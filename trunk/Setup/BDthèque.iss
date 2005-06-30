@@ -49,7 +49,7 @@ Source: D:\Bureautique\BDthèque\fbembed.dll; DestDir: {app}
 Source: D:\Bureautique\BDthèque\firebird.msg; DestDir: {app}; Flags: ignoreversion
 Source: D:\Bureautique\BDthèque\ib_util.dll; DestDir: {app}
 Source: D:\Bureautique\BDthèque\UDF\BDT_UDF.dll; DestDir: {app}\UDF
-Source: D:\Bureautique\BDthèque\Base vide\BD.GDB; DestDir: {app}; Flags: onlyifdoesntexist ignoreversion
+Source: Base vide\BD.GDB; DestDir: {app}; Flags: onlyifdoesntexist ignoreversion
 Source: D:\Bureautique\BDthèque\WebServer\Acceuil.html; DestDir: {app}\WebServer; Flags: ignoreversion
 Source: D:\Bureautique\BDthèque\WebServer\Fond.html; DestDir: {app}\WebServer; Flags: ignoreversion
 Source: D:\Bureautique\BDthèque\WebServer\RepInitiales.html; DestDir: {app}\WebServer; Flags: ignoreversion
