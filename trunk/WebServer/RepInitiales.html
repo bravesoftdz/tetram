@@ -1,0 +1,47 @@
+<%
+vInitiales=Modules.Repertoire.Initiales
+%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//FR">
+<HTML>
+	<HEAD>
+		<TITLE><%=Application.Title%></TITLE>
+		<LINK rel="stylesheet" href="/Styles.css" type="text/css">
+		<script language="JavaScript" type="text/JavaScript">
+		<!--
+		function MM_jumpMenu(targ,selObj,restore){ //v3.0
+			eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
+			if (restore) selObj.selectedIndex=0;
+		}
+		//-->
+		</script>
+	</HEAD>
+	<BODY>
+		<A href="manquants" target=travail>S&eacute;ries incompl&egrave;tes</A><br>
+		<A href="previsions" target=travail>Pr&eacute;visions de sorties</A>
+		<form method="get" action="Repertoire">
+			<input type="hidden" name="Modele" value="RepInitiales">
+			<select name="GroupBy" id="GroupBy" onChange="this.form.submit()">
+				<option value="0"<%=vInitiales.UsedGroupBy.Value==0?" Selected":""%>>Titre</option>
+				<option value="5"<%=vInitiales.UsedGroupBy.Value==5?" Selected":""%>>S&eacute;rie</option>
+				<option value="3"<%=vInitiales.UsedGroupBy.Value==3?" Selected":""%>>Editeur</option>
+				<option value="2"<%=vInitiales.UsedGroupBy.Value==2?" Selected":""%>>Collection</option>
+				<option value="4"<%=vInitiales.UsedGroupBy.Value==4?" Selected":""%>>Genre</option>
+				<option value="1"<%=vInitiales.UsedGroupBy.Value==1?" Selected":""%>>Ann&eacute;e de parution</option>
+			</select>
+		</form>
+		<TABLE width=100% cellspacing=0 cellpadding=0 border=0>
+<%
+var e = new Enumerator(vInitiales.Records);
+for (; !e.atEnd(); e.moveNext()) { %>
+				<TR>
+					<TD>
+						<A href="Repertoire?Initiale=<%=vInitiales.Initiale.Value%>&GroupBy=<%=vInitiales.UsedGroupBy.Value%>" target=travail><%=vInitiales.Initiale.DisplayText%></A>
+					</TD>
+					<TD>
+						(<%=vInitiales.Count.Value%>)
+					</TD>
+				</TR>
+<% } %>
+		</TABLE>
+	</BODY>
+</HTML>

@@ -1,0 +1,3 @@
+STOCK       BITMAP DISCARDABLE "..\..\..\Deco\Glyphs\bmp\livres.bmp"
+ABOUT       BITMAP DISCARDABLE "about.bmp"
+FONDVT      BITMAP DISCARDABLE "..\..\..\Deco\Glyphs\bmp\fondbdd.bmp"
