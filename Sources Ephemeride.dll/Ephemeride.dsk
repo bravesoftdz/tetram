@@ -1,0 +1,116 @@
+[Closed Files]
+File_0=SourceModule,'G:\Programmation\MEDIA.KIT\WallPap 1.0\Sources Ephemeride.dll\UMain.pas',0,1,28,1,45,0,0
+File_1=SourceModule,'G:\Programmation\MEDIA.KIT\WallPap 1.0\Sources wpconf.dll\UCommon.pas',0,1,112,1,124,0,0
+File_2=SourceModule,'G:\Programmation\MEDIA.KIT\WallPap 1.0\SDK\UInterfaceChange.pas',0,1,1,30,11,0,0
+File_3=SourceModule,'G:\Programmation\MEDIA.KIT\WallPap 1.0\SDK\UInterfaceDessinCalendrier.pas',0,5,1,21,15,0,0
+File_4=SourceModule,'G:\Programmation\MEDIA.KIT\WallPap 1.0\Sources Ephemeride.dll\Lune\dessin\Unit1.pas',0,1,28,1,54,1,0
+File_5=SourceModule,'G:\Programmation\MEDIA.KIT\WallPap 1.0\Sources Ephemeride.dll\Lune\Unit1.pas',0,1,130,1,171,1,0
+File_6=SourceModule,'G:\Programmation\MEDIA.KIT\WallPap 1.0\Sources wpconf.dll\Form_Main.pas',0,1,326,26,338,1,0
+File_7=SourceModule,'G:\Programmation\MEDIA.KIT\WallPap 1.0\SDK\UInterfaceJoursFeries.pas',0,1,1,1,11,0,0
+File_8=SourceModule,'d:\programmation\borland\delphi7\source\vcl\Graphics.pas',0,1,4,1,29,0,0
+File_9=SourceModule,'d:\programmation\borland\delphi7\source\vcl\ExtCtrls.pas',0,1,977,1,980,0,0
+
+[Modules]
+Count=0
+EditWindowCount=0
+
+[G:\Programmation\MEDIA.KIT\WallPap 1.0\Sources Ephemeride.dll\Ephemeride.dpr]
+FormState=0
+FormOnTop=0
+
+[D:\Programmation\Borland\Delphi7\Projects\ProjectGroup1.bpg]
+FormState=0
+FormOnTop=0
+
+[Watches]
+Count=0
+
+[Breakpoints]
+Count=1
+Breakpoint0='G:\Programmation\MEDIA.KIT\WallPap 1.0\Sources Ephemeride.dll\UMain.pas',33,'',0,1,'',1,0,0,'',1,'','',''
+
+[AddressBreakpoints]
+Count=0
+
+[Main Window]
+Create=1
+Visible=1
+State=0
+Left=0
+Top=0
+Width=1280
+Height=105
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=1272
+ClientHeight=78
+
+[ProjectManager]
+Create=1
+Visible=1
+State=0
+Left=370
+Top=372
+Width=437
+Height=305
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=429
+ClientHeight=279
+TBDockHeight=305
+LRDockWidth=437
+Dockable=1
+
+[AlignmentPalette]
+Create=1
+Visible=0
+State=0
+Left=200
+Top=107
+Width=156
+Height=84
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=150
+ClientHeight=60
+
+[PropertyInspector]
+Create=1
+Visible=1
+State=0
+Left=0
+Top=473
+Width=196
+Height=543
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=188
+ClientHeight=517
+TBDockHeight=543
+LRDockWidth=196
+Dockable=1
+SplitPos=85
+ArrangeBy=Name
+SelectedItem=
+ExpandedItems=
+HiddenCategories=
+
+[ObjectTree]
+Create=1
+Visible=1
+State=0
+Left=0
+Top=105
+Width=196
+Height=366
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=188
+ClientHeight=340
+TBDockHeight=366
+LRDockWidth=196
+Dockable=1
+
+[DockHosts]
+DockHostCount=0
+
