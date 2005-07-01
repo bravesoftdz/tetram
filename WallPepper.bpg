@@ -1,0 +1,33 @@
+#------------------------------------------------------------------------------
+VERSION = BWS.01
+#------------------------------------------------------------------------------
+!ifndef ROOT
+ROOT = $(MAKEDIR)\..
+!endif
+#------------------------------------------------------------------------------
+MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
+DCC = $(ROOT)\bin\dcc32.exe $**
+BRCC = $(ROOT)\bin\brcc32.exe $**
+#------------------------------------------------------------------------------
+PROJECTS = WallPepper.exe WPConf.dll TestPlug.dll Ephemeride.dll \
+  CompteRebours.dll
+#------------------------------------------------------------------------------
+default: $(PROJECTS)
+#------------------------------------------------------------------------------
+
+WallPepper.exe: sources\WallPepper.dpr
+  $(DCC)
+
+WPConf.dll: Sources wpconf.dll\WPConf.dpr
+  $(DCC)
+
+TestPlug.dll: sources TestPlug.dll\TestPlug.dpr
+  $(DCC)
+
+Ephemeride.dll: Sources Ephemeride.dll\Ephemeride.dpr
+  $(DCC)
+
+CompteRebours.dll: Sources CompteRebours.dll\CompteRebours.dpr
+  $(DCC)
+
+
