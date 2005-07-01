@@ -1,0 +1,63 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{20D4826A-C6FA-45DB-90F4-C717570B9F32}") = "BDPPC", "BDPPC\BDPPC.csdproj", "{83FAE1D8-B8C3-4BCD-9391-894290046AD6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5543AEE2-2359-40F6-9010-C8CF2B090A42} = {5543AEE2-2359-40F6-9010-C8CF2B090A42}
+	EndProjectSection
+EndProject
+Project("{20D4826A-C6FA-45DB-90F4-C717570B9F32}") = "CreateStructureBDPPC", "CreateStructureBDPPC\CreateStructureBDPPC.csdproj", "{83FAE1D8-B8C3-4BCD-9391-894290046AD6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5543AEE2-2359-40F6-9010-C8CF2B090A42} = {5543AEE2-2359-40F6-9010-C8CF2B090A42}
+	EndProjectSection
+EndProject
+Project("{20D4826A-C6FA-45DB-90F4-C717570B9F32}") = "TetramCorp.Components", "..\..\..\Compos Perso.Net\TetramCorp.Components\TetramCorp.Components.csdproj", "{A79C37B0-4DB3-4468-B4CA-82904979A562}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{20D4826A-C6FA-45DB-90F4-C717570B9F32}") = "BD.PPC", "BD.PPC\BD.PPC.csdproj", "{5543AEE2-2359-40F6-9010-C8CF2B090A42}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BD.Common", "BD.Common\BD.Common.csproj", "{E5D80931-B7F6-4449-BE5C-9A9D42FBDE70}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{83FAE1D8-B8C3-4BCD-9391-894290046AD6}.Debug.ActiveCfg = Debug|Pocket PC
+		{83FAE1D8-B8C3-4BCD-9391-894290046AD6}.Debug.Build.0 = Debug|Pocket PC
+		{83FAE1D8-B8C3-4BCD-9391-894290046AD6}.Debug.Deploy.0 = Debug|Pocket PC
+		{83FAE1D8-B8C3-4BCD-9391-894290046AD6}.Release.ActiveCfg = Release|Pocket PC
+		{83FAE1D8-B8C3-4BCD-9391-894290046AD6}.Release.Build.0 = Release|Pocket PC
+		{83FAE1D8-B8C3-4BCD-9391-894290046AD6}.Release.Deploy.0 = Release|Pocket PC
+		{83FAE1D8-B8C3-4BCD-9391-894290046AD6}.Debug.ActiveCfg = Debug|Pocket PC
+		{83FAE1D8-B8C3-4BCD-9391-894290046AD6}.Debug.Build.0 = Debug|Pocket PC
+		{83FAE1D8-B8C3-4BCD-9391-894290046AD6}.Debug.Deploy.0 = Debug|Pocket PC
+		{83FAE1D8-B8C3-4BCD-9391-894290046AD6}.Release.ActiveCfg = Release|Pocket PC
+		{83FAE1D8-B8C3-4BCD-9391-894290046AD6}.Release.Build.0 = Release|Pocket PC
+		{83FAE1D8-B8C3-4BCD-9391-894290046AD6}.Release.Deploy.0 = Release|Pocket PC
+		{A79C37B0-4DB3-4468-B4CA-82904979A562}.Debug.ActiveCfg = Debug|Pocket PC
+		{A79C37B0-4DB3-4468-B4CA-82904979A562}.Debug.Build.0 = Debug|Pocket PC
+		{A79C37B0-4DB3-4468-B4CA-82904979A562}.Debug.Deploy.0 = Debug|Pocket PC
+		{A79C37B0-4DB3-4468-B4CA-82904979A562}.Release.ActiveCfg = Release|Pocket PC
+		{A79C37B0-4DB3-4468-B4CA-82904979A562}.Release.Build.0 = Release|Pocket PC
+		{A79C37B0-4DB3-4468-B4CA-82904979A562}.Release.Deploy.0 = Release|Pocket PC
+		{5543AEE2-2359-40F6-9010-C8CF2B090A42}.Debug.ActiveCfg = Debug|Pocket PC
+		{5543AEE2-2359-40F6-9010-C8CF2B090A42}.Debug.Build.0 = Debug|Pocket PC
+		{5543AEE2-2359-40F6-9010-C8CF2B090A42}.Debug.Deploy.0 = Debug|Pocket PC
+		{5543AEE2-2359-40F6-9010-C8CF2B090A42}.Release.ActiveCfg = Release|Pocket PC
+		{5543AEE2-2359-40F6-9010-C8CF2B090A42}.Release.Build.0 = Release|Pocket PC
+		{5543AEE2-2359-40F6-9010-C8CF2B090A42}.Release.Deploy.0 = Release|Pocket PC
+		{E5D80931-B7F6-4449-BE5C-9A9D42FBDE70}.Debug.ActiveCfg = Debug|.NET
+		{E5D80931-B7F6-4449-BE5C-9A9D42FBDE70}.Debug.Build.0 = Debug|.NET
+		{E5D80931-B7F6-4449-BE5C-9A9D42FBDE70}.Release.ActiveCfg = Release|.NET
+		{E5D80931-B7F6-4449-BE5C-9A9D42FBDE70}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal
