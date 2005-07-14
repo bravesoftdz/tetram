@@ -43,6 +43,8 @@ type
     ImagesStockees: Boolean;
     AvertirPret: Boolean;
     GrandesIconesMenus, GrandesIconesBarre: Boolean;
+    VerifMAJDelai: Integer;
+    LastVerifMAJ: TDateTime;
   end;
 
   TUtilisateur = record
@@ -76,6 +78,8 @@ initialization
     DatabaseRole := ReadString('Database', 'Role', DatabaseRole);
     DatabaseLibraryName := ReadString('Database', 'LibraryName', DatabaseLibraryName);
     RepImages := ReadString('DIVERS', 'RepImages', RepImages);
+    Utilisateur.Options.VerifMAJDelai := ReadInteger('Divers', 'VerifMAJDelai', 4);
+    Utilisateur.Options.LastVerifMAJ := ReadDate('Divers', 'LastVerifMAJ', 0);
   finally
     Free;
   end;
@@ -84,3 +88,4 @@ finalization
   if HandleDLLPic <> 0 then FreeLibrary(HandleDLLPic);
 
 end.
+

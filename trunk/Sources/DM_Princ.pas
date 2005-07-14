@@ -57,6 +57,7 @@ type
   public
     { Déclarations publiques }
     function CheckVersions(Affiche_act: TAffiche_act; Force: Boolean = True): Boolean;
+    function CheckVersion(ForceMessage: Boolean): Boolean;
     function ActiveHTTPServer(Value: Boolean): Boolean;
   end;
 
@@ -70,7 +71,7 @@ implementation
 
 uses
   CommonConst, Commun, Textes, DM_Commun, JvUIBLib, Divers, IniFiles, Procedures, UHistorique, Math,
-  Updates;
+  Updates, CheckVersionNet, DateUtils;
 
 var
   FDMPrinc: TDMPrinc = nil;
@@ -155,6 +156,7 @@ type
 
 var
   Compare, i: Integer;
+  VerifNet: Boolean;
   msg: string;
 begin
   Result := False;
@@ -162,6 +164,30 @@ begin
   Query := TJvUIBQuery.Create(nil);
   with Query do try
     Transaction := GetTransaction(UIBDataBase);
+
+    case Utilisateur.Options.VerifMAJDelai of
+      0: // jamais de verification
+        VerifNet := False;
+      1: // à chaque démarrage
+        VerifNet := True;
+      2: // une fois par jour
+        VerifNet := DaysBetween(Now, Utilisateur.Options.LastVerifMAJ) > 0;
+      3: // une fois par semaine
+        VerifNet := WeeksBetween(Now, Utilisateur.Options.LastVerifMAJ) > 0;
+      else // une fois par mois
+        VerifNet := MonthsBetween(Now, Utilisateur.Options.LastVerifMAJ) > 0;
+    end;
+    if VerifNet then try
+      VerifNet := CheckVersion(False);
+      with TIniFile.Create(FichierIni) do try
+        WriteInteger('Divers', 'LastVerifMAJ', Trunc(Now));
+      finally
+        Free;
+      end;
+      if VerifNet then Exit;
+    except
+    end;
+
     SQL.Text := 'SELECT VALEUR FROM OPTIONS WHERE Nom_option = ''Version''';
     Open;
     if not Eof then
@@ -476,4 +502,10 @@ begin
   if IsIconic(Application.Handle) then PopupMenu.Popup(Mouse.CursorPos.x, Mouse.CursorPos.y);
 end;
 
+function TDMPrinc.CheckVersion(ForceMessage: Boolean): Boolean;
+begin
+  Result := CheckVersionNet.CheckVersion(Application.Title, 'bdtheque', Utilisateur.ExeVersion, ForceMessage, not ForceMessage) = 1;
+end;
+
 end.
+

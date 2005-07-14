@@ -234,6 +234,7 @@ begin
     Utilisateur.Options.AvertirPret := ReadBool('DIVERS', 'AvertirPret', False);
     Utilisateur.Options.GrandesIconesMenus := ReadBool('DIVERS', 'GrandesIconesMenus', True);
     Utilisateur.Options.GrandesIconesBarre := ReadBool('DIVERS', 'GrandesIconesBarre', True);
+    Utilisateur.Options.VerifMAJDelai := ReadInteger('Divers', 'VerifMAJDelai', 4);
   finally
     Free;
   end;
@@ -298,6 +299,7 @@ begin
     WriteBool('WebServer', 'AutoStart', Utilisateur.Options.WebServerAutoStart);
     WriteInteger('WebServer', 'Port', Utilisateur.Options.WebServerPort);
     WriteBool('WebServer', 'AntiAliasing', Utilisateur.Options.WebServerAntiAliasing);
+    WriteInteger('Divers', 'VerifMAJDelai', Utilisateur.Options.VerifMAJDelai);
 
     WriteString('DIVERS', 'RepImages', ''); // efface la ligne
   finally

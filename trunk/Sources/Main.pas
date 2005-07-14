@@ -210,7 +210,7 @@ uses
   MAJ, Form_Consultation, Form_ConsultationE, Form_Repertoire, CommonConst, Commun, Form_options, Form_StatsGeneral,
   Form_StatsEmprunteurs, Form_StatsAlbums, Textes, LoadComplet, Impression, Editions, Form_Gestion, Form_Customize,
   Form_AboutBox, DM_Princ, TypeRec, Types, Procedures, UHistorique, Form_Entretien,
-  Form_Exportation, ShellAPI, CheckVersionNet;
+  Form_Exportation, ShellAPI;
 
 procedure TFond.WMSyscommand(var msg: TWmSysCommand);
 begin
@@ -831,7 +831,7 @@ end;
 
 procedure TFond.actMiseAJourExecute(Sender: TObject);
 begin
-  CheckVersion(Application.Title, 'bdtheque', Utilisateur.ExeVersion, True);
+  DMPrinc.CheckVersion(True);
 end;
 
 end.

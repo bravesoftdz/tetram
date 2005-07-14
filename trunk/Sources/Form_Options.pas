@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, ComCtrls, IniFiles, CommCtrl, ImgList,
-  Buttons, VDTButton, Fram_Boutons, Browss, DBEditLabeled, Spin;
+  Buttons, VDTButton, Fram_Boutons, Browss, DBEditLabeled, Spin, ComboCheck;
 
 type
   TFrmOptions = class(TForm)
@@ -51,6 +51,7 @@ type
     CheckBox6: TCheckBox;
     GrandesIconesMenu: TCheckBox;
     GrandesIconesBarre: TCheckBox;
+    LightComboCheck1: TLightComboCheck;
     procedure btnOKClick(Sender: TObject);
     procedure calculKeyPress(Sender: TObject; var Key: Char);
     procedure calculExit(Sender: TObject);
@@ -106,6 +107,7 @@ begin
     AvertirPret := CheckBox6.Checked;
     GrandesIconesMenus := GrandesIconesMenu.Checked;
     GrandesIconesBarre := Self.GrandesIconesBarre.Checked;
+    VerifMAJDelai := LightComboCheck1.Value;
   end;
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -203,6 +205,7 @@ begin
     CheckBox6.Checked := AvertirPret;
     GrandesIconesMenu.Checked := GrandesIconesMenus;
     Self.GrandesIconesBarre.Checked := GrandesIconesBarre;
+    LightComboCheck1.Value := VerifMAJDelai;
   end;
 end;
 
@@ -323,3 +326,4 @@ begin
 end;
 
 end.
+

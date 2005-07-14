@@ -100,7 +100,8 @@ uses
   UMAJ0_0_3_24 in 'UMAJ0_0_3_24.pas',
   CheckVersionNet in '..\..\..\Common\CheckVersionNet.pas' {frmVerifUpgrade},
   UMAJ0_0_3_27 in 'UMAJ0_0_3_27.pas',
-  UMAJ0_0_3_25 in 'UMAJ0_0_3_25.pas';
+  UMAJ0_0_3_25 in 'UMAJ0_0_3_25.pas',
+  UMAJ1_0_0_0 in 'UMAJ1_0_0_0.pas';
 
 {$R *.RES}
 {$R curseurs.res}

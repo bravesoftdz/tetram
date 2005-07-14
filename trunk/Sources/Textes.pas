@@ -55,6 +55,7 @@ const
   rsTransPages = 'Pages';
   rsTransPret = 'Prêt';
   rsTransPrete = 'Prêté';
+  rsTransPrevisionsSorties = 'Prévisions de sorties';
   rsTransPrix = 'Prix';
   //  rsTransRealisateur = 'Réalisateur';
   rsTransReliure = 'Type de reliure';
