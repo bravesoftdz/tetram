@@ -122,28 +122,31 @@ var
   tmp: string;
 begin
   tmp := ClearISBN(Valeur);
-  if tmp[Length(tmp)] = 'X' then begin
-    while Length(tmp) < LongueurISBN do
-      Insert('0', tmp, Length(tmp) - 1);
-    M := 10;
-  end
-  else begin
-    while Length(tmp) < LongueurISBN do
-      tmp := tmp + '0';
-    M := Ord(tmp[Length(tmp)]) - Ord('0');
-    //    M := StrToInt(tmp[Length(tmp)]);
-  end;
-  C := 0;
-  for X := 1 to Pred(Length(tmp)) do
-    //    C := C + StrToInt(tmp[X]) * X;
-    C := C + (Ord(tmp[X]) - Ord('0')) * X;
-  v := C mod 11;
-  Result := v = M;
+  Result := True;
+  if tmp <> '' then begin
+    if tmp[Length(tmp)] = 'X' then begin
+      while Length(tmp) < LongueurISBN do
+        Insert('0', tmp, Length(tmp) - 1);
+      M := 10;
+    end
+    else begin
+      while Length(tmp) < LongueurISBN do
+        tmp := tmp + '0';
+      M := Ord(tmp[Length(tmp)]) - Ord('0');
+      //    M := StrToInt(tmp[Length(tmp)]);
+    end;
+    C := 0;
+    for X := 1 to Pred(Length(tmp)) do
+      //    C := C + StrToInt(tmp[X]) * X;
+      C := C + (Ord(tmp[X]) - Ord('0')) * X;
+    v := C mod 11;
+    Result := v = M;
 
-  if v = 10 then
-    tmp[Length(tmp)] := 'X'
-  else
-    tmp[Length(tmp)] := IntToStr(v)[1];
+    if v = 10 then
+      tmp[Length(tmp)] := 'X'
+    else
+      tmp[Length(tmp)] := IntToStr(v)[1];
+  end;
   Valeur := tmp;
 end;
 
