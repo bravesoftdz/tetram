@@ -3,6 +3,7 @@ using System.Drawing;
 using System;
 using System.Text;
 using System.Data;
+using System.Globalization;
 using BD.PPC.Database;
 using System.Reflection;
 using System.Data.SqlServerCe;
@@ -11,8 +12,8 @@ namespace BD.PPC.Application
 {
 	internal class ClassMain
 	{
-		private static SplashForm splash = null;
-		public static Repertoire mainform;
+		private static SplashForm splash; // = null;
+		public static Répertoire mainform;
 
 		private static void CloseSplash()
 		{
@@ -22,7 +23,9 @@ namespace BD.PPC.Application
 			splash = null;
 		}
 
-		static void Main() 
+		// pas dispo avec le compact framework
+		// [STAThread]
+    static void Main() 
 		{
 			try
 			{
@@ -31,9 +34,9 @@ namespace BD.PPC.Application
 
 				splash.Label = "Connexion à la base...";
 				splash.Label = "Vérification des versions...";
-				if (!checkVersion()) throw new Exception("Erreur de version");
+				if (!CheckVersion()) throw new Exception("Erreur de version");
 				splash.Label = "Création de la fenêtre principale...";
-				mainform = new Repertoire(); 
+				mainform = new Répertoire(); 
 
 				System.Threading.Thread splashClose = new System.Threading.Thread(new System.Threading.ThreadStart(CloseSplash));
 				splashClose.Start();
@@ -53,7 +56,7 @@ namespace BD.PPC.Application
 
 				foreach (SqlCeError err in errorCollection) 
 				{
-					bld.Append("\n Error Code: " + err.HResult.ToString("X"));
+					bld.Append("\n Error Code: " + err.HResult.ToString("X", CultureInfo.CurrentCulture));
 					bld.Append("\n Message   : " + err.Message);
 					bld.Append("\n Minor Err.: " + err.NativeError);
 					bld.Append("\n Source    : " + err.Source);
@@ -65,7 +68,7 @@ namespace BD.PPC.Application
             
 					foreach (string errPar in err.ErrorParameters) 
 					{
-						if (String.Empty != errPar) bld.Append("\n Err. Par. : " + errPar);
+						if (errPar.Length > 0) bld.Append("\n Err. Par. : " + errPar);
 					}
 
 					MessageBox.Show(bld.ToString());
@@ -86,14 +89,14 @@ namespace BD.PPC.Application
 			}
 		}
 
-		public static bool checkVersion()
+		public static bool CheckVersion()
 		{
-			return checkVersion(true);
+			return CheckVersion(true);
 		}
 
-		public static bool checkVersion(bool Force)
+		public static bool CheckVersion(bool force)
 		{
-			using(IDbCommand cmd = BDPPCDatabase.getCommand())
+			using(IDbCommand cmd = BDPPCDatabase.GetCommand())
 			{
 				cmd.CommandText = "SELECT VALEUR FROM OPTIONS WHERE Nom_option = 'Version'";
 				string version = (string) cmd.ExecuteScalar();
@@ -102,7 +105,7 @@ namespace BD.PPC.Application
 				{
 					version = "0.0.0.0";
 					cmd.CommandText = "INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES ('Version', ?)";
-					cmd.Parameters.Add(BDPPCDatabase.getParameter("@version", version));
+					cmd.Parameters.Add(BDPPCDatabase.GetParameter("@version", version));
 					try
 					{
 						cmd.ExecuteNonQuery();
@@ -123,15 +126,15 @@ namespace BD.PPC.Application
 
 				if (compareValue > 0) 
 				{
-					if (!(Force || MessageBox.Show(msg + "\nVoulez-vous la mettre à jour?", "BDPPC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)) 
+					if (!(force || MessageBox.Show(msg + "\nVoulez-vous la mettre à jour?", "BDPPC", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)) 
 						return false;
 
 					// process de mise à jour à mettre ici
 
 					cmd.CommandText = "UPDATE OPTIONS SET Valeur = ? WHERE Nom_Option = 'Version'";
-					cmd.Parameters.Add(BDPPCDatabase.getParameter("@version", assembly.GetName().Version.ToString()));
+					cmd.Parameters.Add(BDPPCDatabase.GetParameter("@version", assembly.GetName().Version.ToString()));
 					cmd.ExecuteNonQuery();
-					if (!Force) MessageBox.Show("Mise à jour terminée");
+					if (!force) MessageBox.Show("Mise à jour terminée");
 				}
 			}
 			return true;

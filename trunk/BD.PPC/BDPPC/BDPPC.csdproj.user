@@ -2,7 +2,7 @@
     <ECSHARP>
         <Build>
             <Settings
-                DeploymentDevice = "WWE PPC 2003 SE - SDK Emulator"
+                DeploymentDevice = "FRA Pocket PC 2003 - SDK Emulator"
                 ReferencePath = ""
             >
                 <Platform Name = "Pocket PC" />
@@ -21,7 +21,7 @@
                     StartURL = ""
                     StartWorkingDirectory = ""
                     StartWithIE = "true"
-                    SelectedDevice = "WWE PPC 2003 SE - SDK Emulator"
+                    SelectedDevice = "FRA Pocket PC 2003 - SDK Emulator"
                     DeploymentPlatform = "Pocket PC"
                 />
                 <Config

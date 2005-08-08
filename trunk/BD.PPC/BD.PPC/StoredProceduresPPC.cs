@@ -9,41 +9,43 @@ using TetramCorp.Utilities;
 namespace BD.PPC.Records
 {
 	/// <summary>
-	/// Description résumée de Proc_Auteurs.
+	/// Emule les procédures stockées qui ne sont pas disponibles avec SQLServerCE.
 	/// </summary>
-	public class StoredProcedures
+	public sealed class StoredProceduresPPC
 	{
-		public static void Proc_Auteurs(ArrayList list, int RefAlbum, int RefSerie)
+		private StoredProceduresPPC() {}
+
+		public static void ProcAuteurs(ArrayList list, int refAlbum, int refSérie)
 		{
-			using(new WaitCursor())
-			using(IDbCommand cmd = BDPPCDatabase.getCommand())
+			using(new WaitingCursor())
+			using(IDbCommand cmd = BDPPCDatabase.GetCommand())
 			{
-				if (RefAlbum != -1) 
+				if (refAlbum != -1) 
 				{
 					cmd.CommandText = "select p.refpersonne, p.nompersonne, a.refalbum, NULL as refserie, a.metier "
 						+ "from personnes p inner join auteurs a on a.refpersonne = p.refpersonne "
 						+ "where a.refalbum = ? "
 						+ "order by a.metier, p.uppernompersonne";
-					cmd.Parameters.Add(BDPPCDatabase.getParameter("@RefAlbum", RefAlbum));
+					cmd.Parameters.Add(BDPPCDatabase.GetParameter("@RefAlbum", refAlbum));
 
 					using (IDataReader result = cmd.ExecuteReader())
 					using (BaseDataReader dataReader = new BaseDataReader(result, typeof(Auteur)))
 						if (result != null)
-							dataReader.fillList(list);
+							dataReader.FillList(list);
 				}
 			
-				if (RefSerie != -1) 
+				if (refSérie != -1) 
 				{
 					cmd.CommandText = "select p.refpersonne, p.nompersonne, NULL as refalbum, a.refserie, a.metier "
 						+ "from personnes p inner join auteurs_series a on a.refpersonne = p.refpersonne "
 						+ "where a.refserie = ? "
 						+ "order by a.metier, p.uppernompersonne";
-					cmd.Parameters.Add(BDPPCDatabase.getParameter("@RefSerie", RefSerie));
+					cmd.Parameters.Add(BDPPCDatabase.GetParameter("@RefSerie", refSérie));
 
 					using (IDataReader result = cmd.ExecuteReader())
 					using (BaseDataReader dataReader = new BaseDataReader(result, typeof(Auteur)))
 						if (result != null)
-							dataReader.fillList(list);
+							dataReader.FillList(list);
 				}
 			}
 		}

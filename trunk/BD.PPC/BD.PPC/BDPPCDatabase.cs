@@ -9,7 +9,7 @@ namespace BD.PPC.Database
 {
 	public class BDPPCDatabase
 	{
-		private static BDPPCDatabase FDBConnection = null;
+		private static BDPPCDatabase FDBConnection; // = null;
 
 #if (DEBUG)
 		public static BDPPCDatabase DebugDBConnection()
@@ -55,12 +55,12 @@ namespace BD.PPC.Database
 			Connection.Open();
 		}
 
-		public static IDataParameter getParameter(string name, object value)
+		public static IDataParameter GetParameter(string nomParamètre, object value)
 		{
-			return new SqlCeParameter(name, value);
+			return new SqlCeParameter(nomParamètre, value);
 		}
 
-		public static IDbCommand getCommand()
+		public static IDbCommand GetCommand()
 		{
 			return DBConnection.Connection.CreateCommand(); 
 		}

@@ -129,7 +129,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Serie.cs"
+                    RelPath = "Série.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

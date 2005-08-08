@@ -2,7 +2,7 @@
     <ECSHARP>
         <Build>
             <Settings
-                DeploymentDevice = "Pocket PC Device"
+                DeploymentDevice = "Pocket PC 2003 Emulator"
                 ReferencePath = ""
             >
                 <Platform Name = "Pocket PC" />
@@ -21,7 +21,7 @@
                     StartURL = ""
                     StartWorkingDirectory = ""
                     StartWithIE = "true"
-                    SelectedDevice = "Pocket PC Device"
+                    SelectedDevice = "Pocket PC 2003 Emulator"
                     DeploymentPlatform = "Pocket PC"
                 />
                 <Config

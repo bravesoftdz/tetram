@@ -3,29 +3,9 @@ using TetramCorp.Database;
 
 namespace BD.Common.Records
 {
-	public class BaseRecordComplet : BaseRecord
-	{
-		public BaseRecordComplet()
-		{
-			InitializeInstance();
-		}
-
-		public BaseRecordComplet(int Reference) : this()
-		{
-			Fill(Reference);
-		}
-
-		public virtual void InitializeInstance()
-		{
-		}
-
-		public virtual void Fill(int Reference)
-		{
-		}
-
-		public static void test()
-		{
-		}
-
-	}
+//  on ne met pas le paramètre pour que NewInstance retourne null = equivalent d'une classe abstract
+//	[ClassFactory(typeof(BaseRecordComplet))]
+	public class RecordCompletFactory : BaseRecordFactory	{	}
+	
+	public class BaseRecordComplet : BaseRecord	{	}
 }

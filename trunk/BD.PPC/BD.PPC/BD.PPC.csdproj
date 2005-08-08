@@ -147,17 +147,7 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "AuteurPPC.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "BDPPCDatabase.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "EditeurPPC.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -187,12 +177,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "SeriePPC.cs"
+                    RelPath = "RecordCompletPPC.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "StoredProcedures.cs"
+                    RelPath = "RecordCompletPPCFactories.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "StoredProceduresPPC.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

@@ -19,7 +19,7 @@ namespace BD.PPC
 		{
 			this.Visible = false;
 			InitializeComponent();
-			TetramCorp.Utilities.Fonts.changeFont(label1, TetramCorp.Utilities.Fonts.small);
+			TetramCorp.Utilities.Fonts.ChangeFont(label1, TetramCorp.Utilities.Fonts.Small);
 		}
 
 		protected override void Dispose(bool disposing)

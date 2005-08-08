@@ -1,0 +1,27 @@
+<Dictionary>
+	<Words>
+		<Unrecognized>
+			<Word>cb</Word>
+		</Unrecognized>
+		<Recognized>
+			<Word>stylesheet</Word>
+			<Word>DataBase</Word>
+			<Word>chaine</Word>
+			<Word>Factory</Word>
+			<Word>Ref</Word>
+			<Word>editeur</Word>
+			<Word>edition</Word>
+		</Recognized>
+		<Deprecated>
+			<Term PreferredAlternate="EnterpriseServices">ComPlus</Term>
+		</Deprecated>
+	</Words>
+	<Acronyms>
+		<CasingExceptions>
+			<Acronym>BD</Acronym>
+			<Acronym>SQL</Acronym>
+			<Acronym>PPC</Acronym>
+			<Acronym>Pi</Acronym>
+		</CasingExceptions>
+	</Acronyms>
+</Dictionary>

@@ -14,7 +14,7 @@ namespace BD.PPC.Application
 	/// <summary>
 	/// Description résumée de Form1.
 	/// </summary>
-	public class Repertoire : System.Windows.Forms.Form
+	public class Répertoire : System.Windows.Forms.Form
 	{
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.Button button1;
@@ -31,9 +31,9 @@ namespace BD.PPC.Application
 		private System.Windows.Forms.MainMenu mainMenu1;
 		private System.Windows.Forms.ColumnHeader columnHeader1;
 
-		private comboCheck cmFiltre;
+		private ComboCheck cmFiltre;
 
-		public Repertoire()
+		public Répertoire()
 		{
 			//
 			// Requis pour la prise en charge du Concepteur Windows Forms
@@ -44,17 +44,17 @@ namespace BD.PPC.Application
 			this.MinimizeBox = false;
 #endif
 
-			cmFiltre = new comboCheck();
-			cmFiltre.Items.Add(new comboItems("Séries", 1, typeof(ListSeries), typeof(FicheSerie)));
-			cmFiltre.Items.Add(new comboItems("Albums", 2, typeof(ListAlbums), null));
-			cmFiltre.Items.Add(new comboItems("Auteurs", 3, typeof(ListPersonnes), typeof(FicheAuteur)));
-			cmFiltre.Items.Add(new comboItems("Emprunteurs", 4, typeof(ListEmprunteurs), null));
+			cmFiltre = new ComboCheck();
+			cmFiltre.Items.Add(new ComboItems("Séries", 1, typeof(ListSéries), typeof(FicheSérie)));
+			cmFiltre.Items.Add(new ComboItems("Albums", 2, typeof(ListAlbums), null));
+			cmFiltre.Items.Add(new ComboItems("Auteurs", 3, typeof(ListPersonnes), typeof(FicheAuteur)));
+			cmFiltre.Items.Add(new ComboItems("Emprunteurs", 4, typeof(ListEmprunteurs), null));
 			cmFiltre.Location = new Point(0, 0);
 			cmFiltre.Size = new Size(100, 15);
 			cmFiltre.OnChangedItem += new EventHandler(this.ClickComboItem);
 			this.Controls.Add(cmFiltre);
 
-			Fonts.changeFont(this, Fonts.small);
+			Fonts.ChangeFont(this, Fonts.Small);
 		}
 
 		/// <summary>
@@ -188,20 +188,20 @@ namespace BD.PPC.Application
 		}
 		#endregion
 
-		public void ClickComboItem(object sender, EventArgs e)
+		internal void ClickComboItem(object sender, EventArgs e)
 		{
-			reloadData();
+			RechargeDonnées();
 		}
 
 		private void button8_Click(object sender, System.EventArgs e)
 		{
 			Button btn = (Button)sender;
 			criteres = new string[] {btn.Text.Substring(0, 1), btn.Text.Substring(1, 1), btn.Text.Substring(2, 1)};
-			reloadData();
+			RechargeDonnées();
 		}
 
 		private string[] criteres;
-		public bool reloadData()
+		public bool RechargeDonnées()
 		{
 			if (criteres == null || cmFiltre.LastSelected == null) return false;
 
@@ -209,7 +209,7 @@ namespace BD.PPC.Application
 			try
 			{
 				listView1.Items.Clear();
-				Type listClass = ((comboItems)cmFiltre.LastSelected).listClass;
+				Type listClass = ((ComboItems)cmFiltre.LastSelected).listClass;
 				System.Reflection.ConstructorInfo construc = listClass.GetConstructor(new Type[] {typeof(string[])});
 				object Items = construc.Invoke(new object[] {criteres});
 				foreach(BaseRecord item in Items as ArrayList)
@@ -232,7 +232,7 @@ namespace BD.PPC.Application
 		{
 			if (listView1.FocusedItem != null) 
 			{
-				Type formClass = ((comboItems)cmFiltre.LastSelected).formClass;
+				Type formClass = ((ComboItems)cmFiltre.LastSelected).formClass;
 				System.Reflection.ConstructorInfo construc = formClass.GetConstructor(new Type[] {typeof(int)});
 				object form = construc.Invoke(new object[] {(listView1.Items[listView1.FocusedItem.Index] as RepertoireListViewItem).Data.Reference});
 				(form as Form).ShowDialog();
@@ -240,12 +240,12 @@ namespace BD.PPC.Application
 		}
 	}
 
-	internal class comboItems: comboCheckSimpleString
+	internal class ComboItems: ComboCheckSimpleString
 	{
 		public Type listClass;
 		public Type formClass;
 
-		public comboItems(string Item, int value, Type ListClass, Type FormClass) : base (Item, value)
+		public ComboItems(string Item, int value, Type ListClass, Type FormClass) : base (Item, value)
 		{
 			listClass = ListClass;
 			formClass = FormClass;

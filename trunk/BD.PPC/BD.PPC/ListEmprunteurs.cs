@@ -17,28 +17,28 @@ namespace BD.PPC.Lists
 	{
 		public ListEmprunteurs() : base()
 		{
-			loadData(null);
+			ChargeDonnées(null);
 		}
 
-		public ListEmprunteurs(string[] TitleStartWith) : base()
+		public ListEmprunteurs(string[] titreCommencePar) : base()
 		{
-			loadData(TitleStartWith);
+			ChargeDonnées(titreCommencePar);
 		}
 			
-		public void loadData(string[] TitleStartWith)
+		public void ChargeDonnées(string[] titreCommencePar)
 		{
-			using(new WaitCursor())
-			using(IDbCommand cmd = BDPPCDatabase.getCommand())
+			using(new WaitingCursor())
+			using(IDbCommand cmd = BDPPCDatabase.GetCommand())
 			{
 				StringBuilder SQL = new StringBuilder();
 				SQL.Append("SELECT REFEMPRUNTEUR, NOMEMPRUNTEUR FROM EMPRUNTEURS");
-				if (TitleStartWith != null && TitleStartWith.Length > 0) 
+				if (titreCommencePar != null && titreCommencePar.Length > 0) 
 				{
 					SQL.Append("\nWHERE");
-					for(int i = 0; i < TitleStartWith.Length; i++)
+					for(int i = 0; i < titreCommencePar.Length; i++)
 					{
 						SQL.Append((i == 0 ? "" : "\nOR") + "\nUPPERNOMEMPRUNTEUR LIKE ?");
-						cmd.Parameters.Add(BDPPCDatabase.getParameter("@P" + i.ToString(), TitleStartWith[i].ToUpper() + "%"));
+						cmd.Parameters.Add(BDPPCDatabase.GetParameter("@P" + i.ToString(), titreCommencePar[i].ToUpper() + "%"));
 					}
 				}
 				SQL.Append("\nORDER BY UPPERNOMEMPRUNTEUR");
@@ -46,7 +46,7 @@ namespace BD.PPC.Lists
 				using (IDataReader result = cmd.ExecuteReader())
 				using (BaseDataReader dataReader = new BaseDataReader(result, typeof(Emprunteur)))
 					if (result != null)
-						dataReader.fillList(this);
+						dataReader.FillList(this);
 			}
 		}
 	}

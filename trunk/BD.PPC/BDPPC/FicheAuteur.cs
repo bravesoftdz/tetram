@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using TetramCorp.Utilities;
 using BD.PPC.Records;
+using BD.Common.Records;
 
 namespace BD.PPC.Application
 {
@@ -22,8 +23,8 @@ namespace BD.PPC.Application
 			//
 			InitializeComponent();
 
-			Fonts.changeFont(this, Fonts.small);
-			Fonts.changeFont(label1, Fonts.normal);
+			Fonts.ChangeFont(this, Fonts.Small);
+			Fonts.ChangeFont(label1, Fonts.Normal);
 		}
 
 		public FicheAuteur(int refAuteur) : this()
@@ -122,7 +123,7 @@ namespace BD.PPC.Application
 			set
 			{
 				refAuteur = value;
-				AuteurCompletPPC auteur = new AuteurCompletPPC(refAuteur);
+				AuteurComplet auteur = (new AuteurCompletFactoryPPC()).NewInstance(refAuteur) as AuteurComplet;
 				label1.Text = auteur.NomAuteur.ToString();
 				if (auteur.SiteWeb != null && auteur.SiteWeb.Length != 0)
 					label2.Text = auteur.SiteWeb;
@@ -133,9 +134,9 @@ namespace BD.PPC.Application
 					textBox1.Top = label2.Top;
 				}
 				textBox1.Text = auteur.Biographie;
-				foreach(SerieCompletPPC serie in auteur.Series) 
+				foreach(SérieComplet serie in auteur.Séries) 
 				{
-					SerieTreeNode Node =  new SerieTreeNode(serie);
+					SérieTreeNode Node =  new SérieTreeNode(serie);
 					treeView1.Nodes.Add(Node);
 					foreach(BD.Common.Records.Album album in serie.Albums)
 						Node.Nodes.Add(new AlbumTreeNode(album));
@@ -145,12 +146,12 @@ namespace BD.PPC.Application
 
 	}
 
-	internal class SerieTreeNode : TreeNode
+	internal class SérieTreeNode : TreeNode
 	{
-		public SerieCompletPPC Serie;
-		public SerieTreeNode(SerieCompletPPC serie) : base(serie.ToString())
+		public SérieComplet Série;
+		public SérieTreeNode(SérieComplet serie) : base(serie.ToString())
 		{
-			Serie = serie;
+			Série = serie;
 		}
 	}
 

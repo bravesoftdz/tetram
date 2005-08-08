@@ -22,7 +22,7 @@ namespace BD.Common.Records
 		[SQLDataField] [IsReference] public int RefAuteur;
 		[SQLDataClass] public Personnage Personne = new Personnage();
 		[SQLDataField] public int RefAlbum;
-		[SQLDataField] public int RefSerie;
+		[SQLDataField] public int RefSérie;
 		[SQLDataField] public int Metier;
 
 		public override string ToString()
@@ -31,15 +31,15 @@ namespace BD.Common.Records
 		}
 	}
 
-	public abstract class AuteurComplet : BaseRecordComplet
+	[ClassFactory(typeof(AuteurComplet))]
+	public class AuteurCompletFactory : RecordCompletFactory{};
+
+	public class AuteurComplet : BaseRecordComplet
 	{
 		[SQLDataField("RefPersonne")] [IsReference] public int RefAuteur;
 		[SQLDataField("NomPersonne")] public FormatedTitle NomAuteur = new FormatedTitle();
 		[SQLDataField] public string SiteWeb;
 		[SQLDataField] public string Biographie;
-		public ArrayList Series = new ArrayList();
-
-		public AuteurComplet(int Reference) : base(Reference) {}
-
+		public ArrayList Séries = new ArrayList();
 	}
 }

@@ -10,23 +10,23 @@ using BD.Common.Records;
 namespace BD.PPC.Application
 {
 	/// <summary>
-	/// Description résumée de FicheSerie.
+	/// Description résumée de FicheSérie.
 	/// </summary>
-	public class FicheSerie : System.Windows.Forms.Form
+	public class FicheSérie : System.Windows.Forms.Form
 	{
 		private System.Windows.Forms.Label label1;
 	
-		public FicheSerie()
+		public FicheSérie()
 		{
 			InitializeComponent();
 
-			Fonts.changeFont(this, Fonts.small);
-			Fonts.changeFont(label1, Fonts.normal);
+			Fonts.ChangeFont(this, Fonts.Small);
+			Fonts.ChangeFont(label1, Fonts.Normal);
 		}
 
-		public FicheSerie(int refSerie) : this()
+		public FicheSérie(int refSérie) : this()
 		{
-			RefSerie = refSerie;
+			RefSérie = refSérie;
 		}
 			
 		/// <summary>
@@ -56,7 +56,7 @@ namespace BD.PPC.Application
 			this.label6 = new System.Windows.Forms.Label();
 			this.lbColoristes = new System.Windows.Forms.ListBox();
 			this.lbDessinateurs = new System.Windows.Forms.ListBox();
-			this.lbScenaristes = new System.Windows.Forms.ListBox();
+			this.lbScénaristes = new System.Windows.Forms.ListBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
@@ -99,7 +99,7 @@ namespace BD.PPC.Application
 			this.tabDescription.Controls.Add(this.label6);
 			this.tabDescription.Controls.Add(this.lbColoristes);
 			this.tabDescription.Controls.Add(this.lbDessinateurs);
-			this.tabDescription.Controls.Add(this.lbScenaristes);
+			this.tabDescription.Controls.Add(this.lbScénaristes);
 			this.tabDescription.Controls.Add(this.label2);
 			this.tabDescription.Controls.Add(this.label5);
 			this.tabDescription.Controls.Add(this.label4);
@@ -154,10 +154,10 @@ namespace BD.PPC.Application
 			this.lbDessinateurs.Location = new System.Drawing.Point(68, 72);
 			this.lbDessinateurs.Size = new System.Drawing.Size(156, 41);
 			// 
-			// lbScenaristes
+			// lbScénaristes
 			// 
-			this.lbScenaristes.Location = new System.Drawing.Point(68, 40);
-			this.lbScenaristes.Size = new System.Drawing.Size(156, 41);
+			this.lbScénaristes.Location = new System.Drawing.Point(68, 40);
+			this.lbScénaristes.Size = new System.Drawing.Size(156, 41);
 			// 
 			// label2
 			// 
@@ -227,23 +227,23 @@ namespace BD.PPC.Application
 			this.lbAlbums.Location = new System.Drawing.Point(8, 8);
 			this.lbAlbums.Size = new System.Drawing.Size(216, 184);
 			// 
-			// FicheSerie
+			// FicheSérie
 			// 
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.label1);
-			this.Text = "FicheSerie";
-			this.Load += new System.EventHandler(this.FicheSerie_Load);
-			this.Closed += new System.EventHandler(this.FicheSerie_Closed);
+			this.Text = "FicheSérie";
+			this.Load += new System.EventHandler(this.FicheSérie_Load);
+			this.Closed += new System.EventHandler(this.FicheSérie_Closed);
 
 		}
 		#endregion
 
-		private void FicheSerie_Load(object sender, System.EventArgs e)
+		private void FicheSérie_Load(object sender, System.EventArgs e)
 		{
 			ClassMain.mainform.Visible = false;
 		}
 
-		private void FicheSerie_Closed(object sender, System.EventArgs e)
+		private void FicheSérie_Closed(object sender, System.EventArgs e)
 		{
 			ClassMain.mainform.Visible = true;
 		}
@@ -260,7 +260,7 @@ namespace BD.PPC.Application
 		private System.Windows.Forms.Label label6;
 		private System.Windows.Forms.ListBox lbColoristes;
 		private System.Windows.Forms.ListBox lbDessinateurs;
-		private System.Windows.Forms.ListBox lbScenaristes;
+		private System.Windows.Forms.ListBox lbScénaristes;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Label label4;
@@ -270,25 +270,25 @@ namespace BD.PPC.Application
 		private System.Windows.Forms.TextBox tbHistoire;
 		private System.Windows.Forms.TextBox tbNotes;
 
-		private int refSerie;
-		public int RefSerie
+		private int refSérie;
+		public int RefSérie
 		{
 			get
 			{
-				return refSerie;
+				return refSérie;
 			}
 			set
 			{
-				refSerie = value;
-				SerieCompletPPC serie = new SerieCompletPPC(refSerie);
+				refSérie = value;
+				SérieComplet serie = (new SérieCompletFactoryPPC()).NewInstance(refSérie) as SérieComplet;
 				label1.Text = serie.Titre.ToString();
 				if (serie.SiteWeb != null && serie.SiteWeb.Length != 0)
 					label2.Text = serie.SiteWeb;
 				else
 					label2.Hide();
 				lblGenre.Text = serie.Genres.ToString();
-				foreach(Auteur auteur in serie.Scenaristes)
-					lbScenaristes.Items.Add(auteur);
+				foreach(Auteur auteur in serie.Scénaristes)
+					lbScénaristes.Items.Add(auteur);
 				foreach(Auteur auteur in serie.Dessinateurs)
 					lbDessinateurs.Items.Add(auteur);
 				foreach(Auteur auteur in serie.Coloristes)

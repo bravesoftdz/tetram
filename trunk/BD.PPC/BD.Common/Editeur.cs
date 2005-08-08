@@ -19,24 +19,19 @@ namespace BD.Common.Records
 		}
 	}
 
-	public abstract class EditeurComplet : BaseRecordComplet
+	[ClassFactory(typeof(EditeurComplet))]
+	public class EditeurCompletFactory : RecordCompletFactory{}	
+
+	public class EditeurComplet : BaseRecordComplet
 	{
 		[SQLDataField] [IsReference] public int RefEditeur;
 		[SQLDataField] public FormatedTitle NomEditeur = new FormatedTitle(string.Empty);
 		[SQLDataField] public string SiteWeb;
 
-		public EditeurComplet(int Reference) : base(Reference) {}
-
 		public override string ToString()
 		{
 			return NomEditeur.ToString ();
 		}
-
-		public void Fill()
-		{
-			Fill(RefEditeur);	
-		}
-
 	}
 
 }

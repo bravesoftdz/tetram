@@ -18,9 +18,7 @@ namespace BD.Common.Records
 
 	public abstract class EmprunteurComplet : BaseRecordComplet
 	{
-		public EmprunteurComplet(int Reference) : base()
-		{
-		}
+
 	}
 
 }
