@@ -1,8 +1,34 @@
+-=-=-=-=-=-    1.0.0.2 - 11/08/2005   -=-=-=-=-=-
+
+* Nouveautés *
+      - Champs "Histoire" et "Notes" dans le formulaire d'achat
+
+* Bugtrack *
+      - 0000033: [Mode Gestion] Gestion des achats (Tetram)
+      - 0000032: [Mode Consultation] Impossible de visualiser les prévisions de sortie (Tetram)
+      - 0000037: [Mode Gestion] Notes pour un achat (Tetram)
+      - 0000035: [Mode Gestion] Rafraichissement des images dans la fiche d'un album (Tetram)
+      - 0000031: [Mode Gestion] Impossible de créer un nouvel album (Tetram)
+	  
+-=-=-=-=-=-    1.0.0.0 - 14/07/2005   -=-=-=-=-=-
+
+* Nouveautés *
+      - Gestion des achats
+      - Plus de précisions dans le calcul des prévisions de sorties
+      - Vérification automatique de mises à jours
+	  
+* Bugtrack *
+      - 0000029: [Impressions] Renomer "Liste des sorties" (Tetram)
+      - 0000028: [Impressions] Label "Terminé" qui se superpose (Tetram)
+      - 0000026: [Mode Gestion] Sauvegarde de la série sur un album en prévision d'achat (Tetram)
+      - 0000025: [Mode Consultation] Plantage sur la manipulation de la combo "grouper par" (Tetram)
+      - 0000024: [Mode Gestion] Impossible de saisir un ISBN avec une lettre (Tetram)
+      - 0000023: [Mode Gestion] Impossible de créer un auteur (Tetram)
+
+
 -=-=-=-=-=-    0.0.3.20 - 05/01/2005   -=-=-=-=-=-
 
 * Nouveautés *
-
-    bdthèque:
       - Impression de fiche d'album
       - Impression de fiche de série
       - Nouveaux icones dans les menus et la barre d'outils

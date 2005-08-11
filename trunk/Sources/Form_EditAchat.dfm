@@ -1,8 +1,8 @@
 object FrmEditAchat: TFrmEditAchat
-  Left = 481
-  Top = 446
+  Left = 354
+  Top = 555
   Width = 738
-  Height = 287
+  Height = 412
   Caption = 'Achat'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,7 +18,7 @@ object FrmEditAchat: TFrmEditAchat
     Left = 0
     Top = 0
     Width = 730
-    Height = 229
+    Height = 354
     ActivePage = TabSheet1
     Align = alClient
     MultiLine = True
@@ -28,7 +28,7 @@ object FrmEditAchat: TFrmEditAchat
       Caption = 'Nouvel album'
       DesignSize = (
         722
-        198)
+        323)
       object Label3: TLabel
         Left = 97
         Top = 31
@@ -41,7 +41,7 @@ object FrmEditAchat: TFrmEditAchat
       end
       object VDTButton12: TVDTButton
         Left = 677
-        Top = 66
+        Top = 146
         Width = 20
         Height = 20
         Cursor = crHandPoint
@@ -52,7 +52,7 @@ object FrmEditAchat: TFrmEditAchat
       end
       object VDTButton11: TVDTButton
         Left = 697
-        Top = 66
+        Top = 146
         Width = 21
         Height = 20
         Cursor = crHandPoint
@@ -63,7 +63,7 @@ object FrmEditAchat: TFrmEditAchat
       end
       object Bevel3: TBevel
         Left = 206
-        Top = 57
+        Top = 137
         Width = 310
         Height = 6
         Shape = bsTopLine
@@ -102,7 +102,7 @@ object FrmEditAchat: TFrmEditAchat
       end
       object Label20: TLabel
         Left = 506
-        Top = 70
+        Top = 150
         Width = 28
         Height = 13
         Alignment = taRightJustify
@@ -131,7 +131,7 @@ object FrmEditAchat: TFrmEditAchat
       object btScenariste: TVDTButton
         Tag = 1
         Left = 228
-        Top = 66
+        Top = 146
         Width = 69
         Height = 41
         Cursor = crHandPoint
@@ -151,7 +151,7 @@ object FrmEditAchat: TFrmEditAchat
       object btDessinateur: TVDTButton
         Tag = 2
         Left = 228
-        Top = 110
+        Top = 190
         Width = 69
         Height = 41
         Cursor = crHandPoint
@@ -170,7 +170,7 @@ object FrmEditAchat: TFrmEditAchat
       end
       object VDTButton7: TVDTButton
         Left = 183
-        Top = 66
+        Top = 146
         Width = 21
         Height = 20
         Cursor = crHandPoint
@@ -180,7 +180,7 @@ object FrmEditAchat: TFrmEditAchat
       end
       object VDTButton8: TVDTButton
         Left = 204
-        Top = 66
+        Top = 146
         Width = 20
         Height = 20
         Cursor = crHandPoint
@@ -190,7 +190,7 @@ object FrmEditAchat: TFrmEditAchat
       end
       object Label19: TLabel
         Left = 4
-        Top = 70
+        Top = 150
         Width = 42
         Height = 13
         Alignment = taRightJustify
@@ -199,7 +199,7 @@ object FrmEditAchat: TFrmEditAchat
       object btColoriste: TVDTButton
         Tag = 3
         Left = 228
-        Top = 154
+        Top = 234
         Width = 69
         Height = 41
         Cursor = crHandPoint
@@ -215,6 +215,25 @@ object FrmEditAchat: TFrmEditAchat
           26333333333633366333333333363336333333333336}
         Layout = blGlyphBottom
         OnClick = btScenaristeClick
+      end
+      object Label7: TLabel
+        Left = 349
+        Top = 50
+        Width = 32
+        Height = 13
+        Alignment = taRightJustify
+        Anchors = [akTop, akRight]
+        Caption = 'Notes:'
+        FocusControl = remarques
+      end
+      object Label6: TLabel
+        Left = 6
+        Top = 50
+        Width = 40
+        Height = 13
+        Alignment = taRightJustify
+        Caption = 'Histoire:'
+        FocusControl = histoire
       end
       object edAnneeParution: TEditLabeled
         Left = 167
@@ -245,7 +264,7 @@ object FrmEditAchat: TFrmEditAchat
       end
       object Edit3: TEditLabeled
         Left = 541
-        Top = 66
+        Top = 146
         Width = 137
         Height = 20
         Anchors = [akLeft, akTop, akRight]
@@ -261,7 +280,7 @@ object FrmEditAchat: TFrmEditAchat
       end
       object vtSeries: TVirtualStringTree
         Left = 541
-        Top = 89
+        Top = 169
         Width = 177
         Height = 104
         Anchors = [akLeft, akTop, akRight]
@@ -363,7 +382,7 @@ object FrmEditAchat: TFrmEditAchat
       end
       object lvScenaristes: TVDTListViewLabeled
         Left = 297
-        Top = 66
+        Top = 146
         Width = 198
         Height = 41
         BevelKind = bkTile
@@ -384,7 +403,7 @@ object FrmEditAchat: TFrmEditAchat
       end
       object lvDessinateurs: TVDTListViewLabeled
         Left = 297
-        Top = 110
+        Top = 190
         Width = 198
         Height = 41
         BevelKind = bkTile
@@ -405,7 +424,7 @@ object FrmEditAchat: TFrmEditAchat
       end
       object vtPersonnes: TVirtualStringTree
         Left = 48
-        Top = 89
+        Top = 169
         Width = 177
         Height = 105
         AnimationDuration = 0
@@ -433,7 +452,7 @@ object FrmEditAchat: TFrmEditAchat
       end
       object Edit2: TEditLabeled
         Left = 48
-        Top = 66
+        Top = 146
         Width = 135
         Height = 20
         BevelKind = bkTile
@@ -448,7 +467,7 @@ object FrmEditAchat: TFrmEditAchat
       end
       object lvColoristes: TVDTListViewLabeled
         Left = 297
-        Top = 154
+        Top = 234
         Width = 198
         Height = 41
         BevelKind = bkTile
@@ -481,13 +500,39 @@ object FrmEditAchat: TFrmEditAchat
         TypeDonnee = tdEntier
         CurrencyChar = #0
       end
+      object remarques: TMemoLabeled
+        Left = 384
+        Top = 50
+        Width = 338
+        Height = 81
+        Anchors = [akTop, akRight]
+        BevelKind = bkTile
+        BorderStyle = bsNone
+        ScrollBars = ssVertical
+        TabOrder = 15
+        LinkLabel.LinkLabel.Strings = (
+          'Label7')
+      end
+      object histoire: TMemoLabeled
+        Left = 48
+        Top = 50
+        Width = 289
+        Height = 81
+        Anchors = [akLeft, akTop, akRight]
+        BevelKind = bkTile
+        BorderStyle = bsNone
+        ScrollBars = ssVertical
+        TabOrder = 16
+        LinkLabel.LinkLabel.Strings = (
+          'Label6')
+      end
     end
     object TabSheet2: TTabSheet
       Caption = 'Album existant'
       ImageIndex = 1
       DesignSize = (
         722
-        198)
+        323)
       object VDTButton1: TVDTButton
         Left = 697
         Top = 4
@@ -548,14 +593,14 @@ object FrmEditAchat: TFrmEditAchat
           item
             Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
             Position = 0
-            Width = 670
+            Width = 666
           end>
       end
     end
   end
   inline Frame11: TFrame1
     Left = 0
-    Top = 229
+    Top = 354
     Width = 730
     Height = 31
     Align = alBottom

@@ -120,6 +120,9 @@ const
   rsLienAlbum = 'Attention, les personnes et les emprunteurs qui ont un lien avec cet album en seront détachées.';
   rsSupprimerAlbum = 'Êtes-vous sûr de vouloir supprimer cet album ?';
 
+  rsLienAchat = 'Attention, les personnes qui ont un lien avec cet album en seront détachées.';
+  rsSupprimerAchat = 'Êtes-vous sûr de vouloir supprimer cet achat ?';
+
   rsNewTitre = 'Nouveau %s';
   rsEntrerNewTitre = 'Entrez le nouveau nom de %s:';
   rsEntrerModifyTitre = 'Entrez le nouveau nom de %s:';

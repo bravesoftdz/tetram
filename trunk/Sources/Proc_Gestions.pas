@@ -47,7 +47,7 @@ function SupprimerCollections(VT: TVirtualStringTree): Boolean;
 
 implementation
 
-uses Textes, Procedures, DM_Princ;
+uses Textes, Procedures, DM_Princ, TypeRec;
 
 //******************************************************************************************************
 
@@ -115,12 +115,18 @@ end;
 function SupprimerAchats(VT: TVirtualStringTree): Boolean;
 var
   i: Integer;
+  PA: TAlbum;
+  s: string;
 begin
   Result := False;
   i := VT.CurrentValue;
   if i = -1 then Exit;
   VT.MemorizeIndexNode;
-//  if AffMessage(rsLienAlbum + #13 + rsSupprimerAlbum, mtConfirmation, [mbYes, mbNo], True) <> mrYes then Exit;
+  PA := VT.GetFocusedNodeData;
+  s := rsSupprimerAchat;
+  if Assigned(PA) and not PA.Complet then
+    s := rsLienAchat + #13 + s;
+  if AffMessage(s, mtConfirmation, [mbYes, mbNo], True) <> mrYes then Exit;
   Result := DelAchat(i);
   if Result then begin
     VT.InitializeRep(False);

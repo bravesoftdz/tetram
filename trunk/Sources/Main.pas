@@ -189,6 +189,7 @@ type
     FModalWindows: TStack;
     procedure ChargeToolBarres(sl: TStringList);
     procedure WMSyscommand(var msg: TWmSysCommand); message WM_SYSCOMMAND;
+    procedure MergeMenu(MergedMenu: TMainMenu);
   public
     { Déclarations publiques }
     FCurrentForm: TForm;
@@ -647,6 +648,7 @@ function TFond.SetModalChildForm(Form: TForm; Alignement: TAlign): Integer;
 var
   LockWindow: ILockWindow;
   me: IModeEditing;
+  CurrentMenu: TMainMenu;
 begin
   LockWindow := TLockWindow.Create(Self);
   me := TModeEditing.Create;
@@ -655,12 +657,18 @@ begin
   Application.ModalStarted;
   Form.BorderStyle := bsNone;
   Form.Parent := Self;
-  if FModalWindows.Count > 0 then TForm(FModalWindows.Peek).Enabled := False;
+  if FModalWindows.Count > 0 then begin
+    TForm(FModalWindows.Peek).Enabled := False;
+    CurrentMenu := TForm(FModalWindows.Peek).Menu;
+  end
+  else
+    CurrentMenu := FCurrentForm.Menu;
   if Assigned(FrmRepertoire) then FrmRepertoire.Visible := False;
   FModalWindows.Push(Form);
   try
     Form.Show;
     Form.Align := Alignement;
+    MergeMenu(Form.Menu);
     LockWindow := nil;
     repeat
       Application.HandleMessage;
@@ -670,6 +678,7 @@ begin
     FModalWindows.Pop;
     if FModalWindows.Count > 0 then TForm(FModalWindows.Peek).Enabled := True;
     if Assigned(FrmRepertoire) then FrmRepertoire.Visible := FModalWindows.Count = 0;
+    MergeMenu(CurrentMenu);
     Application.ModalFinished;
   end;
 end;
@@ -688,7 +697,7 @@ begin
   end;
 end;
 
-procedure TFond.SetChildForm(Form: TForm; Alignement: TAlign = alClient);
+procedure TFond.MergeMenu(MergedMenu: TMainMenu);
 
   procedure ProcessMenuItem(MenuItem: TMenuItem);
   var
@@ -701,8 +710,24 @@ procedure TFond.SetChildForm(Form: TForm; Alignement: TAlign = alClient);
   end;
 
 var
-  LockWindow: ILockWindow;
   i: Integer;
+begin
+  if Assigned(MergedMenu) then begin
+    if Utilisateur.Options.GrandesIconesMenus then
+      MergedMenu.Images := boutons_32x32_hot
+    else
+      MergedMenu.Images := boutons_16x16_hot;
+    for i := 0 to Pred(MergedMenu.Items.Count) do begin
+      MergedMenu.Items[i].GroupIndex := 50;
+      ProcessMenuItem(MergedMenu.Items[i]);
+    end;
+  end;
+  Menu.Merge(MergedMenu);
+end;
+
+procedure TFond.SetChildForm(Form: TForm; Alignement: TAlign = alClient);
+var
+  LockWindow: ILockWindow;
 begin
   if not Assigned(Form) then begin
     if (Mode_en_cours = mdConsult) then
@@ -722,24 +747,14 @@ begin
   Form.Align := Alignement;
   if not (Form is TFrmRepertoire) then begin
     FCurrentForm := Form;
-    if Assigned(FCurrentForm.Menu) then begin
-      if Utilisateur.Options.GrandesIconesMenus then
-        FCurrentForm.Menu.Images := boutons_32x32_hot
-      else
-        FCurrentForm.Menu.Images := boutons_16x16_hot;
-      for i := 0 to Pred(FCurrentForm.Menu.Items.Count) do begin
-        FCurrentForm.Menu.Items[i].GroupIndex := 50;
-        ProcessMenuItem(FCurrentForm.Menu.Items[i]);
-      end;
-    end;
-    Menu.Merge(FCurrentForm.Menu);
+    MergeMenu(FCurrentForm.Menu);
   end
   else
     FCurrentForm := nil;
   if Form is TFrmRepertoire then Splitter1.Left := ClientWidth - Splitter1.Width;
   Form.left := 0;
-  for i := 0 to Pred(MainMenu1.Items.Count) do
-    ProcessMenuItem(MainMenu1.Items[i]);
+//  for i := 0 to Pred(MainMenu1.Items.Count) do
+//    ProcessMenuItem(MainMenu1.Items[i]);
 end;
 
 procedure TFond.HistoriqueBackExecute(Sender: TObject);

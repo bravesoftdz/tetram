@@ -264,7 +264,7 @@ end;
 
 procedure TFrmAboutBox.ImLogoClick(Sender: TObject);
 begin
-  ShellExecute(0, nil, 'http://www.tetram.info', nil, nil, SW_NORMAL);
+  ShellExecute(0, nil, 'http://www.tetram.org', nil, nil, SW_NORMAL);
 end;
 
 end.

@@ -218,7 +218,7 @@ begin
     fWaiting.ShowProgression('Exportation...', 0, Count);
     FFichierExport := TFileStream.Create(Fichier, fmCreate, fmShareExclusive);
     try
-      //      FFichierExport.WriteStringLN('<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE Albums SYSTEM "http://www.tetram.info/bdtheque/albums.dtd">');
+      //      FFichierExport.WriteStringLN('<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE Albums SYSTEM "http://www.tetram.org/bdtheque/albums.dtd">');
       FFichierExport.WriteStringLN('<?xml version="1.0" encoding="ISO-8859-1"?>');
       FFichierExport.WriteStringLN('<Data>');
 

@@ -1352,7 +1352,7 @@ begin
       Prn.SetTopOfPage;
       Prn.SetFontInformation1('Times New Roman', 12, []);
 
-      ShowMessage(Format('W %d H %d', [Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Prn.MmsToPixelsVertical(Prn.Detail.Height)]));
+//      ShowMessage(Format('W %d H %d', [Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Prn.MmsToPixelsVertical(Prn.Detail.Height)]));
       ms := GetCouvertureStream(RefCouverture, Prn.MmsToPixelsVertical(Prn.Detail.Height), Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Utilisateur.Options.AntiAliasing);
       if Assigned(ms) then try
         fWaiting.ShowProgression(rsTransImage + '...', epNext);

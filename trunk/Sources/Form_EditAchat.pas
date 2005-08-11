@@ -47,6 +47,10 @@ type
     Edit2: TEditLabeled;
     lvColoristes: TVDTListViewLabeled;
     edMoisParution: TEditLabeled;
+    remarques: TMemoLabeled;
+    Label7: TLabel;
+    histoire: TMemoLabeled;
+    Label6: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure VDTButton12Click(Sender: TObject);
     procedure VDTButton11Click(Sender: TObject);
@@ -152,7 +156,8 @@ begin
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
 
-    SQL.Text := 'SELECT COMPLET, TITREALBUM, MOISPARUTION, ANNEEPARUTION, REFSERIE, TOME, TOMEDEBUT, TOMEFIN, HORSSERIE, INTEGRALE FROM ALBUMS WHERE RefAlbum = ?';
+    FetchBlobs := True;
+    SQL.Text := 'SELECT COMPLET, TITREALBUM, MOISPARUTION, ANNEEPARUTION, REFSERIE, TOME, TOMEDEBUT, TOMEFIN, HORSSERIE, INTEGRALE, SUJETALBUM, REMARQUESALBUM FROM ALBUMS WHERE RefAlbum = ?';
     Params.AsInteger[0] := FRefAlbum;
     Open;
 
@@ -175,6 +180,8 @@ begin
         cbIntegrale.Checked := Fields.ByNameAsBoolean['INTEGRALE'];
         cbHorsSerie.Checked := Fields.ByNameAsBoolean['HORSSERIE'];
         cbIntegraleClick(cbIntegrale);
+        histoire.Lines.Text := Fields.ByNameAsString['SUJETALBUM'];
+        remarques.Lines.Text := Fields.ByNameAsString['REMARQUESALBUM'];
         RefSerie := Fields.ByNameAsInteger['REFSERIE'];
 
         lvScenaristes.Items.BeginUpdate;
@@ -291,14 +298,18 @@ begin
           FRefAlbum := Fields.AsInteger[0];
         end;
 
-        SQL.Text := 'INSERT INTO ALBUMS (REFALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, REFSERIE, TOME, TOMEDEBUT, TOMEFIN, HORSSERIE, INTEGRALE, TITREINITIALESALBUM, ACHAT)';
+        SQL.Text := 'INSERT INTO ALBUMS (REFALBUM,  TITREALBUM,  MOISPARUTION,  ANNEEPARUTION,  REFSERIE,  TOME,  TOMEDEBUT,  TOMEFIN,  HORSSERIE,  INTEGRALE,  SUJETALBUM,  REMARQUESALBUM,  TITREINITIALESALBUM,  UPPERSUJETALBUM,  UPPERREMARQUESALBUM, ACHAT)';
         SQL.Add('VALUES');
-        SQL.Add('(:REFALBUM, :TITREALBUM, :MOISPARUTION, :ANNEEPARUTION, :REFSERIE, :TOME, :TOMEDEBUT, :TOMEFIN, :HORSSERIE, :INTEGRALE, :TITREINITIALESALBUM, 1)');
+        SQL.Add('(:REFALBUM, :TITREALBUM, :MOISPARUTION, :ANNEEPARUTION, :REFSERIE, :TOME, :TOMEDEBUT, :TOMEFIN, :HORSSERIE, :INTEGRALE, :SUJETALBUM, :REMARQUESALBUM, :TITREINITIALESALBUM, :UPPERSUJETALBUM, :UPPERREMARQUESALBUM, 1)');
       end
       else begin
         SQL.Text := 'UPDATE ALBUMS SET';
         SQL.Add('TITREALBUM = :TITREALBUM, MOISPARUTION = :MOISPARUTION, ANNEEPARUTION = :ANNEEPARUTION, REFSERIE = :REFSERIE, TOME = :TOME, TOMEDEBUT = :TOMEDEBUT, TOMEFIN = :TOMEFIN,');
         SQL.Add('HORSSERIE = :HORSSERIE, INTEGRALE = :INTEGRALE,');
+        SQL.Add('SUJETALBUM = :SUJETALBUM,');
+        SQL.Add('REMARQUESALBUM = :REMARQUESALBUM,');
+        SQL.Add('UPPERSUJETALBUM = :UPPERSUJETALBUM,');
+        SQL.Add('UPPERREMARQUESALBUM = :UPPERREMARQUESALBUM,');
         SQL.Add('TITREINITIALESALBUM = :TITREINITIALESALBUM');
         SQL.Add('WHERE REFALBUM = :REFALBUM');
       end;
@@ -333,6 +344,26 @@ begin
       Params.ByNameAsBoolean['INTEGRALE'] := cbIntegrale.Checked;
       Params.ByNameAsBoolean['HORSSERIE'] := cbHorsSerie.Checked;
       Params.ByNameAsInteger['REFSERIE'] := vtSeries.CurrentValue;
+      s := histoire.Lines.Text;
+      if s <> '' then begin
+        ParamsSetBlob('SUJETALBUM', s);
+        s := UpperCase(SansAccents(s));
+        ParamsSetBlob('UPPERSUJETALBUM', s);
+      end
+      else begin
+        Params.ByNameIsNull['SUJETALBUM'] := True;
+        Params.ByNameIsNull['UPPERSUJETALBUM'] := True;
+      end;
+      s := remarques.Lines.Text;
+      if s <> '' then begin
+        ParamsSetBlob('REMARQUESALBUM', s);
+        s := UpperCase(SansAccents(s));
+        ParamsSetBlob('UPPERREMARQUESALBUM', s);
+      end
+      else begin
+        Params.ByNameIsNull['REMARQUESALBUM'] := True;
+        Params.ByNameIsNull['UPPERREMARQUESALBUM'] := True;
+      end;
       ExecSQL;
       Transaction.Commit;
     end;

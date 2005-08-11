@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 [Languages]
-Name: fr; MessagesFile: compiler:French-15-4.1.8.isl
+Name: fr; MessagesFile: compiler:Languages\French.isl
 
 [Setup]
 AppVersion={#GetFileVersion("D:\Bureautique\BDthèque\BD.exe")}
@@ -10,16 +10,16 @@ AppName=BDthèque
 AppVerName=BDthèque {#SetupSetting("AppVersion")}
 AppMutex=TetramCorpBDMutex
 AppPublisher=Teträm Corp
-AppPublisherURL=http://www.tetram.info
-AppSupportURL=mailto:dev@tetram.info
-AppUpdatesURL=http://www.tetram.info
+AppPublisherURL=http://www.tetram.org
+AppSupportURL=mailto:dev@tetram.org
+AppUpdatesURL=http://www.tetram.org
 UninstallDisplayIcon={app}\BD.exe
 DefaultDirName={pf}\Teträm Corp\BDthèque
 DefaultGroupName=Teträm Corp\BDthèque
 PrivilegesRequired=poweruser
 AppCopyright=Teträm Corp © 1997-2004
-AppID={{A86E29B5-D1EE-431F-A5BF-E4A10D36CBDC}}
-LicenseFile=G:\Programmation\MEDIA.KIT\BDthèque 1.0\Setup\LicenceFreeWare.rtf
+AppID={{A86E29B5-D1EE-431F-A5BF-E4A10D36CBDC}
+LicenseFile=G:\Programmation\MEDIA.KIT\LicenceFreeWare.rtf
 WindowVisible=true
 BackColor=$8080ff
 BackColor2=clPurple
@@ -67,7 +67,7 @@ Source: What's New.txt; DestDir: {app}; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [INI]
-Filename: {app}\BD.url; Section: InternetShortcut; Key: URL; String: http://www.tetram.info; Tasks: interneticon
+Filename: {app}\BD.url; Section: InternetShortcut; Key: URL; String: http://www.tetram.org; Tasks: interneticon
 
 [Icons]
 Name: {group}\BDthèque; Filename: {app}\BD.exe; IconIndex: 0
@@ -96,67 +96,115 @@ UseAbsolutePaths=false
 Name: {app}\UDF\VDO_UDF.dll; Type: files
 Name: {app}\BDws.dll; Type: files
 
+[CustomMessages]
+CustomFormCaption=BDthèque est déjà installé
+CustomFormDescription=Le programme d'installation a détecté que BDthèque est déjà installé sur cet ordinateur.
+UninstallRegKey=SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{A86E29B5-D1EE-431F-A5BF-E4A10D36CBDC}_is1
+
 [Code]
-var
-  CanUpdate, IsUpdate: Boolean;
-  Textes, Valeurs: TArrayOfString;
+  var
+    CanUpdate, IsUpdate: Boolean;
+    Label2: TLabel;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
 
-procedure InitializeWizard();
-var
-  CurVersion: string;
-begin
-  SetArrayLength(Textes, 2);
-  Textes[0] := 'Mettre à jour la version existante';
-  Textes[1] := 'Installer de nouveau';
-  SetArrayLength(Valeurs, 2);
-  Valeurs[0] := '1';
-  Valeurs[1] := '0';
-  IsUpdate := False;
-  CanUpdate := RegQueryStringValue(HKLM, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{A86E29B5-D1EE-431F-A5BF-E4A10D36CBDC}_is1', 'DisplayVersion', CurVersion) and (CurVersion <> '');
-end;
+  procedure CustomForm_Activate(Page: TWizardPage);
+  begin
+  end;
 
-function ScriptDlgPages(CurPage: Integer; BackClicked: Boolean): Boolean;
-var
-  Next: Boolean;
-begin
-  if CanUpdate and (
-        (not BackClicked and (CurPage = wpLicense))
-     or (BackClicked and ((CurPage = wpSelectTasks) or (CurPage = wpSelectDir)))
-                    ) then begin
-    ScriptDlgPageOpen();
-    ScriptDlgPageSetCaption('BDthèque est déjà installé');
-    ScriptDlgPageSetSubCaption1('Le programme d''installation à détecter que BDthèque est déjà installé sur cet ordinateur.');
-    ScriptDlgPageSetSubCaption2('Selectionner l''action que vous voulez effectuer et cliquer sur Suivant pour continuer.'#13#10#13#10#13#10'ATTENTION: Si vous avez personnalisé le WebServer, pensez à sauvegarder votre répertoire WebServer avant de procéder à la mise à jour: son contenu sera remplacé.');
+  function CustomForm_ShouldSkipPage(Page: TWizardPage): Boolean;
+  begin
+    Result := False;
+  end;
 
-    Next := InputOptionArray(Textes, Valeurs, True, False);
-    while Next and (Valeurs[0] + Valeurs[1] = '00') do begin
-      MsgBox('Vous devez sélectionner une action.', mbError, MB_OK);
-      Next := InputOptionArray(Textes, Valeurs, True, False);
-    end;
-    { See NextButtonClick and BackButtonClick: return True if the click should be allowed }
-    IsUpdate := Valeurs[0] = '1';
-    if not BackClicked then
-      Result := Next
-    else
-      Result := not Next;
-    { Close the wizard page. Do a FullRestore only if the click (see above) is not allowed }
-    ScriptDlgPageClose(not Result);
-  end else begin
+  function CustomForm_BackButtonClick(Page: TWizardPage): Boolean;
+  begin
     Result := True;
   end;
-end;
 
-function NextButtonClick(CurPage: Integer): Boolean;
-begin
-  Result := ScriptDlgPages(CurPage, False);
-end;
+  function CustomForm_NextButtonClick(Page: TWizardPage): Boolean;
+  begin
+    Result := True;
+    IsUpdate := RadioButton2.Checked;
+  end;
 
-function BackButtonClick(CurPage: Integer): Boolean;
-begin
-  Result := ScriptDlgPages(CurPage, True);
-end;
+  procedure CustomForm_CancelButtonClick(Page: TWizardPage; var Cancel, Confirm: Boolean);
+  begin
+  end;
 
-function SkipCurPage(CurPage: Integer): Boolean;
-begin
-  Result := ((CurPage = wpSelectDir) or (CurPage = wpSelectProgramGroup)) and CanUpdate and IsUpdate;
-end;
+  function CustomForm_CreatePage(PreviousPageId: Integer): Integer;
+  var
+    Page: TWizardPage;
+  begin
+    Page := CreateCustomPage(
+      PreviousPageId,
+      ExpandConstant('{cm:CustomFormCaption}'),
+      ExpandConstant('{cm:CustomFormDescription}')
+    );
+
+    { Label2 }
+    Label2 := TLabel.Create(Page);
+    with Label2 do
+    begin
+      Parent := Page.Surface;
+      Left := ScaleX(24);
+      Top := ScaleY(40);
+      Width := ScaleX(366);
+      Height := ScaleY(58);
+      AutoSize := False;
+      Caption := 'Selectionnez l''action que vous voulez effectuer et cliquer sur Suivant pour continuer.';
+      WordWrap := True;
+    end;
+
+    { RadioButton1 }
+    RadioButton1 := TRadioButton.Create(Page);
+    with RadioButton1 do
+    begin
+      Parent := Page.Surface;
+      Left := ScaleX(120);
+      Top := ScaleY(136);
+      Width := ScaleX(113);
+      Height := ScaleY(17);
+      Caption := 'Installer de nouveau';
+      TabOrder := 0;
+    end;
+
+    { RadioButton2 }
+    RadioButton2 := TRadioButton.Create(Page);
+    with RadioButton2 do
+    begin
+      Parent := Page.Surface;
+      Left := ScaleX(120);
+      Top := ScaleY(112);
+      Width := ScaleX(113);
+      Height := ScaleY(17);
+      Caption := 'Mettre à jour';
+      Checked := True;
+      TabOrder := 1;
+      TabStop := True;
+    end;
+
+
+    with Page do
+    begin
+      OnActivate := @CustomForm_Activate;
+      OnNextButtonClick := @CustomForm_NextButtonClick;
+    end;
+
+    Result := Page.ID;
+  end;
+
+  procedure InitializeWizard();
+  var
+    CurVersion: string;
+  begin
+    IsUpdate := False;
+    CanUpdate := RegQueryStringValue(HKLM, ExpandConstant('{cm:UninstallRegKey}'), 'DisplayVersion', CurVersion) and (CurVersion <> '');
+    if CanUpdate then
+      CustomForm_CreatePage(wpLicense);
+  end;
+
+  function ShouldSkipPage(PageID: Integer): Boolean;
+  begin
+    Result := ((PageID = wpSelectDir) or (PageID = wpSelectProgramGroup)) and CanUpdate and IsUpdate;
+  end;

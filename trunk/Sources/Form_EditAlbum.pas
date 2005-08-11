@@ -885,12 +885,16 @@ end;
 procedure TFrmEditAlbum.VDTButton4Click(Sender: TObject);
 begin
   FCurrentEditionComplete.Couvertures.Move(vstImages.FocusedNode.Index, Pred(vstImages.FocusedNode.Index));
+  vstImages.FocusedNode := vstImages.FocusedNode.PrevSibling;
+  vstImages.Selected[vstImages.FocusedNode] := True;
   vstImages.Invalidate;
 end;
 
 procedure TFrmEditAlbum.VDTButton5Click(Sender: TObject);
 begin
   FCurrentEditionComplete.Couvertures.Move(vstImages.FocusedNode.Index, Succ(vstImages.FocusedNode.Index));
+  vstImages.FocusedNode := vstImages.FocusedNode.NextSibling;
+  vstImages.Selected[vstImages.FocusedNode] := True;
   vstImages.Invalidate;
 end;
 
