@@ -90,7 +90,7 @@ MaxStackSize=1048576
 ImageBase=4194304
 ExeDescription=
 [Directories]
-OutputDir=..\
+OutputDir=..\..\bin
 UnitOutputDir=dcu
 PackageDLLOutputDir=
 PackageDCPOutputDir=
@@ -135,15 +135,23 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 [HistoryLists\hlConditionals]
-Count=2
-Item0=NOFORMS
-Item1=NOFORMSA
+Count=3
+Item0=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Item1=NOFORMS
+Item2=NOFORMSA
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
+[HistoryLists\hlSearchPath]
+Count=2
+Item0=$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
+Item1=..\..\..\Compos Perso\PrintObject;..\..\..\Compos Perso\VDTButton;..\..\..\Compos Perso\Memory Table;..\..\..\Compos Perso\VersLabP;..\..\..\Compos Perso\ScanEdit;..\..\..\Common;..\..\..\Compos Perso\HarmFade;..\..\..\Compos Perso\schrinkpanel;..\..\..\Compos Perso\ReadOnlycheckBox;..\..\..\Compos Perso\Labeled;..\..\..\Compos Perso\ShellNotification;..\..\..\Compos Perso\ProgressBar;..\..\..\Compos Perso\BrowseDirectory;..\..\..\Compos Perso\VirtualTree;..\..\..\Common\GraphicEx
 [HistoryLists\hlUnitOutputDirectory]
 Count=1
 Item0=dcu
 [HistoryLists\hlOutputDirectorry]
-Count=1
-Item0=..\
+Count=4
+Item0=..\..\bin\UDF\
+Item1=..\..\bin
+Item2=..\
+Item3=C:\Documents and Settings\Thierry\Bureau\BDthèque
