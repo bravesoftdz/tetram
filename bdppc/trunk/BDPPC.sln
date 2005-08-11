@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreateStructureBDPPC", "Cre
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BDPPC", "BDPPC\BDPPC.csproj", "{A420A569-7633-4FE3-B4C4-D62F875E059A}"
 EndProject
+Project("{B900F1C2-3D47-4FEC-85B3-04AAF18C3634}") = "Setup-BDPPC", "Setup-BDPPC\Setup-BDPPC.vddproj", "{BF0CCAAC-99C3-431A-B3A8-21E77730DABB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,6 +48,8 @@ Global
 		{A420A569-7633-4FE3-B4C4-D62F875E059A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A420A569-7633-4FE3-B4C4-D62F875E059A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A420A569-7633-4FE3-B4C4-D62F875E059A}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{BF0CCAAC-99C3-431A-B3A8-21E77730DABB}.Debug|Any CPU.ActiveCfg = Debug
+		{BF0CCAAC-99C3-431A-B3A8-21E77730DABB}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
