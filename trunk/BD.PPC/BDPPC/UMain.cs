@@ -25,7 +25,7 @@ namespace BD.PPC.Application
 
 		// pas dispo avec le compact framework
 		// [STAThread]
-    static void Main() 
+        static void Main() 
 		{
 			try
 			{
@@ -77,7 +77,7 @@ namespace BD.PPC.Application
 			}
 			catch (Exception ex)
 			{
-				MessageBox.Show(ex.Message);
+        MessageBox.Show(ex.Message);
 			}
 		}
 
@@ -105,6 +105,7 @@ namespace BD.PPC.Application
 				{
 					version = "0.0.0.0";
 					cmd.CommandText = "INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES ('Version', ?)";
+          cmd.Parameters.Clear();
 					cmd.Parameters.Add(BDPPCDatabase.GetParameter("@version", version));
 					try
 					{
@@ -132,7 +133,8 @@ namespace BD.PPC.Application
 					// process de mise à jour à mettre ici
 
 					cmd.CommandText = "UPDATE OPTIONS SET Valeur = ? WHERE Nom_Option = 'Version'";
-					cmd.Parameters.Add(BDPPCDatabase.GetParameter("@version", assembly.GetName().Version.ToString()));
+          cmd.Parameters.Clear();
+          cmd.Parameters.Add(BDPPCDatabase.GetParameter("@version", assembly.GetName().Version.ToString()));
 					cmd.ExecuteNonQuery();
 					if (!force) MessageBox.Show("Mise à jour terminée");
 				}

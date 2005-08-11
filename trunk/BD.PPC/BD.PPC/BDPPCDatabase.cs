@@ -3,7 +3,6 @@ using System.Text;
 using System.Data;
 using System.Data.SqlServerCe;
 using System.IO;
-using System.Windows.Forms;
 
 namespace BD.PPC.Database
 {

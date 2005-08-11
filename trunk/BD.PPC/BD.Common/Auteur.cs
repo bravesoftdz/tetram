@@ -22,7 +22,7 @@ namespace BD.Common.Records
 		[SQLDataField] [IsReference] public int RefAuteur;
 		[SQLDataClass] public Personnage Personne = new Personnage();
 		[SQLDataField] public int RefAlbum;
-		[SQLDataField] public int RefSérie;
+		[SQLDataField("RefSerie")] public int RefSérie;
 		[SQLDataField] public int Metier;
 
 		public override string ToString()
@@ -30,9 +30,6 @@ namespace BD.Common.Records
 			return Personne.ToString();
 		}
 	}
-
-	[ClassFactory(typeof(AuteurComplet))]
-	public class AuteurCompletFactory : RecordCompletFactory{};
 
 	public class AuteurComplet : BaseRecordComplet
 	{

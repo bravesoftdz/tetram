@@ -123,7 +123,7 @@ namespace BD.PPC.Application
 			set
 			{
 				refAuteur = value;
-				AuteurComplet auteur = (new AuteurCompletFactoryPPC()).NewInstance(refAuteur) as AuteurComplet;
+				AuteurComplet auteur = BaseRecordComplet.Create<AuteurCompletPPC>(refAuteur) as AuteurComplet;
 				label1.Text = auteur.NomAuteur.ToString();
 				if (auteur.SiteWeb != null && auteur.SiteWeb.Length != 0)
 					label2.Text = auteur.SiteWeb;

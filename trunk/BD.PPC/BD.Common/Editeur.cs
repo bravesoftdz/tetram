@@ -19,9 +19,6 @@ namespace BD.Common.Records
 		}
 	}
 
-	[ClassFactory(typeof(EditeurComplet))]
-	public class EditeurCompletFactory : RecordCompletFactory{}	
-
 	public class EditeurComplet : BaseRecordComplet
 	{
 		[SQLDataField] [IsReference] public int RefEditeur;

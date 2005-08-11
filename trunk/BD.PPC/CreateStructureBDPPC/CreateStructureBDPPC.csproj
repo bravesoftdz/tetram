@@ -4,15 +4,16 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.50215</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{897F2520-0E64-48C6-BF29-1D95B5A2AD21}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{97CD6E81-A1ED-476B-87C9-B24EDD8B3339}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BD.Common</RootNamespace>
-    <AssemblyName>BD.Common</AssemblyName>
+    <RootNamespace>CreateStructureBDPPC</RootNamespace>
+    <AssemblyName>CreateStructureBDPPC</AssemblyName>
     <ProjectTypeGuids>{4D628B5B-2FBC-4AA6-8C16-197242AEB884};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PlatformFamilyName>PocketPC</PlatformFamilyName>
     <PlatformID>3C41C503-53EF-4c2a-8DD4-A8217CAD115E</PlatformID>
     <OSVersion>4.20</OSVersion>
+    <DeployDirSuffix>CreateStructureBDPPC</DeployDirSuffix>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FormFactorID>
     </FormFactorID>
@@ -44,23 +45,38 @@
     <Reference Include="mscorlib" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.SqlServerCe, Version=3.0.3600.0, Culture=neutral, PublicKeyToken=3be235df1c8d2ad3, processorArchitecture=MSIL" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Album.cs" />
-    <Compile Include="Auteur.cs" />
-    <Compile Include="BaseRecordComplet.cs" />
-    <Compile Include="Collection.cs" />
-    <Compile Include="Divers.cs" />
-    <Compile Include="Editeur.cs" />
-    <Compile Include="Emprunteur.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Série.cs" />
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="UMain.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\Compos Perso.Net\TetramCorp.Components\TetramCorp.Components.csproj">
-      <Project>{A79C37B0-4DB3-4468-B4CA-82904979A562}</Project>
-      <Name>TetramCorp.Components</Name>
+    <EmbeddedResource Include="ScriptData.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BD.PPC\BD.PPC.csproj">
+      <Project>{A1F9DEB7-A290-4DD0-9345-4B1F8420FC75}</Project>
+      <Name>BD.PPC</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Condition="'$(TargetFrameworkVersion)' == 'v1.0'" Project="$(MSBuildBinPath)\Microsoft.CompactFramework.CSharp.v1.targets" />

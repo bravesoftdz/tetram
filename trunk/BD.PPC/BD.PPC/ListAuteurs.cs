@@ -31,7 +31,8 @@ namespace BD.PPC.Lists
 			using(IDbCommand cmd = BDPPCDatabase.GetCommand())
 			{
 				StringBuilder SQL = new StringBuilder();
-				SQL.Append("SELECT REFPERSONNE, NOMPERSONNE FROM PERSONNES");
+        cmd.Parameters.Clear();
+        SQL.Append("SELECT REFPERSONNE, NOMPERSONNE FROM PERSONNES");
 				if (titreCommencePar != null && titreCommencePar.Length > 0) 
 				{
 					SQL.Append("\nWHERE");
@@ -44,7 +45,7 @@ namespace BD.PPC.Lists
 				SQL.Append("\nORDER BY UPPERNOMPERSONNE");
 				cmd.CommandText = SQL.ToString();
 				using (IDataReader result = cmd.ExecuteReader())
-				using (BaseDataReader dataReader = new BaseDataReader(result, typeof(Auteur)))
+        using (BaseDataReader<Auteur> dataReader = new BaseDataReader<Auteur>(result))
 					if (result != null)
 						dataReader.FillList(this);
 			}

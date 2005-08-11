@@ -29,9 +29,9 @@ namespace BD.PPC.Lists
 			using(new WaitingCursor())
 			using(IDbCommand cmd = BDPPCDatabase.GetCommand())
 			{
-			
 				StringBuilder SQL = new StringBuilder();
-				SQL.Append("SELECT * FROM SERIES S LEFT JOIN EDITEURS E ON S.REFEDITEUR = E.REFEDITEUR LEFT JOIN COLLECTIONS C ON S.REFCOLLECTION=C.REFCOLLECTION");
+        cmd.Parameters.Clear();
+        SQL.Append("SELECT * FROM SERIES S LEFT JOIN EDITEURS E ON S.REFEDITEUR = E.REFEDITEUR LEFT JOIN COLLECTIONS C ON S.REFCOLLECTION=C.REFCOLLECTION");
 				if (titreCommencePar != null && titreCommencePar.Length > 0) 
 				{
 					SQL.Append("\nWHERE");
@@ -44,7 +44,7 @@ namespace BD.PPC.Lists
 				SQL.Append("\nORDER BY S.UPPERTITRESERIE");
 				cmd.CommandText = SQL.ToString();
 				using (IDataReader result = cmd.ExecuteReader())
-				using (BaseDataReader dataReader = new BaseDataReader(result, typeof(Série)))
+				using (BaseDataReader<Série> dataReader = new BaseDataReader<Série>(result))
 					if (result != null)
 						dataReader.FillList(this);
 			}

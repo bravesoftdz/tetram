@@ -15,14 +15,14 @@ namespace BD.Common.Records
 		[SQLDataField] public int TomeDebut;
 		[SQLDataField] public int TomeFin;
 		[SQLDataField("TitreAlbum")] public FormatedTitle Titre = new FormatedTitle(string.Empty);
-		[SQLDataField] public int RefSérie;
+		[SQLDataField("RefSerie")] public int RefSérie;
 		[SQLDataField("TitreSerie")] public FormatedTitle Série = new FormatedTitle(string.Empty);
 		[SQLDataField] public int RefEditeur;
 		[SQLDataField] public FormatedTitle Editeur = new FormatedTitle(string.Empty);
-		[SQLDataField] public int AnnéeEdition;
+		[SQLDataField("AnneeEdition")] public int AnnéeEdition;
 		[SQLDataField] public bool Stock;
 		[SQLDataField] public bool Integrale;
-		[SQLDataField] public bool HorsSérie;
+		[SQLDataField("HorsSerie")] public bool HorsSérie;
 		[SQLDataField] public bool Achat;
 		[SQLDataField] public bool Complet;
 

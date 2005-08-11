@@ -280,7 +280,7 @@ namespace BD.PPC.Application
 			set
 			{
 				refSérie = value;
-				SérieComplet serie = (new SérieCompletFactoryPPC()).NewInstance(refSérie) as SérieComplet;
+        SérieComplet serie = BaseRecordComplet.Create<SérieCompletPPC>(refSérie) as SérieComplet;
 				label1.Text = serie.Titre.ToString();
 				if (serie.SiteWeb != null && serie.SiteWeb.Length != 0)
 					label2.Text = serie.SiteWeb;

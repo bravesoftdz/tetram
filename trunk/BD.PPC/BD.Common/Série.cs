@@ -8,8 +8,8 @@ namespace BD.Common.Records
 {
 	public class Série: BaseRecord
 	{
-		[SQLDataField] [IsReference] public int RefSérie;
-		[SQLDataField] public FormatedTitle TitreSérie = new FormatedTitle(string.Empty);
+		[SQLDataField("RefSerie")] [IsReference] public int RefSérie;
+		[SQLDataField("TitreSerie")] public FormatedTitle TitreSérie = new FormatedTitle(string.Empty);
 		[SQLDataClass] public Editeur EditeurSérie = new Editeur();
 		[SQLDataClass] public Collection CollectionSérie = new Collection();
 		
@@ -41,23 +41,11 @@ namespace BD.Common.Records
 		}
 	}
 
-	[ClassFactory(typeof(SérieComplet))]
-	public class SérieCompletFactory : RecordCompletFactory
-	{
-		public SérieComplet NewInstance(int refSérie, int refAuteur)
-		{
-			SérieComplet result = Activator.CreateInstance(Classe) as SérieComplet;
-			result.FIdAuteur = refAuteur;
-			Fill(result, refSérie);
-			return result;
-		}	
-	}
-
 	public class SérieComplet : BaseRecordComplet
 	{
-		[SQLDataField] public int RefSérie;
+		[SQLDataField("RefSerie")] public int RefSérie;
 		[SQLDataField("TITRESERIE")] public FormatedTitle Titre = new FormatedTitle();
-		[SQLDataField] public int Terminée;
+		[SQLDataField("Terminee")] public int Terminée;
 		public ArrayList Albums = new ArrayList();
 		public GenreCollection Genres = new GenreCollection();
 		[SQLDataField("SUJETSERIE")] public string Sujet;
@@ -71,7 +59,7 @@ namespace BD.Common.Records
 
 		public int FIdAuteur = -1;
 
-		public override string ToString()
+        public override string ToString()
 		{
 			return Titre.ToString ();
 		}

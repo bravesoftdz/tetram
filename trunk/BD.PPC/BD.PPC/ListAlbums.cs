@@ -10,8 +10,7 @@ using TetramCorp.Utilities;
 
 namespace BD.PPC.Lists
 {
-
-	public class ListAlbums : ArrayList
+  public class ListAlbums : ArrayList
 	{
 		public ListAlbums() : base()
 		{
@@ -29,7 +28,8 @@ namespace BD.PPC.Lists
 			using(IDbCommand cmd = BDPPCDatabase.GetCommand())
 			{
 				StringBuilder SQL = new StringBuilder();
-				SQL.Append("SELECT * FROM ALBUMS A INNER JOIN SERIES S ON A.REFSERIE = S.REFSERIE");
+        cmd.Parameters.Clear();
+        SQL.Append("SELECT * FROM ALBUMS A INNER JOIN SERIES S ON A.REFSERIE = S.REFSERIE");
 				if (titreCommencePar != null && titreCommencePar.Length > 0) 
 				{
 					SQL.Append("\nWHERE");
@@ -42,7 +42,7 @@ namespace BD.PPC.Lists
 				SQL.Append("\nORDER BY A.UPPERTITREALBUM");
 				cmd.CommandText = SQL.ToString();
 				using (IDataReader result = cmd.ExecuteReader())
-				using (BaseDataReader dataReader = new BaseDataReader(result, typeof(Album)))
+        using (BaseDataReader<Album> dataReader = new BaseDataReader<Album>(result))
 					if (result != null)
 						dataReader.FillList(this);
 			}

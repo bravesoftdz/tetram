@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CreateStructureBDPPC")]
+[assembly: AssemblyTitle("BDPPC")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Teträm Corp")]
-[assembly: AssemblyProduct("CreateStructureBDPPC")]
+[assembly: AssemblyProduct("BDPPC")]
 [assembly: AssemblyCopyright("Copyright © Teträm Corp 2005")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("c406ccdf-9e79-4817-9843-4c8505588b67")]
+[assembly: Guid("a0f78304-a9ca-45f0-ab49-6186a064e3c1")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -31,3 +31,4 @@ using System.Runtime.InteropServices;
 //
 [assembly: AssemblyVersion("1.0.0.0")]
 
+[assembly: System.Resources.NeutralResourcesLanguage("fr-FR")]

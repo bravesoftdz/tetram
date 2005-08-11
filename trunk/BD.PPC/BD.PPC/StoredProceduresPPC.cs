@@ -26,10 +26,11 @@ namespace BD.PPC.Records
 						+ "from personnes p inner join auteurs a on a.refpersonne = p.refpersonne "
 						+ "where a.refalbum = ? "
 						+ "order by a.metier, p.uppernompersonne";
-					cmd.Parameters.Add(BDPPCDatabase.GetParameter("@RefAlbum", refAlbum));
+          cmd.Parameters.Clear();
+          cmd.Parameters.Add(BDPPCDatabase.GetParameter("@RefAlbum", refAlbum));
 
 					using (IDataReader result = cmd.ExecuteReader())
-					using (BaseDataReader dataReader = new BaseDataReader(result, typeof(Auteur)))
+					using (BaseDataReader<Auteur> dataReader = new BaseDataReader<Auteur>(result))
 						if (result != null)
 							dataReader.FillList(list);
 				}
@@ -40,10 +41,11 @@ namespace BD.PPC.Records
 						+ "from personnes p inner join auteurs_series a on a.refpersonne = p.refpersonne "
 						+ "where a.refserie = ? "
 						+ "order by a.metier, p.uppernompersonne";
-					cmd.Parameters.Add(BDPPCDatabase.GetParameter("@RefSerie", refSérie));
+          cmd.Parameters.Clear();
+          cmd.Parameters.Add(BDPPCDatabase.GetParameter("@RefSerie", refSérie));
 
 					using (IDataReader result = cmd.ExecuteReader())
-					using (BaseDataReader dataReader = new BaseDataReader(result, typeof(Auteur)))
+					using (BaseDataReader<Auteur> dataReader = new BaseDataReader<Auteur>(result))
 						if (result != null)
 							dataReader.FillList(list);
 				}
