@@ -20,7 +20,7 @@ PrivilegesRequired=poweruser
 AppCopyright=Teträm Corp © 1997-2004
 AppID={{A86E29B5-D1EE-431F-A5BF-E4A10D36CBDC}
 LicenseFile=G:\Programmation\MEDIA.KIT\LicenceFreeWare.rtf
-WindowVisible=true
+WindowVisible=false
 BackColor=$8080ff
 BackColor2=clPurple
 BackColorDirection=toptobottom
@@ -37,6 +37,8 @@ Compression=lzma/normal
 VersionInfoVersion={#SetupSetting("AppVersion")}
 VersionInfoCompany=Teträm Corp
 VersionInfoTextVersion={#SetupSetting("AppVersion")}
+WizardImageFile=fond.bmp
+WizardSmallImageFile=SetupModernSmall19.bmp
 
 [Tasks]
 Name: desktopicon; Description: Créer un raccourci sur le &bureau; GroupDescription: Raccourcis supplémentaires:
