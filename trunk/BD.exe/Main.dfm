@@ -1,6 +1,6 @@
 object Fond: TFond
-  Left = 363
-  Top = 241
+  Left = 573
+  Top = 248
   Width = 740
   Height = 570
   Caption = 'Fond'
@@ -71,14 +71,18 @@ object Fond: TFond
       Left = 0
       Top = 0
       Action = HistoriqueBack
+      Style = tbsDropDown
     end
     object ToolButton2: TToolButton
-      Left = 39
+      Left = 52
       Top = 0
-      Action = HistoriqueNext
+      Caption = 'Suivant'
+      ImageIndex = 12
+      Style = tbsDropDown
+      OnClick = HistoriqueNextExecute
     end
     object ToolButton5: TToolButton
-      Left = 78
+      Left = 104
       Top = 0
       Width = 8
       Caption = 'ToolButton5'
@@ -86,17 +90,17 @@ object Fond: TFond
       Style = tbsSeparator
     end
     object ToolButton3: TToolButton
-      Left = 86
+      Left = 112
       Top = 0
       Action = AfficheRecherche
     end
     object ToolButton4: TToolButton
-      Left = 125
+      Left = 151
       Top = 0
       Action = AfficheStock
     end
     object ToolButton6: TToolButton
-      Left = 164
+      Left = 190
       Top = 0
       Width = 8
       Caption = 'ToolButton6'
@@ -104,17 +108,17 @@ object Fond: TFond
       Style = tbsSeparator
     end
     object ToolButton7: TToolButton
-      Left = 172
+      Left = 198
       Top = 0
       Action = Impression
     end
     object ToolButton8: TToolButton
-      Left = 211
+      Left = 237
       Top = 0
       Action = ApercuImpression
     end
     object ToolButton9: TToolButton
-      Left = 250
+      Left = 276
       Top = 0
       Width = 8
       Caption = 'ToolButton9'
@@ -122,17 +126,17 @@ object Fond: TFond
       Style = tbsSeparator
     end
     object ToolButton10: TToolButton
-      Left = 258
+      Left = 284
       Top = 0
       Action = AfficheStatsGenerales
     end
     object ToolButton11: TToolButton
-      Left = 297
+      Left = 323
       Top = 0
       Action = ChangementOptions
     end
     object ToolButton12: TToolButton
-      Left = 336
+      Left = 362
       Top = 0
       Width = 8
       Caption = 'ToolButton12'
@@ -141,7 +145,7 @@ object Fond: TFond
       Style = tbsSeparator
     end
     object ToolButton13: TToolButton
-      Left = 344
+      Left = 370
       Top = 0
       Action = AideContextuelle
     end
@@ -7818,5 +7822,17 @@ object Fond: TFond
       00010001E001800F80010001E001C00F80030003E001801FC0030003F001C07F
       E0078003F00FF0FFFFFFF003F8FFFFFF00000000000000000000000000000000
       000000000000}
+  end
+  object PopupMenu1: TPopupMenu
+    Left = 160
+    Top = 166
+    object mnuBack: TMenuItem
+      Caption = 'Pr'#233'c'#233'dent'
+      ImageIndex = 11
+    end
+    object mnuNext: TMenuItem
+      Caption = 'Suivant'
+      ImageIndex = 12
+    end
   end
 end

@@ -11,6 +11,8 @@ type
     procedure WriteString(Stream: TStream; const Chaine: string);
     procedure WriteStringLN(Stream: TStream; const Chaine: string);
   public
+    RecInconnu: Boolean;
+
     procedure Fill(const Reference: Integer); virtual;
     procedure BeforeDestruction; override;
     procedure Clear; virtual;
@@ -228,6 +230,7 @@ end;
 procedure TBaseComplet.Clear;
 begin
   // nettoyage de toutes les listes et autres
+  RecInconnu := True;
 end;
 
 constructor TBaseComplet.Create(const Reference: Integer);
@@ -318,6 +321,7 @@ begin
     SQL.Text := 'SELECT TITREALBUM, MOISPARUTION, ANNEEPARUTION, REFSERIE, TOME, TOMEDEBUT, TOMEFIN, SUJETALBUM, REMARQUESALBUM, HORSSERIE, INTEGRALE FROM ALBUMS WHERE RefAlbum = ?';
     Params.AsInteger[0] := Reference;
     Open;
+    RecInconnu := Eof;
     Self.Titre := Fields.ByNameAsString['TITREALBUM'];
     Self.AnneeParution := Fields.ByNameAsInteger['ANNEEPARUTION'];
     Self.MoisParution := Fields.ByNameAsInteger['MOISPARUTION'];
@@ -444,6 +448,7 @@ begin
     Params.AsInteger[0] := Reference;
     FetchBlobs := True;
     Open;
+    RecInconnu := Eof;
 
     Self.RefEdition := Fields.ByNameAsInteger['REFEDITION'];
     Self.RefAlbum := Fields.ByNameAsInteger['RefAlbum'];
@@ -626,6 +631,7 @@ begin
     Params.AsInteger[0] := Reference;
     FetchBlobs := True;
     Open;
+    RecInconnu := Eof;
     Self.Nom := Fields.ByNameAsString['NomEmprunteur'];
     Self.Adresse.Text := Fields.ByNameAsString['AdresseEmprunteur'];
 
@@ -708,6 +714,7 @@ begin
       + 'WHERE REFSERIE = ?';
     Params.AsInteger[0] := Reference;
     Open;
+    RecInconnu := Eof;
     Self.Titre := FormatTitre(Fields.ByNameAsString['TITRESERIE']);
     if Fields.ByNameIsNull['TERMINEE'] then
       Self.Terminee := -1
@@ -802,6 +809,7 @@ begin
     SQL.Text := 'SELECT NOMEDITEUR, SITEWEB FROM EDITEURS WHERE REFEDITEUR = ?';
     Params.AsInteger[0] := Reference;
     Open;
+    RecInconnu := Eof;
     Self.NomEditeur := Fields.ByNameAsString['NOMEDITEUR'];
     Self.SiteWeb := Trim(Fields.ByNameAsString['SITEWEB']);
   finally
@@ -1433,6 +1441,7 @@ begin
     Params.AsInteger[0] := Reference;
     FetchBlobs := True;
     Open;
+    RecInconnu := Eof;
     Self.NomAuteur := Fields.ByNameAsString['NOMPERSONNE'];
     Self.Biographie.Text := Fields.ByNameAsString['BIOGRAPHIE'];
     Self.SiteWeb := Trim(Fields.ByNameAsString['SITEWEB']);

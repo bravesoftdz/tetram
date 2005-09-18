@@ -139,6 +139,7 @@ type
     procedure ClearForm;
   public
     { Déclarations publiques }
+    property Album: TAlbumComplet read FAlbum;
     property RefAlbum: Integer read GetRefAlbum write SetRefAlbum;
   end;
 

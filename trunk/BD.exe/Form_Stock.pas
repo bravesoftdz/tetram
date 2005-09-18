@@ -299,7 +299,7 @@ begin
         FListEmprunts.Add(TEmprunt.Duplicate(PE));
     end;
     ListeEmprunts.RootNodeCount := FListEmprunts.Count;
-    Caption := Format('%d Emprunts', [R.NBEmprunts]);
+    // Caption := Format('%d Emprunts', [R.NBEmprunts]);
   finally
     R.Free;
   end;

@@ -3,6 +3,7 @@ object FrmStock: TFrmStock
   Top = 342
   Width = 1110
   Height = 607
+  Caption = 'Albums emprunt'#233's'
   Color = clBtnFace
   Constraints.MinWidth = 400
   Font.Charset = ANSI_CHARSET

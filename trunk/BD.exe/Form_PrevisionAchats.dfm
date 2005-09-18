@@ -3,12 +3,12 @@ object frmPrevisionsAchats: TfrmPrevisionsAchats
   Top = 352
   Width = 870
   Height = 640
-  Caption = 'frmPrevisionsAchats'
+  Caption = 'Achats pr'#233'vus'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
-  Font.Name = 'MS Sans Serif'
+  Font.Name = 'Tahoma'
   Font.Style = []
   Menu = MainMenu1
   OldCreateOrder = False
@@ -23,15 +23,21 @@ object frmPrevisionsAchats: TfrmPrevisionsAchats
     Align = alClient
     BevelKind = bkTile
     BorderStyle = bsNone
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
     Header.AutoSizeIndex = 0
     Header.Font.Charset = DEFAULT_CHARSET
     Header.Font.Color = clWindowText
     Header.Font.Height = -11
-    Header.Font.Name = 'MS Sans Serif'
+    Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
     Header.MainColumn = -1
     Header.Options = [hoColumnResize, hoDrag]
     HotCursor = crHandPoint
+    ParentFont = False
     TabOrder = 0
     OnPaintText = vstPrevisionsAchatsPaintText
     Columns = <>
@@ -47,7 +53,7 @@ object frmPrevisionsAchats: TfrmPrevisionsAchats
     object Label1: TLabel
       Left = 4
       Top = 6
-      Width = 59
+      Width = 61
       Height = 13
       Caption = 'Grouper par '
       Transparent = True

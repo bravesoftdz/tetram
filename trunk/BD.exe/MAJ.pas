@@ -6,15 +6,15 @@ uses
   Windows, SysUtils, Forms, Controls, ComCtrls, TypeRec, LoadComplet, Textes, Form_Consultation, Form_ConsultationE,
   Form_SaisieEmpruntAlbum, Form_SaisieEmpruntEmprunteur, Form_Recherche, Form_ZoomCouverture, Classes;
 
-procedure MAJConsultation(Reference: Integer);
-procedure MAJConsultationE(Reference: Integer);
-procedure MAJConsultationAuteur(Reference: Integer);
+function MAJConsultation(Reference: Integer): Boolean;
+function MAJConsultationE(Reference: Integer): Boolean;
+function MAJConsultationAuteur(Reference: Integer): Boolean;
 procedure MAJStock;
 procedure MAJSeriesIncompletes;
 procedure MAJPrevisionsSorties;
 procedure MAJPrevisionsAchats;
 procedure MAJRecherche(Reference: Integer; TypeSimple: Integer = -1);
-procedure ZoomCouverture(RefAlbum, RefCouverture: Integer);
+function ZoomCouverture(RefAlbum, RefCouverture: Integer): Boolean;
 
 function SaisieMouvementAlbum(MvtRefAlbum, MvtRefEdition: Integer; MvtPret: Boolean; MvtRefEmprunteur: Integer = -1): Boolean;
 function SaisieMouvementEmprunteur(MvtRefEmprunteur: Integer; MvtRefAlbum: TEditionsEmpruntees): Boolean;
@@ -24,39 +24,43 @@ implementation
 uses
   Commun, CommonConst, DM_Princ, Form_Stock, Main, DM_Commun, DB, StdCtrls, JvUIB, JvUIBLib, Divers,
   Procedures, Form_SeriesIncompletes, Form_PrevisionsSorties, Graphics,
-  Form_ConsultationAuteur, Form_PrevisionAchats;
+  Form_ConsultationAuteur, Form_PrevisionAchats, UHistorique;
 
-procedure MAJConsultationAuteur(Reference: Integer);
+function MAJConsultationAuteur(Reference: Integer): Boolean;
 var
   FDest: TFrmConsultationAuteur;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
   FDest := TFrmConsultationAuteur.Create(Fond);
   try
     FDest.RefAuteur := Reference;
+    Historique.SetDescription(FDest.Caption);
+    Result := not FDest.Auteur.RecInconnu;
   finally
     Fond.SetChildForm(FDest);
   end;
 end;
 
-procedure MAJConsultation(Reference: Integer);
+function MAJConsultation(Reference: Integer): Boolean;
 var
   FDest: TFrmConsultation;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
   FDest := TFrmConsultation.Create(Fond);
   try
     FDest.RefAlbum := Reference;
+    Historique.SetDescription(FDest.Caption);
+    Result := not FDest.Album.RecInconnu;
   finally
     Fond.SetChildForm(FDest);
   end;
 end;
 
-procedure MAJConsultationE(Reference: Integer);
+function MAJConsultationE(Reference: Integer): Boolean;
 var
   R: TEmprunteurComplet;
   i: Integer;
@@ -64,7 +68,7 @@ var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
   R := TEmprunteurComplet.Create(Reference);
   FDest := TFrmConsultationE.Create(Fond);
   try
@@ -79,6 +83,9 @@ begin
       ListeEmprunts.RootNodeCount := FListEmprunts.Count;
       Emprunts.Caption := IntToStr(R.Emprunts.NBEmprunts);
     end;
+
+    Historique.SetDescription(FDest.Caption);
+    Result := not R.RecInconnu;
   finally
     R.Free;
     Fond.SetChildForm(FDest);
@@ -123,6 +130,7 @@ var
 begin
   hg := THourGlass.Create;
   Fond.SetChildForm(FormClass.Create(Fond));
+  Historique.SetDescription(Fond.FCurrentForm.Caption);
 end;
 
 procedure MAJPrevisionsAchats;
@@ -161,18 +169,24 @@ begin
     end;
     Fond.SetChildForm(FDest);
   end;
+  if Historique.CurrentConsultation = 0 then
+    Historique.SetDescription('Accueil')
+  else
+    Historique.SetDescription(FDest.Caption);
 end;
 
-procedure ZoomCouverture(RefAlbum, RefCouverture: Integer);
+function ZoomCouverture(RefAlbum, RefCouverture: Integer): Boolean;
 var
   FDest: TFrmZoomCouverture;
 begin
   FDest := TFrmZoomCouverture.Create(Fond);
   with FDest do try
-    LoadCouverture(RefAlbum, RefCouverture);
+    Result := LoadCouverture(RefAlbum, RefCouverture);
+    Historique.SetDescription(FDest.Caption);
   finally
     Fond.SetChildForm(FDest);
   end;
 end;
 
 end.
+

@@ -99,9 +99,10 @@ uses
   UMAJ0_0_3_24 in 'UMAJ0_0_3_24.pas',
   UMAJ0_0_3_27 in 'UMAJ0_0_3_27.pas',
   UMAJ0_0_3_25 in 'UMAJ0_0_3_25.pas',
-  UMAJ1_0_0_2 in 'UMAJ1_0_0_2.pas',
+  UMAJ1_0_0_3 in 'UMAJ1_0_0_3.pas',
   UMAJ1_0_0_0 in 'UMAJ1_0_0_0.pas',
-  Divers in '..\..\..\..\Common\Divers.pas';
+  Divers in '..\..\..\..\Common\Divers.pas',
+  UMAJ1_0_0_2 in 'UMAJ1_0_0_2.pas';
 
 {$R *.RES}
 {$R curseurs.res}

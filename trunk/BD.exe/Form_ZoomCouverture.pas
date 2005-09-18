@@ -40,7 +40,7 @@ type
     function ApercuUpdate: Boolean;
   public
     { Déclarations publiques }
-    procedure LoadCouverture(RefAlbum, RefCouverture: Integer);
+    function LoadCouverture(RefAlbum, RefCouverture: Integer): Boolean;
   end;
 
 implementation
@@ -49,7 +49,7 @@ uses CommonConst, Impression, UHistorique, jpeg, Math;
 
 {$R *.DFM}
 
-procedure TFrmZoomCouverture.LoadCouverture(RefAlbum, RefCouverture: Integer);
+function TFrmZoomCouverture.LoadCouverture(RefAlbum, RefCouverture: Integer): Boolean;
 var
   ms: TStream;
   jpg: TJPEGImage;
@@ -66,9 +66,12 @@ begin
       FreeAndNil(jpg);
       FreeAndNil(ms);
     end;
+    Result := True;
   end
-  else
+  else begin
     Image.Picture.Assign(nil);
+    Result := False;
+  end;
 
   ScrollBarV.Visible := Image.Height > (Panel.Height - ScrollBarH.Height);
   ScrollBarH.Visible := Image.Width > (Panel.Width - ScrollBarV.Width);

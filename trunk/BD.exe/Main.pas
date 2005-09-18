@@ -12,7 +12,7 @@ uses
 type
   TActionUpdate = function: Boolean of object;
 
-  TStack = class(Contnrs.TStack)
+  TStack = class(Contnrs.TStack) // surcharge pour pouvoir acceder à List
     //  published
     //    property List;
   end;
@@ -139,6 +139,9 @@ type
     actMiseAJour: TAction;
     N12: TMenuItem;
     Vrifierlaversion1: TMenuItem;
+    PopupMenu1: TPopupMenu;
+    mnuBack: TMenuItem;
+    mnuNext: TMenuItem;
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure ChangementOptionsExecute(Sender: TObject);
@@ -190,6 +193,8 @@ type
     procedure ChargeToolBarres(sl: TStringList);
     procedure WMSyscommand(var msg: TWmSysCommand); message WM_SYSCOMMAND;
     procedure MergeMenu(MergedMenu: TMainMenu);
+    procedure HistoriqueChanged(Sender: TObject);
+    procedure HistoriqueChosen(Sender: TObject);
   public
     { Déclarations publiques }
     FCurrentForm: TForm;
@@ -211,7 +216,7 @@ uses
   MAJ, Form_Consultation, Form_ConsultationE, Form_Repertoire, CommonConst, Commun, Form_options, Form_StatsGeneral,
   Form_StatsEmprunteurs, Form_StatsAlbums, Textes, LoadComplet, Impression, Editions, Form_Gestion, Form_Customize,
   Form_AboutBox, DM_Princ, TypeRec, Types, Procedures, UHistorique, Form_Entretien,
-  Form_Exportation, ShellAPI;
+  Form_Exportation, ShellAPI, MAth;
 
 procedure TFond.WMSyscommand(var msg: TWmSysCommand);
 begin
@@ -226,6 +231,7 @@ procedure TFond.FormDestroy(Sender: TObject);
 var
   i: Integer;
 begin
+  Historique.OnChange := nil;
   FreeAndNil(FModalWindows);
   FreeAndNil(FToolOriginal);
   FreeAndNil(FToolCurrent);
@@ -255,6 +261,7 @@ begin
   FToolCurrent.Assign(FToolOriginal);
   LoadToolBarres;
   Caption := Application.Title;
+  Historique.OnChange := HistoriqueChanged;
 end;
 
 procedure TFond.ChangementOptionsExecute(Sender: TObject);
@@ -291,13 +298,11 @@ var
   R: TStats;
 begin
   R := TStats.Create(False);
-  with TStatsGeneralesCreate(Self, R) do begin
-    try
-      ShowModal;
-    finally
-      Free;
-      R.Free;
-    end;
+  with TStatsGeneralesCreate(Self, R) do try
+    ShowModal;
+  finally
+    Free;
+    R.Free;
   end;
 end;
 
@@ -354,8 +359,7 @@ begin
   if (DMPrinc.HTTPServer.Active) and (AffMessage('Êtes-vous sûr de vouloir quitter?', mtConfirmation, [mbYes, mbNo], True) <> mrYes) then Exit;
   i := 0;
   while i < Application.ComponentCount do
-    if (Application.Components[i] is TDataModule) and
-      (Application.Components[i] <> DMPrinc) then
+    if (Application.Components[i] is TDataModule) and (Application.Components[i] <> DMPrinc) then
       Application.Components[i].Free
     else
       Inc(i);
@@ -380,13 +384,11 @@ var
   R: TStats;
 begin
   R := TStats.Create(False);
-  with TStatsAlbumsCreate(Self, R) do begin
-    try
-      ShowModal;
-    finally
-      Free;
-      R.Free;
-    end;
+  with TStatsAlbumsCreate(Self, R) do try
+    ShowModal;
+  finally
+    Free;
+    R.Free;
   end;
 end;
 
@@ -422,8 +424,16 @@ procedure TFond.ChargeToolBarres(sl: TStringList);
         Width := 8;
       end
       else begin
-        Action := aAction;
+        if aAction = HistoriqueBack then begin
+          Style := tbsDropDown;
+          MenuItem := mnuBack;
+        end;
+        if aAction = HistoriqueNext then begin
+          Style := tbsDropDown;
+          MenuItem := mnuNext;
+        end;
         Cursor := crHandPoint;
+        Action := aAction;
       end;
     end;
   end;
@@ -567,12 +577,10 @@ end;
 
 procedure TFond.AideAboutExecute(Sender: TObject);
 begin
-  with TFrmAboutBox.Create(Application) do begin
-    try
-      ShowModal;
-    finally
-      Free;
-    end;
+  with TFrmAboutBox.Create(Application) do try
+    ShowModal;
+  finally
+    Free;
   end;
 end;
 
@@ -717,12 +725,12 @@ begin
       MergedMenu.Images := boutons_32x32_hot
     else
       MergedMenu.Images := boutons_16x16_hot;
-    for i := 0 to Pred(MergedMenu.Items.Count) do begin
+    for i := 0 to Pred(MergedMenu.Items.Count) do
       MergedMenu.Items[i].GroupIndex := 50;
-      ProcessMenuItem(MergedMenu.Items[i]);
-    end;
   end;
   Menu.Merge(MergedMenu);
+  for i := 0 to Pred(Menu.Items.Count) do
+    ProcessMenuItem(Menu.Items[i]);
 end;
 
 procedure TFond.SetChildForm(Form: TForm; Alignement: TAlign = alClient);
@@ -753,8 +761,6 @@ begin
     FCurrentForm := nil;
   if Form is TFrmRepertoire then Splitter1.Left := ClientWidth - Splitter1.Width;
   Form.left := 0;
-//  for i := 0 to Pred(MainMenu1.Items.Count) do
-//    ProcessMenuItem(MainMenu1.Items[i]);
 end;
 
 procedure TFond.HistoriqueBackExecute(Sender: TObject);
@@ -781,10 +787,9 @@ begin
       TAction(ActionsStatistiques.Actions[i]).Enabled := False;
     Handled := True;
   end
-  else begin
+  else
     for i := 0 to Pred(ActionsStatistiques.ActionCount) do
       TAction(ActionsStatistiques.Actions[i]).Enabled := True;
-  end;
 end;
 
 procedure TFond.ActiveWebServerExecute(Sender: TObject);
@@ -819,7 +824,7 @@ end;
 
 procedure TFond.MeasureMenuItem(Sender: TObject; ACanvas: TCanvas; var Width, Height: Integer);
 
-  procedure GetMenuSize;
+  procedure SetMenuSize;
   var
     NonClientMetrics: TNonClientMetrics;
   begin
@@ -834,7 +839,7 @@ var
 begin
   il := TMenuItem(Sender).GetImageList;
   if not Assigned(il) or (TMenuItem(Sender).ImageIndex = -1) then
-    GetMenuSize
+    SetMenuSize
   else
     Height := il.Height + 3;
 end;
@@ -847,6 +852,52 @@ end;
 procedure TFond.actMiseAJourExecute(Sender: TObject);
 begin
   DMPrinc.CheckVersion(True);
+end;
+
+procedure TFond.HistoriqueChanged(Sender: TObject);
+const
+  MaxNbItems = 10;
+var
+  i: Integer;
+  mnu: TMenuItem;
+begin
+  //  mnuBack.Items.Count = Historique.CurrentConsultation;
+  //  mnuNext.Items.Count = Historique.CountConsultation - Historique.CurrentConsultation - 1;
+  //  mnuCurrent.Items.Count = 1 (Historique.CurrentConsultation);
+
+  mnuBack.Clear;
+  for i := Max(0, Historique.CurrentConsultation - MaxNbItems) to (Historique.CurrentConsultation - 1) do begin
+    mnu := TMenuItem.Create(Self);
+    mnu.Caption := Historique.GetDescription(i);
+    mnu.Tag := i;
+    mnu.OnClick := HistoriqueChosen;
+    mnuBack.Insert(0, mnu);
+  end;
+  if (Historique.CurrentConsultation - MaxNbItems > 0) then begin
+    mnu := TMenuItem.Create(Self);
+    mnu.Caption := '...';
+    mnu.Enabled := False;
+    mnuBack.Add(mnu);
+  end;
+  mnuNext.Clear;
+  for i := (Historique.CurrentConsultation + 1) to Min(Pred(Historique.CountConsultation), Historique.CurrentConsultation + MaxNbItems) do begin
+    mnu := TMenuItem.Create(Self);
+    mnu.Caption := Historique.GetDescription(i);
+    mnu.Tag := i;
+    mnu.OnClick := HistoriqueChosen;
+    mnuNext.Add(mnu);
+  end;
+  if (Historique.CurrentConsultation + MaxNbItems < Pred(Historique.CountConsultation)) then begin
+    mnu := TMenuItem.Create(Self);
+    mnu.Caption := '...';
+    mnu.Enabled := False;
+    mnuNext.Add(mnu);
+  end;
+end;
+
+procedure TFond.HistoriqueChosen(Sender: TObject);
+begin
+  Historique.GoConsultation(TComponent(Sender).Tag);
 end;
 
 end.

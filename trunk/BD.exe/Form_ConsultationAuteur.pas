@@ -52,6 +52,7 @@ type
     procedure ClearForm;
   public
     { Déclarations publiques }
+    property Auteur: TAuteurComplet read FAuteur; 
     property RefAuteur: Integer read GetRefAuteur write SetRefAuteur;
   end;
 

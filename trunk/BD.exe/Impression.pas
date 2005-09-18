@@ -30,7 +30,7 @@ procedure ImpressionListePrevisionsAchats(Previsualisation: Boolean);
 
 implementation
 
-uses Form_Preview, Math, Procedures, DateUtils;
+uses Form_Preview, Math, Procedures, DateUtils, Contnrs, jvuiblib;
 
 function ConfigPrinter(Previsualisation: Boolean): Boolean;
 begin
@@ -1352,7 +1352,7 @@ begin
       Prn.SetTopOfPage;
       Prn.SetFontInformation1('Times New Roman', 12, []);
 
-//      ShowMessage(Format('W %d H %d', [Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Prn.MmsToPixelsVertical(Prn.Detail.Height)]));
+      //      ShowMessage(Format('W %d H %d', [Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Prn.MmsToPixelsVertical(Prn.Detail.Height)]));
       ms := GetCouvertureStream(RefCouverture, Prn.MmsToPixelsVertical(Prn.Detail.Height), Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Utilisateur.Options.AntiAliasing);
       if Assigned(ms) then try
         fWaiting.ShowProgression(rsTransImage + '...', epNext);
@@ -1506,17 +1506,25 @@ begin
   end;
 end;
 
+type
+  TAchat = class(TAlbum)
+    Prix: Currency;
+    PrixCalcule: Boolean;
+  end;
+
 procedure ImpressionListePrevisionsAchats(Previsualisation: Boolean);
 var
-  OldSerie: Integer;
+  i, OldAlbum, OldSerie: Integer;
   Source: TJvUIBQuery;
   sl: Boolean;
   s, s2: string;
   ColumnStyle: TFontStyles;
-  PAl: TAlbum;
+  PAl: TAchat;
   NbAlbums: Integer;
   fWaiting: IWaiting;
   Prn: TPrintObject;
+  ListAlbums: TObjectList;
+  PrixTotal, PrixMoyen: Currency;
 begin
   if not ConfigPrinter(Previsualisation) then Exit;
   fWaiting := TWaiting.Create;
@@ -1524,27 +1532,67 @@ begin
   Source := TJvUIBQuery.Create(nil);
   try
     Prn := TPrintObject.Create(Fond);
+    ListAlbums := TObjectList.Create(True);
     try
       Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      Source.SQL.Text := 'SELECT AVG(PRIX) FROM EDITIONS';
+      Source.Open;
+      PrixMoyen := Source.Fields.AsCurrency[0];
+
       Source.SQL.Text := 'SELECT Count(a.REFALBUM)';
       Source.SQL.Add('FROM Albums a INNER JOIN Series s ON a.RefSerie = s.RefSerie');
+      Source.SQL.Add('left join vw_prixunitaires v on v.horsserie = a.horsserie and v.refserie = s.refserie and (v.refediteur = s.refediteur or s.refediteur is null)');
       Source.SQL.Add('WHERE a.Achat = 1');
       Source.Open;
-      NbAlbums := Source.Fields.AsInteger[0];
+      NbAlbums := Source.Fields.AsInteger[0] * 2; // on va parcourir 2 fois la liste
       Source.Close;
-      Source.SQL[0] := 'SELECT a.REFALBUM, a.TITREALBUM, a.MOISPARUTION, a.ANNEEPARUTION, a.REFSERIE, a.TOME, a.TOMEDEBUT, a.TOMEFIN, a.HORSSERIE, a.INTEGRALE, s.TITRESERIE';
+      Source.SQL[0] := 'SELECT a.REFALBUM, a.TITREALBUM, a.MOISPARUTION, a.ANNEEPARUTION, a.REFSERIE, a.TOME, a.TOMEDEBUT, a.TOMEFIN, a.HORSSERIE, a.INTEGRALE, s.TITRESERIE, v.REFEDITEUR, v.PRIXUNITAIRE';
       Source.SQL.Add('ORDER BY s.UPPERTITRESERIE, a.REFSERIE, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
+
+      with Source do begin
+        Open;
+        PrixTotal := 0;
+        OldAlbum := -1;
+        PAl := nil;
+        fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 0, NbAlbums + 2);
+        while not EOF do begin
+          if (OldAlbum <> Fields.ByNameAsInteger['REFALBUM']) then begin
+            PAl := TAchat.Create;
+            PAl.Fill(Source);
+            PAl.PrixCalcule := True;
+            PAl.Prix := Fields.ByNameAsCurrency['PRIXUNITAIRE'];
+            if PAl.Prix = 0 then begin
+              PAl.PrixCalcule := False;
+              PAl.Prix := PrixMoyen;
+            end;
+            PrixTotal := PrixTotal + PAl.Prix;
+            OldAlbum := PAl.Reference;
+            ListAlbums.Add(PAl);
+          end
+          else begin
+            PrixTotal := PrixTotal - PAl.Prix;
+            PAl.PrixCalcule := False;
+            PAl.Prix := PrixMoyen;
+            PrixTotal := PrixTotal + PAl.Prix;
+          end;
+
+          Next;
+          fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), epNext);
+        end;
+      end;
+
       Prn.Start(1, Application.Title + ' - ' + rsListeAchats);
       Prn.AutoPaging := True;
       Prn.SetMargins(10, 10, 10, 10);
-      Prn.SetDetailTopBottom(Prn.Margin.Top + 25, Prn.Margin.Bottom + 20);
+      Prn.SetDetailTopBottom(Prn.Margin.Top + 30, Prn.Margin.Bottom + 20);
       Prn.SetHeaderDimensions1(Prn.Margin.Left, Prn.Margin.Right, Prn.Margin.Top, 20, False, 0, clWhite);
       Prn.SetFooterDimensions1(Prn.Margin.Left, Prn.Margin.Right, Prn.Margin.Bottom, 10, False, 0, clWhite);
       Prn.SetHeaderInformation1(0, 5, rsListeAchats, taCenter, 'Times New Roman', 24, [fsBold]);
-      Prn.SetHeaderInformation1(1, -1, IntToStr(NbAlbums) + ' ' + rsTransAlbums, taCenter, 'Times New Roman', 12, []);
+      Prn.SetHeaderInformation1(1, -1, Format('%d %s - %s', [NbAlbums, rsTransAlbums, FormatCurr(FormatMonnaie, PrixTotal)]), taCenter, 'Times New Roman', 12, []);
+      Prn.SetHeaderInformation1(2, -1, 'Prix moyen estimé d''un album: ' + FormatCurr(FormatMonnaie, PrixMoyen), taCenter, 'Times New Roman', 12, []);
       Prn.SetFooterInformation1(0, 0, CopyrightTetramCorp, taRightJustify, 'Times New Roman', 9, []);
       Prn.SetPageNumberInformation1(Prn.FooterCoordinates.Top + 5, rsTransPage + ' ', '', taCenter, 'Times New Roman', 10, [fsUnderline]);
       Prn.SetDateTimeInformation1(Prn.HeaderCoordinates.Top, dfShortDateFormat, True, dtStart, tfShortTimeFormat, True, DateFirst, ' - ', taRightJustify, 'Times New Roman', 9, []);
@@ -1554,65 +1602,61 @@ begin
       Prn.CreateColumn1(3, 35, -1, taLeftJustify, 'Times New Roman', 8, []); // réalisation, acteurs
       Prn.CreateColumn1(4, 15, -1, taLeftJustify, 'Times New Roman', 12, [fsBold]); // série
       Prn.SetTopOfPage;
-      PAl := TAlbum.Create;
-      with Source do begin
-        Open;
-        sl := False;
-        OldSerie := -1;
-        fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 0, NbAlbums + 2);
-        while not EOF do begin
-          PAl.Fill(Source);
 
-          if OldSerie <> PAl.RefSerie then begin
-            if (Prn.GetLinesLeftFont(Prn.Columns[1].Font) < 3) then begin
-              Prn.NewPage;
-              sl := False;
-            end;
-            if sl then Prn.NextLine;
-            Prn.WriteLineColumn(4, IIf(sl, -1, -2), FormatTitre(PAl.Serie));
+      sl := False;
+      OldSerie := -1;
+      for i := 0 to Pred(ListAlbums.Count) do begin
+        PAl := TAchat(ListAlbums[i]);
+        if OldSerie <> PAl.RefSerie then begin
+          if (Prn.GetLinesLeftFont(Prn.Columns[1].Font) < 3) then begin
+            Prn.NewPage;
+            sl := False;
           end;
-
-          if (PAl.AnneeParution > 0) and (PAl.AnneeParution = YearOf(Now)) then
-            if (PAl.MoisParution > 0) and (PAl.MoisParution <= MonthOf(Now)) then
-              Prn.Columns[1].Font.Color := clRed
-            else
-              Prn.Columns[1].Font.Color := clFuchsia
-          else
-            Prn.Columns[1].Font.Color := clBlack;
-
-          try
-            s := '';
-            if PAl.Integrale then begin
-              s2 := NonZero(IntToStr(PAl.TomeDebut));
-              AjoutString(s2, NonZero(IntToStr(PAl.TomeFin)), ' à ');
-              AjoutString(s, 'Intégrale ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(PAl.Tome))));
-              AjoutString(s, s2, ' ', '[', ']');
-            end
-            else if PAl.HorsSerie then
-              AjoutString(s, 'Hors série ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(PAl.Tome))))
-            else
-              AjoutString(s, NonZero(IntToStr(PAl.Tome)), ' - ', 'Tome ');
-
-            AjoutString(s, IIf(PAl.MoisParution > 0, ShortMonthNames[PAl.MoisParution] + ' ', '') + NonZero(IntToStr(PAl.AnneeParution)), ' - ');
-            AjoutString(s, FormatTitre(PAl.Titre), ' - ');
-
-            Prn.WriteLineColumn(1, IIf(sl or (OldSerie <> PAl.RefSerie), -1, -2), s);
-          finally
-            Prn.Columns[1].Font.Color := clBlack;
-          end;
-
-          sl := True;
-
-          OldSerie := PAl.RefSerie;
-          Next;
-          fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), epNext);
+          if sl then Prn.NextLine;
+          Prn.WriteLineColumn(4, IIf(sl, -1, -2), FormatTitre(PAl.Serie));
         end;
-        PAl.Free;
+
+        if (PAl.AnneeParution > 0) and (PAl.AnneeParution = YearOf(Now)) then
+          if (PAl.MoisParution > 0) and (PAl.MoisParution <= MonthOf(Now)) then
+            Prn.Columns[1].Font.Color := clRed
+          else
+            Prn.Columns[1].Font.Color := clFuchsia
+        else
+          Prn.Columns[1].Font.Color := clBlack;
+
+        try
+          s := '';
+          if PAl.Integrale then begin
+            s2 := NonZero(IntToStr(PAl.TomeDebut));
+            AjoutString(s2, NonZero(IntToStr(PAl.TomeFin)), ' à ');
+            AjoutString(s, 'Intégrale ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(PAl.Tome))));
+            AjoutString(s, s2, ' ', '[', ']');
+          end
+          else if PAl.HorsSerie then
+            AjoutString(s, 'Hors série ', ' - ', '', TrimRight(' ' + NonZero(IntToStr(PAl.Tome))))
+          else
+            AjoutString(s, NonZero(IntToStr(PAl.Tome)), ' - ', 'Tome ');
+
+          AjoutString(s, IIf(PAl.MoisParution > 0, ShortMonthNames[PAl.MoisParution] + ' ', '') + NonZero(IntToStr(PAl.AnneeParution)), ' - ');
+          AjoutString(s, FormatTitre(PAl.Titre), ' - ');
+          if PAl.PrixCalcule then
+            AjoutString(s, FormatCurr(FormatMonnaie, PAl.Prix), ' - ');
+
+          Prn.WriteLineColumn(1, IIf(sl or (OldSerie <> PAl.RefSerie), -1, -2), s);
+        finally
+          Prn.Columns[1].Font.Color := clBlack;
+        end;
+
+        sl := True;
+
+        OldSerie := PAl.RefSerie;
+        fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), epNext);
       end;
     finally
       fWaiting.ShowProgression(rsTransImpression + '...', epNext);
       if Prn.Printing then Prn.Quit;
       Prn.Free;
+      ListAlbums.Free;
     end;
   finally
     Source.Transaction.Free;

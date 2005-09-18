@@ -3,18 +3,21 @@ unit UHistorique;
 interface
 
 uses
-  SysUtils, Windows, Contnrs;
+  SysUtils, Windows, Classes, Contnrs;
 
 type
-  TFicheConsultation = (fcActionBack, fcActionRefresh, fcAlbum, fcEmprunteur, fcAuteur, fcCouverture, fcRecherche, fcStock, fcPreview, fcSeriesIncompletes, fcPrevisionsSorties, fcRecreateToolBar, fcPrevisionsAchats, fcRefreshRepertoire);
+  TActionConsultation = (fcActionBack, fcActionRefresh, fcAlbum, fcEmprunteur, fcAuteur, fcCouverture, fcRecherche, fcStock, fcPreview, fcSeriesIncompletes, fcPrevisionsSorties, fcRecreateToolBar, fcPrevisionsAchats, fcRefreshRepertoire);
 
 const
-  NoSaveHistorique: set of TFicheConsultation = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire];
+  NoSaveHistorique: set of TActionConsultation = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire];
+  CanRefresh: set of TActionConsultation = [fcAlbum, fcEmprunteur, fcAuteur, fcSeriesIncompletes, fcPrevisionsSorties, fcPrevisionsAchats];
+  MustRefresh: set of TActionConsultation = [fcRecherche, fcStock];
 
 type
   RConsult = record
-    Fiche: TFicheConsultation;
+    Action: TActionConsultation;
     Reference, Reference2: Integer;
+    Description: string;
   end;
 
   TConsultQueue = class(TQueue)
@@ -29,18 +32,20 @@ type
     FCurrentConsultation: Integer;
     FLockCount: Integer;
     FListWaiting: TConsultQueue;
+    FOnChange: TNotifyEvent;
     function GetCountConsultation: Integer;
-    procedure Open(const Consult: RConsult; WithLock: Boolean);
+    function Open(const Consult: RConsult; WithLock: Boolean): Boolean;
     procedure Lock;
     procedure Unlock;
     function GetWaiting: Boolean;
+    procedure Delete(Index: Integer);
   published
     constructor Create;
     destructor Destroy; override;
   public
-    procedure AddConsultation(Consultation: TFicheConsultation; Ref: Integer = -1; Ref2: Integer = -1);
+    procedure AddConsultation(Consultation: TActionConsultation; Ref: Integer = -1; Ref2: Integer = -1);
     procedure EditConsultation(Ref: Integer = -1; Ref2: Integer = -1);
-    procedure AddWaiting(Consultation: TFicheConsultation; Ref: Integer = -1; Ref2: Integer = -1);
+    procedure AddWaiting(Consultation: TActionConsultation; Ref: Integer = -1; Ref2: Integer = -1);
     procedure Refresh;
     procedure Back;
     procedure BackWaiting;
@@ -49,9 +54,13 @@ type
     procedure First;
     procedure Clear;
     procedure ProcessNext;
+    function GetDescription(Index: Integer): string;
+    procedure SetDescription(Value: string);
+    procedure GoConsultation(Index: Integer);
     property CurrentConsultation: Integer read FCurrentConsultation;
     property CountConsultation: Integer read GetCountConsultation;
     property Waiting: Boolean read GetWaiting;
+    property OnChange: TNotifyEvent read FOnChange write FOnChange;
   end;
 
 var
@@ -62,7 +71,7 @@ implementation
 uses
   MAJ, Main, Forms;
 
-procedure THistory.AddConsultation(Consultation: TFicheConsultation; Ref, Ref2: Integer);
+procedure THistory.AddConsultation(Consultation: TActionConsultation; Ref, Ref2: Integer);
 
   procedure Modifie;
   begin
@@ -74,31 +83,33 @@ procedure THistory.AddConsultation(Consultation: TFicheConsultation; Ref, Ref2: 
     Inc(FCurrentConsultation);
     SetLength(FListConsultation, FCurrentConsultation + 1);
     with FListConsultation[FCurrentConsultation] do begin
-      Fiche := Consultation;
+      Action := Consultation;
       Reference := Ref;
       Reference2 := Ref2;
     end;
   end;
+
 begin
-  if not Bool(FLockCount) then begin
-    if (FCurrentConsultation > -1) and (Consultation = FListConsultation[FCurrentConsultation].Fiche) then
-      case Consultation of
-        fcRecherche, fcStock: Modifie;
-        else
+  with FListConsultation[FCurrentConsultation] do
+    if not Bool(FLockCount) then begin
+      if (FCurrentConsultation > -1) and (Consultation = Action) then begin
+        if Consultation in MustRefresh then
+          Modifie
+        else if not (Consultation in CanRefresh) or (Reference <> Ref) or (Reference2 <> Ref2) then
           Ajoute;
       end
-    else
-      Ajoute;
-  end;
+      else
+        Ajoute;
+    end;
 end;
 
-procedure THistory.AddWaiting(Consultation: TFicheConsultation; Ref, Ref2: Integer);
+procedure THistory.AddWaiting(Consultation: TActionConsultation; Ref, Ref2: Integer);
 var
   p: ^RConsult;
 begin
   New(p);
   with RConsult(FListWaiting.Push(p)^) do begin
-    Fiche := Consultation;
+    Action := Consultation;
     Reference := Ref;
     Reference2 := Ref2;
   end;
@@ -132,6 +143,16 @@ begin
   FListWaiting := TConsultQueue.Create;
 end;
 
+procedure THistory.Delete(Index: Integer);
+var
+  i: Integer;
+begin
+  if (Index < 0) or (Index >= Length(FListConsultation)) then Exit;
+  for i := Index + 1 to Pred(Length(FListConsultation)) do
+    FListConsultation[i - 1] := FListConsultation[i];
+  SetLength(FListConsultation, Length(FListConsultation) - 1);
+end;
+
 destructor THistory.Destroy;
 begin
   SetLength(FListConsultation, 0);
@@ -158,9 +179,31 @@ begin
   Result := Length(FListConsultation);
 end;
 
+function THistory.GetDescription(Index: Integer): string;
+begin
+  Result := FListConsultation[Index].Description;
+
+  if Result = '' then
+    if Index = FCurrentConsultation then begin
+      FListConsultation[Index].Description := 'Ask: ' + FormatDateTime('c', Now);
+      Result := FListConsultation[Index].Description;
+    end
+    else begin
+      FListConsultation[Index].Description := 'Unknown: ' + FormatDateTime('c', Now);
+      Result := FListConsultation[Index].Description;
+    end;
+end;
+
 function THistory.GetWaiting: Boolean;
 begin
   Result := Bool(FListWaiting.Count);
+end;
+
+procedure THistory.GoConsultation(Index: Integer);
+begin
+  if (Index < 0) or (Index >= Length(FListConsultation)) then Exit;
+  FCurrentConsultation := Index;
+  Refresh;
 end;
 
 procedure THistory.Last;
@@ -182,19 +225,20 @@ begin
   end;
 end;
 
-procedure THistory.Open(const Consult: RConsult; WithLock: Boolean);
+function THistory.Open(const Consult: RConsult; WithLock: Boolean): Boolean;
 begin
+  Result := True;
   if WithLock then Lock;
   try
-    if not (Consult.Fiche in NoSaveHistorique) then
-      AddConsultation(Consult.Fiche, Consult.Reference, Consult.Reference2);
-    case Consult.Fiche of
+    if not (Consult.Action in NoSaveHistorique) then
+      AddConsultation(Consult.Action, Consult.Reference, Consult.Reference2);
+    case Consult.Action of
       fcActionBack: Back;
-      fcActionRefresh: Open(FListConsultation[FCurrentConsultation], True);
-      fcAlbum: MAJConsultation(Consult.Reference);
-      fcEmprunteur: MAJConsultationE(Consult.Reference);
-      fcAuteur: MAJConsultationAuteur(Consult.Reference);
-      fcCouverture: ZoomCouverture(Consult.Reference, Consult.Reference2);
+      fcActionRefresh: Result := Open(FListConsultation[FCurrentConsultation], True);
+      fcAlbum: Result := MAJConsultation(Consult.Reference);
+      fcEmprunteur: Result := MAJConsultationE(Consult.Reference);
+      fcAuteur: Result := MAJConsultationAuteur(Consult.Reference);
+      fcCouverture: Result := ZoomCouverture(Consult.Reference, Consult.Reference2);
       fcRecherche: MAJRecherche(Consult.Reference, Consult.Reference2);
       fcStock: MAJStock;
       fcPreview: Fond.SetModalChildForm(TForm(Consult.Reference));
@@ -204,9 +248,15 @@ begin
       fcPrevisionsAchats: MAJPrevisionsAchats;
       fcRefreshRepertoire: Fond.ActualiseRepertoire.Execute;
     end;
+    if not Result then begin
+      Delete(FCurrentConsultation);
+      BackWaiting;
+      Result := True;
+    end;
   finally
     if WithLock then Unlock;
   end;
+  if Assigned(FOnChange) then FOnChange(Self);
 end;
 
 procedure THistory.ProcessNext;
@@ -222,6 +272,11 @@ procedure THistory.Refresh;
 begin
   //  Open(FListConsultation[FCurrentConsultation], True);
   AddWaiting(fcActionRefresh);
+end;
+
+procedure THistory.SetDescription(Value: string);
+begin
+  FListConsultation[FCurrentConsultation].Description := Value;
 end;
 
 procedure THistory.Unlock;
@@ -250,3 +305,4 @@ finalization
   Historique.Free;
 
 end.
+
