@@ -10,7 +10,7 @@ DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
 PROJECTS = WallPepper.exe WPConf.dll TestPlug.dll Ephemeride.dll \
-  CompteRebours.dll
+  CompteRebours.dll Agenda.dll Historique.dll SourceNet.dll
 #------------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -28,6 +28,13 @@ Ephemeride.dll: Sources Ephemeride.dll\Ephemeride.dpr
   $(DCC)
 
 CompteRebours.dll: Sources CompteRebours.dll\CompteRebours.dpr
+  $(DCC)
+
+
+Historique.dll: Sources Historique.dll\Historique.dpr
+  $(DCC)
+
+SourceNet.dll: Sources SourceNet.dll\SourceNet.dpr
   $(DCC)
 
 
