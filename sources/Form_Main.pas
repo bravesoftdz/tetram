@@ -590,18 +590,20 @@ begin
       end;
       if PluginForcerImage(Archive, Fichier, UseHistorique) then begin
         Boucle := 0;
+        Image := Fichier;
+        if Archive <> '' then Image := Archive + '|' + Fichier;
+        i := Pos('|', Image);
         while UseHistorique do begin
           // demander une image tant que celle retournée est présente dans l'historique
-          Image := Fichier;
-          if Archive <> '' then Image := Archive + '|' + Fichier;
-          i := Pos('|', Image);
           WriteImageLog(i, Image);
           if not( (((i <> 0) and (not FileExists(Fichier))) or ((i = 0) and (not FileExists(Image)))) or ((FHistorique.Count < FFichiersCount) and (FHistorique.IndexOf(Image) <> -1)) ) then Break;
           // limiter à X recherches pour éviter les boucles infinies
           Inc(Boucle);
           if (Boucle > 10) or not PluginForcerImage(Archive, Fichier, UseHistorique) then Exit;
+          Image := Fichier;
+          if Archive <> '' then Image := Archive + '|' + Fichier;
+          i := Pos('|', Image);
         end;
-        i := 0;
       end else begin
         (Self as IEvenements).DebutRechercheFond;
         try
