@@ -110,8 +110,8 @@ ActiveLang=
 ProjectLang=
 RootDir=D:\Programmation\Borland\Delphi7\Bin\
 [Version Info]
-IncludeVerInfo=0
-AutoIncBuild=0
+IncludeVerInfo=1
+AutoIncBuild=1
 MajorVer=1
 MinorVer=0
 Release=0
@@ -120,7 +120,7 @@ Debug=0
 PreRelease=0
 Special=0
 Private=0
-DLL=0
+DLL=1
 Locale=1036
 CodePage=1252
 [Version Info Keys]
@@ -149,17 +149,18 @@ Item5=lang_fr
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlSearchPath]
-Count=10
+Count=11
 Item0=G:\Programmation\Compos Perso\BrowseDirectory;G:\Programmation\Common\GraphicEx;G:\Programmation\Compos Perso\TrayIcon
-Item1=G:\Programmation\Compos Perso\BrowseDirectory;G:\Programmation\Common\GraphicEx9.9;G:\Programmation\Compos Perso\TrayIcon
-Item2=G:\Programmation\Compos Perso\BrowseDirectory;G:\Programmation\Common\GraphicEx9;G:\Programmation\Compos Perso\TrayIcon
-Item3=G:\Programmation\Compos Perso\BrowseDirectory;G:\Programmation\Common\GraphicEx71;G:\Programmation\Compos Perso\TrayIcon
-Item4=G:\Programmation\Compos Perso\BrowseDirectory;G:\Programmation\Common\GraphicEx71
-Item5=G:\Programmation\Compos Perso\BrowseDirectory;G:\Programmation\Common\GraphicEx9
-Item6=G:\Programmation\Compos Perso\BrowseDirectory
-Item7=..\InstallCompo D5;..\Routines;$(DELPHI)\Source\Toolsapi;\\SERVER2000\Commun\CardioCommon
-Item8=..\InstallCompo D5;..\Routines;\\SERVER2000\Commun\CardioCommon
-Item9=..\InstallCompo D5;..\Routines;$(DELPHI)\Source\Toolsapi;\\FICHIERS\Commun\CardioCommon
+Item1=G:\Programmation\Common\tpsystools\source
+Item2=G:\Programmation\Compos Perso\BrowseDirectory;G:\Programmation\Common\GraphicEx9.9;G:\Programmation\Compos Perso\TrayIcon
+Item3=G:\Programmation\Compos Perso\BrowseDirectory;G:\Programmation\Common\GraphicEx9;G:\Programmation\Compos Perso\TrayIcon
+Item4=G:\Programmation\Compos Perso\BrowseDirectory;G:\Programmation\Common\GraphicEx71;G:\Programmation\Compos Perso\TrayIcon
+Item5=G:\Programmation\Compos Perso\BrowseDirectory;G:\Programmation\Common\GraphicEx71
+Item6=G:\Programmation\Compos Perso\BrowseDirectory;G:\Programmation\Common\GraphicEx9
+Item7=G:\Programmation\Compos Perso\BrowseDirectory
+Item8=..\InstallCompo D5;..\Routines;$(DELPHI)\Source\Toolsapi;\\SERVER2000\Commun\CardioCommon
+Item9=..\InstallCompo D5;..\Routines;\\SERVER2000\Commun\CardioCommon
+Item10=..\InstallCompo D5;..\Routines;$(DELPHI)\Source\Toolsapi;\\FICHIERS\Commun\CardioCommon
 [HistoryLists\hlUnitOutputDirectory]
 Count=4
 Item0=dcu
@@ -167,7 +168,8 @@ Item1=G:\Programmation\MEDIA.KIT\WallPap 1.0\sources\dcu
 Item2=F:\CardioReport\Sources\dcu
 Item3=F:\CardioReport\DLL Materiels\dcu
 [HistoryLists\hlOutputDirectorry]
-Count=3
+Count=4
 Item0=..
-Item1=G:\Programmation\MEDIA.KIT\WallPap 1.0
-Item2=F:\CardioReport
+Item1=..\Plugins\
+Item2=G:\Programmation\MEDIA.KIT\WallPap 1.0
+Item3=F:\CardioReport
