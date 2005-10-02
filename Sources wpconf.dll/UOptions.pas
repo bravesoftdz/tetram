@@ -104,6 +104,9 @@ type
   end;
 
   ROptions = record
+    VerifMAJDelai: Integer;
+    LastVerifMAJ: TDateTime;
+
     Calendrier: RCalendrier;
     Legende: RLegende;
 
@@ -121,8 +124,10 @@ type
     HorairesFixe: array of RHoraireFixe;
     Plugins: array of RPlugin;
     ActionDoubleClick: Integer;
+    ActionPluginDoubleClick: string;
   end;
 
+procedure WriteIntegerOption(Section, Item: string; Valeur: Integer);
 function GetIni(out Old: Boolean; ForceIniFile: Boolean = False): IOptionsWriter;
 procedure LoadOptions(var FOptions: ROptions; var FDebug: RDebug; MainProg: IMainProg);
 function LoadPlugin(MainProg: IMainProg; var FPlugin: RPlugin): Boolean;
@@ -221,6 +226,19 @@ begin
   Result := OptionsWriter;
 end;
 
+procedure WriteIntegerOption(Section, Item: string; Valeur: Integer);
+var
+  IniStruct: IOptionsWriter;
+  FlagOld: Boolean;
+begin
+  IniStruct := GetIni(FlagOld);
+  try
+    IniStruct.WriteInteger(Section, Item, Valeur);
+  finally
+    IniStruct := nil;
+  end;
+end;
+
 procedure LoadOptions(var FOptions: ROptions; var FDebug: RDebug; MainProg: IMainProg);
 var
   IniStruct: IOptionsWriter;
@@ -240,12 +258,15 @@ begin
       AntiAliasing := ReadBool('Options', 'Aliasing', True);
       ResizeDesktop := ReadBool('Options', 'ResizeDesktop', True);
       ActionDoubleClick := ReadInteger('Options', 'ActionDoubleClick', 1);
+      ActionPluginDoubleClick := ReadString('Options', 'ActionPluginDoubleClick', '');
       DemarrageWindows := ReadBool('Options', 'WZ', True);
       Interval := ReadInteger('Options', 'Interval', 60);
       TailleHistorique := ReadInteger('Options', 'Historique', 10);
       ChangerDemarrage := ReadBool('Options', 'Demarrage', False);
       ActiveParDefaut := ReadBool('Options', 'Actif', True);
       Priorite := ReadInteger('Options', 'Priorite', 3);
+      VerifMAJDelai := ReadInteger('Options', 'VerifMAJDelai', 4);
+      LastVerifMAJ := ReadInteger('Divers', 'LastVerifMAJ', 0);
 
       SetLength(Images, 0);
       i := 1;
@@ -376,6 +397,7 @@ begin
         Avant.Trame := ReadInteger('Calendrier\MoisAvant', 'Trame', EnCours.Trame);
         Avant.TrameColor := ReadInteger('Calendrier\MoisAvant', 'TrameColor', EnCours.TrameColor);
         Avant.Maximum := ReadInteger('Calendrier\MoisAvant', 'Maximum', Avant.Nombre);
+        if Avant.Maximum = 0 then Avant.Maximum := Apres.Nombre; // il arrive que le fichier ai la valeur 0 de stockée suite à une conversion d'ancienne version
         Avant.Positionnement := ReadInteger('Calendrier\MoisAvant', 'Positionnement', 0);
         Avant.Position := ReadInteger('Calendrier\MoisAvant', 'Position', 0);
         Avant.Alignement := ReadInteger('Calendrier\MoisAvant', 'Alignement', 0);
@@ -392,6 +414,7 @@ begin
         Apres.Trame := ReadInteger('Calendrier\MoisApres', 'Trame', EnCours.Trame);
         Apres.TrameColor := ReadInteger('Calendrier\MoisApres', 'TrameColor', EnCours.TrameColor);
         Apres.Maximum := ReadInteger('Calendrier\MoisApres', 'Maximum', Apres.Nombre);
+        if Apres.Maximum = 0 then Apres.Maximum := Apres.Nombre; // il arrive que le fichier ai la valeur 0 de stockée suite à une conversion d'ancienne version
         Apres.Positionnement := ReadInteger('Calendrier\MoisApres', 'Positionnement', 0);
         Apres.Position := ReadInteger('Calendrier\MoisApres', 'Position', 1);
         Apres.Alignement := ReadInteger('Calendrier\MoisApres', 'Alignement', 0);
@@ -433,7 +456,8 @@ begin
           if AddPlugin then begin
             SetLength(Plugins, Succ(Length(Plugins)));
             Plugins[Pred(Length(Plugins))].Chemin := sr.Name;
-            LoadPlugin(MainProg, Plugins[Pred(Length(Plugins))]);
+            if not LoadPlugin(MainProg, Plugins[Pred(Length(Plugins))]) then
+              SetLength(Plugins, Pred(Length(Plugins)));
           end;
           i := FindNext(sr);
         end;
@@ -677,4 +701,5 @@ begin
 end;
 
 end.
+
 
