@@ -113,20 +113,20 @@ RootDir=D:\Programmation\Borland\Delphi7\Bin\
 IncludeVerInfo=1
 AutoIncBuild=1
 MajorVer=2
-MinorVer=1
+MinorVer=2
 Release=0
-Build=23
+Build=3
 Debug=0
 PreRelease=0
 Special=0
 Private=0
-DLL=0
+DLL=1
 Locale=1036
 CodePage=1252
 [Version Info Keys]
 CompanyName=
 FileDescription=
-FileVersion=2.1.0.23
+FileVersion=2.2.0.3
 InternalName=
 LegalCopyright=
 LegalTrademarks=
@@ -150,8 +150,8 @@ Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlSearchPath]
 Count=11
-Item0=G:\Programmation\Common\tpsystools\source
-Item1=G:\Programmation\Compos Perso\BrowseDirectory;G:\Programmation\Common\GraphicEx;G:\Programmation\Compos Perso\TrayIcon
+Item0=G:\Programmation\Compos Perso\BrowseDirectory;G:\Programmation\Common\GraphicEx;G:\Programmation\Compos Perso\TrayIcon
+Item1=G:\Programmation\Common\tpsystools\source
 Item2=G:\Programmation\Compos Perso\BrowseDirectory;G:\Programmation\Common\GraphicEx9.9;G:\Programmation\Compos Perso\TrayIcon
 Item3=G:\Programmation\Compos Perso\BrowseDirectory;G:\Programmation\Common\GraphicEx9;G:\Programmation\Compos Perso\TrayIcon
 Item4=G:\Programmation\Compos Perso\BrowseDirectory;G:\Programmation\Common\GraphicEx71;G:\Programmation\Compos Perso\TrayIcon
@@ -169,7 +169,7 @@ Item2=F:\CardioReport\Sources\dcu
 Item3=F:\CardioReport\DLL Materiels\dcu
 [HistoryLists\hlOutputDirectorry]
 Count=4
-Item0=..\Plugins\
-Item1=..
+Item0=..
+Item1=..\Plugins\
 Item2=G:\Programmation\MEDIA.KIT\WallPap 1.0
 Item3=F:\CardioReport
