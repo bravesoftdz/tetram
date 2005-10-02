@@ -6,6 +6,33 @@ uses Windows, SysUtils, Forms, UInterfacePlugIn, UInterfaceDessinCalendrier, Std
   ComCtrls, Controls, Classes, Spin, ExtCtrls;
 
 type
+  TFMain = class(TForm)
+    Edit1: TEdit;
+    Label1: TLabel;
+    Button1: TButton;
+    Button2: TButton;
+    Bevel17: TBevel;
+    Label66: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    ComboBox1: TComboBox;
+    ColorBox1: TColorBox;
+    SpinEdit1: TSpinEdit;
+    CheckBox1: TCheckBox;
+    Bevel1: TBevel;
+    Label6: TLabel;
+    DateTimePicker1: TDateTimePicker;
+    CheckBox2: TCheckBox;
+    CheckBox3: TCheckBox;
+    procedure Button1Click(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ComboBox1DrawItem(Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);
+    procedure ComboBox1MeasureItem(Control: TWinControl; Index: Integer; var Height: Integer);
+  private
+    FWriter: IOptionsWriter;
+  end;
+
   TPlugin = class(TInterfacedObject, IPlugin, IDessinCalendrier, IConfiguration, IEvenements)
   private
     FDessineur: IDessineur;
@@ -38,33 +65,6 @@ type
     FMainProg: IMainProg;
     constructor Create(MainProg: IMainProg);
     destructor Destroy; override;
-  end;
-
-  TFMain = class(TForm)
-    Edit1: TEdit;
-    Label1: TLabel;
-    Button1: TButton;
-    Button2: TButton;
-    Bevel17: TBevel;
-    Label66: TLabel;
-    Label4: TLabel;
-    Label5: TLabel;
-    ComboBox1: TComboBox;
-    ColorBox1: TColorBox;
-    SpinEdit1: TSpinEdit;
-    CheckBox1: TCheckBox;
-    Bevel1: TBevel;
-    Label6: TLabel;
-    DateTimePicker1: TDateTimePicker;
-    CheckBox2: TCheckBox;
-    CheckBox3: TCheckBox;
-    procedure Button1Click(Sender: TObject);
-    procedure FormShow(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
-    procedure ComboBox1DrawItem(Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);
-    procedure ComboBox1MeasureItem(Control: TWinControl; Index: Integer; var Height: Integer);
-  private
-    FWriter: IOptionsWriter;
   end;
 
 var
