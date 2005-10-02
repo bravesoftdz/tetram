@@ -24,7 +24,8 @@ uses
   UInterfaceJoursFeries in '..\SDK\UInterfaceJoursFeries.pas',
   UInterfacePlugIn in '..\SDK\UInterfacePlugIn.pas',
   UInterfaceChange in '..\SDK\UInterfaceChange.pas',
-  UInterfaceDessinCalendrier in '..\SDK\UInterfaceDessinCalendrier.pas';
+  UInterfaceDessinCalendrier in '..\SDK\UInterfaceDessinCalendrier.pas',
+  UInterfacePluginCommandes in '..\SDK\UInterfacePluginCommandes.pas';
 
 {$R *.res}
 

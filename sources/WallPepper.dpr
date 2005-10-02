@@ -15,7 +15,8 @@ uses
   UInterfacePlugIn in '..\SDK\UInterfacePlugIn.pas',
   UInterfaceChange in '..\SDK\UInterfaceChange.pas',
   CheckVersionNet in '..\..\..\Common\CheckVersionNet.pas' {frmVerifUpgrade},
-  RNDGen in 'RNDGen.pas';
+  RNDGen in 'RNDGen.pas',
+  UInterfacePluginCommandes in '..\SDK\UInterfacePluginCommandes.pas';
 
 {$R *.RES}
 
