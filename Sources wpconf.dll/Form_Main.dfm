@@ -1,6 +1,6 @@
 object Fond: TFond
-  Left = 585
-  Top = 160
+  Left = 489
+  Top = 138
   AutoSize = True
   BorderIcons = []
   BorderStyle = bsDialog
@@ -52,43 +52,11 @@ object Fond: TFond
     Top = 0
     Width = 441
     Height = 369
-    ActivePage = TabSheet3
+    ActivePage = TabSheet2
     MultiLine = True
     TabOrder = 2
     object TabSheet1: TTabSheet
       Caption = 'G'#233'n'#233'ral'
-      object Bevel10: TBevel
-        Left = 0
-        Top = 57
-        Width = 433
-        Height = 45
-      end
-      object Bevel9: TBevel
-        Left = 0
-        Top = 172
-        Width = 433
-        Height = 64
-      end
-      object Bevel8: TBevel
-        Left = 0
-        Top = 5
-        Width = 433
-        Height = 49
-      end
-      object Label5: TLabel
-        Left = 237
-        Top = 32
-        Width = 50
-        Height = 13
-        Caption = 'Historique:'
-      end
-      object Label6: TLabel
-        Left = 345
-        Top = 32
-        Width = 8
-        Height = 13
-        Caption = '%'
-      end
       object Image2: TImage
         Left = 392
         Top = 8
@@ -245,128 +213,66 @@ object Fond: TFond
           FF8003FFFF8003FFFFC007FFFFC007FFFFC007FFFFE00FFFFFE00FFFFFF01FFF
           FFFC7FFFFFFFFFFFFFFFFFFF}
       end
-      object Label34: TLabel
-        Left = 8
-        Top = 61
-        Width = 37
-        Height = 13
-        Caption = 'Icone:'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'MS Sans Serif'
-        Font.Style = [fsBold]
-        ParentFont = False
-      end
-      object Label36: TLabel
-        Left = 16
-        Top = 77
-        Width = 116
-        Height = 13
-        Caption = 'Action sur double-clique:'
-      end
-      object Label44: TLabel
-        Left = 8
-        Top = 175
-        Width = 118
-        Height = 13
-        Caption = 'Redimensionnement:'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'MS Sans Serif'
-        Font.Style = [fsBold]
-        ParentFont = False
-      end
-      object Bevel1: TBevel
+      object Panel19: TPanel
         Left = 0
-        Top = 105
-        Width = 433
-        Height = 64
-      end
-      object Label81: TLabel
-        Left = 8
-        Top = 109
-        Width = 45
-        Height = 13
-        Caption = 'Priorit'#233':'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'MS Sans Serif'
-        Font.Style = [fsBold]
-        ParentFont = False
-      end
-      object Label83: TLabel
-        Left = 24
-        Top = 125
-        Width = 169
-        Height = 26
-        Caption = 
-          'Priorit'#233' du changement de fond par rapport aux autres applicatio' +
-          'ns:'
-        WordWrap = True
-      end
-      object cHistorique: TSpinEdit
-        Left = 293
-        Top = 27
-        Width = 49
-        Height = 22
-        MaxValue = 100
-        MinValue = 0
-        TabOrder = 2
-        Value = 0
-      end
-      object cAliasing: TCheckBox
-        Left = 16
-        Top = 195
-        Width = 129
-        Height = 17
-        Caption = 'Anti-aliasing (plus lent)'
-        TabOrder = 4
-      end
-      object cDemarrageWindows: TCheckBox
-        Left = 8
-        Top = 30
-        Width = 185
-        Height = 17
-        Caption = 'Lancer au d'#233'marrage de Windows'
-        TabOrder = 1
-      end
-      object cActif: TCheckBox
-        Left = 8
-        Top = 8
-        Width = 105
-        Height = 17
-        Caption = 'Activ'#233' par d'#233'faut'
-        TabOrder = 0
-      end
-      object cActionDoubleClick: TComboBox
-        Left = 224
-        Top = 73
-        Width = 145
-        Height = 21
-        Style = csDropDownList
-        ItemHeight = 13
-        TabOrder = 3
-        Items.Strings = (
-          'Rien'
-          'Options'
-          'Changer l'#39'image'
-          'S'#233'lectionner une image'
-          'Rafraichir')
-      end
-      object Panel4: TPanel
-        Left = 0
-        Top = 271
-        Width = 433
-        Height = 52
+        Top = 5
+        Width = 385
+        Height = 49
         BevelOuter = bvLowered
         Caption = ' '
         TabOrder = 5
+        object Label5: TLabel
+          Left = 237
+          Top = 29
+          Width = 50
+          Height = 13
+          Caption = 'Historique:'
+        end
+        object Label6: TLabel
+          Left = 345
+          Top = 29
+          Width = 8
+          Height = 13
+          Caption = '%'
+        end
+        object cActif: TCheckBox
+          Left = 8
+          Top = 6
+          Width = 105
+          Height = 17
+          Caption = 'Activ'#233' par d'#233'faut'
+          TabOrder = 0
+        end
+        object cDemarrageWindows: TCheckBox
+          Left = 8
+          Top = 28
+          Width = 185
+          Height = 17
+          Caption = 'Lancer au d'#233'marrage de Windows'
+          TabOrder = 1
+        end
+        object cHistorique: TSpinEdit
+          Left = 293
+          Top = 24
+          Width = 49
+          Height = 22
+          MaxValue = 100
+          MinValue = 0
+          TabOrder = 2
+          Value = 0
+        end
+      end
+      object Panel4: TPanel
+        Left = 0
+        Top = 280
+        Width = 433
+        Height = 43
+        BevelOuter = bvLowered
+        Caption = ' '
+        TabOrder = 0
         object Label42: TLabel
           Left = 8
-          Top = 8
+          Top = 4
           Width = 138
           Height = 13
           Caption = 'Sauvegarde des options'
@@ -389,65 +295,274 @@ object Fond: TFond
         end
         object cSauveIni: TRadioButton
           Left = 224
-          Top = 29
+          Top = 22
           Width = 113
           Height = 17
           Caption = 'Fichier ini'
           TabOrder = 1
         end
       end
-      object Panel6: TPanel
-        Left = 192
-        Top = 193
-        Width = 201
-        Height = 42
-        BevelOuter = bvNone
+      object Panel2: TPanel
+        Left = 0
+        Top = 244
+        Width = 433
+        Height = 33
+        BevelOuter = bvLowered
         Caption = ' '
-        TabOrder = 6
-        object Label45: TLabel
-          Left = 0
-          Top = 3
-          Width = 90
-          Height = 13
-          Caption = 'Utiliser la r'#233'solution'
-        end
-        object cResolutionBureau: TRadioButton
-          Left = 112
-          Top = 1
-          Width = 73
-          Height = 17
-          Caption = 'du bureau'
+        TabOrder = 1
+        object LightComboCheck1: TLightComboCheck
+          Left = 110
+          Top = 13
+          Width = 315
+          Height = 16
           Checked = True
-          TabOrder = 0
-          TabStop = True
+          DefaultValueChecked = 4
+          DefaultValueUnchecked = 0
+          PropertiesStored = False
+          CheckVisible = False
+          CheckedCaptionBold = False
+          ShowCaptionHint = False
+          AssignHint = False
+          OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
+          Items.CaptionComplet = True
+          Items.Separateur = ' '
+          Items = <
+            item
+              Valeur = 0
+              Caption = 'Jamais v'#233'rifier les mise '#224' jour'
+              Visible = True
+              Enabled = True
+              SubItems.CaptionComplet = True
+              SubItems.Separateur = ' '
+              SubItems = <>
+            end
+            item
+              Valeur = 1
+              Caption = 'V'#233'rifier les mise '#224' jour '#224' chaque d'#233'marrage'
+              Visible = True
+              Enabled = True
+              SubItems.CaptionComplet = True
+              SubItems.Separateur = ' '
+              SubItems = <>
+            end
+            item
+              Valeur = 2
+              Caption = 'V'#233'rifier les mise '#224' jour une fois par jour'
+              Visible = True
+              Enabled = True
+              SubItems.CaptionComplet = True
+              SubItems.Separateur = ' '
+              SubItems = <>
+            end
+            item
+              Valeur = 3
+              Caption = 'V'#233'rifier les mise '#224' jour une fois par semaine'
+              Visible = True
+              Enabled = True
+              SubItems.CaptionComplet = True
+              SubItems.Separateur = ' '
+              SubItems = <>
+            end
+            item
+              Valeur = 4
+              Caption = 'V'#233'rifier les mise '#224' jour une fois par mois'
+              Visible = True
+              Enabled = True
+              SubItems.CaptionComplet = True
+              SubItems.Separateur = ' '
+              SubItems = <>
+            end>
         end
-        object cResolutionEcran: TRadioButton
-          Left = 112
-          Top = 21
-          Width = 73
-          Height = 17
-          Caption = 'de l'#39#233'cran'
-          TabOrder = 1
+        object Label11: TLabel
+          Left = 8
+          Top = 4
+          Width = 67
+          Height = 13
+          Caption = 'Mise '#224' jour:'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
         end
       end
-      object cPriorite: TComboBox
-        Left = 224
-        Top = 133
-        Width = 145
-        Height = 21
-        Style = csDropDownList
-        ItemHeight = 13
-        ItemIndex = 3
-        TabOrder = 7
-        Text = 'Normale'
-        Items.Strings = (
-          'Minimale'
-          'Tr'#232's basse'
-          'Basse'
-          'Normale'
-          'Haute'
-          'Tr'#232's haute'
-          'Maximale')
+      object Panel3: TPanel
+        Left = 0
+        Top = 183
+        Width = 433
+        Height = 58
+        BevelOuter = bvLowered
+        Caption = ' '
+        TabOrder = 2
+        object Label44: TLabel
+          Left = 8
+          Top = 4
+          Width = 118
+          Height = 13
+          Caption = 'Redimensionnement:'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object cAliasing: TCheckBox
+          Left = 16
+          Top = 38
+          Width = 129
+          Height = 17
+          Caption = 'Anti-aliasing (plus lent)'
+          TabOrder = 0
+        end
+        object Panel6: TPanel
+          Left = 192
+          Top = 21
+          Width = 201
+          Height = 36
+          BevelOuter = bvNone
+          Caption = ' '
+          TabOrder = 1
+          object Label45: TLabel
+            Left = 0
+            Top = 3
+            Width = 90
+            Height = 13
+            Caption = 'Utiliser la r'#233'solution'
+          end
+          object cResolutionBureau: TRadioButton
+            Left = 112
+            Top = 1
+            Width = 73
+            Height = 17
+            Caption = 'du bureau'
+            Checked = True
+            TabOrder = 0
+            TabStop = True
+          end
+          object cResolutionEcran: TRadioButton
+            Left = 112
+            Top = 19
+            Width = 73
+            Height = 17
+            Caption = 'de l'#39#233'cran'
+            TabOrder = 1
+          end
+        end
+      end
+      object Panel17: TPanel
+        Left = 0
+        Top = 126
+        Width = 433
+        Height = 53
+        BevelOuter = bvLowered
+        Caption = ' '
+        TabOrder = 3
+        object Label81: TLabel
+          Left = 8
+          Top = 4
+          Width = 45
+          Height = 13
+          Caption = 'Priorit'#233':'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object Label83: TLabel
+          Left = 24
+          Top = 20
+          Width = 169
+          Height = 26
+          Caption = 
+            'Priorit'#233' du changement de fond par rapport aux autres applicatio' +
+            'ns:'
+          WordWrap = True
+        end
+        object cPriorite: TComboBox
+          Left = 224
+          Top = 25
+          Width = 145
+          Height = 21
+          Style = csDropDownList
+          ItemHeight = 13
+          ItemIndex = 3
+          TabOrder = 0
+          Text = 'Normale'
+          Items.Strings = (
+            'Minimale'
+            'Tr'#232's basse'
+            'Basse'
+            'Normale'
+            'Haute'
+            'Tr'#232's haute'
+            'Maximale')
+        end
+      end
+      object Panel18: TPanel
+        Left = 0
+        Top = 57
+        Width = 433
+        Height = 66
+        BevelOuter = bvLowered
+        Caption = ' '
+        TabOrder = 4
+        object Label36: TLabel
+          Left = 16
+          Top = 21
+          Width = 110
+          Height = 13
+          Caption = 'Action sur double-click:'
+        end
+        object Label34: TLabel
+          Left = 8
+          Top = 4
+          Width = 37
+          Height = 13
+          Caption = 'Icone:'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
+        object cActionPluginDoubleClick: TComboBox
+          Left = 224
+          Top = 41
+          Width = 145
+          Height = 21
+          Style = csDropDownList
+          ItemHeight = 13
+          TabOrder = 0
+          Items.Strings = (
+            'Rien'
+            'Options'
+            'Changer l'#39'image'
+            'S'#233'lectionner une image'
+            'Rafraichir'
+            'Commande plugin')
+        end
+        object cActionDoubleClick: TComboBox
+          Left = 224
+          Top = 17
+          Width = 145
+          Height = 21
+          Style = csDropDownList
+          ItemHeight = 13
+          TabOrder = 1
+          OnChange = cActionDoubleClickChange
+          Items.Strings = (
+            'Rien'
+            'Options'
+            'Changer l'#39'image'
+            'S'#233'lectionner une image'
+            'Rafraichir'
+            'Commande plugin')
+        end
       end
     end
     object TabSheet7: TTabSheet
@@ -1601,7 +1716,7 @@ object Fond: TFond
         Top = 30
         Width = 433
         Height = 293
-        ActivePage = TabSheet8
+        ActivePage = TabSheet17
         Align = alBottom
         Style = tsButtons
         TabOrder = 1
@@ -1659,7 +1774,7 @@ object Fond: TFond
             Width = 201
             Height = 21
             Style = csDropDownList
-            ItemHeight = 13
+            ItemHeight = 0
             TabOrder = 0
             OnChange = cCalendrier_PremierJourSemaineChange
           end

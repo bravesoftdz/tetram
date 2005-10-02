@@ -7,7 +7,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, Spin, UCommon, UOptions,
-  Registry, Menus, GraphicEx, ComCtrls, Divers, FileCtrl, Browss, CheckLst, IniFiles, UInterfacePlugIn;
+  Registry, Menus, GraphicEx, ComCtrls, Divers, FileCtrl, Browss, CheckLst, IniFiles, UInterfacePlugIn,
+  ComboCheck;
 
 type
   TFond = class(TForm)
@@ -16,16 +17,11 @@ type
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
-    Label5: TLabel;
-    cHistorique: TSpinEdit;
-    Label6: TLabel;
     Label4: TLabel;
     cRepertoires: TCheckListBox;
     Button1: TButton;
     Label8: TLabel;
     cTypesImages: TCheckListBox;
-    cAliasing: TCheckBox;
-    cDemarrageWindows: TCheckBox;
     TabSheet3: TTabSheet;
     CheckBox6: TCheckBox;
     TabSheet5: TTabSheet;
@@ -35,7 +31,6 @@ type
     Label16: TLabel;
     Button9: TButton;
     DlgBrowseDirectory1: TBrowseDirectoryDlg;
-    cActif: TCheckBox;
     Label17: TLabel;
     CheckBox8: TCheckBox;
     CheckBox9: TCheckBox;
@@ -66,12 +61,6 @@ type
     Bevel6: TBevel;
     Bevel7: TBevel;
     Label33: TLabel;
-    Bevel8: TBevel;
-    Bevel9: TBevel;
-    Bevel10: TBevel;
-    Label34: TLabel;
-    Label36: TLabel;
-    cActionDoubleClick: TComboBox;
     cTypesArchives: TCheckListBox;
     Label35: TLabel;
     Bevel11: TBevel;
@@ -113,11 +102,6 @@ type
     Label42: TLabel;
     TabSheet10: TTabSheet;
     Label43: TLabel;
-    Panel6: TPanel;
-    Label45: TLabel;
-    cResolutionBureau: TRadioButton;
-    cResolutionEcran: TRadioButton;
-    Label44: TLabel;
     TabSheet11: TTabSheet;
     cLegende_UseLegende: TCheckBox;
     PageControl3: TPageControl;
@@ -295,14 +279,35 @@ type
     cCalendrier_Avant_Max: TSpinEdit;
     Label80: TLabel;
     cCalendrier_Apres_Max: TSpinEdit;
-    Bevel1: TBevel;
-    Label81: TLabel;
-    Label83: TLabel;
-    cPriorite: TComboBox;
     Button19: TButton;
     Label84: TLabel;
     Button14: TButton;
     Button18: TButton;
+    Panel2: TPanel;
+    LightComboCheck1: TLightComboCheck;
+    Label11: TLabel;
+    Panel3: TPanel;
+    Label44: TLabel;
+    cAliasing: TCheckBox;
+    Panel6: TPanel;
+    Label45: TLabel;
+    cResolutionBureau: TRadioButton;
+    cResolutionEcran: TRadioButton;
+    Panel17: TPanel;
+    Panel18: TPanel;
+    cActionPluginDoubleClick: TComboBox;
+    cActionDoubleClick: TComboBox;
+    Label36: TLabel;
+    Label34: TLabel;
+    Panel19: TPanel;
+    cActif: TCheckBox;
+    cDemarrageWindows: TCheckBox;
+    Label5: TLabel;
+    cHistorique: TSpinEdit;
+    Label6: TLabel;
+    Label81: TLabel;
+    Label83: TLabel;
+    cPriorite: TComboBox;
     procedure FormCreate(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure Options1Click(Sender: TObject);
@@ -358,12 +363,11 @@ type
     procedure cCalendrier_Avant_NombreChange(Sender: TObject);
     procedure cPluginsDblClick(Sender: TObject);
     procedure Button3Click(Sender: TObject);
-    procedure cPluginsData(Control: TWinControl; Index: Integer;
-      var Data: String);
-    procedure cPluginsDataObject(Control: TWinControl; Index: Integer;
-      var DataObject: TObject);
+    procedure cPluginsData(Control: TWinControl; Index: Integer; var Data: string);
+    procedure cPluginsDataObject(Control: TWinControl; Index: Integer; var DataObject: TObject);
     procedure Button14Click(Sender: TObject);
     procedure Button18Click(Sender: TObject);
+    procedure cActionDoubleClickChange(Sender: TObject);
   private
     { Déclarations privées }
     FCurrentItem: TListItem;
@@ -372,6 +376,7 @@ type
     FCurrentImage: string;
     FOptions: ROptions;
     FwasIniFile: Boolean;
+    FActionPluginDoubleClick: array of string;
     procedure LoadOptions;
     procedure SaveOptions;
     procedure LoadWeek(Debut: Integer);
@@ -387,7 +392,7 @@ type
 
 implementation
 
-uses Math, UJoursFeries, UInterfaceChange;
+uses Math, UJoursFeries, UInterfaceChange, UInterfacePluginCommandes;
 
 {$R *.DFM}
 
@@ -471,6 +476,9 @@ var
   FichierIni: string;
   IniStruct: TCustomIniFile;
   FlagOld: Boolean;
+  IPC: IInterfacePluginCommandes;
+  nbCommandes: Integer;
+  Commandes: array of RInfoCommande;
 begin
   FichierIni := ChangeFileExt(Application.ExeName, '.ini');
   FwasIniFile := FileExists(FichierIni);
@@ -486,7 +494,6 @@ begin
   end;
   for i := 0 to Pred(cRepertoires.Count) do
     cRepertoires.Checked[i] := RImage(Pointer(cRepertoires.Items.Objects[i])^).SousRepertoire;
-
 
   for i := 0 to Length(FOptions.Extensions) - 1 do begin
     j := cTypesImages.Items.IndexOf(FOptions.Extensions[i]);
@@ -519,6 +526,7 @@ begin
   cDemarrage.Checked := FOptions.ChangerDemarrage;
   cActif.Checked := FOptions.ActiveParDefaut;
   cPriorite.ItemIndex := FOptions.Priorite;
+  LightComboCheck1.Value := FOptions.VerifMAJDelai;
 
   cLegende_UseLegende.Checked := FOptions.Legende.UseLegende;
   cCalendrier_UseCalendrier.Checked := FOptions.Calendrier.UseCalendrier;
@@ -589,7 +597,8 @@ begin
   if cCalendrier_Avant_Positionnement0.Checked then begin
     cCalendrier_Avant_Position.ItemIndex := FOptions.Calendrier.Avant.Position;
     cCalendrier_Avant_Alignement.ItemIndex := FOptions.Calendrier.Avant.Alignement;
-  end else begin
+  end
+  else begin
     cCalendrier_Avant_Position1.Checked := FOptions.Calendrier.Avant.Position = cCalendrier_Avant_Position1.Tag;
     cCalendrier_Avant_Position2.Checked := FOptions.Calendrier.Avant.Position = cCalendrier_Avant_Position2.Tag;
     cCalendrier_Avant_Position3.Checked := FOptions.Calendrier.Avant.Position = cCalendrier_Avant_Position3.Tag;
@@ -612,7 +621,8 @@ begin
   if cCalendrier_Apres_Positionnement0.Checked then begin
     cCalendrier_Apres_Position.ItemIndex := FOptions.Calendrier.Apres.Position;
     cCalendrier_Apres_Alignement.ItemIndex := FOptions.Calendrier.Apres.Alignement;
-  end else begin
+  end
+  else begin
     cCalendrier_Apres_Position1.Checked := FOptions.Calendrier.Apres.Position = cCalendrier_Apres_Position1.Tag;
     cCalendrier_Apres_Position2.Checked := FOptions.Calendrier.Apres.Position = cCalendrier_Apres_Position2.Tag;
     cCalendrier_Apres_Position3.Checked := FOptions.Calendrier.Apres.Position = cCalendrier_Apres_Position3.Tag;
@@ -667,8 +677,31 @@ begin
   PageControl3.Visible := cLegende_UseLegende.Checked;
 
   cPlugins.Items.Clear;
+  cActionPluginDoubleClick.Items.Clear;
+  SetLength(FActionPluginDoubleClick, 0);
   for i := 0 to Pred(Length(FOptions.Plugins)) do
-    cPlugins.Checked[cPlugins.Items.AddObject(FOptions.Plugins[i].Plugin.GetName, @FOptions.Plugins[i])] := FOptions.Plugins[i].Actif;
+    with FOptions.Plugins[i] do begin
+      cPlugins.Checked[cPlugins.Items.AddObject(Plugin.GetName, @FOptions.Plugins[i])] := Actif;
+      if not Bool(Plugin.QueryInterface(IInterfacePluginCommandes, IPC)) then begin
+        nbCommandes := 16;
+        SetLength(Commandes, nbCommandes);
+        IPC.GetCommandes(nbCommandes, Commandes);
+        if nbCommandes < 0 then begin
+          nbCommandes := -nbCommandes;
+          SetLength(Commandes, nbCommandes);
+          IPC.GetCommandes(nbCommandes, Commandes);
+        end;
+        for j := 0 to Pred(nbCommandes) do begin
+          cActionPluginDoubleClick.Items.Add(Plugin.GetName + ' -> ' + Commandes[j].MenuLabel);
+          SetLength(FActionPluginDoubleClick, Length(FActionPluginDoubleClick) + 1);
+          FActionPluginDoubleClick[Length(FActionPluginDoubleClick) - 1] := ExtractFileName(Chemin) + '\' + IntToStr(Commandes[j].IdCommande);
+          if FOptions.ActionPluginDoubleClick = FActionPluginDoubleClick[Length(FActionPluginDoubleClick) - 1] then
+            cActionPluginDoubleClick.ItemIndex := Pred(cActionPluginDoubleClick.Items.Count);
+        end;
+      end;
+    end;
+
+  cActionPluginDoubleClick.Enabled := FOptions.ActionDoubleClick = 5;
 
   CheckBox6.Checked := FDebug.GenereFichierLog;
   CheckBox8.Checked := FDebug.ListeProcess;
@@ -697,8 +730,7 @@ begin
   if cSauveIni.Checked then begin
     if not FwasIniFile then
       case MessageDlg('Vous avez demandé l''enregistrement des nouvelles options dans un fichier ini.'#13'Voulez-vous supprimer les options éventuellement enregistrées en base de registre?', mtWarning, mbYesNoCancel, 0) of
-        mrYes:
-          begin
+        mrYes: begin
             IniStruct := TRegistryIniFile.Create(ExtractFilePath(CleProg));
             with TRegistryIniFile(IniStruct) do try
               EraseSection(ExtractFileName(CleProg));
@@ -706,8 +738,7 @@ begin
               Free;
             end;
           end;
-        mrCancel:
-          begin
+        mrCancel: begin
             ModalResult := mrNone;
             Exit;
           end;
@@ -715,12 +746,12 @@ begin
     // ne plus supprimer le fichier: la configuration des plugins y est enregitrée!!!
     // if FileExists(FichierIni) then DeleteFile(FichierIni);
     IniStruct := TIniFile.Create(FichierIni);
-  end else begin
+  end
+  else begin
     if FileExists(FichierIni) then
       case MessageDlg('Un fichier ini est présent mais vous avez demandé l''enregistrement des options dans la base de registre.'#13'Si ce fichier n''est pas supprimé, il sera lu prioritairement par rapport à la base de registre.'#13#13'Voulez-vous le supprimer?', mtWarning, mbYesNoCancel, 0) of
         mrYes: if not DeleteFile(FichierIni) then ShowMessage('Erreur'#13'Le fichier n''a pu être supprimé.'#13'Essayez de le supprimer à la main'#13'Fichier: ' + FichierIni);
-        mrCancel:
-          begin
+        mrCancel: begin
             ModalResult := mrNone;
             Exit;
           end;
@@ -779,6 +810,12 @@ begin
     end;
 
     WriteInteger('Options', 'ActionDoubleClick', cActionDoubleClick.ItemIndex);
+    case cActionDoubleClick.ItemIndex of
+      // commande plugin
+      5: WriteString('Options', 'ActionPluginDoubleClick', FActionPluginDoubleClick[cActionPluginDoubleClick.ItemIndex]);
+      else
+        WriteString('Options', 'ActionPluginDoubleClick', '');
+    end;
     WriteBool('Options', 'Demarrage', cDemarrage.Checked);
     WriteBool('Options', 'Aliasing', cAliasing.Checked);
     WriteBool('Options', 'ResizeDesktop', cResolutionBureau.Checked);
@@ -787,6 +824,7 @@ begin
     WriteInteger('Options', 'Interval', cInterval.Value);
     WriteInteger('Options', 'Historique', cHistorique.Value);
     WriteInteger('Options', 'Priorite', cPriorite.ItemIndex);
+    WriteInteger('Options', 'VerifMAJDelai', LightComboCheck1.Value);
 
     EraseSection('Calendrier\MoisEnCours');
     EraseSection('Calendrier\MoisAvant');
@@ -865,7 +903,8 @@ begin
             WriteInteger('Calendrier\MoisAvant', 'Position_X', cCalendrier_Avant_Position_X.Position);
             WriteInteger('Calendrier\MoisAvant', 'Position_Y', cCalendrier_Avant_Position_Y.Position);
           end;
-        end else begin
+        end
+        else begin
           WriteInteger('Calendrier\MoisAvant', 'Position', cCalendrier_Avant_Position.ItemIndex);
           WriteInteger('Calendrier\MoisAvant', 'Alignement', cCalendrier_Avant_Alignement.ItemIndex);
         end;
@@ -903,7 +942,8 @@ begin
             WriteInteger('Calendrier\MoisApres', 'Position_X', cCalendrier_Apres_Position_X.Position);
             WriteInteger('Calendrier\MoisApres', 'Position_Y', cCalendrier_Apres_Position_Y.Position);
           end;
-        end else begin
+        end
+        else begin
           WriteInteger('Calendrier\MoisApres', 'Position', cCalendrier_Apres_Position.ItemIndex);
           WriteInteger('Calendrier\MoisApres', 'Alignement', cCalendrier_Apres_Alignement.ItemIndex);
         end;
@@ -921,17 +961,14 @@ begin
         WriteInteger('Calendrier\JoursFeries', 'Periodicite' + IntToStr(i), Integer(JourFerie.Periodicite));
         WriteInteger('Calendrier\JoursFeries', 'Regle' + IntToStr(i), Integer(JourFerie.Regle));
         case JourFerie.Regle of
-          rjfDateFixe:
-            begin
+          rjfDateFixe: begin
               WriteDate('Calendrier\JoursFeries', 'Jour' + IntToStr(i), JourFerie.JourFixe);
             end;
-          rjfInterval:
-            begin
+          rjfInterval: begin
               WriteDate('Calendrier\JoursFeries', 'JourDebut' + IntToStr(i), JourFerie.JourDebut);
               WriteDate('Calendrier\JoursFeries', 'JourFin' + IntToStr(i), JourFerie.JourFin);
             end;
-          rjfCalcul:
-            begin
+          rjfCalcul: begin
               WriteInteger('Calendrier\JoursFeries', 'Jour' + IntToStr(i), JourFerie.Jour);
               if JourFerie.Periodicite > pjfHebdomadaire then WriteInteger('Calendrier\JoursFeries', 'nJour' + IntToStr(i), JourFerie.nJour);
               if JourFerie.Periodicite > pjfMensuel then WriteInteger('Calendrier\JoursFeries', 'Mois' + IntToStr(i), JourFerie.Mois);
@@ -974,8 +1011,10 @@ begin
     EraseSection('Plugins');
     for i := 1 to cPlugins.Count do begin
       Plugin := Pointer(cPlugins.Items.Objects[i - 1]);
-      if cPlugins.Checked[i - 1] then WriteString('Plugins', 'Path' + IntToStr(i), Plugin.Chemin)
-                                 else WriteString('Plugins', 'Path' + IntToStr(i), '@' + Plugin.Chemin)
+      if cPlugins.Checked[i - 1] then
+        WriteString('Plugins', 'Path' + IntToStr(i), Plugin.Chemin)
+      else
+        WriteString('Plugins', 'Path' + IntToStr(i), '@' + Plugin.Chemin)
     end;
 
     WriteBool('Debug', 'Log', CheckBox6.Checked);
@@ -1007,7 +1046,7 @@ end;
 
 procedure TFond.Options1Click(Sender: TObject);
 begin
-  SetForegroundWindow(Handle);               
+  SetForegroundWindow(Handle);
   Show;
 end;
 
@@ -1046,15 +1085,17 @@ end;
 procedure TFond.cExclusionsDrawItem(Control: TWinControl; Index: Integer; Rect: TRect; State: TOwnerDrawState);
 var
   Flags: Longint;
-  Data: String;
+  Data: string;
 begin
   with cExclusions do begin
     Canvas.FillRect(Rect);
     if Index < Count then begin
       if Index = 0 then Canvas.Font.Color := clInactiveCaptionText;
       Flags := DrawTextBiDiModeFlags(DT_SINGLELINE or DT_VCENTER or DT_NOPREFIX);
-      if not UseRightToLeftAlignment then Inc(Rect.Left, 2)
-                                     else Dec(Rect.Right, 2);
+      if not UseRightToLeftAlignment then
+        Inc(Rect.Left, 2)
+      else
+        Dec(Rect.Right, 2);
       Data := Items[Index];
       DrawText(Canvas.Handle, PChar(Data), Length(Data), Rect, Flags);
     end;
@@ -1466,14 +1507,14 @@ end;
 
 procedure TFond.Button3Click(Sender: TObject);
 var
-  FichierIni: string; 
+  FichierIni: string;
 begin
   FichierIni := ChangeFileExt(Application.ExeName, '.ini');
   if not FwasIniFile and FileExists(FichierIni) then
     DeleteFile(FichierIni);
 end;
 
-procedure TFond.cPluginsData(Control: TWinControl; Index: Integer; var Data: String);
+procedure TFond.cPluginsData(Control: TWinControl; Index: Integer; var Data: string);
 begin
   Data := FOptions.Plugins[Index].Plugin.GetName;
 end;
@@ -1503,4 +1544,10 @@ begin
   cPlugins.ItemIndex := i;
 end;
 
+procedure TFond.cActionDoubleClickChange(Sender: TObject);
+begin
+  cActionPluginDoubleClick.Enabled := cActionDoubleClick.ItemIndex = 5;
+end;
+
 end.
+
