@@ -175,7 +175,11 @@ function TPlugin.ForceImage(var Image, Archive: ShortString; out UtiliserHistori
 begin
   UtiliserHistorique := False;
   Archive := '';
-  Image := RechercheImage;
+  try
+    Image := RechercheImage;
+  except
+    Image := '';
+  end;
   Result := Image <> '';
 end;
 
