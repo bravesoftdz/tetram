@@ -25,7 +25,9 @@ uses
   UInterfacePlugIn in '..\SDK\UInterfacePlugIn.pas',
   UInterfaceChange in '..\SDK\UInterfaceChange.pas',
   UInterfaceDessinCalendrier in '..\SDK\UInterfaceDessinCalendrier.pas',
-  UInterfacePluginCommandes in '..\SDK\UInterfacePluginCommandes.pas';
+  UInterfacePluginCommandes in '..\SDK\UInterfacePluginCommandes.pas',
+  Form_CreateExclu in '..\sources\Form_CreateExclu.pas' {FCreateExclu},
+  Form_SelectWindow in '..\sources\Form_SelectWindow.pas' {FSelectWindow};
 
 {$R *.res}
 

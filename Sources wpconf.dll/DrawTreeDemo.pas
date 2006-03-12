@@ -17,7 +17,7 @@ unit DrawTreeDemo;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, VirtualTrees, StdCtrls, GraphicEx, ImgList, ComCtrls,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, GraphicEx, ImgList, ComCtrls,
   Registry, ActnList, ZipMstr, UnrarComp, UInterfacePlugIn, ExtCtrls;
 
 type

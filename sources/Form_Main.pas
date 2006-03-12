@@ -709,7 +709,7 @@ begin
   Working := True;
   try
     if not Actif then Exit;
-    isSSRunning := SSRunning;
+    isSSRunning := not Force and SSRunning;
     if (isSSRunning or not (Self as IChange).CanChange(Declenchement, isSSRunning)) and not (FDebug.ModeDebug or Force or (Self as IChange).ForceChange(Declenchement, isSSRunning)) then Exit;
     hdl := LoadLibrary(DLLConf);
     if hdl >= 32 then try
@@ -736,8 +736,8 @@ begin
           if Archive <> '' then Image := Archive + '|' + Fichier;
           i := Pos('|', Image);
         end;
-      end else 
-      begin
+      end
+      else begin
         (Self as IEvenements).DebutRechercheFond;
         try
           UseHistorique := True;
@@ -842,6 +842,48 @@ begin
     FHistorique.Delete(0);
 end;
 
+type
+  PSearchWindowsName = ^RSearchWindowsName;
+  RSearchWindowsName = record
+    FenetreTrouvee: Boolean;
+    ProcessChild: Boolean;
+    Form: TFond;
+  end;
+
+function EnumWindowsProc(hwnd: HWND; lParam: LPARAM): Bool; stdcall; export;
+var
+  Buffer: array[0..1023] of Char;
+  i: Integer;
+  SearchWindowsName: PSearchWindowsName;
+  SearchChildWindowsName: RSearchWindowsName;
+begin
+  SearchWindowsName := Pointer(lParam);
+  SearchWindowsName.FenetreTrouvee := False;
+
+  if GetWindowText(hwnd, @Buffer, 1024) > 0 then begin
+    i := 0;
+    while (not SearchWindowsName.FenetreTrouvee) and (i < Length(SearchWindowsName.Form.FOptions.Exclusions)) do begin
+      with SearchWindowsName.Form.FOptions.Exclusions[i] do
+        if (not Process) and (SearchWindowsName.ProcessChild or Repertoire) then begin
+          SearchWindowsName.FenetreTrouvee := SameText(Buffer, Chemin);
+          if SearchWindowsName.FenetreTrouvee then SearchWindowsName.Form.WriteLog('Exclu trouvée: ' + Chemin);
+        end;
+      Inc(i);
+    end;
+
+    if (not SearchWindowsName.FenetreTrouvee) and (SearchWindowsName.ProcessChild) then begin
+      SearchChildWindowsName.FenetreTrouvee := False;
+      SearchChildWindowsName.Form := SearchWindowsName.Form;
+      SearchChildWindowsName.ProcessChild := False;
+
+      EnumChildWindows(hwnd, @EnumWindowsProc, Integer(@SearchChildWindowsName));
+      SearchWindowsName.FenetreTrouvee := SearchChildWindowsName.FenetreTrouvee;
+    end;
+  end;
+
+  Result := not SearchWindowsName.FenetreTrouvee;
+end;
+
 function TFond.SSRunning: Boolean;
 
   function RetrouveSS: string;
@@ -885,19 +927,24 @@ var
       Exit;
     end;
     for i := 0 to Pred(Length(FOptions.Exclusions)) do
-      with FOptions.Exclusions[i] do begin
-        if Repertoire then
-          Result := Copy(ExtractLongPathName(Fichier), 1, Length(Chemin)) <> Chemin
-        else
-          Result := ExtractLongPathName(Fichier) <> Chemin;
-        if not Result then Break;
-      end;
+      with FOptions.Exclusions[i] do
+        if Process then begin
+          if Repertoire then
+            Result := Copy(ExtractLongPathName(Fichier), 1, Length(Chemin)) <> Chemin
+          else
+            Result := ExtractLongPathName(Fichier) <> Chemin;
+          if not Result then Break;
+        end;
     if not Result then begin
-      WriteLog('Exclu trouvé: ' + Fichier);
+      WriteLog('Exclu trouvée: ' + Fichier);
       Exit;
     end;
   end;
 
+var
+  HasWindowSearch: Boolean;
+  i: Integer;
+  SearchWindowsName: RSearchWindowsName;
 begin
   Result := False;
   try
@@ -933,10 +980,29 @@ begin
     finally
       CloseHandle(HdlSnapshotSystem);
     end;
+
+    if not Result then begin
+      HasWindowSearch := False;
+      i := 0;
+      while (not HasWindowSearch) and (i < Length(FOptions.Exclusions)) do begin
+        HasWindowSearch := not FOptions.Exclusions[i].Process;
+        Inc(i);
+      end;
+
+      if HasWindowSearch then begin
+        SearchWindowsName.FenetreTrouvee := False;
+        SearchWindowsName.Form := Self;
+        SearchWindowsName.ProcessChild := True;
+
+        EnumWindows(@EnumWindowsProc, Integer(@SearchWindowsName));
+
+        Result := SearchWindowsName.FenetreTrouvee;
+      end;
+    end;
   except
     Result := False;
   end;
-  WriteLog('Economiseur non trouvé');
+  if not Result then WriteLog('Economiseur non trouvé');
 end;
 
 procedure TFond.BeginTravail;
@@ -1288,7 +1354,7 @@ begin
         if Result then begin
           Archive := sArchive;
           Fichier := sFichier;
-          WriteLog('Image forcée par le plugin ' + Plugin.GetName);
+          WriteLog('Image imposée par le plugin ' + Plugin.GetName);
           Break;
         end;
       end;

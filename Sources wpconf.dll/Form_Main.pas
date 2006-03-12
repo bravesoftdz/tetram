@@ -7,8 +7,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, Spin, UCommon, UOptions,
-  Registry, Menus, GraphicEx, ComCtrls, Divers, FileCtrl, Browss, CheckLst, IniFiles, UInterfacePlugIn,
-  ComboCheck;
+  Registry, Menus, GraphicEx, ComCtrls, Divers, FileCtrl, Browss, CheckLst, IniFiles, UInterfacePlugIn, ComboCheck;
 
 type
   TFond = class(TForm)
@@ -56,7 +55,6 @@ type
     cInterval: TSpinEdit;
     Label19: TLabel;
     cDemarrage: TCheckBox;
-    OpenDialogExclu: TOpenDialog;
     Label32: TLabel;
     Bevel6: TBevel;
     Bevel7: TBevel;
@@ -392,7 +390,8 @@ type
 
 implementation
 
-uses Math, UJoursFeries, UInterfaceChange, UInterfacePluginCommandes;
+uses Math, UJoursFeries, UInterfaceChange, UInterfacePluginCommandes,
+  Form_CreateExclu;
 
 {$R *.DFM}
 
@@ -805,8 +804,12 @@ begin
     EraseSection('Exclus');
     for i := 2 to cExclusions.Count do begin
       Exclusion := Pointer(cExclusions.Items.Objects[i - 1]);
-      WriteString('Exclus', 'Path' + IntToStr(i - 1), Exclusion.Chemin);
-      WriteBool('Exclus', 'Dir' + IntToStr(i - 1), Exclusion.Repertoire);
+      WriteString('Exclus', 'Path' + IntToStr(i - 1), Trim(Exclusion.Chemin));
+      WriteBool('Exclus', 'Process' + IntToStr(i - 1), Exclusion.Process);
+      if Exclusion.Process then
+        WriteBool('Exclus', 'Dir' + IntToStr(i - 1), Exclusion.Repertoire)
+      else
+        WriteBool('Exclus', 'Child' + IntToStr(i - 1), Exclusion.Repertoire);
     end;
 
     WriteInteger('Options', 'ActionDoubleClick', cActionDoubleClick.ItemIndex);
@@ -1201,11 +1204,17 @@ procedure TFond.Button2Click(Sender: TObject);
 var
   Exclusion: ^RExclusion;
 begin
-  if not OpenDialogExclu.Execute then Exit;
-  New(Exclusion);
-  Exclusion.Chemin := OpenDialogExclu.FileName;
-  Exclusion.Repertoire := False;
-  cExclusions.Items.AddObject(Exclusion.Chemin, Pointer(Exclusion));
+  with TFCreateExclu.Create(Self) do try
+    if ShowModal <> mrOk then Exit;
+    New(Exclusion);
+    Exclusion.Chemin := Edit1.Text;
+    Exclusion.Repertoire := (RadioGroup1.ItemIndex = 1) and (CheckBox1.Checked);
+    Exclusion.Process := (RadioGroup1.ItemIndex = 0);
+
+    cExclusions.Items.AddObject(Exclusion.Chemin, Pointer(Exclusion));
+  finally
+    Free;
+  end;
 end;
 
 procedure TFond.Button7Click(Sender: TObject);

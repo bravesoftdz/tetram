@@ -52,7 +52,7 @@ object Fond: TFond
     Top = 0
     Width = 441
     Height = 369
-    ActivePage = TabSheet2
+    ActivePage = TabSheet6
     MultiLine = True
     TabOrder = 2
     object TabSheet1: TTabSheet
@@ -3782,10 +3782,6 @@ object Fond: TFond
       'ves ZIP (*.zip)|*.zip'
     Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
     Left = 104
-    Top = 372
-  end
-  object OpenDialogExclu: TOpenDialog
-    Left = 168
     Top = 372
   end
   object OpenDialogPlugins: TOpenDialog

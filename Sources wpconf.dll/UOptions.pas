@@ -44,6 +44,7 @@ type
   RExclusion = record
     Chemin: ShortString;
     Repertoire: Boolean;
+    Process: Boolean;
   end;
 
   RImage = record
@@ -302,8 +303,9 @@ begin
       while ValueExists('Exclus', 'Path' + IntToStr(i)) do begin
         SetLength(Exclusions, i);
         with Exclusions[i - 1] do begin
-          Chemin := ReadString('Exclus', 'Path' + IntToStr(i), '');
-          Repertoire := ReadBool('Exclus', 'Dir' + IntToStr(i), False);
+          Chemin := Trim(ReadString('Exclus', 'Path' + IntToStr(i), ''));
+          Repertoire := ReadBool('Exclus', 'Dir' + IntToStr(i), ReadBool('Exclus', 'Child' + IntToStr(i), False));
+          Process := ReadBool('Exclus', 'Process' + IntToStr(i), True);
         end;
         Inc(i);
       end;

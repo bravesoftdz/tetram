@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 [Languages]
-Name: fr; MessagesFile: compiler:French-15-4.1.8.isl
+Name: fr; MessagesFile: compiler:Languages\French.isl
 
 [Setup]
 AppVersion={#GetFileVersion("G:\Programmation\MEDIA.KIT\WallPap 1.0\WPConf.dll")}
@@ -77,69 +77,120 @@ LanguageID=$040C
 [_ISTool]
 UseAbsolutePaths=false
 
-[Code]
-var
-  CanUpdate, IsUpdate: Boolean;
-  Textes, Valeurs: TArrayOfString;
-
-procedure InitializeWizard();
-var
-  CurVersion: string;
-begin
-  SetArrayLength(Textes, 2);
-  Textes[0] := 'Mettre à jour la version existante';
-  Textes[1] := 'Installer de nouveau';
-  SetArrayLength(Valeurs, 2);
-  Valeurs[0] := '1';
-  Valeurs[1] := '0';
-  IsUpdate := False;
-  CanUpdate := RegQueryStringValue(HKLM, 'SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{5AED0247-C16B-4DFC-B7FD-42CCE72A4F89}_is1', 'DisplayVersion', CurVersion) and (CurVersion <> '');
-end;
-
-function ScriptDlgPages(CurPage: Integer; BackClicked: Boolean): Boolean;
-var
-  Next: Boolean;
-begin
-  if CanUpdate and (
-        (not BackClicked and (CurPage = wpLicense))
-     or (BackClicked and ((CurPage = wpSelectTasks) or (CurPage = wpSelectDir)))
-                    ) then begin
-    ScriptDlgPageOpen();
-    ScriptDlgPageSetCaption('WallPepper est déjà installé');
-    ScriptDlgPageSetSubCaption1('Le programme d''installation à détecter que WallPepper est déjà installé sur cet ordinateur.');
-    ScriptDlgPageSetSubCaption2('Selectionner l''action que vous voulez effectuer et cliquer sur Suivant pour continuer.'#13#10#13#10#13#10'ATTENTION: Si vous avez personnalisé le WebServer, pensez à sauvegarder votre répertoire WebServer avant de procéder à la mise à jour: son contenu sera remplacé.');
-
-    Next := InputOptionArray(Textes, Valeurs, True, False);
-    while Next and (Valeurs[0] + Valeurs[1] = '00') do begin
-      MsgBox('Vous devez sélectionner une action.', mbError, MB_OK);
-      Next := InputOptionArray(Textes, Valeurs, True, False);
-    end;
-    { See NextButtonClick and BackButtonClick: return True if the click should be allowed }
-    IsUpdate := Valeurs[0] = '1';
-    if not BackClicked then
-      Result := Next
-    else
-      Result := not Next;
-    { Close the wizard page. Do a FullRestore only if the click (see above) is not allowed }
-    ScriptDlgPageClose(not Result);
-  end else begin
-    Result := True;
-  end;
-end;
-
-function NextButtonClick(CurPage: Integer): Boolean;
-begin
-  Result := ScriptDlgPages(CurPage, False);
-end;
-
-function BackButtonClick(CurPage: Integer): Boolean;
-begin
-  Result := ScriptDlgPages(CurPage, True);
-end;
-
-function SkipCurPage(CurPage: Integer): Boolean;
-begin
-  Result := ((CurPage = wpSelectDir) or (CurPage = wpSelectProgramGroup)) and CanUpdate and IsUpdate;
-end;
 [Dirs]
 Name: {app}\Plugins; Flags: uninsalwaysuninstall
+[Code]
+[CustomMessages]
+CustomFormCaption=BDthèque est déjà installé
+CustomFormDescription=Le programme d'installation a détecté que BDthèque est déjà installé sur cet ordinateur.
+UninstallRegKey=SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{5AED0247-C16B-4DFC-B7FD-42CCE72A4F89}_is1
+
+[Code]
+  var
+    CanUpdate, IsUpdate: Boolean;
+    Label2: TLabel;
+    RadioButton1: TRadioButton;
+    RadioButton2: TRadioButton;
+
+  procedure CustomForm_Activate(Page: TWizardPage);
+  begin
+  end;
+
+  function CustomForm_ShouldSkipPage(Page: TWizardPage): Boolean;
+  begin
+    Result := False;
+  end;
+
+  function CustomForm_BackButtonClick(Page: TWizardPage): Boolean;
+  begin
+    Result := True;
+  end;
+
+  function CustomForm_NextButtonClick(Page: TWizardPage): Boolean;
+  begin
+    Result := True;
+    IsUpdate := RadioButton2.Checked;
+  end;
+
+  procedure CustomForm_CancelButtonClick(Page: TWizardPage; var Cancel, Confirm: Boolean);
+  begin
+  end;
+
+  function CustomForm_CreatePage(PreviousPageId: Integer): Integer;
+  var
+    Page: TWizardPage;
+  begin
+    Page := CreateCustomPage(
+      PreviousPageId,
+      ExpandConstant('{cm:CustomFormCaption}'),
+      ExpandConstant('{cm:CustomFormDescription}')
+    );
+
+    { Label2 }
+    Label2 := TLabel.Create(Page);
+    with Label2 do
+    begin
+      Parent := Page.Surface;
+      Left := ScaleX(24);
+      Top := ScaleY(40);
+      Width := ScaleX(366);
+      Height := ScaleY(58);
+      AutoSize := False;
+      Caption := 'Selectionnez l''action que vous voulez effectuer et cliquer sur Suivant pour continuer.';
+      WordWrap := True;
+    end;
+
+    { RadioButton1 }
+    RadioButton1 := TRadioButton.Create(Page);
+    with RadioButton1 do
+    begin
+      Parent := Page.Surface;
+      Left := ScaleX(120);
+      Top := ScaleY(136);
+      Width := ScaleX(113);
+      Height := ScaleY(17);
+      Caption := 'Installer de nouveau';
+      TabOrder := 0;
+    end;
+
+    { RadioButton2 }
+    RadioButton2 := TRadioButton.Create(Page);
+    with RadioButton2 do
+    begin
+      Parent := Page.Surface;
+      Left := ScaleX(120);
+      Top := ScaleY(112);
+      Width := ScaleX(113);
+      Height := ScaleY(17);
+      Caption := 'Mettre à jour';
+      Checked := True;
+      TabOrder := 1;
+      TabStop := True;
+    end;
+
+
+    with Page do
+    begin
+      OnActivate := @CustomForm_Activate;
+      OnNextButtonClick := @CustomForm_NextButtonClick;
+    end;
+
+    Result := Page.ID;
+  end;
+
+  procedure InitializeWizard();
+  var
+    CurVersion: string;
+  begin
+    IsUpdate := False;
+    CanUpdate := RegQueryStringValue(HKLM, ExpandConstant('{cm:UninstallRegKey}'), 'DisplayVersion', CurVersion) and (CurVersion <> '');
+    if CanUpdate then
+      CustomForm_CreatePage(wpLicense);
+  end;
+
+  function ShouldSkipPage(PageID: Integer): Boolean;
+  begin
+    Result := ((PageID = wpSelectDir) or (PageID = wpSelectProgramGroup)) and CanUpdate and IsUpdate;
+  end;
+
+
