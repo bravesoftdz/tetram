@@ -11,8 +11,14 @@ File_8=SourceModule,'d:\program files\borland\delphi7\source\rtl\Sys\system.pas'
 File_9=SourceModule,'d:\program files\borland\delphi7\source\vcl\Controls.pas',0,1,5936,1,5973,0,0
 
 [Modules]
-Count=0
-EditWindowCount=0
+Module0=G:\Programmation\MEDIA.KIT\WallPap 1.0\Sources SourceNet.dll\SourceNet.dpr
+Count=1
+EditWindowCount=1
+
+[G:\Programmation\MEDIA.KIT\WallPap 1.0\Sources SourceNet.dll\SourceNet.dpr]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
 
 [G:\Programmation\MEDIA.KIT\WallPap 1.0\WallPepper.bpg]
 FormState=0
@@ -42,9 +48,37 @@ FormOnTop=0
 FormState=0
 FormOnTop=0
 
-[G:\Programmation\MEDIA.KIT\WallPap 1.0\Sources SourceNet.dll\SourceNet.dpr]
-FormState=0
-FormOnTop=0
+[EditWindow0]
+ViewCount=1
+CurrentView=0
+View0=0
+CodeExplorer=CodeExplorer@EditWindow0
+MessageView=MessageView@EditWindow0
+Create=1
+Visible=1
+State=0
+Left=440
+Top=164
+Width=868
+Height=646
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=860
+ClientHeight=614
+LeftPanelSize=0
+LeftPanelClients=CodeExplorer@EditWindow0
+LeftPanelData=00000400010000000C000000436F64654578706C6F7265720000000000000000000000000000000000FFFFFFFF
+RightPanelSize=0
+BottomPanelSize=85
+BottomPanelClients=MessageView@EditWindow0
+BottomPanelData=000004000000000000000000000000000000000000000000000100000000000000000B0000004D65737361676556696577FFFFFFFF
+
+[View0]
+Module=G:\Programmation\MEDIA.KIT\WallPap 1.0\Sources SourceNet.dll\SourceNet.dpr
+CursorX=40
+CursorY=12
+TopLine=1
+LeftCol=1
 
 [Watches]
 Count=0
@@ -80,13 +114,13 @@ State=2
 Left=0
 Top=0
 Width=1280
-Height=113
+Height=142
 MaxLeft=-4
 MaxTop=-4
 MaxWidth=1288
-MaxHeight=113
+MaxHeight=142
 ClientWidth=1280
-ClientHeight=81
+ClientHeight=110
 
 [ProjectManager]
 Create=1
@@ -353,6 +387,54 @@ TBDockHeight=195
 LRDockWidth=383
 Dockable=1
 
+[fmGrepResults]
+Create=1
+Visible=0
+State=0
+Left=406
+Top=342
+Width=468
+Height=340
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=460
+ClientHeight=311
+TBDockHeight=340
+LRDockWidth=468
+Dockable=1
+
+[CodeExplorer@EditWindow0]
+Create=1
+Visible=0
+State=0
+Left=-240
+Top=-30
+Width=140
+Height=305
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=140
+ClientHeight=305
+TBDockHeight=305
+LRDockWidth=140
+Dockable=1
+
+[MessageView@EditWindow0]
+Create=1
+Visible=1
+State=0
+Left=12
+Top=0
+Width=848
+Height=85
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=848
+ClientHeight=85
+TBDockHeight=85
+LRDockWidth=443
+Dockable=1
+
 [DockHosts]
 DockHostCount=1
 
@@ -377,5 +459,5 @@ ActiveTab=Gestionnaire de projet
 TabDockClients=ProjectManager,PropertyInspector
 
 [ActiveProject]
-ActiveProject=2
+ActiveProject=1
 
