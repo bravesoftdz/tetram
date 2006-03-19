@@ -53,6 +53,7 @@
     <Compile Include="Collection.cs" />
     <Compile Include="Divers.cs" />
     <Compile Include="Editeur.cs" />
+    <Compile Include="Edition.cs" />
     <Compile Include="Emprunteur.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Série.cs" />

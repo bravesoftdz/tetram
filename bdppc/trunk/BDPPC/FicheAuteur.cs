@@ -12,7 +12,7 @@ namespace BD.PPC.Application
 	/// <summary>
 	/// Description résumée de FicheAuteur.
 	/// </summary>
-	public class FicheAuteur : System.Windows.Forms.Form
+  public partial class FicheAuteur : System.Windows.Forms.Form
 	{
 		private System.Windows.Forms.Label label1;
 	

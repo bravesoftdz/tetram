@@ -9,12 +9,14 @@ using TetramCorp.Database;
 namespace BD.PPC.Records
 {
   public class EditeurCompletPPC : BD.Common.Records.EditeurComplet
-	{
+  {
     public override void Fill(params object[] references)
     {
-      if (references.Length < 1) return;
+      if (references.Length < 1)
+        return;
       int reference = (int)references[0];
-      if (reference == 0) return;
+      if (reference == 0)
+        return;
       using (new WaitingCursor())
       using (IDbCommand cmd = BDPPCDatabase.GetCommand())
       {
@@ -29,13 +31,15 @@ namespace BD.PPC.Records
     }
   }
 
-	public class AuteurCompletPPC : BD.Common.Records.AuteurComplet
-	{
+  public class AuteurCompletPPC : BD.Common.Records.AuteurComplet
+  {
     public override void Fill(params object[] references)
     {
-      if (references.Length < 1) return;
+      if (references.Length < 1)
+        return;
       int reference = (int)references[0];
-      if (reference == 0) return;
+      if (reference == 0)
+        return;
       using (new WaitingCursor())
       using (IDbCommand cmd = BDPPCDatabase.GetCommand())
       {
@@ -67,15 +71,17 @@ namespace BD.PPC.Records
               this.Séries.Add(BaseRecord.Create<SérieCompletPPC>(dataReader.GetInt(1), this.RefAuteur));
       }
     }
-	}
+  }
 
-	public class SérieCompletPPC : BD.Common.Records.SérieComplet
-	{
+  public class SérieCompletPPC : BD.Common.Records.SérieComplet
+  {
     public override void Fill(params object[] references)
     {
-      if (references.Length < 1) return;
+      if (references.Length < 1)
+        return;
       int reference = (int)references[0];
-      if (reference == 0) return;
+      if (reference == 0)
+        return;
       if (references.Length > 1)
         this.FIdAuteur = (int)references[1];
       else
@@ -151,4 +157,99 @@ namespace BD.PPC.Records
       }
     }
   }
+
+  public class AlbumCompletPPC : BD.Common.Records.AlbumComplet
+  {
+    public AlbumCompletPPC()
+      : base()
+    {
+      Série = new SérieCompletPPC();
+    }
+
+    public override void Fill(params object[] references)
+    {
+      if (references.Length < 1)
+        return;
+      int reference = (int)references[0];
+      if (reference == 0)
+        return;
+      using (new WaitingCursor())
+      using (IDbCommand cmd = BDPPCDatabase.GetCommand())
+      {
+        cmd.CommandText = "SELECT REFALBUM, TITREALBUM, ANNEEPARUTION, REFSERIE, TOME, TOMEDEBUT, TOMEFIN, SUJETALBUM, REMARQUESALBUM, HORSSERIE, INTEGRALE "
+          + "FROM ALBUMS "
+          + "WHERE RefAlbum = ?";
+        cmd.Parameters.Clear();
+        cmd.Parameters.Add(BDPPCDatabase.GetParameter("@refalbum", reference));
+        using (IDataReader result = cmd.ExecuteReader())
+        using (BaseDataReader<AlbumCompletPPC> dataReader = new BaseDataReader<AlbumCompletPPC>(result))
+          if (result != null && result.Read())
+          {
+            dataReader.LoadData(this);
+            Série.Fill(dataReader.GetInt(3, -1));
+          }
+
+        ArrayList Auteurs = new ArrayList();
+        StoredProceduresPPC.ProcAuteurs(Auteurs, reference, -1);
+        this.Scénaristes.Clear();
+        this.Dessinateurs.Clear();
+        this.Coloristes.Clear();
+        foreach (Auteur auteur in Auteurs)
+          switch (auteur.Metier)
+          {
+            case 0:
+              {
+                this.Scénaristes.Add(auteur);
+                break;
+              }
+            case 1:
+              {
+                this.Dessinateurs.Add(auteur);
+                break;
+              }
+            case 2:
+              {
+                this.Coloristes.Add(auteur);
+                break;
+              }
+
+          }
+
+        this.Editions.Clear();
+        cmd.CommandText = "SELECT REFEDITION, RefAlbum, e.REFEDITEUR, e.REFCOLLECTION, NOMCOLLECTION, ANNEEEDITION, PRIX, VO, COULEUR, ISBN, DEDICACE, PRETE, STOCK, Offert, Gratuit, "
+                        + "NombreDePages, etat, le.libelle as setat, reliure, lr.libelle as sreliure, orientation, lo.libelle as sorientation, FormatEdition, lf.libelle as sFormatEdition, typeedition, lte.libelle as stypeedition, DateAchat, Notes "
+                        + "FROM EDITIONS e LEFT JOIN COLLECTIONS c ON e.REFCOLLECTION = c.REFCOLLECTION "
+                        + "LEFT JOIN LISTES le on (le.ref = e.etat and le.categorie = 1) "
+                        + "LEFT JOIN LISTES lr on (lr.ref = e.reliure and lr.categorie = 2) "
+                        + "LEFT JOIN LISTES lte on (lte.ref = e.typeedition and lte.categorie = 3) "
+                        + "LEFT JOIN LISTES lo on (lo.ref = e.orientation and lo.categorie = 4) "
+                        + "LEFT JOIN LISTES lf on (lf.ref = e.formatedition and lf.categorie = 5) "
+                        + "WHERE REFALBUM = ?";
+        cmd.Parameters.Clear();
+        cmd.Parameters.Add(BDPPCDatabase.GetParameter("@refalbum", RefAlbum));
+
+        using (IDataReader result = cmd.ExecuteReader())
+        using (BaseDataReader<Edition> dataReader = new BaseDataReader<Edition>(result))
+          if (result != null)
+            dataReader.FillList(this.Editions);
+        //Self.Editeur.Fill(Fields.ByNameAsInteger['REFEDITEUR']);
+        //Self.Collection.Fill(q);
+
+      }
+    }
+  }
+
+  public class EditionCompletPPC : EditionComplet
+  {
+    public EditionCompletPPC()
+    {
+      Editeur = new EditeurCompletPPC();
+    }
+  
+    public override void Fill(params System.Object[] references)
+    {
+      throw new System.NotImplementedException();
+    }
+  }
+
 }

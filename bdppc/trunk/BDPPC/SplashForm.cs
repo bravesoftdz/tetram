@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace BD.PPC
 {
-	internal class SplashForm : System.Windows.Forms.Form
+  internal partial class SplashForm : System.Windows.Forms.Form
 	{
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Label label2;
