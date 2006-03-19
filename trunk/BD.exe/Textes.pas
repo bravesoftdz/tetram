@@ -116,11 +116,16 @@ const
   rsSerieObligatoire = 'La série est obligatoire !';
   rsEditeurObligatoire = 'L''éditeur est obligatoire !';
   rsMoisParutionIncorrect = 'Le mois de parution doit être compris entre 1 et 12 !';
+  rsCoteIncomplete = 'Une cote doit être composée d''un prix ET d''une année.';
 
   rsLienAlbum = 'Attention, les personnes et les emprunteurs qui ont un lien avec cet album en seront détachées.';
   rsSupprimerAlbum = 'Êtes-vous sûr de vouloir supprimer cet album ?';
 
-  rsLienAchat = 'Attention, les personnes qui ont un lien avec cet album en seront détachées.';
+  rsLienParaBD = 'Attention, les séries qui ont un lien avec cet objet en seront détachées.';
+  rsSupprimerParaBD = 'Êtes-vous sûr de vouloir supprimer cet objet ?';
+
+  rsLienAchatAlbum = 'Attention, les personnes qui ont un lien avec cet album en seront détachées.';
+  rsLienAchatParaBD = 'Attention, les personnes qui ont un lien avec cet album en seront détachées.';
   rsSupprimerAchat = 'Êtes-vous sûr de vouloir supprimer cet achat ?';
 
   rsNewTitre = 'Nouveau %s';

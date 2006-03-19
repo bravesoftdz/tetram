@@ -29,7 +29,8 @@ type
     procedure FormDestroy(Sender: TObject);
   private
     { Déclarations privées }
-    FRefAlbum, FRefCouverture: Integer;
+    FisParaBD: Boolean;
+    FRefItem, FRefCouverture: Integer;
     PosClick: TPoint;
     Moving: Boolean;
     function PHeight: Integer;
@@ -40,7 +41,7 @@ type
     function ApercuUpdate: Boolean;
   public
     { Déclarations publiques }
-    function LoadCouverture(RefAlbum, RefCouverture: Integer): Boolean;
+    function LoadCouverture(isParaBD: Boolean; RefItem, RefCouverture: Integer): Boolean;
   end;
 
 implementation
@@ -49,14 +50,15 @@ uses CommonConst, Impression, UHistorique, jpeg, Math;
 
 {$R *.DFM}
 
-function TFrmZoomCouverture.LoadCouverture(RefAlbum, RefCouverture: Integer): Boolean;
+function TFrmZoomCouverture.LoadCouverture(isParaBD: Boolean; RefItem, RefCouverture: Integer): Boolean;
 var
   ms: TStream;
   jpg: TJPEGImage;
 begin
-  FRefAlbum := RefAlbum;
+  FisParaBD := isParaBD;
+  FRefItem := RefItem;
   FRefCouverture := RefCouverture;
-  ms := GetCouvertureStream(RefCouverture, -1, -1, False);
+  ms := GetCouvertureStream(isParaBD, RefCouverture, -1, -1, False);
   if Assigned(ms) then begin
     jpg := TJPEGImage.Create;
     try
@@ -114,7 +116,7 @@ begin
   Panel1.Top := ScrollBarH.Top;
   Panel1.Left := ScrollBarV.Left;
 
-  LoadCouverture(FRefAlbum, FRefCouverture);
+  LoadCouverture(FisParaBD, FRefItem, FRefCouverture);
 end;
 
 function TFrmZoomCouverture.PWidth: Integer;
@@ -131,7 +133,8 @@ end;
 
 procedure TFrmZoomCouverture.ImageApercuExecute(Sender: TObject);
 begin
-  ImpressionCouvertureAlbum(FRefAlbum, FRefCouverture, TComponent(Sender).Tag = 1);
+  if FisParaBD then
+    ImpressionCouvertureAlbum(FRefItem, FRefCouverture, TComponent(Sender).Tag = 1);
 end;
 
 procedure TFrmZoomCouverture.ImageMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -178,7 +181,7 @@ end;
 
 function TFrmZoomCouverture.ApercuUpdate: Boolean;
 begin
-  Result := True;
+  Result := not FisParaBD;
 end;
 
 procedure TFrmZoomCouverture.ImpressionExecute(Sender: TObject);
@@ -202,3 +205,4 @@ begin
 end;
 
 end.
+

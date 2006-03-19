@@ -1,13 +1,13 @@
-unit Form_ConsultationE;
+unit Form_ConsultationEmprunteur;
 
 interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, DBCtrls, StdCtrls, Menus, ComCtrls, ExtCtrls, ActnList,
-  ToolWin, VirtualTrees, Procedures;
+  ToolWin, VirtualTrees, Procedures, LoadComplet;
 
 type
-  TFrmConsultationE = class(TForm, IImpressionApercu)
+  TFrmConsultationEmprunteur = class(TForm, IImpressionApercu)
     ActionList1: TActionList;
     FicheImprime: TAction;
     FicheApercu: TAction;
@@ -46,15 +46,19 @@ type
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure Retour1Execute(Sender: TObject);
   private
+    FEmprunteur: TEmprunteurComplet;
     { Déclarations privées }
     procedure ImpressionExecute(Sender: TObject);
     procedure ApercuExecute(Sender: TObject);
     function ImpressionUpdate: Boolean;
     function ApercuUpdate: Boolean;
+    function GetRefEmprunteur: Integer;
+    procedure SetRefEmprunteur(const Value: Integer);
+    procedure ClearForm;
   public
     { Déclarations publiques }
-    FListEmprunts: TList;
-    RefEmprunteur: Integer;
+    property Emprunteur: TEmprunteurComplet read FEmprunteur;
+    property RefEmprunteur: Integer read GetRefEmprunteur write SetRefEmprunteur;
   end;
 
 implementation
@@ -67,9 +71,9 @@ var
   FSortColumn: Integer;
   FSortDirection: TSortDirection;
 
-procedure TFrmConsultationE.FormCreate(Sender: TObject);
+procedure TFrmConsultationEmprunteur.FormCreate(Sender: TObject);
 begin
-  FListEmprunts := TList.Create;
+  FEmprunteur := TEmprunteurComplet.Create;
   PrepareLV(Self);
   ListeEmprunts.Header.Columns[0].Width := Trunc(ListeEmprunts.Header.Columns[0].Width * 1.5) + Fond.ImageList1.Width + 4;
   FSortColumn := 0;
@@ -77,13 +81,13 @@ begin
   ListeEmprunts.Header.Columns[0].ImageIndex := 1;
 end;
 
-procedure TFrmConsultationE.FormDestroy(Sender: TObject);
+procedure TFrmConsultationEmprunteur.FormDestroy(Sender: TObject);
 begin
-  ListeEmprunts.Clear;
-  TEmprunt.VideListe(FListEmprunts);
+  ClearForm;
+  FEmprunteur.Free;
 end;
 
-procedure TFrmConsultationE.btAjouterClick(Sender: TObject);
+procedure TFrmConsultationEmprunteur.btAjouterClick(Sender: TObject);
 var
   a: TEditionsEmpruntees;
 begin
@@ -91,22 +95,22 @@ begin
   if SaisieMouvementEmprunteur(RefEmprunteur, a) then Historique.Refresh;
 end;
 
-procedure TFrmConsultationE.Imprimer1Click(Sender: TObject);
+procedure TFrmConsultationEmprunteur.Imprimer1Click(Sender: TObject);
 begin
   ImpressionEmpruntsEmprunteur(RefEmprunteur, TComponent(Sender).Tag = 1);
 end;
 
-procedure TFrmConsultationE.Imprimer2Click(Sender: TObject);
+procedure TFrmConsultationEmprunteur.Imprimer2Click(Sender: TObject);
 begin
   ImpressionFicheEmprunteur(RefEmprunteur, TComponent(Sender).Tag = 1);
 end;
 
-procedure TFrmConsultationE.ListeEmpruntsDblClick(Sender: TObject);
+procedure TFrmConsultationEmprunteur.ListeEmpruntsDblClick(Sender: TObject);
 begin
-  if Assigned(ListeEmprunts.FocusedNode) then Historique.AddWaiting(fcAlbum, TEmprunt(FListEmprunts[ListeEmprunts.FocusedNode.Index]).Album.Reference);
+  if Assigned(ListeEmprunts.FocusedNode) then Historique.AddWaiting(fcAlbum, TEmprunt(FEmprunteur.Emprunts.Emprunts[ListeEmprunts.FocusedNode.Index]).Album.Reference);
 end;
 
-procedure TFrmConsultationE.Button1Click(Sender: TObject);
+procedure TFrmConsultationEmprunteur.Button1Click(Sender: TObject);
 begin
   if ActiveControl = ListeEmprunts then begin
     ListeEmpruntsDblClick(ListeEmprunts);
@@ -114,19 +118,19 @@ begin
   end;
 end;
 
-procedure TFrmConsultationE.ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TFrmConsultationEmprunteur.ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
 begin
   case Column of
-    0: CellText := DateToStr(TEmprunt(FListEmprunts[Node.Index]).Date);
-    1: CellText := TEmprunt(FListEmprunts[Node.Index]).Album.ChaineAffichage;
-    2: CellText := TEmprunt(FListEmprunts[Node.Index]).Edition.ChaineAffichage;
+    0: CellText := DateToStr(TEmprunt(FEmprunteur.Emprunts.Emprunts[Node.Index]).Date);
+    1: CellText := TEmprunt(FEmprunteur.Emprunts.Emprunts[Node.Index]).Album.ChaineAffichage;
+    2: CellText := TEmprunt(FEmprunteur.Emprunts.Emprunts[Node.Index]).Edition.ChaineAffichage;
   end;
 end;
 
-procedure TFrmConsultationE.ListeEmpruntsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
+procedure TFrmConsultationEmprunteur.ListeEmpruntsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
 begin
   if Column = 0 then
-    if TEmprunt(FListEmprunts[Node.Index]).Pret then
+    if TEmprunt(FEmprunteur.Emprunts.Emprunts[Node.Index]).Pret then
       ImageIndex := 3
     else
       ImageIndex := 2;
@@ -144,7 +148,7 @@ begin
   if FSortDirection = sdDescending then Result := -Result;
 end;
 
-procedure TFrmConsultationE.ListeEmpruntsHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+procedure TFrmConsultationEmprunteur.ListeEmpruntsHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   if Column <> FSortColumn then
     if Column = 0 then
@@ -163,16 +167,16 @@ begin
     ListeEmprunts.Header.Columns[FSortColumn].ImageIndex := 0
   else
     ListeEmprunts.Header.Columns[FSortColumn].ImageIndex := 1;
-  FListEmprunts.Sort(@ListeEmpruntsCompare);
+  FEmprunteur.Emprunts.Emprunts.Sort(@ListeEmpruntsCompare);
   ListeEmprunts.Invalidate;
 end;
 
-procedure TFrmConsultationE.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
+procedure TFrmConsultationEmprunteur.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
   Retour1.Enabled := Bool(ListeEmprunts.SelectedCount);
 end;
 
-procedure TFrmConsultationE.Retour1Execute(Sender: TObject);
+procedure TFrmConsultationEmprunteur.Retour1Execute(Sender: TObject);
 var
   i: Integer;
   a: TEditionsEmpruntees;
@@ -182,32 +186,55 @@ begin
   i := 0;
   Node := ListeEmprunts.GetFirstSelected;
   while Assigned(Node) do begin
-    a[i][0] := TEmprunt(FListEmprunts[Node.Index]).Album.Reference;
-    a[i][1] := TEmprunt(FListEmprunts[Node.Index]).Edition.Reference;
+    a[i][0] := TEmprunt(FEmprunteur.Emprunts.Emprunts[Node.Index]).Album.Reference;
+    a[i][1] := TEmprunt(FEmprunteur.Emprunts.Emprunts[Node.Index]).Edition.Reference;
     Inc(i);
     Node := ListeEmprunts.GetNextSelected(Node);
   end;
   if SaisieMouvementEmprunteur(RefEmprunteur, a) then Historique.Refresh;
 end;
 
-procedure TFrmConsultationE.ApercuExecute(Sender: TObject);
+procedure TFrmConsultationEmprunteur.ApercuExecute(Sender: TObject);
 begin
   Imprimer1Click(Sender);
 end;
 
-function TFrmConsultationE.ApercuUpdate: Boolean;
+function TFrmConsultationEmprunteur.ApercuUpdate: Boolean;
 begin
   Result := True;
 end;
 
-procedure TFrmConsultationE.ImpressionExecute(Sender: TObject);
+procedure TFrmConsultationEmprunteur.ImpressionExecute(Sender: TObject);
 begin
   Imprimer1Click(Sender);
 end;
 
-function TFrmConsultationE.ImpressionUpdate: Boolean;
+function TFrmConsultationEmprunteur.ImpressionUpdate: Boolean;
 begin
   Result := True;
+end;
+
+function TFrmConsultationEmprunteur.GetRefEmprunteur: Integer;
+begin
+  Result := FEmprunteur.RefEmprunteur;
+end;
+
+procedure TFrmConsultationEmprunteur.SetRefEmprunteur(const Value: Integer);
+begin
+  ClearForm;
+  FEmprunteur.Fill(Value);
+
+  Caption := 'Fiche d''emprunteur - "' + FEmprunteur.Nom + '"';
+  nom.Caption := FEmprunteur.Nom;
+  Adresse.Text := FEmprunteur.Adresse.Text;
+
+  ListeEmprunts.RootNodeCount := FEmprunteur.Emprunts.Emprunts.Count;
+  Emprunts.Caption := IntToStr(FEmprunteur.Emprunts.NBEmprunts);
+end;
+
+procedure TFrmConsultationEmprunteur.ClearForm;
+begin
+  ListeEmprunts.Clear;
 end;
 
 end.

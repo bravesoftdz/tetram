@@ -40,7 +40,8 @@ type
     vmAlbumsCollection,
     vmAlbumsEditeur,
     vmAlbumsGenre,
-    vmAlbumsSerie);
+    vmAlbumsSerie,
+    vmParaBDSerie);
 
   TVirtualStringTree = class(VirtualTrees.TVirtualStringTree)
   private
@@ -211,6 +212,15 @@ const
     REFFIELDS: 'REFALBUM';
     TABLESEARCH: 'VW_LISTE_ALBUMS'; FIELDSEARCH: 'UPPERTITREALBUM'; SEARCHORDER: 'UPPERTITREALBUM, UPPERTITRESERIE, HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
     DEFAULTFILTRE: 'COMPLET = 1'
+    ),
+    (// vmParaBDSerie
+    FILTRECOUNT: 'SERIES_PARABD(?)'; FILTRE: 'PARABD_BY_SERIE(?, ?)';
+    FIELDS: 'REFPARABD, TITREPARABD, REFSERIE, TITRESERIE, ACHAT, COMPLET';
+    TypeInitiale: Entier;
+    INITIALEFIELDS: 'TITRESERIE'; INITIALEVALUE: 'REFSERIE';
+    REFFIELDS: 'REFPARABD';
+    TABLESEARCH: 'VW_LISTE_PARABD'; FIELDSEARCH: 'UPPERTITREPARABD'; SEARCHORDER: 'UPPERTITREPARABD, UPPERTITRESERIE';
+    DEFAULTFILTRE: 'COMPLET = 1'
     )
     );
 
@@ -365,7 +375,8 @@ begin
           vmSeries,
           vmGenres,
           vmEditeurs,
-          vmCollections: begin
+          vmCollections,
+          vmParaBDSerie: begin
             Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage;
           end;
       end;
@@ -405,6 +416,7 @@ begin
       vmGenres: ClassPointeur := TGenre;
       vmEditeurs: ClassPointeur := TEditeur;
       vmCollections: ClassPointeur := TCollection;
+      vmParaBDSerie: ClassPointeur := TParaBD;
       else
         ClassPointeur := nil;
     end;
@@ -472,6 +484,8 @@ begin
       case FMode of
         vmAlbums, vmAlbumsAnnee, vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie:
           if FShowAchat and TAlbum(InfoNode.Detail).Achat then Canvas.Font.Style := Canvas.Font.Style + [fsItalic];
+        vmParaBDSerie:
+          if FShowAchat and TParaBD(InfoNode.Detail).Achat then Canvas.Font.Style := Canvas.Font.Style + [fsItalic];
       end;
   inherited;
 end;

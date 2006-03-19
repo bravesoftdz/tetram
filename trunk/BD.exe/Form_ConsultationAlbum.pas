@@ -1,14 +1,14 @@
-unit Form_Consultation;
+unit Form_ConsultationAlbum;
 
 interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls,
-  Main, VDTButton, ActnList, Spin, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees,
-  jpeg, Procedures, ShellAPI, LoadComplet;
+  Main, VDTButton, ActnList, Spin, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, Procedures,
+  jpeg, ShellAPI, LoadComplet;
 
 type
-  TFrmConsultation = class(TForm, IImpressionApercu)
+  TFrmConsultationAlbum = class(TForm, IImpressionApercu)
     Popup3: TPopupMenu;
     Informations1: TMenuItem;
     Emprunts1: TMenuItem;
@@ -63,8 +63,6 @@ type
     Aperuavantimpression5: TMenuItem;
     Aperuavantimpression6: TMenuItem;
     Srie1: TMenuItem;
-    SerieApercu: TAction;
-    SerieImprime: TAction;
     Aperuavantimpression7: TMenuItem;
     Imprimer1: TMenuItem;
     PanelEdition: TPanel;
@@ -122,8 +120,8 @@ type
     procedure lvEditionsClick(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure EditeurClick(Sender: TObject);
+    procedure TitreSerieDblClick(Sender: TObject);
     procedure TitreSerieClick(Sender: TObject);
-    procedure SerieImprimeExecute(Sender: TObject);
   private
     { Déclarations privées }
     CurrentCouverture: Integer;
@@ -154,12 +152,12 @@ var
   FSortColumn: Integer;
   FSortDirection: TSortDirection;
 
-procedure TFrmConsultation.lvScenaristesDblClick(Sender: TObject);
+procedure TFrmConsultationAlbum.lvScenaristesDblClick(Sender: TObject);
 begin
   if Assigned(TListView(Sender).Selected) then Historique.AddWaiting(fcAuteur, TAuteur(TListView(Sender).Selected.Data).Personne.Reference, 0);
 end;
 
-procedure TFrmConsultation.FormCreate(Sender: TObject);
+procedure TFrmConsultationAlbum.FormCreate(Sender: TObject);
 begin
   FAlbum := TAlbumComplet.Create;
   FCurrentEdition := TEditionComplete.Create;
@@ -172,14 +170,14 @@ begin
   Couverture.Picture := nil;
 end;
 
-procedure TFrmConsultation.FormDestroy(Sender: TObject);
+procedure TFrmConsultationAlbum.FormDestroy(Sender: TObject);
 begin
   ClearForm;
   FCurrentEdition.Free;
   FAlbum.Free;
 end;
 
-procedure TFrmConsultation.ClearForm;
+procedure TFrmConsultationAlbum.ClearForm;
 begin
   lvScenaristes.Items.Count := 0;
   lvDessinateurs.Items.Count := 0;
@@ -190,7 +188,7 @@ begin
   FCurrentEdition.Clear;
 end;
 
-procedure TFrmConsultation.ImpRep(Sender: TObject);
+procedure TFrmConsultationAlbum.ImpRep(Sender: TObject);
 begin
   if lvEditions.ItemIndex > -1 then
     ImpressionFicheAlbum(RefAlbum, TEdition(lvEditions.Items.Objects[lvEditions.ItemIndex]).Reference, TComponent(Sender).Tag = 1)
@@ -198,52 +196,52 @@ begin
     ImpressionFicheAlbum(RefAlbum, -1, TComponent(Sender).Tag = 1);
 end;
 
-procedure TFrmConsultation.ajouterClick(Sender: TObject);
+procedure TFrmConsultationAlbum.ajouterClick(Sender: TObject);
 begin
   if SaisieMouvementAlbum(RefAlbum, TEdition(lvEditions.Items.Objects[lvEditions.ItemIndex]).Reference, cbStock.Checked) then Historique.Refresh;
 end;
 
-procedure TFrmConsultation.Impression1Click(Sender: TObject);
+procedure TFrmConsultationAlbum.Impression1Click(Sender: TObject);
 begin
   ImpRep(Sender);
 end;
 
-procedure TFrmConsultation.Imprimer1Click(Sender: TObject);
+procedure TFrmConsultationAlbum.Imprimer1Click(Sender: TObject);
 begin
   ImpressionEmpruntsAlbum(RefAlbum, TComponent(Sender).Tag = 1);
 end;
 
-procedure TFrmConsultation.Imprimer2Click(Sender: TObject);
+procedure TFrmConsultationAlbum.Imprimer2Click(Sender: TObject);
 begin
   ImpressionCouvertureAlbum(RefAlbum, TCouverture(FCurrentEdition.Couvertures[CurrentCouverture]).Reference, TComponent(Sender).Tag = 1);
 end;
 
-procedure TFrmConsultation.ListeEmpruntsDblClick(Sender: TObject);
+procedure TFrmConsultationAlbum.ListeEmpruntsDblClick(Sender: TObject);
 begin
   if Assigned(ListeEmprunts.FocusedNode) then Historique.AddWaiting(fcEmprunteur, TEmprunt(FCurrentEdition.Emprunts.Emprunts[ListeEmprunts.FocusedNode.Index]).Emprunteur.Reference);
 end;
 
-procedure TFrmConsultation.CouvertureDblClick(Sender: TObject);
+procedure TFrmConsultationAlbum.CouvertureDblClick(Sender: TObject);
 begin
   Historique.AddWaiting(fcCouverture, RefAlbum, TCouverture(FCurrentEdition.Couvertures[CurrentCouverture]).Reference);
 end;
 
-procedure TFrmConsultation.lvSerieDblClick(Sender: TObject);
+procedure TFrmConsultationAlbum.lvSerieDblClick(Sender: TObject);
 begin
   if Assigned(lvSerie.Selected) and (TAlbum(lvSerie.Selected.Data).Reference <> RefAlbum) then Historique.AddWaiting(fcAlbum, TAlbum(lvSerie.Selected.Data).Reference);
 end;
 
-procedure TFrmConsultation.VDTButton1Click(Sender: TObject);
+procedure TFrmConsultationAlbum.VDTButton1Click(Sender: TObject);
 begin
   ShowCouverture(Succ(CurrentCouverture));
 end;
 
-procedure TFrmConsultation.VDTButton2Click(Sender: TObject);
+procedure TFrmConsultationAlbum.VDTButton2Click(Sender: TObject);
 begin
   ShowCouverture(Pred(CurrentCouverture));
 end;
 
-procedure TFrmConsultation.ShowCouverture(Num: Integer);
+procedure TFrmConsultationAlbum.ShowCouverture(Num: Integer);
 var
   hg: IHourGlass;
   ms: TStream;
@@ -255,7 +253,7 @@ begin
     if Num > Pred(FCurrentEdition.Couvertures.Count) then Num := 0;
     CurrentCouverture := Num;
     Couverture.Picture := nil;
-    ms := GetCouvertureStream(TCouverture(FCurrentEdition.Couvertures[Num]).Reference, Couverture.Height, Couverture.Width, Utilisateur.Options.AntiAliasing);
+    ms := GetCouvertureStream(False, TCouverture(FCurrentEdition.Couvertures[Num]).Reference, Couverture.Height, Couverture.Width, Utilisateur.Options.AntiAliasing);
     if Assigned(ms) then try
       jpg := TJPEGImage.Create;
       try
@@ -284,14 +282,14 @@ begin
   end;
 end;
 
-procedure TFrmConsultation.FormShow(Sender: TObject);
+procedure TFrmConsultationAlbum.FormShow(Sender: TObject);
 begin
   lvEditions.ItemIndex := 0;
   lvEditions.OnClick(lvEditions);
   Resize;
 end;
 
-procedure TFrmConsultation.ListeEmpruntsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
+procedure TFrmConsultationAlbum.ListeEmpruntsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
 begin
   if Column = 0 then
     if TEmprunt(FCurrentEdition.Emprunts.Emprunts[Node.Index]).Pret then
@@ -300,7 +298,7 @@ begin
       ImageIndex := 2;
 end;
 
-procedure TFrmConsultation.ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TFrmConsultationAlbum.ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
 begin
   case Column of
     0: CellText := DateToStr(TEmprunt(FCurrentEdition.Emprunts.Emprunts[Node.Index]).Date);
@@ -319,7 +317,7 @@ begin
   if FSortDirection = sdDescending then Result := -Result;
 end;
 
-procedure TFrmConsultation.ListeEmpruntsHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+procedure TFrmConsultationAlbum.ListeEmpruntsHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   if Column <> FSortColumn then
     if Column = 0 then
@@ -342,7 +340,7 @@ begin
   ListeEmprunts.Invalidate;
 end;
 
-procedure TFrmConsultation.lvEditionsClick(Sender: TObject);
+procedure TFrmConsultationAlbum.lvEditionsClick(Sender: TObject);
 begin
   PanelEdition.Visible := lvEditions.ItemIndex > -1;
   if PanelEdition.Visible then begin
@@ -399,33 +397,33 @@ begin
   end;
 end;
 
-procedure TFrmConsultation.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
+procedure TFrmConsultationAlbum.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
   CouvertureImprime.Enabled := Bool(FCurrentEdition.Couvertures.Count);
   CouvertureApercu.Enabled := CouvertureImprime.Enabled;
 end;
 
-procedure TFrmConsultation.ApercuExecute(Sender: TObject);
+procedure TFrmConsultationAlbum.ApercuExecute(Sender: TObject);
 begin
   Impression1Click(Sender);
 end;
 
-function TFrmConsultation.ApercuUpdate: Boolean;
+function TFrmConsultationAlbum.ApercuUpdate: Boolean;
 begin
   Result := True;
 end;
 
-procedure TFrmConsultation.ImpressionExecute(Sender: TObject);
+procedure TFrmConsultationAlbum.ImpressionExecute(Sender: TObject);
 begin
   Impression1Click(Sender);
 end;
 
-function TFrmConsultation.ImpressionUpdate: Boolean;
+function TFrmConsultationAlbum.ImpressionUpdate: Boolean;
 begin
   Result := True;
 end;
 
-procedure TFrmConsultation.EditeurClick(Sender: TObject);
+procedure TFrmConsultationAlbum.EditeurClick(Sender: TObject);
 var
   s: string;
 begin
@@ -434,21 +432,12 @@ begin
     ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
 end;
 
-procedure TFrmConsultation.TitreSerieClick(Sender: TObject);
-var
-  s: string;
-begin
-  s := FAlbum.Serie.SiteWeb;
-  if FAlbum.Serie.SiteWeb <> '' then
-    ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
-end;
-
-function TFrmConsultation.GetRefAlbum: Integer;
+function TFrmConsultationAlbum.GetRefAlbum: Integer;
 begin
   Result := FAlbum.RefAlbum;
 end;
 
-procedure TFrmConsultation.SetRefAlbum(const Value: Integer);
+procedure TFrmConsultationAlbum.SetRefAlbum(const Value: Integer);
 var
   s, s2: string;
   i: Integer;
@@ -548,9 +537,21 @@ begin
   lvEditions.Visible := FAlbum.Editions.Editions.Count > 1;
 end;
 
-procedure TFrmConsultation.SerieImprimeExecute(Sender: TObject);
+procedure TFrmConsultationAlbum.TitreSerieDblClick(Sender: TObject);
 begin
-  ImpressionSerie(FAlbum.Serie.RefSerie, TComponent(Sender).Tag = 1);
+  if IsDownKey(VK_CONTROL) then
+    Historique.AddWaiting(fcSerie, FAlbum.Serie.RefSerie);
+end;
+
+procedure TFrmConsultationAlbum.TitreSerieClick(Sender: TObject);
+var
+  s: string;
+begin
+  if not IsDownKey(VK_CONTROL) then begin
+    s := FAlbum.Serie.SiteWeb;
+    if FAlbum.Serie.SiteWeb <> '' then
+      ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
+  end;
 end;
 
 end.

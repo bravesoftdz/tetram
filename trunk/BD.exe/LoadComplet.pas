@@ -89,8 +89,8 @@ type
     RefEdition, RefAlbum: Integer;
     Editeur: TEditeurComplet;
     Collection: TCollection;
-    TypeEdition, AnneeEdition, Etat, Reliure, NombreDePages, FormatEdition, Orientation: Integer;
-    Prix: Currency;
+    TypeEdition, AnneeEdition, Etat, Reliure, NombreDePages, FormatEdition, Orientation, AnneeCote: Integer;
+    Prix, PrixCote: Currency;
     Couleur, VO, Dedicace, Stock, Prete, Offert, Gratuit: Boolean;
     ISBN, sEtat, sReliure, sTypeEdition, sFormatEdition, sOrientation: string;
     DateAchat: TDateTime;
@@ -212,6 +212,15 @@ type
     procedure Clear; override;
     constructor Create; override;
     constructor Create(AvecAchats: Boolean); reintroduce; overload;
+    destructor Destroy; override;
+  end;
+
+  TParaBDComplet = class(TBaseComplet)
+    RefParaBD: Integer;
+
+    procedure Fill(const Reference: Integer); override;
+    procedure Clear; override;
+    constructor Create; override;
     destructor Destroy; override;
   end;
 
@@ -436,8 +445,9 @@ begin
   q := TJvUIBQuery.Create(nil);
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT REFEDITION, RefAlbum, e.REFEDITEUR, e.REFCOLLECTION, NOMCOLLECTION, ANNEEEDITION, PRIX, VO, COULEUR, ISBN, DEDICACE, PRETE, STOCK, Offert, Gratuit,';
-    SQL.Add('NombreDePages, etat, le.libelle as setat, reliure, lr.libelle as sreliure, orientation, lo.libelle as sorientation, FormatEdition, lf.libelle as sFormatEdition, typeedition, lte.libelle as stypeedition, DateAchat, Notes');
+    SQL.Text := 'SELECT REFEDITION, RefAlbum, e.REFEDITEUR, e.REFCOLLECTION, NOMCOLLECTION, ANNEEEDITION, PRIX, VO, COULEUR, ISBN, DEDICACE, PRETE,';
+    SQL.Add('STOCK, Offert, Gratuit, NombreDePages, etat, le.libelle as setat, reliure, lr.libelle as sreliure, orientation, lo.libelle as sorientation,');
+    SQL.Add('FormatEdition, lf.libelle as sFormatEdition, typeedition, lte.libelle as stypeedition, DateAchat, Notes, AnneeCote, PrixCote');
     SQL.Add('FROM EDITIONS e LEFT JOIN COLLECTIONS c ON e.REFCOLLECTION = c.REFCOLLECTION');
     SQL.Add('LEFT JOIN LISTES le on (le.ref = e.etat and le.categorie = 1)');
     SQL.Add('LEFT JOIN LISTES lr on (lr.ref = e.reliure and lr.categorie = 2)');
@@ -477,11 +487,15 @@ begin
     Self.sFormatEdition := Trim(Fields.ByNameAsString['sFormatEdition']);
     Self.DateAchat := Fields.ByNameAsDate['DateAchat'];
     Self.Notes.Text := Fields.ByNameAsString['Notes'];
+    Self.AnneeCote := Fields.ByNameAsInteger['ANNEECOTE'];
+    Self.PrixCote := Fields.ByNameAsCurrency['PRIXCOTE'];
 
     Self.Emprunts.Fill(Self.RefEdition, seAlbum);
 
     Close;
-    SQL.Text := 'SELECT RefCouverture, FichierCouverture, TypeCouverture FROM Couvertures WHERE RefEdition = ? ORDER BY Ordre';
+    SQL.Text := 'SELECT RefCouverture, FichierCouverture, TypeCouverture, CategorieImage, l.Libelle as sCategorieImage';
+    SQL.Add('FROM Couvertures c LEFT JOIN Listes l ON (c.categorieimage = l.ref and l.categorie = 6)');
+    SQL.Add('WHERE RefEdition = ? ORDER BY c.categorieimage NULLS FIRST, c.Ordre');
     Params.AsInteger[0] := Self.RefEdition;
     Open;
     while not Eof do begin
@@ -1463,6 +1477,49 @@ begin
       Series.Add(TSerieComplete.Create(Fields.AsInteger[1], Self.RefAuteur));
       Next;
     end;
+  finally
+    q.Transaction.Free;
+    q.Free;
+  end;
+end;
+
+{ TParaBDComplet }
+
+procedure TParaBDComplet.Clear;
+begin
+  inherited;
+
+end;
+
+constructor TParaBDComplet.Create;
+begin
+  inherited;
+
+end;
+
+destructor TParaBDComplet.Destroy;
+begin
+
+  inherited;
+end;
+
+procedure TParaBDComplet.Fill(const Reference: Integer);
+var
+  q: TJvUIBQuery;
+begin
+  inherited;
+  if (Reference = 0) then Exit;
+  Self.RefParaBD := Reference;
+  q := TJvUIBQuery.Create(nil);
+  with q do try
+    Transaction := GetTransaction(DMPrinc.UIBDataBase);
+    FetchBlobs := True;
+//    SQL.Text := 'SELECT TITREALBUM, MOISPARUTION, ANNEEPARUTION, REFSERIE, TOME, TOMEDEBUT, TOMEFIN, SUJETALBUM, REMARQUESALBUM, HORSSERIE, INTEGRALE FROM ALBUMS WHERE RefAlbum = ?';
+    Params.AsInteger[0] := Reference;
+    Open;
+    RecInconnu := Eof;
+
+
   finally
     q.Transaction.Free;
     q.Free;

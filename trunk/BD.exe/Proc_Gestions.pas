@@ -9,14 +9,15 @@ type
   TActionGestionAdd = function(VT: TVirtualStringTree; Valeur: string): Integer;
   TActionGestionModif = function(VT: TVirtualStringTree): Boolean;
   TActionGestionSupp = function(VT: TVirtualStringTree): Boolean;
+  TActionGestionAchat = function(VT: TVirtualStringTree): Boolean;
 
 function AjouterEditeurs(VT: TVirtualStringTree; Valeur: string): Integer;
 function ModifierEditeurs(VT: TVirtualStringTree): Boolean;
 function SupprimerEditeurs(VT: TVirtualStringTree): Boolean;
 
-function AjouterAchats(VT: TVirtualStringTree; Valeur: string): Integer;
-function ModifierAchats(VT: TVirtualStringTree): Boolean;
-function SupprimerAchats(VT: TVirtualStringTree): Boolean;
+function AjouterAchatsAlbum(VT: TVirtualStringTree; Valeur: string): Integer;
+function ModifierAchatsAlbum(VT: TVirtualStringTree): Boolean;
+function SupprimerAchatsAlbum(VT: TVirtualStringTree): Boolean;
 
 function AjouterAlbums(VT: TVirtualStringTree; Valeur: string): Integer;
 function ModifierAlbums(VT: TVirtualStringTree): Boolean;
@@ -44,6 +45,15 @@ function AjouterCollections(VT: TVirtualStringTree; RefEditeur: Integer; Valeur:
 function AjouterCollections(VT: TVirtualStringTree; Valeur: string): Integer; overload;
 function ModifierCollections(VT: TVirtualStringTree): Boolean;
 function SupprimerCollections(VT: TVirtualStringTree): Boolean;
+
+function AjouterParaBD(VT: TVirtualStringTree; Valeur: string): Integer;
+function ModifierParaBD(VT: TVirtualStringTree): Boolean;
+function AcheterParaBD(VT: TVirtualStringTree): Boolean;
+function SupprimerParaBD(VT: TVirtualStringTree): Boolean;
+
+function AjouterAchatsParaBD(VT: TVirtualStringTree; Valeur: string): Integer;
+function ModifierAchatsParaBD(VT: TVirtualStringTree): Boolean;
+function SupprimerAchatsParaBD(VT: TVirtualStringTree): Boolean;
 
 implementation
 
@@ -91,9 +101,9 @@ begin
 end;
 //********************************************************************************************************
 
-function AjouterAchats(VT: TVirtualStringTree; Valeur: string): Integer;
+function AjouterAchatsAlbum(VT: TVirtualStringTree; Valeur: string): Integer;
 begin
-  Result := CreationAchat(Valeur);
+  Result := CreationAchatAlbum(Valeur);
   if Result = -1 then Exit;
   if Assigned(VT) then begin
     VT.InitializeRep(False);
@@ -101,18 +111,18 @@ begin
   end;
 end;
 
-function ModifierAchats(VT: TVirtualStringTree): Boolean;
+function ModifierAchatsAlbum(VT: TVirtualStringTree): Boolean;
 var
   i: Integer;
 begin
   Result := False;
   i := VT.CurrentValue;
   if i = -1 then Exit;
-  Result := EditionAchat(i);
+  Result := EditionAchatAlbum(i);
   if Result then VT.InitializeRep;
 end;
 
-function SupprimerAchats(VT: TVirtualStringTree): Boolean;
+function SupprimerAchatsAlbum(VT: TVirtualStringTree): Boolean;
 var
   i: Integer;
   PA: TAlbum;
@@ -125,9 +135,9 @@ begin
   PA := VT.GetFocusedNodeData;
   s := rsSupprimerAchat;
   if Assigned(PA) and not PA.Complet then
-    s := rsLienAchat + #13 + s;
+    s := rsLienAchatAlbum + #13 + s;
   if AffMessage(s, mtConfirmation, [mbYes, mbNo], True) <> mrYes then Exit;
-  Result := DelAchat(i);
+  Result := DelAchatAlbum(i);
   if Result then begin
     VT.InitializeRep(False);
     VT.FindIndexNode;
@@ -402,5 +412,100 @@ begin
     VT.ClearIndexNode;
 end;
 //********************************************************************************************************************
+
+function AjouterParaBD(VT: TVirtualStringTree; Valeur: string): Integer;
+begin
+  Result := CreationAlbum(Valeur);
+  if Result = -1 then Exit;
+  if Assigned(VT) then begin
+    VT.InitializeRep(False);
+    VT.CurrentValue := Result;
+  end;
+end;
+
+function ModifierParaBD(VT: TVirtualStringTree): Boolean;
+var
+  i: Integer;
+begin
+  Result := False;
+  i := VT.CurrentValue;
+  if i = -1 then Exit;
+  Result := EditionAlbum(i);
+  if Result then VT.InitializeRep;
+end;
+
+function AcheterParaBD(VT: TVirtualStringTree): Boolean;
+var
+  i: Integer;
+begin
+  Result := False;
+  i := VT.CurrentValue;
+  if i = -1 then Exit;
+  Result := EditionParaBD(i, False, '', True);
+  if Result then VT.InitializeRep;
+end;
+
+function SupprimerParaBD(VT: TVirtualStringTree): Boolean;
+var
+  i: Integer;
+begin
+  Result := False;
+  i := VT.CurrentValue;
+  if i = -1 then Exit;
+  VT.MemorizeIndexNode;
+  if AffMessage(rsLienParaBD + #13 + rsSupprimerParaBD, mtConfirmation, [mbYes, mbNo], True) <> mrYes then Exit;  Result := DelParaBD(i);
+  if Result then begin
+    VT.InitializeRep(False);
+    VT.FindIndexNode;
+  end
+  else
+    VT.ClearIndexNode;
+end;
+//*********************************************************************************************************
+function AjouterAchatsParaBD(VT: TVirtualStringTree; Valeur: string): Integer;
+begin
+  Result := CreationAchatParaBD(Valeur);
+  if Result = -1 then Exit;
+  if Assigned(VT) then begin
+    VT.InitializeRep(False);
+    VT.CurrentValue := Result;
+  end;
+end;
+
+function ModifierAchatsParaBD(VT: TVirtualStringTree): Boolean;
+var
+  i: Integer;
+begin
+  Result := False;
+  i := VT.CurrentValue;
+  if i = -1 then Exit;
+  Result := EditionAchatParaBD(i);
+  if Result then VT.InitializeRep;
+end;
+
+function SupprimerAchatsParaBD(VT: TVirtualStringTree): Boolean;
+var
+  i: Integer;
+  PA: TParaBD;
+  s: string;
+begin
+  Result := False;
+  i := VT.CurrentValue;
+  if i = -1 then Exit;
+  VT.MemorizeIndexNode;
+  PA := VT.GetFocusedNodeData;
+  s := rsSupprimerAchat;
+  if Assigned(PA) and not PA.Complet then
+    s := rsLienAchatParaBD + #13 + s;
+  if AffMessage(s, mtConfirmation, [mbYes, mbNo], True) <> mrYes then Exit;
+  Result := DelAchatParaBD(i);
+  if Result then begin
+    VT.InitializeRep(False);
+    VT.FindIndexNode;
+  end
+  else
+    VT.ClearIndexNode;
+end;
+//*********************************************************************************************************
 end.
 

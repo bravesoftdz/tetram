@@ -21,8 +21,16 @@ type
     VDTButton2: TVDTButton;
     TabAuteurs: TTabSheet;
     vstAuteurs: TVirtualStringTree;
-    Edit1: TEdit;
+    ScanEditAuteur: TEdit;
     VDTButton3: TVDTButton;
+    TabSeries: TTabSheet;
+    TabParaBD: TTabSheet;
+    ScanEditParaBD: TEdit;
+    VDTButton4: TVDTButton;
+    vstParaBD: TVirtualStringTree;
+    ScanEditSerie: TEdit;
+    VDTButton5: TVDTButton;
+    vstSeries: TVirtualStringTree;
     procedure FormCreate(Sender: TObject);
     procedure VDTButton1Click(Sender: TObject);
     procedure VDTButton2Click(Sender: TObject);
@@ -31,7 +39,11 @@ type
     procedure VDTButton3Click(Sender: TObject);
     procedure ScanEditAlbumKeyPress(Sender: TObject; var Key: Char);
     procedure ScanEditEmprunteurKeyPress(Sender: TObject; var Key: Char);
-    procedure Edit1KeyPress(Sender: TObject; var Key: Char);
+    procedure ScanEditAuteurKeyPress(Sender: TObject; var Key: Char);
+    procedure ScanEditSerieKeyPress(Sender: TObject; var Key: Char);
+    procedure ScanEditParaBDKeyPress(Sender: TObject; var Key: Char);
+    procedure VDTButton5Click(Sender: TObject);
+    procedure VDTButton4Click(Sender: TObject);
   private
     { Déclarations privées }
     procedure ChangeAlbumMode(Mode: TVirtualMode);
@@ -51,8 +63,10 @@ uses
 
 const
   PosAlbums = 0;
-  PosAuteurs = 1;
-  PosEmprunteurs = 2;
+  PosSeries = 1;
+  PosAuteurs = 2;
+  PosParaBD = 3;
+  PosEmprunteurs = 4;
 
 procedure TFrmRepertoire.FormCreate(Sender: TObject);
 begin
@@ -61,10 +75,14 @@ begin
   TabAlbums.PageIndex := PosAlbums;
   TabEmprunteurs.PageIndex := PosEmprunteurs;
   TabAuteurs.PageIndex := PosAuteurs;
+  TabSeries.PageIndex := PosSeries;
+  TabParaBD.PageIndex := PosParaBD;
 
   ChargeImage(vstAlbums.Background, 'FONDVT');
   ChargeImage(vstEmprunteurs.Background, 'FONDVT');
   ChargeImage(vstAuteurs.Background, 'FONDVT');
+  ChargeImage(vstSeries.Background, 'FONDVT');
+  ChargeImage(vstParaBD.Background, 'FONDVT');
   PageRep.ActivePageIndex := 0;
 
   vstAlbums.Mode := vmNone;
@@ -78,16 +96,8 @@ begin
   end;
   vstEmprunteurs.Mode := vmEmprunteurs;
   vstAuteurs.Mode := vmPersonnes;
-end;
-
-procedure TFrmRepertoire.VDTButton1Click(Sender: TObject);
-begin
-  vstAlbums.Find(ScanEditAlbum.Text, Sender = VDTButton1);
-end;
-
-procedure TFrmRepertoire.VDTButton2Click(Sender: TObject);
-begin
-  vstEmprunteurs.Find(ScanEditEmprunteur.Text, Sender = VDTButton2);
+  vstSeries.Mode := vmSeries;
+  vstParaBD.Mode := vmParaBDSerie;
 end;
 
 procedure TFrmRepertoire.vstAlbumsDblClick(Sender: TObject);
@@ -99,6 +109,10 @@ begin
         if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcEmprunteur, CurrentValue);
     PosAuteurs: with vstAuteurs do
         if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcAuteur, CurrentValue);
+    PosSeries: with vstSeries do
+        if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcSerie, CurrentValue);
+    PosParaBD: with vstParaBD do
+        if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcParaBD, CurrentValue);
   end;
 end;
 
@@ -119,7 +133,7 @@ end;
 procedure TFrmRepertoire.LightComboCheck1Change(Sender: TObject);
 const
   NewMode: array[0..5] of TVirtualMode = (vmAlbums, vmAlbumsSerie, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsAnnee, vmAlbumsCollection);
-begin       
+begin
   ChangeAlbumMode(NewMode[LightComboCheck1.Value]);
   with TIniFile.Create(FichierIni) do try
     WriteInteger('Options', 'GroupBy', LightComboCheck1.Value);
@@ -128,9 +142,29 @@ begin
   end
 end;
 
+procedure TFrmRepertoire.VDTButton1Click(Sender: TObject);
+begin
+  vstAlbums.Find(ScanEditAlbum.Text, Sender = VDTButton1);
+end;
+
+procedure TFrmRepertoire.VDTButton2Click(Sender: TObject);
+begin
+  vstEmprunteurs.Find(ScanEditEmprunteur.Text, Sender = VDTButton2);
+end;
+
 procedure TFrmRepertoire.VDTButton3Click(Sender: TObject);
 begin
-  vstAuteurs.Find(Edit1.Text, Sender = VDTButton3);
+  vstAuteurs.Find(ScanEditAuteur.Text, Sender = VDTButton3);
+end;
+
+procedure TFrmRepertoire.VDTButton5Click(Sender: TObject);
+begin
+  vstSeries.Find(ScanEditSerie.Text, Sender = VDTButton5);
+end;
+
+procedure TFrmRepertoire.VDTButton4Click(Sender: TObject);
+begin
+  vstParaBD.Find(ScanEditParaBD.Text, Sender = VDTButton4);
 end;
 
 procedure TFrmRepertoire.ScanEditAlbumKeyPress(Sender: TObject; var Key: Char);
@@ -145,16 +179,33 @@ procedure TFrmRepertoire.ScanEditEmprunteurKeyPress(Sender: TObject; var Key: Ch
 begin
   if Key = #13 then begin
     Key := #0;
-    vstEmprunteurs.OnDblClick(nil);
+    vstEmprunteurs.OnDblClick(vstEmprunteurs);
   end;
 end;
 
-procedure TFrmRepertoire.Edit1KeyPress(Sender: TObject; var Key: Char);
+procedure TFrmRepertoire.ScanEditAuteurKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key = #13 then begin
     Key := #0;
-    vstEmprunteurs.OnDblClick(nil);
+    vstAuteurs.OnDblClick(vstAuteurs);
+  end;
+end;
+
+procedure TFrmRepertoire.ScanEditSerieKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then begin
+    Key := #0;
+    vstSeries.OnDblClick(vstSeries);
+  end;
+end;
+
+procedure TFrmRepertoire.ScanEditParaBDKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then begin
+    Key := #0;
+    vstParaBD.OnDblClick(vstParaBD);
   end;
 end;
 
 end.
+

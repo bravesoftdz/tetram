@@ -1,4 +1,4 @@
-unit Form_EditAchat;
+unit Form_EditAchatAlbum;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   ExtCtrls, Buttons, Fram_Boutons, VirtualTree, TypeRec;
 
 type
-  TFrmEditAchat = class(TForm)
+  TFrmEditAchatAlbum = class(TForm)
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
@@ -85,14 +85,14 @@ uses Math, CommonConst, Proc_Gestions, DM_Princ, Commun, Procedures,
 
 {$R *.dfm}
 
-procedure TFrmEditAchat.AjouteAuteur2(List: TVDTListViewLabeled; Auteur: TPersonnage);
+procedure TFrmEditAchatAlbum.AjouteAuteur2(List: TVDTListViewLabeled; Auteur: TPersonnage);
 var
   dummy: Boolean;
 begin
   AjouteAuteur(List, Auteur, dummy);
 end;
 
-procedure TFrmEditAchat.AjouteAuteur(List: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean);
+procedure TFrmEditAchatAlbum.AjouteAuteur(List: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean);
 var
   PA: TAuteur;
 begin
@@ -105,7 +105,7 @@ begin
   FlagAuteur := True;
 end;
 
-procedure TFrmEditAchat.FormCreate(Sender: TObject);
+procedure TFrmEditAchatAlbum.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
   FRefAlbum := -1;
@@ -130,22 +130,22 @@ begin
   FColoristesSelected := False;
 end;
 
-procedure TFrmEditAchat.VDTButton12Click(Sender: TObject);
+procedure TFrmEditAchatAlbum.VDTButton12Click(Sender: TObject);
 begin
   vtSeries.Find(Edit3.Text, Sender = VDTButton12);
 end;
 
-procedure TFrmEditAchat.VDTButton11Click(Sender: TObject);
+procedure TFrmEditAchatAlbum.VDTButton11Click(Sender: TObject);
 begin
   AjouterSeries(vtSeries, Edit3.Text);
 end;
 
-procedure TFrmEditAchat.ScanEditAlbumClick(Sender: TObject);
+procedure TFrmEditAchatAlbum.ScanEditAlbumClick(Sender: TObject);
 begin
   vstAlbums.Find(ScanEditAlbum.Text, Sender = VDTButton1);
 end;
 
-procedure TFrmEditAchat.SetRefAlbum(const Value: Integer);
+procedure TFrmEditAchatAlbum.SetRefAlbum(const Value: Integer);
 var
   q: TJvUIBQuery;
   RefSerie: Integer;
@@ -226,7 +226,7 @@ begin
   end;
 end;
 
-procedure TFrmEditAchat.cbIntegraleClick(Sender: TObject);
+procedure TFrmEditAchatAlbum.cbIntegraleClick(Sender: TObject);
 var
   cl: TColor;
 begin
@@ -240,7 +240,7 @@ begin
   Label17.Font.Color := cl;
 end;
 
-procedure TFrmEditAchat.Frame11btnOKClick(Sender: TObject);
+procedure TFrmEditAchatAlbum.Frame11btnOKClick(Sender: TObject);
 var
   s: string;
   q: TJvUIBQuery;
@@ -374,17 +374,17 @@ begin
   ModalResult := mrOk;
 end;
 
-procedure TFrmEditAchat.VDTButton8Click(Sender: TObject);
+procedure TFrmEditAchatAlbum.VDTButton8Click(Sender: TObject);
 begin
   AjouterAuteurs(vtPersonnes, Edit2.Text);
 end;
 
-procedure TFrmEditAchat.VDTButton7Click(Sender: TObject);
+procedure TFrmEditAchatAlbum.VDTButton7Click(Sender: TObject);
 begin
   vtPersonnes.Find(Edit2.Text, Sender = VDTButton7);
 end;
 
-procedure TFrmEditAchat.vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
+procedure TFrmEditAchatAlbum.vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
   IdPersonne: Integer;
 
@@ -408,7 +408,7 @@ begin
   btColoriste.Enabled := (IdPersonne <> -1) and NotIn(LVColoristes);
 end;
 
-procedure TFrmEditAchat.vtPersonnesDblClick(Sender: TObject);
+procedure TFrmEditAchatAlbum.vtPersonnesDblClick(Sender: TObject);
 var
   i, iCurrentAuteur: Integer;
   Auteur: TAuteur;
@@ -444,7 +444,7 @@ begin
   end;
 end;
 
-procedure TFrmEditAchat.btScenaristeClick(Sender: TObject);
+procedure TFrmEditAchatAlbum.btScenaristeClick(Sender: TObject);
 begin
   if vtPersonnes.CurrentValue = -1 then Exit;
   case TSpeedButton(Sender).Tag of
@@ -455,7 +455,7 @@ begin
   vtPersonnesChange(vtPersonnes, vtPersonnes.FocusedNode);
 end;
 
-procedure TFrmEditAchat.lvColoristesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TFrmEditAchatAlbum.lvColoristesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 var
   src: TListView;
   PA: TAuteur;
@@ -468,7 +468,7 @@ begin
   vtPersonnesChange(vtPersonnes, vtPersonnes.FocusedNode);
 end;
 
-procedure TFrmEditAchat.vtSeriesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
+procedure TFrmEditAchatAlbum.vtSeriesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
   PS: TSerie;
   SC: TSerieComplete;
@@ -501,7 +501,7 @@ begin
   end;
 end;
 
-procedure TFrmEditAchat.vtSeriesDblClick(Sender: TObject);
+procedure TFrmEditAchatAlbum.vtSeriesDblClick(Sender: TObject);
 begin
   if (vtSeries.GetFirstSelected <> nil) then begin
     ModifierSeries(vtSeries);

@@ -1,57 +1,79 @@
-object FrmEditAlbum: TFrmEditAlbum
-  Left = 1467
-  Top = 128
-  Width = 750
-  Height = 856
-  ActiveControl = edTitre
-  Caption = 'Saisie d'#39'album'
+object FrmEditParaBD: TFrmEditParaBD
+  Left = 492
+  Top = 144
+  Width = 870
+  Height = 640
+  Caption = 'FrmEditParaBD'
   Color = clBtnFace
-  Constraints.MinWidth = 750
-  Font.Charset = ANSI_CHARSET
+  Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
-  Font.Name = 'Tahoma'
+  Font.Name = 'MS Sans Serif'
   Font.Style = []
   OldCreateOrder = False
-  OnActivate = FormActivate
-  OnCreate = FormCreate
-  OnDestroy = FormDestroy
-  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object Bevel2: TBevel
+  object Panel2: TPanel
     Left = 0
-    Top = 23
-    Width = 742
-    Height = 4
+    Top = 0
+    Width = 862
+    Height = 23
     Align = alTop
-    Shape = bsBottomLine
+    BevelOuter = bvNone
+    Caption = ' '
+    TabOrder = 0
+    DesignSize = (
+      862
+      23)
+    object btnOK: TBitBtn
+      Left = 699
+      Top = 2
+      Width = 74
+      Height = 19
+      Cursor = crHandPoint
+      Anchors = [akRight, akBottom]
+      Caption = 'Enregistrer'
+      Default = True
+      ModalResult = 1
+      TabOrder = 0
+    end
+    object btnAnnuler: TBitBtn
+      Left = 780
+      Top = 2
+      Width = 72
+      Height = 19
+      Cursor = crHandPoint
+      Anchors = [akRight, akBottom]
+      Cancel = True
+      Caption = 'Annuler'
+      ModalResult = 2
+      TabOrder = 1
+    end
   end
   object ScrollBox: TScrollBox
     Left = 0
-    Top = 27
-    Width = 742
-    Height = 797
+    Top = 23
+    Width = 862
+    Height = 585
     Align = alClient
     BorderStyle = bsNone
-    TabOrder = 0
+    TabOrder = 1
     DesignSize = (
-      742
-      797)
+      845
+      585)
     object imgVisu: TImage
-      Left = 632
+      Left = 735
       Top = 592
       Width = 105
       Height = 129
       Cursor = crHandPoint
       Anchors = [akTop, akRight]
       Center = True
-      OnClick = imgVisuClick
     end
     object Label3: TLabel
-      Left = 105
+      Left = 107
       Top = 31
-      Width = 47
+      Width = 45
       Height = 13
       Alignment = taRightJustify
       Caption = ' Parution:'
@@ -59,9 +81,9 @@ object FrmEditAlbum: TFrmEditAlbum
       Layout = tlCenter
     end
     object Label2: TLabel
-      Left = 25
+      Left = 27
       Top = 7
-      Width = 29
+      Width = 27
       Height = 13
       Alignment = taRightJustify
       Caption = ' Titre:'
@@ -69,18 +91,18 @@ object FrmEditAlbum: TFrmEditAlbum
       Layout = tlCenter
     end
     object Label6: TLabel
-      Left = 14
+      Left = 16
       Top = 50
-      Width = 40
+      Width = 38
       Height = 13
       Alignment = taRightJustify
       Caption = 'Histoire:'
       FocusControl = histoire
     end
     object Label7: TLabel
-      Left = 349
+      Left = 453
       Top = 50
-      Width = 32
+      Width = 31
       Height = 13
       Alignment = taRightJustify
       Anchors = [akTop, akRight]
@@ -105,7 +127,6 @@ object FrmEditAlbum: TFrmEditAlbum
         2106543333363336211063333336333621163333333633362163333333363336
         26333333333633366333333333363336333333333336}
       Layout = blGlyphBottom
-      OnClick = ajoutClick
     end
     object btDessinateur: TVDTButton
       Tag = 2
@@ -125,7 +146,6 @@ object FrmEditAlbum: TFrmEditAlbum
         2106543333363336211063333336333621163333333633362163333333363336
         26333333333633366333333333363336333333333336}
       Layout = blGlyphBottom
-      OnClick = ajoutClick
     end
     object VDTButton7: TVDTButton
       Left = 191
@@ -135,7 +155,6 @@ object FrmEditAlbum: TFrmEditAlbum
       Cursor = crHandPoint
       Caption = '...'
       Flat = True
-      OnClick = VDTButton7Click
     end
     object VDTButton8: TVDTButton
       Left = 212
@@ -145,12 +164,11 @@ object FrmEditAlbum: TFrmEditAlbum
       Cursor = crHandPoint
       Caption = 'N'
       Flat = True
-      OnClick = VDTButton8Click
     end
     object Label19: TLabel
-      Left = 12
+      Left = 15
       Top = 150
-      Width = 42
+      Width = 39
       Height = 13
       Alignment = taRightJustify
       Caption = 'Auteurs:'
@@ -173,10 +191,9 @@ object FrmEditAlbum: TFrmEditAlbum
         2106543333363336211063333336333621163333333633362163333333363336
         26333333333633366333333333363336333333333336}
       Layout = blGlyphBottom
-      OnClick = ChoixImageClick
     end
     object VDTButton4: TVDTButton
-      Left = 609
+      Left = 712
       Top = 591
       Width = 22
       Height = 21
@@ -191,10 +208,9 @@ object FrmEditAlbum: TFrmEditAlbum
         4444444333334555555555543444666666666663455536210000163366663362
         1111633336213336211633333362333362633333333633333633333333333333
         33333333333333333333333333333333333333333333}
-      OnClick = VDTButton4Click
     end
     object VDTButton5: TVDTButton
-      Left = 609
+      Left = 712
       Top = 612
       Width = 22
       Height = 20
@@ -209,27 +225,26 @@ object FrmEditAlbum: TFrmEditAlbum
         3333333333333333334333333333333336543333333333336065433333333336
         1106543333333361111065433336362222221654336166666666666336223333
         33333333666633333333333333333333333333333333}
-      OnClick = VDTButton5Click
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 793
-      Width = 742
+      Top = 721
+      Width = 845
       Height = 4
       Align = alBottom
       Shape = bsSpacer
     end
     object Label20: TLabel
-      Left = 513
+      Left = 514
       Top = 150
-      Width = 28
+      Width = 27
       Height = 13
       Alignment = taRightJustify
       Caption = 'S'#233'rie:'
       FocusControl = remarques
     end
     object VDTButton12: TVDTButton
-      Left = 697
+      Left = 800
       Top = 146
       Width = 20
       Height = 20
@@ -237,7 +252,6 @@ object FrmEditAlbum: TFrmEditAlbum
       Anchors = [akTop, akRight]
       Caption = '...'
       Flat = True
-      OnClick = Edit3Change
     end
     object btColoriste: TVDTButton
       Tag = 3
@@ -257,7 +271,6 @@ object FrmEditAlbum: TFrmEditAlbum
         2106543333363336211063333336333621163333333633362163333333363336
         26333333333633366333333333363336333333333336}
       Layout = blGlyphBottom
-      OnClick = ajoutClick
     end
     object Label1: TLabel
       Left = 21
@@ -270,7 +283,7 @@ object FrmEditAlbum: TFrmEditAlbum
       Layout = tlCenter
     end
     object VDTButton11: TVDTButton
-      Left = 717
+      Left = 820
       Top = 146
       Width = 21
       Height = 20
@@ -278,18 +291,17 @@ object FrmEditAlbum: TFrmEditAlbum
       Anchors = [akTop, akRight]
       Caption = 'N'
       Flat = True
-      OnClick = VDTButton11Click
     end
     object Label5: TLabel
-      Left = 406
+      Left = 408
       Top = 293
-      Width = 38
+      Width = 36
       Height = 13
       Alignment = taRightJustify
       Caption = 'Editeur:'
     end
     object VDTButton1: TVDTButton
-      Left = 696
+      Left = 799
       Top = 290
       Width = 20
       Height = 20
@@ -297,18 +309,17 @@ object FrmEditAlbum: TFrmEditAlbum
       Anchors = [akTop, akRight]
       Caption = '...'
       Flat = True
-      OnClick = EditLabeled1Click
     end
     object Label8: TLabel
-      Left = 394
+      Left = 395
       Top = 384
-      Width = 50
+      Width = 49
       Height = 13
       Alignment = taRightJustify
       Caption = 'Collection:'
     end
     object VDTButton2: TVDTButton
-      Left = 696
+      Left = 799
       Top = 380
       Width = 20
       Height = 20
@@ -316,12 +327,11 @@ object FrmEditAlbum: TFrmEditAlbum
       Anchors = [akTop, akRight]
       Caption = '...'
       Flat = True
-      OnClick = EditLabeled2Click
     end
     object Label4: TLabel
-      Left = 13
+      Left = 14
       Top = 293
-      Width = 41
+      Width = 40
       Height = 13
       Alignment = taRightJustify
       Caption = 'Editions:'
@@ -335,12 +345,11 @@ object FrmEditAlbum: TFrmEditAlbum
       Cursor = crHandPoint
       Caption = 'Nouvelle'
       Flat = True
-      OnClick = VDTButton3Click
     end
     object Bevel3: TBevel
       Left = 216
       Top = 137
-      Width = 310
+      Width = 413
       Height = 6
       Anchors = [akLeft, akTop, akRight]
       Shape = bsTopLine
@@ -348,7 +357,7 @@ object FrmEditAlbum: TFrmEditAlbum
     object Bevel4: TBevel
       Left = 216
       Top = 280
-      Width = 310
+      Width = 413
       Height = 7
       Anchors = [akLeft, akTop, akRight]
       Shape = bsTopLine
@@ -356,13 +365,13 @@ object FrmEditAlbum: TFrmEditAlbum
     object Bevel5: TBevel
       Left = 189
       Top = 582
-      Width = 310
+      Width = 413
       Height = 6
       Anchors = [akLeft, akTop, akRight]
       Shape = bsTopLine
     end
     object VDTButton9: TVDTButton
-      Left = 717
+      Left = 820
       Top = 290
       Width = 21
       Height = 20
@@ -370,10 +379,9 @@ object FrmEditAlbum: TFrmEditAlbum
       Anchors = [akTop, akRight]
       Caption = 'N'
       Flat = True
-      OnClick = VDTButton9Click
     end
     object VDTButton10: TVDTButton
-      Left = 717
+      Left = 820
       Top = 380
       Width = 21
       Height = 20
@@ -382,12 +390,11 @@ object FrmEditAlbum: TFrmEditAlbum
       Caption = 'N'
       Enabled = False
       Flat = True
-      OnClick = VDTButton10Click
     end
     object Label15: TLabel
-      Left = 412
+      Left = 413
       Top = 472
-      Width = 32
+      Width = 31
       Height = 13
       Alignment = taRightJustify
       Caption = 'Notes:'
@@ -441,30 +448,29 @@ object FrmEditAlbum: TFrmEditAlbum
         Cursor = crHandPoint
         Caption = 'Convertisseur'
         Flat = True
-        OnClick = SpeedButton3Click
       end
       object Label9: TLabel
-        Left = 190
+        Left = 192
         Top = 28
-        Width = 22
+        Width = 20
         Height = 13
         Alignment = taRightJustify
         Caption = 'Prix:'
         Layout = tlCenter
       end
       object Label10: TLabel
-        Left = 0
+        Left = 1
         Top = 4
-        Width = 36
+        Width = 35
         Height = 13
         Alignment = taRightJustify
         Caption = 'Edition:'
         Layout = tlCenter
       end
       object Label11: TLabel
-        Left = 9
+        Left = 8
         Top = 52
-        Width = 27
+        Width = 28
         Height = 13
         Alignment = taRightJustify
         Caption = 'ISBN:'
@@ -479,21 +485,20 @@ object FrmEditAlbum: TFrmEditAlbum
         Caption = 'V'#233'rifier'
         Enabled = False
         Flat = True
-        OnClick = VDTButton6Click
       end
       object Label12: TLabel
-        Left = 164
+        Left = 166
         Top = 79
-        Width = 24
+        Width = 22
         Height = 13
         Alignment = taRightJustify
         Caption = 'Etat:'
         Layout = tlCenter
       end
       object Label13: TLabel
-        Left = 151
+        Left = 152
         Top = 113
-        Width = 37
+        Width = 36
         Height = 13
         Alignment = taRightJustify
         Caption = 'Reliure:'
@@ -530,9 +535,9 @@ object FrmEditAlbum: TFrmEditAlbum
         Items = <>
       end
       object Label14: TLabel
-        Left = 152
+        Left = 153
         Top = 96
-        Width = 36
+        Width = 35
         Height = 13
         Alignment = taRightJustify
         Caption = 'Edition:'
@@ -554,9 +559,9 @@ object FrmEditAlbum: TFrmEditAlbum
         Items = <>
       end
       object Label18: TLabel
-        Left = 203
+        Left = 204
         Top = 4
-        Width = 49
+        Width = 48
         Height = 13
         Alignment = taRightJustify
         Caption = 'Achet'#233' le:'
@@ -572,9 +577,9 @@ object FrmEditAlbum: TFrmEditAlbum
         Layout = tlCenter
       end
       object Label22: TLabel
-        Left = 130
+        Left = 134
         Top = 130
-        Width = 58
+        Width = 54
         Height = 13
         Alignment = taRightJustify
         Caption = 'Orientation:'
@@ -596,9 +601,9 @@ object FrmEditAlbum: TFrmEditAlbum
         Items = <>
       end
       object Label23: TLabel
-        Left = 150
+        Left = 153
         Top = 148
-        Width = 38
+        Width = 35
         Height = 13
         Alignment = taRightJustify
         Caption = 'Format:'
@@ -669,21 +674,20 @@ object FrmEditAlbum: TFrmEditAlbum
           00FF00FF04FF0000FF000600FF01FC0200FF00F80EFF000BFF030109FB14ED00
           19EC01FF00FC1F00FE020000FB00FF0700FF00F905FF0004F9001105FB0BF402
           0AFF05FD08FA0305FF0AF4FFF5FFFFFAF9FFF7FFFFF8FFFFF3FF}
-        OnClick = VDTButton13Click
       end
       object Label24: TLabel
-        Left = 97
+        Left = 98
         Top = 188
-        Width = 35
+        Width = 34
         Height = 13
         Alignment = taRightJustify
         Caption = 'Ann'#233'e:'
         Layout = tlCenter
       end
       object Label25: TLabel
-        Left = 185
+        Left = 187
         Top = 188
-        Width = 27
+        Width = 25
         Height = 13
         Alignment = taRightJustify
         Caption = 'Cote:'
@@ -697,7 +701,6 @@ object FrmEditAlbum: TFrmEditAlbum
         Cursor = crHandPoint
         Caption = 'Convertisseur'
         Flat = True
-        OnClick = VDTButton14Click
       end
       object edPrix: TEditLabeled
         Left = 215
@@ -711,7 +714,6 @@ object FrmEditAlbum: TFrmEditAlbum
         Ctl3D = True
         ParentCtl3D = False
         TabOrder = 5
-        OnChange = edPrixChange
         LinkLabel.LinkLabel.Strings = (
           'Label9'
           'SpeedButton3')
@@ -727,7 +729,6 @@ object FrmEditAlbum: TFrmEditAlbum
         BorderStyle = bsNone
         MaxLength = 4
         TabOrder = 0
-        OnChange = edAnneeEditionChange
         LinkLabel.LinkLabel.Strings = (
           'Label10')
         TypeDonnee = tdEntier
@@ -747,8 +748,6 @@ object FrmEditAlbum: TFrmEditAlbum
         MaxLength = 13
         ParentCtl3D = False
         TabOrder = 6
-        OnChange = edISBNChange
-        OnExit = edISBNExit
         LinkLabel.LinkLabel.Strings = (
           'Label11'
           'VDTButton6')
@@ -831,7 +830,6 @@ object FrmEditAlbum: TFrmEditAlbum
         Ctl3D = True
         ParentCtl3D = False
         TabOrder = 4
-        OnClick = cbGratuitClick
         LinkLabel.LinkLabel.Strings = (
           'cbVO')
       end
@@ -845,7 +843,6 @@ object FrmEditAlbum: TFrmEditAlbum
         Ctl3D = True
         ParentCtl3D = False
         TabOrder = 1
-        OnClick = cbOffertClick
         LinkLabel.LinkLabel.Strings = (
           'cbVO')
       end
@@ -858,7 +855,6 @@ object FrmEditAlbum: TFrmEditAlbum
         BorderStyle = bsNone
         MaxLength = 4
         TabOrder = 10
-        OnChange = edAnneeEditionChange
         LinkLabel.LinkLabel.Strings = (
           'Label21')
         TypeDonnee = tdEntier
@@ -914,13 +910,12 @@ object FrmEditAlbum: TFrmEditAlbum
     object edTitre: TEditLabeled
       Left = 56
       Top = 4
-      Width = 682
+      Width = 785
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       TabOrder = 0
-      OnChange = edTitreChange
       LinkLabel.LinkLabel.Strings = (
         'Label2')
       CurrencyChar = #0
@@ -928,7 +923,7 @@ object FrmEditAlbum: TFrmEditAlbum
     object histoire: TMemoLabeled
       Left = 56
       Top = 50
-      Width = 281
+      Width = 384
       Height = 81
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -939,7 +934,7 @@ object FrmEditAlbum: TFrmEditAlbum
         'Label6')
     end
     object remarques: TMemoLabeled
-      Left = 384
+      Left = 487
       Top = 50
       Width = 354
       Height = 81
@@ -969,7 +964,6 @@ object FrmEditAlbum: TFrmEditAlbum
       SortType = stNone
       TabOrder = 12
       ViewStyle = vsReport
-      OnKeyDown = lvDessinateursKeyDown
       LinkLabel.LinkLabel.Strings = (
         'btScenariste')
     end
@@ -991,7 +985,6 @@ object FrmEditAlbum: TFrmEditAlbum
       SortType = stBoth
       TabOrder = 13
       ViewStyle = vsReport
-      OnKeyDown = lvDessinateursKeyDown
       LinkLabel.LinkLabel.Strings = (
         'btDessinateur')
     end
@@ -1019,8 +1012,6 @@ object FrmEditAlbum: TFrmEditAlbum
       ParentShowHint = False
       ShowHint = True
       TabOrder = 11
-      OnChange = vtPersonnesChange
-      OnDblClick = vtPersonnesDblClick
       Columns = <>
     end
     object Edit2: TEditLabeled
@@ -1031,7 +1022,6 @@ object FrmEditAlbum: TFrmEditAlbum
       BevelKind = bkTile
       BorderStyle = bsNone
       TabOrder = 10
-      OnChange = VDTButton7Click
       LinkLabel.LinkLabel.Strings = (
         'Label19'
         'VDTButton7'
@@ -1041,7 +1031,7 @@ object FrmEditAlbum: TFrmEditAlbum
     object vstImages: TVirtualStringTree
       Left = 56
       Top = 591
-      Width = 553
+      Width = 656
       Height = 130
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -1058,21 +1048,10 @@ object FrmEditAlbum: TFrmEditAlbum
       TabOrder = 24
       TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
       TreeOptions.StringOptions = []
-      OnChange = vstImagesChange
-      OnChecked = vstImagesChecked
-      OnDblClick = vstImagesDblClick
-      OnEditing = vstImagesEditing
-      OnGetText = vstImagesGetText
-      OnPaintText = vstImagesPaintText
-      OnInitNode = vstImagesInitNode
-      OnKeyDown = vstImagesKeyDown
-      OnMouseUp = vstImagesMouseUp
-      OnNewText = vstImagesNewText
-      OnStructureChange = vstImagesStructureChange
       Columns = <
         item
           Position = 1
-          Width = 449
+          Width = 552
         end
         item
           Position = 0
@@ -1082,13 +1061,12 @@ object FrmEditAlbum: TFrmEditAlbum
     object Edit3: TEditLabeled
       Left = 550
       Top = 146
-      Width = 148
+      Width = 251
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       TabOrder = 15
-      OnChange = Edit3Change
       LinkLabel.LinkLabel.Strings = (
         'Label20'
         'VDTButton11'
@@ -1098,7 +1076,7 @@ object FrmEditAlbum: TFrmEditAlbum
     object vtSeries: TVirtualStringTree
       Left = 550
       Top = 169
-      Width = 188
+      Width = 291
       Height = 105
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
@@ -1120,8 +1098,6 @@ object FrmEditAlbum: TFrmEditAlbum
       ParentShowHint = False
       ShowHint = True
       TabOrder = 16
-      OnChange = vtSeriesChange
-      OnDblClick = vtSeriesDblClick
       Columns = <>
     end
     object lvColoristes: TVDTListViewLabeled
@@ -1142,7 +1118,6 @@ object FrmEditAlbum: TFrmEditAlbum
       SortType = stBoth
       TabOrder = 14
       ViewStyle = vsReport
-      OnKeyDown = lvDessinateursKeyDown
       LinkLabel.LinkLabel.Strings = (
         'btColoriste')
     end
@@ -1156,7 +1131,6 @@ object FrmEditAlbum: TFrmEditAlbum
       Ctl3D = True
       ParentCtl3D = False
       TabOrder = 5
-      OnClick = cbIntegraleClick
       LinkLabel.LinkLabel.Strings = (
         'cbIntegrale')
     end
@@ -1177,13 +1151,12 @@ object FrmEditAlbum: TFrmEditAlbum
     object EditLabeled1: TEditLabeled
       Left = 446
       Top = 290
-      Width = 251
+      Width = 354
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       TabOrder = 18
-      OnChange = EditLabeled1Click
       LinkLabel.LinkLabel.Strings = (
         'Label5'
         'VDTButton1')
@@ -1192,7 +1165,7 @@ object FrmEditAlbum: TFrmEditAlbum
     object vtEditeurs: TVirtualStringTree
       Left = 446
       Top = 313
-      Width = 292
+      Width = 395
       Height = 59
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
@@ -1214,21 +1187,17 @@ object FrmEditAlbum: TFrmEditAlbum
       ParentShowHint = False
       ShowHint = True
       TabOrder = 19
-      OnChange = vtEditeursChange
-      OnClick = vtEditeursClick
-      OnDblClick = vtEditeursDblClick
       Columns = <>
     end
     object EditLabeled2: TEditLabeled
       Left = 446
       Top = 380
-      Width = 251
+      Width = 354
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       TabOrder = 20
-      OnChange = EditLabeled2Click
       LinkLabel.LinkLabel.Strings = (
         'Label8'
         'VDTButton2')
@@ -1237,7 +1206,7 @@ object FrmEditAlbum: TFrmEditAlbum
     object vtCollections: TVirtualStringTree
       Left = 446
       Top = 403
-      Width = 292
+      Width = 395
       Height = 59
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
@@ -1259,9 +1228,6 @@ object FrmEditAlbum: TFrmEditAlbum
       ParentShowHint = False
       ShowHint = True
       TabOrder = 21
-      OnChange = vtCollectionsChange
-      OnClick = vtCollectionsClick
-      OnDblClick = vtCollectionsDblClick
       Columns = <>
     end
     object vtEditions: TListBoxLabeled
@@ -1281,8 +1247,6 @@ object FrmEditAlbum: TFrmEditAlbum
       ParentShowHint = False
       ShowHint = True
       TabOrder = 17
-      OnClick = vtEditionsClick
-      OnKeyDown = vtEditionsKeyDown
       LinkLabel.LinkLabel.Strings = (
         'Label4'
         'VDTButton3')
@@ -1303,7 +1267,7 @@ object FrmEditAlbum: TFrmEditAlbum
     object edNotes: TMemoLabeled
       Left = 446
       Top = 472
-      Width = 292
+      Width = 395
       Height = 97
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -1359,200 +1323,5 @@ object FrmEditAlbum: TFrmEditAlbum
       TypeDonnee = tdEntier
       CurrencyChar = #0
     end
-  end
-  object Panel2: TPanel
-    Left = 0
-    Top = 0
-    Width = 742
-    Height = 23
-    Align = alTop
-    BevelOuter = bvNone
-    Caption = ' '
-    TabOrder = 1
-    DesignSize = (
-      742
-      23)
-    object btnOK: TBitBtn
-      Left = 579
-      Top = 2
-      Width = 74
-      Height = 19
-      Cursor = crHandPoint
-      Anchors = [akRight, akBottom]
-      Caption = 'Enregistrer'
-      Default = True
-      ModalResult = 1
-      TabOrder = 0
-      OnClick = btnOKClick
-    end
-    object btnAnnuler: TBitBtn
-      Left = 660
-      Top = 2
-      Width = 72
-      Height = 19
-      Cursor = crHandPoint
-      Anchors = [akRight, akBottom]
-      Cancel = True
-      Caption = 'Annuler'
-      ModalResult = 2
-      TabOrder = 1
-      OnClick = btnAnnulerClick
-    end
-  end
-  object ChoixImageDialog: TOpenPictureDialog
-    DefaultExt = 'bmp'
-    Filter = 
-      'Fichiers graphiques utilisables (*.bmp, *.jpg, *.jpeg, *.emf, *.' +
-      'wmf)|*.bmp;*.jpg;*.jpeg;*.emf;*.wmf|Bitmaps (*.bmp)|*.bmp|JPEG (' +
-      '*.jpg, *.jpeg)|*.jpg;*.jpeg|Metafile (*.wmf, *.emf)|*.wmf:*.emf'
-    Options = [ofReadOnly, ofHideReadOnly, ofPathMustExist, ofFileMustExist]
-    Left = 378
-    Top = 65535
-  end
-  object ImageList1: TImageList
-    Left = 344
-    Bitmap = {
-      494C010101000400040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
-      0000000000003600000028000000400000001000000001002000000000000010
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      00000000000000000000DE009400DE009400DE009400DE009400000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      000000000000DE009400DE009400DE009400DE009400DE009400DE0094000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000DE009400FF4ABD00DE009400DE009400DE009400DE009400DE009400DE00
-      9400000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000DE009400FF4ABD00FFB5E700DE009400DE009400DE009400DE009400DE00
-      9400000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000DE009400FF4ABD00FFB5E700FFFFFF00DE009400DE009400DE009400DE00
-      9400000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000DE009400FF4ABD00FFB5E700FFB5E700FFB5E700DE009400DE009400DE00
-      9400000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      000000000000DE009400FF4ABD00FF4ABD00FF4ABD00FF4ABD00DE0094000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      00000000000000000000DE009400DE009400DE009400DE009400000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      000000000000000000000000000000000000424D3E000000000000003E000000
-      2800000040000000100000000100010000000000800000000000000000000000
-      000000000000000000000000FFFFFF00FFFF000000000000FFFF000000000000
-      FFFF000000000000FFFF000000000000FC3F000000000000F81F000000000000
-      F00F000000000000F00F000000000000F00F000000000000F00F000000000000
-      F81F000000000000FC3F000000000000FFFF000000000000FFFF000000000000
-      FFFF000000000000FFFF00000000000000000000000000000000000000000000
-      000000000000}
-  end
-  object pmChoixCategorie: TPopupMenu
-    OnPopup = pmChoixCategoriePopup
-    Left = 416
   end
 end

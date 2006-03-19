@@ -4,8 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls, DBCtrls, StdCtrls, ImgList, DBEditLabeled,
-  VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, VirtualTree, Menus, TypeRec,
-  ActnList, LoadComplet, ComboCheck;
+  VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, VirtualTree, Menus, TypeRec, ActnList, LoadComplet, ComboCheck;
 
 type
   TFrmEditAlbum = class(TForm)
@@ -103,6 +102,12 @@ type
     cbOffert: TCheckBoxLabeled;
     edNombreDePages: TEditLabeled;
     edMoisParution: TEditLabeled;
+    Label24: TLabel;
+    edAnneeCote: TEditLabeled;
+    Label25: TLabel;
+    edPrixCote: TEditLabeled;
+    VDTButton14: TVDTButton;
+    pmChoixCategorie: TPopupMenu;
     procedure ajoutClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -159,6 +164,10 @@ type
     procedure vstImagesStructureChange(Sender: TBaseVirtualTree; Node: PVirtualNode; Reason: TChangeReason);
     procedure VDTButton13Click(Sender: TObject);
     procedure vtEditionsKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure VDTButton14Click(Sender: TObject);
+    procedure vstImagesMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure miChangeCategorieImageClick(Sender: TObject);
+    procedure pmChoixCategoriePopup(Sender: TObject);
   private
     { Déclarations privées }
     FRefAlbum, FRefSerie: Integer;
@@ -169,12 +178,13 @@ type
     FEditionChanging: Boolean;
     FScenaristesSelected, FDessinateursSelected, FColoristesSelected: Boolean;
     FisAchat: Boolean;
+    FCategoriesImages: TStringList;
     procedure UpdateEdition;
     procedure RefreshEditionCaption;
     procedure SetRefAlbum(const Value: Integer);
     procedure VisuClose(Sender: TObject);
-    procedure AjouteAuteur(List: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean);
-    procedure AjouteAuteur2(List: TVDTListViewLabeled; Auteur: TPersonnage);
+    procedure AjouteAuteur(List: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean); overload;
+    procedure AjouteAuteur(List: TVDTListViewLabeled; Auteur: TPersonnage); overload;
   public
     { Déclarations publiques }
     property isCreation: Boolean read FCreation;
@@ -192,9 +202,22 @@ uses
 const
   RemplacerValeur = 'Remplacer %s par %s ?';
 
+  { TFrmEditAlbum }
+
 procedure TFrmEditAlbum.FormCreate(Sender: TObject);
 var
   q: TJvUIBQuery;
+
+  procedure LoadStrings(Categorie: Integer; Strings: TStrings);
+  begin
+    q.Params.AsInteger[0] := Categorie;
+    q.Open;
+    Strings.Clear;
+    while not q.Eof do begin
+      Strings.Add(q.Fields.AsString[0] + '=' + q.Fields.AsString[1]);
+      q.Next;
+    end;
+  end;
 
   procedure LoadCombo(Categorie: Integer; Combo: TLightComboCheck);
   var
@@ -222,6 +245,9 @@ var
       end;
   end;
 
+var
+  i: Integer;
+  mi: TMenuItem;
 begin
   PrepareLV(Self);
   FDeletedCouvertures := TList.Create;
@@ -250,6 +276,8 @@ begin
   FDessinateursSelected := False;
   FColoristesSelected := False;
 
+  FCategoriesImages := TStringList.Create; ;
+
   q := TJvUIBQuery.Create(Self);
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -259,9 +287,18 @@ begin
     LoadCombo(3 {TypeEdition}, cbxEdition);
     LoadCombo(4 {Orientation}, cbxOrientation);
     LoadCombo(5 {Format}, cbxFormat);
+    LoadStrings(6 {Categorie d'image}, FCategoriesImages);
   finally
     Transaction.Free;
     Free;
+  end;
+
+  for i := 0 to Pred(FCategoriesImages.Count) do begin
+    mi := TMenuItem.Create(pmChoixCategorie);
+    mi.Caption := FCategoriesImages.ValueFromIndex[i];
+    mi.Tag := StrToInt(FCategoriesImages.Names[i]);
+    mi.OnClick := miChangeCategorieImageClick;
+    pmChoixCategorie.Items.Add(mi);
   end;
 end;
 
@@ -361,7 +398,7 @@ begin
   end;
 end;
 
-procedure TFrmEditAlbum.AjouteAuteur2(List: TVDTListViewLabeled; Auteur: TPersonnage);
+procedure TFrmEditAlbum.AjouteAuteur(List: TVDTListViewLabeled; Auteur: TPersonnage);
 var
   dummy: Boolean;
 begin
@@ -385,9 +422,9 @@ procedure TFrmEditAlbum.ajoutClick(Sender: TObject);
 begin
   if vtPersonnes.CurrentValue = -1 then Exit;
   case TSpeedButton(Sender).Tag of
-    1: AjouteAuteur(lvScenaristes, vtPersonnes.GetFocusedNodeData, FScenaristesSelected);
-    2: AjouteAuteur(lvDessinateurs, vtPersonnes.GetFocusedNodeData, FDessinateursSelected);
-    3: AjouteAuteur(lvColoristes, vtPersonnes.GetFocusedNodeData, FColoristesSelected);
+    1: AjouteAuteur(lvScenaristes, TPersonnage(vtPersonnes.GetFocusedNodeData), FScenaristesSelected);
+    2: AjouteAuteur(lvDessinateurs, TPersonnage(vtPersonnes.GetFocusedNodeData), FDessinateursSelected);
+    3: AjouteAuteur(lvColoristes, TPersonnage(vtPersonnes.GetFocusedNodeData), FColoristesSelected);
   end;
   vtPersonnesChange(vtPersonnes, vtPersonnes.FocusedNode);
 end;
@@ -429,7 +466,7 @@ var
   EditionComplete: TEditionComplete;
   hg: IHourGlass;
   Stream: TStream;
-  CurrentEdition: Integer;
+  AfficheEdition, CurrentEdition: Integer;
   cs: string;
   FichiersImages: TStringList;
 begin
@@ -455,23 +492,18 @@ begin
   CurrentEdition := vtEditions.ItemIndex;
   UpdateEdition; // force la mise à jour du REditionComplete en cours si c pas déjà fait
 
+  AfficheEdition := -1;
   for i := 0 to Pred(vtEditions.Items.Count) do begin
     EditionComplete := Pointer(vtEditions.Items.Objects[i]);
     if EditionComplete.Editeur.RefEditeur = -1 then begin
       AffMessage(rsEditeurObligatoire, mtInformation, [mbOk], True);
-      vtEditions.ItemIndex := i;
-      vtEditeurs.SetFocus;
-      ModalResult := mrNone;
-      Exit;
+      AfficheEdition := i;
     end;
     cs := EditionComplete.ISBN;
     if cs = '' then begin
       // l'utilisation de l'isbn n'étant obligatoire que depuis "quelques années", les bd anciennes n'en n'ont pas: donc pas obligatoire de le saisir
 //      AffMessage('Le numéro ISBN est obligatoire !', mtInformation, [mbOk], True);
-//      vtEditions.Selected := vtEditions.Items[i];
-//      vtEditeurs.SetFocus;
-//      ModalResult := mrNone;
-//      Exit;
+//      AfficheEdition := i;
     end;
     if not VerifieISBN(cs) then
       if MessageDlg(Format(RemplacerValeur, [EditionComplete.ISBN, FormatISBN(cs)]), mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
@@ -479,11 +511,19 @@ begin
       end
       else begin
         //        AffMessage('Le numéro ISBN est obligatoire !', mtInformation, [mbOk], True);
-        //        vtEditions.Selected := vtEditions.Items[i];
-        //        vtEditeurs.SetFocus;
-        //        ModalResult := mrNone;
-        //        Exit;
+        //        AfficheEdition := i;
       end;
+    if (EditionComplete.AnneeCote * EditionComplete.PrixCote = 0) and (EditionComplete.AnneeCote + EditionComplete.PrixCote <> 0) then begin
+      // une cote doit être composée d'une année ET d'un prix
+      AffMessage(rsCoteIncomplete, mtInformation, [mbOk], True);
+      AfficheEdition := i;
+    end;
+  end;
+  if AfficheEdition <> -1 then begin
+    vtEditions.ItemIndex := AfficheEdition;
+    vtEditeurs.SetFocus;
+    ModalResult := mrNone;
+    Exit;
   end;
 
   FichiersImages := TStringList.Create;
@@ -605,15 +645,17 @@ begin
         EditionComplete.RefEdition := Fields.AsInteger[0];
         Close;
 
-        SQL.Text := 'INSERT INTO EDITIONS (REFEDITION, REFALBUM, REFEDITEUR, REFCOLLECTION, ANNEEEDITION, PRIX, VO, TYPEEDITION, COULEUR, ISBN, STOCK, DEDICACE, OFFERT, GRATUIT, ETAT, RELIURE, ORIENTATION, FormatEdition, DATEACHAT, NOTES, NOMBREDEPAGES)';
+        SQL.Text := 'INSERT INTO EDITIONS (REFEDITION, REFALBUM, REFEDITEUR, REFCOLLECTION, ANNEEEDITION, PRIX, VO, TYPEEDITION, COULEUR, ISBN, STOCK, DEDICACE, OFFERT, GRATUIT, ETAT, RELIURE, ORIENTATION, FormatEdition, DATEACHAT, NOTES, NOMBREDEPAGES, ANNEECOTE, PRIXCOTE)';
         SQL.Add('VALUES');
-        SQL.Add('(:REFEDITION, :REFALBUM, :REFEDITEUR, :REFCOLLECTION, :ANNEEEDITION, :PRIX, :VO, :TYPEEDITION, :COULEUR, :ISBN, :STOCK, :DEDICACE, :OFFERT, :GRATUIT, :ETAT, :RELIURE, :ORIENTATION, :FormatEdition, :DATEACHAT, :NOTES, :NOMBREDEPAGES)');
+        SQL.Add('(:REFEDITION, :REFALBUM, :REFEDITEUR, :REFCOLLECTION, :ANNEEEDITION, :PRIX, :VO, :TYPEEDITION, :COULEUR, :ISBN, :STOCK, :DEDICACE, :OFFERT, :GRATUIT, :ETAT, :RELIURE, :ORIENTATION, :FormatEdition, :DATEACHAT, :NOTES, :NOMBREDEPAGES, :ANNEECOTE, :PRIXCOTE)');
       end
       else begin
         SQL.Text := 'UPDATE EDITIONS SET';
         SQL.Add('REFALBUM = :REFALBUM, REFEDITEUR = :REFEDITEUR, REFCOLLECTION = :REFCOLLECTION, ANNEEEDITION = :ANNEEEDITION,');
         SQL.Add('PRIX = :PRIX, VO = :VO, TYPEEDITION = :TYPEEDITION, COULEUR = :COULEUR, ISBN = :ISBN, STOCK = :STOCK, ETAT = :ETAT, RELIURE = :RELIURE,');
-        SQL.Add('DEDICACE = :DEDICACE, OFFERT = :OFFERT, GRATUIT = :GRATUIT, DATEACHAT = :DATEACHAT, NOTES = :NOTES, ORIENTATION = :ORIENTATION, FormatEdition = :FormatEdition, NOMBREDEPAGES = :NOMBREDEPAGES WHERE (REFEDITION = :REFEDITION)');
+        SQL.Add('DEDICACE = :DEDICACE, OFFERT = :OFFERT, GRATUIT = :GRATUIT, DATEACHAT = :DATEACHAT, NOTES = :NOTES, ORIENTATION = :ORIENTATION,');
+        SQL.Add('ANNEECOTE = :ANNEECOTE, PRIXCOTE = :PRIXCOTE,');
+        SQL.Add('FormatEdition = :FormatEdition, NOMBREDEPAGES = :NOMBREDEPAGES WHERE (REFEDITION = :REFEDITION)');
       end;
 
       Params.ByNameAsInteger['REFEDITION'] := EditionComplete.RefEdition;
@@ -651,6 +693,14 @@ begin
         Params.ByNameIsNull['DATEACHAT'] := True
       else
         Params.ByNameAsDate['DATEACHAT'] := Trunc(EditionComplete.DateAchat);
+      if (EditionComplete.AnneeCote = 0) or (EditionComplete.PrixCote = 0) then begin
+        Params.ByNameIsNull['ANNEECOTE'] := True;
+        Params.ByNameIsNull['PRIXCOTE'] := True;
+      end
+      else begin
+        Params.ByNameAsInteger['ANNEECOTE'] := EditionComplete.AnneeCote;
+        Params.ByNameAsCurrency['PRIXCOTE'] := EditionComplete.PrixCote;
+      end;
 
       s := EditionComplete.Notes.Text;
       if s <> '' then
@@ -674,20 +724,20 @@ begin
         q6.Transaction := Transaction;
 
         q1.SQL.Clear;
-        q1.SQL.Add('INSERT INTO COUVERTURES (REFEDITION, REFALBUM, FichierCouverture, TypeCouverture, Ordre)');
-        q1.SQL.Add('VALUES (:RefEdition, :RefAlbum, :FichierCouverture, 0, :Ordre)');
+        q1.SQL.Add('INSERT INTO COUVERTURES (REFEDITION, REFALBUM, FichierCouverture, TypeCouverture, Ordre, CategorieImage)');
+        q1.SQL.Add('VALUES (:RefEdition, :RefAlbum, :FichierCouverture, 0, :Ordre, :CategorieImage)');
 
         q6.SQL.Text := 'SELECT Result FROM SAVEBLOBTOFILE(:Chemin, :Fichier, :BlobContent)';
 
         q2.SQL.Clear;
-        q2.SQL.Add('INSERT INTO COUVERTURES (REFEDITION, REFALBUM, FichierCouverture, TypeCouverture, Ordre, Couverture)');
-        q2.SQL.Add('VALUES (:RefEdition, :RefAlbum, :FichierCouverture, 1, :Ordre, :Couverture)');
+        q2.SQL.Add('INSERT INTO COUVERTURES (REFEDITION, REFALBUM, FichierCouverture, TypeCouverture, Ordre, Couverture, CategorieImage)');
+        q2.SQL.Add('VALUES (:RefEdition, :RefAlbum, :FichierCouverture, 1, :Ordre, :Couverture, :CategorieImage)');
 
         q3.SQL.Text := 'UPDATE COUVERTURES SET Couverture = :Couverture, TypeCouverture = 1 WHERE RefCouverture = :RefCouverture';
 
         q4.SQL.Text := 'UPDATE COUVERTURES SET Couverture = NULL, TypeCouverture = 0 WHERE RefCouverture = :RefCouverture';
 
-        q5.SQL.Text := 'UPDATE COUVERTURES SET FichierCouverture = :FichierCouverture, Ordre = :Ordre WHERE RefCouverture = :RefCouverture';
+        q5.SQL.Text := 'UPDATE COUVERTURES SET FichierCouverture = :FichierCouverture, Ordre = :Ordre, CategorieImage = :CategorieImage WHERE RefCouverture = :RefCouverture';
 
         for j := 0 to Pred(EditionComplete.Couvertures.Count) do begin
           PC := EditionComplete.Couvertures[j];
@@ -695,47 +745,48 @@ begin
             if (not PC.NewStockee) then begin // couvertures liées (q1)
               PC.OldNom := PC.NewNom;
               PC.NewNom := SearchNewFileName(RepImages, ExtractFileName(PC.NewNom), True);
-              q6.Params.AsString[0] := RepImages;
-              q6.Params.AsString[1] := PC.NewNom;
+              q6.Params.ByNameAsString['Chemin'] := RepImages;
+              q6.Params.ByNameAsString['Fichier'] := PC.NewNom;
               Stream := GetCouvertureStream(PC.OldNom, -1, -1, False);
               try
-                q6.ParamsSetBlob(2, Stream);
+                q6.ParamsSetBlob('BlobContent', Stream);
               finally
                 Stream.Free;
               end;
               q6.Open;
-              showmessage(q6.Fields.AsString[0]);
 
-              q1.Params.AsInteger[0] := EditionComplete.RefEdition;
-              q1.Params.AsInteger[1] := RefAlbum;
-              q1.Params.AsString[2] := PC.NewNom;
-              q1.Params.AsInteger[3] := j;
+              q1.Params.ByNameAsInteger['RefEdition'] := EditionComplete.RefEdition;
+              q1.Params.ByNameAsInteger['RefAlbum'] := RefAlbum;
+              q1.Params.ByNameAsString['FichierCouverture'] := PC.NewNom;
+              q1.Params.ByNameAsInteger['Ordre'] := j;
+              q1.Params.ByNameAsInteger['CategorieImage'] := PC.Categorie;
               q1.ExecSQL;
             end
             else if FileExists(PC.NewNom) then begin // couvertures stockées (q2)
-              q2.Params.AsInteger[0] := EditionComplete.RefEdition;
-              q2.Params.AsInteger[1] := RefAlbum;
-              q2.Params.AsString[2] := ChangeFileExt(ExtractFileName(PC.NewNom), '');
-              q2.Params.AsInteger[3] := j;
+              q2.Params.ByNameAsInteger['RefEdition'] := EditionComplete.RefEdition;
+              q2.Params.ByNameAsInteger['RefAlbum'] := RefAlbum;
+              q2.Params.ByNameAsString['FichierCouverture'] := ChangeFileExt(ExtractFileName(PC.NewNom), '');
+              q2.Params.ByNameAsInteger['Ordre'] := j;
               Stream := GetJPEGStream(PC.NewNom);
               try
-                q2.ParamsSetBlob(4, Stream);
+                q2.ParamsSetBlob('Couverture', Stream);
               finally
                 Stream.Free;
               end;
+              q2.Params.ByNameAsInteger['CategorieImage'] := PC.Categorie;
               q2.ExecSQL;
             end;
           end
           else begin // ancienne couverture
             if PC.OldStockee <> PC.NewStockee then begin // changement de stockage
               if (PC.NewStockee) then begin // conversion couvertures liées en stockées (q3)
-                Stream := GetCouvertureStream(PC.Reference, -1, -1, False);
+                Stream := GetCouvertureStream(False, PC.Reference, -1, -1, False);
                 try
-                  q3.ParamsSetBlob(0, Stream);
+                  q3.ParamsSetBlob('Couverture', Stream);
                 finally
                   Stream.Free;
                 end;
-                q3.Params.AsInteger[1] := PC.Reference;
+                q3.Params.ByNameAsInteger['RefCouverture'] := PC.Reference;
                 q3.ExecSQL;
                 if ExtractFilePath(PC.NewNom) = '' then
                   FichiersImages.Add(RepImages + PC.NewNom)
@@ -745,25 +796,26 @@ begin
               end
               else begin // conversion couvertures stockées en liées
                 PC.NewNom := SearchNewFileName(RepImages, PC.NewNom + '.jpg', True);
-                q6.Params.AsString[0] := RepImages;
-                q6.Params.AsString[1] := PC.NewNom;
-                Stream := GetCouvertureStream(PC.Reference, -1, -1, False);
+                q6.Params.ByNameAsString['Chemin'] := RepImages;
+                q6.Params.ByNameAsString['Fichier'] := PC.NewNom;
+                Stream := GetCouvertureStream(False, PC.Reference, -1, -1, False);
                 try
-                  q6.ParamsSetBlob(2, Stream);
+                  q6.ParamsSetBlob('BlobContent', Stream);
                 finally
                   Stream.Free;
                 end;
                 q6.Open;
 
-                q4.Params.AsInteger[0] := PC.Reference;
+                q4.Params.ByNameAsInteger['RefCouverture'] := PC.Reference;
                 q4.ExecSQL;
               end;
             end;
-            // couvertures renommées ou réordonnées (q5)
+            // couvertures renommées, réordonnées, changée de catégorie, etc (q5)
             // obligatoire pour les changement de stockage
-            q5.Params.AsString[0] := PC.NewNom;
-            q5.Params.AsInteger[1] := j;
-            q5.Params.AsInteger[2] := PC.Reference;
+            q5.Params.ByNameAsString['FichierCouverture'] := PC.NewNom;
+            q5.Params.ByNameAsInteger['Ordre'] := j;
+            q5.Params.ByNameAsInteger['CategorieImage'] := PC.Categorie;
+            q5.Params.ByNameAsInteger['RefCouverture'] := PC.Reference;
             q5.ExecSQL;
           end;
         end;
@@ -828,6 +880,11 @@ begin
           PC.NewNom := PC.OldNom;
           PC.OldStockee := Utilisateur.Options.ImagesStockees;
           PC.NewStockee := PC.OldStockee;
+          if FCurrentEditionComplete.Couvertures.Count = 1 then
+            PC.Categorie := 0
+          else
+            PC.Categorie := 1;
+          PC.sCategorie := FCategoriesImages.Values[IntToStr(PC.Categorie)];
         end;
       finally
         vstImages.RootNodeCount := FCurrentEditionComplete.Couvertures.Count;
@@ -853,7 +910,7 @@ begin
     if PC.Reference = -1 then
       ms := GetCouvertureStream(PC.NewNom, imgVisu.Height, imgVisu.Width, Utilisateur.Options.AntiAliasing)
     else
-      ms := GetCouvertureStream(PC.Reference, imgVisu.Height, imgVisu.Width, Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(False, PC.Reference, imgVisu.Height, imgVisu.Width, Utilisateur.Options.AntiAliasing);
     if Assigned(ms) then try
       jpg := TJPEGImage.Create;
       try
@@ -974,7 +1031,11 @@ var
   PC: TCouverture;
 begin
   PC := FCurrentEditionComplete.Couvertures[Node.Index];
-  CellText := PC.NewNom;
+  CellText := '';
+  case Column of
+    0: CellText := PC.NewNom;
+    1: CellText := PC.sCategorie;
+  end;
 end;
 
 procedure TFrmEditAlbum.vstImagesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
@@ -982,7 +1043,7 @@ var
   PC: TCouverture;
 begin
   PC := FCurrentEditionComplete.Couvertures[Node.Index];
-  if PC.Reference <> -1 then
+  if (Column = 0) and (PC.Reference <> -1) then
     if vstImages.Selected[Node] then
       TargetCanvas.Font.Color := clInactiveCaption
     else
@@ -1019,17 +1080,17 @@ begin
         if not FScenaristesSelected then begin
           TAuteur.VideListe(lvScenaristes);
           for i := 0 to Pred(SC.Scenaristes.Count) do
-            AjouteAuteur2(lvScenaristes, TAuteur(SC.Scenaristes[i]).Personne);
+            AjouteAuteur(lvScenaristes, TAuteur(SC.Scenaristes[i]).Personne);
         end;
         if not FDessinateursSelected then begin
           TAuteur.VideListe(lvDessinateurs);
           for i := 0 to Pred(SC.Dessinateurs.Count) do
-            AjouteAuteur2(lvDessinateurs, TAuteur(SC.Dessinateurs[i]).Personne);
+            AjouteAuteur(lvDessinateurs, TAuteur(SC.Dessinateurs[i]).Personne);
         end;
         if not FColoristesSelected then begin
           TAuteur.VideListe(lvColoristes);
           for i := 0 to Pred(SC.Coloristes.Count) do
-            AjouteAuteur2(lvColoristes, TAuteur(SC.Coloristes[i]).Personne);
+            AjouteAuteur(lvColoristes, TAuteur(SC.Coloristes[i]).Personne);
         end;
       finally
         SC.Free;
@@ -1138,6 +1199,9 @@ procedure TFrmEditAlbum.vstImagesEditing(Sender: TBaseVirtualTree; Node: PVirtua
 begin
   //  PC := FCurrentEditionComplete.Couvertures[Node.Index];
   //  Allowed := (PC.Reference <> -1) and (PC.NewStockee) and (PC.NewStockee = PC.OldStockee);
+
+  // devrait être autorisé aussi pour changer le nom de l'image
+  // l'édition de la catégorie d'image n'est pas gérée par le virtualtreeview
   Allowed := False;
 end;
 
@@ -1146,7 +1210,10 @@ var
   PC: TCouverture;
 begin
   PC := FCurrentEditionComplete.Couvertures[Node.Index];
-  PC.NewNom := NewText;
+  case Column of
+    0: PC.NewNom := NewText;
+    1: ;
+  end;
 end;
 
 procedure TFrmEditAlbum.EditLabeled1Click(Sender: TObject);
@@ -1198,6 +1265,8 @@ begin
     FCurrentEditionComplete.FormatEdition := cbxFormat.Value;
     FCurrentEditionComplete.sFormatEdition := cbxFormat.Caption;
     FCurrentEditionComplete.NombreDePages := StrToIntDef(edNombreDePages.Text, 0);
+    FCurrentEditionComplete.AnneeCote := StrToIntDef(edAnneeCote.Text, 0);
+    FCurrentEditionComplete.PrixCote := StrToCurrDef(StringReplace(edPrixCote.Text, Utilisateur.Options.SymboleMonnetaire, '', []), 0);
     if dtpAchat.Checked then
       FCurrentEditionComplete.DateAchat := Trunc(dtpAchat.Date)
     else
@@ -1278,6 +1347,11 @@ begin
       dtpAchat.Checked := FCurrentEditionComplete.DateAchat > 0;
       if dtpAchat.Checked then dtpAchat.Date := FCurrentEditionComplete.DateAchat;
       edNombreDePages.Text := NonZero(IntToStr(FCurrentEditionComplete.NombreDePages));
+      edAnneeCote.Text := NonZero(IntToStr(FCurrentEditionComplete.AnneeCote));
+      if FCurrentEditionComplete.PrixCote = 0 then
+        edPrixCote.Text := ''
+      else
+        edPrixCote.Text := FormatCurr(FormatMonnaie, FCurrentEditionComplete.PrixCote);
       edNotes.Lines.Assign(FCurrentEditionComplete.Notes);
       vstImages.RootNodeCount := FCurrentEditionComplete.Couvertures.Count;
     end;
@@ -1391,7 +1465,7 @@ begin
   if PC.Reference = -1 then
     ms := GetCouvertureStream(PC.NewNom, 400, 500, Utilisateur.Options.AntiAliasing)
   else
-    ms := GetCouvertureStream(PC.Reference, 400, 500, Utilisateur.Options.AntiAliasing);
+    ms := GetCouvertureStream(False, PC.Reference, 400, 500, Utilisateur.Options.AntiAliasing);
   if Assigned(ms) then try
     jpg := TJPEGImage.Create;
     Frm := TForm.Create(Self);
@@ -1491,6 +1565,54 @@ begin
       CurrentEditionComplete.Free;
     end;
   end;
+end;
+
+procedure TFrmEditAlbum.VDTButton14Click(Sender: TObject);
+var
+  c: Currency;
+begin
+  c := StrToCurrDef(StringReplace(edPrixCote.Text, Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  if Convertisseur(SpeedButton3, c) then
+    if edPrixCote.Focused then
+      edPrixCote.Text := FormatCurr(FormatMonnaieSimple, c)
+    else
+      edPrixCote.Text := FormatCurr(FormatMonnaie, c);
+end;
+
+procedure TFrmEditAlbum.vstImagesMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  pt: TPoint;
+  Node: PVirtualNode;
+begin
+  Node := vstImages.GetNodeAt(X, Y);
+  if (Node <> nil) and (vstImages.Header.Columns.ColumnFromPosition(Point(X, Y)) = 1) then begin
+    with vstImages.GetDisplayRect(Node, 1, False) do begin
+      X := Left;
+      Y := Bottom;
+    end;
+    pt := vstImages.ClientToScreen(Point(X, Y));
+    pmChoixCategorie.PopupComponent := TComponent(Node.Index);
+    pmChoixCategorie.Tag := TCouverture(FCurrentEditionComplete.Couvertures[Node.Index]).Categorie;
+    pmChoixCategorie.Popup(pt.X, pt.Y);
+  end;
+end;
+
+procedure TFrmEditAlbum.miChangeCategorieImageClick(Sender: TObject);
+var
+  PC: TCouverture;
+begin
+  PC := FCurrentEditionComplete.Couvertures[Integer(TPopupMenu(TMenuItem(Sender).GetParentMenu).PopupComponent)];
+  PC.Categorie := Integer(TMenuItem(Sender).Tag);
+  PC.sCategorie := FCategoriesImages.Values[IntToStr(PC.Categorie)];
+  vstImages.Invalidate;
+end;
+
+procedure TFrmEditAlbum.pmChoixCategoriePopup(Sender: TObject);
+var
+  i: Integer;
+begin
+  for i := 0 to Pred(pmChoixCategorie.Items.Count) do
+    pmChoixCategorie.Items[i].Checked := pmChoixCategorie.Tag = pmChoixCategorie.Items[i].Tag;
 end;
 
 end.

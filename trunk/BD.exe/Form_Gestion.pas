@@ -13,8 +13,8 @@ type
     ProcAjouter: TActionGestionAdd;
     ProcModifier: TActionGestionModif;
     ProcSupprimer: TActionGestionSupp;
+    ProcAcheter: TActionGestionAchat;
     Filtre: string;
-    BoutonSupp: TVDTButton;
   end;
 
   TFrmGestions = class(TForm)
@@ -39,10 +39,13 @@ type
     VDTButton1: TVDTButton;
     Bevel2: TBevel;
     Bevel5: TBevel;
-    btAchats: TVDTButton;
+    btAchatsAlbums: TVDTButton;
     Bevel6: TBevel;
     Bevel7: TBevel;
-    VDTButton3: TVDTButton;
+    acheter: TVDTButton;
+    Bevel8: TBevel;
+    btParaBD: TVDTButton;
+    btAchatsParaBD: TVDTButton;
     procedure FormCreate(Sender: TObject);
     function GestionCourante(SB: TSpeedButton = nil): TInfo_Gestion;
     procedure ajouterClick(Sender: TObject);
@@ -52,14 +55,14 @@ type
     procedure VDTButton2Click(Sender: TObject);
     procedure VDTButton1Click(Sender: TObject);
     procedure ScanEditKeyPress(Sender: TObject; var Key: Char);
-    procedure VDTButton3Click(Sender: TObject);
+    procedure acheterClick(Sender: TObject);
   protected
   private
     { Déclarations privées }
-    GestionAchat, GestionAlbum, GestionAuteur, GestionGenre, GestionCollection,
-      GestionEmprunteur, GestionEditeur, GestionSerie: TInfo_Gestion;
+    GestionAchatAlbum, GestionAlbum, GestionAuteur, GestionGenre, GestionCollection,
+      GestionEmprunteur, GestionEditeur, GestionSerie, GestionParaBD, GestionAchatParaBD: TInfo_Gestion;
     LastButton: TSpeedButton;
-    procedure AssignIG(var IG: TInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; Filtre: string = ''; BoutonSupp: TVDTButton = nil);
+    procedure AssignIG(var IG: TInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; Filtre: string = ''; Acheter: TActionGestionAchat = nil);
   public
     { Déclarations publiques }
     SelString: string;
@@ -101,6 +104,10 @@ const
   HintAjoutCollection = 'Ajouter une collection';
   HintModifCollection = 'Modifier la collection sélectionnée';
   HintSuppCollection = 'Supprimer la collection sélectionnée';
+  HintListeParaBD = 'Liste des objets para-BD';
+  HintAjoutParaBD = 'Ajouter un objet para-BD';
+  HintModifParaBD = 'Modifier l''objet sélectionné';
+  HintSuppParaBD = 'Supprimer l''objet sélectionné';
 
   NoSuppression = 'Impossible de supprimer un élément pendant l''édition d''un autre';
 
@@ -109,7 +116,7 @@ const
 
 {$R *.DFM}
 
-procedure TFrmGestions.AssignIG(var IG: TInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; Filtre: string; BoutonSupp: TVDTButton);
+procedure TFrmGestions.AssignIG(var IG: TInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; Filtre: string = ''; Acheter: TActionGestionAchat = nil);
 begin
   IG.ProcAjouter := Ajouter;
   IG.ProcModifier := Modifier;
@@ -120,7 +127,7 @@ begin
   IG.SuppHint := Supp_Hint;
   IG.Mode := Mode;
   IG.Filtre := Filtre;
-  IG.BoutonSupp := BoutonSupp;
+  IG.ProcAcheter := Acheter;
 end;
 
 function TFrmGestions.GestionCourante(SB: TSpeedButton = nil): TInfo_Gestion;
@@ -135,7 +142,7 @@ function TFrmGestions.GestionCourante(SB: TSpeedButton = nil): TInfo_Gestion;
   end;
 
 begin
-  if test(Result, btAchats, SB, GestionAchat) then Exit;
+  if test(Result, btAchatsAlbums, SB, GestionAchatAlbum) then Exit;
   if test(Result, btAlbums, SB, GestionAlbum) then Exit;
   if test(Result, btSeries, SB, GestionSerie) then Exit;
   if test(Result, btAuteurs, SB, GestionAuteur) then Exit;
@@ -143,6 +150,8 @@ begin
   if test(Result, btEditeurs, SB, GestionEditeur) then Exit;
   if test(Result, btCollections, SB, GestionCollection) then Exit;
   if test(Result, btGenre, SB, GestionGenre) then Exit;
+  if test(Result, btParaBD, SB, GestionParaBD) then Exit;
+  if test(Result, btAchatsParaBD, SB, GestionAchatParaBD) then Exit;
   Result := GestionAlbum;
 end;
 
@@ -153,9 +162,9 @@ begin
   AssignIG(GestionAlbum, AjouterAlbums, ModifierAlbums, SupprimerAlbums,
     HintListeAlbums, HintAjoutAlbum, HintModifAlbum, HintSuppAlbum,
     vmAlbumsSerie);
-  AssignIG(GestionAchat, AjouterAchats, ModifierAchats, SupprimerAchats,
+  AssignIG(GestionAchatAlbum, AjouterAchatsAlbum, ModifierAchatsAlbum, SupprimerAchatsAlbum,
     HintListeAlbums, HintAjoutAlbum, HintModifAlbum, HintSuppAlbum,
-    vmAlbumsSerie, 'Achat = 1', VDTButton3);
+    vmAlbumsSerie, 'Achat = 1', AcheterAlbums);
   AssignIG(GestionAuteur, AjouterAuteurs2, ModifierAuteurs, SupprimerAuteurs,
     HintListeAuteurs, HintAjoutAuteur, HintModifAuteur, HintSuppAuteur,
     vmPersonnes);
@@ -174,6 +183,12 @@ begin
   AssignIG(GestionCollection, AjouterCollections, ModifierCollections, SupprimerCollections,
     HintListeCollections, HintAjoutCollection, HintModifCollection, HintSuppCollection,
     vmCollections);
+  AssignIG(GestionParaBD, AjouterCollections, ModifierCollections, SupprimerCollections,
+    HintListeParaBD, HintAjoutParaBD, HintModifParaBD, HintSuppParaBD,
+    vmParaBDSerie);
+  AssignIG(GestionAchatParaBD, AjouterAchatsParaBD, ModifierAchatsParaBD, SupprimerAchatsParaBD,
+    HintListeParaBD, HintAjoutParaBD, HintModifParaBD, HintSuppParaBD,
+    vmParaBDSerie, 'Achat = 1', AcheterParaBD);
   LastButton := nil;
   VirtualTreeView.ShowAchat := False;
   SpeedButton1Click(btAlbums);
@@ -203,8 +218,6 @@ var
 begin
   hg := THourGlass.Create;
   if Sender = LastButton then Exit;
-  with GestionCourante(LastButton) do
-    if Assigned(BoutonSupp) then BoutonSupp.Visible := False;
   LastButton := TSpeedButton(Sender);
   LastButton.Down := True;
   with GestionCourante do begin
@@ -216,12 +229,8 @@ begin
     VirtualTreeView.Filtre := Filtre;
     VirtualTreeView.Mode := Mode;
     VirtualTreeView.Header.Columns.Clear;
-    if Assigned(BoutonSupp) then begin
-      BoutonSupp.Visible := True;
-      BoutonSupp.Left := Bevel7.Left + Bevel7.Width;
-      BoutonSupp.Top := Bevel7.Top;
-    end;
-    Bevel7.Visible := Assigned(BoutonSupp);
+    acheter.Visible := Assigned(ProcAcheter);
+    Bevel7.Visible := acheter.Visible;
   end;
   PrepareLV(Self);
 end;
@@ -244,9 +253,10 @@ begin
   end;
 end;
 
-procedure TFrmGestions.VDTButton3Click(Sender: TObject);
+procedure TFrmGestions.acheterClick(Sender: TObject);
 begin
-  AcheterAlbums(VirtualTreeView);
+  with GestionCourante do
+    ProcAcheter(VirtualTreeView);
 end;
 
 end.

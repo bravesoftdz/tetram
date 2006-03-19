@@ -213,7 +213,7 @@ implementation
 {$R *.DFM}
 
 uses
-  MAJ, Form_Consultation, Form_ConsultationE, Form_Repertoire, CommonConst, Commun, Form_options, Form_StatsGeneral,
+  MAJ, Form_Repertoire, CommonConst, Commun, Form_options, Form_StatsGeneral,
   Form_StatsEmprunteurs, Form_StatsAlbums, Textes, LoadComplet, Impression, Editions, Form_Gestion, Form_Customize,
   Form_AboutBox, DM_Princ, TypeRec, Types, Procedures, UHistorique, Form_Entretien,
   Form_Exportation, ShellAPI, MAth;

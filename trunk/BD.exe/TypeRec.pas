@@ -38,11 +38,28 @@ type
   public
     OldNom, NewNom: string[255];
     OldStockee, NewStockee: Boolean;
+    Categorie: Smallint;
+    sCategorie: string[50];
 
     procedure Assign(Ps: TBasePointeur); override;
 
     procedure Fill(Query: TJvUIBQuery); override;
     function ChaineAffichage: string; override;
+  end;
+
+  TParaBD = class(TBasePointeur)
+  public
+    Titre: string[150];
+    RefSerie: Integer;
+    Serie: string[150];
+    Achat: Boolean;
+    Complet: Boolean;
+
+    procedure Assign(Ps: TBasePointeur); override;
+
+    procedure Fill(Query: TJvUIBQuery); override;
+    function ChaineAffichage: string; overload; override;
+    function ChaineAffichage(Simple: Boolean): string; reintroduce; overload;
   end;
 
   TPersonnage = class(TBasePointeur)
@@ -332,6 +349,8 @@ begin
   NewNom := TCouverture(Ps).NewNom;
   OldStockee := TCouverture(Ps).OldStockee;
   NewStockee := TCouverture(Ps).NewStockee;
+  Categorie := TCouverture(Ps).Categorie;
+  sCategorie := TCouverture(Ps).sCategorie;
 end;
 
 function TCouverture.ChaineAffichage: string;
@@ -346,6 +365,8 @@ begin
   NewNom := OldNom;
   OldStockee := Query.Fields.ByNameAsBoolean['TypeCouverture'];
   NewStockee := OldStockee;
+  Categorie := Query.Fields.ByNameAsSmallint['CategorieImage'];
+  sCategorie := Query.Fields.ByNameAsString['sCategorieImage'];
 end;
 
 { TEditeur }
@@ -827,13 +848,13 @@ begin
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT RefEmprunteur, NomEmprunteur FROM Emprunteurs WHERE RefEmprunteur = ?';
-Params.AsInteger[0] := RefEmprunteur;
-Open;
-Fill(q);
-finally
-  Transaction.Free;
-  Free;
-end;
+    Params.AsInteger[0] := RefEmprunteur;
+    Open;
+    Fill(q);
+  finally
+    Transaction.Free;
+    Free;
+  end;
 end;
 
 { TGenre }
@@ -933,6 +954,58 @@ begin
     Edition.Fill(Query);
   except
     Edition.Clear;
+  end;
+end;
+
+{ TParaBD }
+
+procedure TParaBD.Assign(Ps: TBasePointeur);
+begin
+  inherited;
+  Titre := TParaBD(Ps).Titre;
+  RefSerie := TParaBD(Ps).RefSerie;
+  Serie := TParaBD(Ps).Serie;
+  Achat := TParaBD(Ps).Achat;
+  Complet := TParaBD(Ps).Complet;
+end;
+
+function TParaBD.ChaineAffichage: string;
+begin
+  Result := ChaineAffichage(False);
+end;
+
+function TParaBD.ChaineAffichage(Simple: Boolean): string;
+var
+  s: string;
+begin
+  if Simple then
+    Result := Titre
+  else
+    Result := FormatTitre(Titre);
+  s := '';
+  AjoutString(s, FormatTitre(Serie), ' - ');
+  AjoutString(Result, s, ' ', '(', ')');
+end;
+
+procedure TParaBD.Fill(Query: TJvUIBQuery);
+begin
+  Reference := NonNull(Query, 'RefParaBD');
+  Titre := Query.Fields.ByNameAsString['TitreParaBD'];
+  RefSerie := Query.Fields.ByNameAsInteger['RefSerie'];
+  try
+    Serie := Query.Fields.ByNameAsString['TitreSerie'];
+  except
+    Serie := '';
+  end;
+  try
+    Achat := Query.Fields.ByNameAsBoolean['Achat'];
+  except
+    Achat := False;
+  end;
+  try
+    Complet := Query.Fields.ByNameAsBoolean['Complet'];
+  except
+    Complet := True;
   end;
 end;
 

@@ -14,41 +14,6 @@ object FrmGestions: TFrmGestions
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  Icon.Data = {
-    0000010002002020100000000000E80200002600000010101000000000002801
-    00000E0300002800000020000000400000000100040000000000800200000000
-    0000000000000000000000000000000000000000800000800000008080008000
-    0000800080008080000080808000C0C0C0000000FF0000FF000000FFFF00FF00
-    0000FF00FF00FFFF0000FFFFFF00000000000000000000000000000000000000
-    0000000000000000000000000000000000000000000000000000000000000000
-    00000FFF00FFFFFFFF00FFF00000000000000FFFFFFFFFFFFFFFFFF000000000
-    00000FFFFFFFFFFFFFFFFFF00000000000000FF77777777777777FF000000000
-    08880FFFFFFFFFFFFFFFFFF00000000088880FF77777777777777FF000000000
-    77770FFFFFFFFFFFFFFFFFF00000000000000FFFFFFFFFFFFFFFFFF000000088
-    88880FF77777777777FFFFF00000008888880FFFFFFFFFFFFFFFFFF000000000
-    00000FF77777777777FFFFF00000000708F80FFFFFFFFFFFFFFFFFF070000000
-    0F870FFFFFFFFFFFFFFFFFF07700000008F8F000000000000000000777000000
-    0F8F8F8F8F8F8F8F800777777700000008F77777777777F8F000777777000000
-    0F8F8F8F8F8F8F8F808007777700000008F8F8F8F8F8F8F80880007777000000
-    00000000000000008F808007770000000008F8F8F8F8F8F8F808800077000000
-    0000000000000000008F808007000000000008F8F8F8F8F8F8F8088000000000
-    000000000000000000008F808000000000000008F8F8F8F8F8F8F80880000000
-    00000000000000000000008F800000000000000008F8F8F8F8F8F8F800000000
-    0000000000000000000000000000000000000000000000000000000000000000
-    0000000000000000000000000000FFFFFFFFFFFFFFFFFF08030FFF00000FFF00
-    000FFF00000FF000000FF000000FE000000FE000000FC000000F8000000F8000
-    000F80000007C0000003E0000001F0000001F0000001F0000001F0000001F000
-    0001F8000001FC000001FE000001FF000001FF800003FFC00003FFE00003FFF0
-    0007FFF8000FFFFFFFFFFFFFFFFF280000001000000020000000010004000000
-    0000C00000000000000000000000000000000000000000000000000080000080
-    00000080800080000000800080008080000080808000C0C0C0000000FF0000FF
-    000000FFFF00FF000000FF00FF00FFFF0000FFFFFF0000000000000000000000
-    00000000000000000FF00FF0F00000088FFFFFFFF00000777F777777F0000000
-    0FFFFFFFF00008888F7777FFF00000000FFFFFFFF000000F8888800000700008
-    8888F8000770000F8F8F8F8000700000F8F8F8F8000000000F8F8F8F80000000
-    00F8F8F8F8000000000F8F8F8F800000000000000000FFFF0000F1130000E003
-    0000C003000080030000000300000001000080000000C0000000C0000000C000
-    0000E0000000F0000000F8010000FC010000FFFF0000}
   OldCreateOrder = True
   Position = poScreenCenter
   OnCreate = FormCreate
@@ -71,7 +36,7 @@ object FrmGestions: TFrmGestions
     Left = 104
     Top = 0
     Width = 540
-    Height = 36
+    Height = 38
     Anchors = [akLeft, akTop, akRight]
     BevelInner = bvRaised
     BevelOuter = bvLowered
@@ -82,7 +47,7 @@ object FrmGestions: TFrmGestions
       Left = 5
       Top = 7
       Width = 88
-      Height = 22
+      Height = 25
       Cursor = crHandPoint
       Hint = 'Ajouter un genre'
       Caption = 'Rafra'#238'chir'
@@ -100,7 +65,7 @@ object FrmGestions: TFrmGestions
       Left = 101
       Top = 7
       Width = 88
-      Height = 22
+      Height = 25
       Cursor = crHandPoint
       Hint = 'Ajouter un genre'
       Caption = 'Nouveau'
@@ -111,7 +76,7 @@ object FrmGestions: TFrmGestions
       Left = 190
       Top = 7
       Width = 89
-      Height = 22
+      Height = 25
       Cursor = crHandPoint
       Hint = 'Modifier le genre s'#233'lectionn'#233
       Caption = 'Modifier'
@@ -122,7 +87,7 @@ object FrmGestions: TFrmGestions
       Left = 280
       Top = 7
       Width = 88
-      Height = 22
+      Height = 25
       Cursor = crHandPoint
       Hint = 'Supprimer le genre s'#233'lectionn'#233
       Caption = 'Supprimer'
@@ -136,17 +101,17 @@ object FrmGestions: TFrmGestions
       Height = 22
       Shape = bsLeftLine
     end
-    object VDTButton3: TVDTButton
+    object acheter: TVDTButton
       Left = 377
       Top = 7
       Width = 88
-      Height = 22
+      Height = 25
       Cursor = crHandPoint
       Hint = 'Ajouter un genre'
       Caption = 'Acheter'
       Flat = True
       Visible = False
-      OnClick = VDTButton3Click
+      OnClick = acheterClick
     end
   end
   object VirtualTreeView: TVirtualStringTree
@@ -207,7 +172,7 @@ object FrmGestions: TFrmGestions
       Left = 5
       Top = 7
       Width = 95
-      Height = 22
+      Height = 25
       Cursor = crHandPoint
       Anchors = [akLeft, akTop, akRight]
       GroupIndex = 1
@@ -217,9 +182,9 @@ object FrmGestions: TFrmGestions
     end
     object btEditeurs: TVDTButton
       Left = 5
-      Top = 115
+      Top = 131
       Width = 95
-      Height = 23
+      Height = 25
       Cursor = crHandPoint
       Anchors = [akLeft, akTop, akRight]
       GroupIndex = 1
@@ -229,9 +194,9 @@ object FrmGestions: TFrmGestions
     end
     object btAuteurs: TVDTButton
       Left = 5
-      Top = 86
+      Top = 98
       Width = 95
-      Height = 22
+      Height = 25
       Cursor = crHandPoint
       Anchors = [akLeft, akTop, akRight]
       GroupIndex = 1
@@ -241,9 +206,9 @@ object FrmGestions: TFrmGestions
     end
     object btGenre: TVDTButton
       Left = 5
-      Top = 167
+      Top = 189
       Width = 95
-      Height = 23
+      Height = 25
       Cursor = crHandPoint
       Anchors = [akLeft, akTop, akRight]
       GroupIndex = 1
@@ -253,9 +218,9 @@ object FrmGestions: TFrmGestions
     end
     object btCollections: TVDTButton
       Left = 5
-      Top = 138
+      Top = 156
       Width = 95
-      Height = 22
+      Height = 25
       Cursor = crHandPoint
       Anchors = [akLeft, akTop, akRight]
       GroupIndex = 1
@@ -265,9 +230,9 @@ object FrmGestions: TFrmGestions
     end
     object btSeries: TVDTButton
       Left = 5
-      Top = 29
+      Top = 65
       Width = 95
-      Height = 22
+      Height = 25
       Cursor = crHandPoint
       Anchors = [akLeft, akTop, akRight]
       GroupIndex = 1
@@ -275,55 +240,43 @@ object FrmGestions: TFrmGestions
       Flat = True
       OnClick = SpeedButton1Click
     end
-    object btEmprunteurs: TVDTButton
-      Left = 5
-      Top = 197
-      Width = 95
-      Height = 22
-      Cursor = crHandPoint
-      Anchors = [akLeft, akTop, akRight]
-      GroupIndex = 1
-      Caption = 'Emprunteurs'
-      Flat = True
-      OnClick = SpeedButton1Click
-    end
     object Bevel1: TBevel
-      Left = 20
-      Top = 109
+      Left = 19
+      Top = 125
       Width = 65
       Height = 3
       Anchors = [akLeft, akTop, akRight]
       Shape = bsBottomLine
     end
     object Bevel3: TBevel
-      Left = 20
-      Top = 161
+      Left = 19
+      Top = 183
       Width = 65
       Height = 3
       Anchors = [akLeft, akTop, akRight]
       Shape = bsBottomLine
     end
     object Bevel2: TBevel
-      Left = 20
-      Top = 52
+      Left = 19
+      Top = 58
       Width = 65
       Height = 4
       Anchors = [akLeft, akTop, akRight]
       Shape = bsBottomLine
     end
     object Bevel5: TBevel
-      Left = 20
-      Top = 190
+      Left = 19
+      Top = 273
       Width = 65
       Height = 4
       Anchors = [akLeft, akTop, akRight]
       Shape = bsBottomLine
     end
-    object btAchats: TVDTButton
+    object btAchatsAlbums: TVDTButton
       Left = 5
-      Top = 58
+      Top = 32
       Width = 95
-      Height = 22
+      Height = 25
       Cursor = crHandPoint
       Anchors = [akLeft, akTop, akRight]
       GroupIndex = 1
@@ -332,12 +285,56 @@ object FrmGestions: TFrmGestions
       OnClick = SpeedButton1Click
     end
     object Bevel6: TBevel
-      Left = 24
-      Top = 81
+      Left = 19
+      Top = 92
       Width = 65
       Height = 3
       Anchors = [akLeft, akTop, akRight]
       Shape = bsBottomLine
+    end
+    object Bevel8: TBevel
+      Left = 19
+      Top = 215
+      Width = 65
+      Height = 4
+      Anchors = [akLeft, akTop, akRight]
+      Shape = bsBottomLine
+    end
+    object btParaBD: TVDTButton
+      Left = 5
+      Top = 222
+      Width = 95
+      Height = 25
+      Cursor = crHandPoint
+      Anchors = [akLeft, akTop, akRight]
+      GroupIndex = 1
+      Caption = 'Para-BD'
+      Flat = True
+      OnClick = SpeedButton1Click
+    end
+    object btAchatsParaBD: TVDTButton
+      Left = 5
+      Top = 247
+      Width = 95
+      Height = 25
+      Cursor = crHandPoint
+      Anchors = [akLeft, akTop, akRight]
+      GroupIndex = 1
+      Caption = 'Achats'
+      Flat = True
+      OnClick = SpeedButton1Click
+    end
+    object btEmprunteurs: TVDTButton
+      Left = 5
+      Top = 280
+      Width = 95
+      Height = 25
+      Cursor = crHandPoint
+      Anchors = [akLeft, akTop, akRight]
+      GroupIndex = 1
+      Caption = 'Emprunteurs'
+      Flat = True
+      OnClick = SpeedButton1Click
     end
   end
   object ScanEdit: TEdit

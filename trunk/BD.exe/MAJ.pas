@@ -3,18 +3,19 @@ unit MAJ;
 interface
 
 uses
-  Windows, SysUtils, Forms, Controls, ComCtrls, TypeRec, LoadComplet, Textes, Form_Consultation, Form_ConsultationE,
-  Form_SaisieEmpruntAlbum, Form_SaisieEmpruntEmprunteur, Form_Recherche, Form_ZoomCouverture, Classes;
+  Windows, SysUtils, Forms, Controls, ComCtrls, TypeRec, LoadComplet, Textes, Classes;
 
-function MAJConsultation(Reference: Integer): Boolean;
-function MAJConsultationE(Reference: Integer): Boolean;
+function MAJConsultationAlbum(Reference: Integer): Boolean;
+function MAJConsultationEmprunteur(Reference: Integer): Boolean;
 function MAJConsultationAuteur(Reference: Integer): Boolean;
+function MAJConsultationParaBD(Reference: Integer): Boolean;
+function MAJConsultationSerie(Reference: Integer): Boolean;
 procedure MAJStock;
 procedure MAJSeriesIncompletes;
 procedure MAJPrevisionsSorties;
 procedure MAJPrevisionsAchats;
 procedure MAJRecherche(Reference: Integer; TypeSimple: Integer = -1);
-function ZoomCouverture(RefAlbum, RefCouverture: Integer): Boolean;
+function ZoomCouverture(isParaBD: Boolean; RefItem, RefCouverture: Integer): Boolean;
 
 function SaisieMouvementAlbum(MvtRefAlbum, MvtRefEdition: Integer; MvtPret: Boolean; MvtRefEmprunteur: Integer = -1): Boolean;
 function SaisieMouvementEmprunteur(MvtRefEmprunteur: Integer; MvtRefAlbum: TEditionsEmpruntees): Boolean;
@@ -22,9 +23,10 @@ function SaisieMouvementEmprunteur(MvtRefEmprunteur: Integer; MvtRefAlbum: TEdit
 implementation
 
 uses
-  Commun, CommonConst, DM_Princ, Form_Stock, Main, DM_Commun, DB, StdCtrls, JvUIB, JvUIBLib, Divers,
-  Procedures, Form_SeriesIncompletes, Form_PrevisionsSorties, Graphics,
-  Form_ConsultationAuteur, Form_PrevisionAchats, UHistorique;
+  Commun, CommonConst, DM_Princ, Form_Stock, Main, DM_Commun, DB, StdCtrls, JvUIB, JvUIBLib, Divers, Procedures, Form_SeriesIncompletes,
+  Form_PrevisionsSorties, Graphics, Form_ConsultationAlbum, Form_ConsultationEmprunteur, Form_SaisieEmpruntAlbum, Form_SaisieEmpruntEmprunteur, Form_Recherche,
+  Form_ZoomCouverture, Form_ConsultationAuteur, Form_PrevisionAchats, UHistorique,
+  Form_ConsultationParaBD, Form_ConsultationSerie;
 
 function MAJConsultationAuteur(Reference: Integer): Boolean;
 var
@@ -43,14 +45,14 @@ begin
   end;
 end;
 
-function MAJConsultation(Reference: Integer): Boolean;
+function MAJConsultationAlbum(Reference: Integer): Boolean;
 var
-  FDest: TFrmConsultation;
+  FDest: TFrmConsultationAlbum;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
-  FDest := TFrmConsultation.Create(Fond);
+  FDest := TFrmConsultationAlbum.Create(Fond);
   try
     FDest.RefAlbum := Reference;
     Historique.SetDescription(FDest.Caption);
@@ -60,34 +62,53 @@ begin
   end;
 end;
 
-function MAJConsultationE(Reference: Integer): Boolean;
+function MAJConsultationSerie(Reference: Integer): Boolean;
 var
-  R: TEmprunteurComplet;
-  i: Integer;
-  FDest: TFrmConsultationE;
+  FDest: TFrmConsultationSerie;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
-  R := TEmprunteurComplet.Create(Reference);
-  FDest := TFrmConsultationE.Create(Fond);
+  FDest := TFrmConsultationSerie.Create(Fond);
   try
-    with FDest do begin
-      RefEmprunteur := R.RefEmprunteur;
-      Caption := 'Fiche d''emprunteur - "' + R.Nom + '"';
-      nom.Caption := R.Nom;
-      Adresse.Text := R.Adresse.Text;
-
-      for i := 0 to R.Emprunts.Emprunts.Count - 1 do
-        FListEmprunts.Add(TEmprunt.Duplicate(R.Emprunts.Emprunts[i]));
-      ListeEmprunts.RootNodeCount := FListEmprunts.Count;
-      Emprunts.Caption := IntToStr(R.Emprunts.NBEmprunts);
-    end;
-
+    FDest.RefSerie := Reference;
     Historique.SetDescription(FDest.Caption);
-    Result := not R.RecInconnu;
+    Result := not FDest.Serie.RecInconnu;
   finally
-    R.Free;
+    Fond.SetChildForm(FDest);
+  end;
+end;
+
+function MAJConsultationParaBD(Reference: Integer): Boolean;
+var
+  FDest: TFrmConsultationParaBD;
+  hg: IHourGlass;
+begin
+  hg := THourGlass.Create;
+  //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  FDest := TFrmConsultationParaBD.Create(Fond);
+  try
+    FDest.RefParaBD := Reference;
+    Historique.SetDescription(FDest.Caption);
+    Result := not FDest.ParaBD.RecInconnu;
+  finally
+    Fond.SetChildForm(FDest);
+  end;
+end;
+
+function MAJConsultationEmprunteur(Reference: Integer): Boolean;
+var
+  FDest: TFrmConsultationEmprunteur;
+  hg: IHourGlass;
+begin
+  hg := THourGlass.Create;
+  //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  FDest := TFrmConsultationEmprunteur.Create(Fond);
+  try
+    FDest.RefEmprunteur := Reference;
+    Historique.SetDescription(FDest.Caption);
+    Result := not FDest.Emprunteur.RecInconnu;
+  finally
     Fond.SetChildForm(FDest);
   end;
 end;
@@ -175,13 +196,13 @@ begin
     Historique.SetDescription(FDest.Caption);
 end;
 
-function ZoomCouverture(RefAlbum, RefCouverture: Integer): Boolean;
+function ZoomCouverture(isParaBD: Boolean; RefItem, RefCouverture: Integer): Boolean;
 var
   FDest: TFrmZoomCouverture;
 begin
   FDest := TFrmZoomCouverture.Create(Fond);
   with FDest do try
-    Result := LoadCouverture(RefAlbum, RefCouverture);
+    Result := LoadCouverture(isParaBD, RefItem, RefCouverture);
     Historique.SetDescription(FDest.Caption);
   finally
     Fond.SetChildForm(FDest);

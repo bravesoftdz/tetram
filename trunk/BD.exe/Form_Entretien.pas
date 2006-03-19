@@ -243,7 +243,7 @@ begin
         FichiersImages.Add(RepImages + Fichier)
       else
         FichiersImages.Add(Fichier);
-      Stream := GetCouvertureStream(Fields.AsInteger[0], -1, -1, False);
+      Stream := GetCouvertureStream(False, Fields.AsInteger[0], -1, -1, False);
       try
         UpdateQuery.ParamsSetBlob(1, Stream);
       finally
@@ -307,7 +307,7 @@ begin
       Fichier := SearchNewFileName(RepImages, Fields.AsString[1] + '.jpg', True);
       ExtractQuery.Params.AsString[0] := RepImages;
       ExtractQuery.Params.AsString[1] := Fichier;
-      Stream := GetCouvertureStream(Fields.AsInteger[0], -1, -1, False);
+      Stream := GetCouvertureStream(False, Fields.AsInteger[0], -1, -1, False);
       try
         ExtractQuery.ParamsSetBlob(2, Stream);
       finally
@@ -355,7 +355,7 @@ begin
     nbSupprime := 0;
     Open;
     while not Eof do begin
-      Stream := GetCouvertureStream(Fields.AsInteger[0], -1, -1, False);
+      Stream := GetCouvertureStream(False, Fields.AsInteger[0], -1, -1, False);
       try
         if not Assigned(Stream) then begin
           UpdateQuery.Params.AsInteger[0] := Fields.AsInteger[0];

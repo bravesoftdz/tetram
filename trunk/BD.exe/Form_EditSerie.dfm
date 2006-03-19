@@ -1,8 +1,9 @@
 object FrmEditSerie: TFrmEditSerie
-  Left = 432
-  Top = 239
-  Width = 725
-  Height = 674
+  Left = 1293
+  Top = 25
+  Width = 750
+  Height = 956
+  ActiveControl = edTitre
   Caption = 'Saisie de S'#233'rie'
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
@@ -10,41 +11,6 @@ object FrmEditSerie: TFrmEditSerie
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  Icon.Data = {
-    0000010002002020100000000000E80200002600000010101000000000002801
-    00000E0300002800000020000000400000000100040000000000800200000000
-    0000000000000000000000000000000000000000800000800000008080008000
-    0000800080008080000080808000C0C0C0000000FF0000FF000000FFFF00FF00
-    0000FF00FF00FFFF0000FFFFFF00000000000000000000000000000000000000
-    0959595959595959000000000000000095959595959595909500000000000000
-    5959595959595950595000000000000595959595959595059595000000000000
-    0000000000000009595950000000099999999999999990959595950000000000
-    00000000000000595959595000000090FF7F7F7F7FFFFF059595959500000000
-    FFFFFFFFFFFFFFF05959595950000000FF7F7F7F7F7FFFFF0595959595000000
-    FFFFFFFFFFFFFFFF0059595959500000FF7F7F7FFFFFFFFF0805959595900000
-    FFFFFFFFFFFFFFF08F00595959500000000000000009D90FFF08059595900000
-    00FFFFFFFFFD9DFFF08F00595950000000000000000777000FFF080595900000
-    0000FFFFFFFFF0FFFFF08F0059500000000FFF7FFFFFFF00000FFF0805900000
-    00FFF7FFFFFFFFF0FFFFF08F005000000FFF7FFFFFFFFFFF0D900FFF08000000
-    FFF7FFF7FFF7FFF0D9DFFFF08F00000FFF7FFF7FFF7FFF007770000FFF0000FF
-    FFFFF7FFF7FFF0FFFFFFFFFFF000000FFFFF7FFF7FFF000000009D9000000000
-    FFFFFFF7FFF000000000D9D0000000000FFFFF7FFF0000000000000000000000
-    00FFFFFFF00000000000000000000000000FFFFF000000000000000000000000
-    0000FFF000000000000000000000000000000F00000000000000000000000000
-    0000000000000000000000000000F80007FFF00003FFE00001FFE00000FFC000
-    007F0000003F0000001F0000000F80000007C0000003E0000001E0000000E000
-    0000E0000000F0000000F8000000FC000000FE000000FC000000F8000000F000
-    0000E0000001C000000180000003C0000007E000FF1FF001FFFFF803FFFFFC07
-    FFFFFE0FFFFFFF1FFFFFFFBFFFFF280000001000000020000000010004000000
-    0000C00000000000000000000000000000000000000000000000000080000080
-    00000080800080000000800080008080000080808000C0C0C0000000FF0000FF
-    000000FFFF00FF000000FF00FF00FFFF0000FFFFFF0000000000000000000059
-    59595050000000000000009500000999999909595000000000000095950000FF
-    8888FF09595000F888FFFF0095900000009D900009500000FFD9D0FFF090000F
-    F877700000F000FF8FF8FFFFFF000FF8FF8FF009D90F00FFF8FF0FFD9DF0000F
-    FFF0000777000000FF00000000000000000000000000C01F0000800F00000007
-    000000030000000100008000000080000000C0000000E0000000C00000008000
-    00000000000080000000C0800000E1FF0000F3FF0000}
   OldCreateOrder = False
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -54,7 +20,7 @@ object FrmEditSerie: TFrmEditSerie
   object Bevel1: TBevel
     Left = 0
     Top = 23
-    Width = 717
+    Width = 742
     Height = 4
     Align = alTop
     Shape = bsBottomLine
@@ -62,17 +28,17 @@ object FrmEditSerie: TFrmEditSerie
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 717
+    Width = 742
     Height = 23
     Align = alTop
     BevelOuter = bvNone
     Caption = ' '
     TabOrder = 0
     DesignSize = (
-      717
+      742
       23)
     object btnOK: TBitBtn
-      Left = 557
+      Left = 582
       Top = 2
       Width = 73
       Height = 19
@@ -86,7 +52,7 @@ object FrmEditSerie: TFrmEditSerie
       OnClick = Frame11btnOKClick
     end
     object btnAnnuler: TBitBtn
-      Left = 639
+      Left = 664
       Top = 2
       Width = 71
       Height = 19
@@ -103,17 +69,17 @@ object FrmEditSerie: TFrmEditSerie
   object ScrollBox2: TScrollBox
     Left = 0
     Top = 27
-    Width = 717
-    Height = 620
+    Width = 742
+    Height = 897
     Align = alClient
     BorderStyle = bsNone
     Constraints.MinWidth = 650
     TabOrder = 1
     DesignSize = (
-      717
-      620)
+      742
+      897)
     object Label5: TLabel
-      Left = 7
+      Left = 15
       Top = 301
       Width = 38
       Height = 13
@@ -121,7 +87,7 @@ object FrmEditSerie: TFrmEditSerie
       Caption = 'Editeur:'
     end
     object VDTButton1: TVDTButton
-      Left = 304
+      Left = 309
       Top = 297
       Width = 20
       Height = 21
@@ -131,7 +97,7 @@ object FrmEditSerie: TFrmEditSerie
       OnClick = EditLabeled1Click
     end
     object Label8: TLabel
-      Left = 354
+      Left = 359
       Top = 301
       Width = 50
       Height = 13
@@ -139,7 +105,7 @@ object FrmEditSerie: TFrmEditSerie
       Caption = 'Collection:'
     end
     object VDTButton2: TVDTButton
-      Left = 668
+      Left = 693
       Top = 297
       Width = 20
       Height = 21
@@ -150,7 +116,7 @@ object FrmEditSerie: TFrmEditSerie
       OnClick = EditLabeled2Click
     end
     object VDTButton9: TVDTButton
-      Left = 324
+      Left = 329
       Top = 297
       Width = 21
       Height = 21
@@ -160,7 +126,7 @@ object FrmEditSerie: TFrmEditSerie
       OnClick = VDTButton9Click
     end
     object VDTButton10: TVDTButton
-      Left = 688
+      Left = 713
       Top = 297
       Width = 21
       Height = 21
@@ -172,7 +138,7 @@ object FrmEditSerie: TFrmEditSerie
       OnClick = VDTButton10Click
     end
     object Label2: TLabel
-      Left = 17
+      Left = 24
       Top = 7
       Width = 29
       Height = 13
@@ -183,14 +149,14 @@ object FrmEditSerie: TFrmEditSerie
     end
     object Label17: TLabel
       Left = 513
-      Top = 147
+      Top = 150
       Width = 33
       Height = 13
       Caption = 'Genre:'
     end
     object VDTButton3: TVDTButton
-      Left = 668
-      Top = 143
+      Left = 693
+      Top = 146
       Width = 20
       Height = 20
       Cursor = crHandPoint
@@ -200,8 +166,8 @@ object FrmEditSerie: TFrmEditSerie
       OnClick = ScanEditClick
     end
     object VDTButton4: TVDTButton
-      Left = 688
-      Top = 143
+      Left = 713
+      Top = 146
       Width = 21
       Height = 20
       Cursor = crHandPoint
@@ -213,16 +179,16 @@ object FrmEditSerie: TFrmEditSerie
     object Label15: TLabel
       Left = 512
       Top = 261
-      Width = 197
+      Width = 222
       Height = 13
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
       Caption = ' '
     end
     object Bevel3: TBevel
-      Left = 165
+      Left = 168
       Top = 285
-      Width = 386
+      Width = 411
       Height = 6
       Anchors = [akLeft, akTop, akRight]
       Shape = bsTopLine
@@ -230,13 +196,13 @@ object FrmEditSerie: TFrmEditSerie
     object Bevel2: TBevel
       Left = 165
       Top = 404
-      Width = 386
+      Width = 411
       Height = 7
       Anchors = [akLeft, akTop, akRight]
       Shape = bsTopLine
     end
     object Label6: TLabel
-      Left = 6
+      Left = 13
       Top = 54
       Width = 40
       Height = 13
@@ -245,7 +211,7 @@ object FrmEditSerie: TFrmEditSerie
       FocusControl = histoire
     end
     object Label7: TLabel
-      Left = 335
+      Left = 365
       Top = 54
       Width = 32
       Height = 13
@@ -255,7 +221,7 @@ object FrmEditSerie: TFrmEditSerie
       FocusControl = remarques
     end
     object VDTButton13: TVDTButton
-      Left = 687
+      Left = 712
       Top = 30
       Width = 23
       Height = 18
@@ -280,7 +246,7 @@ object FrmEditSerie: TFrmEditSerie
       OnClick = VDTButton13Click
     end
     object Label1: TLabel
-      Left = 3
+      Left = 8
       Top = 32
       Width = 45
       Height = 13
@@ -291,7 +257,7 @@ object FrmEditSerie: TFrmEditSerie
     end
     object btScenariste: TVDTButton
       Tag = 1
-      Left = 231
+      Left = 236
       Top = 146
       Width = 69
       Height = 41
@@ -311,7 +277,7 @@ object FrmEditSerie: TFrmEditSerie
     end
     object btDessinateur: TVDTButton
       Tag = 2
-      Left = 231
+      Left = 236
       Top = 190
       Width = 69
       Height = 41
@@ -330,7 +296,7 @@ object FrmEditSerie: TFrmEditSerie
       OnClick = btColoristeClick
     end
     object VDTButton7: TVDTButton
-      Left = 186
+      Left = 191
       Top = 146
       Width = 21
       Height = 20
@@ -340,7 +306,7 @@ object FrmEditSerie: TFrmEditSerie
       OnClick = Edit2Change
     end
     object VDTButton8: TVDTButton
-      Left = 207
+      Left = 212
       Top = 146
       Width = 20
       Height = 20
@@ -350,7 +316,7 @@ object FrmEditSerie: TFrmEditSerie
       OnClick = VDTButton8Click
     end
     object Label19: TLabel
-      Left = 7
+      Left = 11
       Top = 150
       Width = 42
       Height = 13
@@ -360,7 +326,7 @@ object FrmEditSerie: TFrmEditSerie
     end
     object btColoriste: TVDTButton
       Tag = 3
-      Left = 231
+      Left = 236
       Top = 234
       Width = 69
       Height = 41
@@ -378,14 +344,38 @@ object FrmEditSerie: TFrmEditSerie
       Layout = blGlyphBottom
       OnClick = btColoristeClick
     end
+    object Bevel5: TBevel
+      Left = 189
+      Top = 566
+      Width = 310
+      Height = 6
+      Anchors = [akLeft, akTop, akRight]
+      Shape = bsTopLine
+    end
+    object Label3: TLabel
+      Left = 15
+      Top = 442
+      Width = 38
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Albums:'
+    end
+    object Label4: TLabel
+      Left = 10
+      Top = 575
+      Width = 43
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Para-BD:'
+    end
     object EditLabeled1: TEditLabeled
-      Left = 51
+      Left = 56
       Top = 297
       Width = 254
       Height = 21
       BevelKind = bkTile
       BorderStyle = bsNone
-      TabOrder = 7
+      TabOrder = 11
       OnChange = EditLabeled1Click
       LinkLabel.LinkLabel.Strings = (
         'Label5'
@@ -393,7 +383,7 @@ object FrmEditSerie: TFrmEditSerie
       CurrencyChar = #0
     end
     object vtEditeurs: TVirtualStringTree
-      Left = 51
+      Left = 56
       Top = 320
       Width = 294
       Height = 74
@@ -415,20 +405,20 @@ object FrmEditSerie: TFrmEditSerie
       Indent = 8
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 8
+      TabOrder = 12
       OnChange = vtEditeursChange
       OnDblClick = vtEditeursDblClick
       Columns = <>
     end
     object EditLabeled2: TEditLabeled
-      Left = 408
+      Left = 413
       Top = 297
-      Width = 261
+      Width = 281
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
-      TabOrder = 9
+      TabOrder = 13
       OnChange = EditLabeled2Click
       LinkLabel.LinkLabel.Strings = (
         'Label8'
@@ -436,9 +426,9 @@ object FrmEditSerie: TFrmEditSerie
       CurrencyChar = #0
     end
     object vtCollections: TVirtualStringTree
-      Left = 408
+      Left = 413
       Top = 320
-      Width = 301
+      Width = 321
       Height = 74
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
@@ -459,14 +449,14 @@ object FrmEditSerie: TFrmEditSerie
       Indent = 8
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 10
+      TabOrder = 14
       OnDblClick = vtCollectionsDblClick
       Columns = <>
     end
     object edTitre: TEditLabeled
-      Left = 51
+      Left = 56
       Top = 4
-      Width = 659
+      Width = 679
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -479,13 +469,13 @@ object FrmEditSerie: TFrmEditSerie
     end
     object ScanEdit: TEditLabeled
       Left = 552
-      Top = 143
-      Width = 117
+      Top = 146
+      Width = 142
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
-      TabOrder = 4
+      TabOrder = 9
       OnChange = ScanEditClick
       OnKeyPress = ScanEditKeyPress
       LinkLabel.LinkLabel.Strings = (
@@ -496,8 +486,8 @@ object FrmEditSerie: TFrmEditSerie
     end
     object vtGenres: TVirtualStringTree
       Left = 512
-      Top = 167
-      Width = 197
+      Top = 169
+      Width = 222
       Height = 90
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
@@ -517,16 +507,16 @@ object FrmEditSerie: TFrmEditSerie
       Indent = 8
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 5
+      TabOrder = 10
       OnChecked = vtGenresChecked
       OnDblClick = vtGenresDblClick
       OnInitNode = vtGenresInitNode
       Columns = <>
     end
     object histoire: TMemoLabeled
-      Left = 51
+      Left = 56
       Top = 54
-      Width = 275
+      Width = 300
       Height = 81
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -537,9 +527,9 @@ object FrmEditSerie: TFrmEditSerie
         'Label6')
     end
     object remarques: TMemoLabeled
-      Left = 373
+      Left = 403
       Top = 54
-      Width = 337
+      Width = 332
       Height = 81
       Anchors = [akTop, akRight]
       BevelKind = bkTile
@@ -550,32 +540,32 @@ object FrmEditSerie: TFrmEditSerie
         'Label7')
     end
     object cbTerminee: TCheckBoxLabeled
-      Left = 165
+      Left = 170
       Top = 417
       Width = 90
       Height = 16
       AllowGrayed = True
       Caption = 'S'#233'rie termin'#233'e'
       State = cbGrayed
-      TabOrder = 6
+      TabOrder = 16
       LinkLabel.LinkLabel.Strings = (
         'cbTerminee')
     end
     object cbComplete: TCheckBoxLabeled
-      Left = 51
+      Left = 56
       Top = 417
       Width = 90
       Height = 16
       Caption = 'S'#233'rie compl'#232'te'
-      TabOrder = 11
+      TabOrder = 15
       LinkLabel.LinkLabel.Strings = (
         'cbComplete')
     end
     object vtAlbums: TVirtualStringTree
-      Left = 48
+      Left = 56
       Top = 442
-      Width = 660
-      Height = 129
+      Width = 677
+      Height = 119
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
       BevelKind = bkTile
@@ -595,14 +585,14 @@ object FrmEditSerie: TFrmEditSerie
       Indent = 8
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 12
+      TabOrder = 17
       OnDblClick = vtAlbumsDblClick
       Columns = <>
     end
     object edSite: TEditLabeled
-      Left = 51
+      Left = 56
       Top = 29
-      Width = 635
+      Width = 655
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -617,7 +607,7 @@ object FrmEditSerie: TFrmEditSerie
       CurrencyChar = #0
     end
     object lvScenaristes: TVDTListViewLabeled
-      Left = 300
+      Left = 305
       Top = 146
       Width = 198
       Height = 41
@@ -631,14 +621,14 @@ object FrmEditSerie: TFrmEditSerie
       ReadOnly = True
       ShowColumnHeaders = False
       SortType = stNone
-      TabOrder = 13
+      TabOrder = 6
       ViewStyle = vsReport
       OnKeyDown = lvColoristesKeyDown
       LinkLabel.LinkLabel.Strings = (
         'btScenariste')
     end
     object lvDessinateurs: TVDTListViewLabeled
-      Left = 300
+      Left = 305
       Top = 190
       Width = 198
       Height = 41
@@ -652,14 +642,14 @@ object FrmEditSerie: TFrmEditSerie
       ReadOnly = True
       ShowColumnHeaders = False
       SortType = stBoth
-      TabOrder = 14
+      TabOrder = 7
       ViewStyle = vsReport
       OnKeyDown = lvColoristesKeyDown
       LinkLabel.LinkLabel.Strings = (
         'btDessinateur')
     end
     object vtPersonnes: TVirtualStringTree
-      Left = 51
+      Left = 56
       Top = 169
       Width = 177
       Height = 105
@@ -681,19 +671,19 @@ object FrmEditSerie: TFrmEditSerie
       Indent = 8
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 15
+      TabOrder = 5
       OnChange = vtPersonnesChange
       OnDblClick = vtPersonnesDblClick
       Columns = <>
     end
     object Edit2: TEditLabeled
-      Left = 51
+      Left = 56
       Top = 146
       Width = 135
       Height = 20
       BevelKind = bkTile
       BorderStyle = bsNone
-      TabOrder = 16
+      TabOrder = 4
       OnChange = Edit2Change
       LinkLabel.LinkLabel.Strings = (
         'Label19'
@@ -702,7 +692,7 @@ object FrmEditSerie: TFrmEditSerie
       CurrencyChar = #0
     end
     object lvColoristes: TVDTListViewLabeled
-      Left = 300
+      Left = 305
       Top = 234
       Width = 198
       Height = 41
@@ -716,11 +706,41 @@ object FrmEditSerie: TFrmEditSerie
       ReadOnly = True
       ShowColumnHeaders = False
       SortType = stBoth
-      TabOrder = 17
+      TabOrder = 8
       ViewStyle = vsReport
       OnKeyDown = lvColoristesKeyDown
       LinkLabel.LinkLabel.Strings = (
         'btColoriste')
+    end
+    object vtParaBD: TVirtualStringTree
+      Left = 56
+      Top = 575
+      Width = 673
+      Height = 130
+      Anchors = [akLeft, akTop, akRight]
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      ButtonFillMode = fmShaded
+      CheckImageKind = ckDarkCheck
+      Header.AutoSizeIndex = 0
+      Header.Font.Charset = DEFAULT_CHARSET
+      Header.Font.Color = clWindowText
+      Header.Font.Height = -11
+      Header.Font.Name = 'Tahoma'
+      Header.Font.Style = []
+      Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
+      TabOrder = 18
+      TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
+      TreeOptions.StringOptions = []
+      Columns = <
+        item
+          Position = 1
+          Width = 569
+        end
+        item
+          Position = 0
+          Width = 100
+        end>
     end
   end
 end

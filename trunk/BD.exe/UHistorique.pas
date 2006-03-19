@@ -6,7 +6,25 @@ uses
   SysUtils, Windows, Classes, Contnrs;
 
 type
-  TActionConsultation = (fcActionBack, fcActionRefresh, fcAlbum, fcEmprunteur, fcAuteur, fcCouverture, fcRecherche, fcStock, fcPreview, fcSeriesIncompletes, fcPrevisionsSorties, fcRecreateToolBar, fcPrevisionsAchats, fcRefreshRepertoire);
+  TActionConsultation = (
+    fcActionBack,
+    fcActionRefresh,
+    fcAlbum,
+    fcEmprunteur,
+    fcAuteur,
+    fcCouverture,
+    fcRecherche,
+    fcStock,
+    fcPreview,
+    fcSeriesIncompletes,
+    fcPrevisionsSorties,
+    fcRecreateToolBar,
+    fcPrevisionsAchats,
+    fcRefreshRepertoire,
+    fcParaBD,
+    fcImageParaBD,
+    fcSerie
+    );
 
 const
   NoSaveHistorique: set of TActionConsultation = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire];
@@ -235,10 +253,12 @@ begin
     case Consult.Action of
       fcActionBack: Back;
       fcActionRefresh: Result := Open(FListConsultation[FCurrentConsultation], True);
-      fcAlbum: Result := MAJConsultation(Consult.Reference);
-      fcEmprunteur: Result := MAJConsultationE(Consult.Reference);
+      fcAlbum: Result := MAJConsultationAlbum(Consult.Reference);
+      fcEmprunteur: Result := MAJConsultationEmprunteur(Consult.Reference);
+      fcSerie: Result := MAJConsultationSerie(Consult.Reference);
       fcAuteur: Result := MAJConsultationAuteur(Consult.Reference);
-      fcCouverture: Result := ZoomCouverture(Consult.Reference, Consult.Reference2);
+      fcParaBD: Result := MAJConsultationParaBD(Consult.Reference);
+      fcCouverture, fcImageParaBD: Result := ZoomCouverture(Consult.Action = fcImageParaBD, Consult.Reference, Consult.Reference2);
       fcRecherche: MAJRecherche(Consult.Reference, Consult.Reference2);
       fcStock: MAJStock;
       fcPreview: Fond.SetModalChildForm(TForm(Consult.Reference));

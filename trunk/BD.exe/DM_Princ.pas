@@ -376,7 +376,7 @@ begin
 
     if AnsiSameText(Copy(LocalDoc, 1, Length(WebServerPath)), WebServerPath) then begin // File down in dir structure
       if AnsiSameText(Copy(LocalDoc, 1, Length(WebServerPath + 'Couverture')), WebServerPath + 'Couverture') then
-        ResultFile := GetCouvertureStream(StrToIntDef(ARequestInfo.Params.Values['RefCouverture'], -1),
+        ResultFile := GetCouvertureStream(False, StrToIntDef(ARequestInfo.Params.Values['RefCouverture'], -1),
           StrToIntDef(ARequestInfo.Params.Values['Height'], -1),
           StrToIntDef(ARequestInfo.Params.Values['Width'], -1),
           Utilisateur.Options.WebServerAntiAliasing);

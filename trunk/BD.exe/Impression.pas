@@ -259,7 +259,7 @@ begin
       if Utilisateur.Options.FicheWithCouverture and Assigned(Edition) then begin
         if Edition.Couvertures.Count > 0 then begin
           fWaiting.ShowProgression(rsTransImage + '...', epNext);
-          ms := GetCouvertureStream(TCouverture(Edition.Couvertures[0]).Reference, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60), Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
+          ms := GetCouvertureStream(False, TCouverture(Edition.Couvertures[0]).Reference, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60), Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
           if Assigned(ms) then try
             fWaiting.ShowProgression(rsTransImage + '...', epNext);
             jpg := TJPEGImage.Create;
@@ -1353,7 +1353,7 @@ begin
       Prn.SetFontInformation1('Times New Roman', 12, []);
 
       //      ShowMessage(Format('W %d H %d', [Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Prn.MmsToPixelsVertical(Prn.Detail.Height)]));
-      ms := GetCouvertureStream(RefCouverture, Prn.MmsToPixelsVertical(Prn.Detail.Height), Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(False, RefCouverture, Prn.MmsToPixelsVertical(Prn.Detail.Height), Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Utilisateur.Options.AntiAliasing);
       if Assigned(ms) then try
         fWaiting.ShowProgression(rsTransImage + '...', epNext);
         jpg := TJPEGImage.Create;

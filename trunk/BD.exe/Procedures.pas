@@ -122,9 +122,9 @@ type
     destructor Destroy; override;
   end;
 
-function GetCouvertureStream(RefCouverture, Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream; overload;
+function GetCouvertureStream(isParaBD: Boolean; RefCouverture, Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream; overload;
 function GetCouvertureStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream; overload;
-procedure LoadCouverture(RefCouverture: Integer; Picture: TPicture);
+procedure LoadCouverture(isParaBD: Boolean; RefCouverture: Integer; Picture: TPicture);
 function GetJPEGStream(const Fichier: string): TStream;
 function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = True): string;
 
@@ -214,7 +214,7 @@ begin
   op := TJvUIBQuery.Create(nil);
   with op do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT Valeur FROM OPTIONS WHERE NOM_OPTION = ?';
+    SQL.Text := 'SELECT SKIP 1 Valeur FROM OPTIONS WHERE NOM_OPTION = ? ORDER BY DM_OPTIONS DESC';
     Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', CurrencyString);
     FormatMonnaie := IIf(CurrencyFormat in [0, 2], Utilisateur.Options.SymboleMonnetaire + IIf(CurrencyFormat = 2, ' ', ''), '') + FormatMonnaieCourt + IIf(CurrencyFormat in [1, 3], IIf(CurrencyFormat = 3, ' ', '') + Utilisateur.Options.SymboleMonnetaire, '');
     RepImages := LitStr(op, 'RepImages', RepImages);
@@ -966,20 +966,20 @@ begin
   end;
 end;
 
-function GetCouvertureStream(RefCouverture, Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream;
+function GetCouvertureStream(isParaBD: Boolean; RefCouverture, Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream;
 var
   Couverture: TPicture;
 begin
   Couverture := TPicture.Create;
   try
-    LoadCouverture(RefCouverture, Couverture);
+    LoadCouverture(isParaBD, RefCouverture, Couverture);
     Result := ResizePicture(Couverture, Hauteur, Largeur, AntiAliasing, Cadre, Effet3D);
   finally
     Couverture.Free;
   end;
 end;
 
-procedure LoadCouverture(RefCouverture: Integer; Picture: TPicture);
+procedure LoadCouverture(isParaBD: Boolean; RefCouverture: Integer; Picture: TPicture);
 var
   ms: TMemoryStream;
   img: TJPEGImage;
@@ -987,7 +987,10 @@ var
 begin
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT Couverture, TypeCouverture, FichierCouverture FROM Couvertures WHERE RefCouverture = ?';
+    if isParaBD then
+      SQL.Text := 'SELECT ParaBD, TypeParaBD, FichierParaBD FROM ParaBD WHERE RefParaBD = ?'
+    else
+      SQL.Text := 'SELECT Couverture, TypeCouverture, FichierCouverture FROM Couvertures WHERE RefCouverture = ?';
     Params.AsInteger[0] := RefCouverture;
     FetchBlobs := True;
     Open;

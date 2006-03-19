@@ -1,4 +1,4 @@
-object FrmEditAchat: TFrmEditAchat
+object FrmEditAchatAlbum: TFrmEditAchatAlbum
   Left = 354
   Top = 555
   Width = 738
@@ -18,7 +18,7 @@ object FrmEditAchat: TFrmEditAchat
     Left = 0
     Top = 0
     Width = 730
-    Height = 354
+    Height = 349
     ActivePage = TabSheet1
     Align = alClient
     MultiLine = True
@@ -28,7 +28,7 @@ object FrmEditAchat: TFrmEditAchat
       Caption = 'Nouvel album'
       DesignSize = (
         722
-        323)
+        318)
       object Label3: TLabel
         Left = 97
         Top = 31
@@ -270,7 +270,7 @@ object FrmEditAchat: TFrmEditAchat
         Anchors = [akLeft, akTop, akRight]
         BevelKind = bkTile
         BorderStyle = bsNone
-        TabOrder = 13
+        TabOrder = 15
         OnChange = VDTButton12Click
         LinkLabel.LinkLabel.Strings = (
           'Label20'
@@ -302,7 +302,7 @@ object FrmEditAchat: TFrmEditAchat
         Indent = 8
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 14
+        TabOrder = 16
         OnChange = vtSeriesChange
         OnDblClick = vtSeriesDblClick
         Columns = <>
@@ -395,7 +395,7 @@ object FrmEditAchat: TFrmEditAchat
         ReadOnly = True
         ShowColumnHeaders = False
         SortType = stNone
-        TabOrder = 10
+        TabOrder = 12
         ViewStyle = vsReport
         OnKeyDown = lvColoristesKeyDown
         LinkLabel.LinkLabel.Strings = (
@@ -416,7 +416,7 @@ object FrmEditAchat: TFrmEditAchat
         ReadOnly = True
         ShowColumnHeaders = False
         SortType = stBoth
-        TabOrder = 11
+        TabOrder = 13
         ViewStyle = vsReport
         OnKeyDown = lvColoristesKeyDown
         LinkLabel.LinkLabel.Strings = (
@@ -445,7 +445,7 @@ object FrmEditAchat: TFrmEditAchat
         Indent = 8
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 9
+        TabOrder = 11
         OnChange = vtPersonnesChange
         OnDblClick = vtPersonnesDblClick
         Columns = <>
@@ -457,7 +457,7 @@ object FrmEditAchat: TFrmEditAchat
         Height = 20
         BevelKind = bkTile
         BorderStyle = bsNone
-        TabOrder = 8
+        TabOrder = 10
         OnChange = VDTButton7Click
         LinkLabel.LinkLabel.Strings = (
           'Label19'
@@ -480,7 +480,7 @@ object FrmEditAchat: TFrmEditAchat
         ReadOnly = True
         ShowColumnHeaders = False
         SortType = stBoth
-        TabOrder = 12
+        TabOrder = 14
         ViewStyle = vsReport
         OnKeyDown = lvColoristesKeyDown
         LinkLabel.LinkLabel.Strings = (
@@ -509,7 +509,7 @@ object FrmEditAchat: TFrmEditAchat
         BevelKind = bkTile
         BorderStyle = bsNone
         ScrollBars = ssVertical
-        TabOrder = 15
+        TabOrder = 9
         LinkLabel.LinkLabel.Strings = (
           'Label7')
       end
@@ -522,7 +522,7 @@ object FrmEditAchat: TFrmEditAchat
         BevelKind = bkTile
         BorderStyle = bsNone
         ScrollBars = ssVertical
-        TabOrder = 16
+        TabOrder = 8
         LinkLabel.LinkLabel.Strings = (
           'Label6')
       end
@@ -532,7 +532,7 @@ object FrmEditAchat: TFrmEditAchat
       ImageIndex = 1
       DesignSize = (
         722
-        323)
+        318)
       object VDTButton1: TVDTButton
         Left = 697
         Top = 4
@@ -600,7 +600,7 @@ object FrmEditAchat: TFrmEditAchat
   end
   inline Frame11: TFrame1
     Left = 0
-    Top = 354
+    Top = 349
     Width = 730
     Height = 31
     Align = alBottom

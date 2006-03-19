@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, ExtCtrls, DBCtrls, Mask,
-  Buttons, VDTButton, ComCtrls, DBEditLabeled, VirtualTrees, VirtualTree;
+  Buttons, VDTButton, ComCtrls, DBEditLabeled, VirtualTrees, VirtualTree,
+  Menus, ExtDlgs;
 
 type
   TFrmEditSerie = class(TForm)
@@ -54,6 +55,10 @@ type
     vtPersonnes: TVirtualStringTree;
     Edit2: TEditLabeled;
     lvColoristes: TVDTListViewLabeled;
+    vtParaBD: TVirtualStringTree;
+    Bevel5: TBevel;
+    Label3: TLabel;
+    Label4: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
@@ -77,12 +82,10 @@ type
     procedure edSiteChange(Sender: TObject);
     procedure Edit2Change(Sender: TObject);
     procedure VDTButton8Click(Sender: TObject);
-    procedure vtPersonnesChange(Sender: TBaseVirtualTree;
-      Node: PVirtualNode);
+    procedure vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure vtPersonnesDblClick(Sender: TObject);
     procedure btColoristeClick(Sender: TObject);
-    procedure lvColoristesKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure lvColoristesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure ScanEditKeyPress(Sender: TObject; var Key: Char);
   private
     { Déclarations privées }
@@ -98,8 +101,7 @@ type
 implementation
 
 uses
-  Commun, Proc_Gestions, TypeRec, DM_Princ, JvUIB, Procedures,
-  Divers, Textes, StdConvs, ShellAPI;
+  Commun, Proc_Gestions, TypeRec, DM_Princ, JvUIB, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG;
 
 {$R *.DFM}
 
@@ -135,8 +137,7 @@ end;
 
 procedure TFrmEditSerie.Frame11btnOKClick(Sender: TObject);
 var
-  RefEditeur, RefCollection,
-    i: Integer;
+  RefEditeur, RefCollection, i: Integer;
   s: string;
 begin
   if Length(Trim(edTitre.Text)) = 0 then begin
@@ -323,6 +324,10 @@ begin
     vtAlbums.Filtre := 'RefSerie = ' + IntToStr(FRefSerie);
     vtAlbums.Mode := vmAlbumsSerie;
     vtAlbums.FullExpand;
+
+    vtParaBD.Filtre := 'RefSerie = ' + IntToStr(FRefSerie);
+    vtParaBD.Mode := vmParaBDSerie;
+    vtParaBD.FullExpand;
   finally
     lvScenaristes.Items.EndUpdate;
     lvDessinateurs.Items.EndUpdate;
@@ -589,3 +594,4 @@ begin
 end;
 
 end.
+

@@ -40,9 +40,9 @@ uses
 
 }
 
-function CreationAchat(const Valeur: string): Integer;
-function EditionAchat(var Reference: Integer; Creation: Boolean = False; const Valeur: string = ''): Boolean;
-function DelAchat(Ref: Integer): Boolean;
+function CreationAchatAlbum(const Valeur: string): Integer;
+function EditionAchatAlbum(var Reference: Integer; Creation: Boolean = False; const Valeur: string = ''): Boolean;
+function DelAchatAlbum(Ref: Integer): Boolean;
 
 function CreationAlbum(const Valeur: string): Integer;
 function EditionAlbum(var Reference: Integer; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
@@ -75,12 +75,21 @@ function CreationSerie(const Valeur: string): Integer;
 function EditionSerie(var Reference: Integer; Creation: Boolean = False; const Valeur: string = ''): Boolean;
 function DelSupport(Ref: Integer): Boolean;
 
+function CreationParaBD(const Valeur: string): Integer;
+function EditionParaBD(var Reference: Integer; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
+function EditionParaBD(var Reference: Integer; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function DelParaBD(Ref: Integer): Boolean;
+
+function CreationAchatParaBD(const Valeur: string): Integer;
+function EditionAchatParaBD(var Reference: Integer; Creation: Boolean = False; const Valeur: string = ''): Boolean;
+function DelAchatParaBD(Ref: Integer): Boolean;
+
 implementation
 
 uses
   JvUIB, Commun, Form_EditAlbum, Form_EditSerie, Form_EditEmprunteur, Textes, Form_EditEditeur, DM_Princ,
-  Math, Main, Procedures, Form_EditCollection, Form_EditAuteur,
-  Form_EditAchat;
+  Math, Main, Procedures, Form_EditCollection, Form_EditAuteur, Form_EditParaBD, 
+  Form_EditAchatAlbum;
 
 function FindRec(Table, Champ: string; Reference: Integer; WithMessage: Boolean): Boolean;
 begin
@@ -248,23 +257,23 @@ end;
 
 //**********************************************************************************************
 
-function CreationAchat(const Valeur: string): Integer;
+function CreationAchatAlbum(const Valeur: string): Integer;
 begin
-  Result := CreationLambda('', EditionAchat, Valeur, TFrmEditAchat);
+  Result := CreationLambda('', EditionAchatAlbum, Valeur, TFrmEditAchatAlbum);
 end;
 
-function EditionAchat(var Reference: Integer; Creation: Boolean; const Valeur: string): Boolean;
+function EditionAchatAlbum(var Reference: Integer; Creation: Boolean; const Valeur: string): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;
-  f: TFrmEditAchat;
+  f: TFrmEditAchatAlbum;
 begin
   Result := False;
-  if Fond.IsShowing(TFrmEditAchat) then Exit;
+  if Fond.IsShowing(TFrmEditAchatAlbum) then Exit;
   if not Creation and not FindRec('ALBUMS', 'REFALBUM', Reference, True) then Exit;
   hg := THourGlass.Create;
   me := TModeEditing.Create;
-  f := TFrmEditAchat.Create(Application);
+  f := TFrmEditAchatAlbum.Create(Application);
   with f do try
     RefAlbum := Reference;
     if Creation then edTitre.Text := Valeur;
@@ -277,7 +286,7 @@ begin
   end;
 end;
 
-function DelAchat(Ref: Integer): Boolean;
+function DelAchatAlbum(Ref: Integer): Boolean;
 begin
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -526,6 +535,95 @@ end;
 function DelEmprunteur(Ref: Integer): Boolean;
 begin
   Result := DelLambda('Emprunteurs', 'RefEmprunteur', Ref);
+end;
+//**********************************************************************************************
+
+function CreationParaBD(const Valeur: string): Integer;
+begin
+  Result := CreationLambda('AI_REFParaBD', EditionParaBD, Valeur, TFrmEditParaBD);
+end;
+
+function EditionParaBD(var Reference: Integer; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean;
+var
+  hg: IHourGlass;
+  me: IModeEditing;
+  f: TFrmEditParaBD;
+begin
+  Result := False;
+  if Fond.IsShowing(TFrmEditParaBD) then Exit;
+  if not Creation and not FindRec('ParaBD', 'REFParaBD', Reference, True) then Exit;
+  hg := THourGlass.Create;
+  me := TModeEditing.Create;
+  f := TFrmEditParaBD.Create(Application);
+  with f do try
+    isAchat := Achat;
+    RefParaBD := Reference;
+    if Creation then edTitre.Text := Valeur;
+    hg := nil;
+    Result := Fond.SetModalChildForm(f) = mrOk;
+  finally
+    Free;
+  end;
+end;
+
+function EditionParaBD(var Reference: Integer; Creation: Boolean; const Valeur: string): Boolean;
+begin
+  Result := EditionParaBD(Reference, Creation, Valeur, False);
+end;
+
+function DelParaBD(Ref: Integer): Boolean;
+begin
+  Result := DelLambda('ParaBD', 'REFParaBD', Ref);
+end;
+//**********************************************************************************************
+function CreationAchatParaBD(const Valeur: string): Integer;
+begin
+  Result := CreationLambda('', EditionAchatParaBD, Valeur, TFrmEditParaBD);
+end;
+
+function EditionAchatParaBD(var Reference: Integer; Creation: Boolean; const Valeur: string): Boolean;
+var
+  hg: IHourGlass;
+  me: IModeEditing;
+  f: TFrmEditParaBD;
+begin
+  Result := False;
+  if Fond.IsShowing(TFrmEditAchatParaBD) then Exit;
+  if not Creation and not FindRec('ParaBD', 'REFParaBD', Reference, True) then Exit;
+  hg := THourGlass.Create;
+  me := TModeEditing.Create;
+  f := TFrmEditAchatParaBD.Create(Application);
+  with f do try
+    RefParaBD := Reference;
+    if Creation then edTitre.Text := Valeur;
+    hg := nil;
+    Result := Fond.SetModalChildForm(f) = mrOk;
+    if Result then
+      Reference := RefParaBD;
+  finally
+    Free;
+  end;
+end;
+
+function DelAchatParaBD(Ref: Integer): Boolean;
+begin
+  with TJvUIBQuery.Create(nil) do try
+    Transaction := GetTransaction(DMPrinc.UIBDataBase);
+    SQL.Text := 'SELECT COMPLET FROM ParaBD WHERE REFParaBD = ?';
+    Params.AsInteger[0] := Ref;
+    Open;
+    if Fields.AsInteger[0] = 1 then begin
+      SQL.Text := 'UPDATE ParaBD SET ACHAT = 0 WHERE REFParaBD = ?';
+      Params.AsInteger[0] := Ref;
+      Execute;
+      Result := True;
+    end
+    else
+      Result := DelParaBD(Ref);
+  finally
+    Transaction.Free;
+    Free;
+  end;
 end;
 //**********************************************************************************************
 end.
