@@ -13,7 +13,7 @@ namespace BD.PPC.Application
 	internal class ClassMain
 	{
 		private static SplashForm splash; // = null;
-		public static Répertoire mainform;
+		public static Repertoire mainform;
 
 		private static void CloseSplash()
 		{
@@ -36,7 +36,7 @@ namespace BD.PPC.Application
 				splash.Label = "Vérification des versions...";
 				if (!CheckVersion()) throw new Exception("Erreur de version");
 				splash.Label = "Création de la fenêtre principale...";
-				mainform = new Répertoire(); 
+				mainform = new Repertoire(); 
 
 				System.Threading.Thread splashClose = new System.Threading.Thread(new System.Threading.ThreadStart(CloseSplash));
 				splashClose.Start();
