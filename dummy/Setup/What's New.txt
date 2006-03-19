@@ -1,3 +1,10 @@
+-=-=-=-=-=-    1.0.0.5 - ??/??/????   -=-=-=-=-=-
+
+* Nouveautés *
+      - Possibilité de coter les éditions (l'historique est conservé mais non exploité pour le moment)
+      - Choix de la catégorie d'image (Couverture, Page de garde, Planche, 4ème de couverture, Dédicace)
+      - Fiche de consultation de Série
+
 -=-=-=-=-=-    1.0.0.2 - 11/08/2005   -=-=-=-=-=-
 
 * Nouveautés *
