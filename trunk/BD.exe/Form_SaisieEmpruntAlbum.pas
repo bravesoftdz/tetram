@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, DBCtrls, ComCtrls, ExtCtrls, Fram_Boutons, VDTButton,
   ScanEdit, Menus, Buttons, Commun, DBEditLabeled, VirtualTrees, VirtualTree,
-  ComboCheck, LoadComplet;
+  ComboCheck, LoadComplet, Frame_RechercheRapide;
 
 type
   TFrmSaisie_EmpruntAlbum = class(TForm)
@@ -17,16 +17,14 @@ type
     VTreeEmprunteur: TVirtualStringTree;
     Label2: TLabel;
     Label3: TLabel;
-    VDTButton2: TVDTButton;
-    ScanEditEmprunteur: TEdit;
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     lccEditions: TLightComboCheck;
+    FrameRechercheRapide1: TFrameRechercheRapide;
     procedure FormCreate(Sender: TObject);
     procedure okClick(Sender: TObject);
     procedure VTreeEmprunteurChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
-    procedure ScanEditEmprunteurClick(Sender: TObject);
     procedure lccEditionsChange(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
@@ -110,6 +108,8 @@ end;
 procedure TFrmSaisie_EmpruntAlbum.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
+  FrameRechercheRapide1.VirtualTreeView := VTreeEmprunteur;
+  FrameRechercheRapide1.ShowNewButton := False;
   FEdition := TEditionComplete.Create;
   VTreeEmprunteur.Mode := vmEmprunteurs;
   date_pret.Date := Date;
@@ -132,11 +132,6 @@ end;
 procedure TFrmSaisie_EmpruntAlbum.VTreeEmprunteurChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
 begin
   Frame11.btnOK.Enabled := RefEmprunteur <> -1;
-end;
-
-procedure TFrmSaisie_EmpruntAlbum.ScanEditEmprunteurClick(Sender: TObject);
-begin
-  VTreeEmprunteur.Find(ScanEditEmprunteur.Text, Sender = VDTButton2);
 end;
 
 procedure TFrmSaisie_EmpruntAlbum.SetRefEdition(const Value: Integer);
@@ -164,3 +159,4 @@ begin
 end;
 
 end.
+

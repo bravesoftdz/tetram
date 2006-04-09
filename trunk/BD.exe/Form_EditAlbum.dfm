@@ -1,6 +1,6 @@
 object FrmEditAlbum: TFrmEditAlbum
-  Left = 1467
-  Top = 128
+  Left = 214
+  Top = 358
   Width = 750
   Height = 856
   ActiveControl = edTitre
@@ -127,26 +127,6 @@ object FrmEditAlbum: TFrmEditAlbum
       Layout = blGlyphBottom
       OnClick = ajoutClick
     end
-    object VDTButton7: TVDTButton
-      Left = 191
-      Top = 146
-      Width = 21
-      Height = 20
-      Cursor = crHandPoint
-      Caption = '...'
-      Flat = True
-      OnClick = VDTButton7Click
-    end
-    object VDTButton8: TVDTButton
-      Left = 212
-      Top = 146
-      Width = 20
-      Height = 20
-      Cursor = crHandPoint
-      Caption = 'N'
-      Flat = True
-      OnClick = VDTButton8Click
-    end
     object Label19: TLabel
       Left = 12
       Top = 150
@@ -228,17 +208,6 @@ object FrmEditAlbum: TFrmEditAlbum
       Caption = 'S'#233'rie:'
       FocusControl = remarques
     end
-    object VDTButton12: TVDTButton
-      Left = 697
-      Top = 146
-      Width = 20
-      Height = 20
-      Cursor = crHandPoint
-      Anchors = [akTop, akRight]
-      Caption = '...'
-      Flat = True
-      OnClick = Edit3Change
-    end
     object btColoriste: TVDTButton
       Tag = 3
       Left = 236
@@ -269,17 +238,6 @@ object FrmEditAlbum: TFrmEditAlbum
       FocusControl = edTome
       Layout = tlCenter
     end
-    object VDTButton11: TVDTButton
-      Left = 717
-      Top = 146
-      Width = 21
-      Height = 20
-      Cursor = crHandPoint
-      Anchors = [akTop, akRight]
-      Caption = 'N'
-      Flat = True
-      OnClick = VDTButton11Click
-    end
     object Label5: TLabel
       Left = 406
       Top = 293
@@ -288,17 +246,6 @@ object FrmEditAlbum: TFrmEditAlbum
       Alignment = taRightJustify
       Caption = 'Editeur:'
     end
-    object VDTButton1: TVDTButton
-      Left = 696
-      Top = 290
-      Width = 20
-      Height = 20
-      Cursor = crHandPoint
-      Anchors = [akTop, akRight]
-      Caption = '...'
-      Flat = True
-      OnClick = EditLabeled1Click
-    end
     object Label8: TLabel
       Left = 394
       Top = 384
@@ -306,17 +253,6 @@ object FrmEditAlbum: TFrmEditAlbum
       Height = 13
       Alignment = taRightJustify
       Caption = 'Collection:'
-    end
-    object VDTButton2: TVDTButton
-      Left = 696
-      Top = 380
-      Width = 20
-      Height = 20
-      Cursor = crHandPoint
-      Anchors = [akTop, akRight]
-      Caption = '...'
-      Flat = True
-      OnClick = EditLabeled2Click
     end
     object Label4: TLabel
       Left = 13
@@ -360,29 +296,6 @@ object FrmEditAlbum: TFrmEditAlbum
       Height = 6
       Anchors = [akLeft, akTop, akRight]
       Shape = bsTopLine
-    end
-    object VDTButton9: TVDTButton
-      Left = 717
-      Top = 290
-      Width = 21
-      Height = 20
-      Cursor = crHandPoint
-      Anchors = [akTop, akRight]
-      Caption = 'N'
-      Flat = True
-      OnClick = VDTButton9Click
-    end
-    object VDTButton10: TVDTButton
-      Left = 717
-      Top = 380
-      Width = 21
-      Height = 20
-      Cursor = crHandPoint
-      Anchors = [akTop, akRight]
-      Caption = 'N'
-      Enabled = False
-      Flat = True
-      OnClick = VDTButton10Click
     end
     object Label15: TLabel
       Left = 412
@@ -712,9 +625,14 @@ object FrmEditAlbum: TFrmEditAlbum
         ParentCtl3D = False
         TabOrder = 5
         OnChange = edPrixChange
-        LinkLabel.LinkLabel.Strings = (
-          'Label9'
-          'SpeedButton3')
+        LinkLabel.LinkControls = <>
+        LinkControls = <
+          item
+            Control = Label9
+          end
+          item
+            Control = SpeedButton3
+          end>
         TypeDonnee = tdCurrency
         CurrencyChar = #0
       end
@@ -728,8 +646,11 @@ object FrmEditAlbum: TFrmEditAlbum
         MaxLength = 4
         TabOrder = 0
         OnChange = edAnneeEditionChange
-        LinkLabel.LinkLabel.Strings = (
-          'Label10')
+        LinkLabel.LinkControls = <>
+        LinkControls = <
+          item
+            Control = Label10
+          end>
         TypeDonnee = tdEntier
         CurrencyChar = #0
       end
@@ -749,9 +670,17 @@ object FrmEditAlbum: TFrmEditAlbum
         TabOrder = 6
         OnChange = edISBNChange
         OnExit = edISBNExit
-        LinkLabel.LinkLabel.Strings = (
-          'Label11'
-          'VDTButton6')
+        LinkLabel.LinkControls = <>
+        LinkControls = <
+          item
+            Control = Label11
+          end
+          item
+            Control = VDTButton6
+          end
+          item
+            Control = VDTButton13
+          end>
         TypeDonnee = tdISBN
         CurrencyChar = #0
       end
@@ -767,6 +696,11 @@ object FrmEditAlbum: TFrmEditAlbum
         TabOrder = 7
         LinkLabel.LinkLabel.Strings = (
           'cbVO')
+        LinkLabel.LinkControls = <>
+        LinkControls = <
+          item
+            Control = cbVO
+          end>
       end
       object cbCouleur: TCheckBoxLabeled
         Left = 38
@@ -782,6 +716,11 @@ object FrmEditAlbum: TFrmEditAlbum
         TabOrder = 8
         LinkLabel.LinkLabel.Strings = (
           'cbCouleur')
+        LinkLabel.LinkControls = <>
+        LinkControls = <
+          item
+            Control = cbCouleur
+          end>
       end
       object cbStock: TCheckBoxLabeled
         Left = 38
@@ -796,6 +735,11 @@ object FrmEditAlbum: TFrmEditAlbum
         TabOrder = 3
         LinkLabel.LinkLabel.Strings = (
           'cbStock')
+        LinkLabel.LinkControls = <>
+        LinkControls = <
+          item
+            Control = cbStock
+          end>
       end
       object cbDedicace: TCheckBoxLabeled
         Left = 38
@@ -809,6 +753,11 @@ object FrmEditAlbum: TFrmEditAlbum
         TabOrder = 9
         LinkLabel.LinkLabel.Strings = (
           'cbDedicace')
+        LinkLabel.LinkControls = <>
+        LinkControls = <
+          item
+            Control = cbDedicace
+          end>
       end
       object dtpAchat: TDateTimePickerLabeled
         Left = 254
@@ -820,6 +769,11 @@ object FrmEditAlbum: TFrmEditAlbum
         ShowCheckbox = True
         Checked = False
         TabOrder = 2
+        LinkLabel.LinkControls = <>
+        LinkControls = <
+          item
+            Control = Label18
+          end>
       end
       object cbGratuit: TCheckBoxLabeled
         Left = 118
@@ -834,6 +788,11 @@ object FrmEditAlbum: TFrmEditAlbum
         OnClick = cbGratuitClick
         LinkLabel.LinkLabel.Strings = (
           'cbVO')
+        LinkLabel.LinkControls = <>
+        LinkControls = <
+          item
+            Control = cbGratuit
+          end>
       end
       object cbOffert: TCheckBoxLabeled
         Left = 118
@@ -848,6 +807,11 @@ object FrmEditAlbum: TFrmEditAlbum
         OnClick = cbOffertClick
         LinkLabel.LinkLabel.Strings = (
           'cbVO')
+        LinkLabel.LinkControls = <>
+        LinkControls = <
+          item
+            Control = cbOffert
+          end>
       end
       object edNombreDePages: TEditLabeled
         Left = 38
@@ -861,6 +825,11 @@ object FrmEditAlbum: TFrmEditAlbum
         OnChange = edAnneeEditionChange
         LinkLabel.LinkLabel.Strings = (
           'Label21')
+        LinkLabel.LinkControls = <>
+        LinkControls = <
+          item
+            Control = Label21
+          end>
         TypeDonnee = tdEntier
         CurrencyChar = #0
       end
@@ -875,6 +844,11 @@ object FrmEditAlbum: TFrmEditAlbum
         TabOrder = 11
         LinkLabel.LinkLabel.Strings = (
           'Label24')
+        LinkLabel.LinkControls = <>
+        LinkControls = <
+          item
+            Control = Label24
+          end>
         TypeDonnee = tdEntier
         CurrencyChar = #0
       end
@@ -893,6 +867,14 @@ object FrmEditAlbum: TFrmEditAlbum
         LinkLabel.LinkLabel.Strings = (
           'Label25'
           'VDTButton14')
+        LinkLabel.LinkControls = <>
+        LinkControls = <
+          item
+            Control = Label25
+          end
+          item
+            Control = VDTButton14
+          end>
         TypeDonnee = tdCurrency
         CurrencyChar = #0
       end
@@ -908,6 +890,11 @@ object FrmEditAlbum: TFrmEditAlbum
       TabOrder = 3
       LinkLabel.LinkLabel.Strings = (
         'Label3')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = Label3
+        end>
       TypeDonnee = tdEntier
       CurrencyChar = #0
     end
@@ -923,6 +910,11 @@ object FrmEditAlbum: TFrmEditAlbum
       OnChange = edTitreChange
       LinkLabel.LinkLabel.Strings = (
         'Label2')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = Label2
+        end>
       CurrencyChar = #0
     end
     object histoire: TMemoLabeled
@@ -937,6 +929,11 @@ object FrmEditAlbum: TFrmEditAlbum
       TabOrder = 8
       LinkLabel.LinkLabel.Strings = (
         'Label6')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = Label6
+        end>
     end
     object remarques: TMemoLabeled
       Left = 384
@@ -950,6 +947,11 @@ object FrmEditAlbum: TFrmEditAlbum
       TabOrder = 9
       LinkLabel.LinkLabel.Strings = (
         'Label7')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = Label7
+        end>
     end
     object lvScenaristes: TVDTListViewLabeled
       Left = 305
@@ -972,6 +974,11 @@ object FrmEditAlbum: TFrmEditAlbum
       OnKeyDown = lvDessinateursKeyDown
       LinkLabel.LinkLabel.Strings = (
         'btScenariste')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = btScenariste
+        end>
     end
     object lvDessinateurs: TVDTListViewLabeled
       Left = 305
@@ -994,6 +1001,11 @@ object FrmEditAlbum: TFrmEditAlbum
       OnKeyDown = lvDessinateursKeyDown
       LinkLabel.LinkLabel.Strings = (
         'btDessinateur')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = btDessinateur
+        end>
     end
     object vtPersonnes: TVirtualStringTree
       Left = 56
@@ -1022,21 +1034,6 @@ object FrmEditAlbum: TFrmEditAlbum
       OnChange = vtPersonnesChange
       OnDblClick = vtPersonnesDblClick
       Columns = <>
-    end
-    object Edit2: TEditLabeled
-      Left = 56
-      Top = 146
-      Width = 135
-      Height = 20
-      BevelKind = bkTile
-      BorderStyle = bsNone
-      TabOrder = 10
-      OnChange = VDTButton7Click
-      LinkLabel.LinkLabel.Strings = (
-        'Label19'
-        'VDTButton7'
-        'VDTButton8')
-      CurrencyChar = #0
     end
     object vstImages: TVirtualStringTree
       Left = 56
@@ -1078,22 +1075,6 @@ object FrmEditAlbum: TFrmEditAlbum
           Position = 0
           Width = 100
         end>
-    end
-    object Edit3: TEditLabeled
-      Left = 550
-      Top = 146
-      Width = 148
-      Height = 20
-      Anchors = [akLeft, akTop, akRight]
-      BevelKind = bkTile
-      BorderStyle = bsNone
-      TabOrder = 15
-      OnChange = Edit3Change
-      LinkLabel.LinkLabel.Strings = (
-        'Label20'
-        'VDTButton11'
-        'VDTButton12')
-      CurrencyChar = #0
     end
     object vtSeries: TVirtualStringTree
       Left = 550
@@ -1145,6 +1126,11 @@ object FrmEditAlbum: TFrmEditAlbum
       OnKeyDown = lvDessinateursKeyDown
       LinkLabel.LinkLabel.Strings = (
         'btColoriste')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = btColoriste
+        end>
     end
     object cbIntegrale: TCheckBoxLabeled
       Left = 316
@@ -1159,6 +1145,11 @@ object FrmEditAlbum: TFrmEditAlbum
       OnClick = cbIntegraleClick
       LinkLabel.LinkLabel.Strings = (
         'cbIntegrale')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = cbIntegrale
+        end>
     end
     object edTome: TEditLabeled
       Left = 56
@@ -1171,22 +1162,12 @@ object FrmEditAlbum: TFrmEditAlbum
       TabOrder = 1
       LinkLabel.LinkLabel.Strings = (
         'Label1')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = Label1
+        end>
       TypeDonnee = tdEntier
-      CurrencyChar = #0
-    end
-    object EditLabeled1: TEditLabeled
-      Left = 446
-      Top = 290
-      Width = 251
-      Height = 20
-      Anchors = [akLeft, akTop, akRight]
-      BevelKind = bkTile
-      BorderStyle = bsNone
-      TabOrder = 18
-      OnChange = EditLabeled1Click
-      LinkLabel.LinkLabel.Strings = (
-        'Label5'
-        'VDTButton1')
       CurrencyChar = #0
     end
     object vtEditeurs: TVirtualStringTree
@@ -1218,21 +1199,6 @@ object FrmEditAlbum: TFrmEditAlbum
       OnClick = vtEditeursClick
       OnDblClick = vtEditeursDblClick
       Columns = <>
-    end
-    object EditLabeled2: TEditLabeled
-      Left = 446
-      Top = 380
-      Width = 251
-      Height = 20
-      Anchors = [akLeft, akTop, akRight]
-      BevelKind = bkTile
-      BorderStyle = bsNone
-      TabOrder = 20
-      OnChange = EditLabeled2Click
-      LinkLabel.LinkLabel.Strings = (
-        'Label8'
-        'VDTButton2')
-      CurrencyChar = #0
     end
     object vtCollections: TVirtualStringTree
       Left = 446
@@ -1286,6 +1252,14 @@ object FrmEditAlbum: TFrmEditAlbum
       LinkLabel.LinkLabel.Strings = (
         'Label4'
         'VDTButton3')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = VDTButton3
+        end
+        item
+          Control = Label4
+        end>
     end
     object cbHorsSerie: TCheckBoxLabeled
       Left = 234
@@ -1299,6 +1273,11 @@ object FrmEditAlbum: TFrmEditAlbum
       TabOrder = 4
       LinkLabel.LinkLabel.Strings = (
         'cbHorsSerie')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = cbHorsSerie
+        end>
     end
     object edNotes: TMemoLabeled
       Left = 446
@@ -1312,6 +1291,11 @@ object FrmEditAlbum: TFrmEditAlbum
       TabOrder = 22
       LinkLabel.LinkLabel.Strings = (
         'Label15')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = Label15
+        end>
     end
     object edTomeDebut: TEditLabeled
       Left = 424
@@ -1326,6 +1310,14 @@ object FrmEditAlbum: TFrmEditAlbum
       LinkLabel.LinkLabel.Strings = (
         'Label16'
         'Label17')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = Label16
+        end
+        item
+          Control = Label17
+        end>
       TypeDonnee = tdEntier
       CurrencyChar = #0
     end
@@ -1342,6 +1334,14 @@ object FrmEditAlbum: TFrmEditAlbum
       LinkLabel.LinkLabel.Strings = (
         'Label16'
         'Label17')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = Label16
+        end
+        item
+          Control = Label17
+        end>
       TypeDonnee = tdEntier
       CurrencyChar = #0
     end
@@ -1356,8 +1356,109 @@ object FrmEditAlbum: TFrmEditAlbum
       TabOrder = 2
       LinkLabel.LinkLabel.Strings = (
         'Label3')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = Label3
+        end>
       TypeDonnee = tdEntier
       CurrencyChar = #0
+    end
+    inline FrameRechercheRapidePersonnes: TFrameRechercheRapide
+      Left = 56
+      Top = 146
+      Width = 177
+      Height = 21
+      TabOrder = 10
+      DesignSize = (
+        177
+        21)
+      inherited btNext: TVDTButton
+        Left = 136
+      end
+      inherited btNew: TVDTButton
+        Left = 156
+      end
+      inherited edSearch: TEditLabeled
+        Width = 137
+        LinkControls = <
+          item
+            Control = Label19
+          end>
+      end
+    end
+    inline FrameRechercheRapideSerie: TFrameRechercheRapide
+      Left = 550
+      Top = 146
+      Width = 188
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 15
+      DesignSize = (
+        188
+        21)
+      inherited btNext: TVDTButton
+        Left = 147
+      end
+      inherited btNew: TVDTButton
+        Left = 167
+      end
+      inherited edSearch: TEditLabeled
+        Width = 148
+        LinkControls = <
+          item
+            Control = Label20
+          end>
+      end
+    end
+    inline FrameRechercheRapideEditeur: TFrameRechercheRapide
+      Left = 446
+      Top = 290
+      Width = 292
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 18
+      DesignSize = (
+        292
+        21)
+      inherited btNext: TVDTButton
+        Left = 251
+      end
+      inherited btNew: TVDTButton
+        Left = 271
+      end
+      inherited edSearch: TEditLabeled
+        Width = 252
+        LinkControls = <
+          item
+            Control = Label5
+          end>
+      end
+    end
+    inline FrameRechercheRapideCollection: TFrameRechercheRapide
+      Left = 446
+      Top = 380
+      Width = 292
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 20
+      DesignSize = (
+        292
+        21)
+      inherited btNext: TVDTButton
+        Left = 251
+      end
+      inherited btNew: TVDTButton
+        Left = 271
+        Enabled = False
+      end
+      inherited edSearch: TEditLabeled
+        Width = 252
+        LinkControls = <
+          item
+            Control = Label8
+          end>
+      end
     end
   end
   object Panel2: TPanel

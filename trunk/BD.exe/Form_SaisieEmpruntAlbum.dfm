@@ -71,17 +71,6 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     ParentFont = False
     Layout = tlCenter
   end
-  object VDTButton2: TVDTButton
-    Left = 445
-    Top = 6
-    Width = 26
-    Height = 17
-    Cursor = crHandPoint
-    Anchors = [akTop, akRight]
-    Caption = '...'
-    Flat = True
-    OnClick = ScanEditEmprunteurClick
-  end
   object Label4: TLabel
     Left = 10
     Top = 7
@@ -159,7 +148,7 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     Width = 479
     Height = 23
     Align = alBottom
-    TabOrder = 3
+    TabOrder = 4
     inherited btnOK: TBitBtn
       Left = 319
       Width = 73
@@ -183,9 +172,11 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     CalColors.BackColor = clScrollBar
     Date = 36293.507726388900000000
     Time = 36293.507726388900000000
-    TabOrder = 0
-    LinkLabel.LinkLabel.Strings = (
-      'Label1')
+    TabOrder = 2
+    LinkControls = <
+      item
+        Control = Label1
+      end>
   end
   object pret: TCheckBoxLabeled
     Left = 153
@@ -204,9 +195,11 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     Font.Style = []
     ParentCtl3D = False
     ParentFont = False
-    TabOrder = 1
-    LinkLabel.LinkLabel.Strings = (
-      'pret')
+    TabOrder = 3
+    LinkControls = <
+      item
+        Control = pret
+      end>
   end
   object VTreeEmprunteur: TVirtualStringTree
     Left = 223
@@ -227,19 +220,24 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     Header.MainColumn = -1
     Header.Options = [hoColumnResize, hoDrag]
     Indent = 8
-    TabOrder = 2
+    TabOrder = 1
     OnChange = VTreeEmprunteurChange
     Columns = <>
   end
-  object ScanEditEmprunteur: TEdit
+  inline FrameRechercheRapide1: TFrameRechercheRapide
     Left = 223
     Top = 6
-    Width = 218
-    Height = 17
-    Anchors = [akLeft, akTop, akRight]
-    BevelKind = bkTile
-    BorderStyle = bsNone
-    TabOrder = 4
-    OnChange = ScanEditEmprunteurClick
+    Width = 249
+    Height = 21
+    TabOrder = 0
+    inherited btNext: TVDTButton
+      Left = 208
+    end
+    inherited btNew: TVDTButton
+      Left = 228
+    end
+    inherited edSearch: TEditLabeled
+      Width = 209
+    end
   end
 end

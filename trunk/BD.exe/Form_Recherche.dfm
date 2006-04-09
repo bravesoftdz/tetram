@@ -41,7 +41,7 @@ object FrmRecherche: TFrmRecherche
     Width = 392
     Height = 222
     Cursor = crHandPoint
-    ActivePage = TabSheet4
+    ActivePage = TabSheet3
     Align = alTop
     Style = tsFlatButtons
     TabOrder = 0
@@ -50,22 +50,11 @@ object FrmRecherche: TFrmRecherche
       DesignSize = (
         384
         191)
-      object VDTButton7: TVDTButton
-        Left = 359
-        Top = 2
-        Width = 24
-        Height = 18
-        Cursor = crHandPoint
-        Anchors = [akTop, akRight, akBottom]
-        Caption = '...'
-        Flat = True
-        OnClick = Edit2Change
-      end
       object LightComboCheck1: TLightComboCheck
         Left = 2
-        Top = 1
+        Top = 0
         Width = 119
-        Height = 19
+        Height = 20
         Checked = True
         Border = CCBflat
         DefaultValueChecked = -1
@@ -129,9 +118,9 @@ object FrmRecherche: TFrmRecherche
       end
       object vtPersonnes: TVirtualStringTree
         Left = 2
-        Top = 22
+        Top = 24
         Width = 383
-        Height = 167
+        Height = 165
         Anchors = [akLeft, akTop, akRight, akBottom]
         AnimationDuration = 0
         BackgroundOffsetX = -96
@@ -161,17 +150,22 @@ object FrmRecherche: TFrmRecherche
         OnDblClick = SpeedButton1Click
         Columns = <>
       end
-      object Edit2: TEdit
+      inline FrameRechercheRapide1: TFrameRechercheRapide
         Left = 128
-        Top = 2
-        Width = 233
-        Height = 18
+        Top = 1
+        Width = 256
+        Height = 21
         Anchors = [akLeft, akTop, akRight]
-        BevelKind = bkTile
-        BorderStyle = bsNone
         TabOrder = 1
-        OnChange = Edit2Change
-        OnKeyPress = Edit2KeyPress
+        inherited btNext: TVDTButton
+          Left = 215
+        end
+        inherited btNew: TVDTButton
+          Left = 235
+        end
+        inherited edSearch: TEditLabeled
+          Width = 216
+        end
       end
     end
     object TabSheet4: TTabSheet
@@ -307,7 +301,8 @@ object FrmRecherche: TFrmRecherche
       end>
   end
   object PopupMenu1: TPopupMenu
-    Left = 352
+    Left = 256
+    Top = 336
     object Critre1: TMenuItem
       Caption = 'Crit'#232're'
       OnClick = Critre1Click
@@ -318,7 +313,8 @@ object FrmRecherche: TFrmRecherche
     end
   end
   object ActionList1: TActionList
-    Left = 224
+    Left = 128
+    Top = 336
     object RechercheApercu: TAction
       Tag = 1
       Category = 'Recherche'
@@ -335,7 +331,8 @@ object FrmRecherche: TFrmRecherche
     end
   end
   object MainMenu1: TMainMenu
-    Left = 256
+    Left = 160
+    Top = 336
     object Recherche1: TMenuItem
       Caption = 'Recherche'
       object Exporter1: TMenuItem

@@ -31,12 +31,13 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       522
       779)
     object Label4: TLabel
-      Left = 342
+      Left = 364
       Top = 164
-      Width = 133
+      Width = 89
       Height = 21
+      Alignment = taCenter
       Anchors = [akTop, akRight]
-      Caption = 'Pas de couverture'
+      Caption = 'Pas d'#39'image'
       Font.Charset = ANSI_CHARSET
       Font.Color = clRed
       Font.Height = -17
@@ -44,15 +45,6 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Font.Style = []
       ParentFont = False
       Transparent = True
-    end
-    object Couverture: TImage
-      Left = 301
-      Top = 51
-      Width = 215
-      Height = 246
-      Anchors = [akTop, akRight]
-      Center = True
-      IncrementalDisplay = True
     end
     object l_remarques: TLabel
       Left = 25
@@ -353,6 +345,33 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Height = 3
       Align = alBottom
       Shape = bsSpacer
+    end
+    object Label18: TLabel
+      Left = 351
+      Top = 204
+      Width = 114
+      Height = 42
+      Alignment = taCenter
+      Anchors = [akTop, akRight]
+      Caption = 'Impossible de charger l'#39'image'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clRed
+      Font.Height = -17
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = True
+      Visible = False
+      WordWrap = True
+    end
+    object Couverture: TImage
+      Left = 301
+      Top = 51
+      Width = 215
+      Height = 246
+      Anchors = [akTop, akRight]
+      Center = True
+      IncrementalDisplay = True
     end
     object remarques: TMemo
       Left = 59

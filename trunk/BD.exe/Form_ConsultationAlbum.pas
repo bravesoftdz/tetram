@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls,
-  Main, VDTButton, ActnList, Spin, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, Procedures,
+  Main, VDTButton, ActnList, Spin, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, Procedures, GraphicEx,
   jpeg, ShellAPI, LoadComplet;
 
 type
@@ -100,6 +100,7 @@ type
     edNotes: TMemo;
     cbOffert: TReadOnlyCheckBox;
     cbDedicace: TReadOnlyCheckBox;
+    Label18: TLabel;
     procedure lvScenaristesDblClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -246,40 +247,56 @@ var
   hg: IHourGlass;
   ms: TStream;
   jpg: TJPEGImage;
+  png: TPNGGraphic;
 begin
-  if Bool(FCurrentEdition.Couvertures.Count) then begin
+  Label4.Visible := FCurrentEdition.Couvertures.Count = 0;
+
+  if FCurrentEdition.Couvertures.Count > 0 then begin
     hg := THourGlass.Create;
     if Num < 0 then Num := Pred(FCurrentEdition.Couvertures.Count);
     if Num > Pred(FCurrentEdition.Couvertures.Count) then Num := 0;
     CurrentCouverture := Num;
     Couverture.Picture := nil;
-    ms := GetCouvertureStream(False, TCouverture(FCurrentEdition.Couvertures[Num]).Reference, Couverture.Height, Couverture.Width, Utilisateur.Options.AntiAliasing);
-    if Assigned(ms) then try
-      jpg := TJPEGImage.Create;
-      try
-        jpg.LoadFromStream(ms);
-        Couverture.Picture.Assign(jpg);
+    try
+      ms := GetCouvertureStream(False, TCouverture(FCurrentEdition.Couvertures[Num]).Reference, Couverture.Height, Couverture.Width, Utilisateur.Options.AntiAliasing);
+      if Assigned(ms) then try
+        jpg := TJPEGImage.Create;
+        try
+          jpg.LoadFromStream(ms);
+          Couverture.Picture.Assign(jpg);
+          Couverture.Transparent := False;
+        finally
+          FreeAndNil(jpg);
+        end;
       finally
-        FreeAndNil(jpg);
-      end;
-    finally
-      FreeAndNil(ms);
-    end
-    else
+        FreeAndNil(ms);
+      end
+      else
+        Couverture.Picture.Assign(nil);
+    except
       Couverture.Picture.Assign(nil);
+    end;
+
+    Label18.Visible := not Assigned(Couverture.Picture.Graphic);
+    if Label18.Visible then begin
+      Couverture.OnDblClick := nil;
+      Couverture.Cursor := crDefault;
+      png := TPNGGraphic.Create;
+      try
+        png.LoadFromResourceName(HInstance, 'IMAGENONVALIDE');
+        Couverture.Picture.Assign(png);
+        Couverture.Transparent := True;
+      finally
+        FreeAndNil(png);
+      end;
+    end
+    else begin
+      Couverture.OnDblClick := CouvertureDblClick;
+      Couverture.Cursor := crHandPoint;
+    end;
   end
   else
     Couverture.Picture.Assign(nil);
-
-  Label4.Visible := not Assigned(Couverture.Picture.Graphic);
-  if Label4.Visible then begin
-    Couverture.OnDblClick := nil;
-    Couverture.Cursor := crDefault;
-  end
-  else begin
-    Couverture.OnDblClick := CouvertureDblClick;
-    Couverture.Cursor := crHandPoint;
-  end;
 end;
 
 procedure TFrmConsultationAlbum.FormShow(Sender: TObject);

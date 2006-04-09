@@ -107,6 +107,11 @@ object FrmEditAuteur: TFrmEditAuteur
       TabOrder = 2
       LinkLabel.LinkLabel.Strings = (
         'Label1')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = Label1
+        end>
     end
     object edNom: TEditLabeled
       Left = 64
@@ -119,6 +124,11 @@ object FrmEditAuteur: TFrmEditAuteur
       TabOrder = 0
       LinkLabel.LinkLabel.Strings = (
         'Label3')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = Label3
+        end>
       CurrencyChar = #0
     end
     object edSite: TEditLabeled
@@ -136,6 +146,11 @@ object FrmEditAuteur: TFrmEditAuteur
       OnChange = edSiteChange
       LinkLabel.LinkLabel.Strings = (
         'Label1')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = Label2
+        end>
       CurrencyChar = #0
     end
   end

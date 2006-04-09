@@ -661,7 +661,7 @@ begin
                       Text := '';
                     if Editable then begin
                       with TEditLabeled(c) do begin
-                        LinkLabel.LinkLabel.Add(l.Name);
+                        LinkControls.Add(l);
                         case TypeChamp of
                           uftChar, uftVarchar: TypeDonnee := tdChaine;
                           uftInteger: TypeDonnee := tdEntierSigne;
@@ -727,7 +727,7 @@ begin
                     WordWrap := True;
                     if Editable then begin
                       with TMemoLabeled(c) do begin
-                        LinkLabel.LinkLabel.Add(l.Name);
+                        LinkControls.Add(l);
                       end;
                     end
                     else begin
@@ -766,7 +766,7 @@ begin
                       Text := '';
                     if Editable then begin
                       with TEditLabeled(c) do begin
-                        LinkLabel.LinkLabel.Add(l.Name);
+                        LinkControls.Add(l);
                         case TypeChamp of
                           uftDate: TypeDonnee := tdDate;
                           uftTime: TypeDonnee := tdHeure;

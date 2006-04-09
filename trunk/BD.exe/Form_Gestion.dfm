@@ -5,7 +5,7 @@ object FrmGestions: TFrmGestions
   BorderStyle = bsSingle
   Caption = 'FrmGestions'
   ClientHeight = 345
-  ClientWidth = 644
+  ClientWidth = 705
   Color = clBtnFace
   Constraints.MinHeight = 230
   Constraints.MinWidth = 485
@@ -18,24 +18,14 @@ object FrmGestions: TFrmGestions
   Position = poScreenCenter
   OnCreate = FormCreate
   DesignSize = (
-    644
+    705
     345)
   PixelsPerInch = 96
   TextHeight = 13
-  object VDTButton1: TVDTButton
-    Left = 452
-    Top = 41
-    Width = 21
-    Height = 18
-    Cursor = crHandPoint
-    Caption = '...'
-    Flat = True
-    OnClick = VDTButton1Click
-  end
   object Panel3: TPanel
     Left = 104
     Top = 0
-    Width = 540
+    Width = 601
     Height = 38
     Anchors = [akLeft, akTop, akRight]
     BevelInner = bvRaised
@@ -117,7 +107,7 @@ object FrmGestions: TFrmGestions
   object VirtualTreeView: TVirtualStringTree
     Left = 105
     Top = 62
-    Width = 537
+    Width = 598
     Height = 281
     Anchors = [akLeft, akTop, akRight, akBottom]
     AnimationDuration = 0
@@ -337,15 +327,21 @@ object FrmGestions: TFrmGestions
       OnClick = SpeedButton1Click
     end
   end
-  object ScanEdit: TEdit
-    Left = 105
-    Top = 41
-    Width = 345
-    Height = 18
-    BevelKind = bkTile
-    BorderStyle = bsNone
+  inline FrameRechercheRapide1: TFrameRechercheRapide
+    Left = 106
+    Top = 40
+    Width = 366
+    Height = 21
     TabOrder = 3
-    OnChange = VDTButton1Click
-    OnKeyPress = ScanEditKeyPress
+    inherited btNext: TVDTButton
+      Left = 325
+    end
+    inherited btNew: TVDTButton
+      Left = 345
+    end
+    inherited edSearch: TEditLabeled
+      Width = 326
+      OnKeyPress = ScanEditKeyPress
+    end
   end
 end

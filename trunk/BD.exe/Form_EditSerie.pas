@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, ExtCtrls, DBCtrls, Mask,
   Buttons, VDTButton, ComCtrls, DBEditLabeled, VirtualTrees, VirtualTree,
-  Menus, ExtDlgs;
+  Menus, ExtDlgs, Frame_RechercheRapide;
 
 type
   TFrmEditSerie = class(TForm)
@@ -15,21 +15,12 @@ type
     btnAnnuler: TBitBtn;
     ScrollBox2: TScrollBox;
     Label5: TLabel;
-    VDTButton1: TVDTButton;
     Label8: TLabel;
-    VDTButton2: TVDTButton;
-    VDTButton9: TVDTButton;
-    VDTButton10: TVDTButton;
-    EditLabeled1: TEditLabeled;
     vtEditeurs: TVirtualStringTree;
-    EditLabeled2: TEditLabeled;
     vtCollections: TVirtualStringTree;
     Label2: TLabel;
     edTitre: TEditLabeled;
     Label17: TLabel;
-    ScanEdit: TEditLabeled;
-    VDTButton3: TVDTButton;
-    VDTButton4: TVDTButton;
     vtGenres: TVirtualStringTree;
     Label15: TLabel;
     Bevel3: TBevel;
@@ -46,31 +37,27 @@ type
     Label1: TLabel;
     btScenariste: TVDTButton;
     btDessinateur: TVDTButton;
-    VDTButton7: TVDTButton;
-    VDTButton8: TVDTButton;
     Label19: TLabel;
     btColoriste: TVDTButton;
     lvScenaristes: TVDTListViewLabeled;
     lvDessinateurs: TVDTListViewLabeled;
     vtPersonnes: TVirtualStringTree;
-    Edit2: TEditLabeled;
     lvColoristes: TVDTListViewLabeled;
     vtParaBD: TVirtualStringTree;
     Bevel5: TBevel;
     Label3: TLabel;
     Label4: TLabel;
+    FrameRechercheRapidePersonnes: TFrameRechercheRapide;
+    FrameRechercheRapideGenre: TFrameRechercheRapide;
+    FrameRechercheRapideCollection: TFrameRechercheRapide;
+    FrameRechercheRapideEditeur: TFrameRechercheRapide;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
     procedure btnAnnulerClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure VDTButton9Click(Sender: TObject);
-    procedure ScanEditClick(Sender: TObject);
-    procedure VDTButton4Click(Sender: TObject);
-    procedure VDTButton10Click(Sender: TObject);
+    procedure OnNewCollection(Sender: TObject);
     procedure edTitreChange(Sender: TObject);
-    procedure EditLabeled1Click(Sender: TObject);
-    procedure EditLabeled2Click(Sender: TObject);
     procedure vtEditeursChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure vtGenresInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure vtGenresChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
@@ -80,8 +67,6 @@ type
     procedure vtAlbumsDblClick(Sender: TObject);
     procedure VDTButton13Click(Sender: TObject);
     procedure edSiteChange(Sender: TObject);
-    procedure Edit2Change(Sender: TObject);
-    procedure VDTButton8Click(Sender: TObject);
     procedure vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure vtPersonnesDblClick(Sender: TObject);
     procedure btColoristeClick(Sender: TObject);
@@ -113,10 +98,11 @@ const
 procedure TFrmEditSerie.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  vtPersonnes.LinkLabel.Assign(Edit2.LinkLabel);
-  vtEditeurs.LinkLabel.Assign(EditLabeled1.LinkLabel);
-  vtCollections.LinkLabel.Assign(EditLabeled2.LinkLabel);
-  vtGenres.LinkLabel.Assign(ScanEdit.LinkLabel);
+  FrameRechercheRapidePersonnes.VirtualTreeView := vtPersonnes;
+  FrameRechercheRapideEditeur.VirtualTreeView := vtEditeurs;
+  FrameRechercheRapideCollection.VirtualTreeView := vtCollections;
+  FrameRechercheRapideCollection.OnNew := OnNewCollection;
+  FrameRechercheRapideGenre.VirtualTreeView := vtGenres;
   FLstGenre := TStringList.Create;
   FLstGenre.Sorted := True;
   vtGenres.Mode := vmGenres;
@@ -347,39 +333,14 @@ begin
   edTitre.SetFocus;
 end;
 
-procedure TFrmEditSerie.VDTButton9Click(Sender: TObject);
+procedure TFrmEditSerie.OnNewCollection(Sender: TObject);
 begin
-  AjouterEditeurs(vtEditeurs, EditLabeled1.Text);
-end;
-
-procedure TFrmEditSerie.ScanEditClick(Sender: TObject);
-begin
-  vtGenres.Find(ScanEdit.Text, Sender = VDTButton2);
-end;
-
-procedure TFrmEditSerie.VDTButton4Click(Sender: TObject);
-begin
-  AjouterGenres(vtGenres, ScanEdit.Text);
-end;
-
-procedure TFrmEditSerie.VDTButton10Click(Sender: TObject);
-begin
-  AjouterCollections(vtCollections, vtEditeurs.CurrentValue, EditLabeled2.Text);
+  AjouterCollections(vtCollections, vtEditeurs.CurrentValue, FrameRechercheRapideCollection.edSearch.Text);
 end;
 
 procedure TFrmEditSerie.edTitreChange(Sender: TObject);
 begin
   Caption := 'Saisie de série - ' + FormatTitre(edTitre.Text);
-end;
-
-procedure TFrmEditSerie.EditLabeled1Click(Sender: TObject);
-begin
-  vtEditeurs.Find(EditLabeled1.Text, Sender = VDTButton1);
-end;
-
-procedure TFrmEditSerie.EditLabeled2Click(Sender: TObject);
-begin
-  vtCollections.Find(EditLabeled2.Text, Sender = VDTButton2);
 end;
 
 procedure TFrmEditSerie.vtEditeursChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
@@ -394,7 +355,7 @@ begin
     vtCollections.Filtre := 'RefEditeur = ' + IntToStr(RefEditeur);
     if vtCollections.Mode <> vmCollections then vtCollections.Mode := vmCollections;
   end;
-  VDTButton10.Enabled := RefEditeur <> -1;
+  FrameRechercheRapideCollection.btNew.Enabled := RefEditeur <> -1;
 end;
 
 procedure TFrmEditSerie.vtGenresInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
@@ -462,16 +423,6 @@ end;
 procedure TFrmEditSerie.edSiteChange(Sender: TObject);
 begin
   VDTButton13.Enabled := Copy(LowerCase(edSite.Text), 1, 7) = 'http://';
-end;
-
-procedure TFrmEditSerie.Edit2Change(Sender: TObject);
-begin
-  vtPersonnes.Find(Edit2.Text, Sender = VDTButton7);
-end;
-
-procedure TFrmEditSerie.VDTButton8Click(Sender: TObject);
-begin
-  AjouterAuteurs(vtPersonnes, Edit2.Text);
 end;
 
 procedure TFrmEditSerie.vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);

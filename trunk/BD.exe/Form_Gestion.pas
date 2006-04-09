@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, ComCtrls, Db, Menus,
-  ExtCtrls, Buttons, Proc_Gestions, VDTButton, VirtualTrees, VirtualTree;
+  ExtCtrls, Buttons, Proc_Gestions, VDTButton, VirtualTrees, VirtualTree,
+  Frame_RechercheRapide;
 
 type
   TInfo_Gestion = record
@@ -35,8 +36,6 @@ type
     Bevel1: TBevel;
     Bevel3: TBevel;
     VirtualTreeView: TVirtualStringTree;
-    ScanEdit: TEdit;
-    VDTButton1: TVDTButton;
     Bevel2: TBevel;
     Bevel5: TBevel;
     btAchatsAlbums: TVDTButton;
@@ -46,6 +45,7 @@ type
     Bevel8: TBevel;
     btParaBD: TVDTButton;
     btAchatsParaBD: TVDTButton;
+    FrameRechercheRapide1: TFrameRechercheRapide;
     procedure FormCreate(Sender: TObject);
     function GestionCourante(SB: TSpeedButton = nil): TInfo_Gestion;
     procedure ajouterClick(Sender: TObject);
@@ -53,7 +53,6 @@ type
     procedure supprimerClick(Sender: TObject);
     procedure SpeedButton1Click(Sender: TObject);
     procedure VDTButton2Click(Sender: TObject);
-    procedure VDTButton1Click(Sender: TObject);
     procedure ScanEditKeyPress(Sender: TObject; var Key: Char);
     procedure acheterClick(Sender: TObject);
   protected
@@ -159,6 +158,9 @@ procedure TFrmGestions.FormCreate(Sender: TObject);
 begin
   Mode_en_cours := mdEdit;
 
+  FrameRechercheRapide1.VirtualTreeView := VirtualTreeView;
+FrameRechercheRapide1.ShowNewButton := False;
+
   AssignIG(GestionAlbum, AjouterAlbums, ModifierAlbums, SupprimerAlbums,
     HintListeAlbums, HintAjoutAlbum, HintModifAlbum, HintSuppAlbum,
     vmAlbumsSerie);
@@ -183,7 +185,7 @@ begin
   AssignIG(GestionCollection, AjouterCollections, ModifierCollections, SupprimerCollections,
     HintListeCollections, HintAjoutCollection, HintModifCollection, HintSuppCollection,
     vmCollections);
-  AssignIG(GestionParaBD, AjouterCollections, ModifierCollections, SupprimerCollections,
+  AssignIG(GestionParaBD, AjouterParaBD, ModifierParaBD, SupprimerParaBD,
     HintListeParaBD, HintAjoutParaBD, HintModifParaBD, HintSuppParaBD,
     vmParaBDSerie);
   AssignIG(GestionAchatParaBD, AjouterAchatsParaBD, ModifierAchatsParaBD, SupprimerAchatsParaBD,
@@ -197,7 +199,7 @@ end;
 procedure TFrmGestions.ajouterClick(Sender: TObject);
 begin
   with GestionCourante do
-    ProcAjouter(VirtualTreeView, ScanEdit.Text);
+    ProcAjouter(VirtualTreeView, FrameRechercheRapide1.edSearch.Text);
 end;
 
 procedure TFrmGestions.modifierClick(Sender: TObject);
@@ -238,11 +240,6 @@ end;
 procedure TFrmGestions.VDTButton2Click(Sender: TObject);
 begin
   VirtualTreeView.InitializeRep;
-end;
-
-procedure TFrmGestions.VDTButton1Click(Sender: TObject);
-begin
-  VirtualTreeView.Find(ScanEdit.Text, Sender = VDTButton1);
 end;
 
 procedure TFrmGestions.ScanEditKeyPress(Sender: TObject; var Key: Char);

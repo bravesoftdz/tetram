@@ -4,7 +4,8 @@ interface
 
 uses
   SysUtils, Windows, Messages, Classes, Forms, Graphics, Controls, Menus, StdCtrls, Buttons, ComCtrls, ExtCtrls, ToolWin, Commun,
-  CommonList, VirtualTrees, VirtualTree, ActnList, VDTButton, JvUIB, ComboCheck, Procedures;
+  CommonList, VirtualTrees, VirtualTree, ActnList, VDTButton, JvUIB, ComboCheck, Procedures,
+  Frame_RechercheRapide;
 
 type
   PCritere = ^RCritere;
@@ -40,8 +41,6 @@ type
     Splitter1: TSplitter;
     TreeView1: TTreeView;
     vtPersonnes: TVirtualStringTree;
-    Edit2: TEdit;
-    VDTButton7: TVDTButton;
     VTResult: TVirtualStringTree;
     LightComboCheck1: TLightComboCheck;
     MainMenu1: TMainMenu;
@@ -49,6 +48,7 @@ type
     Exporter1: TMenuItem;
     Imprimer1: TMenuItem;
     lbResult: TLabel;
+    FrameRechercheRapide1: TFrameRechercheRapide;
     procedure plusClick(Sender: TObject);
     procedure moinsClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -67,7 +67,6 @@ type
     procedure VTResultGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
     procedure VTResultPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
     procedure VTResultHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure Edit2Change(Sender: TObject);
     procedure LightComboCheck1Change(Sender: TObject);
     procedure Edit2KeyPress(Sender: TObject; var Key: Char);
   private
@@ -211,6 +210,8 @@ begin
   LightComboCheck1.Value := 0;
   ChargeImage(VTPersonnes.Background, 'FONDVT');
   ChargeImage(VTResult.Background, 'FONDVT');
+  FrameRechercheRapide1.VirtualTreeView := vtPersonnes;
+  FrameRechercheRapide1.ShowNewButton := False;
 
   ResultList := TListAlbumAdd.Create;
   ResultInfos := TStringList.Create;
@@ -660,11 +661,6 @@ begin
   VTResult.ReinitNode(VTResult.RootNode, True);
   VTResult.Invalidate;
   VTResult.Refresh;
-end;
-
-procedure TFrmRecherche.Edit2Change(Sender: TObject);
-begin
-  VTPersonnes.Find(Edit2.Text, Sender = VDTButton7);
 end;
 
 procedure TFrmRecherche.LightComboCheck1Change(Sender: TObject);

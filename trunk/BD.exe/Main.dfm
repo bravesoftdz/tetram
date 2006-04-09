@@ -3271,7 +3271,7 @@ object Fond: TFond
       Caption = 'Albums pr'#234't'#233's'
       Hint = 'Ouvre ou r'#233'actualise la fen'#234'tre des emprunts'
       ImageIndex = 2
-      ShortCut = 114
+      ShortCut = 117
       OnExecute = AfficheStockExecute
     end
     object Impression: TAction

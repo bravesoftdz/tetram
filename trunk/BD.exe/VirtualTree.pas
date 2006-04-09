@@ -45,7 +45,8 @@ type
 
   TVirtualStringTree = class(VirtualTrees.TVirtualStringTree)
   private
-    FLabel: TLabelisation;
+    FLinkControls: TControlList;
+
     FMemorizedIndexNode: Boolean;
     FIndexNode: Cardinal;
 
@@ -71,8 +72,10 @@ type
     procedure SetUseDefaultFiltre(const Value: Boolean);
     procedure SetShowAchat(const Value: Boolean);
     procedure SetShowDateParutionAlbum(const Value: Boolean);
+    procedure SetLinkControls(const Value: TControlList);
   public
     constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
   protected
     procedure DoFreeNode(Node: PVirtualNode); override;
     procedure DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var Text: WideString); override;
@@ -86,7 +89,7 @@ type
     procedure DoExit; override;
     procedure DoScroll(DeltaX, DeltaY: Integer); override;
   published
-    property LinkLabel: TLabelisation read FLabel write FLabel;
+    property LinkControls: TControlList read FLinkControls write SetLinkControls;
     property Mode: TVirtualMode read FMode write SetMode;
     property CurrentValue: Integer read GetCurrentValue write SetCurrentValue;
     property Caption: WideString read GetFocusedNodeCaption;
@@ -247,7 +250,7 @@ constructor TVirtualStringTree.Create(AOwner: TComponent);
 begin
   inherited;
   Background.OnChange := BackgroundChange;
-  FLabel := TLabelisation.Create(TWinControl(AOwner));
+  FLinkControls := TControlList.Create;
   FSynchroBackground := False;
   ButtonFillMode := fmShaded;
   ButtonStyle := bsRectangle;
@@ -304,13 +307,13 @@ end;
 
 procedure TVirtualStringTree.DoEnter;
 begin
-  FLabel.DoEnter;
+  FLinkControls.DoEnter;
   inherited;
 end;
 
 procedure TVirtualStringTree.DoExit;
 begin
-  FLabel.DoExit;
+  FLinkControls.DoExit;
   inherited;
 end;
 
@@ -772,6 +775,17 @@ procedure TVirtualStringTree.SetUseFiltre(const Value: Boolean);
 begin
   FUseFiltre := Value;
   InitializeRep(True);
+end;
+
+procedure TVirtualStringTree.SetLinkControls(const Value: TControlList);
+begin
+  FLinkControls.Assign(Value);
+end;
+
+destructor TVirtualStringTree.Destroy;
+begin
+  FLinkControls.Free;
+  inherited;
 end;
 
 end.

@@ -88,6 +88,11 @@ object FrmEditEmprunteur: TFrmEditEmprunteur
       TabOrder = 0
       LinkLabel.LinkLabel.Strings = (
         'Label3')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = Label3
+        end>
       CurrencyChar = #0
     end
   end

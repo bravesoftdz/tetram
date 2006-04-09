@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, DBEditLabeled, VirtualTrees, ComCtrls, VDTButton, JvUIB,
-  ExtCtrls, Buttons, Fram_Boutons, VirtualTree, TypeRec;
+  ExtCtrls, Buttons, Fram_Boutons, VirtualTree, TypeRec,
+  Frame_RechercheRapide;
 
 type
   TFrmEditAchatAlbum = class(TForm)
@@ -13,14 +14,11 @@ type
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;
     Label3: TLabel;
-    VDTButton12: TVDTButton;
-    VDTButton11: TVDTButton;
     Bevel3: TBevel;
     Label16: TLabel;
     Label17: TLabel;
     edAnneeParution: TEditLabeled;
     edTitre: TEditLabeled;
-    Edit3: TEditLabeled;
     vtSeries: TVirtualStringTree;
     cbIntegrale: TCheckBoxLabeled;
     edTome: TEditLabeled;
@@ -30,35 +28,28 @@ type
     Label20: TLabel;
     Label1: TLabel;
     Label2: TLabel;
-    ScanEditAlbum: TEdit;
-    VDTButton1: TVDTButton;
     vstAlbums: TVirtualStringTree;
     Label4: TLabel;
     Frame11: TFrame1;
     btScenariste: TVDTButton;
     btDessinateur: TVDTButton;
-    VDTButton7: TVDTButton;
-    VDTButton8: TVDTButton;
     Label19: TLabel;
     btColoriste: TVDTButton;
     lvScenaristes: TVDTListViewLabeled;
     lvDessinateurs: TVDTListViewLabeled;
     vtPersonnes: TVirtualStringTree;
-    Edit2: TEditLabeled;
     lvColoristes: TVDTListViewLabeled;
     edMoisParution: TEditLabeled;
     remarques: TMemoLabeled;
     Label7: TLabel;
     histoire: TMemoLabeled;
     Label6: TLabel;
+    FrameRechercheRapidePersonnes: TFrameRechercheRapide;
+    FrameRechercheRapideSerie: TFrameRechercheRapide;
+    FrameRechercheRapideAlbums: TFrameRechercheRapide;
     procedure FormCreate(Sender: TObject);
-    procedure VDTButton12Click(Sender: TObject);
-    procedure VDTButton11Click(Sender: TObject);
-    procedure ScanEditAlbumClick(Sender: TObject);
     procedure cbIntegraleClick(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
-    procedure VDTButton8Click(Sender: TObject);
-    procedure VDTButton7Click(Sender: TObject);
     procedure vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure vtPersonnesDblClick(Sender: TObject);
     procedure btScenaristeClick(Sender: TObject);
@@ -111,8 +102,10 @@ begin
   FRefAlbum := -1;
   FCreation := True;
 
-  vtSeries.LinkLabel.Assign(Edit3.LinkLabel);
-  vtPersonnes.LinkLabel.Assign(Edit2.LinkLabel);
+  FrameRechercheRapidePersonnes.VirtualTreeView := vtPersonnes;
+  FrameRechercheRapideSerie.VirtualTreeView := vtSeries;
+  FrameRechercheRapideAlbums.VirtualTreeView := vstAlbums;
+  FrameRechercheRapideAlbums.ShowNewButton := False;
   if Mode_en_cours = mdConsult then begin
     Frame11.Align := alBottom;
     Frame11.btnOK.Caption := 'Ok';
@@ -128,21 +121,6 @@ begin
   FScenaristesSelected := False;
   FDessinateursSelected := False;
   FColoristesSelected := False;
-end;
-
-procedure TFrmEditAchatAlbum.VDTButton12Click(Sender: TObject);
-begin
-  vtSeries.Find(Edit3.Text, Sender = VDTButton12);
-end;
-
-procedure TFrmEditAchatAlbum.VDTButton11Click(Sender: TObject);
-begin
-  AjouterSeries(vtSeries, Edit3.Text);
-end;
-
-procedure TFrmEditAchatAlbum.ScanEditAlbumClick(Sender: TObject);
-begin
-  vstAlbums.Find(ScanEditAlbum.Text, Sender = VDTButton1);
 end;
 
 procedure TFrmEditAchatAlbum.SetRefAlbum(const Value: Integer);
@@ -261,14 +239,14 @@ begin
     end;
     if vtSeries.CurrentValue = -1 then begin
       AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
-      Edit3.SetFocus;
+      FrameRechercheRapideSerie.edSearch.SetFocus;
       ModalResult := mrNone;
       Exit;
     end;
   end
   else if (vstAlbums.CurrentValue = -1) then begin
     AffMessage(rsAlbumObligatoire, mtInformation, [mbOk], True);
-    ScanEditAlbum.SetFocus;
+    FrameRechercheRapideAlbums.edSearch.SetFocus;
     ModalResult := mrNone;
     Exit;
   end;
@@ -372,16 +350,6 @@ begin
     Free;
   end;
   ModalResult := mrOk;
-end;
-
-procedure TFrmEditAchatAlbum.VDTButton8Click(Sender: TObject);
-begin
-  AjouterAuteurs(vtPersonnes, Edit2.Text);
-end;
-
-procedure TFrmEditAchatAlbum.VDTButton7Click(Sender: TObject);
-begin
-  vtPersonnes.Find(Edit2.Text, Sender = VDTButton7);
 end;
 
 procedure TFrmEditAchatAlbum.vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);

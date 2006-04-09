@@ -105,7 +105,8 @@ uses
   UMAJ1_0_0_2 in 'UMAJ1_0_0_2.pas',
   UMAJ1_0_0_3 in 'UMAJ1_0_0_3.pas',
   UMAJ1_1_0_0 in 'UMAJ1_1_0_0.pas',
-  Divers in '..\..\..\..\Common\Divers.pas';
+  Divers in '..\..\..\..\Common\Divers.pas',
+  Frame_RechercheRapide in 'Frame_RechercheRapide.pas' {FrameRechercheRapide: TFrame};
 
 {$R *.RES}
 {$R curseurs.res}

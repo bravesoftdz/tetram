@@ -1,6 +1,6 @@
 object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
-  Left = 204
-  Top = 359
+  Left = 547
+  Top = 219
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'Saisie d'#39'un mouvement'
@@ -43,7 +43,7 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
       Align = alClient
       BevelOuter = bvNone
       Caption = 'Panel2'
-      TabOrder = 0
+      TabOrder = 2
       object Panel5: TPanel
         Left = 0
         Top = 0
@@ -82,7 +82,7 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
           ReadOnly = True
           RowSelect = True
           ShowColumnHeaders = False
-          TabOrder = 0
+          TabOrder = 1
           ViewStyle = vsReport
           OnDblClick = ListView1DblClick
           OnSelectItem = ListView1SelectItem
@@ -96,7 +96,7 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
           AutoSize = True
           BevelOuter = bvNone
           Caption = ' '
-          TabOrder = 1
+          TabOrder = 0
           object VDTButton2: TVDTButton
             Left = 0
             Top = 0
@@ -186,8 +186,10 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
           ParentCtl3D = False
           TabOrder = 1
           OnClick = pretClick
-          LinkLabel.LinkLabel.Strings = (
-            'pret')
+          LinkControls = <
+            item
+              Control = pret
+            end>
         end
         object date_pret: TDateTimePickerLabeled
           Left = 34
@@ -203,8 +205,10 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
           ShowHint = False
           TabOrder = 0
           OnChange = date_pretChange
-          LinkLabel.LinkLabel.Strings = (
-            'Label1')
+          LinkControls = <
+            item
+              Control = Label3
+            end>
         end
       end
     end
@@ -219,7 +223,7 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
       Caption = ' '
       Ctl3D = False
       ParentCtl3D = False
-      TabOrder = 1
+      TabOrder = 0
       object Label2: TLabel
         Left = 2
         Top = 2
@@ -237,21 +241,7 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
       Align = alTop
       BevelOuter = bvNone
       Caption = 'Panel6'
-      TabOrder = 2
-      DesignSize = (
-        525
-        149)
-      object VDTButton1: TVDTButton
-        Left = 499
-        Top = 2
-        Width = 26
-        Height = 20
-        Cursor = crHandPoint
-        Anchors = [akTop, akRight]
-        Caption = '...'
-        Flat = True
-        OnClick = VDTButton1Click
-      end
+      TabOrder = 1
       object vtAlbums: TVirtualStringTree
         Left = 0
         Top = 24
@@ -274,7 +264,7 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
         Indent = 8
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 0
+        TabOrder = 1
         TreeOptions.PaintOptions = [toHotTrack, toShowBackground, toShowButtons, toShowDropmark, toShowRoot, toThemeAware, toUseBlendedImages]
         TreeOptions.StringOptions = [toSaveCaptions]
         OnDblClick = vtAlbumsDblClick
@@ -285,16 +275,21 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
             Width = 521
           end>
       end
-      object ScanEditAlbum: TEdit
+      inline FrameRechercheRapide1: TFrameRechercheRapide
         Left = 0
         Top = 2
-        Width = 495
-        Height = 20
-        Anchors = [akLeft, akTop, akRight]
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        TabOrder = 1
-        OnChange = VDTButton1Click
+        Width = 525
+        Height = 21
+        TabOrder = 0
+        inherited btNext: TVDTButton
+          Left = 484
+        end
+        inherited btNew: TVDTButton
+          Left = 504
+        end
+        inherited edSearch: TEditLabeled
+          Width = 485
+        end
       end
     end
   end

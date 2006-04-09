@@ -1,6 +1,6 @@
 object FrmStock: TFrmStock
-  Left = 144
-  Top = 342
+  Left = 510
+  Top = 341
   Width = 1110
   Height = 607
   Caption = 'Albums emprunt'#233's'
@@ -204,9 +204,13 @@ object FrmStock: TFrmStock
     Height = 21
     MaxLength = 2
     TabOrder = 2
-    LinkLabel.LinkLabel.Strings = (
-      'LightComboCheck1'
-      'LightComboCheck2')
+    LinkControls = <
+      item
+        Control = LightComboCheck1
+      end
+      item
+        Control = LightComboCheck2
+      end>
     TypeDonnee = tdEntier
     CurrencyChar = #0
   end

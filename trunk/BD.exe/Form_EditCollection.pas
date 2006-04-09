@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, VDTButton,
-  Buttons, DBEditLabeled, VirtualTrees, VirtualTree;
+  Buttons, DBEditLabeled, VirtualTrees, VirtualTree, Frame_RechercheRapide;
 
 type
   TFrmEditCollection = class(TForm)
@@ -16,16 +16,12 @@ type
     btnOK: TBitBtn;
     btnAnnuler: TBitBtn;
     Label5: TLabel;
-    EditLabeled1: TEditLabeled;
     vtEditeurs: TVirtualStringTree;
-    VDTButton1: TVDTButton;
-    VDTButton9: TVDTButton;
+    FrameRechercheRapide1: TFrameRechercheRapide;
     procedure FormCreate(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
     procedure Frame11btnAnnulerClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure VDTButton1Click(Sender: TObject);
-    procedure VDTButton9Click(Sender: TObject);
     procedure vtEditeursDblClick(Sender: TObject);
   private
     { Déclarations privées }
@@ -51,6 +47,7 @@ begin
   FRefEditeur := -1;
   PrepareLV(Self);
   vtEditeurs.Mode := vmEditeurs;
+  FrameRechercheRapide1.VirtualTreeView := vtEditeurs;
 end;
 
 procedure TFrmEditCollection.SetRefCollection(Value: Integer);
@@ -69,9 +66,7 @@ begin
       edNom.Text := Fields.ByNameAsString['NOMCOLLECTION'];
       FRefEditeur := Fields.ByNameAsInteger['REFEDITEUR'];
       vtEditeurs.Enabled := False;
-      EditLabeled1.Enabled := False;
-      VDTButton1.Enabled := False;
-      VDTButton9.Enabled := False;
+      FrameRechercheRapide1.Enabled := False;
     end;
     vtEditeurs.CurrentValue := FRefEditeur;
   finally
@@ -93,7 +88,7 @@ begin
   RefEditeur := vtEditeurs.CurrentValue;
   if RefEditeur = -1 then begin
     AffMessage(rsEditeurObligatoire, mtInformation, [mbOk], True);
-    EditLabeled1.SetFocus;
+    FrameRechercheRapide1.edSearch.SetFocus;
     ModalResult := mrNone;
     Exit;
   end;
@@ -125,19 +120,10 @@ begin
   edNom.SetFocus;
 end;
 
-procedure TFrmEditCollection.VDTButton1Click(Sender: TObject);
-begin
-  vtEditeurs.Find(EditLabeled1.Text, Sender = VDTButton1);
-end;
-
-procedure TFrmEditCollection.VDTButton9Click(Sender: TObject);
-begin
-  AjouterEditeurs(vtEditeurs, EditLabeled1.Text);
-end;
-
 procedure TFrmEditCollection.vtEditeursDblClick(Sender: TObject);
 begin
   ModifierEditeurs(vtEditeurs);
 end;
 
 end.
+

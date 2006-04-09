@@ -36,10 +36,16 @@ object Convertisseur: TConvertisseur
     TabOrder = 0
     OnChange = Edit1Change
     OnKeyPress = Edit1KeyPress
-    LinkLabel.LinkLabel.Strings = (
-      'Label1'
-      'Label2'
-      'Label4')
+    LinkControls = <
+      item
+        Control = Label4
+      end
+      item
+        Control = Label2
+      end
+      item
+        Control = Label1
+      end>
     TypeDonnee = tdNumeric
     CurrencyChar = #0
   end

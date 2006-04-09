@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, DBEditLabeled, VirtualTrees, ComCtrls, VDTButton,
-  ComboCheck, ExtCtrls, Buttons;
+  Dialogs, StdCtrls, DBEditLabeled, VirtualTrees, ComCtrls, VDTButton, VirtualTree,
+  ComboCheck, ExtCtrls, Buttons, Frame_RechercheRapide;
 
 type
   TFrmEditParaBD = class(TForm)
@@ -13,98 +13,51 @@ type
     btnOK: TBitBtn;
     btnAnnuler: TBitBtn;
     ScrollBox: TScrollBox;
-    imgVisu: TImage;
-    Label3: TLabel;
     Label2: TLabel;
     Label6: TLabel;
-    Label7: TLabel;
-    btScenariste: TVDTButton;
-    btDessinateur: TVDTButton;
-    VDTButton7: TVDTButton;
-    VDTButton8: TVDTButton;
+    btCreateur: TVDTButton;
     Label19: TLabel;
-    ChoixImage: TVDTButton;
-    VDTButton4: TVDTButton;
-    VDTButton5: TVDTButton;
     Bevel1: TBevel;
     Label20: TLabel;
-    VDTButton12: TVDTButton;
-    btColoriste: TVDTButton;
-    Label1: TLabel;
-    VDTButton11: TVDTButton;
-    Label5: TLabel;
-    VDTButton1: TVDTButton;
-    Label8: TLabel;
-    VDTButton2: TVDTButton;
-    Label4: TLabel;
-    VDTButton3: TVDTButton;
     Bevel3: TBevel;
     Bevel4: TBevel;
     Bevel5: TBevel;
-    VDTButton9: TVDTButton;
-    VDTButton10: TVDTButton;
-    Label15: TLabel;
-    Label16: TLabel;
-    Label17: TLabel;
-    PanelEdition: TPanel;
-    SpeedButton3: TVDTButton;
-    Label9: TLabel;
-    Label10: TLabel;
-    Label11: TLabel;
-    VDTButton6: TVDTButton;
-    Label12: TLabel;
-    Label13: TLabel;
-    cbxEtat: TLightComboCheck;
-    cbxReliure: TLightComboCheck;
-    Label14: TLabel;
-    cbxEdition: TLightComboCheck;
-    Label18: TLabel;
-    Label21: TLabel;
-    Label22: TLabel;
-    cbxOrientation: TLightComboCheck;
-    Label23: TLabel;
-    cbxFormat: TLightComboCheck;
-    VDTButton13: TVDTButton;
+    edTitre: TEditLabeled;
+    description: TMemoLabeled;
+    lvAuteurs: TVDTListViewLabeled;
+    vtPersonnes: TVirtualStringTree;
+    vtSeries: TVirtualStringTree;
     Label24: TLabel;
+    edAnneeCote: TEditLabeled;
     Label25: TLabel;
+    edPrixCote: TEditLabeled;
     VDTButton14: TVDTButton;
-    edPrix: TEditLabeled;
+    Label10: TLabel;
     edAnneeEdition: TEditLabeled;
-    edISBN: TEditLabeled;
-    cbVO: TCheckBoxLabeled;
-    cbCouleur: TCheckBoxLabeled;
     cbStock: TCheckBoxLabeled;
-    cbDedicace: TCheckBoxLabeled;
-    dtpAchat: TDateTimePickerLabeled;
     cbGratuit: TCheckBoxLabeled;
     cbOffert: TCheckBoxLabeled;
-    edNombreDePages: TEditLabeled;
-    edAnneeCote: TEditLabeled;
-    edPrixCote: TEditLabeled;
-    edAnneeParution: TEditLabeled;
-    edTitre: TEditLabeled;
-    histoire: TMemoLabeled;
-    remarques: TMemoLabeled;
-    lvScenaristes: TVDTListViewLabeled;
-    lvDessinateurs: TVDTListViewLabeled;
-    vtPersonnes: TVirtualStringTree;
-    Edit2: TEditLabeled;
-    vstImages: TVirtualStringTree;
-    Edit3: TEditLabeled;
-    vtSeries: TVirtualStringTree;
-    lvColoristes: TVDTListViewLabeled;
-    cbIntegrale: TCheckBoxLabeled;
-    edTome: TEditLabeled;
-    EditLabeled1: TEditLabeled;
-    vtEditeurs: TVirtualStringTree;
-    EditLabeled2: TEditLabeled;
-    vtCollections: TVirtualStringTree;
-    vtEditions: TListBoxLabeled;
-    cbHorsSerie: TCheckBoxLabeled;
-    edNotes: TMemoLabeled;
-    edTomeDebut: TEditLabeled;
-    edTomeFin: TEditLabeled;
-    edMoisParution: TEditLabeled;
+    dtpAchat: TDateTimePickerLabeled;
+    Label18: TLabel;
+    Label9: TLabel;
+    edPrix: TEditLabeled;
+    SpeedButton3: TVDTButton;
+    cbDedicace: TCheckBoxLabeled;
+    Label12: TLabel;
+    cbxType: TLightComboCheck;
+    Panel1: TPanel;
+    imgVisu: TImage;
+    cbNumerote: TCheckBoxLabeled;
+    Panel3: TPanel;
+    ChoixImage: TVDTButton;
+    FrameRechercheRapideSerie: TFrameRechercheRapide;
+    FrameRechercheRapideAuteur: TFrameRechercheRapide;
+    procedure cbOffertClick(Sender: TObject);
+    procedure cbGratuitClick(Sender: TObject);
+    procedure edPrixChange(Sender: TObject);
+    procedure SpeedButton3Click(Sender: TObject);
+    procedure VDTButton14Click(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
     FCreation: Boolean;
     FisAchat: Boolean;
@@ -123,17 +76,12 @@ type
     constructor Create(AOwner: TComponent); override;
   end;
 
-
 implementation
 
+uses DM_Princ, JvUIB, Commun, jvuiblib, CommonConst, Textes, Procedures,
+  Proc_Gestions;
+
 {$R *.dfm}
-
-{ TFrmEditParaBD }
-
-procedure TFrmEditParaBD.SetRefParaBD(const Value: Integer);
-begin
-  FRefParaBD := Value;
-end;
 
 { TFrmEditAchatParaBD }
 
@@ -143,4 +91,107 @@ begin
   FisAchat := True;
 end;
 
+{ TFrmEditParaBD }
+
+procedure TFrmEditParaBD.SetRefParaBD(const Value: Integer);
+var
+  q: TJvUIBQuery;
+begin
+  FRefParaBD := Value;
+
+  q := TJvUIBQuery.Create(nil);
+  with q do try
+    Transaction := GetTransaction(DMPrinc.UIBDataBase);
+
+    SQL.Text := 'SELECT TITREPARABD, ANNEE, REFSERIE, TYPEPARABD, ACHAT, DESCRIPTION, DEDICACE, NUMEROTE, ANNEECOTE, PRIXCOTE, GRATUIT, OFFERT,';
+    SQL.Add('DATEACHAT, PRIX, STOCK');
+    SQL.Add('FROM PARABD WHERE RefParaBD = ?');
+    Params.AsInteger[0] := FRefParaBD;
+    FetchBlobs := True;
+    Open;
+
+    FCreation := Eof;
+    if not FCreation then begin
+      edTitre.Text := Fields.ByNameAsString['TITREPARABD'];
+      edAnneeEdition.Text := Fields.ByNameAsString['ANNEE'];
+      cbDedicace.Checked := Fields.ByNameAsBoolean['DEDICACE'];
+      cbNumerote.Checked := Fields.ByNameAsBoolean['NUMEROTE'];
+      description.Lines.Text := Fields.ByNameAsString['DESCRIPTION'];
+
+      cbGratuit.Checked := Fields.ByNameAsBoolean['GRATUIT'];
+      cbOffert.Checked := Fields.ByNameAsBoolean['OFFERT'];
+      cbOffertClick(nil);
+      cbxType.Value := Fields.ByNameAsInteger['TYPEPARABD'];
+
+      cbStock.Checked := Fields.ByNameAsBoolean['STOCK'];
+      dtpAchat.Date := Now;
+      dtpAchat.Checked := Fields.ByNameIsNull['DateAchat'];
+      if dtpAchat.Checked then dtpAchat.Date := Fields.ByNameAsDate['DateAchat'];
+      if Fields.ByNameIsNull['PRIX'] then
+        edPrix.Text := ''
+      else
+        edPrix.Text := FormatCurr(FormatMonnaie, Fields.ByNameAsCurrency['PRIX']);
+      edAnneeCote.Text := Fields.ByNameAsString['ANNEECOTE'];
+      if Fields.ByNameIsNull['PRIXCOTE'] then
+        edPrixCote.Text := ''
+      else
+        edPrixCote.Text := FormatCurr(FormatMonnaie, Fields.ByNameAsCurrency['PRIXCOTE']);
+
+      vtSeries.CurrentValue := Fields.ByNameAsInteger['REFSERIE'];
+    end;
+  finally
+    lvAuteurs.Items.EndUpdate;
+    Transaction.Free;
+    Free;
+  end;
+end;
+
+procedure TFrmEditParaBD.cbOffertClick(Sender: TObject);
+begin
+  if cbOffert.Checked then
+    Label18.Caption := rsTransOffertLe
+  else
+    Label18.Caption := rsTransAcheteLe;
+end;
+
+procedure TFrmEditParaBD.cbGratuitClick(Sender: TObject);
+begin
+  if cbGratuit.Checked then edPrix.Text := '';
+end;
+
+procedure TFrmEditParaBD.edPrixChange(Sender: TObject);
+begin
+  if edPrix.Text <> '' then cbGratuit.Checked := False;
+end;
+
+procedure TFrmEditParaBD.SpeedButton3Click(Sender: TObject);
+var
+  c: Currency;
+begin
+  c := StrToCurrDef(StringReplace(edPrix.Text, Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  if Convertisseur(SpeedButton3, c) then
+    if edPrix.Focused then
+      edPrix.Text := FormatCurr(FormatMonnaieSimple, c)
+    else
+      edPrix.Text := FormatCurr(FormatMonnaie, c);
+end;
+
+procedure TFrmEditParaBD.VDTButton14Click(Sender: TObject);
+var
+  c: Currency;
+begin
+  c := StrToCurrDef(StringReplace(edPrixCote.Text, Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  if Convertisseur(SpeedButton3, c) then
+    if edPrixCote.Focused then
+      edPrixCote.Text := FormatCurr(FormatMonnaieSimple, c)
+    else
+      edPrixCote.Text := FormatCurr(FormatMonnaie, c);
+end;
+
+procedure TFrmEditParaBD.FormActivate(Sender: TObject);
+begin
+  Invalidate;
+end;
+
 end.
+

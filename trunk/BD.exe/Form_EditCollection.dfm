@@ -1,6 +1,6 @@
 object FrmEditCollection: TFrmEditCollection
-  Left = 433
-  Top = 308
+  Left = 546
+  Top = 535
   ActiveControl = edNom
   BorderIcons = []
   BorderStyle = bsDialog
@@ -57,28 +57,6 @@ object FrmEditCollection: TFrmEditCollection
       Alignment = taRightJustify
       Caption = 'Editeur:'
     end
-    object VDTButton1: TVDTButton
-      Left = 363
-      Top = 31
-      Width = 21
-      Height = 20
-      Cursor = crHandPoint
-      Anchors = [akTop, akRight]
-      Caption = '...'
-      Flat = True
-      OnClick = VDTButton1Click
-    end
-    object VDTButton9: TVDTButton
-      Left = 384
-      Top = 31
-      Width = 20
-      Height = 20
-      Cursor = crHandPoint
-      Anchors = [akTop, akRight]
-      Caption = 'N'
-      Flat = True
-      OnClick = VDTButton9Click
-    end
     object edNom: TEditLabeled
       Left = 52
       Top = 7
@@ -93,21 +71,11 @@ object FrmEditCollection: TFrmEditCollection
       TabOrder = 0
       LinkLabel.LinkLabel.Strings = (
         'Label2')
-      CurrencyChar = #0
-    end
-    object EditLabeled1: TEditLabeled
-      Left = 52
-      Top = 31
-      Width = 309
-      Height = 20
-      Anchors = [akLeft, akTop, akRight]
-      BevelKind = bkTile
-      BorderStyle = bsNone
-      TabOrder = 1
-      OnChange = VDTButton1Click
-      LinkLabel.LinkLabel.Strings = (
-        'Label5'
-        'VDTButton1')
+      LinkLabel.LinkControls = <>
+      LinkControls = <
+        item
+          Control = Label2
+        end>
       CurrencyChar = #0
     end
     object vtEditeurs: TVirtualStringTree
@@ -137,6 +105,27 @@ object FrmEditCollection: TFrmEditCollection
       TabOrder = 2
       OnDblClick = vtEditeursDblClick
       Columns = <>
+    end
+    inline FrameRechercheRapide1: TFrameRechercheRapide
+      Left = 52
+      Top = 31
+      Width = 353
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 1
+      inherited btNext: TVDTButton
+        Left = 312
+      end
+      inherited btNew: TVDTButton
+        Left = 332
+      end
+      inherited edSearch: TEditLabeled
+        Width = 313
+        LinkControls = <
+          item
+            Control = Label5
+          end>
+      end
     end
   end
   object Panel1: TPanel

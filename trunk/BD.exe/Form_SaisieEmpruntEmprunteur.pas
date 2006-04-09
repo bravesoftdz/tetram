@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, ComCtrls, ExtCtrls,
   ToolWin, Buttons, Fram_Boutons, ScanEdit, VDTButton, Menus, Commun, DBEditLabeled, VirtualTrees, VirtualTree,
-  ComboCheck;
+  ComboCheck, Frame_RechercheRapide;
 
 type
   TFrmSaisie_EmpruntEmprunteur = class(TForm)
@@ -27,8 +27,7 @@ type
     lccEditions: TLightComboCheck;
     Panel6: TPanel;
     vtAlbums: TVirtualStringTree;
-    ScanEditAlbum: TEdit;
-    VDTButton1: TVDTButton;
+    FrameRechercheRapide1: TFrameRechercheRapide;
     procedure FormCreate(Sender: TObject);
     procedure ListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure pretClick(Sender: TObject);
@@ -40,7 +39,6 @@ type
     procedure BtnOkExecute(Sender: TObject);
     procedure vtAlbumsDblClick(Sender: TObject);
     procedure lccEditionsChange(Sender: TObject);
-    procedure VDTButton1Click(Sender: TObject);
   private
     { Déclarations privées }
     FRefEmprunteur: Integer;
@@ -84,6 +82,8 @@ end;
 procedure TFrmSaisie_EmpruntEmprunteur.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
+  FrameRechercheRapide1.VirtualTreeView := vtAlbums;
+  FrameRechercheRapide1.ShowNewButton := False;
   vtAlbums.Mode := vmAlbumsSerie;
   ChargeImage(vtAlbums.Background, 'FONDVT');
   date_pret.Date := Date;
@@ -220,11 +220,6 @@ begin
   if Assigned(ListView1.Selected) then begin
     ListView1.Selected.SubItems[2] := IntToStr(lccEditions.Value);
   end;
-end;
-
-procedure TFrmSaisie_EmpruntEmprunteur.VDTButton1Click(Sender: TObject);
-begin
-  vtAlbums.Find(ScanEditAlbum.Text, Sender = VDTButton1);
 end;
 
 end.

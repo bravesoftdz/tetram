@@ -1,6 +1,6 @@
 object FrmRepertoire: TFrmRepertoire
-  Left = 1869
-  Top = 205
+  Left = 679
+  Top = 323
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'R'#233'pertoire'
@@ -24,7 +24,7 @@ object FrmRepertoire: TFrmRepertoire
     Width = 345
     Height = 401
     Cursor = crHandPoint
-    ActivePage = TabParaBD
+    ActivePage = TabAlbums
     Align = alClient
     HotTrack = True
     TabOrder = 0
@@ -117,17 +117,6 @@ object FrmRepertoire: TFrmRepertoire
         Caption = 'Grouper par '
         Transparent = True
       end
-      object VDTButton1: TVDTButton
-        Left = 315
-        Top = 2
-        Width = 20
-        Height = 20
-        Cursor = crHandPoint
-        Anchors = [akTop, akRight]
-        Caption = '...'
-        Flat = True
-        OnClick = VDTButton1Click
-      end
       object vstAlbums: TVirtualStringTree
         Left = 2
         Top = 45
@@ -151,26 +140,32 @@ object FrmRepertoire: TFrmRepertoire
         Indent = 8
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 0
+        TabOrder = 1
         OnDblClick = vstAlbumsDblClick
         Columns = <
           item
             Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
             Position = 0
-            Width = 333
+            Width = 329
           end>
       end
-      object ScanEditAlbum: TEdit
+      inline FrameRechercheRapideAlbums: TFrameRechercheRapide
         Left = 2
         Top = 2
-        Width = 312
-        Height = 20
+        Width = 333
+        Height = 21
         Anchors = [akLeft, akTop, akRight]
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        TabOrder = 1
-        OnChange = VDTButton1Click
-        OnKeyPress = ScanEditAlbumKeyPress
+        TabOrder = 0
+        inherited btNext: TVDTButton
+          Left = 292
+        end
+        inherited btNew: TVDTButton
+          Left = 312
+        end
+        inherited edSearch: TEditLabeled
+          Width = 293
+          OnKeyPress = FrameRechercheRapideedSearchKeyPress
+        end
       end
     end
     object TabEmprunteurs: TTabSheet
@@ -178,17 +173,6 @@ object FrmRepertoire: TFrmRepertoire
       DesignSize = (
         337
         373)
-      object VDTButton2: TVDTButton
-        Left = 315
-        Top = 2
-        Width = 20
-        Height = 20
-        Cursor = crHandPoint
-        Anchors = [akTop, akRight]
-        Caption = '...'
-        Flat = True
-        OnClick = VDTButton2Click
-      end
       object vstEmprunteurs: TVirtualStringTree
         Left = 2
         Top = 25
@@ -208,21 +192,27 @@ object FrmRepertoire: TFrmRepertoire
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
         HintAnimation = hatNone
         Indent = 8
-        TabOrder = 0
+        TabOrder = 1
         OnDblClick = vstAlbumsDblClick
         Columns = <>
       end
-      object ScanEditEmprunteur: TEdit
+      inline FrameRechercheRapideEmprunteurs: TFrameRechercheRapide
         Left = 2
         Top = 2
-        Width = 312
-        Height = 20
+        Width = 333
+        Height = 21
         Anchors = [akLeft, akTop, akRight]
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        TabOrder = 1
-        OnChange = VDTButton2Click
-        OnKeyPress = ScanEditEmprunteurKeyPress
+        TabOrder = 0
+        inherited btNext: TVDTButton
+          Left = 292
+        end
+        inherited btNew: TVDTButton
+          Left = 312
+        end
+        inherited edSearch: TEditLabeled
+          Width = 293
+          OnKeyPress = FrameRechercheRapideedSearchKeyPress
+        end
       end
     end
     object TabAuteurs: TTabSheet
@@ -231,17 +221,6 @@ object FrmRepertoire: TFrmRepertoire
       DesignSize = (
         337
         373)
-      object VDTButton3: TVDTButton
-        Left = 315
-        Top = 2
-        Width = 20
-        Height = 20
-        Cursor = crHandPoint
-        Anchors = [akTop, akRight]
-        Caption = '...'
-        Flat = True
-        OnClick = VDTButton3Click
-      end
       object vstAuteurs: TVirtualStringTree
         Left = 2
         Top = 25
@@ -261,21 +240,27 @@ object FrmRepertoire: TFrmRepertoire
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
         HintAnimation = hatNone
         Indent = 8
-        TabOrder = 0
+        TabOrder = 1
         OnDblClick = vstAlbumsDblClick
         Columns = <>
       end
-      object ScanEditAuteur: TEdit
+      inline FrameRechercheRapideAuteurs: TFrameRechercheRapide
         Left = 2
         Top = 2
-        Width = 312
-        Height = 20
+        Width = 333
+        Height = 21
         Anchors = [akLeft, akTop, akRight]
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        TabOrder = 1
-        OnChange = VDTButton3Click
-        OnKeyPress = ScanEditAuteurKeyPress
+        TabOrder = 0
+        inherited btNext: TVDTButton
+          Left = 292
+        end
+        inherited btNew: TVDTButton
+          Left = 312
+        end
+        inherited edSearch: TEditLabeled
+          Width = 293
+          OnKeyPress = FrameRechercheRapideedSearchKeyPress
+        end
       end
     end
     object TabSeries: TTabSheet
@@ -284,30 +269,6 @@ object FrmRepertoire: TFrmRepertoire
       DesignSize = (
         337
         373)
-      object VDTButton5: TVDTButton
-        Left = 315
-        Top = 2
-        Width = 20
-        Height = 20
-        Cursor = crHandPoint
-        Anchors = [akTop, akRight]
-        Caption = '...'
-        Flat = True
-        OnClick = VDTButton5Click
-      end
-      object ScanEditSerie: TEdit
-        Left = 2
-        Top = 2
-        Width = 312
-        Height = 20
-        Anchors = [akLeft, akTop, akRight]
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        TabOrder = 0
-        OnChange = VDTButton3Click
-        OnClick = VDTButton5Click
-        OnKeyPress = ScanEditSerieKeyPress
-      end
       object vstSeries: TVirtualStringTree
         Left = 2
         Top = 25
@@ -331,6 +292,24 @@ object FrmRepertoire: TFrmRepertoire
         OnDblClick = vstAlbumsDblClick
         Columns = <>
       end
+      inline FrameRechercheRapideSeries: TFrameRechercheRapide
+        Left = 2
+        Top = 2
+        Width = 333
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        inherited btNext: TVDTButton
+          Left = 292
+        end
+        inherited btNew: TVDTButton
+          Left = 312
+        end
+        inherited edSearch: TEditLabeled
+          Width = 293
+          OnKeyPress = FrameRechercheRapideedSearchKeyPress
+        end
+      end
     end
     object TabParaBD: TTabSheet
       Caption = 'Para-BD'
@@ -338,30 +317,6 @@ object FrmRepertoire: TFrmRepertoire
       DesignSize = (
         337
         373)
-      object VDTButton4: TVDTButton
-        Left = 315
-        Top = 2
-        Width = 20
-        Height = 20
-        Cursor = crHandPoint
-        Anchors = [akTop, akRight]
-        Caption = '...'
-        Flat = True
-        OnClick = VDTButton4Click
-      end
-      object ScanEditParaBD: TEdit
-        Left = 2
-        Top = 2
-        Width = 312
-        Height = 20
-        Anchors = [akLeft, akTop, akRight]
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        TabOrder = 0
-        OnChange = VDTButton3Click
-        OnClick = VDTButton4Click
-        OnKeyPress = ScanEditParaBDKeyPress
-      end
       object vstParaBD: TVirtualStringTree
         Left = 2
         Top = 25
@@ -384,6 +339,24 @@ object FrmRepertoire: TFrmRepertoire
         TabOrder = 1
         OnDblClick = vstAlbumsDblClick
         Columns = <>
+      end
+      inline FrameRechercheRapideParaBD: TFrameRechercheRapide
+        Left = 2
+        Top = 2
+        Width = 333
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        inherited btNext: TVDTButton
+          Left = 292
+        end
+        inherited btNew: TVDTButton
+          Left = 312
+        end
+        inherited edSearch: TEditLabeled
+          Width = 293
+          OnKeyPress = FrameRechercheRapideedSearchKeyPress
+        end
       end
     end
   end

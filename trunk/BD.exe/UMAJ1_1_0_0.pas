@@ -71,15 +71,25 @@ begin
     Script.Add('CREATE TABLE ParaBD (');
     Script.Add('    ID_ParaBD        T_GUID_NOTNULL,');
     Script.Add('    REFParaBD        T_REFNOTNULL,');
-    Script.Add('    REFSERIE         INTEGER,');
-    Script.Add('    ORDRE            INTEGER,');
+    Script.Add('    TITREPARABD           VARCHAR(150),');
+    Script.Add('    REFSERIE         T_REFNOTNULL_BASE0,');
     Script.Add('    TYPEParaBD       SMALLINT,');
+    Script.Add('    ACHAT            T_YESNO_BASENO,');
+    Script.Add('    COMPLET          INTEGER,');
+    Script.Add('    DEDICACE         T_YESNO_BASENO,');
+    Script.Add('    NUMEROTE         T_YESNO_BASENO,');
+    Script.Add('    ANNEE            SMALLINT,');
+    Script.Add('    ANNEECOTE        SMALLINT,');
+    Script.Add('    PRIXCOTE         NUMERIC(15,2),');
+    Script.Add('    PRETE            T_YESNO_BASENO,');
+    Script.Add('    STOCK            T_YESNO_BASEYES,');
+    Script.Add('    DATEACHAT        DATE,');
+    Script.Add('    PRIX             NUMERIC(15,2),');
+    Script.Add('    GRATUIT          T_YESNO_BASENO,');
+    Script.Add('    OFFERT           T_YESNO_BASENO,');
     Script.Add('    CATEGORIEIMAGE   SMALLINT,');
     Script.Add('    ParaBD           BLOB SUB_TYPE 0 SEGMENT SIZE 80,');
     Script.Add('    FICHIERParaBD    VARCHAR(255),');
-    Script.Add('    ACHAT            T_YESNO_BASENO,');
-    Script.Add('    COMPLET          INTEGER,');
-    Script.Add('    TITREPARABD           VARCHAR(150),');
     Script.Add('    TITREINITIALESPARABD  VARCHAR(15),');
     Script.Add('    UPPERTITREPARABD      VARCHAR(150),');
     Script.Add('    SOUNDEXTITREPARABD    VARCHAR(30),');
@@ -93,7 +103,6 @@ begin
     Script.Add('ALTER TABLE ParaBD ADD CONSTRAINT ParaBD_UNQID UNIQUE (ID_ParaBD);');
     Script.Add('ALTER TABLE ParaBD ADD CONSTRAINT ParaBD_PK PRIMARY KEY (REFParaBD);');
     Script.Add('ALTER TABLE ParaBD ADD CONSTRAINT ParaBD_FK1 FOREIGN KEY (REFSERIE) REFERENCES SERIES (REFSERIE) ON DELETE CASCADE ON UPDATE CASCADE;');
-    Script.Add('CREATE INDEX ParaBD_IDX1 ON ParaBD (ORDRE);');
 
     Script.Add('CREATE TRIGGER ParaBD_AI FOR ParaBD');
     Script.Add('ACTIVE BEFORE INSERT OR UPDATE POSITION 0');
@@ -113,6 +122,46 @@ begin
     Script.Add('');
     Script.Add('  new.DM_ParaBD = cast(''now'' as timestamp);');
     Script.Add('  if (inserting or new.DC_ParaBD is null) then new.DC_ParaBD = new.DM_ParaBD;');
+    Script.Add('end;');
+
+    Script.Add('CREATE TABLE COTES_PARABD (');
+    Script.Add('    ID_COTES_PARABD    T_GUID_NOTNULL,');
+    Script.Add('    REFPARABD          T_REFNOTNULL NOT NULL,');
+    Script.Add('    ANNEECOTE          SMALLINT NOT NULL,');
+    Script.Add('    PRIXCOTE           NUMERIC(15,2) NOT NULL,');
+    Script.Add('    DC_COTES_PARABD    T_TIMESTAMP_NOTNULL,');
+    Script.Add('    DM_COTES_PARABD    T_TIMESTAMP_NOTNULL');
+    Script.Add(');');
+
+    Script.Add('ALTER TABLE COTES_PARABD ADD CONSTRAINT COTES_PARABD_UNQ1 UNIQUE (ID_COTES_PARABD);');
+    Script.Add('ALTER TABLE COTES_PARABD ADD CONSTRAINT COTES_PARABD_PK PRIMARY KEY (ANNEECOTE, REFPARABD);');
+    Script.Add('ALTER TABLE COTES_PARABD ADD CONSTRAINT COTES_PARABD_FK1 FOREIGN KEY (REFPARABD) REFERENCES PARABD (REFPARABD) ON DELETE CASCADE ON UPDATE CASCADE;');
+
+    Script.Add('CREATE TRIGGER COTES_PARABD_UNIQID_BIU0 FOR COTES_PARABD');
+    Script.Add('ACTIVE BEFORE INSERT OR UPDATE POSITION 0');
+    Script.Add('AS');
+    Script.Add('begin');
+    Script.Add('  if (new.ID_COTES_PARABD is null) then new.ID_COTES_PARABD = old.ID_COTES_PARABD;');
+    Script.Add('  if (new.ID_COTES_PARABD is null) then new.ID_COTES_PARABD = UDF_CREATEGUID();');
+    Script.Add('');
+    Script.Add('  if (new.DC_COTES_PARABD is null) then new.DC_COTES_PARABD = old.DC_COTES_PARABD;');
+    Script.Add('');
+    Script.Add('  new.DM_COTES_PARABD = cast(''now'' as timestamp);');
+    Script.Add('  if (inserting or new.DC_COTES_PARABD is null) then new.DC_COTES_PARABD = new.DM_COTES_PARABD;');
+    Script.Add('end;');
+
+    Script.Add('CREATE TRIGGER PARABD_COTE_BIU1 FOR PARABD');
+    Script.Add('ACTIVE AFTER INSERT OR UPDATE POSITION 1');
+    Script.Add('AS');
+    Script.Add('declare variable existPRIX numeric(15,2);');
+    Script.Add('begin');
+    Script.Add('  if (new.anneecote is not null and new.prixcote is not null) then begin');
+    Script.Add('    select PRIXCOTE from COTES_PARABD where REFPARABD = new.refparabd AND ANNEECOTE = new.anneecote INTO :existPRIX;');
+    Script.Add('    if (existPRIX is null) then');
+    Script.Add('      INSERT INTO COTES_PARABD (REFPARABD, ANNEECOTE, PRIXCOTE) VALUES (new.refparabd, new.anneecote, new.prixcote);');
+    Script.Add('    else');
+    Script.Add('      UPDATE COTES_PARABD SET PRIXCOTE = new.prixcote WHERE REFPARABD = new.refparabd AND ANNEECOTE = new.anneecote;');
+    Script.Add('  end');
     Script.Add('end;');
 
     Script.Add('CREATE VIEW VW_LISTE_PARABD(');

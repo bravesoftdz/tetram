@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls, DBCtrls, StdCtrls, ImgList, DBEditLabeled,
-  VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, VirtualTree, Menus, TypeRec, ActnList, LoadComplet, ComboCheck;
+  VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, VirtualTree, Menus, TypeRec, ActnList, LoadComplet, ComboCheck,
+  Frame_RechercheRapide;
 
 type
   TFrmEditAlbum = class(TForm)
@@ -25,9 +26,6 @@ type
     lvDessinateurs: TVDTListViewLabeled;
     btDessinateur: TVDTButton;
     vtPersonnes: TVirtualStringTree;
-    Edit2: TEditLabeled;
-    VDTButton7: TVDTButton;
-    VDTButton8: TVDTButton;
     Label19: TLabel;
     vstImages: TVirtualStringTree;
     ChoixImage: TVDTButton;
@@ -38,31 +36,22 @@ type
     Panel2: TPanel;
     btnOK: TBitBtn;
     btnAnnuler: TBitBtn;
-    Edit3: TEditLabeled;
-    VDTButton12: TVDTButton;
     vtSeries: TVirtualStringTree;
     btColoriste: TVDTButton;
     lvColoristes: TVDTListViewLabeled;
     cbIntegrale: TCheckBoxLabeled;
     Label1: TLabel;
     edTome: TEditLabeled;
-    VDTButton11: TVDTButton;
-    EditLabeled1: TEditLabeled;
     Label5: TLabel;
     vtEditeurs: TVirtualStringTree;
-    VDTButton1: TVDTButton;
     Label8: TLabel;
-    EditLabeled2: TEditLabeled;
     vtCollections: TVirtualStringTree;
-    VDTButton2: TVDTButton;
     Label4: TLabel;
     vtEditions: TListBoxLabeled;
     VDTButton3: TVDTButton;
     Bevel3: TBevel;
     Bevel4: TBevel;
     Bevel5: TBevel;
-    VDTButton9: TVDTButton;
-    VDTButton10: TVDTButton;
     cbHorsSerie: TCheckBoxLabeled;
     Label15: TLabel;
     edNotes: TMemoLabeled;
@@ -108,6 +97,10 @@ type
     edPrixCote: TEditLabeled;
     VDTButton14: TVDTButton;
     pmChoixCategorie: TPopupMenu;
+    FrameRechercheRapidePersonnes: TFrameRechercheRapide;
+    FrameRechercheRapideSerie: TFrameRechercheRapide;
+    FrameRechercheRapideEditeur: TFrameRechercheRapide;
+    FrameRechercheRapideCollection: TFrameRechercheRapide;
     procedure ajoutClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -119,10 +112,7 @@ type
     procedure vstImagesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure VDTButton4Click(Sender: TObject);
     procedure VDTButton5Click(Sender: TObject);
-    procedure VDTButton7Click(Sender: TObject);
-    procedure VDTButton8Click(Sender: TObject);
-    procedure VDTButton11Click(Sender: TObject);
-    procedure Edit3Change(Sender: TObject);
+    procedure OnNewSerie(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure btnAnnulerClick(Sender: TObject);
     procedure longueur2KeyPress(Sender: TObject; var Key: Char);
@@ -134,8 +124,7 @@ type
     procedure vtEditeursChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure vtSeriesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VDTButton3Click(Sender: TObject);
-    procedure VDTButton9Click(Sender: TObject);
-    procedure VDTButton10Click(Sender: TObject);
+    procedure OnNewCollection(Sender: TObject);
     procedure SpeedButton3Click(Sender: TObject);
     procedure VDTButton6Click(Sender: TObject);
     procedure edISBNExit(Sender: TObject);
@@ -144,8 +133,6 @@ type
     procedure vstImagesChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure vstImagesEditing(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
     procedure vstImagesNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: WideString);
-    procedure EditLabeled1Click(Sender: TObject);
-    procedure EditLabeled2Click(Sender: TObject);
     procedure vtEditeursClick(Sender: TObject);
     procedure vtCollectionsClick(Sender: TObject);
     procedure edAnneeEditionChange(Sender: TObject);
@@ -185,6 +172,7 @@ type
     procedure VisuClose(Sender: TObject);
     procedure AjouteAuteur(List: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean); overload;
     procedure AjouteAuteur(List: TVDTListViewLabeled; Auteur: TPersonnage); overload;
+    procedure EditeurCollectionSelected(Sender: TObject; NextSearch: Boolean);
   public
     { Déclarations publiques }
     property isCreation: Boolean read FCreation;
@@ -252,10 +240,15 @@ begin
   PrepareLV(Self);
   FDeletedCouvertures := TList.Create;
   FDeletedEditions := TList.Create;
-  vtSeries.LinkLabel.Assign(Edit3.LinkLabel);
-  vtPersonnes.LinkLabel.Assign(Edit2.LinkLabel);
-  vtEditeurs.LinkLabel.Assign(EditLabeled1.LinkLabel);
-  vtCollections.LinkLabel.Assign(EditLabeled2.LinkLabel);
+
+  FrameRechercheRapidePersonnes.VirtualTreeView := vtPersonnes;
+  FrameRechercheRapideSerie.VirtualTreeView := vtSeries;
+  FrameRechercheRapideSerie.OnNew := OnNewSerie;
+  FrameRechercheRapideEditeur.VirtualTreeView := vtEditeurs;
+  FrameRechercheRapideEditeur.OnSearch := EditeurCollectionSelected;
+  FrameRechercheRapideCollection.VirtualTreeView := vtCollections;
+  FrameRechercheRapideCollection.OnNew := OnNewCollection;
+  FrameRechercheRapideCollection.OnSearch := EditeurCollectionSelected;
 
   SetLength(FEditeurCollectionSelected, 0);
   FCurrentEditionComplete := nil;
@@ -265,6 +258,10 @@ begin
   vtCollections.Mode := vmNone;
   vtCollections.UseFiltre := True;
   vtSeries.Mode := vmSeries;
+  vstImages.LinkControls.Clear;
+  vstImages.LinkControls.Add(ChoixImage);
+  vstImages.LinkControls.Add(VDTButton4);
+  vstImages.LinkControls.Add(VDTButton5);
   vstImages.Mode := vmNone;
   vstImages.CheckImageKind := ckXP;
   vstImages.TreeOptions.StringOptions := [];
@@ -315,7 +312,8 @@ begin
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
 
-    SQL.Text := 'SELECT TITREALBUM, MOISPARUTION, ANNEEPARUTION, REFSERIE, TOME, TOMEDEBUT, TOMEFIN, SUJETALBUM, REMARQUESALBUM, HORSSERIE, INTEGRALE FROM ALBUMS WHERE RefAlbum = ?';
+    SQL.Text := 'SELECT TITREALBUM, MOISPARUTION, ANNEEPARUTION, REFSERIE, TOME, TOMEDEBUT, TOMEFIN, SUJETALBUM, REMARQUESALBUM, HORSSERIE, INTEGRALE';
+    SQL.Add('FROM ALBUMS WHERE RefAlbum = ?');
     Params.AsInteger[0] := FRefAlbum;
     FetchBlobs := True;
     Open;
@@ -484,7 +482,7 @@ begin
   end;
   if vtSeries.CurrentValue = -1 then begin
     AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
-    Edit3.SetFocus;
+    FrameRechercheRapideSerie.edSearch.SetFocus;
     ModalResult := mrNone;
     Exit;
   end;
@@ -955,27 +953,12 @@ begin
   vstImages.Invalidate;
 end;
 
-procedure TFrmEditAlbum.VDTButton7Click(Sender: TObject);
+procedure TFrmEditAlbum.OnNewSerie(Sender: TObject);
 begin
-  vtPersonnes.Find(Edit2.Text, Sender = VDTButton7);
-end;
-
-procedure TFrmEditAlbum.VDTButton8Click(Sender: TObject);
-begin
-  AjouterAuteurs(vtPersonnes, Edit2.Text);
-end;
-
-procedure TFrmEditAlbum.VDTButton11Click(Sender: TObject);
-begin
-  AjouterSeries(vtSeries, Edit3.Text);
+  AjouterSeries(vtSeries, FrameRechercheRapideSerie.edSearch.Text);
   vtEditeurs.InitializeRep;
   vtCollections.InitializeRep;
   vtSeriesChange(vtSeries, vtSeries.FocusedNode);
-end;
-
-procedure TFrmEditAlbum.Edit3Change(Sender: TObject);
-begin
-  vtSeries.Find(Edit3.Text, Sender = VDTButton12);
 end;
 
 procedure TFrmEditAlbum.FormActivate(Sender: TObject);
@@ -1062,7 +1045,7 @@ begin
     vtCollections.Filtre := 'RefEditeur = ' + IntToStr(RefEditeur);
     if vtCollections.Mode <> vmCollections then vtCollections.Mode := vmCollections;
   end;
-  VDTButton10.Enabled := RefEditeur <> -1;
+  FrameRechercheRapideCollection.btNew.Enabled := RefEditeur <> -1;
   RefreshEditionCaption;
 end;
 
@@ -1131,14 +1114,9 @@ begin
   vtEditionsClick(nil);
 end;
 
-procedure TFrmEditAlbum.VDTButton9Click(Sender: TObject);
+procedure TFrmEditAlbum.OnNewCollection(Sender: TObject);
 begin
-  AjouterEditeurs(vtEditeurs, EditLabeled1.Text);
-end;
-
-procedure TFrmEditAlbum.VDTButton10Click(Sender: TObject);
-begin
-  AjouterCollections(vtCollections, vtEditeurs.CurrentValue, EditLabeled2.Text);
+  AjouterCollections(vtCollections, vtEditeurs.CurrentValue, FrameRechercheRapideCollection.edSearch.Text);
 end;
 
 procedure TFrmEditAlbum.SpeedButton3Click(Sender: TObject);
@@ -1214,18 +1192,6 @@ begin
     0: PC.NewNom := NewText;
     1: ;
   end;
-end;
-
-procedure TFrmEditAlbum.EditLabeled1Click(Sender: TObject);
-begin
-  vtEditeurs.Find(EditLabeled1.Text, Sender = VDTButton1);
-  FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
-end;
-
-procedure TFrmEditAlbum.EditLabeled2Click(Sender: TObject);
-begin
-  vtCollections.Find(EditLabeled2.Text, Sender = VDTButton2);
-  FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
 end;
 
 procedure TFrmEditAlbum.vtEditeursClick(Sender: TObject);
@@ -1613,6 +1579,11 @@ var
 begin
   for i := 0 to Pred(pmChoixCategorie.Items.Count) do
     pmChoixCategorie.Items[i].Checked := pmChoixCategorie.Tag = pmChoixCategorie.Items[i].Tag;
+end;
+
+procedure TFrmEditAlbum.EditeurCollectionSelected(Sender: TObject; NextSearch: Boolean);
+begin
+  FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
 end;
 
 end.

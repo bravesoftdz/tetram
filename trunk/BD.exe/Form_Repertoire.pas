@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, DBCtrls, Menus, Buttons, ComCtrls, ExtCtrls,
-  ScanEdit, Main, VDTButton, Commun, VirtualTrees, ActnList, VirtualTree, jpeg, DBEditLabeled, ComboCheck;
+  ScanEdit, Main, VDTButton, Commun, VirtualTrees, ActnList, VirtualTree, jpeg, DBEditLabeled, ComboCheck,
+  Frame_RechercheRapide;
 
 type
   TFrmRepertoire = class(TForm)
@@ -15,35 +16,22 @@ type
     vstEmprunteurs: TVirtualStringTree;
     LightComboCheck1: TLightComboCheck;
     Label1: TLabel;
-    ScanEditAlbum: TEdit;
-    VDTButton1: TVDTButton;
-    ScanEditEmprunteur: TEdit;
-    VDTButton2: TVDTButton;
     TabAuteurs: TTabSheet;
     vstAuteurs: TVirtualStringTree;
-    ScanEditAuteur: TEdit;
-    VDTButton3: TVDTButton;
     TabSeries: TTabSheet;
     TabParaBD: TTabSheet;
-    ScanEditParaBD: TEdit;
-    VDTButton4: TVDTButton;
     vstParaBD: TVirtualStringTree;
-    ScanEditSerie: TEdit;
-    VDTButton5: TVDTButton;
     vstSeries: TVirtualStringTree;
+    FrameRechercheRapideAlbums: TFrameRechercheRapide;
+    FrameRechercheRapideEmprunteurs: TFrameRechercheRapide;
+    FrameRechercheRapideAuteurs: TFrameRechercheRapide;
+    FrameRechercheRapideSeries: TFrameRechercheRapide;
+    FrameRechercheRapideParaBD: TFrameRechercheRapide;
     procedure FormCreate(Sender: TObject);
-    procedure VDTButton1Click(Sender: TObject);
-    procedure VDTButton2Click(Sender: TObject);
     procedure vstAlbumsDblClick(Sender: TObject);
     procedure LightComboCheck1Change(Sender: TObject);
-    procedure VDTButton3Click(Sender: TObject);
-    procedure ScanEditAlbumKeyPress(Sender: TObject; var Key: Char);
-    procedure ScanEditEmprunteurKeyPress(Sender: TObject; var Key: Char);
-    procedure ScanEditAuteurKeyPress(Sender: TObject; var Key: Char);
-    procedure ScanEditSerieKeyPress(Sender: TObject; var Key: Char);
-    procedure ScanEditParaBDKeyPress(Sender: TObject; var Key: Char);
-    procedure VDTButton5Click(Sender: TObject);
-    procedure VDTButton4Click(Sender: TObject);
+    procedure FrameRechercheRapideedSearchKeyPress(Sender: TObject;
+      var Key: Char);
   private
     { Déclarations privées }
     procedure ChangeAlbumMode(Mode: TVirtualMode);
@@ -83,6 +71,18 @@ begin
   ChargeImage(vstAuteurs.Background, 'FONDVT');
   ChargeImage(vstSeries.Background, 'FONDVT');
   ChargeImage(vstParaBD.Background, 'FONDVT');
+
+  FrameRechercheRapideAlbums.VirtualTreeView := vstAlbums;
+  FrameRechercheRapideAlbums.ShowNewButton := False;
+  FrameRechercheRapideEmprunteurs.VirtualTreeView := vstEmprunteurs;
+  FrameRechercheRapideEmprunteurs.ShowNewButton := False;
+  FrameRechercheRapideAuteurs.VirtualTreeView := vstAuteurs;
+  FrameRechercheRapideAuteurs.ShowNewButton := False;
+  FrameRechercheRapideSeries.VirtualTreeView := vstSeries;
+  FrameRechercheRapideSeries.ShowNewButton := False;
+  FrameRechercheRapideParaBD.VirtualTreeView := vstParaBD;
+  FrameRechercheRapideParaBD.ShowNewButton := False;
+
   PageRep.ActivePageIndex := 0;
 
   vstAlbums.Mode := vmNone;
@@ -142,68 +142,11 @@ begin
   end
 end;
 
-procedure TFrmRepertoire.VDTButton1Click(Sender: TObject);
-begin
-  vstAlbums.Find(ScanEditAlbum.Text, Sender = VDTButton1);
-end;
-
-procedure TFrmRepertoire.VDTButton2Click(Sender: TObject);
-begin
-  vstEmprunteurs.Find(ScanEditEmprunteur.Text, Sender = VDTButton2);
-end;
-
-procedure TFrmRepertoire.VDTButton3Click(Sender: TObject);
-begin
-  vstAuteurs.Find(ScanEditAuteur.Text, Sender = VDTButton3);
-end;
-
-procedure TFrmRepertoire.VDTButton5Click(Sender: TObject);
-begin
-  vstSeries.Find(ScanEditSerie.Text, Sender = VDTButton5);
-end;
-
-procedure TFrmRepertoire.VDTButton4Click(Sender: TObject);
-begin
-  vstParaBD.Find(ScanEditParaBD.Text, Sender = VDTButton4);
-end;
-
-procedure TFrmRepertoire.ScanEditAlbumKeyPress(Sender: TObject; var Key: Char);
+procedure TFrmRepertoire.FrameRechercheRapideedSearchKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key = #13 then begin
     Key := #0;
-    vstAlbums.OnDblClick(vstAlbums);
-  end;
-end;
-
-procedure TFrmRepertoire.ScanEditEmprunteurKeyPress(Sender: TObject; var Key: Char);
-begin
-  if Key = #13 then begin
-    Key := #0;
-    vstEmprunteurs.OnDblClick(vstEmprunteurs);
-  end;
-end;
-
-procedure TFrmRepertoire.ScanEditAuteurKeyPress(Sender: TObject; var Key: Char);
-begin
-  if Key = #13 then begin
-    Key := #0;
-    vstAuteurs.OnDblClick(vstAuteurs);
-  end;
-end;
-
-procedure TFrmRepertoire.ScanEditSerieKeyPress(Sender: TObject; var Key: Char);
-begin
-  if Key = #13 then begin
-    Key := #0;
-    vstSeries.OnDblClick(vstSeries);
-  end;
-end;
-
-procedure TFrmRepertoire.ScanEditParaBDKeyPress(Sender: TObject; var Key: Char);
-begin
-  if Key = #13 then begin
-    Key := #0;
-    vstParaBD.OnDblClick(vstParaBD);
+    TFrameRechercheRapide(TWinControl(Sender).Parent).VirtualTreeView.OnDblClick(nil);
   end;
 end;
 
