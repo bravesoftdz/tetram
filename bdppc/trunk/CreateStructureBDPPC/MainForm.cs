@@ -10,163 +10,163 @@ using System.Reflection;
 
 namespace CreateStructureBDPPC
 {
-	/// <summary>
-	/// Description résumée de Form1.
-	/// </summary>
-	public class Form1 : System.Windows.Forms.Form
-	{
-		private System.Windows.Forms.Button button1;
-		private System.Windows.Forms.Button button2;
-		private System.Windows.Forms.Button button3;
-		private System.Windows.Forms.ProgressBar progressBar1;
-		private System.Windows.Forms.MainMenu mainMenu1;
+    /// <summary>
+    /// Description résumée de Form1.
+    /// </summary>
+    public class Form1 : System.Windows.Forms.Form
+    {
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.MainMenu mainMenu1;
 
-		public Form1()
-		{
-			//
-			// Requis pour la prise en charge du Concepteur Windows Forms
-			//
-			InitializeComponent();
+        public Form1()
+        {
+            //
+            // Requis pour la prise en charge du Concepteur Windows Forms
+            //
+            InitializeComponent();
 
-			//
-			// TODO : ajoutez le code du constructeur après l'appel à InitializeComponent
-			//
+            //
+            // TODO : ajoutez le code du constructeur après l'appel à InitializeComponent
+            //
 #if (DEBUG)
-			this.MinimizeBox = false;
+            this.MinimizeBox = false;
 #endif
-		}
-		/// <summary>
-		/// Nettoyage des ressources utilisées.
-		/// </summary>
-		protected override void Dispose( bool disposing )
-		{
-			base.Dispose( disposing );
-		}
-		#region Code généré par le Concepteur Windows Form
-		/// <summary>
-		/// Méthode requise pour la prise en charge du concepteur - ne modifiez pas
-		/// le contenu de cette méthode avec l'éditeur de code.
-		/// </summary>
-		private void InitializeComponent()
-		{
-			this.mainMenu1 = new System.Windows.Forms.MainMenu();
-			this.button1 = new System.Windows.Forms.Button();
-			this.button2 = new System.Windows.Forms.Button();
-			this.button3 = new System.Windows.Forms.Button();
-			this.progressBar1 = new System.Windows.Forms.ProgressBar();
-			// 
-			// button1
-			// 
-			this.button1.Location = new System.Drawing.Point(8, 32);
-			this.button1.Text = "Données";
-			this.button1.Click += new System.EventHandler(this.button1_Click);
-			// 
-			// button2
-			// 
-			this.button2.Location = new System.Drawing.Point(8, 8);
-			this.button2.Text = "Tables";
-			this.button2.Click += new System.EventHandler(this.button2_Click);
-			// 
-			// button3
-			// 
-			this.button3.Location = new System.Drawing.Point(88, 8);
-			this.button3.Text = "Vider";
-			this.button3.Click += new System.EventHandler(this.button3_Click);
-			// 
-			// progressBar1
-			// 
-			this.progressBar1.Location = new System.Drawing.Point(40, 240);
-			// 
-			// Form1
-			// 
-			this.Controls.Add(this.progressBar1);
-			this.Controls.Add(this.button3);
-			this.Controls.Add(this.button2);
-			this.Controls.Add(this.button1);
-			this.Menu = this.mainMenu1;
-			this.Text = "Form1";
+        }
+        /// <summary>
+        /// Nettoyage des ressources utilisées.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+        }
+        #region Code généré par le Concepteur Windows Form
+        /// <summary>
+        /// Méthode requise pour la prise en charge du concepteur - ne modifiez pas
+        /// le contenu de cette méthode avec l'éditeur de code.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.mainMenu1 = new System.Windows.Forms.MainMenu();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(8, 32);
+            this.button1.Text = "Données";
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(8, 8);
+            this.button2.Text = "Tables";
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(88, 8);
+            this.button3.Text = "Vider";
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(40, 240);
+            // 
+            // Form1
+            // 
+            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.button3);
+            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button1);
+            this.Menu = this.mainMenu1;
+            this.Text = "Form1";
 
-		}
-		#endregion
+        }
+        #endregion
 
-		private ArrayList GetTextRessource(string strName)
-		{
-			Assembly assembly = Assembly.GetExecutingAssembly();
-			Stream stream = assembly.GetManifestResourceStream(assembly.GetName().Name + '.' + strName);
-			StreamReader reader = new StreamReader(stream);
-			ArrayList result = new ArrayList();
-  		while (reader.BaseStream.Position < reader.BaseStream.Length)
-				result.Add(reader.ReadLine());
-			return result;
-		}
+        private ArrayList GetTextRessource(string strName)
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            Stream stream = assembly.GetManifestResourceStream(assembly.GetName().Name + '.' + strName);
+            StreamReader reader = new StreamReader(stream);
+            ArrayList result = new ArrayList();
+            while (reader.BaseStream.Position < reader.BaseStream.Length)
+                result.Add(reader.ReadLine());
+            return result;
+        }
 
-		
-		private void button1_Click(object sender, System.EventArgs e)
-		{
-			ExecuteScript(GetTextRessource("ScriptData.sql"));
-		}
 
-		private bool ExcuteSQL(string sql)
-		{
-			if (sql == null || sql.Length == 0) return true;
+        private void button1_Click(object sender, System.EventArgs e)
+        {
+            ExecuteScript(GetTextRessource("ScriptData.sql"));
+        }
+
+        private bool ExcuteSQL(string sql)
+        {
+            if (sql == null || sql.Length == 0) return true;
 #if (DEBUG)
-			using (IDbCommand _command = BDPPCDatabase.DebugDBConnection().Connection.CreateCommand())
+            using (IDbCommand _command = BDPPCDatabase.DebugDBConnection().Connection.CreateCommand())
 #else
 			using (IDbCommand _command = BDPPCDatabase.DBConnection.Connection.CreateCommand())
 #endif
-			{
-				_command.CommandText = sql;
-				_command.ExecuteNonQuery();
-			}
-			return true;
-		}
+            {
+                _command.CommandText = sql;
+                _command.ExecuteNonQuery();
+            }
+            return true;
+        }
 
-		private void ExecuteScript(string[] script)
-		{
-			progressBar1.Minimum = 0; 
-			progressBar1.Maximum = script.Length;
+        private void ExecuteScript(string[] script)
+        {
+            progressBar1.Minimum = 0;
+            progressBar1.Maximum = script.Length;
 #if (DEBUG)
-			using (IDbCommand _command = BDPPCDatabase.DebugDBConnection().Connection.CreateCommand())
+            using (IDbCommand _command = BDPPCDatabase.DebugDBConnection().Connection.CreateCommand())
 #else
 			using (IDbCommand _command = BDPPCDatabase.DBConnection.Connection.CreateCommand())
 #endif
-			{
-				foreach(string sql in script)
-				{
-					_command.CommandText = sql;
-					_command.ExecuteNonQuery();
-					progressBar1.Value++;
-					if (progressBar1.Value % 100 == 0) progressBar1.Update();
-				}
-			}
-			MessageBox.Show("Ok");
-		}
-		
-		private void ExecuteScript(ArrayList script)
-		{
-			progressBar1.Minimum = 0; 
-			progressBar1.Maximum = script.Count;
+            {
+                foreach (string sql in script)
+                {
+                    _command.CommandText = sql;
+                    _command.ExecuteNonQuery();
+                    progressBar1.Value++;
+                    if (progressBar1.Value % 100 == 0) progressBar1.Update();
+                }
+            }
+            MessageBox.Show("Ok");
+        }
+
+        private void ExecuteScript(ArrayList script)
+        {
+            progressBar1.Minimum = 0;
+            progressBar1.Maximum = script.Count;
 #if (DEBUG)
-			using (IDbCommand _command = BDPPCDatabase.DebugDBConnection().Connection.CreateCommand())
+            using (IDbCommand _command = BDPPCDatabase.DebugDBConnection().Connection.CreateCommand())
 #else
 			using (IDbCommand _command = BDPPCDatabase.DBConnection.Connection.CreateCommand())
 #endif
-			{
-				for(int i = 0; i < script.Count; i++)
-				{
-					_command.CommandText = (string)script[i];
-					_command.ExecuteNonQuery();
-			
-					if (i % 100 == 0) progressBar1.Value = i;
-				}
-			}
-			MessageBox.Show("Ok");
-		}
-		
-		private void button2_Click(object sender, System.EventArgs e)
-		{
-			string[] SQLScriptCreate = new string[14] 	{
-																										@"CREATE TABLE ALBUMS (
+            {
+                for (int i = 0; i < script.Count; i++)
+                {
+                    _command.CommandText = (string)script[i];
+                    _command.ExecuteNonQuery();
+
+                    if (i % 100 == 0) progressBar1.Value = i;
+                }
+            }
+            MessageBox.Show("Ok");
+        }
+
+        private void button2_Click(object sender, System.EventArgs e)
+        {
+            string[] SQLScriptCreate = new string[14] 	{
+@"CREATE TABLE ALBUMS (
     ID_ALBUMS            nCHAR(38),
     REFALBUM             INTEGER,
     TITREALBUM           nVARCHAR(150),
@@ -190,7 +190,7 @@ namespace CreateStructureBDPPC
     DC_ALBUMS            datetime,
     DM_ALBUMS            datetime
 );",
-																										@"CREATE TABLE AUTEURS (
+@"CREATE TABLE AUTEURS (
     ID_AUTEURS   nCHAR(38),
     REFALBUM     INTEGER,
     REFPERSONNE  INTEGER,
@@ -198,7 +198,7 @@ namespace CreateStructureBDPPC
     DC_AUTEURS   datetime,
     DM_AUTEURS   datetime
 );",
-																										@"CREATE TABLE AUTEURS_SERIES (
+@"CREATE TABLE AUTEURS_SERIES (
     ID_AUTEURS_SERIES  nCHAR(38),
     REFSERIE           INTEGER,
     REFPERSONNE        INTEGER,
@@ -206,7 +206,7 @@ namespace CreateStructureBDPPC
     DC_AUTEURS_SERIES  datetime,
     DM_AUTEURS_SERIES  datetime
 );",
-																										@"CREATE TABLE COLLECTIONS (
+@"CREATE TABLE COLLECTIONS (
     ID_COLLECTIONS         nCHAR(38),
     REFCOLLECTION          INTEGER,
     NOMCOLLECTION          nVARCHAR(50),
@@ -216,7 +216,7 @@ namespace CreateStructureBDPPC
     DC_COLLECTIONS         datetime,
     DM_COLLECTIONS         datetime
 );",
-																										@"CREATE TABLE EDITEURS (
+@"CREATE TABLE EDITEURS (
     ID_EDITEURS         nCHAR(38),
     REFEDITEUR          INTEGER,
     NOMEDITEUR          nVARCHAR(50),
@@ -226,7 +226,7 @@ namespace CreateStructureBDPPC
     DC_EDITEURS         datetime,
     DM_EDITEURS         datetime
 );",
-																										@"CREATE TABLE EDITIONS (
+@"CREATE TABLE EDITIONS (
     ID_EDITIONS    nCHAR(38),
     REFEDITION     INTEGER,
     REFALBUM       INTEGER,
@@ -253,7 +253,7 @@ namespace CreateStructureBDPPC
     DC_EDITIONS    datetime,
     DM_EDITIONS    datetime
 );",
-																										@"CREATE TABLE EMPRUNTEURS (
+@"CREATE TABLE EMPRUNTEURS (
     ID_EMPRUNTEURS         nCHAR(38),
     REFEMPRUNTEUR          INTEGER,
     NOMEMPRUNTEUR          nvarchar(150),
@@ -263,7 +263,7 @@ namespace CreateStructureBDPPC
     DC_EMPRUNTEURS         datetime,
     DM_EMPRUNTEURS         datetime
 );",
-																										@"CREATE TABLE GENRES (
+@"CREATE TABLE GENRES (
     ID_GENRES      nCHAR(38),
     REFGENRE       INTEGER,
     GENRE          nVARCHAR(30),
@@ -272,14 +272,14 @@ namespace CreateStructureBDPPC
     DC_GENRES      datetime,
     DM_GENRES      datetime
 );",
-																										@"CREATE TABLE GENRESERIES (
+@"CREATE TABLE GENRESERIES (
     ID_GENRESERIES  nCHAR(38),
     REFSERIE        INTEGER,
     REFGENRE        INTEGER,
     DC_GENRESERIES  datetime,
     DM_GENRESERIES  datetime
 );",
-																										@"CREATE TABLE LISTES (
+@"CREATE TABLE LISTES (
     ID_LISTES  nCHAR(38),
     REF        INTEGER,
     CATEGORIE  INTEGER,
@@ -289,14 +289,14 @@ namespace CreateStructureBDPPC
     DC_LISTES  datetime,
     DM_LISTES  datetime
 );",
-																										@"CREATE TABLE OPTIONS (
+@"CREATE TABLE OPTIONS (
     ID_OPTIONS  nCHAR(38),
     NOM_OPTION  nVARCHAR(15),
     VALEUR      nVARCHAR(255),
     DC_OPTIONS  datetime,
     DM_OPTIONS  datetime
 );",
-																										@"CREATE TABLE PERSONNES (
+@"CREATE TABLE PERSONNES (
     ID_PERSONNES         nCHAR(38),
     REFPERSONNE          INTEGER,
     NOMPERSONNE          nvarchar(150),
@@ -307,7 +307,7 @@ namespace CreateStructureBDPPC
     DC_PERSONNES         datetime,
     DM_PERSONNES         datetime
 );",
-																										@"CREATE TABLE SERIES (
+@"CREATE TABLE SERIES (
     ID_SERIES            nCHAR(38),
     REFSERIE             INTEGER,
     TITRESERIE           nVARCHAR(150),
@@ -326,7 +326,7 @@ namespace CreateStructureBDPPC
     DC_SERIES            datetime,
     DM_SERIES            datetime
 );",
-																										@"CREATE TABLE STATUT (
+@"CREATE TABLE STATUT (
     ID_STATUT      nCHAR(38),
     REFEMPRUNT     INTEGER,
     DATEEMPRUNT    datetime,
@@ -336,28 +336,28 @@ namespace CreateStructureBDPPC
     DC_STATUT      datetime,
     DM_STATUT      datetime
 );"};
-			ExecuteScript(SQLScriptCreate);
-		}
+            ExecuteScript(SQLScriptCreate);
+        }
 
-		private void button3_Click(object sender, System.EventArgs e)
-		{
-			string[] SQLScriptDelete = new string[14] 	{
-																										@"DELETE FROM ALBUMS;",
-																										@"DELETE FROM AUTEURS;",
-																										@"DELETE FROM AUTEURS_SERIES;",
-																										@"DELETE FROM COLLECTIONS;",
-																										@"DELETE FROM EDITEURS;",
-																										@"DELETE FROM EDITIONS;",
-																										@"DELETE FROM EMPRUNTEURS;",
-																										@"DELETE FROM GENRES;",
-																										@"DELETE FROM GENRESERIES;",
-																										@"DELETE FROM LISTES;",
-																										@"DELETE FROM OPTIONS;",
-																										@"DELETE FROM PERSONNES;",
-																										@"DELETE FROM SERIES;",
-																										@"DELETE FROM STATUT;"};
-			ExecuteScript(SQLScriptDelete);
-		}
+        private void button3_Click(object sender, System.EventArgs e)
+        {
+            string[] SQLScriptDelete = new string[14] 	{
+@"DELETE FROM ALBUMS;",
+@"DELETE FROM AUTEURS;",
+@"DELETE FROM AUTEURS_SERIES;",
+@"DELETE FROM COLLECTIONS;",
+@"DELETE FROM EDITEURS;",
+@"DELETE FROM EDITIONS;",
+@"DELETE FROM EMPRUNTEURS;",
+@"DELETE FROM GENRES;",
+@"DELETE FROM GENRESERIES;",
+@"DELETE FROM LISTES;",
+@"DELETE FROM OPTIONS;",
+@"DELETE FROM PERSONNES;",
+@"DELETE FROM SERIES;",
+@"DELETE FROM STATUT;"};
+            ExecuteScript(SQLScriptDelete);
+        }
 
-	}
+    }
 }
