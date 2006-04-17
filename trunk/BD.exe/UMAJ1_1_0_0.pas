@@ -183,7 +183,7 @@ begin
     Script.Add('       s.UPPERTITRESERIE,');
     Script.Add('       a.ACHAT,');
     Script.Add('       a.COMPLET,');
-    Script.Add('       lc.LIBELLE,');
+    Script.Add('       lc.LIBELLE');
     Script.Add('FROM PARABD a INNER JOIN SERIES s ON s.refserie = a.refserie');
     Script.Add('LEFT JOIN LISTES lc on (lc.ref = a.CATEGORIEPARABD and lc.categorie = 7);');
 

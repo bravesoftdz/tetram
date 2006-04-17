@@ -40,10 +40,6 @@ object FrameRechercheRapide: TFrameRechercheRapide
     TabOrder = 0
     OnChange = EditLabeled1Click
     OnKeyUp = edSearchKeyUp
-    LinkLabel.LinkLabel.Strings = (
-      'Label5'
-      'VDTButton1')
-    LinkLabel.LinkControls = <>
     LinkControls = <>
     CurrencyChar = #0
   end
