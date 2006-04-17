@@ -52,6 +52,7 @@ type
     Titre: string[150];
     RefSerie: Integer;
     Serie: string[150];
+    sCategorie: string[50];
     Achat: Boolean;
     Complet: Boolean;
 
@@ -363,7 +364,7 @@ begin
   Reference := Query.Fields.ByNameAsInteger['RefCouverture'];
   OldNom := Query.Fields.ByNameAsString['FichierCouverture'];
   NewNom := OldNom;
-  OldStockee := Query.Fields.ByNameAsBoolean['TypeCouverture'];
+  OldStockee := Query.Fields.ByNameAsBoolean['STOCKAGECOUVERTURE'];
   NewStockee := OldStockee;
   Categorie := Query.Fields.ByNameAsSmallint['CategorieImage'];
   sCategorie := Query.Fields.ByNameAsString['sCategorieImage'];
@@ -984,6 +985,7 @@ begin
     Result := FormatTitre(Titre);
   s := '';
   AjoutString(s, FormatTitre(Serie), ' - ');
+  AjoutString(s, sCategorie, ' - ');
   AjoutString(Result, s, ' ', '(', ')');
 end;
 
@@ -1006,6 +1008,11 @@ begin
     Complet := Query.Fields.ByNameAsBoolean['Complet'];
   except
     Complet := True;
+  end;
+  try
+    sCategorie := Query.Fields.ByNameAsString['sCategorie'];
+  except
+    sCategorie := '';
   end;
 end;
 

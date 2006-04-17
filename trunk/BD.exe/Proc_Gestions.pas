@@ -415,7 +415,7 @@ end;
 
 function AjouterParaBD(VT: TVirtualStringTree; Valeur: string): Integer;
 begin
-  Result := CreationAlbum(Valeur);
+  Result := CreationParaBD(Valeur);
   if Result = -1 then Exit;
   if Assigned(VT) then begin
     VT.InitializeRep(False);
@@ -430,7 +430,7 @@ begin
   Result := False;
   i := VT.CurrentValue;
   if i = -1 then Exit;
-  Result := EditionAlbum(i);
+  Result := EditionParaBD(i);
   if Result then VT.InitializeRep;
 end;
 

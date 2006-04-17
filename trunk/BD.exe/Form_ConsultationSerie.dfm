@@ -371,7 +371,8 @@ object FrmConsultationSerie: TFrmConsultationSerie
       Color = clWhite
       Columns = <
         item
-          Width = 46
+          MinWidth = 150
+          Width = 231
         end>
       ColumnClick = False
       HideSelection = False
@@ -422,27 +423,20 @@ object FrmConsultationSerie: TFrmConsultationSerie
       BorderStyle = bsNone
       ButtonFillMode = fmShaded
       CheckImageKind = ckDarkCheck
-      Header.AutoSizeIndex = 0
+      Header.AutoSizeIndex = -1
       Header.Font.Charset = DEFAULT_CHARSET
       Header.Font.Color = clWindowText
       Header.Font.Height = -11
       Header.Font.Name = 'Tahoma'
       Header.Font.Style = []
+      Header.MainColumn = -1
       Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
       ParentColor = True
       TabOrder = 7
       TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
       TreeOptions.StringOptions = []
       OnDblClick = vtParaBDDblClick
-      Columns = <
-        item
-          Position = 1
-          Width = 695
-        end
-        item
-          Position = 0
-          Width = 100
-        end>
+      Columns = <>
     end
     object cbTerminee: TReadOnlyCheckBox
       Left = 216

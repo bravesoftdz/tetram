@@ -4,7 +4,7 @@ interface
 
 uses
   SysUtils, Windows, Classes, Dialogs, ComCtrls, ExtCtrls, Controls, Forms, TypeRec, Graphics, CommonConst, JvUIB, jpeg, GraphicEx,
-  StdCtrls, Form_Progression, JvUIBLib;
+  StdCtrls, Form_Progression, ComboCheck, JvUIBLib;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
 
@@ -128,6 +128,9 @@ procedure LoadCouverture(isParaBD: Boolean; RefCouverture: Integer; Picture: TPi
 function GetJPEGStream(const Fichier: string): TStream;
 function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = True): string;
 
+procedure LoadCombo(Categorie: Integer; Combo: TLightComboCheck);
+procedure LoadStrings(Categorie: Integer; Strings: TStrings);
+
 function HTMLPrepare(const AStr: string): string;
 
 implementation
@@ -214,7 +217,7 @@ begin
   op := TJvUIBQuery.Create(nil);
   with op do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT SKIP 1 Valeur FROM OPTIONS WHERE NOM_OPTION = ? ORDER BY DM_OPTIONS DESC';
+    SQL.Text := 'SELECT FIRST 1 Valeur FROM OPTIONS WHERE NOM_OPTION = ? ORDER BY DM_OPTIONS DESC';
     Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', CurrencyString);
     FormatMonnaie := IIf(CurrencyFormat in [0, 2], Utilisateur.Options.SymboleMonnetaire + IIf(CurrencyFormat = 2, ' ', ''), '') + FormatMonnaieCourt + IIf(CurrencyFormat in [1, 3], IIf(CurrencyFormat = 3, ' ', '') + Utilisateur.Options.SymboleMonnetaire, '');
     RepImages := LitStr(op, 'RepImages', RepImages);
@@ -224,7 +227,8 @@ begin
   end;
   with TIniFile.Create(FichierIni) do try
     Utilisateur.Options.ModeDemarrage := ReadBool('DIVERS', 'ModeDemarrage', True);
-    Utilisateur.Options.FicheWithCouverture := ReadBool('DIVERS', 'FicheWithCouverture', True);
+    Utilisateur.Options.FicheAlbumWithCouverture := ReadBool('DIVERS', 'FicheWithCouverture', True);
+    Utilisateur.Options.FicheParaBDWithImage := ReadBool('DIVERS', 'ParaBDWithImage', True);
     Utilisateur.Options.Images := ReadBool('DIVERS', 'Images', True);
     Utilisateur.Options.AntiAliasing := ReadBool('DIVERS', 'AntiAliasing', True);
     Utilisateur.Options.ImagesStockees := ReadBool('ModeEdition', 'ImagesStockees', False);
@@ -290,7 +294,8 @@ begin
   with TIniFile.Create(FichierIni) do try
     WriteBool('DIVERS', 'ModeDemarrage', Utilisateur.Options.ModeDemarrage);
     WriteBool('DIVERS', 'Images', Utilisateur.Options.Images);
-    WriteBool('DIVERS', 'FicheWithCouverture', Utilisateur.Options.FicheWithCouverture);
+    WriteBool('DIVERS', 'FicheWithCouverture', Utilisateur.Options.FicheAlbumWithCouverture);
+    WriteBool('DIVERS', 'ParaBDWithImage', Utilisateur.Options.FicheParaBDWithImage);
     WriteBool('DIVERS', 'AntiAliasing', Utilisateur.Options.AntiAliasing);
     WriteBool('DIVERS', 'AvertirPret', Utilisateur.Options.AvertirPret);
     WriteBool('DIVERS', 'GrandesIconesMenus', Utilisateur.Options.GrandesIconesMenus);
@@ -988,38 +993,40 @@ begin
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     if isParaBD then
-      SQL.Text := 'SELECT ParaBD, TypeParaBD, FichierParaBD FROM ParaBD WHERE RefParaBD = ?'
+      SQL.Text := 'SELECT IMAGEPARABD, STOCKAGEPARABD, FichierParaBD FROM ParaBD WHERE RefParaBD = ?'
     else
-      SQL.Text := 'SELECT Couverture, TypeCouverture, FichierCouverture FROM Couvertures WHERE RefCouverture = ?';
+      SQL.Text := 'SELECT IMAGECOUVERTURE, STOCKAGECOUVERTURE, FichierCouverture FROM Couvertures WHERE RefCouverture = ?';
     Params.AsInteger[0] := RefCouverture;
     FetchBlobs := True;
     Open;
-    if Eof then
+    if Eof or (Fields.IsNull[0] and Fields.IsNull[2]) then
       Picture.Assign(nil)
-    else if not Fields.AsBoolean[1] then begin
-      Fichier := ExtractFileName(Fields.AsString[2]);
-      Chemin := ExtractFilePath(Fields.AsString[2]);
-      if Chemin = '' then Chemin := RepImages;
-      SQL.Text := 'SELECT BlobContent FROM LOADBLOBFROMFILE(:Chemin, :Fichier);';
-      Params.AsString[0] := Chemin;
-      Params.AsString[1] := Fichier;
-      Open;
-      if Eof then begin
-        Picture.Assign(nil);
-        Exit;
+    else begin
+      if not Fields.AsBoolean[1] then begin
+        Fichier := ExtractFileName(Fields.AsString[2]);
+        Chemin := ExtractFilePath(Fields.AsString[2]);
+        if Chemin = '' then Chemin := RepImages;
+        SQL.Text := 'SELECT BlobContent FROM LOADBLOBFROMFILE(:Chemin, :Fichier);';
+        Params.AsString[0] := Chemin;
+        Params.AsString[1] := Fichier;
+        Open;
+        if Eof then begin
+          Picture.Assign(nil);
+          Exit;
+        end;
       end;
-    end;
 
-    ms := TMemoryStream.Create;
-    img := TJPEGImage.Create;
-    try
-      ReadBlob(0, ms);
-      ms.Position := 0;
-      img.LoadFromStream(ms);
-      Picture.Assign(img);
-    finally
-      ms.Free;
-      img.Free;
+      ms := TMemoryStream.Create;
+      img := TJPEGImage.Create;
+      try
+        ReadBlob(0, ms);
+        ms.Position := 0;
+        img.LoadFromStream(ms);
+        Picture.Assign(img);
+      finally
+        ms.Free;
+        img.Free;
+      end;
     end;
   finally
     Transaction.Free;
@@ -1234,6 +1241,62 @@ begin
     Params.AsBoolean[2] := Reserve;
     Open;
     Result := ExtractFileName(Fields.AsString[0]);
+  finally
+    Transaction.Free;
+    Free;
+  end;
+end;
+
+procedure LoadStrings(Categorie: Integer; Strings: TStrings);
+begin
+  with TJvUIBQuery.Create(nil) do try
+    Transaction := GetTransaction(DMPrinc.UIBDataBase);
+    SQL.Text := 'SELECT REF, LIBELLE, DEFAUT FROM LISTES WHERE CATEGORIE = :Categorie ORDER BY ORDRE';
+
+    Params.AsInteger[0] := Categorie;
+    Open;
+    Strings.Clear;
+    while not Eof do begin
+      Strings.Add(Fields.AsString[0] + '=' + Fields.AsString[1]);
+      Next;
+    end;
+  finally
+    Transaction.Free;
+    Free;
+  end;
+end;
+
+procedure LoadCombo(Categorie: Integer; Combo: TLightComboCheck);
+var
+  HasNULL: Boolean;
+begin
+  with TJvUIBQuery.Create(nil) do try
+    Transaction := GetTransaction(DMPrinc.UIBDataBase);
+    SQL.Text := 'SELECT REF, LIBELLE, DEFAUT FROM LISTES WHERE CATEGORIE = :Categorie ORDER BY ORDRE';
+
+    HasNULL := False;
+
+    Params.AsInteger[0] := Categorie;
+    Open;
+    Combo.Items.Clear;
+    Combo.DefaultValueChecked := -1;
+    while not Eof do begin
+      with Combo.Items.Add do begin
+        Caption := Fields.AsString[1];
+        Valeur := Fields.AsInteger[0];
+        if Fields.AsBoolean[2] then Combo.DefaultValueChecked := Valeur;
+        HasNULL := Valeur = -1;
+      end;
+      Next;
+    end;
+    if not HasNULL then
+      with Combo.Items.Add do begin
+        Caption := '';
+        Valeur := -1;
+        Index := 0;
+      end;
+
+    Combo.Value := Combo.DefaultValueChecked;
   finally
     Transaction.Free;
     Free;

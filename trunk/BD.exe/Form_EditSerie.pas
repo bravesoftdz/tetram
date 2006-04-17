@@ -262,7 +262,7 @@ begin
       remarques.Lines.Text := Fields.ByNameAsString['REMARQUESserie'];
       edSite.Text := Fields.ByNameAsString['SITEWEB'];
 
-      SQL.Text := 'SELECT * FROM PROC_AUTEURS(NULL, ?)';
+      SQL.Text := 'SELECT * FROM PROC_AUTEURS(NULL, ?, NULL)';
       Params.AsInteger[0] := FRefSerie;
       Open;
       while not Eof do begin

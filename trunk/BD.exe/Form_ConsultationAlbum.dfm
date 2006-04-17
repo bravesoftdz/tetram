@@ -1,8 +1,8 @@
 object FrmConsultationAlbum: TFrmConsultationAlbum
-  Left = 352
-  Top = 253
+  Left = 145
+  Top = 98
   Width = 530
-  Height = 831
+  Height = 833
   Caption = 'Fiche d'#39'album'
   Color = clWhite
   Constraints.MinWidth = 530
@@ -22,14 +22,14 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
     Left = 0
     Top = 0
     Width = 522
-    Height = 779
+    Height = 781
     Align = alClient
     BorderStyle = bsNone
     ParentBackground = True
     TabOrder = 0
     DesignSize = (
       522
-      779)
+      781)
     object Label4: TLabel
       Left = 364
       Top = 164
@@ -340,7 +340,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 776
+      Top = 778
       Width = 522
       Height = 3
       Align = alBottom
@@ -556,7 +556,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Left = 3
       Top = 467
       Width = 513
-      Height = 292
+      Height = 310
       Anchors = [akLeft, akTop, akRight]
       BevelOuter = bvNone
       Caption = ' '
@@ -564,7 +564,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       TabOrder = 10
       DesignSize = (
         513
-        292)
+        310)
       object ISBN: TLabel
         Left = 56
         Top = 2
@@ -641,7 +641,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object Label2: TLabel
         Left = 14
-        Top = 157
+        Top = 173
         Width = 45
         Height = 13
         Caption = 'Emprunts'
@@ -714,7 +714,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object Etat: TLabel
         Left = 56
-        Top = 69
+        Top = 85
         Width = 20
         Height = 13
         Caption = 'Etat'
@@ -722,7 +722,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object Label10: TLabel
         Left = 26
-        Top = 69
+        Top = 85
         Width = 24
         Height = 13
         Alignment = taRightJustify
@@ -739,7 +739,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object Reliure: TLabel
         Left = 208
-        Top = 69
+        Top = 85
         Width = 33
         Height = 13
         Caption = 'Reliure'
@@ -747,7 +747,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object Label13: TLabel
         Left = 163
-        Top = 69
+        Top = 85
         Width = 37
         Height = 13
         Alignment = taRightJustify
@@ -764,7 +764,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object TypeEdition: TLabel
         Left = 350
-        Top = 69
+        Top = 85
         Width = 32
         Height = 13
         Caption = 'Edition'
@@ -772,7 +772,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object Label8: TLabel
         Left = 18
-        Top = 102
+        Top = 118
         Width = 32
         Height = 13
         Alignment = taRightJustify
@@ -814,7 +814,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object Label15: TLabel
         Left = 17
-        Top = 85
+        Top = 101
         Width = 33
         Height = 13
         Alignment = taRightJustify
@@ -831,14 +831,14 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object Pages: TLabel
         Left = 56
-        Top = 85
+        Top = 101
         Width = 29
         Height = 13
         Caption = 'Pages'
       end
       object Label17: TLabel
         Left = 142
-        Top = 85
+        Top = 101
         Width = 58
         Height = 13
         Alignment = taRightJustify
@@ -855,7 +855,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object lbOrientation: TLabel
         Left = 208
-        Top = 85
+        Top = 101
         Width = 54
         Height = 13
         Caption = 'Orientation'
@@ -863,7 +863,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object Label19: TLabel
         Left = 350
-        Top = 85
+        Top = 101
         Width = 38
         Height = 13
         Caption = 'Format:'
@@ -879,11 +879,35 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object lbFormat: TLabel
         Left = 392
-        Top = 85
+        Top = 101
         Width = 34
         Height = 13
         Caption = 'Format'
         ShowAccelChar = False
+      end
+      object lbCote: TLabel
+        Left = 56
+        Top = 68
+        Width = 23
+        Height = 13
+        Caption = 'Cote'
+      end
+      object Label20: TLabel
+        Left = 23
+        Top = 68
+        Width = 27
+        Height = 13
+        Alignment = taRightJustify
+        Caption = 'Cote:'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clHotLight
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
       end
       object cbVO: TReadOnlyCheckBox
         Left = 213
@@ -906,7 +930,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object ListeEmprunts: TVirtualStringTree
         Left = 8
-        Top = 176
+        Top = 192
         Width = 505
         Height = 116
         Anchors = [akLeft, akTop, akRight]
@@ -949,7 +973,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object ajouter: TButton
         Left = 441
-        Top = 154
+        Top = 170
         Width = 72
         Height = 20
         Cursor = crHandPoint
@@ -999,7 +1023,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object edNotes: TMemo
         Left = 56
-        Top = 102
+        Top = 118
         Width = 457
         Height = 40
         Anchors = [akLeft, akTop, akRight]
@@ -1145,16 +1169,14 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         Action = FicheImprime
       end
     end
-    object Srie1: TMenuItem
-      Caption = 'S'#233'rie'
+    object Couverture1: TMenuItem
+      Caption = 'Image'
       GroupIndex = 1
-      object Aperuavantimpression7: TMenuItem
-        Caption = 'Aper'#231'u avant impression'
-        ImageIndex = 4
+      object Aperuavantimpression5: TMenuItem
+        Action = CouvertureApercu
       end
-      object Imprimer1: TMenuItem
-        Caption = 'Imprimer'
-        ImageIndex = 3
+      object Aperuavantimpression6: TMenuItem
+        Action = CouvertureImprime
       end
     end
     object Emprunts2: TMenuItem
@@ -1165,16 +1187,6 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object Aperuavantimpression4: TMenuItem
         Action = EmpruntImprime
-      end
-    end
-    object Couverture1: TMenuItem
-      Caption = 'Couverture'
-      GroupIndex = 1
-      object Aperuavantimpression5: TMenuItem
-        Action = CouvertureApercu
-      end
-      object Aperuavantimpression6: TMenuItem
-        Action = CouvertureImprime
       end
     end
   end

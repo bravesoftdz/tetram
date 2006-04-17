@@ -86,6 +86,7 @@ object FrmEditCritere: TFrmEditCritere
     BorderStyle = bsNone
     TabOrder = 0
     Visible = False
+    LinkControls = <>
     CurrencyChar = #0
   end
   inline Frame11: TFrame1

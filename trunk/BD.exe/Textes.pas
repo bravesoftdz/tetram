@@ -9,17 +9,22 @@ const
   rsTransAlbums = 'Albums';
   rsTransAlbumsEmpruntes = 'Albums empruntés';
   rsTransAlbumsManquants = 'Albums manquants';
+  rsTransAnnee = 'Année';
   rsTransAnneeEdition = 'Année d''édition';
   rsTransAnneeParution = 'Année de parution';
   //  rsTransApercu = 'Aperçu avant impression';
+  rsTransAuteurs = 'Auteurs';
   //  rsTransAvec = 'Avec';
   rsTransBiographie = 'Biographie';
   rsTransCollection = 'Collection';
   rsTransConfig = 'Configuration';
   rsTransCoordonnees = 'Coordonnées';
+  rsTransCote = 'Cote';
   rsTransCouleur = 'Couleur';
   rsTransCouleurs = 'Couleurs';
+  rsTransCreateurs = 'Créateurs';
   rsTransDedicace = 'Dédicacé';
+  rsTransDescription = 'Description';
   rsTransDessins = 'Dessins';
   rsTransEditeur = 'Editeur';
   rsTransEdition = 'Edition';
@@ -47,12 +52,14 @@ const
   rsTransMinimum = 'Minimum';
   //  rsTransNationalite = 'Nationalité';
   rsTransNotes = 'Notes';
+  rsTransNumerote = 'Numéroté';
   rsTransOrientation = 'Orientation';
   //  rsTransOui = 'Oui';
   rsTransOffert = 'Offert';
   rsTransOffertLe = 'Offert le';
   rsTransPage = 'Page';
   rsTransPages = 'Pages';
+  rsTransParaDB = 'Para-BD';
   rsTransPret = 'Prêt';
   rsTransPrete = 'Prêté';
   rsTransPrevisionsSorties = 'Prévisions de sorties';
@@ -69,7 +76,7 @@ const
   rsTransStock = 'Stock';
   //  rsTransSupport = 'Support';
   rsTransTerminee = 'Terminée';
-  //  rsTransTitre = 'Titre';
+    rsTransTitre = 'Titre';
   rsTransTome = 'Tome';
   //  rsTransTotal = 'Total';
   //  rsTransTranche = 'Tranche';
@@ -117,6 +124,7 @@ const
   rsEditeurObligatoire = 'L''éditeur est obligatoire !';
   rsMoisParutionIncorrect = 'Le mois de parution doit être compris entre 1 et 12 !';
   rsCoteIncomplete = 'Une cote doit être composée d''un prix ET d''une année.';
+  rsTypeParaBDObligatoire = 'Le type de para-BD est obligatoire !';
 
   rsLienAlbum = 'Attention, les personnes et les emprunteurs qui ont un lien avec cet album en seront détachées.';
   rsSupprimerAlbum = 'Êtes-vous sûr de vouloir supprimer cet album ?';

@@ -13,16 +13,18 @@ procedure ImpressionInfosBDtheque(Previsualisation: Boolean);
 
 procedure ImpressionEmprunts(Previsualisation: Boolean; Source: TSrcEmprunt = seTous; Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1; Avant: TDateTime = -1; EnCours: Boolean = False; Stock: Boolean = False);
 
-procedure ImpressionFicheAlbum(Reference: Variant; RefEdition: Integer; Previsualisation: Boolean);
-procedure ImpressionFicheAuteur(Reference: Variant; Previsualisation: Boolean);
-procedure ImpressionSerie(Reference: Variant; Previsualisation: Boolean);
-procedure ImpressionEmpruntsAlbum(Reference: Variant; Previsualisation: Boolean);
+procedure ImpressionFicheAlbum(Reference: Integer; RefEdition: Integer; Previsualisation: Boolean);
+procedure ImpressionFicheAuteur(Reference: Integer; Previsualisation: Boolean);
+procedure ImpressionSerie(Reference: Integer; Previsualisation: Boolean);
+procedure ImpressionEmpruntsAlbum(Reference: Integer; Previsualisation: Boolean);
+procedure ImpressionFicheParaBD(Reference: Integer; Previsualisation: Boolean);
 
-procedure ImpressionFicheEmprunteur(Reference: Variant; Previsualisation: Boolean);
-procedure ImpressionEmpruntsEmprunteur(Reference: Variant; Previsualisation: Boolean);
+procedure ImpressionFicheEmprunteur(Reference: Integer; Previsualisation: Boolean);
+procedure ImpressionEmpruntsEmprunteur(Reference: Integer; Previsualisation: Boolean);
 
 procedure ImpressionRecherche(Resultat: TList; ResultatInfos, Criteres: TStringList; TypeRecherche: TTypeRecherche; Previsualisation: Boolean);
-procedure ImpressionCouvertureAlbum(Reference: Variant; RefCouverture: Integer; Previsualisation: Boolean);
+procedure ImpressionCouvertureAlbum(Reference: Integer; RefCouverture: Integer; Previsualisation: Boolean);
+procedure ImpressionImageParaBD(Reference: Integer; Previsualisation: Boolean);
 
 procedure ImpressionListeManquants(R: TSeriesIncompletes; Previsualisation: Boolean);
 procedure ImpressionListePrevisions(R: TPrevisionsSorties; Previsualisation: Boolean);
@@ -38,13 +40,14 @@ begin
   if not Result then Result := Fond.PrintDialog1.Execute;
 end;
 
-procedure ImpressionSerie(Reference: Variant; Previsualisation: Boolean);
+procedure ImpressionSerie(Reference: Integer; Previsualisation: Boolean);
 var
   fWaiting: IWaiting;
   Serie: TSerieComplete;
   Prn: TPrintObject;
   Infos, i, op: Integer;
   Album: TAlbum;
+  ParaBD: TParaBD;
   s, s2: string;
   Manquants: TSeriesIncompletes;
   AlbumsManquants: TSerieIncomplete;
@@ -198,6 +201,19 @@ begin
             Manquants.Free;
           end;
         end;
+        Prn.NextLine;
+      end;
+
+      if Serie.ParaBD.Count > 0 then begin
+        Prn.WriteLineColumn(0, -1, rsTransParaDB);
+        for i := 0 to Pred(Serie.ParaBD.Count) do begin
+          ParaBD := Serie.ParaBD[i];
+          s := '';
+          AjoutString(s, ParaBD.sCategorie, ' - ');
+          AjoutString(s, FormatTitre(ParaBD.Titre), ' - ');
+          Prn.WriteLineColumn(1, -1, s);
+        end;
+        Prn.NextLine;
       end;
     finally
       fWaiting.ShowProgression(rsTransImpression + '...', epNext);
@@ -209,7 +225,7 @@ begin
   end;
 end;
 
-procedure ImpressionFicheAlbum(Reference: Variant; RefEdition: Integer; Previsualisation: Boolean);
+procedure ImpressionFicheAlbum(Reference: Integer; RefEdition: Integer; Previsualisation: Boolean);
 var
   i: Integer;
   op: Integer;
@@ -254,10 +270,10 @@ begin
       Prn.CreateColumn1(4, 20, -1, taLeftJustify, 'Times New Roman', 12, []);
       Prn.CreateColumn1(5, 42, 30, taLeftJustify, 'Times New Roman', 16, []);
 
-      fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 1, 7);
+      fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransParaDB, rsTransPage, Prn.GetPageNumber]), 1, 7);
 
-      if Utilisateur.Options.FicheWithCouverture and Assigned(Edition) then begin
-        if Edition.Couvertures.Count > 0 then begin
+      if Utilisateur.Options.FicheAlbumWithCouverture and Assigned(Edition) then begin
+        if (Edition.Couvertures.Count > 0) and (TCouverture(Edition.Couvertures[0]).Categorie = 0) then begin
           fWaiting.ShowProgression(rsTransImage + '...', epNext);
           ms := GetCouvertureStream(False, TCouverture(Edition.Couvertures[0]).Reference, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60), Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
           if Assigned(ms) then try
@@ -372,7 +388,6 @@ begin
         Prn.WriteLineColumn(1, -2, NonZero(IntToStr(Edition.AnneeEdition)));
         Prn.WriteLineColumn(0, -1, rsTransISBN + ':');
         Prn.WriteLineColumn(1, -2, Edition.ISBN);
-        if Edition.Offert then Prn.WriteLineColumn(2, -2, rsTransOffert);
         if Edition.Stock then Prn.WriteLineColumn(4, -2, rsTransStock);
 
         Prn.WriteLineColumn(0, -1, rsTransEditeur + ':');
@@ -394,6 +409,11 @@ begin
         else
           Prn.WriteLineColumn(2, -2, rsTransAcheteLe + ':');
         Prn.WriteLineColumn(3, -2, Edition.sDateAchat);
+
+        if Edition.PrixCote > 0 then begin
+          Prn.WriteLineColumn(0, -1, rsTransCote + ':');
+          Prn.WriteLineColumn(1, -2, Format('%s (%d)', [FormatCurr(FormatMonnaie, Edition.PrixCote), Edition.AnneeCote]));
+        end;
 
         Prn.WriteLineColumn(0, -1, rsTransEtat + ':');
         Prn.WriteLineColumn(1, -2, Edition.sEtat);
@@ -441,7 +461,145 @@ begin
   end;
 end;
 
-procedure ImpressionFicheAuteur(Reference: Variant; Previsualisation: Boolean);
+procedure ImpressionFicheParaBD(Reference: Integer; Previsualisation: Boolean);
+var
+  i: Integer;
+  op: Integer;
+  ParaBD: TParaBDComplet;
+  ms: TStream;
+  jpg: TJPEGImage;
+  s: string;
+  fWaiting: IWaiting;
+  MinTop: Extended;
+  Prn: TPrintObject;
+begin
+  if Reference = 0 then Exit;
+  if not ConfigPrinter(Previsualisation) then Exit;
+  fWaiting := TWaiting.Create;
+  fWaiting.ShowProgression(rsTransConfig, 0, 9);
+  MinTop := -1;
+  ParaBD := TParaBDComplet.Create(Reference);
+  try
+    Prn := TPrintObject.Create(Fond);
+    try
+      Prn.SetOrientation(poPortrait);
+      Prn.Preview := Previsualisation;
+      if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
+      Prn.Start(1, Application.Title + ' - ' + rsTransFiche);
+      Prn.AutoPaging := True;
+      Prn.SetMargins(10, 10, 10, 10);
+      Prn.SetDetailTopBottom(Prn.Margin.Top { + 25}, Prn.Margin.Bottom + 20);
+      //      Prn.SetHeaderDimensions1(Prn.Margin.Left, Prn.Margin.Right, Prn.Margin.Top, 20, False, 0, clWhite);
+      Prn.SetFooterDimensions1(Prn.Margin.Left, Prn.Margin.Right, Prn.Margin.Bottom, 10, False, 0, clWhite);
+      Prn.SetFooterInformation1(0, 0, CopyrightTetramCorp, taRightJustify, 'Times New Roman', 9, []);
+      Prn.SetPageNumberInformation1(Prn.FooterCoordinates.Top + 5, rsTransPage + ' ', '', taCenter, 'Times New Roman', 10, [fsUnderline]);
+      Prn.SetDateTimeInformation1(Prn.HeaderCoordinates.Top, dfShortDateFormat, True, dtStart, tfShortTimeFormat, True, DateFirst, ' - ', taRightJustify, 'Times New Roman', 9, []);
+      Prn.SetTopOfPage;
+      Prn.SetFontInformation1('Times New Roman', 12, []);
+      Prn.CreateColumn1(0, 10, 30, taRightJustify, 'Times New Roman', 12, [fsBold]);
+      Prn.CreateColumn1(1, 42, 30, taLeftJustify, 'Times New Roman', 12, []);
+      Prn.CreateColumn1(2, 90, 30, taRightJustify, 'Times New Roman', 12, [fsBold]);
+      Prn.CreateColumn1(3, 122, 30, taLeftJustify, 'Times New Roman', 12, []);
+      Prn.CreateColumn1(4, 20, -1, taLeftJustify, 'Times New Roman', 12, []);
+      Prn.CreateColumn1(5, 42, 30, taLeftJustify, 'Times New Roman', 16, []);
+
+      fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 1, 7);
+
+      if Utilisateur.Options.FicheParaBDWithImage then begin
+        if ParaBD.HasImage then begin
+          fWaiting.ShowProgression(rsTransImage + '...', epNext);
+          ms := GetCouvertureStream(True, Reference, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60), Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
+          if Assigned(ms) then try
+            fWaiting.ShowProgression(rsTransImage + '...', epNext);
+            jpg := TJPEGImage.Create;
+            try
+              jpg.LoadFromStream(ms);
+              Prn.Draw(Prn.Detail.Left + Prn.Detail.Width - Prn.PixelsToMmsHorizontal(jpg.Width), Prn.Detail.Top, jpg);
+              MinTop := Prn.Detail.Top + Prn.PixelsToMmsVertical(jpg.Height);
+            finally
+              FreeAndNil(jpg);
+            end;
+          finally
+            FreeAndNil(ms);
+          end;
+        end;
+      end;
+
+      Prn.SetTopOfPage;
+      Prn.WriteLineColumn(0, -2, rsTransTitre + ':');
+      Prn.WriteLineColumn(5, -2, FormatTitre(ParaBD.Titre));
+      Prn.WriteLineColumn(0, -1, rsTransSerie + ':');
+      Prn.WriteLineColumn(5, -2, FormatTitre(ParaBD.Serie.Titre));
+      Prn.NewLines(2);
+
+      Prn.WriteLineColumn(0, -1, ParaBD.sCategorieParaBD);
+      if ParaBD.Dedicace then Prn.WriteLineColumn(2, -2, rsTransDedicace);
+      Prn.WriteLineColumn(0, -1, rsTransAnnee + ':');
+      Prn.WriteLineColumn(1, -2, NonZero(IntToStr(ParaBD.AnneeEdition)));
+      if ParaBD.Numerote then Prn.WriteLineColumn(2, -2, rsTransNumerote);
+
+      Prn.NextLine;
+
+      if ParaBD.CategorieParaBD = 0 then
+        s := rsTransAuteurs
+      else
+        s := rsTransCreateurs;
+      fWaiting.ShowProgression(Format('%s (%s %d)...', [s, rsTransPage, Prn.GetPageNumber]), epNext);
+      if ParaBD.Auteurs.Count > 0 then
+        Prn.WriteLineColumn(0, -1, s + ':');
+      op := -2;
+      for i := 0 to ParaBD.Auteurs.Count - 1 do begin
+        Prn.WriteLineColumn(1, op, TAuteur(ParaBD.Auteurs[i]).ChaineAffichage);
+        op := -1;
+      end;
+
+      Prn.NextLine;
+      if Prn.GetYPosition < MinTop then Prn.SetYPosition(MinTop);
+      Prn.NextLine;
+
+      fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransDescription, rsTransPage, Prn.GetPageNumber]), epNext);
+      s := ParaBD.Description.Text;
+      if s <> '' then begin
+        Prn.WriteLineColumn(0, -1, rsTransDescription + ':');
+        Prn.WriteColumn(4, -1, s);
+        Prn.NextLine;
+      end;
+
+      Prn.NewLines(2);
+
+      Prn.Columns.Clear;
+      Prn.CreateColumn1(0, 10, 30, taRightJustify, 'Times New Roman', 12, [fsBold]);
+      Prn.CreateColumn1(1, 42, 30, taLeftJustify, 'Times New Roman', 12, []);
+      Prn.CreateColumn1(2, 75, 30, taRightJustify, 'Times New Roman', 12, [fsBold]);
+      Prn.CreateColumn1(3, 107, 30, taLeftJustify, 'Times New Roman', 12, []);
+      Prn.CreateColumn1(4, 150, 30, taLeftJustify, 'Times New Roman', 12, [fsBold]);
+
+      Prn.WriteLineColumn(0, -1, rsTransPrix + ':');
+      if ParaBD.Gratuit then
+        Prn.WriteLineColumn(1, -2, rsTransGratuit)
+      else if ParaBD.Prix > 0 then
+        Prn.WriteLineColumn(1, -2, FormatCurr(FormatMonnaie, ParaBD.Prix));
+      if ParaBD.Offert then
+        Prn.WriteLineColumn(2, -2, rsTransOffertLe + ':')
+      else
+        Prn.WriteLineColumn(2, -2, rsTransAcheteLe + ':');
+      Prn.WriteLineColumn(3, -2, ParaBD.sDateAchat);
+      if ParaBD.Stock then Prn.WriteLineColumn(4, -2, rsTransStock);
+      if ParaBD.PrixCote > 0 then begin
+        Prn.WriteLineColumn(0, -1, rsTransCote + ':');
+        Prn.WriteLineColumn(1, -2, Format('%s (%d)', [FormatCurr(FormatMonnaie, ParaBD.PrixCote), ParaBD.AnneeCote]));
+      end;
+    finally
+      fWaiting.ShowProgression(rsTransImpression + '...', epNext);
+      if Prn.Printing then Prn.Quit;
+      Prn.Free;
+    end;
+  finally
+    ParaBD.Free;
+  end;
+end;
+
+procedure ImpressionFicheAuteur(Reference: Integer; Previsualisation: Boolean);
 var
   Auteur: TAuteurComplet;
   fWaiting: IWaiting;
@@ -503,7 +661,7 @@ begin
   end;
 end;
 
-procedure ImpressionFicheEmprunteur(Reference: Variant; Previsualisation: Boolean);
+procedure ImpressionFicheEmprunteur(Reference: Integer; Previsualisation: Boolean);
 var
   Emprunteur: TEmprunteurComplet;
   fWaiting: IWaiting;
@@ -548,7 +706,7 @@ begin
   end;
 end;
 
-procedure ImpressionEmpruntsAlbum(Reference: Variant; Previsualisation: Boolean);
+procedure ImpressionEmpruntsAlbum(Reference: Integer; Previsualisation: Boolean);
 var
   index, i: Integer;
   Album: TAlbumComplet;
@@ -616,7 +774,7 @@ begin
   end;
 end;
 
-procedure ImpressionEmpruntsEmprunteur(Reference: Variant; Previsualisation: Boolean);
+procedure ImpressionEmpruntsEmprunteur(Reference: Integer; Previsualisation: Boolean);
 var
   index: Integer;
   Emprunteur: TEmprunteurComplet;
@@ -712,7 +870,7 @@ begin
         Source.FetchBlobs := True;
       end;
       Equipe.Transaction := Source.Transaction;
-      Equipe.SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL)';
+      Equipe.SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL, NULL)';
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
@@ -1155,7 +1313,7 @@ begin
         Source.FetchBlobs := True;
       end;
       Equipe.Transaction := Source.Transaction;
-      Equipe.SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL)';
+      Equipe.SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL, NULL)';
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
@@ -1310,7 +1468,7 @@ begin
   end;
 end;
 
-procedure ImpressionCouvertureAlbum(Reference: Variant; RefCouverture: Integer; Previsualisation: Boolean);
+procedure ImpressionCouvertureAlbum(Reference: Integer; RefCouverture: Integer; Previsualisation: Boolean);
 var
   Album: TAlbumComplet;
   ms: TStream;
@@ -1346,6 +1504,7 @@ begin
       else
         AjoutString(s, NonZero(IntToStr(Album.Tome)), ' - T.');
       Prn.SetHeaderInformation1(1, -1, s, taCenter, 'Times New Roman', 16, [fsBold]);
+      // il serait bien d'indiqué ici dans l'entete la catégorie de l'image (couverture, planche, etc)
       Prn.SetFooterInformation1(0, 0, CopyrightTetramCorp, taRightJustify, 'Times New Roman', 9, []);
       Prn.PageNumber.Printed := False;
       Prn.SetDateTimeInformation1(Prn.HeaderCoordinates.Top, dfShortDateFormat, True, dtStart, tfShortTimeFormat, True, DateFirst, ' - ', taRightJustify, 'Times New Roman', 9, []);
@@ -1375,6 +1534,69 @@ begin
     end;
   finally
     Album.Free;
+  end;
+end;
+
+procedure ImpressionImageParaBD(Reference: Integer; Previsualisation: Boolean);
+var
+  ParaBD: TParaBDComplet;
+  ms: TStream;
+  jpg: TJPEGImage;
+  s: string;
+  fWaiting: IWaiting;
+  Prn: TPrintObject;
+begin
+  if Reference = 0 then Exit;
+  if not ConfigPrinter(Previsualisation) then Exit;
+  fWaiting := TWaiting.Create;
+  fWaiting.ShowProgression(rsTransConfig, 0, 2);
+  ParaBD := TParaBDComplet.Create(Reference);
+  try
+    Prn := TPrintObject.Create(Fond);
+    try
+      Prn.SetOrientation(poPortrait);
+      Prn.Preview := Previsualisation;
+      if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
+      Prn.Start(1, Application.Title + ' - ' + rsTransImage);
+      Prn.AutoPaging := True;
+      Prn.SetMargins(10, 10, 10, 10);
+      Prn.SetDetailTopBottom(Prn.Margin.Top + 25, Prn.Margin.Bottom + 20);
+      Prn.SetHeaderDimensions1(Prn.Margin.Left, Prn.Margin.Right, Prn.Margin.Top, 20, False, 0, clWhite);
+      Prn.SetFooterDimensions1(Prn.Margin.Left, Prn.Margin.Right, Prn.Margin.Bottom, 10, False, 0, clWhite);
+      Prn.SetHeaderInformation1(0, 5, FormatTitre(ParaBD.Titre), taCenter, 'Times New Roman', 24, [fsBold]);
+      s := '';
+      AjoutString(s, ParaBD.Serie.Titre, ' - ');
+      AjoutString(s, ParaBD.sCategorieParaBD, ' - ');
+      Prn.SetHeaderInformation1(1, -1, s, taCenter, 'Times New Roman', 16, [fsBold]);
+      Prn.SetFooterInformation1(0, 0, CopyrightTetramCorp, taRightJustify, 'Times New Roman', 9, []);
+      Prn.PageNumber.Printed := False;
+      Prn.SetDateTimeInformation1(Prn.HeaderCoordinates.Top, dfShortDateFormat, True, dtStart, tfShortTimeFormat, True, DateFirst, ' - ', taRightJustify, 'Times New Roman', 9, []);
+      Prn.SetTopOfPage;
+      Prn.SetFontInformation1('Times New Roman', 12, []);
+
+      //      ShowMessage(Format('W %d H %d', [Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Prn.MmsToPixelsVertical(Prn.Detail.Height)]));
+      ms := GetCouvertureStream(True, Reference, Prn.MmsToPixelsVertical(Prn.Detail.Height), Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Utilisateur.Options.AntiAliasing);
+      if Assigned(ms) then try
+        fWaiting.ShowProgression(rsTransImage + '...', epNext);
+        jpg := TJPEGImage.Create;
+        try
+          jpg.LoadFromStream(ms);
+          Prn.Draw(Prn.Detail.Left + ((Prn.Detail.Width - Prn.PixelsToMmsHorizontal(jpg.Width)) / 2),
+            Prn.Detail.Top + ((Prn.Detail.Height - Prn.PixelsToMmsVertical(jpg.Height)) / 2),
+            jpg);
+        finally
+          FreeAndNil(jpg);
+        end;
+      finally
+        FreeAndNil(ms);
+      end;
+    finally
+      fWaiting.ShowProgression(rsTransImpression + '...', epNext);
+      if Prn.Printing then Prn.Quit;
+      Prn.Free;
+    end;
+  finally
+    ParaBD.Free;
   end;
 end;
 

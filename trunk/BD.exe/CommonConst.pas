@@ -35,7 +35,7 @@ const
 
 type
   ROptions = record
-    FicheWithCouverture, ModeDemarrage, Images: Boolean;
+    FicheAlbumWithCouverture, FicheParaBDWithImage, ModeDemarrage, Images: Boolean;
     SymboleMonnetaire: string[5];
     WebServerAutoStart: Boolean;
     WebServerPort: Integer;

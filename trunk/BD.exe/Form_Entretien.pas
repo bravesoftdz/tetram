@@ -227,12 +227,12 @@ begin
   with TJvUIBQuery.Create(Self) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     UpdateQuery.Transaction := Transaction;
-    SQL.Text := 'SELECT Count(RefCouverture) FROM Couvertures WHERE TypeCouverture = 0';
+    SQL.Text := 'SELECT Count(RefCouverture) FROM Couvertures WHERE STOCKAGECOUVERTURE = 0';
     Open;
     nbAConvertir := Fields.AsInteger[0];
     fWaiting.ShowProgression(rsOperationEnCours, 0, nbAConvertir);
-    SQL.Text := 'SELECT RefCouverture, FichierCouverture FROM Couvertures WHERE TypeCouverture = 0';
-    UpdateQuery.SQL.Text := 'UPDATE CouvertureS SET FichierCouverture = :FichierCouverture, TypeCouverture = 1, Couverture = :Couverture WHERE RefCouverture = :RefCouverture';
+    SQL.Text := 'SELECT RefCouverture, FichierCouverture FROM Couvertures WHERE STOCKAGECOUVERTURE = 0';
+    UpdateQuery.SQL.Text := 'UPDATE CouvertureS SET FichierCouverture = :FichierCouverture, STOCKAGECOUVERTURE = 1, IMAGECOUVERTURE = :IMAGECOUVERTURE WHERE RefCouverture = :RefCouverture';
     nbConverti := 0;
     Open;
     while not Eof do begin
@@ -294,12 +294,12 @@ begin
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     UpdateQuery.Transaction := Transaction;
     ExtractQuery.Transaction := Transaction;
-    SQL.Text := 'SELECT Count(RefCouverture) FROM Couvertures WHERE TypeCouverture = 1';
+    SQL.Text := 'SELECT Count(RefCouverture) FROM Couvertures WHERE STOCKAGECOUVERTURE = 1';
     Open;
     nbAExtraire := Fields.AsInteger[0];
     fWaiting.ShowProgression(rsOperationEnCours, 0, nbAExtraire);
-    SQL.Text := 'SELECT RefCouverture, FichierCouverture FROM Couvertures WHERE TypeCouverture = 1';
-    UpdateQuery.SQL.Text := 'UPDATE CouvertureS SET FichierCouverture = :FichierCouverture, TypeCouverture = 0, Couverture = Null WHERE RefCouverture = :RefCouverture';
+    SQL.Text := 'SELECT RefCouverture, FichierCouverture FROM Couvertures WHERE STOCKAGECOUVERTURE = 1';
+    UpdateQuery.SQL.Text := 'UPDATE CouvertureS SET FichierCouverture = :FichierCouverture, STOCKAGECOUVERTURE = 0, IMAGECOUVERTURE = Null WHERE RefCouverture = :RefCouverture';
     ExtractQuery.SQL.Text := 'SELECT Result FROM SAVEBLOBTOFILE(:Chemin, :Fichier, :BlobContent)';
     nbExtrais := 0;
     Open;
@@ -346,11 +346,11 @@ begin
   with TJvUIBQuery.Create(Self) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     UpdateQuery.Transaction := Transaction;
-    SQL.Text := 'SELECT Count(RefCouverture) FROM Couvertures WHERE TypeCouverture = 0';
+    SQL.Text := 'SELECT Count(RefCouverture) FROM Couvertures WHERE STOCKAGECOUVERTURE = 0';
     Open;
     nbASupprimer := Fields.AsInteger[0];
     fWaiting.ShowProgression(rsOperationEnCours, 0, nbASupprimer);
-    SQL.Text := 'SELECT RefCouverture, FichierCouverture FROM Couvertures WHERE TypeCouverture = 0';
+    SQL.Text := 'SELECT RefCouverture, FichierCouverture FROM Couvertures WHERE STOCKAGECOUVERTURE = 0';
     UpdateQuery.SQL.Text := 'DELETE FROM CouvertureS WHERE RefCouverture = :RefCouverture';
     nbSupprime := 0;
     Open;

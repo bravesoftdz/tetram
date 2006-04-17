@@ -194,46 +194,6 @@ const
 
 procedure TFrmEditAlbum.FormCreate(Sender: TObject);
 var
-  q: TJvUIBQuery;
-
-  procedure LoadStrings(Categorie: Integer; Strings: TStrings);
-  begin
-    q.Params.AsInteger[0] := Categorie;
-    q.Open;
-    Strings.Clear;
-    while not q.Eof do begin
-      Strings.Add(q.Fields.AsString[0] + '=' + q.Fields.AsString[1]);
-      q.Next;
-    end;
-  end;
-
-  procedure LoadCombo(Categorie: Integer; Combo: TLightComboCheck);
-  var
-    HasNULL: Boolean;
-  begin
-    HasNULL := False;
-    q.Params.AsInteger[0] := Categorie;
-    q.Open;
-    Combo.Items.Clear;
-    Combo.DefaultValueChecked := -1;
-    while not q.Eof do begin
-      with Combo.Items.Add do begin
-        Caption := q.Fields.AsString[1];
-        Valeur := q.Fields.AsInteger[0];
-        if q.Fields.AsBoolean[2] then Combo.DefaultValueChecked := Valeur;
-        HasNULL := Valeur = -1;
-      end;
-      q.Next;
-    end;
-    if not HasNULL then
-      with Combo.Items.Add do begin
-        Caption := '';
-        Valeur := -1;
-        Index := 0;
-      end;
-  end;
-
-var
   i: Integer;
   mi: TMenuItem;
 begin
@@ -273,22 +233,14 @@ begin
   FDessinateursSelected := False;
   FColoristesSelected := False;
 
-  FCategoriesImages := TStringList.Create; ;
+  FCategoriesImages := TStringList.Create;
 
-  q := TJvUIBQuery.Create(Self);
-  with q do try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT REF, LIBELLE, DEFAUT FROM LISTES WHERE CATEGORIE = :Categorie ORDER BY ORDRE';
-    LoadCombo(1 {Etat}, cbxEtat);
-    LoadCombo(2 {Reliure}, cbxReliure);
-    LoadCombo(3 {TypeEdition}, cbxEdition);
-    LoadCombo(4 {Orientation}, cbxOrientation);
-    LoadCombo(5 {Format}, cbxFormat);
-    LoadStrings(6 {Categorie d'image}, FCategoriesImages);
-  finally
-    Transaction.Free;
-    Free;
-  end;
+  LoadCombo(1 {Etat}, cbxEtat);
+  LoadCombo(2 {Reliure}, cbxReliure);
+  LoadCombo(3 {TypeEdition}, cbxEdition);
+  LoadCombo(4 {Orientation}, cbxOrientation);
+  LoadCombo(5 {Format}, cbxFormat);
+  LoadStrings(6 {Categorie d'image}, FCategoriesImages);
 
   for i := 0 to Pred(FCategoriesImages.Count) do begin
     mi := TMenuItem.Create(pmChoixCategorie);
@@ -339,7 +291,7 @@ begin
       lvScenaristes.Items.BeginUpdate;
       lvDessinateurs.Items.BeginUpdate;
       lvColoristes.Items.BeginUpdate;
-      SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL)';
+      SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL, NULL)';
       Params.AsInteger[0] := FRefAlbum;
       Open;
       while not Eof do begin
@@ -722,18 +674,18 @@ begin
         q6.Transaction := Transaction;
 
         q1.SQL.Clear;
-        q1.SQL.Add('INSERT INTO COUVERTURES (REFEDITION, REFALBUM, FichierCouverture, TypeCouverture, Ordre, CategorieImage)');
+        q1.SQL.Add('INSERT INTO COUVERTURES (REFEDITION, REFALBUM, FichierCouverture, STOCKAGECOUVERTURE, Ordre, CategorieImage)');
         q1.SQL.Add('VALUES (:RefEdition, :RefAlbum, :FichierCouverture, 0, :Ordre, :CategorieImage)');
 
         q6.SQL.Text := 'SELECT Result FROM SAVEBLOBTOFILE(:Chemin, :Fichier, :BlobContent)';
 
         q2.SQL.Clear;
-        q2.SQL.Add('INSERT INTO COUVERTURES (REFEDITION, REFALBUM, FichierCouverture, TypeCouverture, Ordre, Couverture, CategorieImage)');
-        q2.SQL.Add('VALUES (:RefEdition, :RefAlbum, :FichierCouverture, 1, :Ordre, :Couverture, :CategorieImage)');
+        q2.SQL.Add('INSERT INTO COUVERTURES (REFEDITION, REFALBUM, FichierCouverture, STOCKAGECOUVERTURE, Ordre, IMAGECOUVERTURE, CategorieImage)');
+        q2.SQL.Add('VALUES (:RefEdition, :RefAlbum, :FichierCouverture, 1, :Ordre, :IMAGECOUVERTURE, :CategorieImage)');
 
-        q3.SQL.Text := 'UPDATE COUVERTURES SET Couverture = :Couverture, TypeCouverture = 1 WHERE RefCouverture = :RefCouverture';
+        q3.SQL.Text := 'UPDATE COUVERTURES SET IMAGECOUVERTURE = :IMAGECOUVERTURE, STOCKAGECOUVERTURE = 1 WHERE RefCouverture = :RefCouverture';
 
-        q4.SQL.Text := 'UPDATE COUVERTURES SET Couverture = NULL, TypeCouverture = 0 WHERE RefCouverture = :RefCouverture';
+        q4.SQL.Text := 'UPDATE COUVERTURES SET IMAGECOUVERTURE = NULL, STOCKAGECOUVERTURE = 0 WHERE RefCouverture = :RefCouverture';
 
         q5.SQL.Text := 'UPDATE COUVERTURES SET FichierCouverture = :FichierCouverture, Ordre = :Ordre, CategorieImage = :CategorieImage WHERE RefCouverture = :RefCouverture';
 
@@ -767,7 +719,7 @@ begin
               q2.Params.ByNameAsInteger['Ordre'] := j;
               Stream := GetJPEGStream(PC.NewNom);
               try
-                q2.ParamsSetBlob('Couverture', Stream);
+                q2.ParamsSetBlob('IMAGECOUVERTURE', Stream);
               finally
                 Stream.Free;
               end;
@@ -780,7 +732,7 @@ begin
               if (PC.NewStockee) then begin // conversion couvertures liées en stockées (q3)
                 Stream := GetCouvertureStream(False, PC.Reference, -1, -1, False);
                 try
-                  q3.ParamsSetBlob('Couverture', Stream);
+                  q3.ParamsSetBlob('IMAGECOUVERTURE', Stream);
                 finally
                   Stream.Free;
                 end;
@@ -978,6 +930,8 @@ end;
 
 procedure TFrmEditAlbum.FormShow(Sender: TObject);
 begin
+  // la selection de l'édition doit se faire ici à cause d'un bug du TDateTimePicker:
+  //   il se forcerait à "Checked = True" si on le fait dans le SetRefAlbum
   if vtEditions.ItemIndex = -1 then begin
     vtEditions.ItemIndex := 0;
     vtEditions.OnClick(vtEditions);
@@ -993,7 +947,6 @@ var
   var
     i: Integer;
   begin
-    // PRealisateur peut être utilisé pour transtyper un PActeur
     i := 0;
     Result := True;
     while Result and (i <= Pred(LV.Items.Count)) do begin

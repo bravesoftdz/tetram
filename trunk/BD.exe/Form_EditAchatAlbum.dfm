@@ -202,9 +202,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         BorderStyle = bsNone
         MaxLength = 4
         TabOrder = 3
-        LinkLabel.LinkLabel.Strings = (
-          'Label3')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = Label3
@@ -221,9 +218,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         BevelKind = bkTile
         BorderStyle = bsNone
         TabOrder = 0
-        LinkLabel.LinkLabel.Strings = (
-          'Label2')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = Label2
@@ -270,9 +264,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         ParentCtl3D = False
         TabOrder = 5
         OnClick = cbIntegraleClick
-        LinkLabel.LinkLabel.Strings = (
-          'cbIntegrale')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = cbIntegrale
@@ -287,9 +278,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         BorderStyle = bsNone
         MaxLength = 3
         TabOrder = 1
-        LinkLabel.LinkLabel.Strings = (
-          'Label1')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = Label1
@@ -307,9 +295,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Ctl3D = True
         ParentCtl3D = False
         TabOrder = 4
-        LinkLabel.LinkLabel.Strings = (
-          'cbHorsSerie')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = cbHorsSerie
@@ -325,10 +310,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Enabled = False
         MaxLength = 3
         TabOrder = 6
-        LinkLabel.LinkLabel.Strings = (
-          'Label16'
-          'Label17')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = Label16
@@ -349,10 +330,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Enabled = False
         MaxLength = 3
         TabOrder = 7
-        LinkLabel.LinkLabel.Strings = (
-          'Label16'
-          'Label17')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = Label16
@@ -381,9 +358,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         TabOrder = 12
         ViewStyle = vsReport
         OnKeyDown = lvColoristesKeyDown
-        LinkLabel.LinkLabel.Strings = (
-          'btScenariste')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = btScenariste
@@ -407,9 +381,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         TabOrder = 13
         ViewStyle = vsReport
         OnKeyDown = lvColoristesKeyDown
-        LinkLabel.LinkLabel.Strings = (
-          'btDessinateur')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = btDessinateur
@@ -461,9 +432,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         TabOrder = 14
         ViewStyle = vsReport
         OnKeyDown = lvColoristesKeyDown
-        LinkLabel.LinkLabel.Strings = (
-          'btColoriste')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = btColoriste
@@ -478,9 +446,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         BorderStyle = bsNone
         MaxLength = 2
         TabOrder = 2
-        LinkLabel.LinkLabel.Strings = (
-          'Label3')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = Label3
@@ -498,9 +463,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         BorderStyle = bsNone
         ScrollBars = ssVertical
         TabOrder = 9
-        LinkLabel.LinkLabel.Strings = (
-          'Label7')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = Label7
@@ -516,9 +478,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         BorderStyle = bsNone
         ScrollBars = ssVertical
         TabOrder = 8
-        LinkLabel.LinkLabel.Strings = (
-          'Label6')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = Label6

@@ -1,6 +1,6 @@
 object FrmEditParaBD: TFrmEditParaBD
-  Left = 422
-  Top = 70
+  Left = 1285
+  Top = 76
   Width = 835
   Height = 926
   Caption = 'FrmEditParaBD'
@@ -12,6 +12,8 @@ object FrmEditParaBD: TFrmEditParaBD
   Font.Style = []
   OldCreateOrder = False
   OnActivate = FormActivate
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
   object Panel2: TPanel
@@ -37,6 +39,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Default = True
       ModalResult = 1
       TabOrder = 0
+      OnClick = btnOKClick
     end
     object btnAnnuler: TBitBtn
       Left = 745
@@ -49,6 +52,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Caption = 'Annuler'
       ModalResult = 2
       TabOrder = 1
+      OnClick = btnAnnulerClick
     end
   end
   object ScrollBox: TScrollBox
@@ -99,6 +103,7 @@ object FrmEditParaBD: TFrmEditParaBD
         2106543333363336211063333336333621163333333633362163333333363336
         26333333333633366333333333363336333333333336}
       Layout = blGlyphBottom
+      OnClick = btCreateurClick
     end
     object Label19: TLabel
       Left = 23
@@ -158,7 +163,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Layout = tlCenter
     end
     object Label25: TLabel
-      Left = 147
+      Left = 146
       Top = 484
       Width = 25
       Height = 13
@@ -167,7 +172,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Layout = tlCenter
     end
     object VDTButton14: TVDTButton
-      Left = 242
+      Left = 241
       Top = 480
       Width = 72
       Height = 21
@@ -222,7 +227,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Caption = 'Type:'
       Layout = tlCenter
     end
-    object cbxType: TLightComboCheck
+    object cbxCategorie: TLightComboCheck
       Left = 148
       Top = 31
       Width = 166
@@ -246,9 +251,6 @@ object FrmEditParaBD: TFrmEditParaBD
       BevelKind = bkTile
       BorderStyle = bsNone
       TabOrder = 0
-      LinkLabel.LinkLabel.Strings = (
-        'Label2')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label2
@@ -264,10 +266,7 @@ object FrmEditParaBD: TFrmEditParaBD
       BevelKind = bkTile
       BorderStyle = bsNone
       ScrollBars = ssVertical
-      TabOrder = 1
-      LinkLabel.LinkLabel.Strings = (
-        'Label6')
-      LinkLabel.LinkControls = <>
+      TabOrder = 4
       LinkControls = <
         item
           Control = Label6
@@ -290,11 +289,9 @@ object FrmEditParaBD: TFrmEditParaBD
       ReadOnly = True
       ShowColumnHeaders = False
       SortType = stNone
-      TabOrder = 3
+      TabOrder = 7
       ViewStyle = vsReport
-      LinkLabel.LinkLabel.Strings = (
-        'btScenariste')
-      LinkLabel.LinkControls = <>
+      OnKeyDown = lvAuteursKeyDown
       LinkControls = <
         item
           Control = btCreateur
@@ -323,7 +320,9 @@ object FrmEditParaBD: TFrmEditParaBD
       Indent = 8
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 2
+      TabOrder = 6
+      OnChange = vtPersonnesChange
+      OnDblClick = vtPersonnesDblClick
       Columns = <>
     end
     object vtSeries: TVirtualStringTree
@@ -350,7 +349,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Indent = 8
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 4
+      TabOrder = 9
       Columns = <>
     end
     object edAnneeCote: TEditLabeled
@@ -361,10 +360,7 @@ object FrmEditParaBD: TFrmEditParaBD
       BevelKind = bkTile
       BorderStyle = bsNone
       MaxLength = 4
-      TabOrder = 5
-      LinkLabel.LinkLabel.Strings = (
-        'Label24')
-      LinkLabel.LinkControls = <>
+      TabOrder = 14
       LinkControls = <
         item
           Control = Label24
@@ -373,7 +369,7 @@ object FrmEditParaBD: TFrmEditParaBD
       CurrencyChar = #0
     end
     object edPrixCote: TEditLabeled
-      Left = 175
+      Left = 174
       Top = 480
       Width = 64
       Height = 21
@@ -383,11 +379,7 @@ object FrmEditParaBD: TFrmEditParaBD
       BorderStyle = bsNone
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 6
-      LinkLabel.LinkLabel.Strings = (
-        'Label25'
-        'VDTButton14')
-      LinkLabel.LinkControls = <>
+      TabOrder = 15
       LinkControls = <
         item
           Control = Label25
@@ -406,10 +398,7 @@ object FrmEditParaBD: TFrmEditParaBD
       BevelKind = bkTile
       BorderStyle = bsNone
       MaxLength = 4
-      TabOrder = 7
-      LinkLabel.LinkLabel.Strings = (
-        'Label10')
-      LinkLabel.LinkControls = <>
+      TabOrder = 1
       LinkControls = <
         item
           Control = Label10
@@ -422,15 +411,13 @@ object FrmEditParaBD: TFrmEditParaBD
       Top = 420
       Width = 61
       Height = 13
+      Anchors = [akTop, akRight]
       Caption = 'En stock'
       Checked = True
       Ctl3D = True
       ParentCtl3D = False
       State = cbChecked
-      TabOrder = 8
-      LinkLabel.LinkLabel.Strings = (
-        'cbStock')
-      LinkLabel.LinkControls = <>
+      TabOrder = 16
       LinkControls = <
         item
           Control = cbStock
@@ -445,11 +432,8 @@ object FrmEditParaBD: TFrmEditParaBD
       Caption = 'Gratuit'
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 9
+      TabOrder = 11
       OnClick = cbGratuitClick
-      LinkLabel.LinkLabel.Strings = (
-        'cbVO')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = cbGratuit
@@ -466,9 +450,6 @@ object FrmEditParaBD: TFrmEditParaBD
       ParentCtl3D = False
       TabOrder = 10
       OnClick = cbOffertClick
-      LinkLabel.LinkLabel.Strings = (
-        'cbVO')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = cbOffert
@@ -483,8 +464,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Time = 38158.758085983800000000
       ShowCheckbox = True
       Checked = False
-      TabOrder = 11
-      LinkLabel.LinkControls = <>
+      TabOrder = 12
       LinkControls = <
         item
           Control = Label18
@@ -501,12 +481,8 @@ object FrmEditParaBD: TFrmEditParaBD
       BorderStyle = bsNone
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 12
+      TabOrder = 13
       OnChange = edPrixChange
-      LinkLabel.LinkLabel.Strings = (
-        'Label9'
-        'SpeedButton3')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label9
@@ -526,10 +502,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Caption = 'D'#233'dicac'#233
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 13
-      LinkLabel.LinkLabel.Strings = (
-        'cbDedicace')
-      LinkLabel.LinkControls = <>
+      TabOrder = 2
       LinkControls = <
         item
           Control = cbDedicace
@@ -543,13 +516,12 @@ object FrmEditParaBD: TFrmEditParaBD
       Anchors = [akTop, akRight]
       BevelInner = bvLowered
       Caption = ' '
-      TabOrder = 14
+      TabOrder = 17
       object imgVisu: TImage
         Left = 2
-        Top = 2
+        Top = 25
         Width = 301
-        Height = 446
-        Cursor = crHandPoint
+        Height = 423
         Align = alClient
         Center = True
       end
@@ -585,6 +557,58 @@ object FrmEditParaBD: TFrmEditParaBD
             EE33337F333377F3337F33EEEEEE00EEEE33337F33337733337F33EEEEEEEEEE
             EE33337FFFFFFFFFFF7F33EEEEEEEEEEEE333377777777777773}
           NumGlyphs = 2
+          OnClick = ChoixImageClick
+        end
+        object VDTButton1: TVDTButton
+          Tag = 1
+          Left = 64
+          Top = 5
+          Width = 117
+          Height = 41
+          Cursor = crHandPoint
+          Caption = 'Image'
+          Flat = True
+          Glyph.Data = {
+            76010000424D7601000000000000760000002800000020000000100000000100
+            04000000000000010000120B0000120B00001000000000000000000000000000
+            800000800000008080008000000080008000808000007F7F7F00BFBFBF000000
+            FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333000000000
+            3333333777777777F3333330F777777033333337F3F3F3F7F3333330F0808070
+            33333337F7F7F7F7F3333330F080707033333337F7F7F7F7F3333330F0808070
+            33333337F7F7F7F7F3333330F080707033333337F7F7F7F7F3333330F0808070
+            333333F7F7F7F7F7F3F33030F080707030333737F7F7F7F7F7333300F0808070
+            03333377F7F7F7F773333330F080707033333337F7F7F7F7F333333070707070
+            33333337F7F7F7F7FF3333000000000003333377777777777F33330F88877777
+            0333337FFFFFFFFF7F3333000000000003333377777777777333333330777033
+            3333333337FFF7F3333333333000003333333333377777333333}
+          NumGlyphs = 2
+          OnClick = VDTButton1Click
+        end
+      end
+      object Panel4: TPanel
+        Left = 2
+        Top = 2
+        Width = 301
+        Height = 23
+        Align = alTop
+        BevelOuter = bvNone
+        Caption = ' '
+        TabOrder = 1
+        object cbImageBDD: TCheckBoxLabeled
+          Left = 8
+          Top = 6
+          Width = 217
+          Height = 13
+          Caption = 'Image stock'#233'e dans la base de donn'#233'es'
+          Checked = True
+          Ctl3D = True
+          ParentCtl3D = False
+          State = cbChecked
+          TabOrder = 0
+          LinkControls = <
+            item
+              Control = cbImageBDD
+            end>
         end
       end
     end
@@ -597,10 +621,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Caption = 'Num'#233'rot'#233
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 15
-      LinkLabel.LinkLabel.Strings = (
-        'cbDedicace')
-      LinkLabel.LinkControls = <>
+      TabOrder = 3
       LinkControls = <
         item
           Control = cbNumerote
@@ -612,7 +633,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Width = 442
       Height = 21
       Anchors = [akLeft, akTop, akRight]
-      TabOrder = 16
+      TabOrder = 8
       inherited btNext: TVDTButton
         Left = 401
       end
@@ -632,7 +653,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Top = 173
       Width = 177
       Height = 21
-      TabOrder = 17
+      TabOrder = 5
       inherited btNext: TVDTButton
         Left = 136
       end
@@ -647,5 +668,15 @@ object FrmEditParaBD: TFrmEditParaBD
           end>
       end
     end
+  end
+  object ChoixImageDialog: TOpenPictureDialog
+    DefaultExt = 'bmp'
+    Filter = 
+      'Fichiers graphiques utilisables (*.bmp, *.jpg, *.jpeg, *.emf, *.' +
+      'wmf)|*.bmp;*.jpg;*.jpeg;*.emf;*.wmf|Bitmaps (*.bmp)|*.bmp|JPEG (' +
+      '*.jpg, *.jpeg)|*.jpg;*.jpeg|Metafile (*.wmf, *.emf)|*.wmf:*.emf'
+    Options = [ofReadOnly, ofHideReadOnly, ofPathMustExist, ofFileMustExist]
+    Left = 378
+    Top = 65535
   end
 end

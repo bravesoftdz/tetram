@@ -62,9 +62,6 @@ type
     Aperuavantimpression4: TMenuItem;
     Aperuavantimpression5: TMenuItem;
     Aperuavantimpression6: TMenuItem;
-    Srie1: TMenuItem;
-    Aperuavantimpression7: TMenuItem;
-    Imprimer1: TMenuItem;
     PanelEdition: TPanel;
     ISBN: TLabel;
     Editeur: TLabel;
@@ -101,6 +98,8 @@ type
     cbOffert: TReadOnlyCheckBox;
     cbDedicace: TReadOnlyCheckBox;
     Label18: TLabel;
+    lbCote: TLabel;
+    Label20: TLabel;
     procedure lvScenaristesDblClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -402,6 +401,11 @@ begin
         Prix.Caption := ''
       else
         Prix.Caption := FormatCurr(FormatMonnaie, FCurrentEdition.Prix);
+
+      if FCurrentEdition.PrixCote > 0 then
+        lbCote.Caption := Format('%s (%d)', [FormatCurr(FormatMonnaie, FCurrentEdition.PrixCote), FCurrentEdition.AnneeCote])
+      else
+        lbCote.Caption := '';
 
       ListeEmprunts.RootNodeCount := FCurrentEdition.Emprunts.Emprunts.Count;
       nbEmprunts.Caption := IntToStr(FCurrentEdition.Emprunts.NBEmprunts);

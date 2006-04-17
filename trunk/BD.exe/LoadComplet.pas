@@ -65,7 +65,7 @@ type
     RefSerie: Integer;
     Titre: string;
     Terminee: Integer;
-    Albums: TList;
+    Albums, ParaBD: TList;
     Genres: TStringList;
     Sujet, Notes: TStringList;
     Editeur: TEditeurComplet;
@@ -216,12 +216,26 @@ type
   end;
 
   TParaBDComplet = class(TBaseComplet)
-    RefParaBD: Integer;
+    RefParaBD, AnneeEdition, CategorieParaBD, AnneeCote: Integer;
+    Titre: string[50];
+    sCategorieParaBD: string;
+    Auteurs: TList;
+    Description: TStringList;
+    Serie: TSerieComplete;
+
+    Prix, PrixCote: Currency;
+    Dedicace, Numerote, Stock, Offert, Gratuit, HasImage: Boolean;
+    DateAchat: TDateTime;
+
 
     procedure Fill(const Reference: Integer); override;
     procedure Clear; override;
     constructor Create; override;
     destructor Destroy; override;
+  private
+    function Get_sDateAchat: string;
+  published
+    property sDateAchat: string read Get_sDateAchat;
   end;
 
 implementation
@@ -345,7 +359,7 @@ begin
     serie := Fields.ByNameAsInteger['REFSERIE'];
 
     Close;
-    SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL)';
+    SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL, NULL)';
     Params.AsInteger[0] := Reference;
     Open;
     while not Eof do begin
@@ -493,7 +507,7 @@ begin
     Self.Emprunts.Fill(Self.RefEdition, seAlbum);
 
     Close;
-    SQL.Text := 'SELECT RefCouverture, FichierCouverture, TypeCouverture, CategorieImage, l.Libelle as sCategorieImage';
+    SQL.Text := 'SELECT RefCouverture, FichierCouverture, STOCKAGECOUVERTURE, CategorieImage, l.Libelle as sCategorieImage';
     SQL.Add('FROM Couvertures c LEFT JOIN Listes l ON (c.categorieimage = l.ref and l.categorie = 6)');
     SQL.Add('WHERE RefEdition = ? ORDER BY c.categorieimage NULLS FIRST, c.Ordre');
     Params.AsInteger[0] := Self.RefEdition;
@@ -666,6 +680,7 @@ begin
   RefSerie := -1;
   Titre := '';
   TAlbum.VideListe(Albums);
+  TParaBD.VideListe(ParaBD);
   Genres.Clear;
   Sujet.Clear;
   Notes.Clear;
@@ -681,6 +696,7 @@ begin
   inherited;
   FIdAuteur := -1;
   Albums := TList.Create;
+  ParaBD := TList.Create;
   Genres := TStringList.Create;
   Sujet := TStringList.Create;
   Notes := TStringList.Create;
@@ -701,6 +717,7 @@ end;
 destructor TSerieComplete.Destroy;
 begin
   FreeAndNil(Albums);
+  FreeAndNil(ParaBD);
   Genres.Free;
   Sujet.Free;
   Notes.Free;
@@ -760,6 +777,24 @@ begin
     end;
 
     Close;
+    SQL.Text := 'SELECT REFPARABD, TITREPARABD, REFSERIE, TITRESERIE, ACHAT, COMPLET, SCATEGORIE '
+      + 'FROM VW_LISTE_PARABD '
+      + 'WHERE REFSERIE = ? ';
+    if FIdAuteur <> -1 then
+      SQL.Text := SQL.Text
+        + 'AND REFPARABD IN (SELECT REFPARABD FROM AUTEURS_PARABD WHERE REFPERSONNE = ?) ';
+    SQL.Text := SQL.Text
+      + 'ORDER BY TITREPARABD';
+    Params.AsInteger[0] := Reference;
+    if FIdAuteur <> -1 then
+      Params.AsInteger[1] := FIdAuteur;
+    Open;
+    while not Eof do begin
+      Self.ParaBD.Add(TParaBD.Make(q));
+      Next;
+    end;
+
+    Close;
     SQL.Text := 'SELECT Genre '
       + 'FROM GenreSeries s INNER JOIN Genres g ON g.RefGenre = s.RefGenre '
       + 'WHERE RefSerie = ?';
@@ -771,7 +806,7 @@ begin
     end;
 
     Close;
-    SQL.Text := 'SELECT * FROM PROC_AUTEURS(NULL, ?)';
+    SQL.Text := 'SELECT * FROM PROC_AUTEURS(NULL, ?, NULL)';
     Params.AsInteger[0] := Reference;
     Open;
     while not Eof do begin
@@ -1488,24 +1523,35 @@ end;
 procedure TParaBDComplet.Clear;
 begin
   inherited;
+  RefParaBD := -1;
+  Titre := '';
 
+  TAuteur.VideListe(Auteurs);
+
+  Description.Clear;
+  Serie.Clear;
 end;
 
 constructor TParaBDComplet.Create;
 begin
   inherited;
-
+  Description := TStringList.Create;
+  Auteurs := TList.Create;
+  Serie := TSerieComplete.Create;
 end;
 
 destructor TParaBDComplet.Destroy;
 begin
-
+  Auteurs.Free;
+  Serie.Free;
+  Description.Free;
   inherited;
 end;
 
 procedure TParaBDComplet.Fill(const Reference: Integer);
 var
   q: TJvUIBQuery;
+  serie: Integer;
 begin
   inherited;
   if (Reference = 0) then Exit;
@@ -1514,16 +1560,56 @@ begin
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     FetchBlobs := True;
-//    SQL.Text := 'SELECT TITREALBUM, MOISPARUTION, ANNEEPARUTION, REFSERIE, TOME, TOMEDEBUT, TOMEFIN, SUJETALBUM, REMARQUESALBUM, HORSSERIE, INTEGRALE FROM ALBUMS WHERE RefAlbum = ?';
+    SQL.Text := 'SELECT TITREPARABD, ANNEE, REFSERIE, ACHAT, DESCRIPTION, DEDICACE, NUMEROTE, ANNEECOTE, PRIXCOTE, GRATUIT, OFFERT, DATEACHAT, PRIX, STOCK, CATEGORIEPARABD, lc.Libelle AS sCATEGORIEPARABD, FICHIERPARABD';
+    SQL.Add('FROM PARABD p');
+    SQL.Add('LEFT JOIN LISTES lc on (lc.ref = p.CATEGORIEPARABD and lc.categorie = 7)');
+    SQL.Add('WHERE RefParaBD = ?');
+
     Params.AsInteger[0] := Reference;
     Open;
     RecInconnu := Eof;
 
+    Self.Titre := Fields.ByNameAsString['TITREPARABD'];
+    Self.AnneeEdition := Fields.ByNameAsInteger['ANNEE'];
+    Self.Description.Text := Fields.ByNameAsString['DESCRIPTION'];
+    Self.CategorieParaBD := Fields.ByNameAsInteger['CategorieParaBD'];
+    Self.sCategorieParaBD := Fields.ByNameAsString['sCategorieParaBD'];
+    Self.Prix := Fields.ByNameAsCurrency['PRIX'];
+    Self.Dedicace := Fields.ByNameAsBoolean['DEDICACE'];
+    Self.Numerote := Fields.ByNameAsBoolean['Numerote'];
+    Self.Offert := Fields.ByNameAsBoolean['OFFERT'];
+    Self.Gratuit := Fields.ByNameAsBoolean['GRATUIT'];
+    Self.Stock := Fields.ByNameAsBoolean['STOCK'];
+    Self.DateAchat := Fields.ByNameAsDate['DateAchat'];
+    Self.AnneeCote := Fields.ByNameAsInteger['ANNEECOTE'];
+    Self.PrixCote := Fields.ByNameAsCurrency['PRIXCOTE'];
+    Self.HasImage := not Fields.ByNameIsNull['FICHIERPARABD'];
+
+    serie := Fields.ByNameAsInteger['REFSERIE'];
+
+    Close;
+    SQL.Text := 'SELECT * FROM PROC_AUTEURS(NULL, NULL, ?)';
+    Params.AsInteger[0] := Reference;
+    Open;
+    while not Eof do begin
+      Self.Auteurs.Add(TAuteur.Make(q));
+      Next;
+    end;
+
+    Self.Serie.Fill(serie);
 
   finally
     q.Transaction.Free;
     q.Free;
   end;
+end;
+
+function TParaBDComplet.Get_sDateAchat: string;
+begin
+  if Self.DateAchat > 0 then
+    Result := DateToStr(Self.DateAchat)
+  else
+    Result := '';
 end;
 
 end.

@@ -349,9 +349,6 @@ object FrmEditSerie: TFrmEditSerie
       BorderStyle = bsNone
       TabOrder = 0
       OnChange = edTitreChange
-      LinkLabel.LinkLabel.Strings = (
-        'Label2')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label2
@@ -397,9 +394,6 @@ object FrmEditSerie: TFrmEditSerie
       BorderStyle = bsNone
       ScrollBars = ssVertical
       TabOrder = 2
-      LinkLabel.LinkLabel.Strings = (
-        'Label6')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label6
@@ -415,9 +409,6 @@ object FrmEditSerie: TFrmEditSerie
       BorderStyle = bsNone
       ScrollBars = ssVertical
       TabOrder = 3
-      LinkLabel.LinkLabel.Strings = (
-        'Label7')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label7
@@ -432,9 +423,6 @@ object FrmEditSerie: TFrmEditSerie
       Caption = 'S'#233'rie termin'#233'e'
       State = cbGrayed
       TabOrder = 16
-      LinkLabel.LinkLabel.Strings = (
-        'cbTerminee')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = cbTerminee
@@ -447,9 +435,6 @@ object FrmEditSerie: TFrmEditSerie
       Height = 16
       Caption = 'S'#233'rie compl'#232'te'
       TabOrder = 15
-      LinkLabel.LinkLabel.Strings = (
-        'cbComplete')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = cbComplete
@@ -496,9 +481,6 @@ object FrmEditSerie: TFrmEditSerie
       ParentCtl3D = False
       TabOrder = 1
       OnChange = edSiteChange
-      LinkLabel.LinkLabel.Strings = (
-        'Label1')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label1
@@ -523,9 +505,6 @@ object FrmEditSerie: TFrmEditSerie
       TabOrder = 6
       ViewStyle = vsReport
       OnKeyDown = lvColoristesKeyDown
-      LinkLabel.LinkLabel.Strings = (
-        'btScenariste')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = btScenariste
@@ -549,9 +528,6 @@ object FrmEditSerie: TFrmEditSerie
       TabOrder = 7
       ViewStyle = vsReport
       OnKeyDown = lvColoristesKeyDown
-      LinkLabel.LinkLabel.Strings = (
-        'btDessinateur')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = btDessinateur
@@ -603,9 +579,6 @@ object FrmEditSerie: TFrmEditSerie
       TabOrder = 8
       ViewStyle = vsReport
       OnKeyDown = lvColoristesKeyDown
-      LinkLabel.LinkLabel.Strings = (
-        'btColoriste')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = btColoriste

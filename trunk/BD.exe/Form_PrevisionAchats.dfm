@@ -1,6 +1,6 @@
 object frmPrevisionsAchats: TfrmPrevisionsAchats
-  Left = 253
-  Top = 352
+  Left = 262
+  Top = 208
   Width = 870
   Height = 640
   Caption = 'Achats pr'#233'vus'
@@ -19,7 +19,7 @@ object frmPrevisionsAchats: TfrmPrevisionsAchats
     Left = 0
     Top = 25
     Width = 862
-    Height = 568
+    Height = 563
     Align = alClient
     BevelKind = bkTile
     BorderStyle = bsNone

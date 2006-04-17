@@ -94,7 +94,7 @@ OutputDir=..\..\bin
 UnitOutputDir=dcu
 PackageDLLOutputDir=
 PackageDCPOutputDir=
-SearchPath=$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
+SearchPath=$(DELPHI)\Lib\Debug;$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
 Packages=VCL50;VCLX50;VCLSMP50;QRPT50;VCLDB50;VCLBDE50;VCLDBX50;TEEUI50;TEEDB50;TEE50;TEEQR50;NMFAST50;dclocx50;dclaxserver50;ibevnt50;VCLIB50;VCLIE50;INETDB50;INET50;vcl;rtl;dsnap;dbrtl;vcldb
 Conditionals=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
 DebugSourceDirs=
@@ -143,9 +143,10 @@ Item2=NOFORMSA
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlSearchPath]
-Count=2
-Item0=$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
-Item1=..\..\..\Compos Perso\PrintObject;..\..\..\Compos Perso\VDTButton;..\..\..\Compos Perso\Memory Table;..\..\..\Compos Perso\VersLabP;..\..\..\Compos Perso\ScanEdit;..\..\..\Common;..\..\..\Compos Perso\HarmFade;..\..\..\Compos Perso\schrinkpanel;..\..\..\Compos Perso\ReadOnlycheckBox;..\..\..\Compos Perso\Labeled;..\..\..\Compos Perso\ShellNotification;..\..\..\Compos Perso\ProgressBar;..\..\..\Compos Perso\BrowseDirectory;..\..\..\Compos Perso\VirtualTree;..\..\..\Common\GraphicEx
+Count=3
+Item0=$(DELPHI)\Lib\Debug;$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
+Item1=$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
+Item2=..\..\..\Compos Perso\PrintObject;..\..\..\Compos Perso\VDTButton;..\..\..\Compos Perso\Memory Table;..\..\..\Compos Perso\VersLabP;..\..\..\Compos Perso\ScanEdit;..\..\..\Common;..\..\..\Compos Perso\HarmFade;..\..\..\Compos Perso\schrinkpanel;..\..\..\Compos Perso\ReadOnlycheckBox;..\..\..\Compos Perso\Labeled;..\..\..\Compos Perso\ShellNotification;..\..\..\Compos Perso\ProgressBar;..\..\..\Compos Perso\BrowseDirectory;..\..\..\Compos Perso\VirtualTree;..\..\..\Common\GraphicEx
 [HistoryLists\hlUnitOutputDirectory]
 Count=1
 Item0=dcu

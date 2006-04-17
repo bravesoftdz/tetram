@@ -165,7 +165,7 @@ begin
         lvScenaristes.Items.BeginUpdate;
         lvDessinateurs.Items.BeginUpdate;
         lvColoristes.Items.BeginUpdate;
-        SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL)';
+        SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL, NULL)';
         Params.AsInteger[0] := FRefAlbum;
         Open;
         while not Eof do begin

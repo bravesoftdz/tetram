@@ -1,6 +1,6 @@
 object FrmEditAlbum: TFrmEditAlbum
-  Left = 214
-  Top = 358
+  Left = 1470
+  Top = 140
   Width = 750
   Height = 856
   ActiveControl = edTitre
@@ -625,7 +625,6 @@ object FrmEditAlbum: TFrmEditAlbum
         ParentCtl3D = False
         TabOrder = 5
         OnChange = edPrixChange
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = Label9
@@ -646,7 +645,6 @@ object FrmEditAlbum: TFrmEditAlbum
         MaxLength = 4
         TabOrder = 0
         OnChange = edAnneeEditionChange
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = Label10
@@ -670,7 +668,6 @@ object FrmEditAlbum: TFrmEditAlbum
         TabOrder = 6
         OnChange = edISBNChange
         OnExit = edISBNExit
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = Label11
@@ -694,9 +691,6 @@ object FrmEditAlbum: TFrmEditAlbum
         Ctl3D = True
         ParentCtl3D = False
         TabOrder = 7
-        LinkLabel.LinkLabel.Strings = (
-          'cbVO')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = cbVO
@@ -714,9 +708,6 @@ object FrmEditAlbum: TFrmEditAlbum
         ParentCtl3D = False
         State = cbChecked
         TabOrder = 8
-        LinkLabel.LinkLabel.Strings = (
-          'cbCouleur')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = cbCouleur
@@ -733,9 +724,6 @@ object FrmEditAlbum: TFrmEditAlbum
         ParentCtl3D = False
         State = cbChecked
         TabOrder = 3
-        LinkLabel.LinkLabel.Strings = (
-          'cbStock')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = cbStock
@@ -751,9 +739,6 @@ object FrmEditAlbum: TFrmEditAlbum
         Ctl3D = True
         ParentCtl3D = False
         TabOrder = 9
-        LinkLabel.LinkLabel.Strings = (
-          'cbDedicace')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = cbDedicace
@@ -769,7 +754,6 @@ object FrmEditAlbum: TFrmEditAlbum
         ShowCheckbox = True
         Checked = False
         TabOrder = 2
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = Label18
@@ -786,9 +770,6 @@ object FrmEditAlbum: TFrmEditAlbum
         ParentCtl3D = False
         TabOrder = 4
         OnClick = cbGratuitClick
-        LinkLabel.LinkLabel.Strings = (
-          'cbVO')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = cbGratuit
@@ -805,9 +786,6 @@ object FrmEditAlbum: TFrmEditAlbum
         ParentCtl3D = False
         TabOrder = 1
         OnClick = cbOffertClick
-        LinkLabel.LinkLabel.Strings = (
-          'cbVO')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = cbOffert
@@ -823,9 +801,6 @@ object FrmEditAlbum: TFrmEditAlbum
         MaxLength = 4
         TabOrder = 10
         OnChange = edAnneeEditionChange
-        LinkLabel.LinkLabel.Strings = (
-          'Label21')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = Label21
@@ -842,9 +817,6 @@ object FrmEditAlbum: TFrmEditAlbum
         BorderStyle = bsNone
         MaxLength = 4
         TabOrder = 11
-        LinkLabel.LinkLabel.Strings = (
-          'Label24')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = Label24
@@ -864,10 +836,6 @@ object FrmEditAlbum: TFrmEditAlbum
         Ctl3D = True
         ParentCtl3D = False
         TabOrder = 12
-        LinkLabel.LinkLabel.Strings = (
-          'Label25'
-          'VDTButton14')
-        LinkLabel.LinkControls = <>
         LinkControls = <
           item
             Control = Label25
@@ -888,9 +856,6 @@ object FrmEditAlbum: TFrmEditAlbum
       BorderStyle = bsNone
       MaxLength = 4
       TabOrder = 3
-      LinkLabel.LinkLabel.Strings = (
-        'Label3')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label3
@@ -908,9 +873,6 @@ object FrmEditAlbum: TFrmEditAlbum
       BorderStyle = bsNone
       TabOrder = 0
       OnChange = edTitreChange
-      LinkLabel.LinkLabel.Strings = (
-        'Label2')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label2
@@ -927,9 +889,6 @@ object FrmEditAlbum: TFrmEditAlbum
       BorderStyle = bsNone
       ScrollBars = ssVertical
       TabOrder = 8
-      LinkLabel.LinkLabel.Strings = (
-        'Label6')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label6
@@ -945,9 +904,6 @@ object FrmEditAlbum: TFrmEditAlbum
       BorderStyle = bsNone
       ScrollBars = ssVertical
       TabOrder = 9
-      LinkLabel.LinkLabel.Strings = (
-        'Label7')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label7
@@ -972,9 +928,6 @@ object FrmEditAlbum: TFrmEditAlbum
       TabOrder = 12
       ViewStyle = vsReport
       OnKeyDown = lvDessinateursKeyDown
-      LinkLabel.LinkLabel.Strings = (
-        'btScenariste')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = btScenariste
@@ -999,9 +952,6 @@ object FrmEditAlbum: TFrmEditAlbum
       TabOrder = 13
       ViewStyle = vsReport
       OnKeyDown = lvDessinateursKeyDown
-      LinkLabel.LinkLabel.Strings = (
-        'btDessinateur')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = btDessinateur
@@ -1124,9 +1074,6 @@ object FrmEditAlbum: TFrmEditAlbum
       TabOrder = 14
       ViewStyle = vsReport
       OnKeyDown = lvDessinateursKeyDown
-      LinkLabel.LinkLabel.Strings = (
-        'btColoriste')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = btColoriste
@@ -1143,9 +1090,6 @@ object FrmEditAlbum: TFrmEditAlbum
       ParentCtl3D = False
       TabOrder = 5
       OnClick = cbIntegraleClick
-      LinkLabel.LinkLabel.Strings = (
-        'cbIntegrale')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = cbIntegrale
@@ -1160,9 +1104,6 @@ object FrmEditAlbum: TFrmEditAlbum
       BorderStyle = bsNone
       MaxLength = 3
       TabOrder = 1
-      LinkLabel.LinkLabel.Strings = (
-        'Label1')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label1
@@ -1249,10 +1190,6 @@ object FrmEditAlbum: TFrmEditAlbum
       TabOrder = 17
       OnClick = vtEditionsClick
       OnKeyDown = vtEditionsKeyDown
-      LinkLabel.LinkLabel.Strings = (
-        'Label4'
-        'VDTButton3')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = VDTButton3
@@ -1271,9 +1208,6 @@ object FrmEditAlbum: TFrmEditAlbum
       Ctl3D = True
       ParentCtl3D = False
       TabOrder = 4
-      LinkLabel.LinkLabel.Strings = (
-        'cbHorsSerie')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = cbHorsSerie
@@ -1289,9 +1223,6 @@ object FrmEditAlbum: TFrmEditAlbum
       BorderStyle = bsNone
       ScrollBars = ssVertical
       TabOrder = 22
-      LinkLabel.LinkLabel.Strings = (
-        'Label15')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label15
@@ -1307,10 +1238,6 @@ object FrmEditAlbum: TFrmEditAlbum
       Enabled = False
       MaxLength = 3
       TabOrder = 6
-      LinkLabel.LinkLabel.Strings = (
-        'Label16'
-        'Label17')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label16
@@ -1331,10 +1258,6 @@ object FrmEditAlbum: TFrmEditAlbum
       Enabled = False
       MaxLength = 3
       TabOrder = 7
-      LinkLabel.LinkLabel.Strings = (
-        'Label16'
-        'Label17')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label16
@@ -1354,9 +1277,6 @@ object FrmEditAlbum: TFrmEditAlbum
       BorderStyle = bsNone
       MaxLength = 2
       TabOrder = 2
-      LinkLabel.LinkLabel.Strings = (
-        'Label3')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label3

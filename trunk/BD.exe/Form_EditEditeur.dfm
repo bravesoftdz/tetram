@@ -95,9 +95,6 @@ object FrmEditEditeur: TFrmEditEditeur
       Ctl3D = True
       ParentCtl3D = False
       TabOrder = 0
-      LinkLabel.LinkLabel.Strings = (
-        'Label2')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label2
@@ -117,9 +114,6 @@ object FrmEditEditeur: TFrmEditEditeur
       ParentCtl3D = False
       TabOrder = 1
       OnChange = edSiteChange
-      LinkLabel.LinkLabel.Strings = (
-        'Label1')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label1

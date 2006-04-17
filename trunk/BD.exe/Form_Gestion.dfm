@@ -256,7 +256,7 @@ object FrmGestions: TFrmGestions
     end
     object Bevel5: TBevel
       Left = 19
-      Top = 273
+      Top = 249
       Width = 65
       Height = 4
       Anchors = [akLeft, akTop, akRight]
@@ -304,19 +304,20 @@ object FrmGestions: TFrmGestions
     end
     object btAchatsParaBD: TVDTButton
       Left = 5
-      Top = 247
+      Top = 311
       Width = 95
       Height = 25
       Cursor = crHandPoint
       Anchors = [akLeft, akTop, akRight]
       GroupIndex = 1
-      Caption = 'Achats'
+      Caption = 'Achats parabd'
       Flat = True
+      Visible = False
       OnClick = SpeedButton1Click
     end
     object btEmprunteurs: TVDTButton
       Left = 5
-      Top = 280
+      Top = 256
       Width = 95
       Height = 25
       Cursor = crHandPoint

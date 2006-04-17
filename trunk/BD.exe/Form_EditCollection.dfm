@@ -69,9 +69,6 @@ object FrmEditCollection: TFrmEditCollection
       Ctl3D = True
       ParentCtl3D = False
       TabOrder = 0
-      LinkLabel.LinkLabel.Strings = (
-        'Label2')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label2

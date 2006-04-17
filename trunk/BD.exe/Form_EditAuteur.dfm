@@ -105,9 +105,6 @@ object FrmEditAuteur: TFrmEditAuteur
       BorderStyle = bsNone
       ScrollBars = ssBoth
       TabOrder = 2
-      LinkLabel.LinkLabel.Strings = (
-        'Label1')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label1
@@ -122,9 +119,6 @@ object FrmEditAuteur: TFrmEditAuteur
       BevelKind = bkTile
       BorderStyle = bsNone
       TabOrder = 0
-      LinkLabel.LinkLabel.Strings = (
-        'Label3')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label3
@@ -144,9 +138,6 @@ object FrmEditAuteur: TFrmEditAuteur
       ParentCtl3D = False
       TabOrder = 1
       OnChange = edSiteChange
-      LinkLabel.LinkLabel.Strings = (
-        'Label1')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label2

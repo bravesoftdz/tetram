@@ -1,6 +1,5 @@
 program BD;
 
-{%File '..\..\..\..\Thierry\MonSite\bdtheque\TodoList.txt'}
 {$R 'webserver.res' 'webserver.rc'}
 {$R 'ressources.res' 'ressources.rc'}
 

@@ -86,9 +86,6 @@ object FrmEditEmprunteur: TFrmEditEmprunteur
       BevelKind = bkTile
       BorderStyle = bsNone
       TabOrder = 0
-      LinkLabel.LinkLabel.Strings = (
-        'Label3')
-      LinkLabel.LinkControls = <>
       LinkControls = <
         item
           Control = Label3

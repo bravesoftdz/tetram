@@ -31,7 +31,7 @@ type
     ListView1: TVDTListView;
     PanelImpression: TPanel;
     Label11: TLabel;
-    FicheCouverture: TCheckBox;
+    FicheAlbumCouverture: TCheckBox;
     PanelWebServer: TPanel;
     Label13: TLabel;
     Label3: TLabel;
@@ -52,6 +52,7 @@ type
     GrandesIconesMenu: TCheckBox;
     GrandesIconesBarre: TCheckBox;
     LightComboCheck1: TLightComboCheck;
+    FicheParaBDCouverture: TCheckBox;
     procedure btnOKClick(Sender: TObject);
     procedure calculKeyPress(Sender: TObject; var Key: Char);
     procedure calculExit(Sender: TObject);
@@ -95,7 +96,8 @@ begin
   with Utilisateur.Options do begin
     SymboleMonnetaire := ComboBox1.Text;
     ModeDemarrage := not OpenStart.Checked;
-    FicheWithCouverture := FicheCouverture.Checked;
+    FicheAlbumWithCouverture := FicheAlbumCouverture.Checked;
+    FicheParaBDWithImage := FicheParaBDCouverture.Checked;
     Images := CheckBox3.Checked;
     RepImages := VDTButton1.Caption;
     AntiAliasing := CheckBox5.Checked;
@@ -193,7 +195,8 @@ begin
   with Utilisateur.Options do begin
     ComboBox1.ItemIndex := ComboBox1.Items.IndexOf(SymboleMonnetaire);
     OpenStart.Checked := not ModeDemarrage;
-    FicheCouverture.Checked := FicheWithCouverture;
+    FicheAlbumCouverture.Checked := FicheAlbumWithCouverture;
+    FicheParaBDCouverture.Checked := FicheParaBDWithImage;
     CheckBox3.Checked := Images;
     VDTButton1.Caption := RepImages;
     CheckBox5.Checked := AntiAliasing;

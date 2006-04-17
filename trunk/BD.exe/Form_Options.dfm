@@ -89,7 +89,7 @@ object FrmOptions: TFrmOptions
         Left = 0
         Top = 137
         Width = 352
-        Height = 38
+        Height = 56
         Align = alTop
         BevelOuter = bvNone
         Caption = ' '
@@ -107,7 +107,7 @@ object FrmOptions: TFrmOptions
           Font.Style = [fsBold]
           ParentFont = False
         end
-        object FicheCouverture: TCheckBox
+        object FicheAlbumCouverture: TCheckBox
           Left = 15
           Top = 15
           Width = 242
@@ -118,10 +118,21 @@ object FrmOptions: TFrmOptions
           State = cbChecked
           TabOrder = 0
         end
+        object FicheParaBDCouverture: TCheckBox
+          Left = 15
+          Top = 31
+          Width = 242
+          Height = 16
+          Cursor = crHandPoint
+          Caption = 'Imprimer les fiches de para-BD avec l'#39'image'
+          Checked = True
+          State = cbChecked
+          TabOrder = 1
+        end
       end
       object PanelWebServer: TPanel
         Left = 0
-        Top = 249
+        Top = 267
         Width = 352
         Height = 81
         Align = alTop
@@ -170,6 +181,7 @@ object FrmOptions: TFrmOptions
           Value = 1024
           BevelKind = bkTile
           BorderStyle = bsNone
+          LinkControls = <>
         end
         object CheckBox4: TCheckBox
           Left = 15
@@ -185,7 +197,7 @@ object FrmOptions: TFrmOptions
       end
       object PanelGestion: TPanel
         Left = 0
-        Top = 175
+        Top = 193
         Width = 352
         Height = 74
         Align = alTop
@@ -465,7 +477,7 @@ object FrmOptions: TFrmOptions
           Cursor = crHandPoint
           BevelKind = bkTile
           Ctl3D = True
-          ItemHeight = 0
+          ItemHeight = 13
           ParentCtl3D = False
           TabOrder = 0
           OnChange = ComboBox2Change
@@ -478,7 +490,7 @@ object FrmOptions: TFrmOptions
           Cursor = crHandPoint
           BevelKind = bkTile
           Ctl3D = True
-          ItemHeight = 0
+          ItemHeight = 13
           ParentCtl3D = False
           TabOrder = 1
           OnChange = ComboBox2Change
@@ -535,6 +547,7 @@ object FrmOptions: TFrmOptions
           OnChange = ComboBox2Change
           OnExit = Edit1Exit
           OnKeyPress = calculKeyPress
+          LinkControls = <>
           TypeDonnee = tdNumeric
           CurrencyChar = #0
         end
@@ -547,7 +560,7 @@ object FrmOptions: TFrmOptions
         Cursor = crHandPoint
         BevelKind = bkTile
         Ctl3D = True
-        ItemHeight = 0
+        ItemHeight = 13
         ParentCtl3D = False
         TabOrder = 1
       end

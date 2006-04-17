@@ -165,6 +165,7 @@ end;
 
 procedure TFrmConsultationSerie.FormCreate(Sender: TObject);
 begin
+  PrepareLV(Self);
   FSerie := TSerieComplete.Create;
 end;
 
