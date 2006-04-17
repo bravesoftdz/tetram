@@ -1,1 +1,1 @@
-"D:\Program Files\Firebird\Firebird_1_5\bin\gbak" "bd.gbk" "bd.gdb" -C -I -R -USER "sysdba" -PAS "masterkey" -V
+"D:\Program Files\Firebird\Firebird_1_5\bin\gbak" "bd.gbk" "bd.gdb" -C -R -USER "sysdba" -PAS "masterkey" -V
