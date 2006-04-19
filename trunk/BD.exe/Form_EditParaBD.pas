@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBEditLabeled, VirtualTrees, ComCtrls, VDTButton,
-  VirtualTree, ComboCheck, ExtCtrls, Buttons, Frame_RechercheRapide, ExtDlgs;
+  VirtualTree, ComboCheck, ExtCtrls, Buttons, Frame_RechercheRapide, ExtDlgs,
+  CRFurtif;
 
 type
   TFrmEditParaBD = class(TForm)
@@ -48,12 +49,12 @@ type
     imgVisu: TImage;
     cbNumerote: TCheckBoxLabeled;
     Panel3: TPanel;
-    ChoixImage: TVDTButton;
+    ChoixImage: TCRFurtifLight;
     FrameRechercheRapideSerie: TFrameRechercheRapide;
     FrameRechercheRapideAuteur: TFrameRechercheRapide;
     Panel4: TPanel;
     cbImageBDD: TCheckBoxLabeled;
-    VDTButton1: TVDTButton;
+    VDTButton1: TCRFurtifLight;
     ChoixImageDialog: TOpenPictureDialog;
     procedure cbOffertClick(Sender: TObject);
     procedure cbGratuitClick(Sender: TObject);
@@ -71,12 +72,14 @@ type
     procedure vtPersonnesDblClick(Sender: TObject);
     procedure btCreateurClick(Sender: TObject);
     procedure lvAuteursKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
   private
     FCreation: Boolean;
     FisAchat: Boolean;
     FID_ParaBD: TGUID;
     FOldImageStockee: Boolean;
     FOldFichierImage, FCurrentFichierImage: string;
+    FDateAchat: TDateTime;
     procedure SetID_ParaBD(const Value: TGUID);
     { Déclarations privées }
   public
@@ -142,9 +145,9 @@ begin
       cbGratuit.Checked := Fields.ByNameAsBoolean['GRATUIT'];
       cbOffertClick(nil);
 
-      dtpAchat.Date := Now;
-      dtpAchat.Checked := not Fields.ByNameIsNull['DateAchat'];
-      if dtpAchat.Checked then dtpAchat.Date := Fields.ByNameAsDate['DateAchat'];
+      // artifice pour contourner un bug du TDateTimePicker
+      // dtpAchat initialisé dans le OnShow de la fenêtre
+      FDateAchat := Fields.ByNameAsDate['DateAchat'];
 
       if Fields.ByNameIsNull['PRIX'] then
         edPrix.Text := ''
@@ -537,6 +540,15 @@ begin
   PA.Free;
   src.Selected.Delete;
   vtPersonnesChange(vtPersonnes, vtPersonnes.FocusedNode);
+end;
+
+procedure TFrmEditParaBD.FormShow(Sender: TObject);
+begin
+  // code pour contourner un bug du TDateTimePicker
+  // Cheched := False est réinitialisé au premier affichage du compo (à la création de son handle)
+  dtpAchat.Date := Now;
+  dtpAchat.Checked := FDateAchat > 0;
+  if dtpAchat.Checked then dtpAchat.Date := FDateAchat;
 end;
 
 end.

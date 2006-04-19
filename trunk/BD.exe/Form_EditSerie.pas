@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, ExtCtrls, DBCtrls, Mask,
   Buttons, VDTButton, ComCtrls, DBEditLabeled, VirtualTrees, VirtualTree,
-  Menus, ExtDlgs, Frame_RechercheRapide;
+  Menus, ExtDlgs, Frame_RechercheRapide, CRFurtif;
 
 type
   TFrmEditSerie = class(TForm)
@@ -35,10 +35,10 @@ type
     VDTButton13: TVDTButton;
     edSite: TEditLabeled;
     Label1: TLabel;
-    btScenariste: TVDTButton;
-    btDessinateur: TVDTButton;
+    btScenariste: TCRFurtifLight;
+    btDessinateur: TCRFurtifLight;
     Label19: TLabel;
-    btColoriste: TVDTButton;
+    btColoriste: TCRFurtifLight;
     lvScenaristes: TVDTListViewLabeled;
     lvDessinateurs: TVDTListViewLabeled;
     vtPersonnes: TVirtualStringTree;

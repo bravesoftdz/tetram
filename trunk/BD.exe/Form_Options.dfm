@@ -507,8 +507,8 @@ object FrmOptions: TFrmOptions
           object Label10: TLabel
             Left = 2
             Top = 2
-            Width = 3
-            Height = 13
+            Width = 153
+            Height = 14
             Align = alClient
           end
         end

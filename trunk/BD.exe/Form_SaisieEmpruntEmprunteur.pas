@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, ComCtrls, ExtCtrls,
   ToolWin, Buttons, Fram_Boutons, ScanEdit, VDTButton, Menus, Commun, DBEditLabeled, VirtualTrees, VirtualTree,
-  ComboCheck, Frame_RechercheRapide, LoadComplet;
+  ComboCheck, Frame_RechercheRapide, LoadComplet, CRFurtif;
 
 type
   TFrmSaisie_EmpruntEmprunteur = class(TForm)
@@ -16,8 +16,8 @@ type
     Panel5: TPanel;
     Frame11: TFrame1;
     Panel9: TPanel;
-    VDTButton2: TVDTButton;
-    VDTButton3: TVDTButton;
+    VDTButton2: TCRFurtifLight;
+    VDTButton3: TCRFurtifLight;
     Panel1: TPanel;
     Label2: TLabel;
     Panel3: TPanel;

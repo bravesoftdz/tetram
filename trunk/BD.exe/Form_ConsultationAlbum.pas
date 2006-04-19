@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls,
   Main, VDTButton, ActnList, Spin, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, Procedures, GraphicEx,
-  jpeg, ShellAPI, LoadComplet;
+  jpeg, ShellAPI, LoadComplet, CRFurtif;
 
 type
   TFrmConsultationAlbum = class(TForm, IImpressionApercu)
@@ -38,8 +38,8 @@ type
     Label5: TLabel;
     TitreAlbum: TLabel;
     Label6: TLabel;
-    VDTButton3: TVDTButton;
-    VDTButton4: TVDTButton;
+    VDTButton3: TCRFurtifLight;
+    VDTButton4: TCRFurtifLight;
     Memo1: TMemo;
     lvColoristes: TVDTListView;
     Label7: TLabel;
@@ -246,7 +246,6 @@ var
   hg: IHourGlass;
   ms: TStream;
   jpg: TJPEGImage;
-  png: TPNGGraphic;
 begin
   Label4.Visible := FCurrentEdition.Couvertures.Count = 0;
 
@@ -280,13 +279,15 @@ begin
     if Label18.Visible then begin
       Couverture.OnDblClick := nil;
       Couverture.Cursor := crDefault;
-      png := TPNGGraphic.Create;
+      ms := TResourceStream.Create(HInstance, 'IMAGENONVALIDE', RT_RCDATA);
+      jpg := TJPEGImage.Create;
       try
-        png.LoadFromResourceName(HInstance, 'IMAGENONVALIDE');
-        Couverture.Picture.Assign(png);
+        jpg.LoadFromStream(ms);
+        Couverture.Picture.Assign(jpg);
         Couverture.Transparent := True;
       finally
-        FreeAndNil(png);
+        jpg.Free;
+        ms.Free;
       end;
     end
     else begin

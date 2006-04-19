@@ -41,7 +41,7 @@ object FrmRecherche: TFrmRecherche
     Width = 392
     Height = 222
     Cursor = crHandPoint
-    ActivePage = TabSheet3
+    ActivePage = TabSheet4
     Align = alTop
     Style = tsFlatButtons
     TabOrder = 0

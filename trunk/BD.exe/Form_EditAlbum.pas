@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls, DBCtrls, StdCtrls, ImgList, DBEditLabeled,
   VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, VirtualTree, Menus, TypeRec, ActnList, LoadComplet, ComboCheck,
-  Frame_RechercheRapide;
+  Frame_RechercheRapide, CRFurtif;
 
 type
   TFrmEditAlbum = class(TForm)
@@ -22,22 +22,22 @@ type
     remarques: TMemoLabeled;
     Label7: TLabel;
     lvScenaristes: TVDTListViewLabeled;
-    btScenariste: TVDTButton;
+    btScenariste: TCRFurtifLight;
     lvDessinateurs: TVDTListViewLabeled;
-    btDessinateur: TVDTButton;
+    btDessinateur: TCRFurtifLight;
     vtPersonnes: TVirtualStringTree;
     Label19: TLabel;
     vstImages: TVirtualStringTree;
-    ChoixImage: TVDTButton;
-    VDTButton4: TVDTButton;
-    VDTButton5: TVDTButton;
+    ChoixImage: TCRFurtifLight;
+    VDTButton4: TCRFurtifLight;
+    VDTButton5: TCRFurtifLight;
     Bevel1: TBevel;
     Label20: TLabel;
     Panel2: TPanel;
     btnOK: TBitBtn;
     btnAnnuler: TBitBtn;
     vtSeries: TVirtualStringTree;
-    btColoriste: TVDTButton;
+    btColoriste: TCRFurtifLight;
     lvColoristes: TVDTListViewLabeled;
     cbIntegrale: TCheckBoxLabeled;
     Label1: TLabel;
@@ -78,7 +78,7 @@ type
     cbxOrientation: TLightComboCheck;
     Label23: TLabel;
     cbxFormat: TLightComboCheck;
-    VDTButton13: TVDTButton;
+    VDTButton13: TCRFurtifLight;
     edPrix: TEditLabeled;
     edAnneeEdition: TEditLabeled;
     edISBN: TEditLabeled;

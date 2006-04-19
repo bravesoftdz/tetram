@@ -93,7 +93,6 @@ var
   i: Integer;
   ms: TStream;
   jpg: TJPEGImage;
-  png: TPNGGraphic;
 begin
   ClearForm;
   FParaBD.Fill(Value);
@@ -178,13 +177,15 @@ begin
     if Label18.Visible then begin
       ImageParaBD.OnDblClick := nil;
       ImageParaBD.Cursor := crDefault;
-      png := TPNGGraphic.Create;
+      ms := TResourceStream.Create(HInstance, 'IMAGENONVALIDE', RT_RCDATA);
+      jpg := TJPEGImage.Create;
       try
-        png.LoadFromResourceName(HInstance, 'IMAGENONVALIDE');
-        ImageParaBD.Picture.Assign(png);
+        jpg.LoadFromStream(ms);
+        ImageParaBD.Picture.Assign(jpg);
         ImageParaBD.Transparent := True;
       finally
-        FreeAndNil(png);
+        jpg.Free;
+        ms.Free;
       end;
     end
     else begin

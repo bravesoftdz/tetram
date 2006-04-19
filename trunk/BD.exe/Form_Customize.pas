@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Menus,
   StdCtrls, ComCtrls, CheckLst, ActnList, VDTButton, Buttons, ExtCtrls, Fram_Boutons,
-  ToolWin, IniFiles;
+  ToolWin, IniFiles, CRFurtif;
 
 type
   TFrmCustomize = class(TForm)
@@ -13,9 +13,9 @@ type
     Label4: TLabel;
     GroupBox1: TGroupBox;
     Label3: TLabel;
-    VDTButton2: TVDTButton;
-    VDTButton3: TVDTButton;
-    VDTButton4: TVDTButton;
+    VDTButton2: TCRFurtifLight;
+    VDTButton3: TCRFurtifLight;
+    VDTButton4: TCRFurtifLight;
     Frame11: TFrame1;
     Cats: TListBox;
     Commands: TVDTListView;
