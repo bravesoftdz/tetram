@@ -5,6 +5,9 @@ vEditeur=Modules.FicheSerie.Editeur
 vCollection=Modules.FicheSerie.Collection
 vAlbums=Modules.FicheSerie.Albums
 vGenres=Modules.FicheSerie.Genres
+vDessinateurs=Modules.FicheSerie.Dessinateurs
+vScenaristes=Modules.FicheSerie.Scenaristes
+vColoristes=Modules.FicheSerie.Coloristes
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//FR">
 <HTML>
@@ -37,6 +40,45 @@ if (!e.atEnd()) { %>
 		s == '' ? s = vGenres.Genre.Value : s += ', ' + vGenres.Genre.Value;
 	Response.Write(s);
 %>
+					</TD>
+				</TR>
+<% } %>
+<%
+var e = new Enumerator(vScenaristes.Records);
+if (!e.atEnd()) { %>
+				<TR>
+					<TH align=right>Sc&eacute;nario:</TH>
+					<TD>
+<%
+	for (; !e.atEnd(); e.moveNext()) { %>
+						<A href="FichePersonne?RefPersonne=<%=vScenaristes.RefPersonne.Value%>"><%=vScenaristes.Nom.DisplayText%><br>
+<% 	} %>
+					</TD>
+				</TR>
+<% } %>
+<%
+var e = new Enumerator(vDessinateurs.Records);
+if (!e.atEnd()) { %>
+				<TR>
+					<TH align=right>Dessin:</TH>
+					<TD>
+<%
+	for (; !e.atEnd(); e.moveNext()) { %>
+						<A href="FichePersonne?RefPersonne=<%=vDessinateurs.RefPersonne.Value%>"><%=vDessinateurs.Nom.DisplayText%><br>
+<% 	} %>
+					</TD>
+				</TR>
+<% } %>
+<%
+var e = new Enumerator(vColoristes.Records);
+if (!e.atEnd()) { %>
+				<TR>
+					<TH align=right>Couleurs:</TH>
+					<TD>
+<%
+	for (; !e.atEnd(); e.moveNext()) { %>
+						<A href="FichePersonne?RefPersonne=<%=vColoristes.RefPersonne.Value%>"><%=vColoristes.Nom.DisplayText%><br>
+<% 	} %>
 					</TD>
 				</TR>
 <% } %>
