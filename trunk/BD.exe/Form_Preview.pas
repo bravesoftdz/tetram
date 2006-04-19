@@ -127,6 +127,11 @@ end;
 
 procedure TFrmPreview.ShowNoPage;
 begin
+  ToolButton1.Enabled := numeropage > 1;
+  ToolButton2.Enabled := numeropage > 1;
+  ToolButton3.Enabled := numeropage < maximum;
+  ToolButton4.Enabled := numeropage < maximum;
+
   Label2.Caption := Format('%.*d', [Length(Label1.Caption), numeropage]);
 end;
 
