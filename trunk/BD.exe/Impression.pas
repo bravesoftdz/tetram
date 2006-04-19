@@ -13,18 +13,18 @@ procedure ImpressionInfosBDtheque(Previsualisation: Boolean);
 
 procedure ImpressionEmprunts(Previsualisation: Boolean; Source: TSrcEmprunt = seTous; Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1; Avant: TDateTime = -1; EnCours: Boolean = False; Stock: Boolean = False);
 
-procedure ImpressionFicheAlbum(Reference: Integer; RefEdition: Integer; Previsualisation: Boolean);
-procedure ImpressionFicheAuteur(Reference: Integer; Previsualisation: Boolean);
-procedure ImpressionSerie(Reference: Integer; Previsualisation: Boolean);
-procedure ImpressionEmpruntsAlbum(Reference: Integer; Previsualisation: Boolean);
-procedure ImpressionFicheParaBD(Reference: Integer; Previsualisation: Boolean);
+procedure ImpressionFicheAlbum(Reference, ID_Edition: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheAuteur(Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionSerie(Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionEmpruntsAlbum(Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheParaBD(Reference: TGUID; Previsualisation: Boolean);
 
-procedure ImpressionFicheEmprunteur(Reference: Integer; Previsualisation: Boolean);
-procedure ImpressionEmpruntsEmprunteur(Reference: Integer; Previsualisation: Boolean);
+procedure ImpressionFicheEmprunteur(Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionEmpruntsEmprunteur(Reference: TGUID; Previsualisation: Boolean);
 
 procedure ImpressionRecherche(Resultat: TList; ResultatInfos, Criteres: TStringList; TypeRecherche: TTypeRecherche; Previsualisation: Boolean);
-procedure ImpressionCouvertureAlbum(Reference: Integer; RefCouverture: Integer; Previsualisation: Boolean);
-procedure ImpressionImageParaBD(Reference: Integer; Previsualisation: Boolean);
+procedure ImpressionCouvertureAlbum(Reference, ID_Couverture: TGUID; Previsualisation: Boolean);
+procedure ImpressionImageParaBD(Reference: TGUID; Previsualisation: Boolean);
 
 procedure ImpressionListeManquants(R: TSeriesIncompletes; Previsualisation: Boolean);
 procedure ImpressionListePrevisions(R: TPrevisionsSorties; Previsualisation: Boolean);
@@ -40,7 +40,7 @@ begin
   if not Result then Result := Fond.PrintDialog1.Execute;
 end;
 
-procedure ImpressionSerie(Reference: Integer; Previsualisation: Boolean);
+procedure ImpressionSerie(Reference: TGUID; Previsualisation: Boolean);
 var
   fWaiting: IWaiting;
   Serie: TSerieComplete;
@@ -56,7 +56,7 @@ var
 begin
   Infos := Choisir('Inclure Prévisions et Manquants', 'Omettre Prévisions et Manquants', 1);
   if Infos = mrCancel then Exit;
-  if Reference = 0 then Exit;
+  if IsEqualGUID(Reference, GUID_NULL) then Exit;
   if not ConfigPrinter(Previsualisation) then Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 9);
@@ -178,7 +178,7 @@ begin
         end;
 
         if Infos = mrYes then begin
-          Previsions := TPrevisionsSorties.Create(Serie.RefSerie);
+          Previsions := TPrevisionsSorties.Create(Serie.ID_Serie);
           try
             Prevision := nil;
             if Previsions.AnneesPassees.Count > 0 then Prevision := TPrevisionSortie(Previsions.AnneesPassees[0]);
@@ -189,7 +189,7 @@ begin
           finally
             Previsions.Free;
           end;
-          Manquants := TSeriesIncompletes.Create(Serie.RefSerie);
+          Manquants := TSeriesIncompletes.Create(Serie.ID_Serie);
           try
             if Manquants.Series.Count > 0 then begin
               AlbumsManquants := TSerieIncomplete(Manquants.Series[0]);
@@ -225,7 +225,7 @@ begin
   end;
 end;
 
-procedure ImpressionFicheAlbum(Reference: Integer; RefEdition: Integer; Previsualisation: Boolean);
+procedure ImpressionFicheAlbum(Reference, ID_Edition: TGUID; Previsualisation: Boolean);
 var
   i: Integer;
   op: Integer;
@@ -238,14 +238,14 @@ var
   MinTop: Extended;
   Prn: TPrintObject;
 begin
-  if Reference = 0 then Exit;
+  if IsEqualGUID(Reference, GUID_NULL) then Exit;
   if not ConfigPrinter(Previsualisation) then Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 9);
   MinTop := -1;
   Album := TAlbumComplet.Create(Reference);
   Edition := nil;
-  if RefEdition > -1 then Edition := TEditionComplete.Create(RefEdition);
+  if not IsEqualGUID(ID_Edition, GUID_NULL) then Edition := TEditionComplete.Create(ID_Edition);
   try
     Prn := TPrintObject.Create(Fond);
     try
@@ -275,7 +275,7 @@ begin
       if Utilisateur.Options.FicheAlbumWithCouverture and Assigned(Edition) then begin
         if (Edition.Couvertures.Count > 0) and (TCouverture(Edition.Couvertures[0]).Categorie = 0) then begin
           fWaiting.ShowProgression(rsTransImage + '...', epNext);
-          ms := GetCouvertureStream(False, TCouverture(Edition.Couvertures[0]).Reference, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60), Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
+          ms := GetCouvertureStream(False, TCouverture(Edition.Couvertures[0]).ID, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60), Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
           if Assigned(ms) then try
             fWaiting.ShowProgression(rsTransImage + '...', epNext);
             jpg := TJPEGImage.Create;
@@ -456,12 +456,12 @@ begin
       Prn.Free;
     end;
   finally
-    if RefEdition > -1 then Edition.Free;
+    if not IsEqualGUID(ID_Edition, GUID_NULL) then Edition.Free;
     Album.Free;
   end;
 end;
 
-procedure ImpressionFicheParaBD(Reference: Integer; Previsualisation: Boolean);
+procedure ImpressionFicheParaBD(Reference: TGUID; Previsualisation: Boolean);
 var
   i: Integer;
   op: Integer;
@@ -473,7 +473,7 @@ var
   MinTop: Extended;
   Prn: TPrintObject;
 begin
-  if Reference = 0 then Exit;
+  if IsEqualGUID(Reference, GUID_NULL) then Exit;
   if not ConfigPrinter(Previsualisation) then Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 9);
@@ -599,7 +599,7 @@ begin
   end;
 end;
 
-procedure ImpressionFicheAuteur(Reference: Integer; Previsualisation: Boolean);
+procedure ImpressionFicheAuteur(Reference: TGUID; Previsualisation: Boolean);
 var
   Auteur: TAuteurComplet;
   fWaiting: IWaiting;
@@ -608,7 +608,7 @@ var
   Serie: TSerieComplete;
   fl: Integer;
 begin
-  if Reference = 0 then Exit;
+  if IsEqualGUID(Reference, GUID_NULL) then Exit;
   if not ConfigPrinter(Previsualisation) then Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 3);
@@ -661,13 +661,13 @@ begin
   end;
 end;
 
-procedure ImpressionFicheEmprunteur(Reference: Integer; Previsualisation: Boolean);
+procedure ImpressionFicheEmprunteur(Reference: TGUID; Previsualisation: Boolean);
 var
   Emprunteur: TEmprunteurComplet;
   fWaiting: IWaiting;
   Prn: TPrintObject;
 begin
-  if Reference = 0 then Exit;
+  if IsEqualGUID(Reference, GUID_NULL) then Exit;
   if not ConfigPrinter(Previsualisation) then Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 2);
@@ -706,7 +706,7 @@ begin
   end;
 end;
 
-procedure ImpressionEmpruntsAlbum(Reference: Integer; Previsualisation: Boolean);
+procedure ImpressionEmpruntsAlbum(Reference: TGUID; Previsualisation: Boolean);
 var
   index, i: Integer;
   Album: TAlbumComplet;
@@ -714,7 +714,7 @@ var
   fWaiting: IWaiting;
   Prn: TPrintObject;
 begin
-  if Reference = 0 then Exit;
+  if IsEqualGUID(Reference, GUID_NULL) then Exit;
   if not ConfigPrinter(Previsualisation) then Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 1);
@@ -746,7 +746,7 @@ begin
       Edition := TEditionComplete.Create;
       try
         for i := 0 to Pred(Album.Editions.Editions.Count) do begin
-          Edition.Fill(TEdition(Album.Editions.Editions[i]).Reference);
+          Edition.Fill(TEdition(Album.Editions.Editions[i]).ID);
           if Album.Editions.Editions.Count > 1 then
             Prn.WriteLineColumn(0, IIf(i = 0, -2, -1), TEdition(Album.Editions.Editions[i]).ChaineAffichage);
           case Edition.Emprunts.NBEmprunts of
@@ -774,14 +774,14 @@ begin
   end;
 end;
 
-procedure ImpressionEmpruntsEmprunteur(Reference: Integer; Previsualisation: Boolean);
+procedure ImpressionEmpruntsEmprunteur(Reference: TGUID; Previsualisation: Boolean);
 var
   index: Integer;
   Emprunteur: TEmprunteurComplet;
   fWaiting: IWaiting;
   Prn: TPrintObject;
 begin
-  if Reference = 0 then Exit;
+  if IsEqualGUID(Reference, GUID_NULL) then Exit;
   if not ConfigPrinter(Previsualisation) then Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 1);
@@ -833,7 +833,8 @@ end;
 
 procedure ImpressionListeCompleteAlbums(Previsualisation: Boolean);
 var
-  Index, OldSerie: Integer;
+  Index: Integer;
+  OldSerie: TGUID;
   liste: TModalResult;
   Source, Equipe: TJvUIBQuery;
   sl: Boolean;
@@ -857,13 +858,13 @@ begin
     Prn := TPrintObject.Create(Fond);
     try
       Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      Source.SQL.Text := 'SELECT Count(a.REFALBUM)';
-      Source.SQL.Add('FROM Albums a INNER JOIN Editions e ON a.RefAlbum = e.RefAlbum INNER JOIN Series s ON a.RefSerie = s.RefSerie');
+      Source.SQL.Text := 'SELECT Count(a.ID_Album)';
+      Source.SQL.Add('FROM Albums a INNER JOIN Editions e ON a.ID_Album = e.ID_Album INNER JOIN Series s ON a.ID_Serie = s.ID_Serie');
       Source.Open;
       NbAlbums := Source.Fields.AsInteger[0];
       Source.Close;
-      Source.SQL[0] := 'SELECT a.REFALBUM, a.TITREALBUM, a.MOISPARUTION, a.ANNEEPARUTION, a.REFSERIE, a.TOME, a.TOMEDEBUT, a.TOMEFIN, a.HORSSERIE, a.INTEGRALE, s.TITRESERIE';
-      Source.SQL.Add('ORDER BY s.UPPERTITRESERIE, a.REFSERIE, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
+      Source.SQL[0] := 'SELECT a.ID_Album, a.TITREALBUM, a.MOISPARUTION, a.ANNEEPARUTION, a.ID_Serie, a.TOME, a.TOMEDEBUT, a.TOMEFIN, a.HORSSERIE, a.INTEGRALE, s.TITRESERIE';
+      Source.SQL.Add('ORDER BY s.UPPERTITRESERIE, a.ID_Serie, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
       if liste = mrNo then begin
         if doHistoire in DetailsOptions then Source.SQL[0] := Source.SQL[0] + ', a.SUJETALBUM, s.SUJETSERIE';
         if doNotes in DetailsOptions then Source.SQL[0] := Source.SQL[0] + ', a.REMARQUESALBUM, s.REMARQUESSERIE';
@@ -901,7 +902,7 @@ begin
         index := 1;
         Open;
         sl := False;
-        OldSerie := -1;
+        OldSerie := GUID_NULL;
         fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 0, NbAlbums + 2);
         while not EOF do begin
           if liste = mrNo then begin
@@ -917,7 +918,7 @@ begin
             if ([doScenario, doDessins, doCouleurs] * DetailsOptions) <> [] then begin
               sEquipe := '';
               Equipe.Close;
-              Equipe.Params.AsInteger[0] := Fields.ByNameAsInteger['RefAlbum'];
+              Equipe.Params.AsString[0] := Fields.ByNameAsString['ID_Album'];
               Equipe.Open;
               with Equipe do begin
                 s := '';
@@ -955,7 +956,7 @@ begin
 
           PAl.Fill(Source);
 
-          if OldSerie <> PAl.RefSerie then begin
+          if not IsEqualGUID(OldSerie, PAl.ID_Serie) then begin
             if (Prn.GetLinesLeftFont(Prn.Columns[1].Font) < 3) then begin
               Prn.NewPage;
               sl := False;
@@ -967,7 +968,7 @@ begin
             end;
           end;
 
-          //          Prn.WriteLineColumn(0, IIf(sl or (OldSerie <> PAl.RefSerie), -1, -2), '#' + IntToStr(index));
+          //          Prn.WriteLineColumn(0, IIf(sl or (OldSerie <> PAl.ID_Serie), -1, -2), '#' + IntToStr(index));
 
           s := '';
           if PAl.Integrale then begin
@@ -984,14 +985,14 @@ begin
           AjoutString(s, FormatTitre(PAl.Titre), ' - ');
 
           //          Prn.WriteLineColumn(1, -2, s);
-          Prn.WriteLineColumn(1, IIf(sl or (OldSerie <> PAl.RefSerie), -1, -2), s);
+          Prn.WriteLineColumn(1, IIf(sl or (not IsEqualGUID(OldSerie, PAl.ID_Serie)), -1, -2), s);
 
           sl := True;
           if (liste = mrNo) then begin
             if sEquipe <> '' then Prn.WriteColumn(3, -1, sEquipe);
             if Sujet <> '' then Prn.WriteColumn(2, -1, Sujet);
           end;
-          OldSerie := PAl.RefSerie;
+          OldSerie := PAl.ID_Serie;
           Next;
           fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), epNext);
           Inc(index);
@@ -1022,7 +1023,7 @@ begin
   if not ConfigPrinter(Previsualisation) then Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig + '...', 0, 1);
-  Emprunts := TEmpruntsComplet.Create(-1, Source, Sens, Apres, Avant, EnCours, Stock);
+  Emprunts := TEmpruntsComplet.Create(GUID_NULL, Source, Sens, Apres, Avant, EnCours, Stock);
   case Source of
     seAlbum: Titre := rsListeAlbumsEmpruntes;
     else
@@ -1054,7 +1055,7 @@ begin
       fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransEmprunts, rsTransPage, Prn.GetPageNumber]), 0, Emprunts.NBEmprunts + 2);
       for index := 0 to Emprunts.Emprunts.Count - 1 do begin
         Prn.WriteLineColumn(0, -1, '#' + IntToStr(index + 1));
-        if TEmprunt(Emprunts.Emprunts[index]).Album.Reference <> -1 then Prn.WriteLineColumn(1, -2, TEmprunt(Emprunts.Emprunts[index]).Album.ChaineAffichage);
+        if not IsEqualGUID(TEmprunt(Emprunts.Emprunts[index]).Album.ID, GUID_NULL) then Prn.WriteLineColumn(1, -2, TEmprunt(Emprunts.Emprunts[index]).Album.ChaineAffichage);
         Prn.WriteLineColumn(3, -1, Format(rsTransEmprunteLePar, [TEmprunt(Emprunts.Emprunts[index]).ChaineAffichage, TEmprunt(Emprunts.Emprunts[index]).Emprunteur.ChaineAffichage]));
         fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransEmprunts, rsTransPage, Prn.GetPageNumber]), epNext);
       end;
@@ -1306,7 +1307,7 @@ begin
     Prn := TPrintObject.Create(Fond);
     try
       Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      Source.SQL.Text := 'SELECT a.RefAlbum'#13#10'FROM ALBUMS a INNER JOIN Series s ON s.RefSerie = a.RefSerie WHERE a.RefAlbum = ?';
+      Source.SQL.Text := 'SELECT a.ID_Album'#13#10'FROM ALBUMS a INNER JOIN Series s ON s.ID_Serie = a.ID_Serie WHERE a.ID_Album = ?';
       if liste = mrNo then begin
         if doHistoire in DetailsOptions then Source.SQL[0] := Source.SQL[0] + ', a.SUJETALBUM, s.SUJETSERIE';
         if doNotes in DetailsOptions then Source.SQL[0] := Source.SQL[0] + ', a.REMARQUESALBUM, s.REMARQUESSERIE';
@@ -1388,7 +1389,7 @@ begin
         if liste = mrNo then begin
           Sujet := '';
           if (doHistoire in DetailsOptions) or (doNotes in DetailsOptions) then begin
-            Source.Params.AsInteger[0] := PAl.Reference;
+            Source.Params.AsString[0] := GUIDToString(PAl.ID);
             Source.Open;
             if (doHistoire in DetailsOptions) then begin
               if Source.Fields.ByNameIsNull['SUJETALBUM'] then
@@ -1404,7 +1405,7 @@ begin
             end;
           end;
           if ([doScenario, doDessins, doCouleurs] * DetailsOptions) <> [] then begin
-            Equipe.Params.AsInteger[0] := PAl.Reference;
+            Equipe.Params.AsString[0] := GUIDToString(PAl.ID);
             Equipe.Open;
             sEquipe := '';
             with Equipe do begin
@@ -1468,7 +1469,7 @@ begin
   end;
 end;
 
-procedure ImpressionCouvertureAlbum(Reference: Integer; RefCouverture: Integer; Previsualisation: Boolean);
+procedure ImpressionCouvertureAlbum(Reference, ID_Couverture: TGUID; Previsualisation: Boolean);
 var
   Album: TAlbumComplet;
   ms: TStream;
@@ -1477,7 +1478,7 @@ var
   fWaiting: IWaiting;
   Prn: TPrintObject;
 begin
-  if Reference = 0 then Exit;
+  if IsEqualGUID(Reference, GUID_NULL) then Exit;
   if not ConfigPrinter(Previsualisation) then Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 2);
@@ -1512,7 +1513,7 @@ begin
       Prn.SetFontInformation1('Times New Roman', 12, []);
 
       //      ShowMessage(Format('W %d H %d', [Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Prn.MmsToPixelsVertical(Prn.Detail.Height)]));
-      ms := GetCouvertureStream(False, RefCouverture, Prn.MmsToPixelsVertical(Prn.Detail.Height), Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(False, ID_Couverture, Prn.MmsToPixelsVertical(Prn.Detail.Height), Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Utilisateur.Options.AntiAliasing);
       if Assigned(ms) then try
         fWaiting.ShowProgression(rsTransImage + '...', epNext);
         jpg := TJPEGImage.Create;
@@ -1537,7 +1538,7 @@ begin
   end;
 end;
 
-procedure ImpressionImageParaBD(Reference: Integer; Previsualisation: Boolean);
+procedure ImpressionImageParaBD(Reference: TGUID; Previsualisation: Boolean);
 var
   ParaBD: TParaBDComplet;
   ms: TStream;
@@ -1546,7 +1547,7 @@ var
   fWaiting: IWaiting;
   Prn: TPrintObject;
 begin
-  if Reference = 0 then Exit;
+  if IsEqualGUID(Reference, GUID_NULL) then Exit;
   if not ConfigPrinter(Previsualisation) then Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 2);
@@ -1736,7 +1737,8 @@ type
 
 procedure ImpressionListePrevisionsAchats(Previsualisation: Boolean);
 var
-  i, OldAlbum, OldSerie: Integer;
+  i: Integer;
+  OldAlbum, OldSerie: TGUID;
   Source: TJvUIBQuery;
   sl: Boolean;
   s, s2: string;
@@ -1761,15 +1763,15 @@ begin
       Source.Open;
       PrixMoyen := Source.Fields.AsCurrency[0];
 
-      Source.SQL.Text := 'SELECT Count(a.REFALBUM)';
-      Source.SQL.Add('FROM Albums a INNER JOIN Series s ON a.RefSerie = s.RefSerie');
-      Source.SQL.Add('left join vw_prixunitaires v on v.horsserie = a.horsserie and v.refserie = s.refserie and (v.refediteur = s.refediteur or s.refediteur is null)');
+      Source.SQL.Text := 'SELECT Count(a.ID_Album)';
+      Source.SQL.Add('FROM Albums a INNER JOIN Series s ON a.ID_Serie = s.ID_Serie');
+      Source.SQL.Add('left join vw_prixunitaires v on v.horsserie = a.horsserie and v.ID_Serie = s.ID_Serie and (v.ID_Editeur = s.ID_Editeur or s.ID_Editeur is null)');
       Source.SQL.Add('WHERE a.Achat = 1');
       Source.Open;
       NbAlbums := Source.Fields.AsInteger[0] * 2; // on va parcourir 2 fois la liste
       Source.Close;
-      Source.SQL[0] := 'SELECT a.REFALBUM, a.TITREALBUM, a.MOISPARUTION, a.ANNEEPARUTION, a.REFSERIE, a.TOME, a.TOMEDEBUT, a.TOMEFIN, a.HORSSERIE, a.INTEGRALE, s.TITRESERIE, v.REFEDITEUR, v.PRIXUNITAIRE';
-      Source.SQL.Add('ORDER BY s.UPPERTITRESERIE, a.REFSERIE, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
+      Source.SQL[0] := 'SELECT a.ID_Album, a.TITREALBUM, a.MOISPARUTION, a.ANNEEPARUTION, a.ID_Serie, a.TOME, a.TOMEDEBUT, a.TOMEFIN, a.HORSSERIE, a.INTEGRALE, s.TITRESERIE, v.ID_Editeur, v.PRIXUNITAIRE';
+      Source.SQL.Add('ORDER BY s.UPPERTITRESERIE, a.ID_Serie, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
@@ -1777,11 +1779,11 @@ begin
       with Source do begin
         Open;
         PrixTotal := 0;
-        OldAlbum := -1;
+        OldAlbum := GUID_NULL;
         PAl := nil;
         fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 0, NbAlbums + 2);
         while not EOF do begin
-          if (OldAlbum <> Fields.ByNameAsInteger['REFALBUM']) then begin
+          if not IsEqualGUID(OldAlbum, StringToGUID(Fields.ByNameAsString['ID_ALBUM'])) then begin
             PAl := TAchat.Create;
             PAl.Fill(Source);
             PAl.PrixCalcule := True;
@@ -1791,7 +1793,7 @@ begin
               PAl.Prix := PrixMoyen;
             end;
             PrixTotal := PrixTotal + PAl.Prix;
-            OldAlbum := PAl.Reference;
+            OldAlbum := PAl.ID;
             ListAlbums.Add(PAl);
           end
           else begin
@@ -1826,10 +1828,10 @@ begin
       Prn.SetTopOfPage;
 
       sl := False;
-      OldSerie := -1;
+      OldSerie := GUID_NULL;
       for i := 0 to Pred(ListAlbums.Count) do begin
         PAl := TAchat(ListAlbums[i]);
-        if OldSerie <> PAl.RefSerie then begin
+        if not IsEqualGUID(OldSerie, PAl.ID_Serie) then begin
           if (Prn.GetLinesLeftFont(Prn.Columns[1].Font) < 3) then begin
             Prn.NewPage;
             sl := False;
@@ -1864,14 +1866,14 @@ begin
           if PAl.PrixCalcule then
             AjoutString(s, FormatCurr(FormatMonnaie, PAl.Prix), ' - ');
 
-          Prn.WriteLineColumn(1, IIf(sl or (OldSerie <> PAl.RefSerie), -1, -2), s);
+          Prn.WriteLineColumn(1, IIf(sl or (not IsEqualGUID(OldSerie, PAl.ID_Serie)), -1, -2), s);
         finally
           Prn.Columns[1].Font.Color := clBlack;
         end;
 
         sl := True;
 
-        OldSerie := PAl.RefSerie;
+        OldSerie := PAl.ID_Serie;
         fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), epNext);
       end;
     finally

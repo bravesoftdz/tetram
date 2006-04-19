@@ -3,20 +3,21 @@ unit TypeRec;
 interface
 
 uses
-  Windows, SysUtils, DB, Classes, ComCtrls, JvUIB, StdCtrls;
+  Windows, SysUtils, DB, Classes, ComCtrls, JvUIB, StdCtrls, Commun;
 
 //  IMPORTANT: Ref doit TOUJOURS être le premier champ des records
 //  Les strings DOIVENT être limités pour pouvoir utiliser CopyMemory(Pd, Ps, SizeOf(Ps^));
 
 type
-  TEditionsEmpruntees = array of array[0..1] of Integer;
+  TEditionsEmpruntees = array of array[0..1] of TGUID;
 
   TBasePointeur = class(TObject)
   private
-    class function NonNull(Query: TJvUIBQuery; const Champ: string; Default: Integer = -1): Integer;
+    class function NonNull(Query: TJvUIBQuery; const Champ: string; Default: Integer): Integer; overload;
+    class function NonNull(Query: TJvUIBQuery; const Champ: string): TGUID; overload;
 
   public
-    Reference: Integer;
+    ID: TGUID;
 
     procedure Assign(Ps: TBasePointeur); virtual;
 
@@ -50,7 +51,7 @@ type
   TParaBD = class(TBasePointeur)
   public
     Titre: string[150];
-    RefSerie: Integer;
+    ID_Serie: TGUID;
     Serie: string[150];
     sCategorie: string[50];
     Achat: Boolean;
@@ -77,7 +78,7 @@ type
   TAuteur = class(TBasePointeur)
   public
     Personne: TPersonnage;
-    RefAlbum, RefSerie: Integer;
+    ID_Album, ID_Serie: TGUID;
     Metier: Integer;
 
     procedure Assign(Ps: TBasePointeur); override;
@@ -86,7 +87,7 @@ type
     destructor Destroy; override;
 
     procedure Fill(Query: TJvUIBQuery); overload; override;
-    procedure Fill(Pe: TPersonnage; ReferenceAlbum, ReferenceSerie, Metier: Integer); reintroduce; overload;
+    procedure Fill(Pe: TPersonnage; ReferenceAlbum, ReferenceSerie: TGUID; Metier: Integer); reintroduce; overload;
     procedure Clear; override;
     function ChaineAffichage: string; override;
   end;
@@ -109,9 +110,9 @@ type
     TomeDebut: Integer;
     TomeFin: Integer;
     Titre: string[150];
-    RefSerie: Integer;
+    ID_Serie: TGUID;
     Serie: string[150];
-    RefEditeur: Integer;
+    ID_Editeur: TGUID;
     Editeur: string[50];
     AnneeParution, MoisParution: Integer;
     Stock: Boolean;
@@ -123,7 +124,7 @@ type
     procedure Assign(Ps: TBasePointeur); override;
 
     procedure Fill(Query: TJvUIBQuery); overload; override;
-    procedure Fill(RefAlbum: Integer; RefEdition: Integer = -1); reintroduce; overload;
+    procedure Fill(ID_Album: TGUID; ID_Edition: string = sGUID_NULL); reintroduce; overload;
     function ChaineAffichage: string; overload; override;
     function ChaineAffichage(Simple: Boolean): string; reintroduce; overload;
     class function Duplicate(Ps: TAlbum): TAlbum; reintroduce;
@@ -157,7 +158,7 @@ type
     destructor Destroy; override;
 
     procedure Fill(Query: TJvUIBQuery); overload; override;
-    procedure Fill(RefSerie: Integer); reintroduce; overload;
+    procedure Fill(ID_Serie: TGUID); reintroduce; overload;
     function ChaineAffichage: string; overload; override;
     function ChaineAffichage(Simple: Boolean): string; reintroduce; overload;
     procedure Clear; override;
@@ -189,7 +190,7 @@ type
     procedure Assign(Ps: TBasePointeur); override;
 
     procedure Fill(Query: TJvUIBQuery); overload; override;
-    procedure Fill(RefEmprunteur: Integer); reintroduce; overload;
+    procedure Fill(ID_Emprunteur: TGUID); reintroduce; overload;
     function ChaineAffichage: string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TEmprunteur): TEmprunteur;
@@ -236,7 +237,7 @@ type
 
 implementation
 
-uses DM_Princ, JvUIBLib, Commun;
+uses DM_Princ, JvUIBLib;
 
 { TBasePointeur }
 
@@ -248,7 +249,7 @@ end;
 
 procedure TBasePointeur.Assign(Ps: TBasePointeur);
 begin
-  Reference := Ps.Reference;
+  ID := Ps.ID;
 end;
 
 class function TBasePointeur.Duplicate(Ps: TBasePointeur): TBasePointeur;
@@ -259,7 +260,7 @@ end;
 
 procedure TBasePointeur.Clear;
 begin
-  Reference := -1;
+  ID := GUID_NULL;
 end;
 
 class function TBasePointeur.Make(Query: TJvUIBQuery): TBasePointeur;
@@ -327,6 +328,18 @@ begin
   end;
 end;
 
+class function TBasePointeur.NonNull(Query: TJvUIBQuery; const Champ: string): TGUID;
+begin
+  try
+    if Query.Fields.ByNameIsNull[Champ] then
+      Result := GUID_NULL
+    else
+      Result := StringToGUID(Query.Fields.ByNameAsString[Champ]);
+  except
+    Result := GUID_NULL;
+  end;
+end;
+
 { TConversion }
 
 function TConversion.ChaineAffichage: string;
@@ -361,7 +374,7 @@ end;
 
 procedure TCouverture.Fill(Query: TJvUIBQuery);
 begin
-  Reference := Query.Fields.ByNameAsInteger['RefCouverture'];
+  ID := NonNull(Query, 'ID_Couverture');
   OldNom := Query.Fields.ByNameAsString['FichierCouverture'];
   NewNom := OldNom;
   OldStockee := Query.Fields.ByNameAsBoolean['STOCKAGECOUVERTURE'];
@@ -397,7 +410,7 @@ end;
 procedure TEditeur.Fill(Query: TJvUIBQuery);
 begin
   inherited;
-  Reference := NonNull(Query, 'RefEditeur');
+  ID := NonNull(Query, 'ID_Editeur');
   NomEditeur := Query.Fields.ByNameAsString['NomEditeur'];
 end;
 
@@ -423,7 +436,7 @@ end;
 procedure TPersonnage.Fill(Query: TJvUIBQuery);
 begin
   inherited;
-  Reference := NonNull(Query, 'RefPersonne');
+  ID := NonNull(Query, 'ID_Personne');
   Nom := Query.Fields.ByNameAsString['NomPersonne'];
 end;
 
@@ -432,7 +445,7 @@ end;
 procedure TAuteur.Assign(Ps: TBasePointeur);
 begin
   inherited;
-  RefAlbum := TAuteur(Ps).RefAlbum;
+  ID_Album := TAuteur(Ps).ID_Album;
   Metier := TAuteur(Ps).Metier;
   Personne.Assign(TAuteur(Ps).Personne);
 end;
@@ -467,16 +480,16 @@ begin
   inherited;
   PPersonne := TPersonnage(TPersonnage.Make(Query));
   try
-    Fill(PPersonne, NonNull(Query, 'RefAlbum'), NonNull(Query, 'RefSerie'), Query.Fields.ByNameAsInteger['Metier']);
+    Fill(PPersonne, NonNull(Query, 'ID_Album'), NonNull(Query, 'ID_Serie'), Query.Fields.ByNameAsInteger['Metier']);
   finally
     PPersonne.Free;
   end;
 end;
 
-procedure TAuteur.Fill(Pe: TPersonnage; ReferenceAlbum, ReferenceSerie, Metier: Integer);
+procedure TAuteur.Fill(Pe: TPersonnage; ReferenceAlbum, ReferenceSerie: TGUID; Metier: Integer);
 begin
   Personne.Assign(Pe);
-  RefAlbum := ReferenceAlbum;
+  ID_Album := ReferenceAlbum;
   Self.Metier := Metier;
 end;
 
@@ -489,10 +502,10 @@ begin
   Tome := TAlbum(Ps).Tome;
   TomeDebut := TAlbum(Ps).TomeDebut;
   TomeFin := TAlbum(Ps).TomeFin;
-  RefSerie := TAlbum(Ps).RefSerie;
+  ID_Serie := TAlbum(Ps).ID_Serie;
   Integrale := TAlbum(Ps).Integrale;
   HorsSerie := TAlbum(Ps).HorsSerie;
-  RefEditeur := TAlbum(Ps).RefEditeur;
+  ID_Editeur := TAlbum(Ps).ID_Editeur;
   Serie := TAlbum(Ps).Serie;
   Editeur := TAlbum(Ps).Editeur;
   AnneeParution := TAlbum(Ps).AnneeParution;
@@ -526,19 +539,15 @@ end;
 procedure TAlbum.Fill(Query: TJvUIBQuery);
 begin
   inherited;
-  Reference := NonNull(Query, 'RefAlbum');
+  ID := NonNull(Query, 'ID_Album');
   Titre := Query.Fields.ByNameAsString['TitreAlbum'];
   Tome := Query.Fields.ByNameAsInteger['Tome'];
   TomeDebut := Query.Fields.ByNameAsInteger['TomeDebut'];
   TomeFin := Query.Fields.ByNameAsInteger['TomeFin'];
-  RefSerie := Query.Fields.ByNameAsInteger['RefSerie'];
+  ID_Serie := NonNull(Query, 'ID_Serie');
   Integrale := Query.Fields.ByNameAsBoolean['Integrale'];
   HorsSerie := Query.Fields.ByNameAsBoolean['HorsSerie'];
-  try
-    RefEditeur := Query.Fields.ByNameAsInteger['RefEditeur'];
-  except
-    RefEditeur := -1;
-  end;
+  ID_Editeur := NonNull(Query, 'ID_Editeur');
   try
     Serie := Query.Fields.ByNameAsString['TitreSerie'];
   except
@@ -581,23 +590,23 @@ begin
   Result := TAlbum(inherited Duplicate(Ps));
 end;
 
-procedure TAlbum.Fill(RefAlbum, RefEdition: Integer);
+procedure TAlbum.Fill(ID_Album: TGUID; ID_Edition: string);
 var
   q: TJvUIBQuery;
 begin
   q := TJvUIBQuery.Create(nil);
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT a.RefAlbum, a.TitreAlbum, a.HorsSerie, a.Integrale, a.Tome, a.TomeDebut, a.TomeFin, a.RefSerie, a.Achat, a.Complet';
+    SQL.Text := 'SELECT a.ID_Album, a.TitreAlbum, a.HorsSerie, a.Integrale, a.Tome, a.TomeDebut, a.TomeFin, a.ID_Serie, a.Achat, a.Complet';
     SQL.Add('FROM ALBUMS a');
-    SQL.Add('WHERE a.REFALBUM = :RefAlbum');
-    if RefEdition > -1 then begin
+    SQL.Add('WHERE a.ID_ALBUM = :ID_Album');
+    if (ID_Edition <> sGUID_NULL) then begin
       SQL[0] := SQL[0] + ', e.Stock';
-      SQL[1] := SQL[1] + ' INNER JOIN Editions e ON a.RefAlbum = e.RefAlbum';
-      SQL.Add('AND e.RefEdition = :RefEdition');
+      SQL[1] := SQL[1] + ' INNER JOIN Editions e ON a.ID_Album = e.ID_Album';
+      SQL.Add('AND e.ID_Edition = :ID_Edition');
     end;
-    Params.AsInteger[0] := RefAlbum;
-    if RefEdition > -1 then Params.AsInteger[1] := RefEdition;
+    Params.AsString[0] := GUIDToString(ID_Album);
+    if (ID_Edition <> sGUID_NULL) then Params.AsString[1] := ID_Edition;
     Open;
     Fill(q);
   finally
@@ -652,7 +661,7 @@ end;
 procedure TCollection.Fill(Query: TJvUIBQuery);
 begin
   inherited;
-  Reference := NonNull(Query, 'RefCollection');
+  ID := NonNull(Query, 'ID_Collection');
   NomCollection := Query.Fields.ByNameAsString['NomCollection'];
   try
     Editeur.Fill(Query);
@@ -707,7 +716,7 @@ end;
 procedure TSerie.Fill(Query: TJvUIBQuery);
 begin
   inherited;
-  Reference := NonNull(Query, 'RefSerie');
+  ID := NonNull(Query, 'ID_Serie');
   TitreSerie := Query.Fields.ByNameAsString['TitreSerie'];
   try
     Editeur.Fill(Query);
@@ -728,15 +737,15 @@ begin
   Collection.Clear;
 end;
 
-procedure TSerie.Fill(RefSerie: Integer);
+procedure TSerie.Fill(ID_Serie: TGUID);
 var
   q: TJvUIBQuery;
 begin
   q := TJvUIBQuery.Create(nil);
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT RefSerie, TitreSerie FROM SERIES WHERE REFSERIE = :RefSerie';
-    Params.AsInteger[0] := RefSerie;
+    SQL.Text := 'SELECT ID_Serie, TitreSerie FROM SERIES WHERE ID_Serie = :ID_Serie';
+    Params.AsString[0] := GUIDToString(ID_Serie);
     Open;
     Fill(q);
   finally
@@ -799,7 +808,7 @@ end;
 procedure TEdition.Fill(Query: TJvUIBQuery);
 begin
   inherited;
-  Reference := NonNull(Query, 'RefEdition');
+  ID := NonNull(Query, 'ID_Edition');
   AnneeEdition := Query.Fields.ByNameAsInteger['AnneeEdition'];
   try
     ISBN := Trim(Query.Fields.ByNameAsString['ISBN']);
@@ -837,19 +846,19 @@ end;
 procedure TEmprunteur.Fill(Query: TJvUIBQuery);
 begin
   inherited;
-  Reference := NonNull(Query, 'RefEmprunteur');
+  ID := NonNull(Query, 'ID_Emprunteur');
   Nom := Query.Fields.ByNameAsString['NomEmprunteur'];
 end;
 
-procedure TEmprunteur.Fill(RefEmprunteur: Integer);
+procedure TEmprunteur.Fill(ID_Emprunteur: TGUID);
 var
   q: TJvUIBQuery;
 begin
   q := TJvUIBQuery.Create(nil);
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT RefEmprunteur, NomEmprunteur FROM Emprunteurs WHERE RefEmprunteur = ?';
-    Params.AsInteger[0] := RefEmprunteur;
+    SQL.Text := 'SELECT ID_Emprunteur, NomEmprunteur FROM Emprunteurs WHERE ID_Emprunteur = ?';
+    Params.AsString[0] := GUIDToString(ID_Emprunteur);
     Open;
     Fill(q);
   finally
@@ -881,7 +890,7 @@ end;
 procedure TGenre.Fill(Query: TJvUIBQuery);
 begin
   inherited;
-  Reference := NonNull(Query, 'RefGenre');
+  ID := NonNull(Query, 'ID_Genre');
   Genre := Query.Fields.ByNameAsString['Genre'];
   try
     Quantite := Query.Fields.ByNameAsInteger['QuantiteGenre'];
@@ -964,7 +973,7 @@ procedure TParaBD.Assign(Ps: TBasePointeur);
 begin
   inherited;
   Titre := TParaBD(Ps).Titre;
-  RefSerie := TParaBD(Ps).RefSerie;
+  ID_Serie := TParaBD(Ps).ID_Serie;
   Serie := TParaBD(Ps).Serie;
   Achat := TParaBD(Ps).Achat;
   Complet := TParaBD(Ps).Complet;
@@ -991,9 +1000,9 @@ end;
 
 procedure TParaBD.Fill(Query: TJvUIBQuery);
 begin
-  Reference := NonNull(Query, 'RefParaBD');
+  ID := NonNull(Query, 'ID_ParaBD');
   Titre := Query.Fields.ByNameAsString['TitreParaBD'];
-  RefSerie := Query.Fields.ByNameAsInteger['RefSerie'];
+  ID_Serie := NonNull(Query, 'ID_Serie');
   try
     Serie := Query.Fields.ByNameAsString['TitreSerie'];
   except

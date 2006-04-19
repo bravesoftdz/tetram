@@ -7,10 +7,16 @@ interface
 uses
   SysUtils, Windows, Dialogs, Classes, JvUIB, Controls;
 
+const
+  GUID_NULL: TGUID = '{00000000-0000-0000-0000-000000000000}';
+  sGUID_NULL = '{00000000-0000-0000-0000-000000000000}';
+
 function IIf(Test: Boolean; const BackTrue, BackFalse: string): string; overload;
 function IIf(Test: Boolean; BackTrue, BackFalse: Integer): Integer; overload;
 procedure AjoutString(var Chaine: WideString; const Ajout, Espace: string; const Avant: string = ''; const Apres: string = ''); overload;
 procedure AjoutString(var Chaine: string; const Ajout, Espace: string; const Avant: string = ''; const Apres: string = ''); overload;
+
+function StringToGUIDDef(GUID: string; Default: TGUID): TGUID;
 
 function NonZero(const S: string): string;
 
@@ -37,6 +43,15 @@ type
 implementation
 
 uses DM_Princ, TypeRec, Divers, Forms;
+
+function StringToGUIDDef(GUID: string; Default: TGUID): TGUID;
+begin
+  try
+    Result := StringToGUID(GUID);
+  except
+    Result := Default;
+  end;
+end;
 
 procedure AjoutString(var Chaine: string; const Ajout, Espace: string; const Avant: string = ''; const Apres: string = '');
 var

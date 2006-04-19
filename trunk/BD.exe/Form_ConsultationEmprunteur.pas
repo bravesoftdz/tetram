@@ -52,13 +52,13 @@ type
     procedure ApercuExecute(Sender: TObject);
     function ImpressionUpdate: Boolean;
     function ApercuUpdate: Boolean;
-    function GetRefEmprunteur: Integer;
-    procedure SetRefEmprunteur(const Value: Integer);
+    function GetID_Emprunteur: TGUID;
+    procedure SetID_Emprunteur(const Value: TGUID);
     procedure ClearForm;
   public
     { Déclarations publiques }
     property Emprunteur: TEmprunteurComplet read FEmprunteur;
-    property RefEmprunteur: Integer read GetRefEmprunteur write SetRefEmprunteur;
+    property ID_Emprunteur: TGUID read GetID_Emprunteur write SetID_Emprunteur;
   end;
 
 implementation
@@ -92,22 +92,22 @@ var
   a: TEditionsEmpruntees;
 begin
   SetLength(a, 0);
-  if SaisieMouvementEmprunteur(RefEmprunteur, a) then Historique.Refresh;
+  if SaisieMouvementEmprunteur(ID_Emprunteur, a) then Historique.Refresh;
 end;
 
 procedure TFrmConsultationEmprunteur.Imprimer1Click(Sender: TObject);
 begin
-  ImpressionEmpruntsEmprunteur(RefEmprunteur, TComponent(Sender).Tag = 1);
+  ImpressionEmpruntsEmprunteur(ID_Emprunteur, TComponent(Sender).Tag = 1);
 end;
 
 procedure TFrmConsultationEmprunteur.Imprimer2Click(Sender: TObject);
 begin
-  ImpressionFicheEmprunteur(RefEmprunteur, TComponent(Sender).Tag = 1);
+  ImpressionFicheEmprunteur(ID_Emprunteur, TComponent(Sender).Tag = 1);
 end;
 
 procedure TFrmConsultationEmprunteur.ListeEmpruntsDblClick(Sender: TObject);
 begin
-  if Assigned(ListeEmprunts.FocusedNode) then Historique.AddWaiting(fcAlbum, TEmprunt(FEmprunteur.Emprunts.Emprunts[ListeEmprunts.FocusedNode.Index]).Album.Reference);
+  if Assigned(ListeEmprunts.FocusedNode) then Historique.AddWaiting(fcAlbum, TEmprunt(FEmprunteur.Emprunts.Emprunts[ListeEmprunts.FocusedNode.Index]).Album.ID);
 end;
 
 procedure TFrmConsultationEmprunteur.Button1Click(Sender: TObject);
@@ -186,12 +186,12 @@ begin
   i := 0;
   Node := ListeEmprunts.GetFirstSelected;
   while Assigned(Node) do begin
-    a[i][0] := TEmprunt(FEmprunteur.Emprunts.Emprunts[Node.Index]).Album.Reference;
-    a[i][1] := TEmprunt(FEmprunteur.Emprunts.Emprunts[Node.Index]).Edition.Reference;
+    a[i][0] := TEmprunt(FEmprunteur.Emprunts.Emprunts[Node.Index]).Album.ID;
+    a[i][1] := TEmprunt(FEmprunteur.Emprunts.Emprunts[Node.Index]).Edition.ID;
     Inc(i);
     Node := ListeEmprunts.GetNextSelected(Node);
   end;
-  if SaisieMouvementEmprunteur(RefEmprunteur, a) then Historique.Refresh;
+  if SaisieMouvementEmprunteur(ID_Emprunteur, a) then Historique.Refresh;
 end;
 
 procedure TFrmConsultationEmprunteur.ApercuExecute(Sender: TObject);
@@ -214,12 +214,12 @@ begin
   Result := True;
 end;
 
-function TFrmConsultationEmprunteur.GetRefEmprunteur: Integer;
+function TFrmConsultationEmprunteur.GetID_Emprunteur: TGUID;
 begin
-  Result := FEmprunteur.RefEmprunteur;
+  Result := FEmprunteur.ID_Emprunteur;
 end;
 
-procedure TFrmConsultationEmprunteur.SetRefEmprunteur(const Value: Integer);
+procedure TFrmConsultationEmprunteur.SetID_Emprunteur(const Value: TGUID);
 begin
   ClearForm;
   FEmprunteur.Fill(Value);

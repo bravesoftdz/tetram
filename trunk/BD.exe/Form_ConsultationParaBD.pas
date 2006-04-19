@@ -58,8 +58,8 @@ type
     procedure FicheApercuExecute(Sender: TObject);
   private
     FParaBD: TParaBDComplet;
-    function GetRefParaBD: Integer;
-    procedure SetRefParaBD(const Value: Integer);
+    function GetID_ParaBD: TGUID;
+    procedure SetID_ParaBD(const Value: TGUID);
     procedure ClearForm;
     procedure CouvertureDblClick(Sender: TObject);
     procedure ImpRep(Sender: TObject);
@@ -71,7 +71,7 @@ type
   public
     { Déclarations publiques }
     property ParaBD: TParaBDComplet read FParaBD;
-    property RefParaBD: Integer read GetRefParaBD write SetRefParaBD;
+    property ID_ParaBD: TGUID read GetID_ParaBD write SetID_ParaBD;
   end;
 
 implementation
@@ -83,12 +83,12 @@ uses Commun, TypeRec, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg,
 
 { TFrmConsultationParaBD }
 
-function TFrmConsultationParaBD.GetRefParaBD: Integer;
+function TFrmConsultationParaBD.GetID_ParaBD: TGUID;
 begin
-  Result := FParaBD.RefParaBD;
+  Result := FParaBD.ID_ParaBD;
 end;
 
-procedure TFrmConsultationParaBD.SetRefParaBD(const Value: Integer);
+procedure TFrmConsultationParaBD.SetID_ParaBD(const Value: TGUID);
 var
   i: Integer;
   ms: TStream;
@@ -155,7 +155,7 @@ begin
   if FParaBD.HasImage then begin
     ImageParaBD.Picture := nil;
     try
-      ms := GetCouvertureStream(True, RefParaBD, ImageParaBD.Height, ImageParaBD.Width, Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(True, ID_ParaBD, ImageParaBD.Height, ImageParaBD.Width, Utilisateur.Options.AntiAliasing);
       if Assigned(ms) then try
         jpg := TJPEGImage.Create;
         try
@@ -198,7 +198,7 @@ end;
 
 procedure TFrmConsultationParaBD.CouvertureDblClick(Sender: TObject);
 begin
-  Historique.AddWaiting(fcImageParaBD, RefParaBD, RefParaBD);
+  Historique.AddWaiting(fcImageParaBD, ID_ParaBD, ID_ParaBD);
 end;
 
 procedure TFrmConsultationParaBD.ClearForm;
@@ -220,7 +220,7 @@ end;
 
 procedure TFrmConsultationParaBD.lvAuteursDblClick(Sender: TObject);
 begin
-  if Assigned(TListView(Sender).Selected) then Historique.AddWaiting(fcAuteur, TAuteur(TListView(Sender).Selected.Data).Personne.Reference, 0);
+  if Assigned(TListView(Sender).Selected) then Historique.AddWaiting(fcAuteur, TAuteur(TListView(Sender).Selected.Data).Personne.ID, 0);
 end;
 
 procedure TFrmConsultationParaBD.TitreSerieClick(Sender: TObject);
@@ -237,12 +237,12 @@ end;
 procedure TFrmConsultationParaBD.TitreSerieDblClick(Sender: TObject);
 begin
   if IsDownKey(VK_CONTROL) then
-    Historique.AddWaiting(fcSerie, FParaBD.Serie.RefSerie);
+    Historique.AddWaiting(fcSerie, FParaBD.Serie.ID_Serie);
 end;
 
 procedure TFrmConsultationParaBD.ImageApercuExecute(Sender: TObject);
 begin
-  ImpressionImageParaBD(RefParaBD, TComponent(Sender).Tag = 1);
+  ImpressionImageParaBD(ID_ParaBD, TComponent(Sender).Tag = 1);
 end;
 
 procedure TFrmConsultationParaBD.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
@@ -258,7 +258,7 @@ end;
 
 procedure TFrmConsultationParaBD.ImpRep(Sender: TObject);
 begin
-  ImpressionFicheParaBD(RefParaBD, TComponent(Sender).Tag = 1)
+  ImpressionFicheParaBD(ID_ParaBD, TComponent(Sender).Tag = 1)
 end;
 
 procedure TFrmConsultationParaBD.ApercuExecute(Sender: TObject);

@@ -25,13 +25,13 @@ type
     procedure vtEditeursDblClick(Sender: TObject);
   private
     { Déclarations privées }
-    FRefCollection: Integer;
+    FID_Collection: TGUID;
     FCreation: Boolean;
-    procedure SetRefCollection(Value: Integer);
+    procedure SetID_Collection(Value: TGUID);
   public
     { Déclarations publiques }
-    FRefEditeur: Integer;
-    property RefCollection: Integer read FRefCollection write SetRefCollection;
+    FID_Editeur: TGUID;
+    property ID_Collection: TGUID read FID_Collection write SetID_Collection;
   end;
 
 implementation
@@ -44,31 +44,31 @@ uses
 
 procedure TFrmEditCollection.FormCreate(Sender: TObject);
 begin
-  FRefEditeur := -1;
+  FID_Editeur := GUID_NULL;
   PrepareLV(Self);
   vtEditeurs.Mode := vmEditeurs;
   FrameRechercheRapide1.VirtualTreeView := vtEditeurs;
 end;
 
-procedure TFrmEditCollection.SetRefCollection(Value: Integer);
+procedure TFrmEditCollection.SetID_Collection(Value: TGUID);
 var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  FRefCollection := Value;
+  FID_Collection := Value;
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT NOMCOLLECTION, REFEDITEUR FROM COLLECTIONS WHERE RefCOLLECTION = ?';
-    Params.AsInteger[0] := FRefCollection;
+    SQL.Text := 'SELECT NOMCOLLECTION, ID_Editeur FROM COLLECTIONS WHERE ID_Collection = ?';
+    Params.AsString[0] := GUIDToString(FID_Collection);
     Open;
     FCreation := Eof;
     if not FCreation then begin
       edNom.Text := Fields.ByNameAsString['NOMCOLLECTION'];
-      FRefEditeur := Fields.ByNameAsInteger['REFEDITEUR'];
+      FID_Editeur := StringToGUID(Fields.ByNameAsString['ID_EDITEUR']);
       vtEditeurs.Enabled := False;
       FrameRechercheRapide1.Enabled := False;
     end;
-    vtEditeurs.CurrentValue := FRefEditeur;
+    vtEditeurs.CurrentValue := FID_Editeur;
   finally
     Transaction.Free;
     Free;
@@ -77,7 +77,7 @@ end;
 
 procedure TFrmEditCollection.Frame11btnOKClick(Sender: TObject);
 var
-  RefEditeur: Integer;
+  ID_Editeur: TGUID;
 begin
   if Length(Trim(edNom.Text)) = 0 then begin
     AffMessage(rsNomObligatoire, mtInformation, [mbOk], True);
@@ -85,8 +85,8 @@ begin
     ModalResult := mrNone;
     Exit;
   end;
-  RefEditeur := vtEditeurs.CurrentValue;
-  if RefEditeur = -1 then begin
+  ID_Editeur := vtEditeurs.CurrentValue;
+  if IsEqualGUID(ID_Editeur, GUID_NULL) then begin
     AffMessage(rsEditeurObligatoire, mtInformation, [mbOk], True);
     FrameRechercheRapide1.edSearch.SetFocus;
     ModalResult := mrNone;
@@ -95,12 +95,12 @@ begin
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     if FCreation then
-      SQL.Text := 'INSERT INTO COLLECTIONS (REFCOLLECTION, NOMCOLLECTION, REFEDITEUR) VALUES (:REFCOLLECTION, :NOMCOLLECTION, :REFEDITEUR)'
+      SQL.Text := 'INSERT INTO COLLECTIONS (ID_Collection, NOMCOLLECTION, ID_Editeur) VALUES (:ID_Collection, :NOMCOLLECTION, :ID_Editeur)'
     else
-      SQL.Text := 'UPDATE COLLECTIONS SET NOMCOLLECTION = :NOMCOLLECTION, REFEDITEUR = :REFEDITEUR WHERE REFCOLLECTION = :REFCOLLECTION';
+      SQL.Text := 'UPDATE COLLECTIONS SET NOMCOLLECTION = :NOMCOLLECTION, ID_Editeur = :ID_Editeur WHERE ID_Collection = :ID_Collection';
     Params.ByNameAsString['NOMCOLLECTION'] := Trim(edNom.Text);
-    Params.ByNameAsInteger['REFEDITEUR'] := RefEditeur;
-    Params.ByNameAsInteger['REFCOLLECTION'] := RefCollection;
+    Params.ByNameAsString['ID_EDITEUR'] := GUIDToString(ID_Editeur);
+    Params.ByNameAsString['ID_COLLECTION'] := GUIDToString(ID_Collection);
     ExecSQL;
     Transaction.Commit;
   finally

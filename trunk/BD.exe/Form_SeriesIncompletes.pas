@@ -125,7 +125,7 @@ procedure TfrmSeriesIncompletes.LoadListe;
 begin
   vstAlbumsManquants.BeginUpdate;
   try
-    Liste.Fill(CheckBox1.Checked, CheckBox2.Checked, -1);
+    Liste.Fill(CheckBox1.Checked, CheckBox2.Checked, GUID_NULL);
     vstAlbumsManquants.RootNodeCount := Liste.Series.Count;
     vstAlbumsManquants.ReinitNode(vstAlbumsManquants.RootNode, True);
   finally

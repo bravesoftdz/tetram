@@ -80,7 +80,7 @@ type
   public
     { Déclarations publiques }
     CurrentSQL: string;
-    CritereSimple: Integer;
+    CritereSimple: TGUID;
     ResultList: TListAlbumAdd;
     ResultInfos: TStringList;
     property TypeRecherche: TTypeRecherche read FTypeRecherche write SetTypeRecherche;
@@ -167,7 +167,7 @@ begin
   if (Champ = rsTransFormatEdition) or (LowerCase(Champ) = 'formatedition') then Result := 25;
   if (Champ = rsTransTypeEdition) or (LowerCase(Champ) = 'typeedition') then Result := 26;
 
-  if (Champ = rsTransGenre + ' *') or (LowerCase(Champ) = 'refgenre') then Result := 23;
+  if (Champ = rsTransGenre + ' *') or (LowerCase(Champ) = 'ID_Genre') then Result := 23;
 end;
 
 function TFrmRecherche.IsValChampBoolean(ValChamp: Integer): Boolean;
@@ -352,9 +352,10 @@ const
 var
   q: TJvUIBQuery;
   s: string;
-  oldRefAlbum, oldIndex: Integer;
+  oldID_Album: TGUID;
+  oldIndex: Integer;
 begin
-  if VTPersonnes.CurrentValue <> -1 then begin
+  if not IsEqualGUID(VTPersonnes.CurrentValue, GUID_NULL) then begin
     CritereSimple := VTPersonnes.CurrentValue;
     PageControl2.ActivePageIndex := 0;
     VTResult.RootNodeCount := 0;
@@ -365,13 +366,13 @@ begin
     with q do try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'SELECT * FROM ' + Proc[LightComboCheck1.Value];
-      Params.AsInteger[0] := CritereSimple;
+      Params.AsString[0] := GUIDToString(CritereSimple);
       Open;
-      oldRefAlbum := -1;
+      oldID_Album := GUID_NULL;
       oldIndex := -1;
       s := '';
       while not EOF do begin
-        if (oldRefAlbum = Fields.ByNameAsInteger['RefAlbum']) and (oldIndex <> -1) then begin
+        if isEqualGUID(oldID_Album, StringToGUID(Fields.ByNameAsString['ID_Album'])) and (oldIndex <> -1) then begin
           if LightComboCheck1.Value = 0 then begin
             s := ResultInfos[oldIndex];
             case Fields.ByNameAsInteger['Metier'] of
@@ -393,7 +394,7 @@ begin
           else
             ResultInfos.Add('');
         end;
-        oldRefAlbum := Fields.ByNameAsInteger['RefAlbum'];
+        oldID_Album := StringToGUID(Fields.ByNameAsString['ID_Album']);
         Next;
       end;
       if Bool(ResultList.Count) then
@@ -413,7 +414,7 @@ end;
 
 procedure TFrmRecherche.VTResultDblClick(Sender: TObject);
 begin
-  if Assigned(VTResult.FocusedNode) then Historique.AddWaiting(fcAlbum, ResultList[VTResult.FocusedNode.Index].Reference);
+  if Assigned(VTResult.FocusedNode) then Historique.AddWaiting(fcAlbum, ResultList[VTResult.FocusedNode.Index].ID);
 end;
 
 procedure TFrmRecherche.methodeChange(Sender: TObject);
@@ -514,13 +515,13 @@ var
     // EDITIONS
     // GENRESERIES
 
-    Result := 'ALBUMS INNER JOIN EDITIONS ON ALBUMS.REFALBUM = EDITIONS.REFALBUM INNER JOIN SERIES ON ALBUMS.REFSERIE = SERIES.REFSERIE';
+    Result := 'ALBUMS INNER JOIN EDITIONS ON ALBUMS.ID_Album = EDITIONS.ID_Album INNER JOIN SERIES ON ALBUMS.ID_Serie = SERIES.ID_Serie';
     slFrom.Delete(slFrom.IndexOf('ALBUMS'));
     slFrom.Delete(slFrom.IndexOf('SERIES'));
     slFrom.Delete(slFrom.IndexOf('EDITIONS'));
     i := slFrom.IndexOf('GENRESERIES');
     if i <> -1 then begin
-      Result := Result + ' LEFT OUTER JOIN GENRESERIES ON GENRESERIES.REFSERIE = ALBUMS.REFSERIE';
+      Result := Result + ' LEFT OUTER JOIN GENRESERIES ON GENRESERIES.ID_Serie = ALBUMS.ID_Serie';
       slFrom.Delete(i);
     end;
   end;
@@ -572,7 +573,7 @@ begin
   slWhere := TStringList.Create;
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT DISTINCT ALBUMS.REFALBUM, ALBUMS.TITREALBUM, ALBUMS.TOME, ALBUMS.TOMEDEBUT, ALBUMS.TOMEFIN, ALBUMS.HORSSERIE, ALBUMS.INTEGRALE, ALBUMS.MOISPARUTION, ALBUMS.ANNEEPARUTION, ALBUMS.REFSERIE, SERIES.TITRESERIE';
+    SQL.Text := 'SELECT DISTINCT ALBUMS.ID_Album, ALBUMS.TITREALBUM, ALBUMS.TOME, ALBUMS.TOMEDEBUT, ALBUMS.TOMEFIN, ALBUMS.HORSSERIE, ALBUMS.INTEGRALE, ALBUMS.MOISPARUTION, ALBUMS.ANNEEPARUTION, ALBUMS.ID_Serie, SERIES.TITRESERIE';
 
     slFrom.Add('ALBUMS');
     slFrom.Add('SERIES');

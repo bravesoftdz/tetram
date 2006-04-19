@@ -318,6 +318,7 @@ object FrmConsultationSerie: TFrmConsultationSerie
       ShowColumnHeaders = False
       TabOrder = 2
       ViewStyle = vsReport
+      OnDblClick = lvScenaristesDblClick
     end
     object lvDessinateurs: TVDTListView
       Left = 59
@@ -342,6 +343,7 @@ object FrmConsultationSerie: TFrmConsultationSerie
       SortType = stData
       TabOrder = 3
       ViewStyle = vsReport
+      OnDblClick = lvScenaristesDblClick
     end
     object Memo1: TMemo
       Left = 538
@@ -381,6 +383,7 @@ object FrmConsultationSerie: TFrmConsultationSerie
       SortType = stData
       TabOrder = 5
       ViewStyle = vsReport
+      OnDblClick = lvScenaristesDblClick
     end
     object vtAlbums: TVirtualStringTree
       Left = 59

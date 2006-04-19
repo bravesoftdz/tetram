@@ -3,32 +3,32 @@ unit MAJ;
 interface
 
 uses
-  Windows, SysUtils, Forms, Controls, ComCtrls, TypeRec, LoadComplet, Textes, Classes;
+  Windows, SysUtils, Forms, Controls, ComCtrls, TypeRec, LoadComplet, Textes, Classes, Commun;
 
-function MAJConsultationAlbum(Reference: Integer): Boolean;
-function MAJConsultationEmprunteur(Reference: Integer): Boolean;
-function MAJConsultationAuteur(Reference: Integer): Boolean;
-function MAJConsultationParaBD(Reference: Integer): Boolean;
-function MAJConsultationSerie(Reference: Integer): Boolean;
+function MAJConsultationAlbum(Reference: TGUID): Boolean;
+function MAJConsultationEmprunteur(Reference: TGUID): Boolean;
+function MAJConsultationAuteur(Reference: TGUID): Boolean;
+function MAJConsultationParaBD(Reference: TGUID): Boolean;
+function MAJConsultationSerie(Reference: TGUID): Boolean;
 procedure MAJStock;
 procedure MAJSeriesIncompletes;
 procedure MAJPrevisionsSorties;
 procedure MAJPrevisionsAchats;
-procedure MAJRecherche(Reference: Integer; TypeSimple: Integer = -1);
-function ZoomCouverture(isParaBD: Boolean; RefItem, RefCouverture: Integer): Boolean;
+procedure MAJRecherche(Reference: TGUID; TypeSimple: Integer = -1);
+function ZoomCouverture(isParaBD: Boolean; ID_Item, ID_Couverture: TGUID): Boolean;
 
-function SaisieMouvementAlbum(MvtRefAlbum, MvtRefEdition: Integer; MvtPret: Boolean; MvtRefEmprunteur: Integer = -1): Boolean;
-function SaisieMouvementEmprunteur(MvtRefEmprunteur: Integer; MvtRefAlbum: TEditionsEmpruntees): Boolean;
+function SaisieMouvementAlbum(MvtID_Album, MvtID_Edition: TGUID; MvtPret: Boolean; MvtID_Emprunteur: string = sGUID_NULL): Boolean;
+function SaisieMouvementEmprunteur(MvtID_Emprunteur: TGUID; MvtID_Album: TEditionsEmpruntees): Boolean;
 
 implementation
 
 uses
-  Commun, CommonConst, DM_Princ, Form_Stock, Main, DM_Commun, DB, StdCtrls, JvUIB, JvUIBLib, Divers, Procedures, Form_SeriesIncompletes,
+  CommonConst, DM_Princ, Form_Stock, Main, DM_Commun, DB, StdCtrls, JvUIB, JvUIBLib, Divers, Procedures, Form_SeriesIncompletes,
   Form_PrevisionsSorties, Graphics, Form_ConsultationAlbum, Form_ConsultationEmprunteur, Form_SaisieEmpruntAlbum, Form_SaisieEmpruntEmprunteur, Form_Recherche,
   Form_ZoomCouverture, Form_ConsultationAuteur, Form_PrevisionAchats, UHistorique,
   Form_ConsultationParaBD, Form_ConsultationSerie;
 
-function MAJConsultationAuteur(Reference: Integer): Boolean;
+function MAJConsultationAuteur(Reference: TGUID): Boolean;
 var
   FDest: TFrmConsultationAuteur;
   hg: IHourGlass;
@@ -37,7 +37,7 @@ begin
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
   FDest := TFrmConsultationAuteur.Create(Fond);
   try
-    FDest.RefAuteur := Reference;
+    FDest.ID_Auteur := Reference;
     Historique.SetDescription(FDest.Caption);
     Result := not FDest.Auteur.RecInconnu;
   finally
@@ -45,7 +45,7 @@ begin
   end;
 end;
 
-function MAJConsultationAlbum(Reference: Integer): Boolean;
+function MAJConsultationAlbum(Reference: TGUID): Boolean;
 var
   FDest: TFrmConsultationAlbum;
   hg: IHourGlass;
@@ -54,7 +54,7 @@ begin
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
   FDest := TFrmConsultationAlbum.Create(Fond);
   try
-    FDest.RefAlbum := Reference;
+    FDest.ID_Album := Reference;
     Historique.SetDescription(FDest.Caption);
     Result := not FDest.Album.RecInconnu;
   finally
@@ -62,7 +62,7 @@ begin
   end;
 end;
 
-function MAJConsultationSerie(Reference: Integer): Boolean;
+function MAJConsultationSerie(Reference: TGUID): Boolean;
 var
   FDest: TFrmConsultationSerie;
   hg: IHourGlass;
@@ -71,7 +71,7 @@ begin
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
   FDest := TFrmConsultationSerie.Create(Fond);
   try
-    FDest.RefSerie := Reference;
+    FDest.ID_Serie := Reference;
     Historique.SetDescription(FDest.Caption);
     Result := not FDest.Serie.RecInconnu;
   finally
@@ -79,7 +79,7 @@ begin
   end;
 end;
 
-function MAJConsultationParaBD(Reference: Integer): Boolean;
+function MAJConsultationParaBD(Reference: TGUID): Boolean;
 var
   FDest: TFrmConsultationParaBD;
   hg: IHourGlass;
@@ -88,7 +88,7 @@ begin
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
   FDest := TFrmConsultationParaBD.Create(Fond);
   try
-    FDest.RefParaBD := Reference;
+    FDest.ID_ParaBD := Reference;
     Historique.SetDescription(FDest.Caption);
     Result := not FDest.ParaBD.RecInconnu;
   finally
@@ -96,7 +96,7 @@ begin
   end;
 end;
 
-function MAJConsultationEmprunteur(Reference: Integer): Boolean;
+function MAJConsultationEmprunteur(Reference: TGUID): Boolean;
 var
   FDest: TFrmConsultationEmprunteur;
   hg: IHourGlass;
@@ -105,7 +105,7 @@ begin
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
   FDest := TFrmConsultationEmprunteur.Create(Fond);
   try
-    FDest.RefEmprunteur := Reference;
+    FDest.ID_Emprunteur := Reference;
     Historique.SetDescription(FDest.Caption);
     Result := not FDest.Emprunteur.RecInconnu;
   finally
@@ -113,32 +113,32 @@ begin
   end;
 end;
 
-function SaisieMouvementAlbum(MvtRefAlbum, MvtRefEdition: Integer; MvtPret: Boolean; MvtRefEmprunteur: Integer = -1): Boolean;
+function SaisieMouvementAlbum(MvtID_Album, MvtID_Edition: TGUID; MvtPret: Boolean; MvtID_Emprunteur: string): Boolean;
 begin
   Result := False;
   if Mode_en_cours <> mdConsult then Exit;
 
   with TFrmSaisie_EmpruntAlbum.Create(Fond) do try
     pret.Checked := MvtPret;
-    RefAlbum := MvtRefAlbum;
-    RefEdition := MvtRefEdition;
-    RefEmprunteur := MvtRefEmprunteur;
+    ID_Album := MvtID_Album;
+    ID_Edition := MvtID_Edition;
+    ID_Emprunteur := StringToGUID(MvtID_Emprunteur);
     Result := ShowModal = mrOk;
   finally
     Free;
   end;
 end;
 
-function SaisieMouvementEmprunteur(MvtRefEmprunteur: Integer; MvtRefAlbum: TEditionsEmpruntees): Boolean;
+function SaisieMouvementEmprunteur(MvtID_Emprunteur: TGUID; MvtID_Album: TEditionsEmpruntees): Boolean;
 var
   i: Integer;
 begin
   Result := False;
   if Mode_en_cours <> mdConsult then Exit;
   with TFrmSaisie_EmpruntEmprunteur.Create(Fond) do try
-    RefEmprunteur := MvtRefEmprunteur;
-    for i := Low(MvtRefAlbum) to High(MvtRefAlbum) do
-      AjouteAlbum(MvtRefAlbum[i][0], MvtRefAlbum[i][1]);
+    ID_Emprunteur := MvtID_Emprunteur;
+    for i := Low(MvtID_Album) to High(MvtID_Album) do
+      AjouteAlbum(MvtID_Album[i][0], MvtID_Album[i][1]);
     Result := ShowModal = mrOk;
   finally
     Free;
@@ -174,7 +174,7 @@ begin
   _MAJFenetre(TFrmStock);
 end;
 
-procedure MAJRecherche(Reference, TypeSimple: Integer); overload;
+procedure MAJRecherche(Reference: TGUID; TypeSimple: Integer); overload;
 var
   FDest: TFrmRecherche;
   hg: IHourGlass;
@@ -196,13 +196,13 @@ begin
     Historique.SetDescription(FDest.Caption);
 end;
 
-function ZoomCouverture(isParaBD: Boolean; RefItem, RefCouverture: Integer): Boolean;
+function ZoomCouverture(isParaBD: Boolean; ID_Item, ID_Couverture: TGUID): Boolean;
 var
   FDest: TFrmZoomCouverture;
 begin
   FDest := TFrmZoomCouverture.Create(Fond);
   with FDest do try
-    Result := LoadCouverture(isParaBD, RefItem, RefCouverture);
+    Result := LoadCouverture(isParaBD, ID_Item, ID_Couverture);
     Historique.SetDescription(FDest.Caption);
   finally
     Fond.SetChildForm(FDest);

@@ -200,9 +200,9 @@ begin
     end;
 
     New(p);
-    p.NomChamp := 'REFGENRE';
+    p.NomChamp := 'ID_Genre';
     p.NomTable := 'GENRESERIES';
-    p.TypeData := uftInteger;
+    p.TypeData := uftChar;
     p.Special := csGenre;
     with champs.Items.Add do begin
       Caption := FRecherche.TransChamps('genreserie'); // ne pas traduire

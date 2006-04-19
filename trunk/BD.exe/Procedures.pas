@@ -4,7 +4,7 @@ interface
 
 uses
   SysUtils, Windows, Classes, Dialogs, ComCtrls, ExtCtrls, Controls, Forms, TypeRec, Graphics, CommonConst, JvUIB, jpeg, GraphicEx,
-  StdCtrls, Form_Progression, ComboCheck, JvUIBLib;
+  StdCtrls, Form_Progression, ComboCheck, JvUIBLib, Commun;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
 
@@ -71,7 +71,8 @@ function ChoisirDetail(Bouton: Integer; out DetailsOptions: TDetailOptions): TMo
 procedure PrepareLV(Form: TForm);
 
 function SupprimerTable(Table: string): Boolean;
-function SupprimerToutDans(const ChampSupp, Table: string; const Reference: string = ''; Valeur: Integer = -1; UseTransaction: TJvUIBTransaction = nil): Boolean;
+function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TJvUIBTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table: string; const Reference: string; Valeur: TGUID; UseTransaction: TJvUIBTransaction = nil): Boolean; overload;
 
 type
   PRecRef = ^TRecRef;
@@ -79,7 +80,7 @@ type
     ref: Integer;
   end;
 
-function AjoutMvt(RefEmprunteur, RefObjet: Integer; DateE: TDateTime; Pret: Boolean): Boolean;
+function AjoutMvt(ID_Emprunteur, RefObjet: TGUID; DateE: TDateTime; Pret: Boolean): Boolean;
 function ChargeImage(ImgBmp: TImage; const ResName: string; ForceVisible: Boolean = True): Boolean; overload;
 function ChargeImage(Picture: TPicture; const ResName: string): Boolean; overload;
 procedure InitScrollBoxTableChamps(ScrollBox: TScrollBox; const Table: string; Ref: Integer; Editable: Boolean = False);
@@ -122,9 +123,9 @@ type
     destructor Destroy; override;
   end;
 
-function GetCouvertureStream(isParaBD: Boolean; RefCouverture, Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream; overload;
+function GetCouvertureStream(isParaBD: Boolean; ID_Couverture: TGUID; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream; overload;
 function GetCouvertureStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream; overload;
-procedure LoadCouverture(isParaBD: Boolean; RefCouverture: Integer; Picture: TPicture);
+procedure LoadCouverture(isParaBD: Boolean; ID_Couverture: TGUID; Picture: TPicture);
 function GetJPEGStream(const Fichier: string): TStream;
 function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = True): string;
 
@@ -137,7 +138,7 @@ implementation
 
 uses
   CommonList, Divers, Textes, ShellAPI, ReadOnlyCheckBox, Form_ChoixDetail,
-  JvUIBase, MaskUtils, Mask, Commun, DM_Princ, IniFiles, Form_Choix, Math, VirtualTrees, DbEditLabeled, ActnList,
+  JvUIBase, MaskUtils, Mask, DM_Princ, IniFiles, Form_Choix, Math, VirtualTrees, DbEditLabeled, ActnList,
   Form_Convertisseur, Main, HTTPApp, Types;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
@@ -502,7 +503,12 @@ begin
   end;
 end;
 
-function SupprimerToutDans(const ChampSupp, Table: string; const Reference: string = ''; Valeur: Integer = -1; UseTransaction: TJvUIBTransaction = nil): Boolean;
+function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TJvUIBTransaction = nil): Boolean;
+begin
+  Result := SupprimerToutDans(ChampSupp, Table, '', GUID_NULL, UseTransaction);
+end;
+
+function SupprimerToutDans(const ChampSupp, Table: string; const Reference: string; Valeur: TGUID; UseTransaction: TJvUIBTransaction = nil): Boolean;
 var
   BackupPossible: Boolean;
 begin
@@ -519,7 +525,7 @@ begin
       else
         SQL.Add(Format('DELETE FROM %s', [Table]));
 
-      if Reference <> '' then SQL.Add(Format('WHERE %s = %d', [Reference, Valeur]));
+      if Reference <> '' then SQL.Add(Format('WHERE %s = ''%s''', [Reference, GUIDToString(Valeur)]));
       ExecSQL;
       Transaction.Commit;
       Result := True;
@@ -535,16 +541,16 @@ end;
 const
   ErrorSaveMvt = 'Impossible d''enregistrer le mouvement !';
 
-function AjoutMvt(RefEmprunteur, RefObjet: Integer; DateE: TDateTime; Pret: Boolean): Boolean;
+function AjoutMvt(ID_Emprunteur, RefObjet: TGUID; DateE: TDateTime; Pret: Boolean): Boolean;
 begin
   Result := False;
   try
     with TJvUIBQuery.Create(nil) do try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'Execute procedure PROC_AJOUTMVT(:RefEdition, :RefEmprunteur, :DateEmprunt, :Pret)';
+      SQL.Text := 'Execute procedure PROC_AJOUTMVT(:ID_Edition, :ID_Emprunteur, :DateEmprunt, :Pret)';
 
-      Params.AsInteger[0] := RefObjet;
-      Params.AsInteger[1] := RefEmprunteur;
+      Params.AsString[0] := GUIDToString(RefObjet);
+      Params.AsString[1] := GUIDToString(ID_Emprunteur);
       Params.AsDateTime[2] := DateE;
       Params.AsInteger[3] := Iif(Pret, 1, 0);
       ExecSQL;
@@ -971,20 +977,20 @@ begin
   end;
 end;
 
-function GetCouvertureStream(isParaBD: Boolean; RefCouverture, Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream;
+function GetCouvertureStream(isParaBD: Boolean; ID_Couverture: TGUID; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream;
 var
   Couverture: TPicture;
 begin
   Couverture := TPicture.Create;
   try
-    LoadCouverture(isParaBD, RefCouverture, Couverture);
+    LoadCouverture(isParaBD, ID_Couverture, Couverture);
     Result := ResizePicture(Couverture, Hauteur, Largeur, AntiAliasing, Cadre, Effet3D);
   finally
     Couverture.Free;
   end;
 end;
 
-procedure LoadCouverture(isParaBD: Boolean; RefCouverture: Integer; Picture: TPicture);
+procedure LoadCouverture(isParaBD: Boolean; ID_Couverture: TGUID; Picture: TPicture);
 var
   ms: TMemoryStream;
   img: TJPEGImage;
@@ -993,10 +999,10 @@ begin
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     if isParaBD then
-      SQL.Text := 'SELECT IMAGEPARABD, STOCKAGEPARABD, FichierParaBD FROM ParaBD WHERE RefParaBD = ?'
+      SQL.Text := 'SELECT IMAGEPARABD, STOCKAGEPARABD, FichierParaBD FROM ParaBD WHERE ID_ParaBD = ?'
     else
-      SQL.Text := 'SELECT IMAGECOUVERTURE, STOCKAGECOUVERTURE, FichierCouverture FROM Couvertures WHERE RefCouverture = ?';
-    Params.AsInteger[0] := RefCouverture;
+      SQL.Text := 'SELECT IMAGECOUVERTURE, STOCKAGECOUVERTURE, FichierCouverture FROM Couvertures WHERE ID_Couverture = ?';
+    Params.AsString[0] := GUIDToString(ID_Couverture);
     FetchBlobs := True;
     Open;
     if Eof or (Fields.IsNull[0] and Fields.IsNull[2]) then

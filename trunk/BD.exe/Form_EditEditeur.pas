@@ -26,12 +26,12 @@ type
     procedure edSiteChange(Sender: TObject);
   private
     { Déclarations privées }
-    FRefEditeur: Integer;
+    FID_Editeur: TGUID;
     FCreation: Boolean;
-    procedure SetRefEditeur(Value: Integer);
+    procedure SetID_Editeur(Value: TGUID);
   public
     { Déclarations publiques }
-    property RefEditeur: Integer read FRefEditeur write SetRefEditeur;
+    property ID_Editeur: TGUID read FID_Editeur write SetID_Editeur;
   end;
 
 implementation
@@ -46,16 +46,16 @@ begin
   PrepareLV(Self);
 end;
 
-procedure TFrmEditEditeur.SetRefEditeur(Value: Integer);
+procedure TFrmEditEditeur.SetID_Editeur(Value: TGUID);
 var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  FRefEditeur := Value;
+  FID_Editeur := Value;
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT NOMEDITEUR, SITEWEB FROM EDITEURS WHERE RefEditeur = ?';
-    Params.AsInteger[0] := FRefEditeur;
+    SQL.Text := 'SELECT NOMEDITEUR, SITEWEB FROM EDITEURS WHERE ID_Editeur = ?';
+    Params.AsString[0] := GUIDToString(FID_Editeur);
     Open;
     FCreation := Eof;
     if not FCreation then begin
@@ -79,12 +79,12 @@ begin
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     if FCreation then
-      SQL.Text := 'INSERT INTO EDITEURS (REFEDITEUR, NOMEDITEUR, SITEWEB) VALUES (:REFEDITEUR, :NOMEDITEUR, :SITEWEB)'
+      SQL.Text := 'INSERT INTO EDITEURS (ID_Editeur, NOMEDITEUR, SITEWEB) VALUES (:ID_Editeur, :NOMEDITEUR, :SITEWEB)'
     else
-      SQL.Text := 'UPDATE EDITEURS SET NOMEDITEUR = :NOMEDITEUR, SITEWEB = :SITEWEB WHERE REFEDITEUR = :REFEDITEUR';
+      SQL.Text := 'UPDATE EDITEURS SET NOMEDITEUR = :NOMEDITEUR, SITEWEB = :SITEWEB WHERE ID_Editeur = :ID_Editeur';
     Params.ByNameAsString['NOMEDITEUR'] := Trim(edNom.Text);
     Params.ByNameAsString['SITEWEB'] := Trim(edSite.Text);
-    Params.ByNameAsInteger['REFEDITEUR'] := RefEditeur;
+    Params.ByNameAsString['ID_Editeur'] := GUIDToString(ID_Editeur);
     ExecSQL;
     Transaction.Commit;
   finally

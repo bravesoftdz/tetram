@@ -106,17 +106,17 @@ end;
 
 function TFrmStock.SameEmprunteur: Boolean;
 var
-  e: Integer;
+  e: TGUID;
   Node: PVirtualNode;
 begin
   Result := True;
-  e := -1;
+  e := GUID_NULL;
   if ListeEmprunts.SelectedCount = 0 then Exit;
   Node := ListeEmprunts.GetFirstSelected;
   while Assigned(Node) do begin
-    if e = -1 then
-      e := TEmprunt(FListEmprunts[Node.Index]).Emprunteur.Reference
-    else if e <> TEmprunt(FListEmprunts[Node.Index]).Emprunteur.Reference then begin
+    if IsEqualGUID(e, GUID_NULL) then
+      e := TEmprunt(FListEmprunts[Node.Index]).Emprunteur.ID
+    else if not IsEqualGUID(e, TEmprunt(FListEmprunts[Node.Index]).Emprunteur.ID) then begin
       Result := False;
       Exit;
     end;
@@ -127,8 +127,8 @@ end;
 procedure TFrmStock.Item2Click(Sender: TObject);
 begin
   if Assigned(ListeEmprunts.FocusedNode) then begin
-    if Sender = Item1 then Historique.AddWaiting(fcAlbum, TEmprunt(FListEmprunts[ListeEmprunts.FocusedNode.Index]).Album.Reference);
-    if Sender = Item2 then Historique.AddWaiting(fcEmprunteur, TEmprunt(FListEmprunts[ListeEmprunts.FocusedNode.Index]).Emprunteur.Reference);
+    if Sender = Item1 then Historique.AddWaiting(fcAlbum, TEmprunt(FListEmprunts[ListeEmprunts.FocusedNode.Index]).Album.ID);
+    if Sender = Item2 then Historique.AddWaiting(fcEmprunteur, TEmprunt(FListEmprunts[ListeEmprunts.FocusedNode.Index]).Emprunteur.ID);
   end;
 end;
 
@@ -191,8 +191,8 @@ procedure TFrmStock.ListeEmpruntsDblClick(Sender: TObject);
 begin
   if Assigned(ListeEmprunts.FocusedNode) then
     case ZoneMove of
-      1: Historique.AddWaiting(fcEmprunteur, TEmprunt(FListEmprunts[ListeEmprunts.FocusedNode.Index]).Emprunteur.Reference);
-      0: Historique.AddWaiting(fcAlbum, TEmprunt(FListEmprunts[ListeEmprunts.FocusedNode.Index]).Album.Reference);
+      1: Historique.AddWaiting(fcEmprunteur, TEmprunt(FListEmprunts[ListeEmprunts.FocusedNode.Index]).Emprunteur.ID);
+      0: Historique.AddWaiting(fcAlbum, TEmprunt(FListEmprunts[ListeEmprunts.FocusedNode.Index]).Album.ID);
     end;
 end;
 
@@ -219,19 +219,19 @@ begin
   case ZoneMove of
     0: begin
         PE := FListEmprunts[ListeEmprunts.GetFirstSelected.Index];
-        if SaisieMouvementAlbum(PE.Album.Reference, PE.Edition.Reference, False, PE.Emprunteur.Reference) then Historique.Refresh;
+        if SaisieMouvementAlbum(PE.Album.ID, PE.Edition.ID, False, GUIDToString(PE.Emprunteur.ID)) then Historique.Refresh;
       end;
     1: begin
         SetLength(a, ListeEmprunts.SelectedCount);
         i := 0;
         Node := ListeEmprunts.GetFirstSelected;
         while Assigned(Node) do begin
-          a[i][0] := TEmprunt(FListEmprunts[Node.Index]).Album.Reference;
-          a[i][1] := TEmprunt(FListEmprunts[Node.Index]).Edition.Reference;
+          a[i][0] := TEmprunt(FListEmprunts[Node.Index]).Album.ID;
+          a[i][1] := TEmprunt(FListEmprunts[Node.Index]).Edition.ID;
           Inc(i);
           Node := ListeEmprunts.GetNextSelected(Node);
         end;
-        if SaisieMouvementEmprunteur(TEmprunt(FListEmprunts[ListeEmprunts.FocusedNode.Index]).Emprunteur.Reference, a) then Historique.Refresh;
+        if SaisieMouvementEmprunteur(TEmprunt(FListEmprunts[ListeEmprunts.FocusedNode.Index]).Emprunteur.ID, a) then Historique.Refresh;
       end;
   end;
 end;
@@ -291,11 +291,11 @@ var
 begin
   ClearForm;
   PrepareFiltre(DateAvant, DateApres);
-  R := TEmpruntsComplet.Create(-1, seTous, ssPret, DateAvant, DateApres, True, True);
+  R := TEmpruntsComplet.Create(GUID_NULL, seTous, ssPret, DateAvant, DateApres, True, True);
   try
     for i := 0 to R.Emprunts.Count - 1 do begin
       PE := R.Emprunts[i];
-      if (PE.Album.Reference <> -1) and (PE.Edition.Reference <> -1) and (PE.Emprunteur.Reference <> -1) then
+      if not IsEqualGUID(PE.Album.ID, GUID_NULL) and not IsEqualGUID(PE.Edition.ID, GUID_NULL) and not IsEqualGUID(PE.Emprunteur.ID, GUID_NULL) then
         FListEmprunts.Add(TEmprunt.Duplicate(PE));
     end;
     ListeEmprunts.RootNodeCount := FListEmprunts.Count;

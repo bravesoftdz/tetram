@@ -57,16 +57,16 @@ type
     procedure vtSeriesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure vtSeriesDblClick(Sender: TObject);
   private
-    FRefAlbum: Integer;
+    FID_Album: TGUID;
     FCreation: Boolean;
     FScenaristesSelected, FDessinateursSelected, FColoristesSelected: Boolean;
-    procedure SetRefAlbum(const Value: Integer);
+    procedure SetID_Album(const Value: TGUID);
     procedure AjouteAuteur(List: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean);
     procedure AjouteAuteur2(List: TVDTListViewLabeled; Auteur: TPersonnage);
     { Déclarations privées }
   public
     { Déclarations publiques }
-    property RefAlbum: Integer read FRefAlbum write SetRefAlbum;
+    property ID_Album: TGUID read FID_Album write SetID_Album;
   end;
 
 implementation
@@ -88,7 +88,7 @@ var
   PA: TAuteur;
 begin
   PA := TAuteur.Create;
-  PA.Fill(Auteur, RefAlbum, -1, 0);
+  PA.Fill(Auteur, ID_Album, GUID_NULL, 0);
   with List.Items.Add do begin
     Data := PA;
     Caption := PA.ChaineAffichage;
@@ -99,7 +99,7 @@ end;
 procedure TFrmEditAchatAlbum.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FRefAlbum := -1;
+  FID_Album := GUID_NULL;
   FCreation := True;
 
   FrameRechercheRapidePersonnes.VirtualTreeView := vtPersonnes;
@@ -123,20 +123,20 @@ begin
   FColoristesSelected := False;
 end;
 
-procedure TFrmEditAchatAlbum.SetRefAlbum(const Value: Integer);
+procedure TFrmEditAchatAlbum.SetID_Album(const Value: TGUID);
 var
   q: TJvUIBQuery;
-  RefSerie: Integer;
+  ID_Serie: TGUID;
 begin
-  FRefAlbum := Value;
+  FID_Album := Value;
 
   q := TJvUIBQuery.Create(nil);
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
 
     FetchBlobs := True;
-    SQL.Text := 'SELECT COMPLET, TITREALBUM, MOISPARUTION, ANNEEPARUTION, REFSERIE, TOME, TOMEDEBUT, TOMEFIN, HORSSERIE, INTEGRALE, SUJETALBUM, REMARQUESALBUM FROM ALBUMS WHERE RefAlbum = ?';
-    Params.AsInteger[0] := FRefAlbum;
+    SQL.Text := 'SELECT COMPLET, TITREALBUM, MOISPARUTION, ANNEEPARUTION, ID_Serie, TOME, TOMEDEBUT, TOMEFIN, HORSSERIE, INTEGRALE, SUJETALBUM, REMARQUESALBUM FROM ALBUMS WHERE ID_Album = ?';
+    Params.AsString[0] := GUIDToString(FID_Album);
     Open;
 
     FCreation := Eof;
@@ -145,7 +145,7 @@ begin
     if not FCreation then begin
       if Fields.AsInteger[0] = 1 then begin
         PageControl1.ActivePage := TabSheet2;
-        vstAlbums.CurrentValue := FRefAlbum;
+        vstAlbums.CurrentValue := FID_Album;
       end
       else begin
         PageControl1.ActivePage := TabSheet1;
@@ -160,13 +160,13 @@ begin
         cbIntegraleClick(cbIntegrale);
         histoire.Lines.Text := Fields.ByNameAsString['SUJETALBUM'];
         remarques.Lines.Text := Fields.ByNameAsString['REMARQUESALBUM'];
-        RefSerie := Fields.ByNameAsInteger['REFSERIE'];
+        ID_Serie := StringToGUID(Fields.ByNameAsString['ID_Serie']);
 
         lvScenaristes.Items.BeginUpdate;
         lvDessinateurs.Items.BeginUpdate;
         lvColoristes.Items.BeginUpdate;
         SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL, NULL)';
-        Params.AsInteger[0] := FRefAlbum;
+        Params.AsString[0] := GUIDToString(FID_Album);
         Open;
         while not Eof do begin
           case Fields.ByNameAsInteger['Metier'] of
@@ -195,7 +195,7 @@ begin
           Next;
         end;
 
-        vtSeries.CurrentValue := RefSerie;
+        vtSeries.CurrentValue := ID_Serie;
       end;
     end;
   finally
@@ -237,14 +237,14 @@ begin
       ModalResult := mrNone;
       Exit;
     end;
-    if vtSeries.CurrentValue = -1 then begin
+    if IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then begin
       AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
       FrameRechercheRapideSerie.edSearch.SetFocus;
       ModalResult := mrNone;
       Exit;
     end;
   end
-  else if (vstAlbums.CurrentValue = -1) then begin
+  else if IsEqualGUID(vstAlbums.CurrentValue, GUID_NULL) then begin
     AffMessage(rsAlbumObligatoire, mtInformation, [mbOk], True);
     FrameRechercheRapideAlbums.edSearch.SetFocus;
     ModalResult := mrNone;
@@ -257,42 +257,42 @@ begin
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
 
     if PageControl1.ActivePage = TabSheet2 then begin
-      if (vstAlbums.CurrentValue <> FRefAlbum) and (FRefAlbum <> -1) then begin
-        SQL.Text := 'UPDATE ALBUMS SET ACHAT = 0 WHERE REFALBUM = ?';
-        Params.AsInteger[0] := FRefAlbum;
+      if (not IsEqualGUID(vstAlbums.CurrentValue, FID_Album)) and (not IsEqualGUID(FID_Album, GUID_NULL)) then begin
+        SQL.Text := 'UPDATE ALBUMS SET ACHAT = 0 WHERE ID_Album = ?';
+        Params.AsString[0] := GUIDToString(FID_Album);
         Execute;
-        FRefAlbum := -1;
+        FID_Album := GUID_NULL;
       end;
-      SQL.Text := 'UPDATE ALBUMS SET ACHAT = 1 WHERE REFALBUM = ?';
-      Params.AsInteger[0] := vstAlbums.CurrentValue;
+      SQL.Text := 'UPDATE ALBUMS SET ACHAT = 1 WHERE ID_Album = ?';
+      Params.AsString[0] := GUIDToString(vstAlbums.CurrentValue);
       Execute;
-      FRefAlbum := vstAlbums.CurrentValue;
+      FID_Album := vstAlbums.CurrentValue;
     end
     else begin
       if FCreation then begin
-        if FRefAlbum = -1 then begin
-          SQL.Text := 'SELECT GEN_ID(AI_REFALBUM, 1) FROM RDB$DATABASE';
+        if IsEqualGUID(FID_Album, GUID_NULL) then begin
+          SQL.Text := 'select udf_createguid() from rdb$database';
           Open;
-          FRefAlbum := Fields.AsInteger[0];
+          FID_Album := StringToGUID(Fields.AsString[0]);
         end;
 
-        SQL.Text := 'INSERT INTO ALBUMS (REFALBUM,  TITREALBUM,  MOISPARUTION,  ANNEEPARUTION,  REFSERIE,  TOME,  TOMEDEBUT,  TOMEFIN,  HORSSERIE,  INTEGRALE,  SUJETALBUM,  REMARQUESALBUM,  TITREINITIALESALBUM,  UPPERSUJETALBUM,  UPPERREMARQUESALBUM, ACHAT)';
+        SQL.Text := 'INSERT INTO ALBUMS (ID_Album,  TITREALBUM,  MOISPARUTION,  ANNEEPARUTION,  ID_Serie,  TOME,  TOMEDEBUT,  TOMEFIN,  HORSSERIE,  INTEGRALE,  SUJETALBUM,  REMARQUESALBUM,  TITREINITIALESALBUM,  UPPERSUJETALBUM,  UPPERREMARQUESALBUM, ACHAT)';
         SQL.Add('VALUES');
-        SQL.Add('(:REFALBUM, :TITREALBUM, :MOISPARUTION, :ANNEEPARUTION, :REFSERIE, :TOME, :TOMEDEBUT, :TOMEFIN, :HORSSERIE, :INTEGRALE, :SUJETALBUM, :REMARQUESALBUM, :TITREINITIALESALBUM, :UPPERSUJETALBUM, :UPPERREMARQUESALBUM, 1)');
+        SQL.Add('(:ID_Album, :TITREALBUM, :MOISPARUTION, :ANNEEPARUTION, :ID_Serie, :TOME, :TOMEDEBUT, :TOMEFIN, :HORSSERIE, :INTEGRALE, :SUJETALBUM, :REMARQUESALBUM, :TITREINITIALESALBUM, :UPPERSUJETALBUM, :UPPERREMARQUESALBUM, 1)');
       end
       else begin
         SQL.Text := 'UPDATE ALBUMS SET';
-        SQL.Add('TITREALBUM = :TITREALBUM, MOISPARUTION = :MOISPARUTION, ANNEEPARUTION = :ANNEEPARUTION, REFSERIE = :REFSERIE, TOME = :TOME, TOMEDEBUT = :TOMEDEBUT, TOMEFIN = :TOMEFIN,');
+        SQL.Add('TITREALBUM = :TITREALBUM, MOISPARUTION = :MOISPARUTION, ANNEEPARUTION = :ANNEEPARUTION, ID_Serie = :ID_Serie, TOME = :TOME, TOMEDEBUT = :TOMEDEBUT, TOMEFIN = :TOMEFIN,');
         SQL.Add('HORSSERIE = :HORSSERIE, INTEGRALE = :INTEGRALE,');
         SQL.Add('SUJETALBUM = :SUJETALBUM,');
         SQL.Add('REMARQUESALBUM = :REMARQUESALBUM,');
         SQL.Add('UPPERSUJETALBUM = :UPPERSUJETALBUM,');
         SQL.Add('UPPERREMARQUESALBUM = :UPPERREMARQUESALBUM,');
         SQL.Add('TITREINITIALESALBUM = :TITREINITIALESALBUM');
-        SQL.Add('WHERE REFALBUM = :REFALBUM');
+        SQL.Add('WHERE ID_Album = :ID_Album');
       end;
 
-      Params.ByNameAsInteger['REFALBUM'] := FRefAlbum;
+      Params.ByNameAsString['ID_Album'] := GUIDToString(FID_Album);
       s := Trim(edTitre.Text);
       Params.ByNameAsString['TITREALBUM'] := s;
       Params.ByNameAsString['TITREINITIALESALBUM'] := MakeInitiales(UpperCase(SansAccents(s)));
@@ -321,7 +321,7 @@ begin
         Params.ByNameAsString['TOMEFIN'] := edTomeFin.Text;
       Params.ByNameAsBoolean['INTEGRALE'] := cbIntegrale.Checked;
       Params.ByNameAsBoolean['HORSSERIE'] := cbHorsSerie.Checked;
-      Params.ByNameAsInteger['REFSERIE'] := vtSeries.CurrentValue;
+      Params.ByNameAsString['ID_Serie'] := GUIDToString(vtSeries.CurrentValue);
       s := histoire.Lines.Text;
       if s <> '' then begin
         ParamsSetBlob('SUJETALBUM', s);
@@ -354,7 +354,7 @@ end;
 
 procedure TFrmEditAchatAlbum.vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
-  IdPersonne: Integer;
+  IdPersonne: TGUID;
 
   function NotIn(LV: TListView): Boolean;
   var
@@ -364,21 +364,22 @@ var
     i := 0;
     Result := True;
     while Result and (i <= Pred(LV.Items.Count)) do begin
-      Result := TAuteur(LV.Items[i].Data).Personne.Reference <> IdPersonne;
+      Result := not IsEqualGUID(TAuteur(LV.Items[i].Data).Personne.ID, IdPersonne);
       Inc(i);
     end;
   end;
 
 begin
   IdPersonne := vtPersonnes.CurrentValue;
-  btScenariste.Enabled := (IdPersonne <> -1) and NotIn(LVScenaristes);
-  btDessinateur.Enabled := (IdPersonne <> -1) and NotIn(LVDessinateurs);
-  btColoriste.Enabled := (IdPersonne <> -1) and NotIn(LVColoristes);
+  btScenariste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVScenaristes);
+  btDessinateur.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVDessinateurs);
+  btColoriste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVColoristes);
 end;
 
 procedure TFrmEditAchatAlbum.vtPersonnesDblClick(Sender: TObject);
 var
-  i, iCurrentAuteur: Integer;
+  i: Integer;
+  iCurrentAuteur: TGUID;
   Auteur: TAuteur;
   CurrentAuteur: TPersonnage;
 begin
@@ -387,7 +388,7 @@ begin
     CurrentAuteur := vtPersonnes.GetFocusedNodeData;
     for i := 0 to Pred(lvScenaristes.Items.Count) do begin
       Auteur := lvScenaristes.Items[i].Data;
-      if Auteur.Personne.Reference = iCurrentAuteur then begin
+      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
         Auteur.Personne.Assign(CurrentAuteur);
         lvScenaristes.Items[i].Caption := Auteur.ChaineAffichage;
       end;
@@ -395,7 +396,7 @@ begin
     lvScenaristes.Invalidate;
     for i := 0 to Pred(lvDessinateurs.Items.Count) do begin
       Auteur := lvDessinateurs.Items[i].Data;
-      if Auteur.Personne.Reference = iCurrentAuteur then begin
+      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
         Auteur.Personne.Assign(CurrentAuteur);
         lvDessinateurs.Items[i].Caption := Auteur.ChaineAffichage;
       end;
@@ -403,7 +404,7 @@ begin
     lvDessinateurs.Invalidate;
     for i := 0 to Pred(lvColoristes.Items.Count) do begin
       Auteur := lvColoristes.Items[i].Data;
-      if Auteur.Personne.Reference = iCurrentAuteur then begin
+      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
         Auteur.Personne.Assign(CurrentAuteur);
         lvColoristes.Items[i].Caption := Auteur.ChaineAffichage;
       end;
@@ -414,7 +415,7 @@ end;
 
 procedure TFrmEditAchatAlbum.btScenaristeClick(Sender: TObject);
 begin
-  if vtPersonnes.CurrentValue = -1 then Exit;
+  if IsEqualGUID(vtPersonnes.CurrentValue, GUID_NULL) then Exit;
   case TSpeedButton(Sender).Tag of
     1: AjouteAuteur(lvScenaristes, vtPersonnes.GetFocusedNodeData, FScenaristesSelected);
     2: AjouteAuteur(lvDessinateurs, vtPersonnes.GetFocusedNodeData, FDessinateursSelected);
@@ -445,7 +446,7 @@ begin
   PS := vtSeries.GetFocusedNodeData;
   if Assigned(PS) then begin
     if not (FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then begin
-      SC := TSerieComplete.Create(PS.Reference);
+      SC := TSerieComplete.Create(PS.ID);
       try
         if not FScenaristesSelected then begin
           TAuteur.VideListe(lvScenaristes);

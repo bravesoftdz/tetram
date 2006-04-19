@@ -132,13 +132,13 @@ type
     procedure ApercuExecute(Sender: TObject);
     function ImpressionUpdate: Boolean;
     function ApercuUpdate: Boolean;
-    function GetRefAlbum: Integer;
-    procedure SetRefAlbum(const Value: Integer);
+    function GetID_Album: TGUID;
+    procedure SetID_Album(const Value: TGUID);
     procedure ClearForm;
   public
     { Déclarations publiques }
     property Album: TAlbumComplet read FAlbum;
-    property RefAlbum: Integer read GetRefAlbum write SetRefAlbum;
+    property ID_Album: TGUID read GetID_Album write SetID_Album;
   end;
 
 implementation
@@ -154,7 +154,7 @@ var
 
 procedure TFrmConsultationAlbum.lvScenaristesDblClick(Sender: TObject);
 begin
-  if Assigned(TListView(Sender).Selected) then Historique.AddWaiting(fcAuteur, TAuteur(TListView(Sender).Selected.Data).Personne.Reference, 0);
+  if Assigned(TListView(Sender).Selected) then Historique.AddWaiting(fcAuteur, TAuteur(TListView(Sender).Selected.Data).Personne.ID, 0);
 end;
 
 procedure TFrmConsultationAlbum.FormCreate(Sender: TObject);
@@ -191,14 +191,14 @@ end;
 procedure TFrmConsultationAlbum.ImpRep(Sender: TObject);
 begin
   if lvEditions.ItemIndex > -1 then
-    ImpressionFicheAlbum(RefAlbum, TEdition(lvEditions.Items.Objects[lvEditions.ItemIndex]).Reference, TComponent(Sender).Tag = 1)
+    ImpressionFicheAlbum(ID_Album, TEdition(lvEditions.Items.Objects[lvEditions.ItemIndex]).ID, TComponent(Sender).Tag = 1)
   else
-    ImpressionFicheAlbum(RefAlbum, -1, TComponent(Sender).Tag = 1);
+    ImpressionFicheAlbum(ID_Album, GUID_NULL, TComponent(Sender).Tag = 1);
 end;
 
 procedure TFrmConsultationAlbum.ajouterClick(Sender: TObject);
 begin
-  if SaisieMouvementAlbum(RefAlbum, TEdition(lvEditions.Items.Objects[lvEditions.ItemIndex]).Reference, cbStock.Checked) then Historique.Refresh;
+  if SaisieMouvementAlbum(ID_Album, TEdition(lvEditions.Items.Objects[lvEditions.ItemIndex]).ID, cbStock.Checked) then Historique.Refresh;
 end;
 
 procedure TFrmConsultationAlbum.Impression1Click(Sender: TObject);
@@ -208,27 +208,27 @@ end;
 
 procedure TFrmConsultationAlbum.Imprimer1Click(Sender: TObject);
 begin
-  ImpressionEmpruntsAlbum(RefAlbum, TComponent(Sender).Tag = 1);
+  ImpressionEmpruntsAlbum(ID_Album, TComponent(Sender).Tag = 1);
 end;
 
 procedure TFrmConsultationAlbum.Imprimer2Click(Sender: TObject);
 begin
-  ImpressionCouvertureAlbum(RefAlbum, TCouverture(FCurrentEdition.Couvertures[CurrentCouverture]).Reference, TComponent(Sender).Tag = 1);
+  ImpressionCouvertureAlbum(ID_Album, TCouverture(FCurrentEdition.Couvertures[CurrentCouverture]).ID, TComponent(Sender).Tag = 1);
 end;
 
 procedure TFrmConsultationAlbum.ListeEmpruntsDblClick(Sender: TObject);
 begin
-  if Assigned(ListeEmprunts.FocusedNode) then Historique.AddWaiting(fcEmprunteur, TEmprunt(FCurrentEdition.Emprunts.Emprunts[ListeEmprunts.FocusedNode.Index]).Emprunteur.Reference);
+  if Assigned(ListeEmprunts.FocusedNode) then Historique.AddWaiting(fcEmprunteur, TEmprunt(FCurrentEdition.Emprunts.Emprunts[ListeEmprunts.FocusedNode.Index]).Emprunteur.ID);
 end;
 
 procedure TFrmConsultationAlbum.CouvertureDblClick(Sender: TObject);
 begin
-  Historique.AddWaiting(fcCouverture, RefAlbum, TCouverture(FCurrentEdition.Couvertures[CurrentCouverture]).Reference);
+  Historique.AddWaiting(fcCouverture, ID_Album, TCouverture(FCurrentEdition.Couvertures[CurrentCouverture]).ID);
 end;
 
 procedure TFrmConsultationAlbum.lvSerieDblClick(Sender: TObject);
 begin
-  if Assigned(lvSerie.Selected) and (TAlbum(lvSerie.Selected.Data).Reference <> RefAlbum) then Historique.AddWaiting(fcAlbum, TAlbum(lvSerie.Selected.Data).Reference);
+  if Assigned(lvSerie.Selected) and (not IsEqualGUID(TAlbum(lvSerie.Selected.Data).ID, ID_Album)) then Historique.AddWaiting(fcAlbum, TAlbum(lvSerie.Selected.Data).ID);
 end;
 
 procedure TFrmConsultationAlbum.VDTButton1Click(Sender: TObject);
@@ -257,7 +257,7 @@ begin
     CurrentCouverture := Num;
     Couverture.Picture := nil;
     try
-      ms := GetCouvertureStream(False, TCouverture(FCurrentEdition.Couvertures[Num]).Reference, Couverture.Height, Couverture.Width, Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(False, TCouverture(FCurrentEdition.Couvertures[Num]).ID, Couverture.Height, Couverture.Width, Utilisateur.Options.AntiAliasing);
       if Assigned(ms) then try
         jpg := TJPEGImage.Create;
         try
@@ -360,7 +360,7 @@ procedure TFrmConsultationAlbum.lvEditionsClick(Sender: TObject);
 begin
   PanelEdition.Visible := lvEditions.ItemIndex > -1;
   if PanelEdition.Visible then begin
-    FCurrentEdition.Fill(TEdition(lvEditions.Items.Objects[lvEditions.ItemIndex]).Reference);
+    FCurrentEdition.Fill(TEdition(lvEditions.Items.Objects[lvEditions.ItemIndex]).ID);
     try
       ISBN.Caption := FCurrentEdition.ISBN;
       Editeur.Caption := FormatTitre(FCurrentEdition.Editeur.NomEditeur);
@@ -453,12 +453,12 @@ begin
     ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
 end;
 
-function TFrmConsultationAlbum.GetRefAlbum: Integer;
+function TFrmConsultationAlbum.GetID_Album: TGUID;
 begin
-  Result := FAlbum.RefAlbum;
+  Result := FAlbum.ID_Album;
 end;
 
-procedure TFrmConsultationAlbum.SetRefAlbum(const Value: Integer);
+procedure TFrmConsultationAlbum.SetID_Album(const Value: TGUID);
 var
   s, s2: string;
   i: Integer;
@@ -542,7 +542,7 @@ begin
       PAl := FAlbum.Serie.Albums[i];
       Data := PAl;
       Caption := PAl.ChaineAffichage;
-      if (PAl.Reference = RefAlbum) then
+      if IsEqualGUID(PAl.ID, ID_Album) then
         ImageIndex := 1
       else
         ImageIndex := -1;
@@ -561,7 +561,7 @@ end;
 procedure TFrmConsultationAlbum.TitreSerieDblClick(Sender: TObject);
 begin
   if IsDownKey(VK_CONTROL) then
-    Historique.AddWaiting(fcSerie, FAlbum.Serie.RefSerie);
+    Historique.AddWaiting(fcSerie, FAlbum.Serie.ID_Serie);
 end;
 
 procedure TFrmConsultationAlbum.TitreSerieClick(Sender: TObject);

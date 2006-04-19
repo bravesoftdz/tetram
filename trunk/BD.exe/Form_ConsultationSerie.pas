@@ -39,10 +39,11 @@ type
     procedure EditeurClick(Sender: TObject);
     procedure vtAlbumsDblClick(Sender: TObject);
     procedure vtParaBDDblClick(Sender: TObject);
+    procedure lvScenaristesDblClick(Sender: TObject);
   private
     FSerie: TSerieComplete;
-    function GetRefSerie: Integer;
-    procedure SetRefSerie(const Value: Integer);
+    function GetID_Serie: TGUID;
+    procedure SetID_Serie(const Value: TGUID);
     procedure ClearForm;
 
     procedure ImpressionExecute(Sender: TObject);
@@ -51,7 +52,7 @@ type
     function ApercuUpdate: Boolean;
   public
     property Serie: TSerieComplete read FSerie;
-    property RefSerie: Integer read GetRefSerie write SetRefSerie;
+    property ID_Serie: TGUID read GetID_Serie write SetID_Serie;
   end;
 
 implementation
@@ -62,12 +63,12 @@ uses Commun, Divers, TypeRec, ShellAPI, UHistorique, Impression;
 
 { TFrmConsultationSerie }
 
-function TFrmConsultationSerie.GetRefSerie: Integer;
+function TFrmConsultationSerie.GetID_Serie: TGUID;
 begin
-  Result := FSerie.RefSerie;
+  Result := FSerie.ID_Serie;
 end;
 
-procedure TFrmConsultationSerie.SetRefSerie(const Value: Integer);
+procedure TFrmConsultationSerie.SetID_Serie(const Value: TGUID);
 var
   s: string;
   i: Integer;
@@ -142,11 +143,11 @@ begin
   end;
   lvColoristes.Items.EndUpdate;
 
-  vtAlbums.Filtre := 'RefSerie = ' + IntToStr(RefSerie);
+  vtAlbums.Filtre := 'ID_Serie = ' + QuotedStr(GUIDToString(ID_Serie));
   vtAlbums.Mode := vmAlbumsSerie;
   vtAlbums.FullExpand;
 
-  vtParaBD.Filtre := 'RefSerie = ' + IntToStr(RefSerie);
+  vtParaBD.Filtre := 'ID_Serie = ' + QuotedStr(GUIDToString(ID_Serie));
   vtParaBD.Mode := vmParaBDSerie;
   vtParaBD.FullExpand;
 end;
@@ -205,7 +206,7 @@ end;
 
 procedure TFrmConsultationSerie.ApercuExecute(Sender: TObject);
 begin
-  ImpressionSerie(RefSerie, TComponent(Sender).Tag = 1);
+  ImpressionSerie(ID_Serie, TComponent(Sender).Tag = 1);
 end;
 
 function TFrmConsultationSerie.ApercuUpdate: Boolean;
@@ -215,12 +216,17 @@ end;
 
 procedure TFrmConsultationSerie.ImpressionExecute(Sender: TObject);
 begin
-  ImpressionSerie(RefSerie, TComponent(Sender).Tag = 1);
+  ImpressionSerie(ID_Serie, TComponent(Sender).Tag = 1);
 end;
 
 function TFrmConsultationSerie.ImpressionUpdate: Boolean;
 begin
   Result := True;
+end;
+
+procedure TFrmConsultationSerie.lvScenaristesDblClick(Sender: TObject);
+begin
+  if Assigned(TListView(Sender).Selected) then Historique.AddWaiting(fcAuteur, TAuteur(TListView(Sender).Selected.Data).Personne.ID, 0);
 end;
 
 end.

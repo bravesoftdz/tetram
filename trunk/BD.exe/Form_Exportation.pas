@@ -101,7 +101,7 @@ begin
   Result := vstExportation.GetFirst;
   while Assigned(Result) do begin
     NodeInfo := vstExportation.GetNodeData(Result);
-    if RInitialeInfo(NodeInfo.InitialeInfo^).iValue = InitialeInfo.iValue then Break;
+    if RInitialeInfo(NodeInfo.InitialeInfo^).sValue = InitialeInfo.sValue then Break;
     Result := vstExportation.GetNextSibling(Result);
   end;
 
@@ -136,7 +136,7 @@ begin
   Node := vstExportation.GetFirstChild(NodeSerie);
   while Assigned(Node) do begin
     NodeInfo := vstExportation.GetNodeData(Node);
-    if TAlbum(NodeInfo.Detail).Reference = PA.Reference then Exit;
+    if IsEqualGUID(TAlbum(NodeInfo.Detail).ID, PA.ID) then Exit;
     Node := vstExportation.GetNextSibling(Node);
   end;
 
@@ -241,7 +241,7 @@ begin
   if Sender.GetNodeLevel(Node) = 1 then begin
     FFichierExport := Data;
     NodeInfo := Sender.GetNodeData(Node);
-    with TAlbumComplet.Create(TAlbum(NodeInfo.Detail).Reference) do try
+    with TAlbumComplet.Create(TAlbum(NodeInfo.Detail).ID) do try
       WriteXMLToStream(FFichierExport);
     finally
       Free;

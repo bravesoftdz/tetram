@@ -67,25 +67,23 @@ type
     procedure btnOKClick(Sender: TObject);
     procedure VDTButton1Click(Sender: TObject);
     procedure ChoixImageClick(Sender: TObject);
-    procedure vtPersonnesChange(Sender: TBaseVirtualTree;
-      Node: PVirtualNode);
+    procedure vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure vtPersonnesDblClick(Sender: TObject);
     procedure btCreateurClick(Sender: TObject);
-    procedure lvAuteursKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure lvAuteursKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     FCreation: Boolean;
     FisAchat: Boolean;
-    FRefParaBD: Integer;
+    FID_ParaBD: TGUID;
     FOldImageStockee: Boolean;
     FOldFichierImage, FCurrentFichierImage: string;
-    procedure SetRefParaBD(const Value: Integer);
+    procedure SetID_ParaBD(const Value: TGUID);
     { Déclarations privées }
   public
     { Déclarations publiques }
     property isCreation: Boolean read FCreation;
     property isAchat: Boolean read FisAchat write FisAchat;
-    property RefParaBD: Integer read FRefParaBD write SetRefParaBD;
+    property ID_ParaBD: TGUID read FID_ParaBD write SetID_ParaBD;
   end;
 
   TFrmEditAchatParaBD = class(TFrmEditParaBD)
@@ -110,22 +108,22 @@ end;
 
 { TFrmEditParaBD }
 
-procedure TFrmEditParaBD.SetRefParaBD(const Value: Integer);
+procedure TFrmEditParaBD.SetID_ParaBD(const Value: TGUID);
 var
   q: TJvUIBQuery;
   Stream: TStream;
   jpg: TJPEGImage;
 begin
-  FRefParaBD := Value;
+  FID_ParaBD := Value;
 
   q := TJvUIBQuery.Create(nil);
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
 
-    SQL.Text := 'SELECT TITREPARABD, ANNEE, REFSERIE, STOCKAGEPARABD, ACHAT, DESCRIPTION, DEDICACE, NUMEROTE, ANNEECOTE, PRIXCOTE, GRATUIT, OFFERT,';
+    SQL.Text := 'SELECT TITREPARABD, ANNEE, ID_Serie, STOCKAGEPARABD, ACHAT, DESCRIPTION, DEDICACE, NUMEROTE, ANNEECOTE, PRIXCOTE, GRATUIT, OFFERT,';
     SQL.Add('DATEACHAT, PRIX, STOCK, CATEGORIEPARABD, FICHIERPARABD, CASE WHEN IMAGEPARABD IS NULL THEN 0 ELSE 1 END HASBLOBIMAGE');
-    SQL.Add('FROM PARABD WHERE RefParaBD = ?');
-    Params.AsInteger[0] := FRefParaBD;
+    SQL.Add('FROM PARABD WHERE ID_ParaBD = ?');
+    Params.AsString[0] := GUIDToString(FID_ParaBD);
     FetchBlobs := True;
     Open;
 
@@ -138,7 +136,7 @@ begin
       cbNumerote.Checked := Fields.ByNameAsBoolean['NUMEROTE'];
       description.Lines.Text := Fields.ByNameAsString['DESCRIPTION'];
 
-      vtSeries.CurrentValue := Fields.ByNameAsInteger['REFSERIE'];
+      vtSeries.CurrentValue := StringToGUID(Fields.ByNameAsString['ID_SERIE']);
 
       cbOffert.Checked := Fields.ByNameAsBoolean['OFFERT'];
       cbGratuit.Checked := Fields.ByNameAsBoolean['GRATUIT'];
@@ -168,7 +166,7 @@ begin
 
       lvAuteurs.Items.BeginUpdate;
       SQL.Text := 'SELECT * FROM PROC_AUTEURS(NULL, NULL, ?)';
-      Params.AsInteger[0] := FRefParaBD;
+      Params.AsString[0] := GUIDToString(FID_ParaBD);
       Open;
       while not Eof do begin
         with lvAuteurs.Items.Add do begin
@@ -178,7 +176,7 @@ begin
         Next;
       end;
 
-      Stream := GetCouvertureStream(True, FRefParaBD, imgVisu.Height, imgVisu.Width, Utilisateur.Options.AntiAliasing);
+      Stream := GetCouvertureStream(True, FID_ParaBD, imgVisu.Height, imgVisu.Width, Utilisateur.Options.AntiAliasing);
       if Assigned(Stream) then try
         jpg := TJPEGImage.Create;
         try
@@ -272,7 +270,8 @@ end;
 
 procedure TFrmEditParaBD.btnOKClick(Sender: TObject);
 var
-  i, FRefSerie, AnneeCote: Integer;
+  i, AnneeCote: Integer;
+  FID_Serie: TGUID;
   PrixCote: Currency;
   q: TJvUIBQuery;
   hg: IHourGlass;
@@ -291,7 +290,7 @@ begin
     ModalResult := mrNone;
     Exit;
   end;
-  if vtSeries.CurrentValue = -1 then begin
+  if IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then begin
     AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
     FrameRechercheRapideSerie.edSearch.SetFocus;
     ModalResult := mrNone;
@@ -313,26 +312,26 @@ begin
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
 
     if FCreation then begin
-      SQL.Text := 'INSERT INTO PARABD (REFPARABD, TITREPARABD, ANNEE, REFSERIE, CATEGORIEPARABD, DEDICACE, NUMEROTE, ANNEECOTE, PRIXCOTE, GRATUIT, OFFERT, DATEACHAT, PRIX, STOCK, TITREINITIALESPARABD, DESCRIPTION, UPPERDESCRIPTION, COMPLET)';
+      SQL.Text := 'INSERT INTO PARABD (ID_ParaBD, TITREPARABD, ANNEE, ID_Serie, CATEGORIEPARABD, DEDICACE, NUMEROTE, ANNEECOTE, PRIXCOTE, GRATUIT, OFFERT, DATEACHAT, PRIX, STOCK, TITREINITIALESPARABD, DESCRIPTION, UPPERDESCRIPTION, COMPLET)';
       SQL.Add('VALUES');
-      SQL.Add('(:REFPARABD, :TITREPARABD, :ANNEE, :REFSERIE, :CATEGORIEPARABD, :DEDICACE, :NUMEROTE, :ANNEECOTE, :PRIXCOTE, :GRATUIT, :OFFERT, :DATEACHAT, :PRIX, :STOCK, :TITREINITIALESPARABD, :DESCRIPTION, :UPPERDESCRIPTION, 1)');
+      SQL.Add('(:ID_ParaBD, :TITREPARABD, :ANNEE, :ID_Serie, :CATEGORIEPARABD, :DEDICACE, :NUMEROTE, :ANNEECOTE, :PRIXCOTE, :GRATUIT, :OFFERT, :DATEACHAT, :PRIX, :STOCK, :TITREINITIALESPARABD, :DESCRIPTION, :UPPERDESCRIPTION, 1)');
     end
     else begin
       if isAchat then begin
-        SQL.Text := 'UPDATE PARABD SET ACHAT = 0 WHERE REFALBUM = ?';
-        Params.AsInteger[0] := FRefParaBD;
+        SQL.Text := 'UPDATE PARABD SET ACHAT = 0 WHERE ID_Album = ?';
+        Params.AsString[0] := GUIDToString(FID_ParaBD);
         Execute;
       end;
 
       SQL.Text := 'UPDATE PARABD SET';
-      SQL.Add('TITREPARABD = :TITREPARABD, ANNEE = :ANNEE, REFSERIE = :REFSERIE, CATEGORIEPARABD = :CATEGORIEPARABD, DEDICACE = :DEDICACE, NUMEROTE = :NUMEROTE, ANNEECOTE = :ANNEECOTE,');
+      SQL.Add('TITREPARABD = :TITREPARABD, ANNEE = :ANNEE, ID_Serie = :ID_Serie, CATEGORIEPARABD = :CATEGORIEPARABD, DEDICACE = :DEDICACE, NUMEROTE = :NUMEROTE, ANNEECOTE = :ANNEECOTE,');
       SQL.Add('PRIXCOTE = :PRIXCOTE, GRATUIT = :GRATUIT, OFFERT = :OFFERT, DATEACHAT = :DATEACHAT, PRIX = :PRIX, STOCK = :STOCK, COMPLET = 1,');
       SQL.Add('DESCRIPTION = :DESCRIPTION, TITREINITIALESPARABD = :TITREINITIALESPARABD,');
       SQL.Add('UPPERDESCRIPTION = :UPPERDESCRIPTION');
-      SQL.Add('WHERE (REFPARABD = :REFPARABD)');
+      SQL.Add('WHERE (ID_ParaBD = :ID_ParaBD)');
     end;
 
-    Params.ByNameAsInteger['REFPARABD'] := FRefParaBD;
+    Params.ByNameAsString['ID_ParaBD'] := GUIDToString(FID_ParaBD);
     s := Trim(edTitre.Text);
     Params.ByNameAsString['TITREPARABD'] := s;
     Params.ByNameAsString['TITREINITIALESPARABD'] := MakeInitiales(UpperCase(SansAccents(s)));
@@ -340,8 +339,8 @@ begin
       Params.ByNameIsNull['ANNEE'] := True
     else
       Params.ByNameAsString['ANNEE'] := edAnneeEdition.Text;
-    FRefSerie := vtSeries.CurrentValue;
-    Params.ByNameAsInteger['REFSERIE'] := FRefSerie;
+    FID_Serie := vtSeries.CurrentValue;
+    Params.ByNameAsString['ID_SERIE'] := GUIDToString(FID_Serie);
     Params.ByNameAsInteger['CATEGORIEPARABD'] := cbxCategorie.Value;
     Params.ByNameAsBoolean['DEDICACE'] := cbDedicace.Checked;
     Params.ByNameAsBoolean['NUMEROTE'] := cbNumerote.Checked;
@@ -376,25 +375,25 @@ begin
     Params.ByNameAsBoolean['STOCK'] := cbStock.Checked;
     ExecSQL;
 
-    SupprimerToutDans('', 'AUTEURS_PARABD', 'REFPARABD', FRefParaBD);
+    SupprimerToutDans('', 'AUTEURS_PARABD', 'ID_ParaBD', FID_ParaBD);
     SQL.Clear;
-    SQL.Add('INSERT INTO AUTEURS_PARABD (REFPARABD, REFPERSONNE)');
-    SQL.Add('VALUES (:REFALBUM, :REFPERSONNE)');
+    SQL.Add('INSERT INTO AUTEURS_PARABD (ID_ParaBD, ID_Personne)');
+    SQL.Add('VALUES (:ID_Album, :ID_Personne)');
     for i := 0 to lvAuteurs.Items.Count - 1 do begin
-      Params.AsInteger[0] := FRefParaBD;
-      Params.AsInteger[1] := TAuteur(lvAuteurs.Items[i].Data).Personne.Reference;
+      Params.AsString[0] := GUIDToString(FID_ParaBD);
+      Params.AsString[1] := GUIDToString(TAuteur(lvAuteurs.Items[i].Data).Personne.ID);
       ExecSQL;
     end;
 
     if (FOldFichierImage <> FCurrentFichierImage) or (FOldImageStockee <> cbImageBDD.Checked) then begin
       if FCurrentFichierImage = '' then begin
-        SQL.Text := 'UPDATE PARABD SET IMAGEPARABD = NULL, STOCKAGEPARABD = 0, FICHIERPARABD = NULL WHERE RefParaBD = :RefParaBD';
-        Params.ByNameAsInteger['RefParaBD'] := FRefParaBD;
+        SQL.Text := 'UPDATE PARABD SET IMAGEPARABD = NULL, STOCKAGEPARABD = 0, FICHIERPARABD = NULL WHERE ID_ParaBD = :ID_ParaBD';
+        Params.ByNameAsString['ID_ParaBD'] := GUIDToString(FID_ParaBD);
         ExecSQL;
       end
       else begin
         if cbImageBDD.Checked then begin
-          SQL.Text := 'UPDATE PARABD SET IMAGEPARABD = :IMAGEPARABD, STOCKAGEPARABD = 1, FICHIERPARABD = :FICHIERPARABD WHERE RefParaBD = :RefParaBD';
+          SQL.Text := 'UPDATE PARABD SET IMAGEPARABD = :IMAGEPARABD, STOCKAGEPARABD = 1, FICHIERPARABD = :FICHIERPARABD WHERE ID_ParaBD = :ID_ParaBD';
           if ExtractFilePath(FCurrentFichierImage) = '' then FCurrentFichierImage := IncludeTrailingPathDelimiter(RepImages) + FCurrentFichierImage;
           Stream := GetCouvertureStream(FCurrentFichierImage, -1, -1, False);
           try
@@ -403,7 +402,7 @@ begin
             Stream.Free;
           end;
           Params.ByNameAsString['FICHIERPARABD'] := ExtractFileName(FCurrentFichierImage);
-          Params.ByNameAsInteger['RefParaBD'] := FRefParaBD;
+          Params.ByNameAsString['ID_ParaBD'] := GUIDToString(FID_ParaBD);
           ExecSQL;
         end
         else begin
@@ -420,9 +419,9 @@ begin
           end;
           Open;
 
-          SQL.Text := 'UPDATE PARABD SET IMAGEPARABD = NULL, STOCKAGEPARABD = 0, FICHIERPARABD = :FICHIERPARABD WHERE RefParaBD = :RefParaBD';
+          SQL.Text := 'UPDATE PARABD SET IMAGEPARABD = NULL, STOCKAGEPARABD = 0, FICHIERPARABD = :FICHIERPARABD WHERE ID_ParaBD = :ID_ParaBD';
           Params.ByNameAsString['FICHIERPARABD'] := FCurrentFichierImage;
-          Params.ByNameAsInteger['RefParaBD'] := FRefParaBD;
+          Params.ByNameAsString['ID_ParaBD'] := GUIDToString(FID_ParaBD);
           ExecSQL;
         end;
       end;
@@ -473,7 +472,7 @@ end;
 
 procedure TFrmEditParaBD.vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
-  IdPersonne: Integer;
+  IdPersonne: TGUID;
 
   function NotIn(LV: TListView): Boolean;
   var
@@ -482,19 +481,20 @@ var
     i := 0;
     Result := True;
     while Result and (i <= Pred(LV.Items.Count)) do begin
-      Result := TAuteur(LV.Items[i].Data).Personne.Reference <> IdPersonne;
+      Result := not IsEqualGUID(TAuteur(LV.Items[i].Data).Personne.ID, IdPersonne);
       Inc(i);
     end;
   end;
 
 begin
   IdPersonne := vtPersonnes.CurrentValue;
-  btCreateur.Enabled := (IdPersonne <> -1) and NotIn(lvAuteurs);
+  btCreateur.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(lvAuteurs);
 end;
 
 procedure TFrmEditParaBD.vtPersonnesDblClick(Sender: TObject);
 var
-  i, iCurrentAuteur: Integer;
+  i: Integer;
+  iCurrentAuteur: TGUID;
   Auteur: TAuteur;
   CurrentAuteur: TPersonnage;
 begin
@@ -503,7 +503,7 @@ begin
     CurrentAuteur := vtPersonnes.GetFocusedNodeData;
     for i := 0 to Pred(lvAuteurs.Items.Count) do begin
       Auteur := lvAuteurs.Items[i].Data;
-      if Auteur.Personne.Reference = iCurrentAuteur then begin
+      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
         Auteur.Personne.Assign(CurrentAuteur);
         lvAuteurs.Items[i].Caption := Auteur.ChaineAffichage;
       end;
@@ -516,9 +516,9 @@ procedure TFrmEditParaBD.btCreateurClick(Sender: TObject);
 var
   PA: TAuteur;
 begin
-  if vtPersonnes.CurrentValue = -1 then Exit;
+  if IsEqualGUID(vtPersonnes.CurrentValue, GUID_NULL) then Exit;
   PA := TAuteur.Create;
-  PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), RefParaBD, -1, 0);
+  PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), ID_ParaBD, GUID_NULL, 0);
   with lvAuteurs.Items.Add do begin
     Data := PA;
     Caption := PA.ChaineAffichage;

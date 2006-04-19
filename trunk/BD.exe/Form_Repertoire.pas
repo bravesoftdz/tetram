@@ -118,7 +118,7 @@ end;
 
 procedure TFrmRepertoire.ChangeAlbumMode(Mode: TVirtualMode);
 var
-  i: Integer;
+  i: TGUID;
 const
   FirstTime: Boolean = True;
 begin

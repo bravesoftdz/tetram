@@ -54,6 +54,7 @@ uses
   Form_ChoixDetail in 'Form_ChoixDetail.pas' {FrmChoixDetail},
   Form_Convertisseur in 'Form_Convertisseur.pas' {FrmConvers},
   Frame_Convertisseur in 'Frame_Convertisseur.pas' {Convertisseur: TFrame},
+  Frame_RechercheRapide in 'Frame_RechercheRapide.pas' {FrameRechercheRapide: TFrame},
   CommonList in 'CommonList.pas',
   MAJ in 'MAJ.pas',
   TypeRec in 'TypeRec.pas',
@@ -104,8 +105,8 @@ uses
   UMAJ1_0_0_2 in 'UMAJ1_0_0_2.pas',
   UMAJ1_0_0_3 in 'UMAJ1_0_0_3.pas',
   UMAJ1_1_0_0 in 'UMAJ1_1_0_0.pas',
-  Divers in '..\..\..\..\Common\Divers.pas',
-  Frame_RechercheRapide in 'Frame_RechercheRapide.pas' {FrameRechercheRapide: TFrame};
+  UMAJ1_2_0_0 in 'UMAJ1_2_0_0.pas',
+  Divers in '..\..\..\..\Common\Divers.pas';
 
 {$R *.RES}
 {$R curseurs.res}

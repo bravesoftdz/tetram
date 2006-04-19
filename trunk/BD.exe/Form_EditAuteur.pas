@@ -26,12 +26,12 @@ type
     procedure VDTButton13Click(Sender: TObject);
   private
     { Déclarations privées }
-    FRefAuteur: Integer;
+    FID_Auteur: TGUID;
     FCreation: Boolean;
-    procedure SetRefAuteur(const Value: Integer);
+    procedure SetID_Auteur(const Value: TGUID);
   public
     { Déclarations publiques }
-    property RefAuteur: Integer read FRefAuteur write SetRefAuteur;
+    property ID_Auteur: TGUID read FID_Auteur write SetID_Auteur;
   end;
 
 implementation
@@ -40,16 +40,16 @@ uses Commun, JvUIB, DM_Princ, LoadComplet, ShellAPI;
 
 {$R *.DFM}
 
-procedure TFrmEditAuteur.SetRefAuteur(const Value: Integer);
+procedure TFrmEditAuteur.SetID_Auteur(const Value: TGUID);
 var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  FRefAuteur := Value;
+  FID_Auteur := Value;
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT * FROM PERSONNES WHERE REFPERSONNE = ?';
-    Params.AsInteger[0] := FRefAuteur;
+    SQL.Text := 'SELECT * FROM PERSONNES WHERE ID_Personne = ?';
+    Params.AsString[0] := GUIDToString(FID_Auteur);
     FetchBlobs := True;
     Open;
     FCreation := Eof;
@@ -71,15 +71,15 @@ begin
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     if FCreation then
-      SQL.Text := 'INSERT INTO PERSONNES (REFPERSONNE, NOMPERSONNE, SITEWEB, BIOGRAPHIE) VALUES (:REFPERSONNE, :NOMPERSONNE, :SITEWEB, :BIOGRAPHIE)'
+      SQL.Text := 'INSERT INTO PERSONNES (ID_Personne, NOMPERSONNE, SITEWEB, BIOGRAPHIE) VALUES (:ID_Personne, :NOMPERSONNE, :SITEWEB, :BIOGRAPHIE)'
     else
-      SQL.Text := 'UPDATE PERSONNES SET NOMPERSONNE = :NOMPERSONNE, SITEWEB = :SITEWEB, BIOGRAPHIE = :BIOGRAPHIE WHERE REFPERSONNE = :REFPERSONNE';
+      SQL.Text := 'UPDATE PERSONNES SET NOMPERSONNE = :NOMPERSONNE, SITEWEB = :SITEWEB, BIOGRAPHIE = :BIOGRAPHIE WHERE ID_Personne = :ID_Personne';
     Params.ByNameAsString['NOMPERSONNE'] := Trim(edNom.Text);
     Params.ByNameAsString['SITEWEB'] := Trim(edSite.Text);
     s := edBiographie.Lines.Text;
     ParamsSetBlob('BIOGRAPHIE', s);
 
-    Params.ByNameAsInteger['REFPERSONNE'] := RefAuteur;
+    Params.ByNameAsString['ID_Personne'] := GUIDToString(ID_Auteur);
     ExecSQL;
     Transaction.Commit;
   finally
@@ -105,3 +105,4 @@ begin
 end;
 
 end.
+

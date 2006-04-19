@@ -22,12 +22,12 @@ type
     procedure btnAnnulerClick(Sender: TObject);
   private
     { Déclarations privées }
-    FRefEmprunteur: Integer;
+    FID_Emprunteur: TGUID;
     FCreation: Boolean;
-    procedure SetRefEmprunteur(const Value: Integer);
+    procedure SetID_Emprunteur(const Value: TGUID);
   public
     { Déclarations publiques }
-    property RefEmprunteur: Integer read FRefEmprunteur write SetRefEmprunteur;
+    property ID_Emprunteur: TGUID read FID_Emprunteur write SetID_Emprunteur;
   end;
 
 implementation
@@ -40,23 +40,23 @@ const
 
 {$R *.DFM}
 
-procedure TFrmEditEmprunteur.SetRefEmprunteur(const Value: Integer);
+procedure TFrmEditEmprunteur.SetID_Emprunteur(const Value: TGUID);
 var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  FRefEmprunteur := Value;
+  FID_Emprunteur := Value;
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT * FROM EMPRUNTEURS WHERE REFEMPRUNTEUR = ?';
-    Params.AsInteger[0] := FRefEmprunteur;
+    SQL.Text := 'SELECT * FROM EMPRUNTEURS WHERE ID_Emprunteur = ?';
+    Params.AsString[0] := GUIDToString(FID_Emprunteur);
     FetchBlobs := True;
     Open;
     FCreation := Eof;
     if not FCreation then begin
       edNom.Text := Fields.ByNameAsString['NOMEMPRUNTEUR'];
       Coord.Lines.Text := Fields.ByNameAsString['ADRESSEEMPRUNTEUR'];
-      with TEmpruntsComplet.Create(FRefEmprunteur, seEmprunteur, ssPret) do try
+      with TEmpruntsComplet.Create(FID_Emprunteur, seEmprunteur, ssPret) do try
         Self.emprunts.Caption := IntToStr(NBEmprunts);
       finally
         Free;
@@ -75,14 +75,14 @@ begin
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     if FCreation then
-      SQL.Text := 'INSERT INTO EMPRUNTEURS (REFEMPRUNTEUR, NOMEMPRUNTEUR, ADRESSEEMPRUNTEUR) VALUES (:REFEMPRUNTEUR, :NOMEMPRUNTEUR, :ADRESSEEMPRUNTEUR)'
+      SQL.Text := 'INSERT INTO EMPRUNTEURS (ID_Emprunteur, NOMEMPRUNTEUR, ADRESSEEMPRUNTEUR) VALUES (:ID_Emprunteur, :NOMEMPRUNTEUR, :ADRESSEEMPRUNTEUR)'
     else
-      SQL.Text := 'UPDATE EMPRUNTEURS SET NOMEMPRUNTEUR = :NOMEMPRUNTEUR, ADRESSEEMPRUNTEUR = :ADRESSEEMPRUNTEUR WHERE REFEMPRUNTEUR = :REFEMPRUNTEUR';
+      SQL.Text := 'UPDATE EMPRUNTEURS SET NOMEMPRUNTEUR = :NOMEMPRUNTEUR, ADRESSEEMPRUNTEUR = :ADRESSEEMPRUNTEUR WHERE ID_Emprunteur = :ID_Emprunteur';
     Params.ByNameAsString['NOMEMPRUNTEUR'] := Trim(edNom.Text);
     s := Coord.Lines.Text;
     ParamsSetBlob('ADRESSEEMPRUNTEUR', s);
 
-    Params.ByNameAsInteger['RefEmprunteur'] := RefEmprunteur;
+    Params.ByNameAsString['ID_Emprunteur'] := GUIDToString(ID_Emprunteur);
     ExecSQL;
     Transaction.Commit;
   finally

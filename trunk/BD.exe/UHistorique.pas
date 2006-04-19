@@ -3,7 +3,7 @@ unit UHistorique;
 interface
 
 uses
-  SysUtils, Windows, Classes, Contnrs;
+  SysUtils, Windows, Classes, Contnrs, Commun;
 
 type
   TActionConsultation = (
@@ -34,6 +34,7 @@ const
 type
   RConsult = record
     Action: TActionConsultation;
+    ReferenceGUID, ReferenceGUID2: TGUID;
     Reference, Reference2: Integer;
     Description: string;
   end;
@@ -57,13 +58,18 @@ type
     procedure Unlock;
     function GetWaiting: Boolean;
     procedure Delete(Index: Integer);
+    procedure AddConsultation(Consult: RConsult); overload;
+    procedure EditConsultation(Consult: RConsult); overload;
   published
     constructor Create;
     destructor Destroy; override;
   public
-    procedure AddConsultation(Consultation: TActionConsultation; Ref: Integer = -1; Ref2: Integer = -1);
-    procedure EditConsultation(Ref: Integer = -1; Ref2: Integer = -1);
-    procedure AddWaiting(Consultation: TActionConsultation; Ref: Integer = -1; Ref2: Integer = -1);
+    procedure AddConsultation(Consultation: TActionConsultation); overload;
+    procedure EditConsultation(Ref: TGUID; Ref2: Integer); overload;
+    procedure AddWaiting(Consultation: TActionConsultation; Ref: Integer = -1; Ref2: Integer = -1); overload;
+    procedure AddWaiting(Consultation: TActionConsultation; Ref: TGUID; Ref2: Integer = -1); overload;
+    procedure AddWaiting(Consultation: TActionConsultation; Ref, Ref2: TGUID); overload;
+
     procedure Refresh;
     procedure Back;
     procedure BackWaiting;
@@ -89,11 +95,11 @@ implementation
 uses
   MAJ, Main, Forms;
 
-procedure THistory.AddConsultation(Consultation: TActionConsultation; Ref, Ref2: Integer);
+procedure THistory.AddConsultation(Consult: RConsult);
 
   procedure Modifie;
   begin
-    EditConsultation(Ref, Ref2);
+    EditConsultation(Consult);
   end;
 
   procedure Ajoute;
@@ -101,24 +107,53 @@ procedure THistory.AddConsultation(Consultation: TActionConsultation; Ref, Ref2:
     Inc(FCurrentConsultation);
     SetLength(FListConsultation, FCurrentConsultation + 1);
     with FListConsultation[FCurrentConsultation] do begin
-      Action := Consultation;
-      Reference := Ref;
-      Reference2 := Ref2;
+      Action := Consult.Action;
+      Reference := Consult.Reference;
+      ReferenceGUID := Consult.ReferenceGUID;
+      Reference2 := Consult.Reference2;
+      ReferenceGUID2 := Consult.ReferenceGUID2;
     end;
   end;
 
 begin
   with FListConsultation[FCurrentConsultation] do
     if not Bool(FLockCount) then begin
-      if (FCurrentConsultation > -1) and (Consultation = Action) then begin
-        if Consultation in MustRefresh then
+      if (FCurrentConsultation > -1) and (Consult.Action = Action) then begin
+        if Consult.Action in MustRefresh then
           Modifie
-        else if not (Consultation in CanRefresh) or (Reference <> Ref) or (Reference2 <> Ref2) then
+        else if not (Consult.Action in CanRefresh) or (Reference <> Consult.Reference) or (not IsEqualGUID(ReferenceGUID, Consult.ReferenceGUID)) or (Reference2 <> Consult.Reference2) or (not IsEqualGUID(ReferenceGUID2, Consult.ReferenceGUID2)) then
           Ajoute;
       end
       else
         Ajoute;
     end;
+end;
+
+procedure THistory.AddConsultation(Consultation: TActionConsultation);
+var
+  Consult: RConsult;
+begin
+  Consult.Action := Consultation;
+  Consult.Reference := -1;
+  Consult.ReferenceGUID := GUID_NULL;
+  Consult.Reference2 := -1;
+  Consult.ReferenceGUID2 := GUID_NULL;
+
+  AddConsultation(Consult);
+end;
+
+procedure THistory.AddWaiting(Consultation: TActionConsultation; Ref, Ref2: TGUID);
+var
+  p: ^RConsult;
+begin
+  New(p);
+  with RConsult(FListWaiting.Push(p)^) do begin
+    Action := Consultation;
+    Reference := -1;
+    ReferenceGUID := Ref;
+    Reference2 := -1;
+    ReferenceGUID2 := Ref2;
+  end;
 end;
 
 procedure THistory.AddWaiting(Consultation: TActionConsultation; Ref, Ref2: Integer);
@@ -129,7 +164,23 @@ begin
   with RConsult(FListWaiting.Push(p)^) do begin
     Action := Consultation;
     Reference := Ref;
+    ReferenceGUID := GUID_NULL;
     Reference2 := Ref2;
+    ReferenceGUID2 := GUID_NULL;
+  end;
+end;
+
+procedure THistory.AddWaiting(Consultation: TActionConsultation; Ref: TGUID; Ref2: Integer);
+var
+  p: ^RConsult;
+begin
+  New(p);
+  with RConsult(FListWaiting.Push(p)^) do begin
+    Action := Consultation;
+    Reference := -1;
+    ReferenceGUID := Ref;
+    Reference2 := Ref2;
+    ReferenceGUID2 := GUID_NULL;
   end;
 end;
 
@@ -178,12 +229,26 @@ begin
   inherited;
 end;
 
-procedure THistory.EditConsultation(Ref, Ref2: Integer);
+procedure THistory.EditConsultation(Consult: RConsult);
 begin
   with FListConsultation[FCurrentConsultation] do begin
-    Reference := Ref;
-    Reference2 := Ref2;
+    Reference := Consult.Reference;
+    ReferenceGUID := Consult.ReferenceGUID;
+    Reference2 := Consult.Reference2;
+    ReferenceGUID2 := Consult.ReferenceGUID2;
   end;
+end;
+
+procedure THistory.EditConsultation(Ref: TGUID; Ref2: Integer);
+var
+  Consult: RConsult;
+begin
+  Consult.Reference := -1;
+  Consult.ReferenceGUID := Ref;
+  Consult.Reference2 := Ref2;
+  Consult.ReferenceGUID2 := GUID_NULL;
+
+  EditConsultation(Consult);
 end;
 
 procedure THistory.First;
@@ -249,17 +314,17 @@ begin
   if WithLock then Lock;
   try
     if not (Consult.Action in NoSaveHistorique) then
-      AddConsultation(Consult.Action, Consult.Reference, Consult.Reference2);
+      AddConsultation(Consult);
     case Consult.Action of
       fcActionBack: Back;
       fcActionRefresh: Result := Open(FListConsultation[FCurrentConsultation], True);
-      fcAlbum: Result := MAJConsultationAlbum(Consult.Reference);
-      fcEmprunteur: Result := MAJConsultationEmprunteur(Consult.Reference);
-      fcSerie: Result := MAJConsultationSerie(Consult.Reference);
-      fcAuteur: Result := MAJConsultationAuteur(Consult.Reference);
-      fcParaBD: Result := MAJConsultationParaBD(Consult.Reference);
-      fcCouverture, fcImageParaBD: Result := ZoomCouverture(Consult.Action = fcImageParaBD, Consult.Reference, Consult.Reference2);
-      fcRecherche: MAJRecherche(Consult.Reference, Consult.Reference2);
+      fcAlbum: Result := MAJConsultationAlbum(Consult.ReferenceGUID);
+      fcEmprunteur: Result := MAJConsultationEmprunteur(Consult.ReferenceGUID);
+      fcSerie: Result := MAJConsultationSerie(Consult.ReferenceGUID);
+      fcAuteur: Result := MAJConsultationAuteur(Consult.ReferenceGUID);
+      fcParaBD: Result := MAJConsultationParaBD(Consult.ReferenceGUID);
+      fcCouverture, fcImageParaBD: Result := ZoomCouverture(Consult.Action = fcImageParaBD, Consult.ReferenceGUID, Consult.ReferenceGUID2);
+      fcRecherche: MAJRecherche(Consult.ReferenceGUID, Consult.Reference2);
       fcStock: MAJStock;
       fcPreview: Fond.SetModalChildForm(TForm(Consult.Reference));
       fcSeriesIncompletes: MAJSeriesIncompletes;

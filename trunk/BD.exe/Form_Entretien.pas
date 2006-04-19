@@ -227,12 +227,12 @@ begin
   with TJvUIBQuery.Create(Self) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     UpdateQuery.Transaction := Transaction;
-    SQL.Text := 'SELECT Count(RefCouverture) FROM Couvertures WHERE STOCKAGECOUVERTURE = 0';
+    SQL.Text := 'SELECT Count(ID_Couverture) FROM Couvertures WHERE STOCKAGECOUVERTURE = 0';
     Open;
     nbAConvertir := Fields.AsInteger[0];
     fWaiting.ShowProgression(rsOperationEnCours, 0, nbAConvertir);
-    SQL.Text := 'SELECT RefCouverture, FichierCouverture FROM Couvertures WHERE STOCKAGECOUVERTURE = 0';
-    UpdateQuery.SQL.Text := 'UPDATE CouvertureS SET FichierCouverture = :FichierCouverture, STOCKAGECOUVERTURE = 1, IMAGECOUVERTURE = :IMAGECOUVERTURE WHERE RefCouverture = :RefCouverture';
+    SQL.Text := 'SELECT ID_Couverture, FichierCouverture FROM Couvertures WHERE STOCKAGECOUVERTURE = 0';
+    UpdateQuery.SQL.Text := 'UPDATE CouvertureS SET FichierCouverture = :FichierCouverture, STOCKAGECOUVERTURE = 1, IMAGECOUVERTURE = :IMAGECOUVERTURE WHERE ID_Couverture = :ID_Couverture';
     nbConverti := 0;
     Open;
     while not Eof do begin
@@ -243,7 +243,7 @@ begin
         FichiersImages.Add(RepImages + Fichier)
       else
         FichiersImages.Add(Fichier);
-      Stream := GetCouvertureStream(False, Fields.AsInteger[0], -1, -1, False);
+      Stream := GetCouvertureStream(False, StringToGUID(Fields.AsString[0]), -1, -1, False);
       try
         UpdateQuery.ParamsSetBlob(1, Stream);
       finally
@@ -294,12 +294,12 @@ begin
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     UpdateQuery.Transaction := Transaction;
     ExtractQuery.Transaction := Transaction;
-    SQL.Text := 'SELECT Count(RefCouverture) FROM Couvertures WHERE STOCKAGECOUVERTURE = 1';
+    SQL.Text := 'SELECT Count(ID_Couverture) FROM Couvertures WHERE STOCKAGECOUVERTURE = 1';
     Open;
     nbAExtraire := Fields.AsInteger[0];
     fWaiting.ShowProgression(rsOperationEnCours, 0, nbAExtraire);
-    SQL.Text := 'SELECT RefCouverture, FichierCouverture FROM Couvertures WHERE STOCKAGECOUVERTURE = 1';
-    UpdateQuery.SQL.Text := 'UPDATE CouvertureS SET FichierCouverture = :FichierCouverture, STOCKAGECOUVERTURE = 0, IMAGECOUVERTURE = Null WHERE RefCouverture = :RefCouverture';
+    SQL.Text := 'SELECT ID_Couverture, FichierCouverture FROM Couvertures WHERE STOCKAGECOUVERTURE = 1';
+    UpdateQuery.SQL.Text := 'UPDATE CouvertureS SET FichierCouverture = :FichierCouverture, STOCKAGECOUVERTURE = 0, IMAGECOUVERTURE = Null WHERE ID_Couverture = :ID_Couverture';
     ExtractQuery.SQL.Text := 'SELECT Result FROM SAVEBLOBTOFILE(:Chemin, :Fichier, :BlobContent)';
     nbExtrais := 0;
     Open;
@@ -307,7 +307,7 @@ begin
       Fichier := SearchNewFileName(RepImages, Fields.AsString[1] + '.jpg', True);
       ExtractQuery.Params.AsString[0] := RepImages;
       ExtractQuery.Params.AsString[1] := Fichier;
-      Stream := GetCouvertureStream(False, Fields.AsInteger[0], -1, -1, False);
+      Stream := GetCouvertureStream(False, StringToGUID(Fields.AsString[0]), -1, -1, False);
       try
         ExtractQuery.ParamsSetBlob(2, Stream);
       finally
@@ -346,16 +346,16 @@ begin
   with TJvUIBQuery.Create(Self) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     UpdateQuery.Transaction := Transaction;
-    SQL.Text := 'SELECT Count(RefCouverture) FROM Couvertures WHERE STOCKAGECOUVERTURE = 0';
+    SQL.Text := 'SELECT Count(ID_Couverture) FROM Couvertures WHERE STOCKAGECOUVERTURE = 0';
     Open;
     nbASupprimer := Fields.AsInteger[0];
     fWaiting.ShowProgression(rsOperationEnCours, 0, nbASupprimer);
-    SQL.Text := 'SELECT RefCouverture, FichierCouverture FROM Couvertures WHERE STOCKAGECOUVERTURE = 0';
-    UpdateQuery.SQL.Text := 'DELETE FROM CouvertureS WHERE RefCouverture = :RefCouverture';
+    SQL.Text := 'SELECT ID_Couverture, FichierCouverture FROM Couvertures WHERE STOCKAGECOUVERTURE = 0';
+    UpdateQuery.SQL.Text := 'DELETE FROM CouvertureS WHERE ID_Couverture = :ID_Couverture';
     nbSupprime := 0;
     Open;
     while not Eof do begin
-      Stream := GetCouvertureStream(False, Fields.AsInteger[0], -1, -1, False);
+      Stream := GetCouvertureStream(False, StringToGUID(Fields.AsString[0]), -1, -1, False);
       try
         if not Assigned(Stream) then begin
           UpdateQuery.Params.AsInteger[0] := Fields.AsInteger[0];

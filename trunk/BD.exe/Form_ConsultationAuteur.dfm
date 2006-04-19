@@ -129,7 +129,7 @@ object FrmConsultationAuteur: TFrmConsultationAuteur
       Left = 59
       Top = 291
       Width = 457
-      Height = 182
+      Height = 294
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
       BevelOuter = bvNone

@@ -7,7 +7,7 @@ object DataCommun: TDataCommun
   Width = 589
   object TblGenres: TJvUIBQuery
     SQL.Strings = (
-      'SELECT REFGENRE, GENRE FROM GENRES ORDER BY UPPERGENRE')
+      'SELECT ID_GENRE, GENRE FROM GENRES ORDER BY UPPERGENRE')
     Left = 16
     Top = 8
   end
@@ -19,7 +19,7 @@ object DataCommun: TDataCommun
   end
   object TGenre: TJvUIBQuery
     SQL.Strings = (
-      'SELECT REFGENRE, GENRE FROM GENRES'
+      'SELECT ID_GENRE, GENRE FROM GENRES'
       'ORDER BY GENRE')
     Left = 96
     Top = 8

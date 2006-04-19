@@ -47,13 +47,13 @@ type
     procedure ApercuExecute(Sender: TObject);
     function ImpressionUpdate: Boolean;
     function ApercuUpdate: Boolean;
-    function GetRefAuteur: Integer;
-    procedure SetRefAuteur(const Value: Integer);
+    function GetID_Auteur: TGUID;
+    procedure SetID_Auteur(const Value: TGUID);
     procedure ClearForm;
   public
     { Déclarations publiques }
-    property Auteur: TAuteurComplet read FAuteur; 
-    property RefAuteur: Integer read GetRefAuteur write SetRefAuteur;
+    property Auteur: TAuteurComplet read FAuteur;
+    property ID_Auteur: TGUID read GetID_Auteur write SetID_Auteur;
   end;
 
 implementation
@@ -68,11 +68,12 @@ type
   RNodeInfo = record
     Serie: TSerieComplete;
     Album: TAlbum;
+    ParaBD: TParaBD;
   end;
 
 procedure TFrmConsultationAuteur.lvScenaristesDblClick(Sender: TObject);
 begin
-  if Assigned(TListView(Sender).Selected) then Historique.AddWaiting(fcRecherche, TAuteur(TListView(Sender).Selected.Data).Personne.Reference, 0);
+  if Assigned(TListView(Sender).Selected) then Historique.AddWaiting(fcRecherche, TAuteur(TListView(Sender).Selected.Data).Personne.ID, 0);
 end;
 
 procedure TFrmConsultationAuteur.FormCreate(Sender: TObject);
@@ -95,7 +96,7 @@ end;
 
 procedure TFrmConsultationAuteur.Imprimer1Click(Sender: TObject);
 begin
-  ImpressionEmpruntsAlbum(RefAuteur, TComponent(Sender).Tag = 1);
+  ImpressionEmpruntsAlbum(ID_Auteur, TComponent(Sender).Tag = 1);
 end;
 
 procedure TFrmConsultationAuteur.vstSeriesDblClick(Sender: TObject);
@@ -103,8 +104,10 @@ var
   NodeInfo: PNodeInfo;
 begin
   NodeInfo := vstSeries.GetNodeData(vstSeries.GetFirstSelected);
-  if Assigned(NodeInfo) and Assigned(NodeInfo.Album) then
-    Historique.AddWaiting(fcAlbum, NodeInfo.Album.Reference);
+  if Assigned(NodeInfo) then begin
+    if Assigned(NodeInfo.Album) then Historique.AddWaiting(fcAlbum, NodeInfo.Album.ID);
+    if Assigned(NodeInfo.ParaBD) then Historique.AddWaiting(fcParaBD, NodeInfo.ParaBD.ID);
+  end;
 end;
 
 procedure TFrmConsultationAuteur.FormShow(Sender: TObject);
@@ -141,12 +144,12 @@ begin
     ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
 end;
 
-function TFrmConsultationAuteur.GetRefAuteur: Integer;
+function TFrmConsultationAuteur.GetID_Auteur: TGUID;
 begin
-  Result := FAuteur.RefAuteur;
+  Result := FAuteur.ID_Auteur;
 end;
 
-procedure TFrmConsultationAuteur.SetRefAuteur(const Value: Integer);
+procedure TFrmConsultationAuteur.SetID_Auteur(const Value: TGUID);
 begin
   ClearForm;
   FAuteur.Fill(Value);
@@ -170,20 +173,29 @@ end;
 
 procedure TFrmConsultationAuteur.vstSeriesInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 var
-  NodeInfo: PNodeInfo;
+  NodeInfo, ParentNodeInfo: PNodeInfo;
 begin
   NodeInfo := Sender.GetNodeData(Node);
   if Sender.GetNodeLevel(Node) = 0 then begin
     NodeInfo.Serie := TSerieComplete(FAuteur.Series[Node.Index]);
     NodeInfo.Album := nil;
-    if NodeInfo.Serie.Albums.Count > 0 then
+    NodeInfo.ParaBD := nil;
+    if (NodeInfo.Serie.Albums.Count + NodeInfo.Serie.ParaBD.Count) > 0 then
       Include(InitialStates, ivsHasChildren)
     else
       Exclude(InitialStates, ivsHasChildren);
   end
   else begin
+    ParentNodeInfo := Sender.GetNodeData(ParentNode);
+
     NodeInfo.Serie := nil;
-    NodeInfo.Album := TAlbum(PNodeInfo(Sender.GetNodeData(ParentNode)).Serie.Albums[Node.Index]);
+    NodeInfo.Album := nil;
+    NodeInfo.ParaBD := nil;
+
+    if Node.Index < ParentNodeInfo.Serie.Albums.Count then
+      NodeInfo.Album := TAlbum(ParentNodeInfo.Serie.Albums[Node.Index])
+    else
+      NodeInfo.ParaBD := TParaBD(ParentNodeInfo.Serie.ParaBD[Node.Index - ParentNodeInfo.Serie.Albums.Count]);
   end;
 end;
 
@@ -193,7 +205,7 @@ var
 begin
   NodeInfo := Sender.GetNodeData(Node);
   if Sender.GetNodeLevel(Node) = 0 then begin
-    ChildCount := NodeInfo.Serie.Albums.Count;
+    ChildCount := NodeInfo.Serie.Albums.Count + NodeInfo.Serie.ParaBD.Count;
   end;
 end;
 
@@ -207,8 +219,10 @@ begin
     if Assigned(NodeInfo.Serie) then begin
       CellText := FormatTitre(NodeInfo.Serie.Titre);
     end
-    else
-      CellText := NodeInfo.Album.ChaineAffichage;
+    else begin
+      if Assigned(NodeInfo.Album) then CellText := NodeInfo.Album.ChaineAffichage;
+      if Assigned(NodeInfo.ParaBD) then CellText := NodeInfo.ParaBD.ChaineAffichage;
+    end;
   end;
 end;
 
@@ -222,7 +236,8 @@ end;
 
 procedure TFrmConsultationAuteur.FicheApercuExecute(Sender: TObject);
 begin
-  ImpressionFicheAuteur(RefAuteur, TComponent(Sender).Tag = 1);
+  ImpressionFicheAuteur(ID_Auteur, TComponent(Sender).Tag = 1);
 end;
 
 end.
+

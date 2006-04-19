@@ -30,7 +30,7 @@ type
   private
     { Déclarations privées }
     FisParaBD: Boolean;
-    FRefItem, FRefCouverture: Integer;
+    FID_Item, FID_Couverture: TGUID;
     PosClick: TPoint;
     Moving: Boolean;
     function PHeight: Integer;
@@ -41,7 +41,7 @@ type
     function ApercuUpdate: Boolean;
   public
     { Déclarations publiques }
-    function LoadCouverture(isParaBD: Boolean; RefItem, RefCouverture: Integer): Boolean;
+    function LoadCouverture(isParaBD: Boolean; ID_Item, ID_Couverture: TGUID): Boolean;
   end;
 
 implementation
@@ -50,15 +50,15 @@ uses CommonConst, Impression, UHistorique, jpeg, Math;
 
 {$R *.DFM}
 
-function TFrmZoomCouverture.LoadCouverture(isParaBD: Boolean; RefItem, RefCouverture: Integer): Boolean;
+function TFrmZoomCouverture.LoadCouverture(isParaBD: Boolean; ID_Item, ID_Couverture: TGUID): Boolean;
 var
   ms: TStream;
   jpg: TJPEGImage;
 begin
   FisParaBD := isParaBD;
-  FRefItem := RefItem;
-  FRefCouverture := RefCouverture;
-  ms := GetCouvertureStream(isParaBD, RefCouverture, -1, -1, False);
+  FID_Item := ID_Item;
+  FID_Couverture := ID_Couverture;
+  ms := GetCouvertureStream(isParaBD, ID_Couverture, -1, -1, False);
   if Assigned(ms) then begin
     jpg := TJPEGImage.Create;
     try
@@ -116,7 +116,7 @@ begin
   Panel1.Top := ScrollBarH.Top;
   Panel1.Left := ScrollBarV.Left;
 
-  LoadCouverture(FisParaBD, FRefItem, FRefCouverture);
+  LoadCouverture(FisParaBD, FID_Item, FID_Couverture);
 end;
 
 function TFrmZoomCouverture.PWidth: Integer;
@@ -134,7 +134,7 @@ end;
 procedure TFrmZoomCouverture.ImageApercuExecute(Sender: TObject);
 begin
   if FisParaBD then
-    ImpressionCouvertureAlbum(FRefItem, FRefCouverture, TComponent(Sender).Tag = 1);
+    ImpressionCouvertureAlbum(FID_Item, FID_Couverture, TComponent(Sender).Tag = 1);
 end;
 
 procedure TFrmZoomCouverture.ImageMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);

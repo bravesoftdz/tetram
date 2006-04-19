@@ -63,7 +63,7 @@ end;
 
 procedure TfrmPrevisionsAchats.ChangeAlbumMode(Mode: TVirtualMode);
 var
-  i: Integer;
+  i: TGUID;
 const
   FirstTime: Boolean = True;
 begin

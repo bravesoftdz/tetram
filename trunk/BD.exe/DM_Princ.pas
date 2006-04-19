@@ -376,7 +376,7 @@ begin
 
     if AnsiSameText(Copy(LocalDoc, 1, Length(WebServerPath)), WebServerPath) then begin // File down in dir structure
       if AnsiSameText(Copy(LocalDoc, 1, Length(WebServerPath + 'Couverture')), WebServerPath + 'Couverture') then
-        ResultFile := GetCouvertureStream(False, StrToIntDef(ARequestInfo.Params.Values['RefCouverture'], -1),
+        ResultFile := GetCouvertureStream(False, StringToGUID(ARequestInfo.Params.Values['RefCouverture']),
           StrToIntDef(ARequestInfo.Params.Values['Height'], -1),
           StrToIntDef(ARequestInfo.Params.Values['Width'], -1),
           Utilisateur.Options.WebServerAntiAliasing);
@@ -411,9 +411,8 @@ begin
             AResponseInfo.ContentType := '';
             ByteSent := HTTPServer.ServeFile(AThread, AResponseInfo, LocalDoc);
           end;
-          DisplayMessage(Format('Serving file %s (%d bytes / %d bytes sent) to %s:%d', [LocalDoc,
+          DisplayMessage(Format('Serving file %s (%d bytes) to %s:%d', [LocalDoc,
             ByteSent,
-              ResultFile.Size,
               AThread.Connection.Socket.Binding.PeerIP,
               AThread.Connection.Socket.Binding.PeerPort]));
         end;

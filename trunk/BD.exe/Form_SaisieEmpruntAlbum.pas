@@ -29,18 +29,19 @@ type
     procedure FormDestroy(Sender: TObject);
   private
     { Déclarations privées }
-    FRefAlbum: Integer;
+    FID_Album: TGUID;
     FEdition: TEditionComplete;
-    procedure SetRefAlbum(Value: Integer);
-    procedure SetRefEmprunteur(Value: Integer);
-    function GetRefEmprunteur: Integer;
-    procedure SetRefEdition(const Value: Integer);
-    function GetRefEdition: Integer;
+    FEditions: TEditionsComplet;
+    procedure SetID_Album(Value: TGUID);
+    procedure SetID_Emprunteur(Value: TGUID);
+    function GetID_Emprunteur: TGUID;
+    procedure SetID_Edition(const Value: TGUID);
+    function GetID_Edition: TGUID;
   public
     { Déclarations publiques }
-    property RefAlbum: Integer read FRefAlbum write SetRefAlbum;
-    property RefEdition: Integer read GetRefEdition write SetRefEdition;
-    property RefEmprunteur: Integer read GetRefEmprunteur write SetRefEmprunteur;
+    property ID_Album: TGUID read FID_Album write SetID_Album;
+    property ID_Edition: TGUID read GetID_Edition write SetID_Edition;
+    property ID_Emprunteur: TGUID read GetID_Emprunteur write SetID_Emprunteur;
   end;
 
 var
@@ -58,49 +59,44 @@ const
   NoEmprunts = 'Pas d''emprunts.';
   NotThisEntryHere = 'Impossible d''ajouter ce mouvement dans cette fenêtre';
 
-procedure TFrmSaisie_EmpruntAlbum.SetRefAlbum(Value: Integer);
+procedure TFrmSaisie_EmpruntAlbum.SetID_Album(Value: TGUID);
 var
   i: Integer;
-  Editions: TEditionsComplet;
   PEd: TEdition;
   PA: TAlbum;
   PS: TSerie;
 begin
-  if Value = FRefAlbum then Exit;
-  FRefAlbum := Value;
+  if IsEqualGUID(Value, FID_Album) then Exit;
+  FID_Album := Value;
   PA := TAlbum.Create;
   PS := TSerie.Create;
   try
-    PA.Fill(FRefAlbum);
+    PA.Fill(FID_Album);
     Label2.Caption := PA.ChaineAffichage;
-    PS.Fill(PA.RefSerie);
+    PS.Fill(PA.ID_Serie);
     Label5.Caption := PS.ChaineAffichage;
   finally
     PA.Free;
     PS.Free;
   end;
   lccEditions.Items.Clear;
-  Editions := TEditionsComplet.Create(FRefAlbum);
-  try
-    for i := 0 to Pred(Editions.Editions.Count) do begin
-      PEd := Editions.Editions[i];
-      with lccEditions.Items.Add do begin
-        Caption := PEd.ChaineAffichage;
-        Valeur := PEd.Reference;
-      end;
-      if i = 0 then lccEditions.DefaultValueChecked := PEd.Reference;
+  FEditions.Fill(FID_Album);
+  for i := 0 to Pred(FEditions.Editions.Count) do begin
+    PEd := FEditions.Editions[i];
+    with lccEditions.Items.Add do begin
+      Caption := PEd.ChaineAffichage;
+      Valeur := i;
     end;
-  finally
-    Editions.Free;
   end;
+  lccEditions.DefaultValueChecked := 0;
 end;
 
-procedure TFrmSaisie_EmpruntAlbum.SetRefEmprunteur(Value: Integer);
+procedure TFrmSaisie_EmpruntAlbum.SetID_Emprunteur(Value: TGUID);
 begin
   VTreeEmprunteur.CurrentValue := Value;
 end;
 
-function TFrmSaisie_EmpruntAlbum.GetRefEmprunteur: Integer;
+function TFrmSaisie_EmpruntAlbum.GetID_Emprunteur: TGUID;
 begin
   Result := VTreeEmprunteur.CurrentValue;
 end;
@@ -112,13 +108,14 @@ begin
   FrameRechercheRapide1.ShowNewButton := False;
   FEdition := TEditionComplete.Create;
   VTreeEmprunteur.Mode := vmEmprunteurs;
+  FEditions := TEditionsComplet.Create;
   date_pret.Date := Date;
   ChargeImage(VTreeEmprunteur.Background, 'FONDVT');
 end;
 
 procedure TFrmSaisie_EmpruntAlbum.okClick(Sender: TObject);
 begin
-  if RefEmprunteur = -1 then begin
+  if IsEqualGUID(ID_Emprunteur, GUID_NULL) then begin
     ModalResult := mrNone;
     Exit;
   end;
@@ -126,36 +123,46 @@ begin
     ModalResult := mrNone;
     Exit;
   end;
-  AjoutMvt(RefEmprunteur, RefEdition, Date_Pret.Date, Pret.Checked);
+  AjoutMvt(ID_Emprunteur, ID_Edition, Date_Pret.Date, Pret.Checked);
 end;
 
 procedure TFrmSaisie_EmpruntAlbum.VTreeEmprunteurChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
 begin
-  Frame11.btnOK.Enabled := RefEmprunteur <> -1;
+  Frame11.btnOK.Enabled := not IsEqualGUID(ID_Emprunteur, GUID_NULL);
 end;
 
-procedure TFrmSaisie_EmpruntAlbum.SetRefEdition(const Value: Integer);
+procedure TFrmSaisie_EmpruntAlbum.SetID_Edition(const Value: TGUID);
+var
+  i, lccEditionValue: Integer;
 begin
-  if lccEditions.ValidValue(Value) then begin
-    lccEditions.Value := Value;
-    lccEditions.DefaultValueChecked := Value;
-    if RefEdition <> Value then lccEditionsChange(nil);
+  lccEditionValue := -1;
+  for i := 0 to Pred(FEditions.Editions.Count) do
+    if IsEqualGUID(Value, TEdition(FEditions.Editions[i]).ID) then begin
+      lccEditionValue := i;
+      Break;
+    end;
+
+  if lccEditions.ValidValue(lccEditionValue) then begin
+    lccEditions.Value := lccEditionValue;
+    lccEditions.DefaultValueChecked := lccEditionValue;
+    if not IsEqualGUID(ID_Edition, Value) then lccEditionsChange(nil);
   end;
 end;
 
 procedure TFrmSaisie_EmpruntAlbum.lccEditionsChange(Sender: TObject);
 begin
-  FEdition.Fill(lccEditions.Value);
+  FEdition.Fill(TEdition(FEditions.Editions[lccEditions.Value]).ID);
 end;
 
 procedure TFrmSaisie_EmpruntAlbum.FormDestroy(Sender: TObject);
 begin
   FEdition.Free;
+  FEditions.Free;
 end;
 
-function TFrmSaisie_EmpruntAlbum.GetRefEdition: Integer;
+function TFrmSaisie_EmpruntAlbum.GetID_Edition: TGUID;
 begin
-  Result := FEdition.RefEdition;
+  Result := FEdition.ID_Edition;
 end;
 
 end.
