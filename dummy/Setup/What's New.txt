@@ -1,20 +1,25 @@
--=-=-=-=-=-    1.0.0.5 - ??/??/????   -=-=-=-=-=-
+-=-=-=-=-=-    1.2.0.0 - 19/04/2006   -=-=-=-=-=-
 
 * Nouveautés *
-      - Possibilité de coter les éditions (l'historique est conservé mais non exploité pour le moment)
-      - Choix de la catégorie d'image (Couverture, Page de garde, Planche, 4ème de couverture, Dédicace)
+      - Possibilité de coter les éditions (l'historique est conservé mais non 
+         exploité pour le moment)
+      - Choix de la catégorie d'image (Couverture, Page de garde, Planche, 
+         4ème de couverture, Dédicace)
       - Fiche de consultation de Série
+      - Gestion des para-BD
 
 -=-=-=-=-=-    1.0.0.2 - 11/08/2005   -=-=-=-=-=-
 
-* Nouveautés *
+* Nouveautés*
       - Champs "Histoire" et "Notes" dans le formulaire d'achat
 
 * Bugtrack *
       - 0000033: [Mode Gestion] Gestion des achats (Tetram)
-      - 0000032: [Mode Consultation] Impossible de visualiser les prévisions de sortie (Tetram)
+      - 0000032: [Mode Consultation] Impossible de visualiser les prévisions 
+         de sortie (Tetram)
       - 0000037: [Mode Gestion] Notes pour un achat (Tetram)
-      - 0000035: [Mode Gestion] Rafraichissement des images dans la fiche d'un album (Tetram)
+      - 0000035: [Mode Gestion] Rafraîchissement des images dans la fiche d'un 
+         album (Tetram)
       - 0000031: [Mode Gestion] Impossible de créer un nouvel album (Tetram)
 	  
 -=-=-=-=-=-    1.0.0.0 - 14/07/2005   -=-=-=-=-=-
@@ -22,14 +27,17 @@
 * Nouveautés *
       - Gestion des achats
       - Plus de précisions dans le calcul des prévisions de sorties
-      - Vérification automatique de mises à jours
+      - Vérification automatique de mises  jours
 	  
 * Bugtrack *
-      - 0000029: [Impressions] Renomer "Liste des sorties" (Tetram)
+      - 0000029: [Impressions] Renommer "Liste des sorties" (Tetram)
       - 0000028: [Impressions] Label "Terminé" qui se superpose (Tetram)
-      - 0000026: [Mode Gestion] Sauvegarde de la série sur un album en prévision d'achat (Tetram)
-      - 0000025: [Mode Consultation] Plantage sur la manipulation de la combo "grouper par" (Tetram)
-      - 0000024: [Mode Gestion] Impossible de saisir un ISBN avec une lettre (Tetram)
+      - 0000026: [Mode Gestion] Sauvegarde de la série sur un album en 
+         prévision d'achat (Tetram)
+      - 0000025: [Mode Consultation] Plantage sur la manipulation de la combo 
+         "grouper par" (Tetram)
+      - 0000024: [Mode Gestion] Impossible de saisir un ISBN avec une lettre 
+         (Tetram)
       - 0000023: [Mode Gestion] Impossible de créer un auteur (Tetram)
 
 
@@ -38,15 +46,21 @@
 * Nouveautés *
       - Impression de fiche d'album
       - Impression de fiche de série
-      - Nouveaux icones dans les menus et la barre d'outils
-      - Possibilités de mettre les icones des menus, et les boutons de la barre d'outils en petit
-      - Gestion des tirets dans l'ISBN (uniquement à l'affichage: la saisie se fait toujours sans les tirets)
-      - Possibilité de rentrer l'ISBN en utilisant le code barre de type EAN-ISBN
-      - Gestion de l'ISBN-13 (qui deviendra obligatoire en 2007 mais que vous pouvez déjà rencontrer)
+      - Nouveaux icônes dans les menus et la barre d'outils
+      - Possibilités de mettre les icônes des menus, et les boutons de la 
+         barre d'outils en petit
+      - Gestion des tirets dans l'ISBN (uniquement  l'affichage: la saisie se 
+         fait toujours sans les tirets)
+      - Possibilité de rentrer l'ISBN en utilisant le code barre de type 
+         EAN-ISBN
+      - Gestion de l'ISBN-13 (qui deviendra obligatoire en 2007 mais que vous 
+         pouvez déjà rencontrer)
 
 * Bugtrack *
-      - 0000022: [Mode Consultation] Fiche d'Auteur: Liste des albums d'un auteur incorrecte (Tetram)
-      - 0000021: [Mode Gestion] Indice de liste Hors Limite sur la grille des images (Tetram)
+      - 0000022: [Mode Consultation] Fiche d'Auteur: Liste des albums d'un 
+         auteur incorrecte (Tetram)
+      - 0000021: [Mode Gestion] Indice de liste Hors Limite sur la grille des 
+         images (Tetram)
       - 0000017: [Mode Consultation] Bouton Retour dans les stocks (Tetram)
       - 0000020: [Mode Consultation] Critère de recherche "Prix" (Tetram)
       - 0000013: [Programme] Mode Gestion (Tetram)
@@ -65,17 +79,16 @@ L'historique des versions intermédiaires a été perdu.
       - Fiche d'album: nouveaux champs "Date d'achat", "Offert", "Gratuit",
          "Nombre de pages", "Format", "Orientation"
       - Fiche d'auteur: nouveaux champs "Biographie", "Site Web"
-      - Série: possibilité de saisir des scénaristes/dessinateurs/coloristes par
-         défaut
+      - Série: possibilité de saisir des scénaristes/dessinateurs/coloristes 
+         par défaut
       - Les images peuvent être extraites de la base en décochant la case de la
          fiche de saisie d'album
       - Stock: ajout d'un filtre (depuis plus X jours/semaines/mois/ans ou
          depuis moins de X jours/semaines/mois/ans)
-      - Prêts: avertir si l'édition d'un album est déjà prêté (en Option:
+      - Prêts: avertir si l'édition d'un album est déjà prêtée (en Option:
          désactivé par défaut)
       - Gestion des décorations de pages (suppression du fond des listes entre
          autre)
-
       - Possibilité de modifier un album depuis la fiche de saisie d'une série
       - La création de nouveaux items reprend le texte des zone de recherche
          rapide (Titre d'album, Titre de série, Nom d'auteur, etc)
@@ -86,25 +99,24 @@ L'historique des versions intermédiaires a été perdu.
 * Corrections *
 
     bdthèque:
-      - Nombreuses fautes ou textes érronés
-      - Symbole monétaire correctement pris en compte même s'il est différent de
-         celui de Windows
+      - Nombreuses fautes ou textes erronés
+      - Symbole monétaire correctement pris en compte même s'il est différent 
+         de celui de Windows
       - Les champs de recherche rapide ne tiennent plus compte des accents
-      - Plus de possibilité de changer la date ou le mouvement d'un emprunt sans
-         avoir sélectionner d'album
-      - Plus de possibilité d'enlever la racine de la recherche avancée
+      - Plus de possibilité de changer la date ou le mouvement d'un emprunt 
+         sans avoir sélectionner d'album
+      - Plus de possibilité d'enlever la racine de la recherche avance
       - Impression recherche simple autre que par auteur: plus de "indice de
          liste hors-limite (0)"
-
       - Saisie d'album: le nom des Scénaristes/Dessinateurs/Coloristes est
-         rafraichi si l'un des noms a été corrigé
+         rafraîchi si l'un des noms a été corrigé
 
 -=-=-=-=-=-    0.0.2.19 - 09/06/2004   -=-=-=-=-=-
 
 * Corrections *
 
     bdthèque:
-      - la dernière série crée n'était pas prise en compte dans les prévisions
+      - la dernière série créée n'était pas prise en compte dans les prévisions
          de sorties
       - gestion des emprunts
 
@@ -113,7 +125,7 @@ L'historique des versions intermédiaires a été perdu.
 * Nouveautés *
 
     bdthèque:
-      - liste des series incomplètes et des prévisions de sorties pour chaque
+      - liste des séries incomplètes et des prévisions de sorties pour chaque
          série connue
 
 -=-=-=-=-=-    0.0.2.2 - 02/01/2004    -=-=-=-=-=-
@@ -140,4 +152,4 @@ L'historique des versions intermédiaires a été perdu.
 
 -=-=-=-=-=-    0.0.1.0 - 24/12/2003    -=-=-=-=-=-
 
-Première Béta
+Première béta
