@@ -42,7 +42,7 @@ type
 
 implementation
 
-uses DM_Princ, TypeRec, Divers, Forms;
+uses Divers, Forms;
 
 function StringToGUIDDef(GUID: string; Default: TGUID): TGUID;
 begin

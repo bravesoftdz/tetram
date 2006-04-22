@@ -35,13 +35,13 @@ object FrmConvers: TFrmConvers
       Align = alBottom
       TabOrder = 0
       inherited btnOK: TBitBtn
-        Left = 70
+        Left = 54
         Width = 54
         Height = 19
       end
       inherited btnAnnuler: TBitBtn
-        Left = 128
-        Width = 52
+        Left = 112
+        Width = 68
         Height = 19
       end
     end

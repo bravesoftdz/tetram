@@ -4,13 +4,13 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls;
+  StdCtrls, ExtCtrls, Buttons;
 
 type
   TFrmChoix = class(TForm)
     BtnChoix1: TButton;
     BtnChoix2: TButton;
-    BtnAnnuler: TButton;
+    BtnAnnuler: TBitBtn;
     Bevel1: TBevel;
     Bevel2: TBevel;
   private

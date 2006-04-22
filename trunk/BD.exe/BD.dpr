@@ -77,6 +77,7 @@ uses
   UFicheSerie in '..\BDWebServer\UFicheSerie.pas' {FicheSerie: TWebPageModule},
   UManquants in '..\BDWebServer\UManquants.pas' {Manquants: TWebPageModule},
   UPrevisions in '..\BDWebServer\UPrevisions.pas' {Previsions: TWebPageModule},
+  Divers in '..\..\..\..\Common\Divers.pas',
   Updates in 'Updates.pas',
   UMAJ0_0_0_6 in 'UMAJ0_0_0_6.pas',
   UMAJ0_0_0_8 in 'UMAJ0_0_0_8.pas',
@@ -105,8 +106,7 @@ uses
   UMAJ1_0_0_2 in 'UMAJ1_0_0_2.pas',
   UMAJ1_0_0_3 in 'UMAJ1_0_0_3.pas',
   UMAJ1_1_0_0 in 'UMAJ1_1_0_0.pas',
-  UMAJ1_2_0_0 in 'UMAJ1_2_0_0.pas',
-  Divers in '..\..\..\..\Common\Divers.pas';
+  UMAJ1_2_0_0 in 'UMAJ1_2_0_0.pas';
 
 {$R *.RES}
 {$R curseurs.res}

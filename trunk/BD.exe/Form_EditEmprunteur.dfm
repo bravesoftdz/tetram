@@ -19,9 +19,9 @@ object FrmEditEmprunteur: TFrmEditEmprunteur
   Position = poMainFormCenter
   PixelsPerInch = 96
   TextHeight = 13
-  object Bevel2: TBevel
+  object Bevel1: TBevel
     Left = 0
-    Top = 23
+    Top = 25
     Width = 215
     Height = 4
     Align = alTop
@@ -29,18 +29,18 @@ object FrmEditEmprunteur: TFrmEditEmprunteur
   end
   object ScrollBox1: TScrollBox
     Left = 0
-    Top = 27
+    Top = 29
     Width = 215
-    Height = 117
+    Height = 115
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
     DesignSize = (
       215
-      117)
+      115)
     object emprunts: TLabel
       Left = 60
-      Top = 100
+      Top = 98
       Width = 3
       Height = 13
       Alignment = taCenter
@@ -49,7 +49,7 @@ object FrmEditEmprunteur: TFrmEditEmprunteur
     end
     object Label2: TLabel
       Left = 6
-      Top = 100
+      Top = 98
       Width = 49
       Height = 13
       Anchors = [akLeft, akBottom]
@@ -70,7 +70,7 @@ object FrmEditEmprunteur: TFrmEditEmprunteur
       Left = 4
       Top = 30
       Width = 206
-      Height = 68
+      Height = 66
       Anchors = [akLeft, akTop, akRight, akBottom]
       BevelKind = bkTile
       BorderStyle = bsNone
@@ -93,43 +93,21 @@ object FrmEditEmprunteur: TFrmEditEmprunteur
       CurrencyChar = #0
     end
   end
-  object Panel1: TPanel
+  inline Frame11: TFrame1
     Left = 0
     Top = 0
     Width = 215
-    Height = 23
+    Height = 25
     Align = alTop
-    BevelOuter = bvNone
-    Caption = ' '
     TabOrder = 1
-    DesignSize = (
-      215
-      23)
-    object btnOK: TBitBtn
-      Left = 55
-      Top = 2
-      Width = 73
-      Height = 19
-      Cursor = crHandPoint
-      Anchors = [akRight, akBottom]
+    inherited btnOK: TBitBtn
+      Left = 40
+      Width = 87
       Caption = 'Enregistrer'
-      Default = True
-      ModalResult = 1
-      TabOrder = 0
       OnClick = Frame11btnOKClick
     end
-    object btnAnnuler: TBitBtn
-      Left = 137
-      Top = 2
-      Width = 71
-      Height = 19
-      Cursor = crHandPoint
-      Anchors = [akRight, akBottom]
-      Cancel = True
-      Caption = 'Annuler'
-      ModalResult = 2
-      TabOrder = 1
-      OnClick = btnAnnulerClick
+    inherited btnAnnuler: TBitBtn
+      Left = 132
     end
   end
 end

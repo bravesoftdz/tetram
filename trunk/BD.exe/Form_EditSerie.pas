@@ -5,14 +5,10 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, ExtCtrls, DBCtrls, Mask,
   Buttons, VDTButton, ComCtrls, DBEditLabeled, VirtualTrees, VirtualTree,
-  Menus, ExtDlgs, Frame_RechercheRapide, CRFurtif;
+  Menus, ExtDlgs, Frame_RechercheRapide, CRFurtif, Fram_Boutons;
 
 type
   TFrmEditSerie = class(TForm)
-    Bevel1: TBevel;
-    Panel1: TPanel;
-    btnOK: TBitBtn;
-    btnAnnuler: TBitBtn;
     ScrollBox2: TScrollBox;
     Label5: TLabel;
     Label8: TLabel;
@@ -51,10 +47,11 @@ type
     FrameRechercheRapideGenre: TFrameRechercheRapide;
     FrameRechercheRapideCollection: TFrameRechercheRapide;
     FrameRechercheRapideEditeur: TFrameRechercheRapide;
+    Bevel1: TBevel;
+    Frame11: TFrame1;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
-    procedure btnAnnulerClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure OnNewCollection(Sender: TObject);
     procedure edTitreChange(Sender: TObject);
@@ -322,11 +319,6 @@ begin
     Transaction.Free;
     Free;
   end;
-end;
-
-procedure TFrmEditSerie.btnAnnulerClick(Sender: TObject);
-begin
-  ModalResult := mrCancel;
 end;
 
 procedure TFrmEditSerie.FormShow(Sender: TObject);

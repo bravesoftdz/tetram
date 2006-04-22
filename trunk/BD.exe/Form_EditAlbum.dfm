@@ -21,7 +21,7 @@ object FrmEditAlbum: TFrmEditAlbum
   TextHeight = 13
   object Bevel2: TBevel
     Left = 0
-    Top = 23
+    Top = 25
     Width = 742
     Height = 4
     Align = alTop
@@ -29,15 +29,15 @@ object FrmEditAlbum: TFrmEditAlbum
   end
   object ScrollBox: TScrollBox
     Left = 0
-    Top = 27
+    Top = 29
     Width = 742
-    Height = 797
+    Height = 795
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
     DesignSize = (
       742
-      797)
+      795)
     object imgVisu: TImage
       Left = 632
       Top = 592
@@ -656,7 +656,7 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 793
+      Top = 791
       Width = 742
       Height = 4
       Align = alBottom
@@ -1994,43 +1994,21 @@ object FrmEditAlbum: TFrmEditAlbum
       end
     end
   end
-  object Panel2: TPanel
+  inline Frame11: TFrame1
     Left = 0
     Top = 0
     Width = 742
-    Height = 23
+    Height = 25
     Align = alTop
-    BevelOuter = bvNone
-    Caption = ' '
     TabOrder = 1
-    DesignSize = (
-      742
-      23)
-    object btnOK: TBitBtn
-      Left = 579
-      Top = 2
-      Width = 74
-      Height = 19
-      Cursor = crHandPoint
-      Anchors = [akRight, akBottom]
+    inherited btnOK: TBitBtn
+      Left = 571
+      Width = 87
       Caption = 'Enregistrer'
-      Default = True
-      ModalResult = 1
-      TabOrder = 0
-      OnClick = btnOKClick
+      OnClick = Frame11btnOKClick
     end
-    object btnAnnuler: TBitBtn
-      Left = 660
-      Top = 2
-      Width = 72
-      Height = 19
-      Cursor = crHandPoint
-      Anchors = [akRight, akBottom]
-      Cancel = True
-      Caption = 'Annuler'
-      ModalResult = 2
-      TabOrder = 1
-      OnClick = btnAnnulerClick
+    inherited btnAnnuler: TBitBtn
+      Left = 659
     end
   end
   object ChoixImageDialog: TOpenPictureDialog

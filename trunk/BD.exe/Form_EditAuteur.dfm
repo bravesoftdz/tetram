@@ -19,9 +19,9 @@ object FrmEditAuteur: TFrmEditAuteur
   Position = poMainFormCenter
   PixelsPerInch = 96
   TextHeight = 13
-  object Bevel2: TBevel
+  object Bevel1: TBevel
     Left = 0
-    Top = 23
+    Top = 25
     Width = 717
     Height = 4
     Align = alTop
@@ -29,15 +29,15 @@ object FrmEditAuteur: TFrmEditAuteur
   end
   object ScrollBox1: TScrollBox
     Left = 0
-    Top = 27
+    Top = 29
     Width = 717
-    Height = 192
+    Height = 190
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
     DesignSize = (
       717
-      192)
+      190)
     object Label3: TLabel
       Left = 28
       Top = 8
@@ -99,7 +99,7 @@ object FrmEditAuteur: TFrmEditAuteur
       Left = 64
       Top = 54
       Width = 648
-      Height = 133
+      Height = 131
       Anchors = [akLeft, akTop, akRight, akBottom]
       BevelKind = bkTile
       BorderStyle = bsNone
@@ -145,43 +145,21 @@ object FrmEditAuteur: TFrmEditAuteur
       CurrencyChar = #0
     end
   end
-  object Panel1: TPanel
+  inline Frame11: TFrame1
     Left = 0
     Top = 0
     Width = 717
-    Height = 23
+    Height = 25
     Align = alTop
-    BevelOuter = bvNone
-    Caption = ' '
     TabOrder = 1
-    DesignSize = (
-      717
-      23)
-    object btnOK: TBitBtn
-      Left = 557
-      Top = 2
-      Width = 73
-      Height = 19
-      Cursor = crHandPoint
-      Anchors = [akRight, akBottom]
+    inherited btnOK: TBitBtn
+      Left = 546
+      Width = 87
       Caption = 'Enregistrer'
-      Default = True
-      ModalResult = 1
-      TabOrder = 0
       OnClick = Frame11btnOKClick
     end
-    object btnAnnuler: TBitBtn
-      Left = 639
-      Top = 2
-      Width = 71
-      Height = 19
-      Cursor = crHandPoint
-      Anchors = [akRight, akBottom]
-      Cancel = True
-      Caption = 'Annuler'
-      ModalResult = 2
-      TabOrder = 1
-      OnClick = btnAnnulerClick
+    inherited btnAnnuler: TBitBtn
+      Left = 634
     end
   end
 end

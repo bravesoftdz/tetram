@@ -4,7 +4,7 @@ object FrmCustomize: TFrmCustomize
   BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsDialog
   Caption = 'Personnaliser'
-  ClientHeight = 356
+  ClientHeight = 378
   ClientWidth = 514
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
@@ -18,7 +18,7 @@ object FrmCustomize: TFrmCustomize
   OnCreate = FormCreate
   DesignSize = (
     514
-    356)
+    378)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -375,10 +375,10 @@ object FrmCustomize: TFrmCustomize
   end
   object GroupBox1: TGroupBox
     Left = 7
-    Top = 267
+    Top = 274
     Width = 499
     Height = 61
-    Anchors = [akLeft, akRight, akBottom]
+    Anchors = [akLeft, akTop, akRight]
     Caption = ' Description : '
     TabOrder = 0
     object Label3: TLabel
@@ -395,30 +395,30 @@ object FrmCustomize: TFrmCustomize
   end
   inline Frame11: TFrame1
     Left = 0
-    Top = 332
+    Top = 345
     Width = 514
-    Height = 24
+    Height = 33
     Align = alBottom
     TabOrder = 1
     inherited btnOK: TBitBtn
       Left = 358
+      Top = 9
       Width = 74
-      Height = 19
       OnClick = Frame11btnOKClick
     end
     inherited btnAnnuler: TBitBtn
       Left = 439
+      Top = 9
       Width = 72
-      Height = 19
     end
   end
   object Cats: TListBox
     Left = 7
     Top = 24
     Width = 186
-    Height = 62
+    Height = 67
     Cursor = crHandPoint
-    Anchors = [akLeft, akTop, akRight, akBottom]
+    Anchors = [akLeft, akTop, akRight]
     BevelKind = bkTile
     BorderStyle = bsNone
     ItemHeight = 13
@@ -429,8 +429,8 @@ object FrmCustomize: TFrmCustomize
     Left = 7
     Top = 113
     Width = 186
-    Height = 151
-    Anchors = [akLeft, akTop, akRight, akBottom]
+    Height = 155
+    Anchors = [akLeft, akTop, akRight]
     BevelKind = bkTile
     BorderStyle = bsNone
     Columns = <
@@ -452,8 +452,8 @@ object FrmCustomize: TFrmCustomize
     Left = 302
     Top = 24
     Width = 204
-    Height = 240
-    Anchors = [akLeft, akTop, akRight, akBottom]
+    Height = 244
+    Anchors = [akLeft, akTop, akRight]
     BevelKind = bkTile
     BorderStyle = bsNone
     Columns = <

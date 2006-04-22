@@ -5,13 +5,10 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBEditLabeled, VirtualTrees, ComCtrls, VDTButton,
   VirtualTree, ComboCheck, ExtCtrls, Buttons, Frame_RechercheRapide, ExtDlgs,
-  CRFurtif;
+  CRFurtif, Fram_Boutons;
 
 type
   TFrmEditParaBD = class(TForm)
-    Panel2: TPanel;
-    btnOK: TBitBtn;
-    btnAnnuler: TBitBtn;
     ScrollBox: TScrollBox;
     Label2: TLabel;
     Label6: TLabel;
@@ -56,6 +53,8 @@ type
     cbImageBDD: TCheckBoxLabeled;
     VDTButton1: TCRFurtifLight;
     ChoixImageDialog: TOpenPictureDialog;
+    Frame11: TFrame1;
+    Bevel2: TBevel;
     procedure cbOffertClick(Sender: TObject);
     procedure cbGratuitClick(Sender: TObject);
     procedure edPrixChange(Sender: TObject);
@@ -63,7 +62,6 @@ type
     procedure VDTButton14Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure btnAnnulerClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
     procedure VDTButton1Click(Sender: TObject);
@@ -251,11 +249,6 @@ end;
 procedure TFrmEditParaBD.FormDestroy(Sender: TObject);
 begin
   TAuteur.VideListe(lvAuteurs);
-end;
-
-procedure TFrmEditParaBD.btnAnnulerClick(Sender: TObject);
-begin
-  ModalResult := mrCancel;
 end;
 
 procedure TFrmEditParaBD.FormCreate(Sender: TObject);

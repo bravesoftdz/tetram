@@ -19,65 +19,24 @@ object FrmEditSerie: TFrmEditSerie
   TextHeight = 13
   object Bevel1: TBevel
     Left = 0
-    Top = 23
+    Top = 25
     Width = 742
     Height = 4
     Align = alTop
     Shape = bsBottomLine
   end
-  object Panel1: TPanel
-    Left = 0
-    Top = 0
-    Width = 742
-    Height = 23
-    Align = alTop
-    BevelOuter = bvNone
-    Caption = ' '
-    TabOrder = 0
-    DesignSize = (
-      742
-      23)
-    object btnOK: TBitBtn
-      Left = 582
-      Top = 2
-      Width = 73
-      Height = 19
-      Cursor = crHandPoint
-      Hint = 'Valider les modifcations'
-      Anchors = [akRight, akBottom]
-      Caption = 'Enregistrer'
-      Default = True
-      ModalResult = 1
-      TabOrder = 0
-      OnClick = Frame11btnOKClick
-    end
-    object btnAnnuler: TBitBtn
-      Left = 664
-      Top = 2
-      Width = 71
-      Height = 19
-      Cursor = crHandPoint
-      Hint = 'Annuler les modifications'
-      Anchors = [akRight, akBottom]
-      Cancel = True
-      Caption = 'Annuler'
-      ModalResult = 2
-      TabOrder = 1
-      OnClick = btnAnnulerClick
-    end
-  end
   object ScrollBox2: TScrollBox
     Left = 0
-    Top = 27
+    Top = 29
     Width = 742
-    Height = 897
+    Height = 895
     Align = alClient
     BorderStyle = bsNone
     Constraints.MinWidth = 650
-    TabOrder = 1
+    TabOrder = 0
     DesignSize = (
       742
-      897)
+      895)
     object Label5: TLabel
       Left = 15
       Top = 301
@@ -987,6 +946,23 @@ object FrmEditSerie: TFrmEditSerie
             Control = Label5
           end>
       end
+    end
+  end
+  inline Frame11: TFrame1
+    Left = 0
+    Top = 0
+    Width = 742
+    Height = 25
+    Align = alTop
+    TabOrder = 1
+    inherited btnOK: TBitBtn
+      Left = 568
+      Width = 90
+      Caption = 'Enregistrer'
+      OnClick = Frame11btnOKClick
+    end
+    inherited btnAnnuler: TBitBtn
+      Left = 659
     end
   end
 end

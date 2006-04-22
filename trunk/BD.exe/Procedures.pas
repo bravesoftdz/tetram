@@ -110,7 +110,7 @@ type
   end;
 
   IInformation = interface
-    procedure ShowInfo(Msg: string);
+    procedure ShowInfo(Msg: ShortString);
   end;
   TInformation = class(TInterfacedObject, IInformation)
   private
@@ -118,7 +118,7 @@ type
     FLabel: TLabel;
     procedure SetupDialog;
   published
-    procedure ShowInfo(Msg: string);
+    procedure ShowInfo(Msg: ShortString);
     constructor Create;
     destructor Destroy; override;
   end;
@@ -1125,7 +1125,7 @@ begin
   end;
 end;
 
-procedure TInformation.ShowInfo(Msg: string);
+procedure TInformation.ShowInfo(Msg: ShortString);
 begin
   SetupDialog;
   FLabel.Caption := Msg;

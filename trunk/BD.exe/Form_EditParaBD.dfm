@@ -1,6 +1,6 @@
 object FrmEditParaBD: TFrmEditParaBD
-  Left = 1285
-  Top = 76
+  Left = 257
+  Top = 160
   Width = 835
   Height = 926
   Caption = 'FrmEditParaBD'
@@ -17,56 +17,25 @@ object FrmEditParaBD: TFrmEditParaBD
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
-  object Panel2: TPanel
+  object Bevel2: TBevel
     Left = 0
-    Top = 0
+    Top = 25
     Width = 827
-    Height = 23
+    Height = 4
     Align = alTop
-    BevelOuter = bvNone
-    Caption = ' '
-    TabOrder = 0
-    DesignSize = (
-      827
-      23)
-    object btnOK: TBitBtn
-      Left = 664
-      Top = 2
-      Width = 74
-      Height = 19
-      Cursor = crHandPoint
-      Anchors = [akRight, akBottom]
-      Caption = 'Enregistrer'
-      Default = True
-      ModalResult = 1
-      TabOrder = 0
-      OnClick = btnOKClick
-    end
-    object btnAnnuler: TBitBtn
-      Left = 745
-      Top = 2
-      Width = 72
-      Height = 19
-      Cursor = crHandPoint
-      Anchors = [akRight, akBottom]
-      Cancel = True
-      Caption = 'Annuler'
-      ModalResult = 2
-      TabOrder = 1
-      OnClick = btnAnnulerClick
-    end
+    Shape = bsBottomLine
   end
   object ScrollBox: TScrollBox
     Left = 0
-    Top = 23
+    Top = 29
     Width = 827
-    Height = 871
+    Height = 865
     Align = alClient
     BorderStyle = bsNone
-    TabOrder = 1
+    TabOrder = 0
     DesignSize = (
       827
-      871)
+      865)
     object Label2: TLabel
       Left = 35
       Top = 7
@@ -116,7 +85,7 @@ object FrmEditParaBD: TFrmEditParaBD
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 867
+      Top = 861
       Width = 827
       Height = 4
       Align = alBottom
@@ -1418,6 +1387,23 @@ object FrmEditParaBD: TFrmEditParaBD
             Control = Label19
           end>
       end
+    end
+  end
+  inline Frame11: TFrame1
+    Left = 0
+    Top = 0
+    Width = 827
+    Height = 25
+    Align = alTop
+    TabOrder = 1
+    inherited btnOK: TBitBtn
+      Left = 648
+      Width = 87
+      Caption = 'Enregistrer'
+      OnClick = btnOKClick
+    end
+    inherited btnAnnuler: TBitBtn
+      Left = 744
     end
   end
   object ChoixImageDialog: TOpenPictureDialog

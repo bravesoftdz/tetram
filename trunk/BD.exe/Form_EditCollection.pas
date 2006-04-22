@@ -4,23 +4,21 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, VDTButton,
-  Buttons, DBEditLabeled, VirtualTrees, VirtualTree, Frame_RechercheRapide;
+  Buttons, DBEditLabeled, VirtualTrees, VirtualTree, Frame_RechercheRapide,
+  Fram_Boutons;
 
 type
   TFrmEditCollection = class(TForm)
     ScrollBox1: TScrollBox;
-    Bevel2: TBevel;
     Label2: TLabel;
     edNom: TEditLabeled;
-    Panel1: TPanel;
-    btnOK: TBitBtn;
-    btnAnnuler: TBitBtn;
     Label5: TLabel;
     vtEditeurs: TVirtualStringTree;
     FrameRechercheRapide1: TFrameRechercheRapide;
+    Bevel1: TBevel;
+    Frame11: TFrame1;
     procedure FormCreate(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
-    procedure Frame11btnAnnulerClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure vtEditeursDblClick(Sender: TObject);
   private
@@ -108,11 +106,6 @@ begin
     Free;
   end;
   ModalResult := mrOk;
-end;
-
-procedure TFrmEditCollection.Frame11btnAnnulerClick(Sender: TObject);
-begin
-  ModalResult := mrCancel;
 end;
 
 procedure TFrmEditCollection.FormShow(Sender: TObject);

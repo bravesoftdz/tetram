@@ -4,13 +4,13 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, JvUIB, AppEvnts, IdComponent, IdTCPServer,
-  TrayIcon, IdCustomHTTPServer, IdHTTPServer, IdBaseComponent, SyncObjs, jpeg, Menus, Main, IdISAPIRunner;
+  TrayIcon, IdCustomHTTPServer, IdHTTPServer, IdBaseComponent, SyncObjs, jpeg, Menus, IdISAPIRunner;
 
 const
   AntiAliasing = True;
 
 type
-  TAffiche_act = procedure(Texte: string) of object;
+  TAffiche_act = procedure(Texte: ShortString) of object;
 
   TDMPrinc = class(TDataModule)
     UIBDataBase: TJvUIBDataBase;
@@ -70,8 +70,8 @@ implementation
 {$R *.DFM}
 
 uses
-  CommonConst, Commun, Textes, DM_Commun, JvUIBLib, Divers, IniFiles, Procedures, UHistorique, Math,
-  Updates, CheckVersionNet, DateUtils;
+  CommonConst, Commun, Textes, DM_Commun, JvUIBLib, Divers, IniFiles, Procedures, UHistorique, Math, JvUIbase, Updates,
+  Main, CheckVersionNet, DateUtils;
 
 var
   FDMPrinc: TDMPrinc = nil;
@@ -127,7 +127,6 @@ end;
 function TDMPrinc.CheckVersions(Affiche_act: TAffiche_act; Force: Boolean): Boolean;
 var
   CurrentVersion: string;
-  Query: TJvUIBQuery;
 
 type
   TProcedure = procedure(Query: TJvUIBScript);
@@ -136,22 +135,22 @@ type
   var
     Script: TJvUIBScript;
   begin
-    if CompareVersionNum(Version, CurrentVersion) > 0 then
-      with Query do begin
-        Affiche_act('Mise à jour ' + Version + '...');
-        Script := TJvUIBScript.Create(nil);
-        try
-          Script.Transaction := Query.Transaction;
-          ProcMAJ(Script);
-        finally
-          Script.Free;
-        end;
-        SQL.Text := 'UPDATE OPTIONS SET Valeur = ? WHERE Nom_Option = ''Version''';
-        Params.AsString[0] := Version;
-        ExecSQL;
-        Transaction.Commit;
+    if (CompareVersionNum(Version, CurrentVersion) > 0) and (CompareVersionNum(Version, Utilisateur.ExeVersion) <= 0) then begin
+      Affiche_act('Mise à jour ' + Version + '...');
+      Script := TJvUIBScript.Create(nil);
+      try
+        Script.Transaction := GetTransaction(UIBDatabase);
+        ProcMAJ(Script);
+
+        Script.Script.Text := 'UPDATE OPTIONS SET Valeur = ' + QuotedStr(Version) + ' WHERE Nom_Option = ''Version'';';
+        Script.ExecuteScript;
+        Script.Transaction.Commit;
         CurrentVersion := Version;
+      finally
+        Script.Transaction.Free;
+        Script.Free;
       end;
+    end;
   end;
 
 var
@@ -161,8 +160,7 @@ var
 begin
   Result := False;
   Utilisateur.ExeVersion := GetFichierVersion(Application.ExeName);
-  Query := TJvUIBQuery.Create(nil);
-  with Query do try
+  with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(UIBDataBase);
 
     case Utilisateur.Options.VerifMAJDelai of
@@ -202,31 +200,41 @@ begin
         // Pour s'assurer qu'il y'a la ligne dans la table options
       end;
     end;
-    msg := 'BDthèque ne peut pas utiliser cette base de données.'#13#10'Version de la base de données: ' + CurrentVersion;
 
-    Compare := CompareVersionNum(Utilisateur.ExeVersion, CurrentVersion);
-    if Compare < 0 then begin // CurrentVersion > Utilisateur.ExeVersion
-      ShowMessage(msg);
-      Exit;
-    end;
-
-    if Compare > 0 then begin // Utilisateur.ExeVersion > CurrentVersion
-      if not (Force or (MessageDlg(msg + #13#10'Voulez-vous la mettre à jour?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)) then Exit;
-      for i := 0 to Pred(ListUpdates.Count) do
-        with TUpdate(ListUpdates[i]) do
-          ProcessUpdate(Version, UpdateCallback);
-
-      SQL.Text := 'UPDATE OPTIONS SET Valeur = ? WHERE Nom_Option = ''Version''';
-      Params.AsString[0] := Utilisateur.ExeVersion;
-      ExecSQL;
-      Transaction.Commit;
-      if not Force then ShowMessage('Mise à jour terminée.');
-    end;
-    Result := True;
   finally
     Transaction.Free;
     Free;
   end;
+
+  msg := 'BDthèque ne peut pas utiliser cette base de données.'#13#10'Version de la base de données: ' + CurrentVersion;
+
+  Compare := CompareVersionNum(Utilisateur.ExeVersion, CurrentVersion);
+  if Compare < 0 then begin // CurrentVersion > Utilisateur.ExeVersion
+    ShowMessage(msg);
+    Exit;
+  end;
+
+  if Compare > 0 then begin // Utilisateur.ExeVersion > CurrentVersion
+    if not (Force or (MessageDlg(msg + #13#10'Voulez-vous la mettre à jour?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)) then Exit;
+
+    for i := 0 to Pred(ListUpdates.Count) do
+      with TUpdate(ListUpdates[i]) do
+        ProcessUpdate(Version, UpdateCallback);
+
+    with TJvUIBQuery.Create(nil) do try
+      Transaction := GetTransaction(UIBDataBase);
+
+      SQL.Text := 'UPDATE OPTIONS SET Valeur = ' + QuotedStr(Utilisateur.ExeVersion) + ' WHERE Nom_Option = ''Version'';';
+      ExecSQL;
+      Transaction.Commit;
+    finally
+      Transaction.Free;
+      Free;
+    end;
+
+    if not Force then ShowMessage('Mise à jour terminée.');
+  end;
+  Result := True;
 end;
 
 procedure TDMPrinc.ApplicationEvents1Idle(Sender: TObject; var Done: Boolean);

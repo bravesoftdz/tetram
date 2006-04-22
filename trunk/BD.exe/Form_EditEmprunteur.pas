@@ -4,22 +4,19 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, Mask, Menus, ExtCtrls,
-  DBEditLabeled, DB, Buttons;
+  DBEditLabeled, DB, Buttons, Fram_Boutons;
 
 type
   TFrmEditEmprunteur = class(TForm)
     ScrollBox1: TScrollBox;
     emprunts: TLabel;
     Label2: TLabel;
-    Bevel2: TBevel;
     coord: TMemo;
     edNom: TEditLabeled;
     Label3: TLabel;
-    Panel1: TPanel;
-    btnOK: TBitBtn;
-    btnAnnuler: TBitBtn;
+    Bevel1: TBevel;
+    Frame11: TFrame1;
     procedure Frame11btnOKClick(Sender: TObject);
-    procedure btnAnnulerClick(Sender: TObject);
   private
     { Déclarations privées }
     FID_Emprunteur: TGUID;
@@ -90,11 +87,6 @@ begin
     Free;
   end;
   ModalResult := mrOk;
-end;
-
-procedure TFrmEditEmprunteur.btnAnnulerClick(Sender: TObject);
-begin
-  ModalResult := mrCancel;
 end;
 
 end.

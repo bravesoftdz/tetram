@@ -124,7 +124,8 @@ type
     procedure Assign(Ps: TBasePointeur); override;
 
     procedure Fill(Query: TJvUIBQuery); overload; override;
-    procedure Fill(ID_Album: TGUID; ID_Edition: string = sGUID_NULL); reintroduce; overload;
+    procedure Fill(ID_Album: TGUID); reintroduce; overload;
+    procedure Fill(ID_Album: TGUID; ID_Edition: TGUID); reintroduce; overload;
     function ChaineAffichage: string; overload; override;
     function ChaineAffichage(Simple: Boolean): string; reintroduce; overload;
     class function Duplicate(Ps: TAlbum): TAlbum; reintroduce;
@@ -590,7 +591,12 @@ begin
   Result := TAlbum(inherited Duplicate(Ps));
 end;
 
-procedure TAlbum.Fill(ID_Album: TGUID; ID_Edition: string);
+procedure TAlbum.Fill(ID_Album: TGUID);
+begin
+  Fill(ID_Album, GUID_NULL);
+end;
+
+procedure TAlbum.Fill(ID_Album: TGUID; ID_Edition: TGUID);
 var
   q: TJvUIBQuery;
 begin
@@ -600,13 +606,13 @@ begin
     SQL.Text := 'SELECT a.ID_Album, a.TitreAlbum, a.HorsSerie, a.Integrale, a.Tome, a.TomeDebut, a.TomeFin, a.ID_Serie, a.Achat, a.Complet';
     SQL.Add('FROM ALBUMS a');
     SQL.Add('WHERE a.ID_ALBUM = :ID_Album');
-    if (ID_Edition <> sGUID_NULL) then begin
+    if not IsEqualGUID(ID_Edition , GUID_NULL) then begin
       SQL[0] := SQL[0] + ', e.Stock';
       SQL[1] := SQL[1] + ' INNER JOIN Editions e ON a.ID_Album = e.ID_Album';
       SQL.Add('AND e.ID_Edition = :ID_Edition');
     end;
     Params.AsString[0] := GUIDToString(ID_Album);
-    if (ID_Edition <> sGUID_NULL) then Params.AsString[1] := ID_Edition;
+    if not IsEqualGUID(ID_Edition , GUID_NULL) then Params.AsString[1] := GUIDToString(ID_Edition);
     Open;
     Fill(q);
   finally

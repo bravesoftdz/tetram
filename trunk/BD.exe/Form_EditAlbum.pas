@@ -5,14 +5,13 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls, DBCtrls, StdCtrls, ImgList, DBEditLabeled,
   VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, VirtualTree, Menus, TypeRec, ActnList, LoadComplet, ComboCheck,
-  Frame_RechercheRapide, CRFurtif;
+  Frame_RechercheRapide, CRFurtif, Fram_Boutons;
 
 type
   TFrmEditAlbum = class(TForm)
     ScrollBox: TScrollBox;
     ChoixImageDialog: TOpenPictureDialog;
     ImageList1: TImageList;
-    Bevel2: TBevel;
     Label3: TLabel;
     edAnneeParution: TEditLabeled;
     edTitre: TEditLabeled;
@@ -33,9 +32,6 @@ type
     VDTButton5: TCRFurtifLight;
     Bevel1: TBevel;
     Label20: TLabel;
-    Panel2: TPanel;
-    btnOK: TBitBtn;
-    btnAnnuler: TBitBtn;
     vtSeries: TVirtualStringTree;
     btColoriste: TCRFurtifLight;
     lvColoristes: TVDTListViewLabeled;
@@ -101,11 +97,12 @@ type
     FrameRechercheRapideSerie: TFrameRechercheRapide;
     FrameRechercheRapideEditeur: TFrameRechercheRapide;
     FrameRechercheRapideCollection: TFrameRechercheRapide;
+    Bevel2: TBevel;
+    Frame11: TFrame1;
     procedure ajoutClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure ChoixImageClick(Sender: TObject);
-    procedure btnOKClick(Sender: TObject);
     procedure edTitreChange(Sender: TObject);
     procedure VDTButton2Click(Sender: TObject);
     procedure lvDessinateursKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -114,7 +111,6 @@ type
     procedure VDTButton5Click(Sender: TObject);
     procedure OnNewSerie(Sender: TObject);
     procedure FormActivate(Sender: TObject);
-    procedure btnAnnulerClick(Sender: TObject);
     procedure longueur2KeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
@@ -155,6 +151,7 @@ type
     procedure vstImagesMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure miChangeCategorieImageClick(Sender: TObject);
     procedure pmChoixCategoriePopup(Sender: TObject);
+    procedure Frame11btnOKClick(Sender: TObject);
   private
     { Déclarations privées }
     FID_Album, FID_Serie: TGUID;
@@ -407,7 +404,7 @@ begin
   vtEditions.Clear;
 end;
 
-procedure TFrmEditAlbum.btnOKClick(Sender: TObject);
+procedure TFrmEditAlbum.Frame11btnOKClick(Sender: TObject);
 var
   PC: TCouverture;
   s: string;
@@ -916,11 +913,6 @@ end;
 procedure TFrmEditAlbum.FormActivate(Sender: TObject);
 begin
   Invalidate;
-end;
-
-procedure TFrmEditAlbum.btnAnnulerClick(Sender: TObject);
-begin
-  ModalResult := mrCancel;
 end;
 
 procedure TFrmEditAlbum.longueur2KeyPress(Sender: TObject; var Key: Char);

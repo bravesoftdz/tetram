@@ -23,7 +23,7 @@ type
     { Déclarations privées }
   public
     { Déclarations publiques }
-    procedure Affiche_act(Texte: string);
+    procedure Affiche_act(Texte: ShortString);
   end;
 
 var
@@ -50,7 +50,7 @@ begin
   SetWindowRgn(Handle, FormRgn, TRUE);
 end;
 
-procedure TFrmSplash.Affiche_act(Texte: string);
+procedure TFrmSplash.Affiche_act(Texte: ShortString);
 begin
   Label1.Visible := True;
   Image2.Visible := True;

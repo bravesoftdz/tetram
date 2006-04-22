@@ -2,8 +2,8 @@ object DMPrinc: TDMPrinc
   OldCreateOrder = False
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
-  Left = 366
-  Top = 303
+  Left = 498
+  Top = 264
   Height = 532
   Width = 783
   object UIBDataBase: TJvUIBDataBase

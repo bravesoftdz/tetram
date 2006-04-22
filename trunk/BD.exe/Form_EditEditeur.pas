@@ -4,23 +4,20 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, VDTButton,
-  Buttons, DBEditLabeled, ShellAPI;
+  Buttons, DBEditLabeled, ShellAPI, Fram_Boutons;
 
 type
   TFrmEditEditeur = class(TForm)
     ScrollBox1: TScrollBox;
-    Bevel2: TBevel;
     Label2: TLabel;
     edNom: TEditLabeled;
-    Panel1: TPanel;
-    btnOK: TBitBtn;
-    btnAnnuler: TBitBtn;
     Label1: TLabel;
     edSite: TEditLabeled;
     VDTButton13: TVDTButton;
+    Bevel1: TBevel;
+    Frame11: TFrame1;
     procedure FormCreate(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
-    procedure Frame11btnAnnulerClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure VDTButton13Click(Sender: TObject);
     procedure edSiteChange(Sender: TObject);
@@ -92,11 +89,6 @@ begin
     Free;
   end;
   ModalResult := mrOk;
-end;
-
-procedure TFrmEditEditeur.Frame11btnAnnulerClick(Sender: TObject);
-begin
-  ModalResult := mrCancel;
 end;
 
 procedure TFrmEditEditeur.FormShow(Sender: TObject);

@@ -610,9 +610,9 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
     Align = alBottom
     TabOrder = 1
     inherited btnOK: TBitBtn
-      Left = 559
+      Left = 551
       Top = 8
-      Width = 73
+      Width = 87
       Height = 19
       Caption = 'Ok'
       OnClick = Frame11btnOKClick

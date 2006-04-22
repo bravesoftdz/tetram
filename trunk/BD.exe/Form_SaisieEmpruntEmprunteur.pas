@@ -150,7 +150,10 @@ begin
     if IsEqualGUID(ID_Album, GUID_NULL) or IsEqualGUID(ID_Edition, GUID_NULL) then Exit;
     with ListView1.Items.Add do begin
       PA := TAlbum.Create;
-      PA.Fill(ID_Album, GUIDToString(ID_Edition));
+      if IsEqualGUID(ID_Edition, GUID_EditionPasSelectionnee) then
+        PA.Fill(ID_Album)
+      else
+        PA.Fill(ID_Album, ID_Edition);
       Data := PA;
       Caption := PA.ChaineAffichage;
       SubItems.Add(FormatDateTime(ShortDateFormat, Date));
