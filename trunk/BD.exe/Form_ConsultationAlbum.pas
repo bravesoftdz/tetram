@@ -122,6 +122,11 @@ type
     procedure EditeurClick(Sender: TObject);
     procedure TitreSerieDblClick(Sender: TObject);
     procedure TitreSerieClick(Sender: TObject);
+    procedure lvScenaristesData(Sender: TObject; Item: TListItem);
+    procedure lvDessinateursData(Sender: TObject; Item: TListItem);
+    procedure lvColoristesData(Sender: TObject; Item: TListItem);
+    procedure lvSerieData(Sender: TObject; Item: TListItem);
+    procedure lvSerieGetImageIndex(Sender: TObject; Item: TListItem);
   private
     { Déclarations privées }
     CurrentCouverture: Integer;
@@ -160,7 +165,6 @@ end;
 procedure TFrmConsultationAlbum.FormCreate(Sender: TObject);
 begin
   FAlbum := TAlbumComplet.Create;
-  FCurrentEdition := TEditionComplete.Create;
   PrepareLV(Self);
   CurrentCouverture := 0;
   ListeEmprunts.Header.Columns[0].Width := 100;
@@ -173,7 +177,6 @@ end;
 procedure TFrmConsultationAlbum.FormDestroy(Sender: TObject);
 begin
   ClearForm;
-  FCurrentEdition.Free;
   FAlbum.Free;
 end;
 
@@ -185,7 +188,7 @@ begin
   lvSerie.Items.Count := 0;
   ListeEmprunts.Clear;
   lvEditions.Items.Clear;
-  FCurrentEdition.Clear;
+  FCurrentEdition := nil;
 end;
 
 procedure TFrmConsultationAlbum.ImpRep(Sender: TObject);
@@ -361,7 +364,7 @@ procedure TFrmConsultationAlbum.lvEditionsClick(Sender: TObject);
 begin
   PanelEdition.Visible := lvEditions.ItemIndex > -1;
   if PanelEdition.Visible then begin
-    FCurrentEdition.Fill(TEdition(lvEditions.Items.Objects[lvEditions.ItemIndex]).ID);
+    FCurrentEdition := TEditionComplete(lvEditions.Items.Objects[lvEditions.ItemIndex]);
     try
       ISBN.Caption := FCurrentEdition.ISBN;
       Editeur.Caption := FormatTitre(FCurrentEdition.Editeur.NomEditeur);
@@ -463,13 +466,12 @@ procedure TFrmConsultationAlbum.SetID_Album(const Value: TGUID);
 var
   s, s2: string;
   i: Integer;
-  PAl: TAlbum;
-  PEd: TEdition;
+  PEd: TEditionComplete;
 begin
   ClearForm;
   FAlbum.Fill(Value);
 
-  Caption := 'Fiche d''album - "' + FormatTitre(FAlbum.Titre) + '"';
+  Caption := 'Fiche d''album - ' + FAlbum.ChaineAffichage;
   TitreSerie.Caption := FAlbum.Serie.Titre;
   if FAlbum.Serie.SiteWeb <> '' then begin
     TitreSerie.Font.Color := clBlue;
@@ -500,62 +502,34 @@ begin
   if s = '' then s := FAlbum.Serie.Notes.Text;
   Remarques.Text := s;
 
-  if Bool(FAlbum.Serie.Genres.Count) then begin
-    s := FAlbum.Serie.Genres.Text;
-    FAlbum.Serie.Genres.Sort;
-    Collapse(s, ', ');
-    s := Copy(s, 1, Length(s) - 2);
-  end
-  else
-    s := '';
+  s := '';
+  for i := 0 to Pred(FAlbum.Serie.Genres.Count) do
+    AjoutString(s, FAlbum.Serie.Genres.ValueFromIndex[i], ', ');
   Memo1.Lines.Text := s;
 
   lvScenaristes.Items.BeginUpdate;
-  for i := 0 to Pred(FAlbum.Scenaristes.Count) do begin
-    with lvScenaristes.Items.Add do begin
-      Data := FAlbum.Scenaristes[i];
-      Caption := TAuteur(Data).ChaineAffichage;
-    end;
-  end;
-  lvScenaristes.Items.EndUpdate;
-
   lvDessinateurs.Items.BeginUpdate;
-  for i := 0 to Pred(FAlbum.Dessinateurs.Count) do begin
-    with lvDessinateurs.Items.Add do begin
-      Data := FAlbum.Dessinateurs[i];
-      Caption := TAuteur(Data).ChaineAffichage;
-    end;
-  end;
-  lvDessinateurs.Items.EndUpdate;
-
   lvColoristes.Items.BeginUpdate;
-  for i := 0 to Pred(FAlbum.Coloristes.Count) do begin
-    with lvColoristes.Items.Add do begin
-      Data := FAlbum.Coloristes[i];
-      Caption := TAuteur(Data).ChaineAffichage;
-    end;
-  end;
+
+  lvScenaristes.Items.Count := FAlbum.Scenaristes.Count;
+  lvDessinateurs.Items.Count := FAlbum.Dessinateurs.Count;
+  lvColoristes.Items.Count := FAlbum.Coloristes.Count;
+
+  lvScenaristes.Items.EndUpdate;
+  lvDessinateurs.Items.EndUpdate;
   lvColoristes.Items.EndUpdate;
 
   lvSerie.Items.BeginUpdate;
-  for i := 0 to Pred(FAlbum.Serie.Albums.Count) do begin
-    with lvSerie.Items.Add do begin
-      PAl := FAlbum.Serie.Albums[i];
-      Data := PAl;
-      Caption := PAl.ChaineAffichage;
-      if IsEqualGUID(PAl.ID, ID_Album) then
-        ImageIndex := 1
-      else
-        ImageIndex := -1;
-    end;
-  end;
+  lvSerie.Items.Count := FAlbum.Serie.Albums.Count;
   lvSerie.Items.EndUpdate;
   if FAlbum.Serie.Albums.Count = 1 then lvSerie.SmallImages := nil;
 
+  lvEditions.Items.BeginUpdate;
   for i := 0 to Pred(FAlbum.Editions.Editions.Count) do begin
     PEd := FAlbum.Editions.Editions[i];
     lvEditions.AddItem(PEd.ChaineAffichage, PEd);
   end;
+  lvEditions.Items.EndUpdate;
   lvEditions.Visible := FAlbum.Editions.Editions.Count > 1;
 end;
 
@@ -574,6 +548,38 @@ begin
     if FAlbum.Serie.SiteWeb <> '' then
       ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
   end;
+end;
+
+procedure TFrmConsultationAlbum.lvScenaristesData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FAlbum.Scenaristes[Item.Index];
+  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+end;
+
+procedure TFrmConsultationAlbum.lvDessinateursData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FAlbum.Dessinateurs[Item.Index];
+  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+end;
+
+procedure TFrmConsultationAlbum.lvColoristesData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FAlbum.Coloristes[Item.Index];
+  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+end;
+
+procedure TFrmConsultationAlbum.lvSerieData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FAlbum.Serie.Albums[Item.Index];
+  Item.Caption := TAlbum(Item.Data).ChaineAffichage;
+end;
+
+procedure TFrmConsultationAlbum.lvSerieGetImageIndex(Sender: TObject; Item: TListItem);
+begin
+  if IsEqualGUID(TAlbum(Item.Data).ID, ID_Album) then
+    Item.ImageIndex := 1
+  else
+    Item.ImageIndex := -1;
 end;
 
 end.

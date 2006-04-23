@@ -100,7 +100,7 @@ begin
 
       s := '';
       for i := 0 to Serie.Genres.Count - 1 do
-        AjoutString(s, Serie.Genres[i], ', ');
+        AjoutString(s, Serie.Genres.ValueFromIndex[i], ', ');
       if s <> '' then begin
         Prn.WriteLineColumn(0, -1, rsTransGenre + ':');
         Prn.WriteLineColumn(1, -2, s + '.');
@@ -160,7 +160,7 @@ begin
       if Serie.Albums.Count > 0 then begin
         Prn.WriteLineColumn(0, -1, rsTransAlbums);
         for i := 0 to Pred(Serie.Albums.Count) do begin
-          Album := Serie.Albums[i];
+          Album := TAlbum(Serie.Albums[i]);
           s := '';
           if Album.Integrale then begin
             s2 := NonZero(IntToStr(Album.TomeDebut));
@@ -207,7 +207,7 @@ begin
       if Serie.ParaBD.Count > 0 then begin
         Prn.WriteLineColumn(0, -1, rsTransParaDB);
         for i := 0 to Pred(Serie.ParaBD.Count) do begin
-          ParaBD := Serie.ParaBD[i];
+          ParaBD := TParaBD(Serie.ParaBD[i]);
           s := '';
           AjoutString(s, ParaBD.sCategorie, ' - ');
           AjoutString(s, FormatTitre(ParaBD.Titre), ' - ');
@@ -318,7 +318,7 @@ begin
 
       s := '';
       for i := 0 to Album.Serie.Genres.Count - 1 do
-        AjoutString(s, Album.Serie.Genres[i], ', ');
+        AjoutString(s, Album.Serie.Genres.ValueFromIndex[i], ', ');
       if s <> '' then begin
         Prn.WriteLineColumn(0, -1, rsTransGenre + ':');
         Prn.WriteLineColumn(1, -2, s + '.');

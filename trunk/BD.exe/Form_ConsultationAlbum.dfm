@@ -570,7 +570,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       ParentColor = True
       ReadOnly = True
       ScrollBars = ssVertical
-      TabOrder = 0
+      TabOrder = 8
     end
     object sujet: TMemo
       Left = 59
@@ -585,7 +585,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       ParentColor = True
       ReadOnly = True
       ScrollBars = ssVertical
-      TabOrder = 1
+      TabOrder = 7
     end
     object lvScenaristes: TVDTListView
       Left = 59
@@ -605,10 +605,12 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         end>
       ColumnClick = False
       HideSelection = False
+      OwnerData = True
       ReadOnly = True
       ShowColumnHeaders = False
-      TabOrder = 2
+      TabOrder = 3
       ViewStyle = vsReport
+      OnData = lvScenaristesData
       OnDblClick = lvScenaristesDblClick
     end
     object lvDessinateurs: TVDTListView
@@ -629,11 +631,13 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         end>
       ColumnClick = False
       HideSelection = False
+      OwnerData = True
       ReadOnly = True
       ShowColumnHeaders = False
       SortType = stData
-      TabOrder = 3
+      TabOrder = 4
       ViewStyle = vsReport
+      OnData = lvDessinateursData
       OnDblClick = lvScenaristesDblClick
     end
     object lvSerie: TVDTListView
@@ -654,13 +658,16 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         end>
       ColumnClick = False
       HideSelection = False
+      OwnerData = True
       ReadOnly = True
       ShowColumnHeaders = False
       SmallImages = Fond.ShareImageList
       SortType = stNone
-      TabOrder = 4
+      TabOrder = 6
       ViewStyle = vsReport
+      OnData = lvSerieData
       OnDblClick = lvSerieDblClick
+      OnGetImageIndex = lvSerieGetImageIndex
     end
     object Memo1: TMemo
       Left = 59
@@ -675,7 +682,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       ParentColor = True
       ReadOnly = True
       ScrollBars = ssVertical
-      TabOrder = 5
+      TabOrder = 2
     end
     object lvColoristes: TVDTListView
       Left = 59
@@ -694,11 +701,13 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         end>
       ColumnClick = False
       HideSelection = False
+      OwnerData = True
       ReadOnly = True
       ShowColumnHeaders = False
       SortType = stData
-      TabOrder = 6
+      TabOrder = 5
       ViewStyle = vsReport
+      OnData = lvColoristesData
       OnDblClick = lvScenaristesDblClick
     end
     object Integrale: TReadOnlyCheckBox
@@ -717,7 +726,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Font.Style = []
       ParentColor = False
       ParentFont = False
-      TabOrder = 7
+      TabOrder = 0
     end
     object HorsSerie: TReadOnlyCheckBox
       Left = 171
@@ -734,7 +743,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Font.Style = []
       ParentColor = False
       ParentFont = False
-      TabOrder = 9
+      TabOrder = 1
     end
     object PanelEdition: TPanel
       Left = 3
@@ -745,7 +754,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       BevelOuter = bvNone
       Caption = ' '
       ParentColor = True
-      TabOrder = 10
+      TabOrder = 9
       DesignSize = (
         513
         310)
@@ -1110,7 +1119,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         ParentColor = False
         ParentFont = False
         State = cbGrayed
-        TabOrder = 0
+        TabOrder = 2
       end
       object ListeEmprunts: TVirtualStringTree
         Left = 8
@@ -1136,7 +1145,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         Header.Style = hsPlates
         HotCursor = crHandPoint
         Images = Fond.ImageList1
-        TabOrder = 1
+        TabOrder = 7
         TreeOptions.PaintOptions = [toHideFocusRect, toHotTrack, toShowDropmark, toThemeAware, toUseBlendedImages]
         TreeOptions.SelectionOptions = [toFullRowSelect, toMultiSelect]
         OnDblClick = ListeEmpruntsDblClick
@@ -1164,7 +1173,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         Anchors = [akTop, akRight]
         Caption = 'Ajouter'
         Enabled = False
-        TabOrder = 2
+        TabOrder = 6
         OnClick = ajouterClick
       end
       object cbCouleur: TReadOnlyCheckBox
@@ -1184,7 +1193,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         ParentColor = False
         ParentFont = False
         State = cbGrayed
-        TabOrder = 3
+        TabOrder = 4
       end
       object cbStock: TReadOnlyCheckBox
         Left = 273
@@ -1203,7 +1212,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         ParentColor = False
         ParentFont = False
         State = cbGrayed
-        TabOrder = 4
+        TabOrder = 1
       end
       object edNotes: TMemo
         Left = 56
@@ -1237,7 +1246,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         ParentColor = False
         ParentFont = False
         State = cbGrayed
-        TabOrder = 6
+        TabOrder = 0
       end
       object cbDedicace: TReadOnlyCheckBox
         Left = 183
@@ -1256,7 +1265,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         ParentColor = False
         ParentFont = False
         State = cbGrayed
-        TabOrder = 7
+        TabOrder = 3
       end
     end
     object lvEditions: TListBox
@@ -1271,7 +1280,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       BorderStyle = bsNone
       Color = clWhite
       ItemHeight = 13
-      TabOrder = 8
+      TabOrder = 10
       OnClick = lvEditionsClick
     end
   end

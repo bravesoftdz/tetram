@@ -17,6 +17,8 @@ object FrmEditAuteur: TFrmEditAuteur
   Font.Style = []
   OldCreateOrder = True
   Position = poMainFormCenter
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
   object Bevel1: TBevel

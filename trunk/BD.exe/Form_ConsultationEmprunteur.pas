@@ -224,7 +224,7 @@ begin
   ClearForm;
   FEmprunteur.Fill(Value);
 
-  Caption := 'Fiche d''emprunteur - "' + FEmprunteur.Nom + '"';
+  Caption := 'Fiche d''emprunteur - ' + FEmprunteur.ChaineAffichage;
   nom.Caption := FEmprunteur.Nom;
   Adresse.Text := FEmprunteur.Adresse.Text;
 

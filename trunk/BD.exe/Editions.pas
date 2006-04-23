@@ -88,7 +88,7 @@ implementation
 
 uses
   JvUIB, Commun, Form_EditAlbum, Form_EditSerie, Form_EditEmprunteur, Textes, Form_EditEditeur, DM_Princ,
-  Math, Main, Procedures, Form_EditCollection, Form_EditAuteur, Form_EditParaBD, 
+  Math, Main, Procedures, Form_EditCollection, Form_EditAuteur, Form_EditParaBD,
   Form_EditAchatAlbum;
 
 function FindRec(Table, Champ: string; Reference: TGUID; WithMessage: Boolean): Boolean;
@@ -111,37 +111,35 @@ type
   TLambdaEdition = function(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
   TLambdaEdition2 = function(var ID: TGUID; Reference2: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 
-function CreationLambda(LambdaEdition: TLambdaEdition; const Valeur: string; Fenetre: TFormClass; GenereID: Boolean = True): TGUID; overload;
+function CreationLambda(LambdaEdition: TLambdaEdition; const Valeur: string; Fenetre: TFormClass): TGUID; overload;
 begin
   Result := GUID_NULL;
   if Fond.IsShowing(Fenetre) then Exit;
-  if GenereID then
-    with TJvUIBQuery.Create(nil) do try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'select udf_createguid() from rdb$database';
-      Open;
-      Result := StringToGUID(Fields.AsString[0]);
-    finally
-      Transaction.Free;
-      Free;
-    end;
+  with TJvUIBQuery.Create(nil) do try
+    Transaction := GetTransaction(DMPrinc.UIBDataBase);
+    SQL.Text := 'select udf_createguid() from rdb$database';
+    Open;
+    Result := StringToGUID(Fields.AsString[0]);
+  finally
+    Transaction.Free;
+    Free;
+  end;
   if not LambdaEdition(Result, True, Valeur) then Result := GUID_NULL;
 end;
 
-function CreationLambda(LambdaEdition: TLambdaEdition2; Reference2: TGUID; Valeur: string; Fenetre: TFormClass; GenereID: Boolean = True): TGUID; overload;
+function CreationLambda(LambdaEdition: TLambdaEdition2; Reference2: TGUID; Valeur: string; Fenetre: TFormClass): TGUID; overload;
 begin
   Result := GUID_NULL;
   if Fond.IsShowing(Fenetre) then Exit;
-  if GenereID then
-    with TJvUIBQuery.Create(nil) do try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'select udf_createguid() from rdb$database';
-      Open;
-      Result := StringToGUID(Fields.AsString[0]);
-    finally
-      Transaction.Free;
-      Free;
-    end;
+  with TJvUIBQuery.Create(nil) do try
+    Transaction := GetTransaction(DMPrinc.UIBDataBase);
+    SQL.Text := 'select udf_createguid() from rdb$database';
+    Open;
+    Result := StringToGUID(Fields.AsString[0]);
+  finally
+    Transaction.Free;
+    Free;
+  end;
   if not LambdaEdition(Result, Reference2, True, Valeur) then Result := GUID_NULL;
 end;
 
@@ -259,7 +257,7 @@ end;
 
 function CreationAchatAlbum(const Valeur: string): TGUID;
 begin
-  Result := CreationLambda(EditionAchatAlbum, Valeur, TFrmEditAchatAlbum, False);
+  Result := CreationLambda(EditionAchatAlbum, Valeur, TFrmEditAchatAlbum);
 end;
 
 function EditionAchatAlbum(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
@@ -435,9 +433,11 @@ begin
   me := TModeEditing.Create;
   f := TFrmEditCollection.Create(Application);
   with f do try
-    FID_Editeur := ID_Editeur;
     ID_Collection := ID;
-    if Creation then edNom.Text := Valeur;
+    if Creation then begin
+      edNom.Text := Valeur;
+      vtEditeurs.CurrentValue := ID_Editeur;
+    end;
     hg := nil;
     Result := Fond.SetModalChildForm(f) = mrOk;
   finally
@@ -576,9 +576,10 @@ begin
   Result := DelLambda('ParaBD', 'ID_ParaBD', ID);
 end;
 //**********************************************************************************************
+
 function CreationAchatParaBD(const Valeur: string): TGUID;
 begin
-  Result := CreationLambda(EditionAchatParaBD, Valeur, TFrmEditParaBD, False);
+  Result := CreationLambda(EditionAchatParaBD, Valeur, TFrmEditParaBD);
 end;
 
 function EditionAchatParaBD(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;

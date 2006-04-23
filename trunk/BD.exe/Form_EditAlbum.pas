@@ -152,11 +152,12 @@ type
     procedure miChangeCategorieImageClick(Sender: TObject);
     procedure pmChoixCategoriePopup(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
+    procedure lvScenaristesData(Sender: TObject; Item: TListItem);
+    procedure lvDessinateursData(Sender: TObject; Item: TListItem);
+    procedure lvColoristesData(Sender: TObject; Item: TListItem);
   private
     { Déclarations privées }
-    FID_Album, FID_Serie: TGUID;
-    FCreation: Boolean;
-    FDeletedCouvertures, FDeletedEditions: TStringList;
+    FAlbum: TAlbumComplet;
     FCurrentEditionComplete: TEditionComplete;
     FEditeurCollectionSelected: array of Boolean;
     FEditionChanging: Boolean;
@@ -167,14 +168,16 @@ type
     procedure RefreshEditionCaption;
     procedure SetID_Album(const Value: TGUID);
     procedure VisuClose(Sender: TObject);
-    procedure AjouteAuteur(List: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean); overload;
-    procedure AjouteAuteur(List: TVDTListViewLabeled; Auteur: TPersonnage); overload;
+    procedure AjouteAuteur(List: TList; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean); overload;
+    procedure AjouteAuteur(List: TList; lvList: TVDTListViewLabeled; Auteur: TPersonnage); overload;
     procedure EditeurCollectionSelected(Sender: TObject; NextSearch: Boolean);
+    function GetID_Album: TGUID;
+    function GetCreation: Boolean;
   public
     { Déclarations publiques }
-    property isCreation: Boolean read FCreation;
+    property isCreation: Boolean read GetCreation;
     property isAchat: Boolean read FisAchat write FisAchat;
-    property ID_Album: TGUID read FID_Album write SetID_Album;
+    property ID_Album: TGUID read GetID_Album write SetID_Album;
   end;
 
 implementation
@@ -195,8 +198,6 @@ var
   mi: TMenuItem;
 begin
   PrepareLV(Self);
-  FDeletedCouvertures := TStringList.Create;
-  FDeletedEditions := TStringList.Create;
 
   FrameRechercheRapidePersonnes.VirtualTreeView := vtPersonnes;
   FrameRechercheRapideSerie.VirtualTreeView := vtSeries;
@@ -207,9 +208,10 @@ begin
   FrameRechercheRapideCollection.OnNew := OnNewCollection;
   FrameRechercheRapideCollection.OnSearch := EditeurCollectionSelected;
 
+  FAlbum := TAlbumComplet.Create;
+
   SetLength(FEditeurCollectionSelected, 0);
   FCurrentEditionComplete := nil;
-  FID_Serie := GUID_NULL;
   vtPersonnes.Mode := vmPersonnes;
   vtEditeurs.Mode := vmEditeurs;
   vtCollections.Mode := vmNone;
@@ -250,118 +252,75 @@ end;
 
 procedure TFrmEditAlbum.SetID_Album(const Value: TGUID);
 var
-  q: TJvUIBQuery;
   i: Integer;
-  PE: TEdition;
-  EditionsComplet: TEditionsComplet;
+  PE: TEditionComplete;
+  hg: IHourGlass;
 begin
-  FID_Album := Value;
+  hg := THourGlass.Create;
+  FAlbum.Fill(Value);
 
-  q := TJvUIBQuery.Create(nil);
-  with q do try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
+  lvScenaristes.Items.BeginUpdate;
+  lvDessinateurs.Items.BeginUpdate;
+  lvColoristes.Items.BeginUpdate;
+  vtEditions.Items.BeginUpdate;
+  try
+    edTitre.Text := FAlbum.Titre;
+    edMoisParution.Text := NonZero(IntToStr(FAlbum.MoisParution));
+    edAnneeParution.Text := NonZero(IntToStr(FAlbum.AnneeParution));
+    edTome.Text := NonZero(IntToStr(FAlbum.Tome));
+    edTomeDebut.Text := NonZero(IntToStr(FAlbum.TomeDebut));
+    edTomeFin.Text := NonZero(IntToStr(FAlbum.TomeFin));
+    cbIntegrale.Checked := FAlbum.Integrale;
+    cbHorsSerie.Checked := FAlbum.HorsSerie;
+    histoire.Lines.Assign(FAlbum.Sujet);
+    remarques.Lines.Assign(FAlbum.Notes);
+    cbIntegraleClick(cbIntegrale);
 
-    SQL.Text := 'SELECT TITREALBUM, MOISPARUTION, ANNEEPARUTION, ID_Serie, TOME, TOMEDEBUT, TOMEFIN, SUJETALBUM, REMARQUESALBUM, HORSSERIE, INTEGRALE';
-    SQL.Add('FROM ALBUMS WHERE ID_Album = ?');
-    Params.AsString[0] := GUIDToString(FID_Album);
-    FetchBlobs := True;
-    Open;
+    lvScenaristes.Items.Count := FAlbum.Scenaristes.Count;
+    lvDessinateurs.Items.Count := FAlbum.Dessinateurs.Count;
+    lvColoristes.Items.Count := FAlbum.Coloristes.Count;
 
-    FCreation := Eof;
-    if not FCreation then begin
-      edTitre.Text := Fields.ByNameAsString['TITREALBUM'];
-      edMoisParution.Text := Fields.ByNameAsString['MOISPARUTION'];
-      edAnneeParution.Text := Fields.ByNameAsString['ANNEEPARUTION'];
-      edTome.Text := Fields.ByNameAsString['TOME'];
-      edTomeDebut.Text := Fields.ByNameAsString['TOMEDEBUT'];
-      edTomeFin.Text := Fields.ByNameAsString['TOMEFIN'];
-      cbIntegrale.Checked := Fields.ByNameAsBoolean['INTEGRALE'];
-      cbHorsSerie.Checked := Fields.ByNameAsBoolean['HORSSERIE'];
-      histoire.Lines.Text := Fields.ByNameAsString['SUJETALBUM'];
-      remarques.Lines.Text := Fields.ByNameAsString['REMARQUESALBUM'];
-      FID_Serie := StringToGUID(Fields.ByNameAsString['ID_SERIE']);
+    FScenaristesSelected := not FAlbum.RecInconnu;
+    FDessinateursSelected := not FAlbum.RecInconnu;
+    FColoristesSelected := not FAlbum.RecInconnu;
 
-      cbIntegraleClick(cbIntegrale);
+    vtSeries.OnChange := nil;
+    vtSeries.CurrentValue := FAlbum.ID_Serie;
+    vtSeries.OnChange := vtSeriesChange;
 
-      FetchBlobs := False;
-
-      lvScenaristes.Items.BeginUpdate;
-      lvDessinateurs.Items.BeginUpdate;
-      lvColoristes.Items.BeginUpdate;
-      SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL, NULL)';
-      Params.AsString[0] := GUIDToString(FID_Album);
-      Open;
-      while not Eof do begin
-        case Fields.ByNameAsInteger['Metier'] of
-          0: begin
-              with LVScenaristes.Items.Add do begin
-                Data := TAuteur.Make(q);
-                Caption := TAuteur(Data).ChaineAffichage;
-              end;
-              FScenaristesSelected := True;
-            end;
-          1: begin
-              with LVDessinateurs.Items.Add do begin
-                Data := TAuteur.Make(q);
-                Caption := TAuteur(Data).ChaineAffichage;
-              end;
-              FDessinateursSelected := True;
-            end;
-          2: begin
-              with LVColoristes.Items.Add do begin
-                Data := TAuteur.Make(q);
-                Caption := TAuteur(Data).ChaineAffichage;
-              end;
-              FColoristesSelected := True;
-            end;
-        end;
-        Next;
-      end;
-
-      vtSeries.CurrentValue := FID_Serie;
-      vtEditions.Items.BeginUpdate;
-
-      EditionsComplet := TEditionsComplet.Create(ID_Album);
-      try
-        for i := 0 to Pred(EditionsComplet.Editions.Count) do begin
-          PE := EditionsComplet.Editions[i];
-          SetLength(FEditeurCollectionSelected, Succ(Length(FEditeurCollectionSelected)));
-          FEditeurCollectionSelected[Pred(Length(FEditeurCollectionSelected))] := True;
-          vtEditions.AddItem(PE.ChaineAffichage, TEditionComplete.Create(PE.ID));
-        end;
-      finally
-        EditionsComplet.Free;
-      end;
+    SetLength(FEditeurCollectionSelected, FAlbum.Editions.Editions.Count);
+    for i := 0 to Pred(FAlbum.Editions.Editions.Count) do begin
+      PE := FAlbum.Editions.Editions[i];
+      FEditeurCollectionSelected[i] := True;
+      vtEditions.AddItem(PE.ChaineAffichage, PE);
     end;
 
-    if FCreation or isAchat then VDTButton3.Click;
+    if FAlbum.RecInconnu or isAchat then VDTButton3.Click;
   finally
     vtEditions.Items.EndUpdate;
     lvScenaristes.Items.EndUpdate;
     lvDessinateurs.Items.EndUpdate;
     lvColoristes.Items.EndUpdate;
-    Transaction.Free;
-    Free;
   end;
 end;
 
-procedure TFrmEditAlbum.AjouteAuteur(List: TVDTListViewLabeled; Auteur: TPersonnage);
+procedure TFrmEditAlbum.AjouteAuteur(List: TList; lvList: TVDTListViewLabeled; Auteur: TPersonnage);
 var
   dummy: Boolean;
 begin
-  AjouteAuteur(List, Auteur, dummy);
+  AjouteAuteur(List, lvList, Auteur, dummy);
 end;
 
-procedure TFrmEditAlbum.AjouteAuteur(List: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean);
+procedure TFrmEditAlbum.AjouteAuteur(List: TList; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean);
 var
   PA: TAuteur;
 begin
   PA := TAuteur.Create;
   PA.Fill(Auteur, ID_Album, GUID_NULL, 0);
-  with List.Items.Add do begin
-    Data := PA;
-    Caption := PA.ChaineAffichage;
-  end;
+  List.Add(PA);
+  lvList.Items.Count := List.Count;
+  lvList.Invalidate;
+
   FlagAuteur := True;
 end;
 
@@ -369,9 +328,9 @@ procedure TFrmEditAlbum.ajoutClick(Sender: TObject);
 begin
   if IsEqualGUID(vtPersonnes.CurrentValue, GUID_NULL) then Exit;
   case TSpeedButton(Sender).Tag of
-    1: AjouteAuteur(lvScenaristes, TPersonnage(vtPersonnes.GetFocusedNodeData), FScenaristesSelected);
-    2: AjouteAuteur(lvDessinateurs, TPersonnage(vtPersonnes.GetFocusedNodeData), FDessinateursSelected);
-    3: AjouteAuteur(lvColoristes, TPersonnage(vtPersonnes.GetFocusedNodeData), FColoristesSelected);
+    1: AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TPersonnage(vtPersonnes.GetFocusedNodeData), FScenaristesSelected);
+    2: AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TPersonnage(vtPersonnes.GetFocusedNodeData), FDessinateursSelected);
+    3: AjouteAuteur(FAlbum.Coloristes, lvColoristes, TPersonnage(vtPersonnes.GetFocusedNodeData), FColoristesSelected);
   end;
   vtPersonnesChange(vtPersonnes, vtPersonnes.FocusedNode);
 end;
@@ -379,43 +338,36 @@ end;
 procedure TFrmEditAlbum.lvDessinateursKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 var
   src: TListView;
-  PA: TAuteur;
 begin
   if Key <> VK_DELETE then Exit;
   src := TListView(Sender);
-  PA := src.Selected.Data;
-  PA.Free;
-  src.Selected.Delete;
+  if src = lvScenaristes then FAlbum.Scenaristes.Delete(src.Selected.Index);
+  if src = lvDessinateurs then FAlbum.Dessinateurs.Delete(src.Selected.Index);
+  if src = lvColoristes then FAlbum.Coloristes.Delete(src.Selected.Index);
+  lvScenaristes.Items.Count := FAlbum.Scenaristes.Count;
+  lvDessinateurs.Items.Count := FAlbum.Dessinateurs.Count;
+  lvColoristes.Items.Count := FAlbum.Coloristes.Count;
+  src.Invalidate;
   vtPersonnesChange(vtPersonnes, vtPersonnes.FocusedNode);
 end;
 
 procedure TFrmEditAlbum.FormDestroy(Sender: TObject);
-var
-  i: Integer;
 begin
-  FreeAndNil(FDeletedCouvertures);
-  FreeAndNil(FDeletedEditions);
-  TAuteur.VideListe(lvScenaristes);
-  TAuteur.VideListe(lvDessinateurs);
-  TAuteur.VideListe(lvColoristes);
+  lvScenaristes.Items.Count := 0;
+  lvDessinateurs.Items.Count := 0;
+  lvColoristes.Items.Count := 0;
   FCurrentEditionComplete := nil;
-  for i := 0 to Pred(vtEditions.Items.Count) do
-    vtEditions.Items.Objects[i].Free;
   vtEditions.Clear;
+  FAlbum.Free;
 end;
 
 procedure TFrmEditAlbum.Frame11btnOKClick(Sender: TObject);
 var
-  PC: TCouverture;
-  s: string;
-  q, q1, q2, q3, q4, q5, q6: TJvUIBQuery;
-  i, j: Integer;
+  i: Integer;
   EditionComplete: TEditionComplete;
   hg: IHourGlass;
-  Stream: TStream;
-  AfficheEdition, CurrentEdition: Integer;
+  AfficheEdition: Integer;
   cs: string;
-  FichiersImages: TStringList;
 begin
   if Length(Trim(edTitre.Text)) = 0 then begin
     AffMessage(rsTitreObligatoire, mtInformation, [mbOk], True);
@@ -436,7 +388,6 @@ begin
     Exit;
   end;
 
-  CurrentEdition := vtEditions.ItemIndex;
   UpdateEdition; // force la mise à jour du REditionComplete en cours si c pas déjà fait
 
   AfficheEdition := -1;
@@ -473,326 +424,37 @@ begin
     Exit;
   end;
 
-  FichiersImages := TStringList.Create;
   hg := THourGlass.Create;
-  q := TJvUIBQuery.Create(nil);
-  with q do try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
 
-    if FCreation then begin
-      SQL.Text := 'INSERT INTO ALBUMS (ID_Album, TITREALBUM, MOISPARUTION, ANNEEPARUTION, ID_Serie, TOME, TOMEDEBUT, TOMEFIN, HORSSERIE, INTEGRALE, SUJETALBUM, REMARQUESALBUM, TITREINITIALESALBUM, UPPERSUJETALBUM, UPPERREMARQUESALBUM)';
-      SQL.Add('VALUES');
-      SQL.Add('(:ID_Album, :TITREALBUM, :MOISPARUTION, :ANNEEPARUTION, :ID_Serie, :TOME, :TOMEDEBUT, :TOMEFIN, :HORSSERIE, :INTEGRALE, :SUJETALBUM, :REMARQUESALBUM, :TITREINITIALESALBUM, :UPPERSUJETALBUM, :UPPERREMARQUESALBUM)');
-    end
-    else begin
-      if isAchat then begin
-        SQL.Text := 'UPDATE ALBUMS SET ACHAT = 0 WHERE ID_Album = ?';
-        Params.AsString[0] := GUIDToString(FID_Album);
-        Execute;
-      end;
-
-      SQL.Text := 'UPDATE ALBUMS SET';
-      SQL.Add('TITREALBUM = :TITREALBUM, MOISPARUTION = :MOISPARUTION, ANNEEPARUTION = :ANNEEPARUTION, ID_Serie = :ID_Serie, TOME = :TOME, TOMEDEBUT = :TOMEDEBUT, TOMEFIN = :TOMEFIN,');
-      SQL.Add('HORSSERIE = :HORSSERIE, INTEGRALE = :INTEGRALE,');
-      SQL.Add('SUJETALBUM = :SUJETALBUM, REMARQUESALBUM = :REMARQUESALBUM, TITREINITIALESALBUM = :TITREINITIALESALBUM,');
-      SQL.Add('UPPERSUJETALBUM = :UPPERSUJETALBUM, UPPERREMARQUESALBUM = :UPPERREMARQUESALBUM');
-      SQL.Add('WHERE (ID_Album = :ID_Album)');
-    end;
-
-    Params.ByNameAsString['ID_ALBUM'] := GUIDToString(FID_Album);
-    s := Trim(edTitre.Text);
-    Params.ByNameAsString['TITREALBUM'] := s;
-    Params.ByNameAsString['TITREINITIALESALBUM'] := MakeInitiales(UpperCase(SansAccents(s)));
-    if edAnneeParution.Text = '' then begin
-      Params.ByNameIsNull['ANNEEPARUTION'] := True;
-      Params.ByNameIsNull['MOISPARUTION'] := True;
-    end
-    else begin
-      Params.ByNameAsString['ANNEEPARUTION'] := edAnneeParution.Text;
-      if edMoisParution.Text = '' then
-        Params.ByNameIsNull['MOISPARUTION'] := True
-      else
-        Params.ByNameAsString['MOISPARUTION'] := edMoisParution.Text;
-    end;
-    if edTome.Text = '' then
-      Params.ByNameIsNull['TOME'] := True
+  FAlbum.Titre := Trim(edTitre.Text);
+  if edAnneeParution.Text = '' then begin
+    FAlbum.AnneeParution := 0;
+    FAlbum.MoisParution := 0;
+  end
+  else begin
+    FAlbum.AnneeParution := StrToInt(edAnneeParution.Text);
+    if edMoisParution.Text = '' then
+      FAlbum.MoisParution := 0
     else
-      Params.ByNameAsString['TOME'] := edTome.Text;
-    if (not cbIntegrale.Checked) or (edTomeDebut.Text = '') then
-      Params.ByNameIsNull['TOMEDEBUT'] := True
-    else
-      Params.ByNameAsString['TOMEDEBUT'] := edTomeDebut.Text;
-    if (not cbIntegrale.Checked) or (edTomeFin.Text = '') then
-      Params.ByNameIsNull['TOMEFIN'] := True
-    else
-      Params.ByNameAsString['TOMEFIN'] := edTomeFin.Text;
-    Params.ByNameAsBoolean['INTEGRALE'] := cbIntegrale.Checked;
-    Params.ByNameAsBoolean['HORSSERIE'] := cbHorsSerie.Checked;
-    s := histoire.Lines.Text;
-    if s <> '' then begin
-      ParamsSetBlob('SUJETALBUM', s);
-      s := UpperCase(SansAccents(s));
-      ParamsSetBlob('UPPERSUJETALBUM', s);
-    end
-    else begin
-      Params.ByNameIsNull['SUJETALBUM'] := True;
-      Params.ByNameIsNull['UPPERSUJETALBUM'] := True;
-    end;
-    s := remarques.Lines.Text;
-    if s <> '' then begin
-      ParamsSetBlob('REMARQUESALBUM', s);
-      s := UpperCase(SansAccents(s));
-      ParamsSetBlob('UPPERREMARQUESALBUM', s);
-    end
-    else begin
-      Params.ByNameIsNull['REMARQUESALBUM'] := True;
-      Params.ByNameIsNull['UPPERREMARQUESALBUM'] := True;
-    end;
-    FID_Serie := vtSeries.CurrentValue;
-    Params.ByNameAsString['ID_SERIE'] := GUIDToString(FID_Serie);
-    ExecSQL;
-
-    SupprimerToutDans('', 'AUTEURS', 'ID_Album', ID_Album);
-    SQL.Clear;
-    SQL.Add('INSERT INTO AUTEURS (ID_Album, METIER, ID_Personne)');
-    SQL.Add('VALUES (:ID_Album, :METIER, :ID_Personne)');
-    for i := 0 to LVScenaristes.Items.Count - 1 do begin
-      Params.AsString[0] := GUIDToString(ID_Album);
-      Params.AsInteger[1] := 0;
-      Params.AsString[2] := GUIDToString(TAuteur(lvScenaristes.Items[i].Data).Personne.ID);
-      ExecSQL;
-    end;
-    for i := 0 to LVDessinateurs.Items.Count - 1 do begin
-      Params.AsString[0] := GUIDToString(ID_Album);
-      Params.AsInteger[1] := 1;
-      Params.AsString[2] := GUIDToString(TAuteur(lvDessinateurs.Items[i].Data).Personne.ID);
-      ExecSQL;
-    end;
-    for i := 0 to LVColoristes.Items.Count - 1 do begin
-      Params.AsString[0] := GUIDToString(ID_Album);
-      Params.AsInteger[1] := 2;
-      Params.AsString[2] := GUIDToString(TAuteur(lvColoristes.Items[i].Data).Personne.ID);
-      ExecSQL;
-    end;
-
-    // couvertures supprimées
-    for i := 0 to Pred(FDeletedCouvertures.Count) do
-      SupprimerToutDans('', 'COUVERTURES', 'ID_Couverture', StringToGUID(FDeletedCouvertures[i]), Transaction);
-
-    // éditions supprimées
-    for i := 0 to Pred(FDeletedEditions.Count) do
-      SupprimerToutDans('', 'EDITIONS', 'ID_Edition', StringToGUID(FDeletedEditions[i]), Transaction);
-
-    for i := 0 to Pred(vtEditions.Items.Count) do begin
-      EditionComplete := Pointer(vtEditions.Items.Objects[i]);
-
-      if IsEqualGUID(EditionComplete.ID_Edition, GUID_NULL) then begin
-        SQL.Text := 'select udf_createguid() from rdb$database';
-        Open;
-        EditionComplete.ID_Edition := StringToGUID(Fields.AsString[0]);
-        Close;
-
-        SQL.Text := 'INSERT INTO EDITIONS (ID_Edition, ID_Album, ID_Editeur, ID_Collection, ANNEEEDITION, PRIX, VO, TYPEEDITION, COULEUR, ISBN, STOCK, DEDICACE, OFFERT, GRATUIT, ETAT, RELIURE, ORIENTATION, FormatEdition, DATEACHAT, NOTES, NOMBREDEPAGES, ANNEECOTE, PRIXCOTE)';
-        SQL.Add('VALUES');
-        SQL.Add('(:ID_Edition, :ID_Album, :ID_Editeur, :ID_Collection, :ANNEEEDITION, :PRIX, :VO, :TYPEEDITION, :COULEUR, :ISBN, :STOCK, :DEDICACE, :OFFERT, :GRATUIT, :ETAT, :RELIURE, :ORIENTATION, :FormatEdition, :DATEACHAT, :NOTES, :NOMBREDEPAGES, :ANNEECOTE, :PRIXCOTE)');
-      end
-      else begin
-        SQL.Text := 'UPDATE EDITIONS SET';
-        SQL.Add('ID_Album = :ID_Album, ID_Editeur = :ID_Editeur, ID_Collection = :ID_Collection, ANNEEEDITION = :ANNEEEDITION,');
-        SQL.Add('PRIX = :PRIX, VO = :VO, TYPEEDITION = :TYPEEDITION, COULEUR = :COULEUR, ISBN = :ISBN, STOCK = :STOCK, ETAT = :ETAT, RELIURE = :RELIURE,');
-        SQL.Add('DEDICACE = :DEDICACE, OFFERT = :OFFERT, GRATUIT = :GRATUIT, DATEACHAT = :DATEACHAT, NOTES = :NOTES, ORIENTATION = :ORIENTATION,');
-        SQL.Add('ANNEECOTE = :ANNEECOTE, PRIXCOTE = :PRIXCOTE,');
-        SQL.Add('FormatEdition = :FormatEdition, NOMBREDEPAGES = :NOMBREDEPAGES WHERE (ID_Edition = :ID_Edition)');
-      end;
-
-      Params.ByNameAsString['ID_Edition'] := GUIDToString(EditionComplete.ID_Edition);
-      Params.ByNameAsString['ID_Album'] := GUIDToString(ID_Album);
-      Params.ByNameAsString['ID_Editeur'] := GUIDToString(EditionComplete.Editeur.ID_Editeur);
-      if IsEqualGUID(EditionComplete.Collection.ID, GUID_NULL) then
-        Params.ByNameIsNull['ID_Collection'] := True
-      else
-        Params.ByNameAsString['ID_Collection'] := GUIDToString(EditionComplete.Collection.ID);
-      if EditionComplete.AnneeEdition = 0 then
-        Params.ByNameIsNull['ANNEEEDITION'] := True
-      else
-        Params.ByNameAsInteger['ANNEEEDITION'] := EditionComplete.AnneeEdition;
-      if EditionComplete.NombreDePages = 0 then
-        Params.ByNameIsNull['NombreDePages'] := True
-      else
-        Params.ByNameAsInteger['NombreDePages'] := EditionComplete.NombreDePages;
-      if EditionComplete.Prix = 0 then
-        Params.ByNameIsNull['PRIX'] := True
-      else
-        Params.ByNameAsCurrency['PRIX'] := EditionComplete.Prix;
-      Params.ByNameAsBoolean['VO'] := EditionComplete.VO;
-      Params.ByNameAsBoolean['COULEUR'] := EditionComplete.Couleur;
-      Params.ByNameAsString['ISBN'] := ClearISBN(EditionComplete.ISBN);
-      Params.ByNameAsBoolean['STOCK'] := EditionComplete.Stock;
-      Params.ByNameAsBoolean['DEDICACE'] := EditionComplete.Dedicace;
-      Params.ByNameAsBoolean['GRATUIT'] := EditionComplete.Gratuit;
-      Params.ByNameAsBoolean['OFFERT'] := EditionComplete.Offert;
-      Params.ByNameAsInteger['TYPEEDITION'] := EditionComplete.TypeEdition;
-      Params.ByNameAsInteger['ETAT'] := EditionComplete.Etat;
-      Params.ByNameAsInteger['RELIURE'] := EditionComplete.Reliure;
-      Params.ByNameAsInteger['Orientation'] := EditionComplete.Orientation;
-      Params.ByNameAsInteger['FormatEdition'] := EditionComplete.FormatEdition;
-      if EditionComplete.DateAchat = 0 then
-        Params.ByNameIsNull['DATEACHAT'] := True
-      else
-        Params.ByNameAsDate['DATEACHAT'] := Trunc(EditionComplete.DateAchat);
-      if (EditionComplete.AnneeCote = 0) or (EditionComplete.PrixCote = 0) then begin
-        Params.ByNameIsNull['ANNEECOTE'] := True;
-        Params.ByNameIsNull['PRIXCOTE'] := True;
-      end
-      else begin
-        Params.ByNameAsInteger['ANNEECOTE'] := EditionComplete.AnneeCote;
-        Params.ByNameAsCurrency['PRIXCOTE'] := EditionComplete.PrixCote;
-      end;
-
-      s := EditionComplete.Notes.Text;
-      if s <> '' then
-        ParamsSetBlob('NOTES', s)
-      else
-        Params.ByNameIsNull['NOTES'] := True;
-      ExecSQL;
-
-      q1 := TJvUIBQuery.Create(nil);
-      q2 := TJvUIBQuery.Create(nil);
-      q3 := TJvUIBQuery.Create(nil);
-      q4 := TJvUIBQuery.Create(nil);
-      q5 := TJvUIBQuery.Create(nil);
-      q6 := TJvUIBQuery.Create(nil);
-      try
-        q1.Transaction := Transaction;
-        q2.Transaction := Transaction;
-        q3.Transaction := Transaction;
-        q4.Transaction := Transaction;
-        q5.Transaction := Transaction;
-        q6.Transaction := Transaction;
-
-        q1.SQL.Clear;
-        q1.SQL.Add('INSERT INTO COUVERTURES (ID_Edition, ID_Album, FichierCouverture, STOCKAGECOUVERTURE, Ordre, CategorieImage)');
-        q1.SQL.Add('VALUES (:ID_Edition, :ID_Album, :FichierCouverture, 0, :Ordre, :CategorieImage)');
-
-        q6.SQL.Text := 'SELECT Result FROM SAVEBLOBTOFILE(:Chemin, :Fichier, :BlobContent)';
-
-        q2.SQL.Clear;
-        q2.SQL.Add('INSERT INTO COUVERTURES (ID_Edition, ID_Album, FichierCouverture, STOCKAGECOUVERTURE, Ordre, IMAGECOUVERTURE, CategorieImage)');
-        q2.SQL.Add('VALUES (:ID_Edition, :ID_Album, :FichierCouverture, 1, :Ordre, :IMAGECOUVERTURE, :CategorieImage)');
-
-        q3.SQL.Text := 'UPDATE COUVERTURES SET IMAGECOUVERTURE = :IMAGECOUVERTURE, STOCKAGECOUVERTURE = 1 WHERE ID_Couverture = :ID_Couverture';
-
-        q4.SQL.Text := 'UPDATE COUVERTURES SET IMAGECOUVERTURE = NULL, STOCKAGECOUVERTURE = 0 WHERE ID_Couverture = :ID_Couverture';
-
-        q5.SQL.Text := 'UPDATE COUVERTURES SET FichierCouverture = :FichierCouverture, Ordre = :Ordre, CategorieImage = :CategorieImage WHERE ID_Couverture = :ID_Couverture';
-
-        for j := 0 to Pred(EditionComplete.Couvertures.Count) do begin
-          PC := EditionComplete.Couvertures[j];
-          if IsEqualGUID(PC.ID, GUID_NULL) then begin // nouvelles couvertures
-            if (not PC.NewStockee) then begin // couvertures liées (q1)
-              PC.OldNom := PC.NewNom;
-              PC.NewNom := SearchNewFileName(RepImages, ExtractFileName(PC.NewNom), True);
-              q6.Params.ByNameAsString['Chemin'] := RepImages;
-              q6.Params.ByNameAsString['Fichier'] := PC.NewNom;
-              Stream := GetCouvertureStream(PC.OldNom, -1, -1, False);
-              try
-                q6.ParamsSetBlob('BlobContent', Stream);
-              finally
-                Stream.Free;
-              end;
-              q6.Open;
-
-              q1.Params.ByNameAsString['ID_Edition'] := GUIDToString(EditionComplete.ID_Edition);
-              q1.Params.ByNameAsString['ID_Album'] := GUIDToString(ID_Album);
-              q1.Params.ByNameAsString['FichierCouverture'] := PC.NewNom;
-              q1.Params.ByNameAsInteger['Ordre'] := j;
-              q1.Params.ByNameAsInteger['CategorieImage'] := PC.Categorie;
-              q1.ExecSQL;
-            end
-            else if FileExists(PC.NewNom) then begin // couvertures stockées (q2)
-              q2.Params.ByNameAsString['ID_Edition'] := GUIDToString(EditionComplete.ID_Edition);
-              q2.Params.ByNameAsString['ID_Album'] := GUIDToString(ID_Album);
-              q2.Params.ByNameAsString['FichierCouverture'] := ChangeFileExt(ExtractFileName(PC.NewNom), '');
-              q2.Params.ByNameAsInteger['Ordre'] := j;
-              Stream := GetJPEGStream(PC.NewNom);
-              try
-                q2.ParamsSetBlob('IMAGECOUVERTURE', Stream);
-              finally
-                Stream.Free;
-              end;
-              q2.Params.ByNameAsInteger['CategorieImage'] := PC.Categorie;
-              q2.ExecSQL;
-            end;
-          end
-          else begin // ancienne couverture
-            if PC.OldStockee <> PC.NewStockee then begin // changement de stockage
-              if (PC.NewStockee) then begin // conversion couvertures liées en stockées (q3)
-                Stream := GetCouvertureStream(False, PC.ID, -1, -1, False);
-                try
-                  q3.ParamsSetBlob('IMAGECOUVERTURE', Stream);
-                finally
-                  Stream.Free;
-                end;
-                q3.Params.ByNameAsString['ID_Couverture'] := GUIDToString(PC.ID);
-                q3.ExecSQL;
-                if ExtractFilePath(PC.NewNom) = '' then
-                  FichiersImages.Add(RepImages + PC.NewNom)
-                else
-                  FichiersImages.Add(PC.NewNom);
-                PC.NewNom := ChangeFileExt(ExtractFileName(PC.NewNom), '');
-              end
-              else begin // conversion couvertures stockées en liées
-                PC.NewNom := SearchNewFileName(RepImages, PC.NewNom + '.jpg', True);
-                q6.Params.ByNameAsString['Chemin'] := RepImages;
-                q6.Params.ByNameAsString['Fichier'] := PC.NewNom;
-                Stream := GetCouvertureStream(False, PC.ID, -1, -1, False);
-                try
-                  q6.ParamsSetBlob('BlobContent', Stream);
-                finally
-                  Stream.Free;
-                end;
-                q6.Open;
-
-                q4.Params.ByNameAsString['ID_Couverture'] := GUIDToString(PC.ID);
-                q4.ExecSQL;
-              end;
-            end;
-            // couvertures renommées, réordonnées, changée de catégorie, etc (q5)
-            // obligatoire pour les changement de stockage
-            q5.Params.ByNameAsString['FichierCouverture'] := PC.NewNom;
-            q5.Params.ByNameAsInteger['Ordre'] := j;
-            q5.Params.ByNameAsInteger['CategorieImage'] := PC.Categorie;
-            q5.Params.ByNameAsString['ID_Couverture'] := GUIDToString(PC.ID);
-            q5.ExecSQL;
-          end;
-        end;
-      finally
-        FreeAndNil(q1);
-        FreeAndNil(q2);
-        FreeAndNil(q3);
-        FreeAndNil(q4);
-        FreeAndNil(q5);
-        FreeAndNil(q6);
-      end;
-    end;
-    Transaction.Commit;
-    if FichiersImages.Count > 0 then begin
-      Transaction.StartTransaction;
-      SQL.Text := 'SELECT * FROM DELETEFILE(:Fichier)';
-      for i := 0 to Pred(FichiersImages.Count) do begin
-        Params.AsString[0] := FichiersImages[i];
-        Open;
-        if Fields.AsInteger[0] <> 0 then
-          ShowMessage(FichiersImages[i] + #13#13 + SysErrorMessage(Fields.AsInteger[0]));
-      end;
-      Transaction.Commit;
-    end;
-  finally
-    vtEditions.ItemIndex := CurrentEdition;
-    FichiersImages.Free;
-    Transaction.Free;
-    Free;
+      FAlbum.MoisParution := StrToInt(edMoisParution.Text);
   end;
+  FAlbum.Tome := StrToIntDef(edTome.Text, 0);
+  if (not cbIntegrale.Checked) or (edTomeDebut.Text = '') then
+    FAlbum.TomeDebut := 0
+  else
+    FAlbum.TomeDebut := StrToInt(edTomeDebut.Text);
+  if (not cbIntegrale.Checked) or (edTomeFin.Text = '') then
+    FAlbum.TomeFin := 0
+  else
+    FAlbum.TomeFin := StrToInt(edTomeFin.Text);
+  FAlbum.Integrale := cbIntegrale.Checked;
+  FAlbum.HorsSerie := cbHorsSerie.Checked;
+  FAlbum.Sujet.Assign(histoire.Lines);
+  FAlbum.Notes.Assign(remarques.Lines);
+
+  FAlbum.SaveToDatabase;
+  if isAchat then FAlbum.Acheter(False);
+
   ModalResult := mrOk;
 end;
 
@@ -877,8 +539,6 @@ end;
 procedure TFrmEditAlbum.vstImagesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if Key = VK_DELETE then begin
-    with TCouverture(FCurrentEditionComplete.Couvertures[vstImages.FocusedNode.Index]) do
-      if not IsEqualGUID(ID, GUID_NULL) then FDeletedCouvertures.Add(GUIDToString(ID));
     FCurrentEditionComplete.Couvertures.Delete(vstImages.FocusedNode.Index);
     vstImages.RootNodeCount := FCurrentEditionComplete.Couvertures.Count;
     imgVisu.Picture.Assign(nil);
@@ -996,38 +656,41 @@ end;
 
 procedure TFrmEditAlbum.vtSeriesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
-  PS: TSerie;
-  SC: TSerieComplete;
   i: Integer;
 begin
-  PS := vtSeries.GetFocusedNodeData;
-  if Assigned(PS) then begin
-    if not (FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then begin
-      SC := TSerieComplete.Create(PS.ID);
-      try
-        if not FScenaristesSelected then begin
-          TAuteur.VideListe(lvScenaristes);
-          for i := 0 to Pred(SC.Scenaristes.Count) do
-            AjouteAuteur(lvScenaristes, TAuteur(SC.Scenaristes[i]).Personne);
-        end;
-        if not FDessinateursSelected then begin
-          TAuteur.VideListe(lvDessinateurs);
-          for i := 0 to Pred(SC.Dessinateurs.Count) do
-            AjouteAuteur(lvDessinateurs, TAuteur(SC.Dessinateurs[i]).Personne);
-        end;
-        if not FColoristesSelected then begin
-          TAuteur.VideListe(lvColoristes);
-          for i := 0 to Pred(SC.Coloristes.Count) do
-            AjouteAuteur(lvColoristes, TAuteur(SC.Coloristes[i]).Personne);
-        end;
-      finally
-        SC.Free;
+  FAlbum.ID_Serie := vtSeries.CurrentValue;
+  if not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL) then begin
+    if not (FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then try
+      lvScenaristes.Items.BeginUpdate;
+      lvDessinateurs.Items.BeginUpdate;
+      lvColoristes.Items.BeginUpdate;
+      if not FScenaristesSelected then begin
+        lvScenaristes.Items.Count := 0;
+        FAlbum.Scenaristes.Clear;
+        for i := 0 to Pred(FAlbum.Serie.Scenaristes.Count) do
+          AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TAuteur(FAlbum.Serie.Scenaristes[i]).Personne);
       end;
+      if not FDessinateursSelected then begin
+        lvDessinateurs.Items.Count := 0;
+        FAlbum.Dessinateurs.Clear;
+        for i := 0 to Pred(FAlbum.Serie.Dessinateurs.Count) do
+          AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TAuteur(FAlbum.Serie.Dessinateurs[i]).Personne);
+      end;
+      if not FColoristesSelected then begin
+        lvColoristes.Items.Count := 0;
+        FAlbum.Coloristes.Clear;
+        for i := 0 to Pred(FAlbum.Serie.Coloristes.Count) do
+          AjouteAuteur(FAlbum.Coloristes, lvColoristes, TAuteur(FAlbum.Serie.Coloristes[i]).Personne);
+      end;
+    finally
+      lvScenaristes.Items.EndUpdate;
+      lvDessinateurs.Items.EndUpdate;
+      lvColoristes.Items.EndUpdate;
     end;
 
     if Assigned(FCurrentEditionComplete) and (not FEditeurCollectionSelected[vtEditions.ItemIndex]) then begin
-      vtEditeurs.CurrentValue := PS.Editeur.ID;
-      vtCollections.CurrentValue := PS.Collection.ID;
+      vtEditeurs.CurrentValue := FAlbum.Serie.Editeur.ID_Editeur;
+      vtCollections.CurrentValue := FAlbum.Serie.Collection.ID;
     end;
   end;
 end;
@@ -1039,8 +702,8 @@ begin
   SetLength(FEditeurCollectionSelected, Succ(Length(FEditeurCollectionSelected)));
   FEditeurCollectionSelected[Pred(Length(FEditeurCollectionSelected))] := False;
   EditionComplete := TEditionComplete.Create;
-  EditionComplete.Clear;
-  EditionComplete.ID_Edition := GUID_NULL;
+  EditionComplete.New;
+  EditionComplete.ID_Album := ID_Album;
   EditionComplete.Couleur := True;
   EditionComplete.VO := False;
   EditionComplete.Stock := True;
@@ -1054,6 +717,7 @@ begin
     EditionComplete.Editeur.ID_Editeur := TSerie(vtSeries.GetFocusedNodeData).Editeur.ID;
     EditionComplete.Collection.ID := TSerie(vtSeries.GetFocusedNodeData).Collection.ID;
   end;
+  FAlbum.Editions.Editions.Add(EditionComplete);
   vtEditions.AddItem('Nouvelle edition', Pointer(EditionComplete));
   vtEditions.ItemIndex := Pred(vtEditions.Items.Count);
   vtEditionsClick(nil);
@@ -1189,23 +853,12 @@ end;
 procedure TFrmEditAlbum.RefreshEditionCaption;
 var
   s: string;
-  Edition: TEdition;
 begin
   if not FEditionChanging and Assigned(FCurrentEditionComplete) then begin
     UpdateEdition;
-    Edition := TEdition.Create;
-    try
-      Edition.ID := FCurrentEditionComplete.ID_Edition;
-      Edition.AnneeEdition := FCurrentEditionComplete.AnneeEdition;
-      Edition.ISBN := FormatISBN(FCurrentEditionComplete.ISBN);
-      Edition.Editeur.NomEditeur := FCurrentEditionComplete.Editeur.NomEditeur;
-      Edition.Collection.Assign(FCurrentEditionComplete.Collection);
-      s := Edition.ChaineAffichage;
-      if IsEqualGUID(FCurrentEditionComplete.ID_Edition, GUID_NULL) then s := '* ' + s;
-      vtEditions.Items[vtEditions.ItemIndex] := s;
-    finally
-      FreeAndNil(Edition);
-    end;
+    s := FCurrentEditionComplete.ChaineAffichage;
+    if FCurrentEditionComplete.RecInconnu then s := '* ' + s;
+    vtEditions.Items[vtEditions.ItemIndex] := s;
   end;
 end;
 
@@ -1455,27 +1108,18 @@ end;
 
 procedure TFrmEditAlbum.vtEditionsKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 var
-  CurrentEditionComplete: TEditionComplete;
-  OldIndex, i: Integer;
+  OldIndex: Integer;
 begin
   if Key = VK_DELETE then begin
     OldIndex := vtEditions.ItemIndex;
 
-    CurrentEditionComplete := FCurrentEditionComplete;
-    try
-      vtEditions.DeleteSelected;
-      if OldIndex < vtEditions.Items.Count then
-        vtEditions.ItemIndex := OldIndex
-      else
-        vtEditions.ItemIndex := Pred(vtEditions.Items.Count);
-      vtEditionsClick(vtEditions);
-
-      if not IsEqualGUID(CurrentEditionComplete.ID_Edition, GUID_NULL) then FDeletedEditions.Add(GUIDToString(CurrentEditionComplete.ID_Edition));
-      for i := 0 to Pred(CurrentEditionComplete.Couvertures.Count) do
-        FDeletedCouvertures.Add(GUIDToString(TCouverture(CurrentEditionComplete.Couvertures[i]).ID));
-    finally
-      CurrentEditionComplete.Free;
-    end;
+    vtEditions.DeleteSelected;
+    FAlbum.Editions.Editions.Delete(OldIndex);
+    if OldIndex < vtEditions.Items.Count then
+      vtEditions.ItemIndex := OldIndex
+    else
+      vtEditions.ItemIndex := Pred(vtEditions.Items.Count);
+    vtEditionsClick(vtEditions);
   end;
 end;
 
@@ -1530,6 +1174,34 @@ end;
 procedure TFrmEditAlbum.EditeurCollectionSelected(Sender: TObject; NextSearch: Boolean);
 begin
   FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
+end;
+
+procedure TFrmEditAlbum.lvScenaristesData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FAlbum.Scenaristes[Item.Index];
+  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+end;
+
+procedure TFrmEditAlbum.lvDessinateursData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FAlbum.Dessinateurs[Item.Index];
+  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+end;
+
+procedure TFrmEditAlbum.lvColoristesData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FAlbum.Coloristes[Item.Index];
+  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+end;
+
+function TFrmEditAlbum.GetID_Album: TGUID;
+begin
+  Result := FAlbum.ID_Album;
+end;
+
+function TFrmEditAlbum.GetCreation: Boolean;
+begin
+  Result := FAlbum.RecInconnu;
 end;
 
 end.

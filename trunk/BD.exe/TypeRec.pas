@@ -98,7 +98,8 @@ type
 
     procedure Assign(Ps: TBasePointeur); override;
 
-    procedure Fill(Query: TJvUIBQuery); override;
+    procedure Fill(ID_Editeur: TGUID); reintroduce; overload;
+    procedure Fill(Query: TJvUIBQuery); overload; override;
     function ChaineAffichage: string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TEditeur): TEditeur; reintroduce;
@@ -141,7 +142,8 @@ type
     constructor Create; override;
     destructor Destroy; override;
 
-    procedure Fill(Query: TJvUIBQuery); override;
+    procedure Fill(Query: TJvUIBQuery); overload; override; 
+    procedure Fill(ID_Collection: TGUID); reintroduce; overload;
     function ChaineAffichage: string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TCollection): TCollection; reintroduce;
@@ -415,6 +417,23 @@ begin
   NomEditeur := Query.Fields.ByNameAsString['NomEditeur'];
 end;
 
+procedure TEditeur.Fill(ID_Editeur: TGUID);
+var
+  q: TJvUIBQuery;
+begin
+  q := TJvUIBQuery.Create(nil);
+  with q do try
+    Transaction := GetTransaction(DMPrinc.UIBDataBase);
+    SQL.Text := 'SELECT NOMEDITEUR, ID_Editeur FROM EDITEURS WHERE ID_Editeur = ?';
+    Params.AsString[0] := GUIDToString(ID_Editeur);
+    Open;
+    Fill(q);
+  finally
+    Transaction.Free;
+    Free;
+  end;
+end;
+
 { TPersonnage }
 
 procedure TPersonnage.Assign(Ps: TBasePointeur);
@@ -676,6 +695,25 @@ begin
   end;
 end;
 
+procedure TCollection.Fill(ID_Collection: TGUID);
+var
+  q: TJvUIBQuery;
+begin
+  q := TJvUIBQuery.Create(nil);
+  with q do try
+    Transaction := GetTransaction(DMPrinc.UIBDataBase);
+    SQL.Text := 'SELECT ID_Collection, NomCollection';
+    SQL.Add('FROM COLLECTIONS');
+    SQL.Add('WHERE ID_COLLECTION = :ID_COLLECTION');
+    Params.AsString[0] := GUIDToString(ID_Collection);
+    Open;
+    Fill(q);
+  finally
+    Transaction.Free;
+    Free;
+  end;
+end;
+
 { TSerie }
 
 procedure TSerie.Assign(Ps: TBasePointeur);
@@ -835,7 +873,7 @@ end;
 
 function TEmprunteur.ChaineAffichage: string;
 begin
-  Result := Nom;
+  Result := FormatTitre(Nom);
 end;
 
 class function TEmprunteur.Duplicate(Ps: TEmprunteur): TEmprunteur;

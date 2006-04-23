@@ -97,7 +97,7 @@ begin
   ClearForm;
   FParaBD.Fill(Value);
 
-  Caption := 'Fiche de para-BD - "' + FormatTitre(FParaBD.Titre) + '"';
+  Caption := 'Fiche de para-BD - ' + FParaBD.ChaineAffichage;
   TitreSerie.Caption := FParaBD.Serie.Titre;
   if FParaBD.Serie.SiteWeb <> '' then begin
     TitreSerie.Font.Color := clBlue;

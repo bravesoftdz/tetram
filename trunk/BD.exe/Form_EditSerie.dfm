@@ -1,6 +1,6 @@
 object FrmEditSerie: TFrmEditSerie
-  Left = 431
-  Top = 60
+  Left = 1776
+  Top = 51
   Width = 750
   Height = 956
   ActiveControl = edTitre
@@ -737,11 +737,13 @@ object FrmEditSerie: TFrmEditSerie
         end>
       ColumnClick = False
       HideSelection = False
+      OwnerData = True
       ReadOnly = True
       ShowColumnHeaders = False
       SortType = stNone
       TabOrder = 6
       ViewStyle = vsReport
+      OnData = lvScenaristesData
       OnKeyDown = lvColoristesKeyDown
       LinkControls = <
         item
@@ -760,11 +762,13 @@ object FrmEditSerie: TFrmEditSerie
         end>
       ColumnClick = False
       HideSelection = False
+      OwnerData = True
       ReadOnly = True
       ShowColumnHeaders = False
       SortType = stBoth
       TabOrder = 7
       ViewStyle = vsReport
+      OnData = lvDessinateursData
       OnKeyDown = lvColoristesKeyDown
       LinkControls = <
         item
@@ -811,11 +815,13 @@ object FrmEditSerie: TFrmEditSerie
         end>
       ColumnClick = False
       HideSelection = False
+      OwnerData = True
       ReadOnly = True
       ShowColumnHeaders = False
       SortType = stBoth
       TabOrder = 8
       ViewStyle = vsReport
+      OnData = lvColoristesData
       OnKeyDown = lvColoristesKeyDown
       LinkControls = <
         item

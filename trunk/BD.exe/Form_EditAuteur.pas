@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, Mask, Menus, ExtCtrls,
-  DBEditLabeled, DB, Buttons, VDTButton, Fram_Boutons;
+  DBEditLabeled, DB, Buttons, VDTButton, Fram_Boutons, LoadComplet;
 
 type
   TFrmEditAuteur = class(TForm)
@@ -21,19 +21,21 @@ type
     procedure Frame11btnOKClick(Sender: TObject);
     procedure edSiteChange(Sender: TObject);
     procedure VDTButton13Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     { Déclarations privées }
-    FID_Auteur: TGUID;
-    FCreation: Boolean;
+    FAuteur: TAuteurComplet;
     procedure SetID_Auteur(const Value: TGUID);
+    function GetID_Auteur: TGUID;
   public
     { Déclarations publiques }
-    property ID_Auteur: TGUID read FID_Auteur write SetID_Auteur;
+    property ID_Auteur: TGUID read GetID_Auteur write SetID_Auteur;
   end;
 
 implementation
 
-uses Commun, JvUIB, DM_Princ, LoadComplet, ShellAPI;
+uses Commun, JvUIB, DM_Princ, ShellAPI, Procedures, Textes;
 
 {$R *.DFM}
 
@@ -42,47 +44,27 @@ var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  FID_Auteur := Value;
-  with TJvUIBQuery.Create(nil) do try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT * FROM PERSONNES WHERE ID_Personne = ?';
-    Params.AsString[0] := GUIDToString(FID_Auteur);
-    FetchBlobs := True;
-    Open;
-    FCreation := Eof;
-    if not FCreation then begin
-      edNom.Text := Fields.ByNameAsString['NOMPERSONNE'];
-      edSite.Text := Fields.ByNameAsString['SITEWEB'];
-      edBiographie.Lines.Text := Fields.ByNameAsString['BIOGRAPHIE'];
-    end;
-  finally
-    Transaction.Free;
-    Free;
-  end;
+  FAuteur.Fill(Value);
+
+  edNom.Text := FAuteur.NomAuteur;
+  edSite.Text := FAuteur.SiteWeb;
+  edBiographie.Lines.Assign(FAuteur.Biographie);
 end;
 
 procedure TFrmEditAuteur.Frame11btnOKClick(Sender: TObject);
-var
-  s: string;
 begin
-  with TJvUIBQuery.Create(nil) do try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    if FCreation then
-      SQL.Text := 'INSERT INTO PERSONNES (ID_Personne, NOMPERSONNE, SITEWEB, BIOGRAPHIE) VALUES (:ID_Personne, :NOMPERSONNE, :SITEWEB, :BIOGRAPHIE)'
-    else
-      SQL.Text := 'UPDATE PERSONNES SET NOMPERSONNE = :NOMPERSONNE, SITEWEB = :SITEWEB, BIOGRAPHIE = :BIOGRAPHIE WHERE ID_Personne = :ID_Personne';
-    Params.ByNameAsString['NOMPERSONNE'] := Trim(edNom.Text);
-    Params.ByNameAsString['SITEWEB'] := Trim(edSite.Text);
-    s := edBiographie.Lines.Text;
-    ParamsSetBlob('BIOGRAPHIE', s);
-
-    Params.ByNameAsString['ID_Personne'] := GUIDToString(ID_Auteur);
-    ExecSQL;
-    Transaction.Commit;
-  finally
-    Transaction.Free;
-    Free;
+  if Length(Trim(edNom.Text)) = 0 then begin
+    AffMessage(rsNomObligatoire, mtInformation, [mbOk], True);
+    edNom.SetFocus;
+    ModalResult := mrNone;
+    Exit;
   end;
+
+  FAuteur.NomAuteur := Trim(edNom.Text);
+  FAuteur.SiteWeb := Trim(edSite.Text);
+  FAuteur.Biographie.Assign(edBiographie.Lines);
+  FAuteur.SaveToDatabase;
+
   ModalResult := mrOk;
 end;
 
@@ -94,6 +76,21 @@ end;
 procedure TFrmEditAuteur.VDTButton13Click(Sender: TObject);
 begin
   ShellExecute(Application.DialogHandle, nil, PChar(edSite.Text), nil, nil, SW_NORMAL);
+end;
+
+procedure TFrmEditAuteur.FormCreate(Sender: TObject);
+begin
+  FAuteur := TAuteurComplet.Create;
+end;
+
+procedure TFrmEditAuteur.FormDestroy(Sender: TObject);
+begin
+  FAuteur.Free;
+end;
+
+function TFrmEditAuteur.GetID_Auteur: TGUID;
+begin
+  Result := FAuteur.ID_Auteur;
 end;
 
 end.

@@ -3,41 +3,64 @@ unit LoadComplet;
 interface
 
 uses
-  SysUtils, Windows, Classes, TypeRec, Commun, CommonConst, DM_Princ, JvUIB, DateUtils, Contnrs;
+  SysUtils, Windows, Classes, Dialogs, TypeRec, Commun, CommonConst, DM_Princ, JvUIB, DateUtils, Contnrs;
 
 type
   TBaseComplet = class
-  private
+  protected
     procedure WriteString(Stream: TStream; const Chaine: string);
     procedure WriteStringLN(Stream: TStream; const Chaine: string);
   public
-    RecInconnu: Boolean;
-
     procedure Fill(const Reference: TGUID); virtual;
     procedure BeforeDestruction; override;
     procedure Clear; virtual;
 
-    constructor Create; overload; virtual;
-    constructor Create(const Reference: TGUID); overload;
+    constructor Create; virtual;
 
     procedure WriteXMLToStream(Stream: TStream); virtual;
+  end;
+
+  TObjetComplet = class(TBaseComplet)
+  protected
+    function GetReference: TGUID; virtual;
+  public
+    RecInconnu: Boolean;
+
+    procedure Clear; override;
+
+    constructor Create; overload; override;
+    constructor Create(const Reference: TGUID); reintroduce; overload; virtual;
+
+    procedure SaveToDatabase; overload;
+    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); overload; virtual;
+    procedure New;
+
+    function ChaineAffichage: string; virtual;
+
+    property Reference: TGUID read GetReference;
+  end;
+
+  TInfoComplet = class(TBaseComplet)
+  end;
+
+  TListComplet = class(TBaseComplet)
   end;
 
   TSrcEmprunt = (seTous, seAlbum, seEmprunteur);
   TSensEmprunt = (ssTous, ssPret, ssRetour);
 
-  TEmpruntsComplet = class(TBaseComplet)
+  TEmpruntsComplet = class(TListComplet)
     Emprunts: TList;
     NBEmprunts: Integer;
 
     procedure Fill(Reference: TGUID; Source: TSrcEmprunt = seTous; Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1; Avant: TDateTime = -1; EnCours: Boolean = False; Stock: Boolean = False); reintroduce;
     procedure Clear; override;
-    constructor Create; override;
+    constructor Create; overload; override;
     constructor Create(Reference: TGUID; Source: TSrcEmprunt = seTous; Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1; Avant: TDateTime = -1; EnCours: Boolean = False; Stock: Boolean = False); reintroduce; overload;
     destructor Destroy; override;
   end;
 
-  TEditeurComplet = class(TBaseComplet)
+  TEditeurComplet = class(TObjetComplet)
     ID_Editeur: TGUID;
     NomEditeur: string[50];
     SiteWeb: string[255];
@@ -46,9 +69,34 @@ type
     procedure Clear; override;
     constructor Create; override;
     destructor Destroy; override;
+
+    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+
+    function GetReference: TGUID; override;
   end;
 
-  TAuteurComplet = class(TBaseComplet)
+  TCollectionComplete = class(TObjetComplet)
+  private
+    function GetID_Editeur: TGUID;
+    procedure SetID_Editeur(const Value: TGUID);
+  public
+    ID_Collection: TGUID;
+    NomCollection: string[50];
+    Editeur: TEditeur;
+
+    procedure Fill(const Reference: TGUID); override;
+    procedure Clear; override;
+    constructor Create; override;
+    destructor Destroy; override;
+
+    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+
+    function GetReference: TGUID; override;
+
+    property ID_Editeur: TGUID read GetID_Editeur write SetID_Editeur;
+  end;
+
+  TAuteurComplet = class(TObjetComplet)
     ID_Auteur: TGUID;
     NomAuteur: string[50];
     SiteWeb: string[255];
@@ -59,30 +107,53 @@ type
     procedure Clear; override;
     constructor Create; override;
     destructor Destroy; override;
+
+    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+
+    function GetReference: TGUID; override;
+
+    function ChaineAffichage: string; override;
   end;
 
-  TSerieComplete = class(TBaseComplet)
+  TSerieComplete = class(TObjetComplet)
+  private
+    function GetID_Editeur: TGUID;
+    procedure SetID_Editeur(const Value: TGUID);
+    function GetID_Collection: TGUID;
+    procedure SetID_Collection(const Value: TGUID);
+  public
     ID_Serie: TGUID;
     Titre: string;
     Terminee: Integer;
-    Albums, ParaBD: TList;
+    Complete: Boolean;
+    Albums, ParaBD: TObjectList;
     Genres: TStringList;
     Sujet, Notes: TStringList;
     Editeur: TEditeurComplet;
     Collection: TCollection;
     SiteWeb: string[255];
-    Scenaristes, Dessinateurs, Coloristes: TList;
+    Scenaristes, Dessinateurs, Coloristes: TObjectList;
 
     FIdAuteur: TGUID;
 
-    procedure Fill(const Reference: TGUID); override;
+    procedure Fill(const Reference: TGUID); overload; override;
+    procedure Fill(const Reference, IdAuteur: TGUID); reintroduce; overload;
     procedure Clear; override;
-    constructor Create; override;
-    constructor Create(const Reference, IdAuteur: TGUID); overload;
+    constructor Create; overload; override;
+    constructor Create(const Reference, IdAuteur: TGUID); reintroduce; overload;
     destructor Destroy; override;
+
+    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+
+    function GetReference: TGUID; override;
+    function ChaineAffichage: string; overload; override;
+    function ChaineAffichage(Simple: Boolean): string; reintroduce; overload;
+
+    property ID_Editeur: TGUID read GetID_Editeur write SetID_Editeur;
+    property ID_Collection: TGUID read GetID_Collection write SetID_Collection;
   end;
 
-  TEditionComplete = class(TBaseComplet)
+  TEditionComplete = class(TObjetComplet)
   private
     function Get_sDateAchat: string;
   public
@@ -102,37 +173,58 @@ type
     procedure Clear; override;
     constructor Create; override;
     destructor Destroy; override;
-  published
+    function ChaineAffichage: string; override;
+
+    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+
+    function GetReference: TGUID; override;
+
     property sDateAchat: string read Get_sDateAchat;
   end;
 
-  TEditionsComplet = class(TBaseComplet)
+  TEditionsComplet = class(TListComplet)
     Editions: TList;
 
     procedure Fill(Reference: TGUID; Stock: Integer = -1); reintroduce;
     procedure Clear; override;
-    constructor Create; override;
+    constructor Create; overload; override;
     constructor Create(Reference: TGUID; Stock: Integer = -1); reintroduce; overload;
     destructor Destroy; override;
   end;
 
-  TAlbumComplet = class(TBaseComplet)
+  TAlbumComplet = class(TObjetComplet)
+  private
+    function GetID_Serie: TGUID;
+    procedure SetID_Serie(const Value: TGUID);
+  public
     ID_Album: TGUID;
     MoisParution, AnneeParution, Tome, TomeDebut, TomeFin: Integer;
     Titre: string[50];
     HorsSerie, Integrale: Boolean;
-    Scenaristes, Dessinateurs, Coloristes: TList;
+    Scenaristes, Dessinateurs, Coloristes: TObjectList;
     Sujet, Notes: TStringList;
     Serie: TSerieComplete;
     Editions: TEditionsComplet;
+
+    Complet: Boolean;
 
     procedure Fill(const Reference: TGUID); override;
     procedure Clear; override;
     constructor Create; override;
     destructor Destroy; override;
+
+    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+    procedure Acheter(Prevision: Boolean);
+
+    function GetReference: TGUID; override;
+
+    function ChaineAffichage: string; overload; override;
+    function ChaineAffichage(Simple: Boolean): string; reintroduce; overload;
+
+    property ID_Serie: TGUID read GetID_Serie write SetID_Serie;
   end;
 
-  TEmprunteurComplet = class(TBaseComplet)
+  TEmprunteurComplet = class(TObjetComplet)
     ID_Emprunteur: TGUID;
     Nom: string[100];
     Adresse: TStringList;
@@ -142,9 +234,15 @@ type
     procedure Clear; override;
     constructor Create; override;
     destructor Destroy; override;
+
+    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+
+    function GetReference: TGUID; override;
+
+    function ChaineAffichage: string; override;
   end;
 
-  TStats = class(TBaseComplet)
+  TStats = class(TInfoComplet)
     Editeur: string;
     NbAlbums, NbSeries, NbSeriesTerminee,
       NbAlbumsNB, NbAlbumsVO, NbAlbumsStock, NbAlbumsIntegrale, NbAlbumsHorsSerie, NbAlbumsDedicace, NbAlbumsOffert, NbAlbumsGratuit,
@@ -161,7 +259,7 @@ type
 
     procedure Fill(Complete: Boolean); reintroduce;
     procedure Clear; override;
-    constructor Create; override;
+    constructor Create; overload; override;
     constructor Create(Complete: Boolean); reintroduce; overload;
     destructor Destroy; override;
 
@@ -170,36 +268,37 @@ type
     procedure CreateStats(var Stats: TStats; ID_Editeur: TGUID; Editeur: string); overload;
   end;
 
-  TSerieIncomplete = class
+  TSerieIncomplete = class(TInfoComplet)
     Serie: TSerie;
     NumerosManquants: TStringList;
 
-    constructor Create;
+    constructor Create; override;
     destructor Destroy; override;
     function ChaineAffichage: string;
   end;
 
-  TSeriesIncompletes = class(TBaseComplet)
+  TSeriesIncompletes = class(TListComplet)
     Series: TObjectList;
 
     procedure Fill(const Reference: TGUID); overload; override;
     procedure Fill(AvecIntegrales, AvecAchats: Boolean; ID_Serie: TGUID); reintroduce; overload;
     procedure Clear; override;
-    constructor Create; override;
+    constructor Create; overload; override;
     constructor Create(AvecIntegrales, AvecAchats: Boolean); reintroduce; overload;
+    constructor Create(ID_Serie: TGUID); reintroduce; overload;
     destructor Destroy; override;
   end;
 
-  TPrevisionSortie = class
+  TPrevisionSortie = class(TInfoComplet)
     Serie: TSerie;
     Tome, Annee, Mois: Integer;
 
-    constructor Create;
+    constructor Create; override;
     destructor Destroy; override;
     function sAnnee: string;
   end;
 
-  TPrevisionsSorties = class(TBaseComplet)
+  TPrevisionsSorties = class(TListComplet)
     AnneesPassees: TObjectList;
     AnneeEnCours: TObjectList;
     AnneesProchaines: TObjectList;
@@ -208,12 +307,16 @@ type
     procedure Fill(AvecAchats: Boolean); reintroduce; overload;
     procedure Fill(AvecAchats: Boolean; ID_Serie: TGUID); reintroduce; overload;
     procedure Clear; override;
-    constructor Create; override;
+    constructor Create; overload; override;
     constructor Create(AvecAchats: Boolean); reintroduce; overload;
+    constructor Create(ID_Serie: TGUID); reintroduce; overload;
     destructor Destroy; override;
   end;
 
-  TParaBDComplet = class(TBaseComplet)
+  TParaBDComplet = class(TObjetComplet)
+  private
+    function Get_sDateAchat: string;
+  public
     ID_ParaBD: TGUID;
     AnneeEdition, CategorieParaBD, AnneeCote: Integer;
     Titre: string[50];
@@ -230,15 +333,16 @@ type
     procedure Clear; override;
     constructor Create; override;
     destructor Destroy; override;
-  private
-    function Get_sDateAchat: string;
-  published
+
+    function ChaineAffichage: string; overload; override;
+    function ChaineAffichage(Simple: Boolean): string; reintroduce; overload;
+
     property sDateAchat: string read Get_sDateAchat;
   end;
 
 implementation
 
-uses JvUIBLib, Divers;
+uses JvUIBLib, Divers, StdCtrls, Procedures;
 
 { TBaseComplet }
 
@@ -251,13 +355,6 @@ end;
 procedure TBaseComplet.Clear;
 begin
   // nettoyage de toutes les listes et autres
-  RecInconnu := True;
-end;
-
-constructor TBaseComplet.Create(const Reference: TGUID);
-begin
-  Create;
-  Fill(Reference);
 end;
 
 constructor TBaseComplet.Create;
@@ -287,27 +384,74 @@ end;
 
 { TAlbumComplet }
 
+procedure TAlbumComplet.Acheter(Prevision: Boolean);
+var
+  q: TJvUIBQuery;
+begin
+  if IsEqualGUID(Reference, GUID_NULL) then Exit;
+  q := TJvUIBQuery.Create(nil);
+  with q do try
+    Transaction := GetTransaction(DMPrinc.UIBDataBase);
+    SQL.Text := 'UPDATE ALBUMS SET ACHAT = :Achat WHERE ID_Album = ?';
+    Params.AsBoolean[0] := Prevision;
+    Params.AsString[1] := GUIDToString(ID_Album);
+    Execute;
+    Transaction.Commit;
+  finally
+    Transaction.Free;
+    Free;
+  end;
+end;
+
+function TAlbumComplet.ChaineAffichage: string;
+begin
+  Result := ChaineAffichage(False);
+end;
+
+function TAlbumComplet.ChaineAffichage(Simple: Boolean): string;
+var
+  s, s2: string;
+begin
+  if Simple then
+    Result := Titre
+  else
+    Result := FormatTitre(Titre);
+  s := '';
+  AjoutString(s, FormatTitre(Serie.Titre), ' - ');
+  if Integrale then begin
+    s2 := NonZero(IntToStr(TomeDebut));
+    AjoutString(s2, NonZero(IntToStr(TomeFin)), ' à ');
+    AjoutString(s, 'INT.', ' - ', '', TrimRight(' ' + NonZero(IntToStr(Tome))));
+    AjoutString(s, s2, ' ', '[', ']');
+  end
+  else if HorsSerie then
+    AjoutString(s, 'HS', ' - ', '', TrimRight(' ' + NonZero(IntToStr(Tome))))
+  else
+    AjoutString(s, NonZero(IntToStr(Tome)), ' - ', 'T. ');
+  AjoutString(Result, s, ' ', '(', ')');
+end;
+
 procedure TAlbumComplet.Clear;
 begin
   inherited;
   ID_Album := GUID_NULL;
   Titre := '';
 
-  TAuteur.VideListe(Scenaristes);
-  TAuteur.VideListe(Dessinateurs);
-  TAuteur.VideListe(Coloristes);
-
+  Scenaristes.Clear;
+  Dessinateurs.Clear;
+  Coloristes.Clear;
   Sujet.Clear;
   Notes.Clear;
   Serie.Clear;
+
   Editions.Clear;
 end;
 
 constructor TAlbumComplet.Create;
 begin
-  Scenaristes := TList.Create;
-  Dessinateurs := TList.Create;
-  Coloristes := TList.Create;
+  Scenaristes := TObjectList.Create;
+  Dessinateurs := TObjectList.Create;
+  Coloristes := TObjectList.Create;
   Sujet := TStringList.Create;
   Notes := TStringList.Create;
   Serie := TSerieComplete.Create;
@@ -316,9 +460,9 @@ end;
 
 destructor TAlbumComplet.Destroy;
 begin
-  FreeAndNil(Scenaristes);
-  FreeAndNil(Dessinateurs);
-  FreeAndNil(Coloristes);
+  Scenaristes.Free;
+  Dessinateurs.Free;
+  Coloristes.Free;
 
   Sujet.Free;
   Notes.Free;
@@ -329,7 +473,6 @@ end;
 
 procedure TAlbumComplet.Fill(const Reference: TGUID);
 var
-  serie: TGUID;
   q: TJvUIBQuery;
 begin
   inherited;
@@ -339,7 +482,7 @@ begin
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     FetchBlobs := True;
-    SQL.Text := 'SELECT TITREALBUM, MOISPARUTION, ANNEEPARUTION, ID_Serie, TOME, TOMEDEBUT, TOMEFIN, SUJETALBUM, REMARQUESALBUM, HORSSERIE, INTEGRALE FROM ALBUMS WHERE ID_Album = ?';
+    SQL.Text := 'SELECT TITREALBUM, MOISPARUTION, ANNEEPARUTION, ID_Serie, TOME, TOMEDEBUT, TOMEFIN, SUJETALBUM, REMARQUESALBUM, HORSSERIE, INTEGRALE, COMPLET FROM ALBUMS WHERE ID_Album = ?';
     Params.AsString[0] := GUIDToString(Reference);
     Open;
     RecInconnu := Eof;
@@ -354,7 +497,9 @@ begin
     Self.Integrale := Fields.ByNameAsBoolean['INTEGRALE'];
     Self.HorsSerie := Fields.ByNameAsBoolean['HORSSERIE'];
 
-    serie := StringToGUID(Fields.ByNameAsString['ID_SERIE']);
+    Self.Serie.Fill(StringToGUIDDef(Fields.ByNameAsString['ID_SERIE'], GUID_NULL));
+
+    Complet := Fields.ByNameAsBoolean['COMPLET'];
 
     Close;
     SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL, NULL)';
@@ -369,13 +514,157 @@ begin
       Next;
     end;
 
-    Self.Serie.Fill(serie);
-
     Self.Editions.Fill(Self.ID_Album);
   finally
     q.Transaction.Free;
     q.Free;
   end;
+end;
+
+function TAlbumComplet.GetID_Serie: TGUID;
+begin
+  Result := Serie.ID_Serie;
+end;
+
+function TAlbumComplet.GetReference: TGUID;
+begin
+  Result := ID_Album;
+end;
+
+procedure TAlbumComplet.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+var
+  s: string;
+  q: TJvUIBQuery;
+  i: Integer;
+  hg: IHourGlass;
+  Edition: TEditionComplete;
+begin
+  inherited;
+  hg := THourGlass.Create;
+  q := TJvUIBQuery.Create(nil);
+  with q do try
+    Transaction := UseTransaction;
+
+    if RecInconnu then begin
+      SQL.Text := 'INSERT INTO ALBUMS (ID_Album, TITREALBUM, MOISPARUTION, ANNEEPARUTION, ID_Serie, TOME, TOMEDEBUT, TOMEFIN, HORSSERIE, INTEGRALE, SUJETALBUM, REMARQUESALBUM, TITREINITIALESALBUM, UPPERSUJETALBUM, UPPERREMARQUESALBUM)';
+      SQL.Add('VALUES');
+      SQL.Add('(:ID_Album, :TITREALBUM, :MOISPARUTION, :ANNEEPARUTION, :ID_Serie, :TOME, :TOMEDEBUT, :TOMEFIN, :HORSSERIE, :INTEGRALE, :SUJETALBUM, :REMARQUESALBUM, :TITREINITIALESALBUM, :UPPERSUJETALBUM, :UPPERREMARQUESALBUM)');
+    end
+    else begin
+      SQL.Text := 'UPDATE ALBUMS SET';
+      SQL.Add('TITREALBUM = :TITREALBUM, MOISPARUTION = :MOISPARUTION, ANNEEPARUTION = :ANNEEPARUTION, ID_Serie = :ID_Serie, TOME = :TOME, TOMEDEBUT = :TOMEDEBUT, TOMEFIN = :TOMEFIN,');
+      SQL.Add('HORSSERIE = :HORSSERIE, INTEGRALE = :INTEGRALE,');
+      SQL.Add('SUJETALBUM = :SUJETALBUM, REMARQUESALBUM = :REMARQUESALBUM, TITREINITIALESALBUM = :TITREINITIALESALBUM,');
+      SQL.Add('UPPERSUJETALBUM = :UPPERSUJETALBUM, UPPERREMARQUESALBUM = :UPPERREMARQUESALBUM');
+      SQL.Add('WHERE (ID_Album = :ID_Album)');
+    end;
+
+    Params.ByNameAsString['ID_ALBUM'] := GUIDToString(ID_Album);
+    s := Trim(Titre);
+    Params.ByNameAsString['TITREALBUM'] := s;
+    Params.ByNameAsString['TITREINITIALESALBUM'] := MakeInitiales(UpperCase(SansAccents(s)));
+    if AnneeParution = 0 then begin
+      Params.ByNameIsNull['ANNEEPARUTION'] := True;
+      Params.ByNameIsNull['MOISPARUTION'] := True;
+    end
+    else begin
+      Params.ByNameAsInteger['ANNEEPARUTION'] := AnneeParution;
+      if MoisParution = 0 then
+        Params.ByNameIsNull['MOISPARUTION'] := True
+      else
+        Params.ByNameAsInteger['MOISPARUTION'] := MoisParution;
+    end;
+    if Tome = 0 then
+      Params.ByNameIsNull['TOME'] := True
+    else
+      Params.ByNameAsInteger['TOME'] := Tome;
+    if (not Integrale) or (TomeDebut = 0) then
+      Params.ByNameIsNull['TOMEDEBUT'] := True
+    else
+      Params.ByNameAsInteger['TOMEDEBUT'] := TomeDebut;
+    if (not Integrale) or (TomeFin = 0) then
+      Params.ByNameIsNull['TOMEFIN'] := True
+    else
+      Params.ByNameAsInteger['TOMEFIN'] := TomeFin;
+    Params.ByNameAsBoolean['INTEGRALE'] := Integrale;
+    Params.ByNameAsBoolean['HORSSERIE'] := HorsSerie;
+    s := Sujet.Text;
+    if s <> '' then begin
+      ParamsSetBlob('SUJETALBUM', s);
+      s := UpperCase(SansAccents(s));
+      ParamsSetBlob('UPPERSUJETALBUM', s);
+    end
+    else begin
+      Params.ByNameIsNull['SUJETALBUM'] := True;
+      Params.ByNameIsNull['UPPERSUJETALBUM'] := True;
+    end;
+    s := Notes.Text;
+    if s <> '' then begin
+      ParamsSetBlob('REMARQUESALBUM', s);
+      s := UpperCase(SansAccents(s));
+      ParamsSetBlob('UPPERREMARQUESALBUM', s);
+    end
+    else begin
+      Params.ByNameIsNull['REMARQUESALBUM'] := True;
+      Params.ByNameIsNull['UPPERREMARQUESALBUM'] := True;
+    end;
+    Params.ByNameAsString['ID_SERIE'] := GUIDToString(ID_Serie);
+    ExecSQL;
+
+    SupprimerToutDans('', 'AUTEURS', 'ID_Album', ID_Album);
+    SQL.Clear;
+    SQL.Add('INSERT INTO AUTEURS (ID_Album, METIER, ID_Personne)');
+    SQL.Add('VALUES (:ID_Album, :METIER, :ID_Personne)');
+    for i := 0 to Pred(Scenaristes.Count) do begin
+      Params.AsString[0] := GUIDToString(ID_Album);
+      Params.AsInteger[1] := 0;
+      Params.AsString[2] := GUIDToString(TAuteur(Scenaristes[i]).Personne.ID);
+      ExecSQL;
+    end;
+    for i := 0 to Pred(Dessinateurs.Count) do begin
+      Params.AsString[0] := GUIDToString(ID_Album);
+      Params.AsInteger[1] := 1;
+      Params.AsString[2] := GUIDToString(TAuteur(Dessinateurs[i]).Personne.ID);
+      ExecSQL;
+    end;
+    for i := 0 to Pred(Coloristes.Count) do begin
+      Params.AsString[0] := GUIDToString(ID_Album);
+      Params.AsInteger[1] := 2;
+      Params.AsString[2] := GUIDToString(TAuteur(Coloristes[i]).Personne.ID);
+      ExecSQL;
+    end;
+
+    s := '';
+    for i := 0 to Pred(Editions.Editions.Count) do begin
+      Edition := Editions.Editions[i];
+      if not Edition.RecInconnu then
+        AjoutString(s, QuotedStr(GUIDToString(Edition.ID_Edition)), ',');
+    end;
+
+    // éditions supprimées
+    if s <> '' then begin
+      SQL.Text := 'DELETE FROM EDITIONS WHERE ID_ALBUM = ? AND ID_EDITION NOT IN (' + s + ')';
+      Params.AsString[0] := GUIDToString(ID_Album);
+      ExecSQL;
+      SQL.Text := 'DELETE FROM COUVERTURES WHERE ID_ALBUM = ? AND ID_EDITION IS NOT NULL AND ID_EDITION NOT IN (' + s + ')';
+      Params.AsString[0] := GUIDToString(ID_Album);
+      ExecSQL;
+    end;
+
+    for i := 0 to Pred(Editions.Editions.Count) do begin
+      Edition := Editions.Editions[i];
+      Edition.SaveToDatabase(Transaction);
+    end;
+
+    Transaction.Commit;
+  finally
+    Free;
+  end;
+end;
+
+procedure TAlbumComplet.SetID_Serie(const Value: TGUID);
+begin
+  Serie.Fill(Value);
 end;
 
 { TEditionComplete }
@@ -415,6 +704,8 @@ var
   q: TJvUIBQuery;
 begin
   inherited;
+  if IsEqualGUID(Reference, GUID_NULL) then Exit;
+  Self.ID_Edition := Reference;
   q := TJvUIBQuery.Create(nil);
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -433,9 +724,8 @@ begin
     Open;
     RecInconnu := Eof;
 
-    Self.ID_Edition := StringToGUID(Fields.ByNameAsString['ID_EDITION']);
-    Self.ID_Album := StringToGUID(Fields.ByNameAsString['ID_Album']);
-    Self.Editeur.Fill(StringToGUID(Fields.ByNameAsString['ID_EDITEUR']));
+    Self.ID_Album := StringToGUIDDef(Fields.ByNameAsString['ID_Album'], GUID_NULL);
+    Self.Editeur.Fill(StringToGUIDDef(Fields.ByNameAsString['ID_EDITEUR'], GUID_NULL));
     Self.Collection.Fill(q);
     Self.AnneeEdition := Fields.ByNameAsInteger['ANNEEEDITION'];
     Self.Prix := Fields.ByNameAsCurrency['PRIX'];
@@ -489,6 +779,249 @@ begin
     Result := '';
 end;
 
+function TEditionComplete.ChaineAffichage: string;
+begin
+  Result := '';
+  AjoutString(Result, FormatTitre(Editeur.NomEditeur), ' ');
+  AjoutString(Result, FormatTitre(Collection.NomCollection), ' ', '(', ')');
+  AjoutString(Result, NonZero(IntToStr(AnneeEdition)), ' ', '[', ']');
+  AjoutString(Result, FormatISBN(ISBN), ' - ', 'ISBN ');
+end;
+
+function TEditionComplete.GetReference: TGUID;
+begin
+  Result := ID_Edition;
+end;
+
+procedure TEditionComplete.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+var
+  PC: TCouverture;
+  hg: IHourGlass;
+  q: TJvUIBQuery;
+  s: string;
+  i: Integer;
+  Stream: TStream;
+  q1, q2, q3, q4, q5, q6: TJvUIBQuery;
+  FichiersImages: TStringList;
+begin
+  inherited;
+  FichiersImages := TStringList.Create;
+  hg := THourGlass.Create;
+  q := TJvUIBQuery.Create(nil);
+  with q do try
+    Transaction := UseTransaction;
+
+    if RecInconnu then begin
+      SQL.Text := 'INSERT INTO EDITIONS (ID_Edition, ID_Album, ID_Editeur, ID_Collection, ANNEEEDITION, PRIX, VO, TYPEEDITION, COULEUR, ISBN, STOCK, DEDICACE, OFFERT, GRATUIT, ETAT, RELIURE, ORIENTATION, FormatEdition, DATEACHAT, NOTES, NOMBREDEPAGES, ANNEECOTE, PRIXCOTE)';
+      SQL.Add('VALUES');
+      SQL.Add('(:ID_Edition, :ID_Album, :ID_Editeur, :ID_Collection, :ANNEEEDITION, :PRIX, :VO, :TYPEEDITION, :COULEUR, :ISBN, :STOCK, :DEDICACE, :OFFERT, :GRATUIT, :ETAT, :RELIURE, :ORIENTATION, :FormatEdition, :DATEACHAT, :NOTES, :NOMBREDEPAGES, :ANNEECOTE, :PRIXCOTE)');
+    end
+    else begin
+      SQL.Text := 'UPDATE EDITIONS SET';
+      SQL.Add('ID_Album = :ID_Album, ID_Editeur = :ID_Editeur, ID_Collection = :ID_Collection, ANNEEEDITION = :ANNEEEDITION,');
+      SQL.Add('PRIX = :PRIX, VO = :VO, TYPEEDITION = :TYPEEDITION, COULEUR = :COULEUR, ISBN = :ISBN, STOCK = :STOCK, ETAT = :ETAT, RELIURE = :RELIURE,');
+      SQL.Add('DEDICACE = :DEDICACE, OFFERT = :OFFERT, GRATUIT = :GRATUIT, DATEACHAT = :DATEACHAT, NOTES = :NOTES, ORIENTATION = :ORIENTATION,');
+      SQL.Add('ANNEECOTE = :ANNEECOTE, PRIXCOTE = :PRIXCOTE,');
+      SQL.Add('FormatEdition = :FormatEdition, NOMBREDEPAGES = :NOMBREDEPAGES WHERE (ID_Edition = :ID_Edition)');
+    end;
+
+    Params.ByNameAsString['ID_Edition'] := GUIDToString(ID_Edition);
+    Params.ByNameAsString['ID_Album'] := GUIDToString(ID_Album);
+    Params.ByNameAsString['ID_Editeur'] := GUIDToString(Editeur.ID_Editeur);
+    Params.ByNameAsString['ID_Collection'] := GUIDToString(Collection.ID);
+    if AnneeEdition = 0 then
+      Params.ByNameIsNull['ANNEEEDITION'] := True
+    else
+      Params.ByNameAsInteger['ANNEEEDITION'] := AnneeEdition;
+    if NombreDePages = 0 then
+      Params.ByNameIsNull['NombreDePages'] := True
+    else
+      Params.ByNameAsInteger['NombreDePages'] := NombreDePages;
+    if Prix = 0 then
+      Params.ByNameIsNull['PRIX'] := True
+    else
+      Params.ByNameAsCurrency['PRIX'] := Prix;
+    Params.ByNameAsBoolean['VO'] := VO;
+    Params.ByNameAsBoolean['COULEUR'] := Couleur;
+    Params.ByNameAsString['ISBN'] := ClearISBN(ISBN);
+    Params.ByNameAsBoolean['STOCK'] := Stock;
+    Params.ByNameAsBoolean['DEDICACE'] := Dedicace;
+    Params.ByNameAsBoolean['GRATUIT'] := Gratuit;
+    Params.ByNameAsBoolean['OFFERT'] := Offert;
+    Params.ByNameAsInteger['TYPEEDITION'] := TypeEdition;
+    Params.ByNameAsInteger['ETAT'] := Etat;
+    Params.ByNameAsInteger['RELIURE'] := Reliure;
+    Params.ByNameAsInteger['Orientation'] := Orientation;
+    Params.ByNameAsInteger['FormatEdition'] := FormatEdition;
+    if DateAchat = 0 then
+      Params.ByNameIsNull['DATEACHAT'] := True
+    else
+      Params.ByNameAsDate['DATEACHAT'] := Trunc(DateAchat);
+    if (AnneeCote = 0) or (PrixCote = 0) then begin
+      Params.ByNameIsNull['ANNEECOTE'] := True;
+      Params.ByNameIsNull['PRIXCOTE'] := True;
+    end
+    else begin
+      Params.ByNameAsInteger['ANNEECOTE'] := AnneeCote;
+      Params.ByNameAsCurrency['PRIXCOTE'] := PrixCote;
+    end;
+
+    s := Notes.Text;
+    if s <> '' then
+      ParamsSetBlob('NOTES', s)
+    else
+      Params.ByNameIsNull['NOTES'] := True;
+    ExecSQL;
+
+    s := '';
+    for i := 0 to Pred(Couvertures.Count) do begin
+      PC := Couvertures[i];
+      if not IsEqualGUID(PC.ID, GUID_NULL) then
+        AjoutString(s, QuotedStr(GUIDToString(PC.ID)), ',');
+    end;
+    if s <> '' then begin
+      SQL.Text := 'DELETE FROM COUVERTURES WHERE ID_EDITION = ? AND ID_COUVERTURE NOT IN (' + s + ')';
+      Params.AsString[0] := GUIDToString(ID_Edition);
+      ExecSQL;
+    end;
+
+    q1 := TJvUIBQuery.Create(nil);
+    q2 := TJvUIBQuery.Create(nil);
+    q3 := TJvUIBQuery.Create(nil);
+    q4 := TJvUIBQuery.Create(nil);
+    q5 := TJvUIBQuery.Create(nil);
+    q6 := TJvUIBQuery.Create(nil);
+    try
+      q1.Transaction := Transaction;
+      q2.Transaction := Transaction;
+      q3.Transaction := Transaction;
+      q4.Transaction := Transaction;
+      q5.Transaction := Transaction;
+      q6.Transaction := Transaction;
+
+      q1.SQL.Clear;
+      q1.SQL.Add('INSERT INTO COUVERTURES (ID_Edition, ID_Album, FichierCouverture, STOCKAGECOUVERTURE, Ordre, CategorieImage)');
+      q1.SQL.Add('VALUES (:ID_Edition, :ID_Album, :FichierCouverture, 0, :Ordre, :CategorieImage)');
+
+      q6.SQL.Text := 'SELECT Result FROM SAVEBLOBTOFILE(:Chemin, :Fichier, :BlobContent)';
+
+      q2.SQL.Clear;
+      q2.SQL.Add('INSERT INTO COUVERTURES (ID_Edition, ID_Album, FichierCouverture, STOCKAGECOUVERTURE, Ordre, IMAGECOUVERTURE, CategorieImage)');
+      q2.SQL.Add('VALUES (:ID_Edition, :ID_Album, :FichierCouverture, 1, :Ordre, :IMAGECOUVERTURE, :CategorieImage)');
+
+      q3.SQL.Text := 'UPDATE COUVERTURES SET IMAGECOUVERTURE = :IMAGECOUVERTURE, STOCKAGECOUVERTURE = 1 WHERE ID_Couverture = :ID_Couverture';
+
+      q4.SQL.Text := 'UPDATE COUVERTURES SET IMAGECOUVERTURE = NULL, STOCKAGECOUVERTURE = 0 WHERE ID_Couverture = :ID_Couverture';
+
+      q5.SQL.Text := 'UPDATE COUVERTURES SET FichierCouverture = :FichierCouverture, Ordre = :Ordre, CategorieImage = :CategorieImage WHERE ID_Couverture = :ID_Couverture';
+
+      for i := 0 to Pred(Couvertures.Count) do begin
+        PC := Couvertures[i];
+        if IsEqualGUID(PC.ID, GUID_NULL) then begin // nouvelles couvertures
+          if (not PC.NewStockee) then begin // couvertures liées (q1)
+            PC.OldNom := PC.NewNom;
+            PC.NewNom := SearchNewFileName(RepImages, ExtractFileName(PC.NewNom), True);
+            q6.Params.ByNameAsString['Chemin'] := RepImages;
+            q6.Params.ByNameAsString['Fichier'] := PC.NewNom;
+            Stream := GetCouvertureStream(PC.OldNom, -1, -1, False);
+            try
+              q6.ParamsSetBlob('BlobContent', Stream);
+            finally
+              Stream.Free;
+            end;
+            q6.Open;
+
+            q1.Params.ByNameAsString['ID_Edition'] := GUIDToString(ID_Edition);
+            q1.Params.ByNameAsString['ID_Album'] := GUIDToString(ID_Album);
+            q1.Params.ByNameAsString['FichierCouverture'] := PC.NewNom;
+            q1.Params.ByNameAsInteger['Ordre'] := i;
+            q1.Params.ByNameAsInteger['CategorieImage'] := PC.Categorie;
+            q1.ExecSQL;
+          end
+          else if FileExists(PC.NewNom) then begin // couvertures stockées (q2)
+            q2.Params.ByNameAsString['ID_Edition'] := GUIDToString(ID_Edition);
+            q2.Params.ByNameAsString['ID_Album'] := GUIDToString(ID_Album);
+            q2.Params.ByNameAsString['FichierCouverture'] := ChangeFileExt(ExtractFileName(PC.NewNom), '');
+            q2.Params.ByNameAsInteger['Ordre'] := i;
+            Stream := GetJPEGStream(PC.NewNom);
+            try
+              q2.ParamsSetBlob('IMAGECOUVERTURE', Stream);
+            finally
+              Stream.Free;
+            end;
+            q2.Params.ByNameAsInteger['CategorieImage'] := PC.Categorie;
+            q2.ExecSQL;
+          end;
+        end
+        else begin // ancienne couverture
+          if PC.OldStockee <> PC.NewStockee then begin // changement de stockage
+            if (PC.NewStockee) then begin // conversion couvertures liées en stockées (q3)
+              Stream := GetCouvertureStream(False, PC.ID, -1, -1, False);
+              try
+                q3.ParamsSetBlob('IMAGECOUVERTURE', Stream);
+              finally
+                Stream.Free;
+              end;
+              q3.Params.ByNameAsString['ID_Couverture'] := GUIDToString(PC.ID);
+              q3.ExecSQL;
+              if ExtractFilePath(PC.NewNom) = '' then
+                FichiersImages.Add(RepImages + PC.NewNom)
+              else
+                FichiersImages.Add(PC.NewNom);
+              PC.NewNom := ChangeFileExt(ExtractFileName(PC.NewNom), '');
+            end
+            else begin // conversion couvertures stockées en liées
+              PC.NewNom := SearchNewFileName(RepImages, PC.NewNom + '.jpg', True);
+              q6.Params.ByNameAsString['Chemin'] := RepImages;
+              q6.Params.ByNameAsString['Fichier'] := PC.NewNom;
+              Stream := GetCouvertureStream(False, PC.ID, -1, -1, False);
+              try
+                q6.ParamsSetBlob('BlobContent', Stream);
+              finally
+                Stream.Free;
+              end;
+              q6.Open;
+
+              q4.Params.ByNameAsString['ID_Couverture'] := GUIDToString(PC.ID);
+              q4.ExecSQL;
+            end;
+          end;
+          // couvertures renommées, réordonnées, changée de catégorie, etc (q5)
+          // obligatoire pour les changement de stockage
+          q5.Params.ByNameAsString['FichierCouverture'] := PC.NewNom;
+          q5.Params.ByNameAsInteger['Ordre'] := i;
+          q5.Params.ByNameAsInteger['CategorieImage'] := PC.Categorie;
+          q5.Params.ByNameAsString['ID_Couverture'] := GUIDToString(PC.ID);
+          q5.ExecSQL;
+        end;
+      end;
+    finally
+      FreeAndNil(q1);
+      FreeAndNil(q2);
+      FreeAndNil(q3);
+      FreeAndNil(q4);
+      FreeAndNil(q5);
+      FreeAndNil(q6);
+    end;
+    Transaction.Commit;
+
+    if FichiersImages.Count > 0 then begin
+      Transaction.StartTransaction;
+      SQL.Text := 'SELECT * FROM DELETEFILE(:Fichier)';
+      for i := 0 to Pred(FichiersImages.Count) do begin
+        Params.AsString[0] := FichiersImages[i];
+        Open;
+        if Fields.AsInteger[0] <> 0 then
+          ShowMessage(FichiersImages[i] + #13#13 + SysErrorMessage(Fields.AsInteger[0]));
+      end;
+      Transaction.Commit;
+    end;
+  finally
+    FichiersImages.Free;
+    Free;
+  end;
+end;
+
 { TEditionsComplet }
 
 procedure TEditionsComplet.Clear;
@@ -516,31 +1049,31 @@ begin
 end;
 
 procedure TEditionsComplet.Fill(Reference: TGUID; Stock: Integer = -1);
-var
-  q: TJvUIBQuery;
 begin
   inherited Fill(Reference);
-  q := TJvUIBQuery.Create(nil);
-  with q do try
+  with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT ID_Edition, e.ID_Editeur, ed.nomediteur, e.ID_Collection, c.nomcollection, ANNEEEDITION, ISBN';
-    SQL.Add('FROM EDITIONS e LEFT JOIN editeurs ed on e.ID_Editeur = ed.ID_Editeur LEFT JOIN collections c on e.ID_Collection = c.ID_Collection');
-    SQL.Add('WHERE ID_Album = ?');
+    SQL.Text := 'SELECT ID_Edition FROM EDITIONS WHERE ID_Album = ?';
     if Stock in [0, 1] then SQL.Add('AND e.STOCK = :Stock');
     Params.AsString[0] := GUIDToString(Reference);
     if Stock in [0, 1] then Params.AsInteger[1] := Stock;
     Open;
     while not Eof do begin
-      Editions.Add(TEdition.Make(q));
+      Editions.Add(TEditionComplete.Create(StringToGUID(Fields.AsString[0])));
       Next;
     end;
   finally
-    q.Transaction.Free;
-    q.Free;
+    Transaction.Free;
+    Free;
   end;
 end;
 
 { TEmprunteurComplet }
+
+function TEmprunteurComplet.ChaineAffichage: string;
+begin
+  Result := FormatTitre(Nom);
+end;
 
 procedure TEmprunteurComplet.Clear;
 begin
@@ -592,46 +1125,94 @@ begin
   end;
 end;
 
+function TEmprunteurComplet.GetReference: TGUID;
+begin
+  Result := ID_Emprunteur;
+end;
+
+procedure TEmprunteurComplet.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+var
+  s: string;
+begin
+  inherited;
+  with TJvUIBQuery.Create(nil) do try
+    Transaction := UseTransaction;
+
+    if RecInconnu then
+      SQL.Text := 'INSERT INTO EMPRUNTEURS (ID_Emprunteur, NOMEMPRUNTEUR, ADRESSEEMPRUNTEUR) VALUES (:ID_Emprunteur, :NOMEMPRUNTEUR, :ADRESSEEMPRUNTEUR)'
+    else
+      SQL.Text := 'UPDATE EMPRUNTEURS SET NOMEMPRUNTEUR = :NOMEMPRUNTEUR, ADRESSEEMPRUNTEUR = :ADRESSEEMPRUNTEUR WHERE ID_Emprunteur = :ID_Emprunteur';
+
+    Params.ByNameAsString['NOMEMPRUNTEUR'] := Trim(Nom);
+    s := Self.Adresse.Text;
+    ParamsSetBlob('ADRESSEEMPRUNTEUR', s);
+
+    Params.ByNameAsString['ID_Emprunteur'] := GUIDToString(ID_Emprunteur);
+    ExecSQL;
+    Transaction.Commit;
+  finally
+    Free;
+  end;
+end;
+
 { TSerieComplete }
+
+function TSerieComplete.ChaineAffichage: string;
+begin
+  Result := ChaineAffichage(False);
+end;
+
+function TSerieComplete.ChaineAffichage(Simple: Boolean): string;
+var
+  s: string;
+begin
+  if Simple then
+    Result := Titre
+  else
+    Result := FormatTitre(Titre);
+  s := '';
+  AjoutString(s, FormatTitre(Editeur.NomEditeur), ' ');
+  AjoutString(s, FormatTitre(Collection.NomCollection), ' - ');
+  AjoutString(Result, s, ' ', '(', ')');
+end;
 
 procedure TSerieComplete.Clear;
 begin
   inherited;
   ID_Serie := GUID_NULL;
   Titre := '';
-  TAlbum.VideListe(Albums);
-  TParaBD.VideListe(ParaBD);
+  Albums.Clear;
+  ParaBD.Clear;
   Genres.Clear;
   Sujet.Clear;
   Notes.Clear;
   Editeur.Clear;
   Collection.Clear;
-  TAuteur.VideListe(Scenaristes);
-  TAuteur.VideListe(Dessinateurs);
-  TAuteur.VideListe(Coloristes);
+  Scenaristes.Clear;
+  Dessinateurs.Clear;
+  Coloristes.Clear;
 end;
 
 constructor TSerieComplete.Create;
 begin
   inherited;
   FIdAuteur := GUID_NULL;
-  Albums := TList.Create;
-  ParaBD := TList.Create;
+  Albums := TObjectList.Create(True);
+  ParaBD := TObjectList.Create(True);
   Genres := TStringList.Create;
   Sujet := TStringList.Create;
   Notes := TStringList.Create;
   Editeur := TEditeurComplet.Create;
   Collection := TCollection.Create;
-  Scenaristes := TList.Create;
-  Dessinateurs := TList.Create;
-  Coloristes := TList.Create;
+  Scenaristes := TObjectList.Create(True);
+  Dessinateurs := TObjectList.Create(True);
+  Coloristes := TObjectList.Create(True);
 end;
 
 constructor TSerieComplete.Create(const Reference, IdAuteur: TGUID);
 begin
   Create;
-  FIdAuteur := IdAuteur;
-  Fill(Reference);
+  Fill(Reference, IdAuteur);
 end;
 
 destructor TSerieComplete.Destroy;
@@ -660,7 +1241,7 @@ begin
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     FetchBlobs := True;
-    SQL.Text := 'SELECT TITRESERIE, TERMINEE, SUJETSERIE, REMARQUESSERIE, SITEWEB, S.ID_Editeur, S.ID_Collection, NOMCOLLECTION '
+    SQL.Text := 'SELECT TITRESERIE, TERMINEE, SUJETSERIE, REMARQUESSERIE, SITEWEB, COMPLETE, S.ID_Editeur, S.ID_Collection, NOMCOLLECTION '
       + 'FROM SERIES S LEFT JOIN COLLECTIONS C ON S.ID_Collection = C.ID_Collection '
       + 'WHERE ID_Serie = ?';
     Params.AsString[0] := GUIDToString(Reference);
@@ -671,10 +1252,11 @@ begin
       Self.Terminee := -1
     else
       Self.Terminee := Fields.ByNameAsInteger['TERMINEE'];
+    Self.Complete := Fields.ByNameAsBoolean['COMPLETE'];
     Self.Sujet.Text := Fields.ByNameAsString['SUJETSERIE'];
     Self.Notes.Text := Fields.ByNameAsString['REMARQUESSERIE'];
     Self.SiteWeb := Trim(Fields.ByNameAsString['SITEWEB']);
-    Self.Editeur.Fill(StringToGUID(Fields.ByNameAsString['ID_EDITEUR']));
+    Self.Editeur.Fill(StringToGUIDDef(Fields.ByNameAsString['ID_EDITEUR'], GUID_NULL));
     Self.Collection.Fill(q);
     FetchBlobs := False;
 
@@ -715,13 +1297,14 @@ begin
     end;
 
     Close;
-    SQL.Text := 'SELECT Genre '
+    SQL.Text := 'SELECT g.ID_Genre, Genre '
       + 'FROM GenreSeries s INNER JOIN Genres g ON g.ID_Genre = s.ID_Genre '
-      + 'WHERE ID_Serie = ?';
+      + 'WHERE ID_Serie = ?'
+      + 'ORDER BY GENRE';
     Params.AsString[0] := GUIDToString(Reference);
     Open;
     while not Eof do begin
-      Self.Genres.Add(Fields.AsString[0]);
+      Self.Genres.Values[Fields.AsString[0]] := Fields.AsString[1];
       Next;
     end;
 
@@ -741,6 +1324,135 @@ begin
     q.Transaction.Free;
     q.Free;
   end;
+end;
+
+procedure TSerieComplete.Fill(const Reference, IdAuteur: TGUID);
+begin
+  FIdAuteur := IdAuteur;
+  Fill(Reference);
+end;
+
+function TSerieComplete.GetID_Collection: TGUID;
+begin
+  Result := Collection.ID;
+end;
+
+function TSerieComplete.GetID_Editeur: TGUID;
+begin
+  Result := Editeur.ID_Editeur;
+end;
+
+function TSerieComplete.GetReference: TGUID;
+begin
+  Result := ID_Serie;
+end;
+
+procedure TSerieComplete.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+var
+  s: string;
+  i: Integer;
+begin
+  inherited;
+  with TJvUIBQuery.Create(nil) do try
+    Transaction := UseTransaction;
+    if RecInconnu then begin
+      SQL.Text := 'INSERT INTO SERIES (ID_Serie, TitreSerie, Terminee, Complete, SITEWEB, ID_Editeur, ID_Collection, SUJETserie, REMARQUESserie, UPPERSUJETserie, UPPERREMARQUESserie)';
+      SQL.Add('VALUES');
+      SQL.Add('(:ID_Serie, :TitreSerie, :Terminee, :Complete, :SITEWEB, :ID_Editeur, :ID_Collection, :SUJETserie, :REMARQUESserie, :UPPERSUJETserie, :UPPERREMARQUESserie)');
+    end
+    else begin
+      SQL.Text := 'UPDATE SERIES SET TitreSerie = :TitreSerie, Terminee = :Terminee, Complete = :Complete, SITEWEB = :SITEWEB, ID_Editeur = :ID_Editeur, ID_Collection = :ID_Collection,';
+      SQL.Add('SUJETserie = :SUJETserie, REMARQUESserie = :REMARQUESserie, UPPERSUJETserie = :UPPERSUJETserie,');
+      SQL.Add('UPPERREMARQUESserie = :UPPERREMARQUESserie WHERE ID_Serie = :ID_Serie');
+    end;
+    Params.ByNameAsString['TitreSerie'] := Trim(Self.Titre);
+    if TCheckBoxState(Self.Terminee) = cbGrayed then
+      Params.ByNameIsNull['TERMINEE'] := True
+    else
+      Params.ByNameAsInteger['TERMINEE'] := Self.Terminee;
+    Params.ByNameAsBoolean['COMPLETE'] := Self.Complete;
+    Params.ByNameAsString['SITEWEB'] := Trim(Self.SiteWeb);
+    if IsEqualGUID(Self.ID_Editeur, GUID_NULL) then begin
+      Params.ByNameIsNull['ID_Editeur'] := True;
+      Params.ByNameIsNull['ID_Collection'] := True;
+    end
+    else begin
+      Params.ByNameAsString['ID_Editeur'] := GUIDToString(Self.ID_Editeur);
+      if IsEqualGUID(Self.ID_Collection, GUID_NULL) then
+        Params.ByNameIsNull['ID_Collection'] := True
+      else
+        Params.ByNameAsString['ID_Collection'] := GUIDToString(Self.ID_Collection);
+    end;
+    s := Self.Sujet.Text;
+    if s <> '' then begin
+      ParamsSetBlob('SUJETserie', s);
+      s := UpperCase(SansAccents(s));
+      ParamsSetBlob('UPPERSUJETserie', s);
+    end
+    else begin
+      Params.ByNameIsNull['SUJETserie'] := True;
+      Params.ByNameIsNull['UPPERSUJETserie'] := True;
+    end;
+    s := Self.Notes.Text;
+    if s <> '' then begin
+      ParamsSetBlob('REMARQUESserie', s);
+      s := UpperCase(SansAccents(s));
+      ParamsSetBlob('UPPERREMARQUESserie', s);
+    end
+    else begin
+      Params.ByNameIsNull['REMARQUESserie'] := True;
+      Params.ByNameIsNull['UPPERREMARQUESserie'] := True;
+    end;
+
+    Params.ByNameAsString['ID_Serie'] := GUIDToString(Self.ID_Serie);
+    ExecSQL;
+
+    SupprimerToutDans('', 'GENRESERIES', 'ID_Serie', ID_Serie);
+    SQL.Clear;
+    SQL.Add('INSERT INTO GENRESERIES (ID_Serie, ID_Genre) VALUES (:ID_Serie, :ID_Genre)');
+    for i := 0 to Pred(Genres.Count) do begin
+      Params.AsString[0] := GUIDToString(ID_Serie);
+      Params.AsString[1] := Genres.Names[i];
+      ExecSQL;
+    end;
+
+    SupprimerToutDans('', 'AUTEURS_SERIES', 'ID_Serie', ID_Serie);
+    SQL.Clear;
+    SQL.Add('INSERT INTO AUTEURS_SERIES (ID_Serie, METIER, ID_Personne)');
+    SQL.Add('VALUES (:ID_Serie, :METIER, :ID_Personne)');
+    for i := 0 to Pred(Scenaristes.Count) do begin
+      Params.AsString[0] := GUIDToString(ID_Serie);
+      Params.AsInteger[1] := 0;
+      Params.AsString[2] := GUIDToString(TAuteur(Scenaristes[i]).Personne.ID);
+      ExecSQL;
+    end;
+    for i := 0 to Pred(Dessinateurs.Count) do begin
+      Params.AsString[0] := GUIDToString(ID_Serie);
+      Params.AsInteger[1] := 1;
+      Params.AsString[2] := GUIDToString(TAuteur(Dessinateurs[i]).Personne.ID);
+      ExecSQL;
+    end;
+    for i := 0 to Pred(Coloristes.Count) do begin
+      Params.AsString[0] := GUIDToString(ID_Serie);
+      Params.AsInteger[1] := 2;
+      Params.AsString[2] := GUIDToString(TAuteur(Coloristes[i]).Personne.ID);
+      ExecSQL;
+    end;
+
+    Transaction.Commit;
+  finally
+    Free;
+  end;
+end;
+
+procedure TSerieComplete.SetID_Collection(const Value: TGUID);
+begin
+  Collection.Fill(Value);
+end;
+
+procedure TSerieComplete.SetID_Editeur(const Value: TGUID);
+begin
+  Editeur.Fill(Value);
 end;
 
 { TEditeurComplet }
@@ -784,6 +1496,32 @@ begin
   finally
     q.Transaction.Free;
     q.Free;
+  end;
+end;
+
+function TEditeurComplet.GetReference: TGUID;
+begin
+  Result := ID_Editeur;
+end;
+
+procedure TEditeurComplet.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+begin
+  inherited;
+  with TJvUIBQuery.Create(nil) do try
+    Transaction := UseTransaction;
+
+    if RecInconnu then
+      SQL.Text := 'INSERT INTO EDITEURS (ID_Editeur, NOMEDITEUR, SITEWEB) VALUES (:ID_Editeur, :NOMEDITEUR, :SITEWEB)'
+    else
+      SQL.Text := 'UPDATE EDITEURS SET NOMEDITEUR = :NOMEDITEUR, SITEWEB = :SITEWEB WHERE ID_Editeur = :ID_Editeur';
+
+    Params.ByNameAsString['NOMEDITEUR'] := Trim(NomEditeur);
+    Params.ByNameAsString['SITEWEB'] := Trim(SiteWeb);
+    Params.ByNameAsString['ID_Editeur'] := GUIDToString(ID_Editeur);
+    ExecSQL;
+    Transaction.Commit;
+  finally
+    Free;
   end;
 end;
 
@@ -1179,6 +1917,12 @@ begin
   Fill(AvecIntegrales, AvecAchats, GUID_NULL);
 end;
 
+constructor TSeriesIncompletes.Create(ID_Serie: TGUID);
+begin
+  Create;
+  Fill(ID_Serie);
+end;
+
 destructor TSeriesIncompletes.Destroy;
 begin
 
@@ -1276,6 +2020,12 @@ begin
   Fill(AvecAchats);
 end;
 
+constructor TPrevisionsSorties.Create(ID_Serie: TGUID);
+begin
+  Create;
+  Fill(ID_Serie);
+end;
+
 destructor TPrevisionsSorties.Destroy;
 begin
   AnneesPassees.Free;
@@ -1335,6 +2085,7 @@ end;
 
 constructor TPrevisionSortie.Create;
 begin
+  inherited;
   Serie := TSerie.Create;
 end;
 
@@ -1368,6 +2119,7 @@ end;
 
 constructor TSerieIncomplete.Create;
 begin
+  inherited;
   NumerosManquants := TStringList.Create;
   Serie := TSerie.Create;
 end;
@@ -1380,6 +2132,11 @@ begin
 end;
 
 { TAuteurComplet }
+
+function TAuteurComplet.ChaineAffichage: string;
+begin
+  Result := FormatTitre(NomAuteur);
+end;
 
 procedure TAuteurComplet.Clear;
 begin
@@ -1439,7 +2196,7 @@ begin
     Params.ByNameAsString['ID_Personne'] := GUIDToString(Reference);
     Open;
     while not Eof do begin
-      Series.Add(TSerieComplete.Create(StringToGUID(Fields.AsString[1]), Self.ID_Auteur));
+      Series.Add(TSerieComplete.Create(StringToGUID(Fields.AsString[1])));
       Next;
     end;
   finally
@@ -1448,7 +2205,57 @@ begin
   end;
 end;
 
+function TAuteurComplet.GetReference: TGUID;
+begin
+  Result := ID_Auteur;
+end;
+
+procedure TAuteurComplet.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+var
+  s: string;
+begin
+  inherited;
+  with TJvUIBQuery.Create(nil) do try
+    Transaction := UseTransaction;
+
+    if RecInconnu then
+      SQL.Text := 'INSERT INTO PERSONNES (ID_Personne, NOMPERSONNE, SITEWEB, BIOGRAPHIE) VALUES (:ID_Personne, :NOMPERSONNE, :SITEWEB, :BIOGRAPHIE)'
+    else
+      SQL.Text := 'UPDATE PERSONNES SET NOMPERSONNE = :NOMPERSONNE, SITEWEB = :SITEWEB, BIOGRAPHIE = :BIOGRAPHIE WHERE ID_Personne = :ID_Personne';
+
+    Params.ByNameAsString['NOMPERSONNE'] := Trim(NomAuteur);
+    Params.ByNameAsString['SITEWEB'] := Trim(SiteWeb);
+    s := Biographie.Text;
+    ParamsSetBlob('BIOGRAPHIE', s);
+
+    Params.ByNameAsString['ID_Personne'] := GUIDToString(ID_Auteur);
+    ExecSQL;
+    Transaction.Commit;
+  finally
+    Free;
+  end;
+end;
+
 { TParaBDComplet }
+
+function TParaBDComplet.ChaineAffichage: string;
+begin
+  Result := ChaineAffichage(False);
+end;
+
+function TParaBDComplet.ChaineAffichage(Simple: Boolean): string;
+var
+  s: string;
+begin
+  if Simple then
+    Result := Titre
+  else
+    Result := FormatTitre(Titre);
+  s := '';
+  AjoutString(s, FormatTitre(Serie.Titre), ' - ');
+  AjoutString(s, sCategorieParaBD, ' - ');
+  AjoutString(Result, s, ' ', '(', ')');
+end;
 
 procedure TParaBDComplet.Clear;
 begin
@@ -1515,7 +2322,7 @@ begin
     Self.PrixCote := Fields.ByNameAsCurrency['PRIXCOTE'];
     Self.HasImage := not Fields.ByNameIsNull['FICHIERPARABD'];
 
-    serie := StringToGUID(Fields.ByNameAsString['ID_SERIE']);
+    serie := StringToGUIDDef(Fields.ByNameAsString['ID_SERIE'], GUID_NULL);
 
     Close;
     SQL.Text := 'SELECT * FROM PROC_AUTEURS(NULL, NULL, ?)';
@@ -1540,6 +2347,149 @@ begin
     Result := DateToStr(Self.DateAchat)
   else
     Result := '';
+end;
+
+{ TCollectionComplete }
+
+procedure TCollectionComplete.Clear;
+begin
+  inherited;
+  Editeur.Clear;
+end;
+
+constructor TCollectionComplete.Create;
+begin
+  inherited;
+  Editeur := TEditeur.Create;
+end;
+
+destructor TCollectionComplete.Destroy;
+begin
+  Editeur.Free;
+  inherited;
+end;
+
+procedure TCollectionComplete.Fill(const Reference: TGUID);
+var
+  q: TJvUIBQuery;
+begin
+  inherited;
+  if IsEqualGUID(Reference, GUID_NULL) then Exit;
+  Self.ID_Collection := Reference;
+  q := TJvUIBQuery.Create(nil);
+  with q do try
+    Transaction := GetTransaction(DMPrinc.UIBDataBase);
+    SQL.Text := 'SELECT NOMCOLLECTION, ID_EDITEUR FROM COLLECTIONS WHERE ID_COLLECTION = ?';
+    Params.AsString[0] := GUIDToString(Reference);
+    Open;
+    RecInconnu := Eof;
+    Self.NomCollection := Fields.ByNameAsString['NOMCOLLECTION'];
+    Self.ID_Editeur := StringToGUIDDef(Fields.ByNameAsString['ID_EDITEUR'], GUID_NULL);
+  finally
+    Transaction.Free;
+    Free;
+  end;
+end;
+
+function TCollectionComplete.GetID_Editeur: TGUID;
+begin
+  Result := Editeur.ID;
+end;
+
+function TCollectionComplete.GetReference: TGUID;
+begin
+  Result := ID_Collection;
+end;
+
+procedure TCollectionComplete.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+begin
+  inherited;
+  with TJvUIBQuery.Create(nil) do try
+    Transaction := UseTransaction;
+    if RecInconnu then
+      SQL.Text := 'INSERT INTO COLLECTIONS (ID_Collection, NOMCOLLECTION, ID_Editeur) VALUES (:ID_Collection, :NOMCOLLECTION, :ID_Editeur)'
+    else
+      SQL.Text := 'UPDATE COLLECTIONS SET NOMCOLLECTION = :NOMCOLLECTION, ID_Editeur = :ID_Editeur WHERE ID_Collection = :ID_Collection';
+    Params.ByNameAsString['NOMCOLLECTION'] := Trim(NomCollection);
+    Params.ByNameAsString['ID_EDITEUR'] := GUIDToString(ID_Editeur);
+    Params.ByNameAsString['ID_COLLECTION'] := GUIDToString(ID_Collection);
+    ExecSQL;
+    Transaction.Commit;
+  finally
+    Free;
+  end;
+end;
+
+procedure TCollectionComplete.SetID_Editeur(const Value: TGUID);
+begin
+  Editeur.Fill(Value);
+end;
+
+{ TObjetComplet }
+
+function TObjetComplet.ChaineAffichage: string;
+begin
+  Result := '';
+end;
+
+procedure TObjetComplet.Clear;
+begin
+  inherited;
+  RecInconnu := True;
+end;
+
+constructor TObjetComplet.Create;
+begin
+  inherited;
+
+end;
+
+constructor TObjetComplet.Create(const Reference: TGUID);
+begin
+  Create;
+  Fill(Reference);
+end;
+
+function TObjetComplet.GetReference: TGUID;
+begin
+  Result := GUID_NULL;
+end;
+
+procedure TObjetComplet.New;
+var
+  newID: TGUID;
+begin
+  with TJvUIBQuery.Create(nil) do try
+    Transaction := GetTransaction(DMPrinc.UIBDataBase);
+    SQL.Text := 'select udf_createguid() from rdb$database';
+    Open;
+    newID := StringToGUIDDef(Fields.AsString[0], GUID_NULL);
+  finally
+    Transaction.Free;
+    Free;
+  end;
+
+  Fill(newID);
+end;
+
+procedure TObjetComplet.SaveToDatabase;
+var
+  Transaction: TJvUIBTransaction;
+begin
+  Assert(not IsEqualGUID(Reference, GUID_NULL), 'L''ID ne peut être GUID_NULL');
+
+  Transaction := GetTransaction(DMPrinc.UIBDataBase);
+  try
+    SaveToDatabase(Transaction);
+    Transaction.Commit;
+  finally
+    Transaction.Free;
+  end;
+end;
+
+procedure TObjetComplet.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+begin
+  Assert(not IsEqualGUID(Reference, GUID_NULL), 'L''ID ne peut être GUID_NULL');
 end;
 
 end.

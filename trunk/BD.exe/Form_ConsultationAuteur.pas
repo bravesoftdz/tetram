@@ -155,7 +155,7 @@ begin
   FAuteur.Fill(Value);
 
   edNom.Caption := FormatTitre(FAuteur.NomAuteur);
-  Caption := 'Fiche d''auteur - "' + edNom.Caption + '"';
+  Caption := 'Fiche d''auteur - ' + FAuteur.ChaineAffichage;
   if FAuteur.SiteWeb <> '' then begin
     edNom.Font.Color := clBlue;
     edNom.Font.Style := edNom.Font.Style + [fsUnderline];

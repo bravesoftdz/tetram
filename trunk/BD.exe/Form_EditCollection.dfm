@@ -17,7 +17,7 @@ object FrmEditCollection: TFrmEditCollection
   OldCreateOrder = False
   Position = poMainFormCenter
   OnCreate = FormCreate
-  OnShow = FormShow
+  OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
   object Bevel1: TBevel

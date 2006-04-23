@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, Mask, Menus, ExtCtrls,
-  DBEditLabeled, DB, Buttons, Fram_Boutons;
+  DBEditLabeled, DB, Buttons, Fram_Boutons, LoadComplet;
 
 type
   TFrmEditEmprunteur = class(TForm)
@@ -17,23 +17,21 @@ type
     Bevel1: TBevel;
     Frame11: TFrame1;
     procedure Frame11btnOKClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     { Déclarations privées }
-    FID_Emprunteur: TGUID;
-    FCreation: Boolean;
+    FEmprunteur: TEmprunteurComplet;
     procedure SetID_Emprunteur(const Value: TGUID);
+    function GetID_Emprunteur: TGUID;
   public
     { Déclarations publiques }
-    property ID_Emprunteur: TGUID read FID_Emprunteur write SetID_Emprunteur;
+    property ID_Emprunteur: TGUID read GetID_Emprunteur write SetID_Emprunteur;
   end;
 
 implementation
 
-uses Commun, JvUIB, DM_Princ, LoadComplet;
-
-const
-  PasModifier = 'Impossible de modifier la fiche !';
-  PasAjouter = 'Impossible d''ajouter la fiche !';
+uses Commun, JvUIB, DM_Princ, Procedures, Textes;
 
 {$R *.DFM}
 
@@ -42,51 +40,45 @@ var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  FID_Emprunteur := Value;
-  with TJvUIBQuery.Create(nil) do try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT * FROM EMPRUNTEURS WHERE ID_Emprunteur = ?';
-    Params.AsString[0] := GUIDToString(FID_Emprunteur);
-    FetchBlobs := True;
-    Open;
-    FCreation := Eof;
-    if not FCreation then begin
-      edNom.Text := Fields.ByNameAsString['NOMEMPRUNTEUR'];
-      Coord.Lines.Text := Fields.ByNameAsString['ADRESSEEMPRUNTEUR'];
-      with TEmpruntsComplet.Create(FID_Emprunteur, seEmprunteur, ssPret) do try
-        Self.emprunts.Caption := IntToStr(NBEmprunts);
-      finally
-        Free;
-      end;
-    end;
-  finally
-    Transaction.Free;
-    Free;
-  end;
+
+  FEmprunteur.Fill(Value);
+
+  edNom.Text := FEmprunteur.Nom;
+  Coord.Lines.Assign(FEmprunteur.Adresse);
+  emprunts.Caption := IntToStr(FEmprunteur.Emprunts.NBEmprunts);
 end;
 
 procedure TFrmEditEmprunteur.Frame11btnOKClick(Sender: TObject);
-var
-  s: string;
 begin
-  with TJvUIBQuery.Create(nil) do try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    if FCreation then
-      SQL.Text := 'INSERT INTO EMPRUNTEURS (ID_Emprunteur, NOMEMPRUNTEUR, ADRESSEEMPRUNTEUR) VALUES (:ID_Emprunteur, :NOMEMPRUNTEUR, :ADRESSEEMPRUNTEUR)'
-    else
-      SQL.Text := 'UPDATE EMPRUNTEURS SET NOMEMPRUNTEUR = :NOMEMPRUNTEUR, ADRESSEEMPRUNTEUR = :ADRESSEEMPRUNTEUR WHERE ID_Emprunteur = :ID_Emprunteur';
-    Params.ByNameAsString['NOMEMPRUNTEUR'] := Trim(edNom.Text);
-    s := Coord.Lines.Text;
-    ParamsSetBlob('ADRESSEEMPRUNTEUR', s);
-
-    Params.ByNameAsString['ID_Emprunteur'] := GUIDToString(ID_Emprunteur);
-    ExecSQL;
-    Transaction.Commit;
-  finally
-    Transaction.Free;
-    Free;
+  if Length(Trim(edNom.Text)) = 0 then begin
+    AffMessage(rsNomObligatoire, mtInformation, [mbOk], True);
+    edNom.SetFocus;
+    ModalResult := mrNone;
+    Exit;
   end;
+
+  FEmprunteur.Nom := Trim(edNom.Text);
+  FEmprunteur.Adresse.Assign(Coord.Lines);
+
+  FEmprunteur.SaveToDatabase;
+
   ModalResult := mrOk;
 end;
 
+function TFrmEditEmprunteur.GetID_Emprunteur: TGUID;
+begin
+  Result := FEmprunteur.ID_Emprunteur;
+end;
+
+procedure TFrmEditEmprunteur.FormCreate(Sender: TObject);
+begin
+  FEmprunteur := TEmprunteurComplet.Create;
+end;
+
+procedure TFrmEditEmprunteur.FormDestroy(Sender: TObject);
+begin
+  FEmprunteur.Free;
+end;
+
 end.
+

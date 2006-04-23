@@ -1,6 +1,6 @@
 object FrmEditAlbum: TFrmEditAlbum
-  Left = 1470
-  Top = 140
+  Left = 1266
+  Top = 114
   Width = 750
   Height = 856
   ActiveControl = edTitre
@@ -1535,11 +1535,13 @@ object FrmEditAlbum: TFrmEditAlbum
         end>
       ColumnClick = False
       HideSelection = False
+      OwnerData = True
       ReadOnly = True
       ShowColumnHeaders = False
       SortType = stNone
       TabOrder = 12
       ViewStyle = vsReport
+      OnData = lvScenaristesData
       OnKeyDown = lvDessinateursKeyDown
       LinkControls = <
         item
@@ -1559,11 +1561,13 @@ object FrmEditAlbum: TFrmEditAlbum
         end>
       ColumnClick = False
       HideSelection = False
+      OwnerData = True
       ReadOnly = True
       ShowColumnHeaders = False
       SortType = stBoth
       TabOrder = 13
       ViewStyle = vsReport
+      OnData = lvDessinateursData
       OnKeyDown = lvDessinateursKeyDown
       LinkControls = <
         item
@@ -1681,11 +1685,13 @@ object FrmEditAlbum: TFrmEditAlbum
         end>
       ColumnClick = False
       HideSelection = False
+      OwnerData = True
       ReadOnly = True
       ShowColumnHeaders = False
       SortType = stBoth
       TabOrder = 14
       ViewStyle = vsReport
+      OnData = lvColoristesData
       OnKeyDown = lvDessinateursKeyDown
       LinkControls = <
         item

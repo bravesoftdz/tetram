@@ -76,7 +76,7 @@ begin
   ClearForm;
   FSerie.Fill(Value);
 
-  Caption := 'Fiche de série - "' + FormatTitre(FSerie.Titre) + '"';
+  Caption := 'Fiche de série - ' + FSerie.ChaineAffichage;
   TitreSerie.Caption := FSerie.Titre;
   if FSerie.SiteWeb <> '' then begin
     TitreSerie.Font.Color := clBlue;
@@ -106,14 +106,9 @@ begin
   Sujet.Text := FSerie.Sujet.Text;
   Remarques.Text := FSerie.Notes.Text;
 
-  if Bool(FSerie.Genres.Count) then begin
-    s := FSerie.Genres.Text;
-    FSerie.Genres.Sort;
-    Collapse(s, ', ');
-    s := Copy(s, 1, Length(s) - 2);
-  end
-  else
-    s := '';
+  s := '';
+  for i := 0 to Pred(FSerie.Genres.Count) do
+    AjoutString(s, FSerie.Genres.ValueFromIndex[i], ', ');
   Memo1.Lines.Text := s;
 
   lvScenaristes.Items.BeginUpdate;

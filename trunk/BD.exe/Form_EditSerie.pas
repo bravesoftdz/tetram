@@ -3,9 +3,8 @@ unit Form_EditSerie;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, ExtCtrls, DBCtrls, Mask,
-  Buttons, VDTButton, ComCtrls, DBEditLabeled, VirtualTrees, VirtualTree,
-  Menus, ExtDlgs, Frame_RechercheRapide, CRFurtif, Fram_Boutons;
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, ExtCtrls, DBCtrls, Mask, Buttons, VDTButton, ComCtrls,
+  DBEditLabeled, VirtualTrees, VirtualTree, LoadComplet, Menus, ExtDlgs, Frame_RechercheRapide, CRFurtif, Fram_Boutons;
 
 type
   TFrmEditSerie = class(TForm)
@@ -69,15 +68,17 @@ type
     procedure btColoristeClick(Sender: TObject);
     procedure lvColoristesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure ScanEditKeyPress(Sender: TObject; var Key: Char);
+    procedure lvScenaristesData(Sender: TObject; Item: TListItem);
+    procedure lvDessinateursData(Sender: TObject; Item: TListItem);
+    procedure lvColoristesData(Sender: TObject; Item: TListItem);
   private
     { Déclarations privées }
-    FCreation: Boolean;
-    FID_Serie: TGUID;
-    FLstGenre: TStringList;
+    FSerie: TSerieComplete;
     procedure SetID_Serie(Value: TGUID);
+    function GetID_Serie: TGUID;
   public
     { Déclarations publiques }
-    property ID_Serie: TGUID read FID_Serie write SetID_Serie;
+    property ID_Serie: TGUID read GetID_Serie write SetID_Serie;
   end;
 
 implementation
@@ -100,8 +101,6 @@ begin
   FrameRechercheRapideCollection.VirtualTreeView := vtCollections;
   FrameRechercheRapideCollection.OnNew := OnNewCollection;
   FrameRechercheRapideGenre.VirtualTreeView := vtGenres;
-  FLstGenre := TStringList.Create;
-  FLstGenre.Sorted := True;
   vtGenres.Mode := vmGenres;
   vtGenres.CheckImageKind := ckXP;
   vtGenres.TreeOptions.MiscOptions := vtGenres.TreeOptions.MiscOptions + [toCheckSupport];
@@ -111,18 +110,19 @@ begin
   vtCollections.UseFiltre := True;
   vtAlbums.Mode := vmNone;
   vtAlbums.UseFiltre := True;
+
+  FSerie := TSerieComplete.Create;
 end;
 
 procedure TFrmEditSerie.FormDestroy(Sender: TObject);
 begin
-  FreeAndNil(FLstGenre);
+  lvScenaristes.Items.Count := 0;
+  lvDessinateurs.Items.Count := 0;
+  lvColoristes.Items.Count := 0;
+  FSerie.Free;
 end;
 
 procedure TFrmEditSerie.Frame11btnOKClick(Sender: TObject);
-var
-  ID_Editeur, ID_Collection: TGUID;
-  i: Integer;
-  s: string;
 begin
   if Length(Trim(edTitre.Text)) = 0 then begin
     AffMessage(rsTitreObligatoire, mtInformation, [mbOk], True);
@@ -131,193 +131,64 @@ begin
     Exit;
   end;
 
-  with TJvUIBQuery.Create(nil) do try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    if FCreation then begin
-      SQL.Text := 'INSERT INTO SERIES (ID_Serie, TitreSerie, Terminee, Complete, SITEWEB, ID_Editeur, ID_Collection, SUJETserie, REMARQUESserie, UPPERSUJETserie, UPPERREMARQUESserie)';
-      SQL.Add('VALUES');
-      SQL.Add('(:ID_Serie, :TitreSerie, :Terminee, :Complete, :SITEWEB, :ID_Editeur, :ID_Collection, :SUJETserie, :REMARQUESserie, :UPPERSUJETserie, :UPPERREMARQUESserie)');
-    end
-    else begin
-      SQL.Text := 'UPDATE SERIES SET TitreSerie = :TitreSerie, Terminee = :Terminee, Complete = :Complete, SITEWEB = :SITEWEB, ID_Editeur = :ID_Editeur, ID_Collection = :ID_Collection,';
-      SQL.Add('SUJETserie = :SUJETserie, REMARQUESserie = :REMARQUESserie, UPPERSUJETserie = :UPPERSUJETserie,');
-      SQL.Add('UPPERREMARQUESserie = :UPPERREMARQUESserie WHERE ID_Serie = :ID_Serie');
-    end;
-    Params.ByNameAsString['TitreSerie'] := Trim(edTitre.Text);
-    if cbTerminee.State = cbGrayed then
-      Params.ByNameIsNull['TERMINEE'] := True
-    else
-      Params.ByNameAsInteger['TERMINEE'] := Integer(cbTerminee.State);
-    Params.ByNameAsBoolean['COMPLETE'] := cbComplete.Checked;
-    Params.ByNameAsString['SITEWEB'] := Trim(edSite.Text);
-    ID_Editeur := vtEditeurs.CurrentValue;
-    ID_Collection := vtCollections.CurrentValue;
-    if IsEqualGUID(ID_Editeur, GUID_NULL) then begin
-      Params.ByNameIsNull['ID_Editeur'] := True;
-      Params.ByNameIsNull['ID_Collection'] := True;
-    end
-    else begin
-      Params.ByNameAsString['ID_Editeur'] := GUIDToString(ID_Editeur);
-      if IsEqualGUID(ID_Collection, GUID_NULL) then
-        Params.ByNameIsNull['ID_Collection'] := True
-      else
-        Params.ByNameAsString['ID_Collection'] := GUIDToString(ID_Collection);
-    end;
-    s := histoire.Lines.Text;
-    if s <> '' then begin
-      ParamsSetBlob('SUJETserie', s);
-      s := UpperCase(SansAccents(s));
-      ParamsSetBlob('UPPERSUJETserie', s);
-    end
-    else begin
-      Params.ByNameIsNull['SUJETserie'] := True;
-      Params.ByNameIsNull['UPPERSUJETserie'] := True;
-    end;
-    s := remarques.Lines.Text;
-    if s <> '' then begin
-      ParamsSetBlob('REMARQUESserie', s);
-      s := UpperCase(SansAccents(s));
-      ParamsSetBlob('UPPERREMARQUESserie', s);
-    end
-    else begin
-      Params.ByNameIsNull['REMARQUESserie'] := True;
-      Params.ByNameIsNull['UPPERREMARQUESserie'] := True;
-    end;
+  FSerie.Titre := Trim(edTitre.Text);
+  FSerie.Terminee := Integer(cbTerminee.State);
+  FSerie.Complete := cbComplete.Checked;
+  FSerie.SiteWeb := Trim(edSite.Text);
+  FSerie.ID_Editeur := vtEditeurs.CurrentValue;
+  FSerie.ID_Collection := vtCollections.CurrentValue;
+  FSerie.Sujet.Assign(histoire.Lines);
+  FSerie.Notes.Assign(remarques.Lines);
 
-    Params.ByNameAsString['ID_Serie'] := GUIDToString(ID_Serie);
-    ExecSQL;
+  FSerie.SaveToDatabase;
 
-    SupprimerToutDans('', 'GENRESERIES', 'ID_Serie', ID_Serie);
-    SQL.Clear;
-    SQL.Add('INSERT INTO GENRESERIES (ID_Serie, ID_Genre)');
-    SQL.Add('SELECT ' + QuotedStr(GUIDToString(ID_Serie)) + ', ID_Genre FROM GENRES WHERE Genre = :Genre');
-    for i := 0 to Pred(FLstGenre.Count) do begin
-      Params.AsString[0] := FLstGenre[i];
-      ExecSQL;
-    end;
-
-    SupprimerToutDans('', 'AUTEURS_SERIES', 'ID_Serie', ID_Serie);
-    SQL.Clear;
-    SQL.Add('INSERT INTO AUTEURS_SERIES (ID_Serie, METIER, ID_Personne)');
-    SQL.Add('VALUES (:ID_Serie, :METIER, :ID_Personne)');
-    for i := 0 to lvScenaristes.Items.Count - 1 do begin
-      Params.AsString[0] := GUIDToString(ID_Serie);
-      Params.AsInteger[1] := 0;
-      Params.AsString[2] := GUIDToString(TAuteur(lvScenaristes.Items[i].Data).Personne.ID);
-      ExecSQL;
-    end;
-    for i := 0 to lvDessinateurs.Items.Count - 1 do begin
-      Params.AsString[0] := GUIDToString(ID_Serie);
-      Params.AsInteger[1] := 1;
-      Params.AsString[2] := GUIDToString(TAuteur(lvDessinateurs.Items[i].Data).Personne.ID);
-      ExecSQL;
-    end;
-    for i := 0 to lvColoristes.Items.Count - 1 do begin
-      Params.AsString[0] := GUIDToString(ID_Serie);
-      Params.AsInteger[1] := 2;
-      Params.AsString[2] := GUIDToString(TAuteur(lvColoristes.Items[i].Data).Personne.ID);
-      ExecSQL;
-    end;
-
-    Transaction.Commit;
-  finally
-    Transaction.Free;
-    Free;
-  end;
   ModalResult := mrOk;
 end;
 
 procedure TFrmEditSerie.SetID_Serie(Value: TGUID);
 var
-  Query: TJvUIBQuery;
+  i: Integer;
   hg: IHourGlass;
   s: string;
 begin
   hg := THourGlass.Create;
-  FID_Serie := Value;
+  FSerie.Fill(Value);
   lvScenaristes.Items.BeginUpdate;
   lvDessinateurs.Items.BeginUpdate;
   lvColoristes.Items.BeginUpdate;
-  Query := TJvUIBQuery.Create(Self);
-  with Query do try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT TITRESERIE, TERMINEE, COMPLETE, SITEWEB, ID_Editeur, ID_Collection, SUJETserie, REMARQUESserie FROM SERIES WHERE ID_Serie = :ID_Serie';
-    Params.AsString[0] := GUIDToString(FID_Serie);
-    FetchBlobs := True;
-    Open;
-    FCreation := Eof;
-    if not FCreation then begin
-      edTitre.Text := Fields.ByNameAsString['TITRESERIE'];
-      if not Fields.ByNameIsNull['TERMINEE'] then
-        cbTerminee.State := TCheckBoxState(Fields.ByNameAsInteger['TERMINEE']);
-      if not Fields.ByNameIsNull['ID_EDITEUR'] then begin
-        vtEditeurs.CurrentValue := StringToGUID(Fields.ByNameAsString['ID_EDITEUR']);
-        if not Fields.ByNameIsNull['ID_COLLECTION'] then
-          vtCollections.CurrentValue := StringToGUID(Fields.ByNameAsString['ID_COLLECTION']);
-      end;
-      cbComplete.Checked := Fields.ByNameAsBoolean['COMPLETE'];
-      histoire.Lines.Text := Fields.ByNameAsString['SUJETserie'];
-      remarques.Lines.Text := Fields.ByNameAsString['REMARQUESserie'];
-      edSite.Text := Fields.ByNameAsString['SITEWEB'];
-
-      SQL.Text := 'SELECT * FROM PROC_AUTEURS(NULL, ?, NULL)';
-      Params.AsString[0] := GUIDToString(FID_Serie);
-      Open;
-      while not Eof do begin
-        case Fields.ByNameAsInteger['Metier'] of
-          0: begin
-              with LVScenaristes.Items.Add do begin
-                Data := TAuteur.Make(Query);
-                Caption := TAuteur(Data).ChaineAffichage;
-              end;
-            end;
-          1: begin
-              with LVDessinateurs.Items.Add do begin
-                Data := TAuteur.Make(Query);
-                Caption := TAuteur(Data).ChaineAffichage;
-              end;
-            end;
-          2: begin
-              with LVColoristes.Items.Add do begin
-                Data := TAuteur.Make(Query);
-                Caption := TAuteur(Data).ChaineAffichage;
-              end;
-            end;
-        end;
-        Next;
-      end;
-    end;
-
-    SQL.Text := 'SELECT g.Genre FROM GENRESERIES s INNER JOIN GENRES g ON s.ID_Genre = g.ID_Genre WHERE s.ID_Serie = :ID_Serie';
-    Params.AsString[0] := GUIDToString(FID_Serie);
-    FLstGenre.Clear;
-    Open;
-    while not Eof do begin
-      FLstGenre.Add(Fields.AsString[0]);
-      Next;
-    end;
-    if Bool(FLstGenre.Count) then begin
-      s := FLstGenre.Text;
-      Collapse(s, ', ');
-      s := Copy(s, 1, Length(s) - 2);
-    end
+  try
+    edTitre.Text := FSerie.Titre;
+    if FSerie.Terminee = -1 then
+      cbTerminee.State := cbGrayed
     else
-      s := '';
+      cbTerminee.State := TCheckBoxState(FSerie.Terminee);
+    vtEditeurs.CurrentValue := FSerie.ID_Editeur;
+    vtCollections.CurrentValue := FSerie.ID_Collection;
+    cbComplete.Checked := FSerie.Complete;
+    histoire.Lines.Assign(FSerie.Sujet);
+    remarques.Lines.Assign(FSerie.Notes);
+    edSite.Text := FSerie.SiteWeb;
+
+    lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
+    lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
+    lvColoristes.Items.Count := FSerie.Coloristes.Count;
+
+    s := '';
+    for i := 0 to Pred(FSerie.Genres.Count) do
+      AjoutString(s, FSerie.Genres.ValueFromIndex[i], ', ');
     Label15.Caption := s;
 
-    vtAlbums.Filtre := 'ID_Serie = ' + QuotedStr(GUIDToString(FID_Serie));
+    vtAlbums.Filtre := 'ID_Serie = ' + QuotedStr(GUIDToString(ID_Serie));
     vtAlbums.Mode := vmAlbumsSerie;
     vtAlbums.FullExpand;
 
-    vtParaBD.Filtre := 'ID_Serie = ' + QuotedStr(GUIDToString(FID_Serie));
+    vtParaBD.Filtre := 'ID_Serie = ' + QuotedStr(GUIDToString(ID_Serie));
     vtParaBD.Mode := vmParaBDSerie;
     vtParaBD.FullExpand;
   finally
     lvScenaristes.Items.EndUpdate;
     lvDessinateurs.Items.EndUpdate;
     lvColoristes.Items.EndUpdate;
-    Transaction.Free;
-    Free;
   end;
 end;
 
@@ -355,7 +226,7 @@ procedure TFrmEditSerie.vtGenresInitNode(Sender: TBaseVirtualTree; ParentNode, N
 begin
   if Sender.GetNodeLevel(Node) > 0 then begin
     Node.CheckType := ctCheckBox;
-    if Assigned(FLstGenre) and (FLstGenre.IndexOf(TGenre(RNodeInfo(vtGenres.GetNodeData(Node)^).Detail).Genre) <> -1) then
+    if Assigned(FSerie) and (FSerie.Genres.IndexOfName(GUIDToString(TGenre(RNodeInfo(vtGenres.GetNodeData(Node)^).Detail).ID)) <> -1) then
       Node.CheckState := csCheckedNormal
     else
       Node.CheckState := csUncheckedNormal;
@@ -372,18 +243,14 @@ begin
   NodeInfo := vtGenres.GetNodeData(Node);
   if Assigned(NodeInfo) and Assigned(NodeInfo.Detail) then begin
     PG := NodeInfo.Detail as TGenre;
-    i := FLstGenre.IndexOf(PG.Genre);
+    i := FSerie.Genres.IndexOfName(GUIDToString(PG.ID));
     if i = -1 then
-      FLstGenre.Add(PG.Genre)
+      FSerie.Genres.Values[GUIDToString(PG.ID)] := PG.Genre
     else
-      FLstGenre.Delete(i);
-    if Bool(FLstGenre.Count) then begin
-      s := FLstGenre.Text;
-      Collapse(s, ', ');
-      s := Copy(s, 1, Length(s) - 2);
-    end
-    else
-      s := '';
+      FSerie.Genres.Delete(i);
+    s := '';
+    for i := 0 to Pred(FSerie.Genres.Count) do
+      AjoutString(s, FSerie.Genres.ValueFromIndex[i], ', ');
     Label15.Caption := s;
   end;
 end;
@@ -456,7 +323,7 @@ begin
       Auteur := lvScenaristes.Items[i].Data;
       if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
         Auteur.Personne.Assign(CurrentAuteur);
-        lvScenaristes.Items[i].Caption := Auteur.ChaineAffichage;
+        lvScenaristes.Invalidate;
       end;
     end;
     lvScenaristes.Invalidate;
@@ -464,7 +331,7 @@ begin
       Auteur := lvDessinateurs.Items[i].Data;
       if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
         Auteur.Personne.Assign(CurrentAuteur);
-        lvDessinateurs.Items[i].Caption := Auteur.ChaineAffichage;
+        lvDessinateurs.Invalidate;
       end;
     end;
     lvDessinateurs.Invalidate;
@@ -472,7 +339,7 @@ begin
       Auteur := lvColoristes.Items[i].Data;
       if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
         Auteur.Personne.Assign(CurrentAuteur);
-        lvColoristes.Items[i].Caption := Auteur.ChaineAffichage;
+        lvColoristes.Invalidate;
       end;
     end;
     lvColoristes.Invalidate;
@@ -488,26 +355,23 @@ begin
     1: begin
         PA := TAuteur.Create;
         PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), GUID_NULL, ID_Serie, 0);
-        with lvScenaristes.Items.Add do begin
-          Data := PA;
-          Caption := PA.ChaineAffichage;
-        end;
+        FSerie.Scenaristes.Add(PA);
+        lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
+        lvScenaristes.Invalidate;
       end;
     2: begin
         PA := TAuteur.Create;
         PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), GUID_NULL, ID_Serie, 1);
-        with lvDessinateurs.Items.Add do begin
-          Data := PA;
-          Caption := PA.ChaineAffichage;
-        end;
+        FSerie.Dessinateurs.Add(PA);
+        lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
+        lvDessinateurs.Invalidate;
       end;
     3: begin
         PA := TAuteur.Create;
         PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), GUID_NULL, ID_Serie, 2);
-        with lvColoristes.Items.Add do begin
-          Data := PA;
-          Caption := PA.ChaineAffichage;
-        end;
+        FSerie.Coloristes.Add(PA);
+        lvColoristes.Items.Count := FSerie.Coloristes.Count;
+        lvColoristes.Invalidate;
       end;
   end;
   vtPersonnesChange(vtPersonnes, vtPersonnes.FocusedNode);
@@ -516,13 +380,16 @@ end;
 procedure TFrmEditSerie.lvColoristesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 var
   src: TListView;
-  PA: TAuteur;
 begin
   if Key <> VK_DELETE then Exit;
   src := TListView(Sender);
-  PA := src.Selected.Data;
-  PA.Free;
-  src.Selected.Delete;
+  if src = lvScenaristes then FSerie.Scenaristes.Delete(src.Selected.Index);
+  if src = lvDessinateurs then FSerie.Dessinateurs.Delete(src.Selected.Index);
+  if src = lvColoristes then FSerie.Coloristes.Delete(src.Selected.Index);
+  lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
+  lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
+  lvColoristes.Items.Count := FSerie.Coloristes.Count;
+  src.Invalidate;
   vtPersonnesChange(vtPersonnes, vtPersonnes.FocusedNode);
 end;
 
@@ -536,6 +403,29 @@ begin
       else
         vtGenres.CheckState[vtGenres.GetFirstSelected] := csCheckedNormal;
   end;
+end;
+
+function TFrmEditSerie.GetID_Serie: TGUID;
+begin
+  Result := FSerie.ID_Serie;
+end;
+
+procedure TFrmEditSerie.lvScenaristesData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FSerie.Scenaristes[Item.Index];
+  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+end;
+
+procedure TFrmEditSerie.lvDessinateursData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FSerie.Dessinateurs[Item.Index];
+  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+end;
+
+procedure TFrmEditSerie.lvColoristesData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FSerie.Coloristes[Item.Index];
+  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
 end;
 
 end.

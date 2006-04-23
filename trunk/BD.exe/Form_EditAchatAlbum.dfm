@@ -1,6 +1,6 @@
 object FrmEditAchatAlbum: TFrmEditAchatAlbum
-  Left = 480
-  Top = 375
+  Left = 1515
+  Top = 344
   Width = 738
   Height = 412
   Caption = 'Achat'
@@ -12,6 +12,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
   Font.Style = []
   OldCreateOrder = False
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
   object PageControl1: TPageControl
@@ -19,7 +20,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
     Top = 0
     Width = 730
     Height = 349
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     Align = alClient
     MultiLine = True
     Style = tsButtons
@@ -352,11 +353,13 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
           end>
         ColumnClick = False
         HideSelection = False
+        OwnerData = True
         ReadOnly = True
         ShowColumnHeaders = False
         SortType = stNone
         TabOrder = 12
         ViewStyle = vsReport
+        OnData = lvScenaristesData
         OnKeyDown = lvColoristesKeyDown
         LinkControls = <
           item
@@ -375,11 +378,13 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
           end>
         ColumnClick = False
         HideSelection = False
+        OwnerData = True
         ReadOnly = True
         ShowColumnHeaders = False
         SortType = stBoth
         TabOrder = 13
         ViewStyle = vsReport
+        OnData = lvDessinateursData
         OnKeyDown = lvColoristesKeyDown
         LinkControls = <
           item
@@ -426,11 +431,13 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
           end>
         ColumnClick = False
         HideSelection = False
+        OwnerData = True
         ReadOnly = True
         ShowColumnHeaders = False
         SortType = stBoth
         TabOrder = 14
         ViewStyle = vsReport
+        OnData = lvColoristesData
         OnKeyDown = lvColoristesKeyDown
         LinkControls = <
           item
@@ -582,6 +589,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Top = 4
         Width = 670
         Height = 21
+        Anchors = [akLeft, akTop, akRight]
         TabOrder = 0
         DesignSize = (
           670
