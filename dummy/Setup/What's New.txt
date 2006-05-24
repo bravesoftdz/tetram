@@ -1,3 +1,12 @@
+-=-=-=-=-=-    1.2.0.8 - ??/??/????   -=-=-=-=-=-
+
+* Nouveautés *
+      - La série n'est plus obligatoire pour créer un album (une option permet
+         de réactiver la contrainte)
+      - Le titre d'un album n'est obligatoire que s'il n'est pas associé à une
+         série
+      - Idem pour les para-BD
+
 -=-=-=-=-=-    1.2.0.0 - 19/04/2006   -=-=-=-=-=-
 
 * Nouveautés *
