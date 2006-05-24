@@ -32,7 +32,7 @@ type
 
     procedure Clear; virtual;
     procedure Fill(Query: TJvUIBQuery); virtual; abstract;
-    function ChaineAffichage: string; virtual; abstract;
+    function ChaineAffichage(dummy: Boolean = True): string; virtual; abstract;
   end;
 
   TCouverture = class(TBasePointeur)
@@ -45,7 +45,7 @@ type
     procedure Assign(Ps: TBasePointeur); override;
 
     procedure Fill(Query: TJvUIBQuery); override;
-    function ChaineAffichage: string; override;
+    function ChaineAffichage(dummy: Boolean = True): string; override;
   end;
 
   TParaBD = class(TBasePointeur)
@@ -60,8 +60,8 @@ type
     procedure Assign(Ps: TBasePointeur); override;
 
     procedure Fill(Query: TJvUIBQuery); override;
-    function ChaineAffichage: string; overload; override;
-    function ChaineAffichage(Simple: Boolean): string; reintroduce; overload;
+    function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
+    function ChaineAffichage(Simple: Boolean; AvecSerie: Boolean): string; reintroduce; overload;
   end;
 
   TPersonnage = class(TBasePointeur)
@@ -71,7 +71,7 @@ type
     procedure Assign(Ps: TBasePointeur); override;
 
     procedure Fill(Query: TJvUIBQuery); override;
-    function ChaineAffichage: string; override;
+    function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
   end;
 
@@ -89,7 +89,7 @@ type
     procedure Fill(Query: TJvUIBQuery); overload; override;
     procedure Fill(Pe: TPersonnage; ReferenceAlbum, ReferenceSerie: TGUID; Metier: Integer); reintroduce; overload;
     procedure Clear; override;
-    function ChaineAffichage: string; override;
+    function ChaineAffichage(dummy: Boolean = True): string; override;
   end;
 
   TEditeur = class(TBasePointeur)
@@ -100,7 +100,7 @@ type
 
     procedure Fill(ID_Editeur: TGUID); reintroduce; overload;
     procedure Fill(Query: TJvUIBQuery); overload; override;
-    function ChaineAffichage: string; override;
+    function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TEditeur): TEditeur; reintroduce;
   end;
@@ -127,8 +127,8 @@ type
     procedure Fill(Query: TJvUIBQuery); overload; override;
     procedure Fill(ID_Album: TGUID); reintroduce; overload;
     procedure Fill(ID_Album: TGUID; ID_Edition: TGUID); reintroduce; overload;
-    function ChaineAffichage: string; overload; override;
-    function ChaineAffichage(Simple: Boolean): string; reintroduce; overload;
+    function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
+    function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
     class function Duplicate(Ps: TAlbum): TAlbum; reintroduce;
   end;
 
@@ -142,9 +142,9 @@ type
     constructor Create; override;
     destructor Destroy; override;
 
-    procedure Fill(Query: TJvUIBQuery); overload; override; 
+    procedure Fill(Query: TJvUIBQuery); overload; override;
     procedure Fill(ID_Collection: TGUID); reintroduce; overload;
-    function ChaineAffichage: string; override;
+    function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TCollection): TCollection; reintroduce;
   end;
@@ -162,8 +162,7 @@ type
 
     procedure Fill(Query: TJvUIBQuery); overload; override;
     procedure Fill(ID_Serie: TGUID); reintroduce; overload;
-    function ChaineAffichage: string; overload; override;
-    function ChaineAffichage(Simple: Boolean): string; reintroduce; overload;
+    function ChaineAffichage(Simple: Boolean): string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TSerie): TSerie; reintroduce;
   end;
@@ -181,7 +180,7 @@ type
     destructor Destroy; override;
 
     procedure Fill(Query: TJvUIBQuery); override;
-    function ChaineAffichage: string; override;
+    function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TEdition): TEdition;
   end;
@@ -194,7 +193,7 @@ type
 
     procedure Fill(Query: TJvUIBQuery); overload; override;
     procedure Fill(ID_Emprunteur: TGUID); reintroduce; overload;
-    function ChaineAffichage: string; override;
+    function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TEmprunteur): TEmprunteur;
   end;
@@ -204,7 +203,7 @@ type
     Taux: Double;
 
     procedure Fill(Query: TJvUIBQuery); override;
-    function ChaineAffichage: string; override;
+    function ChaineAffichage(dummy: Boolean = True): string; override;
   end;
 
   TGenre = class(TBasePointeur)
@@ -215,7 +214,7 @@ type
     procedure Assign(Ps: TBasePointeur); override;
 
     procedure Fill(Query: TJvUIBQuery); override;
-    function ChaineAffichage: string; override;
+    function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
   end;
 
@@ -233,7 +232,7 @@ type
     destructor Destroy; override;
 
     procedure Fill(Query: TJvUIBQuery); override;
-    function ChaineAffichage: string; override;
+    function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TEmprunt): TEmprunt;
   end;
@@ -316,7 +315,7 @@ end;
 
 constructor TBasePointeur.Create;
 begin
-
+  ID := GUID_NULL;
 end;
 
 class function TBasePointeur.NonNull(Query: TJvUIBQuery; const Champ: string; Default: Integer): Integer;
@@ -345,7 +344,7 @@ end;
 
 { TConversion }
 
-function TConversion.ChaineAffichage: string;
+function TConversion.ChaineAffichage(dummy: Boolean = True): string;
 begin
   Result := Format('1 %s = %.2f %s', [Monnaie1, Taux, Monnaie2]);
 end;
@@ -370,7 +369,7 @@ begin
   sCategorie := TCouverture(Ps).sCategorie;
 end;
 
-function TCouverture.ChaineAffichage: string;
+function TCouverture.ChaineAffichage(dummy: Boolean = True): string; 
 begin
   Result := NewNom;
 end;
@@ -394,7 +393,7 @@ begin
   NomEditeur := TEditeur(Ps).NomEditeur;
 end;
 
-function TEditeur.ChaineAffichage: string;
+function TEditeur.ChaineAffichage(dummy: Boolean = True): string;
 begin
   Result := FormatTitre(NomEditeur);
 end;
@@ -442,7 +441,7 @@ begin
   Nom := TPersonnage(Ps).Nom;
 end;
 
-function TPersonnage.ChaineAffichage: string;
+function TPersonnage.ChaineAffichage(dummy: Boolean = True): string;
 begin
   Result := FormatTitre(Nom);
 end;
@@ -470,7 +469,7 @@ begin
   Personne.Assign(TAuteur(Ps).Personne);
 end;
 
-function TAuteur.ChaineAffichage: string;
+function TAuteur.ChaineAffichage(dummy: Boolean = True): string;
 begin
   Result := Personne.ChaineAffichage;
 end;
@@ -533,7 +532,11 @@ begin
   Stock := TAlbum(Ps).Stock;
 end;
 
-function TAlbum.ChaineAffichage(Simple: Boolean): string;
+function TAlbum.ChaineAffichage(Simple, AvecSerie: Boolean): string;
+const
+  resTome: array[False..True] of string = ('T. ', 'Tome ');
+  resHS: array[False..True] of string = ('HS', 'Hors-série');
+  resIntegrale: array[False..True] of string = ('INT.', 'Intégrale');
 var
   s, s2: string;
 begin
@@ -542,18 +545,26 @@ begin
   else
     Result := FormatTitre(Titre);
   s := '';
-  AjoutString(s, FormatTitre(Serie), ' - ');
+  if AvecSerie then
+    if Result = '' then
+      Result := FormatTitre(Serie)
+    else
+      AjoutString(s, FormatTitre(Serie), ' - ');
   if Integrale then begin
     s2 := NonZero(IntToStr(TomeDebut));
     AjoutString(s2, NonZero(IntToStr(TomeFin)), ' à ');
-    AjoutString(s, 'INT.', ' - ', '', TrimRight(' ' + NonZero(IntToStr(Tome))));
+    AjoutString(s, resIntegrale[Result = ''], ' - ', '', TrimRight(' ' + NonZero(IntToStr(Tome))));
     AjoutString(s, s2, ' ', '[', ']');
   end
   else if HorsSerie then
-    AjoutString(s, 'HS', ' - ', '', TrimRight(' ' + NonZero(IntToStr(Tome))))
+    AjoutString(s, resHS[Result = ''], ' - ', '', TrimRight(' ' + NonZero(IntToStr(Tome))))
   else
-    AjoutString(s, NonZero(IntToStr(Tome)), ' - ', 'T. ');
-  AjoutString(Result, s, ' ', '(', ')');
+    AjoutString(s, NonZero(IntToStr(Tome)), ' - ', resTome[Result = '']);
+  if Result = '' then
+    Result := s
+  else
+    AjoutString(Result, s, ' ', '(', ')');
+  if Result = '' then Result := '<Sans titre>';
 end;
 
 procedure TAlbum.Fill(Query: TJvUIBQuery);
@@ -625,13 +636,13 @@ begin
     SQL.Text := 'SELECT a.ID_Album, a.TitreAlbum, a.HorsSerie, a.Integrale, a.Tome, a.TomeDebut, a.TomeFin, a.ID_Serie, a.Achat, a.Complet';
     SQL.Add('FROM ALBUMS a');
     SQL.Add('WHERE a.ID_ALBUM = :ID_Album');
-    if not IsEqualGUID(ID_Edition , GUID_NULL) then begin
+    if not IsEqualGUID(ID_Edition, GUID_NULL) then begin
       SQL[0] := SQL[0] + ', e.Stock';
       SQL[1] := SQL[1] + ' INNER JOIN Editions e ON a.ID_Album = e.ID_Album';
       SQL.Add('AND e.ID_Edition = :ID_Edition');
     end;
     Params.AsString[0] := GUIDToString(ID_Album);
-    if not IsEqualGUID(ID_Edition , GUID_NULL) then Params.AsString[1] := GUIDToString(ID_Edition);
+    if not IsEqualGUID(ID_Edition, GUID_NULL) then Params.AsString[1] := GUIDToString(ID_Edition);
     Open;
     Fill(q);
   finally
@@ -640,9 +651,9 @@ begin
   end;
 end;
 
-function TAlbum.ChaineAffichage: string;
+function TAlbum.ChaineAffichage(AvecSerie: Boolean): string;
 begin
-  Result := ChaineAffichage(False);
+  Result := ChaineAffichage(False, AvecSerie);
 end;
 
 { TCollection }
@@ -654,7 +665,7 @@ begin
   Editeur.Assign(TCollection(Ps).Editeur);
 end;
 
-function TCollection.ChaineAffichage: string;
+function TCollection.ChaineAffichage(dummy: Boolean = True): string;
 begin
   Result := FormatTitre(NomCollection);
 end;
@@ -798,11 +809,6 @@ begin
   end;
 end;
 
-function TSerie.ChaineAffichage: string;
-begin
-  Result := ChaineAffichage(False);
-end;
-
 { TEdition }
 
 procedure TEdition.Assign(Ps: TBasePointeur);
@@ -814,7 +820,7 @@ begin
   Editeur.Assign(TEdition(Ps).Editeur);
 end;
 
-function TEdition.ChaineAffichage: string;
+function TEdition.ChaineAffichage(dummy: Boolean = True): string;
 begin
   Result := '';
   AjoutString(Result, FormatTitre(Editeur.NomEditeur), ' ');
@@ -871,7 +877,7 @@ begin
   Nom := TEmprunteur(Ps).Nom;
 end;
 
-function TEmprunteur.ChaineAffichage: string;
+function TEmprunteur.ChaineAffichage(dummy: Boolean = True): string;
 begin
   Result := FormatTitre(Nom);
 end;
@@ -920,7 +926,7 @@ begin
   Quantite := TGenre(Ps).Quantite;
 end;
 
-function TGenre.ChaineAffichage: string;
+function TGenre.ChaineAffichage(dummy: Boolean = True): string;
 begin
   Result := Genre;
 end;
@@ -955,7 +961,7 @@ begin
   Edition.Assign(TEmprunt(Ps).Edition);
 end;
 
-function TEmprunt.ChaineAffichage: string;
+function TEmprunt.ChaineAffichage(dummy: Boolean = True): string; 
 begin
   Result := FormatDateTime(ShortDateFormat, Date);
 end;
@@ -1023,12 +1029,12 @@ begin
   Complet := TParaBD(Ps).Complet;
 end;
 
-function TParaBD.ChaineAffichage: string;
+function TParaBD.ChaineAffichage(AvecSerie: Boolean): string;
 begin
-  Result := ChaineAffichage(False);
+  Result := ChaineAffichage(False, AvecSerie);
 end;
 
-function TParaBD.ChaineAffichage(Simple: Boolean): string;
+function TParaBD.ChaineAffichage(Simple: Boolean; AvecSerie: Boolean): string;
 var
   s: string;
 begin
@@ -1037,9 +1043,16 @@ begin
   else
     Result := FormatTitre(Titre);
   s := '';
-  AjoutString(s, FormatTitre(Serie), ' - ');
+  if AvecSerie then
+    if Result = '' then
+      Result := FormatTitre(Serie)
+    else
+      AjoutString(s, FormatTitre(Serie), ' - ');
   AjoutString(s, sCategorie, ' - ');
-  AjoutString(Result, s, ' ', '(', ')');
+  if Result = '' then
+    Result := s
+  else
+    AjoutString(Result, s, ' ', '(', ')');
 end;
 
 procedure TParaBD.Fill(Query: TJvUIBQuery);

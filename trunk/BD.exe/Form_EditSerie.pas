@@ -71,6 +71,7 @@ type
     procedure lvScenaristesData(Sender: TObject; Item: TListItem);
     procedure lvDessinateursData(Sender: TObject; Item: TListItem);
     procedure lvColoristesData(Sender: TObject; Item: TListItem);
+    procedure vtParaBDDblClick(Sender: TObject);
   private
     { Déclarations privées }
     FSerie: TSerieComplete;
@@ -110,6 +111,8 @@ begin
   vtCollections.UseFiltre := True;
   vtAlbums.Mode := vmNone;
   vtAlbums.UseFiltre := True;
+  vtParaBD.Mode := vmNone;
+  vtParaBD.UseFiltre := True;
 
   FSerie := TSerieComplete.Create;
 end;
@@ -426,6 +429,11 @@ procedure TFrmEditSerie.lvColoristesData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FSerie.Coloristes[Item.Index];
   Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+end;
+
+procedure TFrmEditSerie.vtParaBDDblClick(Sender: TObject);
+begin
+  ModifierParaBD(vtParaBD);
 end;
 
 end.

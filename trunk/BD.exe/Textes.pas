@@ -118,7 +118,9 @@ const
   //  rsPasEnregistrer = 'Impossible d''enregistrer les modifications';
 
   rsAlbumObligatoire = 'Vous devez choisir un album !';
-  rsTitreObligatoire = 'Le titre est obligatoire !';
+  rsTitreObligatoire = 'Le titre est obligatoire!';
+  rsTitreObligatoireAlbumSansSerie = 'Le titre est obligatoire pour un album sans série!';
+  rsTitreObligatoireParaBDSansSerie = 'Le titre est obligatoire pour un para-bd sans série!';
   rsNomObligatoire = 'Le nom est obligatoire !';
   rsSerieObligatoire = 'La série est obligatoire !';
   rsEditeurObligatoire = 'L''éditeur est obligatoire !';

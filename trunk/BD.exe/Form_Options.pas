@@ -53,6 +53,8 @@ type
     GrandesIconesBarre: TCheckBox;
     LightComboCheck1: TLightComboCheck;
     FicheParaBDCouverture: TCheckBox;
+    CheckBox7: TCheckBox;
+    CheckBox8: TCheckBox;
     procedure btnOKClick(Sender: TObject);
     procedure calculKeyPress(Sender: TObject; var Key: Char);
     procedure calculExit(Sender: TObject);
@@ -110,6 +112,8 @@ begin
     GrandesIconesMenus := GrandesIconesMenu.Checked;
     GrandesIconesBarre := Self.GrandesIconesBarre.Checked;
     VerifMAJDelai := LightComboCheck1.Value;
+    SerieObligatoireAlbums := CheckBox7.Checked;
+    SerieObligatoireParaBD := CheckBox8.Checked;
   end;
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -209,6 +213,8 @@ begin
     GrandesIconesMenu.Checked := GrandesIconesMenus;
     Self.GrandesIconesBarre.Checked := GrandesIconesBarre;
     LightComboCheck1.Value := VerifMAJDelai;
+    CheckBox7.Checked := SerieObligatoireAlbums;
+    CheckBox8.Checked := SerieObligatoireParaBD;
   end;
 end;
 

@@ -99,6 +99,7 @@ type
     FrameRechercheRapideCollection: TFrameRechercheRapide;
     Bevel2: TBevel;
     Frame11: TFrame1;
+    btResetSerie: TCRFurtifLight;
     procedure ajoutClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -155,6 +156,7 @@ type
     procedure lvScenaristesData(Sender: TObject; Item: TListItem);
     procedure lvDessinateursData(Sender: TObject; Item: TListItem);
     procedure lvColoristesData(Sender: TObject; Item: TListItem);
+    procedure btResetSerieClick(Sender: TObject);
   private
     { Déclarations privées }
     FAlbum: TAlbumComplet;
@@ -280,9 +282,9 @@ begin
     lvDessinateurs.Items.Count := FAlbum.Dessinateurs.Count;
     lvColoristes.Items.Count := FAlbum.Coloristes.Count;
 
-    FScenaristesSelected := not FAlbum.RecInconnu;
-    FDessinateursSelected := not FAlbum.RecInconnu;
-    FColoristesSelected := not FAlbum.RecInconnu;
+    FScenaristesSelected := lvScenaristes.Items.Count > 0;
+    FDessinateursSelected := lvDessinateurs.Items.Count > 0;
+    FColoristesSelected := lvColoristes.Items.Count > 0;
 
     vtSeries.OnChange := nil;
     vtSeries.CurrentValue := FAlbum.ID_Serie;
@@ -359,6 +361,7 @@ begin
   FCurrentEditionComplete := nil;
   vtEditions.Clear;
   FAlbum.Free;
+  FCategoriesImages.Free;
 end;
 
 procedure TFrmEditAlbum.Frame11btnOKClick(Sender: TObject);
@@ -369,8 +372,14 @@ var
   AfficheEdition: Integer;
   cs: string;
 begin
-  if Length(Trim(edTitre.Text)) = 0 then begin
-    AffMessage(rsTitreObligatoire, mtInformation, [mbOk], True);
+  if Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then begin
+    AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
+    FrameRechercheRapideSerie.edSearch.SetFocus;
+    ModalResult := mrNone;
+    Exit;
+  end;
+  if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then begin
+    AffMessage(rsTitreObligatoireAlbumSansSerie, mtInformation, [mbOk], True);
     edTitre.SetFocus;
     ModalResult := mrNone;
     Exit;
@@ -378,12 +387,6 @@ begin
   if not (StrToIntDef(edMoisParution.Text, 1) in [1..12]) then begin
     AffMessage(rsMoisParutionIncorrect, mtInformation, [mbOk], True);
     edMoisParution.SetFocus;
-    ModalResult := mrNone;
-    Exit;
-  end;
-  if IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then begin
-    AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
-    FrameRechercheRapideSerie.edSearch.SetFocus;
     ModalResult := mrNone;
     Exit;
   end;
@@ -659,7 +662,8 @@ var
   i: Integer;
 begin
   FAlbum.ID_Serie := vtSeries.CurrentValue;
-  if not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL) then begin
+  btResetSerie.Enabled := not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
+  if btResetSerie.Enabled then begin
     if not (FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then try
       lvScenaristes.Items.BeginUpdate;
       lvDessinateurs.Items.BeginUpdate;
@@ -1202,6 +1206,11 @@ end;
 function TFrmEditAlbum.GetCreation: Boolean;
 begin
   Result := FAlbum.RecInconnu;
+end;
+
+procedure TFrmEditAlbum.btResetSerieClick(Sender: TObject);
+begin
+  vtSeries.CurrentValue := GUID_NULL;
 end;
 
 end.

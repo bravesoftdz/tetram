@@ -274,8 +274,14 @@ var
   s: string;
   Stream: TStream;
 begin
-  if Length(Trim(edTitre.Text)) = 0 then begin
-    AffMessage(rsTitreObligatoire, mtInformation, [mbOk], True);
+  if Utilisateur.Options.SerieObligatoireParaBD and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then begin
+    AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
+    FrameRechercheRapideSerie.edSearch.SetFocus;
+    ModalResult := mrNone;
+    Exit;
+  end;
+  if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then begin
+    AffMessage(rsTitreObligatoireParaBDSansSerie, mtInformation, [mbOk], True);
     edTitre.SetFocus;
     ModalResult := mrNone;
     Exit;
@@ -286,12 +292,7 @@ begin
     ModalResult := mrNone;
     Exit;
   end;
-  if IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then begin
-    AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
-    FrameRechercheRapideSerie.edSearch.SetFocus;
-    ModalResult := mrNone;
-    Exit;
-  end;
+
   AnneeCote := StrToIntDef(edAnneeCote.Text, 0);
   PrixCote := StrToCurrDef(StringReplace(edPrixCote.Text, Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if (AnneeCote * PrixCote = 0) and (AnneeCote + PrixCote <> 0) then begin
@@ -329,14 +330,23 @@ begin
 
     Params.ByNameAsString['ID_ParaBD'] := GUIDToString(FID_ParaBD);
     s := Trim(edTitre.Text);
-    Params.ByNameAsString['TITREPARABD'] := s;
-    Params.ByNameAsString['TITREINITIALESPARABD'] := MakeInitiales(UpperCase(SansAccents(s)));
+    if s = '' then begin
+      Params.ByNameIsNull['TITREPARABD'] := True;
+      Params.ByNameIsNull['TITREINITIALESPARABD'] := True;
+    end
+    else begin
+      Params.ByNameAsString['TITREPARABD'] := s;
+      Params.ByNameAsString['TITREINITIALESPARABD'] := MakeInitiales(UpperCase(SansAccents(s)));
+    end;
     if edAnneeEdition.Text = '' then
       Params.ByNameIsNull['ANNEE'] := True
     else
       Params.ByNameAsString['ANNEE'] := edAnneeEdition.Text;
     FID_Serie := vtSeries.CurrentValue;
-    Params.ByNameAsString['ID_SERIE'] := GUIDToString(FID_Serie);
+    if IsEqualGUID(FID_Serie, GUID_NULL) then
+      Params.ByNameIsNull['ID_SERIE'] := True
+    else
+      Params.ByNameAsString['ID_SERIE'] := GUIDToString(FID_Serie);
     Params.ByNameAsInteger['CATEGORIEPARABD'] := cbxCategorie.Value;
     Params.ByNameAsBoolean['DEDICACE'] := cbDedicace.Checked;
     Params.ByNameAsBoolean['NUMEROTE'] := cbNumerote.Checked;
@@ -350,7 +360,7 @@ begin
       Params.ByNameIsNull['DESCRIPTION'] := True;
       Params.ByNameIsNull['UPPERDESCRIPTION'] := True;
     end;
-    if (AnneeCote > 0) then begin // le prix obligatoire si l'année est saisie a déjà été controlé
+    if (AnneeCote > 0) then begin // "prix obligatoire si l'année est saisie" a déjà été controlé
       Params.ByNameAsInteger['ANNEECOTE'] := AnneeCote;
       Params.ByNameAsCurrency['PRIXCOTE'] := PrixCote;
     end

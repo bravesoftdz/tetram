@@ -16,7 +16,7 @@ object FrameRechercheRapide: TFrameRechercheRapide
     Anchors = [akTop, akRight]
     Caption = '...'
     Flat = True
-    OnClick = EditLabeled1Click
+    OnClick = edSearchChange
   end
   object btNew: TVDTButton
     Left = 270
@@ -38,7 +38,7 @@ object FrameRechercheRapide: TFrameRechercheRapide
     BevelKind = bkTile
     BorderStyle = bsNone
     TabOrder = 0
-    OnChange = EditLabeled1Click
+    OnChange = edSearchChange
     OnKeyUp = edSearchKeyUp
     LinkControls = <>
     CurrencyChar = #0

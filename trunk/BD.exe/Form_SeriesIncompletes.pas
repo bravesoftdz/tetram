@@ -25,6 +25,7 @@ type
     procedure vstAlbumsManquantsInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure ListeApercuExecute(Sender: TObject);
     procedure CheckBox1Click(Sender: TObject);
+    procedure vstAlbumsManquantsFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
   private
     procedure ImpressionExecute(Sender: TObject);
     procedure ApercuExecute(Sender: TObject);
@@ -77,11 +78,13 @@ var
   NodeInfo: ^RNodeInfo;
 begin
   NodeInfo := Sender.GetNodeData(Node);
-  if Assigned(NodeInfo) then
+  if Assigned(NodeInfo) then begin
+    Initialize(NodeInfo^);
     with TSerieIncomplete(Liste.Series[Node.Index]) do begin
-      NodeInfo.Serie := Serie.ChaineAffichage;
+      NodeInfo.Serie := Serie.ChaineAffichage(False);
       NodeInfo.AlbumsManquants := ChaineAffichage;
     end;
+  end;
 end;
 
 procedure TfrmSeriesIncompletes.vstAlbumsManquantsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
@@ -142,6 +145,14 @@ begin
     Free;
   end;
   LoadListe;
+end;
+
+procedure TfrmSeriesIncompletes.vstAlbumsManquantsFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+var
+  NodeInfo: ^RNodeInfo;
+begin
+  NodeInfo := Sender.GetNodeData(Node);
+  Finalize(NodeInfo^);
 end;
 
 end.

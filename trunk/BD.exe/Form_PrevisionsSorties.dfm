@@ -20,7 +20,7 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
     Left = 0
     Top = 25
     Width = 814
-    Height = 203
+    Height = 198
     Align = alClient
     AnimationDuration = 0
     BevelKind = bkTile
@@ -39,6 +39,7 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
     Images = Fond.ImageList1
     TabOrder = 0
     OnAfterItemPaint = vstPrevisionsSortiesAfterItemPaint
+    OnFreeNode = vstPrevisionsSortiesFreeNode
     OnGetText = vstPrevisionsSortiesGetText
     OnInitNode = vstPrevisionsSortiesInitNode
     OnResize = vstPrevisionsSortiesResize

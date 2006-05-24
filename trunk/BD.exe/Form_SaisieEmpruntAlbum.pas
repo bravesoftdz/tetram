@@ -74,7 +74,7 @@ begin
     PA.Fill(FID_Album);
     Label2.Caption := PA.ChaineAffichage;
     PS.Fill(PA.ID_Serie);
-    Label5.Caption := PS.ChaineAffichage;
+    Label5.Caption := PS.ChaineAffichage(False);
   finally
     PA.Free;
     PS.Free;

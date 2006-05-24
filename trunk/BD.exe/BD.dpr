@@ -2,8 +2,11 @@ program BD;
 
 {$R 'webserver.res' 'webserver.rc'}
 {$R 'ressources.res' 'ressources.rc'}
+{%File '..\..\..\..\Common\FastMM464\FastMM4Options.inc'}
 
 uses
+  FastMM4 in '..\..\..\..\Common\FastMM464\FastMM4.pas',
+  FastMM4Messages in '..\..\..\..\Common\FastMM464\FastMM4Messages.pas',
   Windows,
   SysUtils,
   Forms,
@@ -106,7 +109,8 @@ uses
   UMAJ1_0_0_2 in 'UMAJ1_0_0_2.pas',
   UMAJ1_0_0_3 in 'UMAJ1_0_0_3.pas',
   UMAJ1_1_0_0 in 'UMAJ1_1_0_0.pas',
-  UMAJ1_2_0_0 in 'UMAJ1_2_0_0.pas';
+  UMAJ1_2_0_0 in 'UMAJ1_2_0_0.pas',
+  UMAJ1_2_0_8 in 'UMAJ1_2_0_8.pas';
 
 {$R *.RES}
 {$R curseurs.res}

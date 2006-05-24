@@ -20,7 +20,7 @@ object frmSeriesIncompletes: TfrmSeriesIncompletes
     Left = 0
     Top = 25
     Width = 814
-    Height = 203
+    Height = 198
     Align = alClient
     AnimationDuration = 0
     BevelKind = bkTile
@@ -37,6 +37,7 @@ object frmSeriesIncompletes: TfrmSeriesIncompletes
     HotCursor = crHandPoint
     Images = Fond.ImageList1
     TabOrder = 0
+    OnFreeNode = vstAlbumsManquantsFreeNode
     OnGetText = vstAlbumsManquantsGetText
     OnInitNode = vstAlbumsManquantsInitNode
     Columns = <

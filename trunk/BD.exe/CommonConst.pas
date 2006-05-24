@@ -45,6 +45,7 @@ type
     GrandesIconesMenus, GrandesIconesBarre: Boolean;
     VerifMAJDelai: Integer;
     LastVerifMAJ: TDateTime;
+    SerieObligatoireAlbums, SerieObligatoireParaBD: Boolean;
   end;
 
   TUtilisateur = record

@@ -834,29 +834,27 @@ object FrmEditSerie: TFrmEditSerie
       Width = 673
       Height = 130
       Anchors = [akLeft, akTop, akRight]
+      AnimationDuration = 0
       BevelKind = bkTile
       BorderStyle = bsNone
       ButtonFillMode = fmShaded
-      CheckImageKind = ckDarkCheck
-      Header.AutoSizeIndex = 0
+      Header.AutoSizeIndex = -1
       Header.Font.Charset = DEFAULT_CHARSET
       Header.Font.Color = clWindowText
       Header.Font.Height = -11
       Header.Font.Name = 'Tahoma'
       Header.Font.Style = []
+      Header.MainColumn = -1
       Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
+      HintAnimation = hatNone
+      HintMode = hmTooltip
+      HotCursor = crHandPoint
+      Indent = 8
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 18
-      TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
-      TreeOptions.StringOptions = []
-      Columns = <
-        item
-          Position = 1
-          Width = 569
-        end
-        item
-          Position = 0
-          Width = 100
-        end>
+      OnDblClick = vtParaBDDblClick
+      Columns = <>
     end
     inline FrameRechercheRapidePersonnes: TFrameRechercheRapide
       Left = 56

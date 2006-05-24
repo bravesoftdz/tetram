@@ -14,7 +14,7 @@ type
     edSearch: TEditLabeled;
     btNext: TVDTButton;
     btNew: TVDTButton;
-    procedure EditLabeled1Click(Sender: TObject);
+    procedure edSearchChange(Sender: TObject);
     procedure edSearchKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure btNewClick(Sender: TObject);
   private
@@ -69,7 +69,7 @@ begin
   end;
 end;
 
-procedure TFrameRechercheRapide.EditLabeled1Click(Sender: TObject);
+procedure TFrameRechercheRapide.edSearchChange(Sender: TObject);
 begin
   DoSearch(Sender = btNext);
 end;

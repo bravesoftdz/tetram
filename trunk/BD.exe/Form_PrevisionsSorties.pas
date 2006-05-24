@@ -26,6 +26,7 @@ type
     procedure vstPrevisionsSortiesAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
     procedure vstPrevisionsSortiesResize(Sender: TObject);
     procedure CheckBox1Click(Sender: TObject);
+    procedure vstPrevisionsSortiesFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
   private
     procedure ImpressionExecute(Sender: TObject);
     procedure ApercuExecute(Sender: TObject);
@@ -78,6 +79,7 @@ var
 begin
   NodeInfo := Sender.GetNodeData(Node);
   if Assigned(NodeInfo) then begin
+    Initialize(NodeInfo^);
     if Node.Index in [Liste.AnneesPassees.Count, Liste.AnneesPassees.Count + Liste.AnneeEnCours.Count + 1] then begin
       NodeInfo.Serie := '-'; // séparateur
     end
@@ -90,7 +92,7 @@ begin
         PS := TPrevisionSortie(Liste.AnneesProchaines[Node.Index - Cardinal(Liste.AnneesPassees.Count + Liste.AnneeEnCours.Count) - 2]);
 
       with PS do begin
-        NodeInfo.Serie := Serie.ChaineAffichage;
+        NodeInfo.Serie := Serie.ChaineAffichage(False);
         NodeInfo.Annee := Annee;
         NodeInfo.PrevisionSortie := Format('Tome %d - %s', [Tome, sAnnee]);
       end;
@@ -223,6 +225,14 @@ begin
     Free;
   end;
   LoadListe;
+end;
+
+procedure TfrmPrevisionsSorties.vstPrevisionsSortiesFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+var
+  NodeInfo: ^RNodeInfo;
+begin
+  NodeInfo := Sender.GetNodeData(Node);
+  Finalize(NodeInfo^);
 end;
 
 end.

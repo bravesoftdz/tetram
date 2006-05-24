@@ -1,12 +1,12 @@
 object FrmOptions: TFrmOptions
-  Left = 618
-  Top = 428
+  Left = 591
+  Top = 278
   HorzScrollBar.Visible = False
   VertScrollBar.Visible = False
   BorderIcons = [biHelp]
   BorderStyle = bsDialog
   Caption = 'Options'
-  ClientHeight = 406
+  ClientHeight = 458
   ClientWidth = 360
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
@@ -71,7 +71,7 @@ object FrmOptions: TFrmOptions
     Left = 0
     Top = 0
     Width = 360
-    Height = 376
+    Height = 428
     Cursor = crHandPoint
     ActivePage = options
     Align = alClient
@@ -87,7 +87,7 @@ object FrmOptions: TFrmOptions
       Caption = 'Options diverses'
       object PanelImpression: TPanel
         Left = 0
-        Top = 137
+        Top = 177
         Width = 352
         Height = 56
         Align = alTop
@@ -132,7 +132,7 @@ object FrmOptions: TFrmOptions
       end
       object PanelWebServer: TPanel
         Left = 0
-        Top = 267
+        Top = 307
         Width = 352
         Height = 81
         Align = alTop
@@ -197,7 +197,7 @@ object FrmOptions: TFrmOptions
       end
       object PanelGestion: TPanel
         Left = 0
-        Top = 193
+        Top = 233
         Width = 352
         Height = 74
         Align = alTop
@@ -252,7 +252,7 @@ object FrmOptions: TFrmOptions
         Left = 0
         Top = 0
         Width = 352
-        Height = 137
+        Height = 177
         Align = alTop
         BevelOuter = bvNone
         Caption = ' '
@@ -272,7 +272,7 @@ object FrmOptions: TFrmOptions
         end
         object LightComboCheck1: TLightComboCheck
           Left = 30
-          Top = 117
+          Top = 158
           Width = 315
           Height = 16
           Checked = True
@@ -348,56 +348,78 @@ object FrmOptions: TFrmOptions
         end
         object CheckBox3: TCheckBox
           Left = 15
-          Top = 32
+          Top = 107
           Width = 201
           Height = 16
           Cursor = crHandPoint
           Caption = 'D'#233'corer les fen'#234'tres avec des images'
           Checked = True
           State = cbChecked
-          TabOrder = 1
+          TabOrder = 5
         end
         object CheckBox5: TCheckBox
           Left = 15
-          Top = 49
+          Top = 86
           Width = 266
           Height = 16
           Cursor = crHandPoint
           Caption = 'Utiliser l'#39'anti-aliasing pour redimensionner les images'
           Checked = True
           State = cbChecked
-          TabOrder = 2
+          TabOrder = 4
         end
         object CheckBox6: TCheckBox
           Left = 15
-          Top = 66
+          Top = 32
           Width = 266
           Height = 16
           Cursor = crHandPoint
           Caption = 'Avertir en cas de pr'#234't d'#39'une '#233'dition d'#233'j'#224' emprunt'#233'e'
           Checked = True
           State = cbChecked
-          TabOrder = 3
+          TabOrder = 1
         end
         object GrandesIconesMenu: TCheckBox
           Left = 15
-          Top = 83
+          Top = 124
           Width = 170
           Height = 16
           Caption = 'Grandes icones dans les menus'
           Checked = True
           State = cbChecked
-          TabOrder = 4
+          TabOrder = 6
         end
         object GrandesIconesBarre: TCheckBox
           Left = 15
-          Top = 100
+          Top = 141
           Width = 194
           Height = 16
           Caption = 'Grandes icones dans la barre d'#39'outils'
           Checked = True
           State = cbChecked
-          TabOrder = 5
+          TabOrder = 7
+        end
+        object CheckBox7: TCheckBox
+          Left = 15
+          Top = 49
+          Width = 298
+          Height = 16
+          Cursor = crHandPoint
+          Caption = 'Saisie d'#39'une s'#233'rie obligatoire pour les albums et les achats'
+          Checked = True
+          State = cbChecked
+          TabOrder = 2
+        end
+        object CheckBox8: TCheckBox
+          Left = 15
+          Top = 66
+          Width = 242
+          Height = 16
+          Cursor = crHandPoint
+          Caption = 'Saisie d'#39'une s'#233'rie obligatoire pour les para-bd'
+          Checked = True
+          State = cbChecked
+          TabOrder = 3
         end
       end
     end
@@ -406,7 +428,7 @@ object FrmOptions: TFrmOptions
       ImageIndex = 2
       DesignSize = (
         352
-        328)
+        380)
       object Label8: TLabel
         Left = 24
         Top = 36
@@ -467,7 +489,7 @@ object FrmOptions: TFrmOptions
         Height = 90
         BevelOuter = bvNone
         Caption = ' '
-        TabOrder = 0
+        TabOrder = 2
         Visible = False
         object ComboBox2: TComboBox
           Left = 4
@@ -503,7 +525,7 @@ object FrmOptions: TFrmOptions
           BevelInner = bvRaised
           BevelOuter = bvLowered
           Caption = ' '
-          TabOrder = 2
+          TabOrder = 3
           object Label10: TLabel
             Left = 2
             Top = 2
@@ -518,17 +540,17 @@ object FrmOptions: TFrmOptions
           Width = 165
           Height = 23
           Align = alBottom
-          TabOrder = 3
+          TabOrder = 4
           inherited btnOK: TBitBtn
-            Left = 67
-            Width = 45
+            Left = 24
+            Width = 64
             Height = 19
             ModalResult = 0
             OnClick = Button2Click
           end
           inherited btnAnnuler: TBitBtn
-            Left = 114
-            Width = 46
+            Left = 96
+            Width = 64
             Height = 19
             ModalResult = 0
             OnClick = Button3Click
@@ -542,7 +564,7 @@ object FrmOptions: TFrmOptions
           Hint = 'Prix unitaire d'#39'une cassette vierge de 120 minutes'
           BevelKind = bkTile
           BorderStyle = bsNone
-          TabOrder = 4
+          TabOrder = 2
           Text = '0,00'
           OnChange = ComboBox2Change
           OnExit = Edit1Exit
@@ -562,7 +584,7 @@ object FrmOptions: TFrmOptions
         Ctl3D = True
         ItemHeight = 13
         ParentCtl3D = False
-        TabOrder = 1
+        TabOrder = 0
       end
       object ListView1: TVDTListView
         Left = 9
@@ -580,7 +602,7 @@ object FrmOptions: TFrmOptions
         HideSelection = False
         ReadOnly = True
         ShowColumnHeaders = False
-        TabOrder = 2
+        TabOrder = 1
         ViewStyle = vsReport
         OnDblClick = ListView1DblClick
       end
@@ -588,7 +610,7 @@ object FrmOptions: TFrmOptions
   end
   inline Frame11: TFrame1
     Left = 0
-    Top = 376
+    Top = 428
     Width = 360
     Height = 30
     Align = alBottom

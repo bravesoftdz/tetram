@@ -240,6 +240,8 @@ begin
     Utilisateur.Options.GrandesIconesMenus := ReadBool('DIVERS', 'GrandesIconesMenus', True);
     Utilisateur.Options.GrandesIconesBarre := ReadBool('DIVERS', 'GrandesIconesBarre', True);
     Utilisateur.Options.VerifMAJDelai := ReadInteger('Divers', 'VerifMAJDelai', 4);
+    Utilisateur.Options.SerieObligatoireAlbums := ReadBool('DIVERS', 'SerieObligatoireAlbums', False);
+    Utilisateur.Options.SerieObligatoireParaBD := ReadBool('DIVERS', 'SerieObligatoireParaBD', False);
   finally
     Free;
   end;
@@ -306,6 +308,8 @@ begin
     WriteInteger('WebServer', 'Port', Utilisateur.Options.WebServerPort);
     WriteBool('WebServer', 'AntiAliasing', Utilisateur.Options.WebServerAntiAliasing);
     WriteInteger('Divers', 'VerifMAJDelai', Utilisateur.Options.VerifMAJDelai);
+    WriteBool('DIVERS', 'SerieObligatoireAlbums', Utilisateur.Options.SerieObligatoireAlbums);
+    WriteBool('DIVERS', 'SerieObligatoireParaBD', Utilisateur.Options.SerieObligatoireParaBD);
 
     WriteString('DIVERS', 'RepImages', ''); // efface la ligne
   finally

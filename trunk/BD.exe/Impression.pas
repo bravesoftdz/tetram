@@ -1641,7 +1641,7 @@ begin
         y1 := Prn.GetYPosition;
         Prn.WriteLineColumn(0, -1, '#' + IntToStr(i + 1));
         Prn.SetYPosition(y1);
-        Prn.WriteColumn(1, -1, Serie.ChaineAffichage);
+        Prn.WriteColumn(1, -1, Serie.ChaineAffichage(False));
         y2 := Prn.GetYPosition;
         s1 := '';
         for j := 0 to NumerosManquants.Count - 1 do begin
@@ -1679,7 +1679,7 @@ var
           Prn.WriteLineColumn(0, -1, '#' + IntToStr(i + 1));
           y1 := Prn.GetYPosition - Prn.GetLineHeightMmsFont(Prn.Columns[1].Font);
           Prn.SetYPosition(y1);
-          Prn.WriteColumn(1, -1, Serie.ChaineAffichage);
+          Prn.WriteColumn(1, -1, Serie.ChaineAffichage(False));
           y2 := Prn.GetYPosition;
           Prn.SetYPosition(y1);
           Prn.WriteColumn(2, -1, Format('Tome %d en %s', [Tome, sAnnee]));
