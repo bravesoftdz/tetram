@@ -46,6 +46,8 @@ type
 
     procedure Fill(Query: TJvUIBQuery); override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
+
+    class function Make(Query: TJvUIBQuery): TCouverture;
   end;
 
   TParaBD = class(TBasePointeur)
@@ -62,6 +64,8 @@ type
     procedure Fill(Query: TJvUIBQuery); override;
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple: Boolean; AvecSerie: Boolean): string; reintroduce; overload;
+
+    class function Make(Query: TJvUIBQuery): TParaBD;
   end;
 
   TPersonnage = class(TBasePointeur)
@@ -90,6 +94,8 @@ type
     procedure Fill(Pe: TPersonnage; ReferenceAlbum, ReferenceSerie: TGUID; Metier: Integer); reintroduce; overload;
     procedure Clear; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
+
+    class function Make(Query: TJvUIBQuery): TAuteur;
   end;
 
   TEditeur = class(TBasePointeur)
@@ -130,6 +136,7 @@ type
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
     class function Duplicate(Ps: TAlbum): TAlbum; reintroduce;
+    class function Make(Query: TJvUIBQuery): TAlbum; reintroduce;
   end;
 
   TCollection = class(TBasePointeur)
@@ -196,6 +203,7 @@ type
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TEmprunteur): TEmprunteur;
+    class function Make(Query: TJvUIBQuery): TEmprunteur;
   end;
 
   TConversion = class(TBasePointeur)
@@ -216,6 +224,8 @@ type
     procedure Fill(Query: TJvUIBQuery); override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
+
+    class function Make(Query: TJvUIBQuery): TGenre;
   end;
 
   TEmprunt = class(TBasePointeur)
@@ -369,7 +379,7 @@ begin
   sCategorie := TCouverture(Ps).sCategorie;
 end;
 
-function TCouverture.ChaineAffichage(dummy: Boolean = True): string; 
+function TCouverture.ChaineAffichage(dummy: Boolean = True): string;
 begin
   Result := NewNom;
 end;
@@ -383,6 +393,11 @@ begin
   NewStockee := OldStockee;
   Categorie := Query.Fields.ByNameAsSmallint['CategorieImage'];
   sCategorie := Query.Fields.ByNameAsString['sCategorieImage'];
+end;
+
+class function TCouverture.Make(Query: TJvUIBQuery): TCouverture;
+begin
+  Result := TCouverture(inherited Make(Query));
 end;
 
 { TEditeur }
@@ -512,6 +527,11 @@ begin
   Self.Metier := Metier;
 end;
 
+class function TAuteur.Make(Query: TJvUIBQuery): TAuteur;
+begin
+  Result := TAuteur(inherited Make(Query));
+end;
+
 { TAlbum }
 
 procedure TAlbum.Assign(Ps: TBasePointeur);
@@ -633,8 +653,8 @@ begin
   q := TJvUIBQuery.Create(nil);
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT a.ID_Album, a.TitreAlbum, a.HorsSerie, a.Integrale, a.Tome, a.TomeDebut, a.TomeFin, a.ID_Serie, a.Achat, a.Complet';
-    SQL.Add('FROM ALBUMS a');
+    SQL.Text := 'SELECT a.ID_Album, a.TitreAlbum, a.HorsSerie, a.Integrale, a.Tome, a.TomeDebut, a.TomeFin, a.ID_Serie, a.Achat, a.Complet, a.TitreSerie';
+    SQL.Add('FROM VW_LISTE_ALBUMS a');
     SQL.Add('WHERE a.ID_ALBUM = :ID_Album');
     if not IsEqualGUID(ID_Edition, GUID_NULL) then begin
       SQL[0] := SQL[0] + ', e.Stock';
@@ -654,6 +674,11 @@ end;
 function TAlbum.ChaineAffichage(AvecSerie: Boolean): string;
 begin
   Result := ChaineAffichage(False, AvecSerie);
+end;
+
+class function TAlbum.Make(Query: TJvUIBQuery): TAlbum;
+begin
+  Result := TAlbum(inherited Make(Query));
 end;
 
 { TCollection }
@@ -917,6 +942,11 @@ begin
   end;
 end;
 
+class function TEmprunteur.Make(Query: TJvUIBQuery): TEmprunteur;
+begin
+  Result := TEmprunteur(inherited Make(Query));
+end;
+
 { TGenre }
 
 procedure TGenre.Assign(Ps: TBasePointeur);
@@ -949,6 +979,11 @@ begin
   end;
 end;
 
+class function TGenre.Make(Query: TJvUIBQuery): TGenre;
+begin
+  Result := TGenre(inherited Make(Query));
+end;
+
 { TEmprunt }
 
 procedure TEmprunt.Assign(Ps: TBasePointeur);
@@ -961,7 +996,7 @@ begin
   Edition.Assign(TEmprunt(Ps).Edition);
 end;
 
-function TEmprunt.ChaineAffichage(dummy: Boolean = True): string; 
+function TEmprunt.ChaineAffichage(dummy: Boolean = True): string;
 begin
   Result := FormatDateTime(ShortDateFormat, Date);
 end;
@@ -1080,6 +1115,11 @@ begin
   except
     sCategorie := '';
   end;
+end;
+
+class function TParaBD.Make(Query: TJvUIBQuery): TParaBD;
+begin
+  Result := TParaBD(inherited Make(Query));
 end;
 
 end.

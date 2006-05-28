@@ -1,6 +1,6 @@
 object FrmConsultationParaBD: TFrmConsultationParaBD
-  Left = 1459
-  Top = 454
+  Left = 1405
+  Top = 196
   Width = 850
   Height = 535
   Caption = 'FrmConsultationParaBD'
@@ -28,7 +28,7 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
     DesignSize = (
       842
       483)
-    object Label4: TLabel
+    object lbNoImage: TLabel
       Left = 636
       Top = 248
       Width = 89
@@ -192,7 +192,7 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
       Align = alBottom
       Shape = bsSpacer
     end
-    object Label18: TLabel
+    object lbInvalidImage: TLabel
       Left = 623
       Top = 292
       Width = 114

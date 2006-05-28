@@ -166,7 +166,7 @@ begin
     edNom.Font.Style := edNom.Font.Style - [fsUnderline];
     edNom.Cursor := crDefault;
   end;
-  edBiographie.Lines.Assign(FAuteur.Biographie);
+  edBiographie.Lines.Text := FAuteur.Biographie.Text;
 
   vstSeries.RootNodeCount := FAuteur.Series.Count;
 end;
@@ -218,6 +218,7 @@ begin
     NodeInfo := Sender.GetNodeData(Node);
     if Assigned(NodeInfo.Serie) then begin
       CellText := FormatTitre(NodeInfo.Serie.Titre);
+      if CellText = '' then CellText := '<Sans série>';
     end
     else begin
       if Assigned(NodeInfo.Album) then CellText := NodeInfo.Album.ChaineAffichage;

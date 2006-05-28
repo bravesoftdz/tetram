@@ -3,7 +3,7 @@ unit LoadComplet;
 interface
 
 uses
-  SysUtils, Windows, Classes, Dialogs, TypeRec, Commun, CommonConst, DM_Princ, JvUIB, DateUtils, Contnrs;
+  SysUtils, Windows, Classes, Dialogs, TypeRec, Commun, CommonConst, DM_Princ, JvUIB, DateUtils, ListOfTypeRec, Contnrs;
 
 type
   TBaseComplet = class
@@ -50,7 +50,7 @@ type
   TSensEmprunt = (ssTous, ssPret, ssRetour);
 
   TEmpruntsComplet = class(TListComplet)
-    Emprunts: TList;
+    Emprunts: TListOfTEmprunt;
     NBEmprunts: Integer;
 
     procedure Fill(Reference: TGUID; Source: TSrcEmprunt = seTous; Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1; Avant: TDateTime = -1; EnCours: Boolean = False; Stock: Boolean = False); reintroduce;
@@ -72,6 +72,7 @@ type
 
     procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
 
+  protected
     function GetReference: TGUID; override;
   end;
 
@@ -79,6 +80,8 @@ type
   private
     function GetID_Editeur: TGUID;
     procedure SetID_Editeur(const Value: TGUID);
+  protected
+    function GetReference: TGUID; override;
   public
     ID_Collection: TGUID;
     NomCollection: string[50];
@@ -91,28 +94,7 @@ type
 
     procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
 
-    function GetReference: TGUID; override;
-
     property ID_Editeur: TGUID read GetID_Editeur write SetID_Editeur;
-  end;
-
-  TAuteurComplet = class(TObjetComplet)
-    ID_Auteur: TGUID;
-    NomAuteur: string[50];
-    SiteWeb: string[255];
-    Biographie: TStringList;
-    Series: TObjectList;
-
-    procedure Fill(const Reference: TGUID); override;
-    procedure Clear; override;
-    constructor Create; override;
-    destructor Destroy; override;
-
-    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
-
-    function GetReference: TGUID; override;
-
-    function ChaineAffichage(dummy: Boolean = True): string; override;
   end;
 
   TSerieComplete = class(TObjetComplet)
@@ -121,31 +103,36 @@ type
     procedure SetID_Editeur(const Value: TGUID);
     function GetID_Collection: TGUID;
     procedure SetID_Collection(const Value: TGUID);
+  protected
+    function GetReference: TGUID; override;
   public
     ID_Serie: TGUID;
     Titre: string;
     Terminee: Integer;
     Complete: Boolean;
-    Albums, ParaBD: TObjectList;
+    Albums: TListOfTAlbum;
+    ParaBD: TListOfTParaBD;
     Genres: TStringList;
     Sujet, Notes: TStringList;
     Editeur: TEditeurComplet;
     Collection: TCollection;
     SiteWeb: string[255];
-    Scenaristes, Dessinateurs, Coloristes: TObjectList;
+    Scenaristes, Dessinateurs, Coloristes: TListOfTAuteur;
 
     FIdAuteur: TGUID;
+    FForce: Boolean;
 
     procedure Fill(const Reference: TGUID); overload; override;
     procedure Fill(const Reference, IdAuteur: TGUID); reintroduce; overload;
+    procedure Fill(const Reference, IdAuteur: TGUID; Force: Boolean); reintroduce; overload;
     procedure Clear; override;
     constructor Create; overload; override;
     constructor Create(const Reference, IdAuteur: TGUID); reintroduce; overload;
+    constructor Create(const Reference, IdAuteur: TGUID; Force: Boolean); reintroduce; overload;
     destructor Destroy; override;
 
     procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
 
-    function GetReference: TGUID; override;
     function ChaineAffichage: string; reintroduce; overload;
     function ChaineAffichage(Simple: Boolean): string; overload; override;
 
@@ -153,9 +140,39 @@ type
     property ID_Collection: TGUID read GetID_Collection write SetID_Collection;
   end;
 
+  TListOfTSerieComplete = class(TObjectList)
+  protected
+    function GetItem(Index: Integer): TSerieComplete;
+  public
+    function Add(AObject: TSerieComplete): Integer;
+    procedure Insert(Index: Integer; AObject: TSerieComplete);
+    property Items[Index: Integer]: TSerieComplete read GetItem; default;
+  end;
+
+  TAuteurComplet = class(TObjetComplet)
+    ID_Auteur: TGUID;
+    NomAuteur: string[50];
+    SiteWeb: string[255];
+    Biographie: TStringList;
+    Series: TListOfTSerieComplete;
+
+    procedure Fill(const Reference: TGUID); override;
+    procedure Clear; override;
+    constructor Create; override;
+    destructor Destroy; override;
+
+    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+
+    function ChaineAffichage(dummy: Boolean = True): string; override;
+  protected
+    function GetReference: TGUID; override;
+  end;
+
   TEditionComplete = class(TObjetComplet)
   private
     function Get_sDateAchat: string;
+  protected
+    function GetReference: TGUID; override;
   public
     ID_Edition, ID_Album: TGUID;
     Editeur: TEditeurComplet;
@@ -167,7 +184,7 @@ type
     DateAchat: TDateTime;
     Notes: TStringList;
     Emprunts: TEmpruntsComplet;
-    Couvertures: TList;
+    Couvertures: TListOfTCouverture;
 
     procedure Fill(const Reference: TGUID); override;
     procedure Clear; override;
@@ -177,13 +194,20 @@ type
 
     procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
 
-    function GetReference: TGUID; override;
-
     property sDateAchat: string read Get_sDateAchat;
   end;
 
+  TListOfTEditionComplete = class(TObjectList)
+  protected
+    function GetItem(Index: Integer): TEditionComplete;
+  public
+    function Add(AObject: TEditionComplete): Integer;
+    procedure Insert(Index: Integer; AObject: TEditionComplete);
+    property Items[Index: Integer]: TEditionComplete read GetItem; default;
+  end;
+
   TEditionsComplet = class(TListComplet)
-    Editions: TList;
+    Editions: TListOfTEditionComplete;
 
     procedure Fill(Reference: TGUID; Stock: Integer = -1); reintroduce;
     procedure Clear; override;
@@ -196,12 +220,14 @@ type
   private
     function GetID_Serie: TGUID;
     procedure SetID_Serie(const Value: TGUID);
+  protected
+    function GetReference: TGUID; override;
   public
     ID_Album: TGUID;
     MoisParution, AnneeParution, Tome, TomeDebut, TomeFin: Integer;
     Titre: string[50];
     HorsSerie, Integrale: Boolean;
-    Scenaristes, Dessinateurs, Coloristes: TObjectList;
+    Scenaristes, Dessinateurs, Coloristes: TListOfTAuteur;
     Sujet, Notes: TStringList;
     Serie: TSerieComplete;
     Editions: TEditionsComplet;
@@ -215,8 +241,6 @@ type
 
     procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
     procedure Acheter(Prevision: Boolean);
-
-    function GetReference: TGUID; override;
 
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
@@ -237,9 +261,20 @@ type
 
     procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
 
-    function GetReference: TGUID; override;
-
     function ChaineAffichage(dummy: Boolean = True): string; override;
+  protected
+    function GetReference: TGUID; override;
+  end;
+
+  TStats = class;
+
+  TListOfTStats = class(TObjectList)
+  protected
+    function GetItem(Index: Integer): TStats;
+  public
+    function Add(AObject: TStats): Integer;
+    procedure Insert(Index: Integer; AObject: TStats);
+    property Items[Index: Integer]: TStats read GetItem; default;
   end;
 
   TStats = class(TInfoComplet)
@@ -252,10 +287,10 @@ type
       NbAlbumsSansPrix: Integer;
     ValeurConnue, ValeurEstimee,
       PrixAlbumMinimun, PrixAlbumMoyen, PrixAlbumMaximun: Currency;
-    ListAlbumsMin, ListEmprunteursMin,
-      ListAlbumsMax, ListEmprunteursMax,
-      ListGenre: TList;
-    ListEditeurs: TList;
+    ListAlbumsMin, ListAlbumsMax: TListOfTAlbum;
+    ListEmprunteursMin, ListEmprunteursMax: TListOfTEmprunteur;
+    ListGenre: TListOfTGenre;
+    ListEditeurs: TListOfTStats;
 
     procedure Fill(Complete: Boolean); reintroduce;
     procedure Clear; override;
@@ -277,8 +312,17 @@ type
     function ChaineAffichage: string;
   end;
 
+  TListOfTSerieIncomplete = class(TObjectList)
+  protected
+    function GetItem(Index: Integer): TSerieIncomplete;
+  public
+    function Add(AObject: TSerieIncomplete): Integer;
+    procedure Insert(Index: Integer; AObject: TSerieIncomplete);
+    property Items[Index: Integer]: TSerieIncomplete read GetItem; default;
+  end;
+
   TSeriesIncompletes = class(TListComplet)
-    Series: TObjectList;
+    Series: TListOfTSerieIncomplete;
 
     procedure Fill(const Reference: TGUID); overload; override;
     procedure Fill(AvecIntegrales, AvecAchats: Boolean; ID_Serie: TGUID); reintroduce; overload;
@@ -298,10 +342,17 @@ type
     function sAnnee: string;
   end;
 
+  TListOfTPrevisionSortie = class(TObjectList)
+  protected
+    function GetItem(Index: Integer): TPrevisionSortie;
+  public
+    function Add(AObject: TPrevisionSortie): Integer;
+    procedure Insert(Index: Integer; AObject: TPrevisionSortie);
+    property Items[Index: Integer]: TPrevisionSortie read GetItem; default;
+  end;
+
   TPrevisionsSorties = class(TListComplet)
-    AnneesPassees: TObjectList;
-    AnneeEnCours: TObjectList;
-    AnneesProchaines: TObjectList;
+    AnneesPassees, AnneeEnCours, AnneesProchaines: TListOfTPrevisionSortie;
 
     procedure Fill(const Reference: TGUID); overload; override;
     procedure Fill(AvecAchats: Boolean); reintroduce; overload;
@@ -315,24 +366,35 @@ type
 
   TParaBDComplet = class(TObjetComplet)
   private
+    OldHasImage, OldImageStockee: Boolean;
+    OldFichierImage: string;
+
     function Get_sDateAchat: string;
+  protected
+    function GetReference: TGUID; override;
   public
     ID_ParaBD: TGUID;
     AnneeEdition, CategorieParaBD, AnneeCote: Integer;
     Titre: string[50];
     sCategorieParaBD: string;
-    Auteurs: TList;
+    Auteurs: TListOfTAuteur;
     Description: TStringList;
     Serie: TSerieComplete;
 
     Prix, PrixCote: Currency;
-    Dedicace, Numerote, Stock, Offert, Gratuit, HasImage: Boolean;
+    Dedicace, Numerote, Stock, Offert, Gratuit: Boolean;
     DateAchat: TDateTime;
+
+    HasImage, ImageStockee: Boolean;
+    FichierImage: string;
 
     procedure Fill(const Reference: TGUID); override;
     procedure Clear; override;
     constructor Create; override;
     destructor Destroy; override;
+
+    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+    procedure Acheter(Prevision: Boolean);
 
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
@@ -461,9 +523,9 @@ end;
 
 constructor TAlbumComplet.Create;
 begin
-  Scenaristes := TObjectList.Create;
-  Dessinateurs := TObjectList.Create;
-  Coloristes := TObjectList.Create;
+  Scenaristes := TListOfTAuteur.Create;
+  Dessinateurs := TListOfTAuteur.Create;
+  Coloristes := TListOfTAuteur.Create;
   Sujet := TStringList.Create;
   Notes := TStringList.Create;
   Serie := TSerieComplete.Create;
@@ -695,7 +757,7 @@ begin
   Editeur := TEditeurComplet.Create;
   Collection := TCollection.Create;
   Emprunts := TEmpruntsComplet.Create;
-  Couvertures := TList.Create;
+  Couvertures := TListOfTCouverture.Create;
   Notes := TStringList.Create;
 end;
 
@@ -706,7 +768,7 @@ begin
   Editeur.Clear;
   Collection.Clear;
   Emprunts.Clear;
-  TCouverture.VideListe(Couvertures);
+  Couvertures.Clear;
   Notes.Clear;
 end;
 
@@ -1048,13 +1110,13 @@ end;
 procedure TEditionsComplet.Clear;
 begin
   inherited;
-  TEdition.VideListe(Editions);
+  Editions.Clear;
 end;
 
 constructor TEditionsComplet.Create;
 begin
   inherited;
-  Editions := TList.Create;
+  Editions := TListOfTEditionComplete.Create;
 end;
 
 constructor TEditionsComplet.Create(Reference: TGUID; Stock: Integer);
@@ -1218,22 +1280,29 @@ constructor TSerieComplete.Create;
 begin
   inherited;
   FIdAuteur := GUID_NULL;
-  Albums := TObjectList.Create(True);
-  ParaBD := TObjectList.Create(True);
+  FForce := False;
+  Albums := TListOfTAlbum.Create(True);
+  ParaBD := TListOfTParaBD.Create(True);
   Genres := TStringList.Create;
   Sujet := TStringList.Create;
   Notes := TStringList.Create;
   Editeur := TEditeurComplet.Create;
   Collection := TCollection.Create;
-  Scenaristes := TObjectList.Create(True);
-  Dessinateurs := TObjectList.Create(True);
-  Coloristes := TObjectList.Create(True);
+  Scenaristes := TListOfTAuteur.Create(True);
+  Dessinateurs := TListOfTAuteur.Create(True);
+  Coloristes := TListOfTAuteur.Create(True);
 end;
 
 constructor TSerieComplete.Create(const Reference, IdAuteur: TGUID);
 begin
   Create;
   Fill(Reference, IdAuteur);
+end;
+
+constructor TSerieComplete.Create(const Reference, IdAuteur: TGUID; Force: Boolean);
+begin
+  Create;
+  Fill(Reference, IdAuteur, Force);
 end;
 
 destructor TSerieComplete.Destroy;
@@ -1256,7 +1325,7 @@ var
   q: TJvUIBQuery;
 begin
   inherited;
-  if IsEqualGUID(Reference, GUID_NULL) then Exit;
+  if IsEqualGUID(Reference, GUID_NULL) and (not FForce) then Exit;
   Self.ID_Serie := Reference;
   q := TJvUIBQuery.Create(nil);
   with q do try
@@ -1282,14 +1351,14 @@ begin
     FetchBlobs := False;
 
     Close;
-    SQL.Text := 'SELECT ID_Album, TITREALBUM, INTEGRALE, HORSSERIE, TOME, TOMEDEBUT, TOMEFIN, ID_Serie '
-      + 'FROM ALBUMS '
-      + 'WHERE ID_Serie = ? ';
+    SQL.Text := 'SELECT ID_Album, TITREALBUM, INTEGRALE, HORSSERIE, TOME, TOMEDEBUT, TOMEFIN, ID_Serie FROM ALBUMS';
+    if IsEqualGUID(Reference, GUID_NULL) then
+      SQL.Add('WHERE (ID_Serie IS NULL OR ID_Serie = ?)')
+    else
+      SQL.Add('WHERE ID_Serie = ?');
     if not IsEqualGUID(FIdAuteur, GUID_NULL) then
-      SQL.Text := SQL.Text
-        + 'AND ID_Album IN (SELECT ID_Album FROM AUTEURS WHERE ID_Personne = ?) ';
-    SQL.Text := SQL.Text
-      + 'ORDER BY HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST';
+      SQL.Add('AND ID_Album IN (SELECT ID_Album FROM AUTEURS WHERE ID_Personne = ?)');
+    SQL.Add('ORDER BY HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST');
     Params.AsString[0] := GUIDToString(Reference);
     if not IsEqualGUID(FIdAuteur, GUID_NULL) then
       Params.AsString[1] := GUIDToString(FIdAuteur);
@@ -1300,14 +1369,14 @@ begin
     end;
 
     Close;
-    SQL.Text := 'SELECT ID_ParaBD, TITREPARABD, ID_Serie, TITRESERIE, ACHAT, COMPLET, SCATEGORIE '
-      + 'FROM VW_LISTE_PARABD '
-      + 'WHERE ID_Serie = ? ';
+    SQL.Text := 'SELECT ID_ParaBD, TITREPARABD, ID_Serie, TITRESERIE, ACHAT, COMPLET, SCATEGORIE FROM VW_LISTE_PARABD';
+    if IsEqualGUID(Reference, GUID_NULL) then
+      SQL.Add('WHERE (ID_Serie IS NULL OR ID_Serie = ?)')
+    else
+      SQL.Add('WHERE ID_Serie = ?');
     if not IsEqualGUID(FIdAuteur, GUID_NULL) then
-      SQL.Text := SQL.Text
-        + 'AND ID_ParaBD IN (SELECT ID_ParaBD FROM AUTEURS_PARABD WHERE ID_Personne = ?) ';
-    SQL.Text := SQL.Text
-      + 'ORDER BY TITREPARABD';
+      SQL.Add('AND ID_ParaBD IN (SELECT ID_ParaBD FROM AUTEURS_PARABD WHERE ID_Personne = ?)');
+    SQL.Add('ORDER BY TITREPARABD');
     Params.AsString[0] := GUIDToString(Reference);
     if not IsEqualGUID(FIdAuteur, GUID_NULL) then
       Params.AsString[1] := GUIDToString(FIdAuteur);
@@ -1351,6 +1420,12 @@ procedure TSerieComplete.Fill(const Reference, IdAuteur: TGUID);
 begin
   FIdAuteur := IdAuteur;
   Fill(Reference);
+end;
+
+procedure TSerieComplete.Fill(const Reference, IdAuteur: TGUID; Force: Boolean);
+begin
+  FForce := Force;
+  Fill(Reference, IdAuteur);
 end;
 
 function TSerieComplete.GetID_Collection: TGUID;
@@ -1549,29 +1624,26 @@ end;
 { TStats }
 
 procedure TStats.Clear;
-var
-  i: Integer;
 begin
   inherited;
-  TEmprunteur.VideListe(ListEmprunteursMax);
-  TEmprunteur.VideListe(ListEmprunteursMin);
-  TAlbum.VideListe(ListAlbumsMax);
-  TAlbum.VideListe(ListAlbumsMin);
-  TGenre.VideListe(ListGenre);
-  for i := 0 to Pred(ListEditeurs.Count) do
-    TStats(ListEditeurs[i]).Free;
+  ListEmprunteursMax.Clear;
+  ListEmprunteursMin.Clear;
+  ListAlbumsMax.Clear;
+  ListAlbumsMin.Clear;
+  ListGenre.Clear;
+  ListEditeurs.Clear;
   ListEditeurs.Clear;
 end;
 
 constructor TStats.Create;
 begin
   inherited;
-  ListEmprunteursMax := TList.Create;
-  ListAlbumsMax := TList.Create;
-  ListEmprunteursMin := TList.Create;
-  ListAlbumsMin := TList.Create;
-  ListGenre := TList.Create;
-  ListEditeurs := TList.Create;
+  ListEmprunteursMax := TListOfTEmprunteur.Create;
+  ListAlbumsMax := TListOfTAlbum.Create;
+  ListEmprunteursMin := TListOfTEmprunteur.Create;
+  ListAlbumsMin := TListOfTAlbum.Create;
+  ListGenre := TListOfTGenre.Create;
+  ListEditeurs := TListOfTStats.Create;
 end;
 
 constructor TStats.Create(Complete: Boolean);
@@ -1618,7 +1690,7 @@ begin
     else
       SQL.Add('');
     Open; Stats.NbSeries := Fields.AsInteger[0]; Close;
-    SQL.Add('inner join Series s on a.ID_Serie = s.ID_Serie');
+    SQL.Add('left join Series s on a.ID_Serie = s.ID_Serie');
     SQL.Add('');
     SQL[3] := 'WHERE s.Terminee = 1'; Open; Stats.NbSeriesTerminee := Fields.AsInteger[0]; Close;
 
@@ -1825,13 +1897,13 @@ procedure TEmpruntsComplet.Clear;
 begin
   inherited;
   NBEmprunts := 0;
-  TEmprunt.VideListe(Emprunts);
+  Emprunts.Clear;
 end;
 
 constructor TEmpruntsComplet.Create;
 begin
   inherited;
-  Emprunts := TList.Create;
+  Emprunts := TListOfTEmprunt.Create;
 end;
 
 constructor TEmpruntsComplet.Create(Reference: TGUID; Source: TSrcEmprunt; Sens: TSensEmprunt; Apres, Avant: TDateTime; EnCours, Stock: Boolean);
@@ -1929,7 +2001,7 @@ end;
 constructor TSeriesIncompletes.Create;
 begin
   inherited;
-  Series := TObjectList.Create(True);
+  Series := TListOfTSerieIncomplete.Create(True);
 end;
 
 constructor TSeriesIncompletes.Create(AvecIntegrales, AvecAchats: Boolean);
@@ -1960,7 +2032,7 @@ var
   var
     i: Integer;
   begin
-    with TSerieIncomplete(Self.Series[Pred(Self.Series.Count)]) do
+    with Self.Series[Pred(Self.Series.Count)] do
       if CurrentTome > FirstTome + 1 then
         NumerosManquants.Add(Format('%d<>%d', [FirstTome, CurrentTome]))
       else
@@ -2030,9 +2102,9 @@ end;
 constructor TPrevisionsSorties.Create;
 begin
   inherited;
-  AnneesPassees := TObjectList.Create(True);
-  AnneeEnCours := TObjectList.Create(True);
-  AnneesProchaines := TObjectList.Create(True);
+  AnneesPassees := TListOfTPrevisionSortie.Create(True);
+  AnneeEnCours := TListOfTPrevisionSortie.Create(True);
+  AnneesProchaines := TListOfTPrevisionSortie.Create(True);
 end;
 
 constructor TPrevisionsSorties.Create(AvecAchats: Boolean);
@@ -2168,7 +2240,7 @@ end;
 constructor TAuteurComplet.Create;
 begin
   inherited;
-  Series := TObjectList.Create(True);
+  Series := TListOfTSerieComplete.Create(True);
   Biographie := TStringList.Create;
 end;
 
@@ -2201,23 +2273,24 @@ begin
 
     SQL.Clear;
     // UpperTitreSerie en premier pour forcer l'union à trier sur le titre
-    SQL.Add('SELECT UPPERTITRESERIE, s.ID_Serie');
-    SQL.Add('FROM ALBUMS al');
+    SQL.Add('SELECT UPPERTITRESERIE, al.ID_Serie');
+    SQL.Add('FROM VW_LISTE_ALBUMS al');
     SQL.Add('  INNER JOIN AUTEURS au ON al.ID_Album = au.ID_Album AND au.ID_Personne = :ID_Personne');
-    SQL.Add('  INNER JOIN SERIES s ON s.ID_Serie = al.ID_Serie');
     SQL.Add('union');
     SQL.Add('SELECT UPPERTITRESERIE, s.ID_Serie');
     SQL.Add('FROM auteurs_series au');
     SQL.Add('  INNER JOIN SERIES s ON s.ID_Serie = au.ID_Serie AND au.ID_Personne = :ID_Personne');
     SQL.Add('union');
-    SQL.Add('SELECT UPPERTITRESERIE, s.ID_Serie');
+    SQL.Add('SELECT UPPERTITRESERIE, p.ID_Serie');
     SQL.Add('FROM auteurs_parabd ap');
-    SQL.Add('  INNER JOIN PARABD p ON ap.ID_PARABD = p.ID_PARABD and ap.ID_Personne = :ID_Personne');
-    SQL.Add('  INNER JOIN SERIES s ON s.ID_Serie = p.ID_Serie ');
+    SQL.Add('  INNER JOIN VW_LISTE_PARABD p ON ap.ID_PARABD = p.ID_PARABD and ap.ID_Personne = :ID_Personne');
     Params.ByNameAsString['ID_Personne'] := GUIDToString(Reference);
     Open;
     while not Eof do begin
-      Series.Add(TSerieComplete.Create(StringToGUID(Fields.AsString[1])));
+      if Fields.IsNull[1] then
+        Series.Insert(0, TSerieComplete.Create(GUID_NULL, Reference, True))
+      else
+        Series.Add(TSerieComplete.Create(StringToGUID(Fields.AsString[1]), Reference, True));
       Next;
     end;
   finally
@@ -2264,6 +2337,25 @@ begin
   Result := ChaineAffichage(False, AvecSerie);
 end;
 
+procedure TParaBDComplet.Acheter(Prevision: Boolean);
+var
+  q: TJvUIBQuery;
+begin
+  if IsEqualGUID(Reference, GUID_NULL) then Exit;
+  q := TJvUIBQuery.Create(nil);
+  with q do try
+    Transaction := GetTransaction(DMPrinc.UIBDataBase);
+    SQL.Text := 'UPDATE PARABD SET ACHAT = :Achat WHERE ID_ParaBD = ?';
+    Params.AsBoolean[0] := Prevision;
+    Params.AsString[1] := GUIDToString(ID_ParaBD);
+    Execute;
+    Transaction.Commit;
+  finally
+    Transaction.Free;
+    Free;
+  end;
+end;
+
 function TParaBDComplet.ChaineAffichage(Simple, AvecSerie: Boolean): string;
 var
   s: string;
@@ -2291,8 +2383,7 @@ begin
   ID_ParaBD := GUID_NULL;
   Titre := '';
 
-  TAuteur.VideListe(Auteurs);
-
+  Auteurs.Clear;
   Description.Clear;
   Serie.Clear;
 end;
@@ -2301,7 +2392,7 @@ constructor TParaBDComplet.Create;
 begin
   inherited;
   Description := TStringList.Create;
-  Auteurs := TList.Create;
+  Auteurs := TListOfTAuteur.Create;
   Serie := TSerieComplete.Create;
 end;
 
@@ -2325,7 +2416,8 @@ begin
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     FetchBlobs := True;
-    SQL.Text := 'SELECT TITREPARABD, ANNEE, ID_Serie, ACHAT, DESCRIPTION, DEDICACE, NUMEROTE, ANNEECOTE, PRIXCOTE, GRATUIT, OFFERT, DATEACHAT, PRIX, STOCK, CATEGORIEPARABD, lc.Libelle AS sCATEGORIEPARABD, FICHIERPARABD';
+    SQL.Text := 'SELECT TITREPARABD, ANNEE, ID_Serie, ACHAT, DESCRIPTION, DEDICACE, NUMEROTE, ANNEECOTE, PRIXCOTE, GRATUIT, OFFERT, DATEACHAT, PRIX, STOCK, CATEGORIEPARABD, lc.Libelle AS sCATEGORIEPARABD,';
+    SQL.Add('FICHIERPARABD, STOCKAGEPARABD, case when IMAGEPARABD is null then 0 else 1 end as HASBLOBIMAGE');
     SQL.Add('FROM PARABD p');
     SQL.Add('LEFT JOIN LISTES lc on (lc.ref = p.CATEGORIEPARABD and lc.categorie = 7)');
     SQL.Add('WHERE ID_ParaBD = ?');
@@ -2348,9 +2440,16 @@ begin
     Self.DateAchat := Fields.ByNameAsDate['DateAchat'];
     Self.AnneeCote := Fields.ByNameAsInteger['ANNEECOTE'];
     Self.PrixCote := Fields.ByNameAsCurrency['PRIXCOTE'];
-    Self.HasImage := not Fields.ByNameIsNull['FICHIERPARABD'];
 
     serie := StringToGUIDDef(Fields.ByNameAsString['ID_SERIE'], GUID_NULL);
+
+    ImageStockee := Fields.ByNameAsBoolean['STOCKAGEPARABD'];
+    FichierImage := Fields.ByNameAsString['FICHIERPARABD'];
+    HasImage := (Fields.ByNameAsSmallint['HASBLOBIMAGE'] = 1) or (FichierImage <> '');
+
+    OldImageStockee := ImageStockee;
+    OldFichierImage := FichierImage;
+    OldHasImage := HasImage;
 
     Close;
     SQL.Text := 'SELECT * FROM PROC_AUTEURS(NULL, NULL, ?)';
@@ -2362,7 +2461,6 @@ begin
     end;
 
     Self.Serie.Fill(serie);
-
   finally
     q.Transaction.Free;
     q.Free;
@@ -2375,6 +2473,151 @@ begin
     Result := DateToStr(Self.DateAchat)
   else
     Result := '';
+end;
+
+procedure TParaBDComplet.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+var
+  s: string;
+  q: TJvUIBQuery;
+  i: Integer;
+  hg: IHourGlass;
+  Stream: TStream;
+begin
+  inherited;
+  hg := THourGlass.Create;
+  q := TJvUIBQuery.Create(nil);
+  with q do try
+    Transaction := UseTransaction;
+
+    if RecInconnu then begin
+      SQL.Text := 'INSERT INTO PARABD (ID_ParaBD, TITREPARABD, ANNEE, ID_Serie, CATEGORIEPARABD, DEDICACE, NUMEROTE, ANNEECOTE, PRIXCOTE, GRATUIT, OFFERT, DATEACHAT, PRIX, STOCK, TITREINITIALESPARABD, DESCRIPTION, UPPERDESCRIPTION, COMPLET)';
+      SQL.Add('VALUES');
+      SQL.Add('(:ID_ParaBD, :TITREPARABD, :ANNEE, :ID_Serie, :CATEGORIEPARABD, :DEDICACE, :NUMEROTE, :ANNEECOTE, :PRIXCOTE, :GRATUIT, :OFFERT, :DATEACHAT, :PRIX, :STOCK, :TITREINITIALESPARABD, :DESCRIPTION, :UPPERDESCRIPTION, 1)');
+    end
+    else begin
+      SQL.Text := 'UPDATE PARABD SET';
+      SQL.Add('TITREPARABD = :TITREPARABD, ANNEE = :ANNEE, ID_Serie = :ID_Serie, CATEGORIEPARABD = :CATEGORIEPARABD, DEDICACE = :DEDICACE, NUMEROTE = :NUMEROTE, ANNEECOTE = :ANNEECOTE,');
+      SQL.Add('PRIXCOTE = :PRIXCOTE, GRATUIT = :GRATUIT, OFFERT = :OFFERT, DATEACHAT = :DATEACHAT, PRIX = :PRIX, STOCK = :STOCK, COMPLET = 1,');
+      SQL.Add('DESCRIPTION = :DESCRIPTION, TITREINITIALESPARABD = :TITREINITIALESPARABD,');
+      SQL.Add('UPPERDESCRIPTION = :UPPERDESCRIPTION');
+      SQL.Add('WHERE (ID_ParaBD = :ID_ParaBD)');
+    end;
+
+    Params.ByNameAsString['ID_ParaBD'] := GUIDToString(ID_ParaBD);
+    s := Trim(Titre);
+    if s = '' then begin
+      Params.ByNameIsNull['TITREPARABD'] := True;
+      Params.ByNameIsNull['TITREINITIALESPARABD'] := True;
+    end
+    else begin
+      Params.ByNameAsString['TITREPARABD'] := s;
+      Params.ByNameAsString['TITREINITIALESPARABD'] := MakeInitiales(UpperCase(SansAccents(s)));
+    end;
+    if AnneeEdition = 0 then
+      Params.ByNameIsNull['ANNEE'] := True
+    else
+      Params.ByNameAsInteger['ANNEE'] := AnneeEdition;
+    Params.ByNameAsInteger['CATEGORIEPARABD'] := CategorieParaBD;
+    Params.ByNameAsBoolean['DEDICACE'] := Dedicace;
+    Params.ByNameAsBoolean['NUMEROTE'] := Numerote;
+    s := description.Text;
+    if s <> '' then begin
+      ParamsSetBlob('DESCRIPTION', s);
+      s := UpperCase(SansAccents(s));
+      ParamsSetBlob('UPPERDESCRIPTION', s);
+    end
+    else begin
+      Params.ByNameIsNull['DESCRIPTION'] := True;
+      Params.ByNameIsNull['UPPERDESCRIPTION'] := True;
+    end;
+    Params.ByNameAsBoolean['GRATUIT'] := Gratuit;
+    Params.ByNameAsBoolean['OFFERT'] := Offert;
+
+    if DateAchat = 0 then
+      Params.ByNameIsNull['DATEACHAT'] := True
+    else
+      Params.ByNameAsDate['DATEACHAT'] := Trunc(DateAchat);
+    if Prix = 0 then
+      Params.ByNameIsNull['PRIX'] := True
+    else
+      Params.ByNameAsCurrency['PRIX'] := Prix;
+    if (AnneeCote = 0) or (PrixCote = 0) then begin
+      Params.ByNameIsNull['ANNEECOTE'] := True;
+      Params.ByNameIsNull['PRIXCOTE'] := True;
+    end
+    else begin
+      Params.ByNameAsInteger['ANNEECOTE'] := AnneeCote;
+      Params.ByNameAsCurrency['PRIXCOTE'] := PrixCote;
+    end;
+    Params.ByNameAsBoolean['STOCK'] := Stock;
+
+    if Serie.RecInconnu or IsEqualGUID(Serie.ID_Serie, GUID_NULL) then
+      Params.ByNameIsNull['ID_SERIE'] := True
+    else
+      Params.ByNameAsString['ID_SERIE'] := GUIDToString(Serie.ID_Serie);
+    ExecSQL;
+
+    SupprimerToutDans('', 'AUTEURS_PARABD', 'ID_ParaBD', ID_ParaBD);
+    SQL.Clear;
+    SQL.Add('INSERT INTO AUTEURS_PARABD (ID_ParaBD, ID_Personne)');
+    SQL.Add('VALUES (:ID_Album, :ID_Personne)');
+    for i := 0 to Pred(Auteurs.Count) do begin
+      Params.AsString[0] := GUIDToString(ID_ParaBD);
+      Params.AsString[1] := GUIDToString(TAuteur(Auteurs[i]).Personne.ID);
+      ExecSQL;
+    end;
+
+    if not HasImage then begin
+      SQL.Text := 'UPDATE PARABD SET IMAGEPARABD = NULL, STOCKAGEPARABD = 0, FICHIERPARABD = NULL WHERE ID_ParaBD = :ID_ParaBD';
+      Params.ByNameAsString['ID_ParaBD'] := GUIDToString(ID_ParaBD);
+      ExecSQL;
+    end
+    else if (OldFichierImage <> FichierImage) or (OldImageStockee <> ImageStockee) then begin
+      if ImageStockee then begin
+        SQL.Text := 'UPDATE PARABD SET IMAGEPARABD = :IMAGEPARABD, STOCKAGEPARABD = 1, FICHIERPARABD = :FICHIERPARABD WHERE ID_ParaBD = :ID_ParaBD';
+        if ExtractFilePath(FichierImage) = '' then FichierImage := IncludeTrailingPathDelimiter(RepImages) + FichierImage;
+        Stream := GetCouvertureStream(FichierImage, -1, -1, False);
+        try
+          ParamsSetBlob('IMAGEPARABD', Stream);
+        finally
+          Stream.Free;
+        end;
+        Params.ByNameAsString['FICHIERPARABD'] := ExtractFileName(FichierImage);
+        Params.ByNameAsString['ID_ParaBD'] := GUIDToString(ID_ParaBD);
+        ExecSQL;
+      end
+      else begin
+        SQL.Text := 'SELECT Result FROM SAVEBLOBTOFILE(:Chemin, :Fichier, :BlobContent)';
+        if ExtractFilePath(FichierImage) = '' then
+          Stream := GetCouvertureStream(True, ID_ParaBD, -1, -1, False)
+        else
+          Stream := GetCouvertureStream(FichierImage, -1, -1, False);
+        try
+          FichierImage := SearchNewFileName(RepImages, ExtractFileName(FichierImage), True);
+          Params.ByNameAsString['Chemin'] := RepImages;
+          Params.ByNameAsString['Fichier'] := FichierImage;
+          ParamsSetBlob('BlobContent', Stream);
+        finally
+          Stream.Free;
+        end;
+        Open;
+
+        SQL.Text := 'UPDATE PARABD SET IMAGEPARABD = NULL, STOCKAGEPARABD = 0, FICHIERPARABD = :FICHIERPARABD WHERE ID_ParaBD = :ID_ParaBD';
+        Params.ByNameAsString['FICHIERPARABD'] := FichierImage;
+        Params.ByNameAsString['ID_ParaBD'] := GUIDToString(ID_ParaBD);
+        ExecSQL;
+      end;
+    end;
+
+    Transaction.Commit;
+  finally
+    Free;
+  end;
+end;
+
+function TParaBDComplet.GetReference: TGUID;
+begin
+  Result := ID_ParaBD;
 end;
 
 { TCollectionComplete }
@@ -2518,6 +2761,91 @@ end;
 procedure TObjetComplet.SaveToDatabase(UseTransaction: TJvUIBTransaction);
 begin
   Assert(not IsEqualGUID(Reference, GUID_NULL), 'L''ID ne peut être GUID_NULL');
+end;
+
+{ TListOfTSerieComplete }
+
+function TListOfTSerieComplete.Add(AObject: TSerieComplete): Integer;
+begin
+  Result := inherited Add(AObject);
+end;
+
+function TListOfTSerieComplete.GetItem(Index: Integer): TSerieComplete;
+begin
+  Result := TSerieComplete(inherited GetItem(Index));
+end;
+
+procedure TListOfTSerieComplete.Insert(Index: Integer; AObject: TSerieComplete);
+begin
+  inherited Insert(Index, AObject);
+end;
+
+{ TListOfTEditionComplete }
+
+function TListOfTEditionComplete.Add(AObject: TEditionComplete): Integer;
+begin
+  Result := inherited Add(AObject);
+end;
+
+function TListOfTEditionComplete.GetItem(Index: Integer): TEditionComplete;
+begin
+  Result := TEditionComplete(inherited GetItem(Index));
+end;
+
+procedure TListOfTEditionComplete.Insert(Index: Integer; AObject: TEditionComplete);
+begin
+  inherited Insert(Index, AObject);
+end;
+
+{ TListOfTStats }
+
+function TListOfTStats.Add(AObject: TStats): Integer;
+begin
+  Result := inherited Add(AObject);
+end;
+
+function TListOfTStats.GetItem(Index: Integer): TStats;
+begin
+  Result := TStats(inherited GetItem(Index));
+end;
+
+procedure TListOfTStats.Insert(Index: Integer; AObject: TStats);
+begin
+  inherited Insert(Index, AObject);
+end;
+
+{ TListOfTSerieIncomplete }
+
+function TListOfTSerieIncomplete.Add(AObject: TSerieIncomplete): Integer;
+begin
+  Result := inherited Add(AObject);
+end;
+
+function TListOfTSerieIncomplete.GetItem(Index: Integer): TSerieIncomplete;
+begin
+  Result := TSerieIncomplete(inherited GetItem(Index));
+end;
+
+procedure TListOfTSerieIncomplete.Insert(Index: Integer; AObject: TSerieIncomplete);
+begin
+  inherited Insert(Index, AObject);
+end;
+
+{ TListOfTPrevisionSortie }
+
+function TListOfTPrevisionSortie.Add(AObject: TPrevisionSortie): Integer;
+begin
+  Result := inherited Add(AObject);
+end;
+
+function TListOfTPrevisionSortie.GetItem(Index: Integer): TPrevisionSortie;
+begin
+  Result := TPrevisionSortie(inherited GetItem(Index));
+end;
+
+procedure TListOfTPrevisionSortie.Insert(Index: Integer; AObject: TPrevisionSortie);
+begin
+  inherited Insert(Index, AObject);
 end;
 
 end.

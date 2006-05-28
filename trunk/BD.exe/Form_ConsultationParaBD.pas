@@ -10,7 +10,7 @@ uses
 type
   TFrmConsultationParaBD = class(TForm, IImpressionApercu)
     ScrollBox2: TScrollBox;
-    Label4: TLabel;
+    lbNoImage: TLabel;
     l_sujet: TLabel;
     l_annee: TLabel;
     l_realisation: TLabel;
@@ -20,7 +20,7 @@ type
     AnneeEdition: TLabel;
     TitreSerie: TLabel;
     Bevel1: TBevel;
-    Label18: TLabel;
+    lbInvalidImage: TLabel;
     ImageParaBD: TImage;
     Description: TMemo;
     lvAuteurs: TVDTListView;
@@ -128,7 +128,7 @@ begin
   end;
   lvAuteurs.Items.EndUpdate;
 
-  Description.Lines.Assign(FParaBD.Description);
+  Description.Lines.Text := FParaBD.Description.Text;
 
   cbStock.Checked := FParaBD.Stock;
   cbOffert.Checked := FParaBD.Offert;
@@ -149,7 +149,7 @@ begin
   else
     lbCote.Caption := '';
 
-  Label4.Visible := not FParaBD.HasImage;
+  lbNoImage.Visible := not FParaBD.HasImage;
 
   if FParaBD.HasImage then begin
     ImageParaBD.Picture := nil;
@@ -173,8 +173,8 @@ begin
       ImageParaBD.Picture.Assign(nil);
     end;
 
-    Label18.Visible := not Assigned(ImageParaBD.Picture.Graphic);
-    if Label18.Visible then begin
+    lbInvalidImage.Visible := not Assigned(ImageParaBD.Picture.Graphic);
+    if lbInvalidImage.Visible then begin
       ImageParaBD.OnDblClick := nil;
       ImageParaBD.Cursor := crDefault;
       ms := TResourceStream.Create(HInstance, 'IMAGENONVALIDE', RT_RCDATA);

@@ -50,9 +50,6 @@ type
     procedure AjouteAlbum(ID_Album, ID_Edition: TGUID);
   end;
 
-var
-  FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur;
-
 implementation
 
 uses DM_Princ, TypeRec, Main, CommonConst, CommonList, Procedures;
@@ -93,16 +90,19 @@ end;
 
 procedure TFrmSaisie_EmpruntEmprunteur.ListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
 var
-  i: Integer;
-  PEd: TEdition;
+  i, ValueSelected: Integer;
+  PEd: TEditionComplete;
   PA: TAlbum;
-  ID_Edition: Integer;
+  ID_Edition: TGUID;
 begin
   date_pret.Enabled := Selected;
   pret.Enabled := Selected;
   lccEditions.Enabled := Selected;
 
   if Selected then begin
+    ID_Edition := StringToGUID(Item.SubItems[2]);
+    ValueSelected := -1;
+
     PA := Item.Data;
     date_pret.Date := StrToDateTime(Item.SubItems[0]);
     pret.Checked := Item.SubItems[1] = v[True];
@@ -114,11 +114,13 @@ begin
         Caption := PEd.ChaineAffichage;
         Valeur := i;
       end;
+      if IsEqualGUID(PEd.ID_Edition, ID_Edition) then ValueSelected := ValueSelected;
     end;
+
     lccEditions.DefaultValueChecked := 0;
-    ID_Edition := StrToIntDef(Item.SubItems[2], -1);
-    if not lccEditions.ValidValue(ID_Edition) then ID_Edition := lccEditions.DefaultValueChecked;
-    lccEditions.Value := ID_Edition;
+    if not lccEditions.ValidValue(ValueSelected) then ValueSelected := lccEditions.DefaultValueChecked;
+    lccEditions.Value := ValueSelected;
+    lccEditionsChange(nil);
   end;
 end;
 
@@ -145,21 +147,24 @@ end;
 procedure TFrmSaisie_EmpruntEmprunteur.AjouteAlbum(ID_Album, ID_Edition: TGUID);
 var
   PA: TAlbum;
+  Item: TListItem;
 begin
   try
     if IsEqualGUID(ID_Album, GUID_NULL) or IsEqualGUID(ID_Edition, GUID_NULL) then Exit;
-    with ListView1.Items.Add do begin
+    Item := ListView1.Items.Add;
+    with Item do begin
       PA := TAlbum.Create;
       if IsEqualGUID(ID_Edition, GUID_EditionPasSelectionnee) then
         PA.Fill(ID_Album)
       else
         PA.Fill(ID_Album, ID_Edition);
       Data := PA;
-      Caption := PA.ChaineAffichage;
+      Caption := PA.ChaineAffichage(True);
       SubItems.Add(FormatDateTime(ShortDateFormat, Date));
       SubItems.Add(v[PA.Stock]);
       SubItems.Add(GUIDToString(ID_Edition));
     end;
+    ListView1.Selected := Item;
   except
     AffMessage(Exception(ExceptObject).Message, mtError, [mbOk], True);
   end;
@@ -219,7 +224,7 @@ end;
 procedure TFrmSaisie_EmpruntEmprunteur.lccEditionsChange(Sender: TObject);
 begin
   if Assigned(ListView1.Selected) then begin
-    ListView1.Selected.SubItems[2] := IntToStr(lccEditions.Value);
+    ListView1.Selected.SubItems[2] := GUIDToString(TEditionComplete(FEditions.Editions[lccEditions.Value]).ID_Edition);
   end;
 end;
 

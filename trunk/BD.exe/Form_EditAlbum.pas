@@ -274,8 +274,8 @@ begin
     edTomeFin.Text := NonZero(IntToStr(FAlbum.TomeFin));
     cbIntegrale.Checked := FAlbum.Integrale;
     cbHorsSerie.Checked := FAlbum.HorsSerie;
-    histoire.Lines.Assign(FAlbum.Sujet);
-    remarques.Lines.Assign(FAlbum.Notes);
+    histoire.Lines.Text := FAlbum.Sujet.Text;
+    remarques.Lines.Text := FAlbum.Notes.Text;
     cbIntegraleClick(cbIntegrale);
 
     lvScenaristes.Items.Count := FAlbum.Scenaristes.Count;
@@ -288,6 +288,7 @@ begin
 
     vtSeries.OnChange := nil;
     vtSeries.CurrentValue := FAlbum.ID_Serie;
+    btResetSerie.Enabled := not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
     vtSeries.OnChange := vtSeriesChange;
 
     SetLength(FEditeurCollectionSelected, FAlbum.Editions.Editions.Count);
@@ -452,8 +453,8 @@ begin
     FAlbum.TomeFin := StrToInt(edTomeFin.Text);
   FAlbum.Integrale := cbIntegrale.Checked;
   FAlbum.HorsSerie := cbHorsSerie.Checked;
-  FAlbum.Sujet.Assign(histoire.Lines);
-  FAlbum.Notes.Assign(remarques.Lines);
+  FAlbum.Sujet.Text := histoire.Lines.Text;
+  FAlbum.Notes.Text := remarques.Lines.Text;
 
   FAlbum.SaveToDatabase;
   if isAchat then FAlbum.Acheter(False);
@@ -850,7 +851,7 @@ begin
       FCurrentEditionComplete.DateAchat := Trunc(dtpAchat.Date)
     else
       FCurrentEditionComplete.DateAchat := 0;
-    FCurrentEditionComplete.Notes.Assign(edNotes.Lines);
+    FCurrentEditionComplete.Notes.Text := edNotes.Lines.Text;
   end;
 end;
 
@@ -920,7 +921,7 @@ begin
         edPrixCote.Text := ''
       else
         edPrixCote.Text := FormatCurr(FormatMonnaie, FCurrentEditionComplete.PrixCote);
-      edNotes.Lines.Assign(FCurrentEditionComplete.Notes);
+      edNotes.Lines.Text := FCurrentEditionComplete.Notes.Text;
       vstImages.RootNodeCount := FCurrentEditionComplete.Couvertures.Count;
     end;
   finally

@@ -140,8 +140,8 @@ begin
   FSerie.SiteWeb := Trim(edSite.Text);
   FSerie.ID_Editeur := vtEditeurs.CurrentValue;
   FSerie.ID_Collection := vtCollections.CurrentValue;
-  FSerie.Sujet.Assign(histoire.Lines);
-  FSerie.Notes.Assign(remarques.Lines);
+  FSerie.Sujet.Text := histoire.Lines.Text;
+  FSerie.Notes.Text := remarques.Lines.Text;
 
   FSerie.SaveToDatabase;
 
@@ -168,8 +168,8 @@ begin
     vtEditeurs.CurrentValue := FSerie.ID_Editeur;
     vtCollections.CurrentValue := FSerie.ID_Collection;
     cbComplete.Checked := FSerie.Complete;
-    histoire.Lines.Assign(FSerie.Sujet);
-    remarques.Lines.Assign(FSerie.Notes);
+    histoire.Lines.Text := FSerie.Sujet.Text;
+    remarques.Lines.Text := FSerie.Notes.Text;
     edSite.Text := FSerie.SiteWeb;
 
     lvScenaristes.Items.Count := FSerie.Scenaristes.Count;

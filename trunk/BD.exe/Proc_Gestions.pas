@@ -240,7 +240,7 @@ end;
 
 function AjouterAuteurs(VT: TVirtualStringTree; Valeur: string): TGUID;
 begin
-  Result := CreationAuteur(Valeur);
+  Result := CreationAuteur(FormalizeNom(Valeur));
   if IsEqualGUID(Result, GUID_NULL) then Exit;
   if Assigned(VT) then begin
     VT.InitializeRep(False);
@@ -250,7 +250,7 @@ end;
 
 function AjouterAuteurs2(VT: TVirtualStringTree; Valeur: string): TGUID;
 begin
-  Result := CreationAuteur2(Valeur);
+  Result := CreationAuteur2(FormalizeNom(Valeur));
   if IsEqualGUID(Result, GUID_NULL) then Exit;
   if Assigned(VT) then begin
     VT.InitializeRep(False);

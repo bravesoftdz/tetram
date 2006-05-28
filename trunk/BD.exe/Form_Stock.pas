@@ -98,8 +98,8 @@ end;
 
 procedure TFrmStock.PopupMenu1Popup(Sender: TObject);
 begin
-  Item1.Caption := TEmprunt(FListEmprunts[ListeEmprunts.FocusedNode.Index]).Album.Titre;
-  Item2.Caption := TEmprunt(FListEmprunts[ListeEmprunts.FocusedNode.Index]).Emprunteur.Nom;
+  Item1.Caption := TEmprunt(FListEmprunts[ListeEmprunts.FocusedNode.Index]).Album.ChaineAffichage(True);
+  Item2.Caption := TEmprunt(FListEmprunts[ListeEmprunts.FocusedNode.Index]).Emprunteur.ChaineAffichage;
   MnuRetour.Enabled := ((ListeEmprunts.SelectedCount = 1) and (ZoneMove in [0, 10])) or
     ((ListeEmprunts.SelectedCount >= 1) and (ZoneMove in [1, 11]) and SameEmprunteur);
 end;
@@ -231,15 +231,18 @@ begin
           Inc(i);
           Node := ListeEmprunts.GetNextSelected(Node);
         end;
-        if SaisieMouvementEmprunteur(TEmprunt(FListEmprunts[ListeEmprunts.FocusedNode.Index]).Emprunteur.ID, a) then Historique.Refresh;
+        if SaisieMouvementEmprunteur(TEmprunt(FListEmprunts[ListeEmprunts.GetFirstSelected.Index]).Emprunteur.ID, a) then Historique.Refresh;
       end;
   end;
 end;
 
 procedure TFrmStock.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
+var
+  isSameEmprunteur: Boolean;
 begin
-  Retour1.Enabled := ListeEmprunts.GetFirstSelected <> nil;
-  Retour2.Enabled := Retour1.Enabled;
+  isSameEmprunteur := SameEmprunteur;
+  Retour1.Enabled := (ListeEmprunts.GetFirstSelected <> nil) and ((ZoneMove <> 1) or isSameEmprunteur);
+  Retour2.Enabled := Retour1.Enabled and isSameEmprunteur;
   actFiltrer.Visible := LightComboCheck1.ValidCurrentValue;
   actFiltrer.Enabled := LightComboCheck1.ValidCurrentValue and (EditLabeled1.Text <> '');
 end;

@@ -1,6 +1,6 @@
 object FrmEditParaBD: TFrmEditParaBD
-  Left = 257
-  Top = 160
+  Left = 188
+  Top = 180
   Width = 835
   Height = 926
   Caption = 'FrmEditParaBD'
@@ -62,7 +62,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Width = 57
       Height = 72
       Cursor = crHandPoint
-      Caption = 'Auteur/Cr'#233'ateur'
+      Caption = 'Auteur / Cr'#233'ateur'
       Enabled = False
       Flat = True
       Glyph.Data = {
@@ -205,12 +205,50 @@ object FrmEditParaBD: TFrmEditParaBD
       Checked = False
       PropertiesStored = False
       CheckVisible = False
+      OnChange = cbxCategorieChange
       ShowCaptionHint = False
       AssignHint = False
       OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
       Items.CaptionComplet = True
       Items.Separateur = ' '
       Items = <>
+    end
+    object btResetSerie: TCRFurtifLight
+      Left = 486
+      Top = 281
+      Width = 20
+      Height = 20
+      Cursor = crHandPoint
+      Anchors = [akTop, akRight]
+      Enabled = False
+      Glyph.Data = {
+        36030000424D3603000000000000360000002800000010000000100000000100
+        18000000000000030000120B0000120B00000000000000000000CC00CCCC00CC
+        CC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00
+        CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC9898A3ADADB4CC00CCCC00CCCC
+        00CCCC00CCCC00CCCC00CCA9A9B1A9A9B1CC00CCCC00CCCC00CCCC00CCCC00CC
+        4A4C7D000CAE0A0E62A2A2ABCC00CCCC00CCCC00CCCC00CC7C7C8D01098D0009
+        9661617BCC00CCCC00CCCC00CC92929F0010C9000DEA0004D3090D61A0A0A9CC
+        00CCCC00CC81819101099A0003D10011F5020979C1C1C3CC00CCCC00CC9B9BA6
+        020D970015FF000BE70004D3080C659E9EA8868694020A950003D2000FF10014
+        F2141860C8C8C9CC00CCCC00CCCC00CC8D8D9B020C980015FF000CE80004D306
+        0A64020A8F0003D3000FF00014F40E1366AEAEB4CC00CCCC00CCCC00CCCC00CC
+        CC00CC91919E030D930015FF000CE80004D30003D3000EEE0014F70A0F66A8A8
+        B0CC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC9595A1040D8E0015FF00
+        0EEF000FF10014F8060C69A1A1AACC00CCCC00CCCC00CCCC00CCCC00CCCC00CC
+        CC00CCCC00CC92929E030B7B0318FE8394F47A8BF50216F902086B868694CC00
+        CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC9797A2040B760116FD93A5F294
+        A6F1A5B6F195A7F20318FA02086D818191CC00CCCC00CCCC00CCCC00CCCC00CC
+        9C9CA6060D720015FC899BF39BACF1080F740C1688A1B2F09AAAF20419FB0108
+        6E7C7C8DCC00CCCC00CCCC00CCB7B7BB090E670015FA7D8FF4A4B4F009107795
+        95A1A3A3AC0E17839CADF19EAFF1051AFC010767A1A1AACC00CCCC00CCB7B7BB
+        030A762B3FFB9DAEF109117991919ECC00CCCC00CCA8A8B00F167E8C9DF13F52
+        FA020A79AAAAB1CC00CCCC00CCCC00CC7F7F90040B7902086B8C8C9ACC00CCCC
+        00CCCC00CCCC00CCACACB30F1571020A7C767689CC00CCCC00CCCC00CCCC00CC
+        CC00CCB7B7BBAEAEB4CC00CCCC00CCCC00CCCC00CCCC00CCCC00CCC0C0C3BBBB
+        BFCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC
+        00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC}
+      OnClick = btResetSerieClick
     end
     object edTitre: TEditLabeled
       Left = 64
@@ -256,11 +294,13 @@ object FrmEditParaBD: TFrmEditParaBD
         end>
       ColumnClick = False
       HideSelection = False
+      OwnerData = True
       ReadOnly = True
       ShowColumnHeaders = False
       SortType = stNone
       TabOrder = 7
       ViewStyle = vsReport
+      OnData = lvAuteursData
       OnKeyDown = lvAuteursKeyDown
       LinkControls = <
         item
@@ -320,6 +360,7 @@ object FrmEditParaBD: TFrmEditParaBD
       ParentShowHint = False
       ShowHint = True
       TabOrder = 9
+      OnChange = vtSeriesChange
       Columns = <>
     end
     object edAnneeCote: TEditLabeled
@@ -1350,18 +1391,18 @@ object FrmEditParaBD: TFrmEditParaBD
     inline FrameRechercheRapideSerie: TFrameRechercheRapide
       Left = 64
       Top = 281
-      Width = 442
+      Width = 422
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 8
       inherited btNext: TVDTButton
-        Left = 401
+        Left = 381
       end
       inherited btNew: TVDTButton
-        Left = 421
+        Left = 401
       end
       inherited edSearch: TEditLabeled
-        Width = 402
+        Width = 382
         LinkControls = <
           item
             Control = Label20

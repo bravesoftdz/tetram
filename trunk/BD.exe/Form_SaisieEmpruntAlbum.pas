@@ -44,9 +44,6 @@ type
     property ID_Emprunteur: TGUID read GetID_Emprunteur write SetID_Emprunteur;
   end;
 
-var
-  FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum;
-
 implementation
 
 uses DM_Princ, CommonConst, TypeRec, CommonList, Procedures;
@@ -62,7 +59,7 @@ const
 procedure TFrmSaisie_EmpruntAlbum.SetID_Album(Value: TGUID);
 var
   i: Integer;
-  PEd: TEdition;
+  PEd: TEditionComplete;
   PA: TAlbum;
   PS: TSerie;
 begin
@@ -106,9 +103,9 @@ begin
   PrepareLV(Self);
   FrameRechercheRapide1.VirtualTreeView := VTreeEmprunteur;
   FrameRechercheRapide1.ShowNewButton := False;
-  FEdition := TEditionComplete.Create;
   VTreeEmprunteur.Mode := vmEmprunteurs;
   FEditions := TEditionsComplet.Create;
+  FEdition := nil;
   date_pret.Date := Date;
   ChargeImage(VTreeEmprunteur.Background, 'FONDVT');
 end;
@@ -128,7 +125,7 @@ end;
 
 procedure TFrmSaisie_EmpruntAlbum.VTreeEmprunteurChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
 begin
-  Frame11.btnOK.Enabled := not IsEqualGUID(ID_Emprunteur, GUID_NULL);
+  Frame11.btnOK.Enabled := not IsEqualGUID(ID_Emprunteur, GUID_NULL) and not IsEqualGUID(ID_Edition, GUID_NULL);
 end;
 
 procedure TFrmSaisie_EmpruntAlbum.SetID_Edition(const Value: TGUID);
@@ -151,18 +148,21 @@ end;
 
 procedure TFrmSaisie_EmpruntAlbum.lccEditionsChange(Sender: TObject);
 begin
-  FEdition.Fill(TEdition(FEditions.Editions[lccEditions.Value]).ID);
+  FEdition := FEditions.Editions[lccEditions.Value];
 end;
 
 procedure TFrmSaisie_EmpruntAlbum.FormDestroy(Sender: TObject);
 begin
-  FEdition.Free;
+  FEdition := nil;
   FEditions.Free;
 end;
 
 function TFrmSaisie_EmpruntAlbum.GetID_Edition: TGUID;
 begin
-  Result := FEdition.ID_Edition;
+  if Assigned(FEdition) then
+    Result := FEdition.ID_Edition
+  else
+    Result := GUID_NULL;
 end;
 
 end.

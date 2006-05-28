@@ -851,7 +851,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object nbemprunts: TLabel
         Left = 71
-        Top = 157
+        Top = 173
         Width = 3
         Height = 13
         Transparent = True

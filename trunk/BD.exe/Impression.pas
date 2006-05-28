@@ -859,7 +859,7 @@ begin
     try
       Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
       Source.SQL.Text := 'SELECT Count(a.ID_Album)';
-      Source.SQL.Add('FROM Albums a INNER JOIN Editions e ON a.ID_Album = e.ID_Album INNER JOIN Series s ON a.ID_Serie = s.ID_Serie');
+      Source.SQL.Add('FROM Albums a INNER JOIN Editions e ON a.ID_Album = e.ID_Album LEFT JOIN Series s ON a.ID_Serie = s.ID_Serie');
       Source.Open;
       NbAlbums := Source.Fields.AsInteger[0];
       Source.Close;
@@ -1307,7 +1307,7 @@ begin
     Prn := TPrintObject.Create(Fond);
     try
       Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      Source.SQL.Text := 'SELECT a.ID_Album'#13#10'FROM ALBUMS a INNER JOIN Series s ON s.ID_Serie = a.ID_Serie WHERE a.ID_Album = ?';
+      Source.SQL.Text := 'SELECT a.ID_Album'#13#10'FROM ALBUMS a LEFT JOIN Series s ON s.ID_Serie = a.ID_Serie WHERE a.ID_Album = ?';
       if liste = mrNo then begin
         if doHistoire in DetailsOptions then Source.SQL[0] := Source.SQL[0] + ', a.SUJETALBUM, s.SUJETSERIE';
         if doNotes in DetailsOptions then Source.SQL[0] := Source.SQL[0] + ', a.REMARQUESALBUM, s.REMARQUESSERIE';
@@ -1764,7 +1764,7 @@ begin
       PrixMoyen := Source.Fields.AsCurrency[0];
 
       Source.SQL.Text := 'SELECT Count(a.ID_Album)';
-      Source.SQL.Add('FROM Albums a INNER JOIN Series s ON a.ID_Serie = s.ID_Serie');
+      Source.SQL.Add('FROM Albums a LEFT JOIN Series s ON a.ID_Serie = s.ID_Serie');
       Source.SQL.Add('left join vw_prixunitaires v on v.horsserie = a.horsserie and v.ID_Serie = s.ID_Serie and (v.ID_Editeur = s.ID_Editeur or s.ID_Editeur is null)');
       Source.SQL.Add('WHERE a.Achat = 1');
       Source.Open;

@@ -110,7 +110,8 @@ uses
   UMAJ1_0_0_3 in 'UMAJ1_0_0_3.pas',
   UMAJ1_1_0_0 in 'UMAJ1_1_0_0.pas',
   UMAJ1_2_0_0 in 'UMAJ1_2_0_0.pas',
-  UMAJ1_2_0_8 in 'UMAJ1_2_0_8.pas';
+  UMAJ1_2_0_8 in 'UMAJ1_2_0_8.pas',
+  ListOfTypeRec in 'ListOfTypeRec.pas';
 
 {$R *.RES}
 {$R curseurs.res}

@@ -96,7 +96,7 @@ PackageDLLOutputDir=
 PackageDCPOutputDir=
 SearchPath=$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
 Packages=VCL50;VCLX50;VCLSMP50;QRPT50;VCLDB50;VCLBDE50;VCLDBX50;TEEUI50;TEEDB50;TEE50;TEEQR50;NMFAST50;dclocx50;dclaxserver50;ibevnt50;VCLIB50;VCLIE50;INETDB50;INET50;vcl;rtl;dsnap;dbrtl;vcldb
-Conditionals=Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Conditionals=_DEBUG;Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
@@ -115,7 +115,7 @@ AutoIncBuild=1
 MajorVer=1
 MinorVer=2
 Release=0
-Build=8
+Build=16
 Debug=0
 PreRelease=0
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Teträm Corp
 FileDescription=
-FileVersion=1.2.0.8
+FileVersion=1.2.0.16
 InternalName=BDT
 LegalCopyright=Teträm Corp 1997-2005
 LegalTrademarks=
@@ -135,14 +135,16 @@ ProductName=BDtheque
 ProductVersion=1
 Comments=
 [HistoryLists\hlConditionals]
-Count=7
-Item0=Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
-Item1=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;NotRelease
-Item2=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;-Release
-Item3=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;Release
-Item4=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
-Item5=NOFORMS
-Item6=NOFORMSA
+Count=9
+Item0=_DEBUG;Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Item1=DEBUG;_Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Item2=Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Item3=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;NotRelease
+Item4=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;-Release
+Item5=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;Release
+Item6=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Item7=NOFORMS
+Item8=NOFORMSA
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
