@@ -1,4 +1,4 @@
--=-=-=-=-=-    1.2.0.8 - ??/??/????   -=-=-=-=-=-
+-=-=-=-=-=-    1.2.0.16 - 11/06/2006   -=-=-=-=-=-
 
 * Nouveautés *
       - La série n'est plus obligatoire pour créer un album (une option permet
