@@ -472,7 +472,7 @@ begin
   FAlbum.Fill(Value);
 
   Caption := 'Fiche d''album - ' + FAlbum.ChaineAffichage;
-  TitreSerie.Caption := FAlbum.Serie.Titre;
+  TitreSerie.Caption := FormatTitre(FAlbum.Serie.Titre);
   if FAlbum.Serie.SiteWeb <> '' then begin
     TitreSerie.Font.Color := clBlue;
     TitreSerie.Font.Style := TitreSerie.Font.Style + [fsUnderline];

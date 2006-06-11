@@ -1337,7 +1337,7 @@ begin
     Params.AsString[0] := GUIDToString(Reference);
     Open;
     RecInconnu := Eof;
-    Self.Titre := FormatTitre(Fields.ByNameAsString['TITRESERIE']);
+    Self.Titre := Fields.ByNameAsString['TITRESERIE'];
     if Fields.ByNameIsNull['TERMINEE'] then
       Self.Terminee := -1
     else

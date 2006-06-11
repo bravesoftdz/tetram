@@ -362,12 +362,16 @@ begin
           end;
         vmEmprunteurs,
           vmPersonnes,
-          vmSeries,
           vmGenres,
           vmEditeurs,
-          vmCollections,
-          vmParaBDSerie: begin
-            Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(FMode <> vmParaBDSerie);
+          vmCollections: begin
+            Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(True);
+          end;
+        vmSeries: begin
+            Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(False);
+          end;
+        vmParaBDSerie: begin
+            Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(False);
           end;
       end;
     end

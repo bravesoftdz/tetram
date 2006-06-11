@@ -77,7 +77,7 @@ begin
   FSerie.Fill(Value);
 
   Caption := 'Fiche de série - ' + FSerie.ChaineAffichage;
-  TitreSerie.Caption := FSerie.Titre;
+  TitreSerie.Caption := FormatTitre(FSerie.Titre);
   if FSerie.SiteWeb <> '' then begin
     TitreSerie.Font.Color := clBlue;
     TitreSerie.Font.Style := TitreSerie.Font.Style + [fsUnderline];

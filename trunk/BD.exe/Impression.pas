@@ -1497,7 +1497,7 @@ begin
       Prn.SetFooterDimensions1(Prn.Margin.Left, Prn.Margin.Right, Prn.Margin.Bottom, 10, False, 0, clWhite);
       Prn.SetHeaderInformation1(0, 5, FormatTitre(Album.Titre), taCenter, 'Times New Roman', 24, [fsBold]);
       s := '';
-      AjoutString(s, Album.Serie.Titre, ' - ');
+      AjoutString(s, FormatTitre(Album.Serie.Titre), ' - ');
       if Album.Integrale then
         AjoutString(s, 'INT.' + NonZero(IntToStr(Album.Tome)), ' - ')
       else if Album.HorsSerie then
@@ -1566,7 +1566,7 @@ begin
       Prn.SetFooterDimensions1(Prn.Margin.Left, Prn.Margin.Right, Prn.Margin.Bottom, 10, False, 0, clWhite);
       Prn.SetHeaderInformation1(0, 5, FormatTitre(ParaBD.Titre), taCenter, 'Times New Roman', 24, [fsBold]);
       s := '';
-      AjoutString(s, ParaBD.Serie.Titre, ' - ');
+      AjoutString(s, FormatTitre(ParaBD.Serie.Titre), ' - ');
       AjoutString(s, ParaBD.sCategorieParaBD, ' - ');
       Prn.SetHeaderInformation1(1, -1, s, taCenter, 'Times New Roman', 16, [fsBold]);
       Prn.SetFooterInformation1(0, 0, CopyrightTetramCorp, taRightJustify, 'Times New Roman', 9, []);
