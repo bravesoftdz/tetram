@@ -19,11 +19,11 @@ namespace BD.Common.Records
 
 	public class Auteur : BaseRecord
 	{
-		[SQLDataField] [IsReference] public int RefAuteur;
-		[SQLDataClass] public Personnage Personne = new Personnage();
-		[SQLDataField] public int RefAlbum;
-		[SQLDataField("RefSerie")] public int RefSérie;
-		[SQLDataField] public int Metier;
+        [SQLDataField][IsReference] public int RefAuteur;
+        [SQLDataClass] public Personnage Personne = new Personnage();
+        [SQLDataField] public int RefAlbum;
+        [SQLDataField("RefSerie")] public int RefSérie;
+        [SQLDataField] public int Metier;
 
 		public override string ToString()
 		{
