@@ -1,4 +1,4 @@
-program BD;
+ program BD;
 
 {$R 'webserver.res' 'webserver.rc'}
 {$R 'ressources.res' 'ressources.rc'}
@@ -111,7 +111,8 @@ uses
   UMAJ1_1_0_0 in 'UMAJ1_1_0_0.pas',
   UMAJ1_2_0_0 in 'UMAJ1_2_0_0.pas',
   UMAJ1_2_0_8 in 'UMAJ1_2_0_8.pas',
-  ListOfTypeRec in 'ListOfTypeRec.pas';
+  ListOfTypeRec in 'ListOfTypeRec.pas',
+  UMAJ1_2_0_17 in 'UMAJ1_2_0_17.pas';
 
 {$R *.RES}
 {$R curseurs.res}

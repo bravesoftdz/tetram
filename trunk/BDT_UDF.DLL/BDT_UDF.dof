@@ -113,9 +113,9 @@ RootDir=G:\Programmation\MEDIA.KIT\BDthèque 1.0\Sources VDO_UDF.DLL\
 IncludeVerInfo=1
 AutoIncBuild=1
 MajorVer=1
-MinorVer=0
+MinorVer=1
 Release=0
-Build=4
+Build=1
 Debug=0
 PreRelease=0
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=
 FileDescription=
-FileVersion=1.0.0.4
+FileVersion=1.1.0.1
 InternalName=
 LegalCopyright=
 LegalTrademarks=
@@ -135,10 +135,16 @@ ProductName=
 ProductVersion=1.0.0.0
 Comments=
 [HistoryLists\hlConditionals]
-Count=3
-Item0=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
-Item1=NOFORMS
-Item2=NOFORMSA
+Count=9
+Item0=_DEBUG;Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Item1=DEBUG;_Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Item2=Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Item3=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;NotRelease
+Item4=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;-Release
+Item5=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;Release
+Item6=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Item7=NOFORMS
+Item8=NOFORMSA
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
@@ -151,7 +157,8 @@ Item2=..\..\..\Compos Perso\PrintObject;..\..\..\Compos Perso\VDTButton;..\..\..
 Count=1
 Item0=dcu
 [HistoryLists\hlOutputDirectorry]
-Count=3
-Item0=..\..\bin
-Item1=..\
-Item2=C:\Documents and Settings\Thierry\Bureau\BDthèque
+Count=4
+Item0=..\..\bin\UDF\
+Item1=..\..\bin
+Item2=..\
+Item3=C:\Documents and Settings\Thierry\Bureau\BDthèque

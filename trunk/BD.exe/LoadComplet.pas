@@ -620,29 +620,24 @@ begin
     Transaction := UseTransaction;
 
     if RecInconnu then begin
-      SQL.Text := 'INSERT INTO ALBUMS (ID_Album, TITREALBUM, MOISPARUTION, ANNEEPARUTION, ID_Serie, TOME, TOMEDEBUT, TOMEFIN, HORSSERIE, INTEGRALE, SUJETALBUM, REMARQUESALBUM, TITREINITIALESALBUM, UPPERSUJETALBUM, UPPERREMARQUESALBUM)';
+      SQL.Text := 'INSERT INTO ALBUMS (ID_Album, TITREALBUM, MOISPARUTION, ANNEEPARUTION, ID_Serie, TOME, TOMEDEBUT, TOMEFIN, HORSSERIE, INTEGRALE, SUJETALBUM, REMARQUESALBUM)';
       SQL.Add('VALUES');
-      SQL.Add('(:ID_Album, :TITREALBUM, :MOISPARUTION, :ANNEEPARUTION, :ID_Serie, :TOME, :TOMEDEBUT, :TOMEFIN, :HORSSERIE, :INTEGRALE, :SUJETALBUM, :REMARQUESALBUM, :TITREINITIALESALBUM, :UPPERSUJETALBUM, :UPPERREMARQUESALBUM)');
+      SQL.Add('(:ID_Album, :TITREALBUM, :MOISPARUTION, :ANNEEPARUTION, :ID_Serie, :TOME, :TOMEDEBUT, :TOMEFIN, :HORSSERIE, :INTEGRALE, :SUJETALBUM, :REMARQUESALBUM)');
     end
     else begin
       SQL.Text := 'UPDATE ALBUMS SET';
       SQL.Add('TITREALBUM = :TITREALBUM, MOISPARUTION = :MOISPARUTION, ANNEEPARUTION = :ANNEEPARUTION, ID_Serie = :ID_Serie, TOME = :TOME, TOMEDEBUT = :TOMEDEBUT, TOMEFIN = :TOMEFIN,');
       SQL.Add('HORSSERIE = :HORSSERIE, INTEGRALE = :INTEGRALE,');
-      SQL.Add('SUJETALBUM = :SUJETALBUM, REMARQUESALBUM = :REMARQUESALBUM, TITREINITIALESALBUM = :TITREINITIALESALBUM,');
-      SQL.Add('UPPERSUJETALBUM = :UPPERSUJETALBUM, UPPERREMARQUESALBUM = :UPPERREMARQUESALBUM');
+      SQL.Add('SUJETALBUM = :SUJETALBUM, REMARQUESALBUM = :REMARQUESALBUM,');
       SQL.Add('WHERE (ID_Album = :ID_Album)');
     end;
 
     Params.ByNameAsString['ID_ALBUM'] := GUIDToString(ID_Album);
     s := Trim(Titre);
-    if s = '' then begin
-      Params.ByNameIsNull['TITREALBUM'] := True;
-      Params.ByNameIsNull['TITREINITIALESALBUM'] := True;
-    end
-    else begin
+    if s = '' then 
+      Params.ByNameIsNull['TITREALBUM'] := True
+    else
       Params.ByNameAsString['TITREALBUM'] := s;
-      Params.ByNameAsString['TITREINITIALESALBUM'] := MakeInitiales(UpperCase(SansAccents(s)));
-    end;
     if AnneeParution = 0 then begin
       Params.ByNameIsNull['ANNEEPARUTION'] := True;
       Params.ByNameIsNull['MOISPARUTION'] := True;
@@ -669,25 +664,15 @@ begin
     Params.ByNameAsBoolean['INTEGRALE'] := Integrale;
     Params.ByNameAsBoolean['HORSSERIE'] := HorsSerie;
     s := Sujet.Text;
-    if s <> '' then begin
-      ParamsSetBlob('SUJETALBUM', s);
-      s := UpperCase(SansAccents(s));
-      ParamsSetBlob('UPPERSUJETALBUM', s);
-    end
-    else begin
+    if s <> '' then
+      ParamsSetBlob('SUJETALBUM', s)
+    else
       Params.ByNameIsNull['SUJETALBUM'] := True;
-      Params.ByNameIsNull['UPPERSUJETALBUM'] := True;
-    end;
     s := Notes.Text;
-    if s <> '' then begin
-      ParamsSetBlob('REMARQUESALBUM', s);
-      s := UpperCase(SansAccents(s));
-      ParamsSetBlob('UPPERREMARQUESALBUM', s);
-    end
-    else begin
+    if s <> '' then
+      ParamsSetBlob('REMARQUESALBUM', s)
+    else
       Params.ByNameIsNull['REMARQUESALBUM'] := True;
-      Params.ByNameIsNull['UPPERREMARQUESALBUM'] := True;
-    end;
     if Serie.RecInconnu or IsEqualGUID(Id_Serie, GUID_NULL) then
       Params.ByNameIsNull['ID_SERIE'] := True
     else
@@ -1480,25 +1465,15 @@ begin
         Params.ByNameAsString['ID_Collection'] := GUIDToString(Self.ID_Collection);
     end;
     s := Self.Sujet.Text;
-    if s <> '' then begin
-      ParamsSetBlob('SUJETserie', s);
-      s := UpperCase(SansAccents(s));
-      ParamsSetBlob('UPPERSUJETserie', s);
-    end
-    else begin
+    if s <> '' then
+      ParamsSetBlob('SUJETserie', s)
+    else
       Params.ByNameIsNull['SUJETserie'] := True;
-      Params.ByNameIsNull['UPPERSUJETserie'] := True;
-    end;
     s := Self.Notes.Text;
-    if s <> '' then begin
-      ParamsSetBlob('REMARQUESserie', s);
-      s := UpperCase(SansAccents(s));
-      ParamsSetBlob('UPPERREMARQUESserie', s);
-    end
-    else begin
+    if s <> '' then
+      ParamsSetBlob('REMARQUESserie', s)
+    else
       Params.ByNameIsNull['REMARQUESserie'] := True;
-      Params.ByNameIsNull['UPPERREMARQUESserie'] := True;
-    end;
 
     Params.ByNameAsString['ID_Serie'] := GUIDToString(Self.ID_Serie);
     ExecSQL;
@@ -2490,29 +2465,25 @@ begin
     Transaction := UseTransaction;
 
     if RecInconnu then begin
-      SQL.Text := 'INSERT INTO PARABD (ID_ParaBD, TITREPARABD, ANNEE, ID_Serie, CATEGORIEPARABD, DEDICACE, NUMEROTE, ANNEECOTE, PRIXCOTE, GRATUIT, OFFERT, DATEACHAT, PRIX, STOCK, TITREINITIALESPARABD, DESCRIPTION, UPPERDESCRIPTION, COMPLET)';
+      SQL.Text := 'INSERT INTO PARABD (ID_ParaBD, TITREPARABD, ANNEE, ID_Serie, CATEGORIEPARABD, DEDICACE, NUMEROTE, ANNEECOTE, PRIXCOTE, GRATUIT, OFFERT, DATEACHAT, PRIX, STOCK, DESCRIPTION, UPPERDESCRIPTION, COMPLET)';
       SQL.Add('VALUES');
-      SQL.Add('(:ID_ParaBD, :TITREPARABD, :ANNEE, :ID_Serie, :CATEGORIEPARABD, :DEDICACE, :NUMEROTE, :ANNEECOTE, :PRIXCOTE, :GRATUIT, :OFFERT, :DATEACHAT, :PRIX, :STOCK, :TITREINITIALESPARABD, :DESCRIPTION, :UPPERDESCRIPTION, 1)');
+      SQL.Add('(:ID_ParaBD, :TITREPARABD, :ANNEE, :ID_Serie, :CATEGORIEPARABD, :DEDICACE, :NUMEROTE, :ANNEECOTE, :PRIXCOTE, :GRATUIT, :OFFERT, :DATEACHAT, :PRIX, :STOCK, :DESCRIPTION, :UPPERDESCRIPTION, 1)');
     end
     else begin
       SQL.Text := 'UPDATE PARABD SET';
       SQL.Add('TITREPARABD = :TITREPARABD, ANNEE = :ANNEE, ID_Serie = :ID_Serie, CATEGORIEPARABD = :CATEGORIEPARABD, DEDICACE = :DEDICACE, NUMEROTE = :NUMEROTE, ANNEECOTE = :ANNEECOTE,');
       SQL.Add('PRIXCOTE = :PRIXCOTE, GRATUIT = :GRATUIT, OFFERT = :OFFERT, DATEACHAT = :DATEACHAT, PRIX = :PRIX, STOCK = :STOCK, COMPLET = 1,');
-      SQL.Add('DESCRIPTION = :DESCRIPTION, TITREINITIALESPARABD = :TITREINITIALESPARABD,');
+      SQL.Add('DESCRIPTION = :DESCRIPTION,');
       SQL.Add('UPPERDESCRIPTION = :UPPERDESCRIPTION');
       SQL.Add('WHERE (ID_ParaBD = :ID_ParaBD)');
     end;
 
     Params.ByNameAsString['ID_ParaBD'] := GUIDToString(ID_ParaBD);
     s := Trim(Titre);
-    if s = '' then begin
-      Params.ByNameIsNull['TITREPARABD'] := True;
-      Params.ByNameIsNull['TITREINITIALESPARABD'] := True;
-    end
-    else begin
+    if s = '' then
+      Params.ByNameIsNull['TITREPARABD'] := True
+    else
       Params.ByNameAsString['TITREPARABD'] := s;
-      Params.ByNameAsString['TITREINITIALESPARABD'] := MakeInitiales(UpperCase(SansAccents(s)));
-    end;
     if AnneeEdition = 0 then
       Params.ByNameIsNull['ANNEE'] := True
     else
@@ -2521,15 +2492,10 @@ begin
     Params.ByNameAsBoolean['DEDICACE'] := Dedicace;
     Params.ByNameAsBoolean['NUMEROTE'] := Numerote;
     s := description.Text;
-    if s <> '' then begin
-      ParamsSetBlob('DESCRIPTION', s);
-      s := UpperCase(SansAccents(s));
-      ParamsSetBlob('UPPERDESCRIPTION', s);
-    end
-    else begin
+    if s <> '' then 
+      ParamsSetBlob('DESCRIPTION', s)
+    else
       Params.ByNameIsNull['DESCRIPTION'] := True;
-      Params.ByNameIsNull['UPPERDESCRIPTION'] := True;
-    end;
     Params.ByNameAsBoolean['GRATUIT'] := Gratuit;
     Params.ByNameAsBoolean['OFFERT'] := Offert;
 

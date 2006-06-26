@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, LoadComplet, VirtualTrees, VirtualTree, ToolWin,
-  Procedures, StdCtrls, ExtCtrls, Menus, ActnList;
+  Procedures, StdCtrls, ExtCtrls, Menus, ActnList, Buttons, VDTButton,
+  DBEditLabeled;
 
 type
   TfrmPrevisionsSorties = class(TForm, IImpressionApercu)
@@ -18,6 +19,8 @@ type
     Liste1: TMenuItem;
     Aperuavantimpression1: TMenuItem;
     Imprimer1: TMenuItem;
+    edSearch: TEditLabeled;
+    btNext: TVDTButton;
     procedure vstPrevisionsSortiesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -27,19 +30,22 @@ type
     procedure vstPrevisionsSortiesResize(Sender: TObject);
     procedure CheckBox1Click(Sender: TObject);
     procedure vstPrevisionsSortiesFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+    procedure edSearchChange(Sender: TObject);
+    procedure edSearchKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     procedure ImpressionExecute(Sender: TObject);
     procedure ApercuExecute(Sender: TObject);
     function ImpressionUpdate: Boolean;
     function ApercuUpdate: Boolean;
     procedure LoadListe;
+    procedure OnCompareNodeString(Sender: TBaseVirtualTree; Node: PVirtualNode; const Text: WideString; var Concorde: Boolean);
   public
     Liste: TPrevisionsSorties;
   end;
 
 implementation
 
-uses Impression, DateUtils, IniFiles, CommonConst;
+uses Impression, DateUtils, IniFiles, CommonConst, Divers, TypeRec, Commun;
 
 {$R *.dfm}
 
@@ -47,6 +53,7 @@ type
   RNodeInfo = record
     Annee: Integer;
     Serie, PrevisionSortie: string;
+    PSerie: TSerie;
   end;
 
 procedure TfrmPrevisionsSorties.FormDestroy(Sender: TObject);
@@ -59,6 +66,7 @@ procedure TfrmPrevisionsSorties.FormCreate(Sender: TObject);
 begin
   ChargeImage(vstPrevisionsSorties.Background, 'FONDVT');
   vstPrevisionsSorties.NodeDataSize := SizeOf(RNodeInfo);
+  vstPrevisionsSorties.OnCompareNodeString := OnCompareNodeString;
 
   CheckBox1.OnClick := nil;
   with TIniFile.Create(FichierIni) do try
@@ -92,6 +100,7 @@ begin
         PS := TPrevisionSortie(Liste.AnneesProchaines[Node.Index - Cardinal(Liste.AnneesPassees.Count + Liste.AnneeEnCours.Count) - 2]);
 
       with PS do begin
+        NodeInfo.PSerie := Serie;
         NodeInfo.Serie := Serie.ChaineAffichage(False);
         NodeInfo.Annee := Annee;
         NodeInfo.PrevisionSortie := Format('Tome %d - %s', [Tome, sAnnee]);
@@ -233,6 +242,25 @@ var
 begin
   NodeInfo := Sender.GetNodeData(Node);
   Finalize(NodeInfo^);
+end;
+
+procedure TfrmPrevisionsSorties.edSearchChange(Sender: TObject);
+begin
+  vstPrevisionsSorties.Find(UpperCase(SansAccents(edSearch.Text)), Sender = btNext);
+end;
+
+procedure TfrmPrevisionsSorties.edSearchKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if Key = VK_F3 then vstPrevisionsSorties.Find(UpperCase(SansAccents(edSearch.Text)), True);
+end;
+
+procedure TfrmPrevisionsSorties.OnCompareNodeString(Sender: TBaseVirtualTree; Node: PVirtualNode; const Text: WideString; var Concorde: Boolean);
+var
+  NodeInfo: ^RNodeInfo;
+begin
+  NodeInfo := Sender.GetNodeData(Node);
+  if Assigned(NodeInfo) and Assigned(NodeInfo.PSerie) then
+    Concorde := Pos(Text, UpperCase(SansAccents(FormatTitre(NodeInfo.PSerie.TitreSerie)))) > 0;
 end;
 
 end.

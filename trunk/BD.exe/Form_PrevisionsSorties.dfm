@@ -1,8 +1,8 @@
 object frmPrevisionsSorties: TfrmPrevisionsSorties
   Left = 379
-  Top = 580
+  Top = 471
   Width = 822
-  Height = 275
+  Height = 384
   Caption = 'Previsions de sorties'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -18,9 +18,9 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
   TextHeight = 13
   object vstPrevisionsSorties: TVirtualStringTree
     Left = 0
-    Top = 25
+    Top = 26
     Width = 814
-    Height = 198
+    Height = 306
     Align = alClient
     AnimationDuration = 0
     BevelKind = bkTile
@@ -60,19 +60,42 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
     Left = 0
     Top = 0
     Width = 814
-    Height = 25
+    Height = 26
     Align = alTop
     BevelOuter = bvNone
     Caption = ' '
     TabOrder = 1
-    object CheckBox1: TCheckBox
-      Left = 8
+    object btNext: TVDTButton
+      Left = 251
       Top = 4
+      Width = 20
+      Height = 20
+      Cursor = crHandPoint
+      Caption = '...'
+      Flat = True
+      OnClick = edSearchChange
+    end
+    object CheckBox1: TCheckBox
+      Left = 288
+      Top = 5
       Width = 193
       Height = 17
       Caption = 'Tenir compte des pr'#233'visions d'#39'achat'
       TabOrder = 0
       OnClick = CheckBox1Click
+    end
+    object edSearch: TEditLabeled
+      Left = 1
+      Top = 4
+      Width = 251
+      Height = 20
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      TabOrder = 1
+      OnChange = edSearchChange
+      OnKeyUp = edSearchKeyUp
+      LinkControls = <>
+      CurrencyChar = #0
     end
   end
   object ActionList1: TActionList

@@ -37,6 +37,8 @@ type
     vmAlbumsSerie,
     vmParaBDSerie);
 
+  TOnCompareNodeString = procedure(Sender: TBaseVirtualTree; Node: PVirtualNode; const Text: WideString; var Concorde: Boolean) of object;
+
   TVirtualStringTree = class(VirtualTrees.TVirtualStringTree)
   private
     FLinkControls: TControlList;
@@ -55,6 +57,7 @@ type
     FFindArray: array of TGUID;
     FLastFindText: string;
     FShowDateParutionAlbum: Boolean;
+    FOnCompareNodeString: TOnCompareNodeString;
 
     procedure SetMode(const Value: TVirtualMode);
     function GetCurrentValue: TGUID;
@@ -82,6 +85,7 @@ type
     procedure DoEnter; override;
     procedure DoExit; override;
     procedure DoScroll(DeltaX, DeltaY: Integer); override;
+    function DoCompareNodeString(Node: PVirtualNode; const Text: WideString): Boolean; virtual;
   published
     property LinkControls: TControlList read FLinkControls write SetLinkControls;
     property Mode: TVirtualMode read FMode write SetMode;
@@ -93,6 +97,7 @@ type
     property SynchroBackground: Boolean read FSynchroBackground write FSynchroBackground default False;
     property ShowAchat: Boolean read FShowAchat write SetShowAchat default True;
     property ShowDateParutionAlbum: Boolean read FShowDateParutionAlbum write SetShowDateParutionAlbum default False;
+    property OnCompareNodeString: TOnCompareNodeString read FOnCompareNodeString write FOnCompareNodeString;
     function GetNodeBasePointer(Node: PVirtualNode): Pointer;
     function GetFocusedNodeData: Pointer;
     procedure InitializeRep(KeepValue: Boolean = True);
@@ -535,11 +540,35 @@ procedure TVirtualStringTree.Find(const Text: string; GetNext: Boolean = False);
 
 var
   iCurrent, iFind: TGUID;
+  nCurrent, nFind: PVirtualNode;
   i: Integer;
 begin
-  if (Length(FFindArray) = 0) or (Text <> FLastFindText) then GetNext := False;
+  if (Text <> FLastFindText) then GetNext := False;
   FLastFindText := Text;
-  if FMode <> vmNone then begin
+  if FMode = vmNone then begin
+    nCurrent := nil;
+    if GetNext then nCurrent := GetFirstSelected;
+    if nCurrent = nil then nCurrent := GetFirst;
+    nFind := nil;
+    while nFind <> nCurrent do begin
+      if nFind = nil then
+        if GetNext then
+          nFind := Self.GetNext(nCurrent)
+        else
+          nFind := nCurrent;
+      if DoCompareNodeString(nFind, Text) then Break;
+      nFind := Self.GetNext(nFind);
+      if nFind = nil then nFind := GetFirst;
+    end;
+    ClearSelection;
+    if Assigned(nFind) then
+      FocusedNode := nFind
+    else
+      FocusedNode := nil;
+    Selected[nFind] := True;
+  end
+  else begin
+    if (Length(FFindArray) = 0) then GetNext := False;
     if Text = '' then begin
       CurrentValue := GUID_NULL;
       SetLength(FFindArray, 0);
@@ -811,6 +840,16 @@ destructor TVirtualStringTree.Destroy;
 begin
   FLinkControls.Free;
   inherited;
+end;
+
+function TVirtualStringTree.DoCompareNodeString(Node: PVirtualNode; const Text: WideString): Boolean;
+begin
+  if Assigned(FOnCompareNodeString) then begin
+    Result := False;
+    FOnCompareNodeString(Self, Node, Text, Result);
+  end
+  else
+    Result := True;
 end;
 
 end.

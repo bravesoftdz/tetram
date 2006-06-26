@@ -7,7 +7,7 @@ uses
   //  IBHeader,
   IBExternals,
   Divers in '..\..\..\Common\Divers.pas',
-  ib_util in 'D:\Programmation\Firebird\Firebird_1_5\include\ib_util.pas';
+  ib_util in 'D:\Program Files\Firebird\Firebird_1_5\include\ib_util.pas';
 
 {$R *.res}
 
@@ -42,6 +42,24 @@ begin
   s := UpperCase(SansAccents(Chaine)) + #0;
   Result := ib_util_malloc(Length(Chaine) + 1);
   StrCopy(Result, PChar(s));
+end;
+
+procedure UpperBlob(BlobIn, BlobOut: PBlob); cdecl; export;
+var
+  buffer: array of Char;
+  LongueurLue, i: Integer;
+begin
+  try
+    if Assigned(BlobIn.BlobHandle) and (BlobIn.SegmentCount > 0) then begin
+      SetLength(buffer, BlobIn.MaxSegmentLength);
+      while LongBool(BlobIn.GetSegment(BlobIn.BlobHandle, @buffer[0], BlobIn.MaxSegmentLength, LongueurLue)) do begin
+        for i := 0 to LongueurLue - 1 do
+          buffer[i] := UpperCase(SansAccents(buffer[i]))[1];
+        BlobOut.PutSegment(BlobOut.BlobHandle, @buffer[0], LongueurLue);
+      end;
+    end;
+  except
+  end; // pour être sûr de ne pas faire planter le serveur !!!!
 end;
 
 function SubString(Chaine: PChar; var Position, Longueur: Integer): PChar; cdecl; export;
@@ -218,7 +236,7 @@ begin
 end;
 
 exports
-  Soundex, Upper, SubString,
+  Soundex, Upper, UpperBlob, SubString,
   SaveBlobToFile, LoadBlobFromFile,
   DeleteFile,
   FindFileFirst, FindFileNext,
