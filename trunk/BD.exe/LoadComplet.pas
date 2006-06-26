@@ -628,7 +628,7 @@ begin
       SQL.Text := 'UPDATE ALBUMS SET';
       SQL.Add('TITREALBUM = :TITREALBUM, MOISPARUTION = :MOISPARUTION, ANNEEPARUTION = :ANNEEPARUTION, ID_Serie = :ID_Serie, TOME = :TOME, TOMEDEBUT = :TOMEDEBUT, TOMEFIN = :TOMEFIN,');
       SQL.Add('HORSSERIE = :HORSSERIE, INTEGRALE = :INTEGRALE,');
-      SQL.Add('SUJETALBUM = :SUJETALBUM, REMARQUESALBUM = :REMARQUESALBUM,');
+      SQL.Add('SUJETALBUM = :SUJETALBUM, REMARQUESALBUM = :REMARQUESALBUM');
       SQL.Add('WHERE (ID_Album = :ID_Album)');
     end;
 
@@ -1437,14 +1437,14 @@ begin
   with TJvUIBQuery.Create(nil) do try
     Transaction := UseTransaction;
     if RecInconnu then begin
-      SQL.Text := 'INSERT INTO SERIES (ID_Serie, TitreSerie, Terminee, Complete, SITEWEB, ID_Editeur, ID_Collection, SUJETserie, REMARQUESserie, UPPERSUJETserie, UPPERREMARQUESserie)';
+      SQL.Text := 'INSERT INTO SERIES (ID_Serie, TitreSerie, Terminee, Complete, SITEWEB, ID_Editeur, ID_Collection, SUJETserie, REMARQUESserie)';
       SQL.Add('VALUES');
-      SQL.Add('(:ID_Serie, :TitreSerie, :Terminee, :Complete, :SITEWEB, :ID_Editeur, :ID_Collection, :SUJETserie, :REMARQUESserie, :UPPERSUJETserie, :UPPERREMARQUESserie)');
+      SQL.Add('(:ID_Serie, :TitreSerie, :Terminee, :Complete, :SITEWEB, :ID_Editeur, :ID_Collection, :SUJETserie, :REMARQUESserie)');
     end
     else begin
       SQL.Text := 'UPDATE SERIES SET TitreSerie = :TitreSerie, Terminee = :Terminee, Complete = :Complete, SITEWEB = :SITEWEB, ID_Editeur = :ID_Editeur, ID_Collection = :ID_Collection,';
-      SQL.Add('SUJETserie = :SUJETserie, REMARQUESserie = :REMARQUESserie, UPPERSUJETserie = :UPPERSUJETserie,');
-      SQL.Add('UPPERREMARQUESserie = :UPPERREMARQUESserie WHERE ID_Serie = :ID_Serie');
+      SQL.Add('SUJETserie = :SUJETserie, REMARQUESserie = :REMARQUESserie');
+      SQL.Add('WHERE ID_Serie = :ID_Serie');
     end;
     Params.ByNameAsString['TitreSerie'] := Trim(Self.Titre);
     if TCheckBoxState(Self.Terminee) = cbGrayed then
@@ -2465,16 +2465,15 @@ begin
     Transaction := UseTransaction;
 
     if RecInconnu then begin
-      SQL.Text := 'INSERT INTO PARABD (ID_ParaBD, TITREPARABD, ANNEE, ID_Serie, CATEGORIEPARABD, DEDICACE, NUMEROTE, ANNEECOTE, PRIXCOTE, GRATUIT, OFFERT, DATEACHAT, PRIX, STOCK, DESCRIPTION, UPPERDESCRIPTION, COMPLET)';
+      SQL.Text := 'INSERT INTO PARABD (ID_ParaBD, TITREPARABD, ANNEE, ID_Serie, CATEGORIEPARABD, DEDICACE, NUMEROTE, ANNEECOTE, PRIXCOTE, GRATUIT, OFFERT, DATEACHAT, PRIX, STOCK, DESCRIPTION, COMPLET)';
       SQL.Add('VALUES');
-      SQL.Add('(:ID_ParaBD, :TITREPARABD, :ANNEE, :ID_Serie, :CATEGORIEPARABD, :DEDICACE, :NUMEROTE, :ANNEECOTE, :PRIXCOTE, :GRATUIT, :OFFERT, :DATEACHAT, :PRIX, :STOCK, :DESCRIPTION, :UPPERDESCRIPTION, 1)');
+      SQL.Add('(:ID_ParaBD, :TITREPARABD, :ANNEE, :ID_Serie, :CATEGORIEPARABD, :DEDICACE, :NUMEROTE, :ANNEECOTE, :PRIXCOTE, :GRATUIT, :OFFERT, :DATEACHAT, :PRIX, :STOCK, :DESCRIPTION, 1)');
     end
     else begin
       SQL.Text := 'UPDATE PARABD SET';
       SQL.Add('TITREPARABD = :TITREPARABD, ANNEE = :ANNEE, ID_Serie = :ID_Serie, CATEGORIEPARABD = :CATEGORIEPARABD, DEDICACE = :DEDICACE, NUMEROTE = :NUMEROTE, ANNEECOTE = :ANNEECOTE,');
       SQL.Add('PRIXCOTE = :PRIXCOTE, GRATUIT = :GRATUIT, OFFERT = :OFFERT, DATEACHAT = :DATEACHAT, PRIX = :PRIX, STOCK = :STOCK, COMPLET = 1,');
-      SQL.Add('DESCRIPTION = :DESCRIPTION,');
-      SQL.Add('UPPERDESCRIPTION = :UPPERDESCRIPTION');
+      SQL.Add('DESCRIPTION = :DESCRIPTION');
       SQL.Add('WHERE (ID_ParaBD = :ID_ParaBD)');
     end;
 

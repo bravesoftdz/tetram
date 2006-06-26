@@ -158,7 +158,7 @@ Count=1
 Item0=dcu
 [HistoryLists\hlOutputDirectorry]
 Count=4
-Item0=..\..\bin\UDF\
-Item1=..\..\bin
+Item0=..\..\bin
+Item1=..\..\bin\UDF\
 Item2=..\
 Item3=C:\Documents and Settings\Thierry\Bureau\BDthèque
