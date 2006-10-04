@@ -62,8 +62,6 @@ type
     ActiveWebServer: TAction;
     AfficheSeriesIncompletes: TAction;
     AffichePrevisionsSorties: TAction;
-    actExporter: TAction;
-    actImporter: TAction;
     AllerVersWebServer: TAction;
     ToolBar1: TToolBar;
     ToolButton1: TToolButton;
@@ -87,9 +85,6 @@ type
     N1: TMenuItem;
     Etats1: TMenuItem;
     N2: TMenuItem;
-    Importer1: TMenuItem;
-    Exporter1: TMenuItem;
-    N3: TMenuItem;
     Actualiserlerpertoire1: TMenuItem;
     Relirelesoptions1: TMenuItem;
     Quitter1: TMenuItem;
@@ -181,7 +176,6 @@ type
     procedure ModeEntretienExecute(Sender: TObject);
     procedure AfficheSeriesIncompletesExecute(Sender: TObject);
     procedure AffichePrevisionsSortiesExecute(Sender: TObject);
-    procedure actExporterExecute(Sender: TObject);
     procedure AllerVersWebServerExecute(Sender: TObject);
     procedure MeasureMenuItem(Sender: TObject; ACanvas: TCanvas; var Width, Height: Integer);
     procedure NouvelAchatExecute(Sender: TObject);
@@ -215,8 +209,7 @@ implementation
 uses
   MAJ, Form_Repertoire, CommonConst, Commun, Form_options, Form_StatsGeneral,
   Form_StatsEmprunteurs, Form_StatsAlbums, Textes, LoadComplet, Impression, Editions, Form_Gestion, Form_Customize,
-  Form_AboutBox, DM_Princ, TypeRec, Types, Procedures, UHistorique, Form_Entretien,
-  Form_Exportation, ShellAPI, MAth;
+  Form_AboutBox, DM_Princ, TypeRec, Types, Procedures, UHistorique, Form_Entretien, ShellAPI, MAth;
 
 procedure TFond.WMSyscommand(var msg: TWmSysCommand);
 begin
@@ -810,11 +803,6 @@ end;
 procedure TFond.AffichePrevisionsSortiesExecute(Sender: TObject);
 begin
   Historique.AddWaiting(fcPrevisionsSorties);
-end;
-
-procedure TFond.actExporterExecute(Sender: TObject);
-begin
-  SetModalChildForm(TFrmExportation.Create(Self));
 end;
 
 procedure TFond.AllerVersWebServerExecute(Sender: TObject);

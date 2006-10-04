@@ -267,12 +267,11 @@ end;
 
 function TFrmPreview.ShowPage;
 var
-  Dest, Source: TBitmap;
+  Source: TGraphic;
   Rapport: Double;
 begin
   try
-    Source := TBitmap(Pages[Page - 1]);
-    Dest := Image.Picture.Bitmap;
+    Source := TGraphic(Pages[Page - 1]);
     case Zoom.ItemIndex + 1 of
       1: begin
           Rapport := Source.Width / Source.Height;
@@ -299,7 +298,9 @@ begin
           Panel1.Visible := ScrollBarV.Visible and ScrollBarH.Visible;
         end;
     end;
-    Dest.Assign(Source);
+    Image.Canvas.Brush.Color := clWhite;
+    Image.Canvas.FillRect(Image.ClientRect);
+    Image.Canvas.StretchDraw(Rect(0, 0, Source.Width, Source.Height), Source);
     OnResize := FormResize;
 
     ScrollBarV.Min := 0;
@@ -324,7 +325,7 @@ begin
     if Image.Left <= 0 then ScrollBarH.Position := -Image.Left;
 
     Result := True;
-//    label3.Caption := Format('W %d H %d', [Source.Width, Source.Height]);
+    //    label3.Caption := Format('W %d H %d', [Source.Width, Source.Height]);
   except
     Result := False;
   end;
@@ -462,3 +463,4 @@ initialization
   Screen.Cursors[CurHand] := LoadCursor(HInstance, 'HAND');
 
 end.
+

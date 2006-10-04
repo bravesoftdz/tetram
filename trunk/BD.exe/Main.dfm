@@ -3377,19 +3377,6 @@ object Fond: TFond
       Caption = 'Pr'#233'visions de sorties'
       OnExecute = AffichePrevisionsSortiesExecute
     end
-    object actExporter: TAction
-      Category = 'BDth'#232'que'
-      Caption = 'Exporter...'
-      Hint = 'Exporter de donn'#233'es'
-      Visible = False
-      OnExecute = actExporterExecute
-    end
-    object actImporter: TAction
-      Category = 'BDth'#232'que'
-      Caption = 'Importer...'
-      Hint = 'Importer des donn'#233'es'
-      Visible = False
-    end
     object AllerVersWebServer: TAction
       Category = 'WebServer'
       Caption = 'Voir'
@@ -4080,7 +4067,7 @@ object Fond: TFond
     Left = 88
     Top = 168
     Bitmap = {
-      494C010102000400040010001000FFFFFFFFFF00FFFFFFFFFFFFFFFF424D3600
+      494C010102000400040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -4216,7 +4203,8 @@ object Fond: TFond
       FFFFE00700000000FFFFE00700000000FBDFE00700000000F18FE00700000000
       F81FC00300000000FC3F800100000000FC3F000000000000F81F000000000000
       F18F000000000000FBDFF81F00000000FFFFFC3F00000000FFFFFC3F00000000
-      FFFFFC7F00000000FFFFFE7F00000000}
+      FFFFFC7F00000000FFFFFE7F0000000000000000000000000000000000000000
+      000000000000}
   end
   object ActionList1: TActionList
     Images = boutons_16x16_hot
@@ -4360,16 +4348,6 @@ object Fond: TFond
       end
       object N2: TMenuItem
         Caption = '-'
-      end
-      object Importer1: TMenuItem
-        Action = actImporter
-      end
-      object Exporter1: TMenuItem
-        Action = actExporter
-      end
-      object N3: TMenuItem
-        Caption = '-'
-        OnClick = ActualiseRepertoireExecute
       end
       object Actualiserlerpertoire1: TMenuItem
         Action = ActualiseRepertoire

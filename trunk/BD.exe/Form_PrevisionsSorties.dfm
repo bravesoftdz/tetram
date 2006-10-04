@@ -39,6 +39,7 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
     Images = Fond.ImageList1
     TabOrder = 0
     OnAfterItemPaint = vstPrevisionsSortiesAfterItemPaint
+    OnDblClick = vstPrevisionsSortiesDblClick
     OnFreeNode = vstPrevisionsSortiesFreeNode
     OnGetText = vstPrevisionsSortiesGetText
     OnInitNode = vstPrevisionsSortiesInitNode

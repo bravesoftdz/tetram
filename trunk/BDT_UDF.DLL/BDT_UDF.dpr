@@ -1,23 +1,31 @@
 library BDT_UDF;
 
 uses
+  FastMM4 in '..\..\..\..\Common\FastMM464\FastMM4.pas',
+  FastMM4Messages in '..\..\..\..\Common\FastMM464\FastMM4Messages.pas',
   Windows,
   SysUtils,
   Classes,
   //  IBHeader,
   IBExternals,
-  Divers in '..\..\..\Common\Divers.pas',
-  ib_util in 'D:\Program Files\Firebird\Firebird_1_5\include\ib_util.pas';
+  Divers in '..\..\..\..\Common\Divers.pas',
+  ib_util in 'D:\Program Files\Firebird\Firebird_1_5\include\ib_util.pas',
+  Math;
 
 {$R *.res}
 
-function Trim(Chaine: PChar): PChar; cdecl; export;
+function CreateResult(const Chaine: string): PChar;
 var
   s: string;
 begin
-  s := SysUtils.Trim(Chaine) + #0;
+  s := Chaine + #0;
   Result := ib_util_malloc(Length(s));
   StrCopy(Result, PChar(s));
+end;
+
+function Trim(Chaine: PChar): PChar; cdecl; export;
+begin
+  Result := CreateResult(SysUtils.Trim(Chaine));
 end;
 
 function Soundex(Chaine: PChar; var OrigineTitre: Integer): PChar; cdecl; export;
@@ -30,18 +38,12 @@ begin
     else
       s := '';
   end;
-  s := s + #0;
-  Result := ib_util_malloc(Length(s));
-  StrCopy(Result, PChar(s));
+  Result := CreateResult(s);
 end;
 
 function Upper(Chaine: PChar): PChar; cdecl; export;
-var
-  s: string;
 begin
-  s := UpperCase(SansAccents(Chaine)) + #0;
-  Result := ib_util_malloc(Length(Chaine) + 1);
-  StrCopy(Result, PChar(s));
+  Result := CreateResult(UpperCase(SansAccents(Chaine)));
 end;
 
 procedure UpperBlob(BlobIn, BlobOut: PBlob); cdecl; export;
@@ -63,12 +65,193 @@ begin
 end;
 
 function SubString(Chaine: PChar; var Position, Longueur: Integer): PChar; cdecl; export;
-var
-  s: string;
 begin
-  s := Copy(Chaine, Position, Longueur) + #0;
-  Result := ib_util_malloc(Length(Chaine) + 1);
-  StrCopy(Result, PChar(s));
+  Result := CreateResult(Copy(Chaine, Position, Longueur));
+end;
+
+function FormatTitre(const Titre: string): string;
+var
+  i, j: Integer;
+  Dummy: string;
+begin
+  Result := Titre;
+  try
+    i := LastDelimiter('[', Titre);
+    if i > 0 then begin
+      j := PosInText(i, Titre, ']');
+      if j = 0 then Exit;
+      Dummy := Copy(Titre, i + 1, j - i - 1);
+      if Length(Dummy) > 0 then
+        if Dummy[Length(Dummy)] <> '''' then Dummy := Dummy + ' ';
+      Result := Dummy + Copy(Titre, 1, i - 1) + Copy(Titre, j + 1, Length(Titre));
+    end;
+  finally
+    Result := SysUtils.Trim(Result);
+  end;
+end;
+
+function FormatTitle(Titre: PChar): PChar; cdecl; export;
+begin
+  Result := CreateResult(FormatTitre(Titre));
+end;
+
+function CompareChaines1(Chaine1, Chaine2: PChar): Float; cdecl; export;
+
+  function DoCompare(const S1, S2: string): Float;
+  var
+    i, l: Integer;
+    Str1, Str2: string;
+  begin
+    Result := 0;
+    if S1 = S2 then
+      Result := 100
+    else try
+      if Length(S1) > Length(S2) then begin
+        Str1 := S2;
+        Str2 := S1;
+      end
+      else begin
+        Str1 := S1;
+        Str2 := S2;
+      end;
+
+      for l := Length(Str1) downto 1 do
+        for i := 1 to Length(Str2) - l + 1 do
+          if Pos(Copy(Str2, i, l), Str1) > 0 then begin
+            Result := l;
+            Exit;
+          end;
+    finally
+      // on converti en %
+      Result := Result / Length(Str2) * 100;
+    end;
+  end;
+
+  function ChercheMeilleurTaux(const Str1, Str2: string): Float;
+  var
+    S1, S2, F1, F2: string;
+    R: Float;
+  begin
+    F1 := FormatTitre(Str1);
+    F2 := FormatTitre(Str2);
+
+    S1 := OnlyAlphaNum(Str1);
+    S2 := OnlyAlphaNum(Str2);
+    Result := DoCompare(S1, S2);
+    if Result = 100 then Exit;
+
+    if F2 <> Str2 then begin
+      S2 := OnlyAlphaNum(F2);
+      R := DoCompare(S1, S2);
+      if R > Result then Result := R;
+      if Result = 100 then Exit;
+    end;
+
+    if F1 <> Str1 then begin
+      S1 := OnlyAlphaNum(F1);
+      S2 := OnlyAlphaNum(Str2);
+      R := DoCompare(S1, S2);
+      if R > Result then Result := R;
+      if Result = 100 then Exit;
+
+      if F2 <> Str2 then begin
+        S2 := OnlyAlphaNum(F2);
+        R := DoCompare(S1, S2);
+        if R > Result then Result := R;
+        if Result = 100 then Exit;
+      end;
+    end;
+  end;
+
+begin
+  Result := ChercheMeilleurTaux(UpperCase(SansAccents(Chaine1)), UpperCase(SansAccents(Chaine2)));
+end;
+
+function CompareChaines2(Chaine1, Chaine2: PChar): Float; cdecl; export;
+
+  function DoCompare(const S1, S2: string): Float;
+  var
+    c, i, l, L1, L2: Integer;
+    Str1, Str2: string;
+  begin
+    Result := 0;
+    if S1 = S2 then
+      Result := 100
+    else try
+      if Length(S1) > Length(S2) then begin
+        Str1 := S2;
+        Str2 := S1;
+      end
+      else begin
+        Str1 := S1;
+        Str2 := S2;
+      end;
+
+      L1 := Length(Str1);
+      L2 := Length(Str2);
+
+      for i := 1 - L1 to L2 - 1 do begin
+        // si on n'a plus assez de caractères pour faire mieux on s'arrête
+        if Result >= L2 - i then Exit;
+
+        c := 0;
+        for l := Max(1, 1 - i) to Min(L1, L2 - i) do
+          if Str1[l] = Str2[i + l] then Inc(c);
+        if c > Result then begin
+          Result := c;
+          // si on a retrouvé la chaine complète, on ne pourra pas faire mieux
+          if Result = L1 then Exit;
+        end;
+      end;
+    finally
+      // on converti en %
+      Result := Result / Length(Str2) * 100;
+    end;
+  end;
+
+  function ChercheMeilleurTaux(const Str1, Str2: string): Float;
+  var
+    S1, S2, F1, F2: string;
+    R: Float;
+  begin
+    F1 := FormatTitre(Str1);
+    F2 := FormatTitre(Str2);
+
+    S1 := OnlyAlphaNum(Str1);
+    S2 := OnlyAlphaNum(Str2);
+    Result := DoCompare(S1, S2);
+    if Result = 100 then Exit;
+
+    if F2 <> Str2 then begin
+      S2 := OnlyAlphaNum(F2);
+      R := DoCompare(S1, S2);
+      if R > Result then Result := R;
+      if Result = 100 then Exit;
+    end;
+
+    if F1 <> Str1 then begin
+      S1 := OnlyAlphaNum(F1);
+      S2 := OnlyAlphaNum(Str2);
+      R := DoCompare(S1, S2);
+      if R > Result then Result := R;
+      if Result = 100 then Exit;
+
+      if F2 <> Str2 then begin
+        S2 := OnlyAlphaNum(F2);
+        R := DoCompare(S1, S2);
+        if R > Result then Result := R;
+        if Result = 100 then Exit;
+      end;
+    end;
+  end;
+
+begin
+  Result := ChercheMeilleurTaux(UpperCase(SansAccents(Chaine1)), UpperCase(SansAccents(Chaine2)));
+end;
+
+function CompareChaines(Chaine1, Chaine2: PChar): Float; cdecl; export;
+begin
+  Result := (CompareChaines1(Chaine1, Chaine2) + CompareChaines2(Chaine1, Chaine2)) / 2;
 end;
 
 function ValidFileName(const FileName: string): string;
@@ -85,8 +268,8 @@ end;
 
 procedure WriteLog(chaine: string);
 begin
-  with tstringlist.create do try
-    if FileExists('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log') then loadfromfile('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log');
+  with TStringList.Create do try
+    if FileExists('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log') then LoadFromFile('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log');
     Add('-- ' + DateTimeToStr(Now) + ' --');
     Add(chaine);
     SaveToFile('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log');
@@ -173,12 +356,8 @@ begin
 end;
 
 function ExtractFileName(var Sr: PSearchRec): PChar; cdecl; export;
-var
-  s: string;
 begin
-  s := sr^.Name + #0;
-  Result := ib_util_malloc(Length(s));
-  StrCopy(Result, PChar(s));
+  Result := CreateResult(sr^.Name);
 end;
 
 function ExtractFileAttr(var Sr: PSearchRec): Integer; cdecl; export;
@@ -208,9 +387,7 @@ begin
     ForceDirectories(Path);
     TFileStream.Create(Fichier + toAdd, fmCreate).Free;
   end;
-  Fichier := Fichier + toAdd + #0;
-  Result := ib_util_malloc(Length(Fichier));
-  StrCopy(Result, PChar(Fichier));
+  Result := CreateResult(Fichier + toAdd);
 end;
 
 function DeleteFile(FileName: PChar): Integer; cdecl; export;
@@ -223,16 +400,17 @@ end;
 
 function CreateGUID: PChar; cdecl; export;
 var
-  s: string;
   GUID: TGUID;
 begin
-  if SysUtils.CreateGUID(GUID) = S_OK then begin
-    s := GUIDToString(GUID) + #0;
-    Result := ib_util_malloc(Length(s));
-    StrCopy(Result, PChar(s));
-  end
+  if SysUtils.CreateGUID(GUID) = S_OK then
+    Result := CreateResult(GUIDToString(GUID))
   else
     Result := nil;
+end;
+
+function UDFLength(Chaine: PChar): Integer; cdecl; export;
+begin
+  Result := StrLen(Chaine);
 end;
 
 exports
@@ -242,7 +420,12 @@ exports
   FindFileFirst, FindFileNext,
   SearchFileName,
   ExtractFileName, ExtractFileAttr, ExtractFileSize,
-  CreateGUID, Trim;
+  CreateGUID, Trim,
+  CompareChaines name 'IdenticalString',
+  CompareChaines1 name 'IdenticalString1',
+  CompareChaines2 name 'IdenticalString2',
+  FormatTitle,
+  UDFLength name 'Length';
 
 begin
 end.

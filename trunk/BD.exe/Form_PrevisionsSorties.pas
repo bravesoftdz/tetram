@@ -32,6 +32,7 @@ type
     procedure vstPrevisionsSortiesFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure edSearchChange(Sender: TObject);
     procedure edSearchKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure vstPrevisionsSortiesDblClick(Sender: TObject);
   private
     procedure ImpressionExecute(Sender: TObject);
     procedure ApercuExecute(Sender: TObject);
@@ -45,7 +46,8 @@ type
 
 implementation
 
-uses Impression, DateUtils, IniFiles, CommonConst, Divers, TypeRec, Commun;
+uses Impression, DateUtils, IniFiles, CommonConst, Divers, TypeRec, Commun,
+  UHistorique;
 
 {$R *.dfm}
 
@@ -261,6 +263,15 @@ begin
   NodeInfo := Sender.GetNodeData(Node);
   if Assigned(NodeInfo) and Assigned(NodeInfo.PSerie) then
     Concorde := Pos(Text, UpperCase(SansAccents(FormatTitre(NodeInfo.PSerie.TitreSerie)))) > 0;
+end;
+
+procedure TfrmPrevisionsSorties.vstPrevisionsSortiesDblClick(Sender: TObject);
+var
+  NodeInfo: ^RNodeInfo;
+begin
+  NodeInfo := vstPrevisionsSorties.GetNodeData(vstPrevisionsSorties.FocusedNode);
+  if Assigned(NodeInfo) and (NodeInfo.Serie <> '-') then
+    Historique.AddWaiting(fcSerie, NodeInfo.PSerie.ID);
 end;
 
 end.

@@ -1,4 +1,4 @@
- program BD;
+program BD;
 
 {$R 'webserver.res' 'webserver.rc'}
 {$R 'ressources.res' 'ressources.rc'}
@@ -112,7 +112,8 @@ uses
   UMAJ1_2_0_0 in 'UMAJ1_2_0_0.pas',
   UMAJ1_2_0_8 in 'UMAJ1_2_0_8.pas',
   ListOfTypeRec in 'ListOfTypeRec.pas',
-  UMAJ1_2_0_17 in 'UMAJ1_2_0_17.pas';
+  UMAJ1_2_0_17 in 'UMAJ1_2_0_17.pas',
+  Form_WizardImport in 'Form_WizardImport.pas' {WizardImport};
 
 {$R *.RES}
 {$R curseurs.res}
@@ -157,7 +158,7 @@ begin
 
     FrmSplash.Affiche_act(ChargementApp + '...');
     Application.CreateForm(TFond, Fond);
-  FrmSplash.Affiche_act(ChargementDatabase + '...');
+    FrmSplash.Affiche_act(ChargementDatabase + '...');
     Historique.AddConsultation(fcRecherche);
     if Utilisateur.Options.ModeDemarrage then
       Fond.ModeConsultation.Execute

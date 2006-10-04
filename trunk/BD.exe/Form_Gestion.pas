@@ -15,6 +15,7 @@ type
     ProcModifier: TActionGestionModif;
     ProcSupprimer: TActionGestionSupp;
     ProcAcheter: TActionGestionAchat;
+    ProcImporter, ProcExporter: Boolean;
     Filtre: string;
   end;
 
@@ -41,11 +42,13 @@ type
     btAchatsAlbums: TVDTButton;
     Bevel6: TBevel;
     Bevel7: TBevel;
-    acheter: TVDTButton;
+    btAcheter: TVDTButton;
     Bevel8: TBevel;
     btParaBD: TVDTButton;
     btAchatsParaBD: TVDTButton;
     FrameRechercheRapide1: TFrameRechercheRapide;
+    btExporter: TVDTButton;
+    btImporter: TVDTButton;
     procedure FormCreate(Sender: TObject);
     function GestionCourante(SB: TSpeedButton = nil): TInfo_Gestion;
     procedure ajouterClick(Sender: TObject);
@@ -54,14 +57,15 @@ type
     procedure SpeedButton1Click(Sender: TObject);
     procedure VDTButton2Click(Sender: TObject);
     procedure ScanEditKeyPress(Sender: TObject; var Key: Char);
-    procedure acheterClick(Sender: TObject);
+    procedure btAcheterClick(Sender: TObject);
+    procedure btImporterClick(Sender: TObject);
   protected
   private
     { Déclarations privées }
     GestionAchatAlbum, GestionAlbum, GestionAuteur, GestionGenre, GestionCollection,
       GestionEmprunteur, GestionEditeur, GestionSerie, GestionParaBD, GestionAchatParaBD: TInfo_Gestion;
     LastButton: TSpeedButton;
-    procedure AssignIG(var IG: TInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; Filtre: string = ''; Acheter: TActionGestionAchat = nil);
+    procedure AssignIG(var IG: TInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; Filtre: string = ''; Acheter: TActionGestionAchat = nil; Importer: Boolean = False; Exporter: Boolean = False);
   public
     { Déclarations publiques }
     SelString: string;
@@ -72,7 +76,7 @@ var
 
 implementation
 
-uses Commun, CommonConst, Procedures;
+uses Commun, CommonConst, Procedures, Form_WizardImport;
 
 const
   HintListeAlbums = 'Liste des albums';
@@ -115,7 +119,7 @@ const
 
 {$R *.DFM}
 
-procedure TFrmGestions.AssignIG(var IG: TInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; Filtre: string = ''; Acheter: TActionGestionAchat = nil);
+procedure TFrmGestions.AssignIG(var IG: TInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; Filtre: string = ''; Acheter: TActionGestionAchat = nil; Importer: Boolean = False; Exporter: Boolean = False);
 begin
   IG.ProcAjouter := Ajouter;
   IG.ProcModifier := Modifier;
@@ -127,6 +131,8 @@ begin
   IG.Mode := Mode;
   IG.Filtre := Filtre;
   IG.ProcAcheter := Acheter;
+  IG.ProcImporter := Importer;
+  IG.ProcExporter := Exporter;
 end;
 
 function TFrmGestions.GestionCourante(SB: TSpeedButton = nil): TInfo_Gestion;
@@ -159,11 +165,11 @@ begin
   Mode_en_cours := mdEdit;
 
   FrameRechercheRapide1.VirtualTreeView := VirtualTreeView;
-FrameRechercheRapide1.ShowNewButton := False;
+  FrameRechercheRapide1.ShowNewButton := False;
 
   AssignIG(GestionAlbum, AjouterAlbums, ModifierAlbums, SupprimerAlbums,
     HintListeAlbums, HintAjoutAlbum, HintModifAlbum, HintSuppAlbum,
-    vmAlbumsSerie);
+    vmAlbumsSerie, '', nil, True);
   AssignIG(GestionAchatAlbum, AjouterAchatsAlbum, ModifierAchatsAlbum, SupprimerAchatsAlbum,
     HintListeAlbums, HintAjoutAlbum, HintModifAlbum, HintSuppAlbum,
     vmAlbumsSerie, 'Achat = 1', AcheterAlbums);
@@ -231,8 +237,13 @@ begin
     VirtualTreeView.Filtre := Filtre;
     VirtualTreeView.Mode := Mode;
     VirtualTreeView.Header.Columns.Clear;
-    acheter.Visible := Assigned(ProcAcheter);
-    Bevel7.Visible := acheter.Visible;
+    btImporter.Enabled := ProcImporter;
+    btExporter.Enabled := ProcExporter;
+    Bevel4.Visible := btImporter.Enabled or btExporter.Enabled;
+    btImporter.Visible := Bevel4.Visible;
+    btExporter.Visible := Bevel4.Visible;
+    btAcheter.Visible := Assigned(ProcAcheter);
+    Bevel7.Visible := btAcheter.Visible;
   end;
   PrepareLV(Self);
 end;
@@ -250,10 +261,19 @@ begin
   end;
 end;
 
-procedure TFrmGestions.acheterClick(Sender: TObject);
+procedure TFrmGestions.btAcheterClick(Sender: TObject);
 begin
   with GestionCourante do
     ProcAcheter(VirtualTreeView);
+end;
+
+procedure TFrmGestions.btImporterClick(Sender: TObject);
+begin
+  with TWizardImport.Create(nil) do try
+    ShowModal;
+  finally
+    Free;
+  end;
 end;
 
 end.
