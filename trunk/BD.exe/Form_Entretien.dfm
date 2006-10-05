@@ -15,7 +15,7 @@ object FrmEntretien: TFrmEntretien
   OnDestroy = FormDestroy
   DesignSize = (
     447
-    266)
+    261)
   PixelsPerInch = 96
   TextHeight = 13
   object Panel14: TPanel

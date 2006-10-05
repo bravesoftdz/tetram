@@ -38,7 +38,6 @@ type
     boutons_16x16_hot: TImageList;
     ShareImageList: TImageList;
     ActionList1: TActionList;
-    PrintDialog1: TPrintDialog;
     AideSommaire: TAction;
     AideAbout: TAction;
     ModeGestion: TAction;

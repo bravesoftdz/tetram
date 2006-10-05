@@ -246,13 +246,12 @@ object FrmPreview: TFrmPreview
       ImageIndex = 8
       Style = tbsSeparator
     end
-    object Label3: TLabel
+    object ToolButton6: TToolButton
       Left = 398
       Top = 0
-      Width = 31
-      Height = 22
-      Caption = 'Label3'
-      Visible = False
+      Caption = 'ToolButton6'
+      ImageIndex = 8
+      OnClick = ToolButton6Click
     end
   end
   object Panel: TPanel
@@ -263,16 +262,6 @@ object FrmPreview: TFrmPreview
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 1
-    object Image: TImage
-      Left = 221
-      Top = 91
-      Width = 85
-      Height = 85
-      Stretch = True
-      OnMouseDown = ImageMouseDown
-      OnMouseMove = ImageMouseMove
-      OnMouseUp = ImageMouseUp
-    end
     object ScrollBarV: TScrollBar
       Left = 543
       Top = 0
@@ -302,6 +291,26 @@ object FrmPreview: TFrmPreview
       BevelOuter = bvNone
       TabOrder = 2
       Visible = False
+    end
+    object fondImage: TPanel
+      Left = 136
+      Top = 144
+      Width = 87
+      Height = 87
+      AutoSize = True
+      Caption = ' '
+      Color = clWhite
+      TabOrder = 3
+      object Image: TImage
+        Left = 1
+        Top = 1
+        Width = 85
+        Height = 85
+        Stretch = True
+        OnMouseDown = ImageMouseDown
+        OnMouseMove = ImageMouseMove
+        OnMouseUp = ImageMouseUp
+      end
     end
   end
   object ImageList1: TImageList

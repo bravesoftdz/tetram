@@ -24,7 +24,6 @@ type
     ToolButton14: TToolButton;
     Panel: TPanel;
     ScrollBarV: TScrollBar;
-    Image: TImage;
     ScrollBarH: TScrollBar;
     Panel1: TPanel;
     Zoom: TComboBox;
@@ -34,7 +33,9 @@ type
     Panel3: TPanel;
     Image2: TImage;
     Panel4: TPanel;
-    Label3: TLabel;
+    fondImage: TPanel;
+    Image: TImage;
+    ToolButton6: TToolButton;
     procedure FormCreate(Sender: TObject);
     procedure ToolButton8Click(Sender: TObject);
     procedure ToolButton1Click(Sender: TObject);
@@ -53,6 +54,7 @@ type
     procedure ImageMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure ImageMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ImageMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ToolButton6Click(Sender: TObject);
   private
     { Déclarations privées }
     procedure ShowNoPage;
@@ -79,7 +81,7 @@ type
 
 implementation
 
-uses MMSystem, UHistorique;
+uses MMSystem, UHistorique, Main;
 
 resourcestring
   zoompleinepage = 'Pleine page';
@@ -148,6 +150,7 @@ end;
 
 procedure TFrmPreview.FormCreate(Sender: TObject);
 begin
+  fondImage.DoubleBuffered := True;
   Zoom.Items.Add(zoompleinepage);
   Zoom.Items.Add(zoomecran);
   Zoom.Items.Add('25%');
@@ -275,7 +278,9 @@ begin
     case Zoom.ItemIndex + 1 of
       1: begin
           Rapport := Source.Width / Source.Height;
-          Image.SetBounds(Image.Left, 0, Round(Panel.Height * Rapport), Panel.Height);
+          fondImage.Top := 0;
+          Image.Width := Round(Panel.Height * Rapport);
+          Image.Height := Panel.Height;
           ScrollBarV.Visible := False;
           ScrollBarH.Visible := False;
           Panel1.Visible := False;
@@ -286,11 +291,13 @@ begin
           ScrollBarV.Height := Panel.Height;
           ScrollBarH.Visible := False;
           Panel1.Visible := False;
-          Image.SetBounds(Image.Left, Image.Top, PWidth, Round(PWidth * Rapport));
+          Image.Width := PWidth;
+          Image.Height := Round(PWidth * Rapport);
         end;
       else begin
           Rapport := StrToInt(Copy(Zoom.Items[Zoom.ItemIndex], 1, Length(Zoom.Items[Zoom.ItemIndex]) - 1)) / 100;
-          Image.SetBounds(Image.Left, Image.Top, Round(WidthMM * Screen.PixelsPerInch * 56.7 / 1440 * Rapport), Round(HeightMM * Screen.PixelsPerInch * 56.7 / 1440 * Rapport));
+          Image.Width := Round(WidthMM * Screen.PixelsPerInch * 56.7 / 1440 * Rapport);
+          Image.Height := Round(HeightMM * Screen.PixelsPerInch * 56.7 / 1440 * Rapport);
           ScrollBarV.Visible := Image.Height > (Panel.Height - ScrollBarH.Height);
           ScrollBarH.Visible := Image.Width > (Panel.Width - ScrollBarV.Width);
           ScrollBarV.Height := PHeight;
@@ -298,9 +305,8 @@ begin
           Panel1.Visible := ScrollBarV.Visible and ScrollBarH.Visible;
         end;
     end;
-    Image.Canvas.Brush.Color := clWhite;
-    Image.Canvas.FillRect(Image.ClientRect);
-    Image.Canvas.StretchDraw(Rect(0, 0, Source.Width, Source.Height), Source);
+    Image.Picture.Assign(Source);
+
     OnResize := FormResize;
 
     ScrollBarV.Min := 0;
@@ -314,18 +320,17 @@ begin
     ScrollBarH.SmallChange := PWidth div 5;
 
     if not ScrollBarH.Visible then
-      Image.Left := (PWidth - Image.Width) div 2
-    else if (Image.Left > 0) then
-      Image.Left := 0;
+      fondImage.Left := (PWidth - Image.Width) div 2
+    else if (fondImage.Left > 0) then
+      fondImage.Left := 0;
     if not ScrollBarV.Visible then
-      Image.Top := (PHeight - Image.Height) div 2
-    else if (Image.Top > 0) then
-      Image.Top := 0;
-    if Image.Top <= 0 then ScrollBarV.Position := -Image.Top;
-    if Image.Left <= 0 then ScrollBarH.Position := -Image.Left;
+      fondImage.Top := (PHeight - Image.Height) div 2
+    else if (fondImage.Top > 0) then
+      fondImage.Top := 0;
+    if fondImage.Top <= 0 then ScrollBarV.Position := -fondImage.Top;
+    if fondImage.Left <= 0 then ScrollBarH.Position := -fondImage.Left;
 
     Result := True;
-    //    label3.Caption := Format('W %d H %d', [Source.Width, Source.Height]);
   except
     Result := False;
   end;
@@ -343,12 +348,12 @@ end;
 
 procedure TFrmPreview.ScrollBarVChange(Sender: TObject);
 begin
-  if not Moving then Image.Top := -ScrollBarV.Position;
+  if not Moving then fondImage.Top := -ScrollBarV.Position;
 end;
 
 procedure TFrmPreview.ScrollBarHChange(Sender: TObject);
 begin
-  if not Moving then Image.Left := -ScrollBarH.Position;
+  if not Moving then fondImage.Left := -ScrollBarH.Position;
 end;
 
 procedure TFrmPreview.ZoomChange(Sender: TObject);
@@ -404,19 +409,21 @@ var
 begin
   if Shift <> [ssLeft] then Exit;
 
-  oldImageLeft := Image.Left;
-  oldImageTop := Image.Top;
+  oldImageLeft := fondImage.Left;
+  oldImageTop := fondImage.Top;
 
-  newImageLeft := Image.Left;
-  newImageTop := Image.Top;
-  if ScrollBarH.Visible then newImageLeft := Max(-ScrollBarH.Max, Min(ScrollBarH.Min, Image.Left + (X - PosClick.x)));
-  if ScrollBarV.Visible then newImageTop := Max(-ScrollBarV.Max, Min(ScrollBarV.Min, Image.Top + (Y - PosClick.y)));
-  Image.SetBounds(newImageLeft, newImageTop, Image.Width, Image.Height);
-  ScrollBarH.Position := -Image.Left;
-  ScrollBarV.Position := -Image.Top;
+  newImageLeft := fondImage.Left;
+  newImageTop := fondImage.Top;
 
-  if oldImageLeft = Image.Left then PosClick.X := X;
-  if oldImageTop = Image.Top then PosClick.Y := Y;
+  if ScrollBarH.Visible then newImageLeft := Max(-ScrollBarH.Max, Min(ScrollBarH.Min, fondImage.Left + (X - PosClick.x)));
+  if ScrollBarV.Visible then newImageTop := Max(-ScrollBarV.Max, Min(ScrollBarV.Min, fondImage.Top + (Y - PosClick.y)));
+  fondImage.Left := newImageLeft;
+  fondImage.Top := newImageTop;
+  ScrollBarH.Position := -fondImage.Left;
+  ScrollBarV.Position := -fondImage.Top;
+
+  if oldImageLeft = fondImage.Left then PosClick.X := X;
+  if oldImageTop = fondImage.Top then PosClick.Y := Y;
 end;
 
 procedure TFrmPreview.ImageMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -457,6 +464,17 @@ end;
 procedure TFrmPreview.SetWidthMM(const Value: Single);
 begin
   WidthMM := Value;
+end;
+
+procedure TFrmPreview.ToolButton6Click(Sender: TObject);
+begin
+  with TPrintObject.Create(nil) do
+  try
+    Titre := Caption;
+    PrintPages(Pages);
+  finally
+    Free;
+  end;
 end;
 
 initialization

@@ -2,17 +2,16 @@ program BD;
 
 {$R 'webserver.res' 'webserver.rc'}
 {$R 'ressources.res' 'ressources.rc'}
-{%File '..\..\..\..\Common\FastMM464\FastMM4Options.inc'}
 
 uses
-  FastMM4 in '..\..\..\..\Common\FastMM464\FastMM4.pas',
-  FastMM4Messages in '..\..\..\..\Common\FastMM464\FastMM4Messages.pas',
+  FastMM4,
   Windows,
   SysUtils,
   Forms,
   Controls,
   Dialogs,
   ISAPIApp,
+  Divers,
   CommonConst in 'CommonConst.pas',
   Commun in 'Commun.pas',
   Main in 'Main.pas' {Fond},
@@ -80,7 +79,6 @@ uses
   UFicheSerie in '..\BDWebServer\UFicheSerie.pas' {FicheSerie: TWebPageModule},
   UManquants in '..\BDWebServer\UManquants.pas' {Manquants: TWebPageModule},
   UPrevisions in '..\BDWebServer\UPrevisions.pas' {Previsions: TWebPageModule},
-  Divers in '..\..\..\..\Common\Divers.pas',
   Updates in 'Updates.pas',
   UMAJ0_0_0_6 in 'UMAJ0_0_0_6.pas',
   UMAJ0_0_0_8 in 'UMAJ0_0_0_8.pas',
@@ -111,8 +109,8 @@ uses
   UMAJ1_1_0_0 in 'UMAJ1_1_0_0.pas',
   UMAJ1_2_0_0 in 'UMAJ1_2_0_0.pas',
   UMAJ1_2_0_8 in 'UMAJ1_2_0_8.pas',
-  ListOfTypeRec in 'ListOfTypeRec.pas',
   UMAJ1_2_0_17 in 'UMAJ1_2_0_17.pas',
+  ListOfTypeRec in 'ListOfTypeRec.pas',
   Form_WizardImport in 'Form_WizardImport.pas' {WizardImport};
 
 {$R *.RES}
@@ -158,7 +156,7 @@ begin
 
     FrmSplash.Affiche_act(ChargementApp + '...');
     Application.CreateForm(TFond, Fond);
-    FrmSplash.Affiche_act(ChargementDatabase + '...');
+  FrmSplash.Affiche_act(ChargementDatabase + '...');
     Historique.AddConsultation(fcRecherche);
     if Utilisateur.Options.ModeDemarrage then
       Fond.ModeConsultation.Execute

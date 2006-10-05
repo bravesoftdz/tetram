@@ -4225,11 +4225,6 @@ object Fond: TFond
       OnExecute = HistoriqueNextExecute
     end
   end
-  object PrintDialog1: TPrintDialog
-    Options = [poWarning]
-    Left = 56
-    Top = 232
-  end
   object ActionsStatistiques: TActionList
     Images = boutons_16x16_hot
     OnUpdate = ActionsStatistiquesUpdate

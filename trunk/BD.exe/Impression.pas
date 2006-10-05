@@ -36,8 +36,15 @@ uses Form_Preview, Math, Procedures, DateUtils, Contnrs, jvuiblib;
 
 function ConfigPrinter(Previsualisation: Boolean): Boolean;
 begin
+  Result := True;
+{
   Result := Previsualisation;
-  if not Result then Result := Fond.PrintDialog1.Execute;
+  if not Result then begin
+    Fond.PrintDialog1.Copies := 1;
+    Fond.PrintDialog1.Options := Fond.PrintDialog1.Options - [poPageNums];
+    Result := Fond.PrintDialog1.Execute;
+  end;
+}
 end;
 
 procedure ImpressionSerie(Reference: TGUID; Previsualisation: Boolean);
@@ -67,7 +74,7 @@ begin
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
-      Prn.Start(1, Application.Title + ' - ' + rsTransFiche);
+      Prn.Start(Application.Title + ' - ' + rsTransFiche);
       Prn.AutoPaging := True;
       Prn.SetMargins(10, 10, 10, 10);
       Prn.SetDetailTopBottom(Prn.Margin.Top + 25, Prn.Margin.Bottom + 20);
@@ -252,7 +259,7 @@ begin
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
-      Prn.Start(1, Application.Title + ' - ' + rsTransFiche);
+      Prn.Start(Application.Title + ' - ' + rsTransFiche);
       Prn.AutoPaging := True;
       Prn.SetMargins(10, 10, 10, 10);
       Prn.SetDetailTopBottom(Prn.Margin.Top { + 25}, Prn.Margin.Bottom + 20);
@@ -485,7 +492,7 @@ begin
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
-      Prn.Start(1, Application.Title + ' - ' + rsTransFiche);
+      Prn.Start(Application.Title + ' - ' + rsTransFiche);
       Prn.AutoPaging := True;
       Prn.SetMargins(10, 10, 10, 10);
       Prn.SetDetailTopBottom(Prn.Margin.Top { + 25}, Prn.Margin.Bottom + 20);
@@ -619,7 +626,7 @@ begin
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
-      Prn.Start(1, Application.Title + ' - ' + rsTransFiche);
+      Prn.Start(Application.Title + ' - ' + rsTransFiche);
       Prn.AutoPaging := True;
       Prn.SetMargins(10, 10, 10, 10);
       Prn.SetDetailTopBottom(Prn.Margin.Top + 25, Prn.Margin.Bottom + 20);
@@ -678,7 +685,7 @@ begin
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
-      Prn.Start(1, Application.Title + ' - ' + rsTransFiche);
+      Prn.Start(Application.Title + ' - ' + rsTransFiche);
       Prn.AutoPaging := True;
       Prn.SetMargins(10, 10, 10, 10);
       Prn.SetDetailTopBottom(Prn.Margin.Top + 25, Prn.Margin.Bottom + 20);
@@ -725,7 +732,7 @@ begin
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
-      Prn.Start(1, Application.Title + ' - ' + rsTitreListeEmprunts);
+      Prn.Start(Application.Title + ' - ' + rsTitreListeEmprunts);
       Prn.AutoPaging := True;
       Prn.SetMargins(10, 10, 10, 10);
       Prn.SetDetailTopBottom(Prn.Margin.Top + 25, Prn.Margin.Bottom + 20);
@@ -792,7 +799,7 @@ begin
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
-      Prn.Start(1, Application.Title + ' - ' + rsTitreListeEmprunts);
+      Prn.Start(Application.Title + ' - ' + rsTitreListeEmprunts);
       Prn.AutoPaging := True;
       Prn.SetMargins(10, 10, 10, 10);
       Prn.SetDetailTopBottom(Prn.Margin.Top + 25, Prn.Margin.Bottom + 20);
@@ -875,7 +882,7 @@ begin
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
-      Prn.Start(1, Application.Title + ' - ' + rsListeCompleteAlbums);
+      Prn.Start(Application.Title + ' - ' + rsListeCompleteAlbums);
       Prn.AutoPaging := True;
       Prn.SetMargins(10, 10, 10, 10);
       Prn.SetDetailTopBottom(Prn.Margin.Top + 25, Prn.Margin.Bottom + 20);
@@ -1035,7 +1042,7 @@ begin
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
-      Prn.Start(1, Application.Title + ' - ' + Titre);
+      Prn.Start(Application.Title + ' - ' + Titre);
       Prn.AutoPaging := True;
       Prn.SetMargins(10, 10, 10, 10);
       Prn.SetDetailTopBottom(Prn.Margin.Top + 25, Prn.Margin.Bottom + 20);
@@ -1252,7 +1259,7 @@ begin
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
-      Prn.Start(1, Application.Title + ' - ' + rsInformationsBDtheque);
+      Prn.Start(Application.Title + ' - ' + rsInformationsBDtheque);
       Prn.AutoPaging := True;
       Prn.SetMargins(10, 10, 10, 10);
       Prn.SetDetailTopBottom(Prn.Margin.Top + 25, Prn.Margin.Bottom + 20);
@@ -1318,7 +1325,7 @@ begin
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
-      Prn.Start(1, Application.Title + ' - ' + rsResultatRecherche);
+      Prn.Start(Application.Title + ' - ' + rsResultatRecherche);
       Prn.AutoPaging := True;
       Prn.SetMargins(10, 10, 10, 10);
       Prn.SetDetailTopBottom(Prn.Margin.Top + 25, Prn.Margin.Bottom + 20);
@@ -1489,7 +1496,7 @@ begin
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
-      Prn.Start(1, Application.Title + ' - ' + rsTransImage);
+      Prn.Start(Application.Title + ' - ' + rsTransImage);
       Prn.AutoPaging := True;
       Prn.SetMargins(10, 10, 10, 10);
       Prn.SetDetailTopBottom(Prn.Margin.Top + 25, Prn.Margin.Bottom + 20);
@@ -1558,7 +1565,7 @@ begin
       Prn.SetOrientation(poPortrait);
       Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
-      Prn.Start(1, Application.Title + ' - ' + rsTransImage);
+      Prn.Start(Application.Title + ' - ' + rsTransImage);
       Prn.AutoPaging := True;
       Prn.SetMargins(10, 10, 10, 10);
       Prn.SetDetailTopBottom(Prn.Margin.Top + 25, Prn.Margin.Bottom + 20);
@@ -1617,7 +1624,7 @@ begin
     Prn.SetOrientation(poPortrait);
     Prn.Preview := Previsualisation;
     if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
-    Prn.Start(1, Application.Title + ' - ' + rsTransAlbumsManquants);
+    Prn.Start(Application.Title + ' - ' + rsTransAlbumsManquants);
     Prn.AutoPaging := True;
     Prn.SetMargins(10, 10, 10, 10);
     Prn.SetDetailTopBottom(Prn.Margin.Top + 25, Prn.Margin.Bottom + 20);
@@ -1700,7 +1707,7 @@ begin
     Prn.SetOrientation(poPortrait);
     Prn.Preview := Previsualisation;
     if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
-    Prn.Start(1, Application.Title + ' - ' + rsTransPrevisionsSorties);
+    Prn.Start(Application.Title + ' - ' + rsTransPrevisionsSorties);
     Prn.AutoPaging := True;
     Prn.SetMargins(10, 10, 10, 10);
     Prn.SetDetailTopBottom(Prn.Margin.Top + 25, Prn.Margin.Bottom + 20);
@@ -1808,7 +1815,7 @@ begin
         end;
       end;
 
-      Prn.Start(1, Application.Title + ' - ' + rsListeAchats);
+      Prn.Start(Application.Title + ' - ' + rsListeAchats);
       Prn.AutoPaging := True;
       Prn.SetMargins(10, 10, 10, 10);
       Prn.SetDetailTopBottom(Prn.Margin.Top + 30, Prn.Margin.Bottom + 20);
