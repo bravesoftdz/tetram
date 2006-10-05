@@ -9,7 +9,7 @@ MAKE = $(ROOT)\bin\make.exe -$(MAKEFLAGS) -f$**
 DCC = $(ROOT)\bin\dcc32.exe $**
 BRCC = $(ROOT)\bin\brcc32.exe $**
 #------------------------------------------------------------------------------
-PROJECTS = MediaKit.bpl BDT_UDF.dll BDPic.dll BD.exe
+PROJECTS = BDT_UDF.dll BDPic.dll BD.exe
 #-----------------------------------------------------------------------------
 default: $(PROJECTS)
 #------------------------------------------------------------------------------
@@ -21,9 +21,6 @@ BDT_UDF.dll: BDT_UDF.DLL\BDT_UDF.dpr
   $(DCC)
 
 BDPic.dll: BDPic.DLL\BDPic.dpr
-  $(DCC)
-
-MediaKit.bpl: ..\..\..\Compos Perso\MediaKit.dpk
   $(DCC)
 
 
