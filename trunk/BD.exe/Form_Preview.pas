@@ -25,7 +25,7 @@ type
     Panel: TPanel;
     ScrollBarV: TScrollBar;
     ScrollBarH: TScrollBar;
-    Panel1: TPanel;
+    Panelcoin: TPanel;
     Zoom: TComboBox;
     Panel2: TPanel;
     Image3: TImage;
@@ -34,8 +34,12 @@ type
     Image2: TImage;
     Panel4: TPanel;
     fondImage: TPanel;
-    Image: TImage;
     ToolButton6: TToolButton;
+    ToolButton7: TToolButton;
+    Panel5: TPanel;
+    ImageDroite: TImage;
+    Panel6: TPanel;
+    ImageGauche: TImage;
     procedure FormCreate(Sender: TObject);
     procedure ToolButton8Click(Sender: TObject);
     procedure ToolButton1Click(Sender: TObject);
@@ -51,10 +55,11 @@ type
     procedure PopupMenu1Popup(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure Image3MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure ImageMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-    procedure ImageMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure ImageMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ImageGaucheMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure ImageGaucheMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ImageGaucheMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ToolButton6Click(Sender: TObject);
+    procedure ToolButton7Click(Sender: TObject);
   private
     { Déclarations privées }
     procedure ShowNoPage;
@@ -181,11 +186,12 @@ begin
   ScrollBarH.Left := 0;
   ScrollBarH.Width := Panel.Width;
   ScrollBarH.Top := Panel.Height - ScrollBarH.Height;
-  Panel1.Height := ScrollBarH.Height;
-  Panel1.Width := ScrollBarV.Width;
-  Panel1.Top := ScrollBarH.Top;
-  Panel1.Left := ScrollBarV.Left;
-  Image.Cursor := CurHand;
+  PanelCoin.Height := ScrollBarH.Height;
+  PanelCoin.Width := ScrollBarV.Width;
+  PanelCoin.Top := ScrollBarH.Top;
+  PanelCoin.Left := ScrollBarV.Left;
+  ImageGauche.Cursor := CurHand;
+  ImageDroite.Cursor := CurHand;
 end;
 
 procedure TFrmPreview.Quit;
@@ -212,13 +218,21 @@ end;
 
 procedure TFrmPreview.ToolButton2Click(Sender: TObject);
 begin
-  if (numeropage > 1) and ShowPage(numeropage - 1) then dec(numeropage);
+  if ToolButton7.Down then begin
+    if (numeropage > 2) and ShowPage(numeropage - 2) then Dec(numeropage, 2);
+  end else begin
+    if (numeropage > 1) and ShowPage(numeropage - 1) then Dec(numeropage);
+  end;
   ShowNoPage;
 end;
 
 procedure TFrmPreview.ToolButton3Click(Sender: TObject);
 begin
-  if (numeropage < maximum) and ShowPage(numeropage + 1) then inc(numeropage);
+  if ToolButton7.Down then begin
+    if (numeropage < maximum - 1) and ShowPage(numeropage + 2) then Inc(numeropage, 2);
+  end else begin
+    if (numeropage < maximum) and ShowPage(numeropage + 1) then Inc(numeropage);
+  end;
   ShowNoPage;
 end;
 
@@ -250,8 +264,8 @@ begin
   ScrollBarH.Width := Panel.Width;
   ScrollBarH.Top := Panel.Height - ScrollBarH.Height;
 
-  Panel1.Top := ScrollBarH.Top;
-  Panel1.Left := ScrollBarV.Left;
+  PanelCoin.Top := ScrollBarH.Top;
+  PanelCoin.Left := ScrollBarV.Left;
 
   ShowPage(numeropage);
 end;
@@ -269,62 +283,98 @@ begin
 end;
 
 function TFrmPreview.ShowPage;
+const
+  Interpage = 10;
 var
-  Source: TGraphic;
+  Source1, Source2: TGraphic;
   Rapport: Double;
+  DoublePage: Boolean;
 begin
+  Source2 := nil;
   try
-    Source := TGraphic(Pages[Page - 1]);
+    DoublePage := ToolButton7.Down and (Page < Pred(Pages.Count));
+
+    Source1 := TGraphic(Pages[Page - 1]);
+    if DoublePage then
+      Source2 := TGraphic(Pages[Page]);
+
     case Zoom.ItemIndex + 1 of
-      1: begin
-          Rapport := Source.Width / Source.Height;
+      1: begin // pleine page 
           fondImage.Top := 0;
-          Image.Width := Round(Panel.Height * Rapport);
-          Image.Height := Panel.Height;
+          if DoublePage then
+            Rapport := (Source1.Width + Source2.Width + 10) / Max(Source1.Height, Source2.Height)
+          else
+            Rapport := Source1.Width / Source1.Height;
+          fondImage.Width := Round(Panel.Height * Rapport);
+          fondImage.Height := Panel.Height;
+
           ScrollBarV.Visible := False;
           ScrollBarH.Visible := False;
-          Panel1.Visible := False;
+          PanelCoin.Visible := False;
         end;
-      2: begin
-          Rapport := Source.Height / Source.Width;
+      2: begin // largeur de page
+          if DoublePage then
+            Rapport := (Source1.Width + Source2.Width + 10) / Max(Source1.Height, Source2.Height)
+          else
+            Rapport := Source1.Width / Source1.Height;
           ScrollBarV.Visible := Rapport > (Panel.Height / Panel.Width);
           ScrollBarV.Height := Panel.Height;
           ScrollBarH.Visible := False;
-          Panel1.Visible := False;
-          Image.Width := PWidth;
-          Image.Height := Round(PWidth * Rapport);
+          PanelCoin.Visible := False;
+
+          fondImage.Width := PWidth;
+          fondImage.Height := Round(PWidth / Rapport);
         end;
       else begin
           Rapport := StrToInt(Copy(Zoom.Items[Zoom.ItemIndex], 1, Length(Zoom.Items[Zoom.ItemIndex]) - 1)) / 100;
-          Image.Width := Round(WidthMM * Screen.PixelsPerInch * 56.7 / 1440 * Rapport);
-          Image.Height := Round(HeightMM * Screen.PixelsPerInch * 56.7 / 1440 * Rapport);
-          ScrollBarV.Visible := Image.Height > (Panel.Height - ScrollBarH.Height);
-          ScrollBarH.Visible := Image.Width > (Panel.Width - ScrollBarV.Width);
+          ImageGauche.Width := Round(WidthMM * Screen.PixelsPerInch * 56.7 / 1440 * Rapport);
+          ImageGauche.Height := Round(HeightMM * Screen.PixelsPerInch * 56.7 / 1440 * Rapport);
+          ScrollBarV.Visible := ImageGauche.Height > (Panel.Height - ScrollBarH.Height);
+          ScrollBarH.Visible := ImageGauche.Width > (Panel.Width - ScrollBarV.Width);
           ScrollBarV.Height := PHeight;
           ScrollBarH.Width := PWidth;
-          Panel1.Visible := ScrollBarV.Visible and ScrollBarH.Visible;
+          PanelCoin.Visible := ScrollBarV.Visible and ScrollBarH.Visible;
         end;
     end;
-    Image.Picture.Assign(Source);
+
+    if not DoublePage then begin
+      ImageGauche.Width := fondImage.Width;
+      ImageGauche.Height := fondImage.Height;
+    end else begin
+      Rapport := Source1.Width  / Max(Source1.Height, Source2.Height);
+      ImageGauche.Width := Round(fondImage.Height * Rapport);
+      ImageGauche.Height := fondImage.Height;
+
+      Rapport := Source2.Width / Max(Source1.Height, Source2.Height);
+      ImageDroite.Width := Round(fondImage.Height * Rapport);
+      ImageDroite.Height := fondImage.Height;
+    end;
+
+    ImageGauche.Picture.Assign(Source1);
+    ImageDroite.Picture.Assign(Source2);
+
+    Panel6.Left := 0;
+    Panel5.Left := Panel6.Width + Interpage;
+    Panel5.Visible := DoublePage;
 
     OnResize := FormResize;
 
     ScrollBarV.Min := 0;
-    ScrollBarV.Max := Abs(Image.Height - PHeight);
+    ScrollBarV.Max := Abs(ImageGauche.Height - PHeight);
     ScrollBarV.LargeChange := PHeight;
     ScrollBarV.SmallChange := PHeight div 5;
 
     ScrollBarH.Min := 0;
-    ScrollBarH.Max := Abs(Image.Width - PWidth);
+    ScrollBarH.Max := Abs(ImageGauche.Width - PWidth);
     ScrollBarH.LargeChange := PWidth;
     ScrollBarH.SmallChange := PWidth div 5;
 
     if not ScrollBarH.Visible then
-      fondImage.Left := (PWidth - Image.Width) div 2
+      fondImage.Left := (PWidth - fondImage.Width) div 2
     else if (fondImage.Left > 0) then
       fondImage.Left := 0;
     if not ScrollBarV.Visible then
-      fondImage.Top := (PHeight - Image.Height) div 2
+      fondImage.Top := (PHeight - fondImage.Height) div 2
     else if (fondImage.Top > 0) then
       fondImage.Top := 0;
     if fondImage.Top <= 0 then ScrollBarV.Position := -fondImage.Top;
@@ -402,7 +452,7 @@ begin
   PopupMenu1.Popup(pos.x, pos.y);
 end;
 
-procedure TFrmPreview.ImageMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+procedure TFrmPreview.ImageGaucheMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 var
   oldImageLeft, oldImageTop: Integer;
   newImageLeft, newImageTop: Integer;
@@ -426,7 +476,7 @@ begin
   if oldImageTop = fondImage.Top then PosClick.Y := Y;
 end;
 
-procedure TFrmPreview.ImageMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+procedure TFrmPreview.ImageGaucheMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
   MonRect: TRect;
 begin
@@ -435,7 +485,7 @@ begin
   PosClick := Point(X, Y);
 end;
 
-procedure TFrmPreview.ImageMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+procedure TFrmPreview.ImageGaucheMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
   Moving := False;
   ClipCursor(nil);
@@ -475,6 +525,11 @@ begin
   finally
     Free;
   end;
+end;
+
+procedure TFrmPreview.ToolButton7Click(Sender: TObject);
+begin
+  ShowPage(numeropage);
 end;
 
 initialization

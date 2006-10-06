@@ -1,6 +1,6 @@
 object FrmEditSerie: TFrmEditSerie
-  Left = 1776
-  Top = 51
+  Left = 302
+  Top = 146
   Width = 750
   Height = 956
   ActiveControl = edTitre

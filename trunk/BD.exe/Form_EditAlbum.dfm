@@ -1,6 +1,6 @@
 object FrmEditAlbum: TFrmEditAlbum
-  Left = 113
-  Top = 101
+  Left = 269
+  Top = 105
   Width = 750
   Height = 856
   ActiveControl = edTitre
@@ -89,11 +89,12 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object btScenariste: TCRFurtifLight
       Tag = 1
-      Left = 236
+      Left = 492
       Top = 146
       Width = 69
       Height = 41
       Cursor = crHandPoint
+      Anchors = [akTop, akRight]
       Caption = 'Sc'#233'nariste'
       Enabled = False
       Glyph.Data = {
@@ -202,11 +203,12 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object btDessinateur: TCRFurtifLight
       Tag = 2
-      Left = 236
+      Left = 492
       Top = 190
       Width = 69
       Height = 41
       Cursor = crHandPoint
+      Anchors = [akTop, akRight]
       Caption = 'Dessinateur'
       Enabled = False
       Glyph.Data = {
@@ -314,11 +316,12 @@ object FrmEditAlbum: TFrmEditAlbum
       WithBorder = True
     end
     object Label19: TLabel
-      Left = 12
+      Left = 268
       Top = 150
       Width = 42
       Height = 13
       Alignment = taRightJustify
+      Anchors = [akTop, akRight]
       Caption = 'Auteurs:'
       FocusControl = remarques
     end
@@ -663,7 +666,7 @@ object FrmEditAlbum: TFrmEditAlbum
       Shape = bsSpacer
     end
     object Label20: TLabel
-      Left = 513
+      Left = 19
       Top = 150
       Width = 28
       Height = 13
@@ -673,11 +676,12 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object btColoriste: TCRFurtifLight
       Tag = 3
-      Left = 236
+      Left = 492
       Top = 234
       Width = 69
       Height = 41
       Cursor = crHandPoint
+      Anchors = [akTop, akRight]
       Caption = 'Coloriste'
       Enabled = False
       Glyph.Data = {
@@ -894,7 +898,7 @@ object FrmEditAlbum: TFrmEditAlbum
       Layout = tlCenter
     end
     object btResetSerie: TCRFurtifLight
-      Left = 718
+      Left = 237
       Top = 146
       Width = 20
       Height = 20
@@ -1560,10 +1564,11 @@ object FrmEditAlbum: TFrmEditAlbum
         end>
     end
     object lvScenaristes: TVDTListViewLabeled
-      Left = 305
+      Left = 561
       Top = 146
-      Width = 198
+      Width = 177
       Height = 41
+      Anchors = [akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       Columns = <
@@ -1576,7 +1581,7 @@ object FrmEditAlbum: TFrmEditAlbum
       ReadOnly = True
       ShowColumnHeaders = False
       SortType = stNone
-      TabOrder = 12
+      TabOrder = 14
       ViewStyle = vsReport
       OnData = lvScenaristesData
       OnKeyDown = lvDessinateursKeyDown
@@ -1586,10 +1591,11 @@ object FrmEditAlbum: TFrmEditAlbum
         end>
     end
     object lvDessinateurs: TVDTListViewLabeled
-      Left = 305
+      Left = 561
       Top = 190
-      Width = 198
+      Width = 177
       Height = 41
+      Anchors = [akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       Columns = <
@@ -1602,7 +1608,7 @@ object FrmEditAlbum: TFrmEditAlbum
       ReadOnly = True
       ShowColumnHeaders = False
       SortType = stBoth
-      TabOrder = 13
+      TabOrder = 15
       ViewStyle = vsReport
       OnData = lvDessinateursData
       OnKeyDown = lvDessinateursKeyDown
@@ -1612,10 +1618,11 @@ object FrmEditAlbum: TFrmEditAlbum
         end>
     end
     object vtPersonnes: TVirtualStringTree
-      Left = 56
+      Left = 312
       Top = 169
       Width = 177
       Height = 105
+      Anchors = [akTop, akRight]
       AnimationDuration = 0
       BevelKind = bkTile
       BorderStyle = bsNone
@@ -1634,7 +1641,7 @@ object FrmEditAlbum: TFrmEditAlbum
       Indent = 8
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 11
+      TabOrder = 13
       OnChange = vtPersonnesChange
       OnDblClick = vtPersonnesDblClick
       Columns = <>
@@ -1681,9 +1688,9 @@ object FrmEditAlbum: TFrmEditAlbum
         end>
     end
     object vtSeries: TVirtualStringTree
-      Left = 550
+      Left = 56
       Top = 169
-      Width = 188
+      Width = 201
       Height = 105
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
@@ -1704,16 +1711,17 @@ object FrmEditAlbum: TFrmEditAlbum
       Indent = 8
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 16
+      TabOrder = 11
       OnChange = vtSeriesChange
       OnDblClick = vtSeriesDblClick
       Columns = <>
     end
     object lvColoristes: TVDTListViewLabeled
-      Left = 305
+      Left = 561
       Top = 234
-      Width = 198
+      Width = 177
       Height = 41
+      Anchors = [akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       Columns = <
@@ -1726,7 +1734,7 @@ object FrmEditAlbum: TFrmEditAlbum
       ReadOnly = True
       ShowColumnHeaders = False
       SortType = stBoth
-      TabOrder = 14
+      TabOrder = 16
       ViewStyle = vsReport
       OnData = lvColoristesData
       OnKeyDown = lvDessinateursKeyDown
@@ -1941,11 +1949,12 @@ object FrmEditAlbum: TFrmEditAlbum
       CurrencyChar = #0
     end
     inline FrameRechercheRapidePersonnes: TFrameRechercheRapide
-      Left = 56
+      Left = 312
       Top = 146
       Width = 177
       Height = 21
-      TabOrder = 10
+      Anchors = [akTop, akRight]
+      TabOrder = 12
       DesignSize = (
         177
         21)
@@ -1964,23 +1973,23 @@ object FrmEditAlbum: TFrmEditAlbum
       end
     end
     inline FrameRechercheRapideSerie: TFrameRechercheRapide
-      Left = 550
+      Left = 56
       Top = 146
-      Width = 168
+      Width = 178
       Height = 21
       Anchors = [akLeft, akTop, akRight]
-      TabOrder = 15
+      TabOrder = 10
       DesignSize = (
-        168
+        178
         21)
       inherited btNext: TVDTButton
-        Left = 127
+        Left = 137
       end
       inherited btNew: TVDTButton
-        Left = 147
+        Left = 157
       end
       inherited edSearch: TEditLabeled
-        Width = 128
+        Width = 138
         LinkControls = <
           item
             Control = Label20

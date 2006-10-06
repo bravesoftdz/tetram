@@ -194,14 +194,14 @@ end;
 procedure TFrmConsultationAlbum.ImpRep(Sender: TObject);
 begin
   if lvEditions.ItemIndex > -1 then
-    ImpressionFicheAlbum(ID_Album, TEdition(lvEditions.Items.Objects[lvEditions.ItemIndex]).ID, TComponent(Sender).Tag = 1)
+    ImpressionFicheAlbum(ID_Album, TEditionComplete(lvEditions.Items.Objects[lvEditions.ItemIndex]).ID_Edition, TComponent(Sender).Tag = 1)
   else
     ImpressionFicheAlbum(ID_Album, GUID_NULL, TComponent(Sender).Tag = 1);
 end;
 
 procedure TFrmConsultationAlbum.ajouterClick(Sender: TObject);
 begin
-  if SaisieMouvementAlbum(ID_Album, TEdition(lvEditions.Items.Objects[lvEditions.ItemIndex]).ID, cbStock.Checked) then Historique.Refresh;
+  if SaisieMouvementAlbum(ID_Album, TEditionComplete(lvEditions.Items.Objects[lvEditions.ItemIndex]).ID_Edition, cbStock.Checked) then Historique.Refresh;
 end;
 
 procedure TFrmConsultationAlbum.Impression1Click(Sender: TObject);

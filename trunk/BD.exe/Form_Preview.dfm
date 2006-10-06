@@ -253,6 +253,14 @@ object FrmPreview: TFrmPreview
       ImageIndex = 8
       OnClick = ToolButton6Click
     end
+    object ToolButton7: TToolButton
+      Left = 433
+      Top = 0
+      Caption = 'ToolButton7'
+      ImageIndex = 9
+      Style = tbsCheck
+      OnClick = ToolButton7Click
+    end
   end
   object Panel: TPanel
     Left = 0
@@ -283,7 +291,7 @@ object FrmPreview: TFrmPreview
       Visible = False
       OnChange = ScrollBarHChange
     end
-    object Panel1: TPanel
+    object Panelcoin: TPanel
       Left = 543
       Top = 327
       Width = 16
@@ -293,23 +301,57 @@ object FrmPreview: TFrmPreview
       Visible = False
     end
     object fondImage: TPanel
-      Left = 136
+      Left = 176
       Top = 144
-      Width = 87
-      Height = 87
-      AutoSize = True
+      Width = 196
+      Height = 105
+      BevelOuter = bvNone
       Caption = ' '
-      Color = clWhite
+      ParentColor = True
       TabOrder = 3
-      object Image: TImage
-        Left = 1
-        Top = 1
-        Width = 85
-        Height = 85
-        Stretch = True
-        OnMouseDown = ImageMouseDown
-        OnMouseMove = ImageMouseMove
-        OnMouseUp = ImageMouseUp
+      OnMouseDown = ImageGaucheMouseDown
+      OnMouseMove = ImageGaucheMouseMove
+      OnMouseUp = ImageGaucheMouseUp
+      object Panel5: TPanel
+        Left = 109
+        Top = 0
+        Width = 87
+        Height = 87
+        AutoSize = True
+        Caption = ' '
+        Color = clWhite
+        TabOrder = 0
+        Visible = False
+        object ImageDroite: TImage
+          Left = 1
+          Top = 1
+          Width = 85
+          Height = 85
+          Stretch = True
+          OnMouseDown = ImageGaucheMouseDown
+          OnMouseMove = ImageGaucheMouseMove
+          OnMouseUp = ImageGaucheMouseUp
+        end
+      end
+      object Panel6: TPanel
+        Left = 0
+        Top = 0
+        Width = 87
+        Height = 87
+        AutoSize = True
+        Caption = ' '
+        Color = clWhite
+        TabOrder = 1
+        object ImageGauche: TImage
+          Left = 1
+          Top = 1
+          Width = 85
+          Height = 85
+          Stretch = True
+          OnMouseDown = ImageGaucheMouseDown
+          OnMouseMove = ImageGaucheMouseMove
+          OnMouseUp = ImageGaucheMouseUp
+        end
       end
     end
   end

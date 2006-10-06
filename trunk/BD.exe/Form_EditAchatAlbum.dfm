@@ -1,7 +1,7 @@
 object FrmEditAchatAlbum: TFrmEditAchatAlbum
   Left = 245
   Top = 418
-  Width = 738
+  Width = 744
   Height = 412
   Caption = 'Achat'
   Color = clBtnFace
@@ -18,7 +18,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 730
+    Width = 736
     Height = 349
     ActivePage = TabSheet1
     Align = alClient
@@ -28,7 +28,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
     object TabSheet1: TTabSheet
       Caption = 'Nouvel album'
       DesignSize = (
-        722
+        728
         318)
       object Label3: TLabel
         Left = 97
@@ -80,8 +80,8 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Layout = tlCenter
       end
       object Label20: TLabel
-        Left = 506
-        Top = 150
+        Left = 14
+        Top = 158
         Width = 28
         Height = 13
         Alignment = taRightJustify
@@ -109,11 +109,12 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       end
       object btScenariste: TVDTButton
         Tag = 1
-        Left = 228
-        Top = 146
+        Left = 478
+        Top = 154
         Width = 69
         Height = 41
         Cursor = crHandPoint
+        Anchors = [akTop, akRight]
         Caption = 'Sc'#233'nariste'
         Enabled = False
         Flat = True
@@ -129,11 +130,12 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       end
       object btDessinateur: TVDTButton
         Tag = 2
-        Left = 228
-        Top = 190
+        Left = 478
+        Top = 198
         Width = 69
         Height = 41
         Cursor = crHandPoint
+        Anchors = [akTop, akRight]
         Caption = 'Dessinateur'
         Enabled = False
         Flat = True
@@ -148,20 +150,22 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         OnClick = btScenaristeClick
       end
       object Label19: TLabel
-        Left = 4
-        Top = 150
+        Left = 254
+        Top = 158
         Width = 42
         Height = 13
         Alignment = taRightJustify
+        Anchors = [akTop, akRight]
         Caption = 'Auteurs:'
       end
       object btColoriste: TVDTButton
         Tag = 3
-        Left = 228
-        Top = 234
+        Left = 478
+        Top = 242
         Width = 69
         Height = 41
         Cursor = crHandPoint
+        Anchors = [akTop, akRight]
         Caption = 'Coloriste'
         Enabled = False
         Flat = True
@@ -176,7 +180,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         OnClick = btScenaristeClick
       end
       object Label7: TLabel
-        Left = 349
+        Left = 355
         Top = 50
         Width = 32
         Height = 13
@@ -195,8 +199,8 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         FocusControl = histoire
       end
       object btResetSerie: TCRFurtifLight
-        Left = 698
-        Top = 146
+        Left = 212
+        Top = 154
         Width = 20
         Height = 20
         Cursor = crHandPoint
@@ -250,7 +254,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       object edTitre: TEditLabeled
         Left = 48
         Top = 4
-        Width = 671
+        Width = 677
         Height = 20
         Anchors = [akLeft, akTop, akRight]
         BevelKind = bkTile
@@ -263,9 +267,9 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         CurrencyChar = #0
       end
       object vtSeries: TVirtualStringTree
-        Left = 541
-        Top = 169
-        Width = 177
+        Left = 49
+        Top = 177
+        Width = 183
         Height = 106
         Anchors = [akLeft, akTop, akRight]
         AnimationDuration = 0
@@ -379,10 +383,11 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         CurrencyChar = #0
       end
       object lvScenaristes: TVDTListViewLabeled
-        Left = 297
-        Top = 146
-        Width = 198
+        Left = 547
+        Top = 154
+        Width = 177
         Height = 41
+        Anchors = [akTop, akRight]
         BevelKind = bkTile
         BorderStyle = bsNone
         Columns = <
@@ -404,10 +409,11 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
           end>
       end
       object lvDessinateurs: TVDTListViewLabeled
-        Left = 297
-        Top = 190
-        Width = 198
+        Left = 547
+        Top = 198
+        Width = 177
         Height = 41
+        Anchors = [akTop, akRight]
         BevelKind = bkTile
         BorderStyle = bsNone
         Columns = <
@@ -429,10 +435,11 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
           end>
       end
       object vtPersonnes: TVirtualStringTree
-        Left = 48
-        Top = 169
+        Left = 298
+        Top = 177
         Width = 177
         Height = 106
+        Anchors = [akTop, akRight]
         AnimationDuration = 0
         BevelKind = bkTile
         BorderStyle = bsNone
@@ -457,10 +464,11 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Columns = <>
       end
       object lvColoristes: TVDTListViewLabeled
-        Left = 297
-        Top = 234
-        Width = 198
+        Left = 547
+        Top = 242
+        Width = 177
         Height = 41
+        Anchors = [akTop, akRight]
         BevelKind = bkTile
         BorderStyle = bsNone
         Columns = <
@@ -498,7 +506,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         CurrencyChar = #0
       end
       object remarques: TMemoLabeled
-        Left = 384
+        Left = 390
         Top = 50
         Width = 334
         Height = 81
@@ -515,7 +523,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       object histoire: TMemoLabeled
         Left = 48
         Top = 50
-        Width = 289
+        Width = 295
         Height = 81
         Anchors = [akLeft, akTop, akRight]
         BevelKind = bkTile
@@ -528,10 +536,11 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
           end>
       end
       inline FrameRechercheRapidePersonnes: TFrameRechercheRapide
-        Left = 48
-        Top = 146
+        Left = 298
+        Top = 154
         Width = 177
         Height = 21
+        Anchors = [akTop, akRight]
         TabOrder = 10
         DesignSize = (
           177
@@ -551,23 +560,23 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         end
       end
       inline FrameRechercheRapideSerie: TFrameRechercheRapide
-        Left = 541
-        Top = 146
-        Width = 156
+        Left = 49
+        Top = 154
+        Width = 162
         Height = 21
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 15
         DesignSize = (
-          156
+          162
           21)
         inherited btNext: TVDTButton
-          Left = 115
+          Left = 121
         end
         inherited btNew: TVDTButton
-          Left = 135
+          Left = 141
         end
         inherited edSearch: TEditLabeled
-          Width = 116
+          Width = 122
           LinkControls = <
             item
               Control = Label20
@@ -579,7 +588,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       Caption = 'Album existant'
       ImageIndex = 1
       DesignSize = (
-        722
+        728
         318)
       object Label4: TLabel
         Left = 13
@@ -593,7 +602,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       object vstAlbums: TVirtualStringTree
         Left = 48
         Top = 27
-        Width = 670
+        Width = 676
         Height = 248
         Anchors = [akLeft, akTop, akRight]
         AnimationDuration = 0
@@ -624,21 +633,21 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       inline FrameRechercheRapideAlbums: TFrameRechercheRapide
         Left = 48
         Top = 4
-        Width = 670
+        Width = 676
         Height = 21
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 0
         DesignSize = (
-          670
+          676
           21)
         inherited btNext: TVDTButton
-          Left = 629
+          Left = 635
         end
         inherited btNew: TVDTButton
-          Left = 649
+          Left = 655
         end
         inherited edSearch: TEditLabeled
-          Width = 630
+          Width = 636
           LinkControls = <
             item
               Control = Label4
@@ -650,12 +659,12 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
   inline Frame11: TFrame1
     Left = 0
     Top = 349
-    Width = 730
+    Width = 736
     Height = 31
     Align = alBottom
     TabOrder = 1
     inherited btnOK: TBitBtn
-      Left = 551
+      Left = 557
       Top = 8
       Width = 87
       Height = 19
@@ -663,7 +672,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       OnClick = Frame11btnOKClick
     end
     inherited btnAnnuler: TBitBtn
-      Left = 647
+      Left = 653
       Top = 8
       Width = 72
       Height = 19
