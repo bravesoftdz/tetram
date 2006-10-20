@@ -942,7 +942,7 @@ object FrmEditAlbum: TFrmEditAlbum
       AutoSize = True
       BevelOuter = bvNone
       Caption = ' '
-      TabOrder = 23
+      TabOrder = 18
       object SpeedButton3: TVDTButton
         Left = 282
         Top = 24
@@ -1799,7 +1799,7 @@ object FrmEditAlbum: TFrmEditAlbum
       Indent = 8
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 19
+      TabOrder = 20
       OnChange = vtEditeursChange
       OnClick = vtEditeursClick
       OnDblClick = vtEditeursDblClick
@@ -1829,7 +1829,7 @@ object FrmEditAlbum: TFrmEditAlbum
       Indent = 8
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 21
+      TabOrder = 22
       OnChange = vtCollectionsChange
       OnClick = vtCollectionsClick
       OnDblClick = vtCollectionsDblClick
@@ -1886,7 +1886,7 @@ object FrmEditAlbum: TFrmEditAlbum
       BevelKind = bkTile
       BorderStyle = bsNone
       ScrollBars = ssVertical
-      TabOrder = 22
+      TabOrder = 23
       LinkControls = <
         item
           Control = Label15
@@ -2002,7 +2002,7 @@ object FrmEditAlbum: TFrmEditAlbum
       Width = 292
       Height = 21
       Anchors = [akLeft, akTop, akRight]
-      TabOrder = 18
+      TabOrder = 19
       DesignSize = (
         292
         21)
@@ -2026,7 +2026,7 @@ object FrmEditAlbum: TFrmEditAlbum
       Width = 292
       Height = 21
       Anchors = [akLeft, akTop, akRight]
-      TabOrder = 20
+      TabOrder = 21
       DesignSize = (
         292
         21)

@@ -91,7 +91,7 @@ type
     function TransChamps(const Champ: string): string;
     function ValChamps(const Champ: string): Integer;
     function IsValChampBoolean(ValChamp: Integer): Boolean;
-    procedure LoadFromStream(Stream: TStream);
+    procedure LoadRechFromStream(Stream: TStream);
   end;
 
 implementation
@@ -539,8 +539,10 @@ end;
 procedure TFrmRecherche.TreeView1Deletion(Sender: TObject; Node: TTreeNode);
 begin
   // Node.Data = -1 est possible mais donc à libérer
-  if Integer(Node.Data) > 0 then
+  if Integer(Node.Data) > 0 then begin
     TCritere(Node.Data).Free;
+    Node.Data := nil;
+  end;
 end;
 
 procedure TFrmRecherche.btnRechercheClick(Sender: TObject);
@@ -585,26 +587,30 @@ var
       RechStream.WriteBuffer(Value[1], l);
     end;
 
+    procedure WriteNode(Node: TTreeNode);
+    begin
+      WriteInteger(Node.Level);
+      WriteInteger(Integer(Node.Data));
+      WriteString(Node.Text);
+      if Integer(Node.Data) > 0 then
+        TCritere(Node.Data).SaveToStream(RechStream);
+    end;
+
   var
     p: TCritere;
     i: Integer;
     sBool: string;
   begin
     Result := '';
-    WriteInteger(ItemCritere.Level);
-    WriteInteger(Integer(ItemCritere.Data));
-    WriteString(ItemCritere.Text);
+    WriteNode(ItemCritere);
     if Integer(ItemCritere.Data) = -1 then
       sBool := ' OR '
     else
       sBool := ' AND ';
     for i := 0 to ItemCritere.Count - 1 do begin
       if Integer(ItemCritere.Item[i].Data) > 0 then begin
+        WriteNode(ItemCritere.Item[i]);
         p := ItemCritere.Item[i].Data;
-        WriteInteger(ItemCritere.Level);
-        WriteInteger(Integer(ItemCritere.Data));
-        WriteString(ItemCritere.Text);
-        p.SaveToStream(RechStream);
         if Result = '' then
           Result := '(' + p.TestSQL + ')'
         else
@@ -775,7 +781,7 @@ begin
   end;
 end;
 
-procedure TFrmRecherche.LoadFromStream(Stream: TStream);
+procedure TFrmRecherche.LoadRechFromStream(Stream: TStream);
 
   function ReadInteger: Integer;
   begin
@@ -794,6 +800,7 @@ procedure TFrmRecherche.LoadFromStream(Stream: TStream);
   function CreateNode(nodeType: Integer; ParentNode: TTreeNode; const Text: string): TTreeNode;
   begin
     Result := TreeView1.Items.AddChild(ParentNode, Text);
+    Result.Data := Pointer(nodeType);
     if nodeType > 0 then begin
       Result.Data := TCritere.Create;
       TCritere(Result.Data).LoadFromStream(Stream);
@@ -801,30 +808,35 @@ procedure TFrmRecherche.LoadFromStream(Stream: TStream);
   end;
 
 var
-  lvl: Integer;
+  lvl, nodeType: Integer;
+  str: string;
   ANode, NextNode: TTreeNode;
 begin
   Stream.Position := 0;
   TreeView1.Items.BeginUpdate;
   try
     TreeView1.Items.Clear;
+
     ANode := nil;
     while Stream.Position < Stream.Size do begin
       lvl := ReadInteger;
+      nodeType := ReadInteger;
+      str := ReadString;
       if ANode = nil then
-        ANode := CreateNode(ReadInteger, nil, ReadString)
+        ANode := CreateNode(nodeType, nil, str)
       else if ANode.Level = lvl then
-        ANode := CreateNode(ReadInteger, ANode.Parent, ReadString)
+        ANode := CreateNode(nodeType, ANode.Parent, str)
       else if ANode.Level = (lvl - 1) then
-        ANode := CreateNode(ReadInteger, ANode, ReadString)
+        ANode := CreateNode(nodeType, ANode, str)
       else if ANode.Level > lvl then
       begin
         NextNode := ANode.Parent;
         while NextNode.Level > lvl do
           NextNode := NextNode.Parent;
-        ANode := CreateNode(ReadInteger, NextNode.Parent, ReadString);
+        ANode := CreateNode(nodeType, NextNode.Parent, str);
       end;
     end;
+    TreeView1.Items[0].Expand(True);
   finally
     TreeView1.Items.EndUpdate;
   end;

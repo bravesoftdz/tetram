@@ -226,7 +226,7 @@ end;
 
 procedure THistory.EditConsultation(Consult: RConsult);
 begin
-  RConsult(FListConsultation[FCurrentConsultation]).Assign(Consult);
+  CurrentConsult.Assign(Consult);
 end;
 
 procedure THistory.EditConsultation(const Ref: TGUID; Ref2: Integer);

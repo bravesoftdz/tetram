@@ -3,6 +3,7 @@ object FrmEditParaBD: TFrmEditParaBD
   Top = 180
   Width = 835
   Height = 926
+  ActiveControl = edTitre
   Caption = 'FrmEditParaBD'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET

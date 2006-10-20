@@ -3,6 +3,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
   Top = 418
   Width = 744
   Height = 412
+  ActiveControl = edTitre
   Caption = 'Achat'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -290,7 +291,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Indent = 8
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 16
+        TabOrder = 11
         OnChange = vtSeriesChange
         OnDblClick = vtSeriesDblClick
         Columns = <>
@@ -399,7 +400,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         ReadOnly = True
         ShowColumnHeaders = False
         SortType = stNone
-        TabOrder = 12
+        TabOrder = 14
         ViewStyle = vsReport
         OnData = lvScenaristesData
         OnKeyDown = lvColoristesKeyDown
@@ -425,7 +426,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         ReadOnly = True
         ShowColumnHeaders = False
         SortType = stBoth
-        TabOrder = 13
+        TabOrder = 15
         ViewStyle = vsReport
         OnData = lvDessinateursData
         OnKeyDown = lvColoristesKeyDown
@@ -458,7 +459,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Indent = 8
         ParentShowHint = False
         ShowHint = True
-        TabOrder = 11
+        TabOrder = 13
         OnChange = vtPersonnesChange
         OnDblClick = vtPersonnesDblClick
         Columns = <>
@@ -480,7 +481,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         ReadOnly = True
         ShowColumnHeaders = False
         SortType = stBoth
-        TabOrder = 14
+        TabOrder = 16
         ViewStyle = vsReport
         OnData = lvColoristesData
         OnKeyDown = lvColoristesKeyDown
@@ -541,7 +542,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Width = 177
         Height = 21
         Anchors = [akTop, akRight]
-        TabOrder = 10
+        TabOrder = 12
         DesignSize = (
           177
           21)
@@ -565,7 +566,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Width = 162
         Height = 21
         Anchors = [akLeft, akTop, akRight]
-        TabOrder = 15
+        TabOrder = 10
         DesignSize = (
           162
           21)
@@ -627,7 +628,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
           item
             Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
             Position = 0
-            Width = 670
+            Width = 672
           end>
       end
       inline FrameRechercheRapideAlbums: TFrameRechercheRapide

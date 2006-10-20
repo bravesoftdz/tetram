@@ -131,8 +131,13 @@ begin
   IG.Mode := Mode;
   IG.Filtre := Filtre;
   IG.ProcAcheter := Acheter;
+{$IFDEF RELEASE}
+  IG.ProcImporter := False;
+  IG.ProcExporter := False;
+{$ELSE}
   IG.ProcImporter := Importer;
   IG.ProcExporter := Exporter;
+{$ENDIF}
 end;
 
 function TFrmGestions.GestionCourante(SB: TSpeedButton = nil): TInfo_Gestion;

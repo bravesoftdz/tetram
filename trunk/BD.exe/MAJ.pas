@@ -174,7 +174,7 @@ begin
   _MAJFenetre(TFrmStock);
 end;
 
-procedure MAJRecherche(const Reference: TGUID; TypeSimple: Integer; Stream: TMemoryStream); 
+procedure MAJRecherche(const Reference: TGUID; TypeSimple: Integer; Stream: TMemoryStream);
 var
   FDest: TFrmRecherche;
   hg: IHourGlass;
@@ -183,17 +183,27 @@ begin
   if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
   FDest := TFrmRecherche.Create(Fond);
   with FDest do begin
+    // le TTreeView est une merde! si on fait la création de noeud avec Data
+    // avant l'assignation du Handle, les Data risques de partir dans la nature
+
+    // TreeView1.HandleNeeded n'est d'aucune utilité!!!!
+
+    // du coup, obligation de faire le SetChildForm AVANT de recréer les critères de recherche
+
+    // conclusion:
+    // TODO: virer le TTreeView!!!!!!!
+
+    Fond.SetChildForm(FDest);
+
     if Assigned(Stream) and (Stream.Size > 0) then begin
-      LoadFromStream(Stream);
+      LoadRechFromStream(Stream);
       btnRecherche.Click;
     end
-    else
-    if LightComboCheck1.ValidValue(TypeSimple) then begin
+    else if LightComboCheck1.ValidValue(TypeSimple) then begin
       LightComboCheck1.Value := TypeSimple;
       VTPersonnes.CurrentValue := Reference;
       SpeedButton1Click(nil);
     end;
-    Fond.SetChildForm(FDest);
   end;
   if Historique.CurrentConsultation = 0 then
     Historique.SetDescription('Accueil')
