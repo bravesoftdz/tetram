@@ -9,7 +9,6 @@ uses
 type
   TDataCommun = class(TDataModule)
     TblGenres: TJvUIBQuery;
-    TblPays: TJvUIBQuery;
     TGenre: TJvUIBQuery;
     TCritereReliure: TJvUIBQuery;
     TCritereString: TJvUIBQuery;

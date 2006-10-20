@@ -32,25 +32,25 @@ const
   MustRefresh: set of TActionConsultation = [fcRecherche, fcStock];
 
 type
-  RConsult = record
+  RConsult = class
     Action: TActionConsultation;
     ReferenceGUID, ReferenceGUID2: TGUID;
     Reference, Reference2: Integer;
     Description: string;
-  end;
+    Stream: TMemoryStream;
 
-  TConsultQueue = class(TQueue)
-  published
+    constructor Create;
     destructor Destroy; override;
-    procedure Clear;
+
+    procedure Assign(Consult: RConsult);
   end;
 
   THistory = class
   private
-    FListConsultation: array of RConsult;
+    FListConsultation: TObjectList;
     FCurrentConsultation: Integer;
     FLockCount: Integer;
-    FListWaiting: TConsultQueue;
+    FListWaiting: TObjectList;
     FOnChange: TNotifyEvent;
     function GetCountConsultation: Integer;
     function Open(const Consult: RConsult; WithLock: Boolean): Boolean;
@@ -59,13 +59,15 @@ type
     function GetWaiting: Boolean;
     procedure Delete(Index: Integer);
     procedure AddConsultation(const Consult: RConsult); overload;
-    procedure EditConsultation(const Consult: RConsult); overload;
+    procedure EditConsultation(Consult: RConsult); overload;
+    function GetCurrentConsult: RConsult;
   published
     constructor Create;
     destructor Destroy; override;
   public
     procedure AddConsultation(Consultation: TActionConsultation); overload;
     procedure EditConsultation(const Ref: TGUID; Ref2: Integer); overload;
+    procedure EditConsultation(Stream: TStream); overload;
     procedure AddWaiting(Consultation: TActionConsultation; Ref: Integer = -1; Ref2: Integer = -1); overload;
     procedure AddWaiting(Consultation: TActionConsultation; const Ref: TGUID; Ref2: Integer = -1); overload;
     procedure AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: TGUID); overload;
@@ -82,6 +84,7 @@ type
     procedure SetDescription(const Value: string);
     procedure GoConsultation(Index: Integer);
     property CurrentConsultation: Integer read FCurrentConsultation;
+    property CurrentConsult: RConsult read GetCurrentConsult;
     property CountConsultation: Integer read GetCountConsultation;
     property Waiting: Boolean read GetWaiting;
     property OnChange: TNotifyEvent read FOnChange write FOnChange;
@@ -105,49 +108,49 @@ procedure THistory.AddConsultation(const Consult: RConsult);
   procedure Ajoute;
   begin
     Inc(FCurrentConsultation);
-    SetLength(FListConsultation, FCurrentConsultation + 1);
-    with FListConsultation[FCurrentConsultation] do begin
-      Action := Consult.Action;
-      Reference := Consult.Reference;
-      ReferenceGUID := Consult.ReferenceGUID;
-      Reference2 := Consult.Reference2;
-      ReferenceGUID2 := Consult.ReferenceGUID2;
-    end;
+    FListConsultation.Count := FCurrentConsultation + 1;
+    if not Assigned(FListConsultation[FCurrentConsultation]) then
+      FListConsultation[FCurrentConsultation] := RConsult.Create;
+    Modifie;
   end;
 
 begin
-  with FListConsultation[FCurrentConsultation] do
-    if not Bool(FLockCount) then begin
-      if (FCurrentConsultation > -1) and (Consult.Action = Action) then begin
+  if not Bool(FLockCount) then begin
+    if (FCurrentConsultation > -1) and (Consult.Action = CurrentConsult.Action) then
+      with CurrentConsult do begin
         if Consult.Action in MustRefresh then
           Modifie
         else if not (Consult.Action in CanRefresh) or (Reference <> Consult.Reference) or (not IsEqualGUID(ReferenceGUID, Consult.ReferenceGUID)) or (Reference2 <> Consult.Reference2) or (not IsEqualGUID(ReferenceGUID2, Consult.ReferenceGUID2)) then
           Ajoute;
       end
-      else
-        Ajoute;
-    end;
+    else
+      Ajoute;
+  end;
 end;
 
 procedure THistory.AddConsultation(Consultation: TActionConsultation);
 var
   Consult: RConsult;
 begin
-  Consult.Action := Consultation;
-  Consult.Reference := -1;
-  Consult.ReferenceGUID := GUID_NULL;
-  Consult.Reference2 := -1;
-  Consult.ReferenceGUID2 := GUID_NULL;
+  Consult := RConsult.Create;
+  try
+    Consult.Action := Consultation;
+    Consult.Reference := -1;
+    Consult.ReferenceGUID := GUID_NULL;
+    Consult.Reference2 := -1;
+    Consult.ReferenceGUID2 := GUID_NULL;
+    Consult.Stream.Size := 0;
 
-  AddConsultation(Consult);
+    AddConsultation(Consult);
+  finally
+    Consult.Free;
+  end;
 end;
 
 procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: TGUID);
-var
-  p: ^RConsult;
 begin
-  New(p);
-  with RConsult(FListWaiting.Push(p)^) do begin
+  FListWaiting.Add(RConsult.Create);
+  with RConsult(FListWaiting.Last) do begin
     Action := Consultation;
     Reference := -1;
     ReferenceGUID := Ref;
@@ -157,11 +160,9 @@ begin
 end;
 
 procedure THistory.AddWaiting(Consultation: TActionConsultation; Ref, Ref2: Integer);
-var
-  p: ^RConsult;
 begin
-  New(p);
-  with RConsult(FListWaiting.Push(p)^) do begin
+  FListWaiting.Add(RConsult.Create);
+  with RConsult(FListWaiting.Last) do begin
     Action := Consultation;
     Reference := Ref;
     ReferenceGUID := GUID_NULL;
@@ -171,11 +172,9 @@ begin
 end;
 
 procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref: TGUID; Ref2: Integer);
-var
-  p: ^RConsult;
 begin
-  New(p);
-  with RConsult(FListWaiting.Push(p)^) do begin
+  FListWaiting.Add(RConsult.Create);
+  with RConsult(FListWaiting.Last) do begin
     Action := Consultation;
     Reference := -1;
     ReferenceGUID := Ref;
@@ -199,56 +198,54 @@ end;
 
 procedure THistory.Clear;
 begin
-  SetLength(FListConsultation, 1);
+  FListConsultation.Count := 1;
   First;
 end;
 
 constructor THistory.Create;
 begin
   inherited;
-  SetLength(FListConsultation, 0);
+  FListConsultation := TObjectList.Create(True);
   FCurrentConsultation := -1;
   FLockCount := 0;
-  FListWaiting := TConsultQueue.Create;
+  FListWaiting := TObjectList.Create(True);
 end;
 
 procedure THistory.Delete(Index: Integer);
-var
-  i: Integer;
 begin
-  if (Index < 0) or (Index >= Length(FListConsultation)) then Exit;
-  for i := Index + 1 to Pred(Length(FListConsultation)) do
-    FListConsultation[i - 1] := FListConsultation[i];
-  SetLength(FListConsultation, Length(FListConsultation) - 1);
+  if (Index < 0) or (Index >= FListConsultation.Count) then Exit;
+  FListConsultation.Delete(Index);
 end;
 
 destructor THistory.Destroy;
 begin
-  SetLength(FListConsultation, 0);
+  FreeAndNil(FListConsultation);
   FreeAndNil(FListWaiting);
   inherited;
 end;
 
-procedure THistory.EditConsultation(const Consult: RConsult);
+procedure THistory.EditConsultation(Consult: RConsult);
 begin
-  with FListConsultation[FCurrentConsultation] do begin
-    Reference := Consult.Reference;
-    ReferenceGUID := Consult.ReferenceGUID;
-    Reference2 := Consult.Reference2;
-    ReferenceGUID2 := Consult.ReferenceGUID2;
-  end;
+  RConsult(FListConsultation[FCurrentConsultation]).Assign(Consult);
 end;
 
 procedure THistory.EditConsultation(const Ref: TGUID; Ref2: Integer);
-var
-  Consult: RConsult;
 begin
-  Consult.Reference := -1;
-  Consult.ReferenceGUID := Ref;
-  Consult.Reference2 := Ref2;
-  Consult.ReferenceGUID2 := GUID_NULL;
+  CurrentConsult.Reference := -1;
+  CurrentConsult.ReferenceGUID := Ref;
+  CurrentConsult.Reference2 := Ref2;
+  CurrentConsult.ReferenceGUID2 := GUID_NULL;
+  CurrentConsult.Stream.Size := 0;
+end;
 
-  EditConsultation(Consult);
+procedure THistory.EditConsultation(Stream: TStream);
+begin
+  CurrentConsult.Reference := -1;
+  CurrentConsult.ReferenceGUID := GUID_NULL;
+  CurrentConsult.Reference2 := -1;
+  CurrentConsult.ReferenceGUID2 := GUID_NULL;
+  CurrentConsult.Stream.Size := 0;
+  CurrentConsult.Stream.CopyFrom(Stream, 0);
 end;
 
 procedure THistory.First;
@@ -259,21 +256,30 @@ end;
 
 function THistory.GetCountConsultation: Integer;
 begin
-  Result := Length(FListConsultation);
+  Result := FListConsultation.Count;
+end;
+
+function THistory.GetCurrentConsult: RConsult;
+begin
+  Result := RConsult(FListConsultation[FCurrentConsultation]);
 end;
 
 function THistory.GetDescription(Index: Integer): string;
+var
+  Consult: RConsult;
 begin
-  Result := FListConsultation[Index].Description;
+  Consult := RConsult(FListConsultation[Index]);
+
+  Result := Consult.Description;
 
   if Result = '' then
     if Index = FCurrentConsultation then begin
-      FListConsultation[Index].Description := 'Ask: ' + FormatDateTime('c', Now);
-      Result := FListConsultation[Index].Description;
+      Consult.Description := 'Ask: ' + FormatDateTime('c', Now);
+      Result := Consult.Description;
     end
     else begin
-      FListConsultation[Index].Description := 'Unknown: ' + FormatDateTime('c', Now);
-      Result := FListConsultation[Index].Description;
+      Consult.Description := 'Unknown: ' + FormatDateTime('c', Now);
+      Result := Consult.Description;
     end;
 end;
 
@@ -284,7 +290,7 @@ end;
 
 procedure THistory.GoConsultation(Index: Integer);
 begin
-  if (Index < 0) or (Index >= Length(FListConsultation)) then Exit;
+  if (Index < 0) or (Index >= FListConsultation.Count) then Exit;
   FCurrentConsultation := Index;
   Refresh;
 end;
@@ -317,14 +323,14 @@ begin
       AddConsultation(Consult);
     case Consult.Action of
       fcActionBack: Back;
-      fcActionRefresh: Result := Open(FListConsultation[FCurrentConsultation], True);
+      fcActionRefresh: Result := Open(CurrentConsult, True);
       fcAlbum: Result := MAJConsultationAlbum(Consult.ReferenceGUID);
       fcEmprunteur: Result := MAJConsultationEmprunteur(Consult.ReferenceGUID);
       fcSerie: Result := MAJConsultationSerie(Consult.ReferenceGUID);
       fcAuteur: Result := MAJConsultationAuteur(Consult.ReferenceGUID);
       fcParaBD: Result := MAJConsultationParaBD(Consult.ReferenceGUID);
       fcCouverture, fcImageParaBD: Result := ZoomCouverture(Consult.Action = fcImageParaBD, Consult.ReferenceGUID, Consult.ReferenceGUID2);
-      fcRecherche: MAJRecherche(Consult.ReferenceGUID, Consult.Reference2);
+      fcRecherche: MAJRecherche(Consult.ReferenceGUID, Consult.Reference2, Consult.Stream);
       fcStock: MAJStock;
       fcPreview: Fond.SetModalChildForm(TForm(Consult.Reference));
       fcSeriesIncompletes: MAJSeriesIncompletes;
@@ -345,12 +351,10 @@ begin
 end;
 
 procedure THistory.ProcessNext;
-var
-  p: ^RConsult;
 begin
-  p := FListWaiting.Pop;
-  Open(p^, False);
-  Dispose(p);
+  if FListWaiting.Count = 0 then Exit;
+  Open(RConsult(FListWaiting.First), False);
+  FListWaiting.Delete(0);
 end;
 
 procedure THistory.Refresh;
@@ -361,7 +365,7 @@ end;
 
 procedure THistory.SetDescription(const Value: string);
 begin
-  FListConsultation[FCurrentConsultation].Description := Value;
+  CurrentConsult.Description := Value;
 end;
 
 procedure THistory.Unlock;
@@ -369,17 +373,28 @@ begin
   if FLockCount > 0 then Dec(FLockCount);
 end;
 
-{ TConsultQueue }
+{ RConsult }
 
-procedure TConsultQueue.Clear;
+procedure RConsult.Assign(Consult: RConsult);
 begin
-  while Bool(Count) do
-    Dispose(Pop);
+  Action := Consult.Action;
+  ReferenceGUID := Consult.ReferenceGUID;
+  ReferenceGUID2 := Consult.ReferenceGUID2;
+  Reference := Consult.Reference;
+  Reference2 := Consult.Reference2;
+  Description := Consult.Description;
+  Stream.Position := 0;
+  Stream.CopyFrom(Consult.Stream, 0);
 end;
 
-destructor TConsultQueue.Destroy;
+constructor RConsult.Create;
 begin
-  Clear;
+  Stream := TMemoryStream.Create;
+end;
+
+destructor RConsult.Destroy;
+begin
+  Stream.Free;
   inherited;
 end;
 

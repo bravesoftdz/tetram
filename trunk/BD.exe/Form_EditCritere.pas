@@ -24,11 +24,13 @@ type
     { Déclarations privées }
     wMin, WMax: Integer;
     FRecherche: TFrmRecherche;
-    procedure SetCritere(const Value: RCritere);
-    function GetCritere: RCritere;
+    FChampValeurs: TStringList;
+    FCritere: TCritere;
+    procedure SetCritere(Value: TCritere);
+    function GetCritere: TCritere;
   public
     { Déclarations publiques }
-    property Critere: RCritere read GetCritere write SetCritere;
+    property Critere: TCritere read GetCritere write SetCritere;
   end;
 
 implementation
@@ -40,8 +42,7 @@ uses JvUIB, DM_Commun, Commun, DM_Princ, JvUIBLib;
 type
   TChampSpecial = (csNone, csTitre, csGenre, csAffiche, csEtat, csReliure, csOrientation, csFormatEdition, csTypeEdition, csHistoire, csRemarques);
 
-  PChamp = ^RChamp;
-  RChamp = record
+  TChamp = class
     NomChamp: string;
     NomTable: string;
     TypeData: TUIBFieldType;
@@ -49,19 +50,33 @@ type
     Special: TChampSpecial;
   end;
 
-function TFrmEditCritere.GetCritere: RCritere;
+function TFrmEditCritere.GetCritere: TCritere;
 var
-  Champ: PChamp;
+  Champ: TChamp;
 begin
+  Result := FCritere; 
+
+  Champ := TChamp(champs.LastItemData);
+
   Result.iChamp := champs.Value;
   Result.iCritere2 := Critere2.Value;
   Result.iSignes := signes.Value;
   Result.valeurText := valeur.Text;
-  Champ := PChamp(champs.LastItemData);
+  if Champ.Special = csGenre then
+    Result.valeurText := FChampValeurs[Result.iCritere2];
   Result.NomTable := Champ.NomTable;
   Result.TestSQL := Champ.NomTable + '.' + Champ.NomChamp;
   case Champ.Special of
-    csEtat, csReliure, csOrientation, csFormatEdition, csGenre, csTypeEdition:
+    csGenre:
+      case Result.iSignes of
+        0: // Indifférent
+          Result.TestSQL := Result.TestSQL + ' IS NOT NULL';
+        1: // est
+          Result.TestSQL := Result.TestSQL + '=' + QuotedStr(UpperCase(Result.valeurText));
+        2: // n'est pas
+          Result.TestSQL := Result.TestSQL + '<>' + QuotedStr(UpperCase(Result.valeurText));
+      end;
+    csEtat, csReliure, csOrientation, csFormatEdition, csTypeEdition:
       case Result.iSignes of
         0: // Indifférent
           Result.TestSQL := Result.TestSQL + ' IS NOT NULL';
@@ -135,13 +150,14 @@ begin
   if valeur.Visible then Result.Test := Result.Test + ' ' + valeur.Text;
 end;
 
-procedure TFrmEditCritere.SetCritere(const Value: RCritere);
+procedure TFrmEditCritere.SetCritere(Value: TCritere);
 begin
-  champs.Value := Value.iChamp;
+  FCritere.Assign(Value);
+  champs.Value := FCritere.iChamp;
   champsChange(champs);
-  signes.Value := Value.iSignes;
-  valeur.Text := Value.valeurText;
-  if Critere2.Visible and Critere2.Enabled then Critere2.Value := Value.iCritere2;
+  signes.Value := FCritere.iSignes;
+  valeur.Text := FCritere.valeurText;
+  if Critere2.Visible and Critere2.Enabled then Critere2.Value := FCritere.iCritere2;
 end;
 
 procedure TFrmEditCritere.FormCreate(Sender: TObject);
@@ -152,11 +168,13 @@ var
   t: string;
   pt: TPoint;
   Table1, Desc, LstChamps: TJvUIBQuery;
-  p: PChamp;
+  p: TChamp;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
   FRecherche := TFrmRecherche(Owner);
+  FChampValeurs := TStringList.Create;
+  FCritere := TCritere.Create;
   pt := FRecherche.ClientToScreen(Point((FRecherche.Width - Width) div 2, (FRecherche.Height - Height) div 2));
   SetBounds(pt.x, pt.y, Width, Height);
   wMin := signes.Width;
@@ -174,7 +192,7 @@ begin
       for i := 0 to Fields.FieldCount - 1 do begin
         t := FRecherche.TransChamps(Fields.SqlName[i]);
         if (t <> '') then begin
-          New(p);
+          p := TChamp.Create;
           p.NomChamp := UpperCase(Fields.SqlName[i]);
           p.NomTable := ListTables[j];
           p.TypeData := Fields.FieldType[i];
@@ -199,7 +217,7 @@ begin
       end;
     end;
 
-    New(p);
+    p := TChamp.Create;
     p.NomChamp := 'ID_Genre';
     p.NomTable := 'GENRESERIES';
     p.TypeData := uftChar;
@@ -219,11 +237,33 @@ end;
 
 procedure TFrmEditCritere.champsChange(Sender: TObject);
 
+  procedure AssignItems(Items: TItems; Source: TJvUIBQuery; ChampValeurs: TStrings); overload;
+  begin
+    try
+      Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      Items.Clear;
+      FChampValeurs.Clear;
+      Source.Open;
+      while not Source.Eof do begin
+        with Items.Add do begin
+          Caption := Source.Fields.AsString[1];
+          Valeur := Index;
+          ChampValeurs.Add(Source.Fields.AsString[0]);
+        end;
+        Source.Next;
+      end;
+      Source.Close;
+    finally
+      Source.Transaction.Free;
+    end;
+  end;
+
   procedure AssignItems(Items: TItems; Source: TJvUIBQuery); overload;
   begin
     try
       Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
       Items.Clear;
+      FChampValeurs.Clear;
       Source.Open;
       while not Source.Eof do begin
         with Items.Add do begin
@@ -259,7 +299,7 @@ begin
   signes.Items.Clear;
   Critere2.Items.Clear;
   signes.Tag := 0;
-  case PChamp(champs.LastItemData).Special of
+  case TChamp(champs.LastItemData).Special of
     csTitre: begin
         AssignItems(signes.Items, DataCommun.TCritereTitre);
         AssignItems(Critere2.Items, DataCommun.TCritereLangueTitre);
@@ -268,7 +308,7 @@ begin
       end;
     csGenre: begin
         AssignItems(signes.Items, DataCommun.TCritereListe);
-        AssignItems(Critere2.Items, DataCommun.TGenre);
+        AssignItems(Critere2.Items, DataCommun.TGenre, FChampValeurs);
         valeur.Visible := False;
         signes.Tag := 2;
       end;
@@ -289,13 +329,13 @@ begin
         valeur.Visible := False;
       end;
     else
-      case PChamp(champs.LastItemData).TypeData of
+      case TChamp(champs.LastItemData).TypeData of
         uftChar, uftVarchar, uftBlob: begin
             AssignItems(signes.Items, DataCommun.TCritereString);
             valeur.Visible := True;
           end;
         uftSmallInt, uftInteger, uftFloat, uftNumeric:
-          if PChamp(champs.LastItemData).Booleen then begin
+          if TChamp(champs.LastItemData).Booleen then begin
             AssignItems(signes.Items, DataCommun.TCritereBoolean);
             valeur.Visible := False;
           end
@@ -310,7 +350,7 @@ begin
       end;
   end;
   if valeur.Visible then
-    case PChamp(champs.LastItemData).TypeData of
+    case TChamp(champs.LastItemData).TypeData of
       uftChar, uftVarchar, uftBlob: valeur.TypeDonnee := tdChaine;
       uftSmallInt, uftInteger: valeur.TypeDonnee := tdEntierSigne;
       uftFloat, uftNumeric: valeur.TypeDonnee := tdNumericSigne;
@@ -328,17 +368,16 @@ end;
 procedure TFrmEditCritere.FormDestroy(Sender: TObject);
 var
   i: Integer;
-  p: PChamp;
 begin
   champs.Items.BeginUpdate;
   try
-    for i := 0 to champs.Items.Count - 1 do begin
-      p := PChamp(champs.Items.Items[i].Data);
-      Dispose(p);
-    end;
+    for i := 0 to champs.Items.Count - 1 do
+      TChamp(champs.Items.Items[i].Data).Free;
   finally
     champs.Items.EndUpdate;
   end;
+  FChampValeurs.Free;
+  FCritere.Free;
 end;
 
 procedure TFrmEditCritere.ActOkExecute(Sender: TObject);

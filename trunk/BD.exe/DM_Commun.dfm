@@ -1,8 +1,8 @@
 object DataCommun: TDataCommun
   OldCreateOrder = False
   OnDestroy = DataModuleDestroy
-  Left = 335
-  Top = 383
+  Left = 517
+  Top = 380
   Height = 351
   Width = 589
   object TblGenres: TJvUIBQuery
@@ -10,12 +10,6 @@ object DataCommun: TDataCommun
       'SELECT ID_GENRE, GENRE FROM GENRES ORDER BY UPPERGENRE')
     Left = 16
     Top = 8
-  end
-  object TblPays: TJvUIBQuery
-    SQL.Strings = (
-      'SELECT REFPAYS, PAYS FROM PAYS ORDER BY UPPERPAYS')
-    Left = 16
-    Top = 56
   end
   object TGenre: TJvUIBQuery
     SQL.Strings = (

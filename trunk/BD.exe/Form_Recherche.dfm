@@ -3,7 +3,7 @@ object FrmRecherche: TFrmRecherche
   Top = 321
   Width = 400
   Height = 469
-  Caption = 'FrmRecherche'
+  Caption = 'Recherche'
   Color = clBtnFace
   Constraints.MinWidth = 400
   Font.Charset = DEFAULT_CHARSET
@@ -234,7 +234,7 @@ object FrmRecherche: TFrmRecherche
         Cursor = crHandPoint
         Hint = 'Rechercher en fonctions des crit'#232'res (recherche multi-crit'#232'res)'
         Anchors = [akTop, akRight]
-        Caption = 'Recherche'
+        Caption = 'Chercher'
         TabOrder = 4
         OnClick = btnRechercheClick
       end

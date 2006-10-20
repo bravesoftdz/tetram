@@ -156,7 +156,7 @@ begin
 
     FrmSplash.Affiche_act(ChargementApp + '...');
     Application.CreateForm(TFond, Fond);
-  FrmSplash.Affiche_act(ChargementDatabase + '...');
+    FrmSplash.Affiche_act(ChargementDatabase + '...');
     Historique.AddConsultation(fcRecherche);
     if Utilisateur.Options.ModeDemarrage then
       Fond.ModeConsultation.Execute

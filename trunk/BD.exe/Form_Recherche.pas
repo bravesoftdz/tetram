@@ -8,8 +8,7 @@ uses
   Frame_RechercheRapide;
 
 type
-  PCritere = ^RCritere;
-  RCritere = record
+  TCritere = class
     // affichage
     Champ, Test: string;
     // sql
@@ -19,6 +18,10 @@ type
     iChamp: Integer;
     iSignes, iCritere2: Integer;
     valeurText: string;
+
+    procedure Assign(S: TCritere);
+    procedure SaveToStream(Stream: TStream);
+    procedure LoadFromStream(Stream: TStream);
   end;
 
   TTypeRecherche = (trAucune, trSimple, trComplexe);
@@ -88,6 +91,7 @@ type
     function TransChamps(const Champ: string): string;
     function ValChamps(const Champ: string): Integer;
     function IsValChampBoolean(ValChamp: Integer): Boolean;
+    procedure LoadFromStream(Stream: TStream);
   end;
 
 implementation
@@ -97,6 +101,74 @@ uses
   Main;
 
 {$R *.DFM}
+
+{ TCritere }
+
+procedure TCritere.Assign(S: TCritere);
+begin
+  Champ := S.Champ;
+  Test := S.Test;
+  NomTable := S.NomTable;
+  TestSQL := S.TestSQL;
+  iChamp := S.iChamp;
+  iSignes := S.iSignes;
+  iCritere2 := S.iCritere2;
+  valeurText := S.valeurText;
+end;
+
+procedure TCritere.LoadFromStream(Stream: TStream);
+
+  function ReadInteger: Integer;
+  begin
+    Stream.Read(Result, SizeOf(Integer));
+  end;
+
+  function ReadString: string;
+  var
+    l: Integer;
+  begin
+    l := ReadInteger;
+    SetLength(Result, l);
+    Stream.Read(Result[1], l);
+  end;
+
+begin
+  Champ := ReadString;
+  Test := ReadString;
+  NomTable := ReadString;
+  TestSQL := ReadString;
+  iChamp := ReadInteger;
+  iSignes := ReadInteger;
+  iCritere2 := ReadInteger;
+  valeurText := ReadString;
+end;
+
+procedure TCritere.SaveToStream(Stream: TStream);
+
+  procedure WriteInteger(Value: Integer);
+  begin
+    Stream.Write(Value, SizeOf(Integer));
+  end;
+
+  procedure WriteString(const Value: string);
+  var
+    l: Integer;
+  begin
+    l := Length(Value);
+    WriteInteger(l);
+    Stream.WriteBuffer(Value[1], l);
+  end;
+
+begin
+  WriteString(Champ);
+  WriteString(Test);
+  WriteString(NomTable);
+  WriteString(TestSQL);
+  WriteInteger(iChamp);
+  WriteInteger(iSignes);
+  WriteInteger(iCritere2);
+  WriteString(valeurText);
+end;
 
 var
   FSortColumn: Integer;
@@ -229,38 +301,17 @@ end;
 procedure TFrmRecherche.ModifClick(Sender: TObject);
 var
   ToModif: TTreeNode;
-  p: PCritere;
-  r: RCritere;
+  p: TCritere;
 begin
   ToModif := TreeView1.Selected;
   if not (Assigned(ToModif) and (Integer(ToModif.Data) > 0)) then Exit;
   p := ToModif.Data;
   with TFrmEditCritere.Create(Self) do begin
     try
-      with p^ do begin
-        r.Test := Test;
-        r.Champ := Champ;
-        r.NomTable := NomTable;
-        r.TestSQL := TestSQL;
-        r.iChamp := iChamp;
-        r.iSignes := iSignes;
-        r.iCritere2 := iCritere2;
-        r.valeurText := valeurText;
-      end;
-      Critere := r;
+      Critere := p;
       if ShowModal <> mrOk then Exit;
-      r := Critere;
-      with p^ do begin
-        Test := r.Test;
-        Champ := r.Champ;
-        NomTable := r.NomTable;
-        TestSQL := r.TestSQL;
-        iChamp := r.iChamp;
-        iSignes := r.iSignes;
-        iCritere2 := r.iCritere2;
-        valeurText := r.valeurText;
-      end;
-      ToModif.Text := p^.Champ + ' ' + p^.Test;
+      p.Assign(Critere);
+      ToModif.Text := p.Champ + ' ' + p.Test;
       if TypeRecherche = trComplexe then TypeRecherche := trAucune;
     finally
       Free;
@@ -305,7 +356,7 @@ var
   procedure ProcessTreeNode(Node: TTreeNode; prefix: string = '');
   var
     i: Integer;
-    p: PCritere;
+    p: TCritere;
     s: string;
   begin
     if Integer(Node.Data) > 0 then begin
@@ -444,33 +495,22 @@ end;
 
 procedure TFrmRecherche.Critre1Click(Sender: TObject);
 var
-  r: RCritere;
-  p: PCritere;
+  p: TCritere;
   ParentNode: TTreeNode;
 begin
   if not Assigned(TreeView1.Selected) then Exit;
   with TFrmEditCritere.Create(Self) do begin
     try
       if ShowModal <> mrOk then Exit;
-      r := Critere;
-      New(p);
-      with p^ do begin
-        Test := r.Test;
-        Champ := r.Champ;
-        NomTable := r.NomTable;
-        TestSQL := r.TestSQL;
-        iChamp := r.iChamp;
-        iSignes := r.iSignes;
-        iCritere2 := r.iCritere2;
-        valeurText := r.valeurText;
-      end;
+      p := TCritere.Create;
+      p.Assign(Critere);
       if Integer(TreeView1.Selected.Data) < 1 then
         ParentNode := TreeView1.Selected
       else
         ParentNode := TreeView1.Selected.Parent;
       with TreeView1.Items.AddChild(ParentNode, '') do begin
         Data := p;
-        Text := p^.Champ + ' ' + p^.Test;
+        Text := p.Champ + ' ' + p.Test;
         Selected := True;
       end;
       if TypeRecherche = trComplexe then TypeRecherche := trAucune;
@@ -498,12 +538,15 @@ end;
 
 procedure TFrmRecherche.TreeView1Deletion(Sender: TObject; Node: TTreeNode);
 begin
-  if Integer(TreeView1.Selected.Data) > 0 then Dispose(TreeView1.Selected.Data);
+  // Node.Data = -1 est possible mais donc à libérer
+  if Integer(Node.Data) > 0 then
+    TCritere(Node.Data).Free;
 end;
 
 procedure TFrmRecherche.btnRechercheClick(Sender: TObject);
 var
   slFrom, slWhere: TStringList;
+  RechStream: TMemoryStream;
 
   function ProcessTables: string;
   var
@@ -527,12 +570,30 @@ var
   end;
 
   function ProcessCritere(ItemCritere: TTreeNode): string;
+
+    procedure WriteInteger(Value: Integer);
+    begin
+      RechStream.Write(Value, SizeOf(Integer));
+    end;
+
+    procedure WriteString(const Value: string);
+    var
+      l: Integer;
+    begin
+      l := Length(Value);
+      WriteInteger(l);
+      RechStream.WriteBuffer(Value[1], l);
+    end;
+
   var
-    p: PCritere;
+    p: TCritere;
     i: Integer;
     sBool: string;
   begin
     Result := '';
+    WriteInteger(ItemCritere.Level);
+    WriteInteger(Integer(ItemCritere.Data));
+    WriteString(ItemCritere.Text);
     if Integer(ItemCritere.Data) = -1 then
       sBool := ' OR '
     else
@@ -540,6 +601,10 @@ var
     for i := 0 to ItemCritere.Count - 1 do begin
       if Integer(ItemCritere.Item[i].Data) > 0 then begin
         p := ItemCritere.Item[i].Data;
+        WriteInteger(ItemCritere.Level);
+        WriteInteger(Integer(ItemCritere.Data));
+        WriteString(ItemCritere.Text);
+        p.SaveToStream(RechStream);
         if Result = '' then
           Result := '(' + p.TestSQL + ')'
         else
@@ -571,6 +636,7 @@ begin
   slFrom.Duplicates := dupIgnore;
   slFrom.Delimiter := ',';
   slWhere := TStringList.Create;
+  RechStream := TMemoryStream.Create;
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT DISTINCT ALBUMS.ID_Album, ALBUMS.TITREALBUM, ALBUMS.TOME, ALBUMS.TOMEDEBUT, ALBUMS.TOMEFIN, ALBUMS.HORSSERIE, ALBUMS.INTEGRALE, ALBUMS.MOISPARUTION, ALBUMS.ANNEEPARUTION, ALBUMS.ID_Serie, SERIES.TITRESERIE';
@@ -578,6 +644,7 @@ begin
     slFrom.Add('ALBUMS');
     slFrom.Add('SERIES');
     slFrom.Add('EDITIONS');
+    RechStream.Size := 0;
     sWhere := ProcessCritere(TreeView1.Items[0]);
     SQL.Add('FROM ' + ProcessTables);
 
@@ -596,11 +663,13 @@ begin
     else
       TypeRecherche := trAucune;
     CurrentSQL := SQL.Text;
+    Historique.EditConsultation(RechStream);
   finally
     Transaction.Free;
     Free;
     slFrom.Free;
     slWhere.Free;
+    RechStream.Free;
   end;
   VTResult.RootNodeCount := ResultList.Count;
   lbResult.Caption := IntToStr(VTResult.RootNodeCount) + ' résultat(s) trouvé(s)';
@@ -703,6 +772,61 @@ begin
   if Key = #13 then begin
     Key := #0;
     vtPersonnes.OnDblClick(nil);
+  end;
+end;
+
+procedure TFrmRecherche.LoadFromStream(Stream: TStream);
+
+  function ReadInteger: Integer;
+  begin
+    Stream.Read(Result, SizeOf(Integer));
+  end;
+
+  function ReadString: string;
+  var
+    l: Integer;
+  begin
+    l := ReadInteger;
+    SetLength(Result, l);
+    Stream.Read(Result[1], l);
+  end;
+
+  function CreateNode(nodeType: Integer; ParentNode: TTreeNode; const Text: string): TTreeNode;
+  begin
+    Result := TreeView1.Items.AddChild(ParentNode, Text);
+    if nodeType > 0 then begin
+      Result.Data := TCritere.Create;
+      TCritere(Result.Data).LoadFromStream(Stream);
+    end;
+  end;
+
+var
+  lvl: Integer;
+  ANode, NextNode: TTreeNode;
+begin
+  Stream.Position := 0;
+  TreeView1.Items.BeginUpdate;
+  try
+    TreeView1.Items.Clear;
+    ANode := nil;
+    while Stream.Position < Stream.Size do begin
+      lvl := ReadInteger;
+      if ANode = nil then
+        ANode := CreateNode(ReadInteger, nil, ReadString)
+      else if ANode.Level = lvl then
+        ANode := CreateNode(ReadInteger, ANode.Parent, ReadString)
+      else if ANode.Level = (lvl - 1) then
+        ANode := CreateNode(ReadInteger, ANode, ReadString)
+      else if ANode.Level > lvl then
+      begin
+        NextNode := ANode.Parent;
+        while NextNode.Level > lvl do
+          NextNode := NextNode.Parent;
+        ANode := CreateNode(ReadInteger, NextNode.Parent, ReadString);
+      end;
+    end;
+  finally
+    TreeView1.Items.EndUpdate;
   end;
 end;
 

@@ -14,7 +14,7 @@ procedure MAJStock;
 procedure MAJSeriesIncompletes;
 procedure MAJPrevisionsSorties;
 procedure MAJPrevisionsAchats;
-procedure MAJRecherche(const Reference: TGUID; TypeSimple: Integer = -1);
+procedure MAJRecherche(const Reference: TGUID; TypeSimple: Integer = -1; Stream: TMemoryStream = nil);
 function ZoomCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID): Boolean;
 
 function SaisieMouvementAlbum(const MvtID_Album, MvtID_Edition: TGUID; MvtPret: Boolean; const MvtID_Emprunteur: string = sGUID_NULL): Boolean;
@@ -174,7 +174,7 @@ begin
   _MAJFenetre(TFrmStock);
 end;
 
-procedure MAJRecherche(const Reference: TGUID; TypeSimple: Integer); overload;
+procedure MAJRecherche(const Reference: TGUID; TypeSimple: Integer; Stream: TMemoryStream); 
 var
   FDest: TFrmRecherche;
   hg: IHourGlass;
@@ -183,6 +183,11 @@ begin
   if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
   FDest := TFrmRecherche.Create(Fond);
   with FDest do begin
+    if Assigned(Stream) and (Stream.Size > 0) then begin
+      LoadFromStream(Stream);
+      btnRecherche.Click;
+    end
+    else
     if LightComboCheck1.ValidValue(TypeSimple) then begin
       LightComboCheck1.Value := TypeSimple;
       VTPersonnes.CurrentValue := Reference;

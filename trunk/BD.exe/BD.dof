@@ -80,7 +80,7 @@ UnsafeType=0
 UnsafeCode=0
 UnsafeCast=0
 [Linker]
-MapFile=0
+MapFile=3
 OutputObjs=0
 ConsoleApp=1
 DebugInfo=0
@@ -94,9 +94,9 @@ OutputDir=..\..\bin
 UnitOutputDir=dcu
 PackageDLLOutputDir=
 PackageDCPOutputDir=
-SearchPath=G:\PROGRA~1\Common\jcl\lib\D7\debug;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\;$(Compos)\FastMM\FastMM4
+SearchPath=$(DELPHI)\Lib\Debug;$(Compos)\FastMM\FastMM4;G:\PROGRA~1\Common\jcl\lib\D7\debug;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\
 Packages=VCL50;VCLX50;VCLSMP50;QRPT50;VCLDB50;VCLBDE50;VCLDBX50;TEEUI50;TEEDB50;TEE50;TEEQR50;NMFAST50;dclocx50;dclaxserver50;ibevnt50;VCLIB50;VCLIE50;INETDB50;INET50;vcl;rtl;dsnap;dbrtl;vcldb;websnap;webdsnap;inetdb;inet;xmlrtl;vclx;vclie;indy;bdertl;dsnapcon;VclSmp;MediaKit
-Conditionals=_DEBUG;Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Conditionals=DEBUG;_Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
@@ -115,7 +115,7 @@ AutoIncBuild=1
 MajorVer=1
 MinorVer=2
 Release=1
-Build=1
+Build=4
 Debug=0
 PreRelease=0
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Teträm Corp
 FileDescription=
-FileVersion=1.2.1.1
+FileVersion=1.2.1.4
 InternalName=BDT
 LegalCopyright=Teträm Corp 1997-2005
 LegalTrademarks=
@@ -135,15 +135,6 @@ ProductName=BDtheque
 ProductVersion=1
 Comments=
 [Excluded Packages]
-C:\Program Files\Borland\Delphi7\Bin\dclbde70.bpl=Composants BD BDE Borland
-c:\program files\borland\delphi7\Bin\dclclxdb70.bpl=Composants BD CLX Borland
-c:\program files\borland\delphi7\bin\dclRave70.bpl=Paquet Rave Reports BE 5.0
-c:\program files\borland\delphi7\Projects\Bpl\SUISkinD7.bpl=Sunisoft SUISkin Engine
-C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTEE57.bpl=TeeChart 5 Components
-C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTEP57.bpl=TeeChart Pro 5 Components
-C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTQR57.bpl=TeeChart 5 for QuickReport
-C:\WINDOWS\system32\TeeImage57.bpl=TeeChart Pro Graphic Exporting formats
-C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTGL57.bpl=TeeChart 5 for OpenGL
 c:\program files\borland\delphi7\Bin\DBWEBXPRT.BPL=Paquet Expert Web Borland
 c:\program files\borland\delphi7\Projects\Bpl\IBO40XDT_D7.bpl=IB Objects TDataset
 c:\program files\borland\delphi7\Projects\Bpl\IBO40CDT_D7.bpl=IB Objects Core Components
@@ -157,12 +148,26 @@ c:\program files\borland\delphi7\Projects\Bpl\IBO40TDT_D7.bpl=IB Objects Tools C
 c:\program files\borland\delphi7\Projects\Bpl\IBOARMURE.bpl=(sans titre)
 C:\programmes\Composant\ArmureD7.bpl=ARMURE
 c:\program files\borland\delphi7\Bin\dcldss70.bpl=Composants Decision Cube Borland
+[HistoryLists\hlConditionals]
+Count=2
+Item0=DEBUG;_Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Item1=Release
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
+[HistoryLists\hlSearchPath]
+Count=4
+Item0=$(DELPHI)\Lib\Debug;$(Compos)\FastMM\FastMM4;G:\PROGRA~1\Common\jcl\lib\D7\debug;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\
+Item1=$(Compos)\FastMM\FastMM4;G:\PROGRA~1\Common\jcl\lib\D7\debug;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\
+Item2=$(Compos)\FastMM\FastMM4
+Item3=G:\PROGRA~1\Common\jcl\lib\D7\debug;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\;$(Compos)\FastMM\FastMM4
 [HistoryLists\hlUnitOutputDirectory]
 Count=1
 Item0=dcu
+[HistoryLists\hlOutputDirectorry]
+Count=2
+Item0=..\..\bin
+Item1=..\..\bin\UDF\
 [HistoryLists\hlBPLOutput]
 Count=1
 Item0=.
