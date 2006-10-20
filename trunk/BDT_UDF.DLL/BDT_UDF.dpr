@@ -1,15 +1,13 @@
 library BDT_UDF;
 
 uses
-  FastMM4 in '..\..\..\..\Common\FastMM464\FastMM4.pas',
-  FastMM4Messages in '..\..\..\..\Common\FastMM464\FastMM4Messages.pas',
+  FastMM4,
   Windows,
   SysUtils,
   Classes,
-  //  IBHeader,
   IBExternals,
-  Divers in '..\..\..\..\Common\Divers.pas',
-  ib_util in 'D:\Program Files\Firebird\Firebird_1_5\include\ib_util.pas',
+  Divers,
+  ib_util in 'ib_util.pas',
   Math;
 
 {$R *.res}
