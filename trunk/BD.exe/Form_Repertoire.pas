@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, DBCtrls, Menus, Buttons, ComCtrls, ExtCtrls,
-  ScanEdit, Main, VDTButton, Commun, VirtualTrees, ActnList, VirtualTree, jpeg, DBEditLabeled, ComboCheck,
+  ScanEdit, VDTButton, VirtualTrees, ActnList, VirtualTree, jpeg, DBEditLabeled, ComboCheck,
   Frame_RechercheRapide;
 
 type
@@ -45,7 +45,7 @@ var
 implementation
 
 uses
-  MAJ, CommonConst, IniFiles, Procedures, UHistorique;
+  CommonConst, IniFiles, Procedures, UHistorique;
 
 {$R *.DFM}
 

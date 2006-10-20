@@ -1,5 +1,5 @@
 unit Form_AboutBox;
-{$D-}
+{.$D-}
 interface
 
 uses Windows, SysUtils, Classes, Graphics, Forms, Controls, StdCtrls,
@@ -45,6 +45,8 @@ resourcestring
 
 function GetWindowsVersion: string;
 type
+  TGNSI = procedure(var lpSystemInfo: TSystemInfo); stdcall;
+
   _OSVERSIONINFOEX = record
     dwOSVersionInfoSize: DWORD;
     dwMajorVersion: DWORD;
@@ -72,15 +74,22 @@ const
   VER_SUITE_SINGLEUSERTS = $100;
   VER_SUITE_PERSONAL = $200;
   VER_SUITE_BLADE = $400;
+  VER_SUITE_STORAGE_SERVER = $2000;
   // wProductType
   VER_NT_WORKSTATION = $001;
   VER_NT_DOMAIN_CONTROLLER = $002;
   VER_NT_SERVER = $003;
 
+  SM_SERVERR2 = 89;
+  PROCESSOR_ARCHITECTURE_IA64 = 6;
+  PROCESSOR_ARCHITECTURE_AMD64 = 9;
+
   BUFSIZE = 80;
 var
   OSVERSIONINFOEX: _OSVERSIONINFOEX;
   OSVERSIONINFO: _OSVERSIONINFO absolute OSVERSIONINFOEX;
+  si: SYSTEM_INFO;
+  pGNSI: TGNSI;
   bOsVersionInfoEx: Boolean;
   hdlKey: HKEY;
   lRet: LONGINT;
@@ -90,6 +99,7 @@ begin
   Result := '';
   // Try calling GetVersionEx using the OSVERSIONINFOEX structure.
   // If that fails, try using the OSVERSIONINFO structure.
+  ZeroMemory(@si, sizeof(SYSTEM_INFO));
   ZeroMemory(@OSVERSIONINFO, sizeof(_OSVERSIONINFOEX));
   OSVERSIONINFO.dwOSVersionInfoSize := sizeof(_OSVERSIONINFOEX);
   bOsVersionInfoEx := GetVersionEx(OSVERSIONINFO);
@@ -97,37 +107,76 @@ begin
     OSVERSIONINFO.dwOSVersionInfoSize := sizeof(_OSVERSIONINFO);
     if not GetVersionEx(OSVERSIONINFO) then Exit;
   end;
+
+  // Call GetNativeSystemInfo if supported or GetSystemInfo otherwise.
+  pGNSI := GetProcAddress(GetModuleHandle('kernel32.dll'), 'GetNativeSystemInfo');
+  if Assigned(pGNSI) then
+    pGNSI(si)
+  else
+    GetSystemInfo(si);
+
   case OSVERSIONINFO.dwPlatformId of
     // Test for the Windows NT product family.
     VER_PLATFORM_WIN32_NT: begin
         // Test for the specific product family.
-        if (OSVERSIONINFO.dwMajorVersion = 5) and (OSVERSIONINFO.dwMinorVersion = 2) then Result := 'Windows Server 2003';
+        Result := 'Unknown Windows';
+        if (OSVERSIONINFO.dwMajorVersion = 6) and (OSVERSIONINFO.dwMinorVersion = 0) then
+          if (OSVERSIONINFOEX.wProductType = VER_NT_WORKSTATION) then
+            Result := 'Windows Vista'
+          else
+            Result := 'Windows Server "Longhorn"';
+        if (OSVERSIONINFO.dwMajorVersion = 5) and (OSVERSIONINFO.dwMinorVersion = 2) then
+          if (GetSystemMetrics(SM_SERVERR2) <> 0) then
+            Result := 'Windows Server 2003 "R2"'
+          else if (OSVERSIONINFOEX.wProductType = VER_NT_WORKSTATION) and (si.wProcessorArchitecture = PROCESSOR_ARCHITECTURE_AMD64) then
+            Result := 'Windows XP Professional x64 Edition'
+          else
+            Result := 'Windows Server 2003';
         if (OSVERSIONINFO.dwMajorVersion = 5) and (OSVERSIONINFO.dwMinorVersion = 1) then Result := 'Windows XP';
         if (OSVERSIONINFO.dwMajorVersion = 5) and (OSVERSIONINFO.dwMinorVersion = 0) then Result := 'Windows 2000';
         if (OSVERSIONINFO.dwMajorVersion <= 4) then Result := 'Windows NT';
         // Test for specific product on Windows NT 4.0 SP6 and later.
         if bOsVersionInfoEx then begin
           // Test for the workstation type.
-          if (OSVERSIONINFOEX.wProductType = VER_NT_WORKSTATION) then begin
+          if (OSVERSIONINFOEX.wProductType = VER_NT_WORKSTATION) and (si.wProcessorArchitecture <> PROCESSOR_ARCHITECTURE_AMD64) then begin
             if (OSVERSIONINFO.dwMajorVersion = 4) then
               Result := Result + ' Workstation 4.0'
             else if Bool(OSVERSIONINFOEX.wSuiteMask and VER_SUITE_PERSONAL) then
               Result := Result + ' Home Edition'
             else
               Result := Result + ' Professional';
-            // Test for the server type.
           end
-          else if (OSVERSIONINFOEX.wProductType = VER_NT_SERVER) then begin
-            if (OSVERSIONINFO.dwMajorVersion = 5) and (OSVERSIONINFO.dwMinorVersion = 2) then begin
-              if Bool(OSVERSIONINFOEX.wSuiteMask and VER_SUITE_DATACENTER) then
-                Result := Result + ' Datacenter Edition'
-              else if Bool(OSVERSIONINFOEX.wSuiteMask and VER_SUITE_ENTERPRISE) then
-                Result := Result + ' Enterprise Edition'
-              else if Bool(OSVERSIONINFOEX.wSuiteMask and VER_SUITE_BLADE) then
-                Result := Result + ' Web Edition'
-              else
-                Result := Result + ' Standard Edition';
-            end
+            // Test for the server type.
+          else if (OSVERSIONINFOEX.wProductType = VER_NT_SERVER) or (OSVERSIONINFOEX.wProductType = VER_NT_DOMAIN_CONTROLLER) then begin
+            if (OSVERSIONINFO.dwMajorVersion = 5) and (OSVERSIONINFO.dwMinorVersion = 2) then
+              case si.wProcessorArchitecture of
+                PROCESSOR_ARCHITECTURE_IA64: begin
+                    if Bool(OSVERSIONINFOEX.wSuiteMask and VER_SUITE_DATACENTER) then
+                      Result := Result + ' Datacenter Edition for Itanium-based Systems'
+                    else if Bool(OSVERSIONINFOEX.wSuiteMask and VER_SUITE_ENTERPRISE) then
+                      Result := Result + ' Enterprise Edition for Itanium-based Systems'
+                    else
+                      Result := Result + ' Standard Edition for Itanium-based Systems';
+                  end;
+                PROCESSOR_ARCHITECTURE_AMD64: begin
+                    if Bool(OSVERSIONINFOEX.wSuiteMask and VER_SUITE_DATACENTER) then
+                      Result := Result + ' Datacenter x64 Edition'
+                    else if Bool(OSVERSIONINFOEX.wSuiteMask and VER_SUITE_ENTERPRISE) then
+                      Result := Result + ' Enterprise x64 Edition'
+                    else
+                      Result := Result + ' Standard x64 Edition';
+                  end;
+                else begin
+                  if Bool(OSVERSIONINFOEX.wSuiteMask and VER_SUITE_DATACENTER) then
+                    Result := Result + ' Datacenter Edition'
+                  else if Bool(OSVERSIONINFOEX.wSuiteMask and VER_SUITE_ENTERPRISE) then
+                    Result := Result + ' Enterprise Edition'
+                  else if Bool(OSVERSIONINFOEX.wSuiteMask and VER_SUITE_BLADE) then
+                    Result := Result + ' Web Edition'
+                  else
+                    Result := Result + ' Standard Edition';
+                end;
+              end
             else if (OSVERSIONINFO.dwMajorVersion = 5) and (OSVERSIONINFO.dwMinorVersion = 0) then begin
               if Bool(OSVERSIONINFOEX.wSuiteMask and VER_SUITE_DATACENTER) then
                 Result := Result + ' Datacenter Server'

@@ -9,10 +9,10 @@ uses SysUtils, Windows, Classes, TypeRec, DB, Graphics, JvUIB;
 type
   TListAlbum = class(TList)
   protected
-    function Get(Index: Integer): TAlbum;
-    procedure Put(Index: Integer; Item: TAlbum);
+    function GetItem(Index: Integer): TAlbum;
+    procedure SetItem(Index: Integer; Item: TAlbum);
   public
-    property Items[Index: Integer]: TAlbum read Get write Put; default;
+    property Items[Index: Integer]: TAlbum read GetItem write SetItem; default;
   end;
 
   TListAlbumAdd = class(TListAlbum)
@@ -36,12 +36,12 @@ begin
   Result := inherited Add(TAlbum.Make(Q));
 end;
 
-function TListAlbum.Get(Index: Integer): TAlbum;
+function TListAlbum.GetItem(Index: Integer): TAlbum;
 begin
   Result := TAlbum(inherited Get(Index));
 end;
 
-procedure TListAlbum.Put(Index: Integer; Item: TAlbum);
+procedure TListAlbum.SetItem(Index: Integer; Item: TAlbum);
 begin
   inherited Put(Index, Item);
 end;

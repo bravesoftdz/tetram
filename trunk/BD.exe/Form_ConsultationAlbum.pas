@@ -545,7 +545,7 @@ var
 begin
   if not IsDownKey(VK_CONTROL) then begin
     s := FAlbum.Serie.SiteWeb;
-    if FAlbum.Serie.SiteWeb <> '' then
+    if s <> '' then
       ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
   end;
 end;

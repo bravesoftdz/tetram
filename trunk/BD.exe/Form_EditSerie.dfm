@@ -653,29 +653,30 @@ object FrmEditSerie: TFrmEditSerie
         end>
     end
     object cbTerminee: TCheckBoxLabeled
-      Left = 170
+      Left = 320
       Top = 417
       Width = 90
       Height = 16
       AllowGrayed = True
       Caption = 'S'#233'rie termin'#233'e'
       State = cbGrayed
-      TabOrder = 16
+      TabOrder = 17
+      OnClick = cbTermineeClick
       LinkControls = <
         item
           Control = cbTerminee
         end>
     end
-    object cbComplete: TCheckBoxLabeled
-      Left = 56
+    object cbManquants: TCheckBoxLabeled
+      Left = 128
       Top = 417
-      Width = 90
+      Width = 137
       Height = 16
-      Caption = 'S'#233'rie compl'#232'te'
-      TabOrder = 15
+      Caption = 'Chercher les manquants'
+      TabOrder = 16
       LinkControls = <
         item
-          Control = cbComplete
+          Control = cbManquants
         end>
     end
     object vtAlbums: TVirtualStringTree
@@ -702,7 +703,7 @@ object FrmEditSerie: TFrmEditSerie
       Indent = 8
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 17
+      TabOrder = 19
       OnDblClick = vtAlbumsDblClick
       Columns = <>
     end
@@ -852,7 +853,7 @@ object FrmEditSerie: TFrmEditSerie
       Indent = 8
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 18
+      TabOrder = 20
       OnDblClick = vtParaBDDblClick
       Columns = <>
     end
@@ -950,6 +951,31 @@ object FrmEditSerie: TFrmEditSerie
             Control = Label5
           end>
       end
+    end
+    object cbSorties: TCheckBoxLabeled
+      Left = 416
+      Top = 417
+      Width = 121
+      Height = 16
+      Caption = 'Surveiller les sorties'
+      TabOrder = 18
+      LinkControls = <
+        item
+          Control = cbSorties
+        end>
+    end
+    object cbComplete: TCheckBoxLabeled
+      Left = 56
+      Top = 417
+      Width = 65
+      Height = 16
+      Caption = 'Complete'
+      TabOrder = 15
+      OnClick = cbCompleteClick
+      LinkControls = <
+        item
+          Control = cbComplete
+        end>
     end
   end
   inline Frame11: TFrame1

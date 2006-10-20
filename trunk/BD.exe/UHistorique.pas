@@ -58,17 +58,17 @@ type
     procedure Unlock;
     function GetWaiting: Boolean;
     procedure Delete(Index: Integer);
-    procedure AddConsultation(Consult: RConsult); overload;
-    procedure EditConsultation(Consult: RConsult); overload;
+    procedure AddConsultation(const Consult: RConsult); overload;
+    procedure EditConsultation(const Consult: RConsult); overload;
   published
     constructor Create;
     destructor Destroy; override;
   public
     procedure AddConsultation(Consultation: TActionConsultation); overload;
-    procedure EditConsultation(Ref: TGUID; Ref2: Integer); overload;
+    procedure EditConsultation(const Ref: TGUID; Ref2: Integer); overload;
     procedure AddWaiting(Consultation: TActionConsultation; Ref: Integer = -1; Ref2: Integer = -1); overload;
-    procedure AddWaiting(Consultation: TActionConsultation; Ref: TGUID; Ref2: Integer = -1); overload;
-    procedure AddWaiting(Consultation: TActionConsultation; Ref, Ref2: TGUID); overload;
+    procedure AddWaiting(Consultation: TActionConsultation; const Ref: TGUID; Ref2: Integer = -1); overload;
+    procedure AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: TGUID); overload;
 
     procedure Refresh;
     procedure Back;
@@ -79,7 +79,7 @@ type
     procedure Clear;
     procedure ProcessNext;
     function GetDescription(Index: Integer): string;
-    procedure SetDescription(Value: string);
+    procedure SetDescription(const Value: string);
     procedure GoConsultation(Index: Integer);
     property CurrentConsultation: Integer read FCurrentConsultation;
     property CountConsultation: Integer read GetCountConsultation;
@@ -95,7 +95,7 @@ implementation
 uses
   MAJ, Main, Forms;
 
-procedure THistory.AddConsultation(Consult: RConsult);
+procedure THistory.AddConsultation(const Consult: RConsult);
 
   procedure Modifie;
   begin
@@ -142,7 +142,7 @@ begin
   AddConsultation(Consult);
 end;
 
-procedure THistory.AddWaiting(Consultation: TActionConsultation; Ref, Ref2: TGUID);
+procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: TGUID);
 var
   p: ^RConsult;
 begin
@@ -170,7 +170,7 @@ begin
   end;
 end;
 
-procedure THistory.AddWaiting(Consultation: TActionConsultation; Ref: TGUID; Ref2: Integer);
+procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref: TGUID; Ref2: Integer);
 var
   p: ^RConsult;
 begin
@@ -229,7 +229,7 @@ begin
   inherited;
 end;
 
-procedure THistory.EditConsultation(Consult: RConsult);
+procedure THistory.EditConsultation(const Consult: RConsult);
 begin
   with FListConsultation[FCurrentConsultation] do begin
     Reference := Consult.Reference;
@@ -239,7 +239,7 @@ begin
   end;
 end;
 
-procedure THistory.EditConsultation(Ref: TGUID; Ref2: Integer);
+procedure THistory.EditConsultation(const Ref: TGUID; Ref2: Integer);
 var
   Consult: RConsult;
 begin
@@ -359,7 +359,7 @@ begin
   AddWaiting(fcActionRefresh);
 end;
 
-procedure THistory.SetDescription(Value: string);
+procedure THistory.SetDescription(const Value: string);
 begin
   FListConsultation[FCurrentConsultation].Description := Value;
 end;

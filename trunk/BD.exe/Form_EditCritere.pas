@@ -17,8 +17,6 @@ type
     ActOk: TAction;
     procedure FormCreate(Sender: TObject);
     procedure champsChange(Sender: TObject);
-    procedure SetCritere(const Value: RCritere);
-    function GetCritere: RCritere;
     procedure FormDestroy(Sender: TObject);
     procedure ActOkExecute(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
@@ -26,6 +24,8 @@ type
     { Déclarations privées }
     wMin, WMax: Integer;
     FRecherche: TFrmRecherche;
+    procedure SetCritere(const Value: RCritere);
+    function GetCritere: RCritere;
   public
     { Déclarations publiques }
     property Critere: RCritere read GetCritere write SetCritere;
@@ -353,7 +353,7 @@ begin
     ((signes.Tag = 1 {DataCommun.TCritereTitre}) and (signes.Checked) and (signes.Value in [4..5]))
     or ((signes.Tag = 2 {DataCommun.TCritereListe}) and (signes.Checked) and (signes.Value >= 0))
     );
-  ActOK.Enabled := (champs.Checked)
+  ActOk.Enabled := (champs.Checked)
     and (signes.Checked)
     and (not valeur.Visible or (valeur.Text <> ''))
     and (not Critere2.Visible or (not Critere2.Enabled) or (Critere2.Checked));

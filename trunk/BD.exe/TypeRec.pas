@@ -91,7 +91,7 @@ type
     destructor Destroy; override;
 
     procedure Fill(Query: TJvUIBQuery); overload; override;
-    procedure Fill(Pe: TPersonnage; ReferenceAlbum, ReferenceSerie: TGUID; Metier: Integer); reintroduce; overload;
+    procedure Fill(Pe: TPersonnage; const ReferenceAlbum, ReferenceSerie: TGUID; Metier: Integer); reintroduce; overload;
     procedure Clear; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
 
@@ -104,7 +104,7 @@ type
 
     procedure Assign(Ps: TBasePointeur); override;
 
-    procedure Fill(ID_Editeur: TGUID); reintroduce; overload;
+    procedure Fill(const ID_Editeur: TGUID); reintroduce; overload;
     procedure Fill(Query: TJvUIBQuery); overload; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
@@ -131,8 +131,8 @@ type
     procedure Assign(Ps: TBasePointeur); override;
 
     procedure Fill(Query: TJvUIBQuery); overload; override;
-    procedure Fill(ID_Album: TGUID); reintroduce; overload;
-    procedure Fill(ID_Album: TGUID; ID_Edition: TGUID); reintroduce; overload;
+    procedure Fill(const ID_Album: TGUID); reintroduce; overload;
+    procedure Fill(const ID_Album, ID_Edition: TGUID); reintroduce; overload;
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
     class function Duplicate(Ps: TAlbum): TAlbum; reintroduce;
@@ -150,7 +150,7 @@ type
     destructor Destroy; override;
 
     procedure Fill(Query: TJvUIBQuery); overload; override;
-    procedure Fill(ID_Collection: TGUID); reintroduce; overload;
+    procedure Fill(const ID_Collection: TGUID); reintroduce; overload;
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TCollection): TCollection; reintroduce;
@@ -168,7 +168,7 @@ type
     destructor Destroy; override;
 
     procedure Fill(Query: TJvUIBQuery); overload; override;
-    procedure Fill(ID_Serie: TGUID); reintroduce; overload;
+    procedure Fill(const ID_Serie: TGUID); reintroduce; overload;
     function ChaineAffichage(Simple: Boolean): string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TSerie): TSerie; reintroduce;
@@ -199,7 +199,7 @@ type
     procedure Assign(Ps: TBasePointeur); override;
 
     procedure Fill(Query: TJvUIBQuery); overload; override;
-    procedure Fill(ID_Emprunteur: TGUID); reintroduce; overload;
+    procedure Fill(const ID_Emprunteur: TGUID); reintroduce; overload;
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TEmprunteur): TEmprunteur;
@@ -325,6 +325,7 @@ end;
 
 constructor TBasePointeur.Create;
 begin
+  inherited;
   ID := GUID_NULL;
 end;
 
@@ -431,7 +432,7 @@ begin
   NomEditeur := Query.Fields.ByNameAsString['NomEditeur'];
 end;
 
-procedure TEditeur.Fill(ID_Editeur: TGUID);
+procedure TEditeur.Fill(const ID_Editeur: TGUID);
 var
   q: TJvUIBQuery;
 begin
@@ -520,7 +521,7 @@ begin
   end;
 end;
 
-procedure TAuteur.Fill(Pe: TPersonnage; ReferenceAlbum, ReferenceSerie: TGUID; Metier: Integer);
+procedure TAuteur.Fill(Pe: TPersonnage; const ReferenceAlbum, ReferenceSerie: TGUID; Metier: Integer);
 begin
   Personne.Assign(Pe);
   ID_Album := ReferenceAlbum;
@@ -641,12 +642,12 @@ begin
   Result := TAlbum(inherited Duplicate(Ps));
 end;
 
-procedure TAlbum.Fill(ID_Album: TGUID);
+procedure TAlbum.Fill(const ID_Album: TGUID);
 begin
   Fill(ID_Album, GUID_NULL);
 end;
 
-procedure TAlbum.Fill(ID_Album: TGUID; ID_Edition: TGUID);
+procedure TAlbum.Fill(const ID_Album, ID_Edition: TGUID);
 var
   q: TJvUIBQuery;
 begin
@@ -731,7 +732,7 @@ begin
   end;
 end;
 
-procedure TCollection.Fill(ID_Collection: TGUID);
+procedure TCollection.Fill(const ID_Collection: TGUID);
 var
   q: TJvUIBQuery;
 begin
@@ -817,7 +818,7 @@ begin
   Collection.Clear;
 end;
 
-procedure TSerie.Fill(ID_Serie: TGUID);
+procedure TSerie.Fill(const ID_Serie: TGUID);
 var
   q: TJvUIBQuery;
 begin
@@ -925,7 +926,7 @@ begin
   Nom := Query.Fields.ByNameAsString['NomEmprunteur'];
 end;
 
-procedure TEmprunteur.Fill(ID_Emprunteur: TGUID);
+procedure TEmprunteur.Fill(const ID_Emprunteur: TGUID);
 var
   q: TJvUIBQuery;
 begin

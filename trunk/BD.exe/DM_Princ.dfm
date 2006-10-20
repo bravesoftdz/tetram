@@ -2,10 +2,10 @@ object DMPrinc: TDMPrinc
   OldCreateOrder = False
   OnCreate = DataModuleCreate
   OnDestroy = DataModuleDestroy
-  Left = 498
-  Top = 264
-  Height = 532
-  Width = 783
+  Left = 510
+  Top = 202
+  Height = 444
+  Width = 572
   object UIBDataBase: TJvUIBDataBase
     Params.Strings = (
       'sql_dialect=3'

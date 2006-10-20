@@ -3,7 +3,7 @@ unit Form_ZoomCouverture;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls, Commun, Main, ActnList, ToolWin, StdCtrls,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls, ActnList, ToolWin, StdCtrls,
   Procedures, Menus;
 
 type
@@ -41,16 +41,16 @@ type
     function ApercuUpdate: Boolean;
   public
     { Déclarations publiques }
-    function LoadCouverture(isParaBD: Boolean; ID_Item, ID_Couverture: TGUID): Boolean;
+    function LoadCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID): Boolean;
   end;
 
 implementation
 
-uses CommonConst, Impression, UHistorique, jpeg, Math;
+uses Impression, UHistorique, jpeg, Math;
 
 {$R *.DFM}
 
-function TFrmZoomCouverture.LoadCouverture(isParaBD: Boolean; ID_Item, ID_Couverture: TGUID): Boolean;
+function TFrmZoomCouverture.LoadCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID): Boolean;
 var
   ms: TStream;
   jpg: TJPEGImage;

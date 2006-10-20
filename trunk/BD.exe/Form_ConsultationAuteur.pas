@@ -3,7 +3,7 @@ unit Form_ConsultationAuteur;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls, Main,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls, 
   VDTButton, ActnList, Spin, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, jpeg, Procedures, ShellAPI, VirtualTree, LoadComplet;
 
 type
@@ -60,8 +60,7 @@ implementation
 
 {$R *.DFM}
 
-uses Commun, TypeRec, CommonConst, MAJ, Impression, DateUtils, UHistorique,
-  Divers;
+uses Commun, TypeRec, Impression, DateUtils, UHistorique;
 
 type
   PNodeInfo = ^RNodeInfo;
@@ -192,10 +191,10 @@ begin
     NodeInfo.Album := nil;
     NodeInfo.ParaBD := nil;
 
-    if Node.Index < ParentNodeInfo.Serie.Albums.Count then
+    if Integer(Node.Index) < ParentNodeInfo.Serie.Albums.Count then
       NodeInfo.Album := TAlbum(ParentNodeInfo.Serie.Albums[Node.Index])
     else
-      NodeInfo.ParaBD := TParaBD(ParentNodeInfo.Serie.ParaBD[Node.Index - ParentNodeInfo.Serie.Albums.Count]);
+      NodeInfo.ParaBD := TParaBD(ParentNodeInfo.Serie.ParaBD[Integer(Node.Index) - ParentNodeInfo.Serie.Albums.Count]);
   end;
 end;
 

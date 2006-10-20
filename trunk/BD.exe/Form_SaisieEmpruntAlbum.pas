@@ -32,8 +32,8 @@ type
     FID_Album: TGUID;
     FEdition: TEditionComplete;
     FEditions: TEditionsComplet;
-    procedure SetID_Album(Value: TGUID);
-    procedure SetID_Emprunteur(Value: TGUID);
+    procedure SetID_Album(const Value: TGUID);
+    procedure SetID_Emprunteur(const Value: TGUID);
     function GetID_Emprunteur: TGUID;
     procedure SetID_Edition(const Value: TGUID);
     function GetID_Edition: TGUID;
@@ -46,7 +46,7 @@ type
 
 implementation
 
-uses DM_Princ, CommonConst, TypeRec, CommonList, Procedures;
+uses CommonConst, TypeRec, Procedures;
 
 {$R *.DFM}
 
@@ -56,7 +56,7 @@ const
   NoEmprunts = 'Pas d''emprunts.';
   NotThisEntryHere = 'Impossible d''ajouter ce mouvement dans cette fenêtre';
 
-procedure TFrmSaisie_EmpruntAlbum.SetID_Album(Value: TGUID);
+procedure TFrmSaisie_EmpruntAlbum.SetID_Album(const Value: TGUID);
 var
   i: Integer;
   PEd: TEditionComplete;
@@ -88,7 +88,7 @@ begin
   lccEditions.DefaultValueChecked := 0;
 end;
 
-procedure TFrmSaisie_EmpruntAlbum.SetID_Emprunteur(Value: TGUID);
+procedure TFrmSaisie_EmpruntAlbum.SetID_Emprunteur(const Value: TGUID);
 begin
   VTreeEmprunteur.CurrentValue := Value;
 end;

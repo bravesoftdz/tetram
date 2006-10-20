@@ -24,7 +24,7 @@ type
   private
     { Déclarations privées }
     FCollection: TCollectionComplete;
-    procedure SetID_Collection(Value: TGUID);
+    procedure SetID_Collection(const Value: TGUID);
     function GetID_Collection: TGUID;
   public
     { Déclarations publiques }
@@ -34,7 +34,7 @@ type
 implementation
 
 uses
-  JvUIB, Commun, DM_Princ, Procedures, Proc_Gestions,
+  JvUIB, Commun, Procedures, Proc_Gestions,
   Textes;
 
 {$R *.DFM}
@@ -47,7 +47,7 @@ begin
   FCollection := TCollectionComplete.Create;
 end;
 
-procedure TFrmEditCollection.SetID_Collection(Value: TGUID);
+procedure TFrmEditCollection.SetID_Collection(const Value: TGUID);
 var
   hg: IHourGlass;
 begin

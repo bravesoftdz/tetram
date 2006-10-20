@@ -25,7 +25,7 @@ type
   private
     { Déclarations privées }
     FEditeur: TEditeurComplet;
-    procedure SetID_Editeur(Value: TGUID);
+    procedure SetID_Editeur(const Value: TGUID);
     function GetID_Editeur: TGUID;
   public
     { Déclarations publiques }
@@ -35,7 +35,7 @@ type
 implementation
 
 uses
-  JvUIB, Commun, DM_Princ, Procedures, Textes;
+  JvUIB, Commun, Procedures, Textes;
 
 {$R *.DFM}
 
@@ -45,7 +45,7 @@ begin
   FEditeur := TEditeurComplet.Create;
 end;
 
-procedure TFrmEditEditeur.SetID_Editeur(Value: TGUID);
+procedure TFrmEditEditeur.SetID_Editeur(const Value: TGUID);
 var
   hg: IHourGlass;
 begin

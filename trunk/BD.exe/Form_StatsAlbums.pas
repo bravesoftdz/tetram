@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, LoadComplet, Commun;
+  StdCtrls, ExtCtrls, LoadComplet;
 
 type
   TFrmStatsAlbums = class(TForm)

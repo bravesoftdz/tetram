@@ -109,7 +109,7 @@ uses
   UMAJ1_1_0_0 in 'UMAJ1_1_0_0.pas',
   UMAJ1_2_0_0 in 'UMAJ1_2_0_0.pas',
   UMAJ1_2_0_8 in 'UMAJ1_2_0_8.pas',
-  UMAJ1_2_0_17 in 'UMAJ1_2_0_17.pas',
+  UMAJ1_2_1_0 in 'UMAJ1_2_1_0.pas',
   ListOfTypeRec in 'ListOfTypeRec.pas',
   Form_WizardImport in 'Form_WizardImport.pas' {WizardImport};
 
@@ -156,7 +156,7 @@ begin
 
     FrmSplash.Affiche_act(ChargementApp + '...');
     Application.CreateForm(TFond, Fond);
-    FrmSplash.Affiche_act(ChargementDatabase + '...');
+  FrmSplash.Affiche_act(ChargementDatabase + '...');
     Historique.AddConsultation(fcRecherche);
     if Utilisateur.Options.ModeDemarrage then
       Fond.ModeConsultation.Execute

@@ -13,18 +13,18 @@ procedure ImpressionInfosBDtheque(Previsualisation: Boolean);
 
 procedure ImpressionEmprunts(Previsualisation: Boolean; Source: TSrcEmprunt = seTous; Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1; Avant: TDateTime = -1; EnCours: Boolean = False; Stock: Boolean = False);
 
-procedure ImpressionFicheAlbum(Reference, ID_Edition: TGUID; Previsualisation: Boolean);
-procedure ImpressionFicheAuteur(Reference: TGUID; Previsualisation: Boolean);
-procedure ImpressionSerie(Reference: TGUID; Previsualisation: Boolean);
-procedure ImpressionEmpruntsAlbum(Reference: TGUID; Previsualisation: Boolean);
-procedure ImpressionFicheParaBD(Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheAlbum(const Reference, ID_Edition: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheAuteur(const Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionSerie(const Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionEmpruntsAlbum(const Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheParaBD(const Reference: TGUID; Previsualisation: Boolean);
 
-procedure ImpressionFicheEmprunteur(Reference: TGUID; Previsualisation: Boolean);
-procedure ImpressionEmpruntsEmprunteur(Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheEmprunteur(const Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionEmpruntsEmprunteur(const Reference: TGUID; Previsualisation: Boolean);
 
 procedure ImpressionRecherche(Resultat: TList; ResultatInfos, Criteres: TStringList; TypeRecherche: TTypeRecherche; Previsualisation: Boolean);
-procedure ImpressionCouvertureAlbum(Reference, ID_Couverture: TGUID; Previsualisation: Boolean);
-procedure ImpressionImageParaBD(Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionCouvertureAlbum(const Reference, ID_Couverture: TGUID; Previsualisation: Boolean);
+procedure ImpressionImageParaBD(const Reference: TGUID; Previsualisation: Boolean);
 
 procedure ImpressionListeManquants(R: TSeriesIncompletes; Previsualisation: Boolean);
 procedure ImpressionListePrevisions(R: TPrevisionsSorties; Previsualisation: Boolean);
@@ -47,7 +47,7 @@ begin
 }
 end;
 
-procedure ImpressionSerie(Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionSerie(const Reference: TGUID; Previsualisation: Boolean);
 var
   fWaiting: IWaiting;
   Serie: TSerieComplete;
@@ -57,7 +57,6 @@ var
   ParaBD: TParaBD;
   s, s2: string;
   Manquants: TSeriesIncompletes;
-  AlbumsManquants: TSerieIncomplete;
   Previsions: TPrevisionsSorties;
   Prevision: TPrevisionSortie;
 begin
@@ -199,10 +198,9 @@ begin
           Manquants := TSeriesIncompletes.Create(Serie.ID_Serie);
           try
             if Manquants.Series.Count > 0 then begin
-              AlbumsManquants := TSerieIncomplete(Manquants.Series[0]);
               Prn.NextLine;
               Prn.WriteLineColumn(0, -1, rsTransAlbumsManquants);
-              Prn.WriteLineColumn(1, -1, AlbumsManquants.ChaineAffichage);
+              Prn.WriteLineColumn(1, -1, TSerieIncomplete(Manquants.Series[0]).ChaineAffichage);
             end;
           finally
             Manquants.Free;
@@ -232,7 +230,7 @@ begin
   end;
 end;
 
-procedure ImpressionFicheAlbum(Reference, ID_Edition: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheAlbum(const Reference, ID_Edition: TGUID; Previsualisation: Boolean);
 var
   i: Integer;
   op: Integer;
@@ -468,7 +466,7 @@ begin
   end;
 end;
 
-procedure ImpressionFicheParaBD(Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheParaBD(const Reference: TGUID; Previsualisation: Boolean);
 var
   i: Integer;
   op: Integer;
@@ -605,7 +603,7 @@ begin
   end;
 end;
 
-procedure ImpressionFicheAuteur(Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheAuteur(const Reference: TGUID; Previsualisation: Boolean);
 var
   Auteur: TAuteurComplet;
   fWaiting: IWaiting;
@@ -667,7 +665,7 @@ begin
   end;
 end;
 
-procedure ImpressionFicheEmprunteur(Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheEmprunteur(const Reference: TGUID; Previsualisation: Boolean);
 var
   Emprunteur: TEmprunteurComplet;
   fWaiting: IWaiting;
@@ -712,7 +710,7 @@ begin
   end;
 end;
 
-procedure ImpressionEmpruntsAlbum(Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionEmpruntsAlbum(const Reference: TGUID; Previsualisation: Boolean);
 var
   index, i: Integer;
   Album: TAlbumComplet;
@@ -780,7 +778,7 @@ begin
   end;
 end;
 
-procedure ImpressionEmpruntsEmprunteur(Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionEmpruntsEmprunteur(const Reference: TGUID; Previsualisation: Boolean);
 var
   index: Integer;
   Emprunteur: TEmprunteurComplet;
@@ -1078,13 +1076,13 @@ end;
 procedure ImpressionInfosBDtheque(Previsualisation: Boolean);
 var
   fWaiting: IWaiting;
-  Position: array[1..10] of Single;
   Prn: TPrintObject;
 
   procedure Imprimer(R: TStats; MaxAlbums: Integer = -1);
   var
     i, ColonneGenre, NbLignes: Integer;
     YPos, YPosMax: Single;
+    Position: array[1..10] of Single;
   begin
     Prn.SetTopOfPage;
     Prn.SetFontInformation1('Times New Roman', 5, []);
@@ -1475,7 +1473,7 @@ begin
   end;
 end;
 
-procedure ImpressionCouvertureAlbum(Reference, ID_Couverture: TGUID; Previsualisation: Boolean);
+procedure ImpressionCouvertureAlbum(const Reference, ID_Couverture: TGUID; Previsualisation: Boolean);
 var
   Album: TAlbumComplet;
   ms: TStream;
@@ -1544,7 +1542,7 @@ begin
   end;
 end;
 
-procedure ImpressionImageParaBD(Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionImageParaBD(const Reference: TGUID; Previsualisation: Boolean);
 var
   ParaBD: TParaBDComplet;
   ms: TStream;
@@ -1746,7 +1744,6 @@ var
   Source: TJvUIBQuery;
   sl: Boolean;
   s, s2: string;
-  ColumnStyle: TFontStyles;
   PAl: TAchat;
   NbAlbums: Integer;
   fWaiting: IWaiting;
@@ -1824,8 +1821,8 @@ begin
       Prn.SetDetailTopBottom(-1, -1);
       Prn.SetPageNumberInformation1(Prn.FooterCoordinates.Top + 5, rsTransPage + ' ', '', taCenter, 'Times New Roman', 10, [fsUnderline]);
       Prn.SetDateTimeInformation1(Prn.HeaderCoordinates.Top, dfShortDateFormat, True, dtStart, tfShortTimeFormat, True, DateFirst, ' - ', taRightJustify, 'Times New Roman', 9, []);
-      Prn.CreateColumn1(0, 15, 15, taLeftJustify, 'Times New Roman', 12, ColumnStyle); // numéro
-      Prn.CreateColumn1(1, 25, -1, taLeftJustify, 'Times New Roman', 12, ColumnStyle); // titre
+      Prn.CreateColumn1(0, 15, 15, taLeftJustify, 'Times New Roman', 12, []); // numéro
+      Prn.CreateColumn1(1, 25, -1, taLeftJustify, 'Times New Roman', 12, []); // titre
       Prn.CreateColumn1(2, 35, -1, taLeftJustify, 'Times New Roman', 10, [fsItalic]); // résumé
       Prn.CreateColumn1(3, 35, -1, taLeftJustify, 'Times New Roman', 8, []); // réalisation, acteurs
       Prn.CreateColumn1(4, 15, -1, taLeftJustify, 'Times New Roman', 12, [fsBold]); // série

@@ -3,7 +3,7 @@ unit VirtualTree;
 interface
 
 uses
-  Dialogs, Windows, SysUtils, Classes, Controls, Graphics, VirtualTrees, DBEditLabeled, TypeRec;
+  Windows, SysUtils, Classes, Controls, Graphics, VirtualTrees, DBEditLabeled, TypeRec;
 
 type
   PInitialeInfo = ^RInitialeInfo;

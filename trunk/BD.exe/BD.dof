@@ -33,7 +33,7 @@ UnitAliases=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=
 NamespacePrefix=
 SymbolDeprecated=1
 SymbolLibrary=1
-SymbolPlatform=1
+SymbolPlatform=0
 UnitLibrary=1
 UnitPlatform=1
 UnitDeprecated=1
@@ -95,7 +95,7 @@ UnitOutputDir=dcu
 PackageDLLOutputDir=
 PackageDCPOutputDir=
 SearchPath=G:\PROGRA~1\Common\jcl\lib\D7\debug;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\;$(Compos)\FastMM\FastMM4
-Packages=VCL50;VCLX50;VCLSMP50;QRPT50;VCLDB50;VCLBDE50;VCLDBX50;TEEUI50;TEEDB50;TEE50;TEEQR50;NMFAST50;dclocx50;dclaxserver50;ibevnt50;VCLIB50;VCLIE50;INETDB50;INET50;vcl;rtl;dsnap;dbrtl;vcldb
+Packages=VCL50;VCLX50;VCLSMP50;QRPT50;VCLDB50;VCLBDE50;VCLDBX50;TEEUI50;TEEDB50;TEE50;TEEQR50;NMFAST50;dclocx50;dclaxserver50;ibevnt50;VCLIB50;VCLIE50;INETDB50;INET50;vcl;rtl;dsnap;dbrtl;vcldb;websnap;webdsnap;inetdb;inet;xmlrtl;vclx;vclie;indy;bdertl;dsnapcon;VclSmp;MediaKit
 Conditionals=_DEBUG;Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
 DebugSourceDirs=
 UsePackages=0
@@ -134,21 +134,35 @@ OriginalFilename=
 ProductName=BDtheque
 ProductVersion=1
 Comments=
-[HistoryLists\hlConditionals]
-Count=1
-Item0=_DEBUG;Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+[Excluded Packages]
+C:\Program Files\Borland\Delphi7\Bin\dclbde70.bpl=Composants BD BDE Borland
+c:\program files\borland\delphi7\Bin\dclclxdb70.bpl=Composants BD CLX Borland
+c:\program files\borland\delphi7\bin\dclRave70.bpl=Paquet Rave Reports BE 5.0
+c:\program files\borland\delphi7\Projects\Bpl\SUISkinD7.bpl=Sunisoft SUISkin Engine
+C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTEE57.bpl=TeeChart 5 Components
+C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTEP57.bpl=TeeChart Pro 5 Components
+C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTQR57.bpl=TeeChart 5 for QuickReport
+C:\WINDOWS\system32\TeeImage57.bpl=TeeChart Pro Graphic Exporting formats
+C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTGL57.bpl=TeeChart 5 for OpenGL
+c:\program files\borland\delphi7\Bin\DBWEBXPRT.BPL=Paquet Expert Web Borland
+c:\program files\borland\delphi7\Projects\Bpl\IBO40XDT_D7.bpl=IB Objects TDataset
+c:\program files\borland\delphi7\Projects\Bpl\IBO40CDT_D7.bpl=IB Objects Core Components
+c:\program files\borland\delphi7\Projects\Bpl\IBO40EDT_D7.bpl=IB Objects Editors
+c:\program files\borland\delphi7\Projects\Bpl\IBO40FDT_D7.bpl=IB Objects Forms and Dialogs
+c:\program files\borland\delphi7\Projects\Bpl\IBO40WXDT_D7.bpl=IB Objects TDataset Internet Extensions
+c:\program files\borland\delphi7\Projects\Bpl\IBO40WSDT_D7.bpl=IBO 4 Web Snap Extensions
+c:\program files\borland\delphi7\Projects\Bpl\IBO40WDT_D7.bpl=IB Objects Internet Extensions
+c:\program files\borland\delphi7\Projects\Bpl\IBO40VDT_D7.bpl=IB Objects Visual Controls
+c:\program files\borland\delphi7\Projects\Bpl\IBO40TDT_D7.bpl=IB Objects Tools Components
+c:\program files\borland\delphi7\Projects\Bpl\IBOARMURE.bpl=(sans titre)
+C:\programmes\Composant\ArmureD7.bpl=ARMURE
+c:\program files\borland\delphi7\Bin\dcldss70.bpl=Composants Decision Cube Borland
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
-[HistoryLists\hlSearchPath]
-Count=1
-Item0=G:\PROGRA~1\Common\jcl\lib\D7\debug;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\;$(Compos)\FastMM\FastMM4
 [HistoryLists\hlUnitOutputDirectory]
 Count=1
 Item0=dcu
-[HistoryLists\hlOutputDirectorry]
-Count=1
-Item0=..\..\bin
 [HistoryLists\hlBPLOutput]
 Count=1
 Item0=.

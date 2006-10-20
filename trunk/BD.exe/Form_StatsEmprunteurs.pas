@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, LoadComplet, ExtCtrls, Commun;
+  StdCtrls, LoadComplet, ExtCtrls;
 
 type
   TFrmStatsEmprunteurs = class(TForm)
@@ -38,7 +38,7 @@ function TStatsEmprunteursCreate(AOwner: TComponent; Info: TStats): TFrmStatsEmp
 
 implementation
 
-uses DM_Princ, CommonConst, TypeRec, Divers;
+uses CommonConst, TypeRec, Divers;
 
 {$R *.DFM}
 

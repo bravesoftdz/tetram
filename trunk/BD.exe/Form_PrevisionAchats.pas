@@ -37,8 +37,7 @@ type
 
 implementation
 
-uses Proc_Gestions, Impression, UHistorique, IniFiles, CommonConst,
-  TypeRec, DateUtils;
+uses Impression, IniFiles, CommonConst, TypeRec, DateUtils;
 
 {$R *.dfm}
 

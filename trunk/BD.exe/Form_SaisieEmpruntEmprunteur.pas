@@ -43,16 +43,16 @@ type
     { Déclarations privées }
     FID_Emprunteur: TGUID;
     FEditions: TEditionsComplet;
-    procedure SetID_Emprunteur(Value: TGUID);
+    procedure SetID_Emprunteur(const Value: TGUID);
   public
     { Déclarations publiques }
     property ID_Emprunteur: TGUID read FID_Emprunteur write SetID_Emprunteur;
-    procedure AjouteAlbum(ID_Album, ID_Edition: TGUID);
+    procedure AjouteAlbum(const ID_Album, ID_Edition: TGUID);
   end;
 
 implementation
 
-uses DM_Princ, TypeRec, Main, CommonConst, CommonList, Procedures;
+uses TypeRec, CommonConst, Procedures;
 
 {$R *.DFM}
 
@@ -65,7 +65,7 @@ const
   NoEmprunts = 'Pas d''emprunts.';
   NotThisEntryHere = 'Impossible d''ajouter ce mouvement dans cette fenêtre';
 
-procedure TFrmSaisie_EmpruntEmprunteur.SetID_Emprunteur(Value: TGUID);
+procedure TFrmSaisie_EmpruntEmprunteur.SetID_Emprunteur(const Value: TGUID);
 begin
   if IsEqualGUID(Value, FID_Emprunteur) then Exit;
   FID_Emprunteur := Value;
@@ -144,7 +144,7 @@ begin
   MoveListItem(ListView1, 1);
 end;
 
-procedure TFrmSaisie_EmpruntEmprunteur.AjouteAlbum(ID_Album, ID_Edition: TGUID);
+procedure TFrmSaisie_EmpruntEmprunteur.AjouteAlbum(const ID_Album, ID_Edition: TGUID);
 var
   PA: TAlbum;
   Item: TListItem;

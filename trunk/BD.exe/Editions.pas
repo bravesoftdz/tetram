@@ -41,48 +41,48 @@ uses
 }
 
 function CreationAchatAlbum(const Valeur: string): TGUID;
-function EditionAchatAlbum(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean;
-function DelAchatAlbum(ID: TGUID): Boolean;
+function EditionAchatAlbum(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean;
+function DelAchatAlbum(const ID: TGUID): Boolean;
 
 function CreationAlbum(const Valeur: string): TGUID;
-function EditionAlbum(var ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
-function EditionAlbum(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
-function DelAlbum(ID: TGUID): Boolean;
+function EditionAlbum(const ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
+function EditionAlbum(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function DelAlbum(const ID: TGUID): Boolean;
 
 function CreationEditeur(const Valeur: string): TGUID;
-function EditionEditeur(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean;
-function DelEditeur(ID: TGUID): Boolean;
+function EditionEditeur(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean;
+function DelEditeur(const ID: TGUID): Boolean;
 
-function CreationCollection(ID_Editeur: TGUID; const Valeur: string): TGUID;
-function EditionCollection(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
-function EditionCollection(var ID: TGUID; ID_Editeur: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
-function DelCollection(ID: TGUID): Boolean;
+function CreationCollection(const ID_Editeur: TGUID; const Valeur: string): TGUID;
+function EditionCollection(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionCollection(const ID: TGUID; const ID_Editeur: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function DelCollection(const ID: TGUID): Boolean;
 
 function CreationGenre(const Genre: string): TGUID;
-function EditionGenre(var ID: TGUID): Boolean;
-function DelGenre(ID: TGUID): Boolean;
+function EditionGenre(const ID: TGUID): Boolean;
+function DelGenre(const ID: TGUID): Boolean;
 
 function CreationAuteur(const Auteur: string): TGUID;
 function CreationAuteur2(const Auteur: string): TGUID;
-function EditionAuteur(var ID: TGUID; Creation: Boolean = False; const Auteur: string = ''): Boolean;
-function DelAuteur(ID: TGUID): Boolean;
+function EditionAuteur(const ID: TGUID; Creation: Boolean = False; const Auteur: string = ''): Boolean;
+function DelAuteur(const ID: TGUID): Boolean;
 
 function CreationEmprunteur(const Emprunteur: string): TGUID;
-function EditionEmprunteur(var ID: TGUID; Creation: Boolean = False; const Emprunteur: string = ''): Boolean;
-function DelEmprunteur(ID: TGUID): Boolean;
+function EditionEmprunteur(const ID: TGUID; Creation: Boolean = False; const Emprunteur: string = ''): Boolean;
+function DelEmprunteur(const ID: TGUID): Boolean;
 
 function CreationSerie(const Valeur: string): TGUID;
-function EditionSerie(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean;
-function DelSupport(ID: TGUID): Boolean;
+function EditionSerie(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean;
+function DelSupport(const ID: TGUID): Boolean;
 
 function CreationParaBD(const Valeur: string): TGUID;
-function EditionParaBD(var ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
-function EditionParaBD(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
-function DelParaBD(ID: TGUID): Boolean;
+function EditionParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
+function EditionParaBD(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function DelParaBD(const ID: TGUID): Boolean;
 
 function CreationAchatParaBD(const Valeur: string): TGUID;
-function EditionAchatParaBD(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean;
-function DelAchatParaBD(ID: TGUID): Boolean;
+function EditionAchatParaBD(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean;
+function DelAchatParaBD(const ID: TGUID): Boolean;
 
 implementation
 
@@ -91,7 +91,7 @@ uses
   Math, Main, Procedures, Form_EditCollection, Form_EditAuteur, Form_EditParaBD,
   Form_EditAchatAlbum;
 
-function FindRec(Table, Champ: string; Reference: TGUID; WithMessage: Boolean): Boolean;
+function FindRec(const Table, Champ: string; const Reference: TGUID; WithMessage: Boolean): Boolean;
 begin
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -108,8 +108,8 @@ end;
 
 //**********************************************************************************************
 type
-  TLambdaEdition = function(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
-  TLambdaEdition2 = function(var ID: TGUID; Reference2: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+  TLambdaEdition = function(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+  TLambdaEdition2 = function(const ID: TGUID; const Reference2: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 
 function CreationLambda(LambdaEdition: TLambdaEdition; const Valeur: string; Fenetre: TFormClass): TGUID; overload;
 begin
@@ -127,7 +127,7 @@ begin
   if not LambdaEdition(Result, True, Valeur) then Result := GUID_NULL;
 end;
 
-function CreationLambda(LambdaEdition: TLambdaEdition2; Reference2: TGUID; Valeur: string; Fenetre: TFormClass): TGUID; overload;
+function CreationLambda(LambdaEdition: TLambdaEdition2; const Reference2: TGUID; const Valeur: string; Fenetre: TFormClass): TGUID; overload;
 begin
   Result := GUID_NULL;
   if Fond.IsShowing(Fenetre) then Exit;
@@ -143,7 +143,7 @@ begin
   if not LambdaEdition(Result, Reference2, True, Valeur) then Result := GUID_NULL;
 end;
 
-function CreationLambdaChampSimple(TypeInfo, Table, Generateur, Champ, ChampRef: string; ValeurDefaut: string): TGUID;
+function CreationLambdaChampSimple(const TypeInfo, Table, Generateur, Champ, ChampRef, ValeurDefaut: string): TGUID;
 var
   Chaine: string;
   hg: IHourGlass;
@@ -183,7 +183,7 @@ begin
   end;
 end;
 
-function EditionLambdaChampSimple(TypeInfo, Table, Generateur, Champ, ChampRef: string; Reference: TGUID): Boolean;
+function EditionLambdaChampSimple(const TypeInfo, Table, Generateur, Champ, ChampRef: string; const Reference: TGUID): Boolean;
 var
   Chaine: string;
   hg: IHourGlass;
@@ -229,7 +229,7 @@ begin
   end;
 end;
 
-function DelLambda(Table, Champ: string; Ref: TGUID): Boolean;
+function DelLambda(const Table, Champ: string; const Ref: TGUID): Boolean;
 var
   hg: IHourGlass;
 begin
@@ -260,7 +260,7 @@ begin
   Result := CreationLambda(EditionAchatAlbum, Valeur, TFrmEditAchatAlbum);
 end;
 
-function EditionAchatAlbum(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionAchatAlbum(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -277,14 +277,12 @@ begin
     if Creation then edTitre.Text := Valeur;
     hg := nil;
     Result := Fond.SetModalChildForm(f) = mrOk;
-    if Result then
-      ID := ID_Album;
   finally
     Free;
   end;
 end;
 
-function DelAchatAlbum(ID: TGUID): Boolean;
+function DelAchatAlbum(const ID: TGUID): Boolean;
 begin
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -311,7 +309,7 @@ begin
   Result := CreationLambda(EditionAlbum, Valeur, TFrmEditAlbum);
 end;
 
-function EditionAlbum(var ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean;
+function EditionAlbum(const ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -334,12 +332,12 @@ begin
   end;
 end;
 
-function EditionAlbum(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionAlbum(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 begin
   Result := EditionAlbum(ID, Creation, Valeur, False);
 end;
 
-function DelAlbum(ID: TGUID): Boolean;
+function DelAlbum(const ID: TGUID): Boolean;
 begin
   Result := DelLambda('ALBUMS', 'ID_Album', ID);
 end;
@@ -350,7 +348,7 @@ begin
   Result := CreationLambda(EditionSerie, Valeur, TFrmEditSerie);
 end;
 
-function EditionSerie(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionSerie(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -371,7 +369,7 @@ begin
   end;
 end;
 
-function DelSupport(ID: TGUID): Boolean;
+function DelSupport(const ID: TGUID): Boolean;
 begin
   Result := DelLambda('SERIES', 'ID_Serie', ID);
 end;
@@ -382,7 +380,7 @@ begin
   Result := CreationLambda(EditionEditeur, Valeur, TFrmEditEditeur);
 end;
 
-function EditionEditeur(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionEditeur(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -404,23 +402,23 @@ begin
   end;
 end;
 
-function DelEditeur(ID: TGUID): Boolean;
+function DelEditeur(const ID: TGUID): Boolean;
 begin
   Result := DelLambda('EDITEURS', 'ID_Editeur', ID);
 end;
 //*************************************************************************************************************************
 
-function CreationCollection(ID_Editeur: TGUID; const Valeur: string): TGUID;
+function CreationCollection(const ID_Editeur: TGUID; const Valeur: string): TGUID;
 begin
   Result := CreationLambda(EditionCollection, ID_Editeur, Valeur, TFrmEditCollection);
 end;
 
-function EditionCollection(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionCollection(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 begin
   Result := EditionCollection(ID, GUID_NULL, Creation);
 end;
 
-function EditionCollection(var ID: TGUID; ID_Editeur: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionCollection(const ID: TGUID; const ID_Editeur: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -445,7 +443,7 @@ begin
   end;
 end;
 
-function DelCollection(ID: TGUID): Boolean;
+function DelCollection(const ID: TGUID): Boolean;
 begin
   Result := DelLambda('COLLECTIONS', 'ID_Collection', ID);
 end;
@@ -456,12 +454,12 @@ begin
   Result := CreationLambdaChampSimple(rsGenre, 'GENRES', 'AI_ID_Genre', 'Genre', 'ID_Genre', Genre);
 end;
 
-function EditionGenre(var ID: TGUID): Boolean;
+function EditionGenre(const ID: TGUID): Boolean;
 begin
   Result := EditionLambdaChampSimple(rsGenre, 'GENRES', 'AI_ID_Genre', 'Genre', 'ID_Genre', ID);
 end;
 
-function DelGenre(ID: TGUID): Boolean;
+function DelGenre(const ID: TGUID): Boolean;
 begin
   Result := DelLambda('Genres', 'ID_Genre', ID);
 end;
@@ -477,7 +475,7 @@ begin
   Result := CreationLambda(EditionAuteur, Auteur, TFrmEditAuteur);
 end;
 
-function EditionAuteur(var ID: TGUID; Creation: Boolean; const Auteur: string): Boolean;
+function EditionAuteur(const ID: TGUID; Creation: Boolean; const Auteur: string): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -499,7 +497,7 @@ begin
   end;
 end;
 
-function DelAuteur(ID: TGUID): Boolean;
+function DelAuteur(const ID: TGUID): Boolean;
 begin
   Result := DelLambda('PERSONNES', 'ID_Personne', ID);
 end;
@@ -510,7 +508,7 @@ begin
   Result := CreationLambda(EditionEmprunteur, Emprunteur, TFrmEditEmprunteur);
 end;
 
-function EditionEmprunteur(var ID: TGUID; Creation: Boolean; const Emprunteur: string): Boolean;
+function EditionEmprunteur(const ID: TGUID; Creation: Boolean; const Emprunteur: string): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -532,7 +530,7 @@ begin
   end;
 end;
 
-function DelEmprunteur(ID: TGUID): Boolean;
+function DelEmprunteur(const ID: TGUID): Boolean;
 begin
   Result := DelLambda('Emprunteurs', 'ID_Emprunteur', ID);
 end;
@@ -543,7 +541,7 @@ begin
   Result := CreationLambda(EditionParaBD, Valeur, TFrmEditParaBD);
 end;
 
-function EditionParaBD(var ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean;
+function EditionParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -566,12 +564,12 @@ begin
   end;
 end;
 
-function EditionParaBD(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 begin
   Result := EditionParaBD(ID, Creation, Valeur, False);
 end;
 
-function DelParaBD(ID: TGUID): Boolean;
+function DelParaBD(const ID: TGUID): Boolean;
 begin
   Result := DelLambda('ParaBD', 'ID_ParaBD', ID);
 end;
@@ -582,7 +580,7 @@ begin
   Result := CreationLambda(EditionAchatParaBD, Valeur, TFrmEditParaBD);
 end;
 
-function EditionAchatParaBD(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionAchatParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -599,14 +597,12 @@ begin
     if Creation then edTitre.Text := Valeur;
     hg := nil;
     Result := Fond.SetModalChildForm(f) = mrOk;
-    if Result then
-      ID := ID_ParaBD;
   finally
     Free;
   end;
 end;
 
-function DelAchatParaBD(ID: TGUID): Boolean;
+function DelAchatParaBD(const ID: TGUID): Boolean;
 begin
   with TJvUIBQuery.Create(nil) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);

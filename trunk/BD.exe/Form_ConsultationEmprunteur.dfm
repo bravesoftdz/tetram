@@ -115,7 +115,7 @@ object FrmConsultationEmprunteur: TFrmConsultationEmprunteur
     ShowAccelChar = False
     Transparent = True
   end
-  object adresse: TMemo
+  object Adresse: TMemo
     Left = 82
     Top = 59
     Width = 415

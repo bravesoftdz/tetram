@@ -16,7 +16,7 @@ function IIf(Test: Boolean; BackTrue, BackFalse: Integer): Integer; overload;
 procedure AjoutString(var Chaine: WideString; const Ajout, Espace: string; const Avant: string = ''; const Apres: string = ''); overload;
 procedure AjoutString(var Chaine: string; const Ajout, Espace: string; const Avant: string = ''; const Apres: string = ''); overload;
 
-function StringToGUIDDef(GUID: string; Default: TGUID): TGUID;
+function StringToGUIDDef(const GUID: string; const Default: TGUID): TGUID;
 
 function NonZero(const S: string): string;
 
@@ -44,7 +44,7 @@ implementation
 
 uses Divers, Forms;
 
-function StringToGUIDDef(GUID: string; Default: TGUID): TGUID;
+function StringToGUIDDef(const GUID: string; const Default: TGUID): TGUID;
 begin
   try
     Result := StringToGUID(GUID);
@@ -270,6 +270,7 @@ end;
 
 constructor THourGlass.Create;
 begin
+  inherited;
   FOldCursor := Screen.Cursor;
   Screen.Cursor := crHourGlass;
 end;

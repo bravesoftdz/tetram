@@ -3,32 +3,32 @@ unit MAJ;
 interface
 
 uses
-  Windows, SysUtils, Forms, Controls, ComCtrls, TypeRec, LoadComplet, Textes, Classes, Commun;
+  Windows, SysUtils, Forms, Controls, ComCtrls, TypeRec, LoadComplet, Classes, Commun;
 
-function MAJConsultationAlbum(Reference: TGUID): Boolean;
-function MAJConsultationEmprunteur(Reference: TGUID): Boolean;
-function MAJConsultationAuteur(Reference: TGUID): Boolean;
-function MAJConsultationParaBD(Reference: TGUID): Boolean;
-function MAJConsultationSerie(Reference: TGUID): Boolean;
+function MAJConsultationAlbum(const Reference: TGUID): Boolean;
+function MAJConsultationEmprunteur(const Reference: TGUID): Boolean;
+function MAJConsultationAuteur(const Reference: TGUID): Boolean;
+function MAJConsultationParaBD(const Reference: TGUID): Boolean;
+function MAJConsultationSerie(const Reference: TGUID): Boolean;
 procedure MAJStock;
 procedure MAJSeriesIncompletes;
 procedure MAJPrevisionsSorties;
 procedure MAJPrevisionsAchats;
-procedure MAJRecherche(Reference: TGUID; TypeSimple: Integer = -1);
-function ZoomCouverture(isParaBD: Boolean; ID_Item, ID_Couverture: TGUID): Boolean;
+procedure MAJRecherche(const Reference: TGUID; TypeSimple: Integer = -1);
+function ZoomCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID): Boolean;
 
-function SaisieMouvementAlbum(MvtID_Album, MvtID_Edition: TGUID; MvtPret: Boolean; MvtID_Emprunteur: string = sGUID_NULL): Boolean;
-function SaisieMouvementEmprunteur(MvtID_Emprunteur: TGUID; MvtID_Album: TEditionsEmpruntees): Boolean;
+function SaisieMouvementAlbum(const MvtID_Album, MvtID_Edition: TGUID; MvtPret: Boolean; const MvtID_Emprunteur: string = sGUID_NULL): Boolean;
+function SaisieMouvementEmprunteur(const MvtID_Emprunteur: TGUID; const MvtID_Album: TEditionsEmpruntees): Boolean;
 
 implementation
 
 uses
-  CommonConst, DM_Princ, Form_Stock, Main, DM_Commun, DB, StdCtrls, JvUIB, JvUIBLib, Divers, Procedures, Form_SeriesIncompletes,
+  CommonConst, Form_Stock, Main, DB, StdCtrls, JvUIB, JvUIBLib, Form_SeriesIncompletes,
   Form_PrevisionsSorties, Graphics, Form_ConsultationAlbum, Form_ConsultationEmprunteur, Form_SaisieEmpruntAlbum, Form_SaisieEmpruntEmprunteur, Form_Recherche,
   Form_ZoomCouverture, Form_ConsultationAuteur, Form_PrevisionAchats, UHistorique,
   Form_ConsultationParaBD, Form_ConsultationSerie;
 
-function MAJConsultationAuteur(Reference: TGUID): Boolean;
+function MAJConsultationAuteur(const Reference: TGUID): Boolean;
 var
   FDest: TFrmConsultationAuteur;
   hg: IHourGlass;
@@ -45,7 +45,7 @@ begin
   end;
 end;
 
-function MAJConsultationAlbum(Reference: TGUID): Boolean;
+function MAJConsultationAlbum(const Reference: TGUID): Boolean;
 var
   FDest: TFrmConsultationAlbum;
   hg: IHourGlass;
@@ -62,7 +62,7 @@ begin
   end;
 end;
 
-function MAJConsultationSerie(Reference: TGUID): Boolean;
+function MAJConsultationSerie(const Reference: TGUID): Boolean;
 var
   FDest: TFrmConsultationSerie;
   hg: IHourGlass;
@@ -79,7 +79,7 @@ begin
   end;
 end;
 
-function MAJConsultationParaBD(Reference: TGUID): Boolean;
+function MAJConsultationParaBD(const Reference: TGUID): Boolean;
 var
   FDest: TFrmConsultationParaBD;
   hg: IHourGlass;
@@ -96,7 +96,7 @@ begin
   end;
 end;
 
-function MAJConsultationEmprunteur(Reference: TGUID): Boolean;
+function MAJConsultationEmprunteur(const Reference: TGUID): Boolean;
 var
   FDest: TFrmConsultationEmprunteur;
   hg: IHourGlass;
@@ -113,7 +113,7 @@ begin
   end;
 end;
 
-function SaisieMouvementAlbum(MvtID_Album, MvtID_Edition: TGUID; MvtPret: Boolean; MvtID_Emprunteur: string): Boolean;
+function SaisieMouvementAlbum(const MvtID_Album, MvtID_Edition: TGUID; MvtPret: Boolean; const MvtID_Emprunteur: string): Boolean;
 begin
   Result := False;
   if Mode_en_cours <> mdConsult then Exit;
@@ -129,7 +129,7 @@ begin
   end;
 end;
 
-function SaisieMouvementEmprunteur(MvtID_Emprunteur: TGUID; MvtID_Album: TEditionsEmpruntees): Boolean;
+function SaisieMouvementEmprunteur(const MvtID_Emprunteur: TGUID; const MvtID_Album: TEditionsEmpruntees): Boolean;
 var
   i: Integer;
 begin
@@ -174,7 +174,7 @@ begin
   _MAJFenetre(TFrmStock);
 end;
 
-procedure MAJRecherche(Reference: TGUID; TypeSimple: Integer); overload;
+procedure MAJRecherche(const Reference: TGUID; TypeSimple: Integer); overload;
 var
   FDest: TFrmRecherche;
   hg: IHourGlass;
@@ -196,7 +196,7 @@ begin
     Historique.SetDescription(FDest.Caption);
 end;
 
-function ZoomCouverture(isParaBD: Boolean; ID_Item, ID_Couverture: TGUID): Boolean;
+function ZoomCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID): Boolean;
 var
   FDest: TFrmZoomCouverture;
 begin

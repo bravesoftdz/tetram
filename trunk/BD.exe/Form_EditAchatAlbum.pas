@@ -76,7 +76,7 @@ type
 
 implementation
 
-uses Math, CommonConst, Proc_Gestions, DM_Princ, Commun, Procedures, Textes, Divers, jvuiblib;
+uses Math, CommonConst, Proc_Gestions, Commun, Procedures, Textes, Divers, jvuiblib;
 
 {$R *.dfm}
 

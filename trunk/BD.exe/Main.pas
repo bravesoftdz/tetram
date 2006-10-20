@@ -6,7 +6,7 @@ interface
 {$WARN SYMBOL_DEPRECATED OFF}
 
 uses
-  Divers, PrintObject, Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ImgList, Menus,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ImgList, Menus,
   ComCtrls, ExtCtrls, Buttons, ActnList, Printers, iniFiles, jpeg, Contnrs, ToolWin;
 
 type
@@ -206,9 +206,9 @@ implementation
 {$R *.DFM}
 
 uses
-  MAJ, Form_Repertoire, CommonConst, Commun, Form_options, Form_StatsGeneral,
-  Form_StatsEmprunteurs, Form_StatsAlbums, Textes, LoadComplet, Impression, Editions, Form_Gestion, Form_Customize,
-  Form_AboutBox, DM_Princ, TypeRec, Types, Procedures, UHistorique, Form_Entretien, ShellAPI, MAth;
+  Form_Repertoire, CommonConst, Form_options, Form_StatsGeneral,
+  Form_StatsEmprunteurs, Form_StatsAlbums, LoadComplet, Impression, Form_Gestion, Form_Customize,
+  Form_AboutBox, DM_Princ, Types, Procedures, UHistorique, Form_Entretien, ShellAPI, Math;
 
 procedure TFond.WMSyscommand(var msg: TWmSysCommand);
 begin

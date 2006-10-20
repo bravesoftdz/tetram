@@ -15,6 +15,7 @@ type
     procedure BeforeDestruction; override;
     procedure Clear; virtual;
 
+    procedure InitInstance; virtual;
     constructor Create; virtual;
 
     procedure WriteXMLToStream(Stream: TStream); virtual;
@@ -28,7 +29,6 @@ type
 
     procedure Clear; override;
 
-    constructor Create; overload; override;
     constructor Create(const Reference: TGUID); reintroduce; overload; virtual;
 
     procedure SaveToDatabase; overload;
@@ -53,10 +53,10 @@ type
     Emprunts: TListOfTEmprunt;
     NBEmprunts: Integer;
 
-    procedure Fill(Reference: TGUID; Source: TSrcEmprunt = seTous; Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1; Avant: TDateTime = -1; EnCours: Boolean = False; Stock: Boolean = False); reintroduce;
+    procedure Fill(const Reference: TGUID; Source: TSrcEmprunt = seTous; Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1; Avant: TDateTime = -1; EnCours: Boolean = False; Stock: Boolean = False); reintroduce;
     procedure Clear; override;
-    constructor Create; overload; override;
-    constructor Create(Reference: TGUID; Source: TSrcEmprunt = seTous; Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1; Avant: TDateTime = -1; EnCours: Boolean = False; Stock: Boolean = False); reintroduce; overload;
+    procedure InitInstance; override;
+    constructor Create(const Reference: TGUID; Source: TSrcEmprunt = seTous; Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1; Avant: TDateTime = -1; EnCours: Boolean = False; Stock: Boolean = False); reintroduce; overload;
     destructor Destroy; override;
   end;
 
@@ -67,8 +67,6 @@ type
 
     procedure Fill(const Reference: TGUID); override;
     procedure Clear; override;
-    constructor Create; override;
-    destructor Destroy; override;
 
     procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
 
@@ -110,6 +108,7 @@ type
     Titre: string;
     Terminee: Integer;
     Complete: Boolean;
+    SuivreManquants, SuivreSorties: Boolean;
     Albums: TListOfTAlbum;
     ParaBD: TListOfTParaBD;
     Genres: TStringList;
@@ -126,7 +125,7 @@ type
     procedure Fill(const Reference, IdAuteur: TGUID); reintroduce; overload;
     procedure Fill(const Reference, IdAuteur: TGUID; Force: Boolean); reintroduce; overload;
     procedure Clear; override;
-    constructor Create; overload; override;
+    procedure InitInstance; override;
     constructor Create(const Reference, IdAuteur: TGUID); reintroduce; overload;
     constructor Create(const Reference, IdAuteur: TGUID; Force: Boolean); reintroduce; overload;
     destructor Destroy; override;
@@ -158,7 +157,7 @@ type
 
     procedure Fill(const Reference: TGUID); override;
     procedure Clear; override;
-    constructor Create; override;
+    procedure InitInstance; override;
     destructor Destroy; override;
 
     procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
@@ -188,7 +187,7 @@ type
 
     procedure Fill(const Reference: TGUID); override;
     procedure Clear; override;
-    constructor Create; override;
+    procedure InitInstance; override;
     destructor Destroy; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
 
@@ -209,10 +208,10 @@ type
   TEditionsComplet = class(TListComplet)
     Editions: TListOfTEditionComplete;
 
-    procedure Fill(Reference: TGUID; Stock: Integer = -1); reintroduce;
+    procedure Fill(const Reference: TGUID; Stock: Integer = -1); reintroduce;
+    procedure InitInstance; override;
     procedure Clear; override;
-    constructor Create; overload; override;
-    constructor Create(Reference: TGUID; Stock: Integer = -1); reintroduce; overload;
+    constructor Create(const Reference: TGUID; Stock: Integer = -1); reintroduce; overload;
     destructor Destroy; override;
   end;
 
@@ -236,7 +235,7 @@ type
 
     procedure Fill(const Reference: TGUID); override;
     procedure Clear; override;
-    constructor Create; override;
+    procedure InitInstance; override;
     destructor Destroy; override;
 
     procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
@@ -256,7 +255,7 @@ type
 
     procedure Fill(const Reference: TGUID); override;
     procedure Clear; override;
-    constructor Create; override;
+    procedure InitInstance; override;
     destructor Destroy; override;
 
     procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
@@ -294,20 +293,21 @@ type
 
     procedure Fill(Complete: Boolean); reintroduce;
     procedure Clear; override;
-    constructor Create; overload; override;
+    procedure InitInstance; override;
     constructor Create(Complete: Boolean); reintroduce; overload;
     destructor Destroy; override;
 
   private
-    procedure CreateStats(var Stats: TStats); overload;
-    procedure CreateStats(var Stats: TStats; ID_Editeur: TGUID; Editeur: string); overload;
+    procedure CreateStats(Stats: TStats); overload;
+    procedure CreateStats(Stats: TStats; const ID_Editeur: TGUID; const Editeur: string); overload;
   end;
 
   TSerieIncomplete = class(TInfoComplet)
     Serie: TSerie;
     NumerosManquants: TStringList;
 
-    constructor Create; override;
+    procedure InitInstance; override;
+
     destructor Destroy; override;
     function ChaineAffichage: string;
   end;
@@ -325,11 +325,11 @@ type
     Series: TListOfTSerieIncomplete;
 
     procedure Fill(const Reference: TGUID); overload; override;
-    procedure Fill(AvecIntegrales, AvecAchats: Boolean; ID_Serie: TGUID); reintroduce; overload;
+    procedure Fill(AvecIntegrales, AvecAchats: Boolean; const ID_Serie: TGUID); reintroduce; overload;
     procedure Clear; override;
-    constructor Create; overload; override;
+    procedure InitInstance; override;
     constructor Create(AvecIntegrales, AvecAchats: Boolean); reintroduce; overload;
-    constructor Create(ID_Serie: TGUID); reintroduce; overload;
+    constructor Create(const ID_Serie: TGUID); reintroduce; overload;
     destructor Destroy; override;
   end;
 
@@ -356,11 +356,12 @@ type
 
     procedure Fill(const Reference: TGUID); overload; override;
     procedure Fill(AvecAchats: Boolean); reintroduce; overload;
-    procedure Fill(AvecAchats: Boolean; ID_Serie: TGUID); reintroduce; overload;
+    procedure Fill(AvecAchats: Boolean; const ID_Serie: TGUID); reintroduce; overload;
+    procedure InitInstance; override;
     procedure Clear; override;
     constructor Create; overload; override;
     constructor Create(AvecAchats: Boolean); reintroduce; overload;
-    constructor Create(ID_Serie: TGUID); reintroduce; overload;
+    constructor Create(const ID_Serie: TGUID); reintroduce; overload;
     destructor Destroy; override;
   end;
 
@@ -390,7 +391,7 @@ type
 
     procedure Fill(const Reference: TGUID); override;
     procedure Clear; override;
-    constructor Create; override;
+    procedure InitInstance; override;
     destructor Destroy; override;
 
     procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
@@ -421,12 +422,18 @@ end;
 
 constructor TBaseComplet.Create;
 begin
-
+  inherited;
+  InitInstance;
 end;
 
 procedure TBaseComplet.Fill(const Reference: TGUID);
 begin
   Clear;
+end;
+
+procedure TBaseComplet.InitInstance;
+begin
+
 end;
 
 procedure TBaseComplet.WriteString(Stream: TStream; const Chaine: string);
@@ -521,17 +528,6 @@ begin
   Editions.Clear;
 end;
 
-constructor TAlbumComplet.Create;
-begin
-  Scenaristes := TListOfTAuteur.Create;
-  Dessinateurs := TListOfTAuteur.Create;
-  Coloristes := TListOfTAuteur.Create;
-  Sujet := TStringList.Create;
-  Notes := TStringList.Create;
-  Serie := TSerieComplete.Create;
-  Editions := TEditionsComplet.Create;
-end;
-
 destructor TAlbumComplet.Destroy;
 begin
   Scenaristes.Free;
@@ -603,6 +599,18 @@ end;
 function TAlbumComplet.GetReference: TGUID;
 begin
   Result := ID_Album;
+end;
+
+procedure TAlbumComplet.InitInstance;
+begin
+  inherited;
+  Scenaristes := TListOfTAuteur.Create;
+  Dessinateurs := TListOfTAuteur.Create;
+  Coloristes := TListOfTAuteur.Create;
+  Sujet := TStringList.Create;
+  Notes := TStringList.Create;
+  Serie := TSerieComplete.Create;
+  Editions := TEditionsComplet.Create;
 end;
 
 procedure TAlbumComplet.SaveToDatabase(UseTransaction: TJvUIBTransaction);
@@ -736,15 +744,6 @@ begin
 end;
 
 { TEditionComplete }
-
-constructor TEditionComplete.Create;
-begin
-  Editeur := TEditeurComplet.Create;
-  Collection := TCollection.Create;
-  Emprunts := TEmpruntsComplet.Create;
-  Couvertures := TListOfTCouverture.Create;
-  Notes := TStringList.Create;
-end;
 
 procedure TEditionComplete.Clear;
 begin
@@ -1090,6 +1089,16 @@ begin
   end;
 end;
 
+procedure TEditionComplete.InitInstance;
+begin
+  inherited;
+  Editeur := TEditeurComplet.Create;
+  Collection := TCollection.Create;
+  Emprunts := TEmpruntsComplet.Create;
+  Couvertures := TListOfTCouverture.Create;
+  Notes := TStringList.Create;
+end;
+
 { TEditionsComplet }
 
 procedure TEditionsComplet.Clear;
@@ -1098,15 +1107,9 @@ begin
   Editions.Clear;
 end;
 
-constructor TEditionsComplet.Create;
+constructor TEditionsComplet.Create(const Reference: TGUID; Stock: Integer);
 begin
-  inherited;
-  Editions := TListOfTEditionComplete.Create;
-end;
-
-constructor TEditionsComplet.Create(Reference: TGUID; Stock: Integer);
-begin
-  Create;
+  inherited Create;
   Fill(Reference, Stock);
 end;
 
@@ -1116,7 +1119,7 @@ begin
   inherited;
 end;
 
-procedure TEditionsComplet.Fill(Reference: TGUID; Stock: Integer = -1);
+procedure TEditionsComplet.Fill(const Reference: TGUID; Stock: Integer = -1);
 begin
   inherited Fill(Reference);
   with TJvUIBQuery.Create(nil) do try
@@ -1136,6 +1139,12 @@ begin
   end;
 end;
 
+procedure TEditionsComplet.InitInstance;
+begin
+  inherited;
+  Editions := TListOfTEditionComplete.Create;
+end;
+
 { TEmprunteurComplet }
 
 function TEmprunteurComplet.ChaineAffichage(dummy: Boolean = True): string;
@@ -1150,13 +1159,6 @@ begin
   Nom := '';
   Adresse.Clear;
   Emprunts.Clear;
-end;
-
-constructor TEmprunteurComplet.Create;
-begin
-  inherited;
-  Adresse := TStringList.Create;
-  Emprunts := TEmpruntsComplet.Create;
 end;
 
 destructor TEmprunteurComplet.Destroy;
@@ -1196,6 +1198,13 @@ end;
 function TEmprunteurComplet.GetReference: TGUID;
 begin
   Result := ID_Emprunteur;
+end;
+
+procedure TEmprunteurComplet.InitInstance;
+begin
+  inherited;
+  Adresse := TStringList.Create;
+  Emprunts := TEmpruntsComplet.Create;
 end;
 
 procedure TEmprunteurComplet.SaveToDatabase(UseTransaction: TJvUIBTransaction);
@@ -1261,32 +1270,15 @@ begin
   Coloristes.Clear;
 end;
 
-constructor TSerieComplete.Create;
-begin
-  inherited;
-  FIdAuteur := GUID_NULL;
-  FForce := False;
-  Albums := TListOfTAlbum.Create(True);
-  ParaBD := TListOfTParaBD.Create(True);
-  Genres := TStringList.Create;
-  Sujet := TStringList.Create;
-  Notes := TStringList.Create;
-  Editeur := TEditeurComplet.Create;
-  Collection := TCollection.Create;
-  Scenaristes := TListOfTAuteur.Create(True);
-  Dessinateurs := TListOfTAuteur.Create(True);
-  Coloristes := TListOfTAuteur.Create(True);
-end;
-
 constructor TSerieComplete.Create(const Reference, IdAuteur: TGUID);
 begin
-  Create;
+  inherited Create;
   Fill(Reference, IdAuteur);
 end;
 
 constructor TSerieComplete.Create(const Reference, IdAuteur: TGUID; Force: Boolean);
 begin
-  Create;
+  inherited Create;
   Fill(Reference, IdAuteur, Force);
 end;
 
@@ -1316,7 +1308,7 @@ begin
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     FetchBlobs := True;
-    SQL.Text := 'SELECT TITRESERIE, TERMINEE, SUJETSERIE, REMARQUESSERIE, SITEWEB, COMPLETE, S.ID_Editeur, S.ID_Collection, NOMCOLLECTION '
+    SQL.Text := 'SELECT TITRESERIE, TERMINEE, SUJETSERIE, REMARQUESSERIE, SITEWEB, COMPLETE, S.ID_Editeur, S.ID_Collection, NOMCOLLECTION, SUIVRESORTIES, SUIVREMANQUANTS '
       + 'FROM SERIES S LEFT JOIN COLLECTIONS C ON S.ID_Collection = C.ID_Collection '
       + 'WHERE ID_Serie = ?';
     Params.AsString[0] := GUIDToString(Reference);
@@ -1327,7 +1319,9 @@ begin
       Self.Terminee := -1
     else
       Self.Terminee := Fields.ByNameAsInteger['TERMINEE'];
+    Self.SuivreSorties := RecInconnu or Fields.ByNameAsBoolean['SUIVRESORTIES'];
     Self.Complete := Fields.ByNameAsBoolean['COMPLETE'];
+    Self.SuivreManquants := RecInconnu or Fields.ByNameAsBoolean['SUIVREMANQUANTS'];
     Self.Sujet.Text := Fields.ByNameAsString['SUJETSERIE'];
     Self.Notes.Text := Fields.ByNameAsString['REMARQUESSERIE'];
     Self.SiteWeb := Trim(Fields.ByNameAsString['SITEWEB']);
@@ -1428,6 +1422,23 @@ begin
   Result := ID_Serie;
 end;
 
+procedure TSerieComplete.InitInstance;
+begin
+  inherited;
+  FIdAuteur := GUID_NULL;
+  FForce := False;
+  Albums := TListOfTAlbum.Create(True);
+  ParaBD := TListOfTParaBD.Create(True);
+  Genres := TStringList.Create;
+  Sujet := TStringList.Create;
+  Notes := TStringList.Create;
+  Editeur := TEditeurComplet.Create;
+  Collection := TCollection.Create;
+  Scenaristes := TListOfTAuteur.Create(True);
+  Dessinateurs := TListOfTAuteur.Create(True);
+  Coloristes := TListOfTAuteur.Create(True);
+end;
+
 procedure TSerieComplete.SaveToDatabase(UseTransaction: TJvUIBTransaction);
 var
   s: string;
@@ -1437,12 +1448,12 @@ begin
   with TJvUIBQuery.Create(nil) do try
     Transaction := UseTransaction;
     if RecInconnu then begin
-      SQL.Text := 'INSERT INTO SERIES (ID_Serie, TitreSerie, Terminee, Complete, SITEWEB, ID_Editeur, ID_Collection, SUJETserie, REMARQUESserie)';
+      SQL.Text := 'INSERT INTO SERIES (ID_Serie, TitreSerie, Terminee, SuivreSorties, Complete, SuivreManquants, SITEWEB, ID_Editeur, ID_Collection, SUJETserie, REMARQUESserie)';
       SQL.Add('VALUES');
-      SQL.Add('(:ID_Serie, :TitreSerie, :Terminee, :Complete, :SITEWEB, :ID_Editeur, :ID_Collection, :SUJETserie, :REMARQUESserie)');
+      SQL.Add('(:ID_Serie, :TitreSerie, :Terminee, :SuivreSorties, :Complete, :SuivreManquants, :SITEWEB, :ID_Editeur, :ID_Collection, :SUJETserie, :REMARQUESserie)');
     end
     else begin
-      SQL.Text := 'UPDATE SERIES SET TitreSerie = :TitreSerie, Terminee = :Terminee, Complete = :Complete, SITEWEB = :SITEWEB, ID_Editeur = :ID_Editeur, ID_Collection = :ID_Collection,';
+      SQL.Text := 'UPDATE SERIES SET TitreSerie = :TitreSerie, Terminee = :Terminee, SuivreSorties = :SuivreSorties, Complete = :Complete, SuivreManquants = :SuivreManquants, SITEWEB = :SITEWEB, ID_Editeur = :ID_Editeur, ID_Collection = :ID_Collection,';
       SQL.Add('SUJETserie = :SUJETserie, REMARQUESserie = :REMARQUESserie');
       SQL.Add('WHERE ID_Serie = :ID_Serie');
     end;
@@ -1451,7 +1462,9 @@ begin
       Params.ByNameIsNull['TERMINEE'] := True
     else
       Params.ByNameAsInteger['TERMINEE'] := Self.Terminee;
+    Params.ByNameAsBoolean['SUIVRESORTIES'] := Self.SuivreSorties;
     Params.ByNameAsBoolean['COMPLETE'] := Self.Complete;
+    Params.ByNameAsBoolean['SUIVREMANQUANTS'] := Self.SuivreManquants;
     Params.ByNameAsString['SITEWEB'] := Trim(Self.SiteWeb);
     if IsEqualGUID(Self.ID_Editeur, GUID_NULL) then begin
       Params.ByNameIsNull['ID_Editeur'] := True;
@@ -1536,18 +1549,6 @@ begin
   SiteWeb := '';
 end;
 
-constructor TEditeurComplet.Create;
-begin
-  inherited;
-
-end;
-
-destructor TEditeurComplet.Destroy;
-begin
-
-  inherited;
-end;
-
 procedure TEditeurComplet.Fill(const Reference: TGUID);
 var
   q: TJvUIBQuery;
@@ -1610,29 +1611,18 @@ begin
   ListEditeurs.Clear;
 end;
 
-constructor TStats.Create;
-begin
-  inherited;
-  ListEmprunteursMax := TListOfTEmprunteur.Create;
-  ListAlbumsMax := TListOfTAlbum.Create;
-  ListEmprunteursMin := TListOfTEmprunteur.Create;
-  ListAlbumsMin := TListOfTAlbum.Create;
-  ListGenre := TListOfTGenre.Create;
-  ListEditeurs := TListOfTStats.Create;
-end;
-
 constructor TStats.Create(Complete: Boolean);
 begin
-  Create;
+  inherited Create;
   Fill(Complete);
 end;
 
-procedure TStats.CreateStats(var Stats: TStats);
+procedure TStats.CreateStats(Stats: TStats);
 begin
   CreateStats(Stats, GUID_NULL, '');
 end;
 
-procedure TStats.CreateStats(var Stats: TStats; ID_Editeur: TGUID; Editeur: string);
+procedure TStats.CreateStats(Stats: TStats; const ID_Editeur: TGUID; const Editeur: string);
 var
   q: TJvUIBQuery;
   hg: IHourGlass;
@@ -1866,6 +1856,17 @@ begin
   end;
 end;
 
+procedure TStats.InitInstance;
+begin
+  inherited;
+  ListEmprunteursMax := TListOfTEmprunteur.Create;
+  ListAlbumsMax := TListOfTAlbum.Create;
+  ListEmprunteursMin := TListOfTEmprunteur.Create;
+  ListAlbumsMin := TListOfTAlbum.Create;
+  ListGenre := TListOfTGenre.Create;
+  ListEditeurs := TListOfTStats.Create;
+end;
+
 { TEmpruntsComplet }
 
 procedure TEmpruntsComplet.Clear;
@@ -1875,15 +1876,9 @@ begin
   Emprunts.Clear;
 end;
 
-constructor TEmpruntsComplet.Create;
+constructor TEmpruntsComplet.Create(const Reference: TGUID; Source: TSrcEmprunt; Sens: TSensEmprunt; Apres, Avant: TDateTime; EnCours, Stock: Boolean);
 begin
-  inherited;
-  Emprunts := TListOfTEmprunt.Create;
-end;
-
-constructor TEmpruntsComplet.Create(Reference: TGUID; Source: TSrcEmprunt; Sens: TSensEmprunt; Apres, Avant: TDateTime; EnCours, Stock: Boolean);
-begin
-  Create;
+  inherited Create;
   Fill(Reference, Source, Sens, Apres, Avant, EnCours, Stock);
 end;
 
@@ -1893,7 +1888,7 @@ begin
   inherited;
 end;
 
-procedure TEmpruntsComplet.Fill(Reference: TGUID; Source: TSrcEmprunt; Sens: TSensEmprunt; Apres, Avant: TDateTime; EnCours, Stock: Boolean);
+procedure TEmpruntsComplet.Fill(const Reference: TGUID; Source: TSrcEmprunt; Sens: TSensEmprunt; Apres, Avant: TDateTime; EnCours, Stock: Boolean);
 var
   q: TJvUIBQuery;
 
@@ -1965,6 +1960,12 @@ begin
   end;
 end;
 
+procedure TEmpruntsComplet.InitInstance;
+begin
+  inherited;
+  Emprunts := TListOfTEmprunt.Create;
+end;
+
 { TSeriesIncompletes }
 
 procedure TSeriesIncompletes.Clear;
@@ -1973,21 +1974,15 @@ begin
   Series.Clear;
 end;
 
-constructor TSeriesIncompletes.Create;
-begin
-  inherited;
-  Series := TListOfTSerieIncomplete.Create(True);
-end;
-
 constructor TSeriesIncompletes.Create(AvecIntegrales, AvecAchats: Boolean);
 begin
-  Create;
+  inherited Create;
   Fill(AvecIntegrales, AvecAchats, GUID_NULL);
 end;
 
-constructor TSeriesIncompletes.Create(ID_Serie: TGUID);
+constructor TSeriesIncompletes.Create(const ID_Serie: TGUID);
 begin
-  Create;
+  inherited Create;
   Fill(ID_Serie);
 end;
 
@@ -1997,7 +1992,7 @@ begin
   inherited;
 end;
 
-procedure TSeriesIncompletes.Fill(AvecIntegrales, AvecAchats: Boolean; ID_Serie: TGUID);
+procedure TSeriesIncompletes.Fill(AvecIntegrales, AvecAchats: Boolean; const ID_Serie: TGUID);
 var
   q: TJvUIBQuery;
   CurrentSerie, dummy: TGUID;
@@ -2064,6 +2059,12 @@ begin
   Fill(True, True, Reference);
 end;
 
+procedure TSeriesIncompletes.InitInstance;
+begin
+  inherited;
+  Series := TListOfTSerieIncomplete.Create(True);
+end;
+
 { TPrevisionsSorties }
 
 procedure TPrevisionsSorties.Clear;
@@ -2077,20 +2078,20 @@ end;
 constructor TPrevisionsSorties.Create;
 begin
   inherited;
-  AnneesPassees := TListOfTPrevisionSortie.Create(True);
-  AnneeEnCours := TListOfTPrevisionSortie.Create(True);
-  AnneesProchaines := TListOfTPrevisionSortie.Create(True);
+  InitInstance;
 end;
 
 constructor TPrevisionsSorties.Create(AvecAchats: Boolean);
 begin
-  Create;
+  inherited Create;
+  InitInstance;
   Fill(AvecAchats);
 end;
 
-constructor TPrevisionsSorties.Create(ID_Serie: TGUID);
+constructor TPrevisionsSorties.Create(const ID_Serie: TGUID);
 begin
-  Create;
+  inherited Create;
+  InitInstance;
   Fill(ID_Serie);
 end;
 
@@ -2102,7 +2103,7 @@ begin
   inherited;
 end;
 
-procedure TPrevisionsSorties.Fill(AvecAchats: Boolean; ID_Serie: TGUID);
+procedure TPrevisionsSorties.Fill(AvecAchats: Boolean; const ID_Serie: TGUID);
 var
   q: TJvUIBQuery;
   Annee, CurrentAnnee: Integer;
@@ -2149,6 +2150,14 @@ begin
   Fill(AvecAchats, GUID_NULL);
 end;
 
+procedure TPrevisionsSorties.InitInstance;
+begin
+  inherited;
+  AnneesPassees := TListOfTPrevisionSortie.Create(True);
+  AnneeEnCours := TListOfTPrevisionSortie.Create(True);
+  AnneesProchaines := TListOfTPrevisionSortie.Create(True);
+end;
+
 { TPrevisionSortie }
 
 constructor TPrevisionSortie.Create;
@@ -2185,18 +2194,18 @@ begin
   end;
 end;
 
-constructor TSerieIncomplete.Create;
-begin
-  inherited;
-  NumerosManquants := TStringList.Create;
-  Serie := TSerie.Create;
-end;
-
 destructor TSerieIncomplete.Destroy;
 begin
   Serie.Free;
   NumerosManquants.Free;
   inherited;
+end;
+
+procedure TSerieIncomplete.InitInstance;
+begin
+  inherited;
+  NumerosManquants := TStringList.Create;
+  Serie := TSerie.Create;
 end;
 
 { TAuteurComplet }
@@ -2210,13 +2219,6 @@ procedure TAuteurComplet.Clear;
 begin
   inherited;
   Series.Clear;
-end;
-
-constructor TAuteurComplet.Create;
-begin
-  inherited;
-  Series := TListOfTSerieComplete.Create(True);
-  Biographie := TStringList.Create;
 end;
 
 destructor TAuteurComplet.Destroy;
@@ -2277,6 +2279,13 @@ end;
 function TAuteurComplet.GetReference: TGUID;
 begin
   Result := ID_Auteur;
+end;
+
+procedure TAuteurComplet.InitInstance;
+begin
+  inherited;
+  Series := TListOfTSerieComplete.Create(True);
+  Biographie := TStringList.Create;
 end;
 
 procedure TAuteurComplet.SaveToDatabase(UseTransaction: TJvUIBTransaction);
@@ -2361,14 +2370,6 @@ begin
   Auteurs.Clear;
   Description.Clear;
   Serie.Clear;
-end;
-
-constructor TParaBDComplet.Create;
-begin
-  inherited;
-  Description := TStringList.Create;
-  Auteurs := TListOfTAuteur.Create;
-  Serie := TSerieComplete.Create;
 end;
 
 destructor TParaBDComplet.Destroy;
@@ -2585,6 +2586,14 @@ begin
   Result := ID_ParaBD;
 end;
 
+procedure TParaBDComplet.InitInstance;
+begin
+  inherited;
+  Description := TStringList.Create;
+  Auteurs := TListOfTAuteur.Create;
+  Serie := TSerieComplete.Create;
+end;
+
 { TCollectionComplete }
 
 procedure TCollectionComplete.Clear;
@@ -2595,7 +2604,7 @@ end;
 
 constructor TCollectionComplete.Create;
 begin
-  inherited;
+  inherited Create;
   Editeur := TEditeur.Create;
 end;
 
@@ -2674,15 +2683,9 @@ begin
   RecInconnu := True;
 end;
 
-constructor TObjetComplet.Create;
-begin
-  inherited;
-
-end;
-
 constructor TObjetComplet.Create(const Reference: TGUID);
 begin
-  Create;
+  inherited Create;
   Fill(Reference);
 end;
 

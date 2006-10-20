@@ -230,7 +230,7 @@ var
 begin
   if not IsDownKey(VK_CONTROL) then begin
     s := FParaBD.Serie.SiteWeb;
-    if FParaBD.Serie.SiteWeb <> '' then
+    if s <> '' then
       ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
   end;
 end;

@@ -85,7 +85,7 @@ type
     ResultInfos: TStringList;
     property TypeRecherche: TTypeRecherche read FTypeRecherche write SetTypeRecherche;
     function ImpressionEnabled: Boolean;
-    function TransChamps(Champ: string): string;
+    function TransChamps(const Champ: string): string;
     function ValChamps(const Champ: string): Integer;
     function IsValChampBoolean(ValChamp: Integer): Boolean;
   end;
@@ -93,7 +93,8 @@ type
 implementation
 
 uses
-  Textes, DM_Princ, CommonConst, TypeRec, Impression, Math, Form_EditCritere, Main, UHistorique;
+  Textes, DM_Princ, TypeRec, Impression, Math, Form_EditCritere, UHistorique,
+  Main;
 
 {$R *.DFM}
 
@@ -101,73 +102,72 @@ var
   FSortColumn: Integer;
   FSortDirection: TSortDirection;
 
-function TFrmRecherche.TransChamps(Champ: string): string;
+function TFrmRecherche.TransChamps(const Champ: string): string;
 begin
   Result := '';
-  Champ := LowerCase(Champ);
-  if Champ = 'titrealbum' then Result := rsTransAlbum;
-  if Champ = 'anneeparution' then Result := rsTransAnneeParution;
-  if Champ = 'tome' then Result := rsTransTome;
-  if Champ = 'horsserie' then Result := rsTransHorsSerie;
-  if Champ = 'integrale' then Result := rsTransIntegrale;
-  if Champ = 'sujetalbum' then Result := rsTransHistoire + ' ' + rsTransAlbum;
-  if Champ = 'remarquesalbum' then Result := rsTransNotes + ' ' + rsTransAlbum;
+  if SameText(Champ, 'titrealbum') then Result := rsTransAlbum;
+  if SameText(Champ, 'anneeparution') then Result := rsTransAnneeParution;
+  if SameText(Champ, 'tome') then Result := rsTransTome;
+  if SameText(Champ, 'horsserie') then Result := rsTransHorsSerie;
+  if SameText(Champ, 'integrale') then Result := rsTransIntegrale;
+  if SameText(Champ, 'sujetalbum') then Result := rsTransHistoire + ' ' + rsTransAlbum;
+  if SameText(Champ, 'remarquesalbum') then Result := rsTransNotes + ' ' + rsTransAlbum;
 
-  if Champ = 'titreserie' then Result := rsTransSerie;
-  if Champ = 'sujetserie' then Result := rsTransHistoire + ' ' + rsTransSerie;
-  if Champ = 'remarquesserie' then Result := rsTransNotes + ' ' + rsTransSerie;
-  if Champ = 'terminee' then Result := rsTransSerieTerminee;
+  if SameText(Champ, 'titreserie') then Result := rsTransSerie;
+  if SameText(Champ, 'sujetserie') then Result := rsTransHistoire + ' ' + rsTransSerie;
+  if SameText(Champ, 'remarquesserie') then Result := rsTransNotes + ' ' + rsTransSerie;
+  if SameText(Champ, 'terminee') then Result := rsTransSerieTerminee;
 
-  if Champ = 'anneeedition' then Result := rsTransAnneeEdition;
-  if Champ = 'prix' then Result := rsTransPrix;
-  if Champ = 'vo' then Result := rsTransVO;
-  if Champ = 'couleur' then Result := rsTransCouleur;
-  if Champ = 'isbn' then Result := rsTransISBN;
-  if Champ = 'prete' then Result := rsTransPrete;
-  if Champ = 'stock' then Result := rsTransStock;
-  if Champ = 'typeedition' then Result := rsTransEdition;
-  if Champ = 'dedicace' then Result := rsTransDedicace;
-  if Champ = 'etat' then Result := rsTransEtat;
-  if Champ = 'reliure' then Result := rsTransReliure;
-  if Champ = 'orientation' then Result := rsTransOrientation;
-  if Champ = 'formatedition' then Result := rsTransFormatEdition;
-  if Champ = 'typeedition' then Result := rsTransTypeEdition;
+  if SameText(Champ, 'anneeedition') then Result := rsTransAnneeEdition;
+  if SameText(Champ, 'prix') then Result := rsTransPrix;
+  if SameText(Champ, 'vo') then Result := rsTransVO;
+  if SameText(Champ, 'couleur') then Result := rsTransCouleur;
+  if SameText(Champ, 'isbn') then Result := rsTransISBN;
+  if SameText(Champ, 'prete') then Result := rsTransPrete;
+  if SameText(Champ, 'stock') then Result := rsTransStock;
+  if SameText(Champ, 'typeedition') then Result := rsTransEdition;
+  if SameText(Champ, 'dedicace') then Result := rsTransDedicace;
+  if SameText(Champ, 'etat') then Result := rsTransEtat;
+  if SameText(Champ, 'reliure') then Result := rsTransReliure;
+  if SameText(Champ, 'orientation') then Result := rsTransOrientation;
+  if SameText(Champ, 'formatedition') then Result := rsTransFormatEdition;
+  if SameText(Champ, 'typeedition') then Result := rsTransTypeEdition;
 
-  if Champ = 'genreserie' then Result := rsTransGenre + ' *';
+  if SameText(Champ, 'genreserie') then Result := rsTransGenre + ' *';
 end;
 
 function TFrmRecherche.ValChamps(const Champ: string): Integer;
 begin
   Result := 0;
-  if (Champ = rsTransAlbum) or (LowerCase(Champ) = 'titrealbum') then Result := 1;
-  if (Champ = rsTransAnneeParution) or (LowerCase(Champ) = 'anneeparution') then Result := 2;
-  if (Champ = rsTransTome) or (LowerCase(Champ) = 'tome') then Result := 3;
-  if (Champ = rsTransHorsSerie) or (LowerCase(Champ) = 'horsserie') then Result := 4;
-  if (Champ = rsTransIntegrale) or (LowerCase(Champ) = 'integrale') then Result := 5;
-  if (Champ = rsTransHistoire + ' ' + rsTransAlbum) or (LowerCase(Champ) = 'sujetalbum') then Result := 6;
-  if (Champ = rsTransNotes + ' ' + rsTransAlbum) or (LowerCase(Champ) = 'remarquesalbum') then Result := 7;
+  if (Champ = rsTransAlbum) or (SameText(Champ, 'titrealbum')) then Result := 1;
+  if (Champ = rsTransAnneeParution) or (SameText(Champ, 'anneeparution')) then Result := 2;
+  if (Champ = rsTransTome) or (SameText(Champ, 'tome')) then Result := 3;
+  if (Champ = rsTransHorsSerie) or (SameText(Champ, 'horsserie')) then Result := 4;
+  if (Champ = rsTransIntegrale) or (SameText(Champ, 'integrale')) then Result := 5;
+  if (Champ = rsTransHistoire + ' ' + rsTransAlbum) or (SameText(Champ, 'sujetalbum')) then Result := 6;
+  if (Champ = rsTransNotes + ' ' + rsTransAlbum) or (SameText(Champ, 'remarquesalbum')) then Result := 7;
 
-  if (Champ = rsTransSerie) or (LowerCase(Champ) = 'titreserie') then Result := 8;
-  if (Champ = rsTransHistoire + ' ' + rsTransSerie) or (LowerCase(Champ) = 'sujetserie') then Result := 9;
-  if (Champ = rsTransNotes + ' ' + rsTransSerie) or (LowerCase(Champ) = 'remarquesserie') then Result := 10;
-  if (Champ = rsTransSerieTerminee) or (LowerCase(Champ) = 'terminee') then Result := 11;
+  if (Champ = rsTransSerie) or (SameText(Champ, 'titreserie')) then Result := 8;
+  if (Champ = rsTransHistoire + ' ' + rsTransSerie) or (SameText(Champ, 'sujetserie')) then Result := 9;
+  if (Champ = rsTransNotes + ' ' + rsTransSerie) or (SameText(Champ, 'remarquesserie')) then Result := 10;
+  if (Champ = rsTransSerieTerminee) or (SameText(Champ, 'terminee')) then Result := 11;
 
-  if (Champ = rsTransAnneeEdition) or (LowerCase(Champ) = 'anneeedition') then Result := 12;
-  if (Champ = rsTransPrix) or (LowerCase(Champ) = 'prix') then Result := 13;
-  if (Champ = rsTransVO) or (LowerCase(Champ) = 'vo') then Result := 14;
-  if (Champ = rsTransCouleur) or (LowerCase(Champ) = 'couleur') then Result := 15;
-  if (Champ = rsTransISBN) or (LowerCase(Champ) = 'isbn') then Result := 16;
-  if (Champ = rsTransPrete) or (LowerCase(Champ) = 'prete') then Result := 17;
-  if (Champ = rsTransStock) or (LowerCase(Champ) = 'stock') then Result := 18;
-  if (Champ = rsTransEdition) or (LowerCase(Champ) = 'typeedition') then Result := 19;
-  if (Champ = rsTransDedicace) or (LowerCase(Champ) = 'dedicace') then Result := 20;
-  if (Champ = rsTransEtat) or (LowerCase(Champ) = 'etat') then Result := 21;
-  if (Champ = rsTransReliure) or (LowerCase(Champ) = 'reliure') then Result := 22;
-  if (Champ = rsTransOrientation) or (LowerCase(Champ) = 'orientation') then Result := 24;
-  if (Champ = rsTransFormatEdition) or (LowerCase(Champ) = 'formatedition') then Result := 25;
-  if (Champ = rsTransTypeEdition) or (LowerCase(Champ) = 'typeedition') then Result := 26;
+  if (Champ = rsTransAnneeEdition) or (SameText(Champ, 'anneeedition')) then Result := 12;
+  if (Champ = rsTransPrix) or (SameText(Champ, 'prix')) then Result := 13;
+  if (Champ = rsTransVO) or (SameText(Champ, 'vo')) then Result := 14;
+  if (Champ = rsTransCouleur) or (SameText(Champ, 'couleur')) then Result := 15;
+  if (Champ = rsTransISBN) or (SameText(Champ, 'isbn')) then Result := 16;
+  if (Champ = rsTransPrete) or (SameText(Champ, 'prete')) then Result := 17;
+  if (Champ = rsTransStock) or (SameText(Champ, 'stock')) then Result := 18;
+  if (Champ = rsTransEdition) or (SameText(Champ, 'typeedition')) then Result := 19;
+  if (Champ = rsTransDedicace) or (SameText(Champ, 'dedicace')) then Result := 20;
+  if (Champ = rsTransEtat) or (SameText(Champ, 'etat')) then Result := 21;
+  if (Champ = rsTransReliure) or (SameText(Champ, 'reliure')) then Result := 22;
+  if (Champ = rsTransOrientation) or (SameText(Champ, 'orientation')) then Result := 24;
+  if (Champ = rsTransFormatEdition) or (SameText(Champ, 'formatedition')) then Result := 25;
+  if (Champ = rsTransTypeEdition) or (SameText(Champ, 'typeedition')) then Result := 26;
 
-  if (Champ = rsTransGenre + ' *') or (LowerCase(Champ) = 'ID_Genre') then Result := 23;
+  if (Champ = rsTransGenre + ' *') or (SameText(Champ, 'ID_Genre')) then Result := 23;
 end;
 
 function TFrmRecherche.IsValChampBoolean(ValChamp: Integer): Boolean;
@@ -300,12 +300,12 @@ end;
 
 procedure TFrmRecherche.RechPrint(Sender: TObject);
 var
-  p: PCritere;
   Criteres: TStringList;
 
   procedure ProcessTreeNode(Node: TTreeNode; prefix: string = '');
   var
     i: Integer;
+    p: PCritere;
     s: string;
   begin
     if Integer(Node.Data) > 0 then begin

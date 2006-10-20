@@ -35,7 +35,7 @@ type
 
 implementation
 
-uses Commun, JvUIB, DM_Princ, ShellAPI, Procedures, Textes;
+uses Commun, JvUIB, ShellAPI, Procedures, Textes;
 
 {$R *.DFM}
 

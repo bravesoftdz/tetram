@@ -25,7 +25,7 @@ type
     Label7: TLabel;
     remarques: TMemoLabeled;
     cbTerminee: TCheckBoxLabeled;
-    cbComplete: TCheckBoxLabeled;
+    cbManquants: TCheckBoxLabeled;
     vtAlbums: TVirtualStringTree;
     VDTButton13: TVDTButton;
     edSite: TEditLabeled;
@@ -48,6 +48,8 @@ type
     FrameRechercheRapideEditeur: TFrameRechercheRapide;
     Bevel1: TBevel;
     Frame11: TFrame1;
+    cbSorties: TCheckBoxLabeled;
+    cbComplete: TCheckBoxLabeled;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
@@ -72,10 +74,12 @@ type
     procedure lvDessinateursData(Sender: TObject; Item: TListItem);
     procedure lvColoristesData(Sender: TObject; Item: TListItem);
     procedure vtParaBDDblClick(Sender: TObject);
+    procedure cbTermineeClick(Sender: TObject);
+    procedure cbCompleteClick(Sender: TObject);
   private
     { Déclarations privées }
     FSerie: TSerieComplete;
-    procedure SetID_Serie(Value: TGUID);
+    procedure SetID_Serie(const Value: TGUID);
     function GetID_Serie: TGUID;
   public
     { Déclarations publiques }
@@ -85,7 +89,7 @@ type
 implementation
 
 uses
-  Commun, Proc_Gestions, TypeRec, DM_Princ, JvUIB, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG;
+  Commun, Proc_Gestions, TypeRec, JvUIB, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG;
 
 {$R *.DFM}
 
@@ -136,7 +140,9 @@ begin
 
   FSerie.Titre := Trim(edTitre.Text);
   FSerie.Terminee := Integer(cbTerminee.State);
+  FSerie.SuivreSorties := cbSorties.Checked;
   FSerie.Complete := cbComplete.Checked;
+  FSerie.SuivreManquants := cbManquants.Checked;
   FSerie.SiteWeb := Trim(edSite.Text);
   FSerie.ID_Editeur := vtEditeurs.CurrentValue;
   FSerie.ID_Collection := vtCollections.CurrentValue;
@@ -148,7 +154,7 @@ begin
   ModalResult := mrOk;
 end;
 
-procedure TFrmEditSerie.SetID_Serie(Value: TGUID);
+procedure TFrmEditSerie.SetID_Serie(const Value: TGUID);
 var
   i: Integer;
   hg: IHourGlass;
@@ -165,9 +171,11 @@ begin
       cbTerminee.State := cbGrayed
     else
       cbTerminee.State := TCheckBoxState(FSerie.Terminee);
+    cbSorties.Checked := FSerie.SuivreSorties;
     vtEditeurs.CurrentValue := FSerie.ID_Editeur;
     vtCollections.CurrentValue := FSerie.ID_Collection;
     cbComplete.Checked := FSerie.Complete;
+    cbManquants.Checked := FSerie.SuivreManquants;
     histoire.Lines.Text := FSerie.Sujet.Text;
     remarques.Lines.Text := FSerie.Notes.Text;
     edSite.Text := FSerie.SiteWeb;
@@ -434,6 +442,16 @@ end;
 procedure TFrmEditSerie.vtParaBDDblClick(Sender: TObject);
 begin
   ModifierParaBD(vtParaBD);
+end;
+
+procedure TFrmEditSerie.cbTermineeClick(Sender: TObject);
+begin
+  cbSorties.Checked := not cbTerminee.Checked;
+end;
+
+procedure TFrmEditSerie.cbCompleteClick(Sender: TObject);
+begin
+  cbManquants.Checked := not cbComplete.Checked;
 end;
 
 end.

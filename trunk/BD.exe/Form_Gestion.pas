@@ -65,7 +65,7 @@ type
     GestionAchatAlbum, GestionAlbum, GestionAuteur, GestionGenre, GestionCollection,
       GestionEmprunteur, GestionEditeur, GestionSerie, GestionParaBD, GestionAchatParaBD: TInfo_Gestion;
     LastButton: TSpeedButton;
-    procedure AssignIG(var IG: TInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; Filtre: string = ''; Acheter: TActionGestionAchat = nil; Importer: Boolean = False; Exporter: Boolean = False);
+    procedure AssignIG(var IG: TInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; const Filtre: string = ''; Acheter: TActionGestionAchat = nil; Importer: Boolean = False; Exporter: Boolean = False);
   public
     { Déclarations publiques }
     SelString: string;
@@ -119,7 +119,7 @@ const
 
 {$R *.DFM}
 
-procedure TFrmGestions.AssignIG(var IG: TInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; Filtre: string = ''; Acheter: TActionGestionAchat = nil; Importer: Boolean = False; Exporter: Boolean = False);
+procedure TFrmGestions.AssignIG(var IG: TInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; const Filtre: string = ''; Acheter: TActionGestionAchat = nil; Importer: Boolean = False; Exporter: Boolean = False);
 begin
   IG.ProcAjouter := Ajouter;
   IG.ProcModifier := Modifier;
@@ -137,7 +137,7 @@ end;
 
 function TFrmGestions.GestionCourante(SB: TSpeedButton = nil): TInfo_Gestion;
 
-  function test(var ig: TInfo_Gestion; Bouton1, Bouton2: TSpeedButton; Retour: TInfo_Gestion): Boolean;
+  function test(var ig: TInfo_Gestion; Bouton1, Bouton2: TSpeedButton; const Retour: TInfo_Gestion): Boolean;
   begin
     Result := False;
     if (Bouton1 = Bouton2) or Bouton1.Down then begin

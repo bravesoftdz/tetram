@@ -86,7 +86,7 @@ type
 
 implementation
 
-uses MMSystem, UHistorique, Main;
+uses MMSystem, UHistorique;
 
 resourcestring
   zoompleinepage = 'Pleine page';
@@ -96,7 +96,7 @@ resourcestring
   suivante = 'Page suivante';
   precedente = 'Page précédente';
   derniere = 'Dernière page';
-  allera = 'Aller à la page...';
+  AllerA = 'Aller à la page...';
   numpage = 'Numéro de page';
   nbpages = 'Nombre de pages';
   quitter = 'Fermer l''aperçu';

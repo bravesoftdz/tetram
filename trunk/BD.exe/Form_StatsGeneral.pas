@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, LoadComplet, Commun;
+  StdCtrls, ExtCtrls, LoadComplet;
 
 type
   TFrmStatsGenerales = class(TForm)
@@ -71,7 +71,7 @@ function TStatsGeneralesCreate(AOwner: TComponent; Info: TStats): TFrmStatsGener
 
 implementation
 
-uses DM_Princ, CommonConst, TypeRec, Math, Divers;
+uses CommonConst, TypeRec, Math, Divers;
 
 {$R *.DFM}
 

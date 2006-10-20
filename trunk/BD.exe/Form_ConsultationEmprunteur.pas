@@ -16,7 +16,7 @@ type
     l_emprunts: TLabel;
     emprunts: TLabel;
     Bevel4: TBevel;
-    adresse: TMemo;
+    Adresse: TMemo;
     Bevel2: TBevel;
     btAjouter: TButton;
     ListeEmprunts: TVirtualStringTree;

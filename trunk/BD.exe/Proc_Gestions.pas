@@ -3,65 +3,65 @@ unit Proc_Gestions;
 interface
 
 uses
-  editions, SysUtils, Classes, Controls, Dialogs, Forms, Db, DBCtrls, Divers, Commun, ComCtrls, VirtualTree, JvUIB;
+  editions, SysUtils, Classes, Controls, Dialogs, Db, DBCtrls, Divers, Commun, ComCtrls, VirtualTree, JvUIB;
 
 type
-  TActionGestionAdd = function(VT: TVirtualStringTree; Valeur: string): TGUID;
+  TActionGestionAdd = function(VT: TVirtualStringTree; const Valeur: string): TGUID;
   TActionGestionModif = function(VT: TVirtualStringTree): Boolean;
   TActionGestionSupp = function(VT: TVirtualStringTree): Boolean;
   TActionGestionAchat = function(VT: TVirtualStringTree): Boolean;
 
-function AjouterEditeurs(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterEditeurs(VT: TVirtualStringTree; const Valeur: string): TGUID;
 function ModifierEditeurs(VT: TVirtualStringTree): Boolean;
 function SupprimerEditeurs(VT: TVirtualStringTree): Boolean;
 
-function AjouterAchatsAlbum(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterAchatsAlbum(VT: TVirtualStringTree; const Valeur: string): TGUID;
 function ModifierAchatsAlbum(VT: TVirtualStringTree): Boolean;
 function SupprimerAchatsAlbum(VT: TVirtualStringTree): Boolean;
 
-function AjouterAlbums(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterAlbums(VT: TVirtualStringTree; const Valeur: string): TGUID;
 function ModifierAlbums(VT: TVirtualStringTree): Boolean;
 function AcheterAlbums(VT: TVirtualStringTree): Boolean;
 function SupprimerAlbums(VT: TVirtualStringTree): Boolean;
 
-function AjouterGenres(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterGenres(VT: TVirtualStringTree; const Valeur: string): TGUID;
 function ModifierGenres(VT: TVirtualStringTree): Boolean;
 function SupprimerGenres(VT: TVirtualStringTree): Boolean;
 
-function AjouterAuteurs(VT: TVirtualStringTree; Valeur: string): TGUID;
-function AjouterAuteurs2(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterAuteurs(VT: TVirtualStringTree; const Valeur: string): TGUID;
+function AjouterAuteurs2(VT: TVirtualStringTree; const Valeur: string): TGUID;
 function ModifierAuteurs(VT: TVirtualStringTree): Boolean;
 function SupprimerAuteurs(VT: TVirtualStringTree): Boolean;
 
-function AjouterSeries(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterSeries(VT: TVirtualStringTree; const Valeur: string): TGUID;
 function ModifierSeries(VT: TVirtualStringTree): Boolean;
 function SupprimerSeries(VT: TVirtualStringTree): Boolean;
 
-function AjouterEmprunteurs(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterEmprunteurs(VT: TVirtualStringTree; const Valeur: string): TGUID;
 function ModifierEmprunteurs(VT: TVirtualStringTree): Boolean;
 function SupprimerEmprunteurs(VT: TVirtualStringTree): Boolean;
 
-function AjouterCollections(VT: TVirtualStringTree; ID_Editeur: TGUID; Valeur: string): TGUID; overload;
-function AjouterCollections(VT: TVirtualStringTree; Valeur: string): TGUID; overload;
+function AjouterCollections(VT: TVirtualStringTree; const ID_Editeur: TGUID; const Valeur: string): TGUID; overload;
+function AjouterCollections(VT: TVirtualStringTree; const Valeur: string): TGUID; overload;
 function ModifierCollections(VT: TVirtualStringTree): Boolean;
 function SupprimerCollections(VT: TVirtualStringTree): Boolean;
 
-function AjouterParaBD(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterParaBD(VT: TVirtualStringTree; const Valeur: string): TGUID;
 function ModifierParaBD(VT: TVirtualStringTree): Boolean;
 function AcheterParaBD(VT: TVirtualStringTree): Boolean;
 function SupprimerParaBD(VT: TVirtualStringTree): Boolean;
 
-function AjouterAchatsParaBD(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterAchatsParaBD(VT: TVirtualStringTree; const Valeur: string): TGUID;
 function ModifierAchatsParaBD(VT: TVirtualStringTree): Boolean;
 function SupprimerAchatsParaBD(VT: TVirtualStringTree): Boolean;
 
 implementation
 
-uses Textes, Procedures, DM_Princ, TypeRec;
+uses Textes, Procedures, TypeRec;
 
 //******************************************************************************************************
 
-function AjouterEditeurs(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterEditeurs(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationEditeur(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
@@ -101,7 +101,7 @@ begin
 end;
 //********************************************************************************************************
 
-function AjouterAchatsAlbum(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterAchatsAlbum(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationAchatAlbum(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
@@ -147,7 +147,7 @@ begin
 end;
 //*********************************************************************************************************
 
-function AjouterAlbums(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterAlbums(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationAlbum(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
@@ -198,7 +198,7 @@ begin
 end;
 //*********************************************************************************************************
 
-function AjouterGenres(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterGenres(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationGenre(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
@@ -238,7 +238,7 @@ begin
 end;
 //********************************************************************************************************************
 
-function AjouterAuteurs(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterAuteurs(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationAuteur(FormalizeNom(Valeur));
   if IsEqualGUID(Result, GUID_NULL) then Exit;
@@ -248,7 +248,7 @@ begin
   end;
 end;
 
-function AjouterAuteurs2(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterAuteurs2(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationAuteur2(FormalizeNom(Valeur));
   if IsEqualGUID(Result, GUID_NULL) then Exit;
@@ -288,7 +288,7 @@ begin
 end;
 //********************************************************************************************************************
 
-function AjouterSeries(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterSeries(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationSerie(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
@@ -328,7 +328,7 @@ begin
 end;
 //********************************************************************************************************************
 
-function AjouterEmprunteurs(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterEmprunteurs(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationEmprunteur(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
@@ -368,7 +368,7 @@ begin
 end;
 //********************************************************************************************************************
 
-function AjouterCollections(VT: TVirtualStringTree; ID_Editeur: TGUID; Valeur: string): TGUID;
+function AjouterCollections(VT: TVirtualStringTree; const ID_Editeur: TGUID; const Valeur: string): TGUID;
 begin
   Result := CreationCollection(ID_Editeur, Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
@@ -378,7 +378,7 @@ begin
   end;
 end;
 
-function AjouterCollections(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterCollections(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := AjouterCollections(VT, GUID_NULL, Valeur);
 end;
@@ -413,7 +413,7 @@ begin
 end;
 //********************************************************************************************************************
 
-function AjouterParaBD(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterParaBD(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationParaBD(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
@@ -462,7 +462,7 @@ begin
     VT.ClearIndexNode;
 end;
 //*********************************************************************************************************
-function AjouterAchatsParaBD(VT: TVirtualStringTree; Valeur: string): TGUID;
+function AjouterAchatsParaBD(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationAchatParaBD(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;

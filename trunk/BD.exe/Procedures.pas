@@ -3,7 +3,7 @@ unit Procedures;
 interface
 
 uses
-  SysUtils, Windows, Classes, Dialogs, ComCtrls, ExtCtrls, Controls, Forms, TypeRec, Graphics, CommonConst, JvUIB, jpeg, GraphicEx,
+  SysUtils, Windows, Classes, Dialogs, ComCtrls, ExtCtrls, Controls, Forms, Graphics, CommonConst, JvUIB, jpeg, GraphicEx,
   StdCtrls, Form_Progression, ComboCheck, JvUIBLib, Commun;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
@@ -56,7 +56,7 @@ function FormExistI(ClassType: TClass): Integer;
 
 procedure MoveListItem(LV: TListView; Sens: Integer);
 
-function DessineImage(Image: TImage; Fichier: string): Boolean;
+function DessineImage(Image: TImage; const Fichier: string): Boolean;
 
 procedure LitOptions;
 procedure EcritOptions;
@@ -70,9 +70,9 @@ type
 function ChoisirDetail(Bouton: Integer; out DetailsOptions: TDetailOptions): TModalResult;
 procedure PrepareLV(Form: TForm);
 
-function SupprimerTable(Table: string): Boolean;
+function SupprimerTable(const Table: string): Boolean;
 function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TJvUIBTransaction = nil): Boolean; overload;
-function SupprimerToutDans(const ChampSupp, Table: string; const Reference: string; Valeur: TGUID; UseTransaction: TJvUIBTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: TGUID; UseTransaction: TJvUIBTransaction = nil): Boolean; overload;
 
 type
   PRecRef = ^TRecRef;
@@ -80,7 +80,7 @@ type
     ref: Integer;
   end;
 
-function AjoutMvt(ID_Emprunteur, RefObjet: TGUID; DateE: TDateTime; Pret: Boolean): Boolean;
+function AjoutMvt(const ID_Emprunteur, RefObjet: TGUID; DateE: TDateTime; Pret: Boolean): Boolean;
 function ChargeImage(ImgBmp: TImage; const ResName: string; ForceVisible: Boolean = True): Boolean; overload;
 function ChargeImage(Picture: TPicture; const ResName: string): Boolean; overload;
 procedure InitScrollBoxTableChamps(ScrollBox: TScrollBox; const Table: string; Ref: Integer; Editable: Boolean = False);
@@ -110,7 +110,7 @@ type
   end;
 
   IInformation = interface
-    procedure ShowInfo(Msg: ShortString);
+    procedure ShowInfo(const Msg: ShortString);
   end;
   TInformation = class(TInterfacedObject, IInformation)
   private
@@ -118,14 +118,14 @@ type
     FLabel: TLabel;
     procedure SetupDialog;
   published
-    procedure ShowInfo(Msg: ShortString);
+    procedure ShowInfo(const Msg: ShortString);
     constructor Create;
     destructor Destroy; override;
   end;
 
-function GetCouvertureStream(isParaBD: Boolean; ID_Couverture: TGUID; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream; overload;
+function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: TGUID; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream; overload;
 function GetCouvertureStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream; overload;
-procedure LoadCouverture(isParaBD: Boolean; ID_Couverture: TGUID; Picture: TPicture);
+procedure LoadCouverture(isParaBD: Boolean; const ID_Couverture: TGUID; Picture: TPicture);
 function GetJPEGStream(const Fichier: string): TStream;
 function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = True): string;
 
@@ -137,7 +137,7 @@ function HTMLPrepare(const AStr: string): string;
 implementation
 
 uses
-  CommonList, Divers, Textes, ShellAPI, ReadOnlyCheckBox, Form_ChoixDetail,
+  Divers, Textes, ShellAPI, ReadOnlyCheckBox, Form_ChoixDetail,
   JvUIBase, MaskUtils, Mask, DM_Princ, IniFiles, Form_Choix, Math, VirtualTrees, DbEditLabeled, ActnList,
   Form_Convertisseur, Main, HTTPApp, Types;
 
@@ -161,7 +161,7 @@ begin
     if Screen.Forms[i].ClassType = ClassType then Inc(Result);
 end;
 
-function DessineImage(Image: TImage; Fichier: string): Boolean;
+function DessineImage(Image: TImage; const Fichier: string): Boolean;
 var
   largeuraff, hauteuraff, largeurimg, hauteurimg: Integer;
   marge: Integer;
@@ -198,7 +198,7 @@ end;
 
 procedure LitOptions;
 
-  function LitStr(Table: TJvUIBQuery; Champ, Defaut: string): string;
+  function LitStr(Table: TJvUIBQuery; const Champ, Defaut: string): string;
   begin
     with Table do begin
       Params.AsString[0] := Champ;
@@ -487,7 +487,7 @@ begin
   end;
 end;
 
-function SupprimerTable(Table: string): Boolean;
+function SupprimerTable(const Table: string): Boolean;
 begin
   try
     with TJvUIBQuery.Create(nil) do try
@@ -512,11 +512,8 @@ begin
   Result := SupprimerToutDans(ChampSupp, Table, '', GUID_NULL, UseTransaction);
 end;
 
-function SupprimerToutDans(const ChampSupp, Table: string; const Reference: string; Valeur: TGUID; UseTransaction: TJvUIBTransaction = nil): Boolean;
-var
-  BackupPossible: Boolean;
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: TGUID; UseTransaction: TJvUIBTransaction = nil): Boolean;
 begin
-  BackupPossible := ChampSupp <> '';
   try
     with TJvUIBQuery.Create(nil) do try
       if Assigned(UseTransaction) then
@@ -524,7 +521,7 @@ begin
       else
         Transaction := GetTransaction(DMPrinc.UIBDataBase);
 
-      if BackupPossible then
+      if ChampSupp <> '' then
         SQL.Add(Format('UPDATE %s set %s = True', [Table, ChampSupp]))
       else
         SQL.Add(Format('DELETE FROM %s', [Table]));
@@ -545,7 +542,7 @@ end;
 const
   ErrorSaveMvt = 'Impossible d''enregistrer le mouvement !';
 
-function AjoutMvt(ID_Emprunteur, RefObjet: TGUID; DateE: TDateTime; Pret: Boolean): Boolean;
+function AjoutMvt(const ID_Emprunteur, RefObjet: TGUID; DateE: TDateTime; Pret: Boolean): Boolean;
 begin
   Result := False;
   try
@@ -824,6 +821,7 @@ end;
 
 constructor TLockWindow.Create(Form: TWinControl);
 begin
+  inherited Create;
   FLocked := LockWindowUpdate(Form.Handle);
 end;
 
@@ -839,6 +837,7 @@ constructor TModeEditing.Create;
 var
   i: Integer;
 begin
+  inherited;
   FOldMode := Mode_en_cours;
   Mode_en_cours := mdEditing;
   for i := 0 to Pred(Fond.ActionsOutils.ActionCount) do
@@ -854,25 +853,6 @@ begin
     for i := 0 to Pred(Fond.ActionsOutils.ActionCount) do
       TAction(Fond.ActionsOutils.Actions[i]).Enabled := True;
   inherited;
-end;
-
-procedure showimage(bmp: tgraphic);
-var
-  f: tform;
-begin
-  f := tform.create(nil);
-  try
-    with timage.create(f) do try
-      parent := f;
-      align := alClient;
-      visible := true;
-      picture.assign(bmp);
-      f.ShowModal;
-    finally
-      free;
-    end;
-  finally
-  end;
 end;
 
 function ResizePicture(Image: TPicture; Hauteur, Largeur: Integer; AntiAliasing, Cadre: Boolean; Effet3D: Integer): TStream;
@@ -981,7 +961,7 @@ begin
   end;
 end;
 
-function GetCouvertureStream(isParaBD: Boolean; ID_Couverture: TGUID; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream;
+function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: TGUID; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream;
 var
   Couverture: TPicture;
 begin
@@ -994,7 +974,7 @@ begin
   end;
 end;
 
-procedure LoadCouverture(isParaBD: Boolean; ID_Couverture: TGUID; Picture: TPicture);
+procedure LoadCouverture(isParaBD: Boolean; const ID_Couverture: TGUID; Picture: TPicture);
 var
   ms: TMemoryStream;
   img: TJPEGImage;
@@ -1086,6 +1066,7 @@ end;
 
 constructor TInformation.Create;
 begin
+  inherited;
   FInfo := nil;
   FLabel := nil;
 end;
@@ -1129,7 +1110,7 @@ begin
   end;
 end;
 
-procedure TInformation.ShowInfo(Msg: ShortString);
+procedure TInformation.ShowInfo(const Msg: ShortString);
 begin
   SetupDialog;
   FLabel.Caption := Msg;

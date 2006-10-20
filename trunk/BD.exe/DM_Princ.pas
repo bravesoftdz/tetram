@@ -10,7 +10,7 @@ const
   AntiAliasing = True;
 
 type
-  TAffiche_act = procedure(Texte: ShortString) of object;
+  TAffiche_act = procedure(const Texte: ShortString) of object;
 
   TDMPrinc = class(TDataModule)
     UIBDataBase: TJvUIBDataBase;
@@ -37,7 +37,7 @@ type
     procedure DataModuleCreate(Sender: TObject);
     procedure HTTPServerCommandGet(AThread: TIdPeerThread; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
     procedure DataModuleDestroy(Sender: TObject);
-    procedure ISAPIRunnerLogServerMessage(Sender: TObject; RequestInfo: TIdHTTPRequestInfo; ResponseInfo: TIdHTTPResponseInfo; AMessage: string);
+    procedure ISAPIRunnerLogServerMessage(Sender: TObject; RequestInfo: TIdHTTPRequestInfo; ResponseInfo: TIdHTTPResponseInfo; const AMessage: string);
     procedure HTTPServerCommandOther(Thread: TIdPeerThread; const asCommand, asData, asVersion: string);
     procedure HTTPServerConnect(AThread: TIdPeerThread);
     procedure HTTPServerDisconnect(AThread: TIdPeerThread);
@@ -435,7 +435,7 @@ begin
   end;
 end;
 
-procedure TDMPrinc.ISAPIRunnerLogServerMessage(Sender: TObject; RequestInfo: TIdHTTPRequestInfo; ResponseInfo: TIdHTTPResponseInfo; AMessage: string);
+procedure TDMPrinc.ISAPIRunnerLogServerMessage(Sender: TObject; RequestInfo: TIdHTTPRequestInfo; ResponseInfo: TIdHTTPResponseInfo; const AMessage: string);
 begin
   DisplayMessage(Amessage);
 end;
