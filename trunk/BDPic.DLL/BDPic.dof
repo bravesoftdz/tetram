@@ -134,24 +134,35 @@ OriginalFilename=
 ProductName=
 ProductVersion=1.0.0.0
 Comments=
-[HistoryLists\hlConditionals]
-Count=3
-Item0=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
-Item1=NOFORMS
-Item2=NOFORMSA
+[Excluded Packages]
+C:\Program Files\Borland\Delphi7\Bin\dclbde70.bpl=Composants BD BDE Borland
+c:\program files\borland\delphi7\Bin\dclclxdb70.bpl=Composants BD CLX Borland
+c:\program files\borland\delphi7\bin\dclRave70.bpl=Paquet Rave Reports BE 5.0
+c:\program files\borland\delphi7\Projects\Bpl\SUISkinD7.bpl=Sunisoft SUISkin Engine
+C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTEE57.bpl=TeeChart 5 Components
+C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTEP57.bpl=TeeChart Pro 5 Components
+C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTQR57.bpl=TeeChart 5 for QuickReport
+C:\WINDOWS\system32\TeeImage57.bpl=TeeChart Pro Graphic Exporting formats
+C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTGL57.bpl=TeeChart 5 for OpenGL
+c:\program files\borland\delphi7\Bin\DBWEBXPRT.BPL=Paquet Expert Web Borland
+c:\program files\borland\delphi7\Projects\Bpl\IBO40XDT_D7.bpl=IB Objects TDataset
+c:\program files\borland\delphi7\Projects\Bpl\IBO40CDT_D7.bpl=IB Objects Core Components
+c:\program files\borland\delphi7\Projects\Bpl\IBO40EDT_D7.bpl=IB Objects Editors
+c:\program files\borland\delphi7\Projects\Bpl\IBO40FDT_D7.bpl=IB Objects Forms and Dialogs
+c:\program files\borland\delphi7\Projects\Bpl\IBO40WXDT_D7.bpl=IB Objects TDataset Internet Extensions
+c:\program files\borland\delphi7\Projects\Bpl\IBO40WSDT_D7.bpl=IBO 4 Web Snap Extensions
+c:\program files\borland\delphi7\Projects\Bpl\IBO40WDT_D7.bpl=IB Objects Internet Extensions
+c:\program files\borland\delphi7\Projects\Bpl\IBO40VDT_D7.bpl=IB Objects Visual Controls
+c:\program files\borland\delphi7\Projects\Bpl\IBO40TDT_D7.bpl=IB Objects Tools Components
+c:\program files\borland\delphi7\Projects\Bpl\IBOARMURE.bpl=(sans titre)
+C:\programmes\Composant\ArmureD7.bpl=ARMURE
+c:\program files\borland\delphi7\Bin\dcldss70.bpl=Composants Decision Cube Borland
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
-[HistoryLists\hlSearchPath]
-Count=3
-Item0=$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
-Item1=$(DELPHI)\Lib\Debug;$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
-Item2=..\..\..\Compos Perso\PrintObject;..\..\..\Compos Perso\VDTButton;..\..\..\Compos Perso\Memory Table;..\..\..\Compos Perso\VersLabP;..\..\..\Compos Perso\ScanEdit;..\..\..\Common;..\..\..\Compos Perso\HarmFade;..\..\..\Compos Perso\schrinkpanel;..\..\..\Compos Perso\ReadOnlycheckBox;..\..\..\Compos Perso\Labeled;..\..\..\Compos Perso\ShellNotification;..\..\..\Compos Perso\ProgressBar;..\..\..\Compos Perso\BrowseDirectory;..\..\..\Compos Perso\VirtualTree;..\..\..\Common\GraphicEx
 [HistoryLists\hlUnitOutputDirectory]
 Count=1
 Item0=dcu
-[HistoryLists\hlOutputDirectorry]
-Count=3
-Item0=..\..\bin
-Item1=..\
-Item2=C:\Documents and Settings\Thierry\Bureau\BDthèque
+[HistoryLists\hlBPLOutput]
+Count=1
+Item0=.
