@@ -1,3 +1,20 @@
+-=-=-=-=-=-    1.2.2.0 - 20/10/2006    -=-=-=-=-=-
+
+* Nouveautés *
+      - Critères de Recherche avancée conservés quand on navigue avec les 
+         boutons Suivant/Précédent
+      - Amélioration de l'apperçu avant impression: utilise moins de mémoire
+         donc le message "Mémoire insuffisante" est moins courant pour les 
+         grosses impressions
+      - Amélioration de l'apperçu avant impression: possibilité de naviguer 
+         dans l'apperçu avec un affichage sur 2 pages
+      - Amélioration de l'apperçu avant impression: possibilité de lancer 
+         l'impression directement depuis l'apperçu
+      - Champs "Surveiller les sorties" et "Chercher les manquants" pour les 
+         séries. Les fonctions "Prévisions de sorties" et "Albums manquants" 
+         utilisent ces nouveaux champs et plus les champs "Terminée" et 
+         "Complete".
+
 -=-=-=-=-=-    1.2.1.0 - 26/06/2006    -=-=-=-=-=-
 
 Version officielle.
