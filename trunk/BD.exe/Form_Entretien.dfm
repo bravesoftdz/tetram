@@ -78,6 +78,7 @@ object FrmEntretien: TFrmEntretien
     TreeOptions.PaintOptions = [toHideFocusRect, toShowButtons, toShowDropmark, toThemeAware, toUseBlendedImages]
     OnCollapsing = vstEntretienCollapsing
     OnDblClick = vstEntretienDblClick
+    OnFreeNode = vstEntretienFreeNode
     OnGetText = vstEntretienGetText
     OnPaintText = vstEntretienPaintText
     OnInitNode = vstEntretienInitNode

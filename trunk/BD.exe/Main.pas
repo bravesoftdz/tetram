@@ -553,6 +553,8 @@ begin
     NouvelAchat.Enabled := ModeConsult;
     ModeConsultation.Checked := Assigned(FrmRepertoire);
     ModeGestion.Checked := Assigned(FrmGestions);
+    ModeConsultation.Enabled := not ModeConsultation.Checked;
+    ModeGestion.Enabled := not ModeGestion.Checked;
     ChangeMode.Checked := ModeGestion.Checked;
     AllerVersWebServer.Enabled := DMPrinc.HTTPServer.Active;
     if AllerVersWebServer.Enabled then

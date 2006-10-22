@@ -71,7 +71,6 @@ begin
     Prn := TPrintObject.Create(Fond);
     try
       Prn.SetOrientation(poPortrait);
-      Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
       Prn.Start(Application.Title + ' - ' + rsTransFiche);
       Prn.AutoPaging := True;
@@ -255,7 +254,6 @@ begin
     Prn := TPrintObject.Create(Fond);
     try
       Prn.SetOrientation(poPortrait);
-      Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
       Prn.Start(Application.Title + ' - ' + rsTransFiche);
       Prn.AutoPaging := True;
@@ -488,7 +486,6 @@ begin
     Prn := TPrintObject.Create(Fond);
     try
       Prn.SetOrientation(poPortrait);
-      Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
       Prn.Start(Application.Title + ' - ' + rsTransFiche);
       Prn.AutoPaging := True;
@@ -621,7 +618,6 @@ begin
     Prn := TPrintObject.Create(Fond);
     try
       Prn.SetOrientation(poPortrait);
-      Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
       Prn.Start(Application.Title + ' - ' + rsTransFiche);
       Prn.AutoPaging := True;
@@ -680,7 +676,6 @@ begin
     Prn := TPrintObject.Create(Fond);
     try
       Prn.SetOrientation(poPortrait);
-      Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
       Prn.Start(Application.Title + ' - ' + rsTransFiche);
       Prn.AutoPaging := True;
@@ -727,7 +722,6 @@ begin
     Prn := TPrintObject.Create(Fond);
     try
       Prn.SetOrientation(poPortrait);
-      Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
       Prn.Start(Application.Title + ' - ' + rsTitreListeEmprunts);
       Prn.AutoPaging := True;
@@ -794,7 +788,6 @@ begin
     Prn := TPrintObject.Create(Fond);
     try
       Prn.SetOrientation(poPortrait);
-      Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
       Prn.Start(Application.Title + ' - ' + rsTitreListeEmprunts);
       Prn.AutoPaging := True;
@@ -877,7 +870,6 @@ begin
       Equipe.Transaction := Source.Transaction;
       Equipe.SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL, NULL)';
       Prn.SetOrientation(poPortrait);
-      Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
       Prn.Start(Application.Title + ' - ' + rsListeCompleteAlbums);
       Prn.AutoPaging := True;
@@ -1037,7 +1029,6 @@ begin
     Prn := TPrintObject.Create(Fond);
     try
       Prn.SetOrientation(poPortrait);
-      Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
       Prn.Start(Application.Title + ' - ' + Titre);
       Prn.AutoPaging := True;
@@ -1254,7 +1245,6 @@ begin
     try
       fWaiting.ShowProgression(rsTransConfig + '...', 0, 12);
       Prn.SetOrientation(poPortrait);
-      Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
       Prn.Start(Application.Title + ' - ' + rsInformationsBDtheque);
       Prn.AutoPaging := True;
@@ -1320,7 +1310,6 @@ begin
       Equipe.Transaction := Source.Transaction;
       Equipe.SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL, NULL)';
       Prn.SetOrientation(poPortrait);
-      Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
       Prn.Start(Application.Title + ' - ' + rsResultatRecherche);
       Prn.AutoPaging := True;
@@ -1491,7 +1480,6 @@ begin
     Prn := TPrintObject.Create(Fond);
     try
       Prn.SetOrientation(poPortrait);
-      Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
       Prn.Start(Application.Title + ' - ' + rsTransImage);
       Prn.AutoPaging := True;
@@ -1560,7 +1548,6 @@ begin
     Prn := TPrintObject.Create(Fond);
     try
       Prn.SetOrientation(poPortrait);
-      Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
       Prn.Start(Application.Title + ' - ' + rsTransImage);
       Prn.AutoPaging := True;
@@ -1619,7 +1606,6 @@ begin
   Prn := TPrintObject.Create(Fond);
   try
     Prn.SetOrientation(poPortrait);
-    Prn.Preview := Previsualisation;
     if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
     Prn.Start(Application.Title + ' - ' + rsTransAlbumsManquants);
     Prn.AutoPaging := True;
@@ -1701,7 +1687,6 @@ begin
   Prn := TPrintObject.Create(Fond);
   try
     Prn.SetOrientation(poPortrait);
-    Prn.Preview := Previsualisation;
     if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
     Prn.Start(Application.Title + ' - ' + rsTransPrevisionsSorties);
     Prn.AutoPaging := True;
@@ -1774,7 +1759,6 @@ begin
       Source.SQL[0] := 'SELECT a.ID_Album, a.TITREALBUM, a.MOISPARUTION, a.ANNEEPARUTION, a.ID_Serie, a.TOME, a.TOMEDEBUT, a.TOMEFIN, a.HORSSERIE, a.INTEGRALE, s.TITRESERIE, v.ID_Editeur, v.PRIXUNITAIRE';
       Source.SQL.Add('ORDER BY s.UPPERTITRESERIE, a.ID_Serie, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
       Prn.SetOrientation(poPortrait);
-      Prn.Preview := Previsualisation;
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
 
       with Source do begin

@@ -94,9 +94,9 @@ OutputDir=..\..\bin
 UnitOutputDir=dcu
 PackageDLLOutputDir=
 PackageDCPOutputDir=
-SearchPath=$(DELPHI)\Lib\Debug;$(Compos)\FastMM\FastMM4;G:\PROGRA~1\Common\jcl\lib\D7\debug;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\
+SearchPath=$(Compos)\FastMM\FastMM4;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\
 Packages=VCL50;VCLX50;VCLSMP50;QRPT50;VCLDB50;VCLBDE50;VCLDBX50;TEEUI50;TEEDB50;TEE50;TEEQR50;NMFAST50;dclocx50;dclaxserver50;ibevnt50;VCLIB50;VCLIE50;INETDB50;INET50;vcl;rtl;dsnap;dbrtl;vcldb;websnap;webdsnap;inetdb;inet;xmlrtl;vclx;vclie;indy;bdertl;dsnapcon;VclSmp;MediaKit
-Conditionals=_DEBUG;Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Conditionals=DEBUG;_Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
@@ -114,8 +114,8 @@ IncludeVerInfo=1
 AutoIncBuild=1
 MajorVer=1
 MinorVer=2
-Release=2
-Build=1
+Release=3
+Build=2
 Debug=0
 PreRelease=0
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Teträm Corp
 FileDescription=
-FileVersion=1.2.2.1
+FileVersion=1.2.3.2
 InternalName=BDT
 LegalCopyright=Teträm Corp 1997-2005
 LegalTrademarks=
@@ -136,7 +136,7 @@ ProductVersion=1
 Comments=
 [HistoryLists\hlConditionals]
 Count=4
-Item0=_DEBUG;Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Item0=DEBUG;_Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
 Item1=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
 Item2=NOFORMS
 Item3=NOFORMSA
@@ -144,11 +144,12 @@ Item3=NOFORMSA
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlSearchPath]
-Count=4
-Item0=$(DELPHI)\Lib\Debug;$(Compos)\FastMM\FastMM4;G:\PROGRA~1\Common\jcl\lib\D7\debug;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\
-Item1=$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
-Item2=$(DELPHI)\Lib\Debug;$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
-Item3=..\..\..\Compos Perso\PrintObject;..\..\..\Compos Perso\VDTButton;..\..\..\Compos Perso\Memory Table;..\..\..\Compos Perso\VersLabP;..\..\..\Compos Perso\ScanEdit;..\..\..\Common;..\..\..\Compos Perso\HarmFade;..\..\..\Compos Perso\schrinkpanel;..\..\..\Compos Perso\ReadOnlycheckBox;..\..\..\Compos Perso\Labeled;..\..\..\Compos Perso\ShellNotification;..\..\..\Compos Perso\ProgressBar;..\..\..\Compos Perso\BrowseDirectory;..\..\..\Compos Perso\VirtualTree;..\..\..\Common\GraphicEx
+Count=5
+Item0=$(Compos)\FastMM\FastMM4;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\
+Item1=$(DELPHI)\Lib\Debug;$(Compos)\FastMM\FastMM4;G:\PROGRA~1\Common\jcl\lib\D7\debug;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\
+Item2=$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
+Item3=$(DELPHI)\Lib\Debug;$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
+Item4=..\..\..\Compos Perso\PrintObject;..\..\..\Compos Perso\VDTButton;..\..\..\Compos Perso\Memory Table;..\..\..\Compos Perso\VersLabP;..\..\..\Compos Perso\ScanEdit;..\..\..\Common;..\..\..\Compos Perso\HarmFade;..\..\..\Compos Perso\schrinkpanel;..\..\..\Compos Perso\ReadOnlycheckBox;..\..\..\Compos Perso\Labeled;..\..\..\Compos Perso\ShellNotification;..\..\..\Compos Perso\ProgressBar;..\..\..\Compos Perso\BrowseDirectory;..\..\..\Compos Perso\VirtualTree;..\..\..\Common\GraphicEx
 [HistoryLists\hlUnitOutputDirectory]
 Count=1
 Item0=dcu

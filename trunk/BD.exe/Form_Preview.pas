@@ -18,7 +18,6 @@ type
     ToolButton8: TToolButton;
     ImageList1: TImageList;
     Label1: TLabel;
-    ToolButton11: TToolButton;
     ToolButton13: TToolButton;
     PopupMenu1: TPopupMenu;
     ToolButton14: TToolButton;
@@ -40,6 +39,8 @@ type
     ImageDroite: TImage;
     Panel6: TPanel;
     ImageGauche: TImage;
+    ToolButton9: TToolButton;
+    ToolButton10: TToolButton;
     procedure FormCreate(Sender: TObject);
     procedure ToolButton8Click(Sender: TObject);
     procedure ToolButton1Click(Sender: TObject);
@@ -61,18 +62,18 @@ type
     procedure ToolButton6Click(Sender: TObject);
     procedure ToolButton7Click(Sender: TObject);
   private
+    Fnumeropage: Integer;
     { Déclarations privées }
-    procedure ShowNoPage;
     function ShowPage(Page: Integer): Boolean;
     function Maximum: Integer;
     function PWidth: Integer;
     function PHeight: Integer;
+    procedure Setnumeropage(const Value: Integer);
   public
     { Déclarations publiques }
     HeightMM: Single;
     WidthMM: Single;
     FPages: TList;
-    numeropage: Integer;
     PosClick: TPoint;
     Moving: Boolean;
     procedure Abort; safecall;
@@ -82,6 +83,7 @@ type
     procedure SetWidthMM(const Value: Single); safecall;
     procedure SetCaption(const Title: string); safecall;
     procedure Start; safecall;
+    property numeropage: Integer read Fnumeropage write Setnumeropage;
   end;
 
 implementation
@@ -132,16 +134,6 @@ begin
   Result := Pages.Count;
 end;
 
-procedure TFrmPreview.ShowNoPage;
-begin
-  ToolButton1.Enabled := numeropage > 1;
-  ToolButton2.Enabled := numeropage > 1;
-  ToolButton3.Enabled := numeropage < maximum;
-  ToolButton4.Enabled := numeropage < maximum;
-
-  Label2.Caption := Format('%.*d', [Length(Label1.Caption), numeropage]);
-end;
-
 procedure AddNewItem(M: TPopupMenu; c: Integer; F: TFrmPreview);
 var
   t: TMenuItem;
@@ -177,7 +169,7 @@ begin
   Label1.Hint := nbpages;
   Image2.Hint := nbpages;
   ToolButton8.Hint := quitter;
-  numeropage := 0;
+  Fnumeropage := 0;
   Icon := TApplication(Owner).Icon;
   FPages := TList.Create;
   ScrollBarV.Top := 0;
@@ -197,10 +189,15 @@ end;
 procedure TFrmPreview.Quit;
 begin
   Label1.Caption := IntToStr(maximum);
+  Zoom.OnChange := nil;
+  try
+    Zoom.ItemIndex := Zoom.Items.IndexOf('100%'); // 5
+  finally
+    Zoom.OnChange := ZoomChange;
+  end;
   ToolButton1.Click;
   Label1.AutoSize := False;
   Label2.AutoSize := False;
-  Zoom.ItemIndex := Zoom.Items.IndexOf('100%'); // 5
   Historique.AddWaiting(fcPreview, Integer(Self));
 end;
 
@@ -212,34 +209,32 @@ end;
 
 procedure TFrmPreview.ToolButton1Click(Sender: TObject);
 begin
-  if (numeropage <> 1) and ShowPage(1) then numeropage := 1;
-  ShowNoPage;
+  if (numeropage <> 1) then ShowPage(1);
 end;
 
 procedure TFrmPreview.ToolButton2Click(Sender: TObject);
 begin
   if ToolButton7.Down then begin
-    if (numeropage > 2) and ShowPage(numeropage - 2) then Dec(numeropage, 2);
-  end else begin
-    if (numeropage > 1) and ShowPage(numeropage - 1) then Dec(numeropage);
+    if (numeropage > 1) then ShowPage(numeropage - 2);
+  end
+  else begin
+    if (numeropage > 1) then ShowPage(numeropage - 1);
   end;
-  ShowNoPage;
 end;
 
 procedure TFrmPreview.ToolButton3Click(Sender: TObject);
 begin
   if ToolButton7.Down then begin
-    if (numeropage < maximum - 1) and ShowPage(numeropage + 2) then Inc(numeropage, 2);
-  end else begin
-    if (numeropage < maximum) and ShowPage(numeropage + 1) then Inc(numeropage);
+    if (numeropage < maximum) then ShowPage(numeropage + 2);
+  end
+  else begin
+    if (numeropage < maximum) then ShowPage(numeropage + 1);
   end;
-  ShowNoPage;
 end;
 
 procedure TFrmPreview.ToolButton4Click(Sender: TObject);
 begin
-  if (numeropage <> maximum) and ShowPage(maximum) then numeropage := maximum;
-  ShowNoPage;
+  if (numeropage <> maximum) then ShowPage(maximum);
 end;
 
 procedure TFrmPreview.PopupClick(Sender: TObject);
@@ -250,8 +245,7 @@ begin
     dummy := StrToInt(InputBox(AllerA, AllerA, IntToStr(numeropage)))
   else
     dummy := TComponent(Sender).Tag;
-  if (dummy in [1..maximum]) and (dummy <> numeropage) and ShowPage(dummy) then numeropage := dummy;
-  ShowNoPage;
+  if (dummy in [1..maximum]) and (dummy <> numeropage) then ShowPage(dummy);
 end;
 
 procedure TFrmPreview.FormResize(Sender: TObject);
@@ -282,29 +276,46 @@ begin
   if ScrollBarH.Visible then Result := Panel.Height - ScrollBarH.Height;
 end;
 
-function TFrmPreview.ShowPage;
+function TFrmPreview.ShowPage(Page: Integer): Boolean;
 const
   Interpage = 10;
 var
   Source1, Source2: TGraphic;
+  Source1Width, Source1Height, Source2Width, Source2Height: Integer;
   Rapport: Double;
   DoublePage: Boolean;
 begin
+  Source1 := nil;
   Source2 := nil;
+  Source1Width := 0;
+  Source1Height := 0;
+  Source2Width := 0;
+  Source2Height := 0;
   try
-    DoublePage := ToolButton7.Down and (Page < Pred(Pages.Count));
+    DoublePage := ToolButton7.Down; // and (Page < Pred(Pages.Count));
+    if DoublePage then begin
+      if Page mod 2 = 1 then Dec(Page);
+      //      if Page < 1 then Page := 1;
+    end;
 
-    Source1 := TGraphic(Pages[Page - 1]);
-    if DoublePage then
+    if Page > 0 then begin
+      Source1 := TGraphic(Pages[Page - 1]);
+      Source1Width := Source1.Width;
+      Source1Height := Source1.Height;
+    end;
+    if DoublePage and (Page < Pages.Count) then begin
       Source2 := TGraphic(Pages[Page]);
+      Source2Width := Source2.Width;
+      Source2Height := Source2.Height;
+    end;
 
     case Zoom.ItemIndex + 1 of
-      1: begin // pleine page 
+      1: begin // pleine page
           fondImage.Top := 0;
           if DoublePage then
-            Rapport := (Source1.Width + Source2.Width + 10) / Max(Source1.Height, Source2.Height)
+            Rapport := (Max(Source1Width, Source2Width) * 2 + Interpage) / Max(Source1Height, Source2Height)
           else
-            Rapport := Source1.Width / Source1.Height;
+            Rapport := Source1Width / Source1Height;
           fondImage.Width := Round(Panel.Height * Rapport);
           fondImage.Height := Panel.Height;
 
@@ -314,9 +325,9 @@ begin
         end;
       2: begin // largeur de page
           if DoublePage then
-            Rapport := (Source1.Width + Source2.Width + 10) / Max(Source1.Height, Source2.Height)
+            Rapport := (Max(Source1Width, Source2Width) * 2 + Interpage) / Max(Source1Height, Source2Height)
           else
-            Rapport := Source1.Width / Source1.Height;
+            Rapport := Source1Width / Source1Height;
           ScrollBarV.Visible := Rapport > (Panel.Height / Panel.Width);
           ScrollBarV.Height := Panel.Height;
           ScrollBarH.Visible := False;
@@ -327,10 +338,13 @@ begin
         end;
       else begin
           Rapport := StrToInt(Copy(Zoom.Items[Zoom.ItemIndex], 1, Length(Zoom.Items[Zoom.ItemIndex]) - 1)) / 100;
-          ImageGauche.Width := Round(WidthMM * Screen.PixelsPerInch * 56.7 / 1440 * Rapport);
-          ImageGauche.Height := Round(HeightMM * Screen.PixelsPerInch * 56.7 / 1440 * Rapport);
-          ScrollBarV.Visible := ImageGauche.Height > (Panel.Height - ScrollBarH.Height);
-          ScrollBarH.Visible := ImageGauche.Width > (Panel.Width - ScrollBarV.Width);
+          if DoublePage then
+            fondImage.Width := Round(WidthMM * 2 * Screen.PixelsPerInch * 56.7 / 1440 * Rapport)
+          else
+            fondImage.Width := Round(WidthMM * Screen.PixelsPerInch * 56.7 / 1440 * Rapport);
+          fondImage.Height := Round(HeightMM * Screen.PixelsPerInch * 56.7 / 1440 * Rapport);
+          ScrollBarV.Visible := fondImage.Height > (Panel.Height - ScrollBarH.Height);
+          ScrollBarH.Visible := fondImage.Width > (Panel.Width - ScrollBarV.Width);
           ScrollBarV.Height := PHeight;
           ScrollBarH.Width := PWidth;
           PanelCoin.Visible := ScrollBarV.Visible and ScrollBarH.Visible;
@@ -340,18 +354,31 @@ begin
     if not DoublePage then begin
       ImageGauche.Width := fondImage.Width;
       ImageGauche.Height := fondImage.Height;
-    end else begin
-      Rapport := Source1.Width  / Max(Source1.Height, Source2.Height);
+    end
+    else begin
+      Rapport := Max(Source1Width, Source2Width) / Max(Source1Height, Source2Height);
+
       ImageGauche.Width := Round(fondImage.Height * Rapport);
       ImageGauche.Height := fondImage.Height;
 
-      Rapport := Source2.Width / Max(Source1.Height, Source2.Height);
-      ImageDroite.Width := Round(fondImage.Height * Rapport);
-      ImageDroite.Height := fondImage.Height;
+      ImageDroite.Width := ImageGauche.Width;
+      ImageDroite.Height := ImageGauche.Height;
     end;
 
     ImageGauche.Picture.Assign(Source1);
+    if not Assigned(Source1) then
+      Panel6.ParentColor := True
+    else
+      Panel6.Color := clWhite;
     ImageDroite.Picture.Assign(Source2);
+    if not Assigned(Source2) then
+      Panel5.ParentColor := True
+    else
+      Panel5.Color := clWhite;
+    //    if DoublePage and not Assigned(Source2) then
+    //      ImageDroite.SetBounds(ImageDroite.Left, ImageDroite.Top, ImageGauche.Width, ImageGauche.Height);
+    //    if DoublePage and not Assigned(Source1) then
+    //      ImageGauche.SetBounds(ImageGauche.Left, ImageGauche.Top, ImageDroite.Width, ImageDroite.Height);
 
     Panel6.Left := 0;
     Panel5.Left := Panel6.Width + Interpage;
@@ -360,12 +387,12 @@ begin
     OnResize := FormResize;
 
     ScrollBarV.Min := 0;
-    ScrollBarV.Max := Abs(ImageGauche.Height - PHeight);
+    ScrollBarV.Max := Abs(fondImage.Height - PHeight);
     ScrollBarV.LargeChange := PHeight;
     ScrollBarV.SmallChange := PHeight div 5;
 
     ScrollBarH.Min := 0;
-    ScrollBarH.Max := Abs(ImageGauche.Width - PWidth);
+    ScrollBarH.Max := Abs(fondImage.Width - PWidth);
     ScrollBarH.LargeChange := PWidth;
     ScrollBarH.SmallChange := PWidth div 5;
 
@@ -381,6 +408,7 @@ begin
     if fondImage.Left <= 0 then ScrollBarH.Position := -fondImage.Left;
 
     Result := True;
+    numeropage := Min(FPages.Count, Max(1, Page));
   except
     Result := False;
   end;
@@ -435,7 +463,7 @@ end;
 
 procedure TFrmPreview.FormActivate(Sender: TObject);
 begin
-  ShowNoPage;
+  //  ShowNoPage;
 end;
 
 procedure TFrmPreview.Image3MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -518,8 +546,7 @@ end;
 
 procedure TFrmPreview.ToolButton6Click(Sender: TObject);
 begin
-  with TPrintObject.Create(nil) do
-  try
+  with TPrintObject.Create(nil) do try
     Titre := Caption;
     PrintPages(Pages);
   finally
@@ -530,6 +557,18 @@ end;
 procedure TFrmPreview.ToolButton7Click(Sender: TObject);
 begin
   ShowPage(numeropage);
+end;
+
+procedure TFrmPreview.Setnumeropage(const Value: Integer);
+begin
+  Fnumeropage := Value;
+
+  ToolButton1.Enabled := Fnumeropage > 1;
+  ToolButton2.Enabled := Fnumeropage > 1;
+  ToolButton3.Enabled := Fnumeropage < maximum;
+  ToolButton4.Enabled := Fnumeropage < maximum;
+
+  Label2.Caption := Format('%.*d', [Length(Label1.Caption), Fnumeropage]);
 end;
 
 initialization

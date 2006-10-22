@@ -40,6 +40,8 @@ type
     procedure BDDOpenBeforeExecute(Sender: TObject);
     procedure BDDOpenAccept(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure vstEntretienFreeNode(Sender: TBaseVirtualTree;
+      Node: PVirtualNode);
   private
     { Déclarations privées }
     FServerWasActive: Boolean;
@@ -47,9 +49,6 @@ type
   public
     { Déclarations publiques }
   end;
-
-var
-  FrmEntretien: TFrmEntretien;
 
 implementation
 
@@ -436,6 +435,14 @@ begin
   DMPrinc.UIBDataBase.Connected := False;
   CheckVersions;
   vstEntretien.Invalidate;
+end;
+
+procedure TFrmEntretien.vstEntretienFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+var
+  ActionNodeData: PActionNodeData;
+begin
+  ActionNodeData := vstEntretien.GetNodeData(Node);
+  Finalize(ActionNodeData^);
 end;
 
 end.
