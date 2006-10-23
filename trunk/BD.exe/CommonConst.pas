@@ -48,7 +48,7 @@ type
     SerieObligatoireAlbums, SerieObligatoireParaBD: Boolean;
   end;
 
-  TUtilisateur = record
+  RUtilisateur = record
     Options: ROptions;
     ExeVersion, AppVersion: string;
   end;
@@ -57,7 +57,7 @@ type
 
 var
   Mode_en_cours: TModeConsult;
-  Utilisateur: TUtilisateur;
+  Utilisateur: RUtilisateur;
 
 implementation
 

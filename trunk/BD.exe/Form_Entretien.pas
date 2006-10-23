@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Buttons,
-  VirtualTrees, VDTButton, ExtCtrls, ActnList, Browss, StdActns;
+  VirtualTrees, VDTButton, ExtCtrls, ActnList, Browss, StdActns, ProceduresBDtk;
 
 type
   TFrmEntretien = class(TForm)

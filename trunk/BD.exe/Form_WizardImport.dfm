@@ -166,7 +166,7 @@ object WizardImport: TWizardImport
       Top = 89
       Width = 571
       Height = 332
-      ActivePage = TabSheetChamps
+      ActivePage = TabSheetTypeSource
       Align = alClient
       Style = tsButtons
       TabOrder = 1

@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, LoadComplet, VirtualTrees, VirtualTree, ToolWin,
-  Procedures, StdCtrls, ExtCtrls, Menus, ActnList;
+  ProceduresBDtk, StdCtrls, ExtCtrls, Menus, ActnList;
 
 type
   TfrmSeriesIncompletes = class(TForm, IImpressionApercu)

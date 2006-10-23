@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls, ReadOnlyCheckBox, Main, Procedures,
-  ComCtrls, VDTButton, Buttons, ActnList, Menus;
+  ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk;
 
 type
   TFrmConsultationParaBD = class(TForm, IImpressionApercu)

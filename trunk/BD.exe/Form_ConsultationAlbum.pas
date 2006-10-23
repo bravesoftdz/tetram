@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls,
-  Main, VDTButton, ActnList, Spin, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, Procedures, GraphicEx,
+  Main, VDTButton, ActnList, Spin, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, ProceduresBDtk, GraphicEx,
   jpeg, ShellAPI, LoadComplet, CRFurtif;
 
 type
@@ -150,7 +150,7 @@ implementation
 
 {$R *.DFM}
 
-uses Commun, TypeRec, CommonConst, MAJ, Impression, DateUtils, UHistorique,
+uses Commun, TypeRec, CommonConst, MAJ, Impression, DateUtils, UHistorique, Procedures,
   Divers, Textes;
 
 var
@@ -303,10 +303,25 @@ begin
 end;
 
 procedure TFrmConsultationAlbum.FormShow(Sender: TObject);
+var
+  i: integer;
 begin
   lvEditions.ItemIndex := 0;
   lvEditions.OnClick(lvEditions);
   Resize;
+
+  // le TListView est aussi une merde! le MakeVisible ne peut fonctionner que si on a un handle
+
+  // lvSerie.HandleNeeded n'est d'aucune utilité!!!!
+
+  // conclusion:
+  // TODO: virer le TListView!!!!!!!
+
+  for i := 0 to Pred(lvSerie.Items.Count) do
+    if IsEqualGUID(TAlbum(lvSerie.Items[i].Data).ID, ID_Album) then
+      if i = Pred(lvSerie.Items.Count)
+        then lvSerie.Items[i].MakeVisible(False)
+        else lvSerie.Items[i + 1].MakeVisible(False);
 end;
 
 procedure TFrmConsultationAlbum.ListeEmpruntsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
@@ -522,7 +537,8 @@ begin
   lvSerie.Items.BeginUpdate;
   lvSerie.Items.Count := FAlbum.Serie.Albums.Count;
   lvSerie.Items.EndUpdate;
-  if FAlbum.Serie.Albums.Count = 1 then lvSerie.SmallImages := nil;
+  if FAlbum.Serie.Albums.Count = 1 then
+    lvSerie.SmallImages := nil;
 
   lvEditions.Items.BeginUpdate;
   for i := 0 to Pred(FAlbum.Editions.Editions.Count) do begin

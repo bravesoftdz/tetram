@@ -2,7 +2,8 @@ unit Form_AboutBox;
 {.$D-}
 interface
 
-uses Windows, SysUtils, Classes, Graphics, Forms, Controls, StdCtrls,
+uses
+  Windows, SysUtils, Classes, Graphics, Forms, Controls, StdCtrls, ProceduresBDtk,
   Buttons, ExtCtrls, verslabp, ShellAPI, jpeg, dialogs;
 
 type

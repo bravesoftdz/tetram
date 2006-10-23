@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, DBCtrls, Menus, ExtCtrls, ComCtrls, Commun,
-  VDTButton, VirtualTrees, ActnList, ComboCheck, DBEditLabeled, Procedures, ToolWin;
+  VDTButton, VirtualTrees, ActnList, ComboCheck, DBEditLabeled, ProceduresBDtk, ToolWin;
 
 type
   TFrmStock = class(TForm, IImpressionApercu)
@@ -66,7 +66,7 @@ type
 
 implementation
 
-uses Main, TypeRec, MAJ, DateUtils, Math, UHistorique,
+uses Main, TypeRec, MAJ, DateUtils, Math, UHistorique, Procedures, 
   LoadComplet, Impression;
 
 {$R *.DFM}

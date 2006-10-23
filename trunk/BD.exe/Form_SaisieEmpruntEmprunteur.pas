@@ -52,7 +52,7 @@ type
 
 implementation
 
-uses TypeRec, CommonConst, Procedures;
+uses TypeRec, CommonConst, Procedures, ProceduresBDtk;
 
 {$R *.DFM}
 

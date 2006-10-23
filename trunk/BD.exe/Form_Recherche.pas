@@ -4,7 +4,7 @@ interface
 
 uses
   SysUtils, Windows, Messages, Classes, Forms, Graphics, Controls, Menus, StdCtrls, Buttons, ComCtrls, ExtCtrls, ToolWin, Commun,
-  CommonList, VirtualTrees, VirtualTree, ActnList, VDTButton, JvUIB, ComboCheck, Procedures,
+  CommonList, VirtualTrees, VirtualTree, ActnList, VDTButton, JvUIB, ComboCheck, ProceduresBDtk,
   Frame_RechercheRapide;
 
 type
@@ -97,7 +97,7 @@ type
 implementation
 
 uses
-  Textes, DM_Princ, TypeRec, Impression, Math, Form_EditCritere, UHistorique,
+  Textes, DM_Princ, TypeRec, Impression, Math, Form_EditCritere, UHistorique, Procedures, 
   Main;
 
 {$R *.DFM}

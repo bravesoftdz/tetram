@@ -32,7 +32,7 @@ procedure ImpressionListePrevisionsAchats(Previsualisation: Boolean);
 
 implementation
 
-uses Form_Preview, Math, Procedures, DateUtils, Contnrs, jvuiblib;
+uses Form_Preview, Math, Procedures, ProceduresBDtk, DateUtils, Contnrs, jvuiblib;
 
 function ConfigPrinter(Previsualisation: Boolean): Boolean;
 begin
@@ -60,9 +60,9 @@ var
   Previsions: TPrevisionsSorties;
   Prevision: TPrevisionSortie;
 begin
+  if IsEqualGUID(Reference, GUID_NULL) then Exit;
   Infos := Choisir('Inclure Prévisions et Manquants', 'Omettre Prévisions et Manquants', 1);
   if Infos = mrCancel then Exit;
-  if IsEqualGUID(Reference, GUID_NULL) then Exit;
   if not ConfigPrinter(Previsualisation) then Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 9);
@@ -861,7 +861,7 @@ begin
       NbAlbums := Source.Fields.AsInteger[0];
       Source.Close;
       Source.SQL[0] := 'SELECT a.ID_Album, a.TITREALBUM, a.MOISPARUTION, a.ANNEEPARUTION, a.ID_Serie, a.TOME, a.TOMEDEBUT, a.TOMEFIN, a.HORSSERIE, a.INTEGRALE, s.TITRESERIE';
-      Source.SQL.Add('ORDER BY s.UPPERTITRESERIE, a.ID_Serie, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
+      Source.SQL.Add('ORDER BY s.UPPERTITRESERIE NULLS FIRST, a.ID_Serie, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
       if liste = mrNo then begin
         if doHistoire in DetailsOptions then Source.SQL[0] := Source.SQL[0] + ', a.SUJETALBUM, s.SUJETSERIE';
         if doNotes in DetailsOptions then Source.SQL[0] := Source.SQL[0] + ', a.REMARQUESALBUM, s.REMARQUESSERIE';
@@ -898,7 +898,7 @@ begin
         index := 1;
         Open;
         sl := False;
-        OldSerie := GUID_NULL;
+        OldSerie := GUID_FULL;
         fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 0, NbAlbums + 2);
         while not EOF do begin
           if liste = mrNo then begin
@@ -958,7 +958,9 @@ begin
               sl := False;
             end;
             if sl then Prn.NextLine;
-            Prn.WriteLineColumn(4, IIf(sl, -1, -2), FormatTitre(PAl.Serie));
+            s := FormatTitre(PAl.Serie);
+            if s = '' then s := '<Sans série>';
+            Prn.WriteLineColumn(4, IIf(sl, -1, -2), s);
             if (liste = mrNo) then begin
               if SujetSerie <> '' then Prn.WriteColumn(5, -1, SujetSerie);
             end;
@@ -979,6 +981,8 @@ begin
             AjoutString(s, NonZero(IntToStr(PAl.Tome)), ' - ', 'Tome ');
 
           AjoutString(s, FormatTitre(PAl.Titre), ' - ');
+
+          if s = '' then s := FormatTitre(PAl.Serie); // si l'album n'a pas de titre c'est qu'il a une série
 
           //          Prn.WriteLineColumn(1, -2, s);
           Prn.WriteLineColumn(1, IIf(sl or (not IsEqualGUID(OldSerie, PAl.ID_Serie)), -1, -2), s);
@@ -1757,14 +1761,14 @@ begin
       NbAlbums := Source.Fields.AsInteger[0] * 2; // on va parcourir 2 fois la liste
       Source.Close;
       Source.SQL[0] := 'SELECT a.ID_Album, a.TITREALBUM, a.MOISPARUTION, a.ANNEEPARUTION, a.ID_Serie, a.TOME, a.TOMEDEBUT, a.TOMEFIN, a.HORSSERIE, a.INTEGRALE, s.TITRESERIE, v.ID_Editeur, v.PRIXUNITAIRE';
-      Source.SQL.Add('ORDER BY s.UPPERTITRESERIE, a.ID_Serie, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
+      Source.SQL.Add('ORDER BY s.UPPERTITRESERIE NULLS FIRST, a.ID_Serie, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
       Prn.SetOrientation(poPortrait);
       if Previsualisation then Prn.PreviewObject := TFrmPreview.Create(Application);
 
       with Source do begin
         Open;
         PrixTotal := 0;
-        OldAlbum := GUID_NULL;
+        OldAlbum := GUID_FULL;
         PAl := nil;
         fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 0, NbAlbums + 2);
         while not EOF do begin
@@ -1813,7 +1817,7 @@ begin
       Prn.SetTopOfPage;
 
       sl := False;
-      OldSerie := GUID_NULL;
+      OldSerie := GUID_FULL;
       for i := 0 to Pred(ListAlbums.Count) do begin
         PAl := TAchat(ListAlbums[i]);
         if not IsEqualGUID(OldSerie, PAl.ID_Serie) then begin
@@ -1822,7 +1826,9 @@ begin
             sl := False;
           end;
           if sl then Prn.NextLine;
-          Prn.WriteLineColumn(4, IIf(sl, -1, -2), FormatTitre(PAl.Serie));
+          s := FormatTitre(PAl.Serie);
+          if s = '' then s := '<Sans série>';
+          Prn.WriteLineColumn(4, IIf(sl, -1, -2), s);
         end;
 
         if (PAl.AnneeParution > 0) and (PAl.AnneeParution = YearOf(Now)) then

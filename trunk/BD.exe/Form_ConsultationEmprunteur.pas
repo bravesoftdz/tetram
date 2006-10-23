@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, DBCtrls, StdCtrls, Menus, ComCtrls, ExtCtrls, ActnList,
-  ToolWin, VirtualTrees, Procedures, LoadComplet;
+  ToolWin, VirtualTrees, ProceduresBDtk, LoadComplet;
 
 type
   TFrmConsultationEmprunteur = class(TForm, IImpressionApercu)
@@ -63,7 +63,7 @@ type
 
 implementation
 
-uses TypeRec, Main, MAJ, Impression, DateUtils, Math, UHistorique;
+uses TypeRec, Main, MAJ, Impression, DateUtils, Math, UHistorique, Procedures;
 
 {$R *.DFM}
 

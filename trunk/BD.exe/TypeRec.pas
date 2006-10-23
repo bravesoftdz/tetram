@@ -52,9 +52,9 @@ type
 
   TParaBD = class(TBasePointeur)
   public
-    Titre: string[150];
+    Titre: string[255];
     ID_Serie: TGUID;
-    Serie: string[150];
+    Serie: string[255];
     sCategorie: string[50];
     Achat: Boolean;
     Complet: Boolean;
@@ -116,9 +116,9 @@ type
     Tome: Integer;
     TomeDebut: Integer;
     TomeFin: Integer;
-    Titre: string[150];
+    Titre: string[255];
     ID_Serie: TGUID;
-    Serie: string[150];
+    Serie: string[255];
     ID_Editeur: TGUID;
     Editeur: string[50];
     AnneeParution, MoisParution: Integer;
@@ -158,7 +158,7 @@ type
 
   TSerie = class(TBasePointeur)
   public
-    TitreSerie: string[150];
+    TitreSerie: string[255];
     Editeur: TEditeur;
     Collection: TCollection;
 

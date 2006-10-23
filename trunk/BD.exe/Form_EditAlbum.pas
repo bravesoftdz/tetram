@@ -185,7 +185,7 @@ type
 implementation
 
 uses
-  Commun, JvUIB, CommonConst, Textes, Divers, Proc_Gestions, JvUIBLib, Procedures, Types, jpeg;
+  Commun, JvUIB, CommonConst, Textes, Divers, Proc_Gestions, JvUIBLib, Procedures, ProceduresBDtk, Types, jpeg;
 
 {$R *.DFM}
 
