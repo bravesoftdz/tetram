@@ -114,7 +114,8 @@ uses
   ListOfTypeRec in 'ListOfTypeRec.pas',
   Form_WizardImport in 'Form_WizardImport.pas' {WizardImport},
   UImportXML in 'UImportXML.pas',
-  ProceduresBDtk in 'ProceduresBDtk.pas';
+  ProceduresBDtk in 'ProceduresBDtk.pas',
+  UMAJ1_2_3_3 in 'UMAJ1_2_3_3.pas';
 
 {$R *.RES}
 {$R curseurs.res}
