@@ -111,7 +111,6 @@ uses
   UMAJ1_2_0_8 in 'UMAJ1_2_0_8.pas',
   UMAJ1_2_1_0 in 'UMAJ1_2_1_0.pas',
   UMAJ1_2_2_0 in 'UMAJ1_2_2_0.pas',
-  UMAJ1_2_3_3 in 'UMAJ1_2_3_3.pas',
   ListOfTypeRec in 'ListOfTypeRec.pas',
   Form_WizardImport in 'Form_WizardImport.pas' {WizardImport},
   UImportXML in 'UImportXML.pas',

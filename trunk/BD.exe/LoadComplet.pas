@@ -105,7 +105,7 @@ type
     function GetReference: TGUID; override;
   public
     ID_Serie: TGUID;
-    Titre: string;
+    Titre: string[150];
     Terminee: Integer;
     Complete: Boolean;
     SuivreManquants, SuivreSorties: Boolean;
@@ -224,7 +224,7 @@ type
   public
     ID_Album: TGUID;
     MoisParution, AnneeParution, Tome, TomeDebut, TomeFin: Integer;
-    Titre: string[50];
+    Titre: string[150];
     HorsSerie, Integrale: Boolean;
     Scenaristes, Dessinateurs, Coloristes: TListOfTAuteur;
     Sujet, Notes: TStringList;
@@ -376,7 +376,7 @@ type
   public
     ID_ParaBD: TGUID;
     AnneeEdition, CategorieParaBD, AnneeCote: Integer;
-    Titre: string[50];
+    Titre: string[150];
     sCategorieParaBD: string;
     Auteurs: TListOfTAuteur;
     Description: TStringList;
