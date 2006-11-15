@@ -238,10 +238,13 @@ var
 begin
   FModalWindows := TStack.Create;
   FToolOriginal := TStringList.Create;
-  for i := 0 to ToolBar1.ButtonCount - 1 do begin
+  for i := 0 to ToolBar1.ButtonCount - 1 do
+  begin
     tlb := ToolBar1.Buttons[i];
-    if Assigned(tlb) then begin
-      if Assigned(tlb.Action) then begin
+    if Assigned(tlb) then
+    begin
+      if Assigned(tlb.Action) then
+      begin
         if TActionList(tlb.Action.Owner) <> ActionList1 then
           FToolOriginal.Add(Format('b%d=%s', [i, tlb.Action.Name]))
       end
@@ -258,7 +261,8 @@ end;
 
 procedure TFond.ChangementOptionsExecute(Sender: TObject);
 begin
-  with TFrmOptions.Create(Self) do try
+  with TFrmOptions.Create(Self) do
+  try
     if ShowModal <> mrOk then Exit;
   finally
     Free;
@@ -290,7 +294,8 @@ var
   R: TStats;
 begin
   R := TStats.Create(False);
-  with TStatsGeneralesCreate(Self, R) do try
+  with TStatsGeneralesCreate(Self, R) do
+  try
     ShowModal;
   finally
     Free;
@@ -363,7 +368,8 @@ var
   R: TStats;
 begin
   R := TStats.Create(False);
-  with TStatsEmprunteursCreate(Self, R) do try
+  with TStatsEmprunteursCreate(Self, R) do
+  try
     ShowModal;
   finally
     Free;
@@ -376,7 +382,8 @@ var
   R: TStats;
 begin
   R := TStats.Create(False);
-  with TStatsAlbumsCreate(Self, R) do try
+  with TStatsAlbumsCreate(Self, R) do
+  try
     ShowModal;
   finally
     Free;
@@ -388,20 +395,17 @@ procedure TFond.ChargeToolBarres(sl: TStringList);
 
   function GetAction(const Name: string): TAction;
   var
-    i: integer;
+    i: Integer;
     act: TCustomAction;
-    s1, s2: string;
   begin
     Result := nil;
-    s1 := UpperCase(Name);
-    for i := 0 to ActionsOutils.ActionCount - 1 do begin
+    for i := 0 to ActionsOutils.ActionCount - 1 do
+    begin
       act := TCustomAction(ActionsOutils.Actions[i]);
-      if act <> nil then begin
-        s2 := UpperCase(act.Name);
-        if s1 = s2 then begin
-          Result := act as TAction;
-          Exit;
-        end;
+      if (act <> nil) and SameText(Name, act.Name) then
+      begin
+        Result := act as TAction;
+        Exit;
       end;
     end;
   end;
@@ -409,18 +413,23 @@ procedure TFond.ChargeToolBarres(sl: TStringList);
   function NewAction(aAction: TAction): TToolButton;
   begin
     Result := TToolButton.Create(ToolBar1);
-    with Result do begin
+    with Result do
+    begin
       Parent := ToolBar1;
-      if aAction = nil then begin
+      if aAction = nil then
+      begin
         Style := tbsSeparator;
         Width := 8;
       end
-      else begin
-        if aAction = HistoriqueBack then begin
+      else
+      begin
+        if aAction = HistoriqueBack then
+        begin
           Style := tbsDropDown;
           MenuItem := mnuBack;
         end;
-        if aAction = HistoriqueNext then begin
+        if aAction = HistoriqueNext then
+        begin
           Style := tbsDropDown;
           MenuItem := mnuNext;
         end;
@@ -446,11 +455,13 @@ begin
   for i := 0 to ToolBar1.ButtonCount - 1 do
     ToolBar1.Buttons[0].Free;
 
-  if Utilisateur.Options.GrandesIconesBarre then begin
+  if Utilisateur.Options.GrandesIconesBarre then
+  begin
     ToolBar1.Images := boutons_32x32_norm;
     ToolBar1.HotImages := boutons_32x32_hot;
   end
-  else begin
+  else
+  begin
     ToolBar1.Images := boutons_16x16_norm;
     ToolBar1.HotImages := boutons_16x16_hot;
   end;
@@ -458,16 +469,20 @@ begin
   ToolBar1.ButtonWidth := 0;
 
   LastButton := tbSep;
-  for i := sl.Count - 1 downto 0 do begin
+  for i := sl.Count - 1 downto 0 do
+  begin
     s1 := sl.Names[i];
     s2 := sl.Values[s1];
-    if s2 = 'X' then begin
+    if s2 = 'X' then
+    begin
       if LastButton <> tbSep then NewAction(nil);
       LastButton := tbSep;
     end
-    else begin
+    else
+    begin
       aAction := GetAction(s2);
-      if aAction <> nil then begin
+      if aAction <> nil then
+      begin
         NewAction(GetAction(s2));
         LastButton := tbBut;
       end;
@@ -484,7 +499,8 @@ var
   sl: TStringList;
 begin
   if FileExists(FichierIni) then
-    with TIniFile.Create(FichierIni) do begin
+    with TIniFile.Create(FichierIni) do
+    begin
       sl := TStringList.Create;
       try
         ReadSections(sl);
@@ -504,7 +520,8 @@ procedure TFond.FormClose(Sender: TObject; var Action: TCloseAction);
 var
   i: integer;
 begin
-  with TIniFile.Create(FichierIni) do try
+  with TIniFile.Create(FichierIni) do
+  try
     EraseSection('Barre');
     for i := 0 to Pred(FToolCurrent.Count) do
       WriteString('Barre', FToolCurrent.Names[i], FToolCurrent.ValueFromIndex[i]);
@@ -515,7 +532,8 @@ end;
 
 procedure TFond.PersonnaliseBarreExecute(Sender: TObject);
 begin
-  with TFrmCustomize.Create(Self) do try
+  with TFrmCustomize.Create(Self) do
+  try
     if ShowModal = mrOk then Historique.AddWaiting(fcRecreateToolBar);
   finally
     Free;
@@ -528,11 +546,13 @@ var
   iImpression: IImpressionApercu;
 begin
   Handled := Mode_en_cours = mdEditing;
-  if not Handled then begin
+  if not Handled then
+  begin
     ModeConsult := Mode_en_cours = mdConsult;
     ActualiseRepertoire.Enabled := ModeConsult;
 
-    if Assigned(FCurrentForm) and FCurrentForm.GetInterface(IImpressionApercu, iImpression) then begin
+    if Assigned(FCurrentForm) and FCurrentForm.GetInterface(IImpressionApercu, iImpression) then
+    begin
       try
         Impression.Enabled := iImpression.ImpressionUpdate;
       except
@@ -544,7 +564,8 @@ begin
         ApercuImpression.Enabled := False;
       end;
     end
-    else begin
+    else
+    begin
       Impression.Enabled := False;
       ApercuImpression.Enabled := False;
     end;
@@ -571,7 +592,8 @@ end;
 
 procedure TFond.AideAboutExecute(Sender: TObject);
 begin
-  with TFrmAboutBox.Create(Application) do try
+  with TFrmAboutBox.Create(Application) do
+  try
     ShowModal;
   finally
     Free;
@@ -659,7 +681,8 @@ begin
   Application.ModalStarted;
   Form.BorderStyle := bsNone;
   Form.Parent := Self;
-  if FModalWindows.Count > 0 then begin
+  if FModalWindows.Count > 0 then
+  begin
     TForm(FModalWindows.Peek).Enabled := False;
     CurrentMenu := TForm(FModalWindows.Peek).Menu;
   end
@@ -692,7 +715,8 @@ var
 begin
   Result := False;
   i := 0;
-  while not Result and (i < FModalWindows.Count) do begin
+  while not Result and (i < FModalWindows.Count) do
+  begin
     c := FModalWindows.List[i];
     Result := c is Classe;
     Inc(i);
@@ -714,7 +738,8 @@ procedure TFond.MergeMenu(MergedMenu: TMainMenu);
 var
   i: Integer;
 begin
-  if Assigned(MergedMenu) then begin
+  if Assigned(MergedMenu) then
+  begin
     if Utilisateur.Options.GrandesIconesMenus then
       MergedMenu.Images := boutons_32x32_hot
     else
@@ -731,7 +756,8 @@ procedure TFond.SetChildForm(Form: TForm; Alignement: TAlign = alClient);
 var
   LockWindow: ILockWindow;
 begin
-  if not Assigned(Form) then begin
+  if not Assigned(Form) then
+  begin
     if (Mode_en_cours = mdConsult) then
       Historique.Last
     else if Assigned(FCurrentForm) then
@@ -747,7 +773,8 @@ begin
   Form.Parent := Self;
   Form.Visible := True;
   Form.Align := Alignement;
-  if not (Form is TFrmRepertoire) then begin
+  if not (Form is TFrmRepertoire) then
+  begin
     FCurrentForm := Form;
     MergeMenu(FCurrentForm.Menu);
   end
@@ -776,7 +803,8 @@ procedure TFond.ActionsStatistiquesUpdate(Action: TBasicAction; var Handled: Boo
 var
   i: Integer;
 begin
-  if Mode_en_cours = mdEditing then begin
+  if Mode_en_cours = mdEditing then
+  begin
     for i := 0 to Pred(ActionsStatistiques.ActionCount) do
       TAction(ActionsStatistiques.Actions[i]).Enabled := False;
     Handled := True;
@@ -818,7 +846,8 @@ procedure TFond.MeasureMenuItem(Sender: TObject; ACanvas: TCanvas; var Width, He
     NonClientMetrics: TNonClientMetrics;
   begin
     NonClientMetrics.cbSize := sizeof(NonClientMetrics);
-    if SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, @NonClientMetrics, 0) then begin
+    if SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, @NonClientMetrics, 0) then
+    begin
       Height := NonClientMetrics.iMenuHeight;
     end;
   end;
@@ -855,28 +884,32 @@ begin
   //  mnuCurrent.Items.Count = 1 (Historique.CurrentConsultation);
 
   mnuBack.Clear;
-  for i := Max(0, Historique.CurrentConsultation - MaxNbItems) to (Historique.CurrentConsultation - 1) do begin
+  for i := Max(0, Historique.CurrentConsultation - MaxNbItems) to (Historique.CurrentConsultation - 1) do
+  begin
     mnu := TMenuItem.Create(Self);
     mnu.Caption := Historique.GetDescription(i);
     mnu.Tag := i;
     mnu.OnClick := HistoriqueChosen;
     mnuBack.Insert(0, mnu);
   end;
-  if (Historique.CurrentConsultation - MaxNbItems > 0) then begin
+  if (Historique.CurrentConsultation - MaxNbItems > 0) then
+  begin
     mnu := TMenuItem.Create(Self);
     mnu.Caption := '...';
     mnu.Enabled := False;
     mnuBack.Add(mnu);
   end;
   mnuNext.Clear;
-  for i := (Historique.CurrentConsultation + 1) to Min(Pred(Historique.CountConsultation), Historique.CurrentConsultation + MaxNbItems) do begin
+  for i := (Historique.CurrentConsultation + 1) to Min(Pred(Historique.CountConsultation), Historique.CurrentConsultation + MaxNbItems) do
+  begin
     mnu := TMenuItem.Create(Self);
     mnu.Caption := Historique.GetDescription(i);
     mnu.Tag := i;
     mnu.OnClick := HistoriqueChosen;
     mnuNext.Add(mnu);
   end;
-  if (Historique.CurrentConsultation + MaxNbItems < Pred(Historique.CountConsultation)) then begin
+  if (Historique.CurrentConsultation + MaxNbItems < Pred(Historique.CountConsultation)) then
+  begin
     mnu := TMenuItem.Create(Self);
     mnu.Caption := '...';
     mnu.Enabled := False;

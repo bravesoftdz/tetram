@@ -97,13 +97,13 @@ object FrmEditCritere: TFrmEditCritere
     Align = alBottom
     TabOrder = 1
     inherited btnOK: TBitBtn
-      Left = 108
+      Left = 100
       Width = 55
       Action = ActOk
     end
     inherited btnAnnuler: TBitBtn
-      Left = 171
-      Width = 53
+      Left = 160
+      Width = 64
     end
   end
   object ActionList1: TActionList

@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Fram_Boutons, StdCtrls, DBCtrls, Form_Recherche,
-  ActnList, DBEditLabeled, ComboCheck;
+  ActnList, DBEditLabeled, ComboCheck, ComCtrls;
 
 type
   TFrmEditCritere = class(TForm)
@@ -35,12 +35,12 @@ type
 
 implementation
 
-uses JvUIB, DM_Commun, Commun, DM_Princ, JvUIBLib;
+uses JvUIB, DM_Commun, Commun, DM_Princ, JvUIBLib, Divers;
 
 {$R *.DFM}
 
 type
-  TChampSpecial = (csNone, csTitre, csGenre, csAffiche, csEtat, csReliure, csOrientation, csFormatEdition, csTypeEdition, csHistoire, csRemarques);
+  TChampSpecial = (csNone, csTitre, csGenre, csAffiche, csEtat, csReliure, csOrientation, csFormatEdition, csTypeEdition);
 
   TChamp = class
     NomChamp: string;
@@ -53,8 +53,9 @@ type
 function TFrmEditCritere.GetCritere: TCritere;
 var
   Champ: TChamp;
+  critereTexte: string;
 begin
-  Result := FCritere; 
+  Result := FCritere;
 
   Champ := TChamp(champs.LastItemData);
 
@@ -66,15 +67,16 @@ begin
     Result.valeurText := FChampValeurs[Result.iCritere2];
   Result.NomTable := Champ.NomTable;
   Result.TestSQL := Champ.NomTable + '.' + Champ.NomChamp;
+  critereTexte := UpperCase(SansAccents(valeur.Text));
   case Champ.Special of
     csGenre:
       case Result.iSignes of
         0: // Indifférent
           Result.TestSQL := Result.TestSQL + ' IS NOT NULL';
         1: // est
-          Result.TestSQL := Result.TestSQL + '=' + QuotedStr(UpperCase(Result.valeurText));
+          Result.TestSQL := Result.TestSQL + '=' + QuotedStr(critereTexte);
         2: // n'est pas
-          Result.TestSQL := Result.TestSQL + '<>' + QuotedStr(UpperCase(Result.valeurText));
+          Result.TestSQL := Result.TestSQL + '<>' + QuotedStr(critereTexte);
       end;
     csEtat, csReliure, csOrientation, csFormatEdition, csTypeEdition:
       case Result.iSignes of
@@ -99,24 +101,15 @@ begin
     csTitre:
       case Result.iSignes of
         1: // Vide ou contient
-          Result.TestSQL := Format('(%s IS NULL OR %s LIKE ''%%%s%%'')', [Champ.NomTable + '.UPPER' + Champ.NomChamp, Champ.NomTable + '.UPPER' + Champ.NomChamp, UpperCase(valeur.Text)]);
+          Result.TestSQL := Format('(%s IS NULL OR %s CONTAINING %s)', [Champ.NomTable + '.UPPER' + Champ.NomChamp, Champ.NomTable + '.UPPER' + Champ.NomChamp, QuotedStr(critereTexte)]);
         2: // Contient
-          Result.TestSQL := Format('%s LIKE ''%%%s%%''', [Champ.NomTable + '.UPPER' + Champ.NomChamp, UpperCase(valeur.Text)]);
+          Result.TestSQL := Format('%s CONTAINING %s', [Champ.NomTable + '.UPPER' + Champ.NomChamp, QuotedStr(critereTexte)]);
         3: // Ne contient pas
-          Result.TestSQL := Format('NOT (%s LIKE ''%%%s%%'')', [Champ.NomTable + '.UPPER' + Champ.NomChamp, UpperCase(valeur.Text)]);
+          Result.TestSQL := Format('NOT (%s CONTAINING %s)', [Champ.NomTable + '.UPPER' + Champ.NomChamp, QuotedStr(critereTexte)]);
         4: // Ressemble
-          Result.TestSQL := Format('%s LIKE UDF_SOUNDEX(''%%%s%%'', %d)', [Champ.NomTable + '.SOUNDEX' + Champ.NomChamp, UpperCase(valeur.Text), Integer(Result.iCritere2)]);
+          Result.TestSQL := Format('%s CONTAINING UDF_SOUNDEX(%s, %d)', [Champ.NomTable + '.SOUNDEX' + Champ.NomChamp, QuotedStr(critereTexte), Integer(Result.iCritere2)]);
         5: // Ne ressemble pas
-          Result.TestSQL := Format('NOT (%s LIKE UDF_SOUNDEX(''%%%s%%'', %d))', [Champ.NomTable + '.SOUNDEX' + Champ.NomChamp, UpperCase(valeur.Text), Integer(Result.iCritere2)]);
-      end;
-    csHistoire, csRemarques:
-      case Result.iSignes of
-        1: // Vide ou contient
-          Result.TestSQL := Format('(%s IS NULL OR %s LIKE ''%%%s%%'')', [Champ.NomTable + '.UPPER' + Champ.NomChamp, Champ.NomTable + '.UPPER' + Champ.NomChamp, UpperCase(valeur.Text)]);
-        2: // Contient
-          Result.TestSQL := Format('%s LIKE ''%%%s%%''', [Champ.NomTable + '.UPPER' + Champ.NomChamp, UpperCase(valeur.Text)]);
-        3: // Ne contient pas
-          Result.TestSQL := Format('NOT (%s LIKE ''%%%s%%'')', [Champ.NomTable + '.UPPER' + Champ.NomChamp, UpperCase(valeur.Text)]);
+          Result.TestSQL := Format('NOT (%s CONTAINING UDF_SOUNDEX(%s, %d))', [Champ.NomTable + '.SOUNDEX' + Champ.NomChamp, QuotedStr(critereTexte), Integer(Result.iCritere2)]);
       end;
     else
       case Champ.TypeData of
@@ -134,12 +127,14 @@ begin
         uftChar, uftVarchar, uftBlob:
           case Result.iSignes of
             1: // Vide ou contient
-              Result.TestSQL := Format('(%s IS NULL OR %s LIKE ''%%%s%%'')', [Result.TestSQL, Result.TestSQL, valeur.Text]);
+              Result.TestSQL := Format('(%s IS NULL OR %s CONTAINING %s)', [Result.TestSQL, Result.TestSQL, QuotedStr(critereTexte)]);
             2: // Contient
-              Result.TestSQL := Format('%s LIKE ''%%%s%%''', [Result.TestSQL, valeur.Text]);
+              Result.TestSQL := Format('%s CONTAINING %s', [Result.TestSQL, QuotedStr(critereTexte)]);
             3: // Ne contient pas
-              Result.TestSQL := Format('NOT (%s LIKE ''%%%s%%'')', [Result.TestSQL, valeur.Text]);
+              Result.TestSQL := Format('NOT (%s CONTAINING %s)', [Result.TestSQL, QuotedStr(critereTexte)]);
           end;
+        uftDate:
+          Result.TestSQL := Result.TestSQL + signes.Caption + QuotedStr(FormatDateTime('YYYY-MM-DD', StrToDate(valeur.Text)));
         else
           Result.TestSQL := '';
       end;
@@ -160,9 +155,14 @@ begin
   if Critere2.Visible and Critere2.Enabled then Critere2.Value := FCritere.iCritere2;
 end;
 
+type
+  TCrackWinControl = class(TWinControl)
+  end;
+
 procedure TFrmEditCritere.FormCreate(Sender: TObject);
 const
   ListTables: array[0..2] of string = ('SERIES', 'ALBUMS', 'EDITIONS');
+  NomTables: array[0..2] of string = ('Série', 'Album', 'Edition');
 var
   i, j: Integer;
   t: string;
@@ -170,6 +170,7 @@ var
   Table1, Desc, LstChamps: TJvUIBQuery;
   p: TChamp;
   hg: IHourGlass;
+  ParentItem: TSubItem;
 begin
   hg := THourGlass.Create;
   FRecherche := TFrmRecherche(Owner);
@@ -183,15 +184,20 @@ begin
   Desc := TJvUIBQuery.Create(Self);
   LstChamps := TJvUIBQuery.Create(Self);
   champs.Items.Clear;
-  with Table1 do try
+  with Table1 do
+  try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    for j := Low(ListTables) to High(ListTables) do begin
+    for j := Low(ListTables) to High(ListTables) do
+    begin
       Close;
       SQL.Text := 'SELECT FIRST 0 SKIP 0 * FROM ' + ListTables[j];
       Open;
-      for i := 0 to Fields.FieldCount - 1 do begin
+      ParentItem := champs.Items.Add(NomTables[j]);
+      for i := 0 to Fields.FieldCount - 1 do
+      begin
         t := FRecherche.TransChamps(Fields.SqlName[i]);
-        if (t <> '') then begin
+        if (t <> '') then
+        begin
           p := TChamp.Create;
           p.NomChamp := UpperCase(Fields.SqlName[i]);
           p.NomTable := ListTables[j];
@@ -199,8 +205,6 @@ begin
           p.Booleen := (p.TypeData = uftSmallInt) and FRecherche.IsValChampBoolean(FRecherche.ValChamps(t));
           case FRecherche.ValChamps(t) of
             1, 8: p.Special := csTitre;
-            6, 9: p.Special := csHistoire;
-            7, 10: p.Special := csRemarques;
             21: p.Special := csEtat;
             22: p.Special := csReliure;
             24: p.Special := csOrientation;
@@ -209,24 +213,29 @@ begin
             else
               p.Special := csNone;
           end;
-          with champs.Items.Add do begin
-            Caption := t;
+          with ParentItem.SubItems.Add(t) do
+          begin
+            Valeur := FRecherche.ValChamps(t);
             Data := TObject(p);
           end;
         end;
       end;
+      case j of
+        0:
+          begin
+            p := TChamp.Create;
+            p.NomChamp := 'ID_Genre';
+            p.NomTable := 'GENRESERIES';
+            p.TypeData := uftChar;
+            p.Special := csGenre;
+            with ParentItem.SubItems.Add(FRecherche.TransChamps('genreserie')) do
+            begin
+              Valeur := FRecherche.ValChamps(Caption);
+              Data := TObject(p);
+            end;
+          end;
+      end;
     end;
-
-    p := TChamp.Create;
-    p.NomChamp := 'ID_Genre';
-    p.NomTable := 'GENRESERIES';
-    p.TypeData := uftChar;
-    p.Special := csGenre;
-    with champs.Items.Add do begin
-      Caption := FRecherche.TransChamps('genreserie'); // ne pas traduire
-      Data := TObject(p);
-    end;
-
   finally
     Transaction.Free;
     Free;
@@ -244,8 +253,10 @@ procedure TFrmEditCritere.champsChange(Sender: TObject);
       Items.Clear;
       FChampValeurs.Clear;
       Source.Open;
-      while not Source.Eof do begin
-        with Items.Add do begin
+      while not Source.Eof do
+      begin
+        with Items.Add do
+        begin
           Caption := Source.Fields.AsString[1];
           Valeur := Index;
           ChampValeurs.Add(Source.Fields.AsString[0]);
@@ -265,8 +276,10 @@ procedure TFrmEditCritere.champsChange(Sender: TObject);
       Items.Clear;
       FChampValeurs.Clear;
       Source.Open;
-      while not Source.Eof do begin
-        with Items.Add do begin
+      while not Source.Eof do
+      begin
+        with Items.Add do
+        begin
           Caption := Source.Fields.AsString[1];
           Valeur := Source.Fields.AsInteger[0];
         end;
@@ -284,7 +297,8 @@ procedure TFrmEditCritere.champsChange(Sender: TObject);
       Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
       Items.Clear;
       Source.Open;
-      while not Source.Eof do begin
+      while not Source.Eof do
+      begin
         Items.AddObject(Source.Fields.AsString[1], Pointer(Source.Fields.AsInteger[0]));
         Source.Next;
       end;
@@ -300,29 +314,34 @@ begin
   Critere2.Items.Clear;
   signes.Tag := 0;
   case TChamp(champs.LastItemData).Special of
-    csTitre: begin
+    csTitre:
+      begin
         AssignItems(signes.Items, DataCommun.TCritereTitre);
         AssignItems(Critere2.Items, DataCommun.TCritereLangueTitre);
         signes.Tag := 1;
         valeur.Visible := True;
       end;
-    csGenre: begin
+    csGenre:
+      begin
         AssignItems(signes.Items, DataCommun.TCritereListe);
         AssignItems(Critere2.Items, DataCommun.TGenre, FChampValeurs);
         valeur.Visible := False;
         signes.Tag := 2;
       end;
-    csAffiche: begin
+    csAffiche:
+      begin
         AssignItems(signes.Items, DataCommun.TCritereAffiche);
         valeur.Visible := False;
       end;
-    csEtat: begin
+    csEtat:
+      begin
         AssignItems(signes.Items, DataCommun.TCritereListe);
         AssignItems(Critere2.Items, DataCommun.TCritereEtat);
         signes.Tag := 2;
         valeur.Visible := False;
       end;
-    csReliure: begin
+    csReliure:
+      begin
         AssignItems(signes.Items, DataCommun.TCritereListe);
         AssignItems(Critere2.Items, DataCommun.TCritereReliure);
         signes.Tag := 2;
@@ -330,20 +349,24 @@ begin
       end;
     else
       case TChamp(champs.LastItemData).TypeData of
-        uftChar, uftVarchar, uftBlob: begin
+        uftChar, uftVarchar, uftBlob:
+          begin
             AssignItems(signes.Items, DataCommun.TCritereString);
             valeur.Visible := True;
           end;
         uftSmallInt, uftInteger, uftFloat, uftNumeric:
-          if TChamp(champs.LastItemData).Booleen then begin
+          if TChamp(champs.LastItemData).Booleen then
+          begin
             AssignItems(signes.Items, DataCommun.TCritereBoolean);
             valeur.Visible := False;
           end
-          else begin
+          else
+          begin
             AssignItems(signes.Items, DataCommun.TCritereNumeral);
             valeur.Visible := True;
           end;
-        uftDate, uftTime, uftTimestamp: begin
+        uftDate, uftTime, uftTimestamp:
+          begin
             AssignItems(signes.Items, DataCommun.TCritereNumeral);
             valeur.Visible := True;
           end;
@@ -399,3 +422,4 @@ begin
 end;
 
 end.
+

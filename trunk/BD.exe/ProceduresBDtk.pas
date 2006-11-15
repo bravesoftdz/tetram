@@ -66,9 +66,13 @@ function Convertisseur(Caller: TControl; var Value: Currency): Boolean;
 
 function Choisir(const Texte1, Texte2: string; Bouton: Integer): TModalResult;
 type
-  TDetailOption = (doScenario, doDessins, doCouleurs, doHistoire, doNotes);
-  TDetailOptions = set of TDetailOption;
-function ChoisirDetail(Bouton: Integer; out DetailsOptions: TDetailOptions): TModalResult;
+  TDetailAlbumOption = (daoScenario, daoDessins, daoCouleurs, daoHistoire, daoNotes);
+  TDetailAlbumOptions = set of TDetailAlbumOption;
+function ChoisirDetailAlbum(Bouton: Integer; out DetailsOptions: TDetailAlbumOptions): TModalResult;
+
+type
+  TDetailSerieOption = (dsoSerieSeule, dsoListeAlbums, dsoAlbumsDetails, dsoListeEditions, dsoEditionsDetaillees);
+function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption; out PrevisionsManquants: Boolean): TModalResult;
 
 implementation
 
@@ -260,7 +264,7 @@ begin
   end;
 end;
 
-function ChoisirDetail(Bouton: Integer; out DetailsOptions: TDetailOptions): TModalResult;
+function ChoisirDetailAlbum(Bouton: Integer; out DetailsOptions: TDetailAlbumOptions): TModalResult;
 var
   w: Integer;
   Texte1, Texte2: string;
@@ -289,15 +293,19 @@ begin
     if bouton = 2 then BtnChoix2.Default := True;
     Result := ShowModal;
     if Result = mrNo then begin
-      if cbScenario.Checked then Include(DetailsOptions, doScenario);
-      if cbDessins.Checked then Include(DetailsOptions, doDessins);
-      if cbCouleurs.Checked then Include(DetailsOptions, doCouleurs);
-      if cbHistoire.Checked then Include(DetailsOptions, doHistoire);
-      if cbNotes.Checked then Include(DetailsOptions, doNotes);
+      if cbScenario.Checked then Include(DetailsOptions, daoScenario);
+      if cbDessins.Checked then Include(DetailsOptions, daoDessins);
+      if cbCouleurs.Checked then Include(DetailsOptions, daoCouleurs);
+      if cbHistoire.Checked then Include(DetailsOptions, daoHistoire);
+      if cbNotes.Checked then Include(DetailsOptions, daoNotes);
     end;
   finally
     Free;
   end;
+end;
+
+function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption; out PrevisionsManquants: Boolean): TModalResult;
+begin
 end;
 
 function Convertisseur(Caller: TControl; var Value: Currency): Boolean;

@@ -23,11 +23,13 @@ const
   rsTransCouleur = 'Couleur';
   rsTransCouleurs = 'Couleurs';
   rsTransCreateurs = 'Créateurs';
+  rsTransDateAchat = 'Date d''achat';
   rsTransDedicace = 'Dédicacé';
   rsTransDescription = 'Description';
   rsTransDessins = 'Dessins';
   rsTransEditeur = 'Editeur';
   rsTransEdition = 'Edition';
+  rsTransEditions = 'Editions';
   rsTransEmprunteLePar = 'Emprunté le %s par %s';
   rsTransEmprunts = 'Emprunts';
   //  rsTransEmprunteur = 'Emprunteur';
@@ -51,6 +53,7 @@ const
   rsTransMaximum = 'Maximum';
   rsTransMinimum = 'Minimum';
   //  rsTransNationalite = 'Nationalité';
+  rsTransNombreDePages = 'Nombre de pages';
   rsTransNotes = 'Notes';
   rsTransNumerote = 'Numéroté';
   rsTransOrientation = 'Orientation';
@@ -70,8 +73,11 @@ const
   rsTransRetour = 'Retour';
   rsTransScenario = 'Scénario';
   rsTransSerie = 'Série';
+  rsTransSerieChercherManquants = 'Chercher les manquants';
+  rsTransSerieComplete = 'Série complète';
   rsTransSerieEnCours = 'Série en cours';
   rsTransSeries = 'Séries';
+  rsTransSerieSuivreSorties = 'Suivre les sorties';
   rsTransSerieTerminee = 'Série terminée';
   rsTransStock = 'Stock';
   //  rsTransSupport = 'Support';

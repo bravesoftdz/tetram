@@ -182,13 +182,16 @@ begin
   if SameText(Champ, 'tome') then Result := rsTransTome;
   if SameText(Champ, 'horsserie') then Result := rsTransHorsSerie;
   if SameText(Champ, 'integrale') then Result := rsTransIntegrale;
-  if SameText(Champ, 'sujetalbum') then Result := rsTransHistoire + ' ' + rsTransAlbum;
-  if SameText(Champ, 'remarquesalbum') then Result := rsTransNotes + ' ' + rsTransAlbum;
+  if SameText(Champ, 'uppersujetalbum') then Result := rsTransHistoire + ' ' + rsTransAlbum;
+  if SameText(Champ, 'upperremarquesalbum') then Result := rsTransNotes + ' ' + rsTransAlbum;
 
   if SameText(Champ, 'titreserie') then Result := rsTransSerie;
-  if SameText(Champ, 'sujetserie') then Result := rsTransHistoire + ' ' + rsTransSerie;
-  if SameText(Champ, 'remarquesserie') then Result := rsTransNotes + ' ' + rsTransSerie;
+  if SameText(Champ, 'uppersujetserie') then Result := rsTransHistoire + ' ' + rsTransSerie;
+  if SameText(Champ, 'upperremarquesserie') then Result := rsTransNotes + ' ' + rsTransSerie;
   if SameText(Champ, 'terminee') then Result := rsTransSerieTerminee;
+  if SameText(Champ, 'complete') then Result := rsTransSerieComplete;
+  if SameText(Champ, 'suivremanquants') then Result := rsTransSerieChercherManquants;
+  if SameText(Champ, 'suivresorties') then Result := rsTransSerieSuivreSorties;
 
   if SameText(Champ, 'anneeedition') then Result := rsTransAnneeEdition;
   if SameText(Champ, 'prix') then Result := rsTransPrix;
@@ -204,6 +207,12 @@ begin
   if SameText(Champ, 'orientation') then Result := rsTransOrientation;
   if SameText(Champ, 'formatedition') then Result := rsTransFormatEdition;
   if SameText(Champ, 'typeedition') then Result := rsTransTypeEdition;
+  if SameText(Champ, 'dateachat') then Result := rsTransDateAchat;
+  if SameText(Champ, 'gratuit') then Result := rsTransGratuit;
+  if SameText(Champ, 'offert') then Result := rsTransOffert;
+  if SameText(Champ, 'nombredepages') then Result := rsTransNombreDePages;
+  if SameText(Champ, 'anneecote') then Result := rsTransCote + ' (' + rsTransAnnee + ')';
+  if SameText(Champ, 'prixcote') then Result := rsTransCote + ' (' + rsTransPrix + ')';
 
   if SameText(Champ, 'genreserie') then Result := rsTransGenre + ' *';
 end;
@@ -223,6 +232,9 @@ begin
   if (Champ = rsTransHistoire + ' ' + rsTransSerie) or (SameText(Champ, 'sujetserie')) then Result := 9;
   if (Champ = rsTransNotes + ' ' + rsTransSerie) or (SameText(Champ, 'remarquesserie')) then Result := 10;
   if (Champ = rsTransSerieTerminee) or (SameText(Champ, 'terminee')) then Result := 11;
+  if (Champ = rsTransSerieComplete) or (SameText(Champ, 'complete')) then Result := 33;
+  if (Champ = rsTransSerieChercherManquants) or (SameText(Champ, 'suivremanquants')) then Result := 34;
+  if (Champ = rsTransSerieSuivreSorties) or (SameText(Champ, 'suivresorties')) then Result := 35;
 
   if (Champ = rsTransAnneeEdition) or (SameText(Champ, 'anneeedition')) then Result := 12;
   if (Champ = rsTransPrix) or (SameText(Champ, 'prix')) then Result := 13;
@@ -238,13 +250,19 @@ begin
   if (Champ = rsTransOrientation) or (SameText(Champ, 'orientation')) then Result := 24;
   if (Champ = rsTransFormatEdition) or (SameText(Champ, 'formatedition')) then Result := 25;
   if (Champ = rsTransTypeEdition) or (SameText(Champ, 'typeedition')) then Result := 26;
+  if (Champ = rsTransDateAchat) or (SameText(Champ, 'dateachat')) then Result := 27;
+  if (Champ = rsTransGratuit) or (SameText(Champ, 'gratuit')) then Result := 28;
+  if (Champ = rsTransOffert) or (SameText(Champ, 'offert')) then Result := 29;
+  if (Champ = rsTransNombreDePages) or (SameText(Champ, 'nombredepages')) then Result := 30;
+  if (Champ = rsTransCote + ' (' + rsTransAnnee + ')') or (SameText(Champ, 'anneecote')) then Result := 31;
+  if (Champ = rsTransCote + ' (' + rsTransPrix + ')') or (SameText(Champ, 'prixcote')) then Result := 32;
 
   if (Champ = rsTransGenre + ' *') or (SameText(Champ, 'ID_Genre')) then Result := 23;
 end;
 
 function TFrmRecherche.IsValChampBoolean(ValChamp: Integer): Boolean;
 begin
-  Result := ValChamp in [4, 5, 11, 14, 15, 17, 18, 19, 20];
+  Result := ValChamp in [4, 5, 11, 14, 15, 17, 18, 19, 20, 28, 29, 33, 34, 35];
 end;
 
 procedure TFrmRecherche.SetTypeRecherche(Value: TTypeRecherche);
