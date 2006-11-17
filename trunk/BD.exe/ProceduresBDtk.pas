@@ -5,9 +5,9 @@ interface
 uses
   SysUtils, Windows, StdCtrls, Forms, Controls, Form_Progression, ExtCtrls, CommonConst, Graphics;
 
-  //procedure ShowProgression(Texte: String; Etape: TEtapeProgression); overload;
-  //procedure ShowProgression(Texte: String; Valeur, Maxi: Integer); overload;
-  //procedure ShowProgression(Texte: PChar; Valeur, Maxi: Integer); overload;
+//procedure ShowProgression(Texte: String; Etape: TEtapeProgression); overload;
+//procedure ShowProgression(Texte: String; Valeur, Maxi: Integer); overload;
+//procedure ShowProgression(Texte: PChar; Valeur, Maxi: Integer); overload;
 
 type
   IImpressionApercu = interface
@@ -72,12 +72,22 @@ function ChoisirDetailAlbum(Bouton: Integer; out DetailsOptions: TDetailAlbumOpt
 
 type
   TDetailSerieOption = (dsoSerieSeule, dsoListeAlbums, dsoAlbumsDetails, dsoListeEditions, dsoEditionsDetaillees);
-function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption; out PrevisionsManquants: Boolean): TModalResult;
+const
+  LibelleDetailSerieOption: array[TDetailSerieOption, TDetailSerieOption] of string = (
+    ('Série seule', 'Liste simplifiée des albums et para-BD', 'Liste détaillée des albums et para-BD', 'Liste simplifiée des éditions', 'Liste détaillée des éditions'),
+    ('', '', '', '', ''),
+    ('', '', 'Album seul', 'Liste simplifiée des éditions', 'Liste détaillée des éditions'),
+    ('', '', '', '', ''),
+    ('', '', '', '', '')
+    );
+function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption; out PrevisionsManquants: Boolean): TModalResult; overload;
+function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption): TModalResult; overload;
 
 implementation
 
 uses
-  Form_ChoixDetail, Form_Choix, Form_Convertisseur, Main, Divers, Procedures, Math, Textes, ActnList;
+  Form_ChoixDetail, Form_Choix, Form_Convertisseur, Main, Divers, Procedures, Math, Textes, ActnList,
+  Form_ChoixDetailSerie;
 
 procedure ShowProgression(const Texte: string; Etape: TEtapeProgression); overload;
 begin
@@ -96,14 +106,16 @@ procedure ShowProgression(const Texte: string; Valeur, Maxi: Integer); overload;
 begin
   if (not FormExistB(TFrmProgression)) and (Valeur <> Maxi) then
     Application.CreateForm(TFrmProgression, FrmProgression);
-  if FormExistB(TFrmProgression) then begin
+  if FormExistB(TFrmProgression) then
+  begin
     FrmProgression.ProgressBar1.Max := Maxi;
     FrmProgression.ProgressBar1.Position := Valeur;
     FrmProgression.op.Caption := Texte;
     FrmProgression.Update;
     FrmProgression.Show;
   end;
-  if (Valeur = Maxi) then begin
+  if (Valeur = Maxi) then
+  begin
     if FormExistB(TFrmProgression) then FrmProgression.Release;
     Exit;
   end;
@@ -140,9 +152,11 @@ var
   tmpForm: TFrmProgression;
 begin
   tmpForm := TFrmProgression.Create(Application);
-  if Assigned(PResult) then begin
+  if Assigned(PResult) then
+  begin
     FButton := TButton.Create(FForm);
-    with FButton do begin
+    with FButton do
+    begin
       Parent := tmpForm;
       ModalResult := mrCancel;
       Caption := 'Annuler';
@@ -171,7 +185,8 @@ end;
 
 procedure TWaiting.RefreshForm;
 begin
-  if Assigned(FForm) then begin
+  if Assigned(FForm) then
+  begin
     FForm.ProgressBar1.Max := FMaxi;
     FForm.ProgressBar1.Position := FValeur;
     FForm.op.Caption := FMessage;
@@ -218,9 +233,11 @@ function ChargeImage(Picture: TPicture; const ResName: string): Boolean;
 begin
   Result := False;
   Picture.Bitmap.FreeImage;
-  if Utilisateur.Options.Images and not IsRemoteSession then begin
+  if Utilisateur.Options.Images and not IsRemoteSession then
+  begin
     if HandleDLLPic <= 32 then HandleDLLPic := LoadLibrary(PChar(RessourcePic));
-    if HandleDLLPic > 32 then try
+    if HandleDLLPic > 32 then
+    try
       Picture.Bitmap.LoadFromResourceName(HandleDLLPic, ResName);
       Result := True;
     except
@@ -238,16 +255,20 @@ function Choisir(const Texte1, Texte2: string; Bouton: Integer): TModalResult;
 var
   w: Integer;
 begin
-  if not Bouton in [0..2] then begin
+  if not Bouton in [0..2] then
+  begin
     Result := 0; Exit;
   end;
-  with TFrmChoix.Create(Application) do try
+  with TFrmChoix.Create(Application) do
+  try
     w := Max(Canvas.TextWidth(Texte1), Canvas.TextWidth(Texte2));
-    with BtnChoix1 do begin
+    with BtnChoix1 do
+    begin
       Width := Max(ClientWidth, w + Left);
       Caption := Texte1;
     end;
-    with BtnChoix2 do begin
+    with BtnChoix2 do
+    begin
       Width := Max(ClientWidth, w + Left);
       Caption := Texte2;
     end;
@@ -271,16 +292,20 @@ var
 begin
   Texte1 := rsTransListeSimple;
   Texte2 := rsTransListeDetail;
-  if not Bouton in [0..2] then begin
+  if not Bouton in [0..2] then
+  begin
     Result := 0; Exit;
   end;
-  with TFrmChoixDetail.Create(Application) do try
+  with TFrmChoixDetail.Create(Application) do
+  try
     w := Max(Canvas.TextWidth(Texte1), Canvas.TextWidth(Texte2));
-    with BtnChoix1 do begin
+    with BtnChoix1 do
+    begin
       Width := Max(ClientWidth, w + Left);
       Caption := Texte1;
     end;
-    with BtnChoix2 do begin
+    with BtnChoix2 do
+    begin
       Width := Max(ClientWidth, w + Left);
       Caption := Texte2;
     end;
@@ -292,7 +317,8 @@ begin
     if bouton = 1 then BtnChoix1.Default := True;
     if bouton = 2 then BtnChoix2.Default := True;
     Result := ShowModal;
-    if Result = mrNo then begin
+    if Result = mrNo then
+    begin
       if cbScenario.Checked then Include(DetailsOptions, daoScenario);
       if cbDessins.Checked then Include(DetailsOptions, daoDessins);
       if cbCouleurs.Checked then Include(DetailsOptions, daoCouleurs);
@@ -304,15 +330,44 @@ begin
   end;
 end;
 
+function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption): TModalResult;
+begin
+  with TFrmChoixDetailSerie.Create(Application) do
+  try
+    CheckBox1.Visible := False;
+    MaxNiveauDetail := NiveauDetailMax;
+    Result := ShowModal;
+    if Result = mrOk then
+    begin
+      DetailSerieOption := TDetailSerieOption(LightComboCheck1.Value);
+    end;
+  finally
+    Free;
+  end;
+end;
+
 function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption; out PrevisionsManquants: Boolean): TModalResult;
 begin
+  with TFrmChoixDetailSerie.Create(Application) do
+  try
+    MaxNiveauDetail := NiveauDetailMax;
+    Result := ShowModal;
+    if Result = mrOk then
+    begin
+      DetailSerieOption := TDetailSerieOption(LightComboCheck1.Value);
+      PrevisionsManquants := CheckBox1.Checked;
+    end;
+  finally
+    Free;
+  end;
 end;
 
 function Convertisseur(Caller: TControl; var Value: Currency): Boolean;
 var
   p: TPoint;
 begin
-  with TFrmConvers.Create(nil) do try
+  with TFrmConvers.Create(nil) do
+  try
     Valeur := Value;
     p := Caller.ClientOrigin;
     Inc(p.y, Caller.Height);
@@ -352,3 +407,4 @@ begin
 end;
 
 end.
+

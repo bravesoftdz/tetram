@@ -105,6 +105,10 @@ HostApplication=
 Launcher=
 UseLauncher=0
 DebugCWD=
+[Language]
+ActiveLang=
+ProjectLang=
+RootDir=
 [Version Info]
 IncludeVerInfo=1
 AutoIncBuild=1
@@ -131,21 +135,17 @@ ProductName=BDtheque
 ProductVersion=1
 Comments=
 [Excluded Packages]
-c:\program files\borland\delphi7\Bin\dclite70.bpl=Environnement de traduction intégré Borland
-c:\program files\borland\delphi7\Bin\DCLIB70.bpl=Composants Accès données InterBase
-c:\program files\borland\delphi7\Bin\applet70.bpl=Paquet Applet Panneau de configuration Borland
+C:\Program Files\Borland\Delphi7\Bin\dclclxstd70.bpl=Composants Standard CLX Borland
 C:\WINDOWS\system32\ibevnt70.bpl=Composant d'alerte d'événement Borland Interbase
-c:\program files\borland\delphi7\Bin\dcl31w70.bpl=Composants compatibilité Delphi 1.0
-c:\program files\borland\delphi7\Bin\dclIntraweb_50_70.bpl=Paquet de conception Intraweb 5.0 pour Delphi 7
-c:\program files\borland\delphi7\bin\dclRave70.bpl=Paquet Rave Reports BE 5.0
 c:\program files\borland\delphi7\Projects\Bpl\SUISkinD7.bpl=Sunisoft SUISkin Engine
 C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTEE57.bpl=TeeChart 5 Components
 C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTEP57.bpl=TeeChart Pro 5 Components
-C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTQR57.bpl=TeeChart 5 for QuickReport
 C:\WINDOWS\system32\TeeImage57.bpl=TeeChart Pro Graphic Exporting formats
 C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTGL57.bpl=TeeChart 5 for OpenGL
+c:\program files\borland\delphi7\Bin\dcl31w70.bpl=Composants compatibilité Delphi 1.0
+c:\program files\borland\delphi7\Bin\dclclxdb70.bpl=Composants BD CLX Borland
+C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTQR57.bpl=TeeChart 5 for QuickReport
 c:\program files\borland\delphi7\Projects\Bpl\IBOARMURE.bpl=(sans titre)
-c:\program files\borland\delphi7\Bin\DBWEBXPRT.BPL=Paquet Expert Web Borland
 c:\program files\borland\delphi7\Projects\Bpl\IBO40XDT_D7.bpl=IB Objects TDataset
 c:\program files\borland\delphi7\Projects\Bpl\IBO40CDT_D7.bpl=IB Objects Core Components
 c:\program files\borland\delphi7\Projects\Bpl\IBO40EDT_D7.bpl=IB Objects Editors
@@ -155,6 +155,7 @@ c:\program files\borland\delphi7\Projects\Bpl\IBO40WSDT_D7.bpl=IBO 4 Web Snap Ex
 c:\program files\borland\delphi7\Projects\Bpl\IBO40WDT_D7.bpl=IB Objects Internet Extensions
 c:\program files\borland\delphi7\Projects\Bpl\IBO40VDT_D7.bpl=IB Objects Visual Controls
 c:\program files\borland\delphi7\Projects\Bpl\IBO40TDT_D7.bpl=IB Objects Tools Components
+c:\program files\borland\delphi7\Bin\DBWEBXPRT.BPL=Paquet Expert Web Borland
 C:\programmes\Composant\ArmureD7.bpl=ARMURE
 c:\program files\borland\delphi7\Bin\dcldss70.bpl=Composants Decision Cube Borland
 [HistoryLists\hlUnitAliases]
