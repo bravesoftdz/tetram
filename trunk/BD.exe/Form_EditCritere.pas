@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Fram_Boutons, StdCtrls, DBCtrls, Form_Recherche,
-  ActnList, DBEditLabeled, ComboCheck, ComCtrls;
+  ActnList, DBEditLabeled, ComboCheck, ComCtrls, LoadComplet;
 
 type
   TFrmEditCritere = class(TForm)
@@ -175,7 +175,7 @@ begin
   hg := THourGlass.Create;
   FRecherche := TFrmRecherche(Owner);
   FChampValeurs := TStringList.Create;
-  FCritere := TCritere.Create;
+  FCritere := TCritere.Create(nil);
   pt := FRecherche.ClientToScreen(Point((FRecherche.Width - Width) div 2, (FRecherche.Height - Height) div 2));
   SetBounds(pt.x, pt.y, Width, Height);
   wMin := signes.Width;
@@ -390,12 +390,13 @@ end;
 
 procedure TFrmEditCritere.FormDestroy(Sender: TObject);
 var
-  i: Integer;
+  i, j: Integer;
 begin
   champs.Items.BeginUpdate;
   try
-    for i := 0 to champs.Items.Count - 1 do
-      TChamp(champs.Items.Items[i].Data).Free;
+    for i := 0 to Pred(champs.Items.Count) do
+      for j := 0 to Pred(champs.Items[i].SubItems.Count) do
+        TChamp(champs.Items[i].SubItems[j].Data).Free;
   finally
     champs.Items.EndUpdate;
   end;

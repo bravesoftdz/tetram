@@ -256,7 +256,6 @@ object FrmRecherche: TFrmRecherche
         OnChange = TreeView1Change
         OnCollapsing = TreeView1Collapsing
         OnDblClick = ModifClick
-        OnDeletion = TreeView1Deletion
       end
     end
   end
@@ -302,7 +301,7 @@ object FrmRecherche: TFrmRecherche
   end
   object PopupMenu1: TPopupMenu
     Left = 256
-    Top = 336
+    Top = 344
     object Critre1: TMenuItem
       Caption = 'Crit'#232're'
       OnClick = Critre1Click

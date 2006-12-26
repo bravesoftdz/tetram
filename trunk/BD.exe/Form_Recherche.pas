@@ -5,27 +5,9 @@ interface
 uses
   SysUtils, Windows, Messages, Classes, Forms, Graphics, Controls, Menus, StdCtrls, Buttons, ComCtrls, ExtCtrls, ToolWin, Commun,
   CommonList, VirtualTrees, VirtualTree, ActnList, VDTButton, JvUIB, ComboCheck, ProceduresBDtk,
-  Frame_RechercheRapide;
+  Frame_RechercheRapide, LoadComplet;
 
 type
-  TCritere = class
-    // affichage
-    Champ, Test: string;
-    // sql
-    NomTable: string;
-    TestSQL: string;
-    // fenêtre
-    iChamp: Integer;
-    iSignes, iCritere2: Integer;
-    valeurText: string;
-
-    procedure Assign(S: TCritere);
-    procedure SaveToStream(Stream: TStream);
-    procedure LoadFromStream(Stream: TStream);
-  end;
-
-  TTypeRecherche = (trAucune, trSimple, trComplexe);
-
   TFrmRecherche = class(TForm, IImpressionApercu)
     PopupMenu1: TPopupMenu;
     Critre1: TMenuItem;
@@ -65,7 +47,6 @@ type
     procedure TreeView1Collapsing(Sender: TObject; Node: TTreeNode; var AllowCollapse: Boolean);
     procedure Critre1Click(Sender: TObject);
     procedure Groupedecritre1Click(Sender: TObject);
-    procedure TreeView1Deletion(Sender: TObject; Node: TTreeNode);
     procedure btnRechercheClick(Sender: TObject);
     procedure VTResultGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
     procedure VTResultPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
@@ -74,18 +55,17 @@ type
     procedure Edit2KeyPress(Sender: TObject; var Key: Char);
   private
     { Déclarations privées }
+    Recherche: TRecherche;
     FTypeRecherche: TTypeRecherche;
     procedure SetTypeRecherche(Value: TTypeRecherche);
     procedure ImpressionExecute(Sender: TObject);
     procedure ApercuExecute(Sender: TObject);
     function ImpressionUpdate: Boolean;
     function ApercuUpdate: Boolean;
+    procedure ReconstructLabels(ParentNode: TTreeNode);
   public
     { Déclarations publiques }
-    CurrentSQL: string;
     CritereSimple: TGUID;
-    ResultList: TListAlbumAdd;
-    ResultInfos: TStringList;
     property TypeRecherche: TTypeRecherche read FTypeRecherche write SetTypeRecherche;
     function ImpressionEnabled: Boolean;
     function TransChamps(const Champ: string): string;
@@ -97,78 +77,10 @@ type
 implementation
 
 uses
-  Textes, DM_Princ, TypeRec, Impression, Math, Form_EditCritere, UHistorique, Procedures, 
+  Textes, DM_Princ, TypeRec, Impression, Math, Form_EditCritere, UHistorique, Procedures,
   Main;
 
 {$R *.DFM}
-
-{ TCritere }
-
-procedure TCritere.Assign(S: TCritere);
-begin
-  Champ := S.Champ;
-  Test := S.Test;
-  NomTable := S.NomTable;
-  TestSQL := S.TestSQL;
-  iChamp := S.iChamp;
-  iSignes := S.iSignes;
-  iCritere2 := S.iCritere2;
-  valeurText := S.valeurText;
-end;
-
-procedure TCritere.LoadFromStream(Stream: TStream);
-
-  function ReadInteger: Integer;
-  begin
-    Stream.Read(Result, SizeOf(Integer));
-  end;
-
-  function ReadString: string;
-  var
-    l: Integer;
-  begin
-    l := ReadInteger;
-    SetLength(Result, l);
-    Stream.Read(Result[1], l);
-  end;
-
-begin
-  Champ := ReadString;
-  Test := ReadString;
-  NomTable := ReadString;
-  TestSQL := ReadString;
-  iChamp := ReadInteger;
-  iSignes := ReadInteger;
-  iCritere2 := ReadInteger;
-  valeurText := ReadString;
-end;
-
-procedure TCritere.SaveToStream(Stream: TStream);
-
-  procedure WriteInteger(Value: Integer);
-  begin
-    Stream.Write(Value, SizeOf(Integer));
-  end;
-
-  procedure WriteString(const Value: string);
-  var
-    l: Integer;
-  begin
-    l := Length(Value);
-    WriteInteger(l);
-    Stream.WriteBuffer(Value[1], l);
-  end;
-
-begin
-  WriteString(Champ);
-  WriteString(Test);
-  WriteString(NomTable);
-  WriteString(TestSQL);
-  WriteInteger(iChamp);
-  WriteInteger(iSignes);
-  WriteInteger(iCritere2);
-  WriteString(valeurText);
-end;
 
 var
   FSortColumn: Integer;
@@ -294,26 +206,31 @@ end;
 procedure TFrmRecherche.FormCreate(Sender: TObject);
 var
   hg: IHourGlass;
+  i: TRechercheSimple;
 begin
   hg := THourGlass.Create;
   PrepareLV(Self);
+
+  Recherche := TRecherche.Create;
+
+  LightComboCheck1.Items.Clear;
+  for i := Low(TRechercheSimple) to High(TRechercheSimple) do
+    LightComboCheck1.Items.Add(TLblRechercheSimple[i]).Valeur := Ord(i);
   LightComboCheck1.Value := 0;
   ChargeImage(VTPersonnes.Background, 'FONDVT');
   ChargeImage(VTResult.Background, 'FONDVT');
   FrameRechercheRapide1.VirtualTreeView := vtPersonnes;
   FrameRechercheRapide1.ShowNewButton := False;
 
-  ResultList := TListAlbumAdd.Create;
-  ResultInfos := TStringList.Create;
   PageControl2.ActivePageIndex := 0;
 
   VTResult.TreeOptions.PaintOptions := VTResult.TreeOptions.PaintOptions - [toShowButtons, toShowDropmark, toShowRoot];
 
   btnRecherche.Font.Style := btnRecherche.Font.Style + [fsBold];
   VTPersonnes.Mode := vmPersonnes;
-  methode.ItemIndex := 0;
-  TypeRecherche := trAucune;
-  Groupedecritre1.Click;
+  TypeRecherche := Recherche.TypeRecherche;
+  TreeView1.Items.AddChild(nil, 'Critères').Data := Recherche.Criteres;
+  methode.ItemIndex := Integer(Recherche.Criteres.GroupOption);
 end;
 
 procedure TFrmRecherche.ModifClick(Sender: TObject);
@@ -324,13 +241,14 @@ begin
   ToModif := TreeView1.Selected;
   if not (Assigned(ToModif) and (Integer(ToModif.Data) > 0)) then Exit;
   p := ToModif.Data;
-  with TFrmEditCritere.Create(Self) do begin
+  with TFrmEditCritere.Create(Self) do
+  begin
     try
       Critere := p;
       if ShowModal <> mrOk then Exit;
       p.Assign(Critere);
-      ToModif.Text := p.Champ + ' ' + p.Test;
       if TypeRecherche = trComplexe then TypeRecherche := trAucune;
+      ReconstructLabels(ToModif.Parent);
     finally
       Free;
     end;
@@ -341,7 +259,8 @@ procedure TFrmRecherche.plusClick(Sender: TObject);
 var
   p: TPoint;
 begin
-  if Assigned(TreeView1.Selected) then begin
+  if Assigned(TreeView1.Selected) then
+  begin
     p := plus.ClientToScreen(Point(0, plus.Height));
     PopupMenu1.Popup(p.x, p.y);
   end
@@ -350,147 +269,62 @@ begin
 end;
 
 procedure TFrmRecherche.moinsClick(Sender: TObject);
+var
+  p: TBaseCritere;
+  ParentNode: TTreeNode;
 begin
   if TypeRecherche = trComplexe then TypeRecherche := trAucune;
   if Assigned(TreeView1.Selected) and (TreeView1.Selected <> TreeView1.Items.GetFirstNode) then
+  begin
+    p := TreeView1.Selected.Data;
+    ParentNode := TreeView1.Selected.Parent;
     TreeView1.Selected.Delete;
+    Recherche.Delete(p);
+    ReconstructLabels(ParentNode);
+  end;
 end;
 
 procedure TFrmRecherche.FormDestroy(Sender: TObject);
 begin
   VTResult.RootNodeCount := 0;
   lbResult.Caption := '';
-  ResultList.Free;
-  ResultInfos.Free;
-
-  if Bool(TreeView1.Items.Count) then
-    TreeView1.Items[0].Delete;
+  Recherche.Free;
 end;
 
 procedure TFrmRecherche.RechPrint(Sender: TObject);
-var
-  Criteres: TStringList;
-
-  procedure ProcessTreeNode(Node: TTreeNode; prefix: string = '');
-  var
-    i: Integer;
-    p: TCritere;
-    s: string;
-  begin
-    if Integer(Node.Data) > 0 then begin
-      s := IntToStr(Node.Level - 1) + '|';
-      p := Node.Data;
-      Criteres.Add(s + prefix + p.Champ + '|' + p.Test);
-    end
-    else begin
-      if prefix <> '' then Criteres.Add(IntToStr(Node.Level - 1) + '|' + prefix + '| ');
-      for i := 0 to Node.Count - 1 do begin
-        if i > 0 then
-          ProcessTreeNode(Node[i], Node.Text + ' ')
-        else
-          ProcessTreeNode(Node[i]);
-      end;
-    end;
-  end;
-
 begin
-  Criteres := TStringList.Create;
-  try
-    case TypeRecherche of
-      trSimple: begin
-          vtPersonnes.CurrentValue := CritereSimple;
-          Criteres.Add(LightComboCheck1.Caption);
-          Criteres.Add(vtPersonnes.Caption);
-        end;
-      trComplexe:
-        ProcessTreeNode(TreeView1.Items[0]);
-    end;
-    ImpressionRecherche(ResultList, ResultInfos, Criteres, TypeRecherche, TComponent(Sender).Tag = 1);
-  finally
-    Criteres.Free;
-  end;
+  ImpressionRecherche(Recherche, TComponent(Sender).Tag = 1);
 end;
 
 procedure TFrmRecherche.SpeedButton1Click(Sender: TObject);
-const
-  Proc: array[0..4] of string = ('ALBUMS_BY_AUTEUR(?, NULL)',
-    'ALBUMS_BY_SERIE(?, NULL)',
-    'ALBUMS_BY_EDITEUR(?, NULL)',
-    'ALBUMS_BY_GENRE(?, NULL)',
-    'ALBUMS_BY_COLLECTION(?, NULL)');
-var
-  q: TJvUIBQuery;
-  s: string;
-  oldID_Album: TGUID;
-  oldIndex: Integer;
 begin
-  if not IsEqualGUID(VTPersonnes.CurrentValue, GUID_NULL) then begin
+  if not IsEqualGUID(VTPersonnes.CurrentValue, GUID_NULL) then
+  begin
     CritereSimple := VTPersonnes.CurrentValue;
     PageControl2.ActivePageIndex := 0;
     VTResult.RootNodeCount := 0;
     lbResult.Caption := '';
-    ResultList.Clear;
-    ResultInfos.Clear;
-    q := TJvUIBQuery.Create(nil);
-    with q do try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'SELECT * FROM ' + Proc[LightComboCheck1.Value];
-      Params.AsString[0] := GUIDToString(CritereSimple);
-      Open;
-      oldID_Album := GUID_NULL;
-      oldIndex := -1;
-      s := '';
-      while not EOF do begin
-        if isEqualGUID(oldID_Album, StringToGUID(Fields.ByNameAsString['ID_Album'])) and (oldIndex <> -1) then begin
-          if LightComboCheck1.Value = 0 then begin
-            s := ResultInfos[oldIndex];
-            case Fields.ByNameAsInteger['Metier'] of
-              0: AjoutString(s, 'Scenariste', ', ');
-              1: AjoutString(s, 'Dessinateur', ', ');
-              2: AjoutString(s, 'Coloriste', ', ');
-            end;
-            ResultInfos[oldIndex] := s;
-          end;
-        end
-        else begin
-          ResultList.AddQ(q);
-          if LightComboCheck1.Value = 0 then
-            case Fields.ByNameAsInteger['Metier'] of
-              0: oldIndex := ResultInfos.Add('Scenariste');
-              1: oldIndex := ResultInfos.Add('Dessinateur');
-              2: oldIndex := ResultInfos.Add('Coloriste');
-            end
-          else
-            ResultInfos.Add('');
-        end;
-        oldID_Album := StringToGUID(Fields.ByNameAsString['ID_Album']);
-        Next;
-      end;
-      if Bool(ResultList.Count) then
-        TypeRecherche := trSimple
-      else
-        TypeRecherche := trAucune;
-      CurrentSQL := SQL.Text;
-      Historique.EditConsultation(CritereSimple, LightComboCheck1.Value);
-      VTResult.RootNodeCount := ResultList.Count;
-      lbResult.Caption := IntToStr(VTResult.RootNodeCount) + ' résultat(s) trouvé(s)';
-    finally
-      Transaction.Free;
-      Free;
-    end;
+
+    Recherche.Fill(TRechercheSimple(LightComboCheck1.Value), vtPersonnes.CurrentValue, vtPersonnes.Caption);
+
+    TypeRecherche := Recherche.TypeRecherche;
+
+    Historique.EditConsultation(CritereSimple, LightComboCheck1.Value);
+    VTResult.RootNodeCount := Recherche.Resultats.Count;
+    lbResult.Caption := IntToStr(VTResult.RootNodeCount) + ' résultat(s) trouvé(s)';
   end;
 end;
 
 procedure TFrmRecherche.VTResultDblClick(Sender: TObject);
 begin
-  if Assigned(VTResult.FocusedNode) then Historique.AddWaiting(fcAlbum, ResultList[VTResult.FocusedNode.Index].ID);
+  if Assigned(VTResult.FocusedNode) then Historique.AddWaiting(fcAlbum, Recherche.Resultats[VTResult.FocusedNode.Index].ID);
 end;
 
 procedure TFrmRecherche.methodeChange(Sender: TObject);
 begin
   if (TypeRecherche = trComplexe) then TypeRecherche := trAucune;
-  TreeView1.Selected.Data := pointer(-methode.ItemIndex);
-  TreeView1.Selected.Text := methode.Text;
+  TGroupCritere(TreeView1.Selected.Parent.Data).GroupOption := TGroupOption(methode.ItemIndex);
+  ReconstructLabels(TreeView1.Selected.Parent);
 end;
 
 function TFrmRecherche.ImpressionEnabled: Boolean;
@@ -500,10 +334,10 @@ end;
 
 procedure TFrmRecherche.TreeView1Change(Sender: TObject; Node: TTreeNode);
 begin
-  Modif.Enabled := Assigned(Node) and (Integer(Node.Data) > 0);
+  Modif.Enabled := Assigned(Node) and (TBaseCritere(Node.Data) is TCritere);
   moins.Enabled := Assigned(Node);
-  methode.Visible := Assigned(Node) and (Integer(Node.Data) < 1);
-  if methode.Visible then methode.ItemIndex := -Integer(Node.Data);
+  methode.Visible := Assigned(Node) and Assigned(Node.Parent) and (TBaseCritere(Node.Parent.Data) is TGroupCritere);
+  if methode.Visible then methode.ItemIndex := Integer(TGroupCritere(Node.Parent.Data).GroupOption);
 end;
 
 procedure TFrmRecherche.TreeView1Collapsing(Sender: TObject; Node: TTreeNode; var AllowCollapse: Boolean);
@@ -517,18 +351,21 @@ var
   ParentNode: TTreeNode;
 begin
   if not Assigned(TreeView1.Selected) then Exit;
-  with TFrmEditCritere.Create(Self) do begin
+  with TFrmEditCritere.Create(Self) do
+  begin
     try
       if ShowModal <> mrOk then Exit;
-      p := TCritere.Create;
-      p.Assign(Critere);
-      if Integer(TreeView1.Selected.Data) < 1 then
+      if TBaseCritere(TreeView1.Selected.Data) is TGroupCritere then
         ParentNode := TreeView1.Selected
       else
         ParentNode := TreeView1.Selected.Parent;
-      with TreeView1.Items.AddChild(ParentNode, '') do begin
+
+      p := Recherche.AddCritere(TGroupCritere(ParentNode.Data));
+      p.Assign(Critere);
+      with TreeView1.Items.AddChild(ParentNode, '') do
+      begin
         Data := p;
-        Text := p.Champ + ' ' + p.Test;
+        ReconstructLabels(ParentNode);
         Selected := True;
       end;
       if TypeRecherche = trComplexe then TypeRecherche := trAucune;
@@ -544,158 +381,42 @@ var
 begin
   if not Assigned(TreeView1.Selected) then
     ParentNode := nil
-  else if Integer(TreeView1.Selected.Data) < 1 then
+  else if TBaseCritere(TreeView1.Selected.Data) is TGroupCritere then
     ParentNode := TreeView1.Selected
   else
     ParentNode := TreeView1.Selected.Parent;
-  with TreeView1.Items.AddChild(ParentNode, methode.Items[0]) do begin
-    Data := pointer(0);
-    Selected := True;
-  end;
-end;
 
-procedure TFrmRecherche.TreeView1Deletion(Sender: TObject; Node: TTreeNode);
-begin
-  // Node.Data = -1 est possible mais donc à libérer
-  if Integer(Node.Data) > 0 then begin
-    TCritere(Node.Data).Free;
-    Node.Data := nil;
+  with TreeView1.Items.AddChild(ParentNode, methode.Items[0]) do
+  begin
+    if Assigned(ParentNode) then
+    begin
+      Data := Recherche.AddGroup(TGroupCritere(ParentNode.Data));
+      ReconstructLabels(ParentNode);
+    end
+    else
+      Data := Recherche.AddGroup(nil);
+    Selected := True;
   end;
 end;
 
 procedure TFrmRecherche.btnRechercheClick(Sender: TObject);
 var
-  slFrom, slWhere: TStringList;
   RechStream: TMemoryStream;
-
-  function ProcessTables: string;
-  var
-    i: Integer;
-  begin
-    // Tables possibles:
-    // ALBUMS
-    // SERIES
-    // EDITIONS
-    // GENRESERIES
-
-    Result := 'ALBUMS INNER JOIN EDITIONS ON ALBUMS.ID_Album = EDITIONS.ID_Album LEFT JOIN SERIES ON ALBUMS.ID_Serie = SERIES.ID_Serie';
-    slFrom.Delete(slFrom.IndexOf('ALBUMS'));
-    slFrom.Delete(slFrom.IndexOf('SERIES'));
-    slFrom.Delete(slFrom.IndexOf('EDITIONS'));
-    i := slFrom.IndexOf('GENRESERIES');
-    if i <> -1 then begin
-      Result := Result + ' LEFT OUTER JOIN GENRESERIES ON GENRESERIES.ID_Serie = ALBUMS.ID_Serie';
-      slFrom.Delete(i);
-    end;
-  end;
-
-  function ProcessCritere(ItemCritere: TTreeNode): string;
-
-    procedure WriteInteger(Value: Integer);
-    begin
-      RechStream.Write(Value, SizeOf(Integer));
-    end;
-
-    procedure WriteString(const Value: string);
-    var
-      l: Integer;
-    begin
-      l := Length(Value);
-      WriteInteger(l);
-      RechStream.WriteBuffer(Value[1], l);
-    end;
-
-    procedure WriteNode(Node: TTreeNode);
-    begin
-      WriteInteger(Node.Level);
-      WriteInteger(Integer(Node.Data));
-      WriteString(Node.Text);
-      if Integer(Node.Data) > 0 then
-        TCritere(Node.Data).SaveToStream(RechStream);
-    end;
-
-  var
-    p: TCritere;
-    i: Integer;
-    sBool: string;
-  begin
-    Result := '';
-    WriteNode(ItemCritere);
-    if Integer(ItemCritere.Data) = -1 then
-      sBool := ' OR '
-    else
-      sBool := ' AND ';
-    for i := 0 to ItemCritere.Count - 1 do begin
-      if Integer(ItemCritere.Item[i].Data) > 0 then begin
-        WriteNode(ItemCritere.Item[i]);
-        p := ItemCritere.Item[i].Data;
-        if Result = '' then
-          Result := '(' + p.TestSQL + ')'
-        else
-          Result := Result + sBool + '(' + p.TestSQL + ')';
-        slFrom.Add(p.NomTable);
-      end
-      else begin
-        if Result = '' then
-          Result := '(' + ProcessCritere(ItemCritere.Item[i]) + ')'
-        else
-          Result := Result + sBool + '(' + ProcessCritere(ItemCritere.Item[i]) + ')';
-      end;
-    end;
-  end;
-
-var
-  q: TJvUIBQuery;
-  sWhere: string;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
   VTResult.RootNodeCount := 0;
   lbResult.Caption := '';
-  ResultList.Clear;
-  ResultInfos.Clear;
-  q := TJvUIBQuery.Create(Self);
-  slFrom := TStringList.Create;
-  slFrom.Sorted := True;
-  slFrom.Duplicates := dupIgnore;
-  slFrom.Delimiter := ',';
-  slWhere := TStringList.Create;
   RechStream := TMemoryStream.Create;
-  with q do try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT DISTINCT ALBUMS.ID_Album, ALBUMS.TITREALBUM, ALBUMS.TOME, ALBUMS.TOMEDEBUT, ALBUMS.TOMEFIN, ALBUMS.HORSSERIE, ALBUMS.INTEGRALE, ALBUMS.MOISPARUTION, ALBUMS.ANNEEPARUTION, ALBUMS.ID_Serie, SERIES.TITRESERIE';
-
-    slFrom.Add('ALBUMS');
-    slFrom.Add('SERIES');
-    slFrom.Add('EDITIONS');
-    RechStream.Size := 0;
-    sWhere := ProcessCritere(TreeView1.Items[0]);
-    SQL.Add('FROM ' + ProcessTables);
-
-    if sWhere <> '' then SQL.Add('WHERE ' + sWhere);
-
-    SQL.Add('ORDER BY ALBUMS.UPPERTITREALBUM, SERIES.UPPERTITRESERIE, ALBUMS.HORSSERIE NULLS FIRST, ALBUMS.INTEGRALE NULLS FIRST,');
-    SQL.Add('ALBUMS.TOME NULLS FIRST, ALBUMS.TOMEDEBUT NULLS FIRST, ALBUMS.TOMEFIN NULLS FIRST, ALBUMS.ANNEEPARUTION NULLS FIRST, ALBUMS.MOISPARUTION NULLS FIRST');
-
-    Open;
-    while not EOF do begin
-      ResultList.AddQ(q);
-      Next;
-    end;
-    if Bool(ResultList) then
-      TypeRecherche := trComplexe
-    else
-      TypeRecherche := trAucune;
-    CurrentSQL := SQL.Text;
+  try
+    Recherche.Fill;
+    TypeRecherche := Recherche.TypeRecherche;
+    Recherche.SaveToStream(RechStream);
     Historique.EditConsultation(RechStream);
   finally
-    Transaction.Free;
-    Free;
-    slFrom.Free;
-    slWhere.Free;
     RechStream.Free;
   end;
-  VTResult.RootNodeCount := ResultList.Count;
+  VTResult.RootNodeCount := Recherche.Resultats.Count;
   lbResult.Caption := IntToStr(VTResult.RootNodeCount) + ' résultat(s) trouvé(s)';
 end;
 
@@ -704,13 +425,13 @@ begin
   CellText := '';
   if TextType = ttNormal then
     case Column of
-      0: CellText := FormatTitre(ResultList[Node.Index].Titre);
-      1: CellText := NonZero(IntToStr(ResultList[Node.Index].Tome));
-      2: CellText := FormatTitre(ResultList[Node.Index].Serie);
+      0: CellText := FormatTitre(Recherche.Resultats[Node.Index].Titre);
+      1: CellText := NonZero(IntToStr(Recherche.Resultats[Node.Index].Tome));
+      2: CellText := FormatTitre(Recherche.Resultats[Node.Index].Serie);
     end
-  else if (TypeRecherche = trSimple) and Bool(ResultInfos.Count) then
+  else if (Recherche.TypeRecherche = trSimple) and (Recherche.ResultatsInfos.Count > 0) then
     case Column of
-      0: AjoutString(CellText, ResultInfos[Node.Index], '', '(', ')');
+      0: AjoutString(CellText, Recherche.ResultatsInfos[Node.Index], '', '(', ')');
     end;
 end;
 
@@ -724,7 +445,8 @@ begin
   case FSortColumn of
     0: Result := CompareText(TAlbum(Item1).Titre, TAlbum(Item2).Titre);
     1: Result := CompareValue(TAlbum(Item1).Tome, TAlbum(Item2).Tome);
-    2: begin
+    2:
+      begin
         Result := CompareText(TAlbum(Item1).Serie, TAlbum(Item2).Serie);
         if Result = 0 then
           Result := CompareValue(TAlbum(Item1).Tome, TAlbum(Item2).Tome);
@@ -737,6 +459,9 @@ end;
 
 procedure TFrmRecherche.VTResultHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 begin
+  // attention: resultatsinfos n'est pas trié!!!!
+  Exit;
+
   if Column <> FSortColumn then
     FSortDirection := sdAscending
   else if FSortDirection = sdAscending then
@@ -750,7 +475,7 @@ begin
   else
     VTResult.Header.Columns[FSortColumn].ImageIndex := 1;
   VTResult.Header.SortColumn := FSortColumn;
-  ResultList.Sort(@ResultListCompare);
+  Recherche.Resultats.Sort(@ResultListCompare);
   VTResult.ReinitNode(VTResult.RootNode, True);
   VTResult.Invalidate;
   VTResult.Refresh;
@@ -793,7 +518,8 @@ end;
 
 procedure TFrmRecherche.Edit2KeyPress(Sender: TObject; var Key: Char);
 begin
-  if Key = #13 then begin
+  if Key = #13 then
+  begin
     Key := #0;
     vtPersonnes.OnDblClick(nil);
   end;
@@ -801,63 +527,53 @@ end;
 
 procedure TFrmRecherche.LoadRechFromStream(Stream: TStream);
 
-  function ReadInteger: Integer;
-  begin
-    Stream.Read(Result, SizeOf(Integer));
-  end;
-
-  function ReadString: string;
+  procedure Process(Critere: TGroupCritere; ParentNode: TTreeNode = nil);
   var
-    l: Integer;
+    i: Integer;
+    ANode: TTreeNode;
+    aCritere: TBaseCritere;
   begin
-    l := ReadInteger;
-    SetLength(Result, l);
-    Stream.Read(Result[1], l);
-  end;
-
-  function CreateNode(nodeType: Integer; ParentNode: TTreeNode; const Text: string): TTreeNode;
-  begin
-    Result := TreeView1.Items.AddChild(ParentNode, Text);
-    Result.Data := Pointer(nodeType);
-    if nodeType > 0 then begin
-      Result.Data := TCritere.Create;
-      TCritere(Result.Data).LoadFromStream(Stream);
+    ANode := TreeView1.Items.AddChild(ParentNode, methode.Items[Integer(Critere.GroupOption)]);
+    ANode.Data := Critere;
+    for i := 0 to Pred(Critere.SousCriteres.Count) do
+    begin
+      aCritere := Critere.SousCriteres[i];
+      if aCritere is TGroupCritere then
+        Process(aCritere as TGroupCritere, ANode)
+      else
+        TreeView1.Items.AddChild(ANode, TCritere(aCritere).Champ + ' ' + TCritere(aCritere).Test).Data := aCritere;
     end;
+    ReconstructLabels(ANode);
   end;
 
-var
-  lvl, nodeType: Integer;
-  str: string;
-  ANode, NextNode: TTreeNode;
 begin
-  Stream.Position := 0;
+  Recherche.LoadFromStream(Stream);
+
   TreeView1.Items.BeginUpdate;
   try
     TreeView1.Items.Clear;
-
-    ANode := nil;
-    while Stream.Position < Stream.Size do begin
-      lvl := ReadInteger;
-      nodeType := ReadInteger;
-      str := ReadString;
-      if ANode = nil then
-        ANode := CreateNode(nodeType, nil, str)
-      else if ANode.Level = lvl then
-        ANode := CreateNode(nodeType, ANode.Parent, str)
-      else if ANode.Level = (lvl - 1) then
-        ANode := CreateNode(nodeType, ANode, str)
-      else if ANode.Level > lvl then
-      begin
-        NextNode := ANode.Parent;
-        while NextNode.Level > lvl do
-          NextNode := NextNode.Parent;
-        ANode := CreateNode(nodeType, NextNode.Parent, str);
-      end;
-    end;
+    Process(Recherche.Criteres);
     TreeView1.Items[0].Expand(True);
   finally
     TreeView1.Items.EndUpdate;
   end;
+end;
+
+procedure TFrmRecherche.ReconstructLabels(ParentNode: TTreeNode);
+var
+  i: Integer;
+begin
+  with ParentNode do
+    for i := 0 to Count - 1 do
+      with Item[i] do
+        if TObject(Data) is TGroupCritere then
+          Text := methode.Text + '...'
+        else
+          with TCritere(Data) do
+            if i = 0 then
+              Text := Champ + ' ' + Test
+            else
+              Text := methode.Text + ' ' + Champ + ' ' + Test;
 end;
 
 end.

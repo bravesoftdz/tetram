@@ -22,7 +22,7 @@ procedure ImpressionFicheParaBD(const Reference: TGUID; Previsualisation: Boolea
 procedure ImpressionFicheEmprunteur(const Reference: TGUID; Previsualisation: Boolean);
 procedure ImpressionEmpruntsEmprunteur(const Reference: TGUID; Previsualisation: Boolean);
 
-procedure ImpressionRecherche(Resultat: TList; ResultatInfos, Criteres: TStringList; TypeRecherche: TTypeRecherche; Previsualisation: Boolean);
+procedure ImpressionRecherche(Recherche: TRecherche; Previsualisation: Boolean);
 procedure ImpressionCouvertureAlbum(const Reference, ID_Couverture: TGUID; Previsualisation: Boolean);
 procedure ImpressionImageParaBD(const Reference: TGUID; Previsualisation: Boolean);
 
@@ -54,8 +54,18 @@ begin
 end;
 
 procedure ImprimeEdition(Prn: TPrintObject; Edition: TEditionComplete; fWaiting: IWaiting);
+const
+  // en mm
+  ThumbWidth = 60;
+  ThumbHeigth = 60;
+  ThumbInterval = 10;
+
 var
   s: string;
+  nbImageHorz, numCol, i: Integer;
+  Repositionne, ImageDessinee: Boolean;
+  ms: TStream;
+  jpg: TJpegImage;
 begin
   Prn.Columns.Clear;
   Prn.CreateColumn1(0, 10, 30, taRightJustify, Prn.Font.Name, 12, [fsBold]);
@@ -122,6 +132,49 @@ begin
     Prn.WriteLineColumn(0, -1, rsTransNotes + ':');
     Prn.WriteColumn(7, -1, s);
     Prn.NextLine;
+  end;
+
+  nbImageHorz := Prn.MmsToPixelsHorizontal(Prn.Detail.Width + ThumbInterval) div (ThumbWidth + ThumbInterval);
+  if Utilisateur.Options.FicheAlbumWithCouverture and (nbImageHorz > 0) then // si nbImageHorz = 0 alors on n'a pas assez de place pour mettre les images
+  begin
+    numCol := 1;
+    Repositionne := False;
+    ImageDessinee := False;
+
+    for i := 0 to Pred(Edition.Couvertures.Count) do
+    begin
+      fWaiting.ShowProgression(rsTransImage + '...', epNext);
+      ms := GetCouvertureStream(False, TCouverture(Edition.Couvertures[i]).ID, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60), Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
+      if Assigned(ms) then
+      try
+        if not Repositionne then Prn.SetYPosition(Prn.GetYPosition + ThumbInterval);
+
+        if Prn.MmsToPixelsVertical(Prn.Detail.Top + Prn.Detail.Height - Prn.GetYPosition) < ThumbHeigth then
+          Prn.NewPage;
+
+        fWaiting.ShowProgression(rsTransImage + '...', epNext);
+        jpg := TJPEGImage.Create;
+        try
+          jpg.LoadFromStream(ms);
+          Prn.Draw(Prn.Detail.Left + (ThumbWidth + ThumbInterval) * (numCol - 1), Prn.GetYPosition, jpg);
+          Repositionne := True;
+          ImageDessinee := True;
+          Inc(numCol);
+          if numCol > nbImageHorz then
+          begin
+            numCol := 1;
+            Prn.SetYPosition(Prn.GetYPosition + ThumbHeigth);
+            Repositionne := False;
+          end;
+        finally
+          FreeAndNil(jpg);
+        end;
+      finally
+        FreeAndNil(ms);
+      end;
+    end;
+    if Repositionne then Prn.SetYPosition(Prn.GetYPosition + ThumbHeigth);
+    if ImageDessinee then Prn.SetYPosition(Prn.GetYPosition + ThumbInterval);
   end;
 end;
 
@@ -587,17 +640,12 @@ var
   op: Integer;
   Album: TAlbumComplet;
   Edition: TEditionComplete;
-  ms: TStream;
-  jpg: TJPEGImage;
   fWaiting: IWaiting;
-  MinTop: Extended;
   Prn: TPrintObject;
   DetailsOptions: TDetailSerieOption;
 begin
   if IsEqualGUID(Reference, GUID_NULL) then Exit;
-  if not IsEqualGUID(ID_Edition, GUID_NULL) then
-    DetailsOptions := dsoAlbumsDetails
-  else if ChoisirDetailSerie(dsoAlbumsDetails, DetailsOptions) = mrCancel then
+  if ChoisirDetailSerie(dsoAlbumsDetails, DetailsOptions) = mrCancel then
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 9);
@@ -611,33 +659,6 @@ begin
       PreparePrintObject(Prn, Previsualisation, rsTransFiche);
 
       ImprimeAlbum(Prn, Album, DetailsOptions, fWaiting);
-
-      if Utilisateur.Options.FicheAlbumWithCouverture and Assigned(Edition) then
-      begin
-        MinTop := Prn.GetYPosition;
-        Prn.SetTopOfPage;
-        if (Edition.Couvertures.Count > 0) and (TCouverture(Edition.Couvertures[0]).Categorie = 0) then
-        begin
-          fWaiting.ShowProgression(rsTransImage + '...', epNext);
-          ms := GetCouvertureStream(False, TCouverture(Edition.Couvertures[0]).ID, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60), Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
-          if Assigned(ms) then
-          try
-            fWaiting.ShowProgression(rsTransImage + '...', epNext);
-            jpg := TJPEGImage.Create;
-            try
-              jpg.LoadFromStream(ms);
-              Prn.Draw(Prn.Detail.Left + Prn.Detail.Width - Prn.PixelsToMmsHorizontal(jpg.Width),
-                Prn.Detail.Top,
-                jpg);
-            finally
-              FreeAndNil(jpg);
-            end;
-          finally
-            FreeAndNil(ms);
-          end;
-        end;
-        Prn.SetYPosition(MinTop);
-      end;
 
       if Assigned(Edition) then
         ImprimeEdition(Prn, Edition, fWaiting);
@@ -1346,7 +1367,7 @@ begin
   end;
 end;
 
-procedure ImpressionRecherche(Resultat: TList; ResultatInfos, Criteres: TStringList; TypeRecherche: TTypeRecherche; Previsualisation: Boolean);
+procedure ImpressionRecherche(Recherche: TRecherche; Previsualisation: Boolean);
 var
   col: Single;
   liste: TModalResult;
@@ -1360,14 +1381,50 @@ var
   DetailsOptions: TDetailAlbumOptions;
   fWaiting: IWaiting;
   Prn: TPrintObject;
+  Criteres: TStringList;
+
+  procedure ProcessCritere(aCritere: TBaseCritere; prefix: string = '');
+  var
+    i: Integer;
+    s: string;
+  begin
+    if aCritere is TCritere then
+    begin
+      s := IntToStr(aCritere.Level - 1) + '|';
+      Criteres.Add(s + prefix + TCritere(aCritere).Champ + '|' + TCritere(aCritere).Test);
+    end
+    else
+    begin
+      if prefix <> '' then Criteres.Add(IntToStr(aCritere.Level - 1) + '|' + prefix + '| ');
+      for i := 0 to TGroupCritere(aCritere).SousCriteres.Count - 1 do
+      begin
+        if i > 0 then
+          ProcessCritere(TGroupCritere(aCritere).SousCriteres[i], TLblGroupOption[TGroupCritere(aCritere).GroupOption] + ' ')
+        else
+          ProcessCritere(TGroupCritere(aCritere).SousCriteres[i]);
+      end;
+    end;
+  end;
+
 begin
   liste := ChoisirDetailAlbum(1, DetailsOptions);
   if liste = mrCancel then Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig + '...', 0, 1);
+  Criteres := TStringList.Create;
   Source := TJvUIBQuery.Create(nil);
   Equipe := TJvUIBQuery.Create(nil);
   try
+    case Recherche.TypeRecherche of
+      trSimple:
+        begin
+          Criteres.Add(TLblRechercheSimple[Recherche.RechercheSimple]);
+          Criteres.Add(Recherche.FLibelle);
+        end;
+      trComplexe:
+        ProcessCritere(Recherche.Criteres);
+    end;
+
     Prn := TPrintObject.Create(Fond);
     try
       Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -1385,7 +1442,7 @@ begin
 
       Prn.SetHeaderDimensions1(-1, -1, -1, 30, False, 0, clWhite);
       Prn.SetHeaderInformation1(0, 5, rsResultatRecherche, taCenter, Prn.Font.Name, 24, [fsBold]);
-      Prn.SetHeaderInformation1(1, -1, IntToStr(Resultat.Count) + ' ' + rsTransAlbums, taCenter, Prn.Font.Name, 12, []);
+      Prn.SetHeaderInformation1(1, -1, IntToStr(Recherche.Resultats.Count) + ' ' + rsTransAlbums, taCenter, Prn.Font.Name, 12, []);
 
       Prn.CreateColumn1(0, 15, 15, taLeftJustify, Prn.Font.Name, 12, []);
       Prn.CreateColumn1(1, 30, -1, taLeftJustify, Prn.Font.Name, 12, []);
@@ -1396,7 +1453,7 @@ begin
 
       Prn.WriteLineColumn(2, -2, 'Critères:');
       Prn.NextLine;
-      case TypeRecherche of
+      case Recherche.TypeRecherche of
         trSimple:
           begin
             Prn.WriteLineColumn(0, -1, 'Type de recherche:');
@@ -1439,18 +1496,18 @@ begin
       end;
 
       Prn.NewLines(2);
-      Prn.WriteLineColumn(2, -1, Format('Résultats: (%d)', [Resultat.Count]));
+      Prn.WriteLineColumn(2, -1, Format('Résultats: (%d)', [Recherche.Resultats.Count]));
       Prn.NextLine;
-      fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 0, Resultat.Count + 1);
+      fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 0, Recherche.Resultats.Count + 1);
       if (liste = mrNo) then
       begin
         Prn.Columns[0].Font.Style := [fsBold];
         Prn.Columns[1].Font.Style := Prn.Columns[0].Font.Style;
       end;
       SautLigne := True;
-      for i := 0 to Resultat.Count - 1 do
+      for i := 0 to Recherche.Resultats.Count - 1 do
       begin
-        PAl := Resultat[i];
+        PAl := Recherche.Resultats[i];
         if liste = mrNo then
         begin
           Sujet := '';
@@ -1516,11 +1573,11 @@ begin
           SautLigne := False;
         end;
         Prn.WriteLineColumn(0, IIf(SautLigne, -1, -2), '#' + IntToStr(i + 1));
-        case TypeRecherche of
+        case Recherche.TypeRecherche of
           trSimple:
             begin
               s := PAl.ChaineAffichage;
-              AjoutString(s, ResultatInfos[i], ' ', '(', ')');
+              AjoutString(s, Recherche.ResultatsInfos[i], ' ', '(', ')');
               Prn.WriteLineColumn(1, -2, s);
             end;
           trComplexe:
@@ -1543,6 +1600,7 @@ begin
     Source.Transaction.Free;
     Source.Free;
     Equipe.Free;
+    Criteres.Free;
   end;
 end;
 
