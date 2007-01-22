@@ -60,7 +60,8 @@ var
   s: string;
 begin
   s := Ajout;
-  if (Ajout <> '') then begin
+  if (Ajout <> '') then
+  begin
     s := Avant + Ajout + Apres;
     if (Chaine <> '') then Chaine := Chaine + Espace;
   end;
@@ -72,7 +73,8 @@ var
   s: string;
 begin
   s := Ajout;
-  if (Ajout <> '') then begin
+  if (Ajout <> '') then
+  begin
     s := Avant + Ajout + Apres;
     if (Chaine <> '') then Chaine := Chaine + Espace;
   end;
@@ -109,7 +111,8 @@ begin
   sum := 0;
   tmp := Copy(Valeur + '0000000000000', 1, 12);
   fak := Length(tmp);
-  for i := 1 to Length(tmp) do begin
+  for i := 1 to Length(tmp) do
+  begin
     if (fak mod 2) = 0 then
       sum := sum + (StrToInt(tmp[i]) * 1)
     else
@@ -140,29 +143,38 @@ var
 begin
   tmp := ClearISBN(Valeur);
   Result := True;
-  if tmp <> '' then begin
-    if tmp[Length(tmp)] = 'X' then begin
+  if tmp <> '' then
+  begin
+    if tmp[Length(tmp)] = 'X' then
+    begin
       while Length(tmp) < LongueurISBN do
         Insert('0', tmp, Length(tmp) - 1);
       M := 10;
     end
-    else begin
+    else
+    begin
       while Length(tmp) < LongueurISBN do
         tmp := tmp + '0';
       M := Ord(tmp[Length(tmp)]) - Ord('0');
       //    M := StrToInt(tmp[Length(tmp)]);
     end;
-    C := 0;
-    for X := 1 to Pred(Length(tmp)) do
-      //    C := C + StrToInt(tmp[X]) * X;
-      C := C + (Ord(tmp[X]) - Ord('0')) * X;
-    v := C mod 11;
-    Result := v = M;
 
-    if v = 10 then
-      tmp[Length(tmp)] := 'X'
+    if LongueurISBN = 13 then
+      Result := VerifieEAN(tmp)
     else
-      tmp[Length(tmp)] := IntToStr(v)[1];
+    begin
+      C := 0;
+      for X := 1 to Pred(Length(tmp)) do
+        //    C := C + StrToInt(tmp[X]) * X;
+        C := C + (Ord(tmp[X]) - Ord('0')) * X;
+      v := C mod 11;
+      Result := v = M;
+
+      if v = 10 then
+        tmp[Length(tmp)] := 'X'
+      else
+        tmp[Length(tmp)] := IntToStr(v)[1];
+    end;
   end;
   Valeur := tmp;
 end;
@@ -255,7 +267,8 @@ begin
   Result := Titre;
   try
     i := Pos('[', Titre);
-    if i > 0 then begin
+    if i > 0 then
+    begin
       j := PosInText(i, Titre, ']');
       if j = 0 then Exit;
       Dummy := Copy(Titre, i + 1, j - i - 1);

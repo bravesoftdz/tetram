@@ -8,6 +8,7 @@ uses
   Frame_RechercheRapide;
 
 type
+  PInfo_Gestion = ^TInfo_Gestion;
   TInfo_Gestion = record
     Mode: TVirtualMode;
     ListeHint, AjoutHint, ModifHint, SuppHint: string;
@@ -17,6 +18,7 @@ type
     ProcAcheter: TActionGestionAchat;
     ProcImporter, ProcExporter: Boolean;
     Filtre: string;
+    DerniereRecherche: string;
   end;
 
   TFrmGestions = class(TForm)
@@ -50,7 +52,7 @@ type
     btExporter: TVDTButton;
     btImporter: TVDTButton;
     procedure FormCreate(Sender: TObject);
-    function GestionCourante(SB: TSpeedButton = nil): TInfo_Gestion;
+    function GestionCourante(SB: TSpeedButton = nil): PInfo_Gestion;
     procedure ajouterClick(Sender: TObject);
     procedure modifierClick(Sender: TObject);
     procedure supprimerClick(Sender: TObject);
@@ -59,6 +61,7 @@ type
     procedure ScanEditKeyPress(Sender: TObject; var Key: Char);
     procedure btAcheterClick(Sender: TObject);
     procedure btImporterClick(Sender: TObject);
+    procedure FrameRechercheRapide1edSearchChange(Sender: TObject);
   protected
   private
     { Déclarations privées }
@@ -138,15 +141,17 @@ begin
   IG.ProcImporter := Importer;
   IG.ProcExporter := Exporter;
 {$ENDIF}
+  IG.DerniereRecherche := '';
 end;
 
-function TFrmGestions.GestionCourante(SB: TSpeedButton = nil): TInfo_Gestion;
+function TFrmGestions.GestionCourante(SB: TSpeedButton = nil): PInfo_Gestion;
 
-  function test(var ig: TInfo_Gestion; Bouton1, Bouton2: TSpeedButton; const Retour: TInfo_Gestion): Boolean;
+  function test(var ig: PInfo_Gestion; Bouton1, Bouton2: TSpeedButton; const Retour: TInfo_Gestion): Boolean;
   begin
     Result := False;
-    if (Bouton1 = Bouton2) or Bouton1.Down then begin
-      ig := Retour;
+    if (Bouton1 = Bouton2) or Bouton1.Down then
+    begin
+      ig := @Retour;
       Result := True;
     end;
   end;
@@ -162,7 +167,7 @@ begin
   if test(Result, btGenre, SB, GestionGenre) then Exit;
   if test(Result, btParaBD, SB, GestionParaBD) then Exit;
   if test(Result, btAchatsParaBD, SB, GestionAchatParaBD) then Exit;
-  Result := GestionAlbum;
+  Result := @GestionAlbum;
 end;
 
 procedure TFrmGestions.FormCreate(Sender: TObject);
@@ -209,19 +214,19 @@ end;
 
 procedure TFrmGestions.ajouterClick(Sender: TObject);
 begin
-  with GestionCourante do
+  with GestionCourante^ do
     ProcAjouter(VirtualTreeView, FrameRechercheRapide1.edSearch.Text);
 end;
 
 procedure TFrmGestions.modifierClick(Sender: TObject);
 begin
-  with GestionCourante do
+  with GestionCourante^ do
     ProcModifier(VirtualTreeView);
 end;
 
 procedure TFrmGestions.supprimerClick(Sender: TObject);
 begin
-  with GestionCourante do
+  with GestionCourante^ do
     ProcSupprimer(VirtualTreeView);
 end;
 
@@ -233,7 +238,8 @@ begin
   if Sender = LastButton then Exit;
   LastButton := TSpeedButton(Sender);
   LastButton.Down := True;
-  with GestionCourante do begin
+  with GestionCourante^ do
+  begin
     ajouter.Hint := AjoutHint;
     supprimer.Hint := SuppHint;
     modifier.Hint := ModifHint;
@@ -249,8 +255,9 @@ begin
     btExporter.Visible := Bevel4.Visible;
     btAcheter.Visible := Assigned(ProcAcheter);
     Bevel7.Visible := btAcheter.Visible;
+    PrepareLV(Self);
+    FrameRechercheRapide1.edSearch.Text := DerniereRecherche;
   end;
-  PrepareLV(Self);
 end;
 
 procedure TFrmGestions.VDTButton2Click(Sender: TObject);
@@ -260,7 +267,8 @@ end;
 
 procedure TFrmGestions.ScanEditKeyPress(Sender: TObject; var Key: Char);
 begin
-  if Key = #13 then begin
+  if Key = #13 then
+  begin
     Key := #0;
     VirtualTreeView.OnDblClick(VirtualTreeView);
   end;
@@ -268,17 +276,28 @@ end;
 
 procedure TFrmGestions.btAcheterClick(Sender: TObject);
 begin
-  with GestionCourante do
+  with GestionCourante^ do
     ProcAcheter(VirtualTreeView);
 end;
 
 procedure TFrmGestions.btImporterClick(Sender: TObject);
 begin
-  with TWizardImport.Create(nil) do try
+  with TWizardImport.Create(nil) do
+  try
     ShowModal;
   finally
     Free;
   end;
+end;
+
+procedure TFrmGestions.FrameRechercheRapide1edSearchChange(Sender: TObject);
+begin
+  FrameRechercheRapide1.edSearchChange(Sender);
+  GestionCourante^.DerniereRecherche := FrameRechercheRapide1.edSearch.Text;
+
+  // l'un ou l'autre... je sais pas trop
+  // FrameRechercheRapide1.edSearch.SelectAll;
+  FrameRechercheRapide1.edSearch.SelStart := Length(FrameRechercheRapide1.edSearch.Text);
 end;
 
 end.

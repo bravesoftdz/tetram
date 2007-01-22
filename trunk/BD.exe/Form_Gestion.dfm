@@ -745,6 +745,7 @@ object FrmGestions: TFrmGestions
     end
     inherited edSearch: TEditLabeled
       Width = 326
+      OnChange = FrameRechercheRapide1edSearchChange
       OnKeyPress = ScanEditKeyPress
     end
   end

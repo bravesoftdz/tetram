@@ -185,7 +185,7 @@ type
 implementation
 
 uses
-  Commun, JvUIB, CommonConst, Textes, Divers, Proc_Gestions, JvUIBLib, Procedures, ProceduresBDtk, Types, jpeg;
+  Commun, JvUIB, CommonConst, Textes, Divers, Proc_Gestions, JvUIBLib, Procedures, ProceduresBDtk, Types, jpeg, DateUtils;
 
 {$R *.DFM}
 
@@ -243,7 +243,8 @@ begin
   LoadCombo(5 {Format}, cbxFormat);
   LoadStrings(6 {Categorie d'image}, FCategoriesImages);
 
-  for i := 0 to Pred(FCategoriesImages.Count) do begin
+  for i := 0 to Pred(FCategoriesImages.Count) do
+  begin
     mi := TMenuItem.Create(pmChoixCategorie);
     mi.Caption := FCategoriesImages.ValueFromIndex[i];
     mi.Tag := StrToInt(FCategoriesImages.Names[i]);
@@ -292,7 +293,8 @@ begin
     vtSeries.OnChange := vtSeriesChange;
 
     SetLength(FEditeurCollectionSelected, FAlbum.Editions.Editions.Count);
-    for i := 0 to Pred(FAlbum.Editions.Editions.Count) do begin
+    for i := 0 to Pred(FAlbum.Editions.Editions.Count) do
+    begin
       PE := FAlbum.Editions.Editions[i];
       FEditeurCollectionSelected[i] := True;
       vtEditions.AddItem(PE.ChaineAffichage, PE);
@@ -370,22 +372,25 @@ var
   i: Integer;
   EditionComplete: TEditionComplete;
   hg: IHourGlass;
-  AfficheEdition: Integer;
+  AfficheEdition, lISBN: Integer;
   cs: string;
 begin
-  if Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then begin
+  if Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  begin
     AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
     FrameRechercheRapideSerie.edSearch.SetFocus;
     ModalResult := mrNone;
     Exit;
   end;
-  if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then begin
+  if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  begin
     AffMessage(rsTitreObligatoireAlbumSansSerie, mtInformation, [mbOk], True);
     edTitre.SetFocus;
     ModalResult := mrNone;
     Exit;
   end;
-  if not (StrToIntDef(edMoisParution.Text, 1) in [1..12]) then begin
+  if not (StrToIntDef(edMoisParution.Text, 1) in [1..12]) then
+  begin
     AffMessage(rsMoisParutionIncorrect, mtInformation, [mbOk], True);
     edMoisParution.SetFocus;
     ModalResult := mrNone;
@@ -395,33 +400,46 @@ begin
   UpdateEdition; // force la mise à jour du REditionComplete en cours si c pas déjà fait
 
   AfficheEdition := -1;
-  for i := 0 to Pred(vtEditions.Items.Count) do begin
+  for i := 0 to Pred(vtEditions.Items.Count) do
+  begin
     EditionComplete := Pointer(vtEditions.Items.Objects[i]);
-    if IsEqualGUID(EditionComplete.Editeur.ID_Editeur, GUID_NULL) then begin
+    if IsEqualGUID(EditionComplete.Editeur.ID_Editeur, GUID_NULL) then
+    begin
       AffMessage(rsEditeurObligatoire, mtInformation, [mbOk], True);
       AfficheEdition := i;
     end;
     cs := EditionComplete.ISBN;
-    if cs = '' then begin
+    if cs = '' then
+    begin
       // l'utilisation de l'isbn n'étant obligatoire que depuis "quelques années", les bd anciennes n'en n'ont pas: donc pas obligatoire de le saisir
 //      AffMessage('Le numéro ISBN est obligatoire !', mtInformation, [mbOk], True);
 //      AfficheEdition := i;
     end;
-    if not VerifieISBN(cs) then
-      if MessageDlg(Format(RemplacerValeur, [EditionComplete.ISBN, FormatISBN(cs)]), mtConfirmation, [mbYes, mbNo], 0) = mrYes then begin
+    lISBN := Length(cs);
+    if not (lISBN in [10, 13]) then
+      if EditionComplete.AnneeEdition >= 2007 then
+        lISBN := 13
+      else
+        lISBN := 10;
+    if not VerifieISBN(cs, lISBN) then
+      if MessageDlg(Format(RemplacerValeur, [FormatISBN(EditionComplete.ISBN), FormatISBN(cs)]), mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+      begin
         EditionComplete.ISBN := cs;
       end
-      else begin
+      else
+      begin
         //        AffMessage('Le numéro ISBN est obligatoire !', mtInformation, [mbOk], True);
         //        AfficheEdition := i;
       end;
-    if (EditionComplete.AnneeCote * EditionComplete.PrixCote = 0) and (EditionComplete.AnneeCote + EditionComplete.PrixCote <> 0) then begin
+    if (EditionComplete.AnneeCote * EditionComplete.PrixCote = 0) and (EditionComplete.AnneeCote + EditionComplete.PrixCote <> 0) then
+    begin
       // une cote doit être composée d'une année ET d'un prix
       AffMessage(rsCoteIncomplete, mtInformation, [mbOk], True);
       AfficheEdition := i;
     end;
   end;
-  if AfficheEdition <> -1 then begin
+  if AfficheEdition <> -1 then
+  begin
     vtEditions.ItemIndex := AfficheEdition;
     vtEditeurs.SetFocus;
     ModalResult := mrNone;
@@ -431,11 +449,13 @@ begin
   hg := THourGlass.Create;
 
   FAlbum.Titre := Trim(edTitre.Text);
-  if edAnneeParution.Text = '' then begin
+  if edAnneeParution.Text = '' then
+  begin
     FAlbum.AnneeParution := 0;
     FAlbum.MoisParution := 0;
   end
-  else begin
+  else
+  begin
     FAlbum.AnneeParution := StrToInt(edAnneeParution.Text);
     if edMoisParution.Text = '' then
       FAlbum.MoisParution := 0
@@ -477,15 +497,18 @@ var
   i: Integer;
   PC: TCouverture;
 begin
-  with ChoixImageDialog do begin
+  with ChoixImageDialog do
+  begin
     Options := Options + [ofAllowMultiSelect];
     Filter := GraphicFilter(TGraphic);
     InitialDir := RepImages;
     FileName := '';
-    if Execute then begin
+    if Execute then
+    begin
       vstImages.BeginUpdate;
       try
-        for i := 0 to Files.Count - 1 do begin
+        for i := 0 to Files.Count - 1 do
+        begin
           PC := TCouverture.Create;
           FCurrentEditionComplete.Couvertures.Add(PC);
           PC.ID := GUID_NULL;
@@ -517,14 +540,16 @@ begin
   VDTButton4.Enabled := Assigned(Node) and (Node.Index > 0);
   VDTButton5.Enabled := Assigned(Node) and (Node.Index < Pred(vstImages.RootNodeCount));
 
-  if Assigned(Node) then begin
+  if Assigned(Node) then
+  begin
     PC := FCurrentEditionComplete.Couvertures[Node.Index];
     hg := THourGlass.Create;
     if IsEqualGUID(PC.ID, GUID_NULL) then
       ms := GetCouvertureStream(PC.NewNom, imgVisu.Height, imgVisu.Width, Utilisateur.Options.AntiAliasing)
     else
       ms := GetCouvertureStream(False, PC.ID, imgVisu.Height, imgVisu.Width, Utilisateur.Options.AntiAliasing);
-    if Assigned(ms) then try
+    if Assigned(ms) then
+    try
       jpg := TJPEGImage.Create;
       try
         jpg.LoadFromStream(ms);
@@ -542,7 +567,8 @@ end;
 
 procedure TFrmEditAlbum.vstImagesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
-  if Key = VK_DELETE then begin
+  if Key = VK_DELETE then
+  begin
     FCurrentEditionComplete.Couvertures.Delete(vstImages.FocusedNode.Index);
     vstImages.RootNodeCount := FCurrentEditionComplete.Couvertures.Count;
     imgVisu.Picture.Assign(nil);
@@ -588,7 +614,8 @@ procedure TFrmEditAlbum.FormShow(Sender: TObject);
 begin
   // la selection de l'édition doit se faire ici à cause d'un bug du TDateTimePicker:
   //   il se forcerait à "Checked = True" si on le fait dans le SetID_Album
-  if vtEditions.ItemIndex = -1 then begin
+  if vtEditions.ItemIndex = -1 then
+  begin
     vtEditions.ItemIndex := 0;
     vtEditions.OnClick(vtEditions);
   end;
@@ -605,7 +632,8 @@ var
   begin
     i := 0;
     Result := True;
-    while Result and (i <= Pred(LV.Items.Count)) do begin
+    while Result and (i <= Pred(LV.Items.Count)) do
+    begin
       Result := not IsEqualGUID(TAuteur(LV.Items[i].Data).Personne.ID, IdPersonne);
       Inc(i);
     end;
@@ -647,10 +675,12 @@ var
   ID_Editeur: TGUID;
 begin
   ID_Editeur := vtEditeurs.CurrentValue;
-  if IsEqualGUID(ID_Editeur, GUID_NULL) then begin
+  if IsEqualGUID(ID_Editeur, GUID_NULL) then
+  begin
     vtCollections.Mode := vmNone;
   end
-  else begin
+  else
+  begin
     vtCollections.Filtre := 'ID_Editeur = ' + QuotedStr(GUIDToString(ID_Editeur));
     if vtCollections.Mode <> vmCollections then vtCollections.Mode := vmCollections;
   end;
@@ -664,24 +694,29 @@ var
 begin
   FAlbum.ID_Serie := vtSeries.CurrentValue;
   btResetSerie.Enabled := not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
-  if btResetSerie.Enabled then begin
-    if not (FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then try
+  if btResetSerie.Enabled then
+  begin
+    if not (FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then
+    try
       lvScenaristes.Items.BeginUpdate;
       lvDessinateurs.Items.BeginUpdate;
       lvColoristes.Items.BeginUpdate;
-      if not FScenaristesSelected then begin
+      if not FScenaristesSelected then
+      begin
         lvScenaristes.Items.Count := 0;
         FAlbum.Scenaristes.Clear;
         for i := 0 to Pred(FAlbum.Serie.Scenaristes.Count) do
           AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TAuteur(FAlbum.Serie.Scenaristes[i]).Personne);
       end;
-      if not FDessinateursSelected then begin
+      if not FDessinateursSelected then
+      begin
         lvDessinateurs.Items.Count := 0;
         FAlbum.Dessinateurs.Clear;
         for i := 0 to Pred(FAlbum.Serie.Dessinateurs.Count) do
           AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TAuteur(FAlbum.Serie.Dessinateurs[i]).Personne);
       end;
-      if not FColoristesSelected then begin
+      if not FColoristesSelected then
+      begin
         lvColoristes.Items.Count := 0;
         FAlbum.Coloristes.Clear;
         for i := 0 to Pred(FAlbum.Serie.Coloristes.Count) do
@@ -693,7 +728,8 @@ begin
       lvColoristes.Items.EndUpdate;
     end;
 
-    if Assigned(FCurrentEditionComplete) and (not FEditeurCollectionSelected[vtEditions.ItemIndex]) then begin
+    if Assigned(FCurrentEditionComplete) and (not FEditeurCollectionSelected[vtEditions.ItemIndex]) then
+    begin
       vtEditeurs.CurrentValue := FAlbum.Serie.Editeur.ID_Editeur;
       vtCollections.CurrentValue := FAlbum.Serie.Collection.ID;
     end;
@@ -718,7 +754,8 @@ begin
   EditionComplete.Orientation := cbxOrientation.DefaultValueChecked;
   EditionComplete.FormatEdition := cbxFormat.DefaultValueChecked;
   EditionComplete.TypeEdition := cbxEdition.DefaultValueChecked;
-  if not IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then begin
+  if not IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  begin
     EditionComplete.Editeur.ID_Editeur := TSerie(vtSeries.GetFocusedNodeData).Editeur.ID;
     EditionComplete.Collection.ID := TSerie(vtSeries.GetFocusedNodeData).Collection.ID;
   end;
@@ -747,11 +784,18 @@ end;
 
 procedure TFrmEditAlbum.VDTButton6Click(Sender: TObject);
 var
+  lISBN: Integer;
   cs: string;
 begin
   cs := edISBN.Text;
-  if not VerifieISBN(cs) then
-    if MessageDlg(Format(RemplacerValeur, [edISBN.Text, cs]), mtConfirmation, [mbYes, mbNo], 0) = mrYes then edISBN.Text := cs;
+  lISBN := Length(cs);
+  if not (lISBN in [10, 13]) then
+    if StrToIntDef(edAnneeEdition.Text, StrToIntDef(edAnneeParution.Text, YearOf(Now))) >= 2007 then
+      lISBN := 13
+    else
+      lISBN := 10;
+  if not VerifieISBN(cs, lISBN) then
+    if MessageDlg(Format(RemplacerValeur, [FormatISBN(edISBN.Text), FormatISBN(cs)]), mtConfirmation, [mbYes, mbNo], 0) = mrYes then edISBN.Text := cs;
 end;
 
 procedure TFrmEditAlbum.edISBNExit(Sender: TObject);
@@ -820,7 +864,8 @@ end;
 
 procedure TFrmEditAlbum.UpdateEdition;
 begin
-  if not FEditionChanging and Assigned(FCurrentEditionComplete) then begin
+  if not FEditionChanging and Assigned(FCurrentEditionComplete) then
+  begin
     FCurrentEditionComplete.ISBN := edISBN.Text;
     FCurrentEditionComplete.AnneeEdition := StrToIntDef(edAnneeEdition.Text, 0);
     FCurrentEditionComplete.Prix := StrToCurrDef(StringReplace(edPrix.Text, Utilisateur.Options.SymboleMonnetaire, '', []), 0);
@@ -859,7 +904,8 @@ procedure TFrmEditAlbum.RefreshEditionCaption;
 var
   s: string;
 begin
-  if not FEditionChanging and Assigned(FCurrentEditionComplete) then begin
+  if not FEditionChanging and Assigned(FCurrentEditionComplete) then
+  begin
     UpdateEdition;
     s := FCurrentEditionComplete.ChaineAffichage;
     if FCurrentEditionComplete.RecInconnu then s := '* ' + s;
@@ -890,7 +936,8 @@ begin
     PanelEdition.Visible := Assigned(FCurrentEditionComplete);
     vstImages.Clear;
     vstImages.RootNodeCount := 0;
-    if Assigned(FCurrentEditionComplete) then begin
+    if Assigned(FCurrentEditionComplete) then
+    begin
       edISBN.Text := ClearISBN(FCurrentEditionComplete.ISBN);
       edAnneeEdition.Text := NonZero(IntToStr(FCurrentEditionComplete.AnneeEdition));
       if FCurrentEditionComplete.Prix = 0 then
@@ -934,7 +981,8 @@ procedure TFrmEditAlbum.vtSeriesDblClick(Sender: TObject);
 var
   i: TGUID;
 begin
-  if (vtSeries.GetFirstSelected <> nil) then begin
+  if (vtSeries.GetFirstSelected <> nil) then
+  begin
     ModifierSeries(vtSeries);
     i := vtCollections.CurrentValue;
     vtEditeurs.InitializeRep;
@@ -952,27 +1000,34 @@ var
   CurrentAuteur: TPersonnage;
 begin
   iCurrentAuteur := vtPersonnes.CurrentValue;
-  if ModifierAuteurs(vtPersonnes) then begin
+  if ModifierAuteurs(vtPersonnes) then
+  begin
     CurrentAuteur := vtPersonnes.GetFocusedNodeData;
-    for i := 0 to Pred(lvScenaristes.Items.Count) do begin
+    for i := 0 to Pred(lvScenaristes.Items.Count) do
+    begin
       Auteur := lvScenaristes.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
+      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then
+      begin
         Auteur.Personne.Assign(CurrentAuteur);
         lvScenaristes.Items[i].Caption := Auteur.ChaineAffichage;
       end;
     end;
     lvScenaristes.Invalidate;
-    for i := 0 to Pred(lvDessinateurs.Items.Count) do begin
+    for i := 0 to Pred(lvDessinateurs.Items.Count) do
+    begin
       Auteur := lvDessinateurs.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
+      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then
+      begin
         Auteur.Personne.Assign(CurrentAuteur);
         lvDessinateurs.Items[i].Caption := Auteur.ChaineAffichage;
       end;
     end;
     lvDessinateurs.Invalidate;
-    for i := 0 to Pred(lvColoristes.Items.Count) do begin
+    for i := 0 to Pred(lvColoristes.Items.Count) do
+    begin
       Auteur := lvColoristes.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
+      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then
+      begin
         Auteur.Personne.Assign(CurrentAuteur);
         lvColoristes.Items[i].Caption := Auteur.ChaineAffichage;
       end;
@@ -1036,7 +1091,8 @@ begin
     ms := GetCouvertureStream(PC.NewNom, 400, 500, Utilisateur.Options.AntiAliasing)
   else
     ms := GetCouvertureStream(False, PC.ID, 400, 500, Utilisateur.Options.AntiAliasing);
-  if Assigned(ms) then try
+  if Assigned(ms) then
+  try
     jpg := TJPEGImage.Create;
     Frm := TForm.Create(Self);
     Couverture := TImage.Create(Frm);
@@ -1069,10 +1125,12 @@ begin
   if not Assigned(vstImages.FocusedNode) then Exit;
   PC := FCurrentEditionComplete.Couvertures[vstImages.FocusedNode.Index];
   if IsEqualGUID(PC.ID, GUID_NULL) then
-    with ChoixImageDialog do begin
+    with ChoixImageDialog do
+    begin
       Options := Options - [ofAllowMultiSelect];
       FileName := PC.NewNom;
-      if Execute then begin
+      if Execute then
+      begin
         PC.NewNom := FileName;
         vstImages.InvalidateNode(vstImages.FocusedNode);
       end;
@@ -1096,14 +1154,17 @@ procedure TFrmEditAlbum.VDTButton13Click(Sender: TObject);
 var
   dummy, Code: string;
 begin
-  if InputQuery('EAN-ISBN', 'Saisir le numéro EAN-ISBN de l''édition:', Code) then begin
+  if InputQuery('EAN-ISBN', 'Saisir le numéro EAN-ISBN de l''édition:', Code) then
+  begin
     dummy := Code;
     if not VerifieEAN(dummy) and (MessageDlg(Code + #13#13'Le caractère de contrôle de ce numéro EAN-ISBN n''est pas correct.'#13#10'Voulez-vous néanmoins utiliser ce code barre?', mtWarning, [mbYes, mbNo], 0) = mrNo) then Exit;
-    if StrToIntDef(edAnneeEdition.Text, 0) >= 2007 then begin // en 2007, les ISBN passent à 13 caractères
+    if StrToIntDef(edAnneeEdition.Text, 0) >= 2007 then
+    begin // en 2007, les ISBN passent à 13 caractères
       Code := Copy(Code, 1, 12);
       VerifieISBN(Code, 13)
     end
-    else begin
+    else
+    begin
       Code := Copy(Code, 4, 9);
       VerifieISBN(Code, 10)
     end;
@@ -1115,7 +1176,8 @@ procedure TFrmEditAlbum.vtEditionsKeyDown(Sender: TObject; var Key: Word; Shift:
 var
   OldIndex: Integer;
 begin
-  if Key = VK_DELETE then begin
+  if Key = VK_DELETE then
+  begin
     OldIndex := vtEditions.ItemIndex;
 
     vtEditions.DeleteSelected;
@@ -1146,8 +1208,10 @@ var
   Node: PVirtualNode;
 begin
   Node := vstImages.GetNodeAt(X, Y);
-  if (Node <> nil) and (vstImages.Header.Columns.ColumnFromPosition(Point(X, Y)) = 1) then begin
-    with vstImages.GetDisplayRect(Node, 1, False) do begin
+  if (Node <> nil) and (vstImages.Header.Columns.ColumnFromPosition(Point(X, Y)) = 1) then
+  begin
+    with vstImages.GetDisplayRect(Node, 1, False) do
+    begin
       X := Left;
       Y := Bottom;
     end;
