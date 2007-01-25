@@ -11,6 +11,7 @@ uses
   Controls,
   Dialogs,
   ISAPIApp,
+  SyncObjs,
   Divers,
   CommonConst in 'CommonConst.pas',
   Commun in 'Commun.pas',
@@ -136,6 +137,8 @@ const
 var
   Debut: TDateTime;
 begin
+  RegisterExpectedMemoryLeak(TCriticalSection, 1);
+
   Mode_en_cours := mdLoad;
   Application.Title := 'BDthèque';
   if not Bool(CreateMutex(nil, True, 'TetramCorpBDMutex')) then
