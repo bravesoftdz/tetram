@@ -137,7 +137,9 @@ const
 var
   Debut: TDateTime;
 begin
+{$IFDEF EnableMemoryLeakReporting}
   RegisterExpectedMemoryLeak(TCriticalSection, 1);
+{$ENDIF}
 
   Mode_en_cours := mdLoad;
   Application.Title := 'BDthèque';

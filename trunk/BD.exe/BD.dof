@@ -105,10 +105,6 @@ HostApplication=
 Launcher=
 UseLauncher=0
 DebugCWD=
-[Language]
-ActiveLang=
-ProjectLang=
-RootDir=
 [Version Info]
 IncludeVerInfo=1
 AutoIncBuild=1
@@ -159,12 +155,24 @@ C:\Program Files\TeeChart Pro v503 for Delphi 7\Delphi7\Bin\DCLTQR57.bpl=TeeChar
 c:\program files\borland\delphi7\Bin\DBWEBXPRT.BPL=Paquet Expert Web Borland
 c:\program files\borland\delphi7\Bin\dclIntraweb_50_70.bpl=Paquet de conception Intraweb 5.0 pour Delphi 7
 c:\program files\borland\delphi7\Bin\dcldss70.bpl=Composants Decision Cube Borland
+[HistoryLists\hlConditionals]
+Count=3
+Item0=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Item1=NOFORMS
+Item2=NOFORMSA
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
+[HistoryLists\hlSearchPath]
+Count=3
+Item0=$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
+Item1=$(DELPHI)\Lib\Debug;$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
+Item2=..\..\..\Compos Perso\PrintObject;..\..\..\Compos Perso\VDTButton;..\..\..\Compos Perso\Memory Table;..\..\..\Compos Perso\VersLabP;..\..\..\Compos Perso\ScanEdit;..\..\..\Common;..\..\..\Compos Perso\HarmFade;..\..\..\Compos Perso\schrinkpanel;..\..\..\Compos Perso\ReadOnlycheckBox;..\..\..\Compos Perso\Labeled;..\..\..\Compos Perso\ShellNotification;..\..\..\Compos Perso\ProgressBar;..\..\..\Compos Perso\BrowseDirectory;..\..\..\Compos Perso\VirtualTree;..\..\..\Common\GraphicEx
 [HistoryLists\hlUnitOutputDirectory]
 Count=1
 Item0=dcu
-[HistoryLists\hlBPLOutput]
-Count=1
-Item0=.
+[HistoryLists\hlOutputDirectorry]
+Count=3
+Item0=..\..\bin
+Item1=..\
+Item2=C:\Documents and Settings\Thierry\Bureau\BDthèque

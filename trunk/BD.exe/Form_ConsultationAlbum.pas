@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls,
-  Main, VDTButton, ActnList, Spin, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, ProceduresBDtk, GraphicEx,
+  Main, VDTButton, ActnList, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, ProceduresBDtk, GraphicEx,
   jpeg, ShellAPI, LoadComplet, CRFurtif;
 
 type

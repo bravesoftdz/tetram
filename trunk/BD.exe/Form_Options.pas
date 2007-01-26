@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, ComCtrls, IniFiles, CommCtrl, ImgList,
-  Buttons, VDTButton, Fram_Boutons, Browss, DBEditLabeled, Spin, ComboCheck;
+  Buttons, VDTButton, Fram_Boutons, Browss, DBEditLabeled, ComboCheck, Spin;
 
 type
   TFrmOptions = class(TForm)

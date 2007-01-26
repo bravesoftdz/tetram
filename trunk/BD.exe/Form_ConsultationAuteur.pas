@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls, ProceduresBDtk, 
-  VDTButton, ActnList, Spin, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, jpeg, Procedures, ShellAPI, VirtualTree, LoadComplet;
+  VDTButton, ActnList, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, jpeg, Procedures, ShellAPI, VirtualTree, LoadComplet;
 
 type
   TFrmConsultationAuteur = class(TForm, IImpressionApercu)
