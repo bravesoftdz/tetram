@@ -1,5 +1,7 @@
 unit VirtualTree;
 
+{$D-}
+
 interface
 
 uses

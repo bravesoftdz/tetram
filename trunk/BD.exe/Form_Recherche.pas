@@ -89,7 +89,7 @@ var
 function TFrmRecherche.TransChamps(const Champ: string): string;
 begin
   Result := '';
-  if SameText(Champ, 'titrealbum') then Result := rsTransAlbum;
+  if SameText(Champ, 'titrealbum') then Result := rsTransTitreAlbum;
   if SameText(Champ, 'anneeparution') then Result := rsTransAnneeParution;
   if SameText(Champ, 'tome') then Result := rsTransTome;
   if SameText(Champ, 'horsserie') then Result := rsTransHorsSerie;
@@ -97,7 +97,7 @@ begin
   if SameText(Champ, 'uppersujetalbum') then Result := rsTransHistoire + ' ' + rsTransAlbum;
   if SameText(Champ, 'upperremarquesalbum') then Result := rsTransNotes + ' ' + rsTransAlbum;
 
-  if SameText(Champ, 'titreserie') then Result := rsTransSerie;
+  if SameText(Champ, 'titreserie') then Result := rsTransTitreSerie;
   if SameText(Champ, 'uppersujetserie') then Result := rsTransHistoire + ' ' + rsTransSerie;
   if SameText(Champ, 'upperremarquesserie') then Result := rsTransNotes + ' ' + rsTransSerie;
   if SameText(Champ, 'terminee') then Result := rsTransSerieTerminee;
@@ -125,6 +125,7 @@ begin
   if SameText(Champ, 'nombredepages') then Result := rsTransNombreDePages;
   if SameText(Champ, 'anneecote') then Result := rsTransCote + ' (' + rsTransAnnee + ')';
   if SameText(Champ, 'prixcote') then Result := rsTransCote + ' (' + rsTransPrix + ')';
+  if SameText(Champ, 'nbeditions') then Result := rsTransNombreDEditions;
 
   if SameText(Champ, 'genreserie') then Result := rsTransGenre + ' *';
 end;
@@ -132,7 +133,7 @@ end;
 function TFrmRecherche.ValChamps(const Champ: string): Integer;
 begin
   Result := 0;
-  if (Champ = rsTransAlbum) or (SameText(Champ, 'titrealbum')) then Result := 1;
+  if (Champ = rsTransTitreAlbum) or (SameText(Champ, 'titrealbum')) then Result := 1;
   if (Champ = rsTransAnneeParution) or (SameText(Champ, 'anneeparution')) then Result := 2;
   if (Champ = rsTransTome) or (SameText(Champ, 'tome')) then Result := 3;
   if (Champ = rsTransHorsSerie) or (SameText(Champ, 'horsserie')) then Result := 4;
@@ -140,7 +141,7 @@ begin
   if (Champ = rsTransHistoire + ' ' + rsTransAlbum) or (SameText(Champ, 'sujetalbum')) then Result := 6;
   if (Champ = rsTransNotes + ' ' + rsTransAlbum) or (SameText(Champ, 'remarquesalbum')) then Result := 7;
 
-  if (Champ = rsTransSerie) or (SameText(Champ, 'titreserie')) then Result := 8;
+  if (Champ = rsTransTitreSerie) or (SameText(Champ, 'titreserie')) then Result := 8;
   if (Champ = rsTransHistoire + ' ' + rsTransSerie) or (SameText(Champ, 'sujetserie')) then Result := 9;
   if (Champ = rsTransNotes + ' ' + rsTransSerie) or (SameText(Champ, 'remarquesserie')) then Result := 10;
   if (Champ = rsTransSerieTerminee) or (SameText(Champ, 'terminee')) then Result := 11;
@@ -168,6 +169,7 @@ begin
   if (Champ = rsTransNombreDePages) or (SameText(Champ, 'nombredepages')) then Result := 30;
   if (Champ = rsTransCote + ' (' + rsTransAnnee + ')') or (SameText(Champ, 'anneecote')) then Result := 31;
   if (Champ = rsTransCote + ' (' + rsTransPrix + ')') or (SameText(Champ, 'prixcote')) then Result := 32;
+  if (Champ = rsTransNombreDEditions) or (SameText(Champ, 'nbeditions')) then Result := 36;
 
   if (Champ = rsTransGenre + ' *') or (SameText(Champ, 'ID_Genre')) then Result := 23;
 end;

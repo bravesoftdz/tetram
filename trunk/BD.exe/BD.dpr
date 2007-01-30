@@ -116,11 +116,13 @@ uses
   Form_WizardImport in 'Form_WizardImport.pas' {WizardImport},
   UImportXML in 'UImportXML.pas',
   ProceduresBDtk in 'ProceduresBDtk.pas',
-  UMAJ1_2_3_3 in 'UMAJ1_2_3_3.pas',
-  Form_ChoixDetailSerie in 'Form_ChoixDetailSerie.pas' {FrmChoixDetailSerie};
+  UMAJ1_2_3_14 in 'UMAJ1_2_3_14.pas',
+  Form_ChoixDetailSerie in 'Form_ChoixDetailSerie.pas' {FrmChoixDetailSerie},
+  UMAJ1_2_3_3 in 'UMAJ1_2_3_3.pas';
 
 {$R *.RES}
 {$R curseurs.res}
+{$Include FastMM4Options.inc}
 
 exports
   GetExtensionVersion,
@@ -166,7 +168,7 @@ begin
 
     FrmSplash.Affiche_act(ChargementApp + '...');
     Application.CreateForm(TFond, Fond);
-    FrmSplash.Affiche_act(ChargementDatabase + '...');
+  FrmSplash.Affiche_act(ChargementDatabase + '...');
     Historique.AddConsultation(fcRecherche);
     if Utilisateur.Options.ModeDemarrage then
       Fond.ModeConsultation.Execute

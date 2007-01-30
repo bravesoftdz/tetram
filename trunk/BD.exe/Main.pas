@@ -136,6 +136,8 @@ type
     PopupMenu1: TPopupMenu;
     mnuBack: TMenuItem;
     mnuNext: TMenuItem;
+    Aperuavantimpression4: TMenuItem;
+    Impression1: TMenuItem;
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure ChangementOptionsExecute(Sender: TObject);

@@ -359,7 +359,6 @@ type
     procedure Fill(AvecAchats: Boolean; const ID_Serie: TGUID); reintroduce; overload;
     procedure PrepareInstance; override;
     procedure Clear; override;
-    constructor Create; overload; override;
     constructor Create(AvecAchats: Boolean); reintroduce; overload;
     constructor Create(const ID_Serie: TGUID); reintroduce; overload;
     destructor Destroy; override;
@@ -2228,23 +2227,15 @@ begin
   AnneesProchaines.Clear;
 end;
 
-constructor TPrevisionsSorties.Create;
-begin
-  inherited;
-  PrepareInstance;
-end;
-
 constructor TPrevisionsSorties.Create(AvecAchats: Boolean);
 begin
   inherited Create;
-  PrepareInstance;
   Fill(AvecAchats);
 end;
 
 constructor TPrevisionsSorties.Create(const ID_Serie: TGUID);
 begin
   inherited Create;
-  PrepareInstance;
   Fill(ID_Serie);
 end;
 

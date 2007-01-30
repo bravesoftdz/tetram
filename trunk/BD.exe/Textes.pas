@@ -53,6 +53,7 @@ const
   rsTransMaximum = 'Maximum';
   rsTransMinimum = 'Minimum';
   //  rsTransNationalite = 'Nationalité';
+  rsTransNombreDEditions = 'Nombre d''éditions';
   rsTransNombreDePages = 'Nombre de pages';
   rsTransNotes = 'Notes';
   rsTransNumerote = 'Numéroté';
@@ -82,7 +83,9 @@ const
   rsTransStock = 'Stock';
   //  rsTransSupport = 'Support';
   rsTransTerminee = 'Terminée';
-    rsTransTitre = 'Titre';
+  rsTransTitre = 'Titre';
+  rsTransTitreAlbum = 'Titre album';
+  rsTransTitreSerie = 'Titre série';
   rsTransTome = 'Tome';
   //  rsTransTotal = 'Total';
   //  rsTransTranche = 'Tranche';

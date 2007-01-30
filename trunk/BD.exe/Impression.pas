@@ -58,7 +58,7 @@ const
   // en mm
   ThumbWidth = 60;
   ThumbHeigth = 60;
-  ThumbInterval = 10;
+  ThumbInterval = 4;
 
 var
   s: string;
@@ -134,8 +134,9 @@ begin
     Prn.NextLine;
   end;
 
-  nbImageHorz := Prn.MmsToPixelsHorizontal(Prn.Detail.Width + ThumbInterval) div (ThumbWidth + ThumbInterval);
-  if Utilisateur.Options.FicheAlbumWithCouverture and (nbImageHorz > 0) then // si nbImageHorz = 0 alors on n'a pas assez de place pour mettre les images
+  nbImageHorz := Trunc((Prn.Detail.Width + ThumbInterval) / (ThumbWidth + ThumbInterval));
+  // si nbImageHorz = 0 alors on n'a pas assez de place pour mettre les images dans une page donc pas necessaire de passer à la page suivante
+  if Utilisateur.Options.FicheAlbumWithCouverture and (nbImageHorz > 0) then
   begin
     numCol := 1;
     Repositionne := False;
@@ -144,19 +145,19 @@ begin
     for i := 0 to Pred(Edition.Couvertures.Count) do
     begin
       fWaiting.ShowProgression(rsTransImage + '...', epNext);
-      ms := GetCouvertureStream(False, TCouverture(Edition.Couvertures[i]).ID, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60), Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
+      ms := GetCouvertureStream(False, TCouverture(Edition.Couvertures[i]).ID, Prn.MmsToPixelsVertical(ThumbHeigth), Prn.MmsToPixelsHorizontal(ThumbWidth), Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
       if Assigned(ms) then
       try
         if not Repositionne then Prn.SetYPosition(Prn.GetYPosition + ThumbInterval);
 
-        if Prn.MmsToPixelsVertical(Prn.Detail.Top + Prn.Detail.Height - Prn.GetYPosition) < ThumbHeigth then
+        if (Prn.Detail.Top + Prn.Detail.Height - Prn.GetYPosition) < ThumbHeigth then
           Prn.NewPage;
 
         fWaiting.ShowProgression(rsTransImage + '...', epNext);
         jpg := TJPEGImage.Create;
         try
           jpg.LoadFromStream(ms);
-          Prn.Draw(Prn.Detail.Left + (ThumbWidth + ThumbInterval) * (numCol - 1), Prn.GetYPosition, jpg);
+          Prn.Draw(Prn.Detail.Left + (ThumbWidth + ThumbInterval) * (numCol - 1) + ((ThumbWidth - Prn.PixelsToMmsHorizontal(jpg.Width))/2), Prn.GetYPosition + ((ThumbHeigth - Prn.PixelsToMmsVertical(jpg.Height))/2), jpg);
           Repositionne := True;
           ImageDessinee := True;
           Inc(numCol);
@@ -660,7 +661,8 @@ begin
 
       ImprimeAlbum(Prn, Album, DetailsOptions, fWaiting);
 
-      if Assigned(Edition) then
+      // imprime album ne peut pas connaitre l'édition qu'on veut imprimer
+      if Assigned(Edition) and (DetailsOptions = dsoAlbumsDetails) then
         ImprimeEdition(Prn, Edition, fWaiting);
 
       Prn.Columns.Clear;
