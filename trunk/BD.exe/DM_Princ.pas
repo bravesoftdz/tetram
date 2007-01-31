@@ -511,7 +511,7 @@ end;
 
 function TDMPrinc.CheckVersion(ForceMessage: Boolean): Boolean;
 begin
-  Result := CheckVersionNet.CheckVersion(Application.Title, 'bdtheque', Utilisateur.ExeVersion, ForceMessage, not ForceMessage) = 1;
+  Result := CheckVersionNet.CheckVersion(SansAccents(Application.Title), 'bdtheque', Utilisateur.ExeVersion, ForceMessage, not ForceMessage) = 1;
 end;
 
 end.
