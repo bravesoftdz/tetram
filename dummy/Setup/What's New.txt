@@ -1,3 +1,13 @@
+-=-=-=-=-=-    1.2.3.15 - 30/01/2007    -=-=-=-=-=-
+
+* Nouveautés *
+      - Plus de possibilités dans l'impression des albums
+      - Impression de la fiche de série
+
+* Corrections *
+      - Correction de la formule de vérification des ISBN13
+      - Optimisations diverses
+
 -=-=-=-=-=-    1.2.2.0 - 20/10/2006    -=-=-=-=-=-
 
 * Nouveautés *
