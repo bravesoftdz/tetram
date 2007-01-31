@@ -118,7 +118,11 @@ uses
   ProceduresBDtk in 'ProceduresBDtk.pas',
   UMAJ1_2_3_14 in 'UMAJ1_2_3_14.pas',
   Form_ChoixDetailSerie in 'Form_ChoixDetailSerie.pas' {FrmChoixDetailSerie},
-  UMAJ1_2_3_3 in 'UMAJ1_2_3_3.pas';
+  UMAJ1_2_3_25 in 'UMAJ1_2_3_25.pas',
+  UMAJ1_2_3_3 in 'UMAJ1_2_3_3.pas',
+  UMAJ1_2_3_20 in 'UMAJ1_2_3_20.pas',
+  UMAJ1_2_3_22 in 'UMAJ1_2_3_22.pas',
+  UMAJ1_2_3_26 in 'UMAJ1_2_3_26.pas';
 
 {$R *.RES}
 {$R curseurs.res}
@@ -178,7 +182,6 @@ begin
     FrmSplash.Affiche_act(FinChargement + '...');
     ChangeCurseur(crHandPoint, 'MyHandPoint', 'MyCursor');
     while Now - Debut < (1 / (24 * 60 * 60)) * 1 do begin // 0: NoWait
-      FrmSplash.BringToFront;
       FrmSplash.Show;
       FrmSplash.Update;
     end;

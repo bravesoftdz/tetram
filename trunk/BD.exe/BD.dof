@@ -111,7 +111,7 @@ AutoIncBuild=1
 MajorVer=1
 MinorVer=2
 Release=3
-Build=18
+Build=30
 Debug=0
 PreRelease=0
 Special=0
@@ -122,7 +122,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Teträm Corp
 FileDescription=
-FileVersion=1.2.3.18
+FileVersion=1.2.3.30
 InternalName=BDT
 LegalCopyright=Teträm Corp 1997-2005
 LegalTrademarks=
@@ -131,11 +131,12 @@ ProductName=BDtheque
 ProductVersion=1
 Comments=
 [HistoryLists\hlConditionals]
-Count=4
+Count=5
 Item0=_DEBUG;Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
-Item1=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
-Item2=NOFORMS
-Item3=NOFORMSA
+Item1=DEBUG;_Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Item2=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Item3=NOFORMS
+Item4=NOFORMSA
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;

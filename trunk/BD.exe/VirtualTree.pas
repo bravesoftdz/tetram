@@ -1,6 +1,6 @@
 unit VirtualTree;
 
-{$D-}
+{.$D-}
 
 interface
 
@@ -37,7 +37,8 @@ type
     vmAlbumsEditeur,
     vmAlbumsGenre,
     vmAlbumsSerie,
-    vmParaBDSerie);
+    vmParaBDSerie,
+    vmAchatsAlbumsEditeur);
 
   TOnCompareNodeString = procedure(Sender: TBaseVirtualTree; Node: PVirtualNode; const Text: WideString; var Concorde: Boolean) of object;
 
@@ -113,7 +114,7 @@ type
   RModeInfo = record
     FILTRECOUNT, FILTRE, FIELDS: string;
     INITIALEFIELDS, INITIALEVALUE, REFFIELDS: string;
-    TABLESEARCH: string; FIELDSEARCH: array[0..1] of string; SEARCHORDER: string;
+    TABLESEARCH: string; FIELDSEARCH: string; SEARCHORDER: string;
     WHERECONDITION: string;
     DEFAULTFILTRE: string;
   end;
@@ -126,7 +127,7 @@ const
     FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET';
     INITIALEFIELDS: 'INITIALETITREALBUM'; INITIALEVALUE: 'INITIALETITREALBUM';
     REFFIELDS: 'ID_ALBUM';
-    TABLESEARCH: 'ALBUMS'; FIELDSEARCH: ('UPPERTITREALBUM', 'UPPERTITRESERIE'); SEARCHORDER: 'UPPERTITREALBUM, HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
+    TABLESEARCH: 'VW_LISTE_ALBUMS'; FIELDSEARCH: 'COALESCE(UPPERTITREALBUM, UPPERTITRESERIE)'; SEARCHORDER: 'UPPERTITREALBUM, HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
     DEFAULTFILTRE: 'COMPLET = 1'
     ),
     (// vmCollections
@@ -134,49 +135,49 @@ const
     FIELDS: 'ID_COLLECTION, NOMCOLLECTION';
     INITIALEFIELDS: 'INITIALENOMCOLLECTION'; INITIALEVALUE: 'INITIALENOMCOLLECTION';
     REFFIELDS: 'ID_COLLECTION';
-    TABLESEARCH: 'COLLECTIONS'; FIELDSEARCH: ('UPPERNOMCOLLECTION', '')
+    TABLESEARCH: 'COLLECTIONS'; FIELDSEARCH: 'UPPERNOMCOLLECTION'
     ),
     (// vmEditeurs
     FILTRECOUNT: 'VW_INITIALES_EDITEURS'; FILTRE: 'EDITEURS_BY_INITIALE(?)';
     FIELDS: 'ID_EDITEUR, NOMEDITEUR';
     INITIALEFIELDS: 'INITIALENOMEDITEUR'; INITIALEVALUE: 'INITIALENOMEDITEUR';
     REFFIELDS: 'ID_EDITEUR';
-    TABLESEARCH: 'EDITEURS'; FIELDSEARCH: ('UPPERNOMEDITEUR', '')
+    TABLESEARCH: 'EDITEURS'; FIELDSEARCH: 'UPPERNOMEDITEUR'
     ),
     (// vmEmprunteurs
     FILTRECOUNT: 'VW_INITIALES_EMPRUNTEURS'; FILTRE: 'EMPRUNTEURS_BY_INITIALE(?)';
     FIELDS: 'ID_EMPRUNTEUR, NOMEMPRUNTEUR';
     INITIALEFIELDS: 'INITIALENOMEMPRUNTEUR'; INITIALEVALUE: 'INITIALENOMEMPRUNTEUR';
     REFFIELDS: 'ID_EMPRUNTEUR';
-    TABLESEARCH: 'EMPRUNTEURS'; FIELDSEARCH: ('UPPERNOMEMPRUNTEUR', '')
+    TABLESEARCH: 'EMPRUNTEURS'; FIELDSEARCH: 'UPPERNOMEMPRUNTEUR'
     ),
     (// vmGenres
     FILTRECOUNT: 'VW_INITIALES_GENRES'; FILTRE: 'GENRES_BY_INITIALE(?)';
     FIELDS: 'ID_GENRE, GENRE';
     INITIALEFIELDS: 'INITIALEGENRE'; INITIALEVALUE: 'INITIALEGENRE';
     REFFIELDS: 'ID_GENRE';
-    TABLESEARCH: 'GENRES'; FIELDSEARCH: ('UPPERGENRE', '')
+    TABLESEARCH: 'GENRES'; FIELDSEARCH: 'UPPERGENRE'
     ),
     (// vmPersonnes
     FILTRECOUNT: 'VW_INITIALES_PERSONNES'; FILTRE: 'PERSONNES_BY_INITIALE(?)';
     FIELDS: 'ID_PERSONNE, NOMPERSONNE';
     INITIALEFIELDS: 'INITIALENOMPERSONNE'; INITIALEVALUE: 'INITIALENOMPERSONNE';
     REFFIELDS: 'ID_PERSONNE';
-    TABLESEARCH: 'PERSONNES'; FIELDSEARCH: ('UPPERNOMPERSONNE', '')
+    TABLESEARCH: 'PERSONNES'; FIELDSEARCH: 'UPPERNOMPERSONNE'
     ),
     (// vmSeries
     FILTRECOUNT: 'VW_INITIALES_SERIES'; FILTRE: 'SERIES_BY_INITIALE(?)';
     FIELDS: 'ID_SERIE, TITRESERIE, ID_EDITEUR, NOMEDITEUR, ID_COLLECTION, NOMCOLLECTION';
     INITIALEFIELDS: 'INITIALETITRESERIE'; INITIALEVALUE: 'INITIALETITRESERIE';
     REFFIELDS: 'ID_SERIE';
-    TABLESEARCH: 'SERIES'; FIELDSEARCH: ('UPPERTITRESERIE', '')
+    TABLESEARCH: 'SERIES'; FIELDSEARCH: 'UPPERTITRESERIE'
     ),
     (// vmAlbumsAnnee
     FILTRECOUNT: 'ANNEES_ALBUMS(?)'; FILTRE: 'ALBUMS_BY_ANNEE(?, ?)';
     FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET';
     INITIALEFIELDS: 'ANNEEPARUTION'; INITIALEVALUE: 'ANNEEPARUTION';
     REFFIELDS: 'ID_ALBUM';
-    TABLESEARCH: 'VW_LISTE_ALBUMS'; FIELDSEARCH: ('UPPERTITREALBUM', 'UPPERTITRESERIE'); SEARCHORDER: 'UPPERTITREALBUM, UPPERTITRESERIE, HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
+    TABLESEARCH: 'VW_LISTE_ALBUMS'; FIELDSEARCH: 'COALESCE(UPPERTITREALBUM, UPPERTITRESERIE)'; SEARCHORDER: 'COALESCE(UPPERTITREALBUM, UPPERTITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
     DEFAULTFILTRE: 'COMPLET = 1'
     ),
     (// vmAlbumsCollection
@@ -184,7 +185,7 @@ const
     FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET';
     INITIALEFIELDS: 'NOMCOLLECTION'; INITIALEVALUE: 'ID_COLLECTION';
     REFFIELDS: 'ID_ALBUM';
-    TABLESEARCH: 'VW_LISTE_COLLECTIONS_ALBUMS'; FIELDSEARCH: ('UPPERTITREALBUM', 'UPPERTITRESERIE'); SEARCHORDER: 'UPPERTITREALBUM, UPPERTITRESERIE, HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
+    TABLESEARCH: 'VW_LISTE_COLLECTIONS_ALBUMS'; FIELDSEARCH: 'COALESCE(UPPERTITREALBUM, UPPERTITRESERIE)'; SEARCHORDER: 'COALESCE(UPPERTITREALBUM, UPPERTITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
     DEFAULTFILTRE: 'COMPLET = 1'
     ),
     (// vmAlbumsEditeur
@@ -192,7 +193,7 @@ const
     FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET';
     INITIALEFIELDS: 'NOMEDITEUR'; INITIALEVALUE: 'ID_EDITEUR';
     REFFIELDS: 'ID_ALBUM';
-    TABLESEARCH: 'VW_LISTE_EDITEURS_ALBUMS'; FIELDSEARCH: ('UPPERTITREALBUM', 'UPPERTITRESERIE'); SEARCHORDER: 'UPPERTITREALBUM, UPPERTITRESERIE, HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
+    TABLESEARCH: 'VW_LISTE_EDITEURS_ALBUMS'; FIELDSEARCH: 'COALESCE(UPPERTITREALBUM, UPPERTITRESERIE)'; SEARCHORDER: 'COALESCE(UPPERTITREALBUM, UPPERTITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
     DEFAULTFILTRE: 'COMPLET = 1'
     ),
     (// vmAlbumsGenre
@@ -200,7 +201,7 @@ const
     FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET';
     INITIALEFIELDS: 'GENRE'; INITIALEVALUE: 'ID_GENRE';
     REFFIELDS: 'ID_ALBUM';
-    TABLESEARCH: 'VW_LISTE_GENRES_ALBUMS'; FIELDSEARCH: ('UPPERTITREALBUM', 'UPPERTITRESERIE'); SEARCHORDER: 'UPPERTITREALBUM, UPPERTITRESERIE, HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
+    TABLESEARCH: 'VW_LISTE_GENRES_ALBUMS'; FIELDSEARCH: 'COALESCE(UPPERTITREALBUM, UPPERTITRESERIE)'; SEARCHORDER: 'COALESCE(UPPERTITREALBUM, UPPERTITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
     DEFAULTFILTRE: 'COMPLET = 1'
     ),
     (// vmAlbumsSerie
@@ -208,7 +209,7 @@ const
     FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET';
     INITIALEFIELDS: 'TITRESERIE'; INITIALEVALUE: 'ID_SERIE';
     REFFIELDS: 'ID_ALBUM';
-    TABLESEARCH: 'VW_LISTE_ALBUMS'; FIELDSEARCH: ('UPPERTITREALBUM', 'UPPERTITRESERIE'); SEARCHORDER: 'UPPERTITREALBUM, UPPERTITRESERIE, HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
+    TABLESEARCH: 'VW_LISTE_ALBUMS'; FIELDSEARCH: 'COALESCE(UPPERTITREALBUM, UPPERTITRESERIE)'; SEARCHORDER: 'COALESCE(UPPERTITREALBUM, UPPERTITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
     DEFAULTFILTRE: 'COMPLET = 1'
     ),
     (// vmParaBDSerie
@@ -216,8 +217,16 @@ const
     FIELDS: 'ID_PARABD, TITREPARABD, ID_SERIE, TITRESERIE, ACHAT, COMPLET, SCATEGORIE';
     INITIALEFIELDS: 'TITRESERIE'; INITIALEVALUE: 'ID_SERIE';
     REFFIELDS: 'ID_PARABD';
-    TABLESEARCH: 'VW_LISTE_PARABD'; FIELDSEARCH: ('UPPERTITREPARABD', 'UPPERTITRESERIE'); SEARCHORDER: 'UPPERTITREPARABD, UPPERTITRESERIE';
+    TABLESEARCH: 'VW_LISTE_PARABD'; FIELDSEARCH: 'COALESCE(UPPERTITREPARABD, UPPERTITRESERIE)'; SEARCHORDER: 'COALESCE(UPPERTITREPARABD, UPPERTITRESERIE)';
     DEFAULTFILTRE: 'COMPLET = 1'
+    ),
+    (// vmAchatsAlbumsEditeur
+    FILTRECOUNT: 'EDITEURS_ACHATALBUMS(?)'; FILTRE: 'ACHATALBUMS_BY_EDITEUR(?, ?)';
+    FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET';
+    INITIALEFIELDS: 'NOMEDITEUR'; INITIALEVALUE: 'ID_EDITEUR';
+    REFFIELDS: 'ID_ALBUM';
+    TABLESEARCH: 'VW_LISTE_EDITEURS_ACHATALBUMS'; FIELDSEARCH: 'COALESCE(UPPERTITREALBUM, UPPERTITRESERIE)'; SEARCHORDER: 'COALESCE(UPPERTITREALBUM, UPPERTITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
+    DEFAULTFILTRE: 'ACHAT = 1'
     )
     );
 
@@ -341,7 +350,8 @@ begin
           vmAlbumsCollection,
           vmAlbumsEditeur,
           vmAlbumsGenre,
-          vmAlbumsSerie: begin
+          vmAlbumsSerie,
+          vmAchatsAlbumsEditeur: begin
             PA := RNodeInfo(GetNodeData(Node)^).Detail as TAlbum;
             case Header.Columns.Count of
               2:
@@ -414,7 +424,8 @@ begin
         vmAlbumsCollection,
         vmAlbumsEditeur,
         vmAlbumsGenre,
-        vmAlbumsSerie: ClassPointeur := TAlbum;
+        vmAlbumsSerie,
+        vmAchatsAlbumsEditeur: ClassPointeur := TAlbum;
       vmEmprunteurs: ClassPointeur := TEmprunteur;
       vmPersonnes: ClassPointeur := TPersonnage;
       vmSeries: ClassPointeur := TSerie;
@@ -484,7 +495,7 @@ begin
     end
     else
       case FMode of
-        vmAlbums, vmAlbumsAnnee, vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie:
+        vmAlbums, vmAlbumsAnnee, vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie, vmAchatsAlbumsEditeur:
           if FShowAchat and TAlbum(InfoNode.Detail).Achat then Canvas.Font.Style := Canvas.Font.Style + [fsItalic];
         vmParaBDSerie:
           if FShowAchat and TParaBD(InfoNode.Detail).Achat then Canvas.Font.Style := Canvas.Font.Style + [fsItalic];
@@ -502,44 +513,6 @@ begin
 end;
 
 procedure TVirtualStringTree.Find(const Text: string; GetNext: Boolean = False);
-
-  function listSortFields: string;
-  var
-    i: Integer;
-  begin
-    Result := '';
-    i := 0;
-    while (i <= High(vmModeInfos[FMode].FIELDSEARCH)) and (vmModeInfos[FMode].FIELDSEARCH[i] <> '') do begin
-      AjoutString(Result, vmModeInfos[FMode].FIELDSEARCH[i], ',');
-      Inc(i);
-    end;
-  end;
-
-  function listWhereFields: string;
-
-    procedure processChamp(id: integer);
-    var
-      testchamp: string;
-      i: Integer;
-    begin
-      testchamp := '';
-      for i := 0 to Pred(id) do
-        AjoutString(testchamp, vmModeInfos[FMode].FIELDSEARCH[i] + ' IS NULL', ' AND ');
-      AjoutString(testchamp, vmModeInfos[FMode].FIELDSEARCH[id] + ' LIKE ''%'' || ? || ''%''', ' AND ');
-      AjoutString(Result, testchamp, ' OR ', '(', ')');
-    end;
-  var
-    i: Integer;
-  begin
-    Result := '';
-    i := 0;
-    while (i <= High(vmModeInfos[FMode].FIELDSEARCH)) and (vmModeInfos[FMode].FIELDSEARCH[i] <> '') do begin
-      processChamp(i);
-      Inc(i);
-    end;
-    if Result <> '' then Result := '(' + Result + ')';
-  end;
-
 var
   iCurrent, iFind: TGUID;
   nCurrent, nFind: PVirtualNode;
@@ -581,7 +554,7 @@ begin
       iFind := FFindArray[0];
       for i := 0 to Pred(Length(FFindArray)) do
         if IsEqualGUID(FFindArray[i], iCurrent) then begin
-          // pas besoin de tester si on est sur le dernier: on ne peut pas puisqu'il c'est une copie du premier
+          // pas besoin de tester si on est sur le dernier: on ne peut pas puisque c'est une copie du premier
           iFind := FFindArray[i + 1];
           Break;
         end;
@@ -590,19 +563,15 @@ begin
     else
       with TJvUIBQuery.Create(nil) do try
         Transaction := GetTransaction(DMPrinc.UIBDataBase);
-        SQL.Text := 'SELECT ' + vmModeInfos[FMode].REFFIELDS + ' FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + listWhereFields;
+        SQL.Text := 'SELECT ' + vmModeInfos[FMode].REFFIELDS + ' FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].FIELDSEARCH + ' LIKE ''%'' || ? || ''%''';
         if FUseFiltre then
           SQL.Add('AND ' + FFiltre)
         else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
           SQL.Add('AND ' + vmModeInfos[FMode].DEFAULTFILTRE);
         SQL.Add('ORDER BY ' + vmModeInfos[FMode].INITIALEFIELDS + ',');
         if vmModeInfos[FMode].SEARCHORDER <> '' then SQL.Add(vmModeInfos[FMode].SEARCHORDER + ',');
-        SQL.Add(listSortFields);
-        i := 0;
-        while (i <= High(vmModeInfos[FMode].FIELDSEARCH)) and (vmModeInfos[FMode].FIELDSEARCH[i] <> '') do begin
-          Params.AsString[i] := UpperCase(SansAccents(Text));
-          Inc(i);
-        end;
+        SQL.Add(vmModeInfos[FMode].FIELDSEARCH);
+        Params.AsString[0] := UpperCase(SansAccents(Text));
         Open;
         SetLength(FFindArray, 0);
         i := 0;
@@ -698,31 +667,30 @@ begin
       BeginUpdate;
       try
         Transaction := GetTransaction(DMPrinc.UIBDataBase);
-        SQL.Text := 'SELECT Count(*) FROM ' + vmModeInfos[FMode].FILTRECOUNT;
-        if FUseFiltre then
-          Params.AsString[0] := FFiltre
-        else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
-          Params.AsString[0] := vmModeInfos[FMode].DEFAULTFILTRE;
-        Open;
-        RootNodeCount := Fields.AsInteger[0];
-        SetLength(FCountPointers, RootNodeCount);
-
         SQL.Text := 'SELECT * FROM ' + vmModeInfos[FMode].FILTRECOUNT;
         if FUseFiltre then
           Params.AsString[0] := FFiltre
         else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
           Params.AsString[0] := vmModeInfos[FMode].DEFAULTFILTRE;
         Open;
+
+        SetLength(FCountPointers, 0);
         i := 0;
         while not Eof do begin
+          // on alloue par plage de 250 pour eviter de le faire trop souvent
+          if Length(FCountPointers) <= i then SetLength(FCountPointers, Length(FCountPointers) + 250);
           FCountPointers[i].Count := Fields.AsInteger[1];
           FCountPointers[i].Initiale := Fields.AsString[0];
-          if FMode in [vmAlbumsSerie, vmAlbumsEditeur, vmAlbumsCollection] then
+          if FMode in [vmAlbumsSerie, vmAlbumsEditeur, vmAlbumsCollection, vmAchatsAlbumsEditeur] then
             FCountPointers[i].Initiale := FormatTitre(FCountPointers[i].Initiale);
           FCountPointers[i].sValue := Fields.ByNameAsString[vmModeInfos[FMode].INITIALEVALUE];
           Next;
           Inc(i);
         end;
+        // on retire ce qui a été alloué en trop
+        SetLength(FCountPointers, Length(FCountPointers));
+        
+        RootNodeCount := Length(FCountPointers);
       finally
         Transaction.Free;
         Free;

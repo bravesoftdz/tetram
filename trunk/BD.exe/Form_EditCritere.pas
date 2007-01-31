@@ -67,7 +67,7 @@ begin
     Result.valeurText := FChampValeurs[Result.iCritere2];
   Result.NomTable := Champ.NomTable;
   Result.TestSQL := Champ.NomTable + '.' + Champ.NomChamp;
-  critereTexte := UpperCase(SansAccents(valeur.Text));
+  critereTexte := UpperCase(SansAccents(Result.valeurText));
   case Champ.Special of
     csGenre:
       case Result.iSignes of

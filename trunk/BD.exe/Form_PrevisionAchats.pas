@@ -76,7 +76,7 @@ end;
 
 procedure TfrmPrevisionsAchats.LightComboCheck1Change(Sender: TObject);
 const
-  NewMode: array[0..5] of TVirtualMode = (vmAlbums, vmAlbumsSerie, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsAnnee, vmAlbumsCollection);
+  NewMode: array[0..5] of TVirtualMode = (vmAlbums, vmAlbumsSerie, vmAchatsAlbumsEditeur, vmAlbumsGenre, vmAlbumsAnnee, vmAlbumsCollection);
 begin
   ChangeAlbumMode(NewMode[LightComboCheck1.Value]);
   with TIniFile.Create(FichierIni) do try
