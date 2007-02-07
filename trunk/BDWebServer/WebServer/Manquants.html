@@ -1,0 +1,20 @@
+<%
+vAlbums=Modules.Manquants.Albums
+%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//FR">
+<HTML>
+	<HEAD>
+		<TITLE><%=Application.Title%>&nbsp;-&nbsp;<%=vTitre.DisplayText%></TITLE>
+		<LINK rel="stylesheet" href="/Styles.css" type="text/css">
+	</HEAD>
+	<BODY>
+<%
+var e = new Enumerator(vAlbums.Records);
+if (!e.atEnd()) { %>
+		<A href="FicheSerie?RefSerie=<%=vAlbums.RefSerie.Value%>"><%=vAlbums.Libelle.DisplayText%><br>
+<%
+}
+%>
+
+	</BODY>
+</HTML> 

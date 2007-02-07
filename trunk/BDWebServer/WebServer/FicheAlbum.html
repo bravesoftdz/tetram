@@ -1,0 +1,112 @@
+<%
+vFilm=Modules.FicheFilm.Film
+vSupport=Modules.FicheFilm.Support
+vAffiche=vFilm.Affiche
+vTitre=vFilm.TitreFilm
+vActeurs=Modules.FicheFilm.Acteurs
+vRealisateurs=Modules.FicheFilm.Realisateurs
+vNationalite=Modules.FicheFilm.Nationalite
+vGenres=Modules.FicheFilm.Genres
+%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//FR">
+<HTML>
+	<HEAD>
+		<TITLE><%=Application.Title%>&nbsp;-&nbsp;<%=vTitre.Value%></TITLE>
+		<LINK rel="stylesheet" href="/Styles.css" type="text/css">
+	</HEAD>
+	<BODY>
+		<H1><%=vTitre.Value%></H1>
+		<TABLE border=0 width=100%>
+			<TBODY valign=top>
+				<TR>
+					<TH align=right></TH><TD width=100%><A href="FicheSupport?RefSupport=<%=vSupport.RefSupport.Value%>"><%=vSupport.TypeSupport.Value%></A>&nbsp;(<%=vFilm.Stock.Value?'En stock':(vFilm.Prete.Value?'Pr&ecirc;t&eacute;':'Pas en stock')%>)</TD>
+					<TD rowspan=10 align=right><A href="<%=vAffiche.Image.AsHREF%>" target=zoomaffiche><%=((vAffiche.Image!=null) && (vAffiche.Image.AsHREF!="/")) ? '<img border=0 height=250 src="' + vAffiche.Image.AsHREF + '&height=250&width=250" alt="' + vAffiche.DisplayLabel + '">' : ''%></A>
+				</TR>
+<% if (vFilm.Annee.DisplayText!="") { %>
+				<TR>
+					<TH align=right>Ann&eacute;e:</TH><TD width=100%><%=vFilm.Annee.DisplayText%></TD>
+				</TR>
+<% } %>
+<% if (vFilm.Duree.DisplayText!="") { %>
+				<TR>
+					<TH align=right>Dur&eacute;e:</TH><TD><%=vFilm.Duree.DisplayText%> (<%=vFilm.Duree.Value%> min)</TD>
+				</TR>
+<% } %>
+				<TR>
+					<TH align=right>Couleur:</TH><TD><%=vFilm.Couleur.Value ? 'Oui' : 'Non'%></TD>
+				</TR>
+				<TR>
+					<TH align=right>VO:</TH><TD><%=vFilm.VO.Value ? 'Oui' : 'Non'%></TD>
+				</TR>
+<%
+var e = new Enumerator(vNationalite.Records);
+if (!e.atEnd()) { %>
+				<TR>
+					<TH align=right>Nationalit&eacute;:</TH>
+					<TD>
+<%
+	s = '';
+	for (; !e.atEnd(); e.moveNext())
+		s == '' ? s = vNationalite.Pays.Value : s += ', ' + vNationalite.Pays.Value;
+	Response.Write(s);
+%>
+					</TD>
+				</TR>
+<%	} %>
+<%
+var e = new Enumerator(vGenres.Records);
+if (!e.atEnd()) { %>
+				<TR>
+					<TH align=right>Genre:</TH>
+					<TD>
+<%
+	s = '';
+	for (; !e.atEnd(); e.moveNext())
+		s == '' ? s = vGenres.Genre.Value : s += ', ' + vGenres.Genre.Value;
+	Response.Write(s);
+%>
+					</TD>
+				</TR>
+<% } %>
+<%
+var e = new Enumerator(vRealisateurs.Records);
+if (!e.atEnd()) { %>
+				<TR>
+					<TH align=right>Realisation:</TH>
+					<TD>
+<%
+	for (; !e.atEnd(); e.moveNext()) { %>
+						<A href="FichePersonne?RefPersonne=<%=vRealisateurs.RefPersonne.Value%>"><%=vRealisateurs.Libelle.Value%><br>
+<% 	} %>
+					</TD>
+				</TR>
+<% } %>
+<%
+var e = new Enumerator(vActeurs.Records);
+if (!e.atEnd()) { %>
+				<TR>
+					<TH align=right>Acteurs:</TH>
+					<TD>
+<%
+	for (; !e.atEnd(); e.moveNext()) { %>
+						<A href="FichePersonne?RefPersonne=<%=vActeurs.RefPersonne.Value%>"><%=vActeurs.Libelle.Value%><br>
+<% 	} %>
+					</TD>
+				</TR>
+<% } %>
+<% if (vFilm.Histoire.Value!="") { %>
+				<TR>
+					<TH align=right>Histoire:</TH><TD><%=vFilm.Histoire.Value%></TD>
+				</TR>
+<% } %>
+<% if (vFilm.Notes.Value!="") { %>
+				<TR>
+					<TH align=right>Notes:</TH><TD><%=vFilm.Notes.Value%></TD>
+				</TR>
+<% } %>
+			</TBODY>
+		</TABLE>
+		<P>
+		<A href="javascript:history.back();">Retour</A> - <A href="Repertoire">R&eacute;pertoire</A><BR>
+	</BODY>
+</HTML>

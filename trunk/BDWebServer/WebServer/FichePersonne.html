@@ -1,0 +1,30 @@
+<%
+vPersonne=Modules.FichePersonne.Personne;
+vFilms=Modules.FichePersonne.Films;
+sRealisation = '';
+sRoles = '';
+var e = new Enumerator(vFilms.Records);
+for (; !e.atEnd(); e.moveNext()) {
+	if (vFilms.IsRealisateur.Value)
+		sRealisation += '<TR><TD width=30><TD><A href="FicheFilm?RefFilm=' + vFilms.RefFilm.Value + '">' + vFilms.TitreFilm.DisplayText + (vFilms.Annee.Value!=0 ? '&nbsp;-&nbsp;' + vFilms.Annee.DisplayText : '') + '</A></TD></TR>';
+	if (vFilms.IsActeur.Value)
+		sRoles += '<TR><TD width=30><TD><A href="FicheFilm?RefFilm=' + vFilms.RefFilm.Value + '">' + vFilms.TitreFilm.DisplayText + (vFilms.Annee.Value!=0 ? '&nbsp;-&nbsp;' + vFilms.Annee.DisplayText : '') + '</A>' + (vFilms.Role.Value!="" ? '&nbsp;<I>(' + vFilms.Role.Value + ')</I>' : '') + '</TD></TR>';
+} %>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//FR">
+<HTML>
+	<HEAD>
+		<TITLE><%=Application.Title%>&nbsp;-&nbsp;<%=vPersonne.Nom.Value%></TITLE>
+		<LINK rel="stylesheet" href="/Styles.css" type="text/css">
+	</HEAD>
+	<BODY>
+		<H1><%=vPersonne.Nom.Value%></H1>
+		<TABLE border=0 width=100%>
+			<TBODY valign=top>
+				<%= sRealisation != "" ? '<TH align=left colspan=2>R&eacute;alisation(s):</TH>' + sRealisation : ''%>
+				<%= sRoles != "" ? '<TH align=left colspan=2>Role(s):</TH>' + sRoles : ''%>
+			</TBODY>
+		</TABLE>
+		<P>
+		<A href="javascript:history.back();">Retour</A> - <A href="Repertoire">R&eacute;pertoire</A><BR>
+	</BODY>
+</HTML>
