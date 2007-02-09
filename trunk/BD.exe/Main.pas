@@ -520,7 +520,7 @@ end;
 
 procedure TFond.FormClose(Sender: TObject; var Action: TCloseAction);
 var
-  i: integer;
+  i: Integer;
 begin
   with TIniFile.Create(FichierIni) do
   try

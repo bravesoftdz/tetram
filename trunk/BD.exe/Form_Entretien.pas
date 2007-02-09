@@ -40,8 +40,7 @@ type
     procedure BDDOpenBeforeExecute(Sender: TObject);
     procedure BDDOpenAccept(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure vstEntretienFreeNode(Sender: TBaseVirtualTree;
-      Node: PVirtualNode);
+    procedure vstEntretienFreeNode(Sender: TBaseVirtualTree;      Node: PVirtualNode);
   private
     { Déclarations privées }
     FServerWasActive: Boolean;
@@ -386,11 +385,14 @@ end;
 
 procedure TFrmEntretien.BDDBackupAccept(Sender: TObject);
 begin
-  with TFrmVerbose.Create(Self) do begin
+  with TFrmVerbose.Create(Self) do try
     Application.ProcessMessages;
     DMPrinc.UIBBackup.OnVerbose := UIBVerbose;
+    DMPrinc.UIBBackup.Verbose := True;
     DMPrinc.UIBBackup.BackupFiles.Text := BDDBackup.Dialog.FileName;
     DMPrinc.UIBBackup.Run;
+  finally
+    // pas de free, c'est la fenêtre qui va s'auto-libérer
     Fin;
   end;
 end;

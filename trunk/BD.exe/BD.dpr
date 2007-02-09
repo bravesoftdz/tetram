@@ -122,7 +122,8 @@ uses
   UMAJ1_2_3_3 in 'UMAJ1_2_3_3.pas',
   UMAJ1_2_3_20 in 'UMAJ1_2_3_20.pas',
   UMAJ1_2_3_22 in 'UMAJ1_2_3_22.pas',
-  UMAJ1_2_3_26 in 'UMAJ1_2_3_26.pas';
+  UMAJ1_2_3_26 in 'UMAJ1_2_3_26.pas',
+  UMAJ2_0_0_0 in 'UMAJ2_0_0_0.pas';
 
 {$R *.RES}
 {$R curseurs.res}
@@ -165,7 +166,9 @@ begin
     Debut := now;
 
     FrmSplash.Affiche_act(VerificationVersion + '...');
-    if not (OuvreSession and DMPrinc.CheckVersions(FrmSplash.Affiche_act)) then Exit;
+    if DMPrinc.CheckVersion(False) then Exit;
+    if not OuvreSession then Exit;
+    if not DMPrinc.CheckVersions(FrmSplash.Affiche_act) then Exit;
 
     FrmSplash.Affiche_act(ChargementOptions + '...');
     LitOptions;

@@ -72,6 +72,7 @@ initialization
   FormatMonnaieSimple := '0.00';
   FormatMonnaie := IIf(CurrencyFormat in [0, 2], CurrencyString + IIf(CurrencyFormat = 2, ' ', ''), '') + FormatMonnaieCourt + IIf(CurrencyFormat in [1, 3], IIf(CurrencyFormat = 3, ' ', '') + CurrencyString, '');
   FormatPourcent := '%d (%f%%)';
+  Utilisateur.ExeVersion := GetFichierVersion(Application.ExeName);
   with TIniFile.Create(FichierIni) do try
     DatabasePath := ReadString('Database', 'Database', ExtractFilePath(Application.ExeName) + DatabasePath);
     DatabaseUserName := ReadString('Database', 'UserName', DatabaseUserName);

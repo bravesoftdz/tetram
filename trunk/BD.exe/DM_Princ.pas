@@ -57,7 +57,7 @@ type
   public
     { Déclarations publiques }
     function CheckVersions(Affiche_act: TAffiche_act; Force: Boolean = True): Boolean;
-    function CheckVersion(ForceMessage: Boolean): Boolean;
+    function CheckVersion(Force: Boolean): Boolean;
     function ActiveHTTPServer(Value: Boolean): Boolean;
   end;
 
@@ -80,7 +80,8 @@ function DMPrinc: TDMPrinc;
 var
   cs: TCriticalSection;
 begin
-  if not Assigned(FDMPrinc) then begin
+  if not Assigned(FDMPrinc) then
+  begin
     cs := TCriticalSection.Create;
     cs.Enter;
     try
@@ -97,7 +98,8 @@ function OuvreSession: Boolean;
 begin
   try
     Result := True;
-    with DMPrinc do begin
+    with DMPrinc do
+    begin
       UIBDataBase.Connected := False;
       UIBDataBase.DatabaseName := DatabasePath;
       UIBDataBase.UserName := DatabaseUserName;
@@ -135,7 +137,8 @@ type
   var
     Script: TJvUIBScript;
   begin
-    if (CompareVersionNum(Version, CurrentVersion) > 0) and (CompareVersionNum(Version, Utilisateur.ExeVersion) <= 0) then begin
+    if (CompareVersionNum(Version, CurrentVersion) > 0) and (CompareVersionNum(Version, Utilisateur.ExeVersion) <= 0) then
+    begin
       Affiche_act('Mise à jour ' + Version + '...');
       Script := TJvUIBScript.Create(nil);
       try
@@ -153,44 +156,54 @@ type
     end;
   end;
 
-var
-  Compare, i: Integer;
-  VerifNet: Boolean;
-  msg: string;
-begin
-  Result := False;
-  Utilisateur.ExeVersion := GetFichierVersion(Application.ExeName);
-  with TJvUIBQuery.Create(nil) do try
-    Transaction := GetTransaction(UIBDataBase);
+  procedure CheckIndex;
+  var
+    i: Integer;
+  begin
+    with TJvUIBQuery.Create(nil) do
+    try
+      Transaction := GetTransaction(UIBDataBase);
+      SQL.Text := 'SELECT RDB$INDEX_NAME FROM RDB$INDICES WHERE COALESCE(RDB$SYSTEM_FLAG, 0) <> 1';
+      Open;
+      with TStringList.Create do
+      try
+        while not Eof do
+        begin
+          Add(Fields.AsString[0]);
+          Next;
+        end;
+        Close;
 
-    case Utilisateur.Options.VerifMAJDelai of
-      0: // jamais de verification
-        VerifNet := False;
-      1: // à chaque démarrage
-        VerifNet := True;
-      2: // une fois par jour
-        VerifNet := DaysBetween(Now, Utilisateur.Options.LastVerifMAJ) > 0;
-      3: // une fois par semaine
-        VerifNet := WeeksBetween(Now, Utilisateur.Options.LastVerifMAJ) > 0;
-      else // une fois par mois
-        VerifNet := MonthsBetween(Now, Utilisateur.Options.LastVerifMAJ) > 0;
-    end;
-    if VerifNet then try
-      VerifNet := CheckVersion(False);
-      with TIniFile.Create(FichierIni) do try
-        WriteInteger('Divers', 'LastVerifMAJ', Trunc(Now));
+        SQL.Clear;
+        for i := 0 to Pred(Count) do
+          SQL.Add('SET STATISTICS INDEX ' + Strings[i] + ';');
       finally
         Free;
       end;
-      if VerifNet then Exit;
-    except
+      QuickScript := True;
+      ExecSQL;
+      Transaction.Commit;
+    finally
+      Transaction.Free;
+      Free;
     end;
+  end;
+
+var
+  Compare, i: Integer;
+  msg: string;
+begin
+  Result := False;
+  with TJvUIBQuery.Create(nil) do
+  try
+    Transaction := GetTransaction(UIBDataBase);
 
     SQL.Text := 'SELECT VALEUR FROM OPTIONS WHERE Nom_option = ''Version''';
     Open;
     if not Eof then
       CurrentVersion := Fields.AsString[0]
-    else begin
+    else
+    begin
       CurrentVersion := '0.0.0.0';
       try
         SQL.Text := 'INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES (''Version'', ?)';
@@ -209,19 +222,22 @@ begin
   msg := 'BDthèque ne peut pas utiliser cette base de données.'#13#10'Version de la base de données: ' + CurrentVersion;
 
   Compare := CompareVersionNum(Utilisateur.ExeVersion, CurrentVersion);
-  if Compare < 0 then begin // CurrentVersion > Utilisateur.ExeVersion
+  if Compare < 0 then
+  begin // CurrentVersion > Utilisateur.ExeVersion
     ShowMessage(msg);
     Exit;
   end;
 
-  if Compare > 0 then begin // Utilisateur.ExeVersion > CurrentVersion
+  if Compare > 0 then
+  begin // Utilisateur.ExeVersion > CurrentVersion
     if not (Force or (MessageDlg(msg + #13#10'Voulez-vous la mettre à jour?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)) then Exit;
 
     for i := 0 to Pred(ListUpdates.Count) do
       with TUpdate(ListUpdates[i]) do
         ProcessUpdate(Version, UpdateCallback);
 
-    with TJvUIBQuery.Create(nil) do try
+    with TJvUIBQuery.Create(nil) do
+    try
       Transaction := GetTransaction(UIBDataBase);
 
       SQL.Text := 'UPDATE OPTIONS SET Valeur = ' + QuotedStr(Utilisateur.ExeVersion) + ' WHERE Nom_Option = ''Version'';';
@@ -231,9 +247,11 @@ begin
       Transaction.Free;
       Free;
     end;
-
-    if not Force then ShowMessage('Mise à jour terminée.');
   end;
+
+  CheckIndex;
+
+  if (Compare > 0) and not Force then ShowMessage('Mise à jour terminée.');
   Result := True;
 end;
 
@@ -246,7 +264,8 @@ end;
 
 procedure TDMPrinc.ApplicationEvents1Message(var Msg: tagMSG; var Handled: Boolean);
 begin
-  if (Msg.message = WM_SYSCOMMAND) and (Msg.wParam = SC_CLOSE) and Assigned(Fond) then begin
+  if (Msg.message = WM_SYSCOMMAND) and (Msg.wParam = SC_CLOSE) and Assigned(Fond) then
+  begin
     Handled := True;
     Fond.Quitter.Execute;
   end;
@@ -275,13 +294,15 @@ begin
   Info := TInformation.Create;
   Result := False;
   //  lbSessionList.Items.Clear;
-  if not HTTPServer.Active then begin
+  if not HTTPServer.Active then
+  begin
     HTTPServer.Bindings.Clear;
     HTTPServer.DefaultPort := Utilisateur.Options.WebServerPort;
     HTTPServer.Bindings.Add;
   end;
 
-  if Value then begin
+  if Value then
+  begin
     try
       Info.ShowInfo('Démarrage du WebServer...');
       //      EnableLog := cbEnableLog.Checked;
@@ -292,12 +313,14 @@ begin
       TrayIcon.Active := True;
       Result := True;
     except
-      on e: exception do begin
+      on e: exception do
+      begin
         DisplayMessage(Format('Exception %s in Activate. Error is:"%s".', [e.ClassName, e.Message]));
       end;
     end;
   end
-  else begin
+  else
+  begin
     Info.ShowInfo('Arrêt du WebServer...');
     TrayIcon.Active := False or IsIconic(Application.Handle);
     HTTPServer.Active := False;
@@ -351,48 +374,59 @@ begin
       AThread.Connection.Socket.Binding.PeerPort]));
 
   LocalDoc := '';
-  if (ARequestInfo.Document = '') or (ARequestInfo.Document = '/') then begin
+  if (ARequestInfo.Document = '') or (ARequestInfo.Document = '/') then
+  begin
     AResponseInfo.Redirect('http://' + ARequestInfo.Host + '/WebServer/');
     Exit;
   end;
   p := Pos('webserver', LowerCase(ARequestInfo.Document));
-  if p in [1, 2] then begin
+  if p in [1, 2] then
+  begin
     LocalDoc := ARequestInfo.Document;
     Action := Copy(LocalDoc, p + Length('WebServer'), Length(LocalDoc));
     //    LocalDoc := WebServerDLL;
     LocalDoc := Application.ExeName;
   end;
 
-  if LocalDoc <> '' then begin
+  if LocalDoc <> '' then
+  begin
     //    LocalDoc := ExpandFileName(ExtractFilePath(Application.ExeName) + LocalDoc);
-    if Action = '' then begin
+    if Action = '' then
+    begin
       AResponseInfo.Redirect('http://' + ARequestInfo.Host + '/WebServer/');
       Exit;
     end
     else
       Action := Copy(Action, 2, Length(Action));
-    if FileExists(LocalDoc) then begin
+    if FileExists(LocalDoc) then
+    begin
       ISAPIRunner.Execute(LocalDoc, AThread, ARequestInfo, AResponseInfo, WebServerPath, False, Action);
     end
-    else begin
+    else
+    begin
       AResponseInfo.ContentText := '<H1><center>Script not found</center></H1>';
       AResponseInfo.ResponseNo := 404; // Not found
     end;
   end
-  else begin
+  else
+  begin
     LocalDoc := ExpandFileName(WebServerPath + ARequestInfo.Document);
 
-    if AnsiSameText(Copy(LocalDoc, 1, Length(WebServerPath)), WebServerPath) then begin // File down in dir structure
+    if AnsiSameText(Copy(LocalDoc, 1, Length(WebServerPath)), WebServerPath) then
+    begin // File down in dir structure
       if AnsiSameText(Copy(LocalDoc, 1, Length(WebServerPath + 'Couverture')), WebServerPath + 'Couverture') then
         ResultFile := GetCouvertureStream(False, StringToGUID(ARequestInfo.Params.Values['RefCouverture']),
           StrToIntDef(ARequestInfo.Params.Values['Height'], -1),
           StrToIntDef(ARequestInfo.Params.Values['Width'], -1),
           Utilisateur.Options.WebServerAntiAliasing);
 
-      if FileExists(LocalDoc) or Assigned(ResultFile) then begin // File exists
-        if AnsiSameText(ARequestInfo.Command, 'HEAD') then begin
+      if FileExists(LocalDoc) or Assigned(ResultFile) then
+      begin // File exists
+        if AnsiSameText(ARequestInfo.Command, 'HEAD') then
+        begin
           // HEAD request, don't send the document but still send back it's size
-          if not Assigned(ResultFile) then begin
+          if not Assigned(ResultFile) then
+          begin
             ResultFile := TFileStream.Create(LocalDoc, fmOpenRead or fmShareDenyWrite);
             AResponseInfo.ContentType := HTTPServer.MIMETable.GetFileMIMEType(LocalDoc);
           end
@@ -406,16 +440,19 @@ begin
             FreeAndNil(ResultFile); // We must free this file since it won't be done by the web server component
           end;
         end
-        else begin
+        else
+        begin
           // Normal document request
           // Send the document back
-          if Assigned(ResultFile) then begin
+          if Assigned(ResultFile) then
+          begin
             AResponseInfo.ContentType := HTTPServer.MIMETable.GetFileMIMEType('.jpg');
             AResponseInfo.ContentStream := ResultFile;
             AResponseInfo.FreeContentStream := True;
             ByteSent := ResultFile.Size;
           end
-          else begin
+          else
+          begin
             AResponseInfo.ContentType := '';
             ByteSent := HTTPServer.ServeFile(AThread, AResponseInfo, LocalDoc);
           end;
@@ -425,7 +462,8 @@ begin
               AThread.Connection.Socket.Binding.PeerPort]));
         end;
       end
-      else begin
+      else
+      begin
         AResponseInfo.ResponseNo := 404; // Not found
         AResponseInfo.ContentText := '<html><head><title>Error</title></head><body><h1>' + AResponseInfo.ResponseText + '</h1>' + ARequestInfo.Document + '</body></html>';
       end;
@@ -509,9 +547,41 @@ begin
   if IsIconic(Application.Handle) then PopupMenu.Popup(Mouse.CursorPos.x, Mouse.CursorPos.y);
 end;
 
-function TDMPrinc.CheckVersion(ForceMessage: Boolean): Boolean;
+function TDMPrinc.CheckVersion(Force: Boolean): Boolean;
+// Valeurs de retour:
+// False: pas de mise à jour ou mise à jour "reportée"
+// True: mise à jour et utilisateur demande à fermer l'appli
+var
+  doVerif: Boolean;
 begin
-  Result := CheckVersionNet.CheckVersion(SansAccents(Application.Title), 'bdtheque', Utilisateur.ExeVersion, ForceMessage, not ForceMessage) = 1;
+  if Force then
+    doVerif := True
+  else
+    case Utilisateur.Options.VerifMAJDelai of
+      0: // jamais de verification
+        doVerif := False;
+      1: // à chaque démarrage
+        doVerif := True;
+      2: // une fois par jour
+        doVerif := DaysBetween(Now, Utilisateur.Options.LastVerifMAJ) > 0;
+      3: // une fois par semaine
+        doVerif := WeeksBetween(Now, Utilisateur.Options.LastVerifMAJ) > 0;
+      else // une fois par mois
+        doVerif := MonthsBetween(Now, Utilisateur.Options.LastVerifMAJ) > 0;
+    end;
+
+  if not doVerif then
+    Result := False
+  else
+  begin
+    Result := CheckVersionNet.CheckVersion(SansAccents(Application.Title), 'bdtheque', Utilisateur.ExeVersion, Force, not Force) = 1;
+    with TIniFile.Create(FichierIni) do
+    try
+      WriteInteger('Divers', 'LastVerifMAJ', Trunc(Now));
+    finally
+      Free;
+    end;
+  end;
 end;
 
 end.
