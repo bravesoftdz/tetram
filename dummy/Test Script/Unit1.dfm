@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 412
-  Top = 168
+  Left = 257
+  Top = 192
   Width = 870
   Height = 640
   Caption = 'Form1'
@@ -45,13 +45,14 @@ object Form1: TForm1
       '    i := Pos('#39's'#233'rie(s) trouv'#233'e(s)'#39', s);'
       '    if i > 0 then begin'
       '      s2 := s2 + '#39'S'#233'ries :'#39'#13#10'#39'---------'#39'#13#10;'
+      '      i := PosEx('#39'<tr valign="top">'#39', s, i);'
       '      s := Copy(s, i, Length(s));'
       '      while Pos('#39'serie.html?id='#39', s) > 0 do begin'
       
         '        s3 := findInfo('#39'<tr valign="top">'#39', '#39'</td></tr>'#39', s, '#39#39')' +
         ';'
       '        if s3 <> '#39#39' then begin'
-      '          s := Copy(s, 17 + Length(s3) + 10, Length(s));'
+      '          s := Copy(s, 17 + Length(s3) + 10 + 1, Length(s));'
       
         '          s2 := s2 + Format('#39'%s (%s)'#39'#13#10, [findInfo('#39'class="d' +
         'efault">'#39', '#39'</a>'#39', s3, '#39#39'), findInfo('#39'serie.html?id='#39', '#39'" class=' +
@@ -65,28 +66,23 @@ object Form1: TForm1
       '    i := Pos('#39'album(s) trouv'#233'(s)'#39', s);'
       '    if i > 0 then begin'
       '      s2 := s2 + '#39'Albums :'#39'#13#10'#39'---------'#39'#13#10;'
+      '      i := PosEx('#39'<tr valign="top">'#39', s, i);'
       '      s := Copy(s, i, Length(s));'
       '      while Pos('#39'album.html?serie='#39', s) > 0 do begin'
-      
-        '        s3 := findInfo('#39'<tr valign="top">'#39', '#39'</td></tr>'#39', s, '#39#39')' +
-        ';'
+      '        s3 := findInfo('#39'<tr valign="top">'#39', '#39'</tr>'#39', s, '#39#39');'
       '        if s3 <> '#39#39' then begin'
-      '          s := Copy(s, 17 + Length(s3) + 10, Length(s));'
+      '          s := Copy(s, 17 + Length(s3) + 5 + 1, Length(s));'
+      '          s3 := findInfo('#39'class="default">'#39', '#39'</td>'#39', s3, '#39#39');'
       
-        '          ShowMessage(Format('#39'%s - %s (%s)'#39'#13#10, [findInfo('#39'" ' +
-        'class="default">'#39', '#39'</a>'#39', s3, '#39#39'), findInfo('#39'">'#39', '#39'&nbsp;&gt;&n' +
-        'bsp;'#39', s3, '#39#39'), findInfo('#39'album.html?serie='#39', '#39'" class="default"' +
-        '>'#39', s3, '#39#39')]));'
-      
-        '          s2 := s2 + Format('#39'%s - %s (%s)'#39'#13#10, [findInfo('#39'" c' +
-        'lass="default">'#39', '#39'</a>'#39', s3, '#39#39'), findInfo('#39'">'#39', '#39'&nbsp;&gt;&nb' +
-        'sp;'#39', s3, '#39#39'), findInfo('#39'album.html?serie='#39', '#39'" class="default">' +
-        #39', s3, '#39#39')]);'
+        '          s2 := s2 + Format('#39'%s - %s (%s)'#39'#13#10, [findInfo('#39' cl' +
+        'ass="default">'#39', '#39'</a>'#39', s3, '#39#39'), findInfo('#39#39', '#39'&nbsp;&gt;&nbsp;' +
+        #39', s3, '#39#39'), findInfo('#39'album.html?serie='#39', '#39'" class="default">'#39', ' +
+        's3, '#39#39')]);'
       '        end;'
       '      end;'
       '    end;'
       '  finally'
-      '//  SetHTML(s2);'
+      '    SetHTML(s2);'
       '  end;'
       'end.')
     ScrollBars = ssBoth
