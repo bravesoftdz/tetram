@@ -5,7 +5,8 @@ uses
   Unit1 in 'Unit1.pas' {Form1},
   Unit2 in 'Unit2.pas' {Form2},
   Unit3 in 'Unit3.pas' {debugoutput},
-  Unit4 in 'Unit4.pas';
+  Unit4 in 'Unit4.pas',
+  Unit5 in 'Unit5.pas';
 
 {$R *.res}
 
