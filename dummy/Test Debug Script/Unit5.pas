@@ -23,11 +23,12 @@ type
   TBreakpointInfo = class
   private
     FActive: Boolean;
-    FEditor: TCustomSynEdit;
     procedure SetActive(const Value: Boolean);
   public
     Line: Cardinal;
-    constructor Create(Editor: TCustomSynEdit);
+    Fichier: string;
+    FEditor: TCustomSynEdit;
+    destructor Destroy; override;
   published
     property Active: Boolean read FActive write SetActive;
   end;
@@ -36,7 +37,7 @@ type
   TTypeMessage = (tmUnknown, tmError, tmHint, tmWarning);
 
   TMessageInfo = class
-    TypeMessage, Text: string;
+    Fichier, TypeMessage, Text: string;
     Line, Char: Cardinal;
     Category: TCategoryMessage;
   end;
@@ -54,6 +55,7 @@ type
     property Items[Index: Integer]: TWatchInfo read GetInfo write PutInfo; default;
   published
     function IndexOfName(const VarName: string): Integer;
+    function CountActive: Integer;
     procedure AddWatch(const VarName: string);
   end;
 
@@ -64,32 +66,34 @@ type
   public
     property Items[Index: Integer]: TMessageInfo read GetInfo write PutInfo; default;
   published
-    function AddCompileErrorMessage(const Text: string; TypeMessage: TTypeMessage; Line, Char: Cardinal): Integer;
-    function AddRuntimeErrorMessage(const Text: string; Line, Char: Cardinal): Integer;
-    function AddInfoMessage(const Text: string; Line: Cardinal = 0; Char: Cardinal = 0): Integer;
+    function AddCompileErrorMessage(const Fichier, Text: string; TypeMessage: TTypeMessage; Line, Char: Cardinal): Integer;
+    function AddRuntimeErrorMessage(const Fichier, Text: string; Line, Char: Cardinal): Integer;
+    function AddInfoMessage(const Fichier, Text: string; Line: Cardinal = 0; Char: Cardinal = 0): Integer;
     function Current: TMessageInfo;
     function Last: TMessageInfo;
   end;
 
+  TGetScript = function(const Fichier: string): TSynEdit of object;
+
   TBreakpointList = class(TDebugList)
   private
-    FEditor: TCustomSynEdit;
+    FGetScript: TGetScript;
   protected
     procedure Notify(Ptr: Pointer; Action: TListNotification); override;
     function GetInfo(Index: Integer): TBreakpointInfo;
     procedure PutInfo(Index: Integer; const Value: TBreakpointInfo);
   public
-    function IndexOf(const ALine: Cardinal): Integer;
-    function Exists(const ALine: Cardinal): Boolean;
-    procedure AddBreakpoint(const ALine: Cardinal);
-    function Toggle(const ALine: Cardinal): Boolean;
+    function IndexOf(const Fichier: string; const ALine: Cardinal): Integer;
+    function Exists(const Fichier: string; const ALine: Cardinal): Boolean;
+    procedure AddBreakpoint(const Fichier: string; const ALine: Cardinal);
+    function Toggle(const Fichier: string; const ALine: Cardinal): Boolean;
     property Items[Index: Integer]: TBreakpointInfo read GetInfo write PutInfo; default;
     function Current: TBreakpointInfo;
 
-    property Editor: TCustomSynEdit read FEditor write FEditor;
+    property Editor: TGetScript read FGetScript write FGetScript;
   end;
 
-  TDebugPlugin = class(TSynEditPlugin)
+  TDebugInfos = class
   private
     FCurrentLine: Integer;
     FCursorLine: Integer;
@@ -98,12 +102,11 @@ type
     FBreakpointsList: TBreakpointList;
     FWatchesList: TWatchList;
     FMessagesList: TMessageList;
-  protected
-    procedure AfterPaint(ACanvas: TCanvas; const AClip: TRect; FirstLine, LastLine: Integer); override;
-    procedure LinesInserted(FirstLine, Count: Integer); override;
-    procedure LinesDeleted(FirstLine, Count: Integer); override;
+    function GetScript: TGetScript;
+    procedure SetScript(const Value: TGetScript);
+
   public
-    constructor Create(AOwner: TCustomSynEdit);
+    constructor Create;
     destructor Destroy; override;
 
     property CurrentLine: Integer read FCurrentLine write FCurrentLine;
@@ -113,24 +116,26 @@ type
     property Breakpoints: TBreakpointList read FBreakpointsList;
     property Watches: TWatchList read FWatchesList;
     property Messages: TMessageList read FMessagesList;
+
+    property OnGetScript: TGetScript read GetScript write SetScript;
   end;
 
 implementation
 
 { TBreakpointList }
 
-function TBreakpointList.IndexOf(const ALine: Cardinal): Integer;
+function TBreakpointList.IndexOf(const Fichier: string; const ALine: Cardinal): Integer;
 begin
   Result := 0;
-  while (Result < Count) and (TBreakpointInfo(Items[Result]).Line <> ALine) do
+  while (Result < Count) and ((Items[Result].Line <> ALine) or not SameText(Items[Result].Fichier, Fichier)) do
     Inc(Result);
   if Result = Count then
     Result := -1;
 end;
 
-function TBreakpointList.Exists(const ALine: Cardinal): Boolean;
+function TBreakpointList.Exists(const Fichier: string; const ALine: Cardinal): Boolean;
 begin
-  Result := IndexOf(ALine) <> -1;
+  Result := IndexOf(Fichier, ALine) <> -1;
 end;
 
 function TBreakpointList.GetInfo(Index: Integer): TBreakpointInfo;
@@ -143,14 +148,14 @@ begin
   Put(Index, Pointer(Value));
 end;
 
-function TBreakpointList.Toggle(const ALine: Cardinal): Boolean;
+function TBreakpointList.Toggle(const Fichier: string; const ALine: Cardinal): Boolean;
 var
   i: Integer;
 begin
-  i := IndexOf(ALine);
+  i := IndexOf(Fichier, ALine);
   if i = -1 then
   begin
-    AddBreakpoint(ALine);
+    AddBreakpoint(Fichier, ALine);
     Result := True;
   end
   else
@@ -167,14 +172,16 @@ begin
   Result := Items[FView.GetFirstSelected.Index];
 end;
 
-procedure TBreakpointList.AddBreakpoint(const ALine: Cardinal);
+procedure TBreakpointList.AddBreakpoint(const Fichier: string; const ALine: Cardinal);
 var
   BP: TBreakpointInfo;
 begin
-  if (IndexOf(ALine) = -1) then
+  if (IndexOf(Fichier, ALine) = -1) then
   begin
-    BP := TBreakpointInfo.Create(Editor);
+    BP := TBreakpointInfo.Create;
+    BP.FEditor := FGetScript(Fichier);
     BP.Line := ALine;
+    BP.Fichier := Fichier;
     BP.Active := True;
     Add(BP);
   end;
@@ -182,38 +189,40 @@ end;
 
 function CompareBreakpoint(Item1, Item2: Pointer): Integer;
 begin
-  Result := TBreakpointInfo(Item1).Line - TBreakpointInfo(Item2).Line;
+  Result := CompareText(TBreakpointInfo(Item1).Fichier, TBreakpointInfo(Item2).Fichier);
+  if Result = 0 then
+    Result := TBreakpointInfo(Item1).Line - TBreakpointInfo(Item2).Line;
 end;
 
 procedure TBreakpointList.Notify(Ptr: Pointer; Action: TListNotification);
 begin
   inherited;
   case Action of
-    lnAdded, lnExtracted, lnDeleted:
+    lnAdded, lnExtracted:
       begin
-        // même sur lnDeleted on peut encore accéder à Ptr
         //Editor.InvalidateLine(TBreakpointInfo(Ptr).Line);
         //Editor.InvalidateGutterLine(TBreakpointInfo(Ptr).Line);
-        // InvalidateLine et InvalidateGutterLine bizarrement insuffisants dans certains cas 
-        Editor.Invalidate;
+        // InvalidateLine et InvalidateGutterLine bizarrement insuffisants dans certains cas
+        TBreakpointInfo(Ptr).FEditor.Invalidate;
       end;
+    lnDeleted:
+      ;
   end;
   if Action = lnAdded then
     Sort(CompareBreakpoint);
 end;
 
-{ TDebugPlugin }
+{ TDebugInfos }
 
-constructor TDebugPlugin.Create(AOwner: TCustomSynEdit);
+constructor TDebugInfos.Create;
 begin
-  inherited Create(AOwner);
+  inherited;
   FBreakpointsList := TBreakpointList.Create(True);
-  FBreakpointsList.Editor := AOwner;
   FWatchesList := TWatchList.Create(True);
   FMessagesList := TMessageList.Create(True);
 end;
 
-destructor TDebugPlugin.Destroy;
+destructor TDebugInfos.Destroy;
 begin
   FBreakpointsList.Free;
   FWatchesList.Free;
@@ -221,49 +230,14 @@ begin
   inherited;
 end;
 
-procedure TDebugPlugin.AfterPaint(ACanvas: TCanvas; const AClip: TRect; FirstLine, LastLine: Integer);
+function TDebugInfos.GetScript: TGetScript;
 begin
-  inherited;
+  Result := FBreakpointsList.FGetScript;
 end;
 
-procedure TDebugPlugin.LinesDeleted(FirstLine, Count: Integer);
-var
-  i: Integer;
+procedure TDebugInfos.SetScript(const Value: TGetScript);
 begin
-  inherited;
-  for i := Pred(FBreakpointsList.Count) downto 0 do
-    if FBreakpointsList[i].Line in [FirstLine..FirstLine + Count] then
-      FBreakpointsList.Delete(i)
-    else if FBreakpointsList[i].Line > Cardinal(FirstLine) then
-    begin
-      Editor.InvalidateGutterLine(FBreakpointsList[i].Line);
-      FBreakpointsList[i].Line := FBreakpointsList[i].Line - Cardinal(Count);
-    end;
-
-  for i := Pred(FMessagesList.Count) downto 0 do
-    if FMessagesList[i].Line in [FirstLine..FirstLine + Count] then
-      FMessagesList.Delete(i)
-    else if FMessagesList[i].Line > Cardinal(FirstLine) then
-      FMessagesList[i].Line := FMessagesList[i].Line - Cardinal(Count);
-end;
-
-procedure TDebugPlugin.LinesInserted(FirstLine, Count: Integer);
-var
-  i: Integer;
-begin
-  inherited;
-  for i := 0 to FBreakpointsList.Count - 1 do
-    if FBreakpointsList[i].Line >= Cardinal(FirstLine) then
-    begin
-      Editor.InvalidateGutterLine(FBreakpointsList[i].Line);
-      FBreakpointsList[i].Line := FBreakpointsList[i].Line + Cardinal(Count);
-    end;
-  for i := 0 to FMessagesList.Count - 1 do
-    if FMessagesList[i].Line >= Cardinal(FirstLine) then
-    begin
-      Editor.InvalidateGutterLine(FMessagesList[i].Line);
-      FMessagesList[i].Line := FMessagesList[i].Line + Cardinal(Count);
-    end;
+  FBreakpointsList.FGetScript := Value;
 end;
 
 { TDebugList }
@@ -335,6 +309,15 @@ begin
   end;
 end;
 
+function TWatchList.CountActive: Integer;
+var
+  i: Integer;
+begin
+  Result := 0;
+  for i := 0 to Pred(Count) do
+    if Items[i].Active then Inc(Result);
+end;
+
 function TWatchList.GetInfo(Index: Integer): TWatchInfo;
 begin
   Result := TWatchInfo(inherited Items[Index]);
@@ -356,7 +339,7 @@ end;
 
 { TMessageList }
 
-function TMessageList.AddCompileErrorMessage(const Text: string; TypeMessage: TTypeMessage; Line, Char: Cardinal): Integer;
+function TMessageList.AddCompileErrorMessage(const Fichier, Text: string; TypeMessage: TTypeMessage; Line, Char: Cardinal): Integer;
 var
   Msg: TMessageInfo;
 begin
@@ -367,32 +350,35 @@ begin
     tmWarning: Msg.TypeMessage := 'Avertissement';
     tmHint: Msg.TypeMessage := 'Conseil';
   end;
+  Msg.Fichier := Fichier;
   Msg.Text := Text;
   Msg.Line := Line;
   Msg.Char := Char;
   Msg.Category := cmCompileError;
 end;
 
-function TMessageList.AddInfoMessage(const Text: string; Line, Char: Cardinal): Integer;
+function TMessageList.AddInfoMessage(const Fichier, Text: string; Line, Char: Cardinal): Integer;
 var
   Msg: TMessageInfo;
 begin
   Msg := TMessageInfo.Create;
   Result := Add(Msg);
   Msg.TypeMessage := 'Information';
+  Msg.Fichier := Fichier;
   Msg.Text := Text;
   Msg.Line := Line;
   Msg.Char := Char;
   Msg.Category := cmInfo;
 end;
 
-function TMessageList.AddRuntimeErrorMessage(const Text: string; Line, Char: Cardinal): Integer;
+function TMessageList.AddRuntimeErrorMessage(const Fichier, Text: string; Line, Char: Cardinal): Integer;
 var
   Msg: TMessageInfo;
 begin
   Msg := TMessageInfo.Create;
   Result := Add(Msg);
   Msg.TypeMessage := 'Erreur';
+  Msg.Fichier := Fichier;
   Msg.Text := Text;
   Msg.Line := Line;
   Msg.Char := Char;
@@ -423,10 +409,11 @@ end;
 
 { TBreakpointInfo }
 
-constructor TBreakpointInfo.Create(Editor: TCustomSynEdit);
+destructor TBreakpointInfo.Destroy;
 begin
-  inherited Create;
-  FEditor := Editor;
+  FEditor.InvalidateGutterLine(Line);
+  FEditor.InvalidateLine(Line);
+  inherited;
 end;
 
 procedure TBreakpointInfo.SetActive(const Value: Boolean);

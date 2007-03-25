@@ -28,17 +28,13 @@ type
     procedure TabControl1Change(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure Button3Click(Sender: TObject);
-    procedure FormKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Déclarations privées }
   public
     { Déclarations publiques }
     class function Execute(var ASearch, AReplace: string; var AOptions: TSynSearchOptions): Boolean;
   end;
-
-var
-  Form2: TForm2;
 
 implementation
 

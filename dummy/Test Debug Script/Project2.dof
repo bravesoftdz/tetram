@@ -15,7 +15,7 @@ K=0
 L=1
 M=0
 N=1
-O=1
+O=0
 P=1
 Q=0
 R=0
@@ -96,7 +96,7 @@ PackageDLLOutputDir=
 PackageDCPOutputDir=
 SearchPath=
 Packages=rtl;vcl;indy;inet;xmlrtl;vclie;inetdbbde;inetdbxpress;vclx;dbrtl;dsnap;dsnapcon;vcldb;soaprtl;dbexpress;dbxcds;inetdb;bdertl;vcldbx;webdsnap;websnap;adortl;ibxpress;teeui;teedb;tee;dss;visualclx;visualdbclx;vclactnband;dclOfficeXP;MediaKit;VclSmp;SynEdit_R7
-Conditionals=
+Conditionals=PS_USESSUPPORT;DEBUG
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
@@ -130,6 +130,10 @@ OriginalFilename=
 ProductName=
 ProductVersion=1.0.0.0
 Comments=
+[HistoryLists\hlConditionals]
+Count=2
+Item0=PS_USESSUPPORT;DEBUG
+Item1=PS_USESSUPPORT
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;

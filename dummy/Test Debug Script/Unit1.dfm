@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 313
-  Top = 244
+  Left = 394
+  Top = 375
   Width = 870
   Height = 640
   Caption = 'Form1'
@@ -68,110 +68,180 @@ object Form1: TForm1
     BevelOuter = bvNone
     Caption = 'Panel2'
     TabOrder = 1
-    object EScript: TSynEdit
+    object pcScripts: TPageControl
       Left = 0
       Top = 0
       Width = 862
       Height = 351
+      ActivePage = TabSheet4
       Align = alClient
-      Color = clWhite
-      ActiveLineColor = 16314351
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Courier New'
-      Font.Style = []
       TabOrder = 0
-      OnMouseMove = EScriptMouseMove
-      Gutter.AutoSize = True
-      Gutter.DigitCount = 3
-      Gutter.Font.Charset = DEFAULT_CHARSET
-      Gutter.Font.Color = clWindowText
-      Gutter.Font.Height = -11
-      Gutter.Font.Name = 'Terminal'
-      Gutter.Font.Style = []
-      Gutter.LeftOffset = 27
-      Gutter.ShowLineNumbers = True
-      Gutter.Width = 0
-      Highlighter = SynPasSyn1
-      Lines.Strings = (
-        'const'
-        
-          '  urlSearch = '#39'http://www.encyclobd.com/biblio/find.html?query=%' +
-          's&submit.x=0&submit.y=0'#39';'
-        ''
-        'var'
-        '  s, s2, s3: string;'
-        '  i: integer;'
-        'begin'
-        '  s := GetPage(Format(urlSearch, ['#39'Lanfeust'#39']));'
-        '  '
-        '  if Pos('#39'Aucuns r'#233'sultats correspondants'#39', s) > 0 then begin'
-        '    SetHTML('#39'Pas de r'#233'sultats'#39');'
-        '    Exit;'
-        '  end;'
-        ''
-        '  s2 := '#39#39';'
-        '  try'
-        
-          '    if Pos('#39'La liste de r'#233'sultats '#233'tant trop importante'#39', s) > 0' +
-          ' then '
-        '      s2 := '#39'R'#233'sultat partiel'#39'#13#10;'
-        ''
-        '    i := Pos('#39's'#233'rie(s) trouv'#233'e(s)'#39', s);'
-        '    if i > 0 then begin'
-        '      s2 := s2 + '#39'S'#233'ries :'#39'#13#10'#39'---------'#39'#13#10;'
-        '      i := PosEx('#39'<tr valign="top">'#39', s, i);'
-        '      s := Copy(s, i, Length(s));'
-        '      while Pos('#39'serie.html?id='#39', s) > 0 do begin'
-        
-          '        s3 := findInfo('#39'<tr valign="top">'#39', '#39'</td></tr>'#39', s, '#39#39')' +
-          ';'
-        '        if s3 <> '#39#39' then begin'
-        '          s := Copy(s, 17 + Length(s3) + 10 + 1, Length(s));'
-        
-          '          s2 := s2 + Format('#39'%s (%s)'#39'#13#10, [findInfo('#39'class="d' +
-          'efault">'#39', '#39'</a>'#39', s3, '#39#39'), findInfo('#39'serie.html?id='#39', '#39'" class=' +
-          '"default">'#39', s3, '#39#39')]);'
-        '        end;'
-        '      end;'
-        '    end;'
-        ''
-        '    s2 := s2 + #13#10;'
-        ''
-        '    i := Pos('#39'album(s) trouv'#233'(s)'#39', s);'
-        '    if i > 0 then begin'
-        '      s2 := s2 + '#39'Albums :'#39'#13#10'#39'---------'#39'#13#10;'
-        '      i := PosEx('#39'<tr valign="top">'#39', s, i);'
-        '      s := Copy(s, i, Length(s));'
-        '      while Pos('#39'album.html?serie='#39', s) > 0 do begin'
-        '        s3 := findInfo('#39'<tr valign="top">'#39', '#39'</tr>'#39', s, '#39#39');'
-        '        if s3 <> '#39#39' then begin'
-        '          s := Copy(s, 17 + Length(s3) + 5 + 1, Length(s));'
-        '          s3 := findInfo('#39'class="default">'#39', '#39'</td>'#39', s3, '#39#39');'
-        
-          '          s2 := s2 + Format('#39'%s - %s (%s)'#39'#13#10, [findInfo('#39' cl' +
-          'ass="default">'#39', '#39'</a>'#39', s3, '#39#39'), findInfo('#39#39', '#39'&nbsp;&gt;&nbsp;' +
-          #39', s3, '#39#39'), findInfo('#39'album.html?serie='#39', '#39'" class="default">'#39', ' +
-          's3, '#39#39')]);'
-        '        end;'
-        '      end;'
-        '    end;'
-        '  finally'
-        '    SetHTML(s2);'
-        '  end;'
-        'end.')
-      Options = [eoAutoIndent, eoAutoSizeMaxScrollWidth, eoDragDropEditing, eoGroupUndo, eoRightMouseMovesCursor, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoTabIndent, eoTabsToSpaces, eoTrimTrailingSpaces]
-      ScrollHintFormat = shfTopToBottom
-      SearchEngine = SynEditSearch1
-      TabWidth = 2
-      WantTabs = True
-      OnChange = EScriptChange
-      OnGutterClick = EScriptGutterClick
-      OnGutterPaint = EScriptGutterPaint
-      OnReplaceText = EScriptReplaceText
-      OnSpecialLineColors = EScriptSpecialLineColors
-      OnStatusChange = EScriptStatusChange
+      object TabSheet4: TTabSheet
+        Caption = 'Main'
+        object seScript1: TSynEdit
+          Left = 0
+          Top = 0
+          Width = 854
+          Height = 323
+          Align = alClient
+          Color = clWhite
+          ActiveLineColor = 16314351
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Courier New'
+          Font.Style = []
+          TabOrder = 0
+          OnMouseMove = seScript1MouseMove
+          Gutter.AutoSize = True
+          Gutter.DigitCount = 3
+          Gutter.Font.Charset = DEFAULT_CHARSET
+          Gutter.Font.Color = clWindowText
+          Gutter.Font.Height = -11
+          Gutter.Font.Name = 'Terminal'
+          Gutter.Font.Style = []
+          Gutter.LeftOffset = 27
+          Gutter.ShowLineNumbers = True
+          Gutter.Width = 0
+          Highlighter = SynPasSyn1
+          Lines.Strings = (
+            'unit Main;'
+            ''
+            'uses unit2;'
+            ''
+            'const'
+            
+              '  urlSearch = '#39'http://www.encyclobd.com/biblio/find.html?query=%' +
+              's&submit.x=0&submit.y=0'#39';'
+            ''
+            'var'
+            '  s, s2, s3: string;'
+            '  i: integer;'
+            'begin'
+            '  test;'
+            ''
+            '  s := GetPage(Format(urlSearch, ['#39'Lanfeust'#39']));'
+            '  '
+            '  if Pos('#39'Aucuns r'#233'sultats correspondants'#39', s) > 0 then begin'
+            '    SetHTML('#39'Pas de r'#233'sultats'#39');'
+            '    Exit;'
+            '  end;'
+            ''
+            '  s2 := '#39#39';'
+            '  try'
+            
+              '    if Pos('#39'La liste de r'#233'sultats '#233'tant trop importante'#39', s) > 0' +
+              ' then '
+            '      s2 := '#39'R'#233'sultat partiel'#39'#13#10;'
+            ''
+            '    i := Pos('#39's'#233'rie(s) trouv'#233'e(s)'#39', s);'
+            '    if i > 0 then begin'
+            '      s2 := s2 + '#39'S'#233'ries :'#39'#13#10'#39'---------'#39'#13#10;'
+            '      i := PosEx('#39'<tr valign="top">'#39', s, i);'
+            '      s := Copy(s, i, Length(s));'
+            '      while Pos('#39'serie.html?id='#39', s) > 0 do begin'
+            
+              '        s3 := findInfo('#39'<tr valign="top">'#39', '#39'</td></tr>'#39', s, '#39#39')' +
+              ';'
+            '        if s3 <> '#39#39' then begin'
+            '          s := Copy(s, 17 + Length(s3) + 10 + 1, Length(s));'
+            
+              '          s2 := s2 + Format('#39'%s (%s)'#39'#13#10, [findInfo('#39'class="d' +
+              'efault">'#39', '#39'</a>'#39', s3, '#39#39'), findInfo('#39'serie.html?id='#39', '#39'" class=' +
+              '"default">'#39', s3, '#39#39')]);'
+            '        end;'
+            '      end;'
+            '    end;'
+            ''
+            '    s2 := s2 + #13#10;'
+            ''
+            '    i := Pos('#39'album(s) trouv'#233'(s)'#39', s);'
+            '    if i > 0 then begin'
+            '      s2 := s2 + '#39'Albums :'#39'#13#10'#39'---------'#39'#13#10;'
+            '      i := PosEx('#39'<tr valign="top">'#39', s, i);'
+            '      s := Copy(s, i, Length(s));'
+            '      while Pos('#39'album.html?serie='#39', s) > 0 do begin'
+            '        s3 := findInfo('#39'<tr valign="top">'#39', '#39'</tr>'#39', s, '#39#39');'
+            '        if s3 <> '#39#39' then begin'
+            '          s := Copy(s, 17 + Length(s3) + 5 + 1, Length(s));'
+            '          s3 := findInfo('#39'class="default">'#39', '#39'</td>'#39', s3, '#39#39');'
+            
+              '          s2 := s2 + Format('#39'%s - %s (%s)'#39'#13#10, [findInfo('#39' cl' +
+              'ass="default">'#39', '#39'</a>'#39', s3, '#39#39'), findInfo('#39#39', '#39'&nbsp;&gt;&nbsp;' +
+              #39', s3, '#39#39'), findInfo('#39'album.html?serie='#39', '#39'" class="default">'#39', ' +
+              's3, '#39#39')]);'
+            '        end;'
+            '      end;'
+            '    end;'
+            '  finally'
+            '    SetHTML(s2);'
+            '  end;'
+            'end.')
+          Options = [eoAutoIndent, eoAutoSizeMaxScrollWidth, eoDragDropEditing, eoGroupUndo, eoRightMouseMovesCursor, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoTabIndent, eoTabsToSpaces, eoTrimTrailingSpaces]
+          ScrollHintFormat = shfTopToBottom
+          SearchEngine = SynEditSearch1
+          TabWidth = 2
+          WantTabs = True
+          OnChange = seScript1Change
+          OnGutterClick = seScript1GutterClick
+          OnGutterPaint = seScript1GutterPaint
+          OnReplaceText = seScript1ReplaceText
+          OnSpecialLineColors = seScript1SpecialLineColors
+          OnStatusChange = seScript1StatusChange
+        end
+      end
+      object TabSheet5: TTabSheet
+        Caption = 'Unit2'
+        ImageIndex = 1
+        object seScript2: TSynEdit
+          Left = 0
+          Top = 0
+          Width = 854
+          Height = 323
+          Align = alClient
+          Color = clWhite
+          ActiveLineColor = 16314351
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Courier New'
+          Font.Style = []
+          TabOrder = 0
+          OnMouseMove = seScript1MouseMove
+          Gutter.AutoSize = True
+          Gutter.DigitCount = 3
+          Gutter.Font.Charset = DEFAULT_CHARSET
+          Gutter.Font.Color = clWindowText
+          Gutter.Font.Height = -11
+          Gutter.Font.Name = 'Terminal'
+          Gutter.Font.Style = []
+          Gutter.LeftOffset = 27
+          Gutter.ShowLineNumbers = True
+          Gutter.Width = 0
+          Highlighter = SynPasSyn1
+          Lines.Strings = (
+            'unit unit2;'
+            ''
+            'function test: integer;'
+            'begin'
+            '  showmessage('#39'in function test'#39');'
+            '  result := 5;'
+            'end;'
+            ''
+            'end.')
+          Options = [eoAutoIndent, eoAutoSizeMaxScrollWidth, eoDragDropEditing, eoGroupUndo, eoRightMouseMovesCursor, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoTabIndent, eoTabsToSpaces, eoTrimTrailingSpaces]
+          ScrollHintFormat = shfTopToBottom
+          SearchEngine = SynEditSearch1
+          TabWidth = 2
+          WantTabs = True
+          OnChange = seScript1Change
+          OnGutterClick = seScript1GutterClick
+          OnGutterPaint = seScript1GutterPaint
+          OnReplaceText = seScript1ReplaceText
+          OnSpecialLineColors = seScript1SpecialLineColors
+          OnStatusChange = seScript1StatusChange
+        end
+      end
     end
   end
   object PageControl1: TPageControl
@@ -179,7 +249,7 @@ object Form1: TForm1
     Top = 395
     Width = 862
     Height = 193
-    ActivePage = TabSheet3
+    ActivePage = TabSheet6
     Align = alBottom
     TabOrder = 2
     object TabSheet1: TTabSheet
@@ -190,7 +260,7 @@ object Form1: TForm1
         Width = 854
         Height = 165
         Align = alClient
-        Header.AutoSizeIndex = 2
+        Header.AutoSizeIndex = 3
         Header.Font.Charset = DEFAULT_CHARSET
         Header.Font.Color = clWindowText
         Header.Font.Height = -11
@@ -205,6 +275,7 @@ object Form1: TForm1
         OnGetText = vstMessagesGetText
         Columns = <
           item
+            Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark]
             Position = 0
             Width = 100
             WideText = 'Contexte'
@@ -216,7 +287,12 @@ object Form1: TForm1
           end
           item
             Position = 2
-            Width = 630
+            Width = 150
+            WideText = 'Fichier'
+          end
+          item
+            Position = 3
+            Width = 580
             WideText = 'Message'
           end>
       end
@@ -257,7 +333,7 @@ object Form1: TForm1
           end
           item
             Position = 1
-            Width = 704
+            Width = 708
             WideText = 'Valeur'
           end>
       end
@@ -272,13 +348,14 @@ object Form1: TForm1
         Height = 165
         Align = alClient
         CheckImageKind = ckSystem
-        Header.AutoSizeIndex = 0
+        Header.AutoSizeIndex = 1
         Header.Font.Charset = DEFAULT_CHARSET
         Header.Font.Color = clWindowText
         Header.Font.Height = -11
         Header.Font.Name = 'MS Sans Serif'
         Header.Font.Style = []
-        Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
+        Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoVisible]
+        Header.Style = hsPlates
         TabOrder = 0
         TreeOptions.MiscOptions = [toAcceptOLEDrop, toCheckSupport, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
         TreeOptions.PaintOptions = [toShowDropmark, toShowTreeLines, toThemeAware, toUseBlendedImages]
@@ -291,24 +368,42 @@ object Form1: TForm1
         Columns = <
           item
             Position = 0
-            Width = 850
+            Width = 100
+            WideText = 'Position'
+          end
+          item
+            Position = 1
+            Width = 754
+            WideText = 'Fichier'
           end>
+      end
+    end
+    object TabSheet6: TTabSheet
+      Caption = 'Sortie'
+      ImageIndex = 3
+      object Output: TMemo
+        Left = 0
+        Top = 0
+        Width = 854
+        Height = 165
+        Align = alClient
+        ScrollBars = ssBoth
+        TabOrder = 0
+        WantTabs = True
       end
     end
   end
   object SynPasSyn1: TSynPasSyn
     DelphiVersion = dvDelphi7
     PackageSource = False
-    Left = 48
-    Top = 32
+    Left = 328
   end
   object lstDebugImages: TImageList
     Height = 17
     Width = 27
-    Left = 83
-    Top = 36
+    Left = 363
     Bitmap = {
-      494C01010800090004001B001100FFFFFFFFFF00FFFFFFFFFFFFFFFF424D3600
+      494C01010800090004001B001100FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       00000000000036000000280000006C0000003300000001002000000000001056
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1026,30 +1121,30 @@ object Form1: TForm1
       F007FFFE00FFFFC01FFFFE3FFFF00000F80FFFFF01FFFFE03FFFFFFFFFF00000
       FC1FFFFF80FFFFF07FFFFFFFFFF00000FFFFFFFFF9FFFFFFFFFFFFFFFFF00000
       FFFFFFFFFFFFFFFFFFFFFFFFFFF00000FFFFFFFFFFFFFFFFFFFFFFFFFFF00000
-      FFFFFFFFFFFFFFFFFFFFFFFFFFF00000}
+      FFFFFFFFFFFFFFFFFFFFFFFFFFF0000000000000000000000000000000000000
+      000000000000}
   end
   object PSScriptDebugger1: TPSScriptDebugger
-    CompilerOptions = []
+    CompilerOptions = [icAllowUnit, icBooleanShortCircuit]
     OnCompile = PSScriptDebugger1Compile
     OnExecute = PSScriptDebugger1Execute
     OnAfterExecute = PSScriptDebugger1AfterExecute
     Plugins = <>
-    UsePreProcessor = False
+    MainFileName = 'Main'
+    UsePreProcessor = True
     OnNeedFile = PSScriptDebugger1NeedFile
+    OnFindUnknownFile = PSScriptDebugger1NeedFile
     OnIdle = PSScriptDebugger1Idle
     OnLineInfo = PSScriptDebugger1LineInfo
     OnBreakpoint = PSScriptDebugger1Breakpoint
-    Left = 128
-    Top = 32
+    Left = 408
   end
   object SynEditSearch1: TSynEditSearch
-    Left = 16
-    Top = 32
+    Left = 296
   end
   object ActionList1: TActionList
     OnUpdate = ActionList1Update
-    Left = 200
-    Top = 40
+    Left = 480
     object EditCut1: TAction
       Category = 'Edition'
       Caption = 'Cou&per'
@@ -1174,8 +1269,7 @@ object Form1: TForm1
     end
   end
   object MainMenu1: TMainMenu
-    Left = 160
-    Top = 32
+    Left = 440
     object Edition1: TMenuItem
       Caption = '&Edition'
       object Dfaire1: TMenuItem

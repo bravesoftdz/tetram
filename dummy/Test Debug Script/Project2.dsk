@@ -1,45 +1,101 @@
 [Closed Files]
-File_0=SourceModule,'G:\Programmation\Composants\Pascal script\Source\uPSDebugger.pas',0,1,338,1,274,0,0
-File_1=SourceModule,'G:\Programmation\Composants\Pascal script\Source\uPSComponent.pas',0,1,141,1,101,0,0
-File_2=SourceModule,'G:\Programmation\Composants\Pascal script\Source\uPSRuntime.pas',0,1,10896,1,10874,0,0
-File_3=SourceModule,'G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit5.pas',0,1,343,1,350,0,0
-File_4=SourceModule,'G:\Programmation\Composants\SynEdit\SynEdit\source\SynTextDrawer.pas',0,1,479,1,487,0,0
-File_5=SourceModule,'G:\Programmation\Composants\SynEdit\SynEdit\source\SynHighlighterPas.pas',0,1,1637,1,1672,0,0
-File_6=SourceModule,'G:\Programmation\Composants\SynEdit\SynEdit\source\SynEditHighlighter.pas',0,1,347,1,567,0,0
-File_7=SourceModule,'G:\Programmation\Composants\Pascal script\Source\uPSCompiler.pas',0,1,829,27,835,0,0
-File_8=SourceModule,'G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit1.dfm',0,1,1,1,1,0,0
-File_9=SourceModule,'G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\SynEdit.inc',0,1,81,1,81,0,0
+File_0=SourceModule,'G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit3.pas',0,1,1,1,1,1,0
+File_1=SourceModule,'d:\program files\borland\delphi7\source\rtl\Win\Windows.pas',0,1,1893,27,1913,0,0
+File_2=SourceModule,'G:\Programmation\MEDIA.KIT\BDThèque\Sources\BD.exe\Procedures.pas',0,1,88,1,102,0,0
+File_3=SourceModule,'G:\Programmation\MEDIA.KIT\BDThèque\Sources\BD.exe\ProceduresBDtk.pas',0,1,1,1,7,0,0
+File_4=SourceModule,'G:\Programmation\MEDIA.KIT\BDThèque\Sources\BD.exe\Commun.pas',0,1,279,1,299,0,0
+File_5=SourceModule,'G:\Programmation\Composants\SynEdit\SynEdit\source\SynEdit.pas',0,1,228,46,259,0,0
 
 [Modules]
-Module0=G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit1.pas
-Module1=d:\program files\borland\delphi7\source\rtl\common\classes.pas
-Module2=G:\Programmation\Composants\Pascal script\Source\uPSUtils.pas
-Module3=G:\Programmation\Composants\SynEdit\SynEdit\source\SynEdit.pas
-Module4=d:\program files\borland\delphi7\source\rtl\common\Contnrs.pas
-Count=5
+Module0=G:\Programmation\Composants\Pascal script\Source\uPSUtils.pas
+Module1=G:\Programmation\Composants\ProgressBar\ProgressBar.pas
+Module2=G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit1.pas
+Module3=G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit5.pas
+Module4=G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit2.pas
+Module5=G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit4.pas
+Module6=G:\Programmation\Composants\Pascal script\Source\uPSCompiler.pas
+Module7=G:\Programmation\Composants\Pascal script\Source\uPSComponent.pas
+Module8=G:\Programmation\Composants\Pascal script\Source\uPSDebugger.pas
+Module9=G:\Programmation\Composants\Pascal script\Source\uPSRuntime.pas
+Module10=G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Form_Progression.pas
+Module11=G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\ProceduresBDtk.pas
+Module12=d:\program files\borland\delphi7\source\vcl\Forms.pas
+Module13=d:\program files\borland\delphi7\source\rtl\Win\WinInet.pas
+Module14=d:\program files\borland\delphi7\source\rtl\Sys\sysutils.pas
+Count=15
 EditWindowCount=1
-
-[G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit1.pas]
-ModuleType=SourceModule
-FormState=1
-FormOnTop=0
-
-[d:\program files\borland\delphi7\source\rtl\common\classes.pas]
-ModuleType=SourceModule
-FormState=0
-FormOnTop=0
 
 [G:\Programmation\Composants\Pascal script\Source\uPSUtils.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[G:\Programmation\Composants\SynEdit\SynEdit\source\SynEdit.pas]
+[G:\Programmation\Composants\ProgressBar\ProgressBar.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
 
-[d:\program files\borland\delphi7\source\rtl\common\Contnrs.pas]
+[G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit1.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=1
+
+[G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit5.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit2.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit4.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[G:\Programmation\Composants\Pascal script\Source\uPSCompiler.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[G:\Programmation\Composants\Pascal script\Source\uPSComponent.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[G:\Programmation\Composants\Pascal script\Source\uPSDebugger.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[G:\Programmation\Composants\Pascal script\Source\uPSRuntime.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Form_Progression.pas]
+ModuleType=SourceModule
+FormState=1
+FormOnTop=0
+
+[G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\ProceduresBDtk.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[d:\program files\borland\delphi7\source\vcl\Forms.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[d:\program files\borland\delphi7\source\rtl\Win\WinInet.pas]
+ModuleType=SourceModule
+FormState=0
+FormOnTop=0
+
+[d:\program files\borland\delphi7\source\rtl\Sys\sysutils.pas]
 ModuleType=SourceModule
 FormState=0
 FormOnTop=0
@@ -53,76 +109,155 @@ FormState=0
 FormOnTop=0
 
 [EditWindow0]
-ViewCount=5
-CurrentView=0
+ViewCount=15
+CurrentView=5
 View0=0
 View1=1
 View2=2
 View3=3
 View4=4
+View5=5
+View6=6
+View7=7
+View8=8
+View9=9
+View10=10
+View11=11
+View12=12
+View13=13
+View14=14
 CodeExplorer=CodeExplorer@EditWindow0
 MessageView=MessageView@EditWindow0
 Create=1
 Visible=1
-State=2
+State=0
 Left=301
 Top=238
 Width=979
 Height=646
 MaxLeft=-4
 MaxTop=134
-MaxWidth=1288
-MaxHeight=894
-ClientWidth=1280
-ClientHeight=862
+ClientWidth=971
+ClientHeight=614
 LeftPanelSize=0
 LeftPanelClients=CodeExplorer@EditWindow0
 LeftPanelData=00000400010000000C000000436F64654578706C6F7265720000000000000000000000000000000000FFFFFFFF
 RightPanelSize=0
-BottomPanelSize=0
-BottomPanelClients=MessageView@EditWindow0
-BottomPanelData=00000400010000000B0000004D657373616765566965770005000000000000025500000000000000010000000000000000000000000100000000000500000B0000004D65737361676556696577FFFFFFFF
+BottomPanelSize=213
+BottomPanelClients=DockSite0
+BottomPanelData=0000040000000000000000000000000000000000000000000001000000000000000009000000446F636B5369746530FFFFFFFF
 
 [View0]
-Module=G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit1.pas
-CursorX=118
-CursorY=848
-TopLine=845
+Module=G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit5.pas
+CursorX=1
+CursorY=290
+TopLine=273
 LeftCol=1
 
 [View1]
-Module=G:\Programmation\Composants\Pascal script\Source\uPSUtils.pas
-CursorX=1
-CursorY=586
-TopLine=566
+Module=G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit1.pas
+CursorX=55
+CursorY=572
+TopLine=563
 LeftCol=1
 
 [View2]
-Module=d:\program files\borland\delphi7\source\rtl\common\classes.pas
+Module=G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit2.pas
 CursorX=1
-CursorY=3483
-TopLine=3460
+CursorY=1
+TopLine=1
 LeftCol=1
 
 [View3]
-Module=d:\program files\borland\delphi7\source\rtl\common\Contnrs.pas
+Module=G:\Programmation\Composants\Pascal script\Source\uPSDebugger.pas
 CursorX=1
-CursorY=236
-TopLine=213
+CursorY=16
+TopLine=1
 LeftCol=1
 
 [View4]
-Module=G:\Programmation\Composants\SynEdit\SynEdit\source\SynEdit.pas
+Module=G:\Programmation\Composants\Pascal script\Source\uPSRuntime.pas
 CursorX=1
-CursorY=9245
-TopLine=9212
+CursorY=594
+TopLine=574
+LeftCol=1
+
+[View5]
+Module=G:\Programmation\Composants\Pascal script\Source\uPSUtils.pas
+CursorX=1
+CursorY=854
+TopLine=837
+LeftCol=1
+
+[View6]
+Module=G:\Programmation\Composants\Pascal script\Source\uPSComponent.pas
+CursorX=1
+CursorY=202
+TopLine=182
+LeftCol=1
+
+[View7]
+Module=G:\Programmation\Composants\Pascal script\Source\uPSCompiler.pas
+CursorX=7
+CursorY=10453
+TopLine=10432
+LeftCol=1
+
+[View8]
+Module=G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Unit4.pas
+CursorX=1
+CursorY=156
+TopLine=115
+LeftCol=1
+
+[View9]
+Module=d:\program files\borland\delphi7\source\rtl\Win\WinInet.pas
+CursorX=1
+CursorY=2888
+TopLine=2868
+LeftCol=1
+
+[View10]
+Module=d:\program files\borland\delphi7\source\rtl\Sys\sysutils.pas
+CursorX=1
+CursorY=15627
+TopLine=15607
+LeftCol=1
+
+[View11]
+Module=G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\ProceduresBDtk.pas
+CursorX=21
+CursorY=25
+TopLine=1
+LeftCol=1
+
+[View12]
+Module=G:\Programmation\Composants\ProgressBar\ProgressBar.pas
+CursorX=1
+CursorY=199
+TopLine=182
+LeftCol=1
+
+[View13]
+Module=d:\program files\borland\delphi7\source\vcl\Forms.pas
+CursorX=1
+CursorY=6887
+TopLine=6867
+LeftCol=1
+
+[View14]
+Module=G:\Programmation\MEDIA.KIT\BDThèque\Divers\Test Debug Script\Form_Progression.pas
+CursorX=61
+CursorY=14
+TopLine=1
 LeftCol=1
 
 [Watches]
-Count=3
-Watch0='FWatchList.RowCount',256,0,18,1,0,'Suivis'
-Watch1='FWatchList.Strings.Count',256,0,18,1,0,'Suivis'
-Watch2='i',256,0,18,1,0,'Suivis'
+Count=4
+Watch0='PageControl1.ActivePage.Name',256,0,18,1,0,'Suivis'
+Watch1='FileName',256,0,18,1,0,'Suivis'
+Watch2='pt',256,0,18,1,0,'Suivis'
+Watch3='r^.FileName',256,0,18,1,0,'Suivis'
 
 [WatchWindow]
 WatchColumnWidth=100
@@ -130,14 +265,14 @@ WatchShowColumnHeaders=1
 Create=1
 Visible=1
 State=0
-Left=138
-Top=815
-Width=1268
-Height=197
+Left=0
+Top=0
+Width=951
+Height=184
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1260
-ClientHeight=168
+ClientWidth=951
+ClientHeight=184
 TBDockHeight=74
 LRDockWidth=426
 Dockable=1
@@ -155,9 +290,9 @@ State=2
 Left=0
 Top=0
 Width=1280
-Height=141
-MaxLeft=-1
-MaxTop=-1
+Height=142
+MaxLeft=-4
+MaxTop=-4
 MaxWidth=1288
 MaxHeight=142
 ClientWidth=1280
@@ -214,7 +349,7 @@ FlagPane=64
 
 [AlignmentPalette]
 Create=1
-Visible=0
+Visible=1
 State=0
 Left=200
 Top=115
@@ -242,8 +377,8 @@ LRDockWidth=196
 Dockable=1
 SplitPos=140
 ArrangeBy=Name
-SelectedItem=ScrollHintFormat
-ExpandedItems=Action,BookMarkOptions,Header.Options,KeyAttri.Style,SymbolAttri,TreeOptions,TreeOptions.SelectionOptions
+SelectedItem=UseDebugInfo
+ExpandedItems=Action,BookMarkOptions,CompilerOptions,Header,Header.Options,KeyAttri.Style,Options,SymbolAttri,TreeOptions,TreeOptions.SelectionOptions
 HiddenCategories=
 
 [BreakpointWindow]
@@ -270,7 +405,7 @@ Column5Width=75
 
 [CallStackWindow]
 Create=1
-Visible=1
+Visible=0
 State=0
 Left=493
 Top=431
@@ -366,24 +501,44 @@ Dockable=1
 
 [MessageView@EditWindow0]
 Create=1
-Visible=0
+Visible=1
 State=0
-Left=12
+Left=0
 Top=0
-Width=1268
-Height=85
+Width=951
+Height=184
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1268
-ClientHeight=85
+ClientWidth=951
+ClientHeight=184
 TBDockHeight=85
 LRDockWidth=443
 Dockable=1
 
 [DockHosts]
-DockHostCount=1
+DockHostCount=2
 
 [DockSite0]
+DockSiteType=1
+Create=1
+Visible=1
+State=0
+Left=12
+Top=0
+Width=959
+Height=213
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=959
+ClientHeight=213
+TBDockHeight=213
+LRDockWidth=283
+Dockable=1
+TabPosition=0
+ActiveTab=Messages
+TabDockClients=MessageView@EditWindow0,WatchWindow
+
+[DockSite1]
 DockSiteType=1
 Create=1
 Visible=1

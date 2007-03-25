@@ -9,6 +9,8 @@ function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;
 
 implementation
 
+uses ProceduresBDtk;
+
 function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;
 var
   iDebut, iFin: Integer;
@@ -39,16 +41,16 @@ begin
   lBuffer := 1024;
   SetLength(Buffer, lBuffer);
   if not InternetGetLastResponseInfo(ErrorCode, @Buffer, lBuffer) then
-  begin
-    if GetLastError = ERROR_INSUFFICIENT_BUFFER then
-    begin
-      SetLength(Buffer, lBuffer);
-      if not InternetGetLastResponseInfo(ErrorCode, @Buffer, lBuffer) then
+    case GetLastError of
+      ERROR_INSUFFICIENT_BUFFER:
+        begin
+          SetLength(Buffer, lBuffer);
+          if not InternetGetLastResponseInfo(ErrorCode, @Buffer, lBuffer) then
+            RaiseLastOsError;
+        end;
+      else
         RaiseLastOsError;
-    end
-    else
-      RaiseLastOsError;
-  end;
+    end;
   raise EOSError.Create(PChar(@Buffer));
 end;
 
@@ -61,78 +63,78 @@ var
   BytesRead: Cardinal;
   Buffer: array of Char;
   lBuffer, dDummy: Cardinal;
-  //  hPSession: HINTERNET;
-  //  _url: URL_COMPONENTS;
+
+  procedure GetInfo(Code: DWord);
+  begin
+    lBuffer := 1024;
+    SetLength(Buffer, lBuffer);
+    ZeroMemory(Buffer, lBuffer);
+    dDummy := 0;
+    if not HttpQueryInfo(hRequest, Code, Buffer, lBuffer, dDummy) then
+      case GetLastError of
+        ERROR_INSUFFICIENT_BUFFER:
+          begin
+            SetLength(Buffer, lBuffer);
+            if not HttpQueryInfo(hRequest, Code, Buffer, lBuffer, dDummy) then RaiseLastOsError;
+          end;
+        ERROR_HTTP_HEADER_NOT_FOUND: // Header HTTP inconnu
+        else
+          RaiseLastOsError;
+      end;
+  end;
+
+var
+  Waiting: IWaiting;
+  UserCancel, PageSize: Integer;
 begin
+  Waiting := TWaiting.Create('', 50, @UserCancel);
   try
     Result := '';
+    Waiting.ShowProgression('Ouverture de la connexion internet...', 0, 0);
     hISession := InternetOpen(PChar(Format('%s/%s', ['test', 'script'])), INTERNET_OPEN_TYPE_PRECONFIG, nil, nil, 0);
+    if UserCancel > 0 then Exit;
     if (hISession = nil) then
       RaiseLastOsError;
     try
-      //      ZeroMemory(@_url, SizeOf(_url));
-      //      _url.dwStructSize := SizeOf(_url);
-      //      _url.dwSchemeLength := 1;
-      //      _url.dwHostNameLength := 1;
-      //      _url.dwUserNameLength := 1;
-      //      _url.dwPasswordLength := 1;
-      //      _url.dwUrlPathLength := 1;
-      //      _url.dwExtraInfoLength := 1;
-      //
-      //      InternetCrackUrl(PChar(url), 0, 0, _url);
-      //      hPSession := InternetConnect(hISession, _url.lpszUrlPath, _url.nPort, _url.lpszUserName, _url.lpszPassword, ifthen(_url.nPort = 80, INTERNET_SERVICE_HTTP, INTERNET_SERVICE_FTP), 0, 0);
-      //      hPSession := InternetConnect(hISession, 'www.encyclobd.com', _url.nPort, _url.lpszUserName, _url.lpszPassword, ifthen(_url.nPort = 80, INTERNET_SERVICE_HTTP, INTERNET_SERVICE_FTP), 0, 0);
-      //      if (hPSession = nil) then RaiseLastOsError;
-      //      try
+      Waiting.ShowProgression('Recherche de la page...', 0, 0);
       hRequest := InternetOpenUrl(hISession, PChar(url), nil, 0, INTERNET_FLAG_PRAGMA_NOCACHE or INTERNET_FLAG_RELOAD or INTERNET_FLAG_RESYNCHRONIZE, 0);
-      //        hRequest := HttpOpenRequest(hPSession, 'GET', _url.lpszUrlPath, nil, nil, nil, INTERNET_FLAG_KEEP_CONNECTION, 0);
-      //        hRequest := HttpOpenRequest(hPSession, 'GET', '/biblio/find.html?query=Lanfeust&submit.x=0&submit.y=0', nil, nil, nil, INTERNET_FLAG_KEEP_CONNECTION or INTERNET_FLAG_NO_CACHE_WRITE, 0);
+      if UserCancel > 0 then Exit;
 
       if (hRequest = nil) then
         RaiseLastInternetError;
       try
-        //          if not HttpSendRequest(hRequest, nil, 0, nil, 0) then RaiseLastOSError;
-
         ss := TStringStream.Create('');
         try
-          lBuffer := 1024;
-          SetLength(Buffer, lBuffer);
-          dDummy := 0;
-          if not HttpQueryInfo(hRequest, HTTP_QUERY_STATUS_CODE, Buffer, lBuffer, dDummy) then
-            if GetLastError = ERROR_INSUFFICIENT_BUFFER then
-            begin
-              SetLength(Buffer, lBuffer);
-              if not HttpQueryInfo(hRequest, HTTP_QUERY_STATUS_CODE, Buffer, lBuffer, dDummy) then RaiseLastOsError;
-            end
-            else
-              RaiseLastOsError;
+          GetInfo(HTTP_QUERY_STATUS_CODE);
           ss.Size := 0;
           ss.Write(Buffer[0], lBuffer);
           if ss.DataString <> '200' then
           begin
             ss.WriteString(#13#10);
-            lBuffer := 1024;
-            SetLength(Buffer, lBuffer);
-            if not HttpQueryInfo(hRequest, HTTP_QUERY_STATUS_TEXT, Buffer, lBuffer, dDummy) then
-              if GetLastError = ERROR_INSUFFICIENT_BUFFER then
-              begin
-                SetLength(Buffer, lBuffer);
-                if not HttpQueryInfo(hRequest, HTTP_QUERY_STATUS_TEXT, Buffer, lBuffer, dDummy) then RaiseLastOsError;
-              end
-              else
-                RaiseLastOsError;
+            GetInfo(HTTP_QUERY_STATUS_TEXT);
             ss.Write(Buffer[0], lBuffer);
             raise EOSError.Create(ss.DataString);
           end;
 
+          GetInfo(HTTP_QUERY_CONTENT_LENGTH);
+          ss.Size := 0;
+          ss.Write(Buffer[0], lBuffer);
+          PageSize := StrToIntDef(ss.DataString, 1);
+          if PageSize = 0 then PageSize := 1;
+
           lBuffer := 4096;
           SetLength(Buffer, lBuffer);
           ss.Size := 0;
-          while InternetReadFile(hRequest, Buffer, lBuffer, BytesRead) and (BytesRead > 0) do
+          Waiting.ShowProgression('Chargement de la page...', 0, PageSize);
+          while InternetReadFile(hRequest, Buffer, lBuffer, BytesRead) and (BytesRead > 0) and (UserCancel = 0) do
           begin
             ss.Write(Buffer[0], BytesRead);
-            //          if BytesRead < lBuffer then Break;
+            if PageSize = 1 then
+              Waiting.ShowProgression('Chargement de la page...', ss.Size mod (lBuffer * 10), lBuffer * 10)
+            else
+              Waiting.ShowProgression('Chargement de la page...', ss.Size, PageSize);
           end;
+          if UserCancel > 0 then Exit;
 
           Result := ss.DataString;
         finally
@@ -141,17 +143,13 @@ begin
       finally
         InternetCloseHandle(hRequest);
       end;
-      //      finally
-      //        InternetCloseHandle(hPSession);
-      //      end;
     finally
       InternetCloseHandle(hISession);
     end;
   except
-    showmessage(exception(exceptobject).message);
+    ShowMessage(Exception(ExceptObject).Message);
   end;
 end;
 
-
 end.
- 
+
