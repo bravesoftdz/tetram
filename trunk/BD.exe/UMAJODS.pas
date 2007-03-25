@@ -1,12 +1,14 @@
-unit UMAJ2_0_0_0;
+unit UMAJODS;
 
 interface
 
+procedure MAJ_ODS;
+
 implementation
 
-uses JvUIB, Updates, CommonConst, SysUtils, Windows, Form_Verbose, Forms, DM_Princ;
+uses JvUIB, CommonConst, SysUtils, Windows, Form_Verbose, Forms, DM_Princ;
 
-procedure MAJ2_0_0_0(Query: TJvUIBScript);
+procedure MAJ_ODS;
 const
   FinBackup = 'gbak:closing file, committing, and finishing.';
   FinRestore = 'gbak:    committing metadata';
@@ -60,9 +62,6 @@ begin
     end;
   end;
 end;
-
-initialization
-  RegisterUpdate('2.0.0.0', @MAJ2_0_0_0);
 
 end.
 

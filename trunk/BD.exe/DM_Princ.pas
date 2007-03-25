@@ -71,7 +71,7 @@ implementation
 
 uses
   CommonConst, Commun, Textes, DM_Commun, JvUIBLib, Divers, IniFiles, Procedures, UHistorique, Math, JvUIbase, Updates,
-  Main, CheckVersionNet, DateUtils;
+  Main, CheckVersionNet, DateUtils, UMAJODS;
 
 var
   FDMPrinc: TDMPrinc = nil;
@@ -194,6 +194,7 @@ var
   msg: string;
 begin
   Result := False;
+
   with TJvUIBQuery.Create(nil) do
   try
     Transaction := GetTransaction(UIBDataBase);
@@ -231,6 +232,8 @@ begin
   if Compare > 0 then
   begin // Utilisateur.ExeVersion > CurrentVersion
     if not (Force or (MessageDlg(msg + #13#10'Voulez-vous la mettre à jour?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)) then Exit;
+
+    MAJ_ODS;
 
     for i := 0 to Pred(ListUpdates.Count) do
       with TUpdate(ListUpdates[i]) do

@@ -123,11 +123,11 @@ uses
   UMAJ1_2_3_20 in 'UMAJ1_2_3_20.pas',
   UMAJ1_2_3_22 in 'UMAJ1_2_3_22.pas',
   UMAJ1_2_3_26 in 'UMAJ1_2_3_26.pas',
-  UMAJ2_0_0_0 in 'UMAJ2_0_0_0.pas';
+  UMAJODS in 'UMAJODS.pas';
 
 {$R *.RES}
 {$R curseurs.res}
-{$Include FastMM4Options.inc}
+{$INCLUDE FastMM4Options.inc}
 
 exports
   GetExtensionVersion,
@@ -175,7 +175,7 @@ begin
 
     FrmSplash.Affiche_act(ChargementApp + '...');
     Application.CreateForm(TFond, Fond);
-  FrmSplash.Affiche_act(ChargementDatabase + '...');
+    FrmSplash.Affiche_act(ChargementDatabase + '...');
     Historique.AddConsultation(fcRecherche);
     if Utilisateur.Options.ModeDemarrage then
       Fond.ModeConsultation.Execute
