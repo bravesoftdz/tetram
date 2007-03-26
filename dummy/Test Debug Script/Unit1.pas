@@ -7,7 +7,9 @@ uses
   Dialogs, SynEditHighlighter, SynHighlighterPas, SynEdit, ImgList, StrUtils,
   uPSComponent, uPSDebugger, SynEditMiscClasses, SynEditSearch, StdActns, ActnList, uPSDisassembly,
   Menus, SynEditTypes, Unit5, ComCtrls, uPSCompiler,
-  uPSRuntime, VirtualTrees, StdCtrls, ExtCtrls;
+  uPSRuntime, VirtualTrees, StdCtrls, ExtCtrls, uPSComponent_StdCtrls,
+  uPSComponent_Controls, uPSComponent_Forms, uPSComponent_DB,
+  uPSComponent_COM, uPSComponent_Default;
 
 type
   TSynDebugPlugin = class(TSynEditPlugin)
@@ -84,6 +86,14 @@ type
     seScript2: TSynEdit;
     TabSheet6: TTabSheet;
     Output: TMemo;
+    PSImport_DateUtils1: TPSImport_DateUtils;
+    PSImport_Classes1: TPSImport_Classes;
+    PSImport_ComObj1: TPSImport_ComObj;
+    PSImport_DB1: TPSImport_DB;
+    PSImport_Forms1: TPSImport_Forms;
+    PSImport_Controls1: TPSImport_Controls;
+    PSImport_StdCtrls1: TPSImport_StdCtrls;
+    PSDllPlugin1: TPSDllPlugin;
     procedure seScript1GutterClick(Sender: TObject; Button: TMouseButton; X, Y, Line: Integer; Mark: TSynEditMark);
     procedure seScript1GutterPaint(Sender: TObject; aLine, X, Y: Integer);
     procedure seScript1SpecialLineColors(Sender: TObject; Line: Integer; var Special: Boolean; var FG, BG: TColor);

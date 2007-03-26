@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 394
-  Top = 375
+  Left = 127
+  Top = 345
   Width = 870
   Height = 640
   Caption = 'Form1'
@@ -292,7 +292,7 @@ object Form1: TForm1
           end
           item
             Position = 3
-            Width = 580
+            Width = 584
             WideText = 'Message'
           end>
       end
@@ -1129,7 +1129,31 @@ object Form1: TForm1
     OnCompile = PSScriptDebugger1Compile
     OnExecute = PSScriptDebugger1Execute
     OnAfterExecute = PSScriptDebugger1AfterExecute
-    Plugins = <>
+    Plugins = <
+      item
+        Plugin = PSImport_DateUtils1
+      end
+      item
+        Plugin = PSImport_Classes1
+      end
+      item
+        Plugin = PSImport_Controls1
+      end
+      item
+        Plugin = PSImport_StdCtrls1
+      end
+      item
+        Plugin = PSImport_Forms1
+      end
+      item
+        Plugin = PSDllPlugin1
+      end
+      item
+        Plugin = PSImport_ComObj1
+      end
+      item
+        Plugin = PSImport_DB1
+      end>
     MainFileName = 'Main'
     UsePreProcessor = True
     OnNeedFile = PSScriptDebugger1NeedFile
@@ -1351,5 +1375,38 @@ object Form1: TForm1
         Action = actRun
       end
     end
+  end
+  object PSImport_DateUtils1: TPSImport_DateUtils
+    Left = 536
+  end
+  object PSImport_Classes1: TPSImport_Classes
+    EnableStreams = True
+    EnableClasses = True
+    Left = 568
+  end
+  object PSImport_ComObj1: TPSImport_ComObj
+    Left = 600
+  end
+  object PSImport_DB1: TPSImport_DB
+    Left = 632
+  end
+  object PSImport_Forms1: TPSImport_Forms
+    EnableForms = True
+    EnableMenus = True
+    Left = 664
+  end
+  object PSImport_Controls1: TPSImport_Controls
+    EnableStreams = True
+    EnableGraphics = True
+    EnableControls = True
+    Left = 696
+  end
+  object PSImport_StdCtrls1: TPSImport_StdCtrls
+    EnableExtCtrls = True
+    EnableButtons = True
+    Left = 728
+  end
+  object PSDllPlugin1: TPSDllPlugin
+    Left = 760
   end
 end
