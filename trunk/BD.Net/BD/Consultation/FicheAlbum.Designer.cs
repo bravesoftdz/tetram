@@ -34,6 +34,7 @@
             this.lbDessinateurs = new System.Windows.Forms.ListBox();
             this.lbScénaristes = new System.Windows.Forms.ListBox();
             this.tbNotes = new System.Windows.Forms.TextBox();
+            this.albumCompletBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tbHistoire = new System.Windows.Forms.TextBox();
             this.lbTitre = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -55,6 +56,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label38 = new System.Windows.Forms.Label();
             this.tbEditionNote = new System.Windows.Forms.TextBox();
+            this.editionCompletBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.lbEditionFormat = new System.Windows.Forms.Label();
             this.label36 = new System.Windows.Forms.Label();
             this.lbEditionType = new System.Windows.Forms.Label();
@@ -94,17 +96,15 @@
             this.lvSerie = new System.Windows.Forms.ListView();
             this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.albumCompletBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.editionCompletBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btImgPrec = new System.Windows.Forms.Button();
+            this.btImgSuiv = new System.Windows.Forms.Button();
             this.lbErreurChargement = new System.Windows.Forms.Label();
             this.lbPasDimage = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pnEditions.SuspendLayout();
-            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.albumCompletBindingSource)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.editionCompletBindingSource)).BeginInit();
+            this.pnEditions.SuspendLayout();
+            this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -160,6 +160,11 @@
             this.tbNotes.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.tbNotes.Size = new System.Drawing.Size(447, 68);
             this.tbNotes.TabIndex = 34;
+            // 
+            // albumCompletBindingSource
+            // 
+            this.albumCompletBindingSource.DataSource = typeof(BD.Common.Records.AlbumComplet);
+            this.albumCompletBindingSource.DataSourceChanged += new System.EventHandler(this.albumCompletBindingSource_DataSourceChanged);
             // 
             // tbHistoire
             // 
@@ -404,6 +409,11 @@
             this.tbEditionNote.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.tbEditionNote.Size = new System.Drawing.Size(447, 57);
             this.tbEditionNote.TabIndex = 118;
+            // 
+            // editionCompletBindingSource
+            // 
+            this.editionCompletBindingSource.DataSource = typeof(BD.Common.Records.EditionComplet);
+            this.editionCompletBindingSource.CurrentChanged += new System.EventHandler(this.editionsBindingSource_CurrentChanged);
             // 
             // lbEditionFormat
             // 
@@ -872,53 +882,43 @@
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.panel1.Controls.Add(this.button2);
-            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.btImgPrec);
+            this.panel1.Controls.Add(this.btImgSuiv);
             this.panel1.Controls.Add(this.lbErreurChargement);
             this.panel1.Controls.Add(this.lbPasDimage);
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Location = new System.Drawing.Point(291, 61);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(224, 241);
+            this.panel1.Size = new System.Drawing.Size(224, 242);
             this.panel1.TabIndex = 91;
             // 
-            // albumCompletBindingSource
+            // btImgPrec
             // 
-            this.albumCompletBindingSource.DataSource = typeof(BD.Common.Records.AlbumComplet);
-            this.albumCompletBindingSource.DataSourceChanged += new System.EventHandler(this.albumCompletBindingSource_DataSourceChanged);
+            this.btImgPrec.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btImgPrec.BackColor = System.Drawing.Color.Transparent;
+            this.btImgPrec.Cursor = System.Windows.Forms.Cursors.Default;
+            this.btImgPrec.Image = global::BD.Properties.Resources.fleche_gauche_simple;
+            this.btImgPrec.Location = new System.Drawing.Point(177, 219);
+            this.btImgPrec.Margin = new System.Windows.Forms.Padding(0);
+            this.btImgPrec.Name = "btImgPrec";
+            this.btImgPrec.Size = new System.Drawing.Size(23, 23);
+            this.btImgPrec.TabIndex = 100;
+            this.btImgPrec.UseVisualStyleBackColor = false;
+            this.btImgPrec.Click += new System.EventHandler(this.button2_Click_1);
             // 
-            // editionCompletBindingSource
+            // btImgSuiv
             // 
-            this.editionCompletBindingSource.DataSource = typeof(BD.Common.Records.EditionComplet);
-            this.editionCompletBindingSource.CurrentChanged += new System.EventHandler(this.editionsBindingSource_CurrentChanged);
-            // 
-            // button2
-            // 
-            this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button2.Image = global::BD.Properties.Resources.fleche_gauche;
-            this.button2.Location = new System.Drawing.Point(78, 218);
-            this.button2.Margin = new System.Windows.Forms.Padding(0);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(73, 23);
-            this.button2.TabIndex = 100;
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click_1);
-            // 
-            // button1
-            // 
-            this.button1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Image = global::BD.Properties.Resources.fleche_droite;
-            this.button1.Location = new System.Drawing.Point(151, 218);
-            this.button1.Margin = new System.Windows.Forms.Padding(0);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(73, 23);
-            this.button1.TabIndex = 99;
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
+            this.btImgSuiv.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btImgSuiv.BackColor = System.Drawing.Color.Transparent;
+            this.btImgSuiv.Cursor = System.Windows.Forms.Cursors.Default;
+            this.btImgSuiv.Image = global::BD.Properties.Resources.fleche_droite_simple;
+            this.btImgSuiv.Location = new System.Drawing.Point(201, 219);
+            this.btImgSuiv.Margin = new System.Windows.Forms.Padding(0);
+            this.btImgSuiv.Name = "btImgSuiv";
+            this.btImgSuiv.Size = new System.Drawing.Size(23, 23);
+            this.btImgSuiv.TabIndex = 99;
+            this.btImgSuiv.UseVisualStyleBackColor = false;
+            this.btImgSuiv.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // lbErreurChargement
             // 
@@ -954,7 +954,7 @@
             this.pictureBox1.InitialImage = null;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(222, 215);
+            this.pictureBox1.Size = new System.Drawing.Size(222, 216);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pictureBox1.TabIndex = 98;
             this.pictureBox1.TabStop = false;
@@ -997,11 +997,11 @@
             this.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "FicheAlbum";
             this.Size = new System.Drawing.Size(522, 801);
+            ((System.ComponentModel.ISupportInitialize)(this.albumCompletBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.editionCompletBindingSource)).EndInit();
             this.pnEditions.ResumeLayout(false);
             this.pnEditions.PerformLayout();
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.albumCompletBindingSource)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.editionCompletBindingSource)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1077,8 +1077,8 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btImgPrec;
+        private System.Windows.Forms.Button btImgSuiv;
         private System.Windows.Forms.Label lbErreurChargement;
         private System.Windows.Forms.Label lbPasDimage;
         private System.Windows.Forms.PictureBox pictureBox1;

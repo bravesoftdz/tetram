@@ -69,7 +69,7 @@ namespace BD
                 e.DrawBackground();
                 if (album.Reference.Equals(this.album.ID_Album))
                 {
-                    e.Graphics.DrawImage(Properties.myResources.AlbumActif, rect.Left, rect.Top, lb.ItemHeight, lb.ItemHeight);
+                    e.Graphics.DrawImage(Properties.Resources.AlbumActif, rect.Left, rect.Top, lb.ItemHeight, lb.ItemHeight);
                     rect.Location = new Point(rect.Left + lb.ItemHeight, rect.Top);
                 }
                 e.Graphics.DrawString(album.ToString(), e.Font, new SolidBrush(lb.ForeColor), rect, StringFormat.GenericDefault);
@@ -159,6 +159,8 @@ namespace BD
             if (CurrentCouverture == index) return; // on passe trois fois dans cette procédure à l'initialisation des BindingSource
             EditionComplet edition = (EditionComplet)editionCompletBindingSource.Current;
             lbPasDimage.Visible = edition.Couvertures.Count == 0;
+            btImgPrec.Enabled = edition.Couvertures.Count > 1;
+            btImgSuiv.Enabled = edition.Couvertures.Count > 1;
 
             if (edition.Couvertures.Count > 0)
                 using (new WaitingCursor())
@@ -175,7 +177,7 @@ namespace BD
                     pictureBox1.DoubleClick -= pictureBox1_DoubleClick;
                     if (lbErreurChargement.Visible)
                     {
-                        pictureBox1.Image = Properties.myResources.brokenimage;
+                        pictureBox1.Image = Properties.Resources.brokenimage;
                     }
                     else
                     {

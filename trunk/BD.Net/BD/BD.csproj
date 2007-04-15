@@ -124,15 +124,16 @@
     <None Include="Properties\DataSources\BD.Common.Lists.ListeEmprunts.datasource" />
     <None Include="Properties\DataSources\BD.Common.Records.EmpruntComplet.datasource" />
     <None Include="Properties\DataSources\BD.Common.Records.SérieComplet.datasource" />
-    <EmbeddedResource Include="Resources\AlbumActif.bmp" />
     <EmbeddedResource Include="Resources\sortAsc.png" />
     <EmbeddedResource Include="Resources\sortDesc.png" />
     <EmbeddedResource Include="Resources\emprunt.png" />
     <EmbeddedResource Include="Resources\retour.png" />
-    <EmbeddedResource Include="Resources\fleche-gauche.bmp" />
-    <EmbeddedResource Include="Resources\fleche-droite.bmp" />
-    <EmbeddedResource Include="Resources\brokenimage.jpg" />
     <EmbeddedResource Include="Resources\brokenimage.png" />
+    <None Include="Resources\fleche-gauche.png" />
+    <None Include="Resources\fleche-droite.png" />
+    <None Include="Resources\AlbumActif.png" />
+    <None Include="Resources\fleche-droite simple.png" />
+    <None Include="Resources\fleche-gauche simple.png" />
     <Content Include="UDF\BDT_UDF.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

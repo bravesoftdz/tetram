@@ -20,11 +20,11 @@ namespace BD.Divers
                 if (_smallImages == null)
                 {
                     _smallImages = new ImageList();
-                    _smallImages.Images.Add("AlbumActif", Properties.myResources.AlbumActif);
-                    _smallImages.Images.Add("sortAsc", Properties.myResources.sortAsc);
-                    _smallImages.Images.Add("sortDesc", Properties.myResources.sortDesc);
-                    _smallImages.Images.Add("Emprunt", Properties.myResources.emprunt);
-                    _smallImages.Images.Add("Retour", Properties.myResources.retour);
+                    _smallImages.Images.Add("AlbumActif", Properties.Resources.AlbumActif);
+                    _smallImages.Images.Add("sortAsc", Properties.Resources.sortAsc);
+                    _smallImages.Images.Add("sortDesc", Properties.Resources.sortDesc);
+                    _smallImages.Images.Add("Emprunt", Properties.Resources.emprunt);
+                    _smallImages.Images.Add("Retour", Properties.Resources.retour);
                 }
                 return _smallImages;
             }

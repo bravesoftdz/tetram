@@ -97,9 +97,23 @@ namespace BD.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap fleche_droite_simple {
+            get {
+                object obj = ResourceManager.GetObject("fleche_droite_simple", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap fleche_gauche {
             get {
                 object obj = ResourceManager.GetObject("fleche_gauche", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap fleche_gauche_simple {
+            get {
+                object obj = ResourceManager.GetObject("fleche_gauche_simple", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
