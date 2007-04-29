@@ -113,6 +113,7 @@
             this.deviceComboBox.Name = "deviceComboBox";
             this.deviceComboBox.Size = new System.Drawing.Size(232, 21);
             this.deviceComboBox.TabIndex = 3;
+            this.deviceComboBox.SelectedIndexChanged += new System.EventHandler(this.DeviceChanged);
             // 
             // deviceLabel
             // 
@@ -130,6 +131,7 @@
             this.adapterComboBox.Name = "adapterComboBox";
             this.adapterComboBox.Size = new System.Drawing.Size(232, 21);
             this.adapterComboBox.TabIndex = 1;
+            this.adapterComboBox.SelectedIndexChanged += new System.EventHandler(this.AdapterChanged);
             // 
             // displayAdapterLabel
             // 
@@ -185,6 +187,7 @@
             this.multisampleQualityComboBox.Name = "multisampleQualityComboBox";
             this.multisampleQualityComboBox.Size = new System.Drawing.Size(232, 21);
             this.multisampleQualityComboBox.TabIndex = 7;
+            this.multisampleQualityComboBox.SelectedIndexChanged += new System.EventHandler(this.MultisampleQualityChanged);
             // 
             // multisampleQualityLabel
             // 
@@ -202,6 +205,7 @@
             this.multisampleComboBox.Name = "multisampleComboBox";
             this.multisampleComboBox.Size = new System.Drawing.Size(232, 21);
             this.multisampleComboBox.TabIndex = 5;
+            this.multisampleComboBox.SelectedIndexChanged += new System.EventHandler(this.MultisampleTypeChanged);
             // 
             // backBufferFormatComboBox
             // 
@@ -211,6 +215,7 @@
             this.backBufferFormatComboBox.Name = "backBufferFormatComboBox";
             this.backBufferFormatComboBox.Size = new System.Drawing.Size(232, 21);
             this.backBufferFormatComboBox.TabIndex = 1;
+            this.backBufferFormatComboBox.SelectedIndexChanged += new System.EventHandler(this.BackBufferFormatChanged);
             // 
             // multisampleLabel
             // 
@@ -244,6 +249,7 @@
             this.depthStencilBufferComboBox.Name = "depthStencilBufferComboBox";
             this.depthStencilBufferComboBox.Size = new System.Drawing.Size(232, 21);
             this.depthStencilBufferComboBox.TabIndex = 3;
+            this.depthStencilBufferComboBox.SelectedIndexChanged += new System.EventHandler(this.DepthStencilBufferFormatChanged);
             // 
             // vertexProcComboBox
             // 
@@ -253,6 +259,7 @@
             this.vertexProcComboBox.Name = "vertexProcComboBox";
             this.vertexProcComboBox.Size = new System.Drawing.Size(232, 21);
             this.vertexProcComboBox.TabIndex = 9;
+            this.vertexProcComboBox.SelectedIndexChanged += new System.EventHandler(this.VertexProcessingChanged);
             // 
             // vertexProcLabel
             // 
@@ -270,6 +277,7 @@
             this.presentIntervalComboBox.Name = "presentIntervalComboBox";
             this.presentIntervalComboBox.Size = new System.Drawing.Size(232, 21);
             this.presentIntervalComboBox.TabIndex = 11;
+            this.presentIntervalComboBox.SelectedValueChanged += new System.EventHandler(this.PresentIntervalChanged);
             // 
             // presentIntervalLabel
             // 
@@ -288,6 +296,7 @@
             this.resolutionComboBox.Name = "resolutionComboBox";
             this.resolutionComboBox.Size = new System.Drawing.Size(232, 21);
             this.resolutionComboBox.TabIndex = 5;
+            this.resolutionComboBox.SelectedIndexChanged += new System.EventHandler(this.ResolutionChanged);
             // 
             // windowedRadioButton
             // 
@@ -296,6 +305,7 @@
             this.windowedRadioButton.Size = new System.Drawing.Size(152, 24);
             this.windowedRadioButton.TabIndex = 0;
             this.windowedRadioButton.Text = "&Windowed";
+            this.windowedRadioButton.CheckedChanged += new System.EventHandler(this.WindowedFullscreenChanged);
             // 
             // resolutionLabel
             // 
@@ -314,6 +324,7 @@
             this.refreshRateComboBox.Name = "refreshRateComboBox";
             this.refreshRateComboBox.Size = new System.Drawing.Size(232, 21);
             this.refreshRateComboBox.TabIndex = 7;
+            this.refreshRateComboBox.SelectedIndexChanged += new System.EventHandler(this.RefreshRateChanged);
             // 
             // adapterFormatLabel
             // 
@@ -366,6 +377,7 @@
             this.adapterFormatComboBox.Name = "adapterFormatComboBox";
             this.adapterFormatComboBox.Size = new System.Drawing.Size(232, 21);
             this.adapterFormatComboBox.TabIndex = 3;
+            this.adapterFormatComboBox.SelectedValueChanged += new System.EventHandler(this.AdapterFormatChanged);
             // 
             // D3DSettingsForm
             // 
@@ -381,7 +393,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.Name = "D3DSettingsForm";
-            this.Text = "Direct3D Settings";
+            this.Text = "Options Direct3D";
             this.adapterDeviceGroupBox.ResumeLayout(false);
             this.otherSettingsGroupBox.ResumeLayout(false);
             this.modeSettingsGroupBox.ResumeLayout(false);

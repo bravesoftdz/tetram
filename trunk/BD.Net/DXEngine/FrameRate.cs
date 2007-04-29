@@ -5,7 +5,7 @@ using Microsoft.DirectX.Direct3D;
 using D3DFont = Microsoft.DirectX.Direct3D.Font;
 using WinFont = System.Drawing.Font;
 using System.Drawing;
-using Microsoft.DirectX; 
+using Microsoft.DirectX;
 
 namespace BDX
 {
@@ -16,11 +16,11 @@ namespace BDX
 
         private SizeF meshBounds = new SizeF();
         private Mesh fontMesh;
-        private WinFont meshWinFont = new WinFont(FontFamily.GenericSansSerif, 36); 
+        private WinFont meshWinFont = new WinFont(FontFamily.GenericSansSerif, 36);
 
         private int frames;
         private string frameratemsg = "";
-        private int lastTickCount; 
+        private int lastTickCount;
 
         public FrameRate()
         {
@@ -41,8 +41,7 @@ namespace BDX
               out glyphMetrics   // Information sur les meshes
               );
 
-
-            meshBounds = ComputeMeshBounds(glyphMetrics); 
+            meshBounds = ComputeMeshBounds(glyphMetrics);
         }
 
         public override void Render(Device device)
@@ -70,7 +69,6 @@ namespace BDX
         {
             ++frames;
 
-
             int ticks = Environment.TickCount;
             int elapsed = ticks - lastTickCount;
             if (elapsed > 1000)
@@ -87,7 +85,6 @@ namespace BDX
             float maxx = 0;
             float maxy = 0;
 
-
             float offsety = 0;
             foreach (GlyphMetricsFloat gmf in gmfs)
             {
@@ -98,14 +95,10 @@ namespace BDX
                     maxy = y;
                 }
 
-
                 offsety += gmf.CellIncY;
-
-
             }
 
-
             return new SizeF(maxx, maxy);
-        } 
+        }
     }
 }

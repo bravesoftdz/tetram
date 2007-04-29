@@ -53,8 +53,8 @@ public class GraphicsAdapterInfo
 {
     public int AdapterOrdinal;
     public AdapterDetails AdapterDetails;
-    public ArrayList DisplayModeList = new ArrayList(); // List of D3DDISPLAYMODEs
-    public ArrayList DeviceInfoList = new ArrayList(); // List of D3DDeviceInfos
+    public List<DisplayMode> DisplayModeList = new List<DisplayMode>();
+    public List<GraphicsDeviceInfo> DeviceInfoList = new List<GraphicsDeviceInfo>();
     public override string ToString() { return AdapterDetails.Description; }
 }
 
@@ -63,7 +63,7 @@ public class GraphicsDeviceInfo
     public int AdapterOrdinal;
     public DeviceType DevType;
     public Caps Caps;
-    public ArrayList DeviceComboList = new ArrayList(); // List of D3DDeviceCombos
+    public List<DeviceCombo> DeviceComboList = new List<DeviceCombo>(); 
     public override string ToString() { return DevType.ToString(); }
 }
 
@@ -74,12 +74,12 @@ public class DeviceCombo
     public Format AdapterFormat;
     public Format BackBufferFormat;
     public bool IsWindowed;
-    public ArrayList DepthStencilFormatList = new ArrayList(); // List of D3DFORMATs
-    public ArrayList MultiSampleTypeList = new ArrayList(); // List of D3DMULTISAMPLE_TYPEs
-    public ArrayList MultiSampleQualityList = new ArrayList(); // List of ints (maxQuality per multisample type)
-    public ArrayList DepthStencilMultiSampleConflictList = new ArrayList(); // List of DepthStencilMultiSampleConflicts
-    public ArrayList VertexProcessingTypeList = new ArrayList(); // List of VertexProcessingTypes
-    public ArrayList PresentIntervalList = new ArrayList(); // List of D3DPRESENT_INTERVALs
+    public List<DepthFormat> DepthStencilFormatList = new List<DepthFormat>();
+    public List<MultiSampleType> MultiSampleTypeList = new List<MultiSampleType>();
+    public List<int> MultiSampleQualityList = new List<int>(); // maxQuality per multisample type
+    public List<DepthStencilMultiSampleConflict> DepthStencilMultiSampleConflictList = new List<DepthStencilMultiSampleConflict>();
+    public List<VertexProcessingType> VertexProcessingTypeList = new List<VertexProcessingType>(); 
+    public List<PresentInterval> PresentIntervalList = new List<PresentInterval>(); 
 }
 
 public class DepthStencilMultiSampleConflict
@@ -88,29 +88,18 @@ public class DepthStencilMultiSampleConflict
     public MultiSampleType MultiSampleType;
 }
 
-class DisplayModeComparer : System.Collections.IComparer
+class DisplayModeComparer : System.Collections.Generic.IComparer<DisplayMode>
 {
-    public int Compare(object x, object y)
+    public int Compare(DisplayMode dx, DisplayMode dy)
     {
-        DisplayMode dx = (DisplayMode)x;
-        DisplayMode dy = (DisplayMode)y;
-
-        if (dx.Width > dy.Width)
-            return 1;
-        if (dx.Width < dy.Width)
-            return -1;
-        if (dx.Height > dy.Height)
-            return 1;
-        if (dx.Height < dy.Height)
-            return -1;
-        if (dx.Format > dy.Format)
-            return 1;
-        if (dx.Format < dy.Format)
-            return -1;
-        if (dx.RefreshRate > dy.RefreshRate)
-            return 1;
-        if (dx.RefreshRate < dy.RefreshRate)
-            return -1;
+        if (dx.Width > dy.Width) return 1;
+        if (dx.Width < dy.Width) return -1;
+        if (dx.Height > dy.Height) return 1;
+        if (dx.Height < dy.Height) return -1;
+        if (dx.Format > dy.Format) return 1;
+        if (dx.Format < dy.Format) return -1;
+        if (dx.RefreshRate > dy.RefreshRate) return 1;
+        if (dx.RefreshRate < dy.RefreshRate) return -1;
         return 0;
     }
 }
@@ -121,11 +110,10 @@ public class D3DEnumeration
     /// The confirm device delegate which is used to determine if a device 
     /// meets the needs of the simulation
     /// </summary>
-    public delegate bool ConfirmDeviceCallbackType(Caps caps,
-        VertexProcessingType vertexProcessingType, Format backBufferFormat);
+    public delegate bool ConfirmDeviceCallbackType(Caps caps, VertexProcessingType vertexProcessingType, Format backBufferFormat);
 
     public ConfirmDeviceCallbackType ConfirmDeviceCallback;
-    public ArrayList AdapterInfoList = new ArrayList(); // List of D3DAdapterInfos
+    public List<GraphicsAdapterInfo> AdapterInfoList = new List<GraphicsAdapterInfo>(); // List of D3DAdapterInfos
 
     // The following variables can be used to limit what modes, formats, 
     // etc. are enumerated.  Set them to the values you want before calling
@@ -148,7 +136,7 @@ public class D3DEnumeration
     {
         foreach (AdapterInformation ai in Manager.Adapters)
         {
-            ArrayList adapterFormatList = new ArrayList();
+            List<Format> adapterFormatList = new List<Format>();
             GraphicsAdapterInfo adapterInfo = new GraphicsAdapterInfo();
             adapterInfo.AdapterOrdinal = ai.Adapter;
             adapterInfo.AdapterDetails = ai.Information;
@@ -157,28 +145,22 @@ public class D3DEnumeration
             // Also build a temporary list of all display adapter formats.
             foreach (DisplayMode displayMode in ai.SupportedDisplayModes)
             {
-                if (displayMode.Width < AppMinFullscreenWidth)
-                    continue;
-                if (displayMode.Height < AppMinFullscreenHeight)
-                    continue;
-                if (Utils.GetColorChannelBits(displayMode.Format) < AppMinColorChannelBits)
-                    continue;
+                if (displayMode.Width < AppMinFullscreenWidth) continue;
+                if (displayMode.Height < AppMinFullscreenHeight) continue;
+                if (Utils.GetColorChannelBits(displayMode.Format) < AppMinColorChannelBits) continue;
                 adapterInfo.DisplayModeList.Add(displayMode);
-                if (!adapterFormatList.Contains(displayMode.Format))
-                    adapterFormatList.Add(displayMode.Format);
+                if (!adapterFormatList.Contains(displayMode.Format)) adapterFormatList.Add(displayMode.Format);
             }
 
             // Sort displaymode list
-            DisplayModeComparer dmc = new DisplayModeComparer();
-            adapterInfo.DisplayModeList.Sort(dmc);
+            adapterInfo.DisplayModeList.Sort(new DisplayModeComparer());
 
             // Get info for each device on this adapter
             EnumerateDevices(adapterInfo, adapterFormatList);
 
             // If at least one device on this adapter is available and compatible
             // with the app, add the adapterInfo to the list
-            if (adapterInfo.DeviceInfoList.Count == 0)
-                continue;
+            if (adapterInfo.DeviceInfoList.Count == 0) continue;
             AdapterInfoList.Add(adapterInfo);
         }
     }
@@ -186,7 +168,7 @@ public class D3DEnumeration
     /// <summary>
     /// Enumerates D3D devices for a particular adapter
     /// </summary>
-    protected void EnumerateDevices(GraphicsAdapterInfo adapterInfo, ArrayList adapterFormatList)
+    protected void EnumerateDevices(GraphicsAdapterInfo adapterInfo, List<Format> adapterFormatList)
     {
         DeviceType[] devTypeArray = new DeviceType[] { DeviceType.Hardware, DeviceType.Software, DeviceType.Reference };
 
@@ -208,8 +190,7 @@ public class D3DEnumeration
 
             // If at least one devicecombo for this device is found, 
             // add the deviceInfo to the list
-            if (deviceInfo.DeviceComboList.Count == 0)
-                continue;
+            if (deviceInfo.DeviceComboList.Count == 0) continue;
             adapterInfo.DeviceInfoList.Add(deviceInfo);
         }
     }
@@ -217,7 +198,7 @@ public class D3DEnumeration
     /// <summary>
     /// Enumerates DeviceCombos for a particular device
     /// </summary>
-    protected void EnumerateDeviceCombos(GraphicsDeviceInfo deviceInfo, ArrayList adapterFormatList)
+    protected void EnumerateDeviceCombos(GraphicsDeviceInfo deviceInfo, List<Format> adapterFormatList)
     {
         Format[] backBufferFormatArray = new Format[] 
 			{	Format.R8G8B8, Format.A8R8G8B8, Format.X8R8G8B8, 
@@ -229,21 +210,15 @@ public class D3DEnumeration
 
         // See which adapter formats are supported by this device
         foreach (Format adapterFormat in adapterFormatList)
-        {
             foreach (Format backBufferFormat in backBufferFormatArray)
             {
-                if (Utils.GetAlphaChannelBits(backBufferFormat) < AppMinAlphaChannelBits)
-                    continue;
+                if (Utils.GetAlphaChannelBits(backBufferFormat) < AppMinAlphaChannelBits) continue;
                 foreach (bool isWindowed in isWindowedArray)
                 {
-                    if (!isWindowed && AppRequiresWindowed)
-                        continue;
-                    if (isWindowed && AppRequiresFullscreen)
-                        continue;
-                    if (!Manager.CheckDeviceType(deviceInfo.AdapterOrdinal, deviceInfo.DevType, adapterFormat, backBufferFormat, isWindowed))
-                    {
-                        continue;
-                    }
+                    if (!isWindowed && AppRequiresWindowed) continue;
+                    if (isWindowed && AppRequiresFullscreen) continue;
+                    if (!Manager.CheckDeviceType(deviceInfo.AdapterOrdinal, deviceInfo.DevType, adapterFormat, backBufferFormat, isWindowed)) continue;
+
                     // At this point, we have an adapter/device/adapterformat/backbufferformat/iswindowed
                     // DeviceCombo that is supported by the system.  We still need to confirm that it's 
                     // compatible with the app, and find one or more suitable depth/stencil buffer format,
@@ -257,24 +232,19 @@ public class D3DEnumeration
                     if (AppUsesDepthBuffer)
                     {
                         BuildDepthStencilFormatList(deviceCombo);
-                        if (deviceCombo.DepthStencilFormatList.Count == 0)
-                            continue;
+                        if (deviceCombo.DepthStencilFormatList.Count == 0) continue;
                     }
                     BuildMultiSampleTypeList(deviceCombo);
-                    if (deviceCombo.MultiSampleTypeList.Count == 0)
-                        continue;
+                    if (deviceCombo.MultiSampleTypeList.Count == 0) continue;
                     BuildDepthStencilMultiSampleConflictList(deviceCombo);
                     BuildVertexProcessingTypeList(deviceInfo, deviceCombo);
-                    if (deviceCombo.VertexProcessingTypeList.Count == 0)
-                        continue;
+                    if (deviceCombo.VertexProcessingTypeList.Count == 0) continue;
                     BuildPresentIntervalList(deviceInfo, deviceCombo);
-                    if (deviceCombo.PresentIntervalList.Count == 0)
-                        continue;
+                    if (deviceCombo.PresentIntervalList.Count == 0) continue;
 
                     deviceInfo.DeviceComboList.Add(deviceCombo);
                 }
             }
-        }
     }
 
     /// <summary>
@@ -295,19 +265,11 @@ public class D3DEnumeration
 
         foreach (DepthFormat depthStencilFmt in depthStencilFormatArray)
         {
-            if (Utils.GetDepthBits(depthStencilFmt) < AppMinDepthBits)
-                continue;
-            if (Utils.GetStencilBits(depthStencilFmt) < AppMinStencilBits)
-                continue;
-            if (Manager.CheckDeviceFormat(deviceCombo.AdapterOrdinal, deviceCombo.DevType, deviceCombo.AdapterFormat,
-                Usage.DepthStencil, ResourceType.Surface, depthStencilFmt))
-            {
-                if (Manager.CheckDepthStencilMatch(deviceCombo.AdapterOrdinal, deviceCombo.DevType,
-                    deviceCombo.AdapterFormat, deviceCombo.BackBufferFormat, depthStencilFmt))
-                {
+            if (Utils.GetDepthBits(depthStencilFmt) < AppMinDepthBits) continue;
+            if (Utils.GetStencilBits(depthStencilFmt) < AppMinStencilBits) continue;
+            if (Manager.CheckDeviceFormat(deviceCombo.AdapterOrdinal, deviceCombo.DevType, deviceCombo.AdapterFormat, Usage.DepthStencil, ResourceType.Surface, depthStencilFmt))
+                if (Manager.CheckDepthStencilMatch(deviceCombo.AdapterOrdinal, deviceCombo.DevType, deviceCombo.AdapterFormat, deviceCombo.BackBufferFormat, depthStencilFmt))
                     deviceCombo.DepthStencilFormatList.Add(depthStencilFmt);
-                }
-            }
         }
     }
 
@@ -336,12 +298,12 @@ public class D3DEnumeration
 			MultiSampleType.FifteenSamples,
 			MultiSampleType.SixteenSamples,
 		};
+
         foreach (MultiSampleType msType in msTypeArray)
         {
             int result;
             int qualityLevels = 0;
-            if (Manager.CheckDeviceMultiSampleType(deviceCombo.AdapterOrdinal, deviceCombo.DevType,
-                deviceCombo.BackBufferFormat, deviceCombo.IsWindowed, msType, out result, out qualityLevels))
+            if (Manager.CheckDeviceMultiSampleType(deviceCombo.AdapterOrdinal, deviceCombo.DevType,                deviceCombo.BackBufferFormat, deviceCombo.IsWindowed, msType, out result, out qualityLevels))
             {
                 deviceCombo.MultiSampleTypeList.Add(msType);
                 deviceCombo.MultiSampleQualityList.Add(qualityLevels);
@@ -358,19 +320,15 @@ public class D3DEnumeration
         DepthStencilMultiSampleConflict DSMSConflict;
 
         foreach (DepthFormat dsFmt in deviceCombo.DepthStencilFormatList)
-        {
             foreach (MultiSampleType msType in deviceCombo.MultiSampleTypeList)
-            {
-                if (!Manager.CheckDeviceMultiSampleType(deviceCombo.AdapterOrdinal,
-                    deviceCombo.DevType, (Format)dsFmt, deviceCombo.IsWindowed, msType))
+                if (!Manager.CheckDeviceMultiSampleType(deviceCombo.AdapterOrdinal, deviceCombo.DevType, (Format)dsFmt, deviceCombo.IsWindowed, msType))
                 {
                     DSMSConflict = new DepthStencilMultiSampleConflict();
                     DSMSConflict.DepthStencilFormat = dsFmt;
                     DSMSConflict.MultiSampleType = msType;
                     deviceCombo.DepthStencilMultiSampleConflictList.Add(DSMSConflict);
                 }
-            }
-        }
+
     }
 
     /// <summary>
@@ -382,29 +340,18 @@ public class D3DEnumeration
         if (deviceInfo.Caps.DeviceCaps.SupportsHardwareTransformAndLight)
         {
             if (deviceInfo.Caps.DeviceCaps.SupportsPureDevice)
-            {
-                if (ConfirmDeviceCallback == null ||
-                    ConfirmDeviceCallback(deviceInfo.Caps, VertexProcessingType.PureHardware, deviceCombo.BackBufferFormat))
-                {
+                if (ConfirmDeviceCallback == null || ConfirmDeviceCallback(deviceInfo.Caps, VertexProcessingType.PureHardware, deviceCombo.BackBufferFormat))
                     deviceCombo.VertexProcessingTypeList.Add(VertexProcessingType.PureHardware);
-                }
-            }
-            if (ConfirmDeviceCallback == null ||
-                ConfirmDeviceCallback(deviceInfo.Caps, VertexProcessingType.Hardware, deviceCombo.BackBufferFormat))
-            {
+
+
+            if (ConfirmDeviceCallback == null || ConfirmDeviceCallback(deviceInfo.Caps, VertexProcessingType.Hardware, deviceCombo.BackBufferFormat))
                 deviceCombo.VertexProcessingTypeList.Add(VertexProcessingType.Hardware);
-            }
-            if (AppUsesMixedVP && (ConfirmDeviceCallback == null ||
-                ConfirmDeviceCallback(deviceInfo.Caps, VertexProcessingType.Mixed, deviceCombo.BackBufferFormat)))
-            {
+
+            if (AppUsesMixedVP && (ConfirmDeviceCallback == null || ConfirmDeviceCallback(deviceInfo.Caps, VertexProcessingType.Mixed, deviceCombo.BackBufferFormat)))
                 deviceCombo.VertexProcessingTypeList.Add(VertexProcessingType.Mixed);
-            }
         }
-        if (ConfirmDeviceCallback == null ||
-            ConfirmDeviceCallback(deviceInfo.Caps, VertexProcessingType.Software, deviceCombo.BackBufferFormat))
-        {
+        if (ConfirmDeviceCallback == null || ConfirmDeviceCallback(deviceInfo.Caps, VertexProcessingType.Software, deviceCombo.BackBufferFormat))
             deviceCombo.VertexProcessingTypeList.Add(VertexProcessingType.Software);
-        }
     }
 
     /// <summary>
@@ -425,22 +372,14 @@ public class D3DEnumeration
         foreach (PresentInterval pi in piArray)
         {
             if (deviceCombo.IsWindowed)
-            {
-                if (pi == PresentInterval.Two ||
-                    pi == PresentInterval.Three ||
-                    pi == PresentInterval.Four)
-                {
+                if (pi == PresentInterval.Two || pi == PresentInterval.Three || pi == PresentInterval.Four)
                     // These intervals are not supported in windowed mode.
                     continue;
-                }
-            }
+
             // Note that PresentInterval.Default is zero, so you
             // can't do a caps check for it -- it is always available.
-            if (pi == PresentInterval.Default ||
-                (deviceInfo.Caps.PresentationIntervals & pi) != (PresentInterval)0)
-            {
+            if (pi == PresentInterval.Default || (deviceInfo.Caps.PresentationIntervals & pi) != (PresentInterval)0)
                 deviceCombo.PresentIntervalList.Add(pi);
-            }
         }
     }
 }
