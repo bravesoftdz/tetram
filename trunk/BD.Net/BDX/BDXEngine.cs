@@ -29,6 +29,7 @@ namespace BDX
         public BDXEngine()
         {
             frameMoving = true;
+            //startFullscreen = true;
         }
 
         protected override void OneTimeSceneInitialization()
@@ -129,11 +130,13 @@ namespace BDX
 
         private void MouseX(int Count)
         {
+            if (!inputs.IsMouseButtonDown(0)) return;
             Matrix matRotation = Matrix.RotationAxis(pov.Up, Geometry.DegreeToRadian(Count / 3.0f));
             pov.Look = Vector3.TransformCoordinate(pov.Look, matRotation);
         }
         private void MouseY(int Count)
         {
+            if (!inputs.IsMouseButtonDown(0)) return;
             Matrix matRotation = Matrix.RotationAxis(pov.Right, Geometry.DegreeToRadian(Count / 3.0f));
             pov.Look = Vector3.TransformCoordinate(pov.Look, matRotation);
         }
