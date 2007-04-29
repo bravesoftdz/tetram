@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.DirectX.Direct3D;
+using Microsoft.DirectX;
 
 namespace DXEngine
 {
@@ -14,6 +15,7 @@ namespace DXEngine
         // Internal variables for the state of the app
         protected bool windowed;
         protected bool active;
+        protected bool ready;
 
         // Main objects used for creating and rendering the 3D scene
         protected PresentParameters presentParams = new PresentParameters();         // Parameters for CreateDevice/Reset
@@ -55,8 +57,10 @@ namespace DXEngine
             RenderTarget = target;
 
             if (!ChooseInitialSettings()) return false;
-            InitializeEnvironment();
             OneTimeSceneInitialization();
+            InitializeEnvironment(); // devrait être avant OneTimeSceneInitialization();
+
+            ready = true;
             return true;
         }
 
@@ -257,6 +261,7 @@ namespace DXEngine
                 presentParams.BackBufferWidth = ourRenderTarget.ClientRectangle.Right - ourRenderTarget.ClientRectangle.Left;
                 presentParams.BackBufferHeight = ourRenderTarget.ClientRectangle.Bottom - ourRenderTarget.ClientRectangle.Top;
                 presentParams.BackBufferFormat = graphicsSettings.DeviceCombo.BackBufferFormat;
+                presentParams.BackBufferFormat = Format.Unknown;
                 presentParams.FullScreenRefreshRateInHz = 0;
                 presentParams.PresentationInterval = PresentInterval.Immediate;
                 presentParams.DeviceWindow = ourRenderTarget;
@@ -288,18 +293,27 @@ namespace DXEngine
             //}
 
             CreateFlags createFlags = new CreateFlags();
-            if (graphicsSettings.VertexProcessingType == VertexProcessingType.Software)
-                createFlags = CreateFlags.SoftwareVertexProcessing;
-            else if (graphicsSettings.VertexProcessingType == VertexProcessingType.Mixed)
-                createFlags = CreateFlags.MixedVertexProcessing;
-            else if (graphicsSettings.VertexProcessingType == VertexProcessingType.Hardware)
-                createFlags = CreateFlags.HardwareVertexProcessing;
-            else if (graphicsSettings.VertexProcessingType == VertexProcessingType.PureHardware)
+            switch (graphicsSettings.VertexProcessingType)
             {
-                createFlags = CreateFlags.HardwareVertexProcessing | CreateFlags.PureDevice;
+                case VertexProcessingType.Software:
+                    {
+                        createFlags = CreateFlags.SoftwareVertexProcessing; break;
+                    }
+                case VertexProcessingType.Mixed:
+                    {
+                        createFlags = CreateFlags.MixedVertexProcessing; break;
+                    }
+                case VertexProcessingType.Hardware:
+                    {
+                        createFlags = CreateFlags.HardwareVertexProcessing; break;
+                    }
+                case VertexProcessingType.PureHardware:
+                    {
+                        createFlags = CreateFlags.HardwareVertexProcessing | CreateFlags.PureDevice; break;
+                    }
+                default:
+                    throw new ApplicationException();
             }
-            else
-                throw new ApplicationException();
 
             createFlags |= CreateFlags.MultiThreaded;
 
@@ -331,6 +345,7 @@ namespace DXEngine
                     presentParams.DeviceWindow.BringToFront();
                 }
 
+                device.Transform.World = Matrix.Identity;
                 // Store device Caps
                 graphicsCaps = device.DeviceCaps;
                 behavior = createFlags;
@@ -469,10 +484,24 @@ namespace DXEngine
         }
 
         /// <summary>
+        /// Prepares the simulation for a new device being selected
+        /// </summary>
+        public void UserSelectNewDevice(object sender, EventArgs e)
+        {
+            // Prompt the user to select a new device or mode
+            if (active && ready)
+            {
+//                Pause(true);
+                DoSelectNewDevice();
+//                Pause(false);
+            }
+        }
+
+        /// <summary>
         /// Displays a dialog so the user can select a new adapter, device, or
         /// display mode, and then recreates the 3D environment if needed
         /// </summary>
-        public void DoSelectNewDevice()
+        private void DoSelectNewDevice()
         {
             // Can't display dialogs in fullscreen mode
             //if (windowed == false)

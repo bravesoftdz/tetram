@@ -64,14 +64,14 @@ namespace BDX
             GraphicsStream adjacency;
             mesh = Mesh.FromFile(fichier, MeshFlags.SystemMemory, device, out adjacency, out materials);
 
-            using (Mesh tmpMesh = Mesh.Clean(CleanType.Simplification | CleanType.Optimization, mesh, adjacency, adjacency))
-            {
-                pmesh = new ProgressiveMesh(tmpMesh, adjacency, null, 1, MeshFlags.SimplifyFace);
+            //using (Mesh tmpMesh = Mesh.Clean(CleanType.Simplification | CleanType.Optimization, mesh, adjacency, adjacency))
+            //{
+            //    pmesh = new ProgressiveMesh(tmpMesh, adjacency, null, 1, MeshFlags.SimplifyFace);
 
-                pmesh.NumberFaces = pmesh.MaxFaces;
-                pmesh.NumberVertices = pmesh.MaxVertices;
-                useProgessive = 10;
-            };
+            //    pmesh.NumberFaces = pmesh.MaxFaces;
+            //    pmesh.NumberVertices = pmesh.MaxVertices;
+            //    useProgessive = 10;
+            //};
 
 //            using (adjacency)
 //                mesh.OptimizeInPlace(MeshFlags.OptimizeVertexCache | MeshFlags.OptimizeCompact | MeshFlags.OptimizeAttributeSort, adjacency);
@@ -138,7 +138,7 @@ namespace BDX
         {
             fichier = @"media\salon.x";
             Rotation.X = -(float)(Math.PI / 2);
-            useProgessive = 5;
+            //useProgessive = 5;
         }
     }
 }

@@ -16,10 +16,7 @@ namespace BDX
 {
     public partial class Form1 : Form
     {
-        private PresentParameters d3dpp = new PresentParameters();
-        private Direct3D.Device device = null;
         private DirectInput.Device dinputDevice = null;
-        List<D3DObject> objects = new List<D3DObject>();
 
         static private float elapsedTime;
         static private DateTime currentTime;
@@ -34,8 +31,6 @@ namespace BDX
         private Point ptCurrentMousePosit = new Point();
         private bool mousing = false;
         private float moveSpeed = 25.0f;
-
-        Sol sol;
 
         private bool lostDevice;
 
@@ -54,43 +49,33 @@ namespace BDX
             this.ClientSize = new System.Drawing.Size(800, 600);
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.Opaque, true);
 
-            engine.Prepare(this);
-
-            // objects.Add(new Decor());
-            sol = new Sol();
-            objects.Add(sol);
-
-
-            objects.Add(new Axes());
-            objects.Add(new FrameRate());
         }
 
         public bool InitializeGraphics()
         {
             Debug.WriteLine("InitializeGraphics()");
+            
+            engine.Prepare(this);
+
             //try
             //{
-            Caps caps = Direct3D.Manager.GetDeviceCaps(Direct3D.Manager.Adapters.Default.Adapter, Direct3D.DeviceType.Hardware);
-            CreateFlags flags;
+            //Caps caps = Direct3D.Manager.GetDeviceCaps(Direct3D.Manager.Adapters.Default.Adapter, Direct3D.DeviceType.Hardware);
+            //CreateFlags flags;
 
-            if (caps.DeviceCaps.SupportsHardwareTransformAndLight)
-                flags = CreateFlags.HardwareVertexProcessing;
-            else
-                flags = CreateFlags.SoftwareVertexProcessing;
+            //if (caps.DeviceCaps.SupportsHardwareTransformAndLight)
+            //    flags = CreateFlags.HardwareVertexProcessing;
+            //else
+            //    flags = CreateFlags.SoftwareVertexProcessing;
 
-            d3dpp.BackBufferFormat = Format.Unknown;
-            d3dpp.SwapEffect = SwapEffect.Discard;
-            d3dpp.Windowed = true;
-            d3dpp.EnableAutoDepthStencil = true;
-            d3dpp.AutoDepthStencilFormat = DepthFormat.D16;
-            d3dpp.PresentationInterval = PresentInterval.Immediate;
-            d3dpp.MultiSample = MultiSampleType.FourSamples;
+            //d3dpp.BackBufferFormat = Format.Unknown;
+            //d3dpp.SwapEffect = SwapEffect.Discard;
+            //d3dpp.Windowed = true;
+            //d3dpp.EnableAutoDepthStencil = true;
+            //d3dpp.AutoDepthStencilFormat = DepthFormat.D16;
+            //d3dpp.PresentationInterval = PresentInterval.Immediate;
+            //d3dpp.MultiSample = MultiSampleType.FourSamples;
 
-            device = new Direct3D.Device(0, Direct3D.DeviceType.Hardware, this, flags, d3dpp);
-            device.DeviceReset += new System.EventHandler(this.OnResetDevice);
-            device.DeviceLost += new System.EventHandler(this.OnLostDevice);
-            //device.DeviceResizing += new System.ComponentModel.CancelEventHandler(this.OnResizeDevice);
-            OnCreateDevice(device, null);
+            //device = new Direct3D.Device(0, Direct3D.DeviceType.Hardware, this, flags, d3dpp);
 
             dinputDevice = new DirectInput.Device(SystemGuid.Keyboard);
             dinputDevice.SetCooperativeLevel(this, CooperativeLevelFlags.Background | CooperativeLevelFlags.NonExclusive);
@@ -104,42 +89,12 @@ namespace BDX
             return true;
         }
 
-        public void OnCreateDevice(object sender, EventArgs e)
-        {
-            Debug.WriteLine("OnCreateDevice(object sender, EventArgs e)");
-            Direct3D.Device dev = (Direct3D.Device)sender;
-            SetupDevice();
-            foreach (D3DObject o in objects) o.InitDevice(dev, false);
-        }
-
-        public void OnLostDevice(object sender, EventArgs e)
-        {
-            Debug.WriteLine("OnLostDevice(object sender, EventArgs e)");
-            lostDevice = true;
-            Direct3D.Device dev = (Direct3D.Device)sender;
-            foreach (D3DObject o in objects) o.LostDevice(dev);
-        }
-
-        public void OnResetDevice(object sender, EventArgs e)
-        {
-            Debug.WriteLine("OnResetDevice(object sender, EventArgs e)");
-            Direct3D.Device dev = (Direct3D.Device)sender;
-            SetupDevice();
-            foreach (D3DObject o in objects) o.InitDevice(dev, true);
-        }
-
-        public void OnResizeDevice(object sender, CancelEventArgs e)
-        {
-            Debug.WriteLine("OnResizeDevice(object sender, CancelEventArgs e)");
-            e.Cancel = true;
-        }
-
         protected void AttemptRecovery()
         {
             Debug.WriteLine("AttemptRecovery()");
             try
             {
-                device.TestCooperativeLevel();
+                engine.d3ddevice.TestCooperativeLevel();
                 lostDevice = false;
             }
             catch (DeviceLostException)
@@ -149,7 +104,7 @@ namespace BDX
             {
                 try
                 {
-                    device.Reset(d3dpp);
+                    engine.d3ddevice.Reset(engine.d3dpp);
                     lostDevice = false;
                 }
                 catch (DeviceLostException)
@@ -161,29 +116,29 @@ namespace BDX
 
         protected void SetupDevice()
         {
-            device.RenderState.ZBufferEnable = true;
+            engine.d3ddevice.RenderState.ZBufferEnable = true;
             //device.RenderState.FillMode = FillMode.WireFrame;
-            device.RenderState.CullMode = Cull.None;
+            engine.d3ddevice.RenderState.CullMode = Cull.None;
         }
 
         protected void SetupLights()
         {
-            device.RenderState.FogEnable = true;
-            device.RenderState.FogColor = Color.Gray;
-            device.RenderState.FogStart = 80.0f;
-            device.RenderState.FogEnd = 500.0f;
-            device.RenderState.FogTableMode = FogMode.Linear;
+            engine.d3ddevice.RenderState.FogEnable = true;
+            engine.d3ddevice.RenderState.FogColor = Color.Gray;
+            engine.d3ddevice.RenderState.FogStart = 80.0f;
+            engine.d3ddevice.RenderState.FogEnd = 500.0f;
+            engine.d3ddevice.RenderState.FogTableMode = FogMode.Linear;
 
-            device.RenderState.Lighting = true;
+            engine.d3ddevice.RenderState.Lighting = true;
 
-            device.Lights[0].Diffuse = Color.White;
-            device.Lights[0].Specular = Color.White;
-            device.Lights[0].Type = LightType.Directional;
-            device.Lights[0].Direction = new Vector3(-1, -1, 3);
+            engine.d3ddevice.Lights[0].Diffuse = Color.White;
+            engine.d3ddevice.Lights[0].Specular = Color.White;
+            engine.d3ddevice.Lights[0].Type = LightType.Directional;
+            engine.d3ddevice.Lights[0].Direction = new Vector3(-1, -1, 3);
             //            device.Lights[0].Commit();
-            device.Lights[0].Enabled = true;
+            engine.d3ddevice.Lights[0].Enabled = true;
 
-            device.RenderState.Ambient = Color.White;
+            engine.d3ddevice.RenderState.Ambient = Color.White;
         }
 
         protected void SetupMaterials(Color color)
@@ -195,8 +150,8 @@ namespace BDX
 
         void SetupMatrices()
         {
-            device.Transform.View = Matrix.LookAtLH(pov.Eye, pov.LookAt, new Vector3(0.0f, 1.0f, 0.0f));
-            device.Transform.Projection = Matrix.PerspectiveFovLH((float)(Math.PI / 4), 1.0f, 1.0f, 1000.0f);
+            engine.d3ddevice.Transform.View = Matrix.LookAtLH(pov.Eye, pov.LookAt, new Vector3(0.0f, 1.0f, 0.0f));
+            engine.d3ddevice.Transform.Projection = Matrix.PerspectiveFovLH((float)(Math.PI / 4), 1.0f, 1.0f, 1000.0f);
         }
 
         public void Render()
@@ -211,7 +166,7 @@ namespace BDX
             elapsedTime = (float)elapsedTimeSpan.Milliseconds * 0.001f;
             lastTime = currentTime;
 
-            if (device == null) return;
+            if (engine.d3ddevice == null) return;
             if (Pause) return;
 
             int i = int.Parse(this.Text) + 1;
@@ -220,9 +175,8 @@ namespace BDX
             SetupLights();
 
             //Clear the backbuffer to a black color 
-            ClearFlags flags = ClearFlags.Target;
-            if (device.RenderState.ZBufferEnable) flags |= ClearFlags.ZBuffer;
-            device.Clear(flags, System.Drawing.Color.Black, 1.0f, 0);
+            ClearFlags flags = ClearFlags.Target | ClearFlags.ZBuffer;
+            engine.d3ddevice.Clear(flags, System.Drawing.Color.Black, 1.0f, 0);
 
             UpdatePOV();
             SetupMatrices();
@@ -230,22 +184,21 @@ namespace BDX
             SetupMaterials(Color.White);
 
             //Begin the scene
-            device.BeginScene();
-            Matrix oldWorld = device.Transform.World;
-            foreach (D3DObject o in objects)
+            engine.d3ddevice.BeginScene();
+            foreach (D3DObject o in engine.objects)
                 try
                 {
-                    o.Render(device);
+                    o.Render(engine.d3ddevice);
                 }
                 finally
                 {
-                    device.Transform.World = oldWorld;
+                    engine.d3ddevice.Transform.World = Matrix.Identity;
                 }
 
 
             //End the scene
-            device.EndScene();
-            device.Present();
+            engine.d3ddevice.EndScene();
+            engine.d3ddevice.Present();
         }
 
         private void UpdatePOV()
@@ -308,19 +261,19 @@ namespace BDX
                 this.Dispose(); // Esc was pressed
 
             if (e.KeyChar == '+')
-                sol.lod++;
+                engine.sol.lod++;
 
             if (e.KeyChar == '-')
-                sol.lod--;
+                engine.sol.lod--;
 
             if (e.KeyChar == 'w')
-                device.RenderState.FillMode = FillMode.WireFrame;
+                engine.d3ddevice.RenderState.FillMode = FillMode.WireFrame;
 
             if (e.KeyChar == 's')
-                device.RenderState.FillMode = FillMode.Solid;
+                engine.d3ddevice.RenderState.FillMode = FillMode.Solid;
 
             if (e.KeyChar == ' ')
-                engine.DoSelectNewDevice();
+                engine.UserSelectNewDevice(null, null);
         }
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)

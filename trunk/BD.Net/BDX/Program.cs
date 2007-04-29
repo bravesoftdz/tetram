@@ -6,6 +6,7 @@ namespace BDX
 {
     static class Program
     {
+        static Form1 frm;
         /// <summary>
         /// Point d'entrée principal de l'application.
         /// </summary>
@@ -13,7 +14,7 @@ namespace BDX
         static void Main()
         {
             Application.EnableVisualStyles();
-            Form1 frm = new Form1();
+            frm = new Form1();
             frm.loading = true;
             frm.InitializeGraphics();
             frm.Show();
