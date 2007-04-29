@@ -11,6 +11,7 @@ using Microsoft.DirectX.DirectInput;
 using Direct3D = Microsoft.DirectX.Direct3D;
 using DirectInput = Microsoft.DirectX.DirectInput;
 using System.Diagnostics;
+using DXEngine;
 
 namespace BDX
 {
@@ -325,37 +326,4 @@ namespace BDX
             mousing = false;
         }
     }
-
-    internal class POV
-    {
-        private Vector3 look;
-
-        public POV(Vector3 eye, Vector3 look)
-        {
-            Eye = eye;
-            Look = look;
-        }
-        public Vector3 Eye;
-        public Vector3 Look
-        {
-            get { return Vector3.Normalize(look); }
-            set { look = value; }
-        }
-        public Vector3 StraightOn
-        { get { return Vector3.Normalize(Vector3.Cross(Right, Up)); } }
-        public Vector3 Right
-        { get { return Vector3.Normalize(Vector3.Cross(Up, Look)); } }
-        public Vector3 Up
-        { get { return new Vector3(0.0f, 1.0f, 0.0f); } }
-        public Vector3 LookAt
-        { get { return Eye + Look; } }
-    }
-
-    internal class D3DObject
-    {
-        internal virtual void InitDevice(Direct3D.Device device, bool isReset) { }
-        internal virtual void LostDevice(Direct3D.Device device) { }
-        internal virtual void Render(Direct3D.Device device) { }
-    }
-
 }

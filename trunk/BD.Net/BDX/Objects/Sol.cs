@@ -56,9 +56,9 @@ namespace BDX
             }
         }
 
-        internal override void Render(Device device) { Render(device, true, true); }
+        public override void Render(Device device) { Render(device, true, true); }
 
-        internal override void InitDevice(Device device, bool isReset)
+        public override void InitDevice(Device device, bool isReset)
         {
             ExtendedMaterial[] materials = null;
             GraphicsStream adjacency;

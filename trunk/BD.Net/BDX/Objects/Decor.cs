@@ -28,7 +28,7 @@ namespace BDX
 
         #region iObject Membres
 
-        internal override void Render(Device device)
+        public override void Render(Device device)
         {
             vBuffer.SetData(Sommets, 0, LockFlags.None);
             device.SetStreamSource(0, vBuffer, 0);
@@ -36,7 +36,7 @@ namespace BDX
             device.DrawPrimitives(PrimitiveType.TriangleStrip, 0, Sommets.Length - 2);
         }
 
-        internal override void InitDevice(Device device, bool isReset)
+        public override void InitDevice(Device device, bool isReset)
         {
             vBuffer = new VertexBuffer(typeof(CustomVertex.PositionColored), Sommets.Length,
                 device, 0, CustomVertex.PositionColored.Format, Pool.Default);

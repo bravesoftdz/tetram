@@ -25,13 +25,13 @@ namespace BDX
 
         #region iObject Membres
 
-        internal override void InitDevice(Device device, bool isReset)
+        public override void InitDevice(Device device, bool isReset)
         {
             vBuffer = new VertexBuffer(typeof(CustomVertex.PositionColored), Sommets.Length,
                 device, 0, CustomVertex.PositionColored.Format, Pool.Default);
         }
 
-        internal override void Render(Device device)
+        public override void Render(Device device)
         {
             Matrix mxWorld, mx;
             mxWorld = Matrix.RotationY(Angle);
