@@ -14,8 +14,10 @@ namespace BDX
         {
             Application.EnableVisualStyles();
             Form1 frm = new Form1();
-            frm.Show();
+            frm.loading = true;
             frm.InitializeGraphics();
+            frm.Show();
+            frm.loading = false;
             Application.Run(frm);
         }
     }
