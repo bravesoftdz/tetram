@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BDX.Engine
+namespace DXEngine
 {
     public class D3DException : System.ApplicationException { }
 

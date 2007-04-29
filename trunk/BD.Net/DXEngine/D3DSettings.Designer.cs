@@ -1,4 +1,4 @@
-﻿namespace BDX.Engine
+﻿namespace DXEngine
 {
     partial class D3DSettingsForm
     {

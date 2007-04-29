@@ -4,7 +4,39 @@ using System.Text;
 using Microsoft.DirectX.Direct3D;
 using System.Collections;
 using Microsoft.DirectX;
-using BDX.Engine;
+
+
+public class POV
+{
+    private Vector3 look;
+
+    public POV(Vector3 eye, Vector3 look)
+    {
+        Eye = eye;
+        Look = look;
+    }
+    public Vector3 Eye;
+    public Vector3 Look
+    {
+        get { return Vector3.Normalize(look); }
+        set { look = value; }
+    }
+    public Vector3 StraightOn
+    { get { return Vector3.Normalize(Vector3.Cross(Right, Up)); } }
+    public Vector3 Right
+    { get { return Vector3.Normalize(Vector3.Cross(Up, Look)); } }
+    public Vector3 Up
+    { get { return new Vector3(0.0f, 1.0f, 0.0f); } }
+    public Vector3 LookAt
+    { get { return Eye + Look; } }
+}
+
+public class D3DObject
+{
+    public virtual void InitDevice(Microsoft.DirectX.Direct3D.Device device, bool isReset) { }
+    public virtual void LostDevice(Microsoft.DirectX.Direct3D.Device device) { }
+    public virtual void Render(Microsoft.DirectX.Direct3D.Device device) { }
+}
 
 /// <summary>
 /// Enumeration of all possible D3D vertex processing types
@@ -48,6 +80,12 @@ public class DeviceCombo
     public ArrayList DepthStencilMultiSampleConflictList = new ArrayList(); // List of DepthStencilMultiSampleConflicts
     public ArrayList VertexProcessingTypeList = new ArrayList(); // List of VertexProcessingTypes
     public ArrayList PresentIntervalList = new ArrayList(); // List of D3DPRESENT_INTERVALs
+}
+
+public class DepthStencilMultiSampleConflict
+{
+    public DepthFormat DepthStencilFormat;
+    public MultiSampleType MultiSampleType;
 }
 
 class DisplayModeComparer : System.Collections.IComparer

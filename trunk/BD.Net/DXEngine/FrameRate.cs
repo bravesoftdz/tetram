@@ -9,7 +9,7 @@ using Microsoft.DirectX;
 
 namespace BDX
 {
-    class FrameRate : D3DObject
+    public class FrameRate : D3DObject
     {
         private D3DFont frameRateD3DFont;
         private WinFont frameRateWinFont = new WinFont(FontFamily.GenericSerif, 20);
@@ -26,7 +26,7 @@ namespace BDX
         {
         }
 
-        internal override void InitDevice(Device device, bool isReset)
+        public override void InitDevice(Device device, bool isReset)
         {
             frameRateD3DFont = new D3DFont(device, frameRateWinFont);
 
@@ -45,7 +45,7 @@ namespace BDX
             meshBounds = ComputeMeshBounds(glyphMetrics); 
         }
 
-        internal override void Render(Device device)
+        public override void Render(Device device)
         {
             float yaw = Environment.TickCount / 1200.0F;
             float pitch = Environment.TickCount / 800.0F;
