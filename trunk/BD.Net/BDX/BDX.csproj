@@ -41,18 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Common\dxmut.cs" />
-    <None Include="Common\dxmutdata.cs">
-      <SubType>Form</SubType>
-    </None>
-    <None Include="Common\dxmutenum.cs" />
-    <None Include="Common\dxmutexception.cs" />
-    <None Include="Common\dxmutgui.cs" />
-    <None Include="Common\dxmutmesh.cs" />
-    <None Include="Common\dxmutmisc.cs">
-      <SubType>Form</SubType>
-    </None>
-    <None Include="Common\dxmutSettingsDlg.cs" />
     <Compile Include="Objects\Axes.cs" />
     <Compile Include="Objects\Decor.cs" />
     <Compile Include="Form1.cs">
@@ -61,7 +49,6 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Engine\FrameRate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -89,7 +76,6 @@
     <Compile Include="Objects\Sol.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Common\directx.ico" />
     <Content Include="Media\salon.X">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

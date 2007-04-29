@@ -48,6 +48,7 @@ namespace BDX
         {
             Debug.WriteLine("form1 constructor");
             InitializeComponent();
+            this.ClientSize = new System.Drawing.Size(800, 600);
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.Opaque, true);
 
             // objects.Add(new Decor());
