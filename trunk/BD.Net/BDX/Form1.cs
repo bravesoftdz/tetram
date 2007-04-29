@@ -11,7 +11,6 @@ using Microsoft.DirectX.DirectInput;
 using Direct3D = Microsoft.DirectX.Direct3D;
 using DirectInput = Microsoft.DirectX.DirectInput;
 using System.Diagnostics;
-using DXEngine;
 
 namespace BDX
 {
@@ -40,6 +39,8 @@ namespace BDX
 
         private bool lostDevice;
 
+        BDXEngine engine = new BDXEngine();
+
         public bool Pause
         {
             get { return ((this.WindowState == FormWindowState.Minimized) || !this.Visible || !this.Focused || (this.Height <= 0)); }
@@ -49,8 +50,11 @@ namespace BDX
         {
             Debug.WriteLine("form1 constructor");
             InitializeComponent();
+
             this.ClientSize = new System.Drawing.Size(800, 600);
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.Opaque, true);
+
+            engine.Prepare(this);
 
             // objects.Add(new Decor());
             sol = new Sol();
@@ -314,6 +318,9 @@ namespace BDX
 
             if (e.KeyChar == 's')
                 device.RenderState.FillMode = FillMode.Solid;
+
+            if (e.KeyChar == ' ')
+                engine.DoSelectNewDevice();
         }
 
         private void Form1_MouseDown(object sender, MouseEventArgs e)
