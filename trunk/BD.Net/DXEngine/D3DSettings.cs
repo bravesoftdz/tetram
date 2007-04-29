@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using Microsoft.DirectX.Direct3D;
 
-namespace BDX.Engine
+namespace DXEngine
 {
     public partial class D3DSettingsForm : Form
     {
