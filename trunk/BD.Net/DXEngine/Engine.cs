@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.DirectX.Direct3D;
+using Direct3D = Microsoft.DirectX.Direct3D;
 using Microsoft.DirectX;
 
 namespace DXEngine
@@ -10,12 +11,23 @@ namespace DXEngine
     {
         protected D3DEnumeration enumerationSettings = new D3DEnumeration();
         protected D3DSettings graphicsSettings = new D3DSettings();
-        private System.Windows.Forms.Control ourRenderTarget;
+        private System.Windows.Forms.Form ourRenderTarget;
+
+        private float lastTime = 0.0f; // The last time
+        private int frames = 0; // Number of rames since our last update
+        private int appPausedCount = 0; // How many times has the app been paused (and when can it resume)?
 
         // Internal variables for the state of the app
         protected bool windowed;
         protected bool active;
         protected bool ready;
+        protected bool hasFocus;
+
+        // Internal variables used for timing
+        protected bool frameMoving;
+        protected bool singleStep;
+
+        private bool deviceLost = false;
 
         // Main objects used for creating and rendering the 3D scene
         protected PresentParameters presentParams = new PresentParameters();         // Parameters for CreateDevice/Reset
@@ -27,7 +39,7 @@ namespace DXEngine
         protected Caps Caps { get { return graphicsCaps; } }
         private CreateFlags behavior;     // Indicate sw or hw vertex processing
         protected BehaviorFlags BehaviorFlags { get { return new BehaviorFlags(behavior); } }
-        protected System.Windows.Forms.Control RenderTarget { get { return ourRenderTarget; } set { ourRenderTarget = value; } }
+        protected System.Windows.Forms.Form RenderTarget { get { return ourRenderTarget; } set { ourRenderTarget = value; } }
 
         // Overridable functions for the 3D scene created by the app
         protected virtual bool ConfirmDevice(Caps caps, VertexProcessingType vertexProcessingType, Format format) { return true; }
@@ -39,7 +51,12 @@ namespace DXEngine
         protected virtual void InvalidateDeviceObjects(System.Object sender, System.EventArgs e) { /* Do Nothing */ }
         protected virtual void DeleteDeviceObjects(System.Object sender, System.EventArgs e) { /* Do Nothing */ }
 
+        // Variables for timing
+        protected float appTime;             // Current time in seconds
+        protected float elapsedTime;      // Time elapsed since last frame
+        protected float framePerSecond;              // Instanteous frame rate
         protected string deviceStats;// String to hold D3D device stats
+        protected string frameStats; // String to hold frame stats
 
         protected bool showCursorWhenFullscreen; // Whether to show cursor when fullscreen
         protected bool clipCursorWhenFullscreen; // Whether to limit cursor pos when fullscreen
@@ -49,7 +66,7 @@ namespace DXEngine
         {
         }
 
-        public bool Prepare(System.Windows.Forms.Control target)
+        public bool Prepare(System.Windows.Forms.Form target)
         {
             enumerationSettings.ConfirmDeviceCallback = new D3DEnumeration.ConfirmDeviceCallbackType(this.ConfirmDevice);
             enumerationSettings.Enumerate();
@@ -474,13 +491,13 @@ namespace DXEngine
                 device.ShowCursor(true);
             }
 
-            //// If the app is paused, trigger the rendering of the current frame
-            //if (false == frameMoving)
-            //{
-            //    singleStep = true;
-            //    DXUtil.Timer(TIMER.START);
-            //    DXUtil.Timer(TIMER.STOP);
-            //}
+            // If the app is paused, trigger the rendering of the current frame
+            if (false == frameMoving)
+            {
+                singleStep = true;
+                Utils.Timer(TIMER.START);
+                Utils.Timer(TIMER.STOP);
+            }
         }
 
         /// <summary>
@@ -536,6 +553,198 @@ namespace DXEngine
             // Inform the display class of the change. It will internally
             // re-create valid surfaces, a d3ddevice, etc.
             InitializeEnvironment();
+        }
+
+        public void Pause(bool pause)
+        {
+
+            appPausedCount += (int)(pause ? +1 : -1);
+            ready = ((appPausedCount > 0) ? false : true);
+
+            // Handle the first pause request (of many, nestable pause requests)
+            if (pause && (1 == appPausedCount))
+            {
+                // Stop the scene from animating
+                if (frameMoving)
+                    Utils.Timer(TIMER.STOP);
+            }
+
+            if (0 == appPausedCount)
+            {
+                // Restart the timers
+                if (frameMoving)
+                    Utils.Timer(TIMER.START);
+            }
+        }
+
+        /// <summary>
+        /// Called when our sample has nothing else to do, and it's time to render
+        /// </summary>
+        public void FullRender()
+        {
+            //if (m_bTerminate)
+            //    this.Close();
+
+            // Render a frame during idle time (no messages are waiting)
+            if (active && ready)
+            {
+                try
+                {
+                    if (deviceLost)
+                    {
+                        // Yield some CPU time to other processes
+                        System.Threading.Thread.Sleep(100); // 100 milliseconds
+                    }
+                    // Render a frame during idle time
+                    if (active)
+                    {
+                        Render3DEnvironment();
+                    }
+                }
+                catch (Exception ee)
+                {
+                    System.Windows.Forms.MessageBox.Show("An exception has occurred.  This sample must exit.\r\n\r\n" + ee.ToString(), "Exception", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
+                    //this.Close();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Draws the scene 
+        /// </summary>
+        public void Render3DEnvironment()
+        {
+            if (deviceLost)
+            {
+                try
+                {
+                    // Test the cooperative level to see if it's okay to render
+                    device.TestCooperativeLevel();
+                }
+                catch (DeviceLostException)
+                {
+                    // If the device was lost, do not render until we get it back
+                    return;
+                }
+                catch (DeviceNotResetException)
+                {
+                    // Check if the device needs to be resized.
+
+                    // If we are windowed, read the desktop mode and use the same format for
+                    // the back buffer
+                    if (windowed)
+                    {
+                        GraphicsAdapterInfo adapterInfo = graphicsSettings.AdapterInfo;
+                        graphicsSettings.WindowedDisplayMode = Manager.Adapters[adapterInfo.AdapterOrdinal].CurrentDisplayMode;
+                        presentParams.BackBufferFormat = graphicsSettings.WindowedDisplayMode.Format;
+                    }
+
+                    // Reset the device and resize it
+                    device.Reset(device.PresentationParameters);
+                    EnvironmentResized(device, null);
+                }
+                deviceLost = false;
+            }
+
+            //// Get the app's time, in seconds. Skip rendering if no time elapsed
+            float fAppTime = Utils.Timer(TIMER.GETAPPTIME);
+            float fElapsedAppTime = Utils.Timer(TIMER.GETELAPSEDTIME);
+            if ((0.0f == fElapsedAppTime) && frameMoving)
+                return;
+
+            // FrameMove (animate) the scene
+            if (frameMoving || singleStep)
+            {
+                // Store the time for the app
+                appTime = fAppTime;
+                elapsedTime = fElapsedAppTime;
+
+                // Frame move the scene
+                FrameMove();
+
+                singleStep = false;
+            }
+
+            // Render the scene as normal
+            Render();
+
+            UpdateStats();
+
+            try
+            {
+                // Show the frame on the primary surface.
+                device.Present();
+            }
+            catch (DeviceLostException)
+            {
+                deviceLost = true;
+            }
+        }
+
+        /// <summary>
+        /// Update the various statistics the simulation keeps track of
+        /// </summary>
+        public void UpdateStats()
+        {
+            // Keep track of the frame count
+            float time = Utils.Timer(TIMER.GETABSOLUTETIME);
+            ++frames;
+
+            // Update the scene stats once per second
+            if (time - lastTime > 1.0f)
+            {
+                framePerSecond = frames / (time - lastTime);
+                lastTime = time;
+                frames = 0;
+
+                string strFmt;
+                DisplayMode mode = Manager.Adapters[graphicsSettings.AdapterOrdinal].CurrentDisplayMode;
+                if (mode.Format == device.PresentationParameters.BackBufferFormat)
+                {
+                    strFmt = mode.Format.ToString();
+                }
+                else
+                {
+                    strFmt = String.Format("backbuf {0}, adapter {1}",
+                        device.PresentationParameters.BackBufferFormat.ToString(), mode.Format.ToString());
+                }
+
+                string strDepthFmt;
+                if (enumerationSettings.AppUsesDepthBuffer)
+                {
+                    strDepthFmt = String.Format(" ({0})",
+                        graphicsSettings.DepthStencilBufferFormat.ToString());
+                }
+                else
+                {
+                    // No depth buffer
+                    strDepthFmt = "";
+                }
+
+                string strMultiSample;
+                switch (graphicsSettings.MultisampleType)
+                {
+                    case Direct3D.MultiSampleType.NonMaskable: strMultiSample = " (NonMaskable Multisample)"; break;
+                    case Direct3D.MultiSampleType.TwoSamples: strMultiSample = " (2x Multisample)"; break;
+                    case Direct3D.MultiSampleType.ThreeSamples: strMultiSample = " (3x Multisample)"; break;
+                    case Direct3D.MultiSampleType.FourSamples: strMultiSample = " (4x Multisample)"; break;
+                    case Direct3D.MultiSampleType.FiveSamples: strMultiSample = " (5x Multisample)"; break;
+                    case Direct3D.MultiSampleType.SixSamples: strMultiSample = " (6x Multisample)"; break;
+                    case Direct3D.MultiSampleType.SevenSamples: strMultiSample = " (7x Multisample)"; break;
+                    case Direct3D.MultiSampleType.EightSamples: strMultiSample = " (8x Multisample)"; break;
+                    case Direct3D.MultiSampleType.NineSamples: strMultiSample = " (9x Multisample)"; break;
+                    case Direct3D.MultiSampleType.TenSamples: strMultiSample = " (10x Multisample)"; break;
+                    case Direct3D.MultiSampleType.ElevenSamples: strMultiSample = " (11x Multisample)"; break;
+                    case Direct3D.MultiSampleType.TwelveSamples: strMultiSample = " (12x Multisample)"; break;
+                    case Direct3D.MultiSampleType.ThirteenSamples: strMultiSample = " (13x Multisample)"; break;
+                    case Direct3D.MultiSampleType.FourteenSamples: strMultiSample = " (14x Multisample)"; break;
+                    case Direct3D.MultiSampleType.FifteenSamples: strMultiSample = " (15x Multisample)"; break;
+                    case Direct3D.MultiSampleType.SixteenSamples: strMultiSample = " (16x Multisample)"; break;
+                    default: strMultiSample = string.Empty; break;
+                }
+                frameStats = String.Format("{0} fps ({1}x{2}), {3}{4}{5}", framePerSecond.ToString("f2"),
+                    device.PresentationParameters.BackBufferWidth, device.PresentationParameters.BackBufferHeight, strFmt, strDepthFmt, strMultiSample);
+            }
         }
     }
 }

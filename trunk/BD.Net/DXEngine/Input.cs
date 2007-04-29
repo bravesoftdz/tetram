@@ -4,7 +4,7 @@ using System.Drawing;
 using Microsoft.DirectX.DirectInput;
 using Microsoft.DirectX;
 
-namespace GameEngine
+namespace  DXEngine
 {
 		#region delegates
 		public delegate void ButtonAction();
@@ -18,7 +18,7 @@ namespace GameEngine
 	/// may be polled.  More importantly it provides the capability to invoke a supplied method
 	/// whenever a mapped keyboard or mouse button is pressed.
 	/// </summary>
-	public class GameInput : IDisposable
+	public class Inputs : IDisposable
 	{
 		#region Attributes
 		public  bool           m_bInitialized  = false;
@@ -62,7 +62,7 @@ namespace GameEngine
 			return m_MousePoint;
 		}
 
-		public GameInput(System.Windows.Forms.Form form)
+		public Inputs(System.Windows.Forms.Form form)
 		{
 			m_form = form;
 
@@ -155,7 +155,7 @@ namespace GameEngine
 					{								
 						if ( ex2 is OtherApplicationHasPriorityException)
 						{	// Something very odd happened.
-							Console.AddLine("An unknown error has occcurred. This app won't be able to process device info.");
+							//Console.AddLine("An unknown error has occcurred. This app won't be able to process device info.");
 						}
 						// Failed to aquire the device.
 						// This could be because the app
@@ -256,7 +256,7 @@ namespace GameEngine
 					{								
 						if (  ex2 is OtherApplicationHasPriorityException )
 						{	// Something very odd happened.
-							Console.AddLine("An unknown error has occcurred. This app won't be able to process device info.");
+							//Console.AddLine("An unknown error has occcurred. This app won't be able to process device info.");
 						}
 						// Failed to aquire the device.
 						// This could be because the app
@@ -335,16 +335,16 @@ namespace GameEngine
 							map.action(m_joystick.X);
 							break;
 						case 4:
-							map.action(m_joystick.X);
+							map.action(m_joystick.Y);
 							break;
 						case 5:
-							map.action(m_joystick.X);
+							map.action(m_joystick.Z);
 							break;
 					}
 				}
 
 				// only process the action map if the console is not visible
-				if ( !GameEngine.Console.IsVisible )
+				//if ( !GameEngine.Console.IsVisible )
 				{
 					foreach ( Mapping map in m_ActionMap ) 
 					{

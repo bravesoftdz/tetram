@@ -39,9 +39,7 @@
             this.Name = "Form1";
             this.Text = "0";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseUp);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Form1_KeyPress);
-            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
             this.ResumeLayout(false);
 
         }
