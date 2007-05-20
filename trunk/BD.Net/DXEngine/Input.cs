@@ -8,6 +8,12 @@ namespace DXEngine
 {
     #region delegates
     public delegate void ButtonAction();
+    public enum Axis
+    {
+        X = 0, 
+        Y = 1, 
+        Z = 2
+    }
     public delegate void AxisAction(int nCount);
     #endregion
 
@@ -344,7 +350,7 @@ namespace DXEngine
                 }
 
                 // only process the action map if the console is not visible
-                //if ( !GameEngine.Console.IsVisible )
+                if (!Console.IsVisible)
                 {
                     foreach (Mapping map in m_ActionMap)
                     {
@@ -448,19 +454,19 @@ namespace DXEngine
         }
 
         // method to map a mouse axis to an action
-        public void MapMouseAxisAction(int nAxis, AxisAction proc)
+        public void MapMouseAxisAction(Axis nAxis, AxisAction proc)
         {
             AxisMapping map = new AxisMapping();
-            map.key = nAxis;
+            map.key = (int)nAxis;
             map.action = proc;
             m_AxisActionMap.Add(map);
         }
 
         // method to map a joystick axis to an action
-        public void MapJoystickAxisAction(int nAxis, AxisAction proc)
+        public void MapJoystickAxisAction(Axis nAxis, AxisAction proc)
         {
             AxisMapping map = new AxisMapping();
-            map.key = nAxis + 3;
+            map.key = (int)nAxis + 3;
             map.action = proc;
             m_AxisActionMap.Add(map);
         }
@@ -487,11 +493,11 @@ namespace DXEngine
             }
         }
 
-        public void UnMapMouseAxisAction(int nAxis)
+        public void UnMapMouseAxisAction(Axis nAxis)
         {
             foreach (AxisMapping map in m_AxisActionMap)
             {
-                if (map.key == nAxis)
+                if (map.key == (int)nAxis)
                 {
                     m_AxisActionMap.Remove(map);
                 }
@@ -509,11 +515,11 @@ namespace DXEngine
             }
         }
 
-        public void UnMapJoystickAxisAction(int nAxis)
+        public void UnMapJoystickAxisAction(Axis nAxis)
         {
             foreach (AxisMapping map in m_AxisActionMap)
             {
-                if (map.key == (nAxis + 3))
+                if (map.key == ((int)nAxis + 3))
                 {
                     m_AxisActionMap.Remove(map);
                 }

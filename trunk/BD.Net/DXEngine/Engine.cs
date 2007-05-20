@@ -24,7 +24,7 @@ namespace DXEngine
         protected bool hasFocus;
 
         // Internal variables used for timing
-        protected bool frameMoving;
+        protected bool frameMoving;               
         protected bool singleStep;
 
         private bool deviceLost = false;
@@ -32,9 +32,10 @@ namespace DXEngine
         // Main objects used for creating and rendering the 3D scene
         protected PresentParameters presentParams = new PresentParameters();         // Parameters for CreateDevice/Reset
         protected Device device; // The rendering device
-        protected RenderStateManager renderState;
-        protected SamplerStateManagerCollection sampleState;
-        protected TextureStateManagerCollection textureStates;
+        protected DeviceInfo deviceInfo = new DeviceInfo(); // des infos qui ne peuvent être récupérées du Device en rendu PureDevice
+        //protected RenderStateManager renderState;
+        //protected SamplerStateManagerCollection sampleState;
+        //protected TextureStateManagerCollection textureStates;
         private Caps graphicsCaps;           // Caps for the device
         protected Caps Caps { get { return graphicsCaps; } }
         private CreateFlags behavior;     // Indicate sw or hw vertex processing
@@ -52,11 +53,11 @@ namespace DXEngine
         protected virtual void DeleteDeviceObjects(System.Object sender, System.EventArgs e) { /* Do Nothing */ }
 
         // Variables for timing
-        protected float appTime;             // Current time in seconds
-        protected float elapsedTime;      // Time elapsed since last frame
-        protected float framePerSecond;              // Instanteous frame rate
-        protected string deviceStats;// String to hold D3D device stats
-        protected string frameStats; // String to hold frame stats
+        public float appTime;             // Current time in seconds
+        public float elapsedTime;      // Time elapsed since last frame
+        public float framePerSecond;              // Instanteous frame rate
+        public string deviceStats;// String to hold D3D device stats
+        public string frameStats; // String to hold frame stats
 
         protected bool showCursorWhenFullscreen; // Whether to show cursor when fullscreen
         protected bool clipCursorWhenFullscreen; // Whether to limit cursor pos when fullscreen
@@ -66,7 +67,7 @@ namespace DXEngine
         {
         }
 
-        public bool Prepare(System.Windows.Forms.Form target)
+        public virtual bool Prepare(System.Windows.Forms.Form target)
         {
             enumerationSettings.ConfirmDeviceCallback = new D3DEnumeration.ConfirmDeviceCallbackType(this.ConfirmDevice);
             enumerationSettings.Enumerate();
@@ -265,23 +266,23 @@ namespace DXEngine
 
         public void BuildPresentParamsFromSettings()
         {
-            presentParams.Windowed = graphicsSettings.IsWindowed;
-            presentParams.BackBufferCount = 1;
-            presentParams.MultiSample = graphicsSettings.MultisampleType;
-            presentParams.MultiSampleQuality = graphicsSettings.MultisampleQuality;
-            presentParams.SwapEffect = SwapEffect.Discard;
-            presentParams.EnableAutoDepthStencil = enumerationSettings.AppUsesDepthBuffer;
-            presentParams.AutoDepthStencilFormat = graphicsSettings.DepthStencilBufferFormat;
-            presentParams.PresentFlag = PresentFlag.None;
+            presentParams.Windowed = graphicsSettings.IsWindowed; // default false
+            presentParams.BackBufferCount = 1; // default 0
+            presentParams.MultiSample = graphicsSettings.MultisampleType; // default None
+            presentParams.MultiSampleQuality = graphicsSettings.MultisampleQuality; // default 0
+            presentParams.SwapEffect = SwapEffect.Discard; // default 0
+            presentParams.EnableAutoDepthStencil = enumerationSettings.AppUsesDepthBuffer; // default false
+            presentParams.AutoDepthStencilFormat = graphicsSettings.DepthStencilBufferFormat; // default Unknown
+            presentParams.PresentFlag = PresentFlag.None; // default None
             if (windowed)
             {
-                presentParams.BackBufferWidth = ourRenderTarget.ClientRectangle.Right - ourRenderTarget.ClientRectangle.Left;
-                presentParams.BackBufferHeight = ourRenderTarget.ClientRectangle.Bottom - ourRenderTarget.ClientRectangle.Top;
-                presentParams.BackBufferFormat = graphicsSettings.DeviceCombo.BackBufferFormat;
-                presentParams.BackBufferFormat = Format.Unknown;
-                presentParams.FullScreenRefreshRateInHz = 0;
-                presentParams.PresentationInterval = PresentInterval.Immediate;
-                presentParams.DeviceWindow = ourRenderTarget;
+                presentParams.BackBufferWidth = ourRenderTarget.ClientRectangle.Right - ourRenderTarget.ClientRectangle.Left; // default 0
+                presentParams.BackBufferHeight = ourRenderTarget.ClientRectangle.Bottom - ourRenderTarget.ClientRectangle.Top; // default 0
+                presentParams.BackBufferFormat = graphicsSettings.DeviceCombo.BackBufferFormat; // default Unknown
+                presentParams.BackBufferFormat = Format.Unknown; // default Unknown
+                presentParams.FullScreenRefreshRateInHz = 0; // default 0
+                presentParams.PresentationInterval = PresentInterval.Immediate; // default Default
+                presentParams.DeviceWindow = ourRenderTarget; // default Null
             }
             else
             {
@@ -341,9 +342,9 @@ namespace DXEngine
                     presentParams.DeviceWindow, createFlags, presentParams);
 
                 // Cache our local objects
-                renderState = device.RenderState;
-                sampleState = device.SamplerState;
-                textureStates = device.TextureState;
+                //renderState = device.RenderState;
+                //sampleState = device.SamplerState;
+                //textureStates = device.TextureState;
                 // When moving from fullscreen to windowed mode, it is important to
                 // adjust the window size after recreating the device rather than
                 // beforehand to ensure that you get the window size you want.  For
@@ -492,7 +493,7 @@ namespace DXEngine
             }
 
             // If the app is paused, trigger the rendering of the current frame
-            if (false == frameMoving)
+            if (!frameMoving)
             {
                 singleStep = true;
                 Utils.Timer(TIMER.START);
@@ -603,7 +604,7 @@ namespace DXEngine
                 }
                 catch (Exception ee)
                 {
-                    System.Windows.Forms.MessageBox.Show("An exception has occurred.  This sample must exit.\r\n\r\n" + ee.ToString(), "Exception", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);
+                    System.Windows.Forms.MessageBox.Show("An exception has occurred.  This sample must exit.\r\n\r\n" + ee.ToString(), "Exception", System.Windows.Forms.MessageBoxButtons.OK, System.Windows.Forms.MessageBoxIcon.Information);               
                     //this.Close();
                 }
             }

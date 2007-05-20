@@ -5,9 +5,9 @@ using Microsoft.DirectX.Direct3D;
 using System.Drawing;
 using Microsoft.DirectX;
 
-namespace BDX
+namespace BDX.Objects
 {
-    class Decor : D3DObject
+    class Decor : IRenderable
     {
 
         private VertexBuffer vBuffer;
@@ -28,7 +28,7 @@ namespace BDX
 
         #region iObject Membres
 
-        public override void Render(Device device)
+        public  void Render(Device device, DeviceInfo deviceInfo)
         {
             vBuffer.SetData(Sommets, 0, LockFlags.None);
             device.SetStreamSource(0, vBuffer, 0);
@@ -36,12 +36,13 @@ namespace BDX
             device.DrawPrimitives(PrimitiveType.TriangleStrip, 0, Sommets.Length - 2);
         }
 
-        public override void InitDevice(Device device, bool isReset)
+        public  void InitDevice(Device device, bool isReset)
         {
             vBuffer = new VertexBuffer(typeof(CustomVertex.PositionColored), Sommets.Length,
                 device, 0, CustomVertex.PositionColored.Format, Pool.Default);
         }
 
+        public void LostDevice(Device device) { }
         #endregion
     }
 }

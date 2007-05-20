@@ -5,37 +5,20 @@ using Microsoft.DirectX.Direct3D;
 using System.Collections;
 using Microsoft.DirectX;
 
-
-public class POV
+public struct DeviceInfo
 {
-    private Vector3 look;
-
-    public POV(Vector3 eye, Vector3 look)
-    {
-        Eye = eye;
-        Look = look;
-    }
-    public Vector3 Eye;
-    public Vector3 Look
-    {
-        get { return Vector3.Normalize(look); }
-        set { look = value; }
-    }
-    public Vector3 StraightOn
-    { get { return Vector3.Normalize(Vector3.Cross(Right, Up)); } }
-    public Vector3 Right
-    { get { return Vector3.Normalize(Vector3.Cross(Up, Look)); } }
-    public Vector3 Up
-    { get { return new Vector3(0.0f, 1.0f, 0.0f); } }
-    public Vector3 LookAt
-    { get { return Eye + Look; } }
+    public Matrix World;
+    public Matrix View;
+    public Matrix Projection;
+    public bool FogEnabled;
+    public bool ZEnabled;
 }
 
-public class D3DObject
+public interface IRenderable
 {
-    public virtual void InitDevice(Microsoft.DirectX.Direct3D.Device device, bool isReset) { }
-    public virtual void LostDevice(Microsoft.DirectX.Direct3D.Device device) { }
-    public virtual void Render(Microsoft.DirectX.Direct3D.Device device) { }
+    void InitDevice(Microsoft.DirectX.Direct3D.Device device, bool isReset);
+    void LostDevice(Microsoft.DirectX.Direct3D.Device device);
+    void Render(Microsoft.DirectX.Direct3D.Device device, DeviceInfo deviceInfo);
 }
 
 /// <summary>

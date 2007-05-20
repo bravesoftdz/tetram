@@ -4,14 +4,17 @@ using System.Text;
 using Microsoft.DirectX.Direct3D;
 using System.Drawing;
 using Microsoft.DirectX;
+using DXEngine;
+using D3DFont = Microsoft.DirectX.Direct3D.Font;
+using WinFont = System.Drawing.Font;
 
-namespace BDX
+namespace BDX.Objects
 {
-    class Axes : D3DObject
+    class Axes : Object3D, IRenderable
     {
         private VertexBuffer vBuffer;
-        public Vector3 Position = Vector3.Empty;
-        public float Angle = 0;
+
+        public Axes(Engine Engine) : base(Engine, "Axes") { }
 
         private CustomVertex.PositionColored[] Sommets = 
         {
@@ -25,27 +28,25 @@ namespace BDX
 
         #region iObject Membres
 
-        public override void InitDevice(Device device, bool isReset)
+        public void InitDevice(Device device, bool isReset)
         {
             vBuffer = new VertexBuffer(typeof(CustomVertex.PositionColored), Sommets.Length,
                 device, 0, CustomVertex.PositionColored.Format, Pool.Default);
+            vBuffer.SetData(Sommets, 0, LockFlags.None);
         }
 
-        public override void Render(Device device)
+        public void Render(Device device, DeviceInfo deviceInfo)
         {
-            Matrix mxWorld, mx;
-            mxWorld = Matrix.RotationY(Angle);
-            mx = Matrix.Translation(Position);
-            mxWorld *= mx;
-            // D3DXMatrixMultiply(&mxWorld, &m_mxOrientation, &mxWorld); ??? 
-            device.Transform.World = mxWorld;
+            device.Transform.World = this.World;    
+            // il faut désactiver la lumière sinon les couleurs ne sont pas utilisées
+            device.RenderState.Lighting = false;
 
-            vBuffer.SetData(Sommets, 0, LockFlags.None);
             device.SetStreamSource(0, vBuffer, 0);
             device.VertexFormat = CustomVertex.PositionColored.Format;
             device.DrawPrimitives(PrimitiveType.LineList, 0, Sommets.Length / 2);
         }
 
+        public void LostDevice(Device device) { }
         #endregion
     }
 }
