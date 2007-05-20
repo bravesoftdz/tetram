@@ -106,11 +106,11 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Common\dxmutSettingsDlg.cs" />
-    <Compile Include="G:\Programmation\MEDIA.KIT\BDThèque\Sources\BD.Net\BDX 3\EmptyProject.cs">
-      <SubType>Code</SubType>
-      <Link>EmptyProject.cs</Link>
-    </Compile>
-    <None Include="EmptyProject.fx" />
+    <Compile Include="EmptyProject.cs" />
+    <EmbeddedResource Include="Media\EmptyProject.fx">
+    </EmbeddedResource>
+    <EmbeddedResource Include="Media\UI\dxutcontrols.dds">
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

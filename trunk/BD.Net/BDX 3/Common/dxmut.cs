@@ -2067,7 +2067,7 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
                     windowClient.Size = new System.Drawing.Size(newDeviceSettings.presentParams.BackBufferWidth, newDeviceSettings.presentParams.BackBufferHeight);
 
                     State.ClientRectangle = windowClient; // Store this for resizing later
-                    State.WindowBoundsRectangle = WindowFocus.Bounds;;
+                    State.WindowBoundsRectangle = WindowFocus.Bounds;
                 }
             }
 
@@ -2716,10 +2716,10 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
         /// </summary>
         private void Cleanup3DEnvironment(bool releaseSettings)
         {
-            DialogResourceManager.GetGlobalInstance().OnLostDevice();
-            DialogResourceManager.GetGlobalInstance().OnDestroyDevice();
-            ResourceCache.GetGlobalInstance().OnLostDevice();
-            ResourceCache.GetGlobalInstance().OnDestroyDevice();
+            DialogResourceManager.Instance.OnLostDevice();
+            DialogResourceManager.Instance.OnDestroyDevice();
+            ResourceCache.Instance.OnLostDevice();
+            ResourceCache.Instance.OnDestroyDevice();
             if (State.Settings != null)
             {
                 State.Settings.OnLostDevice();
@@ -2782,10 +2782,10 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
                         State.Settings.OnResetDevice();
                     }
                     // Call the dialog resource manager create device method
-                    DialogResourceManager.GetGlobalInstance().OnCreateDevice(device);
+                    DialogResourceManager.Instance.OnCreateDevice(device);
 
                     // Call the resource cache created function
-                    ResourceCache.GetGlobalInstance().OnCreateDevice(device);
+                    ResourceCache.Instance.OnCreateDevice(device);
 
                     // Call the applications device created callback if it's set
                     State.IsInsideDeviceCallback = true;
@@ -2812,10 +2812,10 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
                 try
                 {
                     // Call the dialog resource manager reset device method
-                    DialogResourceManager.GetGlobalInstance().OnResetDevice(device);
+                    DialogResourceManager.Instance.OnResetDevice(device);
 
                     // Call the resource cache device reset function
-                    ResourceCache.GetGlobalInstance().OnResetDevice(device);
+                    ResourceCache.Instance.OnResetDevice(device);
 
                     // Call app's reset
                     State.IsInsideDeviceCallback = true;
@@ -4000,8 +4000,8 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
             // Release all vidmem objects
             if (State.AreDeviceObjectsReset)
             {
-                DialogResourceManager.GetGlobalInstance().OnDestroyDevice();
-                ResourceCache.GetGlobalInstance().OnDestroyDevice();
+                DialogResourceManager.Instance.OnDestroyDevice();
+                ResourceCache.Instance.OnDestroyDevice();
                 if (State.Settings != null)
                 {
                     State.Settings.OnDestroyDevice( this, EventArgs.Empty);
@@ -4026,8 +4026,8 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
             // Release all vidmem objects
             if (State.AreDeviceObjectsReset)
             {
-                DialogResourceManager.GetGlobalInstance().OnLostDevice();
-                ResourceCache.GetGlobalInstance().OnLostDevice();
+                DialogResourceManager.Instance.OnLostDevice();
+                ResourceCache.Instance.OnLostDevice();
                 if (State.Settings != null)
                 {
                     State.Settings.OnLostDevice();
@@ -4061,9 +4061,9 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
                 State.Settings.OnResetDevice();
 
             // Call the dialog resource manager device reset function
-            DialogResourceManager.GetGlobalInstance().OnResetDevice(device);
+            DialogResourceManager.Instance.OnResetDevice(device);
             // Call the resource cache device reset function
-            ResourceCache.GetGlobalInstance().OnResetDevice(device);
+            ResourceCache.Instance.OnResetDevice(device);
 
             // Call app's reset callback
             if (DeviceReset != null)

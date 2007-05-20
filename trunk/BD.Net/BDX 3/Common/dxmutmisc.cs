@@ -533,12 +533,15 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
         #region Creation
         private ResourceCache() { } // Don't allow creation
         private static ResourceCache localObject = null;
-        public static ResourceCache GetGlobalInstance()
+        public static ResourceCache Instance
         {
-            if (localObject == null)
-                localObject = new ResourceCache();
+            get
+            {
+                if (localObject == null)
+                    localObject = new ResourceCache();
 
-            return localObject;
+                return localObject;
+            }
         }
         #endregion
 
@@ -693,11 +696,14 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
 
             // Nothing found in the cache
             Effect e = Effect.FromFile(device, filename, defines, includeFile, null, flags, effectPool, out errors);
-            // Add this to the cache
-            CachedEffect entry = new CachedEffect();
-            entry.Flags = flags;
-            entry.Source = filename;
-            effectCache.Add(entry, e);
+            if (e != null)
+            {
+                // Add this to the cache
+                CachedEffect entry = new CachedEffect();
+                entry.Flags = flags;
+                entry.Source = filename;
+                effectCache.Add(entry, e);
+            }
 
             // Return the new effect
             return e;
@@ -2001,7 +2007,7 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
 
                 // The file wasn't found again, search the folders with \media on them
                 // Now you can search the typical folders
-                if (SearchTypicalFolders(filename + MediaPath, exeFolder, exeName, out filePath))
+                if (SearchTypicalFolders(MediaPath + filename, exeFolder, exeName, out filePath))
                 {
                     return filePath;
                 }

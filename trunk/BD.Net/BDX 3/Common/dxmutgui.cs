@@ -209,12 +209,15 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
         } 
 
         private static DialogResourceManager localObject = null;
-        public static DialogResourceManager GetGlobalInstance()
+        public static DialogResourceManager Instance
         {
-            if (localObject == null)
-                localObject = new DialogResourceManager();
+            get
+            {
+                if (localObject == null)
+                    localObject = new DialogResourceManager();
 
-            return localObject;
+                return localObject;
+            }
         }
         #endregion
 
@@ -1345,7 +1348,7 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
             for (uint i = (uint)fontList.Count; i <= index; i++)
                 fontList.Add((int)(-1));
 
-            int fontIndex = DialogResourceManager.GetGlobalInstance().AddFont(faceName, height, weight);
+            int fontIndex = DialogResourceManager.Instance.AddFont(faceName, height, weight);
             fontList[(int)index] = fontIndex;
         }
         /// <summary>
@@ -1354,7 +1357,7 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
         /// </summary>
         public FontNode GetFont(uint index)
         {
-            return DialogResourceManager.GetGlobalInstance().GetFontNode((int)fontList[(int)index]);
+            return DialogResourceManager.Instance.GetFontNode((int)fontList[(int)index]);
         }
         /// <summary>
         /// Shared resource access. Indexed fonts and textures are shared among
@@ -1366,7 +1369,7 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
             for (uint i = (uint)textureList.Count; i <= index; i++)
                 textureList.Add((int)(-1));
 
-            int textureIndex = DialogResourceManager.GetGlobalInstance().AddTexture(filename);
+            int textureIndex = DialogResourceManager.Instance.AddTexture(filename);
             textureList[(int)index] = textureIndex;
         }
         /// <summary>
@@ -1375,7 +1378,7 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
         /// </summary>
         public TextureNode GetTexture(uint index)
         {
-            return DialogResourceManager.GetGlobalInstance().GetTextureNode((int)textureList[(int)index]);
+            return DialogResourceManager.Instance.GetTextureNode((int)textureList[(int)index]);
         }
         #endregion
 
@@ -1603,10 +1606,10 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
                 Refresh();
             }
 
-            Device device = DialogResourceManager.GetGlobalInstance().Device;
+            Device device = DialogResourceManager.Instance.Device;
 
             // Set up a state block here and restore it when finished drawing all the controls
-            DialogResourceManager.GetGlobalInstance().StateBlock.Capture();
+            DialogResourceManager.Instance.StateBlock.Capture();
 
             // Set some render/texture states
             device.RenderState.AlphaBlendEnable = true;
@@ -1642,7 +1645,7 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
             // Set the texture up, and begin the sprite
             TextureNode tNode = GetTexture(0);
             device.SetTexture(0, tNode.Texture);
-            DialogResourceManager.GetGlobalInstance().Sprite.Begin(SpriteFlags.DoNotSaveState);
+            DialogResourceManager.Instance.Sprite.Begin(SpriteFlags.DoNotSaveState);
 
             // Render the caption if it's enabled.
             if (hasCaption)
@@ -1676,8 +1679,8 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
             }
 
             // End the sprite and apply the stateblock
-            DialogResourceManager.GetGlobalInstance().Sprite.End();
-            DialogResourceManager.GetGlobalInstance().StateBlock.Apply();
+            DialogResourceManager.Instance.Sprite.End();
+            DialogResourceManager.Instance.StateBlock.Apply();
         }
 
         /// <summary>
@@ -1721,7 +1724,7 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
                 screenRect.Offset(0, captionHeight);
 
             // Set the identity transform
-            DialogResourceManager.GetGlobalInstance().Sprite.Transform = Matrix.Identity;
+            DialogResourceManager.Instance.Sprite.Transform = Matrix.Identity;
 
             // Get the font node here
             FontNode fNode = GetFont(element.FontIndex);
@@ -1730,11 +1733,11 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
                 // Render the text shadowed
                 System.Drawing.Rectangle shadowRect = screenRect;
                 shadowRect.Offset(1, 1);
-                fNode.Font.DrawText(DialogResourceManager.GetGlobalInstance().Sprite, text,
+                fNode.Font.DrawText(DialogResourceManager.Instance.Sprite, text,
                     shadowRect, element.textFormat, unchecked((int)0xff000000));
             }
 
-            fNode.Font.DrawText(DialogResourceManager.GetGlobalInstance().Sprite, text,
+            fNode.Font.DrawText(DialogResourceManager.Instance.Sprite, text,
                 screenRect, element.textFormat, element.FontColor.Current.ToArgb());
         }
         /// <summary>Draw a sprite</summary>
@@ -1758,7 +1761,7 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
             float scaleY = (float)screenRect.Height / (float)texRect.Height;
 
             // Set the scaling transform
-            DialogResourceManager.GetGlobalInstance().Sprite.Transform = Matrix.Scaling(scaleX, scaleY, 1.0f);
+            DialogResourceManager.Instance.Sprite.Transform = Matrix.Scaling(scaleX, scaleY, 1.0f);
             
             // Calculate the position
             Vector3 pos = new Vector3(screenRect.Left, screenRect.Top, 0.0f);
@@ -1766,7 +1769,7 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
             pos.Y /= scaleY;
 
             // Finally draw the sprite
-            DialogResourceManager.GetGlobalInstance().Sprite.Draw(tNode.Texture, texRect, new Vector3(), pos, element.TextureColor.Current.ToArgb()); 
+            DialogResourceManager.Instance.Sprite.Draw(tNode.Texture, texRect, new Vector3(), pos, element.TextureColor.Current.ToArgb()); 
         }
         /// <summary>Draw's some text</summary>
         public void DrawText(string text, Element element, System.Drawing.Rectangle rect) { this.DrawText(text, element, rect, false); }
@@ -1794,7 +1797,7 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
             Device device = SampleFramework.Device;
 
             // Since we're doing our own drawing here, we need to flush the sprites
-            DialogResourceManager.GetGlobalInstance().Sprite.Flush();
+            DialogResourceManager.Instance.Sprite.Flush();
             // Preserve the devices current vertex declaration
             using (VertexDeclaration decl = device.VertexDeclaration)
             {
@@ -2929,7 +2932,7 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
             // Update the scroll bars rects too
             scrollbarControl.SetLocation(dropDownRect.Right, dropDownRect.Top + 2);
             scrollbarControl.SetSize(scrollWidth, dropDownRect.Height - 2);
-            FontNode fNode = DialogResourceManager.GetGlobalInstance().GetFontNode((int)(elementList[2] as Element).FontIndex);
+            FontNode fNode = DialogResourceManager.Instance.GetFontNode((int)(elementList[2] as Element).FontIndex);
             if ((fNode != null) && (fNode.Height > 0))
             {
                 scrollbarControl.PageSize = (int)(dropDownTextRect.Height / fNode.Height);
@@ -3232,7 +3235,7 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
             // do that now.
             if (!isScrollBarInit)
             {
-                FontNode fNode = DialogResourceManager.GetGlobalInstance().GetFontNode((int)e.FontIndex);
+                FontNode fNode = DialogResourceManager.Instance.GetFontNode((int)e.FontIndex);
                 if ((fNode != null) && (fNode.Height > 0))
                     scrollbarControl.PageSize = (int)(dropDownTextRect.Height / fNode.Height);
                 else
@@ -3254,7 +3257,7 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
             selectionElement.TextureColor.Current = e.TextureColor.Current;
             selectionElement.FontColor.Current = selectionElement.FontColor.States[(int)ControlState.Normal];
 
-            FontNode font = DialogResourceManager.GetGlobalInstance().GetFontNode((int)e.FontIndex);
+            FontNode font = DialogResourceManager.Instance.GetFontNode((int)e.FontIndex);
             int currentY = dropDownTextRect.Top;
             int remainingHeight = dropDownTextRect.Height;
 
@@ -3870,7 +3873,7 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
             // Update the scroll bars rects too
             scrollbarControl.SetLocation(boundingBox.Right - scrollWidth, boundingBox.Top);
             scrollbarControl.SetSize(scrollWidth, height);
-            FontNode fNode = DialogResourceManager.GetGlobalInstance().GetFontNode((int)(elementList[0] as Element).FontIndex);
+            FontNode fNode = DialogResourceManager.Instance.GetFontNode((int)(elementList[0] as Element).FontIndex);
             if ((fNode != null) && (fNode.Height > 0))
             {
                 scrollbarControl.PageSize = (int)(textRect.Height / fNode.Height);
@@ -4253,7 +4256,7 @@ namespace Microsoft.Samples.DirectX.UtilityToolkit
                 // Find out the height of a single line of text
                 System.Drawing.Rectangle rc = textRect;
                 System.Drawing.Rectangle sel = selectionRect;
-                rc.Height = (int)(DialogResourceManager.GetGlobalInstance().GetFontNode((int)e.FontIndex).Height);
+                rc.Height = (int)(DialogResourceManager.Instance.GetFontNode((int)e.FontIndex).Height);
                 textHeight = rc.Height;
 
                 // If we have not initialized the scroll bar page size,
