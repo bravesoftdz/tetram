@@ -14,7 +14,7 @@ namespace BDX.Objects
     {
         private VertexBuffer vBuffer;
 
-        public Axes(Engine Engine) : base(Engine, "Axes") { }
+        public Axes() : base("Axes") { }
 
         private CustomVertex.PositionColored[] Sommets = 
         {

@@ -9,8 +9,8 @@ namespace BDX.Objects
 {
     class Sol : D3DMesh
     {
-        public Sol(Engine Engine)
-            : base(Engine, "Sol")
+        public Sol()
+            : base("Sol")
         {
             fichier = @"media\salon.x";
             Rotation.X = -(float)(Math.PI / 2);

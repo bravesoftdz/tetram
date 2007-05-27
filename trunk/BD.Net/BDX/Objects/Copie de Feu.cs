@@ -7,9 +7,9 @@ using Microsoft.DirectX;
 
 namespace BDX.Objects
 {
-    class Feu : ParticleGenerator
+    class Bougie : ParticleGenerator
     {
-        public Feu(Object3D parent)
+        public Bougie(Object3D parent)
             : base("Feu", 10, 20, Color.Red, @"Media\Particle.bmp", new ParticleUpdate(FeuUpdate))
         {
             Parent = parent;
