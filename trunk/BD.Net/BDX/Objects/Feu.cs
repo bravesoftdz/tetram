@@ -9,11 +9,10 @@ namespace BDX.Objects
 {
     class Feu : ParticleGenerator
     {
-        public Feu(Engine Engine, Object3D parent)
-            : base(Engine, "Feu", 10, 20, Color.Red, @"Media\Particle.bmp", new ParticleUpdate(FeuUpdate))
+        public Feu(Object3D parent)
+            : base("Feu", 10, 20, Color.Red, @"Media\Particle.bmp", new ParticleUpdate(FeuUpdate))
         {
             Parent = parent;
-            Position = new Vector3(2, 2, 2);
             m_ParticlesLimit = 150;
 
             m_EmitPositionModulate = new Vector3(0.5f, 0, 0.5f);
@@ -46,12 +45,12 @@ namespace BDX.Objects
             //sngA = sngA - sngAlphaDecay * sngTime;
             //Obj.m_Color = Color.FromArgb(0.6 + rnd.Next(0.2) - (0.01 + rnd.Next(0.05)) * DeltaT, 1, 0.5, 0.2);
             //Obj.Color = Color.FromArgb((int)(153 + rnd.Next(51) - (3 + rnd.Next(13)) * DeltaT), 255, 128, 51);
-            int alpha = (int)(Obj.Color.A - (3 + rnd.Next(13)) * DeltaT);
+            int alpha = (int)(Obj.Color.A - /*(3 + rnd.Next(13)) * */ DeltaT);
             if (alpha < 0) alpha = 0;
             Obj.Color = Color.FromArgb(alpha, Obj.Color);
 
             Obj.fTimeRemaining -= DeltaT;
-            Obj.bActive = /*Obj.fTimeRemaining > 0 && */Obj.Color.A > 0;
+            Obj.bActive = /* Obj.fTimeRemaining > 0; && */Obj.Color.A > 0;
         }
 
         public override void InitParticle(ref Particle particle)
@@ -72,7 +71,8 @@ namespace BDX.Objects
             particle.Accel = particle.InitialAccel;
             particle.Speed = particle.InitialSpeed;
 
-            particle.Color = Color.FromArgb(200 + rnd.Next(55), 255, 128, 51);
+//            particle.Color = Color.FromArgb(200 + rnd.Next(55), 255, 128, 51);
+            particle.Color = Color.FromArgb(153 + rnd.Next(51), 255, 128, 51);
 
             particle.fTimeRemaining = 10;
         }
