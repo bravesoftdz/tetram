@@ -85,7 +85,7 @@ end;
 destructor TWaiting.Destroy;
 begin
   ShowProgression(FMessage, epFin);
-  FreeAndNil(FTimer);
+  FTimer.Free;
   if Assigned(FForm) then ClearForm;
   inherited;
 end;
