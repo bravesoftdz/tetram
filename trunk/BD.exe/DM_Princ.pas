@@ -285,9 +285,9 @@ end;
 procedure TDMPrinc.DataModuleDestroy(Sender: TObject);
 begin
   ActiveHTTPServer(False);
-  FreeAndNil(FActiveIcon);
+  FActiveIcon.Free;
   UIBDataBase.Connected := False;
-  FreeAndnil(FUILock);
+  FUILock.Free;
 end;
 
 function TDMPrinc.ActiveHTTPServer(Value: Boolean): Boolean;
@@ -440,7 +440,7 @@ begin
             AResponseInfo.ResponseNo := 200;
             AResponseInfo.ContentLength := ResultFile.Size;
           finally
-            FreeAndNil(ResultFile); // We must free this file since it won't be done by the web server component
+            ResultFile.Free; // We must free this file since it won't be done by the web server component
           end;
         end
         else

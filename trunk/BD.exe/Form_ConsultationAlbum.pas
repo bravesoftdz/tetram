@@ -267,10 +267,10 @@ begin
           Couverture.Picture.Assign(jpg);
           Couverture.Transparent := False;
         finally
-          FreeAndNil(jpg);
+          jpg.Free;
         end;
       finally
-        FreeAndNil(ms);
+        ms.Free;
       end
       else
         Couverture.Picture.Assign(nil);
