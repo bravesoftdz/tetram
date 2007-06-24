@@ -16,12 +16,29 @@ namespace DXEngine
         internal bool frustrumChanged;
         private Vector3[] _frustumCorners = new Vector3[8];
         private Plane[] _frustumPlanes = new Plane[6];
+        public bool DoRender = false;
 
-        public POV(Vector3 eye, Vector3 look)
+        static internal POV instance;
+        static public POV Instance
+        {
+            get
+            {
+                if (instance == null) instance = new POV();
+                return instance;
+            }
+        }
+
+        private POV()
+        {
+            Console.AddParameter("SHOWPOV", "Affiche ou masque les valeurs de la caméra.", new CommandFunction(ShowPov));
+        }
+
+        public void Position(Vector3 eye, Vector3 look)
         {
             Eye = eye;
             Look = look;
         }
+
         public Vector3 Eye
         {
             get { return eye; }
@@ -60,24 +77,38 @@ namespace DXEngine
             //infoD3DFont.Dispose();
         }
 
+        private void ShowPov(string sData)
+        {
+            try
+            {
+                DoRender = bool.Parse(sData);
+            }
+            catch
+            {                   
+            }
+        }
+
         public void Render(Device device, DeviceInfo deviceInfo)
         {
-            string msg = "Eye: " + Eye.ToString() +
-                         "\nLookAt: " + LookAt.ToString() +
-                         "\nLook: " + Look.ToString() +
-                         "\nlook: " + look.ToString() +
-                         "\nStraightOn: " + StraightOn.ToString() +
-                         "\nRight: " + Right.ToString() +
-                         "\nUp: " + Up.ToString();
+            if (DoRender)
+            {
+                string msg = "Eye: " + Eye.ToString() +
+                             "\nLookAt: " + LookAt.ToString() +
+                             "\nLook: " + Look.ToString() +
+                             "\nlook: " + look.ToString() +
+                             "\nStraightOn: " + StraightOn.ToString() +
+                             "\nRight: " + Right.ToString() +
+                             "\nUp: " + Up.ToString();
 
-            infoD3DFont.DrawText(
-                null,                  // Paramètre avancé
-                msg,          // Texte à afficher
-                new Rectangle(device.Viewport.X, device.Viewport.Y + 30, device.Viewport.Width, device.Viewport.Height),       // Découpe ce texte dans ce rectangle
-                DrawTextFormat.Left |  // Aligne le texte à la gauche de la fenêtre
-                DrawTextFormat.Top |   // et à son dessus
-                DrawTextFormat.WordBreak,   // Et saute des lignes si necessaire
-                Color.Maroon);         // En quelle couleur dessiner le texte
+                infoD3DFont.DrawText(
+                    null,                  // Paramètre avancé
+                    msg,          // Texte à afficher
+                    new Rectangle(device.Viewport.X, device.Viewport.Y + 30, device.Viewport.Width, device.Viewport.Height),       // Découpe ce texte dans ce rectangle
+                    DrawTextFormat.Left |  // Aligne le texte à la gauche de la fenêtre
+                    DrawTextFormat.Top |   // et à son dessus
+                    DrawTextFormat.WordBreak,   // Et saute des lignes si necessaire
+                    Color.Maroon);         // En quelle couleur dessiner le texte
+            }
         }
 
         public Matrix View

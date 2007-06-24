@@ -50,7 +50,8 @@ public class GraphicsFont
     private float textureScale;
     public int spacingPerChar;
     private float[,] textureCoords = new float[128 - 32, 4];
-
+    protected internal void test()
+    { }
     // Stateblocks for setting and restoring render states
     private StateBlock savedStateBlock;
     private StateBlock drawTextStateBlock;
@@ -327,8 +328,7 @@ public class GraphicsFont
         {
         }
         finally
-        {
-
+        {                    
             // Restore the modified renderstates
             savedStateBlock.Apply();
         }

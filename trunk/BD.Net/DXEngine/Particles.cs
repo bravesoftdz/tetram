@@ -22,6 +22,8 @@ namespace DXEngine
         public System.Drawing.Color Color;
         public float fTimeRemaining, fCreationTime;
         public bool bActive;
+
+        public float alpha;
     }
 
 
@@ -47,11 +49,11 @@ namespace DXEngine
 
         private List<Particle> m_ActiveParticles = new List<Particle>();
         private List<Particle> m_FreeParticles = new List<Particle>();
-        private ParticleUpdate m_Method = null;
+        protected ParticleUpdate m_Method = null;
         private System.Random rand = new System.Random();
 
         public float m_fRate = 22.0f;  // particles to create per second
-        public float m_fPartialParticles = 0.0f;
+        private float m_fPartialParticles = 0.0f;
         public Vector3 m_EmitAccel = new Vector3(0.0f, 0.0f, 0.0f);
         public Vector3 m_EmitSpeed = new Vector3(0.0f, 0.0f, 0.7f);
         public Vector3 m_EmitAccelModulate = new Vector3(0.0f, 0.0f, 0.0f);
@@ -68,15 +70,15 @@ namespace DXEngine
         #endregion
 
         /// <Summary>copy constructor</Summary>
-        public ParticleGenerator(Engine Engine, string Name, ParticleGenerator other)
-            : base(Engine, Name)
+        public ParticleGenerator(string Name, ParticleGenerator other)
+            : base(Name)
         {
             Copy(other);
         }
 
         /// <Summary>normal constructor</Summary>
-        public ParticleGenerator(Engine Engine, string Name, int numFlush, int numDiscard, Color color, string sTextureName, ParticleUpdate method)
-            : base(Engine, Name)
+        public ParticleGenerator(string Name, int numFlush, int numDiscard, Color color, string sTextureName, ParticleUpdate method)
+            : base(Name)
         {
             m_Color = color;
             m_Flush = numFlush;
@@ -176,6 +178,13 @@ namespace DXEngine
                     Device3D.RenderState.SourceBlend = Blend.SourceAlpha;
                     Device3D.RenderState.DestinationBlend = Blend.One;
 
+                    Device3D.TextureState[0].ColorOperation = TextureOperation.Modulate;
+                    Device3D.TextureState[0].ColorArgument1 = TextureArgument.TextureColor;
+                    Device3D.TextureState[0].ColorArgument2 = TextureArgument.Diffuse;
+                    Device3D.TextureState[0].AlphaOperation = TextureOperation.Modulate;
+                    Device3D.TextureState[0].AlphaArgument1 = TextureArgument.TextureColor;
+                    Device3D.TextureState[0].AlphaArgument2 = TextureArgument.Diffuse; 
+                    
                     Device3D.SetTexture(0, m_Texture.GetTexture());
                     Device3D.RenderState.PointSpriteEnable = true;
                     Device3D.RenderState.PointScaleEnable = true;
@@ -252,6 +261,8 @@ namespace DXEngine
 
                     Device3D.RenderState.ZBufferWriteEnable = true;
                     Device3D.RenderState.AlphaBlendEnable = false;
+
+                    //Console.AddLine(m_ActiveParticles[0].Position.ToString() + "Alpha:" + m_ActiveParticles[0].Color.A);
 
                 }
             }

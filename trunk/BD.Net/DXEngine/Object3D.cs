@@ -18,9 +18,9 @@ namespace DXEngine
         private string name = String.Empty;
         private Engine engine;
 
-        public Object3D(Engine Engine, string Name)
+        public Object3D(string Name)
         {
-            engine = Engine;
+            engine = Engine.Instance;
             name = Name;
         }
         

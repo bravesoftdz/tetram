@@ -22,13 +22,13 @@ namespace EmptyProjectSample
     {
         #region Creation
         /// <summary>Create a new instance of the class</summary>
-        public EmptyProject(Framework f) 
-        { 
+        public EmptyProject(Framework f)
+        {
             // Store framework
-            sampleFramework = f; 
+            sampleFramework = f;
             // Create dialogs
-            hud = new Dialog(sampleFramework); 
-            sampleUi = new Dialog(sampleFramework); 
+            hud = new Dialog(sampleFramework);
+            sampleUi = new Dialog(sampleFramework);
         }
         #endregion
 
@@ -54,7 +54,7 @@ namespace EmptyProjectSample
         public bool IsDeviceAcceptable(Caps caps, Format adapterFormat, Format backBufferFormat, bool windowed)
         {
             // Skip back buffer formats that don't support alpha blending
-            if (!Manager.CheckDeviceFormat(caps.AdapterOrdinal, caps.DeviceType, adapterFormat, 
+            if (!Manager.CheckDeviceFormat(caps.AdapterOrdinal, caps.DeviceType, adapterFormat,
                 Usage.QueryPostPixelShaderBlending, ResourceType.Textures, backBufferFormat))
                 return false;
 
@@ -73,8 +73,8 @@ namespace EmptyProjectSample
         {
             // If device doesn't support HW T&L or doesn't support 1.1 vertex shaders in HW 
             // then switch to SWVP.
-            if ( (!caps.DeviceCaps.SupportsHardwareTransformAndLight) ||
-                (caps.VertexShaderVersion < new Version(1,1)) )
+            if ((!caps.DeviceCaps.SupportsHardwareTransformAndLight) ||
+                (caps.VertexShaderVersion < new Version(1, 1)))
             {
                 settings.BehaviorFlags = CreateFlags.SoftwareVertexProcessing;
             }
@@ -85,8 +85,8 @@ namespace EmptyProjectSample
 
             // This application is designed to work on a pure device by not using 
             // any get methods, so create a pure device if supported and using HWVP.
-            if ( (caps.DeviceCaps.SupportsPureDevice) && 
-                ((settings.BehaviorFlags & CreateFlags.HardwareVertexProcessing) != 0 ) )
+            if ((caps.DeviceCaps.SupportsPureDevice) &&
+                ((settings.BehaviorFlags & CreateFlags.HardwareVertexProcessing) != 0))
                 settings.BehaviorFlags |= CreateFlags.PureDevice;
 
             // Debugging vertex shaders requires either REF or software vertex processing 
@@ -149,7 +149,7 @@ namespace EmptyProjectSample
             // Setup the camera's view parameters
             camera.SetViewParameters(new Vector3(0.0f, 0.0f, -5.0f), Vector3.Empty);
         }
-        
+
         /// <summary>
         /// This event will be fired immediately after the Direct3D device has been 
         /// reset, which will happen after a lost device scenario. This is the best location to 
@@ -169,10 +169,10 @@ namespace EmptyProjectSample
             camera.SetWindow(desc.Width, desc.Height);
 
             // Setup UI locations
-            hud.SetLocation(desc.Width-170, 0);
-            hud.SetSize(170,170);
+            hud.SetLocation(desc.Width - 170, 0);
+            hud.SetSize(170, 170);
             sampleUi.SetLocation(desc.Width - 170, desc.Height - 350);
-            sampleUi.SetSize(170,300);
+            sampleUi.SetSize(170, 300);
         }
 
         /// <summary>
@@ -261,7 +261,7 @@ namespace EmptyProjectSample
 
             // Output statistics
             txtHelper.Begin();
-            txtHelper.SetInsertionPoint(5,5);
+            txtHelper.SetInsertionPoint(5, 5);
             txtHelper.SetForegroundColor(System.Drawing.Color.Yellow);
             txtHelper.DrawTextLine(sampleFramework.FrameStats);
             txtHelper.DrawTextLine(sampleFramework.DeviceStats);
@@ -272,18 +272,18 @@ namespace EmptyProjectSample
             // Draw help
             if (isHelpShowing)
             {
-                txtHelper.SetInsertionPoint(10, sampleFramework.BackBufferSurfaceDescription.Height-15*6);
+                txtHelper.SetInsertionPoint(10, sampleFramework.BackBufferSurfaceDescription.Height - 15 * 6);
                 txtHelper.SetForegroundColor(System.Drawing.Color.DarkOrange);
                 txtHelper.DrawTextLine("Controls (F1 to hide):");
 
-                txtHelper.SetInsertionPoint(40, sampleFramework.BackBufferSurfaceDescription.Height-15*5);
+                txtHelper.SetInsertionPoint(40, sampleFramework.BackBufferSurfaceDescription.Height - 15 * 5);
                 txtHelper.DrawTextLine("Help Item Misc: X");
                 txtHelper.DrawTextLine("Quit: Esc");
                 txtHelper.DrawTextLine("Hide help: F1");
             }
             else
             {
-                txtHelper.SetInsertionPoint(10, sampleFramework.BackBufferSurfaceDescription.Height-15*2);
+                txtHelper.SetInsertionPoint(10, sampleFramework.BackBufferSurfaceDescription.Height - 15 * 2);
                 txtHelper.SetForegroundColor(System.Drawing.Color.White);
                 txtHelper.DrawTextLine("Press F1 for help");
             }
@@ -299,7 +299,7 @@ namespace EmptyProjectSample
         /// </summary>
         private void OnKeyEvent(object sender, System.Windows.Forms.KeyEventArgs e)
         {
-            switch(e.KeyCode)
+            switch (e.KeyCode)
             {
                 case System.Windows.Forms.Keys.F1:
                     isHelpShowing = !isHelpShowing;
@@ -336,9 +336,9 @@ namespace EmptyProjectSample
         {
             int y = 10;
             // Initialize the HUD
-            Button fullScreen = hud.AddButton(ToggleFullscreen,"Toggle full screen", 35, y, 125,22);
-            Button toggleRef = hud.AddButton(ToggleReference,"Toggle reference (F3)", 35, y += 24, 125,22);
-            Button changeDevice = hud.AddButton(ChangeDevice,"Change Device (F2)", 35, y += 24, 125,22);
+            Button fullScreen = hud.AddButton(ToggleFullscreen, "Toggle full screen", 35, y, 125, 22);
+            Button toggleRef = hud.AddButton(ToggleReference, "Toggle reference (F3)", 35, y += 24, 125, 22);
+            Button changeDevice = hud.AddButton(ChangeDevice, "Change Device (F2)", 35, y += 24, 125, 22);
             // Hook the button events for when these items are clicked
             fullScreen.Click += new EventHandler(OnFullscreenClicked);
             toggleRef.Click += new EventHandler(OnRefClicked);
@@ -357,19 +357,19 @@ namespace EmptyProjectSample
             const int Radiobutton4 = ChangeDevice + 9;
             const int Radiobutton5 = ChangeDevice + 10;
             const int SliderControl = ChangeDevice + 11;
-            
-            ComboBox cb1 = sampleUi.AddComboBox(ComboBox1, 35, y +=24, 125, 22);
+
+            ComboBox cb1 = sampleUi.AddComboBox(ComboBox1, 35, y += 24, 125, 22);
             for (int i = 0; i < 50; i++) cb1.AddItem("Item#" + i.ToString(), null);
-            sampleUi.AddCheckBox(CheckBox1, "Checkbox1", 35, y+=24, 125,22, false);
-            sampleUi.AddCheckBox(CheckBox2, "Checkbox2", 35, y+=24, 125,22, false);
-            sampleUi.AddRadioButton(Radiobutton1, 1, "Radio1G1", 35, y+=24, 125, 22, true);
-            sampleUi.AddRadioButton(Radiobutton2, 1, "Radio2G1", 35, y+=24, 125, 22, false);
-            sampleUi.AddRadioButton(Radiobutton3, 1, "Radio3G1", 35, y+=24, 125, 22, false);
-            sampleUi.AddButton(Button1, "Button1", 35, y+=24, 125, 22);
-            sampleUi.AddButton(Button2, "Button2", 35, y+=24, 125, 22);
-            sampleUi.AddRadioButton(Radiobutton4, 2, "Radio1G2", 35, y+=24, 125, 22, true);
-            sampleUi.AddRadioButton(Radiobutton5, 2, "Radio2G2", 35, y+=24, 125, 22, false);
-            sampleUi.AddSlider(SliderControl, 50,y+=24, 100, 22);
+            sampleUi.AddCheckBox(CheckBox1, "Checkbox1", 35, y += 24, 125, 22, false);
+            sampleUi.AddCheckBox(CheckBox2, "Checkbox2", 35, y += 24, 125, 22, false);
+            sampleUi.AddRadioButton(Radiobutton1, 1, "Radio1G1", 35, y += 24, 125, 22, true);
+            sampleUi.AddRadioButton(Radiobutton2, 1, "Radio2G1", 35, y += 24, 125, 22, false);
+            sampleUi.AddRadioButton(Radiobutton3, 1, "Radio3G1", 35, y += 24, 125, 22, false);
+            sampleUi.AddButton(Button1, "Button1", 35, y += 24, 125, 22);
+            sampleUi.AddButton(Button2, "Button2", 35, y += 24, 125, 22);
+            sampleUi.AddRadioButton(Radiobutton4, 2, "Radio1G2", 35, y += 24, 125, 22, true);
+            sampleUi.AddRadioButton(Radiobutton5, 2, "Radio2G2", 35, y += 24, 125, 22, false);
+            sampleUi.AddSlider(SliderControl, 50, y += 24, 100, 22);
 
             // If you wanted to respond to any of these you would need to add an event hook here
         }
@@ -396,10 +396,10 @@ namespace EmptyProjectSample
         /// Entry point to the program. Initializes everything and goes into a message processing 
         /// loop. Idle time is used to render the scene.
         /// </summary>
-        static int Main() 
+        static int Main()
         {
             System.Windows.Forms.Application.EnableVisualStyles();
-            using(Framework sampleFramework = new Framework())
+            using (Framework sampleFramework = new Framework())
             {
                 EmptyProject sample = new EmptyProject(sampleFramework);
                 // Set the callback functions. These functions allow the sample framework to notify
@@ -430,11 +430,11 @@ namespace EmptyProjectSample
                     // Initialize the sample framework and create the desired window and Direct3D 
                     // device for the application. Calling each of these functions is optional, but they
                     // allow you to set several options which control the behavior of the sampleFramework.
-                    sampleFramework.Initialize( true, true, true ); // Parse the command line, handle the default hotkeys, and show msgboxes
+                    sampleFramework.Initialize(true, true, true); // Parse the command line, handle the default hotkeys, and show msgboxes
                     sampleFramework.CreateWindow("EmptyProject");
                     // Hook the keyboard event
                     sampleFramework.Window.KeyDown += new System.Windows.Forms.KeyEventHandler(sample.OnKeyEvent);
-                    sampleFramework.CreateDevice( 0, true, Framework.DefaultSizeWidth, Framework.DefaultSizeHeight, 
+                    sampleFramework.CreateDevice(0, true, Framework.DefaultSizeWidth, Framework.DefaultSizeHeight,
                         sample);
 
                     // Pass control to the sample framework for handling the message pump and 

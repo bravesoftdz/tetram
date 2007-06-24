@@ -7,28 +7,31 @@ using Microsoft.DirectX;
 
 namespace BDX.Objects
 {
-    class Bougie : ParticleGenerator
+    class Feu : ParticleGenerator
     {
-        public Bougie(Object3D parent)
-            : base("Feu", 10, 20, Color.Red, @"Media\Particle.bmp", new ParticleUpdate(FeuUpdate))
+        float scale = 10;
+
+        public Feu(Object3D parent)
+            : base("Feu", 10, 20, Color.Red, @"Media\Particle.bmp", null)
         {
             Parent = parent;
-            m_ParticlesLimit = 150;
+            m_Method = new ParticleUpdate(FeuUpdate);
 
-            m_EmitPositionModulate = new Vector3(0.5f, 0, 0.5f);
-            m_EmitAccel = new Vector3(0, 0, 0);
-            m_EmitAccelModulate = new Vector3(0.0f, 0.15f, 0.0f);
-            m_EmitSpeed = new Vector3(0.0f, 0.5f, 0.0f);
-            m_EmitSpeedModulate = new Vector3(0.2f, 0.3f, 0.2f);
-
-            m_PointSize = 1;
+            m_PointSize = 8;
             m_PointScaleA = 0;
             m_PointScaleB = 0;
             m_PointScaleC = 1;
+                               
+            m_ParticlesLimit = (int)(150 * scale);
+            m_EmitPositionModulate = new Vector3(0.5f, 0, 0.5f)*scale;
+            m_EmitAccel = new Vector3(0, 0, 0);
+            m_EmitAccelModulate = new Vector3(0.0f, 0.15f, 0.0f);
+            m_EmitSpeed = new Vector3(0.0f, 0.5f, 0.0f)*scale;
+            m_EmitSpeedModulate = new Vector3(0.2f, 0.3f, 0.2f) * scale;
         }
 
         static private System.Random rnd = new System.Random();
-        static public void FeuUpdate(ref Particle Obj, float DeltaT)
+        public void FeuUpdate(ref Particle Obj, float DeltaT)
         {
             //Call .ResetIt(X, Y, -0.4 + (Rnd * 0.8), -0.5 - (Rnd * 0.4), 0, -(Rnd * 0.3), 2)
             //ResetIt(X As Single, Y As Single, XSpeed As Single, YSpeed As Single, XAcc As Single, YAcc As Single, sngResetSize As Single)
@@ -45,9 +48,13 @@ namespace BDX.Objects
             //sngA = sngA - sngAlphaDecay * sngTime;
             //Obj.m_Color = Color.FromArgb(0.6 + rnd.Next(0.2) - (0.01 + rnd.Next(0.05)) * DeltaT, 1, 0.5, 0.2);
             //Obj.Color = Color.FromArgb((int)(153 + rnd.Next(51) - (3 + rnd.Next(13)) * DeltaT), 255, 128, 51);
-            int alpha = (int)(Obj.Color.A - /*(3 + rnd.Next(13)) * */ DeltaT);
-            if (alpha < 0) alpha = 0;
-            Obj.Color = Color.FromArgb(alpha, Obj.Color);
+            //int alpha = (int)(Obj.Color.A - (3 + rnd.Next(13)) * DeltaT);
+            //if (alpha < 0) alpha = 0;
+            //Obj.Color = Color.FromArgb(alpha, Obj.Color);
+
+            Obj.alpha -= (0.05f + (float)rnd.NextDouble() * 0.05f) * DeltaT * scale;
+            if (Obj.alpha < 0) Obj.alpha = 0;
+            Obj.Color = Color.FromArgb((int)(Obj.alpha * 255), Obj.Color);
 
             Obj.fTimeRemaining -= DeltaT;
             Obj.bActive = /* Obj.fTimeRemaining > 0; && */Obj.Color.A > 0;
@@ -71,8 +78,9 @@ namespace BDX.Objects
             particle.Accel = particle.InitialAccel;
             particle.Speed = particle.InitialSpeed;
 
-//            particle.Color = Color.FromArgb(200 + rnd.Next(55), 255, 128, 51);
-            particle.Color = Color.FromArgb(153 + rnd.Next(51), 255, 128, 51);
+            particle.alpha = 0.6f + (float)rnd.NextDouble() * 0.2f;
+            //            particle.Color = Color.FromArgb(200 + rnd.Next(55), 255, 128, 51);
+            particle.Color = Color.FromArgb((int)(particle.alpha * 255), 255, 128, 51);
 
             particle.fTimeRemaining = 10;
         }

@@ -14,8 +14,8 @@ namespace BDX
     {
         private D3DFont frameRateD3DFont;
 
-        public FrameRate(Engine Engine)
-            : base(Engine, "FPS")
+        public FrameRate()
+            : base("FPS")
         {
         }
 

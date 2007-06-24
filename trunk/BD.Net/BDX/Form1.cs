@@ -11,6 +11,7 @@ using Microsoft.DirectX.DirectInput;
 using Direct3D = Microsoft.DirectX.Direct3D;
 using DirectInput = Microsoft.DirectX.DirectInput;
 using System.Diagnostics;
+using DXEngine;
 
 namespace BDX
 {
@@ -39,13 +40,13 @@ namespace BDX
         {
             Debug.WriteLine("InitializeGraphics()");
 
-            engine.Prepare(this);
+            Engine.Instance.DoPrepare(this);
             return true;
         }
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
-            engine.FullRender();
+            Engine.Instance.FullRender();
             this.Invalidate();
         }
 
@@ -57,13 +58,13 @@ namespace BDX
                     this.Dispose(); // Esc was pressed
 
                 if (e.KeyChar == 'w')
-                    engine.d3ddevice.RenderState.FillMode = FillMode.WireFrame;
+                    Engine.Instance.Device.RenderState.FillMode = FillMode.WireFrame;
 
                 if (e.KeyChar == 's')
-                    engine.d3ddevice.RenderState.FillMode = FillMode.Solid;
+                    Engine.Instance.Device.RenderState.FillMode = FillMode.Solid;
 
                 if (e.KeyChar == ' ')
-                    engine.UserSelectNewDevice(null, null);
+                    Engine.Instance.UserSelectNewDevice(null, null);
             }
         }
     }

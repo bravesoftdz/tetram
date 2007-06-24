@@ -14,8 +14,9 @@ namespace DXEngine
         Texture[] meshTextures; // Textures for our mesh
         public string fichier;
         public int useProgessive = -1;
+        public float scale = 1;
 
-        public D3DMesh(Engine Engine, string Name) : base(Engine, Name) { }
+        public D3DMesh(string Name) : base(Name) { }
 
         public int lod
         {
@@ -41,7 +42,7 @@ namespace DXEngine
         internal void Render(Device device, bool canDrawOpaque, bool canDrawAlpha)
         {
             device.RenderState.CullMode = Cull.None;
-            device.Transform.World = this.World;
+            device.Transform.World = this.World * Matrix.Scaling(scale, scale, scale);
 
             if (canDrawOpaque)
             {
@@ -125,7 +126,7 @@ namespace DXEngine
         public void ComputeBoundingBox(out Vector3 min, out Vector3 max)
         {
             if (mesh == null)
-                throw new InvalidOperationException("There is no system memory mesh.  Nothing to do here.");
+                throw new InvalidOperationException("There is no system memory mesh. Nothing to do here.");
 
             GraphicsStream data = null;
             try
@@ -139,5 +140,88 @@ namespace DXEngine
                 if (data != null) mesh.UnlockVertexBuffer();
             }
         }
+
+/*
+ * protected void ScaleMesh()
+        {
+            if (mesh == null)
+                throw new InvalidOperationException("There is no system memory mesh. Nothing to do here.");
+
+            int numVertices = mesh.NumberVertices;
+            GraphicsStream data = null;
+            try
+            {
+              data = mesh.LockVertexBuffer(LockFlags.None);
+
+              for (int j = 0; j < numVertices; j++)
+              { 
+                vert = data[j];
+
+                vert.Position.X *= (MeshScaling.X);
+
+                vert.Position.Y *= (MeshScaling.Y);
+
+                vert.Position.Z *= (MeshScaling.Z);
+
+                data[j] = vert;
+
+            }
+
+            MyMesh.UnlockVertexBuffer();
+
+        }
+        
+        public void ScaleMesh(float scale)
+        {
+            if (mesh == null) 
+                throw new InvalidOperationException("There is no system memory mesh. Nothing to do here.");
+
+            // get the face count
+            int numVerts = mesh.NumberVertices;
+
+            mesh.LockVertexBuffer(mesh.VertexFormat, LockFlags.None, mesh.NumberVertices);
+
+
+
+            // get the FVF flags
+            mesh.
+            int fvf = mesh.VertexFormatGetFVF();
+
+            // calculate vertex size
+            DWORD vertSize = D3DXGetFVFVertexSize(fvf);
+
+            // lock the vertex buffer
+            if (FAILED(hr = pMesh->LockVertexBuffer(0, &ptr)))
+
+                // return on failure
+                return hr;
+
+            // loop through the vertices
+            for (DWORD i = 0; i < numVerts; i++)
+            {
+
+                // get pointer to location
+                D3DXVECTOR3* vPtr = (D3DXVECTOR3*)ptr;
+
+                // scale the vertex
+                *vPtr += vOff;
+                vPtr->x *= scale;
+                vPtr->y *= scale;
+                vPtr->z *= scale;
+
+                // increment pointer to next vertex
+                ptr += vertSize;
+            }
+
+            // unlock the vertex buffer
+            if (FAILED(hr = pMesh->UnlockVertexBuffer()))
+
+                // return on failure
+                return hr;
+
+            // return success to caller
+            return S_OK;
+        }
+*/
     }
 }

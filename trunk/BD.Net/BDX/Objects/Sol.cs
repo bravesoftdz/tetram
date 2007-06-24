@@ -17,4 +17,16 @@ namespace BDX.Objects
             //useProgessive = 5;
         }
     }
+
+    class Cheminee : D3DMesh
+    {
+        public Cheminee()
+            : base("Cheminee")
+        {
+            fichier = @"media\Cheminee2.x";
+            scale = 0.1f;
+            //Rotation.X = -(float)(Math.PI / 2);
+            //useProgessive = 5;
+        }
+    }
 }

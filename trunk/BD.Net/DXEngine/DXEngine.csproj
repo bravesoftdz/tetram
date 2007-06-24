@@ -70,6 +70,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SkyBox.cs" />
     <Compile Include="SkyDome.cs" />
+    <Compile Include="TimeLine.cs" />
     <Compile Include="UserInterface.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>

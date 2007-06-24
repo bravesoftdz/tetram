@@ -35,11 +35,11 @@ namespace DXEngine
         /// <summary>
         /// constructor uses the font to print text with as well as the background image
         /// </summary>
-        public Console(GraphicsFont pFont, string sFilename, Engine Engine)
+        public Console(GraphicsFont pFont, string sFilename)
         {
             m_pFont = pFont;
             m_Image = new Image(sFilename);
-            engine = Engine;
+            engine = Engine.Instance;
 
             Reset();
 
@@ -63,7 +63,7 @@ namespace DXEngine
         public void InitDevice(Device device, bool isReset)
         {
             m_Image.InitDevice(device, isReset);
-            m_pFont.InitializeDeviceObjects(device);
+            if (!isReset) m_pFont.InitializeDeviceObjects(device);
         }
         public void LostDevice(Device device)
         {
@@ -232,12 +232,20 @@ namespace DXEngine
         /// <param name="sNewLine"></param>
         public static void AddLine(string sNewLine)
         {
-            m_Entries.Insert(0, sNewLine);
-            if (m_Entries.Count > 50)
+            if (sNewLine.Contains("\n"))
             {
-                m_Entries.RemoveAt(50);
+                foreach(string line in sNewLine.Split('\n'))
+                    AddLine(line);
             }
-            System.Diagnostics.Debug.WriteLine(sNewLine);
+            else
+            {
+                m_Entries.Insert(0, sNewLine);
+                if (m_Entries.Count > 50)
+                {
+                    m_Entries.RemoveAt(50);
+                }
+                System.Diagnostics.Debug.WriteLine(sNewLine);
+            }
         }
 
         /// <summary>

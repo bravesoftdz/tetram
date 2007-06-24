@@ -7,8 +7,28 @@ using Microsoft.DirectX;
 
 namespace DXEngine
 {
+    public delegate bool PrepareEvent(System.Windows.Forms.Form target);
+    public delegate bool ConfirmDeviceEvent(Caps caps, VertexProcessingType vertexProcessingType, Format format);
+    public delegate void OneTimeSceneInitializationEvent();
+    public delegate void InitializeDeviceObjectsEvent();
+    public delegate void RestoreDeviceObjectsEvent(System.Object sender, System.EventArgs e);
+    public delegate void FrameMoveEvent();
+    public delegate void RenderEvent();
+    public delegate void InvalidateDeviceObjectsEvent(System.Object sender, System.EventArgs e);
+    public delegate void DeleteDeviceObjectsEvent(System.Object sender, System.EventArgs e);
+
     public class Engine
     {
+        private static Engine localInstance;
+        public static Engine Instance
+        {
+            get
+            {
+                if (localInstance == null) localInstance = new Engine();
+                return localInstance;
+            }
+        }
+
         protected D3DEnumeration enumerationSettings = new D3DEnumeration();
         protected D3DSettings graphicsSettings = new D3DSettings();
         private System.Windows.Forms.Form ourRenderTarget;
@@ -24,15 +44,16 @@ namespace DXEngine
         protected bool hasFocus;
 
         // Internal variables used for timing
-        protected bool frameMoving;               
+        protected bool frameMoving = true;               
         protected bool singleStep;
 
         private bool deviceLost = false;
 
         // Main objects used for creating and rendering the 3D scene
         protected PresentParameters presentParams = new PresentParameters();         // Parameters for CreateDevice/Reset
-        protected Device device; // The rendering device
-        protected DeviceInfo deviceInfo = new DeviceInfo(); // des infos qui ne peuvent être récupérées du Device en rendu PureDevice
+        private Device device; // The rendering device
+        public Device Device { get { return device; } }
+        public DeviceInfo DeviceInfo = new DeviceInfo(); // des infos qui ne peuvent être récupérées du Device en rendu PureDevice
         //protected RenderStateManager renderState;
         //protected SamplerStateManagerCollection sampleState;
         //protected TextureStateManagerCollection textureStates;
@@ -40,42 +61,69 @@ namespace DXEngine
         protected Caps Caps { get { return graphicsCaps; } }
         private CreateFlags behavior;     // Indicate sw or hw vertex processing
         protected BehaviorFlags BehaviorFlags { get { return new BehaviorFlags(behavior); } }
-        protected System.Windows.Forms.Form RenderTarget { get { return ourRenderTarget; } set { ourRenderTarget = value; } }
+        public System.Windows.Forms.Form RenderTarget { get { return ourRenderTarget; } set { ourRenderTarget = value; } }
 
         // Overridable functions for the 3D scene created by the app
-        protected virtual bool ConfirmDevice(Caps caps, VertexProcessingType vertexProcessingType, Format format) { return true; }
-        protected virtual void OneTimeSceneInitialization() { /* Do Nothing */ }
-        protected virtual void InitializeDeviceObjects() { /* Do Nothing */ }
-        protected virtual void RestoreDeviceObjects(System.Object sender, System.EventArgs e) { /* Do Nothing */ }
-        protected virtual void FrameMove() { /* Do Nothing */ }
-        protected virtual void Render() { /* Do Nothing */ }
-        protected virtual void InvalidateDeviceObjects(System.Object sender, System.EventArgs e) { /* Do Nothing */ }
-        protected virtual void DeleteDeviceObjects(System.Object sender, System.EventArgs e) { /* Do Nothing */ }
+        public event ConfirmDeviceEvent ConfirmDevice;
+        private bool OnConfirmDevice(Caps caps, VertexProcessingType vertexProcessingType, Format backBufferFormat)
+        {
+            if (ConfirmDevice != null) 
+                return ConfirmDevice(caps, vertexProcessingType, backBufferFormat);
+            else
+                return true;
+        }
+        public event OneTimeSceneInitializationEvent OneTimeSceneInitialization;
+        public event InitializeDeviceObjectsEvent InitializeDeviceObjects;
+        public event RestoreDeviceObjectsEvent RestoreDeviceObjects;
+        private void OnRestoreDeviceObjects(System.Object sender, System.EventArgs e)
+        {
+            if (RestoreDeviceObjects != null) RestoreDeviceObjects(sender, e);
+        }
+        public event FrameMoveEvent FrameMove;
+        public event RenderEvent Render;
+        public event InvalidateDeviceObjectsEvent InvalidateDeviceObjects;
+        private void OnInvalidateDeviceObjects(System.Object sender, System.EventArgs e)
+        {
+            if (InvalidateDeviceObjects != null) InvalidateDeviceObjects(sender, e);
+        }
+        public event DeleteDeviceObjectsEvent DeleteDeviceObjects;
+        private void OnDeleteDeviceObjects(System.Object sender, System.EventArgs e)
+        {
+            if (DeleteDeviceObjects != null) DeleteDeviceObjects(sender, e);
+        }
 
         // Variables for timing
-        public float appTime;             // Current time in seconds
-        public float elapsedTime;      // Time elapsed since last frame
-        public float framePerSecond;              // Instanteous frame rate
-        public string deviceStats;// String to hold D3D device stats
-        public string frameStats; // String to hold frame stats
+        internal float appTime;
+        public float AppTime { get { return appTime; } }             // Current time in seconds
+        internal float elapsedTime;
+        public float ElapsedTime { get { return elapsedTime; } }      // Time elapsed since last frame
+        internal float framePerSecond;
+        public float FramePerSecond { get { return framePerSecond; } }              // Instanteous frame rate
+        internal string deviceStats;
+        public string DeviceStats { get { return deviceStats; } }// String to hold D3D device stats
+        internal string frameStats;
+        public string FrameStats { get { return frameStats; } } // String to hold frame stats
 
-        protected bool showCursorWhenFullscreen; // Whether to show cursor when fullscreen
-        protected bool clipCursorWhenFullscreen; // Whether to limit cursor pos when fullscreen
-        protected bool startFullscreen; // Whether to start up the app in fullscreen mode
+        public bool showCursorWhenFullscreen; // Whether to show cursor when fullscreen
+        public bool clipCursorWhenFullscreen; // Whether to limit cursor pos when fullscreen
+        public bool startFullscreen; // Whether to start up the app in fullscreen mode
 
-        public Engine()
+        private Engine()
         {
         }
 
-        public virtual bool Prepare(System.Windows.Forms.Form target)
+        public event PrepareEvent Prepare;
+        public bool DoPrepare(System.Windows.Forms.Form target)
         {
-            enumerationSettings.ConfirmDeviceCallback = new D3DEnumeration.ConfirmDeviceCallbackType(this.ConfirmDevice);
+            if (Prepare != null) Prepare(target);
+
+            enumerationSettings.ConfirmDeviceCallback = new D3DEnumeration.ConfirmDeviceCallbackType(this.OnConfirmDevice);
             enumerationSettings.Enumerate();
 
             RenderTarget = target;
 
             if (!ChooseInitialSettings()) return false;
-            OneTimeSceneInitialization();
+            if (OneTimeSceneInitialization != null) OneTimeSceneInitialization();
             InitializeEnvironment(); // devrait être avant OneTimeSceneInitialization();
 
             ready = true;
@@ -428,25 +476,25 @@ namespace DXEngine
                 }
 
                 // Setup the event handlers for our device
-                device.DeviceLost += new System.EventHandler(this.InvalidateDeviceObjects);
-                device.DeviceReset += new System.EventHandler(this.RestoreDeviceObjects);
-                device.Disposing += new System.EventHandler(this.DeleteDeviceObjects);
+                device.DeviceLost += new System.EventHandler(this.OnInvalidateDeviceObjects);
+                device.DeviceReset += new System.EventHandler(this.OnRestoreDeviceObjects);
+                device.Disposing += new System.EventHandler(this.OnDeleteDeviceObjects);
                 device.DeviceResizing += new System.ComponentModel.CancelEventHandler(this.EnvironmentResized);
 
 
                 // Initialize the app's device-dependent objects
                 try
                 {
-                    InitializeDeviceObjects();
-                    RestoreDeviceObjects(null, null);
+                    if (InitializeDeviceObjects != null) InitializeDeviceObjects();
+                    OnRestoreDeviceObjects(null, null);
                     active = true;
                     return;
                 }
                 catch
                 {
                     // Cleanup before we try again
-                    InvalidateDeviceObjects(null, null);
-                    DeleteDeviceObjects(null, null);
+                    OnInvalidateDeviceObjects(null, null);
+                    OnDeleteDeviceObjects(null, null);
                     device.Dispose();
                     device = null;
                     if (presentParams.DeviceWindow.Disposing)
@@ -661,13 +709,13 @@ namespace DXEngine
                 elapsedTime = fElapsedAppTime;
 
                 // Frame move the scene
-                FrameMove();
+                if (FrameMove != null) FrameMove();
 
                 singleStep = false;
             }
 
             // Render the scene as normal
-            Render();
+            if (Render != null) Render();
 
             UpdateStats();
 
