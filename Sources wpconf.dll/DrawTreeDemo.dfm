@@ -15,7 +15,7 @@ object DrawTreeForm: TDrawTreeForm
   OnCreate = FormCreate
   DesignSize = (
     563
-    246)
+    251)
   PixelsPerInch = 96
   TextHeight = 13
   object Button5: TButton

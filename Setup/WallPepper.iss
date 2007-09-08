@@ -10,9 +10,9 @@ AppName=WallPepper {#SetupSetting("AppVersion")}
 AppVerName=WallPepper {#SetupSetting("AppVersion")}
 AppMutex=TetramCorpWallPepperMutex
 AppPublisher=Teträm Corp
-AppPublisherURL=http://www.tetram.info
-AppSupportURL=mailto:dev@tetram.info
-AppUpdatesURL=http://www.tetram.info
+AppPublisherURL=http://www.tetram.org
+AppSupportURL=mailto:dev@tetram.org
+AppUpdatesURL=http://www.tetram.org
 UninstallDisplayIcon={app}\WallPepper.exe
 DefaultDirName={pf}\Teträm Corp\WallPepper
 DefaultGroupName=Teträm Corp\WallPepper
@@ -30,7 +30,7 @@ MinVersion=4.1.1998,5.0.2195
 EnableDirDoesntExistWarning=true
 AllowUNCPath=false
 AppendDefaultDirName=false
-ShowLanguageDialog=yes
+ShowLanguageDialog=auto
 InternalCompressLevel=normal
 SolidCompression=true
 Compression=lzma/normal
@@ -50,10 +50,11 @@ Source: G:\Programmation\MEDIA.KIT\WallPap 1.0\WallPepper.exe; DestDir: {app}
 Source: G:\Programmation\MEDIA.KIT\WallPap 1.0\WPConf.dll; DestDir: {app}
 Source: G:\Programmation\MEDIA.KIT\WallPap 1.0\unrar.dll; DestDir: {app}; Flags: ignoreversion
 Source: G:\Programmation\MEDIA.KIT\WallPap 1.0\unzDll.dll; DestDir: {app}
+Source: What's New.txt; DestDir: {app}; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [INI]
-Filename: {app}\WallPepper.url; Section: InternetShortcut; Key: URL; String: http://www.tetram.info; Tasks: interneticon
+Filename: {app}\WallPepper.url; Section: InternetShortcut; Key: URL; String: http://www.tetram.org; Tasks: interneticon
 
 [Icons]
 Name: {group}\WallPepper; Filename: {app}\WallPepper.exe; IconIndex: 0
@@ -63,6 +64,7 @@ Name: {userdesktop}\WallPepper; Filename: {app}\WallPepper.exe; Tasks: desktopic
 
 [Run]
 Filename: {app}\WallPepper.exe; Description: Lancer WallPepper; Flags: nowait postinstall skipifsilent
+Filename: {app}\What's New.txt; Flags: nowait shellexec skipifdoesntexist postinstall skipifsilent
 
 [UninstallDelete]
 Type: files; Name: {app}\WallPepper.url
@@ -79,10 +81,10 @@ UseAbsolutePaths=false
 
 [Dirs]
 Name: {app}\Plugins; Flags: uninsalwaysuninstall
-[Code]
+
 [CustomMessages]
-CustomFormCaption=BDthèque est déjà installé
-CustomFormDescription=Le programme d'installation a détecté que BDthèque est déjà installé sur cet ordinateur.
+CustomFormCaption=WallPepper est déjà installé
+CustomFormDescription=Le programme d'installation a détecté que WallPepper est déjà installé sur cet ordinateur.
 UninstallRegKey=SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{5AED0247-C16B-4DFC-B7FD-42CCE72A4F89}_is1
 
 [Code]
@@ -192,5 +194,3 @@ UninstallRegKey=SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{5AED0247-C1
   begin
     Result := ((PageID = wpSelectDir) or (PageID = wpSelectProgramGroup)) and CanUpdate and IsUpdate;
   end;
-
-

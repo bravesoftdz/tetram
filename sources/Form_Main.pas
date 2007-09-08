@@ -736,6 +736,7 @@ begin
           if Archive <> '' then Image := Archive + '|' + Fichier;
           i := Pos('|', Image);
         end;
+        i := 0;
       end
       else begin
         (Self as IEvenements).DebutRechercheFond;

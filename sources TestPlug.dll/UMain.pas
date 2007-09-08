@@ -44,7 +44,7 @@ end;
 
 function TPlugin.GetAuthorContact: ShortString;
 begin
-  Result := 'http://www.tetram.info';
+  Result := 'http://www.tetram.org';
 end;
 
 function TPlugin.GetDescription: ShortString;
