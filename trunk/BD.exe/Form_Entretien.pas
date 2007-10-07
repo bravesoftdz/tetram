@@ -43,7 +43,6 @@ type
     procedure vstEntretienFreeNode(Sender: TBaseVirtualTree;      Node: PVirtualNode);
   private
     { Déclarations privées }
-    FServerWasActive: Boolean;
     procedure CheckVersions;
   public
     { Déclarations publiques }
@@ -102,8 +101,6 @@ var
   s: string;
   act: TCustomAction;
 begin
-  FServerWasActive := DMPrinc.HTTPServer.Active;
-  DMPrinc.ActiveHTTPServer(False);
   BDDOpen.Hint := DatabasePath;
   vstEntretien.NodeDataSize := SizeOf(RActionNodeData);
   s := '';
@@ -130,7 +127,6 @@ begin
           TFrmGestions(Fond.FCurrentForm).VirtualTreeView.InitializeRep;
       end;
   end;
-  DMPrinc.ActiveHTTPServer(FServerWasActive);
 end;
 
 procedure TFrmEntretien.vstEntretienGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);

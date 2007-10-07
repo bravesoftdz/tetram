@@ -4,7 +4,6 @@ program BD;
 {$R 'ressources.res' 'ressources.rc'}
 
 uses
-  FastMM4,
   Windows,
   SysUtils,
   Forms,
@@ -48,7 +47,7 @@ uses
   LoadComplet in 'LoadComplet.pas',
   Impression in 'Impression.pas',
   Fram_Boutons in 'Fram_Boutons.pas' {Frame1: TFrame},
-  Form_options in 'Form_Options.pas' {FrmOptions},
+  Form_Options in 'Form_Options.pas' {FrmOptions},
   Form_Customize in 'Form_Customize.pas' {FrmCustomize},
   Form_Progression in 'Form_Progression.pas' {FrmProgression},
   Form_Splash in 'Form_Splash.pas' {FrmSplash},
@@ -71,15 +70,6 @@ uses
   Form_PrevisionsSorties in 'Form_PrevisionsSorties.pas' {frmPrevisionsSorties},
   Form_SeriesIncompletes in 'Form_SeriesIncompletes.pas' {frmSeriesIncompletes},
   Form_PrevisionAchats in 'Form_PrevisionAchats.pas' {frmPrevisionsAchats},
-  DM_WS_Princ in '..\BDWebServer\DM_WS_Princ.pas' {WS_DMPrinc: TWebAppDataModule},
-  URepertoire in '..\BDWebServer\URepertoire.pas' {Repertoire: TWebPageModule},
-  UAcceuil in '..\BDWebServer\UAcceuil.pas' {Acceuil: TWebPageModule},
-  UAffiche in '..\BDWebServer\UAffiche.pas' {Affiche: TWebPageModule},
-  UFicheAlbum in '..\BDWebServer\UFicheAlbum.pas' {FicheAlbum: TWebPageModule},
-  UFichePersonne in '..\BDWebServer\UFichePersonne.pas' {FichePersonne: TWebPageModule},
-  UFicheSerie in '..\BDWebServer\UFicheSerie.pas' {FicheSerie: TWebPageModule},
-  UManquants in '..\BDWebServer\UManquants.pas' {Manquants: TWebPageModule},
-  UPrevisions in '..\BDWebServer\UPrevisions.pas' {Previsions: TWebPageModule},
   Updates in 'Updates.pas',
   UMAJ0_0_0_6 in 'UMAJ0_0_0_6.pas',
   UMAJ0_0_0_8 in 'UMAJ0_0_0_8.pas',
@@ -145,9 +135,9 @@ var
   Debut: TDateTime;
 begin
 {$IFDEF EnableMemoryLeakReporting}
-  RegisterExpectedMemoryLeak(TCriticalSection, 1);
+//  RegisterExpectedMemoryLeak(TCriticalSection, 1);
 {$ENDIF}
-
+  Application.MainFormOnTaskbar := True;
   Mode_en_cours := mdLoad;
   Application.Title := 'BDthèque';
   if not Bool(CreateMutex(nil, True, 'TetramCorpBDMutex')) then
@@ -175,7 +165,7 @@ begin
 
     FrmSplash.Affiche_act(ChargementApp + '...');
     Application.CreateForm(TFond, Fond);
-    FrmSplash.Affiche_act(ChargementDatabase + '...');
+  FrmSplash.Affiche_act(ChargementDatabase + '...');
     Historique.AddConsultation(fcRecherche);
     if Utilisateur.Options.ModeDemarrage then
       Fond.ModeConsultation.Execute
@@ -192,7 +182,6 @@ begin
     FrmSplash.Free;
   end;
   Fond.Show;
-  DMPrinc.ActiveHTTPServer(Utilisateur.Options.WebServerAutoStart);
   Application.Run;
 end.
 

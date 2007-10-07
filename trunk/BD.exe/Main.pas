@@ -58,10 +58,8 @@ type
     HistoriqueBack: TAction;
     HistoriqueNext: TAction;
     Splitter1: TSplitter;
-    ActiveWebServer: TAction;
     AfficheSeriesIncompletes: TAction;
     AffichePrevisionsSorties: TAction;
-    AllerVersWebServer: TAction;
     ToolBar1: TToolBar;
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;
@@ -115,10 +113,6 @@ type
     N7: TMenuItem;
     Options1: TMenuItem;
     Personnaliser1: TMenuItem;
-    N8: TMenuItem;
-    WebServer1: TMenuItem;
-    Dmarrer1: TMenuItem;
-    Voir1: TMenuItem;
     Sommaire1: TMenuItem;
     Aidecontextuelle1: TMenuItem;
     N9: TMenuItem;
@@ -173,7 +167,6 @@ type
     procedure HistoriqueNextExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ActionsStatistiquesUpdate(Action: TBasicAction; var Handled: Boolean);
-    procedure ActiveWebServerExecute(Sender: TObject);
     procedure ModeEntretienExecute(Sender: TObject);
     procedure AfficheSeriesIncompletesExecute(Sender: TObject);
     procedure AffichePrevisionsSortiesExecute(Sender: TObject);
@@ -355,7 +348,6 @@ procedure TFond.QuitterExecute(Sender: TObject);
 var
   i: integer;
 begin
-  if (DMPrinc.HTTPServer.Active) and (AffMessage('Êtes-vous sûr de vouloir quitter?', mtConfirmation, [mbYes, mbNo], True) <> mrYes) then Exit;
   i := 0;
   while i < Application.ComponentCount do
     if (Application.Components[i] is TDataModule) and (Application.Components[i] <> DMPrinc) then
@@ -579,11 +571,6 @@ begin
     ModeConsultation.Enabled := not ModeConsultation.Checked;
     ModeGestion.Enabled := not ModeGestion.Checked;
     ChangeMode.Checked := ModeGestion.Checked;
-    AllerVersWebServer.Enabled := DMPrinc.HTTPServer.Active;
-    if AllerVersWebServer.Enabled then
-      ActiveWebServer.Caption := 'Arrêter'
-    else
-      ActiveWebServer.Caption := 'Démarrer';
   end;
 end;
 
@@ -814,11 +801,6 @@ begin
   else
     for i := 0 to Pred(ActionsStatistiques.ActionCount) do
       TAction(ActionsStatistiques.Actions[i]).Enabled := True;
-end;
-
-procedure TFond.ActiveWebServerExecute(Sender: TObject);
-begin
-  DMPrinc.ActiveHTTPServer(not DMPrinc.HTTPServer.Active);
 end;
 
 procedure TFond.ModeEntretienExecute(Sender: TObject);

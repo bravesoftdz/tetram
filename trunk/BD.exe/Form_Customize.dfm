@@ -391,6 +391,8 @@ object FrmCustomize: TFrmCustomize
       Caption = 'Label3'
       Layout = tlCenter
       Visible = False
+      ExplicitWidth = 31
+      ExplicitHeight = 13
     end
   end
   inline Frame11: TFrame1
@@ -400,16 +402,25 @@ object FrmCustomize: TFrmCustomize
     Height = 33
     Align = alBottom
     TabOrder = 1
+    ExplicitTop = 345
+    ExplicitWidth = 514
+    ExplicitHeight = 33
     inherited btnOK: TBitBtn
       Left = 358
       Top = 9
       Width = 74
       OnClick = Frame11btnOKClick
+      ExplicitLeft = 358
+      ExplicitTop = 9
+      ExplicitWidth = 74
     end
     inherited btnAnnuler: TBitBtn
       Left = 439
       Top = 9
       Width = 72
+      ExplicitLeft = 439
+      ExplicitTop = 9
+      ExplicitWidth = 72
     end
   end
   object Cats: TListBox
@@ -482,9 +493,7 @@ object FrmCustomize: TFrmCustomize
     Align = alNone
     AutoSize = True
     Caption = 'ToolBar1'
-    EdgeBorders = []
     EdgeOuter = esNone
-    Flat = True
     Images = Fond.ImageList1
     TabOrder = 5
     Transparent = True

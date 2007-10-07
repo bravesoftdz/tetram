@@ -1,0 +1,375 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{d644378b-be7d-41f3-af54-5dcb0c849927}</ProjectGuid>
+    <MainSource>BD.dpr</MainSource>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+    <DCC_DependencyCheckOutputName>..\..\bin\BD.exe</DCC_DependencyCheckOutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_DebugInformation>False</DCC_DebugInformation>
+    <DCC_WriteableConstants>True</DCC_WriteableConstants>
+    <DCC_LocalDebugSymbols>False</DCC_LocalDebugSymbols>
+    <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+    <DCC_MapFile>3</DCC_MapFile>
+    <DCC_ExeOutput>..\..\bin</DCC_ExeOutput>
+    <DCC_DcuOutput>dcu</DCC_DcuOutput>
+    <DCC_ObjOutput>dcu</DCC_ObjOutput>
+    <DCC_HppOutput>dcu</DCC_HppOutput>
+    <DCC_UnitSearchPath>$(Compos)\FastMM\FastMM4;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\</DCC_UnitSearchPath>
+    <DCC_ResourcePath>$(Compos)\FastMM\FastMM4;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\</DCC_ResourcePath>
+    <DCC_ObjPath>$(Compos)\FastMM\FastMM4;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\</DCC_ObjPath>
+    <DCC_IncludePath>$(Compos)\FastMM\FastMM4;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\</DCC_IncludePath>
+    <DCC_Define>DEBUG;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;RELEASE</DCC_Define>
+    <DCC_SYMBOL_PLATFORM>False</DCC_SYMBOL_PLATFORM>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Version>7.0</Version>
+    <DCC_WriteableConstants>True</DCC_WriteableConstants>
+    <DCC_MapFile>3</DCC_MapFile>
+    <DCC_ExeOutput>..\..\bin</DCC_ExeOutput>
+    <DCC_DcuOutput>dcu</DCC_DcuOutput>
+    <DCC_ObjOutput>dcu</DCC_ObjOutput>
+    <DCC_HppOutput>dcu</DCC_HppOutput>
+    <DCC_UnitSearchPath>$(Compos)\FastMM\FastMM4;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common)\;$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\</DCC_UnitSearchPath>
+    <DCC_ResourcePath>$(Compos)\FastMM\FastMM4;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common)\;$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\</DCC_ResourcePath>
+    <DCC_ObjPath>$(Compos)\FastMM\FastMM4;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common)\;$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\</DCC_ObjPath>
+    <DCC_IncludePath>$(Compos)\FastMM\FastMM4;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common)\;$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\</DCC_IncludePath>
+    <DCC_Define>DEBUG;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;DEBUG</DCC_Define>
+    <DCC_SYMBOL_PLATFORM>False</DCC_SYMBOL_PLATFORM>
+    <DCC_Optimize>False</DCC_Optimize>
+  </PropertyGroup>
+  <ProjectExtensions>
+    <Borland.Personality>Delphi.Personality</Borland.Personality>
+    <Borland.ProjectType>VCLApplication</Borland.ProjectType>
+    <BorlandProject>
+<BorlandProject><Delphi.Personality><Parameters><Parameters Name="UseLauncher">False</Parameters><Parameters Name="LoadAllSymbols">True</Parameters><Parameters Name="LoadUnspecifiedSymbols">False</Parameters></Parameters><VersionInfo><VersionInfo Name="IncludeVerInfo">True</VersionInfo><VersionInfo Name="AutoIncBuild">True</VersionInfo><VersionInfo Name="MajorVer">2</VersionInfo><VersionInfo Name="MinorVer">0</VersionInfo><VersionInfo Name="Release">0</VersionInfo><VersionInfo Name="Build">5</VersionInfo><VersionInfo Name="Debug">False</VersionInfo><VersionInfo Name="PreRelease">False</VersionInfo><VersionInfo Name="Special">False</VersionInfo><VersionInfo Name="Private">False</VersionInfo><VersionInfo Name="DLL">False</VersionInfo><VersionInfo Name="Locale">1036</VersionInfo><VersionInfo Name="CodePage">1252</VersionInfo></VersionInfo><VersionInfoKeys><VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys><VersionInfoKeys Name="FileDescription"></VersionInfoKeys><VersionInfoKeys Name="FileVersion">2.0.0.5</VersionInfoKeys><VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys><VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2005</VersionInfoKeys><VersionInfoKeys Name="LegalTrademarks"></VersionInfoKeys><VersionInfoKeys Name="OriginalFilename"></VersionInfoKeys><VersionInfoKeys Name="ProductName">BDtheque</VersionInfoKeys><VersionInfoKeys Name="ProductVersion">2</VersionInfoKeys><VersionInfoKeys Name="Comments"></VersionInfoKeys></VersionInfoKeys><Source><Source Name="MainSource">BD.dpr</Source></Source></Delphi.Personality><ModelSupport>True</ModelSupport></BorlandProject></BorlandProject>
+  </ProjectExtensions>
+  <Import Project="$(MSBuildBinPath)\Borland.Delphi.Targets" />
+  <ItemGroup>
+    <DelphiCompile Include="BD.dpr">
+      <MainSource>MainSource</MainSource>
+    </DelphiCompile>
+    <RcCompile Include="ressources.rc">
+      <Form>'ressources.res'</Form>
+    </RcCompile>
+    <RcCompile Include="webserver.rc">
+      <Form>'webserver.res'</Form>
+    </RcCompile>
+    <DCCReference Include="CommonConst.pas" />
+    <DCCReference Include="CommonList.pas" />
+    <DCCReference Include="Commun.pas" />
+    <DCCReference Include="DM_Commun.pas">
+      <Form>DataCommun</Form>
+    </DCCReference>
+    <DCCReference Include="DM_Princ.pas">
+      <Form>DMPrinc</Form>
+    </DCCReference>
+    <DCCReference Include="Editions.pas" />
+    <DCCReference Include="Form_AboutBox.pas">
+      <Form>FrmAboutBox</Form>
+    </DCCReference>
+    <DCCReference Include="Form_Choix.pas">
+      <Form>FrmChoix</Form>
+    </DCCReference>
+    <DCCReference Include="Form_ChoixDetail.pas">
+      <Form>FrmChoixDetail</Form>
+    </DCCReference>
+    <DCCReference Include="Form_ChoixDetailSerie.pas">
+      <Form>FrmChoixDetailSerie</Form>
+    </DCCReference>
+    <DCCReference Include="Form_ConsultationAlbum.pas">
+      <Form>FrmConsultationAlbum</Form>
+    </DCCReference>
+    <DCCReference Include="Form_ConsultationAuteur.pas">
+      <Form>FrmConsultationAuteur</Form>
+    </DCCReference>
+    <DCCReference Include="Form_ConsultationEmprunteur.pas">
+      <Form>FrmConsultationEmprunteur</Form>
+    </DCCReference>
+    <DCCReference Include="Form_ConsultationParaBD.pas">
+      <Form>FrmConsultationParaBD</Form>
+    </DCCReference>
+    <DCCReference Include="Form_ConsultationSerie.pas">
+      <Form>FrmConsultationSerie</Form>
+    </DCCReference>
+    <DCCReference Include="Form_Convertisseur.pas">
+      <Form>FrmConvers</Form>
+    </DCCReference>
+    <DCCReference Include="Form_Customize.pas">
+      <Form>FrmCustomize</Form>
+    </DCCReference>
+    <DCCReference Include="Form_EditAchatAlbum.pas">
+      <Form>FrmEditAchatAlbum</Form>
+    </DCCReference>
+    <DCCReference Include="Form_EditAlbum.pas">
+      <Form>FrmEditAlbum</Form>
+    </DCCReference>
+    <DCCReference Include="Form_EditAuteur.pas">
+      <Form>FrmEditAuteur</Form>
+    </DCCReference>
+    <DCCReference Include="Form_EditCollection.pas">
+      <Form>FrmEditCollection</Form>
+    </DCCReference>
+    <DCCReference Include="Form_EditCritere.pas">
+      <Form>FrmEditCritere</Form>
+    </DCCReference>
+    <DCCReference Include="Form_EditEditeur.pas">
+      <Form>FrmEditEditeur</Form>
+    </DCCReference>
+    <DCCReference Include="Form_EditEmprunteur.pas">
+      <Form>FrmEditEmprunteur</Form>
+    </DCCReference>
+    <DCCReference Include="Form_EditParaBD.pas">
+      <Form>FrmEditParaBD</Form>
+    </DCCReference>
+    <DCCReference Include="Form_EditSerie.pas">
+      <Form>FrmEditSerie</Form>
+    </DCCReference>
+    <DCCReference Include="Form_Entretien.pas">
+      <Form>FrmEntretien</Form>
+    </DCCReference>
+    <DCCReference Include="Form_Exportation.pas">
+      <Form>FrmExportation</Form>
+    </DCCReference>
+    <DCCReference Include="Form_Gestion.pas">
+      <Form>FrmGestions</Form>
+    </DCCReference>
+    <DCCReference Include="Form_Options.pas">
+      <Form>FrmOptions</Form>
+    </DCCReference>
+    <DCCReference Include="Form_Preview.pas">
+      <Form>FrmPreview</Form>
+    </DCCReference>
+    <DCCReference Include="Form_PrevisionAchats.pas">
+      <Form>frmPrevisionsAchats</Form>
+    </DCCReference>
+    <DCCReference Include="Form_PrevisionsSorties.pas">
+      <Form>frmPrevisionsSorties</Form>
+    </DCCReference>
+    <DCCReference Include="Form_Progression.pas">
+      <Form>FrmProgression</Form>
+    </DCCReference>
+    <DCCReference Include="Form_Recherche.pas">
+      <Form>FrmRecherche</Form>
+    </DCCReference>
+    <DCCReference Include="Form_Repertoire.pas">
+      <Form>FrmRepertoire</Form>
+    </DCCReference>
+    <DCCReference Include="Form_SaisieEmpruntAlbum.pas">
+      <Form>FrmSaisie_EmpruntAlbum</Form>
+    </DCCReference>
+    <DCCReference Include="Form_SaisieEmpruntEmprunteur.pas">
+      <Form>FrmSaisie_EmpruntEmprunteur</Form>
+    </DCCReference>
+    <DCCReference Include="Form_SeriesIncompletes.pas">
+      <Form>frmSeriesIncompletes</Form>
+    </DCCReference>
+    <DCCReference Include="Form_Splash.pas">
+      <Form>FrmSplash</Form>
+    </DCCReference>
+    <DCCReference Include="Form_StatsAlbums.pas">
+      <Form>FrmStatsAlbums</Form>
+    </DCCReference>
+    <DCCReference Include="Form_StatsEmprunteurs.pas">
+      <Form>FrmStatsEmprunteurs</Form>
+    </DCCReference>
+    <DCCReference Include="Form_StatsGeneral.pas">
+      <Form>FrmStatsGenerales</Form>
+    </DCCReference>
+    <DCCReference Include="Form_Stock.pas">
+      <Form>FrmStock</Form>
+    </DCCReference>
+    <DCCReference Include="Form_Verbose.pas">
+      <Form>FrmVerbose</Form>
+    </DCCReference>
+    <DCCReference Include="Form_WizardImport.pas">
+      <Form>WizardImport</Form>
+    </DCCReference>
+    <DCCReference Include="Form_ZoomCouverture.pas">
+      <Form>FrmZoomCouverture</Form>
+    </DCCReference>
+    <DCCReference Include="Frame_Convertisseur.pas">
+      <Form>Convertisseur</Form>
+    </DCCReference>
+    <DCCReference Include="Frame_RechercheRapide.pas">
+      <Form>FrameRechercheRapide</Form>
+    </DCCReference>
+    <DCCReference Include="Fram_Boutons.pas">
+      <Form>Frame1</Form>
+    </DCCReference>
+    <DCCReference Include="Impression.pas" />
+    <DCCReference Include="ListOfTypeRec.pas" />
+    <DCCReference Include="LoadComplet.pas" />
+    <DCCReference Include="Main.pas">
+      <Form>Fond</Form>
+    </DCCReference>
+    <DCCReference Include="MAJ.pas" />
+    <DCCReference Include="Procedures.pas" />
+    <DCCReference Include="ProceduresBDtk.pas" />
+    <DCCReference Include="Proc_Gestions.pas" />
+    <DCCReference Include="Textes.pas" />
+    <DCCReference Include="TypeRec.pas" />
+    <DCCReference Include="UHistorique.pas" />
+    <DCCReference Include="UImportXML.pas" />
+    <DCCReference Include="UMAJ0_0_0_6.pas" />
+    <DCCReference Include="UMAJ0_0_0_8.pas" />
+    <DCCReference Include="UMAJ0_0_0_9.pas" />
+    <DCCReference Include="UMAJ0_0_1_2.pas" />
+    <DCCReference Include="UMAJ0_0_1_7.pas" />
+    <DCCReference Include="UMAJ0_0_2_19.pas" />
+    <DCCReference Include="UMAJ0_0_2_2.pas" />
+    <DCCReference Include="UMAJ0_0_2_23.pas" />
+    <DCCReference Include="UMAJ0_0_2_3.pas" />
+    <DCCReference Include="UMAJ0_0_2_5.pas" />
+    <DCCReference Include="UMAJ0_0_2_7.pas" />
+    <DCCReference Include="UMAJ0_0_3_01.pas" />
+    <DCCReference Include="UMAJ0_0_3_02.pas" />
+    <DCCReference Include="UMAJ0_0_3_07.pas" />
+    <DCCReference Include="UMAJ0_0_3_14.pas" />
+    <DCCReference Include="UMAJ0_0_3_16.pas" />
+    <DCCReference Include="UMAJ0_0_3_19.pas" />
+    <DCCReference Include="UMAJ0_0_3_21.pas" />
+    <DCCReference Include="UMAJ0_0_3_22.pas" />
+    <DCCReference Include="UMAJ0_0_3_23.pas" />
+    <DCCReference Include="UMAJ0_0_3_24.pas" />
+    <DCCReference Include="UMAJ0_0_3_25.pas" />
+    <DCCReference Include="UMAJ0_0_3_27.pas" />
+    <DCCReference Include="UMAJ1_0_0_0.pas" />
+    <DCCReference Include="UMAJ1_0_0_2.pas" />
+    <DCCReference Include="UMAJ1_0_0_3.pas" />
+    <DCCReference Include="UMAJ1_1_0_0.pas" />
+    <DCCReference Include="UMAJ1_2_0_0.pas" />
+    <DCCReference Include="UMAJ1_2_0_8.pas" />
+    <DCCReference Include="UMAJ1_2_1_0.pas" />
+    <DCCReference Include="UMAJ1_2_2_0.pas" />
+    <DCCReference Include="UMAJ1_2_3_14.pas" />
+    <DCCReference Include="UMAJ1_2_3_20.pas" />
+    <DCCReference Include="UMAJ1_2_3_22.pas" />
+    <DCCReference Include="UMAJ1_2_3_25.pas" />
+    <DCCReference Include="UMAJ1_2_3_26.pas" />
+    <DCCReference Include="UMAJ1_2_3_3.pas" />
+    <DCCReference Include="UMAJODS.pas" />
+    <DCCReference Include="Updates.pas" />
+    <DCCReference Include="VirtualTree.pas" />
+    <None Include="ModelSupport_BD\CommonConst\default.txaPackage" />
+    <None Include="ModelSupport_BD\CommonConst\default.txvpck" />
+    <None Include="ModelSupport_BD\CommonList\default.txaPackage" />
+    <None Include="ModelSupport_BD\CommonList\default.txvpck" />
+    <None Include="ModelSupport_BD\Commun\default.txaPackage" />
+    <None Include="ModelSupport_BD\Commun\default.txvpck" />
+    <None Include="ModelSupport_BD\default.txaPackage" />
+    <None Include="ModelSupport_BD\default.txvpck" />
+    <None Include="ModelSupport_BD\DM_Commun\default.txaPackage" />
+    <None Include="ModelSupport_BD\DM_Commun\default.txvpck" />
+    <None Include="ModelSupport_BD\DM_Princ\default.txaPackage" />
+    <None Include="ModelSupport_BD\DM_Princ\default.txvpck" />
+    <None Include="ModelSupport_BD\Editions\default.txaPackage" />
+    <None Include="ModelSupport_BD\Editions\default.txvpck" />
+    <None Include="ModelSupport_BD\Form_AboutBox\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_AboutBox\default.txvpck" />
+    <None Include="ModelSupport_BD\Form_ChoixDetailSerie\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_ChoixDetail\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_ChoixDetail\default.txvpck" />
+    <None Include="ModelSupport_BD\Form_Choix\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_Choix\default.txvpck" />
+    <None Include="ModelSupport_BD\Form_ConsultationAlbum\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_ConsultationAlbum\default.txvpck" />
+    <None Include="ModelSupport_BD\Form_ConsultationAuteur\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_ConsultationEmprunteur\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_ConsultationParaBD\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_ConsultationSerie\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_Convertisseur\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_Customize\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_EditAchatAlbum\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_EditAlbum\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_EditAuteur\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_EditCollection\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_EditCritere\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_EditEditeur\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_EditEmprunteur\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_EditParaBD\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_EditSerie\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_Entretien\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_Exportation\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_Gestion\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_options\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_Preview\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_PrevisionAchats\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_PrevisionsSorties\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_Progression\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_Recherche\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_Repertoire\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_SaisieEmpruntAlbum\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_SaisieEmpruntEmprunteur\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_SeriesIncompletes\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_Splash\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_StatsAlbums\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_StatsEmprunteurs\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_StatsGeneral\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_Stock\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_Verbose\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_WizardImport\default.txaPackage" />
+    <None Include="ModelSupport_BD\Form_ZoomCouverture\default.txaPackage" />
+    <None Include="ModelSupport_BD\Frame_Convertisseur\default.txaPackage" />
+    <None Include="ModelSupport_BD\Frame_RechercheRapide\default.txaPackage" />
+    <None Include="ModelSupport_BD\Fram_Boutons\default.txaPackage" />
+    <None Include="ModelSupport_BD\Impression\default.txaPackage" />
+    <None Include="ModelSupport_BD\ListOfTypeRec\default.txaPackage" />
+    <None Include="ModelSupport_BD\LoadComplet\default.txaPackage" />
+    <None Include="ModelSupport_BD\LoadComplet\default.txvpck" />
+    <None Include="ModelSupport_BD\Main\default.txaPackage" />
+    <None Include="ModelSupport_BD\MAJ\default.txaPackage" />
+    <None Include="ModelSupport_BD\ProceduresBDtk\default.txaPackage" />
+    <None Include="ModelSupport_BD\Procedures\default.txaPackage" />
+    <None Include="ModelSupport_BD\Proc_Gestions\default.txaPackage" />
+    <None Include="ModelSupport_BD\Textes\default.txaPackage" />
+    <None Include="ModelSupport_BD\TypeRec\default.txaPackage" />
+    <None Include="ModelSupport_BD\UHistorique\default.txaPackage" />
+    <None Include="ModelSupport_BD\UImportXML\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_0_6\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_0_8\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_0_9\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_1_2\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_1_7\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_2_19\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_2_23\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_2_2\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_2_3\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_2_5\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_2_7\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_3_01\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_3_02\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_3_07\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_3_14\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_3_16\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_3_19\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_3_21\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_3_22\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_3_23\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_3_24\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_3_25\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ0_0_3_27\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ1_0_0_0\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ1_0_0_2\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ1_0_0_3\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ1_1_0_0\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ1_2_0_0\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ1_2_0_8\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ1_2_1_0\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ1_2_2_0\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ1_2_3_14\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ1_2_3_20\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ1_2_3_22\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ1_2_3_25\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ1_2_3_26\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJ1_2_3_3\default.txaPackage" />
+    <None Include="ModelSupport_BD\UMAJODS\default.txaPackage" />
+    <None Include="ModelSupport_BD\Updates\default.txaPackage" />
+    <None Include="ModelSupport_BD\Updates\default.txvpck" />
+    <None Include="ModelSupport_BD\VirtualTree\default.txaPackage" />
+  </ItemGroup>
+</Project>

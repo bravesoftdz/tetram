@@ -1,16 +1,16 @@
 object Frame1: TFrame1
   Left = 0
   Top = 0
-  Width = 443
+  Width = 451
   Height = 25
   Align = alBottom
   TabOrder = 0
   OnResize = FrameResize
   DesignSize = (
-    443
+    451
     25)
   object btnOK: TBitBtn
-    Left = 272
+    Left = 280
     Top = 2
     Width = 79
     Height = 21
@@ -51,9 +51,10 @@ object Frame1: TFrame1
       00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC}
     Margin = 4
     Spacing = -1
+    ExplicitLeft = 272
   end
   object btnAnnuler: TBitBtn
-    Left = 360
+    Left = 368
     Top = 2
     Width = 77
     Height = 21
@@ -94,5 +95,6 @@ object Frame1: TFrame1
       00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC}
     Margin = 4
     Spacing = -1
+    ExplicitLeft = 360
   end
 end

@@ -35,10 +35,7 @@ type
     procedure VDTListView1DragOver(Sender, Source: TObject; X, Y: Integer;
       State: TDragState; var Accept: Boolean);
     procedure VDTListView1DragDrop(Sender, Source: TObject; X, Y: Integer);
-  private
-    { Private-Deklarationen }
   public
-    { Public-Deklarationen }
     procedure FillCategories;
     procedure FillToolbar;
     procedure FillCommands(const cat: string);

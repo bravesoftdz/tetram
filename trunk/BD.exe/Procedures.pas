@@ -42,7 +42,7 @@ type
   TLockWindow = class(TInterfacedObject, ILockWindow)
   private
     FLocked: Boolean;
-  published
+  public
     constructor Create(Form: TWinControl);
     destructor Destroy; override;
   end;
@@ -55,7 +55,7 @@ type
     FInfo: TForm;
     FLabel: TLabel;
     procedure SetupDialog;
-  published
+  public
     procedure ShowInfo(const Msg: ShortString);
     constructor Create;
     destructor Destroy; override;

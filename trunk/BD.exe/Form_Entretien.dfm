@@ -1,9 +1,9 @@
 object FrmEntretien: TFrmEntretien
   Left = 168
   Top = 263
-  Width = 455
-  Height = 293
   Caption = 'FrmEntretien'
+  ClientHeight = 257
+  ClientWidth = 439
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,8 +14,8 @@ object FrmEntretien: TFrmEntretien
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   DesignSize = (
-    447
-    261)
+    439
+    257)
   PixelsPerInch = 96
   TextHeight = 13
   object Panel14: TPanel
@@ -27,7 +27,6 @@ object FrmEntretien: TFrmEntretien
     BevelInner = bvRaised
     BevelOuter = bvLowered
     Caption = ' '
-    ParentBackground = True
     TabOrder = 0
     DesignSize = (
       112
@@ -90,7 +89,7 @@ object FrmEntretien: TFrmEntretien
       end
       item
         Position = 1
-        Width = 129
+        Width = 133
       end>
   end
   object ActionList1: TActionList

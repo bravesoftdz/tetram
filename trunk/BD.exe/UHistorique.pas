@@ -61,10 +61,10 @@ type
     procedure AddConsultation(Consult: TConsult); overload;
     procedure EditConsultation(Consult: TConsult); overload;
     function GetCurrentConsult: TConsult;
-  published
+  public
     constructor Create;
     destructor Destroy; override;
-  public
+
     procedure AddConsultation(Consultation: TActionConsultation); overload;
     procedure EditConsultation(const Ref: TGUID; Ref2: Integer); overload;
     procedure EditConsultation(Stream: TStream); overload;

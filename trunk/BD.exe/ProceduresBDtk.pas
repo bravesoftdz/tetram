@@ -54,7 +54,7 @@ type
   TModeEditing = class(TInterfacedObject, IModeEditing)
   private
     FOldMode: TModeConsult;
-  published
+  public
     constructor Create;
     destructor Destroy; override;
   end;
