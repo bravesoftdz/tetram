@@ -9,7 +9,6 @@ uses
   Forms,
   Controls,
   Dialogs,
-  ISAPIApp,
   SyncObjs,
   Divers,
   CommonConst in 'CommonConst.pas',
@@ -57,7 +56,6 @@ uses
   Form_Convertisseur in 'Form_Convertisseur.pas' {FrmConvers},
   Frame_Convertisseur in 'Frame_Convertisseur.pas' {Convertisseur: TFrame},
   Frame_RechercheRapide in 'Frame_RechercheRapide.pas' {FrameRechercheRapide: TFrame},
-  CommonList in 'CommonList.pas',
   MAJ in 'Consultation\MAJ.pas',
   TypeRec in 'TypeRec.pas',
   VirtualTree in 'VirtualTree.pas',
@@ -118,11 +116,6 @@ uses
 {$R *.RES}
 {$R curseurs.res}
 {$INCLUDE FastMM4Options.inc}
-
-exports
-  GetExtensionVersion,
-  HttpExtensionProc,
-  TerminateExtension;
 
 const
   ChargementApp = 'Chargement de l''application';

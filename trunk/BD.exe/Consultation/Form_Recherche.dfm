@@ -1,9 +1,9 @@
 object FrmRecherche: TFrmRecherche
   Left = 212
   Top = 321
-  Width = 400
-  Height = 469
   Caption = 'Recherche'
+  ClientHeight = 433
+  ClientWidth = 384
   Color = clBtnFace
   Constraints.MinWidth = 400
   Font.Charset = DEFAULT_CHARSET
@@ -20,35 +20,42 @@ object FrmRecherche: TFrmRecherche
   object Splitter1: TSplitter
     Left = 0
     Top = 222
-    Width = 392
+    Width = 384
     Height = 3
     Cursor = crVSplit
     Align = alTop
+    ExplicitWidth = 392
   end
   object lbResult: TLabel
     Left = 0
     Top = 225
-    Width = 392
+    Width = 384
     Height = 17
     Align = alTop
     AutoSize = False
     Caption = ' '
     Layout = tlCenter
+    ExplicitWidth = 392
   end
   object PageControl2: TPageControl
     Left = 0
     Top = 0
-    Width = 392
+    Width = 384
     Height = 222
     Cursor = crHandPoint
     ActivePage = TabSheet4
     Align = alTop
     Style = tsFlatButtons
     TabOrder = 0
+    ExplicitWidth = 392
     object TabSheet3: TTabSheet
       Caption = 'Recherche simple'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
-        384
+        376
         191)
       object LightComboCheck1: TLightComboCheck
         Left = 2
@@ -157,22 +164,32 @@ object FrmRecherche: TFrmRecherche
         Height = 21
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 1
+        ExplicitLeft = 128
+        ExplicitTop = 1
+        ExplicitWidth = 256
         inherited btNext: TVDTButton
           Left = 215
+          ExplicitLeft = 215
         end
         inherited btNew: TVDTButton
           Left = 235
+          ExplicitLeft = 235
         end
         inherited edSearch: TEditLabeled
           Width = 216
+          ExplicitWidth = 216
         end
       end
     end
     object TabSheet4: TTabSheet
       Caption = 'Recherche avanc'#233'e'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
-        384
+        376
         191)
       object plus: TButton
         Left = 1
@@ -262,8 +279,8 @@ object FrmRecherche: TFrmRecherche
   object VTResult: TVirtualStringTree
     Left = 0
     Top = 242
-    Width = 392
-    Height = 175
+    Width = 384
+    Height = 191
     Align = alClient
     BevelKind = bkTile
     BorderStyle = bsNone
@@ -282,10 +299,12 @@ object FrmRecherche: TFrmRecherche
     OnGetText = VTResultGetText
     OnPaintText = VTResultPaintText
     OnHeaderClick = VTResultHeaderClick
+    ExplicitWidth = 392
+    ExplicitHeight = 175
     Columns = <
       item
         Position = 0
-        Width = 148
+        Width = 144
         WideText = 'Album'
       end
       item

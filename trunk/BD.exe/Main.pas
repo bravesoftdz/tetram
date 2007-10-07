@@ -170,7 +170,6 @@ type
     procedure ModeEntretienExecute(Sender: TObject);
     procedure AfficheSeriesIncompletesExecute(Sender: TObject);
     procedure AffichePrevisionsSortiesExecute(Sender: TObject);
-    procedure AllerVersWebServerExecute(Sender: TObject);
     procedure MeasureMenuItem(Sender: TObject; ACanvas: TCanvas; var Width, Height: Integer);
     procedure NouvelAchatExecute(Sender: TObject);
     procedure actMiseAJourExecute(Sender: TObject);
@@ -816,11 +815,6 @@ end;
 procedure TFond.AffichePrevisionsSortiesExecute(Sender: TObject);
 begin
   Historique.AddWaiting(fcPrevisionsSorties);
-end;
-
-procedure TFond.AllerVersWebServerExecute(Sender: TObject);
-begin
-  ShellExecute(0, 'OPEN', PChar('http://127.0.0.1:' + IntToStr(Utilisateur.Options.WebServerPort)), nil, nil, SW_NORMAL);
 end;
 
 procedure TFond.MeasureMenuItem(Sender: TObject; ACanvas: TCanvas; var Width, Height: Integer);

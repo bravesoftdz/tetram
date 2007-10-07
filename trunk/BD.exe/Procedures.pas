@@ -70,14 +70,12 @@ function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = Tru
 procedure LoadCombo(Categorie: Integer; Combo: TLightComboCheck);
 procedure LoadStrings(Categorie: Integer; Strings: TStrings);
 
-function HTMLPrepare(const AStr: string): string;
-
 implementation
 
 uses
   Divers, Textes, ShellAPI, ReadOnlyCheckBox,
   JvUIBase, MaskUtils, Mask, DM_Princ, IniFiles, Math, VirtualTrees, DbEditLabeled, ActnList,
-  HTTPApp, Types;
+  Types;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
 begin
@@ -886,12 +884,6 @@ begin
   FLabel.Caption := Msg;
   FInfo.Show;
   Application.ProcessMessages;
-end;
-
-function HTMLPrepare(const AStr: string): string;
-begin
-  Result := HTMLEncode(AStr);
-  ReplaceString(Result, #13, '<br>');
 end;
 
 function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = True): string;
