@@ -54,14 +54,123 @@
       <MainSource>MainSource</MainSource>
     </DelphiCompile>
     <RcCompile Include="ressources.rc">
-      <Form>'ressources.res'</Form>
+      <Form>ressources.res</Form>
     </RcCompile>
     <RcCompile Include="webserver.rc">
-      <Form>'webserver.res'</Form>
+      <Form>webserver.res</Form>
     </RcCompile>
+    <DCCReference Include="CForm_Repertoire.pas">
+      <Form>FrmRepertoire</Form>
+    </DCCReference>
+    <DCCReference Include="CMAJ.pas" />
+    <DCCReference Include="CoForm_Repertoire.pas">
+      <Form>FrmRepertoire</Form>
+    </DCCReference>
+    <DCCReference Include="CoMAJ.pas" />
     <DCCReference Include="CommonConst.pas" />
     <DCCReference Include="CommonList.pas" />
     <DCCReference Include="Commun.pas" />
+    <DCCReference Include="ConForm_Repertoire.pas">
+      <Form>FrmRepertoire</Form>
+    </DCCReference>
+    <DCCReference Include="ConMAJ.pas" />
+    <DCCReference Include="ConsForm_Repertoire.pas">
+      <Form>FrmRepertoire</Form>
+    </DCCReference>
+    <DCCReference Include="ConsMAJ.pas" />
+    <DCCReference Include="ConsuForm_Repertoire.pas">
+      <Form>FrmRepertoire</Form>
+    </DCCReference>
+    <DCCReference Include="ConsulForm_Repertoire.pas">
+      <Form>FrmRepertoire</Form>
+    </DCCReference>
+    <DCCReference Include="ConsulMAJ.pas" />
+    <DCCReference Include="ConsultaForm_Repertoire.pas">
+      <Form>FrmRepertoire</Form>
+    </DCCReference>
+    <DCCReference Include="ConsultaMAJ.pas" />
+    <DCCReference Include="ConsultatForm_Repertoire.pas">
+      <Form>FrmRepertoire</Form>
+    </DCCReference>
+    <DCCReference Include="ConsultatiForm_Repertoire.pas">
+      <Form>FrmRepertoire</Form>
+    </DCCReference>
+    <DCCReference Include="ConsultatiMAJ.pas" />
+    <DCCReference Include="ConsultatioForm_Repertoire.pas">
+      <Form>FrmRepertoire</Form>
+    </DCCReference>
+    <DCCReference Include="ConsultatioMAJ.pas" />
+    <DCCReference Include="ConsultationForm_Repertoire.pas">
+      <Form>FrmRepertoire</Form>
+    </DCCReference>
+    <DCCReference Include="ConsultationMAJ.pas" />
+    <DCCReference Include="Consultation\Editions.pas" />
+    <DCCReference Include="Consultation\Form_ConsultationAlbum.pas">
+      <Form>FrmConsultationAlbum</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_ConsultationAuteur.pas">
+      <Form>FrmConsultationAuteur</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_ConsultationEmprunteur.pas">
+      <Form>FrmConsultationEmprunteur</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_ConsultationParaBD.pas">
+      <Form>FrmConsultationParaBD</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_ConsultationSerie.pas">
+      <Form>FrmConsultationSerie</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_EditCritere.pas">
+      <Form>FrmEditCritere</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_Exportation.pas">
+      <Form>FrmExportation</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_Preview.pas">
+      <Form>FrmPreview</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_PrevisionAchats.pas">
+      <Form>frmPrevisionsAchats</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_PrevisionsSorties.pas">
+      <Form>frmPrevisionsSorties</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_Recherche.pas">
+      <Form>FrmRecherche</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_Repertoire.pas">
+      <Form>FrmRepertoire</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_SaisieEmpruntAlbum.pas">
+      <Form>FrmSaisie_EmpruntAlbum</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_SeriesIncompletes.pas">
+      <Form>frmSeriesIncompletes</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_StatsAlbums.pas">
+      <Form>FrmStatsAlbums</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_StatsEmprunteurs.pas">
+      <Form>FrmStatsEmprunteurs</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_StatsGeneral.pas">
+      <Form>FrmStatsGenerales</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_Stock.pas">
+      <Form>FrmStock</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Form_ZoomCouverture.pas">
+      <Form>FrmZoomCouverture</Form>
+    </DCCReference>
+    <DCCReference Include="Consultation\Impression.pas" />
+    <DCCReference Include="Consultation\MAJ.pas" />
+    <DCCReference Include="Consultation^MAJ.pas" />
+    <DCCReference Include="ConsultatMAJ.pas" />
+    <DCCReference Include="ConsultForm_Repertoire.pas">
+      <Form>FrmRepertoire</Form>
+    </DCCReference>
+    <DCCReference Include="ConsultMAJ.pas" />
+    <DCCReference Include="ConsuMAJ.pas" />
     <DCCReference Include="DM_Commun.pas">
       <Form>DataCommun</Form>
     </DCCReference>
@@ -201,6 +310,72 @@
     <DCCReference Include="Fram_Boutons.pas">
       <Form>Frame1</Form>
     </DCCReference>
+    <DCCReference Include="Gestion\Editions.pas" />
+    <DCCReference Include="Gestion\Form_EditAchatAlbum.pas">
+      <Form>FrmEditAchatAlbum</Form>
+    </DCCReference>
+    <DCCReference Include="Gestion\Form_EditAlbum.pas">
+      <Form>FrmEditAlbum</Form>
+    </DCCReference>
+    <DCCReference Include="Gestion\Form_EditAuteur.pas">
+      <Form>FrmEditAuteur</Form>
+    </DCCReference>
+    <DCCReference Include="Gestion\Form_EditCollection.pas">
+      <Form>FrmEditCollection</Form>
+    </DCCReference>
+    <DCCReference Include="Gestion\Form_EditEditeur.pas">
+      <Form>FrmEditEditeur</Form>
+    </DCCReference>
+    <DCCReference Include="Gestion\Form_EditEmprunteur.pas">
+      <Form>FrmEditEmprunteur</Form>
+    </DCCReference>
+    <DCCReference Include="Gestion\Form_EditParaBD.pas">
+      <Form>FrmEditParaBD</Form>
+    </DCCReference>
+    <DCCReference Include="Gestion\Form_EditSerie.pas">
+      <Form>FrmEditSerie</Form>
+    </DCCReference>
+    <DCCReference Include="Gestion\Form_Exportation.pas">
+      <Form>FrmExportation</Form>
+    </DCCReference>
+    <DCCReference Include="Gestion\Form_Gestion.pas">
+      <Form>FrmGestions</Form>
+    </DCCReference>
+    <DCCReference Include="Gestion\Form_WizardImport.pas">
+      <Form>WizardImport</Form>
+    </DCCReference>
+    <DCCReference Include="Gestion\Proc_Gestions.pas" />
+    <DCCReference Include="Gestion\UImportXML.pas" />
+    <DCCReference Include="Gestio\Editions.pas" />
+    <DCCReference Include="Gestio\Form_Exportation.pas">
+      <Form>FrmExportation</Form>
+    </DCCReference>
+    <DCCReference Include="Gesti\Editions.pas" />
+    <DCCReference Include="Gesti\Form_Exportation.pas">
+      <Form>FrmExportation</Form>
+    </DCCReference>
+    <DCCReference Include="Gestoi\Form_Exportation.pas">
+      <Form>FrmExportation</Form>
+    </DCCReference>
+    <DCCReference Include="Gesto\Form_Exportation.pas">
+      <Form>FrmExportation</Form>
+    </DCCReference>
+    <DCCReference Include="Gest\Editions.pas" />
+    <DCCReference Include="Gest\Form_Exportation.pas">
+      <Form>FrmExportation</Form>
+    </DCCReference>
+    <DCCReference Include="Ges\Editions.pas" />
+    <DCCReference Include="Ges\Form_Exportation.pas">
+      <Form>FrmExportation</Form>
+    </DCCReference>
+    <DCCReference Include="Ge\Editions.pas" />
+    <DCCReference Include="Ge\Form_Exportation.pas">
+      <Form>FrmExportation</Form>
+    </DCCReference>
+    <DCCReference Include="G\Editions.pas" />
+    <DCCReference Include="G\Form_Exportation.pas">
+      <Form>FrmExportation</Form>
+    </DCCReference>
     <DCCReference Include="Impression.pas" />
     <DCCReference Include="ListOfTypeRec.pas" />
     <DCCReference Include="LoadComplet.pas" />
@@ -208,6 +383,60 @@
       <Form>Fond</Form>
     </DCCReference>
     <DCCReference Include="MAJ.pas" />
+    <DCCReference Include="mises Updates.pas" />
+    <DCCReference Include="mises à joUpdates.pas" />
+    <DCCReference Include="mises à jourUpdates.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_0_6.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_0_8.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_0_9.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_1_2.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_1_7.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_2_19.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_2_2.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_2_23.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_2_3.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_2_5.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_2_7.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_3_01.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_3_02.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_3_07.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_3_14.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_3_16.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_3_19.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_3_21.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_3_22.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_3_23.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_3_24.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_3_25.pas" />
+    <DCCReference Include="mises à jour\UMAJ0_0_3_27.pas" />
+    <DCCReference Include="mises à jour\UMAJ1_0_0_0.pas" />
+    <DCCReference Include="mises à jour\UMAJ1_0_0_2.pas" />
+    <DCCReference Include="mises à jour\UMAJ1_0_0_3.pas" />
+    <DCCReference Include="mises à jour\UMAJ1_1_0_0.pas" />
+    <DCCReference Include="mises à jour\UMAJ1_2_0_0.pas" />
+    <DCCReference Include="mises à jour\UMAJ1_2_0_8.pas" />
+    <DCCReference Include="mises à jour\UMAJ1_2_1_0.pas" />
+    <DCCReference Include="mises à jour\UMAJ1_2_2_0.pas" />
+    <DCCReference Include="mises à jour\UMAJ1_2_3_14.pas" />
+    <DCCReference Include="mises à jour\UMAJ1_2_3_20.pas" />
+    <DCCReference Include="mises à jour\UMAJ1_2_3_22.pas" />
+    <DCCReference Include="mises à jour\UMAJ1_2_3_25.pas" />
+    <DCCReference Include="mises à jour\UMAJ1_2_3_26.pas" />
+    <DCCReference Include="mises à jour\UMAJ1_2_3_3.pas" />
+    <DCCReference Include="mises à jour\UMAJODS.pas" />
+    <DCCReference Include="mises à jour\Updates.pas" />
+    <DCCReference Include="mises à jour^Updates.pas" />
+    <DCCReference Include="mises à jouUpdates.pas" />
+    <DCCReference Include="mises à jUpdates.pas" />
+    <DCCReference Include="mises à Updates.pas" />
+    <DCCReference Include="mises àUpdates.pas" />
+    <DCCReference Include="misesUpdates.pas" />
+    <DCCReference Include="miseUpdates.pas" />
+    <DCCReference Include="misUpdates.pas" />
+    <DCCReference Include="miUpdates.pas" />
+    <DCCReference Include="mUpdates.pas" />
+    <DCCReference Include="oMAJ.pas" />
+    <DCCReference Include="onMAJ.pas" />
     <DCCReference Include="Procedures.pas" />
     <DCCReference Include="ProceduresBDtk.pas" />
     <DCCReference Include="Proc_Gestions.pas" />
