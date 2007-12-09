@@ -5,7 +5,7 @@ object FrmAboutBox: TFrmAboutBox
   BorderStyle = bsNone
   Caption = 'A propos'
   ClientHeight = 449
-  ClientWidth = 497
+  ClientWidth = 535
   Color = clWhite
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -123,13 +123,13 @@ object FrmAboutBox: TFrmAboutBox
     Transparent = True
     WordWrap = True
   end
-  object VlVersion: TVersionLabelP
+  object VlVersion: TfshVersionLabel
     Left = 303
     Top = 51
     Width = 186
     Height = 16
     AutoSize = False
-    Caption = 'Version < Pas d'#39'infos en conception >'
+    Caption = 'Version < Pas d'#39'information en mode design >'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -13
@@ -137,18 +137,20 @@ object FrmAboutBox: TFrmAboutBox
     Font.Style = []
     ParentFont = False
     Transparent = True
-    VersionResource = vrVersionFichier
-    VersionResourceKey = 'FileVersion'
+    VersionResource = vrProductVersion
+    VersionResourceKey = 'ProductVersion'
     InfoPrefix = 'Version'
     ShowInfoPrefix = True
     LangCharset = '-1'
+    DateTimeFormat = 'dd/MM/yyyy'
+    FileSizeFormat = '#,#0" Bytes"'
   end
-  object VlCopyright: TVersionLabelP
+  object VlCopyright: TfshVersionLabel
     Left = 303
     Top = 69
-    Width = 193
+    Width = 232
     Height = 13
-    Caption = 'Copyright < Pas d'#39'infos en conception >'
+    Caption = 'Copyright < Pas d'#39'information en mode design >'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -11
@@ -156,11 +158,13 @@ object FrmAboutBox: TFrmAboutBox
     Font.Style = []
     ParentFont = False
     Transparent = True
-    VersionResource = vrCopyright
+    VersionResource = vrLegalCopyright
     VersionResourceKey = 'LegalCopyright'
     InfoPrefix = 'Copyright'
     ShowInfoPrefix = True
     LangCharset = '-1'
+    DateTimeFormat = 'dd/MM/yyyy'
+    FileSizeFormat = '#,#0" Bytes"'
   end
   object LbMemoireVirtuelleDisponible: TLabel
     Left = 310

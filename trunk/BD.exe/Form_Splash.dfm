@@ -3638,13 +3638,13 @@ object FrmSplash: TFrmSplash
     Transparent = True
     Visible = False
   end
-  object VersionLabel1: TVersionLabelP
-    Left = 157
+  object VersionLabel1: TfshVersionLabel
+    Left = 104
     Top = 49
-    Width = 248
+    Width = 301
     Height = 16
     Alignment = taRightJustify
-    Caption = 'Version < Pas d'#39'infos en conception >'
+    Caption = 'Version < Pas d'#39'information en mode design >'
     Font.Charset = ANSI_CHARSET
     Font.Color = clSkyBlue
     Font.Height = -13
@@ -3653,11 +3653,13 @@ object FrmSplash: TFrmSplash
     ParentFont = False
     Transparent = True
     Visible = False
-    VersionResource = vrVersionProduit
+    VersionResource = vrProductVersion
     VersionResourceKey = 'ProductVersion'
     InfoPrefix = 'Version'
     ShowInfoPrefix = True
     LangCharset = '-1'
+    DateTimeFormat = 'dd/MM/yyyy'
+    FileSizeFormat = '#,#0" Bytes"'
   end
   object Image2: TImage
     Left = 424
@@ -3810,13 +3812,13 @@ object FrmSplash: TFrmSplash
     Shape = bsTopLine
     Visible = False
   end
-  object VersionLabel2: TVersionLabelP
-    Left = 283
+  object VersionLabel2: TfshVersionLabel
+    Left = 244
     Top = 96
-    Width = 193
+    Width = 232
     Height = 13
     Alignment = taRightJustify
-    Caption = 'Copyright < Pas d'#39'infos en conception >'
+    Caption = 'Copyright < Pas d'#39'information en mode design >'
     Font.Charset = ANSI_CHARSET
     Font.Color = clSkyBlue
     Font.Height = -11
@@ -3825,11 +3827,13 @@ object FrmSplash: TFrmSplash
     ParentFont = False
     Transparent = True
     Visible = False
-    VersionResource = vrCopyright
+    VersionResource = vrLegalCopyright
     VersionResourceKey = 'LegalCopyright'
     InfoPrefix = 'Copyright'
     ShowInfoPrefix = True
     LangCharset = '-1'
+    DateTimeFormat = 'dd/MM/yyyy'
+    FileSizeFormat = '#,#0" Bytes"'
   end
   object Label2: TLabel
     Left = 284

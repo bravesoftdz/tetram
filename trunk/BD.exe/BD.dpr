@@ -107,7 +107,7 @@ uses
   UMAJ1_2_3_14 in 'mises à jour\UMAJ1_2_3_14.pas',
   Form_ChoixDetailSerie in 'Form_ChoixDetailSerie.pas' {FrmChoixDetailSerie},
   UMAJ1_2_3_25 in 'mises à jour\UMAJ1_2_3_25.pas',
-  UMAJ1_2_3_3 in 'mises à jour\UMAJ1_2_3_3.pas',
+  UMAJ2_0_0_5 in 'mises à jour\UMAJ2_0_0_5.pas',
   UMAJ1_2_3_20 in 'mises à jour\UMAJ1_2_3_20.pas',
   UMAJ1_2_3_22 in 'mises à jour\UMAJ1_2_3_22.pas',
   UMAJ1_2_3_26 in 'mises à jour\UMAJ1_2_3_26.pas',
@@ -130,12 +130,12 @@ begin
 {$IFDEF EnableMemoryLeakReporting}
 //  RegisterExpectedMemoryLeak(TCriticalSection, 1);
 {$ENDIF}
-  Application.MainFormOnTaskbar := True;
   Mode_en_cours := mdLoad;
   Application.Title := 'BDthèque';
   if not Bool(CreateMutex(nil, True, 'TetramCorpBDMutex')) then
     RaiseLastOSError
-  else if GetLastError = ERROR_ALREADY_EXISTS then begin
+  else if GetLastError = ERROR_ALREADY_EXISTS then
+  begin
     ShowMessage('Une instance de BDthèque est déjà ouverte!');
     Exit;
   end;
@@ -167,7 +167,8 @@ begin
 
     FrmSplash.Affiche_act(FinChargement + '...');
     ChangeCurseur(crHandPoint, 'MyHandPoint', 'MyCursor');
-    while Now - Debut < (1 / (24 * 60 * 60)) * 1 do begin // 0: NoWait
+    while Now - Debut < (1 / (24 * 60 * 60)) * 1 do
+    begin // 0: NoWait
       FrmSplash.Show;
       FrmSplash.Update;
     end;

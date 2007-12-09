@@ -15,8 +15,8 @@ type
     ImLogo: TImage;
     Label1: TLabel;
     VlTitre: TLabel;
-    VlVersion: TVersionLabelP;
-    VlCopyright: TVersionLabelP;
+    VlVersion: TfshVersionLabel;
+    VlCopyright: TfshVersionLabel;
     LbMemoireVirtuelleDisponible: TLabel;
     LbMemoireVirtuelle: TLabel;
     LbMemoireLibre: TLabel;

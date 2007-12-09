@@ -1,9 +1,9 @@
 object FrmRecherche: TFrmRecherche
   Left = 212
   Top = 321
+  Width = 408
+  Height = 479
   Caption = 'Recherche'
-  ClientHeight = 433
-  ClientWidth = 384
   Color = clBtnFace
   Constraints.MinWidth = 400
   Font.Charset = DEFAULT_CHARSET
@@ -20,42 +20,35 @@ object FrmRecherche: TFrmRecherche
   object Splitter1: TSplitter
     Left = 0
     Top = 222
-    Width = 384
+    Width = 400
     Height = 3
     Cursor = crVSplit
     Align = alTop
-    ExplicitWidth = 392
   end
   object lbResult: TLabel
     Left = 0
     Top = 225
-    Width = 384
+    Width = 400
     Height = 17
     Align = alTop
     AutoSize = False
     Caption = ' '
     Layout = tlCenter
-    ExplicitWidth = 392
   end
   object PageControl2: TPageControl
     Left = 0
     Top = 0
-    Width = 384
+    Width = 400
     Height = 222
     Cursor = crHandPoint
     ActivePage = TabSheet4
     Align = alTop
     Style = tsFlatButtons
     TabOrder = 0
-    ExplicitWidth = 392
     object TabSheet3: TTabSheet
       Caption = 'Recherche simple'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
-        376
+        392
         191)
       object LightComboCheck1: TLightComboCheck
         Left = 2
@@ -164,32 +157,22 @@ object FrmRecherche: TFrmRecherche
         Height = 21
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 1
-        ExplicitLeft = 128
-        ExplicitTop = 1
-        ExplicitWidth = 256
         inherited btNext: TVDTButton
           Left = 215
-          ExplicitLeft = 215
         end
         inherited btNew: TVDTButton
           Left = 235
-          ExplicitLeft = 235
         end
         inherited edSearch: TEditLabeled
           Width = 216
-          ExplicitWidth = 216
         end
       end
     end
     object TabSheet4: TTabSheet
-      Caption = 'Recherche avanc'#233'e'
+      Caption = 'Recherche avancée'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
-        376
+        392
         191)
       object plus: TButton
         Left = 1
@@ -197,7 +180,7 @@ object FrmRecherche: TFrmRecherche
         Width = 51
         Height = 20
         Cursor = crHandPoint
-        Hint = 'Ajouter le crit'#232're (recherche multi-crit'#232'res)'
+        Hint = 'Ajouter le critère (recherche multi-critères)'
         Caption = 'Ajouter'
         TabOrder = 0
         OnClick = plusClick
@@ -208,7 +191,7 @@ object FrmRecherche: TFrmRecherche
         Width = 51
         Height = 19
         Cursor = crHandPoint
-        Hint = 'Modifier le crit'#232're s'#233'lectionn'#233' (recherche multi-crit'#232'res)'
+        Hint = 'Modifier le critère sélectionné (recherche multi-critères)'
         Caption = 'Modifier'
         Enabled = False
         TabOrder = 1
@@ -220,7 +203,7 @@ object FrmRecherche: TFrmRecherche
         Width = 51
         Height = 19
         Cursor = crHandPoint
-        Hint = 'Retirer le crit'#232're s'#233'lectionn'#233' (recherche multi-crit'#232'res)'
+        Hint = 'Retirer le critère sélectionné (recherche multi-critères)'
         Caption = 'Retirer'
         Enabled = False
         TabOrder = 2
@@ -232,7 +215,7 @@ object FrmRecherche: TFrmRecherche
         Width = 51
         Height = 21
         Cursor = crHandPoint
-        Hint = 'M'#233'thode (recherche multi-crit'#232'res)'
+        Hint = 'Méthode (recherche multi-critères)'
         BevelKind = bkTile
         Style = csDropDownList
         ItemHeight = 13
@@ -249,7 +232,7 @@ object FrmRecherche: TFrmRecherche
         Width = 75
         Height = 20
         Cursor = crHandPoint
-        Hint = 'Rechercher en fonctions des crit'#232'res (recherche multi-crit'#232'res)'
+        Hint = 'Rechercher en fonctions des critères (recherche multi-critères)'
         Anchors = [akTop, akRight]
         Caption = 'Chercher'
         TabOrder = 4
@@ -279,7 +262,7 @@ object FrmRecherche: TFrmRecherche
   object VTResult: TVirtualStringTree
     Left = 0
     Top = 242
-    Width = 384
+    Width = 400
     Height = 191
     Align = alClient
     BevelKind = bkTile
@@ -299,12 +282,10 @@ object FrmRecherche: TFrmRecherche
     OnGetText = VTResultGetText
     OnPaintText = VTResultPaintText
     OnHeaderClick = VTResultHeaderClick
-    ExplicitWidth = 392
-    ExplicitHeight = 175
     Columns = <
       item
         Position = 0
-        Width = 144
+        Width = 156
         WideText = 'Album'
       end
       item
@@ -322,11 +303,11 @@ object FrmRecherche: TFrmRecherche
     Left = 256
     Top = 344
     object Critre1: TMenuItem
-      Caption = 'Crit'#232're'
+      Caption = 'Critère'
       OnClick = Critre1Click
     end
     object Groupedecritre1: TMenuItem
-      Caption = 'Groupe de crit'#232're'
+      Caption = 'Groupe de critère'
       OnClick = Groupedecritre1Click
     end
   end
@@ -336,7 +317,7 @@ object FrmRecherche: TFrmRecherche
     object RechercheApercu: TAction
       Tag = 1
       Category = 'Recherche'
-      Caption = 'Aper'#231'u avant impression'
+      Caption = 'Aperçu avant impression'
       ImageIndex = 4
       OnExecute = RechPrint
     end

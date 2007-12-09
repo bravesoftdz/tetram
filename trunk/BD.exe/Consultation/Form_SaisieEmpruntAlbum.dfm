@@ -3,7 +3,7 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
   Top = 358
   BorderIcons = []
   BorderStyle = bsDialog
-  Caption = 'Saisie d'#39'un mouvement d'#39'album'
+  Caption = 'Saisie d''un mouvement d''album'
   ClientHeight = 257
   ClientWidth = 479
   Color = clBtnFace
@@ -78,7 +78,7 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     Height = 11
     Hint = 'Date du mouvement'
     Alignment = taRightJustify
-    Caption = 'S'#233'rie:'
+    Caption = 'Série:'
     FocusControl = date_pret
     Font.Charset = ANSI_CHARSET
     Font.Color = clHotLight
@@ -149,26 +149,17 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     Height = 23
     Align = alBottom
     TabOrder = 4
-    ExplicitTop = 234
-    ExplicitWidth = 479
-    ExplicitHeight = 23
     inherited btnOK: TBitBtn
       Left = 319
       Width = 73
       Height = 19
       Enabled = False
       OnClick = okClick
-      ExplicitLeft = 319
-      ExplicitWidth = 73
-      ExplicitHeight = 19
     end
     inherited btnAnnuler: TBitBtn
       Left = 399
       Width = 72
       Height = 19
-      ExplicitLeft = 399
-      ExplicitWidth = 72
-      ExplicitHeight = 19
     end
   end
   object date_pret: TDateTimePickerLabeled
@@ -192,10 +183,10 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     Top = 210
     Width = 37
     Height = 19
-    Hint = 'Case coch'#233'e = le mouvement est un emprunt'
+    Hint = 'Case cochée = le mouvement est un emprunt'
     Alignment = taLeftJustify
     Anchors = [akLeft, akBottom]
-    Caption = 'Pr'#234't:'
+    Caption = 'Prêt:'
     Ctl3D = False
     Font.Charset = ANSI_CHARSET
     Font.Color = clHotLight
@@ -239,20 +230,14 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     Width = 249
     Height = 21
     TabOrder = 0
-    ExplicitLeft = 223
-    ExplicitTop = 6
-    ExplicitWidth = 249
     inherited btNext: TVDTButton
       Left = 208
-      ExplicitLeft = 208
     end
     inherited btNew: TVDTButton
       Left = 228
-      ExplicitLeft = 228
     end
     inherited edSearch: TEditLabeled
       Width = 209
-      ExplicitWidth = 209
     end
   end
 end

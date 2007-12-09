@@ -29,14 +29,14 @@ object FrmEditSerie: TFrmEditSerie
     Left = 0
     Top = 29
     Width = 742
-    Height = 895
+    Height = 900
     Align = alClient
     BorderStyle = bsNone
     Constraints.MinWidth = 650
     TabOrder = 0
     DesignSize = (
       742
-      895)
+      900)
     object Label5: TLabel
       Left = 15
       Top = 301
@@ -521,6 +521,16 @@ object FrmEditSerie: TFrmEditSerie
       Alignment = taRightJustify
       Caption = 'Para-BD:'
     end
+    object Label9: TLabel
+      Left = 600
+      Top = 419
+      Width = 85
+      Height = 13
+      Hint = 'R'#233'f'#233'rence du support'
+      Alignment = taRightJustify
+      Caption = 'Nombre d'#39'albums:'
+      Layout = tlCenter
+    end
     object vtEditeurs: TVirtualStringTree
       Left = 56
       Top = 320
@@ -976,6 +986,25 @@ object FrmEditSerie: TFrmEditSerie
         item
           Control = cbComplete
         end>
+    end
+    object edNbAlbums: TEditLabeled
+      Left = 692
+      Top = 415
+      Width = 41
+      Height = 20
+      AutoSize = False
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      Ctl3D = True
+      ParentCtl3D = False
+      TabOrder = 21
+      OnChange = edSiteChange
+      LinkControls = <
+        item
+          Control = Label9
+        end>
+      TypeDonnee = tdEntier
+      CurrencyChar = #0
     end
   end
   inline Frame11: TFrame1

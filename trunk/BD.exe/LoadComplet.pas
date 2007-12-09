@@ -109,6 +109,7 @@ type
     Terminee: Integer;
     Complete: Boolean;
     SuivreManquants, SuivreSorties: Boolean;
+    NbAlbums: Integer;
     Albums: TListOfTAlbum;
     ParaBD: TListOfTParaBD;
     Genres: TStringList;
@@ -1419,7 +1420,7 @@ begin
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     FetchBlobs := True;
-    SQL.Text := 'SELECT TITRESERIE, TERMINEE, SUJETSERIE, REMARQUESSERIE, SITEWEB, COMPLETE, S.ID_Editeur, S.ID_Collection, NOMCOLLECTION, SUIVRESORTIES, SUIVREMANQUANTS '
+    SQL.Text := 'SELECT TITRESERIE, TERMINEE, SUJETSERIE, REMARQUESSERIE, SITEWEB, COMPLETE, NB_ALBUMS, S.ID_Editeur, S.ID_Collection, NOMCOLLECTION, SUIVRESORTIES, SUIVREMANQUANTS '
       + 'FROM SERIES S LEFT JOIN COLLECTIONS C ON S.ID_Collection = C.ID_Collection '
       + 'WHERE ID_Serie = ?';
     Params.AsString[0] := GUIDToString(Reference);
@@ -1433,6 +1434,7 @@ begin
     Self.SuivreSorties := RecInconnu or Fields.ByNameAsBoolean['SUIVRESORTIES'];
     Self.Complete := Fields.ByNameAsBoolean['COMPLETE'];
     Self.SuivreManquants := RecInconnu or Fields.ByNameAsBoolean['SUIVREMANQUANTS'];
+    Self.NbAlbums := Fields.ByNameAsInteger['NB_ALBUMS'];
     Self.Sujet.Text := Fields.ByNameAsString['SUJETSERIE'];
     Self.Notes.Text := Fields.ByNameAsString['REMARQUESSERIE'];
     Self.SiteWeb := Trim(Fields.ByNameAsString['SITEWEB']);
@@ -1565,14 +1567,14 @@ begin
     Transaction := UseTransaction;
     if RecInconnu then
     begin
-      SQL.Text := 'INSERT INTO SERIES (ID_Serie, TitreSerie, Terminee, SuivreSorties, Complete, SuivreManquants, SITEWEB, ID_Editeur, ID_Collection, SUJETserie, REMARQUESserie)';
+      SQL.Text := 'INSERT INTO SERIES (ID_Serie, TitreSerie, Terminee, SuivreSorties, Complete, SuivreManquants, SITEWEB, ID_Editeur, ID_Collection, SUJETserie, REMARQUESserie, NB_ALBUMS)';
       SQL.Add('VALUES');
-      SQL.Add('(:ID_Serie, :TitreSerie, :Terminee, :SuivreSorties, :Complete, :SuivreManquants, :SITEWEB, :ID_Editeur, :ID_Collection, :SUJETserie, :REMARQUESserie)');
+      SQL.Add('(:ID_Serie, :TitreSerie, :Terminee, :SuivreSorties, :Complete, :SuivreManquants, :SITEWEB, :ID_Editeur, :ID_Collection, :SUJETserie, :REMARQUESserie, :NB_ALBUMS)');
     end
     else
     begin
       SQL.Text := 'UPDATE SERIES SET TitreSerie = :TitreSerie, Terminee = :Terminee, SuivreSorties = :SuivreSorties, Complete = :Complete, SuivreManquants = :SuivreManquants, SITEWEB = :SITEWEB, ID_Editeur = :ID_Editeur, ID_Collection = :ID_Collection,';
-      SQL.Add('SUJETserie = :SUJETserie, REMARQUESserie = :REMARQUESserie');
+      SQL.Add('SUJETserie = :SUJETserie, REMARQUESserie = :REMARQUESserie, NB_ALBUMS = :NB_ALBUMS');
       SQL.Add('WHERE ID_Serie = :ID_Serie');
     end;
     Params.ByNameAsString['TitreSerie'] := Trim(Self.Titre);
@@ -1583,6 +1585,10 @@ begin
     Params.ByNameAsBoolean['SUIVRESORTIES'] := Self.SuivreSorties;
     Params.ByNameAsBoolean['COMPLETE'] := Self.Complete;
     Params.ByNameAsBoolean['SUIVREMANQUANTS'] := Self.SuivreManquants;
+    if Self.NbAlbums > 0 then
+      Params.ByNameAsInteger['NB_ALBUMS'] := Self.NbAlbums
+    else
+      Params.ByNameIsNull['NB_ALBUMS'] := True;
     Params.ByNameAsString['SITEWEB'] := Trim(Self.SiteWeb);
     if IsEqualGUID(Self.ID_Editeur, GUID_NULL) then
     begin

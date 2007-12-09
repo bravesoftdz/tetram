@@ -1,9 +1,9 @@
 object Fond: TFond
   Left = 540
   Top = 248
+  Width = 732
+  Height = 580
   Caption = 'Fond'
-  ClientHeight = 534
-  ClientWidth = 724
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -22,19 +22,19 @@ object Fond: TFond
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 0
-    Top = 38
-    Height = 496
-    ExplicitHeight = 480
+    Top = 40
+    Height = 494
   end
   object ToolBar1: TToolBar
     Left = 0
     Top = 0
     Width = 724
-    Height = 38
+    Height = 40
     AutoSize = True
     ButtonHeight = 38
     ButtonWidth = 39
     Caption = 'ToolBar1'
+    Flat = True
     HotImages = boutons_32x32_hot
     Images = boutons_32x32_norm
     ParentShowHint = False
@@ -48,7 +48,7 @@ object Fond: TFond
       Style = tbsDropDown
     end
     object ToolButton2: TToolButton
-      Left = 54
+      Left = 52
       Top = 0
       Caption = 'Suivant'
       ImageIndex = 12
@@ -56,7 +56,7 @@ object Fond: TFond
       OnClick = HistoriqueNextExecute
     end
     object ToolButton5: TToolButton
-      Left = 108
+      Left = 104
       Top = 0
       Width = 8
       Caption = 'ToolButton5'
@@ -64,17 +64,17 @@ object Fond: TFond
       Style = tbsSeparator
     end
     object ToolButton3: TToolButton
-      Left = 116
+      Left = 112
       Top = 0
       Action = AfficheRecherche
     end
     object ToolButton4: TToolButton
-      Left = 155
+      Left = 151
       Top = 0
       Action = AfficheStock
     end
     object ToolButton6: TToolButton
-      Left = 194
+      Left = 190
       Top = 0
       Width = 8
       Caption = 'ToolButton6'
@@ -82,17 +82,17 @@ object Fond: TFond
       Style = tbsSeparator
     end
     object ToolButton7: TToolButton
-      Left = 202
+      Left = 198
       Top = 0
       Action = Impression
     end
     object ToolButton8: TToolButton
-      Left = 241
+      Left = 237
       Top = 0
       Action = ApercuImpression
     end
     object ToolButton9: TToolButton
-      Left = 280
+      Left = 276
       Top = 0
       Width = 8
       Caption = 'ToolButton9'
@@ -100,17 +100,17 @@ object Fond: TFond
       Style = tbsSeparator
     end
     object ToolButton10: TToolButton
-      Left = 288
+      Left = 284
       Top = 0
       Action = AfficheStatsGenerales
     end
     object ToolButton11: TToolButton
-      Left = 327
+      Left = 323
       Top = 0
       Action = ChangementOptions
     end
     object ToolButton12: TToolButton
-      Left = 366
+      Left = 362
       Top = 0
       Width = 8
       Caption = 'ToolButton12'
@@ -119,7 +119,7 @@ object Fond: TFond
       Style = tbsSeparator
     end
     object ToolButton13: TToolButton
-      Left = 374
+      Left = 370
       Top = 0
       Action = AideContextuelle
     end

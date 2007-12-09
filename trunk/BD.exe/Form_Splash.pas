@@ -9,9 +9,9 @@ uses
 type
   TFrmSplash = class(TForm)
     Label1: TLabel;
-    VersionLabel1: TVersionLabelP;
+    VersionLabel1: TfshVersionLabel;
     Label2: TLabel;
-    VersionLabel2: TVersionLabelP;
+    VersionLabel2: TfshVersionLabel;
     Image2: TImage;
     acte: TBevel;
     ImageFond: TImage;

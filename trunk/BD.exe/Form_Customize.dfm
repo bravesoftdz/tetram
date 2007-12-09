@@ -26,7 +26,7 @@ object FrmCustomize: TFrmCustomize
     Top = 7
     Width = 56
     Height = 13
-    Caption = 'Cat'#233'gories:'
+    Caption = 'Catégories:'
   end
   object Label4: TLabel
     Left = 7
@@ -41,7 +41,7 @@ object FrmCustomize: TFrmCustomize
     Width = 83
     Height = 21
     Cursor = crHandPoint
-    Caption = 'S'#233'parateur'
+    Caption = 'Séparateur'
     Glyph.Data = {
       360C0000424D360C000000000000360000002800000040000000100000000100
       180000000000000C0000120B0000120B00000000000000000000FF00FFFF00FF
@@ -391,8 +391,6 @@ object FrmCustomize: TFrmCustomize
       Caption = 'Label3'
       Layout = tlCenter
       Visible = False
-      ExplicitWidth = 31
-      ExplicitHeight = 13
     end
   end
   inline Frame11: TFrame1
@@ -402,25 +400,16 @@ object FrmCustomize: TFrmCustomize
     Height = 33
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 345
-    ExplicitWidth = 514
-    ExplicitHeight = 33
     inherited btnOK: TBitBtn
       Left = 358
       Top = 9
       Width = 74
       OnClick = Frame11btnOKClick
-      ExplicitLeft = 358
-      ExplicitTop = 9
-      ExplicitWidth = 74
     end
     inherited btnAnnuler: TBitBtn
       Left = 439
       Top = 9
       Width = 72
-      ExplicitLeft = 439
-      ExplicitTop = 9
-      ExplicitWidth = 72
     end
   end
   object Cats: TListBox
@@ -489,7 +478,7 @@ object FrmCustomize: TFrmCustomize
     Left = 519
     Top = 26
     Width = 23
-    Height = 44
+    Height = 47
     Align = alNone
     AutoSize = True
     Caption = 'ToolBar1'
@@ -499,7 +488,7 @@ object FrmCustomize: TFrmCustomize
     Transparent = True
     object ToolButton1: TToolButton
       Left = 0
-      Top = 0
+      Top = 2
       Cursor = crHandPoint
       Caption = 'ToolButton1'
       ImageIndex = 0
@@ -508,7 +497,7 @@ object FrmCustomize: TFrmCustomize
     end
     object ToolButton4: TToolButton
       Left = 0
-      Top = 22
+      Top = 24
       Cursor = crHandPoint
       Caption = 'ToolButton4'
       ImageIndex = 1

@@ -50,6 +50,8 @@ type
     Frame11: TFrame1;
     cbSorties: TCheckBoxLabeled;
     cbComplete: TCheckBoxLabeled;
+    Label9: TLabel;
+    edNbAlbums: TEditLabeled;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
@@ -137,12 +139,27 @@ begin
     ModalResult := mrNone;
     Exit;
   end;
+  if IsEqualGUID(vtEditeurs.CurrentValue, GUID_NULL) then
+  begin
+    AffMessage(rsEditeurObligatoire, mtInformation, [mbOk], True);
+    vtEditeurs.SetFocus;
+    ModalResult := mrNone;
+    Exit;
+  end;
+  if StrToIntDef(edNbAlbums.Text, -1) < 0 then
+  begin
+    AffMessage(rsNbAlbumsIncorrect, mtInformation, [mbOk], True);
+    edNbAlbums.SetFocus;
+    ModalResult := mrNone;
+    Exit;
+  end;
 
   FSerie.Titre := Trim(edTitre.Text);
   FSerie.Terminee := Integer(cbTerminee.State);
   FSerie.SuivreSorties := cbSorties.Checked;
   FSerie.Complete := cbComplete.Checked;
   FSerie.SuivreManquants := cbManquants.Checked;
+  FSerie.NbAlbums := StrToInt(edNbAlbums.Text);
   FSerie.SiteWeb := Trim(edSite.Text);
   FSerie.ID_Editeur := vtEditeurs.CurrentValue;
   FSerie.ID_Collection := vtCollections.CurrentValue;
@@ -179,6 +196,7 @@ begin
     histoire.Lines.Text := FSerie.Sujet.Text;
     remarques.Lines.Text := FSerie.Notes.Text;
     edSite.Text := FSerie.SiteWeb;
+    if FSerie.NbAlbums > 0 then edNbAlbums.Text := IntToStr(FSerie.NbAlbums);
 
     lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
     lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
