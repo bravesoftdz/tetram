@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 127
-  Top = 345
+  Left = 200
+  Top = 269
   Width = 870
   Height = 640
   Caption = 'Form1'
@@ -18,7 +18,7 @@ object Form1: TForm1
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 0
-    Top = 392
+    Top = 398
     Width = 862
     Height = 3
     Cursor = crVSplit
@@ -63,7 +63,7 @@ object Form1: TForm1
     Left = 0
     Top = 41
     Width = 862
-    Height = 351
+    Height = 357
     Align = alClient
     BevelOuter = bvNone
     Caption = 'Panel2'
@@ -72,7 +72,7 @@ object Form1: TForm1
       Left = 0
       Top = 0
       Width = 862
-      Height = 351
+      Height = 357
       ActivePage = TabSheet4
       Align = alClient
       TabOrder = 0
@@ -82,7 +82,7 @@ object Form1: TForm1
           Left = 0
           Top = 0
           Width = 854
-          Height = 323
+          Height = 329
           Align = alClient
           Color = clWhite
           ActiveLineColor = 16314351
@@ -111,15 +111,17 @@ object Form1: TForm1
             ''
             'const'
             
-              '  urlSearch = '#39'http://www.encyclobd.com/biblio/find.html?query=%' +
-              's&submit.x=0&submit.y=0'#39';'
+              '  urlSearch = '#39'http://www.bedetheque.com/index.php?R=1&RechTexte' +
+              '=%s&btRecherche=OK&RechSerie=&RechAuteur=&RechEditeur=&RechColle' +
+              'ction=&RechStyle=&RechDL=&RechISBN='#39';'
             ''
             'var'
             '  s, s2, s3: string;'
             '  i: integer;'
             'begin'
-            '  test;'
-            ''
+            '  s := urlSearch;'
+            '  showmessage(test);'
+            'exit;'
             '  s := GetPage(Format(urlSearch, ['#39'Lanfeust'#39']));'
             '  '
             '  if Pos('#39'Aucuns r'#233'sultats correspondants'#39', s) > 0 then begin'
@@ -176,7 +178,8 @@ object Form1: TForm1
             '  finally'
             '    SetHTML(s2);'
             '  end;'
-            'end.')
+            'end.'
+            '')
           Options = [eoAutoIndent, eoAutoSizeMaxScrollWidth, eoDragDropEditing, eoGroupUndo, eoRightMouseMovesCursor, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoTabIndent, eoTabsToSpaces, eoTrimTrailingSpaces]
           ScrollHintFormat = shfTopToBottom
           SearchEngine = SynEditSearch1
@@ -197,7 +200,7 @@ object Form1: TForm1
           Left = 0
           Top = 0
           Width = 854
-          Height = 323
+          Height = 329
           Align = alClient
           Color = clWhite
           ActiveLineColor = 16314351
@@ -222,13 +225,43 @@ object Form1: TForm1
           Lines.Strings = (
             'unit unit2;'
             ''
-            'function test: integer;'
+            'const'
+            
+              '  EmailRE = '#39'[_a-zA-Z\d\-\.]+@[_a-zA-Z\d\-]+(\.[_a-zA-Z\d\-]+)+'#39 +
+              ';'
+            '  AInputString = '#39#39';'
+            ''
+            'function test: string;'
+            '//var'
+            '//  r: TRegExpr;'
             'begin'
-            '  showmessage('#39'in function test'#39');'
-            '  result := 5;'
+            '  Result := '#39#39';'
+            '//  r := TRegExpr.Create;'
+            '//  try // ensure memory clean-up'
+            '//    r.Expression := EmailRE;'
+            
+              '    // Assign r.e. source code. It will be compiled when nessesa' +
+              'ry'
+            
+              '    // (for example when Exec called). If there are errors in r.' +
+              'e.'
+            '    // run-time execption will be raised during r.e. compilation'
+            '//    if r.Exec1(AInputString) then'
+            '//    repeat'
+            '//      Result := Result + r.Match [0] + '#39','#39';'
+            '//    until not r.ExecNext;'
+            '//  finally'
+            '//    r.Free;'
+            '//  end;'
+            ''
+            '//  showmessage('#39'in function test'#39');'
             'end;'
             ''
-            'end.')
+            'end.'
+            ''
+            ''
+            ''
+            '')
           Options = [eoAutoIndent, eoAutoSizeMaxScrollWidth, eoDragDropEditing, eoGroupUndo, eoRightMouseMovesCursor, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoTabIndent, eoTabsToSpaces, eoTrimTrailingSpaces]
           ScrollHintFormat = shfTopToBottom
           SearchEngine = SynEditSearch1
@@ -246,10 +279,10 @@ object Form1: TForm1
   end
   object PageControl1: TPageControl
     Left = 0
-    Top = 395
+    Top = 401
     Width = 862
     Height = 193
-    ActivePage = TabSheet6
+    ActivePage = TabSheet1
     Align = alBottom
     TabOrder = 2
     object TabSheet1: TTabSheet
@@ -275,7 +308,6 @@ object Form1: TForm1
         OnGetText = vstMessagesGetText
         Columns = <
           item
-            Options = [coAllowClick, coDraggable, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark]
             Position = 0
             Width = 100
             WideText = 'Contexte'
@@ -292,7 +324,7 @@ object Form1: TForm1
           end
           item
             Position = 3
-            Width = 584
+            Width = 480
             WideText = 'Message'
           end>
       end

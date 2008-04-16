@@ -25,23 +25,14 @@ object FrmProgression: TFrmProgression
     AutoSize = False
     Transparent = True
   end
-  object ProgressBar1: TMKProgressBar
+  object ProgressBar1: TProgressBar
     Left = 4
     Top = 24
     Width = 187
     Height = 21
-    BarBevelOuter = bvNone
-    BevelOuter = bvLowered
-    Orientation = orHorizontal
-    Max = 100
-    Min = 0
     Position = 100
-    ShowText = True
-    ShowTextStyle = stsPercent
-    BeginColor = clActiveCaption
-    EndColor = clWhite
-    Style = sExSolid
+    Smooth = True
     Step = 1
-    TransparentGlyph = True
+    TabOrder = 0
   end
 end

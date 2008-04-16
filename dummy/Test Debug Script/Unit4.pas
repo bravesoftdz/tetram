@@ -48,10 +48,13 @@ begin
           if not InternetGetLastResponseInfo(ErrorCode, @Buffer, lBuffer) then
             RaiseLastOsError;
         end;
-      else
-        RaiseLastOsError;
+    else
+      RaiseLastOsError;
     end;
-  raise EOSError.Create(PChar(@Buffer));
+  if lBuffer = 0 then
+    RaiseLastOSError
+  else
+    raise EOSError.Create(PChar(@Buffer));
 end;
 
 function GetPage(const url: string): string;
@@ -78,8 +81,8 @@ var
             if not HttpQueryInfo(hRequest, Code, Buffer, lBuffer, dDummy) then RaiseLastOsError;
           end;
         ERROR_HTTP_HEADER_NOT_FOUND: // Header HTTP inconnu
-        else
-          RaiseLastOsError;
+      else
+        RaiseLastOsError;
       end;
   end;
 

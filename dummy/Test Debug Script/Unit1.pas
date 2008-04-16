@@ -8,7 +8,7 @@ uses
   uPSComponent, uPSDebugger, SynEditMiscClasses, SynEditSearch, StdActns, ActnList, uPSDisassembly,
   Menus, SynEditTypes, Unit5, ComCtrls, uPSCompiler,
   uPSRuntime, VirtualTrees, StdCtrls, ExtCtrls, uPSComponent_StdCtrls,
-  uPSComponent_Controls, uPSComponent_Forms, uPSComponent_DB,
+  uPSComponent_Controls, uPSComponent_Forms, uPSComponent_DB, uPSComponent_RegExpr,
   uPSComponent_COM, uPSComponent_Default;
 
 type
@@ -151,6 +151,7 @@ type
     FDebugPlugin: TDebugInfos;
     SynDebug1, SynDebug2: TSynDebugPlugin;
     FCompiled: Boolean;
+    FPSImport_RegExpr: TPSImport_RegExpr;
     procedure SetResultat(const Chaine: string);
     function Compile: Boolean;
     function Execute: Boolean;
@@ -238,9 +239,10 @@ end;
 procedure TForm1.WMSyscommand(var msg: TWmSysCommand);
 begin
   case (msg.CmdType and $FFF0) of
-    SC_CLOSE: if not PSScriptDebugger1.Running then inherited;
-    else
-      inherited;
+    SC_CLOSE: if not PSScriptDebugger1.Running then
+        inherited;
+  else
+    inherited;
   end;
 end;
 
@@ -401,7 +403,8 @@ begin
     Exclude(FSearchOptions, ssoReplace);
     Exclude(FSearchOptions, ssoReplaceAll);
 
-    if not TForm2.Execute(FLastSearch, dummyReplace, FSearchOptions) then Exit;
+    if not TForm2.Execute(FLastSearch, dummyReplace, FSearchOptions) then
+      Exit;
   end
   else
   begin
@@ -409,7 +412,8 @@ begin
     Include(FSearchOptions, ssoReplace);
     Exclude(FSearchOptions, ssoReplaceAll);
 
-    if not TForm2.Execute(FLastSearch, FLastReplace, FSearchOptions) then Exit;
+    if not TForm2.Execute(FLastSearch, FLastReplace, FSearchOptions) then
+      Exit;
   end;
 
   SearchFindNext1Execute(Sender);
@@ -540,9 +544,10 @@ begin
     try
       PSScriptDebugger1.Exec.RaiseCurrentException;
     except
-      on e: EPSException do Application.HandleException(nil);
-      else
-        raise;
+      on e: EPSException do
+        Application.HandleException(nil);
+    else
+      raise;
     end;
   end;
 end;
@@ -689,6 +694,9 @@ begin
 
   // force à reprendre les params de delphi s'il est installé sur la machine
   SynPasSyn1.UseUserSettings(0);
+
+  FPSImport_RegExpr := TPSImport_RegExpr.Create(Self);
+  TPSPluginItem(PSScriptDebugger1.Plugins.Add).Plugin := FPSImport_RegExpr;
 end;
 
 function TForm1.GetVar(const Name: string; out s: string): PIFVariant;
@@ -803,7 +811,8 @@ end;
 
 procedure TForm1.vstSuivisGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
 begin
-  if Column = -1 then Column := 0;
+  if Column = -1 then
+    Column := 0;
   with FDebugPlugin.Watches[Node.Index] do
     case Column of
       0: CellText := Name;
@@ -827,7 +836,8 @@ end;
 
 procedure TForm1.vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
 begin
-  if Column = -1 then Column := 0;
+  if Column = -1 then
+    Column := 0;
   with FDebugPlugin.Messages[Node.Index] do
     case Column of
       0:
@@ -835,8 +845,8 @@ begin
           cmInfo: CellText := 'Information';
           cmCompileError: CellText := 'Compilation';
           cmRuntimeError: CellText := 'Exécution';
-          else
-            CellText := '';
+        else
+          CellText := '';
         end;
       1: CellText := TypeMessage;
       2: CellText := Fichier;
@@ -900,7 +910,8 @@ end;
 
 procedure TForm1.vstBreakpointsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
 begin
-  if Column = -1 then Column := 0;
+  if Column = -1 then
+    Column := 0;
   with FDebugPlugin.Breakpoints[Node.Index] do
     case Column of
       0: CellText := 'Ligne ' + IntToStr(Line);
@@ -979,7 +990,8 @@ begin
     Exit;
   end;
   s := GetActiveScript.WordAtMouse;
-  if s <> WordVar then Application.CancelHint;
+  if s <> WordVar then
+    Application.CancelHint;
   WordVar := s;
 
   pv := GetVar(WordVar, Prefix);
@@ -1064,8 +1076,6 @@ var
   pt: TIfList;
   r: PPositionData;
 begin
-  if Fn = PSScriptDebugger1.MainFileName then Fn := '';
-
   Result := True;
   Proc := 0;
   Position := 0;
@@ -1077,7 +1087,8 @@ begin
     for j := 0 to pt.Count - 1 do
     begin
       r := pt[j];
-      if not SameText(r^.FileName, Fn) then Continue;
+      if not SameText(r^.FileName, Fn) then
+        Continue;
       if r^.Row = Row then
       begin
         Proc := TCrackPSDebugExec(PSScriptDebugger1.Exec).FProcs.IndexOf(fi^.Func);

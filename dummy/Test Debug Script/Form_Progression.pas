@@ -17,8 +17,8 @@ type
   end;
 
   TFrmProgression = class(TForm)
-    ProgressBar1: TMKProgressBar;
     op: TLabel;
+    ProgressBar1: TProgressBar;
     procedure FormCreate(Sender: TObject);
   private
     hg: IHourGlass;
