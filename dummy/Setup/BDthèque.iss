@@ -5,7 +5,7 @@
 Name: fr; MessagesFile: compiler:Languages\French.isl
 
 [Setup]
-AppVersion={#GetFileVersion("D:\Bureautique\BDthèque\BD.exe")}
+AppVersion={#GetFileVersion("D:\MEDIA.KIT\BDThèque\bin\BD.exe")}
 AppName=BDthèque
 AppVerName=BDthèque {#SetupSetting("AppVersion")}
 AppMutex=TetramCorpBDMutex
@@ -17,9 +17,9 @@ UninstallDisplayIcon={app}\BD.exe
 DefaultDirName={pf}\Teträm Corp\BDthèque
 DefaultGroupName=Teträm Corp\BDthèque
 PrivilegesRequired=poweruser
-AppCopyright=Teträm Corp © 1997-2004
+AppCopyright=Teträm Corp © 1997-2008
 AppID={{A86E29B5-D1EE-431F-A5BF-E4A10D36CBDC}
-LicenseFile=G:\Programmation\MEDIA.KIT\LicenceFreeWare.rtf
+LicenseFile=D:\MEDIA.KIT\LicenceFreeWare.rtf
 WindowVisible=false
 BackColor=$8080ff
 BackColor2=clPurple
@@ -39,34 +39,31 @@ VersionInfoCompany=Teträm Corp
 VersionInfoTextVersion={#SetupSetting("AppVersion")}
 WizardImageFile=fond.bmp
 WizardSmallImageFile=SetupModernSmall19.bmp
+LanguageDetectionMethod=locale
+SetupLogging=true
 
 [Tasks]
 Name: desktopicon; Description: Créer un raccourci sur le &bureau; GroupDescription: Raccourcis supplémentaires:
 Name: interneticon; Description: Créer un raccourci vers le site de Teträm Corp; GroupDescription: Raccourcis supplémentaires:
 
 [Files]
-Source: D:\Bureautique\BDthèque\BD.exe; DestDir: {app}
-Source: D:\Bureautique\BDthèque\BDPic.dll; DestDir: {app}; Flags: ignoreversion
-Source: D:\Bureautique\BDthèque\fbembed.dll; DestDir: {app}
-Source: D:\Bureautique\BDthèque\firebird.msg; DestDir: {app}; Flags: ignoreversion
-Source: D:\Bureautique\BDthèque\ib_util.dll; DestDir: {app}
-Source: D:\Bureautique\BDthèque\UDF\BDT_UDF.dll; DestDir: {app}\UDF
-Source: Base vide\BD.GDB; DestDir: {app}; Flags: onlyifdoesntexist ignoreversion
-Source: D:\Bureautique\BDthèque\WebServer\Acceuil.html; DestDir: {app}\WebServer; Flags: ignoreversion
-Source: D:\Bureautique\BDthèque\WebServer\Fond.html; DestDir: {app}\WebServer; Flags: ignoreversion
-Source: D:\Bureautique\BDthèque\WebServer\RepInitiales.html; DestDir: {app}\WebServer; Flags: ignoreversion
-Source: D:\Bureautique\BDthèque\WebServer\Repertoire.html; DestDir: {app}\WebServer; Flags: ignoreversion
-Source: D:\Bureautique\BDthèque\WebServer\FicheAlbum.html; DestDir: {app}\WebServer; Flags: ignoreversion
-Source: D:\Bureautique\BDthèque\WebServer\FichePersonne.html; DestDir: {app}\WebServer; Flags: ignoreversion
-Source: D:\Bureautique\BDthèque\WebServer\FicheSerie.html; DestDir: {app}\WebServer; Flags: ignoreversion
-Source: D:\Bureautique\BDthèque\WebServer\Manquants.html; DestDir: {app}\WebServer; Flags: ignoreversion
-Source: D:\Bureautique\BDthèque\WebServer\Previsions.html; DestDir: {app}\WebServer; Flags: ignoreversion
-Source: D:\Bureautique\BDthèque\WebServer\Styles.css; DestDir: {app}\WebServer; Flags: ignoreversion
-Source: D:\Bureautique\BDthèque\WebServer\graphics\Acceuil.jpg; DestDir: {app}\WebServer\graphics; Flags: ignoreversion
-Source: D:\Bureautique\BDthèque\WebServer\graphics\logo.jpg; DestDir: {app}\WebServer\graphics; Flags: ignoreversion
-Source: D:\Bureautique\BDthèque\WebServer\graphics\fondbdd.jpg; DestDir: {app}\WebServer\graphics; Flags: ignoreversion
-Source: What's New.txt; DestDir: {app}; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
+
+Source: ..\..\bin\BD.exe; DestDir: {app}; Flags: ignoreversion
+Source: D:\MEDIA.KIT\BDThèque\bin\BDPic.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\fbembed.dll; DestDir: {app}; Flags: ignoreversion
+Source: D:\MEDIA.KIT\BDThèque\bin\firebird.msg; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\ib_util.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\UDF\BDT_UDF.dll; DestDir: {app}\UDF; Flags: ignoreversion
+Source: Base vide\BD.GDB; DestDir: {app}; Flags: onlyifdoesntexist ignoreversion
+Source: What's New.txt; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\msvcr71.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\msvcp71.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\icuuc30.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\icuin30.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\icudt30.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\intl\fbintl.dll; DestDir: {app}\Intl; Flags: ignoreversion
+Source: ..\..\bin\intl\fbintl.conf; DestDir: {app}\Intl; Flags: ignoreversion
 
 [INI]
 Filename: {app}\BD.url; Section: InternetShortcut; Key: URL; String: http://www.tetram.org; Tasks: interneticon
