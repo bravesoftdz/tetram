@@ -1,6 +1,5 @@
 program BD;
 
-{$R 'webserver.res' 'webserver.rc'}
 {$R 'ressources.res' 'ressources.rc'}
 
 uses
@@ -23,7 +22,7 @@ uses
   Form_ConsultationParaBD in 'Consultation\Form_ConsultationParaBD.pas' {FrmConsultationParaBD},
   Form_ZoomCouverture in 'Consultation\Form_ZoomCouverture.pas' {FrmZoomCouverture},
   Form_Recherche in 'Consultation\Form_Recherche.pas' {FrmRecherche},
-  Form_EditCritere in 'Consultation\Form_EditCritere.pas' {FrmEditCritere},
+  Form_EditCritereTri in 'Consultation\Form_EditCritereTri.pas' {FrmEditCritereTri},
   Form_Stock in 'Consultation\Form_Stock.pas' {FrmStock},
   Form_SaisieEmpruntAlbum in 'Consultation\Form_SaisieEmpruntAlbum.pas' {FrmSaisie_EmpruntAlbum},
   Form_SaisieEmpruntEmprunteur in 'Consultation\Form_SaisieEmpruntEmprunteur.pas' {FrmSaisie_EmpruntEmprunteur},
@@ -111,7 +110,22 @@ uses
   UMAJ1_2_3_20 in 'mises à jour\UMAJ1_2_3_20.pas',
   UMAJ1_2_3_22 in 'mises à jour\UMAJ1_2_3_22.pas',
   UMAJ1_2_3_26 in 'mises à jour\UMAJ1_2_3_26.pas',
-  UMAJODS in 'mises à jour\UMAJODS.pas';
+  UMAJODS in 'mises à jour\UMAJODS.pas',
+  Form_Scripts in 'Scripts\Form_Scripts.pas' {FormScripts},
+  Form_ScriptSearch in 'Scripts\Form_ScriptSearch.pas' {Form2},
+  uPSComponent_RegExpr in 'Scripts\uPSComponent_RegExpr.pas',
+  uPSC_RegExpr in 'Scripts\uPSC_RegExpr.pas',
+  uPSR_RegExpr in 'Scripts\uPSR_RegExpr.pas',
+  UScriptsFonctions in 'Scripts\UScriptsFonctions.pas',
+  UScriptUtils in 'Scripts\UScriptUtils.pas',
+  uPSC_LoadComplet in 'Scripts\uPSC_LoadComplet.pas',
+  uPSR_LoadComplet in 'Scripts\uPSR_LoadComplet.pas',
+  uPSI_LoadComplet in 'Scripts\uPSI_LoadComplet.pas',
+  uPSC_TypeRec in 'Scripts\uPSC_TypeRec.pas',
+  uPSR_TypeRec in 'Scripts\uPSR_TypeRec.pas',
+  uPSI_TypeRec in 'Scripts\uPSI_TypeRec.pas',
+  Form_EditCritere in 'Consultation\Form_EditCritere.pas' {FrmEditCritere},
+  UChampsRecherche in 'Consultation\UChampsRecherche.pas';
 
 {$R *.RES}
 {$R curseurs.res}

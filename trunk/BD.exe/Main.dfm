@@ -2716,6 +2716,11 @@ object Fond: TFond
       Caption = 'V'#233'rifier la version'
       OnExecute = actMiseAJourExecute
     end
+    object Scripts: TAction
+      Category = 'Outils'
+      Caption = 'Scripts...'
+      OnExecute = ScriptsExecute
+    end
   end
   object PrinterSetupDialog1: TPrinterSetupDialog
     Left = 88
@@ -3601,6 +3606,18 @@ object Fond: TFond
         end
       end
       object N7: TMenuItem
+        Caption = '-'
+      end
+      object Albumsemprunts2: TMenuItem
+        Action = StatsAlbumsEmpruntes
+      end
+      object N3: TMenuItem
+        Caption = '-'
+      end
+      object Scripts1: TMenuItem
+        Action = Scripts
+      end
+      object N8: TMenuItem
         Caption = '-'
       end
       object Options1: TMenuItem

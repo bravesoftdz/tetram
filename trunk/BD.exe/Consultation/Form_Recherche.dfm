@@ -169,7 +169,7 @@ object FrmRecherche: TFrmRecherche
       end
     end
     object TabSheet4: TTabSheet
-      Caption = 'Recherche avancée'
+      Caption = 'Recherche avanc'#233'e'
       ImageIndex = 1
       DesignSize = (
         392
@@ -180,7 +180,7 @@ object FrmRecherche: TFrmRecherche
         Width = 51
         Height = 20
         Cursor = crHandPoint
-        Hint = 'Ajouter le critère (recherche multi-critères)'
+        Hint = 'Ajouter le crit'#232're (recherche multi-crit'#232'res)'
         Caption = 'Ajouter'
         TabOrder = 0
         OnClick = plusClick
@@ -191,7 +191,7 @@ object FrmRecherche: TFrmRecherche
         Width = 51
         Height = 19
         Cursor = crHandPoint
-        Hint = 'Modifier le critère sélectionné (recherche multi-critères)'
+        Hint = 'Modifier le crit'#232're s'#233'lectionn'#233' (recherche multi-crit'#232'res)'
         Caption = 'Modifier'
         Enabled = False
         TabOrder = 1
@@ -203,7 +203,7 @@ object FrmRecherche: TFrmRecherche
         Width = 51
         Height = 19
         Cursor = crHandPoint
-        Hint = 'Retirer le critère sélectionné (recherche multi-critères)'
+        Hint = 'Retirer le crit'#232're s'#233'lectionn'#233' (recherche multi-crit'#232'res)'
         Caption = 'Retirer'
         Enabled = False
         TabOrder = 2
@@ -215,7 +215,7 @@ object FrmRecherche: TFrmRecherche
         Width = 51
         Height = 21
         Cursor = crHandPoint
-        Hint = 'Méthode (recherche multi-critères)'
+        Hint = 'M'#233'thode (recherche multi-crit'#232'res)'
         BevelKind = bkTile
         Style = csDropDownList
         ItemHeight = 13
@@ -226,36 +226,73 @@ object FrmRecherche: TFrmRecherche
           'ET'
           'OU')
       end
+      object PageControl1: TPageControl
+        Left = 56
+        Top = 0
+        Width = 340
+        Height = 193
+        Cursor = crHandPoint
+        ActivePage = TabSheet2
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        Style = tsFlatButtons
+        TabOrder = 5
+        OnChange = PageControl1Change
+        object TabSheet1: TTabSheet
+          Caption = 'Filtre'
+          object TreeView1: TTreeView
+            Left = 0
+            Top = 0
+            Width = 332
+            Height = 162
+            Align = alClient
+            AutoExpand = True
+            BevelKind = bkTile
+            BorderStyle = bsNone
+            HideSelection = False
+            Indent = 19
+            ReadOnly = True
+            ShowButtons = False
+            ShowRoot = False
+            TabOrder = 0
+            OnChange = TreeView1Change
+            OnCollapsing = TreeView1Collapsing
+            OnDblClick = ModifClick
+          end
+        end
+        object TabSheet2: TTabSheet
+          Caption = 'Tri'
+          ImageIndex = 1
+          object TreeView2: TTreeView
+            Left = 0
+            Top = 0
+            Width = 332
+            Height = 162
+            Align = alClient
+            AutoExpand = True
+            BevelKind = bkTile
+            BorderStyle = bsNone
+            HideSelection = False
+            Indent = 19
+            ReadOnly = True
+            ShowButtons = False
+            ShowRoot = False
+            TabOrder = 0
+            OnChange = TreeView2Change
+            OnDblClick = ModifClick
+          end
+        end
+      end
       object btnRecherche: TButton
         Left = 303
         Top = 0
         Width = 75
         Height = 20
         Cursor = crHandPoint
-        Hint = 'Rechercher en fonctions des critères (recherche multi-critères)'
+        Hint = 'Rechercher en fonctions des crit'#232'res (recherche multi-crit'#232'res)'
         Anchors = [akTop, akRight]
         Caption = 'Chercher'
         TabOrder = 4
         OnClick = btnRechercheClick
-      end
-      object TreeView1: TTreeView
-        Left = 61
-        Top = 24
-        Width = 324
-        Height = 165
-        Anchors = [akLeft, akTop, akRight, akBottom]
-        AutoExpand = True
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        HideSelection = False
-        Indent = 19
-        ReadOnly = True
-        ShowButtons = False
-        ShowRoot = False
-        TabOrder = 5
-        OnChange = TreeView1Change
-        OnCollapsing = TreeView1Collapsing
-        OnDblClick = ModifClick
       end
     end
   end
@@ -300,14 +337,14 @@ object FrmRecherche: TFrmRecherche
       end>
   end
   object PopupMenu1: TPopupMenu
-    Left = 256
-    Top = 344
+    Left = 8
+    Top = 168
     object Critre1: TMenuItem
-      Caption = 'Critère'
+      Caption = 'Crit'#232're'
       OnClick = Critre1Click
     end
     object Groupedecritre1: TMenuItem
-      Caption = 'Groupe de critère'
+      Caption = 'Groupe de crit'#232're'
       OnClick = Groupedecritre1Click
     end
   end
@@ -317,7 +354,7 @@ object FrmRecherche: TFrmRecherche
     object RechercheApercu: TAction
       Tag = 1
       Category = 'Recherche'
-      Caption = 'Aperçu avant impression'
+      Caption = 'Aper'#231'u avant impression'
       ImageIndex = 4
       OnExecute = RechPrint
     end

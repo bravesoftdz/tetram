@@ -12,7 +12,6 @@ type
   RInitialeInfo = record
     Initiale: ShortString;
     Count: Integer;
-    Value: Variant; // Pour le WebServer uniquement!
     sValue: ShortString;
   end;
 

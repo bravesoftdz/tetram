@@ -1,6 +1,6 @@
 object FrmEditAlbum: TFrmEditAlbum
-  Left = 269
-  Top = 105
+  Left = 480
+  Top = 108
   Width = 750
   Height = 856
   ActiveControl = edTitre
@@ -31,16 +31,16 @@ object FrmEditAlbum: TFrmEditAlbum
     Left = 0
     Top = 29
     Width = 742
-    Height = 795
+    Height = 800
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
     DesignSize = (
       742
-      795)
+      800)
     object imgVisu: TImage
       Left = 632
-      Top = 592
+      Top = 600
       Width = 105
       Height = 129
       Cursor = crHandPoint
@@ -49,42 +49,42 @@ object FrmEditAlbum: TFrmEditAlbum
       OnClick = imgVisuClick
     end
     object Label3: TLabel
-      Left = 105
+      Left = 100
       Top = 31
-      Width = 47
+      Width = 50
       Height = 13
       Alignment = taRightJustify
-      Caption = ' Parution:'
+      Caption = ' Parution :'
       FocusControl = edAnneeParution
       Layout = tlCenter
     end
     object Label2: TLabel
-      Left = 25
+      Left = 22
       Top = 7
-      Width = 29
+      Width = 32
       Height = 13
       Alignment = taRightJustify
-      Caption = ' Titre:'
+      Caption = ' Titre :'
       FocusControl = edTitre
       Layout = tlCenter
     end
     object Label6: TLabel
-      Left = 14
+      Left = 11
       Top = 50
-      Width = 40
+      Width = 43
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Histoire:'
+      Caption = 'Histoire :'
       FocusControl = histoire
     end
     object Label7: TLabel
-      Left = 349
+      Left = 346
       Top = 50
-      Width = 32
+      Width = 35
       Height = 13
       Alignment = taRightJustify
       Anchors = [akTop, akRight]
-      Caption = 'Notes:'
+      Caption = 'Notes :'
       FocusControl = remarques
     end
     object btScenariste: TCRFurtifLight
@@ -316,19 +316,19 @@ object FrmEditAlbum: TFrmEditAlbum
       WithBorder = True
     end
     object Label19: TLabel
-      Left = 268
+      Left = 265
       Top = 150
-      Width = 42
+      Width = 45
       Height = 13
       Alignment = taRightJustify
       Anchors = [akTop, akRight]
-      Caption = 'Auteurs:'
+      Caption = 'Auteurs :'
       FocusControl = remarques
     end
     object ChoixImage: TCRFurtifLight
       Tag = 1
       Left = 4
-      Top = 591
+      Top = 599
       Width = 52
       Height = 130
       Cursor = crHandPoint
@@ -439,7 +439,7 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object VDTButton4: TCRFurtifLight
       Left = 609
-      Top = 591
+      Top = 599
       Width = 22
       Height = 21
       Cursor = crHandPoint
@@ -549,7 +549,7 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object VDTButton5: TCRFurtifLight
       Left = 609
-      Top = 612
+      Top = 620
       Width = 22
       Height = 20
       Cursor = crHandPoint
@@ -659,19 +659,19 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 791
+      Top = 796
       Width = 742
       Height = 4
       Align = alBottom
       Shape = bsSpacer
     end
     object Label20: TLabel
-      Left = 19
+      Left = 23
       Top = 150
-      Width = 28
+      Width = 31
       Height = 13
       Alignment = taRightJustify
-      Caption = 'S'#233'rie:'
+      Caption = 'S'#233'rie :'
       FocusControl = remarques
     end
     object btColoriste: TCRFurtifLight
@@ -789,38 +789,38 @@ object FrmEditAlbum: TFrmEditAlbum
       WithBorder = True
     end
     object Label1: TLabel
-      Left = 21
+      Left = 18
       Top = 31
-      Width = 33
+      Width = 36
       Height = 13
       Alignment = taRightJustify
-      Caption = ' Tome:'
+      Caption = ' Tome :'
       FocusControl = edTome
       Layout = tlCenter
     end
     object Label5: TLabel
-      Left = 406
-      Top = 293
-      Width = 38
-      Height = 13
-      Alignment = taRightJustify
-      Caption = 'Editeur:'
-    end
-    object Label8: TLabel
-      Left = 394
-      Top = 384
-      Width = 50
-      Height = 13
-      Alignment = taRightJustify
-      Caption = 'Collection:'
-    end
-    object Label4: TLabel
-      Left = 13
+      Left = 403
       Top = 293
       Width = 41
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Editions:'
+      Caption = 'Editeur :'
+    end
+    object Label8: TLabel
+      Left = 391
+      Top = 384
+      Width = 53
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Collection :'
+    end
+    object Label4: TLabel
+      Left = 10
+      Top = 293
+      Width = 44
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Editions :'
       FocusControl = remarques
     end
     object VDTButton3: TVDTButton
@@ -851,19 +851,19 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object Bevel5: TBevel
       Left = 189
-      Top = 582
+      Top = 590
       Width = 310
       Height = 6
       Anchors = [akLeft, akTop, akRight]
       Shape = bsTopLine
     end
     object Label15: TLabel
-      Left = 412
+      Left = 409
       Top = 472
-      Width = 32
+      Width = 35
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Notes:'
+      Caption = 'Notes :'
     end
     object Label16: TLabel
       Left = 387
@@ -935,16 +935,19 @@ object FrmEditAlbum: TFrmEditAlbum
       OnClick = btResetSerieClick
     end
     object PanelEdition: TPanel
-      Left = 18
+      Left = 15
       Top = 368
-      Width = 355
-      Height = 205
+      Width = 358
+      Height = 213
       AutoSize = True
       BevelOuter = bvNone
       Caption = ' '
       TabOrder = 18
+      DesignSize = (
+        358
+        213)
       object SpeedButton3: TVDTButton
-        Left = 282
+        Left = 285
         Top = 24
         Width = 72
         Height = 21
@@ -954,34 +957,34 @@ object FrmEditAlbum: TFrmEditAlbum
         OnClick = SpeedButton3Click
       end
       object Label9: TLabel
-        Left = 190
+        Left = 191
         Top = 28
-        Width = 22
+        Width = 25
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Prix:'
+        Caption = 'Prix :'
         Layout = tlCenter
       end
       object Label10: TLabel
         Left = 0
         Top = 4
-        Width = 36
+        Width = 39
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Edition:'
+        Caption = 'Edition :'
         Layout = tlCenter
       end
       object Label11: TLabel
         Left = 9
         Top = 52
-        Width = 27
+        Width = 30
         Height = 13
         Alignment = taRightJustify
-        Caption = 'ISBN:'
+        Caption = 'ISBN :'
         Layout = tlCenter
       end
       object VDTButton6: TVDTButton
-        Left = 282
+        Left = 285
         Top = 49
         Width = 48
         Height = 20
@@ -994,23 +997,23 @@ object FrmEditAlbum: TFrmEditAlbum
       object Label12: TLabel
         Left = 164
         Top = 79
-        Width = 24
+        Width = 27
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Etat:'
+        Caption = 'Etat :'
         Layout = tlCenter
       end
       object Label13: TLabel
         Left = 151
         Top = 113
-        Width = 37
+        Width = 40
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Reliure:'
+        Caption = 'Reliure :'
         Layout = tlCenter
       end
       object cbxEtat: TLightComboCheck
-        Left = 188
+        Left = 191
         Top = 79
         Width = 166
         Height = 13
@@ -1025,7 +1028,7 @@ object FrmEditAlbum: TFrmEditAlbum
         Items = <>
       end
       object cbxReliure: TLightComboCheck
-        Left = 188
+        Left = 191
         Top = 113
         Width = 166
         Height = 13
@@ -1042,14 +1045,14 @@ object FrmEditAlbum: TFrmEditAlbum
       object Label14: TLabel
         Left = 152
         Top = 96
-        Width = 36
+        Width = 39
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Edition:'
+        Caption = 'Edition :'
         Layout = tlCenter
       end
       object cbxEdition: TLightComboCheck
-        Left = 188
+        Left = 191
         Top = 96
         Width = 166
         Height = 13
@@ -1066,32 +1069,32 @@ object FrmEditAlbum: TFrmEditAlbum
       object Label18: TLabel
         Left = 203
         Top = 4
-        Width = 49
+        Width = 52
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Achet'#233' le:'
+        Caption = 'Achet'#233' le :'
         Layout = tlCenter
       end
       object Label21: TLabel
         Left = 3
         Top = 156
-        Width = 33
+        Width = 36
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Pages:'
+        Caption = 'Pages :'
         Layout = tlCenter
       end
       object Label22: TLabel
         Left = 130
         Top = 130
-        Width = 58
+        Width = 61
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Orientation:'
+        Caption = 'Orientation :'
         Layout = tlCenter
       end
       object cbxOrientation: TLightComboCheck
-        Left = 188
+        Left = 191
         Top = 130
         Width = 166
         Height = 13
@@ -1108,14 +1111,14 @@ object FrmEditAlbum: TFrmEditAlbum
       object Label23: TLabel
         Left = 150
         Top = 148
-        Width = 38
+        Width = 41
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Format:'
+        Caption = 'Format :'
         Layout = tlCenter
       end
       object cbxFormat: TLightComboCheck
-        Left = 188
+        Left = 191
         Top = 148
         Width = 166
         Height = 13
@@ -1130,7 +1133,7 @@ object FrmEditAlbum: TFrmEditAlbum
         Items = <>
       end
       object VDTButton13: TCRFurtifLight
-        Left = 333
+        Left = 336
         Top = 49
         Width = 21
         Height = 20
@@ -1240,25 +1243,25 @@ object FrmEditAlbum: TFrmEditAlbum
       end
       object Label24: TLabel
         Left = 97
-        Top = 188
-        Width = 35
+        Top = 196
+        Width = 38
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Ann'#233'e:'
+        Caption = 'Ann'#233'e :'
         Layout = tlCenter
       end
       object Label25: TLabel
-        Left = 185
-        Top = 188
-        Width = 27
+        Left = 186
+        Top = 196
+        Width = 30
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Cote:'
+        Caption = 'Cote :'
         Layout = tlCenter
       end
       object VDTButton14: TVDTButton
-        Left = 282
-        Top = 184
+        Left = 285
+        Top = 192
         Width = 72
         Height = 21
         Cursor = crHandPoint
@@ -1266,8 +1269,17 @@ object FrmEditAlbum: TFrmEditAlbum
         Flat = True
         OnClick = VDTButton14Click
       end
+      object Label26: TLabel
+        Left = 97
+        Top = 164
+        Width = 94
+        Height = 13
+        Alignment = taRightJustify
+        Caption = 'Num'#233'ro personnel :'
+        Layout = tlCenter
+      end
       object edPrix: TEditLabeled
-        Left = 215
+        Left = 218
         Top = 24
         Width = 64
         Height = 21
@@ -1290,7 +1302,7 @@ object FrmEditAlbum: TFrmEditAlbum
         CurrencyChar = #0
       end
       object edAnneeEdition: TEditLabeled
-        Left = 38
+        Left = 41
         Top = 0
         Width = 46
         Height = 21
@@ -1307,7 +1319,7 @@ object FrmEditAlbum: TFrmEditAlbum
         CurrencyChar = #0
       end
       object edISBN: TEditLabeled
-        Left = 38
+        Left = 41
         Top = 49
         Width = 241
         Height = 20
@@ -1336,7 +1348,7 @@ object FrmEditAlbum: TFrmEditAlbum
         CurrencyChar = #0
       end
       object cbVO: TCheckBoxLabeled
-        Left = 38
+        Left = 41
         Top = 85
         Width = 34
         Height = 16
@@ -1351,7 +1363,7 @@ object FrmEditAlbum: TFrmEditAlbum
           end>
       end
       object cbCouleur: TCheckBoxLabeled
-        Left = 38
+        Left = 41
         Top = 107
         Width = 54
         Height = 16
@@ -1368,7 +1380,7 @@ object FrmEditAlbum: TFrmEditAlbum
           end>
       end
       object cbStock: TCheckBoxLabeled
-        Left = 38
+        Left = 41
         Top = 28
         Width = 61
         Height = 13
@@ -1384,7 +1396,7 @@ object FrmEditAlbum: TFrmEditAlbum
           end>
       end
       object cbDedicace: TCheckBoxLabeled
-        Left = 38
+        Left = 41
         Top = 129
         Width = 64
         Height = 16
@@ -1399,7 +1411,7 @@ object FrmEditAlbum: TFrmEditAlbum
           end>
       end
       object dtpAchat: TDateTimePickerLabeled
-        Left = 254
+        Left = 257
         Top = 0
         Width = 101
         Height = 21
@@ -1414,7 +1426,7 @@ object FrmEditAlbum: TFrmEditAlbum
           end>
       end
       object cbGratuit: TCheckBoxLabeled
-        Left = 118
+        Left = 121
         Top = 26
         Width = 53
         Height = 16
@@ -1430,7 +1442,7 @@ object FrmEditAlbum: TFrmEditAlbum
           end>
       end
       object cbOffert: TCheckBoxLabeled
-        Left = 118
+        Left = 121
         Top = 2
         Width = 53
         Height = 16
@@ -1446,7 +1458,7 @@ object FrmEditAlbum: TFrmEditAlbum
           end>
       end
       object edNombreDePages: TEditLabeled
-        Left = 38
+        Left = 41
         Top = 152
         Width = 46
         Height = 21
@@ -1463,14 +1475,14 @@ object FrmEditAlbum: TFrmEditAlbum
         CurrencyChar = #0
       end
       object edAnneeCote: TEditLabeled
-        Left = 134
-        Top = 184
+        Left = 137
+        Top = 192
         Width = 46
         Height = 21
         BevelKind = bkTile
         BorderStyle = bsNone
         MaxLength = 4
-        TabOrder = 11
+        TabOrder = 12
         LinkControls = <
           item
             Control = Label24
@@ -1479,8 +1491,8 @@ object FrmEditAlbum: TFrmEditAlbum
         CurrencyChar = #0
       end
       object edPrixCote: TEditLabeled
-        Left = 215
-        Top = 184
+        Left = 218
+        Top = 192
         Width = 64
         Height = 21
         AutoSelect = False
@@ -1489,7 +1501,7 @@ object FrmEditAlbum: TFrmEditAlbum
         BorderStyle = bsNone
         Ctl3D = True
         ParentCtl3D = False
-        TabOrder = 12
+        TabOrder = 13
         LinkControls = <
           item
             Control = Label25
@@ -1498,6 +1510,22 @@ object FrmEditAlbum: TFrmEditAlbum
             Control = VDTButton14
           end>
         TypeDonnee = tdCurrency
+        CurrencyChar = #0
+      end
+      object edNumPerso: TEditLabeled
+        Left = 195
+        Top = 164
+        Width = 160
+        Height = 20
+        Anchors = [akLeft, akTop, akRight]
+        BevelKind = bkTile
+        BorderStyle = bsNone
+        TabOrder = 11
+        OnChange = edTitreChange
+        LinkControls = <
+          item
+            Control = Label2
+          end>
         CurrencyChar = #0
       end
     end
@@ -1648,7 +1676,7 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object vstImages: TVirtualStringTree
       Left = 56
-      Top = 591
+      Top = 599
       Width = 553
       Height = 130
       Anchors = [akLeft, akTop, akRight]
@@ -1881,7 +1909,7 @@ object FrmEditAlbum: TFrmEditAlbum
       Left = 446
       Top = 472
       Width = 292
-      Height = 97
+      Height = 105
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone

@@ -132,6 +132,11 @@ type
     mnuNext: TMenuItem;
     Aperuavantimpression4: TMenuItem;
     Impression1: TMenuItem;
+    Albumsemprunts2: TMenuItem;
+    N3: TMenuItem;
+    N8: TMenuItem;
+    Scripts1: TMenuItem;
+    Scripts: TAction;
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure ChangementOptionsExecute(Sender: TObject);
@@ -173,6 +178,7 @@ type
     procedure MeasureMenuItem(Sender: TObject; ACanvas: TCanvas; var Width, Height: Integer);
     procedure NouvelAchatExecute(Sender: TObject);
     procedure actMiseAJourExecute(Sender: TObject);
+    procedure ScriptsExecute(Sender: TObject);
   private
     { Déclarations privées }
     FToolOriginal: TStringList;
@@ -202,7 +208,8 @@ implementation
 uses
   Form_Repertoire, CommonConst, Form_options, Form_StatsGeneral,
   Form_StatsEmprunteurs, Form_StatsAlbums, LoadComplet, Impression, Form_Gestion, Form_Customize,
-  Form_AboutBox, DM_Princ, Types, Procedures, UHistorique, Form_Entretien, ShellAPI, Math;
+  Form_AboutBox, DM_Princ, Types, Procedures, UHistorique, Form_Entretien, ShellAPI, Math,
+  Form_Scripts;
 
 procedure TFond.WMSyscommand(var msg: TWmSysCommand);
 begin
@@ -570,6 +577,9 @@ begin
     ModeConsultation.Enabled := not ModeConsultation.Checked;
     ModeGestion.Enabled := not ModeGestion.Checked;
     ChangeMode.Checked := ModeGestion.Checked;
+    {$IFDEF RELEASE}
+    Scripts.Visible := False;          
+    {$ENDIF}
   end;
 end;
 
@@ -898,6 +908,15 @@ end;
 procedure TFond.HistoriqueChosen(Sender: TObject);
 begin
   Historique.GoConsultation(TComponent(Sender).Tag);
+end;
+
+procedure TFond.ScriptsExecute(Sender: TObject);
+begin
+  with TFormScripts.Create(nil) do try
+    ShowModal;
+  finally
+    Free;
+  end;
 end;
 
 end.

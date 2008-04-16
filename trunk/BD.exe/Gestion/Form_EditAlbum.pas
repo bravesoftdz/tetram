@@ -100,6 +100,8 @@ type
     Bevel2: TBevel;
     Frame11: TFrame1;
     btResetSerie: TCRFurtifLight;
+    edNumPerso: TEditLabeled;
+    Label26: TLabel;
     procedure ajoutClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -897,6 +899,7 @@ begin
     else
       FCurrentEditionComplete.DateAchat := 0;
     FCurrentEditionComplete.Notes.Text := edNotes.Lines.Text;
+    FCurrentEditionComplete.NumeroPerso := edNumPerso.Text;
   end;
 end;
 
@@ -969,6 +972,7 @@ begin
       else
         edPrixCote.Text := FormatCurr(FormatMonnaie, FCurrentEditionComplete.PrixCote);
       edNotes.Lines.Text := FCurrentEditionComplete.Notes.Text;
+      edNumPerso.Text := FCurrentEditionComplete.NumeroPerso;
       vstImages.RootNodeCount := FCurrentEditionComplete.Couvertures.Count;
     end;
   finally

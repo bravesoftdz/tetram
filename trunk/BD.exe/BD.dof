@@ -96,7 +96,7 @@ PackageDLLOutputDir=
 PackageDCPOutputDir=
 SearchPath=$(Compos)\FastMM\FastMM4;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\
 Packages=VCL50;VCLX50;VCLSMP50;QRPT50;VCLDB50;VCLBDE50;VCLDBX50;TEEUI50;TEEDB50;TEE50;TEEQR50;NMFAST50;dclocx50;dclaxserver50;ibevnt50;VCLIB50;VCLIE50;INETDB50;INET50;vcl;rtl;dsnap;dbrtl;vcldb;websnap;webdsnap;inetdb;inet;xmlrtl;vclx;vclie;indy;bdertl;dsnapcon;VclSmp;MediaKit
-Conditionals=DEBUG;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
+Conditionals=DEBUG;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT
 DebugSourceDirs=
 UsePackages=0
 [Parameters]
@@ -115,7 +115,7 @@ AutoIncBuild=1
 MajorVer=2
 MinorVer=0
 Release=0
-Build=6
+Build=10
 Debug=0
 PreRelease=0
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Teträm Corp
 FileDescription=
-FileVersion=2.0.0.6
+FileVersion=2.0.0.10
 InternalName=BDT
 LegalCopyright=Teträm Corp 1997-2005
 LegalTrademarks=
@@ -135,31 +135,21 @@ ProductName=BDtheque
 ProductVersion=2
 Comments=
 [HistoryLists\hlConditionals]
-Count=10
-Item0=DEBUG;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
-Item1=RELEASE;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
-Item2=RELEASEelease;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
-Item3=_DEBUG;Release;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
-Item4=DEBUG;_Release;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
-Item5=DEBUG;_Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
-Item6=_DEBUG;Release;FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
-Item7=FB15;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic
-Item8=NOFORMS
-Item9=NOFORMSA
+Count=4
+Item0=RELEASE;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT
+Item1=DEBUG;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT
+Item2=PS_USESSUPPORT;DEBUG
+Item3=PS_USESSUPPORT
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlSearchPath]
-Count=4
+Count=2
 Item0=$(Compos)\FastMM\FastMM4;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\
-Item1=$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
-Item2=$(DELPHI)\Lib\Debug;$(ComposPerso)\PrintObject;$(ComposPerso)\VDTButton;$(ComposPerso)\Memory Table;$(ComposPerso)\VersLabP;$(ComposPerso)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(ComposPerso)\ReadOnlycheckBox;$(ComposPerso)\Labeled;$(ComposPerso)\ShellNotification;$(ComposPerso)\ProgressBar;$(ComposPerso)\BrowseDirectory;$(ComposPerso)\VirtualTree;$(Common)\GraphicEx
-Item3=..\..\..\Compos Perso\PrintObject;..\..\..\Compos Perso\VDTButton;..\..\..\Compos Perso\Memory Table;..\..\..\Compos Perso\VersLabP;..\..\..\Compos Perso\ScanEdit;..\..\..\Common;..\..\..\Compos Perso\HarmFade;..\..\..\Compos Perso\schrinkpanel;..\..\..\Compos Perso\ReadOnlycheckBox;..\..\..\Compos Perso\Labeled;..\..\..\Compos Perso\ShellNotification;..\..\..\Compos Perso\ProgressBar;..\..\..\Compos Perso\BrowseDirectory;..\..\..\Compos Perso\VirtualTree;..\..\..\Common\GraphicEx
+Item1=$(DELPHI)\Lib\Debug
 [HistoryLists\hlUnitOutputDirectory]
 Count=1
 Item0=dcu
 [HistoryLists\hlOutputDirectorry]
-Count=3
+Count=1
 Item0=..\..\bin
-Item1=..\
-Item2=C:\Documents and Settings\Thierry\Bureau\BDthèque

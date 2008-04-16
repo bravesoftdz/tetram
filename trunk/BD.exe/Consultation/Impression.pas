@@ -157,7 +157,7 @@ begin
         jpg := TJPEGImage.Create;
         try
           jpg.LoadFromStream(ms);
-          Prn.Draw(Prn.Detail.Left + (ThumbWidth + ThumbInterval) * (numCol - 1) + ((ThumbWidth - Prn.PixelsToMmsHorizontal(jpg.Width))/2), Prn.GetYPosition + ((ThumbHeigth - Prn.PixelsToMmsVertical(jpg.Height))/2), jpg);
+          Prn.Draw(Prn.Detail.Left + (ThumbWidth + ThumbInterval) * (numCol - 1) + ((ThumbWidth - Prn.PixelsToMmsHorizontal(jpg.Width)) / 2), Prn.GetYPosition + ((ThumbHeigth - Prn.PixelsToMmsVertical(jpg.Height)) / 2), jpg);
           Repositionne := True;
           ImageDessinee := True;
           Inc(numCol);
@@ -1169,26 +1169,38 @@ var
   begin
     Prn.SetTopOfPage;
     Prn.SetFontInformation1(Prn.Font.Name, 5, []);
-    Prn.DrawLine(Prn.Detail.Left, Prn.GetYPosition, Prn.Detail.Left + Prn.Detail.Width, Prn.GetYPosition, 1, clBlack); Prn.NextLine;
+    Prn.DrawLine(Prn.Detail.Left, Prn.GetYPosition, Prn.Detail.Left + Prn.Detail.Width, Prn.GetYPosition, 1, clBlack);
+    Prn.NextLine;
     fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), epNext);
     Prn.CreateColumn1(0, 20, 35, taRightJustify, Prn.Font.Name, 10, []);
     Prn.CreateColumn1(1, 57, 15, taLeftJustify, Prn.Font.Name, 10, []);
     Prn.CreateColumn1(2, 100, 35, taRightJustify, Prn.Font.Name, 10, [fsBold]);
     Prn.CreateColumn1(3, 137, 15, taLeftJustify, Prn.Font.Name, 10, []);
     Prn.Columns[0].Font.Style := [fsBold];
-    Prn.WriteLineColumn(0, -2, rsNombreAlbums + ':'); Prn.WriteLineColumn(1, -2, IntToStr(R.NbAlbums));
+    Prn.WriteLineColumn(0, -2, rsNombreAlbums + ':');
+    Prn.WriteLineColumn(1, -2, IntToStr(R.NbAlbums));
     Prn.Columns[0].Font.Style := [];
-    Prn.WriteLineColumn(2, -2, rsAlbumsStock + ':'); Prn.WriteLineColumn(3, -2, Format(FormatPourcent, [R.NbAlbumsStock, MulDiv(R.NbAlbumsStock, 100, R.NbAlbums)]));
+    Prn.WriteLineColumn(2, -2, rsAlbumsStock + ':');
+    Prn.WriteLineColumn(3, -2, Format(FormatPourcent, [R.NbAlbumsStock, MulDiv(R.NbAlbumsStock, 100, R.NbAlbums)]));
     Prn.Columns[0].Font.Style := [fsBold];
-    Prn.WriteLineColumn(0, -1, rsNombreSeries + ':'); Prn.WriteLineColumn(1, -2, IntToStr(R.NbSeries) + ' (dont terminées: ' + Format(FormatPourcent, [R.NbSeriesTerminee, MulDiv(R.NbSeriesTerminee, 100, R.NbSeries)]) + ')');
+    Prn.WriteLineColumn(0, -1, rsNombreSeries + ':');
+    Prn.WriteLineColumn(1, -2, IntToStr(R.NbSeries) + ' (dont terminées: ' + Format(FormatPourcent, [R.NbSeriesTerminee, MulDiv(R.NbSeriesTerminee, 100, R.NbSeries)]) + ')');
     Prn.Columns[0].Font.Style := [];
-    Prn.WriteLineColumn(0, -1, rsAlbumsNB + ':'); Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbAlbumsNB, MulDiv(R.NbAlbumsNB, 100, R.NbAlbums)])); Position[3] := Prn.GetYPosition;
-    Prn.WriteLineColumn(0, -1, rsAlbumsVO + ':'); Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbAlbumsVO, MulDiv(R.NbAlbumsVO, 100, R.NbAlbums)]));
-    Prn.WriteLineColumn(0, -1, rsAlbumsIntegrales + ':'); Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbAlbumsIntegrale, MulDiv(R.NbAlbumsIntegrale, 100, R.NbAlbums)]));
-    Prn.WriteLineColumn(0, -1, rsAlbumsHorsSerie + ':'); Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbAlbumsHorsSerie, MulDiv(R.NbAlbumsHorsSerie, 100, R.NbAlbums)]));
-    Prn.WriteLineColumn(0, -1, rsAlbumsDedicaces + ':'); Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbAlbumsDedicace, MulDiv(R.NbAlbumsDedicace, 100, R.NbAlbums)]));
+    Prn.WriteLineColumn(0, -1, rsAlbumsNB + ':');
+    Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbAlbumsNB, MulDiv(R.NbAlbumsNB, 100, R.NbAlbums)]));
+    Position[3] := Prn.GetYPosition;
+    Prn.WriteLineColumn(0, -1, rsAlbumsVO + ':');
+    Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbAlbumsVO, MulDiv(R.NbAlbumsVO, 100, R.NbAlbums)]));
+    Prn.WriteLineColumn(0, -1, rsAlbumsIntegrales + ':');
+    Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbAlbumsIntegrale, MulDiv(R.NbAlbumsIntegrale, 100, R.NbAlbums)]));
+    Prn.WriteLineColumn(0, -1, rsAlbumsHorsSerie + ':');
+    Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbAlbumsHorsSerie, MulDiv(R.NbAlbumsHorsSerie, 100, R.NbAlbums)]));
+    Prn.WriteLineColumn(0, -1, rsAlbumsDedicaces + ':');
+    Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbAlbumsDedicace, MulDiv(R.NbAlbumsDedicace, 100, R.NbAlbums)]));
     Prn.NextLineFont(Prn.Columns[0].Font);
-    Prn.NextLine; Prn.DrawLine(Prn.Detail.Left, Prn.GetYPosition, Prn.Detail.Left + Prn.Detail.Width, Prn.GetYPosition, 1, clBlack); Prn.NextLine;
+    Prn.NextLine;
+    Prn.DrawLine(Prn.Detail.Left, Prn.GetYPosition, Prn.Detail.Left + Prn.Detail.Width, Prn.GetYPosition, 1, clBlack);
+    Prn.NextLine;
     Position[5] := Prn.GetYPosition;
 
     fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransPrix, rsTransPage, Prn.GetPageNumber]), epNext);
@@ -1206,10 +1218,13 @@ var
       Prn.SetYPosition(Position[5]);
     end;
 
-    Prn.WriteLineColumn(0, -2, rsValeurMoyenne + ':'); Prn.WriteLineColumn(1, -2, FormatCurr(FormatMonnaie, R.PrixAlbumMoyen));
+    Prn.WriteLineColumn(0, -2, rsValeurMoyenne + ':');
+    Prn.WriteLineColumn(1, -2, FormatCurr(FormatMonnaie, R.PrixAlbumMoyen));
     Prn.WriteLineColumn(3, -2, FormatCurr(FormatMonnaie, R.PrixAlbumMinimun) + ' < ' + rsTransPrix + ' < ' + FormatCurr(FormatMonnaie, R.PrixAlbumMaximun));
-    Prn.WriteLineColumn(2, -1, rsValeurConnue + ':'); Prn.WriteLineColumn(1, -2, FormatCurr(FormatMonnaie, R.ValeurConnue));
-    Prn.WriteLineColumn(2, -1, rsValeurEstimee + ':'); Prn.WriteLineColumn(1, -2, FormatCurr(FormatMonnaie, R.ValeurEstimee));
+    Prn.WriteLineColumn(2, -1, rsValeurConnue + ':');
+    Prn.WriteLineColumn(1, -2, FormatCurr(FormatMonnaie, R.ValeurConnue));
+    Prn.WriteLineColumn(2, -1, rsValeurEstimee + ':');
+    Prn.WriteLineColumn(1, -2, FormatCurr(FormatMonnaie, R.ValeurEstimee));
 
     fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransEmprunteurs, rsTransPage, Prn.GetPageNumber]), epNext);
     for i := 0 to Prn.Columns.Count - 1 do
@@ -1226,7 +1241,9 @@ var
     Prn.CreateColumn1(9, 120, -1, taLeftJustify, Prn.Font.Name, 10, [fsItalic]);
 
     Prn.NextLineFont(Prn.Columns[0].Font);
-    Prn.NextLine; Prn.DrawLine(Prn.Detail.Left, Prn.GetYPosition, Prn.Detail.Left + Prn.Detail.Width, Prn.GetYPosition, 1, clBlack); Prn.NextLine;
+    Prn.NextLine;
+    Prn.DrawLine(Prn.Detail.Left, Prn.GetYPosition, Prn.Detail.Left + Prn.Detail.Width, Prn.GetYPosition, 1, clBlack);
+    Prn.NextLine;
     Prn.WriteLineColumn(0, -2, rsTransEmprunteurs + ':');
     Prn.WriteLineColumn(1, -2, IntToStr(R.NbEmprunteurs));
     Prn.WriteLineColumn(2, -2, rsNombreMoyenEmprunts + ':');
@@ -1253,7 +1270,9 @@ var
 
     fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbumsEmpruntes, rsTransPage, Prn.GetPageNumber]), epNext);
     Prn.NextLineFont(Prn.Columns[0].Font);
-    Prn.NextLine; Prn.DrawLine(Prn.Detail.Left, Prn.GetYPosition, Prn.Detail.Left + Prn.Detail.Width, Prn.GetYPosition, 1, clBlack); Prn.NextLine;
+    Prn.NextLine;
+    Prn.DrawLine(Prn.Detail.Left, Prn.GetYPosition, Prn.Detail.Left + Prn.Detail.Width, Prn.GetYPosition, 1, clBlack);
+    Prn.NextLine;
     Prn.WriteLineColumn(0, -2, rsTransAlbumsEmpruntes + ':');
     Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbEmpruntes, MulDiv(R.NbEmpruntes, 100, R.NbAlbums)]));
     Prn.WriteLineColumn(2, -2, rsNombreMoyenEmprunts + ':');
@@ -1291,7 +1310,9 @@ var
     Prn.CreateColumn1(7, 172, 10, taRightJustify, Prn.Font.Name, 10, []);
     Prn.CreateColumn1(8, 188, 10, taRightJustify, Prn.Font.Name, 10, []);
     Prn.NextLineFont(Prn.Columns[0].Font);
-    Prn.NextLine; Prn.DrawLine(Prn.Detail.Left, Prn.GetYPosition, Prn.Detail.Left + Prn.Detail.Width, Prn.GetYPosition, 1, clBlack); Prn.NextLine;
+    Prn.NextLine;
+    Prn.DrawLine(Prn.Detail.Left, Prn.GetYPosition, Prn.Detail.Left + Prn.Detail.Width, Prn.GetYPosition, 1, clBlack);
+    Prn.NextLine;
     i := R.ListGenre.Count;
     if (Prn.GetLinesLeftFont(Prn.Columns[1].Font) < i + 3) and (Prn.GetLinesInDetailAreaFont(Prn.Columns[1].Font) > i) then Prn.NewPage;
     Prn.WriteLineColumn(0, -2, rsTransGenres + ':');
@@ -1373,7 +1394,7 @@ procedure ImpressionRecherche(Recherche: TRecherche; Previsualisation: Boolean);
 var
   col: Single;
   liste: TModalResult;
-  i: Integer;
+  i, nTri: Integer;
   PAl: TAlbum;
   sl: TStringList;
   Source, Equipe: TJvUIBQuery;
@@ -1384,6 +1405,8 @@ var
   fWaiting: IWaiting;
   Prn: TPrintObject;
   Criteres: TStringList;
+  CritereTri: TCritereTri;
+  h: Single;
 
   procedure ProcessCritere(aCritere: TBaseCritere; prefix: string = '');
   var
@@ -1452,6 +1475,7 @@ begin
       Prn.CreateColumn1(3, 55, -1, taLeftJustify, Prn.Font.Name, 12, [fsItalic]);
       Prn.CreateColumn1(4, 35, -1, taLeftJustify, Prn.Font.Name, 10, [fsItalic]); // résumé
       Prn.CreateColumn1(5, 35, -1, taLeftJustify, Prn.Font.Name, 8, []); // réalisation, acteurs
+      Prn.CreateColumn1(6, 35, -1, taLeftJustify, Prn.Font.Name, 8, [fsItalic]); // valeur des champs triés
 
       Prn.WriteLineColumn(2, -2, 'Critères:');
       Prn.NextLine;
@@ -1494,10 +1518,24 @@ begin
                 Prn.Columns[0].Position := col;
               end;
             end;
+            if Recherche.SortBy.Count > 0 then
+            begin
+              Prn.NextLine;
+              Prn.WriteLineColumn(0, -1, 'Tri:');
+              for i := 0 to Pred(Recherche.SortBy.Count) do
+              begin
+                CritereTri := TCritereTri(Recherche.SortBy[i]);
+                if CritereTri._Champ.Booleen then
+                  s := CritereTri.LabelChamp + ' - ' + IIf(CritereTri.Asc, 'Non puis Oui', 'Oui puis Non') + IIf(CritereTri.NullsFirst, ' - Vides en premier', '') + IIf(CritereTri.NullsLast, ' - Vides en dernier', '')
+                else
+                  s := CritereTri.LabelChamp + ' - ' + IIf(CritereTri.Asc, 'Croissant', 'Décroissant') + IIf(CritereTri.NullsFirst, ' - Vides en premier', '') + IIf(CritereTri.NullsLast, ' - Vides en dernier', '');
+                Prn.WriteLineColumn(3, IIf(i = 0, -2, -1), s);
+              end;
+            end;
           end;
       end;
 
-      Prn.NewLines(2);
+      Prn.NewLines(1.5);
       Prn.WriteLineColumn(2, -1, Format('Résultats: (%d)', [Recherche.Resultats.Count]));
       Prn.NextLine;
       fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 0, Recherche.Resultats.Count + 1);
@@ -1507,6 +1545,7 @@ begin
         Prn.Columns[1].Font.Style := Prn.Columns[0].Font.Style;
       end;
       SautLigne := True;
+      nTri := -1;
       for i := 0 to Recherche.Resultats.Count - 1 do
       begin
         PAl := Recherche.Resultats[i];
@@ -1569,11 +1608,28 @@ begin
             end;
           end;
         end;
-        if (i <> 0) and (liste = mrNo) and (Sujet + sEquipe <> '') and (Prn.GetLinesLeftFont(Prn.Columns[1].Font) < 3) then
+        if nTri = -1 then
+          with TStringList.Create do
+          try
+            Text := Recherche.ResultatsInfos[i];
+            nTri := Count;
+          finally
+            Free;
+          end;
+
+        h := Prn.GetLineHeightMmsFont(Prn.Columns[1].Font);
+        if (nTri > 0) then
+          // le premier décalage sera de la hauteur de la colonne 1
+          // les suivants de la hauteur de la colonne 6
+          h := h + Prn.GetLineHeightMmsFont(Prn.Columns[1].Font) + Prn.GetLineHeightMmsFont(Prn.Columns[6].Font) * (nTri - 1);
+
+        if (i <> 0) and ((h > Prn.GetHeightLeftMms) or
+          ((liste = mrNo) and (Sujet + sEquipe <> '') and (Prn.GetHeightLeftMms - h < 3 * Prn.GetLineHeightMmsFont(Prn.Columns[4].Font)))) then
         begin
           Prn.NewPage;
           SautLigne := False;
         end;
+
         Prn.WriteLineColumn(0, IIf(SautLigne, -1, -2), '#' + IntToStr(i + 1));
         case Recherche.TypeRecherche of
           trSimple:
@@ -1583,7 +1639,11 @@ begin
               Prn.WriteLineColumn(1, -2, s);
             end;
           trComplexe:
-            Prn.WriteLineColumn(1, -2, PAl.ChaineAffichage);
+            begin
+              Prn.WriteLineColumn(1, -2, PAl.ChaineAffichage);
+              if Recherche.SortBy.Count > 0 then
+                Prn.WriteColumn(6, -1, StringReplace(Recherche.ResultatsInfos[i], '\n', #13#10, [rfReplaceAll]));
+            end;
         end;
         SautLigne := True;
         if (liste = mrNo) then

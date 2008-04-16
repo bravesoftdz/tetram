@@ -35,13 +35,12 @@ type
 
 implementation
 
-uses JvUIB, DM_Commun, Commun, DM_Princ, JvUIBLib, Divers;
+uses JvUIB, DM_Commun, Commun, DM_Princ, JvUIBLib, Divers,
+  UChampsRecherche;
 
 {$R *.DFM}
 
 type
-  TChampSpecial = (csNone, csTitre, csGenre, csAffiche, csEtat, csReliure, csOrientation, csFormatEdition, csTypeEdition);
-
   TChamp = class
     NomChamp: string;
     NomTable: string;
@@ -52,12 +51,12 @@ type
 
 function TFrmEditCritere.GetCritere: TCritere;
 var
-  Champ: TChamp;
+  Champ: PChamp;
   critereTexte: string;
 begin
   Result := FCritere;
 
-  Champ := TChamp(champs.LastItemData);
+  Champ := PChamp(champs.LastItemData);
 
   Result.iChamp := champs.Value;
   Result.iCritere2 := Critere2.Value;
@@ -165,10 +164,7 @@ const
   NomTables: array[0..2] of string = ('Série', 'Album', 'Edition');
 var
   i, j: Integer;
-  t: string;
   pt: TPoint;
-  Table1, Desc, LstChamps: TJvUIBQuery;
-  p: TChamp;
   hg: IHourGlass;
   ParentItem: TSubItem;
 begin
@@ -180,67 +176,17 @@ begin
   SetBounds(pt.x, pt.y, Width, Height);
   wMin := signes.Width;
   wMax := Critere2.Left + Critere2.Width - signes.Left;
-  Table1 := TJvUIBQuery.Create(Self);
-  Desc := TJvUIBQuery.Create(Self);
-  LstChamps := TJvUIBQuery.Create(Self);
   champs.Items.Clear;
-  with Table1 do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    for j := Low(ListTables) to High(ListTables) do
-    begin
-      Close;
-      SQL.Text := 'SELECT FIRST 0 SKIP 0 * FROM ' + ListTables[j];
-      Open;
-      ParentItem := champs.Items.Add(NomTables[j]);
-      for i := 0 to Fields.FieldCount - 1 do
-      begin
-        t := FRecherche.TransChamps(Fields.SqlName[i]);
-        if (t <> '') then
+  for j := Low(Groupes) to High(Groupes) do
+  begin
+    ParentItem := champs.Items.Add(Groupes[j]);
+    for i := 1 to High(ChampsRecherche^) do
+      if j = ChampsRecherche^[i].Groupe then
+        with ParentItem.SubItems.Add(ChampsRecherche^[i].LibelleChamp) do
         begin
-          p := TChamp.Create;
-          p.NomChamp := UpperCase(Fields.SqlName[i]);
-          p.NomTable := ListTables[j];
-          p.TypeData := Fields.FieldType[i];
-          p.Booleen := (p.TypeData = uftSmallInt) and FRecherche.IsValChampBoolean(FRecherche.ValChamps(t));
-          case FRecherche.ValChamps(t) of
-            1, 8: p.Special := csTitre;
-            21: p.Special := csEtat;
-            22: p.Special := csReliure;
-            24: p.Special := csOrientation;
-            25: p.Special := csFormatEdition;
-            26: p.Special := csTypeEdition;
-            else
-              p.Special := csNone;
-          end;
-          with ParentItem.SubItems.Add(t) do
-          begin
-            Valeur := FRecherche.ValChamps(t);
-            Data := TObject(p);
-          end;
+          Valeur := ChampsRecherche^[i].ID;
+          Data := TObject(@ChampsRecherche^[i]);
         end;
-      end;
-      case j of
-        0:
-          begin
-            p := TChamp.Create;
-            p.NomChamp := 'ID_Genre';
-            p.NomTable := 'GENRESERIES';
-            p.TypeData := uftChar;
-            p.Special := csGenre;
-            with ParentItem.SubItems.Add(FRecherche.TransChamps('genreserie')) do
-            begin
-              Valeur := FRecherche.ValChamps(Caption);
-              Data := TObject(p);
-            end;
-          end;
-      end;
-    end;
-  finally
-    Transaction.Free;
-    Free;
-    LstChamps.Free;
-    Desc.Free;
   end;
 end;
 
@@ -389,17 +335,7 @@ begin
 end;
 
 procedure TFrmEditCritere.FormDestroy(Sender: TObject);
-var
-  i, j: Integer;
 begin
-  champs.Items.BeginUpdate;
-  try
-    for i := 0 to Pred(champs.Items.Count) do
-      for j := 0 to Pred(champs.Items[i].SubItems.Count) do
-        TChamp(champs.Items[i].SubItems[j].Data).Free;
-  finally
-    champs.Items.EndUpdate;
-  end;
   FChampValeurs.Free;
   FCritere.Free;
 end;

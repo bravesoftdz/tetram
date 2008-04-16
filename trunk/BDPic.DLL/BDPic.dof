@@ -157,12 +157,13 @@ c:\program files\borland\delphi7\Projects\Bpl\IBO40TDT_D7.bpl=IB Objects Tools C
 c:\program files\borland\delphi7\Projects\Bpl\IBOARMURE.bpl=(sans titre)
 C:\programmes\Composant\ArmureD7.bpl=ARMURE
 c:\program files\borland\delphi7\Bin\dcldss70.bpl=Composants Decision Cube Borland
+[HistoryLists\hlConditionals]
+Count=2
+Item0=PS_USESSUPPORT;DEBUG
+Item1=PS_USESSUPPORT
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
-[HistoryLists\hlUnitOutputDirectory]
+[HistoryLists\hlSearchPath]
 Count=1
-Item0=dcu
-[HistoryLists\hlBPLOutput]
-Count=1
-Item0=.
+Item0=$(DELPHI)\Lib\Debug

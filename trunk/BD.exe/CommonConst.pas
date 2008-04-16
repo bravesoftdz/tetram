@@ -14,7 +14,6 @@ const
   DatabasePassword: string = 'masterkey';
   DatabaseRole: string = 'ReadOnly'; // AllAccess
   DatabaseLibraryName: string = 'fbembed.dll';
-  WebServerPath: string = 'WebServer\';
   TempPath: array[0..1024] of Char = #0;
   RepImages: string = 'Images\';
   RessourcePic: string = 'BDPic.dll';
@@ -37,15 +36,15 @@ type
   ROptions = record
     FicheAlbumWithCouverture, FicheParaBDWithImage, ModeDemarrage, Images: Boolean;
     SymboleMonnetaire: string[5];
-    WebServerAutoStart: Boolean;
-    WebServerPort: Integer;
-    WebServerAntiAliasing, AntiAliasing: Boolean;
+    AntiAliasing: Boolean;
     ImagesStockees: Boolean;
     AvertirPret: Boolean;
     GrandesIconesMenus, GrandesIconesBarre: Boolean;
     VerifMAJDelai: Integer;
     LastVerifMAJ: TDateTime;
     SerieObligatoireAlbums, SerieObligatoireParaBD: Boolean;
+    RepertoireScripts: string;
+    FormatTitreAlbum: Integer;
   end;
 
   RUtilisateur = record
@@ -66,7 +65,6 @@ uses Divers, IniFiles;
 initialization
   GetTempPath(Length(TempPath), TempPath);
   RepImages := ExtractFilePath(Application.ExeName) + RepImages;
-  WebServerPath := ExtractFilePath(Application.ExeName) + WebServerPath;
   FichierIni := ExtractFilePath(Application.ExeName) + FichierIni;
   FormatMonnaieCourt := '#,##0.00';
   FormatMonnaieSimple := '0.00';

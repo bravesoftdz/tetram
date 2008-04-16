@@ -146,20 +146,13 @@ begin
     ModalResult := mrNone;
     Exit;
   end;
-  if StrToIntDef(edNbAlbums.Text, -1) < 0 then
-  begin
-    AffMessage(rsNbAlbumsIncorrect, mtInformation, [mbOk], True);
-    edNbAlbums.SetFocus;
-    ModalResult := mrNone;
-    Exit;
-  end;
 
   FSerie.Titre := Trim(edTitre.Text);
   FSerie.Terminee := Integer(cbTerminee.State);
   FSerie.SuivreSorties := cbSorties.Checked;
   FSerie.Complete := cbComplete.Checked;
   FSerie.SuivreManquants := cbManquants.Checked;
-  FSerie.NbAlbums := StrToInt(edNbAlbums.Text);
+  FSerie.NbAlbums := StrToIntDef(edNbAlbums.Text, -1);
   FSerie.SiteWeb := Trim(edSite.Text);
   FSerie.ID_Editeur := vtEditeurs.CurrentValue;
   FSerie.ID_Collection := vtCollections.CurrentValue;

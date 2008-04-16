@@ -32,12 +32,6 @@ type
     PanelImpression: TPanel;
     Label11: TLabel;
     FicheAlbumCouverture: TCheckBox;
-    PanelWebServer: TPanel;
-    Label13: TLabel;
-    Label3: TLabel;
-    CheckBox1: TCheckBox;
-    SpinEditLabeled1: TSpinEditLabeled;
-    CheckBox4: TCheckBox;
     PanelGestion: TPanel;
     Label2: TLabel;
     CheckBox2: TCheckBox;
@@ -55,6 +49,8 @@ type
     FicheParaBDCouverture: TCheckBox;
     CheckBox7: TCheckBox;
     CheckBox8: TCheckBox;
+    LightComboCheck2: TLightComboCheck;
+    Label3: TLabel;
     procedure btnOKClick(Sender: TObject);
     procedure calculKeyPress(Sender: TObject; var Key: Char);
     procedure calculExit(Sender: TObject);
@@ -104,9 +100,7 @@ begin
     RepImages := VDTButton1.Caption;
     AntiAliasing := CheckBox5.Checked;
     ImagesStockees := CheckBox2.Checked;
-    WebServerAutoStart := CheckBox1.Checked;
-    WebServerPort := SpinEditLabeled1.Value;
-    WebServerAntiAliasing := CheckBox4.Checked;
+    FormatTitreAlbum := LightComboCheck2.Value;
     AntiAliasing := CheckBox5.Checked;
     AvertirPret := CheckBox6.Checked;
     GrandesIconesMenus := GrandesIconesMenu.Checked;
@@ -205,9 +199,7 @@ begin
     VDTButton1.Caption := RepImages;
     CheckBox5.Checked := AntiAliasing;
     CheckBox2.Checked := ImagesStockees;
-    CheckBox1.Checked := WebServerAutoStart;
-    SpinEditLabeled1.Value := WebServerPort;
-    CheckBox4.Checked := WebServerAntiAliasing;
+    LightComboCheck2.Value := FormatTitreAlbum;
     CheckBox5.Checked := AntiAliasing;
     CheckBox6.Checked := AvertirPret;
     GrandesIconesMenu.Checked := GrandesIconesMenus;

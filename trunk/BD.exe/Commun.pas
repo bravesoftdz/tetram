@@ -28,6 +28,7 @@ function FormatISBN(const Code: string): string;
 function ClearISBN(const Code: string): string;
 
 function FormatTitre(const Titre: string): string;
+function FormatTitreAlbum(Simple, AvecSerie: Boolean; const Titre, Serie: string; Tome, TomeDebut, TomeFin: Integer; Integrale, HorsSerie: Boolean): string;
 
 function GetTransaction(Database: TJvUIBDataBase): TJvUIBTransaction;
 
@@ -44,7 +45,7 @@ type
 
 implementation
 
-uses Divers, Forms;
+uses Divers, Forms, CommonConst;
 
 function StringToGUIDDef(const GUID: string; const Default: TGUID): TGUID;
 begin
@@ -279,6 +280,63 @@ begin
   finally
     Result := Trim(Result);
   end;
+end;
+
+function FormatTitreAlbum(Simple, AvecSerie: Boolean; const Titre, Serie: string; Tome, TomeDebut, TomeFin: Integer; Integrale, HorsSerie: Boolean): string;
+const
+  resTome: array[False..True] of string = ('T. ', 'Tome ');
+  resHS: array[False..True] of string = ('HS', 'Hors-série');
+  resIntegrale: array[False..True] of string = ('INT.', 'Intégrale');
+var
+  sSerie, sAlbum, s2, sTome: string;
+begin
+  sAlbum := Titre;
+  if not Simple then sAlbum := FormatTitre(sAlbum);
+
+  sSerie := '';
+  if AvecSerie then
+    if sAlbum = '' then
+      sAlbum := FormatTitre(Serie)
+    else
+      sSerie := FormatTitre(Serie);
+
+  sTome := '';
+  if Integrale then
+  begin
+    s2 := NonZero(IntToStr(TomeDebut));
+    AjoutString(s2, NonZero(IntToStr(TomeFin)), ' à ');
+    AjoutString(sTome, resIntegrale[sAlbum = ''], ' - ', '', TrimRight(' ' + NonZero(IntToStr(Tome))));
+    AjoutString(sTome, s2, ' ', '[', ']');
+  end
+  else if HorsSerie then
+    AjoutString(sTome, resHS[sAlbum = ''], ' - ', '', TrimRight(' ' + NonZero(IntToStr(Tome))))
+  else
+    AjoutString(sTome, NonZero(IntToStr(Tome)), ' - ', resTome[sAlbum = '']);
+
+  case Utilisateur.Options.FormatTitreAlbum of
+    0: // Album (Serie - Tome)
+      begin
+        AjoutString(sSerie, sTome, ' - ');
+        if sAlbum = '' then
+          Result := sSerie
+        else
+        begin
+          AjoutString(sAlbum, sSerie, ' ', '(', ')');
+          Result := sAlbum;
+        end;
+      end;
+    1: // Tome - Album (Serie)
+      begin
+        if sAlbum = '' then
+          sAlbum := sSerie
+        else
+          AjoutString(sAlbum, sSerie, ' ', '(', ')');
+        AjoutString(sTome, sAlbum, ' - ');
+        Result := sTome;
+      end;
+  end;
+
+  if Result = '' then Result := '<Sans titre>';
 end;
 
 { THourGlass }

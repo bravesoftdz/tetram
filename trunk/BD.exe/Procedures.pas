@@ -169,15 +169,14 @@ begin
     Utilisateur.Options.Images := ReadBool('DIVERS', 'Images', True);
     Utilisateur.Options.AntiAliasing := ReadBool('DIVERS', 'AntiAliasing', True);
     Utilisateur.Options.ImagesStockees := ReadBool('ModeEdition', 'ImagesStockees', False);
-    Utilisateur.Options.WebServerAutoStart := ReadBool('WebServer', 'AutoStart', False);
-    Utilisateur.Options.WebServerPort := ReadInteger('WebServer', 'Port', 1024);
-    Utilisateur.Options.WebServerAntiAliasing := ReadBool('WebServer', 'AntiAliasing', True);
+    Utilisateur.Options.FormatTitreAlbum := ReadInteger('DIVERS', 'FormatTitreAlbum', 0);
     Utilisateur.Options.AvertirPret := ReadBool('DIVERS', 'AvertirPret', False);
     Utilisateur.Options.GrandesIconesMenus := ReadBool('DIVERS', 'GrandesIconesMenus', True);
     Utilisateur.Options.GrandesIconesBarre := ReadBool('DIVERS', 'GrandesIconesBarre', True);
     Utilisateur.Options.VerifMAJDelai := ReadInteger('Divers', 'VerifMAJDelai', 4);
     Utilisateur.Options.SerieObligatoireAlbums := ReadBool('DIVERS', 'SerieObligatoireAlbums', False);
     Utilisateur.Options.SerieObligatoireParaBD := ReadBool('DIVERS', 'SerieObligatoireParaBD', False);
+    Utilisateur.Options.RepertoireScripts := IncludeTrailingPathDelimiter(ReadString('DIVERS', 'Scripts', IncludeTrailingPathDelimiter(ExtractFilePath(Application.ExeName)) + 'scripts'));
   finally
     Free;
   end;
@@ -240,9 +239,7 @@ begin
     WriteBool('DIVERS', 'GrandesIconesMenus', Utilisateur.Options.GrandesIconesMenus);
     WriteBool('DIVERS', 'GrandesIconesBarre', Utilisateur.Options.GrandesIconesBarre);
     WriteBool('ModeEdition', 'ImagesStockees', Utilisateur.Options.ImagesStockees);
-    WriteBool('WebServer', 'AutoStart', Utilisateur.Options.WebServerAutoStart);
-    WriteInteger('WebServer', 'Port', Utilisateur.Options.WebServerPort);
-    WriteBool('WebServer', 'AntiAliasing', Utilisateur.Options.WebServerAntiAliasing);
+    WriteInteger('DIVERS', 'FormatTitreAlbum', Utilisateur.Options.FormatTitreAlbum);
     WriteInteger('Divers', 'VerifMAJDelai', Utilisateur.Options.VerifMAJDelai);
     WriteBool('DIVERS', 'SerieObligatoireAlbums', Utilisateur.Options.SerieObligatoireAlbums);
     WriteBool('DIVERS', 'SerieObligatoireParaBD', Utilisateur.Options.SerieObligatoireParaBD);

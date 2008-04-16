@@ -3,7 +3,7 @@ unit LoadComplet;
 interface
 
 uses
-  SysUtils, Windows, Classes, Dialogs, TypeRec, Commun, CommonConst, DM_Princ, JvUIB, DateUtils, ListOfTypeRec, Contnrs;
+  SysUtils, Windows, Classes, Dialogs, TypeRec, Commun, CommonConst, DM_Princ, JvUIB, DateUtils, ListOfTypeRec, Contnrs, UChampsRecherche;
 
 type
   TBaseComplet = class(TObject)
@@ -183,6 +183,7 @@ type
     ISBN, sEtat, sReliure, sTypeEdition, sFormatEdition, sOrientation: string;
     DateAchat: TDateTime;
     Notes: TStringList;
+    NumeroPerso: string[25];
     Emprunts: TEmpruntsComplet;
     Couvertures: TListOfTCouverture;
 
@@ -444,6 +445,25 @@ type
     procedure LoadFromStream(Stream: TStream); override;
   end;
 
+  TCritereTri = class
+    // sql
+    Champ, NomTable: string;
+    Asc: Boolean;
+    NullsFirst, NullsLast: Boolean;
+    // fenêtre
+    iChamp: Integer;
+    // impression
+    LabelChamp: string;
+    Imprimer: Boolean;
+
+    // valeur de travail
+    _Champ: PChamp;
+
+    procedure Assign(S: TCritereTri);
+    procedure SaveToStream(Stream: TStream);
+    procedure LoadFromStream(Stream: TStream);
+  end;
+
   TTypeRecherche = (trAucune, trSimple, trComplexe);
   TRechercheSimple = (rsAuteur, rsSerie, rsEditeur, rsGenre, rsCollection);
 const
@@ -455,6 +475,7 @@ type
     Resultats: TListOfTAlbum;
     ResultatsInfos: TStrings;
     Criteres: TGroupCritere;
+    SortBy: TList;
     RechercheSimple: TRechercheSimple;
     FLibelle: string;
 
@@ -466,7 +487,9 @@ type
 
     function AddCritere(Parent: TGroupCritere): TCritere;
     function AddGroup(Parent: TGroupCritere): TGroupCritere;
-    procedure Delete(Item: TBaseCritere);
+    function AddSort: TCritereTri;
+    procedure Delete(Item: TBaseCritere); overload;
+    procedure Delete(Item: TCritereTri); overload;
 
     constructor Create; overload; override;
     constructor Create(Recherche: TRechercheSimple; const ID: TGUID; const Libelle: string); reintroduce; overload;
@@ -552,39 +575,8 @@ begin
 end;
 
 function TAlbumComplet.ChaineAffichage(Simple, AvecSerie: Boolean): string;
-const
-  resTome: array[False..True] of string = ('T. ', 'Tome ');
-  resHS: array[False..True] of string = ('HS', 'Hors-série');
-  resIntegrale: array[False..True] of string = ('INT.', 'Intégrale');
-var
-  s, s2: string;
 begin
-  if Simple then
-    Result := Titre
-  else
-    Result := FormatTitre(Titre);
-  s := '';
-  if AvecSerie then
-    if Result = '' then
-      Result := FormatTitre(Serie.Titre)
-    else
-      AjoutString(s, FormatTitre(Serie.Titre), ' - ');
-  if Integrale then
-  begin
-    s2 := NonZero(IntToStr(TomeDebut));
-    AjoutString(s2, NonZero(IntToStr(TomeFin)), ' à ');
-    AjoutString(s, resIntegrale[Result = ''], ' - ', '', TrimRight(' ' + NonZero(IntToStr(Tome))));
-    AjoutString(s, s2, ' ', '[', ']');
-  end
-  else if HorsSerie then
-    AjoutString(s, resHS[Result = ''], ' - ', '', TrimRight(' ' + NonZero(IntToStr(Tome))))
-  else
-    AjoutString(s, NonZero(IntToStr(Tome)), ' - ', resTome[Result = '']);
-  if Result = '' then
-    Result := s
-  else
-    AjoutString(Result, s, ' ', '(', ')');
-  if Result = '' then Result := '<Sans titre>';
+  Result := FormatTitreAlbum(Simple, AvecSerie, Titre, Serie.Titre, Tome, TomeDebut, TomeFin, Integrale, HorsSerie);
 end;
 
 procedure TAlbumComplet.Clear;
@@ -867,7 +859,7 @@ begin
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT ID_EDITION, ID_Album, e.ID_Editeur, e.ID_Collection, NOMCOLLECTION, ANNEEEDITION, PRIX, VO, COULEUR, ISBN, DEDICACE, PRETE,';
     SQL.Add('STOCK, Offert, Gratuit, NombreDePages, etat, le.libelle as setat, reliure, lr.libelle as sreliure, orientation, lo.libelle as sorientation,');
-    SQL.Add('FormatEdition, lf.libelle as sFormatEdition, typeedition, lte.libelle as stypeedition, DateAchat, Notes, AnneeCote, PrixCote');
+    SQL.Add('FormatEdition, lf.libelle as sFormatEdition, typeedition, lte.libelle as stypeedition, DateAchat, Notes, AnneeCote, PrixCote, NumeroPerso');
     SQL.Add('FROM EDITIONS e LEFT JOIN COLLECTIONS c ON e.ID_Collection = c.ID_Collection');
     SQL.Add('LEFT JOIN LISTES le on (le.ref = e.etat and le.categorie = 1)');
     SQL.Add('LEFT JOIN LISTES lr on (lr.ref = e.reliure and lr.categorie = 2)');
@@ -908,6 +900,7 @@ begin
     Self.Notes.Text := Fields.ByNameAsString['Notes'];
     Self.AnneeCote := Fields.ByNameAsInteger['ANNEECOTE'];
     Self.PrixCote := Fields.ByNameAsCurrency['PRIXCOTE'];
+    Self.NumeroPerso := Fields.ByNameAsString['NUMEROPERSO'];
 
     Self.Emprunts.Fill(Self.ID_Edition, seAlbum);
 
@@ -971,9 +964,13 @@ begin
 
     if RecInconnu then
     begin
-      SQL.Text := 'INSERT INTO EDITIONS (ID_Edition, ID_Album, ID_Editeur, ID_Collection, ANNEEEDITION, PRIX, VO, TYPEEDITION, COULEUR, ISBN, STOCK, DEDICACE, OFFERT, GRATUIT, ETAT, RELIURE, ORIENTATION, FormatEdition, DATEACHAT, NOTES, NOMBREDEPAGES, ANNEECOTE, PRIXCOTE)';
-      SQL.Add('VALUES');
-      SQL.Add('(:ID_Edition, :ID_Album, :ID_Editeur, :ID_Collection, :ANNEEEDITION, :PRIX, :VO, :TYPEEDITION, :COULEUR, :ISBN, :STOCK, :DEDICACE, :OFFERT, :GRATUIT, :ETAT, :RELIURE, :ORIENTATION, :FormatEdition, :DATEACHAT, :NOTES, :NOMBREDEPAGES, :ANNEECOTE, :PRIXCOTE)');
+      SQL.Text := 'INSERT INTO EDITIONS (';
+      SQL.Add('ID_Edition, ID_Album, ID_Editeur, ID_Collection, ANNEEEDITION, PRIX, VO, TYPEEDITION, COULEUR, ISBN, STOCK, DEDICACE, OFFERT, GRATUIT,');
+      SQL.Add('ETAT, RELIURE, ORIENTATION, FormatEdition, DATEACHAT, NOTES, NOMBREDEPAGES, ANNEECOTE, PRIXCOTE, NumeroPerso');
+      SQL.Add(') VALUES (');
+      SQL.Add(':ID_Edition, :ID_Album, :ID_Editeur, :ID_Collection, :ANNEEEDITION, :PRIX, :VO, :TYPEEDITION, :COULEUR, :ISBN, :STOCK, :DEDICACE, :OFFERT, :GRATUIT,');
+      SQL.Add(':ETAT, :RELIURE, :ORIENTATION, :FormatEdition, :DATEACHAT, :NOTES, :NOMBREDEPAGES, :ANNEECOTE, :PRIXCOTE, :NumeroPerso');
+      SQL.Add(')');
     end
     else
     begin
@@ -981,7 +978,7 @@ begin
       SQL.Add('ID_Album = :ID_Album, ID_Editeur = :ID_Editeur, ID_Collection = :ID_Collection, ANNEEEDITION = :ANNEEEDITION,');
       SQL.Add('PRIX = :PRIX, VO = :VO, TYPEEDITION = :TYPEEDITION, COULEUR = :COULEUR, ISBN = :ISBN, STOCK = :STOCK, ETAT = :ETAT, RELIURE = :RELIURE,');
       SQL.Add('DEDICACE = :DEDICACE, OFFERT = :OFFERT, GRATUIT = :GRATUIT, DATEACHAT = :DATEACHAT, NOTES = :NOTES, ORIENTATION = :ORIENTATION,');
-      SQL.Add('ANNEECOTE = :ANNEECOTE, PRIXCOTE = :PRIXCOTE,');
+      SQL.Add('ANNEECOTE = :ANNEECOTE, PRIXCOTE = :PRIXCOTE, NumeroPerso = :NumeroPerso,');
       SQL.Add('FormatEdition = :FormatEdition, NOMBREDEPAGES = :NOMBREDEPAGES WHERE (ID_Edition = :ID_Edition)');
     end;
 
@@ -1027,6 +1024,7 @@ begin
       Params.ByNameAsInteger['ANNEECOTE'] := AnneeCote;
       Params.ByNameAsCurrency['PRIXCOTE'] := PrixCote;
     end;
+    Params.ByNameAsString['NUMEROPERSO'] := NumeroPerso;
 
     s := Notes.Text;
     if s <> '' then
@@ -1771,15 +1769,41 @@ begin
     else
       SQL.Add('');
     SQL.Add('');
-    Open; Stats.NbAlbums := Fields.AsInteger[0]; Close;
-    SQL[2] := 'WHERE e.Couleur = 0'; Open; Stats.NbAlbumsNB := Fields.AsInteger[0]; Close;
-    SQL[2] := 'WHERE e.VO = 1'; Open; Stats.NbAlbumsVO := Fields.AsInteger[0]; Close;
-    SQL[2] := 'WHERE e.Stock = 1'; Open; Stats.NbAlbumsStock := Fields.AsInteger[0]; Close;
-    SQL[2] := 'WHERE e.Dedicace = 1'; Open; Stats.NbAlbumsDedicace := Fields.AsInteger[0]; Close;
-    SQL[2] := 'WHERE e.Offert = 1'; Open; Stats.NbAlbumsOffert := Fields.AsInteger[0]; Close;
-    SQL[2] := 'WHERE e.Gratuit = 1'; Open; Stats.NbAlbumsGratuit := Fields.AsInteger[0]; Close;
-    SQL[2] := 'WHERE a.Integrale = 1'; Open; Stats.NbAlbumsIntegrale := Fields.AsInteger[0]; Close;
-    SQL[2] := 'WHERE a.HorsSerie = 1'; Open; Stats.NbAlbumsHorsSerie := Fields.AsInteger[0]; Close;
+    Open;
+    Stats.NbAlbums := Fields.AsInteger[0];
+    Close;
+    SQL[2] := 'WHERE e.Couleur = 0';
+    Open;
+    Stats.NbAlbumsNB := Fields.AsInteger[0];
+    Close;
+    SQL[2] := 'WHERE e.VO = 1';
+    Open;
+    Stats.NbAlbumsVO := Fields.AsInteger[0];
+    Close;
+    SQL[2] := 'WHERE e.Stock = 1';
+    Open;
+    Stats.NbAlbumsStock := Fields.AsInteger[0];
+    Close;
+    SQL[2] := 'WHERE e.Dedicace = 1';
+    Open;
+    Stats.NbAlbumsDedicace := Fields.AsInteger[0];
+    Close;
+    SQL[2] := 'WHERE e.Offert = 1';
+    Open;
+    Stats.NbAlbumsOffert := Fields.AsInteger[0];
+    Close;
+    SQL[2] := 'WHERE e.Gratuit = 1';
+    Open;
+    Stats.NbAlbumsGratuit := Fields.AsInteger[0];
+    Close;
+    SQL[2] := 'WHERE a.Integrale = 1';
+    Open;
+    Stats.NbAlbumsIntegrale := Fields.AsInteger[0];
+    Close;
+    SQL[2] := 'WHERE a.HorsSerie = 1';
+    Open;
+    Stats.NbAlbumsHorsSerie := Fields.AsInteger[0];
+    Close;
 
     SQL.Clear;
     SQL.Add('select count(distinct a.ID_Serie) from albums a');
@@ -1787,10 +1811,15 @@ begin
       SQL.Add('inner join editions e on e.ID_Album = a.ID_Album and e.ID_Editeur=' + QuotedStr(GUIDToString(ID_Editeur)))
     else
       SQL.Add('');
-    Open; Stats.NbSeries := Fields.AsInteger[0]; Close;
+    Open;
+    Stats.NbSeries := Fields.AsInteger[0];
+    Close;
     SQL.Add('left join Series s on a.ID_Serie = s.ID_Serie');
     SQL.Add('');
-    SQL[3] := 'WHERE s.Terminee = 1'; Open; Stats.NbSeriesTerminee := Fields.AsInteger[0]; Close;
+    SQL[3] := 'WHERE s.Terminee = 1';
+    Open;
+    Stats.NbSeriesTerminee := Fields.AsInteger[0];
+    Close;
 
     SQL.Text := 'SELECT Min(a.AnneeParution) AS MinAnnee, Max(a.AnneeParution) AS MaxAnnee FROM Albums a';
     if not IsEqualGUID(ID_Editeur, GUID_NULL) then SQL.Add('INNER JOIN Editions e ON e.ID_Album = a.ID_Album and e.ID_Editeur=' + QuotedStr(GUIDToString(ID_Editeur)));
@@ -2994,6 +3023,7 @@ procedure TRecherche.Clear;
 begin
   inherited;
   Resultats.Clear;
+  ResultatsInfos.Clear;
   TypeRecherche := trAucune;
 end;
 
@@ -3005,6 +3035,7 @@ end;
 procedure TRecherche.ClearCriteres;
 begin
   Criteres.SousCriteres.Clear;
+  SortBy.Clear;
   TypeRecherche := trAucune;
 end;
 
@@ -3038,6 +3069,30 @@ var
     begin
       Result := Result + ' LEFT OUTER JOIN GENRESERIES ON GENRESERIES.ID_Serie = ALBUMS.ID_Serie';
       slFrom.Delete(i);
+    end;
+  end;
+
+  function ProcessSort(out sOrderBy: string): string;
+  var
+    i: Integer;
+    Critere: TCritereTri;
+    s: string;
+  begin
+    sOrderBy := '';
+    Result := '';
+    for i := 0 to Pred(SortBy.Count) do
+    begin
+      Critere := TCritereTri(SortBy[i]);
+      Critere._Champ := ChampByID(Critere.iChamp);
+      s := Critere.NomTable + '.' + Critere.Champ;
+      Result := Result + ', ' + s;
+      if not Critere.Asc then s := s + ' DESC';
+      if Critere.NullsFirst then
+        s := s + ' NULLS FIRST'
+      else if Critere.NullsLast then
+        s := s + ' NULLS LAST';
+      sOrderBy := sOrderBy + s + ', ';
+      slFrom.Add(Critere.NomTable);
     end;
   end;
 
@@ -3075,8 +3130,10 @@ var
 
 var
   Album: TAlbum;
+  i: Integer;
   q: TJvUIBQuery;
-  sWhere: string;
+  sWhere, sOrderBy, s: string;
+  CritereTri: TCritereTri;
 begin
   inherited Fill(GUID_NULL);
 
@@ -3090,16 +3147,17 @@ begin
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT DISTINCT ALBUMS.ID_Album, ALBUMS.TITREALBUM, ALBUMS.TOME, ALBUMS.TOMEDEBUT, ALBUMS.TOMEFIN, ALBUMS.HORSSERIE, ALBUMS.INTEGRALE, ALBUMS.MOISPARUTION, ALBUMS.ANNEEPARUTION, ALBUMS.ID_Serie, SERIES.TITRESERIE';
-
+    SQL.Add(ProcessSort(sOrderBy));
     slFrom.Add('ALBUMS');
     slFrom.Add('SERIES');
     slFrom.Add('EDITIONS');
     sWhere := ProcessCritere(Criteres);
+
     SQL.Add('FROM ' + ProcessTables);
 
     if sWhere <> '' then SQL.Add('WHERE ' + sWhere);
 
-    SQL.Add('ORDER BY COALESCE(ALBUMS.UPPERTITREALBUM, SERIES.UPPERTITRESERIE), SERIES.UPPERTITRESERIE, ALBUMS.HORSSERIE NULLS FIRST, ALBUMS.INTEGRALE NULLS FIRST,');
+    SQL.Add('ORDER BY ' + sOrderBy + 'COALESCE(ALBUMS.UPPERTITREALBUM, SERIES.UPPERTITRESERIE), SERIES.UPPERTITRESERIE, ALBUMS.HORSSERIE NULLS FIRST, ALBUMS.INTEGRALE NULLS FIRST,');
     SQL.Add('ALBUMS.TOME NULLS FIRST, ALBUMS.TOMEDEBUT NULLS FIRST, ALBUMS.TOMEFIN NULLS FIRST, ALBUMS.ANNEEPARUTION NULLS FIRST, ALBUMS.MOISPARUTION NULLS FIRST');
 
     Open;
@@ -3108,6 +3166,34 @@ begin
       Album := TAlbum.Create;
       Album.Fill(q);
       Resultats.Add(Album);
+      s := '';
+      for i := 0 to Pred(SortBy.Count) do
+      begin
+        CritereTri := TCritereTri(SortBy[i]);
+        if CritereTri.Imprimer then
+        begin
+          AjoutString(s, CritereTri.LabelChamp + ' : ', #13#10);
+          if Fields.ByNameIsNull[CritereTri.Champ] then
+            s := s + '<vide>'
+          else if CritereTri._Champ.Booleen then
+            s := s + IIf(Fields.ByNameAsBoolean[CritereTri.Champ], 'Oui', 'Non')
+          else
+            case CritereTri._Champ.Special of
+              csISBN: s := s + FormatISBN(Fields.ByNameAsString[CritereTri.Champ]);
+              csTitre: s := s + FormatTitre(Fields.ByNameAsString[CritereTri.Champ]);
+              csMonnaie: s := s + FormatCurr(FormatMonnaie, Fields.ByNameAsCurrency[CritereTri.Champ]);
+              else
+                case CritereTri._Champ.TypeData of
+                  uftDate: s := s + FormatDateTime('dd mmm yyyy', Fields.ByNameAsDate[CritereTri.Champ]);
+                  uftTime: s := s + FormatDateTime('hh:mm:ss', Fields.ByNameAsTime[CritereTri.Champ]);
+                  uftTimestamp: s := s + FormatDateTime('dd mmm yyyy, hh:mm:ss', Fields.ByNameAsDateTime[CritereTri.Champ]);
+                  else
+                    s := s + StringReplace(AdjustLineBreaks(Fields.ByNameAsString[CritereTri.Champ], tlbsCRLF), #13#10, '\n', [rfReplaceAll]);
+                end;
+            end;
+        end;
+      end;
+      ResultatsInfos.Add(s);
       Next;
     end;
     if Resultats.Count > 0 then
@@ -3128,6 +3214,7 @@ begin
   ResultatsInfos.Free;
   Resultats.Free;
   Criteres.Free;
+  SortBy.Free;
   inherited;
 end;
 
@@ -3208,6 +3295,7 @@ begin
   Resultats := TListOfTAlbum.Create(True);
   ResultatsInfos := TStringList.Create;
   Criteres := TGroupCritere.Create(nil);
+  SortBy := TObjectList.Create(True);
 end;
 
 function TRecherche.AddCritere(Parent: TGroupCritere): TCritere;
@@ -3262,12 +3350,15 @@ procedure TRecherche.LoadFromStream(Stream: TStream);
   end;
 
 var
-  lvl, CritereType: Integer;
+  lvl, CritereType, i: Integer;
   str: string;
   ACritere, NextCritere: TBaseCritere;
 begin
   ClearCriteres;
   Stream.Position := 0;
+
+  for i := 1 to ReadInteger do
+    AddSort.LoadFromStream(Stream);
 
   ReadInteger; // level de la racine
   ReadInteger; // type de la racine
@@ -3326,10 +3417,33 @@ procedure TRecherche.SaveToStream(Stream: TStream);
     end;
   end;
 
+  procedure WriteSortBy;
+  var
+    i: Integer;
+  begin
+    WriteInteger(SortBy.Count);
+    for i := 0 to Pred(SortBy.Count) do
+      TCritereTri(SortBy[i]).SaveToStream(Stream);
+  end;
+
 begin
   Stream.Size := 0;
+  WriteSortBy;
   WriteCritere(Criteres);
   ProcessSousCriteres(Criteres);
+end;
+
+procedure TRecherche.Delete(Item: TCritereTri);
+begin
+  SortBy.Remove(Item);
+  TypeRecherche := trAucune;
+end;
+
+function TRecherche.AddSort: TCritereTri;
+begin
+  Result := TCritereTri.Create;
+  SortBy.Add(Result);
+  TypeRecherche := trAucune;
 end;
 
 { TCritere }
@@ -3455,4 +3569,93 @@ begin
 
 end;
 
+{ TCritereTri }
+
+procedure TCritereTri.Assign(S: TCritereTri);
+begin
+  Champ := S.Champ;
+  LabelChamp := S.LabelChamp;
+  NomTable := S.NomTable;
+  Asc := S.Asc;
+  NullsFirst := S.NullsFirst;
+  NullsLast := S.NullsLast;
+  iChamp := S.iChamp;
+  Imprimer := S.Imprimer;
+end;
+
+procedure TCritereTri.LoadFromStream(Stream: TStream);
+
+  function ReadInteger: Integer;
+  begin
+    Stream.Read(Result, SizeOf(Integer));
+  end;
+
+  function ReadBool: Boolean;
+  var
+    dummy: Byte;
+  begin
+    Stream.Read(dummy, SizeOf(Byte));
+    Result := dummy = 1;
+  end;
+
+  function ReadString: string;
+  var
+    l: Integer;
+  begin
+    l := ReadInteger;
+    SetLength(Result, l);
+    Stream.Read(Result[1], l);
+  end;
+
+begin
+  inherited;
+  LabelChamp := ReadString;
+  Champ := ReadString;
+  NomTable := ReadString;
+  iChamp := ReadInteger;
+  Asc := ReadBool;
+  NullsFirst := ReadBool;
+  NullsLast := ReadBool;
+  Imprimer := ReadBool;
+end;
+
+procedure TCritereTri.SaveToStream(Stream: TStream);
+
+  procedure WriteInteger(Value: Integer);
+  begin
+    Stream.Write(Value, SizeOf(Integer));
+  end;
+
+  procedure WriteBool(Value: Boolean);
+  var
+    dummy: Byte;
+  begin
+    if Value then
+      dummy := 1
+    else
+      dummy := 0;
+    Stream.Write(dummy, SizeOf(Byte));
+  end;
+
+  procedure WriteString(const Value: string);
+  var
+    l: Integer;
+  begin
+    l := Length(Value);
+    WriteInteger(l);
+    Stream.WriteBuffer(Value[1], l);
+  end;
+
+begin
+  WriteString(LabelChamp);
+  WriteString(Champ);
+  WriteString(NomTable);
+  WriteInteger(iChamp);
+  WriteBool(Asc);
+  WriteBool(NullsFirst);
+  WriteBool(NullsLast);
+  WriteBool(Imprimer);
+end;
+
 end.
+

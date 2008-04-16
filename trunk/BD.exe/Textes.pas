@@ -52,11 +52,13 @@ const
   rsTransLongueur = 'Longueur';
   rsTransMaximum = 'Maximum';
   rsTransMinimum = 'Minimum';
+  rsTransMoisParution = 'Mois de parution';
   //  rsTransNationalite = 'Nationalité';
   rsTransNombreDEditions = 'Nombre d''éditions';
   rsTransNombreDePages = 'Nombre de pages';
   rsTransNotes = 'Notes';
   rsTransNumerote = 'Numéroté';
+  rsTransNumeroPerso ='Numérotation personnelle';
   rsTransOrientation = 'Orientation';
   //  rsTransOui = 'Oui';
   rsTransOffert = 'Offert';
@@ -136,7 +138,6 @@ const
   rsMoisParutionIncorrect = 'Le mois de parution doit être compris entre 1 et 12 !';
   rsCoteIncomplete = 'Une cote doit être composée d''un prix ET d''une année.';
   rsTypeParaBDObligatoire = 'Le type de para-BD est obligatoire !';
-  rsNbAlbumsIncorrect = 'Le nombre d''albums est incorrect.';
 
   rsLienAlbum = 'Attention, les personnes et les emprunteurs qui ont un lien avec cet album en seront détachées.';
   rsSupprimerAlbum = 'Êtes-vous sûr de vouloir supprimer cet album ?';

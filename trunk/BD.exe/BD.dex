@@ -51,7 +51,7 @@
       <GenDRC Value="False" Active="True"/>
       <GenDUI Value="False" Active="True"/>
       <CompileName Value="" Active="True"/>
-      <Defines Value="DEBUG;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic" Active="True"/>
+      <Defines Value="DEBUG;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT" Active="True"/>
       <SysDefines Value="" Active="True"/>
       <OutputDir Value="..\..\bin" Active="False"/>
       <UnitOutputDir Value="dcu" Active="False"/>
@@ -284,7 +284,7 @@
       <GenDRC Value="False" Active="True"/>
       <GenDUI Value="False" Active="True"/>
       <CompileName Value="" Active="True"/>
-      <Defines Value="RELEASE;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic" Active="True"/>
+      <Defines Value="RELEASE;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT" Active="True"/>
       <SysDefines Value="" Active="True"/>
       <OutputDir Value="..\..\bin" Active="False"/>
       <UnitOutputDir Value="dcu" Active="False"/>
@@ -517,7 +517,7 @@
       <GenDRC Value="False" Active="True"/>
       <GenDUI Value="False" Active="True"/>
       <CompileName Value="" Active="True"/>
-      <Defines Value="RELEASE;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic" Active="True"/>
+      <Defines Value="RELEASE;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT" Active="True"/>
       <SysDefines Value="" Active="True"/>
       <OutputDir Value="..\..\bin" Active="False"/>
       <UnitOutputDir Value="dcu" Active="False"/>

@@ -287,7 +287,8 @@ var
 begin
   LV.Items.BeginUpdate;
   try
-    for i := LV.Items.Count - 1 downto 0 do begin
+    for i := LV.Items.Count - 1 downto 0 do
+    begin
       TBasePointeur(LV.Items[i].Data).Free;
       LV.Items.Delete(i);
     end;
@@ -302,7 +303,8 @@ var
   i: Integer;
 begin
   try
-    for i := 0 to Pred(List.Count) do begin
+    for i := 0 to Pred(List.Count) do
+    begin
       TBasePointeur(List[i]).Free;
     end;
   finally
@@ -315,7 +317,8 @@ var
   i: Integer;
 begin
   try
-    for i := 0 to Pred(ListBox.Items.Count) do begin
+    for i := 0 to Pred(ListBox.Items.Count) do
+    begin
       ListBox.Items.Objects[i].Free;
     end;
   finally
@@ -437,7 +440,8 @@ var
   q: TJvUIBQuery;
 begin
   q := TJvUIBQuery.Create(nil);
-  with q do try
+  with q do
+  try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT NOMEDITEUR, ID_Editeur FROM EDITEURS WHERE ID_Editeur = ?';
     Params.AsString[0] := GUIDToString(ID_Editeur);
@@ -554,38 +558,8 @@ begin
 end;
 
 function TAlbum.ChaineAffichage(Simple, AvecSerie: Boolean): string;
-const
-  resTome: array[False..True] of string = ('T. ', 'Tome ');
-  resHS: array[False..True] of string = ('HS', 'Hors-série');
-  resIntegrale: array[False..True] of string = ('INT.', 'Intégrale');
-var
-  s, s2: string;
 begin
-  if Simple then
-    Result := Titre
-  else
-    Result := FormatTitre(Titre);
-  s := '';
-  if AvecSerie then
-    if Result = '' then
-      Result := FormatTitre(Serie)
-    else
-      AjoutString(s, FormatTitre(Serie), ' - ');
-  if Integrale then begin
-    s2 := NonZero(IntToStr(TomeDebut));
-    AjoutString(s2, NonZero(IntToStr(TomeFin)), ' à ');
-    AjoutString(s, resIntegrale[Result = ''], ' - ', '', TrimRight(' ' + NonZero(IntToStr(Tome))));
-    AjoutString(s, s2, ' ', '[', ']');
-  end
-  else if HorsSerie then
-    AjoutString(s, resHS[Result = ''], ' - ', '', TrimRight(' ' + NonZero(IntToStr(Tome))))
-  else
-    AjoutString(s, NonZero(IntToStr(Tome)), ' - ', resTome[Result = '']);
-  if Result = '' then
-    Result := s
-  else
-    AjoutString(Result, s, ' ', '(', ')');
-  if Result = '' then Result := '<Sans titre>';
+  Result := FormatTitreAlbum(Simple, AvecSerie, Titre, Serie, Tome, TomeDebut, TomeFin, Integrale, HorsSerie);
 end;
 
 procedure TAlbum.Fill(Query: TJvUIBQuery);
@@ -652,12 +626,14 @@ var
   q: TJvUIBQuery;
 begin
   q := TJvUIBQuery.Create(nil);
-  with q do try
+  with q do
+  try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT a.ID_Album, a.TitreAlbum, a.HorsSerie, a.Integrale, a.Tome, a.TomeDebut, a.TomeFin, a.ID_Serie, a.Achat, a.Complet, a.TitreSerie';
     SQL.Add('FROM VW_LISTE_ALBUMS a');
     SQL.Add('WHERE a.ID_ALBUM = :ID_Album');
-    if not IsEqualGUID(ID_Edition, GUID_NULL) then begin
+    if not IsEqualGUID(ID_Edition, GUID_NULL) then
+    begin
       SQL[0] := SQL[0] + ', e.Stock';
       SQL[1] := SQL[1] + ' INNER JOIN Editions e ON a.ID_Album = e.ID_Album';
       SQL.Add('AND e.ID_Edition = :ID_Edition');
@@ -737,7 +713,8 @@ var
   q: TJvUIBQuery;
 begin
   q := TJvUIBQuery.Create(nil);
-  with q do try
+  with q do
+  try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT ID_Collection, NomCollection';
     SQL.Add('FROM COLLECTIONS');
@@ -823,7 +800,8 @@ var
   q: TJvUIBQuery;
 begin
   q := TJvUIBQuery.Create(nil);
-  with q do try
+  with q do
+  try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT ID_Serie, TitreSerie FROM SERIES WHERE ID_Serie = :ID_Serie';
     Params.AsString[0] := GUIDToString(ID_Serie);
@@ -931,7 +909,8 @@ var
   q: TJvUIBQuery;
 begin
   q := TJvUIBQuery.Create(nil);
-  with q do try
+  with q do
+  try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT ID_Emprunteur, NomEmprunteur FROM Emprunteurs WHERE ID_Emprunteur = ?';
     Params.AsString[0] := GUIDToString(ID_Emprunteur);
@@ -1124,3 +1103,4 @@ begin
 end;
 
 end.
+

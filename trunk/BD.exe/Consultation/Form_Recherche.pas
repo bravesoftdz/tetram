@@ -24,7 +24,6 @@ type
     btnRecherche: TButton;
     TabSheet3: TTabSheet;
     Splitter1: TSplitter;
-    TreeView1: TTreeView;
     vtPersonnes: TVirtualStringTree;
     VTResult: TVirtualStringTree;
     LightComboCheck1: TLightComboCheck;
@@ -34,6 +33,11 @@ type
     Imprimer1: TMenuItem;
     lbResult: TLabel;
     FrameRechercheRapide1: TFrameRechercheRapide;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    TreeView1: TTreeView;
+    TreeView2: TTreeView;
     procedure plusClick(Sender: TObject);
     procedure moinsClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -53,6 +57,8 @@ type
     procedure VTResultHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure LightComboCheck1Change(Sender: TObject);
     procedure Edit2KeyPress(Sender: TObject; var Key: Char);
+    procedure PageControl1Change(Sender: TObject);
+    procedure TreeView2Change(Sender: TObject; Node: TTreeNode);
   private
     { Déclarations privées }
     Recherche: TRecherche;
@@ -63,14 +69,13 @@ type
     function ImpressionUpdate: Boolean;
     function ApercuUpdate: Boolean;
     procedure ReconstructLabels(ParentNode: TTreeNode);
+    procedure ReconstructSortLabel(Node: TTreeNode);
+    procedure AddCritereTri;
   public
     { Déclarations publiques }
     CritereSimple: TGUID;
     property TypeRecherche: TTypeRecherche read FTypeRecherche write SetTypeRecherche;
     function ImpressionEnabled: Boolean;
-    function TransChamps(const Champ: string): string;
-    function ValChamps(const Champ: string): Integer;
-    function IsValChampBoolean(ValChamp: Integer): Boolean;
     procedure LoadRechFromStream(Stream: TStream);
   end;
 
@@ -78,106 +83,13 @@ implementation
 
 uses
   Textes, DM_Princ, TypeRec, Impression, Math, Form_EditCritere, UHistorique, Procedures,
-  Main;
+  Main, Form_EditCritereTri;
 
 {$R *.DFM}
 
 var
   FSortColumn: Integer;
   FSortDirection: TSortDirection;
-
-function TFrmRecherche.TransChamps(const Champ: string): string;
-begin
-  Result := '';
-  if SameText(Champ, 'titrealbum') then Result := rsTransTitreAlbum;
-  if SameText(Champ, 'anneeparution') then Result := rsTransAnneeParution;
-  if SameText(Champ, 'tome') then Result := rsTransTome;
-  if SameText(Champ, 'horsserie') then Result := rsTransHorsSerie;
-  if SameText(Champ, 'integrale') then Result := rsTransIntegrale;
-  if SameText(Champ, 'uppersujetalbum') then Result := rsTransHistoire + ' ' + rsTransAlbum;
-  if SameText(Champ, 'upperremarquesalbum') then Result := rsTransNotes + ' ' + rsTransAlbum;
-
-  if SameText(Champ, 'titreserie') then Result := rsTransTitreSerie;
-  if SameText(Champ, 'uppersujetserie') then Result := rsTransHistoire + ' ' + rsTransSerie;
-  if SameText(Champ, 'upperremarquesserie') then Result := rsTransNotes + ' ' + rsTransSerie;
-  if SameText(Champ, 'terminee') then Result := rsTransSerieTerminee;
-  if SameText(Champ, 'complete') then Result := rsTransSerieComplete;
-  if SameText(Champ, 'suivremanquants') then Result := rsTransSerieChercherManquants;
-  if SameText(Champ, 'suivresorties') then Result := rsTransSerieSuivreSorties;
-
-  if SameText(Champ, 'anneeedition') then Result := rsTransAnneeEdition;
-  if SameText(Champ, 'prix') then Result := rsTransPrix;
-  if SameText(Champ, 'vo') then Result := rsTransVO;
-  if SameText(Champ, 'couleur') then Result := rsTransCouleur;
-  if SameText(Champ, 'isbn') then Result := rsTransISBN;
-  if SameText(Champ, 'prete') then Result := rsTransPrete;
-  if SameText(Champ, 'stock') then Result := rsTransStock;
-  if SameText(Champ, 'typeedition') then Result := rsTransEdition;
-  if SameText(Champ, 'dedicace') then Result := rsTransDedicace;
-  if SameText(Champ, 'etat') then Result := rsTransEtat;
-  if SameText(Champ, 'reliure') then Result := rsTransReliure;
-  if SameText(Champ, 'orientation') then Result := rsTransOrientation;
-  if SameText(Champ, 'formatedition') then Result := rsTransFormatEdition;
-  if SameText(Champ, 'typeedition') then Result := rsTransTypeEdition;
-  if SameText(Champ, 'dateachat') then Result := rsTransDateAchat;
-  if SameText(Champ, 'gratuit') then Result := rsTransGratuit;
-  if SameText(Champ, 'offert') then Result := rsTransOffert;
-  if SameText(Champ, 'nombredepages') then Result := rsTransNombreDePages;
-  if SameText(Champ, 'anneecote') then Result := rsTransCote + ' (' + rsTransAnnee + ')';
-  if SameText(Champ, 'prixcote') then Result := rsTransCote + ' (' + rsTransPrix + ')';
-  if SameText(Champ, 'nbeditions') then Result := rsTransNombreDEditions;
-
-  if SameText(Champ, 'genreserie') then Result := rsTransGenre + ' *';
-end;
-
-function TFrmRecherche.ValChamps(const Champ: string): Integer;
-begin
-  Result := 0;
-  if (Champ = rsTransTitreAlbum) or (SameText(Champ, 'titrealbum')) then Result := 1;
-  if (Champ = rsTransAnneeParution) or (SameText(Champ, 'anneeparution')) then Result := 2;
-  if (Champ = rsTransTome) or (SameText(Champ, 'tome')) then Result := 3;
-  if (Champ = rsTransHorsSerie) or (SameText(Champ, 'horsserie')) then Result := 4;
-  if (Champ = rsTransIntegrale) or (SameText(Champ, 'integrale')) then Result := 5;
-  if (Champ = rsTransHistoire + ' ' + rsTransAlbum) or (SameText(Champ, 'sujetalbum')) then Result := 6;
-  if (Champ = rsTransNotes + ' ' + rsTransAlbum) or (SameText(Champ, 'remarquesalbum')) then Result := 7;
-
-  if (Champ = rsTransTitreSerie) or (SameText(Champ, 'titreserie')) then Result := 8;
-  if (Champ = rsTransHistoire + ' ' + rsTransSerie) or (SameText(Champ, 'sujetserie')) then Result := 9;
-  if (Champ = rsTransNotes + ' ' + rsTransSerie) or (SameText(Champ, 'remarquesserie')) then Result := 10;
-  if (Champ = rsTransSerieTerminee) or (SameText(Champ, 'terminee')) then Result := 11;
-  if (Champ = rsTransSerieComplete) or (SameText(Champ, 'complete')) then Result := 33;
-  if (Champ = rsTransSerieChercherManquants) or (SameText(Champ, 'suivremanquants')) then Result := 34;
-  if (Champ = rsTransSerieSuivreSorties) or (SameText(Champ, 'suivresorties')) then Result := 35;
-
-  if (Champ = rsTransAnneeEdition) or (SameText(Champ, 'anneeedition')) then Result := 12;
-  if (Champ = rsTransPrix) or (SameText(Champ, 'prix')) then Result := 13;
-  if (Champ = rsTransVO) or (SameText(Champ, 'vo')) then Result := 14;
-  if (Champ = rsTransCouleur) or (SameText(Champ, 'couleur')) then Result := 15;
-  if (Champ = rsTransISBN) or (SameText(Champ, 'isbn')) then Result := 16;
-  if (Champ = rsTransPrete) or (SameText(Champ, 'prete')) then Result := 17;
-  if (Champ = rsTransStock) or (SameText(Champ, 'stock')) then Result := 18;
-  if (Champ = rsTransEdition) or (SameText(Champ, 'typeedition')) then Result := 19;
-  if (Champ = rsTransDedicace) or (SameText(Champ, 'dedicace')) then Result := 20;
-  if (Champ = rsTransEtat) or (SameText(Champ, 'etat')) then Result := 21;
-  if (Champ = rsTransReliure) or (SameText(Champ, 'reliure')) then Result := 22;
-  if (Champ = rsTransOrientation) or (SameText(Champ, 'orientation')) then Result := 24;
-  if (Champ = rsTransFormatEdition) or (SameText(Champ, 'formatedition')) then Result := 25;
-  if (Champ = rsTransTypeEdition) or (SameText(Champ, 'typeedition')) then Result := 26;
-  if (Champ = rsTransDateAchat) or (SameText(Champ, 'dateachat')) then Result := 27;
-  if (Champ = rsTransGratuit) or (SameText(Champ, 'gratuit')) then Result := 28;
-  if (Champ = rsTransOffert) or (SameText(Champ, 'offert')) then Result := 29;
-  if (Champ = rsTransNombreDePages) or (SameText(Champ, 'nombredepages')) then Result := 30;
-  if (Champ = rsTransCote + ' (' + rsTransAnnee + ')') or (SameText(Champ, 'anneecote')) then Result := 31;
-  if (Champ = rsTransCote + ' (' + rsTransPrix + ')') or (SameText(Champ, 'prixcote')) then Result := 32;
-  if (Champ = rsTransNombreDEditions) or (SameText(Champ, 'nbeditions')) then Result := 36;
-
-  if (Champ = rsTransGenre + ' *') or (SameText(Champ, 'ID_Genre')) then Result := 23;
-end;
-
-function TFrmRecherche.IsValChampBoolean(ValChamp: Integer): Boolean;
-begin
-  Result := ValChamp in [4, 5, 11, 14, 15, 17, 18, 19, 20, 28, 29, 33, 34, 35];
-end;
 
 procedure TFrmRecherche.SetTypeRecherche(Value: TTypeRecherche);
 begin
@@ -225,6 +137,7 @@ begin
   FrameRechercheRapide1.ShowNewButton := False;
 
   PageControl2.ActivePageIndex := 0;
+  PageControl1.ActivePageIndex := 0;
 
   VTResult.TreeOptions.PaintOptions := VTResult.TreeOptions.PaintOptions - [toShowButtons, toShowDropmark, toShowRoot];
 
@@ -239,20 +152,42 @@ procedure TFrmRecherche.ModifClick(Sender: TObject);
 var
   ToModif: TTreeNode;
   p: TCritere;
+  p2: TCritereTri;
 begin
-  ToModif := TreeView1.Selected;
-  if not (Assigned(ToModif) and (Integer(ToModif.Data) > 0)) then Exit;
-  p := ToModif.Data;
-  with TFrmEditCritere.Create(Self) do
+  if PageControl1.ActivePage = TabSheet1 then
   begin
-    try
-      Critere := p;
-      if ShowModal <> mrOk then Exit;
-      p.Assign(Critere);
-      if TypeRecherche = trComplexe then TypeRecherche := trAucune;
-      ReconstructLabels(ToModif.Parent);
-    finally
-      Free;
+    ToModif := TreeView1.Selected;
+    if not (Assigned(ToModif) and (Integer(ToModif.Data) > 0)) then Exit;
+    p := ToModif.Data;
+    with TFrmEditCritere.Create(Self) do
+    begin
+      try
+        Critere := p;
+        if ShowModal <> mrOk then Exit;
+        p.Assign(Critere);
+        if TypeRecherche = trComplexe then TypeRecherche := trAucune;
+        ReconstructLabels(ToModif.Parent);
+      finally
+        Free;
+      end;
+    end;
+  end
+  else
+  begin
+    ToModif := TreeView2.Selected;
+    if not Assigned(ToModif) then Exit;
+    p2 := ToModif.Data;
+    with TFrmEditCritereTri.Create(Self) do
+    begin
+      try
+        Critere := p2;
+        if ShowModal <> mrOk then Exit;
+        p2.Assign(Critere);
+        if TypeRecherche = trComplexe then TypeRecherche := trAucune;
+        ReconstructSortLabel(ToModif);
+      finally
+        Free;
+      end;
     end;
   end;
 end;
@@ -261,28 +196,48 @@ procedure TFrmRecherche.plusClick(Sender: TObject);
 var
   p: TPoint;
 begin
-  if Assigned(TreeView1.Selected) then
+  if PageControl1.ActivePage = TabSheet1 then
   begin
-    p := plus.ClientToScreen(Point(0, plus.Height));
-    PopupMenu1.Popup(p.x, p.y);
+    if Assigned(TreeView1.Selected) then
+    begin
+      p := plus.ClientToScreen(Point(0, plus.Height));
+      PopupMenu1.Popup(p.x, p.y);
+    end
+    else
+      Groupedecritre1.Click;
   end
   else
-    Groupedecritre1.Click;
+  begin
+    AddCritereTri;
+  end;
 end;
 
 procedure TFrmRecherche.moinsClick(Sender: TObject);
 var
   p: TBaseCritere;
+  Critere: TCritereTri;
   ParentNode: TTreeNode;
 begin
   if TypeRecherche = trComplexe then TypeRecherche := trAucune;
-  if Assigned(TreeView1.Selected) and (TreeView1.Selected <> TreeView1.Items.GetFirstNode) then
+  if PageControl1.ActivePage = TabSheet1 then
   begin
-    p := TreeView1.Selected.Data;
-    ParentNode := TreeView1.Selected.Parent;
-    TreeView1.Selected.Delete;
-    Recherche.Delete(p);
-    ReconstructLabels(ParentNode);
+    if Assigned(TreeView1.Selected) and (TreeView1.Selected <> TreeView1.Items.GetFirstNode) then
+    begin
+      p := TreeView1.Selected.Data;
+      ParentNode := TreeView1.Selected.Parent;
+      TreeView1.Selected.Delete;
+      Recherche.Delete(p);
+      ReconstructLabels(ParentNode);
+    end;
+  end
+  else
+  begin
+    if Assigned(TreeView2.Selected) then
+    begin
+      Critere := TreeView1.Selected.Data;
+      TreeView1.Selected.Delete;
+      Recherche.Delete(Critere);
+    end;
   end;
 end;
 
@@ -576,6 +531,54 @@ begin
               Text := Champ + ' ' + Test
             else
               Text := methode.Text + ' ' + Champ + ' ' + Test;
+end;
+
+procedure TFrmRecherche.PageControl1Change(Sender: TObject);
+begin
+  methode.Visible := PageControl1.ActivePage = TabSheet1;
+  if PageControl1.ActivePage = TabSheet1 then
+    TreeView1Change(TreeView1, TreeView1.Selected)
+  else
+    TreeView2Change(TreeView2, TreeView2.Selected);
+end;
+
+procedure TFrmRecherche.AddCritereTri;
+var
+  p: TCritereTri;
+  Node: TTreeNode;
+begin
+  if not Assigned(TreeView1.Selected) then Exit;
+  with TFrmEditCritereTri.Create(Self) do
+  begin
+    try
+      if ShowModal <> mrOk then Exit;
+
+      p := Recherche.AddSort;
+      p.Assign(Critere);
+      Node := TreeView2.Items.Add(nil, '');
+      with Node do
+      begin
+        Data := p;
+        ReconstructSortLabel(Node);
+        Selected := True;
+      end;
+      if TypeRecherche = trComplexe then TypeRecherche := trAucune;
+    finally
+      Free;
+    end;
+  end;
+end;
+
+procedure TFrmRecherche.ReconstructSortLabel(Node: TTreeNode);
+begin
+  with TCritereTri(Node.Data) do
+    Node.Text := '(' + IIf(NullsFirst, '*', '') + IIf(Asc, '+', '-') + IIf(NullsLast, '*', '') + ') ' + LabelChamp;
+end;
+
+procedure TFrmRecherche.TreeView2Change(Sender: TObject; Node: TTreeNode);
+begin
+  Modif.Enabled := Assigned(Node);
+  moins.Enabled := Assigned(Node);
 end;
 
 end.

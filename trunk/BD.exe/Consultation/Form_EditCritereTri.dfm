@@ -1,10 +1,10 @@
-object FrmEditCritere: TFrmEditCritere
+object FrmEditCritereTri: TFrmEditCritereTri
   Left = 732
   Top = 251
   BorderIcons = []
   BorderStyle = bsToolWindow
   Caption = ' '
-  ClientHeight = 112
+  ClientHeight = 132
   ClientWidth = 231
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -38,64 +38,13 @@ object FrmEditCritere: TFrmEditCritere
     Items.Separateur = ' - '
     Items = <>
   end
-  object signes: TLightComboCheck
-    Left = 8
-    Top = 32
-    Width = 105
-    Height = 22
-    Cursor = crHandPoint
-    Visible = False
-    Checked = False
-    CaptionUnchecked = 'Comparaison'
-    PropertiesStored = False
-    CheckVisible = False
-    FillCaption = False
-    ShowCaptionHint = True
-    AssignHint = False
-    OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
-    Items.CaptionComplet = True
-    Items.Separateur = ' '
-    Items = <>
-  end
-  object Critere2: TLightComboCheck
-    Left = 120
-    Top = 32
-    Width = 105
-    Height = 22
-    Cursor = crHandPoint
-    Visible = False
-    Checked = False
-    CaptionUnchecked = 'Valeur / Langue'
-    PropertiesStored = False
-    CheckVisible = False
-    FillCaption = False
-    ShowCaptionHint = True
-    AssignHint = False
-    OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
-    Items.CaptionComplet = True
-    Items.Separateur = ' '
-    Items = <>
-  end
-  object valeur: TEditLabeled
-    Left = 8
-    Top = 56
-    Width = 217
-    Height = 19
-    Hint = 'Valeur de r'#233'f'#233'rence (recherche multi-crit'#232'res)'
-    BevelKind = bkTile
-    BorderStyle = bsNone
-    TabOrder = 0
-    Visible = False
-    LinkControls = <>
-    CurrencyChar = #0
-  end
   inline Frame11: TFrame1
     Left = 0
-    Top = 87
+    Top = 107
     Width = 231
     Height = 25
     Align = alBottom
-    TabOrder = 1
+    TabOrder = 0
     inherited btnOK: TBitBtn
       Left = 100
       Width = 55
@@ -106,9 +55,55 @@ object FrmEditCritere: TFrmEditCritere
       Width = 64
     end
   end
+  object RadioButton1: TRadioButton
+    Left = 8
+    Top = 32
+    Width = 81
+    Height = 17
+    Caption = 'Croissant'
+    Checked = True
+    TabOrder = 1
+    TabStop = True
+  end
+  object RadioButton2: TRadioButton
+    Left = 120
+    Top = 32
+    Width = 89
+    Height = 17
+    Caption = 'D'#233'croissant'
+    TabOrder = 2
+  end
+  object CheckBox1: TCheckBox
+    Left = 8
+    Top = 56
+    Width = 97
+    Height = 17
+    Caption = 'Vide en premier'
+    TabOrder = 3
+    OnClick = CheckBox1Click
+  end
+  object CheckBox2: TCheckBox
+    Left = 120
+    Top = 56
+    Width = 97
+    Height = 17
+    Caption = 'Vide en dernier'
+    TabOrder = 4
+    OnClick = CheckBox2Click
+  end
+  object CheckBox3: TCheckBox
+    Left = 8
+    Top = 88
+    Width = 97
+    Height = 17
+    Caption = 'Imprimer'
+    Enabled = False
+    TabOrder = 5
+  end
   object ActionList1: TActionList
     OnUpdate = ActionList1Update
-    Top = 80
+    Left = 200
+    Top = 72
     object ActOk: TAction
       Caption = 'OK'
       OnExecute = ActOkExecute
