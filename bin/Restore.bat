@@ -2,11 +2,11 @@
 if "%~1" == "" goto else
 echo Restore: %~1
 pause
-"C:\Program Files\Firebird\Firebird_1_5\bin\gbak" %1 "bd.gdb" -C -R -USER "sysdba" -PAS "laurence" -V
+"C:\Program Files\Firebird\Firebird_2_0\bin\gbak" %1 "bd.gdb" -REP -C -R -USER "sysdba" -PAS "masterkey" -V
 goto endif
 :else
 echo Restore: bd.gbk
 pause
-"C:\Program Files\Firebird\Firebird_1_5\bin\gbak" "bd.gbk" "bd.gdb" -C -R -USER "sysdba" -PAS "laurence" -V
+"C:\Program Files\Firebird\Firebird_2_0\bin\gbak" "bd.gbk" "bd.gdb" -REP -C -R -USER "sysdba" -PAS "masterkey" -V
 :endif
 pause
