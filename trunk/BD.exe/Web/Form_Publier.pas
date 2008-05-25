@@ -349,9 +349,7 @@ var
                 else
                   contenuChamp := Fields.AsString[i];
               end;
-              //          if Fields.FieldType[i] = uftBlob then
-              //            contenuChamp := champ
-              //          else
+              //          if Fields.FieldType[i] <> uftBlob then
               contenuChamp := CleanHTTP(contenuChamp);
               AjoutString(recordXML, contenuChamp, '', Format('<%s%s>', [champ, IIf(Fields.FieldType[i] = uftBlob, {' type="B"'} '', '')]), Format('</%s>', [champ]));
             end;
