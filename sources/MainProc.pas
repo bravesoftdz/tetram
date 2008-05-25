@@ -15,8 +15,8 @@ procedure LoadOptions;
 const
   PathWin: string = '';
   StartupFolder: string = '';
-  CleProg = 'SOFTWARE\Medi@ Kit\WallPap';
-  TitleAPP = 'Medi@ Kit - WallPap 1.0';
+  CleProg = 'SOFTWARE\Medi@ kit\WallPap';
+  TitleAPP = 'Medi@ kit - WallPap 1.0';
   WorkArea: TRect = (Left: 0; Top: 0; Right: 0; Bottom: 0);
 
 implementation

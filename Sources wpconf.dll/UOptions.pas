@@ -7,7 +7,7 @@ uses
 
 const
   CleProg = 'SOFTWARE\TetramCorp\WallPepper';
-  OldCleProg = 'SOFTWARE\Medi@ Kit\WallPap';
+  OldCleProg = 'SOFTWARE\Tetram\WallPap';
 
 type
   TRegleJourFerie = (rjfAucune, rjfDateFixe, rjfInterval, rjfCalcul);
