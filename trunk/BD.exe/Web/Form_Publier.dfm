@@ -87,7 +87,7 @@ object frmPublier: TfrmPublier
       end
       object GroupBox2: TGroupBox
         Left = 0
-        Top = 112
+        Top = 96
         Width = 329
         Height = 65
         Caption = ' Base de donn'#233'es '
@@ -119,6 +119,14 @@ object frmPublier: TfrmPublier
           ItemHeight = 13
           TabOrder = 2
         end
+      end
+      object CheckBox2: TCheckBox
+        Left = 0
+        Top = 168
+        Width = 113
+        Height = 17
+        Caption = 'Envoyer les images'
+        TabOrder = 2
       end
     end
     object TabSheet2: TTabSheet
@@ -174,7 +182,7 @@ object frmPublier: TfrmPublier
           Width = 153
           Height = 21
           Style = csDropDownList
-          ItemHeight = 13
+          ItemHeight = 0
           TabOrder = 2
         end
       end

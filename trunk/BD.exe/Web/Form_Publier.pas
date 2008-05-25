@@ -43,6 +43,7 @@ type
     Label8: TLabel;
     Button1: TButton;
     Label9: TLabel;
+    CheckBox2: TCheckBox;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
@@ -67,14 +68,22 @@ type
     ID: string;
     version_mini, version_maxi: string;
     TypeSynchro: TSynchroSpecial;
+    SkipFields: string;
   end;
 
 const
-  TablesSynchro: array[0..3] of RInfoTable = (
+  TablesSynchro: array[1..11] of RInfoTable = (
     (TableName: 'PERSONNES'; ID: 'id_personne'),
+    (TableName: 'EDITEURS'; ID: 'id_editeur'),
+    (TableName: 'COLLECTIONS'; ID: 'id_collection'),
     (TableName: 'SERIES'; ID: 'id_serie'),
     (TableName: 'ALBUMS'; ID: 'id_album'),
-    (TableName: 'COUVERTURES'; ID: 'id_couverture'; TypeSynchro: tsImages));
+    (TableName: 'EDITIONS'; ID: 'id_edition'),
+    (TableName: 'AUTEURS'; ID: 'id_auteur'),
+    (TableName: 'GENRES'; ID: 'id_genre'),
+    (TableName: 'GENRESERIES'; ID: 'id_genreseries'),
+    (TableName: 'LISTES'; ID: 'id_liste'),
+    (TableName: 'COUVERTURES'; ID: 'id_couverture'; TypeSynchro: tsImages; SkipFields: '@stockagecouverture@imagecouverture@fichiercouverture@'));
 
 procedure TfrmPublier.Button1Click(Sender: TObject);
 const
@@ -295,58 +304,72 @@ var
     MaxBodySize = 4096;
   var
     enteteXML, bodyXML, recordXML, champ, contenuChamp: string;
-    i: Integer;
-    ms: TMemoryStream;
-    ss: TStringStream;
+    i, l: Integer;
+    //    ms: TMemoryStream;
+    //    ss: TStringStream;
+    listFields: TList;
   begin
-    enteteXML := '<table>' + LowerCase(InfoTable.TableName) + '</table>';
-    AjoutString(enteteXML, LowerCase(InfoTable.ID), '', '<primarykey>', '</primarykey>');
-    with Query do
-    begin
-      bodyXML := '';
-      while not Eof do
+    listFields := TList.Create;
+    try
+      enteteXML := '<table>' + LowerCase(InfoTable.TableName) + '</table>';
+      AjoutString(enteteXML, LowerCase(InfoTable.ID), '', '<primarykey>', '</primarykey>');
+      with Query do
       begin
-        recordXML := '';
         for i := 0 to Pred(Fields.FieldCount) do
+          if Pos('@' + LowerCase(Fields.AliasName[i]) + '@', InfoTable.SkipFields) = 0 then listFields.Add(Pointer(i));
+        bodyXML := '';
+        while not Eof do
         begin
-          case Fields.FieldType[i] of
-            uftDate: champ := DateToStr(Fields.AsDate[i], SQLSettings);
-            uftTimestamp: champ := DateToStr(Fields.AsDateTime[i], SQLSettings) + ' ' + TimeToStr(Fields.AsDateTime[i], SQLSettings);
-            uftBlob:
-              begin
-                ms := TMemoryStream.Create;
-                ss := TStringStream.Create('');
-                try
-                  Fields.ReadBlob(i, ms);
-                  ms.Position := 0;
-                  MimeEncodeStream(ms, ss);
-                  champ := ss.DataString;
-                finally
-                  ms.Free;
-                  ss.Free;
-                end;
-              end;
+          recordXML := '';
+          for l := 0 to Pred(listFields.Count) do
+          begin
+            i := Integer(listFields[l]);
+            champ := LowerCase(Fields.AliasName[i]);
+            if Fields.IsNull[i] then
+              AjoutString(recordXML, Format('<%s null="T" />', [champ]), '')
             else
-              Champ := Fields.AsString[i];
+            begin
+              case Fields.FieldType[i] of
+                uftDate: contenuChamp := DateToStr(Fields.AsDate[i], SQLSettings);
+                uftTimestamp: contenuChamp := DateToStr(Fields.AsDateTime[i], SQLSettings) + ' ' + TimeToStr(Fields.AsDateTime[i], SQLSettings);
+                //            uftBlob:
+                //              begin
+                //                ms := TMemoryStream.Create;
+                //                ss := TStringStream.Create('');
+                //                try
+                //                  Fields.ReadBlob(i, ms);
+                //                  ms.Position := 0;
+                //                  MimeEncodeStream(ms, ss);
+                //                  champ := ss.DataString;
+                //                finally
+                //                  ms.Free;
+                //                  ss.Free;
+                //                end;
+                //              end;
+                else
+                  contenuChamp := Fields.AsString[i];
+              end;
+              //          if Fields.FieldType[i] = uftBlob then
+              //            contenuChamp := champ
+              //          else
+              contenuChamp := CleanHTTP(contenuChamp);
+              AjoutString(recordXML, contenuChamp, '', Format('<%s%s>', [champ, IIf(Fields.FieldType[i] = uftBlob, {' type="B"'} '', '')]), Format('</%s>', [champ]));
+            end;
           end;
-          if Fields.FieldType[i] = uftBlob then
-            contenuChamp := champ
-          else
-            contenuChamp := CleanHTTP(champ);
-          champ := LowerCase(Fields.AliasName[i]);
-          AjoutString(recordXML, contenuChamp, '', Format('<%s%s>', [champ, IIf(Fields.FieldType[i] = uftBlob, ' type="B"', '')]), Format('</%s>', [champ]));
-        end;
-        AjoutString(bodyXML, recordXML, '', '<record' + IIf(isDelete, ' action="D"', '') + '>', '</record>');
-        if Length(bodyXML) > MaxBodySize then
-        begin
-          SendXML(Format('<data>%s<records>%s</records></data>', [enteteXML, bodyXML]));
-          bodyXML := '';
-        end;
+          AjoutString(bodyXML, recordXML, '', '<record' + IIf(isDelete, ' action="D"', '') + '>', '</record>');
+          if Length(bodyXML) > MaxBodySize then
+          begin
+            SendXML(Format('<data>%s<records>%s</records></data>', [enteteXML, bodyXML]));
+            bodyXML := '';
+          end;
 
-        Next;
-        RefreshProgressBar;
+          Next;
+          RefreshProgressBar;
+        end;
+        if Length(bodyXML) > 0 then SendXML(Format('<data>%s<records>%s</records></data>', [enteteXML, bodyXML]));
       end;
-      if Length(bodyXML) > 0 then SendXML(Format('<data>%s<records>%s</records></data>', [enteteXML, bodyXML]));
+    finally
+      listFields.Free;
     end;
   end;
 
@@ -374,7 +397,6 @@ var
 
   procedure SendDonnees(InfoTable: RInfoTable);
   begin
-    Label8.Caption := 'Synchronisation de ' + InfoTable.TableName;
     with qry do
     begin
       ProgressBar1.Position := 0;
@@ -482,9 +504,15 @@ begin
 
       rc := 0;
       for i := Low(TablesSynchro) to High(TablesSynchro) do
-        if ((TablesSynchro[i].version_mini = '') or (CompareVersionNum(db_version, TablesSynchro[i].version_mini) >= 0))
-          and ((TablesSynchro[i].version_maxi = '') or (CompareVersionNum(TablesSynchro[i].version_maxi, db_version) >= 0)) then
-          Inc(rc, CompteUpdates(TablesSynchro[i]));
+        with TablesSynchro[i] do
+          if ((version_mini = '') or (CompareVersionNum(db_version, version_mini) >= 0))
+            and ((version_maxi = '') or (CompareVersionNum(version_maxi, db_version) >= 0)) then
+            case TypeSynchro of
+              tsImages:
+                if CheckBox2.Checked then Inc(rc, CompteUpdates(TablesSynchro[i]) * 2); // la synchro des images est faite en 2 fois
+              else
+                Inc(rc, CompteUpdates(TablesSynchro[i]));
+            end;
 
       if rc = 0 then
         ShowMessage('Rien à publier')
@@ -500,6 +528,7 @@ begin
             if ((version_mini = '') or (CompareVersionNum(db_version, version_mini) >= 0))
               and ((version_maxi = '') or (CompareVersionNum(version_maxi, db_version) >= 0)) then
             begin
+              Label8.Caption := 'Synchronisation de ' + TableName;
               case TypeSynchro of
                 tsNone:
                   begin
@@ -507,10 +536,16 @@ begin
                     SendDonnees(TablesSynchro[i]);
                   end;
                 tsImages:
+                  if CheckBox2.Checked then
                   begin
-                    SendData(4);
-                    if RadioButton3.Checked then SendData(6);
+                    SendData(4); // création du répertoire
+                    if RadioButton3.Checked then
+                    begin
+                      SendData(6);
+                      SendData(1, 'TRUNCATE TABLE /*DB_PREFIX*/' + LowerCase(TableName));
+                    end;
                     SendImages(TablesSynchro[i]);
+                    SendDonnees(TablesSynchro[i]);
                   end;
               end;
             end;
