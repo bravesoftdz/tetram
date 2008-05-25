@@ -1,58 +1,46 @@
 <%
-vFilm=Modules.FicheFilm.Film
-vSupport=Modules.FicheFilm.Support
-vAffiche=vFilm.Affiche
-vTitre=vFilm.TitreFilm
-vActeurs=Modules.FicheFilm.Acteurs
-vRealisateurs=Modules.FicheFilm.Realisateurs
-vNationalite=Modules.FicheFilm.Nationalite
-vGenres=Modules.FicheFilm.Genres
+vAlbum=Modules.FicheAlbum.Album
+vSerie=Modules.FicheAlbum.Serie
+vTitre=vAlbum.TitreAlbum
+vDessinateurs=Modules.FicheAlbum.Dessinateurs
+vScenaristes=Modules.FicheAlbum.Scenaristes
+vColoristes=Modules.FicheAlbum.Coloristes
+vGenres=Modules.FicheAlbum.Genres
+vEditions=Modules.FicheAlbum.Editions
+vCouvertures=Modules.FicheAlbum.Couvertures
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//FR">
 <HTML>
 	<HEAD>
-		<TITLE><%=Application.Title%>&nbsp;-&nbsp;<%=vTitre.Value%></TITLE>
+		<TITLE><%=Application.Title%>&nbsp;-&nbsp;<%=vTitre.DisplayText%></TITLE>
 		<LINK rel="stylesheet" href="/Styles.css" type="text/css">
 	</HEAD>
 	<BODY>
-		<H1><%=vTitre.Value%></H1>
+		<H1><%=vTitre.DisplayText%></H1>
 		<TABLE border=0 width=100%>
 			<TBODY valign=top>
 				<TR>
-					<TH align=right></TH><TD width=100%><A href="FicheSupport?RefSupport=<%=vSupport.RefSupport.Value%>"><%=vSupport.TypeSupport.Value%></A>&nbsp;(<%=vFilm.Stock.Value?'En stock':(vFilm.Prete.Value?'Pr&ecirc;t&eacute;':'Pas en stock')%>)</TD>
-					<TD rowspan=10 align=right><A href="<%=vAffiche.Image.AsHREF%>" target=zoomaffiche><%=((vAffiche.Image!=null) && (vAffiche.Image.AsHREF!="/")) ? '<img border=0 height=250 src="' + vAffiche.Image.AsHREF + '&height=250&width=250" alt="' + vAffiche.DisplayLabel + '">' : ''%></A>
-				</TR>
-<% if (vFilm.Annee.DisplayText!="") { %>
-				<TR>
-					<TH align=right>Ann&eacute;e:</TH><TD width=100%><%=vFilm.Annee.DisplayText%></TD>
-				</TR>
-<% } %>
-<% if (vFilm.Duree.DisplayText!="") { %>
-				<TR>
-					<TH align=right>Dur&eacute;e:</TH><TD><%=vFilm.Duree.DisplayText%> (<%=vFilm.Duree.Value%> min)</TD>
-				</TR>
-<% } %>
-				<TR>
-					<TH align=right>Couleur:</TH><TD><%=vFilm.Couleur.Value ? 'Oui' : 'Non'%></TD>
-				</TR>
-				<TR>
-					<TH align=right>VO:</TH><TD><%=vFilm.VO.Value ? 'Oui' : 'Non'%></TD>
+					<TH align=right>S&eacute;rie:</TH><TD width=100%><A href="FicheSerie?RefSerie=<%=vSerie.RefSerie.Value%>"><%=vSerie.TitreSerie.DisplayText%></A></TD>
+					<TD rowspan=10 align=right>
 				</TR>
 <%
-var e = new Enumerator(vNationalite.Records);
-if (!e.atEnd()) { %>
+var s = '';
+if (vAlbum.Integrale.Value) s = 'Int&eacute;grale' + (vAlbum.Tome.DisplayText!=""?' n&deg;' + vAlbum.Tome.DisplayText:"")
+else
+if (vAlbum.HorsSerie.Value) s = 'Hors s&eacute;rie' + (vAlbum.Tome.DisplayText!=""?' n&deg;' + vAlbum.Tome.DisplayText:"")
+else
+if (vAlbum.Tome.DisplayText!='') s = 'Tome ' + vAlbum.Tome.DisplayText;
+
+if (s!="") { %>
 				<TR>
-					<TH align=right>Nationalit&eacute;:</TH>
-					<TD>
-<%
-	s = '';
-	for (; !e.atEnd(); e.moveNext())
-		s == '' ? s = vNationalite.Pays.Value : s += ', ' + vNationalite.Pays.Value;
-	Response.Write(s);
-%>
-					</TD>
+					<TH align=right></TH><TD width=100%><%=s%></TD>
 				</TR>
-<%	} %>
+<% } %>
+<% if (vAlbum.AnneeParution.DisplayText!="") { %>
+				<TR>
+					<TH align=right>Parution:</TH><TD width=100%><%=vAlbum.AnneeParution.DisplayText%></TD>
+				</TR>
+<% } %>
 <%
 var e = new Enumerator(vGenres.Records);
 if (!e.atEnd()) { %>
@@ -62,46 +50,127 @@ if (!e.atEnd()) { %>
 <%
 	s = '';
 	for (; !e.atEnd(); e.moveNext())
-		s == '' ? s = vGenres.Genre.Value : s += ', ' + vGenres.Genre.Value;
+		s == '' ? s = vGenres.Genre.DisplayText : s += ', ' + vGenres.Genre.DisplayText;
 	Response.Write(s);
 %>
 					</TD>
 				</TR>
 <% } %>
 <%
-var e = new Enumerator(vRealisateurs.Records);
+var e = new Enumerator(vScenaristes.Records);
 if (!e.atEnd()) { %>
 				<TR>
-					<TH align=right>Realisation:</TH>
+					<TH align=right>Sc&eacute;nario:</TH>
 					<TD>
 <%
 	for (; !e.atEnd(); e.moveNext()) { %>
-						<A href="FichePersonne?RefPersonne=<%=vRealisateurs.RefPersonne.Value%>"><%=vRealisateurs.Libelle.Value%><br>
+						<A href="FichePersonne?RefPersonne=<%=vScenaristes.RefPersonne.Value%>"><%=vScenaristes.Nom.DisplayText%><br>
 <% 	} %>
 					</TD>
 				</TR>
 <% } %>
 <%
-var e = new Enumerator(vActeurs.Records);
+var e = new Enumerator(vDessinateurs.Records);
 if (!e.atEnd()) { %>
 				<TR>
-					<TH align=right>Acteurs:</TH>
+					<TH align=right>Dessin:</TH>
 					<TD>
 <%
 	for (; !e.atEnd(); e.moveNext()) { %>
-						<A href="FichePersonne?RefPersonne=<%=vActeurs.RefPersonne.Value%>"><%=vActeurs.Libelle.Value%><br>
+						<A href="FichePersonne?RefPersonne=<%=vDessinateurs.RefPersonne.Value%>"><%=vDessinateurs.Nom.DisplayText%><br>
 <% 	} %>
 					</TD>
 				</TR>
 <% } %>
-<% if (vFilm.Histoire.Value!="") { %>
+<%
+var e = new Enumerator(vColoristes.Records);
+if (!e.atEnd()) { %>
 				<TR>
-					<TH align=right>Histoire:</TH><TD><%=vFilm.Histoire.Value%></TD>
+					<TH align=right>Couleurs:</TH>
+					<TD>
+<%
+	for (; !e.atEnd(); e.moveNext()) { %>
+						<A href="FichePersonne?RefPersonne=<%=vColoristes.RefPersonne.Value%>"><%=vColoristes.Nom.DisplayText%><br>
+<% 	} %>
+					</TD>
 				</TR>
 <% } %>
-<% if (vFilm.Notes.Value!="") { %>
+<% if (vAlbum.Histoire.Value!="") { %>
+				<TR><TD>&nbsp;</TD></TR>
 				<TR>
-					<TH align=right>Notes:</TH><TD><%=vFilm.Notes.Value%></TD>
+					<TH align=right>Histoire:</TH><TD><%=vAlbum.Histoire.Value%></TD>
+				</TR>
+<% } %>
+<% if (vAlbum.Notes.Value!="") { %>
+				<TR><TD>&nbsp;</TD></TR>
+				<TR>
+					<TH align=right>Notes:</TH><TD><%=vAlbum.Notes.Value%></TD>
+				</TR>
+<% } %>
+<%
+var e = new Enumerator(vEditions.Records);
+if (!e.atEnd()) { %>
+				<TR><TD>&nbsp;</TD></TR>
+				<TR>
+					<TH align=right>Editions:</TH>
+					<TD>
+<%
+	for (; !e.atEnd(); e.moveNext()) { %>
+						<TABLE>
+							<TR>
+								<TD>
+									<TABLE>
+										<TR>
+											<TH align=right>Editeur:</TH><TD width=100><%=vEditions.EditeurSiteWeb.Value!=''?'<A target=_blank href=' + vEditions.EditeurSiteWeb.Value + '>':''%><%=vEditions.NomEditeur.DisplayText%><%=vEditions.EditeurSiteWeb.Value!=''?'</a>':''%></TD>
+											<% if (vEditions.NomCollection.DisplayText!="") { %>
+											<TH align=right>Collection:</TH><TD><%=vEditions.NomCollection.DisplayText%></TD>
+											<% } %>
+										</TR>
+										<TR>
+											<TH align=right>Ann&eacute;e:</TH><TD><%=vEditions.AnneeEdition.DisplayText%></TD>
+											<TH align=right>ISBN:</TH><TD><%=vEditions.ISBN.DisplayText%></TD>
+										</TR>
+										<TR>
+											<TH align=right>Couleur:</TH><TD><%=vEditions.Couleur.Value?'Oui':'Non'%></TD>
+											<% if (vEditions.VO.Value) { %>
+											<TH align=right>VO:</TH><TD><%=vEditions.VO.Value?'Oui':'Non'%></TD>
+											<% } %>
+										</TR>
+										<TR>
+											<TH align=right>Type d'&eacute;dition:</TH><TD><%=vEditions.Edition.DisplayText%></TD>
+											<TH align=right>Reliure:</TH><TD><%=vEditions.Reliure.DisplayText%></TD>
+										</TR>
+										<TR>
+											<TH align=right>Etat:</TH><TD><%=vEditions.Etat.DisplayText%></TD>
+											<TH align=right>D&eacute;dicac&eacute;e:</TH><TD><%=vEditions.Dedicace.Value?'Oui':'Non'%></TD>
+										</TR>
+										<TR>
+											<% if (vEditions.DateAchat.DisplayText!="") { %>
+											<TH align=right>Achet&eacute; le:</TH><TD><%=vEditions.DateAchat.DisplayText%></TD>
+											<% } %>
+										</TR>
+										<TR><TD>&nbsp;</TD></TR>
+									</TABLE>
+								</TD>
+							<% var c = new Enumerator(vCouvertures.Records);
+							if (!c.atEnd()) { %>
+								<TD><A href="<%=vCouvertures.Couverture.Image.AsHREF%>" target=zoomimage><%=((vCouvertures.Couverture.Image!=null) && (vCouvertures.Couverture.Image.AsHREF!="/")) ? '<img border=0 height=150 src="' + vCouvertures.Couverture.Image.AsHREF + '&height=150&width=150" alt="' + vCouvertures.Couverture.DisplayLabel + '">' : ''%></A>
+							<% } %>
+							</TR>
+							<%
+							c.moveNext()
+							if (!c.atEnd()) { %>
+							<TR>
+								<TD colspan=2 align=right>
+								<%
+								for (; !c.atEnd(); c.moveNext()) { %>
+									<A href="<%=vCouvertures.Couverture.Image.AsHREF%>" target=zoomimage><%=((vCouvertures.Couverture.Image!=null) && (vCouvertures.Couverture.Image.AsHREF!="/")) ? '<img border=0 height=150 src="' + vCouvertures.Couverture.Image.AsHREF + '&height=150&width=150" alt="' + vCouvertures.Couverture.DisplayLabel + '">' : ''%></A>								<% } %>
+								</TD>
+							</TR>
+							<% } %>
+						</TABLE>
+<% 	} %>
+					</TD>
 				</TR>
 <% } %>
 			</TBODY>

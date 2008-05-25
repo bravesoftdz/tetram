@@ -1,26 +1,81 @@
 <%
-vAlbums=Modules.Manquants.Albums
+vAnneesPassees=Modules.Previsions.AnneesPassees
+vAnneeEnCours=Modules.Previsions.AnneeEnCours
+vAnneesProchaines=Modules.Previsions.AnneesProchaines
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//FR">
 <HTML>
 	<HEAD>
-		<TITLE><%=Application.Title%>&nbsp;-&nbsp;Num&eacute;ros manquants</TITLE>
+		<TITLE><%=Application.Title%>&nbsp;-&nbsp;Pr&eacute;visions de sorties</TITLE>
 		<LINK rel="stylesheet" href="/Styles.css" type="text/css">
 	</HEAD>
 	<BODY>
-		<H1>Num&eacute;ros manquants</H1>
 		<TABLE border=0 width=100%>
-			<TBODY valign=top>
+			<TR>
+				<TD><H1>Pr&eacute;visions de sorties</H1></TD>
+				<TD>
+					<FORM action=previsions>
+						<INPUT type="hidden" name='AvecIntegrales' value="1">
+						<input type=submit value="Inclure les int&eacute;grales">
+					</FORM>
+					<FORM action=previsions>
+						<INPUT type="hidden" name='AvecIntegrales' value="0">
+						<input type=submit value="Exclure les int&eacute;grales">
+					</FORM>
+				</TD>
+			</TR>
+		</TABLE>
+		<TABLE border=0 width=100%>
 <%
-var e = new Enumerator(vAlbums.Records);
+var e = new Enumerator(vAnneesPassees.Records);
+if (!e.atEnd()) { %>
+				<TR valign=top>
+					<TD colspan=2><hr width=90%><H3>Ann&eacute;es pass&eacute;es</H3></TD>
+				</TR>
+<%
 for (; !e.atEnd(); e.moveNext()) { %>
-				<TR>
-					<TD><A href="FicheSerie?RefSerie=<%=vAlbums.RefSerie.Value%>"><%=vAlbums.LibelleCourt.DisplayText%>
-					<TD><%=vAlbums.Numeros.DisplayText%>
+				<TR valign=top>
+					<TD><A href="FicheSerie?RefSerie=<%=vAnneesPassees.RefSerie.Value%>"><%=vAnneesPassees.LibelleCourt.DisplayText%></A></TD>
+					<TD>Tome <%=vAnneesPassees.Tome.DisplayText%> en <%=vAnneesPassees.Annee.DisplayText%></TD>
+				</TR>
 <%
+	}
 }
 %>
-			</TBODY>
+
+<%
+var e = new Enumerator(vAnneeEnCours.Records);
+if (!e.atEnd()) { %>
+				<TR valign=top>
+					<TD colspan=2><hr width=90%><H3>Ann&eacute;e en cours</H3></TD>
+				</TR>
+<%
+for (; !e.atEnd(); e.moveNext()) { %>
+				<TR valign=top>
+					<TD><A href="FicheSerie?RefSerie=<%=vAnneeEnCours.RefSerie.Value%>"><%=vAnneeEnCours.LibelleCourt.DisplayText%></A></TD>
+					<TD>Tome <%=vAnneeEnCours.Tome.DisplayText%> en <%=vAnneeEnCours.Annee.DisplayText%></TD>
+				</TR>
+<%
+	}
+}
+%>
+
+<%
+var e = new Enumerator(vAnneesProchaines.Records);
+if (!e.atEnd()) { %>
+				<TR>
+					<TD colspan=2><hr width=90%><H3>Prochaines ann&eacute;es</H3></TD>
+				</TR>
+<%
+for (; !e.atEnd(); e.moveNext()) { %>
+				<TR>
+					<TD><A href="FicheSerie?RefSerie=<%=vAnneesProchaines.RefSerie.Value%>"><%=vAnneesProchaines.LibelleCourt.DisplayText%></A></TD>
+					<TD>Tome <%=vAnneesProchaines.Tome.DisplayText%> en <%=vAnneesProchaines.Annee.DisplayText%></TD>
+				</TR>
+<%
+	}
+}
+%>
 		</TABLE>
 	</BODY>
-</HTML> 
+</HTML>

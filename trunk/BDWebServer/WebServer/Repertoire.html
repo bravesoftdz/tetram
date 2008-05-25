@@ -1,5 +1,5 @@
 <%
-vFilms=Modules.Repertoire.Films
+vAlbums=Modules.Repertoire.Albums
 %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//FR">
 <HTML>
@@ -9,35 +9,27 @@ vFilms=Modules.Repertoire.Films
 	</HEAD>
 	<BODY>
 		<TABLE width=100%>
-			<TBODY>
 				<TR>
 					<TD align=center>
 						<TABLE border=0>
-							<THEAD>
 								<TR>
-									<TH>Titre</TH>
-									<TH>Ann&eacute;e</TH>
-									<TH>VO</TH>
-									<TH>Support</TH>
+									<TH>Album</TH>
+									<TH width=10></TH>
+									<TH>Serie</TH>
 								</TR>
-							</THEAD>
-							<TBODY>
 <%
-var e = new Enumerator(vFilms.Records);
+var e = new Enumerator(vAlbums.Records);
 s = '';
 for (; !e.atEnd(); e.moveNext()) { %>
 								<TR>
-									<TD class=TitreFilm><A href="FicheFilm?RefFilm=<%=vFilms.RefFilm.Value%>"><%=vFilms.TitreFilm.DisplayText%></A></TD>
-									<TD class=Annee><%=vFilms.Annee.DisplayText%></TD>
-									<TD class=VO><%=vFilms.VO.Value ? 'VO' : ''%></TD>
-									<TD class=TypeSupport><A href="FicheSupport?RefSupport=<%=vFilms.RefSupport.Value%>"><%=vFilms.TypeSupport.Value%></A></TD>
+									<TD class=TitreAlbum><A href="FicheAlbum?RefAlbum=<%=vAlbums.RefAlbum.Value%>"><%=vAlbums.LibelleCourt.DisplayText%><%=""%></A></TD>
+									<TD></TD>
+									<TD class=Serie><A href="FicheSerie?RefSerie=<%=vAlbums.RefSerie.Value%>"><%=vAlbums.TitreSerie.DisplayText%></A></TD>
 								</TR>
 <% } %>
-							</TBODY>
 						</TABLE>
 					</TD>
 				</TR>
-			</TBODY>
 		</TABLE>
 	</BODY>
 </HTML>
