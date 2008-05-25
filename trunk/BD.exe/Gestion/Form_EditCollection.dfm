@@ -46,7 +46,7 @@ object FrmEditCollection: TFrmEditCollection
       Height = 13
       Hint = 'R'#233'f'#233'rence du support'
       Alignment = taRightJustify
-      Caption = ' Nom:'
+      Caption = 'Nom :'
       Layout = tlCenter
     end
     object Label5: TLabel
@@ -55,7 +55,7 @@ object FrmEditCollection: TFrmEditCollection
       Width = 38
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Editeur:'
+      Caption = 'Editeur :'
     end
     object edNom: TEditLabeled
       Left = 52

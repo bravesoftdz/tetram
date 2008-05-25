@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, JvUIB;
+  Dialogs, StdCtrls, JvUIB, UBdtForms;
 
 type
-  TFrmVerbose = class(TForm)
+  TFrmVerbose = class(TbdtForm)
     Memo1: TMemo;
     Button1: TButton;
     procedure Button1Click(Sender: TObject);

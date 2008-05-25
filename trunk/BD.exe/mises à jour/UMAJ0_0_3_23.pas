@@ -783,6 +783,6 @@ begin
 end;
 
 initialization
-  RegisterUpdate('0.0.3.23', @MAJ0_0_3_23);
+  RegisterFBUpdate('0.0.3.23', @MAJ0_0_3_23);
 
 end.

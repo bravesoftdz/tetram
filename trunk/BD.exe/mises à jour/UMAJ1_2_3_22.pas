@@ -97,7 +97,7 @@ begin
 end;
 
 initialization
-  RegisterUpdate('1.2.3.22', @MAJ1_2_3_22);
+  RegisterFBUpdate('1.2.3.22', @MAJ1_2_3_22);
 
 end.
 

@@ -75,6 +75,7 @@ const
   //  rsTransReperes = 'Repères';
   rsTransRetour = 'Retour';
   rsTransScenario = 'Scénario';
+  rsTransSensLecture = 'Sens de lecture';
   rsTransSerie = 'Série';
   rsTransSerieChercherManquants = 'Chercher les manquants';
   rsTransSerieComplete = 'Série complète';
@@ -150,8 +151,8 @@ const
   rsSupprimerAchat = 'Êtes-vous sûr de vouloir supprimer cet achat ?';
 
   rsNewTitre = 'Nouveau %s';
-  rsEntrerNewTitre = 'Entrez le nouveau nom de %s:';
-  rsEntrerModifyTitre = 'Entrez le nouveau nom de %s:';
+  rsEntrerNewTitre = 'Entrez le nouveau nom de %s :';
+  rsEntrerModifyTitre = 'Entrez le nouveau nom de %s :';
   rsTitreStillUsed = 'Ce nom de %s est déjà utilisé';
 
   rsLienEditeur = 'Attention, les séries et les éditions qui un lien avec ce type seront classés comme Indéfini';

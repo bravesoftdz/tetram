@@ -24,16 +24,16 @@ object FrmCustomize: TFrmCustomize
   object Label1: TLabel
     Left = 7
     Top = 7
-    Width = 56
+    Width = 59
     Height = 13
-    Caption = 'Catégories:'
+    Caption = 'Cat'#233'gories :'
   end
   object Label4: TLabel
     Left = 7
     Top = 97
-    Width = 62
+    Width = 65
     Height = 13
-    Caption = 'Commandes:'
+    Caption = 'Commandes :'
   end
   object VDTButton2: TCRFurtifLight
     Left = 206
@@ -41,7 +41,7 @@ object FrmCustomize: TFrmCustomize
     Width = 83
     Height = 21
     Cursor = crHandPoint
-    Caption = 'Séparateur'
+    Caption = 'S'#233'parateur'
     Glyph.Data = {
       360C0000424D360C000000000000360000002800000040000000100000000100
       180000000000000C0000120B0000120B00000000000000000000FF00FFFF00FF

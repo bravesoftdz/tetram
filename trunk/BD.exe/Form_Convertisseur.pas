@@ -3,10 +3,10 @@ unit Form_Convertisseur;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, Fram_Boutons;
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, Fram_Boutons, UBdtForms;
 
 type
-  TFrmConvers = class(TForm)
+  TFrmConvers = class(TbdtForm)
     Panel1: TPanel;
     Frame11: TFrame1;
     procedure FormCreate(Sender: TObject);

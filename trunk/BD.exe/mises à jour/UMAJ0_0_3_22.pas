@@ -503,6 +503,6 @@ begin
 end;
 
 initialization
-  RegisterUpdate('0.0.3.22', @MAJ0_0_3_22);
+  RegisterFBUpdate('0.0.3.22', @MAJ0_0_3_22);
 
 end.

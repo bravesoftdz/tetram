@@ -55,7 +55,7 @@ object FrmEditEmprunteur: TFrmEditEmprunteur
       Width = 49
       Height = 13
       Anchors = [akLeft, akBottom]
-      Caption = 'Emprunts:'
+      Caption = 'Emprunts :'
       Transparent = True
     end
     object Label3: TLabel

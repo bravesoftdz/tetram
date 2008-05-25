@@ -19,6 +19,7 @@ type
     TCritereListe: TJvUIBQuery;
     TCritereEtat: TJvUIBQuery;
     TCritereLangueTitre: TJvUIBQuery;
+    TCritereSensLecture: TJvUIBQuery;
     procedure DataModuleDestroy(Sender: TObject);
   private
     { Déclarations privées }

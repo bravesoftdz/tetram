@@ -30,20 +30,20 @@ object FrmEditParaBD: TFrmEditParaBD
     Left = 0
     Top = 29
     Width = 827
-    Height = 865
+    Height = 870
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
     DesignSize = (
       827
-      865)
+      870)
     object Label2: TLabel
       Left = 35
       Top = 7
       Width = 27
       Height = 13
       Alignment = taRightJustify
-      Caption = ' Titre:'
+      Caption = 'Titre :'
       FocusControl = edTitre
       Layout = tlCenter
     end
@@ -53,7 +53,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Width = 56
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Description:'
+      Caption = 'Description :'
       FocusControl = description
     end
     object btCreateur: TVDTButton
@@ -82,11 +82,11 @@ object FrmEditParaBD: TFrmEditParaBD
       Width = 39
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Auteurs:'
+      Caption = 'Auteurs :'
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 861
+      Top = 866
       Width = 827
       Height = 4
       Align = alBottom
@@ -98,7 +98,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Width = 27
       Height = 13
       Alignment = taRightJustify
-      Caption = 'S'#233'rie:'
+      Caption = 'S'#233'rie :'
     end
     object Bevel3: TBevel
       Left = 139
@@ -130,7 +130,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Width = 34
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Ann'#233'e:'
+      Caption = 'Ann'#233'e :'
       Layout = tlCenter
     end
     object Label25: TLabel
@@ -139,7 +139,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Width = 25
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Cote:'
+      Caption = 'Cote :'
       Layout = tlCenter
     end
     object VDTButton14: TVDTButton
@@ -158,7 +158,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Width = 34
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Ann'#233'e:'
+      Caption = 'Ann'#233'e :'
       Layout = tlCenter
     end
     object Label18: TLabel
@@ -167,7 +167,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Width = 48
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Achet'#233' le:'
+      Caption = 'Achet'#233' le :'
       Layout = tlCenter
     end
     object Label9: TLabel
@@ -176,7 +176,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Width = 20
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Prix:'
+      Caption = 'Prix :'
       Layout = tlCenter
     end
     object SpeedButton3: TVDTButton
@@ -195,7 +195,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Width = 27
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Type:'
+      Caption = 'Type :'
       Layout = tlCenter
     end
     object cbxCategorie: TLightComboCheck

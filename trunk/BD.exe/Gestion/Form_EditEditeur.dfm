@@ -46,7 +46,7 @@ object FrmEditEditeur: TFrmEditEditeur
       Height = 13
       Hint = 'R'#233'f'#233'rence du support'
       Alignment = taRightJustify
-      Caption = ' Nom:'
+      Caption = 'Nom :'
       Layout = tlCenter
     end
     object Label1: TLabel
@@ -56,7 +56,7 @@ object FrmEditEditeur: TFrmEditEditeur
       Height = 13
       Hint = 'R'#233'f'#233'rence du support'
       Alignment = taRightJustify
-      Caption = 'Site web:'
+      Caption = 'Site web :'
       Layout = tlCenter
     end
     object VDTButton13: TVDTButton

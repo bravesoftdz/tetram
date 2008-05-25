@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, ActnList, CRFurtif;
+  Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, ActnList, CRFurtif, UBdtForms;
 
 type
   TPageControl = class(ComCtrls.TPageControl)
@@ -15,7 +15,7 @@ type
     function PreviousVisible: TTabSheet;
   end;
 
-  TWizardImport = class(TForm)
+  TWizardImport = class(TbdtForm)
     ActionList1: TActionList;
     actNextPage: TAction;
     actPreviousPage: TAction;

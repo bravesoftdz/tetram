@@ -5,10 +5,10 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, DBCtrls, Menus, Buttons, ComCtrls, ExtCtrls,
   ScanEdit, VDTButton, VirtualTrees, ActnList, VirtualTree, jpeg, DBEditLabeled, ComboCheck, ProceduresBDtk,
-  Frame_RechercheRapide;
+  Frame_RechercheRapide, UBdtForms;
 
 type
-  TFrmRepertoire = class(TForm)
+  TFrmRepertoire = class(TbdtForm)
     PageRep: TPageControl;
     TabEmprunteurs: TTabSheet;
     TabAlbums: TTabSheet;

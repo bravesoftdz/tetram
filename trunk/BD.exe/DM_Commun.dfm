@@ -29,37 +29,49 @@ object DataCommun: TDataCommun
   end
   object TCritereString: TJvUIBQuery
     SQL.Strings = (
-      'SELECT REFCRITERE, CRITERE FROM CRITERESTRING')
+      
+        'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'S' +
+        'TRING'#39)
     Left = 192
     Top = 8
   end
   object TCritereBoolean: TJvUIBQuery
     SQL.Strings = (
-      'SELECT REFCRITERE, CRITERE FROM CRITEREBOOLEAN')
+      
+        'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'B' +
+        'OOL'#39)
     Left = 192
     Top = 56
   end
   object TCritereNumeral: TJvUIBQuery
     SQL.Strings = (
-      'SELECT REFCRITERE, CRITERE FROM CRITERENUMERAL')
+      
+        'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'N' +
+        'UMERIC'#39)
     Left = 192
     Top = 104
   end
   object TCritereTitre: TJvUIBQuery
     SQL.Strings = (
-      'SELECT REFCRITERE, CRITERE FROM CRITERETITRE')
+      
+        'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'T' +
+        'ITRE'#39)
     Left = 192
     Top = 152
   end
   object TCritereAffiche: TJvUIBQuery
     SQL.Strings = (
-      'SELECT REFCRITERE, CRITERE FROM CRITEREAFFICHE')
+      
+        'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'I' +
+        'MAGE'#39)
     Left = 192
     Top = 200
   end
   object TCritereListe: TJvUIBQuery
     SQL.Strings = (
-      'SELECT REFCRITERE, CRITERE FROM CRITERELISTE')
+      
+        'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'L' +
+        'ISTE'#39)
     Left = 192
     Top = 248
   end
@@ -73,8 +85,19 @@ object DataCommun: TDataCommun
   end
   object TCritereLangueTitre: TJvUIBQuery
     SQL.Strings = (
-      'SELECT REFCRITERE, CRITERE FROM CRITERELANGUETITRE')
+      
+        'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'L' +
+        'ANGUETITRE'#39)
     Left = 280
+    Top = 152
+  end
+  object TCritereSensLecture: TJvUIBQuery
+    SQL.Strings = (
+      'SELECT REF, LIBELLE FROM LISTES'
+      'WHERE CATEGORIE = 8'
+      'ORDER BY ORDRE'
+      '')
+    Left = 96
     Top = 152
   end
 end

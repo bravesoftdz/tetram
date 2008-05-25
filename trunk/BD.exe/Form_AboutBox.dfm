@@ -227,7 +227,7 @@ object FrmAboutBox: TFrmAboutBox
     Top = 145
     Width = 39
     Height = 11
-    Caption = 'M'#233'moire:'
+    Caption = 'M'#233'moire :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -9
@@ -241,7 +241,7 @@ object FrmAboutBox: TFrmAboutBox
     Top = 100
     Width = 40
     Height = 11
-    Caption = 'Syst'#232'me:'
+    Caption = 'Syst'#232'me :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -9

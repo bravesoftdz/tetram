@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, Mask, Menus, ExtCtrls,
-  DBEditLabeled, DB, Buttons, VDTButton, Fram_Boutons, LoadComplet;
+  DBEditLabeled, DB, Buttons, VDTButton, Fram_Boutons, LoadComplet, UBdtForms;
 
 type
-  TFrmEditAuteur = class(TForm)
+  TFrmEditAuteur = class(TbdtForm)
     ScrollBox1: TScrollBox;
     edBiographie: TMemoLabeled;
     edNom: TEditLabeled;

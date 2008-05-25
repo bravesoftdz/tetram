@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Fram_Boutons, StdCtrls, DBCtrls, Form_Recherche,
-  ActnList, DBEditLabeled, ComboCheck, ComCtrls, LoadComplet;
+  ActnList, DBEditLabeled, ComboCheck, ComCtrls, LoadComplet, UBdtForms;
 
 type
-  TFrmEditCritere = class(TForm)
+  TFrmEditCritere = class(TbdtForm)
     champs: TLightComboCheck;
     signes: TLightComboCheck;
     valeur: TEditLabeled;
@@ -40,15 +40,6 @@ uses JvUIB, DM_Commun, Commun, DM_Princ, JvUIBLib, Divers,
 
 {$R *.DFM}
 
-type
-  TChamp = class
-    NomChamp: string;
-    NomTable: string;
-    TypeData: TUIBFieldType;
-    Booleen: Boolean;
-    Special: TChampSpecial;
-  end;
-
 function TFrmEditCritere.GetCritere: TCritere;
 var
   Champ: PChamp;
@@ -77,7 +68,7 @@ begin
         2: // n'est pas
           Result.TestSQL := Result.TestSQL + '<>' + QuotedStr(critereTexte);
       end;
-    csEtat, csReliure, csOrientation, csFormatEdition, csTypeEdition:
+    csEtat, csReliure, csOrientation, csFormatEdition, csTypeEdition, csSensLecture:
       case Result.iSignes of
         0: // Indifférent
           Result.TestSQL := Result.TestSQL + ' IS NOT NULL';
@@ -259,7 +250,7 @@ begin
   signes.Items.Clear;
   Critere2.Items.Clear;
   signes.Tag := 0;
-  case TChamp(champs.LastItemData).Special of
+  case PChamp(champs.LastItemData).Special of
     csTitre:
       begin
         AssignItems(signes.Items, DataCommun.TCritereTitre);
@@ -293,15 +284,22 @@ begin
         signes.Tag := 2;
         valeur.Visible := False;
       end;
+    csSensLecture:
+      begin
+        AssignItems(signes.Items, DataCommun.TCritereListe);
+        AssignItems(Critere2.Items, DataCommun.TCritereSensLecture);
+        signes.Tag := 2;
+        valeur.Visible := False;
+      end;
     else
-      case TChamp(champs.LastItemData).TypeData of
+      case PChamp(champs.LastItemData).TypeData of
         uftChar, uftVarchar, uftBlob:
           begin
             AssignItems(signes.Items, DataCommun.TCritereString);
             valeur.Visible := True;
           end;
         uftSmallInt, uftInteger, uftFloat, uftNumeric:
-          if TChamp(champs.LastItemData).Booleen then
+          if PChamp(champs.LastItemData).Booleen then
           begin
             AssignItems(signes.Items, DataCommun.TCritereBoolean);
             valeur.Visible := False;
@@ -319,7 +317,7 @@ begin
       end;
   end;
   if valeur.Visible then
-    case TChamp(champs.LastItemData).TypeData of
+    case PChamp(champs.LastItemData).TypeData of
       uftChar, uftVarchar, uftBlob: valeur.TypeDonnee := tdChaine;
       uftSmallInt, uftInteger: valeur.TypeDonnee := tdEntierSigne;
       uftFloat, uftNumeric: valeur.TypeDonnee := tdNumericSigne;

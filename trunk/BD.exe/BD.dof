@@ -113,9 +113,9 @@ RootDir=
 IncludeVerInfo=1
 AutoIncBuild=1
 MajorVer=2
-MinorVer=0
+MinorVer=1
 Release=0
-Build=10
+Build=0
 Debug=0
 PreRelease=0
 Special=0
@@ -126,9 +126,9 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Teträm Corp
 FileDescription=
-FileVersion=2.0.0.10
+FileVersion=2.1.0.0
 InternalName=BDT
-LegalCopyright=Teträm Corp 1997-2005
+LegalCopyright=Teträm Corp 1997-2008
 LegalTrademarks=
 OriginalFilename=
 ProductName=BDtheque
@@ -136,8 +136,8 @@ ProductVersion=2
 Comments=
 [HistoryLists\hlConditionals]
 Count=4
-Item0=RELEASE;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT
-Item1=DEBUG;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT
+Item0=DEBUG;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT
+Item1=RELEASE;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT
 Item2=PS_USESSUPPORT;DEBUG
 Item3=PS_USESSUPPORT
 [HistoryLists\hlUnitAliases]

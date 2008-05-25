@@ -5,10 +5,10 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, ComCtrls, ExtCtrls,
   ToolWin, Buttons, Fram_Boutons, ScanEdit, VDTButton, Menus, Commun, DBEditLabeled, VirtualTrees, VirtualTree,
-  ComboCheck, Frame_RechercheRapide, LoadComplet, CRFurtif;
+  ComboCheck, Frame_RechercheRapide, LoadComplet, CRFurtif, UBdtForms;
 
 type
-  TFrmSaisie_EmpruntEmprunteur = class(TForm)
+  TFrmSaisie_EmpruntEmprunteur = class(TbdtForm)
     Panel4: TPanel;
     Panel2: TPanel;
     Splitter1: TSplitter;

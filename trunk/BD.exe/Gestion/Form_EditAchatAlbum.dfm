@@ -20,7 +20,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
     Left = 0
     Top = 0
     Width = 736
-    Height = 349
+    Height = 354
     ActivePage = TabSheet1
     Align = alClient
     MultiLine = True
@@ -30,14 +30,14 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       Caption = 'Nouvel album'
       DesignSize = (
         728
-        318)
+        323)
       object Label3: TLabel
         Left = 97
         Top = 31
         Width = 47
         Height = 13
         Alignment = taRightJustify
-        Caption = ' Parution:'
+        Caption = ' Parution :'
         FocusControl = edAnneeParution
         Layout = tlCenter
       end
@@ -54,7 +54,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Width = 35
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Tomes:'
+        Caption = 'Tomes :'
         FocusControl = edTomeDebut
         Font.Charset = ANSI_CHARSET
         Font.Color = clInactiveCaptionText
@@ -86,7 +86,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Width = 28
         Height = 13
         Alignment = taRightJustify
-        Caption = 'S'#233'rie:'
+        Caption = 'S'#233'rie :'
       end
       object Label1: TLabel
         Left = 13
@@ -94,7 +94,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Width = 33
         Height = 13
         Alignment = taRightJustify
-        Caption = ' Tome:'
+        Caption = ' Tome :'
         FocusControl = edTome
         Layout = tlCenter
       end
@@ -104,7 +104,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Width = 29
         Height = 13
         Alignment = taRightJustify
-        Caption = ' Titre:'
+        Caption = ' Titre :'
         FocusControl = edTitre
         Layout = tlCenter
       end
@@ -157,7 +157,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Height = 13
         Alignment = taRightJustify
         Anchors = [akTop, akRight]
-        Caption = 'Auteurs:'
+        Caption = 'Auteurs :'
       end
       object btColoriste: TVDTButton
         Tag = 3
@@ -187,7 +187,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Height = 13
         Alignment = taRightJustify
         Anchors = [akTop, akRight]
-        Caption = 'Notes:'
+        Caption = 'Notes :'
         FocusControl = remarques
       end
       object Label6: TLabel
@@ -196,7 +196,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Width = 40
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Histoire:'
+        Caption = 'Histoire :'
         FocusControl = histoire
       end
       object btResetSerie: TCRFurtifLight
@@ -590,14 +590,14 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       ImageIndex = 1
       DesignSize = (
         728
-        318)
+        323)
       object Label4: TLabel
         Left = 13
         Top = 7
         Width = 33
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Album:'
+        Caption = 'Album :'
         Layout = tlCenter
       end
       object vstAlbums: TVirtualStringTree
@@ -628,7 +628,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
           item
             Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
             Position = 0
-            Width = 672
+            Width = 676
           end>
       end
       inline FrameRechercheRapideAlbums: TFrameRechercheRapide
@@ -659,7 +659,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
   end
   inline Frame11: TFrame1
     Left = 0
-    Top = 349
+    Top = 354
     Width = 736
     Height = 31
     Align = alBottom

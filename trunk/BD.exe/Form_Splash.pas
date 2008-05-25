@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ExtCtrls, StdCtrls, verslabp, jpeg;
+  ExtCtrls, StdCtrls, verslabp, jpeg, UBdtForms;
 
 type
-  TFrmSplash = class(TForm)
+  TFrmSplash = class(TbdtForm)
     Label1: TLabel;
     VersionLabel1: TfshVersionLabel;
     Label2: TLabel;

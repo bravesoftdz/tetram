@@ -114,6 +114,8 @@ begin
     RegisterProperty('Emprunts', 'TEmpruntsComplet', iptrw);
     RegisterProperty('Couvertures', 'TListOfTCouverture', iptrw);
     RegisterProperty('NumeroPerso', 'string', iptrw);
+    RegisterProperty('SensLecture', 'Integer', iptrw);
+    RegisterProperty('sSensLecture', 'string', iptrw);
   end;
 end;
 

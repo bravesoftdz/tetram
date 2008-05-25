@@ -2636,7 +2636,7 @@ begin
 end;
 
 initialization
-  RegisterUpdate('1.2.0.0', @MAJ1_2_0_0);
+  RegisterFBUpdate('1.2.0.0', @MAJ1_2_0_0);
 
 end.
 

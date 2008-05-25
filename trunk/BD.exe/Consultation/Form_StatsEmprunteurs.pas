@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, LoadComplet, ExtCtrls;
+  StdCtrls, LoadComplet, ExtCtrls, UBdtForms;
 
 type
-  TFrmStatsEmprunteurs = class(TForm)
+  TFrmStatsEmprunteurs = class(TbdtForm)
     Label14: TLabel;
     Label15: TLabel;
     Label16: TLabel;

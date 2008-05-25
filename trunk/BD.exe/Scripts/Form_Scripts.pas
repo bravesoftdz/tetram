@@ -10,7 +10,7 @@ uses
   uPSRuntime, VirtualTrees, StdCtrls, ExtCtrls, uPSComponent_StdCtrls,
   uPSComponent_Controls, uPSComponent_Forms, uPSComponent_DB, uPSComponent_RegExpr, LoadComplet,
   uPSComponent_COM, uPSComponent_Default, SynEditKeyCmds, uPSI_LoadComplet, uPSI_TypeRec,
-  SynCompletionProposal;
+  SynCompletionProposal, UBdtForms;
 
 type
   TSynDebugPlugin = class(TSynEditPlugin)
@@ -24,7 +24,7 @@ type
     constructor Create(AOwner: TCustomSynEdit; Debug: TDebugInfos); reintroduce;
   end;
 
-  TFormScripts = class(TForm)
+  TfrmScripts = class(TbdtForm)
     SynPasSyn1: TSynPasSyn;
     lstDebugImages: TImageList;
     PSScriptDebugger1: TPSScriptDebugger;
@@ -219,7 +219,7 @@ type
   end;
 
 var
-  FormScripts: TFormScripts;
+  frmScripts: TfrmScripts;
 
 implementation
 
@@ -280,7 +280,7 @@ begin
     end;
 end;
 
-procedure TFormScripts.WMSyscommand(var msg: TWmSysCommand);
+procedure TfrmScripts.WMSyscommand(var msg: TWmSysCommand);
 begin
   case (msg.CmdType and $FFF0) of
     SC_CLOSE: if not PSScriptDebugger1.Running then
@@ -290,7 +290,7 @@ begin
   end;
 end;
 
-procedure TFormScripts.SetResultat(const Chaine: string);
+procedure TfrmScripts.SetResultat(const Chaine: string);
 begin
   Output.Lines.Text := Chaine;
   if (PageControl1.ActivePage <> TTabSheet(vstSuivis.Parent)) or (FDebugPlugin.Watches.CountActive = 0) then
@@ -308,13 +308,13 @@ const
   imgGutterEXECLINE = 6;
   imgGutterBREAKDISABLED = 7;
 
-procedure TFormScripts.seScript1GutterClick(Sender: TObject; Button: TMouseButton; X, Y, Line: Integer; Mark: TSynEditMark);
+procedure TfrmScripts.seScript1GutterClick(Sender: TObject; Button: TMouseButton; X, Y, Line: Integer; Mark: TSynEditMark);
 begin
   if X <= TSynEdit(Sender).Gutter.LeftOffset then
     ToggleBreakPoint(GetScriptName(TSynEdit(Sender)), Line, False);
 end;
 
-procedure TFormScripts.seScript1GutterPaint(Sender: TObject; aLine, X, Y: Integer);
+procedure TfrmScripts.seScript1GutterPaint(Sender: TObject; aLine, X, Y: Integer);
 var
   IconIndex: Integer;
   i: Integer;
@@ -366,7 +366,7 @@ begin
     lstDebugImages.Draw(TSynEdit(Sender).Canvas, X, Y, IconIndex);
 end;
 
-procedure TFormScripts.seScript1SpecialLineColors(Sender: TObject; Line: Integer; var Special: Boolean; var FG, BG: TColor);
+procedure TfrmScripts.seScript1SpecialLineColors(Sender: TObject; Line: Integer; var Special: Boolean; var FG, BG: TColor);
 var
   i: Integer;
   Script: string;
@@ -414,7 +414,7 @@ begin
     Special := False;
 end;
 
-procedure TFormScripts.seScript1StatusChange(Sender: TObject; Changes: TSynStatusChanges);
+procedure TfrmScripts.seScript1StatusChange(Sender: TObject; Changes: TSynStatusChanges);
 var
   Attri: TSynHighlighterAttributes;
   Token: string;
@@ -440,7 +440,7 @@ begin
   end;
 end;
 
-procedure TFormScripts.SearchFind1Execute(Sender: TObject);
+procedure TfrmScripts.SearchFind1Execute(Sender: TObject);
 var
   dummyReplace: string;
 begin
@@ -477,7 +477,7 @@ begin
   SearchFindNext1Execute(Sender);
 end;
 
-procedure TFormScripts.SearchFindNext1Execute(Sender: TObject);
+procedure TfrmScripts.SearchFindNext1Execute(Sender: TObject);
 begin
   if FLastSearch = '' then
     SearchFind1Execute(SearchFind1)
@@ -485,7 +485,7 @@ begin
     ShowMessage('Texte non trouvé');
 end;
 
-procedure TFormScripts.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
+procedure TfrmScripts.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 var
   Editor: TSynEdit;
 begin
@@ -504,37 +504,37 @@ begin
   actEnregistrerSous.Enabled := Assigned(Editor);
 end;
 
-procedure TFormScripts.EditCut1Execute(Sender: TObject);
+procedure TfrmScripts.EditCut1Execute(Sender: TObject);
 begin
   GetActiveScript.CutToClipboard;
 end;
 
-procedure TFormScripts.EditCopy1Execute(Sender: TObject);
+procedure TfrmScripts.EditCopy1Execute(Sender: TObject);
 begin
   GetActiveScript.CopyToClipboard;
 end;
 
-procedure TFormScripts.EditPaste1Execute(Sender: TObject);
+procedure TfrmScripts.EditPaste1Execute(Sender: TObject);
 begin
   GetActiveScript.PasteFromClipboard;
 end;
 
-procedure TFormScripts.EditSelectAll1Execute(Sender: TObject);
+procedure TfrmScripts.EditSelectAll1Execute(Sender: TObject);
 begin
   GetActiveScript.SelectAll;
 end;
 
-procedure TFormScripts.EditUndo1Execute(Sender: TObject);
+procedure TfrmScripts.EditUndo1Execute(Sender: TObject);
 begin
   GetActiveScript.Undo;
 end;
 
-procedure TFormScripts.EditRedo1Execute(Sender: TObject);
+procedure TfrmScripts.EditRedo1Execute(Sender: TObject);
 begin
   GetActiveScript.Redo;
 end;
 
-procedure TFormScripts.seScript1ReplaceText(Sender: TObject; const ASearch, AReplace: string; Line, Column: Integer; var Action: TSynReplaceAction);
+procedure TfrmScripts.seScript1ReplaceText(Sender: TObject; const ASearch, AReplace: string; Line, Column: Integer; var Action: TSynReplaceAction);
 begin
   case MessageDlg('Remplacer cette occurence ?', mtConfirmation, [mbYes, mbNo, mbCancel, mbYesToAll], 0) of
     mrYes: Action := raReplace;
@@ -544,7 +544,7 @@ begin
   end;
 end;
 
-procedure TFormScripts.PSScriptDebugger1Execute(Sender: TPSScript);
+procedure TfrmScripts.PSScriptDebugger1Execute(Sender: TPSScript);
 var
   i: Integer;
 begin
@@ -558,13 +558,13 @@ begin
   PSScriptDebugger1.SetVarToInstance('AlbumToImport', FAlbumToImport);
 end;
 
-procedure TFormScripts.actCompileExecute(Sender: TObject);
+procedure TfrmScripts.actCompileExecute(Sender: TObject);
 begin
   if not PSScriptDebugger1.Running then
     Compile;
 end;
 
-procedure TFormScripts.actRunExecute(Sender: TObject);
+procedure TfrmScripts.actRunExecute(Sender: TObject);
 begin
   if PSScriptDebugger1.Running then
   begin
@@ -580,7 +580,7 @@ begin
   end;
 end;
 
-function TFormScripts.Execute: Boolean;
+function TfrmScripts.Execute: Boolean;
 begin
   FAlbumToImport.Clear;
   Output.Clear;
@@ -613,10 +613,10 @@ begin
   end;
 end;
 
-procedure TFormScripts.PSScriptDebugger1Compile(Sender: TPSScript);
+procedure TfrmScripts.PSScriptDebugger1Compile(Sender: TPSScript);
 begin
   PSScriptDebugger1.AddFunction(@GetPage, 'function GetPage(const url: string): string;');
-  PSScriptDebugger1.AddMethod(Self, @TFormScripts.SetResultat, 'procedure WriteToConsole(const Chaine: string);');
+  PSScriptDebugger1.AddMethod(Self, @TfrmScripts.SetResultat, 'procedure WriteToConsole(const Chaine: string);');
   PSScriptDebugger1.AddFunction(@Format, 'function Format(const Format: string; const Args: array of const): string;');
   PSScriptDebugger1.AddFunction(@findInfo, 'function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;');
   PSScriptDebugger1.AddFunction(@ShowMessage, 'procedure ShowMessage(const Msg: string);');
@@ -627,7 +627,7 @@ begin
   BuildLokalObjektList(Sender.Comp);
 end;
 
-procedure TFormScripts.PSScriptDebugger1Breakpoint(Sender: TObject; const FileName: string; Position, Row, Col: Cardinal);
+procedure TfrmScripts.PSScriptDebugger1Breakpoint(Sender: TObject; const FileName: string; Position, Row, Col: Cardinal);
 begin
   FActiveLine := Row;
   FActiveFile := CorrectScriptName(FileName);
@@ -635,12 +635,12 @@ begin
   FDebugPlugin.Watches.UpdateView;
 end;
 
-procedure TFormScripts.PSScriptDebugger1Idle(Sender: TObject);
+procedure TfrmScripts.PSScriptDebugger1Idle(Sender: TObject);
 begin
   Application.HandleMessage;
 end;
 
-procedure TFormScripts.PSScriptDebugger1AfterExecute(Sender: TPSScript);
+procedure TfrmScripts.PSScriptDebugger1AfterExecute(Sender: TPSScript);
 begin
   FActiveLine := 0;
   FActiveFile := '';
@@ -652,7 +652,7 @@ begin
   PageControl1.ActivePage := TTabSheet(Output.Parent);
 end;
 
-procedure TFormScripts.PSScriptDebugger1LineInfo(Sender: TObject; const FileName: string; Position, Row, Col: Cardinal);
+procedure TfrmScripts.PSScriptDebugger1LineInfo(Sender: TObject; const FileName: string; Position, Row, Col: Cardinal);
 begin
   if (Row = FRunToCursor) and SameText(CorrectScriptName(FileName), FRunToCursorFile) and (PSScriptDebugger1.Exec.DebugMode = dmRun) then
     PSScriptDebugger1.Pause;
@@ -666,12 +666,12 @@ begin
   end;
 end;
 
-function TFormScripts.PSScriptDebugger1NeedFile(Sender: TObject; const OrginFileName: string; var FileName, Output: string): Boolean;
+function TfrmScripts.PSScriptDebugger1NeedFile(Sender: TObject; const OrginFileName: string; var FileName, Output: string): Boolean;
 begin
   Result := GetScriptLines(FileName, Output);
 end;
 
-procedure TFormScripts.actStepOverExecute(Sender: TObject);
+procedure TfrmScripts.actStepOverExecute(Sender: TObject);
 begin
   if PSScriptDebugger1.Exec.Status = isRunning then
     PSScriptDebugger1.StepOver
@@ -685,7 +685,7 @@ begin
   end;
 end;
 
-procedure TFormScripts.actStepIntoExecute(Sender: TObject);
+procedure TfrmScripts.actStepIntoExecute(Sender: TObject);
 begin
   if PSScriptDebugger1.Exec.Status = isRunning then
     PSScriptDebugger1.StepInto
@@ -699,13 +699,13 @@ begin
   end;
 end;
 
-procedure TFormScripts.actResetExecute(Sender: TObject);
+procedure TfrmScripts.actResetExecute(Sender: TObject);
 begin
   if PSScriptDebugger1.Exec.Status = isRunning then
     PSScriptDebugger1.Stop;
 end;
 
-function TFormScripts.Compile: Boolean;
+function TfrmScripts.Compile: Boolean;
 var
   i: Longint;
   Msg: TMessageInfo;
@@ -733,7 +733,7 @@ begin
   Compiled := Result;
 end;
 
-procedure TFormScripts.actDecompileExecute(Sender: TObject);
+procedure TfrmScripts.actDecompileExecute(Sender: TObject);
 var
   s: string;
 begin
@@ -746,12 +746,12 @@ begin
   end;
 end;
 
-procedure TFormScripts.actBreakpointExecute(Sender: TObject);
+procedure TfrmScripts.actBreakpointExecute(Sender: TObject);
 begin
   ToggleBreakPoint(GetActiveScriptName, GetActiveScript.CaretY, False);
 end;
 
-procedure TFormScripts.FormCreate(Sender: TObject);
+procedure TfrmScripts.FormCreate(Sender: TObject);
 var
   i: Integer;
   sr: TSearchRec;
@@ -791,7 +791,7 @@ begin
   PageControl2.ActivePage := tbScripts;
 end;
 
-function TFormScripts.GetVar(const Name: string; out s: string): PIFVariant;
+function TfrmScripts.GetVar(const Name: string; out s: string): PIFVariant;
 var
   i: Longint;
   s1: string;
@@ -837,7 +837,7 @@ begin
   end;
 end;
 
-function TFormScripts.GetVariableValue(const VarName: string; Actif: Boolean): string;
+function TfrmScripts.GetVariableValue(const VarName: string; Actif: Boolean): string;
 var
   pv: PIFVariant;
   Prefix: string;
@@ -857,30 +857,30 @@ begin
     Result := '<désactivé>';
 end;
 
-procedure TFormScripts.actAddSuiviExecute(Sender: TObject);
+procedure TfrmScripts.actAddSuiviExecute(Sender: TObject);
 begin
   FDebugPlugin.Watches.AddWatch(GetActiveScript.WordAtCursor);
 end;
 
-procedure TFormScripts.actRunToCursorExecute(Sender: TObject);
+procedure TfrmScripts.actRunToCursorExecute(Sender: TObject);
 begin
   FRunToCursor := GetActiveScript.CaretY;
   FRunToCursorFile := GetActiveScriptName;
   actRun.Execute;
 end;
 
-procedure TFormScripts.vstSuivisNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: WideString);
+procedure TfrmScripts.vstSuivisNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: WideString);
 begin
   FDebugPlugin.Watches[Node.Index].Name := NewText;
   FDebugPlugin.Watches.View.InvalidateNode(Node);
 end;
 
-procedure TFormScripts.vstSuivisEditing(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
+procedure TfrmScripts.vstSuivisEditing(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
 begin
   Allowed := Column = 0;
 end;
 
-procedure TFormScripts.vstSuivisInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+procedure TfrmScripts.vstSuivisInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 begin
   Node.CheckType := ctCheckBox;
   if FDebugPlugin.Watches[Node.Index].Active then
@@ -889,13 +889,13 @@ begin
     Node.CheckState := csUncheckedNormal;
 end;
 
-procedure TFormScripts.vstSuivisChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
+procedure TfrmScripts.vstSuivisChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
 begin
   FDebugPlugin.Watches[Node.Index].Active := Node.CheckState = csCheckedNormal;
   FDebugPlugin.Watches.View.InvalidateNode(Node);
 end;
 
-procedure TFormScripts.vstSuivisGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TfrmScripts.vstSuivisGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
 begin
   if Column = -1 then
     Column := 0;
@@ -906,7 +906,7 @@ begin
     end;
 end;
 
-procedure TFormScripts.vstSuivisPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+procedure TfrmScripts.vstSuivisPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
 begin
   if Node.CheckState = csCheckedNormal then
     TargetCanvas.Font.Color := clWindowText
@@ -914,7 +914,7 @@ begin
     TargetCanvas.Font.Color := clGrayText;
 end;
 
-procedure TFormScripts.GoToMessage(Msg: TMessageInfo);
+procedure TfrmScripts.GoToMessage(Msg: TMessageInfo);
 var
   Editor: TSynEdit;
 begin
@@ -924,7 +924,7 @@ begin
   PageControl1.ActivePage := TTabSheet(vstMessages.Parent);
 end;
 
-procedure TFormScripts.vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TfrmScripts.vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
 begin
   if Column = -1 then
     Column := 0;
@@ -944,19 +944,19 @@ begin
     end;
 end;
 
-procedure TFormScripts.vstMessagesDblClick(Sender: TObject);
+procedure TfrmScripts.vstMessagesDblClick(Sender: TObject);
 begin
   GoToMessage(FDebugPlugin.Messages.Current);
 end;
 
-procedure TFormScripts.FormDestroy(Sender: TObject);
+procedure TfrmScripts.FormDestroy(Sender: TObject);
 begin
   ClearPages;
   FDebugPlugin.Free;
   FAlbumToImport.Free;
 end;
 
-procedure TFormScripts.seScript1Change(Sender: TObject);
+procedure TfrmScripts.seScript1Change(Sender: TObject);
 begin
   Compiled := False;
   TSynEdit(Sender).Tag := 1;
@@ -969,12 +969,12 @@ begin
   end;
 end;
 
-procedure TFormScripts.vstBreakpointsDblClick(Sender: TObject);
+procedure TfrmScripts.vstBreakpointsDblClick(Sender: TObject);
 begin
   GoToBreakpoint(FDebugPlugin.Breakpoints.Current);
 end;
 
-procedure TFormScripts.GoToBreakpoint(Msg: TBreakpointInfo);
+procedure TfrmScripts.GoToBreakpoint(Msg: TBreakpointInfo);
 var
   Editor: TSynEdit;
 begin
@@ -984,7 +984,7 @@ begin
   PageControl1.ActivePage := TTabSheet(vstBreakpoints.Parent);
 end;
 
-procedure TFormScripts.GoToPosition(Editor: TSynEdit; Line, Char: Cardinal);
+procedure TfrmScripts.GoToPosition(Editor: TSynEdit; Line, Char: Cardinal);
 begin
   if not Assigned(Editor) then Exit;
 
@@ -1000,14 +1000,14 @@ begin
   Editor.SetFocus;
 end;
 
-procedure TFormScripts.vstBreakpointsChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
+procedure TfrmScripts.vstBreakpointsChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
 begin
   with FDebugPlugin.Breakpoints[Node.Index] do
     ToggleBreakPoint(Fichier, Line, True);
   FDebugPlugin.Breakpoints.View.InvalidateNode(Node);
 end;
 
-procedure TFormScripts.vstBreakpointsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TfrmScripts.vstBreakpointsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
 begin
   if Column = -1 then
     Column := 0;
@@ -1018,7 +1018,7 @@ begin
     end;
 end;
 
-procedure TFormScripts.vstBreakpointsInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+procedure TfrmScripts.vstBreakpointsInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 begin
   Node.CheckType := ctCheckBox;
   if FDebugPlugin.Breakpoints[Node.Index].Active then
@@ -1027,7 +1027,7 @@ begin
     Node.CheckState := csUncheckedNormal;
 end;
 
-procedure TFormScripts.vstBreakpointsPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+procedure TfrmScripts.vstBreakpointsPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
 begin
   if Node.CheckState = csCheckedNormal then
     TargetCanvas.Font.Color := clWindowText
@@ -1035,7 +1035,7 @@ begin
     TargetCanvas.Font.Color := clGrayText;
 end;
 
-procedure TFormScripts.ToggleBreakPoint(const Script: string; Line: Cardinal; Keep: Boolean);
+procedure TfrmScripts.ToggleBreakPoint(const Script: string; Line: Cardinal; Keep: Boolean);
 var
   i: Integer;
 begin
@@ -1074,7 +1074,7 @@ begin
   end;
 end;
 
-procedure TFormScripts.seScript1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+procedure TfrmScripts.seScript1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 const
   WordVar: string = '';
 var
@@ -1126,7 +1126,7 @@ type
   TCrackPSDebugExec = class(TPSDebugExec)
   end;
 
-function TFormScripts.TranslatePositionEx(out Proc, Position: Cardinal; Row: Cardinal; Fn: string): Boolean;
+function TfrmScripts.TranslatePositionEx(out Proc, Position: Cardinal; Row: Cardinal; Fn: string): Boolean;
 var
   i, j: LongInt;
   fi: PFunctionInfo;
@@ -1157,7 +1157,7 @@ begin
   end;
 end;
 
-procedure TFormScripts.SetCompiled(const Value: Boolean);
+procedure TfrmScripts.SetCompiled(const Value: Boolean);
 var
   Editor: TSynEdit;
 begin
@@ -1166,7 +1166,7 @@ begin
   if Assigned(Editor) then Editor.Invalidate;
 end;
 
-function TFormScripts.CorrectScriptName(const Fichier: string): string;
+function TfrmScripts.CorrectScriptName(const Fichier: string): string;
 begin
   if Fichier = '' then
     Result := Projet
@@ -1174,7 +1174,7 @@ begin
     Result := Fichier;
 end;
 
-function TFormScripts.GetActiveScript: TSynEdit;
+function TfrmScripts.GetActiveScript: TSynEdit;
 begin
   if pcScripts.PageCount = 0 then
     Result := nil
@@ -1182,7 +1182,7 @@ begin
     Result := TSynEdit(pcScripts.ActivePage.Controls[0]);
 end;
 
-function TFormScripts.GetActiveScriptName: string;
+function TfrmScripts.GetActiveScriptName: string;
 begin
   if pcScripts.PageCount = 0 then
     Result := Projet
@@ -1190,7 +1190,7 @@ begin
     Result := pcScripts.ActivePage.Caption;
 end;
 
-function TFormScripts.GetScript(const Fichier: string): TSynEdit;
+function TfrmScripts.GetScript(const Fichier: string): TSynEdit;
 var
   i: Integer;
   s: string;
@@ -1209,7 +1209,7 @@ begin
   Result := nil;
 end;
 
-function TFormScripts.GetScriptName(Editor: TSynEdit): string;
+function TfrmScripts.GetScriptName(Editor: TSynEdit): string;
 begin
   if Assigned(Editor) then
     Result := TTabSheet(Editor.Parent).Caption
@@ -1217,12 +1217,12 @@ begin
     Result := Projet;
 end;
 
-function TFormScripts.GetProjet: string;
+function TfrmScripts.GetProjet: string;
 begin
   Result := PSScriptDebugger1.MainFileName;
 end;
 
-procedure TFormScripts.SetProjet(const Value: string);
+procedure TfrmScripts.SetProjet(const Value: string);
 begin
   ProjetOuvert := False;
   // doit etre fait avant le LoadScript
@@ -1231,7 +1231,7 @@ begin
   ProjetOuvert := True;
 end;
 
-procedure TFormScripts.LoadScript(const Fichier: string);
+procedure TfrmScripts.LoadScript(const Fichier: string);
 var
   SB: TStatusBar;
   Editor: TSynEdit;
@@ -1299,7 +1299,7 @@ begin
   GoToPosition(Editor, 1, 1);
 end;
 
-procedure TFormScripts.ClearPages;
+procedure TfrmScripts.ClearPages;
 var
   i: Integer;
 begin
@@ -1307,7 +1307,7 @@ begin
     actFermer.Execute;
 end;
 
-function TFormScripts.GetScriptLines(const Fichier: string; out Output: string): Boolean;
+function TfrmScripts.GetScriptLines(const Fichier: string; out Output: string): Boolean;
 var
   path: string;
   f: TFileStream;
@@ -1341,7 +1341,7 @@ begin
   Result := True;
 end;
 
-procedure TFormScripts.actFermerExecute(Sender: TObject);
+procedure TfrmScripts.actFermerExecute(Sender: TObject);
 begin
   if not FForceClose and (GetActiveScriptName = Projet) then Exit;
 
@@ -1356,18 +1356,18 @@ begin
   pcScripts.ActivePage.Free;
 end;
 
-procedure TFormScripts.actEnregistrerExecute(Sender: TObject);
+procedure TfrmScripts.actEnregistrerExecute(Sender: TObject);
 begin
   GetActiveScript.Lines.SaveToFile(Utilisateur.Options.RepertoireScripts + GetActiveScriptName + '.bds');
   GetActiveScript.Tag := 0;
 end;
 
-procedure TFormScripts.actEnregistrerSousExecute(Sender: TObject);
+procedure TfrmScripts.actEnregistrerSousExecute(Sender: TObject);
 begin
   //
 end;
 
-procedure TFormScripts.SetProjetOuvert(const Value: Boolean);
+procedure TfrmScripts.SetProjetOuvert(const Value: Boolean);
 begin
   if not Value then
   begin
@@ -1384,19 +1384,19 @@ begin
   FProjetOuvert := Value;
 end;
 
-procedure TFormScripts.ListView1DblClick(Sender: TObject);
+procedure TfrmScripts.ListView1DblClick(Sender: TObject);
 begin
   Projet := ListView1.Selected.Caption;
 end;
 
-procedure TFormScripts.seScript1ProcessUserCommand(Sender: TObject; var Command: TSynEditorCommand; var AChar: Char; Data: Pointer);
+procedure TfrmScripts.seScript1ProcessUserCommand(Sender: TObject; var Command: TSynEditorCommand; var AChar: Char; Data: Pointer);
 begin
   case Command - ecUserFirst of
     1: LoadScript(GetActiveScript.WordAtCursor);
   end;
 end;
 
-procedure TFormScripts.actRunWithoutDebugExecute(Sender: TObject);
+procedure TfrmScripts.actRunWithoutDebugExecute(Sender: TObject);
 begin
   PSScriptDebugger1.UseDebugInfo := False;
   try
@@ -1406,7 +1406,7 @@ begin
   end;
 end;
 
-procedure TFormScripts.pcScriptsChange(Sender: TObject);
+procedure TfrmScripts.pcScriptsChange(Sender: TObject);
 begin
 //  à améliorer:
 //     - les params ne s'affichent pas
@@ -1416,7 +1416,7 @@ begin
 //  SynEditParamShow.Editor := GetActiveScript;
 end;
 
-procedure TFormScripts.BuildLokalObjektList(Comp: TPSPascalCompiler);
+procedure TfrmScripts.BuildLokalObjektList(Comp: TPSPascalCompiler);
 var
   Dummy: Integer;
   VDummy: Integer;
@@ -1671,7 +1671,7 @@ begin
   end;
 end;
 
-procedure TFormScripts.RebuildLokalObjektList;
+procedure TfrmScripts.RebuildLokalObjektList;
 var
   Skript: string;
 begin
@@ -1698,7 +1698,7 @@ begin
   PSScriptDebugger1.Comp.Compile(Skript);
 end;
 
-function TFormScripts.GetLookUpString(Line: string; EndPos: Integer): string;
+function TfrmScripts.GetLookUpString(Line: string; EndPos: Integer): string;
 const
   TSynValidIdentifierChars = TSynValidStringChars + ['.', ' ', '[', ']', '(', ')'];
 var
@@ -1751,7 +1751,7 @@ begin
 
 end;
 
-function TFormScripts.FindParameter(LocLine: string; X: Integer; out Func: TParamInfoRecord; out ParamCount: Integer): Boolean;
+function TfrmScripts.FindParameter(LocLine: string; X: Integer; out Func: TParamInfoRecord; out ParamCount: Integer): Boolean;
 var
   TmpX: Integer;
   StartX, ParenCounter: Integer;
@@ -1812,7 +1812,7 @@ begin
   end;
 end;
 
-function TFormScripts.LookUpList(LookUp: string; var ParamInfo: TParamInfoRecord): Boolean;
+function TfrmScripts.LookUpList(LookUp: string; var ParamInfo: TParamInfoRecord): Boolean;
 var
   Dummy: Integer;
   Hash: Cardinal;
@@ -1890,7 +1890,7 @@ begin
   end;
 end;
 
-function TFormScripts.LookUpList(LookUp: Cardinal; var ParamInfo: TParamInfoRecord): Boolean;
+function TfrmScripts.LookUpList(LookUp: Cardinal; var ParamInfo: TParamInfoRecord): Boolean;
 var
   Dummy: Integer;
 begin
@@ -1906,7 +1906,7 @@ begin
   end;
 end;
 
-procedure TFormScripts.SynEditParamShowExecute(Kind: TSynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
+procedure TfrmScripts.SynEditParamShowExecute(Kind: TSynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
 var
   ParamIndex: Integer;
   Info: TParamInfoRecord;
@@ -1929,7 +1929,7 @@ begin
   end;
 end;
 
-procedure TFormScripts.SynEditAutoCompleteExecute(Kind: TSynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
+procedure TfrmScripts.SynEditAutoCompleteExecute(Kind: TSynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
 var
   Parser: TPSPascalParser;
   Token: TPSPasToken;
@@ -2041,7 +2041,7 @@ begin
   FillAutoComplete(fObjectList, Types, Father, Typ);
 end;
 
-procedure TFormScripts.FillAutoComplete(var List: TParamInfoArray; Types: TInfoTypes; FromFather: Cardinal; Typ: string);
+procedure TfrmScripts.FillAutoComplete(var List: TParamInfoArray; Types: TInfoTypes; FromFather: Cardinal; Typ: string);
 var
   Dummy: Integer;
   Text: string;
@@ -2202,7 +2202,7 @@ begin
     FillAutoComplete(List, Types, FromFather);
 end;
 
-procedure TFormScripts.seScript1KeyPress(Sender: TObject; var Key: Char);
+procedure TfrmScripts.seScript1KeyPress(Sender: TObject; var Key: Char);
 begin
   if (Key = ' ') and ((GetKeyState(VK_CONTROL) < 0) or (GetKeyState(VK_SHIFT) < 0)) then
     Key := #0;

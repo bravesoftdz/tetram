@@ -6,7 +6,7 @@ uses
   SysUtils, JvUIBLib;
 
 type
-  TChampSpecial = (csNone, csTitre, csGenre, csAffiche, csEtat, csReliure, csOrientation, csFormatEdition, csTypeEdition, csISBN, csMonnaie);
+  TChampSpecial = (csNone, csTitre, csGenre, csAffiche, csEtat, csReliure, csOrientation, csFormatEdition, csTypeEdition, csISBN, csMonnaie, csSensLecture);
 
   PChamp = ^RChamp;
   RChamp = record
@@ -22,7 +22,7 @@ type
     TypeData: TUIBFieldType;
   end;
 
-  TArrayOfChamp = array[1..39] of RChamp;
+  TArrayOfChamp = array[1..40] of RChamp;
   PArrayOfChamp = ^TArrayOfChamp;
 
 function ChampsRecherche: PArrayOfChamp;
@@ -75,6 +75,7 @@ const
     (Groupe: 3; ID: 35; NomTable: 'EDITIONS'; NomChamp: 'prixcote'; LibelleChamp: rsTransCote + ' (' + rsTransPrix + ')'; Special: csMonnaie; ChampImpressionTri: True),
     (Groupe: 3; ID: 36; NomTable: 'EDITIONS'; NomChamp: 'notes'; LibelleChamp: rsTransNotes + ' ' + rsTransEdition),
     (Groupe: 3; ID: 39; NomTable: 'EDITIONS'; NomChamp: 'numeroperso'; LibelleChamp: rsTransNumeroPerso; ChampImpressionTri: True),
+    (Groupe: 3; ID: 40; NomTable: 'EDITIONS'; NomChamp: 'senslecture'; LibelleChamp: rsTransSensLecture; Special: csSensLecture; ChampImpressionTri: False),
     (Groupe: 1; ID: 37; NomTable: 'GENRESERIES'; NomChamp: 'ID_GENRE'; LibelleChamp: rsTransGenre + ' *'; Special: csGenre)
     );
 

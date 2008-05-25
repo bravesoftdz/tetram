@@ -3,7 +3,7 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
   Top = 358
   BorderIcons = []
   BorderStyle = bsDialog
-  Caption = 'Saisie d''un mouvement d''album'
+  Caption = 'Saisie d'#39'un mouvement d'#39'album'
   ClientHeight = 257
   ClientWidth = 479
   Color = clBtnFace
@@ -29,7 +29,7 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     Hint = 'Date du mouvement'
     Alignment = taRightJustify
     Anchors = [akLeft, akBottom]
-    Caption = 'Date:'
+    Caption = 'Date :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clHotLight
     Font.Height = -9
@@ -62,7 +62,7 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     Height = 11
     Hint = 'Date du mouvement'
     Alignment = taRightJustify
-    Caption = 'Album:'
+    Caption = 'Album :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clHotLight
     Font.Height = -9
@@ -78,7 +78,7 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     Height = 11
     Hint = 'Date du mouvement'
     Alignment = taRightJustify
-    Caption = 'Série:'
+    Caption = 'S'#233'rie :'
     FocusControl = date_pret
     Font.Charset = ANSI_CHARSET
     Font.Color = clHotLight
@@ -112,7 +112,7 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     Height = 11
     Hint = 'Date du mouvement'
     Alignment = taRightJustify
-    Caption = 'Edition:'
+    Caption = 'Edition :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clHotLight
     Font.Height = -9
@@ -183,10 +183,10 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     Top = 210
     Width = 37
     Height = 19
-    Hint = 'Case cochée = le mouvement est un emprunt'
+    Hint = 'Case coch'#233'e = le mouvement est un emprunt'
     Alignment = taLeftJustify
     Anchors = [akLeft, akBottom]
-    Caption = 'Prêt:'
+    Caption = 'Pr'#234't :'
     Ctl3D = False
     Font.Charset = ANSI_CHARSET
     Font.Color = clHotLight

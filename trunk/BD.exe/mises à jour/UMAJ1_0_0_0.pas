@@ -110,7 +110,7 @@ begin
 end;
 
 initialization
-  RegisterUpdate('1.0.0.0', @MAJ1_0_0_0);
+  RegisterFBUpdate('1.0.0.0', @MAJ1_0_0_0);
 
 end.
 

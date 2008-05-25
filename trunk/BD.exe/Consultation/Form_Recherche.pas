@@ -113,8 +113,8 @@ begin
     trSimple: PageControl2.ActivePageIndex := 0;
   end;
   FTypeRecherche := Value;
-  Fond.Impression.Update;
-  Fond.ApercuImpression.Update;
+  Fond.actImpression.Update;
+  Fond.actApercuImpression.Update;
 end;
 
 procedure TFrmRecherche.FormCreate(Sender: TObject);

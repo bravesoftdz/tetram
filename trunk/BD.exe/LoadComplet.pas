@@ -177,10 +177,10 @@ type
     ID_Edition, ID_Album: TGUID;
     Editeur: TEditeurComplet;
     Collection: TCollection;
-    TypeEdition, AnneeEdition, Etat, Reliure, NombreDePages, FormatEdition, Orientation, AnneeCote: Integer;
+    TypeEdition, AnneeEdition, Etat, Reliure, NombreDePages, FormatEdition, Orientation, AnneeCote, SensLecture: Integer;
     Prix, PrixCote: Currency;
     Couleur, VO, Dedicace, Stock, Prete, Offert, Gratuit: Boolean;
-    ISBN, sEtat, sReliure, sTypeEdition, sFormatEdition, sOrientation: string;
+    ISBN, sEtat, sReliure, sTypeEdition, sFormatEdition, sOrientation, sSensLecture: string;
     DateAchat: TDateTime;
     Notes: TStringList;
     NumeroPerso: string[25];
@@ -697,22 +697,14 @@ begin
   try
     Transaction := UseTransaction;
 
-    if RecInconnu then
-    begin
-      SQL.Text := 'INSERT INTO ALBUMS (ID_Album, TITREALBUM, MOISPARUTION, ANNEEPARUTION, ID_Serie, TOME, TOMEDEBUT, TOMEFIN, HORSSERIE, INTEGRALE, SUJETALBUM, REMARQUESALBUM)';
-      SQL.Add('VALUES');
-      SQL.Add('(:ID_Album, :TITREALBUM, :MOISPARUTION, :ANNEEPARUTION, :ID_Serie, :TOME, :TOMEDEBUT, :TOMEFIN, :HORSSERIE, :INTEGRALE, :SUJETALBUM, :REMARQUESALBUM)');
-    end
-    else
-    begin
-      SQL.Text := 'UPDATE ALBUMS SET';
-      SQL.Add('TITREALBUM = :TITREALBUM, MOISPARUTION = :MOISPARUTION, ANNEEPARUTION = :ANNEEPARUTION, ID_Serie = :ID_Serie, TOME = :TOME, TOMEDEBUT = :TOMEDEBUT, TOMEFIN = :TOMEFIN,');
-      SQL.Add('HORSSERIE = :HORSSERIE, INTEGRALE = :INTEGRALE,');
-      SQL.Add('SUJETALBUM = :SUJETALBUM, REMARQUESALBUM = :REMARQUESALBUM');
-      SQL.Add('WHERE (ID_Album = :ID_Album)');
-    end;
+    SQL.Text := 'UPDATE OR INSERT INTO ALBUMS (ID_Album, TITREALBUM, MOISPARUTION, ANNEEPARUTION, ID_Serie, TOME, TOMEDEBUT, TOMEFIN, HORSSERIE, INTEGRALE, SUJETALBUM, REMARQUESALBUM)';
+    SQL.Add('VALUES');
+    SQL.Add('(:ID_Album, :TITREALBUM, :MOISPARUTION, :ANNEEPARUTION, :ID_Serie, :TOME, :TOMEDEBUT, :TOMEFIN, :HORSSERIE, :INTEGRALE, :SUJETALBUM, :REMARQUESALBUM)');
 
-    Params.ByNameAsString['ID_ALBUM'] := GUIDToString(ID_Album);
+    if IsEqualGUID(GUID_NULL, ID_Album) then
+      Params.ByNameIsNull['ID_Album'] := True
+    else
+      Params.ByNameAsString['ID_ALBUM'] := GUIDToString(ID_Album);
     s := Trim(Titre);
     if s = '' then
       Params.ByNameIsNull['TITREALBUM'] := True
@@ -859,13 +851,15 @@ begin
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT ID_EDITION, ID_Album, e.ID_Editeur, e.ID_Collection, NOMCOLLECTION, ANNEEEDITION, PRIX, VO, COULEUR, ISBN, DEDICACE, PRETE,';
     SQL.Add('STOCK, Offert, Gratuit, NombreDePages, etat, le.libelle as setat, reliure, lr.libelle as sreliure, orientation, lo.libelle as sorientation,');
-    SQL.Add('FormatEdition, lf.libelle as sFormatEdition, typeedition, lte.libelle as stypeedition, DateAchat, Notes, AnneeCote, PrixCote, NumeroPerso');
+    SQL.Add('FormatEdition, lf.libelle as sFormatEdition, typeedition, lte.libelle as stypeedition, DateAchat, Notes, AnneeCote, PrixCote, NumeroPerso,');
+    SQL.Add('SensLecture, lsl.libelle as sSensLecture');
     SQL.Add('FROM EDITIONS e LEFT JOIN COLLECTIONS c ON e.ID_Collection = c.ID_Collection');
     SQL.Add('LEFT JOIN LISTES le on (le.ref = e.etat and le.categorie = 1)');
     SQL.Add('LEFT JOIN LISTES lr on (lr.ref = e.reliure and lr.categorie = 2)');
     SQL.Add('LEFT JOIN LISTES lte on (lte.ref = e.typeedition and lte.categorie = 3)');
     SQL.Add('LEFT JOIN LISTES lo on (lo.ref = e.orientation and lo.categorie = 4)');
     SQL.Add('LEFT JOIN LISTES lf on (lf.ref = e.formatedition and lf.categorie = 5)');
+    SQL.Add('LEFT JOIN LISTES lsl on (lsl.ref = e.senslecture and lsl.categorie = 8)');
     SQL.Add('WHERE ID_Edition = ?');
     Params.AsString[0] := GUIDToString(Reference);
     FetchBlobs := True;
@@ -896,6 +890,8 @@ begin
     Self.sOrientation := Trim(Fields.ByNameAsString['sOrientation']);
     Self.FormatEdition := Fields.ByNameAsInteger['FormatEdition'];
     Self.sFormatEdition := Trim(Fields.ByNameAsString['sFormatEdition']);
+    Self.SensLecture := Fields.ByNameAsInteger['SensLecture'];
+    Self.sSensLecture := Trim(Fields.ByNameAsString['sSensLecture']);
     Self.DateAchat := Fields.ByNameAsDate['DateAchat'];
     Self.Notes.Text := Fields.ByNameAsString['Notes'];
     Self.AnneeCote := Fields.ByNameAsInteger['ANNEECOTE'];
@@ -962,27 +958,18 @@ begin
   try
     Transaction := UseTransaction;
 
-    if RecInconnu then
-    begin
-      SQL.Text := 'INSERT INTO EDITIONS (';
-      SQL.Add('ID_Edition, ID_Album, ID_Editeur, ID_Collection, ANNEEEDITION, PRIX, VO, TYPEEDITION, COULEUR, ISBN, STOCK, DEDICACE, OFFERT, GRATUIT,');
-      SQL.Add('ETAT, RELIURE, ORIENTATION, FormatEdition, DATEACHAT, NOTES, NOMBREDEPAGES, ANNEECOTE, PRIXCOTE, NumeroPerso');
-      SQL.Add(') VALUES (');
-      SQL.Add(':ID_Edition, :ID_Album, :ID_Editeur, :ID_Collection, :ANNEEEDITION, :PRIX, :VO, :TYPEEDITION, :COULEUR, :ISBN, :STOCK, :DEDICACE, :OFFERT, :GRATUIT,');
-      SQL.Add(':ETAT, :RELIURE, :ORIENTATION, :FormatEdition, :DATEACHAT, :NOTES, :NOMBREDEPAGES, :ANNEECOTE, :PRIXCOTE, :NumeroPerso');
-      SQL.Add(')');
-    end
-    else
-    begin
-      SQL.Text := 'UPDATE EDITIONS SET';
-      SQL.Add('ID_Album = :ID_Album, ID_Editeur = :ID_Editeur, ID_Collection = :ID_Collection, ANNEEEDITION = :ANNEEEDITION,');
-      SQL.Add('PRIX = :PRIX, VO = :VO, TYPEEDITION = :TYPEEDITION, COULEUR = :COULEUR, ISBN = :ISBN, STOCK = :STOCK, ETAT = :ETAT, RELIURE = :RELIURE,');
-      SQL.Add('DEDICACE = :DEDICACE, OFFERT = :OFFERT, GRATUIT = :GRATUIT, DATEACHAT = :DATEACHAT, NOTES = :NOTES, ORIENTATION = :ORIENTATION,');
-      SQL.Add('ANNEECOTE = :ANNEECOTE, PRIXCOTE = :PRIXCOTE, NumeroPerso = :NumeroPerso,');
-      SQL.Add('FormatEdition = :FormatEdition, NOMBREDEPAGES = :NOMBREDEPAGES WHERE (ID_Edition = :ID_Edition)');
-    end;
+    SQL.Text := 'UPDATE OR INSERT INTO EDITIONS (';
+    SQL.Add('ID_Edition, ID_Album, ID_Editeur, ID_Collection, ANNEEEDITION, PRIX, VO, TYPEEDITION, COULEUR, ISBN, STOCK, DEDICACE, OFFERT, GRATUIT,');
+    SQL.Add('ETAT, RELIURE, ORIENTATION, FormatEdition, DATEACHAT, NOTES, NOMBREDEPAGES, ANNEECOTE, PRIXCOTE, NumeroPerso, SensLecture');
+    SQL.Add(') VALUES (');
+    SQL.Add(':ID_Edition, :ID_Album, :ID_Editeur, :ID_Collection, :ANNEEEDITION, :PRIX, :VO, :TYPEEDITION, :COULEUR, :ISBN, :STOCK, :DEDICACE, :OFFERT, :GRATUIT,');
+    SQL.Add(':ETAT, :RELIURE, :ORIENTATION, :FormatEdition, :DATEACHAT, :NOTES, :NOMBREDEPAGES, :ANNEECOTE, :PRIXCOTE, :NumeroPerso, :SensLecture');
+    SQL.Add(')');
 
-    Params.ByNameAsString['ID_Edition'] := GUIDToString(ID_Edition);
+    if IsEqualGUID(GUID_NULL, ID_Edition) then
+      Params.ByNameIsNull['ID_Edition'] := True
+    else
+      Params.ByNameAsString['ID_Edition'] := GUIDToString(ID_Edition);
     Params.ByNameAsString['ID_Album'] := GUIDToString(ID_Album);
     Params.ByNameAsString['ID_Editeur'] := GUIDToString(Editeur.ID_Editeur);
     Params.ByNameAsString['ID_Collection'] := GUIDToString(Collection.ID);
@@ -1010,6 +997,7 @@ begin
     Params.ByNameAsInteger['RELIURE'] := Reliure;
     Params.ByNameAsInteger['Orientation'] := Orientation;
     Params.ByNameAsInteger['FormatEdition'] := FormatEdition;
+    Params.ByNameAsInteger['SensLecture'] := SensLecture;
     if DateAchat = 0 then
       Params.ByNameIsNull['DATEACHAT'] := True
     else
@@ -1324,16 +1312,16 @@ begin
   try
     Transaction := UseTransaction;
 
-    if RecInconnu then
-      SQL.Text := 'INSERT INTO EMPRUNTEURS (ID_Emprunteur, NOMEMPRUNTEUR, ADRESSEEMPRUNTEUR) VALUES (:ID_Emprunteur, :NOMEMPRUNTEUR, :ADRESSEEMPRUNTEUR)'
-    else
-      SQL.Text := 'UPDATE EMPRUNTEURS SET NOMEMPRUNTEUR = :NOMEMPRUNTEUR, ADRESSEEMPRUNTEUR = :ADRESSEEMPRUNTEUR WHERE ID_Emprunteur = :ID_Emprunteur';
+    SQL.Text := 'UPDATE OR INSERT INTO EMPRUNTEURS (ID_Emprunteur, NOMEMPRUNTEUR, ADRESSEEMPRUNTEUR) VALUES (:ID_Emprunteur, :NOMEMPRUNTEUR, :ADRESSEEMPRUNTEUR)';
 
+    if IsEqualGUID(GUID_NULL, ID_Emprunteur) then
+      Params.ByNameIsNull['ID_Emprunteur'] := True
+    else
+      Params.ByNameAsString['ID_Emprunteur'] := GUIDToString(ID_Emprunteur);
     Params.ByNameAsString['NOMEMPRUNTEUR'] := Trim(Nom);
     s := Self.Adresse.Text;
     ParamsSetBlob('ADRESSEEMPRUNTEUR', s);
 
-    Params.ByNameAsString['ID_Emprunteur'] := GUIDToString(ID_Emprunteur);
     ExecSQL;
     Transaction.Commit;
   finally
@@ -1563,18 +1551,15 @@ begin
   with TJvUIBQuery.Create(nil) do
   try
     Transaction := UseTransaction;
-    if RecInconnu then
-    begin
-      SQL.Text := 'INSERT INTO SERIES (ID_Serie, TitreSerie, Terminee, SuivreSorties, Complete, SuivreManquants, SITEWEB, ID_Editeur, ID_Collection, SUJETserie, REMARQUESserie, NB_ALBUMS)';
-      SQL.Add('VALUES');
-      SQL.Add('(:ID_Serie, :TitreSerie, :Terminee, :SuivreSorties, :Complete, :SuivreManquants, :SITEWEB, :ID_Editeur, :ID_Collection, :SUJETserie, :REMARQUESserie, :NB_ALBUMS)');
-    end
+
+    SQL.Text := 'UPDATE OR INSERT INTO SERIES (ID_Serie, TitreSerie, Terminee, SuivreSorties, Complete, SuivreManquants, SITEWEB, ID_Editeur, ID_Collection, SUJETserie, REMARQUESserie, NB_ALBUMS)';
+    SQL.Add('VALUES');
+    SQL.Add('(:ID_Serie, :TitreSerie, :Terminee, :SuivreSorties, :Complete, :SuivreManquants, :SITEWEB, :ID_Editeur, :ID_Collection, :SUJETserie, :REMARQUESserie, :NB_ALBUMS)');
+
+    if IsEqualGUID(GUID_NULL, ID_Serie) then
+      Params.ByNameIsNull['ID_Serie'] := True
     else
-    begin
-      SQL.Text := 'UPDATE SERIES SET TitreSerie = :TitreSerie, Terminee = :Terminee, SuivreSorties = :SuivreSorties, Complete = :Complete, SuivreManquants = :SuivreManquants, SITEWEB = :SITEWEB, ID_Editeur = :ID_Editeur, ID_Collection = :ID_Collection,';
-      SQL.Add('SUJETserie = :SUJETserie, REMARQUESserie = :REMARQUESserie, NB_ALBUMS = :NB_ALBUMS');
-      SQL.Add('WHERE ID_Serie = :ID_Serie');
-    end;
+      Params.ByNameAsString['ID_Serie'] := GUIDToString(ID_Serie);
     Params.ByNameAsString['TitreSerie'] := Trim(Self.Titre);
     if TCheckBoxState(Self.Terminee) = cbGrayed then
       Params.ByNameIsNull['TERMINEE'] := True
@@ -1612,7 +1597,6 @@ begin
     else
       Params.ByNameIsNull['REMARQUESserie'] := True;
 
-    Params.ByNameAsString['ID_Serie'] := GUIDToString(Self.ID_Serie);
     ExecSQL;
 
     SupprimerToutDans('', 'GENRESERIES', 'ID_Serie', ID_Serie);
@@ -1712,14 +1696,14 @@ begin
   try
     Transaction := UseTransaction;
 
-    if RecInconnu then
-      SQL.Text := 'INSERT INTO EDITEURS (ID_Editeur, NOMEDITEUR, SITEWEB) VALUES (:ID_Editeur, :NOMEDITEUR, :SITEWEB)'
-    else
-      SQL.Text := 'UPDATE EDITEURS SET NOMEDITEUR = :NOMEDITEUR, SITEWEB = :SITEWEB WHERE ID_Editeur = :ID_Editeur';
+    SQL.Text := 'UPDATE OR INSERT INTO EDITEURS (ID_Editeur, NOMEDITEUR, SITEWEB) VALUES (:ID_Editeur, :NOMEDITEUR, :SITEWEB)';
 
+    if IsEqualGUID(GUID_NULL, ID_Editeur) then
+      Params.ByNameIsNull['ID_Editeur'] := True
+    else
+      Params.ByNameAsString['ID_Editeur'] := GUIDToString(ID_Editeur);
     Params.ByNameAsString['NOMEDITEUR'] := Trim(NomEditeur);
     Params.ByNameAsString['SITEWEB'] := Trim(SiteWeb);
-    Params.ByNameAsString['ID_Editeur'] := GUIDToString(ID_Editeur);
     ExecSQL;
     Transaction.Commit;
   finally
@@ -2481,17 +2465,17 @@ begin
   try
     Transaction := UseTransaction;
 
-    if RecInconnu then
-      SQL.Text := 'INSERT INTO PERSONNES (ID_Personne, NOMPERSONNE, SITEWEB, BIOGRAPHIE) VALUES (:ID_Personne, :NOMPERSONNE, :SITEWEB, :BIOGRAPHIE)'
-    else
-      SQL.Text := 'UPDATE PERSONNES SET NOMPERSONNE = :NOMPERSONNE, SITEWEB = :SITEWEB, BIOGRAPHIE = :BIOGRAPHIE WHERE ID_Personne = :ID_Personne';
+    SQL.Text := 'UPDATE OR INSERT INTO PERSONNES (ID_Personne, NOMPERSONNE, SITEWEB, BIOGRAPHIE) VALUES (:ID_Personne, :NOMPERSONNE, :SITEWEB, :BIOGRAPHIE)';
 
+    if IsEqualGUID(GUID_NULL, ID_Auteur) then
+      Params.ByNameIsNull['ID_Personne'] := True
+    else
+      Params.ByNameAsString['ID_Personne'] := GUIDToString(ID_Auteur);
     Params.ByNameAsString['NOMPERSONNE'] := Trim(NomAuteur);
     Params.ByNameAsString['SITEWEB'] := Trim(SiteWeb);
     s := Biographie.Text;
     ParamsSetBlob('BIOGRAPHIE', s);
 
-    Params.ByNameAsString['ID_Personne'] := GUIDToString(ID_Auteur);
     ExecSQL;
     Transaction.Commit;
   finally
@@ -2654,22 +2638,14 @@ begin
   try
     Transaction := UseTransaction;
 
-    if RecInconnu then
-    begin
-      SQL.Text := 'INSERT INTO PARABD (ID_ParaBD, TITREPARABD, ANNEE, ID_Serie, CATEGORIEPARABD, DEDICACE, NUMEROTE, ANNEECOTE, PRIXCOTE, GRATUIT, OFFERT, DATEACHAT, PRIX, STOCK, DESCRIPTION, COMPLET)';
-      SQL.Add('VALUES');
-      SQL.Add('(:ID_ParaBD, :TITREPARABD, :ANNEE, :ID_Serie, :CATEGORIEPARABD, :DEDICACE, :NUMEROTE, :ANNEECOTE, :PRIXCOTE, :GRATUIT, :OFFERT, :DATEACHAT, :PRIX, :STOCK, :DESCRIPTION, 1)');
-    end
-    else
-    begin
-      SQL.Text := 'UPDATE PARABD SET';
-      SQL.Add('TITREPARABD = :TITREPARABD, ANNEE = :ANNEE, ID_Serie = :ID_Serie, CATEGORIEPARABD = :CATEGORIEPARABD, DEDICACE = :DEDICACE, NUMEROTE = :NUMEROTE, ANNEECOTE = :ANNEECOTE,');
-      SQL.Add('PRIXCOTE = :PRIXCOTE, GRATUIT = :GRATUIT, OFFERT = :OFFERT, DATEACHAT = :DATEACHAT, PRIX = :PRIX, STOCK = :STOCK, COMPLET = 1,');
-      SQL.Add('DESCRIPTION = :DESCRIPTION');
-      SQL.Add('WHERE (ID_ParaBD = :ID_ParaBD)');
-    end;
+    SQL.Text := 'UPDATE OR INSERT INTO PARABD (ID_ParaBD, TITREPARABD, ANNEE, ID_Serie, CATEGORIEPARABD, DEDICACE, NUMEROTE, ANNEECOTE, PRIXCOTE, GRATUIT, OFFERT, DATEACHAT, PRIX, STOCK, DESCRIPTION, COMPLET)';
+    SQL.Add('VALUES');
+    SQL.Add('(:ID_ParaBD, :TITREPARABD, :ANNEE, :ID_Serie, :CATEGORIEPARABD, :DEDICACE, :NUMEROTE, :ANNEECOTE, :PRIXCOTE, :GRATUIT, :OFFERT, :DATEACHAT, :PRIX, :STOCK, :DESCRIPTION, 1)');
 
-    Params.ByNameAsString['ID_ParaBD'] := GUIDToString(ID_ParaBD);
+    if IsEqualGUID(GUID_NULL, ID_ParaBD) then
+      Params.ByNameIsNull['ID_ParaBD'] := True
+    else
+      Params.ByNameAsString['ID_ParaBD'] := GUIDToString(ID_ParaBD);
     s := Trim(Titre);
     if s = '' then
       Params.ByNameIsNull['TITREPARABD'] := True
@@ -2851,13 +2827,15 @@ begin
   with TJvUIBQuery.Create(nil) do
   try
     Transaction := UseTransaction;
-    if RecInconnu then
-      SQL.Text := 'INSERT INTO COLLECTIONS (ID_Collection, NOMCOLLECTION, ID_Editeur) VALUES (:ID_Collection, :NOMCOLLECTION, :ID_Editeur)'
+
+    SQL.Text := 'UPDATE OR INSERT INTO COLLECTIONS (ID_Collection, NOMCOLLECTION, ID_Editeur) VALUES (:ID_Collection, :NOMCOLLECTION, :ID_Editeur)';
+
+    if IsEqualGUID(GUID_NULL, ID_Collection) then
+      Params.ByNameIsNull['ID_Collection'] := True
     else
-      SQL.Text := 'UPDATE COLLECTIONS SET NOMCOLLECTION = :NOMCOLLECTION, ID_Editeur = :ID_Editeur WHERE ID_Collection = :ID_Collection';
+      Params.ByNameAsString['ID_Collection'] := GUIDToString(ID_Collection);
     Params.ByNameAsString['NOMCOLLECTION'] := Trim(NomCollection);
     Params.ByNameAsString['ID_EDITEUR'] := GUIDToString(ID_Editeur);
-    Params.ByNameAsString['ID_COLLECTION'] := GUIDToString(ID_Collection);
     ExecSQL;
     Transaction.Commit;
   finally

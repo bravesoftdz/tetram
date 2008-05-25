@@ -100,6 +100,10 @@ type
     Label18: TLabel;
     lbCote: TLabel;
     Label20: TLabel;
+    Label21: TLabel;
+    lbSensLecture: TLabel;
+    Label22: TLabel;
+    lbNumeroPerso: TLabel;
     procedure lvScenaristesDblClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -406,10 +410,12 @@ begin
       Pages.Caption := NonZero(IntToStr(FCurrentEdition.NombreDePages));
       lbOrientation.Caption := FCurrentEdition.sOrientation;
       lbFormat.Caption := FCurrentEdition.sFormatEdition;
+      lbSensLecture.Caption := FCurrentEdition.sSensLecture;
+      lbNumeroPerso.Caption := FCurrentEdition.NumeroPerso;
       if cbOffert.Checked then
-        Label12.Caption := rsTransOffertLe + ':'
+        Label12.Caption := rsTransOffertLe + ' :'
       else
-        Label12.Caption := rsTransAcheteLe + ':';
+        Label12.Caption := rsTransAcheteLe + ' :';
       AcheteLe.Caption := FCurrentEdition.sDateAchat;
       edNotes.Lines.Text := FCurrentEdition.Notes.Text;
 

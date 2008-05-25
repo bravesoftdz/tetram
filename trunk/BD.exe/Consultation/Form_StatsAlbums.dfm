@@ -49,7 +49,7 @@ object FrmStatsAlbums: TFrmStatsAlbums
     Width = 107
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Albums emprunt'#233's:'
+    Caption = 'Albums emprunt'#233's :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
@@ -66,7 +66,7 @@ object FrmStatsAlbums: TFrmStatsAlbums
     Height = 15
     Hint = 'Nombre moyen d'#39'emprunts par albums'
     Alignment = taRightJustify
-    Caption = 'Nombre moyen d'#39'emprunts:'
+    Caption = 'Nombre moyen d'#39'emprunts :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -77,7 +77,7 @@ object FrmStatsAlbums: TFrmStatsAlbums
     Height = 15
     Hint = 'Nombre maximum d'#39'emprunts'
     Alignment = taRightJustify
-    Caption = 'maximum:'
+    Caption = 'maximum :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -88,7 +88,7 @@ object FrmStatsAlbums: TFrmStatsAlbums
     Height = 15
     Hint = 'Nombre minimum d'#39'emprunts'
     Alignment = taRightJustify
-    Caption = 'minimum:'
+    Caption = 'minimum :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -204,7 +204,7 @@ object FrmStatsAlbums: TFrmStatsAlbums
     Width = 99
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Nombre d'#39'albums:'
+    Caption = 'Nombre d'#39'albums :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
@@ -221,7 +221,7 @@ object FrmStatsAlbums: TFrmStatsAlbums
     Height = 15
     Hint = 'Nombre d'#39'albums en noir et blanc'
     Alignment = taRightJustify
-    Caption = 'Albums en N&B:'
+    Caption = 'Albums en N&B :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -232,7 +232,7 @@ object FrmStatsAlbums: TFrmStatsAlbums
     Height = 15
     Hint = 'Nombre d'#39'albums en version originale'
     Alignment = taRightJustify
-    Caption = 'Albums en VO:'
+    Caption = 'Albums en VO :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -243,7 +243,7 @@ object FrmStatsAlbums: TFrmStatsAlbums
     Height = 15
     Hint = 'Nombre d'#39'albums disponibles'
     Alignment = taRightJustify
-    Caption = 'Albums en stock:'
+    Caption = 'Albums en stock :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
@@ -314,7 +314,7 @@ object FrmStatsAlbums: TFrmStatsAlbums
     Width = 99
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Nombre de s'#233'ries:'
+    Caption = 'Nombre de s'#233'ries :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
@@ -344,7 +344,7 @@ object FrmStatsAlbums: TFrmStatsAlbums
     Height = 15
     Hint = 'Nombre d'#39'int'#233'grales'
     Alignment = taRightJustify
-    Caption = 'Int'#233'grales:'
+    Caption = 'Int'#233'grales :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -369,7 +369,7 @@ object FrmStatsAlbums: TFrmStatsAlbums
     Height = 15
     Hint = 'Nombre de hors s'#233'rie'
     Alignment = taRightJustify
-    Caption = 'Hors s'#233'rie:'
+    Caption = 'Hors s'#233'rie :'
     ShowAccelChar = False
     Transparent = True
   end

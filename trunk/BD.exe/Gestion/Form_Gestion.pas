@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, ComCtrls, Db, Menus,
   ExtCtrls, Buttons, Proc_Gestions, VDTButton, VirtualTrees, VirtualTree,
-  Frame_RechercheRapide;
+  Frame_RechercheRapide, UBdtForms;
 
 type
   PInfo_Gestion = ^TInfo_Gestion;
@@ -21,7 +21,7 @@ type
     DerniereRecherche: string;
   end;
 
-  TFrmGestions = class(TForm)
+  TFrmGestions = class(TbdtForm)
     Panel3: TPanel;
     VDTButton2: TVDTButton;
     Bevel4: TBevel;

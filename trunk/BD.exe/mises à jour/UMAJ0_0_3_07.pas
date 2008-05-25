@@ -172,6 +172,6 @@ begin
 end;
 
 initialization
-  RegisterUpdate('0.0.3.7', @MAJ0_0_3_07);
+  RegisterFBUpdate('0.0.3.7', @MAJ0_0_3_07);
 
 end.

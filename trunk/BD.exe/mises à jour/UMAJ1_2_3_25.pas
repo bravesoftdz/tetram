@@ -400,7 +400,7 @@ begin
 end;
 
 initialization
-  RegisterUpdate('1.2.3.25', @MAJ1_2_3_25);
+  RegisterFBUpdate('1.2.3.25', @MAJ1_2_3_25);
 
 end.
 

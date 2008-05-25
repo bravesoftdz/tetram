@@ -212,6 +212,6 @@ begin
 end;
 
 initialization
-  RegisterUpdate('0.0.3.19', @MAJ0_0_3_19);
+  RegisterFBUpdate('0.0.3.19', @MAJ0_0_3_19);
 
 end.

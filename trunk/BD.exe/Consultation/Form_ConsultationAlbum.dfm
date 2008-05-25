@@ -2,8 +2,8 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
   Left = 440
   Top = 64
   Width = 530
-  Height = 833
-  Caption = 'Fiche d'#39'album'
+  Height = 861
+  Caption = 'Fiche d''album'
   Color = clWhite
   Constraints.MinWidth = 530
   Font.Charset = ANSI_CHARSET
@@ -22,14 +22,14 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
     Left = 0
     Top = 0
     Width = 522
-    Height = 781
+    Height = 815
     Align = alClient
     BorderStyle = bsNone
     ParentBackground = True
     TabOrder = 0
     DesignSize = (
       522
-      781)
+      815)
     object Label4: TLabel
       Left = 364
       Top = 164
@@ -37,7 +37,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Height = 21
       Alignment = taCenter
       Anchors = [akTop, akRight]
-      Caption = 'Pas d'#39'image'
+      Caption = 'Pas d''image'
       Font.Charset = ANSI_CHARSET
       Font.Color = clRed
       Font.Height = -17
@@ -47,7 +47,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Transparent = True
     end
     object l_remarques: TLabel
-      Left = 25
+      Left = 28
       Top = 392
       Width = 28
       Height = 13
@@ -65,7 +65,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Transparent = True
     end
     object l_sujet: TLabel
-      Left = 17
+      Left = 20
       Top = 321
       Width = 36
       Height = 13
@@ -83,7 +83,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Transparent = True
     end
     object Label1: TLabel
-      Left = 19
+      Left = 22
       Top = 94
       Width = 34
       Height = 13
@@ -102,10 +102,10 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
     object l_annee: TLabel
       Left = 25
       Top = 11
-      Width = 28
+      Width = 31
       Height = 13
       Alignment = taRightJustify
-      Caption = 'S'#233'rie:'
+      Caption = 'Série :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight
@@ -118,7 +118,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Transparent = True
     end
     object l_acteurs: TLabel
-      Left = 17
+      Left = 20
       Top = 176
       Width = 36
       Height = 13
@@ -136,7 +136,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Transparent = True
     end
     object l_realisation: TLabel
-      Left = 12
+      Left = 15
       Top = 135
       Width = 41
       Height = 13
@@ -154,12 +154,12 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Transparent = True
     end
     object Label5: TLabel
-      Left = 29
+      Left = 32
       Top = 259
       Width = 24
       Height = 13
       Alignment = taRightJustify
-      Caption = 'S'#233'rie'
+      Caption = 'Série'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight
@@ -192,10 +192,10 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
     object Label6: TLabel
       Left = 27
       Top = 33
-      Width = 26
+      Width = 29
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Titre:'
+      Caption = 'Titre :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight
@@ -428,7 +428,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       OnClick = VDTButton1Click
     end
     object Label7: TLabel
-      Left = 11
+      Left = 14
       Top = 218
       Width = 42
       Height = 13
@@ -448,10 +448,10 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
     object Label11: TLabel
       Left = 9
       Top = 67
-      Width = 44
+      Width = 47
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Parution:'
+      Caption = 'Parution :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight
@@ -480,7 +480,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Height = 23
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
-      Caption = 'S'#233'rie'
+      Caption = 'Série'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -12
@@ -497,10 +497,10 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
     object Label14: TLabel
       Left = 23
       Top = 52
-      Width = 30
+      Width = 33
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Tome:'
+      Caption = 'Tome :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight
@@ -524,7 +524,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 778
+      Top = 812
       Width = 522
       Height = 3
       Align = alBottom
@@ -537,7 +537,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Height = 42
       Alignment = taCenter
       Anchors = [akTop, akRight]
-      Caption = 'Impossible de charger l'#39'image'
+      Caption = 'Impossible de charger l''image'
       Font.Charset = ANSI_CHARSET
       Font.Color = clRed
       Font.Height = -17
@@ -717,7 +717,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Height = 16
       TabStop = False
       Anchors = [akLeft, akTop, akRight]
-      Caption = 'Int'#233'grale'
+      Caption = 'Intégrale'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight
@@ -734,7 +734,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Width = 68
       Height = 16
       TabStop = False
-      Caption = 'Hors s'#233'rie'
+      Caption = 'Hors série'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight
@@ -747,9 +747,9 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
     end
     object PanelEdition: TPanel
       Left = 3
-      Top = 467
+      Top = 464
       Width = 513
-      Height = 310
+      Height = 345
       Anchors = [akLeft, akTop, akRight]
       BevelOuter = bvNone
       Caption = ' '
@@ -757,7 +757,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       TabOrder = 9
       DesignSize = (
         513
-        310)
+        345)
       object ISBN: TLabel
         Left = 56
         Top = 2
@@ -784,10 +784,10 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       object Lbl_numero: TLabel
         Left = 23
         Top = 2
-        Width = 27
+        Width = 30
         Height = 13
         Alignment = taRightJustify
-        Caption = 'ISBN:'
+        Caption = 'ISBN :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -801,10 +801,10 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       object Lbl_type: TLabel
         Left = 12
         Top = 18
-        Width = 38
+        Width = 41
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Editeur:'
+        Caption = 'Editeur :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -818,10 +818,10 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       object Label3: TLabel
         Left = 28
         Top = 52
-        Width = 22
+        Width = 25
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Prix:'
+        Caption = 'Prix :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -834,7 +834,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object Label2: TLabel
         Left = 14
-        Top = 173
+        Top = 205
         Width = 45
         Height = 13
         Caption = 'Emprunts'
@@ -851,7 +851,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object nbemprunts: TLabel
         Left = 71
-        Top = 173
+        Top = 205
         Width = 3
         Height = 13
         Transparent = True
@@ -859,10 +859,10 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       object Label9: TLabel
         Left = 0
         Top = 35
-        Width = 50
+        Width = 53
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Collection:'
+        Caption = 'Collection :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -882,12 +882,12 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         ShowAccelChar = False
       end
       object Label16: TLabel
-        Left = 265
+        Left = 262
         Top = 18
-        Width = 35
+        Width = 38
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Ann'#233'e:'
+        Caption = 'Année :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -903,7 +903,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         Top = 18
         Width = 31
         Height = 13
-        Caption = 'Ann'#233'e'
+        Caption = 'Année'
       end
       object Etat: TLabel
         Left = 56
@@ -916,10 +916,10 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       object Label10: TLabel
         Left = 26
         Top = 85
-        Width = 24
+        Width = 27
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Etat:'
+        Caption = 'Etat :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -939,12 +939,12 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         ShowAccelChar = False
       end
       object Label13: TLabel
-        Left = 163
+        Left = 160
         Top = 85
-        Width = 37
+        Width = 40
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Reliure:'
+        Caption = 'Reliure :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -965,11 +965,11 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object Label8: TLabel
         Left = 18
-        Top = 118
-        Width = 32
+        Top = 134
+        Width = 35
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Notes:'
+        Caption = 'Notes :'
         Color = clWhite
         FocusControl = edNotes
         Font.Charset = ANSI_CHARSET
@@ -982,12 +982,12 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         Transparent = True
       end
       object Label12: TLabel
-        Left = 151
+        Left = 148
         Top = 52
-        Width = 49
+        Width = 52
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Achet'#233' le:'
+        Caption = 'Acheté le :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -1003,15 +1003,15 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         Top = 52
         Width = 45
         Height = 13
-        Caption = 'Achet'#233' le'
+        Caption = 'Acheté le'
       end
       object Label15: TLabel
         Left = 17
         Top = 101
-        Width = 33
+        Width = 36
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Pages:'
+        Caption = 'Pages :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -1030,12 +1030,12 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         Caption = 'Pages'
       end
       object Label17: TLabel
-        Left = 142
+        Left = 139
         Top = 101
-        Width = 58
+        Width = 61
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Orientation:'
+        Caption = 'Orientation :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -1057,9 +1057,9 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       object Label19: TLabel
         Left = 350
         Top = 101
-        Width = 38
+        Width = 41
         Height = 13
-        Caption = 'Format:'
+        Caption = 'Format :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -1071,7 +1071,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         Transparent = True
       end
       object lbFormat: TLabel
-        Left = 392
+        Left = 395
         Top = 101
         Width = 34
         Height = 13
@@ -1088,10 +1088,10 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       object Label20: TLabel
         Left = 23
         Top = 68
-        Width = 27
+        Width = 30
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Cote:'
+        Caption = 'Cote :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -1101,6 +1101,56 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         ParentColor = False
         ParentFont = False
         Transparent = True
+      end
+      object Label21: TLabel
+        Left = 119
+        Top = 117
+        Width = 81
+        Height = 13
+        Alignment = taRightJustify
+        Caption = 'Sens de lecture :'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clHotLight
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object lbSensLecture: TLabel
+        Left = 208
+        Top = 117
+        Width = 74
+        Height = 13
+        Caption = 'Sens de lecture'
+        ShowAccelChar = False
+      end
+      object Label22: TLabel
+        Left = 4
+        Top = 181
+        Width = 49
+        Height = 13
+        Alignment = taRightJustify
+        Caption = 'N° perso :'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clHotLight
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentColor = False
+        ParentFont = False
+        Transparent = True
+      end
+      object lbNumeroPerso: TLabel
+        Left = 56
+        Top = 181
+        Width = 87
+        Height = 13
+        Caption = 'Numero personnel'
+        ShowAccelChar = False
       end
       object cbVO: TReadOnlyCheckBox
         Left = 213
@@ -1123,7 +1173,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object ListeEmprunts: TVirtualStringTree
         Left = 8
-        Top = 192
+        Top = 224
         Width = 505
         Height = 116
         Anchors = [akLeft, akTop, akRight]
@@ -1166,7 +1216,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object ajouter: TButton
         Left = 441
-        Top = 170
+        Top = 202
         Width = 72
         Height = 20
         Cursor = crHandPoint
@@ -1216,7 +1266,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       end
       object edNotes: TMemo
         Left = 56
-        Top = 118
+        Top = 134
         Width = 457
         Height = 40
         Anchors = [akLeft, akTop, akRight]
@@ -1255,7 +1305,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         Height = 16
         TabStop = False
         Alignment = taLeftJustify
-        Caption = 'D'#233'dicac'#233
+        Caption = 'Dédicacé'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -1290,7 +1340,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
     object Informations1: TMenuItem
       Caption = '&Informations'
       object Emprunts1: TMenuItem
-        Caption = 'Emprunts:'
+        Caption = 'Emprunts :'
       end
     end
     object MenuItem1: TMenuItem
@@ -1307,21 +1357,21 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
     object EmpruntApercu: TAction
       Tag = 1
       Category = 'Emprunts'
-      Caption = 'Aper'#231'u avant impression'
+      Caption = 'Aperçu avant impression'
       ImageIndex = 4
       OnExecute = Imprimer1Click
     end
     object FicheApercu: TAction
       Tag = 1
       Category = 'Fiche'
-      Caption = 'Aper'#231'u avant impression'
+      Caption = 'Aperçu avant impression'
       ImageIndex = 4
       OnExecute = Impression1Click
     end
     object CouvertureApercu: TAction
       Tag = 1
       Category = 'Couverture'
-      Caption = 'Aper'#231'u avant impression'
+      Caption = 'Aperçu avant impression'
       ImageIndex = 4
       OnExecute = Imprimer2Click
     end

@@ -5,10 +5,10 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBEditLabeled, VirtualTrees, ComCtrls, VDTButton,
   JvUIB, ExtCtrls, Buttons, Fram_Boutons, VirtualTree, TypeRec, Frame_RechercheRapide, LoadComplet,
-  CRFurtif;
+  CRFurtif, UBdtForms;
 
 type
-  TFrmEditAchatAlbum = class(TForm)
+  TFrmEditAchatAlbum = class(TbdtForm)
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;

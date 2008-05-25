@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Fram_Boutons, StdCtrls, ComboCheck, ProceduresBDtk;
+  Dialogs, Fram_Boutons, StdCtrls, ComboCheck, ProceduresBDtk, UBdtForms;
 
 type
-  TFrmChoixDetailSerie = class(TForm)
+  TFrmChoixDetailSerie = class(TbdtForm)
     CheckBox1: TCheckBox;
     Frame11: TFrame1;
     LightComboCheck1: TLightComboCheck;

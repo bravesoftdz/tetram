@@ -31,7 +31,7 @@ object FrmStatsEmprunteurs: TFrmStatsEmprunteurs
     Height = 16
     Alignment = taRightJustify
     AutoSize = False
-    Caption = 'Emprunteurs:'
+    Caption = 'Emprunteurs :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
@@ -49,7 +49,7 @@ object FrmStatsEmprunteurs: TFrmStatsEmprunteurs
     Hint = 'Nombre moyen d'#39'emprunts par emprunteurs'
     Alignment = taRightJustify
     AutoSize = False
-    Caption = 'Nombre moyen d'#39'emprunts:'
+    Caption = 'Nombre moyen d'#39'emprunts :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -61,7 +61,7 @@ object FrmStatsEmprunteurs: TFrmStatsEmprunteurs
     Hint = 'Maximum d'#39'emprunts'
     Alignment = taRightJustify
     AutoSize = False
-    Caption = 'maximum:'
+    Caption = 'maximum :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -73,7 +73,7 @@ object FrmStatsEmprunteurs: TFrmStatsEmprunteurs
     Hint = 'Nombre minimum d'#39'emprunts'
     Alignment = taRightJustify
     AutoSize = False
-    Caption = 'minimum:'
+    Caption = 'minimum :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -136,7 +136,7 @@ object FrmStatsEmprunteurs: TFrmStatsEmprunteurs
     Height = 15
     Hint = 'Nombre total d'#39'albums dans la BDth'#232'que'
     Alignment = taRightJustify
-    Caption = 'Nombre d'#39'albums:'
+    Caption = 'Nombre d'#39'albums :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
@@ -153,7 +153,7 @@ object FrmStatsEmprunteurs: TFrmStatsEmprunteurs
     Height = 15
     Hint = 'Nombre d'#39'albums disponobles'
     Alignment = taRightJustify
-    Caption = 'Albums en stock:'
+    Caption = 'Albums en stock :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -13

@@ -280,6 +280,16 @@ begin
   T := Self.sReliure;
 end;
 
+procedure TEditionCompletesSensLecture_W(Self: TEditionComplete; const T: string);
+begin
+  Self.sSensLecture := T;
+end;
+
+procedure TEditionCompletesSensLecture_R(Self: TEditionComplete; var T: string);
+begin
+  T := Self.sSensLecture;
+end;
+
 procedure TEditionCompletesEtat_W(Self: TEditionComplete; const T: string);
 begin
   Self.sEtat := T;
@@ -438,6 +448,16 @@ end;
 procedure TEditionCompleteReliure_R(Self: TEditionComplete; var T: Integer);
 begin
   T := Self.Reliure;
+end;
+
+procedure TEditionCompleteSensLecture_W(Self: TEditionComplete; const T: Integer);
+begin
+  Self.SensLecture := T;
+end;
+
+procedure TEditionCompleteSensLecture_R(Self: TEditionComplete; var T: Integer);
+begin
+  T := Self.SensLecture;
 end;
 
 procedure TEditionCompleteEtat_W(Self: TEditionComplete; const T: Integer);
@@ -805,6 +825,7 @@ begin
     RegisterPropertyHelper(@TEditionCompleteAnneeEdition_R, @TEditionCompleteAnneeEdition_W, 'AnneeEdition');
     RegisterPropertyHelper(@TEditionCompleteEtat_R, @TEditionCompleteEtat_W, 'Etat');
     RegisterPropertyHelper(@TEditionCompleteReliure_R, @TEditionCompleteReliure_W, 'Reliure');
+    RegisterPropertyHelper(@TEditionCompleteSensLecture_R, @TEditionCompleteSensLecture_W, 'SensLecture');
     RegisterPropertyHelper(@TEditionCompleteNombreDePages_R, @TEditionCompleteNombreDePages_W, 'NombreDePages');
     RegisterPropertyHelper(@TEditionCompleteFormatEdition_R, @TEditionCompleteFormatEdition_W, 'FormatEdition');
     RegisterPropertyHelper(@TEditionCompleteOrientation_R, @TEditionCompleteOrientation_W, 'Orientation');
@@ -821,6 +842,7 @@ begin
     RegisterPropertyHelper(@TEditionCompleteISBN_R, @TEditionCompleteISBN_W, 'ISBN');
     RegisterPropertyHelper(@TEditionCompletesEtat_R, @TEditionCompletesEtat_W, 'sEtat');
     RegisterPropertyHelper(@TEditionCompletesReliure_R, @TEditionCompletesReliure_W, 'sReliure');
+    RegisterPropertyHelper(@TEditionCompletesSensLecture_R, @TEditionCompletesSensLecture_W, 'sSensLecture');
     RegisterPropertyHelper(@TEditionCompletesTypeEdition_R, @TEditionCompletesTypeEdition_W, 'sTypeEdition');
     RegisterPropertyHelper(@TEditionCompletesFormatEdition_R, @TEditionCompletesFormatEdition_W, 'sFormatEdition');
     RegisterPropertyHelper(@TEditionCompletesOrientation_R, @TEditionCompletesOrientation_W, 'sOrientation');

@@ -158,7 +158,7 @@ begin
 end;
 
 initialization
-  RegisterUpdate('1.2.3.20', @MAJ1_2_3_20);
+  RegisterFBUpdate('1.2.3.20', @MAJ1_2_3_20);
 
 end.
 

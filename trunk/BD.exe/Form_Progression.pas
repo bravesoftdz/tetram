@@ -3,10 +3,10 @@ unit Form_Progression;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ComCtrls, ProgressBar, Commun;
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ComCtrls, ProgressBar, Commun, UBdtForms;
 
 type
-  TFrmProgression = class(TForm)
+  TFrmProgression = class(TbdtForm)
     ProgressBar1: TMKProgressBar;
     op: TLabel;
     procedure FormCreate(Sender: TObject);

@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ExtCtrls, ComCtrls, SynEditTypes;
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls, SynEditTypes, UBdtForms;
 
 type
-  TForm2 = class(TForm)
+  TForm2 = class(TbdtForm)
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;

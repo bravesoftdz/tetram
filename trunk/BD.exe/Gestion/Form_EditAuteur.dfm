@@ -69,7 +69,7 @@ object FrmEditAuteur: TFrmEditAuteur
       Height = 13
       Hint = 'R'#233'f'#233'rence du support'
       Alignment = taRightJustify
-      Caption = 'Site web:'
+      Caption = 'Site web :'
       Layout = tlCenter
     end
     object VDTButton13: TVDTButton

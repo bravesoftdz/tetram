@@ -333,7 +333,7 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
           Width = 27
           Height = 13
           Hint = 'Date du mouvement'
-          Caption = 'Date:'
+          Caption = 'Date :'
           Layout = tlCenter
         end
         object lccEditions: TLightComboCheck

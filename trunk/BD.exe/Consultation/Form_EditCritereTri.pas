@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Fram_Boutons, StdCtrls, DBCtrls, Form_Recherche,
-  ActnList, DBEditLabeled, ComboCheck, ComCtrls, LoadComplet;
+  ActnList, DBEditLabeled, ComboCheck, ComCtrls, LoadComplet, UBdtForms;
 
 type
-  TFrmEditCritereTri = class(TForm)
+  TFrmEditCritereTri = class(TbdtForm)
     champs: TLightComboCheck;
     Frame11: TFrame1;
     ActionList1: TActionList;

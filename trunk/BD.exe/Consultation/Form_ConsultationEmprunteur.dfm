@@ -27,7 +27,7 @@ object FrmConsultationEmprunteur: TFrmConsultationEmprunteur
     Height = 11
     Hint = 'Nombre d'#39'emprunts de l'#39'emprunteur'
     Alignment = taRightJustify
-    Caption = 'Emprunts:'
+    Caption = 'Emprunts :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clHotLight
     Font.Height = -9
@@ -68,7 +68,7 @@ object FrmConsultationEmprunteur: TFrmConsultationEmprunteur
     Width = 23
     Height = 11
     Alignment = taRightJustify
-    Caption = 'Nom:'
+    Caption = 'Nom :'
     Color = clWhite
     Font.Charset = ANSI_CHARSET
     Font.Color = clHotLight
@@ -103,7 +103,7 @@ object FrmConsultationEmprunteur: TFrmConsultationEmprunteur
     Width = 36
     Height = 11
     Alignment = taRightJustify
-    Caption = 'Adresse:'
+    Caption = 'Adresse :'
     Color = clWhite
     Font.Charset = ANSI_CHARSET
     Font.Color = clHotLight

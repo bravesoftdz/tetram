@@ -431,7 +431,7 @@ begin
 end;
 
 initialization
-  RegisterUpdate('1.2.3.26', @MAJ1_2_3_26);
+  RegisterFBUpdate('1.2.3.26', @MAJ1_2_3_26);
 
 end.
 

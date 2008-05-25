@@ -163,7 +163,7 @@ object FrmConsultationAuteur: TFrmConsultationAuteur
     object Informations1: TMenuItem
       Caption = '&Informations'
       object Emprunts1: TMenuItem
-        Caption = 'Emprunts:'
+        Caption = 'Emprunts :'
       end
     end
     object MenuItem1: TMenuItem

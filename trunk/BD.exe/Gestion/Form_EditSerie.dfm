@@ -43,7 +43,7 @@ object FrmEditSerie: TFrmEditSerie
       Width = 38
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Editeur:'
+      Caption = 'Editeur :'
     end
     object Label8: TLabel
       Left = 359
@@ -51,7 +51,7 @@ object FrmEditSerie: TFrmEditSerie
       Width = 50
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Collection:'
+      Caption = 'Collection :'
     end
     object Label2: TLabel
       Left = 24
@@ -59,7 +59,7 @@ object FrmEditSerie: TFrmEditSerie
       Width = 29
       Height = 13
       Alignment = taRightJustify
-      Caption = ' Titre:'
+      Caption = 'Titre :'
       FocusControl = edTitre
       Layout = tlCenter
     end
@@ -68,7 +68,7 @@ object FrmEditSerie: TFrmEditSerie
       Top = 150
       Width = 33
       Height = 13
-      Caption = 'Genre:'
+      Caption = 'Genre :'
     end
     object Label15: TLabel
       Left = 512
@@ -101,7 +101,7 @@ object FrmEditSerie: TFrmEditSerie
       Width = 40
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Histoire:'
+      Caption = 'Histoire :'
       FocusControl = histoire
     end
     object Label7: TLabel
@@ -111,7 +111,7 @@ object FrmEditSerie: TFrmEditSerie
       Height = 13
       Alignment = taRightJustify
       Anchors = [akTop, akRight]
-      Caption = 'Notes:'
+      Caption = 'Notes :'
       FocusControl = remarques
     end
     object VDTButton13: TVDTButton
@@ -146,7 +146,7 @@ object FrmEditSerie: TFrmEditSerie
       Height = 13
       Hint = 'R'#233'f'#233'rence du support'
       Alignment = taRightJustify
-      Caption = 'Site web:'
+      Caption = 'Site web :'
       Layout = tlCenter
     end
     object btScenariste: TCRFurtifLight
@@ -381,7 +381,7 @@ object FrmEditSerie: TFrmEditSerie
       Width = 42
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Auteurs:'
+      Caption = 'Auteurs :'
       FocusControl = remarques
     end
     object btColoriste: TCRFurtifLight
@@ -511,7 +511,7 @@ object FrmEditSerie: TFrmEditSerie
       Width = 38
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Albums:'
+      Caption = 'Albums :'
     end
     object Label4: TLabel
       Left = 10
@@ -519,7 +519,7 @@ object FrmEditSerie: TFrmEditSerie
       Width = 43
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Para-BD:'
+      Caption = 'Para-BD :'
     end
     object Label9: TLabel
       Left = 600
@@ -528,7 +528,7 @@ object FrmEditSerie: TFrmEditSerie
       Height = 13
       Hint = 'R'#233'f'#233'rence du support'
       Alignment = taRightJustify
-      Caption = 'Nombre d'#39'albums:'
+      Caption = 'Nombre d'#39'albums :'
       Layout = tlCenter
     end
     object vtEditeurs: TVirtualStringTree

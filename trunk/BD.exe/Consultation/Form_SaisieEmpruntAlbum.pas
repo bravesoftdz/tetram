@@ -6,10 +6,10 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, DBCtrls, ComCtrls, ExtCtrls, Fram_Boutons, VDTButton,
   ScanEdit, Menus, Buttons, Commun, DBEditLabeled, VirtualTrees, VirtualTree,
-  ComboCheck, LoadComplet, Frame_RechercheRapide;
+  ComboCheck, LoadComplet, Frame_RechercheRapide, UBdtForms;
 
 type
-  TFrmSaisie_EmpruntAlbum = class(TForm)
+  TFrmSaisie_EmpruntAlbum = class(TbdtForm)
     Frame11: TFrame1;
     Label1: TLabel;
     date_pret: TDateTimePickerLabeled;

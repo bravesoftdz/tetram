@@ -106,12 +106,12 @@ uses
   UMAJ1_2_3_14 in 'mises à jour\UMAJ1_2_3_14.pas',
   Form_ChoixDetailSerie in 'Form_ChoixDetailSerie.pas' {FrmChoixDetailSerie},
   UMAJ1_2_3_25 in 'mises à jour\UMAJ1_2_3_25.pas',
-  UMAJ2_0_0_5 in 'mises à jour\UMAJ2_0_0_5.pas',
+  UMAJ2_1_0_0 in 'mises à jour\UMAJ2_1_0_0.pas',
   UMAJ1_2_3_20 in 'mises à jour\UMAJ1_2_3_20.pas',
   UMAJ1_2_3_22 in 'mises à jour\UMAJ1_2_3_22.pas',
   UMAJ1_2_3_26 in 'mises à jour\UMAJ1_2_3_26.pas',
   UMAJODS in 'mises à jour\UMAJODS.pas',
-  Form_Scripts in 'Scripts\Form_Scripts.pas' {FormScripts},
+  Form_Scripts in 'Scripts\Form_Scripts.pas' {frmScripts},
   Form_ScriptSearch in 'Scripts\Form_ScriptSearch.pas' {Form2},
   uPSComponent_RegExpr in 'Scripts\uPSComponent_RegExpr.pas',
   uPSC_RegExpr in 'Scripts\uPSC_RegExpr.pas',
@@ -125,7 +125,15 @@ uses
   uPSR_TypeRec in 'Scripts\uPSR_TypeRec.pas',
   uPSI_TypeRec in 'Scripts\uPSI_TypeRec.pas',
   Form_EditCritere in 'Consultation\Form_EditCritere.pas' {FrmEditCritere},
-  UChampsRecherche in 'Consultation\UChampsRecherche.pas';
+  UChampsRecherche in 'Consultation\UChampsRecherche.pas',
+  UBdtForms in 'UBdtForms.pas',
+  UMAJ2_0_0_5 in 'mises à jour\UMAJ2_0_0_5.pas',
+  Form_Publier in 'Web\Form_Publier.pas' {frmPublier},
+  UNet in 'Web\UNet.pas',
+  UMySQLMAJ1_0_0_0 in 'Web\mises à jour\UMySQLMAJ1_0_0_0.pas',
+  DIMimeStreams in 'Web\Mime64\DIMimeStreams.pas',
+  DIMime in 'Web\Mime64\DIMime.pas',
+  UMAJ2_0_1_0 in 'mises à jour\UMAJ2_0_1_0.pas';
 
 {$R *.RES}
 {$R curseurs.res}
@@ -175,9 +183,9 @@ begin
   FrmSplash.Affiche_act(ChargementDatabase + '...');
     Historique.AddConsultation(fcRecherche);
     if Utilisateur.Options.ModeDemarrage then
-      Fond.ModeConsultation.Execute
+      Fond.actModeConsultation.Execute
     else
-      Fond.ModeGestion.Execute;
+      Fond.actModeGestion.Execute;
 
     FrmSplash.Affiche_act(FinChargement + '...');
     ChangeCurseur(crHandPoint, 'MyHandPoint', 'MyCursor');

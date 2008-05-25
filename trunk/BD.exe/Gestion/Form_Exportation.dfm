@@ -14,7 +14,7 @@ object FrmExportation: TFrmExportation
   OnCreate = FormCreate
   DesignSize = (
     792
-    585)
+    590)
   PixelsPerInch = 96
   TextHeight = 13
   object VDTButton1: TVDTButton

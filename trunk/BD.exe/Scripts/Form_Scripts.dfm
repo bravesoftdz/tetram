@@ -1,4 +1,4 @@
-object FormScripts: TFormScripts
+object frmScripts: TfrmScripts
   Left = 397
   Top = 157
   Width = 870

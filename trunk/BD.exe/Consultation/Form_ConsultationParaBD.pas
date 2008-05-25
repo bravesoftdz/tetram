@@ -133,9 +133,9 @@ begin
   cbStock.Checked := FParaBD.Stock;
   cbOffert.Checked := FParaBD.Offert;
   if cbOffert.Checked then
-    Label12.Caption := rsTransOffertLe + ':'
+    Label12.Caption := rsTransOffertLe + ' :'
   else
-    Label12.Caption := rsTransAcheteLe + ':';
+    Label12.Caption := rsTransAcheteLe + ' :';
   AcheteLe.Caption := FParaBD.sDateAchat;
   if FParaBD.Gratuit then
     Prix.Caption := rsTransGratuit

@@ -337,7 +337,7 @@ begin
       fcPrevisionsSorties: MAJPrevisionsSorties;
       fcRecreateToolBar: Fond.RechargeToolBar;
       fcPrevisionsAchats: MAJPrevisionsAchats;
-      fcRefreshRepertoire: Fond.ActualiseRepertoire.Execute;
+      fcRefreshRepertoire: Fond.actActualiseRepertoire.Execute;
     end;
     if not Result then begin
       Delete(FCurrentConsultation);

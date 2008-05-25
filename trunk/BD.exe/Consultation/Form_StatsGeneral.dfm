@@ -56,7 +56,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 99
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Nombre d'#39'albums:'
+    Caption = 'Nombre d'#39'albums :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
@@ -72,7 +72,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 84
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Albums en N&B:'
+    Caption = 'Albums en N&B :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -82,7 +82,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 75
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Albums en VO:'
+    Caption = 'Albums en VO :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -92,7 +92,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 95
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Albums en stock:'
+    Caption = 'Albums en stock :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
@@ -108,7 +108,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 58
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Prix moyen:'
+    Caption = 'Prix moyen :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -129,7 +129,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 84
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Valeur connue:'
+    Caption = 'Valeur connue :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
@@ -145,7 +145,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 87
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Valeur estim'#233'e:'
+    Caption = 'Valeur estim'#233'e :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
@@ -161,7 +161,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 76
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Emprunteurs:'
+    Caption = 'Emprunteurs :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
@@ -177,7 +177,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 135
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Nombre moyen d'#39'emprunts:'
+    Caption = 'Nombre moyen d'#39'emprunts :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -187,7 +187,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 49
     Height = 15
     Alignment = taRightJustify
-    Caption = 'maximum:'
+    Caption = 'maximum :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -197,7 +197,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 48
     Height = 15
     Alignment = taRightJustify
-    Caption = 'minimum:'
+    Caption = 'minimum :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -207,7 +207,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 107
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Albums emprunt'#233's:'
+    Caption = 'Albums emprunt'#233's :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
@@ -223,7 +223,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 135
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Nombre moyen d'#39'emprunts:'
+    Caption = 'Nombre moyen d'#39'emprunts :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -233,7 +233,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 49
     Height = 15
     Alignment = taRightJustify
-    Caption = 'maximum:'
+    Caption = 'maximum :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -243,7 +243,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 48
     Height = 15
     Alignment = taRightJustify
-    Caption = 'minimum:'
+    Caption = 'minimum :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -503,7 +503,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 99
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Nombre de s'#233'ries:'
+    Caption = 'Nombre de s'#233'ries :'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -13
@@ -532,7 +532,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 49
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Int'#233'grales:'
+    Caption = 'Int'#233'grales :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -555,7 +555,7 @@ object FrmStatsGenerales: TFrmStatsGenerales
     Width = 52
     Height = 15
     Alignment = taRightJustify
-    Caption = 'Hors s'#233'rie:'
+    Caption = 'Hors s'#233'rie :'
     ShowAccelChar = False
     Transparent = True
   end

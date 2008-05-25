@@ -5,10 +5,10 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Menus,
   StdCtrls, ComCtrls, CheckLst, ActnList, VDTButton, Buttons, ExtCtrls, Fram_Boutons,
-  ToolWin, IniFiles, CRFurtif;
+  ToolWin, IniFiles, CRFurtif, UBdtForms;
 
 type
-  TFrmCustomize = class(TForm)
+  TFrmCustomize = class(TbdtForm)
     Label1: TLabel;
     Label4: TLabel;
     GroupBox1: TGroupBox;
@@ -58,10 +58,13 @@ begin
   VDTListView1.Items.BeginUpdate;
   LastButton := tbSep;
   try
-    for i := 0 to Fond.ToolBar1.ButtonCount - 1 do begin
+    for i := 0 to Fond.ToolBar1.ButtonCount - 1 do
+    begin
       tlb := Fond.ToolBar1.Buttons[i];
-      if Assigned(tlb.Action) and (TActionList(tlb.Action.Owner) <> Fond.ActionList1) then begin
-        with VDTListView1.Items.Add do begin
+      if Assigned(tlb.Action) and (TActionList(tlb.Action.Owner) <> Fond.ActionList1) then
+      begin
+        with VDTListView1.Items.Add do
+        begin
           Caption := StripHotkey(TCustomAction(tlb.Action).Caption);
           ImageIndex := TCustomAction(tlb.Action).ImageIndex;
           SubItems.Add(TCustomAction(tlb.Action).Hint);
@@ -70,8 +73,10 @@ begin
         end;
         LastButton := tbBut;
       end;
-      if (tlb.Style = tbsSeparator) and (LastButton <> tbSep) then begin
-        with VDTListView1.Items.Add do begin
+      if (tlb.Style = tbsSeparator) and (LastButton <> tbSep) then
+      begin
+        with VDTListView1.Items.Add do
+        begin
           Caption := 'Séparateur';
           SubItems.Add('');
           SubItems.Add('S');
@@ -96,7 +101,8 @@ begin
   Cats.Items.Clear;
   Cats.Items.Add(csAll); // Add "All" entry
   // Loop through the actions
-  for i := 0 to Fond.ActionsOutils.ActionCount - 1 do begin
+  for i := 0 to Fond.ActionsOutils.ActionCount - 1 do
+  begin
     act := Fond.ActionsOutils.Actions[i] as TCustomAction;
     // Only categories, we dont have in the list
     if Cats.Items.IndexOf(act.Category) < 0 then Cats.Items.Add(act.Category);
@@ -117,13 +123,17 @@ begin
   try
     Commands.Items.Clear;
     // Loop through the Actionlist
-    for i := 0 to Fond.ActionsOutils.ActionCount - 1 do begin
+    for i := 0 to Fond.ActionsOutils.ActionCount - 1 do
+    begin
       act := Fond.ActionsOutils.Actions[i] as TCustomAction;
-      if Assigned(act) then begin
+      if Assigned(act) then
+      begin
         // check if the category matches
-        if (cat = csAll) or (cat = act.Category) then begin
+        if (cat = csAll) or (cat = act.Category) then
+        begin
           ti := Commands.Items.Add;
-          if Assigned(ti) then begin
+          if Assigned(ti) then
+          begin
             ti.Caption := StripHotkey(act.Caption);
             ti.ImageIndex := act.ImageIndex;
             ti.SubItems.Add(act.Hint);
@@ -144,8 +154,10 @@ var
 begin
   Label3.Visible := False; // Hide description field
   Commands.Selected := nil; // Delete the selection
-  for i := 0 to Cats.Items.Count - 1 do begin
-    if Cats.Selected[i] then begin
+  for i := 0 to Cats.Items.Count - 1 do
+  begin
+    if Cats.Selected[i] then
+    begin
       FillCommands(Cats.Items[i]); // Fill the command list
       Exit;
     end;
@@ -155,8 +167,10 @@ end;
 procedure TFrmCustomize.CommandsChange(Sender: TObject; Item: TListItem; Change: TItemChange);
 // An Action was selected, update the description display
 begin
-  if Change = ctState then begin
-    if Assigned(Item) then begin
+  if Change = ctState then
+  begin
+    if Assigned(Item) then
+    begin
       // Description is the Action hint, stored in SubItems #2
       if Item.SubItems[0] <> '' then
         Label3.Caption := Item.SubItems[0]
@@ -164,7 +178,8 @@ begin
         Label3.Caption := Item.Caption;
       Label3.Visible := True;
     end
-    else begin
+    else
+    begin
       Label3.Visible := False;
     end;
   end;
@@ -187,7 +202,8 @@ begin
     t := VDTListView1.Items.Insert(VDTListView1.Selected.Index + 1)
   else
     t := VDTListView1.Items.Add;
-  with t do begin
+  with t do
+  begin
     Caption := 'Séparateur';
     SubItems.Add('');
     SubItems.Add('S');
@@ -215,7 +231,8 @@ begin
     t := VDTListView1.Items.Insert(VDTListView1.Selected.Index + 1)
   else
     t := VDTListView1.Items.Add;
-  with t do begin
+  with t do
+  begin
     Caption := StripHotkey(TCustomAction(Commands.Selected.Data).Caption);
     ImageIndex := TCustomAction(Commands.Selected.Data).ImageIndex;
     SubItems.Add(TCustomAction(Commands.Selected.Data).Hint);
@@ -235,12 +252,18 @@ var
   tlb: TListItem;
 begin
   Fond.FToolCurrent.Clear;
-  for i := 0 to VDTListView1.Items.Count - 1 do begin
+  for i := 0 to VDTListView1.Items.Count - 1 do
+  begin
     tlb := VDTListView1.Items[i];
-    if Assigned(tlb) and (tlb.SubItems[1] = 'B') then
-      Fond.FToolCurrent.Add(Format('b%d=%s', [i, tlb.SubItems[2]]));
-    if Assigned(tlb) and (tlb.SubItems[1] = 'S') then
-      Fond.FToolCurrent.Add(Format('b%d=%s', [i, 'X']));
+    if Assigned(tlb) then
+    begin
+      if (tlb.SubItems[1] = 'B') then
+        if Copy(tlb.SubItems[2], 1, 3) = 'act' then
+          Fond.FToolCurrent.Add(Format('b%d=%s', [i, Copy(tlb.SubItems[2], 4, MaxInt)]))
+        else
+          Fond.FToolCurrent.Add(Format('b%d=%s', [i, tlb.SubItems[2]]));
+      if (tlb.SubItems[1] = 'S') then Fond.FToolCurrent.Add(Format('b%d=%s', [i, 'X']));
+    end;
   end;
 end;
 
@@ -259,12 +282,14 @@ begin
     newItemIndex := DestListItem.Index
   else
     newItemIndex := VDTListView1.Items.Count;
-  if (Sender = Source) then begin
+  if (Sender = Source) then
+  begin
     VDTListView1.Items.AddItem(nil, newItemIndex).Assign(VDTListView1.Selected);
     VDTListView1.Items.Delete(VDTListView1.Selected.Index);
   end
   else
-    with VDTListView1.Items.AddItem(nil, newItemIndex) do begin
+    with VDTListView1.Items.AddItem(nil, newItemIndex) do
+    begin
       Caption := StripHotkey(TCustomAction(Commands.Selected.Data).Caption);
       ImageIndex := TCustomAction(Commands.Selected.Data).ImageIndex;
       SubItems.Add(TCustomAction(Commands.Selected.Data).Hint);

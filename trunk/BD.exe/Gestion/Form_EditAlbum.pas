@@ -5,10 +5,10 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls, DBCtrls, StdCtrls, ImgList, DBEditLabeled,
   VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, VirtualTree, Menus, TypeRec, ActnList, LoadComplet, ComboCheck,
-  Frame_RechercheRapide, CRFurtif, Fram_Boutons;
+  Frame_RechercheRapide, CRFurtif, Fram_Boutons, UBdtForms;
 
 type
-  TFrmEditAlbum = class(TForm)
+  TFrmEditAlbum = class(TbdtForm)
     ScrollBox: TScrollBox;
     ChoixImageDialog: TOpenPictureDialog;
     ImageList1: TImageList;
@@ -102,6 +102,8 @@ type
     btResetSerie: TCRFurtifLight;
     edNumPerso: TEditLabeled;
     Label26: TLabel;
+    Label27: TLabel;
+    cbxSensLecture: TLightComboCheck;
     procedure ajoutClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -244,6 +246,7 @@ begin
   LoadCombo(4 {Orientation}, cbxOrientation);
   LoadCombo(5 {Format}, cbxFormat);
   LoadStrings(6 {Categorie d'image}, FCategoriesImages);
+  LoadCombo(8 {Sens de lecture}, cbxSensLecture);
 
   for i := 0 to Pred(FCategoriesImages.Count) do
   begin
@@ -755,6 +758,7 @@ begin
   EditionComplete.Reliure := cbxReliure.DefaultValueChecked;
   EditionComplete.Orientation := cbxOrientation.DefaultValueChecked;
   EditionComplete.FormatEdition := cbxFormat.DefaultValueChecked;
+  EditionComplete.SensLecture := cbxSensLecture.DefaultValueChecked;
   EditionComplete.TypeEdition := cbxEdition.DefaultValueChecked;
   if not IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
   begin
@@ -891,6 +895,8 @@ begin
     FCurrentEditionComplete.sOrientation := cbxOrientation.Caption;
     FCurrentEditionComplete.FormatEdition := cbxFormat.Value;
     FCurrentEditionComplete.sFormatEdition := cbxFormat.Caption;
+    FCurrentEditionComplete.SensLecture := cbxSensLecture.Value;
+    FCurrentEditionComplete.sSensLecture := cbxSensLecture.Caption;
     FCurrentEditionComplete.NombreDePages := StrToIntDef(edNombreDePages.Text, 0);
     FCurrentEditionComplete.AnneeCote := StrToIntDef(edAnneeCote.Text, 0);
     FCurrentEditionComplete.PrixCote := StrToCurrDef(StringReplace(edPrixCote.Text, Utilisateur.Options.SymboleMonnetaire, '', []), 0);
@@ -962,6 +968,7 @@ begin
       cbxReliure.Value := FCurrentEditionComplete.Reliure;
       cbxOrientation.Value := FCurrentEditionComplete.Orientation;
       cbxFormat.Value := FCurrentEditionComplete.FormatEdition;
+      cbxSensLecture.Value := FCurrentEditionComplete.SensLecture;
       dtpAchat.Date := Now;
       dtpAchat.Checked := FCurrentEditionComplete.DateAchat > 0;
       if dtpAchat.Checked then dtpAchat.Date := FCurrentEditionComplete.DateAchat;
@@ -1158,7 +1165,7 @@ procedure TFrmEditAlbum.VDTButton13Click(Sender: TObject);
 var
   dummy, Code: string;
 begin
-  if InputQuery('EAN-ISBN', 'Saisir le numéro EAN-ISBN de l''édition:', Code) then
+  if InputQuery('EAN-ISBN', 'Saisir le numéro EAN-ISBN de l''édition :', Code) then
   begin
     dummy := Code;
     if not VerifieEAN(dummy) and (MessageDlg(Code + #13#13'Le caractère de contrôle de ce numéro EAN-ISBN n''est pas correct.'#13#10'Voulez-vous néanmoins utiliser ce code barre?', mtWarning, [mbYes, mbNo], 0) = mrNo) then Exit;

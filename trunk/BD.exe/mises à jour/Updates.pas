@@ -3,45 +3,72 @@ unit Updates;
 interface
 
 uses
-  Contnrs, JvUIB;
+  Contnrs, Classes, JvUIB;
 
 type
-  TUpdateCallback = procedure(Query: TJvUIBScript);
+  TUpdateFBCallback = procedure(Query: TJvUIBScript);
+  TUpdateMySQLCallback = procedure (Script: TStrings);
 
-  TUpdate = class
+  TFBUpdate = class
     Version: string;
-    UpdateCallback: TUpdateCallback;
+    UpdateCallback: TUpdateFBCallback;
+  end;
+
+  TMySQLUpdate = class
+    Version: string;
+    UpdateCallback: TUpdateMySQLCallback;
   end;
 
 const
-  ListUpdates: TObjectList = nil;
+  ListFBUpdates: TObjectList = nil;
+  ListMySQLUpdates: TObjectList = nil;
 
-procedure RegisterUpdate(Version: string; ProcMAJ: TUpdateCallback);
+procedure RegisterFBUpdate(Version: string; ProcMAJ: TUpdateFBCallback);
+procedure RegisterMySQLUpdate(Version: string; ProcMAJ: TUpdateMySQLCallback);
 
 implementation
 
 uses Divers;
 
-function CompareUpdate(Item1, Item2: Pointer): Integer;
+function CompareFBUpdate(Item1, Item2: Pointer): Integer;
 begin
-  Result := CompareVersionNum(TUpdate(Item1).Version, TUpdate(Item2).Version);
+  Result := CompareVersionNum(TFBUpdate(Item1).Version, TFBUpdate(Item2).Version);
 end;
 
-procedure RegisterUpdate(Version: string; ProcMAJ: TUpdateCallback);
-var
-  Update: TUpdate;
+function CompareMySQLUpdate(Item1, Item2: Pointer): Integer;
 begin
-  Update := TUpdate.Create;
+  Result := CompareVersionNum(TMySQLUpdate(Item1).Version, TMySQLUpdate(Item2).Version);
+end;
+
+procedure RegisterFBUpdate(Version: string; ProcMAJ: TUpdateFBCallback);
+var
+  Update: TFBUpdate;
+begin
+  Update := TFBUpdate.Create;
   Update.Version := Version;
   Update.UpdateCallback := ProcMAJ;
-  ListUpdates.Add(Update);
-  ListUpdates.Sort(CompareUpdate);
+  ListFBUpdates.Add(Update);
+  ListFBUpdates.Sort(CompareFBUpdate);
+end;
+
+procedure RegisterMySQLUpdate(Version: string; ProcMAJ: TUpdateMySQLCallback);
+var
+  Update: TMySQLUpdate;
+begin
+  Update := TMySQLUpdate.Create;
+  Update.Version := Version;
+  Update.UpdateCallback := ProcMAJ;
+  ListMySQLUpdates.Add(Update);
+  ListMySQLUpdates.Sort(CompareMySQLUpdate);
 end;
 
 initialization
-  ListUpdates := TObjectList.Create(True);
+  ListFBUpdates := TObjectList.Create(True);
+  ListMySQLUpdates := TObjectList.Create(True);
 
 finalization
-  ListUpdates.Free;
+  ListFBUpdates.Free;
+  ListMySQLUpdates.Free;
 
 end.
+

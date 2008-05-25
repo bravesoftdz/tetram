@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Buttons,
-  VirtualTrees, VDTButton, ExtCtrls, ActnList, Browss, StdActns, ProceduresBDtk;
+  VirtualTrees, VDTButton, ExtCtrls, ActnList, Browss, StdActns, ProceduresBDtk, UBdtForms;
 
 type
-  TFrmEntretien = class(TForm)
+  TFrmEntretien = class(TbdtForm)
     Panel14: TPanel;
     VDTButton20: TVDTButton;
     vstEntretien: TVirtualStringTree;
@@ -119,7 +119,7 @@ procedure TFrmEntretien.FormDestroy(Sender: TObject);
 begin
   case Mode_en_cours of
     mdConsult: begin
-        Fond.ActualiseRepertoire.Execute;
+        Fond.actActualiseRepertoire.Execute;
         Historique.Clear;
       end;
     mdEdit: begin

@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ActnList, StdActns, VirtualTrees, StdCtrls, Buttons, ProceduresBDtk,
-  VDTButton, ExtCtrls, VirtualTree, Procedures;
+  VDTButton, ExtCtrls, VirtualTree, Procedures, UBdtForms;
 
 type
   TFileStream = class(Classes.TFileStream)
@@ -13,7 +13,7 @@ type
     procedure WriteStringLN(const Chaine: string);
   end;
 
-  TFrmExportation = class(TForm)
+  TFrmExportation = class(TbdtForm)
     Panel14: TPanel;
     VDTButton20: TVDTButton;
     vstExportation: TVirtualStringTree;

@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, ComCtrls, IniFiles, CommCtrl, ImgList,
-  Buttons, VDTButton, Fram_Boutons, Browss, DBEditLabeled, ComboCheck, Spin;
+  Buttons, VDTButton, Fram_Boutons, Browss, DBEditLabeled, ComboCheck, Spin, UBdtForms;
 
 type
-  TFrmOptions = class(TForm)
+  TFrmOptions = class(TbdtForm)
     PageControl1: TPageControl;
     options: TTabSheet;
     ImageList1: TImageList;
@@ -86,12 +86,14 @@ var
   i: Integer;
 begin
   if RepImages <> VDTButton1.Caption then
-    if MessageDlg('Vous avez choisi de modifier le répertoire de stockage des images.'#13'N''oubliez pas de déplacer les fichiers de l''ancien répertoire vers le nouveau.', mtWarning, mbOKCancel, 0) = mrCancel then begin
+    if MessageDlg('Vous avez choisi de modifier le répertoire de stockage des images.'#13'N''oubliez pas de déplacer les fichiers de l''ancien répertoire vers le nouveau.', mtWarning, mbOKCancel, 0) = mrCancel then
+    begin
       ModalResult := mrNone;
       Exit;
     end;
 
-  with Utilisateur.Options do begin
+  with Utilisateur.Options do
+  begin
     SymboleMonnetaire := ComboBox1.Text;
     ModeDemarrage := not OpenStart.Checked;
     FicheAlbumWithCouverture := FicheAlbumCouverture.Checked;
@@ -109,16 +111,20 @@ begin
     SerieObligatoireAlbums := CheckBox7.Checked;
     SerieObligatoireParaBD := CheckBox8.Checked;
   end;
-  with TJvUIBQuery.Create(nil) do try
+  with TJvUIBQuery.Create(nil) do
+  try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'DELETE FROM CONVERSIONS';
-    ExecSQL;
-    SQL.Text := 'INSERT INTO CONVERSIONS (Monnaie1, Monnaie2, Taux) VALUES (?, ?, ?)';
-    for i := 0 to ListView1.Items.Count - 1 do begin
+    SQL.Text := 'UPDATE OR INSERT INTO CONVERSIONS (ID_Conversion, Monnaie1, Monnaie2, Taux) VALUES (?, ?, ?, ?) MATCHING (id_conversion)';
+    for i := 0 to ListView1.Items.Count - 1 do
+    begin
       PC := ListView1.Items[i].Data;
-      Params.AsString[0] := PC.Monnaie1;
-      Params.AsString[1] := PC.Monnaie2;
-      Params.AsDouble[2] := PC.Taux;
+      if IsEqualGUID(GUID_NULL, PC.ID) then
+        Params.IsNull[0] := True
+      else
+        Params.AsString[0] := GUIDToString(PC.ID);
+      Params.AsString[1] := PC.Monnaie1;
+      Params.AsString[2] := PC.Monnaie2;
+      Params.AsDouble[3] := PC.Taux;
       ExecSQL;
     end;
     Transaction.Commit;
@@ -157,13 +163,15 @@ begin
   SItem := nil;
 
   q := TJvUIBQuery.Create(nil);
-  with q do try
+  with q do
+  try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Add('SELECT Monnaie1 AS Monnaie FROM conversions');
     SQL.Add('UNION');
     SQL.Add('SELECT Monnaie2 AS Monnaie FROM conversions');
     Open;
-    while not EOF do begin
+    while not EOF do
+    begin
       ComboBox1.Items.Add(Fields.ByNameAsString['Monnaie']);
       ComboBox2.Items.Add(Fields.ByNameAsString['Monnaie']);
       ComboBox3.Items.Add(Fields.ByNameAsString['Monnaie']);
@@ -171,10 +179,12 @@ begin
     end;
     Close;
     SQL.Clear;
-    SQL.Text := 'SELECT Monnaie1, Monnaie2, Taux FROM conversions';
+    SQL.Text := 'SELECT Id_Conversion, Monnaie1, Monnaie2, Taux FROM conversions';
     Open;
-    while not EOF do begin
-      with ListView1.Items.Add do begin
+    while not EOF do
+    begin
+      with ListView1.Items.Add do
+      begin
         Data := TConversion.Make(Q);
         Caption := TConversion(Data).ChaineAffichage;
         SubItems.Add('0');
@@ -185,12 +195,14 @@ begin
     Transaction.Free;
     Free;
   end;
-  with ComboBox1.Items, Utilisateur.Options do begin
+  with ComboBox1.Items, Utilisateur.Options do
+  begin
     if IndexOf(SymboleMonnetaire) = -1 then Add(SymboleMonnetaire);
     if IndexOf(CurrencyString) = -1 then Add(CurrencyString);
   end;
 
-  with Utilisateur.Options do begin
+  with Utilisateur.Options do
+  begin
     ComboBox1.ItemIndex := ComboBox1.Items.IndexOf(SymboleMonnetaire);
     OpenStart.Checked := not ModeDemarrage;
     FicheAlbumCouverture.Checked := FicheAlbumWithCouverture;
@@ -215,13 +227,15 @@ var
   PC: TConversion;
   i: TListItem;
 begin
-  if Assigned(SItem) then begin
+  if Assigned(SItem) then
+  begin
     PC := SItem.Data;
     i := SItem;
     if i.SubItems[0] <> '1' then i.SubItems[0] := '2';
     SItem := nil;
   end
-  else begin
+  else
+  begin
     PC := TConversion.Create;
     i := ListView1.Items.Add;
     i.SubItems.Add('1');
@@ -251,7 +265,8 @@ procedure TFrmOptions.SpeedButton1Click(Sender: TObject);
 begin
   ComboBox2.Text := '';
   ComboBox3.Text := '';
-  Edit1.Text := Format('0%s00', [DecimalSeparator]); ;
+  Edit1.Text := Format('0%s00', [DecimalSeparator]);
+  ;
   Panel4.Visible := True;
   SpeedButton2.Enabled := False;
   SpeedButton3.Enabled := False;
@@ -300,7 +315,8 @@ end;
 
 procedure TFrmOptions.BtDefClick(Sender: TObject);
 begin
-  if ActiveControl = ListView1 then begin
+  if ActiveControl = ListView1 then
+  begin
     ListView1DblClick(ListView1);
     Exit;
   end;

@@ -204,8 +204,8 @@ begin
 
     MAJ_ODS;
 
-    for i := 0 to Pred(ListUpdates.Count) do
-      with TUpdate(ListUpdates[i]) do
+    for i := 0 to Pred(ListFBUpdates.Count) do
+      with TFBUpdate(ListFBUpdates[i]) do
         ProcessUpdate(Version, UpdateCallback);
 
     with TJvUIBQuery.Create(nil) do
@@ -239,7 +239,7 @@ begin
   if (Msg.message = WM_SYSCOMMAND) and (Msg.wParam = SC_CLOSE) and Assigned(Fond) then
   begin
     Handled := True;
-    Fond.Quitter.Execute;
+    Fond.actQuitter.Execute;
   end;
 end;
 

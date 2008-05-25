@@ -365,6 +365,7 @@ end;
 
 procedure TConversion.Fill(Query: TJvUIBQuery);
 begin
+  ID := NonNull(Query, 'ID_Conversion');
   Monnaie1 := Query.Fields.ByNameAsString['Monnaie1'];
   Monnaie2 := Query.Fields.ByNameAsString['Monnaie2'];
   Taux := Query.Fields.ByNameAsDouble['Taux'];

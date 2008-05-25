@@ -123,7 +123,7 @@ object FrmConsultationSerie: TFrmConsultationSerie
       Width = 26
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Titre:'
+      Caption = 'Titre :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight

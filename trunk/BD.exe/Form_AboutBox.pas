@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, SysUtils, Classes, Graphics, Forms, Controls, StdCtrls, ProceduresBDtk,
-  Buttons, ExtCtrls, verslabp, ShellAPI, jpeg, dialogs;
+  Buttons, ExtCtrls, verslabp, ShellAPI, jpeg, Dialogs, UBdtForms;
 
 type
-  TFrmAboutBox = class(TForm)
+  TFrmAboutBox = class(TbdtForm)
     Panel3: TBevel;
     Panel1: TBevel;
     BtnOk: TButton;

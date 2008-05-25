@@ -17,7 +17,7 @@ var
   AvailableSpace, TotalSpace: Int64;
   Done: Boolean;
 begin
-  if (DMPrinc.UIBDataBase.InfoOdsVersion < 11) then
+  if (DMPrinc.UIBDataBase.InfoOdsVersion < 11) or (DMPrinc.UIBDataBase.InfoOdsMinorVersion < 1) then
   begin
     GetDiskFreeSpaceEx(TempPath, AvailableSpace, TotalSpace, nil);
     if AvailableSpace < 2 * (DMPrinc.UIBDataBase.InfoDbSizeInPages * DMPrinc.UIBDataBase.InfoPageSize) then
