@@ -57,8 +57,9 @@ Source: ..\..\bin\ib_util.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\UDF\BDT_UDF.dll; DestDir: {app}\UDF; Flags: ignoreversion
 Source: Base vide\BD.GDB; DestDir: {app}; Flags: onlyifdoesntexist ignoreversion
 Source: What's New.txt; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\msvcr71.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\msvcp71.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\msvcr80.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\msvcp80.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\Microsoft.VC80.CRT.manifest; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\icuuc30.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\icuin30.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\icudt30.dll; DestDir: {app}; Flags: ignoreversion
@@ -83,6 +84,9 @@ Type: files; Name: {app}\BD.url
 Type: files; Name: {app}\BD.ini
 Type: files; Name: {app}\*.lck
 Type: files; Name: {app}\firebird.log
+Type: files; Name: {app}\msvcr71.dll
+Type: files; Name: {app}\msvcp71.dll
+Type: filesandordirs; Name: {app}\WebServer
 
 [LangOptions]
 LanguageName=French
