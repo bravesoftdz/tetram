@@ -69,10 +69,11 @@ type
     version_mini, version_maxi: string;
     TypeSynchro: TSynchroSpecial;
     SkipFields: string;
+    ProcedureStockee: string;
   end;
 
 const
-  TablesSynchro: array[1..11] of RInfoTable = (
+  TablesSynchro: array[1..13] of RInfoTable = (
     (TableName: 'PERSONNES'; ID: 'id_personne'),
     (TableName: 'EDITEURS'; ID: 'id_editeur'),
     (TableName: 'COLLECTIONS'; ID: 'id_collection'),
@@ -83,6 +84,8 @@ const
     (TableName: 'GENRES'; ID: 'id_genre'),
     (TableName: 'GENRESERIES'; ID: 'id_genreseries'),
     (TableName: 'LISTES'; ID: 'id_liste'),
+    (TableName: 'ALBUMS_MANQUANTS'; ProcedureStockee: 'ALBUMS_MANQUANTS(1, 1, NULL)'),
+    (TableName: 'PREVISIONS_SORTIES'; ProcedureStockee: 'PREVISIONS_SORTIES(1, NULL)'),
     (TableName: 'COUVERTURES'; ID: 'id_couverture'; TypeSynchro: tsImages; SkipFields: '@stockagecouverture@imagecouverture@fichiercouverture@'));
 
 procedure TfrmPublier.Button1Click(Sender: TObject);
@@ -326,7 +329,7 @@ var
             i := Integer(listFields[l]);
             champ := LowerCase(Fields.AliasName[i]);
             if Fields.IsNull[i] then
-              AjoutString(recordXML, Format('<%s null="T" />', [champ]), '')
+              contenuChamp := ''
             else
             begin
               case Fields.FieldType[i] of
@@ -347,11 +350,14 @@ var
                 //                end;
                 //              end;
                 else
-                  contenuChamp := Fields.AsString[i];
+                  contenuChamp := Trim(Fields.AsString[i]);
               end;
               //          if Fields.FieldType[i] <> uftBlob then
               contenuChamp := CleanHTTP(contenuChamp);
-              AjoutString(recordXML, contenuChamp, '', Format('<%s%s>', [champ, IIf(Fields.FieldType[i] = uftBlob, {' type="B"'} '', '')]), Format('</%s>', [champ]));
+              if contenuChamp = '' then
+                AjoutString(recordXML, Format('<%s null="T" />', [champ]), '')
+              else
+                AjoutString(recordXML, contenuChamp, '', Format('<%s%s>', [champ, IIf(Fields.FieldType[i] = uftBlob, {' type="B"'} '', '')]), Format('</%s>', [champ]));
             end;
           end;
           AjoutString(bodyXML, recordXML, '', '<record' + IIf(isDelete, ' action="D"', '') + '>', '</record>');
@@ -371,12 +377,27 @@ var
     end;
   end;
 
+  function GetSQL(InfoTable: RInfoTable; withCount: Boolean): string;
+  var
+    champ: string;
+  begin
+    if withCount then
+      champ := 'count(*)'
+    else
+      champ := '*';
+    if InfoTable.ProcedureStockee <> '' then
+      Result := Format('select %s from %s', [champ, InfoTable.ProcedureStockee])
+    else
+      Result := Format('select %s from %1:s where dm_%1:s >= :UpgradeFromDate', [champ, InfoTable.TableName]);
+  end;
+
   function CompteUpdates(InfoTable: RInfoTable): Integer;
   begin
     with qry do
     begin
-      SQL.Text := Format('select count(*) from %0:s where dm_%0:s >= :UpgradeFromDate', [InfoTable.TableName]);
-      Params.AsDate[0] := Trunc(UpgradeFromDate);
+      SQL.Text := GetSQL(InfoTable, True);
+      if Params.FieldCount > 0 then
+        Params.AsDate[0] := Trunc(UpgradeFromDate);
       Open;
       Result := Fields.AsInteger[0];
       Close;
@@ -400,8 +421,9 @@ var
       ProgressBar1.Position := 0;
       ProgressBar1.Max := CompteUpdates(InfoTable);
 
-      SQL.Text := Format('select * from %0:s where dm_%0:s >= :UpgradeFromDate order by dm_%0:s', [InfoTable.TableName]);
-      Params.AsDate[0] := Trunc(UpgradeFromDate);
+      SQL.Text := GetSQL(InfoTable, False);
+      if Params.FieldCount > 0 then
+        Params.AsDate[0] := Trunc(UpgradeFromDate);
       Open;
       SendDataset(InfoTable, qry);
       Close;
@@ -429,8 +451,9 @@ var
       ProgressBar1.Position := 0;
       ProgressBar1.Max := CompteUpdates(InfoTable);
 
-      SQL.Text := Format('select * from %0:s where dm_%0:s >= :UpgradeFromDate order by dm_%0:s', [InfoTable.TableName]);
-      Params.AsDate[0] := Trunc(UpgradeFromDate);
+      SQL.Text := GetSQL(InfoTable, False);
+      if Params.FieldCount > 0 then
+        Params.AsDate[0] := Trunc(UpgradeFromDate);
       Open;
       while not Eof do
       begin
@@ -530,7 +553,7 @@ begin
               case TypeSynchro of
                 tsNone:
                   begin
-                    if RadioButton3.Checked then SendData(1, 'TRUNCATE TABLE /*DB_PREFIX*/' + LowerCase(TableName));
+                    if RadioButton3.Checked or (ProcedureStockee <> '') then SendData(1, 'TRUNCATE TABLE /*DB_PREFIX*/' + LowerCase(TableName));
                     SendDonnees(TablesSynchro[i]);
                   end;
                 tsImages:

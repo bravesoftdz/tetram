@@ -216,6 +216,47 @@ begin
     Add(');');
     Add('@@');
 
+    Add('CREATE TABLE IF NOT EXISTS /*DB_PREFIX*/albums_manquants (');
+    Add('  id_serie char(38) default NULL,');
+    Add('  countserie int(11) default NULL,');
+    Add('  titreserie varchar(150) default NULL,');
+    Add('  uppertitreserie varchar(150) default NULL,');
+    Add('  tome int(11) default NULL,');
+    Add('  id_editeur char(38) default NULL,');
+    Add('  nomediteur varchar(50) default NULL,');
+    Add('  id_collection char(38) default NULL,');
+    Add('  nomcollection varchar(50) default NULL,');
+    Add('  achat smallint(6) default NULL,');
+    Add('  KEY id_serie (id_serie),');
+    Add('  KEY id_editeur (id_editeur),');
+    Add('  KEY id_collection (id_collection),');
+    Add('  KEY uppertitreserie (uppertitreserie),');
+    Add('  KEY tome (tome),');
+    Add('  KEY achat (achat)');
+    Add(');');
+    Add('@@');
+
+    Add('CREATE TABLE IF NOT EXISTS /*DB_PREFIX*/previsions_sorties (');
+    Add('  id_serie char(38) default NULL,');
+    Add('  titreserie varchar(150) default NULL,');
+    Add('  uppertitreserie varchar(150) default NULL,');
+    Add('  tome int(11) default NULL,');
+    Add('  anneeparution int(11) default NULL,');
+    Add('  moisparution int(11) default NULL,');
+    Add('  id_editeur char(38) default NULL,');
+    Add('  nomediteur varchar(50) default NULL,');
+    Add('  id_collection char(38) default NULL,');
+    Add('  nomcollection varchar(50) default NULL,');
+    Add('  KEY id_serie (id_serie),');
+    Add('  KEY uppertitreserie (uppertitreserie),');
+    Add('  KEY tome (tome),');
+    Add('  KEY parution (anneeparution,moisparution),');
+    Add('  KEY id_editeur (id_editeur),');
+    Add('  KEY id_collection (id_collection)');
+    Add(');');
+    Add('@@');
+
+
     Add('create view /*DB_PREFIX*/vw_liste_albums(');
     Add('    id_album,');
     Add('    titrealbum,');
