@@ -4,6 +4,8 @@ require_once 'config.inc';
 if (substr($db_prefix, -1, 1) != '_') $db_prefix .= '_';
 $db_ok = mysql_connect($db_host, $db_user, $db_pass) && mysql_select_db($db_name);
 if (substr($rep_images, strlen($rep_images), -1) != '/') $rep_images .= '/';
+$nb_requetes_sql = 0;
+$start_time = gettimeofday(true);
 
 function prepare_sql(&$sql)
 {
@@ -21,6 +23,25 @@ function format_string_null($string, $is_where = false)
 	else
 		//return "= '".str_replace("'", "''", $string)."'";
 		return "= '".addslashes($string)."'";
+}
+
+
+function load_sql($sql)
+{
+	global $nb_requetes_sql;
+	
+	prepare_sql($sql);
+	$rs = mysql_query($sql) or die(mysql_error());
+	$nb_requetes_sql++;
+	return $rs;
+}
+
+function load_and_fetch($sql)
+{
+	$rs = load_sql($sql);
+	$obj = mysql_fetch_object($rs);
+	mysql_free_result($rs);
+	return $obj;
 }
 
 ?>

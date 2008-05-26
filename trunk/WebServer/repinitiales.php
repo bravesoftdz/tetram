@@ -1,36 +1,27 @@
 <?
-require_once 'db.php';
-require_once 'routines.php';
+include_once 'header.inc';
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//FR">
-<HTML>
-	<HEAD>
-		<TITLE>BDThèque</TITLE>
-		<LINK rel="stylesheet" href="styles.css" type="text/css">
-		<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<script language="JavaScript" type="text/JavaScript">
-		<!--
-		function MM_jumpMenu(targ,selObj,restore){ //v3.0
-			eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
-			if (restore) selObj.selectedIndex=0;
-		}
-		//-->
-		</script>
-	</HEAD>
-	<BODY>
-		<A href=manquants.php target=travail>Séries incomplètes</A><br>
-		<A href=previsions.php target=travail>Prévisions de sorties</A><p>
-		<form method=post action=repinitiales.php>
-			<select name=GroupBy id=GroupBy onChange="this.form.submit()">
-				<option value=0<? echo $_REQUEST['GroupBy'] == 0?' selected':''; ?>>Titre</option>
-				<option value=5<? echo $_REQUEST['GroupBy'] == 5?' selected':''; ?>>Série</option>
-				<option value=3<? echo $_REQUEST['GroupBy'] == 3?' selected':''; ?>>Editeur</option>
-				<option value=2<? echo $_REQUEST['GroupBy'] == 2?' selected':''; ?>>Collection</option>
-				<option value=4<? echo $_REQUEST['GroupBy'] == 4?' selected':''; ?>>Genre</option>
-				<option value=1<? echo $_REQUEST['GroupBy'] == 1?' selected':''; ?>>Année de parution</option>
-			</select>
-		</form>
-		<TABLE width=100% cellspacing=0 cellpadding=0 border=0>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function MM_jumpMenu(targ,selObj,restore){ //v3.0
+	eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
+	if (restore) selObj.selectedIndex=0;
+}
+//-->
+</script>
+<A href=manquants.php target=travail>Séries incomplètes</A><br>
+<A href=previsions.php target=travail>Prévisions de sorties</A><p>
+<form method=post action=repinitiales.php>
+	<select name=GroupBy id=GroupBy onChange="this.form.submit()">
+		<option value=0<? echo $_REQUEST['GroupBy'] == 0?' selected':''; ?>>Titre</option>
+		<option value=5<? echo $_REQUEST['GroupBy'] == 5?' selected':''; ?>>Série</option>
+		<option value=3<? echo $_REQUEST['GroupBy'] == 3?' selected':''; ?>>Editeur</option>
+		<option value=2<? echo $_REQUEST['GroupBy'] == 2?' selected':''; ?>>Collection</option>
+		<option value=4<? echo $_REQUEST['GroupBy'] == 4?' selected':''; ?>>Genre</option>
+		<option value=1<? echo $_REQUEST['GroupBy'] == 1?' selected':''; ?>>Année de parution</option>
+	</select>
+</form>
+<TABLE width=100% cellspacing=0 cellpadding=0 border=0>
 <?
 switch ($_REQUEST['GroupBy'])
 {
@@ -69,17 +60,17 @@ while ($row = mysql_fetch_array($rs, MYSQL_NUM))
 		$count = $row[2];
 	}
 ?>
-				<TR>
-					<TD>
-						<A href="repertoire.php?ref=<? echo urlencode($ref) ?>&GroupBy=<? echo $_REQUEST['GroupBy'] ?>" target=travail><? echo $display ?></A>
-					</TD>
-					<TD>
-						(<? echo $count ?>)
-					</TD>
-				</TR>
+	<TR>
+		<TD>
+			<A href="repertoire.php?ref=<? echo urlencode($ref) ?>&GroupBy=<? echo $_REQUEST['GroupBy'] ?>" target=travail><? echo $display ?></A>
+		</TD>
+		<TD>
+			(<? echo $count ?>)
+		</TD>
+	</TR>
 <? 
 } 
 ?>
-		</TABLE>
-	</BODY>
-</HTML>
+</TABLE>
+</body>
+</html>

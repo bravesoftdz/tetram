@@ -25,8 +25,12 @@ $jours = array('0' => 'dimanche', '1' => 'lundi', '2' => 'mardi', '3' => 'mercre
                '4' => 'jeudi', '5' => 'vendredi', '6' => 'samedi');
 
 function AfficheDateSQL($dateSQL) {
-  global $mois, $jours;
-  return htmlentities(ucfirst($jours[date("w", strtotime($dateSQL))]).date(" d ", strtotime($dateSQL)).$mois[date("n", strtotime($dateSQL))].date(" Y", strtotime($dateSQL)));
+	global $mois, $jours;
+	
+	if ($dateSQL)
+		return ucfirst($jours[date("w", strtotime($dateSQL))]).date(" d ", strtotime($dateSQL)).$mois[date("n", strtotime($dateSQL))].date(" Y", strtotime($dateSQL));
+	else
+		return '';
 }
 
 function AjoutString(&$Chaine, $Ajout, $Espace, $Avant = '', $Apres = '')
