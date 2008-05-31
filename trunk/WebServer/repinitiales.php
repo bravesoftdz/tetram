@@ -62,7 +62,7 @@ while ($row = mysql_fetch_array($rs, MYSQL_NUM))
 ?>
 	<TR>
 		<TD>
-			<A href="repertoire.php?ref=<? echo urlencode($ref) ?>&GroupBy=<? echo $_REQUEST['GroupBy'] ?>" target=travail><? echo $display ?></A>
+			<A href="repertoire.php?ref=<? echo urlencode($ref) ?>&GroupBy=<? echo $_REQUEST['GroupBy'] ?>" target=travail><? echo _out($display) ?></A>
 		</TD>
 		<TD>
 			(<? echo $count ?>)

@@ -2,14 +2,16 @@
 include_once 'header.inc';
 ?>
 <?
+$option = load_and_fetch('select valeur from /*DB_PREFIX*/options where cle = \'moneysymbol\'');
+$symbole_monetaire = $option->valeur;
 $album = load_and_fetch('select * from /*DB_PREFIX*/albums where id_album '.format_string_null($_REQUEST['ref']));
 $serie = load_and_fetch('select * from /*DB_PREFIX*/series where id_serie '.format_string_null($album->id_serie));
 ?>
-<H1><? echo display_titrealbum($album) ?></H1>
+<H1><? echo _out(display_titrealbum($album)) ?></H1>
 <TABLE border=0 width=100%>
 	<TBODY valign=top>
 		<TR>
-			<TH align=right width=1>Série&nbsp;:</TH><TD width=100%><A href="ficheserie.php?ref=<? echo $album->id_serie ?>"><? echo display_titreserie($serie) ?></A></TD>
+			<TH align=right width=1>Série&nbsp;:</TH><TD width=100%><A href="ficheserie.php?ref=<? echo $album->id_serie ?>"><? echo _out(display_titreserie($serie)) ?></A></TD>
 			<TD rowspan=10 align=right>
 		</TR>
 <?
@@ -26,7 +28,7 @@ if ($s != '')
 { 
 ?>
 		<TR>
-			<TH align=right></TH><TD width=100%><?echo $s?></TD>
+			<TH align=right></TH><TD width=100%><?echo _out($s)?></TD>
 		</TR>
 <? 
 } 
@@ -53,7 +55,7 @@ if (mysql_num_rows($rs))
 ?>
 		<TR>
 			<TH align=right>Genre(s)&nbsp;:</TH>
-			<TD><?echo $s?></TD>
+			<TD><?echo _out($s)?></TD>
 		</TR>
 <? 
 } 
@@ -72,7 +74,7 @@ if (mysql_num_rows($rs))
 	while ($row = mysql_fetch_object($rs)) 
 	{
 ?>
-				<A href="fichepersonne.php?ref=<?echo $row->id_personne?>"><?echo format_titre($row->nompersonne)?><br>
+				<A href="fichepersonne.php?ref=<?echo $row->id_personne?>"><?echo _out(format_titre($row->nompersonne))?><br>
 <?
 	} 
 ?>
@@ -94,7 +96,7 @@ if (mysql_num_rows($rs))
 	while ($row = mysql_fetch_object($rs)) 
 	{
 ?>
-				<A href="fichepersonne.php?ref=<?echo $row->id_personne?>"><?echo format_titre($row->nompersonne)?><br>
+				<A href="fichepersonne.php?ref=<?echo $row->id_personne?>"><?echo _out(format_titre($row->nompersonne))?><br>
 <?
 	} 
 ?>
@@ -116,7 +118,7 @@ if (mysql_num_rows($rs))
 	while ($row = mysql_fetch_object($rs)) 
 	{
 ?>
-				<A href="fichepersonne.php?ref=<?echo $row->id_personne?>"><?echo format_titre($row->nompersonne)?><br>
+				<A href="fichepersonne.php?ref=<?echo $row->id_personne?>"><?echo _out(format_titre($row->nompersonne))?><br>
 <?
 	} 
 ?>
@@ -132,7 +134,7 @@ if ($album->sujetalbum || $serie->sujetserie)
 ?>
 		<TR><TD>&nbsp;</TD></TR>
 		<TR>
-			<TH align=right>Histoire&nbsp;:</TH><TD><?echo $album->sujetalbum?$album->sujetalbum:$serie->sujetserie?></TD>
+			<TH align=right>Histoire&nbsp;:</TH><TD><?echo _out($album->sujetalbum?$album->sujetalbum:$serie->sujetserie)?></TD>
 		</TR>
 <?
 } 
@@ -144,7 +146,7 @@ if ($album->remarquesalbum || $serie->remarquesserie)
 ?>
 		<TR><TD>&nbsp;</TD></TR>
 		<TR>
-			<TH align=right>Notes&nbsp;:</TH><TD><?echo $album->remarquesalbum?$album->remarquesalbum:$serie->remarquesserie?></TD>
+			<TH align=right>Notes&nbsp;:</TH><TD><?echo _out($album->remarquesalbum?$album->remarquesalbum:$serie->remarquesserie)?></TD>
 		</TR>
 <?
 } 
@@ -173,12 +175,12 @@ if (mysql_num_rows($rs) > 0)
 						<TD>
 							<TABLE>
 								<TR>
-									<TH align=right>Editeur&nbsp;:</TH><TD width=100><?echo $editeur->siteweb!=''?"<A target=_blank href=$editeur->siteweb>":''?><?echo format_titre($editeur->nomediteur)?><?echo $editeur->siteweb!=''?'</a>':''?></TD>
+									<TH align=right>Editeur&nbsp;:</TH><TD width=100><?echo $editeur->siteweb!=''?"<A target=_blank href=$editeur->siteweb>":''?><?echo _out(format_titre($editeur->nomediteur))?><?echo $editeur->siteweb!=''?'</a>':''?></TD>
 <? 
 		if ($collection->nomcollection) 
 		{ 
 ?>
-									<TH align=right>Collection&nbsp;:</TH><TD><?echo format_titre($collection->nomcollection)?></TD>
+									<TH align=right>Collection&nbsp;:</TH><TD><?echo _out(format_titre($collection->nomcollection))?></TD>
 <? 
 		} 
 ?>
@@ -199,11 +201,11 @@ if (mysql_num_rows($rs) > 0)
 ?>
 								</TR>
 								<TR>
-									<TH align=right>Type&nbsp;d'édition&nbsp;:</TH><TD><?echo str_replace(' ', '&nbsp;', $type_edition->libelle)?></TD>
-									<TH align=right>Reliure&nbsp;:</TH><TD><?echo str_replace(' ', '&nbsp;', $reliure->libelle)?></TD>
+									<TH align=right>Type&nbsp;d'édition&nbsp;:</TH><TD><?echo str_replace(' ', '&nbsp;', _out($type_edition->libelle))?></TD>
+									<TH align=right>Reliure&nbsp;:</TH><TD><?echo str_replace(' ', '&nbsp;', _out($reliure->libelle))?></TD>
 								</TR>
 								<TR>
-									<TH align=right>Etat&nbsp;:</TH><TD><?echo str_replace(' ', '&nbsp;', $etat->libelle)?></TD>
+									<TH align=right>Etat&nbsp;:</TH><TD><?echo str_replace(' ', '&nbsp;', _out($etat->libelle))?></TD>
 									<TH align=right>Dédicacée&nbsp;:</TH><TD><?echo $edition->dedicace?'Oui':'Non'?></TD>
 								</TR>
 <? 
@@ -211,8 +213,8 @@ if (mysql_num_rows($rs) > 0)
 		{ 
 ?>
 								<TR>
-									<TH align=right>Acheté&nbsp;le&nbsp;:</TH><TD><?echo str_replace(' ', '&nbsp;', AfficheDateSQL($edition->dateachat))?></TD>
-									<TH align=right>Prix&nbsp;:</TH><TD><?echo str_replace(' ', '&nbsp;', number_format($edition->prix, 2, ',', ' '))?></TD>
+									<TH align=right>Acheté&nbsp;le&nbsp;:</TH><TD><?echo str_replace(' ', '&nbsp;', _out(AfficheDateSQL($edition->dateachat)))?></TD>
+									<TH align=right>Prix&nbsp;:</TH><TD><?echo $edition->prix?str_replace(' ', '&nbsp;', number_format($edition->prix, 2, ',', ' ')).' '.$symbole_monetaire:''?></TD>
 								</TR>
 <? 
 		} 
@@ -223,7 +225,7 @@ if (mysql_num_rows($rs) > 0)
 		{ 
 ?>
 								<TR>
-									<TH align=right>Cote&nbsp;:</TH><TD><?echo sprintf('%s&nbsp;(%d)', str_replace(' ', '&nbsp;', number_format($edition->prixcote, 2, ',', ' ')), $edition->anneecote)?></TD>
+									<TH align=right>Cote&nbsp;:</TH><TD><?echo sprintf('%s&nbsp;%s;&nbsp;(%d)', str_replace(' ', '&nbsp;', number_format($edition->prixcote, 2, ',', ' ')), $symbole_monetaire, $edition->anneecote)?></TD>
 								</TR>
 <? 
 		} 
@@ -240,7 +242,7 @@ if (mysql_num_rows($rs) > 0)
 			$filename = $rep_images.$db_prefix.$image->id_couverture.'.jpg';
 			$type_image = load_and_fetch('select * from /*DB_PREFIX*/listes where categorie = 6 and ref'.format_string_null($image->categorieimage));
 ?>
-						<TD><A href="<? echo $filename ?>" target=zoomimage><img border=0 height=150 src="<? echo $filename ?>" alt="<?echo $type_image->libelle?>"></a>
+						<TD><A href="<? echo $filename ?>" target=zoomimage><img border=0 height=150 src="<? echo $filename ?>" alt="<?echo _out($type_image->libelle)?>"></a>
 					</TR>
 <?
 			if ($nrow > 1)
@@ -254,7 +256,7 @@ if (mysql_num_rows($rs) > 0)
 					$filename = $rep_images.$db_prefix.$image->id_couverture.'.jpg';
 					$type_image = load_and_fetch('select * from /*DB_PREFIX*/listes where categorie = 6 and ref'.format_string_null($image->categorieimage));
 ?>
-							<A href="<? echo $filename ?>" target=zoomimage><img border=0 height=150 src="<? echo $filename ?>" alt="<?echo $type_image->libelle?>"></a>
+							<A href="<? echo $filename ?>" target=zoomimage><img border=0 height=150 src="<? echo $filename ?>" alt="<?echo _out($type_image->libelle)?>"></a>
 <?
 				} 
 ?>

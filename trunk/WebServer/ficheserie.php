@@ -6,17 +6,17 @@ $serie = load_and_fetch('select * from /*DB_PREFIX*/series where id_serie '.form
 $editeur = load_and_fetch('select * from /*DB_PREFIX*/editeurs where id_editeur'.format_string_null($serie->id_editeur));
 $collection = load_and_fetch('select * from /*DB_PREFIX*/collections where id_collection'.format_string_null($serie->id_collection));
 ?>
-<H1><?echo display_titreserie($serie)?></H1>
+<H1><?echo _out(display_titreserie($serie))?></H1>
 <TABLE border=0 width=100%>
 	<TBODY valign=top>
 		<TR>
 			<TH align=right width=1></TH><TD width=100%><?echo $serie->terminee==1?'Serie terminée':'Serie en cours'?></TD>
 		</TR>
 		<TR>
-			<TH align=right>Editeur&nbsp;:</TH><TD width=100%><?echo $editeur->siteweb?"<a target=_blank href=$editeur->siteweb>":''?><?echo format_titre($editeur->nomediteur)?><?echo $editeur->siteweb?"</a>":''?></TD>
+			<TH align=right>Editeur&nbsp;:</TH><TD width=100%><?echo $editeur->siteweb?"<a target=_blank href=$editeur->siteweb>":''?><?echo _out(format_titre($editeur->nomediteur))?><?echo $editeur->siteweb?"</a>":''?></TD>
 		</TR>
 		<TR>
-			<TH align=right>Collection&nbsp;:</TH><TD><?echo format_titre($collection->nomcollection)?></TD>
+			<TH align=right>Collection&nbsp;:</TH><TD><?echo _out(format_titre($collection->nomcollection))?></TD>
 		</TR>
 
 <?
@@ -29,7 +29,7 @@ if (mysql_num_rows($rs))
 ?>
 		<TR>
 			<TH align=right>Genre(s)&nbsp;:</TH>
-			<TD><?echo $s?></TD>
+			<TD><?echo _out($s)?></TD>
 		</TR>
 <? 
 } 
@@ -42,7 +42,7 @@ if ($serie->sujetserie)
 ?>
 		<TR><TD>&nbsp;</TD></TR>
 		<TR>
-			<TH align=right>Histoire&nbsp;:</TH><TD><?echo $serie->sujetserie?></TD>
+			<TH align=right>Histoire&nbsp;:</TH><TD><?echo _out($serie->sujetserie)?></TD>
 		</TR>
 <?
 } 
@@ -54,7 +54,7 @@ if ($serie->remarquesserie)
 ?>
 		<TR><TD>&nbsp;</TD></TR>
 		<TR>
-			<TH align=right>Notes&nbsp;:</TH><TD><?echo $serie->remarquesserie?></TD>
+			<TH align=right>Notes&nbsp;:</TH><TD><?echo _out($serie->remarquesserie)?></TD>
 		</TR>
 <?
 } 
@@ -73,7 +73,7 @@ if (mysql_num_rows($rs))
 	while ($album = mysql_fetch_object($rs))
 	{
 ?>
-				<A href="fichealbum.php?ref=<?echo $album->id_album?>"><?echo display_titrealbum($album)?><br>
+				<A href="fichealbum.php?ref=<?echo $album->id_album?>"><?echo _out(display_titrealbum($album))?><br>
 <? 	
 	} 
 ?>

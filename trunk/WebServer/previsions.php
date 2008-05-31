@@ -16,8 +16,8 @@ if (mysql_num_rows($albums))
 	{ 
 ?>
  	<TR<?echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
-		<TD><A href="ficheserie.php?ref=<?echo $album->id_serie?>"><?echo display_titreserie($album)?></A></TD>
-		<TD>Tome <?echo $album->tome?> en <?echo $mois[$album->moisparution].' '.$album->anneeparution?></TD>
+		<TD><A href="ficheserie.php?ref=<?echo $album->id_serie?>"><?echo _out(display_titreserie($album))?></A></TD>
+		<TD>Tome <?echo $album->tome?> en <?echo _out($mois[$album->moisparution].' '.$album->anneeparution)?></TD>
 	</TR>
 <?
 	}
@@ -37,8 +37,8 @@ if (mysql_num_rows($albums))
 	{ 
 ?>
  	<TR<?echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
-		<TD><A href="ficheserie.php?ref=<?echo $album->id_serie?>"><?echo display_titreserie($album)?></A></TD>
-		<TD>Tome <?echo $album->tome?> en <?echo $mois[$album->moisparution].' '.$album->anneeparution?></TD>
+		<TD><A href="ficheserie.php?ref=<?echo $album->id_serie?>"><?echo _out(display_titreserie($album))?></A></TD>
+		<TD>Tome <?echo $album->tome?> en <?echo _out($mois[$album->moisparution].' '.$album->anneeparution)?></TD>
 	</TR>
 <?
 	}
@@ -58,8 +58,8 @@ if (mysql_num_rows($albums))
 	{ 
 ?>
  	<TR<?echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
-		<TD><A href="ficheserie.php?ref=<?echo $album->id_serie?>"><?echo display_titreserie($album)?></A></TD>
-		<TD>Tome <?echo $album->tome?> en <?echo $mois[$album->moisparution].' '.$album->anneeparution?></TD>
+		<TD><A href="ficheserie.php?ref=<?echo $album->id_serie?>"><?echo _out(display_titreserie($album))?></A></TD>
+		<TD>Tome <?echo $album->tome?> en <?echo _out($mois[$album->moisparution].' '.$album->anneeparution)?></TD>
 	</TR>
 <?
 	}

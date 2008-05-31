@@ -5,7 +5,14 @@ if (substr($db_prefix, -1, 1) != '_') $db_prefix .= '_';
 $db_ok = mysql_connect($db_host, $db_user, $db_pass) && mysql_select_db($db_name);
 if (substr($rep_images, strlen($rep_images), -1) != '/') $rep_images .= '/';
 $nb_requetes_sql = 0;
-$start_time = gettimeofday(true);
+$start_time = gettimeofday(false);
+$start_time = (float) ($start_time['sec'] + $start_time['usec'] / 1000000.0);
+if ($db_ok)
+{
+	mysql_query('set names utf-8');
+	mysql_query('set character_set utf-8');
+	mysql_query('set character_set_results utf-8');
+}
 
 function prepare_sql(&$sql)
 {

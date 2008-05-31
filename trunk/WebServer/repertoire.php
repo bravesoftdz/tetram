@@ -43,9 +43,9 @@ if (isset($_REQUEST['GroupBy']))
 	{
 ?>
 	<TR<?echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
-		<TD class=TitreAlbum><A href="fichealbum.php?ref=<? echo $row->id_album ?>"><? echo display_titrealbum($row) ?></A></TD>
+		<TD class=TitreAlbum><A href="fichealbum.php?ref=<? echo $row->id_album ?>"><? echo _out(display_titrealbum($row)) ?></A></TD>
 		<TD></TD>
-		<TD class=Serie><A href="ficheserie.php?ref=<? echo $row->id_serie ?>"><? echo display_titreserie($row) ?></A></TD>
+		<TD class=Serie><A href="ficheserie.php?ref=<? echo $row->id_serie ?>"><? echo _out(display_titreserie($row)) ?></A></TD>
 	</TR>
 <?
 	}

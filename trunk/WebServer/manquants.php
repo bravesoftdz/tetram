@@ -27,7 +27,7 @@ function write_serie()
 	update_serie();
 ?>
 	 	<TR<?echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
-			<TD><A href="ficheserie.php?ref=<?echo $current_album->id_serie?>"><?echo display_titreserie($current_album)?></A></TD>
+			<TD><A href="ficheserie.php?ref=<?echo $current_album->id_serie?>"><?echo _out(display_titreserie($current_album))?></A></TD>
 			<TD><?echo implode(', ', $manquants_serie)?></TD>
 		</TR>
 <?

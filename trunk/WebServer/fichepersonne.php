@@ -4,7 +4,7 @@ include_once 'header.inc';
 <?
 $personne = load_and_fetch('select * from /*DB_PREFIX*/personnes where id_personne'.format_string_null($_REQUEST['ref']));
 ?>
-<H1><?echo format_titre($personne->nompersonne)?></H1>
+<H1><?echo _out(format_titre($personne->nompersonne))?></H1>
 <TABLE border=0 width=100%>
 	<TBODY valign=top align=left>
 <?
@@ -25,7 +25,7 @@ if ($personne->biographie)
 ?>
 		<tr>
 			<th align=right>Biographie&nbsp;:</th>
-			<td><?echo $personne->biographie?></td>
+			<td><?echo _out($personne->biographie)?></td>
 		</tr>
 <?
 }
@@ -44,7 +44,7 @@ if (mysql_num_rows($rs))
 	while ($row = mysql_fetch_object($rs)) 
 	{
 ?>
-				<A href="ficheserie.php?ref=<?echo $row->id_serie?>"><?echo display_titreserie($row)?><br>
+				<A href="ficheserie.php?ref=<?echo $row->id_serie?>"><?echo _out(display_titreserie($row))?><br>
 <?
 	} 
 ?>
@@ -67,7 +67,7 @@ if (mysql_num_rows($rs))
 	while ($row = mysql_fetch_object($rs)) 
 	{
 ?>
-				<A href="fichealbum.php?ref=<?echo $row->id_album?>"><?echo display_titrealbum($row, false, true)?><br>
+				<A href="fichealbum.php?ref=<?echo $row->id_album?>"><?echo _out(display_titrealbum($row, false, true))?><br>
 <?
 	} 
 ?>
@@ -90,7 +90,7 @@ if (mysql_num_rows($rs))
 	while ($row = mysql_fetch_object($rs)) 
 	{
 ?>
-				<A href="fichealbum.php?ref=<?echo $row->id_album?>"><?echo display_titrealbum($row, false, true)?><br>
+				<A href="fichealbum.php?ref=<?echo $row->id_album?>"><?echo _out(display_titrealbum($row, false, true))?><br>
 <?
 	} 
 ?>
@@ -113,7 +113,7 @@ if (mysql_num_rows($rs))
 	while ($row = mysql_fetch_object($rs)) 
 	{
 ?>
-				<A href="fichealbum.php?ref=<?echo $row->id_album?>"><?echo display_titrealbum($row, false, true)?><br>
+				<A href="fichealbum.php?ref=<?echo $row->id_album?>"><?echo _out(display_titrealbum($row, false, true))?><br>
 <?
 	} 
 ?>
