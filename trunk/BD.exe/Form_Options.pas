@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, ComCtrls, IniFiles, CommCtrl, ImgList,
-  Buttons, VDTButton, Fram_Boutons, Browss, DBEditLabeled, ComboCheck, Spin, UBdtForms;
+  Buttons, VDTButton, Fram_Boutons, Browss, DBEditLabeled, ComboCheck, Spin, UBdtForms,
+  ZipMstr;
 
 type
   TFrmOptions = class(TbdtForm)
@@ -51,6 +52,33 @@ type
     CheckBox8: TCheckBox;
     LightComboCheck2: TLightComboCheck;
     Label3: TLabel;
+    TabSheet1: TTabSheet;
+    GroupBox3: TGroupBox;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label7: TLabel;
+    Edit2: TEdit;
+    Edit3: TEdit;
+    ComboBox4: TComboBox;
+    GroupBox4: TGroupBox;
+    Label6: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    Edit4: TEdit;
+    Edit5: TEdit;
+    Edit6: TEdit;
+    Edit7: TEdit;
+    Edit8: TEdit;
+    RadioButton5: TRadioButton;
+    RadioButton4: TRadioButton;
+    ComboBox5: TComboBox;
+    Label17: TLabel;
+    ComboBox6: TComboBox;
+    Button1: TButton;
+    BrowseDirectoryDlg2: TBrowseDirectoryDlg;
+    ZipMaster1: TZipMaster;
     procedure btnOKClick(Sender: TObject);
     procedure calculKeyPress(Sender: TObject; var Key: Char);
     procedure calculExit(Sender: TObject);
@@ -67,6 +95,7 @@ type
     procedure ListView1DblClick(Sender: TObject);
     procedure VDTButton1Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   protected
   private
     ImageChargee: Boolean;
@@ -76,7 +105,7 @@ type
 
 implementation
 
-uses CommonConst, DM_Princ, TypeRec, JvUIB, Commun, Procedures;
+uses CommonConst, DM_Princ, TypeRec, JvUIB, Commun, Procedures, Updates;
 
 {$R *.DFM}
 
@@ -110,6 +139,20 @@ begin
     VerifMAJDelai := LightComboCheck1.Value;
     SerieObligatoireAlbums := CheckBox7.Checked;
     SerieObligatoireParaBD := CheckBox8.Checked;
+
+    SiteWeb.Adresse := Edit2.Text;
+    SiteWeb.Cle := Edit3.Text;
+    SiteWeb.Modele := ComboBox4.Text;
+    SiteWeb.MySQLServeur := Edit4.Text;
+    SiteWeb.MySQLLogin := Edit5.Text;
+    SiteWeb.MySQLPassword := Edit7.Text;
+    SiteWeb.MySQLBDD := Edit8.Text;
+    SiteWeb.MySQLPrefix := Edit6.Text;
+    if RadioButton5.Checked then
+      SiteWeb.BddVersion := ''
+    else
+      SiteWeb.BddVersion := ComboBox5.Text;
+    SiteWeb.Paquets := StrToInt(ComboBox6.Text);
   end;
   with TJvUIBQuery.Create(nil) do
   try
@@ -153,10 +196,24 @@ end;
 
 procedure TFrmOptions.FormCreate(Sender: TObject);
 var
+  i: Integer;
   q: TJvUIBQuery;
+  sr: TSearchRec;
 begin
   PrepareLV(Self);
   LitOptions;
+  for i := Pred(ListMySQLUpdates.Count) downto 0 do
+    ComboBox5.Items.Add(TMySQLUpdate(ListMySQLUpdates[i]).Version);
+  ComboBox5.ItemIndex := 0;
+
+  if FindFirst(RepWebServer + '*.zip', faAnyFile, sr) = 0 then
+  try
+    repeat
+      ComboBox4.Items.Add(ChangeFileExt(sr.Name, ''));
+    until FindNext(sr) > 0;
+  finally
+    FindClose(sr);
+  end;
 
   PageControl1.ActivePage := PageControl1.Pages[0];
   ImageChargee := False;
@@ -219,6 +276,23 @@ begin
     LightComboCheck1.Value := VerifMAJDelai;
     CheckBox7.Checked := SerieObligatoireAlbums;
     CheckBox8.Checked := SerieObligatoireParaBD;
+
+    Edit2.Text := SiteWeb.Adresse;
+    Edit3.Text := SiteWeb.Cle;
+    ComboBox4.ItemIndex := ComboBox4.Items.IndexOf(SiteWeb.Modele);
+    Edit4.Text := SiteWeb.MySQLServeur;
+    Edit5.Text := SiteWeb.MySQLLogin;
+    Edit7.Text := SiteWeb.MySQLPassword;
+    Edit8.Text := SiteWeb.MySQLBDD;
+    Edit6.Text := SiteWeb.MySQLPrefix;
+    if SiteWeb.BddVersion = '' then
+      RadioButton5.Checked := True
+    else
+    begin
+      RadioButton4.Checked := True;
+      ComboBox5.ItemIndex := ComboBox5.Items.IndexOf(SiteWeb.BddVersion);
+    end;
+    ComboBox6.ItemIndex := ComboBox6.Items.IndexOf(IntToStr(SiteWeb.Paquets));
   end;
 end;
 
@@ -340,6 +414,38 @@ end;
 procedure TFrmOptions.FormShow(Sender: TObject);
 begin
   OpenStart.SetFocus;
+end;
+
+procedure TFrmOptions.Button1Click(Sender: TObject);
+var
+  repSave: string;
+begin
+  if not BrowseDirectoryDlg2.Execute then Exit;
+  repSave := IncludeTrailingBackslash(BrowseDirectoryDlg2.Selection);
+  ForceDirectories(repSave);
+  ZipMaster1.ZipFileName := RepWebServer + Utilisateur.Options.SiteWeb.Modele + '.zip';
+  ZipMaster1.ExtrBaseDir := repSave;
+  ZipMaster1.Extract;
+  with TStringList.Create do
+  try
+    Add('<?');
+    Add('');
+    Add('$db_host = ''' + StringReplace(Edit4.Text, '''', '\''', [rfReplaceAll]) + ''';');
+    Add('$db_user = ''' + StringReplace(Edit5.Text, '''', '\''', [rfReplaceAll]) + ''';');
+    Add('$db_pass = ''' + StringReplace(Edit7.Text, '''', '\''', [rfReplaceAll]) + ''';');
+    Add('$db_name = ''' + StringReplace(Edit8.Text, '''', '\''', [rfReplaceAll]) + ''';');
+    Add('$db_prefix = ''' + StringReplace(Edit6.Text, '''', '\''', [rfReplaceAll]) + ''';');
+    Add('$db_key = ''' + StringReplace(Edit3.Text, '''', '\''', [rfReplaceAll]) + ''';');
+    Add('$rep_images = ''images'';');
+    Add('');
+    Add('');
+    Add('if (file_exists(''config_ex.inc'')) include_once ''config_ex.inc'';');
+    Add('');
+    Add('?>');
+    SaveToFile(repSave + 'config.inc');
+  finally
+    Free;
+  end;
 end;
 
 end.

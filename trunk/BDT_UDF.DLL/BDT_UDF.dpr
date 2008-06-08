@@ -50,9 +50,11 @@ var
   LongueurLue, i: Integer;
 begin
   try
-    if Assigned(BlobIn.BlobHandle) and (BlobIn.SegmentCount > 0) then begin
+    if Assigned(BlobIn.BlobHandle) and (BlobIn.SegmentCount > 0) then
+    begin
       SetLength(buffer, BlobIn.MaxSegmentLength);
-      while LongBool(BlobIn.GetSegment(BlobIn.BlobHandle, @buffer[0], BlobIn.MaxSegmentLength, LongueurLue)) do begin
+      while LongBool(BlobIn.GetSegment(BlobIn.BlobHandle, @buffer[0], BlobIn.MaxSegmentLength, LongueurLue)) do
+      begin
         for i := 0 to LongueurLue - 1 do
           buffer[i] := UpperCase(SansAccents(buffer[i]))[1];
         BlobOut.PutSegment(BlobOut.BlobHandle, @buffer[0], LongueurLue);
@@ -75,7 +77,8 @@ begin
   Result := Titre;
   try
     i := LastDelimiter('[', Titre);
-    if i > 0 then begin
+    if i > 0 then
+    begin
       j := PosInText(i, Titre, ']');
       if j = 0 then Exit;
       Dummy := Copy(Titre, i + 1, j - i - 1);
@@ -93,6 +96,47 @@ begin
   Result := CreateResult(FormatTitre(Titre));
 end;
 
+function LevenshteinDistance(const s1, s2: string): Integer;
+const
+  cost_ins = 1;
+  cost_del = 1;
+  cost_sub = 1;
+var
+  n1, n2: Integer;
+  p, q, r: array of Integer;
+  i, j: Integer;
+var
+  d_del, d_ins, d_sub: Integer;
+begin
+  n1 := Length(s1);
+  n2 := Length(s2);
+
+  SetLength(p, n2 + 1);
+  SetLength(q, n2 + 1);
+
+  p[0] := 0;
+  for j := 1 to n2 do
+    p[j] := p[j - 1] + cost_ins;
+
+  for i := 1 to n1 do
+  begin
+    q[0] := p[0] + cost_del;
+    for j := 1 to n2 do
+    begin
+      d_del := p[j] + cost_del;
+      d_ins := q[j - 1] + cost_ins;
+      d_sub := p[j - 1];
+      if s1[i - 1] <> s2[j - 1] then Inc(d_sub, cost_sub);
+      q[j] := Min(Min(d_del, d_ins), d_sub);
+    end;
+    r := p;
+    p := q;
+    q := r;
+  end;
+
+  Result := p[n2];
+end;
+
 function CompareChaines1(Chaine1, Chaine2: PChar): Float; cdecl; export;
 
   function DoCompare(const S1, S2: string): Float;
@@ -103,19 +147,23 @@ function CompareChaines1(Chaine1, Chaine2: PChar): Float; cdecl; export;
     Result := 0;
     if S1 = S2 then
       Result := 100
-    else try
-      if Length(S1) > Length(S2) then begin
+    else
+    try
+      if Length(S1) > Length(S2) then
+      begin
         Str1 := S2;
         Str2 := S1;
       end
-      else begin
+      else
+      begin
         Str1 := S1;
         Str2 := S2;
       end;
 
       for l := Length(Str1) downto 1 do
         for i := 1 to Length(Str2) - l + 1 do
-          if Pos(Copy(Str2, i, l), Str1) > 0 then begin
+          if Pos(Copy(Str2, i, l), Str1) > 0 then
+          begin
             Result := l;
             Exit;
           end;
@@ -138,21 +186,24 @@ function CompareChaines1(Chaine1, Chaine2: PChar): Float; cdecl; export;
     Result := DoCompare(S1, S2);
     if Result = 100 then Exit;
 
-    if F2 <> Str2 then begin
+    if F2 <> Str2 then
+    begin
       S2 := OnlyAlphaNum(F2);
       R := DoCompare(S1, S2);
       if R > Result then Result := R;
       if Result = 100 then Exit;
     end;
 
-    if F1 <> Str1 then begin
+    if F1 <> Str1 then
+    begin
       S1 := OnlyAlphaNum(F1);
       S2 := OnlyAlphaNum(Str2);
       R := DoCompare(S1, S2);
       if R > Result then Result := R;
       if Result = 100 then Exit;
 
-      if F2 <> Str2 then begin
+      if F2 <> Str2 then
+      begin
         S2 := OnlyAlphaNum(F2);
         R := DoCompare(S1, S2);
         if R > Result then Result := R;
@@ -175,12 +226,15 @@ function CompareChaines2(Chaine1, Chaine2: PChar): Float; cdecl; export;
     Result := 0;
     if S1 = S2 then
       Result := 100
-    else try
-      if Length(S1) > Length(S2) then begin
+    else
+    try
+      if Length(S1) > Length(S2) then
+      begin
         Str1 := S2;
         Str2 := S1;
       end
-      else begin
+      else
+      begin
         Str1 := S1;
         Str2 := S2;
       end;
@@ -188,14 +242,16 @@ function CompareChaines2(Chaine1, Chaine2: PChar): Float; cdecl; export;
       L1 := Length(Str1);
       L2 := Length(Str2);
 
-      for i := 1 - L1 to L2 - 1 do begin
+      for i := 1 - L1 to L2 - 1 do
+      begin
         // si on n'a plus assez de caractères pour faire mieux on s'arrête
         if Result >= L2 - i then Exit;
 
         c := 0;
         for l := Max(1, 1 - i) to Min(L1, L2 - i) do
           if Str1[l] = Str2[i + l] then Inc(c);
-        if c > Result then begin
+        if c > Result then
+        begin
           Result := c;
           // si on a retrouvé la chaine complète, on ne pourra pas faire mieux
           if Result = L1 then Exit;
@@ -220,22 +276,25 @@ function CompareChaines2(Chaine1, Chaine2: PChar): Float; cdecl; export;
     Result := DoCompare(S1, S2);
     if Result = 100 then Exit;
 
-    if F2 <> Str2 then begin
-      S2 := OnlyAlphaNum(F2);
+    if F2 <> Str2 then
+    begin
+      S2 := OnlyAlphaNum(F2); // OnlyAlphaNum(FormatTitre(Str2));
       R := DoCompare(S1, S2);
       if R > Result then Result := R;
       if Result = 100 then Exit;
     end;
 
-    if F1 <> Str1 then begin
-      S1 := OnlyAlphaNum(F1);
+    if F1 <> Str1 then
+    begin
+      S1 := OnlyAlphaNum(F1); // OnlyAlphaNum(FormatTitre(Str1));
       S2 := OnlyAlphaNum(Str2);
       R := DoCompare(S1, S2);
       if R > Result then Result := R;
       if Result = 100 then Exit;
 
-      if F2 <> Str2 then begin
-        S2 := OnlyAlphaNum(F2);
+      if F2 <> Str2 then
+      begin
+        S2 := OnlyAlphaNum(F2); // OnlyAlphaNum(FormatTitre(Str2));
         R := DoCompare(S1, S2);
         if R > Result then Result := R;
         if Result = 100 then Exit;
@@ -266,7 +325,8 @@ end;
 
 procedure WriteLog(chaine: string);
 begin
-  with TStringList.Create do try
+  with TStringList.Create do
+  try
     if FileExists('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log') then LoadFromFile('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log');
     Add('-- ' + DateTimeToStr(Now) + ' --');
     Add(chaine);
@@ -285,9 +345,11 @@ begin
   try
     FileName := PChar(Path + ValidFileName(FileName));
     BlobS := TMemoryStream.Create;
-    with BlobS do try
+    with BlobS do
+    try
       Seek(0, soBeginning);
-      if Assigned(Blob.BlobHandle) and (Blob.SegmentCount > 0) then begin
+      if Assigned(Blob.BlobHandle) and (Blob.SegmentCount > 0) then
+      begin
         SetLength(buffer, Blob.MaxSegmentLength);
         while LongBool(Blob.GetSegment(Blob.BlobHandle, @buffer[0], Blob.MaxSegmentLength, LongueurLue)) do
           BlobS.Write(buffer[0], LongueurLue);
@@ -314,7 +376,8 @@ begin
     if not FileExists(FileName) then Exit;
 
     FS := TFileStream.Create(FileName, fmOpenRead or fmShareDenyWrite);
-    with FS do try
+    with FS do
+    try
       while Position < Size do
         Blob.PutSegment(Blob.BlobHandle, @buffer[0], Read(buffer, Length(buffer)));
     finally
@@ -333,7 +396,8 @@ var
 begin
   New(Result);
   i := FindFirst(Path, Attr, Result^);
-  if i <> 0 then begin
+  if i <> 0 then
+  begin
     FindClose(Result^);
     Dispose(Result);
     Result := PSearchRec(-i);
@@ -346,7 +410,8 @@ var
 begin
   Result := sr;
   i := FindNext(Result^);
-  if i <> 0 then begin
+  if i <> 0 then
+  begin
     FindClose(Result^);
     Dispose(Result);
     Result := PSearchRec(-i);
@@ -377,11 +442,13 @@ begin
   Fichier := IncludeTrailingPathDelimiter(Path) + ChangeFileExt(FileName, '');
   Index := 0;
   toAdd := ext;
-  while FileExists(Fichier + toAdd) do begin
+  while FileExists(Fichier + toAdd) do
+  begin
     Inc(Index);
     toAdd := Format(' (%d)%s', [Index, ext]);
   end;
-  if Reserve <> 0 then begin
+  if Reserve <> 0 then
+  begin
     ForceDirectories(Path);
     TFileStream.Create(Fichier + toAdd, fmCreate).Free;
   end;

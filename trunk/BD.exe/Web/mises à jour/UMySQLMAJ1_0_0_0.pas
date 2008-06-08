@@ -15,7 +15,7 @@ begin
     Add('  cle varchar(20) NOT NULL,');
     Add('  valeur varchar(100) default NULL,');
     Add('  PRIMARY KEY  (cle)');
-    Add(');');
+    Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
     Add('CREATE TABLE IF NOT EXISTS /*DB_PREFIX*/albums (');
@@ -46,7 +46,7 @@ begin
     Add('  FULLTEXT KEY uppertitrealbum (uppertitrealbum),');
     Add('  FULLTEXT KEY uppersujetalbum (uppersujetalbum),');
     Add('  FULLTEXT KEY upperremarquesalbum (upperremarquesalbum)');
-    Add(');');
+    Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
     Add('CREATE TABLE IF NOT EXISTS /*DB_PREFIX*/series (');
@@ -73,7 +73,7 @@ begin
     Add('  KEY id_editeur (id_editeur),');
     Add('  KEY id_collection (id_collection),');
     Add('  FULLTEXT KEY uppertitreserie (uppertitreserie)');
-    Add(');');
+    Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
     Add('CREATE TABLE IF NOT EXISTS /*DB_PREFIX*/personnes (');
@@ -87,7 +87,7 @@ begin
     Add('  dm_personnes timestamp,');
     Add('  PRIMARY KEY  (id_personne),');
     Add('  FULLTEXT KEY uppernompersonne (uppernompersonne)');
-    Add(');');
+    Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
     Add('CREATE TABLE IF NOT EXISTS /*DB_PREFIX*/editions (');
@@ -123,7 +123,7 @@ begin
     Add('  KEY id_album (id_album),');
     Add('  KEY id_editeur (id_editeur),');
     Add('  KEY id_collection (id_collection)');
-    Add(');');
+    Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
     Add('CREATE TABLE IF NOT EXISTS /*DB_PREFIX*/editeurs (');
@@ -135,7 +135,7 @@ begin
     Add('  dc_editeurs timestamp,');
     Add('  dm_editeurs timestamp,');
     Add('  PRIMARY KEY (id_editeur)');
-    Add(');');
+    Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
     Add('CREATE TABLE IF NOT EXISTS /*DB_PREFIX*/collections (');
@@ -148,7 +148,7 @@ begin
     Add('  dm_collections timestamp,');
     Add('  PRIMARY KEY (id_collection),');
     Add('  KEY id_editeur (id_editeur)');
-    Add(');');
+    Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
     Add('CREATE TABLE IF NOT EXISTS /*DB_PREFIX*/genres (');
@@ -159,7 +159,7 @@ begin
     Add('  dc_genres timestamp,');
     Add('  dm_genres timestamp,');
     Add('  PRIMARY KEY (id_genre)');
-    Add(');');
+    Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
     Add('CREATE TABLE IF NOT EXISTS /*DB_PREFIX*/genreseries (');
@@ -171,7 +171,7 @@ begin
     Add('  PRIMARY KEY (id_genreseries),');
     Add('  KEY id_serie (id_serie),');
     Add('  KEY id_genre (id_genre)');
-    Add(');');
+    Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
     Add('CREATE TABLE IF NOT EXISTS /*DB_PREFIX*/auteurs (');
@@ -185,7 +185,7 @@ begin
     Add('  KEY id_album (id_album),');
     Add('  KEY id_personne (id_personne),');
     Add('  KEY metier (metier)');
-    Add(');');
+    Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
     Add('CREATE TABLE IF NOT EXISTS /*DB_PREFIX*/listes (');
@@ -199,7 +199,7 @@ begin
     Add('  dm_listes timestamp,');
     Add('  PRIMARY KEY  (id_liste),');
     Add('  KEY ref (ref)');
-    Add(');');
+    Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
     Add('CREATE TABLE IF NOT EXISTS /*DB_PREFIX*/couvertures (');
@@ -213,7 +213,7 @@ begin
     Add('  PRIMARY KEY  (id_couverture),');
     Add('  KEY id_album (id_album),');
     Add('  KEY id_edition (id_edition)');
-    Add(');');
+    Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
     Add('CREATE TABLE IF NOT EXISTS /*DB_PREFIX*/albums_manquants (');
@@ -233,7 +233,7 @@ begin
     Add('  KEY uppertitreserie (uppertitreserie),');
     Add('  KEY tome (tome),');
     Add('  KEY achat (achat)');
-    Add(');');
+    Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
     Add('CREATE TABLE IF NOT EXISTS /*DB_PREFIX*/previsions_sorties (');
@@ -253,7 +253,7 @@ begin
     Add('  KEY parution (anneeparution,moisparution),');
     Add('  KEY id_editeur (id_editeur),');
     Add('  KEY id_collection (id_collection)');
-    Add(');');
+    Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
 

@@ -4,48 +4,26 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ComCtrls, ExtCtrls;
+  Dialogs, StdCtrls, ComCtrls, ExtCtrls, Fram_Boutons;
 
 type
   TfrmPublier = class(TForm)
-    PageControl1: TPageControl;
-    TabSheet1: TTabSheet;
-    TabSheet2: TTabSheet;
     GroupBox1: TGroupBox;
     DateTimePicker1: TDateTimePicker;
     RadioButton1: TRadioButton;
     RadioButton2: TRadioButton;
     RadioButton3: TRadioButton;
-    GroupBox2: TGroupBox;
-    RadioButton4: TRadioButton;
-    RadioButton5: TRadioButton;
-    ComboBox1: TComboBox;
-    GroupBox3: TGroupBox;
-    GroupBox4: TGroupBox;
-    Label1: TLabel;
-    Edit1: TEdit;
-    Label2: TLabel;
-    Edit2: TEdit;
-    Label3: TLabel;
-    Edit3: TEdit;
-    Label4: TLabel;
-    Edit4: TEdit;
-    Label6: TLabel;
-    Edit6: TEdit;
-    Label5: TLabel;
-    Edit5: TEdit;
-    Label7: TLabel;
-    ComboBox2: TComboBox;
-    Memo1: TMemo;
-    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    Button1: TButton;
+    Label8: TLabel;
     ProgressBar1: TProgressBar;
     ProgressBar2: TProgressBar;
-    Label8: TLabel;
-    Button1: TButton;
     Label9: TLabel;
-    CheckBox2: TCheckBox;
+    CheckBox1: TCheckBox;
+    Memo1: TMemo;
     procedure Button1Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure DateTimePicker1Change(Sender: TObject);
   private
     { Déclarations privées }
   public
@@ -99,9 +77,10 @@ var
   UpgradeFromDate: TDate;
   s1, s2: string;
   qry: TJvUIBQuery;
-  StartTime: TDateTime;
+  StartTime, StartTimeTable: TDateTime;
   SQLSettings: TFormatSettings;
   URL: string;
+  MaxBodySize: Integer;
 
   function GetCode(Index: Integer): string;
   begin
@@ -155,7 +134,7 @@ var
     if IsError(0) then raise Exception.Create('Erreur inattendue : ' + s + #13#10 + GetLabel(l));
   end;
 
-  procedure SendData(Action: Integer; const Data: string = '');
+  procedure SendData(Action: Integer; const Data: string = ''; isXML: Boolean = True);
   begin
     if Data <> '' then
       SetLength(Param, ParamLengthMin + 2)
@@ -167,7 +146,10 @@ var
     if Data <> '' then
     begin
       Param[ParamLengthMin + 1].Nom := 'data';
-      Param[ParamLengthMin + 1].Valeur := MimeEncodeString(Data);
+      if isXML then
+        Param[ParamLengthMin + 1].Valeur := MimeEncodeString('<?xml version="1.0" encoding="ISO-8859-1"?>' + Data)
+      else
+        Param[ParamLengthMin + 1].Valeur := MimeEncodeString(Data);
     end;
     PostHTTP;
   end;
@@ -202,9 +184,30 @@ var
     if s1 <> 'db_version' then raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
   end;
 
+  function CleanHTTP(Valeur: widestring): string;
+  var
+    c: PWideChar;
+  begin
+    Result := '';
+    if Length(Valeur) > 0 then
+    begin
+      Valeur := Valeur + #0;
+      c := @Valeur[1];
+      while c^ <> #0 do
+      begin
+        case c^ of
+          ' ', '0'..'9', 'a'..'z', 'A'..'Z': Result := Result + c^;
+          else
+            Result := Result + '&#' + IntToStr(Ord(c^)) + ';';
+        end;
+        Inc(c);
+      end;
+    end;
+  end;
+
   procedure SendOption(const cle, valeur: string);
   begin
-    SendData(2, '<data><table>options</table><primarykey>cle</primarykey><records><record><cle>' + cle + '</cle><valeur>' + valeur + '</valeur></record></records></data>');
+    SendData(2, '<data><table>options</table><primarykey>cle</primarykey><records><record><cle>' + CleanHTTP(cle) + '</cle><valeur>' + CleanHTTP(valeur) + '</valeur></record></records></data>');
   end;
 
   function GetOption(const cle: string): string;
@@ -226,10 +229,9 @@ var
     i: Integer;
     SQL: TStringList;
   begin
-    if RadioButton5.Checked then
-      UpgradeTodb_version := TMySQLUpdate(ListMySQLUpdates[Pred(ListMySQLUpdates.Count)]).Version
-    else
-      UpgradeTodb_version := ComboBox1.Text;
+    UpgradeTodb_version := Utilisateur.Options.SiteWeb.BddVersion;
+    if UpgradeTodb_version = '' then
+      UpgradeTodb_version := TMySQLUpdate(ListMySQLUpdates[Pred(ListMySQLUpdates.Count)]).Version;
 
     if CompareVersionNum(UpgradeTodb_version, db_version) > 0 then
       for i := 0 to Pred(ListMySQLUpdates.Count) do
@@ -242,7 +244,7 @@ var
             try
               UpdateCallback(SQL);
 
-              SendData(1, SQL.Text);
+              SendData(1, SQL.Text, False);
               SendOption('version', Version);
               db_version := Version;
             finally
@@ -253,37 +255,37 @@ var
         end;
   end;
 
-  function CleanHTTP(Valeur: string): string;
-  var
-    c: PChar;
-  begin
-    Result := '';
-    if Length(Valeur) > 0 then
-    begin
-      Valeur := Valeur + #0;
-      c := @Valeur[1];
-      while c^ <> #0 do
-      begin
-        case c^ of
-          '0'..'9', 'a'..'z', 'A'..'Z': Result := Result + c^;
-          else
-            Result := Result + '&#' + IntToStr(Ord(c^)) + ';';
-        end;
-        Inc(c);
-      end;
-    end;
-  end;
-
   procedure RefreshProgressBar;
   var
-    moyExecTime: Cardinal;
+    moyExecTime, moyExecTimeTable: Cardinal;
+    OperationFaites, OperationFaitesTable: Cardinal;
+    OperationRestantes, OperationRestantesTable: Cardinal;
+    ExecTime, ExecTimeTable: Cardinal;
+    TempsRestant: Cardinal;
   begin
     ProgressBar1.StepBy(1);
     ProgressBar2.StepBy(1);
-    moyExecTime := MilliSecondsBetween(Now, StartTime) div Cardinal(ProgressBar2.Position);
-    if moyExecTime < 10 then moyExecTime := 10; // au départ la moyenne n'est pas forcément très juste: par tatonnement, il faut au moins 10ms par enregistrement
 
-    Label9.Caption := 'Fin estimée : ' + FormatDateTime('HH:mm:ss', IncMilliSecond(Now, moyExecTime * Cardinal(ProgressBar2.Max - ProgressBar2.Position)));
+    OperationFaitesTable := Cardinal(ProgressBar1.Position);
+    OperationRestantesTable := Cardinal(ProgressBar1.Max) - OperationFaitesTable;
+    ExecTimeTable := MilliSecondsBetween(Now, StartTimeTable);
+    moyExecTimeTable := ExecTimeTable div OperationFaitesTable;
+    if moyExecTimeTable < 10 then moyExecTimeTable := 10; // au départ la moyenne n'est pas forcément très juste: par tatonnement, il faut au moins 10ms par enregistrement
+
+    TempsRestant := moyExecTimeTable * OperationRestantesTable;
+
+    if ProgressBar1.Position <> ProgressBar2.Position then
+    begin
+      OperationFaites := Cardinal(ProgressBar2.Position) - OperationFaitesTable;
+      OperationRestantes := Cardinal(ProgressBar2.Max - ProgressBar2.Position) - OperationRestantesTable;
+      ExecTime := MilliSecondsBetween(Now, StartTime) - ExecTimeTable;
+      moyExecTime := ExecTime div OperationFaites;
+      if moyExecTime < 10 then moyExecTime := 10; // au départ la moyenne n'est pas forcément très juste: par tatonnement, il faut au moins 10ms par enregistrement
+
+      TempsRestant := TempsRestant + moyExecTime * OperationRestantes
+    end;
+
+    Label9.Caption := 'Fin estimée : ' + FormatDateTime('HH:mm:ss', IncMilliSecond(Now, TempsRestant));
     Application.ProcessMessages;
   end;
 
@@ -299,14 +301,21 @@ var
       if GetLabel(i) <> 'done' then
       begin
         CheckBox1.Checked := False;
-        while not CheckBox1.Checked do
-          Application.HandleMessage;
+        CheckBox1.Visible := True;
+        Memo1.Visible := True;
+        try
+          while not CheckBox1.Checked do
+            Application.HandleMessage;
+        finally
+          CheckBox1.Visible := False;
+          Memo1.Visible := False;
+        end;
       end;
     end;
-  const
-    MaxBodySize = 4096;
+
   var
-    enteteXML, bodyXML, recordXML, champ, contenuChamp: string;
+    enteteXML, bodyXML, recordXML, champ: string;
+    contenuChamp: widestring;
     i, l: Integer;
     //    ms: TMemoryStream;
     //    ss: TStringStream;
@@ -438,13 +447,14 @@ var
         Close;
       end;
     end;
-    SendData(1, 'OPTIMIZE TABLE /*DB_PREFIX*/' + InfoTable.TableName);
+    SendData(1, 'OPTIMIZE TABLE /*DB_PREFIX*/' + InfoTable.TableName, False);
   end;
 
   procedure SendImages(InfoTable: RInfoTable);
   var
     ms: TStream;
     es: TStringStream;
+    l: Integer;
   begin
     with qry do
     begin
@@ -457,23 +467,33 @@ var
       Open;
       while not Eof do
       begin
-        ms := GetCouvertureStream(False, StringToGUIDDef(Fields.ByNameAsString[InfoTable.ID], GUID_NULL), 400, 500, Utilisateur.Options.AntiAliasing);
-        if Assigned(ms) then
+        SetLength(Param, ParamLengthMin + 2);
+        Param[ParamLengthMin + 0].Nom := 'action';
+        Param[ParamLengthMin + 0].Valeur := '8';
+        Param[ParamLengthMin + 1].Nom := 'ID';
+        Param[ParamLengthMin + 1].Valeur := MimeEncodeStringNoCRLF(Fields.ByNameAsString[InfoTable.ID]);
+        PostHTTP;
+        l := 0;
+        if GetLabel(l) = 'file not found' then
         begin
-          es := TStringStream.Create('');
-          try
-            MimeEncodeStream(ms, es);
-            SetLength(Param, ParamLengthMin + 3);
-            Param[ParamLengthMin + 0].Nom := 'action';
-            Param[ParamLengthMin + 0].Valeur := '7';
-            Param[ParamLengthMin + 1].Nom := 'image';
-            Param[ParamLengthMin + 1].Valeur := es.DataString;
-            Param[ParamLengthMin + 2].Nom := 'ID';
-            Param[ParamLengthMin + 2].Valeur := CleanHTTP(Fields.ByNameAsString[InfoTable.ID]);
-            PostHTTP;
-          finally
-            es.Free;
-            ms.Free;
+          ms := GetCouvertureStream(False, StringToGUIDDef(Fields.ByNameAsString[InfoTable.ID], GUID_NULL), 400, 500, Utilisateur.Options.AntiAliasing);
+          if Assigned(ms) then
+          begin
+            es := TStringStream.Create('');
+            try
+              MimeEncodeStream(ms, es);
+              SetLength(Param, ParamLengthMin + 3);
+              Param[ParamLengthMin + 0].Nom := 'action';
+              Param[ParamLengthMin + 0].Valeur := '7';
+              Param[ParamLengthMin + 1].Nom := 'ID';
+              Param[ParamLengthMin + 1].Valeur := MimeEncodeStringNoCRLF(Fields.ByNameAsString[InfoTable.ID]);
+              Param[ParamLengthMin + 2].Nom := 'image';
+              Param[ParamLengthMin + 2].Valeur := es.DataString;
+              PostHTTP;
+            finally
+              es.Free;
+              ms.Free;
+            end;
           end;
         end;
         Next;
@@ -492,16 +512,18 @@ begin
   SQLSettings.DateSeparator := '-';
   SQLSettings.TimeSeparator := ':';
 
-  URL := Edit1.Text;
+  URL := Utilisateur.Options.SiteWeb.Adresse;
   if (URL <> '') and (URL[Length(URL)] <> '/') then URL := URL + '/';
   URL := URL + 'interface.php';
+
+  MaxBodySize := Utilisateur.Options.SiteWeb.Paquets;
 
   Reponse := TStringStream.Create('');
   slReponse := TStringList.Create;
   try
     SetLength(Param, ParamLengthMin);
     Param[0].Nom := 'auth_key';
-    Param[0].Valeur := Edit2.Text;
+    Param[0].Valeur := Utilisateur.Options.SiteWeb.Cle;
     Param[1].Nom := 'isExe';
     Param[1].Valeur := '';
 
@@ -550,10 +572,11 @@ begin
               and ((version_maxi = '') or (CompareVersionNum(version_maxi, db_version) >= 0)) then
             begin
               Label8.Caption := 'Synchronisation de ' + TableName;
+              StartTimeTable := Now;
               case TypeSynchro of
                 tsNone:
                   begin
-                    if RadioButton3.Checked or (ProcedureStockee <> '') then SendData(1, 'TRUNCATE TABLE /*DB_PREFIX*/' + LowerCase(TableName));
+                    if RadioButton3.Checked or (ProcedureStockee <> '') then SendData(1, 'TRUNCATE TABLE /*DB_PREFIX*/' + LowerCase(TableName), False);
                     SendDonnees(TablesSynchro[i]);
                   end;
                 tsImages:
@@ -562,19 +585,21 @@ begin
                     SendData(4); // création du répertoire
                     if RadioButton3.Checked then
                     begin
-                      SendData(6);
-                      SendData(1, 'TRUNCATE TABLE /*DB_PREFIX*/' + LowerCase(TableName));
+                      SendData(6); // enlever toutes les images
+                      SendData(1, 'TRUNCATE TABLE /*DB_PREFIX*/' + LowerCase(TableName), False);
                     end;
-                    SendImages(TablesSynchro[i]);
                     SendDonnees(TablesSynchro[i]);
+                    SendImages(TablesSynchro[i]);
                   end;
               end;
             end;
 
+        SendOption('moneysymbol', CleanHTTP(Utilisateur.Options.SymboleMonnetaire));
+        SendOption('formattitrealbum', IntToStr(Utilisateur.Options.FormatTitreAlbum));
+        SendOption('lastsynchro', DateToStr(StartTime, SQLSettings));
+
         ShowMessage('Publication terminée');
       end;
-
-      SendOption('lastsynchro', DateToStr(StartTime, SQLSettings));
     finally
       Transaction.Free;
       Free;
@@ -588,13 +613,13 @@ begin
 end;
 
 procedure TfrmPublier.FormCreate(Sender: TObject);
-var
-  i: Integer;
 begin
-  for i := Pred(ListMySQLUpdates.Count) downto 0 do
-    ComboBox1.Items.Add(TMySQLUpdate(ListMySQLUpdates[i]).Version);
-  ComboBox1.ItemIndex := 0;
   DateTimePicker1.DateTime := IncMonth(Now, -1);
+end;
+
+procedure TfrmPublier.DateTimePicker1Change(Sender: TObject);
+begin
+  RadioButton2.Checked := True;
 end;
 
 end.

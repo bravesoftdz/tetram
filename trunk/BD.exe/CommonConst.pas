@@ -16,6 +16,7 @@ const
   DatabaseLibraryName: string = 'fbembed.dll';
   TempPath: array[0..1024] of Char = #0;
   RepImages: string = 'Images\';
+  RepWebServer: string = 'WebServer\';
   RessourcePic: string = 'BDPic.dll';
   HandleDLLPic: Integer = 0;
   FichierIni: string = 'Bd.ini';
@@ -33,6 +34,19 @@ const
   customizing: Boolean = False;
 
 type
+  RSiteWeb = record
+    Adresse: string;
+    Cle: string;
+    Modele: string;
+    MySQLServeur: string;
+    MySQLBDD: string;
+    MySQLLogin: string;
+    MySQLPassword: string;
+    MySQLPrefix: string;
+    BddVersion: string;
+    Paquets: Integer;
+  end;
+
   ROptions = record
     FicheAlbumWithCouverture, FicheParaBDWithImage, ModeDemarrage, Images: Boolean;
     SymboleMonnetaire: string[5];
@@ -45,6 +59,7 @@ type
     SerieObligatoireAlbums, SerieObligatoireParaBD: Boolean;
     RepertoireScripts: string;
     FormatTitreAlbum: Integer;
+    SiteWeb: RSiteWeb;
   end;
 
   RUtilisateur = record
@@ -66,6 +81,7 @@ initialization
   GetTempPath(Length(TempPath), TempPath);
   RepImages := ExtractFilePath(Application.ExeName) + RepImages;
   FichierIni := ExtractFilePath(Application.ExeName) + FichierIni;
+  RepWebServer := ExtractFilePath(Application.ExeName) + RepWebServer;
   FormatMonnaieCourt := '#,##0.00';
   FormatMonnaieSimple := '0.00';
   FormatMonnaie := IIf(CurrencyFormat in [0, 2], CurrencyString + IIf(CurrencyFormat = 2, ' ', ''), '') + FormatMonnaieCourt + IIf(CurrencyFormat in [1, 3], IIf(CurrencyFormat = 3, ' ', '') + CurrencyString, '');

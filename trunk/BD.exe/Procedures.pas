@@ -183,6 +183,17 @@ begin
     Utilisateur.Options.SerieObligatoireAlbums := ReadBool('DIVERS', 'SerieObligatoireAlbums', False);
     Utilisateur.Options.SerieObligatoireParaBD := ReadBool('DIVERS', 'SerieObligatoireParaBD', False);
     Utilisateur.Options.RepertoireScripts := IncludeTrailingPathDelimiter(ReadString('DIVERS', 'Scripts', IncludeTrailingPathDelimiter(ExtractFilePath(Application.ExeName)) + 'scripts'));
+
+    Utilisateur.Options.SiteWeb.Adresse := ReadString('WWW', 'Adresse', '');
+    Utilisateur.Options.SiteWeb.Cle := ReadString('WWW', 'AuthKey', '');
+    Utilisateur.Options.SiteWeb.Modele := ReadString('WWW', 'Modele', 'Site par défaut');
+    Utilisateur.Options.SiteWeb.MySQLServeur := ReadString('WWW', 'MySQLServeur', 'localhost');
+    Utilisateur.Options.SiteWeb.MySQLLogin := ReadString('WWW', 'MySQLLogin', '');
+    Utilisateur.Options.SiteWeb.MySQLPassword := ReadString('WWW', 'MySQLPassword', '');
+    Utilisateur.Options.SiteWeb.MySQLBDD := ReadString('WWW', 'MySQLBDD', Utilisateur.Options.SiteWeb.MySQLLogin);
+    Utilisateur.Options.SiteWeb.MySQLPrefix := ReadString('WWW', 'MySQLPrefix', 'bdt');
+    Utilisateur.Options.SiteWeb.BddVersion := ReadString('WWW', 'BddVersion', '');
+    Utilisateur.Options.SiteWeb.Paquets := ReadInteger('WWW', 'Paquets', 4096);
   finally
     Free;
   end;
@@ -245,6 +256,17 @@ begin
     WriteBool('DIVERS', 'SerieObligatoireParaBD', Utilisateur.Options.SerieObligatoireParaBD);
 
     WriteString('DIVERS', 'RepImages', ''); // efface la ligne
+
+    WriteString('WWW', 'Adresse', Utilisateur.Options.SiteWeb.Adresse);
+    WriteString('WWW', 'AuthKey', Utilisateur.Options.SiteWeb.Cle);
+    WriteString('WWW', 'Modele', Utilisateur.Options.SiteWeb.Modele);
+    WriteString('WWW', 'MySQLServeur', Utilisateur.Options.SiteWeb.MySQLServeur);
+    WriteString('WWW', 'MySQLLogin', Utilisateur.Options.SiteWeb.MySQLLogin);
+    WriteString('WWW', 'MySQLPassword', Utilisateur.Options.SiteWeb.MySQLPassword);
+    WriteString('WWW', 'MySQLBDD', Utilisateur.Options.SiteWeb.MySQLBDD);
+    WriteString('WWW', 'MySQLPrefix', Utilisateur.Options.SiteWeb.MySQLPrefix);
+    WriteString('WWW', 'BddVersion', Utilisateur.Options.SiteWeb.BddVersion);
+    WriteInteger('WWW', 'Paquets', Utilisateur.Options.SiteWeb.Paquets);
   finally
     Free;
   end;

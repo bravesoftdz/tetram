@@ -133,7 +133,8 @@ uses
   UMySQLMAJ1_0_0_0 in 'Web\mises à jour\UMySQLMAJ1_0_0_0.pas',
   DIMimeStreams in 'Web\Mime64\DIMimeStreams.pas',
   DIMime in 'Web\Mime64\DIMime.pas',
-  UMAJ2_0_1_0 in 'mises à jour\UMAJ2_0_1_0.pas';
+  UMAJ2_0_1_0 in 'mises à jour\UMAJ2_0_1_0.pas',
+  Form_Fusion in 'Form_Fusion.pas' {frmFusion};
 
 {$R *.RES}
 {$R curseurs.res}
@@ -180,7 +181,7 @@ begin
 
     FrmSplash.Affiche_act(ChargementApp + '...');
     Application.CreateForm(TFond, Fond);
-  FrmSplash.Affiche_act(ChargementDatabase + '...');
+    FrmSplash.Affiche_act(ChargementDatabase + '...');
     Historique.AddConsultation(fcRecherche);
     if Utilisateur.Options.ModeDemarrage then
       Fond.actModeConsultation.Execute

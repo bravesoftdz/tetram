@@ -149,12 +149,21 @@ c:\program files\borland\delphi7\Projects\Bpl\IBOARMURE.bpl=(sans titre)
 C:\programmes\Composant\ArmureD7.bpl=ARMURE
 c:\program files\borland\delphi7\Bin\dcldss70.bpl=Composants Decision Cube Borland
 [HistoryLists\hlConditionals]
-Count=2
-Item0=PS_USESSUPPORT;DEBUG
-Item1=PS_USESSUPPORT
+Count=4
+Item0=DEBUG;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT
+Item1=RELEASE;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT
+Item2=PS_USESSUPPORT;DEBUG
+Item3=PS_USESSUPPORT
 [HistoryLists\hlUnitAliases]
 Count=1
 Item0=WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;
 [HistoryLists\hlSearchPath]
+Count=2
+Item0=$(Compos)\FastMM\FastMM4;$(Compos)\PrintObject;$(Compos)\VDTButton;$(ComposPerso)\Memory Table;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Common);$(ComposPerso)\HarmFade;$(ComposPerso)\schrinkpanel;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(ComposPerso)\ShellNotification;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\
+Item1=$(DELPHI)\Lib\Debug
+[HistoryLists\hlUnitOutputDirectory]
 Count=1
-Item0=$(DELPHI)\Lib\Debug
+Item0=dcu
+[HistoryLists\hlOutputDirectorry]
+Count=1
+Item0=..\..\bin
