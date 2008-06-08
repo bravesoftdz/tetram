@@ -1,8 +1,11 @@
 <?
-include_once 'header.inc';
+include_once '../routines.php';
 ?>
-<H1>Numéros manquants</H1>
-<TABLE border=0 width=100%>
+<div id=entete>
+	<H1>Numéros manquants</H1>
+</div>
+<div id=body>
+	<TABLE border=0 width=100%>
 <?
 $albums = load_sql('select * from /*DB_PREFIX*/albums_manquants order by uppertitreserie, tome');
 $current_serie = null;
@@ -26,10 +29,10 @@ function write_serie()
 	
 	update_serie();
 ?>
-	 	<TR<?echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
-			<TD><A href="ficheserie.php?ref=<?echo $current_album->id_serie?>"><?echo _out(display_titreserie($current_album))?></A></TD>
-			<TD><?echo implode(', ', $manquants_serie)?></TD>
-		</TR>
+			<TR<?echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
+				<TD><A href=# onclick="return AjaxUpdate('detail', 'ficheserie.php?ref=<?echo $current_album->id_serie?>')"><?echo _out(display_titreserie($current_album))?></A></TD>
+				<TD><?echo implode(', ', $manquants_serie)?></TD>
+			</TR>
 <?
 }
 
@@ -57,7 +60,5 @@ while ($album = mysql_fetch_object($albums))
 }
 if ($current_serie) write_serie();
 ?>
-</TABLE>
-<?
-include_once 'footer.inc';
-?>
+	</TABLE>
+</div>

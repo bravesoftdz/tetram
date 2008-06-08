@@ -1,0 +1,43 @@
+#listeinitiales-body
+{
+	height: expression(document.body.clientHeight - this.offsetTop - 60 + 'px');
+}
+
+#listealbums,
+#detail
+{
+	height: expression(document.body.clientHeight - this.offsetTop - 60 + 'px');
+}
+
+#listealbums #body,
+#detail #body
+{
+	height: expression(document.body.clientHeight - this.offsetTop - 60 + 'px');
+}	
+
+#detail
+{
+	width: expression(document.body.clientWidth - this.offsetLeft + 'px');
+}
+
+
+#outer {
+	height: 100%; 
+	width: 100%; 
+	overflow: hidden; 
+	position: relative;
+}
+#middle {
+	position: absolute; 
+	top: 50%;
+	left: 50%;
+	text-align: center;
+} 
+#inner {
+	position: relative; 
+	top: -50%;
+	left: -50%;
+	margin-left: auto; 
+	margin-right: auto; 
+	text-align: left;
+}

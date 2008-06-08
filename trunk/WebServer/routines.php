@@ -1,6 +1,6 @@
 <?
-
 require_once 'db.php';
+unset($FormatTitreAlbum);
 
 function format_titre($titre)
 {
@@ -56,6 +56,8 @@ function build_titrealbum($simple, $avecserie, $titrealbum, $titreserie, $tome, 
 {
 	global $FormatTitreAlbum;
 	
+	if (!isset($FormatTitreAlbum)) $FormatTitreAlbum = get_option('formattitrealbum');
+	
 	$sAlbum = $titrealbum;
 	if (!$simple) $sAlbum = format_titre($sAlbum);
 
@@ -82,12 +84,13 @@ function build_titrealbum($simple, $avecserie, $titrealbum, $titreserie, $tome, 
 	switch ($FormatTitreAlbum)
 	{
 		case 1: // Tome - Album (Serie)
-			if ($sAlbum == '') 
+			if ($sAlbum == '')
 				$sAlbum = $sSerie;
 			else
 				AjoutString($sAlbum, $sSerie, ' ', '(', ')');
 			AjoutString($sTome, $sAlbum, ' - ');
 			$result = $sTome;
+			break;
 		case 0: // Album (Serie - Tome)
 		default:
 			AjoutString($sSerie, $sTome, ' - ');

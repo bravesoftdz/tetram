@@ -1,20 +1,23 @@
 <?
-include_once 'header.inc';
+include_once '../routines.php';
 ?>
 <?
 $personne = load_and_fetch('select * from /*DB_PREFIX*/personnes where id_personne'.format_string_null($_REQUEST['ref']));
 ?>
-<H1><?echo _out(format_titre($personne->nompersonne))?></H1>
-<TABLE border=0 width=100%>
-	<TBODY valign=top align=left>
+<div id=entete>
+	<H1><?echo _out(format_titre($personne->nompersonne))?></H1>
+</div>
+<div id=body>
+	<TABLE border=0 width=100%>
+		<TBODY valign=top align=left>
 <?
 if ($personne->siteweb)
 {
 ?>
-		<tr>
-			<th align=right>Site&nbsp;:</th>
-			<td><a href=<?echo $personne->siteweb?>><?echo $personne->siteweb?></a></td>
-		</tr>
+			<tr>
+				<th align=right>Site&nbsp;:</th>
+				<td><a href=<?echo $personne->siteweb?>><?echo $personne->siteweb?></a></td>
+			</tr>
 <?
 }
 ?>
@@ -23,10 +26,10 @@ if ($personne->siteweb)
 if ($personne->biographie)
 {
 ?>
-		<tr>
-			<th align=right>Biographie&nbsp;:</th>
-			<td><?echo _out($personne->biographie)?></td>
-		</tr>
+			<tr>
+				<th align=right>Biographie&nbsp;:</th>
+				<td><?echo _out($personne->biographie)?></td>
+			</tr>
 <?
 }
 ?>
@@ -36,20 +39,20 @@ $rs = load_sql('select distinct la.id_serie, la.titreserie from /*DB_PREFIX*/vw_
 if (mysql_num_rows($rs))
 {
 ?>
-		<TR><TD width=1>&nbsp;</TD></TR>
-		<TR>
-			<TH align=right>Série(s)&nbsp;:</TH>
-			<TD>
+			<TR><TD width=1>&nbsp;</TD></TR>
+			<TR>
+				<TH align=right>Série(s)&nbsp;:</TH>
+				<TD>
 <?
 	while ($row = mysql_fetch_object($rs)) 
 	{
 ?>
-				<A href="ficheserie.php?ref=<?echo $row->id_serie?>"><?echo _out(display_titreserie($row))?><br>
+				<A href=# onclick="return AjaxUpdate('detail', 'ficheserie.php?ref=<?echo $row->id_serie?>')"><?echo _out(display_titreserie($row))?><br>
 <?
 	} 
 ?>
-			</TD>
-		</TR>
+				</TD>
+			</TR>
 <?
 } 
 ?>
@@ -59,20 +62,20 @@ $rs = load_sql('select la.* from /*DB_PREFIX*/vw_liste_albums la inner join /*DB
 if (mysql_num_rows($rs))
 {
 ?>
-		<TR><TD>&nbsp;</TD></TR>
-		<TR>
-			<TH align=right>Scénario&nbsp;:</TH>
-			<TD>
+			<TR><TD>&nbsp;</TD></TR>
+			<TR>
+				<TH align=right>Scénario&nbsp;:</TH>
+				<TD>
 <?
 	while ($row = mysql_fetch_object($rs)) 
 	{
 ?>
-				<A href="fichealbum.php?ref=<?echo $row->id_album?>"><?echo _out(display_titrealbum($row, false, true))?><br>
+					<A href=# onclick="return AjaxUpdate('detail', 'fichealbum.php?ref=<?echo $row->id_album?>')"><?echo _out(display_titrealbum($row, false, true))?><br>
 <?
 	} 
 ?>
-			</TD>
-		</TR>
+				</TD>
+			</TR>
 <?
 } 
 ?>
@@ -82,20 +85,20 @@ $rs = load_sql('select la.* from /*DB_PREFIX*/vw_liste_albums la inner join /*DB
 if (mysql_num_rows($rs))
 {
 ?>
-		<TR><TD>&nbsp;</TD></TR>
-		<TR>
-			<TH align=right>Dessins&nbsp;:</TH>
-			<TD>
+			<TR><TD>&nbsp;</TD></TR>
+			<TR>
+				<TH align=right>Dessins&nbsp;:</TH>
+				<TD>
 <?
 	while ($row = mysql_fetch_object($rs)) 
 	{
 ?>
-				<A href="fichealbum.php?ref=<?echo $row->id_album?>"><?echo _out(display_titrealbum($row, false, true))?><br>
+					<A href=# onclick="return AjaxUpdate('detail', 'fichealbum.php?ref=<?echo $row->id_album?>')"><?echo _out(display_titrealbum($row, false, true))?><br>
 <?
 	} 
 ?>
-			</TD>
-		</TR>
+				</TD>
+			</TR>
 <?
 } 
 ?>
@@ -105,26 +108,24 @@ $rs = load_sql('select la.* from /*DB_PREFIX*/vw_liste_albums la inner join /*DB
 if (mysql_num_rows($rs))
 {
 ?>
-		<TR><TD>&nbsp;</TD></TR>
-		<TR>
-			<TH align=right>Couleurs&nbsp;:</TH>
-			<TD>
+			<TR><TD>&nbsp;</TD></TR>
+			<TR>
+				<TH align=right>Couleurs&nbsp;:</TH>
+				<TD>
 <?
 	while ($row = mysql_fetch_object($rs)) 
 	{
 ?>
-				<A href="fichealbum.php?ref=<?echo $row->id_album?>"><?echo _out(display_titrealbum($row, false, true))?><br>
+					<A href=# onclick="return AjaxUpdate('detail', 'fichealbum.php?ref=<?echo $row->id_album?>')"><?echo _out(display_titrealbum($row, false, true))?><br>
 <?
 	} 
 ?>
-			</TD>
-		</TR>
+				</TD>
+			</TR>
 <?
 } 
 ?>
 
-	</TBODY>
-</TABLE>
-<?
-include_once 'footer.inc';
-?>
+		</TBODY>
+	</TABLE>
+</div>

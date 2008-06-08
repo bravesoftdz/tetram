@@ -51,4 +51,13 @@ function load_and_fetch($sql)
 	return $obj;
 }
 
+function get_option($cle, $default = '')
+{
+	$rs = load_and_fetch('select valeur from /*DB_PREFIX*/options where cle'.format_string_null($cle, true));
+	if (!$rs->valeur)
+		return $default;
+	else
+		return $rs->valeur;
+}
+
 ?>

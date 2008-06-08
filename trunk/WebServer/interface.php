@@ -27,7 +27,7 @@ if ($_REQUEST['auth_key'] != $db_key) {
 function OnErrorDoNothing($errno, $errstr) {}
 
 function xml2ary(&$string) {
-	$parser = xml_parser_create(); 
+	$parser = xml_parser_create('UTF-8'); 
 	xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
 	xml_parse_into_struct($parser, $string, $vals, $index);
 	xml_parser_free($parser);
@@ -238,18 +238,7 @@ switch ($action)
 	}
 	case 3: // valeur option
 	{
-		$sql = 'select valeur from /*DB_PREFIX*/options where cle '.format_string_null($_REQUEST['cle'], true);
-		prepare_sql($sql);
-		if (!($rs = mysql_query($sql)))
-		{
-			Message('ERROR', 'error getting option '.$_REQUEST['cle']);
-			Message('INFO', mysql_error());
-			exit;
-		}
-		$row = mysql_fetch_object($rs);
-		Message('INFO', $row->valeur);
-		mysql_free_result($rs);
-			
+		Message('INFO', get_option($_REQUEST['cle']));
 		break;
 	}
 	
@@ -270,7 +259,7 @@ switch ($action)
 	}		
 	case 5: // Effacer une image
 	{
-		$filename = $rep_images.$db_prefix.html_entity_decode($_REQUEST['ID']).'.jpg';
+		$filename = $rep_images.$db_prefix.base64_decode($_REQUEST['ID']).'.jpg';
 		if (file_exists($filename)) 
 		{ 
 			unlink($filename); 
@@ -306,7 +295,7 @@ switch ($action)
 	case 7: // ajout d'une image
 	{
 		$image = base64_decode($_REQUEST['image']);
-		$filename = $rep_images.$db_prefix.html_entity_decode($_REQUEST['ID']).'.jpg';
+		$filename = $rep_images.$db_prefix.base64_decode($_REQUEST['ID']).'.jpg';
 		if (!$handle = fopen($filename, 'wb')) 
 		{
 			Message('ERROR', 'unable to open file');
@@ -327,6 +316,14 @@ switch ($action)
 		fclose($handle);
 		break;
 	}
+	case 8: // image existe ?
+		$filename = $rep_images.$db_prefix.base64_decode($_REQUEST['ID']).'.jpg';
+		if (file_exists($filename)) 
+			Message('INFO', 'file exists');
+		else
+			Message('INFO', 'file not found');
+		Message('INFO', $filename);
+		break;
 	default:
 	{
 		Message('ERROR', 'unkonwn action');

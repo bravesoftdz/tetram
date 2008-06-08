@@ -1,26 +1,6 @@
 <?
-include_once 'header.inc';
+include_once('../routines.php');
 ?>
-<script language="JavaScript" type="text/JavaScript">
-<!--
-function MM_jumpMenu(targ,selObj,restore){ //v3.0
-	eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
-	if (restore) selObj.selectedIndex=0;
-}
-//-->
-</script>
-<A href=manquants.php target=travail>Séries incomplètes</A><br>
-<A href=previsions.php target=travail>Prévisions de sorties</A><p>
-<form method=post action=repinitiales.php>
-	<select name=GroupBy id=GroupBy onChange="this.form.submit()">
-		<option value=0<? echo $_REQUEST['GroupBy'] == 0?' selected':''; ?>>Titre</option>
-		<option value=5<? echo $_REQUEST['GroupBy'] == 5?' selected':''; ?>>Série</option>
-		<option value=3<? echo $_REQUEST['GroupBy'] == 3?' selected':''; ?>>Editeur</option>
-		<option value=2<? echo $_REQUEST['GroupBy'] == 2?' selected':''; ?>>Collection</option>
-		<option value=4<? echo $_REQUEST['GroupBy'] == 4?' selected':''; ?>>Genre</option>
-		<option value=1<? echo $_REQUEST['GroupBy'] == 1?' selected':''; ?>>Année de parution</option>
-	</select>
-</form>
 <TABLE width=100% cellspacing=0 cellpadding=0 border=0>
 <?
 switch ($_REQUEST['GroupBy'])
@@ -46,6 +26,7 @@ switch ($_REQUEST['GroupBy'])
 }
 prepare_sql($sql);
 $rs = mysql_query($sql) or die(mysql_error());
+$c = 0;
 while ($row = mysql_fetch_array($rs, MYSQL_NUM)) 
 {
 	$display = $row[0]=='-1' ? '&lt;Inconnu&gt;':format_titre($row[0]);
@@ -60,17 +41,15 @@ while ($row = mysql_fetch_array($rs, MYSQL_NUM))
 		$count = $row[2];
 	}
 ?>
-	<TR>
-		<TD>
-			<A href="repertoire.php?ref=<? echo urlencode($ref) ?>&GroupBy=<? echo $_REQUEST['GroupBy'] ?>" target=travail><? echo _out($display) ?></A>
-		</TD>
-		<TD>
+	<tr<?echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
+		<td width=100%>
+			<a href='#' onclick='return AjaxUpdate("listealbums", "listealbums.php?ref=<? echo urlencode($ref) ?>&GroupBy=<?echo $_REQUEST['GroupBy']?>")'><? echo _out($display) ?></a>
+		</td>
+		<td>
 			(<? echo $count ?>)
-		</TD>
-	</TR>
+		</td>
+	</tr>
 <? 
 } 
 ?>
 </TABLE>
-</body>
-</html>
