@@ -24,10 +24,32 @@ function AjaxGetContent(link)
 		return(false);
 }
 
+var
+  waitMessage = 0;
+
+function beginTask()
+{
+    getById("wait").style.display = "block";
+}
+
+function endTask()
+{
+    getById('wait').style.display = "none";
+}
+
+function _processupdate(id,link)
+{
+    getById(id).innerHTML = AjaxGetContent(link);
+    endTask();
+}
+
 function AjaxUpdate(id, link)
 {
-	getById(id).innerHTML = AjaxGetContent(link);
-	return false;
+    beginTask();
+    
+    setTimeout('_processupdate("'+id+'","'+link+'")', 10);
+    
+    return false;
 }
 
 

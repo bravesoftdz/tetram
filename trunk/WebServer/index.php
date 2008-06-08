@@ -1,4 +1,4 @@
-<?
+﻿<?
 require_once 'db.php';
 require_once 'routines.php';
 ?>
@@ -25,6 +25,8 @@ else
 	</HEAD>
 	<BODY onload="firstLoad();">
 		
+<div id=wait style='display: none'><img src=graphics/loading.gif valign=center>&nbsp;Chargement des données...</div>
+
 <div id=listeinitiales-header>
 	<a href='#' onclick='AjaxUpdate("listealbums", "manquants.php")'>Séries incomplètes</a><br>
 	<a href='#' onclick='AjaxUpdate("listealbums", "previsions.php")'>Prévisions de sorties</a><p>
