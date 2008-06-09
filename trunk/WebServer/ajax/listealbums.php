@@ -29,7 +29,7 @@ switch ($_REQUEST['GroupBy'])
 }
 $rs = load_sql($sql);
 ?>
-<div id=entete>
+<div id=listealbums_entete>
 	<TABLE width=100%>
 		<TR>
 			<TH class=TitreAlbum>Album</TH>
@@ -38,7 +38,7 @@ $rs = load_sql($sql);
 		</TR>
 	</TABLE>
 </div>
-<div id=body>
+<div id=listealbums_body>
 	<TABLE width=100%>
 <?
 	$c = 0;

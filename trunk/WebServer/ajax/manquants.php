@@ -1,10 +1,10 @@
 <?
 include_once '../routines.php';
 ?>
-<div id=entete>
+<div id=listemanquants_entete>
 	<H1>Numéros manquants</H1>
 </div>
-<div id=body>
+<div id=listemanquants_body>
 	<TABLE border=0 width=100%>
 <?
 $albums = load_sql('select * from /*DB_PREFIX*/albums_manquants order by uppertitreserie, tome');

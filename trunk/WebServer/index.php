@@ -18,7 +18,7 @@ else
 		<script language="JavaScript" type="text/JavaScript">
 			function firstLoad()
 			{
-				AjaxUpdate('listeinitiales-body', 'listeinitiales.php?GroupBy=' + getById('GroupBy').options[getById('GroupBy').selectedIndex].value);
+				AjaxUpdate('listeinitiales_body', 'listeinitiales.php?GroupBy=' + getById('GroupBy').options[getById('GroupBy').selectedIndex].value);
 				return true;
 			}
 		</script>
@@ -27,11 +27,12 @@ else
 		
 <div id=wait style='display: none'><img src=graphics/loading.gif valign=center>&nbsp;Chargement des données...</div>
 
-<div id=listeinitiales-header>
+<div id=listeinitiales_header>
 	<a href='#' onclick='AjaxUpdate("listealbums", "manquants.php")'>Séries incomplètes</a><br>
-	<a href='#' onclick='AjaxUpdate("listealbums", "previsions.php")'>Prévisions de sorties</a><p>
+	<a href='#' onclick='AjaxUpdate("listealbums", "previsions.php")'>Prévisions de sorties</a><br>
+	<a href='#' onclick='AjaxUpdate("listealbums", "listeachats.php")'>Prévisions d'achats</a><p>
 	<form method=post action=repinitiales.php>
-		<select name=GroupBy id=GroupBy onChange="AjaxUpdate('listeinitiales-body', 'listeinitiales.php?GroupBy='+this.options[this.selectedIndex].value, false);">
+		<select name=GroupBy id=GroupBy onChange="AjaxUpdate('listeinitiales_body', 'listeinitiales.php?GroupBy='+this.options[this.selectedIndex].value, false);">
 			<option value=0<? echo $_REQUEST['GroupBy'] == 0?' selected':''; ?>>Titre</option>
 			<option value=5<? echo $_REQUEST['GroupBy'] == 5?' selected':''; ?>>Série</option>
 			<option value=3<? echo $_REQUEST['GroupBy'] == 3?' selected':''; ?>>Editeur</option>
@@ -41,7 +42,7 @@ else
 		</select>
 	</form>
 </div>
-<div id=listeinitiales-body> </div>
+<div id=listeinitiales_body> </div>
 
 <div id=listealbums></div>
 <div id=detail></div>

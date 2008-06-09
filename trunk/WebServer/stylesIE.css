@@ -1,4 +1,4 @@
-#listeinitiales-body
+#listeinitiales_body
 {
 	height: expression(document.body.clientHeight - this.offsetTop - 60 + 'px');
 }
@@ -9,8 +9,11 @@
 	height: expression(document.body.clientHeight - this.offsetTop - 60 + 'px');
 }
 
-#listealbums #body,
-#detail #body
+#listealbums_body,
+#listeprevisions_body,
+#listemanquants_body,
+#listeachats_body
+#detail_body
 {
 	height: expression(document.body.clientHeight - this.offsetTop - 60 + 'px');
 }	

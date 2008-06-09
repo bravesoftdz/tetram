@@ -1,10 +1,10 @@
 <?
 include_once '../routines.php';
 ?>
-<div id=entete>
+<div id=listeprevisions_entete>
 	<H1>Prévisions de sorties</H1>
 </div>
-<div id=body>
+<div id=listeprevisions_body>
 	<TABLE border=0 width=100%>
 		<tbody valign=top>
 		<TR height=0>
