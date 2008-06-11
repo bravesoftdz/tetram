@@ -1,0 +1,3 @@
+-rd BDThequeWeb -rm -o ..\..\bin\WebServer\interface.zip -i interface.php -i db.php
+-rd BDThequeWeb -rm -o ..\..\bin\WebServer\BDThequeWeb.zip -r -i *.* -x *.svn -x interface.php -x db.php -x config.inc
+-rd "Site par défaut" -rm -o "..\..\bin\WebServer\Site par défaut.zip" -r -i *.* -x *.svn -x interface.php -x db.php -x config.inc
