@@ -1,4 +1,4 @@
-function Zoom(id, link)
+﻿function Zoom(id, link)
 {
 	var element = getById(id);
 	element.src = link;
@@ -30,16 +30,20 @@ function _processupdate(id,link)
 
 function AjaxUpdate(id, link, label, norefresh)
 {
-	if (id == 'detail' && !(norefresh === true) && (posHistorique == -1 || historique[posHistorique] != link) )
+	if (id == 'detail')
 	{
-		historique[++posHistorique] = link;
-		historiqueLabels[posHistorique] = label;
-		if (posHistorique < historique.length - 1) 
+		if (!(norefresh === true) && (posHistorique == -1 || historique[posHistorique] != link))
 		{
-			historique.length = posHistorique + 1;
-			historiqueLabels.length = posHistorique + 1;
+			historique[++posHistorique] = link;
+			historiqueLabels[posHistorique] = label;
+			if (posHistorique < historique.length - 1) 
+			{
+				historique.length = posHistorique + 1;
+				historiqueLabels.length = posHistorique + 1;
+			}
+			refreshNavigation();
 		}
-		refreshNavigation();
+		getById('zoom').style.display = 'none';
 	}
 	
 	beginTask();

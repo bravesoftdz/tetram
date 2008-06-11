@@ -119,6 +119,7 @@ h1 {
 #historiqueBack.disabled
 {
 	background-image: url(graphics/page-back-disabled.png);
+	display: none;
 }
 
 #historiqueForward
@@ -133,6 +134,7 @@ h1 {
 #historiqueForward.disabled
 {
 	background-image: url(graphics/page-forward-disabled.png);
+	display: none;
 }
 
 .listeHistorique
