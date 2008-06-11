@@ -209,7 +209,8 @@ begin
   if FindFirst(RepWebServer + '*.zip', faAnyFile, sr) = 0 then
   try
     repeat
-      ComboBox4.Items.Add(ChangeFileExt(sr.Name, ''));
+      if not SameText(sr.Name, 'interface.zip') then
+        ComboBox4.Items.Add(ChangeFileExt(sr.Name, ''));
     until FindNext(sr) > 0;
   finally
     FindClose(sr);
@@ -423,6 +424,9 @@ begin
   if not BrowseDirectoryDlg2.Execute then Exit;
   repSave := IncludeTrailingBackslash(BrowseDirectoryDlg2.Selection);
   ForceDirectories(repSave);
+  ZipMaster1.ZipFileName := RepWebServer + 'interface.zip';
+  ZipMaster1.ExtrBaseDir := repSave;
+  ZipMaster1.Extract;
   ZipMaster1.ZipFileName := RepWebServer + Utilisateur.Options.SiteWeb.Modele + '.zip';
   ZipMaster1.ExtrBaseDir := repSave;
   ZipMaster1.Extract;
