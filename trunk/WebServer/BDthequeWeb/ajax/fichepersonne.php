@@ -4,10 +4,10 @@ include_once '../routines.php';
 <?
 $personne = load_and_fetch('select * from /*DB_PREFIX*/personnes where id_personne'.format_string_null($_REQUEST['ref']));
 ?>
-<div id=detail_entete>
+<div class=entete>
 	<H1><?echo _out(format_titre($personne->nompersonne))?></H1>
 </div>
-<div id=detail_body>
+<div class=body>
 	<TABLE border=0 width=100%>
 		<TBODY valign=top align=left>
 			<TR><TD height=0 width=1>&nbsp;</TD></TR>

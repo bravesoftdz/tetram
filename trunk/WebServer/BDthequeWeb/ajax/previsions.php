@@ -1,10 +1,10 @@
-<?
+﻿<?
 include_once '../routines.php';
 ?>
-<div id=listeprevisions_entete>
+<div class=entete>
 	<H1>Prévisions de sorties</H1>
 </div>
-<div id=listeprevisions_body>
+<div class=body>
 	<TABLE border=0 width=100%>
 		<tbody valign=top>
 		<TR height=0>
@@ -24,7 +24,7 @@ if (mysql_num_rows($albums))
 	{ 
 ?>
 		<TR<?echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
-			<TD><A href=# onclick="return AjaxUpdate('detail', 'ficheserie.php?ref=<?echo $album->id_serie?>')"><?echo _out(display_titreserie($album))?></A></TD>
+			<TD><? echo AjaxLink('serie', $album->id_serie, display_titreserie($album), 'série')?></TD>
 			<TD>Tome <?echo $album->tome?> en <?echo _out($mois[$album->moisparution].' '.$album->anneeparution)?></TD>
 		</TR>
 <?
@@ -45,7 +45,7 @@ if (mysql_num_rows($albums))
 	{ 
 ?>
 		<TR<?echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
-			<TD><A href=# onclick="return AjaxUpdate('detail', 'ficheserie.php?ref=<?echo $album->id_serie?>')"><?echo _out(display_titreserie($album))?></A></TD>
+			<TD><? echo AjaxLink('serie', $album->id_serie, display_titreserie($album), 'série')?></TD>
 			<TD>Tome <?echo $album->tome?> en <?echo _out($mois[$album->moisparution].' '.$album->anneeparution)?></TD>
 		</TR>
 <?
@@ -66,7 +66,7 @@ if (mysql_num_rows($albums))
 	{ 
 ?>
 		<TR<?echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
-			<TD><A href=# onclick="return AjaxUpdate('detail', 'ficheserie.php?ref=<?echo $album->id_serie?>')"><?echo _out(display_titreserie($album))?></A></TD>
+			<TD><? echo AjaxLink('serie', $album->id_serie, display_titreserie($album), 'série')?></TD>
 			<TD>Tome <?echo $album->tome?> en <?echo _out($mois[$album->moisparution].' '.$album->anneeparution)?></TD>
 		</TR>
 <?

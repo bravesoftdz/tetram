@@ -1,10 +1,10 @@
-<?
+﻿<?
 include_once '../routines.php';
 ?>
-<div id=listemanquants_entete>
+<div class=entete>
 	<H1>Numéros manquants</H1>
 </div>
-<div id=listemanquants_body>
+<div class=body>
 	<TABLE border=0 width=100%>
 <?
 $albums = load_sql('select * from /*DB_PREFIX*/albums_manquants order by uppertitreserie, tome');
@@ -30,7 +30,7 @@ function write_serie()
 	update_serie();
 ?>
 			<TR<?echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
-				<TD><A href=# onclick="return AjaxUpdate('detail', 'ficheserie.php?ref=<?echo $current_album->id_serie?>')"><?echo _out(display_titreserie($current_album))?></A></TD>
+				<TD><? echo AjaxLink('serie', $current_album->id_serie, display_titreserie($current_album), 'série')?></TD>
 				<TD><?echo implode(', ', $manquants_serie)?></TD>
 			</TR>
 <?

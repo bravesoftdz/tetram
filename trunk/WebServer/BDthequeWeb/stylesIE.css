@@ -1,11 +1,11 @@
 #repertoire
 {
-	height: expression(document.body.clientHeight - this.offsetTop - 60 + 'px');
+	height: expression(document.body.clientHeight - this.offsetTop - 110 + 'px');
 }
 
 #repertoire_body
 {
-	height: expression(document.body.clientHeight - this.offsetTop - 150 + 'px');
+	height: expression(this.parentNode.clientHeight - this.offsetTop + 'px');
 }
 
 #detail

@@ -6,10 +6,10 @@ $symbole_monetaire = get_option('moneysymbol');
 $album = load_and_fetch('select * from /*DB_PREFIX*/albums where id_album '.format_string_null($_REQUEST['ref']));
 $serie = load_and_fetch('select * from /*DB_PREFIX*/series where id_serie '.format_string_null($album->id_serie));
 ?>
-<div id=detail_entete>
+<div class=entete>
 	<H1><? echo _out(display_titrealbum($album)) ?></H1>
 </div>
-<div id=detail_body>
+<div class=body>
 	<TABLE border=0 width=100%>
 		<TBODY valign=top>
 			<TR>
@@ -150,8 +150,8 @@ if (mysql_num_rows($rs) > 0)
 			<TR><TD>&nbsp;</TD></TR>
 			<TR>
 				<TH align=right>Editions&nbsp;:</TH>
-			</tr>
-			</tr>
+			<!--/tr>
+			<tr-->
 				<TD colspan=2>
 <?
 	while ($edition = mysql_fetch_object($rs))

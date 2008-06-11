@@ -30,7 +30,7 @@ function _processupdate(id,link)
 
 function AjaxUpdate(id, link, label, norefresh)
 {
-	if (id == 'detail' && !(norefresh === true)) 
+	if (id == 'detail' && !(norefresh === true) && (posHistorique == -1 || historique[posHistorique] != link) )
 	{
 		historique[++posHistorique] = link;
 		historiqueLabels[posHistorique] = label;

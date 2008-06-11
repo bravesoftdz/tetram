@@ -19,10 +19,10 @@ function format_titre($titre)
 }
 
 $mois = array('1' => 'janvier', '2' => 'février', '3' => 'mars', '4' => 'avril',
-              '5' => 'mai', '6' => 'juin', '7' => 'juillet', '8' => 'août',
+			  '5' => 'mai', '6' => 'juin', '7' => 'juillet', '8' => 'août',
 			  '9' => 'septembre', '10' => 'octobre', '11' => 'novembre', '12' => 'décembre');
 $jours = array('0' => 'dimanche', '1' => 'lundi', '2' => 'mardi', '3' => 'mercredi',
-               '4' => 'jeudi', '5' => 'vendredi', '6' => 'samedi');
+			   '4' => 'jeudi', '5' => 'vendredi', '6' => 'samedi');
 
 function AfficheDateSQL($dateSQL) {
 	global $mois, $jours;
@@ -228,29 +228,29 @@ function format_isbn($isbn)
 
 function detectUTF8($str)
 {
-        return preg_match('%(?:
-        [\xC2-\xDF][\x80-\xBF]        # non-overlong 2-byte
-        |\xE0[\xA0-\xBF][\x80-\xBF]               # excluding overlongs
-        |[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}      # straight 3-byte
-        |\xED[\x80-\x9F][\x80-\xBF]               # excluding surrogates
-        |\xF0[\x90-\xBF][\x80-\xBF]{2}    # planes 1-3
-        |[\xF1-\xF3][\x80-\xBF]{3}                  # planes 4-15
-        |\xF4[\x80-\x8F][\x80-\xBF]{2}    # plane 16
-        )+%xs', $str);
+	return preg_match('%(?:
+		[\xC2-\xDF][\x80-\xBF]        # non-overlong 2-byte
+		|\xE0[\xA0-\xBF][\x80-\xBF]               # excluding overlongs
+		|[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2}      # straight 3-byte
+		|\xED[\x80-\x9F][\x80-\xBF]               # excluding surrogates
+		|\xF0[\x90-\xBF][\x80-\xBF]{2}    # planes 1-3
+		|[\xF1-\xF3][\x80-\xBF]{3}                  # planes 4-15
+		|\xF4[\x80-\x8F][\x80-\xBF]{2}    # plane 16
+		)+%xs', $str);
 }
 
 function _out($str)
 {
-    if (!detectUTF8($str))
-        return utf8_encode($str);
-    else
-        return $str;
+	if (!detectUTF8($str))
+		return utf8_encode($str);
+	else
+		return $str;
 }
 
 function AjaxLink($type, $id, $titre, $category='')
 {
 ?>
-<a href=# onclick='return AjaxUpdate("detail", "fiche<?echo $type?>.php?ref=<? echo $id ?>", "<?echo ucfirst($category!=''?$category:$type)?> : <? echo _out(str_replace(array("'", '"'), array('&#39;', '\"'), $titre)) ?>")' title="<? echo _out(htmlspecialchars($titre)) ?>"><? echo _out($titre) ?></a>
+<a href=# onclick='return AjaxUpdate("detail", "fiche<?echo $type?>.php?ref=<? echo $id ?>", "<?echo ucfirst($category!=''?$category:$type)?> : " + this.title)' title="<? echo _out(htmlspecialchars($titre)) ?>"><? echo _out($titre) ?></a>
 <?
 }
 

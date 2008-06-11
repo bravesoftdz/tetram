@@ -6,10 +6,10 @@ $serie = load_and_fetch('select * from /*DB_PREFIX*/series where id_serie '.form
 $editeur = load_and_fetch('select * from /*DB_PREFIX*/editeurs where id_editeur'.format_string_null($serie->id_editeur));
 $collection = load_and_fetch('select * from /*DB_PREFIX*/collections where id_collection'.format_string_null($serie->id_collection));
 ?>
-<div id=detail_entete>
+<div class=entete>
 	<H1><?echo _out(display_titreserie($serie))?></H1>
 </div>
-<div id=detail_body>
+<div class=body>
 	<TABLE border=0 width=100%>
 		<TBODY valign=top>
 			<TR>

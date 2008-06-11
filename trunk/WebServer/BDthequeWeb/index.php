@@ -67,17 +67,16 @@ else
 	<br /><font size=1>Cliquez sur l'image pour fermer le zoom</font>
 </div>
 
-<div id=historiqueBack class='btnHistorique historiqueBack' onclick='backHistorique()' onmouseover='showListeHistorique(true)'></div>
+<div id=historiqueBack class='btnHistorique historiqueBack' onclick='backHistorique()' onmouseover='showListeHistorique(true)' title='Page précédente'></div>
 <div id=listeHistoriqueBack class=listeHistorique onmousemove='resetHistoriqueTimer()'></div>
-<div id=historiqueForward class='btnHistorique historiqueForward' onclick='forwardHistorique()' onmouseover='showListeHistorique(false)'></div>
+<div id=historiqueForward class='btnHistorique historiqueForward' onclick='forwardHistorique()' onmouseover='showListeHistorique(false)' title='Page suivante'></div>
 <div id=listeHistoriqueForward class=listeHistorique onmousemove='resetHistoriqueTimer()'></div>
 
 <div id=topbar>
 	<div id=toolBar>
-		<div class=toolSeparateur></div>
-		<div id=toolManquants class=toolButton onclick='AjaxUpdate("detail", "manquants.php")'>Séries incomplètes</div>
-		<div id=toolPrevisions class=toolButton onclick='AjaxUpdate("detail", "previsions.php")'>Prévisions de sorties</div>
-		<div id=toolAchats class=toolButton onclick='AjaxUpdate("detail", "listeachats.php")'>Prévisions d'achats</div>
+		<div id=toolManquants class=toolButton onclick='AjaxUpdate("detail", "manquants.php", this.title)' title="Séries incomplètes"></div>
+		<div id=toolPrevisions class=toolButton onclick='AjaxUpdate("detail", "previsions.php", this.title)' title="Prévisions de sorties"></div>
+		<div id=toolAchats class=toolButton onclick='AjaxUpdate("detail", "listeachats.php", this.title)' title="Prévisions d'achats"></div>
 	</div>
 </div>
 <div id=bottombar>
