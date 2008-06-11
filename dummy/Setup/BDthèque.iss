@@ -26,7 +26,7 @@ BackColor2=clPurple
 BackColorDirection=toptobottom
 WizardImageBackColor=clBlack
 OutputBaseFilename=BDTheque-setup-{#SetupSetting("AppVersion")}
-MinVersion=4.1.1998,5.0.2195
+MinVersion=0,5.0.2195
 EnableDirDoesntExistWarning=true
 AllowUNCPath=false
 AppendDefaultDirName=false
@@ -50,21 +50,26 @@ Name: interneticon; Description: Créer un raccourci vers le site de Teträm Corp;
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 Source: ..\..\bin\BD.exe; DestDir: {app}; Flags: ignoreversion
-Source: D:\MEDIA.KIT\BDThèque\bin\BDPic.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\BDPic.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\fbembed.dll; DestDir: {app}; Flags: ignoreversion
-Source: D:\MEDIA.KIT\BDThèque\bin\firebird.msg; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\firebird.msg; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\ib_util.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\UDF\BDT_UDF.dll; DestDir: {app}\UDF; Flags: ignoreversion
 Source: Base vide\BD.GDB; DestDir: {app}; Flags: onlyifdoesntexist ignoreversion
 Source: What's New.txt; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\msvcr80.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\msvcp80.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\Microsoft.VC80.CRT.manifest; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\icuuc30.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\icuin30.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\icudt30.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\intl\fbintl.dll; DestDir: {app}\Intl; Flags: ignoreversion
 Source: ..\..\bin\intl\fbintl.conf; DestDir: {app}\Intl; Flags: ignoreversion
+Source: ..\..\bin\WebServer\Site par défaut.zip; DestDir: {app}\WebServer; Flags: ignoreversion
+Source: ..\..\bin\WebServer\BDthequeWeb.zip; DestDir: {app}\WebServer; Flags: ignoreversion
+Source: ..\..\bin\DelZip179.dll; DestDir: {app}; Flags: ignoreversion
+Source: vcredist_x86.exe; DestDir: {tmp}; Flags: deleteafterinstall 32bit
+Source: vcredist_x64.exe; DestDir: {tmp}; Flags: deleteafterinstall 64bit
+Source: ..\..\bin\msvcp80.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\msvcr80.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\Microsoft.VC80.CRT.manifest; DestDir: {app}; Flags: ignoreversion
 
 [INI]
 Filename: {app}\BD.url; Section: InternetShortcut; Key: URL; String: http://www.tetram.org; Tasks: interneticon
@@ -78,6 +83,10 @@ Name: {userdesktop}\BDthèque; Filename: {app}\BD.exe; Tasks: desktopicon; IconIn
 [Run]
 Filename: {app}\BD.exe; Description: Lancer BDthèque; Flags: nowait postinstall skipifsilent
 Filename: {app}\What's New.txt; Flags: nowait shellexec skipifdoesntexist postinstall skipifsilent
+Filename: {tmp}\vcredist_x86.exe; Flags: 32bit skipifdoesntexist; Parameters: /q; MinVersion: 0,5.01.2600; OnlyBelowVersion: 0,5.01.2600sp1
+Filename: {tmp}\vcredist_x86.exe; Flags: 32bit skipifdoesntexist; Parameters: /q; MinVersion: 0,5.02.3790; OnlyBelowVersion: 0,5.02.3790
+Filename: {tmp}\vcredist_x64.exe; Flags: 64bit skipifdoesntexist; Parameters: /q; MinVersion: 0,5.01.2600; OnlyBelowVersion: 0,5.01.2600sp1
+Filename: {tmp}\vcredist_x64.exe; Flags: 64bit skipifdoesntexist; Parameters: /q; MinVersion: 0,5.02.3790; OnlyBelowVersion: 0,5.02.3790
 
 [UninstallDelete]
 Type: files; Name: {app}\BD.url
