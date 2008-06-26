@@ -17,7 +17,7 @@ function update_serie()
 	if ($current_tome > $first_tome + 1)
 		array_push($manquants_serie, sprintf('%d à %d', $first_tome, $current_tome));
 	else
-		for ($i = $first_tome; $i < $current_tome; $i++) 
+		for ($i = $first_tome; $i <= $current_tome; $i++) 
 			array_push($manquants_serie, $i);
 	
 }
@@ -36,11 +36,12 @@ function write_serie()
 <?
 }
 
+$current_serie = -1;
 while ($album = mysql_fetch_object($albums))
 {
 	if ($current_serie != $album->id_serie)
 	{
-		if ($current_serie) write_serie();
+		if ($current_serie != -1) write_serie();
 		$current_serie = $album->id_serie;
 		$first_tome = $album->tome;
 		$current_tome = $first_tome;
@@ -49,9 +50,9 @@ while ($album = mysql_fetch_object($albums))
 	else
 	{
 		$tmp_tome = $album->tome;
-		if ($tmp_tome <>$current_tome + 1) 
+		if ($tmp_tome != $current_tome + 1) 
 		{
-			 update_serie();
+            update_serie();
 			$first_tome = $tmp_tome;
 		}
 		$current_tome = $tmp_tome;
