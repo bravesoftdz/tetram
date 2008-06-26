@@ -9,9 +9,11 @@ $rs = load_sql($sql);
 ?>
 	<TABLE width=100%>
 		<TR>
-			<TH class=TitreAlbum>Album</TH>
+			<TH width=30% align=left>Album</TH>
 			<TH width=10></TH>
-			<TH>Série</TH>
+			<TH width=30% align=left>Série</TH>
+			<TH width=10></TH>
+			<TH width=30% align=left>Parution</TH>
 		</TR>
 	</TABLE>
 </div>
@@ -23,9 +25,12 @@ $rs = load_sql($sql);
 	{
 ?>
 		<TR<?echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
-			<TD class=TitreAlbum><? echo AjaxLink('album', $row->id_album, display_titrealbum($row))?></TD>
+			<TD width=30%><? echo AjaxLink('album', $row->id_album, display_titrealbum($row))?></TD>
 			<TD width=10></TD>
-			<TD class=Serie><? echo AjaxLink('serie', $row->id_serie, display_titreserie($row), 'série')?></TD>
+			<TD width=30%><? echo AjaxLink('serie', $row->id_serie, display_titreserie($row), 'série')?></TD>
+			<TD width=10></TD>
+			<TD width=30%><? echo ($row->moisparution > 0 ? $mois[$row->moisparution].' ':'').NonZero($row->anneeparution)?></TD>
+            
 		</TR>
 <?
 	}

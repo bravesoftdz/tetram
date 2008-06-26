@@ -41,7 +41,7 @@ if (NonZero($album->anneeparution) != '')
 { 
 ?>
 			<TR>
-				<TH align=right>Parution&nbsp;:</TH><TD width=100%><?echo NonZero($album->anneeparution)?></TD>
+				<TH align=right>Parution&nbsp;:</TH><TD width=100%><?echo ($album->moisparution > 0 ? $mois[$album->moisparution].' ' : '').NonZero($album->anneeparution) ?></TD>
 			</TR>
 <? 
 } 
