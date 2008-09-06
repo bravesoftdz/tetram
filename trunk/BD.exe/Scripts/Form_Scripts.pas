@@ -10,7 +10,7 @@ uses
   uPSRuntime, VirtualTrees, StdCtrls, ExtCtrls, uPSComponent_StdCtrls,
   uPSComponent_Controls, uPSComponent_Forms, uPSComponent_DB, uPSComponent_RegExpr, LoadComplet,
   uPSComponent_COM, uPSComponent_Default, SynEditKeyCmds, uPSI_LoadComplet, uPSI_TypeRec,
-  SynCompletionProposal, UBdtForms;
+  SynCompletionProposal, UBdtForms, IDHashMap;
 
 type
   TSynDebugPlugin = class(TSynEditPlugin)
@@ -178,7 +178,7 @@ type
     FAlbumToImport: TAlbumComplet;
 
     fObjectList: TParamInfoArray;
-    // fTypeInfos: TIDHashMap;
+    fTypeInfos: TIDHashMap;
 
     procedure SetResultat(const Chaine: string);
     function Compile: Boolean;
@@ -228,6 +228,15 @@ implementation
 uses
   Form_ScriptSearch, UScriptsFonctions, CommonConst, uPSPreProcessor,
   Procedures;
+
+function AutoCompleteCompilerBeforeCleanUp(Sender: TPSPascalCompiler): Boolean;
+var
+  s: string;
+begin
+  with TPSScriptDebugger(Sender.ID) do
+    if comp.GetOutput(s) then TfrmScripts(Owner).BuildLokalObjektList(Sender);
+  Result := True;
+end;
 
 procedure TSynDebugPlugin.AfterPaint(ACanvas: TCanvas; const AClip: TRect; FirstLine, LastLine: Integer);
 begin
@@ -285,8 +294,8 @@ begin
   case (msg.CmdType and $FFF0) of
     SC_CLOSE: if not PSScriptDebugger1.Running then
         inherited;
-  else
-    inherited;
+    else
+      inherited;
   end;
 end;
 
@@ -623,8 +632,6 @@ begin
   PSScriptDebugger1.AddFunction(@PosEx, 'function PosEx(const SubStr, S: string; Offset: Cardinal): Integer;');
 
   PSScriptDebugger1.AddRegisteredVariable('AlbumToImport', 'TAlbumComplet');
-
-  BuildLokalObjektList(Sender.Comp);
 end;
 
 procedure TfrmScripts.PSScriptDebugger1Breakpoint(Sender: TObject; const FileName: string; Position, Row, Col: Cardinal);
@@ -757,6 +764,11 @@ var
   sr: TSearchRec;
 begin
   FAlbumToImport := TAlbumComplet.Create;
+
+  fTypeInfos := TIDHashMap.Create;
+
+  Assert(not Assigned(PSScriptDebugger1.Comp.OnBeforeCleanup), 'PSScriptDebugger1.Comp.OnBeforeCleanup déjà utilisé');
+  PSScriptDebugger1.Comp.OnBeforeCleanup := AutoCompleteCompilerBeforeCleanUp;
 
   FForceClose := False;
   PageControl1.ActivePageIndex := 0;
@@ -935,8 +947,8 @@ begin
           cmInfo: CellText := 'Information';
           cmCompileError: CellText := 'Compilation';
           cmRuntimeError: CellText := 'Exécution';
-        else
-          CellText := '';
+          else
+            CellText := '';
         end;
       1: CellText := TypeMessage;
       2: CellText := Fichier;
@@ -952,6 +964,7 @@ end;
 procedure TfrmScripts.FormDestroy(Sender: TObject);
 begin
   ClearPages;
+  fTypeInfos.Free;
   FDebugPlugin.Free;
   FAlbumToImport.Free;
 end;
@@ -1408,12 +1421,12 @@ end;
 
 procedure TfrmScripts.pcScriptsChange(Sender: TObject);
 begin
-//  à améliorer:
-//     - les params ne s'affichent pas
-//     - l'autocomplete ne s'affiche pas toujours
-//     - l'autocomplete choisi mal ce qui est affiché en fonction de la position dans le script
-//  SynEditAutoComplete.Editor := GetActiveScript;
-//  SynEditParamShow.Editor := GetActiveScript;
+  //  à améliorer:
+  //     - les params ne s'affichent pas
+  //     - l'autocomplete ne s'affiche pas toujours
+  //     - l'autocomplete choisi mal ce qui est affiché en fonction de la position dans le script
+  SynEditAutoComplete.Editor := GetActiveScript;
+  SynEditParamShow.Editor := GetActiveScript;
 end;
 
 procedure TfrmScripts.BuildLokalObjektList(Comp: TPSPascalCompiler);
@@ -1422,8 +1435,10 @@ var
   VDummy: Integer;
   Info: TParamInfoRecord;
   Typ: TPSType;
-  Proc: TPSRegProc;
+  RegProc: TPSRegProc;
+  Proc: TPSProcedure;
   ProcInt: TPSInternalProcedure;
+
   con: TPSConstant;
   Father: Cardinal;
 
@@ -1441,7 +1456,7 @@ var
 
   procedure AddTypeInfo(Hash: Cardinal; BaseType: Integer);
   begin
-    // fTypeInfos.InsertID(Hash, BaseType);
+    fTypeInfos.InsertID(Hash, BaseType);
   end;
 
   procedure AddInfo(var Info: TParamInfoRecord);
@@ -1515,13 +1530,16 @@ var
   end;
 
 begin
+  SetLength(fObjectList, 0);
+  fTypeInfos.ClearList;
   ClearInfoRec;
   // Lokale Variablen
   for Dummy := 1 to Comp.GetProcCount - 1 do
   begin
-    if Comp.GetProc(Dummy) is TPSInternalProcedure then
+    Proc := Comp.GetProc(Dummy);
+    if Proc is TPSInternalProcedure then
     begin
-      ProcInt := TPSInternalProcedure(Comp.GetProc(Dummy));
+      ProcInt := TPSInternalProcedure(Proc);
       for VDummy := 0 to ProcInt.ProcVars.Count - 1 do
       begin
         AddVar(TPSVar(ProcInt.ProcVars[VDummy]));
@@ -1531,9 +1549,10 @@ begin
 
   // Parameter der letzten Funktion (Es wird davon ausgegangen, dass der Cursor
   // in der letzten Funktion steht und somit nur diese Paramter sichtbar sind)
-  if Comp.GetProc(Comp.GetProcCount - 1) is TPSInternalProcedure then
+  Proc := Comp.GetProc(Comp.GetProcCount - 1);
+  if Proc is TPSInternalProcedure then
   begin
-    ProcInt := TPSInternalProcedure(Comp.GetProc(Comp.GetProcCount - 1));
+    ProcInt := TPSInternalProcedure(Proc);
     if ProcInt.Decl <> nil then
     begin
       for Dummy := 0 to ProcInt.Decl.ParamCount - 1 do
@@ -1552,9 +1571,10 @@ begin
   // Bei 1 beginnen (0 = main_proc)
   for Dummy := 1 to Comp.GetProcCount - 1 do
   begin
-    ProcInt := TPSInternalProcedure(Comp.GetProc(Dummy));
-    if ProcInt is TPSInternalProcedure then
+    Proc := Comp.GetProc(Dummy);
+    if Proc is TPSInternalProcedure then
     begin
+      ProcInt := TPSInternalProcedure(Proc);
       AddProcedure(ProcInt.OriginalName, ProcInt.Decl);
     end;
   end;
@@ -1562,9 +1582,9 @@ begin
   // registrierte Funktionen
   for Dummy := 0 to Comp.GetRegProcCount - 1 do
   begin
-    Proc := Comp.GetRegProc(Dummy);
-    if Proc is TPSRegProc then
-      AddProcedure(Proc.OrgName, Proc.Decl);
+    RegProc := Comp.GetRegProc(Dummy);
+    if RegProc.NameHash > 0 then // on exclut les property helpers
+      AddProcedure(RegProc.OrgName, RegProc.Decl);
   end;
 
   // Konstanten
@@ -1679,23 +1699,12 @@ begin
   //  Skript := TruncateSourceCode(EditFeld.Text, EditFeld.CaretXY);
   //  Skript := script_utils_Preprocess(Skript, Language);
 
-  SetLength(fObjectList, 0);
-  // fTypeInfos.ClearList;
-
-//  Comp := TPSPascalCompiler.Create;
-//  try
-//    Comp.AllowNoBegin := true;
-//    Comp.BooleanShortCircuit := true;
-//    Comp.OnUses := RegisterCompiler;
-//
-//    Comp.ID := Self;
-//    Comp.OnBeforeCleanup := AutoCompleteCompilerBeforeCleanUp;
-//
-//    Comp.Compile(Skript);
-//  finally
-//    Comp.Free;
-//  end;
-  PSScriptDebugger1.Comp.Compile(Skript);
+  { TODO : la compilation est totale, ça risque d'être pénalisant à la longue
+    voir si on peut pas compiler uniquement les lignes qui précèdent la ligne du curseur
+    c'est probablement ce qu'est sensé faire TruncateSourceCode
+  }
+  Compile;
+  // PSScriptDebugger1.Comp.Compile(Skript);
 end;
 
 function TfrmScripts.GetLookUpString(Line: string; EndPos: Integer): string;
@@ -1732,13 +1741,13 @@ begin
           if not CanSpace then
             WasSpace := true;
         end;
-    else
-      begin
-        if WasSpace then
-          break;
-        WasSpace := false;
-        CanSpace := false;
-      end;
+      else
+        begin
+          if WasSpace then
+            break;
+          WasSpace := false;
+          CanSpace := false;
+        end;
     end;
 
     dec(TmpX);
@@ -1870,7 +1879,6 @@ begin
     Parts := Explode('.', LookUp);
     Assert(length(Parts) > 0, 'Blub' + LookUp);
     result := false;
-    Dummy := 0;
     Parent := 0;
     for Dummy := 0 to high(Parts) do
     begin
@@ -1963,12 +1971,13 @@ begin
   Prev := CSTI_EOF;
   Token := CSTI_EOF;
   PrevEnd := -1;
-  while (Parser.CurrTokenID <> CSTI_EOF) and (Parser.CurrTokenPos < (Editor.CaretX - 1)) do
+  while (Parser.CurrTokenID <> CSTI_EOF) and (Parser.CurrTokenPos < Cardinal(Editor.CaretX - 1)) do
   begin
     Prev := Token;
-    PrevEnd := Parser.CurrTokenPos + length(Parser.OriginalToken);
+    PrevEnd := Parser.CurrTokenPos + Cardinal(Length(Parser.OriginalToken));
     Token := Parser.CurrTokenID;
     // Tritt ein := oder ( auf, so wird ein Wert mit einem Rückgabewert erwartet
+    // si un := ou ( alors, il est une valeur avec une valeur de retour prévu
     if (Token = CSTI_Assignment) and (Prev = CSTI_Identifier) then
     begin
       Types := [itFunction, itVar, itConstant, itType];
@@ -2044,8 +2053,9 @@ end;
 procedure TfrmScripts.FillAutoComplete(var List: TParamInfoArray; Types: TInfoTypes; FromFather: Cardinal; Typ: string);
 var
   Dummy: Integer;
-  Text: string;
+  Text, sTyp: string;
   HashT: Cardinal;
+  cl: TColor;
   Father: TParamInfoRecord;
 
   function CompareTypes(Typ1: Cardinal; Typ2: Cardinal): Boolean;
@@ -2065,8 +2075,8 @@ var
       exit;
     end;
 
-    //Assert(fTypeInfos.FindKey(Typ1, Type1));
-    //Assert(fTypeInfos.FindKey(Typ2, Type2));
+    Assert(fTypeInfos.FindKey(Typ1, Type1));
+    Assert(fTypeInfos.FindKey(Typ2, Type2));
     result := BaseTypeCompatible(Type1, Type2);
 
     if result then
@@ -2140,9 +2150,12 @@ var
     end;
   end;
 
+var
+  sl1, sl2: TStringList;
+  i: Integer;
 begin
   SynEditAutoComplete.ClearList;
-
+  SynEditAutoComplete.Columns[0].BiggestWord := '';
   if LookUpList(FromFather, Father) then
   begin
     if Father.SubType <> 0 then
@@ -2159,45 +2172,97 @@ begin
   end;
   HashT := HashString(Typ);
 
-  for Dummy := 0 to high(List) do
-  begin
-    with List[Dummy] do
+  sl1 := TStringList.Create;
+  sl2 := TStringList.Create;
+
+  try
+
+    for Dummy := 0 to high(List) do
     begin
-      if (Typ in Types) and
-        (Father = FromFather) and
-        ((HashT = 0) or
-        (CompareTypes(HashT, ReturnTyp)) or
-        (HashT = ReturnTyp) or
-        HasFields
-        ) then
+      with List[Dummy] do
       begin
-        case Typ of
-          itProcedure: Text := 'procedure ';
-          itFunction: Text := 'function ';
-          itType: Text := 'type ';
-          itVar: Text := 'var ';
-          itConstant: Text := 'const ';
-          itField: Text := 'field ';
-          itConstructor: Text := 'constructor ';
-        else
-          Assert(false);
-        end;
-
-        if HasFields and (HashT <> 0) and (HashT <> ReturnTyp) then
+        if (Typ in Types) and
+          (Father = FromFather) and
+          ((HashT = 0) or
+          (CompareTypes(HashT, ReturnTyp)) or
+          (HashT = ReturnTyp) or
+          HasFields
+          ) then
         begin
-          if HasFieldReturnTyp(HashT, ReturnTyp) then
-            Text := Text + '\column{}\style{+B}' + OrgName + '...\style{-B}'
-          else
-            continue;
-        end
-        else
-          Text := Text + '\column{}\style{+B}' + OrgName + '\style{-B}' + OrgParams;
+          cl := clBlack;
+          case Typ of
+            itProcedure:
+              begin
+                Text := 'procedure ';
+                cl := clTeal;
+              end;
+            itFunction:
+              begin
+                Text := 'function ';
+                cl := clBlue;
+              end;
+            itType:
+              begin
+                Text := 'type ';
+                cl := clTeal;
+              end;
+            itVar:
+              begin
+                Text := 'var ';
+                cl := clMaroon;
+              end;
+            itConstant:
+              begin
+                Text := 'const ';
+                cl := clGreen;
+              end;
+            itField:
+              begin
+                Text := 'property ';
+                cl := clTeal;
+              end;
+            itConstructor:
+              begin
+                Text := 'constructor ';
+                cl := clTeal;
+              end;
+            else
+              Assert(false);
+          end;
+          sTyp := Text;
 
-        SynEditAutoComplete.InsertList.Add(OrgName);
-        SynEditAutoComplete.ItemList.Add(Text);
+          if HasFields and (HashT <> 0) and (HashT <> ReturnTyp) then
+          begin
+            if HasFieldReturnTyp(HashT, ReturnTyp) then
+              Text := '\color{' + ColorToString(cl) + '}' + Text + '\column{}\color{0}\style{+B}' + OrgName + '...\style{-B}'
+            else
+              continue;
+          end
+          else
+          begin
+            Text := '\color{' + ColorToString(cl) + '}' + Text + '\column{}\color{0}\style{+B}' + OrgName + '\style{-B}';
+            if Typ <> itConstructor then Text := Text + OrgParams;
+          end;
+
+          sl1.AddObject(OrgName, Pointer(sl2.Count));
+          sl2.Add(Text);
+          if Length(sTyp) > Length(SynEditAutoComplete.Columns[0].BiggestWord) then
+            SynEditAutoComplete.Columns[0].BiggestWord := sTyp;
+        end;
       end;
     end;
+
+    sl1.Sort;
+    for i := 0 to Pred(sl1.Count) do
+    begin
+      SynEditAutoComplete.InsertList.Add(sl1[i]);
+      SynEditAutoComplete.ItemList.Add(sl2[Integer(sl1.Objects[i])]);
+    end;
+  finally
+    sl1.Free;
+    sl2.Free;
   end;
+
   if (SynEditAutoComplete.InsertList.Count = 0) and (Hasht <> 0) then
     FillAutoComplete(List, Types, FromFather);
 end;
