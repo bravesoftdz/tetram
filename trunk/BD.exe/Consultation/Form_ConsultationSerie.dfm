@@ -19,7 +19,7 @@ object FrmConsultationSerie: TFrmConsultationSerie
     Left = 0
     Top = 0
     Width = 862
-    Height = 781
+    Height = 786
     Align = alClient
     BorderStyle = bsNone
     ParentBackground = True
@@ -27,7 +27,7 @@ object FrmConsultationSerie: TFrmConsultationSerie
     OnClick = EditeurClick
     DesignSize = (
       862
-      781)
+      786)
     object l_remarques: TLabel
       Left = 25
       Top = 296
@@ -118,9 +118,9 @@ object FrmConsultationSerie: TFrmConsultationSerie
       Transparent = True
     end
     object Label6: TLabel
-      Left = 27
+      Left = 24
       Top = 10
-      Width = 26
+      Width = 29
       Height = 13
       Alignment = taRightJustify
       Caption = 'Titre :'
@@ -175,7 +175,7 @@ object FrmConsultationSerie: TFrmConsultationSerie
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 778
+      Top = 783
       Width = 862
       Height = 3
       Align = alBottom

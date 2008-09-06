@@ -50,9 +50,9 @@ object FrmEditCollection: TFrmEditCollection
       Layout = tlCenter
     end
     object Label5: TLabel
-      Left = 8
+      Left = 5
       Top = 34
-      Width = 38
+      Width = 41
       Height = 13
       Alignment = taRightJustify
       Caption = 'Editeur :'

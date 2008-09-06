@@ -1,9 +1,9 @@
 object FrmEntretien: TFrmEntretien
   Left = 168
   Top = 263
+  Width = 447
+  Height = 284
   Caption = 'FrmEntretien'
-  ClientHeight = 257
-  ClientWidth = 439
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -89,7 +89,7 @@ object FrmEntretien: TFrmEntretien
       end
       item
         Position = 1
-        Width = 133
+        Width = 129
       end>
   end
   object ActionList1: TActionList

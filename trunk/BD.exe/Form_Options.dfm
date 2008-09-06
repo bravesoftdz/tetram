@@ -477,7 +477,7 @@ object FrmOptions: TFrmOptions
           Cursor = crHandPoint
           BevelKind = bkTile
           Ctl3D = True
-          ItemHeight = 13
+          ItemHeight = 0
           ParentCtl3D = False
           TabOrder = 0
           OnChange = ComboBox2Change
@@ -490,7 +490,7 @@ object FrmOptions: TFrmOptions
           Cursor = crHandPoint
           BevelKind = bkTile
           Ctl3D = True
-          ItemHeight = 13
+          ItemHeight = 0
           ParentCtl3D = False
           TabOrder = 1
           OnChange = ComboBox2Change
@@ -560,7 +560,7 @@ object FrmOptions: TFrmOptions
         Cursor = crHandPoint
         BevelKind = bkTile
         Ctl3D = True
-        ItemHeight = 13
+        ItemHeight = 0
         ParentCtl3D = False
         TabOrder = 0
       end

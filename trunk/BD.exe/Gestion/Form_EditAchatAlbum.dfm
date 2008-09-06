@@ -32,9 +32,9 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         728
         323)
       object Label3: TLabel
-        Left = 97
+        Left = 94
         Top = 31
-        Width = 47
+        Width = 50
         Height = 13
         Alignment = taRightJustify
         Caption = ' Parution :'
@@ -49,9 +49,9 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Shape = bsTopLine
       end
       object Label16: TLabel
-        Left = 387
+        Left = 384
         Top = 30
-        Width = 35
+        Width = 38
         Height = 13
         Alignment = taRightJustify
         Caption = 'Tomes :'
@@ -81,17 +81,17 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Layout = tlCenter
       end
       object Label20: TLabel
-        Left = 14
+        Left = 11
         Top = 158
-        Width = 28
+        Width = 31
         Height = 13
         Alignment = taRightJustify
         Caption = 'S'#233'rie :'
       end
       object Label1: TLabel
-        Left = 13
+        Left = 10
         Top = 31
-        Width = 33
+        Width = 36
         Height = 13
         Alignment = taRightJustify
         Caption = ' Tome :'
@@ -99,9 +99,9 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Layout = tlCenter
       end
       object Label2: TLabel
-        Left = 17
+        Left = 14
         Top = 7
-        Width = 29
+        Width = 32
         Height = 13
         Alignment = taRightJustify
         Caption = ' Titre :'
@@ -151,9 +151,9 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         OnClick = btScenaristeClick
       end
       object Label19: TLabel
-        Left = 254
+        Left = 251
         Top = 158
-        Width = 42
+        Width = 45
         Height = 13
         Alignment = taRightJustify
         Anchors = [akTop, akRight]
@@ -181,9 +181,9 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         OnClick = btScenaristeClick
       end
       object Label7: TLabel
-        Left = 355
+        Left = 352
         Top = 50
-        Width = 32
+        Width = 35
         Height = 13
         Alignment = taRightJustify
         Anchors = [akTop, akRight]
@@ -191,9 +191,9 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         FocusControl = remarques
       end
       object Label6: TLabel
-        Left = 6
+        Left = 3
         Top = 50
-        Width = 40
+        Width = 43
         Height = 13
         Alignment = taRightJustify
         Caption = 'Histoire :'
@@ -592,9 +592,9 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         728
         323)
       object Label4: TLabel
-        Left = 13
+        Left = 10
         Top = 7
-        Width = 33
+        Width = 36
         Height = 13
         Alignment = taRightJustify
         Caption = 'Album :'

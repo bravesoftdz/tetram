@@ -48,9 +48,9 @@ object FrmEditParaBD: TFrmEditParaBD
       Layout = tlCenter
     end
     object Label6: TLabel
-      Left = 6
+      Left = 3
       Top = 50
-      Width = 56
+      Width = 59
       Height = 13
       Alignment = taRightJustify
       Caption = 'Description :'
@@ -77,9 +77,9 @@ object FrmEditParaBD: TFrmEditParaBD
       OnClick = btCreateurClick
     end
     object Label19: TLabel
-      Left = 23
+      Left = 20
       Top = 177
-      Width = 39
+      Width = 42
       Height = 13
       Alignment = taRightJustify
       Caption = 'Auteurs :'
@@ -93,9 +93,9 @@ object FrmEditParaBD: TFrmEditParaBD
       Shape = bsSpacer
     end
     object Label20: TLabel
-      Left = 35
+      Left = 32
       Top = 285
-      Width = 27
+      Width = 30
       Height = 13
       Alignment = taRightJustify
       Caption = 'S'#233'rie :'
@@ -125,18 +125,18 @@ object FrmEditParaBD: TFrmEditParaBD
       Shape = bsTopLine
     end
     object Label24: TLabel
-      Left = 58
+      Left = 55
       Top = 484
-      Width = 34
+      Width = 37
       Height = 13
       Alignment = taRightJustify
       Caption = 'Ann'#233'e :'
       Layout = tlCenter
     end
     object Label25: TLabel
-      Left = 146
+      Left = 143
       Top = 484
-      Width = 25
+      Width = 28
       Height = 13
       Alignment = taRightJustify
       Caption = 'Cote :'
@@ -153,27 +153,27 @@ object FrmEditParaBD: TFrmEditParaBD
       OnClick = VDTButton14Click
     end
     object Label10: TLabel
-      Left = 28
+      Left = 25
       Top = 31
-      Width = 34
+      Width = 37
       Height = 13
       Alignment = taRightJustify
       Caption = 'Ann'#233'e :'
       Layout = tlCenter
     end
     object Label18: TLabel
-      Left = 163
+      Left = 160
       Top = 420
-      Width = 48
+      Width = 51
       Height = 13
       Alignment = taRightJustify
       Caption = 'Achet'#233' le :'
       Layout = tlCenter
     end
     object Label9: TLabel
-      Left = 151
+      Left = 148
       Top = 444
-      Width = 20
+      Width = 23
       Height = 13
       Alignment = taRightJustify
       Caption = 'Prix :'
@@ -190,9 +190,9 @@ object FrmEditParaBD: TFrmEditParaBD
       OnClick = SpeedButton3Click
     end
     object Label12: TLabel
-      Left = 121
+      Left = 118
       Top = 31
-      Width = 27
+      Width = 30
       Height = 13
       Alignment = taRightJustify
       Caption = 'Type :'

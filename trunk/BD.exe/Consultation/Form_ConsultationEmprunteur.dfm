@@ -17,13 +17,13 @@ object FrmConsultationEmprunteur: TFrmConsultationEmprunteur
   OnDestroy = FormDestroy
   DesignSize = (
     505
-    434)
+    440)
   PixelsPerInch = 96
   TextHeight = 13
   object l_emprunts: TLabel
-    Left = 4
+    Left = 1
     Top = 226
-    Width = 42
+    Width = 45
     Height = 11
     Hint = 'Nombre d'#39'emprunts de l'#39'emprunteur'
     Alignment = taRightJustify
@@ -63,9 +63,9 @@ object FrmConsultationEmprunteur: TFrmConsultationEmprunteur
     Style = bsRaised
   end
   object Label6: TLabel
-    Left = 52
+    Left = 49
     Top = 41
-    Width = 23
+    Width = 26
     Height = 11
     Alignment = taRightJustify
     Caption = 'Nom :'
@@ -98,9 +98,9 @@ object FrmConsultationEmprunteur: TFrmConsultationEmprunteur
     WordWrap = True
   end
   object Label1: TLabel
-    Left = 39
+    Left = 36
     Top = 61
-    Width = 36
+    Width = 39
     Height = 11
     Alignment = taRightJustify
     Caption = 'Adresse :'

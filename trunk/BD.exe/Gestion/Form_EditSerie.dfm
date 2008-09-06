@@ -38,17 +38,17 @@ object FrmEditSerie: TFrmEditSerie
       742
       900)
     object Label5: TLabel
-      Left = 15
+      Left = 12
       Top = 301
-      Width = 38
+      Width = 41
       Height = 13
       Alignment = taRightJustify
       Caption = 'Editeur :'
     end
     object Label8: TLabel
-      Left = 359
+      Left = 356
       Top = 301
-      Width = 50
+      Width = 53
       Height = 13
       Alignment = taRightJustify
       Caption = 'Collection :'
@@ -66,7 +66,7 @@ object FrmEditSerie: TFrmEditSerie
     object Label17: TLabel
       Left = 513
       Top = 150
-      Width = 33
+      Width = 36
       Height = 13
       Caption = 'Genre :'
     end
@@ -96,18 +96,18 @@ object FrmEditSerie: TFrmEditSerie
       Shape = bsTopLine
     end
     object Label6: TLabel
-      Left = 13
+      Left = 10
       Top = 54
-      Width = 40
+      Width = 43
       Height = 13
       Alignment = taRightJustify
       Caption = 'Histoire :'
       FocusControl = histoire
     end
     object Label7: TLabel
-      Left = 365
+      Left = 362
       Top = 54
-      Width = 32
+      Width = 35
       Height = 13
       Alignment = taRightJustify
       Anchors = [akTop, akRight]
@@ -140,9 +140,9 @@ object FrmEditSerie: TFrmEditSerie
       OnClick = VDTButton13Click
     end
     object Label1: TLabel
-      Left = 8
+      Left = 5
       Top = 32
-      Width = 45
+      Width = 48
       Height = 13
       Hint = 'R'#233'f'#233'rence du support'
       Alignment = taRightJustify
@@ -376,9 +376,9 @@ object FrmEditSerie: TFrmEditSerie
       WithBorder = True
     end
     object Label19: TLabel
-      Left = 11
+      Left = 8
       Top = 150
-      Width = 42
+      Width = 45
       Height = 13
       Alignment = taRightJustify
       Caption = 'Auteurs :'
@@ -506,25 +506,25 @@ object FrmEditSerie: TFrmEditSerie
       Shape = bsTopLine
     end
     object Label3: TLabel
-      Left = 15
+      Left = 12
       Top = 442
-      Width = 38
+      Width = 41
       Height = 13
       Alignment = taRightJustify
       Caption = 'Albums :'
     end
     object Label4: TLabel
-      Left = 10
+      Left = 7
       Top = 575
-      Width = 43
+      Width = 46
       Height = 13
       Alignment = taRightJustify
       Caption = 'Para-BD :'
     end
     object Label9: TLabel
-      Left = 600
+      Left = 597
       Top = 419
-      Width = 85
+      Width = 88
       Height = 13
       Hint = 'R'#233'f'#233'rence du support'
       Alignment = taRightJustify

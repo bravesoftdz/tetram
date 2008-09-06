@@ -35,7 +35,7 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
       Height = 21
       Alignment = taCenter
       Anchors = [akTop, akRight]
-      Caption = 'Pas d''image'
+      Caption = 'Pas d'#39'image'
       Font.Charset = ANSI_CHARSET
       Font.Color = clRed
       Font.Height = -17
@@ -63,12 +63,12 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
       Transparent = True
     end
     object l_annee: TLabel
-      Left = 25
+      Left = 22
       Top = 33
-      Width = 28
+      Width = 31
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Série :'
+      Caption = 'S'#233'rie :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight
@@ -118,9 +118,9 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
       WordWrap = True
     end
     object Label6: TLabel
-      Left = 27
+      Left = 24
       Top = 11
-      Width = 26
+      Width = 29
       Height = 13
       Alignment = taRightJustify
       Caption = 'Titre :'
@@ -136,12 +136,12 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
       Transparent = True
     end
     object Label11: TLabel
-      Left = 18
+      Left = 15
       Top = 67
-      Width = 35
+      Width = 38
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Année :'
+      Caption = 'Ann'#233'e :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight
@@ -160,7 +160,7 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
       Height = 13
       Alignment = taCenter
       AutoSize = False
-      Caption = 'Année'
+      Caption = 'Ann'#233'e'
       Transparent = True
     end
     object TitreSerie: TLabel
@@ -170,7 +170,7 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
       Height = 23
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
-      Caption = 'Série'
+      Caption = 'S'#233'rie'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -12
@@ -199,7 +199,7 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
       Height = 42
       Alignment = taCenter
       Anchors = [akTop, akRight]
-      Caption = 'Impossible de charger l''image'
+      Caption = 'Impossible de charger l'#39'image'
       Font.Charset = ANSI_CHARSET
       Font.Color = clRed
       Font.Height = -17
@@ -218,9 +218,9 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
       Caption = 'Prix'
     end
     object Label3: TLabel
-      Left = 60
+      Left = 57
       Top = 428
-      Width = 22
+      Width = 25
       Height = 13
       Alignment = taRightJustify
       Caption = 'Prix :'
@@ -235,12 +235,12 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
       Transparent = True
     end
     object Label12: TLabel
-      Left = 127
+      Left = 124
       Top = 428
-      Width = 49
+      Width = 52
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Acheté le :'
+      Caption = 'Achet'#233' le :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight
@@ -256,7 +256,7 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
       Top = 428
       Width = 45
       Height = 13
-      Caption = 'Acheté le'
+      Caption = 'Achet'#233' le'
     end
     object TypeParaBD: TLabel
       Left = 59
@@ -269,9 +269,9 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
       Transparent = True
     end
     object Label1: TLabel
-      Left = 25
+      Left = 22
       Top = 51
-      Width = 28
+      Width = 31
       Height = 13
       Alignment = taRightJustify
       Caption = 'Type :'
@@ -287,9 +287,9 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
       Transparent = True
     end
     object Label2: TLabel
-      Left = 55
+      Left = 52
       Top = 444
-      Width = 27
+      Width = 30
       Height = 13
       Alignment = taRightJustify
       Caption = 'Cote :'
@@ -364,7 +364,7 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
       Width = 65
       Height = 15
       TabStop = False
-      Caption = 'Numéroté'
+      Caption = 'Num'#233'rot'#233
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight
@@ -420,7 +420,7 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
       Width = 63
       Height = 16
       TabStop = False
-      Caption = 'Dédicacé'
+      Caption = 'D'#233'dicac'#233
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight
@@ -464,7 +464,7 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
     object ImageApercu: TAction
       Tag = 1
       Category = 'Image'
-      Caption = 'Aperçu avant impression'
+      Caption = 'Aper'#231'u avant impression'
       ImageIndex = 4
       OnExecute = ImageApercuExecute
     end
@@ -478,7 +478,7 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
     object FicheApercu: TAction
       Tag = 1
       Category = 'Fiche'
-      Caption = 'Aperçu avant impression'
+      Caption = 'Aper'#231'u avant impression'
       ImageIndex = 4
       OnExecute = FicheApercuExecute
     end

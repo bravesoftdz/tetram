@@ -3,7 +3,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
   Top = 64
   Width = 530
   Height = 861
-  Caption = 'Fiche d''album'
+  Caption = 'Fiche d'#39'album'
   Color = clWhite
   Constraints.MinWidth = 530
   Font.Charset = ANSI_CHARSET
@@ -37,7 +37,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Height = 21
       Alignment = taCenter
       Anchors = [akTop, akRight]
-      Caption = 'Pas d''image'
+      Caption = 'Pas d'#39'image'
       Font.Charset = ANSI_CHARSET
       Font.Color = clRed
       Font.Height = -17
@@ -105,7 +105,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Width = 31
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Série :'
+      Caption = 'S'#233'rie :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight
@@ -159,7 +159,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Width = 24
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Série'
+      Caption = 'S'#233'rie'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight
@@ -480,7 +480,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Height = 23
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
-      Caption = 'Série'
+      Caption = 'S'#233'rie'
       Font.Charset = ANSI_CHARSET
       Font.Color = clWindowText
       Font.Height = -12
@@ -537,7 +537,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Height = 42
       Alignment = taCenter
       Anchors = [akTop, akRight]
-      Caption = 'Impossible de charger l''image'
+      Caption = 'Impossible de charger l'#39'image'
       Font.Charset = ANSI_CHARSET
       Font.Color = clRed
       Font.Height = -17
@@ -717,7 +717,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Height = 16
       TabStop = False
       Anchors = [akLeft, akTop, akRight]
-      Caption = 'Intégrale'
+      Caption = 'Int'#233'grale'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight
@@ -734,7 +734,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       Width = 68
       Height = 16
       TabStop = False
-      Caption = 'Hors série'
+      Caption = 'Hors s'#233'rie'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = clHotLight
@@ -887,7 +887,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         Width = 38
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Année :'
+        Caption = 'Ann'#233'e :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -903,7 +903,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         Top = 18
         Width = 31
         Height = 13
-        Caption = 'Année'
+        Caption = 'Ann'#233'e'
       end
       object Etat: TLabel
         Left = 56
@@ -987,7 +987,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         Width = 52
         Height = 13
         Alignment = taRightJustify
-        Caption = 'Acheté le :'
+        Caption = 'Achet'#233' le :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -1003,7 +1003,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         Top = 52
         Width = 45
         Height = 13
-        Caption = 'Acheté le'
+        Caption = 'Achet'#233' le'
       end
       object Label15: TLabel
         Left = 17
@@ -1133,7 +1133,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         Width = 49
         Height = 13
         Alignment = taRightJustify
-        Caption = 'N° perso :'
+        Caption = 'N'#176' perso :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -1305,7 +1305,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         Height = 16
         TabStop = False
         Alignment = taLeftJustify
-        Caption = 'Dédicacé'
+        Caption = 'D'#233'dicac'#233
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clHotLight
@@ -1357,21 +1357,21 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
     object EmpruntApercu: TAction
       Tag = 1
       Category = 'Emprunts'
-      Caption = 'Aperçu avant impression'
+      Caption = 'Aper'#231'u avant impression'
       ImageIndex = 4
       OnExecute = Imprimer1Click
     end
     object FicheApercu: TAction
       Tag = 1
       Category = 'Fiche'
-      Caption = 'Aperçu avant impression'
+      Caption = 'Aper'#231'u avant impression'
       ImageIndex = 4
       OnExecute = Impression1Click
     end
     object CouvertureApercu: TAction
       Tag = 1
       Category = 'Couverture'
-      Caption = 'Aperçu avant impression'
+      Caption = 'Aper'#231'u avant impression'
       ImageIndex = 4
       OnExecute = Imprimer2Click
     end
