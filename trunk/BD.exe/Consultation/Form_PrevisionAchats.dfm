@@ -19,7 +19,7 @@ object frmPrevisionsAchats: TfrmPrevisionsAchats
     Left = 0
     Top = 25
     Width = 862
-    Height = 563
+    Height = 569
     Align = alClient
     BevelKind = bkTile
     BorderStyle = bsNone

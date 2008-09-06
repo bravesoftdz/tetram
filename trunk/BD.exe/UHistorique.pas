@@ -23,21 +23,37 @@ type
     fcRefreshRepertoire,
     fcParaBD,
     fcImageParaBD,
-    fcSerie
+    fcSerie,
+    fcGestionAjout,
+    fcGestionModif,
+    fcGestionSupp,
+    fcGestionAchat
     );
 
 const
-  NoSaveHistorique: set of TActionConsultation = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire];
-  CanRefresh: set of TActionConsultation = [fcAlbum, fcEmprunteur, fcAuteur, fcSeriesIncompletes, fcPrevisionsSorties, fcPrevisionsAchats];
-  MustRefresh: set of TActionConsultation = [fcRecherche, fcStock];
+  UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat];
+  NoSaveHistorique = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire]
+    // à cause des callback, les appels de gestion ne peuvent pas être sauvés
+    // et puis je vois pas bien à quoi ça pourrait servir
+    + UsedInGestion;
+  CanRefresh = [fcAlbum, fcEmprunteur, fcAuteur, fcSeriesIncompletes, fcPrevisionsSorties, fcPrevisionsAchats];
+  MustRefresh = [fcRecherche, fcStock];
 
 type
+  TConsultCallback = procedure(Data: Pointer);
+
   TConsult = class
     Action: TActionConsultation;
     ReferenceGUID, ReferenceGUID2: TGUID;
     Reference, Reference2: Integer;
     Description: string;
     Stream: TMemoryStream;
+
+    GestionCallback: TConsultCallback;
+    GestionCallbackData: Pointer;
+
+    GestionProc, GestionVTV: Pointer;
+    GestionValeur: string;
 
     constructor Create;
     destructor Destroy; override;
@@ -71,6 +87,8 @@ type
     procedure AddWaiting(Consultation: TActionConsultation; Ref: Integer = -1; Ref2: Integer = -1); overload;
     procedure AddWaiting(Consultation: TActionConsultation; const Ref: TGUID; Ref2: Integer = -1); overload;
     procedure AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: TGUID); overload;
+    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Valeur: string = ''); overload;
+    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Ref: TGUID; const Valeur: string = ''); overload;
 
     procedure Refresh;
     procedure Back;
@@ -96,7 +114,7 @@ var
 implementation
 
 uses
-  MAJ, Main, Forms;
+  MAJ, Main, Forms, Proc_Gestions;
 
 procedure THistory.AddConsultation(Consult: TConsult);
 
@@ -115,9 +133,11 @@ procedure THistory.AddConsultation(Consult: TConsult);
   end;
 
 begin
-  if not Bool(FLockCount) then begin
+  if not Bool(FLockCount) then
+  begin
     if (FCurrentConsultation > -1) and (Consult.Action = CurrentConsult.Action) then
-      with CurrentConsult do begin
+      with CurrentConsult do
+      begin
         if Consult.Action in MustRefresh then
           Modifie
         else if not (Consult.Action in CanRefresh) or (Reference <> Consult.Reference) or (not IsEqualGUID(ReferenceGUID, Consult.ReferenceGUID)) or (Reference2 <> Consult.Reference2) or (not IsEqualGUID(ReferenceGUID2, Consult.ReferenceGUID2)) then
@@ -150,7 +170,8 @@ end;
 procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: TGUID);
 begin
   FListWaiting.Add(TConsult.Create);
-  with TConsult(FListWaiting.Last) do begin
+  with TConsult(FListWaiting.Last) do
+  begin
     Action := Consultation;
     Reference := -1;
     ReferenceGUID := Ref;
@@ -162,7 +183,8 @@ end;
 procedure THistory.AddWaiting(Consultation: TActionConsultation; Ref, Ref2: Integer);
 begin
   FListWaiting.Add(TConsult.Create);
-  with TConsult(FListWaiting.Last) do begin
+  with TConsult(FListWaiting.Last) do
+  begin
     Action := Consultation;
     Reference := Ref;
     ReferenceGUID := GUID_NULL;
@@ -174,7 +196,8 @@ end;
 procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref: TGUID; Ref2: Integer);
 begin
   FListWaiting.Add(TConsult.Create);
-  with TConsult(FListWaiting.Last) do begin
+  with TConsult(FListWaiting.Last) do
+  begin
     Action := Consultation;
     Reference := -1;
     ReferenceGUID := Ref;
@@ -183,9 +206,33 @@ begin
   end;
 end;
 
+procedure THistory.AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Valeur: string);
+begin
+  AddWaiting(Consultation, Callback, CallbackData, Proc, VTV, GUID_NULL, Valeur);
+end;
+
+procedure THistory.AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Ref: TGUID; const Valeur: string);
+begin
+  FListWaiting.Add(TConsult.Create);
+  with TConsult(FListWaiting.Last) do
+  begin
+    Action := Consultation;
+
+    ReferenceGUID := Ref;
+
+    GestionCallback := Callback;
+    GestionCallbackData := CallbackData;
+
+    GestionProc := Proc;
+    GestionVTV := VTV;
+    GestionValeur := Valeur;
+  end;
+end;
+
 procedure THistory.Back;
 begin
-  if FCurrentConsultation > 0 then begin
+  if FCurrentConsultation > 0 then
+  begin
     Dec(FCurrentConsultation);
     Refresh;
   end;
@@ -273,11 +320,13 @@ begin
   Result := Consult.Description;
 
   if Result = '' then
-    if Index = FCurrentConsultation then begin
+    if Index = FCurrentConsultation then
+    begin
       Consult.Description := 'Ask: ' + FormatDateTime('c', Now);
       Result := Consult.Description;
     end
-    else begin
+    else
+    begin
       Consult.Description := 'Unknown: ' + FormatDateTime('c', Now);
       Result := Consult.Description;
     end;
@@ -308,15 +357,19 @@ end;
 
 procedure THistory.Next;
 begin
-  if Bool(CountConsultation) and (FCurrentConsultation < CountConsultation - 1) then begin
+  if Bool(CountConsultation) and (FCurrentConsultation < CountConsultation - 1) then
+  begin
     Inc(FCurrentConsultation);
     Refresh;
   end;
 end;
 
 function THistory.Open(Consult: TConsult; WithLock: Boolean): Boolean;
+var
+  doCallback: Boolean;
 begin
   Result := True;
+  doCallback := False;
   if WithLock then Lock;
   try
     if not (Consult.Action in NoSaveHistorique) then
@@ -338,8 +391,21 @@ begin
       fcRecreateToolBar: Fond.RechargeToolBar;
       fcPrevisionsAchats: MAJPrevisionsAchats;
       fcRefreshRepertoire: Fond.actActualiseRepertoire.Execute;
+
+      fcGestionAjout:
+        if not IsEqualGUID(GUID_NULL, Consult.ReferenceGUID) then
+          doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAddWithRef(Consult.GestionProc)(Consult.GestionVTV, Consult.ReferenceGUID, Consult.GestionValeur))
+        else
+          doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAdd(Consult.GestionProc)(Consult.GestionVTV, Consult.GestionValeur));
+      fcGestionModif: doCallback := TActionGestionModif(Consult.GestionProc)(Consult.GestionVTV);
+      fcGestionSupp: doCallback := TActionGestionSupp(Consult.GestionProc)(Consult.GestionVTV);
+      fcGestionAchat: doCallback := TActionGestionAchat(Consult.GestionProc)(Consult.GestionVTV);
     end;
-    if not Result then begin
+    if doCallback and (Consult.Action in UsedInGestion) and Assigned(Consult.GestionCallback) then
+      Consult.GestionCallback(Consult.GestionCallbackData);
+
+    if not Result then
+    begin
       Delete(FCurrentConsultation);
       BackWaiting;
       Result := True;

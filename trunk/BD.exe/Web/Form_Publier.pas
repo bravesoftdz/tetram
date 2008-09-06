@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ComCtrls, ExtCtrls, Fram_Boutons;
+  Dialogs, StdCtrls, ComCtrls, ExtCtrls, Fram_Boutons, UBdtForms;
 
 type
-  TfrmPublier = class(TForm)
+  TfrmPublier = class(TBdtForm)
     GroupBox1: TGroupBox;
     DateTimePicker1: TDateTimePicker;
     RadioButton1: TRadioButton;
@@ -358,6 +358,7 @@ var
                 //                  ss.Free;
                 //                end;
                 //              end;
+                uftNumeric: contenuChamp := StringReplace(Fields.AsString[i], DecimalSeparator, '.', []);
                 else
                   contenuChamp := Trim(Fields.AsString[i]);
               end;

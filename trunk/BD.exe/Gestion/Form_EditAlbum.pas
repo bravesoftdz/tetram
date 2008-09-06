@@ -189,7 +189,8 @@ type
 implementation
 
 uses
-  Commun, JvUIB, CommonConst, Textes, Divers, Proc_Gestions, JvUIBLib, Procedures, ProceduresBDtk, Types, jpeg, DateUtils;
+  Commun, JvUIB, CommonConst, Textes, Divers, Proc_Gestions, JvUIBLib, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
+  UHistorique;
 
 {$R *.DFM}
 
@@ -197,6 +198,16 @@ const
   RemplacerValeur = 'Remplacer %s par %s ?';
 
   { TFrmEditAlbum }
+
+type
+  PRefresh = ^RRefresh;
+  RRefresh = record
+    F: TFrmEditAlbum;
+    iCurrentAuteur: TGUID;
+  end;
+
+var
+  R: RRefresh;
 
 procedure TFrmEditAlbum.FormCreate(Sender: TObject);
 var
@@ -494,7 +505,7 @@ end;
 
 procedure TFrmEditAlbum.VDTButton2Click(Sender: TObject);
 begin
-  ModifierSeries(vtSeries);
+  Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierSeries, vtSeries);
 end;
 
 procedure TFrmEditAlbum.ChoixImageClick(Sender: TObject);
@@ -597,12 +608,20 @@ begin
   vstImages.Invalidate;
 end;
 
+procedure RefreshNewSerie(Data: PRefresh);
+begin
+  with Data.F do
+  begin
+    vtEditeurs.InitializeRep;
+    vtCollections.InitializeRep;
+    vtSeriesChange(vtSeries, vtSeries.FocusedNode);
+  end;
+end;
+
 procedure TFrmEditAlbum.OnNewSerie(Sender: TObject);
 begin
-  AjouterSeries(vtSeries, FrameRechercheRapideSerie.edSearch.Text);
-  vtEditeurs.InitializeRep;
-  vtCollections.InitializeRep;
-  vtSeriesChange(vtSeries, vtSeries.FocusedNode);
+  R.F := Self;
+  Historique.AddWaiting(fcGestionAjout, @RefreshNewSerie, @R, @AjouterSeries, vtSeries, FrameRechercheRapideSerie.edSearch.Text);
 end;
 
 procedure TFrmEditAlbum.FormActivate(Sender: TObject);
@@ -773,7 +792,7 @@ end;
 
 procedure TFrmEditAlbum.OnNewCollection(Sender: TObject);
 begin
-  AjouterCollections(vtCollections, vtEditeurs.CurrentValue, FrameRechercheRapideCollection.edSearch.Text);
+  Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterCollections2, vtCollections, vtEditeurs.CurrentValue, FrameRechercheRapideCollection.edSearch.Text);
 end;
 
 procedure TFrmEditAlbum.SpeedButton3Click(Sender: TObject);
@@ -988,13 +1007,12 @@ begin
   end;
 end;
 
-procedure TFrmEditAlbum.vtSeriesDblClick(Sender: TObject);
+procedure RefreshEditSerie(Data: PRefresh);
 var
   i: TGUID;
 begin
-  if (vtSeries.GetFirstSelected <> nil) then
+  with Data.F do
   begin
-    ModifierSeries(vtSeries);
     i := vtCollections.CurrentValue;
     vtEditeurs.InitializeRep;
     vtCollections.InitializeRep;
@@ -1003,58 +1021,72 @@ begin
   end;
 end;
 
-procedure TFrmEditAlbum.vtPersonnesDblClick(Sender: TObject);
+procedure TFrmEditAlbum.vtSeriesDblClick(Sender: TObject);
+begin
+  if (vtSeries.GetFirstSelected <> nil) then
+  begin
+    R.F := Self;
+    Historique.AddWaiting(fcGestionModif, @RefreshEditSerie, @R, @ModifierSeries, vtSeries);
+  end;
+end;
+
+procedure RefreshAuteurs(Data: PRefresh);
 var
   i: Integer;
-  iCurrentAuteur: TGUID;
   Auteur: TAuteur;
   CurrentAuteur: TPersonnage;
 begin
-  iCurrentAuteur := vtPersonnes.CurrentValue;
-  if ModifierAuteurs(vtPersonnes) then
+  with Data.F do
   begin
     CurrentAuteur := vtPersonnes.GetFocusedNodeData;
     for i := 0 to Pred(lvScenaristes.Items.Count) do
     begin
       Auteur := lvScenaristes.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then
+      if IsEqualGUID(Auteur.Personne.ID, Data.iCurrentAuteur) then
       begin
         Auteur.Personne.Assign(CurrentAuteur);
-        lvScenaristes.Items[i].Caption := Auteur.ChaineAffichage;
+        lvScenaristes.Invalidate;
       end;
     end;
     lvScenaristes.Invalidate;
     for i := 0 to Pred(lvDessinateurs.Items.Count) do
     begin
       Auteur := lvDessinateurs.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then
+      if IsEqualGUID(Auteur.Personne.ID, Data.iCurrentAuteur) then
       begin
         Auteur.Personne.Assign(CurrentAuteur);
-        lvDessinateurs.Items[i].Caption := Auteur.ChaineAffichage;
+        lvDessinateurs.Invalidate;
       end;
     end;
     lvDessinateurs.Invalidate;
     for i := 0 to Pred(lvColoristes.Items.Count) do
     begin
       Auteur := lvColoristes.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then
+      if IsEqualGUID(Auteur.Personne.ID, Data.iCurrentAuteur) then
       begin
         Auteur.Personne.Assign(CurrentAuteur);
-        lvColoristes.Items[i].Caption := Auteur.ChaineAffichage;
+        lvColoristes.Invalidate;
       end;
     end;
     lvColoristes.Invalidate;
   end;
 end;
 
+procedure TFrmEditAlbum.vtPersonnesDblClick(Sender: TObject);
+begin
+  R.F := Self;
+  R.iCurrentAuteur := vtPersonnes.CurrentValue;
+  Historique.AddWaiting(fcGestionModif, @RefreshAuteurs, @R, @ModifierAuteurs, vtPersonnes);
+end;
+
 procedure TFrmEditAlbum.vtEditeursDblClick(Sender: TObject);
 begin
-  ModifierEditeurs(vtEditeurs);
+  Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierEditeurs, vtEditeurs);
 end;
 
 procedure TFrmEditAlbum.vtCollectionsDblClick(Sender: TObject);
 begin
-  ModifierCollections(vtCollections);
+  Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierCollections, vtCollections);
 end;
 
 procedure TFrmEditAlbum.cbIntegraleClick(Sender: TObject);
@@ -1105,7 +1137,7 @@ begin
   if Assigned(ms) then
   try
     jpg := TJPEGImage.Create;
-    Frm := TForm.Create(Self);
+    Frm := TBdtForm.Create(Self);
     Couverture := TImage.Create(Frm);
     try
       jpg.LoadFromStream(ms);

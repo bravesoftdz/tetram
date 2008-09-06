@@ -35,7 +35,7 @@ implementation
 
 uses
   JvUIB, Commun, Procedures, Proc_Gestions,
-  Textes;
+  Textes, UHistorique;
 
 {$R *.DFM}
 
@@ -65,14 +65,16 @@ procedure TFrmEditCollection.Frame11btnOKClick(Sender: TObject);
 var
   ID_Editeur: TGUID;
 begin
-  if Length(Trim(edNom.Text)) = 0 then begin
+  if Length(Trim(edNom.Text)) = 0 then
+  begin
     AffMessage(rsNomObligatoire, mtInformation, [mbOk], True);
     edNom.SetFocus;
     ModalResult := mrNone;
     Exit;
   end;
   ID_Editeur := vtEditeurs.CurrentValue;
-  if IsEqualGUID(ID_Editeur, GUID_NULL) then begin
+  if IsEqualGUID(ID_Editeur, GUID_NULL) then
+  begin
     AffMessage(rsEditeurObligatoire, mtInformation, [mbOk], True);
     FrameRechercheRapide1.edSearch.SetFocus;
     ModalResult := mrNone;
@@ -89,7 +91,7 @@ end;
 
 procedure TFrmEditCollection.vtEditeursDblClick(Sender: TObject);
 begin
-  ModifierEditeurs(vtEditeurs);
+  Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierEditeurs, vtEditeurs);
 end;
 
 function TFrmEditCollection.GetID_Collection: TGUID;

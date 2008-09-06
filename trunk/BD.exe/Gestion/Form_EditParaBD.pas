@@ -99,7 +99,8 @@ type
 implementation
 
 uses
-  JvUIB, Commun, jvuiblib, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, TypeRec, Divers;
+  JvUIB, Commun, jvuiblib, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, TypeRec, Divers,
+  UHistorique;
 
 {$R *.dfm}
 
@@ -157,7 +158,8 @@ begin
     if FParaBD.HasImage then cbImageBDD.Checked := FParaBD.ImageStockee;
 
     Stream := GetCouvertureStream(True, FParaBD.ID_ParaBD, imgVisu.Height, imgVisu.Width, Utilisateur.Options.AntiAliasing);
-    if Assigned(Stream) then try
+    if Assigned(Stream) then
+    try
       jpg := TJPEGImage.Create;
       try
         jpg.LoadFromStream(Stream);
@@ -246,19 +248,22 @@ var
   PrixCote: Currency;
   hg: IHourGlass;
 begin
-  if Utilisateur.Options.SerieObligatoireParaBD and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then begin
+  if Utilisateur.Options.SerieObligatoireParaBD and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  begin
     AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
     FrameRechercheRapideSerie.edSearch.SetFocus;
     ModalResult := mrNone;
     Exit;
   end;
-  if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then begin
+  if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  begin
     AffMessage(rsTitreObligatoireParaBDSansSerie, mtInformation, [mbOk], True);
     edTitre.SetFocus;
     ModalResult := mrNone;
     Exit;
   end;
-  if cbxCategorie.Value = -1 then begin
+  if cbxCategorie.Value = -1 then
+  begin
     AffMessage(rsTypeParaBDObligatoire, mtInformation, [mbOk], True);
     // cbxType.SetFocus;
     ModalResult := mrNone;
@@ -267,7 +272,8 @@ begin
 
   AnneeCote := StrToIntDef(edAnneeCote.Text, 0);
   PrixCote := StrToCurrDef(StringReplace(edPrixCote.Text, Utilisateur.Options.SymboleMonnetaire, '', []), 0);
-  if (AnneeCote * PrixCote = 0) and (AnneeCote + PrixCote <> 0) then begin
+  if (AnneeCote * PrixCote = 0) and (AnneeCote + PrixCote <> 0) then
+  begin
     // une cote doit être composée d'une année ET d'un prix
     AffMessage(rsCoteIncomplete, mtInformation, [mbOk], True);
     edAnneeCote.SetFocus;
@@ -315,15 +321,18 @@ var
   Stream: TStream;
   jpg: TJPEGImage;
 begin
-  with ChoixImageDialog do begin
+  with ChoixImageDialog do
+  begin
     Options := Options - [ofAllowMultiSelect];
     Filter := GraphicFilter(TGraphic);
     InitialDir := RepImages;
     FileName := '';
-    if Execute then begin
+    if Execute then
+    begin
       FParaBD.FichierImage := FileName;
       Stream := GetCouvertureStream(FParaBD.FichierImage, imgVisu.Height, imgVisu.Width, Utilisateur.Options.AntiAliasing);
-      if Assigned(Stream) then try
+      if Assigned(Stream) then
+      try
         jpg := TJPEGImage.Create;
         try
           jpg.LoadFromStream(Stream);
@@ -348,7 +357,8 @@ var
   begin
     i := 0;
     Result := True;
-    while Result and (i <= Pred(LV.Items.Count)) do begin
+    while Result and (i <= Pred(LV.Items.Count)) do
+    begin
       Result := not IsEqualGUID(TAuteur(LV.Items[i].Data).Personne.ID, IdPersonne);
       Inc(i);
     end;
@@ -359,25 +369,43 @@ begin
   btCreateur.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(lvAuteurs);
 end;
 
-procedure TFrmEditParaBD.vtPersonnesDblClick(Sender: TObject);
+type
+  PRefresh = ^RRefresh;
+  RRefresh = record
+    F: TFrmEditParaBD;
+    iCurrentAuteur: TGUID;
+  end;
+
+procedure RefreshAuteurs(Data: PRefresh);
 var
   i: Integer;
-  iCurrentAuteur: TGUID;
   Auteur: TAuteur;
   CurrentAuteur: TPersonnage;
 begin
-  iCurrentAuteur := vtPersonnes.CurrentValue;
-  if ModifierAuteurs(vtPersonnes) then begin
+  with Data.F do
+  begin
     CurrentAuteur := vtPersonnes.GetFocusedNodeData;
-    for i := 0 to Pred(lvAuteurs.Items.Count) do begin
+    for i := 0 to Pred(lvAuteurs.Items.Count) do
+    begin
       Auteur := lvAuteurs.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
+      if IsEqualGUID(Auteur.Personne.ID, Data.iCurrentAuteur) then
+      begin
         Auteur.Personne.Assign(CurrentAuteur);
         lvAuteurs.Items[i].Caption := Auteur.ChaineAffichage;
       end;
     end;
     lvAuteurs.Invalidate;
   end;
+end;
+
+var
+  R: RRefresh;
+
+procedure TFrmEditParaBD.vtPersonnesDblClick(Sender: TObject);
+begin
+  R.F := Self;
+  R.iCurrentAuteur := vtPersonnes.CurrentValue;
+  Historique.AddWaiting(fcGestionModif, @RefreshAuteurs, @R, @ModifierAuteurs, vtPersonnes);
 end;
 
 procedure TFrmEditParaBD.btCreateurClick(Sender: TObject);

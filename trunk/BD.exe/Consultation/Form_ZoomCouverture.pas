@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls, ActnList, ToolWin, StdCtrls,
-  Procedures, Menus, ProceduresBDtk;
+  Procedures, Menus, ProceduresBDtk, UBdtForms;
 
 type
-  TFrmZoomCouverture = class(TForm, IImpressionApercu)
+  TFrmZoomCouverture = class(TBdtForm, IImpressionApercu)
     ImageApercu: TAction;
     ImageImprimer: TAction;
     Panel: TPanel;

@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, LoadComplet, VirtualTrees, VirtualTree, ToolWin,
-  ProceduresBDtk, StdCtrls, ExtCtrls, Menus, ActnList;
+  ProceduresBDtk, StdCtrls, ExtCtrls, Menus, ActnList, UBdtForms;
 
 type
-  TfrmSeriesIncompletes = class(TForm, IImpressionApercu)
+  TfrmSeriesIncompletes = class(TBdtForm, IImpressionApercu)
     vstAlbumsManquants: TVirtualStringTree;
     ActionList1: TActionList;
     ListeApercu: TAction;

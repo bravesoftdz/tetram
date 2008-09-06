@@ -20,7 +20,7 @@ object frmSeriesIncompletes: TfrmSeriesIncompletes
     Left = 0
     Top = 25
     Width = 814
-    Height = 198
+    Height = 204
     Align = alClient
     AnimationDuration = 0
     BevelKind = bkTile

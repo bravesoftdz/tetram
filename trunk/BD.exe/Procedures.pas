@@ -75,7 +75,7 @@ implementation
 uses
   Divers, Textes, ShellAPI, ReadOnlyCheckBox,
   JvUIBase, MaskUtils, Mask, DM_Princ, IniFiles, Math, VirtualTrees, DbEditLabeled, ActnList,
-  Types;
+  Types, UBdtForms;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
 begin
@@ -916,7 +916,7 @@ var
   FPanel: TPanel;
 begin
   if Assigned(FInfo) then Exit;
-  FInfo := TForm.Create(Application);
+  FInfo := TbdtForm.Create(Application);
   with FInfo do
   begin
     AutoSize := True;

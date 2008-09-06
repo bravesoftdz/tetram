@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs;
+  Dialogs, UBdtForms;
 
 type
-  TfrmFusion = class(TForm)
+  TfrmFusion = class(TBdtForm)
   private
     { Déclarations privées }
   public

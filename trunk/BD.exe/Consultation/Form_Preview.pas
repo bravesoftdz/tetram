@@ -5,10 +5,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ComCtrls, StdCtrls, ExtCtrls, ToolWin, Menus, Printers, PrintObject, ImgList;
+  ComCtrls, StdCtrls, ExtCtrls, ToolWin, Menus, Printers, PrintObject, ImgList, UBdtForms;
 
 type
-  TFrmPreview = class(TForm, IPrintObjectPreview)
+  TFrmPreview = class(TBdtForm, IPrintObjectPreview)
     ToolBar1: TToolBar;
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;

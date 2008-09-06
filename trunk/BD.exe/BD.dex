@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <Project>
   <Options>
-    <ProjectSettings Value="Local:Debug"/>
+    <ProjectSettings Value="Local:Release"/>
   </Options>
   <ProjectSettings>
     <ProjectSetting Name="Debug">
@@ -483,13 +483,13 @@
       <RemoteDebug Value="False" Active="False"/>
       <Align Value="8" Active="True"/>
       <BoolEval Value="0" Active="True"/>
-      <Assertions Value="1" Active="True"/>
-      <UnitDebugInfo Value="1" Active="True"/>
+      <Assertions Value="0" Active="True"/>
+      <UnitDebugInfo Value="0" Active="True"/>
       <ImportedData Value="1" Active="True"/>
       <LongStrings Value="1" Active="True"/>
       <IOChecks Value="1" Active="True"/>
       <WriteableConst Value="1" Active="True"/>
-      <LocalSymbols Value="1" Active="True"/>
+      <LocalSymbols Value="0" Active="True"/>
       <TypeInfo Value="0" Active="True"/>
       <Optimization Value="1" Active="True"/>
       <OpenStrings Value="1" Active="True"/>
@@ -501,7 +501,7 @@
       <VarStringChecks Value="1" Active="True"/>
       <StackFrames Value="0" Active="True"/>
       <ExtendedSyntax Value="1" Active="True"/>
-      <ReferenceInfo Value="1" Active="True"/>
+      <ReferenceInfo Value="0" Active="True"/>
       <MinEnumSize Value="1" Active="True"/>
       <DebugInfo Value="False" Active="True"/>
       <RemoteSymbols Value="False" Active="True"/>

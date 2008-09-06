@@ -41,7 +41,7 @@ type
 implementation
 
 uses
-  Proc_Gestions;
+  Proc_Gestions, UHistorique;
 
 {$R *.dfm}
 
@@ -63,7 +63,8 @@ end;
 
 procedure TFrameRechercheRapide.DoSearch(NextSearch: Boolean);
 begin
-  if Assigned(FVirtualTreeView) then begin
+  if Assigned(FVirtualTreeView) then
+  begin
     FVirtualTreeView.Find(edSearch.Text, NextSearch);
     DoOnSearch(NextSearch);
   end;
@@ -87,12 +88,14 @@ end;
 procedure TFrameRechercheRapide.SetShowNewButton(const Value: Boolean);
 begin
   btNew.Visible := Value;
-  if Value then begin
+  if Value then
+  begin
     btNew.Left := Self.Width - btNew.Width;
     btNext.Left := btNew.Left - btNext.Width - 1;
     edSearch.Width := btNext.Left - 1;
   end
-  else begin
+  else
+  begin
     btNext.Left := Self.Width - btNext.Width;
     edSearch.Width := btNext.Left - 1;
   end;
@@ -101,7 +104,8 @@ end;
 procedure TFrameRechercheRapide.SetVirtualTreeView(const Value: TVirtualStringTree);
 begin
   FVirtualTreeView := Value;
-  if Assigned(FVirtualTreeView) then begin
+  if Assigned(FVirtualTreeView) then
+  begin
     try
       edSearch.LinkControls.Add(btNext);
     except
@@ -126,19 +130,19 @@ begin
   else if Assigned(FVirtualTreeView) then
     case FVirtualTreeView.Mode of
       vmNone: ;
-      vmEditeurs: AjouterEditeurs(FVirtualTreeView, edSearch.Text);
-      vmCollections: AjouterCollections(FVirtualTreeView, edSearch.Text);
-      vmPersonnes: AjouterAuteurs(FVirtualTreeView, edSearch.Text);
-      vmSeries: AjouterSeries(FVirtualTreeView, edSearch.Text);
+      vmEditeurs: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterEditeurs, FVirtualTreeView, edSearch.Text);
+      vmCollections: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterCollections, FVirtualTreeView, edSearch.Text);
+      vmPersonnes: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterAuteurs, FVirtualTreeView, edSearch.Text);
+      vmSeries: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterSeries, FVirtualTreeView, edSearch.Text);
       vmAlbums,
         vmAlbumsAnnee,
         vmAlbumsCollection,
         vmAlbumsEditeur,
         vmAlbumsGenre,
-        vmAlbumsSerie: AjouterAlbums(FVirtualTreeView, edSearch.Text);
-      vmGenres: AjouterGenres(FVirtualTreeView, edSearch.Text);
-      vmEmprunteurs: AjouterEmprunteurs(FVirtualTreeView, edSearch.Text);
-      vmParaBDSerie: AjouterParaBD(FVirtualTreeView, edSearch.Text);
+        vmAlbumsSerie: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterAlbums, FVirtualTreeView, edSearch.Text);
+      vmGenres: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterGenres, FVirtualTreeView, edSearch.Text);
+      vmEmprunteurs: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterEmprunteurs, FVirtualTreeView, edSearch.Text);
+      vmParaBDSerie: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterParaBD, FVirtualTreeView, edSearch.Text);
       else
         Assert(True, 'Mode non prévu dans l''ajout')
     end;

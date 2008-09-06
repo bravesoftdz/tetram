@@ -76,7 +76,8 @@ type
 
 implementation
 
-uses Math, CommonConst, Proc_Gestions, Commun, Procedures, Textes, Divers, jvuiblib;
+uses Math, CommonConst, Proc_Gestions, Commun, Procedures, Textes, Divers, jvuiblib,
+  UHistorique;
 
 {$R *.dfm}
 
@@ -109,11 +110,13 @@ begin
   FrameRechercheRapideSerie.VirtualTreeView := vtSeries;
   FrameRechercheRapideAlbums.VirtualTreeView := vstAlbums;
   FrameRechercheRapideAlbums.ShowNewButton := False;
-  if Mode_en_cours = mdConsult then begin
+  if Mode_en_cours = mdConsult then
+  begin
     Frame11.Align := alBottom;
     Frame11.btnOK.Caption := 'Ok';
   end
-  else begin
+  else
+  begin
     Frame11.Align := alTop;
     Frame11.btnOK.Caption := 'Enregistrer';
   end;
@@ -133,11 +136,13 @@ begin
   TabSheet1.TabVisible := FAlbum.RecInconnu;
   TabSheet2.TabVisible := FAlbum.RecInconnu;
 
-  if FAlbum.Complet then begin
+  if FAlbum.Complet then
+  begin
     PageControl1.ActivePage := TabSheet2;
     vstAlbums.CurrentValue := FAlbum.ID_Album;
   end
-  else begin
+  else
+  begin
     PageControl1.ActivePage := TabSheet1;
     edTitre.Text := FAlbum.Titre;
     edMoisParution.Text := NonZero(IntToStr(FAlbum.MoisParution));
@@ -190,47 +195,57 @@ end;
 
 procedure TFrmEditAchatAlbum.Frame11btnOKClick(Sender: TObject);
 begin
-  if PageControl1.ActivePage = TabSheet1 then begin
-    if Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then begin
+  if PageControl1.ActivePage = TabSheet1 then
+  begin
+    if Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+    begin
       AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
       FrameRechercheRapideSerie.edSearch.SetFocus;
       ModalResult := mrNone;
       Exit;
     end;
-    if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then begin
+    if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+    begin
       AffMessage(rsTitreObligatoireAlbumSansSerie, mtInformation, [mbOk], True);
       edTitre.SetFocus;
       ModalResult := mrNone;
       Exit;
     end;
-    if not (StrToIntDef(edMoisParution.Text, 1) in [1..12]) then begin
+    if not (StrToIntDef(edMoisParution.Text, 1) in [1..12]) then
+    begin
       AffMessage(rsMoisParutionIncorrect, mtInformation, [mbOk], True);
       edMoisParution.SetFocus;
       ModalResult := mrNone;
       Exit;
     end;
   end
-  else if IsEqualGUID(vstAlbums.CurrentValue, GUID_NULL) then begin
+  else if IsEqualGUID(vstAlbums.CurrentValue, GUID_NULL) then
+  begin
     AffMessage(rsAlbumObligatoire, mtInformation, [mbOk], True);
     FrameRechercheRapideAlbums.edSearch.SetFocus;
     ModalResult := mrNone;
     Exit;
   end;
 
-  if PageControl1.ActivePage = TabSheet2 then begin
-    if (not IsEqualGUID(vstAlbums.CurrentValue, ID_Album)) and (not IsEqualGUID(ID_Album, GUID_NULL)) then begin
+  if PageControl1.ActivePage = TabSheet2 then
+  begin
+    if (not IsEqualGUID(vstAlbums.CurrentValue, ID_Album)) and (not IsEqualGUID(ID_Album, GUID_NULL)) then
+    begin
       FAlbum.Acheter(False);
       FAlbum.Fill(vstAlbums.CurrentValue);
     end;
     FAlbum.Acheter(True);
   end
-  else begin
+  else
+  begin
     FAlbum.Titre := Trim(edTitre.Text);
-    if edAnneeParution.Text = '' then begin
+    if edAnneeParution.Text = '' then
+    begin
       FAlbum.AnneeParution := 0;
       FAlbum.MoisParution := 0;
     end
-    else begin
+    else
+    begin
       FAlbum.AnneeParution := StrToInt(edAnneeParution.Text);
       if edMoisParution.Text = '' then
         FAlbum.MoisParution := 0
@@ -268,7 +283,8 @@ var
     // PRealisateur peut être utilisé pour transtyper un PActeur
     i := 0;
     Result := True;
-    while Result and (i <= Pred(LV.Items.Count)) do begin
+    while Result and (i <= Pred(LV.Items.Count)) do
+    begin
       Result := not IsEqualGUID(TAuteur(LV.Items[i].Data).Personne.ID, IdPersonne);
       Inc(i);
     end;
@@ -281,41 +297,63 @@ begin
   btColoriste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVColoristes);
 end;
 
-procedure TFrmEditAchatAlbum.vtPersonnesDblClick(Sender: TObject);
+type
+  PRefresh = ^RRefresh;
+  RRefresh = record
+    F: TFrmEditAchatAlbum;
+    iCurrentAuteur: TGUID;
+  end;
+
+procedure RefreshAuteurs(Data: PRefresh);
 var
   i: Integer;
-  iCurrentAuteur: TGUID;
   Auteur: TAuteur;
   CurrentAuteur: TPersonnage;
 begin
-  iCurrentAuteur := vtPersonnes.CurrentValue;
-  if ModifierAuteurs(vtPersonnes) then begin
+  with Data.F do
+  begin
     CurrentAuteur := vtPersonnes.GetFocusedNodeData;
-    for i := 0 to Pred(lvScenaristes.Items.Count) do begin
+    for i := 0 to Pred(lvScenaristes.Items.Count) do
+    begin
       Auteur := lvScenaristes.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
+      if IsEqualGUID(Auteur.Personne.ID, Data.iCurrentAuteur) then
+      begin
         Auteur.Personne.Assign(CurrentAuteur);
-        lvScenaristes.Items[i].Caption := Auteur.ChaineAffichage;
+        lvScenaristes.Invalidate;
       end;
     end;
     lvScenaristes.Invalidate;
-    for i := 0 to Pred(lvDessinateurs.Items.Count) do begin
+    for i := 0 to Pred(lvDessinateurs.Items.Count) do
+    begin
       Auteur := lvDessinateurs.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
+      if IsEqualGUID(Auteur.Personne.ID, Data.iCurrentAuteur) then
+      begin
         Auteur.Personne.Assign(CurrentAuteur);
-        lvDessinateurs.Items[i].Caption := Auteur.ChaineAffichage;
+        lvDessinateurs.Invalidate;
       end;
     end;
     lvDessinateurs.Invalidate;
-    for i := 0 to Pred(lvColoristes.Items.Count) do begin
+    for i := 0 to Pred(lvColoristes.Items.Count) do
+    begin
       Auteur := lvColoristes.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
+      if IsEqualGUID(Auteur.Personne.ID, Data.iCurrentAuteur) then
+      begin
         Auteur.Personne.Assign(CurrentAuteur);
-        lvColoristes.Items[i].Caption := Auteur.ChaineAffichage;
+        lvColoristes.Invalidate;
       end;
     end;
     lvColoristes.Invalidate;
   end;
+end;
+
+var
+  R: RRefresh;
+
+procedure TFrmEditAchatAlbum.vtPersonnesDblClick(Sender: TObject);
+begin
+  R.F := Self;
+  R.iCurrentAuteur := vtPersonnes.CurrentValue;
+  Historique.AddWaiting(fcGestionModif, @RefreshAuteurs, @R, @ModifierAuteurs, vtPersonnes);
 end;
 
 procedure TFrmEditAchatAlbum.btScenaristeClick(Sender: TObject);
@@ -348,24 +386,29 @@ var
 begin
   FAlbum.ID_Serie := vtSeries.CurrentValue;
   btResetSerie.Enabled := not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
-  if btResetSerie.Enabled then begin
-    if not (FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then try
+  if btResetSerie.Enabled then
+  begin
+    if not (FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then
+    try
       lvScenaristes.Items.BeginUpdate;
       lvDessinateurs.Items.BeginUpdate;
       lvColoristes.Items.BeginUpdate;
-      if not FScenaristesSelected then begin
+      if not FScenaristesSelected then
+      begin
         lvScenaristes.Items.Count := 0;
         FAlbum.Scenaristes.Clear;
         for i := 0 to Pred(FAlbum.Serie.Scenaristes.Count) do
           AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TAuteur(FAlbum.Serie.Scenaristes[i]).Personne);
       end;
-      if not FDessinateursSelected then begin
+      if not FDessinateursSelected then
+      begin
         lvDessinateurs.Items.Count := 0;
         FAlbum.Dessinateurs.Clear;
         for i := 0 to Pred(FAlbum.Serie.Dessinateurs.Count) do
           AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TAuteur(FAlbum.Serie.Dessinateurs[i]).Personne);
       end;
-      if not FColoristesSelected then begin
+      if not FColoristesSelected then
+      begin
         lvColoristes.Items.Count := 0;
         FAlbum.Coloristes.Clear;
         for i := 0 to Pred(FAlbum.Serie.Coloristes.Count) do
@@ -379,11 +422,20 @@ begin
   end;
 end;
 
+procedure RefreshEditSerie(Data: PRefresh);
+begin
+  with Data.F do
+  begin
+    vtSeriesChange(vtSeries, vtSeries.GetFirstSelected);
+  end;
+end;
+
 procedure TFrmEditAchatAlbum.vtSeriesDblClick(Sender: TObject);
 begin
-  if (vtSeries.GetFirstSelected <> nil) then begin
-    ModifierSeries(vtSeries);
-    vtSeriesChange(vtSeries, vtSeries.GetFirstSelected);
+  if (vtSeries.GetFirstSelected <> nil) then
+  begin
+    R.F := Self;
+    Historique.AddWaiting(fcGestionModif, @RefreshEditSerie, @R, @ModifierSeries, vtSeries);
   end;
 end;
 

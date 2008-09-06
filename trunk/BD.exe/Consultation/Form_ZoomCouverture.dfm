@@ -20,7 +20,7 @@ object FrmZoomCouverture: TFrmZoomCouverture
     Left = 0
     Top = 0
     Width = 362
-    Height = 488
+    Height = 494
     Align = alClient
     BevelOuter = bvNone
     TabOrder = 0

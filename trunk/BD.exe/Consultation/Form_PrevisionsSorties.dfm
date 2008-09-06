@@ -20,7 +20,7 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
     Left = 0
     Top = 26
     Width = 814
-    Height = 306
+    Height = 312
     Align = alClient
     AnimationDuration = 0
     BevelKind = bkTile

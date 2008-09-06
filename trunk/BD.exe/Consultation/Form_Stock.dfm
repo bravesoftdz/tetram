@@ -17,7 +17,7 @@ object FrmStock: TFrmStock
   OnDestroy = FormDestroy
   DesignSize = (
     1102
-    555)
+    561)
   PixelsPerInch = 96
   TextHeight = 13
   object Bevel1: TBevel

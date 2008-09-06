@@ -79,7 +79,7 @@ var
 
 implementation
 
-uses Commun, CommonConst, Procedures, Form_WizardImport;
+uses Commun, CommonConst, Procedures, Form_WizardImport, UHistorique;
 
 const
   HintListeAlbums = 'Liste des albums';
@@ -215,19 +215,19 @@ end;
 procedure TFrmGestions.ajouterClick(Sender: TObject);
 begin
   with GestionCourante^ do
-    ProcAjouter(VirtualTreeView, FrameRechercheRapide1.edSearch.Text);
+    Historique.AddWaiting(fcGestionAjout, nil, nil, @ProcAjouter, VirtualTreeView, FrameRechercheRapide1.edSearch.Text);
 end;
 
 procedure TFrmGestions.modifierClick(Sender: TObject);
 begin
   with GestionCourante^ do
-    ProcModifier(VirtualTreeView);
+    Historique.AddWaiting(fcGestionModif, nil, nil, @ProcModifier, VirtualTreeView);
 end;
 
 procedure TFrmGestions.supprimerClick(Sender: TObject);
 begin
   with GestionCourante^ do
-    ProcSupprimer(VirtualTreeView);
+    Historique.AddWaiting(fcGestionSupp, nil, nil, @ProcSupprimer, VirtualTreeView);
 end;
 
 procedure TFrmGestions.SpeedButton1Click(Sender: TObject);
@@ -277,7 +277,7 @@ end;
 procedure TFrmGestions.btAcheterClick(Sender: TObject);
 begin
   with GestionCourante^ do
-    ProcAcheter(VirtualTreeView);
+    Historique.AddWaiting(fcGestionAchat, nil, nil, @ProcAcheter, VirtualTreeView);
 end;
 
 procedure TFrmGestions.btImporterClick(Sender: TObject);

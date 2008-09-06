@@ -113,7 +113,9 @@ type
   RModeInfo = record
     FILTRECOUNT, FILTRE, FIELDS: string;
     INITIALEFIELDS, INITIALEVALUE, REFFIELDS: string;
-    TABLESEARCH: string; FIELDSEARCH: string; SEARCHORDER: string;
+    TABLESEARCH: string;
+    FIELDSEARCH: string;
+    SEARCHORDER: string;
     WHERECONDITION: string;
     DEFAULTFILTRE: string;
   end;
@@ -266,7 +268,8 @@ begin
   TreeOptions.MiscOptions := [{toFullRepaintOnResize, }toInitOnSave, toToggleOnDblClick, toWheelPanning];
   TreeOptions.SelectionOptions := [toFullRowSelect];
   TreeOptions.StringOptions := [toSaveCaptions, toShowStaticText, toAutoAcceptEditChange];
-  if Header.Columns.Count > 0 then begin
+  if Header.Columns.Count > 0 then
+  begin
     Header.AutoSizeIndex := 0;
     Header.Options := Header.Options + [hoAutoResize];
   end;
@@ -279,6 +282,15 @@ begin
   FUseDefaultFiltre := True;
   SetLength(FFindArray, 0);
   FLastFindText := '';
+  Color := clWhite;
+  //  if clBtnFace = clWhite then
+  begin
+    Colors.BorderColor := clSilver;
+    Colors.GridLineColor := clSilver;
+    Colors.TreeLineColor := clSilver;
+    Colors.UnfocusedSelectionColor := clSilver;
+    Colors.UnfocusedSelectionBorderColor := clSilver;
+  end;
 end;
 
 procedure TVirtualStringTree.DoAfterPaint(Canvas: TCanvas);
@@ -289,7 +301,8 @@ var
   p: TPoint;
 begin
   inherited;
-  if RootNodeCount = 0 then begin
+  if RootNodeCount = 0 then
+  begin
     Ext := Canvas.TextExtent(s);
     p.X := (Width - Ext.cx) div 2;
     p.Y := (Height - Ext.cy) div 2;
@@ -324,9 +337,11 @@ var
   NodeInfo: ^RNodeInfo;
 begin
   if FMode <> vmNone then
-    if (GetNodeLevel(Node) = 0) then begin
+    if (GetNodeLevel(Node) = 0) then
+    begin
       NodeInfo := GetNodeData(Node);
-      if Assigned(NodeInfo.List) then begin
+      if Assigned(NodeInfo.List) then
+      begin
         TBasePointeur.VideListe(NodeInfo.List);
         NodeInfo.List.Free;
       end;
@@ -341,7 +356,8 @@ var
 begin
   Text := '';
   if FMode <> vmNone then
-    if GetNodeLevel(Node) > 0 then begin
+    if GetNodeLevel(Node) > 0 then
+    begin
       if TextType = ttStatic then Exit;
       case FMode of
         vmAlbums,
@@ -350,12 +366,14 @@ begin
           vmAlbumsEditeur,
           vmAlbumsGenre,
           vmAlbumsSerie,
-          vmAchatsAlbumsEditeur: begin
+          vmAchatsAlbumsEditeur:
+          begin
             PA := RNodeInfo(GetNodeData(Node)^).Detail as TAlbum;
             case Header.Columns.Count of
               2:
                 case Column of
-                  0: begin
+                  0:
+                    begin
                       Text := PA.ChaineAffichage(False);
                       if FShowDateParutionAlbum then
                         AjoutString(Text, IIf(PA.MoisParution > 0, ShortMonthNames[PA.MoisParution] + ' ', '') + NonZero(IntToStr(PA.AnneeParution)), ' - ');
@@ -369,7 +387,8 @@ begin
                   2: Text := IIf(PA.MoisParution > 0, ShortMonthNames[PA.MoisParution] + ' ', '') + NonZero(IntToStr(PA.AnneeParution));
                   3: Text := FormatTitre(PA.Serie);
                 end;
-              else begin
+              else
+                begin
                   Text := PA.ChaineAffichage(FMode <> vmAlbumsSerie);
                   if FShowDateParutionAlbum then
                     AjoutString(Text, IIf(PA.MoisParution > 0, ShortMonthNames[PA.MoisParution] + ' ', '') + NonZero(IntToStr(PA.AnneeParution)), ' - ');
@@ -380,18 +399,22 @@ begin
           vmPersonnes,
           vmGenres,
           vmEditeurs,
-          vmCollections: begin
+          vmCollections:
+          begin
             Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(True);
           end;
-        vmSeries: begin
+        vmSeries:
+          begin
             Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(False);
           end;
-        vmParaBDSerie: begin
+        vmParaBDSerie:
+          begin
             Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(False);
           end;
       end;
     end
-    else begin
+    else
+    begin
       if (Column = 0) or (Column = -1) then
         if TextType = ttNormal then
           if FCountPointers[Node.Index].Initiale <> '-1' then
@@ -416,7 +439,8 @@ var
   q: TJvUIBQuery;
   ClassPointeur: TClassBasePointeur;
 begin
-  if (FMode <> vmNone) and (GetNodeLevel(Node) = 0) then begin
+  if (FMode <> vmNone) and (GetNodeLevel(Node) = 0) then
+  begin
     case FMode of
       vmAlbums,
         vmAlbumsAnnee,
@@ -440,7 +464,8 @@ begin
     InfoNode := GetNodeData(Node);
     if not Assigned(InfoNode.List) then InfoNode.List := TList.Create;
     q := TJvUIBQuery.Create(Self);
-    with q do try
+    with q do
+    try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'SELECT ' + vmModeInfos[FMode].FIELDS + ' FROM ' + vmModeInfos[FMode].FILTRE;
       Params.AsString[0] := FCountPointers[Node.Index].sValue;
@@ -449,7 +474,8 @@ begin
       else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
         Params.AsString[1] := vmModeInfos[FMode].DEFAULTFILTRE;
       Open;
-      while not Eof do begin
+      while not Eof do
+      begin
         InfoNode.List.Add(ClassPointeur.Make(Q));
         Next;
       end;
@@ -467,11 +493,13 @@ var
 begin
   NodeInfo := GetNodeData(Node);
   if FMode <> vmNone then
-    if GetNodeLevel(Node) > 0 then begin
+    if GetNodeLevel(Node) > 0 then
+    begin
       NodeInfo.Detail := RNodeInfo(GetNodeData(Parent)^).List[Node.Index];
       InitStates := InitStates - [ivsHasChildren];
     end
-    else begin
+    else
+    begin
       NodeInfo.List := nil;
       NodeInfo.InitialeInfo := @FCountPointers[Node.Index];
       if LongBool(FCountPointers[Node.Index].Count) then
@@ -488,7 +516,8 @@ var
 begin
   InfoNode := GetNodeData(Node);
   if (FMode <> vmNone) and (TextType = ttNormal) then
-    if (GetNodeLevel(Node) = 0) then begin
+    if (GetNodeLevel(Node) = 0) then
+    begin
       Canvas.Font.Height := -11;
       Canvas.Font.Style := Canvas.Font.Style + [fsBold];
     end
@@ -505,7 +534,8 @@ end;
 procedure TVirtualStringTree.DoScroll(DeltaX, DeltaY: Integer);
 begin
   inherited;
-  if SynchroBackground then begin
+  if SynchroBackground then
+  begin
     BackgroundOffsetY := BackgroundOffsetY - DeltaY;
     BackgroundOffsetX := BackgroundOffsetX - DeltaX;
   end;
@@ -519,12 +549,14 @@ var
 begin
   if (Text <> FLastFindText) then GetNext := False;
   FLastFindText := Text;
-  if FMode = vmNone then begin
+  if FMode = vmNone then
+  begin
     nCurrent := nil;
     if GetNext then nCurrent := GetFirstSelected;
     if nCurrent = nil then nCurrent := GetFirst;
     nFind := nil;
-    while nFind <> nCurrent do begin
+    while nFind <> nCurrent do
+    begin
       if nFind = nil then
         if GetNext then
           nFind := Self.GetNext(nCurrent)
@@ -541,18 +573,22 @@ begin
       FocusedNode := nil;
     Selected[nFind] := True;
   end
-  else begin
+  else
+  begin
     if (Length(FFindArray) = 0) then GetNext := False;
-    if Text = '' then begin
+    if Text = '' then
+    begin
       CurrentValue := GUID_NULL;
       SetLength(FFindArray, 0);
       Exit;
     end;
-    if GetNext then begin
+    if GetNext then
+    begin
       iCurrent := CurrentValue;
       iFind := FFindArray[0];
       for i := 0 to Pred(Length(FFindArray)) do
-        if IsEqualGUID(FFindArray[i], iCurrent) then begin
+        if IsEqualGUID(FFindArray[i], iCurrent) then
+        begin
           // pas besoin de tester si on est sur le dernier: on ne peut pas puisque c'est une copie du premier
           iFind := FFindArray[i + 1];
           Break;
@@ -560,7 +596,8 @@ begin
       CurrentValue := iFind;
     end
     else
-      with TJvUIBQuery.Create(nil) do try
+      with TJvUIBQuery.Create(nil) do
+      try
         Transaction := GetTransaction(DMPrinc.UIBDataBase);
         SQL.Text := 'SELECT ' + vmModeInfos[FMode].REFFIELDS + ' FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].FIELDSEARCH + ' LIKE ''%'' || ? || ''%''';
         if FUseFiltre then
@@ -574,7 +611,8 @@ begin
         Open;
         SetLength(FFindArray, 0);
         i := 0;
-        while not Eof do begin
+        while not Eof do
+        begin
           Inc(i);
           // pour gagner en rapidité, on alloue par espace de 250 positions
           if i > Length(FFindArray) then SetLength(FFindArray, i + 250);
@@ -601,11 +639,13 @@ procedure TVirtualStringTree.FindIndexNode;
 var
   Node: PVirtualNode;
 begin
-  if FMemorizedIndexNode then begin
+  if FMemorizedIndexNode then
+  begin
     Node := GetFirst;
     while Assigned(Node) and (Node.Index <> FIndexNode) do
       Node := GetNextSibling(Node);
-    if Assigned(Node) then begin
+    if Assigned(Node) then
+    begin
       FocusedNode := Node;
       Selected[Node] := True;
       Expanded[Node] := True;
@@ -619,7 +659,8 @@ var
   Node: PVirtualNode;
 begin
   Result := GUID_NULL;
-  if FMode <> vmNone then begin
+  if FMode <> vmNone then
+  begin
     Node := GetFirstSelected;
     if GetNodeLevel(Node) > 0 then
       Result := RNodeInfo(GetNodeData(Node)^).Detail.ID;
@@ -649,7 +690,8 @@ end;
 function TVirtualStringTree.GetFocusedNodeData: Pointer;
 begin
   Result := nil;
-  if FMode <> vmNone then begin
+  if FMode <> vmNone then
+  begin
     Result := GetNodeBasePointer(GetFirstSelected);
   end;
 end;
@@ -662,7 +704,8 @@ begin
   iCurrent := CurrentValue;
   Clear;
   if FMode <> vmNone then
-    with TJvUIBQuery.Create(Self) do begin
+    with TJvUIBQuery.Create(Self) do
+    begin
       BeginUpdate;
       try
         Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -675,7 +718,8 @@ begin
 
         SetLength(FCountPointers, 0);
         i := 0;
-        while not Eof do begin
+        while not Eof do
+        begin
           // on alloue par plage de 250 pour eviter de le faire trop souvent
           if Length(FCountPointers) <= i then SetLength(FCountPointers, Length(FCountPointers) + 250);
           FCountPointers[i].Count := Fields.AsInteger[1];
@@ -688,7 +732,7 @@ begin
         end;
         // on retire ce qui a été alloué en trop
         SetLength(FCountPointers, Length(FCountPointers));
-        
+
         RootNodeCount := Length(FCountPointers);
       finally
         Transaction.Free;
@@ -721,18 +765,22 @@ var
 begin
   if FMode = vmNone then Exit;
 
-  if IsEqualGUID(Value, GUID_NULL) then begin
+  if IsEqualGUID(Value, GUID_NULL) then
+  begin
     FocusedNode := nil;
     ClearSelection;
     Exit;
   end;
-  with TJvUIBQuery.Create(nil) do try
+  with TJvUIBQuery.Create(nil) do
+  try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT coalesce(' + vmModeInfos[FMode].INITIALEVALUE + ', ''-1'') FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].REFFIELDS + ' = ?';
     Params.AsString[0] := GUIDToString(Value);
     Open;
-    if Eof then begin
-      ClearSelection; Exit;
+    if Eof then
+    begin
+      ClearSelection;
+      Exit;
     end;
     init := 0;
 
@@ -744,7 +792,8 @@ begin
     while Assigned(Node) and (Node.Index <> init) do
       Node := Node.NextSibling;
     ChildNode := nil;
-    if Assigned(Node) then begin
+    if Assigned(Node) then
+    begin
       InitNode(Node);
       InitChildren(Node);
       ChildNode := Node.FirstChild;
@@ -813,7 +862,8 @@ end;
 
 function TVirtualStringTree.DoCompareNodeString(Node: PVirtualNode; const Text: WideString): Boolean;
 begin
-  if Assigned(FOnCompareNodeString) then begin
+  if Assigned(FOnCompareNodeString) then
+  begin
     Result := False;
     FOnCompareNodeString(Self, Node, Text, Result);
   end

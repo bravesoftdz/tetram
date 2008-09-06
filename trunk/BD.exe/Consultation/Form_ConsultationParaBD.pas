@@ -5,10 +5,10 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls, ReadOnlyCheckBox, Main, Procedures,
-  ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk;
+  ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms;
 
 type
-  TFrmConsultationParaBD = class(TForm, IImpressionApercu)
+  TFrmConsultationParaBD = class(TBdtForm, IImpressionApercu)
     ScrollBox2: TScrollBox;
     lbNoImage: TLabel;
     l_sujet: TLabel;

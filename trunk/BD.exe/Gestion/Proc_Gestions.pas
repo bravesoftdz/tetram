@@ -7,6 +7,7 @@ uses
 
 type
   TActionGestionAdd = function(VT: TVirtualStringTree; const Valeur: string): TGUID;
+  TActionGestionAddWithRef = function(VT: TVirtualStringTree; const ID_Editeur: TGUID; const Valeur: string): TGUID;
   TActionGestionModif = function(VT: TVirtualStringTree): Boolean;
   TActionGestionSupp = function(VT: TVirtualStringTree): Boolean;
   TActionGestionAchat = function(VT: TVirtualStringTree): Boolean;
@@ -41,7 +42,7 @@ function AjouterEmprunteurs(VT: TVirtualStringTree; const Valeur: string): TGUID
 function ModifierEmprunteurs(VT: TVirtualStringTree): Boolean;
 function SupprimerEmprunteurs(VT: TVirtualStringTree): Boolean;
 
-function AjouterCollections(VT: TVirtualStringTree; const ID_Editeur: TGUID; const Valeur: string): TGUID; overload;
+function AjouterCollections2(VT: TVirtualStringTree; const ID_Editeur: TGUID; const Valeur: string): TGUID;
 function AjouterCollections(VT: TVirtualStringTree; const Valeur: string): TGUID; overload;
 function ModifierCollections(VT: TVirtualStringTree): Boolean;
 function SupprimerCollections(VT: TVirtualStringTree): Boolean;
@@ -65,7 +66,8 @@ function AjouterEditeurs(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationEditeur(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
-  if Assigned(VT) then begin
+  if Assigned(VT) then
+  begin
     VT.InitializeRep(False);
     VT.CurrentValue := Result;
   end;
@@ -92,7 +94,8 @@ begin
   VT.MemorizeIndexNode;
   if AffMessage(rsLienEditeur + #13 + rsSupprimerEditeur, mtConfirmation, [mbYes, mbNo], True) <> mrYes then Exit;
   Result := DelEditeur(i);
-  if Result then begin
+  if Result then
+  begin
     VT.InitializeRep(False);
     VT.FindIndexNode;
   end
@@ -105,7 +108,8 @@ function AjouterAchatsAlbum(VT: TVirtualStringTree; const Valeur: string): TGUID
 begin
   Result := CreationAchatAlbum(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
-  if Assigned(VT) then begin
+  if Assigned(VT) then
+  begin
     VT.InitializeRep(False);
     VT.CurrentValue := Result;
   end;
@@ -138,7 +142,8 @@ begin
     s := rsLienAchatAlbum + #13 + s;
   if AffMessage(s, mtConfirmation, [mbYes, mbNo], True) <> mrYes then Exit;
   Result := DelAchatAlbum(i);
-  if Result then begin
+  if Result then
+  begin
     VT.InitializeRep(False);
     VT.FindIndexNode;
   end
@@ -151,7 +156,8 @@ function AjouterAlbums(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationAlbum(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
-  if Assigned(VT) then begin
+  if Assigned(VT) then
+  begin
     VT.InitializeRep(False);
     VT.CurrentValue := Result;
   end;
@@ -189,7 +195,8 @@ begin
   VT.MemorizeIndexNode;
   if AffMessage(rsLienAlbum + #13 + rsSupprimerAlbum, mtConfirmation, [mbYes, mbNo], True) <> mrYes then Exit;
   Result := DelAlbum(i);
-  if Result then begin
+  if Result then
+  begin
     VT.InitializeRep(False);
     VT.FindIndexNode;
   end
@@ -202,7 +209,8 @@ function AjouterGenres(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationGenre(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
-  if Assigned(VT) then begin
+  if Assigned(VT) then
+  begin
     VT.InitializeRep(False);
     VT.CurrentValue := Result;
   end;
@@ -229,7 +237,8 @@ begin
   VT.MemorizeIndexNode;
   if AffMessage(rsLienGenre + #13 + rsSupprimerGenre, mtConfirmation, [mbYes, mbNo], True) <> mrYes then Exit;
   Result := DelGenre(i);
-  if Result then begin
+  if Result then
+  begin
     VT.InitializeRep(False);
     VT.FindIndexNode;
   end
@@ -242,7 +251,8 @@ function AjouterAuteurs(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationAuteur(FormalizeNom(Valeur));
   if IsEqualGUID(Result, GUID_NULL) then Exit;
-  if Assigned(VT) then begin
+  if Assigned(VT) then
+  begin
     VT.InitializeRep(False);
     VT.CurrentValue := Result;
   end;
@@ -252,7 +262,8 @@ function AjouterAuteurs2(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationAuteur2(FormalizeNom(Valeur));
   if IsEqualGUID(Result, GUID_NULL) then Exit;
-  if Assigned(VT) then begin
+  if Assigned(VT) then
+  begin
     VT.InitializeRep(False);
     VT.CurrentValue := Result;
   end;
@@ -279,7 +290,8 @@ begin
   VT.MemorizeIndexNode;
   if AffMessage(rsLienAuteur + #13 + rsSupprimerAuteur, mtConfirmation, [mbYes, mbNo], True) <> mrYes then Exit;
   Result := DelAuteur(i);
-  if Result then begin
+  if Result then
+  begin
     VT.InitializeRep(False);
     VT.FindIndexNode;
   end
@@ -292,7 +304,8 @@ function AjouterSeries(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationSerie(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
-  if Assigned(VT) then begin
+  if Assigned(VT) then
+  begin
     VT.InitializeRep(False);
     VT.CurrentValue := Result;
   end;
@@ -319,7 +332,8 @@ begin
   VT.MemorizeIndexNode;
   if AffMessage(rsLienSerie + #13 + rsSupprimerSerie, mtConfirmation, [mbYes, mbNo], True) <> mrYes then Exit;
   Result := DelSupport(i);
-  if Result then begin
+  if Result then
+  begin
     VT.InitializeRep(False);
     VT.FindIndexNode;
   end
@@ -332,7 +346,8 @@ function AjouterEmprunteurs(VT: TVirtualStringTree; const Valeur: string): TGUID
 begin
   Result := CreationEmprunteur(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
-  if Assigned(VT) then begin
+  if Assigned(VT) then
+  begin
     VT.InitializeRep(False);
     VT.CurrentValue := Result;
   end;
@@ -359,7 +374,8 @@ begin
   VT.MemorizeIndexNode;
   if AffMessage(rsLienEmprunteur + #13 + rsSupprimerEmprunteur, mtConfirmation, [mbYes, mbNo], True) <> mrYes then Exit;
   Result := DelEmprunteur(i);
-  if Result then begin
+  if Result then
+  begin
     VT.InitializeRep(False);
     VT.FindIndexNode;
   end
@@ -368,11 +384,12 @@ begin
 end;
 //********************************************************************************************************************
 
-function AjouterCollections(VT: TVirtualStringTree; const ID_Editeur: TGUID; const Valeur: string): TGUID;
+function AjouterCollections2(VT: TVirtualStringTree; const ID_Editeur: TGUID; const Valeur: string): TGUID;
 begin
   Result := CreationCollection(ID_Editeur, Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
-  if Assigned(VT) then begin
+  if Assigned(VT) then
+  begin
     VT.InitializeRep(False);
     VT.CurrentValue := Result;
   end;
@@ -380,7 +397,7 @@ end;
 
 function AjouterCollections(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
-  Result := AjouterCollections(VT, GUID_NULL, Valeur);
+  Result := AjouterCollections2(VT, GUID_NULL, Valeur);
 end;
 
 function ModifierCollections(VT: TVirtualStringTree): Boolean;
@@ -404,7 +421,8 @@ begin
   VT.MemorizeIndexNode;
   if AffMessage(rsLienCollection + #13 + rsSupprimerCollection, mtConfirmation, [mbYes, mbNo], True) <> mrYes then Exit;
   Result := DelCollection(i);
-  if Result then begin
+  if Result then
+  begin
     VT.InitializeRep(False);
     VT.FindIndexNode;
   end
@@ -417,7 +435,8 @@ function AjouterParaBD(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationParaBD(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
-  if Assigned(VT) then begin
+  if Assigned(VT) then
+  begin
     VT.InitializeRep(False);
     VT.CurrentValue := Result;
   end;
@@ -453,8 +472,10 @@ begin
   i := VT.CurrentValue;
   if IsEqualGUID(i, GUID_NULL) then Exit;
   VT.MemorizeIndexNode;
-  if AffMessage(rsLienParaBD + #13 + rsSupprimerParaBD, mtConfirmation, [mbYes, mbNo], True) <> mrYes then Exit;  Result := DelParaBD(i);
-  if Result then begin
+  if AffMessage(rsLienParaBD + #13 + rsSupprimerParaBD, mtConfirmation, [mbYes, mbNo], True) <> mrYes then Exit;
+  Result := DelParaBD(i);
+  if Result then
+  begin
     VT.InitializeRep(False);
     VT.FindIndexNode;
   end
@@ -462,11 +483,13 @@ begin
     VT.ClearIndexNode;
 end;
 //*********************************************************************************************************
+
 function AjouterAchatsParaBD(VT: TVirtualStringTree; const Valeur: string): TGUID;
 begin
   Result := CreationAchatParaBD(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then Exit;
-  if Assigned(VT) then begin
+  if Assigned(VT) then
+  begin
     VT.InitializeRep(False);
     VT.CurrentValue := Result;
   end;
@@ -499,7 +522,8 @@ begin
     s := rsLienAchatParaBD + #13 + s;
   if AffMessage(s, mtConfirmation, [mbYes, mbNo], True) <> mrYes then Exit;
   Result := DelAchatParaBD(i);
-  if Result then begin
+  if Result then
+  begin
     VT.InitializeRep(False);
     VT.FindIndexNode;
   end

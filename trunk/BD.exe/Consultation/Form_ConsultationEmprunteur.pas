@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, DBCtrls, StdCtrls, Menus, ComCtrls, ExtCtrls, ActnList,
-  ToolWin, VirtualTrees, ProceduresBDtk, LoadComplet;
+  ToolWin, VirtualTrees, ProceduresBDtk, LoadComplet, UBdtForms;
 
 type
-  TFrmConsultationEmprunteur = class(TForm, IImpressionApercu)
+  TFrmConsultationEmprunteur = class(TBdtForm, IImpressionApercu)
     ActionList1: TActionList;
     FicheImprime: TAction;
     FicheApercu: TAction;

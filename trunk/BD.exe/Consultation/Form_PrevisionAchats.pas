@@ -5,10 +5,10 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Menus, ActnList, VirtualTrees, VirtualTree, Buttons, VDTButton, ProceduresBDtk,
-  ExtCtrls, Procedures, ComboCheck, StdCtrls;
+  ExtCtrls, Procedures, ComboCheck, StdCtrls, UBdtForms;
 
 type
-  TfrmPrevisionsAchats = class(TForm, IImpressionApercu)
+  TfrmPrevisionsAchats = class(TBdtForm, IImpressionApercu)
     vstPrevisionsAchats: TVirtualStringTree;
     ActionList1: TActionList;
     ListeApercu: TAction;

@@ -4,11 +4,11 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls,
-  Main, VDTButton, ActnList, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, ProceduresBDtk, GraphicEx,
+  Main, VDTButton, ActnList, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, ProceduresBDtk, GraphicEx, UbdtForms,
   jpeg, ShellAPI, LoadComplet, CRFurtif;
 
 type
-  TFrmConsultationAlbum = class(TForm, IImpressionApercu)
+  TFrmConsultationAlbum = class(TBdtForm, IImpressionApercu)
     Popup3: TPopupMenu;
     Informations1: TMenuItem;
     Emprunts1: TMenuItem;

@@ -91,7 +91,8 @@ type
 implementation
 
 uses
-  Commun, Proc_Gestions, TypeRec, JvUIB, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG;
+  Commun, Proc_Gestions, TypeRec, JvUIB, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
+  UHistorique;
 
 {$R *.DFM}
 
@@ -133,7 +134,8 @@ end;
 
 procedure TFrmEditSerie.Frame11btnOKClick(Sender: TObject);
 begin
-  if Length(Trim(edTitre.Text)) = 0 then begin
+  if Length(Trim(edTitre.Text)) = 0 then
+  begin
     AffMessage(rsTitreObligatoire, mtInformation, [mbOk], True);
     edTitre.SetFocus;
     ModalResult := mrNone;
@@ -221,7 +223,7 @@ end;
 
 procedure TFrmEditSerie.OnNewCollection(Sender: TObject);
 begin
-  AjouterCollections(vtCollections, vtEditeurs.CurrentValue, FrameRechercheRapideCollection.edSearch.Text);
+  Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterCollections2, vtCollections, vtEditeurs.CurrentValue, FrameRechercheRapideCollection.edSearch.Text);
 end;
 
 procedure TFrmEditSerie.edTitreChange(Sender: TObject);
@@ -234,10 +236,12 @@ var
   ID_Editeur: TGUID;
 begin
   ID_Editeur := vtEditeurs.CurrentValue;
-  if IsEqualGUID(ID_Editeur, GUID_NULL) then begin
+  if IsEqualGUID(ID_Editeur, GUID_NULL) then
+  begin
     vtCollections.Mode := vmNone;
   end
-  else begin
+  else
+  begin
     vtCollections.Filtre := 'ID_Editeur = ' + QuotedStr(GUIDToString(ID_Editeur));
     if vtCollections.Mode <> vmCollections then vtCollections.Mode := vmCollections;
   end;
@@ -246,7 +250,8 @@ end;
 
 procedure TFrmEditSerie.vtGenresInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 begin
-  if Sender.GetNodeLevel(Node) > 0 then begin
+  if Sender.GetNodeLevel(Node) > 0 then
+  begin
     Node.CheckType := ctCheckBox;
     if Assigned(FSerie) and (FSerie.Genres.IndexOfName(GUIDToString(TGenre(RNodeInfo(vtGenres.GetNodeData(Node)^).Detail).ID)) <> -1) then
       Node.CheckState := csCheckedNormal
@@ -263,7 +268,8 @@ var
   NodeInfo: PNodeInfo;
 begin
   NodeInfo := vtGenres.GetNodeData(Node);
-  if Assigned(NodeInfo) and Assigned(NodeInfo.Detail) then begin
+  if Assigned(NodeInfo) and Assigned(NodeInfo.Detail) then
+  begin
     PG := NodeInfo.Detail as TGenre;
     i := FSerie.Genres.IndexOfName(GUIDToString(PG.ID));
     if i = -1 then
@@ -279,22 +285,22 @@ end;
 
 procedure TFrmEditSerie.vtEditeursDblClick(Sender: TObject);
 begin
-  ModifierEditeurs(vtEditeurs);
+  Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierEditeurs, vtEditeurs);
 end;
 
 procedure TFrmEditSerie.vtCollectionsDblClick(Sender: TObject);
 begin
-  ModifierCollections(vtCollections);
+  Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierCollections, vtCollections);
 end;
 
 procedure TFrmEditSerie.vtGenresDblClick(Sender: TObject);
 begin
-  ModifierGenres(vtGenres);
+  Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierGenres, vtGenres);
 end;
 
 procedure TFrmEditSerie.vtAlbumsDblClick(Sender: TObject);
 begin
-  ModifierAlbums(vtAlbums);
+  Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierAlbums, vtAlbums);
 end;
 
 procedure TFrmEditSerie.VDTButton13Click(Sender: TObject);
@@ -318,7 +324,8 @@ var
     // PRealisateur peut être utilisé pour transtyper un PActeur
     i := 0;
     Result := True;
-    while Result and (i <= Pred(LV.Items.Count)) do begin
+    while Result and (i <= Pred(LV.Items.Count)) do
+    begin
       Result := not IsEqualGUID(TAuteur(LV.Items[i].Data).Personne.ID, IdPersonne);
       Inc(i);
     end;
@@ -331,35 +338,47 @@ begin
   btColoriste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVColoristes);
 end;
 
-procedure TFrmEditSerie.vtPersonnesDblClick(Sender: TObject);
+type
+  PRefresh = ^RRefresh;
+  RRefresh = record
+    F: TFrmEditSerie;
+    iCurrentAuteur: TGUID;
+  end;
+
+procedure RefreshAuteurs(Data: PRefresh);
 var
   i: Integer;
-  iCurrentAuteur: TGUID;
   Auteur: TAuteur;
   CurrentAuteur: TPersonnage;
 begin
-  iCurrentAuteur := vtPersonnes.CurrentValue;
-  if ModifierAuteurs(vtPersonnes) then begin
+  with Data.F do
+  begin
     CurrentAuteur := vtPersonnes.GetFocusedNodeData;
-    for i := 0 to Pred(lvScenaristes.Items.Count) do begin
+    for i := 0 to Pred(lvScenaristes.Items.Count) do
+    begin
       Auteur := lvScenaristes.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
+      if IsEqualGUID(Auteur.Personne.ID, Data.iCurrentAuteur) then
+      begin
         Auteur.Personne.Assign(CurrentAuteur);
         lvScenaristes.Invalidate;
       end;
     end;
     lvScenaristes.Invalidate;
-    for i := 0 to Pred(lvDessinateurs.Items.Count) do begin
+    for i := 0 to Pred(lvDessinateurs.Items.Count) do
+    begin
       Auteur := lvDessinateurs.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
+      if IsEqualGUID(Auteur.Personne.ID, Data.iCurrentAuteur) then
+      begin
         Auteur.Personne.Assign(CurrentAuteur);
         lvDessinateurs.Invalidate;
       end;
     end;
     lvDessinateurs.Invalidate;
-    for i := 0 to Pred(lvColoristes.Items.Count) do begin
+    for i := 0 to Pred(lvColoristes.Items.Count) do
+    begin
       Auteur := lvColoristes.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, iCurrentAuteur) then begin
+      if IsEqualGUID(Auteur.Personne.ID, Data.iCurrentAuteur) then
+      begin
         Auteur.Personne.Assign(CurrentAuteur);
         lvColoristes.Invalidate;
       end;
@@ -368,27 +387,40 @@ begin
   end;
 end;
 
+var
+  R: RRefresh;
+
+procedure TFrmEditSerie.vtPersonnesDblClick(Sender: TObject);
+begin
+  R.F := Self;
+  R.iCurrentAuteur := vtPersonnes.CurrentValue;
+  Historique.AddWaiting(fcGestionModif, @RefreshAuteurs, @R, @ModifierAuteurs, vtPersonnes);
+end;
+
 procedure TFrmEditSerie.btColoristeClick(Sender: TObject);
 var
   PA: TAuteur;
 begin
   if IsEqualGUID(vtPersonnes.CurrentValue, GUID_NULL) then Exit;
   case TSpeedButton(Sender).Tag of
-    1: begin
+    1:
+      begin
         PA := TAuteur.Create;
         PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), GUID_NULL, ID_Serie, 0);
         FSerie.Scenaristes.Add(PA);
         lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
         lvScenaristes.Invalidate;
       end;
-    2: begin
+    2:
+      begin
         PA := TAuteur.Create;
         PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), GUID_NULL, ID_Serie, 1);
         FSerie.Dessinateurs.Add(PA);
         lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
         lvDessinateurs.Invalidate;
       end;
-    3: begin
+    3:
+      begin
         PA := TAuteur.Create;
         PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), GUID_NULL, ID_Serie, 2);
         FSerie.Coloristes.Add(PA);
@@ -417,7 +449,8 @@ end;
 
 procedure TFrmEditSerie.ScanEditKeyPress(Sender: TObject; var Key: Char);
 begin
-  if Key = #13 then begin
+  if Key = #13 then
+  begin
     Key := #0;
     if vtGenres.GetFirstSelected <> nil then
       if vtGenres.CheckState[vtGenres.GetFirstSelected] = csCheckedNormal then
@@ -452,7 +485,7 @@ end;
 
 procedure TFrmEditSerie.vtParaBDDblClick(Sender: TObject);
 begin
-  ModifierParaBD(vtParaBD);
+  Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierParaBD, vtParaBD);
 end;
 
 procedure TFrmEditSerie.cbTermineeClick(Sender: TObject);

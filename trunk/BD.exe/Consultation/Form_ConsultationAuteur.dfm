@@ -22,14 +22,14 @@ object FrmConsultationAuteur: TFrmConsultationAuteur
     Left = 0
     Top = 0
     Width = 522
-    Height = 753
+    Height = 759
     Align = alClient
     BorderStyle = bsNone
     ParentBackground = True
     TabOrder = 0
     DesignSize = (
       522
-      753)
+      759)
     object l_sujet: TLabel
       Left = 3
       Top = 41
@@ -104,7 +104,7 @@ object FrmConsultationAuteur: TFrmConsultationAuteur
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 750
+      Top = 756
       Width = 522
       Height = 3
       Align = alBottom

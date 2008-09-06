@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, DBCtrls, Menus, ExtCtrls, ComCtrls, Commun,
-  VDTButton, VirtualTrees, ActnList, ComboCheck, DBEditLabeled, ProceduresBDtk, ToolWin;
+  VDTButton, VirtualTrees, ActnList, ComboCheck, DBEditLabeled, ProceduresBDtk, ToolWin, UBdtForms;
 
 type
-  TFrmStock = class(TForm, IImpressionApercu)
+  TFrmStock = class(TBdtForm, IImpressionApercu)
     PopupMenu1: TPopupMenu;
     Item2: TMenuItem;
     Item1: TMenuItem;

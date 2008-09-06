@@ -579,10 +579,9 @@ begin
     actModeConsultation.Enabled := not actModeConsultation.Checked;
     actModeGestion.Enabled := not actModeGestion.Checked;
     actChangeMode.Checked := actModeGestion.Checked;
-    {$IFDEF RELEASE}
+{$IFDEF RELEASE}
     actScripts.Visible := False;
-    actPublier.Visible := False;
-    {$ENDIF}
+{$ENDIF}
   end;
 end;
 
@@ -915,7 +914,8 @@ end;
 
 procedure TFond.actScriptsExecute(Sender: TObject);
 begin
-  with TfrmScripts.Create(nil) do try
+  with TfrmScripts.Create(nil) do
+  try
     ShowModal;
   finally
     Free;
@@ -924,7 +924,8 @@ end;
 
 procedure TFond.actPublierExecute(Sender: TObject);
 begin
-  with TfrmPublier.Create(nil) do try
+  with TfrmPublier.Create(nil) do
+  try
     ShowModal;
   finally
     Free;

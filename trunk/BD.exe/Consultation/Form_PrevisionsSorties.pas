@@ -4,11 +4,11 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, LoadComplet, VirtualTrees, VirtualTree, ToolWin,
-  ProceduresBDtk, StdCtrls, ExtCtrls, Menus, ActnList, Buttons, VDTButton,
+  ProceduresBDtk, StdCtrls, ExtCtrls, Menus, ActnList, Buttons, VDTButton, UBdtForms,
   DBEditLabeled;
 
 type
-  TfrmPrevisionsSorties = class(TForm, IImpressionApercu)
+  TfrmPrevisionsSorties = class(TBdtForm, IImpressionApercu)
     vstPrevisionsSorties: TVirtualStringTree;
     ActionList1: TActionList;
     ListeApercu: TAction;

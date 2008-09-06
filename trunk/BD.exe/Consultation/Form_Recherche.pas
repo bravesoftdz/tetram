@@ -5,10 +5,10 @@ interface
 uses
   SysUtils, Windows, Messages, Classes, Forms, Graphics, Controls, Menus, StdCtrls, Buttons, ComCtrls, ExtCtrls, ToolWin, Commun,
   VirtualTrees, VirtualTree, ActnList, VDTButton, JvUIB, ComboCheck, ProceduresBDtk,
-  Frame_RechercheRapide, LoadComplet;
+  Frame_RechercheRapide, LoadComplet, UBdtForms;
 
 type
-  TFrmRecherche = class(TForm, IImpressionApercu)
+  TFrmRecherche = class(TBdtForm, IImpressionApercu)
     PopupMenu1: TPopupMenu;
     Critre1: TMenuItem;
     Groupedecritre1: TMenuItem;
