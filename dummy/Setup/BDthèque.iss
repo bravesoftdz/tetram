@@ -65,8 +65,7 @@ Source: ..\..\bin\intl\fbintl.conf; DestDir: {app}\Intl; Flags: ignoreversion
 Source: ..\..\bin\WebServer\Site par défaut.zip; DestDir: {app}\WebServer; Flags: ignoreversion
 Source: ..\..\bin\WebServer\BDthequeWeb.zip; DestDir: {app}\WebServer; Flags: ignoreversion
 Source: ..\..\bin\DelZip179.dll; DestDir: {app}; Flags: ignoreversion
-Source: vcredist_x86.exe; DestDir: {tmp}; Flags: deleteafterinstall 32bit
-Source: vcredist_x64.exe; DestDir: {tmp}; Flags: deleteafterinstall 64bit
+Source: vcredist_x86.exe; DestDir: {tmp}; Flags: deleteafterinstall
 Source: ..\..\bin\msvcp80.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\msvcr80.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\Microsoft.VC80.CRT.manifest; DestDir: {app}; Flags: ignoreversion
@@ -83,10 +82,8 @@ Name: {userdesktop}\BDthèque; Filename: {app}\BD.exe; Tasks: desktopicon; IconIn
 [Run]
 Filename: {app}\BD.exe; Description: Lancer BDthèque; Flags: nowait postinstall skipifsilent
 Filename: {app}\What's New.txt; Flags: nowait shellexec skipifdoesntexist postinstall skipifsilent
-Filename: {tmp}\vcredist_x86.exe; Flags: 32bit skipifdoesntexist; Parameters: /q; MinVersion: 0,5.01.2600; OnlyBelowVersion: 0,5.01.2600sp1
-Filename: {tmp}\vcredist_x86.exe; Flags: 32bit skipifdoesntexist; Parameters: /q; MinVersion: 0,5.02.3790; OnlyBelowVersion: 0,5.02.3790
-Filename: {tmp}\vcredist_x64.exe; Flags: 64bit skipifdoesntexist; Parameters: /q; MinVersion: 0,5.01.2600; OnlyBelowVersion: 0,5.01.2600sp1
-Filename: {tmp}\vcredist_x64.exe; Flags: 64bit skipifdoesntexist; Parameters: /q; MinVersion: 0,5.02.3790; OnlyBelowVersion: 0,5.02.3790
+Filename: {tmp}\vcredist_x86.exe; Flags: skipifdoesntexist; Parameters: /q; MinVersion: 0,5.01.2600; OnlyBelowVersion: 0,5.01.2600sp1
+Filename: {tmp}\vcredist_x86.exe; Flags: skipifdoesntexist; Parameters: /q; MinVersion: 0,5.02.3790; OnlyBelowVersion: 0,5.02.3790
 
 [UninstallDelete]
 Type: files; Name: {app}\BD.url

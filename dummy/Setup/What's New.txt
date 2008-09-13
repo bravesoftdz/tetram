@@ -1,4 +1,11 @@
--=-=-=-=-=-    2.0.0.10 - 16/04/2007    -=-=-=-=-=-
+-=-=-=-=-=-    2.1.0.2 - 26/06/2008    -=-=-=-=-=-
+
+* Nouveautés *
+      - Attention: nouveau format du WebServer
+         Il n'est plus géré directement par BDThèque mais doit dorénavent
+         être hébergé sur un site
+
+-=-=-=-=-=-    2.0.0.10 - 16/04/2008    -=-=-=-=-=-
 
 * Nouveautés *
       - Possibilité de trier les recherches avancées (avec impression des 
@@ -7,8 +14,6 @@
       - Nouveau champ dans les séries : nombre d'albums (permet, entre autre, 
          de terminer une série tout en continuant à connaitre les albums 
 	 manquants)
-
-Attention: disparition du WebServer
 
 -=-=-=-=-=-    1.2.3.15 - 30/01/2007    -=-=-=-=-=-
 
