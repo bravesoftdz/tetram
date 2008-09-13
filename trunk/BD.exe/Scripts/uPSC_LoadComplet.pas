@@ -26,12 +26,13 @@ procedure SIRegister_TListComplet(CL: TPSPascalCompiler);
 procedure SIRegister_TInfoComplet(CL: TPSPascalCompiler);
 procedure SIRegister_TObjetComplet(CL: TPSPascalCompiler);
 procedure SIRegister_TBaseComplet(CL: TPSPascalCompiler);
+
 procedure SIRegister_LoadComplet(CL: TPSPascalCompiler);
 
 implementation
 
 uses
-  Windows, Dialogs, TypeRec, Commun, CommonConst, DM_Princ, JvUIB, DateUtils, ListOfTypeRec, Contnrs, LoadComplet;
+  Windows, Dialogs, TypeRec, Commun, CommonConst, DM_Princ, DateUtils, ListOfTypeRec, Contnrs, LoadComplet;
 
 (* === compile-time registration functions === *)
 

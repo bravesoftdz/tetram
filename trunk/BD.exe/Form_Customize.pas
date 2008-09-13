@@ -58,10 +58,10 @@ begin
   VDTListView1.Items.BeginUpdate;
   LastButton := tbSep;
   try
-    for i := 0 to Fond.ToolBar1.ButtonCount - 1 do
+    for i := 0 to frmFond.ToolBar1.ButtonCount - 1 do
     begin
-      tlb := Fond.ToolBar1.Buttons[i];
-      if Assigned(tlb.Action) and (TActionList(tlb.Action.Owner) <> Fond.ActionList1) then
+      tlb := frmFond.ToolBar1.Buttons[i];
+      if Assigned(tlb.Action) and (TActionList(tlb.Action.Owner) <> frmFond.ActionList1) then
       begin
         with VDTListView1.Items.Add do
         begin
@@ -101,9 +101,9 @@ begin
   Cats.Items.Clear;
   Cats.Items.Add(csAll); // Add "All" entry
   // Loop through the actions
-  for i := 0 to Fond.ActionsOutils.ActionCount - 1 do
+  for i := 0 to frmFond.ActionsOutils.ActionCount - 1 do
   begin
-    act := Fond.ActionsOutils.Actions[i] as TCustomAction;
+    act := frmFond.ActionsOutils.Actions[i] as TCustomAction;
     // Only categories, we dont have in the list
     if Cats.Items.IndexOf(act.Category) < 0 then Cats.Items.Add(act.Category);
   end;
@@ -123,9 +123,9 @@ begin
   try
     Commands.Items.Clear;
     // Loop through the Actionlist
-    for i := 0 to Fond.ActionsOutils.ActionCount - 1 do
+    for i := 0 to frmFond.ActionsOutils.ActionCount - 1 do
     begin
-      act := Fond.ActionsOutils.Actions[i] as TCustomAction;
+      act := frmFond.ActionsOutils.Actions[i] as TCustomAction;
       if Assigned(act) then
       begin
         // check if the category matches
@@ -251,18 +251,18 @@ var
   i: integer;
   tlb: TListItem;
 begin
-  Fond.FToolCurrent.Clear;
+  frmFond.FToolCurrent.Clear;
   for i := 0 to VDTListView1.Items.Count - 1 do
   begin
     tlb := VDTListView1.Items[i];
     if Assigned(tlb) then
     begin
       if (tlb.SubItems[1] = 'B') then
-        if Copy(tlb.SubItems[2], 1, 3) = 'act' then
-          Fond.FToolCurrent.Add(Format('b%d=%s', [i, Copy(tlb.SubItems[2], 4, MaxInt)]))
+        if CompareMem(PChar(tlb.SubItems[2]), PChar('act'), 3) then
+          frmFond.FToolCurrent.Add(Format('b%d=%s', [i, Copy(tlb.SubItems[2], 4, MaxInt)]))
         else
-          Fond.FToolCurrent.Add(Format('b%d=%s', [i, tlb.SubItems[2]]));
-      if (tlb.SubItems[1] = 'S') then Fond.FToolCurrent.Add(Format('b%d=%s', [i, 'X']));
+          frmFond.FToolCurrent.Add(Format('b%d=%s', [i, tlb.SubItems[2]]));
+      if (tlb.SubItems[1] = 'S') then frmFond.FToolCurrent.Add(Format('b%d=%s', [i, 'X']));
     end;
   end;
 end;

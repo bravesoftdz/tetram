@@ -34,8 +34,7 @@ type
 implementation
 
 uses
-  JvUIB, Commun, Procedures, Proc_Gestions,
-  Textes, UHistorique;
+  Commun, Procedures, Proc_Gestions, Textes, UHistorique;
 
 {$R *.DFM}
 

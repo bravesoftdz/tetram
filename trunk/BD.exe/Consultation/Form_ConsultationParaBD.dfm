@@ -435,7 +435,7 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
   end
   object MainMenu1: TMainMenu
     AutoMerge = True
-    Images = Fond.boutons_32x32_hot
+    Images = frmFond.boutons_32x32_hot
     Left = 416
     Top = 24
     object Fiche1: TMenuItem

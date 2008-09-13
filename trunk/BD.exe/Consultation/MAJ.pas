@@ -23,7 +23,7 @@ function SaisieMouvementEmprunteur(const MvtID_Emprunteur: TGUID; const MvtID_Al
 implementation
 
 uses
-  CommonConst, Form_Stock, Main, DB, StdCtrls, JvUIB, JvUIBLib, Form_SeriesIncompletes,
+  CommonConst, Form_Stock, Main, DB, StdCtrls, Form_SeriesIncompletes,
   Form_PrevisionsSorties, Graphics, Form_ConsultationAlbum, Form_ConsultationEmprunteur, Form_SaisieEmpruntAlbum, Form_SaisieEmpruntEmprunteur, Form_Recherche,
   Form_ZoomCouverture, Form_ConsultationAuteur, Form_PrevisionAchats, UHistorique,
   Form_ConsultationParaBD, Form_ConsultationSerie;
@@ -35,13 +35,13 @@ var
 begin
   hg := THourGlass.Create;
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
-  FDest := TFrmConsultationAuteur.Create(Fond);
+  FDest := TFrmConsultationAuteur.Create(frmFond);
   try
     FDest.ID_Auteur := Reference;
     Historique.SetDescription(FDest.Caption);
     Result := not FDest.Auteur.RecInconnu;
   finally
-    Fond.SetChildForm(FDest);
+    frmFond.SetChildForm(FDest);
   end;
 end;
 
@@ -52,13 +52,13 @@ var
 begin
   hg := THourGlass.Create;
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
-  FDest := TFrmConsultationAlbum.Create(Fond);
+  FDest := TFrmConsultationAlbum.Create(frmFond);
   try
     FDest.ID_Album := Reference;
     Historique.SetDescription(FDest.Caption);
     Result := not FDest.Album.RecInconnu;
   finally
-    Fond.SetChildForm(FDest);
+    frmFond.SetChildForm(FDest);
   end;
 end;
 
@@ -69,13 +69,13 @@ var
 begin
   hg := THourGlass.Create;
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
-  FDest := TFrmConsultationSerie.Create(Fond);
+  FDest := TFrmConsultationSerie.Create(frmFond);
   try
     FDest.ID_Serie := Reference;
     Historique.SetDescription(FDest.Caption);
     Result := not FDest.Serie.RecInconnu;
   finally
-    Fond.SetChildForm(FDest);
+    frmFond.SetChildForm(FDest);
   end;
 end;
 
@@ -86,13 +86,13 @@ var
 begin
   hg := THourGlass.Create;
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
-  FDest := TFrmConsultationParaBD.Create(Fond);
+  FDest := TFrmConsultationParaBD.Create(frmFond);
   try
     FDest.ID_ParaBD := Reference;
     Historique.SetDescription(FDest.Caption);
     Result := not FDest.ParaBD.RecInconnu;
   finally
-    Fond.SetChildForm(FDest);
+    frmFond.SetChildForm(FDest);
   end;
 end;
 
@@ -103,13 +103,13 @@ var
 begin
   hg := THourGlass.Create;
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
-  FDest := TFrmConsultationEmprunteur.Create(Fond);
+  FDest := TFrmConsultationEmprunteur.Create(frmFond);
   try
     FDest.ID_Emprunteur := Reference;
     Historique.SetDescription(FDest.Caption);
     Result := not FDest.Emprunteur.RecInconnu;
   finally
-    Fond.SetChildForm(FDest);
+    frmFond.SetChildForm(FDest);
   end;
 end;
 
@@ -118,7 +118,7 @@ begin
   Result := False;
   if Mode_en_cours <> mdConsult then Exit;
 
-  with TFrmSaisie_EmpruntAlbum.Create(Fond) do try
+  with TFrmSaisie_EmpruntAlbum.Create(frmFond) do try
     pret.Checked := MvtPret;
     ID_Album := MvtID_Album;
     ID_Edition := MvtID_Edition;
@@ -135,7 +135,7 @@ var
 begin
   Result := False;
   if Mode_en_cours <> mdConsult then Exit;
-  with TFrmSaisie_EmpruntEmprunteur.Create(Fond) do try
+  with TFrmSaisie_EmpruntEmprunteur.Create(frmFond) do try
     ID_Emprunteur := MvtID_Emprunteur;
     for i := Low(MvtID_Album) to High(MvtID_Album) do
       AjouteAlbum(MvtID_Album[i][0], MvtID_Album[i][1]);
@@ -150,8 +150,8 @@ var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  Fond.SetChildForm(FormClass.Create(Fond));
-  Historique.SetDescription(Fond.FCurrentForm.Caption);
+  frmFond.SetChildForm(FormClass.Create(frmFond));
+  Historique.SetDescription(frmFond.FCurrentForm.Caption);
 end;
 
 procedure MAJPrevisionsAchats;
@@ -181,7 +181,7 @@ var
 begin
   hg := THourGlass.Create;
   if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
-  FDest := TFrmRecherche.Create(Fond);
+  FDest := TFrmRecherche.Create(frmFond);
   with FDest do begin
     // le TTreeView est une merde! si on fait la création de noeud avec Data
     // avant l'assignation du Handle, les Data risques de partir dans la nature
@@ -193,7 +193,7 @@ begin
     // conclusion:
     // TODO: virer le TTreeView!!!!!!!
 
-    Fond.SetChildForm(FDest);
+    frmFond.SetChildForm(FDest);
 
     if Assigned(Stream) and (Stream.Size > 0) then begin
       LoadRechFromStream(Stream);
@@ -215,12 +215,12 @@ function ZoomCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID):
 var
   FDest: TFrmZoomCouverture;
 begin
-  FDest := TFrmZoomCouverture.Create(Fond);
+  FDest := TFrmZoomCouverture.Create(frmFond);
   with FDest do try
     Result := LoadCouverture(isParaBD, ID_Item, ID_Couverture);
     Historique.SetDescription(FDest.Caption);
   finally
-    Fond.SetChildForm(FDest);
+    frmFond.SetChildForm(FDest);
   end;
 end;
 

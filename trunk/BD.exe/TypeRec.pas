@@ -3,7 +3,7 @@ unit TypeRec;
 interface
 
 uses
-  Windows, SysUtils, DB, Classes, ComCtrls, JvUIB, StdCtrls, Commun;
+  Windows, SysUtils, DB, Classes, ComCtrls, UIB, StdCtrls, Commun;
 
 //  IMPORTANT: Ref doit TOUJOURS être le premier champ des records
 //  Les strings DOIVENT être limités pour pouvoir utiliser CopyMemory(Pd, Ps, SizeOf(Ps^));
@@ -13,8 +13,8 @@ type
 
   TBasePointeur = class(TObject)
   private
-    class function NonNull(Query: TJvUIBQuery; const Champ: string; Default: Integer): Integer; overload;
-    class function NonNull(Query: TJvUIBQuery; const Champ: string): TGUID; overload;
+    class function NonNull(Query: TUIBQuery; const Champ: string; Default: Integer): Integer; overload;
+    class function NonNull(Query: TUIBQuery; const Champ: string): TGUID; overload;
 
   public
     ID: TGUID;
@@ -25,13 +25,13 @@ type
     constructor Create; virtual;
 
     class function Duplicate(Ps: TBasePointeur): TBasePointeur;
-    class function Make(Query: TJvUIBQuery): TBasePointeur;
+    class function Make(Query: TUIBQuery): TBasePointeur;
     class procedure VideListe(LV: TListView; DoClear: Boolean = True); overload;
     class procedure VideListe(List: TList; DoClear: Boolean = True); overload;
     class procedure VideListe(ListBox: TListBox; DoClear: Boolean = True); overload;
 
     procedure Clear; virtual;
-    procedure Fill(Query: TJvUIBQuery); virtual; abstract;
+    procedure Fill(Query: TUIBQuery); virtual; abstract;
     function ChaineAffichage(dummy: Boolean = True): string; virtual; abstract;
   end;
 
@@ -44,10 +44,10 @@ type
 
     procedure Assign(Ps: TBasePointeur); override;
 
-    procedure Fill(Query: TJvUIBQuery); override;
+    procedure Fill(Query: TUIBQuery); override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
 
-    class function Make(Query: TJvUIBQuery): TCouverture;
+    class function Make(Query: TUIBQuery): TCouverture;
   end;
 
   TParaBD = class(TBasePointeur)
@@ -61,11 +61,11 @@ type
 
     procedure Assign(Ps: TBasePointeur); override;
 
-    procedure Fill(Query: TJvUIBQuery); override;
+    procedure Fill(Query: TUIBQuery); override;
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple: Boolean; AvecSerie: Boolean): string; reintroduce; overload;
 
-    class function Make(Query: TJvUIBQuery): TParaBD;
+    class function Make(Query: TUIBQuery): TParaBD;
   end;
 
   TPersonnage = class(TBasePointeur)
@@ -74,7 +74,7 @@ type
 
     procedure Assign(Ps: TBasePointeur); override;
 
-    procedure Fill(Query: TJvUIBQuery); override;
+    procedure Fill(Query: TUIBQuery); override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
   end;
@@ -90,12 +90,12 @@ type
     constructor Create; override;
     destructor Destroy; override;
 
-    procedure Fill(Query: TJvUIBQuery); overload; override;
+    procedure Fill(Query: TUIBQuery); overload; override;
     procedure Fill(Pe: TPersonnage; const ReferenceAlbum, ReferenceSerie: TGUID; Metier: Integer); reintroduce; overload;
     procedure Clear; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
 
-    class function Make(Query: TJvUIBQuery): TAuteur;
+    class function Make(Query: TUIBQuery): TAuteur;
   end;
 
   TEditeur = class(TBasePointeur)
@@ -105,7 +105,7 @@ type
     procedure Assign(Ps: TBasePointeur); override;
 
     procedure Fill(const ID_Editeur: TGUID); reintroduce; overload;
-    procedure Fill(Query: TJvUIBQuery); overload; override;
+    procedure Fill(Query: TUIBQuery); overload; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TEditeur): TEditeur; reintroduce;
@@ -130,13 +130,13 @@ type
 
     procedure Assign(Ps: TBasePointeur); override;
 
-    procedure Fill(Query: TJvUIBQuery); overload; override;
+    procedure Fill(Query: TUIBQuery); overload; override;
     procedure Fill(const ID_Album: TGUID); reintroduce; overload;
     procedure Fill(const ID_Album, ID_Edition: TGUID); reintroduce; overload;
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
     class function Duplicate(Ps: TAlbum): TAlbum; reintroduce;
-    class function Make(Query: TJvUIBQuery): TAlbum; reintroduce;
+    class function Make(Query: TUIBQuery): TAlbum; reintroduce;
   end;
 
   TCollection = class(TBasePointeur)
@@ -149,7 +149,7 @@ type
     constructor Create; override;
     destructor Destroy; override;
 
-    procedure Fill(Query: TJvUIBQuery); overload; override;
+    procedure Fill(Query: TUIBQuery); overload; override;
     procedure Fill(const ID_Collection: TGUID); reintroduce; overload;
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
@@ -167,7 +167,7 @@ type
     constructor Create; override;
     destructor Destroy; override;
 
-    procedure Fill(Query: TJvUIBQuery); overload; override;
+    procedure Fill(Query: TUIBQuery); overload; override;
     procedure Fill(const ID_Serie: TGUID); reintroduce; overload;
     function ChaineAffichage(Simple: Boolean): string; override;
     procedure Clear; override;
@@ -186,7 +186,7 @@ type
     constructor Create; override;
     destructor Destroy; override;
 
-    procedure Fill(Query: TJvUIBQuery); override;
+    procedure Fill(Query: TUIBQuery); override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TEdition): TEdition;
@@ -198,19 +198,19 @@ type
 
     procedure Assign(Ps: TBasePointeur); override;
 
-    procedure Fill(Query: TJvUIBQuery); overload; override;
+    procedure Fill(Query: TUIBQuery); overload; override;
     procedure Fill(const ID_Emprunteur: TGUID); reintroduce; overload;
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TEmprunteur): TEmprunteur;
-    class function Make(Query: TJvUIBQuery): TEmprunteur;
+    class function Make(Query: TUIBQuery): TEmprunteur;
   end;
 
   TConversion = class(TBasePointeur)
     Monnaie1, Monnaie2: string[5];
     Taux: Double;
 
-    procedure Fill(Query: TJvUIBQuery); override;
+    procedure Fill(Query: TUIBQuery); override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
   end;
 
@@ -221,11 +221,11 @@ type
 
     procedure Assign(Ps: TBasePointeur); override;
 
-    procedure Fill(Query: TJvUIBQuery); override;
+    procedure Fill(Query: TUIBQuery); override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
 
-    class function Make(Query: TJvUIBQuery): TGenre;
+    class function Make(Query: TUIBQuery): TGenre;
   end;
 
   TEmprunt = class(TBasePointeur)
@@ -241,7 +241,7 @@ type
     constructor Create; override;
     destructor Destroy; override;
 
-    procedure Fill(Query: TJvUIBQuery); override;
+    procedure Fill(Query: TUIBQuery); override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TEmprunt): TEmprunt;
@@ -249,7 +249,7 @@ type
 
 implementation
 
-uses DM_Princ, JvUIBLib;
+uses DM_Princ, UIBLib;
 
 { TBasePointeur }
 
@@ -275,7 +275,7 @@ begin
   ID := GUID_NULL;
 end;
 
-class function TBasePointeur.Make(Query: TJvUIBQuery): TBasePointeur;
+class function TBasePointeur.Make(Query: TUIBQuery): TBasePointeur;
 begin
   Result := Self.Create;
   Result.Fill(Query);
@@ -332,7 +332,7 @@ begin
   ID := GUID_NULL;
 end;
 
-class function TBasePointeur.NonNull(Query: TJvUIBQuery; const Champ: string; Default: Integer): Integer;
+class function TBasePointeur.NonNull(Query: TUIBQuery; const Champ: string; Default: Integer): Integer;
 begin
   try
     if Query.Fields.ByNameIsNull[Champ] then
@@ -344,7 +344,7 @@ begin
   end;
 end;
 
-class function TBasePointeur.NonNull(Query: TJvUIBQuery; const Champ: string): TGUID;
+class function TBasePointeur.NonNull(Query: TUIBQuery; const Champ: string): TGUID;
 begin
   try
     if Query.Fields.ByNameIsNull[Champ] then
@@ -363,7 +363,7 @@ begin
   Result := Format('1 %s = %.2f %s', [Monnaie1, Taux, Monnaie2]);
 end;
 
-procedure TConversion.Fill(Query: TJvUIBQuery);
+procedure TConversion.Fill(Query: TUIBQuery);
 begin
   ID := NonNull(Query, 'ID_Conversion');
   Monnaie1 := Query.Fields.ByNameAsString['Monnaie1'];
@@ -389,7 +389,7 @@ begin
   Result := NewNom;
 end;
 
-procedure TCouverture.Fill(Query: TJvUIBQuery);
+procedure TCouverture.Fill(Query: TUIBQuery);
 begin
   ID := NonNull(Query, 'ID_Couverture');
   OldNom := Query.Fields.ByNameAsString['FichierCouverture'];
@@ -400,7 +400,7 @@ begin
   sCategorie := Query.Fields.ByNameAsString['sCategorieImage'];
 end;
 
-class function TCouverture.Make(Query: TJvUIBQuery): TCouverture;
+class function TCouverture.Make(Query: TUIBQuery): TCouverture;
 begin
   Result := TCouverture(inherited Make(Query));
 end;
@@ -429,7 +429,7 @@ begin
   NomEditeur := '';
 end;
 
-procedure TEditeur.Fill(Query: TJvUIBQuery);
+procedure TEditeur.Fill(Query: TUIBQuery);
 begin
   inherited;
   ID := NonNull(Query, 'ID_Editeur');
@@ -438,9 +438,9 @@ end;
 
 procedure TEditeur.Fill(const ID_Editeur: TGUID);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
 begin
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -473,7 +473,7 @@ begin
   Nom := '';
 end;
 
-procedure TPersonnage.Fill(Query: TJvUIBQuery);
+procedure TPersonnage.Fill(Query: TUIBQuery);
 begin
   inherited;
   ID := NonNull(Query, 'ID_Personne');
@@ -513,7 +513,7 @@ begin
   Personne.Clear;
 end;
 
-procedure TAuteur.Fill(Query: TJvUIBQuery);
+procedure TAuteur.Fill(Query: TUIBQuery);
 var
   PPersonne: TPersonnage;
 begin
@@ -533,7 +533,7 @@ begin
   Self.Metier := Metier;
 end;
 
-class function TAuteur.Make(Query: TJvUIBQuery): TAuteur;
+class function TAuteur.Make(Query: TUIBQuery): TAuteur;
 begin
   Result := TAuteur(inherited Make(Query));
 end;
@@ -563,7 +563,7 @@ begin
   Result := FormatTitreAlbum(Simple, AvecSerie, Titre, Serie, Tome, TomeDebut, TomeFin, Integrale, HorsSerie);
 end;
 
-procedure TAlbum.Fill(Query: TJvUIBQuery);
+procedure TAlbum.Fill(Query: TUIBQuery);
 begin
   inherited;
   ID := NonNull(Query, 'ID_Album');
@@ -624,9 +624,9 @@ end;
 
 procedure TAlbum.Fill(const ID_Album, ID_Edition: TGUID);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
 begin
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -654,7 +654,7 @@ begin
   Result := ChaineAffichage(False, AvecSerie);
 end;
 
-class function TAlbum.Make(Query: TJvUIBQuery): TAlbum;
+class function TAlbum.Make(Query: TUIBQuery): TAlbum;
 begin
   Result := TAlbum(inherited Make(Query));
 end;
@@ -697,7 +697,7 @@ begin
   Editeur.Clear;
 end;
 
-procedure TCollection.Fill(Query: TJvUIBQuery);
+procedure TCollection.Fill(Query: TUIBQuery);
 begin
   inherited;
   ID := NonNull(Query, 'ID_Collection');
@@ -711,9 +711,9 @@ end;
 
 procedure TCollection.Fill(const ID_Collection: TGUID);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
 begin
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -772,7 +772,7 @@ begin
   inherited;
 end;
 
-procedure TSerie.Fill(Query: TJvUIBQuery);
+procedure TSerie.Fill(Query: TUIBQuery);
 begin
   inherited;
   ID := NonNull(Query, 'ID_Serie');
@@ -798,9 +798,9 @@ end;
 
 procedure TSerie.Fill(const ID_Serie: TGUID);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
 begin
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -860,7 +860,7 @@ begin
   Collection.Clear;
 end;
 
-procedure TEdition.Fill(Query: TJvUIBQuery);
+procedure TEdition.Fill(Query: TUIBQuery);
 begin
   inherited;
   ID := NonNull(Query, 'ID_Edition');
@@ -898,7 +898,7 @@ begin
   Nom := '';
 end;
 
-procedure TEmprunteur.Fill(Query: TJvUIBQuery);
+procedure TEmprunteur.Fill(Query: TUIBQuery);
 begin
   inherited;
   ID := NonNull(Query, 'ID_Emprunteur');
@@ -907,9 +907,9 @@ end;
 
 procedure TEmprunteur.Fill(const ID_Emprunteur: TGUID);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
 begin
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -923,7 +923,7 @@ begin
   end;
 end;
 
-class function TEmprunteur.Make(Query: TJvUIBQuery): TEmprunteur;
+class function TEmprunteur.Make(Query: TUIBQuery): TEmprunteur;
 begin
   Result := TEmprunteur(inherited Make(Query));
 end;
@@ -948,7 +948,7 @@ begin
   Genre := '';
 end;
 
-procedure TGenre.Fill(Query: TJvUIBQuery);
+procedure TGenre.Fill(Query: TUIBQuery);
 begin
   inherited;
   ID := NonNull(Query, 'ID_Genre');
@@ -960,7 +960,7 @@ begin
   end;
 end;
 
-class function TGenre.Make(Query: TJvUIBQuery): TGenre;
+class function TGenre.Make(Query: TUIBQuery): TGenre;
 begin
   Result := TGenre(inherited Make(Query));
 end;
@@ -1011,7 +1011,7 @@ begin
   Edition.Clear;
 end;
 
-procedure TEmprunt.Fill(Query: TJvUIBQuery);
+procedure TEmprunt.Fill(Query: TUIBQuery);
 begin
   inherited;
   Pret := Bool(Query.Fields.ByNameAsInteger['PretEmprunt']);
@@ -1071,7 +1071,7 @@ begin
     AjoutString(Result, s, ' ', '(', ')');
 end;
 
-procedure TParaBD.Fill(Query: TJvUIBQuery);
+procedure TParaBD.Fill(Query: TUIBQuery);
 begin
   ID := NonNull(Query, 'ID_ParaBD');
   Titre := Query.Fields.ByNameAsString['TitreParaBD'];
@@ -1098,7 +1098,7 @@ begin
   end;
 end;
 
-class function TParaBD.Make(Query: TJvUIBQuery): TParaBD;
+class function TParaBD.Make(Query: TUIBQuery): TParaBD;
 begin
   Result := TParaBD(inherited Make(Query));
 end;

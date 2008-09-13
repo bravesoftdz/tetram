@@ -4,9 +4,9 @@ interface
 
 implementation
 
-uses JvUIB, Updates;
+uses UIB, Updates;
 
-procedure InitialiseTables(Query: TJvUIBScript);
+procedure InitialiseTables(Query: TUIBScript);
 begin
   with Query do begin
     Script.Clear;
@@ -817,7 +817,7 @@ begin
   end;
 end;
 
-procedure RecreerVuesProcTrigger(Query: TJvUIBScript);
+procedure RecreerVuesProcTrigger(Query: TUIBScript);
 begin
   with Query do begin
     Script.Clear;
@@ -2594,7 +2594,7 @@ begin
   end;
 end;
 
-procedure MAJ1_2_0_0(Query: TJvUIBScript);
+procedure MAJ1_2_0_0(Query: TUIBScript);
 begin
   InitialiseTables(Query);
   RecreerVuesProcTrigger(Query);

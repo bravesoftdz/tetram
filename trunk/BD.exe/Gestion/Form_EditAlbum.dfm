@@ -874,7 +874,7 @@ object FrmEditAlbum: TFrmEditAlbum
       Caption = 'Tomes :'
       FocusControl = edTomeDebut
       Font.Charset = ANSI_CHARSET
-      Font.Color = clInactiveCaptionText
+      Font.Color = clInactiveCaption
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -890,7 +890,7 @@ object FrmEditAlbum: TFrmEditAlbum
       Caption = #224
       FocusControl = edTomeFin
       Font.Charset = ANSI_CHARSET
-      Font.Color = clInactiveCaptionText
+      Font.Color = clInactiveCaption
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -1945,7 +1945,7 @@ object FrmEditAlbum: TFrmEditAlbum
         end>
     end
     object edTomeDebut: TEditLabeled
-      Left = 392
+      Left = 424
       Top = 27
       Width = 39
       Height = 20
@@ -1965,7 +1965,7 @@ object FrmEditAlbum: TFrmEditAlbum
       CurrencyChar = #0
     end
     object edTomeFin: TEditLabeled
-      Left = 440
+      Left = 472
       Top = 27
       Width = 39
       Height = 20

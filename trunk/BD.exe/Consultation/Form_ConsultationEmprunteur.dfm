@@ -151,12 +151,12 @@ object FrmConsultationEmprunteur: TFrmConsultationEmprunteur
     Header.Font.Height = -11
     Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
-    Header.Images = Fond.ImageList1
+    Header.Images = frmFond.ImageList1
     Header.MainColumn = 1
     Header.Options = [hoColumnResize, hoShowImages, hoVisible]
     Header.Style = hsPlates
     HotCursor = crHandPoint
-    Images = Fond.ImageList1
+    Images = frmFond.ImageList1
     TabOrder = 2
     TreeOptions.PaintOptions = [toHideFocusRect, toHotTrack, toShowDropmark, toThemeAware, toUseBlendedImages]
     TreeOptions.SelectionOptions = [toFullRowSelect, toMultiSelect]

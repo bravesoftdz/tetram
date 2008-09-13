@@ -17,7 +17,7 @@ type
     //    property List;
   end;
 
-  TFond = class(TbdtForm)
+  TfrmFond = class(TbdtForm)
     ImageList1: TImageList;
     boutons_32x32_hot: TImageList;
     ActionsOutils: TActionList;
@@ -189,6 +189,8 @@ type
     procedure MergeMenu(MergedMenu: TMainMenu);
     procedure HistoriqueChanged(Sender: TObject);
     procedure HistoriqueChosen(Sender: TObject);
+  protected
+    procedure Loaded; override;
   public
     { Déclarations publiques }
     FCurrentForm: TForm;
@@ -200,7 +202,7 @@ type
   end;
 
 var
-  Fond: TFond;
+  frmFond: TfrmFond;
 
 implementation
 
@@ -212,7 +214,7 @@ uses
   Form_AboutBox, DM_Princ, Types, Procedures, UHistorique, Form_Entretien, ShellAPI, Math,
   Form_Scripts, Form_Publier;
 
-procedure TFond.WMSyscommand(var msg: TWmSysCommand);
+procedure TfrmFond.WMSyscommand(var msg: TWmSysCommand);
 begin
   case (msg.CmdType and $FFF0) of
     SC_CLOSE: actQuitter.Execute;
@@ -221,19 +223,29 @@ begin
   end;
 end;
 
-procedure TFond.FormDestroy(Sender: TObject);
+procedure TfrmFond.FormDestroy(Sender: TObject);
 var
   i: Integer;
 begin
+  with TIniFile.Create(FichierIni) do
+  try
+    case WindowState of
+      wsMaximized: DeleteKey('Options', 'WS');
+      wsNormal: WriteString('Options', 'WS', Format('%dx%d-%dx%d', [Width, Height, Left, Top]));
+    end;
+  finally
+    Free;
+  end;
+
   Historique.OnChange := nil;
   FreeAndNil(FModalWindows);
   FreeAndNil(FToolOriginal);
   FreeAndNil(FToolCurrent);
-  for i := Fond.MDIChildCount - 1 downto 0 do
-    Fond.MDIChildren[i].Free;
+  for i := MDIChildCount - 1 downto 0 do
+    MDIChildren[i].Free;
 end;
 
-procedure TFond.FormCreate(Sender: TObject);
+procedure TfrmFond.FormCreate(Sender: TObject);
 var
   i: Integer;
   tlb: TToolButton;
@@ -261,7 +273,7 @@ begin
   Historique.OnChange := HistoriqueChanged;
 end;
 
-procedure TFond.actChangementOptionsExecute(Sender: TObject);
+procedure TfrmFond.actChangementOptionsExecute(Sender: TObject);
 begin
   with TFrmOptions.Create(Self) do
   try
@@ -281,17 +293,17 @@ begin
   Historique.AddWaiting(fcRecreateToolBar);
 end;
 
-procedure TFond.RechargeToolBar;
+procedure TfrmFond.RechargeToolBar;
 begin
   ChargeToolBarres(FToolCurrent);
 end;
 
-procedure TFond.actAideContextuelleExecute(Sender: TObject);
+procedure TfrmFond.actAideContextuelleExecute(Sender: TObject);
 begin
   Application.HelpCommand(HELP_CONTEXTPOPUP, 0);
 end;
 
-procedure TFond.actAfficheStatsGeneralesExecute(Sender: TObject);
+procedure TfrmFond.actAfficheStatsGeneralesExecute(Sender: TObject);
 var
   R: TStats;
 begin
@@ -305,17 +317,17 @@ begin
   end;
 end;
 
-procedure TFond.actAfficheStockExecute(Sender: TObject);
+procedure TfrmFond.actAfficheStockExecute(Sender: TObject);
 begin
   Historique.AddWaiting(fcStock);
 end;
 
-procedure TFond.actAfficheRechercheExecute(Sender: TObject);
+procedure TfrmFond.actAfficheRechercheExecute(Sender: TObject);
 begin
   Historique.AddWaiting(fcRecherche);
 end;
 
-procedure TFond.actImpressionExecute(Sender: TObject);
+procedure TfrmFond.actImpressionExecute(Sender: TObject);
 var
   iImpression: IImpressionApercu;
 begin
@@ -323,7 +335,7 @@ begin
     iImpression.ImpressionExecute(Sender);
 end;
 
-procedure TFond.actApercuImpressionExecute(Sender: TObject);
+procedure TfrmFond.actApercuImpressionExecute(Sender: TObject);
 var
   iImpression: IImpressionApercu;
 begin
@@ -331,7 +343,7 @@ begin
     iImpression.ApercuExecute(Sender);
 end;
 
-procedure TFond.actChangeModeExecute(Sender: TObject);
+procedure TfrmFond.actChangeModeExecute(Sender: TObject);
 begin
   if not actChangeMode.Checked then
     actModeGestion.Execute
@@ -339,19 +351,19 @@ begin
     actModeConsultation.Execute;
 end;
 
-procedure TFond.actActualiseRepertoireExecute(Sender: TObject);
+procedure TfrmFond.actActualiseRepertoireExecute(Sender: TObject);
 begin
   FrmRepertoire.vstAlbums.InitializeRep;
   FrmRepertoire.vstEmprunteurs.InitializeRep;
   FrmRepertoire.vstAuteurs.InitializeRep;
 end;
 
-procedure TFond.actRelireOptionsExecute(Sender: TObject);
+procedure TfrmFond.actRelireOptionsExecute(Sender: TObject);
 begin
   LitOptions;
 end;
 
-procedure TFond.actQuitterExecute(Sender: TObject);
+procedure TfrmFond.actQuitterExecute(Sender: TObject);
 var
   i: integer;
 begin
@@ -364,7 +376,7 @@ begin
   Close;
 end;
 
-procedure TFond.actAfficheStatsEmprunteursExecute(Sender: TObject);
+procedure TfrmFond.actAfficheStatsEmprunteursExecute(Sender: TObject);
 var
   R: TStats;
 begin
@@ -378,7 +390,7 @@ begin
   end;
 end;
 
-procedure TFond.actAfficheStatsAlbumsExecute(Sender: TObject);
+procedure TfrmFond.actAfficheStatsAlbumsExecute(Sender: TObject);
 var
   R: TStats;
 begin
@@ -392,14 +404,14 @@ begin
   end;
 end;
 
-procedure TFond.ChargeToolBarres(sl: TStringList);
+procedure TfrmFond.ChargeToolBarres(sl: TStringList);
 
   function GetAction(Name: string): TAction;
   var
     i: Integer;
     act: TCustomAction;
   begin
-    if Copy(Name, 1, 3) <> 'act' then Name := 'act' + Name;
+    if not CompareMem(PChar(Name), PChar('act'), 3) then Name := 'act' + Name;
     Result := nil;
     for i := 0 to ActionsOutils.ActionCount - 1 do
     begin
@@ -496,7 +508,7 @@ begin
   NewAction(HistoriqueBack);
 end;
 
-procedure TFond.LoadToolBarres;
+procedure TfrmFond.LoadToolBarres;
 var
   sl: TStringList;
 begin
@@ -518,7 +530,7 @@ begin
     end;
 end;
 
-procedure TFond.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TfrmFond.FormClose(Sender: TObject; var Action: TCloseAction);
 var
   i: Integer;
 begin
@@ -532,7 +544,7 @@ begin
   end
 end;
 
-procedure TFond.actPersonnaliseBarreExecute(Sender: TObject);
+procedure TfrmFond.actPersonnaliseBarreExecute(Sender: TObject);
 begin
   with TFrmCustomize.Create(Self) do
   try
@@ -542,7 +554,7 @@ begin
   end;
 end;
 
-procedure TFond.ActionsOutilsUpdate(Action: TBasicAction; var Handled: Boolean);
+procedure TfrmFond.ActionsOutilsUpdate(Action: TBasicAction; var Handled: Boolean);
 var
   ModeConsult: Boolean;
   iImpression: IImpressionApercu;
@@ -585,12 +597,12 @@ begin
   end;
 end;
 
-procedure TFond.actAideSommaireExecute(Sender: TObject);
+procedure TfrmFond.actAideSommaireExecute(Sender: TObject);
 begin
   Application.HelpCommand(HELP_CONTENTS, 0);
 end;
 
-procedure TFond.actAideAboutExecute(Sender: TObject);
+procedure TfrmFond.actAideAboutExecute(Sender: TObject);
 begin
   with TFrmAboutBox.Create(Application) do
   try
@@ -600,7 +612,7 @@ begin
   end;
 end;
 
-procedure TFond.actModeGestionExecute(Sender: TObject);
+procedure TfrmFond.actModeGestionExecute(Sender: TObject);
 var
   LockWindow: ILockWindow;
 begin
@@ -611,7 +623,7 @@ begin
   SetChildForm(FrmGestions);
 end;
 
-procedure TFond.actModeConsultationExecute(Sender: TObject);
+procedure TfrmFond.actModeConsultationExecute(Sender: TObject);
 var
   LockWindow: ILockWindow;
 begin
@@ -623,52 +635,52 @@ begin
   Historique.Refresh;
 end;
 
-procedure TFond.actStatsInfosBDthequeExecute(Sender: TObject);
+procedure TfrmFond.actStatsInfosBDthequeExecute(Sender: TObject);
 begin
   ImpressionInfosBDtheque(TAction(Sender).ActionComponent.Tag = 1);
 end;
 
-procedure TFond.StatsEmpruntsExecute(Sender: TObject);
+procedure TfrmFond.StatsEmpruntsExecute(Sender: TObject);
 begin
   ImpressionEmprunts(TAction(Sender).ActionComponent.Tag = 1, seTous, ssTous, -1, -1, True, True);
 end;
 
-procedure TFond.actStatsListeCompletesAlbumsExecute(Sender: TObject);
+procedure TfrmFond.actStatsListeCompletesAlbumsExecute(Sender: TObject);
 begin
   ImpressionListeCompleteAlbums(TAction(Sender).ActionComponent.Tag = 1);
 end;
 
-procedure TFond.actStatsAlbumsEmpruntesExecute(Sender: TObject);
+procedure TfrmFond.actStatsAlbumsEmpruntesExecute(Sender: TObject);
 begin
   ImpressionEmprunts(TAction(Sender).ActionComponent.Tag = 1, seTous, ssTous, -1, -1, True, True);
 end;
 
-procedure TFond.StatsInfosBDAppExecute(Sender: TObject);
+procedure TfrmFond.StatsInfosBDAppExecute(Sender: TObject);
 begin
   actStatsInfosBDtheque.ActionComponent := TComponent(Sender);
   actStatsInfosBDtheque.Execute;
 end;
 
-procedure TFond.StatsListeCompletesAlbumsAppExecute(Sender: TObject);
+procedure TfrmFond.StatsListeCompletesAlbumsAppExecute(Sender: TObject);
 begin
   actStatsListeCompletesAlbums.ActionComponent := TComponent(Sender);
   actStatsListeCompletesAlbums.Execute;
 end;
 
-procedure TFond.StatsAlbumsEmpruntesAppExecute(Sender: TObject);
+procedure TfrmFond.StatsAlbumsEmpruntesAppExecute(Sender: TObject);
 begin
   actStatsAlbumsEmpruntes.ActionComponent := TComponent(Sender);
   actStatsAlbumsEmpruntes.Execute;
 end;
 
-procedure TFond.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
+procedure TfrmFond.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
   CheminBase.Caption := DMPrinc.UIBDataBase.DatabaseName;
   HistoriqueBack.Enabled := (Mode_en_cours = mdConsult) and Bool(Historique.CurrentConsultation);
   HistoriqueNext.Enabled := (Mode_en_cours = mdConsult) and Bool(Historique.CountConsultation) and (Historique.CurrentConsultation <> Historique.CountConsultation - 1);
 end;
 
-function TFond.SetModalChildForm(Form: TForm; Alignement: TAlign): Integer;
+function TfrmFond.SetModalChildForm(Form: TForm; Alignement: TAlign): Integer;
 var
   LockWindow: ILockWindow;
   me: IModeEditing;
@@ -708,7 +720,7 @@ begin
   end;
 end;
 
-function TFond.IsShowing(Classe: TFormClass): Boolean;
+function TfrmFond.IsShowing(Classe: TFormClass): Boolean;
 var
   i: Integer;
   c: TObject;
@@ -723,7 +735,7 @@ begin
   end;
 end;
 
-procedure TFond.MergeMenu(MergedMenu: TMainMenu);
+procedure TfrmFond.MergeMenu(MergedMenu: TMainMenu);
 
   procedure ProcessMenuItem(MenuItem: TMenuItem);
   var
@@ -752,7 +764,7 @@ begin
     ProcessMenuItem(Menu.Items[i]);
 end;
 
-procedure TFond.SetChildForm(Form: TForm; Alignement: TAlign = alClient);
+procedure TfrmFond.SetChildForm(Form: TForm; Alignement: TAlign = alClient);
 var
   LockWindow: ILockWindow;
 begin
@@ -784,22 +796,22 @@ begin
   Form.left := 0;
 end;
 
-procedure TFond.HistoriqueBackExecute(Sender: TObject);
+procedure TfrmFond.HistoriqueBackExecute(Sender: TObject);
 begin
   Historique.Back;
 end;
 
-procedure TFond.HistoriqueNextExecute(Sender: TObject);
+procedure TfrmFond.HistoriqueNextExecute(Sender: TObject);
 begin
   Historique.Next;
 end;
 
-procedure TFond.FormShow(Sender: TObject);
+procedure TfrmFond.FormShow(Sender: TObject);
 begin
   Splitter1.Left := ClientWidth;
 end;
 
-procedure TFond.ActionsStatistiquesUpdate(Action: TBasicAction; var Handled: Boolean);
+procedure TfrmFond.ActionsStatistiquesUpdate(Action: TBasicAction; var Handled: Boolean);
 var
   i: Integer;
 begin
@@ -814,22 +826,22 @@ begin
       TAction(ActionsStatistiques.Actions[i]).Enabled := True;
 end;
 
-procedure TFond.actModeEntretienExecute(Sender: TObject);
+procedure TfrmFond.actModeEntretienExecute(Sender: TObject);
 begin
   SetModalChildForm(TFrmEntretien.Create(Self));
 end;
 
-procedure TFond.actAfficheSeriesIncompletesExecute(Sender: TObject);
+procedure TfrmFond.actAfficheSeriesIncompletesExecute(Sender: TObject);
 begin
   Historique.AddWaiting(fcSeriesIncompletes);
 end;
 
-procedure TFond.actAffichePrevisionsSortiesExecute(Sender: TObject);
+procedure TfrmFond.actAffichePrevisionsSortiesExecute(Sender: TObject);
 begin
   Historique.AddWaiting(fcPrevisionsSorties);
 end;
 
-procedure TFond.MeasureMenuItem(Sender: TObject; ACanvas: TCanvas; var Width, Height: Integer);
+procedure TfrmFond.MeasureMenuItem(Sender: TObject; ACanvas: TCanvas; var Width, Height: Integer);
 
   procedure SetMenuSize;
   var
@@ -852,17 +864,17 @@ begin
     Height := il.Height + 3;
 end;
 
-procedure TFond.actNouvelAchatExecute(Sender: TObject);
+procedure TfrmFond.actNouvelAchatExecute(Sender: TObject);
 begin
   Historique.AddWaiting(fcPrevisionsAchats);
 end;
 
-procedure TFond.actMiseAJourExecute(Sender: TObject);
+procedure TfrmFond.actMiseAJourExecute(Sender: TObject);
 begin
   DMPrinc.CheckVersion(True);
 end;
 
-procedure TFond.HistoriqueChanged(Sender: TObject);
+procedure TfrmFond.HistoriqueChanged(Sender: TObject);
 const
   MaxNbItems = 10;
 var
@@ -907,12 +919,12 @@ begin
   end;
 end;
 
-procedure TFond.HistoriqueChosen(Sender: TObject);
+procedure TfrmFond.HistoriqueChosen(Sender: TObject);
 begin
   Historique.GoConsultation(TComponent(Sender).Tag);
 end;
 
-procedure TFond.actScriptsExecute(Sender: TObject);
+procedure TfrmFond.actScriptsExecute(Sender: TObject);
 begin
   with TfrmScripts.Create(nil) do
   try
@@ -922,11 +934,45 @@ begin
   end;
 end;
 
-procedure TFond.actPublierExecute(Sender: TObject);
+procedure TfrmFond.actPublierExecute(Sender: TObject);
 begin
   with TfrmPublier.Create(nil) do
   try
     ShowModal;
+  finally
+    Free;
+  end;
+end;
+
+procedure TfrmFond.Loaded;
+var
+  s, Taille, Position: string;
+  i, iWidth, iHeight, iLeft, iTop: Integer;
+begin
+  inherited;
+  with TIniFile.Create(FichierIni) do
+  try
+    s := ReadString('Options', 'WS', '');
+    if s <> '' then
+    try
+      i := Pos('-', s);
+      Taille := Copy(s, 1, i - 1);
+      Position := Copy(s, i + 1, MaxInt);
+
+      i := Pos('x', Taille);
+      iWidth := StrToInt(Copy(Taille, 1, i - 1));
+      iHeight := StrToInt(Copy(Taille, i + 1, MaxInt));
+
+      i := Pos('x', Position);
+      iLeft := StrToInt(Copy(Position, 1, i - 1));
+      iTop := StrToInt(Copy(Position, i + 1, MaxInt));
+
+      WindowState := wsNormal;
+      SetBounds(iLeft, iTop, iWidth, iHeight);
+    except
+      // on ne fait rien en cas d'erreur: la ligne DOIT être correcte
+      Assert(False, 'Taille de fenêtre mal décodée');
+    end;
   finally
     Free;
   end;

@@ -28,7 +28,7 @@ procedure RIRegister_TypeRec(CL: TPSRuntimeClassImporter);
 implementation
 
 uses
-  Windows, DB, ComCtrls, JvUIB, StdCtrls, Commun, TypeRec;
+  Windows, DB, ComCtrls, StdCtrls, Commun, TypeRec;
 
 (* === run-time registration functions === *)
 

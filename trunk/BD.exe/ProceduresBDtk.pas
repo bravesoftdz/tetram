@@ -391,8 +391,8 @@ begin
   inherited;
   FOldMode := Mode_en_cours;
   Mode_en_cours := mdEditing;
-  for i := 0 to Pred(Fond.ActionsOutils.ActionCount) do
-    TAction(Fond.ActionsOutils.Actions[i]).Enabled := False;
+  for i := 0 to Pred(frmFond.ActionsOutils.ActionCount) do
+    TAction(frmFond.ActionsOutils.Actions[i]).Enabled := False;
 end;
 
 destructor TModeEditing.Destroy;
@@ -401,8 +401,8 @@ var
 begin
   Mode_en_cours := FOldMode;
   if Mode_en_cours <> mdEditing then
-    for i := 0 to Pred(Fond.ActionsOutils.ActionCount) do
-      TAction(Fond.ActionsOutils.Actions[i]).Enabled := True;
+    for i := 0 to Pred(frmFond.ActionsOutils.ActionCount) do
+      TAction(frmFond.ActionsOutils.Actions[i]).Enabled := True;
   inherited;
 end;
 

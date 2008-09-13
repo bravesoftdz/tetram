@@ -31,7 +31,7 @@ type
 
 implementation
 
-uses Commun, JvUIB, Procedures, Textes;
+uses Commun, Procedures, Textes;
 
 {$R *.DFM}
 

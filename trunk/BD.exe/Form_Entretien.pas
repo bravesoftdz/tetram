@@ -50,7 +50,7 @@ type
 
 implementation
 
-uses Main, CommonConst, DM_Princ, JvUIB, Commun, Procedures, Textes,
+uses Main, CommonConst, DM_Princ, UIB, Commun, Procedures, Textes,
   Form_Verbose, UHistorique, Form_Gestion, IniFiles;
 
 {$R *.dfm}
@@ -119,12 +119,12 @@ procedure TFrmEntretien.FormDestroy(Sender: TObject);
 begin
   case Mode_en_cours of
     mdConsult: begin
-        Fond.actActualiseRepertoire.Execute;
+        frmFond.actActualiseRepertoire.Execute;
         Historique.Clear;
       end;
     mdEdit: begin
-        if Fond.FCurrentForm is TFrmGestions then
-          TFrmGestions(Fond.FCurrentForm).VirtualTreeView.InitializeRep;
+        if frmFond.FCurrentForm is TFrmGestions then
+          TFrmGestions(frmFond.FCurrentForm).VirtualTreeView.InitializeRep;
       end;
   end;
 end;
@@ -208,7 +208,7 @@ end;
 procedure TFrmEntretien.actConvertirExecute(Sender: TObject);
 var
   nbConverti, nbAConvertir, i: Integer;
-  UpdateQuery: TJvUIBQuery;
+  UpdateQuery: TUIBQuery;
   Fichier: string;
   Stream: TStream;
   fWaiting: IWaiting;
@@ -216,9 +216,9 @@ var
 begin
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsOperationEnCours, 0, 100);
-  UpdateQuery := TJvUIBQuery.Create(Self);
+  UpdateQuery := TUIBQuery.Create(Self);
   FichiersImages := TStringList.Create;
-  with TJvUIBQuery.Create(Self) do try
+  with TUIBQuery.Create(Self) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     UpdateQuery.Transaction := Transaction;
     SQL.Text := 'SELECT Count(ID_Couverture) FROM Couvertures WHERE STOCKAGECOUVERTURE = 0';
@@ -275,16 +275,16 @@ end;
 procedure TFrmEntretien.actExtraireExecute(Sender: TObject);
 var
   nbExtrais, nbAExtraire: Integer;
-  ExtractQuery, UpdateQuery: TJvUIBQuery;
+  ExtractQuery, UpdateQuery: TUIBQuery;
   Fichier: string;
   Stream: TStream;
   fWaiting: IWaiting;
 begin
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsOperationEnCours, 0, 100);
-  UpdateQuery := TJvUIBQuery.Create(Self);
-  ExtractQuery := TJvUIBQuery.Create(Self);
-  with TJvUIBQuery.Create(Self) do try
+  UpdateQuery := TUIBQuery.Create(Self);
+  ExtractQuery := TUIBQuery.Create(Self);
+  with TUIBQuery.Create(Self) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     UpdateQuery.Transaction := Transaction;
     ExtractQuery.Transaction := Transaction;
@@ -330,14 +330,14 @@ end;
 procedure TFrmEntretien.actNettoyerExecute(Sender: TObject);
 var
   nbSupprime, nbASupprimer: Integer;
-  UpdateQuery: TJvUIBQuery;
+  UpdateQuery: TUIBQuery;
   Stream: TStream;
   fWaiting: IWaiting;
 begin
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsOperationEnCours, 0, 100);
-  UpdateQuery := TJvUIBQuery.Create(Self);
-  with TJvUIBQuery.Create(Self) do try
+  UpdateQuery := TUIBQuery.Create(Self);
+  with TUIBQuery.Create(Self) do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     UpdateQuery.Transaction := Transaction;
     SQL.Text := 'SELECT Count(ID_Couverture) FROM Couvertures WHERE STOCKAGECOUVERTURE = 0';

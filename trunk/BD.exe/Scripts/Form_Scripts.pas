@@ -1399,6 +1399,7 @@ end;
 
 procedure TfrmScripts.ListView1DblClick(Sender: TObject);
 begin
+  if not Assigned(ListView1.Selected) then Exit;
   Projet := ListView1.Selected.Caption;
 end;
 
@@ -1693,18 +1694,18 @@ end;
 
 procedure TfrmScripts.RebuildLokalObjektList;
 var
-  Skript: string;
+  Script: TStringList;
 begin
-  Skript := GetActiveScript.Text;
-  //  Skript := TruncateSourceCode(EditFeld.Text, EditFeld.CaretXY);
-  //  Skript := script_utils_Preprocess(Skript, Language);
+  Script := TStringList.Create;
+  try
+    Script.Text := GetActiveScript.Text;
+    Script[GetActiveScript.CaretXY.Line - 1] := '';
 
-  { TODO : la compilation est totale, ça risque d'être pénalisant à la longue
-    voir si on peut pas compiler uniquement les lignes qui précèdent la ligne du curseur
-    c'est probablement ce qu'est sensé faire TruncateSourceCode
-  }
-  Compile;
-  // PSScriptDebugger1.Comp.Compile(Skript);
+    PSScriptDebugger1.Script.Text := Script.Text;
+    PSScriptDebugger1.Compile;
+  finally
+    Script.Free;
+  end;
 end;
 
 function TfrmScripts.GetLookUpString(Line: string; EndPos: Integer): string;
@@ -1766,27 +1767,31 @@ var
   StartX, ParenCounter: Integer;
   LookUp: string;
 begin
+  { TODO : grosse lacune, la fonction ne gère pas du tout si la parenthèse est dans une chaine ou non }
+
   //go back from the cursor and find the first open paren
   TmpX := X;
   if TmpX > length(locLine) then
     TmpX := length(locLine)
   else
-    dec(TmpX);
+    Dec(TmpX);
 
   result := False;
   ParamCount := 0;
   while (TmpX > 0) and not (result) do
   begin
-    if LocLine[TmpX] = ',' then
+    if LocLine[TmpX] = ';' then
+      Exit
+    else if LocLine[TmpX] = ',' then
     begin
-      inc(ParamCount);
-      dec(TmpX);
+      Inc(ParamCount);
+      Dec(TmpX);
     end
     else if LocLine[TmpX] = ')' then
     begin
       //We found a close, go till it's opening paren
       ParenCounter := 1;
-      dec(TmpX);
+      Dec(TmpX);
       while (TmpX > 0) and (ParenCounter > 0) do
       begin
         if LocLine[TmpX] = ')' then
@@ -1953,6 +1958,7 @@ var
   Typ: string;
   Obj: string;
   Editor: TSynEdit;
+  hasAssign: Boolean;
 begin
   Editor := GetActiveScript;
   RebuildLokalObjektList;
@@ -1971,6 +1977,7 @@ begin
   Prev := CSTI_EOF;
   Token := CSTI_EOF;
   PrevEnd := -1;
+  hasAssign := False;
   while (Parser.CurrTokenID <> CSTI_EOF) and (Parser.CurrTokenPos < Cardinal(Editor.CaretX - 1)) do
   begin
     Prev := Token;
@@ -1980,13 +1987,19 @@ begin
     // si un := ou ( alors, il est une valeur avec une valeur de retour prévu
     if (Token = CSTI_Assignment) and (Prev = CSTI_Identifier) then
     begin
-      Types := [itFunction, itVar, itConstant, itType];
+      Types := [itFunction, itVar, itConstant {, itType}];
       if LookUpList(Copy(Editor.LineText, 1, Parser.CurrTokenPos), Info) then
         Typ := Copy(Info.OrgParams, 3, length(Info.OrgParams));
+      hasAssign := True;
     end
     else if (Token = CSTI_OpenRound) then
     begin
-      Types := [itFunction, itVar, itConstant, itType]
+      Types := [itFunction, itVar, itConstant {, itType}];
+      hasAssign := True;
+    end
+    else if (Token = CSTI_SemiColon) then begin
+      hasAssign := False;
+      Typ := '';
     end;
 
     Parser.Next;
@@ -1994,7 +2007,7 @@ begin
 
   Parser.Free;
 
-  if Token = CSTI_STRING then Exit;
+  if Token = CSTI_String then Exit;
 
   if (PrevEnd < (Editor.CaretX - 1)) then
     Prev := Token;
@@ -2024,6 +2037,8 @@ begin
       Father := Info.ReturnTyp;
       if Info.OrgParams = '' then
         Types := [itConstructor]
+      else if hasAssign then
+        Types := [itField, itFunction]
       else
         Types := [itField, itProcedure, itFunction];
     end;

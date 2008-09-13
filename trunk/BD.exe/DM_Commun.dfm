@@ -5,20 +5,20 @@ object DataCommun: TDataCommun
   Top = 380
   Height = 351
   Width = 589
-  object TblGenres: TJvUIBQuery
+  object TblGenres: TUIBQuery
     SQL.Strings = (
       'SELECT ID_GENRE, GENRE FROM GENRES ORDER BY UPPERGENRE')
     Left = 16
     Top = 8
   end
-  object TGenre: TJvUIBQuery
+  object TGenre: TUIBQuery
     SQL.Strings = (
       'SELECT ID_GENRE, GENRE FROM GENRES'
       'ORDER BY GENRE')
     Left = 96
     Top = 8
   end
-  object TCritereReliure: TJvUIBQuery
+  object TCritereReliure: TUIBQuery
     SQL.Strings = (
       'SELECT REF, LIBELLE FROM LISTES'
       'WHERE CATEGORIE = 2'
@@ -27,7 +27,7 @@ object DataCommun: TDataCommun
     Left = 96
     Top = 56
   end
-  object TCritereString: TJvUIBQuery
+  object TCritereString: TUIBQuery
     SQL.Strings = (
       
         'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'S' +
@@ -35,7 +35,7 @@ object DataCommun: TDataCommun
     Left = 192
     Top = 8
   end
-  object TCritereBoolean: TJvUIBQuery
+  object TCritereBoolean: TUIBQuery
     SQL.Strings = (
       
         'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'B' +
@@ -43,7 +43,7 @@ object DataCommun: TDataCommun
     Left = 192
     Top = 56
   end
-  object TCritereNumeral: TJvUIBQuery
+  object TCritereNumeral: TUIBQuery
     SQL.Strings = (
       
         'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'N' +
@@ -51,7 +51,7 @@ object DataCommun: TDataCommun
     Left = 192
     Top = 104
   end
-  object TCritereTitre: TJvUIBQuery
+  object TCritereTitre: TUIBQuery
     SQL.Strings = (
       
         'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'T' +
@@ -59,7 +59,7 @@ object DataCommun: TDataCommun
     Left = 192
     Top = 152
   end
-  object TCritereAffiche: TJvUIBQuery
+  object TCritereAffiche: TUIBQuery
     SQL.Strings = (
       
         'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'I' +
@@ -67,7 +67,7 @@ object DataCommun: TDataCommun
     Left = 192
     Top = 200
   end
-  object TCritereListe: TJvUIBQuery
+  object TCritereListe: TUIBQuery
     SQL.Strings = (
       
         'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'L' +
@@ -75,7 +75,7 @@ object DataCommun: TDataCommun
     Left = 192
     Top = 248
   end
-  object TCritereEtat: TJvUIBQuery
+  object TCritereEtat: TUIBQuery
     SQL.Strings = (
       'SELECT REF, LIBELLE FROM LISTES'
       'WHERE CATEGORIE = 1'
@@ -83,7 +83,7 @@ object DataCommun: TDataCommun
     Left = 96
     Top = 104
   end
-  object TCritereLangueTitre: TJvUIBQuery
+  object TCritereLangueTitre: TUIBQuery
     SQL.Strings = (
       
         'SELECT REFCRITERE, CRITERE FROM CRITERES WHERE TYPE_CRITERE = '#39'L' +
@@ -91,7 +91,7 @@ object DataCommun: TDataCommun
     Left = 280
     Top = 152
   end
-  object TCritereSensLecture: TJvUIBQuery
+  object TCritereSensLecture: TUIBQuery
     SQL.Strings = (
       'SELECT REF, LIBELLE FROM LISTES'
       'WHERE CATEGORIE = 8'

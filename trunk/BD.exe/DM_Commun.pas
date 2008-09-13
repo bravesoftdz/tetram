@@ -4,22 +4,22 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  DB, JvUIB;
+  DB, uib;
 
 type
   TDataCommun = class(TDataModule)
-    TblGenres: TJvUIBQuery;
-    TGenre: TJvUIBQuery;
-    TCritereReliure: TJvUIBQuery;
-    TCritereString: TJvUIBQuery;
-    TCritereBoolean: TJvUIBQuery;
-    TCritereNumeral: TJvUIBQuery;
-    TCritereTitre: TJvUIBQuery;
-    TCritereAffiche: TJvUIBQuery;
-    TCritereListe: TJvUIBQuery;
-    TCritereEtat: TJvUIBQuery;
-    TCritereLangueTitre: TJvUIBQuery;
-    TCritereSensLecture: TJvUIBQuery;
+    TblGenres: TUIBQuery;
+    TGenre: TUIBQuery;
+    TCritereReliure: TUIBQuery;
+    TCritereString: TUIBQuery;
+    TCritereBoolean: TUIBQuery;
+    TCritereNumeral: TUIBQuery;
+    TCritereTitre: TUIBQuery;
+    TCritereAffiche: TUIBQuery;
+    TCritereListe: TUIBQuery;
+    TCritereEtat: TUIBQuery;
+    TCritereLangueTitre: TUIBQuery;
+    TCritereSensLecture: TUIBQuery;
     procedure DataModuleDestroy(Sender: TObject);
   private
     { Déclarations privées }

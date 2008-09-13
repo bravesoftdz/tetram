@@ -51,10 +51,7 @@ type
     cbHorsSerie: TCheckBoxLabeled;
     Label15: TLabel;
     edNotes: TMemoLabeled;
-    Label16: TLabel;
-    edTomeDebut: TEditLabeled;
     Label17: TLabel;
-    edTomeFin: TEditLabeled;
     imgVisu: TImage;
     PanelEdition: TPanel;
     SpeedButton3: TVDTButton;
@@ -104,6 +101,9 @@ type
     Label26: TLabel;
     Label27: TLabel;
     cbxSensLecture: TLightComboCheck;
+    edTomeFin: TEditLabeled;
+    edTomeDebut: TEditLabeled;
+    Label16: TLabel;
     procedure ajoutClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -189,7 +189,7 @@ type
 implementation
 
 uses
-  Commun, JvUIB, CommonConst, Textes, Divers, Proc_Gestions, JvUIBLib, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
+  Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
   UHistorique;
 
 {$R *.DFM}
@@ -1098,7 +1098,7 @@ begin
   if cbIntegrale.Checked then
     cl := clWindowText
   else
-    cl := clInactiveCaptionText;
+    cl := clInactiveCaption;
   Label16.Font.Color := cl;
   Label17.Font.Color := cl;
 end;
@@ -1137,7 +1137,7 @@ begin
   if Assigned(ms) then
   try
     jpg := TJPEGImage.Create;
-    Frm := TBdtForm.Create(Self);
+    Frm := TbdtForm.Create(Self);
     Couverture := TImage.Create(Frm);
     try
       jpg.LoadFromStream(ms);

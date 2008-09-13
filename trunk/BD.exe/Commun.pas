@@ -5,7 +5,7 @@ interface
 {$WARN UNIT_PLATFORM OFF}
 
 uses
-  SysUtils, Windows, Dialogs, Classes, JvUIB, Controls;
+  SysUtils, Windows, Dialogs, Classes, UIB, Controls;
 
 const
   GUID_FULL: TGUID = '{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}';
@@ -30,7 +30,7 @@ function ClearISBN(const Code: string): string;
 function FormatTitre(const Titre: string): string;
 function FormatTitreAlbum(Simple, AvecSerie: Boolean; const Titre, Serie: string; Tome, TomeDebut, TomeFin: Integer; Integrale, HorsSerie: Boolean): string;
 
-function GetTransaction(Database: TJvUIBDataBase): TJvUIBTransaction;
+function GetTransaction(Database: TUIBDataBase): TUIBTransaction;
 
 type
   IHourGlass = interface
@@ -354,9 +354,9 @@ begin
   inherited;
 end;
 
-function GetTransaction(Database: TJvUIBDataBase): TJvUIBTransaction;
+function GetTransaction(Database: TUIBDataBase): TUIBTransaction;
 begin
-  Result := TJvUIBTransaction.Create(nil);
+  Result := TUIBTransaction.Create(nil);
   Result.DataBase := Database;
 end;
 

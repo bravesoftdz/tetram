@@ -63,9 +63,9 @@ object FrmEditAuteur: TFrmEditAuteur
       Layout = tlCenter
     end
     object Label2: TLabel
-      Left = 11
+      Left = 8
       Top = 32
-      Width = 45
+      Width = 48
       Height = 13
       Hint = 'R'#233'f'#233'rence du support'
       Alignment = taRightJustify

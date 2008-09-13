@@ -50,9 +50,9 @@ object FrmEditEditeur: TFrmEditEditeur
       Layout = tlCenter
     end
     object Label1: TLabel
-      Left = 1
+      Left = -2
       Top = 34
-      Width = 45
+      Width = 48
       Height = 13
       Hint = 'R'#233'f'#233'rence du support'
       Alignment = taRightJustify

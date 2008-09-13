@@ -12,7 +12,7 @@ uses
   Divers,
   CommonConst in 'CommonConst.pas',
   Commun in 'Commun.pas',
-  Main in 'Main.pas' {Fond},
+  Main in 'Main.pas' {frmFond},
   DM_Princ in 'DM_Princ.pas' {DMPrinc: TDataModule},
   Form_Repertoire in 'Consultation\Form_Repertoire.pas' {FrmRepertoire},
   Form_ConsultationAlbum in 'Consultation\Form_ConsultationAlbum.pas' {FrmConsultationAlbum},
@@ -152,7 +152,7 @@ var
   Debut: TDateTime;
 begin
 {$IFDEF EnableMemoryLeakReporting}
-//  RegisterExpectedMemoryLeak(TCriticalSection, 1);
+  //  RegisterExpectedMemoryLeak(TCriticalSection, 1);
 {$ENDIF}
   Mode_en_cours := mdLoad;
   Application.Title := 'BDthèque';
@@ -181,13 +181,18 @@ begin
     LitOptions;
 
     FrmSplash.Affiche_act(ChargementApp + '...');
-    Application.CreateForm(TFond, Fond);
-  FrmSplash.Affiche_act(ChargementDatabase + '...');
-    Historique.AddConsultation(fcRecherche);
-    if Utilisateur.Options.ModeDemarrage then
-      Fond.actModeConsultation.Execute
-    else
-      Fond.actModeGestion.Execute;
+    if FindCmdLineSwitch('scripts') then begin
+      Application.CreateForm(TfrmScripts, frmScripts);
+    end else
+    begin
+      Application.CreateForm(TfrmFond, frmFond);
+      FrmSplash.Affiche_act(ChargementDatabase + '...');
+      Historique.AddConsultation(fcRecherche);
+      if Utilisateur.Options.ModeDemarrage then
+        frmFond.actModeConsultation.Execute
+      else
+        frmFond.actModeGestion.Execute;
+    end;
 
     FrmSplash.Affiche_act(FinChargement + '...');
     ChangeCurseur(crHandPoint, 'MyHandPoint', 'MyCursor');
@@ -199,7 +204,8 @@ begin
   finally
     FrmSplash.Free;
   end;
-  Fond.Show;
+  // Fond.Show
+  Application.MainForm.Show;
   Application.Run;
 end.
 

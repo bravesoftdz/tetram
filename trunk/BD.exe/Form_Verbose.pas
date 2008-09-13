@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, JvUIB, UBdtForms;
+  Dialogs, StdCtrls, UBdtForms;
 
 type
   TFrmVerbose = class(TbdtForm)

@@ -5,7 +5,7 @@ interface
 uses
   dialogs,
   Controls, Forms, Classes, SysUtils, Windows, ExtCtrls, Graphics, Printers, LoadComplet, Commun, PrintObject, Textes, CommonConst,
-  Divers, TypeRec, Main, DM_Princ, Form_Recherche, JvUIB, jpeg;
+  Divers, TypeRec, Main, DM_Princ, Form_Recherche, UIB, jpeg;
 
 procedure ImpressionListeCompleteAlbums(Previsualisation: Boolean);
 
@@ -32,7 +32,7 @@ procedure ImpressionListePrevisionsAchats(Previsualisation: Boolean);
 
 implementation
 
-uses Form_Preview, Math, Procedures, ProceduresBDtk, DateUtils, Contnrs, jvuiblib;
+uses Form_Preview, Math, Procedures, ProceduresBDtk, DateUtils, Contnrs, UIBlib;
 
 procedure PreparePrintObject(Prn: TPrintObject; Previsualisation: Boolean; const Titre: string);
 begin
@@ -431,7 +431,7 @@ begin
   fWaiting.ShowProgression(rsTransConfig, 0, 9);
   Serie := TSerieComplete.Create(Reference);
   try
-    Prn := TPrintObject.Create(Fond);
+    Prn := TPrintObject.Create(frmFond);
     try
       PreparePrintObject(Prn, Previsualisation, rsTransFiche);
 
@@ -660,7 +660,7 @@ begin
   Edition := nil;
   if not IsEqualGUID(ID_Edition, GUID_NULL) then Edition := TEditionComplete.Create(ID_Edition);
   try
-    Prn := TPrintObject.Create(Fond);
+    Prn := TPrintObject.Create(frmFond);
     try
       PreparePrintObject(Prn, Previsualisation, rsTransFiche);
 
@@ -710,7 +710,7 @@ begin
   fWaiting.ShowProgression(rsTransConfig, 0, 9);
   ParaBD := TParaBDComplet.Create(Reference);
   try
-    Prn := TPrintObject.Create(Fond);
+    Prn := TPrintObject.Create(frmFond);
     try
       PreparePrintObject(Prn, Previsualisation, rsTransFiche);
 
@@ -739,7 +739,7 @@ begin
   fWaiting.ShowProgression(rsTransConfig, 0, 3);
   Auteur := TAuteurComplet.Create(Reference);
   try
-    Prn := TPrintObject.Create(Fond);
+    Prn := TPrintObject.Create(frmFond);
     try
       PreparePrintObject(Prn, Previsualisation, rsTransFiche);
 
@@ -789,7 +789,7 @@ begin
   fWaiting.ShowProgression(rsTransConfig, 0, 2);
   Emprunteur := TEmprunteurComplet.Create(Reference);
   try
-    Prn := TPrintObject.Create(Fond);
+    Prn := TPrintObject.Create(frmFond);
     try
       PreparePrintObject(Prn, Previsualisation, rsTransFiche);
 
@@ -825,7 +825,7 @@ begin
   fWaiting.ShowProgression(rsTransConfig, 0, 1);
   Album := TAlbumComplet.Create(Reference);
   try
-    Prn := TPrintObject.Create(Fond);
+    Prn := TPrintObject.Create(frmFond);
     try
       PreparePrintObject(Prn, Previsualisation, rsTitreListeEmprunts);
 
@@ -883,7 +883,7 @@ begin
   fWaiting.ShowProgression(rsTransConfig, 0, 1);
   Emprunteur := TEmprunteurComplet.Create(Reference);
   try
-    Prn := TPrintObject.Create(Fond);
+    Prn := TPrintObject.Create(frmFond);
     try
       PreparePrintObject(Prn, Previsualisation, rsTitreListeEmprunts);
 
@@ -923,7 +923,7 @@ var
   Index: Integer;
   OldSerie: TGUID;
   liste: TModalResult;
-  Source, Equipe: TJvUIBQuery;
+  Source, Equipe: TUIBQuery;
   sl: Boolean;
   Sujet, SujetSerie, sEquipe, s, s2: string;
   ColumnStyle: TFontStyles;
@@ -938,10 +938,10 @@ begin
   if liste = mrCancel then Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig + '...', 0, 1);
-  Source := TJvUIBQuery.Create(nil);
-  Equipe := TJvUIBQuery.Create(nil);
+  Source := TUIBQuery.Create(nil);
+  Equipe := TUIBQuery.Create(nil);
   try
-    Prn := TPrintObject.Create(Fond);
+    Prn := TPrintObject.Create(frmFond);
     try
       Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
       Source.SQL.Text := 'SELECT Count(a.ID_Album)';
@@ -1129,7 +1129,7 @@ begin
       Titre := rsListeEmprunts;
   end;
   try
-    Prn := TPrintObject.Create(Fond);
+    Prn := TPrintObject.Create(frmFond);
     try
       PreparePrintObject(Prn, Previsualisation, Titre);
 
@@ -1367,7 +1367,7 @@ begin
   fWaiting.ShowProgression(rsTransConfig + '...', 0, 1);
   Stats := TStats.Create(i = mrNo);
   try
-    Prn := TPrintObject.Create(Fond);
+    Prn := TPrintObject.Create(frmFond);
     try
       fWaiting.ShowProgression(rsTransConfig + '...', 0, 12);
       PreparePrintObject(Prn, Previsualisation, rsInformationsBDtheque);
@@ -1402,7 +1402,7 @@ var
   i, nTri: Integer;
   PAl: TAlbum;
   sl: TStringList;
-  Source, Equipe: TJvUIBQuery;
+  Source, Equipe: TUIBQuery;
   Sujet, sEquipe, s: string;
   PA: TAuteur;
   SautLigne: Boolean;
@@ -1442,8 +1442,8 @@ begin
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig + '...', 0, 1);
   Criteres := TStringList.Create;
-  Source := TJvUIBQuery.Create(nil);
-  Equipe := TJvUIBQuery.Create(nil);
+  Source := TUIBQuery.Create(nil);
+  Equipe := TUIBQuery.Create(nil);
   try
     case Recherche.TypeRecherche of
       trSimple:
@@ -1455,7 +1455,7 @@ begin
         ProcessCritere(Recherche.Criteres);
     end;
 
-    Prn := TPrintObject.Create(Fond);
+    Prn := TPrintObject.Create(frmFond);
     try
       Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
       Source.SQL.Text := 'SELECT a.ID_Album'#13#10'FROM ALBUMS a LEFT JOIN Series s ON s.ID_Serie = a.ID_Serie WHERE a.ID_Album = ?';
@@ -1685,7 +1685,7 @@ begin
   fWaiting.ShowProgression(rsTransConfig, 0, 2);
   Album := TAlbumComplet.Create(Reference);
   try
-    Prn := TPrintObject.Create(Fond);
+    Prn := TPrintObject.Create(frmFond);
     try
       PreparePrintObject(Prn, Previsualisation, rsTransImage);
 
@@ -1745,7 +1745,7 @@ begin
   fWaiting.ShowProgression(rsTransConfig, 0, 2);
   ParaBD := TParaBDComplet.Create(Reference);
   try
-    Prn := TPrintObject.Create(Fond);
+    Prn := TPrintObject.Create(frmFond);
     try
       PreparePrintObject(Prn, Previsualisation, rsTransImage);
 
@@ -1795,7 +1795,7 @@ var
 begin
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 2);
-  Prn := TPrintObject.Create(Fond);
+  Prn := TPrintObject.Create(frmFond);
   try
     PreparePrintObject(Prn, Previsualisation, rsTransAlbumsManquants);
 
@@ -1871,7 +1871,7 @@ var
 begin
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 2);
-  Prn := TPrintObject.Create(Fond);
+  Prn := TPrintObject.Create(frmFond);
   try
     PreparePrintObject(Prn, Previsualisation, rsTransPrevisionsSorties);
 
@@ -1905,7 +1905,7 @@ procedure ImpressionListePrevisionsAchats(Previsualisation: Boolean);
 var
   i: Integer;
   OldAlbum, OldSerie: TGUID;
-  Source: TJvUIBQuery;
+  Source: TUIBQuery;
   sl: Boolean;
   s, s2: string;
   PAl: TAchat;
@@ -1917,9 +1917,9 @@ var
 begin
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig + '...', 0, 1);
-  Source := TJvUIBQuery.Create(nil);
+  Source := TUIBQuery.Create(nil);
   try
-    Prn := TPrintObject.Create(Fond);
+    Prn := TPrintObject.Create(frmFond);
     ListAlbums := TObjectList.Create(True);
     try
       Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);

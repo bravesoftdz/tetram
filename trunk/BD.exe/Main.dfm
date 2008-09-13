@@ -1,9 +1,9 @@
-object Fond: TFond
+object frmFond: TfrmFond
   Left = 480
   Top = 248
   Width = 732
   Height = 580
-  Caption = 'Fond'
+  Caption = 'frmFond'
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText

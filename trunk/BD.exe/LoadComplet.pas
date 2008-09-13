@@ -3,7 +3,7 @@ unit LoadComplet;
 interface
 
 uses
-  SysUtils, Windows, Classes, Dialogs, TypeRec, Commun, CommonConst, DM_Princ, JvUIB, DateUtils, ListOfTypeRec, Contnrs, UChampsRecherche;
+  SysUtils, Windows, Classes, Dialogs, TypeRec, Commun, CommonConst, DM_Princ, UIB, DateUtils, ListOfTypeRec, Contnrs, UChampsRecherche;
 
 type
   TBaseComplet = class(TObject)
@@ -32,7 +32,7 @@ type
     constructor Create(const Reference: TGUID); reintroduce; overload; virtual;
 
     procedure SaveToDatabase; overload;
-    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); overload; virtual;
+    procedure SaveToDatabase(UseTransaction: TUIBTransaction); overload; virtual;
     procedure New;
 
     function ChaineAffichage(dummy: Boolean = True): string; virtual;
@@ -68,7 +68,7 @@ type
     procedure Fill(const Reference: TGUID); override;
     procedure Clear; override;
 
-    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+    procedure SaveToDatabase(UseTransaction: TUIBTransaction); override;
 
   protected
     function GetReference: TGUID; override;
@@ -90,7 +90,7 @@ type
     constructor Create; override;
     destructor Destroy; override;
 
-    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+    procedure SaveToDatabase(UseTransaction: TUIBTransaction); override;
 
     property ID_Editeur: TGUID read GetID_Editeur write SetID_Editeur;
   end;
@@ -131,7 +131,7 @@ type
     constructor Create(const Reference, IdAuteur: TGUID; Force: Boolean); reintroduce; overload;
     destructor Destroy; override;
 
-    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+    procedure SaveToDatabase(UseTransaction: TUIBTransaction); override;
 
     function ChaineAffichage: string; reintroduce; overload;
     function ChaineAffichage(Simple: Boolean): string; overload; override;
@@ -161,7 +161,7 @@ type
     procedure PrepareInstance; override;
     destructor Destroy; override;
 
-    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+    procedure SaveToDatabase(UseTransaction: TUIBTransaction); override;
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
   protected
@@ -193,7 +193,7 @@ type
     destructor Destroy; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
 
-    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+    procedure SaveToDatabase(UseTransaction: TUIBTransaction); override;
 
     property sDateAchat: string read Get_sDateAchat;
   end;
@@ -240,7 +240,7 @@ type
     procedure PrepareInstance; override;
     destructor Destroy; override;
 
-    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+    procedure SaveToDatabase(UseTransaction: TUIBTransaction); override;
     procedure Acheter(Prevision: Boolean);
 
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
@@ -260,7 +260,7 @@ type
     procedure PrepareInstance; override;
     destructor Destroy; override;
 
-    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+    procedure SaveToDatabase(UseTransaction: TUIBTransaction); override;
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
   protected
@@ -395,7 +395,7 @@ type
     procedure PrepareInstance; override;
     destructor Destroy; override;
 
-    procedure SaveToDatabase(UseTransaction: TJvUIBTransaction); override;
+    procedure SaveToDatabase(UseTransaction: TUIBTransaction); override;
     procedure Acheter(Prevision: Boolean);
 
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
@@ -501,7 +501,7 @@ type
 
 implementation
 
-uses JvUIBLib, Divers, StdCtrls, Procedures, Textes;
+uses UIBLib, Divers, StdCtrls, Procedures, Textes;
 
 { TBaseComplet }
 
@@ -551,10 +551,10 @@ end;
 
 procedure TAlbumComplet.Acheter(Prevision: Boolean);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
 begin
   if IsEqualGUID(Reference, GUID_NULL) then Exit;
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -610,12 +610,12 @@ end;
 
 procedure TAlbumComplet.Fill(const Reference: TGUID);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then Exit;
   Self.ID_Album := Reference;
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -682,17 +682,17 @@ begin
   Editions := TEditionsComplet.Create;
 end;
 
-procedure TAlbumComplet.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+procedure TAlbumComplet.SaveToDatabase(UseTransaction: TUIBTransaction);
 var
   s: string;
-  q: TJvUIBQuery;
+  q: TUIBQuery;
   i: Integer;
   hg: IHourGlass;
   Edition: TEditionComplete;
 begin
   inherited;
   hg := THourGlass.Create;
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := UseTransaction;
@@ -840,12 +840,12 @@ end;
 
 procedure TEditionComplete.Fill(const Reference: TGUID);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then Exit;
   Self.ID_Edition := Reference;
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -939,21 +939,21 @@ begin
   Result := ID_Edition;
 end;
 
-procedure TEditionComplete.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+procedure TEditionComplete.SaveToDatabase(UseTransaction: TUIBTransaction);
 var
   PC: TCouverture;
   hg: IHourGlass;
-  q: TJvUIBQuery;
+  q: TUIBQuery;
   s: string;
   i: Integer;
   Stream: TStream;
-  q1, q2, q3, q4, q5, q6: TJvUIBQuery;
+  q1, q2, q3, q4, q5, q6: TUIBQuery;
   FichiersImages: TStringList;
 begin
   inherited;
   FichiersImages := TStringList.Create;
   hg := THourGlass.Create;
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := UseTransaction;
@@ -1035,12 +1035,12 @@ begin
       ExecSQL;
     end;
 
-    q1 := TJvUIBQuery.Create(nil);
-    q2 := TJvUIBQuery.Create(nil);
-    q3 := TJvUIBQuery.Create(nil);
-    q4 := TJvUIBQuery.Create(nil);
-    q5 := TJvUIBQuery.Create(nil);
-    q6 := TJvUIBQuery.Create(nil);
+    q1 := TUIBQuery.Create(nil);
+    q2 := TUIBQuery.Create(nil);
+    q3 := TUIBQuery.Create(nil);
+    q4 := TUIBQuery.Create(nil);
+    q5 := TUIBQuery.Create(nil);
+    q6 := TUIBQuery.Create(nil);
     try
       q1.Transaction := Transaction;
       q2.Transaction := Transaction;
@@ -1215,7 +1215,7 @@ end;
 procedure TEditionsComplet.Fill(const Reference: TGUID; Stock: Integer = -1);
 begin
   inherited Fill(Reference);
-  with TJvUIBQuery.Create(nil) do
+  with TUIBQuery.Create(nil) do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT ID_Edition FROM EDITIONS WHERE ID_Album = ?';
@@ -1265,12 +1265,12 @@ end;
 
 procedure TEmprunteurComplet.Fill(const Reference: TGUID);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then Exit;
   Self.ID_Emprunteur := Reference;
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -1303,12 +1303,12 @@ begin
   Emprunts := TEmpruntsComplet.Create;
 end;
 
-procedure TEmprunteurComplet.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+procedure TEmprunteurComplet.SaveToDatabase(UseTransaction: TUIBTransaction);
 var
   s: string;
 begin
   inherited;
-  with TJvUIBQuery.Create(nil) do
+  with TUIBQuery.Create(nil) do
   try
     Transaction := UseTransaction;
 
@@ -1396,12 +1396,12 @@ end;
 
 procedure TSerieComplete.Fill(const Reference: TGUID);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) and (not FForce) then Exit;
   Self.ID_Serie := Reference;
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -1542,13 +1542,13 @@ begin
   Coloristes := TListOfTAuteur.Create(True);
 end;
 
-procedure TSerieComplete.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+procedure TSerieComplete.SaveToDatabase(UseTransaction: TUIBTransaction);
 var
   s: string;
   i: Integer;
 begin
   inherited;
-  with TJvUIBQuery.Create(nil) do
+  with TUIBQuery.Create(nil) do
   try
     Transaction := UseTransaction;
 
@@ -1663,12 +1663,12 @@ end;
 
 procedure TEditeurComplet.Fill(const Reference: TGUID);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then Exit;
   Self.ID_Editeur := Reference;
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -1689,10 +1689,10 @@ begin
   Result := ID_Editeur;
 end;
 
-procedure TEditeurComplet.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+procedure TEditeurComplet.SaveToDatabase(UseTransaction: TUIBTransaction);
 begin
   inherited;
-  with TJvUIBQuery.Create(nil) do
+  with TUIBQuery.Create(nil) do
   try
     Transaction := UseTransaction;
 
@@ -1738,12 +1738,12 @@ end;
 
 procedure TStats.CreateStats(Stats: TStats; const ID_Editeur: TGUID; const Editeur: string);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
   Stats.Editeur := Editeur;
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -1985,7 +1985,7 @@ end;
 procedure TStats.Fill(Complete: Boolean);
 var
   PS: TStats;
-  q: TJvUIBQuery;
+  q: TUIBQuery;
   hg: IHourGlass;
 begin
   inherited Fill(GUID_NULL);
@@ -1993,7 +1993,7 @@ begin
   CreateStats(Self);
   if Complete then
   begin
-    q := TJvUIBQuery.Create(nil);
+    q := TUIBQuery.Create(nil);
     with q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -2051,7 +2051,7 @@ end;
 
 procedure TEmpruntsComplet.Fill(const Reference: TGUID; Source: TSrcEmprunt; Sens: TSensEmprunt; Apres, Avant: TDateTime; EnCours, Stock: Boolean);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
 
   procedure MakeQuery;
   var
@@ -2095,7 +2095,7 @@ var
   Ref: string;
 begin
   inherited Fill(GUID_NULL);
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -2160,7 +2160,7 @@ end;
 
 procedure TSeriesIncompletes.Fill(AvecIntegrales, AvecAchats: Boolean; const ID_Serie: TGUID);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
   CurrentSerie, dummy: TGUID;
   iDummy, FirstTome, CurrentTome: Integer;
 
@@ -2180,7 +2180,7 @@ var
   Incomplete: TSerieIncomplete;
 begin
   inherited Fill(GUID_NULL);
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -2268,13 +2268,13 @@ end;
 
 procedure TPrevisionsSorties.Fill(AvecAchats: Boolean; const ID_Serie: TGUID);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
   Annee, CurrentAnnee: Integer;
   Prevision: TPrevisionSortie;
 begin
   inherited Fill(GUID_NULL);
   CurrentAnnee := YearOf(Now);
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -2396,12 +2396,12 @@ end;
 
 procedure TAuteurComplet.Fill(const Reference: TGUID);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then Exit;
   Self.ID_Auteur := Reference;
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -2456,12 +2456,12 @@ begin
   Biographie := TStringList.Create;
 end;
 
-procedure TAuteurComplet.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+procedure TAuteurComplet.SaveToDatabase(UseTransaction: TUIBTransaction);
 var
   s: string;
 begin
   inherited;
-  with TJvUIBQuery.Create(nil) do
+  with TUIBQuery.Create(nil) do
   try
     Transaction := UseTransaction;
 
@@ -2492,10 +2492,10 @@ end;
 
 procedure TParaBDComplet.Acheter(Prevision: Boolean);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
 begin
   if IsEqualGUID(Reference, GUID_NULL) then Exit;
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -2552,13 +2552,13 @@ end;
 
 procedure TParaBDComplet.Fill(const Reference: TGUID);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
   serie: TGUID;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then Exit;
   Self.ID_ParaBD := Reference;
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -2623,17 +2623,17 @@ begin
     Result := '';
 end;
 
-procedure TParaBDComplet.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+procedure TParaBDComplet.SaveToDatabase(UseTransaction: TUIBTransaction);
 var
   s: string;
-  q: TJvUIBQuery;
+  q: TUIBQuery;
   i: Integer;
   hg: IHourGlass;
   Stream: TStream;
 begin
   inherited;
   hg := THourGlass.Create;
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := UseTransaction;
@@ -2790,12 +2790,12 @@ end;
 
 procedure TCollectionComplete.Fill(const Reference: TGUID);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then Exit;
   Self.ID_Collection := Reference;
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -2821,10 +2821,10 @@ begin
   Result := ID_Collection;
 end;
 
-procedure TCollectionComplete.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+procedure TCollectionComplete.SaveToDatabase(UseTransaction: TUIBTransaction);
 begin
   inherited;
-  with TJvUIBQuery.Create(nil) do
+  with TUIBQuery.Create(nil) do
   try
     Transaction := UseTransaction;
 
@@ -2876,7 +2876,7 @@ procedure TObjetComplet.New;
 var
   newID: TGUID;
 begin
-  with TJvUIBQuery.Create(nil) do
+  with TUIBQuery.Create(nil) do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'select udf_createguid() from rdb$database';
@@ -2892,7 +2892,7 @@ end;
 
 procedure TObjetComplet.SaveToDatabase;
 var
-  Transaction: TJvUIBTransaction;
+  Transaction: TUIBTransaction;
 begin
   Assert(not IsEqualGUID(Reference, GUID_NULL), 'L''ID ne peut être GUID_NULL');
 
@@ -2905,7 +2905,7 @@ begin
   end;
 end;
 
-procedure TObjetComplet.SaveToDatabase(UseTransaction: TJvUIBTransaction);
+procedure TObjetComplet.SaveToDatabase(UseTransaction: TUIBTransaction);
 begin
   Assert(not IsEqualGUID(Reference, GUID_NULL), 'L''ID ne peut être GUID_NULL');
 end;
@@ -3109,13 +3109,13 @@ var
 var
   Album: TAlbum;
   i: Integer;
-  q: TJvUIBQuery;
+  q: TUIBQuery;
   sWhere, sOrderBy, s: string;
   CritereTri: TCritereTri;
 begin
   inherited Fill(GUID_NULL);
 
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   slFrom := TStringList.Create;
   slFrom.Sorted := True;
   slFrom.Duplicates := dupIgnore;
@@ -3204,7 +3204,7 @@ const
     'ALBUMS_BY_GENRE(?, NULL)',
     'ALBUMS_BY_COLLECTION(?, NULL)');
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
   s: string;
   Album: TAlbum;
   oldID_Album: TGUID;
@@ -3213,7 +3213,7 @@ begin
   inherited Fill(GUID_NULL);
   if not IsEqualGUID(ID, GUID_NULL) then
   begin
-    q := TJvUIBQuery.Create(nil);
+    q := TUIBQuery.Create(nil);
     with q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);

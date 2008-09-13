@@ -3,7 +3,7 @@ unit UChampsRecherche;
 interface
 
 uses
-  SysUtils, JvUIBLib;
+  SysUtils, UIBLib;
 
 type
   TChampSpecial = (csNone, csTitre, csGenre, csAffiche, csEtat, csReliure, csOrientation, csFormatEdition, csTypeEdition, csISBN, csMonnaie, csSensLecture);
@@ -33,7 +33,7 @@ const
 
 implementation
 
-uses Textes, Commun, jvUiB, DM_Princ;
+uses Textes, Commun, UIB, DM_Princ;
 
 const
   _ChampsRecherche: TArrayOfChamp = (
@@ -97,12 +97,12 @@ var
   iChamp, pChamp: Integer;
   Table: string;
   hg: IHourGlass;
-  Qry: TJvUIBQuery;
+  Qry: TUIBQuery;
 begin
   if _ChampsRecherche[1].TypeData = uftUnKnown then
   begin
     hg := THourGlass.Create;
-    Qry := TJvUIBQuery.Create(nil);
+    Qry := TUIBQuery.Create(nil);
     try
       Qry.Transaction := GetTransaction(DMPrinc.UIBDataBase);
 

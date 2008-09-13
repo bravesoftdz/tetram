@@ -99,8 +99,7 @@ type
 implementation
 
 uses
-  JvUIB, Commun, jvuiblib, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, TypeRec, Divers,
-  UHistorique;
+  Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, TypeRec, Divers, UHistorique;
 
 {$R *.dfm}
 

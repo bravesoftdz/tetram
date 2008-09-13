@@ -12,6 +12,8 @@ type
 
 implementation
 
+{$R *.DFM}
+
 { TbdtForm }
 
 constructor TbdtForm.CreateNew(AOwner: TComponent; Dummy: Integer);

@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBEditLabeled, VirtualTrees, ComCtrls, VDTButton,
-  JvUIB, ExtCtrls, Buttons, Fram_Boutons, VirtualTree, TypeRec, Frame_RechercheRapide, LoadComplet,
+  ExtCtrls, Buttons, Fram_Boutons, VirtualTree, TypeRec, Frame_RechercheRapide, LoadComplet,
   CRFurtif, UBdtForms;
 
 type
@@ -76,7 +76,7 @@ type
 
 implementation
 
-uses Math, CommonConst, Proc_Gestions, Commun, Procedures, Textes, Divers, jvuiblib,
+uses Math, CommonConst, Proc_Gestions, Commun, Procedures, Textes, Divers, 
   UHistorique;
 
 {$R *.dfm}

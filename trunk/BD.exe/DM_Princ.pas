@@ -3,8 +3,8 @@ unit DM_Princ;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, JvUIB, AppEvnts, 
-  SyncObjs, jpeg, Menus;
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, AppEvnts, 
+  SyncObjs, jpeg, Menus, uib;
 
 const
   AntiAliasing = True;
@@ -13,10 +13,10 @@ type
   TAffiche_act = procedure(const Texte: ShortString) of object;
 
   TDMPrinc = class(TDataModule)
-    UIBDataBase: TJvUIBDataBase;
+    UIBDataBase: TUIBDataBase;
     ApplicationEvents1: TApplicationEvents;
-    UIBBackup: TJvUIBBackup;
-    UIBRestore: TJvUIBRestore;
+    UIBBackup: TUIBBackup;
+    UIBRestore: TUIBRestore;
     procedure ApplicationEvents1Idle(Sender: TObject; var Done: Boolean);
     procedure ApplicationEvents1Message(var Msg: tagMSG; var Handled: Boolean);
     procedure DataModuleCreate(Sender: TObject);
@@ -39,7 +39,7 @@ implementation
 {$R *.DFM}
 
 uses
-  CommonConst, Commun, Textes, DM_Commun, JvUIBLib, Divers, IniFiles, Procedures, UHistorique, Math, JvUIbase, Updates,
+  CommonConst, Commun, Textes, DM_Commun, UIBLib, Divers, IniFiles, Procedures, UHistorique, Math, UIBase, Updates,
   Main, CheckVersionNet, DateUtils, UMAJODS;
 
 var
@@ -100,16 +100,16 @@ var
   CurrentVersion: string;
 
 type
-  TProcedure = procedure(Query: TJvUIBScript);
+  TProcedure = procedure(Query: TUIBScript);
 
   procedure ProcessUpdate(const Version: string; ProcMAJ: TProcedure);
   var
-    Script: TJvUIBScript;
+    Script: TUIBScript;
   begin
     if (CompareVersionNum(Version, CurrentVersion) > 0) and (CompareVersionNum(Version, Utilisateur.ExeVersion) <= 0) then
     begin
       Affiche_act('Mise à jour ' + Version + '...');
-      Script := TJvUIBScript.Create(nil);
+      Script := TUIBScript.Create(nil);
       try
         Script.Transaction := GetTransaction(UIBDatabase);
         ProcMAJ(Script);
@@ -129,7 +129,7 @@ type
   var
     i: Integer;
   begin
-    with TJvUIBQuery.Create(nil) do
+    with TUIBQuery.Create(nil) do
     try
       Transaction := GetTransaction(UIBDataBase);
       SQL.Text := 'SELECT RDB$INDEX_NAME FROM RDB$INDICES WHERE COALESCE(RDB$SYSTEM_FLAG, 0) <> 1';
@@ -164,7 +164,7 @@ var
 begin
   Result := False;
 
-  with TJvUIBQuery.Create(nil) do
+  with TUIBQuery.Create(nil) do
   try
     Transaction := GetTransaction(UIBDataBase);
 
@@ -208,7 +208,7 @@ begin
       with TFBUpdate(ListFBUpdates[i]) do
         ProcessUpdate(Version, UpdateCallback);
 
-    with TJvUIBQuery.Create(nil) do
+    with TUIBQuery.Create(nil) do
     try
       Transaction := GetTransaction(UIBDataBase);
 
@@ -236,10 +236,10 @@ end;
 
 procedure TDMPrinc.ApplicationEvents1Message(var Msg: tagMSG; var Handled: Boolean);
 begin
-  if (Msg.message = WM_SYSCOMMAND) and (Msg.wParam = SC_CLOSE) and Assigned(Fond) then
+  if (Msg.message = WM_SYSCOMMAND) and (Msg.wParam = SC_CLOSE) and Assigned(frmFond) then
   begin
     Handled := True;
-    Fond.actQuitter.Execute;
+    frmFond.actQuitter.Execute;
   end;
 end;
 

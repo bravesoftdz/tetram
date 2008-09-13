@@ -443,7 +443,7 @@ object FrmCustomize: TFrmCustomize
     ReadOnly = True
     RowSelect = True
     ShowColumnHeaders = False
-    SmallImages = Fond.boutons_16x16_hot
+    SmallImages = frmFond.boutons_16x16_hot
     TabOrder = 3
     ViewStyle = vsReport
     OnChange = CommandsChange
@@ -466,7 +466,7 @@ object FrmCustomize: TFrmCustomize
     ReadOnly = True
     RowSelect = True
     ShowColumnHeaders = False
-    SmallImages = Fond.boutons_16x16_hot
+    SmallImages = frmFond.boutons_16x16_hot
     SortType = stNone
     TabOrder = 4
     ViewStyle = vsReport
@@ -483,7 +483,7 @@ object FrmCustomize: TFrmCustomize
     AutoSize = True
     Caption = 'ToolBar1'
     EdgeOuter = esNone
-    Images = Fond.ImageList1
+    Images = frmFond.ImageList1
     TabOrder = 5
     Transparent = True
     object ToolButton1: TToolButton

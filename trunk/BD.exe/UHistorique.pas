@@ -385,12 +385,12 @@ begin
       fcCouverture, fcImageParaBD: Result := ZoomCouverture(Consult.Action = fcImageParaBD, Consult.ReferenceGUID, Consult.ReferenceGUID2);
       fcRecherche: MAJRecherche(Consult.ReferenceGUID, Consult.Reference2, Consult.Stream);
       fcStock: MAJStock;
-      fcPreview: Fond.SetModalChildForm(TForm(Consult.Reference));
+      fcPreview: frmFond.SetModalChildForm(TForm(Consult.Reference));
       fcSeriesIncompletes: MAJSeriesIncompletes;
       fcPrevisionsSorties: MAJPrevisionsSorties;
-      fcRecreateToolBar: Fond.RechargeToolBar;
+      fcRecreateToolBar: frmFond.RechargeToolBar;
       fcPrevisionsAchats: MAJPrevisionsAchats;
-      fcRefreshRepertoire: Fond.actActualiseRepertoire.Execute;
+      fcRefreshRepertoire: frmFond.actActualiseRepertoire.Execute;
 
       fcGestionAjout:
         if not IsEqualGUID(GUID_NULL, Consult.ReferenceGUID) then

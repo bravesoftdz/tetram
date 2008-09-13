@@ -4,7 +4,7 @@ interface
 
 uses
   SysUtils, Windows, Messages, Classes, Forms, Graphics, Controls, Menus, StdCtrls, Buttons, ComCtrls, ExtCtrls, ToolWin, Commun,
-  VirtualTrees, VirtualTree, ActnList, VDTButton, JvUIB, ComboCheck, ProceduresBDtk,
+  VirtualTrees, VirtualTree, ActnList, VDTButton, ComboCheck, ProceduresBDtk,
   Frame_RechercheRapide, LoadComplet, UBdtForms;
 
 type
@@ -113,8 +113,8 @@ begin
     trSimple: PageControl2.ActivePageIndex := 0;
   end;
   FTypeRecherche := Value;
-  Fond.actImpression.Update;
-  Fond.actApercuImpression.Update;
+  frmFond.actImpression.Update;
+  frmFond.actApercuImpression.Update;
 end;
 
 procedure TFrmRecherche.FormCreate(Sender: TObject);

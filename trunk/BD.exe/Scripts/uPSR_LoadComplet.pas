@@ -31,7 +31,7 @@ procedure RIRegister_LoadComplet(CL: TPSRuntimeClassImporter);
 implementation
 
 uses
-  Windows, Dialogs, TypeRec, Commun, CommonConst, DM_Princ, JvUIB, DateUtils, ListOfTypeRec, Contnrs, LoadComplet;
+  Windows, Dialogs, TypeRec, Commun, CommonConst, DM_Princ, DateUtils, ListOfTypeRec, Contnrs, LoadComplet;
 
 (* === run-time registration functions === *)
 

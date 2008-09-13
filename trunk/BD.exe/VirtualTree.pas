@@ -233,7 +233,7 @@ const
 
 implementation
 
-uses JvUIB, DM_Princ, Commun, Types, JvUIBLib, Divers;
+uses UIB, DM_Princ, Commun, Types, UIBLib, Divers;
 
 { TVirtualStringTree }
 
@@ -436,7 +436,7 @@ type
   TClassBasePointeur = class of TBasePointeur;
 var
   InfoNode: ^RNodeInfo;
-  q: TJvUIBQuery;
+  q: TUIBQuery;
   ClassPointeur: TClassBasePointeur;
 begin
   if (FMode <> vmNone) and (GetNodeLevel(Node) = 0) then
@@ -463,7 +463,7 @@ begin
     ChildCount := FCountPointers[Node.Index].Count;
     InfoNode := GetNodeData(Node);
     if not Assigned(InfoNode.List) then InfoNode.List := TList.Create;
-    q := TJvUIBQuery.Create(Self);
+    q := TUIBQuery.Create(Self);
     with q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -596,7 +596,7 @@ begin
       CurrentValue := iFind;
     end
     else
-      with TJvUIBQuery.Create(nil) do
+      with TUIBQuery.Create(nil) do
       try
         Transaction := GetTransaction(DMPrinc.UIBDataBase);
         SQL.Text := 'SELECT ' + vmModeInfos[FMode].REFFIELDS + ' FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].FIELDSEARCH + ' LIKE ''%'' || ? || ''%''';
@@ -704,7 +704,7 @@ begin
   iCurrent := CurrentValue;
   Clear;
   if FMode <> vmNone then
-    with TJvUIBQuery.Create(Self) do
+    with TUIBQuery.Create(Self) do
     begin
       BeginUpdate;
       try
@@ -771,7 +771,7 @@ begin
     ClearSelection;
     Exit;
   end;
-  with TJvUIBQuery.Create(nil) do
+  with TUIBQuery.Create(nil) do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT coalesce(' + vmModeInfos[FMode].INITIALEVALUE + ', ''-1'') FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].REFFIELDS + ' = ?';

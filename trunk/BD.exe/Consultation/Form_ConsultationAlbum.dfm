@@ -661,7 +661,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       OwnerData = True
       ReadOnly = True
       ShowColumnHeaders = False
-      SmallImages = Fond.ShareImageList
+      SmallImages = frmFond.ShareImageList
       SortType = stNone
       TabOrder = 6
       ViewStyle = vsReport
@@ -1189,12 +1189,12 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
         Header.Font.Height = -11
         Header.Font.Name = 'Tahoma'
         Header.Font.Style = []
-        Header.Images = Fond.ImageList1
+        Header.Images = frmFond.ImageList1
         Header.MainColumn = 1
         Header.Options = [hoAutoResize, hoColumnResize, hoShowImages, hoVisible]
         Header.Style = hsPlates
         HotCursor = crHandPoint
-        Images = Fond.ImageList1
+        Images = frmFond.ImageList1
         TabOrder = 7
         TreeOptions.PaintOptions = [toHideFocusRect, toHotTrack, toShowDropmark, toThemeAware, toUseBlendedImages]
         TreeOptions.SelectionOptions = [toFullRowSelect, toMultiSelect]
@@ -1399,7 +1399,7 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
   end
   object MainMenu1: TMainMenu
     AutoMerge = True
-    Images = Fond.boutons_32x32_hot
+    Images = frmFond.boutons_32x32_hot
     Left = 336
     Top = 16
     object Fiche1: TMenuItem

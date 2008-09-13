@@ -35,7 +35,7 @@ type
 
 implementation
 
-uses Commun, JvUIB, ShellAPI, Procedures, Textes;
+uses Commun, ShellAPI, Procedures, Textes;
 
 {$R *.DFM}
 
@@ -70,7 +70,7 @@ end;
 
 procedure TFrmEditAuteur.edSiteChange(Sender: TObject);
 begin
-  VDTButton13.Enabled := Copy(LowerCase(edSite.Text), 1, 7) = 'http://';
+  VDTButton13.Enabled := CompareMem(PChar(LowerCase(Trim(edSite.Text))), PChar('http://'), 7);
 end;
 
 procedure TFrmEditAuteur.VDTButton13Click(Sender: TObject);

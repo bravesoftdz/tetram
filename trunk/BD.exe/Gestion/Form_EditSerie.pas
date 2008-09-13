@@ -91,7 +91,7 @@ type
 implementation
 
 uses
-  Commun, Proc_Gestions, TypeRec, JvUIB, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
+  Commun, Proc_Gestions, TypeRec, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
   UHistorique;
 
 {$R *.DFM}
@@ -310,7 +310,7 @@ end;
 
 procedure TFrmEditSerie.edSiteChange(Sender: TObject);
 begin
-  VDTButton13.Enabled := Copy(LowerCase(edSite.Text), 1, 7) = 'http://';
+  VDTButton13.Enabled := CompareMem(PChar(LowerCase(Trim(edSite.Text))), PChar('http://'), 7);
 end;
 
 procedure TFrmEditSerie.vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);

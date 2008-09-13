@@ -4,13 +4,13 @@ interface
 
 implementation
 
-uses JvUIB, Updates;
+uses UIB, Updates;
 
-procedure MAJ0_0_2_23(Query: TJvUIBScript);
+procedure MAJ0_0_2_23(Query: TUIBScript);
 
   function HasUpgradeToDo: Boolean;
   begin
-    with TJvUIBQuery.Create(Query.Transaction) do try
+    with TUIBQuery.Create(Query.Transaction) do try
       SQL.Text := 'select count(*) from RDB$RELATION_FIELDS where rdb$field_name = ''ACHAT'' and rdb$relation_name = ''EDITIONS'';';
       Open;
       Result := Fields.AsInteger[0] = 0;

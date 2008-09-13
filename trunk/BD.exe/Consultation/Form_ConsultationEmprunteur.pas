@@ -75,7 +75,7 @@ procedure TFrmConsultationEmprunteur.FormCreate(Sender: TObject);
 begin
   FEmprunteur := TEmprunteurComplet.Create;
   PrepareLV(Self);
-  ListeEmprunts.Header.Columns[0].Width := Trunc(ListeEmprunts.Header.Columns[0].Width * 1.5) + Fond.ImageList1.Width + 4;
+  ListeEmprunts.Header.Columns[0].Width := Trunc(ListeEmprunts.Header.Columns[0].Width * 1.5) + frmFond.ImageList1.Width + 4;
   FSortColumn := 0;
   FSortDirection := sdDescending;
   ListeEmprunts.Header.Columns[0].ImageIndex := 1;

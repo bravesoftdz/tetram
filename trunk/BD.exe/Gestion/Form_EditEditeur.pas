@@ -35,7 +35,7 @@ type
 implementation
 
 uses
-  JvUIB, Commun, Procedures, Textes;
+  Commun, Procedures, Textes;
 
 {$R *.DFM}
 
@@ -84,7 +84,7 @@ end;
 
 procedure TFrmEditEditeur.edSiteChange(Sender: TObject);
 begin
-  VDTButton13.Enabled := Copy(LowerCase(edSite.Text), 1, 7) = 'http://';
+  VDTButton13.Enabled := CompareMem(PChar(LowerCase(Trim(edSite.Text))), PChar('http://'), 7);
 end;
 
 function TFrmEditEditeur.GetID_Editeur: TGUID;

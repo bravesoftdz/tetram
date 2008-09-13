@@ -6,7 +6,7 @@ procedure MAJ_ODS;
 
 implementation
 
-uses JvUIB, CommonConst, SysUtils, Windows, Form_Verbose, Forms, DM_Princ;
+uses CommonConst, SysUtils, Windows, Form_Verbose, Forms, DM_Princ;
 
 procedure MAJ_ODS;
 const
@@ -38,7 +38,7 @@ begin
       DMPrinc.UIBBackup.Verbose := True;
       DMPrinc.UIBBackup.BackupFiles.Text := FichierBackup;
       DMPrinc.UIBBackup.Run;
-      if SameText(Copy(Memo1.Lines[Memo1.Lines.Count - 2], 1, Length(FinBackup)), FinBackup) then
+      if not CompareMem(PChar(Memo1.Lines[Memo1.Lines.Count - 2]), PChar(FinBackup), Length(FinBackup)) then
         raise Exception.Create('Erreur durant le backup');
 
       DMPrinc.UIBDataBase.Connected := False;
@@ -47,7 +47,7 @@ begin
       DMPrinc.UIBRestore.Verbose := True;
       DMPrinc.UIBRestore.BackupFiles.Text := FichierBackup;
       DMPrinc.UIBRestore.Run;
-      if SameText(Copy(Memo1.Lines[Memo1.Lines.Count - 3], 1, Length(FinRestore)), FinRestore) then
+      if not CompareMem(PChar(Memo1.Lines[Memo1.Lines.Count - 3]), PChar(FinRestore), Length(FinRestore)) then
         raise Exception.Create('Erreur durant le restore');
 
       DMPrinc.UIBDataBase.Connected := True;

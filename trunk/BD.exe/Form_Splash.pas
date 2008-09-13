@@ -69,7 +69,7 @@ procedure TFrmSplash.FormDestroy(Sender: TObject);
 begin
   Utilisateur.AppVersion := Copy(VersionLabel1.Caption, Length(VersionLabel1.InfoPrefix) + 1, Length(VersionLabel1.Caption) - Length(VersionLabel1.InfoPrefix));
   Application.Title := '© TeträmCorp ' + TitreApplication + Utilisateur.AppVersion;
-  Fond.Caption := Application.Title;
+  frmFond.Caption := Application.Title;
   Cursor := crDefault;
 end;
 

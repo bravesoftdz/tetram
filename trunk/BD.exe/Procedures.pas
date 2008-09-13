@@ -3,8 +3,8 @@ unit Procedures;
 interface
 
 uses
-  SysUtils, Windows, Classes, Dialogs, ComCtrls, ExtCtrls, Controls, Forms, Graphics, CommonConst, JvUIB, jpeg, GraphicEx,
-  StdCtrls, ComboCheck, JvUIBLib, Commun;
+  SysUtils, Windows, Classes, Dialogs, ComCtrls, ExtCtrls, Controls, Forms, Graphics, CommonConst, UIB, jpeg, GraphicEx,
+  StdCtrls, ComboCheck, UIBLib, Commun;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
 
@@ -21,8 +21,8 @@ procedure EcritOptions;
 procedure PrepareLV(Form: TForm);
 
 function SupprimerTable(const Table: string): Boolean;
-function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TJvUIBTransaction = nil): Boolean; overload;
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: TGUID; UseTransaction: TJvUIBTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TUIBTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: TGUID; UseTransaction: TUIBTransaction = nil): Boolean; overload;
 
 type
   PRecRef = ^TRecRef;
@@ -74,7 +74,7 @@ implementation
 
 uses
   Divers, Textes, ShellAPI, ReadOnlyCheckBox,
-  JvUIBase, MaskUtils, Mask, DM_Princ, IniFiles, Math, VirtualTrees, DbEditLabeled, ActnList,
+  MaskUtils, Mask, DM_Princ, IniFiles, Math, VirtualTrees, DbEditLabeled, ActnList,
   Types, UBdtForms;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
@@ -137,7 +137,7 @@ end;
 
 procedure LitOptions;
 
-  function LitStr(Table: TJvUIBQuery; const Champ, Defaut: string): string;
+  function LitStr(Table: TUIBQuery; const Champ, Defaut: string): string;
   begin
     with Table do
     begin
@@ -151,11 +151,11 @@ procedure LitOptions;
   end;
 
 var
-  op: TJvUIBQuery;
+  op: TUIBQuery;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  op := TJvUIBQuery.Create(nil);
+  op := TUIBQuery.Create(nil);
   with op do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -201,7 +201,7 @@ end;
 
 procedure EcritOptions;
 
-  procedure Sauve(Table: TJvUIBQuery; const Champ: string; Valeur: Currency); overload;
+  procedure Sauve(Table: TUIBQuery; const Champ: string; Valeur: Currency); overload;
   begin
     with Table do
     begin
@@ -212,7 +212,7 @@ procedure EcritOptions;
     end;
   end;
 
-  procedure Sauve(Table: TJvUIBQuery; const Champ, Valeur: string); overload;
+  procedure Sauve(Table: TUIBQuery; const Champ, Valeur: string); overload;
   begin
     with Table do
     begin
@@ -224,11 +224,11 @@ procedure EcritOptions;
   end;
 
 var
-  op: TJvUIBQuery;
+  op: TUIBQuery;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  op := TJvUIBQuery.Create(nil);
+  op := TUIBQuery.Create(nil);
   with op do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -323,7 +323,7 @@ end;
 function SupprimerTable(const Table: string): Boolean;
 begin
   try
-    with TJvUIBQuery.Create(nil) do
+    with TUIBQuery.Create(nil) do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       Transaction.Database.Connected := False; // fonctionne mais pas correct du tout!
@@ -341,15 +341,15 @@ begin
   end;
 end;
 
-function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TJvUIBTransaction = nil): Boolean;
+function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TUIBTransaction = nil): Boolean;
 begin
   Result := SupprimerToutDans(ChampSupp, Table, '', GUID_NULL, UseTransaction);
 end;
 
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: TGUID; UseTransaction: TJvUIBTransaction = nil): Boolean;
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: TGUID; UseTransaction: TUIBTransaction = nil): Boolean;
 begin
   try
-    with TJvUIBQuery.Create(nil) do
+    with TUIBQuery.Create(nil) do
     try
       if Assigned(UseTransaction) then
         Transaction := UseTransaction
@@ -381,7 +381,7 @@ function AjoutMvt(const ID_Emprunteur, RefObjet: TGUID; DateE: TDateTime; Pret: 
 begin
   Result := False;
   try
-    with TJvUIBQuery.Create(nil) do
+    with TUIBQuery.Create(nil) do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'Execute procedure PROC_AJOUTMVT(:ID_Edition, :ID_Emprunteur, :DateEmprunt, :Pret)';
@@ -424,7 +424,7 @@ var
   c: TComponent;
   l: TLabel;
   s: string;
-  Champs, Desc: TJvUIBQuery;
+  Champs, Desc: TUIBQuery;
   Champ: Integer;
   LockUpdate: ILockWindow;
   TypeChamp: TUIBFieldType;
@@ -433,8 +433,8 @@ begin
   for t := ScrollBox.ControlCount - 1 downto 0 do
     ScrollBox.Controls[t].Free;
   t := 4;
-  Desc := TJvUIBQuery.Create(nil);
-  Champs := TJvUIBQuery.Create(nil);
+  Desc := TUIBQuery.Create(nil);
+  Champs := TUIBQuery.Create(nil);
   try
     with Desc do
     begin
@@ -807,7 +807,7 @@ var
   img: TJPEGImage;
   Fichier, Chemin: string;
 begin
-  with TJvUIBQuery.Create(nil) do
+  with TUIBQuery.Create(nil) do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     if isParaBD then
@@ -957,7 +957,7 @@ end;
 
 function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = True): string;
 begin
-  with TJvUIBQuery.Create(nil) do
+  with TUIBQuery.Create(nil) do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT * FROM SearchFileName(:Chemin, :Fichier, :Reserve)';
@@ -974,7 +974,7 @@ end;
 
 procedure LoadStrings(Categorie: Integer; Strings: TStrings);
 begin
-  with TJvUIBQuery.Create(nil) do
+  with TUIBQuery.Create(nil) do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT REF, LIBELLE, DEFAUT FROM LISTES WHERE CATEGORIE = :Categorie ORDER BY ORDRE';
@@ -997,7 +997,7 @@ procedure LoadCombo(Categorie: Integer; Combo: TLightComboCheck);
 var
   HasNULL: Boolean;
 begin
-  with TJvUIBQuery.Create(nil) do
+  with TUIBQuery.Create(nil) do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT REF, LIBELLE, DEFAUT FROM LISTES WHERE CATEGORIE = :Categorie ORDER BY ORDRE';

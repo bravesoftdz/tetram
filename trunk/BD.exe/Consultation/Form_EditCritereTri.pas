@@ -38,7 +38,7 @@ type
 
 implementation
 
-uses JvUIB, DM_Commun, Commun, DM_Princ, JvUIBLib, Divers,
+uses DM_Commun, Commun, DM_Princ, Divers,
   UChampsRecherche;
 
 {$R *.DFM}

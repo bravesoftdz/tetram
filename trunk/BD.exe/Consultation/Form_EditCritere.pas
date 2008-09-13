@@ -35,7 +35,7 @@ type
 
 implementation
 
-uses JvUIB, DM_Commun, Commun, DM_Princ, JvUIBLib, Divers,
+uses UIB, DM_Commun, Commun, DM_Princ, UIBLib, Divers,
   UChampsRecherche;
 
 {$R *.DFM}
@@ -183,7 +183,7 @@ end;
 
 procedure TFrmEditCritere.champsChange(Sender: TObject);
 
-  procedure AssignItems(Items: TItems; Source: TJvUIBQuery; ChampValeurs: TStrings); overload;
+  procedure AssignItems(Items: TItems; Source: TUIBQuery; ChampValeurs: TStrings); overload;
   begin
     try
       Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -206,7 +206,7 @@ procedure TFrmEditCritere.champsChange(Sender: TObject);
     end;
   end;
 
-  procedure AssignItems(Items: TItems; Source: TJvUIBQuery); overload;
+  procedure AssignItems(Items: TItems; Source: TUIBQuery); overload;
   begin
     try
       Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
@@ -228,7 +228,7 @@ procedure TFrmEditCritere.champsChange(Sender: TObject);
     end;
   end;
 
-  procedure AssignItems(Items: TStrings; Source: TJvUIBQuery); overload;
+  procedure AssignItems(Items: TStrings; Source: TUIBQuery); overload;
   begin
     try
       Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);

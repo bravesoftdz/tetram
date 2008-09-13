@@ -4,9 +4,9 @@ interface
 
 implementation
 
-uses JvUIB, Updates, SysUtils;
+uses UIB, Updates, SysUtils;
 
-procedure MAJ0_0_3_24(Query: TJvUIBScript);
+procedure MAJ0_0_3_24(Query: TUIBScript);
 var
   idfieldname, currenttable, dcfieldname, dmfieldname: string;
 begin
@@ -20,7 +20,7 @@ begin
     Script.Add('DECLARE EXTERNAL FUNCTION UDF_CREATEGUID RETURNS CSTRING(38) FREE_IT ENTRY_POINT ''CreateGUID'' MODULE_NAME ''BDT_UDF.dll'';');
     Script.Add('DECLARE EXTERNAL FUNCTION UDF_TRIM CSTRING(32767) RETURNS CSTRING(32767) FREE_IT ENTRY_POINT ''Trim'' MODULE_NAME ''BDT_UDF.dll'';');
 
-    with TJvUIBQuery.Create(Query.Transaction) do try
+    with TUIBQuery.Create(Query.Transaction) do try
       SQL.Text := 'select rdb$relation_name from rdb$relations where rdb$system_flag = 0 and rdb$view_blr is null';
       Open;
       while not Eof do begin

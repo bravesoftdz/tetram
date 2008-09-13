@@ -6,7 +6,7 @@ object DMPrinc: TDMPrinc
   Top = 372
   Height = 444
   Width = 572
-  object UIBDataBase: TJvUIBDataBase
+  object UIBDataBase: TUIBDataBase
     Params.Strings = (
       'sql_dialect=3'
       'lc_ctype=NONE'
@@ -23,12 +23,12 @@ object DMPrinc: TDMPrinc
     Left = 136
     Top = 16
   end
-  object UIBBackup: TJvUIBBackup
+  object UIBBackup: TUIBBackup
     LibraryName = 'fbembed.dll'
     Left = 32
     Top = 184
   end
-  object UIBRestore: TJvUIBRestore
+  object UIBRestore: TUIBRestore
     LibraryName = 'fbembed.dll'
     Options = [roReplace, roCreateNewDB]
     Left = 136

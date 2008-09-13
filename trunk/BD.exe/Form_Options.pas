@@ -105,7 +105,7 @@ type
 
 implementation
 
-uses CommonConst, DM_Princ, TypeRec, JvUIB, Commun, Procedures, Updates;
+uses CommonConst, DM_Princ, TypeRec, UIB, Commun, Procedures, Updates;
 
 {$R *.DFM}
 
@@ -154,7 +154,7 @@ begin
       SiteWeb.BddVersion := ComboBox5.Text;
     SiteWeb.Paquets := StrToInt(ComboBox6.Text);
   end;
-  with TJvUIBQuery.Create(nil) do
+  with TUIBQuery.Create(nil) do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'UPDATE OR INSERT INTO CONVERSIONS (ID_Conversion, Monnaie1, Monnaie2, Taux) VALUES (?, ?, ?, ?) MATCHING (id_conversion)';
@@ -197,7 +197,7 @@ end;
 procedure TFrmOptions.FormCreate(Sender: TObject);
 var
   i: Integer;
-  q: TJvUIBQuery;
+  q: TUIBQuery;
   sr: TSearchRec;
 begin
   PrepareLV(Self);
@@ -220,7 +220,7 @@ begin
   ImageChargee := False;
   SItem := nil;
 
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);

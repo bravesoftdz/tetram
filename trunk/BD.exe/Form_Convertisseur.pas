@@ -28,13 +28,13 @@ var
 
 implementation
 
-uses Frame_Convertisseur, CommonConst, TypeRec, DM_Princ, JvUIB, Commun;
+uses Frame_Convertisseur, CommonConst, TypeRec, DM_Princ, UIB, Commun;
 
 {$R *.DFM}
 
 procedure TFrmConvers.FormCreate(Sender: TObject);
 var
-  q: TJvUIBQuery;
+  q: TUIBQuery;
   fc: TConvertisseur;
   PC: TConversion;
   i: Integer;
@@ -42,7 +42,7 @@ begin
   FFirstEdit := nil;
   ListFC := TList.Create;
   PC := TConversion.Create;
-  q := TJvUIBQuery.Create(nil);
+  q := TUIBQuery.Create(nil);
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT Monnaie1, Monnaie2, Taux FROM conversions WHERE Monnaie1 = ? OR Monnaie2 = ?';

@@ -310,7 +310,7 @@ object FrmRecherche: TFrmRecherche
     Header.Font.Height = -11
     Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
-    Header.Images = Fond.ImageList1
+    Header.Images = frmFond.ImageList1
     Header.Options = [hoAutoResize, hoColumnResize, hoShowImages, hoVisible]
     Header.Style = hsPlates
     TabOrder = 1

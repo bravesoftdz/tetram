@@ -89,7 +89,7 @@ begin
   DateAvant := -1;
   DateApres := -1;
   PrepareLV(Self);
-  ListeEmprunts.Header.Columns[0].Width := Trunc(ListeEmprunts.Header.Columns[0].Width * 1.5) + Fond.ImageList1.Width + 4;
+  ListeEmprunts.Header.Columns[0].Width := Trunc(ListeEmprunts.Header.Columns[0].Width * 1.5) + frmFond.ImageList1.Width + 4;
   ListeEmprunts.Header.Columns[1].Width := 150;
   FSortColumn := 0;
   FSortDirection := sdDescending;

@@ -4,9 +4,9 @@ interface
 
 implementation
 
-uses JvUIB, Updates;
+uses UIB, Updates;
 
-procedure PrepareDatabase(Query: TJvUIBScript);
+procedure PrepareDatabase(Query: TUIBScript);
 begin
   with Query do begin
     Script.Clear;
@@ -109,7 +109,7 @@ begin
     end;
 end;
 
-procedure ResetDatabase(Query: TJvUIBScript);
+procedure ResetDatabase(Query: TUIBScript);
 begin
   with Query do begin
     Script.Clear;
@@ -1027,7 +1027,7 @@ begin
   end;
 end;
 
-procedure NouveauxIndex(Query: TJvUIBScript);
+procedure NouveauxIndex(Query: TUIBScript);
 begin
   with Query do begin
     Script.Clear;
@@ -1158,7 +1158,7 @@ begin
   end;
 end;
 
-procedure MAJ1_2_0_8(Query: TJvUIBScript);
+procedure MAJ1_2_0_8(Query: TUIBScript);
 begin
   PrepareDatabase(Query);
   with Query do begin

@@ -4,9 +4,9 @@ interface
 
 implementation
 
-uses JvUIB, Updates;
+uses UIB, Updates;
 
-procedure MAJ2_1_0_0(Query: TJvUIBScript);
+procedure MAJ2_1_0_0(Query: TUIBScript);
 begin
   with Query do
   begin

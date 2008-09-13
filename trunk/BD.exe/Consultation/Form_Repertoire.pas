@@ -139,7 +139,7 @@ begin
     WriteInteger('Options', 'GroupBy', LightComboCheck1.Value);
   finally
     Free;
-  end
+  end;
 end;
 
 procedure TFrmRepertoire.FrameRechercheRapideedSearchKeyPress(Sender: TObject; var Key: Char);

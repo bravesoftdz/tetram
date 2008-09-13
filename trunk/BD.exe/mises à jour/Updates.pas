@@ -3,10 +3,10 @@ unit Updates;
 interface
 
 uses
-  Contnrs, Classes, JvUIB;
+  Contnrs, Classes, UIB;
 
 type
-  TUpdateFBCallback = procedure(Query: TJvUIBScript);
+  TUpdateFBCallback = procedure(Query: TUIBScript);
   TUpdateMySQLCallback = procedure (Script: TStrings);
 
   TFBUpdate = class

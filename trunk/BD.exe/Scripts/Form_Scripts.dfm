@@ -22,7 +22,7 @@ object frmScripts: TfrmScripts
     Top = 0
     Width = 862
     Height = 594
-    ActivePage = tbEdition
+    ActivePage = tbScripts
     Align = alClient
     PopupMenu = PopupMenu1
     TabOrder = 0
@@ -81,7 +81,7 @@ object frmScripts: TfrmScripts
         Top = 373
         Width = 854
         Height = 193
-        ActivePage = TabSheet6
+        ActivePage = TabSheet1
         Align = alBottom
         TabOrder = 1
         object TabSheet1: TTabSheet
@@ -123,7 +123,7 @@ object frmScripts: TfrmScripts
               end
               item
                 Position = 3
-                Width = 476
+                Width = 472
                 WideText = 'Message'
               end>
           end
@@ -164,7 +164,7 @@ object frmScripts: TfrmScripts
               end
               item
                 Position = 1
-                Width = 700
+                Width = 696
                 WideText = 'Valeur'
               end>
           end
@@ -204,7 +204,7 @@ object frmScripts: TfrmScripts
               end
               item
                 Position = 1
-                Width = 746
+                Width = 742
                 WideText = 'Fichier'
               end>
           end

@@ -31,12 +31,12 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
     Header.Font.Height = -11
     Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
-    Header.Images = Fond.ImageList1
+    Header.Images = frmFond.ImageList1
     Header.Options = [hoAutoResize, hoColumnResize, hoShowImages, hoVisible]
     Header.SortColumn = 1
     Header.Style = hsPlates
     HotCursor = crHandPoint
-    Images = Fond.ImageList1
+    Images = frmFond.ImageList1
     TabOrder = 0
     OnAfterItemPaint = vstPrevisionsSortiesAfterItemPaint
     OnDblClick = vstPrevisionsSortiesDblClick

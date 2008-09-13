@@ -28,7 +28,7 @@ procedure SIRegister_TypeRec(CL: TPSPascalCompiler);
 implementation
 
 uses
-  Windows, DB, ComCtrls, JvUIB, StdCtrls, Commun, TypeRec;
+  Windows, DB, ComCtrls, StdCtrls, Commun, TypeRec;
 
 (* === compile-time registration functions === *)
 

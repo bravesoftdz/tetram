@@ -4,9 +4,9 @@ interface
 
 implementation
 
-uses JvUIB, Updates;
+uses UIB, Updates;
 
-procedure MAJ1_0_0_3(Query: TJvUIBScript);
+procedure MAJ1_0_0_3(Query: TUIBScript);
 begin
   with Query do begin
     Script.Clear;

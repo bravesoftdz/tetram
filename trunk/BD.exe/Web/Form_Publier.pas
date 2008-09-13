@@ -35,7 +35,7 @@ implementation
 {$R *.dfm}
 
 uses
-  UNet, Divers, Updates, DIMime, DIMimeStreams, JvUIB, JvUIBLib, DM_Princ, Commun, DateUtils,
+  UNet, Divers, Updates, DIMime, DIMimeStreams, UIB, UIBLib, DM_Princ, Commun, DateUtils,
   Procedures, CommonConst, VarUtils;
 
 type
@@ -76,7 +76,7 @@ var
   db_version, UpgradeTodb_version: string;
   UpgradeFromDate: TDate;
   s1, s2: string;
-  qry: TJvUIBQuery;
+  qry: TUIBQuery;
   StartTime, StartTimeTable: TDateTime;
   SQLSettings: TFormatSettings;
   URL: string;
@@ -289,7 +289,7 @@ var
     Application.ProcessMessages;
   end;
 
-  procedure SendDataset(InfoTable: RInfoTable; Query: TJvUIBQuery; isDelete: Boolean = False);
+  procedure SendDataset(InfoTable: RInfoTable; Query: TUIBQuery; isDelete: Boolean = False);
 
     procedure SendXML(const XML: string);
     var
@@ -540,7 +540,7 @@ begin
       UpgradeFromDate := -1;
 
     StartTime := Now;
-    qry := TJvUIBQuery.Create(nil);
+    qry := TUIBQuery.Create(nil);
     with qry do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
