@@ -166,6 +166,20 @@ begin
     RegisterProperty('Scenaristes', 'TListOfTAuteur', iptrw);
     RegisterProperty('Dessinateurs', 'TListOfTAuteur', iptrw);
     RegisterProperty('Coloristes', 'TListOfTAuteur', iptrw);
+    RegisterProperty('TypeEdition', 'Integer', iptrw);
+    RegisterProperty('Etat', 'Integer', iptrw);
+    RegisterProperty('Reliure', 'Integer', iptrw);
+    RegisterProperty('FormatEdition', 'Integer', iptrw);
+    RegisterProperty('Orientation', 'Integer', iptrw);
+    RegisterProperty('sEtat', 'string', iptrw);
+    RegisterProperty('sReliure', 'string', iptrw);
+    RegisterProperty('sTypeEdition', 'string', iptrw);
+    RegisterProperty('sFormatEdition', 'string', iptrw);
+    RegisterProperty('sOrientation', 'string', iptrw);
+    RegisterProperty('SensLecture', 'Integer', iptrw);
+    RegisterProperty('sSensLecture', 'string', iptrw);
+    RegisterProperty('VO', 'Integer', iptrw);
+    RegisterProperty('Couleur', 'Integer', iptrw);
   end;
 end;
 

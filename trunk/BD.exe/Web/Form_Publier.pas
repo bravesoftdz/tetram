@@ -55,7 +55,7 @@ const
     (TableName: 'PERSONNES'; ID: 'id_personne'),
     (TableName: 'EDITEURS'; ID: 'id_editeur'),
     (TableName: 'COLLECTIONS'; ID: 'id_collection'),
-    (TableName: 'SERIES'; ID: 'id_serie'),
+    (TableName: 'SERIES'; ID: 'id_serie'; SkipFields: '@etat=1.0.0.1@reliure=1.0.0.1@typeedition=1.0.0.1@orientation=1.0.0.1@formatedition=1.0.0.1@senslecture=1.0.0.1@vo=1.0.0.1@couleur=1.0.0.1@'),
     (TableName: 'ALBUMS'; ID: 'id_album'),
     (TableName: 'EDITIONS'; ID: 'id_edition'),
     (TableName: 'AUTEURS'; ID: 'id_auteur'),
@@ -315,7 +315,7 @@ var
 
   var
     enteteXML, bodyXML, recordXML, champ: string;
-    contenuChamp: widestring;
+    contenuChamp: WideString;
     i, l: Integer;
     //    ms: TMemoryStream;
     //    ss: TStringStream;
@@ -328,7 +328,16 @@ var
       with Query do
       begin
         for i := 0 to Pred(Fields.FieldCount) do
-          if Pos('@' + LowerCase(Fields.AliasName[i]) + '@', InfoTable.SkipFields) = 0 then listFields.Add(Pointer(i));
+        begin
+          champ := LowerCase(Fields.AliasName[i]);
+          l := Pos('@' + champ + '=', InfoTable.SkipFields);
+          if l > 0 then begin
+            l := l + Length(champ) + 2;
+            if CompareVersionNum(db_version, Copy(InfoTable.SkipFields, l, PosInText(l, InfoTable.SkipFields, '@') - l)) >= 0 then listFields.Add(Pointer(i));
+            Continue;
+          end;
+          if Pos('@' + champ + '@', InfoTable.SkipFields) = 0 then listFields.Add(Pointer(i));
+        end;
         bodyXML := '';
         while not Eof do
         begin

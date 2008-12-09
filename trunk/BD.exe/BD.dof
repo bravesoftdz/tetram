@@ -115,7 +115,7 @@ AutoIncBuild=1
 MajorVer=2
 MinorVer=1
 Release=0
-Build=15
+Build=24
 Debug=0
 PreRelease=0
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Teträm Corp
 FileDescription=
-FileVersion=2.1.0.15
+FileVersion=2.1.0.24
 InternalName=BDT
 LegalCopyright=Teträm Corp 1997-2008
 LegalTrademarks=
@@ -139,8 +139,8 @@ Count=1
 Item0=$(Compos)\FastMM\FastMM4;$(Compos)\PrintObject;$(Compos)\VDTButton;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\UIB\source;$(Compos)\TrayIcon;$(Compos)\idrunner;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\
 [HistoryLists\hlConditionals]
 Count=4
-Item0=RELEASE;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT
-Item1=DEBUG;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT
+Item0=DEBUG;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT
+Item1=RELEASE;FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT
 Item2=PS_USESSUPPORT;DEBUG
 Item3=PS_USESSUPPORT
 [HistoryLists\hlUnitAliases]

@@ -22,7 +22,7 @@ object frmScripts: TfrmScripts
     Top = 0
     Width = 862
     Height = 594
-    ActivePage = tbScripts
+    ActivePage = tbEdition
     Align = alClient
     PopupMenu = PopupMenu1
     TabOrder = 0
@@ -81,7 +81,7 @@ object frmScripts: TfrmScripts
         Top = 373
         Width = 854
         Height = 193
-        ActivePage = TabSheet1
+        ActivePage = TabSheet2
         Align = alBottom
         TabOrder = 1
         object TabSheet1: TTabSheet

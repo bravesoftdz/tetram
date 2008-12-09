@@ -106,7 +106,7 @@ uses
   UMAJ1_2_3_14 in 'mises à jour\UMAJ1_2_3_14.pas',
   Form_ChoixDetailSerie in 'Form_ChoixDetailSerie.pas' {FrmChoixDetailSerie},
   UMAJ1_2_3_25 in 'mises à jour\UMAJ1_2_3_25.pas',
-  UMAJ2_1_0_0 in 'mises à jour\UMAJ2_1_0_0.pas',
+  UMAJ2_1_0_16 in 'mises à jour\UMAJ2_1_0_16.pas',
   UMAJ1_2_3_20 in 'mises à jour\UMAJ1_2_3_20.pas',
   UMAJ1_2_3_22 in 'mises à jour\UMAJ1_2_3_22.pas',
   UMAJ1_2_3_26 in 'mises à jour\UMAJ1_2_3_26.pas',
@@ -130,12 +130,16 @@ uses
   UMAJ2_0_0_5 in 'mises à jour\UMAJ2_0_0_5.pas',
   Form_Publier in 'Web\Form_Publier.pas' {frmPublier},
   UNet in 'Web\UNet.pas',
-  UMySQLMAJ1_0_0_0 in 'Web\mises à jour\UMySQLMAJ1_0_0_0.pas',
+  UMySQLMAJ1_0_0_1 in 'Web\mises à jour\UMySQLMAJ1_0_0_1.pas',
   DIMimeStreams in 'Web\Mime64\DIMimeStreams.pas',
   DIMime in 'Web\Mime64\DIMime.pas',
   UMAJ2_0_1_0 in 'mises à jour\UMAJ2_0_1_0.pas',
   Form_Fusion in 'Form_Fusion.pas' {frmFusion},
-  IDHashMap in 'Scripts\IDHashMap.pas';
+  IDHashMap in 'Scripts\IDHashMap.pas',
+  UMAJ2_1_0_0 in 'mises à jour\UMAJ2_1_0_0.pas',
+  UMySQLMAJ1_0_0_0 in 'Web\mises à jour\UMySQLMAJ1_0_0_0.pas',
+  UMySQLMAJ1_0_0_2 in 'Web\mises à jour\UMySQLMAJ1_0_0_2.pas',
+  UMAJ2_1_0_22 in 'mises à jour\UMAJ2_1_0_22.pas';
 
 {$R *.RES}
 {$R curseurs.res}
@@ -183,7 +187,7 @@ begin
     FrmSplash.Affiche_act(ChargementApp + '...');
     if FindCmdLineSwitch('scripts') then begin
       Application.CreateForm(TfrmScripts, frmScripts);
-    end else
+  end else
     begin
       Application.CreateForm(TfrmFond, frmFond);
       FrmSplash.Affiche_act(ChargementDatabase + '...');

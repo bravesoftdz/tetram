@@ -119,6 +119,10 @@ type
     SiteWeb: string[255];
     Scenaristes, Dessinateurs, Coloristes: TListOfTAuteur;
 
+    VO, Couleur: Integer;
+    Etat, Reliure, TypeEdition, FormatEdition, Orientation, SensLecture: Integer;
+    sEtat, sReliure, sTypeEdition, sFormatEdition, sOrientation, sSensLecture: string;
+
     FIdAuteur: TGUID;
     FForce: Boolean;
 
@@ -850,8 +854,9 @@ begin
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT ID_EDITION, ID_Album, e.ID_Editeur, e.ID_Collection, NOMCOLLECTION, ANNEEEDITION, PRIX, VO, COULEUR, ISBN, DEDICACE, PRETE,';
-    SQL.Add('STOCK, Offert, Gratuit, NombreDePages, etat, le.libelle as setat, reliure, lr.libelle as sreliure, orientation, lo.libelle as sorientation,');
-    SQL.Add('FormatEdition, lf.libelle as sFormatEdition, typeedition, lte.libelle as stypeedition, DateAchat, Notes, AnneeCote, PrixCote, NumeroPerso,');
+    SQL.Add('STOCK, Offert, Gratuit, NombreDePages, DateAchat, Notes, AnneeCote, PrixCote, NumeroPerso,');
+    SQL.Add('etat, le.libelle as setat, reliure, lr.libelle as sreliure, orientation, lo.libelle as sorientation,');
+    SQL.Add('FormatEdition, lf.libelle as sFormatEdition, typeedition, lte.libelle as stypeedition,');
     SQL.Add('SensLecture, lsl.libelle as sSensLecture');
     SQL.Add('FROM EDITIONS e LEFT JOIN COLLECTIONS c ON e.ID_Collection = c.ID_Collection');
     SQL.Add('LEFT JOIN LISTES le on (le.ref = e.etat and le.categorie = 1)');
@@ -1406,17 +1411,26 @@ begin
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     FetchBlobs := True;
-    SQL.Text := 'SELECT TITRESERIE, TERMINEE, SUJETSERIE, REMARQUESSERIE, SITEWEB, COMPLETE, NB_ALBUMS, S.ID_Editeur, S.ID_Collection, NOMCOLLECTION, SUIVRESORTIES, SUIVREMANQUANTS '
-      + 'FROM SERIES S LEFT JOIN COLLECTIONS C ON S.ID_Collection = C.ID_Collection '
-      + 'WHERE ID_Serie = ?';
+    SQL.Clear;
+    SQL.Text := 'select titreserie, coalesce(terminee, -1) as terminee, sujetserie, remarquesserie, siteweb, complete, nb_albums, s.id_editeur, s.id_collection , nomcollection, suivresorties, suivremanquants, coalesce(vo, -1) as vo, coalesce(couleur, -1) as couleur,';
+    SQL.Add('coalesce(etat, -1) as etat, le.libelle as setat, coalesce(reliure, -1) as reliure, lr.libelle as sreliure, coalesce(orientation, -1) as orientation, lo.libelle as sorientation,');
+    SQL.Add('coalesce(formatedition, -1) as formatedition, lf.libelle as sformatedition, coalesce(typeedition, -1) as typeedition, lte.libelle as stypeedition,');
+    SQL.Add('coalesce(senslecture, -1) as senslecture, lsl.libelle as ssenslecture');
+    SQL.Add('from series s left join collections c on s.id_collection = c.id_collection');
+    SQL.Add('left join listes le on (le.ref = s.etat and le.categorie = 1)');
+    SQL.Add('left join listes lr on (lr.ref = s.reliure and lr.categorie = 2)');
+    SQL.Add('left join listes lte on (lte.ref = s.typeedition and lte.categorie = 3)');
+    SQL.Add('left join listes lo on (lo.ref = s.orientation and lo.categorie = 4)');
+    SQL.Add('left join listes lf on (lf.ref = s.formatedition and lf.categorie = 5)');
+    SQL.Add('left join listes lsl on (lsl.ref = s.senslecture and lsl.categorie = 8)');
+    SQL.Add('where id_serie = ?');
     Params.AsString[0] := GUIDToString(Reference);
     Open;
     RecInconnu := Eof;
     Self.Titre := Fields.ByNameAsString['TITRESERIE'];
-    if Fields.ByNameIsNull['TERMINEE'] then
-      Self.Terminee := -1
-    else
-      Self.Terminee := Fields.ByNameAsInteger['TERMINEE'];
+    Self.Terminee := Fields.ByNameAsInteger['TERMINEE'];
+    Self.VO := Fields.ByNameAsInteger['VO'];
+    Self.Couleur := Fields.ByNameAsInteger['COULEUR'];
     Self.SuivreSorties := RecInconnu or Fields.ByNameAsBoolean['SUIVRESORTIES'];
     Self.Complete := Fields.ByNameAsBoolean['COMPLETE'];
     Self.SuivreManquants := RecInconnu or Fields.ByNameAsBoolean['SUIVREMANQUANTS'];
@@ -1424,19 +1438,33 @@ begin
     Self.Sujet.Text := Fields.ByNameAsString['SUJETSERIE'];
     Self.Notes.Text := Fields.ByNameAsString['REMARQUESSERIE'];
     Self.SiteWeb := Trim(Fields.ByNameAsString['SITEWEB']);
+
+    Self.TypeEdition := Fields.ByNameAsInteger['TypeEdition'];
+    Self.sTypeEdition := Trim(Fields.ByNameAsString['sTypeEdition']);
+    Self.Etat := Fields.ByNameAsInteger['Etat'];
+    Self.sEtat := Trim(Fields.ByNameAsString['sEtat']);
+    Self.Reliure := Fields.ByNameAsInteger['Reliure'];
+    Self.sReliure := Trim(Fields.ByNameAsString['sReliure']);
+    Self.Orientation := Fields.ByNameAsInteger['Orientation'];
+    Self.sOrientation := Trim(Fields.ByNameAsString['sOrientation']);
+    Self.FormatEdition := Fields.ByNameAsInteger['FormatEdition'];
+    Self.sFormatEdition := Trim(Fields.ByNameAsString['sFormatEdition']);
+    Self.SensLecture := Fields.ByNameAsInteger['SensLecture'];
+    Self.sSensLecture := Trim(Fields.ByNameAsString['sSensLecture']);
+
     Self.Editeur.Fill(StringToGUIDDef(Fields.ByNameAsString['ID_EDITEUR'], GUID_NULL));
     Self.Collection.Fill(q);
     FetchBlobs := False;
 
     Close;
-    SQL.Text := 'SELECT ID_Album, TITREALBUM, INTEGRALE, HORSSERIE, TOME, TOMEDEBUT, TOMEFIN, ID_Serie FROM ALBUMS';
+    SQL.Text := 'select id_album, titrealbum, integrale, horsserie, tome, tomedebut, tomefin, id_serie from albums';
     if IsEqualGUID(Reference, GUID_NULL) then
-      SQL.Add('WHERE (ID_Serie IS NULL OR ID_Serie = ?)')
+      SQL.Add('where (id_serie is null or id_serie = ?)')
     else
-      SQL.Add('WHERE ID_Serie = ?');
+      SQL.Add('where id_serie = ?');
     if not IsEqualGUID(FIdAuteur, GUID_NULL) then
-      SQL.Add('AND ID_Album IN (SELECT ID_Album FROM AUTEURS WHERE ID_Personne = ?)');
-    SQL.Add('ORDER BY HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST');
+      SQL.Add('and id_album in (select id_album from auteurs where id_personne = ?)');
+    SQL.Add('order by horsserie nulls first, integrale nulls first, tome nulls first');
     Params.AsString[0] := GUIDToString(Reference);
     if not IsEqualGUID(FIdAuteur, GUID_NULL) then
       Params.AsString[1] := GUIDToString(FIdAuteur);
@@ -1448,14 +1476,14 @@ begin
     end;
 
     Close;
-    SQL.Text := 'SELECT ID_ParaBD, TITREPARABD, ID_Serie, TITRESERIE, ACHAT, COMPLET, SCATEGORIE FROM VW_LISTE_PARABD';
+    SQL.Text := 'select id_parabd, titreparabd, id_serie, titreserie, achat, complet, scategorie from vw_liste_parabd';
     if IsEqualGUID(Reference, GUID_NULL) then
-      SQL.Add('WHERE (ID_Serie IS NULL OR ID_Serie = ?)')
+      SQL.Add('where (id_serie is null or id_serie = ?)')
     else
-      SQL.Add('WHERE ID_Serie = ?');
+      SQL.Add('where id_serie = ?');
     if not IsEqualGUID(FIdAuteur, GUID_NULL) then
-      SQL.Add('AND ID_ParaBD IN (SELECT ID_ParaBD FROM AUTEURS_PARABD WHERE ID_Personne = ?)');
-    SQL.Add('ORDER BY TITREPARABD');
+      SQL.Add('and id_parabd in (select id_parabd from auteurs_parabd where id_personne = ?)');
+    SQL.Add('order by titreparabd');
     Params.AsString[0] := GUIDToString(Reference);
     if not IsEqualGUID(FIdAuteur, GUID_NULL) then
       Params.AsString[1] := GUIDToString(FIdAuteur);
@@ -1467,10 +1495,10 @@ begin
     end;
 
     Close;
-    SQL.Text := 'SELECT g.ID_Genre, Genre '
-      + 'FROM GenreSeries s INNER JOIN Genres g ON g.ID_Genre = s.ID_Genre '
-      + 'WHERE ID_Serie = ?'
-      + 'ORDER BY GENRE';
+    SQL.Text := 'select g.id_genre, genre '
+      + 'from genreseries s inner join genres g on g.id_genre = s.id_genre '
+      + 'where id_serie = ?'
+      + 'order by genre';
     Params.AsString[0] := GUIDToString(Reference);
     Open;
     while not Eof do
@@ -1480,12 +1508,12 @@ begin
     end;
 
     Close;
-    SQL.Text := 'SELECT * FROM PROC_AUTEURS(NULL, ?, NULL)';
+    SQL.Text := 'select * from proc_auteurs(null, ?, null)';
     Params.AsString[0] := GUIDToString(Reference);
     Open;
     while not Eof do
     begin
-      case Fields.ByNameAsInteger['Metier'] of
+      case Fields.ByNameAsInteger['metier'] of
         0: Self.Scenaristes.Add(TAuteur.Make(q));
         1: Self.Dessinateurs.Add(TAuteur.Make(q));
         2: Self.Coloristes.Add(TAuteur.Make(q));
@@ -1552,9 +1580,15 @@ begin
   try
     Transaction := UseTransaction;
 
-    SQL.Text := 'UPDATE OR INSERT INTO SERIES (ID_Serie, TitreSerie, Terminee, SuivreSorties, Complete, SuivreManquants, SITEWEB, ID_Editeur, ID_Collection, SUJETserie, REMARQUESserie, NB_ALBUMS)';
-    SQL.Add('VALUES');
-    SQL.Add('(:ID_Serie, :TitreSerie, :Terminee, :SuivreSorties, :Complete, :SuivreManquants, :SITEWEB, :ID_Editeur, :ID_Collection, :SUJETserie, :REMARQUESserie, :NB_ALBUMS)');
+    SQL.Text := 'update or insert into series (';
+    SQL.Add('id_serie, titreserie, terminee, suivresorties, complete, suivremanquants, siteweb, id_editeur,');
+    SQL.Add('id_collection, sujetserie, remarquesserie, nb_albums, vo, couleur, etat, reliure, typeedition,');
+    SQL.Add('orientation, formatedition, senslecture');
+    SQL.Add(') values (');
+    SQL.Add(':id_serie, :titreserie, :terminee, :suivresorties, :complete, :suivremanquants, :siteweb, :id_editeur,');
+    SQL.Add(':id_collection, :sujetserie, :remarquesserie, :nb_albums, :vo, :couleur, :etat, :reliure, :typeedition,');
+    SQL.Add(':orientation, :formatedition, :senslecture');
+    SQL.Add(')');
 
     if IsEqualGUID(GUID_NULL, ID_Serie) then
       Params.ByNameIsNull['ID_Serie'] := True
@@ -1565,6 +1599,20 @@ begin
       Params.ByNameIsNull['TERMINEE'] := True
     else
       Params.ByNameAsInteger['TERMINEE'] := Self.Terminee;
+    if TCheckBoxState(Self.VO) = cbGrayed then
+      Params.ByNameIsNull['VO'] := True
+    else
+      Params.ByNameAsInteger['VO'] := Self.VO;
+    if TCheckBoxState(Self.Couleur) = cbGrayed then
+      Params.ByNameIsNull['COULEUR'] := True
+    else
+      Params.ByNameAsInteger['COULEUR'] := Self.Couleur;
+    Params.ByNameAsInteger['TYPEEDITION'] := TypeEdition;
+    Params.ByNameAsInteger['ETAT'] := Etat;
+    Params.ByNameAsInteger['RELIURE'] := Reliure;
+    Params.ByNameAsInteger['Orientation'] := Orientation;
+    Params.ByNameAsInteger['FormatEdition'] := FormatEdition;
+    Params.ByNameAsInteger['SensLecture'] := SensLecture;
     Params.ByNameAsBoolean['SUIVRESORTIES'] := Self.SuivreSorties;
     Params.ByNameAsBoolean['COMPLETE'] := Self.Complete;
     Params.ByNameAsBoolean['SUIVREMANQUANTS'] := Self.SuivreManquants;
@@ -1588,14 +1636,14 @@ begin
     end;
     s := Self.Sujet.Text;
     if s <> '' then
-      ParamsSetBlob('SUJETserie', s)
+      ParamsSetBlob('sujetserie', s)
     else
-      Params.ByNameIsNull['SUJETserie'] := True;
+      Params.ByNameIsNull['sujetserie'] := True;
     s := Self.Notes.Text;
     if s <> '' then
-      ParamsSetBlob('REMARQUESserie', s)
+      ParamsSetBlob('remarquesserie', s)
     else
-      Params.ByNameIsNull['REMARQUESserie'] := True;
+      Params.ByNameIsNull['remarquesserie'] := True;
 
     ExecSQL;
 

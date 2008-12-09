@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, ExtCtrls, DBCtrls, Mask, Buttons, VDTButton, ComCtrls,
-  DBEditLabeled, VirtualTrees, VirtualTree, LoadComplet, Menus, ExtDlgs, Frame_RechercheRapide, CRFurtif, Fram_Boutons, UBdtForms;
+  DBEditLabeled, VirtualTrees, VirtualTree, LoadComplet, Menus, ExtDlgs, Frame_RechercheRapide, CRFurtif, Fram_Boutons, UBdtForms,
+  ComboCheck;
 
 type
   TFrmEditSerie = class(TbdtForm)
@@ -52,6 +53,20 @@ type
     cbComplete: TCheckBoxLabeled;
     Label9: TLabel;
     edNbAlbums: TEditLabeled;
+    cbCouleur: TCheckBoxLabeled;
+    cbVO: TCheckBoxLabeled;
+    Label12: TLabel;
+    cbxEtat: TLightComboCheck;
+    Label14: TLabel;
+    cbxEdition: TLightComboCheck;
+    Label13: TLabel;
+    cbxReliure: TLightComboCheck;
+    Label22: TLabel;
+    cbxOrientation: TLightComboCheck;
+    Label27: TLabel;
+    cbxSensLecture: TLightComboCheck;
+    Label23: TLabel;
+    cbxFormat: TLightComboCheck;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
@@ -121,6 +136,19 @@ begin
   vtParaBD.Mode := vmNone;
   vtParaBD.UseFiltre := True;
 
+  LoadCombo(1 {Etat}, cbxEtat);
+  cbxEtat.Value := -1;
+  LoadCombo(2 {Reliure}, cbxReliure);
+  cbxReliure.Value := -1;
+  LoadCombo(3 {TypeEdition}, cbxEdition);
+  cbxEdition.Value := -1;
+  LoadCombo(4 {Orientation}, cbxOrientation);
+  cbxOrientation.Value := -1;
+  LoadCombo(5 {Format}, cbxFormat);
+  cbxFormat.Value := -1;
+  LoadCombo(8 {Sens de lecture}, cbxSensLecture);
+  cbxSensLecture.Value := -1;
+
   FSerie := TSerieComplete.Create;
 end;
 
@@ -160,6 +188,22 @@ begin
   FSerie.ID_Collection := vtCollections.CurrentValue;
   FSerie.Sujet.Text := histoire.Lines.Text;
   FSerie.Notes.Text := remarques.Lines.Text;
+
+  FSerie.VO := Integer(cbVO.State);
+  FSerie.Couleur := Integer(cbCouleur.State);
+
+  FSerie.TypeEdition := cbxEdition.Value;
+  FSerie.sTypeEdition := cbxEdition.Caption;
+  FSerie.Etat := cbxEtat.Value;
+  FSerie.sEtat := cbxEtat.Caption;
+  FSerie.Reliure := cbxReliure.Value;
+  FSerie.sReliure := cbxReliure.Caption;
+  FSerie.Orientation := cbxOrientation.Value;
+  FSerie.sOrientation := cbxOrientation.Caption;
+  FSerie.FormatEdition := cbxFormat.Value;
+  FSerie.sFormatEdition := cbxFormat.Caption;
+  FSerie.SensLecture := cbxSensLecture.Value;
+  FSerie.sSensLecture := cbxSensLecture.Caption;
 
   FSerie.SaveToDatabase;
 
@@ -201,6 +245,21 @@ begin
     for i := 0 to Pred(FSerie.Genres.Count) do
       AjoutString(s, FSerie.Genres.ValueFromIndex[i], ', ');
     Label15.Caption := s;
+
+    if FSerie.VO = -1 then
+      cbVO.State := cbGrayed
+    else
+      cbVO.State := TCheckBoxState(FSerie.VO);
+    if FSerie.Couleur = -1 then
+      cbCouleur.State := cbGrayed
+    else
+      cbCouleur.State := TCheckBoxState(FSerie.Couleur);
+    cbxEdition.Value := FSerie.TypeEdition;
+    cbxEtat.Value := FSerie.Etat;
+    cbxReliure.Value := FSerie.Reliure;
+    cbxOrientation.Value := FSerie.Orientation;
+    cbxFormat.Value := FSerie.FormatEdition;
+    cbxSensLecture.Value := FSerie.SensLecture;
 
     vtAlbums.Filtre := 'ID_Serie = ' + QuotedStr(GUIDToString(ID_Serie));
     vtAlbums.Mode := vmAlbumsSerie;

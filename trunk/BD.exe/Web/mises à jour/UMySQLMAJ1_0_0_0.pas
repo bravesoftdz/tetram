@@ -10,7 +10,7 @@ procedure MAJ1_0_0_0(Script: TStrings);
 begin
   with Script do
   begin
-    Script.Clear;
+    Clear;
     Add('CREATE TABLE IF NOT EXISTS /*DB_PREFIX*/options (');
     Add('  cle varchar(20) NOT NULL,');
     Add('  valeur varchar(100) default NULL,');

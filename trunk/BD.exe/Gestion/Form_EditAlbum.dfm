@@ -1020,6 +1020,7 @@ object FrmEditAlbum: TFrmEditAlbum
         Checked = False
         PropertiesStored = False
         CheckVisible = False
+        OnChange = vtEditeursClick
         ShowCaptionHint = False
         AssignHint = False
         OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
@@ -1035,6 +1036,7 @@ object FrmEditAlbum: TFrmEditAlbum
         Checked = False
         PropertiesStored = False
         CheckVisible = False
+        OnChange = vtEditeursClick
         ShowCaptionHint = False
         AssignHint = False
         OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
@@ -1059,6 +1061,7 @@ object FrmEditAlbum: TFrmEditAlbum
         Checked = False
         PropertiesStored = False
         CheckVisible = False
+        OnChange = vtEditeursClick
         ShowCaptionHint = False
         AssignHint = False
         OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
@@ -1101,6 +1104,7 @@ object FrmEditAlbum: TFrmEditAlbum
         Checked = False
         PropertiesStored = False
         CheckVisible = False
+        OnChange = vtEditeursClick
         ShowCaptionHint = False
         AssignHint = False
         OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
@@ -1125,6 +1129,7 @@ object FrmEditAlbum: TFrmEditAlbum
         Checked = False
         PropertiesStored = False
         CheckVisible = False
+        OnChange = vtEditeursClick
         ShowCaptionHint = False
         AssignHint = False
         OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
@@ -1295,6 +1300,7 @@ object FrmEditAlbum: TFrmEditAlbum
         Checked = False
         PropertiesStored = False
         CheckVisible = False
+        OnChange = vtEditeursClick
         ShowCaptionHint = False
         AssignHint = False
         OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
@@ -1381,6 +1387,7 @@ object FrmEditAlbum: TFrmEditAlbum
         Ctl3D = True
         ParentCtl3D = False
         TabOrder = 7
+        OnClick = vtEditeursClick
         LinkControls = <
           item
             Control = cbVO
@@ -1398,6 +1405,7 @@ object FrmEditAlbum: TFrmEditAlbum
         ParentCtl3D = False
         State = cbChecked
         TabOrder = 8
+        OnClick = vtEditeursClick
         LinkControls = <
           item
             Control = cbCouleur
@@ -1414,6 +1422,7 @@ object FrmEditAlbum: TFrmEditAlbum
         ParentCtl3D = False
         State = cbChecked
         TabOrder = 3
+        OnClick = vtEditeursClick
         LinkControls = <
           item
             Control = cbStock
@@ -1429,6 +1438,7 @@ object FrmEditAlbum: TFrmEditAlbum
         Ctl3D = True
         ParentCtl3D = False
         TabOrder = 9
+        OnClick = vtEditeursClick
         LinkControls = <
           item
             Control = cbDedicace
@@ -1444,6 +1454,7 @@ object FrmEditAlbum: TFrmEditAlbum
         ShowCheckbox = True
         Checked = False
         TabOrder = 2
+        OnChange = vtEditeursClick
         LinkControls = <
           item
             Control = Label18
@@ -1490,7 +1501,7 @@ object FrmEditAlbum: TFrmEditAlbum
         BorderStyle = bsNone
         MaxLength = 4
         TabOrder = 10
-        OnChange = edAnneeEditionChange
+        OnChange = vtEditeursClick
         LinkControls = <
           item
             Control = Label21
@@ -1507,6 +1518,7 @@ object FrmEditAlbum: TFrmEditAlbum
         BorderStyle = bsNone
         MaxLength = 4
         TabOrder = 12
+        OnChange = vtEditeursClick
         LinkControls = <
           item
             Control = Label24
@@ -1526,6 +1538,7 @@ object FrmEditAlbum: TFrmEditAlbum
         Ctl3D = True
         ParentCtl3D = False
         TabOrder = 13
+        OnChange = vtEditeursClick
         LinkControls = <
           item
             Control = Label25
@@ -1545,7 +1558,7 @@ object FrmEditAlbum: TFrmEditAlbum
         BevelKind = bkTile
         BorderStyle = bsNone
         TabOrder = 11
-        OnChange = edTitreChange
+        OnChange = vtEditeursClick
         LinkControls = <
           item
             Control = Label2
@@ -1883,7 +1896,7 @@ object FrmEditAlbum: TFrmEditAlbum
       ShowHint = True
       TabOrder = 22
       OnChange = vtCollectionsChange
-      OnClick = vtCollectionsClick
+      OnClick = vtEditeursClick
       OnDblClick = vtCollectionsDblClick
       Columns = <>
     end

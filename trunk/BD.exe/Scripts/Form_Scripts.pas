@@ -562,7 +562,10 @@ begin
     for i := 0 to Pred(FDebugPlugin.Breakpoints.Count) do
       with FDebugPlugin.Breakpoints[i] do
         if Active then
-          PSScriptDebugger1.SetBreakPoint(Fichier, Line);
+          if Fichier = PSScriptDebugger1.MainFileName then
+            PSScriptDebugger1.SetBreakPoint(Fichier, Line)
+          else
+            PSScriptDebugger1.SetBreakPoint(UpperCase(Fichier), Line);
 
   PSScriptDebugger1.SetVarToInstance('AlbumToImport', FAlbumToImport);
 end;
@@ -1997,7 +2000,8 @@ begin
       Types := [itFunction, itVar, itConstant {, itType}];
       hasAssign := True;
     end
-    else if (Token = CSTI_SemiColon) then begin
+    else if (Token = CSTI_SemiColon) then
+    begin
       hasAssign := False;
       Typ := '';
     end;

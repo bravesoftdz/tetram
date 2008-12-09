@@ -1000,7 +1000,7 @@ begin
   with TUIBQuery.Create(nil) do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT REF, LIBELLE, DEFAUT FROM LISTES WHERE CATEGORIE = :Categorie ORDER BY ORDRE';
+    SQL.Text := 'select ref, libelle, defaut from listes where categorie = :categorie order by ordre';
 
     HasNULL := False;
 

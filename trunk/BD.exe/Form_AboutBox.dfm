@@ -137,8 +137,8 @@ object FrmAboutBox: TFrmAboutBox
     Font.Style = []
     ParentFont = False
     Transparent = True
-    VersionResource = vrProductVersion
-    VersionResourceKey = 'ProductVersion'
+    VersionResource = vrFileVersion
+    VersionResourceKey = 'FileVersion'
     InfoPrefix = 'Version'
     ShowInfoPrefix = True
     LangCharset = '-1'
@@ -225,7 +225,7 @@ object FrmAboutBox: TFrmAboutBox
   object Label2: TLabel
     Left = 303
     Top = 145
-    Width = 39
+    Width = 42
     Height = 11
     Caption = 'M'#233'moire :'
     Font.Charset = ANSI_CHARSET
@@ -239,7 +239,7 @@ object FrmAboutBox: TFrmAboutBox
   object Label3: TLabel
     Left = 303
     Top = 100
-    Width = 40
+    Width = 43
     Height = 11
     Caption = 'Syst'#232'me :'
     Font.Charset = ANSI_CHARSET

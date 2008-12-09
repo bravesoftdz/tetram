@@ -135,7 +135,6 @@ type
     procedure vstImagesEditing(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
     procedure vstImagesNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: WideString);
     procedure vtEditeursClick(Sender: TObject);
-    procedure vtCollectionsClick(Sender: TObject);
     procedure edAnneeEditionChange(Sender: TObject);
     procedure vtCollectionsChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure vtEditionsClick(Sender: TObject);
@@ -756,6 +755,21 @@ begin
     begin
       vtEditeurs.CurrentValue := FAlbum.Serie.Editeur.ID_Editeur;
       vtCollections.CurrentValue := FAlbum.Serie.Collection.ID;
+
+      with FAlbum.Serie do
+      begin
+        cbCouleur.Checked := IIf(RecInconnu or (Couleur = -1), True, Couleur = 1);
+        cbVO.Checked := IIf(RecInconnu or (VO = -1), False, VO = 1);
+        cbxEtat.Value := IIf(RecInconnu or (Etat = -1), cbxEtat.DefaultValueChecked, Etat);
+        cbxReliure.Value := IIf(RecInconnu or (Reliure = -1), cbxReliure.DefaultValueChecked, Reliure);
+        cbxOrientation.Value := IIf(RecInconnu or (Orientation = -1), cbxOrientation.DefaultValueChecked, Orientation);
+        cbxFormat.Value := IIf(RecInconnu or (FormatEdition = -1), cbxFormat.DefaultValueChecked, FormatEdition);
+        cbxSensLecture.Value := IIf(RecInconnu or (SensLecture = -1), cbxSensLecture.DefaultValueChecked, SensLecture);
+        cbxEdition.Value := IIf(RecInconnu or (TypeEdition = -1), cbxEdition.DefaultValueChecked, TypeEdition);
+      end;
+
+      // on reset parce que le tcheckbox et tedit le flag à tort dans ce cas
+      FEditeurCollectionSelected[vtEditions.ItemIndex] := False;
     end;
   end;
 end;
@@ -765,20 +779,22 @@ var
   EditionComplete: TEditionComplete;
 begin
   SetLength(FEditeurCollectionSelected, Succ(Length(FEditeurCollectionSelected)));
-  FEditeurCollectionSelected[Pred(Length(FEditeurCollectionSelected))] := False;
   EditionComplete := TEditionComplete.Create;
   EditionComplete.New;
   EditionComplete.ID_Album := ID_Album;
-  EditionComplete.Couleur := True;
-  EditionComplete.VO := False;
   EditionComplete.Stock := True;
   EditionComplete.Dedicace := False;
-  EditionComplete.Etat := cbxEtat.DefaultValueChecked;
-  EditionComplete.Reliure := cbxReliure.DefaultValueChecked;
-  EditionComplete.Orientation := cbxOrientation.DefaultValueChecked;
-  EditionComplete.FormatEdition := cbxFormat.DefaultValueChecked;
-  EditionComplete.SensLecture := cbxSensLecture.DefaultValueChecked;
-  EditionComplete.TypeEdition := cbxEdition.DefaultValueChecked;
+  with FAlbum.Serie do
+  begin
+    EditionComplete.Couleur := IIf(RecInconnu or (Couleur = -1), True, Couleur = 1);
+    EditionComplete.VO := IIf(RecInconnu or (VO = -1), False, VO = 1);
+    EditionComplete.Etat := IIf(RecInconnu or (Etat = -1), cbxEtat.DefaultValueChecked, Etat);
+    EditionComplete.Reliure := IIf(RecInconnu or (Reliure = -1), cbxReliure.DefaultValueChecked, Reliure);
+    EditionComplete.Orientation := IIf(RecInconnu or (Orientation = -1), cbxOrientation.DefaultValueChecked, Orientation);
+    EditionComplete.FormatEdition := IIf(RecInconnu or (FormatEdition = -1), cbxFormat.DefaultValueChecked, FormatEdition);
+    EditionComplete.SensLecture := IIf(RecInconnu or (SensLecture = -1), cbxSensLecture.DefaultValueChecked, SensLecture);
+    EditionComplete.TypeEdition := IIf(RecInconnu or (TypeEdition = -1), cbxEdition.DefaultValueChecked, TypeEdition);
+  end;
   if not IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
   begin
     EditionComplete.Editeur.ID_Editeur := TSerie(vtSeries.GetFocusedNodeData).Editeur.ID;
@@ -788,6 +804,8 @@ begin
   vtEditions.AddItem('Nouvelle edition', Pointer(EditionComplete));
   vtEditions.ItemIndex := Pred(vtEditions.Items.Count);
   vtEditionsClick(nil);
+
+  FEditeurCollectionSelected[Pred(Length(FEditeurCollectionSelected))] := False;
 end;
 
 procedure TFrmEditAlbum.OnNewCollection(Sender: TObject);
@@ -832,6 +850,7 @@ procedure TFrmEditAlbum.edISBNChange(Sender: TObject);
 begin
   VDTButton6.Enabled := edISBN.Text <> '';
   RefreshEditionCaption;
+  if vtEditions.ItemIndex > -1 then FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
 end;
 
 procedure TFrmEditAlbum.vstImagesInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
@@ -879,12 +898,7 @@ end;
 
 procedure TFrmEditAlbum.vtEditeursClick(Sender: TObject);
 begin
-  FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
-end;
-
-procedure TFrmEditAlbum.vtCollectionsClick(Sender: TObject);
-begin
-  FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
+  if vtEditions.ItemIndex > -1 then FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
 end;
 
 procedure TFrmEditAlbum.UpdateEdition;
@@ -944,6 +958,7 @@ end;
 procedure TFrmEditAlbum.edAnneeEditionChange(Sender: TObject);
 begin
   RefreshEditionCaption;
+  if vtEditions.ItemIndex > -1 then FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
 end;
 
 procedure TFrmEditAlbum.vtCollectionsChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
@@ -1013,6 +1028,7 @@ var
 begin
   with Data.F do
   begin
+    FAlbum.Serie.Fill(FAlbum.Serie.ID_Serie);
     i := vtCollections.CurrentValue;
     vtEditeurs.InitializeRep;
     vtCollections.InitializeRep;
@@ -1106,11 +1122,13 @@ end;
 procedure TFrmEditAlbum.cbGratuitClick(Sender: TObject);
 begin
   if cbGratuit.Checked then edPrix.Text := '';
+  if vtEditions.ItemIndex > -1 then FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
 end;
 
 procedure TFrmEditAlbum.edPrixChange(Sender: TObject);
 begin
   if edPrix.Text <> '' then cbGratuit.Checked := False;
+  if vtEditions.ItemIndex > -1 then FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
 end;
 
 procedure TFrmEditAlbum.VisuClose(Sender: TObject);
@@ -1186,6 +1204,7 @@ begin
     Label18.Caption := rsTransOffertLe
   else
     Label18.Caption := rsTransAcheteLe;
+  if vtEditions.ItemIndex > -1 then FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
 end;
 
 procedure TFrmEditAlbum.vstImagesStructureChange(Sender: TBaseVirtualTree; Node: PVirtualNode; Reason: TChangeReason);
@@ -1285,7 +1304,7 @@ end;
 
 procedure TFrmEditAlbum.EditeurCollectionSelected(Sender: TObject; NextSearch: Boolean);
 begin
-  FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
+  if vtEditions.ItemIndex > -1 then FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
 end;
 
 procedure TFrmEditAlbum.lvScenaristesData(Sender: TObject; Item: TListItem);

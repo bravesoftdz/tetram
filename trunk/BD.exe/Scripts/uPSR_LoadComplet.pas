@@ -735,6 +735,146 @@ begin
   T := Self.Titre;
 end;
 
+procedure TSerieCompletesOrientation_W(Self: TSerieComplete; const T: string);
+begin
+  Self.sOrientation := T;
+end;
+
+procedure TSerieCompletesOrientation_R(Self: TSerieComplete; var T: string);
+begin
+  T := Self.sOrientation;
+end;
+
+procedure TSerieCompletesFormatEdition_W(Self: TSerieComplete; const T: string);
+begin
+  Self.sFormatEdition := T;
+end;
+
+procedure TSerieCompletesFormatEdition_R(Self: TSerieComplete; var T: string);
+begin
+  T := Self.sFormatEdition;
+end;
+
+procedure TSerieCompletesTypeEdition_W(Self: TSerieComplete; const T: string);
+begin
+  Self.sTypeEdition := T;
+end;
+
+procedure TSerieCompletesTypeEdition_R(Self: TSerieComplete; var T: string);
+begin
+  T := Self.sTypeEdition;
+end;
+
+procedure TSerieCompletesReliure_W(Self: TSerieComplete; const T: string);
+begin
+  Self.sReliure := T;
+end;
+
+procedure TSerieCompletesReliure_R(Self: TSerieComplete; var T: string);
+begin
+  T := Self.sReliure;
+end;
+
+procedure TSerieCompletesSensLecture_W(Self: TSerieComplete; const T: string);
+begin
+  Self.sSensLecture := T;
+end;
+
+procedure TSerieCompletesSensLecture_R(Self: TSerieComplete; var T: string);
+begin
+  T := Self.sSensLecture;
+end;
+
+procedure TSerieCompletesEtat_W(Self: TSerieComplete; const T: string);
+begin
+  Self.sEtat := T;
+end;
+
+procedure TSerieCompletesEtat_R(Self: TSerieComplete; var T: string);
+begin
+  T := Self.sEtat;
+end;
+
+procedure TSerieCompleteOrientation_W(Self: TSerieComplete; const T: Integer);
+begin
+  Self.Orientation := T;
+end;
+
+procedure TSerieCompleteOrientation_R(Self: TSerieComplete; var T: Integer);
+begin
+  T := Self.Orientation;
+end;
+
+procedure TSerieCompleteVO_W(Self: TSerieComplete; const T: Integer);
+begin
+  Self.VO := T;
+end;
+
+procedure TSerieCompleteVO_R(Self: TSerieComplete; var T: Integer);
+begin
+  T := Self.VO;
+end;
+
+procedure TSerieCompleteCouleur_W(Self: TSerieComplete; const T: Integer);
+begin
+  Self.Couleur := T;
+end;
+
+procedure TSerieCompleteCouleur_R(Self: TSerieComplete; var T: Integer);
+begin
+  T := Self.Couleur;
+end;
+
+procedure TSerieCompleteFormatEdition_W(Self: TSerieComplete; const T: Integer);
+begin
+  Self.FormatEdition := T;
+end;
+
+procedure TSerieCompleteFormatEdition_R(Self: TSerieComplete; var T: Integer);
+begin
+  T := Self.FormatEdition;
+end;
+
+procedure TSerieCompleteReliure_W(Self: TSerieComplete; const T: Integer);
+begin
+  Self.Reliure := T;
+end;
+
+procedure TSerieCompleteReliure_R(Self: TSerieComplete; var T: Integer);
+begin
+  T := Self.Reliure;
+end;
+
+procedure TSerieCompleteSensLecture_W(Self: TSerieComplete; const T: Integer);
+begin
+  Self.SensLecture := T;
+end;
+
+procedure TSerieCompleteSensLecture_R(Self: TSerieComplete; var T: Integer);
+begin
+  T := Self.SensLecture;
+end;
+
+procedure TSerieCompleteEtat_W(Self: TSerieComplete; const T: Integer);
+begin
+  Self.Etat := T;
+end;
+
+procedure TSerieCompleteEtat_R(Self: TSerieComplete; var T: Integer);
+begin
+  T := Self.Etat;
+end;
+
+procedure TSerieCompleteTypeEdition_W(Self: TSerieComplete; const T: Integer);
+begin
+  Self.TypeEdition := T;
+end;
+
+procedure TSerieCompleteTypeEdition_R(Self: TSerieComplete; var T: Integer);
+begin
+  T := Self.TypeEdition;
+end;
+
 procedure TCollectionCompleteEditeur_W(Self: TCollectionComplete; const T: TEditeur);
 begin
   Self.Editeur := T;
@@ -896,6 +1036,20 @@ begin
     RegisterPropertyHelper(@TSerieCompleteScenaristes_R, @TSerieCompleteScenaristes_W, 'Scenaristes');
     RegisterPropertyHelper(@TSerieCompleteDessinateurs_R, @TSerieCompleteDessinateurs_W, 'Dessinateurs');
     RegisterPropertyHelper(@TSerieCompleteColoristes_R, @TSerieCompleteColoristes_W, 'Coloristes');
+    RegisterPropertyHelper(@TSerieCompleteTypeEdition_R, @TSerieCompleteTypeEdition_W, 'TypeEdition');
+    RegisterPropertyHelper(@TSerieCompleteEtat_R, @TSerieCompleteEtat_W, 'Etat');
+    RegisterPropertyHelper(@TSerieCompleteReliure_R, @TSerieCompleteReliure_W, 'Reliure');
+    RegisterPropertyHelper(@TSerieCompleteSensLecture_R, @TSerieCompleteSensLecture_W, 'SensLecture');
+    RegisterPropertyHelper(@TSerieCompleteFormatEdition_R, @TSerieCompleteFormatEdition_W, 'FormatEdition');
+    RegisterPropertyHelper(@TSerieCompleteOrientation_R, @TSerieCompleteOrientation_W, 'Orientation');
+    RegisterPropertyHelper(@TSerieCompletesEtat_R, @TSerieCompletesEtat_W, 'sEtat');
+    RegisterPropertyHelper(@TSerieCompletesReliure_R, @TSerieCompletesReliure_W, 'sReliure');
+    RegisterPropertyHelper(@TSerieCompletesSensLecture_R, @TSerieCompletesSensLecture_W, 'sSensLecture');
+    RegisterPropertyHelper(@TSerieCompletesTypeEdition_R, @TSerieCompletesTypeEdition_W, 'sTypeEdition');
+    RegisterPropertyHelper(@TSerieCompletesFormatEdition_R, @TSerieCompletesFormatEdition_W, 'sFormatEdition');
+    RegisterPropertyHelper(@TSerieCompletesOrientation_R, @TSerieCompletesOrientation_W, 'sOrientation');
+    RegisterPropertyHelper(@TSerieCompleteVO_R, @TSerieCompleteVO_W, 'VO');
+    RegisterPropertyHelper(@TSerieCompleteCouleur_R, @TSerieCompleteCouleur_W, 'Couleur');
   end;
 end;
 

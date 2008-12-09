@@ -84,7 +84,7 @@ end;
 
 procedure SIRegister_RegExpr(CL: TPSPascalCompiler);
 begin
-  CL.AddTypeS('AnsiString', 'String');
+//  CL.AddTypeS('AnsiString', 'String');
 
   CL.AddTypeS('RegExprString', 'AnsiString');
   CL.AddTypeS('REChar', 'Char');

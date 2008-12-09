@@ -89,7 +89,7 @@ object FrmEditSerie: TFrmEditSerie
     end
     object Bevel2: TBevel
       Left = 165
-      Top = 404
+      Top = 460
       Width = 411
       Height = 7
       Anchors = [akLeft, akTop, akRight]
@@ -499,7 +499,7 @@ object FrmEditSerie: TFrmEditSerie
     end
     object Bevel5: TBevel
       Left = 189
-      Top = 566
+      Top = 622
       Width = 310
       Height = 6
       Anchors = [akLeft, akTop, akRight]
@@ -507,7 +507,7 @@ object FrmEditSerie: TFrmEditSerie
     end
     object Label3: TLabel
       Left = 12
-      Top = 442
+      Top = 498
       Width = 41
       Height = 13
       Alignment = taRightJustify
@@ -515,7 +515,7 @@ object FrmEditSerie: TFrmEditSerie
     end
     object Label4: TLabel
       Left = 7
-      Top = 575
+      Top = 631
       Width = 46
       Height = 13
       Alignment = taRightJustify
@@ -523,13 +523,157 @@ object FrmEditSerie: TFrmEditSerie
     end
     object Label9: TLabel
       Left = 597
-      Top = 419
+      Top = 475
       Width = 88
       Height = 13
       Hint = 'R'#233'f'#233'rence du support'
       Alignment = taRightJustify
       Caption = 'Nombre d'#39'albums :'
       Layout = tlCenter
+    end
+    object Label12: TLabel
+      Left = 156
+      Top = 399
+      Width = 27
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Etat :'
+      Layout = tlCenter
+    end
+    object cbxEtat: TLightComboCheck
+      Left = 183
+      Top = 399
+      Width = 166
+      Height = 13
+      Checked = False
+      PropertiesStored = False
+      CheckVisible = False
+      ShowCaptionHint = False
+      AssignHint = False
+      OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
+      Items.CaptionComplet = True
+      Items.Separateur = ' '
+      Items = <>
+    end
+    object Label14: TLabel
+      Left = 144
+      Top = 416
+      Width = 39
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Edition :'
+      Layout = tlCenter
+    end
+    object cbxEdition: TLightComboCheck
+      Left = 183
+      Top = 416
+      Width = 166
+      Height = 13
+      Checked = False
+      PropertiesStored = False
+      CheckVisible = False
+      ShowCaptionHint = False
+      AssignHint = False
+      OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
+      Items.CaptionComplet = True
+      Items.Separateur = ' '
+      Items = <>
+    end
+    object Label13: TLabel
+      Left = 143
+      Top = 433
+      Width = 40
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Reliure :'
+      Layout = tlCenter
+    end
+    object cbxReliure: TLightComboCheck
+      Left = 183
+      Top = 433
+      Width = 166
+      Height = 13
+      Checked = False
+      PropertiesStored = False
+      CheckVisible = False
+      ShowCaptionHint = False
+      AssignHint = False
+      OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
+      Items.CaptionComplet = True
+      Items.Separateur = ' '
+      Items = <>
+    end
+    object Label22: TLabel
+      Left = 434
+      Top = 402
+      Width = 61
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Orientation :'
+      Layout = tlCenter
+    end
+    object cbxOrientation: TLightComboCheck
+      Left = 495
+      Top = 402
+      Width = 166
+      Height = 13
+      Checked = False
+      PropertiesStored = False
+      CheckVisible = False
+      ShowCaptionHint = False
+      AssignHint = False
+      OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
+      Items.CaptionComplet = True
+      Items.Separateur = ' '
+      Items = <>
+    end
+    object Label27: TLabel
+      Left = 414
+      Top = 420
+      Width = 81
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Sens de lecture :'
+      Layout = tlCenter
+    end
+    object cbxSensLecture: TLightComboCheck
+      Left = 495
+      Top = 420
+      Width = 166
+      Height = 13
+      Checked = False
+      PropertiesStored = False
+      CheckVisible = False
+      ShowCaptionHint = False
+      AssignHint = False
+      OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
+      Items.CaptionComplet = True
+      Items.Separateur = ' '
+      Items = <>
+    end
+    object Label23: TLabel
+      Left = 454
+      Top = 437
+      Width = 41
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Format :'
+      Layout = tlCenter
+    end
+    object cbxFormat: TLightComboCheck
+      Left = 495
+      Top = 437
+      Width = 166
+      Height = 13
+      Checked = False
+      PropertiesStored = False
+      CheckVisible = False
+      ShowCaptionHint = False
+      AssignHint = False
+      OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
+      Items.CaptionComplet = True
+      Items.Separateur = ' '
+      Items = <>
     end
     object vtEditeurs: TVirtualStringTree
       Left = 56
@@ -664,7 +808,7 @@ object FrmEditSerie: TFrmEditSerie
     end
     object cbTerminee: TCheckBoxLabeled
       Left = 320
-      Top = 417
+      Top = 473
       Width = 90
       Height = 16
       AllowGrayed = True
@@ -679,7 +823,7 @@ object FrmEditSerie: TFrmEditSerie
     end
     object cbManquants: TCheckBoxLabeled
       Left = 128
-      Top = 417
+      Top = 473
       Width = 137
       Height = 16
       Caption = 'Chercher les manquants'
@@ -691,7 +835,7 @@ object FrmEditSerie: TFrmEditSerie
     end
     object vtAlbums: TVirtualStringTree
       Left = 56
-      Top = 442
+      Top = 498
       Width = 677
       Height = 119
       Anchors = [akLeft, akTop, akRight]
@@ -841,7 +985,7 @@ object FrmEditSerie: TFrmEditSerie
     end
     object vtParaBD: TVirtualStringTree
       Left = 56
-      Top = 575
+      Top = 631
       Width = 673
       Height = 130
       Anchors = [akLeft, akTop, akRight]
@@ -964,7 +1108,7 @@ object FrmEditSerie: TFrmEditSerie
     end
     object cbSorties: TCheckBoxLabeled
       Left = 416
-      Top = 417
+      Top = 473
       Width = 121
       Height = 16
       Caption = 'Surveiller les sorties'
@@ -976,7 +1120,7 @@ object FrmEditSerie: TFrmEditSerie
     end
     object cbComplete: TCheckBoxLabeled
       Left = 56
-      Top = 417
+      Top = 473
       Width = 65
       Height = 16
       Caption = 'Complete'
@@ -989,7 +1133,7 @@ object FrmEditSerie: TFrmEditSerie
     end
     object edNbAlbums: TEditLabeled
       Left = 692
-      Top = 415
+      Top = 471
       Width = 41
       Height = 20
       AutoSize = False
@@ -1005,6 +1149,40 @@ object FrmEditSerie: TFrmEditSerie
         end>
       TypeDonnee = tdEntier
       CurrencyChar = #0
+    end
+    object cbCouleur: TCheckBoxLabeled
+      Left = 57
+      Top = 427
+      Width = 54
+      Height = 16
+      Cursor = crHandPoint
+      AllowGrayed = True
+      Caption = 'Couleur'
+      Checked = True
+      Ctl3D = True
+      ParentCtl3D = False
+      State = cbChecked
+      TabOrder = 22
+      LinkControls = <
+        item
+          Control = cbCouleur
+        end>
+    end
+    object cbVO: TCheckBoxLabeled
+      Left = 57
+      Top = 405
+      Width = 34
+      Height = 16
+      Cursor = crHandPoint
+      AllowGrayed = True
+      Caption = 'VO'
+      Ctl3D = True
+      ParentCtl3D = False
+      TabOrder = 23
+      LinkControls = <
+        item
+          Control = cbVO
+        end>
     end
   end
   inline Frame11: TFrame1
