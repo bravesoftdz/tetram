@@ -10,7 +10,8 @@
 
 #detail
 {
-	height: expression(document.body.clientHeight - this.offsetTop - 59 + 'px');
+	height: expression(document.body.clientHeight - this.offsetTop - 61 + 'px');
+	width: expression(document.body.clientWidth - this.offsetLeft + 'px');
 }
 
 #detail_body
@@ -18,9 +19,8 @@
 	height: expression(document.body.clientHeight - this.offsetTop - 120 + 'px');
 }
 
-#detail
-{
-	width: expression(document.body.clientWidth - this.offsetLeft + 'px');
+#detail div.body{
+	height: expression(document.parentNode.clientHeight - this.offsetTop - 40 + 'px');
 }
 
 .tabsheet, .tabsheet_selected

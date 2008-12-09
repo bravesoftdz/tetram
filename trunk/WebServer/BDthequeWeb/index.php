@@ -93,6 +93,8 @@ $editeurs = load_and_fetch('select count(*) as c from /*DB_PREFIX*/editeurs');
 				<b><?echo $albums->c?></b> albums connus pour <b><?echo $editions->c?></b> albums dans la biliothèque,<br>
 				répartis sur <b><?echo $series->c?></b> séries chez <b><?echo $editeurs->c?></b> éditeurs,<br>
 				et réalisés par <b><?echo $auteurs->c?></b> auteurs.
+				<br>
+				<a href=# onclick='AjaxUpdate("detail", "modifs.php", this.title)' title="Dernières modifications">Dernières modifications</a>
 			</td>
 			<td valign=bottom align=right>
 				<font size=1>Site généré par <a href=http://www.tetram.org/bdtheque target=_blank>BDthèque</a></font>
