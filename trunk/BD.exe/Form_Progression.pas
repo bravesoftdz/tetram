@@ -17,9 +17,6 @@ type
     { Déclarations publiques }
   end;
 
-var
-  FrmProgression: TFrmProgression;
-
 implementation
 
 {$R *.DFM}

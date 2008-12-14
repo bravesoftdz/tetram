@@ -5,10 +5,6 @@ interface
 uses
   SysUtils, Windows, StdCtrls, Forms, Controls, Form_Progression, ExtCtrls, CommonConst, Graphics;
 
-//procedure ShowProgression(Texte: String; Etape: TEtapeProgression); overload;
-//procedure ShowProgression(Texte: String; Valeur, Maxi: Integer); overload;
-//procedure ShowProgression(Texte: PChar; Valeur, Maxi: Integer); overload;
-
 type
   IImpressionApercu = interface
     ['{10227EB6-D5D0-4541-AAD6-D1A62E9308C9}']
@@ -89,43 +85,6 @@ uses
   Form_ChoixDetail, Form_Choix, Form_Convertisseur, Main, Divers, Procedures, Math, Textes, ActnList,
   Form_ChoixDetailSerie;
 
-procedure ShowProgression(const Texte: string; Etape: TEtapeProgression); overload;
-begin
-  if (not FormExistB(TFrmProgression)) then Exit;
-  case Etape of
-    epNext: FrmProgression.ProgressBar1.StepBy(1);
-    epFin: FrmProgression.ProgressBar1.Position := FrmProgression.ProgressBar1.Max;
-  end;
-  FrmProgression.op.Caption := Texte;
-  FrmProgression.Update;
-  FrmProgression.Show;
-  if (Etape = epFin) then FrmProgression.Release;
-end;
-
-procedure ShowProgression(const Texte: string; Valeur, Maxi: Integer); overload;
-begin
-  if (not FormExistB(TFrmProgression)) and (Valeur <> Maxi) then
-    Application.CreateForm(TFrmProgression, FrmProgression);
-  if FormExistB(TFrmProgression) then
-  begin
-    FrmProgression.ProgressBar1.Max := Maxi;
-    FrmProgression.ProgressBar1.Position := Valeur;
-    FrmProgression.op.Caption := Texte;
-    FrmProgression.Update;
-    FrmProgression.Show;
-  end;
-  if (Valeur = Maxi) then
-  begin
-    if FormExistB(TFrmProgression) then FrmProgression.Release;
-    Exit;
-  end;
-end;
-
-procedure ShowProgression(Texte: PChar; Valeur, Maxi: Integer); overload;
-begin
-  ShowProgression(StrPas(Texte), Valeur, Maxi);
-end;
-
 { TWaiting }
 
 procedure TWaiting.ClearForm;
@@ -191,8 +150,8 @@ begin
     FForm.ProgressBar1.Position := FValeur;
     FForm.op.Caption := FMessage;
     FForm.Show;
-    Application.ProcessMessages;
   end;
+  Application.ProcessMessages;
 end;
 
 procedure TWaiting.ShowProgression(const Texte: string; Etape: TEtapeProgression);
@@ -257,7 +216,8 @@ var
 begin
   if not Bouton in [0..2] then
   begin
-    Result := 0; Exit;
+    Result := 0;
+    Exit;
   end;
   with TFrmChoix.Create(Application) do
   try
@@ -294,7 +254,8 @@ begin
   Texte2 := rsTransListeDetail;
   if not Bouton in [0..2] then
   begin
-    Result := 0; Exit;
+    Result := 0;
+    Exit;
   end;
   with TFrmChoixDetail.Create(Application) do
   try

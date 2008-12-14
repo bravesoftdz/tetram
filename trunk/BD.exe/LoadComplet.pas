@@ -792,15 +792,14 @@ begin
     end;
 
     // éditions supprimées
-    if s <> '' then
-    begin
-      SQL.Text := 'DELETE FROM EDITIONS WHERE ID_ALBUM = ? AND ID_EDITION NOT IN (' + s + ')';
-      Params.AsString[0] := GUIDToString(ID_Album);
-      ExecSQL;
-      SQL.Text := 'DELETE FROM COUVERTURES WHERE ID_ALBUM = ? AND ID_EDITION IS NOT NULL AND ID_EDITION NOT IN (' + s + ')';
-      Params.AsString[0] := GUIDToString(ID_Album);
-      ExecSQL;
-    end;
+    SQL.Text := 'DELETE FROM EDITIONS WHERE ID_ALBUM = ?';
+    if s <> '' then SQL.Add('AND ID_EDITION NOT IN (' + s + ')');
+    Params.AsString[0] := GUIDToString(ID_Album);
+    ExecSQL;
+    SQL.Text := 'DELETE FROM COUVERTURES WHERE ID_ALBUM = ? AND ID_EDITION IS NOT NULL';
+    if s <> '' then SQL.Add('AND ID_EDITION NOT IN (' + s + ')');
+    Params.AsString[0] := GUIDToString(ID_Album);
+    ExecSQL;
 
     for i := 0 to Pred(Editions.Editions.Count) do
     begin
@@ -1033,12 +1032,11 @@ begin
       if not IsEqualGUID(PC.ID, GUID_NULL) then
         AjoutString(s, QuotedStr(GUIDToString(PC.ID)), ',');
     end;
-    if s <> '' then
-    begin
-      SQL.Text := 'DELETE FROM COUVERTURES WHERE ID_EDITION = ? AND ID_COUVERTURE NOT IN (' + s + ')';
-      Params.AsString[0] := GUIDToString(ID_Edition);
-      ExecSQL;
-    end;
+
+    SQL.Text := 'DELETE FROM COUVERTURES WHERE ID_EDITION = ?';
+    if s <> '' then SQL.Add('AND ID_COUVERTURE NOT IN (' + s + ')');
+    Params.AsString[0] := GUIDToString(ID_Edition);
+    ExecSQL;
 
     q1 := TUIBQuery.Create(nil);
     q2 := TUIBQuery.Create(nil);
