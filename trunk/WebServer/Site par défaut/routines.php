@@ -24,6 +24,14 @@ $mois = array('1' => 'janvier', '2' => 'fÃ©vrier', '3' => 'mars', '4' => 'avril'
 $jours = array('0' => 'dimanche', '1' => 'lundi', '2' => 'mardi', '3' => 'mercredi',
                '4' => 'jeudi', '5' => 'vendredi', '6' => 'samedi');
 
+function build_img_filepath($root, $prefix, $id) {
+    // attention: fonction dupliquée dans interface.php
+    $dir = substr(str_replace(array('{', '}', '-'), '', $id), 0, 3).'/';
+    $dir = substr_replace($dir, '/', 2, 0);
+    $dir = substr_replace($dir, '/', 1, 0);
+    return $root.$dir.$prefix.$id.'.jpg';
+}
+
 function AfficheDateSQL($dateSQL) {
 	global $mois, $jours;
 	
