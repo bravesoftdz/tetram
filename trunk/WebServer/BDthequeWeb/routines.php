@@ -18,6 +18,14 @@ function format_titre($titre)
 	return trim($titre);
 }
 
+function build_img_filepath($root, $prefix, $id) {
+    // attention: fonction dupliqu�e dans interface.php
+    $dir = substr(str_replace(array('{', '}', '-'), '', $id), 0, 3).'/';
+    $dir = substr_replace($dir, '/', 2, 0);
+    $dir = substr_replace($dir, '/', 1, 0);
+    return $root.$dir.$prefix.$id.'.jpg';
+}
+
 $mois = array('1' => 'janvier', '2' => 'février', '3' => 'mars', '4' => 'avril',
 			  '5' => 'mai', '6' => 'juin', '7' => 'juillet', '8' => 'août',
 			  '9' => 'septembre', '10' => 'octobre', '11' => 'novembre', '12' => 'décembre');

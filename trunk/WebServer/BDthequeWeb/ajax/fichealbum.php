@@ -231,7 +231,7 @@ if (mysql_num_rows($rs) > 0)
 		if ($nrow > 0)
 		{
 			$image = mysql_fetch_object($images);
-			$filename = $rep_images.$db_prefix.$image->id_couverture.'.jpg';
+			$filename = build_img_filepath($rep_images, $db_prefix, $image->id_couverture);
 			$type_image = load_and_fetch('select * from /*DB_PREFIX*/listes where categorie = 6 and ref'.format_string_null($image->categorieimage));
 ?>
 							<TD><A href=# onclick='return Zoom("zoomimage", "<? echo $filename ?>")'><img border=0 height=150 src="<? echo $filename ?>" alt="<?echo _out($type_image->libelle)?>"></a>
@@ -245,7 +245,7 @@ if (mysql_num_rows($rs) > 0)
 <?
 				while ($image = mysql_fetch_object($images))
 				{ 
-					$filename = $rep_images.$db_prefix.$image->id_couverture.'.jpg';
+			        $filename = build_img_filepath($rep_images, $db_prefix, $image->id_couverture);
 					$type_image = load_and_fetch('select * from /*DB_PREFIX*/listes where categorie = 6 and ref'.format_string_null($image->categorieimage));
 ?>
 								<A href=# onclick='return Zoom("zoomimage", "<? echo $filename ?>")'><img border=0 height=150 src="<? echo $filename ?>" alt="<?echo _out($type_image->libelle)?>"></a>

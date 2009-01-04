@@ -86,6 +86,77 @@ function _del_p(&$ary) {
 	}
 }
 
+function build_img_filepath($root, $prefix, $id) {
+    $dir = substr(str_replace(array('{', '}', '-'), '', $id), 0, 3).'/';
+    $dir = substr_replace($dir, '/', 2, 0);
+    $dir = substr_replace($dir, '/', 1, 0);
+    return $root.$dir.$prefix.$id.'.jpg';
+}
+
+# Extract from MediaWiki
+function wfMkdirParents( $fullDir, $mode = null ) {
+	global $wgDirectoryMode;
+    $wgDirectoryMode = 0700;
+    
+	if( strval( $fullDir ) === '' )
+		return true;
+	if( file_exists( $fullDir ) )
+		return true;
+	// If not defined or isn't an int, set to default
+	if ( is_null( $mode ) ) {
+		$mode = $wgDirectoryMode;
+	}
+
+
+	# Go back through the paths to find the first directory that exists
+	$currentDir = $fullDir;
+	$createList = array();
+	while ( strval( $currentDir ) !== '' && !file_exists( $currentDir ) ) {
+		# Strip trailing slashes
+		$currentDir = rtrim( $currentDir, '/\\' );
+
+		# Add to create list
+		$createList[] = $currentDir;
+
+		# Find next delimiter searching from the end
+		$p = max( strrpos( $currentDir, '/' ), strrpos( $currentDir, '\\' ) );
+		if ( $p === false ) {
+			$currentDir = false;
+		} else {
+			$currentDir = substr( $currentDir, 0, $p );
+		}
+	}
+
+	if ( count( $createList ) == 0 ) {
+		# Directory specified already exists
+		return true;
+	} elseif ( $currentDir === false ) {
+		# Went all the way back to root and it apparently doesn't exist
+		Message('ERROR', "mkdir: Root doesn't exist?\n" );
+		return false;
+	}
+	# Now go forward creating directories
+	$createList = array_reverse( $createList );
+
+	# Is the parent directory writable?
+	if ( $currentDir === '' ) {
+		$currentDir = '/';
+	}
+	if ( !is_writable( $currentDir ) ) {
+		Message('ERROR', "mkdir: Not writable: $currentDir\n" );
+		return false;
+	}
+
+	foreach ( $createList as $dir ) {
+		# use chmod to override the umask, as suggested by the PHP manual
+		if ( !mkdir( $dir, $mode ) || !chmod( $dir, $mode ) ) {
+			Message('ERROR', "mkdir: Unable to create directory $dir\n" );
+			return false;
+		}
+	}
+	return true;
+}
+
 $action = $_REQUEST['action'];
 if (!$action) $action = 0;
 
@@ -259,7 +330,7 @@ switch ($action)
 	}		
 	case 5: // Effacer une image
 	{
-		$filename = $rep_images.$db_prefix.base64_decode($_REQUEST['ID']).'.jpg';
+		$filename = build_img_filepath($rep_images, $db_prefix, base64_decode($_REQUEST['ID']));
 		if (file_exists($filename)) 
 		{ 
 			unlink($filename); 
@@ -295,7 +366,13 @@ switch ($action)
 	case 7: // ajout d'une image
 	{
 		$image = base64_decode($_REQUEST['image']);
-		$filename = $rep_images.$db_prefix.base64_decode($_REQUEST['ID']).'.jpg';
+		$filename = build_img_filepath($rep_images, $db_prefix, base64_decode($_REQUEST['ID']));
+        if (!wfMkdirParents(dirname($filename)))
+        {
+			Message('ERROR', 'unable to create dir');
+			Message('INFO', $filename);
+			exit;
+        }
 		if (!$handle = fopen($filename, 'wb')) 
 		{
 			Message('ERROR', 'unable to open file');
@@ -317,7 +394,7 @@ switch ($action)
 		break;
 	}
 	case 8: // image existe ?
-		$filename = $rep_images.$db_prefix.base64_decode($_REQUEST['ID']).'.jpg';
+		$filename = build_img_filepath($rep_images, $db_prefix, base64_decode($_REQUEST['ID']));
 		if (file_exists($filename)) 
 			Message('INFO', 'file exists');
 		else
