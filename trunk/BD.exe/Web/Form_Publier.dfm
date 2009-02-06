@@ -1,6 +1,6 @@
 object frmPublier: TfrmPublier
-  Left = 440
-  Top = 160
+  Left = 443
+  Top = 163
   AutoSize = True
   BorderStyle = bsDialog
   BorderWidth = 8

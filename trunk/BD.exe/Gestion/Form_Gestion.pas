@@ -8,8 +8,8 @@ uses
   Frame_RechercheRapide, UBdtForms;
 
 type
-  PInfo_Gestion = ^TInfo_Gestion;
-  TInfo_Gestion = record
+  PInfo_Gestion = ^RInfo_Gestion;
+  RInfo_Gestion = record
     Mode: TVirtualMode;
     ListeHint, AjoutHint, ModifHint, SuppHint: string;
     ProcAjouter: TActionGestionAdd;
@@ -66,9 +66,9 @@ type
   private
     { Déclarations privées }
     GestionAchatAlbum, GestionAlbum, GestionAuteur, GestionGenre, GestionCollection,
-      GestionEmprunteur, GestionEditeur, GestionSerie, GestionParaBD, GestionAchatParaBD: TInfo_Gestion;
+      GestionEmprunteur, GestionEditeur, GestionSerie, GestionParaBD, GestionAchatParaBD: RInfo_Gestion;
     LastButton: TSpeedButton;
-    procedure AssignIG(var IG: TInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; const Filtre: string = ''; Acheter: TActionGestionAchat = nil; Importer: Boolean = False; Exporter: Boolean = False);
+    procedure AssignIG(var IG: RInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; const Filtre: string = ''; Acheter: TActionGestionAchat = nil; Importer: Boolean = False; Exporter: Boolean = False);
   public
     { Déclarations publiques }
     SelString: string;
@@ -122,7 +122,7 @@ const
 
 {$R *.DFM}
 
-procedure TFrmGestions.AssignIG(var IG: TInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; const Filtre: string = ''; Acheter: TActionGestionAchat = nil; Importer: Boolean = False; Exporter: Boolean = False);
+procedure TFrmGestions.AssignIG(var IG: RInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; const Filtre: string = ''; Acheter: TActionGestionAchat = nil; Importer: Boolean = False; Exporter: Boolean = False);
 begin
   IG.ProcAjouter := Ajouter;
   IG.ProcModifier := Modifier;
@@ -146,7 +146,7 @@ end;
 
 function TFrmGestions.GestionCourante(SB: TSpeedButton = nil): PInfo_Gestion;
 
-  function test(var ig: PInfo_Gestion; Bouton1, Bouton2: TSpeedButton; const Retour: TInfo_Gestion): Boolean;
+  function test(var ig: PInfo_Gestion; Bouton1, Bouton2: TSpeedButton; const Retour: RInfo_Gestion): Boolean;
   begin
     Result := False;
     if (Bouton1 = Bouton2) or Bouton1.Down then

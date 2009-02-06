@@ -91,11 +91,11 @@ begin
     csTitre:
       case Result.iSignes of
         1: // Vide ou contient
-          Result.TestSQL := Format('(%s IS NULL OR %s CONTAINING %s)', [Champ.NomTable + '.UPPER' + Champ.NomChamp, Champ.NomTable + '.UPPER' + Champ.NomChamp, QuotedStr(critereTexte)]);
+          Result.TestSQL := Format('(%s IS NULL OR %s CONTAINING %s)', [Champ.NomTable + '.' + Champ.NomChamp, Champ.NomTable + '.' + Champ.NomChamp, QuotedStr(critereTexte)]);
         2: // Contient
-          Result.TestSQL := Format('%s CONTAINING %s', [Champ.NomTable + '.UPPER' + Champ.NomChamp, QuotedStr(critereTexte)]);
+          Result.TestSQL := Format('%s CONTAINING %s', [Champ.NomTable + '.' + Champ.NomChamp, QuotedStr(critereTexte)]);
         3: // Ne contient pas
-          Result.TestSQL := Format('NOT (%s CONTAINING %s)', [Champ.NomTable + '.UPPER' + Champ.NomChamp, QuotedStr(critereTexte)]);
+          Result.TestSQL := Format('NOT (%s CONTAINING %s)', [Champ.NomTable + '.' + Champ.NomChamp, QuotedStr(critereTexte)]);
         4: // Ressemble
           Result.TestSQL := Format('%s CONTAINING UDF_SOUNDEX(%s, %d)', [Champ.NomTable + '.SOUNDEX' + Champ.NomChamp, QuotedStr(critereTexte), Integer(Result.iCritere2)]);
         5: // Ne ressemble pas

@@ -1,6 +1,6 @@
 object frmFond: TfrmFond
-  Left = 480
-  Top = 248
+  Left = 451
+  Top = 125
   Width = 732
   Height = 580
   Caption = 'frmFond'

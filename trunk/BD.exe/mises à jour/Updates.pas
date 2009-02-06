@@ -25,6 +25,7 @@ const
 
 procedure RegisterFBUpdate(Version: string; ProcMAJ: TUpdateFBCallback);
 procedure RegisterMySQLUpdate(Version: string; ProcMAJ: TUpdateMySQLCallback);
+procedure LoadScript(const resName: string; Script: TStrings);
 
 implementation
 
@@ -62,6 +63,18 @@ begin
   ListMySQLUpdates.Sort(CompareMySQLUpdate);
 end;
 
+procedure LoadScript(const resName: string; Script: TStrings);
+var
+  s: TResourceStream;
+begin
+  s := TResourceStream.Create(HInstance, resName, 'ScriptsUpdate');
+  with s do try
+    Script.LoadFromStream(s);
+  finally
+    Free;
+  end;
+end;
+
 initialization
   ListFBUpdates := TObjectList.Create(True);
   ListMySQLUpdates := TObjectList.Create(True);
@@ -71,4 +84,3 @@ finalization
   ListMySQLUpdates.Free;
 
 end.
-

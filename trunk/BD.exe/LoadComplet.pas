@@ -1863,13 +1863,13 @@ begin
     end;
 
     Close;
-    SQL.Text := 'SELECT COUNT(g.ID_Genre) AS QuantiteGenre, g.ID_Genre, g.Genre, g.UpperGenre FROM GenreSeries gs INNER JOIN Genres g ON gs.ID_Genre = g.ID_Genre';
+    SQL.Text := 'SELECT COUNT(g.ID_Genre) AS QuantiteGenre, g.ID_Genre, g.Genre, FROM GenreSeries gs INNER JOIN Genres g ON gs.ID_Genre = g.ID_Genre';
     if not IsEqualGUID(ID_Editeur, GUID_NULL) then
     begin
       SQL.Add('INNER JOIN Albums a ON a.ID_Serie = gs.ID_Serie');
       SQL.Add('INNER JOIN Editions e ON e.ID_Album = a.ID_Album and e.ID_Editeur=' + QuotedStr(GUIDToString(ID_Editeur)));
     end;
-    SQL.Add('GROUP BY g.Genre, g.ID_Genre, g.UpperGenre ORDER BY 1 desc, g.UpperGenre');
+    SQL.Add('GROUP BY g.Genre, g.ID_Genre ORDER BY 1 desc');
     Open;
     while not (EOF) do
     begin
@@ -2047,7 +2047,7 @@ begin
       SQL.Clear;
       SQL.Add('SELECT DISTINCT ed.ID_Editeur, e.NomEditeur FROM Editions ed');
       SQL.Add('INNER JOIN Editeurs e ON ed.ID_Editeur = e.ID_Editeur');
-      SQL.Add('ORDER BY e.UpperNomEditeur');
+      SQL.Add('ORDER BY e.NomEditeur');
       Open;
       while not Eof do
       begin
@@ -2230,7 +2230,7 @@ begin
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT * FROM Albums_MANQUANTS(:WithIntegrales, :WithAchats, :ID_Serie) order by UPPERTITRESERIE, TOME';
+    SQL.Text := 'SELECT * FROM Albums_MANQUANTS(:WithIntegrales, :WithAchats, :ID_Serie) order by TITRESERIE, TOME';
     Params.AsBoolean[0] := AvecIntegrales;
     Params.AsBoolean[1] := AvecAchats;
     if not IsEqualGUID(ID_Serie, GUID_NULL) then
@@ -2324,7 +2324,7 @@ begin
   with q do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT * FROM PREVISIONS_SORTIES(:WithAchats, :ID_Serie) order by ANNEEPARUTION, CASE WHEN MOISPARUTION BETWEEN 1 AND 4 THEN 1 WHEN MOISPARUTION BETWEEN 5 AND 8 THEN 2 WHEN MOISPARUTION BETWEEN 9 AND 12 THEN 3 ELSE 0 END, UPPERTITRESERIE';
+    SQL.Text := 'SELECT * FROM PREVISIONS_SORTIES(:WithAchats, :ID_Serie) order by ANNEEPARUTION, CASE WHEN MOISPARUTION BETWEEN 1 AND 4 THEN 1 WHEN MOISPARUTION BETWEEN 5 AND 8 THEN 2 WHEN MOISPARUTION BETWEEN 9 AND 12 THEN 3 ELSE 0 END, TITRESERIE';
     Params.AsBoolean[0] := AvecAchats;
     if not IsEqualGUID(ID_Serie, GUID_NULL) then
       Params.AsString[1] := GUIDToString(ID_Serie);
@@ -2462,16 +2462,16 @@ begin
     FetchBlobs := False;
 
     SQL.Clear;
-    // UpperTitreSerie en premier pour forcer l'union à trier sur le titre
-    SQL.Add('SELECT UPPERTITRESERIE, al.ID_Serie');
+    // TitreSerie en premier pour forcer l'union à trier sur le titre
+    SQL.Add('SELECT TITRESERIE, al.ID_Serie');
     SQL.Add('FROM VW_LISTE_ALBUMS al');
     SQL.Add('  INNER JOIN AUTEURS au ON al.ID_Album = au.ID_Album AND au.ID_Personne = :ID_Personne');
     SQL.Add('union');
-    SQL.Add('SELECT UPPERTITRESERIE, s.ID_Serie');
+    SQL.Add('SELECT TITRESERIE, s.ID_Serie');
     SQL.Add('FROM auteurs_series au');
     SQL.Add('  INNER JOIN SERIES s ON s.ID_Serie = au.ID_Serie AND au.ID_Personne = :ID_Personne');
     SQL.Add('union');
-    SQL.Add('SELECT UPPERTITRESERIE, p.ID_Serie');
+    SQL.Add('SELECT TITRESERIE, p.ID_Serie');
     SQL.Add('FROM auteurs_parabd ap');
     SQL.Add('  INNER JOIN VW_LISTE_PARABD p ON ap.ID_PARABD = p.ID_PARABD and ap.ID_Personne = :ID_Personne');
     Params.ByNameAsString['ID_Personne'] := GUIDToString(Reference);
@@ -3181,7 +3181,7 @@ begin
 
     if sWhere <> '' then SQL.Add('WHERE ' + sWhere);
 
-    SQL.Add('ORDER BY ' + sOrderBy + 'COALESCE(ALBUMS.UPPERTITREALBUM, SERIES.UPPERTITRESERIE), SERIES.UPPERTITRESERIE, ALBUMS.HORSSERIE NULLS FIRST, ALBUMS.INTEGRALE NULLS FIRST,');
+    SQL.Add('ORDER BY ' + sOrderBy + 'COALESCE(ALBUMS.TITREALBUM, SERIES.TITRESERIE), SERIES.TITRESERIE, ALBUMS.HORSSERIE NULLS FIRST, ALBUMS.INTEGRALE NULLS FIRST,');
     SQL.Add('ALBUMS.TOME NULLS FIRST, ALBUMS.TOMEDEBUT NULLS FIRST, ALBUMS.TOMEFIN NULLS FIRST, ALBUMS.ANNEEPARUTION NULLS FIRST, ALBUMS.MOISPARUTION NULLS FIRST');
 
     Open;

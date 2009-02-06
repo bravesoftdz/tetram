@@ -950,7 +950,7 @@ begin
       NbAlbums := Source.Fields.AsInteger[0];
       Source.Close;
       Source.SQL[0] := 'SELECT a.ID_Album, a.TITREALBUM, a.MOISPARUTION, a.ANNEEPARUTION, a.ID_Serie, a.TOME, a.TOMEDEBUT, a.TOMEFIN, a.HORSSERIE, a.INTEGRALE, s.TITRESERIE';
-      Source.SQL.Add('ORDER BY s.UPPERTITRESERIE NULLS FIRST, a.ID_Serie, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
+      Source.SQL.Add('ORDER BY s.TITRESERIE NULLS FIRST, a.ID_Serie, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
       if liste = mrNo then
       begin
         if daoHistoire in DetailsOptions then Source.SQL[0] := Source.SQL[0] + ', a.SUJETALBUM, s.SUJETSERIE';
@@ -1935,7 +1935,7 @@ begin
       NbAlbums := Source.Fields.AsInteger[0] * 2; // on va parcourir 2 fois la liste
       Source.Close;
       Source.SQL[0] := 'SELECT a.ID_Album, a.TITREALBUM, a.MOISPARUTION, a.ANNEEPARUTION, a.ID_Serie, a.TOME, a.TOMEDEBUT, a.TOMEFIN, a.HORSSERIE, a.INTEGRALE, s.TITRESERIE, v.ID_Editeur, v.PRIXUNITAIRE';
-      Source.SQL.Add('ORDER BY s.UPPERTITRESERIE NULLS FIRST, a.ID_Serie, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
+      Source.SQL.Add('ORDER BY s.TITRESERIE NULLS FIRST, a.ID_Serie, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
 
       PreparePrintObject(Prn, Previsualisation, rsListeAchats);
 

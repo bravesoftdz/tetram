@@ -36,7 +36,7 @@ implementation
 
 uses
   UNet, Divers, Updates, DIMime, DIMimeStreams, UIB, UIBLib, DM_Princ, Commun, DateUtils,
-  Procedures, CommonConst, VarUtils;
+  Procedures, CommonConst, VarUtils, StrUtils;
 
 type
   TSynchroSpecial = (tsNone, tsImages);
@@ -46,25 +46,25 @@ type
     ID: string;
     version_mini, version_maxi: string;
     TypeSynchro: TSynchroSpecial;
-    SkipFields: string;
+    SkipFields, UpperFields: string;
     ProcedureStockee: string;
   end;
 
 const
   TablesSynchro: array[1..13] of RInfoTable = (
-    (TableName: 'PERSONNES'; ID: 'id_personne'),
-    (TableName: 'EDITEURS'; ID: 'id_editeur'),
-    (TableName: 'COLLECTIONS'; ID: 'id_collection'),
-    (TableName: 'SERIES'; ID: 'id_serie'; SkipFields: '@etat=1.0.0.1@reliure=1.0.0.1@typeedition=1.0.0.1@orientation=1.0.0.1@formatedition=1.0.0.1@senslecture=1.0.0.1@vo=1.0.0.1@couleur=1.0.0.1@'),
-    (TableName: 'ALBUMS'; ID: 'id_album'),
+    (TableName: 'PERSONNES'; ID: 'id_personne'; UpperFields: 'nompersonne'),
+    (TableName: 'EDITEURS'; ID: 'id_editeur'; UpperFields: 'nomediteur'),
+    (TableName: 'COLLECTIONS'; ID: 'id_collection'; UpperFields: 'nomcollection'),
+    (TableName: 'SERIES'; ID: 'id_serie'; SkipFields: 'etat=1.0.0.1@reliure=1.0.0.1@typeedition=1.0.0.1@orientation=1.0.0.1@formatedition=1.0.0.1@senslecture=1.0.0.1@vo=1.0.0.1@couleur=1.0.0.1'; UpperFields: 'titreserie@sujetserie@remarquesserie'),
+    (TableName: 'ALBUMS'; ID: 'id_album'; UpperFields: 'titrealbum@sujetalbum@remarquesalbum'),
     (TableName: 'EDITIONS'; ID: 'id_edition'),
     (TableName: 'AUTEURS'; ID: 'id_auteur'),
-    (TableName: 'GENRES'; ID: 'id_genre'),
+    (TableName: 'GENRES'; ID: 'id_genre'; UpperFields: 'genre'),
     (TableName: 'GENRESERIES'; ID: 'id_genreseries'),
     (TableName: 'LISTES'; ID: 'id_liste'),
-    (TableName: 'ALBUMS_MANQUANTS'; ProcedureStockee: 'ALBUMS_MANQUANTS(1, 1, NULL)'),
-    (TableName: 'PREVISIONS_SORTIES'; ProcedureStockee: 'PREVISIONS_SORTIES(1, NULL)'),
-    (TableName: 'COUVERTURES'; ID: 'id_couverture'; TypeSynchro: tsImages; SkipFields: '@stockagecouverture@imagecouverture@fichiercouverture@'));
+    (TableName: 'ALBUMS_MANQUANTS'; UpperFields: 'titreserie'; ProcedureStockee: 'ALBUMS_MANQUANTS(1, 1, NULL)'),
+    (TableName: 'PREVISIONS_SORTIES'; UpperFields: 'titreserie'; ProcedureStockee: 'PREVISIONS_SORTIES(1, NULL)'),
+    (TableName: 'COUVERTURES'; ID: 'id_couverture'; TypeSynchro: tsImages; SkipFields: 'stockagecouverture@imagecouverture@fichiercouverture'));
 
 procedure TfrmPublier.Button1Click(Sender: TObject);
 const
@@ -314,14 +314,15 @@ var
     end;
 
   var
-    enteteXML, bodyXML, recordXML, champ: string;
+    enteteXML, bodyXML, recordXML, champ, s: string;
     contenuChamp: WideString;
     i, l: Integer;
     //    ms: TMemoryStream;
     //    ss: TStringStream;
-    listFields: TList;
+    listFields, listUpperFields: TList;
   begin
     listFields := TList.Create;
+    listUpperFields := TList.Create;
     try
       enteteXML := '<table>' + LowerCase(InfoTable.TableName) + '</table>';
       AjoutString(enteteXML, LowerCase(InfoTable.ID), '', '<primarykey>', '</primarykey>');
@@ -330,13 +331,27 @@ var
         for i := 0 to Pred(Fields.FieldCount) do
         begin
           champ := LowerCase(Fields.AliasName[i]);
-          l := Pos('@' + champ + '=', InfoTable.SkipFields);
-          if l > 0 then begin
+
+          // champ à passer ?
+          s := '@' + InfoTable.SkipFields + '@';
+          l := Pos('@' + champ + '=', s);
+          if l > 0 then
+          begin
             l := l + Length(champ) + 2;
-            if CompareVersionNum(db_version, Copy(InfoTable.SkipFields, l, PosInText(l, InfoTable.SkipFields, '@') - l)) >= 0 then listFields.Add(Pointer(i));
+            if CompareVersionNum(db_version, Copy(s, l, PosEx('@', s, l) - l)) >= 0 then listFields.Add(Pointer(i));
+            Continue; // ce n'est pas grave si on ne fait pas le test du champ à upper: si on le passer c'est qu'il ne l'est pas
+          end;
+          if Pos('@' + champ + '@', s) = 0 then listFields.Add(Pointer(i));
+
+          s := '@' + InfoTable.UpperFields + '@';
+          l := Pos('@' + champ + '=', s);
+          if l > 0 then
+          begin
+            l := l + Length(champ) + 2;
+            if CompareVersionNum(db_version, Copy(s, l, PosEx('@', s, l) - l)) >= 0 then listUpperFields.Add(Pointer(i));
             Continue;
           end;
-          if Pos('@' + champ + '@', InfoTable.SkipFields) = 0 then listFields.Add(Pointer(i));
+          if Pos('@' + champ + '@', s) > 0 then listUpperFields.Add(Pointer(i));
         end;
         bodyXML := '';
         while not Eof do
@@ -372,11 +387,19 @@ var
                   contenuChamp := Trim(Fields.AsString[i]);
               end;
               //          if Fields.FieldType[i] <> uftBlob then
-              contenuChamp := CleanHTTP(contenuChamp);
+
               if contenuChamp = '' then
-                AjoutString(recordXML, Format('<%s null="T" />', [champ]), '')
+              begin
+                AjoutString(recordXML, Format('<%s null="T" />', [champ]), '');
+                if listUpperFields.IndexOf(Pointer(i)) <> -1 then
+                  AjoutString(recordXML, Format('<%s null="T" />', ['upper' + champ]), '');
+              end
               else
-                AjoutString(recordXML, contenuChamp, '', Format('<%s%s>', [champ, IIf(Fields.FieldType[i] = uftBlob, {' type="B"'} '', '')]), Format('</%s>', [champ]));
+              begin
+                AjoutString(recordXML, CleanHTTP(contenuChamp), '', Format('<%s%s>', [champ, IIf(Fields.FieldType[i] = uftBlob, {' type="B"'} '', '')]), Format('</%s>', [champ]));
+                if listUpperFields.IndexOf(Pointer(i)) <> -1 then
+                  AjoutString(recordXML, CleanHTTP(UpperCase(SansAccents(contenuChamp))), '', Format('<%s%s>', ['upper' + champ, IIf(Fields.FieldType[i] = uftBlob, {' type="B"'} '', '')]), Format('</%s>', ['upper' + champ]));
+              end;
             end;
           end;
           AjoutString(bodyXML, recordXML, '', '<record' + IIf(isDelete, ' action="D"', '') + '>', '</record>');
@@ -393,6 +416,7 @@ var
       end;
     finally
       listFields.Free;
+      listUpperFields.Free;
     end;
   end;
 
@@ -562,7 +586,7 @@ begin
             and ((version_maxi = '') or (CompareVersionNum(version_maxi, db_version) >= 0)) then
             case TypeSynchro of
               tsImages:
-                if CheckBox2.Checked then Inc(rc, CompteUpdates(TablesSynchro[i]) * 2); // la synchro des images est faite en 2 fois
+                if CheckBox2.Checked then Inc(rc, CompteUpdates(TablesSynchro[i]) * 2); // la synchro des images est faite en 2 fois : les données puis les fichiers
               else
                 Inc(rc, CompteUpdates(TablesSynchro[i]));
             end;

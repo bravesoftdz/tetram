@@ -115,7 +115,7 @@ AutoIncBuild=1
 MajorVer=2
 MinorVer=1
 Release=0
-Build=26
+Build=72
 Debug=0
 PreRelease=0
 Special=0
@@ -126,7 +126,7 @@ CodePage=1252
 [Version Info Keys]
 CompanyName=Teträm Corp
 FileDescription=
-FileVersion=2.1.0.26
+FileVersion=2.1.0.72
 InternalName=BDT
 LegalCopyright=Teträm Corp 1997-2008
 LegalTrademarks=

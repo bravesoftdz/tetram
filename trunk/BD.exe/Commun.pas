@@ -5,7 +5,7 @@ interface
 {$WARN UNIT_PLATFORM OFF}
 
 uses
-  SysUtils, Windows, Dialogs, Classes, UIB, Controls;
+  SysUtils, Windows, Dialogs, Classes, UIB, Controls, StrUtils;
 
 const
   GUID_FULL: TGUID = '{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}';
@@ -15,8 +15,8 @@ const
 
 function IIf(Test: Boolean; const BackTrue, BackFalse: string): string; overload;
 function IIf(Test: Boolean; BackTrue, BackFalse: Integer): Integer; overload;
-procedure AjoutString(var Chaine: WideString; const Ajout, Espace: string; const Avant: string = ''; const Apres: string = ''); overload;
-procedure AjoutString(var Chaine: string; const Ajout, Espace: string; const Avant: string = ''; const Apres: string = ''); overload;
+procedure AjoutString(var Chaine: WideString; const Ajout, Espace: WideString; const Avant: WideString = ''; const Apres: WideString = ''); overload;
+procedure AjoutString(var Chaine: AnsiString; const Ajout, Espace: AnsiString; const Avant: AnsiString = ''; const Apres: AnsiString = ''); overload;
 
 function StringToGUIDDef(const GUID: string; const Default: TGUID): TGUID;
 
@@ -56,7 +56,7 @@ begin
   end;
 end;
 
-procedure AjoutString(var Chaine: string; const Ajout, Espace: string; const Avant: string = ''; const Apres: string = '');
+procedure AjoutString(var Chaine: AnsiString; const Ajout, Espace: AnsiString; const Avant: AnsiString = ''; const Apres: AnsiString = '');
 var
   s: string;
 begin
@@ -69,7 +69,7 @@ begin
   Chaine := Chaine + s;
 end;
 
-procedure AjoutString(var Chaine: WideString; const Ajout, Espace: string; const Avant: string = ''; const Apres: string = '');
+procedure AjoutString(var Chaine: WideString; const Ajout, Espace: WideString; const Avant: WideString = ''; const Apres: WideString = '');
 var
   s: string;
 begin
@@ -270,7 +270,7 @@ begin
     i := Pos('[', Titre);
     if i > 0 then
     begin
-      j := PosInText(i, Titre, ']');
+      j := PosEx(']', Titre, i);
       if j = 0 then Exit;
       Dummy := Copy(Titre, i + 1, j - i - 1);
       if Length(Dummy) > 0 then

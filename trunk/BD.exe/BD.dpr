@@ -1,6 +1,7 @@
 program BD;
 
 {$R 'ressources.res' 'ressources.rc'}
+{$R 'mises à jour\scripts_maj.res' 'mises à jour\scripts_maj.rc'}
 
 uses
   Windows,
@@ -139,7 +140,8 @@ uses
   UMAJ2_1_0_0 in 'mises à jour\UMAJ2_1_0_0.pas',
   UMySQLMAJ1_0_0_0 in 'Web\mises à jour\UMySQLMAJ1_0_0_0.pas',
   UMySQLMAJ1_0_0_2 in 'Web\mises à jour\UMySQLMAJ1_0_0_2.pas',
-  UMAJ2_1_0_22 in 'mises à jour\UMAJ2_1_0_22.pas';
+  UMAJ2_1_0_22 in 'mises à jour\UMAJ2_1_0_22.pas',
+  UMAJ2_1_0_72 in 'mises à jour\UMAJ2_1_0_72.pas';
 
 {$R *.RES}
 {$R curseurs.res}
