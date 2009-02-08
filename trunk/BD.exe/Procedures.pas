@@ -48,7 +48,7 @@ type
   end;
 
   IInformation = interface
-    procedure ShowInfo(const Msg: ShortString);
+    procedure ShowInfo(const Msg: string);
   end;
   TInformation = class(TInterfacedObject, IInformation)
   private
@@ -56,7 +56,7 @@ type
     FLabel: TLabel;
     procedure SetupDialog;
   public
-    procedure ShowInfo(const Msg: ShortString);
+    procedure ShowInfo(const Msg: string);
     constructor Create;
     destructor Destroy; override;
   end;
@@ -458,7 +458,7 @@ begin
         while not Eof do
         begin
           try
-            Champ := Champs.Fields.GetFieldIndex(Fields.ByNameAsString['Champ']);
+            Champ := Champs.Fields.GetFieldIndex(AnsiString(Fields.ByNameAsString['Champ']));
           except
             Champ := -1;
           end;
@@ -947,7 +947,7 @@ begin
   end;
 end;
 
-procedure TInformation.ShowInfo(const Msg: ShortString);
+procedure TInformation.ShowInfo(const Msg: string);
 begin
   SetupDialog;
   FLabel.Caption := Msg;
