@@ -76,8 +76,7 @@ type
 
 implementation
 
-uses Commun, TypeRec, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg,
-  GraphicEx, Impression;
+uses Commun, TypeRec, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression;
 
 {$R *.dfm}
 
