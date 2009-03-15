@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, ComCtrls, Db, Menus,
   ExtCtrls, Buttons, Proc_Gestions, VDTButton, VirtualTrees, VirtualTree,
-  Frame_RechercheRapide, UBdtForms;
+  Frame_RechercheRapide, UBdtForms, PngSpeedButton;
 
 type
   PInfo_Gestion = ^RInfo_Gestion;
@@ -172,7 +172,7 @@ end;
 
 procedure TFrmGestions.FormCreate(Sender: TObject);
 begin
-  Mode_en_cours := mdEdit;
+  TGlobalVar.Mode_en_cours := mdEdit;
 
   FrameRechercheRapide1.VirtualTreeView := VirtualTreeView;
   FrameRechercheRapide1.ShowNewButton := False;

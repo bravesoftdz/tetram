@@ -200,7 +200,7 @@ begin
       ModalResult := mrNone;
       Exit;
     end
-    else if Utilisateur.Options.AvertirPret and (ListView1.Items[i].SubItems[1] = v[True]) then begin
+    else if TGlobalVar.Utilisateur.Options.AvertirPret and (ListView1.Items[i].SubItems[1] = v[True]) then begin
       Edition := TEditionComplete.Create(StringToGUID(ListView1.Items[i].SubItems[2]));
       try
         if (Edition.Prete) and (MessageDlg(ListView1.Items[i].Caption + #13#13'Cette édition est déjà prêtée.'#13#10'Continuer?', mtConfirmation, [mbYes, mbNo], 0) <> mrYes) then begin

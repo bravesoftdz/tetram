@@ -49,8 +49,8 @@ end;
 
 procedure TConvertisseur.Edit1KeyPress(Sender: TObject; var Key: Char);
 begin
-  if not (Key in ['0'..'9', #8, DecimalSeparator, '.', ',']) then Key := #0;
-  if Key in ['.', ','] then Key := DecimalSeparator;
+  if not CharInSet(Key, ['0'..'9', #8, DecimalSeparator, '.', ',']) then Key := #0;
+  if CharInSet(Key, ['.', ',']) then Key := DecimalSeparator;
   if (Pos(DecimalSeparator, Edit1.Text) <> 0) and (Key = DecimalSeparator) then Key := #0;
 end;
 

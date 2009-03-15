@@ -11,9 +11,9 @@ type
 
   TParamInfoRecord = record
     Name: Cardinal;
-    OrgName: string;
-    Params: string;
-    OrgParams: string;
+    OrgName: AnsiString;
+    Params: AnsiString;
+    OrgParams: AnsiString;
     Father: Cardinal;
     Nr: Integer;
     ReturnTyp: Cardinal;
@@ -44,10 +44,9 @@ type
     procedure SetActive(const Value: Boolean);
   public
     Line: Cardinal;
-    Fichier: string;
+    Fichier: AnsiString;
     FEditor: TCustomSynEdit;
     destructor Destroy; override;
-  published
     property Active: Boolean read FActive write SetActive;
   end;
 
@@ -55,13 +54,13 @@ type
   TTypeMessage = (tmUnknown, tmError, tmHint, tmWarning);
 
   TMessageInfo = class
-    Fichier, TypeMessage, Text: string;
+    Fichier, TypeMessage, Text: AnsiString;
     Line, Char: Cardinal;
     Category: TCategoryMessage;
   end;
 
   TWatchInfo = class
-    Name: string;
+    Name: AnsiString;
     Active: Boolean;
   end;
 
@@ -71,10 +70,9 @@ type
     procedure PutInfo(Index: Integer; const Value: TWatchInfo);
   public
     property Items[Index: Integer]: TWatchInfo read GetInfo write PutInfo; default;
-  published
-    function IndexOfName(const VarName: string): Integer;
+    function IndexOfName(const VarName: AnsiString): Integer;
     function CountActive: Integer;
-    procedure AddWatch(const VarName: string);
+    procedure AddWatch(const VarName: AnsiString);
   end;
 
   TMessageList = class(TDebugList)
@@ -83,15 +81,14 @@ type
     procedure PutInfo(Index: Integer; const Value: TMessageInfo);
   public
     property Items[Index: Integer]: TMessageInfo read GetInfo write PutInfo; default;
-  published
-    function AddCompileErrorMessage(const Fichier, Text: string; TypeMessage: TTypeMessage; Line, Char: Cardinal): Integer;
-    function AddRuntimeErrorMessage(const Fichier, Text: string; Line, Char: Cardinal): Integer;
-    function AddInfoMessage(const Fichier, Text: string; Line: Cardinal = 0; Char: Cardinal = 0): Integer;
+    function AddCompileErrorMessage(const Fichier, Text: AnsiString; TypeMessage: TTypeMessage; Line, Char: Cardinal): Integer;
+    function AddRuntimeErrorMessage(const Fichier, Text: AnsiString; Line, Char: Cardinal): Integer;
+    function AddInfoMessage(const Fichier, Text: AnsiString; Line: Cardinal = 0; Char: Cardinal = 0): Integer;
     function Current: TMessageInfo;
     function Last: TMessageInfo;
   end;
 
-  TGetScript = function(const Fichier: string): TSynEdit of object;
+  TGetScript = function(const Fichier: AnsiString): TSynEdit of object;
 
   TBreakpointList = class(TDebugList)
   private
@@ -101,10 +98,10 @@ type
     function GetInfo(Index: Integer): TBreakpointInfo;
     procedure PutInfo(Index: Integer; const Value: TBreakpointInfo);
   public
-    function IndexOf(const Fichier: string; const ALine: Cardinal): Integer;
-    function Exists(const Fichier: string; const ALine: Cardinal): Boolean;
-    procedure AddBreakpoint(const Fichier: string; const ALine: Cardinal);
-    function Toggle(const Fichier: string; const ALine: Cardinal): Boolean;
+    function IndexOf(const Fichier: AnsiString; const ALine: Cardinal): Integer;
+    function Exists(const Fichier: AnsiString; const ALine: Cardinal): Boolean;
+    procedure AddBreakpoint(const Fichier: AnsiString; const ALine: Cardinal);
+    function Toggle(const Fichier: AnsiString; const ALine: Cardinal): Boolean;
     property Items[Index: Integer]: TBreakpointInfo read GetInfo write PutInfo; default;
     function Current: TBreakpointInfo;
 
@@ -138,29 +135,32 @@ type
     property OnGetScript: TGetScript read GetScript write SetScript;
   end;
 
-  TStringArray = array of string;
+  TStringArray = array of AnsiString;
 
 procedure AddToTStrings(Strings: TStringArray; List: TStrings);
-function Explode(Trenner: string; Text: string): TStringArray;
-function GetTypeName(Typ: TPSType): string;
-function GetParams(Decl: TPSParametersDecl; Delim: string = ''): string;
+function Explode(Trenner: AnsiString; Text: AnsiString): TStringArray;
+function GetTypeName(Typ: TPSType): AnsiString;
+function GetParams(Decl: TPSParametersDecl; Delim: AnsiString = ''): AnsiString;
 function BaseTypeCompatible(p1, p2: Integer): Boolean;
-function HashString(const S: string): Cardinal;
+function HashString(const S: AnsiString): Cardinal;
 
 implementation
 
+uses
+  AnsiStrings;
+
 { TBreakpointList }
 
-function TBreakpointList.IndexOf(const Fichier: string; const ALine: Cardinal): Integer;
+function TBreakpointList.IndexOf(const Fichier: AnsiString; const ALine: Cardinal): Integer;
 begin
   Result := 0;
-  while (Result < Count) and ((Items[Result].Line <> ALine) or not SameText(Items[Result].Fichier, Fichier)) do
+  while (Result < Count) and ((Items[Result].Line <> ALine) or not AnsiSameText(Items[Result].Fichier, Fichier)) do
     Inc(Result);
   if Result = Count then
     Result := -1;
 end;
 
-function TBreakpointList.Exists(const Fichier: string; const ALine: Cardinal): Boolean;
+function TBreakpointList.Exists(const Fichier: AnsiString; const ALine: Cardinal): Boolean;
 begin
   Result := IndexOf(Fichier, ALine) <> -1;
 end;
@@ -175,7 +175,7 @@ begin
   Put(Index, Pointer(Value));
 end;
 
-function TBreakpointList.Toggle(const Fichier: string; const ALine: Cardinal): Boolean;
+function TBreakpointList.Toggle(const Fichier: AnsiString; const ALine: Cardinal): Boolean;
 var
   i: Integer;
 begin
@@ -195,11 +195,12 @@ end;
 function TBreakpointList.Current: TBreakpointInfo;
 begin
   Result := nil;
-  if not Assigned(FView) or (FView.GetFirstSelected = nil) then Exit;
+  if not Assigned(FView) or (FView.GetFirstSelected = nil) then
+    Exit;
   Result := Items[FView.GetFirstSelected.Index];
 end;
 
-procedure TBreakpointList.AddBreakpoint(const Fichier: string; const ALine: Cardinal);
+procedure TBreakpointList.AddBreakpoint(const Fichier: AnsiString; const ALine: Cardinal);
 var
   BP: TBreakpointInfo;
 begin
@@ -226,12 +227,12 @@ begin
   inherited;
   case Action of
     lnAdded, lnExtracted:
-      begin
-        //Editor.InvalidateLine(TBreakpointInfo(Ptr).Line);
-        //Editor.InvalidateGutterLine(TBreakpointInfo(Ptr).Line);
-        // InvalidateLine et InvalidateGutterLine bizarrement insuffisants dans certains cas
-        TBreakpointInfo(Ptr).FEditor.Invalidate;
-      end;
+    begin
+      //Editor.InvalidateLine(TBreakpointInfo(Ptr).Line);
+      //Editor.InvalidateGutterLine(TBreakpointInfo(Ptr).Line);
+      // InvalidateLine et InvalidateGutterLine bizarrement insuffisants dans certains cas
+      TBreakpointInfo(Ptr).FEditor.Invalidate;
+    end;
     lnDeleted:
       ;
   end;
@@ -316,14 +317,15 @@ end;
 
 procedure TDebugList.UpdateView;
 begin
-  if not Assigned(FView) then Exit;
+  if not Assigned(FView) then
+    Exit;
   FView.RootNodeCount := Count;
   FView.Invalidate;
 end;
 
 { TWatchList }
 
-procedure TWatchList.AddWatch(const VarName: string);
+procedure TWatchList.AddWatch(const VarName: AnsiString);
 var
   Watch: TWatchInfo;
 begin
@@ -342,7 +344,8 @@ var
 begin
   Result := 0;
   for i := 0 to Pred(Count) do
-    if Items[i].Active then Inc(Result);
+    if Items[i].Active then
+      Inc(Result);
 end;
 
 function TWatchList.GetInfo(Index: Integer): TWatchInfo;
@@ -350,7 +353,7 @@ begin
   Result := TWatchInfo(inherited Items[Index]);
 end;
 
-function TWatchList.IndexOfName(const VarName: string): Integer;
+function TWatchList.IndexOfName(const VarName: AnsiString): Integer;
 begin
   Result := 0;
   while (Result < Count) and not SameText(TWatchInfo(Items[Result]).Name, VarName) do
@@ -366,7 +369,7 @@ end;
 
 { TMessageList }
 
-function TMessageList.AddCompileErrorMessage(const Fichier, Text: string; TypeMessage: TTypeMessage; Line, Char: Cardinal): Integer;
+function TMessageList.AddCompileErrorMessage(const Fichier, Text: AnsiString; TypeMessage: TTypeMessage; Line, Char: Cardinal): Integer;
 var
   Msg: TMessageInfo;
 begin
@@ -384,7 +387,7 @@ begin
   Msg.Category := cmCompileError;
 end;
 
-function TMessageList.AddInfoMessage(const Fichier, Text: string; Line, Char: Cardinal): Integer;
+function TMessageList.AddInfoMessage(const Fichier, Text: AnsiString; Line, Char: Cardinal): Integer;
 var
   Msg: TMessageInfo;
 begin
@@ -398,7 +401,7 @@ begin
   Msg.Category := cmInfo;
 end;
 
-function TMessageList.AddRuntimeErrorMessage(const Fichier, Text: string; Line, Char: Cardinal): Integer;
+function TMessageList.AddRuntimeErrorMessage(const Fichier, Text: AnsiString; Line, Char: Cardinal): Integer;
 var
   Msg: TMessageInfo;
 begin
@@ -415,7 +418,8 @@ end;
 function TMessageList.Current: TMessageInfo;
 begin
   Result := nil;
-  if not Assigned(FView) or (FView.GetFirstSelected = nil) then Exit;
+  if not Assigned(FView) or (FView.GetFirstSelected = nil) then
+    Exit;
   Result := Items[FView.GetFirstSelected.Index];
 end;
 
@@ -456,11 +460,11 @@ var
 begin
   for Dummy := 0 to high(Strings) do
   begin
-    List.Add(Strings[Dummy]);
+    List.Add(string(Strings[Dummy]));
   end;
 end;
 
-procedure Split(Trenner: string; Text: string; var Text1, Text2: string);
+procedure Split(Trenner: AnsiString; Text: AnsiString; var Text1, Text2: AnsiString);
 var
   EndPos: Integer;
 begin
@@ -473,7 +477,7 @@ begin
   Text2 := Copy(Text, EndPos + length(Trenner), length(Text));
 end;
 
-function Explode(Trenner: string; Text: string): TStringArray;
+function Explode(Trenner: AnsiString; Text: AnsiString): TStringArray;
 begin
   result := nil;
   while Text <> '' do
@@ -483,7 +487,7 @@ begin
   end;
 end;
 
-function HashString(const S: string): Cardinal;
+function HashString(const S: AnsiString): Cardinal;
 const
   cLongBits = 32;
   cOneEight = 4;
@@ -491,12 +495,12 @@ const
   cHighBits = $F0000000;
 var
   I: Integer;
-  P: PChar;
+  P: PAnsiChar;
   Temp: Cardinal;
 begin
   { TODO : I should really be processing 4 bytes at once... }
   Result := 0;
-  P := PChar(UpperCase(S));
+  P := PAnsiChar(AnsiUpperCase(S));
 
   I := Length(S);
   while I > 0 do
@@ -510,7 +514,7 @@ begin
   end;
 end;
 
-function GetTypeName(Typ: TPSType): string;
+function GetTypeName(Typ: TPSType): AnsiString;
 begin
   if Typ.OriginalName <> '' then
     result := Typ.OriginalName
@@ -525,7 +529,7 @@ begin
   end;
 end;
 
-function GetParams(Decl: TPSParametersDecl; Delim: string = ''): string;
+function GetParams(Decl: TPSParametersDecl; Delim: AnsiString = ''): AnsiString;
 var
   Dummy: Integer;
 begin
@@ -565,9 +569,13 @@ function BaseTypeCompatible(p1, p2: Integer): Boolean;
   function IsIntType(b: TPSBaseType): Boolean;
   begin
     case b of
-      btU8, btS8, btU16, btS16, btU32, btS32{$IFNDEF PS_NOINT64}, btS64{$ENDIF}: Result := True;
-    else
-      Result := False;
+      btU8, btS8, btU16, btS16, btU32, btS32
+{$IFNDEF PS_NOINT64}
+        , btS64
+{$ENDIF}
+        : Result := True;
+      else
+        Result := False;
     end;
   end;
 
@@ -575,25 +583,28 @@ function BaseTypeCompatible(p1, p2: Integer): Boolean;
   begin
     case b of
       btSingle, btDouble, btCurrency, btExtended: Result := True;
-    else
-      Result := False;
+      else
+        Result := False;
     end;
   end;
 
   function IsIntRealType(b: TPSBaseType): Boolean;
   begin
     case b of
-      btSingle, btDouble, btCurrency, btExtended, btU8, btS8, btU16, btS16, btU32, btS32{$IFNDEF PS_NOINT64}, btS64{$ENDIF}:
+      btSingle, btDouble, btCurrency, btExtended, btU8, btS8, btU16, btS16, btU32, btS32
+{$IFNDEF PS_NOINT64}
+        , btS64
+{$ENDIF}
+        :
         Result := True;
-    else
-      Result := False;
+      else
+        Result := False;
     end;
 
   end;
 
 begin
-  if
-    ((p1 = btProcPtr) and (p2 = p1)) or
+  if ((p1 = btProcPtr) and (p2 = p1)) or
     (p1 = btPointer) or
     (p2 = btPointer) or
     ((p1 = btNotificationVariant) or (p1 = btVariant)) or
@@ -605,7 +616,7 @@ begin
     ((p1 = btChar) and (p2 = btChar)) or
     ((p1 = btSet) and (p2 = btSet)) or
 {$IFNDEF PS_NOWIDESTRING}
-  ((p1 = btWideChar) and (p2 = btChar)) or
+    ((p1 = btWideChar) and (p2 = btChar)) or
     ((p1 = btWideChar) and (p2 = btWideChar)) or
     ((p1 = btWidestring) and (p2 = btChar)) or
     ((p1 = btWidestring) and (p2 = btWideChar)) or
@@ -615,7 +626,7 @@ begin
     (((p1 = btPchar) or (p1 = btString)) and (p2 = btWidechar)) or
     (((p1 = btPchar) or (p1 = btString)) and (p2 = btchar)) or
 {$ENDIF}
-  ((p1 = btRecord) and (p2 = btrecord)) or
+    ((p1 = btRecord) and (p2 = btrecord)) or
     ((p1 = btEnum) and (p2 = btEnum)) then
     Result := True
   else

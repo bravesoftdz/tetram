@@ -1,9 +1,9 @@
 object FrmConsultationParaBD: TFrmConsultationParaBD
   Left = 1405
   Top = 196
-  Width = 850
-  Height = 535
   Caption = 'FrmConsultationParaBD'
+  ClientHeight = 489
+  ClientWidth = 842
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -343,19 +343,13 @@ object FrmConsultationParaBD: TFrmConsultationParaBD
       BevelInner = bvLowered
       BevelOuter = bvNone
       BevelKind = bkFlat
-      BorderStyle = bsNone
       Color = clWhite
       Columns = <
         item
           MinWidth = 150
           Width = 231
         end>
-      ColumnClick = False
-      HideSelection = False
-      ReadOnly = True
-      ShowColumnHeaders = False
       TabOrder = 1
-      ViewStyle = vsReport
       OnDblClick = lvAuteursDblClick
     end
     object cbNumerote: TReadOnlyCheckBox

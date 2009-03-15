@@ -8,8 +8,8 @@ uses
   uPSComponent, uPSDebugger, SynEditMiscClasses, SynEditSearch, StdActns, ActnList, uPSDisassembly,
   Menus, SynEditTypes, ComCtrls, uPSCompiler, UScriptUtils, uPSUtils,
   uPSRuntime, VirtualTrees, StdCtrls, ExtCtrls, uPSComponent_StdCtrls,
-  uPSComponent_Controls, uPSComponent_Forms, uPSComponent_DB, uPSComponent_RegExpr, LoadComplet,
-  uPSComponent_COM, uPSComponent_Default, SynEditKeyCmds, uPSI_LoadComplet, uPSI_TypeRec,
+  uPSComponent_Controls, uPSComponent_Forms, uPSComponent_DB, uPSI_BdtkRegEx, LoadComplet,
+  uPSComponent_COM, uPSComponent_Default, SynEditKeyCmds, uPSI_BdtkObjects,
   SynCompletionProposal, UBdtForms, IDHashMap;
 
 type
@@ -105,6 +105,7 @@ type
     Excutersansdbuguer1: TMenuItem;
     SynEditParamShow: TSynCompletionProposal;
     SynEditAutoComplete: TSynCompletionProposal;
+    Button3: TButton;
     procedure seScript1GutterClick(Sender: TObject; Button: TMouseButton; X, Y, Line: Integer; Mark: TSynEditMark);
     procedure seScript1GutterPaint(Sender: TObject; aLine, X, Y: Integer);
     procedure seScript1SpecialLineColors(Sender: TObject; Line: Integer; var Special: Boolean; var FG, BG: TColor);
@@ -123,11 +124,11 @@ type
     procedure actCompileExecute(Sender: TObject);
     procedure actRunExecute(Sender: TObject);
     procedure PSScriptDebugger1Compile(Sender: TPSScript);
-    procedure PSScriptDebugger1Breakpoint(Sender: TObject; const FileName: string; Position, Row, Col: Cardinal);
+    procedure PSScriptDebugger1Breakpoint(Sender: TObject; const FileName: AnsiString; Position, Row, Col: Cardinal);
     procedure PSScriptDebugger1Idle(Sender: TObject);
     procedure PSScriptDebugger1AfterExecute(Sender: TPSScript);
-    procedure PSScriptDebugger1LineInfo(Sender: TObject; const FileName: string; Position, Row, Col: Cardinal);
-    function PSScriptDebugger1NeedFile(Sender: TObject; const OrginFileName: string; var FileName, Output: string): Boolean;
+    procedure PSScriptDebugger1LineInfo(Sender: TObject; const FileName: AnsiString; Position, Row, Col: Cardinal);
+    function PSScriptDebugger1NeedFile(Sender: TObject; const OrginFileName: AnsiString; var FileName, Output: AnsiString): Boolean;
     procedure actStepOverExecute(Sender: TObject);
     procedure actStepIntoExecute(Sender: TObject);
     procedure actResetExecute(Sender: TObject);
@@ -136,19 +137,19 @@ type
     procedure FormCreate(Sender: TObject);
     procedure actAddSuiviExecute(Sender: TObject);
     procedure actRunToCursorExecute(Sender: TObject);
-    procedure vstSuivisNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: WideString);
+    procedure vstSuivisNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: String);
     procedure vstSuivisEditing(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
     procedure vstSuivisInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure vstSuivisChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
-    procedure vstSuivisGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+    procedure vstSuivisGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure vstSuivisPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
-    procedure vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+    procedure vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
     procedure vstMessagesDblClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure seScript1Change(Sender: TObject);
     procedure vstBreakpointsDblClick(Sender: TObject);
     procedure vstBreakpointsChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
-    procedure vstBreakpointsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+    procedure vstBreakpointsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
     procedure vstBreakpointsInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure vstBreakpointsPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
     procedure seScript1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -159,20 +160,20 @@ type
     procedure seScript1ProcessUserCommand(Sender: TObject; var Command: TSynEditorCommand; var AChar: Char; Data: Pointer);
     procedure actRunWithoutDebugExecute(Sender: TObject);
     procedure pcScriptsChange(Sender: TObject);
-    procedure SynEditParamShowExecute(Kind: TSynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
-    procedure SynEditAutoCompleteExecute(Kind: TSynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
+    procedure SynEditParamShowExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
+    procedure SynEditAutoCompleteExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
     procedure seScript1KeyPress(Sender: TObject; var Key: Char);
+    procedure Button3Click(Sender: TObject);
   private
     { Déclarations privées }
     FLastSearch, FLastReplace: string;
     FSearchOptions: TSynSearchOptions;
     FActiveLine, FRunToCursor, FErrorLine: Cardinal;
-    FActiveFile, FRunToCursorFile, FErrorFile: string;
+    FActiveFile, FRunToCursorFile, FErrorFile: AnsiString;
     FDebugPlugin: TDebugInfos;
     FCompiled: Boolean;
-    FPSImport_RegExpr: TPSImport_RegExpr;
-    FPSImport_LoadComplet: TPSImport_LoadComplet;
-    FPSImport_TypeRec: TPSImport_TypeRec;
+    FPSImport_RegExpr: TPSImport_BdtkRegEx;
+    FPSImport_BdtkObjects: TPSImport_BdtkObjects;
     FProjetOuvert: Boolean;
     FForceClose: Boolean;
     FAlbumToImport: TAlbumComplet;
@@ -183,38 +184,38 @@ type
     procedure SetResultat(const Chaine: string);
     function Compile: Boolean;
     function Execute: Boolean;
-    function GetVariableValue(const VarName: string; Actif: Boolean): string;
+    function GetVariableValue(const VarName: AnsiString; Actif: Boolean): AnsiString;
     procedure WMSyscommand(var msg: TWmSysCommand); message WM_SYSCOMMAND;
-    function GetVar(const Name: string; out s: string): PIFVariant;
+    function GetVar(const Name: AnsiString; out s: AnsiString): PIFVariant;
     procedure GoToPosition(Editor: TSynEdit; Line, Char: Cardinal);
     procedure GoToMessage(Msg: TMessageInfo);
     procedure GoToBreakpoint(Msg: TBreakpointInfo);
-    procedure ToggleBreakPoint(const Script: string; Line: Cardinal; Keep: Boolean);
+    procedure ToggleBreakPoint(const Script: AnsiString; Line: Cardinal; Keep: Boolean);
 
-    function GetScriptName(Editor: TSynEdit): string;
-    function GetScript(const Fichier: string): TSynEdit;
-    function GetActiveScriptName: string;
+    function GetScriptName(Editor: TSynEdit): AnsiString;
+    function GetScript(const Fichier: AnsiString): TSynEdit;
+    function GetActiveScriptName: AnsiString;
     function GetActiveScript: TSynEdit;
-    function CorrectScriptName(const Fichier: string): string;
-    function TranslatePositionEx(out Proc, Position: Cardinal; Row: Cardinal; Fn: string): Boolean;
+    function CorrectScriptName(const Fichier: AnsiString): AnsiString;
+    function TranslatePositionEx(out Proc, Position: Cardinal; Row: Cardinal; Fn: AnsiString): Boolean;
     procedure SetCompiled(const Value: Boolean);
-    function GetProjet: string;
-    procedure SetProjet(const Value: string);
-    procedure LoadScript(const Fichier: string);
+    function GetProjet: AnsiString;
+    procedure SetProjet(const Value: AnsiString);
+    procedure LoadScript(const Fichier: AnsiString);
     procedure ClearPages;
-    function GetScriptLines(const Fichier: string; out Output: string): Boolean;
+    function GetScriptLines(const Fichier: AnsiString; out Output: AnsiString): Boolean;
     procedure SetProjetOuvert(const Value: Boolean);
     procedure RebuildLokalObjektList;
     procedure BuildLokalObjektList(Comp: TPSPascalCompiler);
-    function FindParameter(LocLine: string; X: Integer; out Func: TParamInfoRecord; out ParamCount: Integer): Boolean;
-    function GetLookUpString(Line: string; EndPos: Integer): string;
-    function LookUpList(LookUp: string; var ParamInfo: TParamInfoRecord): Boolean; overload;
+    function FindParameter(LocLine: AnsiString; X: Integer; out Func: TParamInfoRecord; out ParamCount: Integer): Boolean;
+    function GetLookUpString(Line: AnsiString; EndPos: Integer): AnsiString;
+    function LookUpList(LookUp: AnsiString; var ParamInfo: TParamInfoRecord): Boolean; overload;
     function LookUpList(LookUp: Cardinal; var ParamInfo: TParamInfoRecord): Boolean; overload;
-    procedure FillAutoComplete(var List: TParamInfoArray; Types: TInfoTypes; FromFather: Cardinal = 0; Typ: string = '');
+    procedure FillAutoComplete(var List: TParamInfoArray; Types: TInfoTypes; FromFather: Cardinal = 0; Typ: AnsiString = '');
   public
     { Déclarations publiques }
     property Compiled: Boolean read FCompiled write SetCompiled;
-    property Projet: string read GetProjet write SetProjet;
+    property Projet: AnsiString read GetProjet write SetProjet;
     property ProjetOuvert: Boolean read FProjetOuvert write SetProjetOuvert;
   end;
 
@@ -226,15 +227,16 @@ implementation
 {$R *.dfm}
 
 uses
-  Form_ScriptSearch, UScriptsFonctions, CommonConst, uPSPreProcessor,
-  Procedures;
+  AnsiStrings, Form_ScriptSearch, UScriptsFonctions, CommonConst, uPSPreProcessor,
+  Procedures, BdtkRegEx;
 
 function AutoCompleteCompilerBeforeCleanUp(Sender: TPSPascalCompiler): Boolean;
 var
-  s: string;
+  s: AnsiString;
 begin
   with TPSScriptDebugger(Sender.ID) do
-    if comp.GetOutput(s) then TfrmScripts(Owner).BuildLokalObjektList(Sender);
+    if comp.GetOutput(s) then
+      TfrmScripts(Owner).BuildLokalObjektList(Sender);
   Result := True;
 end;
 
@@ -327,7 +329,7 @@ procedure TfrmScripts.seScript1GutterPaint(Sender: TObject; aLine, X, Y: Integer
 var
   IconIndex: Integer;
   i: Integer;
-  Script: string;
+  Script: AnsiString;
   Proc, Pos: Cardinal;
 begin
   Script := GetScriptName(TSynEdit(Sender));
@@ -347,7 +349,7 @@ begin
       else if FDebugPlugin.Breakpoints[i].Active then
         IconIndex := imgGutterBREAKVALID
       else
-        IconIndex := imgGutterBREAKDISABLED
+        IconIndex := imgGutterBREAKDISABLED;
     end;
   end
   else
@@ -378,7 +380,7 @@ end;
 procedure TfrmScripts.seScript1SpecialLineColors(Sender: TObject; Line: Integer; var Special: Boolean; var FG, BG: TColor);
 var
   i: Integer;
-  Script: string;
+  Script: AnsiString;
   Proc, Pos: Cardinal;
 begin
   Script := GetScriptName(TSynEdit(Sender));
@@ -565,7 +567,7 @@ begin
           if Fichier = PSScriptDebugger1.MainFileName then
             PSScriptDebugger1.SetBreakPoint(Fichier, Line)
           else
-            PSScriptDebugger1.SetBreakPoint(UpperCase(Fichier), Line);
+            PSScriptDebugger1.SetBreakPoint(AnsiStrings.UpperCase(Fichier), Line);
 
   PSScriptDebugger1.SetVarToInstance('AlbumToImport', FAlbumToImport);
 end;
@@ -609,7 +611,7 @@ begin
     FErrorFile := CorrectScriptName(PSScriptDebugger1.ExecErrorFileName);
     FDebugPlugin.Messages.AddRuntimeErrorMessage(
       FErrorFile,
-      Format('%s (Bytecode %d:%d)', [PSScriptDebugger1.ExecErrorToString, PSScriptDebugger1.ExecErrorProcNo, PSScriptDebugger1.ExecErrorByteCodePosition]),
+      AnsiString(Format('%s (Bytecode %d:%d)', [PSScriptDebugger1.ExecErrorToString, PSScriptDebugger1.ExecErrorProcNo, PSScriptDebugger1.ExecErrorByteCodePosition])),
       PSScriptDebugger1.ExecErrorRow,
       PSScriptDebugger1.ExecErrorCol);
     GoToMessage(FDebugPlugin.Messages.Last);
@@ -619,25 +621,36 @@ begin
     except
       on e: EPSException do
         Application.HandleException(nil);
-    else
-      raise;
+      else
+        raise;
     end;
   end;
 end;
 
 procedure TfrmScripts.PSScriptDebugger1Compile(Sender: TPSScript);
 begin
-  PSScriptDebugger1.AddFunction(@GetPage, 'function GetPage(const url: string): string;');
   PSScriptDebugger1.AddMethod(Self, @TfrmScripts.SetResultat, 'procedure WriteToConsole(const Chaine: string);');
-  PSScriptDebugger1.AddFunction(@Format, 'function Format(const Format: string; const Args: array of const): string;');
+
+  PSScriptDebugger1.AddFunction(@GetPage, 'function GetPage(const url: string): string;');
   PSScriptDebugger1.AddFunction(@findInfo, 'function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;');
+  PSScriptDebugger1.AddFunction(@MakeAuteur, 'function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteur;');
+  PSScriptDebugger1.AddFunction(@AskSearchEntry, 'function AskSearchEntry(const Labels: array of string; out Search: string; out Index: Integer): Boolean');
+
+  PSScriptDebugger1.AddFunction(@SysUtils.Format, 'function Format(const Format: string; const Args: array of const): string;');
+  PSScriptDebugger1.AddFunction(@MyFormat, 'function MyFormat(const Format: string; const Args: array of const): string;');
+  PSScriptDebugger1.AddFunction(@MyFormatString, 'function MyFormatString(const Format: string; const Args: array of string): string;');
+  PSScriptDebugger1.AddFunction(@AnsiStrings.Format, 'function AnsiFormat(const Format: ansistring; const Args: array of const): ansistring;');
+
   PSScriptDebugger1.AddFunction(@ShowMessage, 'procedure ShowMessage(const Msg: string);');
-  PSScriptDebugger1.AddFunction(@PosEx, 'function PosEx(const SubStr, S: string; Offset: Cardinal): Integer;');
+  PSScriptDebugger1.AddFunction(@StrUtils.PosEx, 'function PosEx(const SubStr, S: string; Offset: Cardinal): Integer;');
+  PSScriptDebugger1.Comp.AddTypeS('TReplaceFlag', '(rfReplaceAll, rfIgnoreCase)');
+  PSScriptDebugger1.Comp.AddTypeS('TReplaceFlags', 'set of TReplaceFlag');
+  PSScriptDebugger1.AddFunction(@SysUtils.StringReplace, 'function StringReplace(const S, OldPattern, NewPattern: string; Flags: TReplaceFlags): string;');
 
   PSScriptDebugger1.AddRegisteredVariable('AlbumToImport', 'TAlbumComplet');
 end;
 
-procedure TfrmScripts.PSScriptDebugger1Breakpoint(Sender: TObject; const FileName: string; Position, Row, Col: Cardinal);
+procedure TfrmScripts.PSScriptDebugger1Breakpoint(Sender: TObject; const FileName: AnsiString; Position, Row, Col: Cardinal);
 begin
   FActiveLine := Row;
   FActiveFile := CorrectScriptName(FileName);
@@ -657,12 +670,13 @@ begin
   FRunToCursor := 0;
   FRunToCursorFile := '';
   PSScriptDebugger1.ClearBreakPoints;
-  if pcScripts.PageCount > 0 then GetActiveScript.Refresh;
+  if pcScripts.PageCount > 0 then
+    GetActiveScript.Refresh;
   vstSuivis.Invalidate;
   PageControl1.ActivePage := TTabSheet(Output.Parent);
 end;
 
-procedure TfrmScripts.PSScriptDebugger1LineInfo(Sender: TObject; const FileName: string; Position, Row, Col: Cardinal);
+procedure TfrmScripts.PSScriptDebugger1LineInfo(Sender: TObject; const FileName: AnsiString; Position, Row, Col: Cardinal);
 begin
   if (Row = FRunToCursor) and SameText(CorrectScriptName(FileName), FRunToCursorFile) and (PSScriptDebugger1.Exec.DebugMode = dmRun) then
     PSScriptDebugger1.Pause;
@@ -676,7 +690,7 @@ begin
   end;
 end;
 
-function TfrmScripts.PSScriptDebugger1NeedFile(Sender: TObject; const OrginFileName: string; var FileName, Output: string): Boolean;
+function TfrmScripts.PSScriptDebugger1NeedFile(Sender: TObject; const OrginFileName: AnsiString; var FileName, Output: AnsiString): Boolean;
 begin
   Result := GetScriptLines(FileName, Output);
 end;
@@ -719,10 +733,10 @@ function TfrmScripts.Compile: Boolean;
 var
   i: Longint;
   Msg: TMessageInfo;
-  Script: string;
+  Script: AnsiString;
 begin
   GetScriptLines(Projet, Script);
-  PSScriptDebugger1.Script.Text := Script;
+  PSScriptDebugger1.Script.Text := string(Script);
   Result := PSScriptDebugger1.Compile;
   FDebugPlugin.Messages.Clear;
   Msg := nil;
@@ -734,24 +748,26 @@ begin
         FDebugPlugin.Messages.AddCompileErrorMessage(ModuleName, ShortMessageToString, tmHint, Row, Col)
       else if ClassType = TPSPascalCompilerError then
       begin
-        Msg := FDebugPlugin.Messages[FDebugPlugin.Messages.AddCompileErrorMessage(ModuleName, ShortMessageToString, tmError, Row, Col)]
+        Msg := FDebugPlugin.Messages[FDebugPlugin.Messages.AddCompileErrorMessage(ModuleName, ShortMessageToString, tmError, Row, Col)];
       end
       else
         FDebugPlugin.Messages.AddCompileErrorMessage(ModuleName, ShortMessageToString, tmUnknown, Row, Col);
 
-  if Assigned(Msg) then GoToMessage(Msg);
+  if Assigned(Msg) then
+    GoToMessage(Msg);
   Compiled := Result;
 end;
 
 procedure TfrmScripts.actDecompileExecute(Sender: TObject);
 var
-  s: string;
+  s: AnsiString;
+  script: string;
 begin
   if Compile then
   begin
     PSScriptDebugger1.GetCompiled(s);
-    IFPS3DataToText(s, s);
-    output.Lines.Text := s;
+    IFPS3DataToText(s, script);
+    output.Lines.Text := script;
     PageControl1.ActivePage := TTabSheet(Output.Parent);
   end;
 end;
@@ -784,38 +800,36 @@ begin
   // force à reprendre les params de delphi s'il est installé sur la machine
   SynPasSyn1.UseUserSettings(0);
 
-  FPSImport_RegExpr := TPSImport_RegExpr.Create(Self);
+  FPSImport_RegExpr := TPSImport_BdtkRegEx.Create(Self);
   TPSPluginItem(PSScriptDebugger1.Plugins.Add).Plugin := FPSImport_RegExpr;
-  FPSImport_TypeRec := TPSImport_TypeRec.Create(Self);
-  TPSPluginItem(PSScriptDebugger1.Plugins.Add).Plugin := FPSImport_TypeRec;
-  FPSImport_LoadComplet := TPSImport_LoadComplet.Create(Self);
-  TPSPluginItem(PSScriptDebugger1.Plugins.Add).Plugin := FPSImport_LoadComplet;
+  FPSImport_BdtkObjects := TPSImport_BdtkObjects.Create(Self);
+  TPSPluginItem(PSScriptDebugger1.Plugins.Add).Plugin := FPSImport_BdtkObjects;
 
-  i := FindFirst(Utilisateur.Options.RepertoireScripts + '\*.bds', faAnyFile, sr);
+  i := FindFirst(TGlobalVar.Utilisateur.Options.RepertoireScripts + '\*.bds', faAnyFile, sr);
   if i = 0 then
-  try
-    while i = 0 do
-    begin
-      if (sr.Attr and faDirectory) = 0 then
-        ListView1.Items.Add.Caption := ChangeFileExt(sr.Name, '');
-      i := FindNext(sr);
+    try
+      while i = 0 do
+      begin
+        if (sr.Attr and faDirectory) = 0 then
+          ListView1.Items.Add.Caption := ChangeFileExt(sr.Name, '');
+        i := FindNext(sr);
+      end;
+    finally
+      FindClose(sr);
     end;
-  finally
-    FindClose(sr);
-  end;
   PageControl2.ActivePage := tbScripts;
 end;
 
-function TfrmScripts.GetVar(const Name: string; out s: string): PIFVariant;
+function TfrmScripts.GetVar(const Name: AnsiString; out s: AnsiString): PIFVariant;
 var
   i: Longint;
-  s1: string;
+  s1: AnsiString;
 begin
-  s := Uppercase(Name);
-  if pos('.', s) > 0 then
+  s := UpperCase(Name);
+  if AnsiStrings.AnsiPos('.', s) > 0 then
   begin
-    s1 := copy(s, 1, pos('.', s) - 1);
-    delete(s, 1, pos('.', Name));
+    s1 := AnsiString(Copy(string(s), 1, AnsiStrings.AnsiPos('.', s) - 1));
+    delete(s, 1, AnsiStrings.AnsiPos('.', Name));
   end
   else
   begin
@@ -852,10 +866,10 @@ begin
   end;
 end;
 
-function TfrmScripts.GetVariableValue(const VarName: string; Actif: Boolean): string;
+function TfrmScripts.GetVariableValue(const VarName: AnsiString; Actif: Boolean): AnsiString;
 var
   pv: PIFVariant;
-  Prefix: string;
+  Prefix: AnsiString;
 begin
   if Actif then
     if PSScriptDebugger1.Running then
@@ -874,7 +888,7 @@ end;
 
 procedure TfrmScripts.actAddSuiviExecute(Sender: TObject);
 begin
-  FDebugPlugin.Watches.AddWatch(GetActiveScript.WordAtCursor);
+  FDebugPlugin.Watches.AddWatch(AnsiString(GetActiveScript.WordAtCursor));
 end;
 
 procedure TfrmScripts.actRunToCursorExecute(Sender: TObject);
@@ -884,9 +898,9 @@ begin
   actRun.Execute;
 end;
 
-procedure TfrmScripts.vstSuivisNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: WideString);
+procedure TfrmScripts.vstSuivisNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: UnicodeString);
 begin
-  FDebugPlugin.Watches[Node.Index].Name := NewText;
+  FDebugPlugin.Watches[Node.Index].Name := AnsiString(NewText);
   FDebugPlugin.Watches.View.InvalidateNode(Node);
 end;
 
@@ -910,14 +924,14 @@ begin
   FDebugPlugin.Watches.View.InvalidateNode(Node);
 end;
 
-procedure TfrmScripts.vstSuivisGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TfrmScripts.vstSuivisGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
 begin
   if Column = -1 then
     Column := 0;
   with FDebugPlugin.Watches[Node.Index] do
     case Column of
-      0: CellText := Name;
-      1: CellText := GetVariableValue(Name, Active);
+      0: CellText := string(Name);
+      1: CellText := string(GetVariableValue(Name, Active));
     end;
 end;
 
@@ -934,12 +948,13 @@ var
   Editor: TSynEdit;
 begin
   Editor := GetScript(Msg.Fichier);
-  if not Assigned(Editor) then LoadScript(Msg.Fichier);
+  if not Assigned(Editor) then
+    LoadScript(Msg.Fichier);
   GoToPosition(GetScript(Msg.Fichier), Msg.Line, Msg.Char);
   PageControl1.ActivePage := TTabSheet(vstMessages.Parent);
 end;
 
-procedure TfrmScripts.vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TfrmScripts.vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
 begin
   if Column = -1 then
     Column := 0;
@@ -953,9 +968,9 @@ begin
           else
             CellText := '';
         end;
-      1: CellText := TypeMessage;
-      2: CellText := Fichier;
-      3: CellText := Text;
+      1: CellText := string(TypeMessage);
+      2: CellText := string(Fichier);
+      3: CellText := string(Text);
     end;
 end;
 
@@ -995,14 +1010,16 @@ var
   Editor: TSynEdit;
 begin
   Editor := GetScript(Msg.Fichier);
-  if not Assigned(Editor) then LoadScript(Msg.Fichier);
+  if not Assigned(Editor) then
+    LoadScript(Msg.Fichier);
   GoToPosition(GetScript(Msg.Fichier), Msg.Line, 0);
   PageControl1.ActivePage := TTabSheet(vstBreakpoints.Parent);
 end;
 
 procedure TfrmScripts.GoToPosition(Editor: TSynEdit; Line, Char: Cardinal);
 begin
-  if not Assigned(Editor) then Exit;
+  if not Assigned(Editor) then
+    Exit;
 
   if (Line < Cardinal(Editor.TopLine + 2)) or (Line > Cardinal(Editor.TopLine + Editor.LinesInWindow - 2)) then
     Editor.TopLine := Line - Cardinal(Editor.LinesInWindow div 2);
@@ -1012,7 +1029,8 @@ begin
   Editor.Invalidate; // Line et GutterLine sont insuffisants pour certains cas
   PageControl2.ActivePage := tbEdition;
   pcScripts.ActivePage := TTabSheet(Editor.Parent);
-  if pcScripts.PageCount = 1 then pcScriptsChange(nil);
+  if pcScripts.PageCount = 1 then
+    pcScriptsChange(nil);
   Editor.SetFocus;
 end;
 
@@ -1023,14 +1041,14 @@ begin
   FDebugPlugin.Breakpoints.View.InvalidateNode(Node);
 end;
 
-procedure TfrmScripts.vstBreakpointsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TfrmScripts.vstBreakpointsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
 begin
   if Column = -1 then
     Column := 0;
   with FDebugPlugin.Breakpoints[Node.Index] do
     case Column of
-      0: CellText := 'Ligne ' + IntToStr(Line);
-      1: CellText := Fichier;
+      0: CellText := 'Ligne ' + SysUtils.IntToStr(Line);
+      1: CellText := string(Fichier);
     end;
 end;
 
@@ -1051,7 +1069,7 @@ begin
     TargetCanvas.Font.Color := clGrayText;
 end;
 
-procedure TfrmScripts.ToggleBreakPoint(const Script: string; Line: Cardinal; Keep: Boolean);
+procedure TfrmScripts.ToggleBreakPoint(const Script: AnsiString; Line: Cardinal; Keep: Boolean);
 var
   i: Integer;
 begin
@@ -1092,11 +1110,11 @@ end;
 
 procedure TfrmScripts.seScript1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
 const
-  WordVar: string = '';
+  WordVar: AnsiString = '';
 var
   pv: PIFVariant;
-  Prefix: string;
-  s: string;
+  Prefix: AnsiString;
+  s: AnsiString;
 begin
   if not PSScriptDebugger1.Running then
   begin
@@ -1104,7 +1122,7 @@ begin
     GetActiveScript.ShowHint := False;
     Exit;
   end;
-  s := GetActiveScript.WordAtMouse;
+  s := AnsiString(GetActiveScript.WordAtMouse);
   if s <> WordVar then
     Application.CancelHint;
   WordVar := s;
@@ -1117,21 +1135,23 @@ begin
   end
   else
   begin
-    GetActiveScript.Hint := PSVariantToString(NewTPSVariantIFC(pv, False), Prefix);
+    GetActiveScript.Hint := string(PSVariantToString(NewTPSVariantIFC(pv, False), Prefix));
     GetActiveScript.ShowHint := True;
   end;
 end;
 
 type
   PPositionData = ^TPositionData;
+
   TPositionData = packed record
-    FileName: string;
+    FileName: AnsiString;
     Position,
-      Row,
-      Col,
-      SourcePosition: Cardinal;
+    Row,
+    Col,
+    SourcePosition: Cardinal;
   end;
   PFunctionInfo = ^TFunctionInfo;
+
   TFunctionInfo = packed record
     Func: TPSProcRec;
     FParamNames: TIfStringList;
@@ -1142,7 +1162,7 @@ type
   TCrackPSDebugExec = class(TPSDebugExec)
   end;
 
-function TfrmScripts.TranslatePositionEx(out Proc, Position: Cardinal; Row: Cardinal; Fn: string): Boolean;
+function TfrmScripts.TranslatePositionEx(out Proc, Position: Cardinal; Row: Cardinal; Fn: AnsiString): Boolean;
 var
   i, j: LongInt;
   fi: PFunctionInfo;
@@ -1160,7 +1180,7 @@ begin
     for j := 0 to pt.Count - 1 do
     begin
       r := pt[j];
-      if not SameText(r^.FileName, Fn) then
+      if not AnsiSameText(r^.FileName, Fn) then
         Continue;
       if r^.Row = Row then
       begin
@@ -1179,10 +1199,11 @@ var
 begin
   FCompiled := Value;
   Editor := GetActiveScript;
-  if Assigned(Editor) then Editor.Invalidate;
+  if Assigned(Editor) then
+    Editor.Invalidate;
 end;
 
-function TfrmScripts.CorrectScriptName(const Fichier: string): string;
+function TfrmScripts.CorrectScriptName(const Fichier: AnsiString): AnsiString;
 begin
   if Fichier = '' then
     Result := Projet
@@ -1198,18 +1219,18 @@ begin
     Result := TSynEdit(pcScripts.ActivePage.Controls[0]);
 end;
 
-function TfrmScripts.GetActiveScriptName: string;
+function TfrmScripts.GetActiveScriptName: AnsiString;
 begin
   if pcScripts.PageCount = 0 then
     Result := Projet
   else
-    Result := pcScripts.ActivePage.Caption;
+    Result := AnsiString(pcScripts.ActivePage.Caption);
 end;
 
-function TfrmScripts.GetScript(const Fichier: string): TSynEdit;
+function TfrmScripts.GetScript(const Fichier: AnsiString): TSynEdit;
 var
   i: Integer;
-  s: string;
+  s: AnsiString;
 begin
   if Fichier = '' then
     s := Projet
@@ -1217,7 +1238,7 @@ begin
     s := Fichier;
   for i := 0 to Pred(pcScripts.PageCount) do
     with pcScripts.Pages[i] do
-      if SameText(Caption, s) then
+      if AnsiSameText(AnsiString(Caption), s) then
       begin
         Result := TSynEdit(Controls[0]);
         Exit;
@@ -1225,20 +1246,20 @@ begin
   Result := nil;
 end;
 
-function TfrmScripts.GetScriptName(Editor: TSynEdit): string;
+function TfrmScripts.GetScriptName(Editor: TSynEdit): AnsiString;
 begin
   if Assigned(Editor) then
-    Result := TTabSheet(Editor.Parent).Caption
+    Result := AnsiString(TTabSheet(Editor.Parent).Caption)
   else
     Result := Projet;
 end;
 
-function TfrmScripts.GetProjet: string;
+function TfrmScripts.GetProjet: AnsiString;
 begin
   Result := PSScriptDebugger1.MainFileName;
 end;
 
-procedure TfrmScripts.SetProjet(const Value: string);
+procedure TfrmScripts.SetProjet(const Value: AnsiString);
 begin
   ProjetOuvert := False;
   // doit etre fait avant le LoadScript
@@ -1247,12 +1268,12 @@ begin
   ProjetOuvert := True;
 end;
 
-procedure TfrmScripts.LoadScript(const Fichier: string);
+procedure TfrmScripts.LoadScript(const Fichier: AnsiString);
 var
   SB: TStatusBar;
   Editor: TSynEdit;
   Page: TTabSheet;
-  Script: string;
+  Script: AnsiString;
   LockWindow: ILockWindow;
 begin
   Editor := GetScript(Fichier);
@@ -1262,11 +1283,11 @@ begin
 
     // doit être fait avant la création de page
     if not GetScriptLines(Fichier, Script) then
-      raise Exception.Create('Impossible de trouver le fichier ' + Utilisateur.Options.RepertoireScripts + Fichier + '.bdu.');
+      raise Exception.Create('Impossible de trouver le fichier ' + TGlobalVar.Utilisateur.Options.RepertoireScripts + string(Fichier) + '.bdu.');
 
     Page := TTabSheet.Create(pcScripts);
     Page.PageControl := pcScripts;
-    Page.Caption := Fichier;
+    Page.Caption := string(Fichier);
     Editor := TSynEdit.Create(Page);
     Editor.Parent := Page;
     Editor.Align := alClient;
@@ -1303,7 +1324,7 @@ begin
     Editor.AddKey(ecUserFirst + 1, VK_RETURN, [ssCtrl]);
 
     TSynDebugPlugin.Create(Editor, FDebugPlugin);
-    Editor.Lines.Text := Script;
+    Editor.Lines.Text := string(Script);
 
     SB := TStatusBar.Create(Page);
     SB.Parent := Page;
@@ -1323,7 +1344,7 @@ begin
     actFermer.Execute;
 end;
 
-function TfrmScripts.GetScriptLines(const Fichier: string; out Output: string): Boolean;
+function TfrmScripts.GetScriptLines(const Fichier: AnsiString; out Output: AnsiString): Boolean;
 var
   path: string;
   f: TFileStream;
@@ -1332,15 +1353,15 @@ begin
   Editor := GetScript(Fichier);
   if Assigned(Editor) then
   begin
-    Output := Editor.Lines.Text;
+    Output := AnsiString(Editor.Lines.Text);
     Result := True;
     Exit;
   end;
 
   if Fichier = Projet then
-    Path := Utilisateur.Options.RepertoireScripts + Fichier + '.bds'
+    Path := TGlobalVar.Utilisateur.Options.RepertoireScripts + string(Fichier) + '.bds'
   else
-    Path := Utilisateur.Options.RepertoireScripts + Fichier + '.bdu';
+    Path := TGlobalVar.Utilisateur.Options.RepertoireScripts + string(Fichier) + '.bdu';
 
   try
     F := TFileStream.Create(Path, fmOpenRead or fmShareDenyWrite);
@@ -1359,11 +1380,12 @@ end;
 
 procedure TfrmScripts.actFermerExecute(Sender: TObject);
 begin
-  if not FForceClose and (GetActiveScriptName = Projet) then Exit;
+  if not FForceClose and (GetActiveScriptName = Projet) then
+    Exit;
 
   if GetActiveScript.Tag = 1 then
   begin
-    case MessageDlg('Le fichier "' + GetActiveScriptName + '" a été modifié, voulez-vous l''enregistrer?', mtConfirmation, [mbYes, mbNo, mbCancel], 0) of
+    case MessageDlg('Le fichier "' + string(GetActiveScriptName) + '" a été modifié, voulez-vous l''enregistrer?', mtConfirmation, [mbYes, mbNo, mbCancel], 0) of
       mrYes: actEnregistrer.Execute;
       mrNo: ;
       mrCancel: Abort;
@@ -1374,7 +1396,7 @@ end;
 
 procedure TfrmScripts.actEnregistrerExecute(Sender: TObject);
 begin
-  GetActiveScript.Lines.SaveToFile(Utilisateur.Options.RepertoireScripts + GetActiveScriptName + '.bds');
+  GetActiveScript.Lines.SaveToFile(TGlobalVar.Utilisateur.Options.RepertoireScripts + string(GetActiveScriptName) + '.bds');
   GetActiveScript.Tag := 0;
 end;
 
@@ -1402,14 +1424,15 @@ end;
 
 procedure TfrmScripts.ListView1DblClick(Sender: TObject);
 begin
-  if not Assigned(ListView1.Selected) then Exit;
-  Projet := ListView1.Selected.Caption;
+  if not Assigned(ListView1.Selected) then
+    Exit;
+  Projet := AnsiString(ListView1.Selected.Caption);
 end;
 
 procedure TfrmScripts.seScript1ProcessUserCommand(Sender: TObject; var Command: TSynEditorCommand; var AChar: Char; Data: Pointer);
 begin
   case Command - ecUserFirst of
-    1: LoadScript(GetActiveScript.WordAtCursor);
+    1: LoadScript(AnsiString(GetActiveScript.WordAtCursor));
   end;
 end;
 
@@ -1442,7 +1465,6 @@ var
   RegProc: TPSRegProc;
   Proc: TPSProcedure;
   ProcInt: TPSInternalProcedure;
-
   con: TPSConstant;
   Father: Cardinal;
 
@@ -1465,7 +1487,7 @@ var
 
   procedure AddInfo(var Info: TParamInfoRecord);
   begin
-    if (length(Info.OrgName) < 1) or (Info.OrgName[1] in ['!', ' ', '_']) then
+    if (Length(Info.OrgName) < 1) or CharInSet(Info.OrgName[1], ['!', ' ', '_']) then
     begin
       ClearInfoRec;
       exit;
@@ -1482,7 +1504,7 @@ var
     result := (Typ is TPSClassType) or (Typ is TPSRecordType);
   end;
 
-  procedure AddVar(Name: string; Typ: TPSType; InfoType: TInfoType = itVar); overload;
+  procedure AddVar(Name: AnsiString; Typ: TPSType; InfoType: TInfoType = itVar); overload;
   begin
     Info.OrgName := Name;
 
@@ -1503,19 +1525,19 @@ var
 
   procedure SetParams(var Info: TParamInfoRecord; Parameters: TPSParametersDecl);
   var
-    Params: string;
+    Params: AnsiString;
   begin
     Info.OrgParams := GetParams(Parameters);
     Params := GetParams(Parameters, '"');
 
-    Params := Copy(Params, Pos('(', Params) + 1, length(Params));
-    Params := Copy(Params, 1, Pos(')', Params) - 1);
-    Params := StringReplace(Params, ';', ',', [rfReplaceAll]);
+    Params := AnsiString(Copy(string(Params), AnsiStrings.AnsiPos('(', Params) + 1, Length(Params)));
+    Params := AnsiString(Copy(string(Params), 1, AnsiStrings.AnsiPos(')', Params) - 1));
+    Params := AnsiStrings.StringReplace(Params, ';', ',', [rfReplaceAll]);
 
     Info.Params := Params;
   end;
 
-  procedure AddProcedure(Name: string; Parameters: TPSParametersDecl);
+  procedure AddProcedure(Name: AnsiString; Parameters: TPSParametersDecl);
   begin
     Info.OrgName := Name;
 
@@ -1598,9 +1620,9 @@ begin
 
     Info.OrgName := con.OrgName;
 
-    Info.OrgParams := ': ' + GetTypeName(con.FValue.FType);
-    Info.ReturnTyp := HashString(GetTypeName(con.FValue.FType));
-    Info.HasFields := TypHasField(con.FValue.FType);
+    Info.OrgParams := ': ' + GetTypeName(con.Value.FType);
+    Info.ReturnTyp := HashString(GetTypeName(con.Value.FType));
+    Info.HasFields := TypHasField(con.Value.FType);
     Info.Nr := Con.Value.ts32;
     Info.Typ := itConstant;
     AddInfo(Info);
@@ -1695,6 +1717,18 @@ begin
   end;
 end;
 
+procedure TfrmScripts.Button3Click(Sender: TObject);
+var
+  re: TBdtkRegEx;
+begin
+  re := TBdtkRegEx.Create;
+  try
+
+  finally
+    re.Free;
+  end;
+end;
+
 procedure TfrmScripts.RebuildLokalObjektList;
 var
   Script: TStringList;
@@ -1711,9 +1745,9 @@ begin
   end;
 end;
 
-function TfrmScripts.GetLookUpString(Line: string; EndPos: Integer): string;
+function TfrmScripts.GetLookUpString(Line: AnsiString; EndPos: Integer): AnsiString;
 const
-  TSynValidIdentifierChars = TSynValidStringChars + ['.', ' ', '[', ']', '(', ')'];
+  TSynValidIdentifierChars = ['.', ' ', '[', ']', '(', ')'];
 var
   TmpX: Integer;
   ParenCount: Integer;
@@ -1725,50 +1759,50 @@ begin
   ParenCount := 0;
   WasSpace := false;
   CanSpace := true;
-  while (TmpX > 0) and ((Line[TmpX] in TSynValidIdentifierChars) or (ParenCount > 0)) do
+  while (TmpX > 0) and (SynPasSyn1.IsIdentChar(WideChar(Line[TmpX])) or CharInSet(Line[TmpX], TSynValidIdentifierChars) or (ParenCount > 0)) do
   begin
     case Line[TmpX] of
       ')', ']': inc(ParenCount);
       '(', '[':
-        begin
-          if ParenCount = 0 then
-            break;
-          dec(ParenCount);
-        end;
+      begin
+        if ParenCount = 0 then
+          break;
+        dec(ParenCount);
+      end;
       '.':
-        begin
-          CanSpace := true;
-          WasSpace := false;
-        end;
+      begin
+        CanSpace := true;
+        WasSpace := false;
+      end;
       ' ':
-        begin
-          if not CanSpace then
-            WasSpace := true;
-        end;
+      begin
+        if not CanSpace then
+          WasSpace := true;
+      end;
       else
-        begin
-          if WasSpace then
-            break;
-          WasSpace := false;
-          CanSpace := false;
-        end;
+      begin
+        if WasSpace then
+          break;
+        WasSpace := false;
+        CanSpace := false;
+      end;
     end;
 
     dec(TmpX);
   end;
 
   if ParenCount = 0 then
-    result := Copy(Line, TmpX + 1, EndPos - TmpX)
+    result := AnsiString(Copy(Line, TmpX + 1, EndPos - TmpX))
   else
     result := '';
 
 end;
 
-function TfrmScripts.FindParameter(LocLine: string; X: Integer; out Func: TParamInfoRecord; out ParamCount: Integer): Boolean;
+function TfrmScripts.FindParameter(LocLine: AnsiString; X: Integer; out Func: TParamInfoRecord; out ParamCount: Integer): Boolean;
 var
   TmpX: Integer;
   StartX, ParenCounter: Integer;
-  LookUp: string;
+  LookUp: AnsiString;
 begin
   { TODO : grosse lacune, la fonction ne gère pas du tout si la parenthèse est dans une chaine ou non }
 
@@ -1825,20 +1859,19 @@ begin
       end;
     end
     else
-      dec(TmpX)
+      dec(TmpX);
   end;
 end;
 
-function TfrmScripts.LookUpList(LookUp: string; var ParamInfo: TParamInfoRecord): Boolean;
+function TfrmScripts.LookUpList(LookUp: AnsiString; var ParamInfo: TParamInfoRecord): Boolean;
 var
   Dummy: Integer;
   Hash: Cardinal;
   Parts: TStringArray;
-
-  FindString: string;
+  FindString: AnsiString;
   Parent: Cardinal;
 
-  function FindEntry(LookUp: string; Parent: Cardinal; var ParamInfo: TParamInfoRecord): Boolean;
+  function FindEntry(LookUp: AnsiString; Parent: Cardinal; var ParamInfo: TParamInfoRecord): Boolean;
   var
     Dummy: Integer;
     Hash: Cardinal;
@@ -1852,7 +1885,7 @@ var
         result := true;
         ParamInfo := fObjectList[Dummy];
         exit;
-      end
+      end;
     end;
 
     // Keinen passenden Eintrag gefunden. Vorfahren prüfen
@@ -1866,7 +1899,7 @@ var
   end;
 
 begin
-  if Pos('.', LookUp) = 0 then
+  if AnsiStrings.AnsiPos('.', LookUp) = 0 then
   begin
     // Einfacher Bezeichner wird gesucht
     Hash := HashString(Trim(LookUp));
@@ -1875,10 +1908,10 @@ begin
     begin
       if (fObjectList[Dummy].Name = Hash) and (fObjectList[Dummy].Father = 0) then
       begin
-        result := true;
+        Result := True;
         ParamInfo := fObjectList[Dummy];
-        exit;
-      end
+        Exit;
+      end;
     end;
   end
   else
@@ -1886,23 +1919,23 @@ begin
     // Verknüpfter bezeichner wird gesucht
     Parts := Explode('.', LookUp);
     Assert(length(Parts) > 0, 'Blub' + LookUp);
-    result := false;
+    Result := False;
     Parent := 0;
     for Dummy := 0 to high(Parts) do
     begin
       FindString := Trim(Parts[Dummy]);
-      if Pos('[', FindString) > 0 then
-        FindString := Copy(FindString, 1, Pos('[', FindString) - 1);
+      if AnsiStrings.AnsiPos('[', FindString) > 0 then
+        FindString := AnsiString(Copy(FindString, 1, AnsiStrings.AnsiPos('[', FindString) - 1));
 
-      if Pos('(', FindString) > 0 then
-        FindString := Copy(FindString, 1, Pos('(', FindString) - 1);
+      if AnsiStrings.AnsiPos('(', FindString) > 0 then
+        FindString := AnsiString(Copy(FindString, 1, AnsiStrings.AnsiPos('(', FindString) - 1));
 
       if not FindEntry(FindString, Parent, ParamInfo) then
-        exit;
+        Exit;
 
       Parent := ParamInfo.ReturnTyp;
     end;
-    result := true;
+    Result := True;
   end;
 end;
 
@@ -1918,11 +1951,11 @@ begin
       result := true;
       ParamInfo := fObjectList[Dummy];
       exit;
-    end
+    end;
   end;
 end;
 
-procedure TfrmScripts.SynEditParamShowExecute(Kind: TSynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
+procedure TfrmScripts.SynEditParamShowExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
 var
   ParamIndex: Integer;
   Info: TParamInfoRecord;
@@ -1931,7 +1964,7 @@ begin
   RebuildLokalObjektList;
 
   Editor := GetActiveScript;
-  CanExecute := FindParameter(Editor.LineText, Editor.CaretX, Info, ParamIndex);
+  CanExecute := FindParameter(AnsiString(Editor.LineText), Editor.CaretX, Info, ParamIndex);
 
   TSynCompletionProposal(Sender).ItemList.Clear;
 
@@ -1941,11 +1974,11 @@ begin
     if Info.Params = '' then
       Info.Params := '"* Pas de paramètre *"';
 
-    TSynCompletionProposal(Sender).ItemList.Add(Info.Params);
+    TSynCompletionProposal(Sender).ItemList.Add(string(Info.Params));
   end;
 end;
 
-procedure TfrmScripts.SynEditAutoCompleteExecute(Kind: TSynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
+procedure TfrmScripts.SynEditAutoCompleteExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
 var
   Parser: TPSPascalParser;
   Token: TPSPasToken;
@@ -1954,19 +1987,19 @@ var
   Types: TInfoTypes;
   tmpX: Integer;
   Father: Cardinal;
-  Line: string;
+  Line: AnsiString;
   Info: TParamInfoRecord;
   ParamCount: Integer;
   Parts: TStringArray;
-  Typ: string;
-  Obj: string;
+  Typ: AnsiString;
+  Obj: AnsiString;
   Editor: TSynEdit;
   hasAssign: Boolean;
 begin
   Editor := GetActiveScript;
   RebuildLokalObjektList;
 
-  Line := Editor.LineText;
+  Line := AnsiString(Editor.LineText);
 
   Types := [itProcedure, itFunction, itVar];
   Parser := TPSPascalParser.Create;
@@ -1991,8 +2024,8 @@ begin
     if (Token = CSTI_Assignment) and (Prev = CSTI_Identifier) then
     begin
       Types := [itFunction, itVar, itConstant {, itType}];
-      if LookUpList(Copy(Editor.LineText, 1, Parser.CurrTokenPos), Info) then
-        Typ := Copy(Info.OrgParams, 3, length(Info.OrgParams));
+      if LookUpList(AnsiString(Copy(Editor.LineText, 1, Parser.CurrTokenPos)), Info) then
+        Typ := AnsiString(Copy(Info.OrgParams, 3, length(Info.OrgParams)));
       hasAssign := True;
     end
     else if (Token = CSTI_OpenRound) then
@@ -2011,7 +2044,8 @@ begin
 
   Parser.Free;
 
-  if Token = CSTI_String then Exit;
+  if Token = CSTI_String then
+    Exit;
 
   if (PrevEnd < (Editor.CaretX - 1)) then
     Prev := Token;
@@ -2048,15 +2082,15 @@ begin
     end;
   end;
 
-  if (Prev <> CSTI_AddressOf) and FindParameter(Editor.LineText, Editor.CaretX, Info, ParamCount) then
+  if (Prev <> CSTI_AddressOf) and FindParameter(AnsiString(Editor.LineText), Editor.CaretX, Info, ParamCount) then
   begin
     Parts := Explode(',', Info.Params);
     if ParamCount <= high(Parts) then
     begin
-      if Pos(':', Parts[ParamCount]) > 0 then
+      if AnsiStrings.AnsiPos(':', Parts[ParamCount]) > 0 then
       begin
-        Typ := Copy(Parts[ParamCount], Pos(':', Parts[ParamCount]) + 2, length(Parts[ParamCount]));
-        Typ := Copy(Typ, 1, length(Typ) - 1);
+        Typ := AnsiString(Copy(Parts[ParamCount], AnsiStrings.AnsiPos(':', Parts[ParamCount]) + 2, length(Parts[ParamCount])));
+        Typ := AnsiString(Copy(Typ, 1, length(Typ) - 1));
       end
       else
         Typ := '';
@@ -2069,7 +2103,7 @@ begin
   FillAutoComplete(fObjectList, Types, Father, Typ);
 end;
 
-procedure TfrmScripts.FillAutoComplete(var List: TParamInfoArray; Types: TInfoTypes; FromFather: Cardinal; Typ: string);
+procedure TfrmScripts.FillAutoComplete(var List: TParamInfoArray; Types: TInfoTypes; FromFather: Cardinal; Typ: AnsiString);
 var
   Dummy: Integer;
   Text, sTyp: string;
@@ -2211,40 +2245,40 @@ begin
           cl := clBlack;
           case Typ of
             itProcedure:
-              begin
-                Text := 'procedure ';
-                cl := clTeal;
-              end;
+            begin
+              Text := 'procedure ';
+              cl := clTeal;
+            end;
             itFunction:
-              begin
-                Text := 'function ';
-                cl := clBlue;
-              end;
+            begin
+              Text := 'function ';
+              cl := clBlue;
+            end;
             itType:
-              begin
-                Text := 'type ';
-                cl := clTeal;
-              end;
+            begin
+              Text := 'type ';
+              cl := clTeal;
+            end;
             itVar:
-              begin
-                Text := 'var ';
-                cl := clMaroon;
-              end;
+            begin
+              Text := 'var ';
+              cl := clMaroon;
+            end;
             itConstant:
-              begin
-                Text := 'const ';
-                cl := clGreen;
-              end;
+            begin
+              Text := 'const ';
+              cl := clGreen;
+            end;
             itField:
-              begin
-                Text := 'property ';
-                cl := clTeal;
-              end;
+            begin
+              Text := 'property ';
+              cl := clTeal;
+            end;
             itConstructor:
-              begin
-                Text := 'constructor ';
-                cl := clTeal;
-              end;
+            begin
+              Text := 'constructor ';
+              cl := clTeal;
+            end;
             else
               Assert(false);
           end;
@@ -2253,17 +2287,18 @@ begin
           if HasFields and (HashT <> 0) and (HashT <> ReturnTyp) then
           begin
             if HasFieldReturnTyp(HashT, ReturnTyp) then
-              Text := '\color{' + ColorToString(cl) + '}' + Text + '\column{}\color{0}\style{+B}' + OrgName + '...\style{-B}'
+              Text := '\color{' + ColorToString(cl) + '}' + Text + '\column{}\color{0}\style{+B}' + string(OrgName) + '...\style{-B}'
             else
               continue;
           end
           else
           begin
-            Text := '\color{' + ColorToString(cl) + '}' + Text + '\column{}\color{0}\style{+B}' + OrgName + '\style{-B}';
-            if Typ <> itConstructor then Text := Text + OrgParams;
+            Text := '\color{' + ColorToString(cl) + '}' + Text + '\column{}\color{0}\style{+B}' + string(OrgName) + '\style{-B}';
+            if Typ <> itConstructor then
+              Text := Text + string(OrgParams);
           end;
 
-          sl1.AddObject(OrgName, Pointer(sl2.Count));
+          sl1.AddObject(string(OrgName), Pointer(sl2.Count));
           sl2.Add(Text);
           if Length(sTyp) > Length(SynEditAutoComplete.Columns[0].BiggestWord) then
             SynEditAutoComplete.Columns[0].BiggestWord := sTyp;

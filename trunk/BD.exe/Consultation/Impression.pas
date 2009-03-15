@@ -3,9 +3,9 @@ unit Impression;
 interface
 
 uses
-  dialogs,
+  Dialogs,
   Controls, Forms, Classes, SysUtils, Windows, ExtCtrls, Graphics, Printers, LoadComplet, Commun, PrintObject, Textes, CommonConst,
-  Divers, TypeRec, Main, DM_Princ, Form_Recherche, UIB, jpeg;
+  Divers, TypeRec, UfrmFond, DM_Princ, Form_Recherche, UIB, jpeg, Generics.Collections;
 
 procedure ImpressionListeCompleteAlbums(Previsualisation: Boolean);
 
@@ -32,7 +32,8 @@ procedure ImpressionListePrevisionsAchats(Previsualisation: Boolean);
 
 implementation
 
-uses Form_Preview, Math, Procedures, ProceduresBDtk, DateUtils, Contnrs, UIBlib;
+uses Form_Preview, Math, Procedures, ProceduresBDtk, DateUtils, Contnrs, UIBlib, StrUtils,
+  UMetadata;
 
 procedure PreparePrintObject(Prn: TPrintObject; Previsualisation: Boolean; const Titre: string);
 begin
@@ -111,23 +112,23 @@ begin
   end;
 
   Prn.WriteLineColumn(0, -1, rsTransEtat + ' :');
-  Prn.WriteLineColumn(1, -2, Edition.sEtat);
+  Prn.WriteLineColumn(1, -2, Edition.Etat.Caption);
   Prn.WriteLineColumn(2, -2, rsTransReliure + ' :');
-  Prn.WriteLineColumn(3, -2, Edition.sReliure);
+  Prn.WriteLineColumn(3, -2, Edition.Reliure.Caption);
   Prn.WriteLineColumn(5, -2, rsTransTypeEdition + ' :');
-  Prn.WriteLineColumn(6, -2, Edition.sTypeEdition);
+  Prn.WriteLineColumn(6, -2, Edition.TypeEdition.Caption);
 
   Prn.WriteLineColumn(0, -1, rsTransPages + ' :');
   Prn.WriteLineColumn(1, -2, NonZero(IntToStr(Edition.NombreDePages)));
   Prn.WriteLineColumn(2, -2, rsTransOrientation + ' :');
-  Prn.WriteLineColumn(3, -2, Edition.sOrientation);
+  Prn.WriteLineColumn(3, -2, Edition.Orientation.Caption);
   Prn.WriteLineColumn(5, -2, rsTransFormatEdition + ' :');
-  Prn.WriteLineColumn(6, -2, Edition.sFormatEdition);
+  Prn.WriteLineColumn(6, -2, Edition.FormatEdition.Caption);
 
   Prn.WriteLineColumn(0, -1, rsTransNumeroPerso + ' :');
   Prn.WriteLineColumn(1, -2, Edition.NumeroPerso);
   Prn.WriteLineColumn(2, -2, rsTransSensLecture + ' :');
-  Prn.WriteLineColumn(3, -2, Edition.sSensLecture);
+  Prn.WriteLineColumn(3, -2, Edition.SensLecture.Caption);
 
   Prn.NextLine;
 
@@ -141,7 +142,7 @@ begin
 
   nbImageHorz := Trunc((Prn.Detail.Width + ThumbInterval) / (ThumbWidth + ThumbInterval));
   // si nbImageHorz = 0 alors on n'a pas assez de place pour mettre les images dans une page donc pas necessaire de passer à la page suivante
-  if Utilisateur.Options.FicheAlbumWithCouverture and (nbImageHorz > 0) then
+  if TGlobalVar.Utilisateur.Options.FicheAlbumWithCouverture and (nbImageHorz > 0) then
   begin
     numCol := 1;
     Repositionne := False;
@@ -150,7 +151,7 @@ begin
     for i := 0 to Pred(Edition.Couvertures.Count) do
     begin
       fWaiting.ShowProgression(rsTransImage + '...', epNext);
-      ms := GetCouvertureStream(False, TCouverture(Edition.Couvertures[i]).ID, Prn.MmsToPixelsVertical(ThumbHeigth), Prn.MmsToPixelsHorizontal(ThumbWidth), Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
+      ms := GetCouvertureStream(False, TCouverture(Edition.Couvertures[i]).ID, Prn.MmsToPixelsVertical(ThumbHeigth), Prn.MmsToPixelsHorizontal(ThumbWidth), TGlobalVar.Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
       if Assigned(ms) then
       try
         if not Repositionne then Prn.SetYPosition(Prn.GetYPosition + ThumbInterval);
@@ -202,10 +203,10 @@ begin
   fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 1, 7);
 
   MinTop := -1;
-  if Utilisateur.Options.FicheParaBDWithImage and ParaBD.HasImage then
+  if TGlobalVar.Utilisateur.Options.FicheParaBDWithImage and ParaBD.HasImage then
   begin
     fWaiting.ShowProgression(rsTransImage + '...', epNext);
-    ms := GetCouvertureStream(True, ParaBD.ID_ParaBD, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60), Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
+    ms := GetCouvertureStream(True, ParaBD.ID_ParaBD, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60), TGlobalVar.Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
     if Assigned(ms) then
     try
       fWaiting.ShowProgression(rsTransImage + '...', epNext);
@@ -229,7 +230,7 @@ begin
   Prn.WriteLineColumn(5, -2, FormatTitre(ParaBD.Serie.Titre));
   Prn.NewLines(2);
 
-  Prn.WriteLineColumn(0, -1, ParaBD.sCategorieParaBD);
+  Prn.WriteLineColumn(0, -1, ParaBD.CategorieParaBD.Caption);
   if ParaBD.Dedicace then Prn.WriteLineColumn(2, -2, rsTransDedicace);
   Prn.WriteLineColumn(0, -1, rsTransAnnee + ' :');
   Prn.WriteLineColumn(1, -2, NonZero(IntToStr(ParaBD.AnneeEdition)));
@@ -237,7 +238,7 @@ begin
 
   Prn.NextLine;
 
-  if ParaBD.CategorieParaBD = 0 then
+  if ParaBD.CategorieParaBD.Value = 0 then
     s := rsTransAuteurs
   else
     s := rsTransCreateurs;
@@ -1009,7 +1010,7 @@ begin
               with Equipe do
               begin
                 s := '';
-                while (daoScenario in DetailsOptions) and (not Eof) and (Fields.ByNameAsInteger['Metier'] = 0) do
+                while (daoScenario in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maScenariste) do
                 begin
                   PA := TAuteur(TAuteur.Make(Equipe));
                   AjoutString(s, PA.ChaineAffichage, ', ');
@@ -1018,7 +1019,7 @@ begin
                 end;
                 AjoutString(sEquipe, s, #13#10, rsTransScenario + ': ', '.');
                 s := '';
-                while (daoDessins in DetailsOptions) and (not Eof) and (Fields.ByNameAsInteger['Metier'] = 1) do
+                while (daoDessins in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maDessinateur) do
                 begin
                   PA := TAuteur(TAuteur.Make(Equipe));
                   AjoutString(s, PA.ChaineAffichage, ', ');
@@ -1027,7 +1028,7 @@ begin
                 end;
                 AjoutString(sEquipe, s, #13#10, rsTransDessins + ': ', '.');
                 s := '';
-                while (daoCouleurs in DetailsOptions) and (not Eof) and (Fields.ByNameAsInteger['Metier'] = 2) do
+                while (daoCouleurs in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maColoriste) do
                 begin
                   PA := TAuteur(TAuteur.Make(Equipe));
                   AjoutString(s, PA.ChaineAffichage, ', ');
@@ -1584,7 +1585,7 @@ begin
             with Equipe do
             begin
               s := '';
-              while (daoScenario in DetailsOptions) and (not Eof) and (Fields.ByNameAsInteger['Metier'] = 0) do
+              while (daoScenario in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maScenariste) do
               begin
                 PA := TAuteur(TAuteur.Make(Equipe));
                 AjoutString(s, PA.ChaineAffichage, ', ');
@@ -1593,7 +1594,7 @@ begin
               end;
               AjoutString(sEquipe, s, #13#10, rsTransScenario + ': ', '.');
               s := '';
-              while (daoDessins in DetailsOptions) and (not Eof) and (Fields.ByNameAsInteger['Metier'] = 1) do
+              while (daoDessins in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maDessinateur) do
               begin
                 PA := TAuteur(TAuteur.Make(Equipe));
                 AjoutString(s, PA.ChaineAffichage, ', ');
@@ -1602,7 +1603,7 @@ begin
               end;
               AjoutString(sEquipe, s, #13#10, rsTransDessins + ': ', '.');
               s := '';
-              while (daoCouleurs in DetailsOptions) and (not Eof) and (Fields.ByNameAsInteger['Metier'] = 2) do
+              while (daoCouleurs in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maColoriste) do
               begin
                 PA := TAuteur(TAuteur.Make(Equipe));
                 AjoutString(s, PA.ChaineAffichage, ', ');
@@ -1705,7 +1706,7 @@ begin
       Prn.PageNumber.Printed := False;
 
       //      ShowMessage(Format('W %d H %d', [Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Prn.MmsToPixelsVertical(Prn.Detail.Height)]));
-      ms := GetCouvertureStream(False, ID_Couverture, Prn.MmsToPixelsVertical(Prn.Detail.Height), Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(False, ID_Couverture, Prn.MmsToPixelsVertical(Prn.Detail.Height), Prn.MmsToPixelsHorizontal(Prn.Detail.Width), TGlobalVar.Utilisateur.Options.AntiAliasing);
       if Assigned(ms) then
       try
         fWaiting.ShowProgression(rsTransImage + '...', epNext);
@@ -1753,13 +1754,13 @@ begin
       Prn.SetHeaderInformation1(0, 5, FormatTitre(ParaBD.Titre), taCenter, Prn.Font.Name, 24, [fsBold]);
       s := '';
       AjoutString(s, FormatTitre(ParaBD.Serie.Titre), ' - ');
-      AjoutString(s, ParaBD.sCategorieParaBD, ' - ');
+      AjoutString(s, ParaBD.CategorieParaBD.Caption, ' - ');
       Prn.SetHeaderInformation1(1, -1, s, taCenter, Prn.Font.Name, 16, [fsBold]);
 
       Prn.PageNumber.Printed := False;
 
       //      ShowMessage(Format('W %d H %d', [Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Prn.MmsToPixelsVertical(Prn.Detail.Height)]));
-      ms := GetCouvertureStream(True, Reference, Prn.MmsToPixelsVertical(Prn.Detail.Height), Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(True, Reference, Prn.MmsToPixelsVertical(Prn.Detail.Height), Prn.MmsToPixelsHorizontal(Prn.Detail.Width), TGlobalVar.Utilisateur.Options.AntiAliasing);
       if Assigned(ms) then
       try
         fWaiting.ShowProgression(rsTransImage + '...', epNext);
@@ -1840,7 +1841,7 @@ procedure ImpressionListePrevisions(R: TPrevisionsSorties; Previsualisation: Boo
 var
   Prn: TPrintObject;
 
-  procedure PrintGroupe(const Titre: string; Previsions: TList);
+  procedure PrintGroupe(const Titre: string; Previsions: TObjectList<TPrevisionSortie>);
   var
     i: Integer;
     y1, y2: Single;
@@ -2055,4 +2056,3 @@ begin
 end;
 
 end.
-

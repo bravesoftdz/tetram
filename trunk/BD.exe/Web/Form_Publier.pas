@@ -73,7 +73,7 @@ var
   Reponse: TStringStream;
   slReponse: TStringList;
   Param: array of RAttachement;
-  db_version, UpgradeTodb_version: string;
+  db_version, UpgradeTodb_version: TFileVersion;
   UpgradeFromDate: TDate;
   s1, s2: string;
   qry: TUIBQuery;
@@ -85,7 +85,8 @@ var
   function GetCode(Index: Integer): string;
   begin
     Result := slReponse[Index];
-    if Pos(':', Result) > 0 then Result := Copy(Result, 1, Pos(':', Result) - 1);
+    if Pos(':', Result) > 0 then
+      Result := Copy(Result, 1, Pos(':', Result) - 1);
   end;
 
   function GetLabel(var Index: Integer): string;
@@ -131,7 +132,8 @@ var
     l := 0;
     s := GetLabel(l);
     Inc(l);
-    if IsError(0) then raise Exception.Create('Erreur inattendue : ' + s + #13#10 + GetLabel(l));
+    if IsError(0) then
+      raise Exception.Create('Erreur inattendue : ' + s + #13#10 + GetLabel(l));
   end;
 
   procedure SendData(Action: Integer; const Data: string = ''; isXML: Boolean = True);
@@ -147,9 +149,9 @@ var
     begin
       Param[ParamLengthMin + 1].Nom := 'data';
       if isXML then
-        Param[ParamLengthMin + 1].Valeur := MimeEncodeString('<?xml version="1.0" encoding="ISO-8859-1"?>' + Data)
+        Param[ParamLengthMin + 1].Valeur := string(MimeEncodeString('<?xml version="1.0" encoding="ISO-8859-1"?>' + AnsiString(UTF8String(Data))))
       else
-        Param[ParamLengthMin + 1].Valeur := MimeEncodeString(Data);
+        Param[ParamLengthMin + 1].Valeur := string(MimeEncodeString(AnsiString(UTF8String(Data))));
     end;
     PostHTTP;
   end;
@@ -161,32 +163,43 @@ var
     SendData(0);
 
     Decoupe(0, s1, s2);
-    if s1 <> 'intf_version' then raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
-    if CompareVersionNum('1', s2) > 0 then raise Exception.Create('Version d''interface non supportée.'#13#10'Veuillez mettre à jour BDThèque.');
+    if s1 <> 'intf_version' then
+      raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
+    if TFileVersion(s2) <= '1' then
+      raise Exception.Create('Version d''interface non supportée.'#13#10'Veuillez mettre à jour BDThèque.');
 
     Decoupe(1, s1, s2);
-    if s1 <> 'php_version' then raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
-    if Copy(s2, Length(s2) - 2, 2) <> 'OK' then raise Exception.Create('La version de php disponible sur le serveur est insuffisante.'#13#10'Veuillez utiliser un autre hébergeur.');
+    if s1 <> 'php_version' then
+      raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
+    if Copy(s2, Length(s2) - 2, 2) <> 'OK' then
+      raise Exception.Create('La version de php disponible sur le serveur est insuffisante.'#13#10'Veuillez utiliser un autre hébergeur.');
 
     Decoupe(2, s1, s2);
-    if s1 <> 'XML' then raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
-    if Copy(s2, Length(s2) - 2, 2) <> 'OK' then raise Exception.Create('Le support XML n''est pas présent dans le moteur php du serveur.'#13#10'Veuillez utiliser un autre hébergeur.');
+    if s1 <> 'XML' then
+      raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
+    if Copy(s2, Length(s2) - 2, 2) <> 'OK' then
+      raise Exception.Create('Le support XML n''est pas présent dans le moteur php du serveur.'#13#10'Veuillez utiliser un autre hébergeur.');
 
     // Decoupe(3, s1, s2); // support JSON
 
     i := 5;
-    if IsError(4) then raise Exception.Create('Impossible de se connecter à la base de données MySQL:'#13#10'- vérifier le paramétrage de la base de données'#13#10'- Assurez-vous que le modèle est bien chargé sur le site après avoir regénéré le site'#13#10#13#10 + GetLabel(i));
+    if IsError(4) then
+      raise Exception.Create('Impossible de se connecter à la base de données MySQL:'#13#10'- vérifier le paramétrage de la base de données'#13#10'- Assurez-vous que le modèle est bien chargé sur le site après avoir regénéré le site'#13#10#13#10 + GetLabel(i));
     Decoupe(4, s1, s2);
-    if s1 <> 'mysql_version' then raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
-    if Copy(s2, Length(s2) - 2, 2) <> 'OK' then raise Exception.Create('La version de MySQL disponible sur le serveur est insuffisante.'#13#10'Veuillez utiliser un autre hébergeur.');
+    if s1 <> 'mysql_version' then
+      raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
+    if Copy(s2, Length(s2) - 2, 2) <> 'OK' then
+      raise Exception.Create('La version de MySQL disponible sur le serveur est insuffisante.'#13#10'Veuillez utiliser un autre hébergeur.');
 
-    Decoupe(5, s1, db_version);
-    if s1 <> 'db_version' then raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
+    Decoupe(5, s1, s2);
+    if s1 <> 'db_version' then
+      raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
+    db_version := s2;
   end;
 
-  function CleanHTTP(Valeur: widestring): string;
+  function CleanHTTP(Valeur: string): string;
   var
-    c: PWideChar;
+    c: PChar;
   begin
     Result := '';
     if Length(Valeur) > 0 then
@@ -229,16 +242,17 @@ var
     i: Integer;
     SQL: TStringList;
   begin
-    UpgradeTodb_version := Utilisateur.Options.SiteWeb.BddVersion;
+    UpgradeTodb_version := TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion;
     if UpgradeTodb_version = '' then
       UpgradeTodb_version := TMySQLUpdate(ListMySQLUpdates[Pred(ListMySQLUpdates.Count)]).Version;
 
-    if CompareVersionNum(UpgradeTodb_version, db_version) > 0 then
+    if UpgradeTodb_version > db_version then
       for i := 0 to Pred(ListMySQLUpdates.Count) do
         with TMySQLUpdate(ListMySQLUpdates[i]) do
         begin
-          if CompareVersionNum(UpgradeTodb_version, Version) < 0 then Break;
-          if (CompareVersionNum(Version, db_version) > 0) then
+          if UpgradeTodb_version < Version then
+            Break;
+          if Version > db_version then
           begin
             SQL := TStringList.Create;
             try
@@ -270,7 +284,8 @@ var
     OperationRestantesTable := Cardinal(ProgressBar1.Max) - OperationFaitesTable;
     ExecTimeTable := MilliSecondsBetween(Now, StartTimeTable);
     moyExecTimeTable := ExecTimeTable div OperationFaitesTable;
-    if moyExecTimeTable < 10 then moyExecTimeTable := 10; // au départ la moyenne n'est pas forcément très juste: par tatonnement, il faut au moins 10ms par enregistrement
+    if moyExecTimeTable < 10 then
+      moyExecTimeTable := 10; // au départ la moyenne n'est pas forcément très juste: par tatonnement, il faut au moins 10ms par enregistrement
 
     TempsRestant := moyExecTimeTable * OperationRestantesTable;
 
@@ -280,9 +295,10 @@ var
       OperationRestantes := Cardinal(ProgressBar2.Max - ProgressBar2.Position) - OperationRestantesTable;
       ExecTime := MilliSecondsBetween(Now, StartTime) - ExecTimeTable;
       moyExecTime := ExecTime div OperationFaites;
-      if moyExecTime < 10 then moyExecTime := 10; // au départ la moyenne n'est pas forcément très juste: par tatonnement, il faut au moins 10ms par enregistrement
+      if moyExecTime < 10 then
+        moyExecTime := 10; // au départ la moyenne n'est pas forcément très juste: par tatonnement, il faut au moins 10ms par enregistrement
 
-      TempsRestant := TempsRestant + moyExecTime * OperationRestantes
+      TempsRestant := TempsRestant + moyExecTime * OperationRestantes;
     end;
 
     Label9.Caption := 'Fin estimée : ' + FormatDateTime('HH:mm:ss', IncMilliSecond(Now, TempsRestant));
@@ -338,20 +354,24 @@ var
           if l > 0 then
           begin
             l := l + Length(champ) + 2;
-            if CompareVersionNum(db_version, Copy(s, l, PosEx('@', s, l) - l)) >= 0 then listFields.Add(Pointer(i));
+            if db_version >= Copy(s, l, PosEx('@', s, l) - l) then
+              listFields.Add(Pointer(i));
             Continue; // ce n'est pas grave si on ne fait pas le test du champ à upper: si on le passer c'est qu'il ne l'est pas
           end;
-          if Pos('@' + champ + '@', s) = 0 then listFields.Add(Pointer(i));
+          if Pos('@' + champ + '@', s) = 0 then
+            listFields.Add(Pointer(i));
 
           s := '@' + InfoTable.UpperFields + '@';
           l := Pos('@' + champ + '=', s);
           if l > 0 then
           begin
             l := l + Length(champ) + 2;
-            if CompareVersionNum(db_version, Copy(s, l, PosEx('@', s, l) - l)) >= 0 then listUpperFields.Add(Pointer(i));
+            if db_version >= Copy(s, l, PosEx('@', s, l) - l) then
+              listUpperFields.Add(Pointer(i));
             Continue;
           end;
-          if Pos('@' + champ + '@', s) > 0 then listUpperFields.Add(Pointer(i));
+          if Pos('@' + champ + '@', s) > 0 then
+            listUpperFields.Add(Pointer(i));
         end;
         bodyXML := '';
         while not Eof do
@@ -412,7 +432,8 @@ var
           Next;
           RefreshProgressBar;
         end;
-        if Length(bodyXML) > 0 then SendXML(Format('<data>%s<records>%s</records></data>', [enteteXML, bodyXML]));
+        if Length(bodyXML) > 0 then
+          SendXML(Format('<data>%s<records>%s</records></data>', [enteteXML, bodyXML]));
       end;
     finally
       listFields.Free;
@@ -505,12 +526,12 @@ var
         Param[ParamLengthMin + 0].Nom := 'action';
         Param[ParamLengthMin + 0].Valeur := '8';
         Param[ParamLengthMin + 1].Nom := 'ID';
-        Param[ParamLengthMin + 1].Valeur := MimeEncodeStringNoCRLF(Fields.ByNameAsString[InfoTable.ID]);
+        Param[ParamLengthMin + 1].Valeur := string(MimeEncodeStringNoCRLF(AnsiString(UTF8String(Fields.ByNameAsString[InfoTable.ID]))));
         PostHTTP;
         l := 0;
         if GetLabel(l) = 'file not found' then
         begin
-          ms := GetCouvertureStream(False, StringToGUIDDef(Fields.ByNameAsString[InfoTable.ID], GUID_NULL), 400, 500, Utilisateur.Options.AntiAliasing);
+          ms := GetCouvertureStream(False, StringToGUIDDef(Fields.ByNameAsString[InfoTable.ID], GUID_NULL), 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing);
           if Assigned(ms) then
           begin
             es := TStringStream.Create('');
@@ -520,7 +541,7 @@ var
               Param[ParamLengthMin + 0].Nom := 'action';
               Param[ParamLengthMin + 0].Valeur := '7';
               Param[ParamLengthMin + 1].Nom := 'ID';
-              Param[ParamLengthMin + 1].Valeur := MimeEncodeStringNoCRLF(Fields.ByNameAsString[InfoTable.ID]);
+              Param[ParamLengthMin + 1].Valeur := string(MimeEncodeStringNoCRLF(AnsiString(UTF8String(Fields.ByNameAsString[InfoTable.ID]))));
               Param[ParamLengthMin + 2].Nom := 'image';
               Param[ParamLengthMin + 2].Valeur := es.DataString;
               PostHTTP;
@@ -546,18 +567,19 @@ begin
   SQLSettings.DateSeparator := '-';
   SQLSettings.TimeSeparator := ':';
 
-  URL := Utilisateur.Options.SiteWeb.Adresse;
-  if (URL <> '') and (URL[Length(URL)] <> '/') then URL := URL + '/';
+  URL := TGlobalVar.Utilisateur.Options.SiteWeb.Adresse;
+  if (URL <> '') and (URL[Length(URL)] <> '/') then
+    URL := URL + '/';
   URL := URL + 'interface.php';
 
-  MaxBodySize := Utilisateur.Options.SiteWeb.Paquets;
+  MaxBodySize := TGlobalVar.Utilisateur.Options.SiteWeb.Paquets;
 
   Reponse := TStringStream.Create('');
   slReponse := TStringList.Create;
   try
     SetLength(Param, ParamLengthMin);
     Param[0].Nom := 'auth_key';
-    Param[0].Valeur := Utilisateur.Options.SiteWeb.Cle;
+    Param[0].Valeur := TGlobalVar.Utilisateur.Options.SiteWeb.Cle;
     Param[1].Nom := 'isExe';
     Param[1].Valeur := '';
 
@@ -575,69 +597,69 @@ begin
     StartTime := Now;
     qry := TUIBQuery.Create(nil);
     with qry do
-    try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      FetchBlobs := True;
+      try
+        Transaction := GetTransaction(DMPrinc.UIBDataBase);
+        FetchBlobs := True;
 
-      rc := 0;
-      for i := Low(TablesSynchro) to High(TablesSynchro) do
-        with TablesSynchro[i] do
-          if ((version_mini = '') or (CompareVersionNum(db_version, version_mini) >= 0))
-            and ((version_maxi = '') or (CompareVersionNum(version_maxi, db_version) >= 0)) then
-            case TypeSynchro of
-              tsImages:
-                if CheckBox2.Checked then Inc(rc, CompteUpdates(TablesSynchro[i]) * 2); // la synchro des images est faite en 2 fois : les données puis les fichiers
-              else
-                Inc(rc, CompteUpdates(TablesSynchro[i]));
-            end;
-
-      if rc = 0 then
-        ShowMessage('Rien à publier')
-      else
-      begin
-        ProgressBar2.Position := 0;
-        ProgressBar2.Max := rc;
-        ProgressBar1.Position := 0;
-        ProgressBar1.Max := 1;
-
+        rc := 0;
         for i := Low(TablesSynchro) to High(TablesSynchro) do
           with TablesSynchro[i] do
-            if ((version_mini = '') or (CompareVersionNum(db_version, version_mini) >= 0))
-              and ((version_maxi = '') or (CompareVersionNum(version_maxi, db_version) >= 0)) then
-            begin
-              Label8.Caption := 'Synchronisation de ' + TableName;
-              StartTimeTable := Now;
+            if ((version_mini = '') or (db_version >= version_mini)) and ((version_maxi = '') or (db_version < version_maxi)) then
               case TypeSynchro of
-                tsNone:
-                  begin
-                    if RadioButton3.Checked or (ProcedureStockee <> '') then SendData(1, 'TRUNCATE TABLE /*DB_PREFIX*/' + LowerCase(TableName), False);
-                    SendDonnees(TablesSynchro[i]);
-                  end;
                 tsImages:
                   if CheckBox2.Checked then
-                  begin
-                    SendData(4); // création du répertoire
-                    if RadioButton3.Checked then
-                    begin
-                      SendData(6); // enlever toutes les images
-                      SendData(1, 'TRUNCATE TABLE /*DB_PREFIX*/' + LowerCase(TableName), False);
-                    end;
-                    SendDonnees(TablesSynchro[i]);
-                    SendImages(TablesSynchro[i]);
-                  end;
+                    Inc(rc, CompteUpdates(TablesSynchro[i]) * 2); // la synchro des images est faite en 2 fois : les données puis les fichiers
+                else
+                  Inc(rc, CompteUpdates(TablesSynchro[i]));
               end;
-            end;
 
-        SendOption('moneysymbol', CleanHTTP(Utilisateur.Options.SymboleMonnetaire));
-        SendOption('formattitrealbum', IntToStr(Utilisateur.Options.FormatTitreAlbum));
-        SendOption('lastsynchro', DateToStr(StartTime, SQLSettings));
+        if rc = 0 then
+          ShowMessage('Rien à publier')
+        else
+        begin
+          ProgressBar2.Position := 0;
+          ProgressBar2.Max := rc;
+          ProgressBar1.Position := 0;
+          ProgressBar1.Max := 1;
 
-        ShowMessage('Publication terminée');
+          for i := Low(TablesSynchro) to High(TablesSynchro) do
+            with TablesSynchro[i] do
+              if ((version_mini = '') or (db_version >= version_mini)) and ((version_maxi = '') or (db_version < version_maxi)) then
+              begin
+                Label8.Caption := 'Synchronisation de ' + TableName;
+                StartTimeTable := Now;
+                case TypeSynchro of
+                  tsNone:
+                  begin
+                    if RadioButton3.Checked or (ProcedureStockee <> '') then
+                      SendData(1, 'TRUNCATE TABLE /*DB_PREFIX*/' + LowerCase(TableName), False);
+                    SendDonnees(TablesSynchro[i]);
+                  end;
+                  tsImages:
+                    if CheckBox2.Checked then
+                    begin
+                      SendData(4); // création du répertoire
+                      if RadioButton3.Checked then
+                      begin
+                        SendData(6); // enlever toutes les images
+                        SendData(1, 'TRUNCATE TABLE /*DB_PREFIX*/' + LowerCase(TableName), False);
+                      end;
+                      SendDonnees(TablesSynchro[i]);
+                      SendImages(TablesSynchro[i]);
+                    end;
+                end;
+              end;
+
+          SendOption('moneysymbol', CleanHTTP(TGlobalVar.Utilisateur.Options.SymboleMonnetaire));
+          SendOption('formattitrealbum', IntToStr(TGlobalVar.Utilisateur.Options.FormatTitreAlbum));
+          SendOption('lastsynchro', DateToStr(StartTime, SQLSettings));
+
+          ShowMessage('Publication terminée');
+        end;
+      finally
+        Transaction.Free;
+        Free;
       end;
-    finally
-      Transaction.Free;
-      Free;
-    end;
   finally
     ProgressBar2.Position := 0;
     ProgressBar1.Position := 0;

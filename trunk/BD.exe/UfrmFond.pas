@@ -1,4 +1,4 @@
-unit Main;
+unit UfrmFond;
 
 interface
 
@@ -7,7 +7,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ImgList, Menus,
-  ComCtrls, ExtCtrls, Buttons, ActnList, Printers, iniFiles, jpeg, Contnrs, ToolWin, ProceduresBDtk, UBdtForms;
+  ComCtrls, ExtCtrls, Buttons, ActnList, Printers, iniFiles, jpeg, Contnrs, ToolWin, ProceduresBDtk, UBdtForms,
+  PngImageList, pngImage, PngFunctions;
 
 type
   TActionUpdate = function: Boolean of object;
@@ -19,7 +20,7 @@ type
 
   TfrmFond = class(TbdtForm)
     ImageList1: TImageList;
-    boutons_32x32_hot: TImageList;
+    boutons_32x32_hot: TPngImageList;
     ActionsOutils: TActionList;
     actChangementOptions: TAction;
     actAideContextuelle: TAction;
@@ -35,8 +36,8 @@ type
     actAfficheStatsEmprunteurs: TAction;
     actAfficheStatsAlbums: TAction;
     actPersonnaliseBarre: TAction;
-    boutons_16x16_hot: TImageList;
-    ShareImageList: TImageList;
+    boutons_16x16_hot: TPngImageList;
+    ShareImageList: TPngImageList;
     ActionList1: TActionList;
     actAideSommaire: TAction;
     actAideAbout: TAction;
@@ -119,8 +120,8 @@ type
     N10: TMenuItem;
     Cheminbase1: TMenuItem;
     Apropos1: TMenuItem;
-    boutons_32x32_norm: TImageList;
-    boutons_16x16_norm: TImageList;
+    boutons_32x32_norm: TPngImageList;
+    boutons_16x16_norm: TPngImageList;
     actNouvelAchat: TAction;
     N11: TMenuItem;
     Achat1: TMenuItem;
@@ -137,6 +138,8 @@ type
     actScripts: TAction;
     P1: TMenuItem;
     actPublier: TAction;
+    ToolButton14: TToolButton;
+    ToolButton15: TToolButton;
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure actChangementOptionsExecute(Sender: TObject);
@@ -228,14 +231,14 @@ var
   i: Integer;
 begin
   with TIniFile.Create(FichierIni) do
-  try
-    case WindowState of
-      wsMaximized: DeleteKey('Options', 'WS');
-      wsNormal: WriteString('Options', 'WS', Format('%dx%d-%dx%d', [Width, Height, Left, Top]));
+    try
+      case WindowState of
+        wsMaximized: DeleteKey('Options', 'WS');
+        wsNormal: WriteString('Options', 'WS', Format('%dx%d-%dx%d', [Width, Height, Left, Top]));
+      end;
+    finally
+      Free;
     end;
-  finally
-    Free;
-  end;
 
   Historique.OnChange := nil;
   FreeAndNil(FModalWindows);
@@ -243,6 +246,115 @@ begin
   FreeAndNil(FToolCurrent);
   for i := MDIChildCount - 1 downto 0 do
     MDIChildren[i].Free;
+end;
+
+procedure RGBToHSV(R, G, B: Integer; var H, S, V: Integer);
+var
+  Delta: Integer;
+  Min: Integer;
+begin
+  Min := MinIntValue([R, G, B]);
+  V := MaxIntValue([R, G, B]);
+  Delta := V - Min;
+  if V = 0 then
+    S := 0
+  else
+    S := (255 * Delta) div V;
+  if S <> 0 then
+  begin
+    if R = V then
+      H := (40 * (G - B)) div Delta
+    else
+    begin
+      if G = V then
+        H := 80 + (40 * (B - R)) div Delta
+      else
+      begin
+        if B = V then
+          H := 160 + (40 * (R - G)) div Delta;
+      end;
+    end;
+    if H < 0 then
+      H := H + 240;
+  end;
+end;
+
+procedure HSVtoRGB(H, S, V: Integer; var R, G, B: Integer);
+var
+  f: Single;
+  p, q, t: Integer;
+begin
+  if S = 0 then
+  begin
+    R := V;
+    G := V;
+    B := V;
+  end
+  else
+  begin
+    f := Frac(H / 40);
+    p := Round(V * (1 - S / 255));
+    q := Round(V * (1 - S * f / 255));
+    t := Round(V * (1 - S * (1 - f) / 255));
+    case (h div 40) mod 6 of
+      0:
+      begin
+        R := V;
+        G := t;
+        B := p;
+      end;
+      1:
+      begin
+        R := q;
+        G := V;
+        B := p;
+      end;
+      2:
+      begin
+        R := p;
+        G := V;
+        B := t;
+      end;
+      3:
+      begin
+        R := p;
+        G := q;
+        B := V;
+      end;
+      4:
+      begin
+        R := t;
+        G := p;
+        B := V;
+      end;
+      5:
+      begin
+        R := V;
+        G := p;
+        B := q;
+      end;
+    end;
+  end;
+end;
+
+function ColorToGray(AColor: TColor): TColor;
+var
+  H, S, V: Integer;
+  R, G, B: Integer;
+begin
+  AColor := ColorToRGB(AColor);
+  RGBToHSV(GetRValue(AColor), GetGValue(AColor), GetBValue(AColor), H, S, V);
+  HSVtoRGB(H, 0, V, R, G, B);
+  Result := RGB(R, G, B);
+end;
+
+procedure PNGtoGray(png: TPNGImage);
+var
+  h, w: Integer;
+begin
+  for h := 0 to Pred(png.Height) do
+    for w := 0 to Pred(png.Width) do
+      png.Pixels[w, h] := ColorToGray(png.Pixels[w, h]);
 end;
 
 procedure TfrmFond.FormCreate(Sender: TObject);
@@ -260,7 +372,7 @@ begin
       if Assigned(tlb.Action) then
       begin
         if TActionList(tlb.Action.Owner) <> ActionList1 then
-          FToolOriginal.Add(Format('b%d=%s', [i, tlb.Action.Name]))
+          FToolOriginal.Add(Format('b%d=%s', [i, tlb.Action.Name]));
       end
       else if (tlb.Caption = '-') then
         FToolOriginal.Add(Format('b%d=%s', [i, 'X']));
@@ -271,22 +383,38 @@ begin
   LoadToolBarres;
   Caption := Application.Title;
   Historique.OnChange := HistoriqueChanged;
+
+  boutons_32x32_norm.BeginUpdate;
+  boutons_16x16_norm.BeginUpdate;
+  boutons_16x16_hot.BeginUpdate;
+  for i := 0 to Pred(boutons_32x32_hot.Count) do
+  begin
+    boutons_32x32_norm.PngImages.Add.Assign(boutons_32x32_hot.PngImages[i]);
+    MakeImageBlended(boutons_32x32_norm.PngImages[i].PngImage);
+
+    boutons_16x16_hot.PngImages.Add.Assign(boutons_32x32_hot.PngImages[i]);
+    boutons_16x16_norm.PngImages.Add.Assign(boutons_32x32_norm.PngImages[i]);
+  end;
+  boutons_32x32_norm.EndUpdate;
+  boutons_16x16_norm.EndUpdate;
+  boutons_16x16_hot.EndUpdate;
 end;
 
 procedure TfrmFond.actChangementOptionsExecute(Sender: TObject);
 begin
   with TFrmOptions.Create(Self) do
-  try
-    if ShowModal <> mrOk then Exit;
-  finally
-    Free;
-  end;
+    try
+      if ShowModal <> mrOk then
+        Exit;
+    finally
+      Free;
+    end;
   if Assigned(FCurrentForm) and Assigned(FCurrentForm.Menu) then
-    if Utilisateur.Options.GrandesIconesMenus then
+    if TGlobalVar.Utilisateur.Options.GrandesIconesMenus then
       FCurrentForm.Menu.Images := boutons_32x32_hot
     else
       FCurrentForm.Menu.Images := boutons_16x16_hot;
-  if Utilisateur.Options.GrandesIconesMenus then
+  if TGlobalVar.Utilisateur.Options.GrandesIconesMenus then
     Menu.Images := boutons_32x32_hot
   else
     Menu.Images := boutons_16x16_hot;
@@ -309,12 +437,12 @@ var
 begin
   R := TStats.Create(False);
   with TStatsGeneralesCreate(Self, R) do
-  try
-    ShowModal;
-  finally
-    Free;
-    R.Free;
-  end;
+    try
+      ShowModal;
+    finally
+      Free;
+      R.Free;
+    end;
 end;
 
 procedure TfrmFond.actAfficheStockExecute(Sender: TObject);
@@ -382,12 +510,12 @@ var
 begin
   R := TStats.Create(False);
   with TStatsEmprunteursCreate(Self, R) do
-  try
-    ShowModal;
-  finally
-    Free;
-    R.Free;
-  end;
+    try
+      ShowModal;
+    finally
+      Free;
+      R.Free;
+    end;
 end;
 
 procedure TfrmFond.actAfficheStatsAlbumsExecute(Sender: TObject);
@@ -396,12 +524,12 @@ var
 begin
   R := TStats.Create(False);
   with TStatsAlbumsCreate(Self, R) do
-  try
-    ShowModal;
-  finally
-    Free;
-    R.Free;
-  end;
+    try
+      ShowModal;
+    finally
+      Free;
+      R.Free;
+    end;
 end;
 
 procedure TfrmFond.ChargeToolBarres(sl: TStringList);
@@ -411,7 +539,8 @@ procedure TfrmFond.ChargeToolBarres(sl: TStringList);
     i: Integer;
     act: TCustomAction;
   begin
-    if not CompareMem(PChar(Name), PChar('act'), 3) then Name := 'act' + Name;
+    if not CompareMem(PChar(Name), PChar('act'), 3) then
+      Name := 'act' + Name;
     Result := nil;
     for i := 0 to ActionsOutils.ActionCount - 1 do
     begin
@@ -455,7 +584,6 @@ procedure TfrmFond.ChargeToolBarres(sl: TStringList);
 
 type
   TTypeButton = (tbSep, tbBut);
-
 var
   i: Integer;
   s1, s2: string;
@@ -469,7 +597,7 @@ begin
   for i := 0 to ToolBar1.ButtonCount - 1 do
     ToolBar1.Buttons[0].Free;
 
-  if Utilisateur.Options.GrandesIconesBarre then
+  if TGlobalVar.Utilisateur.Options.GrandesIconesBarre then
   begin
     ToolBar1.Images := boutons_32x32_norm;
     ToolBar1.HotImages := boutons_32x32_hot;
@@ -489,7 +617,8 @@ begin
     s2 := sl.Values[s1];
     if s2 = 'X' then
     begin
-      if LastButton <> tbSep then NewAction(nil);
+      if LastButton <> tbSep then
+        NewAction(nil);
       LastButton := tbSep;
     end
     else
@@ -503,7 +632,8 @@ begin
     end;
   end;
 
-  if LastButton <> tbSep then NewAction(nil);
+  if LastButton <> tbSep then
+    NewAction(nil);
   NewAction(HistoriqueNext);
   NewAction(HistoriqueBack);
 end;
@@ -518,7 +648,8 @@ begin
       sl := TStringList.Create;
       try
         ReadSections(sl);
-        if sl.IndexOf('Barre') = -1 then Exit;
+        if sl.IndexOf('Barre') = -1 then
+          Exit;
         sl.Clear;
         ReadSectionValues('Barre', sl);
         ChargeToolBarres(sl);
@@ -535,23 +666,24 @@ var
   i: Integer;
 begin
   with TIniFile.Create(FichierIni) do
-  try
-    EraseSection('Barre');
-    for i := 0 to Pred(FToolCurrent.Count) do
-      WriteString('Barre', FToolCurrent.Names[i], FToolCurrent.ValueFromIndex[i]);
-  finally
-    Free;
-  end
+    try
+      EraseSection('Barre');
+      for i := 0 to Pred(FToolCurrent.Count) do
+        WriteString('Barre', FToolCurrent.Names[i], FToolCurrent.ValueFromIndex[i]);
+    finally
+      Free;
+    end;
 end;
 
 procedure TfrmFond.actPersonnaliseBarreExecute(Sender: TObject);
 begin
   with TFrmCustomize.Create(Self) do
-  try
-    if ShowModal = mrOk then Historique.AddWaiting(fcRecreateToolBar);
-  finally
-    Free;
-  end;
+    try
+      if ShowModal = mrOk then
+        Historique.AddWaiting(fcRecreateToolBar);
+    finally
+      Free;
+    end;
 end;
 
 procedure TfrmFond.ActionsOutilsUpdate(Action: TBasicAction; var Handled: Boolean);
@@ -559,10 +691,10 @@ var
   ModeConsult: Boolean;
   iImpression: IImpressionApercu;
 begin
-  Handled := Mode_en_cours = mdEditing;
+  Handled := TGlobalVar.Mode_en_cours = mdEditing;
   if not Handled then
   begin
-    ModeConsult := Mode_en_cours = mdConsult;
+    ModeConsult := TGlobalVar.Mode_en_cours = mdConsult;
     actActualiseRepertoire.Enabled := ModeConsult;
 
     if Assigned(FCurrentForm) and FCurrentForm.GetInterface(IImpressionApercu, iImpression) then
@@ -605,20 +737,22 @@ end;
 procedure TfrmFond.actAideAboutExecute(Sender: TObject);
 begin
   with TFrmAboutBox.Create(Application) do
-  try
-    ShowModal;
-  finally
-    Free;
-  end;
+    try
+      ShowModal;
+    finally
+      Free;
+    end;
 end;
 
 procedure TfrmFond.actModeGestionExecute(Sender: TObject);
 var
   LockWindow: ILockWindow;
 begin
+  if actModeGestion.Checked then
+    Exit;
   LockWindow := TLockWindow.Create(Self);
-  if actModeGestion.Checked then Exit;
-  if Assigned(FrmRepertoire) then FreeAndNil(FrmRepertoire);
+  if Assigned(FrmRepertoire) then
+    FreeAndNil(FrmRepertoire);
   Application.CreateForm(TFrmGestions, FrmGestions);
   SetChildForm(FrmGestions);
 end;
@@ -627,8 +761,9 @@ procedure TfrmFond.actModeConsultationExecute(Sender: TObject);
 var
   LockWindow: ILockWindow;
 begin
+  if actModeConsultation.Checked then
+    Exit;
   LockWindow := TLockWindow.Create(Self);
-  if actModeConsultation.Checked then Exit;
   FrmGestions := nil;
   Application.CreateForm(TFrmRepertoire, FrmRepertoire);
   SetChildForm(FrmRepertoire, alLeft);
@@ -676,8 +811,8 @@ end;
 procedure TfrmFond.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
   CheminBase.Caption := DMPrinc.UIBDataBase.DatabaseName;
-  HistoriqueBack.Enabled := (Mode_en_cours = mdConsult) and Bool(Historique.CurrentConsultation);
-  HistoriqueNext.Enabled := (Mode_en_cours = mdConsult) and Bool(Historique.CountConsultation) and (Historique.CurrentConsultation <> Historique.CountConsultation - 1);
+  HistoriqueBack.Enabled := (TGlobalVar.Mode_en_cours = mdConsult) and Bool(Historique.CurrentConsultation);
+  HistoriqueNext.Enabled := (TGlobalVar.Mode_en_cours = mdConsult) and Bool(Historique.CountConsultation) and (Historique.CurrentConsultation <> Historique.CountConsultation - 1);
 end;
 
 function TfrmFond.SetModalChildForm(Form: TForm; Alignement: TAlign): Integer;
@@ -689,7 +824,8 @@ begin
   LockWindow := TLockWindow.Create(Self);
   me := TModeEditing.Create;
   Result := 0;
-  if not Assigned(Form) then Exit;
+  if not Assigned(Form) then
+    Exit;
   Application.ModalStarted;
   Form.BorderStyle := bsNone;
   Form.Parent := Self;
@@ -700,7 +836,8 @@ begin
   end
   else
     CurrentMenu := FCurrentForm.Menu;
-  if Assigned(FrmRepertoire) then FrmRepertoire.Visible := False;
+  if Assigned(FrmRepertoire) then
+    FrmRepertoire.Visible := False;
   FModalWindows.Push(Form);
   try
     Form.Show;
@@ -713,8 +850,10 @@ begin
     until Result <> 0;
   finally
     FModalWindows.Pop;
-    if FModalWindows.Count > 0 then TForm(FModalWindows.Peek).Enabled := True;
-    if Assigned(FrmRepertoire) then FrmRepertoire.Visible := FModalWindows.Count = 0;
+    if FModalWindows.Count > 0 then
+      TForm(FModalWindows.Peek).Enabled := True;
+    if Assigned(FrmRepertoire) then
+      FrmRepertoire.Visible := FModalWindows.Count = 0;
     MergeMenu(CurrentMenu);
     Application.ModalFinished;
   end;
@@ -741,8 +880,10 @@ procedure TfrmFond.MergeMenu(MergedMenu: TMainMenu);
   var
     i: Integer;
   begin
-    if MenuItem.Caption = cLineCaption then Exit;
-    if Assigned(MenuItem.Parent) then MenuItem.OnMeasureItem := MeasureMenuItem;
+    if MenuItem.Caption = cLineCaption then
+      Exit;
+    if Assigned(MenuItem.Parent) then
+      MenuItem.OnMeasureItem := MeasureMenuItem;
     for i := 0 to Pred(MenuItem.Count) do
       ProcessMenuItem(MenuItem.Items[i]);
   end;
@@ -752,7 +893,7 @@ var
 begin
   if Assigned(MergedMenu) then
   begin
-    if Utilisateur.Options.GrandesIconesMenus then
+    if TGlobalVar.Utilisateur.Options.GrandesIconesMenus then
       MergedMenu.Images := boutons_32x32_hot
     else
       MergedMenu.Images := boutons_16x16_hot;
@@ -770,7 +911,7 @@ var
 begin
   if not Assigned(Form) then
   begin
-    if (Mode_en_cours = mdConsult) then
+    if (TGlobalVar.Mode_en_cours = mdConsult) then
       Historique.Last
     else if Assigned(FCurrentForm) then
       SetChildForm(FCurrentForm);
@@ -778,7 +919,8 @@ begin
   end;
   LockWindow := TLockWindow.Create(Self);
   try
-    if Assigned(FCurrentForm) then FreeAndNil(FCurrentForm);
+    if Assigned(FCurrentForm) then
+      FreeAndNil(FCurrentForm);
   except
   end;
   Form.BorderStyle := bsNone;
@@ -792,7 +934,8 @@ begin
   end
   else
     FCurrentForm := nil;
-  if Form is TFrmRepertoire then Splitter1.Left := ClientWidth - Splitter1.Width;
+  if Form is TFrmRepertoire then
+    Splitter1.Left := ClientWidth - Splitter1.Width;
   Form.left := 0;
 end;
 
@@ -815,7 +958,7 @@ procedure TfrmFond.ActionsStatistiquesUpdate(Action: TBasicAction; var Handled: 
 var
   i: Integer;
 begin
-  if Mode_en_cours = mdEditing then
+  if TGlobalVar.Mode_en_cours = mdEditing then
   begin
     for i := 0 to Pred(ActionsStatistiques.ActionCount) do
       TAction(ActionsStatistiques.Actions[i]).Enabled := False;
@@ -926,22 +1069,17 @@ end;
 
 procedure TfrmFond.actScriptsExecute(Sender: TObject);
 begin
-  with TfrmScripts.Create(nil) do
-  try
-    ShowModal;
-  finally
-    Free;
-  end;
+  Historique.AddWaiting(fcScripts, Integer(TfrmScripts.Create(Self)));
 end;
 
 procedure TfrmFond.actPublierExecute(Sender: TObject);
 begin
   with TfrmPublier.Create(nil) do
-  try
-    ShowModal;
-  finally
-    Free;
-  end;
+    try
+      ShowModal;
+    finally
+      Free;
+    end;
 end;
 
 procedure TfrmFond.Loaded;
@@ -951,31 +1089,31 @@ var
 begin
   inherited;
   with TIniFile.Create(FichierIni) do
-  try
-    s := ReadString('Options', 'WS', '');
-    if s <> '' then
     try
-      i := Pos('-', s);
-      Taille := Copy(s, 1, i - 1);
-      Position := Copy(s, i + 1, MaxInt);
+      s := ReadString('Options', 'WS', '');
+      if s <> '' then
+        try
+          i := Pos('-', s);
+          Taille := Copy(s, 1, i - 1);
+          Position := Copy(s, i + 1, MaxInt);
 
-      i := Pos('x', Taille);
-      iWidth := StrToInt(Copy(Taille, 1, i - 1));
-      iHeight := StrToInt(Copy(Taille, i + 1, MaxInt));
+          i := Pos('x', Taille);
+          iWidth := StrToInt(Copy(Taille, 1, i - 1));
+          iHeight := StrToInt(Copy(Taille, i + 1, MaxInt));
 
-      i := Pos('x', Position);
-      iLeft := StrToInt(Copy(Position, 1, i - 1));
-      iTop := StrToInt(Copy(Position, i + 1, MaxInt));
+          i := Pos('x', Position);
+          iLeft := StrToInt(Copy(Position, 1, i - 1));
+          iTop := StrToInt(Copy(Position, i + 1, MaxInt));
 
-      WindowState := wsNormal;
-      SetBounds(iLeft, iTop, iWidth, iHeight);
-    except
-      // on ne fait rien en cas d'erreur: la ligne DOIT être correcte
-      Assert(False, 'Taille de fenêtre mal décodée');
+          WindowState := wsNormal;
+          SetBounds(iLeft, iTop, iWidth, iHeight);
+        except
+          // on ne fait rien en cas d'erreur: la ligne DOIT être correcte
+          Assert(False, 'Taille de fenêtre mal décodée');
+        end;
+    finally
+      Free;
     end;
-  finally
-    Free;
-  end;
 end;
 
 end.

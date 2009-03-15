@@ -5,13 +5,13 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, ComCtrls, IniFiles, CommCtrl, ImgList,
   Buttons, VDTButton, Fram_Boutons, Browss, DBEditLabeled, ComboCheck, Spin, UBdtForms,
-  ZipMstr;
+  ZipMstr, PngSpeedButton, PngImageList;
 
 type
   TFrmOptions = class(TbdtForm)
     PageControl1: TPageControl;
     options: TTabSheet;
-    ImageList1: TImageList;
+    ImageList1: TPngImageList;
     TabSheet2: TTabSheet;
     Label8: TLabel;
     Panel4: TPanel;
@@ -30,28 +30,6 @@ type
     ComboBox1: TComboBox;
     Edit1: TEditLabeled;
     ListView1: TVDTListView;
-    PanelImpression: TPanel;
-    Label11: TLabel;
-    FicheAlbumCouverture: TCheckBox;
-    PanelGestion: TPanel;
-    Label2: TLabel;
-    CheckBox2: TCheckBox;
-    PanelGeneral: TPanel;
-    Label1: TLabel;
-    OpenStart: TCheckBox;
-    CheckBox3: TCheckBox;
-    CheckBox5: TCheckBox;
-    Label14: TLabel;
-    VDTButton1: TVDTButton;
-    CheckBox6: TCheckBox;
-    GrandesIconesMenu: TCheckBox;
-    GrandesIconesBarre: TCheckBox;
-    LightComboCheck1: TLightComboCheck;
-    FicheParaBDCouverture: TCheckBox;
-    CheckBox7: TCheckBox;
-    CheckBox8: TCheckBox;
-    LightComboCheck2: TLightComboCheck;
-    Label3: TLabel;
     TabSheet1: TTabSheet;
     GroupBox3: TGroupBox;
     Label4: TLabel;
@@ -79,6 +57,26 @@ type
     Button1: TButton;
     BrowseDirectoryDlg2: TBrowseDirectoryDlg;
     ZipMaster1: TZipMaster;
+    CategoryPanelGroup1: TCategoryPanelGroup;
+    CategoryPanel1: TCategoryPanel;
+    CategoryPanel2: TCategoryPanel;
+    CategoryPanel3: TCategoryPanel;
+    OpenStart: TCheckBox;
+    CheckBox6: TCheckBox;
+    CheckBox7: TCheckBox;
+    CheckBox8: TCheckBox;
+    CheckBox5: TCheckBox;
+    Label3: TLabel;
+    LightComboCheck2: TLightComboCheck;
+    CheckBox3: TCheckBox;
+    GrandesIconesMenu: TCheckBox;
+    GrandesIconesBarre: TCheckBox;
+    LightComboCheck1: TLightComboCheck;
+    FicheAlbumCouverture: TCheckBox;
+    FicheParaBDCouverture: TCheckBox;
+    CheckBox2: TCheckBox;
+    Label14: TLabel;
+    VDTButton1: TVDTButton;
     procedure btnOKClick(Sender: TObject);
     procedure calculKeyPress(Sender: TObject; var Key: Char);
     procedure calculExit(Sender: TObject);
@@ -121,7 +119,7 @@ begin
       Exit;
     end;
 
-  with Utilisateur.Options do
+  with TGlobalVar.Utilisateur.Options do
   begin
     SymboleMonnetaire := ComboBox1.Text;
     ModeDemarrage := not OpenStart.Checked;
@@ -181,8 +179,8 @@ end;
 
 procedure TFrmOptions.calculKeyPress(Sender: TObject; var Key: Char);
 begin
-  if not (Key in [#8, '0'..'9', ',', '.', DecimalSeparator]) then Key := #0;
-  if Key in ['.', ','] then Key := DecimalSeparator;
+  if not CharInSet(Key, [#8, '0'..'9', ',', '.', DecimalSeparator]) then Key := #0;
+  if CharInSet(Key, ['.', ',']) then Key := DecimalSeparator;
 end;
 
 procedure TFrmOptions.calculExit(Sender: TObject);
@@ -253,13 +251,13 @@ begin
     Transaction.Free;
     Free;
   end;
-  with ComboBox1.Items, Utilisateur.Options do
+  with ComboBox1.Items, TGlobalVar.Utilisateur.Options do
   begin
     if IndexOf(SymboleMonnetaire) = -1 then Add(SymboleMonnetaire);
     if IndexOf(CurrencyString) = -1 then Add(CurrencyString);
   end;
 
-  with Utilisateur.Options do
+  with TGlobalVar.Utilisateur.Options do
   begin
     ComboBox1.ItemIndex := ComboBox1.Items.IndexOf(SymboleMonnetaire);
     OpenStart.Checked := not ModeDemarrage;
@@ -427,7 +425,7 @@ begin
   ZipMaster1.ZipFileName := RepWebServer + 'interface.zip';
   ZipMaster1.ExtrBaseDir := repSave;
   ZipMaster1.Extract;
-  ZipMaster1.ZipFileName := RepWebServer + Utilisateur.Options.SiteWeb.Modele + '.zip';
+  ZipMaster1.ZipFileName := RepWebServer + TGlobalVar.Utilisateur.Options.SiteWeb.Modele + '.zip';
   ZipMaster1.ExtrBaseDir := repSave;
   ZipMaster1.Extract;
   with TStringList.Create do

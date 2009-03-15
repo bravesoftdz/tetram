@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, DBCtrls, StdCtrls, Menus, ComCtrls, ExtCtrls, ActnList,
-  ToolWin, VirtualTrees, ProceduresBDtk, LoadComplet, UBdtForms;
+  ToolWin, VirtualTrees, ProceduresBDtk, LoadComplet, UBdtForms, Generics.Defaults;
 
 type
   TFrmConsultationEmprunteur = class(TBdtForm, IImpressionApercu)
@@ -40,7 +40,7 @@ type
     procedure Imprimer2Click(Sender: TObject);
     procedure ListeEmpruntsDblClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
-    procedure ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+    procedure ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure ListeEmpruntsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
     procedure ListeEmpruntsHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
@@ -63,7 +63,7 @@ type
 
 implementation
 
-uses TypeRec, Main, MAJ, Impression, DateUtils, Math, UHistorique, Procedures;
+uses TypeRec, UfrmFond, MAJ, Impression, DateUtils, Math, UHistorique, Procedures;
 
 {$R *.DFM}
 
@@ -118,7 +118,7 @@ begin
   end;
 end;
 
-procedure TFrmConsultationEmprunteur.ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TFrmConsultationEmprunteur.ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
 begin
   case Column of
     0: CellText := DateToStr(TEmprunt(FEmprunteur.Emprunts.Emprunts[Node.Index]).Date);
@@ -136,16 +136,29 @@ begin
       ImageIndex := 2;
 end;
 
-function ListeEmpruntsCompare(Item1, Item2: Pointer): Integer;
+type
+  TEmpruntCompare = class(TComparer<TEmprunt>)
+    function Compare(const Left, Right: TEmprunt): Integer; override;
+  end;
+
+  TEmpruntCompareDesc = class(TEmpruntCompare)
+    function Compare(const Left, Right: TEmprunt): Integer; override;
+  end;
+
+function TEmpruntCompare.Compare(const Left, Right: TEmprunt): Integer;
 begin
   case FSortColumn of
-    0: Result := CompareDate(TEmprunt(Item1).Date, TEmprunt(Item2).Date);
-    1: Result := CompareText(TEmprunt(Item1).Album.ChaineAffichage, TEmprunt(Item2).Album.ChaineAffichage);
-    2: Result := CompareText(TEmprunt(Item1).Edition.ChaineAffichage, TEmprunt(Item2).Edition.ChaineAffichage);
+    0: Result := CompareDate(TEmprunt(Left).Date, TEmprunt(Right).Date);
+    1: Result := CompareText(TEmprunt(Left).Album.ChaineAffichage, TEmprunt(Right).Album.ChaineAffichage);
+    2: Result := CompareText(TEmprunt(Left).Edition.ChaineAffichage, TEmprunt(Right).Edition.ChaineAffichage);
     else
       Result := 0;
   end;
-  if FSortDirection = sdDescending then Result := -Result;
+end;
+
+function TEmpruntCompareDesc.Compare(const Left, Right: TEmprunt): Integer;
+begin
+  Result := -inherited;
 end;
 
 procedure TFrmConsultationEmprunteur.ListeEmpruntsHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -167,7 +180,10 @@ begin
     ListeEmprunts.Header.Columns[FSortColumn].ImageIndex := 0
   else
     ListeEmprunts.Header.Columns[FSortColumn].ImageIndex := 1;
-  FEmprunteur.Emprunts.Emprunts.Sort(@ListeEmpruntsCompare);
+  if FSortDirection = sdDescending then
+    FEmprunteur.Emprunts.Emprunts.Sort(TEmpruntCompareDesc.Create)
+  else
+    FEmprunteur.Emprunts.Emprunts.Sort(TEmpruntCompare.Create);
   ListeEmprunts.Invalidate;
 end;
 

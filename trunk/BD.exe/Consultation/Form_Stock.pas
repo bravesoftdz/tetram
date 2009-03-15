@@ -34,7 +34,7 @@ type
     procedure PopupMenu1Popup(Sender: TObject);
     procedure Item2Click(Sender: TObject);
     procedure ListeEmpruntsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
-    procedure ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+    procedure ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure ListeEmpruntsHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ListeEmpruntsDblClick(Sender: TObject);
     procedure ListeEmpruntsGetPopupMenu(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; const P: TPoint; var AskParent: Boolean; var PopupMenu: TPopupMenu);
@@ -66,7 +66,7 @@ type
 
 implementation
 
-uses Main, TypeRec, MAJ, DateUtils, Math, UHistorique, Procedures, 
+uses UfrmFond, TypeRec, MAJ, DateUtils, Math, UHistorique, Procedures,
   LoadComplet, Impression;
 
 {$R *.DFM}
@@ -141,7 +141,7 @@ begin
       ImageIndex := 2;
 end;
 
-procedure TFrmStock.ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TFrmStock.ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
 begin
   case Column of
     0: CellText := DateToStr(TEmprunt(FListEmprunts[Node.Index]).Date);

@@ -1,9 +1,10 @@
 program BD;
 
 {$R 'ressources.res' 'ressources.rc'}
-{$R 'mises à jour\scripts_maj.res' 'mises à jour\scripts_maj.rc'}
+{$R 'scripts_maj.res' 'mises à jour\scripts_maj.rc'}
 
 uses
+  FastMM4,
   Windows,
   SysUtils,
   Forms,
@@ -11,9 +12,10 @@ uses
   Dialogs,
   SyncObjs,
   Divers,
+  DateUtils,
   CommonConst in 'CommonConst.pas',
   Commun in 'Commun.pas',
-  Main in 'Main.pas' {frmFond},
+  UfrmFond in 'UfrmFond.pas' {frmFond},
   DM_Princ in 'DM_Princ.pas' {DMPrinc: TDataModule},
   Form_Repertoire in 'Consultation\Form_Repertoire.pas' {FrmRepertoire},
   Form_ConsultationAlbum in 'Consultation\Form_ConsultationAlbum.pas' {FrmConsultationAlbum},
@@ -112,19 +114,6 @@ uses
   UMAJ1_2_3_22 in 'mises à jour\UMAJ1_2_3_22.pas',
   UMAJ1_2_3_26 in 'mises à jour\UMAJ1_2_3_26.pas',
   UMAJODS in 'mises à jour\UMAJODS.pas',
-  Form_Scripts in 'Scripts\Form_Scripts.pas' {frmScripts},
-  Form_ScriptSearch in 'Scripts\Form_ScriptSearch.pas' {Form2},
-  uPSComponent_RegExpr in 'Scripts\uPSComponent_RegExpr.pas',
-  uPSC_RegExpr in 'Scripts\uPSC_RegExpr.pas',
-  uPSR_RegExpr in 'Scripts\uPSR_RegExpr.pas',
-  UScriptsFonctions in 'Scripts\UScriptsFonctions.pas',
-  UScriptUtils in 'Scripts\UScriptUtils.pas',
-  uPSC_LoadComplet in 'Scripts\uPSC_LoadComplet.pas',
-  uPSR_LoadComplet in 'Scripts\uPSR_LoadComplet.pas',
-  uPSI_LoadComplet in 'Scripts\uPSI_LoadComplet.pas',
-  uPSC_TypeRec in 'Scripts\uPSC_TypeRec.pas',
-  uPSR_TypeRec in 'Scripts\uPSR_TypeRec.pas',
-  uPSI_TypeRec in 'Scripts\uPSI_TypeRec.pas',
   Form_EditCritere in 'Consultation\Form_EditCritere.pas' {FrmEditCritere},
   UChampsRecherche in 'Consultation\UChampsRecherche.pas',
   UBdtForms in 'UBdtForms.pas',
@@ -136,31 +125,37 @@ uses
   DIMime in 'Web\Mime64\DIMime.pas',
   UMAJ2_0_1_0 in 'mises à jour\UMAJ2_0_1_0.pas',
   Form_Fusion in 'Form_Fusion.pas' {frmFusion},
-  IDHashMap in 'Scripts\IDHashMap.pas',
   UMAJ2_1_0_0 in 'mises à jour\UMAJ2_1_0_0.pas',
   UMySQLMAJ1_0_0_0 in 'Web\mises à jour\UMySQLMAJ1_0_0_0.pas',
   UMySQLMAJ1_0_0_2 in 'Web\mises à jour\UMySQLMAJ1_0_0_2.pas',
   UMAJ2_1_0_22 in 'mises à jour\UMAJ2_1_0_22.pas',
-  UMAJ2_1_0_72 in 'mises à jour\UMAJ2_1_0_72.pas';
+  UMAJ2_1_0_72 in 'mises à jour\UMAJ2_1_0_72.pas',
+  DM_Scripts in 'Scripts\DM_Scripts.pas' {DMScripts: TDataModule},
+  Form_Scripts in 'Scripts\Form_Scripts.pas' {frmScripts},
+  Form_ScriptSearch in 'Scripts\Form_ScriptSearch.pas' {Form2},
+  IDHashMap in 'Scripts\IDHashMap.pas',
+  uPSC_BdtkObjects in 'Scripts\uPSC_BdtkObjects.pas',
+  uPSI_BdtkObjects in 'Scripts\uPSI_BdtkObjects.pas',
+  uPSR_BdtkObjects in 'Scripts\uPSR_BdtkObjects.pas',
+  UScriptsFonctions in 'Scripts\UScriptsFonctions.pas',
+  UScriptUtils in 'Scripts\UScriptUtils.pas',
+  uPSC_BdtkRegEx in 'Scripts\uPSC_BdtkRegEx.pas',
+  uPSI_BdtkRegEx in 'Scripts\uPSI_BdtkRegEx.pas',
+  uPSR_BdtkRegEx in 'Scripts\uPSR_BdtkRegEx.pas',
+  BdtkRegEx in 'Scripts\BdtkRegEx.pas',
+  UMetadata in 'UMetadata.pas',
+  Form_ControlImport in 'Gestion\Form_ControlImport.pas' {frmControlImport},
+  UVirtualTreeEdit in 'UVirtualTreeEdit.pas',
+  UframVTEdit in 'UframVTEdit.pas' {framVTEdit: TFrame};
 
 {$R *.RES}
 {$R curseurs.res}
 {$INCLUDE FastMM4Options.inc}
 
-const
-  ChargementApp = 'Chargement de l''application';
-  ChargementDatabase = 'Chargement des données';
-  ChargementOptions = 'Chargement des options';
-  VerificationVersion = 'Vérification des versions';
-  FinChargement = 'Fin du chargement';
-
 var
   Debut: TDateTime;
 begin
-{$IFDEF EnableMemoryLeakReporting}
-  //  RegisterExpectedMemoryLeak(TCriticalSection, 1);
-{$ENDIF}
-  Mode_en_cours := mdLoad;
+  TGlobalVar.Mode_en_cours := mdLoad;
   Application.Title := 'BDthèque';
   if not Bool(CreateMutex(nil, True, 'TetramCorpBDMutex')) then
     RaiseLastOSError
@@ -179,22 +174,25 @@ begin
     Debut := now;
 
     FrmSplash.Affiche_act(VerificationVersion + '...');
-    if DMPrinc.CheckVersion(False) then Exit;
-    if not OuvreSession then Exit;
-    if not DMPrinc.CheckVersions(FrmSplash.Affiche_act) then Exit;
+    if DMPrinc.CheckVersion(False) then
+      Exit;
+    if not OuvreSession then
+      Exit;
+    if not DMPrinc.CheckVersions(FrmSplash.Affiche_act) then
+      Exit;
 
     FrmSplash.Affiche_act(ChargementOptions + '...');
     LitOptions;
 
     FrmSplash.Affiche_act(ChargementApp + '...');
-    if FindCmdLineSwitch('scripts') then begin
-      Application.CreateForm(TfrmScripts, frmScripts);
-  end else
+    Application.CreateForm(TfrmFond, frmFond);
+    FrmSplash.Affiche_act(ChargementDatabase + '...');
+    Historique.AddConsultation(fcRecherche);
+    if FindCmdLineSwitch('scripts') then
+      frmFond.actScripts.Execute
+    else
     begin
-      Application.CreateForm(TfrmFond, frmFond);
-      FrmSplash.Affiche_act(ChargementDatabase + '...');
-      Historique.AddConsultation(fcRecherche);
-      if Utilisateur.Options.ModeDemarrage then
+      if TGlobalVar.Utilisateur.Options.ModeDemarrage then
         frmFond.actModeConsultation.Execute
       else
         frmFond.actModeGestion.Execute;
@@ -202,8 +200,8 @@ begin
 
     FrmSplash.Affiche_act(FinChargement + '...');
     ChangeCurseur(crHandPoint, 'MyHandPoint', 'MyCursor');
-    while Now - Debut < (1 / (24 * 60 * 60)) * 1 do
-    begin // 0: NoWait
+    while SecondsBetween(Now, Debut) < 1 do // au moins 1 seconde d'affichage du splash
+    begin
       FrmSplash.Show;
       FrmSplash.Update;
     end;

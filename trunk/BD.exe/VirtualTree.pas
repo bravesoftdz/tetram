@@ -5,17 +5,19 @@ unit VirtualTree;
 interface
 
 uses
-  Windows, SysUtils, Classes, Controls, Graphics, VirtualTrees, DBEditLabeled, TypeRec;
+  Windows, SysUtils, Classes, Controls, Graphics, VirtualTrees, DBEditLabeled, TypeRec, StrUtils;
 
 type
   PInitialeInfo = ^RInitialeInfo;
+
   RInitialeInfo = record
-    Initiale: ShortString;
+    Initiale: string;
     Count: Integer;
-    sValue: ShortString;
+    sValue: string;
   end;
 
   PNodeInfo = ^RNodeInfo;
+
   RNodeInfo = record
     List: TList;
     //    PDetail: Pointer;
@@ -39,7 +41,7 @@ type
     vmParaBDSerie,
     vmAchatsAlbumsEditeur);
 
-  TOnCompareNodeString = procedure(Sender: TBaseVirtualTree; Node: PVirtualNode; const Text: WideString; var Concorde: Boolean) of object;
+  TOnCompareNodeString = procedure(Sender: TBaseVirtualTree; Node: PVirtualNode; const Text: string; var Concorde: Boolean) of object;
 
   TVirtualStringTree = class(VirtualTrees.TVirtualStringTree)
   private
@@ -64,7 +66,8 @@ type
     procedure SetMode(const Value: TVirtualMode);
     function GetCurrentValue: TGUID;
     procedure SetCurrentValue(const Value: TGUID);
-    function GetFocusedNodeCaption: WideString;
+    function GetFocusedNodeCaption: UnicodeString;
+    function GetFocusedNodeFullCaption: UnicodeString;
     procedure SetFiltre(const Value: string);
     procedure SetUseFiltre(const Value: Boolean);
     procedure BackgroundChange(Sender: TObject);
@@ -75,9 +78,9 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+    procedure DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var Text: UnicodeString); override;
   protected
     procedure DoFreeNode(Node: PVirtualNode); override;
-    procedure DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var Text: WideString); override;
     procedure DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal); override;
     function InitNode(Node: PVirtualNode): Boolean; reintroduce;
     procedure DoInitNode(Parent, Node: PVirtualNode; var InitStates: TVirtualNodeInitStates); override;
@@ -87,12 +90,13 @@ type
     procedure DoEnter; override;
     procedure DoExit; override;
     procedure DoScroll(DeltaX, DeltaY: Integer); override;
-    function DoCompareNodeString(Node: PVirtualNode; const Text: WideString): Boolean; virtual;
+    function DoCompareNodeString(Node: PVirtualNode; const Text: string): Boolean; virtual;
   published
     property LinkControls: TControlList read FLinkControls write SetLinkControls;
     property Mode: TVirtualMode read FMode write SetMode;
     property CurrentValue: TGUID read GetCurrentValue write SetCurrentValue;
-    property Caption: WideString read GetFocusedNodeCaption;
+    property Caption: UnicodeString read GetFocusedNodeCaption;
+    property FullCaption: UnicodeString read GetFocusedNodeFullCaption;
     property Filtre: string read FFiltre write SetFiltre;
     property UseFiltre: Boolean read FUseFiltre write SetUseFiltre;
     property UseDefaultFiltre: Boolean read FUseDefaultFiltre write SetUseDefaultFiltre;
@@ -233,7 +237,8 @@ const
 
 implementation
 
-uses UIB, DM_Princ, Commun, Types, UIBLib, Divers;
+uses
+  UIB, DM_Princ, Commun, Types, UIBLib, Divers;
 
 { TVirtualStringTree }
 
@@ -306,8 +311,10 @@ begin
     Ext := Canvas.TextExtent(s);
     p.X := (Width - Ext.cx) div 2;
     p.Y := (Height - Ext.cy) div 2;
-    if p.X < 0 then p.X := 0;
-    if p.Y < 0 then p.Y := 0;
+    if p.X < 0 then
+      p.X := 0;
+    if p.Y < 0 then
+      p.Y := 0;
     Canvas.Font.Assign(Font);
     Canvas.Brush.Style := bsClear;
     Canvas.TextOut(p.X, p.Y, s);
@@ -317,7 +324,8 @@ end;
 procedure TVirtualStringTree.DoCollapsed(Node: PVirtualNode);
 begin
   inherited;
-  if HasAsParent(FocusedNode, Node) then CurrentValue := GUID_NULL;
+  if HasAsParent(FocusedNode, Node) then
+    CurrentValue := GUID_NULL;
 end;
 
 procedure TVirtualStringTree.DoEnter;
@@ -350,7 +358,7 @@ begin
   inherited;
 end;
 
-procedure TVirtualStringTree.DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var Text: WideString);
+procedure TVirtualStringTree.DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var Text: UnicodeString);
 var
   PA: TAlbum;
 begin
@@ -358,59 +366,60 @@ begin
   if FMode <> vmNone then
     if GetNodeLevel(Node) > 0 then
     begin
-      if TextType = ttStatic then Exit;
+      if TextType = ttStatic then
+        Exit;
       case FMode of
         vmAlbums,
-          vmAlbumsAnnee,
-          vmAlbumsCollection,
-          vmAlbumsEditeur,
-          vmAlbumsGenre,
-          vmAlbumsSerie,
-          vmAchatsAlbumsEditeur:
-          begin
-            PA := RNodeInfo(GetNodeData(Node)^).Detail as TAlbum;
-            case Header.Columns.Count of
-              2:
-                case Column of
-                  0:
-                    begin
-                      Text := PA.ChaineAffichage(False);
-                      if FShowDateParutionAlbum then
-                        AjoutString(Text, IIf(PA.MoisParution > 0, ShortMonthNames[PA.MoisParution] + ' ', '') + NonZero(IntToStr(PA.AnneeParution)), ' - ');
-                    end;
-                  1: Text := FormatTitre(PA.Serie);
-                end;
-              4:
-                case Column of
-                  0: Text := FormatTitre(PA.Titre);
-                  1: Text := NonZero(IntToStr(PA.Tome));
-                  2: Text := IIf(PA.MoisParution > 0, ShortMonthNames[PA.MoisParution] + ' ', '') + NonZero(IntToStr(PA.AnneeParution));
-                  3: Text := FormatTitre(PA.Serie);
-                end;
-              else
+        vmAlbumsAnnee,
+        vmAlbumsCollection,
+        vmAlbumsEditeur,
+        vmAlbumsGenre,
+        vmAlbumsSerie,
+        vmAchatsAlbumsEditeur:
+        begin
+          PA := RNodeInfo(GetNodeData(Node)^).Detail as TAlbum;
+          case Header.Columns.Count of
+            2:
+              case Column of
+                0:
                 begin
-                  Text := PA.ChaineAffichage(FMode <> vmAlbumsSerie);
+                  Text := PA.ChaineAffichage(False);
                   if FShowDateParutionAlbum then
                     AjoutString(Text, IIf(PA.MoisParution > 0, ShortMonthNames[PA.MoisParution] + ' ', '') + NonZero(IntToStr(PA.AnneeParution)), ' - ');
                 end;
+                1: Text := FormatTitre(PA.Serie);
+              end;
+            4:
+              case Column of
+                0: Text := FormatTitre(PA.Titre);
+                1: Text := NonZero(IntToStr(PA.Tome));
+                2: Text := IIf(PA.MoisParution > 0, ShortMonthNames[PA.MoisParution] + ' ', '') + NonZero(IntToStr(PA.AnneeParution));
+                3: Text := FormatTitre(PA.Serie);
+              end;
+            else
+            begin
+              Text := PA.ChaineAffichage(FMode <> vmAlbumsSerie);
+              if FShowDateParutionAlbum then
+                AjoutString(Text, IIf(PA.MoisParution > 0, ShortMonthNames[PA.MoisParution] + ' ', '') + NonZero(IntToStr(PA.AnneeParution)), ' - ');
             end;
           end;
+        end;
         vmEmprunteurs,
-          vmPersonnes,
-          vmGenres,
-          vmEditeurs,
-          vmCollections:
-          begin
-            Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(True);
-          end;
+        vmPersonnes,
+        vmGenres,
+        vmEditeurs,
+        vmCollections:
+        begin
+          Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(True);
+        end;
         vmSeries:
-          begin
-            Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(False);
-          end;
+        begin
+          Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(False);
+        end;
         vmParaBDSerie:
-          begin
-            Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(False);
-          end;
+        begin
+          Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(False);
+        end;
       end;
     end
     else
@@ -443,12 +452,12 @@ begin
   begin
     case FMode of
       vmAlbums,
-        vmAlbumsAnnee,
-        vmAlbumsCollection,
-        vmAlbumsEditeur,
-        vmAlbumsGenre,
-        vmAlbumsSerie,
-        vmAchatsAlbumsEditeur: ClassPointeur := TAlbum;
+      vmAlbumsAnnee,
+      vmAlbumsCollection,
+      vmAlbumsEditeur,
+      vmAlbumsGenre,
+      vmAlbumsSerie,
+      vmAchatsAlbumsEditeur: ClassPointeur := TAlbum;
       vmEmprunteurs: ClassPointeur := TEmprunteur;
       vmPersonnes: ClassPointeur := TPersonnage;
       vmSeries: ClassPointeur := TSerie;
@@ -462,27 +471,28 @@ begin
 
     ChildCount := FCountPointers[Node.Index].Count;
     InfoNode := GetNodeData(Node);
-    if not Assigned(InfoNode.List) then InfoNode.List := TList.Create;
+    if not Assigned(InfoNode.List) then
+      InfoNode.List := TList.Create;
     q := TUIBQuery.Create(Self);
     with q do
-    try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'SELECT ' + vmModeInfos[FMode].FIELDS + ' FROM ' + vmModeInfos[FMode].FILTRE;
-      Params.AsString[0] := FCountPointers[Node.Index].sValue;
-      if FUseFiltre then
-        Params.AsString[1] := FFiltre
-      else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
-        Params.AsString[1] := vmModeInfos[FMode].DEFAULTFILTRE;
-      Open;
-      while not Eof do
-      begin
-        InfoNode.List.Add(ClassPointeur.Make(Q));
-        Next;
+      try
+        Transaction := GetTransaction(DMPrinc.UIBDataBase);
+        SQL.Text := 'SELECT ' + vmModeInfos[FMode].FIELDS + ' FROM ' + vmModeInfos[FMode].FILTRE;
+        Params.AsString[0] := FCountPointers[Node.Index].sValue;
+        if FUseFiltre then
+          Params.AsString[1] := FFiltre
+        else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
+          Params.AsString[1] := vmModeInfos[FMode].DEFAULTFILTRE;
+        Open;
+        while not Eof do
+        begin
+          InfoNode.List.Add(ClassPointeur.Make(Q));
+          Next;
+        end;
+      finally
+        Transaction.Free;
+        Free;
       end;
-    finally
-      Transaction.Free;
-      Free;
-    end;
   end;
   inherited;
 end;
@@ -519,14 +529,16 @@ begin
     if (GetNodeLevel(Node) = 0) then
     begin
       Canvas.Font.Height := -11;
-      Canvas.Font.Style := Canvas.Font.Style + [fsBold];
+      Canvas.Font.Style  := Canvas.Font.Style + [fsBold];
     end
     else
       case FMode of
         vmAlbums, vmAlbumsAnnee, vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie, vmAchatsAlbumsEditeur:
-          if FShowAchat and TAlbum(InfoNode.Detail).Achat then Canvas.Font.Style := Canvas.Font.Style + [fsItalic];
+          if FShowAchat and TAlbum(InfoNode.Detail).Achat then
+            Canvas.Font.Style := Canvas.Font.Style + [fsItalic];
         vmParaBDSerie:
-          if FShowAchat and TParaBD(InfoNode.Detail).Achat then Canvas.Font.Style := Canvas.Font.Style + [fsItalic];
+          if FShowAchat and TParaBD(InfoNode.Detail).Achat then
+            Canvas.Font.Style := Canvas.Font.Style + [fsItalic];
       end;
   inherited;
 end;
@@ -547,13 +559,16 @@ var
   nCurrent, nFind: PVirtualNode;
   i: Integer;
 begin
-  if (Text <> FLastFindText) then GetNext := False;
+  if (Text <> FLastFindText) then
+    GetNext := False;
   FLastFindText := Text;
   if FMode = vmNone then
   begin
     nCurrent := nil;
-    if GetNext then nCurrent := GetFirstSelected;
-    if nCurrent = nil then nCurrent := GetFirst;
+    if GetNext then
+      nCurrent := GetFirstSelected;
+    if nCurrent = nil then
+      nCurrent := GetFirst;
     nFind := nil;
     while nFind <> nCurrent do
     begin
@@ -562,9 +577,11 @@ begin
           nFind := Self.GetNext(nCurrent)
         else
           nFind := nCurrent;
-      if DoCompareNodeString(nFind, Text) then Break;
+      if DoCompareNodeString(nFind, Text) then
+        Break;
       nFind := Self.GetNext(nFind);
-      if nFind = nil then nFind := GetFirst;
+      if nFind = nil then
+        nFind := GetFirst;
     end;
     ClearSelection;
     if Assigned(nFind) then
@@ -575,7 +592,8 @@ begin
   end
   else
   begin
-    if (Length(FFindArray) = 0) then GetNext := False;
+    if (Length(FFindArray) = 0) then
+      GetNext := False;
     if Text = '' then
     begin
       CurrentValue := GUID_NULL;
@@ -597,41 +615,43 @@ begin
     end
     else
       with TUIBQuery.Create(nil) do
-      try
-        Transaction := GetTransaction(DMPrinc.UIBDataBase);
-        SQL.Text := 'SELECT ' + vmModeInfos[FMode].REFFIELDS + ' FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].FIELDSEARCH + ' LIKE ''%'' || ? || ''%''';
-        if FUseFiltre then
-          SQL.Add('AND ' + FFiltre)
-        else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
-          SQL.Add('AND ' + vmModeInfos[FMode].DEFAULTFILTRE);
-        SQL.Add('ORDER BY ' + vmModeInfos[FMode].INITIALEFIELDS + ',');
-        if vmModeInfos[FMode].SEARCHORDER <> '' then SQL.Add(vmModeInfos[FMode].SEARCHORDER + ',');
-        SQL.Add(vmModeInfos[FMode].FIELDSEARCH);
-        Params.AsString[0] := UpperCase(SansAccents(Text));
-        Open;
-        SetLength(FFindArray, 0);
-        i := 0;
-        while not Eof do
-        begin
-          Inc(i);
-          // pour gagner en rapidité, on alloue par espace de 250 positions
-          if i > Length(FFindArray) then SetLength(FFindArray, i + 250);
-          FFindArray[i - 1] := StringToGUID(Fields.AsString[0]);
-          Next;
-        end;
-        // on retire ce qui est alloué en trop
-        SetLength(FFindArray, i + 1);
-        // recopie du permier à la fin pour pouvoir boucler la recherche
-        FFindArray[i] := FFindArray[0];
+        try
+          Transaction := GetTransaction(DMPrinc.UIBDataBase);
+          SQL.Text := 'SELECT ' + vmModeInfos[FMode].REFFIELDS + ' FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].FIELDSEARCH + ' LIKE ''%'' || ? || ''%''';
+          if FUseFiltre then
+            SQL.Add('AND ' + FFiltre)
+          else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
+            SQL.Add('AND ' + vmModeInfos[FMode].DEFAULTFILTRE);
+          SQL.Add('ORDER BY ' + vmModeInfos[FMode].INITIALEFIELDS + ',');
+          if vmModeInfos[FMode].SEARCHORDER <> '' then
+            SQL.Add(vmModeInfos[FMode].SEARCHORDER + ',');
+          SQL.Add(vmModeInfos[FMode].FIELDSEARCH);
+          Params.AsString[0] := UpperCase(SansAccents(Text));
+          Open;
+          SetLength(FFindArray, 0);
+          i := 0;
+          while not Eof do
+          begin
+            Inc(i);
+            // pour gagner en rapidité, on alloue par espace de 250 positions
+            if i > Length(FFindArray) then
+              SetLength(FFindArray, i + 250);
+            FFindArray[i - 1] := StringToGUID(Fields.AsString[0]);
+            Next;
+          end;
+          // on retire ce qui est alloué en trop
+          SetLength(FFindArray, i + 1);
+          // recopie du permier à la fin pour pouvoir boucler la recherche
+          FFindArray[i] := FFindArray[0];
 
-        if Length(FFindArray) = 0 then
-          CurrentValue := GUID_NULL
-        else
-          CurrentValue := FFindArray[0];
-      finally
-        Transaction.Free;
-        Free;
-      end;
+          if Length(FFindArray) = 0 then
+            CurrentValue := GUID_NULL
+          else
+            CurrentValue := FFindArray[0];
+        finally
+          Transaction.Free;
+          Free;
+        end;
   end;
 end;
 
@@ -667,7 +687,7 @@ begin
   end;
 end;
 
-function TVirtualStringTree.GetFocusedNodeCaption: WideString;
+function TVirtualStringTree.GetFocusedNodeCaption: UnicodeString;
 var
   Node: PVirtualNode;
 begin
@@ -678,6 +698,34 @@ begin
       DoGetText(Node, -1, ttNormal, Result)
     else
       DoGetText(Node, 0, ttNormal, Result);
+end;
+
+function TVirtualStringTree.GetFocusedNodeFullCaption: UnicodeString;
+var
+  PA: TAlbum;
+  Node: PVirtualNode;
+begin
+  Result := '';
+  Node := GetFirstSelected;
+  if GetNodeLevel(Node) > 0 then
+    case FMode of
+      vmAlbums,
+      vmAlbumsAnnee,
+      vmAlbumsCollection,
+      vmAlbumsEditeur,
+      vmAlbumsGenre,
+      vmAlbumsSerie,
+      vmAchatsAlbumsEditeur:
+      begin
+        PA := RNodeInfo(GetNodeData(Node)^).Detail as TAlbum;
+        Result := PA.ChaineAffichage(True);
+      end;
+      else
+        if Header.Columns.Count = 0 then
+          DoGetText(Node, -1, ttNormal, Result)
+        else
+          DoGetText(Node, 0, ttNormal, Result);
+    end;
 end;
 
 function TVirtualStringTree.GetNodeBasePointer(Node: PVirtualNode): Pointer;
@@ -721,7 +769,8 @@ begin
         while not Eof do
         begin
           // on alloue par plage de 250 pour eviter de le faire trop souvent
-          if Length(FCountPointers) <= i then SetLength(FCountPointers, Length(FCountPointers) + 250);
+          if Length(FCountPointers) <= i then
+            SetLength(FCountPointers, Length(FCountPointers) + 250);
           FCountPointers[i].Count := Fields.AsInteger[1];
           FCountPointers[i].Initiale := Fields.AsString[0];
           if FMode in [vmAlbumsSerie, vmAlbumsEditeur, vmAlbumsCollection, vmAchatsAlbumsEditeur] then
@@ -747,14 +796,16 @@ end;
 
 function TVirtualStringTree.InitNode(Node: PVirtualNode): Boolean;
 begin
-  if not (vsInitialized in Node.States) then inherited InitNode(Node);
+  if not (vsInitialized in Node.States) then
+    inherited InitNode(Node);
   Result := True;
 end;
 
 procedure TVirtualStringTree.MemorizeIndexNode;
 begin
   FMemorizedIndexNode := (not IsEqualGUID(CurrentValue, GUID_NULL)) and (FocusedNode.Parent.ChildCount > 1);
-  if FMemorizedIndexNode then FIndexNode := FocusedNode.Parent.Index;
+  if FMemorizedIndexNode then
+    FIndexNode := FocusedNode.Parent.Index;
 end;
 
 procedure TVirtualStringTree.SetCurrentValue(const Value: TGUID);
@@ -763,7 +814,8 @@ var
   Node, ChildNode: PVirtualNode;
   cs: string;
 begin
-  if FMode = vmNone then Exit;
+  if FMode = vmNone then
+    Exit;
 
   if IsEqualGUID(Value, GUID_NULL) then
   begin
@@ -772,50 +824,51 @@ begin
     Exit;
   end;
   with TUIBQuery.Create(nil) do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT coalesce(' + vmModeInfos[FMode].INITIALEVALUE + ', ''-1'') FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].REFFIELDS + ' = ?';
-    Params.AsString[0] := GUIDToString(Value);
-    Open;
-    if Eof then
-    begin
-      ClearSelection;
-      Exit;
-    end;
-    init := 0;
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'SELECT coalesce(' + vmModeInfos[FMode].INITIALEVALUE + ', ''-1'') FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].REFFIELDS + ' = ?';
+      Params.AsString[0] := GUIDToString(Value);
+      Open;
+      if Eof then
+      begin
+        ClearSelection;
+        Exit;
+      end;
+      init := 0;
 
-    cs := Trim(Fields.AsString[0]);
-    while (Integer(init) < Length(FCountPointers)) and (FCountPointers[init].sValue <> cs) do
-      Inc(init);
+      cs := Trim(Fields.AsString[0]);
+      while (Integer(init) < Length(FCountPointers)) and (FCountPointers[init].sValue <> cs) do
+        Inc(init);
 
-    Node := GetFirst;
-    while Assigned(Node) and (Node.Index <> init) do
-      Node := Node.NextSibling;
-    ChildNode := nil;
-    if Assigned(Node) then
-    begin
-      InitNode(Node);
-      InitChildren(Node);
-      ChildNode := Node.FirstChild;
-      while Assigned(ChildNode) and InitNode(ChildNode) and (not IsEqualGUID(RNodeInfo(GetNodeData(ChildNode)^).Detail.ID, Value)) do
-        ChildNode := ChildNode.NextSibling;
+      Node := GetFirst;
+      while Assigned(Node) and (Node.Index <> init) do
+        Node := Node.NextSibling;
+      ChildNode := nil;
+      if Assigned(Node) then
+      begin
+        InitNode(Node);
+        InitChildren(Node);
+        ChildNode := Node.FirstChild;
+        while Assigned(ChildNode) and InitNode(ChildNode) and (not IsEqualGUID(RNodeInfo(GetNodeData(ChildNode)^).Detail.ID, Value)) do
+          ChildNode := ChildNode.NextSibling;
+      end;
+      if Assigned(ChildNode) then
+        FocusedNode := ChildNode
+      else
+        FocusedNode := nil;
+      FocusedColumn := -1;
+      Selected[FocusedNode] := True;
+    finally
+      Transaction.Free;
+      Free;
     end;
-    if Assigned(ChildNode) then
-      FocusedNode := ChildNode
-    else
-      FocusedNode := nil;
-    FocusedColumn := -1;
-    Selected[FocusedNode] := True;
-  finally
-    Transaction.Free;
-    Free;
-  end;
 end;
 
 procedure TVirtualStringTree.SetFiltre(const Value: string);
 begin
   FFiltre := Value;
-  if FUseFiltre then InitializeRep(True);
+  if FUseFiltre then
+    InitializeRep(True);
 end;
 
 procedure TVirtualStringTree.SetMode(const Value: TVirtualMode);
@@ -860,7 +913,7 @@ begin
   inherited;
 end;
 
-function TVirtualStringTree.DoCompareNodeString(Node: PVirtualNode; const Text: WideString): Boolean;
+function TVirtualStringTree.DoCompareNodeString(Node: PVirtualNode; const Text: string): Boolean;
 begin
   if Assigned(FOnCompareNodeString) then
   begin

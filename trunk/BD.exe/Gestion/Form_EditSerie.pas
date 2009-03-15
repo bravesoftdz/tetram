@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, ExtCtrls, DBCtrls, Mask, Buttons, VDTButton, ComCtrls,
   DBEditLabeled, VirtualTrees, VirtualTree, LoadComplet, Menus, ExtDlgs, Frame_RechercheRapide, CRFurtif, Fram_Boutons, UBdtForms,
-  ComboCheck;
+  ComboCheck, StrUtils;
 
 type
   TFrmEditSerie = class(TbdtForm)
@@ -107,7 +107,7 @@ implementation
 
 uses
   Commun, Proc_Gestions, TypeRec, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
-  UHistorique;
+  UHistorique, UMetadata;
 
 {$R *.DFM}
 
@@ -192,18 +192,12 @@ begin
   FSerie.VO := Integer(cbVO.State);
   FSerie.Couleur := Integer(cbCouleur.State);
 
-  FSerie.TypeEdition := cbxEdition.Value;
-  FSerie.sTypeEdition := cbxEdition.Caption;
-  FSerie.Etat := cbxEtat.Value;
-  FSerie.sEtat := cbxEtat.Caption;
-  FSerie.Reliure := cbxReliure.Value;
-  FSerie.sReliure := cbxReliure.Caption;
-  FSerie.Orientation := cbxOrientation.Value;
-  FSerie.sOrientation := cbxOrientation.Caption;
-  FSerie.FormatEdition := cbxFormat.Value;
-  FSerie.sFormatEdition := cbxFormat.Caption;
-  FSerie.SensLecture := cbxSensLecture.Value;
-  FSerie.sSensLecture := cbxSensLecture.Caption;
+  FSerie.TypeEdition := MakeOption(cbxEdition.Value, cbxEdition.Caption);
+  FSerie.Etat := MakeOption(cbxEtat.Value, cbxEtat.Caption);
+  FSerie.Reliure := MakeOption(cbxReliure.Value, cbxReliure.Caption);
+  FSerie.Orientation := MakeOption(cbxOrientation.Value, cbxOrientation.Caption);
+  FSerie.FormatEdition := MakeOption(cbxFormat.Value, cbxFormat.Caption);
+  FSerie.SensLecture := MakeOption(cbxSensLecture.Value, cbxSensLecture.Caption);
 
   FSerie.SaveToDatabase;
 
@@ -254,12 +248,12 @@ begin
       cbCouleur.State := cbGrayed
     else
       cbCouleur.State := TCheckBoxState(FSerie.Couleur);
-    cbxEdition.Value := FSerie.TypeEdition;
-    cbxEtat.Value := FSerie.Etat;
-    cbxReliure.Value := FSerie.Reliure;
-    cbxOrientation.Value := FSerie.Orientation;
-    cbxFormat.Value := FSerie.FormatEdition;
-    cbxSensLecture.Value := FSerie.SensLecture;
+    cbxEdition.Value := FSerie.TypeEdition.Value;
+    cbxEtat.Value := FSerie.Etat.Value;
+    cbxReliure.Value := FSerie.Reliure.Value;
+    cbxOrientation.Value := FSerie.Orientation.Value;
+    cbxFormat.Value := FSerie.FormatEdition.Value;
+    cbxSensLecture.Value := FSerie.SensLecture.Value;
 
     vtAlbums.Filtre := 'ID_Serie = ' + QuotedStr(GUIDToString(ID_Serie));
     vtAlbums.Mode := vmAlbumsSerie;
@@ -465,7 +459,7 @@ begin
     1:
       begin
         PA := TAuteur.Create;
-        PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), GUID_NULL, ID_Serie, 0);
+        PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), GUID_NULL, ID_Serie, maScenariste);
         FSerie.Scenaristes.Add(PA);
         lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
         lvScenaristes.Invalidate;
@@ -473,7 +467,7 @@ begin
     2:
       begin
         PA := TAuteur.Create;
-        PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), GUID_NULL, ID_Serie, 1);
+        PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), GUID_NULL, ID_Serie, maDessinateur);
         FSerie.Dessinateurs.Add(PA);
         lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
         lvDessinateurs.Invalidate;
@@ -481,7 +475,7 @@ begin
     3:
       begin
         PA := TAuteur.Create;
-        PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), GUID_NULL, ID_Serie, 2);
+        PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), GUID_NULL, ID_Serie, maColoriste);
         FSerie.Coloristes.Add(PA);
         lvColoristes.Items.Count := FSerie.Coloristes.Count;
         lvColoristes.Invalidate;

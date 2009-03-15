@@ -1,9 +1,9 @@
 object FrmExportation: TFrmExportation
   Left = 440
   Top = 395
-  Width = 800
-  Height = 617
   Caption = 'Exportation'
+  ClientHeight = 590
+  ClientWidth = 792
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -22,9 +22,7 @@ object FrmExportation: TFrmExportation
     Top = 237
     Width = 95
     Height = 24
-    Cursor = crHandPoint
     Caption = 'Ajouter'
-    Flat = True
     OnClick = VDTButton1Click
   end
   object VDTButton2: TVDTButton
@@ -32,9 +30,7 @@ object FrmExportation: TFrmExportation
     Top = 237
     Width = 95
     Height = 24
-    Cursor = crHandPoint
     Caption = 'Retirer'
-    Flat = True
     OnClick = VDTButton2Click
   end
   object Panel14: TPanel
@@ -46,7 +42,6 @@ object FrmExportation: TFrmExportation
     BevelInner = bvRaised
     BevelOuter = bvLowered
     Caption = ' '
-    ParentBackground = True
     TabOrder = 0
     DesignSize = (
       104
@@ -56,10 +51,8 @@ object FrmExportation: TFrmExportation
       Top = 2
       Width = 95
       Height = 24
-      Cursor = crHandPoint
       Anchors = [akLeft, akTop, akRight]
       Caption = 'Fermer'
-      Flat = True
       OnClick = VDTButton20Click
     end
     object VDTButton3: TVDTButton
@@ -67,10 +60,8 @@ object FrmExportation: TFrmExportation
       Top = 50
       Width = 95
       Height = 24
-      Cursor = crHandPoint
       Anchors = [akLeft, akTop, akRight]
       Caption = 'Exporter'
-      Flat = True
       OnClick = VDTButton3Click
     end
     object VDTButton4: TVDTButton
@@ -78,10 +69,8 @@ object FrmExportation: TFrmExportation
       Top = 74
       Width = 95
       Height = 24
-      Cursor = crHandPoint
       Anchors = [akLeft, akTop, akRight]
       Caption = 'Tout exporter'
-      Flat = True
       OnClick = VDTButton3Click
     end
   end

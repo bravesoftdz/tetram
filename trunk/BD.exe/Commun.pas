@@ -13,28 +13,31 @@ const
   GUID_NULL: TGUID = '{00000000-0000-0000-0000-000000000000}';
   sGUID_NULL = '{00000000-0000-0000-0000-000000000000}';
 
-function IIf(Test: Boolean; const BackTrue, BackFalse: string): string; overload;
-function IIf(Test: Boolean; BackTrue, BackFalse: Integer): Integer; overload;
-procedure AjoutString(var Chaine: WideString; const Ajout, Espace: WideString; const Avant: WideString = ''; const Apres: WideString = ''); overload;
-procedure AjoutString(var Chaine: AnsiString; const Ajout, Espace: AnsiString; const Avant: AnsiString = ''; const Apres: AnsiString = ''); overload;
+function IIf(Test: Boolean; const BackTrue, BackFalse: string): string; overload; inline;
+function IIf(Test: Boolean; BackTrue, BackFalse: Integer): Integer; overload; inline;
 
-function StringToGUIDDef(const GUID: string; const Default: TGUID): TGUID;
+procedure AjoutString(var Chaine: string; const Ajout, Espace: string; const Avant: string = ''; const Apres: string = ''); overload; inline;
+procedure AjoutString(var Chaine: WideString; const Ajout, Espace: WideString; const Avant: WideString = ''; const Apres: WideString = ''); overload; inline;
+procedure AjoutString(var Chaine: AnsiString; const Ajout, Espace: AnsiString; const Avant: AnsiString = ''; const Apres: AnsiString = ''); overload; inline;
 
-function NonZero(const S: string): string;
+function StringToGUIDDef(const GUID: string; const Default: TGUID): TGUID; inline;
+
+function NonZero(const S: string): string; inline;
 
 function VerifieEAN(var Valeur: string): Boolean;
 function VerifieISBN(var Valeur: string; LongueurISBN: Integer = 10): Boolean;
 function FormatISBN(const Code: string): string;
 function ClearISBN(const Code: string): string;
 
-function FormatTitre(const Titre: string): string;
+function FormatTitre(const Titre: string): string; inline;
 function FormatTitreAlbum(Simple, AvecSerie: Boolean; const Titre, Serie: string; Tome, TomeDebut, TomeFin: Integer; Integrale, HorsSerie: Boolean): string;
 
-function GetTransaction(Database: TUIBDataBase): TUIBTransaction;
+function GetTransaction(Database: TUIBDataBase): TUIBTransaction; inline;
 
 type
   IHourGlass = interface
   end;
+
   THourGlass = class(TInterfacedObject, IHourGlass)
   private
     FOldCursor: TCursor;
@@ -45,7 +48,8 @@ type
 
 implementation
 
-uses Divers, Forms, CommonConst;
+uses
+  Forms, CommonConst;
 
 function StringToGUIDDef(const GUID: string; const Default: TGUID): TGUID;
 begin
@@ -57,6 +61,19 @@ begin
 end;
 
 procedure AjoutString(var Chaine: AnsiString; const Ajout, Espace: AnsiString; const Avant: AnsiString = ''; const Apres: AnsiString = '');
+var
+  s: AnsiString;
+begin
+  s := Ajout;
+  if (Ajout <> '') then
+  begin
+    s := Avant + Ajout + Apres;
+    if (Chaine <> '') then Chaine := Chaine + Espace;
+  end;
+  Chaine := Chaine + s;
+end;
+
+procedure AjoutString(var Chaine: string; const Ajout, Espace: string; const Avant: string = ''; const Apres: string = '');
 var
   s: string;
 begin
@@ -134,7 +151,7 @@ var
 begin
   Result := '';
   for i := 1 to Length(Code) do
-    if Code[i] in ['0'..'9', 'X', 'x'] then Result := Result + UpCase(Code[i]);
+    if CharInSet(Code[i], ['0'..'9', 'X', 'x']) then Result := Result + UpCase(Code[i]);
 end;
 
 function VerifieISBN(var Valeur: string; LongueurISBN: Integer = 10): Boolean;
@@ -313,27 +330,27 @@ begin
   else
     AjoutString(sTome, NonZero(IntToStr(Tome)), ' - ', resTome[sAlbum = '']);
 
-  case Utilisateur.Options.FormatTitreAlbum of
+  case TGlobalVar.Utilisateur.Options.FormatTitreAlbum of
     0: // Album (Serie - Tome)
+    begin
+      AjoutString(sSerie, sTome, ' - ');
+      if sAlbum = '' then
+        Result := sSerie
+      else
       begin
-        AjoutString(sSerie, sTome, ' - ');
-        if sAlbum = '' then
-          Result := sSerie
-        else
-        begin
-          AjoutString(sAlbum, sSerie, ' ', '(', ')');
-          Result := sAlbum;
-        end;
+        AjoutString(sAlbum, sSerie, ' ', '(', ')');
+        Result := sAlbum;
       end;
+    end;
     1: // Tome - Album (Serie)
-      begin
-        if sAlbum = '' then
-          sAlbum := sSerie
-        else
-          AjoutString(sAlbum, sSerie, ' ', '(', ')');
-        AjoutString(sTome, sAlbum, ' - ');
-        Result := sTome;
-      end;
+    begin
+      if sAlbum = '' then
+        sAlbum := sSerie
+      else
+        AjoutString(sAlbum, sSerie, ' ', '(', ')');
+      AjoutString(sTome, sAlbum, ' - ');
+      Result := sTome;
+    end;
   end;
 
   if Result = '' then Result := '<Sans titre>';

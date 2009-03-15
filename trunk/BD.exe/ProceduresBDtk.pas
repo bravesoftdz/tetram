@@ -82,7 +82,7 @@ function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerie
 implementation
 
 uses
-  Form_ChoixDetail, Form_Choix, Form_Convertisseur, Main, Divers, Procedures, Math, Textes, ActnList,
+  Form_ChoixDetail, Form_Choix, Form_Convertisseur, UfrmFond, Divers, Procedures, Math, Textes, ActnList,
   Form_ChoixDetailSerie;
 
 { TWaiting }
@@ -151,7 +151,7 @@ begin
     FForm.op.Caption := FMessage;
     FForm.Show;
   end;
-  Application.ProcessMessages;
+  // Application.ProcessMessages;
 end;
 
 procedure TWaiting.ShowProgression(const Texte: string; Etape: TEtapeProgression);
@@ -192,7 +192,7 @@ function ChargeImage(Picture: TPicture; const ResName: string): Boolean;
 begin
   Result := False;
   Picture.Bitmap.FreeImage;
-  if Utilisateur.Options.Images and not IsRemoteSession then
+  if TGlobalVar.Utilisateur.Options.Images and not IsRemoteSession then
   begin
     if HandleDLLPic <= 32 then HandleDLLPic := LoadLibrary(PChar(RessourcePic));
     if HandleDLLPic > 32 then
@@ -350,8 +350,8 @@ var
   i: Integer;
 begin
   inherited;
-  FOldMode := Mode_en_cours;
-  Mode_en_cours := mdEditing;
+  FOldMode := TGlobalVar.Mode_en_cours;
+  TGlobalVar.Mode_en_cours := mdEditing;
   for i := 0 to Pred(frmFond.ActionsOutils.ActionCount) do
     TAction(frmFond.ActionsOutils.Actions[i]).Enabled := False;
 end;
@@ -360,8 +360,8 @@ destructor TModeEditing.Destroy;
 var
   i: Integer;
 begin
-  Mode_en_cours := FOldMode;
-  if Mode_en_cours <> mdEditing then
+  TGlobalVar.Mode_en_cours := FOldMode;
+  if TGlobalVar.Mode_en_cours <> mdEditing then
     for i := 0 to Pred(frmFond.ActionsOutils.ActionCount) do
       TAction(frmFond.ActionsOutils.Actions[i]).Enabled := True;
   inherited;

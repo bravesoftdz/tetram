@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls, DBCtrls, StdCtrls, ImgList, DBEditLabeled,
   VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, VirtualTree, Menus, TypeRec, ActnList, LoadComplet, ComboCheck,
-  Frame_RechercheRapide, CRFurtif, Fram_Boutons, UBdtForms;
+  Frame_RechercheRapide, CRFurtif, Fram_Boutons, UBdtForms, Generics.Collections, StrUtils,
+  JvExMask, JvToolEdit, UVirtualTreeEdit, UfrmFond;
 
 type
   TFrmEditAlbum = class(TbdtForm)
@@ -104,6 +105,7 @@ type
     edTomeFin: TEditLabeled;
     edTomeDebut: TEditLabeled;
     Label16: TLabel;
+    JvComboEdit1: TJvComboEdit;
     procedure ajoutClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -119,7 +121,7 @@ type
     procedure longueur2KeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
     procedure vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
-    procedure vstImagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+    procedure vstImagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure vstImagesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
     procedure vstImagesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure vtEditeursChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
@@ -133,7 +135,7 @@ type
     procedure vstImagesInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure vstImagesChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure vstImagesEditing(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
-    procedure vstImagesNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: WideString);
+    procedure vstImagesNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: string);
     procedure vtEditeursClick(Sender: TObject);
     procedure edAnneeEditionChange(Sender: TObject);
     procedure vtCollectionsChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
@@ -160,6 +162,9 @@ type
     procedure lvDessinateursData(Sender: TObject; Item: TListItem);
     procedure lvColoristesData(Sender: TObject; Item: TListItem);
     procedure btResetSerieClick(Sender: TObject);
+    procedure JvComboEdit1Change(Sender: TObject);
+    procedure FrameRechercheRapideSeriebtNewClick(Sender: TObject);
+    procedure FrameRechercheRapidePersonnesbtNewClick(Sender: TObject);
   private
     { Déclarations privées }
     FAlbum: TAlbumComplet;
@@ -173,8 +178,8 @@ type
     procedure RefreshEditionCaption;
     procedure SetID_Album(const Value: TGUID);
     procedure VisuClose(Sender: TObject);
-    procedure AjouteAuteur(List: TList; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean); overload;
-    procedure AjouteAuteur(List: TList; lvList: TVDTListViewLabeled; Auteur: TPersonnage); overload;
+    procedure AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean); overload;
+    procedure AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage); overload;
     procedure EditeurCollectionSelected(Sender: TObject; NextSearch: Boolean);
     function GetID_Album: TGUID;
     function GetCreation: Boolean;
@@ -189,7 +194,7 @@ implementation
 
 uses
   Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
-  UHistorique;
+  UHistorique, UMetadata;
 
 {$R *.DFM}
 
@@ -233,6 +238,7 @@ begin
   vtCollections.Mode := vmNone;
   vtCollections.UseFiltre := True;
   vtSeries.Mode := vmSeries;
+  JvComboEdit1.Mode := vmSeries;
   vstImages.LinkControls.Clear;
   vstImages.LinkControls.Add(ChoixImage);
   vstImages.LinkControls.Add(VDTButton4);
@@ -243,7 +249,7 @@ begin
   vstImages.TreeOptions.MiscOptions := vstImages.TreeOptions.MiscOptions + [toCheckSupport];
   vstImages.TreeOptions.PaintOptions := vstImages.TreeOptions.PaintOptions - [toShowButtons, toShowRoot, toShowTreeLines];
   FEditionChanging := False;
-  edPrix.CurrencyChar := Utilisateur.Options.SymboleMonnetaire[1];
+  edPrix.CurrencyChar := WideChar(TGlobalVar.Utilisateur.Options.SymboleMonnetaire[1]);
   FScenaristesSelected := False;
   FDessinateursSelected := False;
   FColoristesSelected := False;
@@ -307,6 +313,11 @@ begin
     btResetSerie.Enabled := not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
     vtSeries.OnChange := vtSeriesChange;
 
+    JvComboEdit1.OnChange := nil;
+    JvComboEdit1.CurrentValue := FAlbum.ID_Serie;
+    btResetSerie.Enabled := not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
+    JvComboEdit1.OnChange := JvComboEdit1Change;
+
     SetLength(FEditeurCollectionSelected, FAlbum.Editions.Editions.Count);
     for i := 0 to Pred(FAlbum.Editions.Editions.Count) do
     begin
@@ -324,19 +335,19 @@ begin
   end;
 end;
 
-procedure TFrmEditAlbum.AjouteAuteur(List: TList; lvList: TVDTListViewLabeled; Auteur: TPersonnage);
+procedure TFrmEditAlbum.AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage);
 var
   dummy: Boolean;
 begin
   AjouteAuteur(List, lvList, Auteur, dummy);
 end;
 
-procedure TFrmEditAlbum.AjouteAuteur(List: TList; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean);
+procedure TFrmEditAlbum.AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean);
 var
   PA: TAuteur;
 begin
   PA := TAuteur.Create;
-  PA.Fill(Auteur, ID_Album, GUID_NULL, 0);
+  PA.Fill(Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
   List.Add(PA);
   lvList.Items.Count := List.Count;
   lvList.Invalidate;
@@ -390,14 +401,16 @@ var
   AfficheEdition, lISBN: Integer;
   cs: string;
 begin
-  if Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+//  if TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  if TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(JvComboEdit1.CurrentValue, GUID_NULL) then
   begin
     AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
     FrameRechercheRapideSerie.edSearch.SetFocus;
     ModalResult := mrNone;
     Exit;
   end;
-  if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+//  if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(JvComboEdit1.CurrentValue, GUID_NULL) then
   begin
     AffMessage(rsTitreObligatoireAlbumSansSerie, mtInformation, [mbOk], True);
     edTitre.SetFocus;
@@ -497,6 +510,20 @@ begin
   ModalResult := mrOk;
 end;
 
+procedure TFrmEditAlbum.FrameRechercheRapidePersonnesbtNewClick(
+  Sender: TObject);
+begin
+  FrameRechercheRapidePersonnes.btNewClick(Sender);
+
+end;
+
+procedure TFrmEditAlbum.FrameRechercheRapideSeriebtNewClick(
+  Sender: TObject);
+begin
+  FrameRechercheRapideSerie.btNewClick(Sender);
+
+end;
+
 procedure TFrmEditAlbum.edTitreChange(Sender: TObject);
 begin
   Caption := 'Saisie d''album - ' + FormatTitre(edTitre.Text);
@@ -529,7 +556,7 @@ begin
           PC.ID := GUID_NULL;
           PC.OldNom := Files[i];
           PC.NewNom := PC.OldNom;
-          PC.OldStockee := Utilisateur.Options.ImagesStockees;
+          PC.OldStockee := TGlobalVar.Utilisateur.Options.ImagesStockees;
           PC.NewStockee := PC.OldStockee;
           if FCurrentEditionComplete.Couvertures.Count = 1 then
             PC.Categorie := 0
@@ -560,9 +587,9 @@ begin
     PC := FCurrentEditionComplete.Couvertures[Node.Index];
     hg := THourGlass.Create;
     if IsEqualGUID(PC.ID, GUID_NULL) then
-      ms := GetCouvertureStream(PC.NewNom, imgVisu.Height, imgVisu.Width, Utilisateur.Options.AntiAliasing)
+      ms := GetCouvertureStream(PC.NewNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing)
     else
-      ms := GetCouvertureStream(False, PC.ID, imgVisu.Height, imgVisu.Width, Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(False, PC.ID, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
     if Assigned(ms) then
     try
       jpg := TJPEGImage.Create;
@@ -613,7 +640,8 @@ begin
   begin
     vtEditeurs.InitializeRep;
     vtCollections.InitializeRep;
-    vtSeriesChange(vtSeries, vtSeries.FocusedNode);
+//    vtSeriesChange(vtSeries, vtSeries.FocusedNode);
+    JvComboEdit1Change(JvComboEdit1);
   end;
 end;
 
@@ -669,7 +697,7 @@ begin
   btColoriste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVColoristes);
 end;
 
-procedure TFrmEditAlbum.vstImagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TFrmEditAlbum.vstImagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
 var
   PC: TCouverture;
 begin
@@ -760,12 +788,12 @@ begin
       begin
         cbCouleur.Checked := IIf(RecInconnu or (Couleur = -1), True, Couleur = 1);
         cbVO.Checked := IIf(RecInconnu or (VO = -1), False, VO = 1);
-        cbxEtat.Value := IIf(RecInconnu or (Etat = -1), cbxEtat.DefaultValueChecked, Etat);
-        cbxReliure.Value := IIf(RecInconnu or (Reliure = -1), cbxReliure.DefaultValueChecked, Reliure);
-        cbxOrientation.Value := IIf(RecInconnu or (Orientation = -1), cbxOrientation.DefaultValueChecked, Orientation);
-        cbxFormat.Value := IIf(RecInconnu or (FormatEdition = -1), cbxFormat.DefaultValueChecked, FormatEdition);
-        cbxSensLecture.Value := IIf(RecInconnu or (SensLecture = -1), cbxSensLecture.DefaultValueChecked, SensLecture);
-        cbxEdition.Value := IIf(RecInconnu or (TypeEdition = -1), cbxEdition.DefaultValueChecked, TypeEdition);
+        cbxEtat.Value := IIf(RecInconnu or (Etat.Value = -1), cbxEtat.DefaultValueChecked, Etat.Value);
+        cbxReliure.Value := IIf(RecInconnu or (Reliure.Value = -1), cbxReliure.DefaultValueChecked, Reliure.Value);
+        cbxOrientation.Value := IIf(RecInconnu or (Orientation.Value = -1), cbxOrientation.DefaultValueChecked, Orientation.Value);
+        cbxFormat.Value := IIf(RecInconnu or (FormatEdition.Value = -1), cbxFormat.DefaultValueChecked, FormatEdition.Value);
+        cbxSensLecture.Value := IIf(RecInconnu or (SensLecture.Value = -1), cbxSensLecture.DefaultValueChecked, SensLecture.Value);
+        cbxEdition.Value := IIf(RecInconnu or (TypeEdition.Value = -1), cbxEdition.DefaultValueChecked, TypeEdition.Value);
       end;
 
       // on reset parce que le tcheckbox et tedit le flag à tort dans ce cas
@@ -788,17 +816,18 @@ begin
   begin
     EditionComplete.Couleur := IIf(RecInconnu or (Couleur = -1), True, Couleur = 1);
     EditionComplete.VO := IIf(RecInconnu or (VO = -1), False, VO = 1);
-    EditionComplete.Etat := IIf(RecInconnu or (Etat = -1), cbxEtat.DefaultValueChecked, Etat);
-    EditionComplete.Reliure := IIf(RecInconnu or (Reliure = -1), cbxReliure.DefaultValueChecked, Reliure);
-    EditionComplete.Orientation := IIf(RecInconnu or (Orientation = -1), cbxOrientation.DefaultValueChecked, Orientation);
-    EditionComplete.FormatEdition := IIf(RecInconnu or (FormatEdition = -1), cbxFormat.DefaultValueChecked, FormatEdition);
-    EditionComplete.SensLecture := IIf(RecInconnu or (SensLecture = -1), cbxSensLecture.DefaultValueChecked, SensLecture);
-    EditionComplete.TypeEdition := IIf(RecInconnu or (TypeEdition = -1), cbxEdition.DefaultValueChecked, TypeEdition);
+    EditionComplete.Etat := MakeOption(IIf(RecInconnu or (Etat.Value = -1), cbxEtat.DefaultValueChecked, Etat.Value), '');
+    EditionComplete.Reliure := MakeOption(IIf(RecInconnu or (Reliure.Value = -1), cbxReliure.DefaultValueChecked, Reliure.Value), '');
+    EditionComplete.Orientation := MakeOption(IIf(RecInconnu or (Orientation.Value = -1), cbxOrientation.DefaultValueChecked, Orientation.Value), '');
+    EditionComplete.FormatEdition := MakeOption(IIf(RecInconnu or (FormatEdition.Value = -1), cbxFormat.DefaultValueChecked, FormatEdition.Value), '');
+    EditionComplete.SensLecture := MakeOption(IIf(RecInconnu or (SensLecture.Value = -1), cbxSensLecture.DefaultValueChecked, SensLecture.Value), '');
+    EditionComplete.TypeEdition := MakeOption(IIf(RecInconnu or (TypeEdition.Value = -1), cbxEdition.DefaultValueChecked, TypeEdition.Value), '');
   end;
-  if not IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+//  if not IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  if not IsEqualGUID(JvComboEdit1.CurrentValue, GUID_NULL) then
   begin
-    EditionComplete.Editeur.ID_Editeur := TSerie(vtSeries.GetFocusedNodeData).Editeur.ID;
-    EditionComplete.Collection.ID := TSerie(vtSeries.GetFocusedNodeData).Collection.ID;
+    EditionComplete.Editeur.ID_Editeur := TSerie(JvComboEdit1.Data).Editeur.ID;
+    EditionComplete.Collection.ID := TSerie(JvComboEdit1.Data).Collection.ID;
   end;
   FAlbum.Editions.Editions.Add(EditionComplete);
   vtEditions.AddItem('Nouvelle edition', Pointer(EditionComplete));
@@ -817,7 +846,7 @@ procedure TFrmEditAlbum.SpeedButton3Click(Sender: TObject);
 var
   c: Currency;
 begin
-  c := StrToCurrDef(StringReplace(edPrix.Text, Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  c := StrToCurrDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if Convertisseur(SpeedButton3, c) then
     if edPrix.Focused then
       edPrix.Text := FormatCurr(FormatMonnaieSimple, c)
@@ -885,7 +914,7 @@ begin
   Allowed := False;
 end;
 
-procedure TFrmEditAlbum.vstImagesNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: WideString);
+procedure TFrmEditAlbum.vstImagesNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: string);
 var
   PC: TCouverture;
 begin
@@ -907,7 +936,7 @@ begin
   begin
     FCurrentEditionComplete.ISBN := edISBN.Text;
     FCurrentEditionComplete.AnneeEdition := StrToIntDef(edAnneeEdition.Text, 0);
-    FCurrentEditionComplete.Prix := StrToCurrDef(StringReplace(edPrix.Text, Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+    FCurrentEditionComplete.Prix := StrToCurrDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
     FCurrentEditionComplete.Editeur.ID_Editeur := vtEditeurs.CurrentValue;
     FCurrentEditionComplete.Editeur.NomEditeur := vtEditeurs.Caption;
     FCurrentEditionComplete.Collection.ID := vtCollections.CurrentValue;
@@ -918,21 +947,15 @@ begin
     FCurrentEditionComplete.Dedicace := cbDedicace.Checked;
     FCurrentEditionComplete.Gratuit := cbGratuit.Checked;
     FCurrentEditionComplete.Offert := cbOffert.Checked;
-    FCurrentEditionComplete.TypeEdition := cbxEdition.Value;
-    FCurrentEditionComplete.sTypeEdition := cbxEdition.Caption;
-    FCurrentEditionComplete.Etat := cbxEtat.Value;
-    FCurrentEditionComplete.sEtat := cbxEtat.Caption;
-    FCurrentEditionComplete.Reliure := cbxReliure.Value;
-    FCurrentEditionComplete.sReliure := cbxReliure.Caption;
-    FCurrentEditionComplete.Orientation := cbxOrientation.Value;
-    FCurrentEditionComplete.sOrientation := cbxOrientation.Caption;
-    FCurrentEditionComplete.FormatEdition := cbxFormat.Value;
-    FCurrentEditionComplete.sFormatEdition := cbxFormat.Caption;
-    FCurrentEditionComplete.SensLecture := cbxSensLecture.Value;
-    FCurrentEditionComplete.sSensLecture := cbxSensLecture.Caption;
+    FCurrentEditionComplete.TypeEdition := MakeOption(cbxEdition.Value, cbxEdition.Caption);
+    FCurrentEditionComplete.Etat := MakeOption(cbxEtat.Value, cbxEtat.Caption);
+    FCurrentEditionComplete.Reliure := MakeOption(cbxReliure.Value, cbxReliure.Caption);
+    FCurrentEditionComplete.Orientation := MakeOption(cbxOrientation.Value, cbxOrientation.Caption);
+    FCurrentEditionComplete.FormatEdition := MakeOption(cbxFormat.Value, cbxFormat.Caption);
+    FCurrentEditionComplete.SensLecture := MakeOption(cbxSensLecture.Value, cbxSensLecture.Caption);
     FCurrentEditionComplete.NombreDePages := StrToIntDef(edNombreDePages.Text, 0);
     FCurrentEditionComplete.AnneeCote := StrToIntDef(edAnneeCote.Text, 0);
-    FCurrentEditionComplete.PrixCote := StrToCurrDef(StringReplace(edPrixCote.Text, Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+    FCurrentEditionComplete.PrixCote := StrToCurrDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
     if dtpAchat.Checked then
       FCurrentEditionComplete.DateAchat := Trunc(dtpAchat.Date)
     else
@@ -997,12 +1020,12 @@ begin
       cbGratuit.Checked := FCurrentEditionComplete.Gratuit;
       cbOffert.Checked := FCurrentEditionComplete.Offert;
       cbOffertClick(nil);
-      cbxEdition.Value := FCurrentEditionComplete.TypeEdition;
-      cbxEtat.Value := FCurrentEditionComplete.Etat;
-      cbxReliure.Value := FCurrentEditionComplete.Reliure;
-      cbxOrientation.Value := FCurrentEditionComplete.Orientation;
-      cbxFormat.Value := FCurrentEditionComplete.FormatEdition;
-      cbxSensLecture.Value := FCurrentEditionComplete.SensLecture;
+      cbxEdition.Value := FCurrentEditionComplete.TypeEdition.Value;
+      cbxEtat.Value := FCurrentEditionComplete.Etat.Value;
+      cbxReliure.Value := FCurrentEditionComplete.Reliure.Value;
+      cbxOrientation.Value := FCurrentEditionComplete.Orientation.Value;
+      cbxFormat.Value := FCurrentEditionComplete.FormatEdition.Value;
+      cbxSensLecture.Value := FCurrentEditionComplete.SensLecture.Value;
       dtpAchat.Date := Now;
       dtpAchat.Checked := FCurrentEditionComplete.DateAchat > 0;
       if dtpAchat.Checked then dtpAchat.Date := FCurrentEditionComplete.DateAchat;
@@ -1033,7 +1056,8 @@ begin
     vtEditeurs.InitializeRep;
     vtCollections.InitializeRep;
     vtCollections.CurrentValue := i;
-    vtSeriesChange(vtSeries, vtSeries.GetFirstSelected);
+//    vtSeriesChange(vtSeries, vtSeries.GetFirstSelected);
+    JvComboEdit1Change(JvComboEdit1);
   end;
 end;
 
@@ -1149,9 +1173,9 @@ begin
   PC := FCurrentEditionComplete.Couvertures[vstImages.FocusedNode.Index];
   hg := THourGlass.Create;
   if IsEqualGUID(PC.ID, GUID_NULL) then
-    ms := GetCouvertureStream(PC.NewNom, 400, 500, Utilisateur.Options.AntiAliasing)
+    ms := GetCouvertureStream(PC.NewNom, 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing)
   else
-    ms := GetCouvertureStream(False, PC.ID, 400, 500, Utilisateur.Options.AntiAliasing);
+    ms := GetCouvertureStream(False, PC.ID, 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing);
   if Assigned(ms) then
   try
     jpg := TJPEGImage.Create;
@@ -1176,6 +1200,69 @@ begin
     end;
   finally
     FreeAndNil(ms);
+  end;
+end;
+
+procedure TFrmEditAlbum.JvComboEdit1Change(Sender: TObject);
+var
+  i: Integer;
+begin
+  FAlbum.ID_Serie := JvComboEdit1.CurrentValue;
+  btResetSerie.Enabled := not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
+  if btResetSerie.Enabled then
+  begin
+    if not (FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then
+    try
+      lvScenaristes.Items.BeginUpdate;
+      lvDessinateurs.Items.BeginUpdate;
+      lvColoristes.Items.BeginUpdate;
+      if not FScenaristesSelected then
+      begin
+        lvScenaristes.Items.Count := 0;
+        FAlbum.Scenaristes.Clear;
+        for i := 0 to Pred(FAlbum.Serie.Scenaristes.Count) do
+          AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TAuteur(FAlbum.Serie.Scenaristes[i]).Personne);
+      end;
+      if not FDessinateursSelected then
+      begin
+        lvDessinateurs.Items.Count := 0;
+        FAlbum.Dessinateurs.Clear;
+        for i := 0 to Pred(FAlbum.Serie.Dessinateurs.Count) do
+          AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TAuteur(FAlbum.Serie.Dessinateurs[i]).Personne);
+      end;
+      if not FColoristesSelected then
+      begin
+        lvColoristes.Items.Count := 0;
+        FAlbum.Coloristes.Clear;
+        for i := 0 to Pred(FAlbum.Serie.Coloristes.Count) do
+          AjouteAuteur(FAlbum.Coloristes, lvColoristes, TAuteur(FAlbum.Serie.Coloristes[i]).Personne);
+      end;
+    finally
+      lvScenaristes.Items.EndUpdate;
+      lvDessinateurs.Items.EndUpdate;
+      lvColoristes.Items.EndUpdate;
+    end;
+
+    if Assigned(FCurrentEditionComplete) and (not FEditeurCollectionSelected[vtEditions.ItemIndex]) then
+    begin
+      vtEditeurs.CurrentValue := FAlbum.Serie.Editeur.ID_Editeur;
+      vtCollections.CurrentValue := FAlbum.Serie.Collection.ID;
+
+      with FAlbum.Serie do
+      begin
+        cbCouleur.Checked := IIf(RecInconnu or (Couleur = -1), True, Couleur = 1);
+        cbVO.Checked := IIf(RecInconnu or (VO = -1), False, VO = 1);
+        cbxEtat.Value := IIf(RecInconnu or (Etat.Value = -1), cbxEtat.DefaultValueChecked, Etat.Value);
+        cbxReliure.Value := IIf(RecInconnu or (Reliure.Value = -1), cbxReliure.DefaultValueChecked, Reliure.Value);
+        cbxOrientation.Value := IIf(RecInconnu or (Orientation.Value = -1), cbxOrientation.DefaultValueChecked, Orientation.Value);
+        cbxFormat.Value := IIf(RecInconnu or (FormatEdition.Value = -1), cbxFormat.DefaultValueChecked, FormatEdition.Value);
+        cbxSensLecture.Value := IIf(RecInconnu or (SensLecture.Value = -1), cbxSensLecture.DefaultValueChecked, SensLecture.Value);
+        cbxEdition.Value := IIf(RecInconnu or (TypeEdition.Value = -1), cbxEdition.DefaultValueChecked, TypeEdition.Value);
+      end;
+
+      // on reset parce que le tcheckbox et tedit le flag à tort dans ce cas
+      FEditeurCollectionSelected[vtEditions.ItemIndex] := False;
+    end;
   end;
 end;
 
@@ -1256,7 +1343,7 @@ procedure TFrmEditAlbum.VDTButton14Click(Sender: TObject);
 var
   c: Currency;
 begin
-  c := StrToCurrDef(StringReplace(edPrixCote.Text, Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  c := StrToCurrDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if Convertisseur(SpeedButton3, c) then
     if edPrixCote.Focused then
       edPrixCote.Text := FormatCurr(FormatMonnaieSimple, c)
@@ -1337,7 +1424,7 @@ end;
 
 procedure TFrmEditAlbum.btResetSerieClick(Sender: TObject);
 begin
-  vtSeries.CurrentValue := GUID_NULL;
+  JvComboEdit1.CurrentValue := GUID_NULL;
 end;
 
 end.

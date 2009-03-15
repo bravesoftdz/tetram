@@ -1,9 +1,9 @@
 object FrmStock: TFrmStock
   Left = 510
   Top = 341
-  Width = 1110
-  Height = 607
   Caption = 'Albums emprunt'#233's'
+  ClientHeight = 561
+  ClientWidth = 1102
   Color = clBtnFace
   Constraints.MinWidth = 400
   Font.Charset = ANSI_CHARSET
@@ -188,7 +188,7 @@ object FrmStock: TFrmStock
       item
         MinWidth = 50
         Position = 2
-        Width = 614
+        Width = 618
         WideText = 'Album'
       end
       item

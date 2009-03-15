@@ -27,11 +27,13 @@ type
     fcGestionAjout,
     fcGestionModif,
     fcGestionSupp,
-    fcGestionAchat
+    fcGestionAchat,
+    fcScripts,
+    fcConflitImport
     );
 
 const
-  UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat];
+  UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcScripts, fcConflitImport];
   NoSaveHistorique = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire]
     // à cause des callback, les appels de gestion ne peuvent pas être sauvés
     // et puis je vois pas bien à quoi ça pourrait servir
@@ -114,7 +116,7 @@ var
 implementation
 
 uses
-  MAJ, Main, Forms, Proc_Gestions;
+  MAJ, UfrmFond, Forms, Proc_Gestions;
 
 procedure THistory.AddConsultation(Consult: TConsult);
 
@@ -260,7 +262,8 @@ end;
 
 procedure THistory.Delete(Index: Integer);
 begin
-  if (Index < 0) or (Index >= FListConsultation.Count) then Exit;
+  if (Index < 0) or (Index >= FListConsultation.Count) then
+    Exit;
   FListConsultation.Delete(Index);
 end;
 
@@ -339,7 +342,8 @@ end;
 
 procedure THistory.GoConsultation(Index: Integer);
 begin
-  if (Index < 0) or (Index >= FListConsultation.Count) then Exit;
+  if (Index < 0) or (Index >= FListConsultation.Count) then
+    Exit;
   FCurrentConsultation := Index;
   Refresh;
 end;
@@ -370,10 +374,13 @@ var
 begin
   Result := True;
   doCallback := False;
-  if WithLock then Lock;
+  if WithLock then
+    Lock;
   try
     if not (Consult.Action in NoSaveHistorique) then
       AddConsultation(Consult);
+    if (Consult.Action in UsedInGestion) then
+      frmFond.actModeGestion.Execute;
     case Consult.Action of
       fcActionBack: Back;
       fcActionRefresh: Result := Open(CurrentConsult, True);
@@ -391,6 +398,8 @@ begin
       fcRecreateToolBar: frmFond.RechargeToolBar;
       fcPrevisionsAchats: MAJPrevisionsAchats;
       fcRefreshRepertoire: frmFond.actActualiseRepertoire.Execute;
+      fcScripts: frmFond.SetChildForm(TForm(Consult.Reference));
+      fcConflitImport: frmFond.SetModalChildForm(TForm(Consult.Reference));
 
       fcGestionAjout:
         if not IsEqualGUID(GUID_NULL, Consult.ReferenceGUID) then
@@ -401,7 +410,7 @@ begin
       fcGestionSupp: doCallback := TActionGestionSupp(Consult.GestionProc)(Consult.GestionVTV);
       fcGestionAchat: doCallback := TActionGestionAchat(Consult.GestionProc)(Consult.GestionVTV);
     end;
-    if doCallback and (Consult.Action in UsedInGestion) and Assigned(Consult.GestionCallback) then
+    if doCallback and Assigned(Consult.GestionCallback) then
       Consult.GestionCallback(Consult.GestionCallbackData);
 
     if not Result then
@@ -411,16 +420,19 @@ begin
       Result := True;
     end;
   finally
-    if WithLock then Unlock;
+    if WithLock then
+      Unlock;
   end;
-  if Assigned(FOnChange) then FOnChange(Self);
+  if Assigned(FOnChange) then
+    FOnChange(Self);
 end;
 
 procedure THistory.ProcessNext;
 var
   Consult: TConsult;
 begin
-  if FListWaiting.Count = 0 then Exit;
+  if FListWaiting.Count = 0 then
+    Exit;
   Consult := TConsult(FListWaiting.Extract(FListWaiting.First));
   try
     Open(Consult, False);
@@ -442,7 +454,8 @@ end;
 
 procedure THistory.Unlock;
 begin
-  if FLockCount > 0 then Dec(FLockCount);
+  if FLockCount > 0 then
+    Dec(FLockCount);
 end;
 
 { RConsult }

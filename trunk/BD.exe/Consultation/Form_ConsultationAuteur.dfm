@@ -1,9 +1,9 @@
 object FrmConsultationAuteur: TFrmConsultationAuteur
   Left = 486
   Top = 211
-  Width = 530
-  Height = 805
   Caption = 'Fiche d'#39'auteur'
+  ClientHeight = 759
+  ClientWidth = 522
   Color = clWhite
   Constraints.MinWidth = 530
   Font.Charset = ANSI_CHARSET

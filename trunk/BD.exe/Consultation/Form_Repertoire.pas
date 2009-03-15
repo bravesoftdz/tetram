@@ -30,8 +30,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure vstAlbumsDblClick(Sender: TObject);
     procedure LightComboCheck1Change(Sender: TObject);
-    procedure FrameRechercheRapideedSearchKeyPress(Sender: TObject;
-      var Key: Char);
+    procedure FrameRechercheRapideedSearchKeyPress(Sender: TObject; var Key: Char);
   private
     { Déclarations privées }
     procedure ChangeAlbumMode(Mode: TVirtualMode);
@@ -58,7 +57,7 @@ const
 
 procedure TFrmRepertoire.FormCreate(Sender: TObject);
 begin
-  Mode_en_cours := mdConsult;
+  TGlobalVar.Mode_en_cours := mdConsult;
   PrepareLV(Self);
   TabAlbums.PageIndex := PosAlbums;
   TabEmprunteurs.PageIndex := PosEmprunteurs;

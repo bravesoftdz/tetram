@@ -63,7 +63,6 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
           Height = 127
           Anchors = [akLeft, akTop, akRight, akBottom]
           BevelKind = bkTile
-          BorderStyle = bsNone
           Columns = <
             item
               AutoSize = True
@@ -77,13 +76,8 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
               Caption = 'Mvt'
               Width = 46
             end>
-          ColumnClick = False
-          HideSelection = False
-          ReadOnly = True
           RowSelect = True
-          ShowColumnHeaders = False
           TabOrder = 1
-          ViewStyle = vsReport
           OnDblClick = ListView1DblClick
           OnSelectItem = ListView1SelectItem
         end
@@ -330,7 +324,7 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
         object Label3: TLabel
           Left = 7
           Top = 7
-          Width = 27
+          Width = 30
           Height = 13
           Hint = 'Date du mouvement'
           Caption = 'Date :'
@@ -456,7 +450,7 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
           item
             Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
             Position = 0
-            Width = 521
+            Width = 525
           end>
       end
       inline FrameRechercheRapide1: TFrameRechercheRapide
@@ -465,14 +459,19 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
         Width = 525
         Height = 21
         TabOrder = 0
+        ExplicitTop = 2
+        ExplicitWidth = 525
         inherited btNext: TVDTButton
           Left = 484
+          ExplicitLeft = 484
         end
         inherited btNew: TVDTButton
           Left = 504
+          ExplicitLeft = 504
         end
         inherited edSearch: TEditLabeled
           Width = 485
+          ExplicitWidth = 485
         end
       end
     end
@@ -484,6 +483,9 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
     Height = 31
     Align = alBottom
     TabOrder = 1
+    ExplicitTop = 332
+    ExplicitWidth = 525
+    ExplicitHeight = 31
     inherited btnOK: TBitBtn
       Left = 370
       Top = 6
@@ -492,12 +494,20 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
       Caption = 'Ok'
       Enabled = False
       OnClick = BtnOkExecute
+      ExplicitLeft = 370
+      ExplicitTop = 6
+      ExplicitWidth = 73
+      ExplicitHeight = 19
     end
     inherited btnAnnuler: TBitBtn
       Left = 450
       Top = 6
       Width = 72
       Height = 19
+      ExplicitLeft = 450
+      ExplicitTop = 6
+      ExplicitWidth = 72
+      ExplicitHeight = 19
     end
   end
 end

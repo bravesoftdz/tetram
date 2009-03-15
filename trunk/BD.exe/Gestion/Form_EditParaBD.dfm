@@ -1,10 +1,10 @@
 object FrmEditParaBD: TFrmEditParaBD
   Left = 188
   Top = 180
-  Width = 835
-  Height = 926
   ActiveControl = edTitre
   Caption = 'FrmEditParaBD'
+  ClientHeight = 899
+  ClientWidth = 827
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -62,10 +62,8 @@ object FrmEditParaBD: TFrmEditParaBD
       Top = 196
       Width = 57
       Height = 72
-      Cursor = crHandPoint
       Caption = 'Auteur / Cr'#233'ateur'
       Enabled = False
-      Flat = True
       Glyph.Data = {
         B2000000424DB20000000000000052000000280000000C0000000C0000000100
         04000000000060000000120B0000120B00000700000007000000CE636300FF9C
@@ -147,9 +145,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Top = 480
       Width = 72
       Height = 21
-      Cursor = crHandPoint
       Caption = 'Convertisseur'
-      Flat = True
       OnClick = VDTButton14Click
     end
     object Label10: TLabel
@@ -184,9 +180,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Top = 440
       Width = 72
       Height = 21
-      Cursor = crHandPoint
       Caption = 'Convertisseur'
-      Flat = True
       OnClick = SpeedButton3Click
     end
     object Label12: TLabel
@@ -288,19 +282,13 @@ object FrmEditParaBD: TFrmEditParaBD
       Height = 72
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
-      BorderStyle = bsNone
       Columns = <
         item
           Width = 46
         end>
-      ColumnClick = False
-      HideSelection = False
       OwnerData = True
-      ReadOnly = True
-      ShowColumnHeaders = False
       SortType = stNone
       TabOrder = 7
-      ViewStyle = vsReport
       OnData = lvAuteursData
       OnKeyDown = lvAuteursKeyDown
       LinkControls = <
@@ -1396,11 +1384,16 @@ object FrmEditParaBD: TFrmEditParaBD
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 8
+      ExplicitLeft = 64
+      ExplicitTop = 281
+      ExplicitWidth = 422
       inherited btNext: TVDTButton
         Left = 381
+        ExplicitLeft = 381
       end
       inherited btNew: TVDTButton
         Left = 401
+        ExplicitLeft = 401
       end
       inherited edSearch: TEditLabeled
         Width = 382
@@ -1408,6 +1401,7 @@ object FrmEditParaBD: TFrmEditParaBD
           item
             Control = Label20
           end>
+        ExplicitWidth = 382
       end
     end
     inline FrameRechercheRapideAuteur: TFrameRechercheRapide
@@ -1416,11 +1410,16 @@ object FrmEditParaBD: TFrmEditParaBD
       Width = 177
       Height = 21
       TabOrder = 5
+      ExplicitLeft = 64
+      ExplicitTop = 173
+      ExplicitWidth = 177
       inherited btNext: TVDTButton
         Left = 136
+        ExplicitLeft = 136
       end
       inherited btNew: TVDTButton
         Left = 156
+        ExplicitLeft = 156
       end
       inherited edSearch: TEditLabeled
         Width = 137
@@ -1428,6 +1427,7 @@ object FrmEditParaBD: TFrmEditParaBD
           item
             Control = Label19
           end>
+        ExplicitWidth = 137
       end
     end
   end
@@ -1438,14 +1438,18 @@ object FrmEditParaBD: TFrmEditParaBD
     Height = 25
     Align = alTop
     TabOrder = 1
+    ExplicitWidth = 827
     inherited btnOK: TBitBtn
       Left = 648
       Width = 87
       Caption = 'Enregistrer'
       OnClick = btnOKClick
+      ExplicitLeft = 648
+      ExplicitWidth = 87
     end
     inherited btnAnnuler: TBitBtn
       Left = 744
+      ExplicitLeft = 744
     end
   end
   object ChoixImageDialog: TOpenPictureDialog

@@ -1,0 +1,405 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{022E3FB6-83D5-4439-8F05-C27BDD308694}</ProjectGuid>
+			<MainSource>BD.dpr</MainSource>
+			<Config Condition="'$(Config)'==''">Débogage</Config>
+			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+			<ProjectVersion>12.0</ProjectVersion>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Débogage' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug DCU' or '$(Cfg_3)'!=''">
+			<Cfg_3>true</Cfg_3>
+			<CfgParent>Cfg_2</CfgParent>
+			<Cfg_2>true</Cfg_2>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='FullDebug' or '$(Cfg_4)'!=''">
+			<Cfg_4>true</Cfg_4>
+			<CfgParent>Cfg_2</CfgParent>
+			<Cfg_2>true</Cfg_2>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<DCC_UNIT_PLATFORM>false</DCC_UNIT_PLATFORM>
+			<DCC_DependencyCheckOutputName>..\..\bin\BD.exe</DCC_DependencyCheckOutputName>
+			<DCC_UnitSearchPath>$(Compos)\PrintObject;$(Compos)\VDTButton;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\TrayIcon;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\;$(Compos)\jvcl\jcl\source\common;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+			<DCC_ImageBase>00400000</DCC_ImageBase>
+			<DCC_ExeOutput>..\..\bin</DCC_ExeOutput>
+			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;$(DCC_UnitAlias)</DCC_UnitAlias>
+			<DCC_SYMBOL_PLATFORM>false</DCC_SYMBOL_PLATFORM>
+			<DCC_Define>FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT;$(DCC_Define)</DCC_Define>
+			<DCC_Platform>x86</DCC_Platform>
+			<DCC_K>false</DCC_K>
+			<DCC_F>false</DCC_F>
+			<DCC_S>false</DCC_S>
+			<DCC_N>true</DCC_N>
+			<DCC_E>false</DCC_E>
+			<DCC_WriteableConstants>true</DCC_WriteableConstants>
+			<DCC_UsePackage>VCL50;VCLX50;VCLSMP50;QRPT50;VCLDB50;VCLBDE50;VCLDBX50;TEEUI50;TEEDB50;TEE50;TEEQR50;NMFAST50;dclocx50;dclaxserver50;ibevnt50;VCLIB50;VCLIE50;INETDB50;INET50;vcl;rtl;dsnap;dbrtl;vcldb;websnap;webdsnap;inetdb;inet;xmlrtl;vclx;vclie;indy;bdertl;dsnapcon;VclSmp;MediaKit</DCC_UsePackage>
+			<DCC_DcuOutput>dcu</DCC_DcuOutput>
+			<DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_DebugInformation>false</DCC_DebugInformation>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_3)'!=''">
+			<DCC_DebugDCUs>true</DCC_DebugDCUs>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_4)'!=''">
+			<DCC_MapFile>3</DCC_MapFile>
+			<DCC_Define>FullDebugMode;ClearLogFileOnStartup;LoadDebugDLLDynamically;$(DCC_Define)</DCC_Define>
+		</PropertyGroup>
+		<ItemGroup>
+			<DelphiCompile Include="BD.dpr">
+				<MainSource>MainSource</MainSource>
+			</DelphiCompile>
+			<RcCompile Include="ressources.rc">
+				<Form>ressources.res</Form>
+			</RcCompile>
+			<RcCompile Include="mises à jour\scripts_maj.rc">
+				<Form>scripts_maj.res</Form>
+			</RcCompile>
+			<DCCReference Include="CommonConst.pas"/>
+			<DCCReference Include="Commun.pas"/>
+			<DCCReference Include="UfrmFond.pas">
+				<Form>frmFond</Form>
+			</DCCReference>
+			<DCCReference Include="DM_Princ.pas">
+				<Form>DMPrinc</Form>
+				<DesignClass>TDataModule</DesignClass>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_Repertoire.pas">
+				<Form>FrmRepertoire</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_ConsultationAlbum.pas">
+				<Form>FrmConsultationAlbum</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_ConsultationAuteur.pas">
+				<Form>FrmConsultationAuteur</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_ConsultationEmprunteur.pas">
+				<Form>FrmConsultationEmprunteur</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_ConsultationSerie.pas">
+				<Form>FrmConsultationSerie</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_ConsultationParaBD.pas">
+				<Form>FrmConsultationParaBD</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_ZoomCouverture.pas">
+				<Form>FrmZoomCouverture</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_Recherche.pas">
+				<Form>FrmRecherche</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_EditCritereTri.pas">
+				<Form>FrmEditCritereTri</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_Stock.pas">
+				<Form>FrmStock</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_SaisieEmpruntAlbum.pas">
+				<Form>FrmSaisie_EmpruntAlbum</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_SaisieEmpruntEmprunteur.pas">
+				<Form>FrmSaisie_EmpruntEmprunteur</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_StatsGeneral.pas">
+				<Form>FrmStatsGenerales</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_StatsEmprunteurs.pas">
+				<Form>FrmStatsEmprunteurs</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_StatsAlbums.pas">
+				<Form>FrmStatsAlbums</Form>
+			</DCCReference>
+			<DCCReference Include="DM_Commun.pas">
+				<Form>DataCommun</Form>
+				<DesignClass>TDataModule</DesignClass>
+			</DCCReference>
+			<DCCReference Include="Gestion\Editions.pas"/>
+			<DCCReference Include="Gestion\Proc_Gestions.pas"/>
+			<DCCReference Include="Gestion\Form_Gestion.pas">
+				<Form>FrmGestions</Form>
+			</DCCReference>
+			<DCCReference Include="Gestion\Form_EditAlbum.pas">
+				<Form>FrmEditAlbum</Form>
+			</DCCReference>
+			<DCCReference Include="Gestion\Form_EditAchatAlbum.pas">
+				<Form>FrmEditAchatAlbum</Form>
+			</DCCReference>
+			<DCCReference Include="Gestion\Form_EditSerie.pas">
+				<Form>FrmEditSerie</Form>
+			</DCCReference>
+			<DCCReference Include="Gestion\Form_EditEditeur.pas">
+				<Form>FrmEditEditeur</Form>
+			</DCCReference>
+			<DCCReference Include="Gestion\Form_EditCollection.pas">
+				<Form>FrmEditCollection</Form>
+			</DCCReference>
+			<DCCReference Include="Gestion\Form_EditAuteur.pas">
+				<Form>FrmEditAuteur</Form>
+			</DCCReference>
+			<DCCReference Include="Gestion\Form_EditEmprunteur.pas">
+				<Form>FrmEditEmprunteur</Form>
+			</DCCReference>
+			<DCCReference Include="Gestion\Form_EditParaBD.pas">
+				<Form>FrmEditParaBD</Form>
+			</DCCReference>
+			<DCCReference Include="Textes.pas"/>
+			<DCCReference Include="LoadComplet.pas"/>
+			<DCCReference Include="Consultation\Impression.pas"/>
+			<DCCReference Include="Fram_Boutons.pas">
+				<Form>Frame1</Form>
+				<DesignClass>TFrame</DesignClass>
+			</DCCReference>
+			<DCCReference Include="Form_Options.pas">
+				<Form>FrmOptions</Form>
+			</DCCReference>
+			<DCCReference Include="Form_Customize.pas">
+				<Form>FrmCustomize</Form>
+			</DCCReference>
+			<DCCReference Include="Form_Progression.pas">
+				<Form>FrmProgression</Form>
+			</DCCReference>
+			<DCCReference Include="Form_Splash.pas">
+				<Form>FrmSplash</Form>
+			</DCCReference>
+			<DCCReference Include="Form_AboutBox.pas">
+				<Form>FrmAboutBox</Form>
+			</DCCReference>
+			<DCCReference Include="Form_Choix.pas">
+				<Form>FrmChoix</Form>
+			</DCCReference>
+			<DCCReference Include="Form_ChoixDetail.pas">
+				<Form>FrmChoixDetail</Form>
+			</DCCReference>
+			<DCCReference Include="Form_Convertisseur.pas">
+				<Form>FrmConvers</Form>
+			</DCCReference>
+			<DCCReference Include="Frame_Convertisseur.pas">
+				<Form>Convertisseur</Form>
+				<DesignClass>TFrame</DesignClass>
+			</DCCReference>
+			<DCCReference Include="Frame_RechercheRapide.pas">
+				<Form>FrameRechercheRapide</Form>
+				<DesignClass>TFrame</DesignClass>
+			</DCCReference>
+			<DCCReference Include="Consultation\MAJ.pas"/>
+			<DCCReference Include="TypeRec.pas"/>
+			<DCCReference Include="VirtualTree.pas"/>
+			<DCCReference Include="Consultation\Form_Preview.pas">
+				<Form>FrmPreview</Form>
+			</DCCReference>
+			<DCCReference Include="Procedures.pas"/>
+			<DCCReference Include="UHistorique.pas"/>
+			<DCCReference Include="Form_Verbose.pas">
+				<Form>FrmVerbose</Form>
+			</DCCReference>
+			<DCCReference Include="Form_Entretien.pas">
+				<Form>FrmEntretien</Form>
+			</DCCReference>
+			<DCCReference Include="Gestion\Form_Exportation.pas">
+				<Form>FrmExportation</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_PrevisionsSorties.pas">
+				<Form>frmPrevisionsSorties</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_SeriesIncompletes.pas">
+				<Form>frmSeriesIncompletes</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\Form_PrevisionAchats.pas">
+				<Form>frmPrevisionsAchats</Form>
+			</DCCReference>
+			<DCCReference Include="mises à jour\Updates.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_0_6.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_0_8.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_0_9.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_1_2.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_1_7.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_2_2.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_2_3.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_2_5.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_2_7.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_2_19.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_2_23.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_3_01.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_3_02.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_3_07.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_3_14.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_3_16.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_3_19.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_3_21.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_3_22.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_3_23.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_3_24.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_3_25.pas"/>
+			<DCCReference Include="mises à jour\UMAJ0_0_3_27.pas"/>
+			<DCCReference Include="mises à jour\UMAJ1_0_0_0.pas"/>
+			<DCCReference Include="mises à jour\UMAJ1_0_0_2.pas"/>
+			<DCCReference Include="mises à jour\UMAJ1_0_0_3.pas"/>
+			<DCCReference Include="mises à jour\UMAJ1_1_0_0.pas"/>
+			<DCCReference Include="mises à jour\UMAJ1_2_0_0.pas"/>
+			<DCCReference Include="mises à jour\UMAJ1_2_0_8.pas"/>
+			<DCCReference Include="mises à jour\UMAJ1_2_1_0.pas"/>
+			<DCCReference Include="mises à jour\UMAJ1_2_2_0.pas"/>
+			<DCCReference Include="ListOfTypeRec.pas"/>
+			<DCCReference Include="Gestion\Form_WizardImport.pas">
+				<Form>WizardImport</Form>
+			</DCCReference>
+			<DCCReference Include="Gestion\UImportXML.pas"/>
+			<DCCReference Include="ProceduresBDtk.pas"/>
+			<DCCReference Include="mises à jour\UMAJ1_2_3_14.pas"/>
+			<DCCReference Include="Form_ChoixDetailSerie.pas">
+				<Form>FrmChoixDetailSerie</Form>
+			</DCCReference>
+			<DCCReference Include="mises à jour\UMAJ1_2_3_25.pas"/>
+			<DCCReference Include="mises à jour\UMAJ2_1_0_16.pas"/>
+			<DCCReference Include="mises à jour\UMAJ1_2_3_20.pas"/>
+			<DCCReference Include="mises à jour\UMAJ1_2_3_22.pas"/>
+			<DCCReference Include="mises à jour\UMAJ1_2_3_26.pas"/>
+			<DCCReference Include="mises à jour\UMAJODS.pas"/>
+			<DCCReference Include="Consultation\Form_EditCritere.pas">
+				<Form>FrmEditCritere</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\UChampsRecherche.pas"/>
+			<DCCReference Include="UBdtForms.pas"/>
+			<DCCReference Include="mises à jour\UMAJ2_0_0_5.pas"/>
+			<DCCReference Include="Web\Form_Publier.pas">
+				<Form>frmPublier</Form>
+			</DCCReference>
+			<DCCReference Include="Web\UNet.pas"/>
+			<DCCReference Include="Web\mises à jour\UMySQLMAJ1_0_0_1.pas"/>
+			<DCCReference Include="Web\Mime64\DIMimeStreams.pas"/>
+			<DCCReference Include="Web\Mime64\DIMime.pas"/>
+			<DCCReference Include="mises à jour\UMAJ2_0_1_0.pas"/>
+			<DCCReference Include="Form_Fusion.pas">
+				<Form>frmFusion</Form>
+			</DCCReference>
+			<DCCReference Include="mises à jour\UMAJ2_1_0_0.pas"/>
+			<DCCReference Include="Web\mises à jour\UMySQLMAJ1_0_0_0.pas"/>
+			<DCCReference Include="Web\mises à jour\UMySQLMAJ1_0_0_2.pas"/>
+			<DCCReference Include="mises à jour\UMAJ2_1_0_22.pas"/>
+			<DCCReference Include="mises à jour\UMAJ2_1_0_72.pas"/>
+			<DCCReference Include="Scripts\DM_Scripts.pas">
+				<Form>DMScripts</Form>
+				<DesignClass>TDataModule</DesignClass>
+			</DCCReference>
+			<DCCReference Include="Scripts\Form_Scripts.pas">
+				<Form>frmScripts</Form>
+			</DCCReference>
+			<DCCReference Include="Scripts\Form_ScriptSearch.pas">
+				<Form>Form2</Form>
+			</DCCReference>
+			<DCCReference Include="Scripts\IDHashMap.pas"/>
+			<DCCReference Include="Scripts\uPSC_BdtkObjects.pas"/>
+			<DCCReference Include="Scripts\uPSI_BdtkObjects.pas"/>
+			<DCCReference Include="Scripts\uPSR_BdtkObjects.pas"/>
+			<DCCReference Include="Scripts\UScriptsFonctions.pas"/>
+			<DCCReference Include="Scripts\UScriptUtils.pas"/>
+			<DCCReference Include="Scripts\uPSC_BdtkRegEx.pas"/>
+			<DCCReference Include="Scripts\uPSI_BdtkRegEx.pas"/>
+			<DCCReference Include="Scripts\uPSR_BdtkRegEx.pas"/>
+			<DCCReference Include="Scripts\BdtkRegEx.pas"/>
+			<DCCReference Include="UMetadata.pas"/>
+			<DCCReference Include="Gestion\Form_ControlImport.pas">
+				<Form>frmControlImport</Form>
+			</DCCReference>
+			<DCCReference Include="UVirtualTreeEdit.pas"/>
+			<DCCReference Include="UframVTEdit.pas">
+				<Form>framVTEdit</Form>
+				<DesignClass>TFrame</DesignClass>
+			</DCCReference>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="FullDebug">
+				<Key>Cfg_4</Key>
+				<CfgParent>Cfg_2</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Debug DCU">
+				<Key>Cfg_3</Key>
+				<CfgParent>Cfg_2</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Débogage">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
+		<PropertyGroup>
+			<PreBuildEvent>del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
+		</PropertyGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
+			<Borland.ProjectType>VCLApplication</Borland.ProjectType>
+			<BorlandProject>
+				<Delphi.Personality>
+					<Source>
+						<Source Name="MainSource">BD.dpr</Source>
+					</Source>
+					<Parameters>
+						<Parameters Name="UseLauncher">False</Parameters>
+						<Parameters Name="LoadAllSymbols">True</Parameters>
+						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+						<Parameters Name="RunParams">/Scripts</Parameters>
+					</Parameters>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">True</VersionInfo>
+						<VersionInfo Name="MajorVer">2</VersionInfo>
+						<VersionInfo Name="MinorVer">1</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">125</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">False</VersionInfo>
+						<VersionInfo Name="Locale">1036</VersionInfo>
+						<VersionInfo Name="CodePage">1252</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">2.1.0.125</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
+						<VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2008</VersionInfoKeys>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName">BDtheque</VersionInfoKeys>
+						<VersionInfoKeys Name="ProductVersion">2</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+					</VersionInfoKeys>
+					<Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dcloffice2k120.bpl">Composants Microsoft Office 2000 Sample Automation Server Wrapper</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclofficexp120.bpl">Composants Microsoft Office XP Sample Automation Server Wrapper</Excluded_Packages>
+					</Excluded_Packages>
+				</Delphi.Personality>
+				<ModelSupport>False</ModelSupport>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

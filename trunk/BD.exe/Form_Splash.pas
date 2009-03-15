@@ -23,7 +23,7 @@ type
     { Déclarations privées }
   public
     { Déclarations publiques }
-    procedure Affiche_act(const Texte: ShortString);
+    procedure Affiche_act(const Texte: string);
   end;
 
 var
@@ -31,7 +31,7 @@ var
 
 implementation
 
-uses Main, CommonConst;
+uses UfrmFond, CommonConst;
 
 {$R *.DFM}
 
@@ -50,7 +50,7 @@ begin
   SetWindowRgn(Handle, FormRgn, TRUE);
 end;
 
-procedure TFrmSplash.Affiche_act(const Texte: ShortString);
+procedure TFrmSplash.Affiche_act(const Texte: string);
 begin
   Label1.Visible := True;
   Image2.Visible := True;
@@ -67,8 +67,8 @@ end;
 
 procedure TFrmSplash.FormDestroy(Sender: TObject);
 begin
-  Utilisateur.AppVersion := Copy(VersionLabel1.Caption, Length(VersionLabel1.InfoPrefix) + 1, Length(VersionLabel1.Caption) - Length(VersionLabel1.InfoPrefix));
-  Application.Title := '© TeträmCorp ' + TitreApplication + Utilisateur.AppVersion;
+  TGlobalVar.Utilisateur.AppVersion := Copy(VersionLabel1.Caption, Length(VersionLabel1.InfoPrefix) + 1, Length(VersionLabel1.Caption) - Length(VersionLabel1.InfoPrefix));
+  Application.Title := '© TeträmCorp ' + TitreApplication + TGlobalVar.Utilisateur.AppVersion;
   frmFond.Caption := Application.Title;
   Cursor := crDefault;
 end;

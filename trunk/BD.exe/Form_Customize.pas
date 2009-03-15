@@ -43,7 +43,7 @@ type
 
 implementation
 
-uses Main, CommonConst, Procedures;
+uses UfrmFond, CommonConst, Procedures;
 
 {$R *.DFM}
 

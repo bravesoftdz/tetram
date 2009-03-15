@@ -1,9 +1,9 @@
 object FrmConsultationAlbum: TFrmConsultationAlbum
   Left = 440
   Top = 64
-  Width = 530
-  Height = 861
   Caption = 'Fiche d'#39'album'
+  ClientHeight = 815
+  ClientWidth = 522
   Color = clWhite
   Constraints.MinWidth = 530
   Font.Charset = ANSI_CHARSET
@@ -596,20 +596,14 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       BevelInner = bvLowered
       BevelOuter = bvNone
       BevelKind = bkFlat
-      BorderStyle = bsNone
       Color = clWhite
       Columns = <
         item
           MinWidth = 150
           Width = 231
         end>
-      ColumnClick = False
-      HideSelection = False
       OwnerData = True
-      ReadOnly = True
-      ShowColumnHeaders = False
       TabOrder = 3
-      ViewStyle = vsReport
       OnData = lvScenaristesData
       OnDblClick = lvScenaristesDblClick
     end
@@ -622,21 +616,15 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       BevelInner = bvLowered
       BevelOuter = bvNone
       BevelKind = bkFlat
-      BorderStyle = bsNone
       Color = clWhite
       Columns = <
         item
           MinWidth = 150
           Width = 231
         end>
-      ColumnClick = False
-      HideSelection = False
       OwnerData = True
-      ReadOnly = True
-      ShowColumnHeaders = False
       SortType = stData
       TabOrder = 4
-      ViewStyle = vsReport
       OnData = lvDessinateursData
       OnDblClick = lvScenaristesDblClick
     end
@@ -649,22 +637,16 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       BevelInner = bvLowered
       BevelOuter = bvNone
       BevelKind = bkFlat
-      BorderStyle = bsNone
       Color = clWhite
       Columns = <
         item
           MinWidth = 140
           Width = 231
         end>
-      ColumnClick = False
-      HideSelection = False
       OwnerData = True
-      ReadOnly = True
-      ShowColumnHeaders = False
       SmallImages = frmFond.ShareImageList
       SortType = stNone
       TabOrder = 6
-      ViewStyle = vsReport
       OnData = lvSerieData
       OnDblClick = lvSerieDblClick
       OnGetImageIndex = lvSerieGetImageIndex
@@ -693,20 +675,14 @@ object FrmConsultationAlbum: TFrmConsultationAlbum
       BevelInner = bvLowered
       BevelOuter = bvNone
       BevelKind = bkFlat
-      BorderStyle = bsNone
       Color = clWhite
       Columns = <
         item
           Width = 46
         end>
-      ColumnClick = False
-      HideSelection = False
       OwnerData = True
-      ReadOnly = True
-      ShowColumnHeaders = False
       SortType = stData
       TabOrder = 5
-      ViewStyle = vsReport
       OnData = lvColoristesData
       OnDblClick = lvScenaristesDblClick
     end

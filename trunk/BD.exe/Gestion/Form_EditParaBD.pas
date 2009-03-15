@@ -99,7 +99,8 @@ type
 implementation
 
 uses
-  Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, TypeRec, Divers, UHistorique;
+  Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, TypeRec, Divers, UHistorique,
+  UMetadata;
 
 {$R *.dfm}
 
@@ -126,7 +127,7 @@ begin
   try
     edTitre.Text := FParaBD.Titre;
     edAnneeEdition.Text := NonZero(IntToStr(FParaBD.AnneeEdition));
-    cbxCategorie.Value := FParaBD.CategorieParaBD;
+    cbxCategorie.Value := FParaBD.CategorieParaBD.Value;
     cbDedicace.Checked := FParaBD.Dedicace;
     cbNumerote.Checked := FParaBD.Numerote;
     description.Lines.Text := FParaBD.Description.Text;
@@ -156,7 +157,7 @@ begin
 
     if FParaBD.HasImage then cbImageBDD.Checked := FParaBD.ImageStockee;
 
-    Stream := GetCouvertureStream(True, FParaBD.ID_ParaBD, imgVisu.Height, imgVisu.Width, Utilisateur.Options.AntiAliasing);
+    Stream := GetCouvertureStream(True, FParaBD.ID_ParaBD, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
     if Assigned(Stream) then
     try
       jpg := TJPEGImage.Create;
@@ -196,7 +197,7 @@ procedure TFrmEditParaBD.SpeedButton3Click(Sender: TObject);
 var
   c: Currency;
 begin
-  c := StrToCurrDef(StringReplace(edPrix.Text, Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  c := StrToCurrDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if Convertisseur(SpeedButton3, c) then
     if edPrix.Focused then
       edPrix.Text := FormatCurr(FormatMonnaieSimple, c)
@@ -208,7 +209,7 @@ procedure TFrmEditParaBD.VDTButton14Click(Sender: TObject);
 var
   c: Currency;
 begin
-  c := StrToCurrDef(StringReplace(edPrixCote.Text, Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  c := StrToCurrDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if Convertisseur(SpeedButton3, c) then
     if edPrixCote.Focused then
       edPrixCote.Text := FormatCurr(FormatMonnaieSimple, c)
@@ -247,7 +248,7 @@ var
   PrixCote: Currency;
   hg: IHourGlass;
 begin
-  if Utilisateur.Options.SerieObligatoireParaBD and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  if TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
   begin
     AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
     FrameRechercheRapideSerie.edSearch.SetFocus;
@@ -270,7 +271,7 @@ begin
   end;
 
   AnneeCote := StrToIntDef(edAnneeCote.Text, 0);
-  PrixCote := StrToCurrDef(StringReplace(edPrixCote.Text, Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  PrixCote := StrToCurrDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if (AnneeCote * PrixCote = 0) and (AnneeCote + PrixCote <> 0) then
   begin
     // une cote doit être composée d'une année ET d'un prix
@@ -284,7 +285,7 @@ begin
 
   FParaBD.Titre := Trim(edTitre.Text);
   FParaBD.AnneeEdition := StrToIntDef(edAnneeEdition.Text, 0);
-  FParaBD.CategorieParaBD := cbxCategorie.Value;
+  FParaBD.CategorieParaBD := MakeOption(cbxCategorie.Value, cbxCategorie.Caption);
   FParaBD.Dedicace := cbDedicace.Checked;
   FParaBD.Numerote := cbNumerote.Checked;
   FParaBD.Description.Text := description.Lines.Text;
@@ -296,7 +297,7 @@ begin
     FParaBD.DateAchat := Trunc(dtpAchat.Date)
   else
     FParaBD.DateAchat := 0;
-  FParaBD.Prix := StrToCurrDef(StringReplace(edPrix.Text, Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  FParaBD.Prix := StrToCurrDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   FParaBD.Stock := cbStock.Checked;
 
   FParaBD.ImageStockee := cbImageBDD.Checked;
@@ -311,7 +312,7 @@ procedure TFrmEditParaBD.VDTButton1Click(Sender: TObject);
 begin
   imgVisu.Picture := nil;
   FParaBD.FichierImage := '';
-  cbImageBDD.Checked := Utilisateur.Options.ImagesStockees;
+  cbImageBDD.Checked := TGlobalVar.Utilisateur.Options.ImagesStockees;
   FParaBD.HasImage := False;
 end;
 
@@ -329,7 +330,7 @@ begin
     if Execute then
     begin
       FParaBD.FichierImage := FileName;
-      Stream := GetCouvertureStream(FParaBD.FichierImage, imgVisu.Height, imgVisu.Width, Utilisateur.Options.AntiAliasing);
+      Stream := GetCouvertureStream(FParaBD.FichierImage, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
       if Assigned(Stream) then
       try
         jpg := TJPEGImage.Create;
@@ -413,7 +414,7 @@ var
 begin
   if IsEqualGUID(vtPersonnes.CurrentValue, GUID_NULL) then Exit;
   PA := TAuteur.Create;
-  PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), ID_ParaBD, GUID_NULL, 0);
+  PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), ID_ParaBD, GUID_NULL, TMetierAuteur(0));
   FParaBD.Auteurs.Add(PA);
   lvAuteurs.Items.Count := FParaBD.Auteurs.Count;
   lvAuteurs.Invalidate;

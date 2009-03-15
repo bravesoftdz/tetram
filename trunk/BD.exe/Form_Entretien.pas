@@ -23,7 +23,7 @@ type
     BDDOpen: TFileOpen;
     procedure VDTButton20Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure vstEntretienGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+    procedure vstEntretienGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure vstEntretienPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
     procedure vstEntretienCollapsing(Sender: TBaseVirtualTree; Node: PVirtualNode; var Allowed: Boolean);
     procedure vstEntretienInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
@@ -50,7 +50,7 @@ type
 
 implementation
 
-uses Main, CommonConst, DM_Princ, UIB, Commun, Procedures, Textes,
+uses UfrmFond, CommonConst, DM_Princ, UIB, Commun, Procedures, Textes,
   Form_Verbose, UHistorique, Form_Gestion, IniFiles, Math, uiblib;
 
 {$R *.dfm}
@@ -118,7 +118,7 @@ end;
 
 procedure TFrmEntretien.FormDestroy(Sender: TObject);
 begin
-  case Mode_en_cours of
+  case TGlobalVar.Mode_en_cours of
     mdConsult:
       begin
         frmFond.actActualiseRepertoire.Execute;
@@ -132,7 +132,7 @@ begin
   end;
 end;
 
-procedure TFrmEntretien.vstEntretienGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TFrmEntretien.vstEntretienGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
 var
   s: string;
 begin

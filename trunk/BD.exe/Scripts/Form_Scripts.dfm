@@ -1,9 +1,9 @@
 object frmScripts: TfrmScripts
   Left = 397
   Top = 157
-  Width = 870
-  Height = 640
   Caption = 'Script'
+  ClientHeight = 594
+  ClientWidth = 862
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -54,26 +54,35 @@ object frmScripts: TfrmScripts
         Left = 0
         Top = 0
         Width = 854
-        Height = 41
+        Height = 33
         Align = alTop
         BevelOuter = bvNone
         Caption = ' '
         TabOrder = 0
         object Button1: TButton
-          Left = 8
-          Top = 8
+          Left = 4
+          Top = 0
           Width = 75
           Height = 25
           Action = actCompile
           TabOrder = 0
         end
         object Button2: TButton
-          Left = 88
-          Top = 8
+          Left = 85
+          Top = 0
           Width = 75
           Height = 25
           Action = actRun
           TabOrder = 1
+        end
+        object Button3: TButton
+          Left = 166
+          Top = 0
+          Width = 75
+          Height = 25
+          Caption = 'Button3'
+          TabOrder = 2
+          OnClick = Button3Click
         end
       end
       object PageControl1: TPageControl
@@ -81,7 +90,7 @@ object frmScripts: TfrmScripts
         Top = 373
         Width = 854
         Height = 193
-        ActivePage = TabSheet2
+        ActivePage = TabSheet1
         Align = alBottom
         TabOrder = 1
         object TabSheet1: TTabSheet
@@ -131,6 +140,10 @@ object frmScripts: TfrmScripts
         object TabSheet2: TTabSheet
           Caption = 'Points de suivi'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object vstSuivis: TVirtualStringTree
             Left = 0
             Top = 0
@@ -164,7 +177,7 @@ object frmScripts: TfrmScripts
               end
               item
                 Position = 1
-                Width = 696
+                Width = 700
                 WideText = 'Valeur'
               end>
           end
@@ -172,6 +185,10 @@ object frmScripts: TfrmScripts
         object TabSheet3: TTabSheet
           Caption = 'Points d'#39'arr'#234't'
           ImageIndex = 2
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object vstBreakpoints: TVirtualStringTree
             Left = 0
             Top = 0
@@ -204,7 +221,7 @@ object frmScripts: TfrmScripts
               end
               item
                 Position = 1
-                Width = 742
+                Width = 746
                 WideText = 'Fichier'
               end>
           end
@@ -212,6 +229,10 @@ object frmScripts: TfrmScripts
         object TabSheet6: TTabSheet
           Caption = 'Sortie'
           ImageIndex = 3
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object Output: TMemo
             Left = 0
             Top = 0
@@ -226,9 +247,9 @@ object frmScripts: TfrmScripts
       end
       object pcScripts: TPageControl
         Left = 0
-        Top = 41
+        Top = 33
         Width = 854
-        Height = 328
+        Height = 336
         Align = alClient
         PopupMenu = PopupMenu1
         TabOrder = 2
@@ -246,7 +267,7 @@ object frmScripts: TfrmScripts
     Width = 27
     Left = 363
     Bitmap = {
-      494C01010800090004001B001100FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010108000A0004001B001100FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       00000000000036000000280000006C0000003300000001002000000000001056
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

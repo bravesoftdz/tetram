@@ -3,8 +3,8 @@ unit Form_ConsultationParaBD;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls, ReadOnlyCheckBox, Main, Procedures,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, StrUtils,
+  Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls, ReadOnlyCheckBox, UfrmFond, Procedures,
   ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms;
 
 type
@@ -110,12 +110,12 @@ begin
     TitreSerie.Cursor := crDefault;
   end;
   TitreParaBD.Caption := FormatTitre(FParaBD.Titre);
-  TypeParaBD.Caption := FParaBD.sCategorieParaBD;
+  TypeParaBD.Caption := FParaBD.CategorieParaBD.Caption;
   AnneeEdition.Caption := NonZero(IntToStr(FParaBD.AnneeEdition));
   cbDedicace.Checked := FParaBD.Dedicace;
   cbNumerote.Checked := FParaBD.Numerote;
 
-  if FParaBD.CategorieParaBD = 0 then
+  if FParaBD.CategorieParaBD.Value = 0 then
     l_realisation.Caption := rsTransAuteurs
   else
     l_realisation.Caption := rsTransCreateurs;
@@ -154,7 +154,7 @@ begin
   if FParaBD.HasImage then begin
     ImageParaBD.Picture := nil;
     try
-      ms := GetCouvertureStream(True, ID_ParaBD, ImageParaBD.Height, ImageParaBD.Width, Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(True, ID_ParaBD, ImageParaBD.Height, ImageParaBD.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
       if Assigned(ms) then try
         jpg := TJPEGImage.Create;
         try

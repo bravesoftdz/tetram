@@ -1,9 +1,9 @@
 object frmPrevisionsSorties: TfrmPrevisionsSorties
   Left = 379
   Top = 471
-  Width = 822
-  Height = 384
   Caption = 'Previsions de sorties'
+  ClientHeight = 338
+  ClientWidth = 814
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -53,7 +53,7 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
       item
         MinWidth = 50
         Position = 1
-        Width = 560
+        Width = 564
         WideText = 'Pr'#233'visions'
       end>
   end
@@ -71,9 +71,7 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
       Top = 4
       Width = 20
       Height = 20
-      Cursor = crHandPoint
       Caption = '...'
-      Flat = True
       OnClick = edSearchChange
     end
     object CheckBox1: TCheckBox

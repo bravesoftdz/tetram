@@ -3,14 +3,14 @@ unit DM_Princ;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, AppEvnts, 
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, AppEvnts,
   SyncObjs, jpeg, Menus, uib;
 
 const
   AntiAliasing = True;
 
 type
-  TAffiche_act = procedure(const Texte: ShortString) of object;
+  TAffiche_act = procedure(const Texte: string) of object;
 
   TDMPrinc = class(TDataModule)
     UIBDataBase: TUIBDataBase;
@@ -40,7 +40,7 @@ implementation
 
 uses
   CommonConst, Commun, Textes, DM_Commun, UIBLib, Divers, IniFiles, Procedures, UHistorique, Math, UIBase, Updates,
-  Main, CheckVersionNet, DateUtils, UMAJODS;
+  UfrmFond, CheckVersionNet, DateUtils, UMAJODS;
 
 var
   FDMPrinc: TDMPrinc = nil;
@@ -88,7 +88,8 @@ begin
 
       UIBDataBase.Connected := True;
     end;
-    if not Assigned(DataCommun) then Application.CreateForm(TDataCommun, DataCommun);
+    if not Assigned(DataCommun) then
+      Application.CreateForm(TDataCommun, DataCommun);
   except
     AffMessage(rsOuvertureSessionRate + #13#13 + Exception(ExceptObject).Message, mtError, [mbOk], True);
     Result := False;
@@ -97,16 +98,15 @@ end;
 
 function TDMPrinc.CheckVersions(Affiche_act: TAffiche_act; Force: Boolean): Boolean;
 var
-  CurrentVersion: string;
-
+  CurrentVersion: TFileVersion;
 type
   TProcedure = procedure(Query: TUIBScript);
 
-  procedure ProcessUpdate(const Version: string; ProcMAJ: TProcedure);
+  procedure ProcessUpdate(Version: TFileVersion; ProcMAJ: TProcedure);
   var
     Script: TUIBScript;
   begin
-    if (CompareVersionNum(Version, CurrentVersion) > 0) and (CompareVersionNum(Version, Utilisateur.ExeVersion) <= 0) then
+    if (Version > CurrentVersion) and (Version <= TGlobalVar.Utilisateur.ExeVersion) then
     begin
       Affiche_act('Mise à jour ' + Version + '...');
       Script := TUIBScript.Create(nil);
@@ -130,77 +130,77 @@ type
     i: Integer;
   begin
     with TUIBQuery.Create(nil) do
-    try
-      Transaction := GetTransaction(UIBDataBase);
-      SQL.Text := 'SELECT RDB$INDEX_NAME FROM RDB$INDICES WHERE COALESCE(RDB$SYSTEM_FLAG, 0) <> 1';
-      Open;
-      with TStringList.Create do
       try
-        while not Eof do
-        begin
-          Add(Fields.AsString[0]);
-          Next;
-        end;
-        Close;
+        Transaction := GetTransaction(UIBDataBase);
+        SQL.Text := 'SELECT RDB$INDEX_NAME FROM RDB$INDICES WHERE COALESCE(RDB$SYSTEM_FLAG, 0) <> 1';
+        Open;
+        with TStringList.Create do
+          try
+            while not Eof do
+            begin
+              Add(Fields.AsString[0]);
+              Next;
+            end;
+            Close;
 
-        SQL.Clear;
-        for i := 0 to Pred(Count) do
-          SQL.Add('SET STATISTICS INDEX ' + Strings[i] + ';');
+            SQL.Clear;
+            for i := 0 to Pred(Count) do
+              SQL.Add('SET STATISTICS INDEX ' + Strings[i] + ';');
+          finally
+            Free;
+          end;
+        QuickScript := True;
+        ExecSQL;
+        Transaction.Commit;
       finally
+        Transaction.Free;
         Free;
       end;
-      QuickScript := True;
-      ExecSQL;
-      Transaction.Commit;
-    finally
-      Transaction.Free;
-      Free;
-    end;
   end;
 
 var
-  Compare, i: Integer;
+  i: Integer;
   msg: string;
 begin
   Result := False;
 
   with TUIBQuery.Create(nil) do
-  try
-    Transaction := GetTransaction(UIBDataBase);
+    try
+      Transaction := GetTransaction(UIBDataBase);
 
-    SQL.Text := 'SELECT VALEUR FROM OPTIONS WHERE Nom_option = ''Version''';
-    Open;
-    if not Eof then
-      CurrentVersion := Fields.AsString[0]
-    else
-    begin
-      CurrentVersion := '0.0.0.0';
-      try
-        SQL.Text := 'INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES (''Version'', ?)';
-        Params.AsString[0] := CurrentVersion;
-        ExecSQL;
-      except
-        // Pour s'assurer qu'il y'a la ligne dans la table options
+      SQL.Text := 'SELECT VALEUR FROM OPTIONS WHERE Nom_option = ''Version''';
+      Open;
+      if not Eof then
+        CurrentVersion := Fields.AsString[0]
+      else
+      begin
+        CurrentVersion := '0.0.0.0';
+        try
+          SQL.Text := 'INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES (''Version'', ?)';
+          Params.AsString[0] := CurrentVersion;
+          ExecSQL;
+        except
+          // Pour s'assurer qu'il y'a la ligne dans la table options
+        end;
       end;
-    end;
 
-  finally
-    Transaction.Free;
-    Free;
-  end;
+    finally
+      Transaction.Free;
+      Free;
+    end;
 
   msg := 'BDthèque ne peut pas utiliser cette base de données.'#13#10'Version de la base de données: ' + CurrentVersion;
 
-  Compare := CompareVersionNum(Utilisateur.ExeVersion, CurrentVersion);
-  if Compare < 0 then
-  begin // CurrentVersion > Utilisateur.ExeVersion
-    ShowMessage(msg);
+  if CurrentVersion > TGlobalVar.Utilisateur.ExeVersion then
+  begin
+    ShowMessage('Base de données trop récente.'#13#10 + msg);
     Exit;
   end;
 
-  if Compare > 0 then
-  begin // Utilisateur.ExeVersion > CurrentVersion
-    if not (Force or (MessageDlg(msg + #13#10'Voulez-vous la mettre à jour?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)) then Exit;
+  if TGlobalVar.Utilisateur.ExeVersion > CurrentVersion then
+  begin
+    if not (Force or (MessageDlg(msg + #13#10'Voulez-vous la mettre à jour?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)) then
+      Exit;
 
     MAJ_ODS;
 
@@ -209,21 +209,22 @@ begin
         ProcessUpdate(Version, UpdateCallback);
 
     with TUIBQuery.Create(nil) do
-    try
-      Transaction := GetTransaction(UIBDataBase);
+      try
+        Transaction := GetTransaction(UIBDataBase);
 
-      SQL.Text := 'UPDATE OPTIONS SET Valeur = ' + QuotedStr(Utilisateur.ExeVersion) + ' WHERE Nom_Option = ''Version'';';
-      ExecSQL;
-      Transaction.Commit;
-    finally
-      Transaction.Free;
-      Free;
-    end;
+        SQL.Text := 'UPDATE OPTIONS SET Valeur = ' + QuotedStr(TGlobalVar.Utilisateur.ExeVersion) + ' WHERE Nom_Option = ''Version'';';
+        ExecSQL;
+        Transaction.Commit;
+      finally
+        Transaction.Free;
+        Free;
+      end;
   end;
 
   CheckIndex;
 
-  if (Compare > 0) and not Force then ShowMessage('Mise à jour terminée.');
+  if (TGlobalVar.Utilisateur.ExeVersion > CurrentVersion) and not Force then
+    ShowMessage('Mise à jour terminée.');
   Result := True;
 end;
 
@@ -255,39 +256,39 @@ begin
 end;
 
 function TDMPrinc.CheckVersion(Force: Boolean): Boolean;
-// Valeurs de retour:
-// False: pas de mise à jour ou mise à jour "reportée"
-// True: mise à jour et utilisateur demande à fermer l'appli
+  // Valeurs de retour:
+  // False: pas de mise à jour ou mise à jour "reportée"
+  // True: mise à jour et utilisateur demande à fermer l'appli
 var
   doVerif: Boolean;
 begin
   if Force then
     doVerif := True
   else
-    case Utilisateur.Options.VerifMAJDelai of
+    case TGlobalVar.Utilisateur.Options.VerifMAJDelai of
       0: // jamais de verification
         doVerif := False;
       1: // à chaque démarrage
         doVerif := True;
       2: // une fois par jour
-        doVerif := DaysBetween(Now, Utilisateur.Options.LastVerifMAJ) > 0;
+        doVerif := DaysBetween(Now, TGlobalVar.Utilisateur.Options.LastVerifMAJ) > 0;
       3: // une fois par semaine
-        doVerif := WeeksBetween(Now, Utilisateur.Options.LastVerifMAJ) > 0;
+        doVerif := WeeksBetween(Now, TGlobalVar.Utilisateur.Options.LastVerifMAJ) > 0;
       else // une fois par mois
-        doVerif := MonthsBetween(Now, Utilisateur.Options.LastVerifMAJ) > 0;
+        doVerif := MonthsBetween(Now, TGlobalVar.Utilisateur.Options.LastVerifMAJ) > 0;
     end;
 
   if not doVerif then
     Result := False
   else
   begin
-    Result := CheckVersionNet.CheckVersion(SansAccents(Application.Title), 'bdtheque', Utilisateur.ExeVersion, Force, not Force) = 1;
+    Result := CheckVersionNet.CheckVersion(SansAccents(Application.Title), 'bdtheque', TGlobalVar.Utilisateur.ExeVersion, Force, not Force) = 1;
     with TIniFile.Create(FichierIni) do
-    try
-      WriteInteger('Divers', 'LastVerifMAJ', Trunc(Now));
-    finally
-      Free;
-    end;
+      try
+        WriteInteger('Divers', 'LastVerifMAJ', Trunc(Now));
+      finally
+        Free;
+      end;
   end;
 end;
 

@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBEditLabeled, VirtualTrees, ComCtrls, VDTButton,
   ExtCtrls, Buttons, Fram_Boutons, VirtualTree, TypeRec, Frame_RechercheRapide, LoadComplet,
-  CRFurtif, UBdtForms;
+  CRFurtif, UBdtForms, Generics.Collections;
 
 type
   TFrmEditAchatAlbum = class(TbdtForm)
@@ -65,8 +65,8 @@ type
     FAlbum: TAlbumComplet;
     FScenaristesSelected, FDessinateursSelected, FColoristesSelected: Boolean;
     procedure SetID_Album(const Value: TGUID);
-    procedure AjouteAuteur(List: TList; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean); overload;
-    procedure AjouteAuteur(List: TList; lvList: TVDTListViewLabeled; Auteur: TPersonnage); overload;
+    procedure AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean); overload;
+    procedure AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage); overload;
     function GetID_Album: TGUID;
     { Déclarations privées }
   public
@@ -76,24 +76,24 @@ type
 
 implementation
 
-uses Math, CommonConst, Proc_Gestions, Commun, Procedures, Textes, Divers, 
-  UHistorique;
+uses Math, CommonConst, Proc_Gestions, Commun, Procedures, Textes, Divers,
+  UHistorique, UMetadata;
 
 {$R *.dfm}
 
-procedure TFrmEditAchatAlbum.AjouteAuteur(List: TList; lvList: TVDTListViewLabeled; Auteur: TPersonnage);
+procedure TFrmEditAchatAlbum.AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage);
 var
   dummy: Boolean;
 begin
   AjouteAuteur(List, lvList, Auteur, dummy);
 end;
 
-procedure TFrmEditAchatAlbum.AjouteAuteur(List: TList; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean);
+procedure TFrmEditAchatAlbum.AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean);
 var
   PA: TAuteur;
 begin
   PA := TAuteur.Create;
-  PA.Fill(Auteur, ID_Album, GUID_NULL, 0);
+  PA.Fill(Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
   List.Add(PA);
   lvList.Items.Count := List.Count;
   lvList.Invalidate;
@@ -110,7 +110,7 @@ begin
   FrameRechercheRapideSerie.VirtualTreeView := vtSeries;
   FrameRechercheRapideAlbums.VirtualTreeView := vstAlbums;
   FrameRechercheRapideAlbums.ShowNewButton := False;
-  if Mode_en_cours = mdConsult then
+  if TGlobalVar.Mode_en_cours = mdConsult then
   begin
     Frame11.Align := alBottom;
     Frame11.btnOK.Caption := 'Ok';
@@ -197,7 +197,7 @@ procedure TFrmEditAchatAlbum.Frame11btnOKClick(Sender: TObject);
 begin
   if PageControl1.ActivePage = TabSheet1 then
   begin
-    if Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+    if TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
     begin
       AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
       FrameRechercheRapideSerie.edSearch.SetFocus;

@@ -1,9 +1,9 @@
 object frmSeriesIncompletes: TfrmSeriesIncompletes
   Left = 414
   Top = 463
-  Width = 822
-  Height = 275
   Caption = 'S'#233'ries incompl'#232'tes'
+  ClientHeight = 229
+  ClientWidth = 814
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -49,7 +49,7 @@ object frmSeriesIncompletes: TfrmSeriesIncompletes
       item
         MinWidth = 50
         Position = 1
-        Width = 560
+        Width = 564
         WideText = 'Albums manquants'
       end>
   end

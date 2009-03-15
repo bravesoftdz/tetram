@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, LoadComplet, VirtualTrees, VirtualTree, ToolWin,
-  ProceduresBDtk, StdCtrls, ExtCtrls, Menus, ActnList, Buttons, VDTButton, UBdtForms,
+  ProceduresBDtk, StdCtrls, ExtCtrls, Menus, ActnList, Buttons, VDTButton, UBdtForms, StrUtils,
   DBEditLabeled;
 
 type
@@ -21,7 +21,7 @@ type
     Imprimer1: TMenuItem;
     edSearch: TEditLabeled;
     btNext: TVDTButton;
-    procedure vstPrevisionsSortiesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+    procedure vstPrevisionsSortiesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure vstPrevisionsSortiesInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
@@ -39,7 +39,7 @@ type
     function ImpressionUpdate: Boolean;
     function ApercuUpdate: Boolean;
     procedure LoadListe;
-    procedure OnCompareNodeString(Sender: TBaseVirtualTree; Node: PVirtualNode; const Text: WideString; var Concorde: Boolean);
+    procedure OnCompareNodeString(Sender: TBaseVirtualTree; Node: PVirtualNode; const Text: string; var Concorde: Boolean);
   public
     Liste: TPrevisionsSorties;
   end;
@@ -111,7 +111,7 @@ begin
   end;
 end;
 
-procedure TfrmPrevisionsSorties.vstPrevisionsSortiesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TfrmPrevisionsSorties.vstPrevisionsSortiesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
 var
   NodeInfo: ^RNodeInfo;
 begin
@@ -256,7 +256,7 @@ begin
   if Key = VK_F3 then vstPrevisionsSorties.Find(UpperCase(SansAccents(edSearch.Text)), True);
 end;
 
-procedure TfrmPrevisionsSorties.OnCompareNodeString(Sender: TBaseVirtualTree; Node: PVirtualNode; const Text: WideString; var Concorde: Boolean);
+procedure TfrmPrevisionsSorties.OnCompareNodeString(Sender: TBaseVirtualTree; Node: PVirtualNode; const Text: string; var Concorde: Boolean);
 var
   NodeInfo: ^RNodeInfo;
 begin

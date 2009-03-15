@@ -1,9 +1,9 @@
 object FrmConsultationEmprunteur: TFrmConsultationEmprunteur
   Left = 497
   Top = 243
-  Width = 513
-  Height = 486
   Caption = 'Fiche d'#39'emprunteur'
+  ClientHeight = 440
+  ClientWidth = 505
   Color = clWindow
   Ctl3D = False
   Font.Charset = ANSI_CHARSET

@@ -160,8 +160,8 @@ begin
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT FIRST 1 Valeur FROM OPTIONS WHERE NOM_OPTION = ? ORDER BY DM_OPTIONS DESC';
-    Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', CurrencyString);
-    FormatMonnaie := IIf(CurrencyFormat in [0, 2], Utilisateur.Options.SymboleMonnetaire + IIf(CurrencyFormat = 2, ' ', ''), '') + FormatMonnaieCourt + IIf(CurrencyFormat in [1, 3], IIf(CurrencyFormat = 3, ' ', '') + Utilisateur.Options.SymboleMonnetaire, '');
+    TGlobalVar.Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', CurrencyString);
+    FormatMonnaie := IIf(CurrencyFormat in [0, 2], TGlobalVar.Utilisateur.Options.SymboleMonnetaire + IIf(CurrencyFormat = 2, ' ', ''), '') + FormatMonnaieCourt + IIf(CurrencyFormat in [1, 3], IIf(CurrencyFormat = 3, ' ', '') + TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '');
     RepImages := LitStr(op, 'RepImages', RepImages);
   finally
     Transaction.Free;
@@ -169,31 +169,31 @@ begin
   end;
   with TIniFile.Create(FichierIni) do
   try
-    Utilisateur.Options.ModeDemarrage := ReadBool('DIVERS', 'ModeDemarrage', True);
-    Utilisateur.Options.FicheAlbumWithCouverture := ReadBool('DIVERS', 'FicheWithCouverture', True);
-    Utilisateur.Options.FicheParaBDWithImage := ReadBool('DIVERS', 'ParaBDWithImage', True);
-    Utilisateur.Options.Images := ReadBool('DIVERS', 'Images', True);
-    Utilisateur.Options.AntiAliasing := ReadBool('DIVERS', 'AntiAliasing', True);
-    Utilisateur.Options.ImagesStockees := ReadBool('ModeEdition', 'ImagesStockees', False);
-    Utilisateur.Options.FormatTitreAlbum := ReadInteger('DIVERS', 'FormatTitreAlbum', 0);
-    Utilisateur.Options.AvertirPret := ReadBool('DIVERS', 'AvertirPret', False);
-    Utilisateur.Options.GrandesIconesMenus := ReadBool('DIVERS', 'GrandesIconesMenus', True);
-    Utilisateur.Options.GrandesIconesBarre := ReadBool('DIVERS', 'GrandesIconesBarre', True);
-    Utilisateur.Options.VerifMAJDelai := ReadInteger('Divers', 'VerifMAJDelai', 4);
-    Utilisateur.Options.SerieObligatoireAlbums := ReadBool('DIVERS', 'SerieObligatoireAlbums', False);
-    Utilisateur.Options.SerieObligatoireParaBD := ReadBool('DIVERS', 'SerieObligatoireParaBD', False);
-    Utilisateur.Options.RepertoireScripts := IncludeTrailingPathDelimiter(ReadString('DIVERS', 'Scripts', IncludeTrailingPathDelimiter(ExtractFilePath(Application.ExeName)) + 'scripts'));
+    TGlobalVar.Utilisateur.Options.ModeDemarrage := ReadBool('DIVERS', 'ModeDemarrage', True);
+    TGlobalVar.Utilisateur.Options.FicheAlbumWithCouverture := ReadBool('DIVERS', 'FicheWithCouverture', True);
+    TGlobalVar.Utilisateur.Options.FicheParaBDWithImage := ReadBool('DIVERS', 'ParaBDWithImage', True);
+    TGlobalVar.Utilisateur.Options.Images := ReadBool('DIVERS', 'Images', True);
+    TGlobalVar.Utilisateur.Options.AntiAliasing := ReadBool('DIVERS', 'AntiAliasing', True);
+    TGlobalVar.Utilisateur.Options.ImagesStockees := ReadBool('ModeEdition', 'ImagesStockees', False);
+    TGlobalVar.Utilisateur.Options.FormatTitreAlbum := ReadInteger('DIVERS', 'FormatTitreAlbum', 0);
+    TGlobalVar.Utilisateur.Options.AvertirPret := ReadBool('DIVERS', 'AvertirPret', False);
+    TGlobalVar.Utilisateur.Options.GrandesIconesMenus := ReadBool('DIVERS', 'GrandesIconesMenus', True);
+    TGlobalVar.Utilisateur.Options.GrandesIconesBarre := ReadBool('DIVERS', 'GrandesIconesBarre', True);
+    TGlobalVar.Utilisateur.Options.VerifMAJDelai := ReadInteger('Divers', 'VerifMAJDelai', 4);
+    TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums := ReadBool('DIVERS', 'SerieObligatoireAlbums', False);
+    TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD := ReadBool('DIVERS', 'SerieObligatoireParaBD', False);
+    TGlobalVar.Utilisateur.Options.RepertoireScripts := IncludeTrailingPathDelimiter(ReadString('DIVERS', 'Scripts', IncludeTrailingPathDelimiter(ExtractFilePath(Application.ExeName)) + 'scripts'));
 
-    Utilisateur.Options.SiteWeb.Adresse := ReadString('WWW', 'Adresse', '');
-    Utilisateur.Options.SiteWeb.Cle := ReadString('WWW', 'AuthKey', '');
-    Utilisateur.Options.SiteWeb.Modele := ReadString('WWW', 'Modele', 'Site par défaut');
-    Utilisateur.Options.SiteWeb.MySQLServeur := ReadString('WWW', 'MySQLServeur', 'localhost');
-    Utilisateur.Options.SiteWeb.MySQLLogin := ReadString('WWW', 'MySQLLogin', '');
-    Utilisateur.Options.SiteWeb.MySQLPassword := ReadString('WWW', 'MySQLPassword', '');
-    Utilisateur.Options.SiteWeb.MySQLBDD := ReadString('WWW', 'MySQLBDD', Utilisateur.Options.SiteWeb.MySQLLogin);
-    Utilisateur.Options.SiteWeb.MySQLPrefix := ReadString('WWW', 'MySQLPrefix', 'bdt');
-    Utilisateur.Options.SiteWeb.BddVersion := ReadString('WWW', 'BddVersion', '');
-    Utilisateur.Options.SiteWeb.Paquets := ReadInteger('WWW', 'Paquets', 4096);
+    TGlobalVar.Utilisateur.Options.SiteWeb.Adresse := ReadString('WWW', 'Adresse', '');
+    TGlobalVar.Utilisateur.Options.SiteWeb.Cle := ReadString('WWW', 'AuthKey', '');
+    TGlobalVar.Utilisateur.Options.SiteWeb.Modele := ReadString('WWW', 'Modele', 'Site par défaut');
+    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLServeur := ReadString('WWW', 'MySQLServeur', 'localhost');
+    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin := ReadString('WWW', 'MySQLLogin', '');
+    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPassword := ReadString('WWW', 'MySQLPassword', '');
+    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLBDD := ReadString('WWW', 'MySQLBDD', TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin);
+    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPrefix := ReadString('WWW', 'MySQLPrefix', 'bdt');
+    TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion := ReadString('WWW', 'BddVersion', '');
+    TGlobalVar.Utilisateur.Options.SiteWeb.Paquets := ReadInteger('WWW', 'Paquets', 4096);
   finally
     Free;
   end;
@@ -232,41 +232,41 @@ begin
   with op do
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    Sauve(op, 'SymboleM', Utilisateur.Options.SymboleMonnetaire);
+    Sauve(op, 'SymboleM', TGlobalVar.Utilisateur.Options.SymboleMonnetaire);
     Sauve(op, 'RepImages', RepImages);
     Transaction.Commit;
   finally
     Transaction.Free;
     Free;
   end;
-  with TIniFile.Create(FichierIni) do
+  with TIniFile.Create(FichierIni),TGlobalVar.Utilisateur.Options  do
   try
-    WriteBool('DIVERS', 'ModeDemarrage', Utilisateur.Options.ModeDemarrage);
-    WriteBool('DIVERS', 'Images', Utilisateur.Options.Images);
-    WriteBool('DIVERS', 'FicheWithCouverture', Utilisateur.Options.FicheAlbumWithCouverture);
-    WriteBool('DIVERS', 'ParaBDWithImage', Utilisateur.Options.FicheParaBDWithImage);
-    WriteBool('DIVERS', 'AntiAliasing', Utilisateur.Options.AntiAliasing);
-    WriteBool('DIVERS', 'AvertirPret', Utilisateur.Options.AvertirPret);
-    WriteBool('DIVERS', 'GrandesIconesMenus', Utilisateur.Options.GrandesIconesMenus);
-    WriteBool('DIVERS', 'GrandesIconesBarre', Utilisateur.Options.GrandesIconesBarre);
-    WriteBool('ModeEdition', 'ImagesStockees', Utilisateur.Options.ImagesStockees);
-    WriteInteger('DIVERS', 'FormatTitreAlbum', Utilisateur.Options.FormatTitreAlbum);
-    WriteInteger('Divers', 'VerifMAJDelai', Utilisateur.Options.VerifMAJDelai);
-    WriteBool('DIVERS', 'SerieObligatoireAlbums', Utilisateur.Options.SerieObligatoireAlbums);
-    WriteBool('DIVERS', 'SerieObligatoireParaBD', Utilisateur.Options.SerieObligatoireParaBD);
+    WriteBool('DIVERS', 'ModeDemarrage', ModeDemarrage);
+    WriteBool('DIVERS', 'Images', Images);
+    WriteBool('DIVERS', 'FicheWithCouverture', FicheAlbumWithCouverture);
+    WriteBool('DIVERS', 'ParaBDWithImage', FicheParaBDWithImage);
+    WriteBool('DIVERS', 'AntiAliasing', AntiAliasing);
+    WriteBool('DIVERS', 'AvertirPret', AvertirPret);
+    WriteBool('DIVERS', 'GrandesIconesMenus', GrandesIconesMenus);
+    WriteBool('DIVERS', 'GrandesIconesBarre', GrandesIconesBarre);
+    WriteBool('ModeEdition', 'ImagesStockees', ImagesStockees);
+    WriteInteger('DIVERS', 'FormatTitreAlbum', FormatTitreAlbum);
+    WriteInteger('Divers', 'VerifMAJDelai', VerifMAJDelai);
+    WriteBool('DIVERS', 'SerieObligatoireAlbums', SerieObligatoireAlbums);
+    WriteBool('DIVERS', 'SerieObligatoireParaBD', SerieObligatoireParaBD);
 
     WriteString('DIVERS', 'RepImages', ''); // efface la ligne
 
-    WriteString('WWW', 'Adresse', Utilisateur.Options.SiteWeb.Adresse);
-    WriteString('WWW', 'AuthKey', Utilisateur.Options.SiteWeb.Cle);
-    WriteString('WWW', 'Modele', Utilisateur.Options.SiteWeb.Modele);
-    WriteString('WWW', 'MySQLServeur', Utilisateur.Options.SiteWeb.MySQLServeur);
-    WriteString('WWW', 'MySQLLogin', Utilisateur.Options.SiteWeb.MySQLLogin);
-    WriteString('WWW', 'MySQLPassword', Utilisateur.Options.SiteWeb.MySQLPassword);
-    WriteString('WWW', 'MySQLBDD', Utilisateur.Options.SiteWeb.MySQLBDD);
-    WriteString('WWW', 'MySQLPrefix', Utilisateur.Options.SiteWeb.MySQLPrefix);
-    WriteString('WWW', 'BddVersion', Utilisateur.Options.SiteWeb.BddVersion);
-    WriteInteger('WWW', 'Paquets', Utilisateur.Options.SiteWeb.Paquets);
+    WriteString('WWW', 'Adresse', SiteWeb.Adresse);
+    WriteString('WWW', 'AuthKey', SiteWeb.Cle);
+    WriteString('WWW', 'Modele', SiteWeb.Modele);
+    WriteString('WWW', 'MySQLServeur', SiteWeb.MySQLServeur);
+    WriteString('WWW', 'MySQLLogin', SiteWeb.MySQLLogin);
+    WriteString('WWW', 'MySQLPassword', SiteWeb.MySQLPassword);
+    WriteString('WWW', 'MySQLBDD', SiteWeb.MySQLBDD);
+    WriteString('WWW', 'MySQLPrefix', SiteWeb.MySQLPrefix);
+    WriteString('WWW', 'BddVersion', SiteWeb.BddVersion);
+    WriteInteger('WWW', 'Paquets', SiteWeb.Paquets);
   finally
     Free;
   end;
@@ -921,7 +921,7 @@ begin
   begin
     AutoSize := True;
     BorderWidth := 0;
-    FormStyle := fsStayOnTop;
+    PopupMode := pmExplicit;
     Position := poScreenCenter;
     BorderStyle := bsNone;
     BorderIcons := [];

@@ -34,7 +34,7 @@ type
 implementation
 
 uses
-  Commun, Procedures, Proc_Gestions, Textes, UHistorique;
+  Commun, Procedures, Proc_Gestions, Textes, UHistorique, TypeRec;
 
 {$R *.DFM}
 

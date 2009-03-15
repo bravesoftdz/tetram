@@ -1,10 +1,10 @@
 object FrmEditAchatAlbum: TFrmEditAchatAlbum
   Left = 245
   Top = 418
-  Width = 744
-  Height = 412
   ActiveControl = edTitre
   Caption = 'Achat'
+  ClientHeight = 385
+  ClientWidth = 736
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -114,11 +114,9 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Top = 154
         Width = 69
         Height = 41
-        Cursor = crHandPoint
         Anchors = [akTop, akRight]
         Caption = 'Sc'#233'nariste'
         Enabled = False
-        Flat = True
         Glyph.Data = {
           B2000000424DB20000000000000052000000280000000C0000000C0000000100
           04000000000060000000120B0000120B00000700000007000000CE636300FF9C
@@ -135,11 +133,9 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Top = 198
         Width = 69
         Height = 41
-        Cursor = crHandPoint
         Anchors = [akTop, akRight]
         Caption = 'Dessinateur'
         Enabled = False
-        Flat = True
         Glyph.Data = {
           B2000000424DB20000000000000052000000280000000C0000000C0000000100
           04000000000060000000120B0000120B00000700000007000000CE636300FF9C
@@ -165,11 +161,9 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Top = 242
         Width = 69
         Height = 41
-        Cursor = crHandPoint
         Anchors = [akTop, akRight]
         Caption = 'Coloriste'
         Enabled = False
-        Flat = True
         Glyph.Data = {
           B2000000424DB20000000000000052000000280000000C0000000C0000000100
           04000000000060000000120B0000120B00000700000007000000CE636300FF9C
@@ -390,18 +384,12 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Height = 41
         Anchors = [akTop, akRight]
         BevelKind = bkTile
-        BorderStyle = bsNone
         Columns = <
           item
           end>
-        ColumnClick = False
-        HideSelection = False
         OwnerData = True
-        ReadOnly = True
-        ShowColumnHeaders = False
         SortType = stNone
         TabOrder = 14
-        ViewStyle = vsReport
         OnData = lvScenaristesData
         OnKeyDown = lvColoristesKeyDown
         LinkControls = <
@@ -416,18 +404,12 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Height = 41
         Anchors = [akTop, akRight]
         BevelKind = bkTile
-        BorderStyle = bsNone
         Columns = <
           item
           end>
-        ColumnClick = False
-        HideSelection = False
         OwnerData = True
-        ReadOnly = True
-        ShowColumnHeaders = False
         SortType = stBoth
         TabOrder = 15
-        ViewStyle = vsReport
         OnData = lvDessinateursData
         OnKeyDown = lvColoristesKeyDown
         LinkControls = <
@@ -471,18 +453,12 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Height = 41
         Anchors = [akTop, akRight]
         BevelKind = bkTile
-        BorderStyle = bsNone
         Columns = <
           item
           end>
-        ColumnClick = False
-        HideSelection = False
         OwnerData = True
-        ReadOnly = True
-        ShowColumnHeaders = False
         SortType = stBoth
         TabOrder = 16
-        ViewStyle = vsReport
         OnData = lvColoristesData
         OnKeyDown = lvColoristesKeyDown
         LinkControls = <
@@ -543,14 +519,19 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Height = 21
         Anchors = [akTop, akRight]
         TabOrder = 12
+        ExplicitLeft = 298
+        ExplicitTop = 154
+        ExplicitWidth = 177
         DesignSize = (
           177
           21)
         inherited btNext: TVDTButton
           Left = 136
+          ExplicitLeft = 136
         end
         inherited btNew: TVDTButton
           Left = 156
+          ExplicitLeft = 156
         end
         inherited edSearch: TEditLabeled
           Width = 137
@@ -558,6 +539,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
             item
               Control = Label19
             end>
+          ExplicitWidth = 137
         end
       end
       inline FrameRechercheRapideSerie: TFrameRechercheRapide
@@ -567,14 +549,19 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Height = 21
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 10
+        ExplicitLeft = 49
+        ExplicitTop = 154
+        ExplicitWidth = 162
         DesignSize = (
           162
           21)
         inherited btNext: TVDTButton
           Left = 121
+          ExplicitLeft = 121
         end
         inherited btNew: TVDTButton
           Left = 141
+          ExplicitLeft = 141
         end
         inherited edSearch: TEditLabeled
           Width = 122
@@ -582,12 +569,17 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
             item
               Control = Label20
             end>
+          ExplicitWidth = 122
         end
       end
     end
     object TabSheet2: TTabSheet
       Caption = 'Album existant'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         728
         323)
@@ -638,14 +630,19 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         Height = 21
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 0
+        ExplicitLeft = 48
+        ExplicitTop = 4
+        ExplicitWidth = 676
         DesignSize = (
           676
           21)
         inherited btNext: TVDTButton
           Left = 635
+          ExplicitLeft = 635
         end
         inherited btNew: TVDTButton
           Left = 655
+          ExplicitLeft = 655
         end
         inherited edSearch: TEditLabeled
           Width = 636
@@ -653,6 +650,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
             item
               Control = Label4
             end>
+          ExplicitWidth = 636
         end
       end
     end
@@ -664,6 +662,9 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
     Height = 31
     Align = alBottom
     TabOrder = 1
+    ExplicitTop = 354
+    ExplicitWidth = 736
+    ExplicitHeight = 31
     inherited btnOK: TBitBtn
       Left = 557
       Top = 8
@@ -671,12 +672,20 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       Height = 19
       Caption = 'Ok'
       OnClick = Frame11btnOKClick
+      ExplicitLeft = 557
+      ExplicitTop = 8
+      ExplicitWidth = 87
+      ExplicitHeight = 19
     end
     inherited btnAnnuler: TBitBtn
       Left = 653
       Top = 8
       Width = 72
       Height = 19
+      ExplicitLeft = 653
+      ExplicitTop = 8
+      ExplicitWidth = 72
+      ExplicitHeight = 19
     end
   end
 end

@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls,
-  Main, VDTButton, ActnList, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, ProceduresBDtk, GraphicEx, UbdtForms,
-  jpeg, ShellAPI, LoadComplet, CRFurtif;
+  UfrmFond, VDTButton, ActnList, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, ProceduresBDtk, GraphicEx, UbdtForms, StrUtils,
+  jpeg, ShellAPI, LoadComplet, CRFurtif, Generics.Defaults;
 
 type
   TFrmConsultationAlbum = class(TBdtForm, IImpressionApercu)
@@ -119,7 +119,7 @@ type
     procedure VDTButton2Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ListeEmpruntsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
-    procedure ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+    procedure ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure ListeEmpruntsHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure lvEditionsClick(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
@@ -263,7 +263,7 @@ begin
     CurrentCouverture := Num;
     Couverture.Picture := nil;
     try
-      ms := GetCouvertureStream(False, TCouverture(FCurrentEdition.Couvertures[Num]).ID, Couverture.Height, Couverture.Width, Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(False, TCouverture(FCurrentEdition.Couvertures[Num]).ID, Couverture.Height, Couverture.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
       if Assigned(ms) then try
         jpg := TJPEGImage.Create;
         try
@@ -337,7 +337,7 @@ begin
       ImageIndex := 2;
 end;
 
-procedure TFrmConsultationAlbum.ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TFrmConsultationAlbum.ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
 begin
   case Column of
     0: CellText := DateToStr(TEmprunt(FCurrentEdition.Emprunts.Emprunts[Node.Index]).Date);
@@ -345,15 +345,28 @@ begin
   end;
 end;
 
-function ListeEmpruntsCompare(Item1, Item2: Pointer): Integer;
+type
+  TEmpruntCompare = class(TComparer<TEmprunt>)
+    function Compare(const Left, Right: TEmprunt): Integer; override;
+  end;
+
+  TEmpruntCompareDesc = class(TEmpruntCompare)
+    function Compare(const Left, Right: TEmprunt): Integer; override;
+  end;
+
+function TEmpruntCompare.Compare(const Left, Right: TEmprunt): Integer;
 begin
   case FSortColumn of
-    0: Result := CompareDate(TEmprunt(Item1).Date, TEmprunt(Item2).Date);
-    1: Result := CompareText(TEmprunt(Item1).Emprunteur.Nom, TEmprunt(Item2).Emprunteur.Nom);
+    0: Result := CompareDate(TEmprunt(Left).Date, TEmprunt(Right).Date);
+    1: Result := CompareText(TEmprunt(Left).Emprunteur.Nom, TEmprunt(Right).Emprunteur.Nom);
     else
       Result := 0;
   end;
-  if FSortDirection = sdDescending then Result := -Result;
+end;
+
+function TEmpruntCompareDesc.Compare(const Left, Right: TEmprunt): Integer;
+begin
+  Result := -inherited;
 end;
 
 procedure TFrmConsultationAlbum.ListeEmpruntsHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -375,7 +388,10 @@ begin
     ListeEmprunts.Header.Columns[FSortColumn].ImageIndex := 0
   else
     ListeEmprunts.Header.Columns[FSortColumn].ImageIndex := 1;
-  FCurrentEdition.Emprunts.Emprunts.Sort(@ListeEmpruntsCompare);
+  if FSortDirection = sdDescending then
+    FCurrentEdition.Emprunts.Emprunts.Sort(TEmpruntCompareDesc.Create)
+  else
+    FCurrentEdition.Emprunts.Emprunts.Sort(TEmpruntCompare.Create);
   ListeEmprunts.Invalidate;
 end;
 
@@ -404,13 +420,13 @@ begin
       cbOffert.Checked := FCurrentEdition.Offert;
       cbCouleur.Checked := FCurrentEdition.Couleur;
       cbDedicace.Checked := FCurrentEdition.Dedicace;
-      TypeEdition.Caption := FCurrentEdition.sTypeEdition;
-      Reliure.Caption := FCurrentEdition.sReliure;
-      Etat.Caption := FCurrentEdition.sEtat;
+      TypeEdition.Caption := FCurrentEdition.TypeEdition.Caption;
+      Reliure.Caption := FCurrentEdition.Reliure.Caption;
+      Etat.Caption := FCurrentEdition.Etat.Caption;
       Pages.Caption := NonZero(IntToStr(FCurrentEdition.NombreDePages));
-      lbOrientation.Caption := FCurrentEdition.sOrientation;
-      lbFormat.Caption := FCurrentEdition.sFormatEdition;
-      lbSensLecture.Caption := FCurrentEdition.sSensLecture;
+      lbOrientation.Caption := FCurrentEdition.Orientation.Caption;
+      lbFormat.Caption := FCurrentEdition.FormatEdition.Caption;
+      lbSensLecture.Caption := FCurrentEdition.SensLecture.Caption;
       lbNumeroPerso.Caption := FCurrentEdition.NumeroPerso;
       if cbOffert.Checked then
         Label12.Caption := rsTransOffertLe + ' :'

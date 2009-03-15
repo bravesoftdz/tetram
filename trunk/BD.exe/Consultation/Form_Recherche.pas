@@ -5,7 +5,7 @@ interface
 uses
   SysUtils, Windows, Messages, Classes, Forms, Graphics, Controls, Menus, StdCtrls, Buttons, ComCtrls, ExtCtrls, ToolWin, Commun,
   VirtualTrees, VirtualTree, ActnList, VDTButton, ComboCheck, ProceduresBDtk,
-  Frame_RechercheRapide, LoadComplet, UBdtForms;
+  Frame_RechercheRapide, LoadComplet, UBdtForms, Generics.Defaults;
 
 type
   TFrmRecherche = class(TBdtForm, IImpressionApercu)
@@ -52,7 +52,7 @@ type
     procedure Critre1Click(Sender: TObject);
     procedure Groupedecritre1Click(Sender: TObject);
     procedure btnRechercheClick(Sender: TObject);
-    procedure VTResultGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+    procedure VTResultGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure VTResultPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
     procedure VTResultHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure LightComboCheck1Change(Sender: TObject);
@@ -82,8 +82,8 @@ type
 implementation
 
 uses
-  Textes, DM_Princ, TypeRec, Impression, Math, Form_EditCritere, UHistorique, Procedures,
-  Main, Form_EditCritereTri;
+  Textes, DM_Princ, TypeRec, Impression, Math, Form_EditCritere, UHistorique, Procedures, StrUtils,
+  UfrmFond, Form_EditCritereTri;
 
 {$R *.DFM}
 
@@ -377,7 +377,7 @@ begin
   lbResult.Caption := IntToStr(VTResult.RootNodeCount) + ' résultat(s) trouvé(s)';
 end;
 
-procedure TFrmRecherche.VTResultGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TFrmRecherche.VTResultGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
 begin
   CellText := '';
   if TextType = ttNormal then
@@ -397,16 +397,21 @@ begin
   if TextType = ttStatic then TargetCanvas.Font.Style := TargetCanvas.Font.Style + [fsItalic];
 end;
 
-function ResultListCompare(Item1, Item2: Pointer): Integer;
+type
+  TAlbumCompare = class(TComparer<TAlbum>)
+    function Compare(const Left, Right: TAlbum): Integer; override;
+  end;
+
+function TAlbumCompare.Compare(const Left, Right: TAlbum): Integer;
 begin
   case FSortColumn of
-    0: Result := CompareText(TAlbum(Item1).Titre, TAlbum(Item2).Titre);
-    1: Result := CompareValue(TAlbum(Item1).Tome, TAlbum(Item2).Tome);
+    0: Result := CompareText(TAlbum(Left).Titre, TAlbum(Right).Titre);
+    1: Result := CompareValue(TAlbum(Left).Tome, TAlbum(Right).Tome);
     2:
       begin
-        Result := CompareText(TAlbum(Item1).Serie, TAlbum(Item2).Serie);
+        Result := CompareText(TAlbum(Left).Serie, TAlbum(Right).Serie);
         if Result = 0 then
-          Result := CompareValue(TAlbum(Item1).Tome, TAlbum(Item2).Tome);
+          Result := CompareValue(TAlbum(Left).Tome, TAlbum(Right).Tome);
       end;
     else
       Result := 0;
@@ -432,7 +437,7 @@ begin
   else
     VTResult.Header.Columns[FSortColumn].ImageIndex := 1;
   VTResult.Header.SortColumn := FSortColumn;
-  Recherche.Resultats.Sort(@ResultListCompare);
+  Recherche.Resultats.Sort(TAlbumCompare.Create);
   VTResult.ReinitNode(VTResult.RootNode, True);
   VTResult.Invalidate;
   VTResult.Refresh;

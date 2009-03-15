@@ -116,7 +116,7 @@ begin
     ModalResult := mrNone;
     Exit;
   end;
-  if (Utilisateur.Options.AvertirPret and FEdition.Prete and pret.Checked) and (MessageDlg('Cette édition est déjà prêtée.'#13#10'Continuer?', mtConfirmation, [mbYes, mbNo], 0) <> mrYes) then begin
+  if (TGlobalVar.Utilisateur.Options.AvertirPret and FEdition.Prete and pret.Checked) and (MessageDlg('Cette édition est déjà prêtée.'#13#10'Continuer?', mtConfirmation, [mbYes, mbNo], 0) <> mrYes) then begin
     ModalResult := mrNone;
     Exit;
   end;

@@ -3,12 +3,13 @@ unit UChampsRecherche;
 interface
 
 uses
-  SysUtils, UIBLib;
+  Windows, SysUtils, UIBLib, AnsiStrings;
 
 type
   TChampSpecial = (csNone, csTitre, csGenre, csAffiche, csEtat, csReliure, csOrientation, csFormatEdition, csTypeEdition, csISBN, csMonnaie, csSensLecture);
 
   PChamp = ^RChamp;
+
   RChamp = record
     Groupe: Integer;
     ID: Integer;
@@ -33,7 +34,8 @@ const
 
 implementation
 
-uses Textes, Commun, UIB, DM_Princ;
+uses
+  Textes, Commun, UIB, DM_Princ;
 
 const
   _ChampsRecherche: TArrayOfChamp = (
@@ -111,14 +113,14 @@ begin
       begin
         Table := _ChampsRecherche[iChamp].NomTable;
         Qry.Close;
-        Qry.SQL.Text := 'select first 0 * from ' + Table;
+        Qry.SQL.Text := 'select first 0 * from ' + string(Table);
         Qry.Open;
 
         while iChamp <= High(_ChampsRecherche) do
         begin
           if SameText(Table, _ChampsRecherche[iChamp].NomTable) then
           begin
-            pChamp := Qry.Fields.GetFieldIndex(_ChampsRecherche[iChamp].NomChamp);
+            pChamp := Qry.Fields.GetFieldIndex(AnsiString(_ChampsRecherche[iChamp].NomChamp));
             _ChampsRecherche[iChamp].TypeData := qry.Fields.FieldType[pChamp];
             Inc(iChamp);
           end

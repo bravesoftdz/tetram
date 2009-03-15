@@ -85,7 +85,7 @@ begin
     else
       RaiseLastOsError;
 
-  ss := TStringStream.Create('');
+  ss := TStringStream.Create('', TEncoding.Unicode);
   try
     ss.Size := 0;
     ss.Write(Buffer[0], lBuffer);
@@ -142,7 +142,7 @@ begin
     URLComponents.dwUrlPathLength := 1;
     if not InternetCrackUrl(PChar(URL), Length(URL), 0, URLComponents) then RaiseLastOSError;
     if URLComponents.nScheme <> INTERNET_SERVICE_HTTP then raise Exception.Create('Type d''adresse non supporté:'#13#10 + URL);
-    Serveur := Copy(URLComponents.lpszHostName, 1, Pos('/', URLComponents.lpszHostName + '/') - 1);
+    Serveur := Copy(URLComponents.lpszHostName, 1, Pos('/', string(URLComponents.lpszHostName) + '/') - 1);
     Serveur := Copy(Serveur, 1, Pos(':', Serveur + ':') - 1);
     hConnect := InternetConnect(hISession, PChar(Serveur), URLComponents.nPort, URLComponents.lpszUserName, URLComponents.lpszPassword, URLComponents.nScheme, 0, 0);
     if (hConnect = nil) then RaiseLastInternetError;

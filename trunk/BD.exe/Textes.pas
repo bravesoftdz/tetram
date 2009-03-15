@@ -3,6 +3,12 @@ unit Textes;
 interface
 
 const
+  ChargementApp = 'Chargement de l''application';
+  ChargementDatabase = 'Chargement des données';
+  ChargementOptions = 'Chargement des options';
+  VerificationVersion = 'Vérification des versions';
+  FinChargement = 'Fin du chargement';
+
   rsTransAbrvNB = 'N&B';
   rsTransAcheteLe = 'Acheté le';
   rsTransAlbum = 'Album';
@@ -58,7 +64,7 @@ const
   rsTransNombreDePages = 'Nombre de pages';
   rsTransNotes = 'Notes';
   rsTransNumerote = 'Numéroté';
-  rsTransNumeroPerso ='Numérotation personnelle';
+  rsTransNumeroPerso = 'Numérotation personnelle';
   rsTransOrientation = 'Orientation';
   //  rsTransOui = 'Oui';
   rsTransOffert = 'Offert';

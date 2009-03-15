@@ -1,9 +1,9 @@
 object FrmEntretien: TFrmEntretien
   Left = 168
   Top = 263
-  Width = 447
-  Height = 284
   Caption = 'FrmEntretien'
+  ClientHeight = 257
+  ClientWidth = 439
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -36,10 +36,8 @@ object FrmEntretien: TFrmEntretien
       Top = 7
       Width = 103
       Height = 24
-      Cursor = crHandPoint
       Anchors = [akLeft, akTop, akRight]
       Caption = 'Fermer'
-      Flat = True
       OnClick = VDTButton20Click
     end
     object Label1: TLabel

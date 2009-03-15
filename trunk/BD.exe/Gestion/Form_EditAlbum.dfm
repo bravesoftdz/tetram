@@ -1,10 +1,10 @@
 object FrmEditAlbum: TFrmEditAlbum
   Left = 480
   Top = 108
-  Width = 750
-  Height = 856
   ActiveControl = edTitre
   Caption = 'Saisie d'#39'album'
+  ClientHeight = 829
+  ClientWidth = 742
   Color = clBtnFace
   Constraints.MinWidth = 750
   Font.Charset = ANSI_CHARSET
@@ -828,9 +828,7 @@ object FrmEditAlbum: TFrmEditAlbum
       Top = 336
       Width = 112
       Height = 20
-      Cursor = crHandPoint
       Caption = 'Nouvelle'
-      Flat = True
       OnClick = VDTButton3Click
     end
     object Bevel3: TBevel
@@ -951,9 +949,7 @@ object FrmEditAlbum: TFrmEditAlbum
         Top = 24
         Width = 72
         Height = 21
-        Cursor = crHandPoint
         Caption = 'Convertisseur'
-        Flat = True
         OnClick = SpeedButton3Click
       end
       object Label9: TLabel
@@ -988,10 +984,8 @@ object FrmEditAlbum: TFrmEditAlbum
         Top = 49
         Width = 48
         Height = 20
-        Cursor = crHandPoint
         Caption = 'V'#233'rifier'
         Enabled = False
-        Flat = True
         OnClick = VDTButton6Click
       end
       object Label12: TLabel
@@ -1269,9 +1263,7 @@ object FrmEditAlbum: TFrmEditAlbum
         Top = 208
         Width = 72
         Height = 21
-        Cursor = crHandPoint
         Caption = 'Convertisseur'
-        Flat = True
         OnClick = VDTButton14Click
       end
       object Label26: TLabel
@@ -1635,19 +1627,13 @@ object FrmEditAlbum: TFrmEditAlbum
       Height = 41
       Anchors = [akTop, akRight]
       BevelKind = bkTile
-      BorderStyle = bsNone
       Columns = <
         item
           Width = 46
         end>
-      ColumnClick = False
-      HideSelection = False
       OwnerData = True
-      ReadOnly = True
-      ShowColumnHeaders = False
       SortType = stNone
       TabOrder = 14
-      ViewStyle = vsReport
       OnData = lvScenaristesData
       OnKeyDown = lvDessinateursKeyDown
       LinkControls = <
@@ -1662,19 +1648,13 @@ object FrmEditAlbum: TFrmEditAlbum
       Height = 41
       Anchors = [akTop, akRight]
       BevelKind = bkTile
-      BorderStyle = bsNone
       Columns = <
         item
           Width = 46
         end>
-      ColumnClick = False
-      HideSelection = False
       OwnerData = True
-      ReadOnly = True
-      ShowColumnHeaders = False
       SortType = stBoth
       TabOrder = 15
-      ViewStyle = vsReport
       OnData = lvDessinateursData
       OnKeyDown = lvDessinateursKeyDown
       LinkControls = <
@@ -1756,7 +1736,7 @@ object FrmEditAlbum: TFrmEditAlbum
       Left = 56
       Top = 169
       Width = 201
-      Height = 105
+      Height = 80
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
       BevelKind = bkTile
@@ -1788,19 +1768,13 @@ object FrmEditAlbum: TFrmEditAlbum
       Height = 41
       Anchors = [akTop, akRight]
       BevelKind = bkTile
-      BorderStyle = bsNone
       Columns = <
         item
           Width = 46
         end>
-      ColumnClick = False
-      HideSelection = False
       OwnerData = True
-      ReadOnly = True
-      ShowColumnHeaders = False
       SortType = stBoth
       TabOrder = 16
-      ViewStyle = vsReport
       OnData = lvColoristesData
       OnKeyDown = lvDessinateursKeyDown
       LinkControls = <
@@ -2020,14 +1994,20 @@ object FrmEditAlbum: TFrmEditAlbum
       Height = 21
       Anchors = [akTop, akRight]
       TabOrder = 12
+      ExplicitLeft = 312
+      ExplicitTop = 146
+      ExplicitWidth = 177
       DesignSize = (
         177
         21)
       inherited btNext: TVDTButton
         Left = 136
+        ExplicitLeft = 136
       end
       inherited btNew: TVDTButton
         Left = 156
+        OnClick = FrameRechercheRapidePersonnesbtNewClick
+        ExplicitLeft = 156
       end
       inherited edSearch: TEditLabeled
         Width = 137
@@ -2035,6 +2015,7 @@ object FrmEditAlbum: TFrmEditAlbum
           item
             Control = Label19
           end>
+        ExplicitWidth = 137
       end
     end
     inline FrameRechercheRapideSerie: TFrameRechercheRapide
@@ -2044,14 +2025,20 @@ object FrmEditAlbum: TFrmEditAlbum
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 10
+      ExplicitLeft = 56
+      ExplicitTop = 146
+      ExplicitWidth = 178
       DesignSize = (
         178
         21)
       inherited btNext: TVDTButton
         Left = 137
+        ExplicitLeft = 137
       end
       inherited btNew: TVDTButton
         Left = 157
+        OnClick = FrameRechercheRapideSeriebtNewClick
+        ExplicitLeft = 157
       end
       inherited edSearch: TEditLabeled
         Width = 138
@@ -2059,6 +2046,7 @@ object FrmEditAlbum: TFrmEditAlbum
           item
             Control = Label20
           end>
+        ExplicitWidth = 138
       end
     end
     inline FrameRechercheRapideEditeur: TFrameRechercheRapide
@@ -2068,14 +2056,19 @@ object FrmEditAlbum: TFrmEditAlbum
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 19
+      ExplicitLeft = 446
+      ExplicitTop = 290
+      ExplicitWidth = 292
       DesignSize = (
         292
         21)
       inherited btNext: TVDTButton
         Left = 251
+        ExplicitLeft = 251
       end
       inherited btNew: TVDTButton
         Left = 271
+        ExplicitLeft = 271
       end
       inherited edSearch: TEditLabeled
         Width = 252
@@ -2083,6 +2076,7 @@ object FrmEditAlbum: TFrmEditAlbum
           item
             Control = Label5
           end>
+        ExplicitWidth = 252
       end
     end
     inline FrameRechercheRapideCollection: TFrameRechercheRapide
@@ -2092,15 +2086,20 @@ object FrmEditAlbum: TFrmEditAlbum
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 21
+      ExplicitLeft = 446
+      ExplicitTop = 396
+      ExplicitWidth = 292
       DesignSize = (
         292
         21)
       inherited btNext: TVDTButton
         Left = 251
+        ExplicitLeft = 251
       end
       inherited btNew: TVDTButton
         Left = 271
         Enabled = False
+        ExplicitLeft = 271
       end
       inherited edSearch: TEditLabeled
         Width = 252
@@ -2108,7 +2107,17 @@ object FrmEditAlbum: TFrmEditAlbum
           item
             Control = Label8
           end>
+        ExplicitWidth = 252
       end
+    end
+    object JvComboEdit1: TJvComboEdit
+      Left = 56
+      Top = 253
+      Width = 201
+      Height = 21
+      TabOrder = 25
+      Text = 'JvComboEdit1'
+      OnChange = JvComboEdit1Change
     end
   end
   inline Frame11: TFrame1
@@ -2118,14 +2127,18 @@ object FrmEditAlbum: TFrmEditAlbum
     Height = 25
     Align = alTop
     TabOrder = 1
-    inherited btnOK: TBitBtn
+    ExplicitWidth = 742
+    inherited btnOK: TPngBitBtn
       Left = 571
       Width = 87
       Caption = 'Enregistrer'
       OnClick = Frame11btnOKClick
+      ExplicitLeft = 571
+      ExplicitWidth = 87
     end
-    inherited btnAnnuler: TBitBtn
+    inherited btnAnnuler: TPngBitBtn
       Left = 659
+      ExplicitLeft = 659
     end
   end
   object ChoixImageDialog: TOpenPictureDialog
@@ -2141,7 +2154,7 @@ object FrmEditAlbum: TFrmEditAlbum
   object ImageList1: TImageList
     Left = 344
     Bitmap = {
-      494C010101000400040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010101000300040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

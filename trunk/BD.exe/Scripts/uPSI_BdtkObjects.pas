@@ -1,4 +1,4 @@
-unit uPSI_LoadComplet;
+unit uPSI_BdtkObjects;
 
 interface
 
@@ -6,7 +6,7 @@ uses
   SysUtils, Classes, uPSComponent, uPSCompiler, uPSRuntime;
 
 type
-  TPSImport_LoadComplet = class(TPSPlugin)
+  TPSImport_BdtkObjects = class(TPSPlugin)
   protected
     procedure CompileImport1(CompExec: TPSScript); override;
     procedure ExecImport1(CompExec: TPSScript; const ri: TPSRuntimeClassImporter); override;
@@ -15,19 +15,19 @@ type
 implementation
 
 uses
-  uPSC_LoadComplet,
-  uPSR_LoadComplet;
+  uPSC_BdtkObjects,
+  uPSR_BdtkObjects;
 
 { TPSImport_LoadComplet }
 
-procedure TPSImport_LoadComplet.CompileImport1(CompExec: TPSScript);
+procedure TPSImport_BdtkObjects.CompileImport1(CompExec: TPSScript);
 begin
-  SIRegister_LoadComplet(CompExec.Comp);
+  SIRegister_BdtkObjects(CompExec.Comp);
 end;
 
-procedure TPSImport_LoadComplet.ExecImport1(CompExec: TPSScript; const ri: TPSRuntimeClassImporter);
+procedure TPSImport_BdtkObjects.ExecImport1(CompExec: TPSScript; const ri: TPSRuntimeClassImporter);
 begin
-  RIRegister_LoadComplet(ri);
+  RIRegister_BdtkObjects(ri);
 end;
 
 end.

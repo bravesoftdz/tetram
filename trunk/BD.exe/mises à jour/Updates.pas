@@ -3,25 +3,31 @@ unit Updates;
 interface
 
 uses
-  Contnrs, Classes, UIB;
+  Contnrs, Classes, UIB, Divers, Generics.Collections, Generics.Defaults;
 
 type
   TUpdateFBCallback = procedure(Query: TUIBScript);
-  TUpdateMySQLCallback = procedure (Script: TStrings);
+  TUpdateMySQLCallback = procedure(Script: TStrings);
 
-  TFBUpdate = class
-    Version: string;
+  TBdtkUpdate = class
+    Version: TFileVersion;
+
+    type TBdtkUpdateComparer<T: TBdtkUpdate> = class(TComparer<T>)
+      function Compare(const Left, Right: T): Integer; override;
+    end;
+  end;
+
+  TFBUpdate = class(TBdtkUpdate)
     UpdateCallback: TUpdateFBCallback;
   end;
 
-  TMySQLUpdate = class
-    Version: string;
+  TMySQLUpdate = class(TBdtkUpdate)
     UpdateCallback: TUpdateMySQLCallback;
   end;
 
-const
-  ListFBUpdates: TObjectList = nil;
-  ListMySQLUpdates: TObjectList = nil;
+var
+  ListFBUpdates: TObjectList<TFBUpdate> = nil;
+  ListMySQLUpdates: TObjectList<TMySQLUpdate> = nil;
 
 procedure RegisterFBUpdate(Version: string; ProcMAJ: TUpdateFBCallback);
 procedure RegisterMySQLUpdate(Version: string; ProcMAJ: TUpdateMySQLCallback);
@@ -29,38 +35,32 @@ procedure LoadScript(const resName: string; Script: TStrings);
 
 implementation
 
-uses Divers;
-
-function CompareFBUpdate(Item1, Item2: Pointer): Integer;
-begin
-  Result := CompareVersionNum(TFBUpdate(Item1).Version, TFBUpdate(Item2).Version);
-end;
-
-function CompareMySQLUpdate(Item1, Item2: Pointer): Integer;
-begin
-  Result := CompareVersionNum(TMySQLUpdate(Item1).Version, TMySQLUpdate(Item2).Version);
-end;
-
 procedure RegisterFBUpdate(Version: string; ProcMAJ: TUpdateFBCallback);
 var
   Update: TFBUpdate;
+  comp: IComparer<TFBUpdate>;
 begin
   Update := TFBUpdate.Create;
   Update.Version := Version;
   Update.UpdateCallback := ProcMAJ;
   ListFBUpdates.Add(Update);
-  ListFBUpdates.Sort(CompareFBUpdate);
+  // on passe par une variable temporaire pour bénéficier du comptage de référence: le const du Sort bypass le comptage
+  comp := TBdtkUpdate.TBdtkUpdateComparer<TFBUpdate>.Create;
+  ListFBUpdates.Sort(comp);
 end;
 
 procedure RegisterMySQLUpdate(Version: string; ProcMAJ: TUpdateMySQLCallback);
 var
   Update: TMySQLUpdate;
+  comp: IComparer<TMySQLUpdate>;
 begin
   Update := TMySQLUpdate.Create;
   Update.Version := Version;
   Update.UpdateCallback := ProcMAJ;
   ListMySQLUpdates.Add(Update);
-  ListMySQLUpdates.Sort(CompareMySQLUpdate);
+  // on passe par une variable temporaire pour bénéficier du comptage de référence: le const du Sort bypass le comptage
+  comp := TBdtkUpdate.TBdtkUpdateComparer<TMySQLUpdate>.Create;
+  ListMySQLUpdates.Sort(comp);
 end;
 
 procedure LoadScript(const resName: string; Script: TStrings);
@@ -68,16 +68,24 @@ var
   s: TResourceStream;
 begin
   s := TResourceStream.Create(HInstance, resName, 'ScriptsUpdate');
-  with s do try
-    Script.LoadFromStream(s);
-  finally
-    Free;
-  end;
+  with s do
+    try
+      Script.LoadFromStream(s);
+    finally
+      Free;
+    end;
+end;
+
+{ TBdtkUpdate.TBdtkUpdateComparer<T> }
+
+function TBdtkUpdate.TBdtkUpdateComparer<T>.Compare(const Left, Right: T): Integer;
+begin
+  Result := Left.Version - Right.Version;
 end;
 
 initialization
-  ListFBUpdates := TObjectList.Create(True);
-  ListMySQLUpdates := TObjectList.Create(True);
+  ListFBUpdates := TObjectList<TFBUpdate>.Create(True);
+  ListMySQLUpdates := TObjectList<TMySQLUpdate>.Create(True);
 
 finalization
   ListFBUpdates.Free;

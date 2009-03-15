@@ -19,7 +19,7 @@ type
     Aperuavantimpression1: TMenuItem;
     Imprimer1: TMenuItem;
     CheckBox2: TCheckBox;
-    procedure vstAlbumsManquantsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+    procedure vstAlbumsManquantsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure vstAlbumsManquantsInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
@@ -87,7 +87,7 @@ begin
   end;
 end;
 
-procedure TfrmSeriesIncompletes.vstAlbumsManquantsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TfrmSeriesIncompletes.vstAlbumsManquantsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
 var
   NodeInfo: ^RNodeInfo;
 begin

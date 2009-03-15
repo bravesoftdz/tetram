@@ -56,7 +56,7 @@ begin
   if Champ.Special = csGenre then
     Result.valeurText := FChampValeurs[Result.iCritere2];
   Result.NomTable := Champ.NomTable;
-  Result.TestSQL := Champ.NomTable + '.' + Champ.NomChamp;
+  Result.TestSQL := string(Champ.NomTable + '.' + Champ.NomChamp);
   critereTexte := UpperCase(SansAccents(Result.valeurText));
   case Champ.Special of
     csGenre:

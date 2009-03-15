@@ -34,15 +34,25 @@ object FrmConvers: TFrmConvers
       Height = 24
       Align = alBottom
       TabOrder = 0
+      ExplicitLeft = 2
+      ExplicitTop = 46
+      ExplicitWidth = 185
+      ExplicitHeight = 24
       inherited btnOK: TBitBtn
         Left = 54
         Width = 54
         Height = 19
+        ExplicitLeft = 54
+        ExplicitWidth = 54
+        ExplicitHeight = 19
       end
       inherited btnAnnuler: TBitBtn
         Left = 112
         Width = 68
         Height = 19
+        ExplicitLeft = 112
+        ExplicitWidth = 68
+        ExplicitHeight = 19
       end
     end
   end

@@ -384,8 +384,8 @@ object FrmCustomize: TFrmCustomize
     object Label3: TLabel
       Left = 2
       Top = 15
-      Width = 495
-      Height = 44
+      Width = 31
+      Height = 13
       Align = alClient
       Alignment = taCenter
       Caption = 'Label3'
@@ -400,16 +400,25 @@ object FrmCustomize: TFrmCustomize
     Height = 33
     Align = alBottom
     TabOrder = 1
+    ExplicitTop = 345
+    ExplicitWidth = 514
+    ExplicitHeight = 33
     inherited btnOK: TBitBtn
       Left = 358
       Top = 9
       Width = 74
       OnClick = Frame11btnOKClick
+      ExplicitLeft = 358
+      ExplicitTop = 9
+      ExplicitWidth = 74
     end
     inherited btnAnnuler: TBitBtn
       Left = 439
       Top = 9
       Width = 72
+      ExplicitLeft = 439
+      ExplicitTop = 9
+      ExplicitWidth = 72
     end
   end
   object Cats: TListBox
@@ -432,20 +441,14 @@ object FrmCustomize: TFrmCustomize
     Height = 155
     Anchors = [akLeft, akTop, akRight]
     BevelKind = bkTile
-    BorderStyle = bsNone
     Columns = <
       item
         Width = 46
       end>
-    ColumnClick = False
     DragMode = dmAutomatic
-    HideSelection = False
-    ReadOnly = True
     RowSelect = True
-    ShowColumnHeaders = False
     SmallImages = frmFond.boutons_16x16_hot
     TabOrder = 3
-    ViewStyle = vsReport
     OnChange = CommandsChange
   end
   object VDTListView1: TVDTListView
@@ -455,21 +458,15 @@ object FrmCustomize: TFrmCustomize
     Height = 244
     Anchors = [akLeft, akTop, akRight]
     BevelKind = bkTile
-    BorderStyle = bsNone
     Columns = <
       item
         Width = 46
       end>
-    ColumnClick = False
     DragMode = dmAutomatic
-    HideSelection = False
-    ReadOnly = True
     RowSelect = True
-    ShowColumnHeaders = False
     SmallImages = frmFond.boutons_16x16_hot
     SortType = stNone
     TabOrder = 4
-    ViewStyle = vsReport
     OnChange = CommandsChange
     OnDragDrop = VDTListView1DragDrop
     OnDragOver = VDTListView1DragOver

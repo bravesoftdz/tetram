@@ -46,14 +46,14 @@ begin
   with q do try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT Monnaie1, Monnaie2, Taux FROM conversions WHERE Monnaie1 = ? OR Monnaie2 = ?';
-    Params.AsString[0] := Utilisateur.Options.SymboleMonnetaire;
-    Params.AsString[1] := Utilisateur.Options.SymboleMonnetaire;
+    Params.AsString[0] := TGlobalVar.Utilisateur.Options.SymboleMonnetaire;
+    Params.AsString[1] := TGlobalVar.Utilisateur.Options.SymboleMonnetaire;
     Open;
     i := 0;
     while not EOF do begin
       PC.Fill(Q);
       fc := TConvertisseur.Create(Self);
-      if PC.Monnaie1 = Utilisateur.Options.SymboleMonnetaire then begin
+      if PC.Monnaie1 = TGlobalVar.Utilisateur.Options.SymboleMonnetaire then begin
         fc.Label1.Caption := PC.Monnaie2;
         fc.FTaux := 1 / PC.Taux;
       end

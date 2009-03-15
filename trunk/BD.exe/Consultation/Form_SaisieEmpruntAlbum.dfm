@@ -22,9 +22,9 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 11
+    Left = 8
     Top = 213
-    Width = 23
+    Width = 26
     Height = 11
     Hint = 'Date du mouvement'
     Alignment = taRightJustify
@@ -56,9 +56,9 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     WordWrap = True
   end
   object Label3: TLabel
-    Left = 4
+    Left = 1
     Top = 47
-    Width = 30
+    Width = 33
     Height = 11
     Hint = 'Date du mouvement'
     Alignment = taRightJustify
@@ -72,9 +72,9 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     Layout = tlCenter
   end
   object Label4: TLabel
-    Left = 10
+    Left = 7
     Top = 7
-    Width = 24
+    Width = 27
     Height = 11
     Hint = 'Date du mouvement'
     Alignment = taRightJustify
@@ -106,9 +106,9 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     WordWrap = True
   end
   object Label6: TLabel
-    Left = 3
+    Left = 0
     Top = 127
-    Width = 31
+    Width = 34
     Height = 11
     Hint = 'Date du mouvement'
     Alignment = taRightJustify
@@ -149,17 +149,26 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     Height = 23
     Align = alBottom
     TabOrder = 4
+    ExplicitTop = 234
+    ExplicitWidth = 479
+    ExplicitHeight = 23
     inherited btnOK: TBitBtn
       Left = 319
       Width = 73
       Height = 19
       Enabled = False
       OnClick = okClick
+      ExplicitLeft = 319
+      ExplicitWidth = 73
+      ExplicitHeight = 19
     end
     inherited btnAnnuler: TBitBtn
       Left = 399
       Width = 72
       Height = 19
+      ExplicitLeft = 399
+      ExplicitWidth = 72
+      ExplicitHeight = 19
     end
   end
   object date_pret: TDateTimePickerLabeled
@@ -230,14 +239,20 @@ object FrmSaisie_EmpruntAlbum: TFrmSaisie_EmpruntAlbum
     Width = 249
     Height = 21
     TabOrder = 0
+    ExplicitLeft = 223
+    ExplicitTop = 6
+    ExplicitWidth = 249
     inherited btNext: TVDTButton
       Left = 208
+      ExplicitLeft = 208
     end
     inherited btNew: TVDTButton
       Left = 228
+      ExplicitLeft = 228
     end
     inherited edSearch: TEditLabeled
       Width = 209
+      ExplicitWidth = 209
     end
   end
 end

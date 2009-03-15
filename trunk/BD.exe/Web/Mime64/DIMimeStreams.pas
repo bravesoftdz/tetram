@@ -31,11 +31,11 @@ procedure MimeEncodeStreamNoCRLF(const InputStream: TStream; const OutputStream:
 
 procedure MimeDecodeStream(const InputStream: TStream; const OutputStream: TStream);
 
-procedure MimeEncodeFile(const InputFileName, OutputFileName: AnsiString);
+procedure MimeEncodeFile(const InputFileName, OutputFileName: string);
 
-procedure MimeEncodeFileNoCRLF(const InputFileName, OutputFileName: AnsiString);
+procedure MimeEncodeFileNoCRLF(const InputFileName, OutputFileName: string);
 
-procedure MimeDecodeFile(const InputFileName, OutputFileName: AnsiString);
+procedure MimeDecodeFile(const InputFileName, OutputFileName: string);
 
 implementation
 
@@ -110,7 +110,7 @@ begin
   OutputStream.Write(OutputBuffer, MimeDecodePartialEnd(OutputBuffer, ByteBuffer, ByteBufferSpace));
 end;
 
-procedure MimeEncodeFile(const InputFileName, OutputFileName: AnsiString);
+procedure MimeEncodeFile(const InputFileName, OutputFileName: string);
 var
   InputStream, OutputStream: TFileStream;
 begin
@@ -127,7 +127,7 @@ begin
   end;
 end;
 
-procedure MimeEncodeFileNoCRLF(const InputFileName, OutputFileName: AnsiString);
+procedure MimeEncodeFileNoCRLF(const InputFileName, OutputFileName: string);
 var
   InputStream, OutputStream: TFileStream;
 begin
@@ -144,7 +144,7 @@ begin
   end;
 end;
 
-procedure MimeDecodeFile(const InputFileName, OutputFileName: AnsiString);
+procedure MimeDecodeFile(const InputFileName, OutputFileName: string);
 var
   InputStream, OutputStream: TFileStream;
 begin

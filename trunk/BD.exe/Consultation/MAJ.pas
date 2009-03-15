@@ -23,7 +23,7 @@ function SaisieMouvementEmprunteur(const MvtID_Emprunteur: TGUID; const MvtID_Al
 implementation
 
 uses
-  CommonConst, Form_Stock, Main, DB, StdCtrls, Form_SeriesIncompletes,
+  CommonConst, Form_Stock, UfrmFond, DB, StdCtrls, Form_SeriesIncompletes,
   Form_PrevisionsSorties, Graphics, Form_ConsultationAlbum, Form_ConsultationEmprunteur, Form_SaisieEmpruntAlbum, Form_SaisieEmpruntEmprunteur, Form_Recherche,
   Form_ZoomCouverture, Form_ConsultationAuteur, Form_PrevisionAchats, UHistorique,
   Form_ConsultationParaBD, Form_ConsultationSerie;
@@ -116,7 +116,7 @@ end;
 function SaisieMouvementAlbum(const MvtID_Album, MvtID_Edition: TGUID; MvtPret: Boolean; const MvtID_Emprunteur: string): Boolean;
 begin
   Result := False;
-  if Mode_en_cours <> mdConsult then Exit;
+  if TGlobalVar.Mode_en_cours <> mdConsult then Exit;
 
   with TFrmSaisie_EmpruntAlbum.Create(frmFond) do try
     pret.Checked := MvtPret;
@@ -134,7 +134,7 @@ var
   i: Integer;
 begin
   Result := False;
-  if Mode_en_cours <> mdConsult then Exit;
+  if TGlobalVar.Mode_en_cours <> mdConsult then Exit;
   with TFrmSaisie_EmpruntEmprunteur.Create(frmFond) do try
     ID_Emprunteur := MvtID_Emprunteur;
     for i := Low(MvtID_Album) to High(MvtID_Album) do
@@ -180,7 +180,7 @@ var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  if not (TGlobalVar.Mode_en_cours in [mdEdit, mdConsult]) then Exit;
   FDest := TFrmRecherche.Create(frmFond);
   with FDest do begin
     // le TTreeView est une merde! si on fait la création de noeud avec Data

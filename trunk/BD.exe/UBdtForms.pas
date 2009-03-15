@@ -20,6 +20,8 @@ constructor TbdtForm.CreateNew(AOwner: TComponent; Dummy: Integer);
 begin
   inherited;
   Scaled := False;
+  Font.Name := 'Tahoma';
+  Font.Size := 8;
 end;
 
 end.

@@ -110,11 +110,16 @@ object FrmEditCollection: TFrmEditCollection
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 1
+      ExplicitLeft = 52
+      ExplicitTop = 31
+      ExplicitWidth = 353
       inherited btNext: TVDTButton
         Left = 312
+        ExplicitLeft = 312
       end
       inherited btNew: TVDTButton
         Left = 332
+        ExplicitLeft = 332
       end
       inherited edSearch: TEditLabeled
         Width = 313
@@ -122,6 +127,7 @@ object FrmEditCollection: TFrmEditCollection
           item
             Control = Label5
           end>
+        ExplicitWidth = 313
       end
     end
   end
@@ -132,14 +138,18 @@ object FrmEditCollection: TFrmEditCollection
     Height = 25
     Align = alTop
     TabOrder = 1
+    ExplicitWidth = 410
     inherited btnOK: TBitBtn
       Left = 239
       Width = 87
       Caption = 'Enregistrer'
       OnClick = Frame11btnOKClick
+      ExplicitLeft = 239
+      ExplicitWidth = 87
     end
     inherited btnAnnuler: TBitBtn
       Left = 327
+      ExplicitLeft = 327
     end
   end
 end

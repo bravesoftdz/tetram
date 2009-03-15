@@ -5,7 +5,7 @@ interface
 {$WARN UNIT_PLATFORM OFF}
 
 uses
-  SysUtils, Windows, Forms, FileCtrl, Classes,
+  SysUtils, Windows, Forms, FileCtrl, Classes, Divers,
   Contnrs;
 
 const
@@ -49,7 +49,7 @@ type
 
   ROptions = record
     FicheAlbumWithCouverture, FicheParaBDWithImage, ModeDemarrage, Images: Boolean;
-    SymboleMonnetaire: string[5];
+    SymboleMonnetaire: string;
     AntiAliasing: Boolean;
     ImagesStockees: Boolean;
     AvertirPret: Boolean;
@@ -64,18 +64,21 @@ type
 
   RUtilisateur = record
     Options: ROptions;
-    ExeVersion, AppVersion: string;
+    ExeVersion, AppVersion: TFileVersion;
   end;
 
   TModeConsult = (mdLoad, mdConsult, mdEdit, mdEditing, mdEntretien, mdImportation, mdExportation);
 
-var
-  Mode_en_cours: TModeConsult;
-  Utilisateur: RUtilisateur;
+type
+  TGlobalVar = class
+    class var Mode_en_cours: TModeConsult;
+    class var Utilisateur: RUtilisateur;
+  end;
 
 implementation
 
-uses Divers, IniFiles;
+uses
+  IniFiles;
 
 initialization
   GetTempPath(Length(TempPath), TempPath);
@@ -86,22 +89,24 @@ initialization
   FormatMonnaieSimple := '0.00';
   FormatMonnaie := IIf(CurrencyFormat in [0, 2], CurrencyString + IIf(CurrencyFormat = 2, ' ', ''), '') + FormatMonnaieCourt + IIf(CurrencyFormat in [1, 3], IIf(CurrencyFormat = 3, ' ', '') + CurrencyString, '');
   FormatPourcent := '%d (%f%%)';
-  Utilisateur.ExeVersion := GetFichierVersion(Application.ExeName);
-  with TIniFile.Create(FichierIni) do try
-    DatabasePath := ReadString('Database', 'Database', ExtractFilePath(Application.ExeName) + DatabasePath);
-    DatabaseUserName := ReadString('Database', 'UserName', DatabaseUserName);
-    DatabasePassword := ReadString('Database', 'Password', DatabasePassword);
-    DatabaseRole := ReadString('Database', 'Role', DatabaseRole);
-    DatabaseLibraryName := ReadString('Database', 'LibraryName', DatabaseLibraryName);
-    RepImages := ReadString('DIVERS', 'RepImages', RepImages);
-    Utilisateur.Options.VerifMAJDelai := ReadInteger('Divers', 'VerifMAJDelai', 4);
-    Utilisateur.Options.LastVerifMAJ := ReadInteger('Divers', 'LastVerifMAJ', 0);
-  finally
-    Free;
-  end;
+  TGlobalVar.Utilisateur.ExeVersion := GetFichierVersion(Application.ExeName);
+  with TIniFile.Create(FichierIni) do
+    try
+      DatabasePath := ReadString('Database', 'Database', ExtractFilePath(Application.ExeName) + DatabasePath);
+      DatabaseUserName := ReadString('Database', 'UserName', DatabaseUserName);
+      DatabasePassword := ReadString('Database', 'Password', DatabasePassword);
+      DatabaseRole := ReadString('Database', 'Role', DatabaseRole);
+      DatabaseLibraryName := ReadString('Database', 'LibraryName', DatabaseLibraryName);
+      RepImages := ReadString('DIVERS', 'RepImages', RepImages);
+      TGlobalVar.Utilisateur.Options.VerifMAJDelai := ReadInteger('Divers', 'VerifMAJDelai', 4);
+      TGlobalVar.Utilisateur.Options.LastVerifMAJ := ReadInteger('Divers', 'LastVerifMAJ', 0);
+    finally
+      Free;
+    end;
 
 finalization
-  if HandleDLLPic <> 0 then FreeLibrary(HandleDLLPic);
+  if HandleDLLPic <> 0 then
+    FreeLibrary(HandleDLLPic);
 
 end.
 

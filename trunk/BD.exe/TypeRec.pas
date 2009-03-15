@@ -3,7 +3,7 @@ unit TypeRec;
 interface
 
 uses
-  Windows, SysUtils, DB, Classes, ComCtrls, UIB, StdCtrls, Commun;
+  Windows, SysUtils, DB, Classes, ComCtrls, UIB, StdCtrls, Commun, UMetaData;
 
 //  IMPORTANT: Ref doit TOUJOURS être le premier champ des records
 //  Les strings DOIVENT être limités pour pouvoir utiliser CopyMemory(Pd, Ps, SizeOf(Ps^));
@@ -37,10 +37,10 @@ type
 
   TCouverture = class(TBasePointeur)
   public
-    OldNom, NewNom: string[255];
+    OldNom, NewNom: string{[255]};
     OldStockee, NewStockee: Boolean;
     Categorie: Smallint;
-    sCategorie: string[50];
+    sCategorie: string{[50]};
 
     procedure Assign(Ps: TBasePointeur); override;
 
@@ -52,10 +52,10 @@ type
 
   TParaBD = class(TBasePointeur)
   public
-    Titre: string[150];
+    Titre: string{[150]};
     ID_Serie: TGUID;
-    Serie: string[150];
-    sCategorie: string[50];
+    Serie: string{[150]};
+    sCategorie: string{[50]};
     Achat: Boolean;
     Complet: Boolean;
 
@@ -70,7 +70,7 @@ type
 
   TPersonnage = class(TBasePointeur)
   public
-    Nom: string[150];
+    Nom: string{[150]};
 
     procedure Assign(Ps: TBasePointeur); override;
 
@@ -83,7 +83,7 @@ type
   public
     Personne: TPersonnage;
     ID_Album, ID_Serie: TGUID;
-    Metier: Integer;
+    Metier: TMetierAuteur;
 
     procedure Assign(Ps: TBasePointeur); override;
 
@@ -91,7 +91,7 @@ type
     destructor Destroy; override;
 
     procedure Fill(Query: TUIBQuery); overload; override;
-    procedure Fill(Pe: TPersonnage; const ReferenceAlbum, ReferenceSerie: TGUID; Metier: Integer); reintroduce; overload;
+    procedure Fill(Pe: TPersonnage; const ReferenceAlbum, ReferenceSerie: TGUID; Metier: TMetierAuteur); reintroduce; overload;
     procedure Clear; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
 
@@ -100,7 +100,7 @@ type
 
   TEditeur = class(TBasePointeur)
   public
-    NomEditeur: string[50];
+    NomEditeur: string{[50]};
 
     procedure Assign(Ps: TBasePointeur); override;
 
@@ -116,11 +116,11 @@ type
     Tome: Integer;
     TomeDebut: Integer;
     TomeFin: Integer;
-    Titre: string[150];
+    Titre: string{[150]};
     ID_Serie: TGUID;
-    Serie: string[150];
+    Serie: string{[150]};
     ID_Editeur: TGUID;
-    Editeur: string[50];
+    Editeur: string{[50]};
     AnneeParution, MoisParution: Integer;
     Stock: Boolean;
     Integrale: Boolean;
@@ -141,7 +141,7 @@ type
 
   TCollection = class(TBasePointeur)
   public
-    NomCollection: string[50];
+    NomCollection: string{[50]};
     Editeur: TEditeur;
 
     procedure Assign(Ps: TBasePointeur); override;
@@ -158,7 +158,7 @@ type
 
   TSerie = class(TBasePointeur)
   public
-    TitreSerie: string[150];
+    TitreSerie: string{[150]};
     Editeur: TEditeur;
     Collection: TCollection;
 
@@ -177,7 +177,7 @@ type
   TEdition = class(TBasePointeur)
   public
     AnneeEdition: Integer;
-    ISBN: string[17];
+    ISBN: string{[17]};
     Editeur: TEditeur;
     Collection: TCollection;
 
@@ -194,7 +194,7 @@ type
 
   TEmprunteur = class(TBasePointeur)
   public
-    Nom: string[100];
+    Nom: string{[100]};
 
     procedure Assign(Ps: TBasePointeur); override;
 
@@ -207,7 +207,7 @@ type
   end;
 
   TConversion = class(TBasePointeur)
-    Monnaie1, Monnaie2: string[5];
+    Monnaie1, Monnaie2: string{[5]};
     Taux: Double;
 
     procedure Fill(Query: TUIBQuery); override;
@@ -216,7 +216,7 @@ type
 
   TGenre = class(TBasePointeur)
   public
-    Genre: string[50];
+    Genre: string{[50]};
     Quantite: Integer;
 
     procedure Assign(Ps: TBasePointeur); override;
@@ -249,7 +249,7 @@ type
 
 implementation
 
-uses DM_Princ, UIBLib;
+uses DM_Princ, UIBLib, StrUtils;
 
 { TBasePointeur }
 
@@ -520,13 +520,13 @@ begin
   inherited;
   PPersonne := TPersonnage(TPersonnage.Make(Query));
   try
-    Fill(PPersonne, NonNull(Query, 'ID_Album'), NonNull(Query, 'ID_Serie'), Query.Fields.ByNameAsInteger['Metier']);
+    Fill(PPersonne, NonNull(Query, 'ID_Album'), NonNull(Query, 'ID_Serie'), TMetierAuteur(Query.Fields.ByNameAsInteger['Metier']));
   finally
     PPersonne.Free;
   end;
 end;
 
-procedure TAuteur.Fill(Pe: TPersonnage; const ReferenceAlbum, ReferenceSerie: TGUID; Metier: Integer);
+procedure TAuteur.Fill(Pe: TPersonnage; const ReferenceAlbum, ReferenceSerie: TGUID; Metier: TMetierAuteur);
 begin
   Personne.Assign(Pe);
   ID_Album := ReferenceAlbum;

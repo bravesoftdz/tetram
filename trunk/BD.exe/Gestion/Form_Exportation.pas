@@ -26,7 +26,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure VDTButton20Click(Sender: TObject);
     procedure VDTButton1Click(Sender: TObject);
-    procedure vstExportationGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+    procedure vstExportationGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure vstExportationPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
     procedure vstExportationFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VDTButton2Click(Sender: TObject);
@@ -62,7 +62,7 @@ end;
 
 procedure TFrmExportation.FormCreate(Sender: TObject);
 begin
-  Mode_en_cours := mdExportation;
+  TGlobalVar.Mode_en_cours := mdExportation;
 
   PrepareLV(Self);
 
@@ -144,7 +144,7 @@ begin
   NodeInfo.Detail := TAlbum.Duplicate(PA);
 end;
 
-procedure TFrmExportation.vstExportationGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: WideString);
+procedure TFrmExportation.vstExportationGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
 var
   InitialeInfo: PInitialeInfo;
   NodeInfo: ^RNodeInfo;

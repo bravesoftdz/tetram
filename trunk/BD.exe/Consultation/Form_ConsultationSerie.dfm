@@ -1,9 +1,9 @@
 object FrmConsultationSerie: TFrmConsultationSerie
   Left = 1349
   Top = 58
-  Width = 870
-  Height = 813
   Caption = 'FrmConsultationSerie'
+  ClientHeight = 786
+  ClientWidth = 862
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -305,19 +305,13 @@ object FrmConsultationSerie: TFrmConsultationSerie
       BevelInner = bvLowered
       BevelOuter = bvNone
       BevelKind = bkFlat
-      BorderStyle = bsNone
       Color = clWhite
       Columns = <
         item
           MinWidth = 150
           Width = 231
         end>
-      ColumnClick = False
-      HideSelection = False
-      ReadOnly = True
-      ShowColumnHeaders = False
       TabOrder = 2
-      ViewStyle = vsReport
       OnDblClick = lvScenaristesDblClick
     end
     object lvDessinateurs: TVDTListView
@@ -329,20 +323,14 @@ object FrmConsultationSerie: TFrmConsultationSerie
       BevelInner = bvLowered
       BevelOuter = bvNone
       BevelKind = bkFlat
-      BorderStyle = bsNone
       Color = clWhite
       Columns = <
         item
           MinWidth = 150
           Width = 231
         end>
-      ColumnClick = False
-      HideSelection = False
-      ReadOnly = True
-      ShowColumnHeaders = False
       SortType = stData
       TabOrder = 3
-      ViewStyle = vsReport
       OnDblClick = lvScenaristesDblClick
     end
     object Memo1: TMemo
@@ -369,20 +357,14 @@ object FrmConsultationSerie: TFrmConsultationSerie
       BevelInner = bvLowered
       BevelOuter = bvNone
       BevelKind = bkFlat
-      BorderStyle = bsNone
       Color = clWhite
       Columns = <
         item
           MinWidth = 150
           Width = 231
         end>
-      ColumnClick = False
-      HideSelection = False
-      ReadOnly = True
-      ShowColumnHeaders = False
       SortType = stData
       TabOrder = 5
-      ViewStyle = vsReport
       OnDblClick = lvScenaristesDblClick
     end
     object vtAlbums: TVirtualStringTree

@@ -1,8 +1,6 @@
 object DataCommun: TDataCommun
   OldCreateOrder = False
   OnDestroy = DataModuleDestroy
-  Left = 517
-  Top = 380
   Height = 351
   Width = 589
   object TblGenres: TUIBQuery

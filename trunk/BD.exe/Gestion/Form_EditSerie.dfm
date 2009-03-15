@@ -1,10 +1,10 @@
 object FrmEditSerie: TFrmEditSerie
   Left = 302
   Top = 146
-  Width = 750
-  Height = 956
   ActiveControl = edTitre
   Caption = 'Saisie de S'#233'rie'
+  ClientHeight = 929
+  ClientWidth = 742
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -119,10 +119,8 @@ object FrmEditSerie: TFrmEditSerie
       Top = 30
       Width = 23
       Height = 18
-      Cursor = crHandPoint
       Anchors = [akTop, akRight]
       Enabled = False
-      Flat = True
       Glyph.Data = {
         76010000424D7601000000000000760000002800000020000000100000000100
         04000000000000010000120B0000120B00001000000000000000000000000000
@@ -885,19 +883,14 @@ object FrmEditSerie: TFrmEditSerie
       Top = 146
       Width = 198
       Height = 41
+      Anchors = [akLeft, akTop, akRight, akBottom]
       BevelKind = bkTile
-      BorderStyle = bsNone
       Columns = <
         item
         end>
-      ColumnClick = False
-      HideSelection = False
       OwnerData = True
-      ReadOnly = True
-      ShowColumnHeaders = False
       SortType = stNone
       TabOrder = 6
-      ViewStyle = vsReport
       OnData = lvScenaristesData
       OnKeyDown = lvColoristesKeyDown
       LinkControls = <
@@ -910,19 +903,14 @@ object FrmEditSerie: TFrmEditSerie
       Top = 190
       Width = 198
       Height = 41
+      Anchors = [akLeft, akTop, akRight, akBottom]
       BevelKind = bkTile
-      BorderStyle = bsNone
       Columns = <
         item
         end>
-      ColumnClick = False
-      HideSelection = False
       OwnerData = True
-      ReadOnly = True
-      ShowColumnHeaders = False
       SortType = stBoth
       TabOrder = 7
-      ViewStyle = vsReport
       OnData = lvDessinateursData
       OnKeyDown = lvColoristesKeyDown
       LinkControls = <
@@ -963,19 +951,14 @@ object FrmEditSerie: TFrmEditSerie
       Top = 234
       Width = 198
       Height = 41
+      Anchors = [akLeft, akTop, akRight, akBottom]
       BevelKind = bkTile
-      BorderStyle = bsNone
       Columns = <
         item
         end>
-      ColumnClick = False
-      HideSelection = False
       OwnerData = True
-      ReadOnly = True
-      ShowColumnHeaders = False
       SortType = stBoth
       TabOrder = 8
-      ViewStyle = vsReport
       OnData = lvColoristesData
       OnKeyDown = lvColoristesKeyDown
       LinkControls = <
@@ -1017,14 +1000,19 @@ object FrmEditSerie: TFrmEditSerie
       Width = 177
       Height = 21
       TabOrder = 4
+      ExplicitLeft = 56
+      ExplicitTop = 146
+      ExplicitWidth = 177
       DesignSize = (
         177
         21)
       inherited btNext: TVDTButton
         Left = 136
+        ExplicitLeft = 136
       end
       inherited btNew: TVDTButton
         Left = 156
+        ExplicitLeft = 156
       end
       inherited edSearch: TEditLabeled
         Width = 137
@@ -1032,6 +1020,7 @@ object FrmEditSerie: TFrmEditSerie
           item
             Control = Label19
           end>
+        ExplicitWidth = 137
       end
     end
     inline FrameRechercheRapideGenre: TFrameRechercheRapide
@@ -1041,14 +1030,19 @@ object FrmEditSerie: TFrmEditSerie
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 9
+      ExplicitLeft = 552
+      ExplicitTop = 146
+      ExplicitWidth = 180
       DesignSize = (
         180
         21)
       inherited btNext: TVDTButton
         Left = 139
+        ExplicitLeft = 139
       end
       inherited btNew: TVDTButton
         Left = 159
+        ExplicitLeft = 159
       end
       inherited edSearch: TEditLabeled
         Width = 140
@@ -1056,6 +1050,7 @@ object FrmEditSerie: TFrmEditSerie
           item
             Control = Label17
           end>
+        ExplicitWidth = 140
       end
     end
     inline FrameRechercheRapideCollection: TFrameRechercheRapide
@@ -1065,15 +1060,20 @@ object FrmEditSerie: TFrmEditSerie
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 13
+      ExplicitLeft = 413
+      ExplicitTop = 298
+      ExplicitWidth = 321
       DesignSize = (
         321
         21)
       inherited btNext: TVDTButton
         Left = 280
+        ExplicitLeft = 280
       end
       inherited btNew: TVDTButton
         Left = 300
         Enabled = False
+        ExplicitLeft = 300
       end
       inherited edSearch: TEditLabeled
         Width = 281
@@ -1081,6 +1081,7 @@ object FrmEditSerie: TFrmEditSerie
           item
             Control = Label8
           end>
+        ExplicitWidth = 281
       end
     end
     inline FrameRechercheRapideEditeur: TFrameRechercheRapide
@@ -1089,14 +1090,19 @@ object FrmEditSerie: TFrmEditSerie
       Width = 294
       Height = 21
       TabOrder = 11
+      ExplicitLeft = 56
+      ExplicitTop = 298
+      ExplicitWidth = 294
       DesignSize = (
         294
         21)
       inherited btNext: TVDTButton
         Left = 253
+        ExplicitLeft = 253
       end
       inherited btNew: TVDTButton
         Left = 273
+        ExplicitLeft = 273
       end
       inherited edSearch: TEditLabeled
         Width = 254
@@ -1104,6 +1110,7 @@ object FrmEditSerie: TFrmEditSerie
           item
             Control = Label5
           end>
+        ExplicitWidth = 254
       end
     end
     object cbSorties: TCheckBoxLabeled
@@ -1192,14 +1199,18 @@ object FrmEditSerie: TFrmEditSerie
     Height = 25
     Align = alTop
     TabOrder = 1
+    ExplicitWidth = 742
     inherited btnOK: TBitBtn
       Left = 568
       Width = 90
       Caption = 'Enregistrer'
       OnClick = Frame11btnOKClick
+      ExplicitLeft = 568
+      ExplicitWidth = 90
     end
     inherited btnAnnuler: TBitBtn
       Left = 659
+      ExplicitLeft = 659
     end
   end
 end

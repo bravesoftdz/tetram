@@ -88,7 +88,7 @@ implementation
 
 uses
   UIB, Commun, Form_EditAlbum, Form_EditSerie, Form_EditEmprunteur, Textes, Form_EditEditeur, DM_Princ,
-  Math, Main, Procedures, ProceduresBDtk, Form_EditCollection, Form_EditAuteur, Form_EditParaBD,
+  Math, UfrmFond, Procedures, ProceduresBDtk, Form_EditCollection, Form_EditAuteur, Form_EditParaBD,
   Form_EditAchatAlbum;
 
 function FindRec(const Table, Champ: string; const Reference: TGUID; WithMessage: Boolean): Boolean;

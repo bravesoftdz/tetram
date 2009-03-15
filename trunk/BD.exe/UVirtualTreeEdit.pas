@@ -1,0 +1,270 @@
+unit UVirtualTreeEdit;
+
+interface
+
+uses
+  SysUtils, Windows, Classes, Controls, Messages, JvToolEdit, VirtualTrees, VirtualTree, Variants;
+
+type
+  TJvComboEdit = class(JvToolEdit.TJvComboEdit)
+
+    type TJvPopupVirtualTree = class(TJvPopupWindow)
+    private
+      FTreeView: TVirtualStringTree;
+      FClickedPosition: TPoint;
+      procedure TreeViewMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+      procedure TreeViewMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    public
+      constructor Create(AOwner: TComponent); override;
+      destructor Destroy; override;
+    protected
+      function GetValue: Variant; override;
+      procedure SetValue(const Value: Variant); override;
+    published
+      property TreeView: TVirtualStringTree read FTreeView;
+    end;
+
+  private
+    type TCrackWinControl = class(TWinControl);
+  var
+    FInternalCurrentValue: TGUID;
+    FReloadValue: Boolean;
+    FInternalValueChanged: TNotifyEvent;
+
+    procedure SetMode(const Value: TVirtualMode);
+    procedure SetCurrentValue(const Value: TGUID);
+    function GetMode: TVirtualMode;
+    function GetCurrentValue: TGUID;
+    function GetPopupWindow: TJvPopupVirtualTree;
+    procedure SetInternalCurrentValue(const Value: TGUID);
+  protected
+    procedure PopupCloseUp(Sender: TObject; Accept: Boolean); override;
+    procedure PopupDropDown(DisableEdit: Boolean); override;
+    procedure KeyDown(var Key: Word; Shift: TShiftState); override;
+    procedure SetPopupValue(const Value: Variant); override;
+    procedure PopupChange; override;
+    procedure Change; override;
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    function Data: Pointer;
+    procedure CloseUp;
+  published
+    property Mode: TVirtualMode read GetMode write SetMode;
+    property CurrentValue: TGUID read GetCurrentValue write SetCurrentValue;
+    property PopupWindow: TJvPopupVirtualTree read GetPopupWindow;
+    property InternalValueChanged: TNotifyEvent read FInternalValueChanged write FInternalValueChanged;
+  end;
+
+implementation
+
+uses
+  Commun, Forms, TypeRec;
+
+constructor TJvComboEdit.Create(AOwner: TComponent);
+begin
+  inherited;
+
+  ImageKind := ikDropDown;
+  FInternalCurrentValue := GUID_NULL;
+  FReloadValue := True;
+  FPopup := TJvPopupVirtualTree.Create(Self);
+  TJvPopupWindow(FPopup).OnCloseUp := PopupCloseUp;
+end;
+
+destructor TJvComboEdit.Destroy;
+begin
+  TJvPopupWindow(FPopup).OnCloseUp := nil;
+  FPopup.Parent := nil;
+  FreeAndNil(FPopup);
+
+  inherited;
+end;
+
+procedure TJvComboEdit.Change;
+begin
+  if FReloadValue then
+    PopupWindow.SetValue(Self.Text);
+  if (Screen.ActiveControl = Self) and not PopupVisible then
+    PopupDropDown(False);
+  inherited;
+end;
+
+procedure TJvComboEdit.CloseUp;
+begin
+  if PopupVisible then PopupCloseUp(Self, True);
+end;
+
+function TJvComboEdit.Data: Pointer;
+begin
+  Result := PopupWindow.TreeView.GetFocusedNodeData;
+end;
+
+procedure TJvComboEdit.PopupDropDown(DisableEdit: Boolean);
+begin
+  inherited PopupDropDown(False);
+end;
+
+function TJvComboEdit.GetMode: TVirtualMode;
+begin
+  Result := PopupWindow.TreeView.Mode;
+end;
+
+function TJvComboEdit.GetCurrentValue: TGUID;
+begin
+  Result := PopupWindow.TreeView.CurrentValue;
+end;
+
+function TJvComboEdit.GetPopupWindow: TJvPopupVirtualTree;
+begin
+  Result := TJvPopupVirtualTree(FPopup);
+end;
+
+procedure TJvComboEdit.KeyDown(var Key: Word; Shift: TShiftState);
+var
+  msg: TWMKey;
+begin
+  if not ReadOnly then
+  begin
+    case Key of
+      VK_PRIOR, VK_NEXT, VK_UP, VK_DOWN, VK_RETURN:
+        if PopupVisible then
+        begin
+          with msg do
+          begin
+            Msg := WM_KEYDOWN;
+            CharCode := Key;
+            Unused := 0;
+            if ssAlt in Shift then // les autres etats du clavier ne sont pas pris dans KeyData
+              KeyData := $20000000
+            else
+              KeyData := 0;
+            Result := 0;
+          end;
+          TCrackWinControl(PopupWindow.TreeView).Dispatch(msg);
+          Key := 0;
+        end;
+      VK_F3:
+      begin
+        PopupWindow.TreeView.Find(Self.Text, True);
+        Key := 0;
+      end;
+    end;
+  end;
+  inherited KeyDown(Key, Shift);
+end;
+
+
+procedure TJvComboEdit.PopupChange;
+begin
+  SetInternalCurrentValue(PopupWindow.TreeView.CurrentValue);
+  if Assigned(OnChange) then
+    OnChange(Self);
+end;
+
+procedure TJvComboEdit.PopupCloseUp(Sender: TObject; Accept: Boolean);
+begin
+  if Accept then
+    PopupChange;
+  FReloadValue := False;
+  try
+    inherited;
+  finally
+    FReloadValue := True;
+  end;
+end;
+
+procedure TJvComboEdit.SetCurrentValue(const Value: TGUID);
+begin
+  PopupWindow.TreeView.CurrentValue := Value;
+  SetInternalCurrentValue(GetCurrentValue);
+  FReloadValue := False;
+  try
+    Text := TJvPopupVirtualTree(FPopup).GetValue;
+  finally
+    FReloadValue := True;
+  end;
+end;
+
+procedure TJvComboEdit.SetInternalCurrentValue(const Value: TGUID);
+begin
+  FInternalCurrentValue := Value;
+  if Assigned(FInternalValueChanged) then
+    FInternalValueChanged(Self);
+end;
+
+procedure TJvComboEdit.SetMode(const Value: TVirtualMode);
+begin
+  PopupWindow.TreeView.Mode := Value;
+end;
+
+procedure TJvComboEdit.SetPopupValue(const Value: Variant);
+begin
+  PopupWindow.SetValue(GuidToString(FInternalCurrentValue));
+end;
+
+constructor TJvComboEdit.TJvPopupVirtualTree.Create(AOwner: TComponent);
+begin
+  inherited;
+
+  Height := 150;
+  Width  := 300;
+
+  FTreeView := TVirtualStringTree.Create(Self);
+  FTreeView.Parent := Self;
+  FTreeView.Align := alClient;
+  FTreeView.ParentColor := True;
+  FTreeView.OnMouseUp := TreeViewMouseUp;
+  FTreeView.OnMouseDown := TreeViewMouseDown;
+end;
+
+destructor TJvComboEdit.TJvPopupVirtualTree.Destroy;
+begin
+  FreeAndNil(FTreeView);
+
+  inherited;
+end;
+
+function TJvComboEdit.TJvPopupVirtualTree.GetValue: Variant;
+begin
+  Result := TreeView.FullCaption;
+end;
+
+procedure TJvComboEdit.TJvPopupVirtualTree.SetValue(const Value: Variant);
+begin
+  try
+    if not VarIsStr(Value) then
+      TreeView.CurrentValue := GUID_NULL
+    else
+      TreeView.CurrentValue := StringToGuid(Value);
+  except
+    on EConvertError do
+      TreeView.Find(Value, False);
+    else
+      raise;
+  end;
+end;
+
+procedure TJvComboEdit.TJvPopupVirtualTree.TreeViewMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  FClickedPosition.X := X - TreeView.OffsetX;
+  FClickedPosition.Y := Y - TreeView.OffsetY;
+end;
+
+procedure TJvComboEdit.TJvPopupVirtualTree.TreeViewMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+var
+  Node: PVirtualNode;
+  dummy: Integer;
+begin
+  if (Button = mbLeft) and (Shift - [ssLeft] = []) then
+  begin
+    Node := TreeView.GetNodeAt(FClickedPosition.X, FClickedPosition.Y, False, dummy);
+    if Assigned(Node) and (TreeView.GetNodeLevel(Node) > 0) and not IsEqualGUID(TreeView.CurrentValue, GUID_NULL) then
+    begin
+      CloseUp(True);
+    end;
+  end;
+end;
+
+end.
+
