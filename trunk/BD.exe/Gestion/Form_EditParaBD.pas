@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBEditLabeled, VirtualTrees, ComCtrls, VDTButton,
-  VirtualTree, ComboCheck, ExtCtrls, Buttons, Frame_RechercheRapide, ExtDlgs, LoadComplet,
-  CRFurtif, Fram_Boutons, UBdtForms, PngSpeedButton, UframVTEdit;
+  VirtualTree, ComboCheck, ExtCtrls, Buttons, UframRechercheRapide, ExtDlgs, LoadComplet,
+  CRFurtif, UframBoutons, UBdtForms, PngSpeedButton, UframVTEdit;
 
 type
   TFrmEditParaBD = class(TbdtForm)
@@ -47,7 +47,7 @@ type
     cbImageBDD: TCheckBoxLabeled;
     VDTButton1: TCRFurtifLight;
     ChoixImageDialog: TOpenPictureDialog;
-    Frame11: TFrame1;
+    Frame11: TframBoutons;
     Bevel2: TBevel;
     vtEditSeries: TframVTEdit;
     vtEditPersonnes: TframVTEdit;

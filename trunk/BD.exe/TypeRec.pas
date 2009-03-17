@@ -249,7 +249,7 @@ type
 
 implementation
 
-uses DM_Princ, UIBLib, StrUtils;
+uses UdmPrinc, UIBLib, StrUtils;
 
 { TBasePointeur }
 

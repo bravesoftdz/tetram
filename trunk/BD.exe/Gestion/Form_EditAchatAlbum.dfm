@@ -18,7 +18,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
     427)
   PixelsPerInch = 96
   TextHeight = 13
-  inline Frame11: TFrame1
+  inline Frame11: TframBoutons
     Left = 0
     Top = 396
     Width = 736
@@ -538,7 +538,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         item
           Control = btScenariste
         end>
-      ExplicitLeft = 469
     end
     object lvDessinateurs: TVDTListViewLabeled
       Left = 381
@@ -559,7 +558,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         item
           Control = btDessinateur
         end>
-      ExplicitLeft = 469
     end
     object lvColoristes: TVDTListViewLabeled
       Left = 381
@@ -580,7 +578,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         item
           Control = btColoriste
         end>
-      ExplicitLeft = 469
     end
     inline vtEditPersonnes: TframVTEdit
       Left = 52

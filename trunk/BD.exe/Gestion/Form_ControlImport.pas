@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ImgList, StdCtrls, ComCtrls, ToolWin, Fram_Boutons, UframVTEdit, UbdtForms,
+  Dialogs, ImgList, StdCtrls, ComCtrls, ToolWin, UframBoutons, UframVTEdit, UbdtForms,
   ExtCtrls, CRFurtif;
 
 type
@@ -19,7 +19,7 @@ type
     framVTEdit2: TframVTEdit;
     framVTEdit3: TframVTEdit;
     framVTEdit4: TframVTEdit;
-    Frame11: TFrame1;
+    Frame11: TframBoutons;
     ToolBar1: TToolBar;
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;

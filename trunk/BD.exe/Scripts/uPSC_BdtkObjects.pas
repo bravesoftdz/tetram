@@ -28,7 +28,7 @@ procedure SIRegister_BdtkObjects(CL: TPSPascalCompiler);
 implementation
 
 uses
-  Windows, Dialogs, TypeRec, Commun, CommonConst, DM_Princ, DateUtils, ListOfTypeRec, Contnrs, LoadComplet;
+  Windows, Dialogs, TypeRec, Commun, CommonConst, UdmPrinc, DateUtils, ListOfTypeRec, Contnrs, LoadComplet;
 
 (* === compile-time registration functions === *)
 

@@ -35,7 +35,7 @@ const
 implementation
 
 uses
-  Textes, Commun, UIB, DM_Princ;
+  Textes, Commun, UIB, UdmPrinc;
 
 const
   _ChampsRecherche: TArrayOfChamp = (

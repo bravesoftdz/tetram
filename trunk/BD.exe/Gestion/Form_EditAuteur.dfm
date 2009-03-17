@@ -163,7 +163,7 @@ object FrmEditAuteur: TFrmEditAuteur
       CurrencyChar = #0
     end
   end
-  inline Frame11: TFrame1
+  inline Frame11: TframBoutons
     Left = 0
     Top = 0
     Width = 717

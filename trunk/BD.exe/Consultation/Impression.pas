@@ -5,7 +5,7 @@ interface
 uses
   Dialogs,
   Controls, Forms, Classes, SysUtils, Windows, ExtCtrls, Graphics, Printers, LoadComplet, Commun, PrintObject, Textes, CommonConst,
-  Divers, TypeRec, UfrmFond, DM_Princ, Form_Recherche, UIB, jpeg, Generics.Collections;
+  Divers, TypeRec, UfrmFond, UdmPrinc, UfrmRecherche, UIB, jpeg, Generics.Collections;
 
 procedure ImpressionListeCompleteAlbums(Previsualisation: Boolean);
 
@@ -32,7 +32,7 @@ procedure ImpressionListePrevisionsAchats(Previsualisation: Boolean);
 
 implementation
 
-uses Form_Preview, Math, Procedures, ProceduresBDtk, DateUtils, Contnrs, UIBlib, StrUtils,
+uses UfrmPreview, Math, Procedures, ProceduresBDtk, DateUtils, Contnrs, UIBlib, StrUtils,
   UMetadata;
 
 procedure PreparePrintObject(Prn: TPrintObject; Previsualisation: Boolean; const Titre: string);

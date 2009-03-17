@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls, DBCtrls, StdCtrls, ImgList, DBEditLabeled,
   VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, VirtualTree, Menus, TypeRec, ActnList, LoadComplet, ComboCheck,
-  Frame_RechercheRapide, CRFurtif, Fram_Boutons, UBdtForms, Generics.Collections, StrUtils,
+  UframRechercheRapide, CRFurtif, UframBoutons, UBdtForms, Generics.Collections, StrUtils,
   JvExMask, JvToolEdit, UVirtualTreeEdit, UfrmFond, PngSpeedButton,
   UframVTEdit;
 
@@ -85,7 +85,7 @@ type
     VDTButton14: TVDTButton;
     pmChoixCategorie: TPopupMenu;
     Bevel2: TBevel;
-    Frame11: TFrame1;
+    Frame11: TframBoutons;
     edNumPerso: TEditLabeled;
     Label26: TLabel;
     Label27: TLabel;

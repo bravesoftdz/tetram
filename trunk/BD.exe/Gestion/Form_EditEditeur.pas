@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, VDTButton,
-  Buttons, DBEditLabeled, ShellAPI, Fram_Boutons, LoadComplet, UBdtForms,
-  PngSpeedButton;
+  Buttons, DBEditLabeled, ShellAPI, LoadComplet, UBdtForms,
+  PngSpeedButton, UframBoutons;
 
 type
   TFrmEditEditeur = class(TbdtForm)
@@ -16,7 +16,7 @@ type
     edSite: TEditLabeled;
     VDTButton13: TVDTButton;
     Bevel1: TBevel;
-    Frame11: TFrame1;
+    Frame11: TframBoutons;
     procedure FormCreate(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
     procedure FormShow(Sender: TObject);

@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, VDTButton,
-  Buttons, DBEditLabeled, VirtualTrees, VirtualTree, Frame_RechercheRapide, LoadComplet,
-  Fram_Boutons, UBdtForms, UframVTEdit;
+  Buttons, DBEditLabeled, VirtualTrees, VirtualTree, UframRechercheRapide, LoadComplet,
+  UBdtForms, UframVTEdit, UframBoutons;
 
 type
   TFrmEditCollection = class(TbdtForm)
@@ -14,7 +14,7 @@ type
     edNom: TEditLabeled;
     Label5: TLabel;
     Bevel1: TBevel;
-    Frame11: TFrame1;
+    Frame11: TframBoutons;
     vtEditEditeurs: TframVTEdit;
     procedure FormCreate(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);

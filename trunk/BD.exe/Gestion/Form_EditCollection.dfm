@@ -87,19 +87,23 @@ object FrmEditCollection: TFrmEditCollection
       ExplicitWidth = 352
       inherited btReset: TVDTButton
         Left = 289
+        ExplicitLeft = 289
       end
       inherited btNew: TVDTButton
         Left = 331
+        ExplicitLeft = 331
       end
       inherited btEdit: TVDTButton
         Left = 310
+        ExplicitLeft = 310
       end
       inherited VTEdit: TJvComboEdit
         Width = 289
+        ExplicitWidth = 289
       end
     end
   end
-  inline Frame11: TFrame1
+  inline Frame11: TframBoutons
     Left = 0
     Top = 0
     Width = 410

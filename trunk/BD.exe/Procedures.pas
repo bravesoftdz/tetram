@@ -74,7 +74,7 @@ implementation
 
 uses
   Divers, Textes, ShellAPI, ReadOnlyCheckBox,
-  MaskUtils, Mask, DM_Princ, IniFiles, Math, VirtualTrees, DbEditLabeled, ActnList,
+  MaskUtils, Mask, UdmPrinc, IniFiles, Math, VirtualTrees, DbEditLabeled, ActnList,
   Types, UBdtForms;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;

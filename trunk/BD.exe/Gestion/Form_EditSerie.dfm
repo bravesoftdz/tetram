@@ -35,7 +35,6 @@ object FrmEditSerie: TFrmEditSerie
     BorderStyle = bsNone
     Constraints.MinWidth = 650
     TabOrder = 0
-    ExplicitWidth = 742
     DesignSize = (
       784
       900)
@@ -714,7 +713,6 @@ object FrmEditSerie: TFrmEditSerie
           Control = Label2
         end>
       CurrencyChar = #0
-      ExplicitWidth = 680
     end
     object vtGenres: TVirtualStringTree
       Left = 512
@@ -743,7 +741,6 @@ object FrmEditSerie: TFrmEditSerie
       OnChecked = vtGenresChecked
       OnDblClick = vtGenresDblClick
       OnInitNode = vtGenresInitNode
-      ExplicitWidth = 224
       Columns = <>
     end
     object histoire: TMemoLabeled
@@ -760,7 +757,6 @@ object FrmEditSerie: TFrmEditSerie
         item
           Control = Label6
         end>
-      ExplicitWidth = 300
     end
     object remarques: TMemoLabeled
       Left = 445
@@ -776,7 +772,6 @@ object FrmEditSerie: TFrmEditSerie
         item
           Control = Label7
         end>
-      ExplicitLeft = 403
     end
     object cbTerminee: TCheckBoxLabeled
       Left = 320
@@ -831,7 +826,6 @@ object FrmEditSerie: TFrmEditSerie
       ShowHint = True
       TabOrder = 18
       OnDblClick = vtAlbumsDblClick
-      ExplicitWidth = 680
       Columns = <>
     end
     object edSite: TEditLabeled
@@ -852,7 +846,6 @@ object FrmEditSerie: TFrmEditSerie
           Control = Label1
         end>
       CurrencyChar = #0
-      ExplicitWidth = 656
     end
     object lvScenaristes: TVDTListViewLabeled
       Left = 305
@@ -940,7 +933,6 @@ object FrmEditSerie: TFrmEditSerie
       ShowHint = True
       TabOrder = 19
       OnDblClick = vtParaBDDblClick
-      ExplicitWidth = 680
       Columns = <>
     end
     inline FrameRechercheRapideGenre: TFrameRechercheRapide
@@ -952,7 +944,7 @@ object FrmEditSerie: TFrmEditSerie
       TabOrder = 8
       ExplicitLeft = 552
       ExplicitTop = 146
-      ExplicitWidth = 184
+      ExplicitWidth = 226
       DesignSize = (
         226
         21)
@@ -970,7 +962,7 @@ object FrmEditSerie: TFrmEditSerie
           item
             Control = Label17
           end>
-        ExplicitWidth = 140
+        ExplicitWidth = 186
       end
     end
     object cbSorties: TCheckBoxLabeled
@@ -1062,12 +1054,15 @@ object FrmEditSerie: TFrmEditSerie
       ExplicitWidth = 177
       inherited btReset: TVDTButton
         Left = 114
+        ExplicitLeft = 114
       end
       inherited btNew: TVDTButton
         Left = 156
+        ExplicitLeft = 156
       end
       inherited btEdit: TVDTButton
         Left = 135
+        ExplicitLeft = 135
       end
       inherited VTEdit: TJvComboEdit
         Width = 114
@@ -1086,16 +1081,19 @@ object FrmEditSerie: TFrmEditSerie
       ExplicitWidth = 347
       inherited btReset: TVDTButton
         Left = 284
+        ExplicitLeft = 284
       end
       inherited btNew: TVDTButton
         Left = 326
+        ExplicitLeft = 326
       end
       inherited btEdit: TVDTButton
         Left = 305
+        ExplicitLeft = 305
       end
       inherited VTEdit: TJvComboEdit
         Width = 284
-        ExplicitWidth = 252
+        ExplicitWidth = 284
       end
     end
     inline vtEditEditeurs: TframVTEdit
@@ -1109,38 +1107,42 @@ object FrmEditSerie: TFrmEditSerie
       ExplicitWidth = 347
       inherited btReset: TVDTButton
         Left = 284
+        ExplicitLeft = 284
       end
       inherited btNew: TVDTButton
         Left = 326
+        ExplicitLeft = 326
       end
       inherited btEdit: TVDTButton
         Left = 305
+        ExplicitLeft = 305
       end
       inherited VTEdit: TJvComboEdit
         Width = 284
         OnChange = vtEditEditeursVTEditChange
+        ExplicitWidth = 284
       end
     end
   end
-  inline Frame11: TFrame1
+  inline Frame11: TframBoutons
     Left = 0
     Top = 0
     Width = 784
     Height = 25
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 742
+    ExplicitWidth = 784
     inherited btnOK: TButton
       Left = 610
       Width = 90
       Caption = 'Enregistrer'
       OnClick = Frame11btnOKClick
-      ExplicitLeft = 568
+      ExplicitLeft = 610
       ExplicitWidth = 90
     end
     inherited btnAnnuler: TButton
       Left = 701
-      ExplicitLeft = 659
+      ExplicitLeft = 701
     end
   end
 end

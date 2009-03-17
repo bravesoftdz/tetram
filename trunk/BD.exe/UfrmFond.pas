@@ -212,9 +212,9 @@ implementation
 {$R *.DFM}
 
 uses
-  Form_Repertoire, CommonConst, Form_options, Form_StatsGeneral,
-  Form_StatsEmprunteurs, Form_StatsAlbums, LoadComplet, Impression, Form_Gestion, Form_Customize,
-  Form_AboutBox, DM_Princ, Types, Procedures, UHistorique, Form_Entretien, ShellAPI, Math,
+  UfrmRepertoire, CommonConst, UfrmOptions, UfrmStatsGeneral,
+  UfrmStatsEmprunteurs, UfrmStatsAlbums, LoadComplet, Impression, Form_Gestion, UfrmCustomize,
+  UfrmAboutBox, UdmPrinc, Types, Procedures, UHistorique, UfrmEntretien, ShellAPI, Math,
   Form_Scripts, Form_Publier;
 
 procedure TfrmFond.WMSyscommand(var msg: TWmSysCommand);

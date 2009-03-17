@@ -4,12 +4,12 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBEditLabeled, VirtualTrees, ComCtrls, VDTButton,
-  ExtCtrls, Buttons, Fram_Boutons, VirtualTree, TypeRec, Frame_RechercheRapide, LoadComplet,
+  ExtCtrls, Buttons, UframBoutons, VirtualTree, TypeRec, UframRechercheRapide, LoadComplet,
   CRFurtif, UBdtForms, Generics.Collections, PngSpeedButton, UframVTEdit;
 
 type
   TFrmEditAchatAlbum = class(TbdtForm)
-    Frame11: TFrame1;
+    Frame11: TframBoutons;
     rbAlbumExistant: TRadioButton;
     rbNouvelAlbum: TRadioButton;
     pnAlbumExistant: TPanel;

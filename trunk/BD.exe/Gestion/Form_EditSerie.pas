@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, ExtCtrls, DBCtrls, Mask, Buttons, VDTButton, ComCtrls,
-  DBEditLabeled, VirtualTrees, VirtualTree, LoadComplet, Menus, ExtDlgs, Frame_RechercheRapide, CRFurtif, Fram_Boutons, UBdtForms,
+  DBEditLabeled, VirtualTrees, VirtualTree, LoadComplet, Menus, ExtDlgs, UframRechercheRapide, CRFurtif, UframBoutons, UBdtForms,
   ComboCheck, StrUtils, PngSpeedButton, UframVTEdit;
 
 type
@@ -42,7 +42,7 @@ type
     Label4: TLabel;
     FrameRechercheRapideGenre: TFrameRechercheRapide;
     Bevel1: TBevel;
-    Frame11: TFrame1;
+    Frame11: TframBoutons;
     cbSorties: TCheckBoxLabeled;
     cbComplete: TCheckBoxLabeled;
     Label9: TLabel;
@@ -520,4 +520,3 @@ begin
 end;
 
 end.
-

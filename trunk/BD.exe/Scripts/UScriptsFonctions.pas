@@ -15,7 +15,7 @@ function MyFormatString(const Fmt: string; const Args: array of string): string;
 implementation
 
 uses
-  ProceduresBDtk, UBdtForms, DBEditLabeled, StdCtrls, Controls, Forms, Fram_Boutons;
+  ProceduresBDtk, UBdtForms, DBEditLabeled, StdCtrls, Controls, Forms, UframBoutons;
 
 function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;
 var
@@ -252,7 +252,7 @@ begin
       end;
     end;
 
-    with TFrame1.Create(F) do
+    with TframBoutons.Create(F) do
     begin
       Align := alNone;
       Parent := F;

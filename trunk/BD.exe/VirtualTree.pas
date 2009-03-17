@@ -238,7 +238,7 @@ const
 implementation
 
 uses
-  UIB, DM_Princ, Commun, Types, UIBLib, Divers;
+  UIB, UdmPrinc, Commun, Types, UIBLib, Divers;
 
 { TVirtualStringTree }
 

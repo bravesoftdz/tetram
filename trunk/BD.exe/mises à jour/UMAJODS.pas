@@ -6,7 +6,7 @@ procedure MAJ_ODS;
 
 implementation
 
-uses CommonConst, SysUtils, Windows, Form_Verbose, Forms, DM_Princ;
+uses CommonConst, SysUtils, Windows, UfrmVerbose, Forms, UdmPrinc;
 
 procedure MAJ_ODS;
 const

@@ -1708,7 +1708,7 @@ object FrmEditAlbum: TFrmEditAlbum
       Columns = <
         item
           Position = 1
-          Width = 449
+          Width = 453
         end
         item
           Position = 0
@@ -1922,7 +1922,7 @@ object FrmEditAlbum: TFrmEditAlbum
       end
     end
   end
-  inline Frame11: TFrame1
+  inline Frame11: TframBoutons
     Left = 0
     Top = 0
     Width = 742

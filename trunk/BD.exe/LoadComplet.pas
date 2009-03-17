@@ -3,7 +3,7 @@ unit LoadComplet;
 interface
 
 uses
-  SysUtils, Windows, Classes, Dialogs, TypeRec, Commun, CommonConst, DM_Princ, UIB, DateUtils, ListOfTypeRec, Contnrs, UChampsRecherche,
+  SysUtils, Windows, Classes, Dialogs, TypeRec, Commun, CommonConst, UdmPrinc, UIB, DateUtils, ListOfTypeRec, Contnrs, UChampsRecherche,
   Generics.Collections, Generics.Defaults;
 
 type

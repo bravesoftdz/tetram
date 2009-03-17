@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, Mask, Menus, ExtCtrls,
-  DBEditLabeled, DB, Buttons, VDTButton, Fram_Boutons, LoadComplet, UBdtForms,
+  DBEditLabeled, DB, Buttons, VDTButton, UframBoutons, LoadComplet, UBdtForms,
   PngSpeedButton;
 
 type
@@ -18,7 +18,7 @@ type
     edSite: TEditLabeled;
     VDTButton13: TVDTButton;
     Bevel1: TBevel;
-    Frame11: TFrame1;
+    Frame11: TframBoutons;
     procedure Frame11btnOKClick(Sender: TObject);
     procedure edSiteChange(Sender: TObject);
     procedure VDTButton13Click(Sender: TObject);

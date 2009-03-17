@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ComCtrls, ExtCtrls, Fram_Boutons, UBdtForms;
+  Dialogs, StdCtrls, ComCtrls, ExtCtrls, UframBoutons, UBdtForms;
 
 type
   TfrmPublier = class(TBdtForm)
@@ -35,7 +35,7 @@ implementation
 {$R *.dfm}
 
 uses
-  UNet, Divers, Updates, DIMime, DIMimeStreams, UIB, UIBLib, DM_Princ, Commun, DateUtils,
+  UNet, Divers, Updates, DIMime, DIMimeStreams, UIB, UIBLib, UdmPrinc, Commun, DateUtils,
   Procedures, CommonConst, VarUtils, StrUtils;
 
 type

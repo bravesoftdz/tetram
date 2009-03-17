@@ -1353,16 +1353,20 @@ object FrmEditParaBD: TFrmEditParaBD
       ExplicitWidth = 436
       inherited btReset: TVDTButton
         Left = 373
+        ExplicitLeft = 373
       end
       inherited btNew: TVDTButton
         Left = 415
+        ExplicitLeft = 415
       end
       inherited btEdit: TVDTButton
         Left = 394
+        ExplicitLeft = 394
       end
       inherited VTEdit: TJvComboEdit
         Width = 373
         OnChange = vtEditSeriesVTEditChange
+        ExplicitWidth = 373
       end
     end
     inline vtEditPersonnes: TframVTEdit
@@ -1376,20 +1380,24 @@ object FrmEditParaBD: TFrmEditParaBD
       ExplicitWidth = 204
       inherited btReset: TVDTButton
         Left = 141
+        ExplicitLeft = 141
       end
       inherited btNew: TVDTButton
         Left = 183
+        ExplicitLeft = 183
       end
       inherited btEdit: TVDTButton
         Left = 162
+        ExplicitLeft = 162
       end
       inherited VTEdit: TJvComboEdit
         Width = 141
         OnChange = vtEditPersonnesVTEditChange
+        ExplicitWidth = 141
       end
     end
   end
-  inline Frame11: TFrame1
+  inline Frame11: TframBoutons
     Left = 0
     Top = 0
     Width = 824

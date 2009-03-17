@@ -3,7 +3,7 @@ unit ProceduresBDtk;
 interface
 
 uses
-  SysUtils, Windows, StdCtrls, Forms, Controls, Form_Progression, ExtCtrls, CommonConst, Graphics;
+  SysUtils, Windows, StdCtrls, Forms, Controls, UfrmProgression, ExtCtrls, CommonConst, Graphics;
 
 type
   IImpressionApercu = interface
@@ -82,8 +82,8 @@ function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerie
 implementation
 
 uses
-  Form_ChoixDetail, Form_Choix, Form_Convertisseur, UfrmFond, Divers, Procedures, Math, Textes, ActnList,
-  Form_ChoixDetailSerie;
+  UfrmChoixDetail, UfrmChoix, UfrmConvertisseur, UfrmFond, Divers, Procedures, Math, Textes, ActnList,
+  UfrmChoixDetailSerie;
 
 { TWaiting }
 

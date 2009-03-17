@@ -73,67 +73,67 @@
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
 			<RcCompile Include="ressources.rc">
-				<Form>ressources.res</Form>
+				<Form>&apos;ressources.res&apos;</Form>
 			</RcCompile>
 			<RcCompile Include="mises à jour\scripts_maj.rc">
-				<Form>scripts_maj.res</Form>
+				<Form>&apos;scripts_maj.res&apos;</Form>
 			</RcCompile>
 			<DCCReference Include="CommonConst.pas"/>
 			<DCCReference Include="Commun.pas"/>
 			<DCCReference Include="UfrmFond.pas">
 				<Form>frmFond</Form>
 			</DCCReference>
-			<DCCReference Include="DM_Princ.pas">
-				<Form>DMPrinc</Form>
+			<DCCReference Include="UdmPrinc.pas">
+				<Form>dmPrinc</Form>
 				<DesignClass>TDataModule</DesignClass>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_Repertoire.pas">
-				<Form>FrmRepertoire</Form>
+			<DCCReference Include="Consultation\UfrmRepertoire.pas">
+				<Form>frmRepertoire</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_ConsultationAlbum.pas">
-				<Form>FrmConsultationAlbum</Form>
+			<DCCReference Include="Consultation\UfrmConsultationAlbum.pas">
+				<Form>frmConsultationAlbum</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_ConsultationAuteur.pas">
-				<Form>FrmConsultationAuteur</Form>
+			<DCCReference Include="Consultation\UfrmConsultationAuteur.pas">
+				<Form>frmConsultationAuteur</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_ConsultationEmprunteur.pas">
-				<Form>FrmConsultationEmprunteur</Form>
+			<DCCReference Include="Consultation\UfrmConsultationEmprunteur.pas">
+				<Form>frmConsultationEmprunteur</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_ConsultationSerie.pas">
-				<Form>FrmConsultationSerie</Form>
+			<DCCReference Include="Consultation\UfrmConsultationSerie.pas">
+				<Form>frmConsultationSerie</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_ConsultationParaBD.pas">
-				<Form>FrmConsultationParaBD</Form>
+			<DCCReference Include="Consultation\UfrmConsultationParaBD.pas">
+				<Form>frmConsultationParaBD</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_ZoomCouverture.pas">
-				<Form>FrmZoomCouverture</Form>
+			<DCCReference Include="Consultation\UfrmZoomCouverture.pas">
+				<Form>frmZoomCouverture</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_Recherche.pas">
-				<Form>FrmRecherche</Form>
+			<DCCReference Include="Consultation\UfrmRecherche.pas">
+				<Form>frmRecherche</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_EditCritereTri.pas">
-				<Form>FrmEditCritereTri</Form>
+			<DCCReference Include="Consultation\UfrmEditCritereTri.pas">
+				<Form>frmEditCritereTri</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_Stock.pas">
-				<Form>FrmStock</Form>
+			<DCCReference Include="Consultation\UfrmStock.pas">
+				<Form>frmStock</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_SaisieEmpruntAlbum.pas">
-				<Form>FrmSaisie_EmpruntAlbum</Form>
+			<DCCReference Include="Consultation\UfrmSaisieEmpruntAlbum.pas">
+				<Form>frmSaisieEmpruntAlbum</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_SaisieEmpruntEmprunteur.pas">
-				<Form>FrmSaisie_EmpruntEmprunteur</Form>
+			<DCCReference Include="Consultation\UfrmSaisieEmpruntEmprunteur.pas">
+				<Form>frmSaisieEmpruntEmprunteur</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_StatsGeneral.pas">
-				<Form>FrmStatsGenerales</Form>
+			<DCCReference Include="Consultation\UfrmStatsGeneral.pas">
+				<Form>frmStatsGenerales</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_StatsEmprunteurs.pas">
-				<Form>FrmStatsEmprunteurs</Form>
+			<DCCReference Include="Consultation\UfrmStatsEmprunteurs.pas">
+				<Form>frmStatsEmprunteurs</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_StatsAlbums.pas">
-				<Form>FrmStatsAlbums</Form>
+			<DCCReference Include="Consultation\UfrmStatsAlbums.pas">
+				<Form>frmStatsAlbums</Form>
 			</DCCReference>
-			<DCCReference Include="DM_Commun.pas">
-				<Form>DataCommun</Form>
+			<DCCReference Include="UdmCommun.pas">
+				<Form>dmCommun</Form>
 				<DesignClass>TDataModule</DesignClass>
 			</DCCReference>
 			<DCCReference Include="Gestion\Editions.pas"/>
@@ -150,6 +150,9 @@
 			<DCCReference Include="Gestion\Form_EditEditeur.pas">
 				<Form>FrmEditEditeur</Form>
 			</DCCReference>
+			<DCCReference Include="Gestion\Form_EditSerie.pas">
+				<Form>FrmEditSerie</Form>
+			</DCCReference>
 			<DCCReference Include="Gestion\Form_EditCollection.pas">
 				<Form>FrmEditCollection</Form>
 			</DCCReference>
@@ -165,66 +168,66 @@
 			<DCCReference Include="Textes.pas"/>
 			<DCCReference Include="LoadComplet.pas"/>
 			<DCCReference Include="Consultation\Impression.pas"/>
-			<DCCReference Include="Fram_Boutons.pas">
-				<Form>Frame1</Form>
+			<DCCReference Include="UframBoutons.pas">
+				<Form>framBoutons</Form>
 				<DesignClass>TFrame</DesignClass>
 			</DCCReference>
-			<DCCReference Include="Form_Options.pas">
-				<Form>FrmOptions</Form>
+			<DCCReference Include="UfrmOptions.pas">
+				<Form>frmOptions</Form>
 			</DCCReference>
-			<DCCReference Include="Form_Customize.pas">
-				<Form>FrmCustomize</Form>
+			<DCCReference Include="UfrmCustomize.pas">
+				<Form>frmCustomize</Form>
 			</DCCReference>
-			<DCCReference Include="Form_Progression.pas">
-				<Form>FrmProgression</Form>
+			<DCCReference Include="UfrmProgression.pas">
+				<Form>frmProgression</Form>
 			</DCCReference>
-			<DCCReference Include="Form_Splash.pas">
-				<Form>FrmSplash</Form>
+			<DCCReference Include="UfrmSplash.pas">
+				<Form>frmSplash</Form>
 			</DCCReference>
-			<DCCReference Include="Form_AboutBox.pas">
-				<Form>FrmAboutBox</Form>
+			<DCCReference Include="UfrmAboutBox.pas">
+				<Form>frmAboutBox</Form>
 			</DCCReference>
-			<DCCReference Include="Form_Choix.pas">
-				<Form>FrmChoix</Form>
+			<DCCReference Include="UfrmChoix.pas">
+				<Form>frmChoix</Form>
 			</DCCReference>
-			<DCCReference Include="Form_ChoixDetail.pas">
-				<Form>FrmChoixDetail</Form>
+			<DCCReference Include="UfrmChoixDetail.pas">
+				<Form>frmChoixDetail</Form>
 			</DCCReference>
-			<DCCReference Include="Form_Convertisseur.pas">
+			<DCCReference Include="UfrmConvertisseur.pas">
 				<Form>FrmConvers</Form>
 			</DCCReference>
-			<DCCReference Include="Frame_Convertisseur.pas">
-				<Form>Convertisseur</Form>
+			<DCCReference Include="UframConvertisseur.pas">
+				<Form>framConvertisseur</Form>
 				<DesignClass>TFrame</DesignClass>
 			</DCCReference>
-			<DCCReference Include="Frame_RechercheRapide.pas">
+			<DCCReference Include="UframRechercheRapide.pas">
 				<Form>FrameRechercheRapide</Form>
 				<DesignClass>TFrame</DesignClass>
 			</DCCReference>
 			<DCCReference Include="Consultation\MAJ.pas"/>
 			<DCCReference Include="TypeRec.pas"/>
 			<DCCReference Include="VirtualTree.pas"/>
-			<DCCReference Include="Consultation\Form_Preview.pas">
-				<Form>FrmPreview</Form>
+			<DCCReference Include="Consultation\UfrmPreview.pas">
+				<Form>frmPreview</Form>
 			</DCCReference>
 			<DCCReference Include="Procedures.pas"/>
 			<DCCReference Include="UHistorique.pas"/>
-			<DCCReference Include="Form_Verbose.pas">
-				<Form>FrmVerbose</Form>
+			<DCCReference Include="UfrmVerbose.pas">
+				<Form>frmVerbose</Form>
 			</DCCReference>
-			<DCCReference Include="Form_Entretien.pas">
-				<Form>FrmEntretien</Form>
+			<DCCReference Include="UfrmEntretien.pas">
+				<Form>frmEntretien</Form>
 			</DCCReference>
 			<DCCReference Include="Gestion\Form_Exportation.pas">
 				<Form>FrmExportation</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_PrevisionsSorties.pas">
+			<DCCReference Include="Consultation\UfrmPrevisionsSorties.pas">
 				<Form>frmPrevisionsSorties</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_SeriesIncompletes.pas">
+			<DCCReference Include="Consultation\UfrmSeriesIncompletes.pas">
 				<Form>frmSeriesIncompletes</Form>
 			</DCCReference>
-			<DCCReference Include="Consultation\Form_PrevisionAchats.pas">
+			<DCCReference Include="Consultation\UfrmPrevisionAchats.pas">
 				<Form>frmPrevisionsAchats</Form>
 			</DCCReference>
 			<DCCReference Include="mises à jour\Updates.pas"/>
@@ -266,8 +269,8 @@
 			<DCCReference Include="Gestion\UImportXML.pas"/>
 			<DCCReference Include="ProceduresBDtk.pas"/>
 			<DCCReference Include="mises à jour\UMAJ1_2_3_14.pas"/>
-			<DCCReference Include="Form_ChoixDetailSerie.pas">
-				<Form>FrmChoixDetailSerie</Form>
+			<DCCReference Include="UfrmChoixDetailSerie.pas">
+				<Form>frmChoixDetailSerie</Form>
 			</DCCReference>
 			<DCCReference Include="mises à jour\UMAJ1_2_3_25.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_1_0_16.pas"/>
@@ -275,8 +278,8 @@
 			<DCCReference Include="mises à jour\UMAJ1_2_3_22.pas"/>
 			<DCCReference Include="mises à jour\UMAJ1_2_3_26.pas"/>
 			<DCCReference Include="mises à jour\UMAJODS.pas"/>
-			<DCCReference Include="Consultation\Form_EditCritere.pas">
-				<Form>FrmEditCritere</Form>
+			<DCCReference Include="Consultation\UfrmEditCritere.pas">
+				<Form>frmEditCritere</Form>
 			</DCCReference>
 			<DCCReference Include="Consultation\UChampsRecherche.pas"/>
 			<DCCReference Include="UBdtForms.pas"/>
@@ -289,7 +292,7 @@
 			<DCCReference Include="Web\Mime64\DIMimeStreams.pas"/>
 			<DCCReference Include="Web\Mime64\DIMime.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_0_1_0.pas"/>
-			<DCCReference Include="Form_Fusion.pas">
+			<DCCReference Include="UfrmFusion.pas">
 				<Form>frmFusion</Form>
 			</DCCReference>
 			<DCCReference Include="mises à jour\UMAJ2_1_0_0.pas"/>
@@ -325,9 +328,6 @@
 			<DCCReference Include="UframVTEdit.pas">
 				<Form>framVTEdit</Form>
 				<DesignClass>TFrame</DesignClass>
-			</DCCReference>
-			<DCCReference Include="Gestion\Form_EditSerie.pas">
-				<Form>FrmEditSerie</Form>
 			</DCCReference>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>

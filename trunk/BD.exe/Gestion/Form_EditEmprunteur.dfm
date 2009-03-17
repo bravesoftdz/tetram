@@ -52,7 +52,7 @@ object FrmEditEmprunteur: TFrmEditEmprunteur
     object Label2: TLabel
       Left = 6
       Top = 98
-      Width = 49
+      Width = 52
       Height = 13
       Anchors = [akLeft, akBottom]
       Caption = 'Emprunts :'
@@ -95,21 +95,25 @@ object FrmEditEmprunteur: TFrmEditEmprunteur
       CurrencyChar = #0
     end
   end
-  inline Frame11: TFrame1
+  inline Frame11: TframBoutons
     Left = 0
     Top = 0
     Width = 215
     Height = 25
     Align = alTop
     TabOrder = 1
-    inherited btnOK: TBitBtn
+    ExplicitWidth = 215
+    inherited btnOK: TButton
       Left = 40
       Width = 87
       Caption = 'Enregistrer'
       OnClick = Frame11btnOKClick
+      ExplicitLeft = 40
+      ExplicitWidth = 87
     end
-    inherited btnAnnuler: TBitBtn
+    inherited btnAnnuler: TButton
       Left = 132
+      ExplicitLeft = 132
     end
   end
 end

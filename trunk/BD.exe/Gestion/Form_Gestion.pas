@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, ComCtrls, Db, Menus,
   ExtCtrls, Buttons, Proc_Gestions, VDTButton, VirtualTrees, VirtualTree,
-  Frame_RechercheRapide, UBdtForms, PngSpeedButton;
+  UframRechercheRapide, UBdtForms, PngSpeedButton;
 
 type
   PInfo_Gestion = ^RInfo_Gestion;

@@ -50,7 +50,7 @@ object frmControlImport: TfrmControlImport
     ExplicitLeft = 72
     ExplicitTop = 177
   end
-  inline Frame11: TFrame1
+  inline Frame11: TframBoutons
     Left = 0
     Top = 0
     Width = 643

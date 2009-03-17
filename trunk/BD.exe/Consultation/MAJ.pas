@@ -23,10 +23,10 @@ function SaisieMouvementEmprunteur(const MvtID_Emprunteur: TGUID; const MvtID_Al
 implementation
 
 uses
-  CommonConst, Form_Stock, UfrmFond, DB, StdCtrls, Form_SeriesIncompletes,
-  Form_PrevisionsSorties, Graphics, Form_ConsultationAlbum, Form_ConsultationEmprunteur, Form_SaisieEmpruntAlbum, Form_SaisieEmpruntEmprunteur, Form_Recherche,
-  Form_ZoomCouverture, Form_ConsultationAuteur, Form_PrevisionAchats, UHistorique,
-  Form_ConsultationParaBD, Form_ConsultationSerie;
+  CommonConst, UfrmStock, UfrmFond, DB, StdCtrls, UfrmSeriesIncompletes,
+  UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmConsultationEmprunteur, UfrmSaisieEmpruntAlbum, UfrmSaisieEmpruntEmprunteur, UfrmRecherche,
+  UfrmZoomCouverture, UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique,
+  UfrmConsultationParaBD, UfrmConsultationSerie;
 
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;
 var
@@ -118,7 +118,7 @@ begin
   Result := False;
   if TGlobalVar.Mode_en_cours <> mdConsult then Exit;
 
-  with TFrmSaisie_EmpruntAlbum.Create(frmFond) do try
+  with TfrmSaisieEmpruntAlbum.Create(frmFond) do try
     pret.Checked := MvtPret;
     ID_Album := MvtID_Album;
     ID_Edition := MvtID_Edition;
@@ -135,7 +135,7 @@ var
 begin
   Result := False;
   if TGlobalVar.Mode_en_cours <> mdConsult then Exit;
-  with TFrmSaisie_EmpruntEmprunteur.Create(frmFond) do try
+  with TfrmSaisieEmpruntEmprunteur.Create(frmFond) do try
     ID_Emprunteur := MvtID_Emprunteur;
     for i := Low(MvtID_Album) to High(MvtID_Album) do
       AjouteAlbum(MvtID_Album[i][0], MvtID_Album[i][1]);
