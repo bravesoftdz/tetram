@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, VDTButton,
   Buttons, DBEditLabeled, VirtualTrees, VirtualTree, Frame_RechercheRapide, LoadComplet,
-  Fram_Boutons, UBdtForms;
+  Fram_Boutons, UBdtForms, UframVTEdit;
 
 type
   TFrmEditCollection = class(TbdtForm)
@@ -13,13 +13,11 @@ type
     Label2: TLabel;
     edNom: TEditLabeled;
     Label5: TLabel;
-    vtEditeurs: TVirtualStringTree;
-    FrameRechercheRapide1: TFrameRechercheRapide;
     Bevel1: TBevel;
     Frame11: TFrame1;
+    vtEditEditeurs: TframVTEdit;
     procedure FormCreate(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
-    procedure vtEditeursDblClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
     { Déclarations privées }
@@ -41,8 +39,7 @@ uses
 procedure TFrmEditCollection.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  vtEditeurs.Mode := vmEditeurs;
-  FrameRechercheRapide1.VirtualTreeView := vtEditeurs;
+  vtEditEditeurs.Mode := vmEditeurs;
   FCollection := TCollectionComplete.Create;
 end;
 
@@ -54,10 +51,9 @@ begin
   FCollection.Fill(Value);
 
   edNom.Text := FCollection.NomCollection;
-  vtEditeurs.CurrentValue := FCollection.ID_Editeur;
+  vtEditEditeurs.CurrentValue := FCollection.ID_Editeur;
 
-  vtEditeurs.Enabled := FCollection.RecInconnu;
-  FrameRechercheRapide1.Enabled := vtEditeurs.Enabled;
+  vtEditEditeurs.Enabled := FCollection.RecInconnu;
 end;
 
 procedure TFrmEditCollection.Frame11btnOKClick(Sender: TObject);
@@ -71,11 +67,11 @@ begin
     ModalResult := mrNone;
     Exit;
   end;
-  ID_Editeur := vtEditeurs.CurrentValue;
+  ID_Editeur := vtEditEditeurs.CurrentValue;
   if IsEqualGUID(ID_Editeur, GUID_NULL) then
   begin
     AffMessage(rsEditeurObligatoire, mtInformation, [mbOk], True);
-    FrameRechercheRapide1.edSearch.SetFocus;
+    vtEditEditeurs.SetFocus;
     ModalResult := mrNone;
     Exit;
   end;
@@ -86,11 +82,6 @@ begin
   FCollection.SaveToDatabase;
 
   ModalResult := mrOk;
-end;
-
-procedure TFrmEditCollection.vtEditeursDblClick(Sender: TObject);
-begin
-  Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierEditeurs, vtEditeurs);
 end;
 
 function TFrmEditCollection.GetID_Collection: TGUID;

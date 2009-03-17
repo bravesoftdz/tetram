@@ -4,8 +4,8 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'Saisie d'#39'un mouvement'
-  ClientHeight = 363
-  ClientWidth = 525
+  ClientHeight = 389
+  ClientWidth = 526
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -21,8 +21,8 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
   object Panel4: TPanel
     Left = 0
     Top = 0
-    Width = 525
-    Height = 332
+    Width = 526
+    Height = 358
     Align = alClient
     BevelOuter = bvNone
     Caption = 'Panel4'
@@ -30,16 +30,17 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
     object Splitter1: TSplitter
       Left = 0
       Top = 172
-      Width = 525
+      Width = 526
       Height = 3
       Cursor = crVSplit
       Align = alTop
+      ExplicitWidth = 525
     end
     object Panel2: TPanel
       Left = 0
       Top = 175
-      Width = 525
-      Height = 157
+      Width = 526
+      Height = 183
       Align = alClient
       BevelOuter = bvNone
       Caption = 'Panel2'
@@ -47,20 +48,20 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
       object Panel5: TPanel
         Left = 0
         Top = 0
-        Width = 525
-        Height = 129
+        Width = 526
+        Height = 155
         Align = alClient
         BevelOuter = bvNone
         Caption = ' '
         TabOrder = 0
         DesignSize = (
-          525
-          129)
+          526
+          155)
         object ListView1: TVDTListView
           Left = 2
           Top = 2
-          Width = 500
-          Height = 127
+          Width = 501
+          Height = 153
           Anchors = [akLeft, akTop, akRight, akBottom]
           BevelKind = bkTile
           Columns = <
@@ -82,10 +83,10 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
           OnSelectItem = ListView1SelectItem
         end
         object Panel9: TPanel
-          Left = 504
+          Left = 505
           Top = 0
           Width = 21
-          Height = 129
+          Height = 155
           Align = alRight
           AutoSize = True
           BevelOuter = bvNone
@@ -311,8 +312,8 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
       end
       object Panel3: TPanel
         Left = 0
-        Top = 129
-        Width = 525
+        Top = 155
+        Width = 526
         Height = 28
         Align = alBottom
         BevelInner = bvRaised
@@ -393,7 +394,7 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
     object Panel1: TPanel
       Left = 0
       Top = 0
-      Width = 525
+      Width = 526
       Height = 23
       Align = alTop
       BevelInner = bvRaised
@@ -405,25 +406,29 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
       object Label2: TLabel
         Left = 2
         Top = 2
-        Width = 521
+        Width = 522
         Height = 19
         Align = alClient
         AutoSize = False
+        ExplicitWidth = 521
       end
     end
     object Panel6: TPanel
       Left = 0
       Top = 23
-      Width = 525
+      Width = 526
       Height = 149
       Align = alTop
       BevelOuter = bvNone
       Caption = 'Panel6'
       TabOrder = 1
+      DesignSize = (
+        526
+        149)
       object vtAlbums: TVirtualStringTree
         Left = 0
         Top = 24
-        Width = 525
+        Width = 526
         Height = 125
         Align = alBottom
         AnimationDuration = 0
@@ -450,7 +455,7 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
           item
             Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
             Position = 0
-            Width = 525
+            Width = 522
           end>
       end
       inline FrameRechercheRapide1: TFrameRechercheRapide
@@ -458,6 +463,7 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
         Top = 2
         Width = 525
         Height = 21
+        Anchors = [akLeft, akTop, akRight]
         TabOrder = 0
         ExplicitTop = 2
         ExplicitWidth = 525
@@ -478,36 +484,32 @@ object FrmSaisie_EmpruntEmprunteur: TFrmSaisie_EmpruntEmprunteur
   end
   inline Frame11: TFrame1
     Left = 0
-    Top = 332
-    Width = 525
+    Top = 358
+    Width = 526
     Height = 31
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 332
-    ExplicitWidth = 525
+    ExplicitTop = 358
+    ExplicitWidth = 526
     ExplicitHeight = 31
-    inherited btnOK: TBitBtn
-      Left = 370
+    inherited btnOK: TButton
+      Left = 371
       Top = 6
       Width = 73
-      Height = 19
       Caption = 'Ok'
       Enabled = False
       OnClick = BtnOkExecute
-      ExplicitLeft = 370
+      ExplicitLeft = 371
       ExplicitTop = 6
       ExplicitWidth = 73
-      ExplicitHeight = 19
     end
-    inherited btnAnnuler: TBitBtn
-      Left = 450
+    inherited btnAnnuler: TButton
+      Left = 451
       Top = 6
       Width = 72
-      Height = 19
-      ExplicitLeft = 450
+      ExplicitLeft = 451
       ExplicitTop = 6
       ExplicitWidth = 72
-      ExplicitHeight = 19
     end
   end
 end

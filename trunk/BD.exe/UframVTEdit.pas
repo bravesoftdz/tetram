@@ -5,9 +5,11 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Buttons, VDTButton, CRFurtif, StdCtrls, Mask, JvExMask,
-  JvToolEdit, UVirtualTreeEdit, VirtualTree, UHistorique;
+  JvToolEdit, UVirtualTreeEdit, VirtualTree, UHistorique, PngSpeedButton, UfrmFond;
 
 type
+  callbackCall = reference to procedure(data: Pointer);
+
   TframVTEdit = class(TFrame)
     VTEdit: TJvComboEdit;
     btReset: TVDTButton;
@@ -15,7 +17,9 @@ type
     btEdit: TVDTButton;
     procedure btResetClick(Sender: TObject);
     procedure btNewClick(Sender: TObject);
+    procedure btEditClick(Sender: TObject);
   private
+
     FAfterEdit: TNotifyEvent;
     FAfterAppend: TNotifyEvent;
     FParentValue: TGUID;
@@ -27,7 +31,6 @@ type
     procedure SetCanEdit(const Value: Boolean);
     procedure SetMode(const Value: TVirtualMode);
     procedure SetCurrentValue(const Value: TGUID);
-    procedure TriggerEdit(TypeAction: TActionConsultation);
     procedure InternalValueChanged(Sender: TObject);
   public
     constructor Create(AOwner: TComponent); override;
@@ -57,9 +60,90 @@ begin
   VTEdit.InternalValueChanged := InternalValueChanged;
 end;
 
-procedure TframVTEdit.btNewClick(Sender: TObject);
+procedure callbackAfterEdit(Data: Pointer);
 begin
-  TriggerEdit(fcGestionAjout);
+  TframVTEdit(Data).VTEdit.PopupWindow.TreeView.InitializeRep;
+  if Assigned(TframVTEdit(Data).FAfterEdit) then
+    TframVTEdit(Data).FAfterEdit(TframVTEdit(Data));
+end;
+
+procedure TframVTEdit.btEditClick(Sender: TObject);
+var
+  VT: TVirtualStringTree;
+begin
+  VT := VTEdit.PopupWindow.TreeView;
+  case Mode of
+    vmAlbums,
+    vmAlbumsAnnee,
+    vmAlbumsCollection,
+    vmAlbumsEditeur,
+    vmAlbumsGenre,
+    vmAlbumsSerie:
+      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierAlbums, VT, '');
+    vmAchatsAlbumsEditeur:
+      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierAchatsAlbum, VT, '');
+    vmCollections:
+      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierCollections, VT, '');
+    vmEditeurs:
+      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierEditeurs, VT, '');
+    vmEmprunteurs:
+      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierEmprunteurs, VT, '');
+    vmGenres:
+      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierGenres, VT, '');
+    vmPersonnes:
+      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierAuteurs, VT, '');
+    vmSeries:
+      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierSeries, VT, '');
+    vmParaBDSerie:
+      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierParaBD, VT, '');
+    else
+      Exit;
+  end;
+end;
+
+
+procedure callbackAfterAppend(Data: Pointer);
+begin
+  TframVTEdit(Data).VTEdit.PopupWindow.TreeView.InitializeRep;
+  if Assigned(TframVTEdit(Data).FAfterAppend) then
+    TframVTEdit(Data).FAfterAppend(TframVTEdit(Data));
+end;
+
+procedure TframVTEdit.btNewClick(Sender: TObject);
+var
+  VT: TVirtualStringTree;
+begin
+  VT := VTEdit.PopupWindow.TreeView;
+  case Mode of
+    vmAlbums,
+    vmAlbumsAnnee,
+    vmAlbumsCollection,
+    vmAlbumsEditeur,
+    vmAlbumsGenre,
+    vmAlbumsSerie:
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterAlbums, VT, '');
+    vmAchatsAlbumsEditeur:
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterAchatsAlbum, VT, '');
+    vmCollections:
+      if IsEqualGUID(FParentValue, GUID_NULL) then
+        Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterCollections, VT, '')
+      else
+        Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterCollections2, VT, FParentValue, '');
+    vmEditeurs:
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterEditeurs, VT, '');
+    vmEmprunteurs:
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterEmprunteurs, VT, '');
+    vmGenres:
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterGenres, VT, '');
+    vmPersonnes:
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterAuteurs, VT, '');
+    vmSeries:
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterSeries, VT, '');
+    vmParaBDSerie:
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterParaBD, VT, '');
+    else
+      Exit;
+  end;
 end;
 
 procedure TframVTEdit.btResetClick(Sender: TObject);
@@ -91,6 +175,7 @@ end;
 procedure TframVTEdit.InternalValueChanged(Sender: TObject);
 begin
   btReset.Enabled := not IsEqualGUID(CurrentValue, GUID_NULL);
+  btEdit.Enabled := not IsEqualGUID(CurrentValue, GUID_NULL);
 end;
 
 procedure TframVTEdit.SetCanCreate(const Value: Boolean);
@@ -139,54 +224,6 @@ end;
 procedure TframVTEdit.SetMode(const Value: TVirtualMode);
 begin
   VTEdit.Mode := Value;
-end;
-
-procedure TframVTEdit.TriggerEdit(TypeAction: TActionConsultation);
-var
-  VT: TVirtualStringTree;
-begin
-  VT := VTEdit.PopupWindow.TreeView;
-  case Mode of
-    vmAlbums,
-    vmAlbumsAnnee,
-    vmAlbumsCollection,
-    vmAlbumsEditeur,
-    vmAlbumsGenre,
-    vmAlbumsSerie:
-      Historique.AddWaiting(TypeAction, nil, nil, @AjouterAlbums, VT, '');
-    vmAchatsAlbumsEditeur:
-      Historique.AddWaiting(TypeAction, nil, nil, @AjouterAchatsAlbum, VT, '');
-    vmCollections:
-      if IsEqualGUID(FParentValue, GUID_NULL) then
-        Historique.AddWaiting(TypeAction, nil, nil, @AjouterCollections, VT, '')
-      else
-        Historique.AddWaiting(TypeAction, nil, nil, @AjouterCollections2, VT, FParentValue, '');
-    vmEditeurs:
-      Historique.AddWaiting(TypeAction, nil, nil, @AjouterEditeurs, VT, '');
-    vmEmprunteurs:
-      Historique.AddWaiting(TypeAction, nil, nil, @AjouterEmprunteurs, VT, '');
-    vmGenres:
-      Historique.AddWaiting(TypeAction, nil, nil, @AjouterGenres, VT, '');
-    vmPersonnes:
-      Historique.AddWaiting(TypeAction, nil, nil, @AjouterAuteurs, VT, '');
-    vmSeries:
-      Historique.AddWaiting(TypeAction, nil, nil, @AjouterSeries, VT, '');
-    vmParaBDSerie:
-      Historique.AddWaiting(TypeAction, nil, nil, @AjouterParaBD, VT, '');
-    else
-      Exit;
-  end;
-
-  if TypeAction = fcGestionAjout then
-  begin
-    if Assigned(FAfterAppend) then
-      FAfterAppend(Self);
-  end
-  else
-  begin
-    if Assigned(FAfterEdit) then
-      FAfterEdit(Self);
-  end;
 end;
 
 end.

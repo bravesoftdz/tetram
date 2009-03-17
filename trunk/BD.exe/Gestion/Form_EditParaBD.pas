@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBEditLabeled, VirtualTrees, ComCtrls, VDTButton,
   VirtualTree, ComboCheck, ExtCtrls, Buttons, Frame_RechercheRapide, ExtDlgs, LoadComplet,
-  CRFurtif, Fram_Boutons, UBdtForms;
+  CRFurtif, Fram_Boutons, UBdtForms, PngSpeedButton, UframVTEdit;
 
 type
   TFrmEditParaBD = class(TbdtForm)
@@ -16,14 +16,10 @@ type
     Label19: TLabel;
     Bevel1: TBevel;
     Label20: TLabel;
-    Bevel3: TBevel;
     Bevel4: TBevel;
-    Bevel5: TBevel;
     edTitre: TEditLabeled;
     description: TMemoLabeled;
     lvAuteurs: TVDTListViewLabeled;
-    vtPersonnes: TVirtualStringTree;
-    vtSeries: TVirtualStringTree;
     Label24: TLabel;
     edAnneeCote: TEditLabeled;
     Label25: TLabel;
@@ -47,15 +43,15 @@ type
     cbNumerote: TCheckBoxLabeled;
     Panel3: TPanel;
     ChoixImage: TCRFurtifLight;
-    FrameRechercheRapideSerie: TFrameRechercheRapide;
-    FrameRechercheRapideAuteur: TFrameRechercheRapide;
     Panel4: TPanel;
     cbImageBDD: TCheckBoxLabeled;
     VDTButton1: TCRFurtifLight;
     ChoixImageDialog: TOpenPictureDialog;
     Frame11: TFrame1;
     Bevel2: TBevel;
-    btResetSerie: TCRFurtifLight;
+    vtEditSeries: TframVTEdit;
+    vtEditPersonnes: TframVTEdit;
+    Bevel3: TBevel;
     procedure cbOffertClick(Sender: TObject);
     procedure cbGratuitClick(Sender: TObject);
     procedure edPrixChange(Sender: TObject);
@@ -67,15 +63,14 @@ type
     procedure btnOKClick(Sender: TObject);
     procedure VDTButton1Click(Sender: TObject);
     procedure ChoixImageClick(Sender: TObject);
-    procedure vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
-    procedure vtPersonnesDblClick(Sender: TObject);
     procedure btCreateurClick(Sender: TObject);
     procedure lvAuteursKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure FormShow(Sender: TObject);
     procedure lvAuteursData(Sender: TObject; Item: TListItem);
-    procedure btResetSerieClick(Sender: TObject);
-    procedure vtSeriesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure cbxCategorieChange(Sender: TObject);
+    procedure vtEditSeriesVTEditChange(Sender: TObject);
+    procedure vtEditPersonnesVTEditChange(Sender: TObject);
+    procedure OnEditPersonnes(Sender: TObject);
   private
     FCreation: Boolean;
     FisAchat: Boolean;
@@ -132,7 +127,7 @@ begin
     cbNumerote.Checked := FParaBD.Numerote;
     description.Lines.Text := FParaBD.Description.Text;
 
-    vtSeries.CurrentValue := FParaBD.Serie.ID_Serie;
+    vtEditSeries.CurrentValue := FParaBD.Serie.ID_Serie;
 
     cbOffert.Checked := FParaBD.Offert;
     cbGratuit.Checked := FParaBD.Gratuit;
@@ -230,10 +225,11 @@ end;
 procedure TFrmEditParaBD.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FrameRechercheRapideSerie.VirtualTreeView := vtSeries;
-  FrameRechercheRapideAuteur.VirtualTreeView := vtPersonnes;
-  vtSeries.Mode := vmSeries;
-  vtPersonnes.Mode := vmPersonnes;
+  vtEditSeries.Mode := vmSeries;
+  vtEditSeries.VTEdit.LinkControls.Add(Label20);
+  vtEditPersonnes.Mode := vmPersonnes;
+  vtEditPersonnes.VTEdit.LinkControls.Add(Label19);
+  vtEditPersonnes.AfterEdit := OnEditPersonnes;
 
   LoadCombo(7 {Catégorie ParaBD}, cbxCategorie);
 
@@ -248,14 +244,14 @@ var
   PrixCote: Currency;
   hg: IHourGlass;
 begin
-  if TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  if TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD and IsEqualGUID(vtEditSeries.CurrentValue, GUID_NULL) then
   begin
     AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
-    FrameRechercheRapideSerie.edSearch.SetFocus;
+    vtEditSeries.SetFocus;
     ModalResult := mrNone;
     Exit;
   end;
-  if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtEditSeries.CurrentValue, GUID_NULL) then
   begin
     AffMessage(rsTitreObligatoireParaBDSansSerie, mtInformation, [mbOk], True);
     edTitre.SetFocus;
@@ -347,7 +343,7 @@ begin
   end;
 end;
 
-procedure TFrmEditParaBD.vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
+procedure TFrmEditParaBD.vtEditPersonnesVTEditChange(Sender: TObject);
 var
   IdPersonne: TGUID;
 
@@ -365,60 +361,45 @@ var
   end;
 
 begin
-  IdPersonne := vtPersonnes.CurrentValue;
+  IdPersonne := vtEditPersonnes.CurrentValue;
   btCreateur.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(lvAuteurs);
 end;
 
-type
-  PRefresh = ^RRefresh;
-  RRefresh = record
-    F: TFrmEditParaBD;
-    iCurrentAuteur: TGUID;
-  end;
+procedure TFrmEditParaBD.vtEditSeriesVTEditChange(Sender: TObject);
+begin
+  FParaBD.Serie.Fill(vtEditSeries.CurrentValue);
+end;
 
-procedure RefreshAuteurs(Data: PRefresh);
+procedure TFrmEditParaBD.OnEditPersonnes(Sender: TObject);
 var
   i: Integer;
   Auteur: TAuteur;
   CurrentAuteur: TPersonnage;
 begin
-  with Data.F do
-  begin
-    CurrentAuteur := vtPersonnes.GetFocusedNodeData;
+    CurrentAuteur := vtEditPersonnes.VTEdit.Data;
     for i := 0 to Pred(lvAuteurs.Items.Count) do
     begin
       Auteur := lvAuteurs.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, Data.iCurrentAuteur) then
+      if IsEqualGUID(Auteur.Personne.ID, vtEditPersonnes.CurrentValue) then
       begin
         Auteur.Personne.Assign(CurrentAuteur);
         lvAuteurs.Items[i].Caption := Auteur.ChaineAffichage;
       end;
     end;
     lvAuteurs.Invalidate;
-  end;
-end;
-
-var
-  R: RRefresh;
-
-procedure TFrmEditParaBD.vtPersonnesDblClick(Sender: TObject);
-begin
-  R.F := Self;
-  R.iCurrentAuteur := vtPersonnes.CurrentValue;
-  Historique.AddWaiting(fcGestionModif, @RefreshAuteurs, @R, @ModifierAuteurs, vtPersonnes);
 end;
 
 procedure TFrmEditParaBD.btCreateurClick(Sender: TObject);
 var
   PA: TAuteur;
 begin
-  if IsEqualGUID(vtPersonnes.CurrentValue, GUID_NULL) then Exit;
+  if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then Exit;
   PA := TAuteur.Create;
-  PA.Fill(TPersonnage(vtPersonnes.GetFocusedNodeData), ID_ParaBD, GUID_NULL, TMetierAuteur(0));
+  PA.Fill(TPersonnage(vtEditPersonnes.VTEdit.Data), ID_ParaBD, GUID_NULL, TMetierAuteur(0));
   FParaBD.Auteurs.Add(PA);
   lvAuteurs.Items.Count := FParaBD.Auteurs.Count;
   lvAuteurs.Invalidate;
-  vtPersonnesChange(vtPersonnes, vtPersonnes.FocusedNode);
+  vtEditPersonnesVTEditChange(vtEditPersonnes.VTEdit);
 end;
 
 procedure TFrmEditParaBD.lvAuteursKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -430,7 +411,7 @@ begin
   if src = lvAuteurs then FParaBD.Auteurs.Delete(src.Selected.Index);
   lvAuteurs.Items.Count := FParaBD.Auteurs.Count;
   src.Invalidate;
-  vtPersonnesChange(vtPersonnes, vtPersonnes.FocusedNode);
+  vtEditPersonnesVTEditChange(vtEditPersonnes.VTEdit);
 end;
 
 procedure TFrmEditParaBD.FormShow(Sender: TObject);
@@ -451,17 +432,6 @@ procedure TFrmEditParaBD.lvAuteursData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FParaBD.Auteurs[Item.Index];
   Item.Caption := TAuteur(Item.Data).ChaineAffichage;
-end;
-
-procedure TFrmEditParaBD.btResetSerieClick(Sender: TObject);
-begin
-  vtSeries.CurrentValue := GUID_NULL;
-end;
-
-procedure TFrmEditParaBD.vtSeriesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
-begin
-  FParaBD.Serie.Fill(vtSeries.CurrentValue);
-  btResetSerie.Enabled := not IsEqualGUID(FParaBD.Serie.ID_Serie, GUID_NULL);
 end;
 
 procedure TFrmEditParaBD.cbxCategorieChange(Sender: TObject);

@@ -40,8 +40,8 @@ object FrmEditAlbum: TFrmEditAlbum
       800)
     object imgVisu: TImage
       Left = 632
-      Top = 616
-      Width = 105
+      Top = 537
+      Width = 104
       Height = 129
       Cursor = crHandPoint
       Anchors = [akTop, akRight]
@@ -50,7 +50,7 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object Label3: TLabel
       Left = 100
-      Top = 31
+      Top = 53
       Width = 50
       Height = 13
       Alignment = taRightJustify
@@ -70,7 +70,7 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object Label6: TLabel
       Left = 11
-      Top = 50
+      Top = 77
       Width = 43
       Height = 13
       Alignment = taRightJustify
@@ -79,7 +79,7 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object Label7: TLabel
       Left = 346
-      Top = 50
+      Top = 77
       Width = 35
       Height = 13
       Alignment = taRightJustify
@@ -89,12 +89,11 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object btScenariste: TCRFurtifLight
       Tag = 1
-      Left = 492
-      Top = 146
+      Left = 384
+      Top = 171
       Width = 69
       Height = 41
       Cursor = crHandPoint
-      Anchors = [akTop, akRight]
       Caption = 'Sc'#233'nariste'
       Enabled = False
       Glyph.Data = {
@@ -203,12 +202,11 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object btDessinateur: TCRFurtifLight
       Tag = 2
-      Left = 492
-      Top = 190
+      Left = 384
+      Top = 215
       Width = 69
       Height = 41
       Cursor = crHandPoint
-      Anchors = [akTop, akRight]
       Caption = 'Dessinateur'
       Enabled = False
       Glyph.Data = {
@@ -316,19 +314,18 @@ object FrmEditAlbum: TFrmEditAlbum
       WithBorder = True
     end
     object Label19: TLabel
-      Left = 265
-      Top = 150
+      Left = 9
+      Top = 174
       Width = 45
       Height = 13
       Alignment = taRightJustify
-      Anchors = [akTop, akRight]
       Caption = 'Auteurs :'
       FocusControl = remarques
     end
     object ChoixImage: TCRFurtifLight
       Tag = 1
       Left = 4
-      Top = 615
+      Top = 536
       Width = 52
       Height = 130
       Cursor = crHandPoint
@@ -439,7 +436,7 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object VDTButton4: TCRFurtifLight
       Left = 609
-      Top = 615
+      Top = 536
       Width = 22
       Height = 21
       Cursor = crHandPoint
@@ -549,7 +546,7 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object VDTButton5: TCRFurtifLight
       Left = 609
-      Top = 636
+      Top = 557
       Width = 22
       Height = 20
       Cursor = crHandPoint
@@ -667,7 +664,7 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object Label20: TLabel
       Left = 23
-      Top = 150
+      Top = 30
       Width = 31
       Height = 13
       Alignment = taRightJustify
@@ -676,12 +673,11 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object btColoriste: TCRFurtifLight
       Tag = 3
-      Left = 492
-      Top = 234
+      Left = 384
+      Top = 259
       Width = 69
       Height = 41
       Cursor = crHandPoint
-      Anchors = [akTop, akRight]
       Caption = 'Coloriste'
       Enabled = False
       Glyph.Data = {
@@ -790,7 +786,7 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object Label1: TLabel
       Left = 18
-      Top = 31
+      Top = 53
       Width = 36
       Height = 13
       Alignment = taRightJustify
@@ -798,25 +794,9 @@ object FrmEditAlbum: TFrmEditAlbum
       FocusControl = edTome
       Layout = tlCenter
     end
-    object Label5: TLabel
-      Left = 403
-      Top = 293
-      Width = 41
-      Height = 13
-      Alignment = taRightJustify
-      Caption = 'Editeur :'
-    end
-    object Label8: TLabel
-      Left = 391
-      Top = 400
-      Width = 53
-      Height = 13
-      Alignment = taRightJustify
-      Caption = 'Collection :'
-    end
     object Label4: TLabel
       Left = 10
-      Top = 293
+      Top = 212
       Width = 44
       Height = 13
       Alignment = taRightJustify
@@ -824,48 +804,39 @@ object FrmEditAlbum: TFrmEditAlbum
       FocusControl = remarques
     end
     object VDTButton3: TVDTButton
-      Left = 260
-      Top = 336
+      Left = 225
+      Top = 287
       Width = 112
       Height = 20
       Caption = 'Nouvelle'
       OnClick = VDTButton3Click
     end
     object Bevel3: TBevel
-      Left = 216
-      Top = 137
-      Width = 310
-      Height = 6
-      Anchors = [akLeft, akTop, akRight]
+      Left = 52
+      Top = 203
+      Width = 292
+      Height = 5
       Shape = bsTopLine
     end
     object Bevel4: TBevel
-      Left = 216
-      Top = 280
-      Width = 310
+      Left = 343
+      Top = 306
+      Width = 395
       Height = 7
       Anchors = [akLeft, akTop, akRight]
       Shape = bsTopLine
     end
     object Bevel5: TBevel
-      Left = 189
-      Top = 606
+      Left = 216
+      Top = 524
       Width = 310
       Height = 6
       Anchors = [akLeft, akTop, akRight]
       Shape = bsTopLine
     end
-    object Label15: TLabel
-      Left = 409
-      Top = 504
-      Width = 35
-      Height = 13
-      Alignment = taRightJustify
-      Caption = 'Notes :'
-    end
     object Label16: TLabel
       Left = 384
-      Top = 30
+      Top = 54
       Width = 38
       Height = 13
       Alignment = taRightJustify
@@ -881,7 +852,7 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object Label17: TLabel
       Left = 464
-      Top = 30
+      Top = 54
       Width = 6
       Height = 13
       Alignment = taRightJustify
@@ -895,66 +866,32 @@ object FrmEditAlbum: TFrmEditAlbum
       ParentFont = False
       Layout = tlCenter
     end
-    object btResetSerie: TCRFurtifLight
-      Left = 237
-      Top = 146
-      Width = 20
-      Height = 20
-      Cursor = crHandPoint
-      Anchors = [akTop, akRight]
-      Enabled = False
-      Glyph.Data = {
-        36030000424D3603000000000000360000002800000010000000100000000100
-        18000000000000030000120B0000120B00000000000000000000CC00CCCC00CC
-        CC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00
-        CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC9898A3ADADB4CC00CCCC00CCCC
-        00CCCC00CCCC00CCCC00CCA9A9B1A9A9B1CC00CCCC00CCCC00CCCC00CCCC00CC
-        4A4C7D000CAE0A0E62A2A2ABCC00CCCC00CCCC00CCCC00CC7C7C8D01098D0009
-        9661617BCC00CCCC00CCCC00CC92929F0010C9000DEA0004D3090D61A0A0A9CC
-        00CCCC00CC81819101099A0003D10011F5020979C1C1C3CC00CCCC00CC9B9BA6
-        020D970015FF000BE70004D3080C659E9EA8868694020A950003D2000FF10014
-        F2141860C8C8C9CC00CCCC00CCCC00CC8D8D9B020C980015FF000CE80004D306
-        0A64020A8F0003D3000FF00014F40E1366AEAEB4CC00CCCC00CCCC00CCCC00CC
-        CC00CC91919E030D930015FF000CE80004D30003D3000EEE0014F70A0F66A8A8
-        B0CC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC9595A1040D8E0015FF00
-        0EEF000FF10014F8060C69A1A1AACC00CCCC00CCCC00CCCC00CCCC00CCCC00CC
-        CC00CCCC00CC92929E030B7B0318FE8394F47A8BF50216F902086B868694CC00
-        CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC9797A2040B760116FD93A5F294
-        A6F1A5B6F195A7F20318FA02086D818191CC00CCCC00CCCC00CCCC00CCCC00CC
-        9C9CA6060D720015FC899BF39BACF1080F740C1688A1B2F09AAAF20419FB0108
-        6E7C7C8DCC00CCCC00CCCC00CCB7B7BB090E670015FA7D8FF4A4B4F009107795
-        95A1A3A3AC0E17839CADF19EAFF1051AFC010767A1A1AACC00CCCC00CCB7B7BB
-        030A762B3FFB9DAEF109117991919ECC00CCCC00CCA8A8B00F167E8C9DF13F52
-        FA020A79AAAAB1CC00CCCC00CCCC00CC7F7F90040B7902086B8C8C9ACC00CCCC
-        00CCCC00CCCC00CCACACB30F1571020A7C767689CC00CCCC00CCCC00CCCC00CC
-        CC00CCB7B7BBAEAEB4CC00CCCC00CCCC00CCCC00CCCC00CCCC00CCC0C0C3BBBB
-        BFCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC
-        00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC}
-      OnClick = btResetSerieClick
+    object Bevel6: TBevel
+      Left = 343
+      Top = 203
+      Width = 7
+      Height = 103
+      Shape = bsLeftLine
     end
     object PanelEdition: TPanel
-      Left = 15
-      Top = 368
-      Width = 358
-      Height = 229
-      AutoSize = True
+      Left = 56
+      Top = 319
+      Width = 680
+      Height = 193
       BevelOuter = bvNone
       Caption = ' '
-      TabOrder = 18
-      DesignSize = (
-        358
-        229)
+      TabOrder = 16
       object SpeedButton3: TVDTButton
-        Left = 285
-        Top = 24
+        Left = 301
+        Top = 84
         Width = 72
         Height = 21
         Caption = 'Convertisseur'
         OnClick = SpeedButton3Click
       end
       object Label9: TLabel
-        Left = 191
-        Top = 28
+        Left = 207
+        Top = 87
         Width = 25
         Height = 13
         Alignment = taRightJustify
@@ -962,8 +899,8 @@ object FrmEditAlbum: TFrmEditAlbum
         Layout = tlCenter
       end
       object Label10: TLabel
-        Left = 0
-        Top = 4
+        Left = 16
+        Top = 63
         Width = 39
         Height = 13
         Alignment = taRightJustify
@@ -971,8 +908,8 @@ object FrmEditAlbum: TFrmEditAlbum
         Layout = tlCenter
       end
       object Label11: TLabel
-        Left = 9
-        Top = 52
+        Left = 25
+        Top = 112
         Width = 30
         Height = 13
         Alignment = taRightJustify
@@ -980,8 +917,8 @@ object FrmEditAlbum: TFrmEditAlbum
         Layout = tlCenter
       end
       object VDTButton6: TVDTButton
-        Left = 285
-        Top = 49
+        Left = 301
+        Top = 109
         Width = 48
         Height = 20
         Caption = 'V'#233'rifier'
@@ -989,8 +926,8 @@ object FrmEditAlbum: TFrmEditAlbum
         OnClick = VDTButton6Click
       end
       object Label12: TLabel
-        Left = 164
-        Top = 79
+        Left = 456
+        Top = 19
         Width = 27
         Height = 13
         Alignment = taRightJustify
@@ -998,8 +935,8 @@ object FrmEditAlbum: TFrmEditAlbum
         Layout = tlCenter
       end
       object Label13: TLabel
-        Left = 151
-        Top = 113
+        Left = 443
+        Top = 53
         Width = 40
         Height = 13
         Alignment = taRightJustify
@@ -1007,14 +944,13 @@ object FrmEditAlbum: TFrmEditAlbum
         Layout = tlCenter
       end
       object cbxEtat: TLightComboCheck
-        Left = 191
-        Top = 79
-        Width = 166
+        Left = 496
+        Top = 19
+        Width = 184
         Height = 13
         Checked = False
         PropertiesStored = False
         CheckVisible = False
-        OnChange = vtEditeursClick
         ShowCaptionHint = False
         AssignHint = False
         OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
@@ -1023,14 +959,13 @@ object FrmEditAlbum: TFrmEditAlbum
         Items = <>
       end
       object cbxReliure: TLightComboCheck
-        Left = 191
-        Top = 113
-        Width = 166
+        Left = 496
+        Top = 53
+        Width = 184
         Height = 13
         Checked = False
         PropertiesStored = False
         CheckVisible = False
-        OnChange = vtEditeursClick
         ShowCaptionHint = False
         AssignHint = False
         OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
@@ -1039,8 +974,8 @@ object FrmEditAlbum: TFrmEditAlbum
         Items = <>
       end
       object Label14: TLabel
-        Left = 152
-        Top = 96
+        Left = 444
+        Top = 36
         Width = 39
         Height = 13
         Alignment = taRightJustify
@@ -1048,14 +983,13 @@ object FrmEditAlbum: TFrmEditAlbum
         Layout = tlCenter
       end
       object cbxEdition: TLightComboCheck
-        Left = 191
-        Top = 96
-        Width = 166
+        Left = 496
+        Top = 36
+        Width = 184
         Height = 13
         Checked = False
         PropertiesStored = False
         CheckVisible = False
-        OnChange = vtEditeursClick
         ShowCaptionHint = False
         AssignHint = False
         OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
@@ -1064,8 +998,8 @@ object FrmEditAlbum: TFrmEditAlbum
         Items = <>
       end
       object Label18: TLabel
-        Left = 203
-        Top = 4
+        Left = 219
+        Top = 63
         Width = 52
         Height = 13
         Alignment = taRightJustify
@@ -1073,8 +1007,8 @@ object FrmEditAlbum: TFrmEditAlbum
         Layout = tlCenter
       end
       object Label21: TLabel
-        Left = 3
-        Top = 156
+        Left = 19
+        Top = 150
         Width = 36
         Height = 13
         Alignment = taRightJustify
@@ -1082,8 +1016,8 @@ object FrmEditAlbum: TFrmEditAlbum
         Layout = tlCenter
       end
       object Label22: TLabel
-        Left = 130
-        Top = 130
+        Left = 422
+        Top = 69
         Width = 61
         Height = 13
         Alignment = taRightJustify
@@ -1091,14 +1025,13 @@ object FrmEditAlbum: TFrmEditAlbum
         Layout = tlCenter
       end
       object cbxOrientation: TLightComboCheck
-        Left = 191
-        Top = 130
-        Width = 166
+        Left = 496
+        Top = 69
+        Width = 184
         Height = 13
         Checked = False
         PropertiesStored = False
         CheckVisible = False
-        OnChange = vtEditeursClick
         ShowCaptionHint = False
         AssignHint = False
         OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
@@ -1107,8 +1040,8 @@ object FrmEditAlbum: TFrmEditAlbum
         Items = <>
       end
       object Label23: TLabel
-        Left = 150
-        Top = 165
+        Left = 442
+        Top = 104
         Width = 41
         Height = 13
         Alignment = taRightJustify
@@ -1116,14 +1049,13 @@ object FrmEditAlbum: TFrmEditAlbum
         Layout = tlCenter
       end
       object cbxFormat: TLightComboCheck
-        Left = 191
-        Top = 165
-        Width = 166
+        Left = 496
+        Top = 104
+        Width = 185
         Height = 13
         Checked = False
         PropertiesStored = False
         CheckVisible = False
-        OnChange = vtEditeursClick
         ShowCaptionHint = False
         AssignHint = False
         OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
@@ -1132,8 +1064,8 @@ object FrmEditAlbum: TFrmEditAlbum
         Items = <>
       end
       object VDTButton13: TCRFurtifLight
-        Left = 336
-        Top = 49
+        Left = 352
+        Top = 109
         Width = 21
         Height = 20
         Cursor = crHandPoint
@@ -1241,8 +1173,8 @@ object FrmEditAlbum: TFrmEditAlbum
         WithBorder = True
       end
       object Label24: TLabel
-        Left = 97
-        Top = 212
+        Left = 116
+        Top = 175
         Width = 38
         Height = 13
         Alignment = taRightJustify
@@ -1250,8 +1182,8 @@ object FrmEditAlbum: TFrmEditAlbum
         Layout = tlCenter
       end
       object Label25: TLabel
-        Left = 186
-        Top = 212
+        Left = 205
+        Top = 175
         Width = 30
         Height = 13
         Alignment = taRightJustify
@@ -1259,16 +1191,16 @@ object FrmEditAlbum: TFrmEditAlbum
         Layout = tlCenter
       end
       object VDTButton14: TVDTButton
-        Left = 285
-        Top = 208
+        Left = 304
+        Top = 172
         Width = 72
         Height = 21
         Caption = 'Convertisseur'
         OnClick = VDTButton14Click
       end
       object Label26: TLabel
-        Left = 97
-        Top = 187
+        Left = 116
+        Top = 150
         Width = 94
         Height = 13
         Alignment = taRightJustify
@@ -1276,8 +1208,8 @@ object FrmEditAlbum: TFrmEditAlbum
         Layout = tlCenter
       end
       object Label27: TLabel
-        Left = 110
-        Top = 148
+        Left = 402
+        Top = 87
         Width = 81
         Height = 13
         Alignment = taRightJustify
@@ -1285,14 +1217,13 @@ object FrmEditAlbum: TFrmEditAlbum
         Layout = tlCenter
       end
       object cbxSensLecture: TLightComboCheck
-        Left = 191
-        Top = 148
-        Width = 166
+        Left = 496
+        Top = 87
+        Width = 184
         Height = 13
         Checked = False
         PropertiesStored = False
         CheckVisible = False
-        OnChange = vtEditeursClick
         ShowCaptionHint = False
         AssignHint = False
         OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
@@ -1300,9 +1231,33 @@ object FrmEditAlbum: TFrmEditAlbum
         Items.Separateur = ' '
         Items = <>
       end
+      object Label8: TLabel
+        Left = 0
+        Top = 27
+        Width = 53
+        Height = 13
+        Alignment = taRightJustify
+        Caption = 'Collection :'
+      end
+      object Label5: TLabel
+        Left = 12
+        Top = 3
+        Width = 41
+        Height = 13
+        Alignment = taRightJustify
+        Caption = 'Editeur :'
+      end
+      object Label15: TLabel
+        Left = 405
+        Top = 123
+        Width = 35
+        Height = 13
+        Alignment = taRightJustify
+        Caption = 'Notes :'
+      end
       object edPrix: TEditLabeled
-        Left = 218
-        Top = 24
+        Left = 234
+        Top = 84
         Width = 64
         Height = 21
         AutoSelect = False
@@ -1311,7 +1266,7 @@ object FrmEditAlbum: TFrmEditAlbum
         BorderStyle = bsNone
         Ctl3D = True
         ParentCtl3D = False
-        TabOrder = 5
+        TabOrder = 7
         OnChange = edPrixChange
         LinkControls = <
           item
@@ -1324,14 +1279,14 @@ object FrmEditAlbum: TFrmEditAlbum
         CurrencyChar = #0
       end
       object edAnneeEdition: TEditLabeled
-        Left = 41
-        Top = 0
+        Left = 57
+        Top = 60
         Width = 46
         Height = 21
         BevelKind = bkTile
         BorderStyle = bsNone
         MaxLength = 4
-        TabOrder = 0
+        TabOrder = 2
         OnChange = edAnneeEditionChange
         LinkControls = <
           item
@@ -1341,8 +1296,8 @@ object FrmEditAlbum: TFrmEditAlbum
         CurrencyChar = #0
       end
       object edISBN: TEditLabeled
-        Left = 41
-        Top = 49
+        Left = 57
+        Top = 109
         Width = 241
         Height = 20
         AutoSelect = False
@@ -1353,7 +1308,7 @@ object FrmEditAlbum: TFrmEditAlbum
         Ctl3D = True
         MaxLength = 13
         ParentCtl3D = False
-        TabOrder = 6
+        TabOrder = 8
         OnChange = edISBNChange
         OnExit = edISBNExit
         LinkControls = <
@@ -1370,24 +1325,23 @@ object FrmEditAlbum: TFrmEditAlbum
         CurrencyChar = #0
       end
       object cbVO: TCheckBoxLabeled
-        Left = 41
-        Top = 85
+        Left = 510
+        Top = 3
         Width = 34
         Height = 16
         Cursor = crHandPoint
         Caption = 'VO'
         Ctl3D = True
         ParentCtl3D = False
-        TabOrder = 7
-        OnClick = vtEditeursClick
+        TabOrder = 9
         LinkControls = <
           item
             Control = cbVO
           end>
       end
       object cbCouleur: TCheckBoxLabeled
-        Left = 41
-        Top = 107
+        Left = 550
+        Top = 3
         Width = 54
         Height = 16
         Cursor = crHandPoint
@@ -1396,16 +1350,15 @@ object FrmEditAlbum: TFrmEditAlbum
         Ctl3D = True
         ParentCtl3D = False
         State = cbChecked
-        TabOrder = 8
-        OnClick = vtEditeursClick
+        TabOrder = 10
         LinkControls = <
           item
             Control = cbCouleur
           end>
       end
       object cbStock: TCheckBoxLabeled
-        Left = 41
-        Top = 28
+        Left = 57
+        Top = 88
         Width = 61
         Height = 13
         Caption = 'En stock'
@@ -1413,55 +1366,52 @@ object FrmEditAlbum: TFrmEditAlbum
         Ctl3D = True
         ParentCtl3D = False
         State = cbChecked
-        TabOrder = 3
-        OnClick = vtEditeursClick
+        TabOrder = 5
         LinkControls = <
           item
             Control = cbStock
           end>
       end
       object cbDedicace: TCheckBoxLabeled
-        Left = 41
-        Top = 129
+        Left = 610
+        Top = 3
         Width = 64
         Height = 16
         Cursor = crHandPoint
         Caption = 'D'#233'dicac'#233
         Ctl3D = True
         ParentCtl3D = False
-        TabOrder = 9
-        OnClick = vtEditeursClick
+        TabOrder = 11
         LinkControls = <
           item
             Control = cbDedicace
           end>
       end
       object dtpAchat: TDateTimePickerLabeled
-        Left = 257
-        Top = 0
+        Left = 273
+        Top = 60
         Width = 101
         Height = 21
         Date = 38158.758085983800000000
         Time = 38158.758085983800000000
         ShowCheckbox = True
         Checked = False
-        TabOrder = 2
-        OnChange = vtEditeursClick
+        TabOrder = 4
         LinkControls = <
           item
             Control = Label18
           end>
       end
       object cbGratuit: TCheckBoxLabeled
-        Left = 121
-        Top = 26
+        Left = 137
+        Top = 87
         Width = 53
         Height = 16
         Cursor = crHandPoint
         Caption = 'Gratuit'
         Ctl3D = True
         ParentCtl3D = False
-        TabOrder = 4
+        TabOrder = 6
         OnClick = cbGratuitClick
         LinkControls = <
           item
@@ -1469,15 +1419,15 @@ object FrmEditAlbum: TFrmEditAlbum
           end>
       end
       object cbOffert: TCheckBoxLabeled
-        Left = 121
-        Top = 2
+        Left = 137
+        Top = 62
         Width = 53
         Height = 16
         Cursor = crHandPoint
         Caption = 'Offert'
         Ctl3D = True
         ParentCtl3D = False
-        TabOrder = 1
+        TabOrder = 3
         OnClick = cbOffertClick
         LinkControls = <
           item
@@ -1485,15 +1435,14 @@ object FrmEditAlbum: TFrmEditAlbum
           end>
       end
       object edNombreDePages: TEditLabeled
-        Left = 41
-        Top = 152
+        Left = 57
+        Top = 147
         Width = 46
         Height = 21
         BevelKind = bkTile
         BorderStyle = bsNone
         MaxLength = 4
-        TabOrder = 10
-        OnChange = vtEditeursClick
+        TabOrder = 12
         LinkControls = <
           item
             Control = Label21
@@ -1502,15 +1451,14 @@ object FrmEditAlbum: TFrmEditAlbum
         CurrencyChar = #0
       end
       object edAnneeCote: TEditLabeled
-        Left = 137
-        Top = 208
+        Left = 156
+        Top = 172
         Width = 46
         Height = 21
         BevelKind = bkTile
         BorderStyle = bsNone
         MaxLength = 4
-        TabOrder = 12
-        OnChange = vtEditeursClick
+        TabOrder = 14
         LinkControls = <
           item
             Control = Label24
@@ -1519,8 +1467,8 @@ object FrmEditAlbum: TFrmEditAlbum
         CurrencyChar = #0
       end
       object edPrixCote: TEditLabeled
-        Left = 218
-        Top = 208
+        Left = 237
+        Top = 172
         Width = 64
         Height = 21
         AutoSelect = False
@@ -1529,8 +1477,7 @@ object FrmEditAlbum: TFrmEditAlbum
         BorderStyle = bsNone
         Ctl3D = True
         ParentCtl3D = False
-        TabOrder = 13
-        OnChange = vtEditeursClick
+        TabOrder = 15
         LinkControls = <
           item
             Control = Label25
@@ -1542,31 +1489,96 @@ object FrmEditAlbum: TFrmEditAlbum
         CurrencyChar = #0
       end
       object edNumPerso: TEditLabeled
-        Left = 195
-        Top = 183
+        Left = 214
+        Top = 147
         Width = 160
         Height = 20
-        Anchors = [akLeft, akTop, akRight]
         BevelKind = bkTile
         BorderStyle = bsNone
-        TabOrder = 11
-        OnChange = vtEditeursClick
+        TabOrder = 13
         LinkControls = <
           item
             Control = Label2
           end>
         CurrencyChar = #0
       end
+      inline vtEditCollections: TframVTEdit
+        Left = 56
+        Top = 24
+        Width = 317
+        Height = 21
+        TabOrder = 1
+        ExplicitLeft = 56
+        ExplicitTop = 24
+        ExplicitWidth = 317
+        inherited btReset: TVDTButton
+          Left = 254
+          ExplicitLeft = 226
+        end
+        inherited btNew: TVDTButton
+          Left = 296
+          ExplicitLeft = 268
+        end
+        inherited btEdit: TVDTButton
+          Left = 275
+          ExplicitLeft = 247
+        end
+        inherited VTEdit: TJvComboEdit
+          Width = 254
+          OnChange = vtEditCollectionsVTEditChange
+          ExplicitWidth = 254
+        end
+      end
+      inline vtEditEditeurs: TframVTEdit
+        Left = 56
+        Top = 0
+        Width = 317
+        Height = 21
+        TabOrder = 0
+        ExplicitLeft = 56
+        ExplicitWidth = 317
+        inherited btReset: TVDTButton
+          Left = 254
+          ExplicitLeft = 226
+        end
+        inherited btNew: TVDTButton
+          Left = 296
+          ExplicitLeft = 268
+        end
+        inherited btEdit: TVDTButton
+          Left = 275
+          ExplicitLeft = 247
+        end
+        inherited VTEdit: TJvComboEdit
+          Width = 254
+          OnChange = vtEditEditeursVTEditChange
+          ExplicitWidth = 254
+        end
+      end
+      object edNotes: TMemoLabeled
+        Left = 442
+        Top = 123
+        Width = 238
+        Height = 70
+        BevelKind = bkTile
+        BorderStyle = bsNone
+        ScrollBars = ssVertical
+        TabOrder = 16
+        LinkControls = <
+          item
+            Control = Label15
+          end>
+      end
     end
     object edAnneeParution: TEditLabeled
       Left = 175
-      Top = 27
+      Top = 51
       Width = 39
       Height = 20
       BevelKind = bkTile
       BorderStyle = bsNone
       MaxLength = 4
-      TabOrder = 3
+      TabOrder = 4
       LinkControls = <
         item
           Control = Label3
@@ -1592,14 +1604,14 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object histoire: TMemoLabeled
       Left = 56
-      Top = 50
+      Top = 74
       Width = 281
       Height = 81
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       ScrollBars = ssVertical
-      TabOrder = 8
+      TabOrder = 9
       LinkControls = <
         item
           Control = Label6
@@ -1607,25 +1619,25 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object remarques: TMemoLabeled
       Left = 384
-      Top = 50
+      Top = 74
       Width = 354
       Height = 81
       Anchors = [akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       ScrollBars = ssVertical
-      TabOrder = 9
+      TabOrder = 10
       LinkControls = <
         item
           Control = Label7
         end>
     end
     object lvScenaristes: TVDTListViewLabeled
-      Left = 561
-      Top = 146
-      Width = 177
+      Left = 459
+      Top = 171
+      Width = 279
       Height = 41
-      Anchors = [akTop, akRight]
+      Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       Columns = <
         item
@@ -1633,7 +1645,7 @@ object FrmEditAlbum: TFrmEditAlbum
         end>
       OwnerData = True
       SortType = stNone
-      TabOrder = 14
+      TabOrder = 12
       OnData = lvScenaristesData
       OnKeyDown = lvDessinateursKeyDown
       LinkControls = <
@@ -1642,11 +1654,11 @@ object FrmEditAlbum: TFrmEditAlbum
         end>
     end
     object lvDessinateurs: TVDTListViewLabeled
-      Left = 561
-      Top = 190
-      Width = 177
+      Left = 459
+      Top = 215
+      Width = 279
       Height = 41
-      Anchors = [akTop, akRight]
+      Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       Columns = <
         item
@@ -1654,7 +1666,7 @@ object FrmEditAlbum: TFrmEditAlbum
         end>
       OwnerData = True
       SortType = stBoth
-      TabOrder = 15
+      TabOrder = 13
       OnData = lvDessinateursData
       OnKeyDown = lvDessinateursKeyDown
       LinkControls = <
@@ -1662,38 +1674,9 @@ object FrmEditAlbum: TFrmEditAlbum
           Control = btDessinateur
         end>
     end
-    object vtPersonnes: TVirtualStringTree
-      Left = 312
-      Top = 169
-      Width = 177
-      Height = 105
-      Anchors = [akTop, akRight]
-      AnimationDuration = 0
-      BevelKind = bkTile
-      BorderStyle = bsNone
-      ButtonFillMode = fmShaded
-      Header.AutoSizeIndex = -1
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'Tahoma'
-      Header.Font.Style = []
-      Header.MainColumn = -1
-      Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-      HintAnimation = hatNone
-      HintMode = hmTooltip
-      HotCursor = crHandPoint
-      Indent = 8
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 13
-      OnChange = vtPersonnesChange
-      OnDblClick = vtPersonnesDblClick
-      Columns = <>
-    end
     object vstImages: TVirtualStringTree
       Left = 56
-      Top = 615
+      Top = 536
       Width = 553
       Height = 130
       Anchors = [akLeft, akTop, akRight]
@@ -1708,7 +1691,7 @@ object FrmEditAlbum: TFrmEditAlbum
       Header.Font.Name = 'Tahoma'
       Header.Font.Style = []
       Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-      TabOrder = 24
+      TabOrder = 17
       TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
       TreeOptions.StringOptions = []
       OnChange = vstImagesChange
@@ -1732,41 +1715,12 @@ object FrmEditAlbum: TFrmEditAlbum
           Width = 100
         end>
     end
-    object vtSeries: TVirtualStringTree
-      Left = 56
-      Top = 169
-      Width = 201
-      Height = 80
-      Anchors = [akLeft, akTop, akRight]
-      AnimationDuration = 0
-      BevelKind = bkTile
-      BorderStyle = bsNone
-      ButtonFillMode = fmShaded
-      Header.AutoSizeIndex = -1
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'Tahoma'
-      Header.Font.Style = []
-      Header.MainColumn = -1
-      Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-      HintAnimation = hatNone
-      HintMode = hmTooltip
-      HotCursor = crHandPoint
-      Indent = 8
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 11
-      OnChange = vtSeriesChange
-      OnDblClick = vtSeriesDblClick
-      Columns = <>
-    end
     object lvColoristes: TVDTListViewLabeled
-      Left = 561
-      Top = 234
-      Width = 177
+      Left = 459
+      Top = 259
+      Width = 279
       Height = 41
-      Anchors = [akTop, akRight]
+      Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       Columns = <
         item
@@ -1774,7 +1728,7 @@ object FrmEditAlbum: TFrmEditAlbum
         end>
       OwnerData = True
       SortType = stBoth
-      TabOrder = 16
+      TabOrder = 14
       OnData = lvColoristesData
       OnKeyDown = lvDessinateursKeyDown
       LinkControls = <
@@ -1784,14 +1738,14 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object cbIntegrale: TCheckBoxLabeled
       Left = 316
-      Top = 29
+      Top = 53
       Width = 65
       Height = 16
       Cursor = crHandPoint
       Caption = 'Int'#233'grale'
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 5
+      TabOrder = 6
       OnClick = cbIntegraleClick
       LinkControls = <
         item
@@ -1800,13 +1754,13 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object edTome: TEditLabeled
       Left = 56
-      Top = 27
+      Top = 51
       Width = 39
       Height = 20
       BevelKind = bkTile
       BorderStyle = bsNone
       MaxLength = 3
-      TabOrder = 1
+      TabOrder = 2
       LinkControls = <
         item
           Control = Label1
@@ -1814,71 +1768,11 @@ object FrmEditAlbum: TFrmEditAlbum
       TypeDonnee = tdEntier
       CurrencyChar = #0
     end
-    object vtEditeurs: TVirtualStringTree
-      Left = 446
-      Top = 313
-      Width = 292
-      Height = 78
-      Anchors = [akLeft, akTop, akRight]
-      AnimationDuration = 0
-      BevelKind = bkTile
-      BorderStyle = bsNone
-      ButtonFillMode = fmShaded
-      Header.AutoSizeIndex = -1
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'Tahoma'
-      Header.Font.Style = []
-      Header.MainColumn = -1
-      Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-      HintAnimation = hatNone
-      HintMode = hmTooltip
-      HotCursor = crHandPoint
-      Indent = 8
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 20
-      OnChange = vtEditeursChange
-      OnClick = vtEditeursClick
-      OnDblClick = vtEditeursDblClick
-      Columns = <>
-    end
-    object vtCollections: TVirtualStringTree
-      Left = 446
-      Top = 419
-      Width = 292
-      Height = 78
-      Anchors = [akLeft, akTop, akRight]
-      AnimationDuration = 0
-      BevelKind = bkTile
-      BorderStyle = bsNone
-      ButtonFillMode = fmShaded
-      Header.AutoSizeIndex = -1
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'Tahoma'
-      Header.Font.Style = []
-      Header.MainColumn = -1
-      Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-      HintAnimation = hatNone
-      HintMode = hmTooltip
-      HotCursor = crHandPoint
-      Indent = 8
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 22
-      OnChange = vtCollectionsChange
-      OnClick = vtEditeursClick
-      OnDblClick = vtCollectionsDblClick
-      Columns = <>
-    end
     object vtEditions: TListBoxLabeled
       Left = 56
-      Top = 290
-      Width = 317
-      Height = 45
+      Top = 212
+      Width = 281
+      Height = 69
       BevelKind = bkTile
       BorderStyle = bsNone
       Font.Charset = ANSI_CHARSET
@@ -1890,7 +1784,7 @@ object FrmEditAlbum: TFrmEditAlbum
       ParentFont = False
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 17
+      TabOrder = 15
       OnClick = vtEditionsClick
       OnKeyDown = vtEditionsKeyDown
       LinkControls = <
@@ -1903,57 +1797,22 @@ object FrmEditAlbum: TFrmEditAlbum
     end
     object cbHorsSerie: TCheckBoxLabeled
       Left = 234
-      Top = 29
+      Top = 53
       Width = 73
       Height = 16
       Cursor = crHandPoint
       Caption = 'Hors s'#233'rie'
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 4
+      TabOrder = 5
       LinkControls = <
         item
           Control = cbHorsSerie
         end>
     end
-    object edNotes: TMemoLabeled
-      Left = 446
-      Top = 504
-      Width = 292
-      Height = 78
-      Anchors = [akLeft, akTop, akRight]
-      BevelKind = bkTile
-      BorderStyle = bsNone
-      ScrollBars = ssVertical
-      TabOrder = 23
-      LinkControls = <
-        item
-          Control = Label15
-        end>
-    end
     object edTomeDebut: TEditLabeled
       Left = 424
-      Top = 27
-      Width = 39
-      Height = 20
-      BevelKind = bkTile
-      BorderStyle = bsNone
-      Enabled = False
-      MaxLength = 3
-      TabOrder = 6
-      LinkControls = <
-        item
-          Control = Label16
-        end
-        item
-          Control = Label17
-        end>
-      TypeDonnee = tdEntier
-      CurrencyChar = #0
-    end
-    object edTomeFin: TEditLabeled
-      Left = 472
-      Top = 27
+      Top = 51
       Width = 39
       Height = 20
       BevelKind = bkTile
@@ -1971,15 +1830,35 @@ object FrmEditAlbum: TFrmEditAlbum
       TypeDonnee = tdEntier
       CurrencyChar = #0
     end
+    object edTomeFin: TEditLabeled
+      Left = 472
+      Top = 51
+      Width = 39
+      Height = 20
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      Enabled = False
+      MaxLength = 3
+      TabOrder = 8
+      LinkControls = <
+        item
+          Control = Label16
+        end
+        item
+          Control = Label17
+        end>
+      TypeDonnee = tdEntier
+      CurrencyChar = #0
+    end
     object edMoisParution: TEditLabeled
       Left = 152
-      Top = 27
+      Top = 51
       Width = 22
       Height = 20
       BevelKind = bkTile
       BorderStyle = bsNone
       MaxLength = 2
-      TabOrder = 2
+      TabOrder = 3
       LinkControls = <
         item
           Control = Label3
@@ -1987,137 +1866,60 @@ object FrmEditAlbum: TFrmEditAlbum
       TypeDonnee = tdEntier
       CurrencyChar = #0
     end
-    inline FrameRechercheRapidePersonnes: TFrameRechercheRapide
-      Left = 312
-      Top = 146
-      Width = 177
-      Height = 21
-      Anchors = [akTop, akRight]
-      TabOrder = 12
-      ExplicitLeft = 312
-      ExplicitTop = 146
-      ExplicitWidth = 177
-      DesignSize = (
-        177
-        21)
-      inherited btNext: TVDTButton
-        Left = 136
-        ExplicitLeft = 136
-      end
-      inherited btNew: TVDTButton
-        Left = 156
-        OnClick = FrameRechercheRapidePersonnesbtNewClick
-        ExplicitLeft = 156
-      end
-      inherited edSearch: TEditLabeled
-        Width = 137
-        LinkControls = <
-          item
-            Control = Label19
-          end>
-        ExplicitWidth = 137
-      end
-    end
-    inline FrameRechercheRapideSerie: TFrameRechercheRapide
+    inline vtEditSerie: TframVTEdit
       Left = 56
-      Top = 146
-      Width = 178
+      Top = 27
+      Width = 682
       Height = 21
       Anchors = [akLeft, akTop, akRight]
-      TabOrder = 10
+      TabOrder = 1
       ExplicitLeft = 56
-      ExplicitTop = 146
-      ExplicitWidth = 178
-      DesignSize = (
-        178
-        21)
-      inherited btNext: TVDTButton
-        Left = 137
-        ExplicitLeft = 137
+      ExplicitTop = 27
+      ExplicitWidth = 682
+      inherited btReset: TVDTButton
+        Left = 619
+        ExplicitLeft = 619
       end
       inherited btNew: TVDTButton
-        Left = 157
-        OnClick = FrameRechercheRapideSeriebtNewClick
-        ExplicitLeft = 157
+        Left = 661
+        ExplicitLeft = 661
       end
-      inherited edSearch: TEditLabeled
-        Width = 138
-        LinkControls = <
-          item
-            Control = Label20
-          end>
-        ExplicitWidth = 138
+      inherited btEdit: TVDTButton
+        Left = 640
+        ExplicitLeft = 640
       end
-    end
-    inline FrameRechercheRapideEditeur: TFrameRechercheRapide
-      Left = 446
-      Top = 290
-      Width = 292
-      Height = 21
-      Anchors = [akLeft, akTop, akRight]
-      TabOrder = 19
-      ExplicitLeft = 446
-      ExplicitTop = 290
-      ExplicitWidth = 292
-      DesignSize = (
-        292
-        21)
-      inherited btNext: TVDTButton
-        Left = 251
-        ExplicitLeft = 251
-      end
-      inherited btNew: TVDTButton
-        Left = 271
-        ExplicitLeft = 271
-      end
-      inherited edSearch: TEditLabeled
-        Width = 252
-        LinkControls = <
-          item
-            Control = Label5
-          end>
-        ExplicitWidth = 252
+      inherited VTEdit: TJvComboEdit
+        Width = 619
+        OnChange = JvComboEdit1Change
+        ExplicitWidth = 619
       end
     end
-    inline FrameRechercheRapideCollection: TFrameRechercheRapide
-      Left = 446
-      Top = 396
-      Width = 292
-      Height = 21
-      Anchors = [akLeft, akTop, akRight]
-      TabOrder = 21
-      ExplicitLeft = 446
-      ExplicitTop = 396
-      ExplicitWidth = 292
-      DesignSize = (
-        292
-        21)
-      inherited btNext: TVDTButton
-        Left = 251
-        ExplicitLeft = 251
-      end
-      inherited btNew: TVDTButton
-        Left = 271
-        Enabled = False
-        ExplicitLeft = 271
-      end
-      inherited edSearch: TEditLabeled
-        Width = 252
-        LinkControls = <
-          item
-            Control = Label8
-          end>
-        ExplicitWidth = 252
-      end
-    end
-    object JvComboEdit1: TJvComboEdit
+    inline vtEditPersonnes: TframVTEdit
       Left = 56
-      Top = 253
-      Width = 201
+      Top = 171
+      Width = 281
       Height = 21
-      TabOrder = 25
-      Text = 'JvComboEdit1'
-      OnChange = JvComboEdit1Change
+      TabOrder = 11
+      ExplicitLeft = 56
+      ExplicitTop = 171
+      ExplicitWidth = 281
+      inherited btReset: TVDTButton
+        Left = 218
+        ExplicitLeft = 218
+      end
+      inherited btNew: TVDTButton
+        Left = 260
+        ExplicitLeft = 260
+      end
+      inherited btEdit: TVDTButton
+        Left = 239
+        ExplicitLeft = 239
+      end
+      inherited VTEdit: TJvComboEdit
+        Width = 218
+        OnChange = framVTEdit1VTEditChange
+        ExplicitWidth = 218
+      end
     end
   end
   inline Frame11: TFrame1
@@ -2128,7 +1930,7 @@ object FrmEditAlbum: TFrmEditAlbum
     Align = alTop
     TabOrder = 1
     ExplicitWidth = 742
-    inherited btnOK: TPngBitBtn
+    inherited btnOK: TButton
       Left = 571
       Width = 87
       Caption = 'Enregistrer'
@@ -2136,7 +1938,7 @@ object FrmEditAlbum: TFrmEditAlbum
       ExplicitLeft = 571
       ExplicitWidth = 87
     end
-    inherited btnAnnuler: TPngBitBtn
+    inherited btnAnnuler: TButton
       Left = 659
       ExplicitLeft = 659
     end

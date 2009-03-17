@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, VirtualTree, Buttons, VDTButton, StdCtrls, DBEditLabeled;
+  Dialogs, VirtualTree, Buttons, VDTButton, StdCtrls, DBEditLabeled,
+  PngSpeedButton;
 
 type
   TOnSearchEvent = procedure(Sender: TObject; NextSearch: Boolean) of object;

@@ -1,9 +1,8 @@
 object FrmEditAchatAlbum: TFrmEditAchatAlbum
   Left = 245
   Top = 418
-  ActiveControl = edTitre
   Caption = 'Achat'
-  ClientHeight = 385
+  ClientHeight = 427
   ClientWidth = 736
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -14,658 +13,22 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
   OldCreateOrder = False
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  DesignSize = (
+    736
+    427)
   PixelsPerInch = 96
   TextHeight = 13
-  object PageControl1: TPageControl
-    Left = 0
-    Top = 0
-    Width = 736
-    Height = 354
-    ActivePage = TabSheet1
-    Align = alClient
-    MultiLine = True
-    Style = tsButtons
-    TabOrder = 0
-    object TabSheet1: TTabSheet
-      Caption = 'Nouvel album'
-      DesignSize = (
-        728
-        323)
-      object Label3: TLabel
-        Left = 94
-        Top = 31
-        Width = 50
-        Height = 13
-        Alignment = taRightJustify
-        Caption = ' Parution :'
-        FocusControl = edAnneeParution
-        Layout = tlCenter
-      end
-      object Bevel3: TBevel
-        Left = 206
-        Top = 137
-        Width = 310
-        Height = 6
-        Shape = bsTopLine
-      end
-      object Label16: TLabel
-        Left = 384
-        Top = 30
-        Width = 38
-        Height = 13
-        Alignment = taRightJustify
-        Caption = 'Tomes :'
-        FocusControl = edTomeDebut
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clInactiveCaptionText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentFont = False
-        Layout = tlCenter
-      end
-      object Label17: TLabel
-        Left = 464
-        Top = 30
-        Width = 6
-        Height = 13
-        Alignment = taRightJustify
-        Caption = #224
-        FocusControl = edTomeFin
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clInactiveCaptionText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentFont = False
-        Layout = tlCenter
-      end
-      object Label20: TLabel
-        Left = 11
-        Top = 158
-        Width = 31
-        Height = 13
-        Alignment = taRightJustify
-        Caption = 'S'#233'rie :'
-      end
-      object Label1: TLabel
-        Left = 10
-        Top = 31
-        Width = 36
-        Height = 13
-        Alignment = taRightJustify
-        Caption = ' Tome :'
-        FocusControl = edTome
-        Layout = tlCenter
-      end
-      object Label2: TLabel
-        Left = 14
-        Top = 7
-        Width = 32
-        Height = 13
-        Alignment = taRightJustify
-        Caption = ' Titre :'
-        FocusControl = edTitre
-        Layout = tlCenter
-      end
-      object btScenariste: TVDTButton
-        Tag = 1
-        Left = 478
-        Top = 154
-        Width = 69
-        Height = 41
-        Anchors = [akTop, akRight]
-        Caption = 'Sc'#233'nariste'
-        Enabled = False
-        Glyph.Data = {
-          B2000000424DB20000000000000052000000280000000C0000000C0000000100
-          04000000000060000000120B0000120B00000700000007000000CE636300FF9C
-          9C00FFCECE0000FF0000BDBDBD008C8C8C000000000033334333333360603336
-          5433333333333336654333333336333616543333333633362065433333363336
-          2106543333363336211063333336333621163333333633362163333333363336
-          26333333333633366333333333363336333333333336}
-        Layout = blGlyphBottom
-        OnClick = btScenaristeClick
-      end
-      object btDessinateur: TVDTButton
-        Tag = 2
-        Left = 478
-        Top = 198
-        Width = 69
-        Height = 41
-        Anchors = [akTop, akRight]
-        Caption = 'Dessinateur'
-        Enabled = False
-        Glyph.Data = {
-          B2000000424DB20000000000000052000000280000000C0000000C0000000100
-          04000000000060000000120B0000120B00000700000007000000CE636300FF9C
-          9C00FFCECE0000FF0000BDBDBD008C8C8C000000000033334333333360603336
-          5433333333333336654333333336333616543333333633362065433333363336
-          2106543333363336211063333336333621163333333633362163333333363336
-          26333333333633366333333333363336333333333336}
-        Layout = blGlyphBottom
-        OnClick = btScenaristeClick
-      end
-      object Label19: TLabel
-        Left = 251
-        Top = 158
-        Width = 45
-        Height = 13
-        Alignment = taRightJustify
-        Anchors = [akTop, akRight]
-        Caption = 'Auteurs :'
-      end
-      object btColoriste: TVDTButton
-        Tag = 3
-        Left = 478
-        Top = 242
-        Width = 69
-        Height = 41
-        Anchors = [akTop, akRight]
-        Caption = 'Coloriste'
-        Enabled = False
-        Glyph.Data = {
-          B2000000424DB20000000000000052000000280000000C0000000C0000000100
-          04000000000060000000120B0000120B00000700000007000000CE636300FF9C
-          9C00FFCECE0000FF0000BDBDBD008C8C8C000000000033334333333360603336
-          5433333333333336654333333336333616543333333633362065433333363336
-          2106543333363336211063333336333621163333333633362163333333363336
-          26333333333633366333333333363336333333333336}
-        Layout = blGlyphBottom
-        OnClick = btScenaristeClick
-      end
-      object Label7: TLabel
-        Left = 352
-        Top = 50
-        Width = 35
-        Height = 13
-        Alignment = taRightJustify
-        Anchors = [akTop, akRight]
-        Caption = 'Notes :'
-        FocusControl = remarques
-      end
-      object Label6: TLabel
-        Left = 3
-        Top = 50
-        Width = 43
-        Height = 13
-        Alignment = taRightJustify
-        Caption = 'Histoire :'
-        FocusControl = histoire
-      end
-      object btResetSerie: TCRFurtifLight
-        Left = 212
-        Top = 154
-        Width = 20
-        Height = 20
-        Cursor = crHandPoint
-        Anchors = [akTop, akRight]
-        Enabled = False
-        Glyph.Data = {
-          36030000424D3603000000000000360000002800000010000000100000000100
-          18000000000000030000120B0000120B00000000000000000000CC00CCCC00CC
-          CC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00
-          CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC9898A3ADADB4CC00CCCC00CCCC
-          00CCCC00CCCC00CCCC00CCA9A9B1A9A9B1CC00CCCC00CCCC00CCCC00CCCC00CC
-          4A4C7D000CAE0A0E62A2A2ABCC00CCCC00CCCC00CCCC00CC7C7C8D01098D0009
-          9661617BCC00CCCC00CCCC00CC92929F0010C9000DEA0004D3090D61A0A0A9CC
-          00CCCC00CC81819101099A0003D10011F5020979C1C1C3CC00CCCC00CC9B9BA6
-          020D970015FF000BE70004D3080C659E9EA8868694020A950003D2000FF10014
-          F2141860C8C8C9CC00CCCC00CCCC00CC8D8D9B020C980015FF000CE80004D306
-          0A64020A8F0003D3000FF00014F40E1366AEAEB4CC00CCCC00CCCC00CCCC00CC
-          CC00CC91919E030D930015FF000CE80004D30003D3000EEE0014F70A0F66A8A8
-          B0CC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC9595A1040D8E0015FF00
-          0EEF000FF10014F8060C69A1A1AACC00CCCC00CCCC00CCCC00CCCC00CCCC00CC
-          CC00CCCC00CC92929E030B7B0318FE8394F47A8BF50216F902086B868694CC00
-          CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC9797A2040B760116FD93A5F294
-          A6F1A5B6F195A7F20318FA02086D818191CC00CCCC00CCCC00CCCC00CCCC00CC
-          9C9CA6060D720015FC899BF39BACF1080F740C1688A1B2F09AAAF20419FB0108
-          6E7C7C8DCC00CCCC00CCCC00CCB7B7BB090E670015FA7D8FF4A4B4F009107795
-          95A1A3A3AC0E17839CADF19EAFF1051AFC010767A1A1AACC00CCCC00CCB7B7BB
-          030A762B3FFB9DAEF109117991919ECC00CCCC00CCA8A8B00F167E8C9DF13F52
-          FA020A79AAAAB1CC00CCCC00CCCC00CC7F7F90040B7902086B8C8C9ACC00CCCC
-          00CCCC00CCCC00CCACACB30F1571020A7C767689CC00CCCC00CCCC00CCCC00CC
-          CC00CCB7B7BBAEAEB4CC00CCCC00CCCC00CCCC00CCCC00CCCC00CCC0C0C3BBBB
-          BFCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC
-          00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC}
-        OnClick = btResetSerieClick
-      end
-      object edAnneeParution: TEditLabeled
-        Left = 167
-        Top = 27
-        Width = 39
-        Height = 20
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        MaxLength = 4
-        TabOrder = 3
-        LinkControls = <
-          item
-            Control = Label3
-          end>
-        TypeDonnee = tdEntier
-        CurrencyChar = #0
-      end
-      object edTitre: TEditLabeled
-        Left = 48
-        Top = 4
-        Width = 677
-        Height = 20
-        Anchors = [akLeft, akTop, akRight]
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        TabOrder = 0
-        LinkControls = <
-          item
-            Control = Label2
-          end>
-        CurrencyChar = #0
-      end
-      object vtSeries: TVirtualStringTree
-        Left = 49
-        Top = 177
-        Width = 183
-        Height = 106
-        Anchors = [akLeft, akTop, akRight]
-        AnimationDuration = 0
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        ButtonFillMode = fmShaded
-        Header.AutoSizeIndex = -1
-        Header.Font.Charset = DEFAULT_CHARSET
-        Header.Font.Color = clWindowText
-        Header.Font.Height = -11
-        Header.Font.Name = 'Tahoma'
-        Header.Font.Style = []
-        Header.MainColumn = -1
-        Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-        HintAnimation = hatNone
-        HintMode = hmTooltip
-        HotCursor = crHandPoint
-        Indent = 8
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 11
-        OnChange = vtSeriesChange
-        OnDblClick = vtSeriesDblClick
-        Columns = <>
-      end
-      object cbIntegrale: TCheckBoxLabeled
-        Left = 316
-        Top = 29
-        Width = 65
-        Height = 16
-        Cursor = crHandPoint
-        Caption = 'Int'#233'grale'
-        Ctl3D = True
-        ParentCtl3D = False
-        TabOrder = 5
-        OnClick = cbIntegraleClick
-        LinkControls = <
-          item
-            Control = cbIntegrale
-          end>
-      end
-      object edTome: TEditLabeled
-        Left = 48
-        Top = 27
-        Width = 39
-        Height = 20
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        MaxLength = 3
-        TabOrder = 1
-        LinkControls = <
-          item
-            Control = Label1
-          end>
-        TypeDonnee = tdEntier
-        CurrencyChar = #0
-      end
-      object cbHorsSerie: TCheckBoxLabeled
-        Left = 234
-        Top = 29
-        Width = 73
-        Height = 16
-        Cursor = crHandPoint
-        Caption = 'Hors s'#233'rie'
-        Ctl3D = True
-        ParentCtl3D = False
-        TabOrder = 4
-        LinkControls = <
-          item
-            Control = cbHorsSerie
-          end>
-      end
-      object edTomeDebut: TEditLabeled
-        Left = 424
-        Top = 27
-        Width = 39
-        Height = 20
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        Enabled = False
-        MaxLength = 3
-        TabOrder = 6
-        LinkControls = <
-          item
-            Control = Label16
-          end
-          item
-            Control = Label17
-          end>
-        TypeDonnee = tdEntier
-        CurrencyChar = #0
-      end
-      object edTomeFin: TEditLabeled
-        Left = 472
-        Top = 27
-        Width = 39
-        Height = 20
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        Enabled = False
-        MaxLength = 3
-        TabOrder = 7
-        LinkControls = <
-          item
-            Control = Label16
-          end
-          item
-            Control = Label17
-          end>
-        TypeDonnee = tdEntier
-        CurrencyChar = #0
-      end
-      object lvScenaristes: TVDTListViewLabeled
-        Left = 547
-        Top = 154
-        Width = 177
-        Height = 41
-        Anchors = [akTop, akRight]
-        BevelKind = bkTile
-        Columns = <
-          item
-          end>
-        OwnerData = True
-        SortType = stNone
-        TabOrder = 14
-        OnData = lvScenaristesData
-        OnKeyDown = lvColoristesKeyDown
-        LinkControls = <
-          item
-            Control = btScenariste
-          end>
-      end
-      object lvDessinateurs: TVDTListViewLabeled
-        Left = 547
-        Top = 198
-        Width = 177
-        Height = 41
-        Anchors = [akTop, akRight]
-        BevelKind = bkTile
-        Columns = <
-          item
-          end>
-        OwnerData = True
-        SortType = stBoth
-        TabOrder = 15
-        OnData = lvDessinateursData
-        OnKeyDown = lvColoristesKeyDown
-        LinkControls = <
-          item
-            Control = btDessinateur
-          end>
-      end
-      object vtPersonnes: TVirtualStringTree
-        Left = 298
-        Top = 177
-        Width = 177
-        Height = 106
-        Anchors = [akTop, akRight]
-        AnimationDuration = 0
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        ButtonFillMode = fmShaded
-        Header.AutoSizeIndex = -1
-        Header.Font.Charset = DEFAULT_CHARSET
-        Header.Font.Color = clWindowText
-        Header.Font.Height = -11
-        Header.Font.Name = 'Tahoma'
-        Header.Font.Style = []
-        Header.MainColumn = -1
-        Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-        HintAnimation = hatNone
-        HintMode = hmTooltip
-        HotCursor = crHandPoint
-        Indent = 8
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 13
-        OnChange = vtPersonnesChange
-        OnDblClick = vtPersonnesDblClick
-        Columns = <>
-      end
-      object lvColoristes: TVDTListViewLabeled
-        Left = 547
-        Top = 242
-        Width = 177
-        Height = 41
-        Anchors = [akTop, akRight]
-        BevelKind = bkTile
-        Columns = <
-          item
-          end>
-        OwnerData = True
-        SortType = stBoth
-        TabOrder = 16
-        OnData = lvColoristesData
-        OnKeyDown = lvColoristesKeyDown
-        LinkControls = <
-          item
-            Control = btColoriste
-          end>
-      end
-      object edMoisParution: TEditLabeled
-        Left = 144
-        Top = 27
-        Width = 22
-        Height = 20
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        MaxLength = 2
-        TabOrder = 2
-        LinkControls = <
-          item
-            Control = Label3
-          end>
-        TypeDonnee = tdEntier
-        CurrencyChar = #0
-      end
-      object remarques: TMemoLabeled
-        Left = 390
-        Top = 50
-        Width = 334
-        Height = 81
-        Anchors = [akTop, akRight]
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        ScrollBars = ssVertical
-        TabOrder = 9
-        LinkControls = <
-          item
-            Control = Label7
-          end>
-      end
-      object histoire: TMemoLabeled
-        Left = 48
-        Top = 50
-        Width = 295
-        Height = 81
-        Anchors = [akLeft, akTop, akRight]
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        ScrollBars = ssVertical
-        TabOrder = 8
-        LinkControls = <
-          item
-            Control = Label6
-          end>
-      end
-      inline FrameRechercheRapidePersonnes: TFrameRechercheRapide
-        Left = 298
-        Top = 154
-        Width = 177
-        Height = 21
-        Anchors = [akTop, akRight]
-        TabOrder = 12
-        ExplicitLeft = 298
-        ExplicitTop = 154
-        ExplicitWidth = 177
-        DesignSize = (
-          177
-          21)
-        inherited btNext: TVDTButton
-          Left = 136
-          ExplicitLeft = 136
-        end
-        inherited btNew: TVDTButton
-          Left = 156
-          ExplicitLeft = 156
-        end
-        inherited edSearch: TEditLabeled
-          Width = 137
-          LinkControls = <
-            item
-              Control = Label19
-            end>
-          ExplicitWidth = 137
-        end
-      end
-      inline FrameRechercheRapideSerie: TFrameRechercheRapide
-        Left = 49
-        Top = 154
-        Width = 162
-        Height = 21
-        Anchors = [akLeft, akTop, akRight]
-        TabOrder = 10
-        ExplicitLeft = 49
-        ExplicitTop = 154
-        ExplicitWidth = 162
-        DesignSize = (
-          162
-          21)
-        inherited btNext: TVDTButton
-          Left = 121
-          ExplicitLeft = 121
-        end
-        inherited btNew: TVDTButton
-          Left = 141
-          ExplicitLeft = 141
-        end
-        inherited edSearch: TEditLabeled
-          Width = 122
-          LinkControls = <
-            item
-              Control = Label20
-            end>
-          ExplicitWidth = 122
-        end
-      end
-    end
-    object TabSheet2: TTabSheet
-      Caption = 'Album existant'
-      ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
-      DesignSize = (
-        728
-        323)
-      object Label4: TLabel
-        Left = 10
-        Top = 7
-        Width = 36
-        Height = 13
-        Alignment = taRightJustify
-        Caption = 'Album :'
-        Layout = tlCenter
-      end
-      object vstAlbums: TVirtualStringTree
-        Left = 48
-        Top = 27
-        Width = 676
-        Height = 248
-        Anchors = [akLeft, akTop, akRight]
-        AnimationDuration = 0
-        BackgroundOffsetY = 24
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        Header.AutoSizeIndex = 0
-        Header.Font.Charset = DEFAULT_CHARSET
-        Header.Font.Color = clWindowText
-        Header.Font.Height = -11
-        Header.Font.Name = 'Tahoma'
-        Header.Font.Style = []
-        Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-        HintAnimation = hatNone
-        HintMode = hmTooltip
-        HotCursor = crHandPoint
-        Indent = 8
-        ParentShowHint = False
-        ShowHint = True
-        TabOrder = 1
-        Columns = <
-          item
-            Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
-            Position = 0
-            Width = 676
-          end>
-      end
-      inline FrameRechercheRapideAlbums: TFrameRechercheRapide
-        Left = 48
-        Top = 4
-        Width = 676
-        Height = 21
-        Anchors = [akLeft, akTop, akRight]
-        TabOrder = 0
-        ExplicitLeft = 48
-        ExplicitTop = 4
-        ExplicitWidth = 676
-        DesignSize = (
-          676
-          21)
-        inherited btNext: TVDTButton
-          Left = 635
-          ExplicitLeft = 635
-        end
-        inherited btNew: TVDTButton
-          Left = 655
-          ExplicitLeft = 655
-        end
-        inherited edSearch: TEditLabeled
-          Width = 636
-          LinkControls = <
-            item
-              Control = Label4
-            end>
-          ExplicitWidth = 636
-        end
-      end
-    end
-  end
   inline Frame11: TFrame1
     Left = 0
-    Top = 354
+    Top = 396
     Width = 736
     Height = 31
     Align = alBottom
-    TabOrder = 1
-    ExplicitTop = 354
+    TabOrder = 0
+    ExplicitTop = 396
     ExplicitWidth = 736
     ExplicitHeight = 31
-    inherited btnOK: TBitBtn
+    inherited btnOK: TButton
       Left = 557
       Top = 8
       Width = 87
@@ -677,7 +40,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       ExplicitWidth = 87
       ExplicitHeight = 19
     end
-    inherited btnAnnuler: TBitBtn
+    inherited btnAnnuler: TButton
       Left = 653
       Top = 8
       Width = 72
@@ -686,6 +49,566 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       ExplicitTop = 8
       ExplicitWidth = 72
       ExplicitHeight = 19
+    end
+  end
+  object rbAlbumExistant: TRadioButton
+    Left = 18
+    Top = 335
+    Width = 116
+    Height = 17
+    Caption = 'Album existant'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 1
+    OnClick = rbNouvelAlbumClick
+  end
+  object rbNouvelAlbum: TRadioButton
+    Left = 18
+    Top = 10
+    Width = 89
+    Height = 17
+    Caption = 'Nouvel album'
+    Checked = True
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    TabOrder = 3
+    TabStop = True
+    OnClick = rbNouvelAlbumClick
+  end
+  object pnAlbumExistant: TPanel
+    Left = 136
+    Top = 331
+    Width = 593
+    Height = 23
+    Anchors = [akLeft, akTop, akRight]
+    BevelOuter = bvNone
+    BorderWidth = 1
+    Caption = ' '
+    TabOrder = 2
+    DesignSize = (
+      593
+      23)
+    inline vtEditAlbums: TframVTEdit
+      Left = 1
+      Top = 1
+      Width = 591
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 0
+      ExplicitLeft = 1
+      ExplicitTop = 1
+      ExplicitWidth = 680
+      inherited btReset: TVDTButton
+        Left = 528
+        ExplicitLeft = 617
+      end
+      inherited btNew: TVDTButton
+        Left = 570
+        ExplicitLeft = 659
+      end
+      inherited btEdit: TVDTButton
+        Left = 549
+        ExplicitLeft = 638
+      end
+      inherited VTEdit: TJvComboEdit
+        Width = 528
+        ExplicitWidth = 617
+      end
+    end
+  end
+  object pnNouvelAlbum: TPanel
+    Left = 136
+    Top = 8
+    Width = 592
+    Height = 292
+    Anchors = [akLeft, akTop, akRight]
+    BevelOuter = bvNone
+    Caption = ' '
+    TabOrder = 4
+    DesignSize = (
+      592
+      292)
+    object Label2: TLabel
+      Left = 14
+      Top = 3
+      Width = 32
+      Height = 13
+      Alignment = taRightJustify
+      Caption = ' Titre :'
+      FocusControl = edTitre
+      Layout = tlCenter
+    end
+    object Label20: TLabel
+      Left = 15
+      Top = 26
+      Width = 31
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'S'#233'rie :'
+    end
+    object Label1: TLabel
+      Left = 10
+      Top = 50
+      Width = 36
+      Height = 13
+      Alignment = taRightJustify
+      Caption = ' Tome :'
+      FocusControl = edTome
+      Layout = tlCenter
+    end
+    object Label3: TLabel
+      Left = 117
+      Top = 50
+      Width = 50
+      Height = 13
+      Alignment = taRightJustify
+      Caption = ' Parution :'
+      FocusControl = edAnneeParution
+      Layout = tlCenter
+    end
+    object Label17: TLabel
+      Left = 475
+      Top = 50
+      Width = 6
+      Height = 13
+      Alignment = taRightJustify
+      Caption = #224
+      FocusControl = edTomeFin
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Layout = tlCenter
+    end
+    object Label6: TLabel
+      Left = 3
+      Top = 73
+      Width = 43
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Histoire :'
+      FocusControl = histoire
+    end
+    object Label7: TLabel
+      Left = 265
+      Top = 73
+      Width = 35
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight]
+      Caption = 'Notes :'
+      FocusControl = remarques
+      ExplicitLeft = 353
+    end
+    object btScenariste: TVDTButton
+      Tag = 1
+      Left = 306
+      Top = 157
+      Width = 69
+      Height = 41
+      Anchors = [akTop, akRight]
+      Caption = 'Sc'#233'nariste'
+      Enabled = False
+      Layout = blGlyphBottom
+      OnClick = btScenaristeClick
+      PngImage.Data = {
+        89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+        610000000473424954080808087C0864880000001974455874536F6674776172
+        65007777772E696E6B73636170652E6F72679BEE3C1A000001924944415478DA
+        A593CF2B445114C7BFF7CD9B9937C3F363A8998D29358AB0D26C98291B4B2294
+        85B261C972E41FB0100BAC44898D1FD9B04191321E121B56A4484D340B63E6CD
+        AF37EFC77567AC14CF4CBE75EB9CFBED7C3A9D7B0FC13F454C3C8E1DA3744027
+        0451B31D33CB4D29194B4AD99392001501FB0405E6052F8FEC8BC6422CF38212
+        8A1D215E14A0BCC3BEE0A8B78E7B06AAE0FDF041DAB8849EA2118E1ABD7149BD
+        2EA20361DBD5E31CAC6E1431E75FC2C1F31E5617D7F2DD2409C14022AC1C9A02
+        C480FDD4332C06AD6EBE903755B640D70D48EB57C83EA92A285A6549B937033C
+        78462A1AACB5966FF74A44437453CE8733F29932690678ABE973BA1D753610EB
+        97ADC906129719A46E73119D58FCE970FAD504205CBBBA1D6D7CA5057C190735
+        A1437BD7113BCC643818C1F8997A633E830EFB8ED82EF4DBDC5C21A71A416C3F
+        0543A3434929B7F5E72B8841619A7362AABACB815C54877CAE5036B8101BDC6C
+        91FFC0D64C08B9630E618549103A2C8773BBF8453FEE02EB629415FB884E5712
+        17CA234C64B64C45E9DF804F400D9711AB9FEB370000000049454E44AE426082}
+      ExplicitLeft = 394
+    end
+    object btDessinateur: TVDTButton
+      Tag = 2
+      Left = 306
+      Top = 201
+      Width = 69
+      Height = 41
+      Anchors = [akTop, akRight]
+      Caption = 'Dessinateur'
+      Enabled = False
+      Layout = blGlyphBottom
+      OnClick = btScenaristeClick
+      PngImage.Data = {
+        89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+        610000000473424954080808087C0864880000001974455874536F6674776172
+        65007777772E696E6B73636170652E6F72679BEE3C1A000001924944415478DA
+        A593CF2B445114C7BFF7CD9B9937C3F363A8998D29358AB0D26C98291B4B2294
+        85B261C972E41FB0100BAC44898D1FD9B04191321E121B56A4484D340B63E6CD
+        AF37EFC77567AC14CF4CBE75EB9CFBED7C3A9D7B0FC13F454C3C8E1DA3744027
+        0451B31D33CB4D29194B4AD99392001501FB0405E6052F8FEC8BC6422CF38212
+        8A1D215E14A0BCC3BEE0A8B78E7B06AAE0FDF041DAB8849EA2118E1ABD7149BD
+        2EA20361DBD5E31CAC6E1431E75FC2C1F31E5617D7F2DD2409C14022AC1C9A02
+        C480FDD4332C06AD6EBE903755B640D70D48EB57C83EA92A285A6549B937033C
+        78462A1AACB5966FF74A44437453CE8733F29932690678ABE973BA1D753610EB
+        97ADC906129719A46E73119D58FCE970FAD504205CBBBA1D6D7CA5057C190735
+        A1437BD7113BCC643818C1F8997A633E830EFB8ED82EF4DBDC5C21A71A416C3F
+        0543A3434929B7F5E72B8841619A7362AABACB815C54877CAE5036B8101BDC6C
+        91FFC0D64C08B9630E618549103A2C8773BBF8453FEE02EB629415FB884E5712
+        17CA234C64B64C45E9DF804F400D9711AB9FEB370000000049454E44AE426082}
+      ExplicitLeft = 394
+    end
+    object btColoriste: TVDTButton
+      Tag = 3
+      Left = 306
+      Top = 245
+      Width = 69
+      Height = 41
+      Anchors = [akTop, akRight]
+      Caption = 'Coloriste'
+      Enabled = False
+      Layout = blGlyphBottom
+      OnClick = btScenaristeClick
+      PngImage.Data = {
+        89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+        610000000473424954080808087C0864880000001974455874536F6674776172
+        65007777772E696E6B73636170652E6F72679BEE3C1A000001924944415478DA
+        A593CF2B445114C7BFF7CD9B9937C3F363A8998D29358AB0D26C98291B4B2294
+        85B261C972E41FB0100BAC44898D1FD9B04191321E121B56A4484D340B63E6CD
+        AF37EFC77567AC14CF4CBE75EB9CFBED7C3A9D7B0FC13F454C3C8E1DA3744027
+        0451B31D33CB4D29194B4AD99392001501FB0405E6052F8FEC8BC6422CF38212
+        8A1D215E14A0BCC3BEE0A8B78E7B06AAE0FDF041DAB8849EA2118E1ABD7149BD
+        2EA20361DBD5E31CAC6E1431E75FC2C1F31E5617D7F2DD2409C14022AC1C9A02
+        C480FDD4332C06AD6EBE903755B640D70D48EB57C83EA92A285A6549B937033C
+        78462A1AACB5966FF74A44437453CE8733F29932690678ABE973BA1D753610EB
+        97ADC906129719A46E73119D58FCE970FAD504205CBBBA1D6D7CA5057C190735
+        A1437BD7113BCC643818C1F8997A633E830EFB8ED82EF4DBDC5C21A71A416C3F
+        0543A3434929B7F5E72B8841619A7362AABACB815C54877CAE5036B8101BDC6C
+        91FFC0D64C08B9630E618549103A2C8773BBF8453FEE02EB629415FB884E5712
+        17CA234C64B64C45E9DF804F400D9711AB9FEB370000000049454E44AE426082}
+      ExplicitLeft = 394
+    end
+    object Label19: TLabel
+      Left = 1
+      Top = 214
+      Width = 45
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Auteurs :'
+    end
+    object Label16: TLabel
+      Left = 412
+      Top = 50
+      Width = 12
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'de'
+      FocusControl = edTomeDebut
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Layout = tlCenter
+    end
+    object edTitre: TEditLabeled
+      Left = 52
+      Top = 0
+      Width = 540
+      Height = 20
+      Anchors = [akLeft, akTop, akRight]
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      TabOrder = 0
+      LinkControls = <
+        item
+          Control = Label2
+        end>
+      CurrencyChar = #0
+      ExplicitWidth = 628
+    end
+    inline vtEditSeries: TframVTEdit
+      Left = 52
+      Top = 23
+      Width = 540
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 1
+      ExplicitLeft = 52
+      ExplicitTop = 23
+      ExplicitWidth = 628
+      inherited btReset: TVDTButton
+        Left = 477
+        ExplicitLeft = 565
+      end
+      inherited btNew: TVDTButton
+        Left = 519
+        ExplicitLeft = 607
+      end
+      inherited btEdit: TVDTButton
+        Left = 498
+        ExplicitLeft = 586
+      end
+      inherited VTEdit: TJvComboEdit
+        Width = 477
+        OnChange = vtEditSeriesVTEditChange
+        ExplicitWidth = 565
+      end
+    end
+    object edTome: TEditLabeled
+      Left = 52
+      Top = 47
+      Width = 39
+      Height = 20
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      MaxLength = 3
+      TabOrder = 2
+      LinkControls = <
+        item
+          Control = Label1
+        end>
+      TypeDonnee = tdEntier
+      CurrencyChar = #0
+    end
+    object edMoisParution: TEditLabeled
+      Left = 173
+      Top = 47
+      Width = 22
+      Height = 20
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      MaxLength = 2
+      TabOrder = 3
+      LinkControls = <
+        item
+          Control = Label3
+        end>
+      TypeDonnee = tdEntier
+      CurrencyChar = #0
+    end
+    object edAnneeParution: TEditLabeled
+      Left = 201
+      Top = 47
+      Width = 39
+      Height = 20
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      MaxLength = 4
+      TabOrder = 4
+      LinkControls = <
+        item
+          Control = Label3
+        end>
+      TypeDonnee = tdEntier
+      CurrencyChar = #0
+    end
+    object cbHorsSerie: TCheckBoxLabeled
+      Left = 264
+      Top = 49
+      Width = 73
+      Height = 16
+      Cursor = crHandPoint
+      Caption = 'Hors s'#233'rie'
+      Ctl3D = True
+      ParentCtl3D = False
+      TabOrder = 5
+      LinkControls = <
+        item
+          Control = cbHorsSerie
+        end>
+    end
+    object cbIntegrale: TCheckBoxLabeled
+      Left = 343
+      Top = 49
+      Width = 65
+      Height = 16
+      Cursor = crHandPoint
+      Caption = 'Int'#233'grale'
+      Ctl3D = True
+      ParentCtl3D = False
+      TabOrder = 6
+      OnClick = cbIntegraleClick
+      LinkControls = <
+        item
+          Control = cbIntegrale
+        end>
+    end
+    object edTomeDebut: TEditLabeled
+      Left = 430
+      Top = 47
+      Width = 39
+      Height = 20
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      Enabled = False
+      MaxLength = 3
+      TabOrder = 7
+      LinkControls = <
+        item
+          Control = Label16
+        end
+        item
+          Control = Label17
+        end>
+      TypeDonnee = tdEntier
+      CurrencyChar = #0
+    end
+    object edTomeFin: TEditLabeled
+      Left = 487
+      Top = 47
+      Width = 39
+      Height = 20
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      Enabled = False
+      MaxLength = 3
+      TabOrder = 8
+      LinkControls = <
+        item
+          Control = Label16
+        end
+        item
+          Control = Label17
+        end>
+      TypeDonnee = tdEntier
+      CurrencyChar = #0
+    end
+    object histoire: TMemoLabeled
+      Left = 52
+      Top = 70
+      Width = 207
+      Height = 81
+      Anchors = [akLeft, akTop, akRight]
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      ScrollBars = ssVertical
+      TabOrder = 9
+      LinkControls = <
+        item
+          Control = Label6
+        end>
+      ExplicitWidth = 295
+    end
+    object remarques: TMemoLabeled
+      Left = 306
+      Top = 70
+      Width = 287
+      Height = 81
+      Anchors = [akTop, akRight]
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      ScrollBars = ssVertical
+      TabOrder = 10
+      LinkControls = <
+        item
+          Control = Label7
+        end>
+      ExplicitLeft = 394
+    end
+    object lvScenaristes: TVDTListViewLabeled
+      Left = 381
+      Top = 157
+      Width = 212
+      Height = 41
+      Anchors = [akTop, akRight]
+      BevelKind = bkTile
+      Columns = <
+        item
+        end>
+      OwnerData = True
+      SortType = stNone
+      TabOrder = 12
+      OnData = lvScenaristesData
+      OnKeyDown = lvColoristesKeyDown
+      LinkControls = <
+        item
+          Control = btScenariste
+        end>
+      ExplicitLeft = 469
+    end
+    object lvDessinateurs: TVDTListViewLabeled
+      Left = 381
+      Top = 201
+      Width = 212
+      Height = 41
+      Anchors = [akTop, akRight]
+      BevelKind = bkTile
+      Columns = <
+        item
+        end>
+      OwnerData = True
+      SortType = stBoth
+      TabOrder = 13
+      OnData = lvDessinateursData
+      OnKeyDown = lvColoristesKeyDown
+      LinkControls = <
+        item
+          Control = btDessinateur
+        end>
+      ExplicitLeft = 469
+    end
+    object lvColoristes: TVDTListViewLabeled
+      Left = 381
+      Top = 245
+      Width = 212
+      Height = 41
+      Anchors = [akTop, akRight]
+      BevelKind = bkTile
+      Columns = <
+        item
+        end>
+      OwnerData = True
+      SortType = stBoth
+      TabOrder = 14
+      OnData = lvColoristesData
+      OnKeyDown = lvColoristesKeyDown
+      LinkControls = <
+        item
+          Control = btColoriste
+        end>
+      ExplicitLeft = 469
+    end
+    inline vtEditPersonnes: TframVTEdit
+      Left = 52
+      Top = 211
+      Width = 207
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 11
+      ExplicitLeft = 52
+      ExplicitTop = 211
+      ExplicitWidth = 295
+      inherited btReset: TVDTButton
+        Left = 144
+        ExplicitLeft = 232
+      end
+      inherited btNew: TVDTButton
+        Left = 186
+        ExplicitLeft = 274
+      end
+      inherited btEdit: TVDTButton
+        Left = 165
+        ExplicitLeft = 253
+      end
+      inherited VTEdit: TJvComboEdit
+        Width = 144
+        OnChange = vtEditPersonnesVTEditChange
+        ExplicitWidth = 232
+      end
     end
   end
 end

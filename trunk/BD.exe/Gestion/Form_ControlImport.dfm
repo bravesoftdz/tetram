@@ -58,13 +58,15 @@ object frmControlImport: TfrmControlImport
     Align = alTop
     TabOrder = 4
     ExplicitWidth = 643
-    inherited btnOK: TBitBtn
+    inherited btnOK: TButton
       Left = 480
+      Images = nil
       OnClick = Frame11btnOKClick
       ExplicitLeft = 480
     end
-    inherited btnAnnuler: TBitBtn
+    inherited btnAnnuler: TButton
       Left = 560
+      Images = nil
       OnClick = Frame11btnAnnulerClick
       ExplicitLeft = 560
     end

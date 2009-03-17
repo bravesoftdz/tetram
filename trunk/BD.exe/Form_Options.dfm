@@ -82,29 +82,30 @@ object FrmOptions: TFrmOptions
     TabHeight = 38
     TabOrder = 0
     TabStop = False
-    ExplicitHeight = 394
     object options: TTabSheet
       Hint = 'Options diverses'
       Caption = 'Options diverses'
-      ExplicitHeight = 346
       object CategoryPanelGroup1: TCategoryPanelGroup
         Left = 0
         Top = 0
         Width = 352
         Height = 329
+        VertScrollBar.Position = 53
         VertScrollBar.Tracking = True
         Align = alClient
         BevelInner = bvNone
         BevelOuter = bvNone
+        DoubleBuffered = True
         HeaderFont.Charset = DEFAULT_CHARSET
         HeaderFont.Color = clWindowText
         HeaderFont.Height = -9
         HeaderFont.Name = 'Tahoma'
         HeaderFont.Style = [fsBold]
         HeaderHeight = 16
+        ParentDoubleBuffered = False
         TabOrder = 0
         object CategoryPanel1: TCategoryPanel
-          Top = 0
+          Top = -53
           Height = 241
           Caption = 'G'#233'n'#233'ral'
           TabOrder = 0
@@ -326,7 +327,7 @@ object FrmOptions: TFrmOptions
           end
         end
         object CategoryPanel2: TCategoryPanel
-          Top = 241
+          Top = 188
           Height = 59
           Caption = 'Impression'
           TabOrder = 1
@@ -354,7 +355,7 @@ object FrmOptions: TFrmOptions
           end
         end
         object CategoryPanel3: TCategoryPanel
-          Top = 300
+          Top = 247
           Height = 80
           Caption = 'Mode Gestion'
           TabOrder = 2
@@ -392,7 +393,6 @@ object FrmOptions: TFrmOptions
     object TabSheet2: TTabSheet
       Caption = 'Monnaies'
       ImageIndex = 1
-      ExplicitHeight = 346
       DesignSize = (
         352
         329)
@@ -499,33 +499,28 @@ object FrmOptions: TFrmOptions
         end
         inline Frame12: TFrame1
           Left = 0
-          Top = 67
+          Top = 65
           Width = 165
-          Height = 23
+          Height = 25
           Align = alBottom
           TabOrder = 4
-          ExplicitTop = 67
+          ExplicitTop = 65
           ExplicitWidth = 165
-          ExplicitHeight = 23
-          inherited btnOK: TPngBitBtn
+          inherited btnOK: TButton
             Left = 24
             Width = 64
-            Height = 19
             ModalResult = 0
             OnClick = Button2Click
             ExplicitLeft = 24
             ExplicitWidth = 64
-            ExplicitHeight = 19
           end
-          inherited btnAnnuler: TPngBitBtn
+          inherited btnAnnuler: TButton
             Left = 96
             Width = 64
-            Height = 19
             ModalResult = 0
             OnClick = Button3Click
             ExplicitLeft = 96
             ExplicitWidth = 64
-            ExplicitHeight = 19
           end
         end
         object Edit1: TEditLabeled
@@ -576,7 +571,6 @@ object FrmOptions: TFrmOptions
     object TabSheet1: TTabSheet
       Caption = 'Site web'
       ImageIndex = 2
-      ExplicitHeight = 346
       object GroupBox3: TGroupBox
         Left = 0
         Top = 0
@@ -781,29 +775,25 @@ object FrmOptions: TFrmOptions
     Height = 30
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 394
+    ExplicitTop = 377
     ExplicitWidth = 360
     ExplicitHeight = 30
-    inherited btnOK: TPngBitBtn
+    inherited btnOK: TButton
       Left = 203
       Top = 6
       Width = 73
-      Height = 19
       OnClick = btnOKClick
       ExplicitLeft = 203
       ExplicitTop = 6
       ExplicitWidth = 73
-      ExplicitHeight = 19
     end
-    inherited btnAnnuler: TPngBitBtn
+    inherited btnAnnuler: TButton
       Left = 284
       Top = 6
       Width = 71
-      Height = 19
       ExplicitLeft = 284
       ExplicitTop = 6
       ExplicitWidth = 71
-      ExplicitHeight = 19
     end
   end
   object ImageList1: TPngImageList

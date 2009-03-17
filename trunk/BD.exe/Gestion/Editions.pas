@@ -434,7 +434,7 @@ begin
     ID_Collection := ID;
     if Creation then begin
       edNom.Text := Valeur;
-      vtEditeurs.CurrentValue := ID_Editeur;
+      vtEditEditeurs.CurrentValue := ID_Editeur;
     end;
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;

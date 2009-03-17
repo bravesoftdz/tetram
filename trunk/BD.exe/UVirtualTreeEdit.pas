@@ -3,7 +3,7 @@ unit UVirtualTreeEdit;
 interface
 
 uses
-  SysUtils, Windows, Classes, Controls, Messages, JvToolEdit, VirtualTrees, VirtualTree, Variants;
+  SysUtils, Windows, Classes, Controls, Messages, JvToolEdit, VirtualTrees, VirtualTree, Variants, DBEditLabeled;
 
 type
   TJvComboEdit = class(JvToolEdit.TJvComboEdit)
@@ -30,7 +30,9 @@ type
     FInternalCurrentValue: TGUID;
     FReloadValue: Boolean;
     FInternalValueChanged: TNotifyEvent;
+    FLinkControls: TControlList;
 
+    procedure SetLinkControls(const Value: TControlList);
     procedure SetMode(const Value: TVirtualMode);
     procedure SetCurrentValue(const Value: TGUID);
     function GetMode: TVirtualMode;
@@ -44,27 +46,32 @@ type
     procedure SetPopupValue(const Value: Variant); override;
     procedure PopupChange; override;
     procedure Change; override;
+    procedure DoEnter; override;
+    procedure DoExit; override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     function Data: Pointer;
     procedure CloseUp;
+    procedure SetBounds(ALeft, ATop, AWidth, AHeight: Integer); override;
   published
     property Mode: TVirtualMode read GetMode write SetMode;
     property CurrentValue: TGUID read GetCurrentValue write SetCurrentValue;
     property PopupWindow: TJvPopupVirtualTree read GetPopupWindow;
     property InternalValueChanged: TNotifyEvent read FInternalValueChanged write FInternalValueChanged;
+    property LinkControls: TControlList read FLinkControls write SetLinkControls;
   end;
 
 implementation
 
 uses
-  Commun, Forms, TypeRec;
+  Commun, Forms, TypeRec, Math;
 
 constructor TJvComboEdit.Create(AOwner: TComponent);
 begin
   inherited;
 
+  FLinkControls := TControlList.Create;
   ImageKind := ikDropDown;
   FInternalCurrentValue := GUID_NULL;
   FReloadValue := True;
@@ -77,6 +84,7 @@ begin
   TJvPopupWindow(FPopup).OnCloseUp := nil;
   FPopup.Parent := nil;
   FreeAndNil(FPopup);
+  FLinkControls.Free;
 
   inherited;
 end;
@@ -92,12 +100,25 @@ end;
 
 procedure TJvComboEdit.CloseUp;
 begin
-  if PopupVisible then PopupCloseUp(Self, True);
+  if PopupVisible then
+    PopupCloseUp(Self, True);
 end;
 
 function TJvComboEdit.Data: Pointer;
 begin
   Result := PopupWindow.TreeView.GetFocusedNodeData;
+end;
+
+procedure TJvComboEdit.DoEnter;
+begin
+  FLinkControls.DoEnter;
+  inherited;
+end;
+
+procedure TJvComboEdit.DoExit;
+begin
+  FLinkControls.DoExit;
+  inherited;
 end;
 
 procedure TJvComboEdit.PopupDropDown(DisableEdit: Boolean);
@@ -193,6 +214,17 @@ begin
     FInternalValueChanged(Self);
 end;
 
+procedure TJvComboEdit.SetLinkControls(const Value: TControlList);
+begin
+  FLinkControls.Assign(Value);
+end;
+
+procedure TJvComboEdit.SetBounds(ALeft, ATop, AWidth, AHeight: Integer);
+begin
+  inherited;
+  if Assigned(FPopup) then FPopup.Width := Max(300, Width);
+end;
+
 procedure TJvComboEdit.SetMode(const Value: TVirtualMode);
 begin
   PopupWindow.TreeView.Mode := Value;
@@ -208,11 +240,12 @@ begin
   inherited;
 
   Height := 150;
-  Width  := 300;
+  Width := 300;
 
   FTreeView := TVirtualStringTree.Create(Self);
   FTreeView.Parent := Self;
   FTreeView.Align := alClient;
+  FTreeView.BorderStyle := bsNone;
   FTreeView.ParentColor := True;
   FTreeView.OnMouseUp := TreeViewMouseUp;
   FTreeView.OnMouseDown := TreeViewMouseDown;

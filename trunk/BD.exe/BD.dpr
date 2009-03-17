@@ -38,7 +38,6 @@ uses
   Form_Gestion in 'Gestion\Form_Gestion.pas' {FrmGestions},
   Form_EditAlbum in 'Gestion\Form_EditAlbum.pas' {FrmEditAlbum},
   Form_EditAchatAlbum in 'Gestion\Form_EditAchatAlbum.pas' {FrmEditAchatAlbum},
-  Form_EditSerie in 'Gestion\Form_EditSerie.pas' {FrmEditSerie},
   Form_EditEditeur in 'Gestion\Form_EditEditeur.pas' {FrmEditEditeur},
   Form_EditCollection in 'Gestion\Form_EditCollection.pas' {FrmEditCollection},
   Form_EditAuteur in 'Gestion\Form_EditAuteur.pas' {FrmEditAuteur},
@@ -146,7 +145,8 @@ uses
   UMetadata in 'UMetadata.pas',
   Form_ControlImport in 'Gestion\Form_ControlImport.pas' {frmControlImport},
   UVirtualTreeEdit in 'UVirtualTreeEdit.pas',
-  UframVTEdit in 'UframVTEdit.pas' {framVTEdit: TFrame};
+  UframVTEdit in 'UframVTEdit.pas' {framVTEdit: TFrame},
+  Form_EditSerie in 'Gestion\Form_EditSerie.pas' {FrmEditSerie};
 
 {$R *.RES}
 {$R curseurs.res}
@@ -186,7 +186,7 @@ begin
 
     FrmSplash.Affiche_act(ChargementApp + '...');
     Application.CreateForm(TfrmFond, frmFond);
-    FrmSplash.Affiche_act(ChargementDatabase + '...');
+  FrmSplash.Affiche_act(ChargementDatabase + '...');
     Historique.AddConsultation(fcRecherche);
     if FindCmdLineSwitch('scripts') then
       frmFond.actScripts.Execute

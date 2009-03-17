@@ -4,12 +4,12 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  Buttons, StdCtrls, PngBitBtn;
+  Buttons, StdCtrls, UfrmFond;
 
 type
   TFrame1 = class(TFrame)
-    btnOK: TPngBitBtn;
-    btnAnnuler: TPngBitBtn;
+    btnOK: TButton;
+    btnAnnuler: TButton;
     procedure FrameResize(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
     procedure btnAnnulerClick(Sender: TObject);

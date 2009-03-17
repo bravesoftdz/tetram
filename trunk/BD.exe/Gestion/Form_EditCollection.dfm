@@ -8,7 +8,7 @@ object FrmEditCollection: TFrmEditCollection
   ClientHeight = 186
   ClientWidth = 410
   Color = clBtnFace
-  Constraints.MinWidth = 418
+  Constraints.MinWidth = 416
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -51,7 +51,7 @@ object FrmEditCollection: TFrmEditCollection
     end
     object Label5: TLabel
       Left = 5
-      Top = 34
+      Top = 33
       Width = 41
       Height = 13
       Alignment = taRightJustify
@@ -75,59 +75,27 @@ object FrmEditCollection: TFrmEditCollection
         end>
       CurrencyChar = #0
     end
-    object vtEditeurs: TVirtualStringTree
+    inline vtEditEditeurs: TframVTEdit
       Left = 52
-      Top = 54
-      Width = 353
-      Height = 73
-      Anchors = [akLeft, akTop, akRight]
-      AnimationDuration = 0
-      BevelKind = bkTile
-      BorderStyle = bsNone
-      ButtonFillMode = fmShaded
-      Header.AutoSizeIndex = -1
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'Tahoma'
-      Header.Font.Style = []
-      Header.MainColumn = -1
-      Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-      HintAnimation = hatNone
-      HintMode = hmTooltip
-      HotCursor = crHandPoint
-      Indent = 8
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 2
-      OnDblClick = vtEditeursDblClick
-      Columns = <>
-    end
-    inline FrameRechercheRapide1: TFrameRechercheRapide
-      Left = 52
-      Top = 31
-      Width = 353
+      Top = 30
+      Width = 352
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 1
       ExplicitLeft = 52
-      ExplicitTop = 31
-      ExplicitWidth = 353
-      inherited btNext: TVDTButton
-        Left = 312
-        ExplicitLeft = 312
+      ExplicitTop = 30
+      ExplicitWidth = 352
+      inherited btReset: TVDTButton
+        Left = 289
       end
       inherited btNew: TVDTButton
-        Left = 332
-        ExplicitLeft = 332
+        Left = 331
       end
-      inherited edSearch: TEditLabeled
-        Width = 313
-        LinkControls = <
-          item
-            Control = Label5
-          end>
-        ExplicitWidth = 313
+      inherited btEdit: TVDTButton
+        Left = 310
+      end
+      inherited VTEdit: TJvComboEdit
+        Width = 289
       end
     end
   end
@@ -139,7 +107,7 @@ object FrmEditCollection: TFrmEditCollection
     Align = alTop
     TabOrder = 1
     ExplicitWidth = 410
-    inherited btnOK: TBitBtn
+    inherited btnOK: TButton
       Left = 239
       Width = 87
       Caption = 'Enregistrer'
@@ -147,7 +115,7 @@ object FrmEditCollection: TFrmEditCollection
       ExplicitLeft = 239
       ExplicitWidth = 87
     end
-    inherited btnAnnuler: TBitBtn
+    inherited btnAnnuler: TButton
       Left = 327
       ExplicitLeft = 327
     end

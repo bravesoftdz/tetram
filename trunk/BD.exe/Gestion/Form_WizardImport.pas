@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, ActnList, CRFurtif, UBdtForms;
+  Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, ActnList, CRFurtif, UBdtForms,
+  pngimage;
 
 type
   TPageControl = class(ComCtrls.TPageControl)

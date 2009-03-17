@@ -4,8 +4,8 @@ object FrmCustomize: TFrmCustomize
   BorderIcons = [biMinimize, biMaximize]
   BorderStyle = bsDialog
   Caption = 'Personnaliser'
-  ClientHeight = 378
-  ClientWidth = 514
+  ClientHeight = 368
+  ClientWidth = 535
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -14,11 +14,12 @@ object FrmCustomize: TFrmCustomize
   Font.Style = []
   FormStyle = fsStayOnTop
   OldCreateOrder = False
+  PopupMode = pmAuto
   Position = poMainFormCenter
   OnCreate = FormCreate
   DesignSize = (
-    514
-    378)
+    535
+    368)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -376,35 +377,38 @@ object FrmCustomize: TFrmCustomize
   object GroupBox1: TGroupBox
     Left = 7
     Top = 274
-    Width = 499
+    Width = 520
     Height = 61
     Anchors = [akLeft, akTop, akRight]
     Caption = ' Description : '
     TabOrder = 0
+    ExplicitWidth = 499
     object Label3: TLabel
       Left = 2
       Top = 15
-      Width = 31
-      Height = 13
+      Width = 516
+      Height = 44
       Align = alClient
       Alignment = taCenter
       Caption = 'Label3'
       Layout = tlCenter
       Visible = False
+      ExplicitWidth = 31
+      ExplicitHeight = 13
     end
   end
   inline Frame11: TFrame1
     Left = 0
-    Top = 345
-    Width = 514
+    Top = 335
+    Width = 535
     Height = 33
     Align = alBottom
     TabOrder = 1
     ExplicitTop = 345
     ExplicitWidth = 514
     ExplicitHeight = 33
-    inherited btnOK: TBitBtn
-      Left = 358
+    inherited btnOK: TButton
+      Left = 379
       Top = 9
       Width = 74
       OnClick = Frame11btnOKClick
@@ -412,8 +416,8 @@ object FrmCustomize: TFrmCustomize
       ExplicitTop = 9
       ExplicitWidth = 74
     end
-    inherited btnAnnuler: TBitBtn
-      Left = 439
+    inherited btnAnnuler: TButton
+      Left = 460
       Top = 9
       Width = 72
       ExplicitLeft = 439
@@ -427,7 +431,6 @@ object FrmCustomize: TFrmCustomize
     Width = 186
     Height = 67
     Cursor = crHandPoint
-    Anchors = [akLeft, akTop, akRight]
     BevelKind = bkTile
     BorderStyle = bsNone
     ItemHeight = 13
@@ -439,7 +442,7 @@ object FrmCustomize: TFrmCustomize
     Top = 113
     Width = 186
     Height = 155
-    Anchors = [akLeft, akTop, akRight]
+    Anchors = [akLeft, akTop]
     BevelKind = bkTile
     Columns = <
       item
@@ -456,7 +459,7 @@ object FrmCustomize: TFrmCustomize
     Top = 24
     Width = 204
     Height = 244
-    Anchors = [akLeft, akTop, akRight]
+    Anchors = [akLeft, akTop]
     BevelKind = bkTile
     Columns = <
       item
@@ -472,10 +475,10 @@ object FrmCustomize: TFrmCustomize
     OnDragOver = VDTListView1DragOver
   end
   object ToolBar1: TToolBar
-    Left = 519
-    Top = 26
+    Left = 509
+    Top = 24
     Width = 23
-    Height = 47
+    Height = 44
     Align = alNone
     AutoSize = True
     Caption = 'ToolBar1'
@@ -485,7 +488,7 @@ object FrmCustomize: TFrmCustomize
     Transparent = True
     object ToolButton1: TToolButton
       Left = 0
-      Top = 2
+      Top = 0
       Cursor = crHandPoint
       Caption = 'ToolButton1'
       ImageIndex = 0
@@ -494,7 +497,7 @@ object FrmCustomize: TFrmCustomize
     end
     object ToolButton4: TToolButton
       Left = 0
-      Top = 24
+      Top = 22
       Cursor = crHandPoint
       Caption = 'ToolButton4'
       ImageIndex = 1

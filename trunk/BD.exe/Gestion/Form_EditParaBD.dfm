@@ -4,7 +4,7 @@ object FrmEditParaBD: TFrmEditParaBD
   ActiveControl = edTitre
   Caption = 'FrmEditParaBD'
   ClientHeight = 899
-  ClientWidth = 827
+  ClientWidth = 824
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -21,21 +21,23 @@ object FrmEditParaBD: TFrmEditParaBD
   object Bevel2: TBevel
     Left = 0
     Top = 25
-    Width = 827
+    Width = 824
     Height = 4
     Align = alTop
     Shape = bsBottomLine
+    ExplicitWidth = 827
   end
   object ScrollBox: TScrollBox
     Left = 0
     Top = 29
-    Width = 827
+    Width = 824
     Height = 870
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
+    ExplicitWidth = 827
     DesignSize = (
-      827
+      824
       870)
     object Label2: TLabel
       Left = 35
@@ -49,7 +51,7 @@ object FrmEditParaBD: TFrmEditParaBD
     end
     object Label6: TLabel
       Left = 3
-      Top = 50
+      Top = 81
       Width = 59
       Height = 13
       Alignment = taRightJustify
@@ -58,25 +60,35 @@ object FrmEditParaBD: TFrmEditParaBD
     end
     object btCreateur: TVDTButton
       Tag = 1
-      Left = 248
-      Top = 196
+      Left = 278
+      Top = 206
       Width = 57
       Height = 72
       Caption = 'Auteur / Cr'#233'ateur'
       Enabled = False
-      Glyph.Data = {
-        B2000000424DB20000000000000052000000280000000C0000000C0000000100
-        04000000000060000000120B0000120B00000700000007000000CE636300FF9C
-        9C00FFCECE0000FF0000BDBDBD008C8C8C000000000033334333333360603336
-        5433333333333336654333333336333616543333333633362065433333363336
-        2106543333363336211063333336333621163333333633362163333333363336
-        26333333333633366333333333363336333333333336}
       Layout = blGlyphBottom
       OnClick = btCreateurClick
+      PngImage.Data = {
+        89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+        610000000473424954080808087C0864880000001974455874536F6674776172
+        65007777772E696E6B73636170652E6F72679BEE3C1A000001924944415478DA
+        A593CF2B445114C7BFF7CD9B9937C3F363A8998D29358AB0D26C98291B4B2294
+        85B261C972E41FB0100BAC44898D1FD9B04191321E121B56A4484D340B63E6CD
+        AF37EFC77567AC14CF4CBE75EB9CFBED7C3A9D7B0FC13F454C3C8E1DA3744027
+        0451B31D33CB4D29194B4AD99392001501FB0405E6052F8FEC8BC6422CF38212
+        8A1D215E14A0BCC3BEE0A8B78E7B06AAE0FDF041DAB8849EA2118E1ABD7149BD
+        2EA20361DBD5E31CAC6E1431E75FC2C1F31E5617D7F2DD2409C14022AC1C9A02
+        C480FDD4332C06AD6EBE903755B640D70D48EB57C83EA92A285A6549B937033C
+        78462A1AACB5966FF74A44437453CE8733F29932690678ABE973BA1D753610EB
+        97ADC906129719A46E73119D58FCE970FAD504205CBBBA1D6D7CA5057C190735
+        A1437BD7113BCC643818C1F8997A633E830EFB8ED82EF4DBDC5C21A71A416C3F
+        0543A3434929B7F5E72B8841619A7362AABACB815C54877CAE5036B8101BDC6C
+        91FFC0D64C08B9630E618549103A2C8773BBF8453FEE02EB629415FB884E5712
+        17CA234C64B64C45E9DF804F400D9711AB9FEB370000000049454E44AE426082}
     end
     object Label19: TLabel
       Left = 20
-      Top = 177
+      Top = 210
       Width = 42
       Height = 13
       Alignment = taRightJustify
@@ -85,46 +97,32 @@ object FrmEditParaBD: TFrmEditParaBD
     object Bevel1: TBevel
       Left = 0
       Top = 866
-      Width = 827
+      Width = 824
       Height = 4
       Align = alBottom
       Shape = bsSpacer
+      ExplicitWidth = 827
     end
     object Label20: TLabel
       Left = 32
-      Top = 285
+      Top = 31
       Width = 30
       Height = 13
       Alignment = taRightJustify
       Caption = 'S'#233'rie :'
     end
-    object Bevel3: TBevel
-      Left = 139
-      Top = 166
-      Width = 293
-      Height = 6
-      Anchors = [akLeft, akTop, akRight]
-      Shape = bsTopLine
-    end
     object Bevel4: TBevel
       Left = 139
-      Top = 397
-      Width = 293
+      Top = 285
+      Width = 290
       Height = 7
       Anchors = [akLeft, akTop, akRight]
       Shape = bsTopLine
-    end
-    object Bevel5: TBevel
-      Left = 139
-      Top = 273
-      Width = 293
-      Height = 6
-      Anchors = [akLeft, akTop, akRight]
-      Shape = bsTopLine
+      ExplicitWidth = 293
     end
     object Label24: TLabel
-      Left = 55
-      Top = 484
+      Left = 68
+      Top = 365
       Width = 37
       Height = 13
       Alignment = taRightJustify
@@ -132,8 +130,8 @@ object FrmEditParaBD: TFrmEditParaBD
       Layout = tlCenter
     end
     object Label25: TLabel
-      Left = 143
-      Top = 484
+      Left = 160
+      Top = 365
       Width = 28
       Height = 13
       Alignment = taRightJustify
@@ -141,16 +139,41 @@ object FrmEditParaBD: TFrmEditParaBD
       Layout = tlCenter
     end
     object VDTButton14: TVDTButton
-      Left = 241
-      Top = 480
-      Width = 72
+      Left = 258
+      Top = 362
+      Width = 96
       Height = 21
       Caption = 'Convertisseur'
       OnClick = VDTButton14Click
+      PngImage.Data = {
+        89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+        610000000473424954080808087C0864880000001974455874536F6674776172
+        65007777772E696E6B73636170652E6F72679BEE3C1A0000028A4944415478DA
+        AD935D48537118C69F733CCB6D6ED99C2D3F5AD36698854BAA31592695A4158A
+        05D1A7581984C9208930280AD2EC2633B192E80357575A4A6617F6412C0B23EB
+        C214B53422974C6B76FC9CEE6CF39C7F674641687651EFDD1FDEE7C7FF79DFE7
+        A50821F897A2FE3B809224C941485A94CABD5B1BEC8D7FD1C39C01DF7A47EC13
+        FE081045E1A228C3A41DCD4ED18F9AD2970E31A68563A069A0B65D8D138F235F
+        760FF8F208DFD93A0D2097992C47CDBDE539AB592A3AC433E33727BC34CE3546
+        4E9635855E1BF7B0A7086F1FFC0558AB8F799DB5E29351A39062EBF2F159FD7E
+        F826C5B106DD607D27D94EF82EDB14203E22AEE578F2BB04FFC339AE44AE690C
+        32C974B17F547DC1C9E8D21E464A667101F8F652D13E4F21C09CBF65A5FDE20E
+        BD038CD83820A7B141476090FE18AE8F96C0199D0D76491E3CF313E09AF0609B
+        C1DC38C20DEE15AD3828306BD291D2F360F15C372CB26168BC0244CB885AB60A
+        A1FA34B8627641A2502148A104EB75A0A1A60C374ADEF89CACD702A1B3D20FD8
+        87F5762BA2472073313818E846A29B03492A4458791502CE5F815D338CBAB60B
+        68E0BA911C9A8AA0578B70BFA23E5FB471D50F0841B0DB8675BD06A83940DC76
+        86A041AA3107AEF71DA85736A12D8CC6A1D81CE41AF643A58884F5762D0A2CC5
+        67C1BF2DFC9903068CAF0446E711C4B153DE033DF31091A84356EC01646A3741
+        2D9742A594E16973334E5F2A251D0FFB6D981C38F95B1229C6BC195123D54872
+        283187E0D61E1B74EA70CCA105D89E37E2F2CD4AAEBF75E82E84E10A081F5B44
+        AD67A6284740C9D52DD849198BD2AD78F6E809EE55D77C71B3139510FAAE837C
+        FDEC5FDFACC7244268D0934520C246089C157C5715E01D223334CF7A8D9458E4
+        2FE7FA1D7C9B2366D9AB45ED0000000049454E44AE426082}
     end
     object Label10: TLabel
       Left = 25
-      Top = 31
+      Top = 56
       Width = 37
       Height = 13
       Alignment = taRightJustify
@@ -158,8 +181,8 @@ object FrmEditParaBD: TFrmEditParaBD
       Layout = tlCenter
     end
     object Label18: TLabel
-      Left = 160
-      Top = 420
+      Left = 138
+      Top = 301
       Width = 51
       Height = 13
       Alignment = taRightJustify
@@ -167,8 +190,8 @@ object FrmEditParaBD: TFrmEditParaBD
       Layout = tlCenter
     end
     object Label9: TLabel
-      Left = 148
-      Top = 444
+      Left = 165
+      Top = 326
       Width = 23
       Height = 13
       Alignment = taRightJustify
@@ -176,16 +199,41 @@ object FrmEditParaBD: TFrmEditParaBD
       Layout = tlCenter
     end
     object SpeedButton3: TVDTButton
-      Left = 241
-      Top = 440
-      Width = 72
+      Left = 258
+      Top = 323
+      Width = 96
       Height = 21
       Caption = 'Convertisseur'
       OnClick = SpeedButton3Click
+      PngImage.Data = {
+        89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+        610000000473424954080808087C0864880000001974455874536F6674776172
+        65007777772E696E6B73636170652E6F72679BEE3C1A0000028A4944415478DA
+        AD935D48537118C69F733CCB6D6ED99C2D3F5AD36698854BAA31592695A4158A
+        05D1A7581984C9208930280AD2EC2633B192E80357575A4A6617F6412C0B23EB
+        C214B53422974C6B76FC9CEE6CF39C7F674641687651EFDD1FDEE7C7FF79DFE7
+        A50821F897A2FE3B809224C941485A94CABD5B1BEC8D7FD1C39C01DF7A47EC13
+        FE081045E1A228C3A41DCD4ED18F9AD2970E31A68563A069A0B65D8D138F235F
+        760FF8F208DFD93A0D2097992C47CDBDE539AB592A3AC433E33727BC34CE3546
+        4E9635855E1BF7B0A7086F1FFC0558AB8F799DB5E29351A39062EBF2F159FD7E
+        F826C5B106DD607D27D94EF82EDB14203E22AEE578F2BB04FFC339AE44AE690C
+        32C974B17F547DC1C9E8D21E464A667101F8F652D13E4F21C09CBF65A5FDE20E
+        BD038CD83820A7B141476090FE18AE8F96C0199D0D76491E3CF313E09AF0609B
+        C1DC38C20DEE15AD3828306BD291D2F360F15C372CB26168BC0244CB885AB60A
+        A1FA34B8627641A2502148A104EB75A0A1A60C374ADEF89CACD702A1B3D20FD8
+        87F5762BA2472073313818E846A29B03492A4458791502CE5F815D338CBAB60B
+        68E0BA911C9A8AA0578B70BFA23E5FB471D50F0841B0DB8675BD06A83940DC76
+        86A041AA3107AEF71DA85736A12D8CC6A1D81CE41AF643A58884F5762D0A2CC5
+        67C1BF2DFC9903068CAF0446E711C4B153DE033DF31091A84356EC01646A3741
+        2D9742A594E16973334E5F2A251D0FFB6D981C38F95B1229C6BC195123D54872
+        283187E0D61E1B74EA70CCA105D89E37E2F2CD4AAEBF75E82E84E10A081F5B44
+        AD67A6284740C9D52DD849198BD2AD78F6E809EE55D77C71B3139510FAAE837C
+        FDEC5FDFACC7244268D0934520C246089C157C5715E01D223334CF7A8D9458E4
+        2FE7FA1D7C9B2366D9AB45ED0000000049454E44AE426082}
     end
     object Label12: TLabel
       Left = 118
-      Top = 31
+      Top = 56
       Width = 30
       Height = 13
       Alignment = taRightJustify
@@ -194,7 +242,7 @@ object FrmEditParaBD: TFrmEditParaBD
     end
     object cbxCategorie: TLightComboCheck
       Left = 148
-      Top = 31
+      Top = 56
       Width = 166
       Height = 13
       Checked = False
@@ -208,47 +256,18 @@ object FrmEditParaBD: TFrmEditParaBD
       Items.Separateur = ' '
       Items = <>
     end
-    object btResetSerie: TCRFurtifLight
-      Left = 486
-      Top = 281
-      Width = 20
-      Height = 20
-      Cursor = crHandPoint
-      Anchors = [akTop, akRight]
-      Enabled = False
-      Glyph.Data = {
-        36030000424D3603000000000000360000002800000010000000100000000100
-        18000000000000030000120B0000120B00000000000000000000CC00CCCC00CC
-        CC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00
-        CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC9898A3ADADB4CC00CCCC00CCCC
-        00CCCC00CCCC00CCCC00CCA9A9B1A9A9B1CC00CCCC00CCCC00CCCC00CCCC00CC
-        4A4C7D000CAE0A0E62A2A2ABCC00CCCC00CCCC00CCCC00CC7C7C8D01098D0009
-        9661617BCC00CCCC00CCCC00CC92929F0010C9000DEA0004D3090D61A0A0A9CC
-        00CCCC00CC81819101099A0003D10011F5020979C1C1C3CC00CCCC00CC9B9BA6
-        020D970015FF000BE70004D3080C659E9EA8868694020A950003D2000FF10014
-        F2141860C8C8C9CC00CCCC00CCCC00CC8D8D9B020C980015FF000CE80004D306
-        0A64020A8F0003D3000FF00014F40E1366AEAEB4CC00CCCC00CCCC00CCCC00CC
-        CC00CC91919E030D930015FF000CE80004D30003D3000EEE0014F70A0F66A8A8
-        B0CC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC9595A1040D8E0015FF00
-        0EEF000FF10014F8060C69A1A1AACC00CCCC00CCCC00CCCC00CCCC00CCCC00CC
-        CC00CCCC00CC92929E030B7B0318FE8394F47A8BF50216F902086B868694CC00
-        CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC9797A2040B760116FD93A5F294
-        A6F1A5B6F195A7F20318FA02086D818191CC00CCCC00CCCC00CCCC00CCCC00CC
-        9C9CA6060D720015FC899BF39BACF1080F740C1688A1B2F09AAAF20419FB0108
-        6E7C7C8DCC00CCCC00CCCC00CCB7B7BB090E670015FA7D8FF4A4B4F009107795
-        95A1A3A3AC0E17839CADF19EAFF1051AFC010767A1A1AACC00CCCC00CCB7B7BB
-        030A762B3FFB9DAEF109117991919ECC00CCCC00CCA8A8B00F167E8C9DF13F52
-        FA020A79AAAAB1CC00CCCC00CCCC00CC7F7F90040B7902086B8C8C9ACC00CCCC
-        00CCCC00CCCC00CCACACB30F1571020A7C767689CC00CCCC00CCCC00CCCC00CC
-        CC00CCB7B7BBAEAEB4CC00CCCC00CCCC00CCCC00CCCC00CCCC00CCC0C0C3BBBB
-        BFCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC
-        00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CCCC00CC}
-      OnClick = btResetSerieClick
+    object Bevel3: TBevel
+      Left = 139
+      Top = 195
+      Width = 290
+      Height = 6
+      Anchors = [akLeft, akTop, akRight]
+      Shape = bsTopLine
     end
     object edTitre: TEditLabeled
-      Left = 64
+      Left = 68
       Top = 4
-      Width = 442
+      Width = 436
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -261,24 +280,24 @@ object FrmEditParaBD: TFrmEditParaBD
       CurrencyChar = #0
     end
     object description: TMemoLabeled
-      Left = 64
-      Top = 50
-      Width = 442
+      Left = 68
+      Top = 78
+      Width = 436
       Height = 111
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       ScrollBars = ssVertical
-      TabOrder = 4
+      TabOrder = 5
       LinkControls = <
         item
           Control = Label6
         end>
     end
     object lvAuteurs: TVDTListViewLabeled
-      Left = 305
-      Top = 196
-      Width = 201
+      Left = 335
+      Top = 207
+      Width = 169
       Height = 72
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -296,71 +315,15 @@ object FrmEditParaBD: TFrmEditParaBD
           Control = btCreateur
         end>
     end
-    object vtPersonnes: TVirtualStringTree
-      Left = 64
-      Top = 196
-      Width = 177
-      Height = 72
-      AnimationDuration = 0
-      BevelKind = bkTile
-      BorderStyle = bsNone
-      ButtonFillMode = fmShaded
-      Header.AutoSizeIndex = -1
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'Tahoma'
-      Header.Font.Style = []
-      Header.MainColumn = -1
-      Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-      HintAnimation = hatNone
-      HintMode = hmTooltip
-      HotCursor = crHandPoint
-      Indent = 8
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 6
-      OnChange = vtPersonnesChange
-      OnDblClick = vtPersonnesDblClick
-      Columns = <>
-    end
-    object vtSeries: TVirtualStringTree
-      Left = 64
-      Top = 304
-      Width = 442
-      Height = 88
-      Anchors = [akLeft, akTop, akRight]
-      AnimationDuration = 0
-      BevelKind = bkTile
-      BorderStyle = bsNone
-      ButtonFillMode = fmShaded
-      Header.AutoSizeIndex = -1
-      Header.Font.Charset = DEFAULT_CHARSET
-      Header.Font.Color = clWindowText
-      Header.Font.Height = -11
-      Header.Font.Name = 'Tahoma'
-      Header.Font.Style = []
-      Header.MainColumn = -1
-      Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-      HintAnimation = hatNone
-      HintMode = hmTooltip
-      HotCursor = crHandPoint
-      Indent = 8
-      ParentShowHint = False
-      ShowHint = True
-      TabOrder = 9
-      OnChange = vtSeriesChange
-      Columns = <>
-    end
     object edAnneeCote: TEditLabeled
-      Left = 94
-      Top = 480
+      Left = 111
+      Top = 362
       Width = 46
       Height = 21
       BevelKind = bkTile
       BorderStyle = bsNone
       MaxLength = 4
-      TabOrder = 14
+      TabOrder = 12
       LinkControls = <
         item
           Control = Label24
@@ -369,8 +332,8 @@ object FrmEditParaBD: TFrmEditParaBD
       CurrencyChar = #0
     end
     object edPrixCote: TEditLabeled
-      Left = 174
-      Top = 480
+      Left = 191
+      Top = 362
       Width = 64
       Height = 21
       AutoSelect = False
@@ -379,7 +342,7 @@ object FrmEditParaBD: TFrmEditParaBD
       BorderStyle = bsNone
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 15
+      TabOrder = 13
       LinkControls = <
         item
           Control = Label25
@@ -391,14 +354,14 @@ object FrmEditParaBD: TFrmEditParaBD
       CurrencyChar = #0
     end
     object edAnneeEdition: TEditLabeled
-      Left = 64
-      Top = 27
+      Left = 68
+      Top = 53
       Width = 46
       Height = 21
       BevelKind = bkTile
       BorderStyle = bsNone
       MaxLength = 4
-      TabOrder = 1
+      TabOrder = 2
       LinkControls = <
         item
           Control = Label10
@@ -407,8 +370,8 @@ object FrmEditParaBD: TFrmEditParaBD
       CurrencyChar = #0
     end
     object cbStock: TCheckBoxLabeled
-      Left = 445
-      Top = 420
+      Left = 442
+      Top = 302
       Width = 61
       Height = 13
       Anchors = [akTop, akRight]
@@ -417,7 +380,7 @@ object FrmEditParaBD: TFrmEditParaBD
       Ctl3D = True
       ParentCtl3D = False
       State = cbChecked
-      TabOrder = 16
+      TabOrder = 14
       LinkControls = <
         item
           Control = cbStock
@@ -425,14 +388,14 @@ object FrmEditParaBD: TFrmEditParaBD
     end
     object cbGratuit: TCheckBoxLabeled
       Left = 69
-      Top = 442
+      Top = 323
       Width = 53
       Height = 16
       Cursor = crHandPoint
       Caption = 'Gratuit'
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 11
+      TabOrder = 9
       OnClick = cbGratuitClick
       LinkControls = <
         item
@@ -441,14 +404,14 @@ object FrmEditParaBD: TFrmEditParaBD
     end
     object cbOffert: TCheckBoxLabeled
       Left = 69
-      Top = 418
+      Top = 299
       Width = 53
       Height = 16
       Cursor = crHandPoint
       Caption = 'Offert'
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 10
+      TabOrder = 8
       OnClick = cbOffertClick
       LinkControls = <
         item
@@ -456,23 +419,23 @@ object FrmEditParaBD: TFrmEditParaBD
         end>
     end
     object dtpAchat: TDateTimePickerLabeled
-      Left = 213
-      Top = 416
+      Left = 191
+      Top = 298
       Width = 101
       Height = 21
       Date = 38158.758085983800000000
       Time = 38158.758085983800000000
       ShowCheckbox = True
       Checked = False
-      TabOrder = 12
+      TabOrder = 10
       LinkControls = <
         item
           Control = Label18
         end>
     end
     object edPrix: TEditLabeled
-      Left = 174
-      Top = 440
+      Left = 191
+      Top = 323
       Width = 64
       Height = 21
       AutoSelect = False
@@ -481,7 +444,7 @@ object FrmEditParaBD: TFrmEditParaBD
       BorderStyle = bsNone
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 13
+      TabOrder = 11
       OnChange = edPrixChange
       LinkControls = <
         item
@@ -495,28 +458,29 @@ object FrmEditParaBD: TFrmEditParaBD
     end
     object cbDedicace: TCheckBoxLabeled
       Left = 334
-      Top = 29
+      Top = 55
       Width = 64
       Height = 16
       Cursor = crHandPoint
       Caption = 'D'#233'dicac'#233
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 2
+      TabOrder = 3
       LinkControls = <
         item
           Control = cbDedicace
         end>
     end
     object Panel1: TPanel
-      Left = 513
+      Left = 510
       Top = 4
       Width = 305
       Height = 501
       Anchors = [akTop, akRight]
       BevelInner = bvLowered
       Caption = ' '
-      TabOrder = 17
+      TabOrder = 15
+      ExplicitLeft = 513
       object imgVisu: TImage
         Left = 2
         Top = 25
@@ -1364,91 +1328,85 @@ object FrmEditParaBD: TFrmEditParaBD
     end
     object cbNumerote: TCheckBoxLabeled
       Left = 422
-      Top = 29
+      Top = 55
       Width = 64
       Height = 16
       Cursor = crHandPoint
       Caption = 'Num'#233'rot'#233
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 3
+      TabOrder = 4
       LinkControls = <
         item
           Control = cbNumerote
         end>
     end
-    inline FrameRechercheRapideSerie: TFrameRechercheRapide
-      Left = 64
-      Top = 281
-      Width = 422
+    inline vtEditSeries: TframVTEdit
+      Left = 68
+      Top = 28
+      Width = 436
       Height = 21
       Anchors = [akLeft, akTop, akRight]
-      TabOrder = 8
-      ExplicitLeft = 64
-      ExplicitTop = 281
-      ExplicitWidth = 422
-      inherited btNext: TVDTButton
-        Left = 381
-        ExplicitLeft = 381
+      TabOrder = 1
+      ExplicitLeft = 68
+      ExplicitTop = 28
+      ExplicitWidth = 436
+      inherited btReset: TVDTButton
+        Left = 373
       end
       inherited btNew: TVDTButton
-        Left = 401
-        ExplicitLeft = 401
+        Left = 415
       end
-      inherited edSearch: TEditLabeled
-        Width = 382
-        LinkControls = <
-          item
-            Control = Label20
-          end>
-        ExplicitWidth = 382
+      inherited btEdit: TVDTButton
+        Left = 394
+      end
+      inherited VTEdit: TJvComboEdit
+        Width = 373
+        OnChange = vtEditSeriesVTEditChange
       end
     end
-    inline FrameRechercheRapideAuteur: TFrameRechercheRapide
-      Left = 64
-      Top = 173
-      Width = 177
+    inline vtEditPersonnes: TframVTEdit
+      Left = 68
+      Top = 207
+      Width = 204
       Height = 21
-      TabOrder = 5
-      ExplicitLeft = 64
-      ExplicitTop = 173
-      ExplicitWidth = 177
-      inherited btNext: TVDTButton
-        Left = 136
-        ExplicitLeft = 136
+      TabOrder = 6
+      ExplicitLeft = 68
+      ExplicitTop = 207
+      ExplicitWidth = 204
+      inherited btReset: TVDTButton
+        Left = 141
       end
       inherited btNew: TVDTButton
-        Left = 156
-        ExplicitLeft = 156
+        Left = 183
       end
-      inherited edSearch: TEditLabeled
-        Width = 137
-        LinkControls = <
-          item
-            Control = Label19
-          end>
-        ExplicitWidth = 137
+      inherited btEdit: TVDTButton
+        Left = 162
+      end
+      inherited VTEdit: TJvComboEdit
+        Width = 141
+        OnChange = vtEditPersonnesVTEditChange
       end
     end
   end
   inline Frame11: TFrame1
     Left = 0
     Top = 0
-    Width = 827
+    Width = 824
     Height = 25
     Align = alTop
     TabOrder = 1
     ExplicitWidth = 827
-    inherited btnOK: TBitBtn
-      Left = 648
+    inherited btnOK: TButton
+      Left = 645
       Width = 87
       Caption = 'Enregistrer'
       OnClick = btnOKClick
       ExplicitLeft = 648
       ExplicitWidth = 87
     end
-    inherited btnAnnuler: TBitBtn
-      Left = 744
+    inherited btnAnnuler: TButton
+      Left = 741
       ExplicitLeft = 744
     end
   end

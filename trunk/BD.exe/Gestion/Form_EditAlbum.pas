@@ -6,7 +6,8 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls, DBCtrls, StdCtrls, ImgList, DBEditLabeled,
   VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, VirtualTree, Menus, TypeRec, ActnList, LoadComplet, ComboCheck,
   Frame_RechercheRapide, CRFurtif, Fram_Boutons, UBdtForms, Generics.Collections, StrUtils,
-  JvExMask, JvToolEdit, UVirtualTreeEdit, UfrmFond;
+  JvExMask, JvToolEdit, UVirtualTreeEdit, UfrmFond, PngSpeedButton,
+  UframVTEdit;
 
 type
   TFrmEditAlbum = class(TbdtForm)
@@ -25,7 +26,6 @@ type
     btScenariste: TCRFurtifLight;
     lvDessinateurs: TVDTListViewLabeled;
     btDessinateur: TCRFurtifLight;
-    vtPersonnes: TVirtualStringTree;
     Label19: TLabel;
     vstImages: TVirtualStringTree;
     ChoixImage: TCRFurtifLight;
@@ -33,16 +33,11 @@ type
     VDTButton5: TCRFurtifLight;
     Bevel1: TBevel;
     Label20: TLabel;
-    vtSeries: TVirtualStringTree;
     btColoriste: TCRFurtifLight;
     lvColoristes: TVDTListViewLabeled;
     cbIntegrale: TCheckBoxLabeled;
     Label1: TLabel;
     edTome: TEditLabeled;
-    Label5: TLabel;
-    vtEditeurs: TVirtualStringTree;
-    Label8: TLabel;
-    vtCollections: TVirtualStringTree;
     Label4: TLabel;
     vtEditions: TListBoxLabeled;
     VDTButton3: TVDTButton;
@@ -50,8 +45,6 @@ type
     Bevel4: TBevel;
     Bevel5: TBevel;
     cbHorsSerie: TCheckBoxLabeled;
-    Label15: TLabel;
-    edNotes: TMemoLabeled;
     Label17: TLabel;
     imgVisu: TImage;
     PanelEdition: TPanel;
@@ -91,13 +84,8 @@ type
     edPrixCote: TEditLabeled;
     VDTButton14: TVDTButton;
     pmChoixCategorie: TPopupMenu;
-    FrameRechercheRapidePersonnes: TFrameRechercheRapide;
-    FrameRechercheRapideSerie: TFrameRechercheRapide;
-    FrameRechercheRapideEditeur: TFrameRechercheRapide;
-    FrameRechercheRapideCollection: TFrameRechercheRapide;
     Bevel2: TBevel;
     Frame11: TFrame1;
-    btResetSerie: TCRFurtifLight;
     edNumPerso: TEditLabeled;
     Label26: TLabel;
     Label27: TLabel;
@@ -105,29 +93,33 @@ type
     edTomeFin: TEditLabeled;
     edTomeDebut: TEditLabeled;
     Label16: TLabel;
-    JvComboEdit1: TJvComboEdit;
+    vtEditSerie: TframVTEdit;
+    vtEditCollections: TframVTEdit;
+    Label8: TLabel;
+    vtEditEditeurs: TframVTEdit;
+    Label5: TLabel;
+    Label15: TLabel;
+    edNotes: TMemoLabeled;
+    Bevel6: TBevel;
+    vtEditPersonnes: TframVTEdit;
     procedure ajoutClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure ChoixImageClick(Sender: TObject);
     procedure edTitreChange(Sender: TObject);
-    procedure VDTButton2Click(Sender: TObject);
     procedure lvDessinateursKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure vstImagesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure VDTButton4Click(Sender: TObject);
     procedure VDTButton5Click(Sender: TObject);
     procedure OnNewSerie(Sender: TObject);
+    procedure OnEditSerie(Sender: TObject);
     procedure FormActivate(Sender: TObject);
     procedure longueur2KeyPress(Sender: TObject; var Key: Char);
     procedure FormShow(Sender: TObject);
-    procedure vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure vstImagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure vstImagesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
     procedure vstImagesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
-    procedure vtEditeursChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
-    procedure vtSeriesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure VDTButton3Click(Sender: TObject);
-    procedure OnNewCollection(Sender: TObject);
     procedure SpeedButton3Click(Sender: TObject);
     procedure VDTButton6Click(Sender: TObject);
     procedure edISBNExit(Sender: TObject);
@@ -136,14 +128,9 @@ type
     procedure vstImagesChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure vstImagesEditing(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
     procedure vstImagesNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: string);
-    procedure vtEditeursClick(Sender: TObject);
     procedure edAnneeEditionChange(Sender: TObject);
     procedure vtCollectionsChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
     procedure vtEditionsClick(Sender: TObject);
-    procedure vtSeriesDblClick(Sender: TObject);
-    procedure vtPersonnesDblClick(Sender: TObject);
-    procedure vtEditeursDblClick(Sender: TObject);
-    procedure vtCollectionsDblClick(Sender: TObject);
     procedure cbIntegraleClick(Sender: TObject);
     procedure cbGratuitClick(Sender: TObject);
     procedure edPrixChange(Sender: TObject);
@@ -161,10 +148,11 @@ type
     procedure lvScenaristesData(Sender: TObject; Item: TListItem);
     procedure lvDessinateursData(Sender: TObject; Item: TListItem);
     procedure lvColoristesData(Sender: TObject; Item: TListItem);
-    procedure btResetSerieClick(Sender: TObject);
     procedure JvComboEdit1Change(Sender: TObject);
-    procedure FrameRechercheRapideSeriebtNewClick(Sender: TObject);
-    procedure FrameRechercheRapidePersonnesbtNewClick(Sender: TObject);
+    procedure framVTEdit1VTEditChange(Sender: TObject);
+    procedure OnEditAuteurs(Sender: TObject);
+    procedure vtEditEditeursVTEditChange(Sender: TObject);
+    procedure vtEditCollectionsVTEditChange(Sender: TObject);
   private
     { Déclarations privées }
     FAlbum: TAlbumComplet;
@@ -180,7 +168,6 @@ type
     procedure VisuClose(Sender: TObject);
     procedure AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean); overload;
     procedure AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage); overload;
-    procedure EditeurCollectionSelected(Sender: TObject; NextSearch: Boolean);
     function GetID_Album: TGUID;
     function GetCreation: Boolean;
   public
@@ -203,16 +190,6 @@ const
 
   { TFrmEditAlbum }
 
-type
-  PRefresh = ^RRefresh;
-  RRefresh = record
-    F: TFrmEditAlbum;
-    iCurrentAuteur: TGUID;
-  end;
-
-var
-  R: RRefresh;
-
 procedure TFrmEditAlbum.FormCreate(Sender: TObject);
 var
   i: Integer;
@@ -220,25 +197,23 @@ var
 begin
   PrepareLV(Self);
 
-  FrameRechercheRapidePersonnes.VirtualTreeView := vtPersonnes;
-  FrameRechercheRapideSerie.VirtualTreeView := vtSeries;
-  FrameRechercheRapideSerie.OnNew := OnNewSerie;
-  FrameRechercheRapideEditeur.VirtualTreeView := vtEditeurs;
-  FrameRechercheRapideEditeur.OnSearch := EditeurCollectionSelected;
-  FrameRechercheRapideCollection.VirtualTreeView := vtCollections;
-  FrameRechercheRapideCollection.OnNew := OnNewCollection;
-  FrameRechercheRapideCollection.OnSearch := EditeurCollectionSelected;
+  vtEditSerie.VTEdit.LinkControls.Add(Label20);
+  vtEditEditeurs.VTEdit.LinkControls.Add(Label5);
+  vtEditCollections.VTEdit.LinkControls.Add(Label8);
+
+  vtEditSerie.AfterAppend := OnNewSerie;
+  vtEditSerie.AfterEdit := OnEditSerie;
+  vtEditPersonnes.AfterEdit := OnEditAuteurs;
 
   FAlbum := TAlbumComplet.Create;
 
   SetLength(FEditeurCollectionSelected, 0);
   FCurrentEditionComplete := nil;
-  vtPersonnes.Mode := vmPersonnes;
-  vtEditeurs.Mode := vmEditeurs;
-  vtCollections.Mode := vmNone;
-  vtCollections.UseFiltre := True;
-  vtSeries.Mode := vmSeries;
-  JvComboEdit1.Mode := vmSeries;
+  vtEditPersonnes.Mode := vmPersonnes;
+  vtEditEditeurs.Mode := vmEditeurs;
+  vtEditCollections.Mode := vmNone;
+  vtEditCollections.VTEdit.PopupWindow.TreeView.UseFiltre := True;
+  vtEditSerie.Mode := vmSeries;
   vstImages.LinkControls.Clear;
   vstImages.LinkControls.Add(ChoixImage);
   vstImages.LinkControls.Add(VDTButton4);
@@ -308,15 +283,9 @@ begin
     FDessinateursSelected := lvDessinateurs.Items.Count > 0;
     FColoristesSelected := lvColoristes.Items.Count > 0;
 
-    vtSeries.OnChange := nil;
-    vtSeries.CurrentValue := FAlbum.ID_Serie;
-    btResetSerie.Enabled := not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
-    vtSeries.OnChange := vtSeriesChange;
-
-    JvComboEdit1.OnChange := nil;
-    JvComboEdit1.CurrentValue := FAlbum.ID_Serie;
-    btResetSerie.Enabled := not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
-    JvComboEdit1.OnChange := JvComboEdit1Change;
+    vtEditSerie.VTEdit.OnChange := nil;
+    vtEditSerie.CurrentValue := FAlbum.ID_Serie;
+    vtEditSerie.VTEdit.OnChange := JvComboEdit1Change;
 
     SetLength(FEditeurCollectionSelected, FAlbum.Editions.Editions.Count);
     for i := 0 to Pred(FAlbum.Editions.Editions.Count) do
@@ -326,7 +295,8 @@ begin
       vtEditions.AddItem(PE.ChaineAffichage, PE);
     end;
 
-    if FAlbum.RecInconnu or isAchat then VDTButton3.Click;
+    if FAlbum.RecInconnu or isAchat then
+      VDTButton3.Click;
   finally
     vtEditions.Items.EndUpdate;
     lvScenaristes.Items.EndUpdate;
@@ -357,29 +327,34 @@ end;
 
 procedure TFrmEditAlbum.ajoutClick(Sender: TObject);
 begin
-  if IsEqualGUID(vtPersonnes.CurrentValue, GUID_NULL) then Exit;
+  if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
+    Exit;
   case TSpeedButton(Sender).Tag of
-    1: AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TPersonnage(vtPersonnes.GetFocusedNodeData), FScenaristesSelected);
-    2: AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TPersonnage(vtPersonnes.GetFocusedNodeData), FDessinateursSelected);
-    3: AjouteAuteur(FAlbum.Coloristes, lvColoristes, TPersonnage(vtPersonnes.GetFocusedNodeData), FColoristesSelected);
+    1: AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TPersonnage(vtEditPersonnes.VTEdit.Data), FScenaristesSelected);
+    2: AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TPersonnage(vtEditPersonnes.VTEdit.Data), FDessinateursSelected);
+    3: AjouteAuteur(FAlbum.Coloristes, lvColoristes, TPersonnage(vtEditPersonnes.VTEdit.Data), FColoristesSelected);
   end;
-  vtPersonnesChange(vtPersonnes, vtPersonnes.FocusedNode);
+  framVTEdit1VTEditChange(vtEditPersonnes.VTEdit);
 end;
 
 procedure TFrmEditAlbum.lvDessinateursKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 var
   src: TListView;
 begin
-  if Key <> VK_DELETE then Exit;
+  if Key <> VK_DELETE then
+    Exit;
   src := TListView(Sender);
-  if src = lvScenaristes then FAlbum.Scenaristes.Delete(src.Selected.Index);
-  if src = lvDessinateurs then FAlbum.Dessinateurs.Delete(src.Selected.Index);
-  if src = lvColoristes then FAlbum.Coloristes.Delete(src.Selected.Index);
+  if src = lvScenaristes then
+    FAlbum.Scenaristes.Delete(src.Selected.Index);
+  if src = lvDessinateurs then
+    FAlbum.Dessinateurs.Delete(src.Selected.Index);
+  if src = lvColoristes then
+    FAlbum.Coloristes.Delete(src.Selected.Index);
   lvScenaristes.Items.Count := FAlbum.Scenaristes.Count;
   lvDessinateurs.Items.Count := FAlbum.Dessinateurs.Count;
   lvColoristes.Items.Count := FAlbum.Coloristes.Count;
   src.Invalidate;
-  vtPersonnesChange(vtPersonnes, vtPersonnes.FocusedNode);
+  framVTEdit1VTEditChange(vtEditPersonnes.VTEdit);
 end;
 
 procedure TFrmEditAlbum.FormDestroy(Sender: TObject);
@@ -401,16 +376,16 @@ var
   AfficheEdition, lISBN: Integer;
   cs: string;
 begin
-//  if TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
-  if TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(JvComboEdit1.CurrentValue, GUID_NULL) then
+  //  if TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  if TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtEditSerie.CurrentValue, GUID_NULL) then
   begin
     AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
-    FrameRechercheRapideSerie.edSearch.SetFocus;
+    vtEditSerie.SetFocus;
     ModalResult := mrNone;
     Exit;
   end;
-//  if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
-  if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(JvComboEdit1.CurrentValue, GUID_NULL) then
+  //  if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtEditSerie.CurrentValue, GUID_NULL) then
   begin
     AffMessage(rsTitreObligatoireAlbumSansSerie, mtInformation, [mbOk], True);
     edTitre.SetFocus;
@@ -440,8 +415,8 @@ begin
     if cs = '' then
     begin
       // l'utilisation de l'isbn n'étant obligatoire que depuis "quelques années", les bd anciennes n'en n'ont pas: donc pas obligatoire de le saisir
-//      AffMessage('Le numéro ISBN est obligatoire !', mtInformation, [mbOk], True);
-//      AfficheEdition := i;
+      //      AffMessage('Le numéro ISBN est obligatoire !', mtInformation, [mbOk], True);
+      //      AfficheEdition := i;
     end;
     lISBN := Length(cs);
     if not (lISBN in [10, 13]) then
@@ -469,7 +444,7 @@ begin
   if AfficheEdition <> -1 then
   begin
     vtEditions.ItemIndex := AfficheEdition;
-    vtEditeurs.SetFocus;
+    vtEditEditeurs.SetFocus;
     ModalResult := mrNone;
     Exit;
   end;
@@ -505,33 +480,39 @@ begin
   FAlbum.Notes.Text := remarques.Lines.Text;
 
   FAlbum.SaveToDatabase;
-  if isAchat then FAlbum.Acheter(False);
+  if isAchat then
+    FAlbum.Acheter(False);
 
   ModalResult := mrOk;
 end;
 
-procedure TFrmEditAlbum.FrameRechercheRapidePersonnesbtNewClick(
-  Sender: TObject);
+procedure TFrmEditAlbum.framVTEdit1VTEditChange(Sender: TObject);
+var
+  IdPersonne: TGUID;
+
+  function NotIn(LV: TListView): Boolean;
+  var
+    i: Integer;
+  begin
+    i := 0;
+    Result := True;
+    while Result and (i <= Pred(LV.Items.Count)) do
+    begin
+      Result := not IsEqualGUID(TAuteur(LV.Items[i].Data).Personne.ID, IdPersonne);
+      Inc(i);
+    end;
+  end;
+
 begin
-  FrameRechercheRapidePersonnes.btNewClick(Sender);
-
-end;
-
-procedure TFrmEditAlbum.FrameRechercheRapideSeriebtNewClick(
-  Sender: TObject);
-begin
-  FrameRechercheRapideSerie.btNewClick(Sender);
-
+  IdPersonne := vtEditPersonnes.CurrentValue;
+  btScenariste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVScenaristes);
+  btDessinateur.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVDessinateurs);
+  btColoriste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVColoristes);
 end;
 
 procedure TFrmEditAlbum.edTitreChange(Sender: TObject);
 begin
   Caption := 'Saisie d''album - ' + FormatTitre(edTitre.Text);
-end;
-
-procedure TFrmEditAlbum.VDTButton2Click(Sender: TObject);
-begin
-  Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierSeries, vtSeries);
 end;
 
 procedure TFrmEditAlbum.ChoixImageClick(Sender: TObject);
@@ -591,17 +572,17 @@ begin
     else
       ms := GetCouvertureStream(False, PC.ID, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
     if Assigned(ms) then
-    try
-      jpg := TJPEGImage.Create;
       try
-        jpg.LoadFromStream(ms);
-        imgVisu.Picture.Assign(jpg);
+        jpg := TJPEGImage.Create;
+        try
+          jpg.LoadFromStream(ms);
+          imgVisu.Picture.Assign(jpg);
+        finally
+          FreeAndNil(jpg);
+        end;
       finally
-        FreeAndNil(jpg);
+        FreeAndNil(ms);
       end;
-    finally
-      FreeAndNil(ms);
-    end;
   end
   else
     imgVisu.Picture.Assign(nil);
@@ -634,21 +615,23 @@ begin
   vstImages.Invalidate;
 end;
 
-procedure RefreshNewSerie(Data: PRefresh);
-begin
-  with Data.F do
-  begin
-    vtEditeurs.InitializeRep;
-    vtCollections.InitializeRep;
-//    vtSeriesChange(vtSeries, vtSeries.FocusedNode);
-    JvComboEdit1Change(JvComboEdit1);
-  end;
-end;
-
 procedure TFrmEditAlbum.OnNewSerie(Sender: TObject);
 begin
-  R.F := Self;
-  Historique.AddWaiting(fcGestionAjout, @RefreshNewSerie, @R, @AjouterSeries, vtSeries, FrameRechercheRapideSerie.edSearch.Text);
+  vtEditEditeurs.VTEdit.PopupWindow.TreeView.InitializeRep;
+  vtEditCollections.VTEdit.PopupWindow.TreeView.InitializeRep;
+  JvComboEdit1Change(vtEditSerie.VTEdit);
+end;
+
+procedure TFrmEditAlbum.OnEditSerie(Sender: TObject);
+var
+  i: TGUID;
+begin
+  FAlbum.Serie.Fill(FAlbum.Serie.ID_Serie);
+  i := vtEditCollections.CurrentValue;
+  vtEditEditeurs.VTEdit.PopupWindow.TreeView.InitializeRep;
+  vtEditCollections.VTEdit.PopupWindow.TreeView.InitializeRep;
+  vtEditCollections.CurrentValue := i;
+  JvComboEdit1Change(vtEditSerie.VTEdit);
 end;
 
 procedure TFrmEditAlbum.FormActivate(Sender: TObject);
@@ -658,7 +641,8 @@ end;
 
 procedure TFrmEditAlbum.longueur2KeyPress(Sender: TObject; var Key: Char);
 begin
-  if Key = ' ' then Key := '0';
+  if Key = ' ' then
+    Key := '0';
 end;
 
 procedure TFrmEditAlbum.FormShow(Sender: TObject);
@@ -671,30 +655,6 @@ begin
     vtEditions.OnClick(vtEditions);
   end;
   edTitre.SetFocus;
-end;
-
-procedure TFrmEditAlbum.vtPersonnesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
-var
-  IdPersonne: TGUID;
-
-  function NotIn(LV: TListView): Boolean;
-  var
-    i: Integer;
-  begin
-    i := 0;
-    Result := True;
-    while Result and (i <= Pred(LV.Items.Count)) do
-    begin
-      Result := not IsEqualGUID(TAuteur(LV.Items[i].Data).Personne.ID, IdPersonne);
-      Inc(i);
-    end;
-  end;
-
-begin
-  IdPersonne := vtPersonnes.CurrentValue;
-  btScenariste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVScenaristes);
-  btDessinateur.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVDessinateurs);
-  btColoriste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVColoristes);
 end;
 
 procedure TFrmEditAlbum.vstImagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
@@ -721,85 +681,35 @@ begin
       TargetCanvas.Font.Color := clInactiveCaptionText;
 end;
 
-procedure TFrmEditAlbum.vtEditeursChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
-var
-  ID_Editeur: TGUID;
+procedure TFrmEditAlbum.vtEditCollectionsVTEditChange(Sender: TObject);
 begin
-  ID_Editeur := vtEditeurs.CurrentValue;
-  if IsEqualGUID(ID_Editeur, GUID_NULL) then
-  begin
-    vtCollections.Mode := vmNone;
-  end
-  else
-  begin
-    vtCollections.Filtre := 'ID_Editeur = ' + QuotedStr(GUIDToString(ID_Editeur));
-    if vtCollections.Mode <> vmCollections then vtCollections.Mode := vmCollections;
-  end;
-  FrameRechercheRapideCollection.btNew.Enabled := not IsEqualGUID(ID_Editeur, GUID_NULL);
+  if vtEditions.ItemIndex > -1 then
+    FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
   RefreshEditionCaption;
 end;
 
-procedure TFrmEditAlbum.vtSeriesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
+procedure TFrmEditAlbum.vtEditEditeursVTEditChange(Sender: TObject);
 var
-  i: Integer;
+  ID_Editeur: TGUID;
 begin
-  FAlbum.ID_Serie := vtSeries.CurrentValue;
-  btResetSerie.Enabled := not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
-  if btResetSerie.Enabled then
+  if vtEditions.ItemIndex > -1 then
+    FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
+
+  ID_Editeur := vtEditEditeurs.CurrentValue;
+  if IsEqualGUID(ID_Editeur, GUID_NULL) then
   begin
-    if not (FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then
-    try
-      lvScenaristes.Items.BeginUpdate;
-      lvDessinateurs.Items.BeginUpdate;
-      lvColoristes.Items.BeginUpdate;
-      if not FScenaristesSelected then
-      begin
-        lvScenaristes.Items.Count := 0;
-        FAlbum.Scenaristes.Clear;
-        for i := 0 to Pred(FAlbum.Serie.Scenaristes.Count) do
-          AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TAuteur(FAlbum.Serie.Scenaristes[i]).Personne);
-      end;
-      if not FDessinateursSelected then
-      begin
-        lvDessinateurs.Items.Count := 0;
-        FAlbum.Dessinateurs.Clear;
-        for i := 0 to Pred(FAlbum.Serie.Dessinateurs.Count) do
-          AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TAuteur(FAlbum.Serie.Dessinateurs[i]).Personne);
-      end;
-      if not FColoristesSelected then
-      begin
-        lvColoristes.Items.Count := 0;
-        FAlbum.Coloristes.Clear;
-        for i := 0 to Pred(FAlbum.Serie.Coloristes.Count) do
-          AjouteAuteur(FAlbum.Coloristes, lvColoristes, TAuteur(FAlbum.Serie.Coloristes[i]).Personne);
-      end;
-    finally
-      lvScenaristes.Items.EndUpdate;
-      lvDessinateurs.Items.EndUpdate;
-      lvColoristes.Items.EndUpdate;
-    end;
-
-    if Assigned(FCurrentEditionComplete) and (not FEditeurCollectionSelected[vtEditions.ItemIndex]) then
-    begin
-      vtEditeurs.CurrentValue := FAlbum.Serie.Editeur.ID_Editeur;
-      vtCollections.CurrentValue := FAlbum.Serie.Collection.ID;
-
-      with FAlbum.Serie do
-      begin
-        cbCouleur.Checked := IIf(RecInconnu or (Couleur = -1), True, Couleur = 1);
-        cbVO.Checked := IIf(RecInconnu or (VO = -1), False, VO = 1);
-        cbxEtat.Value := IIf(RecInconnu or (Etat.Value = -1), cbxEtat.DefaultValueChecked, Etat.Value);
-        cbxReliure.Value := IIf(RecInconnu or (Reliure.Value = -1), cbxReliure.DefaultValueChecked, Reliure.Value);
-        cbxOrientation.Value := IIf(RecInconnu or (Orientation.Value = -1), cbxOrientation.DefaultValueChecked, Orientation.Value);
-        cbxFormat.Value := IIf(RecInconnu or (FormatEdition.Value = -1), cbxFormat.DefaultValueChecked, FormatEdition.Value);
-        cbxSensLecture.Value := IIf(RecInconnu or (SensLecture.Value = -1), cbxSensLecture.DefaultValueChecked, SensLecture.Value);
-        cbxEdition.Value := IIf(RecInconnu or (TypeEdition.Value = -1), cbxEdition.DefaultValueChecked, TypeEdition.Value);
-      end;
-
-      // on reset parce que le tcheckbox et tedit le flag à tort dans ce cas
-      FEditeurCollectionSelected[vtEditions.ItemIndex] := False;
-    end;
+    vtEditCollections.Mode := vmNone;
+  end
+  else
+  begin
+    vtEditCollections.VTEdit.PopupWindow.TreeView.Filtre := 'ID_Editeur = ' + QuotedStr(GUIDToString(ID_Editeur));
+    if vtEditCollections.Mode <> vmCollections then
+      vtEditCollections.Mode := vmCollections;
   end;
+  vtEditCollections.ParentValue := ID_Editeur;
+  vtEditCollections.CurrentValue := GUID_NULL;
+  vtEditCollections.CanCreate := not IsEqualGUID(ID_Editeur, GUID_NULL);
+  RefreshEditionCaption;
 end;
 
 procedure TFrmEditAlbum.VDTButton3Click(Sender: TObject);
@@ -823,11 +733,11 @@ begin
     EditionComplete.SensLecture := MakeOption(IIf(RecInconnu or (SensLecture.Value = -1), cbxSensLecture.DefaultValueChecked, SensLecture.Value), '');
     EditionComplete.TypeEdition := MakeOption(IIf(RecInconnu or (TypeEdition.Value = -1), cbxEdition.DefaultValueChecked, TypeEdition.Value), '');
   end;
-//  if not IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
-  if not IsEqualGUID(JvComboEdit1.CurrentValue, GUID_NULL) then
+  //  if not IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  if not IsEqualGUID(vtEditSerie.CurrentValue, GUID_NULL) then
   begin
-    EditionComplete.Editeur.ID_Editeur := TSerie(JvComboEdit1.Data).Editeur.ID;
-    EditionComplete.Collection.ID := TSerie(JvComboEdit1.Data).Collection.ID;
+    EditionComplete.Editeur.ID_Editeur := TSerie(vtEditSerie.VTEdit.Data).Editeur.ID;
+    EditionComplete.Collection.ID := TSerie(vtEditSerie.VTEdit.Data).Collection.ID;
   end;
   FAlbum.Editions.Editions.Add(EditionComplete);
   vtEditions.AddItem('Nouvelle edition', Pointer(EditionComplete));
@@ -835,11 +745,6 @@ begin
   vtEditionsClick(nil);
 
   FEditeurCollectionSelected[Pred(Length(FEditeurCollectionSelected))] := False;
-end;
-
-procedure TFrmEditAlbum.OnNewCollection(Sender: TObject);
-begin
-  Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterCollections2, vtCollections, vtEditeurs.CurrentValue, FrameRechercheRapideCollection.edSearch.Text);
 end;
 
 procedure TFrmEditAlbum.SpeedButton3Click(Sender: TObject);
@@ -867,7 +772,8 @@ begin
     else
       lISBN := 10;
   if not VerifieISBN(cs, lISBN) then
-    if MessageDlg(Format(RemplacerValeur, [FormatISBN(edISBN.Text), FormatISBN(cs)]), mtConfirmation, [mbYes, mbNo], 0) = mrYes then edISBN.Text := cs;
+    if MessageDlg(Format(RemplacerValeur, [FormatISBN(edISBN.Text), FormatISBN(cs)]), mtConfirmation, [mbYes, mbNo], 0) = mrYes then
+      edISBN.Text := cs;
 end;
 
 procedure TFrmEditAlbum.edISBNExit(Sender: TObject);
@@ -879,7 +785,8 @@ procedure TFrmEditAlbum.edISBNChange(Sender: TObject);
 begin
   VDTButton6.Enabled := edISBN.Text <> '';
   RefreshEditionCaption;
-  if vtEditions.ItemIndex > -1 then FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
+  if vtEditions.ItemIndex > -1 then
+    FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
 end;
 
 procedure TFrmEditAlbum.vstImagesInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
@@ -925,11 +832,6 @@ begin
   end;
 end;
 
-procedure TFrmEditAlbum.vtEditeursClick(Sender: TObject);
-begin
-  if vtEditions.ItemIndex > -1 then FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
-end;
-
 procedure TFrmEditAlbum.UpdateEdition;
 begin
   if not FEditionChanging and Assigned(FCurrentEditionComplete) then
@@ -937,10 +839,10 @@ begin
     FCurrentEditionComplete.ISBN := edISBN.Text;
     FCurrentEditionComplete.AnneeEdition := StrToIntDef(edAnneeEdition.Text, 0);
     FCurrentEditionComplete.Prix := StrToCurrDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
-    FCurrentEditionComplete.Editeur.ID_Editeur := vtEditeurs.CurrentValue;
-    FCurrentEditionComplete.Editeur.NomEditeur := vtEditeurs.Caption;
-    FCurrentEditionComplete.Collection.ID := vtCollections.CurrentValue;
-    FCurrentEditionComplete.Collection.NomCollection := vtCollections.Caption;
+    FCurrentEditionComplete.Editeur.ID_Editeur := vtEditEditeurs.CurrentValue;
+    FCurrentEditionComplete.Editeur.NomEditeur := vtEditEditeurs.VTEdit.PopupWindow.TreeView.Caption;
+    FCurrentEditionComplete.Collection.ID := vtEditCollections.CurrentValue;
+    FCurrentEditionComplete.Collection.NomCollection := vtEditCollections.VTEdit.PopupWindow.TreeView.Caption;
     FCurrentEditionComplete.Stock := cbStock.Checked;
     FCurrentEditionComplete.VO := cbVO.Checked;
     FCurrentEditionComplete.Couleur := cbCouleur.Checked;
@@ -973,7 +875,8 @@ begin
   begin
     UpdateEdition;
     s := FCurrentEditionComplete.ChaineAffichage;
-    if FCurrentEditionComplete.RecInconnu then s := '* ' + s;
+    if FCurrentEditionComplete.RecInconnu then
+      s := '* ' + s;
     vtEditions.Items[vtEditions.ItemIndex] := s;
   end;
 end;
@@ -981,7 +884,8 @@ end;
 procedure TFrmEditAlbum.edAnneeEditionChange(Sender: TObject);
 begin
   RefreshEditionCaption;
-  if vtEditions.ItemIndex > -1 then FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
+  if vtEditions.ItemIndex > -1 then
+    FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
 end;
 
 procedure TFrmEditAlbum.vtCollectionsChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
@@ -1010,9 +914,8 @@ begin
         edPrix.Text := ''
       else
         edPrix.Text := FormatCurr(FormatMonnaie, FCurrentEditionComplete.Prix);
-      vtEditeurs.CurrentValue := FCurrentEditionComplete.Editeur.ID_Editeur;
-      if IsEqualGUID(vtEditeurs.CurrentValue, GUID_NULL) then vtEditeurs.FullCollapse;
-      vtCollections.CurrentValue := FCurrentEditionComplete.Collection.ID;
+      vtEditEditeurs.CurrentValue := FCurrentEditionComplete.Editeur.ID_Editeur;
+      vtEditCollections.CurrentValue := FCurrentEditionComplete.Collection.ID;
       cbStock.Checked := FCurrentEditionComplete.Stock;
       cbVO.Checked := FCurrentEditionComplete.VO;
       cbCouleur.Checked := FCurrentEditionComplete.Couleur;
@@ -1028,7 +931,8 @@ begin
       cbxSensLecture.Value := FCurrentEditionComplete.SensLecture.Value;
       dtpAchat.Date := Now;
       dtpAchat.Checked := FCurrentEditionComplete.DateAchat > 0;
-      if dtpAchat.Checked then dtpAchat.Date := FCurrentEditionComplete.DateAchat;
+      if dtpAchat.Checked then
+        dtpAchat.Date := FCurrentEditionComplete.DateAchat;
       edNombreDePages.Text := NonZero(IntToStr(FCurrentEditionComplete.NombreDePages));
       edAnneeCote.Text := NonZero(IntToStr(FCurrentEditionComplete.AnneeCote));
       if FCurrentEditionComplete.PrixCote = 0 then
@@ -1045,88 +949,43 @@ begin
   end;
 end;
 
-procedure RefreshEditSerie(Data: PRefresh);
-var
-  i: TGUID;
-begin
-  with Data.F do
-  begin
-    FAlbum.Serie.Fill(FAlbum.Serie.ID_Serie);
-    i := vtCollections.CurrentValue;
-    vtEditeurs.InitializeRep;
-    vtCollections.InitializeRep;
-    vtCollections.CurrentValue := i;
-//    vtSeriesChange(vtSeries, vtSeries.GetFirstSelected);
-    JvComboEdit1Change(JvComboEdit1);
-  end;
-end;
-
-procedure TFrmEditAlbum.vtSeriesDblClick(Sender: TObject);
-begin
-  if (vtSeries.GetFirstSelected <> nil) then
-  begin
-    R.F := Self;
-    Historique.AddWaiting(fcGestionModif, @RefreshEditSerie, @R, @ModifierSeries, vtSeries);
-  end;
-end;
-
-procedure RefreshAuteurs(Data: PRefresh);
+procedure TFrmEditAlbum.OnEditAuteurs(Sender: TObject);
 var
   i: Integer;
   Auteur: TAuteur;
   CurrentAuteur: TPersonnage;
 begin
-  with Data.F do
+  CurrentAuteur := vtEditPersonnes.VTEdit.Data;
+  for i := 0 to Pred(lvScenaristes.Items.Count) do
   begin
-    CurrentAuteur := vtPersonnes.GetFocusedNodeData;
-    for i := 0 to Pred(lvScenaristes.Items.Count) do
+    Auteur := lvScenaristes.Items[i].Data;
+    if IsEqualGUID(Auteur.Personne.ID, CurrentAuteur.ID) then
     begin
-      Auteur := lvScenaristes.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, Data.iCurrentAuteur) then
-      begin
-        Auteur.Personne.Assign(CurrentAuteur);
-        lvScenaristes.Invalidate;
-      end;
+      Auteur.Personne.Assign(CurrentAuteur);
+      lvScenaristes.Invalidate;
     end;
-    lvScenaristes.Invalidate;
-    for i := 0 to Pred(lvDessinateurs.Items.Count) do
-    begin
-      Auteur := lvDessinateurs.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, Data.iCurrentAuteur) then
-      begin
-        Auteur.Personne.Assign(CurrentAuteur);
-        lvDessinateurs.Invalidate;
-      end;
-    end;
-    lvDessinateurs.Invalidate;
-    for i := 0 to Pred(lvColoristes.Items.Count) do
-    begin
-      Auteur := lvColoristes.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, Data.iCurrentAuteur) then
-      begin
-        Auteur.Personne.Assign(CurrentAuteur);
-        lvColoristes.Invalidate;
-      end;
-    end;
-    lvColoristes.Invalidate;
   end;
-end;
-
-procedure TFrmEditAlbum.vtPersonnesDblClick(Sender: TObject);
-begin
-  R.F := Self;
-  R.iCurrentAuteur := vtPersonnes.CurrentValue;
-  Historique.AddWaiting(fcGestionModif, @RefreshAuteurs, @R, @ModifierAuteurs, vtPersonnes);
-end;
-
-procedure TFrmEditAlbum.vtEditeursDblClick(Sender: TObject);
-begin
-  Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierEditeurs, vtEditeurs);
-end;
-
-procedure TFrmEditAlbum.vtCollectionsDblClick(Sender: TObject);
-begin
-  Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierCollections, vtCollections);
+  lvScenaristes.Invalidate;
+  for i := 0 to Pred(lvDessinateurs.Items.Count) do
+  begin
+    Auteur := lvDessinateurs.Items[i].Data;
+    if IsEqualGUID(Auteur.Personne.ID, CurrentAuteur.ID) then
+    begin
+      Auteur.Personne.Assign(CurrentAuteur);
+      lvDessinateurs.Invalidate;
+    end;
+  end;
+  lvDessinateurs.Invalidate;
+  for i := 0 to Pred(lvColoristes.Items.Count) do
+  begin
+    Auteur := lvColoristes.Items[i].Data;
+    if IsEqualGUID(Auteur.Personne.ID, CurrentAuteur.ID) then
+    begin
+      Auteur.Personne.Assign(CurrentAuteur);
+      lvColoristes.Invalidate;
+    end;
+  end;
+  lvColoristes.Invalidate;
 end;
 
 procedure TFrmEditAlbum.cbIntegraleClick(Sender: TObject);
@@ -1145,14 +1004,18 @@ end;
 
 procedure TFrmEditAlbum.cbGratuitClick(Sender: TObject);
 begin
-  if cbGratuit.Checked then edPrix.Text := '';
-  if vtEditions.ItemIndex > -1 then FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
+  if cbGratuit.Checked then
+    edPrix.Text := '';
+  if vtEditions.ItemIndex > -1 then
+    FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
 end;
 
 procedure TFrmEditAlbum.edPrixChange(Sender: TObject);
 begin
-  if edPrix.Text <> '' then cbGratuit.Checked := False;
-  if vtEditions.ItemIndex > -1 then FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
+  if edPrix.Text <> '' then
+    cbGratuit.Checked := False;
+  if vtEditions.ItemIndex > -1 then
+    FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
 end;
 
 procedure TFrmEditAlbum.VisuClose(Sender: TObject);
@@ -1169,7 +1032,8 @@ var
   Couverture: TImage;
   Frm: TForm;
 begin
-  if not Assigned(vstImages.FocusedNode) then Exit;
+  if not Assigned(vstImages.FocusedNode) then
+    Exit;
   PC := FCurrentEditionComplete.Couvertures[vstImages.FocusedNode.Index];
   hg := THourGlass.Create;
   if IsEqualGUID(PC.ID, GUID_NULL) then
@@ -1177,76 +1041,75 @@ begin
   else
     ms := GetCouvertureStream(False, PC.ID, 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing);
   if Assigned(ms) then
-  try
-    jpg := TJPEGImage.Create;
-    Frm := TbdtForm.Create(Self);
-    Couverture := TImage.Create(Frm);
     try
-      jpg.LoadFromStream(ms);
-      Frm.BorderIcons := [];
-      Frm.BorderStyle := bsToolWindow;
-      Frm.Position := poOwnerFormCenter;
-      Couverture.Parent := Frm;
-      Couverture.Picture.Assign(jpg);
-      Couverture.Cursor := crHandPoint;
-      Couverture.OnClick := VisuClose;
-      Couverture.AutoSize := True;
-      Frm.AutoSize := True;
-      Frm.ShowModal;
+      jpg := TJPEGImage.Create;
+      Frm := TbdtForm.Create(Self);
+      Couverture := TImage.Create(Frm);
+      try
+        jpg.LoadFromStream(ms);
+        Frm.BorderIcons := [];
+        Frm.BorderStyle := bsToolWindow;
+        Frm.Position := poOwnerFormCenter;
+        Couverture.Parent := Frm;
+        Couverture.Picture.Assign(jpg);
+        Couverture.Cursor := crHandPoint;
+        Couverture.OnClick := VisuClose;
+        Couverture.AutoSize := True;
+        Frm.AutoSize := True;
+        Frm.ShowModal;
+      finally
+        FreeAndNil(jpg);
+        FreeAndNil(Couverture);
+        FreeAndNil(Frm);
+      end;
     finally
-      FreeAndNil(jpg);
-      FreeAndNil(Couverture);
-      FreeAndNil(Frm);
+      FreeAndNil(ms);
     end;
-  finally
-    FreeAndNil(ms);
-  end;
 end;
 
 procedure TFrmEditAlbum.JvComboEdit1Change(Sender: TObject);
 var
   i: Integer;
 begin
-  FAlbum.ID_Serie := JvComboEdit1.CurrentValue;
-  btResetSerie.Enabled := not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
-  if btResetSerie.Enabled then
+  FAlbum.ID_Serie := vtEditSerie.CurrentValue;
+  if not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL) then
   begin
     if not (FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then
-    try
-      lvScenaristes.Items.BeginUpdate;
-      lvDessinateurs.Items.BeginUpdate;
-      lvColoristes.Items.BeginUpdate;
-      if not FScenaristesSelected then
-      begin
-        lvScenaristes.Items.Count := 0;
-        FAlbum.Scenaristes.Clear;
-        for i := 0 to Pred(FAlbum.Serie.Scenaristes.Count) do
-          AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TAuteur(FAlbum.Serie.Scenaristes[i]).Personne);
+      try
+        lvScenaristes.Items.BeginUpdate;
+        lvDessinateurs.Items.BeginUpdate;
+        lvColoristes.Items.BeginUpdate;
+        if not FScenaristesSelected then
+        begin
+          lvScenaristes.Items.Count := 0;
+          FAlbum.Scenaristes.Clear;
+          for i := 0 to Pred(FAlbum.Serie.Scenaristes.Count) do
+            AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TAuteur(FAlbum.Serie.Scenaristes[i]).Personne);
+        end;
+        if not FDessinateursSelected then
+        begin
+          lvDessinateurs.Items.Count := 0;
+          FAlbum.Dessinateurs.Clear;
+          for i := 0 to Pred(FAlbum.Serie.Dessinateurs.Count) do
+            AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TAuteur(FAlbum.Serie.Dessinateurs[i]).Personne);
+        end;
+        if not FColoristesSelected then
+        begin
+          lvColoristes.Items.Count := 0;
+          FAlbum.Coloristes.Clear;
+          for i := 0 to Pred(FAlbum.Serie.Coloristes.Count) do
+            AjouteAuteur(FAlbum.Coloristes, lvColoristes, TAuteur(FAlbum.Serie.Coloristes[i]).Personne);
+        end;
+      finally
+        lvScenaristes.Items.EndUpdate;
+        lvDessinateurs.Items.EndUpdate;
+        lvColoristes.Items.EndUpdate;
       end;
-      if not FDessinateursSelected then
-      begin
-        lvDessinateurs.Items.Count := 0;
-        FAlbum.Dessinateurs.Clear;
-        for i := 0 to Pred(FAlbum.Serie.Dessinateurs.Count) do
-          AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TAuteur(FAlbum.Serie.Dessinateurs[i]).Personne);
-      end;
-      if not FColoristesSelected then
-      begin
-        lvColoristes.Items.Count := 0;
-        FAlbum.Coloristes.Clear;
-        for i := 0 to Pred(FAlbum.Serie.Coloristes.Count) do
-          AjouteAuteur(FAlbum.Coloristes, lvColoristes, TAuteur(FAlbum.Serie.Coloristes[i]).Personne);
-      end;
-    finally
-      lvScenaristes.Items.EndUpdate;
-      lvDessinateurs.Items.EndUpdate;
-      lvColoristes.Items.EndUpdate;
-    end;
 
     if Assigned(FCurrentEditionComplete) and (not FEditeurCollectionSelected[vtEditions.ItemIndex]) then
     begin
-      vtEditeurs.CurrentValue := FAlbum.Serie.Editeur.ID_Editeur;
-      vtCollections.CurrentValue := FAlbum.Serie.Collection.ID;
+      vtEditEditeurs.CurrentValue := FAlbum.Serie.Editeur.ID_Editeur;
+      vtEditCollections.CurrentValue := FAlbum.Serie.Collection.ID;
 
       with FAlbum.Serie do
       begin
@@ -1270,7 +1133,8 @@ procedure TFrmEditAlbum.vstImagesDblClick(Sender: TObject);
 var
   PC: TCouverture;
 begin
-  if not Assigned(vstImages.FocusedNode) then Exit;
+  if not Assigned(vstImages.FocusedNode) then
+    Exit;
   PC := FCurrentEditionComplete.Couvertures[vstImages.FocusedNode.Index];
   if IsEqualGUID(PC.ID, GUID_NULL) then
     with ChoixImageDialog do
@@ -1291,7 +1155,8 @@ begin
     Label18.Caption := rsTransOffertLe
   else
     Label18.Caption := rsTransAcheteLe;
-  if vtEditions.ItemIndex > -1 then FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
+  if vtEditions.ItemIndex > -1 then
+    FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
 end;
 
 procedure TFrmEditAlbum.vstImagesStructureChange(Sender: TBaseVirtualTree; Node: PVirtualNode; Reason: TChangeReason);
@@ -1306,16 +1171,17 @@ begin
   if InputQuery('EAN-ISBN', 'Saisir le numéro EAN-ISBN de l''édition :', Code) then
   begin
     dummy := Code;
-    if not VerifieEAN(dummy) and (MessageDlg(Code + #13#13'Le caractère de contrôle de ce numéro EAN-ISBN n''est pas correct.'#13#10'Voulez-vous néanmoins utiliser ce code barre?', mtWarning, [mbYes, mbNo], 0) = mrNo) then Exit;
+    if not VerifieEAN(dummy) and (MessageDlg(Code + #13#13'Le caractère de contrôle de ce numéro EAN-ISBN n''est pas correct.'#13#10'Voulez-vous néanmoins utiliser ce code barre?', mtWarning, [mbYes, mbNo], 0) = mrNo) then
+      Exit;
     if StrToIntDef(edAnneeEdition.Text, 0) >= 2007 then
     begin // en 2007, les ISBN passent à 13 caractères
       Code := Copy(Code, 1, 12);
-      VerifieISBN(Code, 13)
+      VerifieISBN(Code, 13);
     end
     else
     begin
       Code := Copy(Code, 4, 9);
-      VerifieISBN(Code, 10)
+      VerifieISBN(Code, 10);
     end;
     edisbn.Text := Code;
   end;
@@ -1329,6 +1195,7 @@ begin
   begin
     OldIndex := vtEditions.ItemIndex;
 
+    FCurrentEditionComplete := nil;
     vtEditions.DeleteSelected;
     FAlbum.Editions.Editions.Delete(OldIndex);
     if OldIndex < vtEditions.Items.Count then
@@ -1389,11 +1256,6 @@ begin
     pmChoixCategorie.Items[i].Checked := pmChoixCategorie.Tag = pmChoixCategorie.Items[i].Tag;
 end;
 
-procedure TFrmEditAlbum.EditeurCollectionSelected(Sender: TObject; NextSearch: Boolean);
-begin
-  if vtEditions.ItemIndex > -1 then FEditeurCollectionSelected[vtEditions.ItemIndex] := True;
-end;
-
 procedure TFrmEditAlbum.lvScenaristesData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FAlbum.Scenaristes[Item.Index];
@@ -1420,11 +1282,6 @@ end;
 function TFrmEditAlbum.GetCreation: Boolean;
 begin
   Result := FAlbum.RecInconnu;
-end;
-
-procedure TFrmEditAlbum.btResetSerieClick(Sender: TObject);
-begin
-  JvComboEdit1.CurrentValue := GUID_NULL;
 end;
 
 end.

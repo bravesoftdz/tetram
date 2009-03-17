@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, Mask, Menus, ExtCtrls,
-  DBEditLabeled, DB, Buttons, VDTButton, Fram_Boutons, LoadComplet, UBdtForms;
+  DBEditLabeled, DB, Buttons, VDTButton, Fram_Boutons, LoadComplet, UBdtForms,
+  PngSpeedButton;
 
 type
   TFrmEditAuteur = class(TbdtForm)
