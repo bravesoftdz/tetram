@@ -1,4 +1,4 @@
-object FrmEditAchatAlbum: TFrmEditAchatAlbum
+object frmEditAchatAlbum: TfrmEditAchatAlbum
   Left = 245
   Top = 418
   Caption = 'Achat'
@@ -105,7 +105,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       TabOrder = 0
       ExplicitLeft = 1
       ExplicitTop = 1
-      ExplicitWidth = 680
+      ExplicitWidth = 591
       inherited btReset: TVDTButton
         Left = 528
         ExplicitLeft = 617
@@ -120,7 +120,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       end
       inherited VTEdit: TJvComboEdit
         Width = 528
-        ExplicitWidth = 617
+        ExplicitWidth = 528
       end
     end
   end
@@ -338,7 +338,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
           Control = Label2
         end>
       CurrencyChar = #0
-      ExplicitWidth = 628
     end
     inline vtEditSeries: TframVTEdit
       Left = 52
@@ -349,7 +348,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       TabOrder = 1
       ExplicitLeft = 52
       ExplicitTop = 23
-      ExplicitWidth = 628
+      ExplicitWidth = 540
       inherited btReset: TVDTButton
         Left = 477
         ExplicitLeft = 565
@@ -365,7 +364,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       inherited VTEdit: TJvComboEdit
         Width = 477
         OnChange = vtEditSeriesVTEditChange
-        ExplicitWidth = 565
+        ExplicitWidth = 477
       end
     end
     object edTome: TEditLabeled
@@ -501,7 +500,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         item
           Control = Label6
         end>
-      ExplicitWidth = 295
     end
     object remarques: TMemoLabeled
       Left = 306
@@ -517,7 +515,6 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
         item
           Control = Label7
         end>
-      ExplicitLeft = 394
     end
     object lvScenaristes: TVDTListViewLabeled
       Left = 381
@@ -588,7 +585,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       TabOrder = 11
       ExplicitLeft = 52
       ExplicitTop = 211
-      ExplicitWidth = 295
+      ExplicitWidth = 207
       inherited btReset: TVDTButton
         Left = 144
         ExplicitLeft = 232
@@ -604,7 +601,7 @@ object FrmEditAchatAlbum: TFrmEditAchatAlbum
       inherited VTEdit: TJvComboEdit
         Width = 144
         OnChange = vtEditPersonnesVTEditChange
-        ExplicitWidth = 232
+        ExplicitWidth = 144
       end
     end
   end

@@ -1,4 +1,4 @@
-unit Form_EditEditeur;
+unit UfrmEditEditeur;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   PngSpeedButton, UframBoutons;
 
 type
-  TFrmEditEditeur = class(TbdtForm)
+  TfrmEditEditeur = class(TbdtForm)
     ScrollBox1: TScrollBox;
     Label2: TLabel;
     edNom: TEditLabeled;
@@ -40,13 +40,13 @@ uses
 
 {$R *.DFM}
 
-procedure TFrmEditEditeur.FormCreate(Sender: TObject);
+procedure TfrmEditEditeur.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
   FEditeur := TEditeurComplet.Create;
 end;
 
-procedure TFrmEditEditeur.SetID_Editeur(const Value: TGUID);
+procedure TfrmEditEditeur.SetID_Editeur(const Value: TGUID);
 var
   hg: IHourGlass;
 begin
@@ -57,7 +57,7 @@ begin
   edSite.Text := FEditeur.SiteWeb;
 end;
 
-procedure TFrmEditEditeur.Frame11btnOKClick(Sender: TObject);
+procedure TfrmEditEditeur.Frame11btnOKClick(Sender: TObject);
 begin
   if Length(Trim(edNom.Text)) = 0 then begin
     AffMessage(rsNomObligatoire, mtInformation, [mbOk], True);
@@ -73,27 +73,27 @@ begin
   ModalResult := mrOk;
 end;
 
-procedure TFrmEditEditeur.FormShow(Sender: TObject);
+procedure TfrmEditEditeur.FormShow(Sender: TObject);
 begin
   edNom.SetFocus;
 end;
 
-procedure TFrmEditEditeur.VDTButton13Click(Sender: TObject);
+procedure TfrmEditEditeur.VDTButton13Click(Sender: TObject);
 begin
   ShellExecute(Application.DialogHandle, nil, PChar(edSite.Text), nil, nil, SW_NORMAL);
 end;
 
-procedure TFrmEditEditeur.edSiteChange(Sender: TObject);
+procedure TfrmEditEditeur.edSiteChange(Sender: TObject);
 begin
   VDTButton13.Enabled := CompareMem(PChar(LowerCase(Trim(edSite.Text))), PChar('http://'), 7);
 end;
 
-function TFrmEditEditeur.GetID_Editeur: TGUID;
+function TfrmEditEditeur.GetID_Editeur: TGUID;
 begin
   Result := FEditeur.ID_Editeur;
 end;
 
-procedure TFrmEditEditeur.FormDestroy(Sender: TObject);
+procedure TfrmEditEditeur.FormDestroy(Sender: TObject);
 begin
   FEditeur.Free;
 end;

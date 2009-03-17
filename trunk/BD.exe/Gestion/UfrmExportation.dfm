@@ -1,4 +1,4 @@
-object FrmExportation: TFrmExportation
+object frmExportation: TfrmExportation
   Left = 440
   Top = 395
   Caption = 'Exportation'

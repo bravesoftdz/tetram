@@ -42,6 +42,10 @@ object frmScripts: TfrmScripts
     end
     object tbEdition: TTabSheet
       Caption = 'Edition'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Splitter1: TSplitter
         Left = 0
         Top = 369
@@ -95,6 +99,10 @@ object frmScripts: TfrmScripts
         TabOrder = 1
         object TabSheet1: TTabSheet
           Caption = 'Messages'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object vstMessages: TVirtualStringTree
             Left = 0
             Top = 0
@@ -132,7 +140,7 @@ object frmScripts: TfrmScripts
               end
               item
                 Position = 3
-                Width = 472
+                Width = 476
                 WideText = 'Message'
               end>
           end

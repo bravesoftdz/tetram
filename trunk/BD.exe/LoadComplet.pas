@@ -692,7 +692,7 @@ implementation
 
 uses
   UIBLib, Divers, StdCtrls, Procedures, Textes, StrUtils, UMetadata,
-  Form_ControlImport, UHistorique;
+  UfrmControlImport, UHistorique;
 
 function MakeOption(Value: integer; const Caption: string): ROption;
 begin

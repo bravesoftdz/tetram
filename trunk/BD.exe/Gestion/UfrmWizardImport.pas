@@ -1,4 +1,4 @@
-unit Form_WizardImport;
+unit UfrmWizardImport;
 
 interface
 
@@ -16,7 +16,7 @@ type
     function PreviousVisible: TTabSheet;
   end;
 
-  TWizardImport = class(TbdtForm)
+  TfrmWizardImport = class(TbdtForm)
     ActionList1: TActionList;
     actNextPage: TAction;
     actPreviousPage: TAction;
@@ -77,7 +77,7 @@ type
   end;
 
 var
-  WizardImport: TWizardImport;
+  frmWizardImport: TfrmWizardImport;
 
 implementation
 
@@ -125,7 +125,7 @@ end;
 
 { TForm1 }
 
-procedure TWizardImport.FormCreate(Sender: TObject);
+procedure TfrmWizardImport.FormCreate(Sender: TObject);
 var
   i: Integer;
 begin
@@ -139,12 +139,12 @@ begin
   Source := '';
 end;
 
-procedure TWizardImport.actPreviousPageExecute(Sender: TObject);
+procedure TfrmWizardImport.actPreviousPageExecute(Sender: TObject);
 begin
   PageControl1.ActivePage := PageControl1.PreviousVisible;
 end;
 
-procedure TWizardImport.actNextPageExecute(Sender: TObject);
+procedure TfrmWizardImport.actNextPageExecute(Sender: TObject);
 begin
   if PageControl1.ActivePageIndex = PageControl1.PageCount - 1 then
     ModalResult := mrOk
@@ -152,7 +152,7 @@ begin
     PageControl1.ActivePage := PageControl1.NextVisible;
 end;
 
-procedure TWizardImport.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
+procedure TfrmWizardImport.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
   actPreviousPage.Enabled := PageControl1.ActivePageIndex > 0;
   actNextPage.Enabled := IsValideCurrentPage;
@@ -162,12 +162,12 @@ begin
     actNextPage.Caption := 'Suivant';
 end;
 
-function TWizardImport.IsValideCurrentPage: Boolean;
+function TfrmWizardImport.IsValideCurrentPage: Boolean;
 begin
   Result := IsValidePage(PageControl1.ActivePage);
 end;
 
-function TWizardImport.IsValidePage(Page: TTabSheet): Boolean;
+function TfrmWizardImport.IsValidePage(Page: TTabSheet): Boolean;
 begin
   Result := (Page = TabSheet1) or (Page = TabSheetFinal);
   if Result then Exit;
@@ -183,19 +183,19 @@ begin
     ;
 end;
 
-procedure TWizardImport.SetSource(const Value: string);
+procedure TfrmWizardImport.SetSource(const Value: string);
 begin
   FSource := Value;
   Label10.Caption := MinimizeName(FSource, Label10.Canvas, Label10.Width);
 end;
 
-procedure TWizardImport.Button1Click(Sender: TObject);
+procedure TfrmWizardImport.Button1Click(Sender: TObject);
 begin
   OpenDialog1.Filter := ComboBox1.Text + '|' + GetCurrentMask;
   if OpenDialog1.Execute then Source := OpenDialog1.FileName;
 end;
 
-function TWizardImport.GetCurrentMask: string;
+function TfrmWizardImport.GetCurrentMask: string;
 begin
   case ComboBox1.ItemIndex of
     0: Result := '*.csv';
@@ -207,7 +207,7 @@ begin
   end;
 end;
 
-procedure TWizardImport.TabSheetSourceShow(Sender: TObject);
+procedure TfrmWizardImport.TabSheetSourceShow(Sender: TObject);
 begin
   if not MatchesMask(FSource, GetCurrentMask) then Source := '';
 end;

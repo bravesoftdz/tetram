@@ -52,7 +52,7 @@ type
 implementation
 
 uses UfrmFond, CommonConst, UdmPrinc, UIB, Commun, Procedures, Textes,
-  UfrmVerbose, UHistorique, Form_Gestion, IniFiles, Math, uiblib;
+  UfrmVerbose, UHistorique, UfrmGestion, IniFiles, Math, uiblib;
 
 {$R *.dfm}
 

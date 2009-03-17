@@ -1,4 +1,4 @@
-unit Form_ScriptSearch;
+unit UfrmScriptSearch;
 
 interface
 
@@ -7,7 +7,7 @@ uses
   Dialogs, StdCtrls, ExtCtrls, ComCtrls, SynEditTypes, UBdtForms;
 
 type
-  TForm2 = class(TbdtForm)
+  TfrmScriptSearch = class(TbdtForm)
     Button1: TButton;
     Button2: TButton;
     Button3: TButton;
@@ -44,9 +44,9 @@ const
   FLastSearch: string = '';
   FLastReplace: string = '';
 
-class function TForm2.Execute(var ASearch, AReplace: string; var AOptions: TSynSearchOptions): Boolean;
+class function TfrmScriptSearch.Execute(var ASearch, AReplace: string; var AOptions: TSynSearchOptions): Boolean;
 begin
-  with TForm2.Create(nil) do
+  with TfrmScriptSearch.Create(nil) do
   try
     if ASearch = '' then
       ComboBox1.ItemIndex := 0
@@ -97,7 +97,7 @@ begin
   end;
 end;
 
-procedure TForm2.TabControl1Change(Sender: TObject);
+procedure TfrmScriptSearch.TabControl1Change(Sender: TObject);
 begin
   ComboBox2.Visible := TabControl1.TabIndex = 1;
   Label2.Visible := ComboBox2.Visible;
@@ -105,14 +105,14 @@ begin
   Button3.Visible := ComboBox2.Visible;
 end;
 
-procedure TForm2.FormCreate(Sender: TObject);
+procedure TfrmScriptSearch.FormCreate(Sender: TObject);
 begin
   TabControl1Change(nil);
   ComboBox1.Items.Text := FLastSearch;
   ComboBox2.Items.Text := FLastReplace;
 end;
 
-procedure TForm2.Button3Click(Sender: TObject);
+procedure TfrmScriptSearch.Button3Click(Sender: TObject);
 
   function AddCombo(Combo: TComboBox): string;
   var
@@ -132,7 +132,7 @@ begin
   FLastReplace := AddCombo(ComboBox2);
 end;
 
-procedure TForm2.FormKeyDown(Sender: TObject; var Key: Word;
+procedure TfrmScriptSearch.FormKeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
   if (Key = 9) and (ssCtrl in Shift) then

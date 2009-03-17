@@ -1,8 +1,8 @@
-object FrmEditParaBD: TFrmEditParaBD
+object frmEditParaBD: TfrmEditParaBD
   Left = 188
   Top = 180
   ActiveControl = edTitre
-  Caption = 'FrmEditParaBD'
+  Caption = 'frmEditParaBD'
   ClientHeight = 899
   ClientWidth = 824
   Color = clBtnFace
@@ -35,7 +35,6 @@ object FrmEditParaBD: TFrmEditParaBD
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
-    ExplicitWidth = 827
     DesignSize = (
       824
       870)
@@ -480,7 +479,6 @@ object FrmEditParaBD: TFrmEditParaBD
       BevelInner = bvLowered
       Caption = ' '
       TabOrder = 15
-      ExplicitLeft = 513
       object imgVisu: TImage
         Left = 2
         Top = 25
@@ -1404,18 +1402,18 @@ object FrmEditParaBD: TFrmEditParaBD
     Height = 25
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 827
+    ExplicitWidth = 824
     inherited btnOK: TButton
       Left = 645
       Width = 87
       Caption = 'Enregistrer'
       OnClick = btnOKClick
-      ExplicitLeft = 648
+      ExplicitLeft = 645
       ExplicitWidth = 87
     end
     inherited btnAnnuler: TButton
       Left = 741
-      ExplicitLeft = 744
+      ExplicitLeft = 741
     end
   end
   object ChoixImageDialog: TOpenPictureDialog

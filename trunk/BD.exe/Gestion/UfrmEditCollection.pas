@@ -1,4 +1,4 @@
-unit Form_EditCollection;
+unit UfrmEditCollection;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   UBdtForms, UframVTEdit, UframBoutons;
 
 type
-  TFrmEditCollection = class(TbdtForm)
+  TfrmEditCollection = class(TbdtForm)
     ScrollBox1: TScrollBox;
     Label2: TLabel;
     edNom: TEditLabeled;
@@ -36,14 +36,14 @@ uses
 
 {$R *.DFM}
 
-procedure TFrmEditCollection.FormCreate(Sender: TObject);
+procedure TfrmEditCollection.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
   vtEditEditeurs.Mode := vmEditeurs;
   FCollection := TCollectionComplete.Create;
 end;
 
-procedure TFrmEditCollection.SetID_Collection(const Value: TGUID);
+procedure TfrmEditCollection.SetID_Collection(const Value: TGUID);
 var
   hg: IHourGlass;
 begin
@@ -56,7 +56,7 @@ begin
   vtEditEditeurs.Enabled := FCollection.RecInconnu;
 end;
 
-procedure TFrmEditCollection.Frame11btnOKClick(Sender: TObject);
+procedure TfrmEditCollection.Frame11btnOKClick(Sender: TObject);
 var
   ID_Editeur: TGUID;
 begin
@@ -84,12 +84,12 @@ begin
   ModalResult := mrOk;
 end;
 
-function TFrmEditCollection.GetID_Collection: TGUID;
+function TfrmEditCollection.GetID_Collection: TGUID;
 begin
   Result := FCollection.ID_Collection;
 end;
 
-procedure TFrmEditCollection.FormDestroy(Sender: TObject);
+procedure TfrmEditCollection.FormDestroy(Sender: TObject);
 begin
   FCollection.Free;
 end;

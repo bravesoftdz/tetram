@@ -1,4 +1,4 @@
-unit Form_EditSerie;
+unit UfrmEditSerie;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   ComboCheck, StrUtils, PngSpeedButton, UframVTEdit;
 
 type
-  TFrmEditSerie = class(TbdtForm)
+  TfrmEditSerie = class(TbdtForm)
     ScrollBox2: TScrollBox;
     Label5: TLabel;
     Label8: TLabel;
@@ -110,7 +110,7 @@ const
   PasModifier = 'Impossible de modifier le support !';
   PasAjouter = 'Impossible d''ajouter le support !';
 
-procedure TFrmEditSerie.FormCreate(Sender: TObject);
+procedure TfrmEditSerie.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
   FrameRechercheRapideGenre.VirtualTreeView := vtGenres;
@@ -146,7 +146,7 @@ begin
   FSerie := TSerieComplete.Create;
 end;
 
-procedure TFrmEditSerie.FormDestroy(Sender: TObject);
+procedure TfrmEditSerie.FormDestroy(Sender: TObject);
 begin
   lvScenaristes.Items.Count := 0;
   lvDessinateurs.Items.Count := 0;
@@ -154,7 +154,7 @@ begin
   FSerie.Free;
 end;
 
-procedure TFrmEditSerie.Frame11btnOKClick(Sender: TObject);
+procedure TfrmEditSerie.Frame11btnOKClick(Sender: TObject);
 begin
   if Length(Trim(edTitre.Text)) = 0 then
   begin
@@ -198,7 +198,7 @@ begin
   ModalResult := mrOk;
 end;
 
-procedure TFrmEditSerie.SetID_Serie(const Value: TGUID);
+procedure TfrmEditSerie.SetID_Serie(const Value: TGUID);
 var
   i: Integer;
   hg: IHourGlass;
@@ -264,17 +264,17 @@ begin
   end;
 end;
 
-procedure TFrmEditSerie.FormShow(Sender: TObject);
+procedure TfrmEditSerie.FormShow(Sender: TObject);
 begin
   edTitre.SetFocus;
 end;
 
-procedure TFrmEditSerie.edTitreChange(Sender: TObject);
+procedure TfrmEditSerie.edTitreChange(Sender: TObject);
 begin
   Caption := 'Saisie de série - ' + FormatTitre(edTitre.Text);
 end;
 
-procedure TFrmEditSerie.vtGenresInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+procedure TfrmEditSerie.vtGenresInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 begin
   if Sender.GetNodeLevel(Node) > 0 then
   begin
@@ -286,7 +286,7 @@ begin
   end;
 end;
 
-procedure TFrmEditSerie.vtGenresChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
+procedure TfrmEditSerie.vtGenresChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
   s: string;
   i: Integer;
@@ -309,7 +309,7 @@ begin
   end;
 end;
 
-procedure TFrmEditSerie.vtEditEditeursVTEditChange(Sender: TObject);
+procedure TfrmEditSerie.vtEditEditeursVTEditChange(Sender: TObject);
 var
   ID_Editeur: TGUID;
 begin
@@ -329,7 +329,7 @@ begin
   vtEditCollections.CanCreate := not IsEqualGUID(ID_Editeur, GUID_NULL);
 end;
 
-procedure TFrmEditSerie.vtEditPersonnesVTEditChange(Sender: TObject);
+procedure TfrmEditSerie.vtEditPersonnesVTEditChange(Sender: TObject);
 var
   IdPersonne: TGUID;
 
@@ -354,27 +354,27 @@ begin
   btColoriste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVColoristes);
 end;
 
-procedure TFrmEditSerie.vtGenresDblClick(Sender: TObject);
+procedure TfrmEditSerie.vtGenresDblClick(Sender: TObject);
 begin
   Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierGenres, vtGenres);
 end;
 
-procedure TFrmEditSerie.vtAlbumsDblClick(Sender: TObject);
+procedure TfrmEditSerie.vtAlbumsDblClick(Sender: TObject);
 begin
   Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierAlbums, vtAlbums);
 end;
 
-procedure TFrmEditSerie.VDTButton13Click(Sender: TObject);
+procedure TfrmEditSerie.VDTButton13Click(Sender: TObject);
 begin
   ShellExecute(Application.DialogHandle, nil, PChar(edSite.Text), nil, nil, SW_NORMAL);
 end;
 
-procedure TFrmEditSerie.edSiteChange(Sender: TObject);
+procedure TfrmEditSerie.edSiteChange(Sender: TObject);
 begin
   VDTButton13.Enabled := CompareMem(PChar(LowerCase(Trim(edSite.Text))), PChar('http://'), 7);
 end;
 
-procedure TFrmEditSerie.OnEditPersonne(Sender: TObject);
+procedure TfrmEditSerie.OnEditPersonne(Sender: TObject);
 var
   i: Integer;
   Auteur: TAuteur;
@@ -413,7 +413,7 @@ begin
   lvColoristes.Invalidate;
 end;
 
-procedure TFrmEditSerie.btColoristeClick(Sender: TObject);
+procedure TfrmEditSerie.btColoristeClick(Sender: TObject);
 var
   PA: TAuteur;
 begin
@@ -448,7 +448,7 @@ begin
   vtEditPersonnesVTEditChange(vtEditPersonnes.VTEdit);
 end;
 
-procedure TFrmEditSerie.lvColoristesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TfrmEditSerie.lvColoristesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 var
   src: TListView;
 begin
@@ -468,7 +468,7 @@ begin
   vtEditPersonnesVTEditChange(vtEditPersonnes.VTEdit);
 end;
 
-procedure TFrmEditSerie.ScanEditKeyPress(Sender: TObject; var Key: Char);
+procedure TfrmEditSerie.ScanEditKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key = #13 then
   begin
@@ -481,40 +481,40 @@ begin
   end;
 end;
 
-function TFrmEditSerie.GetID_Serie: TGUID;
+function TfrmEditSerie.GetID_Serie: TGUID;
 begin
   Result := FSerie.ID_Serie;
 end;
 
-procedure TFrmEditSerie.lvScenaristesData(Sender: TObject; Item: TListItem);
+procedure TfrmEditSerie.lvScenaristesData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FSerie.Scenaristes[Item.Index];
   Item.Caption := TAuteur(Item.Data).ChaineAffichage;
 end;
 
-procedure TFrmEditSerie.lvDessinateursData(Sender: TObject; Item: TListItem);
+procedure TfrmEditSerie.lvDessinateursData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FSerie.Dessinateurs[Item.Index];
   Item.Caption := TAuteur(Item.Data).ChaineAffichage;
 end;
 
-procedure TFrmEditSerie.lvColoristesData(Sender: TObject; Item: TListItem);
+procedure TfrmEditSerie.lvColoristesData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FSerie.Coloristes[Item.Index];
   Item.Caption := TAuteur(Item.Data).ChaineAffichage;
 end;
 
-procedure TFrmEditSerie.vtParaBDDblClick(Sender: TObject);
+procedure TfrmEditSerie.vtParaBDDblClick(Sender: TObject);
 begin
   Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierParaBD, vtParaBD);
 end;
 
-procedure TFrmEditSerie.cbTermineeClick(Sender: TObject);
+procedure TfrmEditSerie.cbTermineeClick(Sender: TObject);
 begin
   cbSorties.Checked := not cbTerminee.Checked;
 end;
 
-procedure TFrmEditSerie.cbCompleteClick(Sender: TObject);
+procedure TfrmEditSerie.cbCompleteClick(Sender: TObject);
 begin
   cbManquants.Checked := not cbComplete.Checked;
 end;

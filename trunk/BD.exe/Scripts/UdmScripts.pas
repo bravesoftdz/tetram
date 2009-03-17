@@ -1,4 +1,4 @@
-unit DM_Scripts;
+unit UdmScripts;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   uPSComponent_COM, uPSComponent_Default;
 
 type
-  TDMScripts = class(TDataModule)
+  TdmScripts = class(TDataModule)
   private
     { Déclarations privées }
   public
@@ -16,7 +16,7 @@ type
   end;
 
 var
-  DMScripts: TDMScripts;
+  dmScripts: TdmScripts;
 
 implementation
 

@@ -1,4 +1,4 @@
-object FrmEditEmprunteur: TFrmEditEmprunteur
+object frmEditEmprunteur: TfrmEditEmprunteur
   Left = 550
   Top = 342
   HorzScrollBar.Visible = False
@@ -6,7 +6,7 @@ object FrmEditEmprunteur: TFrmEditEmprunteur
   ActiveControl = edNom
   BorderIcons = []
   BorderStyle = bsSingle
-  Caption = 'FrmEditEmprunteur'
+  Caption = 'frmEditEmprunteur'
   ClientHeight = 144
   ClientWidth = 215
   Color = clBtnFace

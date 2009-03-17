@@ -1,4 +1,4 @@
-unit Form_Exportation;
+unit UfrmExportation;
 
 interface
 
@@ -13,7 +13,7 @@ type
     procedure WriteStringLN(const Chaine: string);
   end;
 
-  TFrmExportation = class(TbdtForm)
+  TfrmExportation = class(TbdtForm)
     Panel14: TPanel;
     VDTButton20: TVDTButton;
     vstExportation: TVirtualStringTree;
@@ -60,7 +60,7 @@ begin
   WriteString(Chaine + #13#10);
 end;
 
-procedure TFrmExportation.FormCreate(Sender: TObject);
+procedure TfrmExportation.FormCreate(Sender: TObject);
 begin
   TGlobalVar.Mode_en_cours := mdExportation;
 
@@ -73,13 +73,13 @@ begin
   vstExportation.NodeDataSize := SizeOf(RNodeInfo);
 end;
 
-procedure TFrmExportation.VDTButton20Click(Sender: TObject);
+procedure TfrmExportation.VDTButton20Click(Sender: TObject);
 begin
   ModalResult := mrCancel;
   Release;
 end;
 
-procedure TFrmExportation.VDTButton1Click(Sender: TObject);
+procedure TfrmExportation.VDTButton1Click(Sender: TObject);
 begin
   case vstAlbums.GetNodeLevel(vstAlbums.FocusedNode) of
     0: AjouterSerie(vstAlbums.FocusedNode, True);
@@ -87,7 +87,7 @@ begin
   end;
 end;
 
-function TFrmExportation.AjouterSerie(Source: PVirtualNode; Complete: Boolean): PVirtualNode;
+function TfrmExportation.AjouterSerie(Source: PVirtualNode; Complete: Boolean): PVirtualNode;
 var
   NodeAlbum: PVirtualNode;
   NewInitialeInfo, InitialeInfo: PInitialeInfo;
@@ -122,7 +122,7 @@ begin
   end;
 end;
 
-procedure TFrmExportation.AjouterAlbum(Source, NodeSerie: PVirtualNode);
+procedure TfrmExportation.AjouterAlbum(Source, NodeSerie: PVirtualNode);
 var
   NodeInfo: ^RNodeInfo;
   PA: TAlbum;
@@ -144,7 +144,7 @@ begin
   NodeInfo.Detail := TAlbum.Duplicate(PA);
 end;
 
-procedure TFrmExportation.vstExportationGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
+procedure TfrmExportation.vstExportationGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
 var
   InitialeInfo: PInitialeInfo;
   NodeInfo: ^RNodeInfo;
@@ -164,7 +164,7 @@ begin
   end;
 end;
 
-procedure TFrmExportation.vstExportationPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+procedure TfrmExportation.vstExportationPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
 begin
   if (Sender.GetNodeLevel(Node) = 0) and (TextType = ttNormal) then begin
     TargetCanvas.Font.Height := -11;
@@ -172,7 +172,7 @@ begin
   end;
 end;
 
-procedure TFrmExportation.vstExportationFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+procedure TfrmExportation.vstExportationFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
 var
   NodeInfo: ^RNodeInfo;
 begin
@@ -183,12 +183,12 @@ begin
   end;
 end;
 
-procedure TFrmExportation.VDTButton2Click(Sender: TObject);
+procedure TfrmExportation.VDTButton2Click(Sender: TObject);
 begin
   vstExportation.DeleteSelectedNodes;
 end;
 
-procedure TFrmExportation.VDTButton3Click(Sender: TObject);
+procedure TfrmExportation.VDTButton3Click(Sender: TObject);
 var
   Fichier: string;
   FFichierExport: TFileStream;
@@ -233,7 +233,7 @@ begin
   end;
 end;
 
-procedure TFrmExportation.WriteNode(Sender: TBaseVirtualTree; Node: PVirtualNode; Data: Pointer; var Abort: Boolean);
+procedure TfrmExportation.WriteNode(Sender: TBaseVirtualTree; Node: PVirtualNode; Data: Pointer; var Abort: Boolean);
 var
   FFichierExport: TFileStream;
   NodeInfo: ^RNodeInfo;

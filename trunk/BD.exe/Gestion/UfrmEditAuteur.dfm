@@ -1,29 +1,30 @@
-object FrmEditEditeur: TFrmEditEditeur
-  Left = 513
-  Top = 494
+object frmEditAuteur: TfrmEditAuteur
+  Left = 537
+  Top = 280
+  HorzScrollBar.Visible = False
+  VertScrollBar.Visible = False
   ActiveControl = edNom
   BorderIcons = []
-  BorderStyle = bsDialog
-  Caption = 'Saisie d'#39'Editeur'
-  ClientHeight = 388
-  ClientWidth = 339
+  BorderStyle = bsSingle
+  Caption = 'frmEditAuteur'
+  ClientHeight = 219
+  ClientWidth = 717
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = False
+  OldCreateOrder = True
   Position = poMainFormCenter
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Bevel1: TBevel
     Left = 0
     Top = 25
-    Width = 339
+    Width = 717
     Height = 4
     Align = alTop
     Shape = bsBottomLine
@@ -31,27 +32,39 @@ object FrmEditEditeur: TFrmEditEditeur
   object ScrollBox1: TScrollBox
     Left = 0
     Top = 29
-    Width = 339
-    Height = 359
+    Width = 717
+    Height = 190
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
     DesignSize = (
-      339
-      359)
-    object Label2: TLabel
-      Left = 18
-      Top = 10
+      717
+      190)
+    object Label3: TLabel
+      Left = 28
+      Top = 8
       Width = 28
       Height = 13
-      Hint = 'R'#233'f'#233'rence du support'
       Alignment = taRightJustify
       Caption = 'Nom :'
+      FocusControl = edNom
+      Transparent = True
       Layout = tlCenter
     end
     object Label1: TLabel
-      Left = -2
-      Top = 34
+      Left = 4
+      Top = 55
+      Width = 57
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Biographie :'
+      FocusControl = edNom
+      Transparent = True
+      Layout = tlCenter
+    end
+    object Label2: TLabel
+      Left = 8
+      Top = 32
       Width = 48
       Height = 13
       Hint = 'R'#233'f'#233'rence du support'
@@ -60,8 +73,8 @@ object FrmEditEditeur: TFrmEditEditeur
       Layout = tlCenter
     end
     object VDTButton13: TVDTButton
-      Left = 308
-      Top = 32
+      Left = 687
+      Top = 30
       Width = 23
       Height = 18
       Anchors = [akTop, akRight]
@@ -100,28 +113,40 @@ object FrmEditEditeur: TFrmEditEditeur
         3F46038B558452BD6059268919EDEE3681C6123142E2DFC17F03DFC55B0C5750
         2E1C0000000049454E44AE426082}
     end
-    object edNom: TEditLabeled
-      Left = 49
-      Top = 7
-      Width = 281
-      Height = 20
-      Anchors = [akLeft, akTop, akRight]
-      AutoSize = False
+    object edBiographie: TMemoLabeled
+      Left = 64
+      Top = 54
+      Width = 648
+      Height = 131
+      Anchors = [akLeft, akTop, akRight, akBottom]
       BevelKind = bkTile
       BorderStyle = bsNone
-      Ctl3D = True
-      ParentCtl3D = False
+      ScrollBars = ssBoth
+      TabOrder = 2
+      LinkControls = <
+        item
+          Control = Label1
+        end>
+    end
+    object edNom: TEditLabeled
+      Left = 64
+      Top = 4
+      Width = 648
+      Height = 20
+      Anchors = [akLeft, akTop, akRight]
+      BevelKind = bkTile
+      BorderStyle = bsNone
       TabOrder = 0
       LinkControls = <
         item
-          Control = Label2
+          Control = Label3
         end>
       CurrencyChar = #0
     end
     object edSite: TEditLabeled
-      Left = 49
-      Top = 31
-      Width = 256
+      Left = 64
+      Top = 29
+      Width = 622
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -133,7 +158,7 @@ object FrmEditEditeur: TFrmEditEditeur
       OnChange = edSiteChange
       LinkControls = <
         item
-          Control = Label1
+          Control = Label2
         end>
       CurrencyChar = #0
     end
@@ -141,22 +166,24 @@ object FrmEditEditeur: TFrmEditEditeur
   inline Frame11: TframBoutons
     Left = 0
     Top = 0
-    Width = 339
+    Width = 717
     Height = 25
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 339
+    ExplicitWidth = 717
     inherited btnOK: TButton
-      Left = 168
+      Left = 546
       Width = 87
       Caption = 'Enregistrer'
+      Images = nil
       OnClick = Frame11btnOKClick
-      ExplicitLeft = 168
+      ExplicitLeft = 546
       ExplicitWidth = 87
     end
     inherited btnAnnuler: TButton
-      Left = 256
-      ExplicitLeft = 256
+      Left = 634
+      Images = nil
+      ExplicitLeft = 634
     end
   end
 end

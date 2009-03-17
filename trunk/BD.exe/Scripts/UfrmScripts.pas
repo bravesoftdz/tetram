@@ -1,4 +1,4 @@
-unit Form_Scripts;
+unit UfrmScripts;
 
 interface
 
@@ -227,7 +227,7 @@ implementation
 {$R *.dfm}
 
 uses
-  AnsiStrings, Form_ScriptSearch, UScriptsFonctions, CommonConst, uPSPreProcessor,
+  AnsiStrings, UfrmScriptSearch, UScriptsFonctions, CommonConst, uPSPreProcessor,
   Procedures, BdtkRegEx;
 
 function AutoCompleteCompilerBeforeCleanUp(Sender: TPSPascalCompiler): Boolean;
@@ -472,7 +472,7 @@ begin
     Exclude(FSearchOptions, ssoReplace);
     Exclude(FSearchOptions, ssoReplaceAll);
 
-    if not TForm2.Execute(FLastSearch, dummyReplace, FSearchOptions) then
+    if not TfrmScriptSearch.Execute(FLastSearch, dummyReplace, FSearchOptions) then
       Exit;
   end
   else
@@ -481,7 +481,7 @@ begin
     Include(FSearchOptions, ssoReplace);
     Exclude(FSearchOptions, ssoReplaceAll);
 
-    if not TForm2.Execute(FLastSearch, FLastReplace, FSearchOptions) then
+    if not TfrmScriptSearch.Execute(FLastSearch, FLastReplace, FSearchOptions) then
       Exit;
   end;
 

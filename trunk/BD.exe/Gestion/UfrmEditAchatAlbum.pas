@@ -1,4 +1,4 @@
-unit Form_EditAchatAlbum;
+unit UfrmEditAchatAlbum;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   CRFurtif, UBdtForms, Generics.Collections, PngSpeedButton, UframVTEdit;
 
 type
-  TFrmEditAchatAlbum = class(TbdtForm)
+  TfrmEditAchatAlbum = class(TbdtForm)
     Frame11: TframBoutons;
     rbAlbumExistant: TRadioButton;
     rbNouvelAlbum: TRadioButton;
@@ -76,14 +76,14 @@ uses
 
 {$R *.dfm}
 
-procedure TFrmEditAchatAlbum.AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage);
+procedure TfrmEditAchatAlbum.AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage);
 var
   dummy: Boolean;
 begin
   AjouteAuteur(List, lvList, Auteur, dummy);
 end;
 
-procedure TFrmEditAchatAlbum.AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean);
+procedure TfrmEditAchatAlbum.AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean);
 var
   PA: TAuteur;
 begin
@@ -96,7 +96,7 @@ begin
   FlagAuteur := True;
 end;
 
-procedure TFrmEditAchatAlbum.FormCreate(Sender: TObject);
+procedure TfrmEditAchatAlbum.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
   FAlbum := TAlbumComplet.Create;
@@ -127,7 +127,7 @@ begin
   FColoristesSelected := False;
 end;
 
-procedure TFrmEditAchatAlbum.SetID_Album(const Value: TGUID);
+procedure TfrmEditAchatAlbum.SetID_Album(const Value: TGUID);
 begin
   FAlbum.Fill(Value);
 
@@ -177,7 +177,7 @@ begin
   rbNouvelAlbumClick(nil);
 end;
 
-procedure TFrmEditAchatAlbum.cbIntegraleClick(Sender: TObject);
+procedure TfrmEditAchatAlbum.cbIntegraleClick(Sender: TObject);
 var
   cl: TColor;
 begin
@@ -191,7 +191,7 @@ begin
   Label17.Font.Color := cl;
 end;
 
-procedure TFrmEditAchatAlbum.Frame11btnOKClick(Sender: TObject);
+procedure TfrmEditAchatAlbum.Frame11btnOKClick(Sender: TObject);
 begin
   if rbNouvelAlbum.Checked then
   begin
@@ -270,7 +270,7 @@ begin
   ModalResult := mrOk;
 end;
 
-procedure TFrmEditAchatAlbum.vtEditPersonnesVTEditChange(Sender: TObject);
+procedure TfrmEditAchatAlbum.vtEditPersonnesVTEditChange(Sender: TObject);
 var
   IdPersonne: TGUID;
 
@@ -295,7 +295,7 @@ begin
   btColoriste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVColoristes);
 end;
 
-procedure TFrmEditAchatAlbum.vtEditSeriesVTEditChange(Sender: TObject);
+procedure TfrmEditAchatAlbum.vtEditSeriesVTEditChange(Sender: TObject);
 var
   i: Integer;
 begin
@@ -336,7 +336,7 @@ begin
   end;
 end;
 
-procedure TFrmEditAchatAlbum.OnEditAuteurs(Sender: TObject);
+procedure TfrmEditAchatAlbum.OnEditAuteurs(Sender: TObject);
 var
   i: Integer;
   Auteur: TAuteur;
@@ -375,7 +375,7 @@ begin
   lvColoristes.Invalidate;
 end;
 
-procedure TFrmEditAchatAlbum.btScenaristeClick(Sender: TObject);
+procedure TfrmEditAchatAlbum.btScenaristeClick(Sender: TObject);
 begin
   if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
     Exit;
@@ -387,7 +387,7 @@ begin
   vtEditPersonnesVTEditChange(vtEditPersonnes.VTEdit);
 end;
 
-procedure TFrmEditAchatAlbum.lvColoristesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TfrmEditAchatAlbum.lvColoristesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 var
   src: TListView;
   PA: TAuteur;
@@ -401,35 +401,35 @@ begin
   vtEditPersonnesVTEditChange(vtEditPersonnes.VTEdit);
 end;
 
-function TFrmEditAchatAlbum.GetID_Album: TGUID;
+function TfrmEditAchatAlbum.GetID_Album: TGUID;
 begin
   Result := FAlbum.ID_Album;
 end;
 
-procedure TFrmEditAchatAlbum.FormDestroy(Sender: TObject);
+procedure TfrmEditAchatAlbum.FormDestroy(Sender: TObject);
 begin
   FAlbum.Free;
 end;
 
-procedure TFrmEditAchatAlbum.lvScenaristesData(Sender: TObject; Item: TListItem);
+procedure TfrmEditAchatAlbum.lvScenaristesData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FAlbum.Scenaristes[Item.Index];
   Item.Caption := TAuteur(Item.Data).ChaineAffichage;
 end;
 
-procedure TFrmEditAchatAlbum.rbNouvelAlbumClick(Sender: TObject);
+procedure TfrmEditAchatAlbum.rbNouvelAlbumClick(Sender: TObject);
 begin
   pnNouvelAlbum.Visible := rbNouvelAlbum.Checked;
   pnAlbumExistant.Visible := rbAlbumExistant.Checked;
 end;
 
-procedure TFrmEditAchatAlbum.lvDessinateursData(Sender: TObject; Item: TListItem);
+procedure TfrmEditAchatAlbum.lvDessinateursData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FAlbum.Dessinateurs[Item.Index];
   Item.Caption := TAuteur(Item.Data).ChaineAffichage;
 end;
 
-procedure TFrmEditAchatAlbum.lvColoristesData(Sender: TObject; Item: TListItem);
+procedure TfrmEditAchatAlbum.lvColoristesData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FAlbum.Coloristes[Item.Index];
   Item.Caption := TAuteur(Item.Data).ChaineAffichage;

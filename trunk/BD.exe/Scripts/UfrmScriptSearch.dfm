@@ -1,4 +1,4 @@
-object Form2: TForm2
+object frmScriptSearch: TfrmScriptSearch
   Left = 413
   Top = 409
   AutoSize = True

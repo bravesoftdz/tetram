@@ -1,4 +1,4 @@
-unit Form_Gestion;
+unit UfrmGestion;
 
 interface
 
@@ -21,7 +21,7 @@ type
     DerniereRecherche: string;
   end;
 
-  TFrmGestions = class(TbdtForm)
+  TfrmGestions = class(TbdtForm)
     Panel3: TPanel;
     VDTButton2: TVDTButton;
     Bevel4: TBevel;
@@ -75,11 +75,11 @@ type
   end;
 
 var
-  FrmGestions: TFrmGestions;
+  frmGestions: TfrmGestions;
 
 implementation
 
-uses Commun, CommonConst, Procedures, Form_WizardImport, UHistorique;
+uses Commun, CommonConst, Procedures, UfrmWizardImport, UHistorique;
 
 const
   HintListeAlbums = 'Liste des albums';
@@ -122,7 +122,7 @@ const
 
 {$R *.DFM}
 
-procedure TFrmGestions.AssignIG(var IG: RInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; const Filtre: string = ''; Acheter: TActionGestionAchat = nil; Importer: Boolean = False; Exporter: Boolean = False);
+procedure TfrmGestions.AssignIG(var IG: RInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; const Filtre: string = ''; Acheter: TActionGestionAchat = nil; Importer: Boolean = False; Exporter: Boolean = False);
 begin
   IG.ProcAjouter := Ajouter;
   IG.ProcModifier := Modifier;
@@ -144,7 +144,7 @@ begin
   IG.DerniereRecherche := '';
 end;
 
-function TFrmGestions.GestionCourante(SB: TSpeedButton = nil): PInfo_Gestion;
+function TfrmGestions.GestionCourante(SB: TSpeedButton = nil): PInfo_Gestion;
 
   function test(var ig: PInfo_Gestion; Bouton1, Bouton2: TSpeedButton; const Retour: RInfo_Gestion): Boolean;
   begin
@@ -170,7 +170,7 @@ begin
   Result := @GestionAlbum;
 end;
 
-procedure TFrmGestions.FormCreate(Sender: TObject);
+procedure TfrmGestions.FormCreate(Sender: TObject);
 begin
   TGlobalVar.Mode_en_cours := mdEdit;
 
@@ -212,25 +212,25 @@ begin
   SpeedButton1Click(btAlbums);
 end;
 
-procedure TFrmGestions.ajouterClick(Sender: TObject);
+procedure TfrmGestions.ajouterClick(Sender: TObject);
 begin
   with GestionCourante^ do
     Historique.AddWaiting(fcGestionAjout, nil, nil, @ProcAjouter, VirtualTreeView, FrameRechercheRapide1.edSearch.Text);
 end;
 
-procedure TFrmGestions.modifierClick(Sender: TObject);
+procedure TfrmGestions.modifierClick(Sender: TObject);
 begin
   with GestionCourante^ do
     Historique.AddWaiting(fcGestionModif, nil, nil, @ProcModifier, VirtualTreeView);
 end;
 
-procedure TFrmGestions.supprimerClick(Sender: TObject);
+procedure TfrmGestions.supprimerClick(Sender: TObject);
 begin
   with GestionCourante^ do
     Historique.AddWaiting(fcGestionSupp, nil, nil, @ProcSupprimer, VirtualTreeView);
 end;
 
-procedure TFrmGestions.SpeedButton1Click(Sender: TObject);
+procedure TfrmGestions.SpeedButton1Click(Sender: TObject);
 var
   hg: IHourGlass;
 begin
@@ -260,12 +260,12 @@ begin
   end;
 end;
 
-procedure TFrmGestions.VDTButton2Click(Sender: TObject);
+procedure TfrmGestions.VDTButton2Click(Sender: TObject);
 begin
   VirtualTreeView.InitializeRep;
 end;
 
-procedure TFrmGestions.ScanEditKeyPress(Sender: TObject; var Key: Char);
+procedure TfrmGestions.ScanEditKeyPress(Sender: TObject; var Key: Char);
 begin
   if Key = #13 then
   begin
@@ -274,15 +274,15 @@ begin
   end;
 end;
 
-procedure TFrmGestions.btAcheterClick(Sender: TObject);
+procedure TfrmGestions.btAcheterClick(Sender: TObject);
 begin
   with GestionCourante^ do
     Historique.AddWaiting(fcGestionAchat, nil, nil, @ProcAcheter, VirtualTreeView);
 end;
 
-procedure TFrmGestions.btImporterClick(Sender: TObject);
+procedure TfrmGestions.btImporterClick(Sender: TObject);
 begin
-  with TWizardImport.Create(nil) do
+  with TfrmWizardImport.Create(nil) do
   try
     ShowModal;
   finally
@@ -290,7 +290,7 @@ begin
   end;
 end;
 
-procedure TFrmGestions.FrameRechercheRapide1edSearchChange(Sender: TObject);
+procedure TfrmGestions.FrameRechercheRapide1edSearchChange(Sender: TObject);
 begin
   FrameRechercheRapide1.edSearchChange(Sender);
   GestionCourante^.DerniereRecherche := FrameRechercheRapide1.edSearch.Text;

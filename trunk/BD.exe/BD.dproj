@@ -73,10 +73,10 @@
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
 			<RcCompile Include="ressources.rc">
-				<Form>&apos;ressources.res&apos;</Form>
+				<Form>ressources.res</Form>
 			</RcCompile>
 			<RcCompile Include="mises à jour\scripts_maj.rc">
-				<Form>&apos;scripts_maj.res&apos;</Form>
+				<Form>scripts_maj.res</Form>
 			</RcCompile>
 			<DCCReference Include="CommonConst.pas"/>
 			<DCCReference Include="Commun.pas"/>
@@ -138,32 +138,32 @@
 			</DCCReference>
 			<DCCReference Include="Gestion\Editions.pas"/>
 			<DCCReference Include="Gestion\Proc_Gestions.pas"/>
-			<DCCReference Include="Gestion\Form_Gestion.pas">
-				<Form>FrmGestions</Form>
+			<DCCReference Include="Gestion\UfrmGestion.pas">
+				<Form>frmGestions</Form>
 			</DCCReference>
-			<DCCReference Include="Gestion\Form_EditAlbum.pas">
-				<Form>FrmEditAlbum</Form>
+			<DCCReference Include="Gestion\UfrmEditAlbum.pas">
+				<Form>frmEditAlbum</Form>
 			</DCCReference>
-			<DCCReference Include="Gestion\Form_EditAchatAlbum.pas">
-				<Form>FrmEditAchatAlbum</Form>
+			<DCCReference Include="Gestion\UfrmEditAchatAlbum.pas">
+				<Form>frmEditAchatAlbum</Form>
 			</DCCReference>
-			<DCCReference Include="Gestion\Form_EditEditeur.pas">
-				<Form>FrmEditEditeur</Form>
+			<DCCReference Include="Gestion\UfrmEditEditeur.pas">
+				<Form>frmEditEditeur</Form>
 			</DCCReference>
-			<DCCReference Include="Gestion\Form_EditSerie.pas">
-				<Form>FrmEditSerie</Form>
+			<DCCReference Include="Gestion\UfrmEditSerie.pas">
+				<Form>frmEditSerie</Form>
 			</DCCReference>
-			<DCCReference Include="Gestion\Form_EditCollection.pas">
-				<Form>FrmEditCollection</Form>
+			<DCCReference Include="Gestion\UfrmEditCollection.pas">
+				<Form>frmEditCollection</Form>
 			</DCCReference>
-			<DCCReference Include="Gestion\Form_EditAuteur.pas">
-				<Form>FrmEditAuteur</Form>
+			<DCCReference Include="Gestion\UfrmEditAuteur.pas">
+				<Form>frmEditAuteur</Form>
 			</DCCReference>
-			<DCCReference Include="Gestion\Form_EditEmprunteur.pas">
-				<Form>FrmEditEmprunteur</Form>
+			<DCCReference Include="Gestion\UfrmEditEmprunteur.pas">
+				<Form>frmEditEmprunteur</Form>
 			</DCCReference>
-			<DCCReference Include="Gestion\Form_EditParaBD.pas">
-				<Form>FrmEditParaBD</Form>
+			<DCCReference Include="Gestion\UfrmEditParaBD.pas">
+				<Form>frmEditParaBD</Form>
 			</DCCReference>
 			<DCCReference Include="Textes.pas"/>
 			<DCCReference Include="LoadComplet.pas"/>
@@ -218,8 +218,8 @@
 			<DCCReference Include="UfrmEntretien.pas">
 				<Form>frmEntretien</Form>
 			</DCCReference>
-			<DCCReference Include="Gestion\Form_Exportation.pas">
-				<Form>FrmExportation</Form>
+			<DCCReference Include="Gestion\UfrmExportation.pas">
+				<Form>frmExportation</Form>
 			</DCCReference>
 			<DCCReference Include="Consultation\UfrmPrevisionsSorties.pas">
 				<Form>frmPrevisionsSorties</Form>
@@ -263,8 +263,8 @@
 			<DCCReference Include="mises à jour\UMAJ1_2_1_0.pas"/>
 			<DCCReference Include="mises à jour\UMAJ1_2_2_0.pas"/>
 			<DCCReference Include="ListOfTypeRec.pas"/>
-			<DCCReference Include="Gestion\Form_WizardImport.pas">
-				<Form>WizardImport</Form>
+			<DCCReference Include="Gestion\UfrmWizardImport.pas">
+				<Form>frmWizardImport</Form>
 			</DCCReference>
 			<DCCReference Include="Gestion\UImportXML.pas"/>
 			<DCCReference Include="ProceduresBDtk.pas"/>
@@ -285,6 +285,7 @@
 			<DCCReference Include="UBdtForms.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_0_0_5.pas"/>
 			<DCCReference Include="Web\Form_Publier.pas">
+				<ModuleName>UfrmPublier</ModuleName>
 				<Form>frmPublier</Form>
 			</DCCReference>
 			<DCCReference Include="Web\UNet.pas"/>
@@ -300,15 +301,15 @@
 			<DCCReference Include="Web\mises à jour\UMySQLMAJ1_0_0_2.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_1_0_22.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_1_0_72.pas"/>
-			<DCCReference Include="Scripts\DM_Scripts.pas">
-				<Form>DMScripts</Form>
+			<DCCReference Include="Scripts\UdmScripts.pas">
+				<Form>dmScripts</Form>
 				<DesignClass>TDataModule</DesignClass>
 			</DCCReference>
-			<DCCReference Include="Scripts\Form_Scripts.pas">
+			<DCCReference Include="Scripts\UfrmScripts.pas">
 				<Form>frmScripts</Form>
 			</DCCReference>
-			<DCCReference Include="Scripts\Form_ScriptSearch.pas">
-				<Form>Form2</Form>
+			<DCCReference Include="Scripts\UfrmScriptSearch.pas">
+				<Form>frmScriptSearch</Form>
 			</DCCReference>
 			<DCCReference Include="Scripts\IDHashMap.pas"/>
 			<DCCReference Include="Scripts\uPSC_BdtkObjects.pas"/>
@@ -321,7 +322,7 @@
 			<DCCReference Include="Scripts\uPSR_BdtkRegEx.pas"/>
 			<DCCReference Include="Scripts\BdtkRegEx.pas"/>
 			<DCCReference Include="UMetadata.pas"/>
-			<DCCReference Include="Gestion\Form_ControlImport.pas">
+			<DCCReference Include="Gestion\UfrmControlImport.pas">
 				<Form>frmControlImport</Form>
 			</DCCReference>
 			<DCCReference Include="UVirtualTreeEdit.pas"/>

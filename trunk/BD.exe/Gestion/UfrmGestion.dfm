@@ -1,9 +1,9 @@
-object FrmGestions: TFrmGestions
+object frmGestions: TfrmGestions
   Left = 414
   Top = 314
   BorderIcons = [biMinimize]
   BorderStyle = bsSingle
-  Caption = 'FrmGestions'
+  Caption = 'frmGestions'
   ClientHeight = 537
   ClientWidth = 705
   Color = clBtnFace

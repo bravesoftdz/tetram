@@ -1,4 +1,4 @@
-object FrmEditAlbum: TFrmEditAlbum
+object frmEditAlbum: TfrmEditAlbum
   Left = 480
   Top = 108
   ActiveControl = edTitre
@@ -1708,7 +1708,7 @@ object FrmEditAlbum: TFrmEditAlbum
       Columns = <
         item
           Position = 1
-          Width = 453
+          Width = 449
         end
         item
           Position = 0

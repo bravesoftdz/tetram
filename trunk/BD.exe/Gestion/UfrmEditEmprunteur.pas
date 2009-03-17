@@ -1,4 +1,4 @@
-unit Form_EditEmprunteur;
+unit UfrmEditEmprunteur;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   UframBoutons;
 
 type
-  TFrmEditEmprunteur = class(TbdtForm)
+  TfrmEditEmprunteur = class(TbdtForm)
     ScrollBox1: TScrollBox;
     emprunts: TLabel;
     Label2: TLabel;
@@ -36,7 +36,7 @@ uses Commun, Procedures, Textes;
 
 {$R *.DFM}
 
-procedure TFrmEditEmprunteur.SetID_Emprunteur(const Value: TGUID);
+procedure TfrmEditEmprunteur.SetID_Emprunteur(const Value: TGUID);
 var
   hg: IHourGlass;
 begin
@@ -49,7 +49,7 @@ begin
   emprunts.Caption := IntToStr(FEmprunteur.Emprunts.NBEmprunts);
 end;
 
-procedure TFrmEditEmprunteur.Frame11btnOKClick(Sender: TObject);
+procedure TfrmEditEmprunteur.Frame11btnOKClick(Sender: TObject);
 begin
   if Length(Trim(edNom.Text)) = 0 then begin
     AffMessage(rsNomObligatoire, mtInformation, [mbOk], True);
@@ -66,17 +66,17 @@ begin
   ModalResult := mrOk;
 end;
 
-function TFrmEditEmprunteur.GetID_Emprunteur: TGUID;
+function TfrmEditEmprunteur.GetID_Emprunteur: TGUID;
 begin
   Result := FEmprunteur.ID_Emprunteur;
 end;
 
-procedure TFrmEditEmprunteur.FormCreate(Sender: TObject);
+procedure TfrmEditEmprunteur.FormCreate(Sender: TObject);
 begin
   FEmprunteur := TEmprunteurComplet.Create;
 end;
 
-procedure TFrmEditEmprunteur.FormDestroy(Sender: TObject);
+procedure TfrmEditEmprunteur.FormDestroy(Sender: TObject);
 begin
   FEmprunteur.Free;
 end;

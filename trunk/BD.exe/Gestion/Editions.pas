@@ -87,9 +87,9 @@ function DelAchatParaBD(const ID: TGUID): Boolean;
 implementation
 
 uses
-  UIB, Commun, Form_EditAlbum, Form_EditSerie, Form_EditEmprunteur, Textes, Form_EditEditeur, UdmPrinc,
-  Math, UfrmFond, Procedures, ProceduresBDtk, Form_EditCollection, Form_EditAuteur, Form_EditParaBD,
-  Form_EditAchatAlbum;
+  UIB, Commun, UfrmEditAlbum, UfrmEditSerie, UfrmEditEmprunteur, Textes, UfrmEditEditeur, UdmPrinc,
+  Math, UfrmFond, Procedures, ProceduresBDtk, UfrmEditCollection, UfrmEditAuteur, UfrmEditParaBD,
+  UfrmEditAchatAlbum;
 
 function FindRec(const Table, Champ: string; const Reference: TGUID; WithMessage: Boolean): Boolean;
 begin

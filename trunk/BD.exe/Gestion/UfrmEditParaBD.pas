@@ -1,4 +1,4 @@
-unit Form_EditParaBD;
+unit UfrmEditParaBD;
 
 interface
 
@@ -8,7 +8,7 @@ uses
   CRFurtif, UframBoutons, UBdtForms, PngSpeedButton, UframVTEdit;
 
 type
-  TFrmEditParaBD = class(TbdtForm)
+  TfrmEditParaBD = class(TbdtForm)
     ScrollBox: TScrollBox;
     Label2: TLabel;
     Label6: TLabel;
@@ -109,7 +109,7 @@ end;
 
 { TFrmEditParaBD }
 
-procedure TFrmEditParaBD.SetID_ParaBD(const Value: TGUID);
+procedure TfrmEditParaBD.SetID_ParaBD(const Value: TGUID);
 var
   Stream: TStream;
   jpg: TJPEGImage;
@@ -170,7 +170,7 @@ begin
   end;
 end;
 
-procedure TFrmEditParaBD.cbOffertClick(Sender: TObject);
+procedure TfrmEditParaBD.cbOffertClick(Sender: TObject);
 begin
   if cbOffert.Checked then
     Label18.Caption := rsTransOffertLe
@@ -178,17 +178,17 @@ begin
     Label18.Caption := rsTransAcheteLe;
 end;
 
-procedure TFrmEditParaBD.cbGratuitClick(Sender: TObject);
+procedure TfrmEditParaBD.cbGratuitClick(Sender: TObject);
 begin
   if cbGratuit.Checked then edPrix.Text := '';
 end;
 
-procedure TFrmEditParaBD.edPrixChange(Sender: TObject);
+procedure TfrmEditParaBD.edPrixChange(Sender: TObject);
 begin
   if edPrix.Text <> '' then cbGratuit.Checked := False;
 end;
 
-procedure TFrmEditParaBD.SpeedButton3Click(Sender: TObject);
+procedure TfrmEditParaBD.SpeedButton3Click(Sender: TObject);
 var
   c: Currency;
 begin
@@ -200,7 +200,7 @@ begin
       edPrix.Text := FormatCurr(FormatMonnaie, c);
 end;
 
-procedure TFrmEditParaBD.VDTButton14Click(Sender: TObject);
+procedure TfrmEditParaBD.VDTButton14Click(Sender: TObject);
 var
   c: Currency;
 begin
@@ -212,17 +212,17 @@ begin
       edPrixCote.Text := FormatCurr(FormatMonnaie, c);
 end;
 
-procedure TFrmEditParaBD.FormActivate(Sender: TObject);
+procedure TfrmEditParaBD.FormActivate(Sender: TObject);
 begin
   Invalidate;
 end;
 
-procedure TFrmEditParaBD.FormDestroy(Sender: TObject);
+procedure TfrmEditParaBD.FormDestroy(Sender: TObject);
 begin
   FParaBD.Free;
 end;
 
-procedure TFrmEditParaBD.FormCreate(Sender: TObject);
+procedure TfrmEditParaBD.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
   vtEditSeries.Mode := vmSeries;
@@ -238,7 +238,7 @@ begin
   VDTButton1.Click;
 end;
 
-procedure TFrmEditParaBD.btnOKClick(Sender: TObject);
+procedure TfrmEditParaBD.btnOKClick(Sender: TObject);
 var
   AnneeCote: Integer;
   PrixCote: Currency;
@@ -304,7 +304,7 @@ begin
   ModalResult := mrOk;
 end;
 
-procedure TFrmEditParaBD.VDTButton1Click(Sender: TObject);
+procedure TfrmEditParaBD.VDTButton1Click(Sender: TObject);
 begin
   imgVisu.Picture := nil;
   FParaBD.FichierImage := '';
@@ -312,7 +312,7 @@ begin
   FParaBD.HasImage := False;
 end;
 
-procedure TFrmEditParaBD.ChoixImageClick(Sender: TObject);
+procedure TfrmEditParaBD.ChoixImageClick(Sender: TObject);
 var
   Stream: TStream;
   jpg: TJPEGImage;
@@ -343,7 +343,7 @@ begin
   end;
 end;
 
-procedure TFrmEditParaBD.vtEditPersonnesVTEditChange(Sender: TObject);
+procedure TfrmEditParaBD.vtEditPersonnesVTEditChange(Sender: TObject);
 var
   IdPersonne: TGUID;
 
@@ -365,12 +365,12 @@ begin
   btCreateur.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(lvAuteurs);
 end;
 
-procedure TFrmEditParaBD.vtEditSeriesVTEditChange(Sender: TObject);
+procedure TfrmEditParaBD.vtEditSeriesVTEditChange(Sender: TObject);
 begin
   FParaBD.Serie.Fill(vtEditSeries.CurrentValue);
 end;
 
-procedure TFrmEditParaBD.OnEditPersonnes(Sender: TObject);
+procedure TfrmEditParaBD.OnEditPersonnes(Sender: TObject);
 var
   i: Integer;
   Auteur: TAuteur;
@@ -389,7 +389,7 @@ begin
     lvAuteurs.Invalidate;
 end;
 
-procedure TFrmEditParaBD.btCreateurClick(Sender: TObject);
+procedure TfrmEditParaBD.btCreateurClick(Sender: TObject);
 var
   PA: TAuteur;
 begin
@@ -402,7 +402,7 @@ begin
   vtEditPersonnesVTEditChange(vtEditPersonnes.VTEdit);
 end;
 
-procedure TFrmEditParaBD.lvAuteursKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TfrmEditParaBD.lvAuteursKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 var
   src: TListView;
 begin
@@ -414,7 +414,7 @@ begin
   vtEditPersonnesVTEditChange(vtEditPersonnes.VTEdit);
 end;
 
-procedure TFrmEditParaBD.FormShow(Sender: TObject);
+procedure TfrmEditParaBD.FormShow(Sender: TObject);
 begin
   // code pour contourner un bug du TDateTimePicker
   // Cheched := False est réinitialisé au premier affichage du compo (à la création de son handle)
@@ -423,18 +423,18 @@ begin
   if dtpAchat.Checked then dtpAchat.Date := FDateAchat;
 end;
 
-function TFrmEditParaBD.GetID_ParaBD: TGUID;
+function TfrmEditParaBD.GetID_ParaBD: TGUID;
 begin
   Result := FParaBD.ID_ParaBD;
 end;
 
-procedure TFrmEditParaBD.lvAuteursData(Sender: TObject; Item: TListItem);
+procedure TfrmEditParaBD.lvAuteursData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FParaBD.Auteurs[Item.Index];
   Item.Caption := TAuteur(Item.Data).ChaineAffichage;
 end;
 
-procedure TFrmEditParaBD.cbxCategorieChange(Sender: TObject);
+procedure TfrmEditParaBD.cbxCategorieChange(Sender: TObject);
 begin
   if cbxCategorie.Value = 0 then
     btCreateur.Caption := 'Auteur'
