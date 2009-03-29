@@ -1,0 +1,315 @@
+program Glenat;
+
+uses ScriptFonctions;
+
+const
+  urlSearch = 'http://www.glenat.com/cherche.asp?CRITERE=TXT_TITRE&EDITEUR=088343089091090092341040111468470&TXT_TITRE=';
+  urlBDPlanches = '/flash/livre.php?ean13='; // + isbn/ean
+
+  regExSearchResultats = '<img(?:.*?)marecherche(?:.*?)>(?s-:.*?)<table(?:.*?)>((?s-:.*?)<tr class=ligne[1|2]>(?s-:.*?))</table>';
+  regExSearchResultatsLigne = '((?s-)<tr(?:.*?)(?:.*?)</tr>)';
+  regExSearchResultatsLigneSerie = '<tr><td(?:.*?)class=titre>(?:<(?:.*?)>)*(?<titre_serie>.*?)</td></tr>';
+  regExSearchResultatsLigneAlbum = '<tr class=ligne[1|2]>(?s-:.*?)<td(?s-:.*?)>(?s-:.*?)<a href="(?<lien>.*?)">(?s-:.*?)<!--(?s-:.*?)-->[\r|\n|\t|\s]*(?<tome>.*?)[\r|\n|\t|\s]*</a>(?:[\r|\n|\t|\s]*'
+   + '<font(?s-:.*?)><br>[\r|\n|\t|\s]*<i>(?<titre_album>.*?)</i></font>)*(?s-:.*?)<td(?s-:.*?)><font(?:.*?)>(?<auteur>.*?)</font></td>(?s-:.*?)<div(?:.*?)><font(?:.*?)>[\r|\n|\t|\s]*(?<parution>.*?)[\r|\n|\t|\s]*'
+   + '</font></div>(?s-:.*?)<td(?:.*?)><font(?:.*?)>(?<editeur>.*?)</font>(?s-:.*?)</td>(?s-:.*?)</tr>';
+
+  regExMangaCouverture = '<div class="fiche_gauche">(?s-:.*?)<img src="(?<couverture>.*?)"(?:.*?)/>(?s-:.*?)<div(?:.*?)>(?s-:.*?)<img(?:.*?)/>(?s-:.*?)<p(?:.*?)>(?s-:.*?)<br />(?<edition>.*?)</p>(?s-:.*?)</div>(?s-:.*?)</div>';
+  regExMangaInfos = '<div class="fiche_droite">((?s-).*?)</div>';
+  regExMangaSerie = '<h1(?:.*?)>(?<titre_serie>.*?)(?:#(?<tome>\d+)|)*</h1>';
+  regExMangaTitre = '<h2(?:.*?)>(?<titre_album>.*?)</h2>';
+  regExMangaDetail = '<p(?:.*?)>(?<data>(?s-).*?)</p>'; // infos, puis résumé
+  regExMangaAuteur = '<div class="mini_auteur">(?s-:.*?)<h2(?:.*?)>(?s-:.*?)<a(?:.*?)>[\r|\n|\t|\s]*(?<auteur>.*?)[\r|\n|\t|\s]*</a>(?s-:.*?)</h2>';
+
+  regExBDCouverture = '<td class="frame left">(?s-:.*?)<img(?: src="(?<couverture>.*?)"|.*?)*/>(?s-:.*?)</td>';
+  regExBDInfos = '<td class="frame main">((?s-).*?)</td>';
+  regExBDSerie = '<h1 class="title">(.*?)</h1>';
+  regExBDTome = '<h2 class="tome">(?:\D*?)(\d*?)</h2>';
+  regExBDTitre = '<h3 class="subtitle">(.*?)</h3>';
+  regExBDCollection = '<li class="collection">(?s-:.*?)<a(?:.*?)>(.*?)</a>';
+  regExBDPages = '<li class="pages">(\d*?)(?:\D*?)</li>';
+  regExBDParution = '<li class="date">(?:(?:[a-zA-Z]| )*?)([\d|.|,]*?)</li>';
+  regExBDISBN = '<li class="ean">EAN/ISBN(?:[ |:]*?)([\d|x|X]*?)</li>';
+  regExBDPrix = '<li class="price">Prix(?:[ |:]*?)([\d|.|,]*?)(?s-:.*?)</li>';
+  regExBDGenres = '<li class="genres">Genres:(.*?)</li>';
+  regExBDTermine = '<span class="statut">(.*?)</span>';
+  regExBDResume = '<div class="text">(.*?)</div>';
+  regExBDAuteurs = '<ul class="authors">((?s-).*?)</ul>';
+  regExBDAuteur = '<span(?:.*?)>(?<metier>.*?)</span>[\r|\n|\t|\s]*<a(?:.*?)>(?<nom>.*?)</a>';
+
+  urlInfoAlbum = 'http://www.dargaud.com/front/albums/xml/album.aspx?id='; // + id_album
+  urlInfoAlbumSerie = 'http://www.dargaud.com/front/albums/xml/album_serie.aspx?id='; // + id_album
+
+  urlInfoSerie = 'http://www.dargaud.com/front/albums/series/xml/serie.aspx?id='; // + id_serie
+  urlPageSerie = 'http://www.dargaud.com/front/albums/series/serie.aspx?id='; // + id_serie
+
+  regExResultAlbums = '<object id=''header(?:.*?)classid=''clsid:D27CDB6E-AE6D-11cf-96B8-444553540000(?:.*?)value=(?:.*?)titre=Albums(?:.*?)</object></td>[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*<td>&nbsp;</td>';
+  regExResultSeries = '<object id=''header(?:.*?)classid=''clsid:D27CDB6E-AE6D-11cf-96B8-444553540000(?:.*?)value=(?:.*?)titre=Séries(?:.*?)</object></td>[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*<td>&nbsp;</td>';
+  regExResult = '<td class="result"><span>(?:.*?)</span>(.*?)</td>';
+  regExResultAlbumsTitre = '<a class="rechercheBold" href="(?:.*?)">(.*?)</a>';
+  regExResultAlbumsDetails = '<br>&nbsp;&nbsp;%s&nbsp;: </span><a class="recherche" href=(?:.*?)>(.*?)</a>';
+
+  regExSerieTitre = '<serie(?:.*?)titre="(.*?)"';
+  regExSerieAlbums = '<albums>(.*?)</albums>';
+  regExSerieAlbum = '<album(.*?)/>';
+  regExSerieAlbumId = 'id="(.*?)"';
+  regExSerieAlbumType = 'type="(.*?)"';
+  regExSerieAlbumTitre = 'titre="(.*?)"';
+  regExSerieAlbumAnnee = 'annee="(.*?)"';
+  regExSerieAlbumAuteurs = 'auteurs="(.*?)"';
+
+  regExAlbumSerieId = '<album_serie(?:.*?)ser_id="(.*?)"(?:.*?)>';
+  regExAlbumSerieTitre = '<album_serie(?:.*?)ser_titre="(.*?)"(?:.*?)>';
+  regExAlbumSerieNbAlbums = '<album_serie(?:.*?)nbr_alb="(.*?)"(?:.*?)>';
+
+  regExAlbumTitre = '<album(?:.*?)titre="(.*?)"';
+  regExAlbumISBN = '<album(?:.*?)isbn="(.*?)"';
+  regExAlbumResume = '<album(?:.*?)texte="(.*?)"';
+  regExAlbumTome = '<album(?:.*?)tome="(?:\D*?)(\d*?)"';
+  regExAlbumParution = '<album(?:.*?)date="(.*?)"';
+  regExAlbumPrix = '<album(?:.*?)prix="(.*?)"';
+  regExAlbumPages = '<album(?:.*?)pages="(.*?)"';
+  regExAlbumCouverture = '<album(?:.*?)media="(.*?)"';
+  regExAlbumAuteurs = '<peoples>(.*?)</peoples>';
+  regExAlbumAuteur = '<people(.*?)/>';
+  regExAlbumAuteurType = 'type="(.*?)"';
+  regExAlbumAuteurNom = 'nom="(.*?)"';
+
+procedure ParseManga(const lien: string);
+var
+  page, s, data, auteur: string;
+  re: TBdtkRegEx;
+begin
+  page := GetPage(lien, False);
+
+  re := TBdtkRegEx.Create;
+  try
+    s := ExtractRegEx(page, regExMangaInfos);
+    if re.BeginSearch(s, regExMangaSerie) and re.Next then
+    begin
+      AlbumToImport.Serie.Titre := re.GetCaptureByName('titre_serie');
+      AlbumToImport.Tome := StrToIntDef(re.GetCaptureByName('tome'), 0);
+    end;
+    AlbumToImport.Titre := ExtractRegEx(s, regExMangaTitre);
+
+    if re.BeginSearch(s, regExMangaDetail) and re.Next then
+    begin
+      data := re.GetCaptureByName('data');
+      AlbumToImport.Serie.Collection := ExtractRegEx(data, '<a(?:.*?)>(?:Collection )?(.*?)</a>');
+      AlbumToImport.Edition.Collection := AlbumToImport.Serie.Collection;
+      AlbumToImport.Edition.NombreDePages := StrToIntDef(ExtractRegEx(data, '(\d+) pages'), 0);
+      AlbumToImport.Edition.ISBN := ExtractRegEx(data, 'EAN/ISBN(?:[ |:]*)([\d|x|X]+)');
+      AlbumToImport.Edition.Prix := StrToFloatDef(ExtractRegEx(data, 'Prix(?:[ |:]*)([\d|.|,]+)'), 0);
+
+      with TStringList.Create do
+        try
+          Split(ExtractRegEx(data, 'Paru en ([\w|\d| ]*)'), ' ');
+          if Count > 0 then
+            AlbumToImport.AnneeParution := StrToIntDef(Strings[Count - 1], 0);
+          if Count > 1 then
+            AlbumToImport.MoisParution := TraduitMois(Strings[Count - 2]);
+        finally
+          Free;
+        end;
+
+      if re.Next then
+        AlbumToImport.Sujet.Text := HTMLDecode(re.GetCaptureByName('data'));
+    end;
+
+    AlbumToImport.Serie.Editeur.NomEditeur := 'Glenat Manga';
+    AlbumToImport.Serie.Editeur.SiteWeb := 'http://www.glenatmanga.com';
+    AlbumToImport.Edition.Editeur.NomEditeur := AlbumToImport.Serie.Editeur.NomEditeur;
+    AlbumToImport.Edition.Editeur.SiteWeb := AlbumToImport.Serie.Editeur.SiteWeb;
+
+    auteur := ExtractRegEx(page, regExMangaAuteur);
+    AlbumToImport.Scenaristes.Add(MakeAuteur(auteur, maScenariste));
+    AlbumToImport.Dessinateurs.Add(MakeAuteur(auteur, maDessinateur));
+    AlbumToImport.Serie.Scenaristes.Add(MakeAuteur(auteur, maScenariste));
+    AlbumToImport.Serie.Dessinateurs.Add(MakeAuteur(auteur, maDessinateur));
+
+    if re.BeginSearch(page, regExMangaCouverture) and re.Next then begin
+      s := re.GetCaptureByName('couverture');
+      if s <> '' then
+        AlbumToImport.Edition.AddImageFromURL(CombineURL(lien, s), ctiCouverture);
+
+      s := re.GetCaptureByName('edition');
+      if Pos('en cours', s) > 0 then AlbumToImport.Serie.Terminee := 0;
+      if Pos('terminée', s) > 0 then AlbumToImport.Serie.Terminee := 1;
+    end;
+  finally
+    re.Free;
+  end;
+
+  AlbumToImport.Import;
+end;
+
+procedure ParseBD(const lien: string);
+var
+  page, images, auteur, metier, s, termine: string;
+  imgAdded: Boolean;
+begin
+  page := GetPage(lien, True);
+
+  s := ExtractRegEx(page,  regExBDInfos);
+  AlbumToImport.Serie.Titre := ExtractRegEx(s,  regExBDSerie);
+  AlbumToImport.Titre := ExtractRegEx(s,  regExBDTitre);
+  AlbumToImport.Tome := StrToIntDef(ExtractRegEx(s,  regExBDTome), 0);
+  AlbumToImport.Sujet.Text := ExtractRegEx(s,  regExBDResume);
+
+  AlbumToImport.Edition.NombreDePages := StrToIntDef(ExtractRegEx(s,  regExBDPages), 0);
+  AlbumToImport.Edition.ISBN := ExtractRegEx(s,  regExBDISBN);
+  AlbumToImport.Edition.Prix := StrToFloatDef(ExtractRegEx(s,  regExBDPrix), 0);
+  with TStringList.Create do
+    try
+      Split(ExtractRegEx(s, regExBDParution), '.');
+      if Count > 0 then
+        AlbumToImport.AnneeParution := StrToIntDef(Strings[Count - 1], 0);
+      if Count > 1 then
+        AlbumToImport.MoisParution := TraduitMois(Strings[Count - 2]);
+    finally
+      Free;
+    end;
+
+  AlbumToImport.Serie.Editeur.NomEditeur := 'Glenat BD';
+  AlbumToImport.Serie.Editeur.SiteWeb := 'http://www.glenatbd.com';
+  AlbumToImport.Serie.Collection := ExtractRegEx(s,  regExBDCollection);
+  AlbumToImport.Edition.Editeur.NomEditeur := AlbumToImport.Serie.Editeur.NomEditeur;
+  AlbumToImport.Edition.Editeur.SiteWeb := AlbumToImport.Serie.Editeur.SiteWeb;
+  AlbumToImport.Edition.Collection := AlbumToImport.Serie.Collection;
+
+  with TBdtkRegEx.Create do
+    try
+      if BeginSearch(ExtractRegEx(s, regExBDAuteurs), regExBDAuteur) then
+        while Next do begin
+          auteur := GetCaptureByName('nom');
+          metier := GetCaptureByName('metier');
+          if (metier = 'Dessinateur') or (metier = 'Auteur') then
+          begin
+            AlbumToImport.Dessinateurs.Add(MakeAuteur(auteur, maDessinateur));
+            AlbumToImport.Serie.Dessinateurs.Add(MakeAuteur(auteur, maDessinateur));
+          end;
+          if (metier = 'Scénariste') or (metier = 'Auteur') then
+          begin
+            AlbumToImport.Scenaristes.Add(MakeAuteur(auteur, maScenariste));
+            AlbumToImport.Serie.Scenaristes.Add(MakeAuteur(auteur, maScenariste));
+          end;
+          if (metier = 'Coloriste') or (metier = 'Auteur') then
+          begin
+            AlbumToImport.Coloristes.Add(MakeAuteur(auteur, maColoriste));
+            AlbumToImport.Serie.Coloristes.Add(MakeAuteur(auteur, maColoriste));
+          end;
+        end;
+
+      if BeginSearch(ExtractRegEx(s, regExBDGenres), '<a(?:.*?)>(?<genre>.*?)</a>') then
+        while Next do
+          AlbumToImport.Serie.Genres.Add(GetCaptureByName('genre'));
+    finally
+      Free;
+    end;
+
+  termine := ExtractRegEx(s, regExBDTermine);
+  if Pos('en cours', termine) > 0 then AlbumToImport.Serie.Terminee := 0;
+  if Pos('terminée', termine) > 0 then AlbumToImport.Serie.Terminee := 1;
+
+  imgAdded := False;
+  if AlbumToImport.Edition.ISBN <> '' then
+  begin
+    images := GetPage(CombineURL(lien, urlBDPlanches + AlbumToImport.Edition.ISBN), True);
+    if images <> '' then
+    begin
+      with TBdtkRegEx.Create do
+        try
+          if BeginSearch(ExtractRegEx(images, '<pages>((?s-).*?)</pages>'), '<page>(?<lien>.*?)</page>') then
+            while Find(s) do
+              if Pos('0000000000000-P.jpg', s) = 0 then
+              begin
+                if imgAdded then
+                  AlbumToImport.Edition.AddImageFromURL(CombineURL(lien, s), ctiPlanche)
+                else
+                  AlbumToImport.Edition.AddImageFromURL(CombineURL(lien, s), ctiCouverture);
+                imgAdded := True;
+              end;
+        finally
+          Free;
+        end;
+    end;
+  end;
+
+  if not imgAdded then begin
+    s := ExtractRegEx(page, regExBDCouverture);
+    if s <> '' then
+      AlbumToImport.Edition.AddImageFromURL(CombineURL(lien, s), ctiCouverture);
+  end;
+
+  AlbumToImport.Import;
+end;
+
+function RechercheParTitre(const Titre: string): string;
+var
+  page, sAlbum, oldSerie, sSerie: string;
+  re: TBdtkRegEx;
+  c: TScriptChoix;
+  lien, titre_album, commentaire: string;
+begin
+  Result := '';
+  page := GetPage(urlSearch + Titre, False);
+  page := ExtractRegEx(page, regExSearchResultats);
+
+  c := TScriptChoix.Create;
+  re := TBdtkRegEx.Create;
+  try
+    c.Titre := 'Résultats de recherche de "' + Titre + '"';
+    oldSerie := '';
+    if re.BeginSearch(page, regExSearchResultatsLigne) then
+      while re.Find(sAlbum) do begin
+        sSerie := ExtractRegEx(sAlbum, regExSearchResultatsLigneSerie);
+        if sSerie = '' then
+          with TBdtkRegEx.Create do
+            try
+              sSerie := oldSerie;
+              if BeginSearch(sAlbum, regExSearchResultatsLigneAlbum) and Next then
+              begin
+                lien := GetCaptureByName('lien');
+                titre_album := GetCaptureByName('titre_album');
+                AjoutString2(titre_album, GetCaptureByName('tome'), #13#10);
+                commentaire := '';
+                AjoutString1(commentaire, StringReplace(GetCaptureByName('auteur'), '<br>', ', ', [rfReplaceAll, rfIgnoreCase]), #13#10, 'Auteur(s): ', '');
+                AjoutString1(commentaire, GetCaptureByName('editeur'), #13#10, 'Editeur: ', '');
+                AjoutString1(commentaire, GetCaptureByName('parution'), #13#10, 'Parution: ', '');
+
+                c.AjoutChoix(sSerie, titre_album, HTMLDecode(commentaire), lien);
+              end;
+          finally
+            Free;
+          end;
+        oldSerie := sSerie;
+      end;
+
+    Result := c.Show;
+  finally
+    re.Free;
+    c.Free;
+  end;
+end;
+
+procedure ParseAlbum(const lien: string);
+begin
+  if Pos('glenatmanga', lien) > 0 then
+    ParseManga(lien)
+  else
+  if Pos('glenatbd', lien) > 0 then
+    ParseBD(lien)
+  else
+    ShowMessage('Type d''album non reconnu');
+end;
+
+var
+  id_album, entry: string;
+  index: integer;
+begin
+  if not AskSearchEntry(['Titre de l''album ou de la série'], entry, index) then Exit;
+
+  id_album := RechercheParTitre(entry);
+  if id_album <> '' then
+    ParseAlbum(id_album);
+end.
+
