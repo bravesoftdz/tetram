@@ -1,0 +1,98 @@
+unit ScriptFonctions;
+
+function CleanISBN(const ISBN: string): string;
+begin
+  Result := ISBN;
+  Result := StringReplace(Result, '-', '', [rfReplaceAll]);
+  Result := StringReplace(Result, ' ', '', [rfReplaceAll]);
+end;
+
+procedure AjoutString1(var Chaine: string; const Ajout, Espace: string; const Avant: string; const Apres: string);
+var
+  s: string;
+begin
+  s := Ajout;
+  if (Ajout <> '') then
+  begin
+    s := Avant + Ajout + Apres;
+    if (Chaine <> '') then Chaine := Chaine + Espace;
+  end;
+  Chaine := Chaine + s;
+end;
+
+procedure AjoutString2(var Chaine: string; const Ajout, Espace: string);
+begin
+  AjoutString1(Chaine, Ajout, Espace, '', '');
+end;
+
+function ChaineIn(const Chaine: string; const Tests: array of string): Boolean;
+var
+  i: Integer;
+begin
+  Result := False;
+  i := 0;
+  while not Result and (i < Length(Tests)) do begin
+    Result := SameText(Chaine, Tests[i]);
+    Inc(i);
+  end;
+end;
+
+function TraduitMois(const Chaine: string): Integer;
+begin
+  Result := StrToIntDef(Chaine, -1);
+  if (Result >= 1) and (Result <= 12) then Exit;
+  
+  if ChaineIn(Chaine, ['janvier', 'january', 'jan', 'jan.', 'janv', 'janv.']) then begin
+    Result := 1;
+    Exit;
+  end;
+  if ChaineIn(Chaine, ['février', 'fevrier', 'february', 'fev', 'fév', 'fevr', 'févr', 'feb', 'fev.', 'fév.', 'fevr.', 'févr.', 'feb.']) then begin
+    Result := 2;
+    Exit;
+  end;
+  if ChaineIn(Chaine, ['mars', 'march', 'mar', 'mar.']) then begin
+    Result := 3;
+    Exit;
+  end;
+  if ChaineIn(Chaine, ['avril', 'april', 'avr', 'apr', 'avr.', 'apr.']) then begin
+    Result := 4;
+    Exit;
+  end;
+  if ChaineIn(Chaine, ['mai', 'may']) then begin
+    Result := 5;
+    Exit;
+  end;
+  if ChaineIn(Chaine, ['juin', 'june', 'jun']) then begin
+    Result := 6;
+    Exit;
+  end;
+  if ChaineIn(Chaine, ['juillet', 'july', 'jui', 'jui.', 'juil', 'juil.', 'jul']) then begin
+    Result := 7;
+    Exit;
+  end;
+  if ChaineIn(Chaine, ['août', 'aout', 'august', 'aug', 'aug.']) then begin
+    Result := 8;
+    Exit;
+  end;
+  if ChaineIn(Chaine, ['septembre', 'september', 'sep', 'sep.', 'sept', 'sept.']) then begin
+    Result := 9;
+    Exit;
+  end;
+  if ChaineIn(Chaine, ['octobre', 'october', 'oct', 'oct.']) then begin
+    Result := 10;
+    Exit;
+  end;
+  if ChaineIn(Chaine, ['novembre', 'november', 'nov', 'nov.']) then begin
+    Result := 11;
+    Exit;
+  end;
+  if ChaineIn(Chaine, ['décembre', 'decembre', 'december', 'dec', 'déc', 'dec.', 'déc.']) then begin
+    Result := 12;
+    Exit;
+  end;
+  
+  Result := 0;
+end;
+
+end.
+
