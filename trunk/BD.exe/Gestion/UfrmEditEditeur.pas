@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, VDTButton,
-  Buttons, DBEditLabeled, ShellAPI, LoadComplet, UBdtForms,
+  Buttons, EditLabeled, ShellAPI, LoadComplet, UBdtForms,
   PngSpeedButton, UframBoutons;
 
 type
@@ -22,15 +22,15 @@ type
     procedure FormShow(Sender: TObject);
     procedure VDTButton13Click(Sender: TObject);
     procedure edSiteChange(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
   private
     { Déclarations privées }
     FEditeur: TEditeurComplet;
-    procedure SetID_Editeur(const Value: TGUID);
+    procedure SetEditeur(Value: TEditeurComplet);
     function GetID_Editeur: TGUID;
   public
     { Déclarations publiques }
-    property ID_Editeur: TGUID read GetID_Editeur write SetID_Editeur;
+    property ID_Editeur: TGUID read GetID_Editeur;
+    property Editeur: TEditeurComplet read FEditeur write SetEditeur;
   end;
 
 implementation
@@ -43,15 +43,15 @@ uses
 procedure TfrmEditEditeur.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FEditeur := TEditeurComplet.Create;
+  FEditeur := nil;
 end;
 
-procedure TfrmEditEditeur.SetID_Editeur(const Value: TGUID);
+procedure TfrmEditEditeur.SetEditeur(Value: TEditeurComplet);
 var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  FEditeur.Fill(Value);
+  FEditeur := Value;
 
   edNom.Text := FEditeur.NomEditeur;
   edSite.Text := FEditeur.SiteWeb;
@@ -91,11 +91,6 @@ end;
 function TfrmEditEditeur.GetID_Editeur: TGUID;
 begin
   Result := FEditeur.ID_Editeur;
-end;
-
-procedure TfrmEditEditeur.FormDestroy(Sender: TObject);
-begin
-  FEditeur.Free;
 end;
 
 end.

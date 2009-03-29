@@ -77,7 +77,6 @@ object frmOptions: TfrmOptions
     Align = alClient
     HotTrack = True
     Images = ImageList1
-    MultiLine = True
     Style = tsFlatButtons
     TabHeight = 38
     TabOrder = 0
@@ -108,7 +107,6 @@ object frmOptions: TfrmOptions
           Height = 241
           Caption = 'G'#233'n'#233'ral'
           TabOrder = 0
-          ExplicitWidth = 350
           object Label3: TLabel
             Left = 14
             Top = 95
@@ -331,7 +329,6 @@ object frmOptions: TfrmOptions
           Height = 59
           Caption = 'Impression'
           TabOrder = 1
-          ExplicitWidth = 350
           object FicheAlbumCouverture: TCheckBox
             Left = 14
             Top = 5
@@ -360,7 +357,6 @@ object frmOptions: TfrmOptions
           Height = 80
           Caption = 'Mode Gestion'
           TabOrder = 2
-          ExplicitWidth = 350
           object Label14: TLabel
             Left = 14
             Top = 23
@@ -462,7 +458,7 @@ object frmOptions: TfrmOptions
           Cursor = crHandPoint
           BevelKind = bkTile
           Ctl3D = True
-          ItemHeight = 13
+          ItemHeight = 0
           ParentCtl3D = False
           TabOrder = 0
           OnChange = ComboBox2Change
@@ -475,7 +471,7 @@ object frmOptions: TfrmOptions
           Cursor = crHandPoint
           BevelKind = bkTile
           Ctl3D = True
-          ItemHeight = 13
+          ItemHeight = 0
           ParentCtl3D = False
           TabOrder = 1
           OnChange = ComboBox2Change
@@ -549,7 +545,7 @@ object frmOptions: TfrmOptions
         Cursor = crHandPoint
         BevelKind = bkTile
         Ctl3D = True
-        ItemHeight = 13
+        ItemHeight = 0
         ParentCtl3D = False
         TabOrder = 0
       end
@@ -571,10 +567,6 @@ object frmOptions: TfrmOptions
     object TabSheet1: TTabSheet
       Caption = 'Site web'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object GroupBox3: TGroupBox
         Left = 0
         Top = 0
@@ -632,7 +624,7 @@ object frmOptions: TfrmOptions
           Width = 161
           Height = 21
           Style = csDropDownList
-          ItemHeight = 13
+          ItemHeight = 0
           TabOrder = 2
         end
         object ComboBox6: TComboBox
@@ -641,7 +633,7 @@ object frmOptions: TfrmOptions
           Width = 57
           Height = 21
           Style = csDropDownList
-          ItemHeight = 13
+          ItemHeight = 0
           TabOrder = 3
           Items.Strings = (
             '1024'
@@ -757,7 +749,7 @@ object frmOptions: TfrmOptions
           Width = 97
           Height = 21
           Style = csDropDownList
-          ItemHeight = 13
+          ItemHeight = 0
           TabOrder = 7
         end
         object Button1: TButton

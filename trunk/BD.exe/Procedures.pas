@@ -74,7 +74,7 @@ implementation
 
 uses
   Divers, Textes, ShellAPI, ReadOnlyCheckBox,
-  MaskUtils, Mask, UdmPrinc, IniFiles, Math, VirtualTrees, DbEditLabeled, ActnList,
+  MaskUtils, Mask, UdmPrinc, IniFiles, Math, VirtualTrees, EditLabeled, ActnList,
   Types, UBdtForms;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
@@ -1022,7 +1022,7 @@ begin
     if not HasNULL then
       with Combo.Items.Add do
       begin
-        Caption := '';
+        Caption := ' ';
         Valeur := -1;
         Index := 0;
       end;

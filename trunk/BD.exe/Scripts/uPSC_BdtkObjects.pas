@@ -13,6 +13,7 @@ uses
   SysUtils, Classes, uPSCompiler;
 
 { compile-time registration functions }
+procedure SIRegister_TStringList(CL: TPSPascalCompiler);
 procedure SIRegister_TObjectList(CL: TPSPascalCompiler);
 procedure SIRegister_TObjectListOfAuteur(CL: TPSPascalCompiler);
 procedure SIRegister_TObjectListOfEditionComplete(CL: TPSPascalCompiler);
@@ -23,6 +24,8 @@ procedure SIRegister_TEditionComplete(CL: TPSPascalCompiler);
 procedure SIRegister_TSerieComplete(CL: TPSPascalCompiler);
 procedure SIRegister_TEditeurComplet(CL: TPSPascalCompiler);
 
+procedure SIRegister_TScriptChoix(CL: TPSPascalCompiler);
+
 procedure SIRegister_BdtkObjects(CL: TPSPascalCompiler);
 
 implementation
@@ -31,6 +34,14 @@ uses
   Windows, Dialogs, TypeRec, Commun, CommonConst, UdmPrinc, DateUtils, ListOfTypeRec, Contnrs, LoadComplet;
 
 (* === compile-time registration functions === *)
+
+procedure SIRegister_TStringList(CL: TPSPascalCompiler);
+begin
+  with CL.FindClass('TStringList') do
+  begin
+    RegisterMethod('procedure Split(const Chaine: string; Sep: Char)');
+  end;
+end;
 
 procedure SIRegister_TObjectList(CL: TPSPascalCompiler);
 begin
@@ -81,7 +92,7 @@ begin
     RegisterProperty('Coloristes', 'TObjectListOfAuteur' {TObjectList<TAuteur>}, iptR);
     RegisterProperty('Sujet', 'TStringList', iptR);
     RegisterProperty('Notes', 'TStringList', iptR);
-    RegisterProperty('Editions', 'TObjectListOfEditionComplete', iptR);
+    RegisterProperty('Edition', 'TEditionComplete', iptR);
 
     RegisterMethod('procedure Clear;');
     RegisterMethod('procedure Import;');
@@ -97,13 +108,13 @@ begin
     RegisterProperty('Genres', 'TStringList', iptR);
     RegisterProperty('Sujet', 'TStringList', iptR);
     RegisterProperty('Notes', 'TStringList', iptR);
-//    RegisterProperty('Editeur', 'TEditeurComplet', iptR);
-//    RegisterProperty('Collection', 'TCollection', iptR);
+    RegisterProperty('Editeur', 'TEditeurComplet', iptR);
+    RegisterProperty('Collection', 'string', iptRW);
     RegisterProperty('SiteWeb', 'string', iptRW);
-//    RegisterProperty('NbAlbums', 'Integer', iptRW);
-//    RegisterProperty('Scenaristes', 'TObjectList<TAuteur>', iptR);
-//    RegisterProperty('Dessinateurs', 'TObjectList<TAuteur>', iptR);
-//    RegisterProperty('Coloristes', 'TObjectList<TAuteur>', iptR);
+    RegisterProperty('NbAlbums', 'Integer', iptRW);
+    RegisterProperty('Scenaristes', 'TObjectListOfAuteur' {TObjectList<TAuteur>}, iptR);
+    RegisterProperty('Dessinateurs', 'TObjectListOfAuteur' {TObjectList<TAuteur>}, iptR);
+    RegisterProperty('Coloristes', 'TObjectListOfAuteur' {TObjectList<TAuteur>}, iptR);
   end;
 end;
 
@@ -111,8 +122,10 @@ procedure SIRegister_TEditionComplete(CL: TPSPascalCompiler);
 begin
   with CL.AddClassN(CL.FindClass('TObject' {TObjetComplet}), 'TEditionComplete') do
   begin
+    RegisterMethod('constructor Create');
+
     RegisterProperty('Editeur', 'TEditeurComplet', iptR);
-    RegisterProperty('Collection', 'TCollection', iptR);
+    RegisterProperty('Collection', 'string', iptRW);
     RegisterProperty('TypeEdition', 'Integer' {ROption}, iptRW);
     RegisterProperty('AnneeEdition', 'Integer', iptRW);
     RegisterProperty('Etat', 'Integer' {ROption}, iptRW);
@@ -126,16 +139,17 @@ begin
     RegisterProperty('PrixCote', 'Currency', iptRW);
     RegisterProperty('Couleur', 'Boolean', iptRW);
     RegisterProperty('VO', 'Boolean', iptRW);
-    RegisterProperty('Dedicace', 'Boolean', iptRW);
-    RegisterProperty('Stock', 'Boolean', iptRW);
-    RegisterProperty('Prete', 'Boolean', iptRW);
-    RegisterProperty('Offert', 'Boolean', iptRW);
+//    RegisterProperty('Dedicace', 'Boolean', iptRW);
+//    RegisterProperty('Stock', 'Boolean', iptRW);
+//    RegisterProperty('Prete', 'Boolean', iptRW);
+//    RegisterProperty('Offert', 'Boolean', iptRW);
     RegisterProperty('Gratuit', 'Boolean', iptRW);
     RegisterProperty('ISBN', 'string', iptRW);
-    RegisterProperty('DateAchat', 'TDateTime', iptRW);
-    RegisterProperty('Notes', 'TStringList', iptR);
-    RegisterProperty('NumeroPerso', 'string', iptRW);
+//    RegisterProperty('DateAchat', 'TDateTime', iptRW);
+//    RegisterProperty('Notes', 'TStringList', iptR);
+//    RegisterProperty('NumeroPerso', 'string', iptRW);
 //    RegisterProperty('Couvertures', 'TMyObjectList<TCouverture>', iptR);
+    RegisterMethod('function AddImageFromURL(const URL: string; TypeImage: Integer): Integer;');
   end;
 end;
 
@@ -158,17 +172,32 @@ begin
   end;
 end;
 
+procedure SIRegister_TScriptChoix(CL: TPSPascalCompiler);
+begin
+  with CL.AddClassN(CL.FindClass('TObject'), 'TScriptChoix') do
+  begin
+    RegisterMethod('constructor Create');
+
+    RegisterMethod('function Show: string;');
+    RegisterMethod('procedure ResetList;');
+    RegisterMethod('procedure AjoutChoix(const Categorie, Libelle, Commentaire, Data: string);');
+    RegisterProperty('Titre', 'string', iptRW);
+  end;
+end;
+
 procedure SIRegister_BdtkObjects(CL: TPSPascalCompiler);
 begin
+  SIRegister_TStringList(CL);
   SIRegister_TObjectList(CL);
 
-  SIRegister_TSerieComplete(CL);
-  SIRegister_TEditeurComplet(CL);
-  SIRegister_TEditionComplete(CL);
-  SIRegister_TObjectListOfEditionComplete(CL);
   SIRegister_TAuteur(CL);
   SIRegister_TObjectListOfAuteur(CL);
+  SIRegister_TEditeurComplet(CL);
+  SIRegister_TSerieComplete(CL);
+  SIRegister_TEditionComplete(CL);
   SIRegister_TAlbumComplet(CL);
+
+  SIRegister_TScriptChoix(CL);
 end;
 
 end.

@@ -1,4 +1,4 @@
-object FrameRechercheRapide: TFrameRechercheRapide
+object framRechercheRapide: TframRechercheRapide
   Left = 0
   Top = 0
   Width = 291

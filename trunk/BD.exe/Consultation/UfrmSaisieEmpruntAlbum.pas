@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
   StdCtrls, DBCtrls, ComCtrls, ExtCtrls, UframBoutons, VDTButton,
-  ScanEdit, Menus, Buttons, Commun, DBEditLabeled, VirtualTrees, VirtualTree,
+  ScanEdit, Menus, Buttons, Commun, EditLabeled, VirtualTrees, VirtualTree,
   ComboCheck, LoadComplet, UframRechercheRapide, UBdtForms;
 
 type
@@ -21,7 +21,7 @@ type
     Label5: TLabel;
     Label6: TLabel;
     lccEditions: TLightComboCheck;
-    FrameRechercheRapide1: TFrameRechercheRapide;
+    FrameRechercheRapide1: TFramRechercheRapide;
     procedure FormCreate(Sender: TObject);
     procedure okClick(Sender: TObject);
     procedure VTreeEmprunteurChange(Sender: TBaseVirtualTree; Node: PVirtualNode);

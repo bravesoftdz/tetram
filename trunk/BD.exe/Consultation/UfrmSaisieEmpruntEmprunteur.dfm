@@ -455,10 +455,10 @@ object frmSaisieEmpruntEmprunteur: TfrmSaisieEmpruntEmprunteur
           item
             Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
             Position = 0
-            Width = 522
+            Width = 526
           end>
       end
-      inline FrameRechercheRapide1: TFrameRechercheRapide
+      inline FrameRechercheRapide1: TframRechercheRapide
         Left = 0
         Top = 2
         Width = 525

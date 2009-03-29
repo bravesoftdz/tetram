@@ -24,13 +24,15 @@ type
   private
     { Déclarations privées }
   public
-    { Déclarations publiques }
   end;
 
 var
   dmCommun: TdmCommun;
 
 implementation
+
+uses
+  UdmPrinc, Commun, Divers;
 
 {$R *.DFM}
 

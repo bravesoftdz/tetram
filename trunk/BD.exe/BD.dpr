@@ -50,14 +50,13 @@ uses
   UframBoutons in 'UframBoutons.pas' {framBoutons: TFrame},
   UfrmOptions in 'UfrmOptions.pas' {frmOptions},
   UfrmCustomize in 'UfrmCustomize.pas' {frmCustomize},
-  UfrmProgression in 'UfrmProgression.pas' {frmProgression},
   UfrmSplash in 'UfrmSplash.pas' {frmSplash},
   UfrmAboutBox in 'UfrmAboutBox.pas' {frmAboutBox},
   UfrmChoix in 'UfrmChoix.pas' {frmChoix},
   UfrmChoixDetail in 'UfrmChoixDetail.pas' {frmChoixDetail},
   UfrmConvertisseur in 'UfrmConvertisseur.pas' {FrmConvers},
   UframConvertisseur in 'UframConvertisseur.pas' {framConvertisseur: TFrame},
-  UframRechercheRapide in 'UframRechercheRapide.pas' {FrameRechercheRapide: TFrame},
+  UframRechercheRapide in 'UframRechercheRapide.pas' {framRechercheRapide: TFrame},
   MAJ in 'Consultation\MAJ.pas',
   TypeRec in 'TypeRec.pas',
   VirtualTree in 'VirtualTree.pas',
@@ -146,7 +145,12 @@ uses
   UMetadata in 'UMetadata.pas',
   UfrmControlImport in 'Gestion\UfrmControlImport.pas' {frmControlImport},
   UVirtualTreeEdit in 'UVirtualTreeEdit.pas',
-  UframVTEdit in 'UframVTEdit.pas' {framVTEdit: TFrame};
+  UframVTEdit in 'UframVTEdit.pas' {framVTEdit: TFrame},
+  UMAJ2_1_1_2 in 'mises à jour\UMAJ2_1_1_2.pas',
+  LoadCompletImport in 'LoadCompletImport.pas',
+  UfrmValidationImport in 'Scripts\UfrmValidationImport.pas' {frmValidationImport},
+  UfrmScriptChoix in 'Scripts\UfrmScriptChoix.pas' {frmScriptChoix},
+  UfrmProgression in 'UfrmProgression.pas' {frmProgression};
 
 {$R *.RES}
 {$R curseurs.res}

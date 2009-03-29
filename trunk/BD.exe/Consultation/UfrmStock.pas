@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, DBCtrls, Menus, ExtCtrls, ComCtrls, Commun,
-  VDTButton, VirtualTrees, ActnList, ComboCheck, DBEditLabeled, ProceduresBDtk, ToolWin, UBdtForms;
+  VDTButton, VirtualTrees, ActnList, ComboCheck, EditLabeled, ProceduresBDtk, ToolWin, UBdtForms;
 
 type
   TfrmStock = class(TBdtForm, IImpressionApercu)

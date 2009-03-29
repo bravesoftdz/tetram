@@ -48,7 +48,7 @@ type
     Bevel8: TBevel;
     btParaBD: TVDTButton;
     btAchatsParaBD: TVDTButton;
-    FrameRechercheRapide1: TFrameRechercheRapide;
+    FrameRechercheRapide1: TFramRechercheRapide;
     btExporter: TVDTButton;
     btImporter: TVDTButton;
     procedure FormCreate(Sender: TObject);

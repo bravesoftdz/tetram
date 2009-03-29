@@ -3,7 +3,7 @@ unit UfrmEditAlbum;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls, DBCtrls, StdCtrls, ImgList, DBEditLabeled,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls, DBCtrls, StdCtrls, ImgList, EditLabeled,
   VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, VirtualTree, Menus, TypeRec, ActnList, LoadComplet, ComboCheck,
   UframRechercheRapide, CRFurtif, UframBoutons, UBdtForms, Generics.Collections, StrUtils,
   JvExMask, JvToolEdit, UVirtualTreeEdit, UfrmFond, PngSpeedButton,
@@ -164,7 +164,7 @@ type
     FCategoriesImages: TStringList;
     procedure UpdateEdition;
     procedure RefreshEditionCaption;
-    procedure SetID_Album(const Value: TGUID);
+    procedure SetAlbum(Value: TAlbumComplet);
     procedure VisuClose(Sender: TObject);
     procedure AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean); overload;
     procedure AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage); overload;
@@ -174,7 +174,8 @@ type
     { Déclarations publiques }
     property isCreation: Boolean read GetCreation;
     property isAchat: Boolean read FisAchat write FisAchat;
-    property ID_Album: TGUID read GetID_Album write SetID_Album;
+    property ID_Album: TGUID read GetID_Album;
+    property Album: TAlbumComplet read FAlbum write SetAlbum;
   end;
 
 implementation
@@ -204,8 +205,6 @@ begin
   vtEditSerie.AfterAppend := OnNewSerie;
   vtEditSerie.AfterEdit := OnEditSerie;
   vtEditPersonnes.AfterEdit := OnEditAuteurs;
-
-  FAlbum := TAlbumComplet.Create;
 
   SetLength(FEditeurCollectionSelected, 0);
   FCurrentEditionComplete := nil;
@@ -249,14 +248,14 @@ begin
   end;
 end;
 
-procedure TfrmEditAlbum.SetID_Album(const Value: TGUID);
+procedure TfrmEditAlbum.SetAlbum(Value: TAlbumComplet);
 var
   i: Integer;
   PE: TEditionComplete;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  FAlbum.Fill(Value);
+  FAlbum := Value;
 
   lvScenaristes.Items.BeginUpdate;
   lvDessinateurs.Items.BeginUpdate;
@@ -283,7 +282,8 @@ begin
     FDessinateursSelected := lvDessinateurs.Items.Count > 0;
     FColoristesSelected := lvColoristes.Items.Count > 0;
 
-    vtEditSerie.VTEdit.OnChange := nil;
+    if not FAlbum.RecInconnu then
+      vtEditSerie.VTEdit.OnChange := nil;
     vtEditSerie.CurrentValue := FAlbum.ID_Serie;
     vtEditSerie.VTEdit.OnChange := JvComboEdit1Change;
 
@@ -295,7 +295,7 @@ begin
       vtEditions.AddItem(PE.ChaineAffichage, PE);
     end;
 
-    if FAlbum.RecInconnu or isAchat then
+    if (FAlbum.RecInconnu and (FAlbum.Editions.Editions.Count = 0)) or isAchat then
       VDTButton3.Click;
   finally
     vtEditions.Items.EndUpdate;
@@ -364,7 +364,6 @@ begin
   lvColoristes.Items.Count := 0;
   FCurrentEditionComplete := nil;
   vtEditions.Clear;
-  FAlbum.Free;
   FCategoriesImages.Free;
 end;
 
@@ -745,6 +744,7 @@ begin
   vtEditionsClick(nil);
 
   FEditeurCollectionSelected[Pred(Length(FEditeurCollectionSelected))] := False;
+  RefreshEditionCaption;
 end;
 
 procedure TfrmEditAlbum.SpeedButton3Click(Sender: TObject);

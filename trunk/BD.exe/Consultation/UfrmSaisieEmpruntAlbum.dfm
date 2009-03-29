@@ -233,7 +233,7 @@ object frmSaisieEmpruntAlbum: TfrmSaisieEmpruntAlbum
     OnChange = VTreeEmprunteurChange
     Columns = <>
   end
-  inline FrameRechercheRapide1: TFrameRechercheRapide
+  inline FrameRechercheRapide1: TframRechercheRapide
     Left = 223
     Top = 6
     Width = 249

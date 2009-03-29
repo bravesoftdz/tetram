@@ -7,10 +7,9 @@ uses
   Dialogs, SynEditHighlighter, SynHighlighterPas, SynEdit, ImgList, StrUtils,
   uPSComponent, uPSDebugger, SynEditMiscClasses, SynEditSearch, StdActns, ActnList, uPSDisassembly,
   Menus, SynEditTypes, ComCtrls, uPSCompiler, UScriptUtils, uPSUtils,
-  uPSRuntime, VirtualTrees, StdCtrls, ExtCtrls, uPSComponent_StdCtrls,
-  uPSComponent_Controls, uPSComponent_Forms, uPSComponent_DB, uPSI_BdtkRegEx, LoadComplet,
-  uPSComponent_COM, uPSComponent_Default, SynEditKeyCmds, uPSI_BdtkObjects,
-  SynCompletionProposal, UBdtForms, IDHashMap;
+  uPSRuntime, VirtualTrees, StdCtrls, ExtCtrls, uPSI_BdtkRegEx, LoadComplet,
+  SynEditKeyCmds, uPSI_BdtkObjects, SynCompletionProposal, UBdtForms, IDHashMap, uPSComponent_COM,
+  uPSComponent_Default, Generics.Collections;
 
 type
   TSynDebugPlugin = class(TSynEditPlugin)
@@ -22,6 +21,33 @@ type
     procedure LinesDeleted(FirstLine, Count: Integer); override;
   public
     constructor Create(AOwner: TCustomSynEdit; Debug: TDebugInfos); reintroduce;
+  end;
+
+  TInfoScript = class
+  private
+    FTabSheet: TTabSheet;
+    FEditor: TSynEdit;
+    FSB: TStatusBar;
+    FFileName: string;
+    FScriptName: AnsiString;
+  end;
+
+  TInfosScripts = class(TObjectList<TInfoScript>)
+    function InfoScript(Index: Integer): TInfoScript; overload;
+    function InfoScript(TabSheet: TTabSheet): TInfoScript; overload;
+    function InfoScript(Editor: TSynEdit): TInfoScript; overload;
+    function InfoScriptByScriptName(const Script: AnsiString): TInfoScript;
+
+    function ScriptName(Index: Integer): AnsiString; overload;
+    function ScriptName(TabSheet: TTabSheet): AnsiString; overload;
+    function ScriptName(Editor: TSynEdit): AnsiString; overload;
+
+    function ScriptFileName(Index: Integer): string; overload;
+    function ScriptFileName(TabSheet: TTabSheet): string; overload;
+    function ScriptFileName(Editor: TSynEdit): string; overload;
+
+    function EditorByIndex(Index: Integer): TSynEdit;
+    function EditorByScriptName(const Script: AnsiString): TSynEdit;
   end;
 
   TfrmScripts = class(TbdtForm)
@@ -70,10 +96,6 @@ type
     PSImport_DateUtils1: TPSImport_DateUtils;
     PSImport_Classes1: TPSImport_Classes;
     PSImport_ComObj1: TPSImport_ComObj;
-    PSImport_DB1: TPSImport_DB;
-    PSImport_Forms1: TPSImport_Forms;
-    PSImport_Controls1: TPSImport_Controls;
-    PSImport_StdCtrls1: TPSImport_StdCtrls;
     PSDllPlugin1: TPSDllPlugin;
     PopupMenu1: TPopupMenu;
     actFermer: TAction;
@@ -105,7 +127,6 @@ type
     Excutersansdbuguer1: TMenuItem;
     SynEditParamShow: TSynCompletionProposal;
     SynEditAutoComplete: TSynCompletionProposal;
-    Button3: TButton;
     procedure seScript1GutterClick(Sender: TObject; Button: TMouseButton; X, Y, Line: Integer; Mark: TSynEditMark);
     procedure seScript1GutterPaint(Sender: TObject; aLine, X, Y: Integer);
     procedure seScript1SpecialLineColors(Sender: TObject; Line: Integer; var Special: Boolean; var FG, BG: TColor);
@@ -163,7 +184,6 @@ type
     procedure SynEditParamShowExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
     procedure SynEditAutoCompleteExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
     procedure seScript1KeyPress(Sender: TObject; var Key: Char);
-    procedure Button3Click(Sender: TObject);
   private
     { Déclarations privées }
     FLastSearch, FLastReplace: string;
@@ -177,34 +197,40 @@ type
     FProjetOuvert: Boolean;
     FForceClose: Boolean;
     FAlbumToImport: TAlbumComplet;
+    FListTypesImages: TStringList;
 
     fObjectList: TParamInfoArray;
     fTypeInfos: TIDHashMap;
 
+    FInfoScripts: TInfosScripts;
+
+    {$REGION 'Exécution'}
     procedure SetResultat(const Chaine: string);
     function Compile: Boolean;
     function Execute: Boolean;
     function GetVariableValue(const VarName: AnsiString; Actif: Boolean): AnsiString;
-    procedure WMSyscommand(var msg: TWmSysCommand); message WM_SYSCOMMAND;
     function GetVar(const Name: AnsiString; out s: AnsiString): PIFVariant;
+    {$ENDREGION}
+    procedure WMSyscommand(var msg: TWmSysCommand); message WM_SYSCOMMAND;
+    {$REGION 'Débuggage'}
     procedure GoToPosition(Editor: TSynEdit; Line, Char: Cardinal);
     procedure GoToMessage(Msg: TMessageInfo);
     procedure GoToBreakpoint(Msg: TBreakpointInfo);
     procedure ToggleBreakPoint(const Script: AnsiString; Line: Cardinal; Keep: Boolean);
-
-    function GetScriptName(Editor: TSynEdit): AnsiString;
-    function GetScript(const Fichier: AnsiString): TSynEdit;
-    function GetActiveScriptName: AnsiString;
+    {$ENDREGION}
+    function GetFullNameScript(const Script: AnsiString): string;
+    function GetScript(const Script: AnsiString): TSynEdit;
     function GetActiveScript: TSynEdit;
-    function CorrectScriptName(const Fichier: AnsiString): AnsiString;
+    function CorrectScriptName(const Script: AnsiString): AnsiString;
     function TranslatePositionEx(out Proc, Position: Cardinal; Row: Cardinal; Fn: AnsiString): Boolean;
     procedure SetCompiled(const Value: Boolean);
     function GetProjet: AnsiString;
     procedure SetProjet(const Value: AnsiString);
-    procedure LoadScript(const Fichier: AnsiString);
+    procedure LoadScript(const Script: AnsiString);
     procedure ClearPages;
-    function GetScriptLines(const Fichier: AnsiString; out Output: AnsiString): Boolean;
+    function GetScriptLines(const Script: AnsiString; out Output: AnsiString): Boolean;
     procedure SetProjetOuvert(const Value: Boolean);
+    {$REGION 'Auto completion'}
     procedure RebuildLokalObjektList;
     procedure BuildLokalObjektList(Comp: TPSPascalCompiler);
     function FindParameter(LocLine: AnsiString; X: Integer; out Func: TParamInfoRecord; out ParamCount: Integer): Boolean;
@@ -212,6 +238,7 @@ type
     function LookUpList(LookUp: AnsiString; var ParamInfo: TParamInfoRecord): Boolean; overload;
     function LookUpList(LookUp: Cardinal; var ParamInfo: TParamInfoRecord): Boolean; overload;
     procedure FillAutoComplete(var List: TParamInfoArray; Types: TInfoTypes; FromFather: Cardinal = 0; Typ: AnsiString = '');
+    {$ENDREGION}
   public
     { Déclarations publiques }
     property Compiled: Boolean read FCompiled write SetCompiled;
@@ -228,18 +255,31 @@ implementation
 
 uses
   AnsiStrings, UfrmScriptSearch, UScriptsFonctions, CommonConst, uPSPreProcessor,
-  Procedures, BdtkRegEx;
+  Procedures, BdtkRegEx, Commun, Divers;
 
-function AutoCompleteCompilerBeforeCleanUp(Sender: TPSPascalCompiler): Boolean;
-var
-  s: AnsiString;
-begin
-  with TPSScriptDebugger(Sender.ID) do
-    if comp.GetOutput(s) then
-      TfrmScripts(Owner).BuildLokalObjektList(Sender);
-  Result := True;
-end;
+type
+  PPositionData = ^TPositionData;
 
+  TPositionData = packed record
+    FileName: AnsiString;
+    Position,
+    Row,
+    Col,
+    SourcePosition: Cardinal;
+  end;
+  PFunctionInfo = ^TFunctionInfo;
+
+  TFunctionInfo = packed record
+    Func: TPSProcRec;
+    FParamNames: TIfStringList;
+    FVariableNames: TIfStringList;
+    FPositionTable: TIfList;
+  end;
+
+  TCrackPSDebugExec = class(TPSDebugExec)
+  end;
+
+{$REGION 'TSynDebugPlugin'}
 procedure TSynDebugPlugin.AfterPaint(ACanvas: TCanvas; const AClip: TRect; FirstLine, LastLine: Integer);
 begin
   inherited;
@@ -291,1169 +331,169 @@ begin
     end;
 end;
 
-procedure TfrmScripts.WMSyscommand(var msg: TWmSysCommand);
-begin
-  case (msg.CmdType and $FFF0) of
-    SC_CLOSE: if not PSScriptDebugger1.Running then
-        inherited;
-    else
-      inherited;
-  end;
-end;
+{$ENDREGION}
 
-procedure TfrmScripts.SetResultat(const Chaine: string);
-begin
-  Output.Lines.Text := Chaine;
-  if (PageControl1.ActivePage <> TTabSheet(vstSuivis.Parent)) or (FDebugPlugin.Watches.CountActive = 0) then
-    PageControl1.ActivePage := TTabSheet(Output.Parent);
-  Application.ProcessMessages;
-end;
+{$REGION 'TInfosScripts'}
 
-const
-  imgGutterBREAK = 0;
-  imgGutterBREAKVALID = 1;
-  imgGutterBREAKINVAL = 2;
-  imgGutterCOMPLINE = 3;
-  imgGutterEXECLINECL = 4;
-  imgGutterEXECLINEBP = 5;
-  imgGutterEXECLINE = 6;
-  imgGutterBREAKDISABLED = 7;
-
-procedure TfrmScripts.seScript1GutterClick(Sender: TObject; Button: TMouseButton; X, Y, Line: Integer; Mark: TSynEditMark);
-begin
-  if X <= TSynEdit(Sender).Gutter.LeftOffset then
-    ToggleBreakPoint(GetScriptName(TSynEdit(Sender)), Line, False);
-end;
-
-procedure TfrmScripts.seScript1GutterPaint(Sender: TObject; aLine, X, Y: Integer);
+function TInfosScripts.ScriptName(Index: Integer): AnsiString;
 var
-  IconIndex: Integer;
-  i: Integer;
-  Script: AnsiString;
-  Proc, Pos: Cardinal;
+  info: TInfoScript;
 begin
-  Script := GetScriptName(TSynEdit(Sender));
-  IconIndex := -1;
-  i := FDebugPlugin.Breakpoints.IndexOf(Script, aLine);
-  if i <> -1 then
-  begin
-    if not PSScriptDebugger1.Running then
-      if FDebugPlugin.Breakpoints[i].Active then
-        IconIndex := imgGutterBREAK
-      else
-        IconIndex := imgGutterBREAKDISABLED
-    else
-    begin
-      if (Cardinal(aLine) = FActiveLine) and SameText(FActiveFile, Script) then
-        IconIndex := imgGutterEXECLINEBP
-      else if FDebugPlugin.Breakpoints[i].Active then
-        IconIndex := imgGutterBREAKVALID
-      else
-        IconIndex := imgGutterBREAKDISABLED;
-    end;
-  end
+  info := InfoScript(Index);
+  if Assigned(info) then
+    Result := info.FScriptName
   else
-  begin
-    if (PSScriptDebugger1.Exec.DebugMode = dmPaused) and (Cardinal(aLine) = FActiveLine) and SameText(FActiveFile, Script) then
-      IconIndex := imgGutterEXECLINE;
-  end;
-
-  if Compiled then
-    if TranslatePositionEx(Proc, Pos, aLine, Script) then
-      case IconIndex of
-        -1: IconIndex := imgGutterCOMPLINE;
-        // imgGutterBREAKDISABLED: IconIndex := imgGutterCOMPLINE;
-        // imgGutterBREAK: IconIndex := imgGutterCOMPLINE;
-        // imgGutterBREAKVALID: IconIndex := imgGutterCOMPLINE;
-        imgGutterEXECLINE: IconIndex := imgGutterEXECLINECL;
-      end
-    else
-      case IconIndex of
-        imgGutterBREAK: IconIndex := imgGutterBREAKINVAL;
-        imgGutterBREAKVALID: IconIndex := imgGutterBREAKINVAL;
-      end;
-
-  if IconIndex <> -1 then
-    lstDebugImages.Draw(TSynEdit(Sender).Canvas, X, Y, IconIndex);
+    Result := '';
 end;
 
-procedure TfrmScripts.seScript1SpecialLineColors(Sender: TObject; Line: Integer; var Special: Boolean; var FG, BG: TColor);
+function TInfosScripts.ScriptName(TabSheet: TTabSheet): AnsiString;
 var
-  i: Integer;
-  Script: AnsiString;
-  Proc, Pos: Cardinal;
+  info: TInfoScript;
 begin
-  Script := GetScriptName(TSynEdit(Sender));
-  i := FDebugPlugin.Breakpoints.IndexOf(Script, Line);
-
-  if (Cardinal(Line) = FActiveLine) and SameText(FActiveFile, Script) then
-  begin
-    Special := True;
-    FG := clWhite;
-    BG := clNavy;
-  end
-  else if i <> -1 then
-  begin
-    Special := True;
-    if FDebugPlugin.Breakpoints[i].Active then
-    begin
-      if Compiled and not TranslatePositionEx(Proc, Pos, Line, Script) then
-      begin
-        FG := clWhite;
-        BG := clOlive;
-      end
-      else
-      begin
-        FG := clWhite;
-        BG := clRed;
-      end;
-    end
-    else
-    begin
-      FG := clRed;
-      BG := clLime;
-    end;
-  end
-  else if (FErrorLine > 0) and (Cardinal(Line) = FErrorLine) and SameText(FErrorFile, Script) then
-  begin
-    Special := True;
-    FG := clWhite;
-    BG := clMaroon;
-  end
-
+  info := InfoScript(TabSheet);
+  if Assigned(info) then
+    Result := info.FScriptName
   else
-    Special := False;
+    Result := '';
 end;
 
-procedure TfrmScripts.seScript1StatusChange(Sender: TObject; Changes: TSynStatusChanges);
+function TInfosScripts.ScriptName(Editor: TSynEdit): AnsiString;
 var
-  Attri: TSynHighlighterAttributes;
-  Token: string;
-  SB: TStatusBar;
-  Editor: TSynEdit;
+  info: TInfoScript;
 begin
-  if (scCaretX in Changes) or (scCaretY in Changes) then
-  begin
-    //    sbEditor.Panels[pnlEditorPos].Caption := Format('%d:%d', [EScript.CaretX, EScript.CaretY]);
-    Editor := TSynEdit(TSynEdit(Sender));
-    SB := TStatusBar(TTabSheet(Editor.Parent).Controls[1]);
-    SB.Panels[0].Text := Format('%.3d : %.3d', [Editor.CaretY, Editor.CaretX]);
-    if Editor.GetHighlighterAttriAtRowCol(Editor.CaretXY, Token, Attri) then
-    begin
-      SB.Panels[1].Text := Attri.Name;
-    end
-    else
-      SB.Panels[1].Text := '';
-  end;
-  if (scModified in Changes) then
-  begin
-    //    FCurrentFile.Modified := EScript.Modified;
-  end;
-end;
-
-procedure TfrmScripts.SearchFind1Execute(Sender: TObject);
-var
-  dummyReplace: string;
-begin
-  if GetActiveScript.SelAvail and (GetActiveScript.BlockBegin.Line = GetActiveScript.BlockEnd.Line) then
-  begin
-    FLastSearch := GetActiveScript.SelText;
-    Include(FSearchOptions, ssoSelectedOnly);
-  end
+  info := InfoScript(Editor);
+  if Assigned(info) then
+    Result := info.FScriptName
   else
-  begin
-    FLastSearch := GetActiveScript.WordAtCursor;
-    Exclude(FSearchOptions, ssoSelectedOnly);
-  end;
-
-  if Sender = SearchFind1 then
-  begin
-    // chercher
-    Exclude(FSearchOptions, ssoReplace);
-    Exclude(FSearchOptions, ssoReplaceAll);
-
-    if not TfrmScriptSearch.Execute(FLastSearch, dummyReplace, FSearchOptions) then
-      Exit;
-  end
-  else
-  begin
-    // remplacer
-    Include(FSearchOptions, ssoReplace);
-    Exclude(FSearchOptions, ssoReplaceAll);
-
-    if not TfrmScriptSearch.Execute(FLastSearch, FLastReplace, FSearchOptions) then
-      Exit;
-  end;
-
-  SearchFindNext1Execute(Sender);
+    Result := '';
 end;
 
-procedure TfrmScripts.SearchFindNext1Execute(Sender: TObject);
-begin
-  if FLastSearch = '' then
-    SearchFind1Execute(SearchFind1)
-  else if GetActiveScript.SearchReplace(FLastSearch, FLastReplace, FSearchOptions) = 0 then
-    ShowMessage('Texte non trouvé');
-end;
-
-procedure TfrmScripts.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
+function TInfosScripts.ScriptFileName(Index: Integer): string;
 var
-  Editor: TSynEdit;
+  info: TInfoScript;
 begin
-  Editor := GetActiveScript;
-  Handled := True;
-  EditCut1.Enabled := Assigned(Editor) and Editor.SelAvail;
-  EditCopy1.Enabled := Assigned(Editor) and Editor.SelAvail;
-  EditPaste1.Enabled := Assigned(Editor) and Editor.CanPaste;
-  EditUndo1.Enabled := Assigned(Editor) and Editor.CanUndo;
-  EditRedo1.Enabled := Assigned(Editor) and Editor.CanRedo;
-  actCompile.Enabled := FProjetOuvert;
-  actRun.Enabled := FProjetOuvert;
-  actRunWithoutDebug.Enabled := FProjetOuvert and not PSScriptDebugger1.Running;
-  actFermer.Enabled := Assigned(Editor) and (GetActiveScriptName <> Projet);
-  actEnregistrer.Enabled := Assigned(Editor);
-  actEnregistrerSous.Enabled := Assigned(Editor);
+  info := InfoScript(Index);
+  if Assigned(info) then
+    Result := info.FFileName
+  else
+    Result := '';
 end;
 
-procedure TfrmScripts.EditCut1Execute(Sender: TObject);
+function TInfosScripts.ScriptFileName(TabSheet: TTabSheet): string;
+var
+  info: TInfoScript;
 begin
-  GetActiveScript.CutToClipboard;
+  info := InfoScript(TabSheet);
+  if Assigned(info) then
+    Result := info.FFileName
+  else
+    Result := '';
 end;
 
-procedure TfrmScripts.EditCopy1Execute(Sender: TObject);
+function TInfosScripts.ScriptFileName(Editor: TSynEdit): string;
+var
+  info: TInfoScript;
 begin
-  GetActiveScript.CopyToClipboard;
+  info := InfoScript(Editor);
+  if Assigned(info) then
+    Result := info.FFileName
+  else
+    Result := '';
 end;
 
-procedure TfrmScripts.EditPaste1Execute(Sender: TObject);
+function TInfosScripts.InfoScript(Index: Integer): TInfoScript;
 begin
-  GetActiveScript.PasteFromClipboard;
+  if (Index >= 0) and (Index <= Count - 1) then
+    Result := Items[Index]
+  else
+    Result := nil;
 end;
 
-procedure TfrmScripts.EditSelectAll1Execute(Sender: TObject);
-begin
-  GetActiveScript.SelectAll;
-end;
-
-procedure TfrmScripts.EditUndo1Execute(Sender: TObject);
-begin
-  GetActiveScript.Undo;
-end;
-
-procedure TfrmScripts.EditRedo1Execute(Sender: TObject);
-begin
-  GetActiveScript.Redo;
-end;
-
-procedure TfrmScripts.seScript1ReplaceText(Sender: TObject; const ASearch, AReplace: string; Line, Column: Integer; var Action: TSynReplaceAction);
-begin
-  case MessageDlg('Remplacer cette occurence ?', mtConfirmation, [mbYes, mbNo, mbCancel, mbYesToAll], 0) of
-    mrYes: Action := raReplace;
-    mrNo: Action := raSkip;
-    mrCancel: Action := raCancel;
-    mrYesToAll: Action := raReplaceAll;
-  end;
-end;
-
-procedure TfrmScripts.PSScriptDebugger1Execute(Sender: TPSScript);
+function TInfosScripts.InfoScript(TabSheet: TTabSheet): TInfoScript;
 var
   i: Integer;
 begin
-  PSScriptDebugger1.ClearBreakPoints;
-  if PSScriptDebugger1.UseDebugInfo then
-    for i := 0 to Pred(FDebugPlugin.Breakpoints.Count) do
-      with FDebugPlugin.Breakpoints[i] do
-        if Active then
-          if Fichier = PSScriptDebugger1.MainFileName then
-            PSScriptDebugger1.SetBreakPoint(Fichier, Line)
-          else
-            PSScriptDebugger1.SetBreakPoint(AnsiStrings.UpperCase(Fichier), Line);
-
-  PSScriptDebugger1.SetVarToInstance('AlbumToImport', FAlbumToImport);
-end;
-
-procedure TfrmScripts.actCompileExecute(Sender: TObject);
-begin
-  if not PSScriptDebugger1.Running then
-    Compile;
-end;
-
-procedure TfrmScripts.actRunExecute(Sender: TObject);
-begin
-  if PSScriptDebugger1.Running then
-  begin
-    PSScriptDebugger1.Resume;
-    FActiveLine := 0;
-    FActiveFile := '';
-    GetActiveScript.Refresh;
-  end
-  else
-  begin
-    if Compile then
-      Execute;
-  end;
-end;
-
-function TfrmScripts.Execute: Boolean;
-begin
-  FAlbumToImport.Clear;
-  Output.Clear;
-  PageControl1.ActivePage := TTabSheet(vstSuivis.Parent);
-  if PSScriptDebugger1.Execute then
-  begin
-    //    AddMessage('Succesfully Execute');
-    FErrorLine := 0;
-    Result := True;
-  end
-  else
-  begin
-    FErrorLine := PSScriptDebugger1.ExecErrorRow;
-    FErrorFile := CorrectScriptName(PSScriptDebugger1.ExecErrorFileName);
-    FDebugPlugin.Messages.AddRuntimeErrorMessage(
-      FErrorFile,
-      AnsiString(Format('%s (Bytecode %d:%d)', [PSScriptDebugger1.ExecErrorToString, PSScriptDebugger1.ExecErrorProcNo, PSScriptDebugger1.ExecErrorByteCodePosition])),
-      PSScriptDebugger1.ExecErrorRow,
-      PSScriptDebugger1.ExecErrorCol);
-    GoToMessage(FDebugPlugin.Messages.Last);
-    Result := False;
-    try
-      PSScriptDebugger1.Exec.RaiseCurrentException;
-    except
-      on e: EPSException do
-        Application.HandleException(nil);
-      else
-        raise;
-    end;
-  end;
-end;
-
-procedure TfrmScripts.PSScriptDebugger1Compile(Sender: TPSScript);
-begin
-  PSScriptDebugger1.AddMethod(Self, @TfrmScripts.SetResultat, 'procedure WriteToConsole(const Chaine: string);');
-
-  PSScriptDebugger1.AddFunction(@GetPage, 'function GetPage(const url: string): string;');
-  PSScriptDebugger1.AddFunction(@findInfo, 'function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;');
-  PSScriptDebugger1.AddFunction(@MakeAuteur, 'function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteur;');
-  PSScriptDebugger1.AddFunction(@AskSearchEntry, 'function AskSearchEntry(const Labels: array of string; out Search: string; out Index: Integer): Boolean');
-
-  PSScriptDebugger1.AddFunction(@SysUtils.Format, 'function Format(const Format: string; const Args: array of const): string;');
-  PSScriptDebugger1.AddFunction(@MyFormat, 'function MyFormat(const Format: string; const Args: array of const): string;');
-  PSScriptDebugger1.AddFunction(@MyFormatString, 'function MyFormatString(const Format: string; const Args: array of string): string;');
-  PSScriptDebugger1.AddFunction(@AnsiStrings.Format, 'function AnsiFormat(const Format: ansistring; const Args: array of const): ansistring;');
-
-  PSScriptDebugger1.AddFunction(@ShowMessage, 'procedure ShowMessage(const Msg: string);');
-  PSScriptDebugger1.AddFunction(@StrUtils.PosEx, 'function PosEx(const SubStr, S: string; Offset: Cardinal): Integer;');
-  PSScriptDebugger1.Comp.AddTypeS('TReplaceFlag', '(rfReplaceAll, rfIgnoreCase)');
-  PSScriptDebugger1.Comp.AddTypeS('TReplaceFlags', 'set of TReplaceFlag');
-  PSScriptDebugger1.AddFunction(@SysUtils.StringReplace, 'function StringReplace(const S, OldPattern, NewPattern: string; Flags: TReplaceFlags): string;');
-
-  PSScriptDebugger1.AddRegisteredVariable('AlbumToImport', 'TAlbumComplet');
-end;
-
-procedure TfrmScripts.PSScriptDebugger1Breakpoint(Sender: TObject; const FileName: AnsiString; Position, Row, Col: Cardinal);
-begin
-  FActiveLine := Row;
-  FActiveFile := CorrectScriptName(FileName);
-  GoToPosition(GetScript(FActiveFile), FActiveLine, 1);
-  FDebugPlugin.Watches.UpdateView;
-end;
-
-procedure TfrmScripts.PSScriptDebugger1Idle(Sender: TObject);
-begin
-  Application.HandleMessage;
-end;
-
-procedure TfrmScripts.PSScriptDebugger1AfterExecute(Sender: TPSScript);
-begin
-  FActiveLine := 0;
-  FActiveFile := '';
-  FRunToCursor := 0;
-  FRunToCursorFile := '';
-  PSScriptDebugger1.ClearBreakPoints;
-  if pcScripts.PageCount > 0 then
-    GetActiveScript.Refresh;
-  vstSuivis.Invalidate;
-  PageControl1.ActivePage := TTabSheet(Output.Parent);
-end;
-
-procedure TfrmScripts.PSScriptDebugger1LineInfo(Sender: TObject; const FileName: AnsiString; Position, Row, Col: Cardinal);
-begin
-  if (Row = FRunToCursor) and SameText(CorrectScriptName(FileName), FRunToCursorFile) and (PSScriptDebugger1.Exec.DebugMode = dmRun) then
-    PSScriptDebugger1.Pause;
-
-  if PSScriptDebugger1.Exec.DebugMode <> dmRun then
-  begin
-    FActiveLine := Row;
-    FActiveFile := CorrectScriptName(FileName);
-    GoToPosition(GetScript(FActiveFile), FActiveLine, 1);
-    FDebugPlugin.Watches.UpdateView;
-  end;
-end;
-
-function TfrmScripts.PSScriptDebugger1NeedFile(Sender: TObject; const OrginFileName: AnsiString; var FileName, Output: AnsiString): Boolean;
-begin
-  Result := GetScriptLines(FileName, Output);
-end;
-
-procedure TfrmScripts.actStepOverExecute(Sender: TObject);
-begin
-  if PSScriptDebugger1.Exec.Status = isRunning then
-    PSScriptDebugger1.StepOver
-  else
-  begin
-    if Compile then
-    begin
-      PSScriptDebugger1.StepInto;
-      Execute;
-    end;
-  end;
-end;
-
-procedure TfrmScripts.actStepIntoExecute(Sender: TObject);
-begin
-  if PSScriptDebugger1.Exec.Status = isRunning then
-    PSScriptDebugger1.StepInto
-  else
-  begin
-    if Compile then
-    begin
-      PSScriptDebugger1.StepInto;
-      Execute;
-    end;
-  end;
-end;
-
-procedure TfrmScripts.actResetExecute(Sender: TObject);
-begin
-  if PSScriptDebugger1.Exec.Status = isRunning then
-    PSScriptDebugger1.Stop;
-end;
-
-function TfrmScripts.Compile: Boolean;
-var
-  i: Longint;
-  Msg: TMessageInfo;
-  Script: AnsiString;
-begin
-  GetScriptLines(Projet, Script);
-  PSScriptDebugger1.Script.Text := string(Script);
-  Result := PSScriptDebugger1.Compile;
-  FDebugPlugin.Messages.Clear;
-  Msg := nil;
-  for i := 0 to PSScriptDebugger1.CompilerMessageCount - 1 do
-    with PSScriptDebugger1.CompilerMessages[i] do
-      if ClassType = TPSPascalCompilerWarning then
-        FDebugPlugin.Messages.AddCompileErrorMessage(ModuleName, ShortMessageToString, tmWarning, Row, Col)
-      else if ClassType = TPSPascalCompilerHint then
-        FDebugPlugin.Messages.AddCompileErrorMessage(ModuleName, ShortMessageToString, tmHint, Row, Col)
-      else if ClassType = TPSPascalCompilerError then
-      begin
-        Msg := FDebugPlugin.Messages[FDebugPlugin.Messages.AddCompileErrorMessage(ModuleName, ShortMessageToString, tmError, Row, Col)];
-      end
-      else
-        FDebugPlugin.Messages.AddCompileErrorMessage(ModuleName, ShortMessageToString, tmUnknown, Row, Col);
-
-  if Assigned(Msg) then
-    GoToMessage(Msg);
-  Compiled := Result;
-end;
-
-procedure TfrmScripts.actDecompileExecute(Sender: TObject);
-var
-  s: AnsiString;
-  script: string;
-begin
-  if Compile then
-  begin
-    PSScriptDebugger1.GetCompiled(s);
-    IFPS3DataToText(s, script);
-    output.Lines.Text := script;
-    PageControl1.ActivePage := TTabSheet(Output.Parent);
-  end;
-end;
-
-procedure TfrmScripts.actBreakpointExecute(Sender: TObject);
-begin
-  ToggleBreakPoint(GetActiveScriptName, GetActiveScript.CaretY, False);
-end;
-
-procedure TfrmScripts.FormCreate(Sender: TObject);
-var
-  i: Integer;
-  sr: TSearchRec;
-begin
-  FAlbumToImport := TAlbumComplet.Create;
-
-  fTypeInfos := TIDHashMap.Create;
-
-  Assert(not Assigned(PSScriptDebugger1.Comp.OnBeforeCleanup), 'PSScriptDebugger1.Comp.OnBeforeCleanup déjà utilisé');
-  PSScriptDebugger1.Comp.OnBeforeCleanup := AutoCompleteCompilerBeforeCleanUp;
-
-  FForceClose := False;
-  PageControl1.ActivePageIndex := 0;
-  FDebugPlugin := TDebugInfos.Create;
-  FDebugPlugin.OnGetScript := GetScript;
-  FDebugPlugin.Watches.View := vstSuivis;
-  FDebugPlugin.Messages.View := vstMessages;
-  FDebugPlugin.Breakpoints.View := vstBreakpoints;
-
-  // force à reprendre les params de delphi s'il est installé sur la machine
-  SynPasSyn1.UseUserSettings(0);
-
-  FPSImport_RegExpr := TPSImport_BdtkRegEx.Create(Self);
-  TPSPluginItem(PSScriptDebugger1.Plugins.Add).Plugin := FPSImport_RegExpr;
-  FPSImport_BdtkObjects := TPSImport_BdtkObjects.Create(Self);
-  TPSPluginItem(PSScriptDebugger1.Plugins.Add).Plugin := FPSImport_BdtkObjects;
-
-  i := FindFirst(TGlobalVar.Utilisateur.Options.RepertoireScripts + '\*.bds', faAnyFile, sr);
-  if i = 0 then
-    try
-      while i = 0 do
-      begin
-        if (sr.Attr and faDirectory) = 0 then
-          ListView1.Items.Add.Caption := ChangeFileExt(sr.Name, '');
-        i := FindNext(sr);
-      end;
-    finally
-      FindClose(sr);
-    end;
-  PageControl2.ActivePage := tbScripts;
-end;
-
-function TfrmScripts.GetVar(const Name: AnsiString; out s: AnsiString): PIFVariant;
-var
-  i: Longint;
-  s1: AnsiString;
-begin
-  s := UpperCase(Name);
-  if AnsiStrings.AnsiPos('.', s) > 0 then
-  begin
-    s1 := AnsiString(Copy(string(s), 1, AnsiStrings.AnsiPos('.', s) - 1));
-    delete(s, 1, AnsiStrings.AnsiPos('.', Name));
-  end
-  else
-  begin
-    s1 := s;
-    s := '';
-  end;
   Result := nil;
-  with PSScriptDebugger1 do
-  begin
-    for i := 0 to Exec.CurrentProcVars.Count - 1 do
-      if UpperCase(Exec.CurrentProcVars[i]) = s1 then
-      begin
-        Result := Exec.GetProcVar(i);
-        break;
-      end;
-    if Result = nil then
+  for i := 0 to Pred(Count) do
+    if Items[i].FTabSheet = TabSheet then
     begin
-      for i := 0 to Exec.CurrentProcParams.Count - 1 do
-        if Uppercase(Exec.CurrentProcParams[i]) = s1 then
-        begin
-          Result := Exec.GetProcParam(i);
-          break;
-        end;
-    end;
-    if Result = nil then
-    begin
-      for i := 0 to Exec.GlobalVarNames.Count - 1 do
-        if Uppercase(Exec.GlobalVarNames[i]) = s1 then
-        begin
-          Result := Exec.GetGlobalVar(i);
-          break;
-        end;
-    end;
-  end;
-end;
-
-function TfrmScripts.GetVariableValue(const VarName: AnsiString; Actif: Boolean): AnsiString;
-var
-  pv: PIFVariant;
-  Prefix: AnsiString;
-begin
-  if Actif then
-    if PSScriptDebugger1.Running then
-    begin
-      pv := GetVar(VarName, Prefix);
-      if pv = nil then
-        Result := '{Expression inconnue}'
-      else
-        Result := PSVariantToString(NewTPSVariantIFC(pv, False), Prefix);
-    end
-    else
-      Result := '{Valeur inaccessible}'
-  else
-    Result := '<désactivé>';
-end;
-
-procedure TfrmScripts.actAddSuiviExecute(Sender: TObject);
-begin
-  FDebugPlugin.Watches.AddWatch(AnsiString(GetActiveScript.WordAtCursor));
-end;
-
-procedure TfrmScripts.actRunToCursorExecute(Sender: TObject);
-begin
-  FRunToCursor := GetActiveScript.CaretY;
-  FRunToCursorFile := GetActiveScriptName;
-  actRun.Execute;
-end;
-
-procedure TfrmScripts.vstSuivisNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: UnicodeString);
-begin
-  FDebugPlugin.Watches[Node.Index].Name := AnsiString(NewText);
-  FDebugPlugin.Watches.View.InvalidateNode(Node);
-end;
-
-procedure TfrmScripts.vstSuivisEditing(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
-begin
-  Allowed := Column = 0;
-end;
-
-procedure TfrmScripts.vstSuivisInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
-begin
-  Node.CheckType := ctCheckBox;
-  if FDebugPlugin.Watches[Node.Index].Active then
-    Node.CheckState := csCheckedNormal
-  else
-    Node.CheckState := csUncheckedNormal;
-end;
-
-procedure TfrmScripts.vstSuivisChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
-begin
-  FDebugPlugin.Watches[Node.Index].Active := Node.CheckState = csCheckedNormal;
-  FDebugPlugin.Watches.View.InvalidateNode(Node);
-end;
-
-procedure TfrmScripts.vstSuivisGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
-begin
-  if Column = -1 then
-    Column := 0;
-  with FDebugPlugin.Watches[Node.Index] do
-    case Column of
-      0: CellText := string(Name);
-      1: CellText := string(GetVariableValue(Name, Active));
+      Result := Items[i];
+      Exit;
     end;
 end;
 
-procedure TfrmScripts.vstSuivisPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
-begin
-  if Node.CheckState = csCheckedNormal then
-    TargetCanvas.Font.Color := clWindowText
-  else
-    TargetCanvas.Font.Color := clGrayText;
-end;
-
-procedure TfrmScripts.GoToMessage(Msg: TMessageInfo);
-var
-  Editor: TSynEdit;
-begin
-  Editor := GetScript(Msg.Fichier);
-  if not Assigned(Editor) then
-    LoadScript(Msg.Fichier);
-  GoToPosition(GetScript(Msg.Fichier), Msg.Line, Msg.Char);
-  PageControl1.ActivePage := TTabSheet(vstMessages.Parent);
-end;
-
-procedure TfrmScripts.vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
-begin
-  if Column = -1 then
-    Column := 0;
-  with FDebugPlugin.Messages[Node.Index] do
-    case Column of
-      0:
-        case Category of
-          cmInfo: CellText := 'Information';
-          cmCompileError: CellText := 'Compilation';
-          cmRuntimeError: CellText := 'Exécution';
-          else
-            CellText := '';
-        end;
-      1: CellText := string(TypeMessage);
-      2: CellText := string(Fichier);
-      3: CellText := string(Text);
-    end;
-end;
-
-procedure TfrmScripts.vstMessagesDblClick(Sender: TObject);
-begin
-  GoToMessage(FDebugPlugin.Messages.Current);
-end;
-
-procedure TfrmScripts.FormDestroy(Sender: TObject);
-begin
-  ClearPages;
-  fTypeInfos.Free;
-  FDebugPlugin.Free;
-  FAlbumToImport.Free;
-end;
-
-procedure TfrmScripts.seScript1Change(Sender: TObject);
-begin
-  Compiled := False;
-  TSynEdit(Sender).Tag := 1;
-  if (FErrorLine > 0) then
-  begin
-    GetScript(FErrorFile).InvalidateLine(FErrorLine);
-    GetScript(FErrorFile).InvalidateGutterLine(FErrorLine);
-    FErrorLine := 0;
-    FErrorFile := '';
-  end;
-end;
-
-procedure TfrmScripts.vstBreakpointsDblClick(Sender: TObject);
-begin
-  GoToBreakpoint(FDebugPlugin.Breakpoints.Current);
-end;
-
-procedure TfrmScripts.GoToBreakpoint(Msg: TBreakpointInfo);
-var
-  Editor: TSynEdit;
-begin
-  Editor := GetScript(Msg.Fichier);
-  if not Assigned(Editor) then
-    LoadScript(Msg.Fichier);
-  GoToPosition(GetScript(Msg.Fichier), Msg.Line, 0);
-  PageControl1.ActivePage := TTabSheet(vstBreakpoints.Parent);
-end;
-
-procedure TfrmScripts.GoToPosition(Editor: TSynEdit; Line, Char: Cardinal);
-begin
-  if not Assigned(Editor) then
-    Exit;
-
-  if (Line < Cardinal(Editor.TopLine + 2)) or (Line > Cardinal(Editor.TopLine + Editor.LinesInWindow - 2)) then
-    Editor.TopLine := Line - Cardinal(Editor.LinesInWindow div 2);
-
-  Editor.CaretY := Line;
-  Editor.CaretX := Char;
-  Editor.Invalidate; // Line et GutterLine sont insuffisants pour certains cas
-  PageControl2.ActivePage := tbEdition;
-  pcScripts.ActivePage := TTabSheet(Editor.Parent);
-  if pcScripts.PageCount = 1 then
-    pcScriptsChange(nil);
-  Editor.SetFocus;
-end;
-
-procedure TfrmScripts.vstBreakpointsChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
-begin
-  with FDebugPlugin.Breakpoints[Node.Index] do
-    ToggleBreakPoint(Fichier, Line, True);
-  FDebugPlugin.Breakpoints.View.InvalidateNode(Node);
-end;
-
-procedure TfrmScripts.vstBreakpointsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
-begin
-  if Column = -1 then
-    Column := 0;
-  with FDebugPlugin.Breakpoints[Node.Index] do
-    case Column of
-      0: CellText := 'Ligne ' + SysUtils.IntToStr(Line);
-      1: CellText := string(Fichier);
-    end;
-end;
-
-procedure TfrmScripts.vstBreakpointsInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
-begin
-  Node.CheckType := ctCheckBox;
-  if FDebugPlugin.Breakpoints[Node.Index].Active then
-    Node.CheckState := csCheckedNormal
-  else
-    Node.CheckState := csUncheckedNormal;
-end;
-
-procedure TfrmScripts.vstBreakpointsPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
-begin
-  if Node.CheckState = csCheckedNormal then
-    TargetCanvas.Font.Color := clWindowText
-  else
-    TargetCanvas.Font.Color := clGrayText;
-end;
-
-procedure TfrmScripts.ToggleBreakPoint(const Script: AnsiString; Line: Cardinal; Keep: Boolean);
+function TInfosScripts.InfoScript(Editor: TSynEdit): TInfoScript;
 var
   i: Integer;
 begin
-  i := FDebugPlugin.Breakpoints.IndexOf(Script, Line);
-  if i = -1 then // nouveau point d'arrêt
-  begin
-    FDebugPlugin.Breakpoints.AddBreakpoint(Script, Line);
-    if PSScriptDebugger1.Running then
-      if Script = PSScriptDebugger1.MainFileName then
-        PSScriptDebugger1.SetBreakPoint('', Line)
-      else
-        PSScriptDebugger1.SetBreakPoint(Script, Line);
-  end
-  else if Keep then // changement d'état du point d'arrêt
-  begin
-    FDebugPlugin.Breakpoints[i].Active := not FDebugPlugin.Breakpoints[i].Active;
-    if PSScriptDebugger1.Running then
-      if FDebugPlugin.Breakpoints[i].Active then
-        if Script = PSScriptDebugger1.MainFileName then
-          PSScriptDebugger1.SetBreakPoint('', Line)
-        else
-          PSScriptDebugger1.SetBreakPoint(Script, Line)
-      else if Script = PSScriptDebugger1.MainFileName then
-        PSScriptDebugger1.ClearBreakPoint('', Line)
-      else
-        PSScriptDebugger1.ClearBreakPoint(Script, Line);
-  end
-  else
-  begin // suppression du point d'arrêt
-    FDebugPlugin.Breakpoints.Delete(i);
-    if PSScriptDebugger1.Running then
-      if Script = PSScriptDebugger1.MainFileName then
-        PSScriptDebugger1.ClearBreakPoint('', Line)
-      else
-        PSScriptDebugger1.ClearBreakPoint(Script, Line);
-  end;
-end;
-
-procedure TfrmScripts.seScript1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
-const
-  WordVar: AnsiString = '';
-var
-  pv: PIFVariant;
-  Prefix: AnsiString;
-  s: AnsiString;
-begin
-  if not PSScriptDebugger1.Running then
-  begin
-    WordVar := '';
-    GetActiveScript.ShowHint := False;
-    Exit;
-  end;
-  s := AnsiString(GetActiveScript.WordAtMouse);
-  if s <> WordVar then
-    Application.CancelHint;
-  WordVar := s;
-
-  pv := GetVar(WordVar, Prefix);
-  if pv = nil then
-  begin
-    GetActiveScript.Hint := '';
-    GetActiveScript.ShowHint := False;
-  end
-  else
-  begin
-    GetActiveScript.Hint := string(PSVariantToString(NewTPSVariantIFC(pv, False), Prefix));
-    GetActiveScript.ShowHint := True;
-  end;
-end;
-
-type
-  PPositionData = ^TPositionData;
-
-  TPositionData = packed record
-    FileName: AnsiString;
-    Position,
-    Row,
-    Col,
-    SourcePosition: Cardinal;
-  end;
-  PFunctionInfo = ^TFunctionInfo;
-
-  TFunctionInfo = packed record
-    Func: TPSProcRec;
-    FParamNames: TIfStringList;
-    FVariableNames: TIfStringList;
-    FPositionTable: TIfList;
-  end;
-
-  TCrackPSDebugExec = class(TPSDebugExec)
-  end;
-
-function TfrmScripts.TranslatePositionEx(out Proc, Position: Cardinal; Row: Cardinal; Fn: AnsiString): Boolean;
-var
-  i, j: LongInt;
-  fi: PFunctionInfo;
-  pt: TIfList;
-  r: PPositionData;
-begin
-  Result := True;
-  Proc := 0;
-  Position := 0;
-  for i := 0 to TCrackPSDebugExec(PSScriptDebugger1.Exec).FDebugDataForProcs.Count - 1 do
-  begin
-    Result := False;
-    fi := TCrackPSDebugExec(PSScriptDebugger1.Exec).FDebugDataForProcs[i];
-    pt := fi^.FPositionTable;
-    for j := 0 to pt.Count - 1 do
+  Result := nil;
+  for i := 0 to Pred(Count) do
+    if Items[i].FEditor = Editor then
     begin
-      r := pt[j];
-      if not AnsiSameText(r^.FileName, Fn) then
-        Continue;
-      if r^.Row = Row then
-      begin
-        Proc := TCrackPSDebugExec(PSScriptDebugger1.Exec).FProcs.IndexOf(fi^.Func);
-        Position := r^.Position;
-        Result := True;
-        Exit;
-      end;
+      Result := Items[i];
+      Exit;
     end;
-  end;
 end;
 
-procedure TfrmScripts.SetCompiled(const Value: Boolean);
+function TInfosScripts.InfoScriptByScriptName(const Script: AnsiString): TInfoScript;
 var
-  Editor: TSynEdit;
+  i: Integer;
 begin
-  FCompiled := Value;
-  Editor := GetActiveScript;
-  if Assigned(Editor) then
-    Editor.Invalidate;
+  Result := nil;
+  for i := 0 to Pred(Count) do
+    if AnsiSameText(Items[i].FScriptName, Script) then
+    begin
+      Result := Items[i];
+      Exit;
+    end;
 end;
 
-function TfrmScripts.CorrectScriptName(const Fichier: AnsiString): AnsiString;
+function TInfosScripts.EditorByIndex(Index: Integer): TSynEdit;
+var
+  info: TInfoScript;
 begin
-  if Fichier = '' then
-    Result := Projet
+  info := InfoScript(Index);
+  if Assigned(info) then
+    Result := info.FEditor
   else
-    Result := Fichier;
+    Result := nil;
+end;
+
+function TInfosScripts.EditorByScriptName(const Script: AnsiString): TSynEdit;
+var
+  info: TInfoScript;
+begin
+  info := InfoScriptByScriptName(Script);
+  if Assigned(info) then
+    Result := info.FEditor
+  else
+    Result := nil;
+end;
+
+function TfrmScripts.GetScript(const Script: AnsiString): TSynEdit;
+begin
+  if Script = '' then
+    Result := FInfoScripts.EditorByScriptName(Projet)
+  else
+    Result := FInfoScripts.EditorByScriptName(Script);
 end;
 
 function TfrmScripts.GetActiveScript: TSynEdit;
 begin
-  if pcScripts.PageCount = 0 then
-    Result := nil
-  else
-    Result := TSynEdit(pcScripts.ActivePage.Controls[0]);
+  Result := FInfoScripts.EditorByIndex(pcScripts.ActivePageIndex);
 end;
 
-function TfrmScripts.GetActiveScriptName: AnsiString;
-begin
-  if pcScripts.PageCount = 0 then
-    Result := Projet
-  else
-    Result := AnsiString(pcScripts.ActivePage.Caption);
-end;
+{$ENDREGION}
 
-function TfrmScripts.GetScript(const Fichier: AnsiString): TSynEdit;
+{$REGION 'Auto completion'}
+function AutoCompleteCompilerBeforeCleanUp(Sender: TPSPascalCompiler): Boolean;
 var
-  i: Integer;
   s: AnsiString;
 begin
-  if Fichier = '' then
-    s := Projet
-  else
-    s := Fichier;
-  for i := 0 to Pred(pcScripts.PageCount) do
-    with pcScripts.Pages[i] do
-      if AnsiSameText(AnsiString(Caption), s) then
-      begin
-        Result := TSynEdit(Controls[0]);
-        Exit;
-      end;
-  Result := nil;
-end;
-
-function TfrmScripts.GetScriptName(Editor: TSynEdit): AnsiString;
-begin
-  if Assigned(Editor) then
-    Result := AnsiString(TTabSheet(Editor.Parent).Caption)
-  else
-    Result := Projet;
-end;
-
-function TfrmScripts.GetProjet: AnsiString;
-begin
-  Result := PSScriptDebugger1.MainFileName;
-end;
-
-procedure TfrmScripts.SetProjet(const Value: AnsiString);
-begin
-  ProjetOuvert := False;
-  // doit etre fait avant le LoadScript
-  PSScriptDebugger1.MainFileName := Value;
-  LoadScript(Value);
-  ProjetOuvert := True;
-end;
-
-procedure TfrmScripts.LoadScript(const Fichier: AnsiString);
-var
-  SB: TStatusBar;
-  Editor: TSynEdit;
-  Page: TTabSheet;
-  Script: AnsiString;
-  LockWindow: ILockWindow;
-begin
-  Editor := GetScript(Fichier);
-  if not Assigned(Editor) then
-  begin
-    LockWindow := TLockWindow.Create(pcScripts);
-
-    // doit être fait avant la création de page
-    if not GetScriptLines(Fichier, Script) then
-      raise Exception.Create('Impossible de trouver le fichier ' + TGlobalVar.Utilisateur.Options.RepertoireScripts + string(Fichier) + '.bdu.');
-
-    Page := TTabSheet.Create(pcScripts);
-    Page.PageControl := pcScripts;
-    Page.Caption := string(Fichier);
-    Editor := TSynEdit.Create(Page);
-    Editor.Parent := Page;
-    Editor.Align := alClient;
-    Editor.Color := clWhite;
-    Editor.ActiveLineColor := 16314351;
-    Editor.Font.Color := clWindowText;
-    Editor.Font.Height := -13;
-    Editor.Font.Name := 'Courier New';
-    Editor.Font.Style := [];
-    Editor.OnMouseMove := seScript1MouseMove;
-    Editor.Gutter.AutoSize := True;
-    Editor.Gutter.DigitCount := 3;
-    Editor.Gutter.Font.Color := clWindowText;
-    Editor.Gutter.Font.Height := -11;
-    Editor.Gutter.Font.Name := 'Terminal';
-    Editor.Gutter.Font.Style := [];
-    Editor.Gutter.LeftOffset := 27;
-    Editor.Gutter.ShowLineNumbers := True;
-    Editor.Gutter.Width := 0;
-    Editor.Highlighter := SynPasSyn1;
-    Editor.Options := [eoAutoIndent, eoAutoSizeMaxScrollWidth, eoDragDropEditing, eoGroupUndo, eoRightMouseMovesCursor, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoTabIndent, eoTabsToSpaces, eoTrimTrailingSpaces];
-    Editor.ScrollHintFormat := shfTopToBottom;
-    Editor.SearchEngine := SynEditSearch1;
-    Editor.TabWidth := 2;
-    Editor.WantTabs := True;
-    Editor.OnChange := seScript1Change;
-    Editor.OnGutterClick := seScript1GutterClick;
-    Editor.OnGutterPaint := seScript1GutterPaint;
-    Editor.OnReplaceText := seScript1ReplaceText;
-    Editor.OnSpecialLineColors := seScript1SpecialLineColors;
-    Editor.OnStatusChange := seScript1StatusChange;
-    Editor.OnProcessUserCommand := seScript1ProcessUserCommand;
-    Editor.OnKeyPress := seScript1KeyPress;
-    Editor.AddKey(ecUserFirst + 1, VK_RETURN, [ssCtrl]);
-
-    TSynDebugPlugin.Create(Editor, FDebugPlugin);
-    Editor.Lines.Text := string(Script);
-
-    SB := TStatusBar.Create(Page);
-    SB.Parent := Page;
-    SB.Panels.Add.Width := 50;
-    SB.Panels.Add.Width := 50;
-
-    Page.Visible := True;
-  end;
-  GoToPosition(Editor, 1, 1);
-end;
-
-procedure TfrmScripts.ClearPages;
-var
-  i: Integer;
-begin
-  for i := 0 to Pred(pcScripts.PageCount) do
-    actFermer.Execute;
-end;
-
-function TfrmScripts.GetScriptLines(const Fichier: AnsiString; out Output: AnsiString): Boolean;
-var
-  path: string;
-  f: TFileStream;
-  Editor: TSynEdit;
-begin
-  Editor := GetScript(Fichier);
-  if Assigned(Editor) then
-  begin
-    Output := AnsiString(Editor.Lines.Text);
-    Result := True;
-    Exit;
-  end;
-
-  if Fichier = Projet then
-    Path := TGlobalVar.Utilisateur.Options.RepertoireScripts + string(Fichier) + '.bds'
-  else
-    Path := TGlobalVar.Utilisateur.Options.RepertoireScripts + string(Fichier) + '.bdu';
-
-  try
-    F := TFileStream.Create(Path, fmOpenRead or fmShareDenyWrite);
-  except
-    Result := False;
-    Exit;
-  end;
-  try
-    SetLength(Output, f.Size);
-    f.Read(Output[1], Length(Output));
-  finally
-    f.Free;
-  end;
+  with TPSScriptDebugger(Sender.ID) do
+    if comp.GetOutput(s) then
+      TfrmScripts(Owner).BuildLokalObjektList(Sender);
   Result := True;
-end;
-
-procedure TfrmScripts.actFermerExecute(Sender: TObject);
-begin
-  if not FForceClose and (GetActiveScriptName = Projet) then
-    Exit;
-
-  if GetActiveScript.Tag = 1 then
-  begin
-    case MessageDlg('Le fichier "' + string(GetActiveScriptName) + '" a été modifié, voulez-vous l''enregistrer?', mtConfirmation, [mbYes, mbNo, mbCancel], 0) of
-      mrYes: actEnregistrer.Execute;
-      mrNo: ;
-      mrCancel: Abort;
-    end;
-  end;
-  pcScripts.ActivePage.Free;
-end;
-
-procedure TfrmScripts.actEnregistrerExecute(Sender: TObject);
-begin
-  GetActiveScript.Lines.SaveToFile(TGlobalVar.Utilisateur.Options.RepertoireScripts + string(GetActiveScriptName) + '.bds');
-  GetActiveScript.Tag := 0;
-end;
-
-procedure TfrmScripts.actEnregistrerSousExecute(Sender: TObject);
-begin
-  //
-end;
-
-procedure TfrmScripts.SetProjetOuvert(const Value: Boolean);
-begin
-  if not Value then
-  begin
-    FForceClose := True;
-    try
-      ClearPages;
-      Compiled := False;
-      FDebugPlugin.Messages.Clear;
-      PSScriptDebugger1.MainFileName := '';
-    finally
-      FForceClose := False;
-    end;
-  end;
-  FProjetOuvert := Value;
-end;
-
-procedure TfrmScripts.ListView1DblClick(Sender: TObject);
-begin
-  if not Assigned(ListView1.Selected) then
-    Exit;
-  Projet := AnsiString(ListView1.Selected.Caption);
-end;
-
-procedure TfrmScripts.seScript1ProcessUserCommand(Sender: TObject; var Command: TSynEditorCommand; var AChar: Char; Data: Pointer);
-begin
-  case Command - ecUserFirst of
-    1: LoadScript(AnsiString(GetActiveScript.WordAtCursor));
-  end;
-end;
-
-procedure TfrmScripts.actRunWithoutDebugExecute(Sender: TObject);
-begin
-  PSScriptDebugger1.UseDebugInfo := False;
-  try
-    actRun.Execute;
-  finally
-    PSScriptDebugger1.UseDebugInfo := True;
-  end;
-end;
-
-procedure TfrmScripts.pcScriptsChange(Sender: TObject);
-begin
-  //  à améliorer:
-  //     - les params ne s'affichent pas
-  //     - l'autocomplete ne s'affiche pas toujours
-  //     - l'autocomplete choisi mal ce qui est affiché en fonction de la position dans le script
-  SynEditAutoComplete.Editor := GetActiveScript;
-  SynEditParamShow.Editor := GetActiveScript;
 end;
 
 procedure TfrmScripts.BuildLokalObjektList(Comp: TPSPascalCompiler);
@@ -1714,18 +754,6 @@ begin
         end;
       end;
     end;
-  end;
-end;
-
-procedure TfrmScripts.Button3Click(Sender: TObject);
-var
-  re: TBdtkRegEx;
-begin
-  re := TBdtkRegEx.Create;
-  try
-
-  finally
-    re.Free;
   end;
 end;
 
@@ -2321,11 +1349,1188 @@ begin
     FillAutoComplete(List, Types, FromFather);
 end;
 
+{$ENDREGION}
+
+{$REGION 'Edition'}
+const
+  imgGutterBREAK = 0;
+  imgGutterBREAKVALID = 1;
+  imgGutterBREAKINVAL = 2;
+  imgGutterCOMPLINE = 3;
+  imgGutterEXECLINECL = 4;
+  imgGutterEXECLINEBP = 5;
+  imgGutterEXECLINE = 6;
+  imgGutterBREAKDISABLED = 7;
+
+procedure TfrmScripts.seScript1GutterClick(Sender: TObject; Button: TMouseButton; X, Y, Line: Integer; Mark: TSynEditMark);
+begin
+  if X <= TSynEdit(Sender).Gutter.LeftOffset then
+    ToggleBreakPoint(FInfoScripts.ScriptName(TSynEdit(Sender)), Line, False);
+end;
+
+procedure TfrmScripts.seScript1GutterPaint(Sender: TObject; aLine, X, Y: Integer);
+var
+  IconIndex: Integer;
+  i: Integer;
+  Script: AnsiString;
+  Proc, Pos: Cardinal;
+begin
+  Script := FInfoScripts.ScriptName(TSynEdit(Sender));
+  IconIndex := -1;
+  i := FDebugPlugin.Breakpoints.IndexOf(Script, aLine);
+  if i <> -1 then
+  begin
+    if not PSScriptDebugger1.Running then
+      if FDebugPlugin.Breakpoints[i].Active then
+        IconIndex := imgGutterBREAK
+      else
+        IconIndex := imgGutterBREAKDISABLED
+    else
+    begin
+      if (Cardinal(aLine) = FActiveLine) and SameText(FActiveFile, Script) then
+        IconIndex := imgGutterEXECLINEBP
+      else if FDebugPlugin.Breakpoints[i].Active then
+        IconIndex := imgGutterBREAKVALID
+      else
+        IconIndex := imgGutterBREAKDISABLED;
+    end;
+  end
+  else
+  begin
+    if (PSScriptDebugger1.Exec.DebugMode = dmPaused) and (Cardinal(aLine) = FActiveLine) and SameText(FActiveFile, Script) then
+      IconIndex := imgGutterEXECLINE;
+  end;
+
+  if Compiled then
+    if TranslatePositionEx(Proc, Pos, aLine, Script) then
+      case IconIndex of
+        -1: IconIndex := imgGutterCOMPLINE;
+        // imgGutterBREAKDISABLED: IconIndex := imgGutterCOMPLINE;
+        // imgGutterBREAK: IconIndex := imgGutterCOMPLINE;
+        // imgGutterBREAKVALID: IconIndex := imgGutterCOMPLINE;
+        imgGutterEXECLINE: IconIndex := imgGutterEXECLINECL;
+      end
+    else
+      case IconIndex of
+        imgGutterBREAK: IconIndex := imgGutterBREAKINVAL;
+        imgGutterBREAKVALID: IconIndex := imgGutterBREAKINVAL;
+      end;
+
+  if IconIndex <> -1 then
+    lstDebugImages.Draw(TSynEdit(Sender).Canvas, X, Y, IconIndex);
+end;
+
+procedure TfrmScripts.seScript1SpecialLineColors(Sender: TObject; Line: Integer; var Special: Boolean; var FG, BG: TColor);
+var
+  i: Integer;
+  Script: AnsiString;
+  Proc, Pos: Cardinal;
+begin
+  Script := FInfoScripts.ScriptName(TSynEdit(Sender));
+  i := FDebugPlugin.Breakpoints.IndexOf(Script, Line);
+
+  if (Cardinal(Line) = FActiveLine) and SameText(FActiveFile, Script) then
+  begin
+    Special := True;
+    FG := clWhite;
+    BG := clNavy;
+  end
+  else if i <> -1 then
+  begin
+    Special := True;
+    if FDebugPlugin.Breakpoints[i].Active then
+    begin
+      if Compiled and not TranslatePositionEx(Proc, Pos, Line, Script) then
+      begin
+        FG := clWhite;
+        BG := clOlive;
+      end
+      else
+      begin
+        FG := clWhite;
+        BG := clRed;
+      end;
+    end
+    else
+    begin
+      FG := clRed;
+      BG := clLime;
+    end;
+  end
+  else if (FErrorLine > 0) and (Cardinal(Line) = FErrorLine) and SameText(FErrorFile, Script) then
+  begin
+    Special := True;
+    FG := clWhite;
+    BG := clMaroon;
+  end
+
+  else
+    Special := False;
+end;
+
+procedure TfrmScripts.seScript1StatusChange(Sender: TObject; Changes: TSynStatusChanges);
+var
+  Attri: TSynHighlighterAttributes;
+  Token: string;
+  SB: TStatusBar;
+  Editor: TSynEdit;
+begin
+  if (scCaretX in Changes) or (scCaretY in Changes) then
+  begin
+    Editor := TSynEdit(TSynEdit(Sender));
+    SB := FInfoScripts.InfoScript(Editor).FSB;
+    SB.Panels[0].Text := Format('%.3d : %.3d', [Editor.CaretY, Editor.CaretX]);
+    if Editor.GetHighlighterAttriAtRowCol(Editor.CaretXY, Token, Attri) then
+    begin
+      SB.Panels[2].Text := Attri.Name;
+    end
+    else
+      SB.Panels[2].Text := '';
+  end;
+  if (scModified in Changes) then
+  begin
+    //    FCurrentFile.Modified := EScript.Modified;
+  end;
+end;
+
+procedure TfrmScripts.SearchFind1Execute(Sender: TObject);
+var
+  dummyReplace: string;
+begin
+  if GetActiveScript.SelAvail and (GetActiveScript.BlockBegin.Line = GetActiveScript.BlockEnd.Line) then
+  begin
+    FLastSearch := GetActiveScript.SelText;
+    Include(FSearchOptions, ssoSelectedOnly);
+  end
+  else
+  begin
+    FLastSearch := GetActiveScript.WordAtCursor;
+    Exclude(FSearchOptions, ssoSelectedOnly);
+  end;
+
+  if Sender = SearchFind1 then
+  begin
+    // chercher
+    Exclude(FSearchOptions, ssoReplace);
+    Exclude(FSearchOptions, ssoReplaceAll);
+
+    if not TfrmScriptSearch.Execute(FLastSearch, dummyReplace, FSearchOptions) then
+      Exit;
+  end
+  else
+  begin
+    // remplacer
+    Include(FSearchOptions, ssoReplace);
+    Exclude(FSearchOptions, ssoReplaceAll);
+
+    if not TfrmScriptSearch.Execute(FLastSearch, FLastReplace, FSearchOptions) then
+      Exit;
+  end;
+
+  SearchFindNext1Execute(Sender);
+end;
+
+procedure TfrmScripts.SearchFindNext1Execute(Sender: TObject);
+begin
+  if FLastSearch = '' then
+    SearchFind1Execute(SearchFind1)
+  else if GetActiveScript.SearchReplace(FLastSearch, FLastReplace, FSearchOptions) = 0 then
+    ShowMessage('Texte non trouvé');
+end;
+
+procedure TfrmScripts.EditCut1Execute(Sender: TObject);
+begin
+  GetActiveScript.CutToClipboard;
+end;
+
+procedure TfrmScripts.EditCopy1Execute(Sender: TObject);
+begin
+  GetActiveScript.CopyToClipboard;
+end;
+
+procedure TfrmScripts.EditPaste1Execute(Sender: TObject);
+begin
+  GetActiveScript.PasteFromClipboard;
+end;
+
+procedure TfrmScripts.EditSelectAll1Execute(Sender: TObject);
+begin
+  GetActiveScript.SelectAll;
+end;
+
+procedure TfrmScripts.EditUndo1Execute(Sender: TObject);
+begin
+  GetActiveScript.Undo;
+end;
+
+procedure TfrmScripts.EditRedo1Execute(Sender: TObject);
+begin
+  GetActiveScript.Redo;
+end;
+
+procedure TfrmScripts.seScript1ReplaceText(Sender: TObject; const ASearch, AReplace: string; Line, Column: Integer; var Action: TSynReplaceAction);
+begin
+  case MessageDlg('Remplacer cette occurence ?', mtConfirmation, [mbYes, mbNo, mbCancel, mbYesToAll], 0) of
+    mrYes: Action := raReplace;
+    mrNo: Action := raSkip;
+    mrCancel: Action := raCancel;
+    mrYesToAll: Action := raReplaceAll;
+  end;
+end;
+
+procedure TfrmScripts.seScript1Change(Sender: TObject);
+begin
+  Compiled := False;
+  TSynEdit(Sender).Tag := 1;
+  FInfoScripts.InfoScript(TSynEdit(Sender)).FSB.Panels[1].Text := 'Modifié';
+  if (FErrorLine > 0) then
+  begin
+    GetScript(FErrorFile).InvalidateLine(FErrorLine);
+    GetScript(FErrorFile).InvalidateGutterLine(FErrorLine);
+    FErrorLine := 0;
+    FErrorFile := '';
+  end;
+end;
+
+procedure TfrmScripts.actFermerExecute(Sender: TObject);
+begin
+  if not FForceClose and (FInfoScripts.ScriptName(GetActiveScript) = Projet) then
+    Exit;
+
+  if GetActiveScript.Tag = 1 then
+  begin
+    case MessageDlg('L''unité "' + string(FInfoScripts.ScriptName(GetActiveScript)) + '" a été modifiée, voulez-vous l''enregistrer?', mtConfirmation, [mbYes, mbNo, mbCancel], 0) of
+      mrYes: actEnregistrer.Execute;
+      mrNo: ;
+      mrCancel: Abort;
+    end;
+  end;
+  FInfoScripts.Delete(pcScripts.ActivePageIndex);
+  pcScripts.ActivePage.Free;
+end;
+
+procedure TfrmScripts.actEnregistrerExecute(Sender: TObject);
+begin
+  GetActiveScript.Lines.SaveToFile(FInfoScripts.ScriptFileName(GetActiveScript));
+  GetActiveScript.Tag := 0;
+  FInfoScripts.InfoScript(GetActiveScript).FSB.Panels[1].Text := '';
+end;
+
+procedure TfrmScripts.actEnregistrerSousExecute(Sender: TObject);
+begin
+  //
+end;
+
+procedure TfrmScripts.ListView1DblClick(Sender: TObject);
+begin
+  if not Assigned(ListView1.Selected) then
+    Exit;
+  Projet := AnsiString(ListView1.Selected.Caption);
+end;
+
+procedure TfrmScripts.seScript1ProcessUserCommand(Sender: TObject; var Command: TSynEditorCommand; var AChar: Char; Data: Pointer);
+begin
+  case Command - ecUserFirst of
+    1: LoadScript(AnsiString(GetActiveScript.WordAtCursor));
+  end;
+end;
+
+procedure TfrmScripts.pcScriptsChange(Sender: TObject);
+begin
+  //  à améliorer:
+  //     - les params ne s'affichent pas
+  //     - l'autocomplete ne s'affiche pas toujours
+  //     - l'autocomplete choisi mal ce qui est affiché en fonction de la position dans le script
+  SynEditAutoComplete.Editor := GetActiveScript;
+  SynEditParamShow.Editor := GetActiveScript;
+end;
+
 procedure TfrmScripts.seScript1KeyPress(Sender: TObject; var Key: Char);
 begin
   if (Key = ' ') and ((GetKeyState(VK_CONTROL) < 0) or (GetKeyState(VK_SHIFT) < 0)) then
     Key := #0;
 end;
+
+{$ENDREGION}
+
+procedure TfrmScripts.WMSyscommand(var msg: TWmSysCommand);
+begin
+  case (msg.CmdType and $FFF0) of
+    SC_CLOSE: if not PSScriptDebugger1.Running then
+        inherited;
+    else
+      inherited;
+  end;
+end;
+
+procedure TfrmScripts.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
+var
+  Editor: TSynEdit;
+begin
+  Editor := GetActiveScript;
+  Handled := True;
+  EditCut1.Enabled := Assigned(Editor) and Editor.SelAvail;
+  EditCopy1.Enabled := Assigned(Editor) and Editor.SelAvail;
+  EditPaste1.Enabled := Assigned(Editor) and Editor.CanPaste;
+  EditUndo1.Enabled := Assigned(Editor) and Editor.CanUndo;
+  EditRedo1.Enabled := Assigned(Editor) and Editor.CanRedo;
+  actCompile.Enabled := FProjetOuvert;
+  actRun.Enabled := FProjetOuvert;
+  actRunWithoutDebug.Enabled := FProjetOuvert and not PSScriptDebugger1.Running;
+  actFermer.Enabled := Assigned(Editor) and (FForceClose or (FInfoScripts.ScriptName(GetActiveScript) <> Projet));
+  actEnregistrer.Enabled := Assigned(Editor);
+  actEnregistrerSous.Enabled := Assigned(Editor);
+end;
+
+function TfrmScripts.GetProjet: AnsiString;
+begin
+  Result := PSScriptDebugger1.MainFileName;
+end;
+
+procedure TfrmScripts.SetProjet(const Value: AnsiString);
+begin
+  ProjetOuvert := False;
+  // doit etre fait avant le LoadScript
+  PSScriptDebugger1.MainFileName := Value;
+  LoadScript(Value);
+  ProjetOuvert := True;
+end;
+
+procedure TfrmScripts.SetProjetOuvert(const Value: Boolean);
+begin
+  if not Value then
+  begin
+    FForceClose := True;
+    try
+      ClearPages;
+      Compiled := False;
+      FDebugPlugin.Messages.Clear;
+      PSScriptDebugger1.MainFileName := '';
+    finally
+      FForceClose := False;
+    end;
+  end;
+  FProjetOuvert := Value;
+end;
+
+procedure TfrmScripts.SetCompiled(const Value: Boolean);
+var
+  Editor: TSynEdit;
+begin
+  FCompiled := Value;
+  Editor := GetActiveScript;
+  if Assigned(Editor) then
+    Editor.Invalidate;
+end;
+
+procedure TfrmScripts.FormCreate(Sender: TObject);
+var
+  i: Integer;
+  sr: TSearchRec;
+begin
+  FAlbumToImport := TAlbumComplet.Create;
+  FListTypesImages := TStringList.Create;
+  LoadStrings(6, FListTypesImages);
+
+  fTypeInfos := TIDHashMap.Create;
+
+  Assert(not Assigned(PSScriptDebugger1.Comp.OnBeforeCleanup), 'PSScriptDebugger1.Comp.OnBeforeCleanup déjà utilisé');
+  PSScriptDebugger1.Comp.OnBeforeCleanup := AutoCompleteCompilerBeforeCleanUp;
+
+  FInfoScripts := TInfosScripts.Create;
+
+  FForceClose := False;
+  PageControl1.ActivePageIndex := 0;
+  FDebugPlugin := TDebugInfos.Create;
+  FDebugPlugin.OnGetScript := GetScript;
+  FDebugPlugin.Watches.View := vstSuivis;
+  FDebugPlugin.Messages.View := vstMessages;
+  FDebugPlugin.Breakpoints.View := vstBreakpoints;
+
+  // force à reprendre les params de delphi s'il est installé sur la machine
+  SynPasSyn1.UseUserSettings(0);
+
+  FPSImport_RegExpr := TPSImport_BdtkRegEx.Create(Self);
+  TPSPluginItem(PSScriptDebugger1.Plugins.Add).Plugin := FPSImport_RegExpr;
+  FPSImport_BdtkObjects := TPSImport_BdtkObjects.Create(Self);
+  TPSPluginItem(PSScriptDebugger1.Plugins.Add).Plugin := FPSImport_BdtkObjects;
+
+  i := FindFirst(TGlobalVar.Utilisateur.Options.RepertoireScripts + '\*.bds', faAnyFile, sr);
+  if i = 0 then
+    try
+      while i = 0 do
+      begin
+        if (sr.Attr and faDirectory) = 0 then
+          ListView1.Items.Add.Caption := ChangeFileExt(sr.Name, '');
+        i := FindNext(sr);
+      end;
+    finally
+      FindClose(sr);
+    end;
+  PageControl2.ActivePage := tbScripts;
+end;
+
+procedure TfrmScripts.FormDestroy(Sender: TObject);
+begin
+  ClearPages;
+  FInfoScripts.Free;
+  fTypeInfos.Free;
+  FDebugPlugin.Free;
+  FAlbumToImport.Free;
+  FListTypesImages.Free;
+end;
+
+function TfrmScripts.GetFullNameScript(const Script: AnsiString): string;
+var
+  MatchFound: SysUtils.TFilenameCaseMatch;
+begin
+  if ExtractFileExt(Script) = '' then
+    if ExtractFileName(Script) = Projet then
+      Result := string(Script) + '.bds'
+    else
+      Result := string(Script) + '.bdu';
+
+  if ExtractFilePath(Script) = '' then
+    Result := TGlobalVar.Utilisateur.Options.RepertoireScripts + Result;
+
+  Result := SysUtils.ExpandFileNameCase(Result, MatchFound);
+end;
+
+function TfrmScripts.CorrectScriptName(const Script: AnsiString): AnsiString;
+begin
+  if Script = '' then
+    Result := Projet
+  else
+    Result := Script;
+end;
+
+function TfrmScripts.GetScriptLines(const Script: AnsiString; out Output: AnsiString): Boolean;
+var
+  path: string;
+  f: TFileStream;
+  Editor: TSynEdit;
+begin
+  Editor := GetScript(Script);
+  if Assigned(Editor) then
+  begin
+    Output := AnsiString(Editor.Lines.Text);
+    Result := True;
+    Exit;
+  end;
+
+  Path := GetFullNameScript(Script);
+  try
+    F := TFileStream.Create(Path, fmOpenRead or fmShareDenyWrite);
+  except
+    Result := False;
+    Exit;
+  end;
+  try
+    SetLength(Output, f.Size);
+    f.Read(Output[1], Length(Output));
+  finally
+    f.Free;
+  end;
+  Result := True;
+end;
+
+procedure TfrmScripts.LoadScript(const Script: AnsiString);
+var
+  Code: AnsiString;
+  LockWindow: ILockWindow;
+  info: TInfoScript;
+  Editor: TSynEdit;
+begin
+  Editor := GetScript(Script);
+  if not Assigned(Editor) then
+  begin
+    LockWindow := TLockWindow.Create(pcScripts);
+
+    // doit être fait avant la création de page
+    if not GetScriptLines(Script, Code) then
+      raise Exception.Create('Impossible de trouver l''unité ' + string(Script) + '.');
+
+    info := TInfoScript.Create;
+    FInfoScripts.Add(info);
+
+    info.FFileName := GetFullNameScript(Script);
+    info.FScriptName := AnsiString(ChangeFileExt(ExtractFileName(info.FFileName), ''));
+
+    info.FTabSheet := TTabSheet.Create(pcScripts);
+    info.FTabSheet.PageControl := pcScripts;
+    info.FTabSheet.Caption := string(info.FScriptName);
+
+    info.FEditor := TSynEdit.Create(info.FTabSheet);
+    info.FEditor.Parent := info.FTabSheet;
+    info.FEditor.Align := alClient;
+    info.FEditor.Color := clWhite;
+    info.FEditor.ActiveLineColor := 16314351;
+    info.FEditor.Font.Color := clWindowText;
+    info.FEditor.Font.Height := -13;
+    info.FEditor.Font.Name := 'Courier New';
+    info.FEditor.Font.Style := [];
+    info.FEditor.OnMouseMove := seScript1MouseMove;
+    info.FEditor.Gutter.AutoSize := True;
+    info.FEditor.Gutter.DigitCount := 3;
+    info.FEditor.Gutter.Font.Color := clWindowText;
+    info.FEditor.Gutter.Font.Height := -11;
+    info.FEditor.Gutter.Font.Name := 'Terminal';
+    info.FEditor.Gutter.Font.Style := [];
+    info.FEditor.Gutter.LeftOffset := 27;
+    info.FEditor.Gutter.ShowLineNumbers := True;
+    info.FEditor.Gutter.Width := 0;
+    info.FEditor.Highlighter := SynPasSyn1;
+    info.FEditor.Options := [eoAutoIndent, eoTabIndent, eoSmartTabs, eoAutoSizeMaxScrollWidth, eoDragDropEditing, eoGroupUndo, eoRightMouseMovesCursor, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoTabIndent, eoTabsToSpaces, eoTrimTrailingSpaces];
+    info.FEditor.ScrollHintFormat := shfTopToBottom;
+    info.FEditor.SearchEngine := SynEditSearch1;
+    info.FEditor.TabWidth := 2;
+    info.FEditor.WantTabs := True;
+    info.FEditor.OnChange := seScript1Change;
+    info.FEditor.OnGutterClick := seScript1GutterClick;
+    info.FEditor.OnGutterPaint := seScript1GutterPaint;
+    info.FEditor.OnReplaceText := seScript1ReplaceText;
+    info.FEditor.OnSpecialLineColors := seScript1SpecialLineColors;
+    info.FEditor.OnStatusChange := seScript1StatusChange;
+    info.FEditor.OnProcessUserCommand := seScript1ProcessUserCommand;
+    info.FEditor.OnKeyPress := seScript1KeyPress;
+    info.FEditor.AddKey(ecUserFirst + 1, VK_RETURN, [ssCtrl]);
+
+    TSynDebugPlugin.Create(info.FEditor, FDebugPlugin);
+    info.FEditor.Lines.Text := string(Code);
+
+    info.FSB := TStatusBar.Create(info.FTabSheet);
+    info.FSB.Parent := info.FTabSheet;
+    info.FSB.Panels.Add.Width := 50;
+    info.FSB.Panels.Add.Width := 50;
+    info.FSB.Panels.Add.Width := 50;
+
+    Editor := info.FEditor;
+    info.FTabSheet.Visible := True;
+  end;
+  GoToPosition(Editor, 1, 1);
+end;
+
+procedure TfrmScripts.ClearPages;
+var
+  i: Integer;
+begin
+  for i := 0 to Pred(pcScripts.PageCount) do
+    actFermer.Execute;
+end;
+
+{$REGION 'Débuggage'}
+procedure TfrmScripts.PSScriptDebugger1Breakpoint(Sender: TObject; const FileName: AnsiString; Position, Row, Col: Cardinal);
+begin
+  FActiveLine := Row;
+  FActiveFile := CorrectScriptName(FileName);
+  GoToPosition(GetScript(FActiveFile), FActiveLine, 1);
+  FDebugPlugin.Watches.UpdateView;
+end;
+
+procedure TfrmScripts.actStepOverExecute(Sender: TObject);
+begin
+  if PSScriptDebugger1.Exec.Status = isRunning then
+    PSScriptDebugger1.StepOver
+  else
+  begin
+    if Compile then
+    begin
+      PSScriptDebugger1.StepInto;
+      Execute;
+    end;
+  end;
+end;
+
+procedure TfrmScripts.actStepIntoExecute(Sender: TObject);
+begin
+  if PSScriptDebugger1.Exec.Status = isRunning then
+    PSScriptDebugger1.StepInto
+  else
+  begin
+    if Compile then
+    begin
+      PSScriptDebugger1.StepInto;
+      Execute;
+    end;
+  end;
+end;
+
+procedure TfrmScripts.actResetExecute(Sender: TObject);
+begin
+  if PSScriptDebugger1.Exec.Status = isRunning then
+    PSScriptDebugger1.Stop;
+end;
+
+procedure TfrmScripts.actDecompileExecute(Sender: TObject);
+var
+  s: AnsiString;
+  script: string;
+  i, j: LongInt;
+  fi: PFunctionInfo;
+  pt: TIfList;
+  r: PPositionData;
+begin
+  if Compile then
+  begin
+    PSScriptDebugger1.GetCompiled(s);
+    IFPS3DataToText(s, script);
+    output.Lines.Text := script;
+
+    output.Lines.Add('[DEBUG DATA]');
+    for i := 0 to TCrackPSDebugExec(PSScriptDebugger1.Exec).FDebugDataForProcs.Count - 1 do
+    begin
+      fi := TCrackPSDebugExec(PSScriptDebugger1.Exec).FDebugDataForProcs[i];
+      pt := fi^.FPositionTable;
+      if fi^.Func is TPSExternalProcRec then
+        with TPSExternalProcRec(fi^.Func) do
+          output.Lines.Add(Format('ExternalProc: %s %s', [Name, Decl]))
+      else if fi^.Func is TPSInternalProcRec then
+        with TPSInternalProcRec(fi^.Func) do
+          output.Lines.Add(Format('InternalProc: %s %s', [ExportName, ExportDecl]))
+      else
+        output.Lines.Add('unknown proc');
+
+      for j := 0 to pt.Count - 1 do
+      begin
+        r := pt[j];
+        output.Lines.Add(Format('%s: P=%d, RxC=%dx%d, SP=%d', [r^.FileName, r^.Position, r^.Row, r^.Col, r^.SourcePosition]));
+      end;
+    end;
+
+    PageControl1.ActivePage := TTabSheet(Output.Parent);
+  end;
+end;
+
+procedure TfrmScripts.actBreakpointExecute(Sender: TObject);
+begin
+  ToggleBreakPoint(FInfoScripts.ScriptName(GetActiveScript), GetActiveScript.CaretY, False);
+end;
+
+procedure TfrmScripts.actAddSuiviExecute(Sender: TObject);
+begin
+  FDebugPlugin.Watches.AddWatch(AnsiString(GetActiveScript.WordAtCursor));
+end;
+
+procedure TfrmScripts.actRunToCursorExecute(Sender: TObject);
+begin
+  FRunToCursor := GetActiveScript.CaretY;
+  FRunToCursorFile := FInfoScripts.ScriptName(GetActiveScript);
+  actRun.Execute;
+end;
+
+procedure TfrmScripts.vstSuivisNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: UnicodeString);
+begin
+  FDebugPlugin.Watches[Node.Index].Name := AnsiString(NewText);
+  FDebugPlugin.Watches.View.InvalidateNode(Node);
+end;
+
+procedure TfrmScripts.vstSuivisEditing(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
+begin
+  Allowed := Column = 0;
+end;
+
+procedure TfrmScripts.vstSuivisInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+begin
+  Node.CheckType := ctCheckBox;
+  if FDebugPlugin.Watches[Node.Index].Active then
+    Node.CheckState := csCheckedNormal
+  else
+    Node.CheckState := csUncheckedNormal;
+end;
+
+procedure TfrmScripts.vstSuivisChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
+begin
+  FDebugPlugin.Watches[Node.Index].Active := Node.CheckState = csCheckedNormal;
+  FDebugPlugin.Watches.View.InvalidateNode(Node);
+end;
+
+procedure TfrmScripts.vstSuivisGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
+begin
+  if Column = -1 then
+    Column := 0;
+  with FDebugPlugin.Watches[Node.Index] do
+    case Column of
+      0: CellText := string(Name);
+      1: CellText := string(GetVariableValue(Name, Active));
+    end;
+end;
+
+procedure TfrmScripts.vstSuivisPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+begin
+  if Node.CheckState = csCheckedNormal then
+    TargetCanvas.Font.Color := clWindowText
+  else
+    TargetCanvas.Font.Color := clGrayText;
+end;
+
+procedure TfrmScripts.GoToMessage(Msg: TMessageInfo);
+var
+  Editor: TSynEdit;
+begin
+  Editor := GetScript(Msg.Fichier);
+  if not Assigned(Editor) then
+    LoadScript(Msg.Fichier);
+  GoToPosition(GetScript(Msg.Fichier), Msg.Line, Msg.Char);
+  PageControl1.ActivePage := TTabSheet(vstMessages.Parent);
+end;
+
+procedure TfrmScripts.vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
+begin
+  if Column = -1 then
+    Column := 0;
+  with FDebugPlugin.Messages[Node.Index] do
+    case Column of
+      0:
+        case Category of
+          cmInfo: CellText := 'Information';
+          cmCompileError: CellText := 'Compilation';
+          cmRuntimeError: CellText := 'Exécution';
+          else
+            CellText := '';
+        end;
+      1: CellText := string(TypeMessage);
+      2: CellText := string(Fichier);
+      3: CellText := string(Text);
+    end;
+end;
+
+procedure TfrmScripts.vstMessagesDblClick(Sender: TObject);
+begin
+  GoToMessage(FDebugPlugin.Messages.Current);
+end;
+
+procedure TfrmScripts.vstBreakpointsDblClick(Sender: TObject);
+begin
+  GoToBreakpoint(FDebugPlugin.Breakpoints.Current);
+end;
+
+procedure TfrmScripts.GoToBreakpoint(Msg: TBreakpointInfo);
+var
+  Editor: TSynEdit;
+begin
+  Editor := GetScript(Msg.Fichier);
+  if not Assigned(Editor) then
+    LoadScript(Msg.Fichier);
+  GoToPosition(GetScript(Msg.Fichier), Msg.Line, 0);
+  PageControl1.ActivePage := TTabSheet(vstBreakpoints.Parent);
+end;
+
+procedure TfrmScripts.GoToPosition(Editor: TSynEdit; Line, Char: Cardinal);
+begin
+  if not Assigned(Editor) then
+    Exit;
+
+  if (Line < Cardinal(Editor.TopLine + 2)) or (Line > Cardinal(Editor.TopLine + Editor.LinesInWindow - 2)) then
+    Editor.TopLine := Line - Cardinal(Editor.LinesInWindow div 2);
+
+  Editor.CaretY := Line;
+  Editor.CaretX := Char;
+  Editor.Invalidate; // Line et GutterLine sont insuffisants pour certains cas
+  PageControl2.ActivePage := tbEdition;
+  pcScripts.ActivePage := TTabSheet(Editor.Parent);
+  if pcScripts.PageCount = 1 then
+    pcScriptsChange(nil);
+  Editor.SetFocus;
+end;
+
+procedure TfrmScripts.vstBreakpointsChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
+begin
+  with FDebugPlugin.Breakpoints[Node.Index] do
+    ToggleBreakPoint(Fichier, Line, True);
+  FDebugPlugin.Breakpoints.View.InvalidateNode(Node);
+end;
+
+procedure TfrmScripts.vstBreakpointsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: String);
+begin
+  if Column = -1 then
+    Column := 0;
+  with FDebugPlugin.Breakpoints[Node.Index] do
+    case Column of
+      0: CellText := 'Ligne ' + SysUtils.IntToStr(Line);
+      1: CellText := string(Fichier);
+    end;
+end;
+
+procedure TfrmScripts.vstBreakpointsInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+begin
+  Node.CheckType := ctCheckBox;
+  if FDebugPlugin.Breakpoints[Node.Index].Active then
+    Node.CheckState := csCheckedNormal
+  else
+    Node.CheckState := csUncheckedNormal;
+end;
+
+procedure TfrmScripts.vstBreakpointsPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+begin
+  if Node.CheckState = csCheckedNormal then
+    TargetCanvas.Font.Color := clWindowText
+  else
+    TargetCanvas.Font.Color := clGrayText;
+end;
+
+procedure TfrmScripts.ToggleBreakPoint(const Script: AnsiString; Line: Cardinal; Keep: Boolean);
+var
+  i: Integer;
+begin
+  i := FDebugPlugin.Breakpoints.IndexOf(Script, Line);
+  if i = -1 then // nouveau point d'arrêt
+  begin
+    FDebugPlugin.Breakpoints.AddBreakpoint(Script, Line);
+    if PSScriptDebugger1.Running then
+      if Script = PSScriptDebugger1.MainFileName then
+        PSScriptDebugger1.SetBreakPoint('', Line)
+      else
+        PSScriptDebugger1.SetBreakPoint(Script, Line);
+  end
+  else if Keep then // changement d'état du point d'arrêt
+  begin
+    FDebugPlugin.Breakpoints[i].Active := not FDebugPlugin.Breakpoints[i].Active;
+    if PSScriptDebugger1.Running then
+      if FDebugPlugin.Breakpoints[i].Active then
+        if Script = PSScriptDebugger1.MainFileName then
+          PSScriptDebugger1.SetBreakPoint('', Line)
+        else
+          PSScriptDebugger1.SetBreakPoint(Script, Line)
+      else if Script = PSScriptDebugger1.MainFileName then
+        PSScriptDebugger1.ClearBreakPoint('', Line)
+      else
+        PSScriptDebugger1.ClearBreakPoint(Script, Line);
+  end
+  else
+  begin // suppression du point d'arrêt
+    FDebugPlugin.Breakpoints.Delete(i);
+    if PSScriptDebugger1.Running then
+      PSScriptDebugger1.ClearBreakPoint(Script, Line);
+  end;
+end;
+
+function TfrmScripts.GetVar(const Name: AnsiString; out s: AnsiString): PIFVariant;
+var
+  i: Longint;
+  s1: AnsiString;
+begin
+  s := UpperCase(Name);
+  if AnsiStrings.AnsiPos('.', s) > 0 then
+  begin
+    s1 := AnsiString(Copy(string(s), 1, AnsiStrings.AnsiPos('.', s) - 1));
+    delete(s, 1, AnsiStrings.AnsiPos('.', Name));
+  end
+  else
+  begin
+    s1 := s;
+    s := '';
+  end;
+  Result := nil;
+  with PSScriptDebugger1 do
+  begin
+    for i := 0 to Exec.CurrentProcVars.Count - 1 do
+      if UpperCase(Exec.CurrentProcVars[i]) = s1 then
+      begin
+        Result := Exec.GetProcVar(i);
+        break;
+      end;
+    if Result = nil then
+    begin
+      for i := 0 to Exec.CurrentProcParams.Count - 1 do
+        if Uppercase(Exec.CurrentProcParams[i]) = s1 then
+        begin
+          Result := Exec.GetProcParam(i);
+          break;
+        end;
+    end;
+    if Result = nil then
+    begin
+      for i := 0 to Exec.GlobalVarNames.Count - 1 do
+        if Uppercase(Exec.GlobalVarNames[i]) = s1 then
+        begin
+          Result := Exec.GetGlobalVar(i);
+          break;
+        end;
+    end;
+  end;
+end;
+
+function TfrmScripts.GetVariableValue(const VarName: AnsiString; Actif: Boolean): AnsiString;
+var
+  pv: PIFVariant;
+  Prefix: AnsiString;
+begin
+  if Actif then
+    if PSScriptDebugger1.Running then
+    begin
+      pv := GetVar(VarName, Prefix);
+      if pv = nil then
+        Result := '{Expression inconnue}'
+      else
+        Result := PSVariantToString(NewTPSVariantIFC(pv, False), Prefix);
+    end
+    else
+      Result := '{Valeur inaccessible}'
+  else
+    Result := '<désactivé>';
+end;
+
+procedure TfrmScripts.seScript1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+const
+  WordVar: AnsiString = '';
+var
+  pv: PIFVariant;
+  Prefix: AnsiString;
+  s: AnsiString;
+begin
+  if not PSScriptDebugger1.Running then
+  begin
+    WordVar := '';
+    GetActiveScript.ShowHint := False;
+    Exit;
+  end;
+  s := AnsiString(GetActiveScript.WordAtMouse);
+  if s <> WordVar then
+    Application.CancelHint;
+  WordVar := s;
+
+  pv := GetVar(WordVar, Prefix);
+  if pv = nil then
+  begin
+    GetActiveScript.Hint := '';
+    GetActiveScript.ShowHint := False;
+  end
+  else
+  begin
+    GetActiveScript.Hint := string(PSVariantToString(NewTPSVariantIFC(pv, False), Prefix));
+    GetActiveScript.ShowHint := True;
+  end;
+end;
+
+{$ENDREGION}
+
+{$REGION 'Exécution'}
+procedure TfrmScripts.SetResultat(const Chaine: string);
+begin
+  Output.Lines.Add(Chaine);
+  if (PageControl1.ActivePage <> TTabSheet(vstSuivis.Parent)) or (FDebugPlugin.Watches.CountActive = 0) then
+    PageControl1.ActivePage := TTabSheet(Output.Parent);
+  Application.ProcessMessages;
+end;
+
+procedure TfrmScripts.PSScriptDebugger1Execute(Sender: TPSScript);
+var
+  i: Integer;
+begin
+  PSScriptDebugger1.ClearBreakPoints;
+  if PSScriptDebugger1.UseDebugInfo then
+    for i := 0 to Pred(FDebugPlugin.Breakpoints.Count) do
+      with FDebugPlugin.Breakpoints[i] do
+        if Active then
+          if Fichier = PSScriptDebugger1.MainFileName then
+            PSScriptDebugger1.SetBreakPoint(Fichier, Line)
+          else
+            PSScriptDebugger1.SetBreakPoint(AnsiStrings.UpperCase(Fichier), Line);
+
+  PSScriptDebugger1.SetVarToInstance('AlbumToImport', FAlbumToImport);
+end;
+
+procedure TfrmScripts.actCompileExecute(Sender: TObject);
+begin
+  if not PSScriptDebugger1.Running then
+    Compile;
+end;
+
+procedure TfrmScripts.actRunExecute(Sender: TObject);
+begin
+  if PSScriptDebugger1.Running then
+  begin
+    PSScriptDebugger1.Resume;
+    FActiveLine := 0;
+    FActiveFile := '';
+    GetActiveScript.Refresh;
+  end
+  else
+  begin
+    if Compile then
+      Execute;
+  end;
+end;
+
+function TfrmScripts.Execute: Boolean;
+begin
+  FAlbumToImport.Clear;
+  Output.Clear;
+  PageControl1.ActivePage := TTabSheet(vstSuivis.Parent);
+  if PSScriptDebugger1.Execute then
+  begin
+    //    AddMessage('Succesfully Execute');
+    FErrorLine := 0;
+    Result := True;
+  end
+  else
+  begin
+    FErrorLine := PSScriptDebugger1.ExecErrorRow;
+    FErrorFile := CorrectScriptName(PSScriptDebugger1.ExecErrorFileName);
+    FDebugPlugin.Messages.AddRuntimeErrorMessage(
+      FErrorFile,
+      AnsiString(Format('%s (Bytecode %d:%d)', [PSScriptDebugger1.ExecErrorToString, PSScriptDebugger1.ExecErrorProcNo, PSScriptDebugger1.ExecErrorByteCodePosition])),
+      PSScriptDebugger1.ExecErrorRow,
+      PSScriptDebugger1.ExecErrorCol);
+    GoToMessage(FDebugPlugin.Messages.Last);
+    Result := False;
+    try
+      PSScriptDebugger1.Exec.RaiseCurrentException;
+    except
+      on e: EPSException do
+        Application.HandleException(nil);
+      else
+        raise;
+    end;
+  end;
+end;
+
+procedure TfrmScripts.PSScriptDebugger1Compile(Sender: TPSScript);
+var
+  i: Integer;
+begin
+  for i := 0 to Pred(FListTypesImages.Count) do
+    PSScriptDebugger1.Comp.AddConstantN('cti' + AnsiStrings.StringReplace(AnsiString(SansAccents(FListTypesImages.ValueFromIndex[i])), ' ', '_', [rfReplaceAll]), 'integer').SetInt(StrToInt(AnsiString(FListTypesImages.Names[i])));
+
+  PSScriptDebugger1.AddMethod(Self, @TfrmScripts.SetResultat, 'procedure WriteToConsole(const Chaine: string);');
+
+  PSScriptDebugger1.AddFunction(@GetPage, 'function GetPage(const url: string; UTF8: Boolean): string;');
+  PSScriptDebugger1.AddFunction(@findInfo, 'function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;');
+  PSScriptDebugger1.AddFunction(@MakeAuteur, 'function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteur;');
+  PSScriptDebugger1.AddFunction(@AskSearchEntry, 'function AskSearchEntry(const Labels: array of string; out Search: string; out Index: Integer): Boolean');
+  PSScriptDebugger1.AddFunction(@CombineURL, 'function CombineURL(const Root, URL: string): string;');
+  PSScriptDebugger1.AddFunction(@HTMLDecode, 'function HTMLDecode(const Chaine: string): string;');
+
+  PSScriptDebugger1.AddFunction(@SysUtils.Format, 'function Format(const Format: string; const Args: array of const): string;');
+
+  PSScriptDebugger1.AddFunction(@SysUtils.SameText, 'function SameText(const S1, S2: string): Boolean;');
+  PSScriptDebugger1.AddFunction(@ShowMessage, 'procedure ShowMessage(const Msg: string);');
+  PSScriptDebugger1.AddFunction(@StrUtils.PosEx, 'function PosEx(const SubStr, S: string; Offset: Cardinal): Integer;');
+
+  PSScriptDebugger1.Comp.AddTypeS('TReplaceFlag', '(rfReplaceAll, rfIgnoreCase)');
+  PSScriptDebugger1.Comp.AddTypeS('TReplaceFlags', 'set of TReplaceFlag');
+  PSScriptDebugger1.AddFunction(@SysUtils.StringReplace, 'function StringReplace(const S, OldPattern, NewPattern: string; Flags: TReplaceFlags): string;');
+  PSScriptDebugger1.AddFunction(@ScriptStrToFloatDef, 'function StrToFloatDef(const S: string; const Default: Extended): Extended;');
+
+  PSScriptDebugger1.AddRegisteredVariable('AlbumToImport', 'TAlbumComplet');
+end;
+
+procedure TfrmScripts.PSScriptDebugger1Idle(Sender: TObject);
+begin
+  Application.HandleMessage;
+end;
+
+procedure TfrmScripts.PSScriptDebugger1AfterExecute(Sender: TPSScript);
+begin
+  FActiveLine := 0;
+  FActiveFile := '';
+  FRunToCursor := 0;
+  FRunToCursorFile := '';
+  PSScriptDebugger1.ClearBreakPoints;
+  if pcScripts.PageCount > 0 then
+    GetActiveScript.Refresh;
+  vstSuivis.Invalidate;
+  PageControl1.ActivePage := TTabSheet(Output.Parent);
+end;
+
+procedure TfrmScripts.PSScriptDebugger1LineInfo(Sender: TObject; const FileName: AnsiString; Position, Row, Col: Cardinal);
+var
+  Editor: TSynEdit;
+begin
+  if (Row = FRunToCursor) and SameText(CorrectScriptName(FileName), FRunToCursorFile) and (PSScriptDebugger1.Exec.DebugMode = dmRun) then
+    PSScriptDebugger1.Pause;
+
+  if PSScriptDebugger1.Exec.DebugMode <> dmRun then
+  begin
+    FActiveLine := Row;
+    FActiveFile := CorrectScriptName(FileName);
+    Editor := GetScript(FActiveFile);
+    if not Assigned(Editor) then
+    begin
+      LoadScript(FActiveFile);
+      Editor := GetScript(FActiveFile);
+    end;
+    GoToPosition(Editor, FActiveLine, 1);
+    FDebugPlugin.Watches.UpdateView;
+  end;
+end;
+
+function TfrmScripts.PSScriptDebugger1NeedFile(Sender: TObject; const OrginFileName: AnsiString; var FileName, Output: AnsiString): Boolean;
+begin
+  Result := GetScriptLines(FileName, Output);
+end;
+
+function TfrmScripts.Compile: Boolean;
+var
+  i: Longint;
+  Msg: TMessageInfo;
+  Script: AnsiString;
+begin
+  GetScriptLines(Projet, Script);
+  PSScriptDebugger1.Script.Text := string(Script);
+  Result := PSScriptDebugger1.Compile;
+  FDebugPlugin.Messages.Clear;
+  Msg := nil;
+  for i := 0 to PSScriptDebugger1.CompilerMessageCount - 1 do
+    with PSScriptDebugger1.CompilerMessages[i] do
+      if ClassType = TPSPascalCompilerWarning then
+        FDebugPlugin.Messages.AddCompileErrorMessage(ModuleName, ShortMessageToString, tmWarning, Row, Col)
+      else if ClassType = TPSPascalCompilerHint then
+        FDebugPlugin.Messages.AddCompileErrorMessage(ModuleName, ShortMessageToString, tmHint, Row, Col)
+      else if ClassType = TPSPascalCompilerError then
+      begin
+        Msg := FDebugPlugin.Messages[FDebugPlugin.Messages.AddCompileErrorMessage(ModuleName, ShortMessageToString, tmError, Row, Col)];
+      end
+      else
+        FDebugPlugin.Messages.AddCompileErrorMessage(ModuleName, ShortMessageToString, tmUnknown, Row, Col);
+
+  if Assigned(Msg) then
+    GoToMessage(Msg);
+  Compiled := Result;
+end;
+
+function TfrmScripts.TranslatePositionEx(out Proc, Position: Cardinal; Row: Cardinal; Fn: AnsiString): Boolean;
+var
+  i, j: LongInt;
+  fi: PFunctionInfo;
+  pt: TIfList;
+  r: PPositionData;
+begin
+  Result := True;
+  Proc := 0;
+  Position := 0;
+  for i := 0 to TCrackPSDebugExec(PSScriptDebugger1.Exec).FDebugDataForProcs.Count - 1 do
+  begin
+    Result := False;
+    fi := TCrackPSDebugExec(PSScriptDebugger1.Exec).FDebugDataForProcs[i];
+    pt := fi^.FPositionTable;
+    for j := 0 to pt.Count - 1 do
+    begin
+      r := pt[j];
+      if not AnsiSameText(r^.FileName, Fn) then
+        Continue;
+      if r^.Row = Row then
+      begin
+        Proc := TCrackPSDebugExec(PSScriptDebugger1.Exec).FProcs.IndexOf(fi^.Func);
+        Position := r^.Position;
+        Result := True;
+        Exit;
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmScripts.actRunWithoutDebugExecute(Sender: TObject);
+begin
+  PSScriptDebugger1.UseDebugInfo := False;
+  try
+    actRun.Execute;
+  finally
+    PSScriptDebugger1.UseDebugInfo := True;
+  end;
+end;
+
+{$ENDREGION}
 
 end.
 

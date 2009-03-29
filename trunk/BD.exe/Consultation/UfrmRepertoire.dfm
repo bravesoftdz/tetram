@@ -31,6 +31,10 @@ object frmRepertoire: TfrmRepertoire
     TabStop = False
     object TabAlbums: TTabSheet
       Caption = 'Albums'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         337
         373)
@@ -146,10 +150,10 @@ object frmRepertoire: TfrmRepertoire
           item
             Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
             Position = 0
-            Width = 329
+            Width = 333
           end>
       end
-      inline FrameRechercheRapideAlbums: TFrameRechercheRapide
+      inline FrameRechercheRapideAlbums: TframRechercheRapide
         Left = 2
         Top = 2
         Width = 333
@@ -206,7 +210,7 @@ object frmRepertoire: TfrmRepertoire
         OnDblClick = vstAlbumsDblClick
         Columns = <>
       end
-      inline FrameRechercheRapideEmprunteurs: TFrameRechercheRapide
+      inline FrameRechercheRapideEmprunteurs: TframRechercheRapide
         Left = 2
         Top = 2
         Width = 333
@@ -264,7 +268,7 @@ object frmRepertoire: TfrmRepertoire
         OnDblClick = vstAlbumsDblClick
         Columns = <>
       end
-      inline FrameRechercheRapideAuteurs: TFrameRechercheRapide
+      inline FrameRechercheRapideAuteurs: TframRechercheRapide
         Left = 2
         Top = 2
         Width = 333
@@ -322,7 +326,7 @@ object frmRepertoire: TfrmRepertoire
         OnDblClick = vstAlbumsDblClick
         Columns = <>
       end
-      inline FrameRechercheRapideSeries: TFrameRechercheRapide
+      inline FrameRechercheRapideSeries: TframRechercheRapide
         Left = 2
         Top = 2
         Width = 333
@@ -380,7 +384,7 @@ object frmRepertoire: TfrmRepertoire
         OnDblClick = vstAlbumsDblClick
         Columns = <>
       end
-      inline FrameRechercheRapideParaBD: TFrameRechercheRapide
+      inline FrameRechercheRapideParaBD: TframRechercheRapide
         Left = 2
         Top = 2
         Width = 333

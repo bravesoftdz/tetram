@@ -4,14 +4,14 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, VirtualTree, Buttons, VDTButton, StdCtrls, DBEditLabeled,
+  Dialogs, VirtualTree, Buttons, VDTButton, StdCtrls, EditLabeled,
   PngSpeedButton;
 
 type
   TOnSearchEvent = procedure(Sender: TObject; NextSearch: Boolean) of object;
   TOnNewEvent = procedure(Sender: TObject) of object;
 
-  TFrameRechercheRapide = class(TFrame)
+  TframRechercheRapide = class(TFrame)
     edSearch: TEditLabeled;
     btNext: TVDTButton;
     btNew: TVDTButton;
@@ -46,23 +46,23 @@ uses
 
 {$R *.dfm}
 
-constructor TFrameRechercheRapide.Create(AOwner: TComponent);
+constructor TframRechercheRapide.Create(AOwner: TComponent);
 begin
   inherited;
   ShowNewButton := True;
 end;
 
-procedure TFrameRechercheRapide.DoOnNew;
+procedure TframRechercheRapide.DoOnNew;
 begin
   if Assigned(FOnNew) then FOnNew(Self);
 end;
 
-procedure TFrameRechercheRapide.DoOnSearch(NextSearch: Boolean);
+procedure TframRechercheRapide.DoOnSearch(NextSearch: Boolean);
 begin
   if Assigned(FOnSearch) then FOnSearch(Self, NextSearch);
 end;
 
-procedure TFrameRechercheRapide.DoSearch(NextSearch: Boolean);
+procedure TframRechercheRapide.DoSearch(NextSearch: Boolean);
 begin
   if Assigned(FVirtualTreeView) then
   begin
@@ -71,22 +71,22 @@ begin
   end;
 end;
 
-procedure TFrameRechercheRapide.edSearchChange(Sender: TObject);
+procedure TframRechercheRapide.edSearchChange(Sender: TObject);
 begin
   DoSearch(Sender = btNext);
 end;
 
-procedure TFrameRechercheRapide.edSearchKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+procedure TframRechercheRapide.edSearchKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
   if Key = VK_F3 then DoSearch(True);
 end;
 
-function TFrameRechercheRapide.GetShowNewButton: Boolean;
+function TframRechercheRapide.GetShowNewButton: Boolean;
 begin
   Result := btNew.Visible;
 end;
 
-procedure TFrameRechercheRapide.SetShowNewButton(const Value: Boolean);
+procedure TframRechercheRapide.SetShowNewButton(const Value: Boolean);
 begin
   btNew.Visible := Value;
   if Value then
@@ -102,7 +102,7 @@ begin
   end;
 end;
 
-procedure TFrameRechercheRapide.SetVirtualTreeView(const Value: TVirtualStringTree);
+procedure TframRechercheRapide.SetVirtualTreeView(const Value: TVirtualStringTree);
 begin
   FVirtualTreeView := Value;
   if Assigned(FVirtualTreeView) then
@@ -124,7 +124,7 @@ begin
   btNew.Enabled := edSearch.Enabled;
 end;
 
-procedure TFrameRechercheRapide.btNewClick(Sender: TObject);
+procedure TframRechercheRapide.btNewClick(Sender: TObject);
 begin
   if Assigned(FOnNew) then
     FOnNew(Self)
@@ -149,7 +149,7 @@ begin
     end;
 end;
 
-procedure TFrameRechercheRapide.SetEnabled(Value: Boolean);
+procedure TframRechercheRapide.SetEnabled(Value: Boolean);
 begin
   inherited;
   edSearch.Enabled := Value;

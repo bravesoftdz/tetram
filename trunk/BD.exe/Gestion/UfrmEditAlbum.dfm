@@ -882,7 +882,7 @@ object frmEditAlbum: TfrmEditAlbum
       Caption = ' '
       TabOrder = 16
       object SpeedButton3: TVDTButton
-        Left = 301
+        Left = 304
         Top = 84
         Width = 72
         Height = 21
@@ -890,7 +890,7 @@ object frmEditAlbum: TfrmEditAlbum
         OnClick = SpeedButton3Click
       end
       object Label9: TLabel
-        Left = 207
+        Left = 210
         Top = 87
         Width = 25
         Height = 13
@@ -899,7 +899,7 @@ object frmEditAlbum: TfrmEditAlbum
         Layout = tlCenter
       end
       object Label10: TLabel
-        Left = 16
+        Left = 15
         Top = 63
         Width = 39
         Height = 13
@@ -908,7 +908,7 @@ object frmEditAlbum: TfrmEditAlbum
         Layout = tlCenter
       end
       object Label11: TLabel
-        Left = 25
+        Left = 24
         Top = 112
         Width = 30
         Height = 13
@@ -917,7 +917,7 @@ object frmEditAlbum: TfrmEditAlbum
         Layout = tlCenter
       end
       object VDTButton6: TVDTButton
-        Left = 301
+        Left = 304
         Top = 109
         Width = 48
         Height = 20
@@ -998,7 +998,7 @@ object frmEditAlbum: TfrmEditAlbum
         Items = <>
       end
       object Label18: TLabel
-        Left = 219
+        Left = 222
         Top = 63
         Width = 52
         Height = 13
@@ -1007,7 +1007,7 @@ object frmEditAlbum: TfrmEditAlbum
         Layout = tlCenter
       end
       object Label21: TLabel
-        Left = 19
+        Left = 18
         Top = 150
         Width = 36
         Height = 13
@@ -1064,7 +1064,7 @@ object frmEditAlbum: TfrmEditAlbum
         Items = <>
       end
       object VDTButton13: TCRFurtifLight
-        Left = 352
+        Left = 355
         Top = 109
         Width = 21
         Height = 20
@@ -1173,7 +1173,7 @@ object frmEditAlbum: TfrmEditAlbum
         WithBorder = True
       end
       object Label24: TLabel
-        Left = 116
+        Left = 108
         Top = 175
         Width = 38
         Height = 13
@@ -1182,7 +1182,7 @@ object frmEditAlbum: TfrmEditAlbum
         Layout = tlCenter
       end
       object Label25: TLabel
-        Left = 205
+        Left = 204
         Top = 175
         Width = 30
         Height = 13
@@ -1232,7 +1232,7 @@ object frmEditAlbum: TfrmEditAlbum
         Items = <>
       end
       object Label8: TLabel
-        Left = 0
+        Left = 1
         Top = 27
         Width = 53
         Height = 13
@@ -1240,7 +1240,7 @@ object frmEditAlbum: TfrmEditAlbum
         Caption = 'Collection :'
       end
       object Label5: TLabel
-        Left = 12
+        Left = 13
         Top = 3
         Width = 41
         Height = 13
@@ -1256,7 +1256,7 @@ object frmEditAlbum: TfrmEditAlbum
         Caption = 'Notes :'
       end
       object edPrix: TEditLabeled
-        Left = 234
+        Left = 237
         Top = 84
         Width = 64
         Height = 21
@@ -1279,7 +1279,7 @@ object frmEditAlbum: TfrmEditAlbum
         CurrencyChar = #0
       end
       object edAnneeEdition: TEditLabeled
-        Left = 57
+        Left = 60
         Top = 60
         Width = 46
         Height = 21
@@ -1296,7 +1296,7 @@ object frmEditAlbum: TfrmEditAlbum
         CurrencyChar = #0
       end
       object edISBN: TEditLabeled
-        Left = 57
+        Left = 60
         Top = 109
         Width = 241
         Height = 20
@@ -1357,7 +1357,7 @@ object frmEditAlbum: TfrmEditAlbum
           end>
       end
       object cbStock: TCheckBoxLabeled
-        Left = 57
+        Left = 60
         Top = 88
         Width = 61
         Height = 13
@@ -1388,7 +1388,7 @@ object frmEditAlbum: TfrmEditAlbum
           end>
       end
       object dtpAchat: TDateTimePickerLabeled
-        Left = 273
+        Left = 275
         Top = 60
         Width = 101
         Height = 21
@@ -1403,7 +1403,7 @@ object frmEditAlbum: TfrmEditAlbum
           end>
       end
       object cbGratuit: TCheckBoxLabeled
-        Left = 137
+        Left = 140
         Top = 87
         Width = 53
         Height = 16
@@ -1419,8 +1419,8 @@ object frmEditAlbum: TfrmEditAlbum
           end>
       end
       object cbOffert: TCheckBoxLabeled
-        Left = 137
-        Top = 62
+        Left = 140
+        Top = 63
         Width = 53
         Height = 16
         Cursor = crHandPoint
@@ -1435,7 +1435,7 @@ object frmEditAlbum: TfrmEditAlbum
           end>
       end
       object edNombreDePages: TEditLabeled
-        Left = 57
+        Left = 60
         Top = 147
         Width = 46
         Height = 21
@@ -1451,7 +1451,7 @@ object frmEditAlbum: TfrmEditAlbum
         CurrencyChar = #0
       end
       object edAnneeCote: TEditLabeled
-        Left = 156
+        Left = 152
         Top = 172
         Width = 46
         Height = 21
@@ -1467,7 +1467,7 @@ object frmEditAlbum: TfrmEditAlbum
         CurrencyChar = #0
       end
       object edPrixCote: TEditLabeled
-        Left = 237
+        Left = 240
         Top = 172
         Width = 64
         Height = 21
@@ -1489,7 +1489,7 @@ object frmEditAlbum: TfrmEditAlbum
         CurrencyChar = #0
       end
       object edNumPerso: TEditLabeled
-        Left = 214
+        Left = 216
         Top = 147
         Width = 160
         Height = 20
@@ -1503,56 +1503,56 @@ object frmEditAlbum: TfrmEditAlbum
         CurrencyChar = #0
       end
       inline vtEditCollections: TframVTEdit
-        Left = 56
+        Left = 60
         Top = 24
-        Width = 317
+        Width = 316
         Height = 21
         TabOrder = 1
-        ExplicitLeft = 56
+        ExplicitLeft = 60
         ExplicitTop = 24
-        ExplicitWidth = 317
+        ExplicitWidth = 316
         inherited btReset: TVDTButton
-          Left = 254
+          Left = 253
           ExplicitLeft = 226
         end
         inherited btNew: TVDTButton
-          Left = 296
+          Left = 295
           ExplicitLeft = 268
         end
         inherited btEdit: TVDTButton
-          Left = 275
+          Left = 274
           ExplicitLeft = 247
         end
         inherited VTEdit: TJvComboEdit
-          Width = 254
+          Width = 253
           OnChange = vtEditCollectionsVTEditChange
-          ExplicitWidth = 254
+          ExplicitWidth = 253
         end
       end
       inline vtEditEditeurs: TframVTEdit
-        Left = 56
+        Left = 60
         Top = 0
-        Width = 317
+        Width = 316
         Height = 21
         TabOrder = 0
-        ExplicitLeft = 56
-        ExplicitWidth = 317
+        ExplicitLeft = 60
+        ExplicitWidth = 316
         inherited btReset: TVDTButton
-          Left = 254
+          Left = 253
           ExplicitLeft = 226
         end
         inherited btNew: TVDTButton
-          Left = 296
+          Left = 295
           ExplicitLeft = 268
         end
         inherited btEdit: TVDTButton
-          Left = 275
+          Left = 274
           ExplicitLeft = 247
         end
         inherited VTEdit: TJvComboEdit
-          Width = 254
+          Width = 253
           OnChange = vtEditEditeursVTEditChange
-          ExplicitWidth = 254
+          ExplicitWidth = 253
         end
       end
       object edNotes: TMemoLabeled

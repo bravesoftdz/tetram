@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, Mask, Menus, ExtCtrls,
-  DBEditLabeled, DB, Buttons, VDTButton, UframBoutons, LoadComplet, UBdtForms,
+  EditLabeled, Buttons, VDTButton, UframBoutons, LoadComplet, UBdtForms,
   PngSpeedButton;
 
 type

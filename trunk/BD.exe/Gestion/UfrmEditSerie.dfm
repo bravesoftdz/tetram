@@ -935,7 +935,7 @@ object frmEditSerie: TfrmEditSerie
       OnDblClick = vtParaBDDblClick
       Columns = <>
     end
-    inline FrameRechercheRapideGenre: TFrameRechercheRapide
+    inline FrameRechercheRapideGenre: TframRechercheRapide
       Left = 552
       Top = 146
       Width = 226

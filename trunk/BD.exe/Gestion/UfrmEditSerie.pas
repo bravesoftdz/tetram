@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, ExtCtrls, DBCtrls, Mask, Buttons, VDTButton, ComCtrls,
-  DBEditLabeled, VirtualTrees, VirtualTree, LoadComplet, Menus, ExtDlgs, UframRechercheRapide, CRFurtif, UframBoutons, UBdtForms,
+  EditLabeled, VirtualTrees, VirtualTree, LoadComplet, Menus, ExtDlgs, UframRechercheRapide, CRFurtif, UframBoutons, UBdtForms,
   ComboCheck, StrUtils, PngSpeedButton, UframVTEdit;
 
 type
@@ -40,7 +40,7 @@ type
     Bevel5: TBevel;
     Label3: TLabel;
     Label4: TLabel;
-    FrameRechercheRapideGenre: TFrameRechercheRapide;
+    FrameRechercheRapideGenre: TFramRechercheRapide;
     Bevel1: TBevel;
     Frame11: TframBoutons;
     cbSorties: TCheckBoxLabeled;
@@ -90,11 +90,12 @@ type
   private
     { Déclarations privées }
     FSerie: TSerieComplete;
-    procedure SetID_Serie(const Value: TGUID);
+    procedure SetSerie(Value: TSerieComplete);
     function GetID_Serie: TGUID;
   public
     { Déclarations publiques }
-    property ID_Serie: TGUID read GetID_Serie write SetID_Serie;
+    property ID_Serie: TGUID read GetID_Serie;
+    property Serie: TSerieComplete read FSerie write SetSerie;
   end;
 
 implementation
@@ -142,8 +143,6 @@ begin
   cbxFormat.Value := -1;
   LoadCombo(8 {Sens de lecture}, cbxSensLecture);
   cbxSensLecture.Value := -1;
-
-  FSerie := TSerieComplete.Create;
 end;
 
 procedure TfrmEditSerie.FormDestroy(Sender: TObject);
@@ -151,7 +150,6 @@ begin
   lvScenaristes.Items.Count := 0;
   lvDessinateurs.Items.Count := 0;
   lvColoristes.Items.Count := 0;
-  FSerie.Free;
 end;
 
 procedure TfrmEditSerie.Frame11btnOKClick(Sender: TObject);
@@ -198,14 +196,15 @@ begin
   ModalResult := mrOk;
 end;
 
-procedure TfrmEditSerie.SetID_Serie(const Value: TGUID);
+procedure TfrmEditSerie.SetSerie(Value: TSerieComplete);
 var
   i: Integer;
   hg: IHourGlass;
   s: string;
 begin
   hg := THourGlass.Create;
-  FSerie.Fill(Value);
+  FSerie := Value;
+
   lvScenaristes.Items.BeginUpdate;
   lvDessinateurs.Items.BeginUpdate;
   lvColoristes.Items.BeginUpdate;

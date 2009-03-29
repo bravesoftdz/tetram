@@ -47,7 +47,7 @@
 			<DCC_N>true</DCC_N>
 			<DCC_E>false</DCC_E>
 			<DCC_WriteableConstants>true</DCC_WriteableConstants>
-			<DCC_UsePackage>VCL50;VCLX50;VCLSMP50;QRPT50;VCLDB50;VCLBDE50;VCLDBX50;TEEUI50;TEEDB50;TEE50;TEEQR50;NMFAST50;dclocx50;dclaxserver50;ibevnt50;VCLIB50;VCLIE50;INETDB50;INET50;vcl;rtl;dsnap;dbrtl;vcldb;websnap;webdsnap;inetdb;inet;xmlrtl;vclx;vclie;indy;bdertl;dsnapcon;VclSmp;MediaKit</DCC_UsePackage>
+			<DCC_UsePackage>VCL50;VCLX50;VCLSMP50;QRPT50;VCLDB50;VCLBDE50;VCLDBX50;TEEUI50;TEEDB50;TEE50;TEEQR50;NMFAST50;dclocx50;dclaxserver50;ibevnt50;VCLIB50;VCLIE50;INETDB50;INET50;vcl;rtl;dbrtl;vcldb;webdsnap;inetdb;inet;xmlrtl;vclx;vclie;indy;bdertl;VclSmp;MediaKit</DCC_UsePackage>
 			<DCC_DcuOutput>dcu</DCC_DcuOutput>
 			<DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
 		</PropertyGroup>
@@ -73,10 +73,10 @@
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
 			<RcCompile Include="ressources.rc">
-				<Form>ressources.res</Form>
+				<Form>&apos;ressources.res&apos;</Form>
 			</RcCompile>
 			<RcCompile Include="mises à jour\scripts_maj.rc">
-				<Form>scripts_maj.res</Form>
+				<Form>&apos;scripts_maj.res&apos;</Form>
 			</RcCompile>
 			<DCCReference Include="CommonConst.pas"/>
 			<DCCReference Include="Commun.pas"/>
@@ -178,9 +178,6 @@
 			<DCCReference Include="UfrmCustomize.pas">
 				<Form>frmCustomize</Form>
 			</DCCReference>
-			<DCCReference Include="UfrmProgression.pas">
-				<Form>frmProgression</Form>
-			</DCCReference>
 			<DCCReference Include="UfrmSplash.pas">
 				<Form>frmSplash</Form>
 			</DCCReference>
@@ -201,7 +198,7 @@
 				<DesignClass>TFrame</DesignClass>
 			</DCCReference>
 			<DCCReference Include="UframRechercheRapide.pas">
-				<Form>FrameRechercheRapide</Form>
+				<Form>framRechercheRapide</Form>
 				<DesignClass>TFrame</DesignClass>
 			</DCCReference>
 			<DCCReference Include="Consultation\MAJ.pas"/>
@@ -284,8 +281,7 @@
 			<DCCReference Include="Consultation\UChampsRecherche.pas"/>
 			<DCCReference Include="UBdtForms.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_0_0_5.pas"/>
-			<DCCReference Include="Web\Form_Publier.pas">
-				<ModuleName>UfrmPublier</ModuleName>
+			<DCCReference Include="Web\UfrmPublier.pas">
 				<Form>frmPublier</Form>
 			</DCCReference>
 			<DCCReference Include="Web\UNet.pas"/>
@@ -330,6 +326,17 @@
 				<Form>framVTEdit</Form>
 				<DesignClass>TFrame</DesignClass>
 			</DCCReference>
+			<DCCReference Include="mises à jour\UMAJ2_1_1_2.pas"/>
+			<DCCReference Include="LoadCompletImport.pas"/>
+			<DCCReference Include="Scripts\UfrmValidationImport.pas">
+				<Form>frmValidationImport</Form>
+			</DCCReference>
+			<DCCReference Include="Scripts\UfrmScriptChoix.pas">
+				<Form>frmScriptChoix</Form>
+			</DCCReference>
+			<DCCReference Include="UfrmProgression.pas">
+				<Form>frmProgression</Form>
+			</DCCReference>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
 			</BuildConfiguration>
@@ -366,6 +373,7 @@
 						<Parameters Name="UseLauncher">False</Parameters>
 						<Parameters Name="LoadAllSymbols">True</Parameters>
 						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+						<Parameters Name="RunParams">/Scripts</Parameters>
 					</Parameters>
 					<VersionInfo>
 						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
@@ -373,7 +381,7 @@
 						<VersionInfo Name="MajorVer">2</VersionInfo>
 						<VersionInfo Name="MinorVer">1</VersionInfo>
 						<VersionInfo Name="Release">1</VersionInfo>
-						<VersionInfo Name="Build">2</VersionInfo>
+						<VersionInfo Name="Build">4</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -385,7 +393,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">2.1.1.2</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">2.1.1.4</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2008</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks"/>
@@ -395,6 +403,23 @@
 						<VersionInfoKeys Name="Comments"/>
 					</VersionInfoKeys>
 					<Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclmcn120.bpl">Composants de connexion CodeGear DataSnap</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclmid120.bpl">Composants CodeGear MyBase DataAccess</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclIndyCore120.bpl">Indy 10 Core Design Time</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\Bin\dclIndyProtocols120.bpl">Indy 10 Protocols Design Time</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclwebsnap120.bpl">Composants CodeGear WebSnap</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclsoap120.bpl">Composants CodeGear SOAP</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclDataSnapProviderClient120.bpl">Composants client du fournisseur CodeGear DBExpress DataSnap</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclDBXDrivers120.bpl">Composants Pilote CodeGear</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclDBXDriversEnt120.bpl">Composants Pilote CodeGear Entreprise</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dcldbxcds120.bpl">Composant CodeGear SimpleDataset (DBX)</Excluded_Packages>
+						<Excluded_Packages Name="D:\Outils\Jedi Code Format\JCFIdeD12.bpl">JEDI Code Format IDE Plugin for CodeGear Delphi 2009 for Win32</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\6.0\Bpl\JclBaseExpert120.bpl">JCL Package containing common units for JCL Experts</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\6.0\Bpl\JclDebugExpert120.bpl">JCL Debug IDE extension</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\6.0\Bpl\JclProjectAnalysisExpert120.bpl">JCL Project Analyzer</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\6.0\Bpl\JclFavoriteFoldersExpert120.bpl">JCL Open and Save IDE dialogs with favorite folders</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\6.0\Bpl\JclRepositoryExpert120.bpl">JCL Package containing repository wizards</Excluded_Packages>
+						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\6.0\Bpl\JclSIMDViewExpert120.bpl">JCL Debug Window of XMM registers</Excluded_Packages>
 						<Excluded_Packages Name="$(BDS)\bin\dcloffice2k120.bpl">Composants Microsoft Office 2000 Sample Automation Server Wrapper</Excluded_Packages>
 						<Excluded_Packages Name="$(BDS)\bin\dclofficexp120.bpl">Composants Microsoft Office XP Sample Automation Server Wrapper</Excluded_Packages>
 					</Excluded_Packages>

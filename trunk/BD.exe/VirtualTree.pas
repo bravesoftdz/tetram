@@ -5,7 +5,7 @@ unit VirtualTree;
 interface
 
 uses
-  Windows, SysUtils, Classes, Controls, Graphics, VirtualTrees, DBEditLabeled, TypeRec, StrUtils;
+  Windows, SysUtils, Classes, Controls, Graphics, VirtualTrees, EditLabeled, TypeRec, StrUtils, LinkControls;
 
 type
   PInitialeInfo = ^RInitialeInfo;
@@ -25,21 +25,22 @@ type
     Detail: TBasePointeur;
   end;
 
-  TVirtualMode = (vmNone,
-    vmAlbums,
-    vmCollections,
-    vmEditeurs,
-    vmEmprunteurs,
-    vmGenres,
-    vmPersonnes,
-    vmSeries,
-    vmAlbumsAnnee,
-    vmAlbumsCollection,
-    vmAlbumsEditeur,
-    vmAlbumsGenre,
-    vmAlbumsSerie,
-    vmParaBDSerie,
-    vmAchatsAlbumsEditeur);
+  // !!! Les valeurs ne doivent pas être changées
+  TVirtualMode = (vmNone = 0,
+    vmAlbums = 1,
+    vmCollections = 2,
+    vmEditeurs = 3,
+    vmEmprunteurs = 4,
+    vmGenres = 5,
+    vmPersonnes = 6,
+    vmSeries = 7,
+    vmAlbumsAnnee = 8,
+    vmAlbumsCollection = 9,
+    vmAlbumsEditeur = 10,
+    vmAlbumsGenre = 11,
+    vmAlbumsSerie = 12,
+    vmParaBDSerie = 13,
+    vmAchatsAlbumsEditeur = 14);
 
   TOnCompareNodeString = procedure(Sender: TBaseVirtualTree; Node: PVirtualNode; const Text: string; var Concorde: Boolean) of object;
 

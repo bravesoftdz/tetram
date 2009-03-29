@@ -8,10 +8,17 @@ uses
 type
   TBdtkRegEx = class
   private
-    FRegEx: TJclAnsiRegEx;
+    FRegEx: TJclRegEx;
+    FLastFoundPos: Integer;
+    FSearchString: string;
   public
     constructor Create;
     destructor Destroy; override;
+
+    function BeginSearch(const Chaine, aRegEx: string): Boolean;
+    function Find(var Chaine: string): Boolean;
+    function Next: Boolean;
+    function GetCaptureByName(const Group: string): string;
   end;
 
 function ExtractRegEx(const Chaine, aRegEx: string): string;
@@ -39,7 +46,7 @@ var
 begin
   with TBdtkRegEx.Create do
     try
-      FRegEx.Compile(aRegEx, false);
+      if not FRegEx.Compile(aRegEx, false) then Exit;
       if FRegEx.Match(Chaine) and (FRegEx.CaptureCount > 0) then
       begin
         if Group = '' then
@@ -64,7 +71,8 @@ end;
 
 constructor TBdtkRegEx.Create;
 begin
-  FRegEx := TJclAnsiRegEx.Create;
+  FRegEx := TJclRegEx.Create;
+  FRegEx.Options := [roMultiLine, roIgnoreCase, roUTF8, roNewLineAny];
 end;
 
 destructor TBdtkRegEx.Destroy;
@@ -73,4 +81,36 @@ begin
   inherited;
 end;
 
+function TBdtkRegEx.BeginSearch(const Chaine, aRegEx: string): Boolean;
+begin
+  Result := FRegEx.Compile(aRegEx, true);
+  FSearchString := Chaine;
+  FLastFoundPos := 1;
+end;
+
+function TBdtkRegEx.Find(var Chaine: string): Boolean;
+begin
+  Result := Next;
+  if Result then
+    Chaine := FRegEx.Captures[1];
+end;
+
+function TBdtkRegEx.Next: Boolean;
+begin
+  Result := FRegEx.Match(FSearchString, FLastFoundPos);
+  FLastFoundPos := FRegEx.CaptureRanges[0].LastPos + 1;
+end;
+
+function TBdtkRegEx.GetCaptureByName(const Group: string): string;
+var
+  i: Integer;
+begin
+  i := FRegEx.IndexOfName(Group);
+  if (i > 0) then
+    Result := FRegEx.Captures[i]
+  else
+    Result := '';
+end;
+
 end.
+

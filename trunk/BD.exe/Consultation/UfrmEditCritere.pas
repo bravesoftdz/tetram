@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, UframBoutons, StdCtrls, DBCtrls, UfrmRecherche,
-  ActnList, DBEditLabeled, ComboCheck, ComCtrls, LoadComplet, UBdtForms;
+  ActnList, EditLabeled, ComboCheck, ComCtrls, LoadComplet, UBdtForms;
 
 type
   TfrmEditCritere = class(TbdtForm)

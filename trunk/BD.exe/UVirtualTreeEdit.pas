@@ -3,7 +3,7 @@ unit UVirtualTreeEdit;
 interface
 
 uses
-  SysUtils, Windows, Classes, Controls, Messages, JvToolEdit, VirtualTrees, VirtualTree, Variants, DBEditLabeled;
+  SysUtils, Windows, Classes, Controls, Messages, JvToolEdit, VirtualTrees, VirtualTree, Variants, EditLabeled, LinkControls;
 
 type
   TJvComboEdit = class(JvToolEdit.TJvComboEdit)
@@ -22,6 +22,7 @@ type
       procedure SetValue(const Value: Variant); override;
     published
       property TreeView: TVirtualStringTree read FTreeView;
+      property Value: Variant read GetValue write SetValue;
     end;
 
   private
@@ -44,7 +45,6 @@ type
     procedure PopupDropDown(DisableEdit: Boolean); override;
     procedure KeyDown(var Key: Word; Shift: TShiftState); override;
     procedure SetPopupValue(const Value: Variant); override;
-    procedure PopupChange; override;
     procedure Change; override;
     procedure DoEnter; override;
     procedure DoExit; override;
@@ -53,6 +53,7 @@ type
     destructor Destroy; override;
     function Data: Pointer;
     procedure CloseUp;
+    procedure PopupChange; override;
     procedure SetBounds(ALeft, ATop, AWidth, AHeight: Integer); override;
   published
     property Mode: TVirtualMode read GetMode write SetMode;
@@ -178,15 +179,17 @@ end;
 
 procedure TJvComboEdit.PopupChange;
 begin
-  SetInternalCurrentValue(PopupWindow.TreeView.CurrentValue);
-  if Assigned(OnChange) then
-    OnChange(Self);
+  //  SetInternalCurrentValue(PopupWindow.TreeView.CurrentValue);
 end;
 
 procedure TJvComboEdit.PopupCloseUp(Sender: TObject; Accept: Boolean);
 begin
   if Accept then
-    PopupChange;
+  begin
+    SetInternalCurrentValue(PopupWindow.TreeView.CurrentValue);
+    if Assigned(OnChange) then
+      OnChange(Self);
+  end;
   FReloadValue := False;
   try
     inherited;
@@ -205,6 +208,8 @@ begin
   finally
     FReloadValue := True;
   end;
+  if Assigned(OnChange) then
+    OnChange(Self);
 end;
 
 procedure TJvComboEdit.SetInternalCurrentValue(const Value: TGUID);
@@ -222,7 +227,8 @@ end;
 procedure TJvComboEdit.SetBounds(ALeft, ATop, AWidth, AHeight: Integer);
 begin
   inherited;
-  if Assigned(FPopup) then FPopup.Width := Max(300, Width);
+  if Assigned(FPopup) then
+    FPopup.Width := Max(300, Width);
 end;
 
 procedure TJvComboEdit.SetMode(const Value: TVirtualMode);
@@ -272,7 +278,7 @@ begin
       TreeView.CurrentValue := StringToGuid(Value);
   except
     on EConvertError do
-      TreeView.Find(Value, False);
+      TreeView.Find(Value, False)
     else
       raise;
   end;

@@ -22,7 +22,8 @@ procedure AjoutString(var Chaine: AnsiString; const Ajout, Espace: AnsiString; c
 
 function StringToGUIDDef(const GUID: string; const Default: TGUID): TGUID; inline;
 
-function NonZero(const S: string): string; inline;
+function NonZero(const S: string): string; inline; overload;
+function NonZero(const I: integer): string; inline; overload;
 
 function VerifieEAN(var Valeur: string): Boolean;
 function VerifieISBN(var Valeur: string; LongueurISBN: Integer = 10): Boolean;
@@ -103,6 +104,12 @@ function NonZero(const S: string): string;
 begin
   Result := s;
   if Trim(s) = '0' then Result := '';
+end;
+
+function NonZero(const I: integer): string;
+begin
+  Result := '';
+  if I <> 0 then Result := IntToStr(i);
 end;
 
 function IIf(Test: Boolean; const BackTrue, BackFalse: string): string;

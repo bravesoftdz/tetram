@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, ComCtrls, ExtCtrls,
-  ToolWin, Buttons, UframBoutons, ScanEdit, VDTButton, Menus, Commun, DBEditLabeled, VirtualTrees, VirtualTree,
+  ToolWin, Buttons, UframBoutons, ScanEdit, VDTButton, Menus, Commun, EditLabeled, VirtualTrees, VirtualTree,
   ComboCheck, UframRechercheRapide, LoadComplet, CRFurtif, UBdtForms;
 
 type
@@ -27,7 +27,7 @@ type
     lccEditions: TLightComboCheck;
     Panel6: TPanel;
     vtAlbums: TVirtualStringTree;
-    FrameRechercheRapide1: TFrameRechercheRapide;
+    FrameRechercheRapide1: TFramRechercheRapide;
     procedure FormCreate(Sender: TObject);
     procedure ListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure pretClick(Sender: TObject);

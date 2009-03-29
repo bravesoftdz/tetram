@@ -3,9 +3,7 @@ unit UdmScripts;
 interface
 
 uses
-  SysUtils, Classes, uPSComponent, uPSComponent_StdCtrls,
-  uPSComponent_Controls, uPSComponent_Forms, uPSComponent_DB,
-  uPSComponent_COM, uPSComponent_Default;
+  SysUtils, Classes;
 
 type
   TdmScripts = class(TDataModule)

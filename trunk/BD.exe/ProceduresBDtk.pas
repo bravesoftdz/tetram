@@ -3,7 +3,7 @@ unit ProceduresBDtk;
 interface
 
 uses
-  SysUtils, Windows, StdCtrls, Forms, Controls, UfrmProgression, ExtCtrls, CommonConst, Graphics;
+  SysUtils, Windows, StdCtrls, Forms, Controls, UfrmProgression, ExtCtrls, CommonConst, Graphics, StrUtils;
 
 type
   IImpressionApercu = interface
@@ -27,7 +27,7 @@ type
   private
     FTimer: TTimer;
 
-    FMessage: string;
+    FCaption, FMessage: string;
     FValeur, FMaxi: Integer;
     FTimeToWait: Cardinal;
     FForm: TFrmProgression;
@@ -47,6 +47,7 @@ type
 
   IModeEditing = interface
   end;
+
   TModeEditing = class(TInterfacedObject, IModeEditing)
   private
     FOldMode: TModeConsult;
@@ -61,13 +62,16 @@ function ChargeImage(Picture: TPicture; const ResName: string): Boolean; overloa
 function Convertisseur(Caller: TControl; var Value: Currency): Boolean;
 
 function Choisir(const Texte1, Texte2: string; Bouton: Integer): TModalResult;
+
 type
   TDetailAlbumOption = (daoScenario, daoDessins, daoCouleurs, daoHistoire, daoNotes);
   TDetailAlbumOptions = set of TDetailAlbumOption;
+
 function ChoisirDetailAlbum(Bouton: Integer; out DetailsOptions: TDetailAlbumOptions): TModalResult;
 
 type
   TDetailSerieOption = (dsoSerieSeule, dsoListeAlbums, dsoAlbumsDetails, dsoListeEditions, dsoEditionsDetaillees);
+
 const
   LibelleDetailSerieOption: array[TDetailSerieOption, TDetailSerieOption] of string = (
     ('Série seule', 'Liste simplifiée des albums et para-BD', 'Liste détaillée des albums et para-BD', 'Liste simplifiée des éditions', 'Liste détaillée des éditions'),
@@ -76,6 +80,7 @@ const
     ('', '', '', '', ''),
     ('', '', '', '', '')
     );
+
 function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption; out PrevisionsManquants: Boolean): TModalResult; overload;
 function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption): TModalResult; overload;
 
@@ -89,7 +94,8 @@ uses
 
 procedure TWaiting.ClearForm;
 begin
-  if Assigned(FForm) then FreeAndNil(FForm);
+  if Assigned(FForm) then
+    FreeAndNil(FForm);
 end;
 
 constructor TWaiting.Create(const Msg: string; WaitFor: Cardinal; Retour: PInteger);
@@ -99,40 +105,33 @@ begin
   FTimer.Interval := WaitFor;
   FTimer.OnTimer := Execute;
   FForm := nil;
+  FCaption := Msg;
   FTimeToWait := WaitFor;
-  if Assigned(Retour) then Retour^ := 0;
+  if Assigned(Retour) then
+    Retour^ := 0;
   PResult := Retour;
   FTimer.Enabled := True;
 end;
 
 procedure TWaiting.InitForm;
-var
-  FButton: TButton;
-  tmpForm: TFrmProgression;
 begin
-  tmpForm := TFrmProgression.Create(Application);
+  FForm := TFrmProgression.Create(Application);
   if Assigned(PResult) then
-  begin
-    FButton := TButton.Create(FForm);
-    with FButton do
-    begin
-      Parent := tmpForm;
-      ModalResult := mrCancel;
-      Caption := 'Annuler';
-      Parent.ClientHeight := Parent.ClientHeight + Height + 5;
-      SetBounds(Parent.ClientWidth - Width, Parent.ClientHeight - Height, Width, Height);
-      OnClick := Self.Cancel;
-    end;
-  end;
-  FForm := tmpForm;
+    FForm.framBoutons1.btnAnnuler.OnClick := Self.Cancel
+  else
+    FForm.framBoutons1.Visible := False;
+  if FCaption <> '' then
+    FForm.Caption := FCaption;
   RefreshForm;
+  FForm.Show;
 end;
 
 destructor TWaiting.Destroy;
 begin
   ShowProgression(FMessage, epFin);
   FreeAndNil(FTimer);
-  if Assigned(FForm) then ClearForm;
+  if Assigned(FForm) then
+    ClearForm;
   inherited;
 end;
 
@@ -143,15 +142,23 @@ begin
 end;
 
 procedure TWaiting.RefreshForm;
+var
+  tmp: string;
 begin
   if Assigned(FForm) then
   begin
     FForm.ProgressBar1.Max := FMaxi;
     FForm.ProgressBar1.Position := FValeur;
-    FForm.op.Caption := FMessage;
-    FForm.Show;
+    tmp := FMessage;
+    with FForm.op do
+      if Canvas.TextWidth(tmp) > Width then
+      begin
+        while Canvas.TextWidth(tmp + '...') > Width do
+          Delete(tmp, Length(tmp) div 2, 1);
+        Insert('...', tmp, Length(tmp) div 2 + 1);
+      end;
+    FForm.op.Caption := tmp;
   end;
-  // Application.ProcessMessages;
 end;
 
 procedure TWaiting.ShowProgression(const Texte: string; Etape: TEtapeProgression);
@@ -160,7 +167,8 @@ begin
     epNext: Inc(FValeur);
     epFin: FValeur := FMaxi;
   end;
-  FMessage := Texte;
+  if Texte <> '' then
+    FMessage := Texte;
 
   RefreshForm;
 end;
@@ -169,7 +177,8 @@ procedure TWaiting.ShowProgression(const Texte: string; Valeur, Maxi: Integer);
 begin
   FMaxi := Maxi;
   FValeur := Valeur;
-  FMessage := Texte;
+  if Texte <> '' then
+    FMessage := Texte;
   RefreshForm;
 end;
 
@@ -177,13 +186,15 @@ procedure TWaiting.ShowProgression(Texte: PChar; Valeur, Maxi: Integer);
 begin
   FMaxi := Maxi;
   FValeur := Valeur;
-  FMessage := Texte;
+  if Texte <> '' then
+    FMessage := Texte;
   RefreshForm;
 end;
 
 procedure TWaiting.Cancel(Sender: TObject);
 begin
-  if Assigned(PResult) then PResult^ := FForm.ModalResult;
+  if Assigned(PResult) then
+    PResult^ := FForm.ModalResult;
   FForm.Release;
   FForm := nil;
 end;
@@ -194,20 +205,22 @@ begin
   Picture.Bitmap.FreeImage;
   if TGlobalVar.Utilisateur.Options.Images and not IsRemoteSession then
   begin
-    if HandleDLLPic <= 32 then HandleDLLPic := LoadLibrary(PChar(RessourcePic));
+    if HandleDLLPic <= 32 then
+      HandleDLLPic := LoadLibrary(PChar(RessourcePic));
     if HandleDLLPic > 32 then
-    try
-      Picture.Bitmap.LoadFromResourceName(HandleDLLPic, ResName);
-      Result := True;
-    except
-    end;
+      try
+        Picture.Bitmap.LoadFromResourceName(HandleDLLPic, ResName);
+        Result := True;
+      except
+      end;
   end;
 end;
 
 function ChargeImage(ImgBmp: TImage; const ResName: string; ForceVisible: Boolean = True): Boolean;
 begin
   Result := ChargeImage(ImgBmp.Picture, ResName);
-  if ForceVisible then ImgBmp.Visible := not ImgBmp.Picture.Bitmap.Empty;
+  if ForceVisible then
+    ImgBmp.Visible := not ImgBmp.Picture.Bitmap.Empty;
 end;
 
 function Choisir(const Texte1, Texte2: string; Bouton: Integer): TModalResult;
@@ -220,29 +233,32 @@ begin
     Exit;
   end;
   with TFrmChoix.Create(Application) do
-  try
-    w := Max(Canvas.TextWidth(Texte1), Canvas.TextWidth(Texte2));
-    with BtnChoix1 do
-    begin
-      Width := Max(ClientWidth, w + Left);
-      Caption := Texte1;
+    try
+      w := Max(Canvas.TextWidth(Texte1), Canvas.TextWidth(Texte2));
+      with BtnChoix1 do
+      begin
+        Width := Max(ClientWidth, w + Left);
+        Caption := Texte1;
+      end;
+      with BtnChoix2 do
+      begin
+        Width := Max(ClientWidth, w + Left);
+        Caption := Texte2;
+      end;
+      ClientWidth := BtnChoix1.Width + 2 * BtnChoix1.Left;
+      Bevel2.Width := ClientWidth - 2 * Bevel2.Left;
+      Bevel1.Width := ClientWidth - 2 * Bevel1.Left;
+      BtnAnnuler.Left := (ClientWidth - BtnAnnuler.Width) div 2;
+      if bouton = 0 then
+        BtnAnnuler.Default := True;
+      if bouton = 1 then
+        BtnChoix1.Default := True;
+      if bouton = 2 then
+        BtnChoix2.Default := True;
+      Result := ShowModal;
+    finally
+      Free;
     end;
-    with BtnChoix2 do
-    begin
-      Width := Max(ClientWidth, w + Left);
-      Caption := Texte2;
-    end;
-    ClientWidth := BtnChoix1.Width + 2 * BtnChoix1.Left;
-    Bevel2.Width := ClientWidth - 2 * Bevel2.Left;
-    Bevel1.Width := ClientWidth - 2 * Bevel1.Left;
-    BtnAnnuler.Left := (ClientWidth - BtnAnnuler.Width) div 2;
-    if bouton = 0 then BtnAnnuler.Default := True;
-    if bouton = 1 then BtnChoix1.Default := True;
-    if bouton = 2 then BtnChoix2.Default := True;
-    Result := ShowModal;
-  finally
-    Free;
-  end;
 end;
 
 function ChoisirDetailAlbum(Bouton: Integer; out DetailsOptions: TDetailAlbumOptions): TModalResult;
@@ -258,69 +274,77 @@ begin
     Exit;
   end;
   with TFrmChoixDetail.Create(Application) do
-  try
-    w := Max(Canvas.TextWidth(Texte1), Canvas.TextWidth(Texte2));
-    with BtnChoix1 do
-    begin
-      Width := Max(ClientWidth, w + Left);
-      Caption := Texte1;
+    try
+      w := Max(Canvas.TextWidth(Texte1), Canvas.TextWidth(Texte2));
+      with BtnChoix1 do
+      begin
+        Width := Max(ClientWidth, w + Left);
+        Caption := Texte1;
+      end;
+      with BtnChoix2 do
+      begin
+        Width := Max(ClientWidth, w + Left);
+        Caption := Texte2;
+      end;
+      ClientWidth := BtnChoix1.Width + 2 * BtnChoix1.Left;
+      Bevel2.Width := ClientWidth - 2 * Bevel2.Left;
+      Bevel1.Width := ClientWidth - 2 * Bevel1.Left;
+      BtnAnnuler.Left := (ClientWidth - BtnAnnuler.Width) div 2;
+      if bouton = 0 then
+        BtnAnnuler.Default := True;
+      if bouton = 1 then
+        BtnChoix1.Default := True;
+      if bouton = 2 then
+        BtnChoix2.Default := True;
+      Result := ShowModal;
+      if Result = mrNo then
+      begin
+        if cbScenario.Checked then
+          Include(DetailsOptions, daoScenario);
+        if cbDessins.Checked then
+          Include(DetailsOptions, daoDessins);
+        if cbCouleurs.Checked then
+          Include(DetailsOptions, daoCouleurs);
+        if cbHistoire.Checked then
+          Include(DetailsOptions, daoHistoire);
+        if cbNotes.Checked then
+          Include(DetailsOptions, daoNotes);
+      end;
+    finally
+      Free;
     end;
-    with BtnChoix2 do
-    begin
-      Width := Max(ClientWidth, w + Left);
-      Caption := Texte2;
-    end;
-    ClientWidth := BtnChoix1.Width + 2 * BtnChoix1.Left;
-    Bevel2.Width := ClientWidth - 2 * Bevel2.Left;
-    Bevel1.Width := ClientWidth - 2 * Bevel1.Left;
-    BtnAnnuler.Left := (ClientWidth - BtnAnnuler.Width) div 2;
-    if bouton = 0 then BtnAnnuler.Default := True;
-    if bouton = 1 then BtnChoix1.Default := True;
-    if bouton = 2 then BtnChoix2.Default := True;
-    Result := ShowModal;
-    if Result = mrNo then
-    begin
-      if cbScenario.Checked then Include(DetailsOptions, daoScenario);
-      if cbDessins.Checked then Include(DetailsOptions, daoDessins);
-      if cbCouleurs.Checked then Include(DetailsOptions, daoCouleurs);
-      if cbHistoire.Checked then Include(DetailsOptions, daoHistoire);
-      if cbNotes.Checked then Include(DetailsOptions, daoNotes);
-    end;
-  finally
-    Free;
-  end;
 end;
 
 function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption): TModalResult;
 begin
   with TFrmChoixDetailSerie.Create(Application) do
-  try
-    CheckBox1.Visible := False;
-    MaxNiveauDetail := NiveauDetailMax;
-    Result := ShowModal;
-    if Result = mrOk then
-    begin
-      DetailSerieOption := TDetailSerieOption(LightComboCheck1.Value);
+    try
+      CheckBox1.Visible := False;
+      MaxNiveauDetail := NiveauDetailMax;
+      Result := ShowModal;
+      if Result = mrOk then
+      begin
+        DetailSerieOption := TDetailSerieOption(LightComboCheck1.Value);
+      end;
+    finally
+      Free;
     end;
-  finally
-    Free;
-  end;
 end;
 
 function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption; out PrevisionsManquants: Boolean): TModalResult;
 begin
   with TFrmChoixDetailSerie.Create(Application) do
-  try
-    MaxNiveauDetail := NiveauDetailMax;
-    Result := ShowModal;
-    if Result = mrOk then
-    begin
-      DetailSerieOption := TDetailSerieOption(LightComboCheck1.Value);
-      PrevisionsManquants := CheckBox1.Checked;
+    try
+      MaxNiveauDetail := NiveauDetailMax;
+      Result := ShowModal;
+      if Result = mrOk then
+      begin
+        DetailSerieOption := TDetailSerieOption(LightComboCheck1.Value);
+        PrevisionsManquants := CheckBox1.Checked;
+      end;
+    finally
+      Free;
     end;
-  finally
-    Free;
-  end;
 end;
 
 function Convertisseur(Caller: TControl; var Value: Currency): Boolean;
@@ -328,19 +352,22 @@ var
   p: TPoint;
 begin
   with TFrmConvers.Create(nil) do
-  try
-    Valeur := Value;
-    p := Caller.ClientOrigin;
-    Inc(p.y, Caller.Height);
-    Left := p.x;
-    Top := p.y;
-    if Left + Width > Screen.WorkAreaRect.Right then Left := Max(0, Screen.WorkAreaRect.Right - Width);
-    if Top + Height > Screen.WorkAreaRect.Bottom then Top := Max(0, Screen.WorkAreaRect.Bottom - Height);
-    Result := ShowModal = mrOk;
-    if Result then Value := Valeur;
-  finally
-    Free;
-  end;
+    try
+      Valeur := Value;
+      p := Caller.ClientOrigin;
+      Inc(p.y, Caller.Height);
+      Left := p.x;
+      Top := p.y;
+      if Left + Width > Screen.WorkAreaRect.Right then
+        Left := Max(0, Screen.WorkAreaRect.Right - Width);
+      if Top + Height > Screen.WorkAreaRect.Bottom then
+        Top := Max(0, Screen.WorkAreaRect.Bottom - Height);
+      Result := ShowModal = mrOk;
+      if Result then
+        Value := Valeur;
+    finally
+      Free;
+    end;
 end;
 
 { TModeEditing }

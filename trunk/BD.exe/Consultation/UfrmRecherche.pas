@@ -32,7 +32,7 @@ type
     Exporter1: TMenuItem;
     Imprimer1: TMenuItem;
     lbResult: TLabel;
-    FrameRechercheRapide1: TFrameRechercheRapide;
+    FrameRechercheRapide1: TFramRechercheRapide;
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
     TabSheet2: TTabSheet;

@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, ComCtrls, IniFiles, CommCtrl, ImgList,
-  Buttons, VDTButton, UframBoutons, Browss, DBEditLabeled, ComboCheck, Spin, UBdtForms,
+  Buttons, VDTButton, UframBoutons, Browss, EditLabeled, ComboCheck, Spin, UBdtForms,
   ZipMstr, PngSpeedButton, PngImageList;
 
 type

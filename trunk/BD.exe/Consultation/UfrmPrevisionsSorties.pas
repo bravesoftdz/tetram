@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, LoadComplet, VirtualTrees, VirtualTree, ToolWin,
   ProceduresBDtk, StdCtrls, ExtCtrls, Menus, ActnList, Buttons, VDTButton, UBdtForms, StrUtils,
-  DBEditLabeled, PngSpeedButton;
+  EditLabeled, PngSpeedButton;
 
 type
   TfrmPrevisionsSorties = class(TBdtForm, IImpressionApercu)

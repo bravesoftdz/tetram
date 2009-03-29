@@ -74,7 +74,8 @@ type
 
     procedure Assign(Ps: TBasePointeur); override;
 
-    procedure Fill(Query: TUIBQuery); override;
+    procedure Fill(Query: TUIBQuery); overload; override;
+    procedure Fill(const ID_Personne: TGUID); reintroduce; overload;
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
   end;
@@ -249,7 +250,8 @@ type
 
 implementation
 
-uses UdmPrinc, UIBLib, StrUtils;
+uses
+  UdmPrinc, UIBLib, StrUtils;
 
 { TBasePointeur }
 
@@ -293,7 +295,8 @@ begin
       LV.Items.Delete(i);
     end;
   finally
-    if DoClear then LV.Items.Clear;
+    if DoClear then
+      LV.Items.Clear;
     LV.Items.EndUpdate;
   end;
 end;
@@ -308,7 +311,8 @@ begin
       TBasePointeur(List[i]).Free;
     end;
   finally
-    if DoClear then List.Clear;
+    if DoClear then
+      List.Clear;
   end;
 end;
 
@@ -322,7 +326,8 @@ begin
       ListBox.Items.Objects[i].Free;
     end;
   finally
-    if DoClear then ListBox.Items.Clear;
+    if DoClear then
+      ListBox.Items.Clear;
   end;
 end;
 
@@ -442,16 +447,16 @@ var
 begin
   q := TUIBQuery.Create(nil);
   with q do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT NOMEDITEUR, ID_Editeur FROM EDITEURS WHERE ID_Editeur = ?';
-    Params.AsString[0] := GUIDToString(ID_Editeur);
-    Open;
-    Fill(q);
-  finally
-    Transaction.Free;
-    Free;
-  end;
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'SELECT NOMEDITEUR, ID_Editeur FROM EDITEURS WHERE ID_Editeur = ?';
+      Params.AsString[0] := GUIDToString(ID_Editeur);
+      Open;
+      Fill(q);
+    finally
+      Transaction.Free;
+      Free;
+    end;
 end;
 
 { TPersonnage }
@@ -478,6 +483,24 @@ begin
   inherited;
   ID := NonNull(Query, 'ID_Personne');
   Nom := Query.Fields.ByNameAsString['NomPersonne'];
+end;
+
+procedure TPersonnage.Fill(const ID_Personne: TGUID);
+var
+  q: TUIBQuery;
+begin
+  q := TUIBQuery.Create(nil);
+  with q do
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'select nompersonne, id_personne from personnes where id_personne = ?';
+      Params.AsString[0] := GUIDToString(ID_Personne);
+      Open;
+      Fill(q);
+    finally
+      Transaction.Free;
+      Free;
+    end;
 end;
 
 { TAuteur }
@@ -628,25 +651,26 @@ var
 begin
   q := TUIBQuery.Create(nil);
   with q do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT a.ID_Album, a.TitreAlbum, a.HorsSerie, a.Integrale, a.Tome, a.TomeDebut, a.TomeFin, a.ID_Serie, a.Achat, a.Complet, a.TitreSerie';
-    SQL.Add('FROM VW_LISTE_ALBUMS a');
-    SQL.Add('WHERE a.ID_ALBUM = :ID_Album');
-    if not IsEqualGUID(ID_Edition, GUID_NULL) then
-    begin
-      SQL[0] := SQL[0] + ', e.Stock';
-      SQL[1] := SQL[1] + ' INNER JOIN Editions e ON a.ID_Album = e.ID_Album';
-      SQL.Add('AND e.ID_Edition = :ID_Edition');
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'SELECT a.ID_Album, a.TitreAlbum, a.HorsSerie, a.Integrale, a.Tome, a.TomeDebut, a.TomeFin, a.ID_Serie, a.Achat, a.Complet, a.TitreSerie';
+      SQL.Add('FROM VW_LISTE_ALBUMS a');
+      SQL.Add('WHERE a.ID_ALBUM = :ID_Album');
+      if not IsEqualGUID(ID_Edition, GUID_NULL) then
+      begin
+        SQL[0] := SQL[0] + ', e.Stock';
+        SQL[1] := SQL[1] + ' INNER JOIN Editions e ON a.ID_Album = e.ID_Album';
+        SQL.Add('AND e.ID_Edition = :ID_Edition');
+      end;
+      Params.AsString[0] := GUIDToString(ID_Album);
+      if not IsEqualGUID(ID_Edition, GUID_NULL) then
+        Params.AsString[1] := GUIDToString(ID_Edition);
+      Open;
+      Fill(q);
+    finally
+      Transaction.Free;
+      Free;
     end;
-    Params.AsString[0] := GUIDToString(ID_Album);
-    if not IsEqualGUID(ID_Edition, GUID_NULL) then Params.AsString[1] := GUIDToString(ID_Edition);
-    Open;
-    Fill(q);
-  finally
-    Transaction.Free;
-    Free;
-  end;
 end;
 
 function TAlbum.ChaineAffichage(AvecSerie: Boolean): string;
@@ -715,18 +739,16 @@ var
 begin
   q := TUIBQuery.Create(nil);
   with q do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT ID_Collection, NomCollection';
-    SQL.Add('FROM COLLECTIONS');
-    SQL.Add('WHERE ID_COLLECTION = :ID_COLLECTION');
-    Params.AsString[0] := GUIDToString(ID_Collection);
-    Open;
-    Fill(q);
-  finally
-    Transaction.Free;
-    Free;
-  end;
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'select id_collection, nomcollection from collections where id_collection = ?';
+      Params.AsString[0] := GUIDToString(ID_Collection);
+      Open;
+      Fill(q);
+    finally
+      Transaction.Free;
+      Free;
+    end;
 end;
 
 { TSerie }
@@ -802,16 +824,16 @@ var
 begin
   q := TUIBQuery.Create(nil);
   with q do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT ID_Serie, TitreSerie FROM SERIES WHERE ID_Serie = :ID_Serie';
-    Params.AsString[0] := GUIDToString(ID_Serie);
-    Open;
-    Fill(q);
-  finally
-    Transaction.Free;
-    Free;
-  end;
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'SELECT ID_Serie, TitreSerie FROM SERIES WHERE ID_Serie = :ID_Serie';
+      Params.AsString[0] := GUIDToString(ID_Serie);
+      Open;
+      Fill(q);
+    finally
+      Transaction.Free;
+      Free;
+    end;
 end;
 
 { TEdition }
@@ -911,16 +933,16 @@ var
 begin
   q := TUIBQuery.Create(nil);
   with q do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT ID_Emprunteur, NomEmprunteur FROM Emprunteurs WHERE ID_Emprunteur = ?';
-    Params.AsString[0] := GUIDToString(ID_Emprunteur);
-    Open;
-    Fill(q);
-  finally
-    Transaction.Free;
-    Free;
-  end;
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'SELECT ID_Emprunteur, NomEmprunteur FROM Emprunteurs WHERE ID_Emprunteur = ?';
+      Params.AsString[0] := GUIDToString(ID_Emprunteur);
+      Open;
+      Fill(q);
+    finally
+      Transaction.Free;
+      Free;
+    end;
 end;
 
 class function TEmprunteur.Make(Query: TUIBQuery): TEmprunteur;

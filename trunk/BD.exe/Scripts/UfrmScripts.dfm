@@ -2,7 +2,7 @@ object frmScripts: TfrmScripts
   Left = 397
   Top = 157
   Caption = 'Script'
-  ClientHeight = 594
+  ClientHeight = 613
   ClientWidth = 862
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -21,7 +21,7 @@ object frmScripts: TfrmScripts
     Left = 0
     Top = 0
     Width = 862
-    Height = 594
+    Height = 613
     ActivePage = tbEdition
     Align = alClient
     PopupMenu = PopupMenu1
@@ -35,6 +35,7 @@ object frmScripts: TfrmScripts
         Width = 833
         Height = 209
         Columns = <>
+        ReadOnly = True
         TabOrder = 0
         ViewStyle = vsList
         OnDblClick = ListView1DblClick
@@ -48,11 +49,12 @@ object frmScripts: TfrmScripts
       ExplicitHeight = 0
       object Splitter1: TSplitter
         Left = 0
-        Top = 369
+        Top = 388
         Width = 854
         Height = 4
         Cursor = crVSplit
         Align = alBottom
+        ExplicitTop = 369
       end
       object Panel1: TPanel
         Left = 0
@@ -79,19 +81,10 @@ object frmScripts: TfrmScripts
           Action = actRun
           TabOrder = 1
         end
-        object Button3: TButton
-          Left = 166
-          Top = 0
-          Width = 75
-          Height = 25
-          Caption = 'Button3'
-          TabOrder = 2
-          OnClick = Button3Click
-        end
       end
       object PageControl1: TPageControl
         Left = 0
-        Top = 373
+        Top = 392
         Width = 854
         Height = 193
         ActivePage = TabSheet1
@@ -257,7 +250,7 @@ object frmScripts: TfrmScripts
         Left = 0
         Top = 33
         Width = 854
-        Height = 336
+        Height = 355
         Align = alClient
         PopupMenu = PopupMenu1
         TabOrder = 2
@@ -1009,22 +1002,10 @@ object frmScripts: TfrmScripts
         Plugin = PSImport_Classes1
       end
       item
-        Plugin = PSImport_Controls1
-      end
-      item
-        Plugin = PSImport_StdCtrls1
-      end
-      item
-        Plugin = PSImport_Forms1
-      end
-      item
         Plugin = PSDllPlugin1
       end
       item
         Plugin = PSImport_ComObj1
-      end
-      item
-        Plugin = PSImport_DB1
       end>
     MainFileName = 'Main'
     UsePreProcessor = True
@@ -1033,7 +1014,7 @@ object frmScripts: TfrmScripts
     OnIdle = PSScriptDebugger1Idle
     OnLineInfo = PSScriptDebugger1LineInfo
     OnBreakpoint = PSScriptDebugger1Breakpoint
-    Left = 800
+    Left = 672
   end
   object SynEditSearch1: TSynEditSearch
     Left = 296
@@ -1166,11 +1147,13 @@ object frmScripts: TfrmScripts
     object actFermer: TAction
       Category = 'Editeur'
       Caption = 'Fermer'
+      ShortCut = 16499
       OnExecute = actFermerExecute
     end
     object actEnregistrer: TAction
       Category = 'Editeur'
       Caption = 'Enregistrer'
+      ShortCut = 16467
       OnExecute = actEnregistrerExecute
     end
     object actEnregistrerSous: TAction
@@ -1283,27 +1266,8 @@ object frmScripts: TfrmScripts
   object PSImport_ComObj1: TPSImport_ComObj
     Left = 600
   end
-  object PSImport_DB1: TPSImport_DB
-    Left = 632
-  end
-  object PSImport_Forms1: TPSImport_Forms
-    EnableForms = True
-    EnableMenus = True
-    Left = 664
-  end
-  object PSImport_Controls1: TPSImport_Controls
-    EnableStreams = True
-    EnableGraphics = True
-    EnableControls = True
-    Left = 696
-  end
-  object PSImport_StdCtrls1: TPSImport_StdCtrls
-    EnableExtCtrls = True
-    EnableButtons = True
-    Left = 728
-  end
   object PSDllPlugin1: TPSDllPlugin
-    Left = 760
+    Left = 632
   end
   object PopupMenu1: TPopupMenu
     Left = 408

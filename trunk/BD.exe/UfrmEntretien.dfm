@@ -72,6 +72,7 @@ object frmEntretien: TfrmEntretien
     SelectionCurveRadius = 10
     ShowHint = True
     TabOrder = 1
+    TreeOptions.MiscOptions = [toAcceptOLEDrop, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning, toVariableNodeHeight]
     TreeOptions.PaintOptions = [toHideFocusRect, toShowButtons, toShowDropmark, toThemeAware, toUseBlendedImages]
     OnCollapsing = vstEntretienCollapsing
     OnDblClick = vstEntretienDblClick
@@ -87,7 +88,7 @@ object frmEntretien: TfrmEntretien
       end
       item
         Position = 1
-        Width = 133
+        Width = 129
       end>
   end
   object ActionList1: TActionList

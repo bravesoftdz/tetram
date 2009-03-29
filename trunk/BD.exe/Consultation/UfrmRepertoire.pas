@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, DBCtrls, Menus, Buttons, ComCtrls, ExtCtrls,
-  ScanEdit, VDTButton, VirtualTrees, ActnList, VirtualTree, jpeg, DBEditLabeled, ComboCheck, ProceduresBDtk,
+  ScanEdit, VDTButton, VirtualTrees, ActnList, VirtualTree, jpeg, EditLabeled, ComboCheck, ProceduresBDtk,
   UframRechercheRapide, UBdtForms;
 
 type
@@ -22,11 +22,11 @@ type
     TabParaBD: TTabSheet;
     vstParaBD: TVirtualStringTree;
     vstSeries: TVirtualStringTree;
-    FrameRechercheRapideAlbums: TFrameRechercheRapide;
-    FrameRechercheRapideEmprunteurs: TFrameRechercheRapide;
-    FrameRechercheRapideAuteurs: TFrameRechercheRapide;
-    FrameRechercheRapideSeries: TFrameRechercheRapide;
-    FrameRechercheRapideParaBD: TFrameRechercheRapide;
+    FrameRechercheRapideAlbums: TFramRechercheRapide;
+    FrameRechercheRapideEmprunteurs: TFramRechercheRapide;
+    FrameRechercheRapideAuteurs: TFramRechercheRapide;
+    FrameRechercheRapideSeries: TFramRechercheRapide;
+    FrameRechercheRapideParaBD: TFramRechercheRapide;
     procedure FormCreate(Sender: TObject);
     procedure vstAlbumsDblClick(Sender: TObject);
     procedure LightComboCheck1Change(Sender: TObject);
@@ -145,7 +145,7 @@ procedure TfrmRepertoire.FrameRechercheRapideedSearchKeyPress(Sender: TObject; v
 begin
   if Key = #13 then begin
     Key := #0;
-    TFrameRechercheRapide(TWinControl(Sender).Parent).VirtualTreeView.OnDblClick(nil);
+    TFramRechercheRapide(TWinControl(Sender).Parent).VirtualTreeView.OnDblClick(nil);
   end;
 end;
 

@@ -2,7 +2,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
   Left = 245
   Top = 418
   Caption = 'Achat'
-  ClientHeight = 427
+  ClientHeight = 404
   ClientWidth = 736
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -15,12 +15,12 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
   OnDestroy = FormDestroy
   DesignSize = (
     736
-    427)
+    404)
   PixelsPerInch = 96
   TextHeight = 13
   inline Frame11: TframBoutons
     Left = 0
-    Top = 396
+    Top = 373
     Width = 736
     Height = 31
     Align = alBottom
@@ -53,7 +53,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
   end
   object rbAlbumExistant: TRadioButton
     Left = 18
-    Top = 335
+    Top = 23
     Width = 116
     Height = 17
     Caption = 'Album existant'
@@ -68,7 +68,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
   end
   object rbNouvelAlbum: TRadioButton
     Left = 18
-    Top = 10
+    Top = 66
     Width = 89
     Height = 17
     Caption = 'Nouvel album'
@@ -85,7 +85,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
   end
   object pnAlbumExistant: TPanel
     Left = 136
-    Top = 331
+    Top = 19
     Width = 593
     Height = 23
     Anchors = [akLeft, akTop, akRight]
@@ -126,7 +126,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
   end
   object pnNouvelAlbum: TPanel
     Left = 136
-    Top = 8
+    Top = 64
     Width = 592
     Height = 292
     Anchors = [akLeft, akTop, akRight]
@@ -175,7 +175,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
       Layout = tlCenter
     end
     object Label17: TLabel
-      Left = 475
+      Left = 503
       Top = 50
       Width = 6
       Height = 13
@@ -183,7 +183,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
       Caption = #224
       FocusControl = edTomeFin
       Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
+      Font.Color = clInactiveCaption
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -309,15 +309,15 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
       Caption = 'Auteurs :'
     end
     object Label16: TLabel
-      Left = 412
+      Left = 414
       Top = 50
-      Width = 12
+      Width = 38
       Height = 13
       Alignment = taRightJustify
-      Caption = 'de'
+      Caption = 'Tomes :'
       FocusControl = edTomeDebut
       Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
+      Font.Color = clInactiveCaption
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -447,7 +447,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
         end>
     end
     object edTomeDebut: TEditLabeled
-      Left = 430
+      Left = 458
       Top = 47
       Width = 39
       Height = 20
@@ -467,7 +467,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
       CurrencyChar = #0
     end
     object edTomeFin: TEditLabeled
-      Left = 487
+      Left = 515
       Top = 47
       Width = 39
       Height = 20

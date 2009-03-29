@@ -7,7 +7,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ImgList, Menus,
-  ComCtrls, ExtCtrls, Buttons, ActnList, Printers, iniFiles, jpeg, Contnrs, ToolWin, ProceduresBDtk, UBdtForms,
+  ComCtrls, ExtCtrls, Buttons, ActnList, Printers, iniFiles, jpeg, Contnrs, ToolWin, UBdtForms,
   PngImageList, pngImage, PngFunctions;
 
 type
@@ -212,7 +212,7 @@ implementation
 {$R *.DFM}
 
 uses
-  UfrmRepertoire, CommonConst, UfrmOptions, UfrmStatsGeneral,
+  ProceduresBDtk, UfrmRepertoire, CommonConst, UfrmOptions, UfrmStatsGeneral,
   UfrmStatsEmprunteurs, UfrmStatsAlbums, LoadComplet, Impression, UfrmGestion, UfrmCustomize,
   UfrmAboutBox, UdmPrinc, Types, Procedures, UHistorique, UfrmEntretien, ShellAPI, Math,
   UfrmScripts, UfrmPublier;
@@ -1069,7 +1069,8 @@ end;
 
 procedure TfrmFond.actScriptsExecute(Sender: TObject);
 begin
-  Historique.AddWaiting(fcScripts, Integer(TfrmScripts.Create(Self)));
+  frmScripts := TfrmScripts.Create(Self);
+  Historique.AddWaiting(fcScripts, Integer(frmScripts));
 end;
 
 procedure TfrmFond.actPublierExecute(Sender: TObject);

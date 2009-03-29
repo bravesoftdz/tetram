@@ -620,7 +620,7 @@ object frmGestions: TfrmGestions
       OnClick = SpeedButton1Click
     end
   end
-  inline FrameRechercheRapide1: TFrameRechercheRapide
+  inline FrameRechercheRapide1: TframRechercheRapide
     Left = 106
     Top = 72
     Width = 366

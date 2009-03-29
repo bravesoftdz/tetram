@@ -62,7 +62,7 @@ end;
 
 procedure callbackAfterEdit(Data: Pointer);
 begin
-  TframVTEdit(Data).VTEdit.PopupWindow.TreeView.InitializeRep;
+  TframVTEdit(Data).VTEdit.CurrentValue := TframVTEdit(Data).VTEdit.PopupWindow.TreeView.CurrentValue;
   if Assigned(TframVTEdit(Data).FAfterEdit) then
     TframVTEdit(Data).FAfterEdit(TframVTEdit(Data));
 end;
@@ -104,7 +104,7 @@ end;
 
 procedure callbackAfterAppend(Data: Pointer);
 begin
-  TframVTEdit(Data).VTEdit.PopupWindow.TreeView.InitializeRep;
+  TframVTEdit(Data).VTEdit.CurrentValue := TframVTEdit(Data).VTEdit.PopupWindow.TreeView.CurrentValue;
   if Assigned(TframVTEdit(Data).FAfterAppend) then
     TframVTEdit(Data).FAfterAppend(TframVTEdit(Data));
 end;
@@ -121,26 +121,26 @@ begin
     vmAlbumsEditeur,
     vmAlbumsGenre,
     vmAlbumsSerie:
-      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterAlbums, VT, '');
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterAlbums, VT, VTEdit.Text);
     vmAchatsAlbumsEditeur:
-      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterAchatsAlbum, VT, '');
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterAchatsAlbum, VT, VTEdit.Text);
     vmCollections:
       if IsEqualGUID(FParentValue, GUID_NULL) then
-        Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterCollections, VT, '')
+        Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterCollections, VT, VTEdit.Text)
       else
-        Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterCollections2, VT, FParentValue, '');
+        Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterCollections2, VT, FParentValue, VTEdit.Text);
     vmEditeurs:
-      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterEditeurs, VT, '');
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterEditeurs, VT, VTEdit.Text);
     vmEmprunteurs:
-      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterEmprunteurs, VT, '');
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterEmprunteurs, VT, VTEdit.Text);
     vmGenres:
-      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterGenres, VT, '');
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterGenres, VT, VTEdit.Text);
     vmPersonnes:
-      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterAuteurs, VT, '');
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterAuteurs, VT, VTEdit.Text);
     vmSeries:
-      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterSeries, VT, '');
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterSeries, VT, VTEdit.Text);
     vmParaBDSerie:
-      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterParaBD, VT, '');
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterParaBD, VT, VTEdit.Text);
     else
       Exit;
   end;
