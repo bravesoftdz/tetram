@@ -16,7 +16,6 @@ const
   regExAlbumPlanches = '<H2>Extraits</H2>(?s-:.*?)<UL class="gallery">((?s-).*?)</UL>';
   regExAlbumPlanche = '<a(?: href="(?<planche>.*?)"|.*?)*>(?s-:.*?)</a>';
 
-
 procedure ParseAlbum(const id_album: string);
 var
   page, auteur, metier, s, lien: string;
