@@ -47,7 +47,7 @@ begin
     sl.Free;
   end;
 
-  AlbumToImport.Sujet.Text := ExtractRegExGroup(page, regExAlbumEdition, 'resume');
+  AlbumToImport.Sujet.Text := HTMLText(HTMLDecode(ExtractRegExGroup(page, regExAlbumEdition, 'resume')));
 
   AlbumToImport.Edition.Editeur.NomEditeur := 'Panini';
   AlbumToImport.Edition.Editeur.SiteWeb := 'http://www.paninicomicsfrance.com/Home.jsp';
@@ -118,13 +118,3 @@ begin
   if id_album <> '' then
     ParseAlbum(id_album);
 end.
-
-
-
-
-
-
-
-
-
-

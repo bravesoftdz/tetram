@@ -50,8 +50,7 @@ begin
   AlbumToImport.Tome := StrToIntDef(ExtractRegExGroup(page, regExAlbumSerie, 'tome'), 0);
 
   AlbumToImport.Titre := ExtractRegEx(page, regExAlbumTitre);
-  AlbumToImport.Sujet.Text := ExtractRegEx(page, regExAlbumResume);
-  AlbumToImport.Sujet.Text := StringReplace(AlbumToImport.Sujet.Text, #9, '', [rfReplaceAll]);
+  AlbumToImport.Sujet.Text := HTMLText(HTMLDecode(ExtractRegEx(page, regExAlbumResume)));
 
   re := TBdtkRegEx.Create;
   try
@@ -240,14 +239,3 @@ begin
   if id_album <> '' then
     ParseAlbum(id_album);
 end.
-
-
-
-
-
-
-
-
-
-
-

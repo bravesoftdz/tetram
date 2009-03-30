@@ -248,19 +248,3 @@ begin
   if id_album <> '' then
     ParseAlbum(id_album);
 end.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

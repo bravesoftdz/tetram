@@ -112,7 +112,7 @@ begin
         end;
 
       if re.Next then
-        AlbumToImport.Sujet.Text := HTMLDecode(re.GetCaptureByName('data'));
+        AlbumToImport.Sujet.Text := HTMLText(HTMLDecode(re.GetCaptureByName('data')));
     end;
 
     AlbumToImport.Serie.Editeur.NomEditeur := 'Glenat Manga';
@@ -153,7 +153,7 @@ begin
   AlbumToImport.Serie.Titre := ExtractRegEx(s,  regExBDSerie);
   AlbumToImport.Titre := ExtractRegEx(s,  regExBDTitre);
   AlbumToImport.Tome := StrToIntDef(ExtractRegEx(s,  regExBDTome), 0);
-  AlbumToImport.Sujet.Text := ExtractRegEx(s,  regExBDResume);
+  AlbumToImport.Sujet.Text := HTMLText(HTMLDecode(ExtractRegEx(s,  regExBDResume)));
 
   AlbumToImport.Edition.NombreDePages := StrToIntDef(ExtractRegEx(s,  regExBDPages), 0);
   AlbumToImport.Edition.ISBN := ExtractRegEx(s,  regExBDISBN);
@@ -312,4 +312,3 @@ begin
   if id_album <> '' then
     ParseAlbum(id_album);
 end.
-
