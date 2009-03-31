@@ -1,0 +1,133 @@
+program FluideGlacial;
+
+uses ScriptFonctions;
+
+const
+  urlSite = 'http://www.fluideboutique.com';
+  urlSearch = '/cgi-bin/fluide/resultatrech.asp?Option=R&page=%d&recherche=';
+
+  regExResultAlbums = '<!-- nom du produit-->(?<titre_album>.*?)(?:</b>)?<br>(?s-:.*?)<!--(?: )?descriptif-->(?<commentaire>.*?)</font></b>(?s-:.*?)<a(?: href="(?<lien>.*?)"|.*?)*><img(?s-:.*?)alt="Voir la fiche"></a>';
+
+  regExAlbumTitre = '<div class="titrefiche"><b><!--titre album-->(?<titre_album>.*?)</b></div>';
+  regExAlbumAuteurs = '<td(?:.*?)class="alpha"><font color="#FF7900"><b>(?<auteurs>.*?)</b></font></td>';
+  regExAlbumInfos = '<div class="infoediteur"(?:.*?)>(?s-:.*?)<!-- couleur ou noir et blanc-->(?<couleur>.*?)\| <!-- annee de parution-->(?<parution>\d*?) \| <!--nombre de page-->(?<pages>\d*)(?s-:.*?)</div>';
+  regExAlbumPrix = '<!--prix en euro-->([\d|\.|,]*) <img';
+  regExAlbumResume = '<!--descriptif long-->((?s-).*?)</td>';
+  regExAlbumCouverture = '<img src="(.*?)" width="200" height="270" hspace="15">';
+  regExAlbumPlanche = '<td valign="top" align="center"><a(?: href="(?<couverture>.*?)"|.*?)*><img(?:.*?)alt="Lire la 4&egrave;me de couv"></a></td>';
+  regExAlbumPlancheSrc = '<img(?: src="(?<planche>.*?)"|.*?)*>';
+
+procedure ParseAlbum(const id_album: string);
+var
+  page, s, lien: string;
+  re: TBdtkRegEx;
+  i: Integer;
+begin
+  lien := CombineURL(urlSite, id_album);
+  page := GetPage(lien, False);
+
+  re := TBdtkRegEx.Create;
+  try
+    AlbumToImport.Titre := HTMLText(ExtractRegEx(page, regExAlbumTitre));
+    AlbumToImport.Sujet.Text := HTMLText(ExtractRegEx(page, regExAlbumResume));
+
+    if re.BeginSearch(page, regExAlbumInfos) and re.Next then
+    begin
+      s := Lowercase(re.GetCaptureByName('couleur'));
+      if (Pos('n&b', s) + Pos('nb', s) > 0) and (Pos('coul', s) = 0) then
+        AlbumToImport.Edition.Couleur := False;
+
+      AlbumToImport.Edition.NombreDePages := StrToIntDef(re.GetCaptureByName('pages'), 0);
+      with TStringList.Create do
+        try
+          Split(re.GetCaptureByName('parution'), ' ');
+          if Count > 0 then
+            AlbumToImport.AnneeParution := StrToIntDef(Strings[Count - 1], 0);
+          if Count > 1 then
+            AlbumToImport.MoisParution := TraduitMois(Strings[Count - 2]);
+        finally
+          Free;
+        end;
+    end;
+
+    AlbumToImport.Edition.Prix := StrToFloatDef(ExtractRegEx(page, regExAlbumPrix), 0);
+    AlbumToImport.Edition.Editeur.NomEditeur := 'Fluide Glacial';
+    AlbumToImport.Edition.Editeur.SiteWeb := 'http://www.fluideglacial.com';
+
+    with TStringList.Create do
+      try
+        Split(ExtractRegEx(page, regExAlbumAuteurs), '/');
+        for i := 0 to Count - 1 do
+        begin
+           AlbumToImport.Scenaristes.Add(MakeAuteur(Strings[i], maScenariste));
+           AlbumToImport.Dessinateurs.Add(MakeAuteur(Strings[i], maDessinateur));
+        end;
+      finally
+        Free;
+      end;
+
+    s := ExtractRegEx(page, regExAlbumCouverture);
+    if s <> '' then
+      AlbumToImport.Edition.AddImageFromURL(CombineURL(lien, s), ctiCouverture);
+    s := ExtractRegEx(page, regExAlbumPlanche);
+    if s <> '' then
+    begin
+      page := GetPage(CombineURL(lien, s), False);
+      s := ExtractRegEx(page, regExAlbumPlancheSrc);
+      if s <> '' then
+        AlbumToImport.Edition.AddImageFromURL(CombineURL(lien, s), ctiPlanche);
+    end;
+  finally
+    re.Free;
+  end;
+
+  AlbumToImport.Import;
+end;
+
+function RechercheParTitre(const Titre: string): string;
+var
+  page: string;
+  re: TBdtkRegEx;
+  c: TScriptChoix;
+  p: Integer;
+  id, titre_album, commentaire: string;
+begin
+  Result := '';
+  p := 1;
+
+  c := TScriptChoix.Create;
+  re := TBdtkRegEx.Create;
+  try
+    c.Titre := 'Résultats de recherche de "' + Titre + '"';
+    while True do
+    begin
+      page := GetPage(urlSite + Format(urlSearch, [p]) + Titre, False);
+      if re.BeginSearch(page, regExResultAlbums) then
+        while re.Next do begin
+          id := re.GetCaptureByName('lien');
+          titre_album := HTMLText(re.GetCaptureByName('titre_album'));
+          commentaire := HTMLText(re.GetCaptureByName('commentaire'));
+          c.AjoutChoix('Album', titre_album, commentaire, id);
+        end;
+
+      if not MatchRegEx(page, '<!-- suite-->') then Break;
+      p := p + 1;
+    end;
+
+    Result := c.Show;
+  finally
+    re.Free;
+    c.Free;
+  end;
+end;
+
+var
+  id_album, entry: string;
+  index: integer;
+begin
+  if not AskSearchEntry(['Titre de l''album ou de la série'], entry, index) then Exit;
+
+  id_album := RechercheParTitre(entry);
+  if id_album <> '' then
+    ParseAlbum(id_album);
+end.
