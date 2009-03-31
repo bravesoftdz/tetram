@@ -42,7 +42,7 @@ begin
         AlbumToImport.Edition.AddImageFromURL(CombineURL(lien, s), ctiCouverture);
 
       s := re.GetCaptureByName('infos');
-      AlbumToImport.Edition.ISBN := ExtractRegEx(s, 'ISBN(?:[\s|:])([\d|x|X]+)');
+      AlbumToImport.Edition.ISBN := ExtractRegEx(s, 'ISBN(?:[\s|:])([\d|x|X|-]+)');
       AlbumToImport.Edition.NombreDePages := StrToIntDef(ExtractRegEx(s, '(\d*) pages'), 0);
       with TStringList.Create do
         try
@@ -54,7 +54,7 @@ begin
         finally
           Free;
         end;
-      AlbumToImport.Edition.Prix := StrToFloatDef(ExtractRegEx(s, '([\d|.|,]*) €'), 0);
+      AlbumToImport.Edition.Prix := StrToFloatDef(ExtractRegEx(s, '([\d|\.|,]*) €'), 0);
     end;
 
     AlbumToImport.Serie.Editeur.NomEditeur := 'Humanoïdes Associés';

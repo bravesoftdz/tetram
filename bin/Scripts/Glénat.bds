@@ -28,8 +28,8 @@ const
   regExBDCollection = '<li class="collection">(?s-:.*?)<a(?:.*?)>(.*?)</a>';
   regExBDPages = '<li class="pages">(\d*?)(?:\D*?)</li>';
   regExBDParution = '<li class="date">(?:(?:[a-zA-Z]| )*?)([\d|.|,]*?)</li>';
-  regExBDISBN = '<li class="ean">EAN/ISBN(?:[ |:]*?)([\d|x|X]*?)</li>';
-  regExBDPrix = '<li class="price">Prix(?:[ |:]*?)([\d|.|,]*?)(?s-:.*?)</li>';
+  regExBDISBN = '<li class="ean">EAN/ISBN(?:[ |:]*?)([\d|x|X|-]*?)</li>';
+  regExBDPrix = '<li class="price">Prix(?:[ |:]*?)([\d|\.|,]*?)(?s-:.*?)</li>';
   regExBDGenres = '<li class="genres">Genres:(.*?)</li>';
   regExBDTermine = '<span class="statut">(.*?)</span>';
   regExBDResume = '<div class="text">(.*?)</div>';

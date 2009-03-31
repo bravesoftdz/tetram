@@ -13,9 +13,9 @@ const
   regExAlbumSerie = '<td valign="top" class="cat-genre">Genre&nbsp;:&nbsp;<a(?:.*?)>(?<genre>.*?)</a><br/>Collection&nbsp;:&nbsp;<a(?:.*?)>(?<collection>.*?)</a>&nbsp;\|&nbsp;Série&nbsp;:&nbsp;<a(?: href="(?<lien_serie>.*?)"|.*?)*>(?<titre_serie>.*?)</a></td>';
   regExAlbumCouverture = '<div id="image_box_ctl0_ctl0_Main_MainCatalogue_ctl0">[\r|\n|\t|\s]*<a(?: href="(?<couverture>.*?)"|.*?)*><img(?:.*?)></a>[\r|\n|\t|\s]*</div>';
   regExAlbumParution = '<span id="ctl0_ctl0_Main_MainCatalogue_date_sortie">(.*?)</span>';
-  regExAlbumISBN = '<span id="ctl0_ctl0_Main_MainCatalogue_ean">([\d|x|X]*)</span>';
+  regExAlbumISBN = '<span id="ctl0_ctl0_Main_MainCatalogue_ean">([\d|x|X|-]*)</span>';
   regExAlbumResume = '<span id="ctl0_ctl0_Main_MainCatalogue_resume">((?s-).*?)(?:</div>|<u>|</span>)'; // laisser </span> en dernier
-  regExAlbumPrix = '<span id="ctl0_ctl0_Main_MainCatalogue_prix">([\d|,|.]*)&nbsp;&euro;</span>';
+  regExAlbumPrix = '<span id="ctl0_ctl0_Main_MainCatalogue_prix">([\d|,|\.]*)&nbsp;&euro;</span>';
   regExAlbumScenariste = '<span id="ctl0_ctl0_Main_MainCatalogue_scenariste">((?s-).*?)</span>';
   regExAlbumDessinateur = '<span id="ctl0_ctl0_Main_MainCatalogue_dessinateur">((?s-).*?)</span>';
   regExAlbumColoriste = '<span id="ctl0_ctl0_Main_MainCatalogue_coloriste">((?s-).*?)</span>';
