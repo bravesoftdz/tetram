@@ -46,7 +46,7 @@ begin
     end;
 
   AlbumToImport.Edition.ISBN := ExtractRegEx(page, regExAlbumISBN);
-  AlbumToImport.Sujet.Text := HTMLText(HTMLDecode(ExtractRegEx(page, regExAlbumResume)));
+  AlbumToImport.Sujet.Text := HTMLText(ExtractRegEx(page, regExAlbumResume));
   AlbumToImport.Edition.Prix := StrToFloatDef(ExtractRegEx(page, regExAlbumPrix), 0);
 
   re := TBdtkRegEx.Create;
@@ -74,7 +74,7 @@ begin
     if AlbumToImport.Serie.SiteWeb <> '' then
     begin
       pageserie := GetPage(AlbumToImport.Serie.SiteWeb, False);
-      AlbumToImport.Serie.Sujet.Text := HTMLText(HTMLDecode(ExtractRegEx(pageserie, regExAlbumResume)));
+      AlbumToImport.Serie.Sujet.Text := HTMLText(ExtractRegEx(pageserie, regExAlbumResume));
 
       if re.BeginSearch(ExtractRegEx(pageserie, regExAlbumScenariste), regExAuteur) then
         while re.Find(sAuteur) do
@@ -151,7 +151,7 @@ begin
         id := re.GetCaptureByName('lien');
         titre_album := re.GetCaptureByName('titre_album');
         commentaire := re.GetCaptureByName('commentaire');
-        c.AjoutChoix('', HTMLDecode(titre_album), HTMLText(HTMLDecode(commentaire)), id);
+        c.AjoutChoix('', HTMLDecode(titre_album), HTMLText(commentaire), id);
       end;
 
     Result := c.Show;

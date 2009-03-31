@@ -55,7 +55,7 @@ begin
         sl.Free;
       end;
 
-      AlbumToImport.Sujet.Text := HTMLDecode(GetCaptureByName('resume'));
+      AlbumToImport.Sujet.Text := HTMLText(GetCaptureByName('resume'));
 
       re := TBdtkRegEx.Create;
       try
@@ -111,7 +111,7 @@ begin
       page := GetPage(urlInfoSerie + GetCaptureByName('id_serie'), True);
       if BeginSearch(page, regExSerieInfos) and Next then begin
         AlbumToImport.Serie.Titre := GetCaptureByName('titre_serie');
-        AlbumToImport.Serie.Sujet.Text := HTMLDecode(GetCaptureByName('resume'));
+        AlbumToImport.Serie.Sujet.Text := HTMLText(GetCaptureByName('resume'));
       end;
 
       re := TBdtkRegEx.Create;

@@ -33,7 +33,7 @@ begin
       AlbumToImport.Serie.Titre := re.GetCaptureByName('titre_serie');
     end;
 
-    AlbumToImport.Sujet.Text := HTMLText(HTMLDecode(ExtractRegEx(page, regExAlbumResume)));
+    AlbumToImport.Sujet.Text := HTMLText(ExtractRegEx(page, regExAlbumResume));
 
     if re.BeginSearch(page, regExAlbumInfos) and re.Next then
     begin
