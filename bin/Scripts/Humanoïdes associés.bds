@@ -6,7 +6,7 @@ const
   urlSite = 'http://www.humano.com';
   urlSearch = '/catalogue/albumList/page/%d?nom=';
 
-  regExResultAlbums = '<div class=''content_right_tab2''>(?s-:.*?)<a href="(?<id_album>.*?)">(?<titre_album>(?s-).*?)(?: - (?<titre_serie>(?s-).*?))?</a>(?s-:.*?)</div>';
+  regExResultAlbums = '<div class=''content_right_tab1''><a(?:.*?)><img(?: src="(?<thumb>.*?)"|.*?)* /></a></div><div class=''content_right_tab2''>(?s-:.*?)<a(?: href="(?<id_album>.*?)"|.*?)*>(?<titre_album>(?s-).*?)(?: - (?<titre_serie>(?s-).*?))?</a>(?s-:.*?)</div>';
 
   regExAlbumTitre = '<div id="page"(?s-:.*?)>(?s-:.*?)<H1>(?<titre_album>(?s-).*?)(?: - (?<titre_serie>.*?)(?: \(T(?<tome>.*?)\))?)?</H1>';
   regExAlbumInfos = '<div id="content_right_col1">(?s-:.*?)<a(?: href="(?<couverture>.*?)"|.*?)*>(?s-:.*?)<P>(?<infos>(?s-).*?)</P>';
@@ -99,7 +99,7 @@ var
   re: TBdtkRegEx;
   c: TScriptChoix;
   p: Integer;
-  id, titre_album, commentaire: string;
+  id, titre_album, commentaire, thumb: string;
 begin
   Result := '';
   p := 0;
@@ -117,7 +117,9 @@ begin
           titre_album := re.GetCaptureByName('titre_album');
           commentaire := '';
           AjoutString1(commentaire, re.GetCaptureByName('titre_serie'), #13#10, 'Série: ', '');
-          c.AjoutChoix('Album', titre_album, commentaire, id);
+          thumb := re.GetCaptureByName('thumb');
+          if thumb <> '' then thumb := CombineURL(urlSite, thumb);
+          c.AjoutChoixWithThumb('Album', titre_album, commentaire, id, thumb);
         end;
 
       if ExtractRegEx(page, '<a class="nav_last"(.*?)>Dernier</a>') = '' then Break;

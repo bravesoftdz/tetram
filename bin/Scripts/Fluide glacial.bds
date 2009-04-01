@@ -6,7 +6,7 @@ const
   urlSite = 'http://www.fluideboutique.com';
   urlSearch = '/cgi-bin/fluide/resultatrech.asp?Option=R&page=%d&recherche=';
 
-  regExResultAlbums = '<!-- nom du produit-->(?<titre_album>.*?)(?:</b>)?<br>(?s-:.*?)<!--(?: )?descriptif-->(?<commentaire>.*?)</font></b>(?s-:.*?)<a(?: href="(?<lien>.*?)"|.*?)*><img(?s-:.*?)alt="Voir la fiche"></a>';
+  regExResultAlbums = '<!-- photo du produit--><a(?:.*?)><img(?: src="(?<thumb>.*?)"|.*?)*></a>(?s-:.*?)<!-- nom du produit-->(?<titre_album>.*?)(?:</b>)?<br>(?s-:.*?)<!--(?: )?descriptif-->(?<commentaire>.*?)</font></b>(?s-:.*?)<a(?: href="(?<lien>.*?)"|.*?)*><img(?s-:.*?)alt="Voir la fiche"></a>';
 
   regExAlbumTitre = '<div class="titrefiche"><b><!--titre album-->(?<titre_album>.*?)</b></div>';
   regExAlbumAuteurs = '<td(?:.*?)class="alpha"><font color="#FF7900"><b>(?<auteurs>.*?)</b></font></td>';
@@ -34,7 +34,7 @@ begin
     if re.BeginSearch(page, regExAlbumInfos) and re.Next then
     begin
       s := Lowercase(re.GetCaptureByName('couleur'));
-      if (Pos('n&b', s) + Pos('nb', s) > 0) and (Pos('coul', s) = 0) then
+      if (Pos('n&amp;b', s) + Pos('n&b', s) + Pos('nb', s) > 0) and (Pos('coul', s) = 0) then
         AlbumToImport.Edition.Couleur := False;
 
       AlbumToImport.Edition.NombreDePages := StrToIntDef(re.GetCaptureByName('pages'), 0);
@@ -90,7 +90,7 @@ var
   re: TBdtkRegEx;
   c: TScriptChoix;
   p: Integer;
-  id, titre_album, commentaire: string;
+  id, titre_album, commentaire, thumb: string;
 begin
   Result := '';
   p := 1;
@@ -107,7 +107,9 @@ begin
           id := re.GetCaptureByName('lien');
           titre_album := HTMLText(re.GetCaptureByName('titre_album'));
           commentaire := HTMLText(re.GetCaptureByName('commentaire'));
-          c.AjoutChoix('Album', titre_album, commentaire, id);
+          thumb := re.GetCaptureByName('thumb');
+          if thumb <> '' then thumb := CombineURL(urlSite, thumb);
+          c.AjoutChoixWithThumb('Album', titre_album, commentaire, id, thumb);
         end;
 
       if not MatchRegEx(page, '<!-- suite-->') then Break;
