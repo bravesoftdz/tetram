@@ -1,20 +1,22 @@
-program PaniniComics;
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Script>
+  <Code>program PaniniComics;
 
 uses ScriptFonctions;
 
 const
-  urlSite = 'http://www.paninicomicsfrance.com/';
-  urlSearch = 'Titolo.jsp?recherche&PagerCurrentPage=%d&FiltroRicercaRapida=';
-  urlInfoAlbum = 'Titolo.jsp?IdTitolo='; // + id_album
+  urlSite = &apos;http://www.paninicomicsfrance.com/&apos;;
+  urlSearch = &apos;Titolo.jsp?recherche&amp;PagerCurrentPage=%d&amp;FiltroRicercaRapida=&apos;;
+  urlInfoAlbum = &apos;Titolo.jsp?IdTitolo=&apos;; // + id_album
 
-  regExResultAlbums = '<h3>Résultat de la recherche</h3><table(?:.*?)>(.*?)</table>';
-  regExResult = '<tr class(?:.*?)><td><img(?:.*?)/></td><td>(?<album>.*?)</td>(?:<td(?:.*?)>(?:.*?)</td>)*?<td><a href="Titolo.jsp\?IdTitolo=(?<id_album>.*?)"(?:.*?)></a></td>(?:<td(?:.*?)>(?:.*?)</td>)*?</tr>';
-  regExResultNbPages = '<input name="PagerLastPage" type="hidden" value="(\d*?)"/>';
+  regExResultAlbums = &apos;&lt;h3&gt;Résultat de la recherche&lt;/h3&gt;&lt;table(?:.*?)&gt;(.*?)&lt;/table&gt;&apos;;
+  regExResult = &apos;&lt;tr class(?:.*?)&gt;&lt;td&gt;&lt;img(?:.*?)/&gt;&lt;/td&gt;&lt;td&gt;(?&lt;album&gt;.*?)&lt;/td&gt;(?:&lt;td(?:.*?)&gt;(?:.*?)&lt;/td&gt;)*?&lt;td&gt;&lt;a href=&quot;Titolo.jsp\?IdTitolo=(?&lt;id_album&gt;.*?)&quot;(?:.*?)&gt;&lt;/a&gt;&lt;/td&gt;(?:&lt;td(?:.*?)&gt;(?:.*?)&lt;/td&gt;)*?&lt;/tr&gt;&apos;;
+  regExResultNbPages = &apos;&lt;input name=&quot;PagerLastPage&quot; type=&quot;hidden&quot; value=&quot;(\d*?)&quot;/&gt;&apos;;
 
-  regExInfosAlbum = '(<div id="contentinterno"(?:.*?)« BACK)';
-  regExAlbumTitres = '<div id="contentinterno" xmlns=""><hr/><h3>(?<titre_serie>.*?)</h3><h2>(?<titre_album>\D*?)(?:\s*?)(?<tome>\d*?)</h2>';
-  regExAlbumCouverture = '<img alt="" border="0" class="imgright" height="303" src="(?<couverture>.*?)" width="200"/>';
-  regExAlbumEdition = '<span class="subheading">prix:(?:.*?)(?<prix>[\d|\.|,]*?)</span>(?:.*)<span class="subheading">(?<parution>.*?)<br>(?<collection>.*?)(?:<br>(?:(?<nbpage>\d*?) pages |(?:.*?)))*?</span>(?:Auteur : (?<auteur>.*?)(?:<br>)+)*(?<resume>.*?)</p><div id="paginato">';
+  regExInfosAlbum = &apos;(&lt;div id=&quot;contentinterno&quot;(?:.*?)« BACK)&apos;;
+  regExAlbumTitres = &apos;&lt;div id=&quot;contentinterno&quot; xmlns=&quot;&quot;&gt;&lt;hr/&gt;&lt;h3&gt;(?&lt;titre_serie&gt;.*?)&lt;/h3&gt;&lt;h2&gt;(?&lt;titre_album&gt;\D*?)(?:\s*?)(?&lt;tome&gt;\d*?)&lt;/h2&gt;&apos;;
+  regExAlbumCouverture = &apos;&lt;img alt=&quot;&quot; border=&quot;0&quot; class=&quot;imgright&quot; height=&quot;303&quot; src=&quot;(?&lt;couverture&gt;.*?)&quot; width=&quot;200&quot;/&gt;&apos;;
+  regExAlbumEdition = &apos;&lt;span class=&quot;subheading&quot;&gt;prix:(?:.*?)(?&lt;prix&gt;[\d|\.|,]*?)&lt;/span&gt;(?:.*)&lt;span class=&quot;subheading&quot;&gt;(?&lt;parution&gt;.*?)&lt;br&gt;(?&lt;collection&gt;.*?)(?:&lt;br&gt;(?:(?&lt;nbpage&gt;\d*?) pages |(?:.*?)))*?&lt;/span&gt;(?:Auteur : (?&lt;auteur&gt;.*?)(?:&lt;br&gt;)+)*(?&lt;resume&gt;.*?)&lt;/p&gt;&lt;div id=&quot;paginato&quot;&gt;&apos;;
 
 procedure ParseAlbum(const id_album: string);
 var
@@ -24,13 +26,13 @@ begin
   page := GetPage(urlSite + urlInfoAlbum + id_album, False);
   page := ExtractRegEx(page, regExInfosAlbum);
 
-  AlbumToImport.Titre := ExtractRegExGroup(page, regExAlbumTitres, 'titre_album');
-  AlbumToImport.Tome := StrToIntDef(ExtractRegExGroup(page, regExAlbumTitres, 'tome'), 0);
-  AlbumToImport.Serie.Titre := ExtractRegExGroup(page, regExAlbumTitres, 'titre_serie');
-  if AlbumToImport.Titre = AlbumToImport.Serie.Titre then AlbumToImport.Titre := '';
+  AlbumToImport.Titre := ExtractRegExGroup(page, regExAlbumTitres, &apos;titre_album&apos;);
+  AlbumToImport.Tome := StrToIntDef(ExtractRegExGroup(page, regExAlbumTitres, &apos;tome&apos;), 0);
+  AlbumToImport.Serie.Titre := ExtractRegExGroup(page, regExAlbumTitres, &apos;titre_serie&apos;);
+  if AlbumToImport.Titre = AlbumToImport.Serie.Titre then AlbumToImport.Titre := &apos;&apos;;
 
-  s := ExtractRegExGroup(page, regExAlbumEdition, 'auteur');
-  if s <> '' then
+  s := ExtractRegExGroup(page, regExAlbumEdition, &apos;auteur&apos;);
+  if s &lt;&gt; &apos;&apos; then
   begin
     AlbumToImport.Scenaristes.Add(MakeAuteur(s, maScenariste));
     AlbumToImport.Dessinateurs.Add(MakeAuteur(s, maDessinateur));
@@ -38,25 +40,25 @@ begin
 
   sl := TStringList.Create;
   try
-    sl.Split(ExtractRegExGroup(page, regExAlbumEdition, 'parution'), '/');
-    if sl.Count > 0 then
+    sl.Split(ExtractRegExGroup(page, regExAlbumEdition, &apos;parution&apos;), &apos;/&apos;);
+    if sl.Count &gt; 0 then
       AlbumToImport.AnneeParution := StrToIntDef(sl[sl.Count - 1], 0);
-    if sl.Count > 1 then
+    if sl.Count &gt; 1 then
       AlbumToImport.MoisParution := TraduitMois(sl[sl.Count - 2]);
   finally
     sl.Free;
   end;
 
-  AlbumToImport.Sujet.Text := HTMLText(ExtractRegExGroup(page, regExAlbumEdition, 'resume'));
+  AlbumToImport.Sujet.Text := HTMLText(ExtractRegExGroup(page, regExAlbumEdition, &apos;resume&apos;));
 
-  AlbumToImport.Edition.Editeur.NomEditeur := 'Panini';
-  AlbumToImport.Edition.Editeur.SiteWeb := 'http://www.paninicomicsfrance.com/Home.jsp';
-  AlbumToImport.Edition.Collection := ExtractRegExGroup(page, regExAlbumEdition, 'collection');
-  AlbumToImport.Edition.NombreDePages := StrToIntDef(ExtractRegExGroup(page, regExAlbumEdition, 'nbpages'), 0);
-  AlbumToImport.Edition.Prix := StrToFloatDef(ExtractRegExGroup(page, regExAlbumEdition, 'prix'), 0);
+  AlbumToImport.Edition.Editeur.NomEditeur := &apos;Panini&apos;;
+  AlbumToImport.Edition.Editeur.SiteWeb := &apos;http://www.paninicomicsfrance.com/Home.jsp&apos;;
+  AlbumToImport.Edition.Collection := ExtractRegExGroup(page, regExAlbumEdition, &apos;collection&apos;);
+  AlbumToImport.Edition.NombreDePages := StrToIntDef(ExtractRegExGroup(page, regExAlbumEdition, &apos;nbpages&apos;), 0);
+  AlbumToImport.Edition.Prix := StrToFloatDef(ExtractRegExGroup(page, regExAlbumEdition, &apos;prix&apos;), 0);
 
   s := ExtractRegEx(page, regExAlbumCouverture);
-  if s <> '' then
+  if s &lt;&gt; &apos;&apos; then
     AlbumToImport.Edition.AddImageFromURL(CombineURL(urlSite + urlInfoAlbum + id_album, s), ctiCouverture);
 
   AlbumToImport.Import;
@@ -70,7 +72,7 @@ var
   nbpages, p: integer;
   id, titre_album, commentaire: string;
 begin
-  Result := '';
+  Result := &apos;&apos;;
   p := 1;
   page := GetPage(urlSite + Format(urlSearch, [p]) + Titre, False);
   nbpages := StrToIntDef(ExtractRegEx(page, regExResultNbPages), 1);
@@ -78,26 +80,26 @@ begin
   c := TScriptChoix.Create;
   re := TBdtkRegEx.Create;
   try
-    c.Titre := 'Résultats de recherche de "' + Titre + '"';
+    c.Titre := &apos;Résultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
     while True do
     begin
       if re.BeginSearch(ExtractRegEx(page, regExResultAlbums), regExResult) then
         while re.Next do begin
-          id := re.GetCaptureByName('id_album');
+          id := re.GetCaptureByName(&apos;id_album&apos;);
           with TStringList.Create do
             try
-              Text := StringReplace(re.GetCaptureByName('album'), '<br>', #13, [rfReplaceAll]);
+              Text := StringReplace(re.GetCaptureByName(&apos;album&apos;), &apos;&lt;br&gt;&apos;, #13, [rfReplaceAll]);
               titre_album := Strings[0];
               Delete(0);
               commentaire := Text;
             finally
               Free;
             end;
-          c.AjoutChoix('Album', titre_album, commentaire, id);
+          c.AjoutChoix(&apos;Album&apos;, titre_album, commentaire, id);
         end;
 
       p := p + 1;
-      if p > nbpages then Break;
+      if p &gt; nbpages then Break;
       page := GetPage(urlSite + Format(urlSearch, [p]) + Titre, False);
     end;
 
@@ -112,9 +114,11 @@ var
   id_album, entry: string;
   index: integer;
 begin
-  if not AskSearchEntry(['Titre de l''album ou de la série'], entry, index) then Exit;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la série&apos;], entry, index) then Exit;
 
   id_album := RechercheParTitre(entry);
-  if id_album <> '' then
+  if id_album &lt;&gt; &apos;&apos; then
     ParseAlbum(id_album);
 end.
+</Code>
+</Script>

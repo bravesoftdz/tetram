@@ -1,23 +1,25 @@
-program Kurokawa;
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Script>
+  <Code>program Kurokawa;
 
 uses ScriptFonctions;
 
 const
-  urlSite = 'http://www.kurokawa.fr';
-  urlSearch = '/recherche/?q=';
+  urlSite = &apos;http://www.kurokawa.fr&apos;;
+  urlSearch = &apos;/recherche/?q=&apos;;
 
-  regExResultAlbums = '<div id="books">((?s-).*?)</div>';
-  regExResult = '<td class="case_1 row_\d"><a(?: href="(?<id_album>.*?)"|.*?)*>(?<titre_album>.*?)</a></td>';
+  regExResultAlbums = &apos;&lt;div id=&quot;books&quot;&gt;((?s-).*?)&lt;/div&gt;&apos;;
+  regExResult = &apos;&lt;td class=&quot;case_1 row_\d&quot;&gt;&lt;a(?: href=&quot;(?&lt;id_album&gt;.*?)&quot;|.*?)*&gt;(?&lt;titre_album&gt;.*?)&lt;/a&gt;&lt;/td&gt;&apos;;
 
-  regExAlbumTitre = '<th width="100">Titre</th>[\r|\n|\t|\s]*<td><strong>(?<titre_serie>.*?)(?: - (?:T(?<tome>\d*))?\s?(?<titre_album>.*?))?</strong></td>';
-  regExAlbumAuteur = '<th>Auteur\(s\)</th>[\r|\n|\t|\s]*<td><span class="author">(?<nom>.*?)</span></td>';
-  regExAlbumCollection = '<th>Collection</th>[\r|\n|\t|\s]*<td><a(?:.*?)>(?<collection>.*?)</a></td>';
-  regExAlbumParution = '<th width="124">Date de parution</th><td>([\d|/]*)</td>';
-  regExAlbumISBN = '<th class="right">Code ISBN</th><td>([\d|x|X|-]*)</td>';
-  regExAlbumPrix = '<th>Prix</th><td><strong>€([\d|\.|,]*)</strong></td>';
-  regExAlbumPages = '<th>Nombre de pages</th><td>(\d*)</td>';
-  regExAlbumResume = '<div class="couv">(?s-:.*?)<div class="txt">(?<resume>(?s-).*?)</div>[\r|\n|\t|\s]*</div>';
-  regExAlbumCouverture = 'so\.addVariable\(''media'', ''(?<couverture>.*?)''\);';
+  regExAlbumTitre = &apos;&lt;th width=&quot;100&quot;&gt;Titre&lt;/th&gt;[\r|\n|\t|\s]*&lt;td&gt;&lt;strong&gt;(?&lt;titre_serie&gt;.*?)(?: - (?:T(?&lt;tome&gt;\d*))?\s?(?&lt;titre_album&gt;.*?))?&lt;/strong&gt;&lt;/td&gt;&apos;;
+  regExAlbumAuteur = &apos;&lt;th&gt;Auteur\(s\)&lt;/th&gt;[\r|\n|\t|\s]*&lt;td&gt;&lt;span class=&quot;author&quot;&gt;(?&lt;nom&gt;.*?)&lt;/span&gt;&lt;/td&gt;&apos;;
+  regExAlbumCollection = &apos;&lt;th&gt;Collection&lt;/th&gt;[\r|\n|\t|\s]*&lt;td&gt;&lt;a(?:.*?)&gt;(?&lt;collection&gt;.*?)&lt;/a&gt;&lt;/td&gt;&apos;;
+  regExAlbumParution = &apos;&lt;th width=&quot;124&quot;&gt;Date de parution&lt;/th&gt;&lt;td&gt;([\d|/]*)&lt;/td&gt;&apos;;
+  regExAlbumISBN = &apos;&lt;th class=&quot;right&quot;&gt;Code ISBN&lt;/th&gt;&lt;td&gt;([\d|x|X|-]*)&lt;/td&gt;&apos;;
+  regExAlbumPrix = &apos;&lt;th&gt;Prix&lt;/th&gt;&lt;td&gt;&lt;strong&gt;&#x20AC;([\d|\.|,]*)&lt;/strong&gt;&lt;/td&gt;&apos;;
+  regExAlbumPages = &apos;&lt;th&gt;Nombre de pages&lt;/th&gt;&lt;td&gt;(\d*)&lt;/td&gt;&apos;;
+  regExAlbumResume = &apos;&lt;div class=&quot;couv&quot;&gt;(?s-:.*?)&lt;div class=&quot;txt&quot;&gt;(?&lt;resume&gt;(?s-).*?)&lt;/div&gt;[\r|\n|\t|\s]*&lt;/div&gt;&apos;;
+  regExAlbumCouverture = &apos;so\.addVariable\(&apos;&apos;media&apos;&apos;, &apos;&apos;(?&lt;couverture&gt;.*?)&apos;&apos;\);&apos;;
 
 procedure ParseAlbum(const id_album: string);
 var
@@ -30,13 +32,13 @@ begin
   try
     if re.BeginSearch(page, regExAlbumTitre) and re.Next then
     begin
-      AlbumToImport.Serie.Titre := re.GetCaptureByName('titre_serie');
-      AlbumToImport.Tome := StrToIntDef(re.GetCaptureByName('tome'), 0);
-      AlbumToImport.Titre := re.GetCaptureByName('titre_album');
+      AlbumToImport.Serie.Titre := re.GetCaptureByName(&apos;titre_serie&apos;);
+      AlbumToImport.Tome := StrToIntDef(re.GetCaptureByName(&apos;tome&apos;), 0);
+      AlbumToImport.Titre := re.GetCaptureByName(&apos;titre_album&apos;);
     end;
 
     auteur := ExtractRegEx(page, regExAlbumAuteur);
-    if auteur <> '' then
+    if auteur &lt;&gt; &apos;&apos; then
     begin
       AlbumToImport.Scenaristes.Add(MakeAuteur(auteur, maScenariste));
       AlbumToImport.Serie.Scenaristes.Add(MakeAuteur(auteur, maScenariste));
@@ -44,7 +46,7 @@ begin
       AlbumToImport.Serie.Dessinateurs.Add(MakeAuteur(auteur, maDessinateur));
     end;
 
-    AlbumToImport.Serie.Editeur.NomEditeur := 'Kurokawa';
+    AlbumToImport.Serie.Editeur.NomEditeur := &apos;Kurokawa&apos;;
     AlbumToImport.Serie.Editeur.SiteWeb := urlSite;
     AlbumToImport.Serie.Collection := ExtractRegEx(page, regExAlbumCollection);
     AlbumToImport.Edition.Editeur.NomEditeur := AlbumToImport.Serie.Editeur.NomEditeur;
@@ -57,10 +59,10 @@ begin
 
     with TStringList.Create do
     try
-      Split(ExtractRegEx(page, regExAlbumParution), '/');
-      if Count > 0 then
+      Split(ExtractRegEx(page, regExAlbumParution), &apos;/&apos;);
+      if Count &gt; 0 then
         AlbumToImport.AnneeParution := StrToIntDef(Strings[Count - 1], 0);
-      if Count > 1 then
+      if Count &gt; 1 then
         AlbumToImport.MoisParution := TraduitMois(Strings[Count - 2]);
     finally
       Free;
@@ -69,10 +71,10 @@ begin
     AlbumToImport.Sujet.Text := HTMLText(ExtractRegEx(page, regExAlbumResume));
 
     s :=ExtractRegEx(page, regExAlbumCouverture);
-    if s <> '' then
+    if s &lt;&gt; &apos;&apos; then
     begin
-      s := ChangeFileExt(s, '.JPG');
-      s := ChangeFilePath(s, '/uploads/oeuvres/zoom');
+      s := ChangeFileExt(s, &apos;.JPG&apos;);
+      s := ChangeFilePath(s, &apos;/uploads/oeuvres/zoom&apos;);
       AlbumToImport.Edition.AddImageFromURL(CombineURL(urlSite, s), ctiCouverture);
     end;
   finally
@@ -89,17 +91,17 @@ var
   c: TScriptChoix;
   id, titre_album: string;
 begin
-  Result := '';
+  Result := &apos;&apos;;
   page := GetPage(urlSite + urlSearch + Titre, True);
   c := TScriptChoix.Create;
   re := TBdtkRegEx.Create;
   try
-    c.Titre := 'Résultats de recherche de "' + Titre + '"';
+    c.Titre := &apos;Résultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
     if re.BeginSearch(ExtractRegEx(page, regExResultAlbums), regExResult) then
       while re.Next do begin
-        id := re.GetCaptureByName('id_album');
-        titre_album := re.GetCaptureByName('titre_album');
-        c.AjoutChoix('Album', titre_album, '', id);
+        id := re.GetCaptureByName(&apos;id_album&apos;);
+        titre_album := re.GetCaptureByName(&apos;titre_album&apos;);
+        c.AjoutChoix(&apos;Album&apos;, titre_album, &apos;&apos;, id);
       end;
 
     Result := c.Show;
@@ -113,10 +115,12 @@ var
   id_album, entry: string;
   index: integer;
 begin
-  if not AskSearchEntry(['Titre de l''album ou de la série'], entry, index) then Exit;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la série&apos;], entry, index) then Exit;
 
   id_album := RechercheParTitre(entry);
-  if id_album <> '' then
+  if id_album &lt;&gt; &apos;&apos; then
     ParseAlbum(id_album);
 end.
 
+</Code>
+</Script>

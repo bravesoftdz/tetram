@@ -1,41 +1,43 @@
-program Delcourt;
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Script>
+  <Code>program Delcourt;
 
 uses ScriptFonctions;
 
 const
-  urlSite = 'http://www.editions-delcourt.fr';
-  urlSearch = '/content/search/(offset)/%d?SearchText=';
+  urlSite = &apos;http://www.editions-delcourt.fr&apos;;
+  urlSearch = &apos;/content/search/(offset)/%d?SearchText=&apos;;
 
-  regExResult = '<div id="resultssearch">((?s-).*?)</div>';
-  regExResultAlbums = '<tr>[\r|\n|\t|\s]*'
-    + '<td class="cell1">(?s-:.*?)?</td>[\r|\n|\t|\s]*'
-    + '<td class="cell2"><a(?: href="(?<lien>.*?)"|.*?)*>(?<titre_album>.*?)</a></td>[\r|\n|\t|\s]*'
-    + '<td class="cell3">(?<scenariste>(?s-).*?)?</td>[\r|\n|\t|\s]*'
-    + '<td class="cell4">(?<dessinateur>(?s-).*?)?</td>[\r|\n|\t|\s]*'
-    + '<td class="cell5">(?:[\r|\n|\t|\s]*<a(?:.*?)>(?<collection>.*?)</a><br />[\r|\n|\t|\s]*)?</td>[\r|\n|\t|\s]*'
-    + '</tr>';
+  regExResult = &apos;&lt;div id=&quot;resultssearch&quot;&gt;((?s-).*?)&lt;/div&gt;&apos;;
+  regExResultAlbums = &apos;&lt;tr&gt;[\r|\n|\t|\s]*&apos;
+    + &apos;&lt;td class=&quot;cell1&quot;&gt;(?s-:.*?)?&lt;/td&gt;[\r|\n|\t|\s]*&apos;
+    + &apos;&lt;td class=&quot;cell2&quot;&gt;&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;(?&lt;titre_album&gt;.*?)&lt;/a&gt;&lt;/td&gt;[\r|\n|\t|\s]*&apos;
+    + &apos;&lt;td class=&quot;cell3&quot;&gt;(?&lt;scenariste&gt;(?s-).*?)?&lt;/td&gt;[\r|\n|\t|\s]*&apos;
+    + &apos;&lt;td class=&quot;cell4&quot;&gt;(?&lt;dessinateur&gt;(?s-).*?)?&lt;/td&gt;[\r|\n|\t|\s]*&apos;
+    + &apos;&lt;td class=&quot;cell5&quot;&gt;(?:[\r|\n|\t|\s]*&lt;a(?:.*?)&gt;(?&lt;collection&gt;.*?)&lt;/a&gt;&lt;br /&gt;[\r|\n|\t|\s]*)?&lt;/td&gt;[\r|\n|\t|\s]*&apos;
+    + &apos;&lt;/tr&gt;&apos;;
 
-  regExAlbumDetail = '<div id="details">((?s-).*?)</div>';
-  regExAlbumSerieTitre = '<h3>Série :[\r|\n|\t|\s]*<span(?:.*?)>(?<titre_serie>.*?)</span>';
-  // c'est loin de correspondre exactement, mais c'est un tel foutoir que je vois pas comment faire mieux
+  regExAlbumDetail = &apos;&lt;div id=&quot;details&quot;&gt;((?s-).*?)&lt;/div&gt;&apos;;
+  regExAlbumSerieTitre = &apos;&lt;h3&gt;Série :[\r|\n|\t|\s]*&lt;span(?:.*?)&gt;(?&lt;titre_serie&gt;.*?)&lt;/span&gt;&apos;;
+  // c&apos;est loin de correspondre exactement, mais c&apos;est un tel foutoir que je vois pas comment faire mieux
   // on peut même pas extraire le numéro du tome
-  regExAlbumTitre = '<h1>(.*?)</h1>';
-  regExAlbumParution = 'Date de parution(?:[ |:]*)([\d|/]*)';
-  regExAlbumISBN = 'ISBN(?:[ |:]*)([\d|x|X|-]*)';
-  regExAlbumPrix = 'Prix public(?:[ |:]*)([\d|,|\.]*)';
-  regExAlbumResume = '<div id="resume">[\r|\n|\t|\s]*<h2>(?s-:.*?)</h2>[\r|\n|\t|\s]*(?<resume>(?s-).*?)[\r|\n|\t|\s]*</div>';
-  regExSerieResume = '<div id="laserie">[\r|\n|\t|\s]*<h2>(?s-:.*?)</h2>[\r|\n|\t|\s]*(?<resume>(?s-).*?)[\r|\n|\t|\s]*</div>';
-  regExAlbumScenaristes = '<h3>Scénario :[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*</h3>';
-  regExAlbumDessinateurs = '<h3>Dessin :[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*</h3>';
-  regExAlbumColoristes = '<h3>Couleurs :[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*</h3>';
-  regExAuteur = '<a(?s-:.*?)>(?<nom>.*?)</a>';
-  regExAlbumCollection = '<h3>Collection :[\r|\n|\t|\s]*<a(?s-:.*?)>(?<nom>.*?)</a>[\r|\n|\t|\s]*</h3>';
-  regExSerieGenres = '<h3>Genre :[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*</h3>';
-  regExGenre = '<span(?s-:.*?)>(?<genre>.*?)(?:[|, ]*)</span>';
+  regExAlbumTitre = &apos;&lt;h1&gt;(.*?)&lt;/h1&gt;&apos;;
+  regExAlbumParution = &apos;Date de parution(?:[ |:]*)([\d|/]*)&apos;;
+  regExAlbumISBN = &apos;ISBN(?:[ |:]*)([\d|x|X|-]*)&apos;;
+  regExAlbumPrix = &apos;Prix public(?:[ |:]*)([\d|,|\.]*)&apos;;
+  regExAlbumResume = &apos;&lt;div id=&quot;resume&quot;&gt;[\r|\n|\t|\s]*&lt;h2&gt;(?s-:.*?)&lt;/h2&gt;[\r|\n|\t|\s]*(?&lt;resume&gt;(?s-).*?)[\r|\n|\t|\s]*&lt;/div&gt;&apos;;
+  regExSerieResume = &apos;&lt;div id=&quot;laserie&quot;&gt;[\r|\n|\t|\s]*&lt;h2&gt;(?s-:.*?)&lt;/h2&gt;[\r|\n|\t|\s]*(?&lt;resume&gt;(?s-).*?)[\r|\n|\t|\s]*&lt;/div&gt;&apos;;
+  regExAlbumScenaristes = &apos;&lt;h3&gt;Scénario :[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*&lt;/h3&gt;&apos;;
+  regExAlbumDessinateurs = &apos;&lt;h3&gt;Dessin :[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*&lt;/h3&gt;&apos;;
+  regExAlbumColoristes = &apos;&lt;h3&gt;Couleurs :[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*&lt;/h3&gt;&apos;;
+  regExAuteur = &apos;&lt;a(?s-:.*?)&gt;(?&lt;nom&gt;.*?)&lt;/a&gt;&apos;;
+  regExAlbumCollection = &apos;&lt;h3&gt;Collection :[\r|\n|\t|\s]*&lt;a(?s-:.*?)&gt;(?&lt;nom&gt;.*?)&lt;/a&gt;[\r|\n|\t|\s]*&lt;/h3&gt;&apos;;
+  regExSerieGenres = &apos;&lt;h3&gt;Genre :[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*&lt;/h3&gt;&apos;;
+  regExGenre = &apos;&lt;span(?s-:.*?)&gt;(?&lt;genre&gt;.*?)(?:[|, ]*)&lt;/span&gt;&apos;;
 
-  regExAlbumPlanches = '<div id="couverture">(?s-:.*?)"dataFile", "(?<lien>.*?)"(?s-:.*?)</div>';
-  regExAlbumPlanchesListe = '<planches>((?s-).*?)</planches>';
-  regExAlbumPlanche = '<img>(.*?)</img>';
+  regExAlbumPlanches = &apos;&lt;div id=&quot;couverture&quot;&gt;(?s-:.*?)&quot;dataFile&quot;, &quot;(?&lt;lien&gt;.*?)&quot;(?s-:.*?)&lt;/div&gt;&apos;;
+  regExAlbumPlanchesListe = &apos;&lt;planches&gt;((?s-).*?)&lt;/planches&gt;&apos;;
+  regExAlbumPlanche = &apos;&lt;img&gt;(.*?)&lt;/img&gt;&apos;;
 
 procedure ParseAlbum(const lien: string);
 var
@@ -55,10 +57,10 @@ begin
       AlbumToImport.Edition.ISBN := ExtractRegEx(s, regExAlbumISBN);
       with TStringList.Create do
         try
-          Split(ExtractRegEx(s, regExAlbumParution), '/');
-          if Count > 0 then
+          Split(ExtractRegEx(s, regExAlbumParution), &apos;/&apos;);
+          if Count &gt; 0 then
             AlbumToImport.AnneeParution := StrToIntDef(Strings[Count - 1], 0);
-          if Count > 1 then
+          if Count &gt; 1 then
             AlbumToImport.MoisParution := TraduitMois(Strings[Count - 2]);
         finally
           Free;
@@ -88,9 +90,9 @@ begin
 
       if re.BeginSearch(ExtractRegEx(s, regExSerieGenres), regExGenre) then
         while re.Next do
-          AlbumToImport.Serie.Genres.Add(re.GetCaptureByName('genre'));
+          AlbumToImport.Serie.Genres.Add(re.GetCaptureByName(&apos;genre&apos;));
 
-      AlbumToImport.Serie.Editeur.NomEditeur := 'Delcourt';
+      AlbumToImport.Serie.Editeur.NomEditeur := &apos;Delcourt&apos;;
       AlbumToImport.Serie.Editeur.SiteWeb := urlSite;
       AlbumToImport.Serie.Collection := ExtractRegEx(s, regExAlbumCollection);
       AlbumToImport.Edition.Editeur.NomEditeur := AlbumToImport.Serie.Editeur.NomEditeur;
@@ -102,13 +104,13 @@ begin
     AlbumToImport.Serie.Sujet.Text := HTMLText(ExtractRegEx(page, regExSerieResume));
 
     s := ExtractRegEx(page, regExAlbumPlanches);
-    if s <> '' then
+    if s &lt;&gt; &apos;&apos; then
     begin
       page := GetPage(CombineURL(urlSite, s), True);
       planche := False;
       if re.BeginSearch(ExtractRegEx(page, regExAlbumPlanchesListe), regExAlbumPlanche) then
         while re.Find(s) do
-        if s <> '' then
+        if s &lt;&gt; &apos;&apos; then
         begin
           if planche then
             AlbumToImport.Edition.AddImageFromURL(CombineURL(urlSite, s), ctiPlanche)
@@ -133,47 +135,47 @@ var
   p: Integer;
   id, titre_album, commentaire, s, nom: string;
 begin
-  Result := '';
+  Result := &apos;&apos;;
   p := 0;
 
   c := TScriptChoix.Create;
   re := TBdtkRegEx.Create;
   try
-    c.Titre := 'Résultats de recherche de "' + Titre + '"';
+    c.Titre := &apos;Résultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
     while True do
     begin
       page := GetPage(urlSite + Format(urlSearch, [p]) + Titre, True);
       if re.BeginSearch(ExtractRegEx(page, regExResult), regExResultAlbums) then
         while re.Next do begin
-          id := re.GetCaptureByName('lien');
-          titre_album := re.GetCaptureByName('titre_album');
-          commentaire := '';
-          s := '';
+          id := re.GetCaptureByName(&apos;lien&apos;);
+          titre_album := re.GetCaptureByName(&apos;titre_album&apos;);
+          commentaire := &apos;&apos;;
+          s := &apos;&apos;;
           with TBdtkRegEx.Create do
             try
-              if BeginSearch(re.GetCaptureByName('scenariste'), '<a(?:.*?)>(?<nom>(?s-).*?)</a>') then
+              if BeginSearch(re.GetCaptureByName(&apos;scenariste&apos;), &apos;&lt;a(?:.*?)&gt;(?&lt;nom&gt;(?s-).*?)&lt;/a&gt;&apos;) then
                 while Find(nom) do
-                  AjoutString2(s, nom, ', ');
+                  AjoutString2(s, nom, &apos;, &apos;);
             finally
               Free;
             end;
-          AjoutString1(commentaire, s, #13#10, 'Scenariste: ', '');
-          s := '';
+          AjoutString1(commentaire, s, #13#10, &apos;Scenariste: &apos;, &apos;&apos;);
+          s := &apos;&apos;;
           with TBdtkRegEx.Create do
             try
-              if BeginSearch(re.GetCaptureByName('dessinateur'), '<a(?:.*?)>(?<nom>(?s-).*?)</a>') then
+              if BeginSearch(re.GetCaptureByName(&apos;dessinateur&apos;), &apos;&lt;a(?:.*?)&gt;(?&lt;nom&gt;(?s-).*?)&lt;/a&gt;&apos;) then
                 while Find(nom) do
-                  AjoutString2(s, nom, ', ');
+                  AjoutString2(s, nom, &apos;, &apos;);
             finally
               Free;
             end;
-          AjoutString1(commentaire, s, #13#10, 'Dessinateur: ', '');
-          AjoutString1(commentaire, re.GetCaptureByName('collection'), #13#10, 'Collection: ', '');
-          c.AjoutChoix('Album', titre_album, commentaire, id);
+          AjoutString1(commentaire, s, #13#10, &apos;Dessinateur: &apos;, &apos;&apos;);
+          AjoutString1(commentaire, re.GetCaptureByName(&apos;collection&apos;), #13#10, &apos;Collection: &apos;, &apos;&apos;);
+          c.AjoutChoix(&apos;Album&apos;, titre_album, commentaire, id);
           p := p + 1;
         end;
 
-      if ExtractRegEx(page, '<a(.*?)>Page suivante&nbsp;</a>') = '' then Break;
+      if ExtractRegEx(page, &apos;&lt;a(.*?)&gt;Page suivante&amp;nbsp;&lt;/a&gt;&apos;) = &apos;&apos; then Break;
     end;
 
     Result := c.Show;
@@ -187,9 +189,10 @@ var
   id_album, entry: string;
   index: integer;
 begin
-  if not AskSearchEntry(['Titre de l''album ou de la série, ou ISBN'], entry, index) then Exit;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la série, ou ISBN&apos;], entry, index) then Exit;
 
   id_album := RechercheParTitre(entry);
-  if id_album <> '' then
+  if id_album &lt;&gt; &apos;&apos; then
     ParseAlbum(id_album);
-end.
+end.</Code>
+</Script>

@@ -1,32 +1,37 @@
-program Casterman;
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Script>
+  <Options>
+    <Option Label="Miniatures dans les recherches" Values="Oui|Non" Default="Oui"/>
+  </Options>
+  <Code>program Casterman;
 
 uses ScriptFonctions;
 
 const
-  urlSite = 'http://www.casterman.com';
-  urlSearchBD = 'http://bd.casterman.com/Search_Result.cfm?TypeSearch=Catalogue&keywords=';
-  urlSearchJeunesse = 'http://jeunesse.casterman.com/Search_Result.cfm?TypeSearch=Catalogue&keywords=';
+  urlSite = &apos;http://www.casterman.com&apos;;
+  urlSearchBD = &apos;http://bd.casterman.com/Search_Result.cfm?TypeSearch=Catalogue&amp;keywords=&apos;;
+  urlSearchJeunesse = &apos;http://jeunesse.casterman.com/Search_Result.cfm?TypeSearch=Catalogue&amp;keywords=&apos;;
 
   regExResultAlbums =
-    '<div class="highlights searchresult">[\r|\n|\t|\s]*<div class="visu">[\r|\n|\t|\s]*(?:<a(?:.*?)>'
-    + '<img(?: src="(?<thumb>.*?)"|.*?)*/></a>)?[\r|\n|\t|\s]*&nbsp;[\r|\n|\t|\s]*</div>[\r|\n|\t|\s]*<div class="details">[\r|\n|\t|\s]*'
-    + '<div class="title">[\r|\n|\t|\s]*<span>Album :</span><a(?: href="(?<lien>.*?)"|.*?)*>(?<titre_album>.*?)</a>[\r|\n|\t|\s]*</div>'
-    + '(?<commentaire>(?s-).*?)</div>[\r|\n|\t|\s]*<div class="clearer"></div>[\r|\n|\t|\s]*</div>';
+    &apos;&lt;div class=&quot;highlights searchresult&quot;&gt;[\r|\n|\t|\s]*&lt;div class=&quot;visu&quot;&gt;[\r|\n|\t|\s]*(?:&lt;a(?:.*?)&gt;&apos;
+    + &apos;&lt;img(?: src=&quot;(?&lt;thumb&gt;.*?)&quot;|.*?)*/&gt;&lt;/a&gt;)?[\r|\n|\t|\s]*&amp;nbsp;[\r|\n|\t|\s]*&lt;/div&gt;[\r|\n|\t|\s]*&lt;div class=&quot;details&quot;&gt;[\r|\n|\t|\s]*&apos;
+    + &apos;&lt;div class=&quot;title&quot;&gt;[\r|\n|\t|\s]*&lt;span&gt;Album :&lt;/span&gt;&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;(?&lt;titre_album&gt;.*?)&lt;/a&gt;[\r|\n|\t|\s]*&lt;/div&gt;&apos;
+    + &apos;(?&lt;commentaire&gt;(?s-).*?)&lt;/div&gt;[\r|\n|\t|\s]*&lt;div class=&quot;clearer&quot;&gt;&lt;/div&gt;[\r|\n|\t|\s]*&lt;/div&gt;&apos;;
 
-  regExAlbumTitre = '<div class="mainTitle">(?<titre_album>.*?)(?: *)</div>';
-  regExAlbumAuteurs = '<td class="authors" width="50%" valign="top">((?s-).*?)</td>';
-  regExAlbumAuteur = '<span>[\r|\n|\t|\s]*<a(?:.*?)>(?<nom>.*?)</a>(?:,)?[\r|\n|\t|\s]*</span>';
-  regExAlbumParution = '<td class="pubdate">[\r|\n|\t|\s]*<strong>Date de parution :</strong>\s*(?<parution>[\d|/]*)[\r|\n|\t|\s]*</td>';
-  regExAlbumCollection = '<div class="specs">Collection : <span><a(?:.*?)>\s*(?<collection>.*?)\s*</a></span></div>';
-  regExAlbumSerie = '<div class="specs">[\r|\n|\t|\s]*Serie : <a(?: href="(?<lien>.*?)"|.*?)*>(?<titre_serie>.*?)</a>[\r|\n|\t|\s]*</div>';
-  regExAlbumTome = '<div class="specs">Tome : <span>(?<tome>\d*)</span></div>';
-  regExAlbumPages = '<div class="specs">Pages : <span>(?<pages>\d*)</span></div>';
-  regExAlbumPrix = '<div class="specs">Prix : <span>(?<prix>[\d|\.|,]*) &euro;</span></div>';
-  regExAlbumResume = '<div class="bookDescription">(?s-:.*?)<div class="text">(?<resume>(?s-).*?)</div>';
-  regExAlbumISBN = '<li>ISBN : ([\d|x|X|-]*)</li>';
-  regExAlbumCouverture = '<div class="album-cover-image">[\r|\n|\t|\s]*<a(?: href="(?<lien>.*?)"|.*?)*>[\r|\n|\t|\s]*<img(?s-:.*?)>[\r|\n|\t|\s]*</a>[\r|\n|\t|\s]*</div>';
-  regExAlbumPrevisu = '<a href="(?<lien>.*?)" class="preview"><span>Prévisualiser</span></a>';
-  regExAlbumPlanche = '<div class="preview"(?:.*?)>[\r|\n|\t|\s]*<a(?: href="(?<lien>.*?)"|.*?)*>[\r|\n|\t|\s]*(?:<img(?:.*?)>[\r|\n|\t|\s]*)*</a>[\r|\n|\t|\s]*</div>';
+  regExAlbumTitre = &apos;&lt;div class=&quot;mainTitle&quot;&gt;(?&lt;titre_album&gt;.*?)(?: *)&lt;/div&gt;&apos;;
+  regExAlbumAuteurs = &apos;&lt;td class=&quot;authors&quot; width=&quot;50%&quot; valign=&quot;top&quot;&gt;((?s-).*?)&lt;/td&gt;&apos;;
+  regExAlbumAuteur = &apos;&lt;span&gt;[\r|\n|\t|\s]*&lt;a(?:.*?)&gt;(?&lt;nom&gt;.*?)&lt;/a&gt;(?:,)?[\r|\n|\t|\s]*&lt;/span&gt;&apos;;
+  regExAlbumParution = &apos;&lt;td class=&quot;pubdate&quot;&gt;[\r|\n|\t|\s]*&lt;strong&gt;Date de parution :&lt;/strong&gt;\s*(?&lt;parution&gt;[\d|/]*)[\r|\n|\t|\s]*&lt;/td&gt;&apos;;
+  regExAlbumCollection = &apos;&lt;div class=&quot;specs&quot;&gt;Collection : &lt;span&gt;&lt;a(?:.*?)&gt;\s*(?&lt;collection&gt;.*?)\s*&lt;/a&gt;&lt;/span&gt;&lt;/div&gt;&apos;;
+  regExAlbumSerie = &apos;&lt;div class=&quot;specs&quot;&gt;[\r|\n|\t|\s]*Serie : &lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;(?&lt;titre_serie&gt;.*?)&lt;/a&gt;[\r|\n|\t|\s]*&lt;/div&gt;&apos;;
+  regExAlbumTome = &apos;&lt;div class=&quot;specs&quot;&gt;Tome : &lt;span&gt;(?&lt;tome&gt;\d*)&lt;/span&gt;&lt;/div&gt;&apos;;
+  regExAlbumPages = &apos;&lt;div class=&quot;specs&quot;&gt;Pages : &lt;span&gt;(?&lt;pages&gt;\d*)&lt;/span&gt;&lt;/div&gt;&apos;;
+  regExAlbumPrix = &apos;&lt;div class=&quot;specs&quot;&gt;Prix : &lt;span&gt;(?&lt;prix&gt;[\d|\.|,]*) &amp;euro;&lt;/span&gt;&lt;/div&gt;&apos;;
+  regExAlbumResume = &apos;&lt;div class=&quot;bookDescription&quot;&gt;(?s-:.*?)&lt;div class=&quot;text&quot;&gt;(?&lt;resume&gt;(?s-).*?)&lt;/div&gt;&apos;;
+  regExAlbumISBN = &apos;&lt;li&gt;ISBN : ([\d|x|X|-]*)&lt;/li&gt;&apos;;
+  regExAlbumCouverture = &apos;&lt;div class=&quot;album-cover-image&quot;&gt;[\r|\n|\t|\s]*&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;[\r|\n|\t|\s]*&lt;img(?s-:.*?)&gt;[\r|\n|\t|\s]*&lt;/a&gt;[\r|\n|\t|\s]*&lt;/div&gt;&apos;;
+  regExAlbumPrevisu = &apos;&lt;a href=&quot;(?&lt;lien&gt;.*?)&quot; class=&quot;preview&quot;&gt;&lt;span&gt;Prévisualiser&lt;/span&gt;&lt;/a&gt;&apos;;
+  regExAlbumPlanche = &apos;&lt;div class=&quot;preview&quot;(?:.*?)&gt;[\r|\n|\t|\s]*&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;[\r|\n|\t|\s]*(?:&lt;img(?:.*?)&gt;[\r|\n|\t|\s]*)*&lt;/a&gt;[\r|\n|\t|\s]*&lt;/div&gt;&apos;;
 
 procedure ParseAlbum(const lien: string);
 var
@@ -49,16 +54,16 @@ begin
 
     with TStringList.Create do
       try
-        Split(ExtractRegEx(page, regExAlbumParution), '/');
-        if Count > 0 then
+        Split(ExtractRegEx(page, regExAlbumParution), &apos;/&apos;);
+        if Count &gt; 0 then
           AlbumToImport.AnneeParution := StrToIntDef(Strings[Count - 1], 0);
-        if Count > 1 then
+        if Count &gt; 1 then
           AlbumToImport.MoisParution := TraduitMois(Strings[Count - 2]);
       finally
         Free;
       end;
 
-    AlbumToImport.Serie.Editeur.NomEditeur := 'Casterman';
+    AlbumToImport.Serie.Editeur.NomEditeur := &apos;Casterman&apos;;
     AlbumToImport.Serie.Editeur.SiteWeb := urlSite;
     AlbumToImport.Serie.Collection := ExtractRegEx(page, regExAlbumCollection);
     AlbumToImport.Edition.Editeur.NomEditeur := AlbumToImport.Serie.Editeur.NomEditeur;
@@ -66,32 +71,32 @@ begin
     AlbumToImport.Edition.Collection := AlbumToImport.Serie.Collection;
 
     if re.BeginSearch(page, regExAlbumSerie) and re.Next then begin
-      AlbumToImport.Serie.Titre := re.GetCaptureByName('titre_serie');
-      s := re.GetCaptureByName('lien');
-      if s <> '' then
+      AlbumToImport.Serie.Titre := re.GetCaptureByName(&apos;titre_serie&apos;);
+      s := re.GetCaptureByName(&apos;lien&apos;);
+      if s &lt;&gt; &apos;&apos; then
         AlbumToImport.Serie.SiteWeb := CombineURL(lien, s);
     end;
 
     AlbumToImport.Tome := StrToIntDef(ExtractRegEx(page, regExAlbumTome), 0);
     AlbumToImport.Edition.NombreDePages := StrToIntDef(ExtractRegEx(page, regExAlbumPages), 0);
-    AlbumToImport.Edition.Prix := StrToFloatDef(StringReplace(ExtractRegEx(page, regExAlbumPrix), ',', '.', []), 0);
+    AlbumToImport.Edition.Prix := StrToFloatDef(StringReplace(ExtractRegEx(page, regExAlbumPrix), &apos;,&apos;, &apos;.&apos;, []), 0);
     AlbumToImport.Edition.ISBN := ExtractRegEx(page, regExAlbumISBN);
 
     AlbumToImport.Sujet.Text := HTMLText(ExtractRegEx(page, regExAlbumResume));
 
     s := ExtractRegEx(page, regExAlbumCouverture);
-    if s <> '' then
+    if s &lt;&gt; &apos;&apos; then
       AlbumToImport.Edition.AddImageFromURL(CombineURL(lien, s), ctiCouverture);
 
     s := ExtractRegEx(page, regExAlbumPrevisu);
-    if s <> '' then
+    if s &lt;&gt; &apos;&apos; then
     begin
       lien := CombineURL(lien, s);
       page := GetPage(lien, True);
 
       if re.BeginSearch(page, regExAlbumPlanche) then
         while re.Find(s) do
-          if (s <> '') and (ExtractFileName(s) <> 'club.cfm') then
+          if (s &lt;&gt; &apos;&apos;) and (ExtractFileName(s) &lt;&gt; &apos;club.cfm&apos;) then
             AlbumToImport.Edition.AddImageFromURL(CombineURL(lien, s), ctiPlanche);
     end;
   finally
@@ -107,55 +112,62 @@ var
   re: TBdtkRegEx;
   c: TScriptChoix;
   id, titre_album, commentaire, thumb: string;
-  Added: Boolean;
+  Added, Miniatures: Boolean;
 begin
-  Result := '';
+  Result := &apos;&apos;;
+  Miniatures := GetOptionValue(&apos;Miniatures dans les recherches&apos;, &apos;Oui&apos;) = &apos;Oui&apos;;
   c := TScriptChoix.Create;
   re := TBdtkRegEx.Create;
   try
-    c.Titre := 'Résultats de recherche de "' + Titre + '"';
+    c.Titre := &apos;Résultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
 
     lien := urlSearchBD + Titre;
     page := GetPage(lien, True);
     Added := False;
     if re.BeginSearch(page, regExResultAlbums) then
       while re.Next do begin
-        thumb := re.GetCaptureByName('thumb');
-        if thumb <> '' then
-          thumb := CombineURL(lien, thumb);
-        id := re.GetCaptureByName('lien');
-          id := CombineURL(lien, id);
-        titre_album := HTMLText(re.GetCaptureByName('titre_album'));
-        commentaire := HTMLText(re.GetCaptureByName('commentaire'));
-        if Length(commentaire) > 250 then commentaire := Copy(commentaire, 1, 247) + '...';
-        if thumb <> '' then
-          c.AjoutChoixWithThumb('BD', titre_album, commentaire, id, thumb)
+        if Miniatures then
+          thumb := re.GetCaptureByName(&apos;thumb&apos;)
         else
-          c.AjoutChoix('BD', titre_album, commentaire, id);
+          thumb := &apos;&apos;;
+        if thumb &lt;&gt; &apos;&apos; then
+          thumb := CombineURL(lien, thumb);
+        id := re.GetCaptureByName(&apos;lien&apos;);
+          id := CombineURL(lien, id);
+        titre_album := HTMLText(re.GetCaptureByName(&apos;titre_album&apos;));
+        commentaire := HTMLText(re.GetCaptureByName(&apos;commentaire&apos;));
+        if Length(commentaire) &gt; 250 then commentaire := Copy(commentaire, 1, 247) + &apos;...&apos;;
+        if thumb &lt;&gt; &apos;&apos; then
+          c.AjoutChoixWithThumb(&apos;BD&apos;, titre_album, commentaire, id, thumb)
+        else
+          c.AjoutChoix(&apos;BD&apos;, titre_album, commentaire, id);
         Added := True;
       end;
-    if not Added then c.AjoutChoix('BD', 'Aucun', '', '');
+    if not Added then c.AjoutChoix(&apos;BD&apos;, &apos;Aucun&apos;, &apos;&apos;, &apos;&apos;);
 
     lien := urlSearchJeunesse + Titre;
     page := GetPage(lien, True);
     Added := False;
     if re.BeginSearch(page, regExResultAlbums) then
       while re.Next do begin
-        thumb := re.GetCaptureByName('thumb');
-        if thumb <> '' then
-          thumb := CombineURL(lien, thumb);
-        id := re.GetCaptureByName('lien');
-          id := CombineURL(lien, id);
-        titre_album := HTMLText(re.GetCaptureByName('titre_album'));
-        commentaire := HTMLText(re.GetCaptureByName('commentaire'));
-        if Length(commentaire) > 250 then commentaire := Copy(commentaire, 1, 247) + '...';
-        if thumb <> '' then
-          c.AjoutChoixWithThumb('Jeunesse', titre_album, commentaire, id, thumb)
+        if Miniatures then
+          thumb := re.GetCaptureByName(&apos;thumb&apos;)
         else
-          c.AjoutChoix('Jeunesse', titre_album, commentaire, id);
+          thumb := &apos;&apos;;
+        if thumb &lt;&gt; &apos;&apos; then
+          thumb := CombineURL(lien, thumb);
+        id := re.GetCaptureByName(&apos;lien&apos;);
+          id := CombineURL(lien, id);
+        titre_album := HTMLText(re.GetCaptureByName(&apos;titre_album&apos;));
+        commentaire := HTMLText(re.GetCaptureByName(&apos;commentaire&apos;));
+        if Length(commentaire) &gt; 250 then commentaire := Copy(commentaire, 1, 247) + &apos;...&apos;;
+        if thumb &lt;&gt; &apos;&apos; then
+          c.AjoutChoixWithThumb(&apos;Jeunesse&apos;, titre_album, commentaire, id, thumb)
+        else
+          c.AjoutChoix(&apos;Jeunesse&apos;, titre_album, commentaire, id);
         Added := True;
       end;
-    if not Added then c.AjoutChoix('Jeunesse', 'Aucun', '', '');
+    if not Added then c.AjoutChoix(&apos;Jeunesse&apos;, &apos;Aucun&apos;, &apos;&apos;, &apos;&apos;);
 
     Result := c.Show;
   finally
@@ -168,10 +180,10 @@ var
   id_album, entry: string;
   index: integer;
 begin
-  if not AskSearchEntry(['Titre de l''album ou de la série'], entry, index) then Exit;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la série&apos;], entry, index) then Exit;
 
   id_album := RechercheParTitre(entry);
-  if id_album <> '' then
+  if id_album &lt;&gt; &apos;&apos; then
     ParseAlbum(id_album);
-end.
-
+end.</Code>
+</Script>
