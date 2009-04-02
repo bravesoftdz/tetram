@@ -1,0 +1,177 @@
+unit Main;
+
+uses ScriptFonctions;
+
+const
+  urlSite = 'http://www.casterman.com';
+  urlSearchBD = 'http://bd.casterman.com/Search_Result.cfm?TypeSearch=Catalogue&keywords=';
+  urlSearchJeunesse = 'http://jeunesse.casterman.com/Search_Result.cfm?TypeSearch=Catalogue&keywords=';
+
+  regExResultAlbums =
+    '<div class="highlights searchresult">[\r|\n|\t|\s]*<div class="visu">[\r|\n|\t|\s]*(?:<a(?:.*?)>'
+    + '<img(?: src="(?<thumb>.*?)"|.*?)*/></a>)?[\r|\n|\t|\s]*&nbsp;[\r|\n|\t|\s]*</div>[\r|\n|\t|\s]*<div class="details">[\r|\n|\t|\s]*'
+    + '<div class="title">[\r|\n|\t|\s]*<span>Album :</span><a(?: href="(?<lien>.*?)"|.*?)*>(?<titre_album>.*?)</a>[\r|\n|\t|\s]*</div>'
+    + '(?<commentaire>(?s-).*?)</div>[\r|\n|\t|\s]*<div class="clearer"></div>[\r|\n|\t|\s]*</div>';
+
+  regExAlbumTitre = '<div class="mainTitle">(?<titre_album>.*?)(?: *)</div>';
+  regExAlbumAuteurs = '<td class="authors" width="50%" valign="top">((?s-).*?)</td>';
+  regExAlbumAuteur = '<span>[\r|\n|\t|\s]*<a(?:.*?)>(?<nom>.*?)</a>(?:,)?[\r|\n|\t|\s]*</span>';
+  regExAlbumParution = '<td class="pubdate">[\r|\n|\t|\s]*<strong>Date de parution :</strong>\s*(?<parution>[\d|/]*)[\r|\n|\t|\s]*</td>';
+  regExAlbumCollection = '<div class="specs">Collection : <span><a(?:.*?)>\s*(?<collection>.*?)\s*</a></span></div>';
+  regExAlbumSerie = '<div class="specs">[\r|\n|\t|\s]*Serie : <a(?: href="(?<lien>.*?)"|.*?)*>(?<titre_serie>.*?)</a>[\r|\n|\t|\s]*</div>';
+  regExAlbumTome = '<div class="specs">Tome : <span>(?<tome>\d*)</span></div>';
+  regExAlbumPages = '<div class="specs">Pages : <span>(?<pages>\d*)</span></div>';
+  regExAlbumPrix = '<div class="specs">Prix : <span>(?<prix>[\d|\.|,]*) &euro;</span></div>';
+  regExAlbumResume = '<div class="bookDescription">(?s-:.*?)<div class="text">(?<resume>(?s-).*?)</div>';
+  regExAlbumISBN = '<li>ISBN : ([\d|x|X|-]*)</li>';
+  regExAlbumCouverture = '<div class="album-cover-image">[\r|\n|\t|\s]*<a(?: href="(?<lien>.*?)"|.*?)*>[\r|\n|\t|\s]*<img(?s-:.*?)>[\r|\n|\t|\s]*</a>[\r|\n|\t|\s]*</div>';
+  regExAlbumPrevisu = '<a href="(?<lien>.*?)" class="preview"><span>Prévisualiser</span></a>';
+  regExAlbumPlanche = '<div class="preview"(?:.*?)>[\r|\n|\t|\s]*<a(?: href="(?<lien>.*?)"|.*?)*>[\r|\n|\t|\s]*(?:<img(?:.*?)>[\r|\n|\t|\s]*)*</a>[\r|\n|\t|\s]*</div>';
+
+procedure ParseAlbum(const lien: string);
+var
+  page, nom, s: string;
+  re: TBdtkRegEx;
+begin
+  re := TBdtkRegEx.Create;
+  try
+    page := GetPage(lien, True);
+    AlbumToImport.Titre := ExtractRegEx(page, regExAlbumTitre);
+
+    if re.BeginSearch(ExtractRegEx(page, regExAlbumAuteurs), regExAlbumAuteur) then
+      while re.Find(nom) do
+      begin
+        AlbumToImport.Serie.Scenaristes.Add(MakeAuteur(nom, maScenariste));
+        AlbumToImport.Scenaristes.Add(MakeAuteur(nom, maScenariste));
+        AlbumToImport.Serie.Dessinateurs.Add(MakeAuteur(nom, maDessinateur));
+        AlbumToImport.Dessinateurs.Add(MakeAuteur(nom, maDessinateur));
+      end;
+
+    with TStringList.Create do
+      try
+        Split(ExtractRegEx(page, regExAlbumParution), '/');
+        if Count > 0 then
+          AlbumToImport.AnneeParution := StrToIntDef(Strings[Count - 1], 0);
+        if Count > 1 then
+          AlbumToImport.MoisParution := TraduitMois(Strings[Count - 2]);
+      finally
+        Free;
+      end;
+
+    AlbumToImport.Serie.Editeur.NomEditeur := 'Casterman';
+    AlbumToImport.Serie.Editeur.SiteWeb := urlSite;
+    AlbumToImport.Serie.Collection := ExtractRegEx(page, regExAlbumCollection);
+    AlbumToImport.Edition.Editeur.NomEditeur := AlbumToImport.Serie.Editeur.NomEditeur;
+    AlbumToImport.Edition.Editeur.SiteWeb := AlbumToImport.Serie.Editeur.SiteWeb;
+    AlbumToImport.Edition.Collection := AlbumToImport.Serie.Collection;
+
+    if re.BeginSearch(page, regExAlbumSerie) and re.Next then begin
+      AlbumToImport.Serie.Titre := re.GetCaptureByName('titre_serie');
+      s := re.GetCaptureByName('lien');
+      if s <> '' then
+        AlbumToImport.Serie.SiteWeb := CombineURL(lien, s);
+    end;
+
+    AlbumToImport.Tome := StrToIntDef(ExtractRegEx(page, regExAlbumTome), 0);
+    AlbumToImport.Edition.NombreDePages := StrToIntDef(ExtractRegEx(page, regExAlbumPages), 0);
+    AlbumToImport.Edition.Prix := StrToFloatDef(StringReplace(ExtractRegEx(page, regExAlbumPrix), ',', '.', []), 0);
+    AlbumToImport.Edition.ISBN := ExtractRegEx(page, regExAlbumISBN);
+
+    AlbumToImport.Sujet.Text := HTMLText(ExtractRegEx(page, regExAlbumResume));
+
+    s := ExtractRegEx(page, regExAlbumCouverture);
+    if s <> '' then
+      AlbumToImport.Edition.AddImageFromURL(CombineURL(lien, s), ctiCouverture);
+
+    s := ExtractRegEx(page, regExAlbumPrevisu);
+    if s <> '' then
+    begin
+      lien := CombineURL(lien, s);
+      page := GetPage(lien, True);
+
+      if re.BeginSearch(page, regExAlbumPlanche) then
+        while re.Find(s) do
+          if (s <> '') and (ExtractFileName(s) <> 'club.cfm') then
+            AlbumToImport.Edition.AddImageFromURL(CombineURL(lien, s), ctiPlanche);
+    end;
+  finally
+    re.Free;
+  end;
+
+  AlbumToImport.Import;
+end;
+
+function RechercheParTitre(const Titre: string): string;
+var
+  page, lien: string;
+  re: TBdtkRegEx;
+  c: TScriptChoix;
+  id, titre_album, commentaire, thumb: string;
+  Added: Boolean;
+begin
+  Result := '';
+  c := TScriptChoix.Create;
+  re := TBdtkRegEx.Create;
+  try
+    c.Titre := 'Résultats de recherche de "' + Titre + '"';
+
+    lien := urlSearchBD + Titre;
+    page := GetPage(lien, True);
+    Added := False;
+    if re.BeginSearch(page, regExResultAlbums) then
+      while re.Next do begin
+        thumb := re.GetCaptureByName('thumb');
+        if thumb <> '' then
+          thumb := CombineURL(lien, thumb);
+        id := re.GetCaptureByName('lien');
+          id := CombineURL(lien, id);
+        titre_album := HTMLText(re.GetCaptureByName('titre_album'));
+        commentaire := HTMLText(re.GetCaptureByName('commentaire'));
+        if Length(commentaire) > 250 then commentaire := Copy(commentaire, 1, 247) + '...';
+        if thumb <> '' then
+          c.AjoutChoixWithThumb('BD', titre_album, commentaire, id, thumb)
+        else
+          c.AjoutChoix('BD', titre_album, commentaire, id);
+        Added := True;
+      end;
+    if not Added then c.AjoutChoix('BD', 'Aucun', '', '');
+
+    lien := urlSearchJeunesse + Titre;
+    page := GetPage(lien, True);
+    Added := False;
+    if re.BeginSearch(page, regExResultAlbums) then
+      while re.Next do begin
+        thumb := re.GetCaptureByName('thumb');
+        if thumb <> '' then
+          thumb := CombineURL(lien, thumb);
+        id := re.GetCaptureByName('lien');
+          id := CombineURL(lien, id);
+        titre_album := HTMLText(re.GetCaptureByName('titre_album'));
+        commentaire := HTMLText(re.GetCaptureByName('commentaire'));
+        if Length(commentaire) > 250 then commentaire := Copy(commentaire, 1, 247) + '...';
+        if thumb <> '' then
+          c.AjoutChoixWithThumb('Jeunesse', titre_album, commentaire, id, thumb)
+        else
+          c.AjoutChoix('Jeunesse', titre_album, commentaire, id);
+        Added := True;
+      end;
+    if not Added then c.AjoutChoix('Jeunesse', 'Aucun', '', '');
+
+    Result := c.Show;
+  finally
+    re.Free;
+    c.Free;
+  end;
+end;
+
+var
+  id_album, entry: string;
+  index: integer;
+begin
+  if not AskSearchEntry(['Titre de l''album ou de la série'], entry, index) then Exit;
+
+  id_album := RechercheParTitre(entry);
+  if id_album <> '' then
+    ParseAlbum(id_album);
+end.
+
