@@ -1,4 +1,4 @@
-unit Main;
+program Casterman;
 
 uses ScriptFonctions;
 

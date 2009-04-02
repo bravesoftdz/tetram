@@ -1,4 +1,4 @@
-unit Main;
+program Kurokawa;
 
 uses ScriptFonctions;
 

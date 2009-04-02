@@ -1,4 +1,4 @@
-unit Main;
+program PaniniComics;
 
 uses ScriptFonctions;
 
