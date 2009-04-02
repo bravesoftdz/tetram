@@ -3,7 +3,7 @@ unit LoadCompletImport;
 interface
 
 uses
-  Windows, SysUtils, Classes, LoadComplet, Generics.Collections;
+  Windows, SysUtils, Classes, LoadComplet, Generics.Collections, Graphics;
 
 type
   TAlbumCompletHelper = class helper for TAlbumComplet
@@ -29,6 +29,13 @@ var
   function SearchAssociation(const Texte: string; TypeData: TVirtualMode; out Always: Boolean; ParentID: TGUID): TGUID;
   begin
     Result := GUID_NULL;
+
+    if Trim(Texte) = '' then
+    begin
+      Result := GUID_FULL;
+      Always := True;
+      Exit;
+    end;
 
     Qry.SQL.Text := 'select id, always from import_associations where chaine = :chaine and typedata = :typedata and parentid = :parentid';
     Qry.Prepare(True);
@@ -68,8 +75,14 @@ var
         end;
 
         Result := GUID_NULL; // on réinitialise pour être sûr de ne pas avoir de retour en cas d'annulatfion
-        if ShowModalEx <> mrOk then
-          Exit;
+        case ShowModalEx of
+          mrCancel: Exit;
+          mrIgnore:
+          begin
+            Result := GUID_FULL;
+            Exit;
+          end;
+        end;
 
         Result := framVTEdit1.CurrentValue;
 
@@ -92,26 +105,58 @@ var
     Result := CheckValue(Texte, TypeData, GUID_NULL);
   end;
 
-  function CheckListAuteurs(List: TObjectList<TAuteur>): Boolean;
+  function CheckListAuteurs(List: TObjectList<TAuteur>; OtherList: array of TObjectList<TAuteur>): Boolean;
+
+    procedure RemoveAuteur(Index: integer);
+    var
+      i, j: Integer;
+      nom: string;
+    begin
+      nom := List[Index].Personne.Nom;
+      for i := Low(OtherList) to High(OtherList) do
+        for j := Pred(OtherList[i].Count) downto 0 do
+          if SameText(OtherList[i][j].Personne.Nom, Nom) then
+            OtherList[i].Delete(j);
+      List.Delete(Index);
+    end;
+
   var
     dummyID: TGUID;
+
+    procedure AcceptAuteur(Index: Integer);
+    var
+      i, j: Integer;
+      nom: string;
+    begin
+      nom := List[Index].Personne.Nom;
+      for i := Low(OtherList) to High(OtherList) do
+        for j := Pred(OtherList[i].Count) downto 0 do
+          if SameText(OtherList[i][j].Personne.Nom, Nom) then
+            OtherList[i][j].Personne.Fill(dummyID);
+      List[Index].Personne.Fill(dummyID);
+    end;
+
+  var
     i: Integer;
   begin
     Result := False;
-    for i := 0 to Pred(List.Count) do
+    for i := Pred(List.Count) downto 0 do
       if IsEqualGUID(List[i].Personne.ID, GUID_NULL) then
       begin
         dummyID := CheckValue(List[i].Personne.Nom, vmPersonnes);
         if IsEqualGUID(dummyID, GUID_NULL) then
           Exit;
-        List[i].Personne.Fill(dummyID);
+        if IsEqualGUID(dummyID, GUID_FULL) then
+          RemoveAuteur(i)
+        else
+          List[i].Personne.Fill(dummyID);
       end;
     Result := True;
   end;
 
 var
   dummyID: TGUID;
-  i: Integer;
+  i, j: Integer;
 begin
   with TfrmValidationImport.Create(nil) do
     try
@@ -126,31 +171,50 @@ begin
   try
     Qry.Transaction := GetTransaction(DMPrinc.UIBDataBase);
 
+    if not CheckListAuteurs(Scenaristes, [Dessinateurs, Coloristes, Serie.Scenaristes, Serie.Dessinateurs, Serie.Coloristes]) then
+      Exit;
+    if not CheckListAuteurs(Dessinateurs, [Coloristes, Serie.Scenaristes, Serie.Dessinateurs, Serie.Coloristes]) then
+      Exit;
+    if not CheckListAuteurs(Coloristes, [Serie.Scenaristes, Serie.Dessinateurs, Serie.Coloristes]) then
+      Exit;
+
+    if not CheckListAuteurs(Serie.Scenaristes, [Serie.Dessinateurs, Serie.Coloristes]) then
+      Exit;
+    if not CheckListAuteurs(Serie.Dessinateurs, [Serie.Coloristes]) then
+      Exit;
+    if not CheckListAuteurs(Serie.Coloristes, []) then
+      Exit;
+
+    for i := Pred(Serie.Genres.Count) downto 0 do
+      if IsEqualGUID(StringToGUIDDef(Serie.Genres.Names[i], GUID_NULL), GUID_NULL) then
+      begin
+        dummyID := CheckValue(Serie.Genres[i], vmGenres);
+        if IsEqualGUID(dummyID, GUID_NULL) then
+          Exit;
+        if IsEqualGUID(dummyID, GUID_FULL) then
+          Serie.Genres.Delete(i)
+        else
+          Serie.Genres[i] := GUIDToString(dummyID) + '=' + Serie.Genres[i];
+      end;
+
     dummyID := CheckValue(Serie.Titre, vmSeries, GUID_NULL, Serie);
     if IsEqualGUID(dummyID, GUID_NULL) then
       Exit;
-    ID_Serie := dummyID;
-
-    if not CheckListAuteurs(Scenaristes) then
-      Exit;
-    if not CheckListAuteurs(Dessinateurs) then
-      Exit;
-    if not CheckListAuteurs(Coloristes) then
-      Exit;
-
-    if not CheckListAuteurs(Serie.Scenaristes) then
-      Exit;
-    if not CheckListAuteurs(Serie.Dessinateurs) then
-      Exit;
-    if not CheckListAuteurs(Serie.Coloristes) then
-      Exit;
+    if not IsEqualGUID(dummyID, GUID_FULL) then
+      ID_Serie := dummyID;
 
     if IsEqualGUID(Serie.Editeur.ID_Editeur, GUID_NULL) then
     begin
       dummyID := CheckValue(Serie.Editeur.NomEditeur, vmEditeurs, GUID_NULL, Serie.Editeur);
       if IsEqualGUID(dummyID, GUID_NULL) then
         Exit;
-      Serie.Editeur.Fill(dummyID);
+      if not IsEqualGUID(dummyID, GUID_FULL) then
+      begin
+        for j := 0 to Pred(Editions.Editions.Count) do
+          if SameText(Serie.Editeur.NomEditeur, Editions.Editions[j].Editeur.NomEditeur) then
+            Editions.Editions[j].Editeur.Fill(dummyID);
+        Serie.Editeur.Fill(dummyID);
+      end;
     end;
 
     if (Serie.Collection.NomCollection <> '') and IsEqualGUID(Serie.Collection.ID, GUID_NULL) then
@@ -158,22 +222,36 @@ begin
       dummyID := CheckValue(Serie.Collection.NomCollection, vmCollections, dummyID);
       if IsEqualGUID(dummyID, GUID_NULL) then
         Exit;
-      Serie.Collection.Fill(dummyID);
+      if not IsEqualGUID(dummyID, GUID_FULL) then
+      begin
+        for j := 0 to Pred(Editions.Editions.Count) do
+          if SameText(Serie.Collection.NomCollection, Editions.Editions[j].Collection.NomCollection) then
+            Editions.Editions[j].Collection.Fill(dummyID);
+        Serie.Collection.Fill(dummyID);
+      end;
     end;
 
     for i := 0 to Pred(Editions.Editions.Count) do
     begin
-      dummyID := CheckValue(Editions.Editions[i].Editeur.NomEditeur, vmEditeurs, GUID_NULL, Editions.Editions[i].Editeur);
-      if IsEqualGUID(dummyID, GUID_NULL) then
-        Exit;
-      Editions.Editions[i].Editeur.Fill(dummyID);
-
-      if Editions.Editions[i].Collection.NomCollection <> '' then
+      if IsEqualGUID(Editions.Editions[i].Editeur.ID_Editeur, GUID_NULL) then
       begin
-        dummyID := CheckValue(Editions.Editions[i].Collection.NomCollection, vmCollections, dummyID);
+        dummyID := CheckValue(Editions.Editions[i].Editeur.NomEditeur, vmEditeurs, GUID_NULL, Editions.Editions[i].Editeur);
         if IsEqualGUID(dummyID, GUID_NULL) then
           Exit;
-        Editions.Editions[i].Collection.Fill(dummyID);
+        if not IsEqualGUID(dummyID, GUID_FULL) then
+          Editions.Editions[i].Editeur.Fill(dummyID);
+      end;
+
+      if IsEqualGUID(Editions.Editions[i].Collection.ID, GUID_NULL) then
+      begin
+        if Editions.Editions[i].Collection.NomCollection <> '' then
+        begin
+          dummyID := CheckValue(Editions.Editions[i].Collection.NomCollection, vmCollections, dummyID);
+          if IsEqualGUID(dummyID, GUID_NULL) then
+            Exit;
+          if not IsEqualGUID(dummyID, GUID_FULL) then
+            Editions.Editions[i].Collection.Fill(dummyID);
+        end;
       end;
     end;
 
@@ -191,23 +269,21 @@ end;
 function TEditionCompleteHelper.AddImageFromURL(const URL: string; TypeImage: Integer): Integer;
 var
   Stream: TFileStream;
-  URLComponents: TURLComponents;
   Couverture: TCouverture;
   tmpFile: string;
+  P: PChar;
   sl: TStringList;
 begin
   Result := -1;
 
-  ZeroMemory(@URLComponents, SizeOf(URLComponents));
-  URLComponents.dwStructSize := SizeOf(URLComponents);
-  URLComponents.dwHostNameLength := 1;
-  URLComponents.dwSchemeLength := 1;
-  URLComponents.dwUserNameLength := 1;
-  URLComponents.dwPasswordLength := 1;
-  URLComponents.dwUrlPathLength := 1;
-  InternetCrackUrl(PChar(URL), Length(URL), 0, URLComponents);
+  SetLength(tmpFile, MAX_PATH + 1);
+  FillMemory(@tmpFile[1], Length(tmpFile) * SizeOf(Char), 1);
+  GetTempFileName(TempPath, 'bdk', 0, @tmpFile[1]);
+  P := @tmpFile[1];
+  while P^ <> #0 do
+    Inc(P);
+  SetLength(tmpFile, (Integer(P) - Integer(@tmpFile[1])) div SizeOf(Char));
 
-  tmpFile := TempPath + ExtractFileName(StringReplace(URLComponents.lpszUrlPath, '/', '\', [rfReplaceAll]));
   if FileExists(tmpFile) then
     Stream := TFileStream.Create(tmpFile, fmOpenReadWrite, fmShareExclusive)
   else
@@ -234,8 +310,6 @@ begin
   finally
     sl.Free;
   end;
-
-  //  DeleteFile(tmpFile);
 end;
 
 end.

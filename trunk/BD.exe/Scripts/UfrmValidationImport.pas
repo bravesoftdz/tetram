@@ -491,7 +491,7 @@ procedure TfrmValidationImport.SetAlbum(Value: TAlbumComplet);
     Chk.Checked := Defaut <> Value;
     TRadioButton(Ctrl.Controls[0]).Checked := TCheckBoxState(Value) = cbChecked;
     TRadioButton(Ctrl.Controls[1]).Checked := TCheckBoxState(Value) = cbUnchecked;
-    TRadioButton(Ctrl.Controls[2]).Checked := Value = -1;
+    TRadioButton(Ctrl.Controls[2]).Checked := TCheckBoxState(Value) = cbGrayed;
     ChangeState(Chk, Ctrl);
   end;
 
@@ -539,6 +539,21 @@ begin
   LoadValue(FAlbum.Serie.Editeur.NomEditeur, edNomEditeurSerie, CheckBoxLabeled5, DefaultValues.Serie.Editeur.NomEditeur);
   LoadValue(FAlbum.Serie.Editeur.SiteWeb, edSiteWebEditeurSerie, CheckBoxLabeled6, DefaultValues.Serie.Editeur.SiteWeb);
   LoadValue(FAlbum.Serie.Collection.NomCollection, edCollectionSerie, CheckBoxLabeled7, DefaultValues.Serie.Collection.NomCollection);
+
+  TabSheet2.TabVisible :=
+    CheckBox13.Checked or
+    CheckBox16.Checked or
+    CheckBox19.Checked or
+    CheckBox14.Checked or
+    CheckBox15.Checked or
+    CheckBoxLabeled2.Checked or
+    CheckBoxLabeled3.Checked or
+    CheckBoxLabeled4.Checked or
+    CheckBox17.Checked or
+    CheckBox18.Checked or
+    CheckBoxLabeled5.Checked or
+    CheckBoxLabeled6.Checked or
+    CheckBoxLabeled7.Checked;
 
   //Edition
   TabSheet3.TabVisible := FAlbum.Editions.Editions.Count > 0;

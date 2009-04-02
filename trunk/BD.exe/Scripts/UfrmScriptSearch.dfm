@@ -1,6 +1,7 @@
 object frmScriptSearch: TfrmScriptSearch
   Left = 413
   Top = 409
+  ActiveControl = ComboBox1
   AutoSize = True
   BorderStyle = bsDialog
   BorderWidth = 8

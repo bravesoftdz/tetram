@@ -32,6 +32,12 @@ type
     FScriptName: AnsiString;
   end;
 
+  TOption = class
+    FLibelle: string;
+    FValues, FDefaultValue: string;
+    FChooseValue: string;
+  end;
+
   TInfosScripts = class(TObjectList<TInfoScript>)
     function InfoScript(Index: Integer): TInfoScript; overload;
     function InfoScript(TabSheet: TTabSheet): TInfoScript; overload;
@@ -127,6 +133,19 @@ type
     Excutersansdbuguer1: TMenuItem;
     SynEditParamShow: TSynCompletionProposal;
     SynEditAutoComplete: TSynCompletionProposal;
+    ListBox1: TListBox;
+    Splitter2: TSplitter;
+    Panel2: TPanel;
+    Button3: TButton;
+    Button4: TButton;
+    actEdit: TAction;
+    PopupMenu2: TPopupMenu;
+    actCreerOption: TAction;
+    actRetirerOption: TAction;
+    Creruneoption1: TMenuItem;
+    Retireruneoption1: TMenuItem;
+    actModifierOption: TAction;
+    Modifieruneoption1: TMenuItem;
     procedure seScript1GutterClick(Sender: TObject; Button: TMouseButton; X, Y, Line: Integer; Mark: TSynEditMark);
     procedure seScript1GutterPaint(Sender: TObject; aLine, X, Y: Integer);
     procedure seScript1SpecialLineColors(Sender: TObject; Line: Integer; var Special: Boolean; var FG, BG: TColor);
@@ -184,6 +203,14 @@ type
     procedure SynEditParamShowExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
     procedure SynEditAutoCompleteExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
     procedure seScript1KeyPress(Sender: TObject; var Key: Char);
+    procedure PageControl2Change(Sender: TObject);
+    procedure ListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
+    procedure ListBox1Data(Control: TWinControl; Index: Integer; var Data: string);
+    procedure ListBox1DblClick(Sender: TObject);
+    procedure actEditExecute(Sender: TObject);
+    procedure actCreerOptionExecute(Sender: TObject);
+    procedure actRetirerOptionExecute(Sender: TObject);
+    procedure actModifierOptionExecute(Sender: TObject);
   private
     { Déclarations privées }
     FLastSearch, FLastReplace: string;
@@ -203,6 +230,7 @@ type
     fTypeInfos: TIDHashMap;
 
     FInfoScripts: TInfosScripts;
+    FOptions: TObjectList<TOption>;
 
     {$REGION 'Exécution'}
     procedure SetResultat(const Chaine: string);
@@ -227,9 +255,15 @@ type
     function GetProjet: AnsiString;
     procedure SetProjet(const Value: AnsiString);
     procedure LoadScript(const Script: AnsiString);
+    procedure LoadOptions(const Script: AnsiString);
+    procedure RefreshOptions;
+    function OptionByName(const OptionName: string): TOption;
+    function OptionValue(const OptionName, Default: string): string;
+    function EditOption(Option: TOption): Boolean;
     procedure ClearPages;
-    function GetScriptLines(const Script: AnsiString; out Output: AnsiString): Boolean;
+    function GetScriptLines(const Script: AnsiString; Output: TStrings): Boolean;
     procedure SetProjetOuvert(const Value: Boolean);
+    function GetProjetToRun: AnsiString;
     {$REGION 'Auto completion'}
     procedure RebuildLokalObjektList;
     procedure BuildLokalObjektList(Comp: TPSPascalCompiler);
@@ -254,10 +288,16 @@ implementation
 {$R *.dfm}
 
 uses
-  AnsiStrings, UfrmScriptSearch, UScriptsFonctions, CommonConst, uPSPreProcessor,
-  Procedures, BdtkRegEx, Commun, Divers;
+  AnsiStrings, UfrmScriptSearch, UScriptsFonctions, CommonConst, uPSPreProcessor, UIB,
+  Procedures, BdtkRegEx, Commun, Divers, UScriptsHTMLFunctions, JclSimpleXML,
+  UdmPrinc, UfrmScriptOption, UfrmScriptEditOption;
 
 type
+  TMySynEdit = class(SynEdit.TSynEdit)
+  published
+    property BevelKind;
+  end;
+
   PPositionData = ^TPositionData;
 
   TPositionData = packed record
@@ -983,6 +1023,13 @@ begin
   end;
 end;
 
+procedure TfrmScripts.PageControl2Change(Sender: TObject);
+begin
+  if PageControl2.ActivePageIndex = 0 then
+    ProjetOuvert := False;
+  RefreshOptions;
+end;
+
 procedure TfrmScripts.SynEditParamShowExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
 var
   ParamIndex: Integer;
@@ -1609,9 +1656,46 @@ begin
   pcScripts.ActivePage.Free;
 end;
 
-procedure TfrmScripts.actEnregistrerExecute(Sender: TObject);
+procedure TfrmScripts.actEditExecute(Sender: TObject);
 begin
-  GetActiveScript.Lines.SaveToFile(FInfoScripts.ScriptFileName(GetActiveScript));
+  Projet := AnsiString(ListView1.Selected.Caption);
+end;
+
+procedure TfrmScripts.actEnregistrerExecute(Sender: TObject);
+var
+  Fichier, s: string;
+  i: Integer;
+begin
+  Fichier := FInfoScripts.ScriptFileName(GetActiveScript);
+  if SameText(ExtractFileExt(Fichier), '.bds') then
+    with TJclSimpleXML.Create do
+      try
+        Options := Options + [sxoAutoCreate];
+        Root.Name := 'Script';
+
+        with Root.Items.ItemNamed['Options'] do
+        begin
+          Clear;
+          for i := 0 to Pred(FOptions.Count) do
+            with Items.Add('Option') do
+            begin
+              Properties.ItemNamed['Label'].Value := FOptions[i].FLibelle;
+              Properties.ItemNamed['Values'].Value := FOptions[i].FValues;
+              Properties.ItemNamed['Default'].Value := FOptions[i].FDefaultValue;
+            end;
+        end;
+
+        s := GetActiveScript.Lines.Text;
+        while EndsText(sLineBreak, s) do
+          Delete(s, Length(s) - Length(sLineBreak) + 1, Length(sLineBreak));
+        Root.Items.ItemNamed['Code'].Value := s;
+
+        SaveToFile(Fichier);
+      finally
+        Free;
+      end
+  else
+    GetActiveScript.Lines.SaveToFile(FInfoScripts.ScriptFileName(GetActiveScript));
   GetActiveScript.Tag := 0;
   FInfoScripts.InfoScript(GetActiveScript).FSB.Panels[1].Text := '';
 end;
@@ -1621,11 +1705,62 @@ begin
   //
 end;
 
+procedure TfrmScripts.ListBox1Data(Control: TWinControl; Index: Integer; var Data: string);
+begin
+  Data := FOptions[Index].FLibelle + ': ' + FOptions[Index].FChooseValue;
+end;
+
+procedure TfrmScripts.ListBox1DblClick(Sender: TObject);
+var
+  Option: TOption;
+begin
+  if ListBox1.ItemIndex = -1 then
+    Exit;
+  Option := FOptions[ListBox1.ItemIndex];
+
+  with TfrmScriptOption.Create(nil) do
+    try
+      RadioGroup1.Caption := Option.FLibelle;
+      RadioGroup1.Items.Text := StringReplace(Option.FValues, '|', sLineBreak, [rfReplaceAll]);
+      RadioGroup1.ItemIndex := RadioGroup1.Items.IndexOf(Option.FChooseValue);
+      RadioGroup1.Height := 21 + 20 * RadioGroup1.Items.Count;
+      ClientHeight := RadioGroup1.Height + framBoutons1.Height + 4;
+      if ShowModal = mrOk then
+      begin
+        Option.FChooseValue := RadioGroup1.Items[RadioGroup1.ItemIndex];
+
+        with TUIBQuery.Create(nil) do
+          try
+            Transaction := GetTransaction(dmPrinc.UIBDataBase);
+            SQL.Text := 'update or insert into options_scripts (script, nom_option, valeur) values (:script, :nom_option, :valeur)';
+            Params.AsString[0] := ExtractFileName(GetFullNameScript(GetProjetToRun));
+            Params.AsString[1] := Option.FLibelle;
+            Params.AsString[2] := Option.FChooseValue;
+            Execute;
+            Transaction.Commit;
+          finally
+            Transaction.Free;
+            Free;
+          end;
+
+        RefreshOptions;
+      end;
+    finally
+      Free;
+    end;
+end;
+
 procedure TfrmScripts.ListView1DblClick(Sender: TObject);
 begin
   if not Assigned(ListView1.Selected) then
     Exit;
-  Projet := AnsiString(ListView1.Selected.Caption);
+  actRun.Execute;
+end;
+
+procedure TfrmScripts.ListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
+begin
+  if Selected and Assigned(Item) then
+    LoadOptions(AnsiString(Item.Caption) + '.bds');
 end;
 
 procedure TfrmScripts.seScript1ProcessUserCommand(Sender: TObject; var Command: TSynEditorCommand; var AChar: Char; Data: Pointer);
@@ -1669,13 +1804,21 @@ var
 begin
   Editor := GetActiveScript;
   Handled := True;
+  actEdit.Enabled := Assigned(ListView1.Selected);
+
   EditCut1.Enabled := Assigned(Editor) and Editor.SelAvail;
   EditCopy1.Enabled := Assigned(Editor) and Editor.SelAvail;
   EditPaste1.Enabled := Assigned(Editor) and Editor.CanPaste;
   EditUndo1.Enabled := Assigned(Editor) and Editor.CanUndo;
   EditRedo1.Enabled := Assigned(Editor) and Editor.CanRedo;
   actCompile.Enabled := FProjetOuvert;
-  actRun.Enabled := FProjetOuvert;
+  actRun.Enabled := actCompile.Enabled or actEdit.Enabled;
+  actCreerOption.Visible := FProjetOuvert;
+  actCreerOption.Enabled := FProjetOuvert;
+  actRetirerOption.Visible := FProjetOuvert;
+  actRetirerOption.Enabled := FProjetOuvert and (ListBox1.ItemIndex <> -1);
+  actModifierOption.Visible := FProjetOuvert;
+  actModifierOption.Enabled := FProjetOuvert and (ListBox1.ItemIndex <> -1);
   actRunWithoutDebug.Enabled := FProjetOuvert and not PSScriptDebugger1.Running;
   actFermer.Enabled := Assigned(Editor) and (FForceClose or (FInfoScripts.ScriptName(GetActiveScript) <> Projet));
   actEnregistrer.Enabled := Assigned(Editor);
@@ -1711,6 +1854,7 @@ begin
     end;
   end;
   FProjetOuvert := Value;
+  tbEdition.TabVisible := Value;
 end;
 
 procedure TfrmScripts.SetCompiled(const Value: Boolean);
@@ -1738,6 +1882,7 @@ begin
   PSScriptDebugger1.Comp.OnBeforeCleanup := AutoCompleteCompilerBeforeCleanUp;
 
   FInfoScripts := TInfosScripts.Create;
+  FOptions := TObjectList<TOption>.Create(True);
 
   FForceClose := False;
   PageControl1.ActivePageIndex := 0;
@@ -1768,11 +1913,13 @@ begin
       FindClose(sr);
     end;
   PageControl2.ActivePage := tbScripts;
+  ProjetOuvert := False;
 end;
 
 procedure TfrmScripts.FormDestroy(Sender: TObject);
 begin
   ClearPages;
+  FOptions.Free;
   FInfoScripts.Free;
   fTypeInfos.Free;
   FDebugPlugin.Free;
@@ -1784,13 +1931,14 @@ function TfrmScripts.GetFullNameScript(const Script: AnsiString): string;
 var
   MatchFound: SysUtils.TFilenameCaseMatch;
 begin
-  if ExtractFileExt(Script) = '' then
-    if ExtractFileName(Script) = Projet then
-      Result := string(Script) + '.bds'
+  Result := string(Script);
+  if ExtractFileExt(Result) = '' then
+    if ExtractFileName(Result) = string(GetProjetToRun) then
+      Result := Result + '.bds'
     else
-      Result := string(Script) + '.bdu';
+      Result := Result + '.bdu';
 
-  if ExtractFilePath(Script) = '' then
+  if AnsiStrings.ExtractFilePath(Script) = '' then
     Result := TGlobalVar.Utilisateur.Options.RepertoireScripts + Result;
 
   Result := SysUtils.ExpandFileNameCase(Result, MatchFound);
@@ -1804,7 +1952,7 @@ begin
     Result := Script;
 end;
 
-function TfrmScripts.GetScriptLines(const Script: AnsiString; out Output: AnsiString): Boolean;
+function TfrmScripts.GetScriptLines(const Script: AnsiString; Output: TStrings): Boolean;
 var
   path: string;
   f: TFileStream;
@@ -1813,30 +1961,118 @@ begin
   Editor := GetScript(Script);
   if Assigned(Editor) then
   begin
-    Output := AnsiString(Editor.Lines.Text);
+    Output.Assign(Editor.Lines);
     Result := True;
     Exit;
   end;
 
   Path := GetFullNameScript(Script);
   try
-    F := TFileStream.Create(Path, fmOpenRead or fmShareDenyWrite);
+    f := TFileStream.Create(Path, fmOpenRead or fmShareDenyWrite);
   except
     Result := False;
     Exit;
   end;
+
   try
-    SetLength(Output, f.Size);
-    f.Read(Output[1], Length(Output));
+    if SameText(ExtractFileExt(Path), '.bds') then
+      with TJclSimpleXML.Create do
+        try
+          LoadFromStream(f);
+          Output.Text := Root.Items.ItemNamed['Code'].Value;
+        finally
+          Free;
+        end
+    else
+      Output.LoadFromStream(f);
   finally
     f.Free;
   end;
   Result := True;
 end;
 
+function TfrmScripts.OptionByName(const OptionName: string): TOption;
+var
+  i: Integer;
+begin
+  for i := 0 to Pred(FOptions.Count) do
+  begin
+    Result := FOptions[i];
+    if SameText(Result.FLibelle, OptionName) then
+      Exit;
+  end;
+  Result := nil;
+end;
+
+function TfrmScripts.OptionValue(const OptionName, Default: string): string;
+var
+  Option: TOption;
+begin
+  Option := OptionByName(OptionName);
+  if Assigned(Option) then
+    Result := Option.FChooseValue
+  else
+    Result := Default;
+end;
+
+procedure TfrmScripts.RefreshOptions;
+begin
+  ListBox1.Count := FOptions.Count;
+  ListBox1.Invalidate;
+end;
+
+procedure TfrmScripts.LoadOptions(const Script: AnsiString);
+var
+  Fichier: string;
+  i: Integer;
+  Option: TOption;
+begin
+  Fichier := GetFullNameScript(Script);
+  if SameText(ExtractFileExt(Fichier), '.bds') then
+  begin
+    FOptions.Clear;
+    with TJclSimpleXML.Create do
+      try
+        LoadFromFile(Fichier);
+        Options := Options + [sxoAutoCreate];
+
+        with Root.Items.ItemNamed['Options'] do
+          for i := 0 to Pred(Items.Count) do
+          begin
+            Option := TOption.Create;
+            FOptions.Add(Option);
+            Option.FLibelle := Items[i].Properties.Value('Label');
+            Option.FValues := Items[i].Properties.Value('Values');
+            Option.FDefaultValue := Items[i].Properties.Value('Default');
+            Option.FChooseValue := Option.FDefaultValue;
+          end;
+      finally
+        Free;
+      end;
+    with TUIBQuery.Create(nil) do
+      try
+        Transaction := GetTransaction(dmPrinc.UIBDataBase);
+        SQL.Text := 'select nom_option, valeur from options_scripts where script = :script';
+        Params.AsString[0] := ExtractFileName(Fichier);
+        Open;
+        while not Eof do
+        begin
+          Option := OptionByName(Fields.AsString[0]);
+          if Assigned(Option) then
+            Option.FChooseValue := Fields.AsString[1];
+          Next;
+        end;
+      finally
+        Transaction.Free;
+        Free;
+      end;
+  end;
+  RefreshOptions;
+end;
+
 procedure TfrmScripts.LoadScript(const Script: AnsiString);
 var
-  Code: AnsiString;
+  Code: TStringList;
   LockWindow: ILockWindow;
   info: TInfoScript;
   Editor: TSynEdit;
@@ -1846,66 +2082,73 @@ begin
   begin
     LockWindow := TLockWindow.Create(pcScripts);
 
-    // doit être fait avant la création de page
-    if not GetScriptLines(Script, Code) then
-      raise Exception.Create('Impossible de trouver l''unité ' + string(Script) + '.');
+    Code := TStringList.Create;
+    try
+      // doit être fait avant la création de page pour s'assurer de l'existence du fichier
+      if not GetScriptLines(Script, Code) then
+        raise Exception.Create('Impossible de trouver l''unité ' + string(Script) + '.');
 
-    info := TInfoScript.Create;
-    FInfoScripts.Add(info);
+      info := TInfoScript.Create;
+      FInfoScripts.Add(info);
 
-    info.FFileName := GetFullNameScript(Script);
-    info.FScriptName := AnsiString(ChangeFileExt(ExtractFileName(info.FFileName), ''));
+      info.FFileName := GetFullNameScript(Script);
+      info.FScriptName := AnsiString(ChangeFileExt(ExtractFileName(info.FFileName), ''));
 
-    info.FTabSheet := TTabSheet.Create(pcScripts);
-    info.FTabSheet.PageControl := pcScripts;
-    info.FTabSheet.Caption := string(info.FScriptName);
+      info.FTabSheet := TTabSheet.Create(pcScripts);
+      info.FTabSheet.PageControl := pcScripts;
+      info.FTabSheet.Caption := string(info.FScriptName);
 
-    info.FEditor := TSynEdit.Create(info.FTabSheet);
-    info.FEditor.Parent := info.FTabSheet;
-    info.FEditor.Align := alClient;
-    info.FEditor.Color := clWhite;
-    info.FEditor.ActiveLineColor := 16314351;
-    info.FEditor.Font.Color := clWindowText;
-    info.FEditor.Font.Height := -13;
-    info.FEditor.Font.Name := 'Courier New';
-    info.FEditor.Font.Style := [];
-    info.FEditor.OnMouseMove := seScript1MouseMove;
-    info.FEditor.Gutter.AutoSize := True;
-    info.FEditor.Gutter.DigitCount := 3;
-    info.FEditor.Gutter.Font.Color := clWindowText;
-    info.FEditor.Gutter.Font.Height := -11;
-    info.FEditor.Gutter.Font.Name := 'Terminal';
-    info.FEditor.Gutter.Font.Style := [];
-    info.FEditor.Gutter.LeftOffset := 27;
-    info.FEditor.Gutter.ShowLineNumbers := True;
-    info.FEditor.Gutter.Width := 0;
-    info.FEditor.Highlighter := SynPasSyn1;
-    info.FEditor.Options := [eoAutoIndent, eoTabIndent, eoSmartTabs, eoAutoSizeMaxScrollWidth, eoDragDropEditing, eoGroupUndo, eoRightMouseMovesCursor, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoTabIndent, eoTabsToSpaces, eoTrimTrailingSpaces];
-    info.FEditor.ScrollHintFormat := shfTopToBottom;
-    info.FEditor.SearchEngine := SynEditSearch1;
-    info.FEditor.TabWidth := 2;
-    info.FEditor.WantTabs := True;
-    info.FEditor.OnChange := seScript1Change;
-    info.FEditor.OnGutterClick := seScript1GutterClick;
-    info.FEditor.OnGutterPaint := seScript1GutterPaint;
-    info.FEditor.OnReplaceText := seScript1ReplaceText;
-    info.FEditor.OnSpecialLineColors := seScript1SpecialLineColors;
-    info.FEditor.OnStatusChange := seScript1StatusChange;
-    info.FEditor.OnProcessUserCommand := seScript1ProcessUserCommand;
-    info.FEditor.OnKeyPress := seScript1KeyPress;
-    info.FEditor.AddKey(ecUserFirst + 1, VK_RETURN, [ssCtrl]);
+      info.FEditor := TMySynEdit.Create(info.FTabSheet);
+      info.FEditor.Parent := info.FTabSheet;
+      info.FEditor.Align := alClient;
+      info.FEditor.Color := clWhite;
+      info.FEditor.ActiveLineColor := 16314351;
+      info.FEditor.Font.Color := clWindowText;
+      info.FEditor.Font.Height := -13;
+      info.FEditor.Font.Name := 'Courier New';
+      info.FEditor.Font.Style := [];
+      info.FEditor.OnMouseMove := seScript1MouseMove;
+      info.FEditor.Gutter.AutoSize := True;
+      info.FEditor.Gutter.DigitCount := 3;
+      info.FEditor.Gutter.Font.Color := clWindowText;
+      info.FEditor.Gutter.Font.Height := -11;
+      info.FEditor.Gutter.Font.Name := 'Terminal';
+      info.FEditor.Gutter.Font.Style := [];
+      info.FEditor.Gutter.LeftOffset := 27;
+      info.FEditor.Gutter.ShowLineNumbers := True;
+      info.FEditor.Gutter.Width := 0;
+      info.FEditor.BorderStyle := bsNone;
+      TMySynEdit(info.FEditor).BevelKind := bkTile;
+      info.FEditor.Highlighter := SynPasSyn1;
+      info.FEditor.Options := [eoAutoIndent, eoTabIndent, eoSmartTabs, eoAutoSizeMaxScrollWidth, eoDragDropEditing, eoGroupUndo, eoRightMouseMovesCursor, eoScrollPastEol, eoShowScrollHint, eoSmartTabDelete, eoTabIndent, eoTabsToSpaces, eoTrimTrailingSpaces];
+      info.FEditor.ScrollHintFormat := shfTopToBottom;
+      info.FEditor.SearchEngine := SynEditSearch1;
+      info.FEditor.TabWidth := 2;
+      info.FEditor.WantTabs := True;
+      info.FEditor.OnChange := seScript1Change;
+      info.FEditor.OnGutterClick := seScript1GutterClick;
+      info.FEditor.OnGutterPaint := seScript1GutterPaint;
+      info.FEditor.OnReplaceText := seScript1ReplaceText;
+      info.FEditor.OnSpecialLineColors := seScript1SpecialLineColors;
+      info.FEditor.OnStatusChange := seScript1StatusChange;
+      info.FEditor.OnProcessUserCommand := seScript1ProcessUserCommand;
+      info.FEditor.OnKeyPress := seScript1KeyPress;
+      info.FEditor.AddKey(ecUserFirst + 1, VK_RETURN, [ssCtrl]);
 
-    TSynDebugPlugin.Create(info.FEditor, FDebugPlugin);
-    info.FEditor.Lines.Text := string(Code);
+      TSynDebugPlugin.Create(info.FEditor, FDebugPlugin);
+      info.FEditor.Lines.Assign(Code);
 
-    info.FSB := TStatusBar.Create(info.FTabSheet);
-    info.FSB.Parent := info.FTabSheet;
-    info.FSB.Panels.Add.Width := 50;
-    info.FSB.Panels.Add.Width := 50;
-    info.FSB.Panels.Add.Width := 50;
+      info.FSB := TStatusBar.Create(info.FTabSheet);
+      info.FSB.Parent := info.FTabSheet;
+      info.FSB.Panels.Add.Width := 50;
+      info.FSB.Panels.Add.Width := 50;
+      info.FSB.Panels.Add.Width := 50;
 
-    Editor := info.FEditor;
-    info.FTabSheet.Visible := True;
+      Editor := info.FEditor;
+      info.FTabSheet.Visible := True;
+    finally
+      Code.Free;
+    end;
   end;
   GoToPosition(Editor, 1, 1);
 end;
@@ -1955,10 +2198,24 @@ begin
   end;
 end;
 
+procedure TfrmScripts.actModifierOptionExecute(Sender: TObject);
+begin
+  if EditOption(FOptions[ListBox1.ItemIndex]) then
+    RefreshOptions;
+end;
+
 procedure TfrmScripts.actResetExecute(Sender: TObject);
 begin
   if PSScriptDebugger1.Exec.Status = isRunning then
     PSScriptDebugger1.Stop;
+end;
+
+procedure TfrmScripts.actRetirerOptionExecute(Sender: TObject);
+begin
+  FOptions.Delete(ListBox1.ItemIndex);
+  GetScript(Projet).Tag := 1;
+  FInfoScripts.InfoScriptByScriptName(Projet).FSB.Panels[1].Text := 'Modifié';
+  RefreshOptions;
 end;
 
 procedure TfrmScripts.actDecompileExecute(Sender: TObject);
@@ -2336,6 +2593,49 @@ begin
     Compile;
 end;
 
+function TfrmScripts.EditOption(Option: TOption): Boolean;
+var
+  s: string;
+begin
+  with TfrmScriptEditOption.Create(nil) do
+    try
+      EditLabeled1.Text := Option.FLibelle;
+      MemoLabeled1.Lines.Text := StringReplace(Option.FValues, '|', sLineBreak, [rfReplaceAll]);
+      EditLabeled2.Text := Option.FDefaultValue;
+
+      Result := ShowModal = mrOk;
+      if Result then
+      begin
+        Option.FLibelle := EditLabeled1.Text;
+        s := MemoLabeled1.Lines.Text;
+        while EndsText(sLineBreak, s) do
+          Delete(s, Length(s) - Length(sLineBreak) + 1, Length(sLineBreak));
+        s := StringReplace(s, sLineBreak, '|', [rfReplaceAll]);
+        Option.FValues := s;
+        Option.FDefaultValue := EditLabeled2.Text;
+
+        GetScript(Projet).Tag := 1;
+        FInfoScripts.InfoScriptByScriptName(Projet).FSB.Panels[1].Text := 'Modifié';
+      end;
+    finally
+      Free;
+    end;
+end;
+
+procedure TfrmScripts.actCreerOptionExecute(Sender: TObject);
+var
+  Option: TOption;
+begin
+  Option := TOption.Create;
+  if EditOption(Option) then
+  begin
+    FOptions.Add(Option);
+    RefreshOptions;
+  end
+  else
+    Option.Free;
+end;
+
 procedure TfrmScripts.actRunExecute(Sender: TObject);
 begin
   if PSScriptDebugger1.Running then
@@ -2359,7 +2659,6 @@ begin
   PageControl1.ActivePage := TTabSheet(vstSuivis.Parent);
   if PSScriptDebugger1.Execute then
   begin
-    //    AddMessage('Succesfully Execute');
     FErrorLine := 0;
     Result := True;
   end
@@ -2393,6 +2692,7 @@ begin
     PSScriptDebugger1.Comp.AddConstantN('cti' + AnsiStrings.StringReplace(AnsiString(SansAccents(FListTypesImages.ValueFromIndex[i])), ' ', '_', [rfReplaceAll]), 'integer').SetInt(StrToInt(AnsiString(FListTypesImages.Names[i])));
 
   PSScriptDebugger1.AddMethod(Self, @TfrmScripts.SetResultat, 'procedure WriteToConsole(const Chaine: string);');
+  PSScriptDebugger1.AddMethod(Self, @TfrmScripts.OptionValue, 'function GetOptionValue(const OptionName, Default: string): string;');
 
   PSScriptDebugger1.AddFunction(@GetPage, 'function GetPage(const url: string; UTF8: Boolean): string;');
   PSScriptDebugger1.AddFunction(@findInfo, 'function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;');
@@ -2400,6 +2700,16 @@ begin
   PSScriptDebugger1.AddFunction(@AskSearchEntry, 'function AskSearchEntry(const Labels: array of string; out Search: string; out Index: Integer): Boolean');
   PSScriptDebugger1.AddFunction(@CombineURL, 'function CombineURL(const Root, URL: string): string;');
   PSScriptDebugger1.AddFunction(@HTMLDecode, 'function HTMLDecode(const Chaine: string): string;');
+  PSScriptDebugger1.AddFunction(@HTMLText, 'function HTMLText(const Chaine: string): string;');
+
+  PSScriptDebugger1.AddFunction(@ScriptChangeFileExt, 'function ChangeFileExt(const FileName, Extension: string): string;');
+  PSScriptDebugger1.AddFunction(@ScriptChangeFilePath, 'function ChangeFilePath(const FileName, Path: string): string;');
+  PSScriptDebugger1.AddFunction(@ScriptExtractFilePath, 'function ExtractFilePath(const FileName: string): string;');
+  PSScriptDebugger1.AddFunction(@ScriptExtractFileDir, 'function ExtractFileDir(const FileName: string): string;');
+  PSScriptDebugger1.AddFunction(@ScriptExtractFileName, 'function ExtractFileName(const FileName: string): string;');
+  PSScriptDebugger1.AddFunction(@ScriptExtractFileExt, 'function ExtractFileExt(const FileName: string): string;');
+  PSScriptDebugger1.AddFunction(@ScriptIncludeTrailingPathDelimiter, 'function ScriptIncludeTrailingPathDelimiter(const s: string): string;');
+  PSScriptDebugger1.AddFunction(@ScriptExcludeTrailingPathDelimiter, 'function ScriptExcludeTrailingPathDelimiter(const s: string): string;');
 
   PSScriptDebugger1.AddFunction(@SysUtils.Format, 'function Format(const Format: string; const Args: array of const): string;');
 
@@ -2456,18 +2766,24 @@ begin
 end;
 
 function TfrmScripts.PSScriptDebugger1NeedFile(Sender: TObject; const OrginFileName: AnsiString; var FileName, Output: AnsiString): Boolean;
+var
+  tmp: TStringList;
 begin
-  Result := GetScriptLines(FileName, Output);
+  tmp := TStringList.Create;
+  try
+    Result := GetScriptLines(FileName, tmp);
+    Output := AnsiString(tmp.Text);
+  finally
+    tmp.Free;
+  end;
 end;
 
 function TfrmScripts.Compile: Boolean;
 var
   i: Longint;
   Msg: TMessageInfo;
-  Script: AnsiString;
 begin
-  GetScriptLines(Projet, Script);
-  PSScriptDebugger1.Script.Text := string(Script);
+  GetScriptLines(GetProjetToRun, PSScriptDebugger1.Script);
   Result := PSScriptDebugger1.Compile;
   FDebugPlugin.Messages.Clear;
   Msg := nil;
@@ -2531,6 +2847,14 @@ begin
 end;
 
 {$ENDREGION}
+
+function TfrmScripts.GetProjetToRun: AnsiString;
+begin
+  if ProjetOuvert then
+    Result := Projet
+  else
+    Result := AnsiString(ListView1.Selected.Caption);
+end;
 
 end.
 

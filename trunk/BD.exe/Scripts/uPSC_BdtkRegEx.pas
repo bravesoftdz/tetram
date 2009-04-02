@@ -30,6 +30,7 @@ begin
     RegisterMethod('function BeginSearch(const Chaine, aRegEx: string): Boolean');
     RegisterMethod('function Find(var Chaine: string): Boolean');
     RegisterMethod('function Next: Boolean');
+    RegisterMethod('function Match: Boolean');
     RegisterMethod('function GetCaptureByName(const Group: string): string;');
   end;
 end;
@@ -37,8 +38,9 @@ end;
 procedure SIRegister_BdtkRegEx(CL: TPSPascalCompiler);
 begin
   SIRegister_TBdtkRegEx(CL);
-  CL.AddDelphiFunction('Function ExtractRegEx(const Chaine, aRegEx: string): string');
-  CL.AddDelphiFunction('Function ExtractRegExGroup(const Chaine, aRegEx, Group: string): string');
+  CL.AddDelphiFunction('function MatchRegEx(const Chaine, aRegEx: string): Boolean');
+  CL.AddDelphiFunction('function ExtractRegEx(const Chaine, aRegEx: string): string');
+  CL.AddDelphiFunction('function ExtractRegExGroup(const Chaine, aRegEx, Group: string): string');
 end;
 
 end.

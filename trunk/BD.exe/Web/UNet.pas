@@ -11,7 +11,8 @@ type
     IsFichier: Boolean;
   end;
 
-function LoadStreamURL(URL: string; Pieces: array of RAttachement; StreamAnswer: TStream): Word;
+function LoadStreamURL(URL: string; Pieces: array of RAttachement; StreamAnswer: TStream): Word; overload;
+function LoadStreamURL(URL: string; Pieces: array of RAttachement; StreamAnswer: TStream; out DocName: string): Word; overload;
 
 implementation
 
@@ -320,6 +321,13 @@ end;
 
 function LoadStreamURL(URL: string; Pieces: array of RAttachement; StreamAnswer: TStream): Word;
 var
+  dummy: string;
+begin
+  Result := LoadStreamURL(URL, Pieces, StreamAnswer, dummy);
+end;
+
+function LoadStreamURL(URL: string; Pieces: array of RAttachement; StreamAnswer: TStream; out DocName: string): Word;
+var
   MemoryStream: TMemoryStream;
   fs: TFileStream;
   i: Integer;
@@ -331,7 +339,10 @@ begin
   dl := TDownloader.Create;
   with dl do
     try
-      FHttpCli.URL := UrlEncode(URL);
+      if Pos('%', URL) > 0 then
+        FHttpCli.URL := URL
+      else
+        FHttpCli.URL := UrlEncode(URL);
       FHttpCli.SendStream := MemoryStream;
       FHttpCli.RcvdStream := StreamAnswer;
 
@@ -386,6 +397,8 @@ begin
 
       FHttpCli.CtrlSocket.MessageLoop;
       Result := FHttpCli.StatusCode;
+      // à remplacer pas la valeur du header 'filename' ou equivalent
+      DocName := FHttpCli.ContentType;
     finally
       MemoryStream.Free;
       Free;

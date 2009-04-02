@@ -25,7 +25,7 @@ object frmValidationImport: TfrmValidationImport
     Height = 27
     Align = alBottom
     TabOrder = 0
-    ExplicitTop = 517
+    ExplicitTop = 508
     ExplicitWidth = 526
     ExplicitHeight = 27
     inherited btnOK: TButton

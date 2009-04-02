@@ -14,6 +14,9 @@ object frmControlImport: TfrmControlImport
   PopupMode = pmAuto
   Position = poOwnerFormCenter
   OnCreate = FormCreate
+  DesignSize = (
+    491
+    159)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
@@ -62,8 +65,10 @@ object frmControlImport: TfrmControlImport
     ExplicitTop = 134
     ExplicitWidth = 491
     inherited btnOK: TButton
-      Left = 328
-      ExplicitLeft = 328
+      Left = 323
+      Top = 1
+      ExplicitLeft = 323
+      ExplicitTop = 1
     end
     inherited btnAnnuler: TButton
       Left = 408
@@ -106,5 +111,22 @@ object frmControlImport: TfrmControlImport
       OnChange = framVTEdit1VTEditChange
       ExplicitWidth = 310
     end
+  end
+  object btnIgnore: TButton
+    Left = 168
+    Top = 136
+    Width = 111
+    Height = 21
+    Cursor = crHandPoint
+    Hint = 'Valider les modifcations'
+    Anchors = [akRight, akBottom]
+    Caption = 'Ne pas importer'
+    Default = True
+    DoubleBuffered = True
+    ImageIndex = 4
+    Images = frmFond.ShareImageList
+    ModalResult = 5
+    ParentDoubleBuffered = False
+    TabOrder = 3
   end
 end

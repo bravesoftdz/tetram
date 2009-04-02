@@ -24,6 +24,7 @@ uses
 
 procedure RIRegister_BdtkRegEx_Routines(S: TPSExec);
 begin
+  S.RegisterDelphiFunction(@MatchRegEx, 'MatchRegEx', cdRegister);
   S.RegisterDelphiFunction(@ExtractRegEx, 'ExtractRegEx', cdRegister);
   S.RegisterDelphiFunction(@ExtractRegExGroup, 'ExtractRegExGroup', cdRegister);
 end;
@@ -36,6 +37,7 @@ begin
     RegisterMethod(@TBdtkRegEx.BeginSearch, 'BeginSearch');
     RegisterMethod(@TBdtkRegEx.Find, 'Find');
     RegisterMethod(@TBdtkRegEx.Next, 'Next');
+    RegisterMethod(@TBdtkRegEx.Match, 'Match');
     RegisterMethod(@TBdtkRegEx.GetCaptureByName, 'GetCaptureByName');
   end;
 end;

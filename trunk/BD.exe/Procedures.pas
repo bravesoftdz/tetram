@@ -26,6 +26,7 @@ function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Vale
 
 type
   PRecRef = ^TRecRef;
+
   TRecRef = record
     ref: Integer;
   end;
@@ -39,6 +40,7 @@ function GetShellImage(const Path: string; Large, Open: Boolean): Integer;
 type
   ILockWindow = interface
   end;
+
   TLockWindow = class(TInterfacedObject, ILockWindow)
   private
     FLocked: Boolean;
@@ -50,6 +52,7 @@ type
   IInformation = interface
     procedure ShowInfo(const Msg: string);
   end;
+
   TInformation = class(TInterfacedObject, IInformation)
   private
     FInfo: TForm;
@@ -79,7 +82,8 @@ uses
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
 begin
-  if Son then MessageBeep(MB_ICONERROR);
+  if Son then
+    MessageBeep(MB_ICONERROR);
   Result := MessageDlg(Msg, DlgType, Buttons, 0);
 end;
 
@@ -94,7 +98,8 @@ var
 begin
   Result := 0;
   for i := 0 to Screen.FormCount - 1 do
-    if Screen.Forms[i].ClassType = ClassType then Inc(Result);
+    if Screen.Forms[i].ClassType = ClassType then
+      Inc(Result);
 end;
 
 function DessineImage(Image: TImage; const Fichier: string): Boolean;
@@ -105,34 +110,35 @@ var
 begin
   Result := False;
   Image.Picture := nil;
-  if not FileExists(Fichier) then Exit;
+  if not FileExists(Fichier) then
+    Exit;
   hg := THourGlass.Create;
   with TPicture.Create do
-  try
-    LoadFromFile(Fichier);
-    hauteurimg := Height;
-    largeurimg := Width;
-    largeuraff := Image.Width;
-    hauteuraff := Image.Height;
-    if (hauteurimg >= hauteuraff) and (largeurimg >= largeuraff) then
-      if (hauteurimg / largeurimg) > (hauteuraff / largeuraff) then
-      begin
-        largeuraff := Windows.MulDiv(hauteuraff, largeurimg, hauteurimg);
-        marge := (Image.Width - largeuraff) div 2;
-        Image.Canvas.StretchDraw(Rect(marge, 0, marge + largeuraff, hauteuraff), Graphic);
-      end
+    try
+      LoadFromFile(Fichier);
+      hauteurimg := Height;
+      largeurimg := Width;
+      largeuraff := Image.Width;
+      hauteuraff := Image.Height;
+      if (hauteurimg >= hauteuraff) and (largeurimg >= largeuraff) then
+        if (hauteurimg / largeurimg) > (hauteuraff / largeuraff) then
+        begin
+          largeuraff := Windows.MulDiv(hauteuraff, largeurimg, hauteurimg);
+          marge := (Image.Width - largeuraff) div 2;
+          Image.Canvas.StretchDraw(Rect(marge, 0, marge + largeuraff, hauteuraff), Graphic);
+        end
+        else
+        begin
+          hauteuraff := Windows.MulDiv(largeuraff, hauteurimg, largeurimg);
+          marge := (Image.Height - hauteuraff) div 2;
+          Image.Canvas.StretchDraw(Rect(0, marge, largeuraff, marge + hauteuraff), Graphic);
+        end
       else
-      begin
-        hauteuraff := Windows.MulDiv(largeuraff, hauteurimg, largeurimg);
-        marge := (Image.Height - hauteuraff) div 2;
-        Image.Canvas.StretchDraw(Rect(0, marge, largeuraff, marge + hauteuraff), Graphic);
-      end
-    else
-      Image.Canvas.Draw((largeuraff - largeurimg) div 2, (hauteuraff - hauteurimg) div 2, Graphic);
-    Result := True;
-  finally
-    Free;
-  end;
+        Image.Canvas.Draw((largeuraff - largeurimg) div 2, (hauteuraff - hauteurimg) div 2, Graphic);
+      Result := True;
+    finally
+      Free;
+    end;
 end;
 
 procedure LitOptions;
@@ -157,46 +163,46 @@ begin
   hg := THourGlass.Create;
   op := TUIBQuery.Create(nil);
   with op do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT FIRST 1 Valeur FROM OPTIONS WHERE NOM_OPTION = ? ORDER BY DM_OPTIONS DESC';
-    TGlobalVar.Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', CurrencyString);
-    FormatMonnaie := IIf(CurrencyFormat in [0, 2], TGlobalVar.Utilisateur.Options.SymboleMonnetaire + IIf(CurrencyFormat = 2, ' ', ''), '') + FormatMonnaieCourt + IIf(CurrencyFormat in [1, 3], IIf(CurrencyFormat = 3, ' ', '') + TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '');
-    RepImages := LitStr(op, 'RepImages', RepImages);
-  finally
-    Transaction.Free;
-    Free;
-  end;
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'SELECT FIRST 1 Valeur FROM OPTIONS WHERE NOM_OPTION = ? ORDER BY DM_OPTIONS DESC';
+      TGlobalVar.Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', CurrencyString);
+      FormatMonnaie := IIf(CurrencyFormat in [0, 2], TGlobalVar.Utilisateur.Options.SymboleMonnetaire + IIf(CurrencyFormat = 2, ' ', ''), '') + FormatMonnaieCourt + IIf(CurrencyFormat in [1, 3], IIf(CurrencyFormat = 3, ' ', '') + TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '');
+      RepImages := LitStr(op, 'RepImages', RepImages);
+    finally
+      Transaction.Free;
+      Free;
+    end;
   with TIniFile.Create(FichierIni) do
-  try
-    TGlobalVar.Utilisateur.Options.ModeDemarrage := ReadBool('DIVERS', 'ModeDemarrage', True);
-    TGlobalVar.Utilisateur.Options.FicheAlbumWithCouverture := ReadBool('DIVERS', 'FicheWithCouverture', True);
-    TGlobalVar.Utilisateur.Options.FicheParaBDWithImage := ReadBool('DIVERS', 'ParaBDWithImage', True);
-    TGlobalVar.Utilisateur.Options.Images := ReadBool('DIVERS', 'Images', True);
-    TGlobalVar.Utilisateur.Options.AntiAliasing := ReadBool('DIVERS', 'AntiAliasing', True);
-    TGlobalVar.Utilisateur.Options.ImagesStockees := ReadBool('ModeEdition', 'ImagesStockees', False);
-    TGlobalVar.Utilisateur.Options.FormatTitreAlbum := ReadInteger('DIVERS', 'FormatTitreAlbum', 0);
-    TGlobalVar.Utilisateur.Options.AvertirPret := ReadBool('DIVERS', 'AvertirPret', False);
-    TGlobalVar.Utilisateur.Options.GrandesIconesMenus := ReadBool('DIVERS', 'GrandesIconesMenus', True);
-    TGlobalVar.Utilisateur.Options.GrandesIconesBarre := ReadBool('DIVERS', 'GrandesIconesBarre', True);
-    TGlobalVar.Utilisateur.Options.VerifMAJDelai := ReadInteger('Divers', 'VerifMAJDelai', 4);
-    TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums := ReadBool('DIVERS', 'SerieObligatoireAlbums', False);
-    TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD := ReadBool('DIVERS', 'SerieObligatoireParaBD', False);
-    TGlobalVar.Utilisateur.Options.RepertoireScripts := IncludeTrailingPathDelimiter(ReadString('DIVERS', 'Scripts', IncludeTrailingPathDelimiter(ExtractFilePath(Application.ExeName)) + 'scripts'));
+    try
+      TGlobalVar.Utilisateur.Options.ModeDemarrage := ReadBool('DIVERS', 'ModeDemarrage', True);
+      TGlobalVar.Utilisateur.Options.FicheAlbumWithCouverture := ReadBool('DIVERS', 'FicheWithCouverture', True);
+      TGlobalVar.Utilisateur.Options.FicheParaBDWithImage := ReadBool('DIVERS', 'ParaBDWithImage', True);
+      TGlobalVar.Utilisateur.Options.Images := ReadBool('DIVERS', 'Images', True);
+      TGlobalVar.Utilisateur.Options.AntiAliasing := ReadBool('DIVERS', 'AntiAliasing', True);
+      TGlobalVar.Utilisateur.Options.ImagesStockees := ReadBool('ModeEdition', 'ImagesStockees', False);
+      TGlobalVar.Utilisateur.Options.FormatTitreAlbum := ReadInteger('DIVERS', 'FormatTitreAlbum', 0);
+      TGlobalVar.Utilisateur.Options.AvertirPret := ReadBool('DIVERS', 'AvertirPret', False);
+      TGlobalVar.Utilisateur.Options.GrandesIconesMenus := ReadBool('DIVERS', 'GrandesIconesMenus', True);
+      TGlobalVar.Utilisateur.Options.GrandesIconesBarre := ReadBool('DIVERS', 'GrandesIconesBarre', True);
+      TGlobalVar.Utilisateur.Options.VerifMAJDelai := ReadInteger('Divers', 'VerifMAJDelai', 4);
+      TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums := ReadBool('DIVERS', 'SerieObligatoireAlbums', False);
+      TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD := ReadBool('DIVERS', 'SerieObligatoireParaBD', False);
+      TGlobalVar.Utilisateur.Options.RepertoireScripts := IncludeTrailingPathDelimiter(ReadString('DIVERS', 'Scripts', IncludeTrailingPathDelimiter(ExtractFilePath(Application.ExeName)) + 'scripts'));
 
-    TGlobalVar.Utilisateur.Options.SiteWeb.Adresse := ReadString('WWW', 'Adresse', '');
-    TGlobalVar.Utilisateur.Options.SiteWeb.Cle := ReadString('WWW', 'AuthKey', '');
-    TGlobalVar.Utilisateur.Options.SiteWeb.Modele := ReadString('WWW', 'Modele', 'Site par défaut');
-    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLServeur := ReadString('WWW', 'MySQLServeur', 'localhost');
-    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin := ReadString('WWW', 'MySQLLogin', '');
-    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPassword := ReadString('WWW', 'MySQLPassword', '');
-    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLBDD := ReadString('WWW', 'MySQLBDD', TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin);
-    TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPrefix := ReadString('WWW', 'MySQLPrefix', 'bdt');
-    TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion := ReadString('WWW', 'BddVersion', '');
-    TGlobalVar.Utilisateur.Options.SiteWeb.Paquets := ReadInteger('WWW', 'Paquets', 4096);
-  finally
-    Free;
-  end;
+      TGlobalVar.Utilisateur.Options.SiteWeb.Adresse := ReadString('WWW', 'Adresse', '');
+      TGlobalVar.Utilisateur.Options.SiteWeb.Cle := ReadString('WWW', 'AuthKey', '');
+      TGlobalVar.Utilisateur.Options.SiteWeb.Modele := ReadString('WWW', 'Modele', 'Site par défaut');
+      TGlobalVar.Utilisateur.Options.SiteWeb.MySQLServeur := ReadString('WWW', 'MySQLServeur', 'localhost');
+      TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin := ReadString('WWW', 'MySQLLogin', '');
+      TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPassword := ReadString('WWW', 'MySQLPassword', '');
+      TGlobalVar.Utilisateur.Options.SiteWeb.MySQLBDD := ReadString('WWW', 'MySQLBDD', TGlobalVar.Utilisateur.Options.SiteWeb.MySQLLogin);
+      TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPrefix := ReadString('WWW', 'MySQLPrefix', 'bdt');
+      TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion := ReadString('WWW', 'BddVersion', '');
+      TGlobalVar.Utilisateur.Options.SiteWeb.Paquets := ReadInteger('WWW', 'Paquets', 4096);
+    finally
+      Free;
+    end;
 end;
 
 procedure EcritOptions;
@@ -230,46 +236,46 @@ begin
   hg := THourGlass.Create;
   op := TUIBQuery.Create(nil);
   with op do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    Sauve(op, 'SymboleM', TGlobalVar.Utilisateur.Options.SymboleMonnetaire);
-    Sauve(op, 'RepImages', RepImages);
-    Transaction.Commit;
-  finally
-    Transaction.Free;
-    Free;
-  end;
-  with TIniFile.Create(FichierIni),TGlobalVar.Utilisateur.Options  do
-  try
-    WriteBool('DIVERS', 'ModeDemarrage', ModeDemarrage);
-    WriteBool('DIVERS', 'Images', Images);
-    WriteBool('DIVERS', 'FicheWithCouverture', FicheAlbumWithCouverture);
-    WriteBool('DIVERS', 'ParaBDWithImage', FicheParaBDWithImage);
-    WriteBool('DIVERS', 'AntiAliasing', AntiAliasing);
-    WriteBool('DIVERS', 'AvertirPret', AvertirPret);
-    WriteBool('DIVERS', 'GrandesIconesMenus', GrandesIconesMenus);
-    WriteBool('DIVERS', 'GrandesIconesBarre', GrandesIconesBarre);
-    WriteBool('ModeEdition', 'ImagesStockees', ImagesStockees);
-    WriteInteger('DIVERS', 'FormatTitreAlbum', FormatTitreAlbum);
-    WriteInteger('Divers', 'VerifMAJDelai', VerifMAJDelai);
-    WriteBool('DIVERS', 'SerieObligatoireAlbums', SerieObligatoireAlbums);
-    WriteBool('DIVERS', 'SerieObligatoireParaBD', SerieObligatoireParaBD);
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      Sauve(op, 'SymboleM', TGlobalVar.Utilisateur.Options.SymboleMonnetaire);
+      Sauve(op, 'RepImages', RepImages);
+      Transaction.Commit;
+    finally
+      Transaction.Free;
+      Free;
+    end;
+  with TIniFile.Create(FichierIni), TGlobalVar.Utilisateur.Options do
+    try
+      WriteBool('DIVERS', 'ModeDemarrage', ModeDemarrage);
+      WriteBool('DIVERS', 'Images', Images);
+      WriteBool('DIVERS', 'FicheWithCouverture', FicheAlbumWithCouverture);
+      WriteBool('DIVERS', 'ParaBDWithImage', FicheParaBDWithImage);
+      WriteBool('DIVERS', 'AntiAliasing', AntiAliasing);
+      WriteBool('DIVERS', 'AvertirPret', AvertirPret);
+      WriteBool('DIVERS', 'GrandesIconesMenus', GrandesIconesMenus);
+      WriteBool('DIVERS', 'GrandesIconesBarre', GrandesIconesBarre);
+      WriteBool('ModeEdition', 'ImagesStockees', ImagesStockees);
+      WriteInteger('DIVERS', 'FormatTitreAlbum', FormatTitreAlbum);
+      WriteInteger('Divers', 'VerifMAJDelai', VerifMAJDelai);
+      WriteBool('DIVERS', 'SerieObligatoireAlbums', SerieObligatoireAlbums);
+      WriteBool('DIVERS', 'SerieObligatoireParaBD', SerieObligatoireParaBD);
 
-    WriteString('DIVERS', 'RepImages', ''); // efface la ligne
+      WriteString('DIVERS', 'RepImages', ''); // efface la ligne
 
-    WriteString('WWW', 'Adresse', SiteWeb.Adresse);
-    WriteString('WWW', 'AuthKey', SiteWeb.Cle);
-    WriteString('WWW', 'Modele', SiteWeb.Modele);
-    WriteString('WWW', 'MySQLServeur', SiteWeb.MySQLServeur);
-    WriteString('WWW', 'MySQLLogin', SiteWeb.MySQLLogin);
-    WriteString('WWW', 'MySQLPassword', SiteWeb.MySQLPassword);
-    WriteString('WWW', 'MySQLBDD', SiteWeb.MySQLBDD);
-    WriteString('WWW', 'MySQLPrefix', SiteWeb.MySQLPrefix);
-    WriteString('WWW', 'BddVersion', SiteWeb.BddVersion);
-    WriteInteger('WWW', 'Paquets', SiteWeb.Paquets);
-  finally
-    Free;
-  end;
+      WriteString('WWW', 'Adresse', SiteWeb.Adresse);
+      WriteString('WWW', 'AuthKey', SiteWeb.Cle);
+      WriteString('WWW', 'Modele', SiteWeb.Modele);
+      WriteString('WWW', 'MySQLServeur', SiteWeb.MySQLServeur);
+      WriteString('WWW', 'MySQLLogin', SiteWeb.MySQLLogin);
+      WriteString('WWW', 'MySQLPassword', SiteWeb.MySQLPassword);
+      WriteString('WWW', 'MySQLBDD', SiteWeb.MySQLBDD);
+      WriteString('WWW', 'MySQLPrefix', SiteWeb.MySQLPrefix);
+      WriteString('WWW', 'BddVersion', SiteWeb.BddVersion);
+      WriteInteger('WWW', 'Paquets', SiteWeb.Paquets);
+    finally
+      Free;
+    end;
 end;
 
 procedure MoveListItem(LV: TListView; Sens: Integer);
@@ -279,10 +285,13 @@ var
   swLI: TListItem;
 begin
   AListItem := LV.Selected;
-  if not Assigned(AListItem) then Exit;
-  if not (AListItem.Index + Sens in [0..LV.Items.Count - 1]) then Exit;
+  if not Assigned(AListItem) then
+    Exit;
+  if not (AListItem.Index + Sens in [0..LV.Items.Count - 1]) then
+    Exit;
   TmpAListItem := LV.Items[AListItem.Index + Sens];
-  if not Assigned(TmpAListItem) then Exit;
+  if not Assigned(TmpAListItem) then
+    Exit;
   LV.Items.BeginUpdate;
   swLI := LV.Items.Add;
   try
@@ -303,39 +312,41 @@ var
   i, j, w: integer;
 begin
   for i := 0 to Form.ComponentCount - 1 do
-  try
-    if Form.Components[i] is TListView then
-      with Form.Components[i] as TListView do
-        if Columns.Count = 1 then Columns[0].Width := ClientWidth - GetSystemMetrics(SM_CXVSCROLL);
-    if Form.Components[i] is TVirtualStringTree then
-      with (Form.Components[i] as TVirtualStringTree).Header do
-        if Columns.Count > 0 then
-        begin
-          w := 0;
-          for j := 0 to Pred(Columns.Count) do
-            if j <> MainColumn then Inc(w, Columns[j].Width);
-          Columns[MainColumn].Width := TreeView.ClientWidth - w - GetSystemMetrics(SM_CXVSCROLL);
-        end;
-  except
-  end;
+    try
+      if Form.Components[i] is TListView then
+        with Form.Components[i] as TListView do
+          if Columns.Count = 1 then
+            Columns[0].Width := ClientWidth - GetSystemMetrics(SM_CXVSCROLL);
+      if Form.Components[i] is TVirtualStringTree then
+        with (Form.Components[i] as TVirtualStringTree).Header do
+          if Columns.Count > 0 then
+          begin
+            w := 0;
+            for j := 0 to Pred(Columns.Count) do
+              if j <> MainColumn then
+                Inc(w, Columns[j].Width);
+            Columns[MainColumn].Width := TreeView.ClientWidth - w - GetSystemMetrics(SM_CXVSCROLL);
+          end;
+    except
+    end;
 end;
 
 function SupprimerTable(const Table: string): Boolean;
 begin
   try
     with TUIBQuery.Create(nil) do
-    try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      Transaction.Database.Connected := False; // fonctionne mais pas correct du tout!
-      Transaction.Database.Connected := True;
-      SQL.Text := 'DROP TABLE ' + Table;
-      ExecSQL;
-      Transaction.Commit;
-      Result := True;
-    finally
-      Transaction.Free;
-      Free;
-    end;
+      try
+        Transaction := GetTransaction(DMPrinc.UIBDataBase);
+        Transaction.Database.Connected := False; // fonctionne mais pas correct du tout!
+        Transaction.Database.Connected := True;
+        SQL.Text := 'DROP TABLE ' + Table;
+        ExecSQL;
+        Transaction.Commit;
+        Result := True;
+      finally
+        Transaction.Free;
+        Free;
+      end;
   except
     Result := False;
   end;
@@ -350,25 +361,27 @@ function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Vale
 begin
   try
     with TUIBQuery.Create(nil) do
-    try
-      if Assigned(UseTransaction) then
-        Transaction := UseTransaction
-      else
-        Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      try
+        if Assigned(UseTransaction) then
+          Transaction := UseTransaction
+        else
+          Transaction := GetTransaction(DMPrinc.UIBDataBase);
 
-      if ChampSupp <> '' then
-        SQL.Add(Format('UPDATE %s set %s = True', [Table, ChampSupp]))
-      else
-        SQL.Add(Format('DELETE FROM %s', [Table]));
+        if ChampSupp <> '' then
+          SQL.Add(Format('UPDATE %s set %s = True', [Table, ChampSupp]))
+        else
+          SQL.Add(Format('DELETE FROM %s', [Table]));
 
-      if Reference <> '' then SQL.Add(Format('WHERE %s = ''%s''', [Reference, GUIDToString(Valeur)]));
-      ExecSQL;
-      Transaction.Commit;
-      Result := True;
-    finally
-      if not Assigned(UseTransaction) then Transaction.Free;
-      Free;
-    end;
+        if Reference <> '' then
+          SQL.Add(Format('WHERE %s = ''%s''', [Reference, GUIDToString(Valeur)]));
+        ExecSQL;
+        Transaction.Commit;
+        Result := True;
+      finally
+        if not Assigned(UseTransaction) then
+          Transaction.Free;
+        Free;
+      end;
   except
     Result := False;
   end;
@@ -382,20 +395,20 @@ begin
   Result := False;
   try
     with TUIBQuery.Create(nil) do
-    try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'Execute procedure PROC_AJOUTMVT(:ID_Edition, :ID_Emprunteur, :DateEmprunt, :Pret)';
+      try
+        Transaction := GetTransaction(DMPrinc.UIBDataBase);
+        SQL.Text := 'Execute procedure PROC_AJOUTMVT(:ID_Edition, :ID_Emprunteur, :DateEmprunt, :Pret)';
 
-      Params.AsString[0] := GUIDToString(RefObjet);
-      Params.AsString[1] := GUIDToString(ID_Emprunteur);
-      Params.AsDateTime[2] := DateE;
-      Params.AsInteger[3] := Iif(Pret, 1, 0);
-      ExecSQL;
-      Transaction.Commit;
-    finally
-      Transaction.Free;
-      Free;
-    end;
+        Params.AsString[0] := GUIDToString(RefObjet);
+        Params.AsString[1] := GUIDToString(ID_Emprunteur);
+        Params.AsDateTime[2] := DateE;
+        Params.AsInteger[3] := Iif(Pret, 1, 0);
+        ExecSQL;
+        Transaction.Commit;
+      finally
+        Transaction.Free;
+        Free;
+      end;
     Result := True;
   except
     AffMessage(ErrorSaveMvt + #13#10 + Exception(ExceptObject).Message, mtWarning, [mbOk], True);
@@ -467,172 +480,172 @@ begin
             TypeChamp := Fields.FieldType[Champ];
             case TypeChamp of
               uftChar, uftVarchar, uftInteger, uftFloat:
+              begin
+                l := TLabel.Create(ScrollBox.Owner);
+                with l do
                 begin
-                  l := TLabel.Create(ScrollBox.Owner);
-                  with l do
-                  begin
-                    Top := t;
-                    Parent := ScrollBox;
-                    Caption := Fields.ByNameAsString['TEXTECHAMP'] + ' :';
-                    Left := 4;
-                    Inc(t, Height);
-                    Name := 'Compo' + IntToStr(ScrollBox.Owner.ComponentCount);
-                  end;
-                  if Editable then
-                    c := TEditLabeled.Create(ScrollBox.Owner)
-                  else
-                    c := TEdit.Create(ScrollBox.Owner);
-                  with TEdit(c) do
-                  begin
-                    Anchors := [akLeft, akTop, akRight];
-                    BevelKind := bkTile;
-                    BorderStyle := bsNone;
-                    Top := t;
-                    Parent := ScrollBox;
-                    Left := 4;
-                    Width := ScrollBox.Width - 12 - GetSystemMetrics(SM_CXVSCROLL);
-                    Inc(t, Height);
-                    Name := Champs.Fields.SqlName[Champ];
-                    if not (Champs.Eof or Champs.Fields.IsNull[Champ]) then
-                      Text := Champs.Fields.AsString[Champ]
-                    else
-                      Text := '';
-                    if Editable then
-                    begin
-                      with TEditLabeled(c) do
-                      begin
-                        LinkControls.Add(l);
-                        case TypeChamp of
-                          uftChar, uftVarchar: TypeDonnee := tdChaine;
-                          uftInteger: TypeDonnee := tdEntierSigne;
-                          uftFloat: TypeDonnee := tdNumericSigne;
-                        end;
-                      end;
-                    end
-                    else
-                      ReadOnly := True;
-                  end;
+                  Top := t;
+                  Parent := ScrollBox;
+                  Caption := Fields.ByNameAsString['TEXTECHAMP'] + ' :';
+                  Left := 4;
+                  Inc(t, Height);
+                  Name := 'Compo' + IntToStr(ScrollBox.Owner.ComponentCount);
                 end;
+                if Editable then
+                  c := TEditLabeled.Create(ScrollBox.Owner)
+                else
+                  c := TEdit.Create(ScrollBox.Owner);
+                with TEdit(c) do
+                begin
+                  Anchors := [akLeft, akTop, akRight];
+                  BevelKind := bkTile;
+                  BorderStyle := bsNone;
+                  Top := t;
+                  Parent := ScrollBox;
+                  Left := 4;
+                  Width := ScrollBox.Width - 12 - GetSystemMetrics(SM_CXVSCROLL);
+                  Inc(t, Height);
+                  Name := Champs.Fields.SqlName[Champ];
+                  if not (Champs.Eof or Champs.Fields.IsNull[Champ]) then
+                    Text := Champs.Fields.AsString[Champ]
+                  else
+                    Text := '';
+                  if Editable then
+                  begin
+                    with TEditLabeled(c) do
+                    begin
+                      LinkControls.Add(l);
+                      case TypeChamp of
+                        uftChar, uftVarchar: TypeDonnee := tdChaine;
+                        uftInteger: TypeDonnee := tdEntierSigne;
+                        uftFloat: TypeDonnee := tdNumericSigne;
+                      end;
+                    end;
+                  end
+                  else
+                    ReadOnly := True;
+                end;
+              end;
               uftSmallInt:
+              begin
+                if Editable then
+                  c := TCheckBoxLabeled.Create(ScrollBox.Owner)
+                else
+                  c := TReadOnlyCheckBox.Create(ScrollBox.Owner);
+                with TCheckBox(c) do
                 begin
+                  Anchors := [akLeft, akTop, akRight];
+                  Top := t;
+                  Parent := ScrollBox;
+                  Name := Champs.Fields.SqlName[Champ];
+                  s := Fields.ByNameAsString['TEXTECHAMP'];
+                  Caption := s;
+                  Left := 4;
+                  Width := TForm(ScrollBox.Owner).Canvas.TextWidth(s) + 32;
+                  Inc(t, Height + 4);
+                  Checked := not (Champs.Eof or Champs.Fields.IsNull[Champ]) and Champs.Fields.AsBoolean[Champ];
                   if Editable then
-                    c := TCheckBoxLabeled.Create(ScrollBox.Owner)
-                  else
-                    c := TReadOnlyCheckBox.Create(ScrollBox.Owner);
-                  with TCheckBox(c) do
                   begin
-                    Anchors := [akLeft, akTop, akRight];
-                    Top := t;
-                    Parent := ScrollBox;
-                    Name := Champs.Fields.SqlName[Champ];
-                    s := Fields.ByNameAsString['TEXTECHAMP'];
-                    Caption := s;
-                    Left := 4;
-                    Width := TForm(ScrollBox.Owner).Canvas.TextWidth(s) + 32;
-                    Inc(t, Height + 4);
-                    Checked := not (Champs.Eof or Champs.Fields.IsNull[Champ]) and Champs.Fields.AsBoolean[Champ];
-                    if Editable then
+                    with TCheckBoxLabeled(c) do
                     begin
-                      with TCheckBoxLabeled(c) do
-                      begin
-                      end;
                     end;
                   end;
                 end;
+              end;
               uftBlob:
+              begin
+                l := TLabel.Create(ScrollBox.Owner);
+                with l do
                 begin
-                  l := TLabel.Create(ScrollBox.Owner);
-                  with l do
-                  begin
-                    Top := t;
-                    Parent := ScrollBox;
-                    Caption := Fields.ByNameAsString['TEXTECHAMP'] + ' :';
-                    Left := 4;
-                    Inc(t, Height);
-                    Name := 'Compo' + IntToStr(ScrollBox.Owner.ComponentCount);
-                  end;
-                  if Editable then
-                    c := TMemoLabeled.Create(ScrollBox.Owner)
+                  Top := t;
+                  Parent := ScrollBox;
+                  Caption := Fields.ByNameAsString['TEXTECHAMP'] + ' :';
+                  Left := 4;
+                  Inc(t, Height);
+                  Name := 'Compo' + IntToStr(ScrollBox.Owner.ComponentCount);
+                end;
+                if Editable then
+                  c := TMemoLabeled.Create(ScrollBox.Owner)
+                else
+                  c := TMemo.Create(ScrollBox.Owner);
+                with TMemo(c) do
+                begin
+                  Anchors := [akLeft, akTop, akRight];
+                  BevelKind := bkTile;
+                  BorderStyle := bsNone;
+                  Top := t;
+                  Parent := ScrollBox;
+                  Left := 4;
+                  Width := ScrollBox.Width - 12 - GetSystemMetrics(SM_CXVSCROLL);
+                  ClientHeight := 4 * TForm(ScrollBox.Owner).Canvas.TextHeight('A');
+                  Inc(t, Height + 4);
+                  Name := Champs.Fields.SqlName[Champ];
+                  if not (Champs.Eof or Champs.Fields.IsNull[Champ]) then
+                    Lines.Text := Champs.Fields.AsString[Champ]
                   else
-                    c := TMemo.Create(ScrollBox.Owner);
-                  with TMemo(c) do
+                    Lines.Text := '';
+                  WordWrap := True;
+                  if Editable then
                   begin
-                    Anchors := [akLeft, akTop, akRight];
-                    BevelKind := bkTile;
-                    BorderStyle := bsNone;
-                    Top := t;
-                    Parent := ScrollBox;
-                    Left := 4;
-                    Width := ScrollBox.Width - 12 - GetSystemMetrics(SM_CXVSCROLL);
-                    ClientHeight := 4 * TForm(ScrollBox.Owner).Canvas.TextHeight('A');
-                    Inc(t, Height + 4);
-                    Name := Champs.Fields.SqlName[Champ];
-                    if not (Champs.Eof or Champs.Fields.IsNull[Champ]) then
-                      Lines.Text := Champs.Fields.AsString[Champ]
-                    else
-                      Lines.Text := '';
-                    WordWrap := True;
-                    if Editable then
+                    with TMemoLabeled(c) do
                     begin
-                      with TMemoLabeled(c) do
-                      begin
-                        LinkControls.Add(l);
-                      end;
-                    end
-                    else
-                    begin
-                      ReadOnly := True;
-                      ScrollBars := ssVertical;
+                      LinkControls.Add(l);
                     end;
-                  end;
-                end;
-              uftDate, uftTime, uftTimestamp:
-                begin
-                  l := TLabel.Create(ScrollBox.Owner);
-                  with l do
-                  begin
-                    Top := t;
-                    Parent := ScrollBox;
-                    Caption := Fields.ByNameAsString['TEXTECHAMP'] + ' :';
-                    Left := 4;
-                    Inc(t, Height);
-                    Name := 'Compo' + IntToStr(ScrollBox.Owner.ComponentCount);
-                  end;
-                  if Editable then
-                    c := TEditLabeled.Create(ScrollBox.Owner)
+                  end
                   else
-                    c := TEdit.Create(ScrollBox.Owner);
-                  with TEdit(c) do
                   begin
-                    Anchors := [akLeft, akTop, akRight];
-                    BevelKind := bkTile;
-                    BorderStyle := bsNone;
-                    Top := t;
-                    Parent := ScrollBox;
-                    Left := 4;
-                    Width := ScrollBox.Width - 12 - GetSystemMetrics(SM_CXVSCROLL);
-                    Inc(t, Height + 4);
-                    Name := Champs.Fields.SqlName[Champ];
-                    if not (Champs.Eof or Champs.Fields.IsNull[Champ]) then
-                      Text := Champs.Fields.AsString[Champ]
-                    else
-                      Text := '';
-                    if Editable then
-                    begin
-                      with TEditLabeled(c) do
-                      begin
-                        LinkControls.Add(l);
-                        case TypeChamp of
-                          uftDate: TypeDonnee := tdDate;
-                          uftTime: TypeDonnee := tdHeure;
-                          uftTimestamp: TypeDonnee := tdDateHeure;
-                        end;
-                      end;
-                    end
-                    else
-                      TEdit(c).ReadOnly := True;
+                    ReadOnly := True;
+                    ScrollBars := ssVertical;
                   end;
                 end;
+              end;
+              uftDate, uftTime, uftTimestamp:
+              begin
+                l := TLabel.Create(ScrollBox.Owner);
+                with l do
+                begin
+                  Top := t;
+                  Parent := ScrollBox;
+                  Caption := Fields.ByNameAsString['TEXTECHAMP'] + ' :';
+                  Left := 4;
+                  Inc(t, Height);
+                  Name := 'Compo' + IntToStr(ScrollBox.Owner.ComponentCount);
+                end;
+                if Editable then
+                  c := TEditLabeled.Create(ScrollBox.Owner)
+                else
+                  c := TEdit.Create(ScrollBox.Owner);
+                with TEdit(c) do
+                begin
+                  Anchors := [akLeft, akTop, akRight];
+                  BevelKind := bkTile;
+                  BorderStyle := bsNone;
+                  Top := t;
+                  Parent := ScrollBox;
+                  Left := 4;
+                  Width := ScrollBox.Width - 12 - GetSystemMetrics(SM_CXVSCROLL);
+                  Inc(t, Height + 4);
+                  Name := Champs.Fields.SqlName[Champ];
+                  if not (Champs.Eof or Champs.Fields.IsNull[Champ]) then
+                    Text := Champs.Fields.AsString[Champ]
+                  else
+                    Text := '';
+                  if Editable then
+                  begin
+                    with TEditLabeled(c) do
+                    begin
+                      LinkControls.Add(l);
+                      case TypeChamp of
+                        uftDate: TypeDonnee := tdDate;
+                        uftTime: TypeDonnee := tdHeure;
+                        uftTimestamp: TypeDonnee := tdDateHeure;
+                      end;
+                    end;
+                  end
+                  else
+                    TEdit(c).ReadOnly := True;
+                end;
+              end;
             end; // case Champ.Datatype
           end; // if Assigned(Champ)
           Next;
@@ -653,7 +666,8 @@ var
 begin
   FillChar(FileInfo, SizeOf(FileInfo), #0);
   Flags := SHGFI_SYSICONINDEX or SHGFI_ICON;
-  if Open then Flags := Flags or SHGFI_OPENICON;
+  if Open then
+    Flags := Flags or SHGFI_OPENICON;
   if Large then
     Flags := Flags or SHGFI_LARGEICON
   else
@@ -670,7 +684,8 @@ end;
 
 destructor TLockWindow.Destroy;
 begin
-  if FLocked then LockWindowUpdate(0);
+  if FLocked then
+    LockWindowUpdate(0);
   inherited;
 end;
 
@@ -742,15 +757,15 @@ begin
         end;
 
         with TJPEGImage.Create do
-        try
-          Assign(Bmp);
-          PixelFormat := jf24Bit;
-          CompressionQuality := 70;
-          Compress;
-          SaveToStream(Result);
-        finally
-          Free;
-        end;
+          try
+            Assign(Bmp);
+            PixelFormat := jf24Bit;
+            CompressionQuality := 70;
+            Compress;
+            SaveToStream(Result);
+          finally
+            Free;
+          end;
       finally
         Bmp.Free;
       end;
@@ -808,51 +823,52 @@ var
   Fichier, Chemin: string;
 begin
   with TUIBQuery.Create(nil) do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    if isParaBD then
-      SQL.Text := 'SELECT IMAGEPARABD, STOCKAGEPARABD, FichierParaBD FROM ParaBD WHERE ID_ParaBD = ?'
-    else
-      SQL.Text := 'SELECT IMAGECOUVERTURE, STOCKAGECOUVERTURE, FichierCouverture FROM Couvertures WHERE ID_Couverture = ?';
-    Params.AsString[0] := GUIDToString(ID_Couverture);
-    FetchBlobs := True;
-    Open;
-    if Eof or (Fields.IsNull[0] and Fields.IsNull[2]) then
-      Picture.Assign(nil)
-    else
-    begin
-      if not Fields.AsBoolean[1] then
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      if isParaBD then
+        SQL.Text := 'SELECT IMAGEPARABD, STOCKAGEPARABD, FichierParaBD FROM ParaBD WHERE ID_ParaBD = ?'
+      else
+        SQL.Text := 'SELECT IMAGECOUVERTURE, STOCKAGECOUVERTURE, FichierCouverture FROM Couvertures WHERE ID_Couverture = ?';
+      Params.AsString[0] := GUIDToString(ID_Couverture);
+      FetchBlobs := True;
+      Open;
+      if Eof or (Fields.IsNull[0] and Fields.IsNull[2]) then
+        Picture.Assign(nil)
+      else
       begin
-        Fichier := ExtractFileName(Fields.AsString[2]);
-        Chemin := ExtractFilePath(Fields.AsString[2]);
-        if Chemin = '' then Chemin := RepImages;
-        SQL.Text := 'SELECT BlobContent FROM LOADBLOBFROMFILE(:Chemin, :Fichier);';
-        Params.AsString[0] := Chemin;
-        Params.AsString[1] := Fichier;
-        Open;
-        if Eof then
+        if not Fields.AsBoolean[1] then
         begin
-          Picture.Assign(nil);
-          Exit;
+          Fichier := ExtractFileName(Fields.AsString[2]);
+          Chemin := ExtractFilePath(Fields.AsString[2]);
+          if Chemin = '' then
+            Chemin := RepImages;
+          SQL.Text := 'SELECT BlobContent FROM LOADBLOBFROMFILE(:Chemin, :Fichier);';
+          Params.AsString[0] := Chemin;
+          Params.AsString[1] := Fichier;
+          Open;
+          if Eof then
+          begin
+            Picture.Assign(nil);
+            Exit;
+          end;
+        end;
+
+        ms := TMemoryStream.Create;
+        img := TJPEGImage.Create;
+        try
+          ReadBlob(0, ms);
+          ms.Position := 0;
+          img.LoadFromStream(ms);
+          Picture.Assign(img);
+        finally
+          ms.Free;
+          img.Free;
         end;
       end;
-
-      ms := TMemoryStream.Create;
-      img := TJPEGImage.Create;
-      try
-        ReadBlob(0, ms);
-        ms.Position := 0;
-        img.LoadFromStream(ms);
-        Picture.Assign(img);
-      finally
-        ms.Free;
-        img.Free;
-      end;
+    finally
+      Transaction.Free;
+      Free;
     end;
-  finally
-    Transaction.Free;
-    Free;
-  end;
 end;
 
 function GetJPEGStream(const Fichier: string): TStream;
@@ -860,39 +876,66 @@ function GetJPEGStream(const Fichier: string): TStream;
   function MatchesMask(const Fichier, Mask: string): Boolean;
   begin
     with TStringList.Create do
-    try
-      Text := StringReplace(LowerCase(Mask), ';', #13#10, [rfReplaceAll]);
-      Result := IndexOf('*' + Fichier) <> -1;
-    finally
-      Free;
-    end;
+      try
+        Text := StringReplace(LowerCase(Mask), ';', #13#10, [rfReplaceAll]);
+        Result := IndexOf('*' + Fichier) <> -1;
+      finally
+        Free;
+      end;
   end;
 
 var
   jImg: TJPEGImage;
   Img: TPicture;
+  graphClass: TGraphicClass;
+  graph: TGraphic;
+  f: TFileStream;
+  buffer: array[0..2] of Byte;
 begin
-  if MatchesMask(LowerCase(ExtractFileExt(Fichier)), GraphicFileMask(TJPEGImage)) then
+  f := TFileStream.Create(Fichier, fmOpenRead or fmShareDenyWrite);
+
+  f.Position := 0;
+  f.ReadBuffer(buffer, 3);
+  f.Position := 0;
+
+  if (buffer[0] = $FF) and (buffer[1] = $D8) and (buffer[2] = $FF) then
   begin
-    Result := TFileStream.Create(Fichier, fmOpenRead or fmShareDenyWrite);
+    Result := f;
+    Exit;
   end
   else
-  begin
-    Result := TMemoryStream.Create;
-    img := TPicture.Create;
-    jImg := TJPEGImage.Create;
-    try
+    graphClass := FileFormatList.GraphicFromContent(f);
+
+  Result := TMemoryStream.Create;
+  img := nil;
+  graph := nil;
+  jImg := TJPEGImage.Create;
+  try
+    if Assigned(graphClass) then
+    begin
+      graph := graphClass.Create;
+      graph.LoadFromStream(f);
+    end
+    else
+    begin
+      img := TPicture.Create;
       img.LoadFromFile(Fichier);
-      jImg.PixelFormat := jf24Bit;
-      jImg.Assign(img.Graphic);
-      jImg.CompressionQuality := 70;
-      jImg.Compress;
-      jImg.SaveToStream(Result);
-    finally
-      jImg.Free;
-      img.Free;
     end;
+
+    jImg.PixelFormat := jf24Bit;
+    if Assigned(graph) then
+      jImg.Assign(graph)
+    else
+      jImg.Assign(img.Graphic);
+    jImg.CompressionQuality := 70;
+    jImg.Compress;
+    jImg.SaveToStream(Result);
+  finally
+    jImg.Free;
+    img.Free;
+    graph.Free;
   end;
+
   Result.Position := 0;
 end;
 
@@ -907,7 +950,8 @@ end;
 
 destructor TInformation.Destroy;
 begin
-  if Assigned(FInfo) then FreeAndNil(FInfo);
+  if Assigned(FInfo) then
+    FreeAndNil(FInfo);
   inherited;
 end;
 
@@ -915,7 +959,8 @@ procedure TInformation.SetupDialog;
 var
   FPanel: TPanel;
 begin
-  if Assigned(FInfo) then Exit;
+  if Assigned(FInfo) then
+    Exit;
   FInfo := TbdtForm.Create(Application);
   with FInfo do
   begin
@@ -958,39 +1003,39 @@ end;
 function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = True): string;
 begin
   with TUIBQuery.Create(nil) do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT * FROM SearchFileName(:Chemin, :Fichier, :Reserve)';
-    Params.AsString[0] := IncludeTrailingPathDelimiter(Chemin);
-    Params.AsString[1] := Fichier;
-    Params.AsBoolean[2] := Reserve;
-    Open;
-    Result := ExtractFileName(Fields.AsString[0]);
-  finally
-    Transaction.Free;
-    Free;
-  end;
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'SELECT * FROM SearchFileName(:Chemin, :Fichier, :Reserve)';
+      Params.AsString[0] := IncludeTrailingPathDelimiter(Chemin);
+      Params.AsString[1] := Fichier;
+      Params.AsBoolean[2] := Reserve;
+      Open;
+      Result := ExtractFileName(Fields.AsString[0]);
+    finally
+      Transaction.Free;
+      Free;
+    end;
 end;
 
 procedure LoadStrings(Categorie: Integer; Strings: TStrings);
 begin
   with TUIBQuery.Create(nil) do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'SELECT REF, LIBELLE, DEFAUT FROM LISTES WHERE CATEGORIE = :Categorie ORDER BY ORDRE';
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'SELECT REF, LIBELLE, DEFAUT FROM LISTES WHERE CATEGORIE = :Categorie ORDER BY ORDRE';
 
-    Params.AsInteger[0] := Categorie;
-    Open;
-    Strings.Clear;
-    while not Eof do
-    begin
-      Strings.Add(Fields.AsString[0] + '=' + Fields.AsString[1]);
-      Next;
+      Params.AsInteger[0] := Categorie;
+      Open;
+      Strings.Clear;
+      while not Eof do
+      begin
+        Strings.Add(Fields.AsString[0] + '=' + Fields.AsString[1]);
+        Next;
+      end;
+    finally
+      Transaction.Free;
+      Free;
     end;
-  finally
-    Transaction.Free;
-    Free;
-  end;
 end;
 
 procedure LoadCombo(Categorie: Integer; Combo: TLightComboCheck);
@@ -998,40 +1043,41 @@ var
   HasNULL: Boolean;
 begin
   with TUIBQuery.Create(nil) do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'select ref, libelle, defaut from listes where categorie = :categorie order by ordre';
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'select ref, libelle, defaut from listes where categorie = :categorie order by ordre';
 
-    HasNULL := False;
+      HasNULL := False;
 
-    Params.AsInteger[0] := Categorie;
-    Open;
-    Combo.Items.Clear;
-    Combo.DefaultValueChecked := -1;
-    while not Eof do
-    begin
-      with Combo.Items.Add do
+      Params.AsInteger[0] := Categorie;
+      Open;
+      Combo.Items.Clear;
+      Combo.DefaultValueChecked := -1;
+      while not Eof do
       begin
-        Caption := Fields.AsString[1];
-        Valeur := Fields.AsInteger[0];
-        if Fields.AsBoolean[2] then Combo.DefaultValueChecked := Valeur;
-        HasNULL := Valeur = -1;
+        with Combo.Items.Add do
+        begin
+          Caption := Fields.AsString[1];
+          Valeur := Fields.AsInteger[0];
+          if Fields.AsBoolean[2] then
+            Combo.DefaultValueChecked := Valeur;
+          HasNULL := Valeur = -1;
+        end;
+        Next;
       end;
-      Next;
+      if not HasNULL then
+        with Combo.Items.Add do
+        begin
+          Caption := ' ';
+          Valeur := -1;
+          Index := 0;
+        end;
+
+      Combo.Value := Combo.DefaultValueChecked;
+    finally
+      Transaction.Free;
+      Free;
     end;
-    if not HasNULL then
-      with Combo.Items.Add do
-      begin
-        Caption := ' ';
-        Valeur := -1;
-        Index := 0;
-      end;
-
-    Combo.Value := Combo.DefaultValueChecked;
-  finally
-    Transaction.Free;
-    Free;
-  end;
 end;
 
 end.

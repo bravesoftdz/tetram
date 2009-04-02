@@ -15,6 +15,7 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
+    btnIgnore: TButton;
     procedure framVTEdit1VTEditChange(Sender: TObject);
     procedure framVTEdit1btEditClick(Sender: TObject);
     procedure framVTEdit1btNewClick(Sender: TObject);
@@ -146,7 +147,7 @@ begin
             DoAppend(@AjouterSeries);
         end;
     end;
-  until Result in [mrOk, mrCancel];
+  until Result in [mrOk, mrCancel, mrIgnore];
 end;
 
 end.

@@ -2,7 +2,7 @@ object frmScripts: TfrmScripts
   Left = 397
   Top = 157
   Caption = 'Script'
-  ClientHeight = 613
+  ClientHeight = 670
   ClientWidth = 862
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -17,56 +17,101 @@ object frmScripts: TfrmScripts
   OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
+  object Splitter2: TSplitter
+    Left = 629
+    Top = 0
+    Height = 670
+    Align = alRight
+    ExplicitLeft = 720
+    ExplicitTop = 344
+    ExplicitHeight = 100
+  end
   object PageControl2: TPageControl
     Left = 0
     Top = 0
-    Width = 862
-    Height = 613
-    ActivePage = tbEdition
+    Width = 629
+    Height = 670
+    ActivePage = tbScripts
     Align = alClient
     PopupMenu = PopupMenu1
+    Style = tsButtons
     TabOrder = 0
+    OnChange = PageControl2Change
+    ExplicitHeight = 613
     object tbScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 1
+      ExplicitHeight = 582
+      DesignSize = (
+        621
+        639)
       object ListView1: TListView
-        Left = 8
-        Top = 16
-        Width = 833
-        Height = 209
+        Left = 3
+        Top = 39
+        Width = 615
+        Height = 222
+        Anchors = [akLeft, akTop, akRight]
+        BevelKind = bkTile
+        BorderStyle = bsNone
         Columns = <>
+        HideSelection = False
         ReadOnly = True
         TabOrder = 0
         ViewStyle = vsList
         OnDblClick = ListView1DblClick
+        OnSelectItem = ListView1SelectItem
+      end
+      object Panel2: TPanel
+        Left = 0
+        Top = 0
+        Width = 621
+        Height = 33
+        Align = alTop
+        BevelOuter = bvNone
+        Caption = ' '
+        TabOrder = 1
+        object Button3: TButton
+          Left = 86
+          Top = 0
+          Width = 75
+          Height = 25
+          Action = actEdit
+          TabOrder = 0
+        end
+        object Button4: TButton
+          Left = 5
+          Top = 0
+          Width = 75
+          Height = 25
+          Action = actRun
+          TabOrder = 1
+        end
       end
     end
     object tbEdition: TTabSheet
       Caption = 'Edition'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitHeight = 582
       object Splitter1: TSplitter
         Left = 0
-        Top = 388
-        Width = 854
+        Top = 442
+        Width = 621
         Height = 4
         Cursor = crVSplit
         Align = alBottom
         ExplicitTop = 369
+        ExplicitWidth = 854
       end
       object Panel1: TPanel
         Left = 0
         Top = 0
-        Width = 854
+        Width = 621
         Height = 33
         Align = alTop
         BevelOuter = bvNone
         Caption = ' '
         TabOrder = 0
         object Button1: TButton
-          Left = 4
+          Left = 5
           Top = 0
           Width = 75
           Height = 25
@@ -74,7 +119,7 @@ object frmScripts: TfrmScripts
           TabOrder = 0
         end
         object Button2: TButton
-          Left = 85
+          Left = 86
           Top = 0
           Width = 75
           Height = 25
@@ -84,24 +129,23 @@ object frmScripts: TfrmScripts
       end
       object PageControl1: TPageControl
         Left = 0
-        Top = 392
-        Width = 854
+        Top = 446
+        Width = 621
         Height = 193
         ActivePage = TabSheet1
         Align = alBottom
         TabOrder = 1
+        ExplicitTop = 389
         object TabSheet1: TTabSheet
           Caption = 'Messages'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object vstMessages: TVirtualStringTree
             Left = 0
             Top = 0
-            Width = 846
+            Width = 613
             Height = 165
             Align = alClient
+            BevelKind = bkTile
+            BorderStyle = bsNone
             Header.AutoSizeIndex = 3
             Header.Font.Charset = DEFAULT_CHARSET
             Header.Font.Color = clWindowText
@@ -133,7 +177,7 @@ object frmScripts: TfrmScripts
               end
               item
                 Position = 3
-                Width = 476
+                Width = 239
                 WideText = 'Message'
               end>
           end
@@ -141,16 +185,14 @@ object frmScripts: TfrmScripts
         object TabSheet2: TTabSheet
           Caption = 'Points de suivi'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object vstSuivis: TVirtualStringTree
             Left = 0
             Top = 0
-            Width = 846
+            Width = 613
             Height = 165
             Align = alClient
+            BevelKind = bkTile
+            BorderStyle = bsNone
             CheckImageKind = ckSystem
             Header.AutoSizeIndex = 1
             Header.Font.Charset = DEFAULT_CHARSET
@@ -178,7 +220,7 @@ object frmScripts: TfrmScripts
               end
               item
                 Position = 1
-                Width = 700
+                Width = 463
                 WideText = 'Valeur'
               end>
           end
@@ -186,16 +228,14 @@ object frmScripts: TfrmScripts
         object TabSheet3: TTabSheet
           Caption = 'Points d'#39'arr'#234't'
           ImageIndex = 2
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object vstBreakpoints: TVirtualStringTree
             Left = 0
             Top = 0
-            Width = 846
+            Width = 613
             Height = 165
             Align = alClient
+            BevelKind = bkTile
+            BorderStyle = bsNone
             CheckImageKind = ckSystem
             Header.AutoSizeIndex = 1
             Header.Font.Charset = DEFAULT_CHARSET
@@ -222,7 +262,7 @@ object frmScripts: TfrmScripts
               end
               item
                 Position = 1
-                Width = 746
+                Width = 509
                 WideText = 'Fichier'
               end>
           end
@@ -230,16 +270,14 @@ object frmScripts: TfrmScripts
         object TabSheet6: TTabSheet
           Caption = 'Sortie'
           ImageIndex = 3
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Output: TMemo
             Left = 0
             Top = 0
-            Width = 846
+            Width = 613
             Height = 165
             Align = alClient
+            BevelKind = bkTile
+            BorderStyle = bsNone
             ScrollBars = ssBoth
             TabOrder = 0
             WantTabs = True
@@ -249,14 +287,31 @@ object frmScripts: TfrmScripts
       object pcScripts: TPageControl
         Left = 0
         Top = 33
-        Width = 854
-        Height = 355
+        Width = 621
+        Height = 409
         Align = alClient
         PopupMenu = PopupMenu1
         TabOrder = 2
         OnChange = pcScriptsChange
+        ExplicitHeight = 352
       end
     end
+  end
+  object ListBox1: TListBox
+    Left = 632
+    Top = 0
+    Width = 230
+    Height = 670
+    Style = lbVirtual
+    Align = alRight
+    BevelKind = bkTile
+    BorderStyle = bsNone
+    ItemHeight = 16
+    PopupMenu = PopupMenu2
+    TabOrder = 1
+    OnData = ListBox1Data
+    OnDblClick = ListBox1DblClick
+    ExplicitHeight = 613
   end
   object SynPasSyn1: TSynPasSyn
     DelphiVersion = dvDelphi7
@@ -1167,6 +1222,26 @@ object frmScripts: TfrmScripts
       ShortCut = 8312
       OnExecute = actRunWithoutDebugExecute
     end
+    object actEdit: TAction
+      Category = 'Script'
+      Caption = 'Modifier'
+      OnExecute = actEditExecute
+    end
+    object actCreerOption: TAction
+      Category = 'Script'
+      Caption = 'Cr'#233'er une option'
+      OnExecute = actCreerOptionExecute
+    end
+    object actRetirerOption: TAction
+      Category = 'Script'
+      Caption = 'Retirer une option'
+      OnExecute = actRetirerOptionExecute
+    end
+    object actModifierOption: TAction
+      Category = 'Script'
+      Caption = 'Modifier une option'
+      OnExecute = actModifierOptionExecute
+    end
   end
   object MainMenu1: TMainMenu
     Left = 440
@@ -1325,5 +1400,18 @@ object frmScripts: TfrmScripts
     OnExecute = SynEditAutoCompleteExecute
     ShortCut = 16416
     Left = 260
+  end
+  object PopupMenu2: TPopupMenu
+    Left = 408
+    Top = 32
+    object Creruneoption1: TMenuItem
+      Action = actCreerOption
+    end
+    object Modifieruneoption1: TMenuItem
+      Action = actModifierOption
+    end
+    object Retireruneoption1: TMenuItem
+      Action = actRetirerOption
+    end
   end
 end

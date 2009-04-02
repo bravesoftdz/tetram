@@ -181,6 +181,7 @@ begin
     RegisterMethod('function Show: string;');
     RegisterMethod('procedure ResetList;');
     RegisterMethod('procedure AjoutChoix(const Categorie, Libelle, Commentaire, Data: string);');
+    RegisterMethod('procedure AjoutChoixWithThumb(const Categorie, Libelle, Commentaire, Data, URL: string);');
     RegisterProperty('Titre', 'string', iptRW);
   end;
 end;

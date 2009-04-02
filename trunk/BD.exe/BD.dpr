@@ -146,11 +146,15 @@ uses
   UfrmControlImport in 'Gestion\UfrmControlImport.pas' {frmControlImport},
   UVirtualTreeEdit in 'UVirtualTreeEdit.pas',
   UframVTEdit in 'UframVTEdit.pas' {framVTEdit: TFrame},
-  UMAJ2_1_1_2 in 'mises à jour\UMAJ2_1_1_2.pas',
+  UMAJ2_1_1_4 in 'mises à jour\UMAJ2_1_1_4.pas',
   LoadCompletImport in 'LoadCompletImport.pas',
   UfrmValidationImport in 'Scripts\UfrmValidationImport.pas' {frmValidationImport},
   UfrmScriptChoix in 'Scripts\UfrmScriptChoix.pas' {frmScriptChoix},
-  UfrmProgression in 'UfrmProgression.pas' {frmProgression};
+  UfrmProgression in 'UfrmProgression.pas' {frmProgression},
+  UScriptsHTMLFunctions in 'Scripts\UScriptsHTMLFunctions.pas',
+  UMAJ2_1_1_2 in 'mises à jour\UMAJ2_1_1_2.pas',
+  UfrmScriptEditOption in 'Scripts\UfrmScriptEditOption.pas' {frmScriptEditOption},
+  UfrmScriptOption in 'Scripts\UfrmScriptOption.pas' {frmScriptOption};
 
 {$R *.RES}
 {$R curseurs.res}

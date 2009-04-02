@@ -692,6 +692,7 @@ begin
     RegisterMethod(@TScriptChoix.Show, 'Show');
     RegisterMethod(@TScriptChoix.ResetList, 'ResetList');
     RegisterMethod(@TScriptChoix.AjoutChoix, 'AjoutChoix');
+    RegisterMethod(@TScriptChoix.AjoutChoixWithThumb, 'AjoutChoixWithThumb');
     RegisterPropertyHelper(@TScriptChoixTitre_R, @TScriptChoixTitre_W, 'Titre');
   end;
 end;

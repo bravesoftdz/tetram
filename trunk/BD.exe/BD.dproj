@@ -65,6 +65,7 @@
 			<DCC_DebugDCUs>true</DCC_DebugDCUs>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Cfg_4)'!=''">
+			<DCC_Optimize>false</DCC_Optimize>
 			<DCC_MapFile>3</DCC_MapFile>
 			<DCC_Define>FullDebugMode;ClearLogFileOnStartup;LoadDebugDLLDynamically;$(DCC_Define)</DCC_Define>
 		</PropertyGroup>
@@ -73,10 +74,10 @@
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
 			<RcCompile Include="ressources.rc">
-				<Form>&apos;ressources.res&apos;</Form>
+				<Form>ressources.res</Form>
 			</RcCompile>
 			<RcCompile Include="mises à jour\scripts_maj.rc">
-				<Form>&apos;scripts_maj.res&apos;</Form>
+				<Form>scripts_maj.res</Form>
 			</RcCompile>
 			<DCCReference Include="CommonConst.pas"/>
 			<DCCReference Include="Commun.pas"/>
@@ -326,7 +327,7 @@
 				<Form>framVTEdit</Form>
 				<DesignClass>TFrame</DesignClass>
 			</DCCReference>
-			<DCCReference Include="mises à jour\UMAJ2_1_1_2.pas"/>
+			<DCCReference Include="mises à jour\UMAJ2_1_1_4.pas"/>
 			<DCCReference Include="LoadCompletImport.pas"/>
 			<DCCReference Include="Scripts\UfrmValidationImport.pas">
 				<Form>frmValidationImport</Form>
@@ -336,6 +337,14 @@
 			</DCCReference>
 			<DCCReference Include="UfrmProgression.pas">
 				<Form>frmProgression</Form>
+			</DCCReference>
+			<DCCReference Include="Scripts\UScriptsHTMLFunctions.pas"/>
+			<DCCReference Include="mises à jour\UMAJ2_1_1_2.pas"/>
+			<DCCReference Include="Scripts\UfrmScriptEditOption.pas">
+				<Form>frmScriptEditOption</Form>
+			</DCCReference>
+			<DCCReference Include="Scripts\UfrmScriptOption.pas">
+				<Form>frmScriptOption</Form>
 			</DCCReference>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
