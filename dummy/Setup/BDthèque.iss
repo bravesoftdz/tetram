@@ -65,10 +65,13 @@ Source: ..\..\bin\intl\fbintl.conf; DestDir: {app}\Intl; Flags: ignoreversion
 Source: ..\..\bin\WebServer\Site par défaut.zip; DestDir: {app}\WebServer; Flags: ignoreversion
 Source: ..\..\bin\WebServer\BDthequeWeb.zip; DestDir: {app}\WebServer; Flags: ignoreversion
 Source: ..\..\bin\DelZip179.dll; DestDir: {app}; Flags: ignoreversion
-Source: vcredist_x86.exe; DestDir: {tmp}; Flags: deleteafterinstall
+;Source: vcredist_x86.exe; DestDir: {tmp}; Flags: deleteafterinstall
 Source: ..\..\bin\msvcp80.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\msvcr80.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\Microsoft.VC80.CRT.manifest; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\pcre3.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\scripts\*.bds; DestDir: {app}\Scripts; Flags: ignoreversion promptifolder
+Source: ..\..\bin\scripts\*.bdu; DestDir: {app}\Scripts; Flags: ignoreversion promptifolder
 
 [INI]
 Filename: {app}\BD.url; Section: InternetShortcut; Key: URL; String: http://www.tetram.org; Tasks: interneticon
@@ -82,16 +85,16 @@ Name: {userdesktop}\BDthèque; Filename: {app}\BD.exe; Tasks: desktopicon; IconIn
 [Run]
 Filename: {app}\BD.exe; Description: Lancer BDthèque; Flags: nowait postinstall skipifsilent
 Filename: {app}\What's New.txt; Flags: nowait shellexec skipifdoesntexist postinstall skipifsilent
-Filename: {tmp}\vcredist_x86.exe; Flags: skipifdoesntexist; Parameters: /q; MinVersion: 0,5.01.2600; OnlyBelowVersion: 0,5.01.2600sp1
-Filename: {tmp}\vcredist_x86.exe; Flags: skipifdoesntexist; Parameters: /q; MinVersion: 0,5.02.3790; OnlyBelowVersion: 0,5.02.3790
+;Filename: {tmp}\vcredist_x86.exe; Flags: skipifdoesntexist; Parameters: /q; MinVersion: 0,5.01.2600; OnlyBelowVersion: 0,5.01.2600sp1
+;Filename: {tmp}\vcredist_x86.exe; Flags: skipifdoesntexist; Parameters: /q; MinVersion: 0,5.02.3790; OnlyBelowVersion: 0,5.02.3790
 
 [UninstallDelete]
 Type: files; Name: {app}\BD.url
 Type: files; Name: {app}\BD.ini
 Type: files; Name: {app}\*.lck
 Type: files; Name: {app}\firebird.log
-Type: files; Name: {app}\msvcr71.dll
-Type: files; Name: {app}\msvcp71.dll
+;Type: files; Name: {app}\msvcr71.dll
+;Type: files; Name: {app}\msvcp71.dll
 Type: filesandordirs; Name: {app}\WebServer
 
 [LangOptions]
