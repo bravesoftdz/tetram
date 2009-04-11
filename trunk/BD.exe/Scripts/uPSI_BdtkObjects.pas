@@ -16,7 +16,7 @@ implementation
 
 uses
   uPSC_BdtkObjects,
-  uPSR_BdtkObjects;
+  uPSR_BdtkObjects, UdmScripts;
 
 { TPSImport_LoadComplet }
 
@@ -27,7 +27,7 @@ end;
 
 procedure TPSImport_BdtkObjects.ExecImport1(CompExec: TPSScript; const ri: TPSRuntimeClassImporter);
 begin
-  RIRegister_BdtkObjects(ri);
+  RIRegister_BdtkObjects(ri, TdmScripts(CompExec.Owner).AlbumToUpdate);
 end;
 
 end.

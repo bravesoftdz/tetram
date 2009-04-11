@@ -9,6 +9,7 @@ uses
 
 type
   PInfo_Gestion = ^RInfo_Gestion;
+
   RInfo_Gestion = record
     Mode: TVirtualMode;
     ListeHint, AjoutHint, ModifHint, SuppHint: string;
@@ -65,8 +66,7 @@ type
   protected
   private
     { Déclarations privées }
-    GestionAchatAlbum, GestionAlbum, GestionAuteur, GestionGenre, GestionCollection,
-      GestionEmprunteur, GestionEditeur, GestionSerie, GestionParaBD, GestionAchatParaBD: RInfo_Gestion;
+    GestionAchatAlbum, GestionAlbum, GestionAuteur, GestionGenre, GestionCollection, GestionEmprunteur, GestionEditeur, GestionSerie, GestionParaBD, GestionAchatParaBD: RInfo_Gestion;
     LastButton: TSpeedButton;
     procedure AssignIG(var IG: RInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; const Filtre: string = ''; Acheter: TActionGestionAchat = nil; Importer: Boolean = False; Exporter: Boolean = False);
   public
@@ -79,7 +79,8 @@ var
 
 implementation
 
-uses Commun, CommonConst, Procedures, UfrmWizardImport, UHistorique;
+uses
+  Commun, CommonConst, Procedures, UfrmWizardImport, UHistorique;
 
 const
   HintListeAlbums = 'Liste des albums';
@@ -157,16 +158,26 @@ function TfrmGestions.GestionCourante(SB: TSpeedButton = nil): PInfo_Gestion;
   end;
 
 begin
-  if test(Result, btAchatsAlbums, SB, GestionAchatAlbum) then Exit;
-  if test(Result, btAlbums, SB, GestionAlbum) then Exit;
-  if test(Result, btSeries, SB, GestionSerie) then Exit;
-  if test(Result, btAuteurs, SB, GestionAuteur) then Exit;
-  if test(Result, btEmprunteurs, SB, GestionEmprunteur) then Exit;
-  if test(Result, btEditeurs, SB, GestionEditeur) then Exit;
-  if test(Result, btCollections, SB, GestionCollection) then Exit;
-  if test(Result, btGenre, SB, GestionGenre) then Exit;
-  if test(Result, btParaBD, SB, GestionParaBD) then Exit;
-  if test(Result, btAchatsParaBD, SB, GestionAchatParaBD) then Exit;
+  if test(Result, btAchatsAlbums, SB, GestionAchatAlbum) then
+    Exit;
+  if test(Result, btAlbums, SB, GestionAlbum) then
+    Exit;
+  if test(Result, btSeries, SB, GestionSerie) then
+    Exit;
+  if test(Result, btAuteurs, SB, GestionAuteur) then
+    Exit;
+  if test(Result, btEmprunteurs, SB, GestionEmprunteur) then
+    Exit;
+  if test(Result, btEditeurs, SB, GestionEditeur) then
+    Exit;
+  if test(Result, btCollections, SB, GestionCollection) then
+    Exit;
+  if test(Result, btGenre, SB, GestionGenre) then
+    Exit;
+  if test(Result, btParaBD, SB, GestionParaBD) then
+    Exit;
+  if test(Result, btAchatsParaBD, SB, GestionAchatParaBD) then
+    Exit;
   Result := @GestionAlbum;
 end;
 
@@ -235,7 +246,8 @@ var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  if Sender = LastButton then Exit;
+  if Sender = LastButton then
+    Exit;
   LastButton := TSpeedButton(Sender);
   LastButton.Down := True;
   with GestionCourante^ do
@@ -283,11 +295,11 @@ end;
 procedure TfrmGestions.btImporterClick(Sender: TObject);
 begin
   with TfrmWizardImport.Create(nil) do
-  try
-    ShowModal;
-  finally
-    Free;
-  end;
+    try
+      ShowModal;
+    finally
+      Free;
+    end;
 end;
 
 procedure TfrmGestions.FrameRechercheRapide1edSearchChange(Sender: TObject);

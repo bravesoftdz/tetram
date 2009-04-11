@@ -16,6 +16,7 @@ procedure MAJPrevisionsSorties;
 procedure MAJPrevisionsAchats;
 procedure MAJRecherche(const Reference: TGUID; TypeSimple: Integer = -1; Stream: TMemoryStream = nil);
 function ZoomCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID): Boolean;
+function MAJScript(Data: TAlbumComplet): Boolean;
 
 function SaisieMouvementAlbum(const MvtID_Album, MvtID_Edition: TGUID; MvtPret: Boolean; const MvtID_Emprunteur: string = sGUID_NULL): Boolean;
 function SaisieMouvementEmprunteur(const MvtID_Emprunteur: TGUID; const MvtID_Album: TEditionsEmpruntees): Boolean;
@@ -26,7 +27,7 @@ uses
   CommonConst, UfrmStock, UfrmFond, DB, StdCtrls, UfrmSeriesIncompletes,
   UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmConsultationEmprunteur, UfrmSaisieEmpruntAlbum, UfrmSaisieEmpruntEmprunteur, UfrmRecherche,
   UfrmZoomCouverture, UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique,
-  UfrmConsultationParaBD, UfrmConsultationSerie;
+  UfrmConsultationParaBD, UfrmConsultationSerie, UfrmScripts;
 
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;
 var
@@ -116,17 +117,19 @@ end;
 function SaisieMouvementAlbum(const MvtID_Album, MvtID_Edition: TGUID; MvtPret: Boolean; const MvtID_Emprunteur: string): Boolean;
 begin
   Result := False;
-  if TGlobalVar.Mode_en_cours <> mdConsult then Exit;
+  if TGlobalVar.Mode_en_cours <> mdConsult then
+    Exit;
 
-  with TfrmSaisieEmpruntAlbum.Create(frmFond) do try
-    pret.Checked := MvtPret;
-    ID_Album := MvtID_Album;
-    ID_Edition := MvtID_Edition;
-    ID_Emprunteur := StringToGUID(MvtID_Emprunteur);
-    Result := ShowModal = mrOk;
-  finally
-    Free;
-  end;
+  with TfrmSaisieEmpruntAlbum.Create(frmFond) do
+    try
+      pret.Checked := MvtPret;
+      ID_Album := MvtID_Album;
+      ID_Edition := MvtID_Edition;
+      ID_Emprunteur := StringToGUID(MvtID_Emprunteur);
+      Result := ShowModal = mrOk;
+    finally
+      Free;
+    end;
 end;
 
 function SaisieMouvementEmprunteur(const MvtID_Emprunteur: TGUID; const MvtID_Album: TEditionsEmpruntees): Boolean;
@@ -134,15 +137,17 @@ var
   i: Integer;
 begin
   Result := False;
-  if TGlobalVar.Mode_en_cours <> mdConsult then Exit;
-  with TfrmSaisieEmpruntEmprunteur.Create(frmFond) do try
-    ID_Emprunteur := MvtID_Emprunteur;
-    for i := Low(MvtID_Album) to High(MvtID_Album) do
-      AjouteAlbum(MvtID_Album[i][0], MvtID_Album[i][1]);
-    Result := ShowModal = mrOk;
-  finally
-    Free;
-  end;
+  if TGlobalVar.Mode_en_cours <> mdConsult then
+    Exit;
+  with TfrmSaisieEmpruntEmprunteur.Create(frmFond) do
+    try
+      ID_Emprunteur := MvtID_Emprunteur;
+      for i := Low(MvtID_Album) to High(MvtID_Album) do
+        AjouteAlbum(MvtID_Album[i][0], MvtID_Album[i][1]);
+      Result := ShowModal = mrOk;
+    finally
+      Free;
+    end;
 end;
 
 procedure _MAJFenetre(FormClass: TFormClass);
@@ -180,9 +185,11 @@ var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  if not (TGlobalVar.Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  if not (TGlobalVar.Mode_en_cours in [mdEdit, mdConsult]) then
+    Exit;
   FDest := TFrmRecherche.Create(frmFond);
-  with FDest do begin
+  with FDest do
+  begin
     // le TTreeView est une merde! si on fait la création de noeud avec Data
     // avant l'assignation du Handle, les Data risques de partir dans la nature
 
@@ -195,11 +202,13 @@ begin
 
     frmFond.SetChildForm(FDest);
 
-    if Assigned(Stream) and (Stream.Size > 0) then begin
+    if Assigned(Stream) and (Stream.Size > 0) then
+    begin
       LoadRechFromStream(Stream);
       btnRecherche.Click;
     end
-    else if LightComboCheck1.ValidValue(TypeSimple) then begin
+    else if LightComboCheck1.ValidValue(TypeSimple) then
+    begin
       LightComboCheck1.Value := TypeSimple;
       VTPersonnes.CurrentValue := Reference;
       SpeedButton1Click(nil);
@@ -216,11 +225,38 @@ var
   FDest: TFrmZoomCouverture;
 begin
   FDest := TFrmZoomCouverture.Create(frmFond);
-  with FDest do try
-    Result := LoadCouverture(isParaBD, ID_Item, ID_Couverture);
-    Historique.SetDescription(FDest.Caption);
+  with FDest do
+    try
+      Result := LoadCouverture(isParaBD, ID_Item, ID_Couverture);
+      Historique.SetDescription(FDest.Caption);
+    finally
+      frmFond.SetChildForm(FDest);
+    end;
+end;
+
+function MAJScript(Data: TAlbumComplet): Boolean;
+var
+  FDest: TfrmScripts;
+  isUpdate: Boolean;
+//  hg: IHourGlass;
+begin
+  // hg := THourGlass.Create;
+  isUpdate := False;
+  FDest := TfrmScripts.Create(frmFond);
+  try
+    FDest.dmScripts.AlbumToImport := Data;
+    Result := True;
+
+    // AlbumToUpdate pourrait être différent dans le finally
+    isUpdate := FDest.dmScripts.AlbumToUpdate;
+    FDest.framBoutons1.Visible := isUpdate;
+    if isUpdate then
+      Result := frmFond.SetModalChildForm(FDest) = mrOk
+    else
+      frmFond.SetChildForm(FDest);
   finally
-    frmFond.SetChildForm(FDest);
+    if isUpdate then
+      FDest.Free;
   end;
 end;
 

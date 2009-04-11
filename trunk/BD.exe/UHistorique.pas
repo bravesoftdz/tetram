@@ -48,6 +48,7 @@ type
     Action: TActionConsultation;
     ReferenceGUID, ReferenceGUID2: TGUID;
     Reference, Reference2: Integer;
+    Data: Pointer;
     Description: string;
     Stream: TMemoryStream;
 
@@ -398,7 +399,11 @@ begin
       fcRecreateToolBar: frmFond.RechargeToolBar;
       fcPrevisionsAchats: MAJPrevisionsAchats;
       fcRefreshRepertoire: frmFond.actActualiseRepertoire.Execute;
-      fcScripts: frmFond.SetChildForm(TForm(Consult.Reference));
+      fcScripts:
+        if Assigned(Consult.GestionCallback) then
+          doCallback := MAJScript(Consult.GestionVTV)
+        else
+          MAJScript(nil);
       fcConflitImport: frmFond.SetModalChildForm(TForm(Consult.Reference));
 
       fcGestionAjout:
@@ -470,11 +475,13 @@ begin
   Description := Consult.Description;
   Stream.Position := 0;
   Stream.CopyFrom(Consult.Stream, 0);
+  Data := Consult.Data;
 end;
 
 constructor TConsult.Create;
 begin
   Stream := TMemoryStream.Create;
+  Data := nil;
 end;
 
 destructor TConsult.Destroy;

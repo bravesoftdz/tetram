@@ -431,7 +431,7 @@ procedure TfrmValidationImport.SetAlbum(Value: TAlbumComplet);
 
   procedure LoadValue(Value: TStrings; Ctrl: TMemo; Chk: TCheckBox); overload;
   begin
-    Ctrl.Lines.Text := Value.Text;
+    Ctrl.Lines.Assign(Value);
     Chk.Checked := Value.Text <> '';
     ChangeState(Chk, Ctrl);
   end;

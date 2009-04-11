@@ -4,9 +4,9 @@ interface
 
 implementation
 
-uses JvUIB, Updates;
+uses UIB, Updates;
 
-procedure MAJ1_2_3_3(Query: TJvUIBScript);
+procedure MAJ1_2_3_3(Query: TUIBScript);
 begin
   with Query do begin
     Script.Clear;
@@ -86,7 +86,7 @@ begin
 end;
 
 initialization
-  RegisterUpdate('1.2.3.3', @MAJ1_2_3_3);
+  RegisterFBUpdate('1.2.3.3', @MAJ1_2_3_3);
 
 end.
 

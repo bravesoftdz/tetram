@@ -3,7 +3,7 @@ unit TypeRec;
 interface
 
 uses
-  Windows, SysUtils, DB, Classes, ComCtrls, UIB, StdCtrls, Commun, UMetaData;
+  Windows, SysUtils, DB, Classes, ComCtrls, UIB, StdCtrls, Commun, UMetaData, SyncObjs, Generics.Collections;
 
 //  IMPORTANT: Ref doit TOUJOURS être le premier champ des records
 //  Les strings DOIVENT être limités pour pouvoir utiliser CopyMemory(Pd, Ps, SizeOf(Ps^));
@@ -13,9 +13,15 @@ type
 
   TBasePointeur = class(TObject)
   private
-    class function NonNull(Query: TUIBQuery; const Champ: string; Default: Integer): Integer; overload;
-    class function NonNull(Query: TUIBQuery; const Champ: string): TGUID; overload;
-
+    class var FPreparedQuery: TUIBQuery;
+    class var cs: TCriticalSection;
+    class procedure GetFieldIndices; virtual;
+    class function GetFieldIndex(const Name: string): Integer;
+  protected
+    class function NonNull(Query: TUIBQuery; const Champ: string; Default: Integer): Integer; overload; inline;
+    class function NonNull(Query: TUIBQuery; const Champ: string): TGUID; overload; inline;
+    class function NonNull(Query: TUIBQuery; Champ, Default: Integer): Integer; overload; inline;
+    class function NonNull(Query: TUIBQuery; Champ: Integer): TGUID; overload; inline;
   public
     ID: TGUID;
 
@@ -33,6 +39,11 @@ type
     procedure Clear; virtual;
     procedure Fill(Query: TUIBQuery); virtual; abstract;
     function ChaineAffichage(dummy: Boolean = True): string; virtual; abstract;
+
+    class procedure FillList(List: TList<TBasePointeur>; Query: TUIBQuery); overload;
+    class procedure FillList(List: TList; Query: TUIBQuery); overload;
+    class procedure Prepare(Q: TUIBQuery);
+    class procedure Unprepare;
   end;
 
   TCouverture = class(TBasePointeur)
@@ -113,6 +124,23 @@ type
   end;
 
   TAlbum = class(TBasePointeur)
+  private
+    class var IndexID_Album: Integer;
+    class var IndexTome: Integer;
+    class var IndexTomeDebut: Integer;
+    class var IndexTomeFin: Integer;
+    class var IndexTitreAlbum: Integer;
+    class var IndexID_Serie: Integer;
+    class var IndexTitreSerie: Integer;
+    class var IndexID_Editeur: Integer;
+    class var IndexNomEditeur: Integer;
+    class var IndexAnneeParution, IndexMoisParution: Integer;
+    class var IndexStock: Integer;
+    class var IndexIntegrale: Integer;
+    class var IndexHorsSerie: Integer;
+    class var IndexAchat: Integer;
+    class var IndexComplet: Integer;
+    class procedure GetFieldIndices; override;
   public
     Tome: Integer;
     TomeDebut: Integer;
@@ -361,6 +389,87 @@ begin
   end;
 end;
 
+class function TBasePointeur.NonNull(Query: TUIBQuery; Champ, Default: Integer): Integer;
+begin
+  try
+    if Query.Fields.IsNull[Champ] then
+      Result := Default
+    else
+      Result := Query.Fields.AsInteger[Champ];
+  except
+    Result := Default;
+  end;
+end;
+
+class function TBasePointeur.NonNull(Query: TUIBQuery; Champ: Integer): TGUID;
+begin
+  try
+    if Query.Fields.IsNull[Champ] then
+      Result := GUID_NULL
+    else
+      Result := StringToGUID(Query.Fields.AsString[Champ]);
+  except
+    Result := GUID_NULL;
+  end;
+end;
+
+class procedure TBasePointeur.GetFieldIndices;
+begin
+  Assert(FPreparedQuery <> nil, 'Doit être préparé avant');
+end;
+
+class function TBasePointeur.GetFieldIndex(const Name: string): Integer;
+begin
+  for Result := 0 to Pred(FPreparedQuery.Fields.FieldCount) do
+    if SameText(FPreparedQuery.Fields.AliasName[Result], Name) then
+      Exit;
+  Result := -1;
+end;
+
+class procedure TBasePointeur.FillList(List: TList<TBasePointeur>; Query: TUIBQuery);
+begin
+  Prepare(Query);
+  try
+    while not Query.Eof do
+    begin
+      List.Add(Make(Query));
+      Query.Next;
+    end;
+  finally
+    Unprepare;
+  end;
+end;
+
+class procedure TBasePointeur.FillList(List: TList; Query: TUIBQuery);
+begin
+  Prepare(Query);
+  try
+    while not Query.Eof do
+    begin
+      List.Add(Make(Query));
+      Query.Next;
+    end;
+  finally
+    Unprepare;
+  end;
+end;
+
+class procedure TBasePointeur.Prepare(Q: TUIBQuery);
+begin
+  Assert(FPreparedQuery = nil, 'Ne peut pas être préparée plusieurs fois');
+  if not Assigned(cs) then
+    cs := TCriticalSection.Create;
+  cs.Enter;
+  FPreparedQuery := Q;
+  GetFieldIndices;
+end;
+
+class procedure TBasePointeur.Unprepare;
+begin
+  FPreparedQuery := nil;
+  cs.Release;
+end;
+
 { TConversion }
 
 function TConversion.ChaineAffichage(dummy: Boolean = True): string;
@@ -589,49 +698,79 @@ end;
 procedure TAlbum.Fill(Query: TUIBQuery);
 begin
   inherited;
-  ID := NonNull(Query, 'ID_Album');
-  Titre := Query.Fields.ByNameAsString['TitreAlbum'];
-  Tome := Query.Fields.ByNameAsInteger['Tome'];
-  TomeDebut := Query.Fields.ByNameAsInteger['TomeDebut'];
-  TomeFin := Query.Fields.ByNameAsInteger['TomeFin'];
-  ID_Serie := NonNull(Query, 'ID_Serie');
-  Integrale := Query.Fields.ByNameAsBoolean['Integrale'];
-  HorsSerie := Query.Fields.ByNameAsBoolean['HorsSerie'];
-  ID_Editeur := NonNull(Query, 'ID_Editeur');
-  try
-    Serie := Query.Fields.ByNameAsString['TitreSerie'];
-  except
-    Serie := '';
-  end;
-  try
-    Editeur := Query.Fields.ByNameAsString['NomEditeur'];
-  except
-    Editeur := '';
-  end;
-  try
-    MoisParution := Query.Fields.ByNameAsInteger['MoisParution'];
-  except
-    MoisParution := 0;
-  end;
-  try
-    AnneeParution := Query.Fields.ByNameAsInteger['AnneeParution'];
-  except
-    AnneeParution := 0;
-  end;
-  try
-    Stock := Query.Fields.ByNameAsBoolean['Stock'];
-  except
-    Stock := True;
-  end;
-  try
-    Achat := Query.Fields.ByNameAsBoolean['Achat'];
-  except
-    Achat := False;
-  end;
-  try
-    Complet := Query.Fields.ByNameAsBoolean['Complet'];
-  except
-    Complet := True;
+  Serie := '';
+  Editeur := '';
+  MoisParution := 0;
+  AnneeParution := 0;
+  Stock := True;
+  Achat := False;
+  Complet := True;
+
+  if Assigned(FPreparedQuery) then
+  begin
+    ID := NonNull(Query, IndexID_Album);
+    Titre := Query.Fields.AsString[IndexTitreAlbum];
+    Tome := Query.Fields.AsInteger[IndexTome];
+    TomeDebut := Query.Fields.AsInteger[IndexTomeDebut];
+    TomeFin := Query.Fields.AsInteger[IndexTomeFin];
+    ID_Serie := NonNull(Query, IndexID_Serie);
+    Integrale := Query.Fields.AsBoolean[IndexIntegrale];
+    HorsSerie := Query.Fields.AsBoolean[IndexHorsSerie];
+    ID_Editeur := NonNull(Query, IndexID_Editeur);
+    if IndexTitreSerie <> -1 then
+      Serie := Query.Fields.AsString[IndexTitreSerie];
+    if IndexNomEditeur <> -1 then
+      Editeur := Query.Fields.AsString[IndexNomEditeur];
+    if IndexMoisParution <> -1 then
+      MoisParution := Query.Fields.AsInteger[IndexMoisParution];
+    if IndexAnneeParution <> -1 then
+      AnneeParution := Query.Fields.AsInteger[IndexAnneeParution];
+    if IndexStock <> -1 then
+      Stock := Query.Fields.AsBoolean[IndexStock];
+    if IndexAchat <> -1 then
+      Achat := Query.Fields.AsBoolean[IndexAchat];
+    if IndexComplet <> -1 then
+      Complet := Query.Fields.AsBoolean[IndexComplet];
+  end
+  else
+  begin
+    ID := NonNull(Query, 'ID_Album');
+    Titre := Query.Fields.ByNameAsString['TitreAlbum'];
+    Tome := Query.Fields.ByNameAsInteger['Tome'];
+    TomeDebut := Query.Fields.ByNameAsInteger['TomeDebut'];
+    TomeFin := Query.Fields.ByNameAsInteger['TomeFin'];
+    ID_Serie := NonNull(Query, 'ID_Serie');
+    Integrale := Query.Fields.ByNameAsBoolean['Integrale'];
+    HorsSerie := Query.Fields.ByNameAsBoolean['HorsSerie'];
+    ID_Editeur := NonNull(Query, 'ID_Editeur');
+    try
+      Serie := Query.Fields.ByNameAsString['TitreSerie'];
+    except
+    end;
+    try
+      Editeur := Query.Fields.ByNameAsString['NomEditeur'];
+    except
+    end;
+    try
+      MoisParution := Query.Fields.ByNameAsInteger['MoisParution'];
+    except
+    end;
+    try
+      AnneeParution := Query.Fields.ByNameAsInteger['AnneeParution'];
+    except
+    end;
+    try
+      Stock := Query.Fields.ByNameAsBoolean['Stock'];
+    except
+    end;
+    try
+      Achat := Query.Fields.ByNameAsBoolean['Achat'];
+    except
+    end;
+    try
+      Complet := Query.Fields.ByNameAsBoolean['Complet'];
+    except
+    end;
   end;
 end;
 
@@ -681,6 +820,27 @@ end;
 class function TAlbum.Make(Query: TUIBQuery): TAlbum;
 begin
   Result := TAlbum(inherited Make(Query));
+end;
+
+class procedure TAlbum.GetFieldIndices;
+begin
+  inherited;
+  IndexID_Album := GetFieldIndex('ID_Album');
+  IndexTitreAlbum := GetFieldIndex('TitreAlbum');
+  IndexTome := GetFieldIndex('Tome');
+  IndexTomeDebut := GetFieldIndex('TomeDebut');
+  IndexTomeFin := GetFieldIndex('TomeFin');
+  IndexID_Serie := GetFieldIndex('ID_Serie');
+  IndexIntegrale := GetFieldIndex('Integrale');
+  IndexHorsSerie := GetFieldIndex('HorsSerie');
+  IndexID_Editeur := GetFieldIndex('ID_Editeur');
+  IndexTitreSerie := GetFieldIndex('TitreSerie');
+  IndexNomEditeur := GetFieldIndex('NomEditeur');
+  IndexMoisParution := GetFieldIndex('MoisParution');
+  IndexAnneeParution := GetFieldIndex('AnneeParution');
+  IndexStock := GetFieldIndex('Stock');
+  IndexAchat := GetFieldIndex('Achat');
+  IndexComplet := GetFieldIndex('Complet');
 end;
 
 { TCollection }
@@ -1124,6 +1284,12 @@ class function TParaBD.Make(Query: TUIBQuery): TParaBD;
 begin
   Result := TParaBD(inherited Make(Query));
 end;
+
+initialization
+  TBasePointeur.cs := nil;
+
+finalization
+  TBasePointeur.cs.Free;
 
 end.
 

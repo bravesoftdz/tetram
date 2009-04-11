@@ -78,7 +78,6 @@ type
     procedure Clear; override;
     procedure SaveToDatabase(UseTransaction: TUIBTransaction); override;
   published
-  published
     property ID_Editeur: TGUID read FID write FID;
     property NomEditeur: string read FNomEditeur write SetNomEditeur;
     property SiteWeb: string read FSiteWeb write SetSiteWeb;
@@ -92,10 +91,10 @@ type
     procedure SetID_Editeur(const Value: TGUID); inline;
     procedure SetNomCollection(const Value: string); inline;
   public
-    constructor Create; override;
     destructor Destroy; override;
     procedure Fill(const Reference: TGUID); override;
     procedure Clear; override;
+    procedure PrepareInstance; override;
     procedure SaveToDatabase(UseTransaction: TUIBTransaction); override;
   published
     property ID_Collection: TGUID read FID write FID;
@@ -337,6 +336,7 @@ type
     procedure Acheter(Prevision: Boolean);
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
+    procedure Fusionne(Dest: TAlbumComplet);
   published
     property Complet: Boolean read FComplet;
     property ID_Album: TGUID read FID write FID;
@@ -847,6 +847,8 @@ begin
         SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL, NULL)';
         Params.AsString[0] := GUIDToString(Reference);
         Open;
+        TAuteur.Prepare(q);
+        try
         while not Eof do
         begin
           case TMetierAuteur(Fields.ByNameAsInteger['Metier']) of
@@ -856,6 +858,9 @@ begin
           end;
           Next;
         end;
+        finally
+          TAuteur.Unprepare;
+        end;
 
         Self.Editions.Fill(Self.ID_Album);
       end;
@@ -863,6 +868,46 @@ begin
       q.Transaction.Free;
       q.Free;
     end;
+end;
+
+
+procedure TAlbumComplet.Fusionne(Dest: TAlbumComplet);
+var
+  DefaultAlbum: TAlbumComplet;
+begin
+  DefaultAlbum := TAlbumComplet.Create;
+  try
+    //Album
+    if SameText(Titre, DefaultAlbum.Titre) then
+      Dest.Titre := Titre;
+    if MoisParution = DefaultAlbum.MoisParution then
+      Dest.MoisParution := MoisParution;
+    if AnneeParution = DefaultAlbum.AnneeParution then
+      Dest.AnneeParution := AnneeParution;
+    if Tome = DefaultAlbum.Tome then
+      Dest.Tome := Tome;
+    if TomeDebut = DefaultAlbum.TomeDebut then
+      Dest.TomeDebut := TomeDebut;
+    if TomeFin = DefaultAlbum.TomeFin then
+      Dest.TomeFin := TomeFin;
+    if HorsSerie = DefaultAlbum.HorsSerie then
+      Dest.HorsSerie := HorsSerie;
+    if Integrale = DefaultAlbum.Integrale then
+      Dest.Integrale := Integrale;
+    // scenaristes
+    // dessinateurs
+    // coloristes
+    if SameText(Sujet.Text, DefaultAlbum.Sujet.Text) then
+      Dest.Sujet.Assign(Sujet);
+    if SameText(Notes.Text, DefaultAlbum.Notes.Text) then
+      Dest.Notes.Assign(Notes);
+
+    //Série
+    if IsEqualGUID(ID_Serie, DefaultAlbum.ID_Serie) then
+      Dest.ID_Serie := ID_Serie;
+  finally
+    DefaultAlbum.Free;
+  end;
 end;
 
 function TAlbumComplet.GetID_Serie: TGUID;
@@ -1171,11 +1216,7 @@ begin
         SQL.Add('WHERE ID_Edition = ? ORDER BY c.categorieimage NULLS FIRST, c.Ordre');
         Params.AsString[0] := GUIDToString(Self.ID_Edition);
         Open;
-        while not Eof do
-        begin
-          Self.Couvertures.Add(TCouverture.Make(q));
-          Next;
-        end;
+        TCouverture.FillList(TList<TBasePointeur>(Self.Couvertures), q);
       end;
     finally
       q.Transaction.Free;
@@ -1337,11 +1378,11 @@ begin
               PC.NewNom := SearchNewFileName(RepImages, ExtractFileName(PC.NewNom), True);
               q6.Params.ByNameAsString['Chemin'] := RepImages;
               q6.Params.ByNameAsString['Fichier'] := PC.NewNom;
-                Stream := GetCouvertureStream(PC.OldNom, -1, -1, False);
+              Stream := GetCouvertureStream(PC.OldNom, -1, -1, False);
               try
                 q6.ParamsSetBlob('BlobContent', Stream);
               finally
-                  Stream.Free;
+                Stream.Free;
               end;
               q6.Open;
 
@@ -1358,11 +1399,11 @@ begin
               q2.Params.ByNameAsString['ID_Album'] := GUIDToString(ID_Album);
               q2.Params.ByNameAsString['FichierCouverture'] := ChangeFileExt(ExtractFileName(PC.NewNom), '');
               q2.Params.ByNameAsInteger['Ordre'] := i;
-                Stream := GetJPEGStream(PC.NewNom);
+              Stream := GetJPEGStream(PC.NewNom);
               try
                 q2.ParamsSetBlob('IMAGECOUVERTURE', Stream);
               finally
-                  Stream.Free;
+                Stream.Free;
               end;
               q2.Params.ByNameAsInteger['CategorieImage'] := PC.Categorie;
               q2.ExecSQL;
@@ -1787,11 +1828,7 @@ begin
         if not IsEqualGUID(FIdAuteur, GUID_NULL) then
           Params.AsString[1] := GUIDToString(FIdAuteur);
         Open;
-        while not Eof do
-        begin
-          Self.Albums.Add(TAlbum.Make(q));
-          Next;
-        end;
+        TAlbum.FillList(TList<TBasePointeur>(Self.Albums), q);
 
         Close;
         SQL.Text := 'select id_parabd, titreparabd, id_serie, titreserie, achat, complet, scategorie from vw_liste_parabd';
@@ -1806,11 +1843,7 @@ begin
         if not IsEqualGUID(FIdAuteur, GUID_NULL) then
           Params.AsString[1] := GUIDToString(FIdAuteur);
         Open;
-        while not Eof do
-        begin
-          Self.ParaBD.Add(TParaBD.Make(q));
-          Next;
-        end;
+        TParaBD.FillList(TList<TBasePointeur>(Self.ParaBD), q);
 
         Close;
         SQL.Text := 'select g.id_genre, genre ' + 'from genreseries s inner join genres g on g.id_genre = s.id_genre ' + 'where id_serie = ?' + 'order by genre';
@@ -1826,14 +1859,19 @@ begin
         SQL.Text := 'select * from proc_auteurs(null, ?, null)';
         Params.AsString[0] := GUIDToString(Reference);
         Open;
-        while not Eof do
-        begin
-          case TMetierAuteur(Fields.ByNameAsInteger['metier']) of
-            maScenariste: Self.Scenaristes.Add(TAuteur.Make(q));
-            maDessinateur: Self.Dessinateurs.Add(TAuteur.Make(q));
-            maColoriste: Self.Coloristes.Add(TAuteur.Make(q));
+        TAuteur.Prepare(q);
+        try
+          while not Eof do
+          begin
+            case TMetierAuteur(Fields.ByNameAsInteger['metier']) of
+              maScenariste: Self.Scenaristes.Add(TAuteur.Make(q));
+              maDessinateur: Self.Dessinateurs.Add(TAuteur.Make(q));
+              maColoriste: Self.Coloristes.Add(TAuteur.Make(q));
+            end;
+            Next;
           end;
-          Next;
+        finally
+          TAuteur.Unprepare;
         end;
       end;
     finally
@@ -2205,11 +2243,7 @@ begin
       end;
       SQL.Add('GROUP BY g.Genre, g.ID_Genre ORDER BY 1 desc');
       Open;
-      while not (EOF) do
-      begin
-        Stats.ListGenre.Add(TGenre.Make(Q));
-        Next;
-      end;
+      TGenre.FillList(TList<TBasePointeur>(Stats.ListGenre), Q);
 
       Close;
       SQL.Text := 'SELECT Sum(Prix) AS SumPrix, COUNT(Prix) AS CountPrix, Min(Prix) AS MinPrix, Max(Prix) AS MaxPrix FROM Editions';
@@ -3016,11 +3050,7 @@ begin
         SQL.Text := 'SELECT * FROM PROC_AUTEURS(NULL, NULL, ?)';
         Params.AsString[0] := GUIDToString(Reference);
         Open;
-        while not Eof do
-        begin
-          Self.Auteurs.Add(TAuteur.Make(q));
-          Next;
-        end;
+        TAuteur.FillList(TList<TBasePointeur>(Self.Auteurs), q);
 
         Self.Serie.Fill(serie);
       end;
@@ -3192,12 +3222,6 @@ begin
   Editeur.Clear;
 end;
 
-constructor TCollectionComplete.Create;
-begin
-  inherited Create;
-  FEditeur := TEditeur.Create;
-end;
-
 destructor TCollectionComplete.Destroy;
 begin
   FreeAndNil(FEditeur);
@@ -3235,6 +3259,12 @@ end;
 function TCollectionComplete.GetID_Editeur: TGUID;
 begin
   Result := Editeur.ID;
+end;
+
+procedure TCollectionComplete.PrepareInstance;
+begin
+  inherited;
+  FEditeur := TEditeur.Create;
 end;
 
 procedure TCollectionComplete.SaveToDatabase(UseTransaction: TUIBTransaction);

@@ -25,6 +25,7 @@ type
     procedure SetMode(const Value: TVirtualMode);
   public
     ObjetImport: TObjetComplet;
+    SelectedValue: TGUID;
     function ShowModalEx: TModalResult;
   published
     property Mode: TVirtualMode read GetMode write SetMode;
@@ -93,13 +94,18 @@ function TfrmControlImport.ShowModalEx: TModalResult;
   procedure DoEdit(EditProc: TActionGestionModif);
   begin
     if EditProc(framVTEdit1.VTEdit.PopupWindow.TreeView) then
-    // on force l'édit à avoir le nouvel intitulé
+      // on force l'édit à avoir le nouvel intitulé
       framVTEdit1.CurrentValue := framVTEdit1.CurrentValue;
   end;
 
-  procedure DoAppend(EditProc: TActionGestionAdd);
+  procedure DoAppend2(AppendProc: TActionGestionAddWithRef);
   begin
-    framVTEdit1.CurrentValue := EditProc(framVTEdit1.VTEdit.PopupWindow.TreeView, Label2.Caption, ObjetImport);
+    framVTEdit1.CurrentValue := AppendProc(framVTEdit1.VTEdit.PopupWindow.TreeView, framVTEdit1.ParentValue, Label2.Caption);
+  end;
+
+  procedure DoAppend(AppendProc: TActionGestionAdd);
+  begin
+    framVTEdit1.CurrentValue := AppendProc(framVTEdit1.VTEdit.PopupWindow.TreeView, Label2.Caption, ObjetImport);
   end;
 
 begin
@@ -136,7 +142,7 @@ begin
           vmAlbumsSerie:
             DoAppend(@AjouterAlbums);
           vmCollections:
-            DoAppend(@AjouterCollections);
+            DoAppend2(@AjouterCollections2);
           vmEditeurs:
             DoAppend(@AjouterEditeurs);
           vmGenres:
@@ -148,6 +154,7 @@ begin
         end;
     end;
   until Result in [mrOk, mrCancel, mrIgnore];
+  SelectedValue := framVTEdit1.CurrentValue;
 end;
 
 end.

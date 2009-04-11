@@ -18,15 +18,15 @@ type
     vtEditEditeurs: TframVTEdit;
     procedure FormCreate(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
   private
     { Déclarations privées }
     FCollection: TCollectionComplete;
-    procedure SetID_Collection(const Value: TGUID);
+    procedure SetCollection(Value: TCollectionComplete);
     function GetID_Collection: TGUID;
   public
     { Déclarations publiques }
-    property ID_Collection: TGUID read GetID_Collection write SetID_Collection;
+    property ID_Collection: TGUID read GetID_Collection;
+    property Collection: TCollectionComplete read FCollection write SetCollection;
   end;
 
 implementation
@@ -40,15 +40,15 @@ procedure TfrmEditCollection.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
   vtEditEditeurs.Mode := vmEditeurs;
-  FCollection := TCollectionComplete.Create;
+  FCollection := nil;
 end;
 
-procedure TfrmEditCollection.SetID_Collection(const Value: TGUID);
+procedure TfrmEditCollection.SetCollection(Value: TCollectionComplete);
 var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  FCollection.Fill(Value);
+  FCollection := Value;
 
   edNom.Text := FCollection.NomCollection;
   vtEditEditeurs.CurrentValue := FCollection.ID_Editeur;
@@ -87,11 +87,6 @@ end;
 function TfrmEditCollection.GetID_Collection: TGUID;
 begin
   Result := FCollection.ID_Collection;
-end;
-
-procedure TfrmEditCollection.FormDestroy(Sender: TObject);
-begin
-  FCollection.Free;
 end;
 
 end.

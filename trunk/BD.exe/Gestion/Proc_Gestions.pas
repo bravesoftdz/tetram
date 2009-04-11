@@ -446,7 +446,17 @@ end;
 
 function AjouterCollections(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
 begin
-  Result := AjouterCollections2(VT, GUID_NULL, Valeur);
+  if Assigned(Source) then
+    Result := CreationCollection(Source)
+  else
+    Result := CreationCollection(GUID_NULL, Valeur);
+  if IsEqualGUID(Result, GUID_NULL) then
+    Exit;
+  if Assigned(VT) then
+  begin
+    VT.InitializeRep(False);
+    VT.CurrentValue := Result;
+  end;
 end;
 
 function ModifierCollections(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;

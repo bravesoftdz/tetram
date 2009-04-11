@@ -103,8 +103,8 @@ begin
   Collection.Caption := FSerie.Collection.ChaineAffichage;
   cbTerminee.State := TCheckBoxState(FSerie.Terminee);
 
-  Sujet.Text := FSerie.Sujet.Text;
-  Remarques.Text := FSerie.Notes.Text;
+  Sujet.Assign(FSerie.Sujet);
+  Remarques.Assign(FSerie.Notes);
 
   s := '';
   for i := 0 to Pred(FSerie.Genres.Count) do

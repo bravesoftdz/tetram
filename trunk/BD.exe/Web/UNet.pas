@@ -17,7 +17,7 @@ function LoadStreamURL(URL: string; Pieces: array of RAttachement; StreamAnswer:
 implementation
 
 uses
-  WinInet, OverbyteIcsHttpProt, ProceduresBDtk;
+  WinInet, OverbyteIcsHttpProt, ProceduresBDtk, AnsiStrings;
 
 function URLEncode(const URL: string): string;
 var
@@ -211,10 +211,10 @@ begin
                   httpHeader := httpHeader + 'Content-Type: application/octet-stream'#13#10;
                   httpHeader := httpHeader + 'Content-Length: ' + IntToStr(fs.Size) + #13#10;
                   httpHeader := httpHeader + #13#10;
-                  MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
+                  MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader) * SizeOf(Char));
                   MemoryStream.CopyFrom(fs, fs.Size);
                   httpHeader := #13#10;
-                  MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
+                  MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader) * SizeOf(Char));
                 finally
                   fs.Free;
                 end;
@@ -225,10 +225,10 @@ begin
                 httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + Pieces[i].Nom + '"'#13#10;
                 httpHeader := httpHeader + #13#10;
                 httpHeader := httpHeader + Pieces[i].Valeur + #13#10;
-                MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
+                MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader) * SizeOf(Char));
               end;
             httpHeader := '-----------------------------' + idRequete + '--'#13#10;
-            MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
+            MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader) * SizeOf(Char));
 
             httpHeader := 'Content-Type: multipart/form-data; boundary=---------------------------' + idRequete + #13#10;
           end;
@@ -331,7 +331,8 @@ var
   MemoryStream: TMemoryStream;
   fs: TFileStream;
   i: Integer;
-  idRequete, httpHeader: string;
+  idRequete: string;
+  httpHeader: RawByteString;
   dl: TDownloader;
 begin
   idRequete := '26846888314793'; // valeur arbitraire: voir s'il faut la changer à chaque requête mais il semble que non
@@ -357,10 +358,10 @@ begin
           begin
             fs := TFileStream.Create(Pieces[i].Valeur, fmOpenRead or fmShareDenyWrite);
             try
-              httpHeader := '-----------------------------' + idRequete + #13#10;
-              httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + Pieces[i].Nom + '"; filename="' + ExtractFileName(Pieces[i].Valeur) + '"'#13#10;
+              httpHeader := '-----------------------------' + UTF8Encode(idRequete) + #13#10;
+              httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + UTF8Encode(Pieces[i].Nom) + '"; filename="' + UTF8Encode(ExtractFileName(Pieces[i].Valeur)) + '"'#13#10;
               httpHeader := httpHeader + 'Content-Type: application/octet-stream'#13#10;
-              httpHeader := httpHeader + 'Content-Length: ' + IntToStr(fs.Size) + #13#10;
+              httpHeader := httpHeader + 'Content-Length: ' + UTF8Encode(IntToStr(fs.Size)) + #13#10;
               httpHeader := httpHeader + #13#10;
               MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
               MemoryStream.CopyFrom(fs, fs.Size);
@@ -372,20 +373,20 @@ begin
           end
           else
           begin
-            httpHeader := '-----------------------------' + idRequete + #13#10;
-            httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + Pieces[i].Nom + '"'#13#10;
+            httpHeader := '-----------------------------' + UTF8Encode(idRequete) + #13#10;
+            httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + UTF8Encode(Pieces[i].Nom) + '"'#13#10;
             httpHeader := httpHeader + #13#10;
-            httpHeader := httpHeader + Pieces[i].Valeur + #13#10;
+            httpHeader := httpHeader + UTF8Encode(Pieces[i].Valeur) + #13#10;
             MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
           end;
-        httpHeader := '-----------------------------' + idRequete + '--'#13#10;
+
+        httpHeader := '-----------------------------' + UTF8Encode(idRequete) + '--'#13#10;
         MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
 
-        httpHeader := 'Content-Type: multipart/form-data; boundary=---------------------------' + idRequete + #13#10;
+        FHttpCli.ContentTypePost := 'multipart/form-data; charset=UTF-8; boundary=---------------------------' + idRequete;
       end;
 
-      httpHeader := httpHeader + 'Accept-Charset: ISO-8859-1'#13#10;
-
+      MemoryStream.Position := 0;
 
       FWaiting := TWaiting.Create('Chargement des données...', 1, @FUserCancel);
       // pour forcer la fenêtre à afficher des choses dès son apparition

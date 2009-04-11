@@ -242,7 +242,7 @@ begin
 
   Caption := 'Fiche d''emprunteur - ' + FEmprunteur.ChaineAffichage;
   nom.Caption := FEmprunteur.Nom;
-  Adresse.Text := FEmprunteur.Adresse.Text;
+  Adresse.Assign(FEmprunteur.Adresse);
 
   ListeEmprunts.RootNodeCount := FEmprunteur.Emprunts.Emprunts.Count;
   Emprunts.Caption := IntToStr(FEmprunteur.Emprunts.NBEmprunts);

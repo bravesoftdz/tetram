@@ -8,8 +8,6 @@ uses
   JvToolEdit, UVirtualTreeEdit, VirtualTree, UHistorique, PngSpeedButton, UfrmFond;
 
 type
-  callbackCall = reference to procedure(data: Pointer);
-
   TframVTEdit = class(TFrame)
     VTEdit: TJvComboEdit;
     btReset: TVDTButton;

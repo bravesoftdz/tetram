@@ -229,6 +229,83 @@
 				<Form>frmPrevisionsAchats</Form>
 			</DCCReference>
 			<DCCReference Include="mises à jour\Updates.pas"/>
+			<DCCReference Include="ListOfTypeRec.pas"/>
+			<DCCReference Include="Gestion\UfrmWizardImport.pas">
+				<Form>frmWizardImport</Form>
+			</DCCReference>
+			<DCCReference Include="Gestion\UImportXML.pas"/>
+			<DCCReference Include="ProceduresBDtk.pas"/>
+			<DCCReference Include="UfrmChoixDetailSerie.pas">
+				<Form>frmChoixDetailSerie</Form>
+			</DCCReference>
+			<DCCReference Include="mises à jour\UMAJODS.pas"/>
+			<DCCReference Include="Consultation\UfrmEditCritere.pas">
+				<Form>frmEditCritere</Form>
+			</DCCReference>
+			<DCCReference Include="Consultation\UChampsRecherche.pas"/>
+			<DCCReference Include="UBdtForms.pas"/>
+			<DCCReference Include="Web\UfrmPublier.pas">
+				<Form>frmPublier</Form>
+			</DCCReference>
+			<DCCReference Include="Web\UNet.pas"/>
+			<DCCReference Include="Web\mises à jour\UMySQLMAJ1_0_0_1.pas"/>
+			<DCCReference Include="Web\Mime64\DIMimeStreams.pas"/>
+			<DCCReference Include="Web\Mime64\DIMime.pas"/>
+			<DCCReference Include="UfrmFusion.pas">
+				<Form>frmFusion</Form>
+			</DCCReference>
+			<DCCReference Include="Web\mises à jour\UMySQLMAJ1_0_0_0.pas"/>
+			<DCCReference Include="Web\mises à jour\UMySQLMAJ1_0_0_2.pas"/>
+			<DCCReference Include="Scripts\UdmScripts.pas">
+				<Form>dmScripts</Form>
+				<DesignClass>TDataModule</DesignClass>
+			</DCCReference>
+			<DCCReference Include="Scripts\UfrmScripts.pas">
+				<Form>frmScripts</Form>
+			</DCCReference>
+			<DCCReference Include="Scripts\UfrmScriptSearch.pas">
+				<Form>frmScriptSearch</Form>
+			</DCCReference>
+			<DCCReference Include="Scripts\IDHashMap.pas"/>
+			<DCCReference Include="Scripts\uPSC_BdtkObjects.pas"/>
+			<DCCReference Include="Scripts\uPSI_BdtkObjects.pas"/>
+			<DCCReference Include="Scripts\uPSR_BdtkObjects.pas"/>
+			<DCCReference Include="Scripts\UScriptsFonctions.pas"/>
+			<DCCReference Include="Scripts\UScriptUtils.pas"/>
+			<DCCReference Include="Scripts\uPSC_BdtkRegEx.pas"/>
+			<DCCReference Include="Scripts\uPSI_BdtkRegEx.pas"/>
+			<DCCReference Include="Scripts\uPSR_BdtkRegEx.pas"/>
+			<DCCReference Include="Scripts\BdtkRegEx.pas"/>
+			<DCCReference Include="UMetadata.pas"/>
+			<DCCReference Include="Gestion\UfrmControlImport.pas">
+				<Form>frmControlImport</Form>
+			</DCCReference>
+			<DCCReference Include="UVirtualTreeEdit.pas"/>
+			<DCCReference Include="UframVTEdit.pas">
+				<Form>framVTEdit</Form>
+				<DesignClass>TFrame</DesignClass>
+			</DCCReference>
+			<DCCReference Include="LoadCompletImport.pas"/>
+			<DCCReference Include="Scripts\UfrmValidationImport.pas">
+				<Form>frmValidationImport</Form>
+			</DCCReference>
+			<DCCReference Include="Scripts\UfrmScriptChoix.pas">
+				<Form>frmScriptChoix</Form>
+			</DCCReference>
+			<DCCReference Include="UfrmProgression.pas">
+				<Form>frmProgression</Form>
+			</DCCReference>
+			<DCCReference Include="Scripts\UScriptsHTMLFunctions.pas"/>
+			<DCCReference Include="Scripts\UfrmScriptEditOption.pas">
+				<Form>frmScriptEditOption</Form>
+			</DCCReference>
+			<DCCReference Include="Scripts\UfrmScriptOption.pas">
+				<Form>frmScriptOption</Form>
+			</DCCReference>
+			<DCCReference Include="Scripts\UScriptList.pas"/>
+			<DCCReference Include="Scripts\UScriptEdition.pas"/>
+			<DCCReference Include="Scripts\UScriptDebug.pas"/>
+			<DCCReference Include="mises à jour\UMAJ2_1_1_4.pas"/>
 			<DCCReference Include="mises à jour\UMAJ0_0_0_6.pas"/>
 			<DCCReference Include="mises à jour\UMAJ0_0_0_8.pas"/>
 			<DCCReference Include="mises à jour\UMAJ0_0_0_9.pas"/>
@@ -260,92 +337,19 @@
 			<DCCReference Include="mises à jour\UMAJ1_2_0_8.pas"/>
 			<DCCReference Include="mises à jour\UMAJ1_2_1_0.pas"/>
 			<DCCReference Include="mises à jour\UMAJ1_2_2_0.pas"/>
-			<DCCReference Include="ListOfTypeRec.pas"/>
-			<DCCReference Include="Gestion\UfrmWizardImport.pas">
-				<Form>frmWizardImport</Form>
-			</DCCReference>
-			<DCCReference Include="Gestion\UImportXML.pas"/>
-			<DCCReference Include="ProceduresBDtk.pas"/>
+			<DCCReference Include="mises à jour\UMAJ1_2_3_3.pas"/>
 			<DCCReference Include="mises à jour\UMAJ1_2_3_14.pas"/>
-			<DCCReference Include="UfrmChoixDetailSerie.pas">
-				<Form>frmChoixDetailSerie</Form>
-			</DCCReference>
-			<DCCReference Include="mises à jour\UMAJ1_2_3_25.pas"/>
-			<DCCReference Include="mises à jour\UMAJ2_1_0_16.pas"/>
 			<DCCReference Include="mises à jour\UMAJ1_2_3_20.pas"/>
 			<DCCReference Include="mises à jour\UMAJ1_2_3_22.pas"/>
+			<DCCReference Include="mises à jour\UMAJ1_2_3_25.pas"/>
 			<DCCReference Include="mises à jour\UMAJ1_2_3_26.pas"/>
-			<DCCReference Include="mises à jour\UMAJODS.pas"/>
-			<DCCReference Include="Consultation\UfrmEditCritere.pas">
-				<Form>frmEditCritere</Form>
-			</DCCReference>
-			<DCCReference Include="Consultation\UChampsRecherche.pas"/>
-			<DCCReference Include="UBdtForms.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_0_0_5.pas"/>
-			<DCCReference Include="Web\UfrmPublier.pas">
-				<Form>frmPublier</Form>
-			</DCCReference>
-			<DCCReference Include="Web\UNet.pas"/>
-			<DCCReference Include="Web\mises à jour\UMySQLMAJ1_0_0_1.pas"/>
-			<DCCReference Include="Web\Mime64\DIMimeStreams.pas"/>
-			<DCCReference Include="Web\Mime64\DIMime.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_0_1_0.pas"/>
-			<DCCReference Include="UfrmFusion.pas">
-				<Form>frmFusion</Form>
-			</DCCReference>
 			<DCCReference Include="mises à jour\UMAJ2_1_0_0.pas"/>
-			<DCCReference Include="Web\mises à jour\UMySQLMAJ1_0_0_0.pas"/>
-			<DCCReference Include="Web\mises à jour\UMySQLMAJ1_0_0_2.pas"/>
+			<DCCReference Include="mises à jour\UMAJ2_1_0_16.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_1_0_22.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_1_0_72.pas"/>
-			<DCCReference Include="Scripts\UdmScripts.pas">
-				<Form>dmScripts</Form>
-				<DesignClass>TDataModule</DesignClass>
-			</DCCReference>
-			<DCCReference Include="Scripts\UfrmScripts.pas">
-				<Form>frmScripts</Form>
-			</DCCReference>
-			<DCCReference Include="Scripts\UfrmScriptSearch.pas">
-				<Form>frmScriptSearch</Form>
-			</DCCReference>
-			<DCCReference Include="Scripts\IDHashMap.pas"/>
-			<DCCReference Include="Scripts\uPSC_BdtkObjects.pas"/>
-			<DCCReference Include="Scripts\uPSI_BdtkObjects.pas"/>
-			<DCCReference Include="Scripts\uPSR_BdtkObjects.pas"/>
-			<DCCReference Include="Scripts\UScriptsFonctions.pas"/>
-			<DCCReference Include="Scripts\UScriptUtils.pas"/>
-			<DCCReference Include="Scripts\uPSC_BdtkRegEx.pas"/>
-			<DCCReference Include="Scripts\uPSI_BdtkRegEx.pas"/>
-			<DCCReference Include="Scripts\uPSR_BdtkRegEx.pas"/>
-			<DCCReference Include="Scripts\BdtkRegEx.pas"/>
-			<DCCReference Include="UMetadata.pas"/>
-			<DCCReference Include="Gestion\UfrmControlImport.pas">
-				<Form>frmControlImport</Form>
-			</DCCReference>
-			<DCCReference Include="UVirtualTreeEdit.pas"/>
-			<DCCReference Include="UframVTEdit.pas">
-				<Form>framVTEdit</Form>
-				<DesignClass>TFrame</DesignClass>
-			</DCCReference>
-			<DCCReference Include="mises à jour\UMAJ2_1_1_4.pas"/>
-			<DCCReference Include="LoadCompletImport.pas"/>
-			<DCCReference Include="Scripts\UfrmValidationImport.pas">
-				<Form>frmValidationImport</Form>
-			</DCCReference>
-			<DCCReference Include="Scripts\UfrmScriptChoix.pas">
-				<Form>frmScriptChoix</Form>
-			</DCCReference>
-			<DCCReference Include="UfrmProgression.pas">
-				<Form>frmProgression</Form>
-			</DCCReference>
-			<DCCReference Include="Scripts\UScriptsHTMLFunctions.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_1_1_2.pas"/>
-			<DCCReference Include="Scripts\UfrmScriptEditOption.pas">
-				<Form>frmScriptEditOption</Form>
-			</DCCReference>
-			<DCCReference Include="Scripts\UfrmScriptOption.pas">
-				<Form>frmScriptOption</Form>
-			</DCCReference>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
 			</BuildConfiguration>
@@ -368,7 +372,8 @@
 		</ItemGroup>
 		<Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
 		<PropertyGroup>
-			<PreBuildEvent>del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
+			<PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
+			<PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
 		</PropertyGroup>
 		<ProjectExtensions>
 			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
@@ -390,7 +395,7 @@
 						<VersionInfo Name="MajorVer">2</VersionInfo>
 						<VersionInfo Name="MinorVer">1</VersionInfo>
 						<VersionInfo Name="Release">1</VersionInfo>
-						<VersionInfo Name="Build">4</VersionInfo>
+						<VersionInfo Name="Build">6</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -402,7 +407,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">2.1.1.4</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">2.1.1.6</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2008</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks"/>

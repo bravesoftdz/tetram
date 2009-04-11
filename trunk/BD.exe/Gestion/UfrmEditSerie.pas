@@ -178,8 +178,8 @@ begin
   FSerie.SiteWeb := Trim(edSite.Text);
   FSerie.ID_Editeur := vtEditEditeurs.CurrentValue;
   FSerie.ID_Collection := vtEditCollections.CurrentValue;
-  FSerie.Sujet.Text := histoire.Lines.Text;
-  FSerie.Notes.Text := remarques.Lines.Text;
+  FSerie.Sujet.Assign(histoire.Lines);
+  FSerie.Notes.Assign(remarques.Lines);
 
   FSerie.VO := Integer(cbVO.State);
   FSerie.Couleur := Integer(cbCouleur.State);
@@ -219,8 +219,8 @@ begin
     vtEditCollections.CurrentValue := FSerie.ID_Collection;
     cbComplete.Checked := FSerie.Complete;
     cbManquants.Checked := FSerie.SuivreManquants;
-    histoire.Lines.Text := FSerie.Sujet.Text;
-    remarques.Lines.Text := FSerie.Notes.Text;
+    histoire.Lines.Assign(FSerie.Sujet);
+    remarques.Lines.Assign(FSerie.Notes);
     edSite.Text := FSerie.SiteWeb;
     if FSerie.NbAlbums > 0 then
       edNbAlbums.Text := IntToStr(FSerie.NbAlbums);

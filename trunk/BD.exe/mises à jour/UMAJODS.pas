@@ -13,7 +13,7 @@ const
   FinBackup = 'gbak:closing file, committing, and finishing.';
   FinRestore = 'gbak:    committing metadata';
 var
-  FichierBackup: string;
+  FichierBackup, s: string;
   AvailableSpace, TotalSpace: Int64;
   Done: Boolean;
 begin
@@ -38,7 +38,8 @@ begin
       DMPrinc.UIBBackup.Verbose := True;
       DMPrinc.UIBBackup.BackupFiles.Text := FichierBackup;
       DMPrinc.UIBBackup.Run;
-      if not CompareMem(PChar(Memo1.Lines[Memo1.Lines.Count - 2]), PChar(FinBackup), Length(FinBackup)) then
+      s := Copy(Memo1.Lines[Memo1.Lines.Count - 1], 1, Length(FinBackup));
+      if not SameText(s, FinBackup) then
         raise Exception.Create('Erreur durant le backup');
 
       DMPrinc.UIBDataBase.Connected := False;
@@ -47,7 +48,8 @@ begin
       DMPrinc.UIBRestore.Verbose := True;
       DMPrinc.UIBRestore.BackupFiles.Text := FichierBackup;
       DMPrinc.UIBRestore.Run;
-      if not CompareMem(PChar(Memo1.Lines[Memo1.Lines.Count - 3]), PChar(FinRestore), Length(FinRestore)) then
+      s := Copy(Memo1.Lines[Memo1.Lines.Count - 2], 1, Length(FinRestore));
+      if not SameText(s, FinRestore) then
         raise Exception.Create('Erreur durant le restore');
 
       DMPrinc.UIBDataBase.Connected := True;

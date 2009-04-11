@@ -2,16 +2,16 @@ object framBoutons: TframBoutons
   Left = 0
   Top = 0
   Width = 451
-  Height = 25
+  Height = 29
   Align = alBottom
   TabOrder = 0
   OnResize = FrameResize
   DesignSize = (
     451
-    25)
+    29)
   object btnOK: TButton
     Left = 288
-    Top = 2
+    Top = 6
     Width = 79
     Height = 21
     Cursor = crHandPoint
@@ -26,10 +26,11 @@ object framBoutons: TframBoutons
     ParentDoubleBuffered = False
     TabOrder = 0
     OnClick = btnOKClick
+    ExplicitTop = 2
   end
   object btnAnnuler: TButton
     Left = 368
-    Top = 2
+    Top = 6
     Width = 77
     Height = 21
     Cursor = crHandPoint
@@ -44,5 +45,6 @@ object framBoutons: TframBoutons
     ParentDoubleBuffered = False
     TabOrder = 1
     OnClick = btnAnnulerClick
+    ExplicitTop = 2
   end
 end

@@ -7,7 +7,7 @@ uses
   VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, VirtualTree, Menus, TypeRec, ActnList, LoadComplet, ComboCheck,
   UframRechercheRapide, CRFurtif, UframBoutons, UBdtForms, Generics.Collections, StrUtils,
   JvExMask, JvToolEdit, UVirtualTreeEdit, UfrmFond, PngSpeedButton,
-  UframVTEdit;
+  UframVTEdit, LoadCompletImport;
 
 type
   TfrmEditAlbum = class(TbdtForm)
@@ -153,9 +153,11 @@ type
     procedure OnEditAuteurs(Sender: TObject);
     procedure vtEditEditeursVTEditChange(Sender: TObject);
     procedure vtEditCollectionsVTEditChange(Sender: TObject);
+    procedure Frame11Click(Sender: TObject);
   private
     { Déclarations privées }
     FAlbum: TAlbumComplet;
+    FAlbumImport: TAlbumComplet;
     FCurrentEditionComplete: TEditionComplete;
     FEditeurCollectionSelected: array of Boolean;
     FEditionChanging: Boolean;
@@ -170,6 +172,7 @@ type
     procedure AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage); overload;
     function GetID_Album: TGUID;
     function GetCreation: Boolean;
+    procedure SaveToObject;
   public
     { Déclarations publiques }
     property isCreation: Boolean read GetCreation;
@@ -270,8 +273,8 @@ begin
     edTomeFin.Text := NonZero(IntToStr(FAlbum.TomeFin));
     cbIntegrale.Checked := FAlbum.Integrale;
     cbHorsSerie.Checked := FAlbum.HorsSerie;
-    histoire.Lines.Text := FAlbum.Sujet.Text;
-    remarques.Lines.Text := FAlbum.Notes.Text;
+    histoire.Lines.Assign(FAlbum.Sujet);
+    remarques.Lines.Assign(FAlbum.Notes);
     cbIntegraleClick(cbIntegrale);
 
     lvScenaristes.Items.Count := FAlbum.Scenaristes.Count;
@@ -282,11 +285,11 @@ begin
     FDessinateursSelected := lvDessinateurs.Items.Count > 0;
     FColoristesSelected := lvColoristes.Items.Count > 0;
 
-    if not FAlbum.RecInconnu then
-      vtEditSerie.VTEdit.OnChange := nil;
+    vtEditSerie.VTEdit.OnChange := nil;
     vtEditSerie.CurrentValue := FAlbum.ID_Serie;
     vtEditSerie.VTEdit.OnChange := JvComboEdit1Change;
 
+    vtEditions.Clear;
     SetLength(FEditeurCollectionSelected, FAlbum.Editions.Editions.Count);
     for i := 0 to Pred(FAlbum.Editions.Editions.Count) do
     begin
@@ -365,6 +368,7 @@ begin
   FCurrentEditionComplete := nil;
   vtEditions.Clear;
   FCategoriesImages.Free;
+  FreeAndNil(FAlbumImport);
 end;
 
 procedure TfrmEditAlbum.Frame11btnOKClick(Sender: TObject);
@@ -449,6 +453,22 @@ begin
   end;
 
   hg := THourGlass.Create;
+  SaveToObject;
+
+  FAlbum.SaveToDatabase;
+  if isAchat then
+    FAlbum.Acheter(False);
+
+  ModalResult := mrOk;
+end;
+
+procedure TfrmEditAlbum.SaveToObject;
+var
+  hg: IHourGlass;
+begin
+  UpdateEdition; // force la mise à jour du REditionComplete en cours si c pas déjà fait
+
+  hg := THourGlass.Create;
 
   FAlbum.Titre := Trim(edTitre.Text);
   if edAnneeParution.Text = '' then
@@ -475,14 +495,22 @@ begin
     FAlbum.TomeFin := StrToInt(edTomeFin.Text);
   FAlbum.Integrale := cbIntegrale.Checked;
   FAlbum.HorsSerie := cbHorsSerie.Checked;
-  FAlbum.Sujet.Text := histoire.Lines.Text;
-  FAlbum.Notes.Text := remarques.Lines.Text;
+  FAlbum.Sujet.Assign(histoire.Lines);
+  FAlbum.Notes.Assign(remarques.Lines);
+end;
 
-  FAlbum.SaveToDatabase;
-  if isAchat then
-    FAlbum.Acheter(False);
+procedure ImportScript(frm: TfrmEditAlbum);
+begin
+  frm.SaveToObject;
+  frm.FAlbumImport.Fusionne(frm.Album);
+  frm.Album := frm.Album; // recharger la fenêtre avec frm.Album
+  FreeAndNil(frm.FAlbumImport);
+end;
 
-  ModalResult := mrOk;
+procedure TfrmEditAlbum.Frame11Click(Sender: TObject);
+begin
+//  FAlbumImport := TAlbumComplet.Create;
+//  Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
 end;
 
 procedure TfrmEditAlbum.framVTEdit1VTEditChange(Sender: TObject);
@@ -862,7 +890,7 @@ begin
       FCurrentEditionComplete.DateAchat := Trunc(dtpAchat.Date)
     else
       FCurrentEditionComplete.DateAchat := 0;
-    FCurrentEditionComplete.Notes.Text := edNotes.Lines.Text;
+    FCurrentEditionComplete.Notes.Assign(edNotes.Lines);
     FCurrentEditionComplete.NumeroPerso := edNumPerso.Text;
   end;
 end;

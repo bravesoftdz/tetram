@@ -189,7 +189,6 @@ type
     FModalWindows: TStack;
     procedure ChargeToolBarres(sl: TStringList);
     procedure WMSyscommand(var msg: TWmSysCommand); message WM_SYSCOMMAND;
-    procedure MergeMenu(MergedMenu: TMainMenu);
     procedure HistoriqueChanged(Sender: TObject);
     procedure HistoriqueChosen(Sender: TObject);
   protected
@@ -198,6 +197,7 @@ type
     { Déclarations publiques }
     FCurrentForm: TForm;
     FToolCurrent: TStringList;
+    procedure MergeMenu(MergedMenu: TMainMenu);
     function IsShowing(Classe: TFormClass): Boolean;
     procedure SetChildForm(Form: TForm; Alignement: TAlign = alClient);
     function SetModalChildForm(Form: TForm; Alignement: TAlign = alClient): Integer;
@@ -723,9 +723,6 @@ begin
     actModeConsultation.Enabled := not actModeConsultation.Checked;
     actModeGestion.Enabled := not actModeGestion.Checked;
     actChangeMode.Checked := actModeGestion.Checked;
-{$IFDEF RELEASE}
-    actScripts.Visible := False;
-{$ENDIF}
   end;
 end;
 
@@ -1069,8 +1066,7 @@ end;
 
 procedure TfrmFond.actScriptsExecute(Sender: TObject);
 begin
-  frmScripts := TfrmScripts.Create(Self);
-  Historique.AddWaiting(fcScripts, Integer(frmScripts));
+  Historique.AddWaiting(fcScripts);
 end;
 
 procedure TfrmFond.actPublierExecute(Sender: TObject);

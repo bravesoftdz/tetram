@@ -20,14 +20,14 @@ procedure RIRegister_TObjectListOfAuteur(CL: TPSRuntimeClassImporter);
 procedure RIRegister_TObjectListOfEditionComplete(CL: TPSRuntimeClassImporter);
 
 procedure RIRegister_TAuteur(CL: TPSRuntimeClassImporter);
-procedure RIRegister_TAlbumComplet(CL: TPSRuntimeClassImporter);
+procedure RIRegister_TAlbumComplet(CL: TPSRuntimeClassImporter; isUpdate: Boolean);
 procedure RIRegister_TEditionComplete(CL: TPSRuntimeClassImporter);
 procedure RIRegister_TSerieComplete(CL: TPSRuntimeClassImporter);
 procedure RIRegister_TEditeurComplet(CL: TPSRuntimeClassImporter);
 
 procedure RIRegister_TScriptChoix(CL: TPSRuntimeClassImporter);
 
-procedure RIRegister_BdtkObjects(CL: TPSRuntimeClassImporter);
+procedure RIRegister_BdtkObjects(CL: TPSRuntimeClassImporter; isUpdate: Boolean);
 
 implementation
 
@@ -38,7 +38,8 @@ uses
 
 procedure TAlbumCompletEdition_R(Self: TAlbumComplet; var T: TEditionComplete);
 begin
-  if Self.Editions.Editions.Count = 0 then begin
+  if Self.Editions.Editions.Count = 0 then
+  begin
     Self.Editions.Editions.Add(TEditionComplete.Create(GUID_NULL));
     Self.Editions.Editions[0].New;
   end;
@@ -587,7 +588,7 @@ begin
   end;
 end;
 
-procedure RIRegister_TAlbumComplet(CL: TPSRuntimeClassImporter);
+procedure RIRegister_TAlbumComplet(CL: TPSRuntimeClassImporter; isUpdate: Boolean);
 begin
   with CL.Add(TAlbumComplet) do
   begin
@@ -608,7 +609,10 @@ begin
     RegisterPropertyHelper(@TAlbumCompletEdition_R, nil, 'Edition');
 
     RegisterMethod(@TAlbumComplet.Clear, 'Clear');
-    RegisterMethod(@TAlbumComplet.Import, 'Import');
+    if isUpdate then
+      RegisterMethod(@ImportUpdate, 'Import')
+    else
+      RegisterMethod(@ImportNew, 'Import');
   end;
 end;
 
@@ -651,17 +655,17 @@ begin
     RegisterPropertyHelper(@TEditionCompletePrixCote_R, @TEditionCompletePrixCote_W, 'PrixCote');
     RegisterPropertyHelper(@TEditionCompleteCouleur_R, @TEditionCompleteCouleur_W, 'Couleur');
     RegisterPropertyHelper(@TEditionCompleteVO_R, @TEditionCompleteVO_W, 'VO');
-//    RegisterPropertyHelper(@TEditionCompleteDedicace_R, @TEditionCompleteDedicace_W, 'Dedicace');
-//    RegisterPropertyHelper(@TEditionCompleteStock_R, @TEditionCompleteStock_W, 'Stock');
-//    RegisterPropertyHelper(@TEditionCompletePrete_R, @TEditionCompletePrete_W, 'Prete');
-//    RegisterPropertyHelper(@TEditionCompleteOffert_R, @TEditionCompleteOffert_W, 'Offert');
+    //    RegisterPropertyHelper(@TEditionCompleteDedicace_R, @TEditionCompleteDedicace_W, 'Dedicace');
+    //    RegisterPropertyHelper(@TEditionCompleteStock_R, @TEditionCompleteStock_W, 'Stock');
+    //    RegisterPropertyHelper(@TEditionCompletePrete_R, @TEditionCompletePrete_W, 'Prete');
+    //    RegisterPropertyHelper(@TEditionCompleteOffert_R, @TEditionCompleteOffert_W, 'Offert');
     RegisterPropertyHelper(@TEditionCompleteGratuit_R, @TEditionCompleteGratuit_W, 'Gratuit');
     RegisterPropertyHelper(@TEditionCompleteISBN_R, @TEditionCompleteISBN_W, 'ISBN');
-//    RegisterPropertyHelper(@TEditionCompleteDateAchat_R, @TEditionCompleteDateAchat_W, 'DateAchat');
-//    RegisterPropertyHelper(@TEditionCompleteNotes_R, nil, 'Notes');
-//    RegisterPropertyHelper(@TEditionCompleteNumeroPerso_R, @TEditionCompleteNumeroPerso_W, 'NumeroPerso');
+    //    RegisterPropertyHelper(@TEditionCompleteDateAchat_R, @TEditionCompleteDateAchat_W, 'DateAchat');
+    //    RegisterPropertyHelper(@TEditionCompleteNotes_R, nil, 'Notes');
+    //    RegisterPropertyHelper(@TEditionCompleteNumeroPerso_R, @TEditionCompleteNumeroPerso_W, 'NumeroPerso');
     //    RegisterPropertyHelper(@TEditionCompleteCouvertures_R, nil, 'Couvertures');
-    RegisterMethod(@TEditionComplete.AddImageFromURL, 'AddImageFromURL');
+    RegisterMethod(@AddImageFromURL, 'AddImageFromURL');
   end;
 end;
 
@@ -697,7 +701,7 @@ begin
   end;
 end;
 
-procedure RIRegister_BdtkObjects(CL: TPSRuntimeClassImporter);
+procedure RIRegister_BdtkObjects(CL: TPSRuntimeClassImporter; isUpdate: Boolean);
 begin
   RIRegister_TStringList(CL);
   RIRegister_TObjectList(CL);
@@ -707,7 +711,7 @@ begin
   RIRegister_TEditeurComplet(CL);
   RIRegister_TSerieComplete(CL);
   RIRegister_TEditionComplete(CL);
-  RIRegister_TAlbumComplet(CL);
+  RIRegister_TAlbumComplet(CL, isUpdate);
 
   RIRegister_TScriptChoix(CL);
 end;

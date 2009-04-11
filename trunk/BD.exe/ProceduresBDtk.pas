@@ -155,7 +155,7 @@ begin
       begin
         while Canvas.TextWidth(tmp + '...') > Width do
           Delete(tmp, Length(tmp) div 2, 1);
-        Insert('...', tmp, Length(tmp) div 2 + 1);
+        Insert('...', tmp, Length(tmp) div 2);
       end;
     FForm.op.Caption := tmp;
   end;

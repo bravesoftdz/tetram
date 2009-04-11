@@ -433,7 +433,7 @@ begin
       else
         Label12.Caption := rsTransAcheteLe + ' :';
       AcheteLe.Caption := FCurrentEdition.sDateAchat;
-      edNotes.Lines.Text := FCurrentEdition.Notes.Text;
+      edNotes.Lines.Assign(FCurrentEdition.Notes);
 
       ShowCouverture(0);
       if FCurrentEdition.Gratuit then

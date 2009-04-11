@@ -125,8 +125,10 @@ var
     l: Integer;
     s: string;
   begin
+    Reponse.Size := 0;
     if LoadStreamURL(URL, Param, Reponse) <> 200 then
       raise Exception.Create('Impossible d''accéder au site:'#13#10'- vérifier le paramétrage de l''adresse'#13#10'- Assurez-vous que le modèle est bien chargé sur le site');
+    Reponse.Position := 0;
     slReponse.LoadFromStream(Reponse);
     memo1.Lines.Text := Reponse.DataString;
     l := 0;
@@ -165,7 +167,7 @@ var
     Decoupe(0, s1, s2);
     if s1 <> 'intf_version' then
       raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
-    if TFileVersion(s2) <= '1' then
+    if TFileVersion(s2) < '1' then
       raise Exception.Create('Version d''interface non supportée.'#13#10'Veuillez mettre à jour BDThèque.');
 
     Decoupe(1, s1, s2);

@@ -5,28 +5,23 @@ interface
 uses
   Windows, SysUtils, Classes, LoadComplet, Generics.Collections, Graphics;
 
-type
-  TAlbumCompletHelper = class helper for TAlbumComplet
-    procedure Import;
-  end;
+procedure ImportUpdate(Album: TAlbumComplet);
+procedure ImportNew(Album: TAlbumComplet);
 
-  TEditionCompleteHelper = class helper for TEditionComplete
-    function AddImageFromURL(const URL: string; TypeImage: Integer): Integer;
-  end;
-
+function AddImageFromURL(Edition: TEditionComplete; const URL: string; TypeImage: Integer): Integer;
 
 implementation
 
 uses
   UIB, Commun, VirtualTree, UfrmControlImport, Controls, UdmPrinc, WinInet,
   UHistorique, Proc_Gestions, Editions, UfrmValidationImport, UNet,
-  TypeRec, CommonConst, Procedures;
+  TypeRec, CommonConst, Procedures, UMetadata, Divers;
 
-procedure TAlbumCompletHelper.Import;
+procedure Import(Self: TAlbumComplet; isUpdate: Boolean);
 var
   Qry: TUIBQuery;
 
-  function SearchAssociation(const Texte: string; TypeData: TVirtualMode; out Always: Boolean; ParentID: TGUID): TGUID;
+  function SearchAssociation(Texte: string; TypeData: TVirtualMode; out Always: Boolean; ParentID: TGUID): TGUID;
   begin
     Result := GUID_NULL;
 
@@ -50,7 +45,7 @@ var
     end;
   end;
 
-  function CheckValue(const Texte: string; TypeData: TVirtualMode; ParentID: TGUID; Objet: TObjetComplet = nil): TGUID; overload;
+  function CheckValue(Texte: string; TypeData: TVirtualMode; ParentID: TGUID; Objet: TObjetComplet = nil): TGUID; overload;
   var
     Toujours: Boolean;
   begin
@@ -84,7 +79,9 @@ var
           end;
         end;
 
-        Result := framVTEdit1.CurrentValue;
+        // pourquoi on doit passer par une variable intermédiaire à cause des collections restera                         un grand mystère pour moi
+        // Result := framVTEdit1.CurrentValue;
+        Result := SelectedValue;
 
         Qry.SQL.Text := 'update or insert into import_associations (chaine, id, parentid, typedata, always) values (:chaine, :id, :parentid, :typedata, :always)';
         Qry.Prepare(True);
@@ -100,7 +97,7 @@ var
     Qry.Transaction.Commit;
   end;
 
-  function CheckValue(const Texte: string; TypeData: TVirtualMode): TGUID; inline; overload;
+  function CheckValue(Texte: string; TypeData: TVirtualMode): TGUID; inline; overload;
   begin
     Result := CheckValue(Texte, TypeData, GUID_NULL);
   end;
@@ -149,7 +146,7 @@ var
         if IsEqualGUID(dummyID, GUID_FULL) then
           RemoveAuteur(i)
         else
-          List[i].Personne.Fill(dummyID);
+          AcceptAuteur(i);
       end;
     Result := True;
   end;
@@ -157,116 +154,192 @@ var
 var
   dummyID: TGUID;
   i, j: Integer;
+  PA: TAuteur;
+  DefaultEdition, Edition: TEditionComplete;
 begin
-  with TfrmValidationImport.Create(nil) do
-    try
-      Album := Self;
-      if ShowModal <> mrOk then
-        Exit;
-    finally
-      Free;
-    end;
-
-  Qry := TUIBQuery.Create(nil);
-  try
-    Qry.Transaction := GetTransaction(DMPrinc.UIBDataBase);
-
-    if not CheckListAuteurs(Scenaristes, [Dessinateurs, Coloristes, Serie.Scenaristes, Serie.Dessinateurs, Serie.Coloristes]) then
-      Exit;
-    if not CheckListAuteurs(Dessinateurs, [Coloristes, Serie.Scenaristes, Serie.Dessinateurs, Serie.Coloristes]) then
-      Exit;
-    if not CheckListAuteurs(Coloristes, [Serie.Scenaristes, Serie.Dessinateurs, Serie.Coloristes]) then
-      Exit;
-
-    if not CheckListAuteurs(Serie.Scenaristes, [Serie.Dessinateurs, Serie.Coloristes]) then
-      Exit;
-    if not CheckListAuteurs(Serie.Dessinateurs, [Serie.Coloristes]) then
-      Exit;
-    if not CheckListAuteurs(Serie.Coloristes, []) then
-      Exit;
-
-    for i := Pred(Serie.Genres.Count) downto 0 do
-      if IsEqualGUID(StringToGUIDDef(Serie.Genres.Names[i], GUID_NULL), GUID_NULL) then
-      begin
-        dummyID := CheckValue(Serie.Genres[i], vmGenres);
-        if IsEqualGUID(dummyID, GUID_NULL) then
+  with Self do
+  begin
+    with TfrmValidationImport.Create(nil) do
+      try
+        Album := Self;
+        if ShowModal <> mrOk then
           Exit;
-        if IsEqualGUID(dummyID, GUID_FULL) then
-          Serie.Genres.Delete(i)
-        else
-          Serie.Genres[i] := GUIDToString(dummyID) + '=' + Serie.Genres[i];
+      finally
+        Free;
       end;
 
-    dummyID := CheckValue(Serie.Titre, vmSeries, GUID_NULL, Serie);
-    if IsEqualGUID(dummyID, GUID_NULL) then
-      Exit;
-    if not IsEqualGUID(dummyID, GUID_FULL) then
-      ID_Serie := dummyID;
+    Qry := TUIBQuery.Create(nil);
+    try
+      Qry.Transaction := GetTransaction(DMPrinc.UIBDataBase);
 
-    if IsEqualGUID(Serie.Editeur.ID_Editeur, GUID_NULL) then
-    begin
-      dummyID := CheckValue(Serie.Editeur.NomEditeur, vmEditeurs, GUID_NULL, Serie.Editeur);
-      if IsEqualGUID(dummyID, GUID_NULL) then
+      if not CheckListAuteurs(Scenaristes, [Dessinateurs, Coloristes, Serie.Scenaristes, Serie.Dessinateurs, Serie.Coloristes]) then
         Exit;
-      if not IsEqualGUID(dummyID, GUID_FULL) then
-      begin
-        for j := 0 to Pred(Editions.Editions.Count) do
-          if SameText(Serie.Editeur.NomEditeur, Editions.Editions[j].Editeur.NomEditeur) then
-            Editions.Editions[j].Editeur.Fill(dummyID);
-        Serie.Editeur.Fill(dummyID);
-      end;
-    end;
-
-    if (Serie.Collection.NomCollection <> '') and IsEqualGUID(Serie.Collection.ID, GUID_NULL) then
-    begin
-      dummyID := CheckValue(Serie.Collection.NomCollection, vmCollections, dummyID);
-      if IsEqualGUID(dummyID, GUID_NULL) then
+      if not CheckListAuteurs(Dessinateurs, [Coloristes, Serie.Scenaristes, Serie.Dessinateurs, Serie.Coloristes]) then
         Exit;
-      if not IsEqualGUID(dummyID, GUID_FULL) then
-      begin
-        for j := 0 to Pred(Editions.Editions.Count) do
-          if SameText(Serie.Collection.NomCollection, Editions.Editions[j].Collection.NomCollection) then
-            Editions.Editions[j].Collection.Fill(dummyID);
-        Serie.Collection.Fill(dummyID);
-      end;
-    end;
+      if not CheckListAuteurs(Coloristes, [Serie.Scenaristes, Serie.Dessinateurs, Serie.Coloristes]) then
+        Exit;
 
-    for i := 0 to Pred(Editions.Editions.Count) do
-    begin
-      if IsEqualGUID(Editions.Editions[i].Editeur.ID_Editeur, GUID_NULL) then
+      if not CheckListAuteurs(Serie.Scenaristes, [Serie.Dessinateurs, Serie.Coloristes]) then
+        Exit;
+      if not CheckListAuteurs(Serie.Dessinateurs, [Serie.Coloristes]) then
+        Exit;
+      if not CheckListAuteurs(Serie.Coloristes, []) then
+        Exit;
+
+      for i := Pred(Serie.Genres.Count) downto 0 do
+        if IsEqualGUID(StringToGUIDDef(Serie.Genres.Names[i], GUID_NULL), GUID_NULL) then
+        begin
+          dummyID := CheckValue(Serie.Genres[i], vmGenres);
+          if IsEqualGUID(dummyID, GUID_NULL) then
+            Exit;
+          if IsEqualGUID(dummyID, GUID_FULL) then
+            Serie.Genres.Delete(i)
+          else
+            Serie.Genres[i] := GUIDToString(dummyID) + '=' + Serie.Genres[i];
+        end;
+
+      if IsEqualGUID(Serie.Editeur.ID_Editeur, GUID_NULL) then
       begin
-        dummyID := CheckValue(Editions.Editions[i].Editeur.NomEditeur, vmEditeurs, GUID_NULL, Editions.Editions[i].Editeur);
+        dummyID := CheckValue(Serie.Editeur.NomEditeur, vmEditeurs, GUID_NULL, Serie.Editeur);
         if IsEqualGUID(dummyID, GUID_NULL) then
           Exit;
         if not IsEqualGUID(dummyID, GUID_FULL) then
-          Editions.Editions[i].Editeur.Fill(dummyID);
-      end;
-
-      if IsEqualGUID(Editions.Editions[i].Collection.ID, GUID_NULL) then
-      begin
-        if Editions.Editions[i].Collection.NomCollection <> '' then
         begin
-          dummyID := CheckValue(Editions.Editions[i].Collection.NomCollection, vmCollections, dummyID);
-          if IsEqualGUID(dummyID, GUID_NULL) then
-            Exit;
-          if not IsEqualGUID(dummyID, GUID_FULL) then
-            Editions.Editions[i].Collection.Fill(dummyID);
+          for j := 0 to Pred(Editions.Editions.Count) do
+            if SameText(Serie.Editeur.NomEditeur, Editions.Editions[j].Editeur.NomEditeur) then
+            begin
+              Editions.Editions[j].Editeur.Fill(dummyID);
+              Editions.Editions[j].Collection.Editeur.Fill(dummyID);
+            end;
+          Serie.Editeur.Fill(dummyID);
         end;
       end;
+
+      if (Serie.Collection.NomCollection <> '') and IsEqualGUID(Serie.Collection.ID, GUID_NULL) then
+      begin
+        dummyID := CheckValue(Serie.Collection.NomCollection, vmCollections, dummyID);
+        if IsEqualGUID(dummyID, GUID_NULL) then
+          Exit;
+        if not IsEqualGUID(dummyID, GUID_FULL) then
+        begin
+          for j := 0 to Pred(Editions.Editions.Count) do
+            if SameText(Serie.Collection.NomCollection, Editions.Editions[j].Collection.NomCollection) then
+              Editions.Editions[j].Collection.Fill(dummyID);
+          Serie.Collection.Fill(dummyID);
+        end;
+      end;
+
+      dummyID := CheckValue(Serie.Titre, vmSeries, GUID_NULL, Serie);
+      if IsEqualGUID(dummyID, GUID_NULL) then
+        Exit;
+      if not IsEqualGUID(dummyID, GUID_FULL) then
+      begin
+        ID_Serie := dummyID;
+
+        if Scenaristes.Count + Dessinateurs.Count + Coloristes.Count = 0 then
+        begin
+          for i := 0 to Pred(Serie.Scenaristes.Count) do
+          begin
+            PA := TAuteur.Create;
+            PA.Fill(Serie.Scenaristes[i].Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
+            Scenaristes.Add(PA);
+          end;
+
+          for i := 0 to Pred(Serie.Dessinateurs.Count) do
+          begin
+            PA := TAuteur.Create;
+            PA.Fill(Serie.Dessinateurs[i].Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
+            Dessinateurs.Add(PA);
+          end;
+
+          for i := 0 to Pred(Serie.Coloristes.Count) do
+          begin
+            PA := TAuteur.Create;
+            PA.Fill(Serie.Coloristes[i].Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
+            Coloristes.Add(PA);
+          end;
+        end;
+      end;
+
+      DefaultEdition := TEditionComplete.Create(GUID_NULL);
+      try
+        for i := 0 to Pred(Editions.Editions.Count) do
+        begin
+          Edition := Editions.Editions[i];
+          if not IsEqualGUID(ID_Serie, GUID_FULL) then
+          begin
+            if Edition.Couleur = DefaultEdition.Couleur then
+              Edition.Couleur := IIf(Serie.Couleur = -1, DefaultEdition.Couleur, Serie.Couleur = 1);
+            if Edition.VO = DefaultEdition.VO then
+              Edition.VO := IIf(Serie.VO = -1, DefaultEdition.VO, Serie.VO = 1);
+            if Edition.Etat.Value = DefaultEdition.Etat.Value then
+              Edition.Etat := MakeOption(IIf(Serie.Etat.Value = -1, DefaultEdition.Etat.Value, Serie.Etat.Value), '');
+            if Edition.Reliure.Value = DefaultEdition.Reliure.Value then
+              Edition.Reliure := MakeOption(IIf(Serie.Reliure.Value = -1, DefaultEdition.Reliure.Value, Serie.Reliure.Value), '');
+            if Edition.Orientation.Value = DefaultEdition.Orientation.Value then
+              Edition.Orientation := MakeOption(IIf(Serie.Orientation.Value = -1, DefaultEdition.Orientation.Value, Serie.Orientation.Value), '');
+            if Edition.FormatEdition.Value = DefaultEdition.FormatEdition.Value then
+              Edition.FormatEdition := MakeOption(IIf(Serie.FormatEdition.Value = -1, DefaultEdition.FormatEdition.Value, Serie.FormatEdition.Value), '');
+            if Edition.SensLecture.Value = DefaultEdition.SensLecture.Value then
+              Edition.SensLecture := MakeOption(IIf(Serie.SensLecture.Value = -1, DefaultEdition.SensLecture.Value, Serie.SensLecture.Value), '');
+            if Edition.TypeEdition.Value = DefaultEdition.TypeEdition.Value then
+              Edition.TypeEdition := MakeOption(IIf(Serie.TypeEdition.Value = -1, DefaultEdition.TypeEdition.Value, Serie.TypeEdition.Value), '');
+          end;
+
+          if IsEqualGUID(Edition.Editeur.ID_Editeur, GUID_NULL) then
+          begin
+            dummyID := CheckValue(Edition.Editeur.NomEditeur, vmEditeurs, GUID_NULL, Edition.Editeur);
+            if IsEqualGUID(dummyID, GUID_NULL) then
+              Exit;
+            if not IsEqualGUID(dummyID, GUID_FULL) then
+            begin
+              Edition.Editeur.Fill(dummyID);
+              Edition.Collection.Editeur.Fill(dummyID);
+            end;
+          end;
+
+          if IsEqualGUID(Edition.Collection.ID, GUID_NULL) then
+          begin
+            if Edition.Collection.NomCollection <> '' then
+            begin
+              dummyID := CheckValue(Edition.Collection.NomCollection, vmCollections, dummyID);
+              if IsEqualGUID(dummyID, GUID_NULL) then
+                Exit;
+              if not IsEqualGUID(dummyID, GUID_FULL) then
+                Edition.Collection.Fill(dummyID);
+            end;
+          end;
+        end;
+      finally
+        DefaultEdition.Free;
+      end;
+
+      Qry.Transaction.Commit;
+    finally
+      Qry.Transaction.Free;
+      Qry.Free;
     end;
 
-    Qry.Transaction.Commit;
-  finally
-    Qry.Transaction.Free;
-    Qry.Free;
+    if not isUpdate then
+    begin
+      if IsEqualGUID(ID_Album, GUID_NULL) then
+        New(False);
+      CreationAlbum(Self);
+    end;
   end;
-
-  if IsEqualGUID(ID_Album, GUID_NULL) then
-    New(False);
-  CreationAlbum(Self);
 end;
 
-function TEditionCompleteHelper.AddImageFromURL(const URL: string; TypeImage: Integer): Integer;
+procedure ImportUpdate(Album: TAlbumComplet);
+begin
+  Import(Album, True);
+end;
+
+procedure ImportNew(Album: TAlbumComplet);
+begin
+  Import(Album, False);
+end;
+
+function AddImageFromURL(Edition: TEditionComplete; const URL: string; TypeImage: Integer): Integer;
 var
   Stream: TFileStream;
   Couverture: TCouverture;
@@ -296,7 +369,7 @@ begin
   end;
 
   Couverture := TCouverture.Create;
-  Result := Couvertures.Add(Couverture);
+  Result := Edition.Couvertures.Add(Couverture);
   Couverture.NewNom := tmpFile;
   Couverture.OldNom := Couverture.NewNom;
   Couverture.NewStockee := TGlobalVar.Utilisateur.Options.ImagesStockees;

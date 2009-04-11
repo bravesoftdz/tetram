@@ -125,7 +125,7 @@ begin
     cbxCategorie.Value := FParaBD.CategorieParaBD.Value;
     cbDedicace.Checked := FParaBD.Dedicace;
     cbNumerote.Checked := FParaBD.Numerote;
-    description.Lines.Text := FParaBD.Description.Text;
+    description.Lines.Assign(FParaBD.Description);
 
     vtEditSeries.CurrentValue := FParaBD.Serie.ID_Serie;
 
@@ -284,7 +284,7 @@ begin
   FParaBD.CategorieParaBD := MakeOption(cbxCategorie.Value, cbxCategorie.Caption);
   FParaBD.Dedicace := cbDedicace.Checked;
   FParaBD.Numerote := cbNumerote.Checked;
-  FParaBD.Description.Text := description.Lines.Text;
+  FParaBD.Description.Assign(description.Lines);
   FParaBD.AnneeCote := AnneeCote;
   FParaBD.PrixCote := PrixCote;
   FParaBD.Gratuit := cbGratuit.Checked;

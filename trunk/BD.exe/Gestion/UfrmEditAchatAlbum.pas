@@ -150,8 +150,8 @@ begin
     edTomeFin.Text := NonZero(IntToStr(FAlbum.TomeFin));
     cbIntegrale.Checked := FAlbum.Integrale;
     cbHorsSerie.Checked := FAlbum.HorsSerie;
-    histoire.Lines.Text := FAlbum.Sujet.Text;
-    remarques.Lines.Text := FAlbum.Notes.Text;
+    histoire.Lines.Assign(FAlbum.Sujet);
+    remarques.Lines.Assign(FAlbum.Notes);
     cbIntegraleClick(cbIntegrale);
 
     lvScenaristes.Items.BeginUpdate;
@@ -261,8 +261,8 @@ begin
       FAlbum.TomeFin := StrToInt(edTomeFin.Text);
     FAlbum.Integrale := cbIntegrale.Checked;
     FAlbum.HorsSerie := cbHorsSerie.Checked;
-    FAlbum.Sujet.Text := histoire.Lines.Text;
-    FAlbum.Notes.Text := remarques.Lines.Text;
+    FAlbum.Sujet.Assign(histoire.Lines);
+    FAlbum.Notes.Assign(remarques.Lines);
 
     FAlbum.SaveToDatabase;
     FAlbum.Acheter(True);

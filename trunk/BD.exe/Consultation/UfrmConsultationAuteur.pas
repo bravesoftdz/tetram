@@ -166,7 +166,7 @@ begin
     edNom.Font.Style := edNom.Font.Style - [fsUnderline];
     edNom.Cursor := crDefault;
   end;
-  edBiographie.Lines.Text := FAuteur.Biographie.Text;
+  edBiographie.Lines.Assign(FAuteur.Biographie);
 
   vstSeries.RootNodeCount := FAuteur.Series.Count;
 end;

@@ -58,9 +58,11 @@ function EditionEditeur(const ID: TGUID; Creation: Boolean = False; const Valeur
 function EditionEditeur(Source: TObjetComplet): Boolean; overload;
 function DelEditeur(const ID: TGUID): Boolean;
 
-function CreationCollection(const ID_Editeur: TGUID; const Valeur: string): TGUID;
+function CreationCollection(const ID_Editeur: TGUID; const Valeur: string): TGUID; overload;
+function CreationCollection(Source: TObjetComplet): TGUID; overload;
 function EditionCollection(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
 function EditionCollection(const ID: TGUID; const ID_Editeur: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionCollection(Source: TObjetComplet): Boolean; overload;
 function DelCollection(const ID: TGUID): Boolean;
 
 function CreationGenre(const Genre: string; Source: TObjetComplet = nil): TGUID;
@@ -526,6 +528,29 @@ begin
   Result := CreationLambda(EditionCollection, ID_Editeur, Valeur, TFrmEditCollection);
 end;
 
+function CreationCollection(Source: TObjetComplet): TGUID;
+begin
+  Result := CreationLambda(EditionCollection, Source, TFrmEditCollection);
+end;
+
+function EditionCollection(Source: TObjetComplet): Boolean;
+var
+  hg: IHourGlass;
+  me: IModeEditing;
+  f: TFrmEditCollection;
+begin
+  hg := THourGlass.Create;
+  me := TModeEditing.Create;
+  f := TFrmEditCollection.Create(Application);
+  try
+    f.Collection := TCollectionComplete(Source);
+    hg := nil;
+    Result := frmFond.SetModalChildForm(f) = mrOk;
+  finally
+    f.Free;
+  end;
+end;
+
 function EditionCollection(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 begin
   Result := EditionCollection(ID, GUID_NULL, Creation);
@@ -533,31 +558,24 @@ end;
 
 function EditionCollection(const ID: TGUID; const ID_Editeur: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
-  hg: IHourGlass;
-  me: IModeEditing;
-  f: TFrmEditCollection;
+  Collection: TCollectionComplete;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditCollection) then
     Exit;
   if not Creation and not FindRec('COLLECTIONS', 'ID_Collection', ID, True) then
     Exit;
-  hg := THourGlass.Create;
-  me := TModeEditing.Create;
-  f := TFrmEditCollection.Create(Application);
-  with f do
-    try
-      ID_Collection := ID;
-      if Creation then
-      begin
-        edNom.Text := Valeur;
-        vtEditEditeurs.CurrentValue := ID_Editeur;
-      end;
-      hg := nil;
-      Result := frmFond.SetModalChildForm(f) = mrOk;
-    finally
-      Free;
+  Collection := TCollectionComplete.Create(ID);
+  try
+    if Creation then
+    begin
+      Collection.NomCollection := Valeur;
+      Collection.Editeur.Fill(ID_Editeur);
     end;
+    Result := EditionCollection(Collection);
+  finally
+    Collection.Free;
+  end;
 end;
 
 function DelCollection(const ID: TGUID): Boolean;

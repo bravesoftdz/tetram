@@ -45,7 +45,7 @@ begin
   FEmprunteur.Fill(Value);
 
   edNom.Text := FEmprunteur.Nom;
-  Coord.Lines.Text := FEmprunteur.Adresse.Text;
+  Coord.Lines.Assign(FEmprunteur.Adresse);
   emprunts.Caption := IntToStr(FEmprunteur.Emprunts.NBEmprunts);
 end;
 
@@ -59,7 +59,7 @@ begin
   end;
 
   FEmprunteur.Nom := Trim(edNom.Text);
-  FEmprunteur.Adresse.Text := Coord.Lines.Text;
+  FEmprunteur.Adresse.Assign(Coord.Lines);
 
   FEmprunteur.SaveToDatabase;
 

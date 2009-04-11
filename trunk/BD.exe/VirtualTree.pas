@@ -485,11 +485,7 @@ begin
         else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
           Params.AsString[1] := vmModeInfos[FMode].DEFAULTFILTRE;
         Open;
-        while not Eof do
-        begin
-          InfoNode.List.Add(ClassPointeur.Make(Q));
-          Next;
-        end;
+        ClassPointeur.FillList(InfoNode.List, Q);
       finally
         Transaction.Free;
         Free;

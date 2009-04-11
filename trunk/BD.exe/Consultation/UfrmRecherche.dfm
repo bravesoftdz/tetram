@@ -41,16 +41,12 @@ object frmRecherche: TfrmRecherche
     Width = 400
     Height = 222
     Cursor = crHandPoint
-    ActivePage = TabSheet4
+    ActivePage = TabSheet3
     Align = alTop
     Style = tsFlatButtons
     TabOrder = 0
     object TabSheet3: TTabSheet
       Caption = 'Recherche simple'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         392
         191)
@@ -130,11 +126,6 @@ object frmRecherche: TfrmRecherche
         BackgroundOffsetX = -96
         BevelKind = bkTile
         BorderStyle = bsNone
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -9
-        Font.Name = 'Tahoma'
-        Font.Style = []
         Header.AutoSizeIndex = -1
         Header.Font.Charset = DEFAULT_CHARSET
         Header.Font.Color = clWindowText
@@ -147,7 +138,6 @@ object frmRecherche: TfrmRecherche
         HintMode = hmTooltip
         HotCursor = crHandPoint
         Indent = 8
-        ParentFont = False
         ParentShowHint = False
         ShowHint = True
         TabOrder = 0
@@ -181,10 +171,6 @@ object frmRecherche: TfrmRecherche
     object TabSheet4: TTabSheet
       Caption = 'Recherche avanc'#233'e'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         392
         191)
@@ -253,10 +239,6 @@ object frmRecherche: TfrmRecherche
         OnChange = PageControl1Change
         object TabSheet1: TTabSheet
           Caption = 'Filtre'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object TreeView1: TTreeView
             Left = 0
             Top = 0
@@ -280,10 +262,6 @@ object frmRecherche: TfrmRecherche
         object TabSheet2: TTabSheet
           Caption = 'Tri'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object TreeView2: TTreeView
             Left = 0
             Top = 0
@@ -344,7 +322,7 @@ object frmRecherche: TfrmRecherche
     Columns = <
       item
         Position = 0
-        Width = 160
+        Width = 156
         WideText = 'Album'
       end
       item

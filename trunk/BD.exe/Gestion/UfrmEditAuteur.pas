@@ -49,7 +49,7 @@ begin
 
   edNom.Text := FAuteur.NomAuteur;
   edSite.Text := FAuteur.SiteWeb;
-  edBiographie.Lines.Text := FAuteur.Biographie.Text;
+  edBiographie.Lines.Assign(FAuteur.Biographie);
 end;
 
 procedure TfrmEditAuteur.Frame11btnOKClick(Sender: TObject);
@@ -63,7 +63,7 @@ begin
 
   FAuteur.NomAuteur := Trim(edNom.Text);
   FAuteur.SiteWeb := Trim(edSite.Text);
-  FAuteur.Biographie.Text := edBiographie.Lines.Text;
+  FAuteur.Biographie.Assign(edBiographie.Lines);
   FAuteur.SaveToDatabase;
 
   ModalResult := mrOk;

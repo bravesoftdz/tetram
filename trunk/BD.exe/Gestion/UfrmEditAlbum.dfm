@@ -21,23 +21,26 @@ object frmEditAlbum: TfrmEditAlbum
   TextHeight = 13
   object Bevel2: TBevel
     Left = 0
-    Top = 25
+    Top = 29
     Width = 742
     Height = 4
     Align = alTop
     Shape = bsBottomLine
+    ExplicitTop = 25
   end
   object ScrollBox: TScrollBox
     Left = 0
-    Top = 29
+    Top = 33
     Width = 742
-    Height = 800
+    Height = 796
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
+    ExplicitTop = 29
+    ExplicitHeight = 800
     DesignSize = (
       742
-      800)
+      796)
     object imgVisu: TImage
       Left = 632
       Top = 537
@@ -656,11 +659,12 @@ object frmEditAlbum: TfrmEditAlbum
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 796
+      Top = 792
       Width = 742
       Height = 4
       Align = alBottom
       Shape = bsSpacer
+      ExplicitTop = 796
     end
     object Label20: TLabel
       Left = 23
@@ -1926,10 +1930,14 @@ object frmEditAlbum: TfrmEditAlbum
     Left = 0
     Top = 0
     Width = 742
-    Height = 25
+    Height = 29
     Align = alTop
     TabOrder = 1
+    OnClick = Frame11Click
     ExplicitWidth = 742
+    DesignSize = (
+      742
+      29)
     inherited btnOK: TButton
       Left = 571
       Width = 87
