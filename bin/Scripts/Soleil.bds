@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <Script>
+  <Options/>
   <Code>program Soleil;
 
 uses ScriptFonctions;
@@ -55,13 +56,13 @@ begin
   try
     if re.BeginSearch(page, regExAlbumTitre) and re.Next then
     begin
-      AlbumToImport.Titre := re.GetCaptureByName(&apos;titre_album&apos;);
+      AlbumToImport.Titre := PrepareTitre(re.GetCaptureByName(&apos;titre_album&apos;));
       AlbumToImport.Tome := StrToIntDef(re.GetCaptureByName(&apos;tome&apos;), 0);
     end;
 
     if re.BeginSearch(page, regExAlbumSerie) and re.Next then
     begin
-      AlbumToImport.Serie.Titre := re.GetCaptureByName(&apos;titre_serie&apos;);
+      AlbumToImport.Serie.Titre := PrepareTitre(re.GetCaptureByName(&apos;titre_serie&apos;));
       AlbumToImport.Serie.SiteWeb := CombineURL(lien, re.GetCaptureByName(&apos;lien_serie&apos;));
       AlbumToImport.Serie.Genres.Add(re.GetCaptureByName(&apos;genre&apos;));
 
@@ -156,7 +157,10 @@ begin
         c.AjoutChoix(&apos;&apos;, HTMLDecode(titre_album), HTMLText(commentaire), id);
       end;
 
-    Result := c.Show;
+    if c.ChoixCount &gt; 0 then
+      Result := c.Show
+    else
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
   finally
     re.Free;
     c.Free;
@@ -172,6 +176,5 @@ begin
   id_album := RechercheParTitre(entry);
   if id_album &lt;&gt; &apos;&apos; then
     ParseAlbum(id_album);
-end.
-</Code>
+end.</Code>
 </Script>

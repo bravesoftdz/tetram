@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <Script>
+  <Options/>
   <Code>program Dargaud;
 
 uses ScriptFonctions;
@@ -43,7 +44,7 @@ begin
     // album
     page := GetPage(urlInfoAlbum + id_album, True);
     if BeginSearch(page, regExAlbumInfos) and Next then begin
-      AlbumToImport.Titre := GetCaptureByName(&apos;titre&apos;);
+      AlbumToImport.Titre := PrepareTitre(GetCaptureByName(&apos;titre&apos;));
       AlbumToImport.Tome := StrToIntDef(GetCaptureByName(&apos;tome&apos;), 0);
 
       sl := TStringList.Create;
@@ -103,7 +104,7 @@ begin
     // lien album serie
     page := GetPage(urlInfoAlbumSerie + id_album, True);
     if BeginSearch(page, regExAlbumSerieInfos) and Next then begin
-      AlbumToImport.Serie.Titre := GetCaptureByName(&apos;titre_serie&apos;);
+      AlbumToImport.Serie.Titre := PrepareTitre(GetCaptureByName(&apos;titre_serie&apos;));
       AlbumToImport.Serie.NbAlbums := StrToIntDef(GetCaptureByName(&apos;nbalbums&apos;), 0);
       AlbumToImport.Serie.SiteWeb := urlPageSerie + GetCaptureByName(&apos;id_serie&apos;);
       AlbumToImport.Serie.Editeur.NomEditeur := &apos;Dargaud&apos;;
@@ -112,7 +113,7 @@ begin
       // série
       page := GetPage(urlInfoSerie + GetCaptureByName(&apos;id_serie&apos;), True);
       if BeginSearch(page, regExSerieInfos) and Next then begin
-        AlbumToImport.Serie.Titre := GetCaptureByName(&apos;titre_serie&apos;);
+        AlbumToImport.Serie.Titre := PrepareTitre(GetCaptureByName(&apos;titre_serie&apos;));
         AlbumToImport.Serie.Sujet.Text := HTMLText(GetCaptureByName(&apos;resume&apos;));
       end;
 
@@ -183,7 +184,11 @@ begin
           AjoutString1(commentaire, re.GetCaptureByName(&apos;auteurs&apos;), #13#10, &apos;Auteur(s): &apos;, &apos;&apos;);
           c.AjoutChoix(&apos;Album&apos;, titre_album, commentaire, id_album);
         end;
-    Result := c.Show;
+
+    if c.ChoixCount &gt; 0 then
+      Result := c.Show
+    else
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
   finally
     re.Free;
     c.Free;
@@ -228,7 +233,11 @@ begin
       end;
     if not Added then c.AjoutChoix(&apos;Série&apos;, &apos;Aucune&apos;, &apos;&apos;, &apos;&apos;);
 
-    Result := c.Show;
+    if c.ChoixCount &gt; 0 then
+      Result := c.Show
+    else
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
+
     if Result = &apos;&apos; then Exit;
     if Result[1] = &apos;A&apos; then
       Result := Copy(Result, 2, Length(Result))
@@ -249,6 +258,5 @@ begin
   id_album := RechercheParTitre(entry);
   if id_album &lt;&gt; &apos;&apos; then
     ParseAlbum(id_album);
-end.
-</Code>
+end.</Code>
 </Script>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <Script>
+  <Options/>
   <Code>program Dupuis;
 
 uses ScriptFonctions;
@@ -47,11 +48,11 @@ var
 begin
   page := GetPage(CombineURL(urlSearchRoot, id_album), False);
 
-  AlbumToImport.Serie.Titre := ExtractRegExGroup(page, regExAlbumSerie, &apos;titre_serie&apos;);
+  AlbumToImport.Serie.Titre := PrepareTitre(ExtractRegExGroup(page, regExAlbumSerie, &apos;titre_serie&apos;));
   AlbumToImport.Serie.SiteWeb := CombineURL(urlSearchRoot, ExtractRegExGroup(page, regExAlbumSerie, &apos;id_serie&apos;));
   AlbumToImport.Tome := StrToIntDef(ExtractRegExGroup(page, regExAlbumSerie, &apos;tome&apos;), 0);
 
-  AlbumToImport.Titre := ExtractRegEx(page, regExAlbumTitre);
+  AlbumToImport.Titre := PrepareTitre(ExtractRegEx(page, regExAlbumTitre));
   AlbumToImport.Sujet.Text := HTMLText(ExtractRegEx(page, regExAlbumResume));
 
   re := TBdtkRegEx.Create;
@@ -169,7 +170,10 @@ begin
         page := GetPage(urlSearchRoot + Format(urlSearchCategorie, [Categorie, p]) + Titre, False);
     end;
 
-    Result := c.Show;
+    if c.ChoixCount &gt; 0 then
+      Result := c.Show
+    else
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
   finally
     re.Free;
     c.Free;
@@ -218,7 +222,10 @@ begin
         c.AjoutChoix(&apos;Album&apos;, titre_album, commentaire, id);
       end;
 
-    Result := c.Show;
+    if c.ChoixCount &gt; 0 then
+      Result := c.Show
+    else
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
   finally
     re.Free;
     c.Free;
@@ -240,6 +247,5 @@ begin
 
   if id_album &lt;&gt; &apos;&apos; then
     ParseAlbum(id_album);
-end.
-</Code>
+end.</Code>
 </Script>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <Script>
+  <Options/>
   <Code>program PaniniComics;
 
 uses ScriptFonctions;
@@ -26,9 +27,9 @@ begin
   page := GetPage(urlSite + urlInfoAlbum + id_album, False);
   page := ExtractRegEx(page, regExInfosAlbum);
 
-  AlbumToImport.Titre := ExtractRegExGroup(page, regExAlbumTitres, &apos;titre_album&apos;);
+  AlbumToImport.Titre := PrepareTitre(ExtractRegExGroup(page, regExAlbumTitres, &apos;titre_album&apos;));
   AlbumToImport.Tome := StrToIntDef(ExtractRegExGroup(page, regExAlbumTitres, &apos;tome&apos;), 0);
-  AlbumToImport.Serie.Titre := ExtractRegExGroup(page, regExAlbumTitres, &apos;titre_serie&apos;);
+  AlbumToImport.Serie.Titre := PrepareTitre(ExtractRegExGroup(page, regExAlbumTitres, &apos;titre_serie&apos;));
   if AlbumToImport.Titre = AlbumToImport.Serie.Titre then AlbumToImport.Titre := &apos;&apos;;
 
   s := ExtractRegExGroup(page, regExAlbumEdition, &apos;auteur&apos;);
@@ -103,7 +104,10 @@ begin
       page := GetPage(urlSite + Format(urlSearch, [p]) + Titre, False);
     end;
 
-    Result := c.Show;
+    if c.ChoixCount &gt; 0 then
+      Result := c.Show
+    else
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
   finally
     re.Free;
     c.Free;
@@ -119,6 +123,5 @@ begin
   id_album := RechercheParTitre(entry);
   if id_album &lt;&gt; &apos;&apos; then
     ParseAlbum(id_album);
-end.
-</Code>
+end.</Code>
 </Script>

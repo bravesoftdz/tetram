@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <Script>
+  <Options>
+    <Option Label="Type de recherche" Values="Uniquement BD|Uniquement Mangas|Les deux" Default="Les deux"/>
+  </Options>
   <Code>program Glenat;
 
 uses ScriptFonctions;
@@ -88,10 +91,11 @@ begin
     s := ExtractRegEx(page, regExMangaInfos);
     if re.BeginSearch(s, regExMangaSerie) and re.Next then
     begin
-      AlbumToImport.Serie.Titre := re.GetCaptureByName(&apos;titre_serie&apos;);
+      AlbumToImport.Serie.Titre := PrepareTitre(re.GetCaptureByName(&apos;titre_serie&apos;));
       AlbumToImport.Tome := StrToIntDef(re.GetCaptureByName(&apos;tome&apos;), 0);
     end;
-    AlbumToImport.Titre := ExtractRegEx(s, regExMangaTitre);
+    AlbumToImport.Titre := PrepareTitre(ExtractRegEx(s, regExMangaTitre));
+    if AlbumToImport.Titre = AlbumToImport.Serie.Titre then AlbumToImport.Titre := &apos;&apos;;
 
     if re.BeginSearch(s, regExMangaDetail) and re.Next then
     begin
@@ -152,8 +156,8 @@ begin
   page := GetPage(lien, True);
 
   s := ExtractRegEx(page,  regExBDInfos);
-  AlbumToImport.Serie.Titre := ExtractRegEx(s,  regExBDSerie);
-  AlbumToImport.Titre := ExtractRegEx(s,  regExBDTitre);
+  AlbumToImport.Serie.Titre := PrepareTitre(ExtractRegEx(s,  regExBDSerie));
+  AlbumToImport.Titre := PrepareTitre(ExtractRegEx(s,  regExBDTitre));
   AlbumToImport.Tome := StrToIntDef(ExtractRegEx(s,  regExBDTome), 0);
   AlbumToImport.Sujet.Text := HTMLText(ExtractRegEx(s,  regExBDResume));
 
@@ -245,14 +249,32 @@ begin
   AlbumToImport.Import;
 end;
 
+function IsLienManga(const Lien: string): Boolean;
+begin
+  Result := Pos(&apos;glenatmanga&apos;, lien) &gt; 0;
+end;
+
+function IsLienBD(const Lien: string): Boolean;
+begin
+  Result := Pos(&apos;glenatbd&apos;, lien) &gt; 0;
+end;
+
 function RechercheParTitre(const Titre: string): string;
 var
   page, sAlbum, oldSerie, sSerie: string;
   re: TBdtkRegEx;
   c: TScriptChoix;
   lien, titre_album, commentaire: string;
+  OptionRecherche: Integer;
+  Manga, BD: Boolean;
+  isOk: Boolean;
 begin
   Result := &apos;&apos;;
+
+  OptionRecherche := GetOptionValueIndex(&apos;Type de recherche&apos;, 2);
+  BD := (OptionRecherche = 0) or (OptionRecherche = 2);
+  Manga := (OptionRecherche = 1) or (OptionRecherche = 2);
+
   page := GetPage(urlSearch + Titre, False);
   page := ExtractRegEx(page, regExSearchResultats);
 
@@ -271,14 +293,19 @@ begin
               if BeginSearch(sAlbum, regExSearchResultatsLigneAlbum) and Next then
               begin
                 lien := GetCaptureByName(&apos;lien&apos;);
-                titre_album := GetCaptureByName(&apos;titre_album&apos;);
-                AjoutString2(titre_album, GetCaptureByName(&apos;tome&apos;), #13#10);
-                commentaire := &apos;&apos;;
-                AjoutString1(commentaire, StringReplace(GetCaptureByName(&apos;auteur&apos;), &apos;&lt;br&gt;&apos;, &apos;, &apos;, [rfReplaceAll, rfIgnoreCase]), #13#10, &apos;Auteur(s): &apos;, &apos;&apos;);
-                AjoutString1(commentaire, GetCaptureByName(&apos;editeur&apos;), #13#10, &apos;Editeur: &apos;, &apos;&apos;);
-                AjoutString1(commentaire, GetCaptureByName(&apos;parution&apos;), #13#10, &apos;Parution: &apos;, &apos;&apos;);
+                isOk := OptionRecherche = 2;
+                if not isOk then isOk := (BD and IsLienBD(lien)) or (Manga and IsLienManga(lien));
 
-                c.AjoutChoix(sSerie, titre_album, HTMLText(commentaire), lien);
+                if isOk then begin
+                  titre_album := GetCaptureByName(&apos;titre_album&apos;);
+                  AjoutString2(titre_album, GetCaptureByName(&apos;tome&apos;), #13#10);
+                  commentaire := &apos;&apos;;
+                  AjoutString1(commentaire, StringReplace(GetCaptureByName(&apos;auteur&apos;), &apos;&lt;br&gt;&apos;, &apos;, &apos;, [rfReplaceAll, rfIgnoreCase]), #13#10, &apos;Auteur(s): &apos;, &apos;&apos;);
+                  AjoutString1(commentaire, GetCaptureByName(&apos;editeur&apos;), #13#10, &apos;Editeur: &apos;, &apos;&apos;);
+                  AjoutString1(commentaire, GetCaptureByName(&apos;parution&apos;), #13#10, &apos;Parution: &apos;, &apos;&apos;);
+
+                  c.AjoutChoix(sSerie, titre_album, HTMLText(commentaire), lien);
+                end;
               end;
           finally
             Free;
@@ -286,7 +313,10 @@ begin
         oldSerie := sSerie;
       end;
 
-    Result := c.Show;
+    if c.ChoixCount &gt; 0 then
+      Result := c.Show
+    else
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
   finally
     re.Free;
     c.Free;
@@ -295,10 +325,10 @@ end;
 
 procedure ParseAlbum(const lien: string);
 begin
-  if Pos(&apos;glenatmanga&apos;, lien) &gt; 0 then
+  if IsLienManga(lien) then
     ParseManga(lien)
   else
-  if Pos(&apos;glenatbd&apos;, lien) &gt; 0 then
+  if IsLienBD(lien) then
     ParseBD(lien)
   else
     ShowMessage(&apos;Type d&apos;&apos;album non reconnu&apos;);

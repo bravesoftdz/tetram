@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <Script>
+  <Options/>
   <Code>program Delcourt;
 
 uses ScriptFonctions;
@@ -51,8 +52,8 @@ begin
   try
     if re.BeginSearch(page, regExAlbumDetail) and re.Find(s) then
     begin
-      AlbumToImport.Serie.Titre := ExtractRegEx(s, regExAlbumSerieTitre);
-      AlbumToImport.Titre := ExtractRegEx(s, regExAlbumTitre);
+      AlbumToImport.Serie.Titre := PrepareTitre(ExtractRegEx(s, regExAlbumSerieTitre));
+      AlbumToImport.Titre := PrepareTitre(ExtractRegEx(s, regExAlbumTitre));
 
       AlbumToImport.Edition.ISBN := ExtractRegEx(s, regExAlbumISBN);
       with TStringList.Create do
@@ -178,7 +179,10 @@ begin
       if ExtractRegEx(page, &apos;&lt;a(.*?)&gt;Page suivante&amp;nbsp;&lt;/a&gt;&apos;) = &apos;&apos; then Break;
     end;
 
-    Result := c.Show;
+    if c.ChoixCount &gt; 0 then
+      Result := c.Show
+    else
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
   finally
     re.Free;
     c.Free;
