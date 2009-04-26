@@ -84,10 +84,8 @@ uses
   UMySQLMAJ1_0_0_1 in 'Web\mises à jour\UMySQLMAJ1_0_0_1.pas',
   DIMimeStreams in 'Web\Mime64\DIMimeStreams.pas',
   DIMime in 'Web\Mime64\DIMime.pas',
-  UfrmFusion in 'UfrmFusion.pas' {frmFusion},
   UMySQLMAJ1_0_0_0 in 'Web\mises à jour\UMySQLMAJ1_0_0_0.pas',
   UMySQLMAJ1_0_0_2 in 'Web\mises à jour\UMySQLMAJ1_0_0_2.pas',
-  UdmScripts in 'Scripts\UdmScripts.pas' {dmScripts: TDataModule},
   UfrmScripts in 'Scripts\UfrmScripts.pas' {frmScripts},
   UfrmScriptSearch in 'Scripts\UfrmScriptSearch.pas' {frmScriptSearch},
   IDHashMap in 'Scripts\IDHashMap.pas',
@@ -114,7 +112,7 @@ uses
   UScriptList in 'Scripts\UScriptList.pas',
   UScriptEdition in 'Scripts\UScriptEdition.pas',
   UScriptDebug in 'Scripts\UScriptDebug.pas',
-  UMAJ2_1_1_4 in 'mises à jour\UMAJ2_1_1_4.pas',
+  UMAJ2_1_1_7 in 'mises à jour\UMAJ2_1_1_7.pas',
   UMAJ0_0_0_6 in 'mises à jour\UMAJ0_0_0_6.pas',
   UMAJ0_0_0_8 in 'mises à jour\UMAJ0_0_0_8.pas',
   UMAJ0_0_0_9 in 'mises à jour\UMAJ0_0_0_9.pas',
@@ -158,7 +156,11 @@ uses
   UMAJ2_1_0_16 in 'mises à jour\UMAJ2_1_0_16.pas',
   UMAJ2_1_0_22 in 'mises à jour\UMAJ2_1_0_22.pas',
   UMAJ2_1_0_72 in 'mises à jour\UMAJ2_1_0_72.pas',
-  UMAJ2_1_1_2 in 'mises à jour\UMAJ2_1_1_2.pas';
+  UMAJ2_1_1_2 in 'mises à jour\UMAJ2_1_1_2.pas',
+  UdmScripts in 'Scripts\UdmScripts.pas' {dmScripts: TDataModule},
+  UfrmFusionEditions in 'Gestion\UfrmFusionEditions.pas' {frmFusionEditions},
+  UMAJ2_1_1_4 in 'mises à jour\UMAJ2_1_1_4.pas',
+  UMAJ2_1_1_8 in 'mises à jour\UMAJ2_1_1_8.pas';
 
 {$R *.RES}
 {$R curseurs.res}
@@ -167,6 +169,7 @@ uses
 var
   Debut: TDateTime;
 begin
+  Application.MainFormOnTaskbar := True;
   TGlobalVar.Mode_en_cours := mdLoad;
   Application.Title := 'BDthèque';
   if not Bool(CreateMutex(nil, True, 'TetramCorpBDMutex')) then

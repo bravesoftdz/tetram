@@ -16,6 +16,9 @@ type
     Bevel1: TBevel;
     Frame11: TframBoutons;
     vtEditEditeurs: TframVTEdit;
+    Label4: TLabel;
+    edAssociations: TMemoLabeled;
+    Bevel4: TBevel;
     procedure FormCreate(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
   private
@@ -49,9 +52,11 @@ var
 begin
   hg := THourGlass.Create;
   FCollection := Value;
+  FCollection.FillAssociations(vmCollections);
 
   edNom.Text := FCollection.NomCollection;
   vtEditEditeurs.CurrentValue := FCollection.ID_Editeur;
+  edAssociations.Lines.Assign(FCollection.Associations);
 
   vtEditEditeurs.Enabled := FCollection.RecInconnu;
 end;
@@ -78,8 +83,10 @@ begin
 
   FCollection.NomCollection := Trim(edNom.Text);
   FCollection.ID_Editeur := ID_Editeur;
+  FCollection.Associations.Assign(edAssociations.Lines);
 
   FCollection.SaveToDatabase;
+  FCollection.SaveAssociations(vmCollections, FCollection.Editeur.ID);
 
   ModalResult := mrOk;
 end;

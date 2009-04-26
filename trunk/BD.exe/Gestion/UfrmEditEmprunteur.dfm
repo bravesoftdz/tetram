@@ -7,8 +7,8 @@ object frmEditEmprunteur: TfrmEditEmprunteur
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'frmEditEmprunteur'
-  ClientHeight = 144
-  ClientWidth = 215
+  ClientHeight = 232
+  ClientWidth = 521
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -23,40 +23,44 @@ object frmEditEmprunteur: TfrmEditEmprunteur
   TextHeight = 13
   object Bevel1: TBevel
     Left = 0
-    Top = 25
-    Width = 215
+    Top = 29
+    Width = 521
     Height = 4
     Align = alTop
     Shape = bsBottomLine
+    ExplicitTop = 25
+    ExplicitWidth = 215
   end
   object ScrollBox1: TScrollBox
     Left = 0
-    Top = 29
-    Width = 215
-    Height = 115
+    Top = 33
+    Width = 521
+    Height = 199
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
     DesignSize = (
-      215
-      115)
+      521
+      199)
     object emprunts: TLabel
       Left = 60
-      Top = 98
+      Top = 186
       Width = 3
       Height = 13
       Alignment = taCenter
       Anchors = [akLeft, akBottom]
       Transparent = True
+      ExplicitTop = 98
     end
     object Label2: TLabel
       Left = 6
-      Top = 98
+      Top = 186
       Width = 52
       Height = 13
       Anchors = [akLeft, akBottom]
       Caption = 'Emprunts :'
       Transparent = True
+      ExplicitTop = 98
     end
     object Label3: TLabel
       Left = 4
@@ -71,8 +75,8 @@ object frmEditEmprunteur: TfrmEditEmprunteur
     object coord: TMemo
       Left = 4
       Top = 30
-      Width = 206
-      Height = 66
+      Width = 512
+      Height = 154
       Anchors = [akLeft, akTop, akRight, akBottom]
       BevelKind = bkTile
       BorderStyle = bsNone
@@ -82,7 +86,7 @@ object frmEditEmprunteur: TfrmEditEmprunteur
     object edNom: TEditLabeled
       Left = 37
       Top = 6
-      Width = 173
+      Width = 479
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -98,22 +102,22 @@ object frmEditEmprunteur: TfrmEditEmprunteur
   inline Frame11: TframBoutons
     Left = 0
     Top = 0
-    Width = 215
-    Height = 25
+    Width = 521
+    Height = 29
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 215
+    ExplicitWidth = 521
     inherited btnOK: TButton
-      Left = 40
+      Left = 346
       Width = 87
       Caption = 'Enregistrer'
       OnClick = Frame11btnOKClick
-      ExplicitLeft = 40
+      ExplicitLeft = 346
       ExplicitWidth = 87
     end
     inherited btnAnnuler: TButton
-      Left = 132
-      ExplicitLeft = 132
+      Left = 438
+      ExplicitLeft = 438
     end
   end
 end

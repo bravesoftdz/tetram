@@ -23,6 +23,8 @@ object frmZoomCouverture: TfrmZoomCouverture
     Height = 494
     Align = alClient
     BevelOuter = bvNone
+    DoubleBuffered = True
+    ParentDoubleBuffered = False
     TabOrder = 0
     object Image: TImage
       Left = 221

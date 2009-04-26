@@ -64,6 +64,9 @@ type
     vtEditPersonnes: TframVTEdit;
     vtEditCollections: TframVTEdit;
     vtEditEditeurs: TframVTEdit;
+    edAssociations: TMemoLabeled;
+    Label10: TLabel;
+    Bevel4: TBevel;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
@@ -191,7 +194,10 @@ begin
   FSerie.FormatEdition := MakeOption(cbxFormat.Value, cbxFormat.Caption);
   FSerie.SensLecture := MakeOption(cbxSensLecture.Value, cbxSensLecture.Caption);
 
+  FSerie.Associations.Assign(edAssociations.Lines);
+
   FSerie.SaveToDatabase;
+  FSerie.SaveAssociations(vmSeries, GUID_NULL);
 
   ModalResult := mrOk;
 end;
@@ -204,6 +210,7 @@ var
 begin
   hg := THourGlass.Create;
   FSerie := Value;
+  FSerie.FillAssociations(vmSeries);
 
   lvScenaristes.Items.BeginUpdate;
   lvDessinateurs.Items.BeginUpdate;
@@ -256,6 +263,8 @@ begin
     vtParaBD.Filtre := 'ID_Serie = ' + QuotedStr(GUIDToString(ID_Serie));
     vtParaBD.Mode := vmParaBDSerie;
     vtParaBD.FullExpand;
+
+    edAssociations.Lines.Assign(FSerie.Associations);
   finally
     lvScenaristes.Items.EndUpdate;
     lvDessinateurs.Items.EndUpdate;

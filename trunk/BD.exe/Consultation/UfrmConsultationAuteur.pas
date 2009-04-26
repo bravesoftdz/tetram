@@ -3,12 +3,12 @@ unit UfrmConsultationAuteur;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls, ProceduresBDtk, 
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls, ProceduresBDtk,
   VDTButton, ActnList, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, jpeg, Procedures, ShellAPI, VirtualTree, LoadComplet, UBdtForms,
   StrUtils;
 
 type
-  TfrmConsultationAuteur = class(TBdtForm, IImpressionApercu)
+  TfrmConsultationAuteur = class(TBdtForm, IImpressionApercu, IFicheEditable)
     Popup3: TPopupMenu;
     Informations1: TMenuItem;
     Emprunts1: TMenuItem;
@@ -29,6 +29,9 @@ type
     Fiche1: TMenuItem;
     Aperuavantimpression1: TMenuItem;
     Aperuavantimpression2: TMenuItem;
+    FicheModifier: TAction;
+    Modifier1: TMenuItem;
+    N1: TMenuItem;
     procedure lvScenaristesDblClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -41,6 +44,7 @@ type
     procedure vstSeriesInitChildren(Sender: TBaseVirtualTree; Node: PVirtualNode; var ChildCount: Cardinal);
     procedure vstSeriesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
     procedure FicheApercuExecute(Sender: TObject);
+    procedure FicheModifierExecute(Sender: TObject);
   private
     { Déclarations privées }
     FAuteur: TAuteurComplet;
@@ -51,6 +55,8 @@ type
     function GetID_Auteur: TGUID;
     procedure SetID_Auteur(const Value: TGUID);
     procedure ClearForm;
+    procedure ModificationExecute(Sender: TObject);
+    function ModificationUpdate: Boolean;
   public
     { Déclarations publiques }
     property Auteur: TAuteurComplet read FAuteur;
@@ -61,7 +67,7 @@ implementation
 
 {$R *.DFM}
 
-uses Commun, TypeRec, Impression, DateUtils, UHistorique;
+uses Commun, TypeRec, Impression, DateUtils, UHistorique, Editions;
 
 type
   PNodeInfo = ^RNodeInfo;
@@ -238,6 +244,21 @@ end;
 procedure TfrmConsultationAuteur.FicheApercuExecute(Sender: TObject);
 begin
   ImpressionFicheAuteur(ID_Auteur, TComponent(Sender).Tag = 1);
+end;
+
+procedure TfrmConsultationAuteur.FicheModifierExecute(Sender: TObject);
+begin
+  if EditionAuteur(FAuteur.ID) then Historique.Refresh;
+end;
+
+procedure TfrmConsultationAuteur.ModificationExecute(Sender: TObject);
+begin
+  FicheModifierExecute(Sender);
+end;
+
+function TfrmConsultationAuteur.ModificationUpdate: Boolean;
+begin
+  Result := True;
 end;
 
 end.

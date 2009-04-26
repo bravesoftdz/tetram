@@ -71,7 +71,7 @@ object frmOptions: TfrmOptions
     Left = 0
     Top = 0
     Width = 360
-    Height = 377
+    Height = 378
     Cursor = crHandPoint
     ActivePage = options
     Align = alClient
@@ -88,7 +88,7 @@ object frmOptions: TfrmOptions
         Left = 0
         Top = 0
         Width = 352
-        Height = 329
+        Height = 330
         VertScrollBar.Tracking = True
         Align = alClient
         BevelInner = bvNone
@@ -393,7 +393,7 @@ object frmOptions: TfrmOptions
       ImageIndex = 1
       DesignSize = (
         352
-        329)
+        330)
       object Label8: TLabel
         Left = 24
         Top = 36
@@ -502,6 +502,7 @@ object frmOptions: TfrmOptions
           TabOrder = 4
           ExplicitTop = 65
           ExplicitWidth = 165
+          ExplicitHeight = 25
           inherited btnOK: TButton
             Left = 24
             Width = 64
@@ -567,6 +568,10 @@ object frmOptions: TfrmOptions
     object TabSheet1: TTabSheet
       Caption = 'Site web'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object GroupBox3: TGroupBox
         Left = 0
         Top = 0
@@ -766,29 +771,24 @@ object frmOptions: TfrmOptions
   end
   inline Frame11: TframBoutons
     Left = 0
-    Top = 377
+    Top = 378
     Width = 360
-    Height = 30
+    Height = 29
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 377
+    ExplicitTop = 378
     ExplicitWidth = 360
-    ExplicitHeight = 30
     inherited btnOK: TButton
       Left = 203
-      Top = 6
       Width = 73
       OnClick = btnOKClick
       ExplicitLeft = 203
-      ExplicitTop = 6
       ExplicitWidth = 73
     end
     inherited btnAnnuler: TButton
       Left = 284
-      Top = 6
       Width = 71
       ExplicitLeft = 284
-      ExplicitTop = 6
       ExplicitWidth = 71
     end
   end

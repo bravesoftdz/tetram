@@ -8,7 +8,7 @@ uses
   ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms;
 
 type
-  TfrmConsultationParaBD = class(TBdtForm, IImpressionApercu)
+  TfrmConsultationParaBD = class(TBdtForm, IImpressionApercu, IFicheEditable)
     ScrollBox2: TScrollBox;
     lbNoImage: TLabel;
     l_sujet: TLabel;
@@ -48,6 +48,9 @@ type
     Label1: TLabel;
     Label2: TLabel;
     lbCote: TLabel;
+    FicheModifier: TAction;
+    Modifier1: TMenuItem;
+    N1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure lvAuteursDblClick(Sender: TObject);
@@ -56,6 +59,7 @@ type
     procedure ImageApercuExecute(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure FicheApercuExecute(Sender: TObject);
+    procedure FicheModifierExecute(Sender: TObject);
   private
     FParaBD: TParaBDComplet;
     function GetID_ParaBD: TGUID;
@@ -67,6 +71,8 @@ type
     function ApercuUpdate: Boolean;
     procedure ImpressionExecute(Sender: TObject);
     function ImpressionUpdate: Boolean;
+    procedure ModificationExecute(Sender: TObject);
+    function ModificationUpdate: Boolean;
     { Déclarations privées }
   public
     { Déclarations publiques }
@@ -76,7 +82,8 @@ type
 
 implementation
 
-uses Commun, TypeRec, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression;
+uses Commun, TypeRec, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
+  Editions;
 
 {$R *.dfm}
 
@@ -256,6 +263,11 @@ begin
   ImpRep(Sender);
 end;
 
+procedure TfrmConsultationParaBD.FicheModifierExecute(Sender: TObject);
+begin
+  if EditionParaBD(FParaBD.ID) then Historique.Refresh;
+end;
+
 procedure TfrmConsultationParaBD.ImpRep(Sender: TObject);
 begin
   ImpressionFicheParaBD(ID_ParaBD, TComponent(Sender).Tag = 1)
@@ -277,6 +289,16 @@ begin
 end;
 
 function TfrmConsultationParaBD.ImpressionUpdate: Boolean;
+begin
+  Result := True;
+end;
+
+procedure TfrmConsultationParaBD.ModificationExecute(Sender: TObject);
+begin
+  FicheModifierExecute(Sender);
+end;
+
+function TfrmConsultationParaBD.ModificationUpdate: Boolean;
 begin
   Result := True;
 end;

@@ -17,6 +17,9 @@ type
     VDTButton13: TVDTButton;
     Bevel1: TBevel;
     Frame11: TframBoutons;
+    Label4: TLabel;
+    edAssociations: TMemoLabeled;
+    Bevel4: TBevel;
     procedure FormCreate(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -36,7 +39,7 @@ type
 implementation
 
 uses
-  Commun, Procedures, Textes;
+  Commun, Procedures, Textes, VirtualTree;
 
 {$R *.DFM}
 
@@ -52,9 +55,11 @@ var
 begin
   hg := THourGlass.Create;
   FEditeur := Value;
+  FEditeur.FillAssociations(vmEditeurs);
 
   edNom.Text := FEditeur.NomEditeur;
   edSite.Text := FEditeur.SiteWeb;
+  edAssociations.Lines.Assign(FEditeur.Associations);
 end;
 
 procedure TfrmEditEditeur.Frame11btnOKClick(Sender: TObject);
@@ -68,7 +73,10 @@ begin
 
   FEditeur.NomEditeur := Trim(edNom.Text);
   FEditeur.SiteWeb := Trim(edSite.Text);
+  FEditeur.Associations.Assign(edAssociations.Lines);
+
   FEditeur.SaveToDatabase;
+  FEditeur.SaveAssociations(vmEditeurs, GUID_NULL);
 
   ModalResult := mrOk;
 end;

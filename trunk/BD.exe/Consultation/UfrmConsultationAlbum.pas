@@ -8,7 +8,7 @@ uses
   jpeg, ShellAPI, LoadComplet, CRFurtif, Generics.Defaults;
 
 type
-  TfrmConsultationAlbum = class(TBdtForm, IImpressionApercu)
+  TfrmConsultationAlbum = class(TBdtForm, IImpressionApercu, IFicheEditable)
     Popup3: TPopupMenu;
     Informations1: TMenuItem;
     Emprunts1: TMenuItem;
@@ -104,6 +104,9 @@ type
     lbSensLecture: TLabel;
     Label22: TLabel;
     lbNumeroPerso: TLabel;
+    N1: TMenuItem;
+    FicheModifier: TAction;
+    Modifier1: TMenuItem;
     procedure lvScenaristesDblClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -131,6 +134,7 @@ type
     procedure lvColoristesData(Sender: TObject; Item: TListItem);
     procedure lvSerieData(Sender: TObject; Item: TListItem);
     procedure lvSerieGetImageIndex(Sender: TObject; Item: TListItem);
+    procedure FicheModifierExecute(Sender: TObject);
   private
     { Déclarations privées }
     CurrentCouverture: Integer;
@@ -144,6 +148,8 @@ type
     function GetID_Album: TGUID;
     procedure SetID_Album(const Value: TGUID);
     procedure ClearForm;
+    procedure ModificationExecute(Sender: TObject);
+    function ModificationUpdate: Boolean;
   public
     { Déclarations publiques }
     property Album: TAlbumComplet read FAlbum;
@@ -155,7 +161,7 @@ implementation
 {$R *.DFM}
 
 uses Commun, TypeRec, CommonConst, MAJ, Impression, DateUtils, UHistorique, Procedures,
-  Divers, Textes;
+  Divers, Textes, Editions;
 
 var
   FSortColumn: Integer;
@@ -164,6 +170,11 @@ var
 procedure TfrmConsultationAlbum.lvScenaristesDblClick(Sender: TObject);
 begin
   if Assigned(TListView(Sender).Selected) then Historique.AddWaiting(fcAuteur, TAuteur(TListView(Sender).Selected.Data).Personne.ID, 0);
+end;
+
+procedure TfrmConsultationAlbum.FicheModifierExecute(Sender: TObject);
+begin
+  if EditionAlbum(FAlbum.ID) then Historique.Refresh;
 end;
 
 procedure TfrmConsultationAlbum.FormCreate(Sender: TObject);
@@ -618,6 +629,16 @@ begin
     Item.ImageIndex := 1
   else
     Item.ImageIndex := -1;
+end;
+
+procedure TfrmConsultationAlbum.ModificationExecute(Sender: TObject);
+begin
+  FicheModifierExecute(Sender);
+end;
+
+function TfrmConsultationAlbum.ModificationUpdate: Boolean;
+begin
+  Result := True;
 end;
 
 end.

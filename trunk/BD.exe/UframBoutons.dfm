@@ -26,7 +26,6 @@ object framBoutons: TframBoutons
     ParentDoubleBuffered = False
     TabOrder = 0
     OnClick = btnOKClick
-    ExplicitTop = 2
   end
   object btnAnnuler: TButton
     Left = 368
@@ -45,6 +44,5 @@ object framBoutons: TframBoutons
     ParentDoubleBuffered = False
     TabOrder = 1
     OnClick = btnAnnulerClick
-    ExplicitTop = 2
   end
 end

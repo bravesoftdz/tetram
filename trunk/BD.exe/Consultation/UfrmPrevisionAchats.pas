@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Menus, ActnList, VirtualTrees, VirtualTree, Buttons, VDTButton, ProceduresBDtk,
-  ExtCtrls, Procedures, ComboCheck, StdCtrls, UBdtForms;
+  ExtCtrls, Procedures, ComboCheck, StdCtrls, UBdtForms, PngSpeedButton;
 
 type
   TfrmPrevisionsAchats = class(TBdtForm, IImpressionApercu)
@@ -20,10 +20,25 @@ type
     Panel1: TPanel;
     Label1: TLabel;
     LightComboCheck1: TLightComboCheck;
+    supprimer: TVDTButton;
+    modifier: TVDTButton;
+    ajouter: TVDTButton;
+    actAjouter: TAction;
+    actModifier: TAction;
+    actSupprimer: TAction;
+    Bevel7: TBevel;
+    btAcheter: TVDTButton;
+    actAcheter: TAction;
     procedure FormCreate(Sender: TObject);
     procedure ListeApercuExecute(Sender: TObject);
     procedure LightComboCheck1Change(Sender: TObject);
     procedure vstPrevisionsAchatsPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+    procedure actSupprimerExecute(Sender: TObject);
+    procedure actAjouterExecute(Sender: TObject);
+    procedure actModifierExecute(Sender: TObject);
+    procedure ActionList1Update(Action: TBasicAction;
+      var Handled: Boolean);
+    procedure actAcheterExecute(Sender: TObject);
   private
     procedure ChangeAlbumMode(Mode: TVirtualMode);
     { Déclarations privées }
@@ -37,7 +52,8 @@ type
 
 implementation
 
-uses Impression, IniFiles, CommonConst, TypeRec, DateUtils;
+uses Impression, IniFiles, CommonConst, TypeRec, DateUtils, UHistorique,
+  Proc_Gestions, Commun;
 
 {$R *.dfm}
 
@@ -122,6 +138,33 @@ begin
         TargetCanvas.Font.Color := clRed
       else
         TargetCanvas.Font.Color := clFuchsia;
+end;
+
+procedure TfrmPrevisionsAchats.actAcheterExecute(Sender: TObject);
+begin
+  Historique.AddWaiting(fcGestionAchat, nil, nil, @AcheterAlbums, vstPrevisionsAchats);
+end;
+
+procedure TfrmPrevisionsAchats.actAjouterExecute(Sender: TObject);
+begin
+  Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterAchatsAlbum, vstPrevisionsAchats, '');
+end;
+
+procedure TfrmPrevisionsAchats.ActionList1Update(Action: TBasicAction;  var Handled: Boolean);
+begin
+  actModifier.Enabled := not IsEqualGUID(vstPrevisionsAchats.CurrentValue, GUID_NULL);
+  actSupprimer.Enabled := actModifier.Enabled;
+  actAcheter.Enabled := actModifier.Enabled;
+end;
+
+procedure TfrmPrevisionsAchats.actModifierExecute(Sender: TObject);
+begin
+  Historique.AddWaiting(fcGestionModif, nil, nil, @ModifierAchatsAlbum, vstPrevisionsAchats);
+end;
+
+procedure TfrmPrevisionsAchats.actSupprimerExecute(Sender: TObject);
+begin
+  Historique.AddWaiting(fcGestionSupp, nil, nil, @SupprimerAchatsAlbum, vstPrevisionsAchats);
 end;
 
 end.

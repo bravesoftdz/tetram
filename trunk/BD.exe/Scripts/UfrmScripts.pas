@@ -154,8 +154,6 @@ type
     procedure seScript1ProcessUserCommand(Sender: TObject; var Command: TSynEditorCommand; var AChar: Char; Data: Pointer);
     procedure actRunWithoutDebugExecute(Sender: TObject);
     procedure pcScriptsChange(Sender: TObject);
-    procedure SynEditParamShowExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
-    procedure SynEditAutoCompleteExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
     procedure seScript1KeyPress(Sender: TObject; var Key: Char);
     procedure PageControl2Change(Sender: TObject);
     procedure ListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
@@ -167,6 +165,8 @@ type
     procedure actModifierOptionExecute(Sender: TObject);
     procedure actPauseExecute(Sender: TObject);
     procedure mmConsoleChange(Sender: TObject);
+    procedure SynEditParamShowExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
+    procedure SynEditAutoCompleteExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
   private
     FLastSearch, FLastReplace: string;
     FSearchOptions: TSynSearchOptions;
@@ -759,29 +759,6 @@ begin
   RefreshOptions;
 end;
 
-procedure TfrmScripts.SynEditParamShowExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
-var
-  ParamIndex: Integer;
-  Info: TParamInfoRecord;
-  Editor: TSynEdit;
-begin
-  RebuildLokalObjektList;
-
-  Editor := FCurrentScript.Editor;
-  CanExecute := FindParameter(AnsiString(Editor.LineText), Editor.CaretX, Info, ParamIndex);
-
-  TSynCompletionProposal(Sender).ItemList.Clear;
-
-  if CanExecute then
-  begin
-    TSynCompletionProposal(Sender).Form.CurrentIndex := ParamIndex;
-    if Info.Params = '' then
-      Info.Params := '"* Pas de paramètre *"';
-
-    TSynCompletionProposal(Sender).ItemList.Add(string(Info.Params));
-  end;
-end;
-
 procedure TfrmScripts.SynEditAutoCompleteExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
 var
   Parser: TPSPascalParser;
@@ -905,6 +882,29 @@ begin
 
   CanExecute := true;
   FillAutoComplete(fObjectList, Types, Father, Typ);
+end;
+
+procedure TfrmScripts.SynEditParamShowExecute(Kind: SynCompletionType;  Sender: TObject; var CurrentInput: string; var x, y: Integer;  var CanExecute: Boolean);
+var
+  ParamIndex: Integer;
+  Info: TParamInfoRecord;
+  Editor: TSynEdit;
+begin
+  RebuildLokalObjektList;
+
+  Editor := FCurrentScript.Editor;
+  CanExecute := FindParameter(AnsiString(Editor.LineText), Editor.CaretX, Info, ParamIndex);
+
+  TSynCompletionProposal(Sender).ItemList.Clear;
+
+  if CanExecute then
+  begin
+    TSynCompletionProposal(Sender).Form.CurrentIndex := ParamIndex;
+    if Info.Params = '' then
+      Info.Params := '"* Pas de paramètre *"';
+
+    TSynCompletionProposal(Sender).ItemList.Add(string(Info.Params));
+  end;
 end;
 
 procedure TfrmScripts.FillAutoComplete(var List: TParamInfoArray; Types: TInfoTypes; FromFather: Cardinal; Typ: AnsiString);
@@ -1362,7 +1362,6 @@ begin
   Compiled := False;
   Script := FScriptList.InfoScript(TSynEdit(Sender));
   Script.Modifie := True;
-  Script.SB.Panels[1].Text := 'Modifié';
 
   if (dmScripts.ErrorLine > 0) then
   begin
@@ -1406,8 +1405,8 @@ procedure TfrmScripts.actEnregistrerExecute(Sender: TObject);
 begin
   with FOpenedScript[pcScripts.ActivePageIndex] do
   begin
+    Code.Assign(Editor.Lines);
     Save;
-    SB.Panels[1].Text := '';
   end;
 end;
 
@@ -1497,7 +1496,16 @@ begin
         end;
   end
   else
+  begin
+    // pour forcer la fermeture des onglets tant que le projet est potentiellement ouvert :
+    // la destruction de la fenêtre déselectionne l'item du listview avant de commencer la chaine des Destroy
+    // et donc les passage dans FormDestroy et ClearPages
+    // la question à 100 balles est "pourquoi ça ne se produit que lorsqu'on a fair un actEnregistrer.Execute"
+    // ou dans certains cas quand l'exécution du script à généré une erreur de script
+    ProjetOuvert := False;
+
     FProjetScript := nil;
+  end;
   RefreshOptions;
 end;
 
@@ -1828,7 +1836,6 @@ procedure TfrmScripts.actRetirerOptionExecute(Sender: TObject);
 begin
   FProjetScript.Options.Delete(ListBox1.ItemIndex);
   FProjetScript.Modifie := True;
-  FProjetScript.SB.Panels[1].Text := 'Modifié';
   RefreshOptions;
 end;
 
@@ -1959,7 +1966,7 @@ procedure TfrmScripts.GoToPosition(Script: AnsiString; Line, Char: Cardinal);
 var
   Editor: TSynEdit;
 begin
-  Editor := GetScript(dmScripts.ActiveFile);
+  Editor := GetScript(Script);
   if not Assigned(Editor) then
   begin
     LoadScript(dmScripts.ActiveFile);
@@ -2083,7 +2090,6 @@ begin
         Option.FDefaultValue := EditLabeled2.Text;
 
         FProjetScript.Modifie := True;
-        FProjetScript.SB.Panels[1].Text := 'Modifié';
       end;
     finally
       Free;
@@ -2097,6 +2103,7 @@ begin
   Option := TOption.Create;
   if EditOption(Option) then
   begin
+    Option.FChooseValue := Option.FDefaultValue;
     FProjetScript.Options.Add(Option);
     RefreshOptions;
   end

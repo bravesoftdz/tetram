@@ -4,10 +4,11 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls, ReadOnlyCheckBox,
-  ComCtrls, VDTButton, Buttons, VirtualTree, Procedures, ProceduresBDtk, UBdtForms, StrUtils;
+  ComCtrls, VDTButton, Buttons, VirtualTree, Procedures, ProceduresBDtk, UBdtForms, StrUtils,
+  ActnList, Menus;
 
 type
-  TfrmConsultationSerie = class(TBdtForm, IImpressionApercu)
+  TfrmConsultationSerie = class(TBdtForm, IImpressionApercu, IFicheEditable)
     ScrollBox2: TScrollBox;
     l_remarques: TLabel;
     l_sujet: TLabel;
@@ -33,6 +34,16 @@ type
     Label9: TLabel;
     Collection: TLabel;
     cbTerminee: TReadOnlyCheckBox;
+    MainMenu1: TMainMenu;
+    Fiche1: TMenuItem;
+    Modifier1: TMenuItem;
+    N1: TMenuItem;
+    Aperuavantimpression1: TMenuItem;
+    Imprimer1: TMenuItem;
+    ActionList1: TActionList;
+    FicheApercu: TAction;
+    FicheImprime: TAction;
+    FicheModifier: TAction;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure TitreSerieClick(Sender: TObject);
@@ -40,6 +51,8 @@ type
     procedure vtAlbumsDblClick(Sender: TObject);
     procedure vtParaBDDblClick(Sender: TObject);
     procedure lvScenaristesDblClick(Sender: TObject);
+    procedure FicheApercuExecute(Sender: TObject);
+    procedure FicheModifierExecute(Sender: TObject);
   private
     FSerie: TSerieComplete;
     function GetID_Serie: TGUID;
@@ -50,6 +63,9 @@ type
     procedure ApercuExecute(Sender: TObject);
     function ImpressionUpdate: Boolean;
     function ApercuUpdate: Boolean;
+    procedure ImpRep(Sender: TObject);
+    procedure ModificationExecute(Sender: TObject);
+    function ModificationUpdate: Boolean;
   public
     property Serie: TSerieComplete read FSerie;
     property ID_Serie: TGUID read GetID_Serie write SetID_Serie;
@@ -57,7 +73,7 @@ type
 
 implementation
 
-uses Commun, Divers, TypeRec, ShellAPI, UHistorique, Impression;
+uses Commun, Divers, TypeRec, ShellAPI, UHistorique, Impression, Editions;
 
 {$R *.dfm}
 
@@ -103,8 +119,8 @@ begin
   Collection.Caption := FSerie.Collection.ChaineAffichage;
   cbTerminee.State := TCheckBoxState(FSerie.Terminee);
 
-  Sujet.Assign(FSerie.Sujet);
-  Remarques.Assign(FSerie.Notes);
+  Sujet.Lines.Assign(FSerie.Sujet);
+  Remarques.Lines.Assign(FSerie.Notes);
 
   s := '';
   for i := 0 to Pred(FSerie.Genres.Count) do
@@ -159,6 +175,16 @@ begin
   vtParaBD.UseFiltre := True;
 end;
 
+procedure TfrmConsultationSerie.FicheApercuExecute(Sender: TObject);
+begin
+  ImpRep(Sender);
+end;
+
+procedure TfrmConsultationSerie.FicheModifierExecute(Sender: TObject);
+begin
+  if EditionSerie(FSerie.ID) then Historique.Refresh;
+end;
+
 procedure TfrmConsultationSerie.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
@@ -201,7 +227,7 @@ end;
 
 procedure TfrmConsultationSerie.ApercuExecute(Sender: TObject);
 begin
-  ImpressionSerie(ID_Serie, TComponent(Sender).Tag = 1);
+  FicheApercuExecute(Sender);
 end;
 
 function TfrmConsultationSerie.ApercuUpdate: Boolean;
@@ -209,9 +235,14 @@ begin
   Result := True;
 end;
 
-procedure TfrmConsultationSerie.ImpressionExecute(Sender: TObject);
+procedure TfrmConsultationSerie.ImpRep(Sender: TObject);
 begin
   ImpressionSerie(ID_Serie, TComponent(Sender).Tag = 1);
+end;
+
+procedure TfrmConsultationSerie.ImpressionExecute(Sender: TObject);
+begin
+  FicheApercuExecute(Sender);
 end;
 
 function TfrmConsultationSerie.ImpressionUpdate: Boolean;
@@ -222,6 +253,16 @@ end;
 procedure TfrmConsultationSerie.lvScenaristesDblClick(Sender: TObject);
 begin
   if Assigned(TListView(Sender).Selected) then Historique.AddWaiting(fcAuteur, TAuteur(TListView(Sender).Selected.Data).Personne.ID, 0);
+end;
+
+procedure TfrmConsultationSerie.ModificationExecute(Sender: TObject);
+begin
+  FicheModifierExecute(Sender);
+end;
+
+function TfrmConsultationSerie.ModificationUpdate: Boolean;
+begin
+  Result := True;
 end;
 
 end.

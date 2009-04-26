@@ -9,8 +9,7 @@ uses
 type
   TfrmChoixDetailSerie = class(TbdtForm)
     CheckBox1: TCheckBox;
-    Frame11: TframBoutons;
-    LightComboCheck1: TLightComboCheck;
+    framBoutons1: TframBoutons;
   private
     FMaxNiveauDetail: TDetailSerieOption;
     procedure SetMaxNiveauDetail(const Value: TDetailSerieOption);
@@ -29,13 +28,31 @@ implementation
 procedure TfrmChoixDetailSerie.SetMaxNiveauDetail(const Value: TDetailSerieOption);
 var
   i: TDetailSerieOption;
+  nbButtons: Integer;
 begin
   FMaxNiveauDetail := Value;
-  LightComboCheck1.Items.Clear;
+
+  nbButtons := 0;
   for i := Low(TDetailSerieOption) to High(TDetailSerieOption) do
     if i >= FMaxNiveauDetail then
-      LightComboCheck1.Items.Add(LibelleDetailSerieOption[Value][i]).Valeur := Integer(i);
-  LightComboCheck1.Value := Integer(FMaxNiveauDetail);
+      with TButton.Create(Self) do
+      begin
+        Parent := Self;
+        Left := 22;
+        Top := 23 + Integer(nbButtons) * 47;
+        Width := 350;
+        Height := 42;
+        Cursor := crHandPoint;
+        Style := bsCommandLink;
+        Caption := LibelleDetailSerieOption[FMaxNiveauDetail][i];
+        Default := i = FMaxNiveauDetail;
+        ModalResult := 110 + Integer(i);
+        Inc(nbButtons);
+      end;
+  CheckBox1.Top := 23 + Integer(nbButtons) * 47 + 23;
+  ClientHeight := CheckBox1.Top + framBoutons1.Height;
+  if CheckBox1.Visible then
+    ClientHeight := ClientHeight + CheckBox1.Height + 6;
 end;
 
 end.

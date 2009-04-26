@@ -42,7 +42,7 @@ type
   private
     { Déclarations privées }
     FID_Emprunteur: TGUID;
-    FEditions: TEditionsComplet;
+    FEditions: TEditionsCompletes;
     procedure SetID_Emprunteur(const Value: TGUID);
   public
     { Déclarations publiques }
@@ -84,7 +84,7 @@ begin
   FrameRechercheRapide1.ShowNewButton := False;
   vtAlbums.Mode := vmAlbumsSerie;
   ChargeImage(vtAlbums.Background, 'FONDVT');
-  FEditions := TEditionsComplet.Create;
+  FEditions := TEditionsCompletes.Create;
   date_pret.Date := Date;
 end;
 

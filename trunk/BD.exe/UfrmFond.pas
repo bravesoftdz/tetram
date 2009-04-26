@@ -122,7 +122,7 @@ type
     Apropos1: TMenuItem;
     boutons_32x32_norm: TPngImageList;
     boutons_16x16_norm: TPngImageList;
-    actNouvelAchat: TAction;
+    actAfficheAchats: TAction;
     N11: TMenuItem;
     Achat1: TMenuItem;
     actMiseAJour: TAction;
@@ -140,6 +140,7 @@ type
     actPublier: TAction;
     ToolButton14: TToolButton;
     ToolButton15: TToolButton;
+    actFicheModifier: TAction;
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure actChangementOptionsExecute(Sender: TObject);
@@ -179,10 +180,13 @@ type
     procedure actAfficheSeriesIncompletesExecute(Sender: TObject);
     procedure actAffichePrevisionsSortiesExecute(Sender: TObject);
     procedure MeasureMenuItem(Sender: TObject; ACanvas: TCanvas; var Width, Height: Integer);
-    procedure actNouvelAchatExecute(Sender: TObject);
+    procedure actAfficheAchatsExecute(Sender: TObject);
     procedure actMiseAJourExecute(Sender: TObject);
     procedure actScriptsExecute(Sender: TObject);
     procedure actPublierExecute(Sender: TObject);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure actFicheModifierExecute(Sender: TObject);
   private
     { Déclarations privées }
     FToolOriginal: TStringList;
@@ -246,6 +250,15 @@ begin
   FreeAndNil(FToolCurrent);
   for i := MDIChildCount - 1 downto 0 do
     MDIChildren[i].Free;
+end;
+
+procedure TfrmFond.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if ssAlt in Shift then
+    case Key of
+      VK_LEFT: HistoriqueBack.Execute;
+      VK_RIGHT: HistoriqueNext.Execute;
+    end;
 end;
 
 procedure RGBToHSV(R, G, B: Integer; var H, S, V: Integer);
@@ -479,6 +492,14 @@ begin
     actModeConsultation.Execute;
 end;
 
+procedure TfrmFond.actFicheModifierExecute(Sender: TObject);
+var
+  iModification: IFicheEditable;
+begin
+  if Assigned(FCurrentForm) and FCurrentForm.GetInterface(IFicheEditable, iModification) then
+    iModification.ModificationExecute(Sender);
+end;
+
 procedure TfrmFond.actActualiseRepertoireExecute(Sender: TObject);
 begin
   FrmRepertoire.vstAlbums.InitializeRep;
@@ -690,6 +711,7 @@ procedure TfrmFond.ActionsOutilsUpdate(Action: TBasicAction; var Handled: Boolea
 var
   ModeConsult: Boolean;
   iImpression: IImpressionApercu;
+  iModification: IFicheEditable;
 begin
   Handled := TGlobalVar.Mode_en_cours = mdEditing;
   if not Handled then
@@ -697,27 +719,43 @@ begin
     ModeConsult := TGlobalVar.Mode_en_cours = mdConsult;
     actActualiseRepertoire.Enabled := ModeConsult;
 
-    if Assigned(FCurrentForm) and FCurrentForm.GetInterface(IImpressionApercu, iImpression) then
+    if Assigned(FCurrentForm) then
     begin
-      try
-        actImpression.Enabled := iImpression.ImpressionUpdate;
-      except
+      if FCurrentForm.GetInterface(IImpressionApercu, iImpression) then
+      begin
+        try
+          actImpression.Enabled := iImpression.ImpressionUpdate;
+        except
+          actImpression.Enabled := False;
+        end;
+        try
+          actApercuImpression.Enabled := iImpression.ApercuUpdate;
+        except
+          actApercuImpression.Enabled := False;
+        end;
+      end
+      else
+      begin
         actImpression.Enabled := False;
-      end;
-      try
-        actApercuImpression.Enabled := iImpression.ApercuUpdate;
-      except
         actApercuImpression.Enabled := False;
       end;
-    end
-    else
-    begin
-      actImpression.Enabled := False;
-      actApercuImpression.Enabled := False;
+
+      if FCurrentForm.GetInterface(IFicheEditable, iModification) then
+      begin
+        try
+          actFicheModifier.Enabled := iModification.ModificationUpdate;
+        except
+          actFicheModifier.Enabled := False;
+        end;
+      end
+      else
+      begin
+        actFicheModifier.Enabled := False;
+      end;
     end;
     actAfficheRecherche.Enabled := ModeConsult;
     actAfficheStock.Enabled := ModeConsult;
-    actNouvelAchat.Enabled := ModeConsult;
+    actAfficheAchats.Enabled := ModeConsult;
     actModeConsultation.Checked := Assigned(FrmRepertoire);
     actModeGestion.Checked := Assigned(FrmGestions);
     actModeConsultation.Enabled := not actModeConsultation.Checked;
@@ -1004,7 +1042,7 @@ begin
     Height := il.Height + 3;
 end;
 
-procedure TfrmFond.actNouvelAchatExecute(Sender: TObject);
+procedure TfrmFond.actAfficheAchatsExecute(Sender: TObject);
 begin
   Historique.AddWaiting(fcPrevisionsAchats);
 end;

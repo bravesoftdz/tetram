@@ -3,8 +3,8 @@ object frmEditSerie: TfrmEditSerie
   Top = 146
   ActiveControl = edTitre
   Caption = 'Saisie de S'#233'rie'
-  ClientHeight = 929
-  ClientWidth = 784
+  ClientHeight = 920
+  ClientWidth = 798
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -19,27 +19,28 @@ object frmEditSerie: TfrmEditSerie
   TextHeight = 13
   object Bevel1: TBevel
     Left = 0
-    Top = 25
-    Width = 784
+    Top = 29
+    Width = 798
     Height = 4
     Align = alTop
     Shape = bsBottomLine
+    ExplicitTop = 25
     ExplicitWidth = 742
   end
   object ScrollBox2: TScrollBox
     Left = 0
-    Top = 29
-    Width = 784
-    Height = 900
+    Top = 33
+    Width = 798
+    Height = 887
     Align = alClient
     BorderStyle = bsNone
     Constraints.MinWidth = 650
     TabOrder = 0
     DesignSize = (
-      784
-      900)
+      798
+      887)
     object Label5: TLabel
-      Left = 12
+      Left = 34
       Top = 301
       Width = 41
       Height = 13
@@ -47,7 +48,7 @@ object frmEditSerie: TfrmEditSerie
       Caption = 'Editeur :'
     end
     object Label8: TLabel
-      Left = 0
+      Left = 22
       Top = 326
       Width = 53
       Height = 13
@@ -55,7 +56,7 @@ object frmEditSerie: TfrmEditSerie
       Caption = 'Collection :'
     end
     object Label2: TLabel
-      Left = 24
+      Left = 46
       Top = 7
       Width = 29
       Height = 13
@@ -65,26 +66,26 @@ object frmEditSerie: TfrmEditSerie
       Layout = tlCenter
     end
     object Label17: TLabel
-      Left = 513
+      Left = 538
       Top = 150
       Width = 36
       Height = 13
       Caption = 'Genre :'
     end
     object Label15: TLabel
-      Left = 512
+      Left = 537
       Top = 261
-      Width = 264
+      Width = 255
       Height = 13
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
       Caption = ' '
-      ExplicitWidth = 222
+      ExplicitWidth = 241
     end
     object Bevel3: TBevel
       Left = 168
       Top = 285
-      Width = 453
+      Width = 467
       Height = 6
       Anchors = [akLeft, akTop, akRight]
       Shape = bsTopLine
@@ -93,14 +94,14 @@ object frmEditSerie: TfrmEditSerie
     object Bevel2: TBevel
       Left = 165
       Top = 417
-      Width = 453
+      Width = 467
       Height = 7
       Anchors = [akLeft, akTop, akRight]
       Shape = bsTopLine
       ExplicitWidth = 411
     end
     object Label6: TLabel
-      Left = 10
+      Left = 32
       Top = 55
       Width = 43
       Height = 13
@@ -109,7 +110,7 @@ object frmEditSerie: TfrmEditSerie
       FocusControl = histoire
     end
     object Label7: TLabel
-      Left = 404
+      Left = 443
       Top = 55
       Width = 35
       Height = 13
@@ -117,10 +118,10 @@ object frmEditSerie: TfrmEditSerie
       Anchors = [akTop, akRight]
       Caption = 'Notes :'
       FocusControl = remarques
-      ExplicitLeft = 362
+      ExplicitLeft = 429
     end
     object VDTButton13: TVDTButton
-      Left = 755
+      Left = 769
       Top = 28
       Width = 23
       Height = 20
@@ -162,7 +163,7 @@ object frmEditSerie: TfrmEditSerie
       ExplicitLeft = 713
     end
     object Label1: TLabel
-      Left = 5
+      Left = 27
       Top = 31
       Width = 48
       Height = 13
@@ -173,7 +174,7 @@ object frmEditSerie: TfrmEditSerie
     end
     object btScenariste: TCRFurtifLight
       Tag = 1
-      Left = 236
+      Left = 302
       Top = 146
       Width = 69
       Height = 41
@@ -286,7 +287,7 @@ object frmEditSerie: TfrmEditSerie
     end
     object btDessinateur: TCRFurtifLight
       Tag = 2
-      Left = 236
+      Left = 302
       Top = 190
       Width = 69
       Height = 41
@@ -398,7 +399,7 @@ object frmEditSerie: TfrmEditSerie
       WithBorder = True
     end
     object Label19: TLabel
-      Left = 8
+      Left = 30
       Top = 203
       Width = 45
       Height = 13
@@ -408,7 +409,7 @@ object frmEditSerie: TfrmEditSerie
     end
     object btColoriste: TCRFurtifLight
       Tag = 3
-      Left = 236
+      Left = 302
       Top = 234
       Width = 69
       Height = 41
@@ -522,14 +523,14 @@ object frmEditSerie: TfrmEditSerie
     object Bevel5: TBevel
       Left = 189
       Top = 579
-      Width = 352
+      Width = 366
       Height = 6
       Anchors = [akLeft, akTop, akRight]
       Shape = bsTopLine
       ExplicitWidth = 310
     end
     object Label3: TLabel
-      Left = 9
+      Left = 31
       Top = 455
       Width = 41
       Height = 13
@@ -537,7 +538,7 @@ object frmEditSerie: TfrmEditSerie
       Caption = 'Albums :'
     end
     object Label4: TLabel
-      Left = 7
+      Left = 29
       Top = 588
       Width = 46
       Height = 13
@@ -698,10 +699,30 @@ object frmEditSerie: TfrmEditSerie
       Items.Separateur = ' '
       Items = <>
     end
+    object Label10: TLabel
+      Left = 9
+      Top = 743
+      Width = 66
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Associations :'
+      FocusControl = edAssociations
+      Transparent = True
+      Layout = tlCenter
+    end
+    object Bevel4: TBevel
+      Left = 197
+      Top = 723
+      Width = 366
+      Height = 6
+      Anchors = [akLeft, akTop, akRight]
+      Shape = bsTopLine
+      ExplicitWidth = 352
+    end
     object edTitre: TEditLabeled
-      Left = 56
+      Left = 81
       Top = 4
-      Width = 722
+      Width = 711
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -715,9 +736,9 @@ object frmEditSerie: TfrmEditSerie
       CurrencyChar = #0
     end
     object vtGenres: TVirtualStringTree
-      Left = 512
+      Left = 537
       Top = 169
-      Width = 266
+      Width = 255
       Height = 90
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
@@ -744,9 +765,9 @@ object frmEditSerie: TfrmEditSerie
       Columns = <>
     end
     object histoire: TMemoLabeled
-      Left = 56
+      Left = 81
       Top = 52
-      Width = 342
+      Width = 356
       Height = 81
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -759,9 +780,9 @@ object frmEditSerie: TfrmEditSerie
         end>
     end
     object remarques: TMemoLabeled
-      Left = 445
+      Left = 484
       Top = 52
-      Width = 333
+      Width = 308
       Height = 81
       Anchors = [akTop, akRight]
       BevelKind = bkTile
@@ -774,7 +795,7 @@ object frmEditSerie: TfrmEditSerie
         end>
     end
     object cbTerminee: TCheckBoxLabeled
-      Left = 320
+      Left = 333
       Top = 432
       Width = 90
       Height = 16
@@ -789,7 +810,7 @@ object frmEditSerie: TfrmEditSerie
         end>
     end
     object cbManquants: TCheckBoxLabeled
-      Left = 128
+      Left = 153
       Top = 432
       Width = 137
       Height = 16
@@ -801,9 +822,9 @@ object frmEditSerie: TfrmEditSerie
         end>
     end
     object vtAlbums: TVirtualStringTree
-      Left = 56
+      Left = 81
       Top = 455
-      Width = 722
+      Width = 711
       Height = 119
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
@@ -829,9 +850,9 @@ object frmEditSerie: TfrmEditSerie
       Columns = <>
     end
     object edSite: TEditLabeled
-      Left = 56
+      Left = 81
       Top = 28
-      Width = 698
+      Width = 687
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -848,9 +869,9 @@ object frmEditSerie: TfrmEditSerie
       CurrencyChar = #0
     end
     object lvScenaristes: TVDTListViewLabeled
-      Left = 305
+      Left = 371
       Top = 146
-      Width = 198
+      Width = 151
       Height = 41
       Anchors = [akLeft, akTop]
       BevelKind = bkTile
@@ -868,9 +889,9 @@ object frmEditSerie: TfrmEditSerie
         end>
     end
     object lvDessinateurs: TVDTListViewLabeled
-      Left = 305
+      Left = 371
       Top = 190
-      Width = 198
+      Width = 151
       Height = 41
       Anchors = [akLeft, akTop]
       BevelKind = bkTile
@@ -888,9 +909,9 @@ object frmEditSerie: TfrmEditSerie
         end>
     end
     object lvColoristes: TVDTListViewLabeled
-      Left = 305
+      Left = 371
       Top = 234
-      Width = 198
+      Width = 151
       Height = 41
       Anchors = [akLeft, akTop]
       BevelKind = bkTile
@@ -908,9 +929,9 @@ object frmEditSerie: TfrmEditSerie
         end>
     end
     object vtParaBD: TVirtualStringTree
-      Left = 56
+      Left = 81
       Top = 588
-      Width = 722
+      Width = 711
       Height = 130
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
@@ -936,37 +957,37 @@ object frmEditSerie: TfrmEditSerie
       Columns = <>
     end
     inline FrameRechercheRapideGenre: TframRechercheRapide
-      Left = 552
+      Left = 577
       Top = 146
-      Width = 226
+      Width = 215
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 8
-      ExplicitLeft = 552
+      ExplicitLeft = 577
       ExplicitTop = 146
-      ExplicitWidth = 226
+      ExplicitWidth = 215
       DesignSize = (
-        226
+        215
         21)
       inherited btNext: TVDTButton
-        Left = 185
+        Left = 174
         ExplicitLeft = 139
       end
       inherited btNew: TVDTButton
-        Left = 205
+        Left = 194
         ExplicitLeft = 159
       end
       inherited edSearch: TEditLabeled
-        Width = 186
+        Width = 175
         LinkControls = <
           item
             Control = Label17
           end>
-        ExplicitWidth = 186
+        ExplicitWidth = 175
       end
     end
     object cbSorties: TCheckBoxLabeled
-      Left = 416
+      Left = 429
       Top = 432
       Width = 121
       Height = 16
@@ -978,7 +999,7 @@ object frmEditSerie: TfrmEditSerie
         end>
     end
     object cbComplete: TCheckBoxLabeled
-      Left = 56
+      Left = 81
       Top = 432
       Width = 65
       Height = 16
@@ -1010,7 +1031,7 @@ object frmEditSerie: TfrmEditSerie
       CurrencyChar = #0
     end
     object cbCouleur: TCheckBoxLabeled
-      Left = 56
+      Left = 81
       Top = 389
       Width = 54
       Height = 16
@@ -1028,7 +1049,7 @@ object frmEditSerie: TfrmEditSerie
         end>
     end
     object cbVO: TCheckBoxLabeled
-      Left = 56
+      Left = 81
       Top = 372
       Width = 34
       Height = 16
@@ -1044,105 +1065,120 @@ object frmEditSerie: TfrmEditSerie
         end>
     end
     inline vtEditPersonnes: TframVTEdit
-      Left = 56
+      Left = 81
       Top = 200
-      Width = 177
+      Width = 215
       Height = 21
       TabOrder = 4
-      ExplicitLeft = 56
+      ExplicitLeft = 81
       ExplicitTop = 200
-      ExplicitWidth = 177
+      ExplicitWidth = 215
       inherited btReset: TVDTButton
-        Left = 114
+        Left = 152
         ExplicitLeft = 114
       end
       inherited btNew: TVDTButton
-        Left = 156
+        Left = 194
         ExplicitLeft = 156
       end
       inherited btEdit: TVDTButton
-        Left = 135
+        Left = 173
         ExplicitLeft = 135
       end
       inherited VTEdit: TJvComboEdit
-        Width = 114
+        Width = 152
         OnChange = vtEditPersonnesVTEditChange
-        ExplicitWidth = 114
+        ExplicitWidth = 152
       end
     end
     inline vtEditCollections: TframVTEdit
-      Left = 56
+      Left = 81
       Top = 323
-      Width = 347
+      Width = 322
       Height = 21
       TabOrder = 11
-      ExplicitLeft = 56
+      ExplicitLeft = 81
       ExplicitTop = 323
-      ExplicitWidth = 347
+      ExplicitWidth = 322
       inherited btReset: TVDTButton
-        Left = 284
+        Left = 259
         ExplicitLeft = 284
       end
       inherited btNew: TVDTButton
-        Left = 326
+        Left = 301
         ExplicitLeft = 326
       end
       inherited btEdit: TVDTButton
-        Left = 305
+        Left = 280
         ExplicitLeft = 305
       end
       inherited VTEdit: TJvComboEdit
-        Width = 284
-        ExplicitWidth = 284
+        Width = 259
+        ExplicitWidth = 259
       end
     end
     inline vtEditEditeurs: TframVTEdit
-      Left = 56
+      Left = 81
       Top = 298
-      Width = 347
+      Width = 322
       Height = 21
       TabOrder = 10
-      ExplicitLeft = 56
+      ExplicitLeft = 81
       ExplicitTop = 298
-      ExplicitWidth = 347
+      ExplicitWidth = 322
       inherited btReset: TVDTButton
-        Left = 284
+        Left = 259
         ExplicitLeft = 284
       end
       inherited btNew: TVDTButton
-        Left = 326
+        Left = 301
         ExplicitLeft = 326
       end
       inherited btEdit: TVDTButton
-        Left = 305
+        Left = 280
         ExplicitLeft = 305
       end
       inherited VTEdit: TJvComboEdit
-        Width = 284
+        Width = 259
         OnChange = vtEditEditeursVTEditChange
-        ExplicitWidth = 284
+        ExplicitWidth = 259
       end
+    end
+    object edAssociations: TMemoLabeled
+      Left = 81
+      Top = 733
+      Width = 711
+      Height = 105
+      Anchors = [akLeft, akTop, akRight]
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      ScrollBars = ssBoth
+      TabOrder = 21
+      LinkControls = <
+        item
+          Control = Label10
+        end>
     end
   end
   inline Frame11: TframBoutons
     Left = 0
     Top = 0
-    Width = 784
-    Height = 25
+    Width = 798
+    Height = 29
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 784
+    ExplicitWidth = 798
     inherited btnOK: TButton
-      Left = 610
+      Left = 624
       Width = 90
       Caption = 'Enregistrer'
       OnClick = Frame11btnOKClick
-      ExplicitLeft = 610
+      ExplicitLeft = 624
       ExplicitWidth = 90
     end
     inherited btnAnnuler: TButton
-      Left = 701
-      ExplicitLeft = 701
+      Left = 715
+      ExplicitLeft = 715
     end
   end
 end

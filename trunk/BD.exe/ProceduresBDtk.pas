@@ -3,7 +3,7 @@ unit ProceduresBDtk;
 interface
 
 uses
-  SysUtils, Windows, StdCtrls, Forms, Controls, UfrmProgression, ExtCtrls, CommonConst, Graphics, StrUtils;
+  SysUtils, Windows, StdCtrls, Forms, Controls, UfrmProgression, ExtCtrls, CommonConst, Graphics, StrUtils, Dialogs;
 
 type
   IImpressionApercu = interface
@@ -12,6 +12,12 @@ type
     procedure ApercuExecute(Sender: TObject);
     function ImpressionUpdate: Boolean;
     function ApercuUpdate: Boolean;
+  end;
+
+  IFicheEditable = interface
+    ['{2B938304-BB07-48D7-8A19-F3C70C38E271}']
+    procedure ModificationExecute(Sender: TObject);
+    function ModificationUpdate: Boolean;
   end;
 
   TEtapeProgression = (epNext, epFin);
@@ -224,50 +230,54 @@ begin
 end;
 
 function Choisir(const Texte1, Texte2: string; Bouton: Integer): TModalResult;
-var
-  w: Integer;
 begin
+  Result := mrCancel;
   if not Bouton in [0..2] then
-  begin
-    Result := 0;
     Exit;
-  end;
-  with TFrmChoix.Create(Application) do
-    try
-      w := Max(Canvas.TextWidth(Texte1), Canvas.TextWidth(Texte2));
-      with BtnChoix1 do
-      begin
-        Width := Max(ClientWidth, w + Left);
-        Caption := Texte1;
+
+{$IFDEF DEBUG}
+  if CanUseTaskDialog then
+    with TTaskDialog.Create(nil) do
+      try
+        with Buttons.Add do
+        begin
+          Caption := Texte1;
+          Default := Bouton = 1;
+          ModalResult := mrYes;
+        end;
+
+        with Buttons.Add do
+        begin
+          Caption := Texte2;
+          Default := Bouton = 2;
+          ModalResult := mrNo;
+        end;
+        Flags := [tfAllowDialogCancellation, tfUseCommandLinks];
+        CommonButtons := [tcbCancel];
+        if Execute then
+          Result := ModalResult;
+      finally
+        Free;
+      end
+  else
+{$ENDIF DEBUG}
+    with TFrmChoix.Create(Application) do
+      try
+        BtnChoix1.Caption := Texte1;
+        BtnChoix2.Caption := Texte2;
+        case bouton of
+          0: framBoutons1.btnAnnuler.Default := True;
+          1: BtnChoix1.Default := True;
+          2: BtnChoix2.Default := True;
+        end;
+        Result := ShowModal;
+      finally
+        Free;
       end;
-      with BtnChoix2 do
-      begin
-        Width := Max(ClientWidth, w + Left);
-        Caption := Texte2;
-      end;
-      ClientWidth := BtnChoix1.Width + 2 * BtnChoix1.Left;
-      Bevel2.Width := ClientWidth - 2 * Bevel2.Left;
-      Bevel1.Width := ClientWidth - 2 * Bevel1.Left;
-      BtnAnnuler.Left := (ClientWidth - BtnAnnuler.Width) div 2;
-      if bouton = 0 then
-        BtnAnnuler.Default := True;
-      if bouton = 1 then
-        BtnChoix1.Default := True;
-      if bouton = 2 then
-        BtnChoix2.Default := True;
-      Result := ShowModal;
-    finally
-      Free;
-    end;
 end;
 
 function ChoisirDetailAlbum(Bouton: Integer; out DetailsOptions: TDetailAlbumOptions): TModalResult;
-var
-  w: Integer;
-  Texte1, Texte2: string;
 begin
-  Texte1 := rsTransListeSimple;
-  Texte2 := rsTransListeDetail;
   if not Bouton in [0..2] then
   begin
     Result := 0;
@@ -275,27 +285,13 @@ begin
   end;
   with TFrmChoixDetail.Create(Application) do
     try
-      w := Max(Canvas.TextWidth(Texte1), Canvas.TextWidth(Texte2));
-      with BtnChoix1 do
-      begin
-        Width := Max(ClientWidth, w + Left);
-        Caption := Texte1;
+      BtnChoix1.Caption := rsTransListeSimple;
+      BtnChoix2.Caption := rsTransListeDetail;
+      case bouton of
+        0: framBoutons1.btnAnnuler.Default := True;
+        1: BtnChoix1.Default := True;
+        2: BtnChoix2.Default := True;
       end;
-      with BtnChoix2 do
-      begin
-        Width := Max(ClientWidth, w + Left);
-        Caption := Texte2;
-      end;
-      ClientWidth := BtnChoix1.Width + 2 * BtnChoix1.Left;
-      Bevel2.Width := ClientWidth - 2 * Bevel2.Left;
-      Bevel1.Width := ClientWidth - 2 * Bevel1.Left;
-      BtnAnnuler.Left := (ClientWidth - BtnAnnuler.Width) div 2;
-      if bouton = 0 then
-        BtnAnnuler.Default := True;
-      if bouton = 1 then
-        BtnChoix1.Default := True;
-      if bouton = 2 then
-        BtnChoix2.Default := True;
       Result := ShowModal;
       if Result = mrNo then
       begin
@@ -316,35 +312,112 @@ begin
 end;
 
 function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption): TModalResult;
+{$IFDEF DEBUG}
+var
+  i: TDetailSerieOption;
+{$ENDIF DEBUG}
 begin
-  with TFrmChoixDetailSerie.Create(Application) do
-    try
-      CheckBox1.Visible := False;
-      MaxNiveauDetail := NiveauDetailMax;
-      Result := ShowModal;
-      if Result = mrOk then
-      begin
-        DetailSerieOption := TDetailSerieOption(LightComboCheck1.Value);
+  Result := mrCancel;
+{$IFDEF DEBUG}
+  if CanUseTaskDialog then
+    with TTaskDialog.Create(nil) do
+      try
+        for i := Low(TDetailSerieOption) to High(TDetailSerieOption) do
+          if i >= NiveauDetailMax then
+            with Buttons.Add do
+            begin
+              Caption := LibelleDetailSerieOption[NiveauDetailMax][i];
+              Default := i = NiveauDetailMax;
+              ModalResult := 110 + Integer(i);
+            end;
+
+        Flags := [tfAllowDialogCancellation, tfUseCommandLinks];
+        CommonButtons := [tcbCancel];
+
+        if Execute and (ModalResult <> mrCancel) then
+        begin
+          Result := mrOk;
+          DetailSerieOption := TDetailSerieOption(ModalResult - 110);
+        end;
+      finally
+        Free;
+      end
+  else
+{$ENDIF DEBUG}
+    with TFrmChoixDetailSerie.Create(Application) do
+      try
+        // cacher la checkbox avant d'assigner MaxNiveauDetail
+        CheckBox1.Visible := False;
+        MaxNiveauDetail := NiveauDetailMax;
+        if ShowModal <> mrCancel then
+        begin
+          Result := mrOk;
+          DetailSerieOption := TDetailSerieOption(ModalResult - 110);
+        end;
+      finally
+        Free;
       end;
-    finally
-      Free;
-    end;
 end;
 
 function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption; out PrevisionsManquants: Boolean): TModalResult;
+{$IFDEF DEBUG}
+var
+  i: TDetailSerieOption;
+{$ENDIF DEBUG}
 begin
-  with TFrmChoixDetailSerie.Create(Application) do
-    try
-      MaxNiveauDetail := NiveauDetailMax;
-      Result := ShowModal;
-      if Result = mrOk then
-      begin
-        DetailSerieOption := TDetailSerieOption(LightComboCheck1.Value);
-        PrevisionsManquants := CheckBox1.Checked;
+  Result := mrCancel;
+{$IFDEF DEBUG}
+  if CanUseTaskDialog then
+    with TTaskDialog.Create(nil) do
+      try
+        for i := Low(TDetailSerieOption) to High(TDetailSerieOption) do
+          if i >= NiveauDetailMax then
+            with Buttons.Add do
+            begin
+              Caption := LibelleDetailSerieOption[NiveauDetailMax][i];
+              Default := i = NiveauDetailMax;
+              ModalResult := 110 + Integer(i);
+            end;
+
+        with RadioButtons.Add do
+        begin
+          Caption := 'Inclure Prévisions de sorties/Manquants';
+          Default := True;
+          ModalResult := 105;
+        end;
+        with RadioButtons.Add do
+        begin
+          Caption := 'Exclure Prévisions de sorties/Manquants';
+          Default := False;
+          ModalResult := 106;
+        end;
+
+        Flags := [tfAllowDialogCancellation, tfUseCommandLinks];
+        CommonButtons := [tcbCancel];
+
+        if Execute and (ModalResult <> mrCancel) then
+        begin
+          Result := mrOk;
+          DetailSerieOption := TDetailSerieOption(ModalResult - 110);
+          PrevisionsManquants := Assigned(RadioButton) and (RadioButton.ModalResult = 105);
+        end;
+      finally
+        Free;
+      end
+  else
+{$ENDIF DEBUG}
+    with TFrmChoixDetailSerie.Create(Application) do
+      try
+        MaxNiveauDetail := NiveauDetailMax;
+        if ShowModal <> mrCancel then
+        begin
+          Result := mrOk;
+          DetailSerieOption := TDetailSerieOption(ModalResult - 110);
+          PrevisionsManquants := CheckBox1.Checked;
+        end;
+      finally
+        Free;
       end;
-    finally
-      Free;
-    end;
 end;
 
 function Convertisseur(Caller: TControl; var Value: Currency): Boolean;

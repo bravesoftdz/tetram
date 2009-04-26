@@ -251,15 +251,8 @@
 			<DCCReference Include="Web\mises à jour\UMySQLMAJ1_0_0_1.pas"/>
 			<DCCReference Include="Web\Mime64\DIMimeStreams.pas"/>
 			<DCCReference Include="Web\Mime64\DIMime.pas"/>
-			<DCCReference Include="UfrmFusion.pas">
-				<Form>frmFusion</Form>
-			</DCCReference>
 			<DCCReference Include="Web\mises à jour\UMySQLMAJ1_0_0_0.pas"/>
 			<DCCReference Include="Web\mises à jour\UMySQLMAJ1_0_0_2.pas"/>
-			<DCCReference Include="Scripts\UdmScripts.pas">
-				<Form>dmScripts</Form>
-				<DesignClass>TDataModule</DesignClass>
-			</DCCReference>
 			<DCCReference Include="Scripts\UfrmScripts.pas">
 				<Form>frmScripts</Form>
 			</DCCReference>
@@ -305,7 +298,7 @@
 			<DCCReference Include="Scripts\UScriptList.pas"/>
 			<DCCReference Include="Scripts\UScriptEdition.pas"/>
 			<DCCReference Include="Scripts\UScriptDebug.pas"/>
-			<DCCReference Include="mises à jour\UMAJ2_1_1_4.pas"/>
+			<DCCReference Include="mises à jour\UMAJ2_1_1_7.pas"/>
 			<DCCReference Include="mises à jour\UMAJ0_0_0_6.pas"/>
 			<DCCReference Include="mises à jour\UMAJ0_0_0_8.pas"/>
 			<DCCReference Include="mises à jour\UMAJ0_0_0_9.pas"/>
@@ -350,6 +343,15 @@
 			<DCCReference Include="mises à jour\UMAJ2_1_0_22.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_1_0_72.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_1_1_2.pas"/>
+			<DCCReference Include="Scripts\UdmScripts.pas">
+				<Form>dmScripts</Form>
+				<DesignClass>TDataModule</DesignClass>
+			</DCCReference>
+			<DCCReference Include="Gestion\UfrmFusionEditions.pas">
+				<Form>frmFusionEditions</Form>
+			</DCCReference>
+			<DCCReference Include="mises à jour\UMAJ2_1_1_4.pas"/>
+			<DCCReference Include="mises à jour\UMAJ2_1_1_8.pas"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
 			</BuildConfiguration>
@@ -387,7 +389,6 @@
 						<Parameters Name="UseLauncher">False</Parameters>
 						<Parameters Name="LoadAllSymbols">True</Parameters>
 						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
-						<Parameters Name="RunParams">/Scripts</Parameters>
 					</Parameters>
 					<VersionInfo>
 						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
@@ -395,7 +396,7 @@
 						<VersionInfo Name="MajorVer">2</VersionInfo>
 						<VersionInfo Name="MinorVer">1</VersionInfo>
 						<VersionInfo Name="Release">1</VersionInfo>
-						<VersionInfo Name="Build">6</VersionInfo>
+						<VersionInfo Name="Build">9</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -407,9 +408,9 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">2.1.1.6</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">2.1.1.9</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
-						<VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2008</VersionInfoKeys>
+						<VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2009</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks"/>
 						<VersionInfoKeys Name="OriginalFilename"/>
 						<VersionInfoKeys Name="ProductName">BDtheque</VersionInfoKeys>

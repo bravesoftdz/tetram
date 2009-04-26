@@ -183,6 +183,7 @@ begin
 
   PSScriptDebugger1.AddMethod(Self, @TdmScripts.WriteToConsole, 'procedure WriteToConsole(const Chaine: string);');
   PSScriptDebugger1.AddMethod(FRunningScript, @TScript.OptionValue, 'function GetOptionValue(const OptionName, Default: string): string;');
+  PSScriptDebugger1.AddMethod(FRunningScript, @TScript.OptionValueIndex, 'function GetOptionValueIndex(const OptionName: string; Default: Integer): Integer;');
 
   PSScriptDebugger1.AddFunction(@GetPage, 'function GetPage(const url: string; UTF8: Boolean): string;');
   PSScriptDebugger1.AddFunction(@findInfo, 'function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;');
@@ -192,14 +193,14 @@ begin
   PSScriptDebugger1.AddFunction(@HTMLDecode, 'function HTMLDecode(const Chaine: string): string;');
   PSScriptDebugger1.AddFunction(@HTMLText, 'function HTMLText(const Chaine: string): string;');
 
-  PSScriptDebugger1.AddFunction(@ScriptChangeFileExt, 'function ChangeFileExt(const FileName, Extension: string): string;');
-  PSScriptDebugger1.AddFunction(@ScriptChangeFilePath, 'function ChangeFilePath(const FileName, Path: string): string;');
-  PSScriptDebugger1.AddFunction(@ScriptExtractFilePath, 'function ExtractFilePath(const FileName: string): string;');
-  PSScriptDebugger1.AddFunction(@ScriptExtractFileDir, 'function ExtractFileDir(const FileName: string): string;');
-  PSScriptDebugger1.AddFunction(@ScriptExtractFileName, 'function ExtractFileName(const FileName: string): string;');
-  PSScriptDebugger1.AddFunction(@ScriptExtractFileExt, 'function ExtractFileExt(const FileName: string): string;');
-  PSScriptDebugger1.AddFunction(@ScriptIncludeTrailingPathDelimiter, 'function ScriptIncludeTrailingPathDelimiter(const s: string): string;');
-  PSScriptDebugger1.AddFunction(@ScriptExcludeTrailingPathDelimiter, 'function ScriptExcludeTrailingPathDelimiter(const s: string): string;');
+  PSScriptDebugger1.AddFunction(@ScriptChangeFileExt, 'function ChangeFileExt(const URL, Extension: string): string;');
+  PSScriptDebugger1.AddFunction(@ScriptChangeFilePath, 'function ChangeFilePath(const URL, Path: string): string;');
+  PSScriptDebugger1.AddFunction(@ScriptExtractFilePath, 'function ExtractFilePath(const URL: string): string;');
+  PSScriptDebugger1.AddFunction(@ScriptExtractFileDir, 'function ExtractFileDir(const URL: string): string;');
+  PSScriptDebugger1.AddFunction(@ScriptExtractFileName, 'function ExtractFileName(const URL: string): string;');
+  PSScriptDebugger1.AddFunction(@ScriptExtractFileExt, 'function ExtractFileExt(const URL: string): string;');
+  PSScriptDebugger1.AddFunction(@ScriptIncludeTrailingPathDelimiter, 'function IncludeTrailingPathDelimiter(const URL: string): string;');
+  PSScriptDebugger1.AddFunction(@ScriptExcludeTrailingPathDelimiter, 'function ExcludeTrailingPathDelimiter(const URL: string): string;');
 
   PSScriptDebugger1.AddFunction(@SysUtils.Format, 'function Format(const Format: string; const Args: array of const): string;');
 

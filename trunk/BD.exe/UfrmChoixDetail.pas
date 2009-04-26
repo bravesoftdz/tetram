@@ -4,28 +4,23 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, UBdtForms;
+  StdCtrls, ExtCtrls, UBdtForms, UframBoutons;
 
 type
   TfrmChoixDetail = class(TbdtForm)
     BtnChoix1: TButton;
     BtnChoix2: TButton;
-    BtnAnnuler: TButton;
-    Bevel1: TBevel;
-    Bevel2: TBevel;
     cbDessins: TCheckBox;
     cbHistoire: TCheckBox;
     cbNotes: TCheckBox;
     cbScenario: TCheckBox;
     cbCouleurs: TCheckBox;
+    framBoutons1: TframBoutons;
   private
     { Déclarations privées }
   public
     { Déclarations publiques }
   end;
-
-var
-  frmChoixDetail: TfrmChoixDetail;
 
 implementation
 

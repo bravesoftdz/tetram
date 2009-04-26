@@ -380,8 +380,8 @@ begin
   try
     if not (Consult.Action in NoSaveHistorique) then
       AddConsultation(Consult);
-    if (Consult.Action in UsedInGestion) then
-      frmFond.actModeGestion.Execute;
+    //if (Consult.Action in UsedInGestion) then
+    //  frmFond.actModeGestion.Execute;
     case Consult.Action of
       fcActionBack: Back;
       fcActionRefresh: Result := Open(CurrentConsult, True);
@@ -415,8 +415,11 @@ begin
       fcGestionSupp: doCallback := TActionGestionSupp(Consult.GestionProc)(Consult.GestionVTV);
       fcGestionAchat: doCallback := TActionGestionAchat(Consult.GestionProc)(Consult.GestionVTV);
     end;
-    if doCallback and Assigned(Consult.GestionCallback) then
-      Consult.GestionCallback(Consult.GestionCallbackData);
+    if doCallback then
+    begin
+      if Assigned(Consult.GestionCallback) then Consult.GestionCallback(Consult.GestionCallbackData);
+      AddWaiting(fcRefreshRepertoire);
+    end;
 
     if not Result then
     begin

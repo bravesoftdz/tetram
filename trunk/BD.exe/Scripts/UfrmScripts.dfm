@@ -22,7 +22,7 @@ object frmScripts: TfrmScripts
     Top = 0
     Width = 862
     Height = 641
-    ActivePage = tbScripts
+    ActivePage = tbEdition
     Align = alClient
     PopupMenu = PopupMenu1
     Style = tsButtons
@@ -72,7 +72,6 @@ object frmScripts: TfrmScripts
         Caption = 'Panel2'
         ShowCaption = False
         TabOrder = 1
-        ExplicitTop = 20
         DesignSize = (
           854
           588)
@@ -108,7 +107,6 @@ object frmScripts: TfrmScripts
             TabOrder = 0
             OnData = ListBox1Data
             OnDblClick = ListBox1DblClick
-            ExplicitHeight = 588
           end
           object ListView1: TListView
             Left = 0
@@ -125,10 +123,6 @@ object frmScripts: TfrmScripts
             ViewStyle = vsList
             OnDblClick = ListView1DblClick
             OnSelectItem = ListView1SelectItem
-            ExplicitLeft = -211
-            ExplicitTop = -181
-            ExplicitWidth = 852
-            ExplicitHeight = 222
           end
         end
       end
@@ -231,10 +225,8 @@ object frmScripts: TfrmScripts
           ActivePage = TabSheet1
           Align = alClient
           TabOrder = 0
-          ExplicitWidth = 666
           object TabSheet1: TTabSheet
             Caption = 'Messages'
-            ExplicitWidth = 658
             object vstMessages: TVirtualStringTree
               Left = 0
               Top = 0
@@ -256,7 +248,6 @@ object frmScripts: TfrmScripts
               TreeOptions.SelectionOptions = [toFullRowSelect]
               OnDblClick = vstMessagesDblClick
               OnGetText = vstMessagesGetText
-              ExplicitWidth = 658
               Columns = <
                 item
                   Position = 0
@@ -283,7 +274,6 @@ object frmScripts: TfrmScripts
           object TabSheet2: TTabSheet
             Caption = 'Points de suivi'
             ImageIndex = 1
-            ExplicitWidth = 658
             object vstSuivis: TVirtualStringTree
               Left = 0
               Top = 0
@@ -311,7 +301,6 @@ object frmScripts: TfrmScripts
               OnPaintText = vstSuivisPaintText
               OnInitNode = vstSuivisInitNode
               OnNewText = vstSuivisNewText
-              ExplicitWidth = 658
               Columns = <
                 item
                   Position = 0
@@ -328,7 +317,6 @@ object frmScripts: TfrmScripts
           object TabSheet3: TTabSheet
             Caption = 'Points d'#39'arr'#234't'
             ImageIndex = 2
-            ExplicitWidth = 658
             object vstBreakpoints: TVirtualStringTree
               Left = 0
               Top = 0
@@ -355,7 +343,6 @@ object frmScripts: TfrmScripts
               OnGetText = vstBreakpointsGetText
               OnPaintText = vstBreakpointsPaintText
               OnInitNode = vstBreakpointsInitNode
-              ExplicitWidth = 658
               Columns = <
                 item
                   Position = 0
@@ -372,7 +359,6 @@ object frmScripts: TfrmScripts
           object TabSheet6: TTabSheet
             Caption = 'Sortie'
             ImageIndex = 3
-            ExplicitWidth = 658
             object mmConsole: TMemo
               Left = 0
               Top = 0
@@ -385,7 +371,6 @@ object frmScripts: TfrmScripts
               TabOrder = 0
               WantTabs = True
               OnChange = mmConsoleChange
-              ExplicitWidth = 658
             end
           end
         end
@@ -399,7 +384,6 @@ object frmScripts: TfrmScripts
           TabOrder = 1
           object TabSheet4: TTabSheet
             Caption = 'Options'
-            ExplicitWidth = 177
             object ListBox1: TListBox
               Left = 0
               Top = 0
@@ -414,10 +398,6 @@ object frmScripts: TfrmScripts
               TabOrder = 0
               OnData = ListBox1Data
               OnDblClick = ListBox1DblClick
-              ExplicitLeft = 4
-              ExplicitTop = 6
-              ExplicitWidth = 177
-              ExplicitHeight = 176
             end
           end
         end
@@ -441,13 +421,11 @@ object frmScripts: TfrmScripts
       Left = 699
       Visible = False
       ExplicitLeft = 699
-      ExplicitTop = 6
     end
     inherited btnAnnuler: TButton
       Left = 779
       Caption = 'Fermer'
       ExplicitLeft = 779
-      ExplicitTop = 6
     end
   end
   object SynPasSyn1: TSynPasSyn

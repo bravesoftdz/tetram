@@ -225,12 +225,24 @@ object frmConsultationEmprunteur: TfrmConsultationEmprunteur
       Caption = 'Pr'#234't / Retour'
       OnExecute = Retour1Execute
     end
+    object FicheModifier: TAction
+      Category = 'Fiche'
+      Caption = 'Modifier'
+      ImageIndex = 13
+      OnExecute = FicheModifierExecute
+    end
   end
   object MainMenu1: TMainMenu
     Left = 120
     Top = 16
     object Fiche1: TMenuItem
       Caption = 'Fiche'
+      object Modifier1: TMenuItem
+        Action = FicheModifier
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
       object Aperuavantimpression1: TMenuItem
         Action = FicheApercu
       end

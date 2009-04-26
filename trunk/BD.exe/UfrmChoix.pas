@@ -4,15 +4,13 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, Buttons, UBdtForms;
+  StdCtrls, ExtCtrls, Buttons, UBdtForms, UframBoutons, UfrmFond;
 
 type
   TfrmChoix = class(TbdtForm)
     BtnChoix1: TButton;
     BtnChoix2: TButton;
-    BtnAnnuler: TBitBtn;
-    Bevel1: TBevel;
-    Bevel2: TBevel;
+    framBoutons1: TframBoutons;
   private
     { Déclarations privées }
   public

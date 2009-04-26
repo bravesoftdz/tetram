@@ -36,8 +36,6 @@ object frmEditAlbum: TfrmEditAlbum
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
-    ExplicitTop = 29
-    ExplicitHeight = 800
     DesignSize = (
       742
       796)
@@ -1933,7 +1931,6 @@ object frmEditAlbum: TfrmEditAlbum
     Height = 29
     Align = alTop
     TabOrder = 1
-    OnClick = Frame11Click
     ExplicitWidth = 742
     DesignSize = (
       742
@@ -1950,6 +1947,22 @@ object frmEditAlbum: TfrmEditAlbum
       Left = 659
       ExplicitLeft = 659
     end
+  end
+  object btnScript: TButton
+    Left = 8
+    Top = 6
+    Width = 69
+    Height = 21
+    Cursor = crHandPoint
+    Hint = 'Valider les modifcations'
+    Caption = 'Script'
+    Default = True
+    DoubleBuffered = True
+    ImageIndex = 12
+    Images = frmFond.ShareImageList
+    ParentDoubleBuffered = False
+    TabOrder = 2
+    OnClick = btnScriptClick
   end
   object ChoixImageDialog: TOpenPictureDialog
     DefaultExt = 'bmp'

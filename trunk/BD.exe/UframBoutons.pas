@@ -17,6 +17,7 @@ type
     { Déclarations privées }
   public
     { Déclarations publiques }
+    procedure Loaded; override;
   end;
 
 implementation
@@ -27,6 +28,13 @@ procedure TframBoutons.FrameResize(Sender: TObject);
 begin
   btnOK.Top := (ClientHeight - btnOK.Height) div 2;
   btnAnnuler.Top := btnOK.Top;
+end;
+
+procedure TframBoutons.Loaded;
+begin
+  inherited;
+  btnOK.HandleNeeded;
+  btnAnnuler.HandleNeeded;
 end;
 
 procedure TframBoutons.btnOKClick(Sender: TObject);

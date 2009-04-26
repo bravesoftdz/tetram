@@ -689,11 +689,41 @@ begin
   inherited;
 end;
 
+function ChangeLight(Value, FromValue, ToValue: Integer; Color, ToColor: TColor): TColor;
+
+  function Min(a, b: integer): integer; inline;
+  begin
+    if a < b then
+      result := a
+    else
+      result := b;
+  end;
+
+  function Max(a, b: integer): integer; inline;
+  begin
+    if a > b then
+      result := a
+    else
+      result := b;
+  end;
+
+var
+  rc, gc, bc: Integer;
+begin
+  Color := Color and not clSystemColor;
+  ToColor := ToColor and not clSystemColor;
+  rc := GetRValue(Color) + Round(MulDiv(GetRValue(ToColor) - GetRValue(Color), Value - FromValue, ToValue - FromValue));
+  gc := GetGValue(Color) + Round(MulDiv(GetGValue(ToColor) - GetGValue(Color), Value - FromValue, ToValue - FromValue));
+  bc := GetBValue(Color) + Round(MulDiv(GetBValue(ToColor) - GetBValue(Color), Value - FromValue, ToValue - FromValue));
+
+  Result := RGB(Max(0, Min(255, rc)), Max(0, Min(255, gc)), Max(0, Min(255, bc)));
+end;
+
 function ResizePicture(Image: TPicture; Hauteur, Largeur: Integer; AntiAliasing, Cadre: Boolean; Effet3D: Integer): TStream;
 var
-  NewLargeur, NewHauteur: Integer;
+  NewLargeur, NewHauteur, i: Integer;
   Bmp: TBitmap;
-  Trace: array of TPoint;
+//  Trace: array of TPoint;
 begin
   Result := TMemoryStream.Create;
   try
@@ -746,14 +776,23 @@ begin
           Bmp.Canvas.Pen.Style := psSolid;
           Bmp.Canvas.Brush.Color := clGray;
           Bmp.Canvas.Brush.Style := bsSolid;
-          SetLength(Trace, 6);
-          Trace[0] := Point(0, NewHauteur);
-          Trace[1] := Point(0 + Effet3D, Bmp.Height);
-          Trace[2] := Point(Bmp.Width, Bmp.Height);
-          Trace[3] := Point(Bmp.Width, 0 + Effet3D);
-          Trace[4] := Point(NewLargeur, 0);
-          Trace[5] := Point(NewLargeur, NewHauteur);
-          Bmp.Canvas.Polygon(Trace);
+          //          SetLength(Trace, 6);
+          //          Trace[0] := Point(0, NewHauteur);
+          //          Trace[1] := Point(0 + Effet3D, Bmp.Height);
+          //          Trace[2] := Point(Bmp.Width, Bmp.Height);
+          //          Trace[3] := Point(Bmp.Width, 0 + Effet3D);
+          //          Trace[4] := Point(NewLargeur, 0);
+          //          Trace[5] := Point(NewLargeur, NewHauteur);
+          //          Bmp.Canvas.Polygon(Trace);
+
+          for i := 0 to Effet3D do
+          begin
+            Bmp.Canvas.Pen.Color := ChangeLight(i, 0, Effet3D, clGray, clWhite);
+
+            Bmp.Canvas.MoveTo(0 + i, NewHauteur + i);
+            Bmp.Canvas.LineTo(NewLargeur + i, NewHauteur + i);
+            Bmp.Canvas.LineTo(NewLargeur + i, 0 + i);
+          end;
         end;
 
         with TJPEGImage.Create do

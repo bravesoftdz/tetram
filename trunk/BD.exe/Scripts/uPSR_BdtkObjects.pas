@@ -697,6 +697,9 @@ begin
     RegisterMethod(@TScriptChoix.ResetList, 'ResetList');
     RegisterMethod(@TScriptChoix.AjoutChoix, 'AjoutChoix');
     RegisterMethod(@TScriptChoix.AjoutChoixWithThumb, 'AjoutChoixWithThumb');
+    RegisterMethod(@TScriptChoix.CategorieCount, 'CategorieCount');
+    RegisterMethod(@TScriptChoix.ChoixCount, 'ChoixCount');
+    RegisterMethod(@TScriptChoix.CategorieChoixCount, 'CategorieChoixCount');
     RegisterPropertyHelper(@TScriptChoixTitre_R, @TScriptChoixTitre_W, 'Titre');
   end;
 end;

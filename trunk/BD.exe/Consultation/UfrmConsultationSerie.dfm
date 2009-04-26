@@ -2,7 +2,7 @@ object frmConsultationSerie: TfrmConsultationSerie
   Left = 1349
   Top = 58
   Caption = 'frmConsultationSerie'
-  ClientHeight = 786
+  ClientHeight = 767
   ClientWidth = 862
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
@@ -10,6 +10,7 @@ object frmConsultationSerie: TfrmConsultationSerie
   Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
+  Menu = MainMenu1
   OldCreateOrder = False
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -19,15 +20,16 @@ object frmConsultationSerie: TfrmConsultationSerie
     Left = 0
     Top = 0
     Width = 862
-    Height = 786
+    Height = 767
     Align = alClient
     BorderStyle = bsNone
     ParentBackground = True
     TabOrder = 0
     OnClick = EditeurClick
+    ExplicitHeight = 786
     DesignSize = (
       862
-      786)
+      767)
     object l_remarques: TLabel
       Left = 25
       Top = 296
@@ -175,11 +177,12 @@ object frmConsultationSerie: TfrmConsultationSerie
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 783
+      Top = 764
       Width = 862
       Height = 3
       Align = alBottom
       Shape = bsSpacer
+      ExplicitTop = 783
     end
     object Label4: TLabel
       Left = 14
@@ -441,6 +444,51 @@ object frmConsultationSerie: TfrmConsultationSerie
       ParentFont = False
       State = cbGrayed
       TabOrder = 8
+    end
+  end
+  object MainMenu1: TMainMenu
+    AutoMerge = True
+    Images = frmFond.boutons_32x32_hot
+    Left = 416
+    Top = 24
+    object Fiche1: TMenuItem
+      Caption = 'Fiche'
+      object Modifier1: TMenuItem
+        Action = FicheModifier
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
+      object Aperuavantimpression1: TMenuItem
+        Action = FicheApercu
+      end
+      object Imprimer1: TMenuItem
+        Action = FicheImprime
+      end
+    end
+  end
+  object ActionList1: TActionList
+    Left = 448
+    Top = 24
+    object FicheApercu: TAction
+      Tag = 1
+      Category = 'Fiche'
+      Caption = 'Aper'#231'u avant impression'
+      ImageIndex = 4
+      OnExecute = FicheApercuExecute
+    end
+    object FicheImprime: TAction
+      Tag = 2
+      Category = 'Fiche'
+      Caption = 'Imprimer'
+      ImageIndex = 3
+      OnExecute = FicheApercuExecute
+    end
+    object FicheModifier: TAction
+      Category = 'Fiche'
+      Caption = 'Modifier'
+      ImageIndex = 13
+      OnExecute = FicheModifierExecute
     end
   end
 end

@@ -17,7 +17,6 @@ type
     ToolButton5: TToolButton;
     ToolButton8: TToolButton;
     ImageList1: TImageList;
-    Label1: TLabel;
     ToolButton13: TToolButton;
     PopupMenu1: TPopupMenu;
     ToolButton14: TToolButton;
@@ -26,12 +25,6 @@ type
     ScrollBarH: TScrollBar;
     Panelcoin: TPanel;
     Zoom: TComboBox;
-    Panel2: TPanel;
-    Image3: TImage;
-    Label2: TLabel;
-    Panel3: TPanel;
-    Image2: TImage;
-    Panel4: TPanel;
     fondImage: TPanel;
     ToolButton6: TToolButton;
     ToolButton7: TToolButton;
@@ -41,6 +34,9 @@ type
     ImageGauche: TImage;
     ToolButton9: TToolButton;
     ToolButton10: TToolButton;
+    ToolButton11: TToolButton;
+    StatusBar1: TStatusBar;
+    Edit1: TEdit;
     procedure FormCreate(Sender: TObject);
     procedure ToolButton8Click(Sender: TObject);
     procedure ToolButton1Click(Sender: TObject);
@@ -61,13 +57,14 @@ type
     procedure ImageGaucheMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ToolButton6Click(Sender: TObject);
     procedure ToolButton7Click(Sender: TObject);
+    procedure Edit1Change(Sender: TObject);
   private
     Fnumeropage: Integer;
     { Déclarations privées }
     function ShowPage(Page: Integer): Boolean;
-    function Maximum: Integer;
-    function PWidth: Integer;
-    function PHeight: Integer;
+    function Maximum: Integer; inline;
+    function PWidth: Integer; inline;
+    function PHeight: Integer; inline;
     procedure Setnumeropage(const Value: Integer);
   public
     { Déclarations publiques }
@@ -109,7 +106,7 @@ const
 {$R *.DFM}
 {$R *.res}
 
-function Max(a, b: Integer): Integer;
+function Max(a, b: Integer): Integer; inline;
 begin
   if a > b then
     Result := a
@@ -117,7 +114,7 @@ begin
     Result := b;
 end;
 
-function Min(a, b: Integer): Integer;
+function Min(a, b: Integer): Integer; inline;
 begin
   if a < b then
     Result := a
@@ -164,10 +161,7 @@ begin
   ToolButton2.Hint := suivante;
   ToolButton3.Hint := precedente;
   ToolButton4.Hint := derniere;
-  Label2.Hint := numpage;
-  Image3.Hint := numpage;
-  Label1.Hint := nbpages;
-  Image2.Hint := nbpages;
+  ToolButton11.Hint := numpage;
   ToolButton8.Hint := quitter;
   Fnumeropage := 0;
   Icon := TApplication(Owner).Icon;
@@ -188,7 +182,7 @@ end;
 
 procedure TfrmPreview.Quit;
 begin
-  Label1.Caption := IntToStr(maximum);
+  Edit1.Text := Format('%d / %d', [0, maximum]);
   Zoom.OnChange := nil;
   try
     Zoom.ItemIndex := Zoom.Items.IndexOf('100%'); // 5
@@ -196,8 +190,6 @@ begin
     Zoom.OnChange := ZoomChange;
   end;
   ToolButton1.Click;
-  Label1.AutoSize := False;
-  Label2.AutoSize := False;
   Historique.AddWaiting(fcPreview, Integer(Self));
 end;
 
@@ -275,6 +267,9 @@ begin
   Result := Panel.Height;
   if ScrollBarH.Visible then Result := Panel.Height - ScrollBarH.Height;
 end;
+
+type
+  TPanel = class(ExtCtrls.TPanel);
 
 function TfrmPreview.ShowPage(Page: Integer): Boolean;
 const
@@ -380,6 +375,10 @@ begin
     //    if DoublePage and not Assigned(Source1) then
     //      ImageGauche.SetBounds(ImageGauche.Left, ImageGauche.Top, ImageDroite.Width, ImageDroite.Height);
 
+    // merci Delphi 2009: le panel ne s'adapte plus pour un changement de taille d'un timage
+    TPanel(Panel6).AdjustSize;
+    TPanel(Panel5).AdjustSize;
+
     Panel6.Left := 0;
     Panel5.Left := Panel6.Width + Interpage;
     Panel5.Visible := DoublePage;
@@ -461,6 +460,35 @@ begin
   end;
 end;
 
+procedure TfrmPreview.Edit1Change(Sender: TObject);
+var
+  DC: HDC;
+  SaveFont: HFont;
+  I: Integer;
+  SysMetrics, Metrics: TTextMetric;
+begin
+  DC := GetDC(0);
+  try
+    GetTextMetrics(DC, SysMetrics);
+    SaveFont := SelectObject(DC, Edit1.Font.Handle);
+    GetTextMetrics(DC, Metrics);
+    SelectObject(DC, SaveFont);
+  finally
+    ReleaseDC(0, DC);
+  end;
+  if NewStyleControls then
+  begin
+    if Edit1.Ctl3D then I := 8 else I := 6;
+    I := GetSystemMetrics(SM_CXBORDER) * I;
+  end else
+  begin
+    I := SysMetrics.tmMaxCharWidth;
+    if I > Metrics.tmMaxCharWidth then I := Metrics.tmMaxCharWidth;
+    I := I div 4 + GetSystemMetrics(SM_CXBORDER) * 4;
+  end;
+  Edit1.Width := Metrics.tmAveCharWidth * Length(Edit1.Text) + I;
+end;
+
 procedure TfrmPreview.FormActivate(Sender: TObject);
 begin
   //  ShowNoPage;
@@ -470,12 +498,10 @@ procedure TfrmPreview.Image3MouseDown(Sender: TObject; Button: TMouseButton; Shi
 var
   pos: TPoint;
 begin
-  if (Sender = Image3) or (Sender = Label2) then PopupMenu1.Alignment := paLeft;
-  if (Sender = Panel4) then PopupMenu1.Alignment := paCenter;
-  if (Sender = Image2) or (Sender = Label1) then PopupMenu1.Alignment := paRight;
+  if (Sender = ToolButton11) then PopupMenu1.Alignment := paLeft;
 
   pos.x := X;
-  pos.y := Image3.Top + Image3.Height;
+  pos.y := ToolButton11.Top + ToolButton11.Height;
   pos := TWinControl(Sender).ClientToScreen(pos);
   PopupMenu1.Popup(pos.x, pos.y);
 end;
@@ -568,7 +594,7 @@ begin
   ToolButton3.Enabled := Fnumeropage < maximum;
   ToolButton4.Enabled := Fnumeropage < maximum;
 
-  Label2.Caption := Format('%.*d', [Length(Label1.Caption), Fnumeropage]);
+  Edit1.Text := Format('%.*d / %d', [Length(IntToStr(maximum)), Fnumeropage, maximum]);
 end;
 
 initialization

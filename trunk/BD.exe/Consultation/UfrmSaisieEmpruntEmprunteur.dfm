@@ -494,21 +494,17 @@ object frmSaisieEmpruntEmprunteur: TfrmSaisieEmpruntEmprunteur
     ExplicitHeight = 31
     inherited btnOK: TButton
       Left = 371
-      Top = 6
       Width = 73
       Caption = 'Ok'
       Enabled = False
       OnClick = BtnOkExecute
       ExplicitLeft = 371
-      ExplicitTop = 6
       ExplicitWidth = 73
     end
     inherited btnAnnuler: TButton
       Left = 451
-      Top = 6
       Width = 72
       ExplicitLeft = 451
-      ExplicitTop = 6
       ExplicitWidth = 72
     end
   end

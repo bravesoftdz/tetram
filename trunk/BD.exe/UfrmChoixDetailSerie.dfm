@@ -3,115 +3,45 @@ object frmChoixDetailSerie: TfrmChoixDetailSerie
   Top = 358
   BorderStyle = bsDialog
   Caption = 'S'#233'lectionner le niveau de d'#233'tail'
-  ClientHeight = 116
-  ClientWidth = 283
-  Color = clBtnFace
+  ClientHeight = 250
+  ClientWidth = 387
+  Color = clWindow
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
-  Font.Name = 'MS Sans Serif'
+  Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  PopupMode = pmAuto
+  Position = poMainFormCenter
   PixelsPerInch = 96
   TextHeight = 13
-  object LightComboCheck1: TLightComboCheck
-    Left = 30
-    Top = 15
-    Width = 227
-    Height = 19
-    Checked = True
-    Border = CCBflat
-    DefaultValueChecked = -1
-    PropertiesStored = True
-    Transparent = True
-    CheckVisible = False
-    FillCaption = False
-    CheckedCaptionBold = False
-    ShowCaptionHint = False
-    AssignHint = False
-    OptionValidValue.ValueOption = [vvoChecked, vvoUnchecked, vvoMissing, vvoUnknown, vvoOthers]
-    Items.CaptionComplet = True
-    Items.Separateur = ' '
-    Items = <
-      item
-        Valeur = 0
-        Caption = 'Titre'
-        Visible = True
-        Enabled = True
-        SubItems.CaptionComplet = True
-        SubItems.Separateur = ' '
-        SubItems = <>
-      end
-      item
-        Valeur = 1
-        Caption = 'S'#233'rie'
-        Visible = True
-        Enabled = True
-        SubItems.CaptionComplet = True
-        SubItems.Separateur = ' '
-        SubItems = <>
-      end
-      item
-        Valeur = 2
-        Caption = 'Editeur'
-        Visible = True
-        Enabled = True
-        SubItems.CaptionComplet = True
-        SubItems.Separateur = ' '
-        SubItems = <>
-      end
-      item
-        Valeur = 3
-        Caption = 'Genre'
-        Visible = True
-        Enabled = True
-        SubItems.CaptionComplet = True
-        SubItems.Separateur = ' '
-        SubItems = <>
-      end
-      item
-        Valeur = 4
-        Caption = 'Ann'#233'e de parution'
-        Visible = True
-        Enabled = True
-        SubItems.CaptionComplet = True
-        SubItems.Separateur = ' '
-        SubItems = <>
-      end
-      item
-        Valeur = 5
-        Caption = 'Collection'
-        Visible = True
-        Enabled = True
-        SubItems.CaptionComplet = True
-        SubItems.Separateur = ' '
-        SubItems = <>
-      end>
+  inline framBoutons1: TframBoutons
+    Left = 0
+    Top = 221
+    Width = 387
+    Height = 29
+    Align = alBottom
+    Color = clBtnFace
+    ParentBackground = False
+    ParentColor = False
+    TabOrder = 1
+    ExplicitLeft = -114
+    ExplicitTop = 220
+    inherited btnOK: TButton
+      Left = 224
+      Visible = False
+    end
+    inherited btnAnnuler: TButton
+      Left = 304
+    end
   end
   object CheckBox1: TCheckBox
-    Left = 32
-    Top = 48
+    Left = 8
+    Top = 197
     Width = 209
     Height = 17
     Caption = 'Inclure Pr'#233'visions de sorties/Manquants'
     TabOrder = 0
-  end
-  inline Frame11: TframBoutons
-    Left = 0
-    Top = 91
-    Width = 283
-    Height = 25
-    Align = alBottom
-    TabOrder = 1
-    ExplicitTop = 91
-    ExplicitWidth = 283
-    inherited btnOK: TButton
-      Left = 112
-      ExplicitLeft = 112
-    end
-    inherited btnAnnuler: TButton
-      Left = 200
-      ExplicitLeft = 200
-    end
   end
 end

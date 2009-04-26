@@ -203,7 +203,12 @@ begin
         dummyID := CheckValue(Serie.Editeur.NomEditeur, vmEditeurs, GUID_NULL, Serie.Editeur);
         if IsEqualGUID(dummyID, GUID_NULL) then
           Exit;
-        if not IsEqualGUID(dummyID, GUID_FULL) then
+        if IsEqualGUID(dummyID, GUID_FULL) then
+        begin
+          Serie.Editeur.NomEditeur := '';
+          Serie.Collection.NomCollection := '';
+        end
+        else
         begin
           for j := 0 to Pred(Editions.Editions.Count) do
             if SameText(Serie.Editeur.NomEditeur, Editions.Editions[j].Editeur.NomEditeur) then
@@ -217,16 +222,19 @@ begin
 
       if (Serie.Collection.NomCollection <> '') and IsEqualGUID(Serie.Collection.ID, GUID_NULL) then
       begin
-        dummyID := CheckValue(Serie.Collection.NomCollection, vmCollections, dummyID);
+        dummyID := CheckValue(Serie.Collection.NomCollection, vmCollections, Serie.Editeur.ID_Editeur);
         if IsEqualGUID(dummyID, GUID_NULL) then
           Exit;
-        if not IsEqualGUID(dummyID, GUID_FULL) then
+        if IsEqualGUID(dummyID, GUID_FULL) then
+          Serie.Collection.NomCollection := ''
+        else
         begin
           for j := 0 to Pred(Editions.Editions.Count) do
-            if SameText(Serie.Collection.NomCollection, Editions.Editions[j].Collection.NomCollection) then
+            if IsEqualGUID(Serie.Editeur.ID_Editeur, Editions.Editions[j].Editeur.ID_Editeur)
+              and SameText(Serie.Collection.NomCollection, Editions.Editions[j].Collection.NomCollection) then
               Editions.Editions[j].Collection.Fill(dummyID);
           Serie.Collection.Fill(dummyID);
-        end;
+        end
       end;
 
       dummyID := CheckValue(Serie.Titre, vmSeries, GUID_NULL, Serie);
@@ -291,7 +299,12 @@ begin
             dummyID := CheckValue(Edition.Editeur.NomEditeur, vmEditeurs, GUID_NULL, Edition.Editeur);
             if IsEqualGUID(dummyID, GUID_NULL) then
               Exit;
-            if not IsEqualGUID(dummyID, GUID_FULL) then
+            if IsEqualGUID(dummyID, GUID_FULL) then
+            begin
+              Edition.Editeur.NomEditeur := '';
+              Edition.Collection.NomCollection := '';
+            end
+            else
             begin
               Edition.Editeur.Fill(dummyID);
               Edition.Collection.Editeur.Fill(dummyID);
@@ -302,10 +315,12 @@ begin
           begin
             if Edition.Collection.NomCollection <> '' then
             begin
-              dummyID := CheckValue(Edition.Collection.NomCollection, vmCollections, dummyID);
+              dummyID := CheckValue(Edition.Collection.NomCollection, vmCollections, Edition.Editeur.ID_Editeur);
               if IsEqualGUID(dummyID, GUID_NULL) then
                 Exit;
-              if not IsEqualGUID(dummyID, GUID_FULL) then
+              if IsEqualGUID(dummyID, GUID_FULL) then
+                Edition.Collection.NomCollection := ''
+              else
                 Edition.Collection.Fill(dummyID);
             end;
           end;
@@ -315,6 +330,7 @@ begin
       end;
 
       Qry.Transaction.Commit;
+      Self.ReadyToFusion := True;
     finally
       Qry.Transaction.Free;
       Qry.Free;

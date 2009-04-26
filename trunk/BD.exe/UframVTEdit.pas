@@ -30,12 +30,14 @@ type
     procedure SetMode(const Value: TVirtualMode);
     procedure SetCurrentValue(const Value: TGUID);
     procedure InternalValueChanged(Sender: TObject);
+    procedure SetParentValue(const Value: TGUID);
+    procedure RefreshFiltre;
   public
     constructor Create(AOwner: TComponent); override;
   published
     property Mode: TVirtualMode read GetMode write SetMode;
     property CurrentValue: TGUID read GetCurrentValue write SetCurrentValue;
-    property ParentValue: TGUID read FParentValue write FParentValue;
+    property ParentValue: TGUID read FParentValue write SetParentValue;
     property AfterEdit: TNotifyEvent read FAfterEdit write FAfterEdit;
     property AfterAppend: TNotifyEvent read FAfterAppend write FAfterAppend;
 
@@ -56,6 +58,21 @@ begin
   inherited;
   FParentValue := GUID_NULL;
   VTEdit.InternalValueChanged := InternalValueChanged;
+end;
+
+procedure TframVTEdit.RefreshFiltre;
+begin
+  with VTEdit.PopupWindow.TreeView do begin
+    if not IsEqualGUID(ParentValue, GUID_NULL) then
+      case Mode of
+        vmCollections: Filtre := 'id_editeur = ' + QuotedStr(GUIDToString(ParentValue));
+        else
+          Filtre := '';
+      end
+    else
+      Filtre := '';
+    UseFiltre := Filtre <> '';
+  end;
 end;
 
 procedure callbackAfterEdit(Data: Pointer);
@@ -222,6 +239,13 @@ end;
 procedure TframVTEdit.SetMode(const Value: TVirtualMode);
 begin
   VTEdit.Mode := Value;
+  RefreshFiltre;
+end;
+
+procedure TframVTEdit.SetParentValue(const Value: TGUID);
+begin
+  FParentValue := Value;
+  RefreshFiltre;
 end;
 
 end.

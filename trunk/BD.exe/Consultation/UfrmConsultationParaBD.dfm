@@ -434,6 +434,12 @@ object frmConsultationParaBD: TfrmConsultationParaBD
     Top = 24
     object Fiche1: TMenuItem
       Caption = 'Fiche'
+      object Modifier1: TMenuItem
+        Action = FicheModifier
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
       object Aperuavantimpression1: TMenuItem
         Action = FicheApercu
       end
@@ -482,6 +488,12 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       Caption = 'Imprimer'
       ImageIndex = 3
       OnExecute = FicheApercuExecute
+    end
+    object FicheModifier: TAction
+      Category = 'Fiche'
+      Caption = 'Modifier'
+      ImageIndex = 13
+      OnExecute = FicheModifierExecute
     end
   end
 end

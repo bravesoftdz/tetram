@@ -29,30 +29,21 @@ object FrmConvers: TFrmConvers
     TabOrder = 0
     inline Frame11: TframBoutons
       Left = 2
-      Top = 46
+      Top = 41
       Width = 185
-      Height = 24
+      Height = 29
       Align = alBottom
       TabOrder = 0
       ExplicitLeft = 2
-      ExplicitTop = 46
+      ExplicitTop = 41
       ExplicitWidth = 185
-      ExplicitHeight = 24
       inherited btnOK: TButton
-        Left = 54
-        Width = 54
-        Height = 19
-        ExplicitLeft = 54
-        ExplicitWidth = 54
-        ExplicitHeight = 19
+        Left = 22
+        ExplicitLeft = 22
       end
       inherited btnAnnuler: TButton
-        Left = 112
-        Width = 68
-        Height = 19
-        ExplicitLeft = 112
-        ExplicitWidth = 68
-        ExplicitHeight = 19
+        Left = 105
+        ExplicitLeft = 105
       end
     end
   end

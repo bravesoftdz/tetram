@@ -4,7 +4,7 @@ interface
 
 uses
   SysUtils, Windows, Classes, Dialogs, TypeRec, Commun, CommonConst, UdmPrinc, UIB, DateUtils, ListOfTypeRec, Contnrs, UChampsRecherche,
-  Generics.Collections, Generics.Defaults;
+  Generics.Collections, Generics.Defaults, VirtualTree;
 
 type
   ROption = record
@@ -29,18 +29,26 @@ type
   end;
 
   TObjetComplet = class(TBaseComplet)
+  private
+    FAssociations: TStringList;
   protected
     FID: TGUID;
+  published
   public
     RecInconnu: Boolean;
     constructor Create(const Reference: TGUID); reintroduce; overload; virtual;
+    destructor Destroy; override;
     procedure Clear; override;
+    procedure PrepareInstance; override;
     procedure SaveToDatabase; overload;
     procedure SaveToDatabase(UseTransaction: TUIBTransaction); overload; virtual;
     procedure New(ClearInstance: Boolean = True);
     function ChaineAffichage(dummy: Boolean = True): string; virtual;
+    procedure FillAssociations(TypeData: TVirtualMode);
+    procedure SaveAssociations(TypeData: TVirtualMode; ParentID: TGUID);
   published
     property ID: TGUID read FID;
+    property Associations: TStringList read FAssociations;
   end;
 
   TInfoComplet = class(TBaseComplet)
@@ -261,6 +269,7 @@ type
     procedure PrepareInstance; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure SaveToDatabase(UseTransaction: TUIBTransaction); override;
+    procedure FusionneInto(Dest: TEditionComplete);
   published
     property ID_Edition: TGUID read FID write FID;
     property ID_Album: TGUID read FID_Album write FID_Album;
@@ -293,7 +302,7 @@ type
     property Couvertures: TMyObjectList<TCouverture> read FCouvertures;
   end;
 
-  TEditionsComplet = class(TListComplet)
+  TEditionsCompletes = class(TListComplet)
   private
     FEditions: TObjectList<TEditionComplete>;
   public
@@ -302,6 +311,7 @@ type
     procedure Clear; override;
     constructor Create(const Reference: TGUID; Stock: Integer = -1); reintroduce; overload;
     destructor Destroy; override;
+    procedure FusionneInto(Dest: TEditionsCompletes);
   published
     property Editions: TObjectList<TEditionComplete> read FEditions;
   end;
@@ -322,8 +332,9 @@ type
     FDessinateurs: TObjectList<TAuteur>;
     FTomeDebut: Integer;
     FTome: Integer;
-    FEditions: TEditionsComplet;
+    FEditions: TEditionsCompletes;
     FComplet: Boolean;
+    FReadyToFusion: Boolean;
     function GetID_Serie: TGUID; inline;
     procedure SetID_Serie(const Value: TGUID); inline;
     procedure SetTitre(const Value: string); inline;
@@ -336,7 +347,9 @@ type
     procedure Acheter(Prevision: Boolean);
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
-    procedure Fusionne(Dest: TAlbumComplet);
+
+    procedure FusionneInto(Dest: TAlbumComplet);
+    property ReadyToFusion: Boolean read FReadyToFusion write FReadyToFusion;
   published
     property Complet: Boolean read FComplet;
     property ID_Album: TGUID read FID write FID;
@@ -355,7 +368,7 @@ type
     property Coloristes: TObjectList<TAuteur> read FColoristes;
     property Sujet: TStringList read FSujet;
     property Notes: TStringList read FNotes;
-    property Editions: TEditionsComplet read FEditions;
+    property Editions: TEditionsCompletes read FEditions;
   end;
 
   TEmprunteurComplet = class(TObjetComplet)
@@ -684,7 +697,8 @@ type
 implementation
 
 uses
-  UIBLib, Divers, StdCtrls, Procedures, Textes, StrUtils, UMetadata;
+  UIBLib, Divers, StdCtrls, Procedures, Textes, StrUtils, UMetadata, Controls,
+  UfrmFusionEditions;
 
 function MakeOption(Value: integer; const Caption: string): ROption;
 begin
@@ -774,6 +788,8 @@ end;
 procedure TAlbumComplet.Clear;
 begin
   inherited;
+  FReadyToFusion := False;
+
   ID_Album := GUID_NULL;
   Titre := '';
 
@@ -871,40 +887,64 @@ begin
 end;
 
 
-procedure TAlbumComplet.Fusionne(Dest: TAlbumComplet);
+procedure TAlbumComplet.FusionneInto(Dest: TAlbumComplet);
+
+  function NotInList(Auteur: TAuteur; List: TObjectList<TAuteur>): Boolean; inline;
+  var
+    i: Integer;
+  begin
+    i := 0;
+    Result := True;
+    while Result and (i <= Pred(List.Count)) do
+    begin
+      Result := not IsEqualGUID(List[i].Personne.ID, Auteur.Personne.ID);
+      Inc(i);
+    end;
+  end;
+
 var
   DefaultAlbum: TAlbumComplet;
+  Auteur: TAuteur;
 begin
   DefaultAlbum := TAlbumComplet.Create;
   try
     //Album
-    if SameText(Titre, DefaultAlbum.Titre) then
+    if not SameText(Titre, DefaultAlbum.Titre) then
       Dest.Titre := Titre;
-    if MoisParution = DefaultAlbum.MoisParution then
+    if MoisParution <> DefaultAlbum.MoisParution then
       Dest.MoisParution := MoisParution;
-    if AnneeParution = DefaultAlbum.AnneeParution then
+    if AnneeParution <> DefaultAlbum.AnneeParution then
       Dest.AnneeParution := AnneeParution;
-    if Tome = DefaultAlbum.Tome then
+    if Tome <> DefaultAlbum.Tome then
       Dest.Tome := Tome;
-    if TomeDebut = DefaultAlbum.TomeDebut then
+    if TomeDebut <> DefaultAlbum.TomeDebut then
       Dest.TomeDebut := TomeDebut;
-    if TomeFin = DefaultAlbum.TomeFin then
+    if TomeFin <> DefaultAlbum.TomeFin then
       Dest.TomeFin := TomeFin;
-    if HorsSerie = DefaultAlbum.HorsSerie then
+    if HorsSerie <> DefaultAlbum.HorsSerie then
       Dest.HorsSerie := HorsSerie;
-    if Integrale = DefaultAlbum.Integrale then
+    if Integrale <> DefaultAlbum.Integrale then
       Dest.Integrale := Integrale;
-    // scenaristes
-    // dessinateurs
-    // coloristes
-    if SameText(Sujet.Text, DefaultAlbum.Sujet.Text) then
+
+    for Auteur in Scenaristes do
+      if NotInList(Auteur, Dest.Scenaristes) then Dest.Scenaristes.Add(TAuteur.Duplicate(Auteur) as TAuteur);
+    for Auteur in Dessinateurs do
+      if NotInList(Auteur, Dest.Dessinateurs) then Dest.Dessinateurs.Add(TAuteur.Duplicate(Auteur) as TAuteur);
+    for Auteur in Coloristes do
+      if NotInList(Auteur, Dest.Coloristes) then Dest.Coloristes.Add(TAuteur.Duplicate(Auteur) as TAuteur);
+
+    if not SameText(Sujet.Text, DefaultAlbum.Sujet.Text) then
       Dest.Sujet.Assign(Sujet);
-    if SameText(Notes.Text, DefaultAlbum.Notes.Text) then
+    if not SameText(Notes.Text, DefaultAlbum.Notes.Text) then
       Dest.Notes.Assign(Notes);
 
     //Série
-    if IsEqualGUID(ID_Serie, DefaultAlbum.ID_Serie) then
+    if not IsEqualGUID(ID_Serie, DefaultAlbum.ID_Serie) and
+      not IsEqualGUID(ID_Serie, Dest.ID_Serie)
+    then
       Dest.ID_Serie := ID_Serie;
+
+    Editions.FusionneInto(Dest.Editions);
   finally
     DefaultAlbum.Free;
   end;
@@ -924,7 +964,7 @@ begin
   FSujet := TStringList.Create;
   FNotes := TStringList.Create;
   FSerie := TSerieComplete.Create;
-  FEditions := TEditionsComplet.Create;
+  FEditions := TEditionsCompletes.Create;
 end;
 
 procedure TAlbumComplet.SaveToDatabase(UseTransaction: TUIBTransaction);
@@ -1224,6 +1264,73 @@ begin
     end;
 end;
 
+procedure TEditionComplete.FusionneInto(Dest: TEditionComplete);
+var
+  DefaultEdition: TEditionComplete;
+  Couverture: TCouverture;
+begin
+  DefaultEdition := TEditionComplete.Create;
+  try
+    if not IsEqualGUID(Editeur.ID_Editeur, DefaultEdition.Editeur.ID_Editeur)
+      and not IsEqualGUID(Editeur.ID_Editeur, Dest.Editeur.ID_Editeur) then
+      Dest.Editeur.Fill(Editeur.ID_Editeur);
+    if not IsEqualGUID(Collection.ID, DefaultEdition.Collection.ID)
+      and not IsEqualGUID(Collection.ID, Dest.Collection.ID) then
+      Dest.Collection.Fill(Collection.ID);
+
+    if TypeEdition.Value <> DefaultEdition.TypeEdition.Value then
+      Dest.TypeEdition := TypeEdition;
+    if Etat.Value <> DefaultEdition.Etat.Value then
+      Dest.Etat := Etat;
+    if Reliure.Value <> DefaultEdition.Reliure.Value then
+      Dest.Reliure := Reliure;
+    if FormatEdition.Value <> DefaultEdition.FormatEdition.Value then
+      Dest.FormatEdition := FormatEdition;
+    if Orientation.Value <> DefaultEdition.Orientation.Value then
+      Dest.Orientation := Orientation;
+    if SensLecture.Value <> DefaultEdition.SensLecture.Value then
+      Dest.SensLecture := SensLecture;
+
+    if AnneeEdition <> DefaultEdition.AnneeEdition then
+      Dest.AnneeEdition := AnneeEdition;
+    if NombreDePages <> DefaultEdition.NombreDePages then
+      Dest.NombreDePages := NombreDePages;
+    if AnneeCote <> DefaultEdition.AnneeCote then
+      Dest.AnneeCote := AnneeCote;
+    if Prix <> DefaultEdition.Prix then
+      Dest.Prix := Prix;
+    if PrixCote <> DefaultEdition.PrixCote then
+      Dest.PrixCote := PrixCote;
+    if Couleur <> DefaultEdition.Couleur then
+      Dest.Couleur := Couleur;
+    if VO <> DefaultEdition.VO then
+      Dest.VO := VO;
+    if Dedicace <> DefaultEdition.Dedicace then
+      Dest.Dedicace := Dedicace;
+    if Stock <> DefaultEdition.Stock then
+      Dest.Stock := Stock;
+    if Prete <> DefaultEdition.Prete then
+      Dest.Prete := Prete;
+    if Offert <> DefaultEdition.Offert then
+      Dest.Offert := Offert;
+    if Gratuit <> DefaultEdition.Gratuit then
+      Dest.Gratuit := Gratuit;
+    if ISBN <> DefaultEdition.ISBN then
+      Dest.ISBN := ISBN;
+    if DateAchat <> DefaultEdition.DateAchat then
+      Dest.DateAchat := DateAchat;
+    if not SameText(Notes.Text, DefaultEdition.Notes.Text) then
+      Dest.Notes.Assign(Notes);
+    if NumeroPerso <> DefaultEdition.NumeroPerso then
+      Dest.NumeroPerso := NumeroPerso;
+
+    for Couverture in Couvertures do
+      Dest.Couvertures.Add(TCouverture.Duplicate(Couverture) as TCouverture);
+  finally
+    DefaultEdition.Free;
+  end;
+end;
+
 function TEditionComplete.Get_sDateAchat: string;
 begin
   if Self.DateAchat > 0 then
@@ -1501,25 +1608,25 @@ end;
 
 { TEditionsComplet }
 
-procedure TEditionsComplet.Clear;
+procedure TEditionsCompletes.Clear;
 begin
   inherited;
   Editions.Clear;
 end;
 
-constructor TEditionsComplet.Create(const Reference: TGUID; Stock: Integer);
+constructor TEditionsCompletes.Create(const Reference: TGUID; Stock: Integer);
 begin
   inherited Create;
   Fill(Reference, Stock);
 end;
 
-destructor TEditionsComplet.Destroy;
+destructor TEditionsCompletes.Destroy;
 begin
   FreeAndNil(FEditions);
   inherited;
 end;
 
-procedure TEditionsComplet.Fill(const Reference: TGUID; Stock: Integer = -1);
+procedure TEditionsCompletes.Fill(const Reference: TGUID; Stock: Integer = -1);
 begin
   inherited Fill(Reference);
   with TUIBQuery.Create(nil) do
@@ -1543,7 +1650,78 @@ begin
     end;
 end;
 
-procedure TEditionsComplet.PrepareInstance;
+type
+  OptionFusion = record
+    ImporterImages: Boolean;
+    RemplacerImages: Boolean;
+  end;
+
+procedure TEditionsCompletes.FusionneInto(Dest: TEditionsCompletes);
+var
+  FusionsGUID: array of TGUID;
+  OptionsFusion: array of OptionFusion;
+  Edition: TEditionComplete;
+  i, j: Integer;
+begin
+  if Editions.Count = 0 then Exit;
+
+  SetLength(FusionsGUID, Editions.Count);
+  ZeroMemory(FusionsGUID, SizeOf(FusionsGUID));
+  SetLength(OptionsFusion, Editions.Count);
+  ZeroMemory(OptionsFusion, SizeOf(FusionsGUID));
+  // même si la destination n'a aucune données, on peut choisir de ne rien y importer
+  //  if Dest.Editions.Count > 0 then
+  for i := 0 to Pred(Editions.Count) do
+    with TfrmFusionEditions.Create(nil) do
+    try
+      SetEditionSrc(Editions[i]);
+      SetEditions(Dest.Editions, FusionsGUID);
+
+      case ShowModal of
+        mrCancel: FusionsGUID[i] := GUID_FULL;
+        mrOk:
+          if CheckBox1.Checked then
+            FusionsGUID[i] := GUID_NULL
+          else
+            FusionsGUID[i] := TEditionComplete(lbEditions.Items.Objects[lbEditions.ItemIndex]).ID_Edition;
+      end;
+      OptionsFusion[i].ImporterImages := CheckBox2.Checked;
+      OptionsFusion[i].RemplacerImages := CheckBox3.Checked;
+    finally
+      Free;
+    end;
+
+  for i := 0 to Pred(Editions.Count) do
+  begin
+    if IsEqualGUID(FusionsGUID[i], GUID_FULL) then Continue;
+    if IsEqualGUID(FusionsGUID[i], GUID_NULL) then
+    begin
+      Edition := TEditionComplete.Create;
+      Edition.New;
+      Dest.Editions.Add(Edition);
+    end
+    else
+    begin
+      Edition := nil;
+      for j := 0 to Pred(Dest.Editions.Count) do
+        if IsEqualGUID(Dest.Editions[j].ID_Edition, FusionsGUID[i]) then
+        begin
+          Edition := Dest.Editions[j];
+          Break;
+        end;
+    end;
+    if Assigned(Edition) then begin
+      if not OptionsFusion[i].ImporterImages then
+        Editions[i].Couvertures.Clear
+      else if OptionsFusion[i].RemplacerImages then
+        Edition.Couvertures.Clear;
+
+      Editions[i].FusionneInto(Edition);
+    end;
+  end;
+end;
+
+procedure TEditionsCompletes.PrepareInstance;
 begin
   inherited;
   FEditions := TObjectList<TEditionComplete>.Create;
@@ -2894,24 +3072,26 @@ end;
 procedure TAuteurComplet.SaveToDatabase(UseTransaction: TUIBTransaction);
 var
   s: string;
+  q: TUIBQuery;
 begin
   inherited;
-  with TUIBQuery.Create(nil) do
+  q := TUIBQuery.Create(nil);
+  with q do
     try
       Transaction := UseTransaction;
 
-      SQL.Text := 'UPDATE OR INSERT INTO PERSONNES (ID_Personne, NOMPERSONNE, SITEWEB, BIOGRAPHIE) VALUES (:ID_Personne, :NOMPERSONNE, :SITEWEB, :BIOGRAPHIE)';
+      SQL.Text := 'update or insert into personnes (id_personne, nompersonne, siteweb, biographie) values (:id_personne, :nompersonne, :siteweb, :biographie)';
 
       if IsEqualGUID(GUID_NULL, ID_Auteur) then
-        Params.ByNameIsNull['ID_Personne'] := True
+        Params.ByNameIsNull['id_personne'] := True
       else
-        Params.ByNameAsString['ID_Personne'] := GUIDToString(ID_Auteur);
-      Params.ByNameAsString['NOMPERSONNE'] := Trim(NomAuteur);
-      Params.ByNameAsString['SITEWEB'] := Trim(SiteWeb);
+        Params.ByNameAsString['id_personne'] := GUIDToString(ID_Auteur);
+      Params.ByNameAsString['nompersonne'] := Trim(NomAuteur);
+      Params.ByNameAsString['siteweb'] := Trim(SiteWeb);
       s := Biographie.Text;
-      ParamsSetBlob('BIOGRAPHIE', s);
-
+      ParamsSetBlob('biographie', s);
       ExecSQL;
+
       Transaction.Commit;
     finally
       Free;
@@ -3311,12 +3491,39 @@ begin
   inherited;
   FID := GUID_NULL;
   RecInconnu := True;
+  FAssociations.Clear;
 end;
 
 constructor TObjetComplet.Create(const Reference: TGUID);
 begin
   inherited Create;
   Fill(Reference);
+end;
+
+destructor TObjetComplet.Destroy;
+begin
+  FAssociations.Free;
+  inherited;
+end;
+
+procedure TObjetComplet.FillAssociations(TypeData: TVirtualMode);
+begin
+  with TUIBQuery.Create(nil) do
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'select chaine, always from import_associations where typedata = :typedata and id = :id and always = 1';
+      Params.AsInteger[0] := Integer(TypeData);
+      Params.AsString[1] := GUIDToString(ID);
+      Open;
+      while not Eof do
+      begin
+        FAssociations.Add(Fields.AsString[0]);
+        Next;
+      end;
+    finally
+      Transaction.Free;
+      Free;
+    end;
 end;
 
 procedure TObjetComplet.New(ClearInstance: Boolean = True);
@@ -3342,6 +3549,12 @@ begin
     Fill(newId);
 end;
 
+procedure TObjetComplet.PrepareInstance;
+begin
+  inherited;
+  FAssociations := TStringList.Create;
+end;
+
 procedure TObjetComplet.SaveToDatabase;
 var
   Transaction: TUIBTransaction;
@@ -3356,6 +3569,37 @@ begin
   finally
     Transaction.Free;
   end;
+end;
+
+procedure TObjetComplet.SaveAssociations(TypeData: TVirtualMode; ParentID: TGUID);
+var
+  i: Integer;
+begin
+  with TUIBQuery.Create(nil) do
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'delete from import_associations where typedata = :typedata and id = :id and always = 1';
+      Params.AsInteger[0] := Integer(TypeData);
+      Params.AsString[1] := GUIDToString(ID);
+      Execute;
+
+      SQL.Text := 'update or insert into import_associations (chaine, id, parentid, typedata, always) values (:chaine, :id, :parentid, :typedata, 1)';
+      Prepare(True);
+      for i := 0 to Pred(FAssociations.Count) do
+      begin
+        if Trim(FAssociations[i]) <> '' then begin
+          Params.AsString[0] := Copy(Trim(FAssociations[i]), 1, Params.SQLLen[0]);
+          Params.AsString[1] := GuidToString(ID);
+          Params.AsString[2] := GuidToString(ParentID);
+          Params.AsInteger[3] := Integer(TypeData);
+          Execute;
+        end;
+        Next;
+      end;
+    finally
+      Transaction.Free;
+      Free;
+    end;
 end;
 
 procedure TObjetComplet.SaveToDatabase(UseTransaction: TUIBTransaction);

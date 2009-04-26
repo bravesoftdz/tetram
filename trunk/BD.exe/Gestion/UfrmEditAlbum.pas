@@ -102,6 +102,7 @@ type
     edNotes: TMemoLabeled;
     Bevel6: TBevel;
     vtEditPersonnes: TframVTEdit;
+    btnScript: TButton;
     procedure ajoutClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -153,7 +154,7 @@ type
     procedure OnEditAuteurs(Sender: TObject);
     procedure vtEditEditeursVTEditChange(Sender: TObject);
     procedure vtEditCollectionsVTEditChange(Sender: TObject);
-    procedure Frame11Click(Sender: TObject);
+    procedure btnScriptClick(Sender: TObject);
   private
     { Déclarations privées }
     FAlbum: TAlbumComplet;
@@ -256,6 +257,7 @@ var
   i: Integer;
   PE: TEditionComplete;
   hg: IHourGlass;
+  OldvtEditionsItemIndex: Integer;
 begin
   hg := THourGlass.Create;
   FAlbum := Value;
@@ -289,7 +291,11 @@ begin
     vtEditSerie.CurrentValue := FAlbum.ID_Serie;
     vtEditSerie.VTEdit.OnChange := JvComboEdit1Change;
 
+    // tout ce mic mac pour l'actualisation par script
+    OldvtEditionsItemIndex := vtEditions.ItemIndex;
+    FCurrentEditionComplete := nil;
     vtEditions.Clear;
+    vtEditionsClick(nil);
     SetLength(FEditeurCollectionSelected, FAlbum.Editions.Editions.Count);
     for i := 0 to Pred(FAlbum.Editions.Editions.Count) do
     begin
@@ -297,6 +303,8 @@ begin
       FEditeurCollectionSelected[i] := True;
       vtEditions.AddItem(PE.ChaineAffichage, PE);
     end;
+    vtEditions.ItemIndex := OldvtEditionsItemIndex;
+    vtEditionsClick(nil);
 
     if (FAlbum.RecInconnu and (FAlbum.Editions.Editions.Count = 0)) or isAchat then
       VDTButton3.Click;
@@ -326,6 +334,26 @@ begin
   lvList.Invalidate;
 
   FlagAuteur := True;
+end;
+
+procedure ImportScript(frm: TfrmEditAlbum);
+begin
+  try
+    if frm.FAlbumImport.ReadyToFusion then
+    begin
+      frm.SaveToObject;
+      frm.FAlbumImport.FusionneInto(frm.Album);
+      frm.Album := frm.Album; // recharger la fenêtre avec frm.Album
+    end;
+  finally
+    FreeAndNil(frm.FAlbumImport);
+  end;
+end;
+
+procedure TfrmEditAlbum.btnScriptClick(Sender: TObject);
+begin
+  FAlbumImport := TAlbumComplet.Create;
+  Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
 end;
 
 procedure TfrmEditAlbum.ajoutClick(Sender: TObject);
@@ -497,20 +525,6 @@ begin
   FAlbum.HorsSerie := cbHorsSerie.Checked;
   FAlbum.Sujet.Assign(histoire.Lines);
   FAlbum.Notes.Assign(remarques.Lines);
-end;
-
-procedure ImportScript(frm: TfrmEditAlbum);
-begin
-  frm.SaveToObject;
-  frm.FAlbumImport.Fusionne(frm.Album);
-  frm.Album := frm.Album; // recharger la fenêtre avec frm.Album
-  FreeAndNil(frm.FAlbumImport);
-end;
-
-procedure TfrmEditAlbum.Frame11Click(Sender: TObject);
-begin
-//  FAlbumImport := TAlbumComplet.Create;
-//  Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
 end;
 
 procedure TfrmEditAlbum.framVTEdit1VTEditChange(Sender: TObject);
@@ -1222,6 +1236,10 @@ begin
   if Key = VK_DELETE then
   begin
     OldIndex := vtEditions.ItemIndex;
+
+    if (FCurrentEditionComplete.Emprunts.Emprunts.Count > 0) and
+     (AffMessage(rsLienEdition + #13 + rsSupprimerEdition, mtConfirmation, [mbYes, mbNo], True) <> mrYes) then
+      Exit;
 
     FCurrentEditionComplete := nil;
     vtEditions.DeleteSelected;

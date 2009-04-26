@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, Mask, Menus, ExtCtrls,
   EditLabeled, Buttons, VDTButton, UframBoutons, LoadComplet, UBdtForms,
-  PngSpeedButton;
+  PngSpeedButton, ComCtrls;
 
 type
   TfrmEditAuteur = class(TbdtForm)
@@ -19,6 +19,9 @@ type
     VDTButton13: TVDTButton;
     Bevel1: TBevel;
     Frame11: TframBoutons;
+    edAssociations: TMemoLabeled;
+    Label4: TLabel;
+    Bevel4: TBevel;
     procedure Frame11btnOKClick(Sender: TObject);
     procedure edSiteChange(Sender: TObject);
     procedure VDTButton13Click(Sender: TObject);
@@ -36,7 +39,7 @@ type
 
 implementation
 
-uses Commun, ShellAPI, Procedures, Textes;
+uses Commun, ShellAPI, Procedures, Textes, VirtualTree;
 
 {$R *.DFM}
 
@@ -46,10 +49,12 @@ var
 begin
   hg := THourGlass.Create;
   FAuteur.Fill(Value);
+  FAuteur.FillAssociations(vmPersonnes);
 
   edNom.Text := FAuteur.NomAuteur;
   edSite.Text := FAuteur.SiteWeb;
   edBiographie.Lines.Assign(FAuteur.Biographie);
+  edAssociations.Lines.Assign(FAuteur.Associations);
 end;
 
 procedure TfrmEditAuteur.Frame11btnOKClick(Sender: TObject);
@@ -64,7 +69,10 @@ begin
   FAuteur.NomAuteur := Trim(edNom.Text);
   FAuteur.SiteWeb := Trim(edSite.Text);
   FAuteur.Biographie.Assign(edBiographie.Lines);
+  FAuteur.Associations.Assign(edAssociations.Lines);
+
   FAuteur.SaveToDatabase;
+  FAuteur.SaveAssociations(vmPersonnes, GUID_NULL);
 
   ModalResult := mrOk;
 end;

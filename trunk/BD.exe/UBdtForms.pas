@@ -22,6 +22,8 @@ begin
   Scaled := False;
   Font.Name := 'Tahoma';
   Font.Size := 8;
+  PopupMode := pmAuto;
+  Position := poMainFormCenter;
 end;
 
 end.

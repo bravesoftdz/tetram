@@ -123,7 +123,7 @@ var
   i: Integer;
 begin
   i := FRegEx.IndexOfName(Group);
-  if (i > 0) then
+  if (i > 0) and (i < FRegEx.CaptureCount) then
     Result := FRegEx.Captures[i]
   else
     Result := '';

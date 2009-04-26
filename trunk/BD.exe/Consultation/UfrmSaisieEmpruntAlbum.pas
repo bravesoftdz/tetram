@@ -31,7 +31,7 @@ type
     { Déclarations privées }
     FID_Album: TGUID;
     FEdition: TEditionComplete;
-    FEditions: TEditionsComplet;
+    FEditions: TEditionsCompletes;
     procedure SetID_Album(const Value: TGUID);
     procedure SetID_Emprunteur(const Value: TGUID);
     function GetID_Emprunteur: TGUID;
@@ -104,7 +104,7 @@ begin
   FrameRechercheRapide1.VirtualTreeView := VTreeEmprunteur;
   FrameRechercheRapide1.ShowNewButton := False;
   VTreeEmprunteur.Mode := vmEmprunteurs;
-  FEditions := TEditionsComplet.Create;
+  FEditions := TEditionsCompletes.Create;
   FEdition := nil;
   date_pret.Date := Date;
   ChargeImage(VTreeEmprunteur.Background, 'FONDVT');

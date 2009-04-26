@@ -541,7 +541,7 @@ begin
   LoadValue(FAlbum.Serie.Collection.NomCollection, edCollectionSerie, CheckBoxLabeled7, DefaultValues.Serie.Collection.NomCollection);
 
   TabSheet2.TabVisible :=
-    CheckBox13.Checked or
+    CheckBox13.Checked{ or
     CheckBox16.Checked or
     CheckBox19.Checked or
     CheckBox14.Checked or
@@ -553,7 +553,7 @@ begin
     CheckBox18.Checked or
     CheckBoxLabeled5.Checked or
     CheckBoxLabeled6.Checked or
-    CheckBoxLabeled7.Checked;
+    CheckBoxLabeled7.Checked};
 
   //Edition
   TabSheet3.TabVisible := FAlbum.Editions.Editions.Count > 0;

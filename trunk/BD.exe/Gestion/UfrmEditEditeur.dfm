@@ -6,7 +6,7 @@ object frmEditEditeur: TfrmEditEditeur
   BorderStyle = bsDialog
   Caption = 'Saisie d'#39'Editeur'
   ClientHeight = 388
-  ClientWidth = 339
+  ClientWidth = 762
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -21,25 +21,27 @@ object frmEditEditeur: TfrmEditEditeur
   TextHeight = 13
   object Bevel1: TBevel
     Left = 0
-    Top = 25
-    Width = 339
+    Top = 29
+    Width = 762
     Height = 4
     Align = alTop
     Shape = bsBottomLine
+    ExplicitTop = 25
+    ExplicitWidth = 339
   end
   object ScrollBox1: TScrollBox
     Left = 0
-    Top = 29
-    Width = 339
-    Height = 359
+    Top = 33
+    Width = 762
+    Height = 355
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
     DesignSize = (
-      339
-      359)
+      762
+      355)
     object Label2: TLabel
-      Left = 18
+      Left = 43
       Top = 10
       Width = 28
       Height = 13
@@ -49,7 +51,7 @@ object frmEditEditeur: TfrmEditEditeur
       Layout = tlCenter
     end
     object Label1: TLabel
-      Left = -2
+      Left = 23
       Top = 34
       Width = 48
       Height = 13
@@ -59,7 +61,7 @@ object frmEditEditeur: TfrmEditEditeur
       Layout = tlCenter
     end
     object VDTButton13: TVDTButton
-      Left = 308
+      Left = 731
       Top = 32
       Width = 23
       Height = 18
@@ -98,11 +100,31 @@ object frmEditEditeur: TfrmEditEditeur
         893708AB398E77913EF34A5E9AF82B9B1E99095E38A5C85284E2C608F9FF6DE3
         3F46038B558452BD6059268919EDEE3681C6123142E2DFC17F03DFC55B0C5750
         2E1C0000000049454E44AE426082}
+      ExplicitLeft = 308
+    end
+    object Label4: TLabel
+      Left = 5
+      Top = 68
+      Width = 66
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Associations :'
+      FocusControl = edAssociations
+      Transparent = True
+      Layout = tlCenter
+    end
+    object Bevel4: TBevel
+      Left = 197
+      Top = 57
+      Width = 366
+      Height = 6
+      Anchors = [akLeft, akTop, akRight]
+      Shape = bsTopLine
     end
     object edNom: TEditLabeled
-      Left = 49
+      Left = 77
       Top = 7
-      Width = 281
+      Width = 676
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -118,9 +140,9 @@ object frmEditEditeur: TfrmEditEditeur
       CurrencyChar = #0
     end
     object edSite: TEditLabeled
-      Left = 49
+      Left = 77
       Top = 31
-      Width = 256
+      Width = 651
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -136,26 +158,41 @@ object frmEditEditeur: TfrmEditEditeur
         end>
       CurrencyChar = #0
     end
+    object edAssociations: TMemoLabeled
+      Left = 77
+      Top = 65
+      Width = 676
+      Height = 105
+      Anchors = [akLeft, akTop, akRight]
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      ScrollBars = ssBoth
+      TabOrder = 2
+      LinkControls = <
+        item
+          Control = Label4
+        end>
+    end
   end
   inline Frame11: TframBoutons
     Left = 0
     Top = 0
-    Width = 339
-    Height = 25
+    Width = 762
+    Height = 29
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 339
+    ExplicitWidth = 762
     inherited btnOK: TButton
-      Left = 168
+      Left = 591
       Width = 87
       Caption = 'Enregistrer'
       OnClick = Frame11btnOKClick
-      ExplicitLeft = 168
+      ExplicitLeft = 591
       ExplicitWidth = 87
     end
     inherited btnAnnuler: TButton
-      Left = 256
-      ExplicitLeft = 256
+      Left = 679
+      ExplicitLeft = 679
     end
   end
 end

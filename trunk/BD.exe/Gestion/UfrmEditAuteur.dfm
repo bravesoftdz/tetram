@@ -7,8 +7,8 @@ object frmEditAuteur: TfrmEditAuteur
   BorderIcons = []
   BorderStyle = bsSingle
   Caption = 'frmEditAuteur'
-  ClientHeight = 219
-  ClientWidth = 717
+  ClientHeight = 562
+  ClientWidth = 731
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -23,26 +23,30 @@ object frmEditAuteur: TfrmEditAuteur
   TextHeight = 13
   object Bevel1: TBevel
     Left = 0
-    Top = 25
-    Width = 717
+    Top = 29
+    Width = 731
     Height = 4
     Align = alTop
     Shape = bsBottomLine
+    ExplicitTop = 25
+    ExplicitWidth = 717
   end
   object ScrollBox1: TScrollBox
     Left = 0
-    Top = 29
-    Width = 717
-    Height = 190
+    Top = 33
+    Width = 731
+    Height = 529
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
+    ExplicitWidth = 717
+    ExplicitHeight = 418
     DesignSize = (
-      717
-      190)
+      731
+      529)
     object Label3: TLabel
-      Left = 28
-      Top = 8
+      Left = 42
+      Top = 7
       Width = 28
       Height = 13
       Alignment = taRightJustify
@@ -52,28 +56,28 @@ object frmEditAuteur: TfrmEditAuteur
       Layout = tlCenter
     end
     object Label1: TLabel
-      Left = 4
-      Top = 55
+      Left = 13
+      Top = 57
       Width = 57
       Height = 13
       Alignment = taRightJustify
       Caption = 'Biographie :'
-      FocusControl = edNom
+      FocusControl = edBiographie
       Transparent = True
       Layout = tlCenter
     end
     object Label2: TLabel
-      Left = 8
+      Left = 22
       Top = 32
       Width = 48
       Height = 13
-      Hint = 'R'#233'f'#233'rence du support'
       Alignment = taRightJustify
       Caption = 'Site web :'
+      FocusControl = edSite
       Layout = tlCenter
     end
     object VDTButton13: TVDTButton
-      Left = 687
+      Left = 701
       Top = 30
       Width = 23
       Height = 18
@@ -112,13 +116,34 @@ object frmEditAuteur: TfrmEditAuteur
         893708AB398E77913EF34A5E9AF82B9B1E99095E38A5C85284E2C608F9FF6DE3
         3F46038B558452BD6059268919EDEE3681C6123142E2DFC17F03DFC55B0C5750
         2E1C0000000049454E44AE426082}
+      ExplicitLeft = 687
+    end
+    object Label4: TLabel
+      Left = 4
+      Top = 305
+      Width = 66
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Associations :'
+      FocusControl = edAssociations
+      Transparent = True
+      Layout = tlCenter
+    end
+    object Bevel4: TBevel
+      Left = 197
+      Top = 292
+      Width = 362
+      Height = 6
+      Anchors = [akLeft, akTop, akRight]
+      Shape = bsTopLine
+      ExplicitWidth = 366
     end
     object edBiographie: TMemoLabeled
-      Left = 64
+      Left = 73
       Top = 54
-      Width = 648
-      Height = 131
-      Anchors = [akLeft, akTop, akRight, akBottom]
+      Width = 653
+      Height = 231
+      Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       ScrollBars = ssBoth
@@ -127,11 +152,12 @@ object frmEditAuteur: TfrmEditAuteur
         item
           Control = Label1
         end>
+      ExplicitWidth = 657
     end
     object edNom: TEditLabeled
-      Left = 64
+      Left = 73
       Top = 4
-      Width = 648
+      Width = 653
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -142,11 +168,12 @@ object frmEditAuteur: TfrmEditAuteur
           Control = Label3
         end>
       CurrencyChar = #0
+      ExplicitWidth = 657
     end
     object edSite: TEditLabeled
-      Left = 64
+      Left = 73
       Top = 29
-      Width = 622
+      Width = 627
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -161,18 +188,35 @@ object frmEditAuteur: TfrmEditAuteur
           Control = Label2
         end>
       CurrencyChar = #0
+      ExplicitWidth = 631
+    end
+    object edAssociations: TMemoLabeled
+      Left = 73
+      Top = 302
+      Width = 653
+      Height = 105
+      Anchors = [akLeft, akTop, akRight]
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      ScrollBars = ssBoth
+      TabOrder = 3
+      LinkControls = <
+        item
+          Control = Label4
+        end>
+      ExplicitWidth = 657
     end
   end
   inline Frame11: TframBoutons
     Left = 0
     Top = 0
-    Width = 717
-    Height = 25
+    Width = 731
+    Height = 29
     Align = alTop
     TabOrder = 1
     ExplicitWidth = 717
     inherited btnOK: TButton
-      Left = 546
+      Left = 560
       Width = 87
       Caption = 'Enregistrer'
       Images = nil
@@ -181,7 +225,7 @@ object frmEditAuteur: TfrmEditAuteur
       ExplicitWidth = 87
     end
     inherited btnAnnuler: TButton
-      Left = 634
+      Left = 648
       Images = nil
       ExplicitLeft = 634
     end

@@ -181,6 +181,9 @@ const
   rsLienSerie = 'Attention, les albums qui ont un lien avec cette série seront supprimés.';
   rsSupprimerSerie = 'Êtes-vous sûr de vouloir supprimer cette série ?';
 
+  rsLienEdition = 'Attention, les emprunts de cette édition seront supprimés.';
+  rsSupprimerEdition = 'Êtes-vous sûr de vouloir supprimer cette édition ?';
+
   rsOperationEnCours = 'Operation en cours';
 
 implementation

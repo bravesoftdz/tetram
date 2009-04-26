@@ -1186,7 +1186,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
           end
           item
             Position = 1
-            Width = 403
+            Width = 405
             WideText = 'Emprunteur'
           end>
       end
@@ -1372,6 +1372,12 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       ImageIndex = 3
       OnExecute = Imprimer2Click
     end
+    object FicheModifier: TAction
+      Category = 'Fiche'
+      Caption = 'Modifier'
+      ImageIndex = 13
+      OnExecute = FicheModifierExecute
+    end
   end
   object MainMenu1: TMainMenu
     AutoMerge = True
@@ -1381,6 +1387,12 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     object Fiche1: TMenuItem
       Caption = 'Fiche'
       GroupIndex = 1
+      object Modifier1: TMenuItem
+        Action = FicheModifier
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
       object Aperuavantimpression1: TMenuItem
         Action = FicheApercu
       end

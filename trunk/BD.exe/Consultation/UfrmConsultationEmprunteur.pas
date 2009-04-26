@@ -7,7 +7,7 @@ uses
   ToolWin, VirtualTrees, ProceduresBDtk, LoadComplet, UBdtForms, Generics.Defaults;
 
 type
-  TfrmConsultationEmprunteur = class(TBdtForm, IImpressionApercu)
+  TfrmConsultationEmprunteur = class(TBdtForm, IImpressionApercu, IFicheEditable)
     ActionList1: TActionList;
     FicheImprime: TAction;
     FicheApercu: TAction;
@@ -32,6 +32,9 @@ type
     Aperuavantimpression2: TMenuItem;
     Aperuavantimpression3: TMenuItem;
     Aperuavantimpression4: TMenuItem;
+    FicheModifier: TAction;
+    Modifier1: TMenuItem;
+    N1: TMenuItem;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btAjouterClick(Sender: TObject);
@@ -45,6 +48,7 @@ type
     procedure ListeEmpruntsHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure Retour1Execute(Sender: TObject);
+    procedure FicheModifierExecute(Sender: TObject);
   private
     FEmprunteur: TEmprunteurComplet;
     { Déclarations privées }
@@ -55,6 +59,8 @@ type
     function GetID_Emprunteur: TGUID;
     procedure SetID_Emprunteur(const Value: TGUID);
     procedure ClearForm;
+    procedure ModificationExecute(Sender: TObject);
+    function ModificationUpdate: Boolean;
   public
     { Déclarations publiques }
     property Emprunteur: TEmprunteurComplet read FEmprunteur;
@@ -63,13 +69,19 @@ type
 
 implementation
 
-uses TypeRec, UfrmFond, MAJ, Impression, DateUtils, Math, UHistorique, Procedures;
+uses TypeRec, UfrmFond, MAJ, Impression, DateUtils, Math, UHistorique, Procedures,
+  Editions;
 
 {$R *.DFM}
 
 var
   FSortColumn: Integer;
   FSortDirection: TSortDirection;
+
+procedure TfrmConsultationEmprunteur.FicheModifierExecute(Sender: TObject);
+begin
+  if EditionEmprunteur(FEmprunteur.ID) then Historique.Refresh;
+end;
 
 procedure TfrmConsultationEmprunteur.FormCreate(Sender: TObject);
 begin
@@ -242,7 +254,7 @@ begin
 
   Caption := 'Fiche d''emprunteur - ' + FEmprunteur.ChaineAffichage;
   nom.Caption := FEmprunteur.Nom;
-  Adresse.Assign(FEmprunteur.Adresse);
+  Adresse.Lines.Assign(FEmprunteur.Adresse);
 
   ListeEmprunts.RootNodeCount := FEmprunteur.Emprunts.Emprunts.Count;
   Emprunts.Caption := IntToStr(FEmprunteur.Emprunts.NBEmprunts);
@@ -251,6 +263,16 @@ end;
 procedure TfrmConsultationEmprunteur.ClearForm;
 begin
   ListeEmprunts.Clear;
+end;
+
+procedure TfrmConsultationEmprunteur.ModificationExecute(Sender: TObject);
+begin
+  FicheModifierExecute(Sender);
+end;
+
+function TfrmConsultationEmprunteur.ModificationUpdate: Boolean;
+begin
+  Result := True;
 end;
 
 end.

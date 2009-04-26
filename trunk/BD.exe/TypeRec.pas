@@ -180,7 +180,7 @@ type
 
     procedure Fill(Query: TUIBQuery); overload; override;
     procedure Fill(const ID_Collection: TGUID); reintroduce; overload;
-    function ChaineAffichage(dummy: Boolean = True): string; override;
+    function ChaineAffichage(Simple: Boolean = True): string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TCollection): TCollection; reintroduce;
   end;
@@ -392,7 +392,7 @@ end;
 class function TBasePointeur.NonNull(Query: TUIBQuery; Champ, Default: Integer): Integer;
 begin
   try
-    if Query.Fields.IsNull[Champ] then
+    if (Champ = -1) or Query.Fields.IsNull[Champ] then
       Result := Default
     else
       Result := Query.Fields.AsInteger[Champ];
@@ -404,7 +404,7 @@ end;
 class function TBasePointeur.NonNull(Query: TUIBQuery; Champ: Integer): TGUID;
 begin
   try
-    if Query.Fields.IsNull[Champ] then
+    if (Champ = -1) or Query.Fields.IsNull[Champ] then
       Result := GUID_NULL
     else
       Result := StringToGUID(Query.Fields.AsString[Champ]);
@@ -852,9 +852,11 @@ begin
   Editeur.Assign(TCollection(Ps).Editeur);
 end;
 
-function TCollection.ChaineAffichage(dummy: Boolean = True): string;
+function TCollection.ChaineAffichage(Simple: Boolean = True): string;
 begin
   Result := FormatTitre(NomCollection);
+  if not Simple then
+    AjoutString(Result, FormatTitre(Editeur.NomEditeur), ' ', '(', ')');
 end;
 
 constructor TCollection.Create;

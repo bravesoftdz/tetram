@@ -20,24 +20,25 @@ object frmEditParaBD: TfrmEditParaBD
   TextHeight = 13
   object Bevel2: TBevel
     Left = 0
-    Top = 25
+    Top = 29
     Width = 824
     Height = 4
     Align = alTop
     Shape = bsBottomLine
+    ExplicitTop = 25
     ExplicitWidth = 827
   end
   object ScrollBox: TScrollBox
     Left = 0
-    Top = 29
+    Top = 33
     Width = 824
-    Height = 870
+    Height = 866
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
     DesignSize = (
       824
-      870)
+      866)
     object Label2: TLabel
       Left = 35
       Top = 7
@@ -95,11 +96,12 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 866
+      Top = 862
       Width = 824
       Height = 4
       Align = alBottom
       Shape = bsSpacer
+      ExplicitTop = 866
       ExplicitWidth = 827
     end
     object Label20: TLabel
@@ -1399,7 +1401,7 @@ object frmEditParaBD: TfrmEditParaBD
     Left = 0
     Top = 0
     Width = 824
-    Height = 25
+    Height = 29
     Align = alTop
     TabOrder = 1
     ExplicitWidth = 824

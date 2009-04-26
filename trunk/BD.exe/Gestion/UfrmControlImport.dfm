@@ -64,6 +64,7 @@ object frmControlImport: TfrmControlImport
     TabOrder = 0
     ExplicitTop = 134
     ExplicitWidth = 491
+    ExplicitHeight = 25
     inherited btnOK: TButton
       Left = 323
       Top = 1

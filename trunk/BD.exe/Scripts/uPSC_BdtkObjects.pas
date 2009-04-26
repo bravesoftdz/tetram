@@ -182,6 +182,9 @@ begin
     RegisterMethod('procedure ResetList;');
     RegisterMethod('procedure AjoutChoix(const Categorie, Libelle, Commentaire, Data: string);');
     RegisterMethod('procedure AjoutChoixWithThumb(const Categorie, Libelle, Commentaire, Data, URL: string);');
+    RegisterMethod('function CategorieCount: Integer;');
+    RegisterMethod('function ChoixCount: Integer;');
+    RegisterMethod('function CategorieChoixCount(const Name: string): Integer;');
     RegisterProperty('Titre', 'string', iptRW);
   end;
 end;

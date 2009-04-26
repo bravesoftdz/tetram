@@ -138,7 +138,7 @@ const
     ),
     (// vmCollections
     FILTRECOUNT: 'INITIALES_COLLECTIONS(?)'; FILTRE: 'COLLECTIONS_BY_INITIALE(?, ?)';
-    FIELDS: 'ID_COLLECTION, NOMCOLLECTION';
+    FIELDS: 'ID_COLLECTION, NOMCOLLECTION, id_editeur, nomediteur';
     INITIALEFIELDS: 'INITIALENOMCOLLECTION'; INITIALEVALUE: 'INITIALENOMCOLLECTION';
     REFFIELDS: 'ID_COLLECTION';
     TABLESEARCH: 'COLLECTIONS'; FIELDSEARCH: 'NOMCOLLECTION'
@@ -408,10 +408,13 @@ begin
         vmEmprunteurs,
         vmPersonnes,
         vmGenres,
-        vmEditeurs,
-        vmCollections:
+        vmEditeurs:
         begin
           Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(True);
+        end;
+        vmCollections:
+        begin
+          Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(FUseFiltre and (Pos('id_editeur', LowerCase(FFiltre)) > 0));
         end;
         vmSeries:
         begin
@@ -772,6 +775,8 @@ begin
           FCountPointers[i].Initiale := Fields.AsString[0];
           if FMode in [vmAlbumsSerie, vmAlbumsEditeur, vmAlbumsCollection, vmAchatsAlbumsEditeur] then
             FCountPointers[i].Initiale := FormatTitre(FCountPointers[i].Initiale);
+          if FMode = vmAlbumsCollection then
+            AjoutString(FCountPointers[i].Initiale, FormatTitre(Fields.AsString[3]), ' ', '(', ')');
           FCountPointers[i].sValue := Fields.ByNameAsString[vmModeInfos[FMode].INITIALEVALUE];
           Next;
           Inc(i);

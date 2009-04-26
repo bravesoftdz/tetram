@@ -150,7 +150,7 @@ end;
 
 procedure ChangeLight(Value: Integer; Canvas: TCanvas; R: TRect; Seuil: TColor = clWhite);
 
-  function Min(a, b: integer): integer;
+  function Min(a, b: integer): integer; inline;
   begin
     if a < b then
       result := a
@@ -158,7 +158,7 @@ procedure ChangeLight(Value: Integer; Canvas: TCanvas; R: TRect; Seuil: TColor =
       result := b;
   end;
 
-  function Max(a, b: integer): integer;
+  function Max(a, b: integer): integer; inline;
   begin
     if a > b then
       result := a

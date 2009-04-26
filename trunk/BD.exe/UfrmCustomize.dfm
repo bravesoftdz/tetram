@@ -385,40 +385,37 @@ object frmCustomize: TfrmCustomize
     object Label3: TLabel
       Left = 2
       Top = 15
-      Width = 31
-      Height = 13
+      Width = 516
+      Height = 44
       Align = alClient
       Alignment = taCenter
       Caption = 'Label3'
       Layout = tlCenter
       Visible = False
+      ExplicitWidth = 31
+      ExplicitHeight = 13
     end
   end
   inline Frame11: TframBoutons
     Left = 0
-    Top = 335
+    Top = 339
     Width = 535
-    Height = 33
+    Height = 29
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 335
+    ExplicitTop = 339
     ExplicitWidth = 535
-    ExplicitHeight = 33
     inherited btnOK: TButton
       Left = 379
-      Top = 9
       Width = 74
       OnClick = Frame11btnOKClick
       ExplicitLeft = 379
-      ExplicitTop = 9
       ExplicitWidth = 74
     end
     inherited btnAnnuler: TButton
       Left = 460
-      Top = 9
       Width = 72
       ExplicitLeft = 460
-      ExplicitTop = 9
       ExplicitWidth = 72
     end
   end

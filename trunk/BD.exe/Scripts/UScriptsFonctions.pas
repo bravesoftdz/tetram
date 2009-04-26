@@ -27,7 +27,8 @@ type
   private
     FList: TObjectList<TCategorie>;
     FTitre: string;
-    function GetCategorie(const Name: string): TCategorie;
+    function GetCategorie(const Name: string): TCategorie; overload;
+    function GetCategorie(const Name: string; Force: Boolean): TCategorie; overload;
   public
     constructor Create;
     destructor Destroy; override;
@@ -36,6 +37,10 @@ type
     procedure AjoutChoix(const Categorie, Libelle, Commentaire, Data: string);
     procedure AjoutChoixWithThumb(const Categorie, Libelle, Commentaire, Data, URL: string);
     function Show: string;
+
+    function CategorieCount: Integer;
+    function ChoixCount: Integer;
+    function CategorieChoixCount(const Name: string): Integer;
 
     property Categorie[const Name: string]: TCategorie read GetCategorie;
     property Titre: string read FTitre write FTitre;
@@ -142,7 +147,37 @@ begin
   Choix.FData := Data;
 end;
 
+function TScriptChoix.CategorieCount: Integer;
+begin
+  Result := FList.Count;
+end;
+
+function TScriptChoix.CategorieChoixCount(const Name: string): Integer;
+var
+  Categorie: TCategorie;
+begin
+  Categorie := GetCategorie(Name);
+  if Assigned(Categorie) then
+    Result := Categorie.Choix.Count
+  else
+    Result := 0;
+end;
+
+function TScriptChoix.ChoixCount: Integer;
+var
+  Categorie: TCategorie;
+begin
+  Result := 0;
+  for Categorie in FList do
+    Inc(Result, Categorie.Choix.Count);
+end;
+
 function TScriptChoix.GetCategorie(const Name: string): TCategorie;
+begin
+  Result := GetCategorie(Name, True);
+end;
+
+function TScriptChoix.GetCategorie(const Name: string; Force: Boolean): TCategorie;
 var
   i: integer;
 begin
