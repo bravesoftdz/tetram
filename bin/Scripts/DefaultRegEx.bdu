@@ -1,0 +1,6 @@
+unit DefaultRegEx;
+
+const
+  regExURL = '<a(?: href="(?<lien>.*?)"|.*?)*>(?<texte>(?s-).*?)</a>';
+
+end.

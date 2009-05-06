@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Script>
+  <Options/>
+  <Code>program Pika;
+
+uses ScriptFonctions, DefaultRegEx;
+
+const
+  urlSite = &apos;http://www.pika.fr&apos;;
+  urlSearchRoot = &apos;/new/search/node/%stype:volume&apos;;
+
+  regExResultsGlobale = &apos;&lt;div id=&quot;results&quot;(?:.*?)&gt;((?:(?s-:.*?)&lt;div(?:.*?)&gt;(?s-:.*?)&lt;/div&gt;(?s-:.*?))*?)&lt;/div&gt;&apos;;
+  regExResultsGlobaleLigne = &apos;&lt;div(?:.*?)&gt;[\r|\n|\t|\s]*&lt;table(?:.*?)&gt;((?s-).*?)&lt;/table&gt;(?s-:.*?)&lt;/div&gt;&apos;;
+  regExResultsGlobaleLigneDecoupe = regExURL;
+
+  regExAlbumSerie = &apos;&lt;td(?:.*?)pattern-volume(?:.*?)&gt;(?s-:.*?)&lt;a(?: href=&quot;(?&lt;lien_serie&gt;.*?)&quot;|.*?)*&gt;(?&lt;titre_serie&gt;\D*)(?&lt;tome&gt;\d*)?&lt;/a&gt;(?s-:.*?)&lt;a(?:.*?)&gt;(?&lt;collection&gt;.*)&lt;/a&gt;(?s-:.*?)&lt;/td&gt;&apos;;
+
+  regExAlbumParution = &apos;&lt;span style=&quot;color: #AAA; text-transform: uppercase&quot;&gt;parution : &lt;/span&gt;([\d|/|\s]*)&lt;br /&gt;&apos;;
+  regExAlbumSensLecture = &apos;&lt;span style=&quot;color: #AAA; text-transform: uppercase&quot;&gt;sens de lecture : &lt;/span&gt;(.*?)&lt;br /&gt;&apos;;
+  regExAlbumFormat = &apos;&lt;span style=&quot;color: #AAA; text-transform: uppercase&quot;&gt;format : &lt;/span&gt;(.*?)&lt;br /&gt;&apos;;
+  regExAlbumNbPages = &apos;&lt;span style=&quot;color: #AAA; text-transform: uppercase&quot;&gt;nombre de pages : &lt;/span&gt;(\d*)&lt;br /&gt;&apos;;
+  regExAlbumPrix = &apos;&lt;span style=&quot;color: #AAA; text-transform: uppercase&quot;&gt;prix de vente : &lt;/span&gt;([\d|,|\.]*) &#x20AC;&lt;br /&gt;&apos;;
+  regExAlbumISBN = &apos;&lt;span style=&quot;color: #AAA; text-transform: uppercase&quot;&gt;isbn :(?:[ |:]*)([\d|x|X|-]*)&lt;/span&gt;&lt;br /&gt;&apos;;
+  regExAlbumCouverture = &apos;&lt;img id=&quot;image_fr&quot;(?: src=&quot;(?&lt;couverture&gt;.*?)&quot;|.*?)*/&gt;&apos;;
+  regExSerieTerminee = &apos;&lt;div(?:.*?)&gt;[\r|\n|\t|\s]*&lt;span(?:.*?)&gt;en france&lt;/span&gt;(?s-:.*?)&lt;ul(?:.*?)&gt;(?s-:.*?)&lt;li&gt;&amp;bull; Série (en cours|complète)&lt;/li&gt;(?s-:.*?)&lt;/ul&gt;(?s-:.*?)&lt;ul(?:.*?)&gt;(?s-:.*?)&lt;/ul&gt;(?s-:.*?)&lt;/div&gt;&apos;;
+  regExAlbumAuteurs = &apos;&lt;span style=&quot;color: #AAA; text-transform: uppercase&quot;&gt;auteur\(s\) : &lt;/span&gt;(?:&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;(?&lt;auteur&gt;(?s-).*?)&lt;/a&gt;.*?)*&lt;br /&gt;&apos;;
+
+
+  regExAlbumDessinateurs = &apos;&lt;!-- DESSINATEUR\(S\) --&gt;(?s-:.*?)&lt;li&gt;((?s-).*?)&lt;/li&gt;&apos;;
+  regExAlbumScenaristes = &apos;&lt;!-- SCENARISTE\(S\) --&gt;(?s-:.*?)&lt;li&gt;((?s-).*?)&lt;/li&gt;&apos;;
+  regExAlbumFiche = &apos;&lt;!-- FICHE TECHNIQUE --&gt;(?s-:.*?)&lt;table id=&quot;fiche_tech&quot;(?s-:.*?)&gt;((?s-).*?)&lt;/table&gt;&apos;;
+  regExAlbumResume = &apos;&lt;!-- RESUME ALBUM --&gt;(?s-:.*?)&lt;!-- ACCROCHE --&gt;[\r|\n|\t]*((?s-).*?)[\r|\n|\t]*&lt;!-- INFOS SUPPLEMENTAIRES --&gt;&apos;;
+  regExSerieGenres = &apos;&lt;!-- GENRE --&gt;(?s-:.*?)&lt;h5&gt;Genre : (.*?)&amp;nbsp;&lt;/h5&gt;&apos;;
+  regExAlbumPlanches = &apos;&lt;div id=&quot;planches&quot;&gt;&lt;ul&gt;(?&lt;planches&gt;.*?)&lt;/ul&gt;&apos;;
+  regExAlbumPlanche = &apos;&lt;a href=&quot;(?&lt;image&gt;.*?)&quot;(?s-:.*?)&gt;(?s-:.*?)&lt;/a&gt;&apos;;
+
+procedure ParseAlbum(const id_album: string);
+var
+  page, Auteurs, s: string;
+  re: TBdtkRegEx;
+  sl: TStringList;
+begin
+  page := GetPage(CombineURL(urlSite, id_album), True);
+
+  re := TBdtkRegEx.Create;
+  try
+    AlbumToImport.Serie.Editeur.NomEditeur := &apos;Pika Edition&apos;;
+    AlbumToImport.Serie.Editeur.SiteWeb := urlSite;
+    AlbumToImport.Edition.Editeur.NomEditeur := AlbumToImport.Serie.Editeur.NomEditeur;
+    AlbumToImport.Edition.Editeur.SiteWeb := AlbumToImport.Serie.Editeur.SiteWeb;
+
+    if re.beginSearch(page, regExAlbumSerie) and re.Next then
+    begin
+      AlbumToImport.Serie.Titre := PrepareTitre(re.GetCaptureByName(&apos;titre_serie&apos;));
+      AlbumToImport.Serie.SiteWeb := CombineURL(urlSite, re.GetCaptureByName(&apos;lien_serie&apos;));
+      AlbumToImport.Tome := StrToIntDef(re.GetCaptureByName(&apos;tome&apos;), 0);
+
+      AlbumToImport.Serie.Collection := PrepareTitre(re.GetCaptureByName(&apos;collection&apos;));
+      AlbumToImport.Edition.Collection := AlbumToImport.Serie.Collection;
+    end;
+
+    AlbumToImport.Edition.ISBN := CleanISBN(ExtractRegEx(page, regExAlbumISBN));
+    AlbumToImport.Edition.Prix := StrToFloatDef(StringReplace(ExtractRegEx(page, regExAlbumPrix), &apos;,&apos;, &apos;.&apos;, []), 0);
+
+    sl := TStringList.Create;
+    try
+      sl.Split(ExtractRegEx(page, regExAlbumParution), &apos;/&apos;);
+      if sl.Count &gt; 0 then
+        AlbumToImport.AnneeParution := StrToIntDef(sl[sl.Count - 1], 0);
+      if sl.Count &gt; 1 then
+        AlbumToImport.MoisParution := TraduitMois(sl[sl.Count - 2]);
+    finally
+      sl.Free;
+    end;
+
+    AlbumToImport.Edition.NombreDePages := StrToIntDef(ExtractRegEx(page, regExAlbumNbPages), 0);
+
+    s := ExtractRegEx(page, regExAlbumCouverture);
+    if s &lt;&gt; &apos;&apos; then
+      AlbumToImport.Edition.AddImageFromURL(CombineURL(urlSite, s), ctiCouverture);
+
+    if SameText(ExtractRegEx(page, regExAlbumSensLecture), &apos;Japonais&apos;) then
+      AlbumToImport.Edition.SensLecture := 2;
+    s := ExtractRegEx(page, regExAlbumFormat);
+    if SameText(s, &apos;12 x 18 cm&apos;) then
+      AlbumToImport.Edition.FormatEdition := 1;
+
+    if SameText(ExtractRegEx(page, regExSerieTerminee), &apos;complète&apos;) then
+      AlbumToImport.Serie.Terminee := 1
+    else
+      AlbumToImport.Serie.Terminee := 0;
+
+    if re.BeginSearch(page, regExAlbumAuteurs) then
+      while re.Next do
+      begin
+        AlbumToImport.Scenaristes.Add(MakeAuteur(PrepareTitre(re.GetCaptureByName(&apos;auteur&apos;)), maScenariste));
+        AlbumToImport.Dessinateurs.Add(MakeAuteur(PrepareTitre(re.GetCaptureByName(&apos;auteur&apos;)), maDessinateur));
+        AlbumToImport.Serie.Scenaristes.Add(MakeAuteur(PrepareTitre(re.GetCaptureByName(&apos;auteur&apos;)), maScenariste));
+        AlbumToImport.Serie.Dessinateurs.Add(MakeAuteur(PrepareTitre(re.GetCaptureByName(&apos;auteur&apos;)), maDessinateur));
+      end;
+  finally
+    re.Free;
+  end;
+
+  AlbumToImport.Import;
+end;
+
+function RechercheParTitre(const Titre: string): string;
+var
+  page, sResultat: string;
+  re: TBdtkRegEx;
+  c: TScriptChoix;
+  id, titre_album: string;
+  lien: string;
+begin
+  Result := &apos;&apos;;
+  lien := Trim(Titre);
+  lien := StringReplace(lien, &apos;  &apos;, &apos; &apos;, [rfReplaceAll]);
+  lien := StringReplace(lien, &apos; &apos;, &apos;+&apos;, [rfReplaceAll]);
+  lien := CombineURL(urlSite, Format(urlSearchRoot, [lien + &apos;+&apos;]));
+
+  page := GetPage(lien, True);
+
+  c := TScriptChoix.Create;
+  re := TBdtkRegEx.Create;
+  try
+    c.Titre := &apos;Résultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
+    if re.BeginSearch(ExtractRegEx(page, regExResultsGlobale), regExResultsGlobaleLigne) then
+      while re.Find(sResultat) do begin
+        titre_album := ExtractRegExGroup(sResultat, regExResultsGlobaleLigneDecoupe, &apos;texte&apos;);
+        id := ExtractRegExGroup(sResultat, regExResultsGlobaleLigneDecoupe, &apos;lien&apos;);
+
+        c.AjoutChoix(&apos;Album&apos;, titre_album, &apos;&apos;, id);
+      end;
+
+    if c.ChoixCount &gt; 0 then
+      Result := c.Show
+    else
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
+  finally
+    re.Free;
+    c.Free;
+  end;
+end;
+
+var
+  id_album, entry: string;
+  index: integer;
+begin
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la série&apos;], entry, index) then Exit;
+
+  id_album := RechercheParTitre(entry);
+
+  if id_album &lt;&gt; &apos;&apos; then
+    ParseAlbum(id_album);
+end.</Code>
+</Script>

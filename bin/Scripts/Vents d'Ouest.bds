@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Script>
+  <Options/>
+  <Code>program VentsdOuest;
+
+begin
+  ShowMessage(&apos;Utiliser le script Glenat.&apos;);
+end.</Code>
+</Script>
