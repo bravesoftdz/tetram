@@ -24,6 +24,7 @@ const
   regExAlbumNbPages = &apos;&lt;span id=&quot;intitule&quot;&gt;[\r|\n|\t|\s]*NOMBRE DE PAGES[\r|\n|\t|\s]*:&lt;/span&gt;[\r|\n|\t|\s]*(?&lt;pages&gt;\d*)[\r|\n|\t|\s]*(?&lt;couleurs&gt;en couleurs|)[\r|\n|\t|\s]*&lt;br&gt;&apos;;
   regExAlbumPrix = &apos;&lt;span id=&quot;intitule&quot;&gt;[\r|\n|\t|\s]*PRIX[\r|\n|\t|\s]*:&lt;/span&gt;[\r|\n|\t|\s]*([\d|,|\.]*).*?&lt;br&gt;&apos;;
   regExAlbumISBN = &apos;&lt;span id=&quot;intitule&quot;&gt;[\r|\n|\t|\s]*ISBN[\r|\n|\t|\s]*:&lt;/span&gt;[\r|\n|\t|\s]*([\d|x|X|-]*)&lt;br&gt;&apos;;
+  regExAlbumGenre = &apos;&lt;span id=&quot;intitule&quot;&gt;[\r|\n|\t|\s]*GENRE[\r|\n|\t|\s]*:&lt;/span&gt;[\r|\n|\t|\s]*(.*?)&lt;br&gt;&apos;;
   regExAlbumResume = &apos;&lt;BASE.*?&gt;((?s-).*?)&lt;BASE.*?&gt;&apos;;
   regExAlbumCouverture = &apos;&lt;div align=right id=&quot;myLayer&quot;.*?&gt;&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;.*?&lt;img.*?&gt;&lt;/a&gt;&lt;/div&gt;&apos;;
   regExAlbumPlanches = &apos;EXTRAITS(?s-).*?&lt;table.*?&gt;((?s-).*?)&lt;/table&gt;&apos;;
@@ -40,6 +41,7 @@ var
   sl: TStringList;
 begin
   page := GetPage(CombineURL(urlSite, id_album), False);
+      WriteToFile(page, &apos;C:\Documents and Settings\Thierry\Bureau\lombard.txt&apos;);
 
   re := TBdtkRegEx.Create;
   try
@@ -79,6 +81,8 @@ begin
 
     AlbumToImport.Sujet.Text := HTMLText(ExtractRegEx(page, regExAlbumResume));
 
+    AlbumToImport.Serie.Genres.Add(ExtractRegEx(page, regExAlbumGenre));
+
     if re.BeginSearch(ExtractRegEx(page, regExAlbumScenaristes), regExURL) then
       while re.Next do
         AlbumToImport.Scenaristes.Add(MakeAuteur(re.GetCaptureByName(&apos;texte&apos;), maScenariste));
@@ -106,7 +110,6 @@ begin
     if AlbumToImport.Serie.SiteWeb &lt;&gt; &apos;&apos; then
     begin
       page := GetPage(AlbumToImport.Serie.SiteWeb, False);
-      WriteToFile(page, &apos;C:\Documents and Settings\Thierry\Bureau\lombard.txt&apos;);
 
       AlbumToImport.Serie.Sujet.Text := HTMLText(ExtractRegEx(page, regExAlbumResume));
 
