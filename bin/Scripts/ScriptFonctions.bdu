@@ -103,7 +103,7 @@ begin
   Result := Titre;
   pEspace := Pos(' ', Titre);
   pApostrophe := Pos('''', Titre);
-  if (pApostrophe > 0) and (pApostrophe < pEspace) then pEspace := pApostrophe + 1; // + 1 pour prendre l'apostrophe dans le mot
+  if (pApostrophe > 0) and ((pEspace = 0) or (pApostrophe < pEspace)) then pEspace := pApostrophe + 1; // + 1 pour prendre l'apostrophe dans le mot
   if pEspace = 0 then Exit;
   Mot := Copy(Titre, 1, pEspace - 1);
   if not ChaineIn(LowerCase(Mot), ['l''', 'un', 'une', 'des', 'le', 'la', 'les']) then Exit;

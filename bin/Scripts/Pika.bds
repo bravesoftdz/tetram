@@ -25,15 +25,6 @@ const
   regExSerieTerminee = &apos;&lt;div(?:.*?)&gt;[\r|\n|\t|\s]*&lt;span(?:.*?)&gt;en france&lt;/span&gt;(?s-:.*?)&lt;ul(?:.*?)&gt;(?s-:.*?)&lt;li&gt;&amp;bull; Série (en cours|complète)&lt;/li&gt;(?s-:.*?)&lt;/ul&gt;(?s-:.*?)&lt;ul(?:.*?)&gt;(?s-:.*?)&lt;/ul&gt;(?s-:.*?)&lt;/div&gt;&apos;;
   regExAlbumAuteurs = &apos;&lt;span style=&quot;color: #AAA; text-transform: uppercase&quot;&gt;auteur\(s\) : &lt;/span&gt;(?:&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;(?&lt;auteur&gt;(?s-).*?)&lt;/a&gt;.*?)*&lt;br /&gt;&apos;;
 
-
-  regExAlbumDessinateurs = &apos;&lt;!-- DESSINATEUR\(S\) --&gt;(?s-:.*?)&lt;li&gt;((?s-).*?)&lt;/li&gt;&apos;;
-  regExAlbumScenaristes = &apos;&lt;!-- SCENARISTE\(S\) --&gt;(?s-:.*?)&lt;li&gt;((?s-).*?)&lt;/li&gt;&apos;;
-  regExAlbumFiche = &apos;&lt;!-- FICHE TECHNIQUE --&gt;(?s-:.*?)&lt;table id=&quot;fiche_tech&quot;(?s-:.*?)&gt;((?s-).*?)&lt;/table&gt;&apos;;
-  regExAlbumResume = &apos;&lt;!-- RESUME ALBUM --&gt;(?s-:.*?)&lt;!-- ACCROCHE --&gt;[\r|\n|\t]*((?s-).*?)[\r|\n|\t]*&lt;!-- INFOS SUPPLEMENTAIRES --&gt;&apos;;
-  regExSerieGenres = &apos;&lt;!-- GENRE --&gt;(?s-:.*?)&lt;h5&gt;Genre : (.*?)&amp;nbsp;&lt;/h5&gt;&apos;;
-  regExAlbumPlanches = &apos;&lt;div id=&quot;planches&quot;&gt;&lt;ul&gt;(?&lt;planches&gt;.*?)&lt;/ul&gt;&apos;;
-  regExAlbumPlanche = &apos;&lt;a href=&quot;(?&lt;image&gt;.*?)&quot;(?s-:.*?)&gt;(?s-:.*?)&lt;/a&gt;&apos;;
-
 procedure ParseAlbum(const id_album: string);
 var
   page, Auteurs, s: string;
