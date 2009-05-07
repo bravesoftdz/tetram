@@ -15,6 +15,7 @@ procedure MAJSeriesIncompletes;
 procedure MAJPrevisionsSorties;
 procedure MAJPrevisionsAchats;
 procedure MAJRecherche(const Reference: TGUID; TypeSimple: Integer = -1; Stream: TMemoryStream = nil);
+function MAJGallerie(TypeGallerie: Integer; const Reference: TGUID): Boolean;
 function ZoomCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID): Boolean;
 function MAJScript(Data: TAlbumComplet): Boolean;
 
@@ -27,7 +28,7 @@ uses
   CommonConst, UfrmStock, UfrmFond, DB, StdCtrls, UfrmSeriesIncompletes,
   UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmConsultationEmprunteur, UfrmSaisieEmpruntAlbum, UfrmSaisieEmpruntEmprunteur, UfrmRecherche,
   UfrmZoomCouverture, UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique,
-  UfrmConsultationParaBD, UfrmConsultationSerie, UfrmScripts;
+  UfrmConsultationParaBD, UfrmConsultationSerie, UfrmScripts, UfrmGallerie;
 
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;
 var
@@ -249,14 +250,34 @@ begin
 
     // AlbumToUpdate pourrait être différent dans le finally
     isUpdate := FDest.dmScripts.AlbumToUpdate;
-    FDest.framBoutons1.Visible := isUpdate;
-    if isUpdate then
-      Result := frmFond.SetModalChildForm(FDest) = mrOk
-    else
-      frmFond.SetChildForm(FDest);
+    FDest.Label1.Visible := not isUpdate;
+    Result := frmFond.SetModalChildForm(FDest) = mrOk
   finally
     if isUpdate then
       FDest.Free;
+  end;
+end;
+
+function MAJGallerie(TypeGallerie: Integer; const Reference: TGUID): Boolean;
+var
+  FDest: TfrmGallerie;
+  hg: IHourGlass;
+begin
+  hg := THourGlass.Create;
+  //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  Result := False;
+  FDest := TfrmGallerie.Create(frmFond);
+  try
+    case TypeGallerie of
+      1: FDest.ID_Serie := Reference;
+      2: FDest.ID_Album := Reference;
+      3: FDest.ID_Edition := Reference;
+      else Exit;
+    end;
+    Historique.SetDescription(FDest.Caption);
+    Result := True;
+  finally
+    frmFond.SetChildForm(FDest);
   end;
 end;
 

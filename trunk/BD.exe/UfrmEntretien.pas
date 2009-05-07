@@ -240,8 +240,8 @@ begin
     while not Eof do
     begin
       Fichier := Fields.AsString[1];
-      UpdateQuery.Params.Parse(UpdateQuery.SQL.Text);
-      UpdateQuery.Params.AsString[0] := ChangeFileExt(ExtractFileName(Fichier), '');
+      UpdateQuery.Prepare(True);
+      UpdateQuery.Params.AsString[0] := Copy(ChangeFileExt(ExtractFileName(Fichier), ''), 1, UpdateQuery.Params.SQLLen[0]);
       if ExtractFilePath(Fichier) = '' then
         FichiersImages.Add(RepImages + Fichier)
       else
@@ -264,9 +264,10 @@ begin
     begin
       Transaction.StartTransaction;
       SQL.Text := 'select * from deletefile(:fichier)';
+      Prepare(True);
       for i := 0 to Pred(FichiersImages.Count) do
       begin
-        Params.AsString[0] := FichiersImages[i];
+        Params.AsString[0] := Copy(FichiersImages[i], 1, Params.SQLLen[0]);
         Open;
         if Fields.AsInteger[0] <> 0 then
           ShowMessage(FichiersImages[i] + #13#13 + SysErrorMessage(Fields.AsInteger[0]));
@@ -306,14 +307,16 @@ begin
     fWaiting.ShowProgression(rsOperationEnCours, 0, nbAExtraire);
     SQL.Text := 'select id_couverture, fichiercouverture from couvertures where stockagecouverture = 1';
     UpdateQuery.SQL.Text := 'update couvertures set fichiercouverture = :fichiercouverture, stockagecouverture = 0, imagecouverture = null where id_couverture = :id_couverture';
+    UpdateQuery.Prepare(True);
     ExtractQuery.SQL.Text := 'select result from saveblobtofile(:chemin, :fichier, :blobcontent)';
+    ExtractQuery.Prepare(True);
     nbExtrais := 0;
     Open;
     while not Eof do
     begin
       Fichier := SearchNewFileName(RepImages, Fields.AsString[1] + '.jpg', True);
-      ExtractQuery.Params.AsString[0] := RepImages;
-      ExtractQuery.Params.AsString[1] := Fichier;
+      ExtractQuery.Params.AsString[0] := Copy(RepImages, 1, ExtractQuery.Params.SQLLen[0]);
+      ExtractQuery.Params.AsString[1] := Copy(Fichier, 1, ExtractQuery.Params.SQLLen[1]);
       Stream := GetCouvertureStream(False, StringToGUID(Fields.AsString[0]), -1, -1, False);
       try
         ExtractQuery.ParamsSetBlob(2, Stream);
@@ -322,7 +325,7 @@ begin
       end;
       ExtractQuery.Open;
 
-      UpdateQuery.Params.AsString[0] := Fichier;
+      UpdateQuery.Params.AsString[0] := Copy(Fichier, 1, UpdateQuery.Params.SQLLen[0]);
       UpdateQuery.Params.AsString[1] := Fields.AsString[0];
       UpdateQuery.ExecSQL;
       Inc(nbExtrais);

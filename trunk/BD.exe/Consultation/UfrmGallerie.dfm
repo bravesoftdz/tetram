@@ -1,0 +1,40 @@
+object frmGallerie: TfrmGallerie
+  Left = 0
+  Top = 0
+  Caption = 'frmGallerie'
+  ClientHeight = 456
+  ClientWidth = 492
+  Color = clWhite
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnResize = FormResize
+  PixelsPerInch = 96
+  TextHeight = 13
+  object ScrollBox1: TPanel
+    Left = 0
+    Top = 0
+    Width = 471
+    Height = 439
+    BevelOuter = bvNone
+    ParentBackground = False
+    ParentColor = True
+    ShowCaption = False
+    TabOrder = 0
+  end
+  object ScrollBarV: TScrollBar
+    Left = 351
+    Top = 64
+    Width = 16
+    Height = 327
+    Kind = sbVertical
+    PageSize = 0
+    TabOrder = 1
+    OnChange = ScrollBarVChange
+  end
+end

@@ -29,8 +29,9 @@ type
     fcGestionSupp,
     fcGestionAchat,
     fcScripts,
-    fcConflitImport
-    );
+    fcConflitImport,
+    fcGallerie
+  );
 
 const
   UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcScripts, fcConflitImport];
@@ -38,7 +39,7 @@ const
     // à cause des callback, les appels de gestion ne peuvent pas être sauvés
     // et puis je vois pas bien à quoi ça pourrait servir
     + UsedInGestion;
-  CanRefresh = [fcAlbum, fcEmprunteur, fcAuteur, fcSeriesIncompletes, fcPrevisionsSorties, fcPrevisionsAchats];
+  CanRefresh = [fcAlbum, fcEmprunteur, fcAuteur, fcSeriesIncompletes, fcPrevisionsSorties, fcPrevisionsAchats, fcGallerie];
   MustRefresh = [fcRecherche, fcStock];
 
 type
@@ -114,10 +115,17 @@ type
 var
   Historique: THistory;
 
+procedure RefreshCallBack(Data: Pointer);
+
 implementation
 
 uses
   MAJ, UfrmFond, Forms, Proc_Gestions;
+
+procedure RefreshCallBack(Data: Pointer);
+begin
+  Historique.Refresh;
+end;
 
 procedure THistory.AddConsultation(Consult: TConsult);
 
@@ -394,6 +402,7 @@ begin
       fcRecherche: MAJRecherche(Consult.ReferenceGUID, Consult.Reference2, Consult.Stream);
       fcStock: MAJStock;
       fcPreview: frmFond.SetModalChildForm(TForm(Consult.Reference));
+      fcGallerie: Result := MAJGallerie(Consult.Reference2, Consult.ReferenceGUID);
       fcSeriesIncompletes: MAJSeriesIncompletes;
       fcPrevisionsSorties: MAJPrevisionsSorties;
       fcRecreateToolBar: frmFond.RechargeToolBar;
@@ -411,7 +420,11 @@ begin
           doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAddWithRef(Consult.GestionProc)(Consult.GestionVTV, Consult.ReferenceGUID, Consult.GestionValeur))
         else
           doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAdd(Consult.GestionProc)(Consult.GestionVTV, Consult.GestionValeur));
-      fcGestionModif: doCallback := TActionGestionModif(Consult.GestionProc)(Consult.GestionVTV);
+      fcGestionModif:
+        if IsEqualGUID(Consult.ReferenceGUID, GUID_NULL) then
+          doCallback := TActionGestionModif(Consult.GestionProc)(Consult.GestionVTV)
+        else
+          doCallback := TActionGestionModif2(Consult.GestionProc)(Consult.ReferenceGUID);
       fcGestionSupp: doCallback := TActionGestionSupp(Consult.GestionProc)(Consult.GestionVTV);
       fcGestionAchat: doCallback := TActionGestionAchat(Consult.GestionProc)(Consult.GestionVTV);
     end;

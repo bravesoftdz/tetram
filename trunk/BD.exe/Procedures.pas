@@ -147,7 +147,7 @@ procedure LitOptions;
   begin
     with Table do
     begin
-      Params.AsString[0] := Champ;
+      Params.AsString[0] := Copy(Champ, 1, Params.SQLLen[0]);
       Open;
       if not Eof then
         Result := Fields.AsString[0]
@@ -166,6 +166,7 @@ begin
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'SELECT FIRST 1 Valeur FROM OPTIONS WHERE NOM_OPTION = ? ORDER BY DM_OPTIONS DESC';
+      Prepare(True);
       TGlobalVar.Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', CurrencyString);
       FormatMonnaie := IIf(CurrencyFormat in [0, 2], TGlobalVar.Utilisateur.Options.SymboleMonnetaire + IIf(CurrencyFormat = 2, ' ', ''), '') + FormatMonnaieCourt + IIf(CurrencyFormat in [1, 3], IIf(CurrencyFormat = 3, ' ', '') + TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '');
       RepImages := LitStr(op, 'RepImages', RepImages);
@@ -212,8 +213,9 @@ procedure EcritOptions;
     with Table do
     begin
       SQL.Text := 'UPDATE OR INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES (:Nom_Option, :Valeur) MATCHING (Nom_Option)';
-      Params.ByNameAsString['Nom_Option'] := Champ;
-      Params.ByNameAsCurrency['Valeur'] := Valeur;
+      Prepare(True);
+      Params.AsString[1] := Copy(Champ, 1, Params.SQLLen[0]);
+      Params.AsCurrency[1] := Valeur;
       ExecSQL;
     end;
   end;
@@ -223,8 +225,9 @@ procedure EcritOptions;
     with Table do
     begin
       SQL.Text := 'UPDATE OR INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES (:Nom_Option, :Valeur) MATCHING (Nom_Option)';
-      Params.ByNameAsString['Nom_Option'] := Champ;
-      Params.ByNameAsString['Valeur'] := Valeur;
+      Prepare(True);
+      Params.AsString[0] := Copy(Champ, 1, Params.SQLLen[0]);
+      Params.AsString[1] := Copy(Valeur, 1, Params.SQLLen[1]);
       ExecSQL;
     end;
   end;
@@ -453,7 +456,8 @@ begin
     begin
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'SELECT Champ, TEXTECHAMP FROM description_typesupport WHERE Upper(TableChamps) = ? ORDER BY ordrechamp';
-      Params.AsString[0] := UpperCase(Table);
+      Prepare(True);
+      Params.AsString[0] := Copy(UpperCase(Table), 1, Params.SQLLen[0]);
       Open;
     end;
     if not Desc.Eof then
@@ -882,8 +886,9 @@ begin
           if Chemin = '' then
             Chemin := RepImages;
           SQL.Text := 'SELECT BlobContent FROM LOADBLOBFROMFILE(:Chemin, :Fichier);';
-          Params.AsString[0] := Chemin;
-          Params.AsString[1] := Fichier;
+          Prepare(True);
+          Params.AsString[0] := Copy(Chemin, 1, Params.SQLLen[0]);
+          Params.AsString[1] := Copy(Fichier, 1, Params.SQLLen[1]);
           Open;
           if Eof then
           begin
@@ -1045,8 +1050,9 @@ begin
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'SELECT * FROM SearchFileName(:Chemin, :Fichier, :Reserve)';
-      Params.AsString[0] := IncludeTrailingPathDelimiter(Chemin);
-      Params.AsString[1] := Fichier;
+      Prepare(True);
+      Params.AsString[0] := Copy(IncludeTrailingPathDelimiter(Chemin), 1, Params.SQLLen[0]);
+      Params.AsString[1] := Copy(Fichier, 1, Params.SQLLen[1]);
       Params.AsBoolean[2] := Reserve;
       Open;
       Result := ExtractFileName(Fields.AsString[0]);

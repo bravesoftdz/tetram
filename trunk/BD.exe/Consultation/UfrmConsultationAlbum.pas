@@ -135,6 +135,7 @@ type
     procedure lvSerieData(Sender: TObject; Item: TListItem);
     procedure lvSerieGetImageIndex(Sender: TObject; Item: TListItem);
     procedure FicheModifierExecute(Sender: TObject);
+    procedure ScrollBox2Click(Sender: TObject);
   private
     { Déclarations privées }
     CurrentCouverture: Integer;
@@ -161,7 +162,7 @@ implementation
 {$R *.DFM}
 
 uses Commun, TypeRec, CommonConst, MAJ, Impression, DateUtils, UHistorique, Procedures,
-  Divers, Textes, Editions;
+  Divers, Textes, Proc_Gestions;
 
 var
   FSortColumn: Integer;
@@ -174,7 +175,7 @@ end;
 
 procedure TfrmConsultationAlbum.FicheModifierExecute(Sender: TObject);
 begin
-  if EditionAlbum(FAlbum.ID) then Historique.Refresh;
+  Historique.AddWaiting(fcGestionModif, @RefreshCallBack, nil, @ModifierAlbums2, nil, FAlbum.ID);
 end;
 
 procedure TfrmConsultationAlbum.FormCreate(Sender: TObject);
@@ -508,6 +509,11 @@ end;
 function TfrmConsultationAlbum.GetID_Album: TGUID;
 begin
   Result := FAlbum.ID_Album;
+end;
+
+procedure TfrmConsultationAlbum.ScrollBox2Click(Sender: TObject);
+begin
+  Historique.AddWaiting(fcGallerie, Album.Serie.ID_Serie, 1);
 end;
 
 procedure TfrmConsultationAlbum.SetID_Album(const Value: TGUID);

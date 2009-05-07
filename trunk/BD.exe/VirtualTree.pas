@@ -482,11 +482,12 @@ begin
       try
         Transaction := GetTransaction(DMPrinc.UIBDataBase);
         SQL.Text := 'SELECT ' + vmModeInfos[FMode].FIELDS + ' FROM ' + vmModeInfos[FMode].FILTRE;
-        Params.AsString[0] := FCountPointers[Node.Index].sValue;
+        Prepare(True);
+        Params.AsString[0] := Copy(FCountPointers[Node.Index].sValue, 1, Params.SQLLen[0]);
         if FUseFiltre then
-          Params.AsString[1] := FFiltre
+          Params.AsString[1] := Copy(FFiltre, 1, Params.SQLLen[1])
         else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
-          Params.AsString[1] := vmModeInfos[FMode].DEFAULTFILTRE;
+          Params.AsString[1] := Copy(vmModeInfos[FMode].DEFAULTFILTRE, 1, Params.SQLLen[1]);
         Open;
         ClassPointeur.FillList(InfoNode.List, Q);
       finally
@@ -626,7 +627,8 @@ begin
           if vmModeInfos[FMode].SEARCHORDER <> '' then
             SQL.Add(vmModeInfos[FMode].SEARCHORDER + ',');
           SQL.Add(vmModeInfos[FMode].FIELDSEARCH);
-          Params.AsString[0] := UpperCase(SansAccents(Text));
+          Prepare(True);
+          Params.AsString[0] := Copy(UpperCase(SansAccents(Text)), 1, Params.SQLLen[0]);
           Open;
           SetLength(FFindArray, 0);
           i := 0;
@@ -758,10 +760,11 @@ begin
       try
         Transaction := GetTransaction(DMPrinc.UIBDataBase);
         SQL.Text := 'SELECT * FROM ' + vmModeInfos[FMode].FILTRECOUNT;
+        Prepare(True);
         if FUseFiltre then
-          Params.AsString[0] := FFiltre
+          Params.AsString[0] := Copy(FFiltre, 1, Params.SQLLen[0])
         else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
-          Params.AsString[0] := vmModeInfos[FMode].DEFAULTFILTRE;
+          Params.AsString[0] := Copy(vmModeInfos[FMode].DEFAULTFILTRE, 1, Params.SQLLen[0]);
         Open;
 
         SetLength(FCountPointers, 0);

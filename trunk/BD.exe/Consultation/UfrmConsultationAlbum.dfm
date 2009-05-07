@@ -27,6 +27,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     BorderStyle = bsNone
     ParentBackground = True
     TabOrder = 0
+    OnClick = ScrollBox2Click
     DesignSize = (
       522
       815)
@@ -1186,7 +1187,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
           end
           item
             Position = 1
-            Width = 405
+            Width = 403
             WideText = 'Emprunteur'
           end>
       end

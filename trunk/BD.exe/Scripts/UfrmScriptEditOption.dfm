@@ -39,12 +39,12 @@ object frmScriptEditOption: TfrmScriptEditOption
   end
   inline framBoutons1: TframBoutons
     Left = 0
-    Top = 204
+    Top = 200
     Width = 319
-    Height = 25
+    Height = 29
     Align = alBottom
-    TabOrder = 0
-    ExplicitTop = 90
+    TabOrder = 3
+    ExplicitTop = 200
     ExplicitWidth = 319
     inherited btnOK: TButton
       Left = 156
@@ -78,7 +78,7 @@ object frmScriptEditOption: TfrmScriptEditOption
     BevelKind = bkTile
     BorderStyle = bsNone
     MaxLength = 50
-    TabOrder = 2
+    TabOrder = 0
     OnChange = MemoLabeled1Change
     LinkControls = <
       item
@@ -94,7 +94,7 @@ object frmScriptEditOption: TfrmScriptEditOption
     BevelKind = bkTile
     BorderStyle = bsNone
     MaxLength = 50
-    TabOrder = 3
+    TabOrder = 2
     OnChange = MemoLabeled1Change
     LinkControls = <
       item

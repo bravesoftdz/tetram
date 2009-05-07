@@ -352,6 +352,7 @@ end;
 
 procedure TfrmEditAlbum.btnScriptClick(Sender: TObject);
 begin
+  FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
   FAlbumImport := TAlbumComplet.Create;
   Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
 end;
@@ -396,7 +397,7 @@ begin
   FCurrentEditionComplete := nil;
   vtEditions.Clear;
   FCategoriesImages.Free;
-  FreeAndNil(FAlbumImport);
+  FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
 end;
 
 procedure TfrmEditAlbum.Frame11btnOKClick(Sender: TObject);

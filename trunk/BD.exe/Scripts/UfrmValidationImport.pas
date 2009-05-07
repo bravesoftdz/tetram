@@ -440,6 +440,8 @@ procedure TfrmValidationImport.SetAlbum(Value: TAlbumComplet);
   var
     i: Integer;
   begin
+    for i := Pred(Value.Count) downto 0 do
+      if Trim(Value[i]) = '' then Value.Delete(i);
     Ctrl.Items.Assign(Value);
     for i := 0 to Pred(Ctrl.Items.Count) do
       Ctrl.Checked[i] := True;

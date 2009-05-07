@@ -917,10 +917,14 @@ begin
   Result := ALFastTagReplace(Result, '<', '>', myHandleTagfunct, '', '', True, [rfReplaceAll], nil);
   Result := StringReplace(Result, #1, '<', [rfReplaceAll]);
   Result := StringReplace(Result, '  ', ' ', [rfReplaceAll]);
-  while StartsText(sLineBreak, Result) do
-    Delete(Result, 1, Length(sLineBreak));
-  while EndsText(sLineBreak, Result) do
-    Delete(Result, Length(Result) - Length(sLineBreak) + 1, Length(sLineBreak));
+  Result := StringReplace(Result, sLineBreak + ' ', sLineBreak, [rfReplaceAll]);
+  Result := StringReplace(Result, ' ' + sLineBreak, sLineBreak, [rfReplaceAll]);
+  Result := StringReplace(Result, sLineBreak + sLineBreak, sLineBreak, [rfReplaceAll]);
+
+  while (Length(Result) > 0) and CharInSet(Result[1], [#13, #10, ' ']) do
+    Delete(Result, 1, 1);
+  while (Length(Result) > 0) and CharInSet(Result[Length(Result)], [#13, #10, ' ']) do
+    Delete(Result, Length(Result), 1);
   Result := HTMLDecode(Result);
 end;
 

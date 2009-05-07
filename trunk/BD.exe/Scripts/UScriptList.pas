@@ -29,10 +29,11 @@ type
     FScriptName: AnsiString;
     FScriptKing: TScriptKind;
     FLoaded: Boolean;
-    procedure SetFileName(const Value: String);
   public
     constructor Create; virtual;
     destructor Destroy; override;
+
+    procedure SetFileName(const Value: String); virtual;
 
     procedure Load;
     procedure SaveToFile(const aFileName: string); virtual;

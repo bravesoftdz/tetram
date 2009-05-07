@@ -29,9 +29,12 @@ object frmControlImport: TfrmControlImport
   object Label2: TLabel
     Left = 110
     Top = 53
-    Width = 31
+    Width = 310
     Height = 13
+    AutoSize = False
     Caption = 'Label2'
+    EllipsisPosition = epEndEllipsis
+    ShowAccelChar = False
   end
   object Label3: TLabel
     Left = 8

@@ -160,7 +160,7 @@ begin
   end
   else
   begin
-    Label1.Caption := Edition.ISBN;
+    Label1.Caption := FormatISBN(Edition.ISBN);
     Label2.Caption := FormatTitre(Edition.Editeur.NomEditeur);
     Label14.Caption := Edition.Collection.ChaineAffichage;
     ReadOnlyCheckBox3.Checked := Edition.Stock;
@@ -214,12 +214,21 @@ procedure TfrmFusionEditions.SetEditions(Editions: TObjectList<TEditionComplete>
   end;
 
 var
+  i, ItemIndex, dummy: Integer;
   Edition: TEditionComplete;
 begin
   lbEditions.Clear;
-  for Edition in Editions do
+  ItemIndex := -1;
+  for i := 0 to Pred(Editions.Count) do
+  begin
+    Edition := Editions[i];
     if NotInExclusion(Edition.ID_Edition) then
-      lbEditions.Items.AddObject(Edition.ChaineAffichage, Edition);
+    begin
+      dummy := lbEditions.Items.AddObject(Edition.ChaineAffichage, Edition);
+      if SameText(FormatISBN(Edition.ISBN), ISBN.Caption) and (ItemIndex = -1) then ItemIndex := dummy;
+    end;
+  end;
+  lbEditions.ItemIndex := ItemIndex;
   CheckBox1.Checked := lbEditions.Items.Count = 0;
   CheckBox1.Enabled := not CheckBox1.Checked;
   lbEditions.Enabled := CheckBox1.Enabled;
@@ -228,7 +237,7 @@ end;
 
 procedure TfrmFusionEditions.SetEditionSrc(Edition: TEditionComplete);
 begin
-  ISBN.Caption := Edition.ISBN;
+  ISBN.Caption := FormatISBN(Edition.ISBN);
   Editeur.Caption := FormatTitre(Edition.Editeur.NomEditeur);
   Collection.Caption := Edition.Collection.ChaineAffichage;
   cbStock.Checked := Edition.Stock;

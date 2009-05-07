@@ -985,6 +985,7 @@ begin
       SQL.Text := 'UPDATE OR INSERT INTO ALBUMS (ID_Album, TITREALBUM, MOISPARUTION, ANNEEPARUTION, ID_Serie, TOME, TOMEDEBUT, TOMEFIN, HORSSERIE, INTEGRALE, SUJETALBUM, REMARQUESALBUM)';
       SQL.Add('VALUES');
       SQL.Add('(:ID_Album, :TITREALBUM, :MOISPARUTION, :ANNEEPARUTION, :ID_Serie, :TOME, :TOMEDEBUT, :TOMEFIN, :HORSSERIE, :INTEGRALE, :SUJETALBUM, :REMARQUESALBUM)');
+      Prepare(True);
 
       if IsEqualGUID(GUID_NULL, ID_Album) then
         Params.ByNameIsNull['ID_Album'] := True
@@ -1576,9 +1577,10 @@ begin
       begin
         Transaction.StartTransaction;
         SQL.Text := 'SELECT * FROM DELETEFILE(:Fichier)';
+        Prepare(True);
         for i := 0 to Pred(FichiersImages.Count) do
         begin
-          Params.AsString[0] := FichiersImages[i];
+          Params.AsString[0] := Copy(FichiersImages[i], 1, Params.SQLLen[0]);
           Open;
           if Fields.AsInteger[0] <> 0 then
             ShowMessage(FichiersImages[i] + #13#13 + SysErrorMessage(Fields.AsInteger[0]));
@@ -1675,6 +1677,7 @@ begin
     with TfrmFusionEditions.Create(nil) do
     try
       SetEditionSrc(Editions[i]);
+      // SetEditions doit être fait après SetEditionSrc
       SetEditions(Dest.Editions, FusionsGUID);
 
       case ShowModal of
@@ -1685,8 +1688,8 @@ begin
           else
             FusionsGUID[i] := TEditionComplete(lbEditions.Items.Objects[lbEditions.ItemIndex]).ID_Edition;
       end;
-      OptionsFusion[i].ImporterImages := CheckBox2.Checked;
-      OptionsFusion[i].RemplacerImages := CheckBox3.Checked;
+      OptionsFusion[i].ImporterImages := CheckBox2.Checked and (Editions[i].Couvertures.Count > 0);
+      OptionsFusion[i].RemplacerImages := CheckBox3.Checked and OptionsFusion[i].ImporterImages;
     finally
       Free;
     end;
@@ -2177,10 +2180,11 @@ begin
       SupprimerToutDans('', 'GENRESERIES', 'ID_Serie', ID_Serie);
       SQL.Clear;
       SQL.Add('INSERT INTO GENRESERIES (ID_Serie, ID_Genre) VALUES (:ID_Serie, :ID_Genre)');
+      Prepare(True);
       for i := 0 to Pred(Genres.Count) do
       begin
         Params.AsString[0] := GUIDToString(ID_Serie);
-        Params.AsString[1] := Genres.Names[i];
+        Params.AsString[1] := Copy(Genres.Names[i], 1, Params.SQLLen[1]);
         ExecSQL;
       end;
 

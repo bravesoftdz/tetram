@@ -5,7 +5,7 @@ object frmPreview: TfrmPreview
   VertScrollBar.Tracking = True
   ActiveControl = ToolBar1
   Caption = 'frmPreview'
-  ClientHeight = 366
+  ClientHeight = 380
   ClientWidth = 599
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -174,12 +174,13 @@ object frmPreview: TfrmPreview
     Left = 0
     Top = 26
     Width = 599
-    Height = 340
+    Height = 354
     Align = alClient
     BevelOuter = bvNone
     DoubleBuffered = True
     ParentDoubleBuffered = False
     TabOrder = 1
+    ExplicitHeight = 340
     object ScrollBarV: TScrollBar
       Left = 543
       Top = 0
@@ -267,16 +268,6 @@ object frmPreview: TfrmPreview
           OnMouseUp = ImageGaucheMouseUp
         end
       end
-    end
-    object StatusBar1: TStatusBar
-      Left = 0
-      Top = 321
-      Width = 599
-      Height = 19
-      Panels = <>
-      ExplicitLeft = 424
-      ExplicitTop = 56
-      ExplicitWidth = 0
     end
   end
   object ImageList1: TImageList

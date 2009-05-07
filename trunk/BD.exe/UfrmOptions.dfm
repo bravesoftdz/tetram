@@ -107,6 +107,7 @@ object frmOptions: TfrmOptions
           Height = 241
           Caption = 'G'#233'n'#233'ral'
           TabOrder = 0
+          ExplicitWidth = 350
           object Label3: TLabel
             Left = 14
             Top = 95
@@ -329,6 +330,7 @@ object frmOptions: TfrmOptions
           Height = 59
           Caption = 'Impression'
           TabOrder = 1
+          ExplicitWidth = 350
           object FicheAlbumCouverture: TCheckBox
             Left = 14
             Top = 5
@@ -357,6 +359,7 @@ object frmOptions: TfrmOptions
           Height = 80
           Caption = 'Mode Gestion'
           TabOrder = 2
+          ExplicitWidth = 350
           object Label14: TLabel
             Left = 14
             Top = 23
@@ -638,7 +641,7 @@ object frmOptions: TfrmOptions
           Width = 57
           Height = 21
           Style = csDropDownList
-          ItemHeight = 0
+          ItemHeight = 13
           TabOrder = 3
           Items.Strings = (
             '1024'

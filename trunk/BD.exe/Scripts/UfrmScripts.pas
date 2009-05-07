@@ -54,11 +54,9 @@ type
     PopupMenu1: TPopupMenu;
     actFermer: TAction;
     actEnregistrer: TAction;
-    actEnregistrerSous: TAction;
     Fermer1: TMenuItem;
     N6: TMenuItem;
     Enregistrer1: TMenuItem;
-    Enregistrersous1: TMenuItem;
     PageControl2: TPageControl;
     tbEdition: TTabSheet;
     ToolBar2: TToolBar;
@@ -107,6 +105,7 @@ type
     ListBox2: TListBox;
     Splitter3: TSplitter;
     ListView1: TListView;
+    Label1: TLabel;
     procedure seScript1GutterClick(Sender: TObject; Button: TMouseButton; X, Y, Line: Integer; Mark: TSynEditMark);
     procedure seScript1GutterPaint(Sender: TObject; aLine, X, Y: Integer);
     procedure seScript1SpecialLineColors(Sender: TObject; Line: Integer; var Special: Boolean; var FG, BG: TColor);
@@ -149,7 +148,6 @@ type
     procedure seScript1MouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure actFermerExecute(Sender: TObject);
     procedure actEnregistrerExecute(Sender: TObject);
-    procedure actEnregistrerSousExecute(Sender: TObject);
     procedure ListView1DblClick(Sender: TObject);
     procedure seScript1ProcessUserCommand(Sender: TObject; var Command: TSynEditorCommand; var AChar: Char; Data: Pointer);
     procedure actRunWithoutDebugExecute(Sender: TObject);
@@ -167,6 +165,7 @@ type
     procedure mmConsoleChange(Sender: TObject);
     procedure SynEditParamShowExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
     procedure SynEditAutoCompleteExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
+    procedure framBoutons1btnAnnulerClick(Sender: TObject);
   private
     FLastSearch, FLastReplace: string;
     FSearchOptions: TSynSearchOptions;
@@ -205,6 +204,7 @@ type
     function EditOption(Option: TOption): Boolean;
     procedure ClearPages;
     procedure SetProjetOuvert(const Value: Boolean);
+    procedure LoadScripts;
     {$REGION 'Auto completion'}
     procedure RebuildLokalObjektList;
     procedure BuildLokalObjektList(Comp: TPSPascalCompiler);
@@ -1410,11 +1410,6 @@ begin
   end;
 end;
 
-procedure TfrmScripts.actEnregistrerSousExecute(Sender: TObject);
-begin
-  //
-end;
-
 procedure TfrmScripts.ListBox1Data(Control: TWinControl; Index: Integer; var Data: string);
 begin
   Data := FProjetScript.Options[Index].FLibelle + ': ' + FProjetScript.Options[Index].FChooseValue;
@@ -1443,9 +1438,10 @@ begin
           try
             Transaction := GetTransaction(dmPrinc.UIBDataBase);
             SQL.Text := 'update or insert into options_scripts (script, nom_option, valeur) values (:script, :nom_option, :valeur)';
-            Params.AsString[0] := string(FProjetScript.ScriptName);
-            Params.AsString[1] := Option.FLibelle;
-            Params.AsString[2] := Option.FChooseValue;
+            Prepare(True);
+            Params.AsString[0] := Copy(string(FProjetScript.ScriptName), 1, Params.SQLLen[0]);
+            Params.AsString[1] := Copy(Option.FLibelle, 1, Params.SQLLen[1]);
+            Params.AsString[2] := Copy(Option.FChooseValue, 1, Params.SQLLen[2]);
             Execute;
             Transaction.Commit;
           finally
@@ -1464,7 +1460,10 @@ procedure TfrmScripts.ListView1DblClick(Sender: TObject);
 begin
   if not Assigned(ListView1.Selected) then
     Exit;
-  actRun.Execute;
+  if actRunWithoutDebug.Enabled then
+    actRunWithoutDebug.Execute
+  else
+    actEdit.Execute;
 end;
 
 procedure TfrmScripts.ListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
@@ -1481,7 +1480,8 @@ begin
         try
           Transaction := GetTransaction(dmPrinc.UIBDataBase);
           SQL.Text := 'select nom_option, valeur from options_scripts where script = :script';
-          Params.AsString[0] := string(FProjetScript.ScriptName);
+          Prepare(True);
+          Params.AsString[0] := Copy(string(FProjetScript.ScriptName), 1, Params.SQLLen[0]);
           Open;
           while not Eof do
           begin
@@ -1570,7 +1570,8 @@ begin
   EditRedo1.Enabled := Assigned(Editor) and Editor.CanRedo;
   actCompile.Enabled := FProjetOuvert;
   actRun.Enabled := (actCompile.Enabled or actEdit.Enabled) and (not dmScripts.Running or (dmScripts.DebugMode = dmPaused));
-  actRunWithoutDebug.Enabled := actRun.Enabled and not dmScripts.Running;
+  actRunWithoutDebug.Visible := dmScripts.AlbumToUpdate;
+  actRunWithoutDebug.Enabled := actRunWithoutDebug.Visible and actRun.Enabled and not dmScripts.Running;
   actPause.Enabled := dmScripts.Running and (dmScripts.DebugMode = dmRun);
   actCreerOption.Visible := FProjetOuvert;
   actCreerOption.Enabled := FProjetOuvert;
@@ -1580,7 +1581,6 @@ begin
   actModifierOption.Enabled := FProjetOuvert and (ListBox1.ItemIndex <> -1);
   actFermer.Enabled := Assigned(Editor) and (FForceClose or (FCurrentScript <> FProjetScript));
   actEnregistrer.Enabled := Assigned(Editor);
-  actEnregistrerSous.Enabled := Assigned(Editor);
   actReset.Enabled := dmScripts.Running and (dmScripts.DebugMode in [dmPaused]);
   actCompile.Enabled := not dmScripts.Running;
 end;
@@ -1623,8 +1623,6 @@ begin
 end;
 
 procedure TfrmScripts.FormCreate(Sender: TObject);
-var
-  i: Integer;
 begin
   if TGlobalVar.Utilisateur.Options.GrandesIconesBarre then
   begin
@@ -1666,14 +1664,7 @@ begin
   // force à reprendre les params de delphi s'il est installé sur la machine
   SynPasSyn1.UseUserSettings(0);
 
-  FScriptList.LoadDir(TGlobalVar.Utilisateur.Options.RepertoireScripts);
-  for i := 0 to Pred(FScriptList.Count) do
-    if FScriptList[i].ScriptKing = skMain then
-      with ListView1.Items.Add do
-      begin
-        Data := FScriptList[i];
-        Caption := string(FScriptList[i].ScriptName);
-      end;
+  LoadScripts;
 
   PageControl2.ActivePage := tbScripts;
   ProjetOuvert := False;
@@ -1681,11 +1672,18 @@ end;
 
 procedure TfrmScripts.FormDestroy(Sender: TObject);
 begin
+  ProjetOuvert := False;
   ClearPages;
   fTypeInfos.Free;
   dmScripts.Free;
   FOpenedScript.Free;
   FScriptList.Free;
+end;
+
+procedure TfrmScripts.framBoutons1btnAnnulerClick(Sender: TObject);
+begin
+  framBoutons1.btnAnnulerClick(Sender);
+  if not dmScripts.AlbumToUpdate then Release;
 end;
 
 procedure TfrmScripts.RefreshOptions;
@@ -1770,6 +1768,21 @@ begin
     info.TabSheet.Visible := True;
   end;
   GoToPosition(info.Editor, 1, 1);
+end;
+
+procedure TfrmScripts.LoadScripts;
+var
+  Script: TScript;
+begin
+  FScriptList.LoadDir(TGlobalVar.Utilisateur.Options.RepertoireScripts);
+  ListView1.Items.Clear;
+  for Script in FScriptList do
+    if Script.ScriptKing = skMain then
+      with ListView1.Items.Add do
+      begin
+        Data := Script;
+        Caption := string(Script.ScriptName);
+      end;
 end;
 
 procedure TfrmScripts.ClearPages;

@@ -83,7 +83,7 @@ type
 implementation
 
 uses Commun, TypeRec, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
-  Editions;
+  Proc_Gestions;
 
 {$R *.dfm}
 
@@ -265,7 +265,7 @@ end;
 
 procedure TfrmConsultationParaBD.FicheModifierExecute(Sender: TObject);
 begin
-  if EditionParaBD(FParaBD.ID) then Historique.Refresh;
+  Historique.AddWaiting(fcGestionModif, @RefreshCallBack, nil, @ModifierParaBD2, nil, FParaBD.ID);
 end;
 
 procedure TfrmConsultationParaBD.ImpRep(Sender: TObject);

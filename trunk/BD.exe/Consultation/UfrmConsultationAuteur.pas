@@ -67,7 +67,8 @@ implementation
 
 {$R *.DFM}
 
-uses Commun, TypeRec, Impression, DateUtils, UHistorique, Editions;
+uses Commun, TypeRec, Impression, DateUtils, UHistorique,
+  Proc_Gestions;
 
 type
   PNodeInfo = ^RNodeInfo;
@@ -248,7 +249,7 @@ end;
 
 procedure TfrmConsultationAuteur.FicheModifierExecute(Sender: TObject);
 begin
-  if EditionAuteur(FAuteur.ID) then Historique.Refresh;
+  Historique.AddWaiting(fcGestionModif, @RefreshCallBack, nil, @ModifierAuteurs2, nil, ID_Auteur);
 end;
 
 procedure TfrmConsultationAuteur.ModificationExecute(Sender: TObject);

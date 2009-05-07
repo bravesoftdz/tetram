@@ -2,7 +2,7 @@ object frmValidationImport: TfrmValidationImport
   Left = 0
   Top = 0
   ActiveControl = framBoutons1.btnOK
-  Caption = 'frmValidationImport'
+  Caption = 'Donn'#233'es r'#233'cup'#233'r'#233'es'
   ClientHeight = 535
   ClientWidth = 526
   Color = clBtnFace
@@ -52,6 +52,10 @@ object frmValidationImport: TfrmValidationImport
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Album'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Label17: TLabel
         Left = 428
         Top = 128
@@ -879,6 +883,10 @@ object frmValidationImport: TfrmValidationImport
     object TabSheet3: TTabSheet
       Caption = 'Edition'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object cbxEtat: TLightComboCheck
         Left = 144
         Top = 151

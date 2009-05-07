@@ -73,7 +73,7 @@ type
 
 implementation
 
-uses Commun, Divers, TypeRec, ShellAPI, UHistorique, Impression, Editions;
+uses Commun, Divers, TypeRec, ShellAPI, UHistorique, Impression, Proc_Gestions;
 
 {$R *.dfm}
 
@@ -182,7 +182,7 @@ end;
 
 procedure TfrmConsultationSerie.FicheModifierExecute(Sender: TObject);
 begin
-  if EditionSerie(FSerie.ID) then Historique.Refresh;
+  Historique.AddWaiting(fcGestionModif, @RefreshCallBack, nil, @ModifierSeries2, nil, FSerie.ID);
 end;
 
 procedure TfrmConsultationSerie.FormCreate(Sender: TObject);

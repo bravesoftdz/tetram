@@ -45,6 +45,7 @@ type
     function GetDebugMode: TDebugMode;
     function CorrectScriptName(const Script: AnsiString): AnsiString;
     procedure SetAlbumToImport(Value: TAlbumComplet);
+    procedure WriteToFile(const Chaine, FileName: string);
   public
     frmScripts: TForm;
 
@@ -182,10 +183,13 @@ begin
     PSScriptDebugger1.Comp.AddConstantN('cti' + AnsiStrings.StringReplace(AnsiString(SansAccents(FListTypesImages.ValueFromIndex[i])), ' ', '_', [rfReplaceAll]), 'integer').SetInt(StrToInt(AnsiString(FListTypesImages.Names[i])));
 
   PSScriptDebugger1.AddMethod(Self, @TdmScripts.WriteToConsole, 'procedure WriteToConsole(const Chaine: string);');
+  PSScriptDebugger1.AddMethod(Self, @TdmScripts.WriteToFile, 'procedure WriteToFile(const Chaine, FileName: string);');
   PSScriptDebugger1.AddMethod(FRunningScript, @TScript.OptionValue, 'function GetOptionValue(const OptionName, Default: string): string;');
   PSScriptDebugger1.AddMethod(FRunningScript, @TScript.OptionValueIndex, 'function GetOptionValueIndex(const OptionName: string; Default: Integer): Integer;');
 
   PSScriptDebugger1.AddFunction(@GetPage, 'function GetPage(const url: string; UTF8: Boolean): string;');
+  PSScriptDebugger1.Comp.AddTypeS('RAttachement', 'record Nom, Valeur: string; IsFichier: Boolean; end');
+  PSScriptDebugger1.AddFunction(@PostPage, 'function PostPage(const url: string; Pieces: array of RAttachement; UTF8: Boolean): string;');
   PSScriptDebugger1.AddFunction(@findInfo, 'function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;');
   PSScriptDebugger1.AddFunction(@MakeAuteur, 'function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteur;');
   PSScriptDebugger1.AddFunction(@AskSearchEntry, 'function AskSearchEntry(const Labels: array of string; out Search: string; out Index: Integer): Boolean');
@@ -347,6 +351,29 @@ begin
       r := pt[j];
       Lines.Add(Format('%s: P=%d, RxC=%dx%d, SP=%d', [r^.FileName, r^.Position, r^.Row, r^.Col, r^.SourcePosition]));
     end;
+  end;
+end;
+
+procedure TdmScripts.WriteToFile(const Chaine, FileName: string);
+var
+  Buffer, Preamble: TBytes;
+  fs: TFileStream;
+begin
+  Buffer := TEncoding.Default.GetBytes(Chaine);
+  Preamble := TEncoding.Default.GetPreamble;
+
+  if FileExists(FileName) then
+    fs := TFileStream.Create(FileName, fmOpenWrite)
+  else
+    fs := TFileStream.Create(FileName, fmCreate or fmOpenWrite);
+  try
+    fs.Size := 0;
+
+    if Length(Preamble) > 0 then
+      fs.WriteBuffer(Preamble[0], Length(Preamble));
+    fs.WriteBuffer(Buffer[0], Length(Buffer));
+  finally
+    fs.Free;
   end;
 end;
 

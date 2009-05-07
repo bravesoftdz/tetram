@@ -156,6 +156,7 @@ begin
   try
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'UPDATE OR INSERT INTO CONVERSIONS (ID_Conversion, Monnaie1, Monnaie2, Taux) VALUES (?, ?, ?, ?) MATCHING (id_conversion)';
+    Prepare(True);
     for i := 0 to ListView1.Items.Count - 1 do
     begin
       PC := ListView1.Items[i].Data;
@@ -163,8 +164,8 @@ begin
         Params.IsNull[0] := True
       else
         Params.AsString[0] := GUIDToString(PC.ID);
-      Params.AsString[1] := PC.Monnaie1;
-      Params.AsString[2] := PC.Monnaie2;
+      Params.AsString[1] := Copy(PC.Monnaie1, 1, Params.SQLLen[1]);
+      Params.AsString[2] := Copy(PC.Monnaie2, 1, Params.SQLLen[2]);
       Params.AsDouble[3] := PC.Taux;
       ExecSQL;
     end;

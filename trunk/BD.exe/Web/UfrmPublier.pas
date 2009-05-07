@@ -471,7 +471,8 @@ var
       if InfoTable.ID <> '' then
       begin
         SQL.Text := 'select count(*) from suppressions where tablename = :table and dm_suppressions >= :UpgradeFromDate';
-        Params.AsString[0] := InfoTable.TableName;
+        Prepare(True);
+        Params.AsString[0] := Copy(InfoTable.TableName, 1, Params.SQLLen[0]);
         Params.AsDate[1] := Trunc(UpgradeFromDate);
         Open;
         Inc(Result, Fields.AsInteger[0]);
@@ -497,7 +498,8 @@ var
       if InfoTable.ID <> '' then
       begin
         SQL.Text := 'select ID as ' + InfoTable.ID + ' from suppressions where tablename = :table and dm_suppressions >= :UpgradeFromDate order by dm_suppressions';
-        Params.AsString[0] := InfoTable.TableName;
+        Prepare(True);
+        Params.AsString[0] := Copy(InfoTable.TableName, 1, Params.SQLLen[0]);
         Params.AsDate[1] := Trunc(UpgradeFromDate);
         Open;
         SendDataset(InfoTable, qry, True);

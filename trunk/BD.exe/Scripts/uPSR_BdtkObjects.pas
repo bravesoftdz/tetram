@@ -609,10 +609,7 @@ begin
     RegisterPropertyHelper(@TAlbumCompletEdition_R, nil, 'Edition');
 
     RegisterMethod(@TAlbumComplet.Clear, 'Clear');
-    if isUpdate then
-      RegisterMethod(@ImportUpdate, 'Import')
-    else
-      RegisterMethod(@ImportNew, 'Import');
+    RegisterMethod(@Import, 'Import')
   end;
 end;
 

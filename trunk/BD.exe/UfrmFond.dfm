@@ -2045,10 +2045,11 @@ object frmFond: TfrmFond
       Caption = 'V'#233'rifier la version'
       OnExecute = actMiseAJourExecute
     end
-    object actScripts: TAction
-      Category = 'Outils'
-      Caption = 'Scripts...'
-      OnExecute = actScriptsExecute
+    object actModeScripts: TAction
+      Category = 'Modes'
+      Caption = 'Scripts'
+      ImageIndex = 7
+      OnExecute = actModeScriptsExecute
     end
     object actPublier: TAction
       Category = 'Outils'
@@ -2525,6 +2526,9 @@ object frmFond: TfrmFond
         object Entretien1: TMenuItem
           Action = actModeEntretien
         end
+        object Scripts1: TMenuItem
+          Action = actModeScripts
+        end
       end
       object N1: TMenuItem
         Caption = '-'
@@ -2640,9 +2644,6 @@ object frmFond: TfrmFond
       end
       object N7: TMenuItem
         Caption = '-'
-      end
-      object Scripts1: TMenuItem
-        Action = actScripts
       end
       object P1: TMenuItem
         Action = actPublier

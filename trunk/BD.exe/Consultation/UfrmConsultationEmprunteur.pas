@@ -70,7 +70,7 @@ type
 implementation
 
 uses TypeRec, UfrmFond, MAJ, Impression, DateUtils, Math, UHistorique, Procedures,
-  Editions;
+  Proc_Gestions;
 
 {$R *.DFM}
 
@@ -80,7 +80,7 @@ var
 
 procedure TfrmConsultationEmprunteur.FicheModifierExecute(Sender: TObject);
 begin
-  if EditionEmprunteur(FEmprunteur.ID) then Historique.Refresh;
+  Historique.AddWaiting(fcGestionModif, @RefreshCallBack, nil, @ModifierEmprunteurs2, nil, FEmprunteur.ID);
 end;
 
 procedure TfrmConsultationEmprunteur.FormCreate(Sender: TObject);

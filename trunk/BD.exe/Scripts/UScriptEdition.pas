@@ -16,6 +16,7 @@ type
   public
     constructor Create; override;
 
+    procedure SetFileName(const Value: String); override;
     procedure SaveToFile(const FileName: string); override;
     procedure GetScriptLines(Lines: TStrings); override;
 
@@ -62,7 +63,13 @@ end;
 procedure TScriptEdition.SaveToFile(const FileName: string);
 begin
   inherited;
-  FModifie := False;
+  Modifie := False;
+end;
+
+procedure TScriptEdition.SetFileName(const Value: String);
+begin
+  inherited;
+  if Assigned(FTabSheet) then FTabSheet.Caption := string(ScriptName);
 end;
 
 procedure TScriptEdition.SetModifie(const Value: Boolean);

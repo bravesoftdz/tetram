@@ -35,7 +35,6 @@ type
     ToolButton9: TToolButton;
     ToolButton10: TToolButton;
     ToolButton11: TToolButton;
-    StatusBar1: TStatusBar;
     Edit1: TEdit;
     procedure FormCreate(Sender: TObject);
     procedure ToolButton8Click(Sender: TObject);

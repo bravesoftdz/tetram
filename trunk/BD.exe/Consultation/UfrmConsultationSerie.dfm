@@ -26,7 +26,6 @@ object frmConsultationSerie: TfrmConsultationSerie
     ParentBackground = True
     TabOrder = 0
     OnClick = EditeurClick
-    ExplicitHeight = 786
     DesignSize = (
       862
       767)

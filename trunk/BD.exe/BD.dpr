@@ -160,7 +160,8 @@ uses
   UdmScripts in 'Scripts\UdmScripts.pas' {dmScripts: TDataModule},
   UfrmFusionEditions in 'Gestion\UfrmFusionEditions.pas' {frmFusionEditions},
   UMAJ2_1_1_4 in 'mises à jour\UMAJ2_1_1_4.pas',
-  UMAJ2_1_1_8 in 'mises à jour\UMAJ2_1_1_8.pas';
+  UMAJ2_1_1_8 in 'mises à jour\UMAJ2_1_1_8.pas',
+  UfrmGallerie in 'Consultation\UfrmGallerie.pas' {frmGallerie};
 
 {$R *.RES}
 {$R curseurs.res}
@@ -204,7 +205,7 @@ begin
   FrmSplash.Affiche_act(ChargementDatabase + '...');
     Historique.AddConsultation(fcRecherche);
     if FindCmdLineSwitch('scripts') then
-      frmFond.actScripts.Execute
+      frmFond.actModeScripts.Execute
     else
     begin
       if TGlobalVar.Utilisateur.Options.ModeDemarrage then

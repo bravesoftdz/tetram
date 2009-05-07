@@ -135,7 +135,7 @@ type
     Impression1: TMenuItem;
     N8: TMenuItem;
     Scripts1: TMenuItem;
-    actScripts: TAction;
+    actModeScripts: TAction;
     P1: TMenuItem;
     actPublier: TAction;
     ToolButton14: TToolButton;
@@ -182,7 +182,7 @@ type
     procedure MeasureMenuItem(Sender: TObject; ACanvas: TCanvas; var Width, Height: Integer);
     procedure actAfficheAchatsExecute(Sender: TObject);
     procedure actMiseAJourExecute(Sender: TObject);
-    procedure actScriptsExecute(Sender: TObject);
+    procedure actModeScriptsExecute(Sender: TObject);
     procedure actPublierExecute(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
@@ -1102,7 +1102,7 @@ begin
   Historique.GoConsultation(TComponent(Sender).Tag);
 end;
 
-procedure TfrmFond.actScriptsExecute(Sender: TObject);
+procedure TfrmFond.actModeScriptsExecute(Sender: TObject);
 begin
   Historique.AddWaiting(fcScripts);
 end;

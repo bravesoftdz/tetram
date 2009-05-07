@@ -3,7 +3,7 @@ unit UScriptsFonctions;
 interface
 
 uses
-  Windows, SysUtils, Classes, Dialogs, WinInet, StrUtils, Math, UMetadata, TypeRec, Generics.Collections, jpeg;
+  Windows, SysUtils, Classes, Dialogs, WinInet, StrUtils, Math, UMetadata, TypeRec, Generics.Collections, UNet, jpeg;
 
 type
   TScriptChoix = class
@@ -47,6 +47,7 @@ type
   end;
 
 function GetPage(const url: string; UTF8: Boolean = True): string;
+function PostPage(const url: string; Pieces: array of RAttachement; UTF8: Boolean = True): string;
 function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;
 function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteur;
 function AskSearchEntry(const Labels: array of string; out Search: string; out Index: Integer): Boolean;
@@ -67,7 +68,7 @@ implementation
 
 uses
   ProceduresBDtk, UBdtForms, EditLabeled, StdCtrls, Controls, Forms, UframBoutons,
-  UfrmScriptChoix, OverbyteIcsHttpProt, UNet, CommonConst, Procedures;
+  UfrmScriptChoix, OverbyteIcsHttpProt, CommonConst, Procedures;
 
 const
   PathDelim = '/';
@@ -263,6 +264,24 @@ begin
     if iFin = 0 then
       iFin := Length(sChaine);
     Result := Copy(sChaine, iDebut, iFin - iDebut);
+  end;
+end;
+
+function PostPage(const url: string; Pieces: array of RAttachement; UTF8: Boolean): string;
+var
+  ss: TStringStream;
+begin
+  if UTF8 then
+    ss := TStringStream.Create('', TEncoding.UTF8)
+  else
+    ss := TStringStream.Create('', TEncoding.Default);
+  try
+    if LoadStreamURL(url, Pieces, ss) = 200 then
+      Result := ss.DataString
+    else
+      Result := '';
+  finally
+    ss.Free;
   end;
 end;
 

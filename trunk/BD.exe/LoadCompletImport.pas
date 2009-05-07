@@ -5,8 +5,7 @@ interface
 uses
   Windows, SysUtils, Classes, LoadComplet, Generics.Collections, Graphics;
 
-procedure ImportUpdate(Album: TAlbumComplet);
-procedure ImportNew(Album: TAlbumComplet);
+procedure Import(Self: TAlbumComplet);
 
 function AddImageFromURL(Edition: TEditionComplete; const URL: string; TypeImage: Integer): Integer;
 
@@ -17,7 +16,7 @@ uses
   UHistorique, Proc_Gestions, Editions, UfrmValidationImport, UNet,
   TypeRec, CommonConst, Procedures, UMetadata, Divers;
 
-procedure Import(Self: TAlbumComplet; isUpdate: Boolean);
+procedure Import(Self: TAlbumComplet);
 var
   Qry: TUIBQuery;
 
@@ -335,24 +334,7 @@ begin
       Qry.Transaction.Free;
       Qry.Free;
     end;
-
-    if not isUpdate then
-    begin
-      if IsEqualGUID(ID_Album, GUID_NULL) then
-        New(False);
-      CreationAlbum(Self);
-    end;
   end;
-end;
-
-procedure ImportUpdate(Album: TAlbumComplet);
-begin
-  Import(Album, True);
-end;
-
-procedure ImportNew(Album: TAlbumComplet);
-begin
-  Import(Album, False);
 end;
 
 function AddImageFromURL(Edition: TEditionComplete; const URL: string; TypeImage: Integer): Integer;

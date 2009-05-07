@@ -19,7 +19,7 @@ object frmScripts: TfrmScripts
   TextHeight = 13
   object PageControl2: TPageControl
     Left = 0
-    Top = 0
+    Top = 29
     Width = 862
     Height = 641
     ActivePage = tbEdition
@@ -75,6 +75,21 @@ object frmScripts: TfrmScripts
         DesignSize = (
           854
           588)
+        object Label1: TLabel
+          Left = 0
+          Top = 285
+          Width = 718
+          Height = 16
+          Caption = 
+            'ATTENTION: Dans ce mode, aucune entr'#233'e ne sera ajout'#233'e dans la b' +
+            'ase de donn'#233'es par l'#39'ex'#233'cution d'#39'un script.'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clRed
+          Font.Height = -13
+          Font.Name = 'Tahoma'
+          Font.Style = [fsBold]
+          ParentFont = False
+        end
         object Panel4: TPanel
           Left = 0
           Top = 6
@@ -406,13 +421,11 @@ object frmScripts: TfrmScripts
   end
   inline framBoutons1: TframBoutons
     Left = 0
-    Top = 641
+    Top = 0
     Width = 862
     Height = 29
-    Align = alBottom
+    Align = alTop
     TabOrder = 1
-    Visible = False
-    ExplicitTop = 641
     ExplicitWidth = 862
     DesignSize = (
       862
@@ -425,6 +438,7 @@ object frmScripts: TfrmScripts
     inherited btnAnnuler: TButton
       Left = 779
       Caption = 'Fermer'
+      OnClick = framBoutons1btnAnnulerClick
       ExplicitLeft = 779
     end
   end
@@ -579,11 +593,6 @@ object frmScripts: TfrmScripts
       ShortCut = 16467
       OnExecute = actEnregistrerExecute
     end
-    object actEnregistrerSous: TAction
-      Category = 'Editeur'
-      Caption = 'Enregistrer sous...'
-      OnExecute = actEnregistrerSousExecute
-    end
     object actRunWithoutDebug: TAction
       Category = 'Script'
       Caption = 'Ex'#233'cuter sans d'#233'buguer'
@@ -711,9 +720,6 @@ object frmScripts: TfrmScripts
     object Enregistrer1: TMenuItem
       Action = actEnregistrer
     end
-    object Enregistrersous1: TMenuItem
-      Action = actEnregistrerSous
-    end
   end
   object SynEditParamShow: TSynCompletionProposal
     DefaultType = ctParams
@@ -759,7 +765,6 @@ object frmScripts: TfrmScripts
   end
   object PopupMenu2: TPopupMenu
     Left = 520
-    Top = 8
     object Creruneoption1: TMenuItem
       Action = actCreerOption
     end

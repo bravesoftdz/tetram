@@ -39,7 +39,7 @@
 			<DCC_ExeOutput>..\..\bin</DCC_ExeOutput>
 			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;$(DCC_UnitAlias)</DCC_UnitAlias>
 			<DCC_SYMBOL_PLATFORM>false</DCC_SYMBOL_PLATFORM>
-			<DCC_Define>FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT;$(DCC_Define)</DCC_Define>
+			<DCC_Define>FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT;PCRE_LINKONREQUEST;$(DCC_Define)</DCC_Define>
 			<DCC_Platform>x86</DCC_Platform>
 			<DCC_K>false</DCC_K>
 			<DCC_F>false</DCC_F>
@@ -352,6 +352,9 @@
 			</DCCReference>
 			<DCCReference Include="mises à jour\UMAJ2_1_1_4.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_1_1_8.pas"/>
+			<DCCReference Include="Consultation\UfrmGallerie.pas">
+				<Form>frmGallerie</Form>
+			</DCCReference>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
 			</BuildConfiguration>
@@ -396,7 +399,7 @@
 						<VersionInfo Name="MajorVer">2</VersionInfo>
 						<VersionInfo Name="MinorVer">1</VersionInfo>
 						<VersionInfo Name="Release">1</VersionInfo>
-						<VersionInfo Name="Build">9</VersionInfo>
+						<VersionInfo Name="Build">10</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -408,7 +411,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">2.1.1.9</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">2.1.1.10</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2009</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks"/>

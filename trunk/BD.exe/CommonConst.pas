@@ -67,7 +67,7 @@ type
     ExeVersion, AppVersion: TFileVersion;
   end;
 
-  TModeConsult = (mdLoad, mdConsult, mdEdit, mdEditing, mdEntretien, mdImportation, mdExportation);
+  TModeConsult = (mdLoad, mdConsult, mdEdit, mdEditing, mdEntretien, mdImportation, mdExportation, mdScript);
 
 type
   TGlobalVar = class

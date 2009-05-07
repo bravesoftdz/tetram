@@ -177,7 +177,8 @@ begin
         CurrentVersion := '0.0.0.0';
         try
           SQL.Text := 'INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES (''Version'', ?)';
-          Params.AsString[0] := CurrentVersion;
+          Prepare(True);
+          Params.AsString[0] := Copy(CurrentVersion, 1, Params.SQLLen[0]);
           ExecSQL;
         except
           // Pour s'assurer qu'il y'a la ligne dans la table options
