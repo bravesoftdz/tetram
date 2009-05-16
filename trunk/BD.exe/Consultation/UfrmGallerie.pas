@@ -211,6 +211,7 @@ begin
   Album := TAlbum.Create;
   try
     Album.Fill(Value);
+    Caption := 'Gallerie - ' + Album.ChaineAffichage(True);
     ShowAlbum(Album);
   finally
     Album.Free;
@@ -233,6 +234,7 @@ begin
   Edition := TEditionComplete.Create(Value);
   try
     ShowEdition(Edition);
+    Caption := 'Gallerie - ' + Edition.ChaineAffichage;
   finally
     Edition.Free;
   end;
@@ -254,6 +256,7 @@ begin
   Serie := TSerieComplete.Create(Value);
   try
     ShowSerie(Serie);
+    Caption := 'Gallerie - ' + Serie.ChaineAffichage;
   finally
     Serie.Free;
   end;
