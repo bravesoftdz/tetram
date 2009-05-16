@@ -5,7 +5,7 @@ unit VirtualTree;
 interface
 
 uses
-  Windows, SysUtils, Classes, Controls, Graphics, VirtualTrees, EditLabeled, TypeRec, StrUtils, LinkControls;
+  Windows, SysUtils, Classes, Controls, Graphics, VirtualTrees, VirtualTreeBdtk, EditLabeled, TypeRec, StrUtils, LinkControls;
 
 type
   PInitialeInfo = ^RInitialeInfo;
@@ -44,10 +44,8 @@ type
 
   TOnCompareNodeString = procedure(Sender: TBaseVirtualTree; Node: PVirtualNode; const Text: string; var Concorde: Boolean) of object;
 
-  TVirtualStringTree = class(VirtualTrees.TVirtualStringTree)
+  TVirtualStringTree = class(VirtualTreeBdtk.TVirtualStringTree)
   private
-    FLinkControls: TControlList;
-
     FMemorizedIndexNode: Boolean;
     FIndexNode: Cardinal;
 
@@ -55,7 +53,6 @@ type
     FCountPointers: array of RInitialeInfo;
     FUseFiltre: Boolean;
     FFiltre: string;
-    FSynchroBackground: Boolean;
     FUseDefaultFiltre: Boolean;
     FShowAchat: Boolean;
 
@@ -71,11 +68,10 @@ type
     function GetFocusedNodeFullCaption: UnicodeString;
     procedure SetFiltre(const Value: string);
     procedure SetUseFiltre(const Value: Boolean);
-    procedure BackgroundChange(Sender: TObject);
     procedure SetUseDefaultFiltre(const Value: Boolean);
     procedure SetShowAchat(const Value: Boolean);
     procedure SetShowDateParutionAlbum(const Value: Boolean);
-    procedure SetLinkControls(const Value: TControlList);
+    function GetNodeByValue(const Value: TGUID): PVirtualNode;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -88,12 +84,8 @@ type
     procedure DoPaintText(Node: PVirtualNode; const Canvas: TCanvas; Column: TColumnIndex; TextType: TVSTTextType); override;
     procedure DoAfterPaint(Canvas: TCanvas); override;
     procedure DoCollapsed(Node: PVirtualNode); override;
-    procedure DoEnter; override;
-    procedure DoExit; override;
-    procedure DoScroll(DeltaX, DeltaY: Integer); override;
     function DoCompareNodeString(Node: PVirtualNode; const Text: string): Boolean; virtual;
   published
-    property LinkControls: TControlList read FLinkControls write SetLinkControls;
     property Mode: TVirtualMode read FMode write SetMode;
     property CurrentValue: TGUID read GetCurrentValue write SetCurrentValue;
     property Caption: UnicodeString read GetFocusedNodeCaption;
@@ -101,17 +93,17 @@ type
     property Filtre: string read FFiltre write SetFiltre;
     property UseFiltre: Boolean read FUseFiltre write SetUseFiltre;
     property UseDefaultFiltre: Boolean read FUseDefaultFiltre write SetUseDefaultFiltre;
-    property SynchroBackground: Boolean read FSynchroBackground write FSynchroBackground default False;
     property ShowAchat: Boolean read FShowAchat write SetShowAchat default True;
     property ShowDateParutionAlbum: Boolean read FShowDateParutionAlbum write SetShowDateParutionAlbum default False;
     property OnCompareNodeString: TOnCompareNodeString read FOnCompareNodeString write FOnCompareNodeString;
-    function GetNodeBasePointer(Node: PVirtualNode): Pointer;
+    function GetNodeBasePointer(Node: PVirtualNode): TBasePointeur;
     function GetFocusedNodeData: Pointer;
     procedure InitializeRep(KeepValue: Boolean = True);
     procedure Find(const Text: string; GetNext: Boolean = False);
     procedure MemorizeIndexNode;
     procedure FindIndexNode;
     procedure ClearIndexNode;
+    procedure MakeVisibleValue(const Value: TGUID);
   end;
 
 type
@@ -242,15 +234,6 @@ uses
   UIB, UdmPrinc, Commun, Types, UIBLib, Divers;
 
 { TVirtualStringTree }
-
-procedure TVirtualStringTree.BackgroundChange(Sender: TObject);
-begin
-  if Background.Graphic.Empty then
-    TreeOptions.PaintOptions := TreeOptions.PaintOptions - [toShowBackground]
-  else
-    TreeOptions.PaintOptions := TreeOptions.PaintOptions + [toShowBackground];
-end;
-
 procedure TVirtualStringTree.ClearIndexNode;
 begin
   FMemorizedIndexNode := False;
@@ -259,44 +242,15 @@ end;
 constructor TVirtualStringTree.Create(AOwner: TComponent);
 begin
   inherited;
-  Background.OnChange := BackgroundChange;
-  FLinkControls := TControlList.Create;
-  FSynchroBackground := False;
-  ButtonFillMode := fmShaded;
-  ButtonStyle := bsRectangle;
-  AnimationDuration := 0;
-  //  DefaultNodeHeight := 16;
-  DefaultText := '';
+  TreeOptions.StringOptions := TreeOptions.StringOptions + [toShowStaticText];
   NodeDataSize := SizeOf(RNodeInfo);
   Indent := 8;
-  TreeOptions.PaintOptions := [toHideFocusRect, toHotTrack, toShowBackground, toShowButtons, toShowDropmark, toShowRoot, toThemeAware, toUseBlendedImages, toGhostedIfUnfocused];
-  TreeOptions.AutoOptions := [toAutoDropExpand, toAutoScrollOnExpand, toAutoTristateTracking, toAutoDeleteMovedNodes];
-  TreeOptions.MiscOptions := [{toFullRepaintOnResize, }toInitOnSave, toToggleOnDblClick, toWheelPanning];
-  TreeOptions.SelectionOptions := [toFullRowSelect];
-  TreeOptions.StringOptions := [toSaveCaptions, toShowStaticText, toAutoAcceptEditChange];
-  if Header.Columns.Count > 0 then
-  begin
-    Header.AutoSizeIndex := 0;
-    Header.Options := Header.Options + [hoAutoResize];
-  end;
-  HintMode := hmTooltip;
-  HintAnimation := hatNone;
-  HotCursor := crHandPoint;
   FShowAchat := True;
   FShowDateParutionAlbum := False;
   FUseFiltre := False;
   FUseDefaultFiltre := True;
   SetLength(FFindArray, 0);
   FLastFindText := '';
-  Color := clWhite;
-  //  if clBtnFace = clWhite then
-  begin
-    Colors.BorderColor := clSilver;
-    Colors.GridLineColor := clSilver;
-    Colors.TreeLineColor := clSilver;
-    Colors.UnfocusedSelectionColor := clSilver;
-    Colors.UnfocusedSelectionBorderColor := clSilver;
-  end;
 end;
 
 procedure TVirtualStringTree.DoAfterPaint(Canvas: TCanvas);
@@ -327,18 +281,6 @@ begin
   inherited;
   if HasAsParent(FocusedNode, Node) then
     CurrentValue := GUID_NULL;
-end;
-
-procedure TVirtualStringTree.DoEnter;
-begin
-  FLinkControls.DoEnter;
-  inherited;
-end;
-
-procedure TVirtualStringTree.DoExit;
-begin
-  FLinkControls.DoExit;
-  inherited;
 end;
 
 procedure TVirtualStringTree.DoFreeNode(Node: PVirtualNode);
@@ -544,16 +486,6 @@ begin
   inherited;
 end;
 
-procedure TVirtualStringTree.DoScroll(DeltaX, DeltaY: Integer);
-begin
-  inherited;
-  if SynchroBackground then
-  begin
-    BackgroundOffsetY := BackgroundOffsetY - DeltaY;
-    BackgroundOffsetX := BackgroundOffsetX - DeltaX;
-  end;
-end;
-
 procedure TVirtualStringTree.Find(const Text: string; GetNext: Boolean = False);
 var
   iCurrent, iFind: TGUID;
@@ -730,11 +662,50 @@ begin
     end;
 end;
 
-function TVirtualStringTree.GetNodeBasePointer(Node: PVirtualNode): Pointer;
+function TVirtualStringTree.GetNodeBasePointer(Node: PVirtualNode): TBasePointeur;
 begin
   Result := nil;
   if GetNodeLevel(Node) > 0 then
     Result := RNodeInfo(GetNodeData(Node)^).Detail;
+end;
+
+function TVirtualStringTree.GetNodeByValue(const Value: TGUID): PVirtualNode;
+var
+  Node: PVirtualNode;
+  init: Cardinal;
+  cs: string;
+begin
+  Result := nil;
+  if IsEqualGUID(Value, GUID_NULL) then Exit;
+  with TUIBQuery.Create(nil) do
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'SELECT coalesce(' + vmModeInfos[FMode].INITIALEVALUE + ', ''-1'') FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].REFFIELDS + ' = ?';
+      Params.AsString[0] := GUIDToString(Value);
+      Open;
+      if Eof then Exit;
+      init := 0;
+
+      cs := Trim(Fields.AsString[0]);
+      while (Integer(init) < Length(FCountPointers)) and (FCountPointers[init].sValue <> cs) do
+        Inc(init);
+
+      Node := GetFirst;
+      while Assigned(Node) and (Node.Index <> init) do
+        Node := Node.NextSibling;
+      Result := nil;
+      if Assigned(Node) then
+      begin
+        InitNode(Node);
+        InitChildren(Node);
+        Result := Node.FirstChild;
+        while Assigned(Result) and InitNode(Result) and (not IsEqualGUID(RNodeInfo(GetNodeData(Result)^).Detail.ID, Value)) do
+          Result := Result.NextSibling;
+      end;
+    finally
+      Transaction.Free;
+      Free;
+    end;
 end;
 
 function TVirtualStringTree.GetFocusedNodeData: Pointer;
@@ -785,7 +756,7 @@ begin
           Inc(i);
         end;
         // on retire ce qui a été alloué en trop
-        SetLength(FCountPointers, Length(FCountPointers));
+        SetLength(FCountPointers, i);
 
         RootNodeCount := Length(FCountPointers);
       finally
@@ -806,6 +777,20 @@ begin
   Result := True;
 end;
 
+procedure TVirtualStringTree.MakeVisibleValue(const Value: TGUID);
+var
+  ChildNode: PVirtualNode;
+begin
+  if FMode = vmNone then
+    Exit;
+
+  ChildNode := GetNodeByValue(Value);
+  if Assigned(ChildNode) then
+    FocusedNode := ChildNode
+  else
+    FocusedNode := nil;
+end;
+
 procedure TVirtualStringTree.MemorizeIndexNode;
 begin
   FMemorizedIndexNode := (not IsEqualGUID(CurrentValue, GUID_NULL)) and (FocusedNode.Parent.ChildCount > 1);
@@ -814,59 +799,16 @@ begin
 end;
 
 procedure TVirtualStringTree.SetCurrentValue(const Value: TGUID);
-var
-  init: Cardinal;
-  Node, ChildNode: PVirtualNode;
-  cs: string;
 begin
   if FMode = vmNone then
     Exit;
 
-  if IsEqualGUID(Value, GUID_NULL) then
-  begin
-    FocusedNode := nil;
+  MakeVisibleValue(Value);
+  if Assigned(FocusedNode) then
+    Selected[FocusedNode] := True
+  else
     ClearSelection;
-    Exit;
-  end;
-  with TUIBQuery.Create(nil) do
-    try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'SELECT coalesce(' + vmModeInfos[FMode].INITIALEVALUE + ', ''-1'') FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].REFFIELDS + ' = ?';
-      Params.AsString[0] := GUIDToString(Value);
-      Open;
-      if Eof then
-      begin
-        ClearSelection;
-        Exit;
-      end;
-      init := 0;
-
-      cs := Trim(Fields.AsString[0]);
-      while (Integer(init) < Length(FCountPointers)) and (FCountPointers[init].sValue <> cs) do
-        Inc(init);
-
-      Node := GetFirst;
-      while Assigned(Node) and (Node.Index <> init) do
-        Node := Node.NextSibling;
-      ChildNode := nil;
-      if Assigned(Node) then
-      begin
-        InitNode(Node);
-        InitChildren(Node);
-        ChildNode := Node.FirstChild;
-        while Assigned(ChildNode) and InitNode(ChildNode) and (not IsEqualGUID(RNodeInfo(GetNodeData(ChildNode)^).Detail.ID, Value)) do
-          ChildNode := ChildNode.NextSibling;
-      end;
-      if Assigned(ChildNode) then
-        FocusedNode := ChildNode
-      else
-        FocusedNode := nil;
-      FocusedColumn := -1;
-      Selected[FocusedNode] := True;
-    finally
-      Transaction.Free;
-      Free;
-    end;
+  FocusedColumn := -1;
 end;
 
 procedure TVirtualStringTree.SetFiltre(const Value: string);
@@ -907,14 +849,8 @@ begin
   InitializeRep(True);
 end;
 
-procedure TVirtualStringTree.SetLinkControls(const Value: TControlList);
-begin
-  FLinkControls.Assign(Value);
-end;
-
 destructor TVirtualStringTree.Destroy;
 begin
-  FLinkControls.Free;
   inherited;
 end;
 
@@ -930,4 +866,3 @@ begin
 end;
 
 end.
-

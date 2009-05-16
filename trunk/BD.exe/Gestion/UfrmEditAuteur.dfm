@@ -39,8 +39,6 @@ object frmEditAuteur: TfrmEditAuteur
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
-    ExplicitWidth = 717
-    ExplicitHeight = 418
     DesignSize = (
       731
       529)
@@ -152,7 +150,6 @@ object frmEditAuteur: TfrmEditAuteur
         item
           Control = Label1
         end>
-      ExplicitWidth = 657
     end
     object edNom: TEditLabeled
       Left = 73
@@ -168,7 +165,6 @@ object frmEditAuteur: TfrmEditAuteur
           Control = Label3
         end>
       CurrencyChar = #0
-      ExplicitWidth = 657
     end
     object edSite: TEditLabeled
       Left = 73
@@ -188,7 +184,6 @@ object frmEditAuteur: TfrmEditAuteur
           Control = Label2
         end>
       CurrencyChar = #0
-      ExplicitWidth = 631
     end
     object edAssociations: TMemoLabeled
       Left = 73
@@ -200,11 +195,11 @@ object frmEditAuteur: TfrmEditAuteur
       BorderStyle = bsNone
       ScrollBars = ssBoth
       TabOrder = 3
+      WordWrap = False
       LinkControls = <
         item
           Control = Label4
         end>
-      ExplicitWidth = 657
     end
   end
   inline Frame11: TframBoutons
@@ -214,20 +209,20 @@ object frmEditAuteur: TfrmEditAuteur
     Height = 29
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 717
+    ExplicitWidth = 731
     inherited btnOK: TButton
       Left = 560
       Width = 87
       Caption = 'Enregistrer'
       Images = nil
       OnClick = Frame11btnOKClick
-      ExplicitLeft = 546
+      ExplicitLeft = 560
       ExplicitWidth = 87
     end
     inherited btnAnnuler: TButton
       Left = 648
       Images = nil
-      ExplicitLeft = 634
+      ExplicitLeft = 648
     end
   end
 end

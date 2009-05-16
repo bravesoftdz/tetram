@@ -77,7 +77,10 @@ begin
   FModifie := Value;
   if Assigned(SB) and (SB.Panels.Count >= 2) then
     if FModifie then
-      SB.Panels[1].Text := 'Modifié'
+    begin
+      SB.Panels[1].Text := 'Modifié';
+      ScriptInfos.LastUpdate := Now;
+    end
     else
       SB.Panels[1].Text := '';
 end;

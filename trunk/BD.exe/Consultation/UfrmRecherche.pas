@@ -91,32 +91,6 @@ var
   FSortColumn: Integer;
   FSortDirection: TSortDirection;
 
-procedure TfrmRecherche.SetTypeRecherche(Value: TTypeRecherche);
-begin
-  FSortColumn := 2;
-  FSortDirection := sdDescending;
-  VTResult.Header.Columns[0].ImageIndex := -1;
-  VTResult.Header.Columns[1].ImageIndex := -1;
-  VTResult.Header.Columns[2].ImageIndex := -1;
-  if FSortDirection = sdAscending then
-    VTResult.Header.Columns[FSortColumn].ImageIndex := 0
-  else
-    VTResult.Header.Columns[FSortColumn].ImageIndex := 1;
-  if Value = trSimple then
-    VTResult.TreeOptions.StringOptions := VTResult.TreeOptions.StringOptions + [toShowStaticText]
-  else
-    VTResult.TreeOptions.StringOptions := VTResult.TreeOptions.StringOptions - [toShowStaticText];
-  RechercheApercu.Enabled := Value <> trAucune;
-  RechercheImprime.Enabled := RechercheApercu.Enabled;
-  case Value of
-    trComplexe: PageControl2.ActivePageIndex := 1;
-    trSimple: PageControl2.ActivePageIndex := 0;
-  end;
-  FTypeRecherche := Value;
-  frmFond.actImpression.Update;
-  frmFond.actApercuImpression.Update;
-end;
-
 procedure TfrmRecherche.FormCreate(Sender: TObject);
 var
   hg: IHourGlass;
@@ -251,6 +225,32 @@ end;
 procedure TfrmRecherche.RechPrint(Sender: TObject);
 begin
   ImpressionRecherche(Recherche, TComponent(Sender).Tag = 1);
+end;
+
+procedure TfrmRecherche.SetTypeRecherche(Value: TTypeRecherche);
+begin
+  FSortColumn := 2;
+  FSortDirection := sdDescending;
+  VTResult.Header.Columns[0].ImageIndex := -1;
+  VTResult.Header.Columns[1].ImageIndex := -1;
+  VTResult.Header.Columns[2].ImageIndex := -1;
+  if FSortDirection = sdAscending then
+    VTResult.Header.Columns[FSortColumn].ImageIndex := 0
+  else
+    VTResult.Header.Columns[FSortColumn].ImageIndex := 1;
+  if Value = trSimple then
+    VTResult.TreeOptions.StringOptions := VTResult.TreeOptions.StringOptions + [toShowStaticText]
+  else
+    VTResult.TreeOptions.StringOptions := VTResult.TreeOptions.StringOptions - [toShowStaticText];
+  RechercheApercu.Enabled := Value <> trAucune;
+  RechercheImprime.Enabled := RechercheApercu.Enabled;
+  case Value of
+    trComplexe: PageControl2.ActivePageIndex := 1;
+    trSimple: PageControl2.ActivePageIndex := 0;
+  end;
+  FTypeRecherche := Value;
+  frmFond.actImpression.Update;
+  frmFond.actApercuImpression.Update;
 end;
 
 procedure TfrmRecherche.SpeedButton1Click(Sender: TObject);

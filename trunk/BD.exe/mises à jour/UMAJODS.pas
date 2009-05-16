@@ -19,7 +19,7 @@ var
 begin
   if (DMPrinc.UIBDataBase.InfoOdsVersion < 11) or (DMPrinc.UIBDataBase.InfoOdsMinorVersion < 1) then
   begin
-    GetDiskFreeSpaceEx(TempPath, AvailableSpace, TotalSpace, nil);
+    GetDiskFreeSpaceEx(PChar(TempPath), AvailableSpace, TotalSpace, nil);
     if AvailableSpace < 2 * (DMPrinc.UIBDataBase.InfoDbSizeInPages * DMPrinc.UIBDataBase.InfoPageSize) then
       raise Exception.CreateFmt('Espace insuffisant sur le disque "%s" pour procéder à la mise à jour', [ExtractFileDrive(TempPath)]);
 

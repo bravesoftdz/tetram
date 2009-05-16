@@ -31,10 +31,6 @@ object frmRepertoire: TfrmRepertoire
     TabStop = False
     object TabAlbums: TTabSheet
       Caption = 'Albums'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         337
         373)
@@ -150,7 +146,7 @@ object frmRepertoire: TfrmRepertoire
           item
             Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
             Position = 0
-            Width = 333
+            Width = 329
           end>
       end
       inline FrameRechercheRapideAlbums: TframRechercheRapide
@@ -180,10 +176,6 @@ object frmRepertoire: TfrmRepertoire
     end
     object TabEmprunteurs: TTabSheet
       Caption = 'Emprunteurs'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         337
         373)
@@ -238,10 +230,6 @@ object frmRepertoire: TfrmRepertoire
     object TabAuteurs: TTabSheet
       Caption = 'Auteurs'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         337
         373)
@@ -296,10 +284,6 @@ object frmRepertoire: TfrmRepertoire
     object TabSeries: TTabSheet
       Caption = 'S'#233'ries'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         337
         373)
@@ -354,10 +338,6 @@ object frmRepertoire: TfrmRepertoire
     object TabParaBD: TTabSheet
       Caption = 'Para-BD'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         337
         373)

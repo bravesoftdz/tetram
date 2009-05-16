@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls, ReadOnlyCheckBox,
   ComCtrls, VDTButton, Buttons, VirtualTree, Procedures, ProceduresBDtk, UBdtForms, StrUtils,
-  ActnList, Menus;
+  ActnList, Menus, PngSpeedButton;
 
 type
   TfrmConsultationSerie = class(TBdtForm, IImpressionApercu, IFicheEditable)
@@ -44,6 +44,7 @@ type
     FicheApercu: TAction;
     FicheImprime: TAction;
     FicheModifier: TAction;
+    VDTButton1: TVDTButton;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure TitreSerieClick(Sender: TObject);
@@ -53,6 +54,7 @@ type
     procedure lvScenaristesDblClick(Sender: TObject);
     procedure FicheApercuExecute(Sender: TObject);
     procedure FicheModifierExecute(Sender: TObject);
+    procedure VDTButton1Click(Sender: TObject);
   private
     FSerie: TSerieComplete;
     function GetID_Serie: TGUID;
@@ -119,13 +121,13 @@ begin
   Collection.Caption := FSerie.Collection.ChaineAffichage;
   cbTerminee.State := TCheckBoxState(FSerie.Terminee);
 
-  Sujet.Lines.Assign(FSerie.Sujet);
-  Remarques.Lines.Assign(FSerie.Notes);
+  Sujet.Text := FSerie.Sujet.Text;
+  Remarques.Text := FSerie.Notes.Text;
 
   s := '';
   for i := 0 to Pred(FSerie.Genres.Count) do
     AjoutString(s, FSerie.Genres.ValueFromIndex[i], ', ');
-  Memo1.Lines.Text := s;
+  Memo1.Text := s;
 
   lvScenaristes.Items.BeginUpdate;
   for i := 0 to Pred(FSerie.Scenaristes.Count) do begin
@@ -204,6 +206,11 @@ begin
   s := FSerie.SiteWeb;
   if s <> '' then
     ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
+end;
+
+procedure TfrmConsultationSerie.VDTButton1Click(Sender: TObject);
+begin
+  Historique.AddWaiting(fcGallerie, Serie.ID_Serie, 1);
 end;
 
 procedure TfrmConsultationSerie.EditeurClick(Sender: TObject);

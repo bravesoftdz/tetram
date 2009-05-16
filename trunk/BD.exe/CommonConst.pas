@@ -14,7 +14,7 @@ const
   DatabasePassword: string = 'masterkey';
   DatabaseRole: string = 'ReadOnly'; // AllAccess
   DatabaseLibraryName: string = 'fbembed.dll';
-  TempPath: array[0..1024] of Char = #0;
+  TempPath: string = 'TC_BDTK';
   RepImages: string = 'Images\';
   RepWebServer: string = 'WebServer\';
   RessourcePic: string = 'BDPic.dll';
@@ -78,10 +78,27 @@ type
 implementation
 
 uses
-  IniFiles;
+  IniFiles, ShellAPI;
+
+const
+  bufTempPath: array[0..1024] of Char = #0;
+
+procedure EmptyTempPath;
+var
+  op: _SHFILEOPSTRUCT;
+begin
+  op.Wnd := INVALID_HANDLE_VALUE;
+  op.wFunc := FO_DELETE;
+  op.pFrom := PChar(TempPath + '*');
+  op.fFlags := FOF_SILENT or FOF_NOCONFIRMATION or FOF_NOERRORUI;
+  SHFileOperation(op);
+end;
 
 initialization
-  GetTempPath(Length(TempPath), TempPath);
+  GetTempPath(Length(bufTempPath), bufTempPath);
+  TempPath := IncludeTrailingPathDelimiter(bufTempPath) + 'TC_BDTK\';
+  ForceDirectories(TempPath);
+  EmptyTempPath;
   RepImages := ExtractFilePath(Application.ExeName) + RepImages;
   FichierIni := ExtractFilePath(Application.ExeName) + FichierIni;
   RepWebServer := ExtractFilePath(Application.ExeName) + RepWebServer;

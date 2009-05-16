@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls,
-  UfrmFond, VDTButton, ActnList, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, ProceduresBDtk, UbdtForms, StrUtils,
-  jpeg, ShellAPI, LoadComplet, CRFurtif, Generics.Defaults;
+  UfrmFond, VDTButton, ActnList, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, VirtualTree, ProceduresBDtk, UbdtForms, StrUtils,
+  jpeg, ShellAPI, LoadComplet, CRFurtif, Generics.Defaults, PngSpeedButton;
 
 type
   TfrmConsultationAlbum = class(TBdtForm, IImpressionApercu, IFicheEditable)
@@ -34,7 +34,6 @@ type
     lvDessinateurs: TVDTListView;
     Couverture: TImage;
     Label4: TLabel;
-    lvSerie: TVDTListView;
     Label5: TLabel;
     TitreAlbum: TLabel;
     Label6: TLabel;
@@ -107,6 +106,9 @@ type
     N1: TMenuItem;
     FicheModifier: TAction;
     Modifier1: TMenuItem;
+    VDTButton1: TVDTButton;
+    VDTButton2: TVDTButton;
+    vstSerie: TVirtualStringTree;
     procedure lvScenaristesDblClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -117,9 +119,8 @@ type
     procedure Imprimer2Click(Sender: TObject);
     procedure ListeEmpruntsDblClick(Sender: TObject);
     procedure CouvertureDblClick(Sender: TObject);
-    procedure lvSerieDblClick(Sender: TObject);
-    procedure VDTButton1Click(Sender: TObject);
-    procedure VDTButton2Click(Sender: TObject);
+    procedure VDTButton4Click(Sender: TObject);
+    procedure VDTButton3Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure ListeEmpruntsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
     procedure ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
@@ -132,10 +133,13 @@ type
     procedure lvScenaristesData(Sender: TObject; Item: TListItem);
     procedure lvDessinateursData(Sender: TObject; Item: TListItem);
     procedure lvColoristesData(Sender: TObject; Item: TListItem);
-    procedure lvSerieData(Sender: TObject; Item: TListItem);
-    procedure lvSerieGetImageIndex(Sender: TObject; Item: TListItem);
     procedure FicheModifierExecute(Sender: TObject);
-    procedure ScrollBox2Click(Sender: TObject);
+    procedure VDTButton1Click(Sender: TObject);
+    procedure VDTButton2Click(Sender: TObject);
+    procedure vstSerieGetImageIndex(Sender: TBaseVirtualTree;
+      Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
+      var Ghosted: Boolean; var ImageIndex: Integer);
+    procedure vstSerieDblClick(Sender: TObject);
   private
     { Déclarations privées }
     CurrentCouverture: Integer;
@@ -201,7 +205,7 @@ begin
   lvScenaristes.Items.Count := 0;
   lvDessinateurs.Items.Count := 0;
   lvColoristes.Items.Count := 0;
-  lvSerie.Items.Count := 0;
+  vstSerie.Mode := vmNone;
   ListeEmprunts.Clear;
   lvEditions.Items.Clear;
   FCurrentEdition := nil;
@@ -245,17 +249,41 @@ begin
   Historique.AddWaiting(fcCouverture, ID_Album, TCouverture(FCurrentEdition.Couvertures[CurrentCouverture]).ID);
 end;
 
-procedure TfrmConsultationAlbum.lvSerieDblClick(Sender: TObject);
-begin
-  if Assigned(lvSerie.Selected) and (not IsEqualGUID(TAlbum(lvSerie.Selected.Data).ID, ID_Album)) then Historique.AddWaiting(fcAlbum, TAlbum(lvSerie.Selected.Data).ID);
-end;
-
-procedure TfrmConsultationAlbum.VDTButton1Click(Sender: TObject);
+procedure TfrmConsultationAlbum.VDTButton4Click(Sender: TObject);
 begin
   ShowCouverture(Succ(CurrentCouverture));
 end;
 
+procedure TfrmConsultationAlbum.vstSerieDblClick(Sender: TObject);
+var
+  val: TGUID;
+begin
+  val := vstSerie.CurrentValue;
+  if (not IsEqualGUID(val, GUID_NULL)) and (not IsEqualGUID(val, ID_Album)) then Historique.AddWaiting(fcAlbum, val);
+end;
+
+procedure TfrmConsultationAlbum.vstSerieGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
+var
+  album: TBasePointeur;
+begin
+  album := vstSerie.GetNodeBasePointer(Node);
+  if Assigned(album) and IsEqualGUID(album.ID, ID_Album) then
+    ImageIndex := 1
+  else
+    ImageIndex := -1;
+end;
+
+procedure TfrmConsultationAlbum.VDTButton1Click(Sender: TObject);
+begin
+  Historique.AddWaiting(fcGallerie, Album.ID_Album, 2);
+end;
+
 procedure TfrmConsultationAlbum.VDTButton2Click(Sender: TObject);
+begin
+  Historique.AddWaiting(fcGallerie, Album.Serie.ID_Serie, 1);
+end;
+
+procedure TfrmConsultationAlbum.VDTButton3Click(Sender: TObject);
 begin
   ShowCouverture(Pred(CurrentCouverture));
 end;
@@ -319,25 +347,10 @@ begin
 end;
 
 procedure TfrmConsultationAlbum.FormShow(Sender: TObject);
-var
-  i: integer;
 begin
   lvEditions.ItemIndex := 0;
   lvEditions.OnClick(lvEditions);
   Resize;
-
-  // le TListView est aussi une merde! le MakeVisible ne peut fonctionner que si on a un handle
-
-  // lvSerie.HandleNeeded n'est d'aucune utilité!!!!
-
-  // conclusion:
-  // TODO: virer le TListView!!!!!!!
-
-  for i := 0 to Pred(lvSerie.Items.Count) do
-    if IsEqualGUID(TAlbum(lvSerie.Items[i].Data).ID, ID_Album) then
-      if i = Pred(lvSerie.Items.Count)
-        then lvSerie.Items[i].MakeVisible(False)
-        else lvSerie.Items[i + 1].MakeVisible(False);
 end;
 
 procedure TfrmConsultationAlbum.ListeEmpruntsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
@@ -445,7 +458,7 @@ begin
       else
         Label12.Caption := rsTransAcheteLe + ' :';
       AcheteLe.Caption := FCurrentEdition.sDateAchat;
-      edNotes.Lines.Assign(FCurrentEdition.Notes);
+      edNotes.Text := FCurrentEdition.Notes.Text;
 
       ShowCouverture(0);
       if FCurrentEdition.Gratuit then
@@ -511,11 +524,6 @@ begin
   Result := FAlbum.ID_Album;
 end;
 
-procedure TfrmConsultationAlbum.ScrollBox2Click(Sender: TObject);
-begin
-  Historique.AddWaiting(fcGallerie, Album.Serie.ID_Serie, 1);
-end;
-
 procedure TfrmConsultationAlbum.SetID_Album(const Value: TGUID);
 var
   s, s2: string;
@@ -573,11 +581,14 @@ begin
   lvDessinateurs.Items.EndUpdate;
   lvColoristes.Items.EndUpdate;
 
-  lvSerie.Items.BeginUpdate;
-  lvSerie.Items.Count := FAlbum.Serie.Albums.Count;
-  lvSerie.Items.EndUpdate;
+  vstSerie.Mode := vmAlbumsSerie;
+  vstSerie.Filtre := 'id_serie = ' + QuotedStr(GUIDToString(FAlbum.Serie.ID_Serie));
+  vstSerie.UseFiltre := True;
+  vstSerie.MakeVisibleValue(FAlbum.ID_Album);
   if FAlbum.Serie.Albums.Count = 1 then
-    lvSerie.SmallImages := nil;
+    vstSerie.Images := nil
+  else
+    vstSerie.Images := frmFond.ShareImageList;
 
   lvEditions.Items.BeginUpdate;
   for i := 0 to Pred(FAlbum.Editions.Editions.Count) do begin
@@ -621,20 +632,6 @@ procedure TfrmConsultationAlbum.lvColoristesData(Sender: TObject; Item: TListIte
 begin
   Item.Data := FAlbum.Coloristes[Item.Index];
   Item.Caption := TAuteur(Item.Data).ChaineAffichage;
-end;
-
-procedure TfrmConsultationAlbum.lvSerieData(Sender: TObject; Item: TListItem);
-begin
-  Item.Data := FAlbum.Serie.Albums[Item.Index];
-  Item.Caption := TAlbum(Item.Data).ChaineAffichage;
-end;
-
-procedure TfrmConsultationAlbum.lvSerieGetImageIndex(Sender: TObject; Item: TListItem);
-begin
-  if IsEqualGUID(TAlbum(Item.Data).ID, ID_Album) then
-    Item.ImageIndex := 1
-  else
-    Item.ImageIndex := -1;
 end;
 
 procedure TfrmConsultationAlbum.ModificationExecute(Sender: TObject);

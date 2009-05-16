@@ -161,7 +161,10 @@ uses
   UfrmFusionEditions in 'Gestion\UfrmFusionEditions.pas' {frmFusionEditions},
   UMAJ2_1_1_4 in 'mises à jour\UMAJ2_1_1_4.pas',
   UMAJ2_1_1_8 in 'mises à jour\UMAJ2_1_1_8.pas',
-  UfrmGallerie in 'Consultation\UfrmGallerie.pas' {frmGallerie};
+  UfrmGallerie in 'Consultation\UfrmGallerie.pas' {frmGallerie},
+  UfrmScriptsUpdate in 'Scripts\UfrmScriptsUpdate.pas' {frmScriptsUpdate},
+  VirtualTreeBdtk in 'VirtualTreeBdtk.pas',
+  UMAJ2_1_1_10 in 'mises à jour\UMAJ2_1_1_10.pas';
 
 {$R *.RES}
 {$R curseurs.res}
@@ -204,15 +207,13 @@ begin
     Application.CreateForm(TfrmFond, frmFond);
   FrmSplash.Affiche_act(ChargementDatabase + '...');
     Historique.AddConsultation(fcRecherche);
-    if FindCmdLineSwitch('scripts') then
-      frmFond.actModeScripts.Execute
+    if TGlobalVar.Utilisateur.Options.ModeDemarrage then
+      frmFond.actModeConsultation.Execute
     else
-    begin
-      if TGlobalVar.Utilisateur.Options.ModeDemarrage then
-        frmFond.actModeConsultation.Execute
-      else
-        frmFond.actModeGestion.Execute;
-    end;
+      frmFond.actModeGestion.Execute;
+
+    if FindCmdLineSwitch('scripts') then
+      frmFond.actModeScripts.Execute;
 
     FrmSplash.Affiche_act(FinChargement + '...');
     ChangeCurseur(crHandPoint, 'MyHandPoint', 'MyCursor');

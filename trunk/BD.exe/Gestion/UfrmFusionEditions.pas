@@ -182,7 +182,7 @@ begin
     else
       Label30.Caption := rsTransAcheteLe + ' :';
     Label31.Caption := Edition.sDateAchat;
-    Memo1.Lines.Assign(Edition.Notes);
+    Memo1.Text := Edition.Notes.Text;
 
     if Edition.Gratuit then
       Label4.Caption := rsTransGratuit
@@ -214,21 +214,30 @@ procedure TfrmFusionEditions.SetEditions(Editions: TObjectList<TEditionComplete>
   end;
 
 var
-  i, ItemIndex, dummy: Integer;
+  i, dummy, iiIsbn, iiInconnu: Integer;
   Edition: TEditionComplete;
 begin
   lbEditions.Clear;
-  ItemIndex := -1;
+  iiIsbn := -1;
+  iiInconnu := -1;
   for i := 0 to Pred(Editions.Count) do
   begin
     Edition := Editions[i];
     if NotInExclusion(Edition.ID_Edition) then
     begin
       dummy := lbEditions.Items.AddObject(Edition.ChaineAffichage, Edition);
-      if SameText(FormatISBN(Edition.ISBN), ISBN.Caption) and (ItemIndex = -1) then ItemIndex := dummy;
+      if (iiIsbn = -1) and SameText(FormatISBN(Edition.ISBN), ISBN.Caption) then iiIsbn := dummy;
+      if Edition.RecInconnu then iiInconnu := dummy;
     end;
   end;
-  lbEditions.ItemIndex := ItemIndex;
+
+  if iiInconnu <> -1 then
+    lbEditions.ItemIndex := iiInconnu
+  else if iiIsbn <> -1 then
+    lbEditions.ItemIndex := iiIsbn
+  else
+    lbEditions.ItemIndex := -1;
+
   CheckBox1.Checked := lbEditions.Items.Count = 0;
   CheckBox1.Enabled := not CheckBox1.Checked;
   lbEditions.Enabled := CheckBox1.Enabled;
@@ -259,7 +268,7 @@ begin
   else
     Label12.Caption := rsTransAcheteLe + ' :';
   AcheteLe.Caption := Edition.sDateAchat;
-  edNotes.Lines.Assign(Edition.Notes);
+  edNotes.Lines.Text := Edition.Notes.Text;
 
   if Edition.Gratuit then
     Prix.Caption := rsTransGratuit

@@ -60,19 +60,16 @@ object frmControlImport: TfrmControlImport
   end
   inline framBoutons1: TframBoutons
     Left = 0
-    Top = 134
+    Top = 130
     Width = 491
-    Height = 25
+    Height = 29
     Align = alBottom
     TabOrder = 0
-    ExplicitTop = 134
+    ExplicitTop = 130
     ExplicitWidth = 491
-    ExplicitHeight = 25
     inherited btnOK: TButton
       Left = 323
-      Top = 1
       ExplicitLeft = 323
-      ExplicitTop = 1
     end
     inherited btnAnnuler: TButton
       Left = 408

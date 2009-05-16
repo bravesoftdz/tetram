@@ -1342,7 +1342,10 @@ end;
 
 function TEditionComplete.ChaineAffichage(dummy: Boolean = True): string;
 begin
-  Result := '';
+  if RecInconnu then
+    Result := '*'
+  else
+    Result := '';
   AjoutString(Result, FormatTitre(Editeur.NomEditeur), ' ');
   AjoutString(Result, FormatTitre(Collection.NomCollection), ' ', '(', ')');
   AjoutString(Result, NonZero(IntToStr(AnneeEdition)), ' ', '[', ']');

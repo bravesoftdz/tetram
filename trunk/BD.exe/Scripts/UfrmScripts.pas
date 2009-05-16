@@ -7,7 +7,7 @@ uses
   SynEdit, ImgList, StrUtils, SynEditMiscClasses, SynEditSearch, StdActns, ActnList, Menus, SynEditTypes, ComCtrls,
   UScriptUtils, uPSUtils, VirtualTrees, StdCtrls, ExtCtrls, LoadComplet, SynEditKeyCmds, SynCompletionProposal, UBdtForms,
   IDHashMap, Generics.Collections, ToolWin, UfrmFond, uPSComponent, PngImageList, UdmScripts, UScriptList, UScriptDebug,
-  UScriptEdition, uPSCompiler, UframBoutons;
+  UScriptEdition, uPSCompiler, UframBoutons, EditLabeled;
 
 type
   TfrmScripts = class(TbdtForm)
@@ -106,6 +106,27 @@ type
     Splitter3: TSplitter;
     ListView1: TListView;
     Label1: TLabel;
+    Panel5: TPanel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label5: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label4: TLabel;
+    Label6: TLabel;
+    Memo1: TMemo;
+    TabSheet5: TTabSheet;
+    EditLabeled1: TEditLabeled;
+    MemoLabeled1: TMemoLabeled;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    EditLabeled2: TEditLabeled;
+    EditLabeled3: TEditLabeled;
+    Button1: TButton;
     procedure seScript1GutterClick(Sender: TObject; Button: TMouseButton; X, Y, Line: Integer; Mark: TSynEditMark);
     procedure seScript1GutterPaint(Sender: TObject; aLine, X, Y: Integer);
     procedure seScript1SpecialLineColors(Sender: TObject; Line: Integer; var Special: Boolean; var FG, BG: TColor);
@@ -166,6 +187,8 @@ type
     procedure SynEditParamShowExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
     procedure SynEditAutoCompleteExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
     procedure framBoutons1btnAnnulerClick(Sender: TObject);
+    procedure EditLabeled1Change(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     FLastSearch, FLastReplace: string;
     FSearchOptions: TSynSearchOptions;
@@ -179,6 +202,7 @@ type
     FCurrentScript, FProjetScript: TScriptEdition;
     FScriptList: TScriptListEdition;
     FOpenedScript: TObjectList<TScriptEdition>;
+    FRefreshingDescription: Boolean;
 
     {$REGION 'Exécution'}
     function Compile: Boolean;
@@ -201,6 +225,7 @@ type
     procedure SetProjet(const Value: AnsiString);
     procedure LoadScript(const Script: AnsiString);
     procedure RefreshOptions;
+    procedure RefreshDescription(Script: TScriptEdition);
     function EditOption(Option: TOption): Boolean;
     procedure ClearPages;
     procedure SetProjetOuvert(const Value: Boolean);
@@ -231,7 +256,8 @@ implementation
 uses
   AnsiStrings, UfrmScriptSearch, UScriptsFonctions, CommonConst, uPSPreProcessor, UIB,
   Procedures, BdtkRegEx, Commun, Divers, UScriptsHTMLFunctions, JclSimpleXML,
-  UdmPrinc, UfrmScriptOption, UfrmScriptEditOption, uPSDebugger, uPSRuntime;
+  UdmPrinc, UfrmScriptOption, UfrmScriptEditOption, uPSDebugger, uPSRuntime,
+  UfrmScriptsUpdate;
 
 type
   TMySynEdit = class(SynEdit.TSynEdit)
@@ -519,6 +545,18 @@ begin
   end;
 end;
 
+procedure TfrmScripts.Button1Click(Sender: TObject);
+begin
+  with TfrmScriptsUpdate.Create(nil) do
+  try
+    dmScripts := Self.dmScripts;
+    ShowModal;
+  finally
+    Free;
+  end;
+  LoadScripts;
+end;
+
 procedure TfrmScripts.RebuildLokalObjektList;
 var
   Script: TStringList;
@@ -598,14 +636,14 @@ begin
 
   //go back from the cursor and find the first open paren
   TmpX := X;
-  if TmpX > length(locLine) then
-    TmpX := length(locLine)
+  if TmpX > Length(LocLine) then
+    TmpX := Length(LocLine)
   else
     Dec(TmpX);
 
-  result := False;
+  Result := False;
   ParamCount := 0;
-  while (TmpX > 0) and not (result) do
+  while (TmpX > 0) and not (Result) do
   begin
     if LocLine[TmpX] = ';' then
       Exit
@@ -622,34 +660,28 @@ begin
       while (TmpX > 0) and (ParenCounter > 0) do
       begin
         if LocLine[TmpX] = ')' then
-          inc(ParenCounter)
+          Inc(ParenCounter)
         else if LocLine[TmpX] = '(' then
-          dec(ParenCounter);
+          Dec(ParenCounter);
 
-        dec(TmpX);
+        Dec(TmpX);
       end;
     end
-    else if locLine[TmpX] = '(' then
+    else if LocLine[TmpX] = '(' then
     begin
       //we have a valid open paren, lets see what the word before it is
       StartX := TmpX;
-      LookUp := GetLookUpString(locLine, tmpX - 1);
-      if LookUp <> '' then
+      LookUp := GetLookUpString(LocLine, tmpX - 1);
+      if LookUp = '' then Exit;
+      Result := LookupList(Lookup, Func) and (Func.Typ in [itProcedure, itFunction, itType]);
+      if not Result then
       begin
-        result := LookupList(Lookup, Func);
-        if not (Func.Typ in [itProcedure, itFunction, itType]) then
-        begin
-          result := false;
-        end;
-        if not (result) then
-        begin
-          TmpX := StartX;
-          dec(TmpX);
-        end;
+        TmpX := StartX;
+        Dec(TmpX);
       end;
     end
     else
-      dec(TmpX);
+      Dec(TmpX);
   end;
 end;
 
@@ -667,14 +699,14 @@ var
     Hash: Cardinal;
   begin
     Hash := HashString(LookUp);
-    result := false;
-    for Dummy := 0 to high(fObjectList) do
+    Result := False;
+    for Dummy := 0 to High(fObjectList) do
     begin
       if (fObjectList[Dummy].Name = Hash) and (fObjectList[Dummy].Father = Parent) then
       begin
-        result := true;
+        Result := True;
         ParamInfo := fObjectList[Dummy];
-        exit;
+        Exit;
       end;
     end;
 
@@ -683,7 +715,7 @@ var
     begin
       if ParamInfo.SubType <> 0 then
       begin
-        result := FindEntry(LookUp, ParamInfo.SubType, ParamInfo);
+        Result := FindEntry(LookUp, ParamInfo.SubType, ParamInfo);
       end;
     end;
   end;
@@ -694,7 +726,7 @@ begin
     // Einfacher Bezeichner wird gesucht
     Hash := HashString(Trim(LookUp));
     result := false;
-    for Dummy := 0 to high(fObjectList) do
+    for Dummy := 0 to High(fObjectList) do
     begin
       if (fObjectList[Dummy].Name = Hash) and (fObjectList[Dummy].Father = 0) then
       begin
@@ -711,7 +743,7 @@ begin
     Assert(length(Parts) > 0, 'Blub' + LookUp);
     Result := False;
     Parent := 0;
-    for Dummy := 0 to high(Parts) do
+    for Dummy := 0 to High(Parts) do
     begin
       FindString := Trim(Parts[Dummy]);
       if AnsiStrings.AnsiPos('[', FindString) > 0 then
@@ -734,11 +766,11 @@ var
   Dummy: Integer;
 begin
   result := false;
-  for Dummy := 0 to high(fObjectList) do
+  for Dummy := 0 to High(fObjectList) do
   begin
     if (fObjectList[Dummy].Name = LookUp) and (fObjectList[Dummy].Father = 0) then
     begin
-      result := true;
+      result := True;
       ParamInfo := fObjectList[Dummy];
       exit;
     end;
@@ -757,6 +789,8 @@ begin
   if PageControl2.ActivePageIndex = 0 then
     ProjetOuvert := False;
   RefreshOptions;
+  RefreshDescription(FProjetScript);
+  Panel3.ActivePageIndex := 0;
 end;
 
 procedure TfrmScripts.SynEditAutoCompleteExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var x, y: Integer; var CanExecute: Boolean);
@@ -784,46 +818,51 @@ begin
 
   Types := [itProcedure, itFunction, itVar];
   Parser := TPSPascalParser.Create;
-  Parser.SetText(Line);
+  try
+    Parser.SetText(Line);
 
-  Father := 0;
-  Typ := '';
+    Father := 0;
+    Typ := '';
 
-  CanExecute := false;
+    CanExecute := false;
 
-  Prev := CSTI_EOF;
-  Token := CSTI_EOF;
-  PrevEnd := -1;
-  hasAssign := False;
-  while (Parser.CurrTokenID <> CSTI_EOF) and (Parser.CurrTokenPos < Cardinal(Editor.CaretX - 1)) do
-  begin
-    Prev := Token;
-    PrevEnd := Parser.CurrTokenPos + Cardinal(Length(Parser.OriginalToken));
-    Token := Parser.CurrTokenID;
-    // Tritt ein := oder ( auf, so wird ein Wert mit einem Rückgabewert erwartet
-    // si un := ou ( alors, il est une valeur avec une valeur de retour prévu
-    if (Token = CSTI_Assignment) and (Prev = CSTI_Identifier) then
+    Prev := CSTI_EOF;
+    Token := CSTI_EOF;
+    PrevEnd := -1;
+    hasAssign := False;
+    while (Parser.CurrTokenID <> CSTI_EOF) and (Parser.CurrTokenPos < Cardinal(Editor.CaretX - 1)) do
     begin
-      Types := [itFunction, itVar, itConstant {, itType}];
-      if LookUpList(AnsiString(Copy(Editor.LineText, 1, Parser.CurrTokenPos)), Info) then
-        Typ := AnsiString(Copy(Info.OrgParams, 3, length(Info.OrgParams)));
-      hasAssign := True;
-    end
-    else if (Token = CSTI_OpenRound) then
-    begin
-      Types := [itFunction, itVar, itConstant {, itType}];
-      hasAssign := True;
-    end
-    else if (Token = CSTI_SemiColon) then
-    begin
-      hasAssign := False;
-      Typ := '';
+      Prev := Token;
+      PrevEnd := Parser.CurrTokenPos + Cardinal(Length(Parser.OriginalToken));
+      Token := Parser.CurrTokenID;
+      // Tritt ein := oder ( auf, so wird ein Wert mit einem Rückgabewert erwartet
+      // si un := ou ( alors, ça devient une valeur avec une valeur de retour prévu
+      case Token of
+        CSTI_Assignment:
+          if (Prev = CSTI_Identifier) then
+          begin
+            Types := [itFunction, itVar, itConstant {, itType}];
+            if LookUpList(AnsiString(Copy(Editor.LineText, 1, Parser.CurrTokenPos)), Info) then
+              Typ := AnsiString(Copy(Info.OrgParams, 3, length(Info.OrgParams)));
+            hasAssign := True;
+          end;
+        CSTI_OpenRound:
+          begin
+            Types := [itFunction, itVar, itConstant {, itType}];
+            hasAssign := True;
+          end;
+        CSTI_SemiColon:
+          begin
+            hasAssign := False;
+            Typ := '';
+          end;
+      end;
+
+      Parser.Next;
     end;
-
-    Parser.Next;
+  finally
+    Parser.Free;
   end;
-
-  Parser.Free;
 
   if Token = CSTI_String then
     Exit;
@@ -831,36 +870,39 @@ begin
   if (PrevEnd < (Editor.CaretX - 1)) then
     Prev := Token;
 
-  if Prev = CSTI_Colon then
-    Types := [itType]
-  else if Prev = CSTI_AddressOf then
-  begin
-    Types := [itProcedure, itFunction];
-    Typ := '';
-  end
-  else if Prev = CSTI_Period then
-  begin
-    tmpX := Editor.CaretX - 1;
-    if tmpX > Length(Line) then
-      tmpX := Length(Line);
+  case Prev of
+    CSTI_Colon:
+      Types := [itType];
+    CSTI_AddressOf:
+      begin
+        Types := [itProcedure, itFunction];
+        Typ := '';
+      end;
+    CSTI_Period:
+      begin
+        tmpX := Editor.CaretX - 1;
+        if tmpX > Length(Line) then
+          tmpX := Length(Line);
 
-    while (tmpX > 0) and (Line[tmpX] <> '.') do
-      dec(tmpX);
+        while (tmpX > 0) and (Line[tmpX] <> '.') do
+          dec(tmpX);
 
-    dec(tmpX);
+        dec(tmpX);
 
-    Obj := GetLookUpString(Line, tmpX);
+        Obj := GetLookUpString(Line, tmpX);
 
-    if LookUpList(LowerCase(Obj), Info) then
-    begin
-      Father := Info.ReturnTyp;
-      if Info.OrgParams = '' then
-        Types := [itConstructor]
-      else if hasAssign then
-        Types := [itField, itFunction]
-      else
-        Types := [itField, itProcedure, itFunction];
-    end;
+        if LookUpList(LowerCase(Obj), Info) then
+        begin
+          Father := Info.ReturnTyp;
+          if Info.OrgParams = '' then
+            Types := [itConstructor]
+          else if hasAssign then
+            Types := [itField, itFunction]
+          else
+            Types := [itField, itProcedure, itFunction];
+        end;
+      end;
+    else
   end;
 
   if (Prev <> CSTI_AddressOf) and FindParameter(AnsiString(Editor.LineText), Editor.CaretX, Info, ParamCount) then
@@ -880,7 +922,7 @@ begin
     end;
   end;
 
-  CanExecute := true;
+  CanExecute := True;
   FillAutoComplete(fObjectList, Types, Father, Typ);
 end;
 
@@ -1320,6 +1362,16 @@ begin
   FCurrentScript.Editor.CutToClipboard;
 end;
 
+procedure TfrmScripts.EditLabeled1Change(Sender: TObject);
+begin
+  if FRefreshingDescription or not ProjetOuvert then Exit;
+  if Sender = EditLabeled1 then FCurrentScript.ScriptInfos.Auteur := EditLabeled1.Text;
+  if Sender = EditLabeled2 then FCurrentScript.ScriptInfos.ScriptVersion := EditLabeled2.Text;
+  if Sender = EditLabeled3 then FCurrentScript.ScriptInfos.BDVersion := EditLabeled3.Text;
+  if Sender = MemoLabeled1 then FCurrentScript.ScriptInfos.Description := MemoLabeled1.Text;
+  FCurrentScript.Modifie := True;
+end;
+
 procedure TfrmScripts.EditCopy1Execute(Sender: TObject);
 begin
   FCurrentScript.Editor.CopyToClipboard;
@@ -1393,6 +1445,7 @@ begin
   FCurrentScript.Editor := nil;
   FCurrentScript.SB := nil;
   FCurrentScript.Modifie := False;
+  FCurrentScript.Loaded := False;
   pcScriptsChange(nil);
 end;
 
@@ -1450,6 +1503,7 @@ begin
           end;
 
         RefreshOptions;
+        RefreshDescription(FProjetScript);
       end;
     finally
       Free;
@@ -1507,6 +1561,7 @@ begin
     FProjetScript := nil;
   end;
   RefreshOptions;
+  RefreshDescription(FProjetScript);
 end;
 
 procedure TfrmScripts.seScript1ProcessUserCommand(Sender: TObject; var Command: TSynEditorCommand; var AChar: Char; Data: Pointer);
@@ -1532,6 +1587,8 @@ begin
     SynEditAutoComplete.Editor := nil;
     SynEditParamShow.Editor := nil;
   end;
+  TabSheet4.TabVisible := FCurrentScript = FProjetScript;
+  RefreshDescription(FCurrentScript);
 end;
 
 procedure TfrmScripts.seScript1KeyPress(Sender: TObject; var Key: Char);
@@ -1686,6 +1743,42 @@ begin
   if not dmScripts.AlbumToUpdate then Release;
 end;
 
+procedure TfrmScripts.RefreshDescription(Script: TScriptEdition);
+begin
+  FRefreshingDescription := True;
+  try
+    if Assigned(Script) then
+    begin
+      Label5.Caption := Script.ScriptInfos.Auteur;
+      EditLabeled1.Text := Script.ScriptInfos.Auteur;
+
+      if Script.ScriptInfos.LastUpdate > 0 then
+        Label6.Caption := DateTimeToStr(Script.ScriptInfos.LastUpdate)
+      else
+        Label6.Caption := '';
+
+      Label8.Caption := Script.ScriptInfos.ScriptVersion;
+      EditLabeled2.Text := Script.ScriptInfos.ScriptVersion;
+
+      Label10.Caption := Script.ScriptInfos.BDVersion;
+      EditLabeled3.Text := Script.ScriptInfos.BDVersion;
+
+      Memo1.Lines.Text := Script.ScriptInfos.Description;
+      MemoLabeled1.Text := Script.ScriptInfos.Description;
+    end
+    else
+    begin
+      Label5.Caption := '';
+      Label6.Caption := '';
+      Label8.Caption := '';
+      Label10.Caption := '';
+      Memo1.Lines.Clear;
+    end;
+  finally
+    FRefreshingDescription := False;
+  end;
+end;
+
 procedure TfrmScripts.RefreshOptions;
 begin
   if Assigned(FProjetScript) then
@@ -1755,8 +1848,8 @@ begin
     info.Editor.AddKey(ecUserFirst + 1, VK_RETURN, [ssCtrl]);
 
     TSynDebugPlugin.Create(info.Editor, dmScripts.DebugPlugin);
-    if not Info.Loaded then
-      info.Load;
+    // if not Info.Loaded then
+    info.Load; // on force le rechargement pour être sûr de bien avoir la dernière version
     info.Editor.Lines.Assign(info.Code);
 
     info.SB := TStatusBar.Create(info.TabSheet);
@@ -1774,15 +1867,21 @@ procedure TfrmScripts.LoadScripts;
 var
   Script: TScript;
 begin
-  FScriptList.LoadDir(TGlobalVar.Utilisateur.Options.RepertoireScripts);
-  ListView1.Items.Clear;
-  for Script in FScriptList do
-    if Script.ScriptKing = skMain then
-      with ListView1.Items.Add do
-      begin
-        Data := Script;
-        Caption := string(Script.ScriptName);
-      end;
+  ListView1.Items.BeginUpdate;
+  try
+    ListView1.Items.Clear;
+    FScriptList.LoadDir(TGlobalVar.Utilisateur.Options.RepertoireScripts);
+    for Script in FScriptList do
+      if Script.ScriptKing = skMain then
+        with ListView1.Items.Add do
+        begin
+          Data := Script;
+          Caption := string(Script.ScriptName);
+        end;
+  finally
+    ListView1.Items.EndUpdate;
+  end;
+  ListView1.OnSelectItem(ListView1, nil, False);
 end;
 
 procedure TfrmScripts.ClearPages;

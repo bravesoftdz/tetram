@@ -275,8 +275,8 @@ begin
     edTomeFin.Text := NonZero(IntToStr(FAlbum.TomeFin));
     cbIntegrale.Checked := FAlbum.Integrale;
     cbHorsSerie.Checked := FAlbum.HorsSerie;
-    histoire.Lines.Assign(FAlbum.Sujet);
-    remarques.Lines.Assign(FAlbum.Notes);
+    histoire.Text := FAlbum.Sujet.Text;
+    remarques.Text := FAlbum.Notes.Text;
     cbIntegraleClick(cbIntegrale);
 
     lvScenaristes.Items.Count := FAlbum.Scenaristes.Count;
@@ -337,13 +337,21 @@ begin
 end;
 
 procedure ImportScript(frm: TfrmEditAlbum);
+var
+  oldIsAchat: Boolean;
 begin
   try
     if frm.FAlbumImport.ReadyToFusion then
     begin
       frm.SaveToObject;
       frm.FAlbumImport.FusionneInto(frm.Album);
-      frm.Album := frm.Album; // recharger la fenêtre avec frm.Album
+      oldIsAchat := frm.isAchat;
+      try
+        frm.isAchat := False;
+        frm.Album := frm.Album; // recharger la fenêtre avec frm.Album
+      finally
+        frm.isAchat := oldIsAchat;
+      end;
     end;
   finally
     FreeAndNil(frm.FAlbumImport);
@@ -524,8 +532,8 @@ begin
     FAlbum.TomeFin := StrToInt(edTomeFin.Text);
   FAlbum.Integrale := cbIntegrale.Checked;
   FAlbum.HorsSerie := cbHorsSerie.Checked;
-  FAlbum.Sujet.Assign(histoire.Lines);
-  FAlbum.Notes.Assign(remarques.Lines);
+  FAlbum.Sujet.Text := histoire.Text;
+  FAlbum.Notes.Text := remarques.Text;
 end;
 
 procedure TfrmEditAlbum.framVTEdit1VTEditChange(Sender: TObject);
@@ -739,18 +747,16 @@ begin
 
   ID_Editeur := vtEditEditeurs.CurrentValue;
   if IsEqualGUID(ID_Editeur, GUID_NULL) then
-  begin
-    vtEditCollections.Mode := vmNone;
-  end
+    vtEditCollections.Mode := vmNone
   else
+    vtEditCollections.Mode := vmCollections;
+  if not IsEqualGUID(vtEditCollections.ParentValue, ID_Editeur) then
   begin
-    vtEditCollections.VTEdit.PopupWindow.TreeView.Filtre := 'ID_Editeur = ' + QuotedStr(GUIDToString(ID_Editeur));
-    if vtEditCollections.Mode <> vmCollections then
-      vtEditCollections.Mode := vmCollections;
+    vtEditCollections.ParentValue := ID_Editeur;
+    vtEditCollections.VTEdit.PopupWindow.TreeView.Filtre := 'ID_Editeur = ' + QuotedStr(GUIDToString(vtEditCollections.ParentValue));
+    vtEditCollections.CurrentValue := GUID_NULL;
+    vtEditCollections.CanCreate := not IsEqualGUID(ID_Editeur, GUID_NULL);
   end;
-  vtEditCollections.ParentValue := ID_Editeur;
-  vtEditCollections.CurrentValue := GUID_NULL;
-  vtEditCollections.CanCreate := not IsEqualGUID(ID_Editeur, GUID_NULL);
   RefreshEditionCaption;
 end;
 
@@ -905,22 +911,17 @@ begin
       FCurrentEditionComplete.DateAchat := Trunc(dtpAchat.Date)
     else
       FCurrentEditionComplete.DateAchat := 0;
-    FCurrentEditionComplete.Notes.Assign(edNotes.Lines);
+    FCurrentEditionComplete.Notes.Text := edNotes.Text;
     FCurrentEditionComplete.NumeroPerso := edNumPerso.Text;
   end;
 end;
 
 procedure TfrmEditAlbum.RefreshEditionCaption;
-var
-  s: string;
 begin
   if not FEditionChanging and Assigned(FCurrentEditionComplete) then
   begin
     UpdateEdition;
-    s := FCurrentEditionComplete.ChaineAffichage;
-    if FCurrentEditionComplete.RecInconnu then
-      s := '* ' + s;
-    vtEditions.Items[vtEditions.ItemIndex] := s;
+    vtEditions.Items[vtEditions.ItemIndex] := FCurrentEditionComplete.ChaineAffichage;
   end;
 end;
 
@@ -982,7 +983,7 @@ begin
         edPrixCote.Text := ''
       else
         edPrixCote.Text := FormatCurr(FormatMonnaie, FCurrentEditionComplete.PrixCote);
-      edNotes.Lines.Text := FCurrentEditionComplete.Notes.Text;
+      edNotes.Text := FCurrentEditionComplete.Notes.Text;
       edNumPerso.Text := FCurrentEditionComplete.NumeroPerso;
       vstImages.RootNodeCount := FCurrentEditionComplete.Couvertures.Count;
     end;

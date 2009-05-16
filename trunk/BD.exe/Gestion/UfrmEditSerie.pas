@@ -181,8 +181,8 @@ begin
   FSerie.SiteWeb := Trim(edSite.Text);
   FSerie.ID_Editeur := vtEditEditeurs.CurrentValue;
   FSerie.ID_Collection := vtEditCollections.CurrentValue;
-  FSerie.Sujet.Assign(histoire.Lines);
-  FSerie.Notes.Assign(remarques.Lines);
+  FSerie.Sujet.Text := histoire.Text;
+  FSerie.Notes.Text := remarques.Text;
 
   FSerie.VO := Integer(cbVO.State);
   FSerie.Couleur := Integer(cbCouleur.State);
@@ -194,7 +194,7 @@ begin
   FSerie.FormatEdition := MakeOption(cbxFormat.Value, cbxFormat.Caption);
   FSerie.SensLecture := MakeOption(cbxSensLecture.Value, cbxSensLecture.Caption);
 
-  FSerie.Associations.Assign(edAssociations.Lines);
+  FSerie.Associations.Text := edAssociations.Lines.Text;
 
   FSerie.SaveToDatabase;
   FSerie.SaveAssociations(vmSeries, GUID_NULL);
@@ -226,8 +226,8 @@ begin
     vtEditCollections.CurrentValue := FSerie.ID_Collection;
     cbComplete.Checked := FSerie.Complete;
     cbManquants.Checked := FSerie.SuivreManquants;
-    histoire.Lines.Assign(FSerie.Sujet);
-    remarques.Lines.Assign(FSerie.Notes);
+    histoire.Text := FSerie.Sujet.Text;
+    remarques.Text := FSerie.Notes.Text;
     edSite.Text := FSerie.SiteWeb;
     if FSerie.NbAlbums > 0 then
       edNbAlbums.Text := IntToStr(FSerie.NbAlbums);
@@ -264,7 +264,7 @@ begin
     vtParaBD.Mode := vmParaBDSerie;
     vtParaBD.FullExpand;
 
-    edAssociations.Lines.Assign(FSerie.Associations);
+    edAssociations.Text := FSerie.Associations.Text;
   finally
     lvScenaristes.Items.EndUpdate;
     lvDessinateurs.Items.EndUpdate;
@@ -323,18 +323,16 @@ var
 begin
   ID_Editeur := vtEditEditeurs.CurrentValue;
   if IsEqualGUID(ID_Editeur, GUID_NULL) then
-  begin
-    vtEditCollections.Mode := vmNone;
-  end
+    vtEditCollections.Mode := vmNone
   else
+    vtEditCollections.Mode := vmCollections;
+  if not IsEqualGUID(vtEditCollections.ParentValue, ID_Editeur) then
   begin
-    vtEditCollections.VTEdit.PopupWindow.TreeView.Filtre := 'ID_Editeur = ' + QuotedStr(GUIDToString(ID_Editeur));
-    if vtEditCollections.Mode <> vmCollections then
-      vtEditCollections.Mode := vmCollections;
+    vtEditCollections.ParentValue := ID_Editeur;
+    vtEditCollections.VTEdit.PopupWindow.TreeView.Filtre := 'ID_Editeur = ' + QuotedStr(GUIDToString(vtEditCollections.ParentValue));
+    vtEditCollections.CurrentValue := GUID_NULL;
+    vtEditCollections.CanCreate := not IsEqualGUID(ID_Editeur, GUID_NULL);
   end;
-  vtEditCollections.ParentValue := ID_Editeur;
-  vtEditCollections.CurrentValue := GUID_NULL;
-  vtEditCollections.CanCreate := not IsEqualGUID(ID_Editeur, GUID_NULL);
 end;
 
 procedure TfrmEditSerie.vtEditPersonnesVTEditChange(Sender: TObject);

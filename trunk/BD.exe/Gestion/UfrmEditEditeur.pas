@@ -59,7 +59,7 @@ begin
 
   edNom.Text := FEditeur.NomEditeur;
   edSite.Text := FEditeur.SiteWeb;
-  edAssociations.Lines.Assign(FEditeur.Associations);
+  edAssociations.Text := FEditeur.Associations.Text;
 end;
 
 procedure TfrmEditEditeur.Frame11btnOKClick(Sender: TObject);

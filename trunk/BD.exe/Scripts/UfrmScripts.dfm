@@ -31,6 +31,10 @@ object frmScripts: TfrmScripts
     object tbScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object ToolBar1: TToolBar
         Left = 0
         Top = 0
@@ -77,7 +81,7 @@ object frmScripts: TfrmScripts
           588)
         object Label1: TLabel
           Left = 0
-          Top = 285
+          Top = 485
           Width = 718
           Height = 16
           Caption = 
@@ -139,6 +143,140 @@ object frmScripts: TfrmScripts
             OnDblClick = ListView1DblClick
             OnSelectItem = ListView1SelectItem
           end
+        end
+        object Panel5: TPanel
+          Left = 0
+          Top = 269
+          Width = 854
+          Height = 100
+          Anchors = [akLeft, akTop, akRight]
+          BevelKind = bkTile
+          BevelOuter = bvNone
+          Caption = 'Panel5'
+          ShowCaption = False
+          TabOrder = 1
+          DesignSize = (
+            850
+            96)
+          object Label2: TLabel
+            Left = 8
+            Top = 8
+            Width = 45
+            Height = 13
+            Caption = 'Auteur :'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object Label3: TLabel
+            Left = 8
+            Top = 46
+            Width = 70
+            Height = 13
+            Caption = 'Description :'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object Label5: TLabel
+            Left = 59
+            Top = 8
+            Width = 31
+            Height = 13
+            Caption = 'Label2'
+          end
+          object Label7: TLabel
+            Left = 8
+            Top = 27
+            Width = 48
+            Height = 13
+            Caption = 'Version :'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object Label8: TLabel
+            Left = 62
+            Top = 27
+            Width = 31
+            Height = 13
+            Caption = 'Label2'
+          end
+          object Label9: TLabel
+            Left = 264
+            Top = 27
+            Width = 168
+            Height = 13
+            Caption = 'Version de BDth'#232'que requise :'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object Label10: TLabel
+            Left = 438
+            Top = 27
+            Width = 31
+            Height = 13
+            Caption = 'Label2'
+          end
+          object Label4: TLabel
+            Left = 264
+            Top = 8
+            Width = 128
+            Height = 13
+            Caption = 'Derni'#232're modification :'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object Label6: TLabel
+            Left = 398
+            Top = 8
+            Width = 31
+            Height = 13
+            Caption = 'Label2'
+          end
+          object Memo1: TMemo
+            Left = 84
+            Top = 46
+            Width = 757
+            Height = 43
+            Anchors = [akLeft, akTop, akRight, akBottom]
+            BevelInner = bvNone
+            BevelOuter = bvNone
+            BorderStyle = bsNone
+            Lines.Strings = (
+              'Memo1')
+            ParentColor = True
+            ReadOnly = True
+            ScrollBars = ssVertical
+            TabOrder = 0
+          end
+        end
+        object Button1: TButton
+          Left = 0
+          Top = 375
+          Width = 93
+          Height = 25
+          Cursor = crHandPoint
+          Caption = 'Mettre '#224' jour'
+          TabOrder = 2
+          OnClick = Button1Click
         end
       end
     end
@@ -224,7 +362,7 @@ object frmScripts: TfrmScripts
         ShowCaption = False
         TabOrder = 2
         object Splitter2: TSplitter
-          Left = 629
+          Left = 584
           Top = 0
           Height = 186
           Align = alRight
@@ -235,7 +373,7 @@ object frmScripts: TfrmScripts
         object PageControl1: TPageControl
           Left = 0
           Top = 0
-          Width = 629
+          Width = 584
           Height = 186
           ActivePage = TabSheet1
           Align = alClient
@@ -245,7 +383,7 @@ object frmScripts: TfrmScripts
             object vstMessages: TVirtualStringTree
               Left = 0
               Top = 0
-              Width = 621
+              Width = 576
               Height = 158
               Align = alClient
               BevelKind = bkTile
@@ -281,7 +419,7 @@ object frmScripts: TfrmScripts
                 end
                 item
                   Position = 3
-                  Width = 247
+                  Width = 202
                   WideText = 'Message'
                 end>
             end
@@ -289,10 +427,14 @@ object frmScripts: TfrmScripts
           object TabSheet2: TTabSheet
             Caption = 'Points de suivi'
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object vstSuivis: TVirtualStringTree
               Left = 0
               Top = 0
-              Width = 621
+              Width = 576
               Height = 158
               Align = alClient
               BevelKind = bkTile
@@ -324,7 +466,7 @@ object frmScripts: TfrmScripts
                 end
                 item
                   Position = 1
-                  Width = 471
+                  Width = 430
                   WideText = 'Valeur'
                 end>
             end
@@ -332,10 +474,14 @@ object frmScripts: TfrmScripts
           object TabSheet3: TTabSheet
             Caption = 'Points d'#39'arr'#234't'
             ImageIndex = 2
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object vstBreakpoints: TVirtualStringTree
               Left = 0
               Top = 0
-              Width = 621
+              Width = 576
               Height = 158
               Align = alClient
               BevelKind = bkTile
@@ -366,7 +512,7 @@ object frmScripts: TfrmScripts
                 end
                 item
                   Position = 1
-                  Width = 517
+                  Width = 476
                   WideText = 'Fichier'
                 end>
             end
@@ -374,10 +520,14 @@ object frmScripts: TfrmScripts
           object TabSheet6: TTabSheet
             Caption = 'Sortie'
             ImageIndex = 3
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object mmConsole: TMemo
               Left = 0
               Top = 0
-              Width = 621
+              Width = 576
               Height = 158
               Align = alClient
               BevelKind = bkTile
@@ -390,19 +540,23 @@ object frmScripts: TfrmScripts
           end
         end
         object Panel3: TPageControl
-          Left = 632
+          Left = 587
           Top = 0
-          Width = 222
+          Width = 267
           Height = 186
-          ActivePage = TabSheet4
+          ActivePage = TabSheet5
           Align = alRight
           TabOrder = 1
           object TabSheet4: TTabSheet
             Caption = 'Options'
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object ListBox1: TListBox
               Left = 0
               Top = 0
-              Width = 214
+              Width = 259
               Height = 158
               Style = lbVirtual
               Align = alClient
@@ -413,6 +567,118 @@ object frmScripts: TfrmScripts
               TabOrder = 0
               OnData = ListBox1Data
               OnDblClick = ListBox1DblClick
+            end
+          end
+          object TabSheet5: TTabSheet
+            Caption = 'Informations'
+            ImageIndex = 1
+            object Label11: TLabel
+              Left = 3
+              Top = 6
+              Width = 45
+              Height = 13
+              Caption = 'Auteur :'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label12: TLabel
+              Left = 3
+              Top = 33
+              Width = 48
+              Height = 13
+              Caption = 'Version :'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label13: TLabel
+              Left = 3
+              Top = 60
+              Width = 123
+              Height = 13
+              Caption = 'Version de BDth'#232'que :'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label14: TLabel
+              Left = 3
+              Top = 87
+              Width = 70
+              Height = 13
+              Caption = 'Description :'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object EditLabeled1: TEditLabeled
+              Left = 79
+              Top = 3
+              Width = 177
+              Height = 21
+              TabOrder = 0
+              Text = 'EditLabeled1'
+              OnChange = EditLabeled1Change
+              LinkControls = <
+                item
+                  Control = Label11
+                end>
+              CurrencyChar = #0
+            end
+            object MemoLabeled1: TMemoLabeled
+              Left = 79
+              Top = 84
+              Width = 177
+              Height = 71
+              Lines.Strings = (
+                'MemoLabeled1')
+              TabOrder = 3
+              OnChange = EditLabeled1Change
+              LinkControls = <
+                item
+                  Control = Label14
+                end>
+            end
+            object EditLabeled2: TEditLabeled
+              Left = 79
+              Top = 30
+              Width = 177
+              Height = 21
+              TabOrder = 1
+              Text = 'EditLabeled1'
+              OnChange = EditLabeled1Change
+              LinkControls = <
+                item
+                  Control = Label12
+                end>
+              CurrencyChar = #0
+            end
+            object EditLabeled3: TEditLabeled
+              Left = 132
+              Top = 57
+              Width = 124
+              Height = 21
+              TabOrder = 2
+              Text = 'EditLabeled1'
+              OnChange = EditLabeled1Change
+              LinkControls = <
+                item
+                  Control = Label13
+                end>
+              CurrencyChar = #0
             end
           end
         end

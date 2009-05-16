@@ -17,9 +17,9 @@ object frmPrevisionsAchats: TfrmPrevisionsAchats
   TextHeight = 13
   object vstPrevisionsAchats: TVirtualStringTree
     Left = 0
-    Top = 56
+    Top = 55
     Width = 862
-    Height = 538
+    Height = 539
     Align = alClient
     BevelKind = bkTile
     BorderStyle = bsNone
@@ -40,13 +40,15 @@ object frmPrevisionsAchats: TfrmPrevisionsAchats
     ParentFont = False
     TabOrder = 0
     OnPaintText = vstPrevisionsAchatsPaintText
+    ExplicitTop = 56
+    ExplicitHeight = 538
     Columns = <>
   end
   object Panel1: TPanel
     Left = 0
     Top = 0
     Width = 862
-    Height = 56
+    Height = 55
     Align = alTop
     AutoSize = True
     BevelOuter = bvNone
@@ -54,7 +56,7 @@ object frmPrevisionsAchats: TfrmPrevisionsAchats
     TabOrder = 1
     object Label1: TLabel
       Left = 4
-      Top = 4
+      Top = 3
       Width = 61
       Height = 13
       Caption = 'Grouper par '
@@ -62,7 +64,7 @@ object frmPrevisionsAchats: TfrmPrevisionsAchats
     end
     object LightComboCheck1: TLightComboCheck
       Left = 70
-      Top = 1
+      Top = 0
       Width = 140
       Height = 19
       Checked = True
@@ -137,7 +139,7 @@ object frmPrevisionsAchats: TfrmPrevisionsAchats
     end
     object supprimer: TVDTButton
       Left = 181
-      Top = 30
+      Top = 29
       Width = 88
       Height = 25
       Action = actSupprimer
@@ -187,7 +189,7 @@ object frmPrevisionsAchats: TfrmPrevisionsAchats
     end
     object modifier: TVDTButton
       Left = 93
-      Top = 30
+      Top = 29
       Width = 88
       Height = 25
       Action = actModifier
@@ -243,7 +245,7 @@ object frmPrevisionsAchats: TfrmPrevisionsAchats
     end
     object ajouter: TVDTButton
       Left = 5
-      Top = 30
+      Top = 29
       Width = 88
       Height = 25
       Action = actAjouter
@@ -287,14 +289,14 @@ object frmPrevisionsAchats: TfrmPrevisionsAchats
     end
     object Bevel7: TBevel
       Left = 272
-      Top = 32
+      Top = 31
       Width = 6
       Height = 22
       Shape = bsLeftLine
     end
     object btAcheter: TVDTButton
       Left = 278
-      Top = 31
+      Top = 30
       Width = 88
       Height = 25
       Action = actAcheter

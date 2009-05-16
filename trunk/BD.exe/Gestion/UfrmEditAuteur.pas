@@ -53,8 +53,8 @@ begin
 
   edNom.Text := FAuteur.NomAuteur;
   edSite.Text := FAuteur.SiteWeb;
-  edBiographie.Lines.Assign(FAuteur.Biographie);
-  edAssociations.Lines.Assign(FAuteur.Associations);
+  edBiographie.Text := FAuteur.Biographie.Text;
+  edAssociations.Text := FAuteur.Associations.Text;
 end;
 
 procedure TfrmEditAuteur.Frame11btnOKClick(Sender: TObject);
@@ -68,8 +68,8 @@ begin
 
   FAuteur.NomAuteur := Trim(edNom.Text);
   FAuteur.SiteWeb := Trim(edSite.Text);
-  FAuteur.Biographie.Assign(edBiographie.Lines);
-  FAuteur.Associations.Assign(edAssociations.Lines);
+  FAuteur.Biographie.Text := edBiographie.Text;
+  FAuteur.Associations.Text := edAssociations.Text;
 
   FAuteur.SaveToDatabase;
   FAuteur.SaveAssociations(vmPersonnes, GUID_NULL);

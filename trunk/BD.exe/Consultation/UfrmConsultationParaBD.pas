@@ -134,7 +134,7 @@ begin
   end;
   lvAuteurs.Items.EndUpdate;
 
-  Description.Lines.Assign(FParaBD.Description);
+  Description.Text := FParaBD.Description.Text;
 
   cbStock.Checked := FParaBD.Stock;
   cbOffert.Checked := FParaBD.Offert;

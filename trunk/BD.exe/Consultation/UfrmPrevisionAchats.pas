@@ -36,8 +36,7 @@ type
     procedure actSupprimerExecute(Sender: TObject);
     procedure actAjouterExecute(Sender: TObject);
     procedure actModifierExecute(Sender: TObject);
-    procedure ActionList1Update(Action: TBasicAction;
-      var Handled: Boolean);
+    procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure actAcheterExecute(Sender: TObject);
   private
     procedure ChangeAlbumMode(Mode: TVirtualMode);

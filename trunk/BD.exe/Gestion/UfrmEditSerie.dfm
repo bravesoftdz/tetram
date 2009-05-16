@@ -1154,6 +1154,7 @@ object frmEditSerie: TfrmEditSerie
       BorderStyle = bsNone
       ScrollBars = ssBoth
       TabOrder = 21
+      WordWrap = False
       LinkControls = <
         item
           Control = Label10

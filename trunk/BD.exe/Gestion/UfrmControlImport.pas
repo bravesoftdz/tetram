@@ -40,7 +40,7 @@ uses
 
 procedure TfrmControlImport.FormCreate(Sender: TObject);
 begin
-  ObjetImport:=nil;
+  ObjetImport := nil;
 end;
 
 procedure TfrmControlImport.framVTEdit1btEditClick(Sender: TObject);

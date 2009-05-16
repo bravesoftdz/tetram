@@ -56,7 +56,7 @@ begin
 
   edNom.Text := FCollection.NomCollection;
   vtEditEditeurs.CurrentValue := FCollection.ID_Editeur;
-  edAssociations.Lines.Assign(FCollection.Associations);
+  edAssociations.Lines.Text := FCollection.Associations.Text;
 
   vtEditEditeurs.Enabled := FCollection.RecInconnu;
 end;
@@ -83,7 +83,7 @@ begin
 
   FCollection.NomCollection := Trim(edNom.Text);
   FCollection.ID_Editeur := ID_Editeur;
-  FCollection.Associations.Assign(edAssociations.Lines);
+  FCollection.Associations.Text := edAssociations.Text;
 
   FCollection.SaveToDatabase;
   FCollection.SaveAssociations(vmCollections, FCollection.Editeur.ID);

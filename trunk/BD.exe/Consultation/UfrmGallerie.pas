@@ -169,14 +169,19 @@ begin
   ScrollBarV.Height := ClientHeight;
   ScrollBarV.Top := 0;
   ScrollBox1.Left := 0;
-  ScrollBox1.Height := ClientHeight;
   ScrollBox1.Width := ClientWidth - ScrollBarV.Width;
   ScrollBox1.Height := HeightThumbs;
 
-  ScrollBarV.Position := -ScrollBox1.Top;
-  ScrollBarV.Max := ScrollBox1.Height - ClientHeight;
-  ScrollBarV.LargeChange := ClientHeight;
-  ScrollBarV.SmallChange := ClientHeight div 5;
+  ScrollBarV.Visible := ScrollBox1.Height > ClientHeight;
+  if ScrollBarV.Visible then
+  begin
+    ScrollBarV.Position := -ScrollBox1.Top;
+    ScrollBarV.Max := ScrollBox1.Height - ClientHeight;
+    ScrollBarV.LargeChange := ClientHeight;
+    ScrollBarV.SmallChange := ClientHeight div 5;
+  end
+  else
+    ScrollBox1.Top := 0;
 end;
 
 function TfrmGallerie.HeightThumbs: Integer;

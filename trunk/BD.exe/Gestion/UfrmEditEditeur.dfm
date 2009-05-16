@@ -168,6 +168,7 @@ object frmEditEditeur: TfrmEditEditeur
       BorderStyle = bsNone
       ScrollBars = ssBoth
       TabOrder = 2
+      WordWrap = False
       LinkControls = <
         item
           Control = Label4

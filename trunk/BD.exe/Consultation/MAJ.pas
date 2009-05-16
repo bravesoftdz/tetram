@@ -37,6 +37,8 @@ var
 begin
   hg := THourGlass.Create;
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  Result := not IsEqualGUID(Reference, GUID_NULL);
+  if not Result then Exit;
   FDest := TFrmConsultationAuteur.Create(frmFond);
   try
     FDest.ID_Auteur := Reference;
@@ -54,6 +56,8 @@ var
 begin
   hg := THourGlass.Create;
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  Result := not IsEqualGUID(Reference, GUID_NULL);
+  if not Result then Exit;
   FDest := TFrmConsultationAlbum.Create(frmFond);
   try
     FDest.ID_Album := Reference;
@@ -71,6 +75,8 @@ var
 begin
   hg := THourGlass.Create;
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  Result := not IsEqualGUID(Reference, GUID_NULL);
+  if not Result then Exit;
   FDest := TFrmConsultationSerie.Create(frmFond);
   try
     FDest.ID_Serie := Reference;
@@ -88,6 +94,8 @@ var
 begin
   hg := THourGlass.Create;
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  Result := not IsEqualGUID(Reference, GUID_NULL);
+  if not Result then Exit;
   FDest := TFrmConsultationParaBD.Create(frmFond);
   try
     FDest.ID_ParaBD := Reference;
@@ -105,6 +113,8 @@ var
 begin
   hg := THourGlass.Create;
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  Result := not IsEqualGUID(Reference, GUID_NULL);
+  if not Result then Exit;
   FDest := TFrmConsultationEmprunteur.Create(frmFond);
   try
     FDest.ID_Emprunteur := Reference;
@@ -192,14 +202,16 @@ begin
   with FDest do
   begin
     // le TTreeView est une merde! si on fait la création de noeud avec Data
-    // avant l'assignation du Handle, les Data risques de partir dans la nature
+    // avant l'assignation du Handle, les Data risquent de partir dans la nature
 
     // TreeView1.HandleNeeded n'est d'aucune utilité!!!!
 
     // du coup, obligation de faire le SetChildForm AVANT de recréer les critères de recherche
 
     // conclusion:
-    // TODO: virer le TTreeView!!!!!!!
+    // virer le TTreeView!!!!!!!
+
+    // 16/05/2009: Etait vrai avec D7, semble plus le cas avec D2009: on verra à le changer pour homogénéiser
 
     frmFond.SetChildForm(FDest);
 
@@ -225,6 +237,8 @@ function ZoomCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID):
 var
   FDest: TFrmZoomCouverture;
 begin
+  Result := not (IsEqualGUID(ID_Item, GUID_NULL) or IsEqualGUID(ID_Couverture, GUID_NULL));
+  if not Result then Exit;
   FDest := TFrmZoomCouverture.Create(frmFond);
   with FDest do
     try
@@ -265,7 +279,8 @@ var
 begin
   hg := THourGlass.Create;
   //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
-  Result := False;
+  Result := not IsEqualGUID(Reference, GUID_NULL);
+  if not Result then Exit;
   FDest := TfrmGallerie.Create(frmFond);
   try
     case TypeGallerie of

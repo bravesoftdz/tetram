@@ -77,7 +77,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
     object rbNouvelAlbum: TRadioButton
       Left = 18
       Top = 66
-      Width = 89
+      Width = 95
       Height = 17
       Caption = 'Nouvel album'
       Checked = True

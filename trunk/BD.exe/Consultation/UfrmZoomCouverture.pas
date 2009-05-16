@@ -50,59 +50,6 @@ uses Impression, UHistorique, jpeg, Math;
 
 {$R *.DFM}
 
-function TfrmZoomCouverture.LoadCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID): Boolean;
-var
-  ms: TStream;
-  jpg: TJPEGImage;
-begin
-  FisParaBD := isParaBD;
-  FID_Item := ID_Item;
-  FID_Couverture := ID_Couverture;
-  ms := GetCouvertureStream(isParaBD, ID_Couverture, -1, -1, False);
-  if Assigned(ms) then begin
-    jpg := TJPEGImage.Create;
-    try
-      jpg.LoadFromStream(ms);
-      Image.Picture.Assign(jpg);
-    finally
-      FreeAndNil(jpg);
-      FreeAndNil(ms);
-    end;
-    Result := True;
-  end
-  else begin
-    Image.Picture.Assign(nil);
-    Result := False;
-  end;
-
-  ScrollBarV.Visible := Image.Height > (Panel.Height - ScrollBarH.Height);
-  ScrollBarH.Visible := Image.Width > (Panel.Width - ScrollBarV.Width);
-  ScrollBarV.Height := PHeight;
-  ScrollBarH.Width := PWidth;
-  Panel1.Visible := ScrollBarV.Visible and ScrollBarH.Visible;
-
-  ScrollBarV.Min := 0;
-  ScrollBarV.Max := Abs(Image.Height - PHeight);
-  ScrollBarV.LargeChange := PHeight;
-  ScrollBarV.SmallChange := PHeight div 5;
-
-  ScrollBarH.Min := 0;
-  ScrollBarH.Max := Abs(Image.Width - PWidth);
-  ScrollBarH.LargeChange := PWidth;
-  ScrollBarH.SmallChange := PWidth div 5;
-
-  if not ScrollBarH.Visible then
-    Image.Left := (PWidth - Image.Width) div 2
-  else if (Image.Left > 0) then
-    Image.Left := 0;
-  if not ScrollBarV.Visible then
-    Image.Top := (PHeight - Image.Height) div 2
-  else if (Image.Top > 0) then
-    Image.Top := 0;
-  if Image.Top <= 0 then ScrollBarV.Position := -Image.Top;
-  if Image.Left <= 0 then ScrollBarH.Position := -Image.Left;
-end;
-
 procedure TfrmZoomCouverture.FormResize(Sender: TObject);
 begin
   ScrollBarV.Top := 0;
@@ -192,6 +139,59 @@ end;
 function TfrmZoomCouverture.ImpressionUpdate: Boolean;
 begin
   Result := True;
+end;
+
+function TfrmZoomCouverture.LoadCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID): Boolean;
+var
+  ms: TStream;
+  jpg: TJPEGImage;
+begin
+  FisParaBD := isParaBD;
+  FID_Item := ID_Item;
+  FID_Couverture := ID_Couverture;
+  ms := GetCouvertureStream(isParaBD, ID_Couverture, -1, -1, False);
+  if Assigned(ms) then begin
+    jpg := TJPEGImage.Create;
+    try
+      jpg.LoadFromStream(ms);
+      Image.Picture.Assign(jpg);
+    finally
+      FreeAndNil(jpg);
+      FreeAndNil(ms);
+    end;
+    Result := True;
+  end
+  else begin
+    Image.Picture.Assign(nil);
+    Result := False;
+  end;
+
+  ScrollBarV.Visible := Image.Height > (Panel.Height - ScrollBarH.Height);
+  ScrollBarH.Visible := Image.Width > (Panel.Width - ScrollBarV.Width);
+  ScrollBarV.Height := PHeight;
+  ScrollBarH.Width := PWidth;
+  Panel1.Visible := ScrollBarV.Visible and ScrollBarH.Visible;
+
+  ScrollBarV.Min := 0;
+  ScrollBarV.Max := Abs(Image.Height - PHeight);
+  ScrollBarV.LargeChange := PHeight;
+  ScrollBarV.SmallChange := PHeight div 5;
+
+  ScrollBarH.Min := 0;
+  ScrollBarH.Max := Abs(Image.Width - PWidth);
+  ScrollBarH.LargeChange := PWidth;
+  ScrollBarH.SmallChange := PWidth div 5;
+
+  if not ScrollBarH.Visible then
+    Image.Left := (PWidth - Image.Width) div 2
+  else if (Image.Left > 0) then
+    Image.Left := 0;
+  if not ScrollBarV.Visible then
+    Image.Top := (PHeight - Image.Height) div 2
+  else if (Image.Top > 0) then
+    Image.Top := 0;
+  if Image.Top <= 0 then ScrollBarV.Position := -Image.Top;
+  if Image.Left <= 0 then ScrollBarH.Position := -Image.Left;
 end;
 
 procedure TfrmZoomCouverture.ImageDblClick(Sender: TObject);

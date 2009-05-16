@@ -238,8 +238,11 @@ end;
 
 procedure TframVTEdit.SetMode(const Value: TVirtualMode);
 begin
-  VTEdit.Mode := Value;
-  RefreshFiltre;
+  if Mode <> Value then
+  begin
+    VTEdit.Mode := Value;
+    RefreshFiltre;
+  end;
 end;
 
 procedure TframVTEdit.SetParentValue(const Value: TGUID);

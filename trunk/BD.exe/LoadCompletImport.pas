@@ -349,7 +349,7 @@ begin
 
   SetLength(tmpFile, MAX_PATH + 1);
   FillMemory(@tmpFile[1], Length(tmpFile) * SizeOf(Char), 1);
-  GetTempFileName(TempPath, 'bdk', 0, @tmpFile[1]);
+  GetTempFileName(PChar(TempPath), 'bdk', 0, @tmpFile[1]);
   P := @tmpFile[1];
   while P^ <> #0 do
     Inc(P);
@@ -360,6 +360,7 @@ begin
   else
     Stream := TFileStream.Create(tmpFile, fmCreate, fmShareExclusive);
   try
+    Stream.Size := 0;
     if LoadStreamURL(URL, [], Stream) <> 200 then
       Exit;
   finally
