@@ -1,6 +1,17 @@
-unit DefaultRegEx;
+<?xml version="1.0" encoding="iso-8859-1"?>
+<Script>
+  <Infos>
+    <Auteur>Tetram Corp</Auteur>
+    <Description/>
+    <ScriptVersion>1</ScriptVersion>
+    <BDVersion>2.1.0.17</BDVersion>
+    <LastUpdate>Fri, 8 May 2009 11:26:16 +0200</LastUpdate>
+  </Infos>
+  <Options/>
+  <Code>unit DefaultRegEx;
 
 const
-  regExURL = '<a(?: href="(?<lien>.*?)"|.*?)*>(?<texte>(?s-).*?)</a>';
+  regExURL = &apos;&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;(?&lt;texte&gt;(?s-).*?)&lt;/a&gt;&apos;;
 
-end.
+end.</Code>
+</Script>
