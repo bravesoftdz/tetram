@@ -173,7 +173,7 @@ begin
   try
     url := 'http://www.tetram.org/scriptsupdate.php?code=bdtheque';
     if LightComboCheck1.Value = 1 then url := url + '&contrib';
-    xml.LoadFromString(GetPage(url));
+    xml.LoadFromString(GetPage(url, False));
     xml.Options := xml.Options + [sxoAutoCreate];
     for i := 0 to Pred(xml.Root.Items.Count) do
       with xml.Root.Items[i] do begin
@@ -287,27 +287,28 @@ begin
   begin
     script := onlineScripts[Node.Index];
     localscript := script.LocalScript;
-    case Column of
-      1:
-        if not SameText(script.ScriptInfos.Auteur, localscript.ScriptInfos.Auteur) then
-          TargetCanvas.Font.Color := clGreen;
-      2:
-        if script.ScriptInfos.ScriptVersion > localscript.ScriptInfos.ScriptVersion then
-          TargetCanvas.Font.Color := clGreen
-        else if script.ScriptInfos.ScriptVersion < localscript.ScriptInfos.ScriptVersion then
-          TargetCanvas.Font.Color := clRed;
-      3:
-        if script.ScriptInfos.BDVersion > TGlobalVar.Utilisateur.ExeVersion then
-        begin
-          TargetCanvas.Font.Style := [fsBold];
-          TargetCanvas.Font.Color := clRed;
-        end;
-      4:
-        if script.ScriptInfos.LastUpdate > localscript.ScriptInfos.LastUpdate then
-          TargetCanvas.Font.Color := clBlue
-        else if script.ScriptInfos.LastUpdate < localscript.ScriptInfos.LastUpdate then
-          TargetCanvas.Font.Color := clRed;
-    end;
+    if Assigned(localscript) then
+      case Column of
+        1:
+          if not SameText(script.ScriptInfos.Auteur, localscript.ScriptInfos.Auteur) then
+            TargetCanvas.Font.Color := clGreen;
+        2:
+          if script.ScriptInfos.ScriptVersion > localscript.ScriptInfos.ScriptVersion then
+            TargetCanvas.Font.Color := clGreen
+          else if script.ScriptInfos.ScriptVersion < localscript.ScriptInfos.ScriptVersion then
+            TargetCanvas.Font.Color := clRed;
+        3:
+          if script.ScriptInfos.BDVersion > TGlobalVar.Utilisateur.ExeVersion then
+          begin
+            TargetCanvas.Font.Style := [fsBold];
+            TargetCanvas.Font.Color := clRed;
+          end;
+        4:
+          if script.ScriptInfos.LastUpdate > localscript.ScriptInfos.LastUpdate then
+            TargetCanvas.Font.Color := clBlue
+          else if script.ScriptInfos.LastUpdate < localscript.ScriptInfos.LastUpdate then
+            TargetCanvas.Font.Color := clRed;
+      end;
   end
   else
   begin
