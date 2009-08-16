@@ -12,6 +12,7 @@ const
   rsTransAbrvNB = 'N&B';
   rsTransAcheteLe = 'Acheté le';
   rsTransAlbum = 'Album';
+  rsTransAlbumNotation = 'Notation';
   rsTransAlbums = 'Albums';
   rsTransAlbumsEmpruntes = 'Albums empruntés';
   rsTransAlbumsManquants = 'Albums manquants';
@@ -88,6 +89,7 @@ const
   rsTransSerieEnCours = 'Série en cours';
   rsTransSeries = 'Séries';
   rsTransSerieSuivreSorties = 'Suivre les sorties';
+  rsTransSerieNotation = 'Notation';
   rsTransSerieTerminee = 'Série terminée';
   rsTransStock = 'Stock';
   //  rsTransSupport = 'Support';
@@ -106,6 +108,7 @@ const
   //  rsAlbumsTrouves = 'albums trouvés';
   rsAlbumsVO = 'Albums en VO';
   rsAlbumsIntegrales = 'Intégrales';
+  rsAlbumsIntegrale = 'Intégrale';
   rsAlbumsHorsSerie = 'Hors série';
   rsAlbumsDedicaces = 'Albums dédicacés';
   rsInformationsBDtheque = 'Informations sur la BDthèque';

@@ -7,7 +7,7 @@ object frmConsultationAuteur: TfrmConsultationAuteur
   Color = clWhite
   Constraints.MinWidth = 530
   Font.Charset = ANSI_CHARSET
-  Font.Color = clWindowText
+  Font.Color = clBlack
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
@@ -40,7 +40,7 @@ object frmConsultationAuteur: TfrmConsultationAuteur
       Color = clWhite
       FocusControl = edBiographie
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -50,14 +50,14 @@ object frmConsultationAuteur: TfrmConsultationAuteur
     end
     object l_annee: TLabel
       Left = 32
-      Top = 11
+      Top = 10
       Width = 21
       Height = 13
       Alignment = taRightJustify
       Caption = 'Nom'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -75,7 +75,7 @@ object frmConsultationAuteur: TfrmConsultationAuteur
       Caption = 'S'#233'ries'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -92,7 +92,7 @@ object frmConsultationAuteur: TfrmConsultationAuteur
       AutoSize = False
       Caption = 'Nom'
       Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
+      Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
@@ -144,6 +144,7 @@ object frmConsultationAuteur: TfrmConsultationAuteur
       Header.Font.Style = []
       Header.Options = [hoColumnResize, hoDrag]
       TabOrder = 1
+      OnAfterItemPaint = vstSeriesAfterItemPaint
       OnDblClick = vstSeriesDblClick
       OnGetText = vstSeriesGetText
       OnPaintText = vstSeriesPaintText

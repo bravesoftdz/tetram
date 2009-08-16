@@ -3,9 +3,9 @@ unit UfrmConsultationSerie;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls, ReadOnlyCheckBox,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls,
   ComCtrls, VDTButton, Buttons, VirtualTree, Procedures, ProceduresBDtk, UBdtForms, StrUtils,
-  ActnList, Menus, PngSpeedButton;
+  ActnList, Menus, PngSpeedButton, LabeledCheckBox;
 
 type
   TfrmConsultationSerie = class(TBdtForm, IImpressionApercu, IFicheEditable)
@@ -33,7 +33,6 @@ type
     Editeur: TLabel;
     Label9: TLabel;
     Collection: TLabel;
-    cbTerminee: TReadOnlyCheckBox;
     MainMenu1: TMainMenu;
     Fiche1: TMenuItem;
     Modifier1: TMenuItem;
@@ -45,6 +44,15 @@ type
     FicheImprime: TAction;
     FicheModifier: TAction;
     VDTButton1: TVDTButton;
+    PopupMenu1: TPopupMenu;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N4: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    Image1: TImage;
+    cbTerminee: TLabeledCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure TitreSerieClick(Sender: TObject);
@@ -55,6 +63,9 @@ type
     procedure FicheApercuExecute(Sender: TObject);
     procedure FicheModifierExecute(Sender: TObject);
     procedure VDTButton1Click(Sender: TObject);
+    procedure N7Click(Sender: TObject);
+    procedure vtAlbumsAfterItemPaint(Sender: TBaseVirtualTree;
+      TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
   private
     FSerie: TSerieComplete;
     function GetID_Serie: TGUID;
@@ -75,7 +86,8 @@ type
 
 implementation
 
-uses Commun, Divers, TypeRec, ShellAPI, UHistorique, Impression, Proc_Gestions;
+uses Commun, Divers, TypeRec, ShellAPI, UHistorique, Impression, Proc_Gestions,
+  UfrmFond;
 
 {$R *.dfm}
 
@@ -89,6 +101,7 @@ end;
 procedure TfrmConsultationSerie.SetID_Serie(const Value: TGUID);
 var
   s: string;
+  Auteur: TAuteur;
   i: Integer;
 begin
   ClearForm;
@@ -106,6 +119,7 @@ begin
     TitreSerie.Font.Style := TitreSerie.Font.Style - [fsUnderline];
     TitreSerie.Cursor := crDefault;
   end;
+  Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FSerie.Notation].PngImage);
 
   Editeur.Caption := FormatTitre(FSerie.Editeur.NomEditeur);
   if FSerie.Editeur.SiteWeb <> '' then begin
@@ -130,30 +144,27 @@ begin
   Memo1.Text := s;
 
   lvScenaristes.Items.BeginUpdate;
-  for i := 0 to Pred(FSerie.Scenaristes.Count) do begin
+  for Auteur in FSerie.Scenaristes do
     with lvScenaristes.Items.Add do begin
-      Data := FSerie.Scenaristes[i];
-      Caption := TAuteur(Data).ChaineAffichage;
+      Data := Auteur;
+      Caption := Auteur.ChaineAffichage;
     end;
-  end;
   lvScenaristes.Items.EndUpdate;
 
   lvDessinateurs.Items.BeginUpdate;
-  for i := 0 to Pred(FSerie.Dessinateurs.Count) do begin
+  for Auteur in FSerie.Dessinateurs do
     with lvDessinateurs.Items.Add do begin
-      Data := FSerie.Dessinateurs[i];
-      Caption := TAuteur(Data).ChaineAffichage;
+      Data := Auteur;
+      Caption := Auteur.ChaineAffichage;
     end;
-  end;
   lvDessinateurs.Items.EndUpdate;
 
   lvColoristes.Items.BeginUpdate;
-  for i := 0 to Pred(FSerie.Coloristes.Count) do begin
+  for Auteur in FSerie.Coloristes do
     with lvColoristes.Items.Add do begin
-      Data := FSerie.Coloristes[i];
-      Caption := TAuteur(Data).ChaineAffichage;
+      Data := Auteur;
+      Caption := Auteur.ChaineAffichage;
     end;
-  end;
   lvColoristes.Items.EndUpdate;
 
   vtAlbums.Filtre := 'ID_Serie = ' + QuotedStr(GUIDToString(ID_Serie));
@@ -222,6 +233,12 @@ begin
     ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
 end;
 
+procedure TfrmConsultationSerie.vtAlbumsAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
+begin
+  if vtAlbums.GetNodeLevel(Node) > 0 then
+    frmFond.DessineNote(TargetCanvas, ItemRect, TAlbum(vtAlbums.GetNodeBasePointer(Node)).Notation);
+end;
+
 procedure TfrmConsultationSerie.vtAlbumsDblClick(Sender: TObject);
 begin
   Historique.AddWaiting(fcAlbum, vtAlbums.CurrentValue);
@@ -270,6 +287,12 @@ end;
 function TfrmConsultationSerie.ModificationUpdate: Boolean;
 begin
   Result := True;
+end;
+
+procedure TfrmConsultationSerie.N7Click(Sender: TObject);
+begin
+  FSerie.ChangeNotation(TMenuItem(Sender).Tag);
+  Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FSerie.Notation].PngImage);
 end;
 
 end.

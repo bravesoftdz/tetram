@@ -31,6 +31,7 @@ type
     procedure vstAlbumsDblClick(Sender: TObject);
     procedure LightComboCheck1Change(Sender: TObject);
     procedure FrameRechercheRapideedSearchKeyPress(Sender: TObject; var Key: Char);
+    procedure vstAlbumsAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
   private
     { Déclarations privées }
     procedure ChangeAlbumMode(Mode: TVirtualMode);
@@ -44,7 +45,7 @@ var
 implementation
 
 uses
-  CommonConst, IniFiles, Procedures, UHistorique;
+  CommonConst, IniFiles, Procedures, UHistorique, UfrmFond, TypeRec;
 
 {$R *.DFM}
 
@@ -97,6 +98,12 @@ begin
   vstAuteurs.Mode := vmPersonnes;
   vstSeries.Mode := vmSeries;
   vstParaBD.Mode := vmParaBDSerie;
+end;
+
+procedure TfrmRepertoire.vstAlbumsAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
+begin
+  if vstAlbums.GetNodeLevel(Node) > 0 then
+    frmFond.DessineNote(TargetCanvas, ItemRect, TAlbum(vstAlbums.GetNodeBasePointer(Node)).Notation);
 end;
 
 procedure TfrmRepertoire.vstAlbumsDblClick(Sender: TObject);

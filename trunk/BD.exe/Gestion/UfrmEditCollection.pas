@@ -19,6 +19,7 @@ type
     Label4: TLabel;
     edAssociations: TMemoLabeled;
     Bevel4: TBevel;
+    Label28: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
   private

@@ -41,7 +41,7 @@ object frmRecherche: TfrmRecherche
     Width = 400
     Height = 222
     Cursor = crHandPoint
-    ActivePage = TabSheet3
+    ActivePage = TabSheet4
     Align = alTop
     Style = tsFlatButtons
     TabOrder = 0
@@ -175,10 +175,6 @@ object frmRecherche: TfrmRecherche
     object TabSheet4: TTabSheet
       Caption = 'Recherche avanc'#233'e'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         392
         191)
@@ -274,10 +270,6 @@ object frmRecherche: TfrmRecherche
         object TabSheet2: TTabSheet
           Caption = 'Tri'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object TreeView2: TTreeView
             Left = 0
             Top = 0
@@ -338,7 +330,7 @@ object frmRecherche: TfrmRecherche
     Columns = <
       item
         Position = 0
-        Width = 160
+        Width = 156
         WideText = 'Album'
       end
       item

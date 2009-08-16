@@ -164,7 +164,8 @@ uses
   UfrmGallerie in 'Consultation\UfrmGallerie.pas' {frmGallerie},
   UfrmScriptsUpdate in 'Scripts\UfrmScriptsUpdate.pas' {frmScriptsUpdate},
   VirtualTreeBdtk in 'VirtualTreeBdtk.pas',
-  UMAJ2_1_1_10 in 'mises à jour\UMAJ2_1_1_10.pas';
+  UMAJ2_1_1_10 in 'mises à jour\UMAJ2_1_1_10.pas',
+  UMAJ2_1_1_17 in 'mises à jour\UMAJ2_1_1_17.pas';
 
 {$R *.RES}
 {$R curseurs.res}

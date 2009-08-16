@@ -52,6 +52,7 @@ type
     vtEditSeries: TframVTEdit;
     vtEditPersonnes: TframVTEdit;
     Bevel3: TBevel;
+    Label28: TLabel;
     procedure cbOffertClick(Sender: TObject);
     procedure cbGratuitClick(Sender: TObject);
     procedure edPrixChange(Sender: TObject);

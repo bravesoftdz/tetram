@@ -2,12 +2,12 @@ object frmConsultationAlbum: TfrmConsultationAlbum
   Left = 440
   Top = 64
   Caption = 'Fiche d'#39'album'
-  ClientHeight = 815
-  ClientWidth = 522
+  ClientHeight = 872
+  ClientWidth = 532
   Color = clWhite
   Constraints.MinWidth = 530
   Font.Charset = ANSI_CHARSET
-  Font.Color = clWindowText
+  Font.Color = clBlack
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
@@ -21,17 +21,17 @@ object frmConsultationAlbum: TfrmConsultationAlbum
   object ScrollBox2: TScrollBox
     Left = 0
     Top = 0
-    Width = 522
-    Height = 815
+    Width = 532
+    Height = 872
     Align = alClient
     BorderStyle = bsNone
     ParentBackground = True
     TabOrder = 0
     DesignSize = (
-      522
-      815)
+      532
+      872)
     object Label4: TLabel
-      Left = 364
+      Left = 374
       Top = 164
       Width = 89
       Height = 21
@@ -45,6 +45,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Font.Style = []
       ParentFont = False
       Transparent = True
+      ExplicitLeft = 364
     end
     object l_remarques: TLabel
       Left = 28
@@ -56,7 +57,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Color = clWhite
       FocusControl = remarques
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -74,7 +75,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Color = clWhite
       FocusControl = sujet
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -91,7 +92,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Caption = 'Genres'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -100,15 +101,15 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Transparent = True
     end
     object l_annee: TLabel
-      Left = 25
-      Top = 11
+      Left = 57
+      Top = 8
       Width = 31
       Height = 13
       Alignment = taRightJustify
       Caption = 'S'#233'rie :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -127,7 +128,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Color = clWhite
       FocusControl = lvDessinateurs
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -145,7 +146,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Color = clWhite
       FocusControl = lvScenaristes
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -162,7 +163,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Caption = 'S'#233'rie'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -171,15 +172,15 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Transparent = True
     end
     object TitreAlbum: TLabel
-      Left = 59
+      Left = 94
       Top = 27
-      Width = 455
+      Width = 430
       Height = 23
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
       Caption = 'Titre'
       Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
+      Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
@@ -188,17 +189,18 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Transparent = True
       Layout = tlCenter
       WordWrap = True
+      ExplicitWidth = 433
     end
     object Label6: TLabel
-      Left = 27
-      Top = 33
+      Left = 59
+      Top = 32
       Width = 29
       Height = 13
       Alignment = taRightJustify
       Caption = 'Titre :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -208,7 +210,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Transparent = True
     end
     object VDTButton3: TCRFurtifLight
-      Left = 471
+      Left = 481
       Top = 299
       Width = 21
       Height = 20
@@ -316,9 +318,10 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       NumGlyphs = 4
       Visible = False
       OnClick = VDTButton3Click
+      ExplicitLeft = 471
     end
     object VDTButton4: TCRFurtifLight
-      Left = 495
+      Left = 505
       Top = 299
       Width = 21
       Height = 20
@@ -426,6 +429,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       NumGlyphs = 4
       Visible = False
       OnClick = VDTButton4Click
+      ExplicitLeft = 495
     end
     object Label7: TLabel
       Left = 14
@@ -437,7 +441,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Color = clWhite
       FocusControl = lvColoristes
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -454,7 +458,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Caption = 'Parution :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -474,15 +478,15 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Transparent = True
     end
     object TitreSerie: TLabel
-      Left = 59
-      Top = 5
-      Width = 455
+      Left = 94
+      Top = 3
+      Width = 430
       Height = 23
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
       Caption = 'S'#233'rie'
       Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
+      Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
@@ -493,6 +497,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       WordWrap = True
       OnClick = TitreSerieClick
       OnDblClick = TitreSerieDblClick
+      ExplicitWidth = 433
     end
     object Label14: TLabel
       Left = 23
@@ -503,7 +508,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Caption = 'Tome :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -524,14 +529,16 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 812
-      Width = 522
+      Top = 869
+      Width = 532
       Height = 3
       Align = alBottom
       Shape = bsSpacer
+      ExplicitTop = 812
+      ExplicitWidth = 522
     end
     object Label18: TLabel
-      Left = 351
+      Left = 361
       Top = 204
       Width = 114
       Height = 42
@@ -547,18 +554,20 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Transparent = True
       Visible = False
       WordWrap = True
+      ExplicitLeft = 351
     end
     object Couverture: TImage
-      Left = 301
+      Left = 311
       Top = 51
       Width = 215
       Height = 246
       Anchors = [akTop, akRight]
       Center = True
       IncrementalDisplay = True
+      ExplicitLeft = 301
     end
     object VDTButton1: TVDTButton
-      Left = 301
+      Left = 311
       Top = 299
       Width = 20
       Height = 20
@@ -595,6 +604,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         FB57FD8522C99080D088688532608C54E6A71549382DC7C9341E8FA7A7A9EE65
         D60793318FE5C5314D61CAFE6798068484C9AF17CADE500D4214EEEECEDE11AF
         EF9FF413DFF6506512AFC4930000000049454E44AE426082}
+      ExplicitLeft = 301
     end
     object VDTButton2: TVDTButton
       Left = 36
@@ -634,10 +644,20 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         D60793318FE5C5314D61CAFE6798068484C9AF17CADE500D4214EEEECEDE11AF
         EF9FF413DFF6506512AFC4930000000049454E44AE426082}
     end
+    object Image1: TImage
+      Left = 10
+      Top = 11
+      Width = 32
+      Height = 32
+      Center = True
+      IncrementalDisplay = True
+      PopupMenu = PopupMenu1
+      Transparent = True
+    end
     object remarques: TMemo
       Left = 59
       Top = 392
-      Width = 457
+      Width = 467
       Height = 65
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -647,12 +667,12 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       ParentColor = True
       ReadOnly = True
       ScrollBars = ssVertical
-      TabOrder = 7
+      TabOrder = 5
     end
     object sujet: TMemo
       Left = 59
       Top = 320
-      Width = 457
+      Width = 467
       Height = 67
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -662,12 +682,12 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       ParentColor = True
       ReadOnly = True
       ScrollBars = ssVertical
-      TabOrder = 6
+      TabOrder = 4
     end
     object lvScenaristes: TVDTListView
       Left = 59
       Top = 135
-      Width = 233
+      Width = 243
       Height = 35
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -680,14 +700,14 @@ object frmConsultationAlbum: TfrmConsultationAlbum
           Width = 231
         end>
       OwnerData = True
-      TabOrder = 3
+      TabOrder = 1
       OnData = lvScenaristesData
       OnDblClick = lvScenaristesDblClick
     end
     object lvDessinateurs: TVDTListView
       Left = 59
       Top = 176
-      Width = 233
+      Width = 243
       Height = 36
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -701,14 +721,14 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         end>
       OwnerData = True
       SortType = stData
-      TabOrder = 4
+      TabOrder = 2
       OnData = lvDessinateursData
       OnDblClick = lvScenaristesDblClick
     end
     object Memo1: TMemo
       Left = 59
       Top = 94
-      Width = 233
+      Width = 243
       Height = 34
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -718,12 +738,12 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       ParentColor = True
       ReadOnly = True
       ScrollBars = ssVertical
-      TabOrder = 2
+      TabOrder = 0
     end
     object lvColoristes: TVDTListView
       Left = 59
       Top = 218
-      Width = 233
+      Width = 243
       Height = 36
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -736,61 +756,26 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         end>
       OwnerData = True
       SortType = stData
-      TabOrder = 5
+      TabOrder = 3
       OnData = lvColoristesData
       OnDblClick = lvScenaristesDblClick
-    end
-    object Integrale: TReadOnlyCheckBox
-      Left = 171
-      Top = 50
-      Width = 126
-      Height = 16
-      TabStop = False
-      Anchors = [akLeft, akTop, akRight]
-      Caption = 'Int'#233'grale'
-      Color = clWhite
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
-      Font.Height = -11
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentColor = False
-      ParentFont = False
-      TabOrder = 0
-    end
-    object HorsSerie: TReadOnlyCheckBox
-      Left = 171
-      Top = 65
-      Width = 68
-      Height = 16
-      TabStop = False
-      Caption = 'Hors s'#233'rie'
-      Color = clWhite
-      Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
-      Font.Height = -11
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentColor = False
-      ParentFont = False
-      TabOrder = 1
     end
     object PanelEdition: TPanel
       Left = 3
       Top = 464
-      Width = 513
+      Width = 523
       Height = 345
       Anchors = [akLeft, akTop, akRight]
       BevelOuter = bvNone
       Caption = ' '
       ParentColor = True
-      TabOrder = 8
+      TabOrder = 6
       DesignSize = (
-        513
+        523
         345)
       object ISBN: TLabel
         Left = 56
-        Top = 1
+        Top = 3
         Width = 23
         Height = 13
         Caption = 'ISBN'
@@ -812,15 +797,15 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'Prix'
       end
       object Lbl_numero: TLabel
-        Left = 20
-        Top = 1
+        Left = 23
+        Top = 3
         Width = 30
         Height = 13
         Alignment = taRightJustify
         Caption = 'ISBN :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -837,7 +822,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'Editeur :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -854,7 +839,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'Prix :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -870,7 +855,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'Emprunts'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -888,14 +873,14 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       end
       object Label9: TLabel
         Left = 0
-        Top = 35
+        Top = 33
         Width = 53
         Height = 13
         Alignment = taRightJustify
         Caption = 'Collection :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -905,7 +890,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       end
       object Collection: TLabel
         Left = 56
-        Top = 35
+        Top = 33
         Width = 46
         Height = 13
         Caption = 'Collection'
@@ -920,7 +905,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'Ann'#233'e :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -952,7 +937,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'Etat :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -977,7 +962,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'Reliure :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -1003,7 +988,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Color = clWhite
         FocusControl = edNotes
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -1020,7 +1005,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'Achet'#233' le :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -1044,7 +1029,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'Pages :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -1068,7 +1053,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'Orientation :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -1092,7 +1077,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'Format :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -1124,7 +1109,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'Cote :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -1141,7 +1126,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'Sens de lecture :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -1166,7 +1151,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'N'#176' perso :'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
@@ -1182,29 +1167,10 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'Numero personnel'
         ShowAccelChar = False
       end
-      object cbVO: TReadOnlyCheckBox
-        Left = 213
-        Top = 18
-        Width = 33
-        Height = 16
-        TabStop = False
-        Alignment = taLeftJustify
-        Caption = 'VO'
-        Color = clWhite
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentColor = False
-        ParentFont = False
-        State = cbGrayed
-        TabOrder = 2
-      end
       object ListeEmprunts: TVirtualStringTree
         Left = 8
         Top = 224
-        Width = 505
+        Width = 515
         Height = 116
         Anchors = [akLeft, akTop, akRight]
         AnimationDuration = 0
@@ -1225,7 +1191,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Header.Style = hsPlates
         HotCursor = crHandPoint
         Images = frmFond.ImageList1
-        TabOrder = 7
+        TabOrder = 2
         TreeOptions.PaintOptions = [toHideFocusRect, toHotTrack, toShowDropmark, toThemeAware, toUseBlendedImages]
         TreeOptions.SelectionOptions = [toFullRowSelect, toMultiSelect]
         OnDblClick = ListeEmpruntsDblClick
@@ -1240,64 +1206,25 @@ object frmConsultationAlbum: TfrmConsultationAlbum
           end
           item
             Position = 1
-            Width = 403
+            Width = 413
             WideText = 'Emprunteur'
           end>
       end
-      object ajouter: TButton
-        Left = 441
+      object btnAjouter: TButton
+        Left = 451
         Top = 202
         Width = 72
         Height = 20
         Cursor = crHandPoint
         Anchors = [akTop, akRight]
         Caption = 'Ajouter'
-        Enabled = False
-        TabOrder = 6
-        OnClick = ajouterClick
-      end
-      object cbCouleur: TReadOnlyCheckBox
-        Left = 262
-        Top = 35
-        Width = 56
-        Height = 15
-        TabStop = False
-        Alignment = taLeftJustify
-        Caption = 'Couleur'
-        Color = clWhite
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentColor = False
-        ParentFont = False
-        State = cbGrayed
-        TabOrder = 4
-      end
-      object cbStock: TReadOnlyCheckBox
-        Left = 273
-        Top = 1
-        Width = 45
-        Height = 15
-        TabStop = False
-        Alignment = taLeftJustify
-        Caption = 'Stock'
-        Color = clWhite
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentColor = False
-        ParentFont = False
-        State = cbGrayed
         TabOrder = 1
+        OnClick = btnAjouterClick
       end
       object edNotes: TMemo
         Left = 56
         Top = 134
-        Width = 457
+        Width = 467
         Height = 40
         Anchors = [akLeft, akTop, akRight]
         BevelInner = bvLowered
@@ -1307,51 +1234,138 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         ParentColor = True
         ReadOnly = True
         ScrollBars = ssVertical
-        TabOrder = 5
-      end
-      object cbOffert: TReadOnlyCheckBox
-        Left = 197
-        Top = 1
-        Width = 49
-        Height = 16
-        TabStop = False
-        Alignment = taLeftJustify
-        Caption = 'Offert'
-        Color = clWhite
-        Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentColor = False
-        ParentFont = False
-        State = cbGrayed
         TabOrder = 0
       end
-      object cbDedicace: TReadOnlyCheckBox
-        Left = 183
-        Top = 35
-        Width = 63
-        Height = 16
-        TabStop = False
+      object cbOffert: TLabeledCheckBox
+        Left = 233
+        Top = 3
+        Width = 13
+        Height = 13
         Alignment = taLeftJustify
-        Caption = 'D'#233'dicac'#233
-        Color = clWhite
+        Caption = 'Offert'
         Font.Charset = ANSI_CHARSET
-        Font.Color = clHotLight
+        Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = []
-        ParentColor = False
         ParentFont = False
-        State = cbGrayed
         TabOrder = 3
+        EditLabel.Width = 30
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Offert'
+        EditLabel.Font.Charset = ANSI_CHARSET
+        EditLabel.Font.Color = 12615680
+        EditLabel.Font.Height = -11
+        EditLabel.Font.Name = 'Tahoma'
+        EditLabel.Font.Style = []
+        EditLabel.ParentFont = False
+        ReadOnly = True
+      end
+      object cbVO: TLabeledCheckBox
+        Left = 233
+        Top = 18
+        Width = 13
+        Height = 13
+        Alignment = taLeftJustify
+        Caption = 'VO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 12615680
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 4
+        EditLabel.Width = 14
+        EditLabel.Height = 13
+        EditLabel.Caption = 'VO'
+        EditLabel.Font.Charset = ANSI_CHARSET
+        EditLabel.Font.Color = 12615680
+        EditLabel.Font.Height = -11
+        EditLabel.Font.Name = 'Tahoma'
+        EditLabel.Font.Style = []
+        EditLabel.ParentFont = False
+        ReadOnly = True
+      end
+      object cbDedicace: TLabeledCheckBox
+        Left = 233
+        Top = 33
+        Width = 13
+        Height = 13
+        Alignment = taLeftJustify
+        Caption = 'D'#233'dicac'#233
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 12615680
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 5
+        EditLabel.Width = 43
+        EditLabel.Height = 13
+        EditLabel.Caption = 'D'#233'dicac'#233
+        EditLabel.Font.Charset = ANSI_CHARSET
+        EditLabel.Font.Color = 12615680
+        EditLabel.Font.Height = -11
+        EditLabel.Font.Name = 'Tahoma'
+        EditLabel.Font.Style = []
+        EditLabel.ParentFont = False
+        ReadOnly = True
+      end
+      object cbStock: TLabeledCheckBox
+        Left = 305
+        Top = 3
+        Width = 13
+        Height = 13
+        Alignment = taLeftJustify
+        Caption = 'Stock'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 12615680
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 6
+        EditLabel.Width = 26
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Stock'
+        EditLabel.Font.Charset = ANSI_CHARSET
+        EditLabel.Font.Color = 12615680
+        EditLabel.Font.Height = -11
+        EditLabel.Font.Name = 'Tahoma'
+        EditLabel.Font.Style = []
+        EditLabel.ParentFont = False
+        ReadOnly = True
+      end
+      object cbCouleur: TLabeledCheckBox
+        Left = 305
+        Top = 33
+        Width = 13
+        Height = 13
+        Alignment = taLeftJustify
+        Caption = 'Couleur'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = 12615680
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 7
+        EditLabel.Width = 37
+        EditLabel.Height = 13
+        EditLabel.Caption = 'Couleur'
+        EditLabel.Font.Charset = ANSI_CHARSET
+        EditLabel.Font.Color = 12615680
+        EditLabel.Font.Height = -11
+        EditLabel.Font.Name = 'Tahoma'
+        EditLabel.Font.Style = []
+        EditLabel.ParentFont = False
+        ReadOnly = True
       end
     end
     object lvEditions: TListBox
       Left = 346
       Top = 467
-      Width = 170
+      Width = 180
       Height = 62
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -1360,13 +1374,13 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       BorderStyle = bsNone
       Color = clWhite
       ItemHeight = 13
-      TabOrder = 9
+      TabOrder = 7
       OnClick = lvEditionsClick
     end
     object vstSerie: TVirtualStringTree
       Left = 59
       Top = 259
-      Width = 233
+      Width = 243
       Height = 56
       Cursor = crHandPoint
       Anchors = [akLeft, akTop, akRight]
@@ -1383,26 +1397,59 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Header.Font.Style = []
       Header.MainColumn = -1
       Header.Options = [hoColumnResize, hoDrag]
-      TabOrder = 10
+      TabOrder = 8
+      OnAfterItemPaint = vstSerieAfterItemPaint
       OnDblClick = vstSerieDblClick
       OnGetImageIndex = vstSerieGetImageIndex
       Columns = <>
     end
-  end
-  object Popup3: TPopupMenu
-    Left = 304
-    Top = 16
-    object Informations1: TMenuItem
-      Caption = '&Informations'
-      object Emprunts1: TMenuItem
-        Caption = 'Emprunts :'
-      end
+    object cbIntegrale: TLabeledCheckBox
+      Left = 171
+      Top = 52
+      Width = 13
+      Height = 13
+      Caption = 'Int'#233'grale'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 12615680
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 9
+      EditLabel.Width = 44
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Int'#233'grale'
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
-    object MenuItem1: TMenuItem
-      Caption = '-'
-    end
-    object Adresse1: TMenuItem
-      Caption = '&Adresse'
+    object HorsSerie: TLabeledCheckBox
+      Left = 171
+      Top = 67
+      Width = 13
+      Height = 13
+      Caption = 'Hors s'#233'rie'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 12615680
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 10
+      EditLabel.Width = 48
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Hors s'#233'rie'
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
   end
   object ActionList1: TActionList
@@ -1498,6 +1545,46 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       object Aperuavantimpression4: TMenuItem
         Action = EmpruntImprime
       end
+    end
+  end
+  object PopupMenu1: TPopupMenu
+    Images = frmFond.imlNotation_32x32
+    Left = 8
+    Top = 64
+    object N2: TMenuItem
+      Caption = 'Pas d'#39'avis'
+      ImageIndex = 0
+      OnClick = N7Click
+    end
+    object N3: TMenuItem
+      Tag = 1
+      Caption = 'Tr'#232's mauvais'
+      ImageIndex = 1
+      OnClick = N7Click
+    end
+    object N4: TMenuItem
+      Tag = 2
+      Caption = 'Mauvais'
+      ImageIndex = 2
+      OnClick = N7Click
+    end
+    object N5: TMenuItem
+      Tag = 3
+      Caption = 'Moyen'
+      ImageIndex = 3
+      OnClick = N7Click
+    end
+    object N6: TMenuItem
+      Tag = 4
+      Caption = 'Bien'
+      ImageIndex = 4
+      OnClick = N7Click
+    end
+    object N7: TMenuItem
+      Tag = 5
+      Caption = 'Tr'#232's bien'
+      ImageIndex = 5
+      OnClick = N7Click
     end
   end
 end

@@ -6,7 +6,7 @@ object frmGallerie: TfrmGallerie
   ClientWidth = 492
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
-  Font.Color = clWindowText
+  Font.Color = clBlack
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []

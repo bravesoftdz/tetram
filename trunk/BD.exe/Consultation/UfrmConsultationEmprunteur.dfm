@@ -7,7 +7,7 @@ object frmConsultationEmprunteur: TfrmConsultationEmprunteur
   Color = clWindow
   Ctl3D = False
   Font.Charset = ANSI_CHARSET
-  Font.Color = clWindowText
+  Font.Color = clBlack
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
@@ -21,16 +21,16 @@ object frmConsultationEmprunteur: TfrmConsultationEmprunteur
   PixelsPerInch = 96
   TextHeight = 13
   object l_emprunts: TLabel
-    Left = 1
+    Left = 8
     Top = 226
-    Width = 45
-    Height = 11
+    Width = 52
+    Height = 13
     Hint = 'Nombre d'#39'emprunts de l'#39'emprunteur'
     Alignment = taRightJustify
     Caption = 'Emprunts :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clHotLight
-    Font.Height = -9
+    Font.Color = 12615680
+    Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
@@ -63,16 +63,16 @@ object frmConsultationEmprunteur: TfrmConsultationEmprunteur
     Style = bsRaised
   end
   object Label6: TLabel
-    Left = 49
-    Top = 41
-    Width = 26
-    Height = 11
+    Left = 47
+    Top = 40
+    Width = 28
+    Height = 13
     Alignment = taRightJustify
     Caption = 'Nom :'
     Color = clWhite
     Font.Charset = ANSI_CHARSET
-    Font.Color = clHotLight
-    Font.Height = -9
+    Font.Color = 12615680
+    Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentColor = False
@@ -88,7 +88,7 @@ object frmConsultationEmprunteur: TfrmConsultationEmprunteur
     Anchors = [akLeft, akTop, akRight]
     AutoSize = False
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -12
     Font.Name = 'Tahoma'
     Font.Style = [fsBold]
@@ -98,16 +98,16 @@ object frmConsultationEmprunteur: TfrmConsultationEmprunteur
     WordWrap = True
   end
   object Label1: TLabel
-    Left = 36
+    Left = 29
     Top = 61
-    Width = 39
-    Height = 11
+    Width = 46
+    Height = 13
     Alignment = taRightJustify
     Caption = 'Adresse :'
     Color = clWhite
     Font.Charset = ANSI_CHARSET
-    Font.Color = clHotLight
-    Font.Height = -9
+    Font.Color = 12615680
+    Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentColor = False
@@ -191,8 +191,8 @@ object frmConsultationEmprunteur: TfrmConsultationEmprunteur
   end
   object ActionList1: TActionList
     OnUpdate = ActionList1Update
-    Left = 52
-    Top = 12
+    Left = 28
+    Top = 164
     object FicheApercu: TAction
       Tag = 1
       Category = 'Fiche'
@@ -233,8 +233,8 @@ object frmConsultationEmprunteur: TfrmConsultationEmprunteur
     end
   end
   object MainMenu1: TMainMenu
-    Left = 120
-    Top = 16
+    Left = 88
+    Top = 160
     object Fiche1: TMenuItem
       Caption = 'Fiche'
       object Modifier1: TMenuItem

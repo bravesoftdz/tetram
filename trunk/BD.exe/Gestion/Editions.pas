@@ -41,7 +41,8 @@ uses
 }
 
 function CreationAchatAlbum(const Valeur: string): TGUID;
-function EditionAchatAlbum(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean;
+function EditionAchatAlbum(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionAchatAlbum(Source: TObjetComplet): Boolean; overload;
 function DelAchatAlbum(const ID: TGUID): Boolean;
 
 function CreationAlbum(const Valeur: string): TGUID; overload;
@@ -307,30 +308,41 @@ begin
   Result := CreationLambda(EditionAchatAlbum, Valeur, TFrmEditAchatAlbum);
 end;
 
-function EditionAchatAlbum(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionAchatAlbum(Source: TObjetComplet): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;
   f: TFrmEditAchatAlbum;
 begin
-  Result := False;
-  if frmFond.IsShowing(TFrmEditAchatAlbum) then
-    Exit;
-  if not Creation and not FindRec('ALBUMS', 'ID_Album', ID, True) then
-    Exit;
   hg := THourGlass.Create;
   me := TModeEditing.Create;
   f := TFrmEditAchatAlbum.Create(Application);
-  with f do
-    try
-      ID_Album := ID;
-      if Creation then
-        edTitre.Text := Valeur;
-      hg := nil;
-      Result := frmFond.SetModalChildForm(f) = mrOk;
-    finally
-      Free;
-    end;
+  try
+    f.Album := TAlbumComplet(Source);
+    hg := nil;
+    Result := frmFond.SetModalChildForm(f) = mrOk;
+  finally
+    f.Free;
+  end;
+end;
+
+function EditionAchatAlbum(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+var
+  Album: TAlbumComplet;
+begin
+  Result := False;
+  if frmFond.IsShowing(TFrmEditAlbum) then
+    Exit;
+  if not Creation and not FindRec('ALBUMS', 'ID_Album', ID, True) then
+    Exit;
+  Album := TAlbumComplet.Create(ID);
+  try
+    if Creation then
+      Album.Titre := Valeur;
+    Result := EditionAchatAlbum(Album);
+  finally
+    Album.Free;
+  end;
 end;
 
 function DelAchatAlbum(const ID: TGUID): Boolean;

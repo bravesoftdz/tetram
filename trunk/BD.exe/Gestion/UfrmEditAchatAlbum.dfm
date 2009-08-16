@@ -3,7 +3,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
   Top = 418
   Caption = 'Achat'
   ClientHeight = 404
-  ClientWidth = 736
+  ClientWidth = 760
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,50 +15,65 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
   OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 13
+  object Label28: TLabel
+    Left = 8
+    Top = 4
+    Width = 54
+    Height = 23
+    Caption = 'Achat'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -19
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Bevel2: TBevel
+    Left = 0
+    Top = 29
+    Width = 760
+    Height = 4
+    Align = alTop
+    Shape = bsBottomLine
+    ExplicitLeft = -88
+    ExplicitWidth = 824
+  end
   inline Frame11: TframBoutons
     Left = 0
-    Top = 375
-    Width = 736
+    Top = 0
+    Width = 760
     Height = 29
-    Align = alBottom
+    Align = alTop
     TabOrder = 0
-    ExplicitTop = 375
-    ExplicitWidth = 736
+    ExplicitWidth = 760
     inherited btnOK: TButton
-      Left = 557
-      Top = 8
+      Left = 581
       Width = 87
-      Height = 19
-      Caption = 'Ok'
+      Caption = 'Enregistrer'
       OnClick = Frame11btnOKClick
-      ExplicitLeft = 557
-      ExplicitTop = 8
+      ExplicitLeft = 581
       ExplicitWidth = 87
-      ExplicitHeight = 19
     end
     inherited btnAnnuler: TButton
-      Left = 653
-      Top = 8
+      Left = 677
       Width = 72
-      Height = 19
-      ExplicitLeft = 653
-      ExplicitTop = 8
+      ExplicitLeft = 677
       ExplicitWidth = 72
-      ExplicitHeight = 19
     end
   end
-  object pnlForm: TPanel
+  object pnlForm: TScrollBox
     Left = 0
-    Top = 0
-    Width = 736
-    Height = 375
+    Top = 33
+    Width = 760
+    Height = 371
     Align = alClient
-    BevelOuter = bvNone
-    ShowCaption = False
+    BorderStyle = bsNone
     TabOrder = 1
+    ExplicitLeft = -8
+    ExplicitTop = 39
     DesignSize = (
-      736
-      375)
+      760
+      371)
     object rbAlbumExistant: TRadioButton
       Left = 18
       Top = 23
@@ -94,7 +109,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
     object pnAlbumExistant: TPanel
       Left = 136
       Top = 19
-      Width = 593
+      Width = 617
       Height = 23
       Anchors = [akLeft, akTop, akRight]
       BevelOuter = bvNone
@@ -102,47 +117,47 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
       Caption = ' '
       TabOrder = 1
       DesignSize = (
-        593
+        617
         23)
       inline vtEditAlbums: TframVTEdit
         Left = 1
         Top = 1
-        Width = 591
+        Width = 615
         Height = 21
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 0
         ExplicitLeft = 1
         ExplicitTop = 1
-        ExplicitWidth = 591
+        ExplicitWidth = 615
         inherited btReset: TVDTButton
-          Left = 528
+          Left = 552
           ExplicitLeft = 617
         end
         inherited btNew: TVDTButton
-          Left = 570
+          Left = 594
           ExplicitLeft = 659
         end
         inherited btEdit: TVDTButton
-          Left = 549
+          Left = 573
           ExplicitLeft = 638
         end
         inherited VTEdit: TJvComboEdit
-          Width = 528
-          ExplicitWidth = 528
+          Width = 552
+          ExplicitWidth = 552
         end
       end
     end
     object pnNouvelAlbum: TPanel
       Left = 136
       Top = 64
-      Width = 592
+      Width = 620
       Height = 292
       Anchors = [akLeft, akTop, akRight]
       BevelOuter = bvNone
       Caption = ' '
       TabOrder = 2
       DesignSize = (
-        592
+        620
         292)
       object Label2: TLabel
         Left = 14
@@ -208,7 +223,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
         FocusControl = histoire
       end
       object Label7: TLabel
-        Left = 265
+        Left = 293
         Top = 73
         Width = 35
         Height = 13
@@ -220,7 +235,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
       end
       object btScenariste: TVDTButton
         Tag = 1
-        Left = 306
+        Left = 334
         Top = 157
         Width = 69
         Height = 41
@@ -250,7 +265,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
       end
       object btDessinateur: TVDTButton
         Tag = 2
-        Left = 306
+        Left = 334
         Top = 201
         Width = 69
         Height = 41
@@ -280,7 +295,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
       end
       object btColoriste: TVDTButton
         Tag = 3
-        Left = 306
+        Left = 334
         Top = 245
         Width = 69
         Height = 41
@@ -335,7 +350,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
       object edTitre: TEditLabeled
         Left = 52
         Top = 0
-        Width = 540
+        Width = 568
         Height = 20
         Anchors = [akLeft, akTop, akRight]
         BevelKind = bkTile
@@ -350,29 +365,29 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
       inline vtEditSeries: TframVTEdit
         Left = 52
         Top = 23
-        Width = 540
+        Width = 568
         Height = 21
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 1
         ExplicitLeft = 52
         ExplicitTop = 23
-        ExplicitWidth = 540
+        ExplicitWidth = 568
         inherited btReset: TVDTButton
-          Left = 477
+          Left = 505
           ExplicitLeft = 565
         end
         inherited btNew: TVDTButton
-          Left = 519
+          Left = 547
           ExplicitLeft = 607
         end
         inherited btEdit: TVDTButton
-          Left = 498
+          Left = 526
           ExplicitLeft = 586
         end
         inherited VTEdit: TJvComboEdit
-          Width = 477
+          Width = 505
           OnChange = vtEditSeriesVTEditChange
-          ExplicitWidth = 477
+          ExplicitWidth = 505
         end
       end
       object edTome: TEditLabeled
@@ -497,7 +512,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
       object histoire: TMemoLabeled
         Left = 52
         Top = 70
-        Width = 207
+        Width = 235
         Height = 81
         Anchors = [akLeft, akTop, akRight]
         BevelKind = bkTile
@@ -510,7 +525,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
           end>
       end
       object remarques: TMemoLabeled
-        Left = 306
+        Left = 334
         Top = 70
         Width = 287
         Height = 81
@@ -525,7 +540,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
           end>
       end
       object lvScenaristes: TVDTListViewLabeled
-        Left = 381
+        Left = 409
         Top = 157
         Width = 212
         Height = 41
@@ -545,7 +560,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
           end>
       end
       object lvDessinateurs: TVDTListViewLabeled
-        Left = 381
+        Left = 409
         Top = 201
         Width = 212
         Height = 41
@@ -565,7 +580,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
           end>
       end
       object lvColoristes: TVDTListViewLabeled
-        Left = 381
+        Left = 409
         Top = 245
         Width = 212
         Height = 41
@@ -587,31 +602,47 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
       inline vtEditPersonnes: TframVTEdit
         Left = 52
         Top = 211
-        Width = 207
+        Width = 235
         Height = 21
         Anchors = [akLeft, akTop, akRight]
         TabOrder = 11
         ExplicitLeft = 52
         ExplicitTop = 211
-        ExplicitWidth = 207
+        ExplicitWidth = 235
         inherited btReset: TVDTButton
-          Left = 144
+          Left = 172
           ExplicitLeft = 232
         end
         inherited btNew: TVDTButton
-          Left = 186
+          Left = 214
           ExplicitLeft = 274
         end
         inherited btEdit: TVDTButton
-          Left = 165
+          Left = 193
           ExplicitLeft = 253
         end
         inherited VTEdit: TJvComboEdit
-          Width = 144
+          Width = 172
           OnChange = vtEditPersonnesVTEditChange
-          ExplicitWidth = 144
+          ExplicitWidth = 172
         end
       end
     end
+  end
+  object btnScript: TButton
+    Left = 33
+    Top = 122
+    Width = 69
+    Height = 21
+    Cursor = crHandPoint
+    Hint = 'Valider les modifcations'
+    Caption = 'Script'
+    Default = True
+    DoubleBuffered = True
+    ImageIndex = 12
+    Images = frmFond.ShareImageList
+    ParentDoubleBuffered = False
+    TabOrder = 2
+    OnClick = btnScriptClick
   end
 end

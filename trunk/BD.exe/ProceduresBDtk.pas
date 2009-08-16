@@ -287,7 +287,7 @@ begin
     try
       BtnChoix1.Caption := rsTransListeSimple;
       BtnChoix2.Caption := rsTransListeDetail;
-      case bouton of
+      case Bouton of
         0: framBoutons1.btnAnnuler.Default := True;
         1: BtnChoix1.Default := True;
         2: BtnChoix2.Default := True;

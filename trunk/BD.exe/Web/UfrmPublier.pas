@@ -55,8 +55,8 @@ const
     (TableName: 'PERSONNES'; ID: 'id_personne'; UpperFields: 'nompersonne'),
     (TableName: 'EDITEURS'; ID: 'id_editeur'; UpperFields: 'nomediteur'),
     (TableName: 'COLLECTIONS'; ID: 'id_collection'; UpperFields: 'nomcollection'),
-    (TableName: 'SERIES'; ID: 'id_serie'; SkipFields: 'etat=1.0.0.1@reliure=1.0.0.1@typeedition=1.0.0.1@orientation=1.0.0.1@formatedition=1.0.0.1@senslecture=1.0.0.1@vo=1.0.0.1@couleur=1.0.0.1'; UpperFields: 'titreserie@sujetserie@remarquesserie'),
-    (TableName: 'ALBUMS'; ID: 'id_album'; UpperFields: 'titrealbum@sujetalbum@remarquesalbum'),
+    (TableName: 'SERIES'; ID: 'id_serie'; SkipFields: 'etat=1.0.0.1@reliure=1.0.0.1@typeedition=1.0.0.1@orientation=1.0.0.1@formatedition=1.0.0.1@senslecture=1.0.0.1@vo=1.0.0.1@couleur=1.0.0.1@notation'; UpperFields: 'titreserie@sujetserie@remarquesserie'),
+    (TableName: 'ALBUMS'; ID: 'id_album'; SkipFields: 'notation'; UpperFields: 'titrealbum@sujetalbum@remarquesalbum'),
     (TableName: 'EDITIONS'; ID: 'id_edition'),
     (TableName: 'AUTEURS'; ID: 'id_auteur'),
     (TableName: 'GENRES'; ID: 'id_genre'; UpperFields: 'genre'),
@@ -241,34 +241,33 @@ var
 
   procedure Upgrade;
   var
-    i: Integer;
     SQL: TStringList;
+    MySQLUpdate: TMySQLUpdate;
   begin
     UpgradeTodb_version := TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion;
     if UpgradeTodb_version = '' then
       UpgradeTodb_version := TMySQLUpdate(ListMySQLUpdates[Pred(ListMySQLUpdates.Count)]).Version;
 
     if UpgradeTodb_version > db_version then
-      for i := 0 to Pred(ListMySQLUpdates.Count) do
-        with TMySQLUpdate(ListMySQLUpdates[i]) do
+      for MySQLUpdate in ListMySQLUpdates do
+      begin
+        if UpgradeTodb_version < MySQLUpdate.Version then
+          Break;
+        if MySQLUpdate.Version > db_version then
         begin
-          if UpgradeTodb_version < Version then
-            Break;
-          if Version > db_version then
-          begin
-            SQL := TStringList.Create;
-            try
-              UpdateCallback(SQL);
+          SQL := TStringList.Create;
+          try
+            MySQLUpdate.UpdateCallback(SQL);
 
-              SendData(1, SQL.Text, False);
-              SendOption('version', Version);
-              db_version := Version;
-            finally
-              SQL.Free;
-            end;
-
+            SendData(1, SQL.Text, False);
+            SendOption('version', MySQLUpdate.Version);
+            db_version := MySQLUpdate.Version;
+          finally
+            SQL.Free;
           end;
+
         end;
+      end;
   end;
 
   procedure RefreshProgressBar;
@@ -307,7 +306,7 @@ var
     Application.ProcessMessages;
   end;
 
-  procedure SendDataset(InfoTable: RInfoTable; Query: TUIBQuery; isDelete: Boolean = False);
+  procedure SendDataset(const InfoTable: RInfoTable; Query: TUIBQuery; isDelete: Boolean = False);
 
     procedure SendXML(const XML: string);
     var
@@ -443,7 +442,7 @@ var
     end;
   end;
 
-  function GetSQL(InfoTable: RInfoTable; withCount: Boolean): string;
+  function GetSQL(const InfoTable: RInfoTable; withCount: Boolean): string;
   var
     champ: string;
   begin
@@ -457,7 +456,7 @@ var
       Result := Format('select %s from %1:s where dm_%1:s >= :UpgradeFromDate', [champ, InfoTable.TableName]);
   end;
 
-  function CompteUpdates(InfoTable: RInfoTable): Integer;
+  function CompteUpdates(const InfoTable: RInfoTable): Integer;
   begin
     with qry do
     begin
@@ -481,7 +480,7 @@ var
     end;
   end;
 
-  procedure SendDonnees(InfoTable: RInfoTable);
+  procedure SendDonnees(const InfoTable: RInfoTable);
   begin
     with qry do
     begin
@@ -509,7 +508,7 @@ var
     SendData(1, 'OPTIMIZE TABLE /*DB_PREFIX*/' + InfoTable.TableName, False);
   end;
 
-  procedure SendImages(InfoTable: RInfoTable);
+  procedure SendImages(const InfoTable: RInfoTable);
   var
     ms: TStream;
     es: TStringStream;

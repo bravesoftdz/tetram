@@ -33,6 +33,7 @@ end;
 procedure TframBoutons.Loaded;
 begin
   inherited;
+  // code nécessaire pour faire afficher correctement les boutons pour le premier affichage de l'instance
   btnOK.HandleNeeded;
   btnAnnuler.HandleNeeded;
 end;

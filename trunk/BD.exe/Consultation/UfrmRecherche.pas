@@ -83,7 +83,7 @@ implementation
 
 uses
   Textes, UdmPrinc, TypeRec, Impression, Math, UfrmEditCritere, UHistorique, Procedures, StrUtils,
-  UfrmFond, UfrmEditCritereTri;
+  UfrmFond, UfrmEditCritereTri, Divers;
 
 {$R *.DFM}
 
@@ -491,20 +491,16 @@ procedure TfrmRecherche.LoadRechFromStream(Stream: TStream);
 
   procedure Process(Critere: TGroupCritere; ParentNode: TTreeNode = nil);
   var
-    i: Integer;
     ANode: TTreeNode;
     aCritere: TBaseCritere;
   begin
     ANode := TreeView1.Items.AddChild(ParentNode, methode.Items[Integer(Critere.GroupOption)]);
     ANode.Data := Critere;
-    for i := 0 to Pred(Critere.SousCriteres.Count) do
-    begin
-      aCritere := Critere.SousCriteres[i];
+    for aCritere in Critere.SousCriteres do
       if aCritere is TGroupCritere then
         Process(aCritere as TGroupCritere, ANode)
       else
         TreeView1.Items.AddChild(ANode, TCritere(aCritere).Champ + ' ' + TCritere(aCritere).Test).Data := aCritere;
-    end;
     ReconstructLabels(ANode);
   end;
 

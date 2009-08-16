@@ -76,6 +76,7 @@ uses
 
 constructor TScript.Create;
 begin
+  inherited;
   FCode := TStringList.Create;
   FOptions := TObjectList<TOption>.Create(True);
   FFileName := '';
@@ -142,15 +143,10 @@ begin
 end;
 
 function TScript.OptionByName(const OptionName: string): TOption;
-var
-  i: Integer;
 begin
-  for i := 0 to Pred(FOptions.Count) do
-  begin
-    Result := FOptions[i];
+  for Result in FOptions do
     if SameText(Result.FLibelle, OptionName) then
       Exit;
-  end;
   Result := nil;
 end;
 
@@ -190,7 +186,7 @@ end;
 procedure TScript.SaveToFile(const aFileName: string);
 var
   s: string;
-  i: Integer;
+  Option: TOption;
 begin
   with TJclSimpleXML.Create do
     try
@@ -211,12 +207,12 @@ begin
       with Root.Items.ItemNamed['Options'] do
       begin
         Clear;
-        for i := 0 to Pred(FOptions.Count) do
+        for Option in FOptions do
           with Items.Add('Option') do
           begin
-            Properties.ItemNamed['Label'].Value := FOptions[i].FLibelle;
-            Properties.ItemNamed['Values'].Value := FOptions[i].FValues;
-            Properties.ItemNamed['Default'].Value := FOptions[i].FDefaultValue;
+            Properties.ItemNamed['Label'].Value := Option.FLibelle;
+            Properties.ItemNamed['Values'].Value := Option.FValues;
+            Properties.ItemNamed['Default'].Value := Option.FDefaultValue;
           end;
       end;
 
@@ -248,15 +244,10 @@ begin
 end;
 
 function TScriptList.FindScript(const ScriptName: AnsiString; ScriptKinds: TScriptKinds = [skUnit]): TScript;
-var
-  i: Integer;
 begin
-  for i := 0 to Pred(Count) do
-  begin
-    Result := Items[i];
+  for Result in Self do
     if (Result.ScriptKing in ScriptKinds) and AnsiStrings.SameText(Result.ScriptName, ScriptName) then
       Exit;
-  end;
   Result := nil;
 end;
 

@@ -140,6 +140,7 @@ type
     class var IndexHorsSerie: Integer;
     class var IndexAchat: Integer;
     class var IndexComplet: Integer;
+    class var IndexNotation: Integer;
     class procedure GetFieldIndices; override;
   public
     Tome: Integer;
@@ -156,6 +157,7 @@ type
     HorsSerie: Boolean;
     Achat: Boolean;
     Complet: Boolean;
+    Notation: Integer;
 
     procedure Assign(Ps: TBasePointeur); override;
 
@@ -335,9 +337,7 @@ var
 begin
   try
     for i := 0 to Pred(List.Count) do
-    begin
       TBasePointeur(List[i]).Free;
-    end;
   finally
     if DoClear then
       List.Clear;
@@ -688,6 +688,7 @@ begin
   AnneeParution := TAlbum(Ps).AnneeParution;
   MoisParution := TAlbum(Ps).MoisParution;
   Stock := TAlbum(Ps).Stock;
+  Notation := TAlbum(Ps).Notation;
 end;
 
 function TAlbum.ChaineAffichage(Simple, AvecSerie: Boolean): string;
@@ -705,6 +706,7 @@ begin
   Stock := True;
   Achat := False;
   Complet := True;
+  Notation := 0;
 
   if Assigned(FPreparedQuery) then
   begin
@@ -731,6 +733,8 @@ begin
       Achat := Query.Fields.AsBoolean[IndexAchat];
     if IndexComplet <> -1 then
       Complet := Query.Fields.AsBoolean[IndexComplet];
+    if IndexNotation <> -1 then
+      Notation := Query.Fields.AsSmallint[IndexNotation];
   end
   else
   begin
@@ -769,6 +773,10 @@ begin
     end;
     try
       Complet := Query.Fields.ByNameAsBoolean['Complet'];
+    except
+    end;
+    try
+      Notation := Query.Fields.ByNameAsSmallint['Notation'];
     except
     end;
   end;
@@ -841,6 +849,7 @@ begin
   IndexStock := GetFieldIndex('Stock');
   IndexAchat := GetFieldIndex('Achat');
   IndexComplet := GetFieldIndex('Complet');
+  IndexNotation := GetFieldIndex('Notation');
 end;
 
 { TCollection }

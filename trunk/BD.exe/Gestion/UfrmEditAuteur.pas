@@ -22,6 +22,7 @@ type
     edAssociations: TMemoLabeled;
     Label4: TLabel;
     Bevel4: TBevel;
+    Label28: TLabel;
     procedure Frame11btnOKClick(Sender: TObject);
     procedure edSiteChange(Sender: TObject);
     procedure VDTButton13Click(Sender: TObject);

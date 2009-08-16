@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ExtCtrls, StdCtrls, LoadComplet, Generics.Collections, Contnrs, TypeRec,
-  UBdtForms;
+  UBdtForms, ListOfTypeRec;
 
 type
   TfrmGallerie = class(TBdtForm)
@@ -19,7 +19,7 @@ type
     type
       TMyPanel = class(TPanel)
       private
-        FControlList: TObjectList;
+        FControlList: TMyObjectList<TControl>;
       public
         procedure CMControlListChanging(var Message: TCMControlListChanging); message CM_CONTROLLISTCHANGING;
         procedure SetBounds(Left, Top, Width, Height: Integer); override;
@@ -376,7 +376,7 @@ begin
   inherited;
   ParentColor := True;
   ParentBackground := False;
-  FControlList := TObjectList.Create(False);
+  FControlList := TMyObjectList<TControl>.Create(False);
 end;
 
 destructor TfrmGallerie.TMyPanel.Destroy;
@@ -390,7 +390,6 @@ const
   PositionnementEnCours: Boolean = False;
 var
   Ctrl: TControl;
-  i: Integer;
   l, t, CtrlHeight: Integer;
 begin
   if PositionnementEnCours or not Assigned(FControlList) then Exit;
@@ -399,9 +398,8 @@ begin
     l := 0;
     t := 0;
     CtrlHeight := 0;
-    for i := 0 to Pred(FControlList.Count) do
+    for Ctrl in FControlList do
     begin
-      Ctrl := TControl(FControlList[i]);
       if not Ctrl.Visible then Continue;
       CtrlHeight := Ctrl.Height;
       if l + Ctrl.Width > Self.Width then

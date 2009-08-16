@@ -49,7 +49,7 @@ object frmSeriesIncompletes: TfrmSeriesIncompletes
       item
         MinWidth = 50
         Position = 1
-        Width = 564
+        Width = 560
         WideText = 'Albums manquants'
       end>
   end

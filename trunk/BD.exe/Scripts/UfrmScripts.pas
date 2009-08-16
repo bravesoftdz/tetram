@@ -1620,11 +1620,11 @@ begin
   Handled := True;
   actEdit.Enabled := Assigned(ListView1.Selected);
 
-  EditCut1.Enabled := Assigned(Editor) and Editor.SelAvail;
-  EditCopy1.Enabled := Assigned(Editor) and Editor.SelAvail;
-  EditPaste1.Enabled := Assigned(Editor) and Editor.CanPaste;
-  EditUndo1.Enabled := Assigned(Editor) and Editor.CanUndo;
-  EditRedo1.Enabled := Assigned(Editor) and Editor.CanRedo;
+  EditCut1.Enabled := Assigned(Editor) and Editor.Focused and Editor.SelAvail;
+  EditCopy1.Enabled := Assigned(Editor) and Editor.Focused and Editor.SelAvail;
+  EditPaste1.Enabled := Assigned(Editor) and Editor.Focused and Editor.CanPaste;
+  EditUndo1.Enabled := Assigned(Editor) and Editor.Focused and Editor.CanUndo;
+  EditRedo1.Enabled := Assigned(Editor) and Editor.Focused and Editor.CanRedo;
   actCompile.Enabled := FProjetOuvert;
   actRun.Enabled := (actCompile.Enabled or actEdit.Enabled) and (not dmScripts.Running or (dmScripts.DebugMode = dmPaused));
   actRunWithoutDebug.Visible := dmScripts.AlbumToUpdate;
@@ -1640,6 +1640,27 @@ begin
   actEnregistrer.Enabled := Assigned(Editor);
   actReset.Enabled := dmScripts.Running and (dmScripts.DebugMode in [dmPaused]);
   actCompile.Enabled := not dmScripts.Running;
+
+  // sinon les actions court-circuitent les raccouris sur les autres composants
+  // mettre les actions enabled := False n'est pas suffisant
+  if Assigned(Editor) and Editor.Focused then
+  begin
+    EditCut1.ShortCut := ShortCut(Ord('X'), [ssCtrl]);
+    EditCopy1.ShortCut := ShortCut(Ord('C'), [ssCtrl]);
+    EditPaste1.ShortCut := ShortCut(Ord('V'), [ssCtrl]);
+    EditUndo1.ShortCut := ShortCut(Ord('Z'), [ssCtrl]);
+    EditRedo1.ShortCut := ShortCut(Ord('Y'), [ssCtrl]);
+    EditSelectAll1.ShortCut := ShortCut(Ord('A'), [ssCtrl]);
+  end
+  else
+  begin
+    EditCut1.ShortCut := 0;
+    EditCopy1.ShortCut := 0;
+    EditPaste1.ShortCut := 0;
+    EditUndo1.ShortCut := 0;
+    EditRedo1.ShortCut := 0;
+    EditSelectAll1.ShortCut := 0;
+  end;
 end;
 
 function TfrmScripts.GetProjet: AnsiString;

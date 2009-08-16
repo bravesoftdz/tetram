@@ -26,7 +26,7 @@ object frmFusionEditions: TfrmFusionEditions
   object lbEditions: TListBox
     Left = 363
     Top = 225
-    Width = 349
+    Width = 350
     Height = 56
     BevelInner = bvNone
     BevelKind = bkTile
@@ -47,37 +47,56 @@ object frmFusionEditions: TfrmFusionEditions
   object pnEditionSrc: TPanel
     Left = 8
     Top = 8
-    Width = 349
+    Width = 350
     Height = 211
     BevelKind = bkTile
     BevelOuter = bvNone
     Caption = ' '
-    ParentColor = True
+    Color = clWhite
+    ParentBackground = False
     TabOrder = 2
     object ISBN: TLabel
-      Left = 56
+      Left = 57
       Top = 2
       Width = 23
       Height = 13
       Caption = 'ISBN'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
     end
     object Editeur: TLabel
-      Left = 56
+      Left = 57
       Top = 18
       Width = 34
       Height = 13
       Caption = 'Editeur'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
     object Prix: TLabel
-      Left = 56
+      Left = 57
       Top = 52
       Width = 18
       Height = 13
       Caption = 'Prix'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
     end
     object Lbl_numero: TLabel
-      Left = 23
+      Left = 24
       Top = 2
       Width = 30
       Height = 13
@@ -85,7 +104,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'ISBN :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -94,7 +113,7 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Lbl_type: TLabel
-      Left = 12
+      Left = 13
       Top = 18
       Width = 41
       Height = 13
@@ -102,7 +121,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Editeur :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -111,7 +130,7 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label3: TLabel
-      Left = 28
+      Left = 29
       Top = 52
       Width = 25
       Height = 13
@@ -119,7 +138,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Prix :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -128,7 +147,7 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label9: TLabel
-      Left = 0
+      Left = 1
       Top = 34
       Width = 53
       Height = 13
@@ -136,7 +155,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Collection :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -145,15 +164,21 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Collection: TLabel
-      Left = 56
+      Left = 57
       Top = 34
       Width = 46
       Height = 13
       Caption = 'Collection'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
     object Label16: TLabel
-      Left = 262
+      Left = 263
       Top = 18
       Width = 38
       Height = 13
@@ -161,7 +186,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Ann'#233'e :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -170,22 +195,34 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object AnneeEdition: TLabel
-      Left = 305
+      Left = 306
       Top = 18
       Width = 31
       Height = 13
       Caption = 'Ann'#233'e'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
     end
     object Etat: TLabel
-      Left = 56
+      Left = 57
       Top = 83
       Width = 20
       Height = 13
       Caption = 'Etat'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
     object Label10: TLabel
-      Left = 26
+      Left = 27
       Top = 83
       Width = 27
       Height = 13
@@ -193,7 +230,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Etat :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -202,15 +239,21 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Reliure: TLabel
-      Left = 216
+      Left = 215
       Top = 83
       Width = 33
       Height = 13
       Caption = 'Reliure'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
     object Label13: TLabel
-      Left = 168
+      Left = 169
       Top = 83
       Width = 40
       Height = 13
@@ -218,7 +261,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Reliure :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -227,15 +270,21 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object TypeEdition: TLabel
-      Left = 56
+      Left = 57
       Top = 128
       Width = 32
       Height = 13
       Caption = 'Edition'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
     object Label8: TLabel
-      Left = 18
+      Left = 19
       Top = 146
       Width = 35
       Height = 13
@@ -244,7 +293,7 @@ object frmFusionEditions: TfrmFusionEditions
       Color = clWhite
       FocusControl = edNotes
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -253,7 +302,7 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label12: TLabel
-      Left = 156
+      Left = 157
       Top = 52
       Width = 52
       Height = 13
@@ -261,7 +310,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Achet'#233' le :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -270,14 +319,20 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object AcheteLe: TLabel
-      Left = 216
+      Left = 215
       Top = 52
       Width = 45
       Height = 13
       Caption = 'Achet'#233' le'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
     end
     object Label15: TLabel
-      Left = 17
+      Left = 18
       Top = 98
       Width = 36
       Height = 13
@@ -285,7 +340,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Pages :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -294,14 +349,20 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Pages: TLabel
-      Left = 56
+      Left = 57
       Top = 98
       Width = 29
       Height = 13
       Caption = 'Pages'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
     end
     object Label17: TLabel
-      Left = 147
+      Left = 148
       Top = 98
       Width = 61
       Height = 13
@@ -309,7 +370,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Orientation :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -318,22 +379,28 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object lbOrientation: TLabel
-      Left = 216
+      Left = 215
       Top = 98
       Width = 54
       Height = 13
       Caption = 'Orientation'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
     object Label19: TLabel
-      Left = 167
+      Left = 168
       Top = 128
       Width = 41
       Height = 13
       Caption = 'Format :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -342,22 +409,34 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object lbFormat: TLabel
-      Left = 216
+      Left = 215
       Top = 128
       Width = 34
       Height = 13
       Caption = 'Format'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
     object lbCote: TLabel
-      Left = 56
+      Left = 57
       Top = 67
       Width = 23
       Height = 13
       Caption = 'Cote'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
     end
     object Label20: TLabel
-      Left = 23
+      Left = 24
       Top = 67
       Width = 30
       Height = 13
@@ -365,7 +444,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Cote :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -374,7 +453,7 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label21: TLabel
-      Left = 127
+      Left = 128
       Top = 113
       Width = 81
       Height = 13
@@ -382,7 +461,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Sens de lecture :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -391,15 +470,21 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object lbSensLecture: TLabel
-      Left = 216
+      Left = 215
       Top = 113
       Width = 74
       Height = 13
       Caption = 'Sens de lecture'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
     object Label22: TLabel
-      Left = 4
+      Left = 5
       Top = 190
       Width = 49
       Height = 13
@@ -407,7 +492,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'N'#176' perso :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -416,24 +501,30 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object lbNumeroPerso: TLabel
-      Left = 56
+      Left = 57
       Top = 190
       Width = 87
       Height = 13
       Caption = 'Numero personnel'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
-    object cbVO: TReadOnlyCheckBox
-      Left = 213
-      Top = 17
-      Width = 33
-      Height = 16
+    object cbVO: TLabeledCheckBox
+      Left = 235
+      Top = 18
+      Width = 13
+      Height = 13
       TabStop = False
       Alignment = taLeftJustify
       Caption = 'VO'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -441,18 +532,28 @@ object frmFusionEditions: TfrmFusionEditions
       ParentFont = False
       State = cbGrayed
       TabOrder = 2
+      EditLabel.Width = 14
+      EditLabel.Height = 13
+      EditLabel.Caption = 'VO'
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
-    object cbCouleur: TReadOnlyCheckBox
-      Left = 262
-      Top = 33
-      Width = 56
-      Height = 15
+    object cbCouleur: TLabeledCheckBox
+      Left = 306
+      Top = 34
+      Width = 13
+      Height = 13
       TabStop = False
       Alignment = taLeftJustify
       Caption = 'Couleur'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -460,18 +561,28 @@ object frmFusionEditions: TfrmFusionEditions
       ParentFont = False
       State = cbGrayed
       TabOrder = 4
+      EditLabel.Width = 37
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Couleur'
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
-    object cbStock: TReadOnlyCheckBox
-      Left = 273
-      Top = 1
-      Width = 45
-      Height = 15
+    object cbStock: TLabeledCheckBox
+      Left = 306
+      Top = 2
+      Width = 13
+      Height = 13
       TabStop = False
       Alignment = taLeftJustify
       Caption = 'Stock'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -479,31 +590,47 @@ object frmFusionEditions: TfrmFusionEditions
       ParentFont = False
       State = cbGrayed
       TabOrder = 1
+      EditLabel.Width = 26
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Stock'
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
     object edNotes: TMemo
-      Left = 56
+      Left = 57
       Top = 146
       Width = 287
       Height = 40
       BevelInner = bvNone
       BevelKind = bkTile
       BevelOuter = bvNone
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
       ParentColor = True
+      ParentFont = False
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 5
     end
-    object cbOffert: TReadOnlyCheckBox
-      Left = 197
-      Top = 1
-      Width = 49
-      Height = 16
+    object cbOffert: TLabeledCheckBox
+      Left = 235
+      Top = 2
+      Width = 13
+      Height = 13
       TabStop = False
       Alignment = taLeftJustify
       Caption = 'Offert'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -511,18 +638,28 @@ object frmFusionEditions: TfrmFusionEditions
       ParentFont = False
       State = cbGrayed
       TabOrder = 0
+      EditLabel.Width = 30
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Offert'
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
-    object cbDedicace: TReadOnlyCheckBox
-      Left = 183
-      Top = 33
-      Width = 63
-      Height = 16
+    object cbDedicace: TLabeledCheckBox
+      Left = 235
+      Top = 34
+      Width = 13
+      Height = 13
       TabStop = False
       Alignment = taLeftJustify
       Caption = 'D'#233'dicac'#233
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -530,42 +667,71 @@ object frmFusionEditions: TfrmFusionEditions
       ParentFont = False
       State = cbGrayed
       TabOrder = 3
+      EditLabel.Width = 43
+      EditLabel.Height = 13
+      EditLabel.Caption = 'D'#233'dicac'#233
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
   end
   object pnEditionDst: TPanel
     Left = 363
     Top = 8
-    Width = 349
+    Width = 350
     Height = 211
     BevelKind = bkTile
     BevelOuter = bvNone
     Caption = ' '
-    ParentColor = True
+    Color = clWhite
+    ParentBackground = False
     TabOrder = 3
     object Label1: TLabel
-      Left = 56
+      Left = 57
       Top = 2
       Width = 23
       Height = 13
       Caption = 'ISBN'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
     end
     object Label2: TLabel
-      Left = 56
+      Left = 57
       Top = 18
       Width = 34
       Height = 13
       Caption = 'Editeur'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
     object Label4: TLabel
-      Left = 56
+      Left = 57
       Top = 52
       Width = 18
       Height = 13
       Caption = 'Prix'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
     end
     object Label5: TLabel
-      Left = 23
+      Left = 24
       Top = 2
       Width = 30
       Height = 13
@@ -573,7 +739,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'ISBN :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -582,7 +748,7 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label6: TLabel
-      Left = 12
+      Left = 13
       Top = 18
       Width = 41
       Height = 13
@@ -590,7 +756,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Editeur :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -599,7 +765,7 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label7: TLabel
-      Left = 28
+      Left = 29
       Top = 52
       Width = 25
       Height = 13
@@ -607,7 +773,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Prix :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -616,7 +782,7 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label11: TLabel
-      Left = 0
+      Left = 1
       Top = 34
       Width = 53
       Height = 13
@@ -624,7 +790,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Collection :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -633,15 +799,21 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label14: TLabel
-      Left = 56
+      Left = 57
       Top = 34
       Width = 46
       Height = 13
       Caption = 'Collection'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
     object Label18: TLabel
-      Left = 262
+      Left = 263
       Top = 18
       Width = 38
       Height = 13
@@ -649,7 +821,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Ann'#233'e :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -658,22 +830,34 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label23: TLabel
-      Left = 305
+      Left = 306
       Top = 18
       Width = 31
       Height = 13
       Caption = 'Ann'#233'e'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
     end
     object Label24: TLabel
-      Left = 56
+      Left = 57
       Top = 83
       Width = 20
       Height = 13
       Caption = 'Etat'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
     object Label25: TLabel
-      Left = 26
+      Left = 27
       Top = 83
       Width = 27
       Height = 13
@@ -681,7 +865,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Etat :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -690,15 +874,21 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label26: TLabel
-      Left = 216
+      Left = 215
       Top = 83
       Width = 33
       Height = 13
       Caption = 'Reliure'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
     object Label27: TLabel
-      Left = 168
+      Left = 169
       Top = 83
       Width = 40
       Height = 13
@@ -706,7 +896,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Reliure :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -715,15 +905,21 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label28: TLabel
-      Left = 56
+      Left = 57
       Top = 128
       Width = 32
       Height = 13
       Caption = 'Edition'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
     object Label29: TLabel
-      Left = 18
+      Left = 19
       Top = 146
       Width = 35
       Height = 13
@@ -732,7 +928,7 @@ object frmFusionEditions: TfrmFusionEditions
       Color = clWhite
       FocusControl = Memo1
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -741,7 +937,7 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label30: TLabel
-      Left = 156
+      Left = 157
       Top = 52
       Width = 52
       Height = 13
@@ -749,7 +945,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Achet'#233' le :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -758,14 +954,20 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label31: TLabel
-      Left = 216
+      Left = 215
       Top = 52
       Width = 45
       Height = 13
       Caption = 'Achet'#233' le'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
     end
     object Label32: TLabel
-      Left = 17
+      Left = 18
       Top = 98
       Width = 36
       Height = 13
@@ -773,7 +975,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Pages :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -782,14 +984,20 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label33: TLabel
-      Left = 56
+      Left = 57
       Top = 98
       Width = 29
       Height = 13
       Caption = 'Pages'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
     end
     object Label34: TLabel
-      Left = 147
+      Left = 148
       Top = 98
       Width = 61
       Height = 13
@@ -797,7 +1005,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Orientation :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -806,22 +1014,28 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label35: TLabel
-      Left = 216
+      Left = 215
       Top = 98
       Width = 54
       Height = 13
       Caption = 'Orientation'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
     object Label36: TLabel
-      Left = 167
+      Left = 168
       Top = 128
       Width = 41
       Height = 13
       Caption = 'Format :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -830,22 +1044,34 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label37: TLabel
-      Left = 216
+      Left = 215
       Top = 128
       Width = 34
       Height = 13
       Caption = 'Format'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
     object Label38: TLabel
-      Left = 56
+      Left = 57
       Top = 67
       Width = 23
       Height = 13
       Caption = 'Cote'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
     end
     object Label39: TLabel
-      Left = 23
+      Left = 24
       Top = 67
       Width = 30
       Height = 13
@@ -853,7 +1079,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Cote :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -862,7 +1088,7 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label40: TLabel
-      Left = 127
+      Left = 128
       Top = 113
       Width = 81
       Height = 13
@@ -870,7 +1096,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'Sens de lecture :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -879,15 +1105,21 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label41: TLabel
-      Left = 216
+      Left = 215
       Top = 113
       Width = 74
       Height = 13
       Caption = 'Sens de lecture'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
     object Label42: TLabel
-      Left = 4
+      Left = 5
       Top = 190
       Width = 49
       Height = 13
@@ -895,7 +1127,7 @@ object frmFusionEditions: TfrmFusionEditions
       Caption = 'N'#176' perso :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -904,24 +1136,30 @@ object frmFusionEditions: TfrmFusionEditions
       Transparent = True
     end
     object Label43: TLabel
-      Left = 56
+      Left = 57
       Top = 190
       Width = 87
       Height = 13
       Caption = 'Numero personnel'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
       ShowAccelChar = False
     end
-    object ReadOnlyCheckBox1: TReadOnlyCheckBox
-      Left = 213
-      Top = 17
-      Width = 33
-      Height = 16
+    object ReadOnlyCheckBox1: TLabeledCheckBox
+      Left = 235
+      Top = 18
+      Width = 13
+      Height = 13
       TabStop = False
       Alignment = taLeftJustify
       Caption = 'VO'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -929,18 +1167,28 @@ object frmFusionEditions: TfrmFusionEditions
       ParentFont = False
       State = cbGrayed
       TabOrder = 2
+      EditLabel.Width = 14
+      EditLabel.Height = 13
+      EditLabel.Caption = 'VO'
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
-    object ReadOnlyCheckBox2: TReadOnlyCheckBox
-      Left = 262
-      Top = 33
-      Width = 56
-      Height = 15
+    object ReadOnlyCheckBox2: TLabeledCheckBox
+      Left = 306
+      Top = 34
+      Width = 13
+      Height = 13
       TabStop = False
       Alignment = taLeftJustify
       Caption = 'Couleur'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -948,18 +1196,28 @@ object frmFusionEditions: TfrmFusionEditions
       ParentFont = False
       State = cbGrayed
       TabOrder = 4
+      EditLabel.Width = 37
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Couleur'
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
-    object ReadOnlyCheckBox3: TReadOnlyCheckBox
-      Left = 273
-      Top = 1
-      Width = 45
-      Height = 15
+    object ReadOnlyCheckBox3: TLabeledCheckBox
+      Left = 306
+      Top = 2
+      Width = 13
+      Height = 13
       TabStop = False
       Alignment = taLeftJustify
       Caption = 'Stock'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -967,31 +1225,47 @@ object frmFusionEditions: TfrmFusionEditions
       ParentFont = False
       State = cbGrayed
       TabOrder = 1
+      EditLabel.Width = 26
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Stock'
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
     object Memo1: TMemo
-      Left = 56
+      Left = 57
       Top = 146
       Width = 287
       Height = 40
       BevelInner = bvNone
       BevelKind = bkTile
       BevelOuter = bvNone
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
       ParentColor = True
+      ParentFont = False
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 5
     end
-    object ReadOnlyCheckBox4: TReadOnlyCheckBox
-      Left = 197
-      Top = 1
-      Width = 49
-      Height = 16
+    object ReadOnlyCheckBox4: TLabeledCheckBox
+      Left = 235
+      Top = 2
+      Width = 13
+      Height = 13
       TabStop = False
       Alignment = taLeftJustify
       Caption = 'Offert'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -999,18 +1273,28 @@ object frmFusionEditions: TfrmFusionEditions
       ParentFont = False
       State = cbGrayed
       TabOrder = 0
+      EditLabel.Width = 30
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Offert'
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
-    object ReadOnlyCheckBox5: TReadOnlyCheckBox
-      Left = 183
-      Top = 33
-      Width = 63
-      Height = 16
+    object ReadOnlyCheckBox5: TLabeledCheckBox
+      Left = 235
+      Top = 34
+      Width = 13
+      Height = 13
       TabStop = False
       Alignment = taLeftJustify
       Caption = 'D'#233'dicac'#233
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -1018,6 +1302,16 @@ object frmFusionEditions: TfrmFusionEditions
       ParentFont = False
       State = cbGrayed
       TabOrder = 3
+      EditLabel.Width = 43
+      EditLabel.Height = 13
+      EditLabel.Caption = 'D'#233'dicac'#233
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
   end
   inline framBoutons1: TframBoutons

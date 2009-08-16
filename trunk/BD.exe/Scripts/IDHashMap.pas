@@ -61,6 +61,7 @@ end;
 
 constructor TIDHashMap.Create;
 begin
+  inherited;
   fRand := round(random * High(Cardinal));
   Size := 59;
 end;

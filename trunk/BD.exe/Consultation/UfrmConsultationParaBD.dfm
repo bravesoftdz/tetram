@@ -6,9 +6,9 @@ object frmConsultationParaBD: TfrmConsultationParaBD
   ClientWidth = 842
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
-  Font.Color = clWindowText
+  Font.Color = clBlack
   Font.Height = -11
-  Font.Name = 'MS Sans Serif'
+  Font.Name = 'Tahoma'
   Font.Style = []
   Menu = MainMenu1
   OldCreateOrder = False
@@ -54,7 +54,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       Color = clWhite
       FocusControl = Description
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -64,14 +64,14 @@ object frmConsultationParaBD: TfrmConsultationParaBD
     end
     object l_annee: TLabel
       Left = 22
-      Top = 33
+      Top = 32
       Width = 31
       Height = 13
       Alignment = taRightJustify
       Caption = 'S'#233'rie :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -90,7 +90,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       Color = clWhite
       FocusControl = lvAuteurs
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -107,7 +107,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       AutoSize = False
       Caption = 'Titre'
       Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
+      Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
@@ -119,14 +119,14 @@ object frmConsultationParaBD: TfrmConsultationParaBD
     end
     object Label6: TLabel
       Left = 24
-      Top = 11
+      Top = 10
       Width = 29
       Height = 13
       Alignment = taRightJustify
       Caption = 'Titre :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -144,7 +144,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       Caption = 'Ann'#233'e :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -172,7 +172,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       AutoSize = False
       Caption = 'S'#233'rie'
       Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
+      Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
@@ -213,7 +213,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
     object Prix: TLabel
       Left = 88
       Top = 428
-      Width = 17
+      Width = 18
       Height = 13
       Caption = 'Prix'
     end
@@ -226,7 +226,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       Caption = 'Prix :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -243,7 +243,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       Caption = 'Achet'#233' le :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -277,7 +277,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       Caption = 'Type :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -295,7 +295,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       Caption = 'Cote :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -306,7 +306,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
     object lbCote: TLabel
       Left = 88
       Top = 444
-      Width = 22
+      Width = 23
       Height = 13
       Caption = 'Cote'
     end
@@ -352,79 +352,103 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       TabOrder = 1
       OnDblClick = lvAuteursDblClick
     end
-    object cbNumerote: TReadOnlyCheckBox
-      Left = 253
-      Top = 66
-      Width = 65
-      Height = 15
-      TabStop = False
-      Caption = 'Num'#233'rot'#233
-      Color = clWhite
+    object cbDedicace: TLabeledCheckBox
+      Left = 172
+      Top = 67
+      Width = 13
+      Height = 13
+      Caption = 'D'#233'dicac'#233
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      ParentColor = False
       ParentFont = False
-      State = cbGrayed
       TabOrder = 2
+      EditLabel.Width = 43
+      EditLabel.Height = 13
+      EditLabel.Caption = 'D'#233'dicac'#233
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
-    object cbStock: TReadOnlyCheckBox
-      Left = 145
-      Top = 401
-      Width = 45
-      Height = 15
-      TabStop = False
-      Alignment = taLeftJustify
-      Caption = 'Stock'
-      Color = clWhite
+    object cbNumerote: TLabeledCheckBox
+      Left = 258
+      Top = 67
+      Width = 13
+      Height = 13
+      Caption = 'Num'#233'rot'#233
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      ParentColor = False
       ParentFont = False
-      State = cbGrayed
       TabOrder = 3
+      EditLabel.Width = 47
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Num'#233'rot'#233
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
-    object cbOffert: TReadOnlyCheckBox
-      Left = 69
+    object cbOffert: TLabeledCheckBox
+      Left = 98
       Top = 400
-      Width = 49
-      Height = 16
-      TabStop = False
+      Width = 13
+      Height = 13
       Alignment = taLeftJustify
       Caption = 'Offert'
-      Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      ParentColor = False
       ParentFont = False
-      State = cbGrayed
       TabOrder = 4
+      EditLabel.Width = 30
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Offert'
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
-    object cbDedicace: TReadOnlyCheckBox
-      Left = 167
-      Top = 65
-      Width = 63
-      Height = 16
-      TabStop = False
-      Caption = 'D'#233'dicac'#233
-      Color = clWhite
+    object cbStock: TLabeledCheckBox
+      Left = 185
+      Top = 400
+      Width = 13
+      Height = 13
+      Alignment = taLeftJustify
+      Caption = 'Stock'
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      ParentColor = False
       ParentFont = False
-      State = cbGrayed
       TabOrder = 5
+      EditLabel.Width = 26
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Stock'
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
   end
   object MainMenu1: TMainMenu

@@ -14,6 +14,7 @@ object frmControlImport: TfrmControlImport
   PopupMode = pmAuto
   Position = poOwnerFormCenter
   OnCreate = FormCreate
+  OnShow = FormShow
   DesignSize = (
     491
     159)

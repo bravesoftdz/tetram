@@ -11,8 +11,8 @@ type
     IsFichier: Boolean;
   end;
 
-function LoadStreamURL(URL: string; Pieces: array of RAttachement; StreamAnswer: TStream): Word; overload;
-function LoadStreamURL(URL: string; Pieces: array of RAttachement; StreamAnswer: TStream; out DocName: string): Word; overload;
+function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream): Word; overload;
+function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; out DocName: string): Word; overload;
 
 implementation
 
@@ -147,7 +147,7 @@ begin
   end;
 end;
 
-function LoadStreamURL2(URL: string; Pieces: array of RAttachement; StreamAnswer: TStream): Word;
+function LoadStreamURL2(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream): Word;
 const
   FLAG_ICC_FORCE_CONNECTION = 1;
 var
@@ -319,14 +319,14 @@ begin
   FWaiting := nil;
 end;
 
-function LoadStreamURL(URL: string; Pieces: array of RAttachement; StreamAnswer: TStream): Word;
+function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream): Word;
 var
   dummy: string;
 begin
   Result := LoadStreamURL(URL, Pieces, StreamAnswer, dummy);
 end;
 
-function LoadStreamURL(URL: string; Pieces: array of RAttachement; StreamAnswer: TStream; out DocName: string): Word;
+function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; out DocName: string): Word;
 var
   MemoryStream: TMemoryStream;
   fs: TFileStream;

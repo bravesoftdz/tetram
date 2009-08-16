@@ -8,7 +8,7 @@ object frmStatsEmprunteurs: TfrmStatsEmprunteurs
   ClientWidth = 448
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
-  Font.Color = clWindowText
+  Font.Color = clBlack
   Font.Height = -12
   Font.Name = 'Times New Roman'
   Font.Style = []
@@ -33,7 +33,7 @@ object frmStatsEmprunteurs: TfrmStatsEmprunteurs
     AutoSize = False
     Caption = 'Emprunteurs :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]
@@ -138,7 +138,7 @@ object frmStatsEmprunteurs: TfrmStatsEmprunteurs
     Alignment = taRightJustify
     Caption = 'Nombre d'#39'albums :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]
@@ -155,7 +155,7 @@ object frmStatsEmprunteurs: TfrmStatsEmprunteurs
     Alignment = taRightJustify
     Caption = 'Albums en stock :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]

@@ -98,21 +98,20 @@ procedure TfrmEntretien.FormCreate(Sender: TObject);
 
 var
   Node: PVirtualNode;
-  i: Integer;
   s: string;
-  act: TCustomAction;
+  act: TContainedAction;
 begin
   BDDOpen.Hint := DatabasePath;
   vstEntretien.NodeDataSize := SizeOf(RActionNodeData);
   s := '';
   Node := nil;
-  for i := 0 to Pred(ActionList1.ActionCount) do
-  begin
-    act := TCustomAction(ActionList1.Actions[i]);
-    if not Assigned(Node) or (s <> act.Category) then Node := AddNode(nil, act.Category);
-    s := act.Category;
-    AddNode(Node, act);
-  end;
+  for act in ActionList1 do
+    if act is TCustomAction then
+    begin
+      if not Assigned(Node) or (s <> act.Category) then Node := AddNode(nil, act.Category);
+      s := act.Category;
+      AddNode(Node, TCustomAction(act));
+    end;
 
   vstEntretien.FullExpand;
 end;

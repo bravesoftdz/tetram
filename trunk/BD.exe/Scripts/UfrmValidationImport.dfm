@@ -47,15 +47,11 @@ object frmValidationImport: TfrmValidationImport
     Top = 0
     Width = 520
     Height = 505
-    ActivePage = TabSheet2
+    ActivePage = TabSheet3
     Style = tsFlatButtons
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Album'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label17: TLabel
         Left = 428
         Top = 128
@@ -883,10 +879,6 @@ object frmValidationImport: TfrmValidationImport
     object TabSheet3: TTabSheet
       Caption = 'Edition'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object cbxEtat: TLightComboCheck
         Left = 144
         Top = 151

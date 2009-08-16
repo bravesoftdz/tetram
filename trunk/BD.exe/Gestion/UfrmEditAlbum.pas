@@ -103,6 +103,7 @@ type
     Bevel6: TBevel;
     vtEditPersonnes: TframVTEdit;
     btnScript: TButton;
+    Label28: TLabel;
     procedure ajoutClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -344,6 +345,10 @@ begin
     if frm.FAlbumImport.ReadyToFusion then
     begin
       frm.SaveToObject;
+      frm.vtEditSerie.VTEdit.PopupWindow.TreeView.InitializeRep;
+      frm.vtEditPersonnes.VTEdit.PopupWindow.TreeView.InitializeRep;
+      frm.vtEditEditeurs.VTEdit.PopupWindow.TreeView.InitializeRep;
+      frm.vtEditCollections.VTEdit.PopupWindow.TreeView.InitializeRep;
       frm.FAlbumImport.FusionneInto(frm.Album);
       oldIsAchat := frm.isAchat;
       try
@@ -362,6 +367,10 @@ procedure TfrmEditAlbum.btnScriptClick(Sender: TObject);
 begin
   FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
   FAlbumImport := TAlbumComplet.Create;
+  if FAlbum.Titre <> '' then
+    FAlbumImport.DefaultSearch := FormatTitre(FAlbum.Titre)
+  else
+    FAlbumImport.DefaultSearch := FormatTitre(FAlbum.Serie.Titre);
   Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
 end;
 
@@ -1113,7 +1122,7 @@ end;
 
 procedure TfrmEditAlbum.JvComboEdit1Change(Sender: TObject);
 var
-  i: Integer;
+  Auteur: TAuteur;
 begin
   FAlbum.ID_Serie := vtEditSerie.CurrentValue;
   if not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL) then
@@ -1127,22 +1136,22 @@ begin
         begin
           lvScenaristes.Items.Count := 0;
           FAlbum.Scenaristes.Clear;
-          for i := 0 to Pred(FAlbum.Serie.Scenaristes.Count) do
-            AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TAuteur(FAlbum.Serie.Scenaristes[i]).Personne);
+          for Auteur in FAlbum.Serie.Scenaristes do
+            AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, Auteur.Personne);
         end;
         if not FDessinateursSelected then
         begin
           lvDessinateurs.Items.Count := 0;
           FAlbum.Dessinateurs.Clear;
-          for i := 0 to Pred(FAlbum.Serie.Dessinateurs.Count) do
-            AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TAuteur(FAlbum.Serie.Dessinateurs[i]).Personne);
+          for Auteur in FAlbum.Serie.Dessinateurs do
+            AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, Auteur.Personne);
         end;
         if not FColoristesSelected then
         begin
           lvColoristes.Items.Count := 0;
           FAlbum.Coloristes.Clear;
-          for i := 0 to Pred(FAlbum.Serie.Coloristes.Count) do
-            AjouteAuteur(FAlbum.Coloristes, lvColoristes, TAuteur(FAlbum.Serie.Coloristes[i]).Personne);
+          for Auteur in FAlbum.Serie.Coloristes do
+            AjouteAuteur(FAlbum.Coloristes, lvColoristes, Auteur.Personne);
         end;
       finally
         lvScenaristes.Items.EndUpdate;
@@ -1298,10 +1307,10 @@ end;
 
 procedure TfrmEditAlbum.pmChoixCategoriePopup(Sender: TObject);
 var
-  i: Integer;
+  MenuItem: TMenuItem;
 begin
-  for i := 0 to Pred(pmChoixCategorie.Items.Count) do
-    pmChoixCategorie.Items[i].Checked := pmChoixCategorie.Tag = pmChoixCategorie.Items[i].Tag;
+  for MenuItem in pmChoixCategorie.Items do
+    MenuItem.Checked := pmChoixCategorie.Tag = MenuItem.Tag;
 end;
 
 procedure TfrmEditAlbum.lvScenaristesData(Sender: TObject; Item: TListItem);

@@ -78,6 +78,8 @@ procedure SIRegister_TAlbumComplet(CL: TPSPascalCompiler);
 begin
   with CL.AddClassN(CL.FindClass('TObject' {TObjetComplet}), 'TAlbumComplet') do
   begin
+    RegisterProperty('DefaultSearch', 'string', iptR);
+
     RegisterProperty('Titre', 'string', iptRW);
     RegisterProperty('Serie', 'TSerieComplete', iptR);
     RegisterProperty('MoisParution', 'Integer', iptRW);

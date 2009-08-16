@@ -2,13 +2,13 @@ object frmConsultationSerie: TfrmConsultationSerie
   Left = 1349
   Top = 58
   Caption = 'frmConsultationSerie'
-  ClientHeight = 767
+  ClientHeight = 805
   ClientWidth = 862
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
-  Font.Color = clWindowText
+  Font.Color = clBlack
   Font.Height = -11
-  Font.Name = 'MS Sans Serif'
+  Font.Name = 'Tahoma'
   Font.Style = []
   Menu = MainMenu1
   OldCreateOrder = False
@@ -20,7 +20,7 @@ object frmConsultationSerie: TfrmConsultationSerie
     Left = 0
     Top = 0
     Width = 862
-    Height = 767
+    Height = 805
     Align = alClient
     BorderStyle = bsNone
     ParentBackground = True
@@ -28,7 +28,7 @@ object frmConsultationSerie: TfrmConsultationSerie
     OnClick = EditeurClick
     DesignSize = (
       862
-      767)
+      805)
     object l_remarques: TLabel
       Left = 25
       Top = 296
@@ -39,7 +39,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Color = clWhite
       FocusControl = remarques
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -57,7 +57,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Color = clWhite
       FocusControl = sujet
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -74,7 +74,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Caption = 'Genres'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -92,7 +92,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Color = clWhite
       FocusControl = lvDessinateurs
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -110,7 +110,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Color = clWhite
       FocusControl = lvScenaristes
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -119,7 +119,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Transparent = True
     end
     object Label6: TLabel
-      Left = 24
+      Left = 61
       Top = 10
       Width = 29
       Height = 13
@@ -127,7 +127,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Caption = 'Titre :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -146,7 +146,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Color = clWhite
       FocusControl = lvColoristes
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -155,15 +155,15 @@ object frmConsultationSerie: TfrmConsultationSerie
       Transparent = True
     end
     object TitreSerie: TLabel
-      Left = 59
+      Left = 96
       Top = 5
-      Width = 795
+      Width = 758
       Height = 23
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
       Caption = 'S'#233'rie'
       Font.Charset = ANSI_CHARSET
-      Font.Color = clWindowText
+      Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Tahoma'
       Font.Style = [fsBold]
@@ -176,7 +176,7 @@ object frmConsultationSerie: TfrmConsultationSerie
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 764
+      Top = 802
       Width = 862
       Height = 3
       Align = alBottom
@@ -192,7 +192,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Caption = 'Para-BD'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -209,7 +209,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Caption = 'Albums'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -226,7 +226,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Caption = 'Editeur'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -237,7 +237,7 @@ object frmConsultationSerie: TfrmConsultationSerie
     object Editeur: TLabel
       Left = 59
       Top = 40
-      Width = 33
+      Width = 34
       Height = 13
       Caption = 'Editeur'
       ShowAccelChar = False
@@ -252,7 +252,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Caption = 'Collection'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
@@ -305,6 +305,16 @@ object frmConsultationSerie: TfrmConsultationSerie
         FB57FD8522C99080D088688532608C54E6A71549382DC7C9341E8FA7A7A9EE65
         D60793318FE5C5314D61CAFE6798068484C9AF17CADE500D4214EEEECEDE11AF
         EF9FF413DFF6506512AFC4930000000049454E44AE426082}
+    end
+    object Image1: TImage
+      Left = 10
+      Top = 3
+      Width = 32
+      Height = 32
+      Center = True
+      IncrementalDisplay = True
+      PopupMenu = PopupMenu1
+      Transparent = True
     end
     object remarques: TMemo
       Left = 59
@@ -433,6 +443,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Indent = 8
       ParentColor = True
       TabOrder = 6
+      OnAfterItemPaint = vtAlbumsAfterItemPaint
       OnDblClick = vtAlbumsDblClick
       Columns = <>
     end
@@ -463,24 +474,30 @@ object frmConsultationSerie: TfrmConsultationSerie
       OnDblClick = vtParaBDDblClick
       Columns = <>
     end
-    object cbTerminee: TReadOnlyCheckBox
-      Left = 216
-      Top = 38
-      Width = 62
-      Height = 16
-      TabStop = False
+    object cbTerminee: TLabeledCheckBox
+      Left = 234
+      Top = 40
+      Width = 13
+      Height = 13
       Alignment = taLeftJustify
       Caption = 'Termin'#233'e'
-      Color = clWhite
       Font.Charset = ANSI_CHARSET
-      Font.Color = clHotLight
+      Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
       Font.Style = []
-      ParentColor = False
       ParentFont = False
-      State = cbGrayed
       TabOrder = 8
+      EditLabel.Width = 44
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Termin'#233'e'
+      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Color = 12615680
+      EditLabel.Font.Height = -11
+      EditLabel.Font.Name = 'Tahoma'
+      EditLabel.Font.Style = []
+      EditLabel.ParentFont = False
+      ReadOnly = True
     end
   end
   object MainMenu1: TMainMenu
@@ -526,6 +543,46 @@ object frmConsultationSerie: TfrmConsultationSerie
       Caption = 'Modifier'
       ImageIndex = 13
       OnExecute = FicheModifierExecute
+    end
+  end
+  object PopupMenu1: TPopupMenu
+    Images = frmFond.imlNotation_32x32
+    Left = 120
+    Top = 40
+    object N2: TMenuItem
+      Caption = 'Pas d'#39'avis'
+      ImageIndex = 0
+      OnClick = N7Click
+    end
+    object N3: TMenuItem
+      Tag = 1
+      Caption = 'Tr'#232's mauvais'
+      ImageIndex = 1
+      OnClick = N7Click
+    end
+    object N4: TMenuItem
+      Tag = 2
+      Caption = 'Mauvais'
+      ImageIndex = 2
+      OnClick = N7Click
+    end
+    object N5: TMenuItem
+      Tag = 3
+      Caption = 'Moyen'
+      ImageIndex = 3
+      OnClick = N7Click
+    end
+    object N6: TMenuItem
+      Tag = 4
+      Caption = 'Bien'
+      ImageIndex = 4
+      OnClick = N7Click
+    end
+    object N7: TMenuItem
+      Tag = 5
+      Caption = 'Tr'#232's bien'
+      ImageIndex = 5
+      OnClick = N7Click
     end
   end
 end

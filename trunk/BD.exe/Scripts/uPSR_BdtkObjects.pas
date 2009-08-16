@@ -46,6 +46,12 @@ begin
   T := Self.Editions.Editions[0];
 end;
 
+
+procedure TAlbumCompletDefaultSearch_R(Self: TAlbumComplet; var T: string);
+begin
+  T := Self.DefaultSearch;
+end;
+
 procedure TAlbumCompletSerie_R(Self: TAlbumComplet; var T: TSerieComplete);
 begin
   T := Self.Serie;
@@ -592,6 +598,8 @@ procedure RIRegister_TAlbumComplet(CL: TPSRuntimeClassImporter; isUpdate: Boolea
 begin
   with CL.Add(TAlbumComplet) do
   begin
+    RegisterPropertyHelper(@TAlbumCompletDefaultSearch_R, nil, 'DefaultSearch');
+
     RegisterPropertyHelper(@TAlbumCompletTitre_R, @TAlbumCompletTitre_W, 'Titre');
     RegisterPropertyHelper(@TAlbumCompletSerie_R, nil, 'Serie');
     RegisterPropertyHelper(@TAlbumCompletMoisParution_R, @TAlbumCompletMoisParution_W, 'MoisParution');

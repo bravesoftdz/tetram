@@ -497,7 +497,7 @@ procedure TfrmValidationImport.SetAlbum(Value: TAlbumComplet);
     ChangeState(Chk, Ctrl);
   end;
 
-  procedure LoadValue(Value: ROption; Ctrl: TLightComboCheck; Chk: TCheckBox); overload;
+  procedure LoadValue(const Value: ROption; Ctrl: TLightComboCheck; Chk: TCheckBox); overload;
   begin
     Ctrl.Value := Value.Value;
     Chk.Checked := Value.Value <> Ctrl.DefaultValueChecked;
@@ -557,9 +557,9 @@ begin
     CheckBoxLabeled6.Checked or
     CheckBoxLabeled7.Checked};
 
-  //Edition
-  TabSheet3.TabVisible := FAlbum.Editions.Editions.Count > 0;
-  if FAlbum.Editions.Editions.Count > 0 then
+  // Edition
+  TabSheet3.TabVisible := FAlbum.FusionneEditions and (FAlbum.Editions.Editions.Count > 0);
+  if TabSheet3.TabVisible then
     with FAlbum.Editions.Editions[0] do
     begin
       LoadValue(Editeur.NomEditeur, edNomEditeur, CheckBox20, DefaultEdition.Editeur.NomEditeur);

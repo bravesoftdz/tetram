@@ -77,6 +77,15 @@ begin
         2: // n'est pas
           Result.TestSQL := Result.TestSQL + '<>' + IntToStr(Result.iCritere2);
       end;
+    csNotation:
+      case Result.iSignes of
+        0: // Indifférent
+          Result.TestSQL := 'coalesce(' + Result.TestSQL + ',0)>0';
+        1: // est
+          Result.TestSQL := 'coalesce(' + Result.TestSQL + ',0)=' + IntToStr(Result.iCritere2);
+        2: // n'est pas
+          Result.TestSQL := 'coalesce(' + Result.TestSQL + ',0)<>' + IntToStr(Result.iCritere2);
+      end;
     csAffiche:
       case Result.iSignes of
         1: // Oui
@@ -291,6 +300,13 @@ begin
         signes.Tag := 2;
         valeur.Visible := False;
       end;
+    csNotation:
+      begin
+        AssignItems(signes.Items, dmCommun.TCritereListe);
+        AssignItems(Critere2.Items, dmCommun.TCritereNotation);
+        signes.Tag := 2;
+        valeur.Visible := False;
+      end;
     else
       case PChamp(champs.LastItemData).TypeData of
         uftChar, uftVarchar, uftBlob:
@@ -348,7 +364,7 @@ begin
   Critere2.Enabled := Critere2.Visible
     and (
     ((signes.Tag = 1 {DataCommun.TCritereTitre}) and (signes.Checked) and (signes.Value in [4..5]))
-    or ((signes.Tag = 2 {DataCommun.TCritereListe}) and (signes.Checked) and (signes.Value >= 0))
+    or ((signes.Tag = 2 {DataCommun.TCritereListe}) and (signes.Checked) and (signes.Value > 0))
     );
   ActOk.Enabled := (champs.Checked)
     and (signes.Checked)

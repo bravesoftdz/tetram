@@ -60,6 +60,7 @@ type
     RepertoireScripts: string;
     FormatTitreAlbum: Integer;
     SiteWeb: RSiteWeb;
+    AfficheNoteListes: Boolean;
   end;
 
   RUtilisateur = record

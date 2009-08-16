@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls, ProceduresBDtk,
-  VDTButton, ActnList, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, jpeg, Procedures, ShellAPI, VirtualTree, LoadComplet, UBdtForms,
+  VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, jpeg, Procedures, ShellAPI, VirtualTree, LoadComplet, UBdtForms,
   StrUtils;
 
 type
@@ -45,6 +45,8 @@ type
     procedure vstSeriesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
     procedure FicheApercuExecute(Sender: TObject);
     procedure FicheModifierExecute(Sender: TObject);
+    procedure vstSeriesAfterItemPaint(Sender: TBaseVirtualTree;
+      TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
   private
     { Déclarations privées }
     FAuteur: TAuteurComplet;
@@ -68,7 +70,7 @@ implementation
 {$R *.DFM}
 
 uses Commun, TypeRec, Impression, DateUtils, UHistorique,
-  Proc_Gestions;
+  Proc_Gestions, UfrmFond;
 
 type
   PNodeInfo = ^RNodeInfo;
@@ -104,6 +106,12 @@ end;
 procedure TfrmConsultationAuteur.Imprimer1Click(Sender: TObject);
 begin
   ImpressionEmpruntsAlbum(ID_Auteur, TComponent(Sender).Tag = 1);
+end;
+
+procedure TfrmConsultationAuteur.vstSeriesAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
+begin
+  if vstSeries.GetNodeLevel(Node) > 0 then
+    frmFond.DessineNote(TargetCanvas, ItemRect, TAlbum(vstSeries.GetNodeBasePointer(Node)).Notation);
 end;
 
 procedure TfrmConsultationAuteur.vstSeriesDblClick(Sender: TObject);

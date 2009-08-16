@@ -98,6 +98,7 @@ object frmEditCritere: TfrmEditCritere
     TabOrder = 1
     ExplicitTop = 87
     ExplicitWidth = 231
+    ExplicitHeight = 25
     inherited btnOK: TButton
       Left = 100
       Width = 55

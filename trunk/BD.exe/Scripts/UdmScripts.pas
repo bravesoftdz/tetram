@@ -54,7 +54,7 @@ type
     function Compile(Script: TScript; out Msg: TMessageInfo): Boolean;
     function Execute: Boolean;
 
-    function TranslatePositionEx(out Proc, Position: Cardinal; Row: Cardinal; Fn: AnsiString): Boolean;
+    function TranslatePositionEx(out Proc, Position: Cardinal; Row: Cardinal; const Fn: AnsiString): Boolean;
     procedure GetUncompiledCode(Lines: TStrings);
     procedure WriteToConsole(const Chaine: string);
     function GetVar(const Name: AnsiString; out s: AnsiString): PIFVariant;
@@ -189,10 +189,10 @@ begin
 
   PSScriptDebugger1.AddFunction(@GetPage, 'function GetPage(const url: string; UTF8: Boolean): string;');
   PSScriptDebugger1.Comp.AddTypeS('RAttachement', 'record Nom, Valeur: string; IsFichier: Boolean; end');
-  PSScriptDebugger1.AddFunction(@PostPage, 'function PostPage(const url: string; Pieces: array of RAttachement; UTF8: Boolean): string;');
+  PSScriptDebugger1.AddFunction(@PostPage, 'function PostPage(const url: string; const Pieces: array of RAttachement; UTF8: Boolean): string;');
   PSScriptDebugger1.AddFunction(@findInfo, 'function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;');
   PSScriptDebugger1.AddFunction(@MakeAuteur, 'function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteur;');
-  PSScriptDebugger1.AddFunction(@AskSearchEntry, 'function AskSearchEntry(const Labels: array of string; out Search: string; out Index: Integer): Boolean');
+  PSScriptDebugger1.AddFunction(@AskSearchEntry, 'function AskSearchEntry(const Labels: array of string; var Search: string; var Index: Integer): Boolean');
   PSScriptDebugger1.AddFunction(@CombineURL, 'function CombineURL(const Root, URL: string): string;');
   PSScriptDebugger1.AddFunction(@HTMLDecode, 'function HTMLDecode(const Chaine: string): string;');
   PSScriptDebugger1.AddFunction(@HTMLText, 'function HTMLText(const Chaine: string): string;');
@@ -222,19 +222,18 @@ end;
 
 procedure TdmScripts.PSScriptDebugger1Execute(Sender: TPSScript);
 var
-  i: Integer;
+  bp: TBreakpointInfo;
 begin
   PSScriptDebugger1.ClearBreakPoints;
   if PSScriptDebugger1.UseDebugInfo then
-    for i := 0 to Pred(FDebugPlugin.Breakpoints.Count) do
-      with FDebugPlugin.Breakpoints[i] do
-        if Active then
-          if Fichier = PSScriptDebugger1.MainFileName then
-            PSScriptDebugger1.SetBreakPoint(Fichier, Line)
-          else
-            PSScriptDebugger1.SetBreakPoint(AnsiStrings.UpperCase(Fichier), Line);
+    for bp in FDebugPlugin.Breakpoints do
+      if bp.Active then
+        if bp.Fichier = PSScriptDebugger1.MainFileName then
+          PSScriptDebugger1.SetBreakPoint(bp.Fichier, bp.Line)
+        else
+          PSScriptDebugger1.SetBreakPoint(AnsiStrings.UpperCase(bp.Fichier), bp.Line);
 
-  PSScriptDebugger1.SetVarToInstance('AlbumToImport', FAlbumToImport);
+  Sender.SetVarToInstance('AlbumToImport', FAlbumToImport);
 end;
 
 procedure TdmScripts.PSScriptDebugger1Idle(Sender: TObject);
@@ -288,7 +287,7 @@ begin
   FRunToCursorFile := CorrectScriptName(Value);
 end;
 
-function TdmScripts.TranslatePositionEx(out Proc, Position: Cardinal; Row: Cardinal; Fn: AnsiString): Boolean;
+function TdmScripts.TranslatePositionEx(out Proc, Position: Cardinal; Row: Cardinal; const Fn: AnsiString): Boolean;
 var
   i, j: LongInt;
   fi: PFunctionInfo;

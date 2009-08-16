@@ -29,6 +29,19 @@ object frmEditEditeur: TfrmEditEditeur
     ExplicitTop = 25
     ExplicitWidth = 339
   end
+  object Label28: TLabel
+    Left = 8
+    Top = 4
+    Width = 69
+    Height = 23
+    Caption = 'Editeur'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -19
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
   object ScrollBox1: TScrollBox
     Left = 0
     Top = 33

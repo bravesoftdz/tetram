@@ -102,7 +102,7 @@ var
 type
   TProcedure = procedure(Query: TUIBScript);
 
-  procedure ProcessUpdate(Version: TFileVersion; ProcMAJ: TProcedure);
+  procedure ProcessUpdate(const Version: TFileVersion; ProcMAJ: TProcedure);
   var
     Script: TUIBScript;
   begin
@@ -159,7 +159,7 @@ type
   end;
 
 var
-  i: Integer;
+  FBUpdate: TFBUpdate;
   msg: string;
 begin
   Result := False;
@@ -205,9 +205,8 @@ begin
 
     MAJ_ODS;
 
-    for i := 0 to Pred(ListFBUpdates.Count) do
-      with TFBUpdate(ListFBUpdates[i]) do
-        ProcessUpdate(Version, UpdateCallback);
+    for FBUpdate in ListFBUpdates do
+      ProcessUpdate(FBUpdate.Version, FBUpdate.UpdateCallback);
 
     with TUIBQuery.Create(nil) do
       try

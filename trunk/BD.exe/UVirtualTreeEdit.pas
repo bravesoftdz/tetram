@@ -32,6 +32,7 @@ type
     FReloadValue: Boolean;
     FInternalValueChanged: TNotifyEvent;
     FLinkControls: TControlList;
+    FLastSearch: string;
 
     procedure SetLinkControls(const Value: TControlList);
     procedure SetMode(const Value: TVirtualMode);
@@ -55,18 +56,20 @@ type
     procedure CloseUp;
     procedure PopupChange; override;
     procedure SetBounds(ALeft, ATop, AWidth, AHeight: Integer); override;
+    procedure Paint(var Msg: TWMPaint); message WM_PAINT;
   published
     property Mode: TVirtualMode read GetMode write SetMode;
     property CurrentValue: TGUID read GetCurrentValue write SetCurrentValue;
     property PopupWindow: TJvPopupVirtualTree read GetPopupWindow;
     property InternalValueChanged: TNotifyEvent read FInternalValueChanged write FInternalValueChanged;
     property LinkControls: TControlList read FLinkControls write SetLinkControls;
+    property LastSearch: string read FLastSearch;
   end;
 
 implementation
 
 uses
-  Commun, Forms, TypeRec, Math;
+  Commun, Forms, TypeRec, Math, Graphics;
 
 constructor TJvComboEdit.Create(AOwner: TComponent);
 begin
@@ -177,6 +180,20 @@ begin
 end;
 
 
+procedure TJvComboEdit.Paint;
+begin
+  inherited;
+  if Text = '' then
+    with TControlCanvas.Create do
+    try
+      Control := Self;
+      Font.Color := clInactiveCaptionText;
+      TextRect(Self.BoundsRect, 0, 0, FLastSearch);
+    finally
+      Free;
+    end;
+end;
+
 procedure TJvComboEdit.PopupChange;
 begin
   //  SetInternalCurrentValue(PopupWindow.TreeView.CurrentValue);
@@ -189,6 +206,9 @@ begin
     SetInternalCurrentValue(PopupWindow.TreeView.CurrentValue);
     if Assigned(OnChange) then
       OnChange(Self);
+
+    FLastSearch := Self.Text;
+    Self.TextHint := FLastSearch;
   end;
   FReloadValue := False;
   try

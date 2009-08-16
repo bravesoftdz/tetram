@@ -19,8 +19,9 @@ uses
 procedure Import(Self: TAlbumComplet);
 var
   Qry: TUIBQuery;
+  Auteur: TAuteur;
 
-  function SearchAssociation(Texte: string; TypeData: TVirtualMode; out Always: Boolean; ParentID: TGUID): TGUID;
+  function SearchAssociation(Texte: string; TypeData: TVirtualMode; out Always: Boolean; const ParentID: TGUID): TGUID;
   begin
     Result := GUID_NULL;
 
@@ -44,7 +45,7 @@ var
     end;
   end;
 
-  function CheckValue(Texte: string; TypeData: TVirtualMode; ParentID: TGUID; Objet: TObjetComplet = nil): TGUID; overload;
+  function CheckValue(Texte: string; TypeData: TVirtualMode; const ParentID: TGUID; Objet: TObjetComplet = nil): TGUID; overload;
   var
     Toujours: Boolean;
   begin
@@ -68,7 +69,7 @@ var
           framVTEdit1.VTEdit.CurrentValue := framVTEdit1.VTEdit.PopupWindow.TreeView.CurrentValue;
         end;
 
-        Result := GUID_NULL; // on réinitialise pour être sûr de ne pas avoir de retour en cas d'annulatfion
+        Result := GUID_NULL; // on réinitialise pour être sûr de ne pas avoir de retour en cas d'annulation
         case ShowModalEx of
           mrCancel: Exit;
           mrIgnore:
@@ -78,12 +79,15 @@ var
           end;
         end;
 
-        // pourquoi on doit passer par une variable intermédiaire à cause des collections restera                         un grand mystère pour moi
+        // pourquoi on doit passer par une variable intermédiaire à cause des collections restera
+        // un grand mystère pour moi
         // Result := framVTEdit1.CurrentValue;
         Result := SelectedValue;
 
         Qry.SQL.Text := 'update or insert into import_associations (chaine, id, parentid, typedata, always) values (:chaine, :id, :parentid, :typedata, :always)';
         Qry.Prepare(True);
+        // pourquoi l'utilisation du mot clé "const" sur le paramètre Texte provoque ici une opération de pointeur incorrecte après
+        // la création d'une nouvelle série est autre grand mystère
         Qry.Params.AsString[0] := Copy(Texte, 1, Qry.Params.SQLLen[0]);
         Qry.Params.AsString[1] := GuidToString(Result);
         Qry.Params.AsString[2] := GuidToString(ParentID);
@@ -101,39 +105,12 @@ var
     Result := CheckValue(Texte, TypeData, GUID_NULL);
   end;
 
-  function CheckListAuteurs(List: TObjectList<TAuteur>; OtherList: array of TObjectList<TAuteur>): Boolean;
-
-    procedure RemoveAuteur(Index: integer);
-    var
-      i, j: Integer;
-      nom: string;
-    begin
-      nom := List[Index].Personne.Nom;
-      for i := Low(OtherList) to High(OtherList) do
-        for j := Pred(OtherList[i].Count) downto 0 do
-          if SameText(OtherList[i][j].Personne.Nom, Nom) then
-            OtherList[i].Delete(j);
-      List.Delete(Index);
-    end;
-
+  function CheckListAuteurs(List: TObjectList<TAuteur>; const OtherList: array of TObjectList<TAuteur>): Boolean;
   var
     dummyID: TGUID;
-
-    procedure AcceptAuteur(Index: Integer);
-    var
-      i, j: Integer;
-      nom: string;
-    begin
-      nom := List[Index].Personne.Nom;
-      for i := Low(OtherList) to High(OtherList) do
-        for j := Pred(OtherList[i].Count) downto 0 do
-          if SameText(OtherList[i][j].Personne.Nom, Nom) then
-            OtherList[i][j].Personne.Fill(dummyID);
-      List[Index].Personne.Fill(dummyID);
-    end;
-
-  var
-    i: Integer;
+    i, j, k: Integer;
+    Accept: Boolean;
+    Nom: string;
   begin
     Result := False;
     for i := Pred(List.Count) downto 0 do
@@ -142,10 +119,21 @@ var
         dummyID := CheckValue(List[i].Personne.Nom, vmPersonnes);
         if IsEqualGUID(dummyID, GUID_NULL) then
           Exit;
-        if IsEqualGUID(dummyID, GUID_FULL) then
-          RemoveAuteur(i)
+
+        Accept := not IsEqualGUID(dummyID, GUID_FULL);
+
+        Nom := List[i].Personne.Nom;
+        for j := Low(OtherList) to High(OtherList) do
+          for k := Pred(OtherList[j].Count) downto 0 do
+            if SameText(OtherList[j][k].Personne.Nom, Nom) then
+              if Accept then
+                OtherList[j][k].Personne.Fill(dummyID)
+              else
+                OtherList[j].Delete(k);
+        if Accept then
+          List[i].Personne.Fill(dummyID)
         else
-          AcceptAuteur(i);
+          List.Delete(i);
       end;
     Result := True;
   end;
@@ -209,11 +197,11 @@ begin
         end
         else
         begin
-          for j := 0 to Pred(Editions.Editions.Count) do
-            if SameText(Serie.Editeur.NomEditeur, Editions.Editions[j].Editeur.NomEditeur) then
+          for Edition in Editions.Editions do
+            if SameText(Serie.Editeur.NomEditeur, Edition.Editeur.NomEditeur) then
             begin
-              Editions.Editions[j].Editeur.Fill(dummyID);
-              Editions.Editions[j].Collection.Editeur.Fill(dummyID);
+              Edition.Editeur.Fill(dummyID);
+              Edition.Collection.Editeur.Fill(dummyID);
             end;
           Serie.Editeur.Fill(dummyID);
         end;
@@ -228,10 +216,10 @@ begin
           Serie.Collection.NomCollection := ''
         else
         begin
-          for j := 0 to Pred(Editions.Editions.Count) do
-            if IsEqualGUID(Serie.Editeur.ID_Editeur, Editions.Editions[j].Editeur.ID_Editeur)
-              and SameText(Serie.Collection.NomCollection, Editions.Editions[j].Collection.NomCollection) then
-              Editions.Editions[j].Collection.Fill(dummyID);
+          for Edition in Editions.Editions do
+            if IsEqualGUID(Serie.Editeur.ID_Editeur, Edition.Editeur.ID_Editeur)
+              and SameText(Serie.Collection.NomCollection, Edition.Collection.NomCollection) then
+              Edition.Collection.Fill(dummyID);
           Serie.Collection.Fill(dummyID);
         end
       end;
@@ -245,24 +233,24 @@ begin
 
         if Scenaristes.Count + Dessinateurs.Count + Coloristes.Count = 0 then
         begin
-          for i := 0 to Pred(Serie.Scenaristes.Count) do
+          for Auteur in Serie.Scenaristes do
           begin
             PA := TAuteur.Create;
-            PA.Fill(Serie.Scenaristes[i].Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
+            PA.Fill(Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
             Scenaristes.Add(PA);
           end;
 
-          for i := 0 to Pred(Serie.Dessinateurs.Count) do
+          for Auteur in Serie.Dessinateurs do
           begin
             PA := TAuteur.Create;
-            PA.Fill(Serie.Dessinateurs[i].Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
+            PA.Fill(Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
             Dessinateurs.Add(PA);
           end;
 
-          for i := 0 to Pred(Serie.Coloristes.Count) do
+          for Auteur in Serie.Coloristes do
           begin
             PA := TAuteur.Create;
-            PA.Fill(Serie.Coloristes[i].Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
+            PA.Fill(Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
             Coloristes.Add(PA);
           end;
         end;
@@ -270,9 +258,8 @@ begin
 
       DefaultEdition := TEditionComplete.Create(GUID_NULL);
       try
-        for i := 0 to Pred(Editions.Editions.Count) do
+        for Edition in Editions.Editions do
         begin
-          Edition := Editions.Editions[i];
           if not IsEqualGUID(ID_Serie, GUID_FULL) then
           begin
             if Edition.Couleur = DefaultEdition.Couleur then

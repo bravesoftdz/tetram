@@ -6,7 +6,7 @@ uses
   Windows, SysUtils, Classes, UIBLib, AnsiStrings;
 
 type
-  TChampSpecial = (csNone, csTitre, csGenre, csAffiche, csEtat, csReliure, csOrientation, csFormatEdition, csTypeEdition, csISBN, csMonnaie, csSensLecture);
+  TChampSpecial = (csNone, csTitre, csGenre, csAffiche, csEtat, csReliure, csOrientation, csFormatEdition, csTypeEdition, csISBN, csMonnaie, csSensLecture, csNotation);
 
   PChamp = ^RChamp;
 
@@ -23,7 +23,7 @@ type
     TypeData: TUIBFieldType;
   end;
 
-  TArrayOfChamp = array[1..40] of RChamp;
+  TArrayOfChamp = array[1..42] of RChamp;
   PArrayOfChamp = ^TArrayOfChamp;
 
 function ChampsRecherche: PArrayOfChamp;
@@ -38,6 +38,7 @@ uses
   Textes, Commun, UIB, UdmPrinc;
 
 const
+  // Bien que pas génant, il vaut mieux que les champs soient regroupés par table
   _ChampsRecherche: TArrayOfChamp = (
     (Groupe: 2; ID: 01; NomTable: 'ALBUMS'; NomChamp: 'titrealbum'; LibelleChamp: rsTransTitreAlbum; Special: csTitre),
     (Groupe: 2; ID: 02; NomTable: 'ALBUMS'; NomChamp: 'anneeparution'; LibelleChamp: rsTransAnneeParution; ChampImpressionTri: True),
@@ -48,6 +49,7 @@ const
     (Groupe: 2; ID: 06; NomTable: 'ALBUMS'; NomChamp: 'sujetalbum'; LibelleChamp: rsTransHistoire + ' ' + rsTransAlbum),
     (Groupe: 2; ID: 07; NomTable: 'ALBUMS'; NomChamp: 'remarquesalbum'; LibelleChamp: rsTransNotes + ' ' + rsTransAlbum),
     (Groupe: 2; ID: 08; NomTable: 'ALBUMS'; NomChamp: 'nbeditions'; LibelleChamp: rsTransNombreDEditions; ChampImpressionTri: True),
+    (Groupe: 2; ID: 42; NomTable: 'ALBUMS'; NomChamp: 'notation'; LibelleChamp: rsTransAlbumNotation; Special: csNotation; ChampImpressionTri: True),
     (Groupe: 1; ID: 09; NomTable: 'SERIES'; NomChamp: 'titreserie'; LibelleChamp: rsTransTitreSerie; Special: csTitre),
     (Groupe: 1; ID: 10; NomTable: 'SERIES'; NomChamp: 'sujetserie'; LibelleChamp: rsTransHistoire + ' ' + rsTransSerie),
     (Groupe: 1; ID: 11; NomTable: 'SERIES'; NomChamp: 'remarquesserie'; LibelleChamp: rsTransNotes + ' ' + rsTransSerie),
@@ -55,6 +57,7 @@ const
     (Groupe: 1; ID: 13; NomTable: 'SERIES'; NomChamp: 'complete'; LibelleChamp: rsTransSerieComplete; Booleen: True; ChampImpressionTri: True),
     (Groupe: 1; ID: 14; NomTable: 'SERIES'; NomChamp: 'suivremanquants'; LibelleChamp: rsTransSerieChercherManquants; Booleen: True; ChampImpressionTri: True),
     (Groupe: 1; ID: 15; NomTable: 'SERIES'; NomChamp: 'suivresorties'; LibelleChamp: rsTransSerieSuivreSorties; Booleen: True; ChampImpressionTri: True),
+    (Groupe: 1; ID: 41; NomTable: 'SERIES'; NomChamp: 'notation'; LibelleChamp: rsTransSerieSuivreSorties; Special: csNotation; ChampImpressionTri: True),
     (Groupe: 3; ID: 16; NomTable: 'EDITIONS'; NomChamp: 'anneeedition'; LibelleChamp: rsTransAnneeEdition; ChampImpressionTri: True),
     (Groupe: 3; ID: 17; NomTable: 'EDITIONS'; NomChamp: 'prix'; LibelleChamp: rsTransPrix; Special: csMonnaie; ChampImpressionTri: True),
     (Groupe: 3; ID: 18; NomTable: 'EDITIONS'; NomChamp: 'vo'; LibelleChamp: rsTransVO; Booleen: True; ChampImpressionTri: True),

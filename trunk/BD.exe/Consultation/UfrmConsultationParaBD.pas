@@ -4,8 +4,9 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, StrUtils,
-  Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls, ReadOnlyCheckBox, UfrmFond, Procedures,
-  ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms;
+  Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls, UfrmFond, Procedures,
+  ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms,
+  LabeledCheckBox;
 
 type
   TfrmConsultationParaBD = class(TBdtForm, IImpressionApercu, IFicheEditable)
@@ -40,10 +41,6 @@ type
     Label3: TLabel;
     Label12: TLabel;
     AcheteLe: TLabel;
-    cbNumerote: TReadOnlyCheckBox;
-    cbStock: TReadOnlyCheckBox;
-    cbOffert: TReadOnlyCheckBox;
-    cbDedicace: TReadOnlyCheckBox;
     TypeParaBD: TLabel;
     Label1: TLabel;
     Label2: TLabel;
@@ -51,6 +48,10 @@ type
     FicheModifier: TAction;
     Modifier1: TMenuItem;
     N1: TMenuItem;
+    cbDedicace: TLabeledCheckBox;
+    cbNumerote: TLabeledCheckBox;
+    cbOffert: TLabeledCheckBox;
+    cbStock: TLabeledCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure lvAuteursDblClick(Sender: TObject);
@@ -96,7 +97,7 @@ end;
 
 procedure TfrmConsultationParaBD.SetID_ParaBD(const Value: TGUID);
 var
-  i: Integer;
+  Auteur: TAuteur;
   ms: TStream;
   jpg: TJPEGImage;
 begin
@@ -126,12 +127,11 @@ begin
   else
     l_realisation.Caption := rsTransCreateurs;
   lvAuteurs.Items.BeginUpdate;
-  for i := 0 to Pred(FParaBD.Auteurs.Count) do begin
+  for Auteur in FParaBD.Auteurs do
     with lvAuteurs.Items.Add do begin
-      Data := FParaBD.Auteurs[i];
-      Caption := TAuteur(Data).ChaineAffichage;
+      Data := Auteur;
+      Caption := Auteur.ChaineAffichage;
     end;
-  end;
   lvAuteurs.Items.EndUpdate;
 
   Description.Text := FParaBD.Description.Text;

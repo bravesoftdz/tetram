@@ -9,7 +9,7 @@ object frmEditParaBD: TfrmEditParaBD
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
-  Font.Name = 'MS Sans Serif'
+  Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
   OnActivate = FormActivate
@@ -28,6 +28,19 @@ object frmEditParaBD: TfrmEditParaBD
     ExplicitTop = 25
     ExplicitWidth = 827
   end
+  object Label28: TLabel
+    Left = 8
+    Top = 4
+    Width = 69
+    Height = 23
+    Caption = 'ParaBD'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -19
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
   object ScrollBox: TScrollBox
     Left = 0
     Top = 33
@@ -40,9 +53,9 @@ object frmEditParaBD: TfrmEditParaBD
       824
       866)
     object Label2: TLabel
-      Left = 35
+      Left = 33
       Top = 7
-      Width = 27
+      Width = 29
       Height = 13
       Alignment = taRightJustify
       Caption = 'Titre :'
@@ -50,9 +63,9 @@ object frmEditParaBD: TfrmEditParaBD
       Layout = tlCenter
     end
     object Label6: TLabel
-      Left = 3
+      Left = 2
       Top = 81
-      Width = 59
+      Width = 60
       Height = 13
       Alignment = taRightJustify
       Caption = 'Description :'
@@ -64,7 +77,7 @@ object frmEditParaBD: TfrmEditParaBD
       Top = 206
       Width = 57
       Height = 72
-      Caption = 'Auteur / Cr'#233'ateur'
+      Caption = 'Auteur /'#13#10'Cr'#233'ateur'
       Enabled = False
       Layout = blGlyphBottom
       OnClick = btCreateurClick
@@ -87,9 +100,9 @@ object frmEditParaBD: TfrmEditParaBD
         17CA234C64B64C45E9DF804F400D9711AB9FEB370000000049454E44AE426082}
     end
     object Label19: TLabel
-      Left = 20
+      Left = 17
       Top = 210
-      Width = 42
+      Width = 45
       Height = 13
       Alignment = taRightJustify
       Caption = 'Auteurs :'
@@ -105,9 +118,9 @@ object frmEditParaBD: TfrmEditParaBD
       ExplicitWidth = 827
     end
     object Label20: TLabel
-      Left = 32
+      Left = 31
       Top = 31
-      Width = 30
+      Width = 31
       Height = 13
       Alignment = taRightJustify
       Caption = 'S'#233'rie :'
@@ -122,25 +135,25 @@ object frmEditParaBD: TfrmEditParaBD
       ExplicitWidth = 293
     end
     object Label24: TLabel
-      Left = 68
+      Left = 67
       Top = 365
-      Width = 37
+      Width = 38
       Height = 13
       Alignment = taRightJustify
       Caption = 'Ann'#233'e :'
       Layout = tlCenter
     end
     object Label25: TLabel
-      Left = 160
+      Left = 163
       Top = 365
-      Width = 28
+      Width = 30
       Height = 13
       Alignment = taRightJustify
       Caption = 'Cote :'
       Layout = tlCenter
     end
     object VDTButton14: TVDTButton
-      Left = 258
+      Left = 263
       Top = 362
       Width = 96
       Height = 21
@@ -173,34 +186,34 @@ object frmEditParaBD: TfrmEditParaBD
         2FE7FA1D7C9B2366D9AB45ED0000000049454E44AE426082}
     end
     object Label10: TLabel
-      Left = 25
+      Left = 24
       Top = 56
-      Width = 37
+      Width = 38
       Height = 13
       Alignment = taRightJustify
       Caption = 'Ann'#233'e :'
       Layout = tlCenter
     end
     object Label18: TLabel
-      Left = 138
-      Top = 301
-      Width = 51
+      Left = 142
+      Top = 302
+      Width = 52
       Height = 13
       Alignment = taRightJustify
       Caption = 'Achet'#233' le :'
       Layout = tlCenter
     end
     object Label9: TLabel
-      Left = 165
-      Top = 326
-      Width = 23
+      Left = 168
+      Top = 327
+      Width = 25
       Height = 13
       Alignment = taRightJustify
       Caption = 'Prix :'
       Layout = tlCenter
     end
     object SpeedButton3: TVDTButton
-      Left = 258
+      Left = 263
       Top = 323
       Width = 96
       Height = 21
@@ -233,9 +246,9 @@ object frmEditParaBD: TfrmEditParaBD
         2FE7FA1D7C9B2366D9AB45ED0000000049454E44AE426082}
     end
     object Label12: TLabel
-      Left = 118
+      Left = 117
       Top = 56
-      Width = 30
+      Width = 31
       Height = 13
       Alignment = taRightJustify
       Caption = 'Type :'
@@ -333,7 +346,7 @@ object frmEditParaBD: TfrmEditParaBD
       CurrencyChar = #0
     end
     object edPrixCote: TEditLabeled
-      Left = 191
+      Left = 196
       Top = 362
       Width = 64
       Height = 21
@@ -389,7 +402,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object cbGratuit: TCheckBoxLabeled
       Left = 69
-      Top = 323
+      Top = 325
       Width = 53
       Height = 16
       Cursor = crHandPoint
@@ -405,7 +418,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object cbOffert: TCheckBoxLabeled
       Left = 69
-      Top = 299
+      Top = 300
       Width = 53
       Height = 16
       Cursor = crHandPoint
@@ -420,7 +433,7 @@ object frmEditParaBD: TfrmEditParaBD
         end>
     end
     object dtpAchat: TDateTimePickerLabeled
-      Left = 191
+      Left = 196
       Top = 298
       Width = 101
       Height = 21
@@ -435,7 +448,7 @@ object frmEditParaBD: TfrmEditParaBD
         end>
     end
     object edPrix: TEditLabeled
-      Left = 191
+      Left = 196
       Top = 323
       Width = 64
       Height = 21

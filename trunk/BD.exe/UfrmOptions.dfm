@@ -89,6 +89,7 @@ object frmOptions: TfrmOptions
         Top = 0
         Width = 352
         Height = 330
+        VertScrollBar.Position = 74
         VertScrollBar.Tracking = True
         Align = alClient
         BevelInner = bvNone
@@ -103,11 +104,10 @@ object frmOptions: TfrmOptions
         ParentDoubleBuffered = False
         TabOrder = 0
         object CategoryPanel1: TCategoryPanel
-          Top = 0
-          Height = 241
+          Top = -74
+          Height = 263
           Caption = 'G'#233'n'#233'ral'
           TabOrder = 0
-          ExplicitWidth = 350
           object Label3: TLabel
             Left = 14
             Top = 95
@@ -324,13 +324,25 @@ object frmOptions: TfrmOptions
             State = cbChecked
             TabOrder = 7
           end
+          object AfficherNotesListes: TCheckBox
+            Left = 14
+            Top = 222
+            Width = 257
+            Height = 16
+            Cursor = crHandPoint
+            Margins.Top = 0
+            Margins.Bottom = 1
+            Caption = 'Afficher l'#39'appreciation personnelle dans les listes'
+            Checked = True
+            State = cbChecked
+            TabOrder = 8
+          end
         end
         object CategoryPanel2: TCategoryPanel
-          Top = 241
+          Top = 189
           Height = 59
           Caption = 'Impression'
           TabOrder = 1
-          ExplicitWidth = 350
           object FicheAlbumCouverture: TCheckBox
             Left = 14
             Top = 5
@@ -355,11 +367,10 @@ object frmOptions: TfrmOptions
           end
         end
         object CategoryPanel3: TCategoryPanel
-          Top = 300
+          Top = 248
           Height = 80
           Caption = 'Mode Gestion'
           TabOrder = 2
-          ExplicitWidth = 350
           object Label14: TLabel
             Left = 14
             Top = 23
@@ -461,7 +472,7 @@ object frmOptions: TfrmOptions
           Cursor = crHandPoint
           BevelKind = bkTile
           Ctl3D = True
-          ItemHeight = 0
+          ItemHeight = 13
           ParentCtl3D = False
           TabOrder = 0
           OnChange = ComboBox2Change
@@ -474,7 +485,7 @@ object frmOptions: TfrmOptions
           Cursor = crHandPoint
           BevelKind = bkTile
           Ctl3D = True
-          ItemHeight = 0
+          ItemHeight = 13
           ParentCtl3D = False
           TabOrder = 1
           OnChange = ComboBox2Change
@@ -491,9 +502,11 @@ object frmOptions: TfrmOptions
           object Label10: TLabel
             Left = 2
             Top = 2
-            Width = 3
-            Height = 13
+            Width = 153
+            Height = 14
             Align = alClient
+            ExplicitWidth = 3
+            ExplicitHeight = 13
           end
         end
         inline Frame12: TframBoutons
@@ -549,7 +562,7 @@ object frmOptions: TfrmOptions
         Cursor = crHandPoint
         BevelKind = bkTile
         Ctl3D = True
-        ItemHeight = 0
+        ItemHeight = 13
         ParentCtl3D = False
         TabOrder = 0
       end
@@ -571,10 +584,6 @@ object frmOptions: TfrmOptions
     object TabSheet1: TTabSheet
       Caption = 'Site web'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object GroupBox3: TGroupBox
         Left = 0
         Top = 0
@@ -632,7 +641,7 @@ object frmOptions: TfrmOptions
           Width = 161
           Height = 21
           Style = csDropDownList
-          ItemHeight = 0
+          ItemHeight = 13
           TabOrder = 2
         end
         object ComboBox6: TComboBox
@@ -757,7 +766,7 @@ object frmOptions: TfrmOptions
           Width = 97
           Height = 21
           Style = csDropDownList
-          ItemHeight = 0
+          ItemHeight = 13
           TabOrder = 7
         end
         object Button1: TButton

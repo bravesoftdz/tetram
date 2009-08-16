@@ -10,6 +10,7 @@ object frmScripts: TfrmScripts
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  KeyPreview = True
   Menu = MainMenu1
   OldCreateOrder = False
   Position = poMainFormCenter
@@ -31,10 +32,6 @@ object frmScripts: TfrmScripts
     object tbScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object ToolBar1: TToolBar
         Left = 0
         Top = 0
@@ -82,11 +79,11 @@ object frmScripts: TfrmScripts
         object Label1: TLabel
           Left = 0
           Top = 485
-          Width = 718
+          Width = 748
           Height = 16
           Caption = 
-            'ATTENTION: Dans ce mode, aucune entr'#233'e ne sera ajout'#233'e dans la b' +
-            'ase de donn'#233'es par l'#39'ex'#233'cution d'#39'un script.'
+            'ATTENTION: Dans ce mode, aucune information ne sera ajout'#233'e dans' +
+            ' la base de donn'#233'es par l'#39'ex'#233'cution d'#39'un script.'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clRed
           Font.Height = -13
@@ -427,10 +424,6 @@ object frmScripts: TfrmScripts
           object TabSheet2: TTabSheet
             Caption = 'Points de suivi'
             ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object vstSuivis: TVirtualStringTree
               Left = 0
               Top = 0
@@ -466,7 +459,7 @@ object frmScripts: TfrmScripts
                 end
                 item
                   Position = 1
-                  Width = 430
+                  Width = 426
                   WideText = 'Valeur'
                 end>
             end
@@ -474,10 +467,6 @@ object frmScripts: TfrmScripts
           object TabSheet3: TTabSheet
             Caption = 'Points d'#39'arr'#234't'
             ImageIndex = 2
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object vstBreakpoints: TVirtualStringTree
               Left = 0
               Top = 0
@@ -512,7 +501,7 @@ object frmScripts: TfrmScripts
                 end
                 item
                   Position = 1
-                  Width = 476
+                  Width = 472
                   WideText = 'Fichier'
                 end>
             end
@@ -520,10 +509,6 @@ object frmScripts: TfrmScripts
           object TabSheet6: TTabSheet
             Caption = 'Sortie'
             ImageIndex = 3
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object mmConsole: TMemo
               Left = 0
               Top = 0
@@ -549,10 +534,6 @@ object frmScripts: TfrmScripts
           TabOrder = 1
           object TabSheet4: TTabSheet
             Caption = 'Options'
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object ListBox1: TListBox
               Left = 0
               Top = 0

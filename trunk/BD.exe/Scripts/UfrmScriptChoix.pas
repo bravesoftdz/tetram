@@ -22,6 +22,7 @@ type
     procedure VirtualStringTree1PaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
     procedure VirtualStringTree1MeasureItem(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
     procedure VirtualStringTree1AfterCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; CellRect: TRect);
+    procedure VirtualStringTree1DblClick(Sender: TObject);
   private
     FList: TObjectList<TScriptChoix.TCategorie>;
   public
@@ -85,6 +86,11 @@ begin
     if (Column = 2) and Assigned(FList[Node.Parent.Index].Choix[Node.Index].FImage) then
       TargetCanvas.Draw(CellRect.Left, CellRect.Top, FList[Node.Parent.Index].Choix[Node.Index].FImage);
   end;
+end;
+
+procedure TfrmScriptChoix.VirtualStringTree1DblClick(Sender: TObject);
+begin
+  framBoutons1.btnOk.Click;
 end;
 
 procedure TfrmScriptChoix.VirtualStringTree1GetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);

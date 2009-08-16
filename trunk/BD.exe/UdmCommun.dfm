@@ -98,4 +98,13 @@ object dmCommun: TdmCommun
     Left = 96
     Top = 152
   end
+  object TCritereNotation: TUIBQuery
+    SQL.Strings = (
+      'SELECT REF, LIBELLE FROM LISTES'
+      'WHERE CATEGORIE = 9'
+      'ORDER BY ORDRE'
+      '')
+    Left = 96
+    Top = 208
+  end
 end

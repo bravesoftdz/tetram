@@ -47,10 +47,10 @@ type
   end;
 
 function GetPage(const url: string; UTF8: Boolean = True): string;
-function PostPage(const url: string; Pieces: array of RAttachement; UTF8: Boolean = True): string;
+function PostPage(const url: string; const Pieces: array of RAttachement; UTF8: Boolean = True): string;
 function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;
 function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteur;
-function AskSearchEntry(const Labels: array of string; out Search: string; out Index: Integer): Boolean;
+function AskSearchEntry(const Labels: array of string; var Search: string; var Index: Integer): Boolean;
 procedure Split(SL: TStringList; const Chaine: string; Sep: Char);
 function CombineURL(const Root, URL: string): string;
 function ScriptStrToFloatDef(const S: string; const Default: Extended): Extended;
@@ -184,23 +184,14 @@ begin
 end;
 
 function TScriptChoix.GetCategorie(const Name: string; Force: Boolean): TCategorie;
-var
-  i: integer;
 begin
-  Result := nil;
-  for i := 0 to Pred(FList.Count) do
-    if SameText(FList[i].FNom, Name) then
-    begin
-      Result := FList[i];
+  for Result in FList do
+    if SameText(Result.FNom, Name) then
       Exit;
-    end;
 
-  if not Assigned(Result) then
-  begin
-    Result := TCategorie.Create;
-    FList.Add(Result);
-    Result.FNom := Name;
-  end;
+  Result := TCategorie.Create;
+  FList.Add(Result);
+  Result.FNom := Name;
 end;
 
 procedure TScriptChoix.ResetList;
@@ -272,7 +263,7 @@ begin
   end;
 end;
 
-function PostPage(const url: string; Pieces: array of RAttachement; UTF8: Boolean): string;
+function PostPage(const url: string; const Pieces: array of RAttachement; UTF8: Boolean): string;
 var
   ss: TStringStream;
 begin
@@ -338,7 +329,7 @@ end;
 type
   TCrackLabel = class(TLabel);
 
-function AskSearchEntry(const Labels: array of string; out Search: string; out Index: Integer): Boolean;
+function AskSearchEntry(const Labels: array of string; var Search: string; var Index: Integer): Boolean;
 var
   F: TdummyForm;
   E: TEditLabeled;
@@ -386,6 +377,8 @@ begin
       E.Left := L[i].Left + maxW + 8;
       E.Width := 250;
       E.Visible := True;
+      if (Search <> '') and (Index = i) then
+        E.Text := Search;
       E.OnChange := F.editChange;
 
       if E.Height > L[i].Height then

@@ -329,6 +329,12 @@ object frmSaisieEmpruntEmprunteur: TfrmSaisieEmpruntEmprunteur
           Height = 13
           Hint = 'Date du mouvement'
           Caption = 'Date :'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = 12615680
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
           Layout = tlCenter
         end
         object lccEditions: TLightComboCheck
@@ -338,11 +344,6 @@ object frmSaisieEmpruntEmprunteur: TfrmSaisieEmpruntEmprunteur
           Height = 20
           Checked = False
           Enabled = False
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -9
-          Font.Name = 'Tahoma'
-          Font.Style = []
           PropertiesStored = False
           CheckVisible = False
           OnChange = lccEditionsChange
@@ -362,7 +363,13 @@ object frmSaisieEmpruntEmprunteur: TfrmSaisieEmpruntEmprunteur
           Caption = 'Pr'#234't'
           Ctl3D = False
           Enabled = False
+          Font.Charset = ANSI_CHARSET
+          Font.Color = 12615680
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
           ParentCtl3D = False
+          ParentFont = False
           TabOrder = 1
           OnClick = pretClick
           LinkControls = <
@@ -455,7 +462,7 @@ object frmSaisieEmpruntEmprunteur: TfrmSaisieEmpruntEmprunteur
           item
             Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
             Position = 0
-            Width = 526
+            Width = 522
           end>
       end
       inline FrameRechercheRapide1: TframRechercheRapide

@@ -99,6 +99,7 @@ type
     function GetNodeBasePointer(Node: PVirtualNode): TBasePointeur;
     function GetFocusedNodeData: Pointer;
     procedure InitializeRep(KeepValue: Boolean = True);
+    procedure ReinitNodes(NodeLevel: Integer = -1);
     procedure Find(const Text: string; GetNext: Boolean = False);
     procedure MemorizeIndexNode;
     procedure FindIndexNode;
@@ -122,7 +123,7 @@ const
     (),
     (// vmAlbums
     FILTRECOUNT: 'INITIALES_ALBUMS(?)'; FILTRE: 'ALBUMS_BY_INITIALE(?, ?)';
-    FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET';
+    FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET, NOTATION';
     INITIALEFIELDS: 'INITIALETITREALBUM'; INITIALEVALUE: 'INITIALETITREALBUM';
     REFFIELDS: 'ID_ALBUM';
     TABLESEARCH: 'VW_LISTE_ALBUMS'; FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)'; SEARCHORDER: 'TITREALBUM, HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
@@ -172,7 +173,7 @@ const
     ),
     (// vmAlbumsAnnee
     FILTRECOUNT: 'ANNEES_ALBUMS(?)'; FILTRE: 'ALBUMS_BY_ANNEE(?, ?)';
-    FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET';
+    FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET, NOTATION';
     INITIALEFIELDS: 'ANNEEPARUTION'; INITIALEVALUE: 'ANNEEPARUTION';
     REFFIELDS: 'ID_ALBUM';
     TABLESEARCH: 'VW_LISTE_ALBUMS'; FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)'; SEARCHORDER: 'COALESCE(TITREALBUM, TITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
@@ -180,7 +181,7 @@ const
     ),
     (// vmAlbumsCollection
     FILTRECOUNT: 'COLLECTIONS_ALBUMS(?)'; FILTRE: 'ALBUMS_BY_COLLECTION(?, ?)';
-    FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET';
+    FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET, NOTATION';
     INITIALEFIELDS: 'NOMCOLLECTION'; INITIALEVALUE: 'ID_COLLECTION';
     REFFIELDS: 'ID_ALBUM';
     TABLESEARCH: 'VW_LISTE_COLLECTIONS_ALBUMS'; FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)'; SEARCHORDER: 'COALESCE(TITREALBUM, TITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
@@ -188,7 +189,7 @@ const
     ),
     (// vmAlbumsEditeur
     FILTRECOUNT: 'EDITEURS_ALBUMS(?)'; FILTRE: 'ALBUMS_BY_EDITEUR(?, ?)';
-    FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET';
+    FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET, NOTATION';
     INITIALEFIELDS: 'NOMEDITEUR'; INITIALEVALUE: 'ID_EDITEUR';
     REFFIELDS: 'ID_ALBUM';
     TABLESEARCH: 'VW_LISTE_EDITEURS_ALBUMS'; FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)'; SEARCHORDER: 'COALESCE(TITREALBUM, TITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
@@ -196,7 +197,7 @@ const
     ),
     (// vmAlbumsGenre
     FILTRECOUNT: 'GENRES_ALBUMS(?)'; FILTRE: 'ALBUMS_BY_GENRE(?, ?)';
-    FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET';
+    FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET, NOTATION';
     INITIALEFIELDS: 'GENRE'; INITIALEVALUE: 'ID_GENRE';
     REFFIELDS: 'ID_ALBUM';
     TABLESEARCH: 'VW_LISTE_GENRES_ALBUMS'; FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)'; SEARCHORDER: 'COALESCE(TITREALBUM, TITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
@@ -204,7 +205,7 @@ const
     ),
     (// vmAlbumsSerie
     FILTRECOUNT: 'SERIES_ALBUMS(?)'; FILTRE: 'ALBUMS_BY_SERIE(?, ?)';
-    FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET';
+    FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET, NOTATION';
     INITIALEFIELDS: 'TITRESERIE'; INITIALEVALUE: 'ID_SERIE';
     REFFIELDS: 'ID_ALBUM';
     TABLESEARCH: 'VW_LISTE_ALBUMS'; FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)'; SEARCHORDER: 'COALESCE(TITREALBUM, TITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
@@ -220,7 +221,7 @@ const
     ),
     (// vmAchatsAlbumsEditeur
     FILTRECOUNT: 'EDITEURS_ACHATALBUMS(?)'; FILTRE: 'ACHATALBUMS_BY_EDITEUR(?, ?)';
-    FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET';
+    FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET, NOTATION';
     INITIALEFIELDS: 'NOMEDITEUR'; INITIALEVALUE: 'ID_EDITEUR';
     REFFIELDS: 'ID_ALBUM';
     TABLESEARCH: 'VW_LISTE_EDITEURS_ACHATALBUMS'; FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)'; SEARCHORDER: 'COALESCE(TITREALBUM, TITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
@@ -328,7 +329,7 @@ begin
                 begin
                   Text := PA.ChaineAffichage(False);
                   if FShowDateParutionAlbum then
-                    AjoutString(Text, IIf(PA.MoisParution > 0, ShortMonthNames[PA.MoisParution] + ' ', '') + NonZero(IntToStr(PA.AnneeParution)), ' - ');
+                    AjoutString(Text, IfThen(PA.MoisParution > 0, ShortMonthNames[PA.MoisParution] + ' ', '') + NonZero(IntToStr(PA.AnneeParution)), ' - ');
                 end;
                 1: Text := FormatTitre(PA.Serie);
               end;
@@ -336,14 +337,14 @@ begin
               case Column of
                 0: Text := FormatTitre(PA.Titre);
                 1: Text := NonZero(IntToStr(PA.Tome));
-                2: Text := IIf(PA.MoisParution > 0, ShortMonthNames[PA.MoisParution] + ' ', '') + NonZero(IntToStr(PA.AnneeParution));
+                2: Text := IfThen(PA.MoisParution > 0, ShortMonthNames[PA.MoisParution] + ' ', '') + NonZero(IntToStr(PA.AnneeParution));
                 3: Text := FormatTitre(PA.Serie);
               end;
             else
             begin
               Text := PA.ChaineAffichage(FMode <> vmAlbumsSerie);
               if FShowDateParutionAlbum then
-                AjoutString(Text, IIf(PA.MoisParution > 0, ShortMonthNames[PA.MoisParution] + ' ', '') + NonZero(IntToStr(PA.AnneeParution)), ' - ');
+                AjoutString(Text, IfThen(PA.MoisParution > 0, ShortMonthNames[PA.MoisParution] + ' ', '') + NonZero(IntToStr(PA.AnneeParution)), ' - ');
             end;
           end;
         end;
@@ -381,7 +382,7 @@ begin
                 Text := '<Inconnu>';
             end
         else
-          AjoutString(Text, NonZero(IntToStr(FCountPointers[Node.Index].Count)), '', ' - (', ')');
+          AjoutString(Text, NonZero(IntToStr(FCountPointers[Node.Index].Count)), ' ', '(', ')');
     end;
   inherited;
 end;
@@ -453,7 +454,9 @@ begin
     end
     else
     begin
-      NodeInfo.List := nil;
+      if Assigned(NodeInfo.List) then
+        TBasePointeur.VideListe(NodeInfo.List);
+      FreeAndNil(NodeInfo.List);
       NodeInfo.InitialeInfo := @FCountPointers[Node.Index];
       if LongBool(FCountPointers[Node.Index].Count) then
         InitStates := InitStates + [ivsHasChildren]
@@ -796,6 +799,42 @@ begin
   FMemorizedIndexNode := (not IsEqualGUID(CurrentValue, GUID_NULL)) and (FocusedNode.Parent.ChildCount > 1);
   if FMemorizedIndexNode then
     FIndexNode := FocusedNode.Parent.Index;
+end;
+
+procedure TVirtualStringTree.ReinitNodes(NodeLevel: Integer);
+var
+  oldNode, Node: PVirtualNode;
+begin
+  if NodeLevel = -1 then
+    Node := RootNode
+  else
+  begin
+    Node := GetFirstNoInit;
+    while Assigned(Node) and (GetNodeLevel(Node) <> Cardinal(NodeLevel)) do
+      Node := GetNextNoInit(Node);
+
+    if Assigned(Node) and (GetNodeLevel(Node) <> Cardinal(NodeLevel)) then // i.e. there is no node with the desired level in the tree
+      Node := nil;
+  end;
+
+  if not Assigned(Node) then Exit;
+
+  while Assigned(Node) do
+  begin
+    oldNode := Node;
+    ReinitNode(Node.Parent, True);
+    InvalidateChildren(Node.Parent, True);
+
+    Node := oldNode.Parent.NextSibling;
+    if Assigned(Node) then
+    begin
+      while Assigned(Node) and (GetNodeLevel(Node) <> Cardinal(NodeLevel)) do
+        Node := GetNextNoInit(Node);
+      if Assigned(Node) and (GetNodeLevel(Node) <> Cardinal(NodeLevel)) then // i.e. there is no node with the desired level in the tree
+        Node := nil;
+    end;
+  end;
+
 end;
 
 procedure TVirtualStringTree.SetCurrentValue(const Value: TGUID);

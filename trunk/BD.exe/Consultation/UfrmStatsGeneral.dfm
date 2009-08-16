@@ -10,7 +10,7 @@ object frmStatsGenerales: TfrmStatsGenerales
   ClientWidth = 504
   Color = clWhite
   Font.Charset = ANSI_CHARSET
-  Font.Color = clWindowText
+  Font.Color = clBlack
   Font.Height = -12
   Font.Name = 'Times New Roman'
   Font.Style = []
@@ -58,7 +58,7 @@ object frmStatsGenerales: TfrmStatsGenerales
     Alignment = taRightJustify
     Caption = 'Nombre d'#39'albums :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]
@@ -94,7 +94,7 @@ object frmStatsGenerales: TfrmStatsGenerales
     Alignment = taRightJustify
     Caption = 'Albums en stock :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]
@@ -131,7 +131,7 @@ object frmStatsGenerales: TfrmStatsGenerales
     Alignment = taRightJustify
     Caption = 'Valeur connue :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]
@@ -147,7 +147,7 @@ object frmStatsGenerales: TfrmStatsGenerales
     Alignment = taRightJustify
     Caption = 'Valeur estim'#233'e :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]
@@ -163,7 +163,7 @@ object frmStatsGenerales: TfrmStatsGenerales
     Alignment = taRightJustify
     Caption = 'Emprunteurs :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]
@@ -209,7 +209,7 @@ object frmStatsGenerales: TfrmStatsGenerales
     Alignment = taRightJustify
     Caption = 'Albums emprunt'#233's :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]
@@ -505,7 +505,7 @@ object frmStatsGenerales: TfrmStatsGenerales
     Alignment = taRightJustify
     Caption = 'Nombre de s'#233'ries :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]

@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, UbdtForms, StdCtrls, ReadOnlyCheckBox, ExtCtrls, UframBoutons, LoadComplet,
-  Generics.Collections;
+  Dialogs, UbdtForms, StdCtrls, ExtCtrls, UframBoutons, LoadComplet,
+  Generics.Collections, LabeledCheckBox;
 
 type
   TfrmFusionEditions = class(TBdtForm)
@@ -42,12 +42,12 @@ type
     lbSensLecture: TLabel;
     Label22: TLabel;
     lbNumeroPerso: TLabel;
-    cbVO: TReadOnlyCheckBox;
-    cbCouleur: TReadOnlyCheckBox;
-    cbStock: TReadOnlyCheckBox;
+    cbVO: TLabeledCheckBox;
+    cbCouleur: TLabeledCheckBox;
+    cbStock: TLabeledCheckBox;
     edNotes: TMemo;
-    cbOffert: TReadOnlyCheckBox;
-    cbDedicace: TReadOnlyCheckBox;
+    cbOffert: TLabeledCheckBox;
+    cbDedicace: TLabeledCheckBox;
     pnEditionDst: TPanel;
     Label1: TLabel;
     Label2: TLabel;
@@ -79,12 +79,12 @@ type
     Label41: TLabel;
     Label42: TLabel;
     Label43: TLabel;
-    ReadOnlyCheckBox1: TReadOnlyCheckBox;
-    ReadOnlyCheckBox2: TReadOnlyCheckBox;
-    ReadOnlyCheckBox3: TReadOnlyCheckBox;
+    ReadOnlyCheckBox1: TLabeledCheckBox;
+    ReadOnlyCheckBox2: TLabeledCheckBox;
+    ReadOnlyCheckBox3: TLabeledCheckBox;
     Memo1: TMemo;
-    ReadOnlyCheckBox4: TReadOnlyCheckBox;
-    ReadOnlyCheckBox5: TReadOnlyCheckBox;
+    ReadOnlyCheckBox4: TLabeledCheckBox;
+    ReadOnlyCheckBox5: TLabeledCheckBox;
     framBoutons1: TframBoutons;
     Label44: TLabel;
     CheckBox2: TCheckBox;
@@ -97,7 +97,7 @@ type
   public
     procedure SetEditionDst(Edition: TEditionComplete);
     procedure SetEditionSrc(Edition: TEditionComplete);
-    procedure SetEditions(Editions: TObjectList<TEditionComplete>; Exclure: array of TGUID);
+    procedure SetEditions(Editions: TObjectList<TEditionComplete>; const Exclure: array of TGUID);
   end;
 
 implementation
@@ -198,9 +198,9 @@ begin
   end;
 end;
 
-procedure TfrmFusionEditions.SetEditions(Editions: TObjectList<TEditionComplete>; Exclure: array of TGUID);
+procedure TfrmFusionEditions.SetEditions(Editions: TObjectList<TEditionComplete>; const Exclure: array of TGUID);
 
-  function NotInExclusion(ID: TGUID): Boolean;
+  function NotInExclusion(const ID: TGUID): Boolean;
   var
     i: Integer;
   begin
@@ -214,22 +214,19 @@ procedure TfrmFusionEditions.SetEditions(Editions: TObjectList<TEditionComplete>
   end;
 
 var
-  i, dummy, iiIsbn, iiInconnu: Integer;
+  dummy, iiIsbn, iiInconnu: Integer;
   Edition: TEditionComplete;
 begin
   lbEditions.Clear;
   iiIsbn := -1;
   iiInconnu := -1;
-  for i := 0 to Pred(Editions.Count) do
-  begin
-    Edition := Editions[i];
+  for Edition in Editions do
     if NotInExclusion(Edition.ID_Edition) then
     begin
       dummy := lbEditions.Items.AddObject(Edition.ChaineAffichage, Edition);
       if (iiIsbn = -1) and SameText(FormatISBN(Edition.ISBN), ISBN.Caption) then iiIsbn := dummy;
       if Edition.RecInconnu then iiInconnu := dummy;
     end;
-  end;
 
   if iiInconnu <> -1 then
     lbEditions.ItemIndex := iiInconnu

@@ -83,6 +83,7 @@ end;
 
 constructor TBdtkRegEx.Create;
 begin
+  inherited;
   FRegEx := TJclRegEx.Create;
   FRegEx.Options := [roMultiLine, roIgnoreCase, roUTF8, roNewLineAny];
 end;

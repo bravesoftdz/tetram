@@ -178,6 +178,10 @@ object frmWizardImport: TfrmWizardImport
       TabOrder = 1
       object TabSheet1: TTabSheet
         Caption = 'TabSheet1'
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Label2: TLabel
           Left = 88
           Top = 272
@@ -224,7 +228,7 @@ object frmWizardImport: TfrmWizardImport
           Width = 297
           Height = 21
           Style = csDropDownList
-          ItemHeight = 0
+          ItemHeight = 13
           ItemIndex = 0
           TabOrder = 0
           Text = 'Fichier .csv'
@@ -309,7 +313,7 @@ object frmWizardImport: TfrmWizardImport
           Width = 297
           Height = 21
           Style = csDropDownList
-          ItemHeight = 0
+          ItemHeight = 13
           TabOrder = 0
           Items.Strings = (
             'Albums'
@@ -320,6 +324,10 @@ object frmWizardImport: TfrmWizardImport
       object TabSheetChamps: TTabSheet
         Caption = 'TabSheetChamps'
         ImageIndex = 5
+        ExplicitLeft = 0
+        ExplicitTop = 0
+        ExplicitWidth = 0
+        ExplicitHeight = 0
         object Label13: TLabel
           Left = 88
           Top = 272

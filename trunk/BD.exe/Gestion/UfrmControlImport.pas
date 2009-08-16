@@ -20,6 +20,7 @@ type
     procedure framVTEdit1btEditClick(Sender: TObject);
     procedure framVTEdit1btNewClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
     function GetMode: TVirtualMode;
     procedure SetMode(const Value: TVirtualMode);
@@ -41,6 +42,11 @@ uses
 procedure TfrmControlImport.FormCreate(Sender: TObject);
 begin
   ObjetImport := nil;
+end;
+
+procedure TfrmControlImport.FormShow(Sender: TObject);
+begin
+  if framBoutons1.btnOk.CanFocus then framBoutons1.btnOk.SetFocus;
 end;
 
 procedure TfrmControlImport.framVTEdit1btEditClick(Sender: TObject);

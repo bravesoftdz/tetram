@@ -76,7 +76,7 @@ procedure LoadStrings(Categorie: Integer; Strings: TStrings);
 implementation
 
 uses
-  Divers, Textes, ShellAPI, ReadOnlyCheckBox,
+  Divers, Textes, ShellAPI, LabeledCheckBox,
   MaskUtils, Mask, UdmPrinc, IniFiles, Math, VirtualTrees, EditLabeled, ActnList,
   Types, UBdtForms;
 
@@ -190,6 +190,7 @@ begin
       TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums := ReadBool('DIVERS', 'SerieObligatoireAlbums', False);
       TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD := ReadBool('DIVERS', 'SerieObligatoireParaBD', False);
       TGlobalVar.Utilisateur.Options.RepertoireScripts := IncludeTrailingPathDelimiter(ReadString('DIVERS', 'Scripts', IncludeTrailingPathDelimiter(ExtractFilePath(Application.ExeName)) + 'scripts'));
+      TGlobalVar.Utilisateur.Options.AfficheNoteListes := ReadBool('DIVERS', 'AfficheNoteListes', True);
 
       TGlobalVar.Utilisateur.Options.SiteWeb.Adresse := ReadString('WWW', 'Adresse', '');
       TGlobalVar.Utilisateur.Options.SiteWeb.Cle := ReadString('WWW', 'AuthKey', '');
@@ -263,6 +264,7 @@ begin
       WriteInteger('Divers', 'VerifMAJDelai', VerifMAJDelai);
       WriteBool('DIVERS', 'SerieObligatoireAlbums', SerieObligatoireAlbums);
       WriteBool('DIVERS', 'SerieObligatoireParaBD', SerieObligatoireParaBD);
+      WriteBool('DIVERS', 'AfficheNoteListes', AfficheNoteListes);
 
       WriteString('DIVERS', 'RepImages', ''); // efface la ligne
 
@@ -312,7 +314,7 @@ end;
 
 procedure PrepareLV(Form: TForm);
 var
-  i, j, w: integer;
+  i, j, w: Integer;
 begin
   for i := 0 to Form.ComponentCount - 1 do
     try
@@ -405,7 +407,7 @@ begin
         Params.AsString[0] := GUIDToString(RefObjet);
         Params.AsString[1] := GUIDToString(ID_Emprunteur);
         Params.AsDateTime[2] := DateE;
-        Params.AsInteger[3] := Iif(Pret, 1, 0);
+        Params.AsInteger[3] := IIf(Pret, 1, 0);
         ExecSQL;
         Transaction.Commit;
       finally
@@ -535,7 +537,7 @@ begin
                 if Editable then
                   c := TCheckBoxLabeled.Create(ScrollBox.Owner)
                 else
-                  c := TReadOnlyCheckBox.Create(ScrollBox.Owner);
+                  c := TLabeledCheckBox.Create(ScrollBox.Owner);
                 with TCheckBox(c) do
                 begin
                   Anchors := [akLeft, akTop, akRight];
@@ -548,12 +550,12 @@ begin
                   Width := TForm(ScrollBox.Owner).Canvas.TextWidth(s) + 32;
                   Inc(t, Height + 4);
                   Checked := not (Champs.Eof or Champs.Fields.IsNull[Champ]) and Champs.Fields.AsBoolean[Champ];
-                  if Editable then
-                  begin
-                    with TCheckBoxLabeled(c) do
-                    begin
-                    end;
-                  end;
+//                  if Editable then
+//                  begin
+//                    with TCheckBoxLabeled(c) do
+//                    begin
+//                    end;
+//                  end;
                 end;
               end;
               uftBlob:
@@ -763,7 +765,7 @@ begin
           Bmp.Canvas.StretchDraw(Rect(0, 0, NewLargeur, NewHauteur), Image.Graphic);
         Bmp.Height := NewHauteur + Effet3D;
         Bmp.Width := NewLargeur + Effet3D;
-        BMP.Canvas.TextOut(Bmp.Width, Bmp.Height, '');
+        Bmp.Canvas.TextOut(Bmp.Width, Bmp.Height, '');
 
         if Cadre then
         begin

@@ -4,8 +4,8 @@ object frmSaisieEmpruntAlbum: TfrmSaisieEmpruntAlbum
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'Saisie d'#39'un mouvement d'#39'album'
-  ClientHeight = 257
-  ClientWidth = 479
+  ClientHeight = 304
+  ClientWidth = 549
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
@@ -17,22 +17,22 @@ object frmSaisieEmpruntAlbum: TfrmSaisieEmpruntAlbum
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   DesignSize = (
-    479
-    257)
+    549
+    304)
   PixelsPerInch = 96
   TextHeight = 13
   object Label1: TLabel
-    Left = 8
-    Top = 213
-    Width = 26
-    Height = 11
+    Left = 4
+    Top = 260
+    Width = 30
+    Height = 13
     Hint = 'Date du mouvement'
     Alignment = taRightJustify
     Anchors = [akLeft, akBottom]
     Caption = 'Date :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clHotLight
-    Font.Height = -9
+    Font.Color = 12615680
+    Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
@@ -42,7 +42,7 @@ object frmSaisieEmpruntAlbum: TfrmSaisieEmpruntAlbum
     Left = 37
     Top = 48
     Width = 179
-    Height = 73
+    Height = 120
     Anchors = [akLeft, akTop, akBottom]
     AutoSize = False
     Caption = ' '
@@ -54,45 +54,46 @@ object frmSaisieEmpruntAlbum: TfrmSaisieEmpruntAlbum
     ParentFont = False
     Transparent = True
     WordWrap = True
+    ExplicitHeight = 73
   end
   object Label3: TLabel
-    Left = 1
-    Top = 47
-    Width = 33
-    Height = 11
+    Left = 3
+    Top = 46
+    Width = 36
+    Height = 13
     Hint = 'Date du mouvement'
     Alignment = taRightJustify
     Caption = 'Album :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clHotLight
-    Font.Height = -9
+    Font.Color = 12615680
+    Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
     Layout = tlCenter
   end
   object Label4: TLabel
-    Left = 7
-    Top = 7
-    Width = 27
-    Height = 11
+    Left = 8
+    Top = 8
+    Width = 31
+    Height = 13
     Hint = 'Date du mouvement'
     Alignment = taRightJustify
     Caption = 'S'#233'rie :'
     FocusControl = date_pret
     Font.Charset = ANSI_CHARSET
-    Font.Color = clHotLight
-    Font.Height = -9
+    Font.Color = 12615680
+    Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
     Layout = tlCenter
   end
   object Label5: TLabel
-    Left = 37
+    Left = 45
     Top = 8
-    Width = 179
-    Height = 33
+    Width = 171
+    Height = 89
     Anchors = [akLeft, akTop, akBottom]
     AutoSize = False
     Caption = ' '
@@ -106,32 +107,27 @@ object frmSaisieEmpruntAlbum: TfrmSaisieEmpruntAlbum
     WordWrap = True
   end
   object Label6: TLabel
-    Left = 0
-    Top = 127
-    Width = 34
-    Height = 11
+    Left = 8
+    Top = 122
+    Width = 39
+    Height = 13
     Hint = 'Date du mouvement'
     Alignment = taRightJustify
     Caption = 'Edition :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clHotLight
-    Font.Height = -9
+    Font.Color = 12615680
+    Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
     Layout = tlCenter
   end
   object lccEditions: TLightComboCheck
-    Left = 37
-    Top = 122
-    Width = 179
+    Left = 53
+    Top = 119
+    Width = 164
     Height = 20
     Checked = False
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -9
-    Font.Name = 'Tahoma'
-    Font.Style = []
     PropertiesStored = False
     CheckVisible = False
     OnChange = lccEditionsChange
@@ -144,36 +140,31 @@ object frmSaisieEmpruntAlbum: TfrmSaisieEmpruntAlbum
   end
   inline Frame11: TframBoutons
     Left = 0
-    Top = 234
-    Width = 479
-    Height = 23
+    Top = 275
+    Width = 549
+    Height = 29
     Align = alBottom
     TabOrder = 4
-    ExplicitTop = 234
-    ExplicitWidth = 479
-    ExplicitHeight = 23
+    ExplicitTop = 275
+    ExplicitWidth = 549
     inherited btnOK: TButton
-      Left = 319
+      Left = 389
       Width = 73
-      Height = 19
       Enabled = False
       OnClick = okClick
-      ExplicitLeft = 319
+      ExplicitLeft = 389
       ExplicitWidth = 73
-      ExplicitHeight = 19
     end
     inherited btnAnnuler: TButton
-      Left = 399
+      Left = 469
       Width = 72
-      Height = 19
-      ExplicitLeft = 399
+      ExplicitLeft = 469
       ExplicitWidth = 72
-      ExplicitHeight = 19
     end
   end
   object date_pret: TDateTimePickerLabeled
     Left = 37
-    Top = 209
+    Top = 256
     Width = 90
     Height = 22
     Hint = 'Date du mouvement'
@@ -189,7 +180,7 @@ object frmSaisieEmpruntAlbum: TfrmSaisieEmpruntAlbum
   end
   object pret: TCheckBoxLabeled
     Left = 153
-    Top = 210
+    Top = 257
     Width = 37
     Height = 19
     Hint = 'Case coch'#233'e = le mouvement est un emprunt'
@@ -198,8 +189,8 @@ object frmSaisieEmpruntAlbum: TfrmSaisieEmpruntAlbum
     Caption = 'Pr'#234't :'
     Ctl3D = False
     Font.Charset = ANSI_CHARSET
-    Font.Color = clHotLight
-    Font.Height = -9
+    Font.Color = 12615680
+    Font.Height = -11
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentCtl3D = False
@@ -213,8 +204,8 @@ object frmSaisieEmpruntAlbum: TfrmSaisieEmpruntAlbum
   object VTreeEmprunteur: TVirtualStringTree
     Left = 223
     Top = 28
-    Width = 249
-    Height = 200
+    Width = 319
+    Height = 247
     Align = alCustom
     Anchors = [akLeft, akTop, akRight, akBottom]
     AnimationDuration = 0

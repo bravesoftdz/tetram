@@ -4,16 +4,12 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls,
-  UfrmFond, VDTButton, ActnList, Buttons, ReadOnlyCheckBox, ToolWin, VirtualTrees, VirtualTree, ProceduresBDtk, UbdtForms, StrUtils,
-  jpeg, ShellAPI, LoadComplet, CRFurtif, Generics.Defaults, PngSpeedButton;
+  UfrmFond, VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, VirtualTree, ProceduresBDtk, UbdtForms, StrUtils,
+  jpeg, ShellAPI, LoadComplet, CRFurtif, Generics.Defaults, PngSpeedButton, pngimage,
+  LabeledCheckBox;
 
 type
   TfrmConsultationAlbum = class(TBdtForm, IImpressionApercu, IFicheEditable)
-    Popup3: TPopupMenu;
-    Informations1: TMenuItem;
-    Emprunts1: TMenuItem;
-    MenuItem1: TMenuItem;
-    Adresse1: TMenuItem;
     ActionList1: TActionList;
     FicheImprime: TAction;
     FicheApercu: TAction;
@@ -42,7 +38,6 @@ type
     Memo1: TMemo;
     lvColoristes: TVDTListView;
     Label7: TLabel;
-    Integrale: TReadOnlyCheckBox;
     Label11: TLabel;
     AnneeParution: TLabel;
     TitreSerie: TLabel;
@@ -50,7 +45,6 @@ type
     Tome: TLabel;
     Bevel1: TBevel;
     lvEditions: TListBox;
-    HorsSerie: TReadOnlyCheckBox;
     MainMenu1: TMainMenu;
     Fiche1: TMenuItem;
     Emprunts2: TMenuItem;
@@ -88,14 +82,9 @@ type
     lbOrientation: TLabel;
     Label19: TLabel;
     lbFormat: TLabel;
-    cbVO: TReadOnlyCheckBox;
     ListeEmprunts: TVirtualStringTree;
-    ajouter: TButton;
-    cbCouleur: TReadOnlyCheckBox;
-    cbStock: TReadOnlyCheckBox;
+    btnAjouter: TButton;
     edNotes: TMemo;
-    cbOffert: TReadOnlyCheckBox;
-    cbDedicace: TReadOnlyCheckBox;
     Label18: TLabel;
     lbCote: TLabel;
     Label20: TLabel;
@@ -109,11 +98,25 @@ type
     VDTButton1: TVDTButton;
     VDTButton2: TVDTButton;
     vstSerie: TVirtualStringTree;
+    Image1: TImage;
+    PopupMenu1: TPopupMenu;
+    N2: TMenuItem;
+    N3: TMenuItem;
+    N5: TMenuItem;
+    N6: TMenuItem;
+    N7: TMenuItem;
+    cbIntegrale: TLabeledCheckBox;
+    HorsSerie: TLabeledCheckBox;
+    cbOffert: TLabeledCheckBox;
+    cbVO: TLabeledCheckBox;
+    cbDedicace: TLabeledCheckBox;
+    cbStock: TLabeledCheckBox;
+    cbCouleur: TLabeledCheckBox;
     procedure lvScenaristesDblClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure ImpRep(Sender: TObject);
-    procedure ajouterClick(Sender: TObject);
+    procedure btnAjouterClick(Sender: TObject);
     procedure Impression1Click(Sender: TObject);
     procedure Imprimer1Click(Sender: TObject);
     procedure Imprimer2Click(Sender: TObject);
@@ -136,10 +139,10 @@ type
     procedure FicheModifierExecute(Sender: TObject);
     procedure VDTButton1Click(Sender: TObject);
     procedure VDTButton2Click(Sender: TObject);
-    procedure vstSerieGetImageIndex(Sender: TBaseVirtualTree;
-      Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-      var Ghosted: Boolean; var ImageIndex: Integer);
+    procedure vstSerieGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
     procedure vstSerieDblClick(Sender: TObject);
+    procedure N7Click(Sender: TObject);
+    procedure vstSerieAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
   private
     { Déclarations privées }
     CurrentCouverture: Integer;
@@ -219,7 +222,7 @@ begin
     ImpressionFicheAlbum(ID_Album, GUID_NULL, TComponent(Sender).Tag = 1);
 end;
 
-procedure TfrmConsultationAlbum.ajouterClick(Sender: TObject);
+procedure TfrmConsultationAlbum.btnAjouterClick(Sender: TObject);
 begin
   if SaisieMouvementAlbum(ID_Album, TEditionComplete(lvEditions.Items.Objects[lvEditions.ItemIndex]).ID_Edition, cbStock.Checked) then Historique.Refresh;
 end;
@@ -254,6 +257,12 @@ begin
   ShowCouverture(Succ(CurrentCouverture));
 end;
 
+procedure TfrmConsultationAlbum.vstSerieAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
+begin
+  if vstSerie.GetNodeLevel(Node) > 0 then
+    frmFond.DessineNote(TargetCanvas, ItemRect, TAlbum(vstSerie.GetNodeBasePointer(Node)).Notation);
+end;
+
 procedure TfrmConsultationAlbum.vstSerieDblClick(Sender: TObject);
 var
   val: TGUID;
@@ -268,7 +277,7 @@ var
 begin
   album := vstSerie.GetNodeBasePointer(Node);
   if Assigned(album) and IsEqualGUID(album.ID, ID_Album) then
-    ImageIndex := 1
+    ImageIndex := 13
   else
     ImageIndex := -1;
 end;
@@ -423,9 +432,12 @@ end;
 procedure TfrmConsultationAlbum.lvEditionsClick(Sender: TObject);
 begin
   PanelEdition.Visible := lvEditions.ItemIndex > -1;
-  if PanelEdition.Visible then begin
-    FCurrentEdition := TEditionComplete(lvEditions.Items.Objects[lvEditions.ItemIndex]);
-    try
+  try
+    if not PanelEdition.Visible then
+      FCurrentEdition := nil
+    else
+    begin
+      FCurrentEdition := TEditionComplete(lvEditions.Items.Objects[lvEditions.ItemIndex]);
       ISBN.Caption := FCurrentEdition.ISBN;
       Editeur.Caption := FormatTitre(FCurrentEdition.Editeur.NomEditeur);
       if FCurrentEdition.Editeur.SiteWeb <> '' then begin
@@ -434,7 +446,7 @@ begin
         Editeur.Cursor := crHandPoint;
       end
       else begin
-        Editeur.Font.Color := clWindowText;
+        Editeur.Font.Color := clBlack;
         Editeur.Font.Style := [];
         Editeur.Cursor := crDefault;
       end;
@@ -475,12 +487,11 @@ begin
 
       ListeEmprunts.RootNodeCount := FCurrentEdition.Emprunts.Emprunts.Count;
       nbEmprunts.Caption := IntToStr(FCurrentEdition.Emprunts.NBEmprunts);
-    finally
-      Ajouter.Enabled := True;
-      CurrentCouverture := 0;
-      VDTButton3.Visible := FCurrentEdition.Couvertures.Count > 1;
-      VDTButton4.Visible := VDTButton3.Visible;
     end;
+  finally
+    CurrentCouverture := 0;
+    VDTButton3.Visible := Assigned(FCurrentEdition) and (FCurrentEdition.Couvertures.Count > 1);
+    VDTButton4.Visible := VDTButton3.Visible;
   end;
 end;
 
@@ -541,19 +552,20 @@ begin
     TitreSerie.Cursor := crHandPoint;
   end
   else begin
-    TitreSerie.Font.Color := clWindowText;
+    TitreSerie.Font.Color := clBlack;
     TitreSerie.Font.Style := TitreSerie.Font.Style - [fsUnderline];
     TitreSerie.Cursor := crDefault;
   end;
   TitreAlbum.Caption := FormatTitre(FAlbum.Titre);
+  Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FAlbum.Notation].PngImage);
   Tome.Caption := NonZero(IntToStr(FAlbum.Tome));
-  Integrale.Checked := FAlbum.Integrale;
-  if Integrale.Checked then begin
+  cbIntegrale.Checked := FAlbum.Integrale;
+  if cbIntegrale.Checked then begin
     s := NonZero(IntToStr(FAlbum.TomeDebut));
     AjoutString(s, NonZero(IntToStr(FAlbum.TomeFin)), ' à ');
-    s2 := Integrale.Caption;
+    s2 := rsAlbumsIntegrale;
     AjoutString(s2, s, ' ', '[', ']');
-    Integrale.Caption := s2;
+    cbIntegrale.Caption := s2;
   end;
   HorsSerie.Checked := FAlbum.HorsSerie;
   AnneeParution.Caption := IIf(FAlbum.MoisParution > 0, ShortMonthNames[FAlbum.MoisParution] + ' ', '') + NonZero(IntToStr(FAlbum.AnneeParution));
@@ -591,10 +603,8 @@ begin
     vstSerie.Images := frmFond.ShareImageList;
 
   lvEditions.Items.BeginUpdate;
-  for i := 0 to Pred(FAlbum.Editions.Editions.Count) do begin
-    PEd := FAlbum.Editions.Editions[i];
+  for PEd in FAlbum.Editions.Editions do
     lvEditions.AddItem(PEd.ChaineAffichage, PEd);
-  end;
   lvEditions.Items.EndUpdate;
   lvEditions.Visible := FAlbum.Editions.Editions.Count > 1;
 end;
@@ -642,6 +652,14 @@ end;
 function TfrmConsultationAlbum.ModificationUpdate: Boolean;
 begin
   Result := True;
+end;
+
+procedure TfrmConsultationAlbum.N7Click(Sender: TObject);
+begin
+  FAlbum.ChangeNotation(TMenuItem(Sender).Tag);
+  Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FAlbum.Notation].PngImage);
+  Historique.AddWaiting(fcRefreshRepertoireData);
+  vstSerie.ReinitNodes(1);
 end;
 
 end.

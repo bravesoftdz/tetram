@@ -13,9 +13,6 @@ const
   GUID_NULL: TGUID = '{00000000-0000-0000-0000-000000000000}';
   sGUID_NULL = '{00000000-0000-0000-0000-000000000000}';
 
-function IIf(Test: Boolean; const BackTrue, BackFalse: string): string; overload; inline;
-function IIf(Test: Boolean; BackTrue, BackFalse: Integer): Integer; overload; inline;
-
 procedure AjoutString(var Chaine: string; const Ajout, Espace: string; const Avant: string = ''; const Apres: string = ''); overload; inline;
 procedure AjoutString(var Chaine: WideString; const Ajout, Espace: WideString; const Avant: WideString = ''; const Apres: WideString = ''); overload; inline;
 procedure AjoutString(var Chaine: AnsiString; const Ajout, Espace: AnsiString; const Avant: AnsiString = ''; const Apres: AnsiString = ''); overload; inline;
@@ -110,22 +107,6 @@ function NonZero(const I: integer): string;
 begin
   Result := '';
   if I <> 0 then Result := IntToStr(i);
-end;
-
-function IIf(Test: Boolean; const BackTrue, BackFalse: string): string;
-begin
-  if Test then
-    Result := BackTrue
-  else
-    Result := BackFalse;
-end;
-
-function IIf(Test: Boolean; BackTrue, BackFalse: Integer): Integer;
-begin
-  if Test then
-    Result := BackTrue
-  else
-    Result := BackFalse;
 end;
 
 function VerifieEAN(var Valeur: string): Boolean;

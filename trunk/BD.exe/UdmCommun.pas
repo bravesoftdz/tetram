@@ -20,6 +20,7 @@ type
     TCritereEtat: TUIBQuery;
     TCritereLangueTitre: TUIBQuery;
     TCritereSensLecture: TUIBQuery;
+    TCritereNotation: TUIBQuery;
     procedure DataModuleDestroy(Sender: TObject);
   private
     { Déclarations privées }

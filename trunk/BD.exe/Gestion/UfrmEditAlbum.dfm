@@ -28,6 +28,19 @@ object frmEditAlbum: TfrmEditAlbum
     Shape = bsBottomLine
     ExplicitTop = 25
   end
+  object Label28: TLabel
+    Left = 8
+    Top = 4
+    Width = 61
+    Height = 23
+    Caption = 'Album'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -19
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
   object ScrollBox: TScrollBox
     Left = 0
     Top = 33
@@ -1949,7 +1962,7 @@ object frmEditAlbum: TfrmEditAlbum
     end
   end
   object btnScript: TButton
-    Left = 8
+    Left = 185
     Top = 6
     Width = 69
     Height = 21

@@ -9,7 +9,7 @@ type
   TActionGestionAdd = function(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
   TActionGestionAddWithRef = function(VT: TVirtualStringTree; const ID_Editeur: TGUID; const Valeur: string; Source: TObjetComplet = nil): TGUID;
   TActionGestionModif = function(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
-  TActionGestionModif2 = function(ID: TGUID; Source: TObjetComplet = nil): Boolean;
+  TActionGestionModif2 = function(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
   TActionGestionSupp = function(VT: TVirtualStringTree): Boolean;
   TActionGestionAchat = function(VT: TVirtualStringTree): Boolean;
 
@@ -23,7 +23,7 @@ function SupprimerAchatsAlbum(VT: TVirtualStringTree): Boolean;
 
 function AjouterAlbums(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
 function ModifierAlbums(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
-function ModifierAlbums2(ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function ModifierAlbums2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
 function AcheterAlbums(VT: TVirtualStringTree): Boolean;
 function SupprimerAlbums(VT: TVirtualStringTree): Boolean;
 
@@ -34,17 +34,17 @@ function SupprimerGenres(VT: TVirtualStringTree): Boolean;
 function AjouterAuteurs(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
 function AjouterAuteurs2(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
 function ModifierAuteurs(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
-function ModifierAuteurs2(ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function ModifierAuteurs2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
 function SupprimerAuteurs(VT: TVirtualStringTree): Boolean;
 
 function AjouterSeries(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
 function ModifierSeries(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
-function ModifierSeries2(ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function ModifierSeries2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
 function SupprimerSeries(VT: TVirtualStringTree): Boolean;
 
 function AjouterEmprunteurs(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
 function ModifierEmprunteurs(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
-function ModifierEmprunteurs2(ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function ModifierEmprunteurs2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
 function SupprimerEmprunteurs(VT: TVirtualStringTree): Boolean;
 
 function AjouterCollections2(VT: TVirtualStringTree; const ID_Editeur: TGUID; const Valeur: string): TGUID;
@@ -54,7 +54,7 @@ function SupprimerCollections(VT: TVirtualStringTree): Boolean;
 
 function AjouterParaBD(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
 function ModifierParaBD(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
-function ModifierParaBD2(ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function ModifierParaBD2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
 function AcheterParaBD(VT: TVirtualStringTree): Boolean;
 function SupprimerParaBD(VT: TVirtualStringTree): Boolean;
 
@@ -187,7 +187,7 @@ begin
   end;
 end;
 
-function ModifierAlbums2(ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function ModifierAlbums2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
 begin
   Result := False;
   if IsEqualGUID(ID, GUID_NULL) then
@@ -308,7 +308,7 @@ begin
   end;
 end;
 
-function ModifierAuteurs2(ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function ModifierAuteurs2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
 begin
   Result := False;
   if IsEqualGUID(ID, GUID_NULL) then
@@ -360,7 +360,7 @@ begin
   end;
 end;
 
-function ModifierSeries2(ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function ModifierSeries2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
 begin
   Result := False;
   if IsEqualGUID(ID, GUID_NULL) then
@@ -409,7 +409,7 @@ begin
   end;
 end;
 
-function ModifierEmprunteurs2(ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function ModifierEmprunteurs2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
 begin
   Result := False;
   if IsEqualGUID(ID, GUID_NULL) then
@@ -520,7 +520,7 @@ begin
   end;
 end;
 
-function ModifierParaBD2(ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function ModifierParaBD2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
 begin
   Result := False;
   if IsEqualGUID(ID, GUID_NULL) then

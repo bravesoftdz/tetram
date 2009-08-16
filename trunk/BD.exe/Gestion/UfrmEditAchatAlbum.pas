@@ -9,6 +9,7 @@ uses
 
 type
   TfrmEditAchatAlbum = class(TbdtForm)
+    pnlForm: TScrollBox;
     Frame11: TframBoutons;
     rbAlbumExistant: TRadioButton;
     rbNouvelAlbum: TRadioButton;
@@ -42,6 +43,9 @@ type
     vtEditPersonnes: TframVTEdit;
     Label19: TLabel;
     Label16: TLabel;
+    Label28: TLabel;
+    Bevel2: TBevel;
+    btnScript: TButton;
     procedure FormCreate(Sender: TObject);
     procedure cbIntegraleClick(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
@@ -55,23 +59,26 @@ type
     procedure vtEditSeriesVTEditChange(Sender: TObject);
     procedure vtEditPersonnesVTEditChange(Sender: TObject);
     procedure OnEditAuteurs(Sender: TObject);
+    procedure btnScriptClick(Sender: TObject);
   private
-    FAlbum: TAlbumComplet;
+    { Déclarations privées }
+    FAlbum, FAlbumImport: TAlbumComplet;
     FScenaristesSelected, FDessinateursSelected, FColoristesSelected: Boolean;
-    procedure SetID_Album(const Value: TGUID);
     procedure AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean); overload;
     procedure AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage); overload;
     function GetID_Album: TGUID;
-    { Déclarations privées }
+    procedure SaveToObject;
+    procedure SetAlbum(const Value: TAlbumComplet);
   public
     { Déclarations publiques }
-    property ID_Album: TGUID read GetID_Album write SetID_Album;
+    property ID_Album: TGUID read GetID_Album;
+    property Album: TAlbumComplet read FAlbum write SetAlbum;
   end;
 
 implementation
 
 uses
-  Math, CommonConst, Proc_Gestions, Commun, Procedures, Textes, Divers,
+  Math, CommonConst, Proc_Gestions, Commun, Procedures, Textes, Divers, StrUtils,
   UHistorique, UMetadata;
 
 {$R *.dfm}
@@ -99,7 +106,6 @@ end;
 procedure TfrmEditAchatAlbum.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FAlbum := TAlbumComplet.Create;
 
   vtEditPersonnes.VTEdit.LinkControls.Add(Label19);
   vtEditSeries.VTEdit.LinkControls.Add(Label20);
@@ -108,16 +114,6 @@ begin
   vtEditSeries.AfterEdit := vtEditSeriesVTEditChange;
   vtEditAlbums.CanCreate := False;
   vtEditAlbums.CanEdit := False;
-  if TGlobalVar.Mode_en_cours = mdConsult then
-  begin
-    Frame11.Align := alBottom;
-    Frame11.btnOK.Caption := 'Ok';
-  end
-  else
-  begin
-    Frame11.Align := alTop;
-    Frame11.btnOK.Caption := 'Enregistrer';
-  end;
   rbNouvelAlbum.Checked := True;
   vtEditPersonnes.Mode := vmPersonnes;
   vtEditSeries.Mode := vmSeries;
@@ -127,9 +123,12 @@ begin
   FColoristesSelected := False;
 end;
 
-procedure TfrmEditAchatAlbum.SetID_Album(const Value: TGUID);
+procedure TfrmEditAchatAlbum.SetAlbum(const Value: TAlbumComplet);
+var
+  hg: IHourGlass;
 begin
-  FAlbum.Fill(Value);
+  hg := THourGlass.Create;
+  FAlbum := Value;
 
   rbNouvelAlbum.Enabled := FAlbum.RecInconnu;
   rbAlbumExistant.Enabled := FAlbum.RecInconnu;
@@ -236,38 +235,46 @@ begin
   end
   else
   begin
-    FAlbum.Titre := Trim(edTitre.Text);
-    if edAnneeParution.Text = '' then
-    begin
-      FAlbum.AnneeParution := 0;
-      FAlbum.MoisParution := 0;
-    end
-    else
-    begin
-      FAlbum.AnneeParution := StrToInt(edAnneeParution.Text);
-      if edMoisParution.Text = '' then
-        FAlbum.MoisParution := 0
-      else
-        FAlbum.MoisParution := StrToInt(edMoisParution.Text);
-    end;
-    FAlbum.Tome := StrToIntDef(edTome.Text, 0);
-    if (not cbIntegrale.Checked) or (edTomeDebut.Text = '') then
-      FAlbum.TomeDebut := 0
-    else
-      FAlbum.TomeDebut := StrToInt(edTomeDebut.Text);
-    if (not cbIntegrale.Checked) or (edTomeFin.Text = '') then
-      FAlbum.TomeFin := 0
-    else
-      FAlbum.TomeFin := StrToInt(edTomeFin.Text);
-    FAlbum.Integrale := cbIntegrale.Checked;
-    FAlbum.HorsSerie := cbHorsSerie.Checked;
-    FAlbum.Sujet.Text := histoire.Text;
-    FAlbum.Notes.Text := remarques.Text;
-
+    SaveToObject;
     FAlbum.SaveToDatabase;
     FAlbum.Acheter(True);
   end;
   ModalResult := mrOk;
+end;
+
+procedure TfrmEditAchatAlbum.SaveToObject;
+var
+  hg: IHourGlass;
+begin
+  hg := THourGlass.Create;
+
+  FAlbum.Titre := Trim(edTitre.Text);
+  if edAnneeParution.Text = '' then
+  begin
+    FAlbum.AnneeParution := 0;
+    FAlbum.MoisParution := 0;
+  end
+  else
+  begin
+    FAlbum.AnneeParution := StrToInt(edAnneeParution.Text);
+    if edMoisParution.Text = '' then
+      FAlbum.MoisParution := 0
+    else
+      FAlbum.MoisParution := StrToInt(edMoisParution.Text);
+  end;
+  FAlbum.Tome := StrToIntDef(edTome.Text, 0);
+  if (not cbIntegrale.Checked) or (edTomeDebut.Text = '') then
+    FAlbum.TomeDebut := 0
+  else
+    FAlbum.TomeDebut := StrToInt(edTomeDebut.Text);
+  if (not cbIntegrale.Checked) or (edTomeFin.Text = '') then
+    FAlbum.TomeFin := 0
+  else
+    FAlbum.TomeFin := StrToInt(edTomeFin.Text);
+  FAlbum.Integrale := cbIntegrale.Checked;
+  FAlbum.HorsSerie := cbHorsSerie.Checked;
+  FAlbum.Sujet.Text := histoire.Text;
+  FAlbum.Notes.Text := remarques.Text;
 end;
 
 procedure TfrmEditAchatAlbum.vtEditPersonnesVTEditChange(Sender: TObject);
@@ -297,7 +304,7 @@ end;
 
 procedure TfrmEditAchatAlbum.vtEditSeriesVTEditChange(Sender: TObject);
 var
-  i: Integer;
+  Auteur: TAuteur;
 begin
   FAlbum.ID_Serie := vtEditSeries.CurrentValue;
   if not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL) then
@@ -311,22 +318,22 @@ begin
         begin
           lvScenaristes.Items.Count := 0;
           FAlbum.Scenaristes.Clear;
-          for i := 0 to Pred(FAlbum.Serie.Scenaristes.Count) do
-            AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TAuteur(FAlbum.Serie.Scenaristes[i]).Personne);
+          for Auteur in FAlbum.Serie.Scenaristes do
+            AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, Auteur.Personne);
         end;
         if not FDessinateursSelected then
         begin
           lvDessinateurs.Items.Count := 0;
           FAlbum.Dessinateurs.Clear;
-          for i := 0 to Pred(FAlbum.Serie.Dessinateurs.Count) do
-            AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TAuteur(FAlbum.Serie.Dessinateurs[i]).Personne);
+          for Auteur in FAlbum.Serie.Dessinateurs do
+            AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, Auteur.Personne);
         end;
         if not FColoristesSelected then
         begin
           lvColoristes.Items.Count := 0;
           FAlbum.Coloristes.Clear;
-          for i := 0 to Pred(FAlbum.Serie.Coloristes.Count) do
-            AjouteAuteur(FAlbum.Coloristes, lvColoristes, TAuteur(FAlbum.Serie.Coloristes[i]).Personne);
+          for Auteur in FAlbum.Serie.Coloristes do
+            AjouteAuteur(FAlbum.Coloristes, lvColoristes, Auteur.Personne);
         end;
       finally
         lvScenaristes.Items.EndUpdate;
@@ -375,6 +382,34 @@ begin
   lvColoristes.Invalidate;
 end;
 
+procedure ImportScript(frm: TfrmEditAchatAlbum);
+begin
+  try
+    if frm.FAlbumImport.ReadyToFusion then
+    begin
+      frm.SaveToObject;
+      frm.vtEditSeries.VTEdit.PopupWindow.TreeView.InitializeRep;
+      frm.vtEditPersonnes.VTEdit.PopupWindow.TreeView.InitializeRep;
+      frm.FAlbumImport.FusionneInto(frm.Album);
+      frm.Album := frm.Album; // recharger la fenêtre avec frm.Album
+    end;
+  finally
+    FreeAndNil(frm.FAlbumImport);
+  end;
+end;
+
+procedure TfrmEditAchatAlbum.btnScriptClick(Sender: TObject);
+begin
+  FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
+  FAlbumImport := TAlbumComplet.Create;
+  if FAlbum.Titre <> '' then
+    FAlbumImport.DefaultSearch := FormatTitre(FAlbum.Titre)
+  else
+    FAlbumImport.DefaultSearch := FormatTitre(FAlbum.Serie.Titre);
+  FAlbumImport.FusionneEditions := False;
+  Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
+end;
+
 procedure TfrmEditAchatAlbum.btScenaristeClick(Sender: TObject);
 begin
   if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
@@ -408,7 +443,7 @@ end;
 
 procedure TfrmEditAchatAlbum.FormDestroy(Sender: TObject);
 begin
-  FAlbum.Free;
+  FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
 end;
 
 procedure TfrmEditAchatAlbum.lvScenaristesData(Sender: TObject; Item: TListItem);
@@ -419,8 +454,10 @@ end;
 
 procedure TfrmEditAchatAlbum.rbNouvelAlbumClick(Sender: TObject);
 begin
-  pnNouvelAlbum.Visible := rbNouvelAlbum.Checked;
   pnAlbumExistant.Visible := rbAlbumExistant.Checked;
+
+  pnNouvelAlbum.Visible := rbNouvelAlbum.Checked;
+  btnScript.Visible := rbNouvelAlbum.Checked;
 end;
 
 procedure TfrmEditAchatAlbum.lvDessinateursData(Sender: TObject; Item: TListItem);

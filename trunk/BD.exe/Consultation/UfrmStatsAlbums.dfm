@@ -8,7 +8,7 @@ object frmStatsAlbums: TfrmStatsAlbums
   ClientWidth = 396
   Color = clWhite
   Font.Charset = ANSI_CHARSET
-  Font.Color = clWindowText
+  Font.Color = clBlack
   Font.Height = -12
   Font.Name = 'Times New Roman'
   Font.Style = []
@@ -51,7 +51,7 @@ object frmStatsAlbums: TfrmStatsAlbums
     Alignment = taRightJustify
     Caption = 'Albums emprunt'#233's :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]
@@ -206,7 +206,7 @@ object frmStatsAlbums: TfrmStatsAlbums
     Alignment = taRightJustify
     Caption = 'Nombre d'#39'albums :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]
@@ -245,7 +245,7 @@ object frmStatsAlbums: TfrmStatsAlbums
     Alignment = taRightJustify
     Caption = 'Albums en stock :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]
@@ -316,7 +316,7 @@ object frmStatsAlbums: TfrmStatsAlbums
     Alignment = taRightJustify
     Caption = 'Nombre de s'#233'ries :'
     Font.Charset = ANSI_CHARSET
-    Font.Color = clWindowText
+    Font.Color = clBlack
     Font.Height = -13
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]

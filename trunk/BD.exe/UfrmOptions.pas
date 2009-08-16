@@ -77,6 +77,7 @@ type
     CheckBox2: TCheckBox;
     Label14: TLabel;
     VDTButton1: TVDTButton;
+    AfficherNotesListes: TCheckBox;
     procedure btnOKClick(Sender: TObject);
     procedure calculKeyPress(Sender: TObject; var Key: Char);
     procedure calculExit(Sender: TObject);
@@ -137,6 +138,7 @@ begin
     VerifMAJDelai := LightComboCheck1.Value;
     SerieObligatoireAlbums := CheckBox7.Checked;
     SerieObligatoireParaBD := CheckBox8.Checked;
+    AfficheNoteListes := AfficherNotesListes.Checked;
 
     SiteWeb.Adresse := Edit2.Text;
     SiteWeb.Cle := Edit3.Text;
@@ -195,14 +197,14 @@ end;
 
 procedure TfrmOptions.FormCreate(Sender: TObject);
 var
-  i: Integer;
   q: TUIBQuery;
   sr: TSearchRec;
+  MySQLUpdate: TMySQLUpdate;
 begin
   PrepareLV(Self);
   LitOptions;
-  for i := Pred(ListMySQLUpdates.Count) downto 0 do
-    ComboBox5.Items.Add(TMySQLUpdate(ListMySQLUpdates[i]).Version);
+  for MySQLUpdate in ListMySQLUpdates do
+    ComboBox5.Items.Insert(0, MySQLUpdate.Version);
   ComboBox5.ItemIndex := 0;
 
   if FindFirst(RepWebServer + '*.zip', faAnyFile, sr) = 0 then
@@ -276,6 +278,7 @@ begin
     LightComboCheck1.Value := VerifMAJDelai;
     CheckBox7.Checked := SerieObligatoireAlbums;
     CheckBox8.Checked := SerieObligatoireParaBD;
+    AfficherNotesListes.Checked := AfficheNoteListes;
 
     Edit2.Text := SiteWeb.Adresse;
     Edit3.Text := SiteWeb.Cle;

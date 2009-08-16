@@ -21,6 +21,7 @@ type
     fcRecreateToolBar,
     fcPrevisionsAchats,
     fcRefreshRepertoire,
+    fcRefreshRepertoireData,
     fcParaBD,
     fcImageParaBD,
     fcSerie,
@@ -32,15 +33,6 @@ type
     fcConflitImport,
     fcGallerie
   );
-
-const
-  UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcScripts, fcConflitImport];
-  NoSaveHistorique = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire]
-    // à cause des callback, les appels de gestion ne peuvent pas être sauvés
-    // et puis je vois pas bien à quoi ça pourrait servir
-    + UsedInGestion;
-  CanRefresh = [fcAlbum, fcEmprunteur, fcAuteur, fcSeriesIncompletes, fcPrevisionsSorties, fcPrevisionsAchats, fcGallerie];
-  MustRefresh = [fcRecherche, fcStock];
 
 type
   TConsultCallback = procedure(Data: Pointer);
@@ -121,6 +113,15 @@ implementation
 
 uses
   MAJ, UfrmFond, Forms, Proc_Gestions;
+
+const
+  UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcScripts, fcConflitImport];
+  NoSaveHistorique = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire, fcRefreshRepertoireData]
+    // à cause des callback, les appels de gestion ne peuvent pas être sauvés dans l'historique
+    // et puis je vois pas bien à quoi ça pourrait servir
+    + UsedInGestion;
+  CanRefresh = [fcAlbum, fcEmprunteur, fcAuteur, fcSeriesIncompletes, fcPrevisionsSorties, fcPrevisionsAchats, fcGallerie];
+  MustRefresh = [fcRecherche, fcStock];
 
 procedure RefreshCallBack(Data: Pointer);
 begin
@@ -408,6 +409,7 @@ begin
       fcRecreateToolBar: frmFond.RechargeToolBar;
       fcPrevisionsAchats: MAJPrevisionsAchats;
       fcRefreshRepertoire: frmFond.actActualiseRepertoire.Execute;
+      fcRefreshRepertoireData: frmFond.actActualiseRepertoireData;
       fcScripts:
         if Assigned(Consult.GestionCallback) then
           doCallback := MAJScript(Consult.GestionVTV)
@@ -496,6 +498,7 @@ end;
 
 constructor TConsult.Create;
 begin
+  inherited;
   Stream := TMemoryStream.Create;
   Data := nil;
 end;

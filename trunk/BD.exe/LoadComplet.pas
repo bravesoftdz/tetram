@@ -45,7 +45,7 @@ type
     procedure New(ClearInstance: Boolean = True);
     function ChaineAffichage(dummy: Boolean = True): string; virtual;
     procedure FillAssociations(TypeData: TVirtualMode);
-    procedure SaveAssociations(TypeData: TVirtualMode; ParentID: TGUID);
+    procedure SaveAssociations(TypeData: TVirtualMode; const ParentID: TGUID);
   published
     property ID: TGUID read FID;
     property Associations: TStringList read FAssociations;
@@ -141,6 +141,7 @@ type
     FTypeEdition: ROption;
     FOrientation: ROption;
     FSensLecture: ROption;
+    FNotation: Integer;
     function GetID_Editeur: TGUID; inline;
     procedure SetID_Editeur(const Value: TGUID); inline;
     function GetID_Collection: TGUID; inline;
@@ -168,6 +169,7 @@ type
     procedure SaveToDatabase(UseTransaction: TUIBTransaction); override;
     function ChaineAffichage: string; reintroduce; overload;
     function ChaineAffichage(Simple: Boolean): string; overload; override;
+    procedure ChangeNotation(Note: Integer);
   published
     property ID_Serie: TGUID read FID write FID;
     property ID_Editeur: TGUID read GetID_Editeur write SetID_Editeur;
@@ -197,6 +199,7 @@ type
     property FormatEdition: ROption read FFormatEdition write FFormatEdition;
     property Orientation: ROption read FOrientation write FOrientation;
     property SensLecture: ROption read FSensLecture write FSensLecture;
+    property Notation: Integer read FNotation write FNotation;
   end;
 
   TAuteurComplet = class(TObjetComplet)
@@ -335,6 +338,9 @@ type
     FEditions: TEditionsCompletes;
     FComplet: Boolean;
     FReadyToFusion: Boolean;
+    FFusionneEditions: Boolean;
+    FNotation: Integer;
+    FDefaultSearch: string;
     function GetID_Serie: TGUID; inline;
     procedure SetID_Serie(const Value: TGUID); inline;
     procedure SetTitre(const Value: string); inline;
@@ -347,9 +353,12 @@ type
     procedure Acheter(Prevision: Boolean);
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
+    procedure ChangeNotation(Note: Integer);
 
     procedure FusionneInto(Dest: TAlbumComplet);
     property ReadyToFusion: Boolean read FReadyToFusion write FReadyToFusion;
+    property FusionneEditions: Boolean read FFusionneEditions write FFusionneEditions;
+    property DefaultSearch: string read FDefaultSearch write FDefaultSearch;
   published
     property Complet: Boolean read FComplet;
     property ID_Album: TGUID read FID write FID;
@@ -369,6 +378,7 @@ type
     property Sujet: TStringList read FSujet;
     property Notes: TStringList read FNotes;
     property Editions: TEditionsCompletes read FEditions;
+    property Notation: Integer read FNotation write FNotation;
   end;
 
   TEmprunteurComplet = class(TObjetComplet)
@@ -629,7 +639,7 @@ type
   end;
 
   TGroupCritere = class(TBaseCritere)
-    SousCriteres: TList;
+    SousCriteres: TObjectList<TBaseCritere>;
     GroupOption: TGroupOption;
 
     constructor Create(Parent: TGroupCritere); override;
@@ -670,7 +680,7 @@ type
     Resultats: TObjectList<TAlbum>;
     ResultatsInfos: TStrings;
     Criteres: TGroupCritere;
-    SortBy: TList;
+    SortBy: TObjectList<TCritereTri>;
     RechercheSimple: TRechercheSimple;
     FLibelle: string;
 
@@ -785,10 +795,30 @@ begin
   Result := FormatTitreAlbum(Simple, AvecSerie, Titre, Serie.Titre, Tome, TomeDebut, TomeFin, Integrale, HorsSerie);
 end;
 
+procedure TAlbumComplet.ChangeNotation(Note: Integer);
+begin
+  with TUIBQuery.Create(nil) do
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'update albums set notation = ? where id_album = ?';
+      Params.AsSmallint[0] := Note;
+      Params.AsString[1] := GUIDToString(ID_Album);
+      ExecSQL;
+      Transaction.Commit;
+
+      FNotation := Note;
+    finally
+      Transaction.Free;
+      Free;
+    end;
+end;
+
 procedure TAlbumComplet.Clear;
 begin
   inherited;
   FReadyToFusion := False;
+  // le statut doit être conservé même si on fait un clear
+  // FFusionneEditions := True;
 
   ID_Album := GUID_NULL;
   Titre := '';
@@ -801,6 +831,7 @@ begin
   TomeFin := 0;
   HorsSerie := False;
   Integrale := False;
+  Notation := -1;
 
   Scenaristes.Clear;
   Dessinateurs.Clear;
@@ -837,7 +868,7 @@ begin
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       FetchBlobs := True;
-      SQL.Text := 'SELECT TITREALBUM, MOISPARUTION, ANNEEPARUTION, ID_Serie, TOME, TOMEDEBUT, TOMEFIN, SUJETALBUM, REMARQUESALBUM, HORSSERIE, INTEGRALE, COMPLET FROM ALBUMS WHERE ID_Album = ?';
+      SQL.Text := 'SELECT TITREALBUM, MOISPARUTION, ANNEEPARUTION, ID_Serie, TOME, TOMEDEBUT, TOMEFIN, SUJETALBUM, REMARQUESALBUM, HORSSERIE, INTEGRALE, COMPLET, NOTATION FROM ALBUMS WHERE ID_Album = ?';
       Params.AsString[0] := GUIDToString(Reference);
       Open;
       RecInconnu := Eof;
@@ -854,6 +885,7 @@ begin
         Self.TomeFin := Fields.ByNameAsInteger['TOMEFIN'];
         Self.Integrale := Fields.ByNameAsBoolean['INTEGRALE'];
         Self.HorsSerie := Fields.ByNameAsBoolean['HORSSERIE'];
+        Self.Notation := Fields.ByNameAsSmallint['NOTATION'];
 
         Self.Serie.Fill(StringToGUIDDef(Fields.ByNameAsString['ID_SERIE'], GUID_NULL));
 
@@ -944,7 +976,7 @@ begin
     then
       Dest.ID_Serie := ID_Serie;
 
-    Editions.FusionneInto(Dest.Editions);
+    if FusionneEditions then Editions.FusionneInto(Dest.Editions);
   finally
     DefaultAlbum.Free;
   end;
@@ -958,6 +990,8 @@ end;
 procedure TAlbumComplet.PrepareInstance;
 begin
   inherited;
+  FFusionneEditions := True;
+  FDefaultSearch := '';
   FScenaristes := TObjectList<TAuteur>.Create;
   FDessinateurs := TObjectList<TAuteur>.Create;
   FColoristes := TObjectList<TAuteur>.Create;
@@ -971,7 +1005,7 @@ procedure TAlbumComplet.SaveToDatabase(UseTransaction: TUIBTransaction);
 var
   s: string;
   q: TUIBQuery;
-  i: Integer;
+  Auteur: TAuteur;
   hg: IHourGlass;
   Edition: TEditionComplete;
 begin
@@ -1043,35 +1077,32 @@ begin
       SQL.Clear;
       SQL.Add('INSERT INTO AUTEURS (ID_Album, METIER, ID_Personne)');
       SQL.Add('VALUES (:ID_Album, :METIER, :ID_Personne)');
-      for i := 0 to Pred(Scenaristes.Count) do
+      for Auteur in Scenaristes do
       begin
         Params.AsString[0] := GUIDToString(ID_Album);
         Params.AsInteger[1] := 0;
-        Params.AsString[2] := GUIDToString(TAuteur(Scenaristes[i]).Personne.ID);
+        Params.AsString[2] := GUIDToString(Auteur.Personne.ID);
         ExecSQL;
       end;
-      for i := 0 to Pred(Dessinateurs.Count) do
+      for Auteur in Dessinateurs do
       begin
         Params.AsString[0] := GUIDToString(ID_Album);
         Params.AsInteger[1] := 1;
-        Params.AsString[2] := GUIDToString(TAuteur(Dessinateurs[i]).Personne.ID);
+        Params.AsString[2] := GUIDToString(Auteur.Personne.ID);
         ExecSQL;
       end;
-      for i := 0 to Pred(Coloristes.Count) do
+      for Auteur in Coloristes do
       begin
         Params.AsString[0] := GUIDToString(ID_Album);
         Params.AsInteger[1] := 2;
-        Params.AsString[2] := GUIDToString(TAuteur(Coloristes[i]).Personne.ID);
+        Params.AsString[2] := GUIDToString(Auteur.Personne.ID);
         ExecSQL;
       end;
 
       s := '';
-      for i := 0 to Pred(Editions.Editions.Count) do
-      begin
-        Edition := Editions.Editions[i];
+      for Edition in Editions.Editions do
         if not Edition.RecInconnu then
           AjoutString(s, QuotedStr(GUIDToString(Edition.ID_Edition)), ',');
-      end;
 
       // éditions supprimées
       SQL.Text := 'DELETE FROM EDITIONS WHERE ID_ALBUM = ?';
@@ -1085,9 +1116,8 @@ begin
       Params.AsString[0] := GUIDToString(ID_Album);
       ExecSQL;
 
-      for i := 0 to Pred(Editions.Editions.Count) do
+      for Edition in Editions.Editions do
       begin
-        Edition := Editions.Editions[i];
         Edition.ID_Album := ID_Album;
         Edition.SaveToDatabase(Transaction);
       end;
@@ -1435,12 +1465,9 @@ begin
       ExecSQL;
 
       s := '';
-      for i := 0 to Pred(Couvertures.Count) do
-      begin
-        PC := Couvertures[i];
+      for PC in Couvertures do
         if not IsEqualGUID(PC.ID, GUID_NULL) then
           AjoutString(s, QuotedStr(GUIDToString(PC.ID)), ',');
-      end;
 
       SQL.Text := 'DELETE FROM COUVERTURES WHERE ID_EDITION = ?';
       if s <> '' then
@@ -1478,9 +1505,7 @@ begin
 
         q5.SQL.Text := 'UPDATE COUVERTURES SET FichierCouverture = :FichierCouverture, Ordre = :Ordre, CategorieImage = :CategorieImage WHERE ID_Couverture = :ID_Couverture';
 
-        for i := 0 to Pred(Couvertures.Count) do
-        begin
-          PC := Couvertures[i];
+        for PC in Couvertures do
           if IsEqualGUID(PC.ID, GUID_NULL) then
           begin // nouvelles couvertures
             if (not PC.NewStockee) then
@@ -1500,7 +1525,7 @@ begin
               q1.Params.ByNameAsString['ID_Edition'] := GUIDToString(ID_Edition);
               q1.Params.ByNameAsString['ID_Album'] := GUIDToString(ID_Album);
               q1.Params.ByNameAsString['FichierCouverture'] := PC.NewNom;
-              q1.Params.ByNameAsInteger['Ordre'] := i;
+              q1.Params.ByNameAsInteger['Ordre'] := Couvertures.IndexOf(PC);
               q1.Params.ByNameAsInteger['CategorieImage'] := PC.Categorie;
               q1.ExecSQL;
             end
@@ -1509,7 +1534,7 @@ begin
               q2.Params.ByNameAsString['ID_Edition'] := GUIDToString(ID_Edition);
               q2.Params.ByNameAsString['ID_Album'] := GUIDToString(ID_Album);
               q2.Params.ByNameAsString['FichierCouverture'] := ChangeFileExt(ExtractFileName(PC.NewNom), '');
-              q2.Params.ByNameAsInteger['Ordre'] := i;
+              q2.Params.ByNameAsInteger['Ordre'] := Couvertures.IndexOf(PC);
               Stream := GetJPEGStream(PC.NewNom);
               try
                 q2.ParamsSetBlob('IMAGECOUVERTURE', Stream);
@@ -1560,12 +1585,11 @@ begin
             // couvertures renommées, réordonnées, changée de catégorie, etc (q5)
             // obligatoire pour les changement de stockage
             q5.Params.ByNameAsString['FichierCouverture'] := PC.NewNom;
-            q5.Params.ByNameAsInteger['Ordre'] := i;
+            q5.Params.ByNameAsInteger['Ordre'] := Couvertures.IndexOf(PC);
             q5.Params.ByNameAsInteger['CategorieImage'] := PC.Categorie;
             q5.Params.ByNameAsString['ID_Couverture'] := GUIDToString(PC.ID);
             q5.ExecSQL;
           end;
-        end;
       finally
         FreeAndNil(q1);
         FreeAndNil(q2);
@@ -1883,6 +1907,24 @@ begin
   AjoutString(Result, s, ' ', '(', ')');
 end;
 
+procedure TSerieComplete.ChangeNotation(Note: Integer);
+begin
+  with TUIBQuery.Create(nil) do
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'update series set notation = ? where id_serie = ?';
+      Params.AsSmallint[0] := Note;
+      Params.AsString[1] := GUIDToString(ID_Serie);
+      ExecSQL;
+      Transaction.Commit;
+
+      FNotation := Note;
+    finally
+      Transaction.Free;
+      Free;
+    end;
+end;
+
 procedure TSerieComplete.Clear;
 begin
   inherited;
@@ -1915,6 +1957,7 @@ begin
   SuivreManquants := True;
   SuivreSorties := True;
   NbAlbums := 0;
+  Notation := -1;
 end;
 
 constructor TSerieComplete.Create(const Reference, IdAuteur: TGUID);
@@ -1961,7 +2004,7 @@ begin
       SQL.Text := 'select titreserie, coalesce(terminee, -1) as terminee, sujetserie, remarquesserie, siteweb, complete, nb_albums, s.id_editeur, s.id_collection , nomcollection, suivresorties, suivremanquants, coalesce(vo, -1) as vo, coalesce(couleur, -1) as couleur,';
       SQL.Add('coalesce(etat, -1) as etat, le.libelle as setat, coalesce(reliure, -1) as reliure, lr.libelle as sreliure, coalesce(orientation, -1) as orientation, lo.libelle as sorientation,');
       SQL.Add('coalesce(formatedition, -1) as formatedition, lf.libelle as sformatedition, coalesce(typeedition, -1) as typeedition, lte.libelle as stypeedition,');
-      SQL.Add('coalesce(senslecture, -1) as senslecture, lsl.libelle as ssenslecture');
+      SQL.Add('coalesce(senslecture, -1) as senslecture, lsl.libelle as ssenslecture, notation');
       SQL.Add('from series s left join collections c on s.id_collection = c.id_collection');
       SQL.Add('left join listes le on (le.ref = s.etat and le.categorie = 1)');
       SQL.Add('left join listes lr on (lr.ref = s.reliure and lr.categorie = 2)');
@@ -1977,6 +2020,7 @@ begin
       if not RecInconnu then
       begin
         Self.Titre := Fields.ByNameAsString['TITRESERIE'];
+        Self.Notation := Fields.ByNameAsSmallint['NOTATION'];
         Self.Terminee := Fields.ByNameAsInteger['TERMINEE'];
         Self.VO := Fields.ByNameAsInteger['VO'];
         Self.Couleur := Fields.ByNameAsInteger['COULEUR'];
@@ -2107,6 +2151,7 @@ procedure TSerieComplete.SaveToDatabase(UseTransaction: TUIBTransaction);
 var
   s: string;
   i: Integer;
+  Auteur: TAuteur;
 begin
   inherited;
   with TUIBQuery.Create(nil) do
@@ -2195,25 +2240,25 @@ begin
       SQL.Clear;
       SQL.Add('INSERT INTO AUTEURS_SERIES (ID_Serie, METIER, ID_Personne)');
       SQL.Add('VALUES (:ID_Serie, :METIER, :ID_Personne)');
-      for i := 0 to Pred(Scenaristes.Count) do
+      for Auteur in Scenaristes do
       begin
         Params.AsString[0] := GUIDToString(ID_Serie);
         Params.AsInteger[1] := 0;
-        Params.AsString[2] := GUIDToString(TAuteur(Scenaristes[i]).Personne.ID);
+        Params.AsString[2] := GUIDToString(Auteur.Personne.ID);
         ExecSQL;
       end;
-      for i := 0 to Pred(Dessinateurs.Count) do
+      for Auteur in Dessinateurs do
       begin
         Params.AsString[0] := GUIDToString(ID_Serie);
         Params.AsInteger[1] := 1;
-        Params.AsString[2] := GUIDToString(TAuteur(Dessinateurs[i]).Personne.ID);
+        Params.AsString[2] := GUIDToString(Auteur.Personne.ID);
         ExecSQL;
       end;
-      for i := 0 to Pred(Coloristes.Count) do
+      for Auteur in Coloristes do
       begin
         Params.AsString[0] := GUIDToString(ID_Serie);
         Params.AsInteger[1] := 2;
-        Params.AsString[2] := GUIDToString(TAuteur(Coloristes[i]).Personne.ID);
+        Params.AsString[2] := GUIDToString(Auteur.Personne.ID);
         ExecSQL;
       end;
 
@@ -3259,9 +3304,9 @@ procedure TParaBDComplet.SaveToDatabase(UseTransaction: TUIBTransaction);
 var
   s: string;
   q: TUIBQuery;
-  i: Integer;
   hg: IHourGlass;
   Stream: TStream;
+  Auteur: TAuteur;
 begin
   inherited;
   hg := THourGlass.Create;
@@ -3328,10 +3373,10 @@ begin
       SQL.Clear;
       SQL.Add('INSERT INTO AUTEURS_PARABD (ID_ParaBD, ID_Personne)');
       SQL.Add('VALUES (:ID_Album, :ID_Personne)');
-      for i := 0 to Pred(Auteurs.Count) do
+      for Auteur in Auteurs do
       begin
         Params.AsString[0] := GUIDToString(ID_ParaBD);
-        Params.AsString[1] := GUIDToString(TAuteur(Auteurs[i]).Personne.ID);
+        Params.AsString[1] := GUIDToString(Auteur.Personne.ID);
         ExecSQL;
       end;
 
@@ -3578,7 +3623,7 @@ begin
   end;
 end;
 
-procedure TObjetComplet.SaveAssociations(TypeData: TVirtualMode; ParentID: TGUID);
+procedure TObjetComplet.SaveAssociations(TypeData: TVirtualMode; const ParentID: TGUID);
 var
   i: Integer;
 begin
@@ -3671,15 +3716,13 @@ var
 
   function ProcessSort(out sOrderBy: string): string;
   var
-    i: Integer;
     Critere: TCritereTri;
     s: string;
   begin
     sOrderBy := '';
     Result := '';
-    for i := 0 to Pred(SortBy.Count) do
+    for Critere in SortBy do
     begin
-      Critere := TCritereTri(SortBy[i]);
       Critere._Champ := ChampByID(Critere.iChamp);
       s := string(Critere.NomTable + '.' + Critere.Champ);
       Result := Result + ', ' + s;
@@ -3697,7 +3740,6 @@ var
   function ProcessCritere(ItemCritere: TGroupCritere): string;
   var
     p: TBaseCritere;
-    i: Integer;
     sBool: string;
   begin
     Result := '';
@@ -3705,9 +3747,7 @@ var
       sBool := ' OR '
     else
       sBool := ' AND ';
-    for i := 0 to Pred(ItemCritere.SousCriteres.Count) do
-    begin
-      p := ItemCritere.SousCriteres[i];
+    for p in ItemCritere.SousCriteres do
       if p is TCritere then
       begin
         if Result = '' then
@@ -3723,12 +3763,10 @@ var
         else
           Result := Result + sBool + '(' + ProcessCritere(p as TGroupCritere) + ')';
       end;
-    end;
   end;
 
 var
   Album: TAlbum;
-  i: Integer;
   q: TUIBQuery;
   sWhere, sOrderBy, s: string;
   CritereTri: TCritereTri;
@@ -3766,9 +3804,7 @@ begin
         Album.Fill(q);
         Resultats.Add(Album);
         s := '';
-        for i := 0 to Pred(SortBy.Count) do
-        begin
-          CritereTri := TCritereTri(SortBy[i]);
+        for CritereTri in SortBy do
           if CritereTri.Imprimer then
           begin
             AjoutString(s, CritereTri.LabelChamp + ' : ', #13#10);
@@ -3790,7 +3826,6 @@ begin
                       s := s + StringReplace(AdjustLineBreaks(Fields.ByNameAsString[CritereTri.Champ], tlbsCRLF), #13#10, '\n', [rfReplaceAll]);
                   end;
               end;
-          end;
         end;
         ResultatsInfos.Add(s);
         Next;
@@ -3894,7 +3929,7 @@ begin
   Resultats := TObjectList<TAlbum>.Create(True);
   ResultatsInfos := TStringList.Create;
   Criteres := TGroupCritere.Create(nil);
-  SortBy := TObjectList.Create(True);
+  SortBy := TObjectList<TCritereTri>.Create(True);
 end;
 
 function TRecherche.AddCritere(Parent: TGroupCritere): TCritere;
@@ -4006,12 +4041,10 @@ procedure TRecherche.SaveToStream(Stream: TStream);
 
   procedure ProcessSousCriteres(aCritere: TGroupCritere);
   var
-    i: Integer;
     Critere: TBaseCritere;
   begin
-    for i := 0 to Pred(aCritere.SousCriteres.Count) do
+    for Critere in aCritere.SousCriteres do
     begin
-      Critere := aCritere.SousCriteres[i];
       WriteCritere(Critere);
       if (Critere is TGroupCritere) then
         ProcessSousCriteres(TGroupCritere(Critere));
@@ -4020,11 +4053,11 @@ procedure TRecherche.SaveToStream(Stream: TStream);
 
   procedure WriteSortBy;
   var
-    i: Integer;
+    CritereTri: TCritereTri;
   begin
     WriteInteger(SortBy.Count);
-    for i := 0 to Pred(SortBy.Count) do
-      TCritereTri(SortBy[i]).SaveToStream(Stream);
+    for CritereTri in SortBy do
+      CritereTri.SaveToStream(Stream);
   end;
 
 begin
@@ -4074,7 +4107,7 @@ procedure TCritere.LoadFromStream(Stream: TStream);
   begin
     l := ReadInteger;
     SetLength(Result, l);
-    Stream.Read(Result[1], l);
+    Stream.Read(Result[1], l * SizeOf(Char));
   end;
 
 begin
@@ -4102,7 +4135,7 @@ procedure TCritere.SaveToStream(Stream: TStream);
   begin
     l := Length(Value);
     WriteInteger(l);
-    Stream.WriteBuffer(Value[1], l);
+    Stream.WriteBuffer(Value[1], l * SizeOf(Char));
   end;
 
 begin
@@ -4122,7 +4155,7 @@ end;
 constructor TGroupCritere.Create(Parent: TGroupCritere);
 begin
   inherited;
-  SousCriteres := TObjectList.Create(True);
+  SousCriteres := TObjectList<TBaseCritere>.Create(True);
 end;
 
 destructor TGroupCritere.Destroy;

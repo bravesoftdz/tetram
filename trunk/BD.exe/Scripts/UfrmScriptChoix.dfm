@@ -25,6 +25,7 @@ object frmScriptChoix: TfrmScriptChoix
     TabOrder = 0
     ExplicitTop = 358
     ExplicitWidth = 567
+    ExplicitHeight = 25
     inherited btnOK: TButton
       Left = 404
       ExplicitLeft = 404
@@ -55,6 +56,7 @@ object frmScriptChoix: TfrmScriptChoix
     TreeOptions.PaintOptions = [toHideFocusRect, toShowButtons, toShowDropmark, toShowTreeLines, toThemeAware, toUseBlendedImages]
     TreeOptions.SelectionOptions = [toFullRowSelect]
     OnAfterCellPaint = VirtualStringTree1AfterCellPaint
+    OnDblClick = VirtualStringTree1DblClick
     OnGetText = VirtualStringTree1GetText
     OnPaintText = VirtualStringTree1PaintText
     OnInitChildren = VirtualStringTree1InitChildren

@@ -141,6 +141,7 @@ object frmRepertoire: TfrmRepertoire
         ParentShowHint = False
         ShowHint = True
         TabOrder = 1
+        OnAfterItemPaint = vstAlbumsAfterItemPaint
         OnDblClick = vstAlbumsDblClick
         Columns = <
           item

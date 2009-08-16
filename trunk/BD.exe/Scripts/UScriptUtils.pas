@@ -3,7 +3,8 @@ unit UScriptUtils;
 interface
 
 uses
-  SysUtils, Classes, Graphics, Types, StdCtrls, SynEdit, Controls, VirtualTrees, Contnrs, uPSCompiler, uPSUtils;
+  SysUtils, Classes, Graphics, Types, StdCtrls, SynEdit, Controls, VirtualTrees, Contnrs, uPSCompiler, uPSUtils,
+  Generics.Collections, Generics.Defaults;
 
 type
   TInfoType = (itProcedure, itFunction, itType, itVar, itConstant, itField, itConstructor);
@@ -24,17 +25,19 @@ type
 
   TParamInfoArray = array of TParamInfoRecord;
 
-  TDebugList = class(TObjectList)
+  TDebugList<T: class> = class(TObjectList<T>)
   private
     FView: TVirtualStringTree;
     procedure SetView(const Value: TVirtualStringTree);
   protected
-    procedure Notify(Ptr: Pointer; Action: TListNotification); override;
+    procedure Notify(const Value: T; Action: TCollectionNotification); override;
   public
     destructor Destroy; override;
-    procedure Clear; override;
+    procedure Clear; reintroduce;
     procedure UpdateView;
     procedure DeleteCurrent;
+    function Current: T;
+    function Last: T;
     property View: TVirtualStringTree read FView write SetView;
   end;
 
@@ -64,46 +67,32 @@ type
     Active: Boolean;
   end;
 
-  TWatchList = class(TDebugList)
-  private
-    function GetInfo(Index: Integer): TWatchInfo;
-    procedure PutInfo(Index: Integer; const Value: TWatchInfo);
+  TWatchList = class(TDebugList<TWatchInfo>)
   public
-    property Items[Index: Integer]: TWatchInfo read GetInfo write PutInfo; default;
     function IndexOfName(const VarName: AnsiString): Integer;
     function CountActive: Integer;
     procedure AddWatch(const VarName: AnsiString);
   end;
 
-  TMessageList = class(TDebugList)
-  private
-    function GetInfo(Index: Integer): TMessageInfo;
-    procedure PutInfo(Index: Integer; const Value: TMessageInfo);
+  TMessageList = class(TDebugList<TMessageInfo>)
   public
-    property Items[Index: Integer]: TMessageInfo read GetInfo write PutInfo; default;
     function AddCompileErrorMessage(const Fichier, Text: AnsiString; TypeMessage: TTypeMessage; Line, Char: Cardinal): Integer;
     function AddRuntimeErrorMessage(const Fichier, Text: AnsiString; Line, Char: Cardinal): Integer;
     function AddInfoMessage(const Fichier, Text: AnsiString; Line: Cardinal = 0; Char: Cardinal = 0): Integer;
-    function Current: TMessageInfo;
-    function Last: TMessageInfo;
   end;
 
   TGetScript = function(const Fichier: AnsiString): TSynEdit of object;
 
-  TBreakpointList = class(TDebugList)
+  TBreakpointList = class(TDebugList<TBreakpointInfo>)
   private
     FGetScript: TGetScript;
   protected
-    procedure Notify(Ptr: Pointer; Action: TListNotification); override;
-    function GetInfo(Index: Integer): TBreakpointInfo;
-    procedure PutInfo(Index: Integer; const Value: TBreakpointInfo);
+    procedure Notify(const Value: TBreakpointInfo; Action: TCollectionNotification); override;
   public
     function IndexOf(const Fichier: AnsiString; const ALine: Cardinal): Integer;
     function Exists(const Fichier: AnsiString; const ALine: Cardinal): Boolean;
     procedure AddBreakpoint(const Fichier: AnsiString; const ALine: Cardinal);
     function Toggle(const Fichier: AnsiString; const ALine: Cardinal): Boolean;
-    property Items[Index: Integer]: TBreakpointInfo read GetInfo write PutInfo; default;
-    function Current: TBreakpointInfo;
 
     property Editor: TGetScript read FGetScript write FGetScript;
   end;
@@ -137,10 +126,10 @@ type
 
   TStringArray = array of AnsiString;
 
-procedure AddToTStrings(Strings: TStringArray; List: TStrings);
-function Explode(Trenner: AnsiString; Text: AnsiString): TStringArray;
+procedure AddToTStrings(const Strings: TStringArray; List: TStrings);
+function Explode(const Trenner: AnsiString; Text: AnsiString): TStringArray;
 function GetTypeName(Typ: TPSType): AnsiString;
-function GetParams(Decl: TPSParametersDecl; Delim: AnsiString = ''): AnsiString;
+function GetParams(Decl: TPSParametersDecl; const Delim: AnsiString = ''): AnsiString;
 function BaseTypeCompatible(p1, p2: Integer): Boolean;
 function HashString(const S: AnsiString): Cardinal;
 
@@ -165,16 +154,6 @@ begin
   Result := IndexOf(Fichier, ALine) <> -1;
 end;
 
-function TBreakpointList.GetInfo(Index: Integer): TBreakpointInfo;
-begin
-  Result := TBreakpointInfo(inherited Items[Index]);
-end;
-
-procedure TBreakpointList.PutInfo(Index: Integer; const Value: TBreakpointInfo);
-begin
-  Put(Index, Pointer(Value));
-end;
-
 function TBreakpointList.Toggle(const Fichier: AnsiString; const ALine: Cardinal): Boolean;
 var
   i: Integer;
@@ -192,14 +171,6 @@ begin
   end;
 end;
 
-function TBreakpointList.Current: TBreakpointInfo;
-begin
-  Result := nil;
-  if not Assigned(FView) or (FView.GetFirstSelected = nil) then
-    Exit;
-  Result := Items[FView.GetFirstSelected.Index];
-end;
-
 procedure TBreakpointList.AddBreakpoint(const Fichier: AnsiString; const ALine: Cardinal);
 var
   BP: TBreakpointInfo;
@@ -215,29 +186,29 @@ begin
   end;
 end;
 
-function CompareBreakpoint(Item1, Item2: Pointer): Integer;
-begin
-  Result := CompareText(TBreakpointInfo(Item1).Fichier, TBreakpointInfo(Item2).Fichier);
-  if Result = 0 then
-    Result := TBreakpointInfo(Item1).Line - TBreakpointInfo(Item2).Line;
-end;
-
-procedure TBreakpointList.Notify(Ptr: Pointer; Action: TListNotification);
+procedure TBreakpointList.Notify(const Value: TBreakpointInfo; Action: TCollectionNotification);
 begin
   inherited;
   case Action of
-    lnAdded, lnExtracted:
+    cnAdded, cnExtracted:
     begin
       //Editor.InvalidateLine(TBreakpointInfo(Ptr).Line);
       //Editor.InvalidateGutterLine(TBreakpointInfo(Ptr).Line);
       // InvalidateLine et InvalidateGutterLine bizarrement insuffisants dans certains cas
-      TBreakpointInfo(Ptr).FEditor.Invalidate;
+      Value.FEditor.Invalidate;
     end;
-    lnDeleted:
+    cnRemoved:
       ;
   end;
-  if Action = lnAdded then
-    Sort(CompareBreakpoint);
+  if Action = cnAdded then
+    Sort(TComparer<TBreakpointInfo>.Construct(
+      function(const Left, Right: TBreakpointInfo): Integer
+      begin
+        Result := CompareText(Left.Fichier, Right.Fichier);
+        if Result = 0 then
+          Result := Left.Line - Right.Line;
+      end
+    ));
 end;
 
 { TDebugInfos }
@@ -270,7 +241,7 @@ end;
 
 { TDebugList }
 
-procedure TDebugList.Clear;
+procedure TDebugList<T>.Clear;
 begin
   if Assigned(FView) then
     FView.BeginUpdate;
@@ -283,7 +254,15 @@ begin
   end;
 end;
 
-procedure TDebugList.DeleteCurrent;
+function TDebugList<T>.Current: T;
+begin
+  Result := nil;
+  if not Assigned(FView) or (FView.GetFirstSelected = nil) then
+    Exit;
+  Result := Items[FView.GetFirstSelected.Index];
+end;
+
+procedure TDebugList<T>.DeleteCurrent;
 begin
   if Assigned(FView) then
   begin
@@ -292,21 +271,29 @@ begin
   end;
 end;
 
-destructor TDebugList.Destroy;
+destructor TDebugList<T>.Destroy;
 begin
   SetView(nil);
   inherited;
 end;
 
-procedure TDebugList.Notify(Ptr: Pointer; Action: TListNotification);
+function TDebugList<T>.Last: T;
+begin
+  if Count > 0 then
+    Result := Items[Count - 1]
+  else
+    Result := nil;
+end;
+
+procedure TDebugList<T>.Notify(const Value: T; Action: TCollectionNotification);
 begin
   inherited;
   case Action of
-    lnAdded, lnExtracted, lnDeleted: UpdateView;
+    cnAdded, cnExtracted, cnRemoved: UpdateView;
   end;
 end;
 
-procedure TDebugList.SetView(const Value: TVirtualStringTree);
+procedure TDebugList<T>.SetView(const Value: TVirtualStringTree);
 begin
   if Assigned(FView) then
     FView.RootNodeCount := 0;
@@ -315,7 +302,7 @@ begin
     FView.RootNodeCount := Count;
 end;
 
-procedure TDebugList.UpdateView;
+procedure TDebugList<T>.UpdateView;
 begin
   if not Assigned(FView) then
     Exit;
@@ -340,31 +327,21 @@ end;
 
 function TWatchList.CountActive: Integer;
 var
-  i: Integer;
+  Watch: TWatchInfo;
 begin
   Result := 0;
-  for i := 0 to Pred(Count) do
-    if Items[i].Active then
+  for Watch in Self do
+    if Watch.Active then
       Inc(Result);
-end;
-
-function TWatchList.GetInfo(Index: Integer): TWatchInfo;
-begin
-  Result := TWatchInfo(inherited Items[Index]);
 end;
 
 function TWatchList.IndexOfName(const VarName: AnsiString): Integer;
 begin
   Result := 0;
-  while (Result < Count) and not SameText(TWatchInfo(Items[Result]).Name, VarName) do
+  while (Result < Count) and not SameText(Items[Result].Name, VarName) do
     Inc(Result);
   if Result = Count then
     Result := -1;
-end;
-
-procedure TWatchList.PutInfo(Index: Integer; const Value: TWatchInfo);
-begin
-  Put(Index, Pointer(Value));
 end;
 
 { TMessageList }
@@ -415,29 +392,6 @@ begin
   Msg.Category := cmRuntimeError;
 end;
 
-function TMessageList.Current: TMessageInfo;
-begin
-  Result := nil;
-  if not Assigned(FView) or (FView.GetFirstSelected = nil) then
-    Exit;
-  Result := Items[FView.GetFirstSelected.Index];
-end;
-
-function TMessageList.GetInfo(Index: Integer): TMessageInfo;
-begin
-  Result := TMessageInfo(inherited Items[Index]);
-end;
-
-function TMessageList.Last: TMessageInfo;
-begin
-  Result := TMessageInfo(inherited Last);
-end;
-
-procedure TMessageList.PutInfo(Index: Integer; const Value: TMessageInfo);
-begin
-  Put(Index, Pointer(Value));
-end;
-
 { TBreakpointInfo }
 
 destructor TBreakpointInfo.Destroy;
@@ -454,7 +408,7 @@ begin
   FEditor.InvalidateGutterLine(Line);
 end;
 
-procedure AddToTStrings(Strings: TStringArray; List: TStrings);
+procedure AddToTStrings(const Strings: TStringArray; List: TStrings);
 var
   Dummy: Integer;
 begin
@@ -464,7 +418,7 @@ begin
   end;
 end;
 
-procedure Split(Trenner: AnsiString; Text: AnsiString; var Text1, Text2: AnsiString);
+procedure Split(const Trenner, Text: AnsiString; var Text1, Text2: AnsiString);
 var
   EndPos: Integer;
 begin
@@ -477,7 +431,7 @@ begin
   Text2 := Copy(Text, EndPos + length(Trenner), length(Text));
 end;
 
-function Explode(Trenner: AnsiString; Text: AnsiString): TStringArray;
+function Explode(const Trenner: AnsiString; Text: AnsiString): TStringArray;
 begin
   result := nil;
   while Text <> '' do
@@ -529,39 +483,39 @@ begin
   end;
 end;
 
-function GetParams(Decl: TPSParametersDecl; Delim: AnsiString = ''): AnsiString;
+function GetParams(Decl: TPSParametersDecl; const Delim: AnsiString = ''): AnsiString;
 var
   Dummy: Integer;
 begin
   Assert(Decl <> nil);
-  result := '';
+  Result := '';
   if Decl.ParamCount > 0 then
   begin
-    result := result + ' (';
+    Result := Result + ' (';
     for Dummy := 0 to Decl.ParamCount - 1 do
     begin
       if Dummy <> 0 then
-        result := result + '; ';
+        Result := Result + '; ';
 
-      result := result + Delim;
+      Result := Result + Delim;
 
       if (Decl.Params[Dummy].Mode = pmOut) then
-        result := result + 'out ';
+        Result := Result + 'out ';
       if (Decl.Params[Dummy].Mode = pmInOut) then
-        result := result + 'var ';
+        Result := Result + 'var ';
 
-      Result := result + Decl.Params[Dummy].OrgName;
+      Result := Result + Decl.Params[Dummy].OrgName;
 
       if Decl.Params[Dummy].aType <> nil then
-        result := result + ': ' + GetTypeName(Decl.Params[Dummy].aType);
+        Result := Result + ': ' + GetTypeName(Decl.Params[Dummy].aType);
 
-      result := result + Delim;
+      Result := Result + Delim;
     end;
-    result := result + ')';
+    Result := Result + ')';
   end;
 
   if Decl.Result <> nil then
-    result := result + ': ' + GetTypeName(Decl.Result);
+    Result := Result + ': ' + GetTypeName(Decl.Result);
 end;
 
 function BaseTypeCompatible(p1, p2: Integer): Boolean;

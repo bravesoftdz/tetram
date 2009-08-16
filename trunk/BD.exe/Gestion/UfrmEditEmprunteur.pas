@@ -17,6 +17,7 @@ type
     Label3: TLabel;
     Bevel1: TBevel;
     Frame11: TframBoutons;
+    Label28: TLabel;
     procedure Frame11btnOKClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);

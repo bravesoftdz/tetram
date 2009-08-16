@@ -54,7 +54,7 @@ begin
   Prn.Headers.Clear;
 end;
 
-procedure ImprimeEdition(Prn: TPrintObject; Edition: TEditionComplete; fWaiting: IWaiting);
+procedure ImprimeEdition(Prn: TPrintObject; Edition: TEditionComplete; const fWaiting: IWaiting);
 const
   // en mm
   ThumbWidth = 60;
@@ -63,10 +63,11 @@ const
 
 var
   s: string;
-  nbImageHorz, numCol, i: Integer;
+  nbImageHorz, numCol: Integer;
   Repositionne, ImageDessinee: Boolean;
   ms: TStream;
   jpg: TJpegImage;
+  PC: TCouverture;
 begin
   Prn.Columns.Clear;
   Prn.CreateColumn1(0, 10, 30, taRightJustify, Prn.Font.Name, 12, [fsBold]);
@@ -148,10 +149,10 @@ begin
     Repositionne := False;
     ImageDessinee := False;
 
-    for i := 0 to Pred(Edition.Couvertures.Count) do
+    for PC in Edition.Couvertures do
     begin
       fWaiting.ShowProgression(rsTransImage + '...', epNext);
-      ms := GetCouvertureStream(False, TCouverture(Edition.Couvertures[i]).ID, Prn.MmsToPixelsVertical(ThumbHeigth), Prn.MmsToPixelsHorizontal(ThumbWidth), TGlobalVar.Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
+      ms := GetCouvertureStream(False, PC.ID, Prn.MmsToPixelsVertical(ThumbHeigth), Prn.MmsToPixelsHorizontal(ThumbWidth), TGlobalVar.Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
       if Assigned(ms) then
       try
         if not Repositionne then Prn.SetYPosition(Prn.GetYPosition + ThumbInterval);
@@ -185,7 +186,7 @@ begin
   end;
 end;
 
-procedure ImprimeParaBD(Prn: TPrintObject; ParaBD: TParaBDComplet; fWaiting: IWaiting);
+procedure ImprimeParaBD(Prn: TPrintObject; ParaBD: TParaBDComplet; const fWaiting: IWaiting);
 var
   ms: TStream;
   jpg: TJPEGImage;
@@ -292,10 +293,11 @@ begin
   end;
 end;
 
-procedure ImprimeAlbum(Prn: TPrintObject; Album: TAlbumComplet; DetailsOptions: TDetailSerieOption; fWaiting: IWaiting);
+procedure ImprimeAlbum(Prn: TPrintObject; Album: TAlbumComplet; DetailsOptions: TDetailSerieOption; const fWaiting: IWaiting);
 var
   s, s2: string;
   i, op: Integer;
+  Edition: TEditioncomplete;
 begin
   Prn.CreateColumn1(0, 10, 30, taRightJustify, Prn.Font.Name, 12, [fsBold]);
   Prn.CreateColumn1(1, 42, 30, taLeftJustify, Prn.Font.Name, 12, []);
@@ -399,13 +401,13 @@ begin
       Prn.CreateColumn1(1, 42, -1, taLeftJustify, Prn.Font.Name, 12, []);
 
       Prn.WriteLineColumn(0, -1, rsTransEditions);
-      for i := 0 to Pred(Album.Editions.Editions.Count) do
-        Prn.WriteLineColumn(1, -1, TEditioncomplete(Album.Editions.Editions[i]).ChaineAffichage);
+      for Edition in Album.Editions.Editions do
+        Prn.WriteLineColumn(1, -1, Edition.ChaineAffichage);
     end;
 
     if DetailsOptions > dsoListeEditions then
-      for i := 0 to Pred(Album.Editions.Editions.Count) do
-        ImprimeEdition(Prn, Album.Editions.Editions[i], fWaiting);
+      for Edition in Album.Editions.Editions do
+        ImprimeEdition(Prn, Edition, fWaiting);
   end;
 end;
 
@@ -528,9 +530,8 @@ begin
         if (Serie.Albums.Count > 0) and (DetailsOptions < dsoAlbumsDetails) then
         begin
           Prn.WriteLineColumn(0, -1, rsTransAlbums);
-          for i := 0 to Pred(Serie.Albums.Count) do
+          for Album in Serie.Albums do
           begin
-            Album := TAlbum(Serie.Albums[i]);
             s := '';
             if Album.Integrale then
             begin
@@ -593,9 +594,8 @@ begin
         if Serie.ParaBD.Count > 0 then
         begin
           Prn.WriteLineColumn(0, -1, rsTransParaDB);
-          for i := 0 to Pred(Serie.ParaBD.Count) do
+          for ParaBD in Serie.ParaBD do
           begin
-            ParaBD := TParaBD(Serie.ParaBD[i]);
             s := '';
             AjoutString(s, ParaBD.sCategorie, ' - ');
             AjoutString(s, FormatTitre(ParaBD.Titre), ' - ');
@@ -606,9 +606,8 @@ begin
 
         if DetailsOptions > dsoListeAlbums then
         begin
-          for i := 0 to Pred(Serie.Albums.Count) do
+          for Album in Serie.Albums do
           begin
-            Album := TAlbum(Serie.Albums[i]);
             Prn.NewPage;
             AlbumComplet := TAlbumComplet.Create(Album.ID);
             try
@@ -618,9 +617,8 @@ begin
             end;
           end;
 
-          for i := 0 to Pred(Serie.ParaBD.Count) do
+          for ParaBD in Serie.ParaBD do
           begin
-            ParaBD := TParaBD(Serie.ParaBD[i]);
             Prn.NewPage;
             ParaBDComplet := TParaBDComplet.Create(ParaBD.ID);
             try
@@ -731,9 +729,9 @@ var
   Auteur: TAuteurComplet;
   fWaiting: IWaiting;
   Prn: TPrintObject;
-  i, j: Integer;
   Serie: TSerieComplete;
   fl: Integer;
+  Album: TAlbum;
 begin
   if IsEqualGUID(Reference, GUID_NULL) then Exit;
   fWaiting := TWaiting.Create;
@@ -761,12 +759,11 @@ begin
       end;
 
       fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransSeries, rsTransPage, Prn.GetPageNumber]), epNext);
-      for i := 0 to Pred(Auteur.Series.Count) do
+      for Serie in Auteur.Series do
       begin
-        Serie := TSerieComplete(Auteur.Series[i]);
         Prn.WriteLineColumn(0, fl, FormatTitre(Serie.Titre) + ' :');
-        for j := 0 to Pred(Serie.Albums.Count) do
-          Prn.WriteColumn(1, -1, TAlbum(Serie.Albums[j]).ChaineAffichage);
+        for Album in Serie.Albums do
+          Prn.WriteColumn(1, -1, Album.ChaineAffichage);
         fl := -1;
       end;
     finally
@@ -843,9 +840,9 @@ begin
       try
         for i := 0 to Pred(Album.Editions.Editions.Count) do
         begin
-          Edition.Fill(TEdition(Album.Editions.Editions[i]).ID);
+          Edition := Album.Editions.Editions[i];
           if Album.Editions.Editions.Count > 1 then
-            Prn.WriteLineColumn(0, IIf(i = 0, -2, -1), TEdition(Album.Editions.Editions[i]).ChaineAffichage);
+            Prn.WriteLineColumn(0, IIf(i = 0, -2, -1), Edition.ChaineAffichage);
           case Edition.Emprunts.NBEmprunts of
             0: Prn.WriteLineColumn(0, -1, rsNoEmprunts);
             else
@@ -1166,6 +1163,7 @@ procedure ImpressionInfosBDtheque(Previsualisation: Boolean);
 var
   fWaiting: IWaiting;
   Prn: TPrintObject;
+  Stat: TStats;
 
   procedure Imprimer(R: TStats; MaxAlbums: Integer = -1);
   var
@@ -1210,8 +1208,7 @@ var
     Position[5] := Prn.GetYPosition;
 
     fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransPrix, rsTransPage, Prn.GetPageNumber]), epNext);
-    for i := 0 to Prn.Columns.Count - 1 do
-      Prn.Columns[0].Free;
+    Prn.Columns.Clear;
     Prn.CreateColumn1(0, 20, 35, taRightJustify, Prn.Font.Name, 10, []);
     Prn.CreateColumn1(1, 57, 15, taLeftJustify, Prn.Font.Name, 10, []);
     Prn.CreateColumn1(2, 20, 35, taRightJustify, Prn.Font.Name, 10, [fsBold]);
@@ -1233,8 +1230,7 @@ var
     Prn.WriteLineColumn(1, -2, FormatCurr(FormatMonnaie, R.ValeurEstimee));
 
     fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransEmprunteurs, rsTransPage, Prn.GetPageNumber]), epNext);
-    for i := 0 to Prn.Columns.Count - 1 do
-      Prn.Columns[0].Free;
+    Prn.Columns.Clear;
     Prn.CreateColumn1(0, 20, 35, taRightJustify, Prn.Font.Name, 10, [fsBold]);
     Prn.CreateColumn1(1, 57, 15, taLeftJustify, Prn.Font.Name, 10, []);
     Prn.CreateColumn1(2, 110, 35, taRightJustify, Prn.Font.Name, 10, []);
@@ -1380,11 +1376,11 @@ begin
 
       Imprimer(Stats);
       Prn.SetHeaderInformation1(1, -1, '', taCenter, Prn.Font.Name, 12, [fsBold]);
-      for i := 0 to Pred(Stats.ListEditeurs.Count) do
+      for Stat in Stats.ListEditeurs do
       begin
         Prn.NewPage;
-        Prn.Headers[1].Text := 'Répartition pour ' + FormatTitre(TStats(Stats.ListEditeurs[i]).Editeur);
-        Imprimer(Stats.ListEditeurs[i], Stats.NbAlbums);
+        Prn.Headers[1].Text := 'Répartition pour ' + FormatTitre(Stat.Editeur);
+        Imprimer(Stat, Stats.NbAlbums);
       end;
     finally
       fWaiting.ShowProgression(rsTransImpression + '...', epNext);
@@ -1913,7 +1909,7 @@ var
   NbAlbums: Integer;
   fWaiting: IWaiting;
   Prn: TPrintObject;
-  ListAlbums: TObjectList;
+  ListAlbums: TObjectList<TAchat>;
   PrixTotal, PrixMoyen: Currency;
 begin
   fWaiting := TWaiting.Create;
@@ -1921,7 +1917,7 @@ begin
   Source := TUIBQuery.Create(nil);
   try
     Prn := TPrintObject.Create(frmFond);
-    ListAlbums := TObjectList.Create(True);
+    ListAlbums := TObjectList<TAchat>.Create(True);
     try
       Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
       Source.SQL.Text := 'SELECT AVG(PRIX) FROM EDITIONS';
@@ -1990,9 +1986,8 @@ begin
 
       sl := False;
       OldSerie := GUID_FULL;
-      for i := 0 to Pred(ListAlbums.Count) do
+      for PAl in ListAlbums do
       begin
-        PAl := TAchat(ListAlbums[i]);
         if not IsEqualGUID(OldSerie, PAl.ID_Serie) then
         begin
           if (Prn.GetLinesLeftFont(Prn.Columns[1].Font) < 3) then

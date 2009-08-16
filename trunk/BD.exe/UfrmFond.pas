@@ -20,7 +20,6 @@ type
 
   TfrmFond = class(TbdtForm)
     ImageList1: TImageList;
-    boutons_32x32_hot: TPngImageList;
     ActionsOutils: TActionList;
     actChangementOptions: TAction;
     actAideContextuelle: TAction;
@@ -141,6 +140,9 @@ type
     ToolButton14: TToolButton;
     ToolButton15: TToolButton;
     actFicheModifier: TAction;
+    boutons_32x32_hot: TPngImageList;
+    imlNotation_32x32: TPngImageList;
+    imlNotation_16x16: TPngImageList;
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure actChangementOptionsExecute(Sender: TObject);
@@ -184,8 +186,7 @@ type
     procedure actMiseAJourExecute(Sender: TObject);
     procedure actModeScriptsExecute(Sender: TObject);
     procedure actPublierExecute(Sender: TObject);
-    procedure FormKeyDown(Sender: TObject; var Key: Word;
-      Shift: TShiftState);
+    procedure FormKeyDown(Sender: TObject; var Key: Word;      Shift: TShiftState);
     procedure actFicheModifierExecute(Sender: TObject);
   private
     { Déclarations privées }
@@ -206,6 +207,8 @@ type
     procedure SetChildForm(Form: TForm; Alignement: TAlign = alClient);
     function SetModalChildForm(Form: TForm; Alignement: TAlign = alClient): Integer;
     procedure RechargeToolBar;
+    procedure DessineNote(Canvas: TCanvas; aRect: TRect; Notation: Integer);
+    procedure actActualiseRepertoireData;
   end;
 
 var
@@ -397,6 +400,17 @@ begin
   Caption := Application.Title;
   Historique.OnChange := HistoriqueChanged;
 
+  imlNotation_32x32.BeginUpdate;
+  imlNotation_16x16.BeginUpdate;
+  imlNotation_32x32.PngImages.Insert(0).Assign(imlNotation_32x32.PngImages[3]);
+  MakeImageGrayscale(imlNotation_32x32.PngImages[0].PngImage);
+//  for i := 0 to Pred(imlNotation_32x32.Count) do
+//    imlNotation_16x16.PngImages.Add.Assign(imlNotation_32x32.PngImages[i]);
+  imlNotation_16x16.PngImages.Insert(0).Assign(imlNotation_16x16.PngImages[1]);
+  MakeImageGrayscale(imlNotation_16x16.PngImages[0].PngImage);
+  imlNotation_32x32.EndUpdate;
+  imlNotation_16x16.EndUpdate;
+
   boutons_32x32_norm.BeginUpdate;
   boutons_16x16_norm.BeginUpdate;
   boutons_16x16_hot.BeginUpdate;
@@ -500,11 +514,21 @@ begin
     iModification.ModificationExecute(Sender);
 end;
 
+procedure TfrmFond.actActualiseRepertoireData;
+begin
+  if actActualiseRepertoire.Enabled then
+  begin
+    frmRepertoire.vstAlbums.ReinitNodes(1);
+    frmRepertoire.vstEmprunteurs.ReinitNodes(1);
+    frmRepertoire.vstAuteurs.ReinitNodes(1);
+  end;
+end;
+
 procedure TfrmFond.actActualiseRepertoireExecute(Sender: TObject);
 begin
-  FrmRepertoire.vstAlbums.InitializeRep;
-  FrmRepertoire.vstEmprunteurs.InitializeRep;
-  FrmRepertoire.vstAuteurs.InitializeRep;
+  frmRepertoire.vstAlbums.InitializeRep;
+  frmRepertoire.vstEmprunteurs.InitializeRep;
+  frmRepertoire.vstAuteurs.InitializeRep;
 end;
 
 procedure TfrmFond.actRelireOptionsExecute(Sender: TObject);
@@ -555,23 +579,19 @@ end;
 
 procedure TfrmFond.ChargeToolBarres(sl: TStringList);
 
-  function GetAction(Name: string): TAction;
+  function GetAction(ActionList: TActionList; Name: string): TAction;
   var
-    i: Integer;
-    act: TCustomAction;
+    act: TContainedAction;
   begin
-    if not CompareMem(PChar(Name), PChar('act'), 3) then
+    if not SameText(Copy(Name, 1, 3), 'act') then
       Name := 'act' + Name;
     Result := nil;
-    for i := 0 to ActionsOutils.ActionCount - 1 do
-    begin
-      act := TCustomAction(ActionsOutils.Actions[i]);
-      if (act <> nil) and SameText(Name, act.Name) then
+    for act in ActionList do
+      if SameText(Name, act.Name) then
       begin
         Result := act as TAction;
         Exit;
       end;
-    end;
   end;
 
   function NewAction(aAction: TAction): TToolButton;
@@ -644,10 +664,10 @@ begin
     end
     else
     begin
-      aAction := GetAction(s2);
+      aAction := GetAction(ActionsOutils, s2);
       if aAction <> nil then
       begin
-        NewAction(GetAction(s2));
+        NewAction(aAction);
         LastButton := tbBut;
       end;
     end;
@@ -913,18 +933,18 @@ procedure TfrmFond.MergeMenu(MergedMenu: TMainMenu);
 
   procedure ProcessMenuItem(MenuItem: TMenuItem);
   var
-    i: Integer;
+    Item: TMenuItem;
   begin
     if MenuItem.Caption = cLineCaption then
       Exit;
     if Assigned(MenuItem.Parent) then
       MenuItem.OnMeasureItem := MeasureMenuItem;
-    for i := 0 to Pred(MenuItem.Count) do
-      ProcessMenuItem(MenuItem.Items[i]);
+    for Item in MenuItem do
+      ProcessMenuItem(Item);
   end;
 
 var
-  i: Integer;
+  MenuItem: TMenuItem;
 begin
   if Assigned(MergedMenu) then
   begin
@@ -932,12 +952,12 @@ begin
       MergedMenu.Images := boutons_32x32_hot
     else
       MergedMenu.Images := boutons_16x16_hot;
-    for i := 0 to Pred(MergedMenu.Items.Count) do
-      MergedMenu.Items[i].GroupIndex := 50;
+    for MenuItem in MergedMenu.Items do
+      MenuItem.GroupIndex := 50;
   end;
   Menu.Merge(MergedMenu);
-  for i := 0 to Pred(Menu.Items.Count) do
-    ProcessMenuItem(Menu.Items[i]);
+  for MenuItem in Menu.Items do
+    ProcessMenuItem(MenuItem);
 end;
 
 procedure TfrmFond.SetChildForm(Form: TForm; Alignement: TAlign = alClient);
@@ -991,17 +1011,17 @@ end;
 
 procedure TfrmFond.ActionsStatistiquesUpdate(Action: TBasicAction; var Handled: Boolean);
 var
-  i: Integer;
+  act: TContainedAction;
 begin
   if TGlobalVar.Mode_en_cours = mdEditing then
   begin
-    for i := 0 to Pred(ActionsStatistiques.ActionCount) do
-      TAction(ActionsStatistiques.Actions[i]).Enabled := False;
+    for act in ActionsStatistiques do
+      TAction(act).Enabled := False;
     Handled := True;
   end
   else
-    for i := 0 to Pred(ActionsStatistiques.ActionCount) do
-      TAction(ActionsStatistiques.Actions[i]).Enabled := True;
+    for act in ActionsStatistiques do
+      TAction(act).Enabled := True;
 end;
 
 procedure TfrmFond.actModeEntretienExecute(Sender: TObject);
@@ -1148,6 +1168,32 @@ begin
         end;
     finally
       Free;
+    end;
+end;
+
+procedure TfrmFond.DessineNote(Canvas: TCanvas; aRect: TRect; Notation: Integer);
+const
+  imgSize = 12;
+var
+  i: Integer;
+begin
+//  imlNotation_32x32.PngImages[Notation].PngImage.Draw(Canvas, Rect(aRect.Left, aRect.Top, aRect.Left + 16, aRect.Top + 16));
+
+  if not TGlobalVar.Utilisateur.Options.AfficheNoteListes then Exit;
+
+  aRect.Left := aRect.Right - imgSize * 4 - 4;
+  aRect.Right := aRect.Left + imgSize;
+  aRect.Top := (aRect.Bottom - aRect.Top - imgSize) div 2;
+  aRect.Bottom := aRect.Top + imgSize;
+
+  if Notation > 0 then
+    for i := 1 to 4 do
+    begin
+      if i >= Notation then
+        imlNotation_16x16.PngImages[0].PngImage.Draw(Canvas, aRect)
+      else
+        imlNotation_16x16.PngImages[1].PngImage.Draw(Canvas, aRect);
+      OffsetRect(aRect, imgSize, 0);
     end;
 end;
 
