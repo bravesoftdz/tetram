@@ -1,4 +1,32 @@
-﻿-=-=-=-=-=-    2.1.1.5 - 04/04/2009    -=-=-=-=-=-
+﻿-=-=-=-=-=-    2.2.0.0 - 16/08/2009    -=-=-=-=-=-
+
+* Nouveautés * 
+      - Possibilité d'attribuer une note/appréciation personnelle à chaque 
+         album et/ou série
+
+* Corrections * 
+      - la dernière recherche dans les zones de saisies de série, auteur, 
+         éditeur ou collection est de nouveau utilisée lors de la création d'un
+         nouvel élément
+
+-=-=-=-=-=-    2.1.1.11 - 16/05/2009    -=-=-=-=-=-
+
+* Nouveautés * 
+      - Possibilité de modifier une fiche directement depuis le mode
+         Consultation. Plus d'obligation de passer par le mode Gestion.
+         La création d'une nouvelle fiche reste uniquement accessible en mode 
+         Gestion.
+      - Les scripts permettent désormais de modifier une fiche d'album déjà
+         existante.
+         Ils permettent aussi d'ajouter de nouvelles éditions à un album 
+         existant. Ils permettent donc la validation d'un achat.
+         Ils ne permettent par contre plus la création directe. (Voir le wiki 
+         pour plus de détail)
+      - Gestion de la version et des mises à jour des scripts.
+      - Nouvelle fenêtre pour visualiser la gallerie d'images d'une série ou 
+         d'un album en mode Consultation.
+
+-=-=-=-=-=-    2.1.1.5 - 04/04/2009    -=-=-=-=-=-
 
 * Nouveautés *
       - Nouvelle fonction "Script": permet de creer un nouvel album avec des 
@@ -15,8 +43,8 @@
             * de créer une prévision d'achat (que l'album soit nouveau ou non)
 
 * Corrections * 
-      - Changement de l'ergonomie des zones de saisie de série, éditeur ou 
-         collection
+      - Changement de l'ergonomie des zones de saisie de série, auteur, éditeur 
+         ou collection
 
 -=-=-=-=-=-    2.1.0.16 - 19/09/2008    -=-=-=-=-=-
 
@@ -44,7 +72,7 @@
 -=-=-=-=-=-    1.2.3.15 - 30/01/2007    -=-=-=-=-=-
 
 * Nouveautés *
-      - Plus de possibilités dans l'impression des albums
+      - Nouvelles possibilités dans l'impression des albums
       - Impression de la fiche de série
 
 * Corrections *
@@ -66,7 +94,7 @@
       - Champs "Surveiller les sorties" et "Chercher les manquants" pour les 
          séries. Les fonctions "Prévisions de sorties" et "Albums manquants" 
          utilisent ces nouveaux champs et plus les champs "Terminée" et 
-         "Complete".
+         "Complète".
 
 -=-=-=-=-=-    1.2.1.0 - 26/06/2006    -=-=-=-=-=-
 
