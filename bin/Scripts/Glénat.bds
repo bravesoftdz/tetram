@@ -4,12 +4,12 @@
     <Auteur>Tetram Corp</Auteur>
     <Description/>
     <ScriptVersion>1</ScriptVersion>
-    <BDVersion>2.1.0.17</BDVersion>
-    <LastUpdate>Fri, 8 May 2009 11:26:16 +0200</LastUpdate>
+    <BDVersion>2.2.0.0</BDVersion>
+    <LastUpdate>Sun, 16 Aug 2009 20:18:43 +0200</LastUpdate>
   </Infos>
   <Options>
-    <Option Label="Recherche Glénat BD" Values="Oui|Non" Default="Oui"/>
-    <Option Label="Recherche Glénat Manga" Values="Oui|Non" Default="Oui"/>
+    <Option Label="Recherche Gl&#xE9;nat BD" Values="Oui|Non" Default="Oui"/>
+    <Option Label="Recherche Gl&#xE9;nat Manga" Values="Oui|Non" Default="Oui"/>
     <Option Label="Recherche Vents d&apos;Ouest" Values="Oui|Non" Default="Oui"/>
   </Options>
   <Code>program Glenat;
@@ -31,7 +31,7 @@ const
   regExMangaInfos = &apos;&lt;div class=&quot;fiche_droite&quot;&gt;((?s-).*?)&lt;/div&gt;&apos;;
   regExMangaSerie = &apos;&lt;h1(?:.*?)&gt;(?&lt;titre_serie&gt;.*?)(?:#(?&lt;tome&gt;\d+)|)*&lt;/h1&gt;&apos;;
   regExMangaTitre = &apos;&lt;h2(?:.*?)&gt;(?&lt;titre_album&gt;.*?)&lt;/h2&gt;&apos;;
-  regExMangaDetail = &apos;&lt;p(?:.*?)&gt;(?&lt;data&gt;(?s-).*?)&lt;/p&gt;&apos;; // infos, puis résumé
+  regExMangaDetail = &apos;&lt;p(?:.*?)&gt;(?&lt;data&gt;(?s-).*?)&lt;/p&gt;&apos;; // infos, puis r&#xE9;sum&#xE9;
   regExMangaAuteur = &apos;&lt;div class=&quot;mini_auteur&quot;&gt;(?s-:.*?)&lt;h2(?:.*?)&gt;(?s-:.*?)&lt;a(?:.*?)&gt;[\r|\n|\t|\s]*(?&lt;auteur&gt;.*?)[\r|\n|\t|\s]*&lt;/a&gt;(?s-:.*?)&lt;/h2&gt;&apos;;
 
   regExBDCouverture = &apos;&lt;td class=&quot;frame left&quot;&gt;(?s-:.*?)&lt;img(?: src=&quot;(?&lt;couverture&gt;.*?)&quot;|.*?)*/&gt;(?s-:.*?)&lt;/td&gt;&apos;;
@@ -57,7 +57,7 @@ const
   urlPageSerie = &apos;http://www.dargaud.com/front/albums/series/serie.aspx?id=&apos;; // + id_serie
 
   regExResultAlbums = &apos;&lt;object id=&apos;&apos;header(?:.*?)classid=&apos;&apos;clsid:D27CDB6E-AE6D-11cf-96B8-444553540000(?:.*?)value=(?:.*?)titre=Albums(?:.*?)&lt;/object&gt;&lt;/td&gt;[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*&lt;td&gt;&amp;nbsp;&lt;/td&gt;&apos;;
-  regExResultSeries = &apos;&lt;object id=&apos;&apos;header(?:.*?)classid=&apos;&apos;clsid:D27CDB6E-AE6D-11cf-96B8-444553540000(?:.*?)value=(?:.*?)titre=Séries(?:.*?)&lt;/object&gt;&lt;/td&gt;[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*&lt;td&gt;&amp;nbsp;&lt;/td&gt;&apos;;
+  regExResultSeries = &apos;&lt;object id=&apos;&apos;header(?:.*?)classid=&apos;&apos;clsid:D27CDB6E-AE6D-11cf-96B8-444553540000(?:.*?)value=(?:.*?)titre=S&#xE9;ries(?:.*?)&lt;/object&gt;&lt;/td&gt;[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*&lt;td&gt;&amp;nbsp;&lt;/td&gt;&apos;;
   regExResult = &apos;&lt;td class=&quot;result&quot;&gt;&lt;span&gt;(?:.*?)&lt;/span&gt;(.*?)&lt;/td&gt;&apos;;
   regExResultAlbumsTitre = &apos;&lt;a class=&quot;rechercheBold&quot; href=&quot;(?:.*?)&quot;&gt;(.*?)&lt;/a&gt;&apos;;
   regExResultAlbumsDetails = &apos;&lt;br&gt;&amp;nbsp;&amp;nbsp;%s&amp;nbsp;: &lt;/span&gt;&lt;a class=&quot;recherche&quot; href=(?:.*?)&gt;(.*?)&lt;/a&gt;&apos;;
@@ -163,7 +163,7 @@ begin
 
       s := re.GetCaptureByName(&apos;edition&apos;);
       if Pos(&apos;en cours&apos;, s) &gt; 0 then AlbumToImport.Serie.Terminee := 0;
-      if Pos(&apos;terminée&apos;, s) &gt; 0 then AlbumToImport.Serie.Terminee := 1;
+      if Pos(&apos;termin&#xE9;e&apos;, s) &gt; 0 then AlbumToImport.Serie.Terminee := 1;
     end;
   finally
     re.Free;
@@ -225,7 +225,7 @@ begin
             AlbumToImport.Dessinateurs.Add(MakeAuteur(auteur, maDessinateur));
             AlbumToImport.Serie.Dessinateurs.Add(MakeAuteur(auteur, maDessinateur));
           end;
-          if (metier = &apos;Scénariste&apos;) or (metier = &apos;Auteur&apos;) then
+          if (metier = &apos;Sc&#xE9;nariste&apos;) or (metier = &apos;Auteur&apos;) then
           begin
             AlbumToImport.Scenaristes.Add(MakeAuteur(auteur, maScenariste));
             AlbumToImport.Serie.Scenaristes.Add(MakeAuteur(auteur, maScenariste));
@@ -246,7 +246,7 @@ begin
 
   termine := ExtractRegEx(s, regExBDTermine);
   if Pos(&apos;en cours&apos;, termine) &gt; 0 then AlbumToImport.Serie.Terminee := 0;
-  if Pos(&apos;terminée&apos;, termine) &gt; 0 then AlbumToImport.Serie.Terminee := 1;
+  if Pos(&apos;termin&#xE9;e&apos;, termine) &gt; 0 then AlbumToImport.Serie.Terminee := 1;
 
   imgAdded := False;
   if AlbumToImport.Edition.ISBN &lt;&gt; &apos;&apos; then
@@ -293,8 +293,8 @@ var
 begin
   Result := &apos;&apos;;
 
-  GlenatBD := GetOptionValue(&apos;Recherche Glénat BD&apos;, &apos;Oui&apos;) = &apos;Oui&apos;;
-  GlenatManga := GetOptionValue(&apos;Recherche Glénat Manga&apos;, &apos;Oui&apos;) = &apos;Oui&apos;;
+  GlenatBD := GetOptionValue(&apos;Recherche Gl&#xE9;nat BD&apos;, &apos;Oui&apos;) = &apos;Oui&apos;;
+  GlenatManga := GetOptionValue(&apos;Recherche Gl&#xE9;nat Manga&apos;, &apos;Oui&apos;) = &apos;Oui&apos;;
   VentsdOuest := GetOptionValue(&apos;Recherche Vents d&apos;&apos;Ouest&apos;, &apos;Oui&apos;) = &apos;Oui&apos;;
 
   page := GetPage(urlSearch + Titre, False);
@@ -303,7 +303,7 @@ begin
   c := TScriptChoix.Create;
   re := TBdtkRegEx.Create;
   try
-    c.Titre := &apos;Résultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
+    c.Titre := &apos;R&#xE9;sultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
     oldSerie := &apos;&apos;;
     if re.BeginSearch(page, regExSearchResultatsLigne) then
       while re.Find(sAlbum) do begin
@@ -338,7 +338,7 @@ begin
     if c.ChoixCount &gt; 0 then
       Result := c.Show
     else
-      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourn&#xE9; de r&#xE9;sultat.&apos;);
   finally
     re.Free;
     c.Free;
@@ -363,7 +363,9 @@ var
   id_album, entry: string;
   index: integer;
 begin
-  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la série&apos;], entry, index) then Exit;
+  entry := AlbumToImport.DefaultSearch;
+  index := 0;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie&apos;], entry, index) then Exit;
 
   id_album := RechercheParTitre(entry);
   if id_album &lt;&gt; &apos;&apos; then

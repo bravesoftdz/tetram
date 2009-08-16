@@ -4,8 +4,8 @@
     <Auteur>Tetram Corp</Auteur>
     <Description/>
     <ScriptVersion>1</ScriptVersion>
-    <BDVersion>2.1.0.17</BDVersion>
-    <LastUpdate>Fri, 8 May 2009 11:26:16 +0200</LastUpdate>
+    <BDVersion>2.2.0.0</BDVersion>
+    <LastUpdate>Sun, 16 Aug 2009 20:19:09 +0200</LastUpdate>
   </Infos>
   <Options/>
   <Code>program Pika;
@@ -29,7 +29,7 @@ const
   regExAlbumPrix = &apos;&lt;span style=&quot;color: #AAA; text-transform: uppercase&quot;&gt;prix de vente : &lt;/span&gt;([\d|,|\.]*) &#x20AC;&lt;br /&gt;&apos;;
   regExAlbumISBN = &apos;&lt;span style=&quot;color: #AAA; text-transform: uppercase&quot;&gt;isbn :(?:[ |:]*)([\d|x|X|-]*)&lt;/span&gt;&lt;br /&gt;&apos;;
   regExAlbumCouverture = &apos;&lt;img id=&quot;image_fr&quot;(?: src=&quot;(?&lt;couverture&gt;.*?)&quot;|.*?)*/&gt;&apos;;
-  regExSerieTerminee = &apos;&lt;div(?:.*?)&gt;[\r|\n|\t|\s]*&lt;span(?:.*?)&gt;en france&lt;/span&gt;(?s-:.*?)&lt;ul(?:.*?)&gt;(?s-:.*?)&lt;li&gt;&amp;bull; Série (en cours|complète)&lt;/li&gt;(?s-:.*?)&lt;/ul&gt;(?s-:.*?)&lt;ul(?:.*?)&gt;(?s-:.*?)&lt;/ul&gt;(?s-:.*?)&lt;/div&gt;&apos;;
+  regExSerieTerminee = &apos;&lt;div(?:.*?)&gt;[\r|\n|\t|\s]*&lt;span(?:.*?)&gt;en france&lt;/span&gt;(?s-:.*?)&lt;ul(?:.*?)&gt;(?s-:.*?)&lt;li&gt;&amp;bull; S&#xE9;rie (en cours|compl&#xE8;te)&lt;/li&gt;(?s-:.*?)&lt;/ul&gt;(?s-:.*?)&lt;ul(?:.*?)&gt;(?s-:.*?)&lt;/ul&gt;(?s-:.*?)&lt;/div&gt;&apos;;
   regExAlbumAuteurs = &apos;&lt;span style=&quot;color: #AAA; text-transform: uppercase&quot;&gt;auteur\(s\) : &lt;/span&gt;(?:&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;(?&lt;auteur&gt;(?s-).*?)&lt;/a&gt;.*?)*&lt;br /&gt;&apos;;
 
 procedure ParseAlbum(const id_album: string);
@@ -83,7 +83,7 @@ begin
     if SameText(s, &apos;12 x 18 cm&apos;) then
       AlbumToImport.Edition.FormatEdition := 1;
 
-    if SameText(ExtractRegEx(page, regExSerieTerminee), &apos;complète&apos;) then
+    if SameText(ExtractRegEx(page, regExSerieTerminee), &apos;compl&#xE8;te&apos;) then
       AlbumToImport.Serie.Terminee := 1
     else
       AlbumToImport.Serie.Terminee := 0;
@@ -122,7 +122,7 @@ begin
   c := TScriptChoix.Create;
   re := TBdtkRegEx.Create;
   try
-    c.Titre := &apos;Résultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
+    c.Titre := &apos;R&#xE9;sultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
     if re.BeginSearch(ExtractRegEx(page, regExResultsGlobale), regExResultsGlobaleLigne) then
       while re.Find(sResultat) do begin
         titre_album := ExtractRegExGroup(sResultat, regExResultsGlobaleLigneDecoupe, &apos;texte&apos;);
@@ -134,7 +134,7 @@ begin
     if c.ChoixCount &gt; 0 then
       Result := c.Show
     else
-      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourn&#xE9; de r&#xE9;sultat.&apos;);
   finally
     re.Free;
     c.Free;
@@ -145,7 +145,9 @@ var
   id_album, entry: string;
   index: integer;
 begin
-  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la série&apos;], entry, index) then Exit;
+  entry := AlbumToImport.DefaultSearch;
+  index := 0;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie&apos;], entry, index) then Exit;
 
   id_album := RechercheParTitre(entry);
 

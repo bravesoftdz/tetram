@@ -4,8 +4,8 @@
     <Auteur>Tetram Corp</Auteur>
     <Description/>
     <ScriptVersion>1</ScriptVersion>
-    <BDVersion>2.1.0.17</BDVersion>
-    <LastUpdate>Fri, 8 May 2009 11:26:16 +0200</LastUpdate>
+    <BDVersion>2.2.0.0</BDVersion>
+    <LastUpdate>Sun, 16 Aug 2009 20:18:31 +0200</LastUpdate>
   </Infos>
   <Options/>
   <Code>program Dupuis;
@@ -154,7 +154,7 @@ begin
           commentaire := &apos;&apos;;
           Serie := ExtractRegExGroup(sResultat, regExResultsCategorieLigneDecoupe, &apos;Serie&apos;);
           Serie := ExtractRegExGroup(Serie, regExResultsItems, &apos;Label&apos;)
-          AjoutString1(commentaire, ExtractRegExGroup(Serie, regExResultsSerie, &apos;TitreSerie&apos;), #13#10, &apos;Série: &apos;, &apos;&apos;);
+          AjoutString1(commentaire, ExtractRegExGroup(Serie, regExResultsSerie, &apos;TitreSerie&apos;), #13#10, &apos;S&#xE9;rie: &apos;, &apos;&apos;);
           with TBdtkRegEx.Create do
             try
               Auteurs := &apos;&apos;;
@@ -180,7 +180,7 @@ begin
     if c.ChoixCount &gt; 0 then
       Result := c.Show
     else
-      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourn&#xE9; de r&#xE9;sultat.&apos;);
   finally
     re.Free;
     c.Free;
@@ -202,7 +202,7 @@ begin
   c := TScriptChoix.Create;
   re := TBdtkRegEx.Create;
   try
-    c.Titre := &apos;Résultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
+    c.Titre := &apos;R&#xE9;sultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
     if re.BeginSearch(ExtractRegEx(page, regExResultsGlobale), regExResultsGlobaleLigne) then
       while re.Find(sResultat) do begin
         Album := ExtractRegExGroup(sResultat, regExResultsGlobaleLigneDecoupe, &apos;Album&apos;);
@@ -212,7 +212,7 @@ begin
         commentaire := &apos;&apos;;
         Serie := ExtractRegExGroup(sResultat, regExResultsGlobaleLigneDecoupe, &apos;Serie&apos;);
         Serie := ExtractRegExGroup(Serie, regExResultsItems, &apos;Label&apos;)
-        AjoutString1(commentaire, ExtractRegExGroup(Serie, regExResultsSerie, &apos;TitreSerie&apos;), #13#10, &apos;Série: &apos;, &apos;&apos;);
+        AjoutString1(commentaire, ExtractRegExGroup(Serie, regExResultsSerie, &apos;TitreSerie&apos;), #13#10, &apos;S&#xE9;rie: &apos;, &apos;&apos;);
         with TBdtkRegEx.Create do
           try
             Auteurs := &apos;&apos;;
@@ -232,7 +232,7 @@ begin
     if c.ChoixCount &gt; 0 then
       Result := c.Show
     else
-      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourn&#xE9; de r&#xE9;sultat.&apos;);
   finally
     re.Free;
     c.Free;
@@ -243,7 +243,9 @@ var
   id_album, entry: string;
   index: integer;
 begin
-  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la série&apos;, &apos;Titre de l&apos;&apos;album&apos;, &apos;Titre de la série&apos;], entry, index) then Exit;
+  entry := AlbumToImport.DefaultSearch;
+  index := 0;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie&apos;, &apos;Titre de l&apos;&apos;album&apos;, &apos;Titre de la s&#xE9;rie&apos;], entry, index) then Exit;
 
   id_album := &apos;&apos;;
   case index of

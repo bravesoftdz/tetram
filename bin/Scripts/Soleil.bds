@@ -4,8 +4,8 @@
     <Auteur>Tetram Corp</Auteur>
     <Description/>
     <ScriptVersion>1</ScriptVersion>
-    <BDVersion>2.1.0.17</BDVersion>
-    <LastUpdate>Fri, 8 May 2009 11:26:16 +0200</LastUpdate>
+    <BDVersion>2.2.0.0</BDVersion>
+    <LastUpdate>Sun, 16 Aug 2009 20:19:14 +0200</LastUpdate>
   </Infos>
   <Options/>
   <Code>program Soleil;
@@ -20,7 +20,7 @@ const
   regExResult = &apos;&lt;span class=&quot;bloctxt-03&quot;&gt;&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;(?&lt;titre_album&gt;.*?)&lt;/a&gt;&lt;/span&gt;&lt;br /&gt;[\r|\n|\t|\s]*&lt;span class=&quot;bloctxt-06&quot;&gt;(?&lt;commentaire&gt;(?s-).*?)&lt;/span&gt;&apos;;
 
   regExAlbumTitre = &apos;&lt;span id=&quot;ctl0_ctl0_Main_MainCatalogue_titre&quot;&gt;(?&lt;titre_album&gt;.*?)(?:&lt;br/&gt;vol\.(?&lt;tome&gt;\d*))?&lt;/span&gt;&apos;;
-  regExAlbumSerie = &apos;&lt;td valign=&quot;top&quot; class=&quot;cat-genre&quot;&gt;Genre&amp;nbsp;:&amp;nbsp;&lt;a(?:.*?)&gt;(?&lt;genre&gt;.*?)&lt;/a&gt;&lt;br/&gt;Collection&amp;nbsp;:&amp;nbsp;&lt;a(?:.*?)&gt;(?&lt;collection&gt;.*?)&lt;/a&gt;&amp;nbsp;\|&amp;nbsp;Série&amp;nbsp;:&amp;nbsp;&lt;a(?: href=&quot;(?&lt;lien_serie&gt;.*?)&quot;|.*?)*&gt;(?&lt;titre_serie&gt;.*?)&lt;/a&gt;&lt;/td&gt;&apos;;
+  regExAlbumSerie = &apos;&lt;td valign=&quot;top&quot; class=&quot;cat-genre&quot;&gt;Genre&amp;nbsp;:&amp;nbsp;&lt;a(?:.*?)&gt;(?&lt;genre&gt;.*?)&lt;/a&gt;&lt;br/&gt;Collection&amp;nbsp;:&amp;nbsp;&lt;a(?:.*?)&gt;(?&lt;collection&gt;.*?)&lt;/a&gt;&amp;nbsp;\|&amp;nbsp;S&#xE9;rie&amp;nbsp;:&amp;nbsp;&lt;a(?: href=&quot;(?&lt;lien_serie&gt;.*?)&quot;|.*?)*&gt;(?&lt;titre_serie&gt;.*?)&lt;/a&gt;&lt;/td&gt;&apos;;
   regExAlbumCouverture = &apos;&lt;div id=&quot;image_box_ctl0_ctl0_Main_MainCatalogue_ctl0&quot;&gt;[\r|\n|\t|\s]*&lt;a(?: href=&quot;(?&lt;couverture&gt;.*?)&quot;|.*?)*&gt;&lt;img(?:.*?)&gt;&lt;/a&gt;[\r|\n|\t|\s]*&lt;/div&gt;&apos;;
   regExAlbumParution = &apos;&lt;span id=&quot;ctl0_ctl0_Main_MainCatalogue_date_sortie&quot;&gt;(.*?)&lt;/span&gt;&apos;;
   regExAlbumISBN = &apos;&lt;span id=&quot;ctl0_ctl0_Main_MainCatalogue_ean&quot;&gt;([\d|x|X|-]*)&lt;/span&gt;&apos;;
@@ -155,7 +155,7 @@ begin
   c := TScriptChoix.Create;
   re := TBdtkRegEx.Create;
   try
-    c.Titre := &apos;Résultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
+    c.Titre := &apos;R&#xE9;sultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
     if re.BeginSearch(ExtractRegEx(page, regExResultAlbums), regExResult) then
       while re.Next do begin
         id := re.GetCaptureByName(&apos;lien&apos;);
@@ -167,7 +167,7 @@ begin
     if c.ChoixCount &gt; 0 then
       Result := c.Show
     else
-      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourn&#xE9; de r&#xE9;sultat.&apos;);
   finally
     re.Free;
     c.Free;
@@ -178,7 +178,9 @@ var
   id_album, entry: string;
   index: integer;
 begin
-  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la série&apos;], entry, index) then Exit;
+  entry := AlbumToImport.DefaultSearch;
+  index := 0;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie&apos;], entry, index) then Exit;
 
   id_album := RechercheParTitre(entry);
   if id_album &lt;&gt; &apos;&apos; then

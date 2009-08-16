@@ -4,8 +4,8 @@
     <Auteur>Tetram Corp</Auteur>
     <Description/>
     <ScriptVersion>1</ScriptVersion>
-    <BDVersion>2.1.0.17</BDVersion>
-    <LastUpdate>Fri, 8 May 2009 11:26:16 +0200</LastUpdate>
+    <BDVersion>2.2.0.0</BDVersion>
+    <LastUpdate>Sun, 16 Aug 2009 20:17:55 +0200</LastUpdate>
   </Infos>
   <Options/>
   <Code>program Delcourt;
@@ -26,16 +26,16 @@ const
     + &apos;&lt;/tr&gt;&apos;;
 
   regExAlbumDetail = &apos;&lt;div id=&quot;details&quot;&gt;((?s-).*?)&lt;/div&gt;&apos;;
-  regExAlbumSerieTitre = &apos;&lt;h3&gt;Série :[\r|\n|\t|\s]*&lt;span(?:.*?)&gt;(?&lt;titre_serie&gt;.*?)&lt;/span&gt;&apos;;
+  regExAlbumSerieTitre = &apos;&lt;h3&gt;S&#xE9;rie :[\r|\n|\t|\s]*&lt;span(?:.*?)&gt;(?&lt;titre_serie&gt;.*?)&lt;/span&gt;&apos;;
   // c&apos;est loin de correspondre exactement, mais c&apos;est un tel foutoir que je vois pas comment faire mieux
-  // on peut même pas extraire le numéro du tome
+  // on peut m&#xEA;me pas extraire le num&#xE9;ro du tome
   regExAlbumTitre = &apos;&lt;h1&gt;(.*?)&lt;/h1&gt;&apos;;
   regExAlbumParution = &apos;Date de parution(?:[ |:]*)([\d|/]*)&apos;;
   regExAlbumISBN = &apos;ISBN(?:[ |:]*)([\d|x|X|-]*)&apos;;
   regExAlbumPrix = &apos;Prix public(?:[ |:]*)([\d|,|\.]*)&apos;;
   regExAlbumResume = &apos;&lt;div id=&quot;resume&quot;&gt;[\r|\n|\t|\s]*&lt;h2&gt;(?s-:.*?)&lt;/h2&gt;[\r|\n|\t|\s]*(?&lt;resume&gt;(?s-).*?)[\r|\n|\t|\s]*&lt;/div&gt;&apos;;
   regExSerieResume = &apos;&lt;div id=&quot;laserie&quot;&gt;[\r|\n|\t|\s]*&lt;h2&gt;(?s-:.*?)&lt;/h2&gt;[\r|\n|\t|\s]*(?&lt;resume&gt;(?s-).*?)[\r|\n|\t|\s]*&lt;/div&gt;&apos;;
-  regExAlbumScenaristes = &apos;&lt;h3&gt;Scénario :[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*&lt;/h3&gt;&apos;;
+  regExAlbumScenaristes = &apos;&lt;h3&gt;Sc&#xE9;nario :[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*&lt;/h3&gt;&apos;;
   regExAlbumDessinateurs = &apos;&lt;h3&gt;Dessin :[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*&lt;/h3&gt;&apos;;
   regExAlbumColoristes = &apos;&lt;h3&gt;Couleurs :[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*&lt;/h3&gt;&apos;;
   regExAuteur = &apos;&lt;a(?s-:.*?)&gt;(?&lt;nom&gt;.*?)&lt;/a&gt;&apos;;
@@ -149,7 +149,7 @@ begin
   c := TScriptChoix.Create;
   re := TBdtkRegEx.Create;
   try
-    c.Titre := &apos;Résultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
+    c.Titre := &apos;R&#xE9;sultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
     while True do
     begin
       page := GetPage(urlSite + Format(urlSearch, [p]) + Titre, True);
@@ -189,7 +189,7 @@ begin
     if c.ChoixCount &gt; 0 then
       Result := c.Show
     else
-      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourn&#xE9; de r&#xE9;sultat.&apos;);
   finally
     re.Free;
     c.Free;
@@ -200,7 +200,9 @@ var
   id_album, entry: string;
   index: integer;
 begin
-  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la série, ou ISBN&apos;], entry, index) then Exit;
+  entry := AlbumToImport.DefaultSearch;
+  index := 0;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie, ou ISBN&apos;], entry, index) then Exit;
 
   id_album := RechercheParTitre(entry);
   if id_album &lt;&gt; &apos;&apos; then

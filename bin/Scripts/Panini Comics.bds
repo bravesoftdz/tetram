@@ -4,8 +4,8 @@
     <Auteur>Tetram Corp</Auteur>
     <Description/>
     <ScriptVersion>1</ScriptVersion>
-    <BDVersion>2.1.0.17</BDVersion>
-    <LastUpdate>Fri, 8 May 2009 11:26:16 +0200</LastUpdate>
+    <BDVersion>2.2.0.0</BDVersion>
+    <LastUpdate>Sun, 16 Aug 2009 20:19:03 +0200</LastUpdate>
   </Infos>
   <Options/>
   <Code>program PaniniComics;
@@ -17,11 +17,11 @@ const
   urlSearch = &apos;Titolo.jsp?recherche&amp;PagerCurrentPage=%d&amp;FiltroRicercaRapida=&apos;;
   urlInfoAlbum = &apos;Titolo.jsp?IdTitolo=&apos;; // + id_album
 
-  regExResultAlbums = &apos;&lt;h3&gt;Résultat de la recherche&lt;/h3&gt;&lt;table(?:.*?)&gt;(.*?)&lt;/table&gt;&apos;;
+  regExResultAlbums = &apos;&lt;h3&gt;R&#xE9;sultat de la recherche&lt;/h3&gt;&lt;table(?:.*?)&gt;(.*?)&lt;/table&gt;&apos;;
   regExResult = &apos;&lt;tr class(?:.*?)&gt;&lt;td&gt;&lt;img(?:.*?)/&gt;&lt;/td&gt;&lt;td&gt;(?&lt;album&gt;.*?)&lt;/td&gt;(?:&lt;td(?:.*?)&gt;(?:.*?)&lt;/td&gt;)*?&lt;td&gt;&lt;a href=&quot;Titolo.jsp\?IdTitolo=(?&lt;id_album&gt;.*?)&quot;(?:.*?)&gt;&lt;/a&gt;&lt;/td&gt;(?:&lt;td(?:.*?)&gt;(?:.*?)&lt;/td&gt;)*?&lt;/tr&gt;&apos;;
   regExResultNbPages = &apos;&lt;input name=&quot;PagerLastPage&quot; type=&quot;hidden&quot; value=&quot;(\d*?)&quot;/&gt;&apos;;
 
-  regExInfosAlbum = &apos;(&lt;div id=&quot;contentinterno&quot;(?:.*?)« BACK)&apos;;
+  regExInfosAlbum = &apos;(&lt;div id=&quot;contentinterno&quot;(?:.*?)&#xAB; BACK)&apos;;
   regExAlbumTitres = &apos;&lt;div id=&quot;contentinterno&quot; xmlns=&quot;&quot;&gt;&lt;hr/&gt;&lt;h3&gt;(?&lt;titre_serie&gt;.*?)&lt;/h3&gt;&lt;h2&gt;(?&lt;titre_album&gt;\D*?)(?:\s*?)(?&lt;tome&gt;\d*?)&lt;/h2&gt;&apos;;
   regExAlbumCouverture = &apos;&lt;img alt=&quot;&quot; border=&quot;0&quot; class=&quot;imgright&quot; height=&quot;303&quot; src=&quot;(?&lt;couverture&gt;.*?)&quot; width=&quot;200&quot;/&gt;&apos;;
   regExAlbumEdition = &apos;&lt;span class=&quot;subheading&quot;&gt;prix:(?:.*?)(?&lt;prix&gt;[\d|\.|,]*?)&lt;/span&gt;(?:.*)&lt;span class=&quot;subheading&quot;&gt;(?&lt;parution&gt;.*?)&lt;br&gt;(?&lt;collection&gt;.*?)(?:&lt;br&gt;(?:(?&lt;nbpage&gt;\d*?) pages |(?:.*?)))*?&lt;/span&gt;(?:Auteur : (?&lt;auteur&gt;.*?)(?:&lt;br&gt;)+)*(?&lt;resume&gt;.*?)&lt;/p&gt;&lt;div id=&quot;paginato&quot;&gt;&apos;;
@@ -88,7 +88,7 @@ begin
   c := TScriptChoix.Create;
   re := TBdtkRegEx.Create;
   try
-    c.Titre := &apos;Résultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
+    c.Titre := &apos;R&#xE9;sultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
     while True do
     begin
       if re.BeginSearch(ExtractRegEx(page, regExResultAlbums), regExResult) then
@@ -114,7 +114,7 @@ begin
     if c.ChoixCount &gt; 0 then
       Result := c.Show
     else
-      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourn&#xE9; de r&#xE9;sultat.&apos;);
   finally
     re.Free;
     c.Free;
@@ -125,7 +125,9 @@ var
   id_album, entry: string;
   index: integer;
 begin
-  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la série&apos;], entry, index) then Exit;
+  entry := AlbumToImport.DefaultSearch;
+  index := 0;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie&apos;], entry, index) then Exit;
 
   id_album := RechercheParTitre(entry);
   if id_album &lt;&gt; &apos;&apos; then

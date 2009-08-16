@@ -4,8 +4,8 @@
     <Auteur>Tetram Corp</Auteur>
     <Description/>
     <ScriptVersion>1</ScriptVersion>
-    <BDVersion>2.1.0.17</BDVersion>
-    <LastUpdate>Fri, 8 May 2009 18:04:32 +0200</LastUpdate>
+    <BDVersion>2.2.0.0</BDVersion>
+    <LastUpdate>Sun, 16 Aug 2009 20:18:57 +0200</LastUpdate>
   </Infos>
   <Options/>
   <Code>program LeLombard;
@@ -39,7 +39,7 @@ const
   urlImage = &apos;/doc/Albums/%s/%s&apos;;
 
   regExAlbumDessinateurs = &apos;&lt;tr&gt;(?s-:.*?)DESSINATEUR(?s-:.*?)&lt;/tr&gt;((?:[\r|\n|\t|\s]*&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td id=&quot;textereduit&quot;&gt;&lt;a.*?&gt;.*?&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;)*)&apos;;
-  regExAlbumScenaristes = &apos;&lt;tr&gt;(?s-:.*?)SCÉNARISTE(?s-:.*?)&lt;/tr&gt;((?:[\r|\n|\t|\s]*&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td id=&quot;textereduit&quot;&gt;&lt;a.*?&gt;.*?&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;)*)&apos;;
+  regExAlbumScenaristes = &apos;&lt;tr&gt;(?s-:.*?)SC&#xC9;NARISTE(?s-:.*?)&lt;/tr&gt;((?:[\r|\n|\t|\s]*&lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;td id=&quot;textereduit&quot;&gt;&lt;a.*?&gt;.*?&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;)*)&apos;;
 
 procedure ParseAlbum(const id_album: string);
 var
@@ -153,7 +153,7 @@ begin
   c := TScriptChoix.Create;
   re := TBdtkRegEx.Create;
   try
-    c.Titre := &apos;Résultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
+    c.Titre := &apos;R&#xE9;sultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
     if re.BeginSearch(ExtractRegEx(page, regExResultsGlobale), regExResultsGlobaleLigne) then
       while re.Next do begin
         titre_album := re.GetCaptureByName(&apos;titre_album&apos;);
@@ -179,7 +179,7 @@ begin
     if c.ChoixCount &gt; 0 then
       Result := c.Show
     else
-      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourn&#xE9; de r&#xE9;sultat.&apos;);
   finally
     re.Free;
     c.Free;
@@ -190,7 +190,9 @@ var
   id_album, entry: string;
   index: integer;
 begin
-  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la série&apos;], entry, index) then Exit;
+  entry := AlbumToImport.DefaultSearch;
+  index := 0;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie&apos;], entry, index) then Exit;
 
   id_album := RechercheParTitre(entry);
 

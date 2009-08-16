@@ -4,8 +4,8 @@
     <Auteur>Tetram Corp</Auteur>
     <Description/>
     <ScriptVersion>1</ScriptVersion>
-    <BDVersion>2.1.0.17</BDVersion>
-    <LastUpdate>Fri, 8 May 2009 11:26:16 +0200</LastUpdate>
+    <BDVersion>2.2.0.0</BDVersion>
+    <LastUpdate>Sun, 16 Aug 2009 20:17:44 +0200</LastUpdate>
   </Infos>
   <Options>
     <Option Label="Type de recherche" Values="Uniquement BD|Uniquement Jeunesse|Les deux" Default="Les deux"/>
@@ -38,7 +38,7 @@ const
   regExAlbumResume = &apos;&lt;div class=&quot;bookDescription&quot;&gt;(?s-:.*?)&lt;div class=&quot;text&quot;&gt;(?&lt;resume&gt;(?s-).*?)&lt;/div&gt;&apos;;
   regExAlbumISBN = &apos;&lt;li&gt;ISBN : ([\d|x|X|-]*)&lt;/li&gt;&apos;;
   regExAlbumCouverture = &apos;&lt;div class=&quot;album-cover-image&quot;&gt;[\r|\n|\t|\s]*&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;[\r|\n|\t|\s]*&lt;img(?s-:.*?)&gt;[\r|\n|\t|\s]*&lt;/a&gt;[\r|\n|\t|\s]*&lt;/div&gt;&apos;;
-  regExAlbumPrevisu = &apos;&lt;a href=&quot;(?&lt;lien&gt;.*?)&quot; class=&quot;preview&quot;&gt;&lt;span&gt;Prévisualiser&lt;/span&gt;&lt;/a&gt;&apos;;
+  regExAlbumPrevisu = &apos;&lt;a href=&quot;(?&lt;lien&gt;.*?)&quot; class=&quot;preview&quot;&gt;&lt;span&gt;Pr&#xE9;visualiser&lt;/span&gt;&lt;/a&gt;&apos;;
   regExAlbumPlanche = &apos;&lt;div class=&quot;preview&quot;(?:.*?)&gt;[\r|\n|\t|\s]*&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;[\r|\n|\t|\s]*(?:&lt;img(?:.*?)&gt;[\r|\n|\t|\s]*)*&lt;/a&gt;[\r|\n|\t|\s]*&lt;/div&gt;&apos;;
 
 procedure ParseAlbum(const lien: string);
@@ -135,7 +135,7 @@ begin
   c := TScriptChoix.Create;
   re := TBdtkRegEx.Create;
   try
-    c.Titre := &apos;Résultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
+    c.Titre := &apos;R&#xE9;sultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
 
     if BD then
     begin
@@ -194,7 +194,7 @@ begin
     if c.ChoixCount &gt; 0 then
       Result := c.Show
     else
-      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourn&#xE9; de r&#xE9;sultat.&apos;);
   finally
     re.Free;
     c.Free;
@@ -205,7 +205,9 @@ var
   id_album, entry: string;
   index: integer;
 begin
-  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la série&apos;], entry, index) then Exit;
+  entry := AlbumToImport.DefaultSearch;
+  index := 0;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie&apos;], entry, index) then Exit;
 
   id_album := RechercheParTitre(entry);
   if id_album &lt;&gt; &apos;&apos; then

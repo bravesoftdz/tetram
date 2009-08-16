@@ -4,8 +4,8 @@
     <Auteur>Tetram Corp</Auteur>
     <Description/>
     <ScriptVersion>1</ScriptVersion>
-    <BDVersion>2.1.0.17</BDVersion>
-    <LastUpdate>Fri, 8 May 2009 17:09:06 +0200</LastUpdate>
+    <BDVersion>2.2.0.0</BDVersion>
+    <LastUpdate>Sun, 16 Aug 2009 20:18:48 +0200</LastUpdate>
   </Infos>
   <Options>
     <Option Label="Miniatures dans les recherches" Values="Oui|Non" Default="Oui"/>
@@ -69,7 +69,7 @@ begin
       AlbumToImport.Edition.Prix := StrToFloatDef(ExtractRegEx(s, &apos;([\d|\.|,]*) &#x20AC;&apos;), 0);
     end;
 
-    AlbumToImport.Serie.Editeur.NomEditeur := &apos;Humanoïdes Associés&apos;;
+    AlbumToImport.Serie.Editeur.NomEditeur := &apos;Humano&#xEF;des Associ&#xE9;s&apos;;
     AlbumToImport.Serie.Editeur.SiteWeb := urlSite;
     AlbumToImport.Edition.Editeur.NomEditeur := AlbumToImport.Serie.Editeur.NomEditeur;
     AlbumToImport.Edition.Editeur.SiteWeb := AlbumToImport.Serie.Editeur.SiteWeb;
@@ -121,7 +121,7 @@ begin
   c := TScriptChoix.Create;
   re := TBdtkRegEx.Create;
   try
-    c.Titre := &apos;Résultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
+    c.Titre := &apos;R&#xE9;sultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
     while True do
     begin
       page := GetPage(urlSite + Format(urlSearch, [p]) + Titre, True);
@@ -130,7 +130,7 @@ begin
           id := re.GetCaptureByName(&apos;id_album&apos;);
           titre_album := re.GetCaptureByName(&apos;titre_album&apos;);
           commentaire := &apos;&apos;;
-          AjoutString1(commentaire, re.GetCaptureByName(&apos;titre_serie&apos;), #13#10, &apos;Série: &apos;, &apos;&apos;);
+          AjoutString1(commentaire, re.GetCaptureByName(&apos;titre_serie&apos;), #13#10, &apos;S&#xE9;rie: &apos;, &apos;&apos;);
           if Miniatures then
             thumb := re.GetCaptureByName(&apos;thumb&apos;)
           else
@@ -149,7 +149,7 @@ begin
     if c.ChoixCount &gt; 0 then
       Result := c.Show
     else
-      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourné de résultat.&apos;);
+      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourn&#xE9; de r&#xE9;sultat.&apos;);
   finally
     re.Free;
     c.Free;
@@ -160,7 +160,9 @@ var
   id_album, entry: string;
   index: integer;
 begin
-  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la série&apos;], entry, index) then Exit;
+  entry := AlbumToImport.DefaultSearch;
+  index := 0;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie&apos;], entry, index) then Exit;
 
   id_album := RechercheParTitre(entry);
   if id_album &lt;&gt; &apos;&apos; then
