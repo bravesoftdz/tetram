@@ -497,7 +497,7 @@ end;
 
 procedure TfrmConsultationAlbum.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
-  CouvertureImprime.Enabled := Bool(FCurrentEdition.Couvertures.Count);
+  CouvertureImprime.Enabled := Assigned(FCurrentEdition) and Bool(FCurrentEdition.Couvertures.Count);
   CouvertureApercu.Enabled := CouvertureImprime.Enabled;
 end;
 
