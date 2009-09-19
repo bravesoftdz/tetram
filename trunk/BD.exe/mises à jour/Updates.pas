@@ -11,10 +11,10 @@ type
 
   TBdtkUpdate = class
     Version: TFileVersion;
+  end;
 
-    type TBdtkUpdateComparer<T: TBdtkUpdate> = class(TComparer<T>)
-      function Compare(const Left, Right: T): Integer; override;
-    end;
+  TBdtkUpdateComparer<T: TBdtkUpdate> = class(TComparer<T>)
+    function Compare(const Left, Right: T): Integer; override;
   end;
 
   TFBUpdate = class(TBdtkUpdate)
@@ -45,7 +45,7 @@ begin
   Update.UpdateCallback := ProcMAJ;
   ListFBUpdates.Add(Update);
   // on passe par une variable temporaire pour bénéficier du comptage de référence: le const du Sort bypass le comptage
-  comp := TBdtkUpdate.TBdtkUpdateComparer<TFBUpdate>.Create;
+  comp := TBdtkUpdateComparer<TFBUpdate>.Create;
   ListFBUpdates.Sort(comp);
 end;
 
@@ -59,7 +59,7 @@ begin
   Update.UpdateCallback := ProcMAJ;
   ListMySQLUpdates.Add(Update);
   // on passe par une variable temporaire pour bénéficier du comptage de référence: le const du Sort bypass le comptage
-  comp := TBdtkUpdate.TBdtkUpdateComparer<TMySQLUpdate>.Create;
+  comp := TBdtkUpdateComparer<TMySQLUpdate>.Create;
   ListMySQLUpdates.Sort(comp);
 end;
 
@@ -78,17 +78,20 @@ end;
 
 { TBdtkUpdate.TBdtkUpdateComparer<T> }
 
-function TBdtkUpdate.TBdtkUpdateComparer<T>.Compare(const Left, Right: T): Integer;
+function TBdtkUpdateComparer<T>.Compare(const Left, Right: T)
+  : Integer;
 begin
   Result := Left.Version - Right.Version;
 end;
 
 initialization
-  ListFBUpdates := TObjectList<TFBUpdate>.Create(True);
-  ListMySQLUpdates := TObjectList<TMySQLUpdate>.Create(True);
+
+ListFBUpdates := TObjectList<TFBUpdate>.Create(True);
+ListMySQLUpdates := TObjectList<TMySQLUpdate>.Create(True);
 
 finalization
-  ListFBUpdates.Free;
-  ListMySQLUpdates.Free;
+
+ListFBUpdates.Free;
+ListMySQLUpdates.Free;
 
 end.

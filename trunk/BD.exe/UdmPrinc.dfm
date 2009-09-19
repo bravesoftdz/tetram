@@ -11,6 +11,7 @@ object dmPrinc: TdmPrinc
       'user_name='
       'password=')
     DatabaseName = 'G:\Programmation\MEDIA.KIT\BDth'#232'que 1.0\BD.GDB'
+    CharacterSet = csNONE
     LibraryName = 'fbembed.dll'
     Left = 32
     Top = 16

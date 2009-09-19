@@ -4,11 +4,10 @@ interface
 
 {$WARN UNIT_PLATFORM OFF}
 
-uses
-  SysUtils, Windows, Forms, FileCtrl, Classes, Divers,
-  Contnrs;
+uses SysUtils, Windows, Forms, FileCtrl, Classes, Divers, Contnrs;
 
 const
+  AppData: string = 'TetramCorp\BDTheque\';
   DatabasePath: string = 'bd.gdb';
   DatabaseUserName: string = 'SYSDBA';
   DatabasePassword: string = 'masterkey';
@@ -24,14 +23,10 @@ const
   FormatPourcent: string = '';
   FormatMonnaie: string = '';
   FormatMonnaieSimple: string = '';
-  CODE_APP = '954726'; {code (6 caractères numériques) arbitraire utilisé pour générer les références de cassettes}
   TitreApplication = 'BDthèque';
   CopyrightTetramCorp = 'Copyright © Teträm Corp';
 
   csAll = '(Toutes)'; // All categories
-  csCaption = '<Barre>'; // Default Toolbar Caption
-  cstbU = 'tbU'; // ID for userdefined toolbars
-  customizing: Boolean = False;
 
 type
   RSiteWeb = record
@@ -72,17 +67,15 @@ type
 
 type
   TGlobalVar = class
-    class var Mode_en_cours: TModeConsult;
+  class var
+    Mode_en_cours: TModeConsult;
     class var Utilisateur: RUtilisateur;
   end;
 
 implementation
 
-uses
-  IniFiles, ShellAPI;
+uses IniFiles, ShellAPI, SHFolder;
 
-const
-  bufTempPath: array[0..1024] of Char = #0;
 
 procedure EmptyTempPath;
 var
@@ -95,22 +88,47 @@ begin
   SHFileOperation(op);
 end;
 
-initialization
-  GetTempPath(Length(bufTempPath), bufTempPath);
-  TempPath := IncludeTrailingPathDelimiter(bufTempPath) + 'TC_BDTK\';
+procedure InitPath;
+var
+  buffer: array [0..MAX_PATH] of Char;
+begin
+  ZeroMemory(@buffer, Length(buffer) * SizeOf(Char));
+  GetTempPath(Length(buffer), buffer);
+  TempPath := IncludeTrailingPathDelimiter(buffer) + TempPath;
   ForceDirectories(TempPath);
   EmptyTempPath;
-  RepImages := ExtractFilePath(Application.ExeName) + RepImages;
-  FichierIni := ExtractFilePath(Application.ExeName) + FichierIni;
+
+  ZeroMemory(@buffer, Length(buffer) * SizeOf(Char));
+  SHGetFolderPath(0, CSIDL_APPDATA, 0, SHGFP_TYPE_CURRENT, buffer);
+  AppData := IncludeTrailingPathDelimiter(buffer) + AppData;
+  ForceDirectories(AppData);
+
+  if FileExists(ExtractFilePath(Application.ExeName) + FichierIni) then
+  begin
+    FichierIni := ExtractFilePath(Application.ExeName) + FichierIni;
+    DatabasePath := ExtractFilePath(Application.ExeName) + DatabasePath;
+    RepImages := ExtractFilePath(Application.ExeName) + RepImages;
+  end
+  else
+  begin
+    FichierIni := AppData + FichierIni;
+    DatabasePath := AppData + DatabasePath;
+    RepImages := AppData + RepImages;
+  end;
   RepWebServer := ExtractFilePath(Application.ExeName) + RepWebServer;
+end;
+
+initialization
+  InitPath;
   FormatMonnaieCourt := '#,##0.00';
   FormatMonnaieSimple := '0.00';
   FormatMonnaie := IIf(CurrencyFormat in [0, 2], CurrencyString + IIf(CurrencyFormat = 2, ' ', ''), '') + FormatMonnaieCourt + IIf(CurrencyFormat in [1, 3], IIf(CurrencyFormat = 3, ' ', '') + CurrencyString, '');
   FormatPourcent := '%d (%f%%)';
   TGlobalVar.Utilisateur.ExeVersion := GetFichierVersion(Application.ExeName);
+  TGlobalVar.Utilisateur.AppVersion := Format('%d.%d', [TGlobalVar.Utilisateur.ExeVersion.MajorVersion, TGlobalVar.Utilisateur.ExeVersion.MinorVersion]);
   with TIniFile.Create(FichierIni) do
     try
-      DatabasePath := ReadString('Database', 'Database', ExtractFilePath(Application.ExeName) + DatabasePath);
+      DatabasePath := ReadString('Database', 'Database', DatabasePath);
       DatabaseUserName := ReadString('Database', 'UserName', DatabaseUserName);
       DatabasePassword := ReadString('Database', 'Password', DatabasePassword);
       DatabaseRole := ReadString('Database', 'Role', DatabaseRole);
@@ -123,8 +141,6 @@ initialization
     end;
 
 finalization
-  if HandleDLLPic <> 0 then
-    FreeLibrary(HandleDLLPic);
+  if HandleDLLPic <> 0 then FreeLibrary(HandleDLLPic);
 
 end.
-

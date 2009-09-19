@@ -1,11 +1,10 @@
 unit UfrmProgression;
 
-{.$D-}
+{ .$D- }
 interface
 
-uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ComCtrls, Commun, UBdtForms,
-  JvExControls, JvLabel, UframBoutons;
+uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ComCtrls, Commun, UBdtForms, JvExControls, JvLabel,
+  UframBoutons;
 
 type
   TProgressBar = class(ComCtrls.TProgressBar)

@@ -75,9 +75,13 @@
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
 			<RcCompile Include="ressources.rc">
+				<ContainerId>RC</ContainerId>
+				<ContainerId>RC</ContainerId>
 				<Form>ressources.res</Form>
 			</RcCompile>
 			<RcCompile Include="mises à jour\scripts_maj.rc">
+				<ContainerId>RC</ContainerId>
+				<ContainerId>RC</ContainerId>
 				<Form>scripts_maj.res</Form>
 			</RcCompile>
 			<DCCReference Include="CommonConst.pas"/>
@@ -286,9 +290,6 @@
 			<DCCReference Include="Scripts\UfrmScriptChoix.pas">
 				<Form>frmScriptChoix</Form>
 			</DCCReference>
-			<DCCReference Include="UfrmProgression.pas">
-				<Form>frmProgression</Form>
-			</DCCReference>
 			<DCCReference Include="Scripts\UScriptsHTMLFunctions.pas"/>
 			<DCCReference Include="Scripts\UfrmScriptEditOption.pas">
 				<Form>frmScriptEditOption</Form>
@@ -362,6 +363,10 @@
 			<DCCReference Include="VirtualTreeBdtk.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_1_1_10.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_1_1_17.pas"/>
+			<DCCReference Include="UfrmProgression.pas">
+				<Form>frmProgression</Form>
+			</DCCReference>
+			<None Include="ModelSupport_BD\default.txaPackage"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
 			</BuildConfiguration>
@@ -384,8 +389,8 @@
 		</ItemGroup>
 		<Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
 		<PropertyGroup>
-			<PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
-			<PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
+			<PreBuildEvent><![CDATA[rem del "$(PROJECTDIR)\dcu\*.dcu"]]></PreBuildEvent>
+			<PostBuildEvent><![CDATA[rem copy "d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB" d:\MEDIA.KIT\BDThèque\bin /y]]></PostBuildEvent>
 		</PropertyGroup>
 		<ProjectExtensions>
 			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
@@ -399,6 +404,7 @@
 						<Parameters Name="UseLauncher">False</Parameters>
 						<Parameters Name="LoadAllSymbols">True</Parameters>
 						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+						<Parameters Name="RunParams">/test</Parameters>
 					</Parameters>
 					<VersionInfo>
 						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
@@ -406,7 +412,7 @@
 						<VersionInfo Name="MajorVer">2</VersionInfo>
 						<VersionInfo Name="MinorVer">2</VersionInfo>
 						<VersionInfo Name="Release">0</VersionInfo>
-						<VersionInfo Name="Build">1</VersionInfo>
+						<VersionInfo Name="Build">134</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -418,7 +424,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">2.2.0.1</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">2.2.0.134</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2009</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks"/>
@@ -428,25 +434,8 @@
 						<VersionInfoKeys Name="Comments"/>
 					</VersionInfoKeys>
 					<Excluded_Packages>
-						<Excluded_Packages Name="$(BDS)\bin\dclmcn120.bpl">Composants de connexion CodeGear DataSnap</Excluded_Packages>
-						<Excluded_Packages Name="$(BDS)\bin\dclmid120.bpl">Composants CodeGear MyBase DataAccess</Excluded_Packages>
-						<Excluded_Packages Name="$(BDS)\bin\dclIndyCore120.bpl">Indy 10 Core Design Time</Excluded_Packages>
-						<Excluded_Packages Name="$(BDS)\Bin\dclIndyProtocols120.bpl">Indy 10 Protocols Design Time</Excluded_Packages>
-						<Excluded_Packages Name="$(BDS)\bin\dclwebsnap120.bpl">Composants CodeGear WebSnap</Excluded_Packages>
-						<Excluded_Packages Name="$(BDS)\bin\dclsoap120.bpl">Composants CodeGear SOAP</Excluded_Packages>
-						<Excluded_Packages Name="$(BDS)\bin\dclDataSnapProviderClient120.bpl">Composants client du fournisseur CodeGear DBExpress DataSnap</Excluded_Packages>
-						<Excluded_Packages Name="$(BDS)\bin\dclDBXDrivers120.bpl">Composants Pilote CodeGear</Excluded_Packages>
-						<Excluded_Packages Name="$(BDS)\bin\dclDBXDriversEnt120.bpl">Composants Pilote CodeGear Entreprise</Excluded_Packages>
-						<Excluded_Packages Name="$(BDS)\bin\dcldbxcds120.bpl">Composant CodeGear SimpleDataset (DBX)</Excluded_Packages>
-						<Excluded_Packages Name="D:\Outils\Jedi Code Format\JCFIdeD12.bpl">JEDI Code Format IDE Plugin for CodeGear Delphi 2009 for Win32</Excluded_Packages>
-						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\6.0\Bpl\JclBaseExpert120.bpl">JCL Package containing common units for JCL Experts</Excluded_Packages>
-						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\6.0\Bpl\JclDebugExpert120.bpl">JCL Debug IDE extension</Excluded_Packages>
-						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\6.0\Bpl\JclProjectAnalysisExpert120.bpl">JCL Project Analyzer</Excluded_Packages>
-						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\6.0\Bpl\JclFavoriteFoldersExpert120.bpl">JCL Open and Save IDE dialogs with favorite folders</Excluded_Packages>
-						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\6.0\Bpl\JclRepositoryExpert120.bpl">JCL Package containing repository wizards</Excluded_Packages>
-						<Excluded_Packages Name="C:\Documents and Settings\All Users\Documents\RAD Studio\6.0\Bpl\JclSIMDViewExpert120.bpl">JCL Debug Window of XMM registers</Excluded_Packages>
-						<Excluded_Packages Name="$(BDS)\bin\dcloffice2k120.bpl">Composants Microsoft Office 2000 Sample Automation Server Wrapper</Excluded_Packages>
-						<Excluded_Packages Name="$(BDS)\bin\dclofficexp120.bpl">Composants Microsoft Office XP Sample Automation Server Wrapper</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dcloffice2k140.bpl">Composants Microsoft Office 2000 Sample Automation Server Wrapper</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclofficexp140.bpl">Composants Microsoft Office XP Sample Automation Server Wrapper</Excluded_Packages>
 					</Excluded_Packages>
 				</Delphi.Personality>
 				<ModelSupport>False</ModelSupport>

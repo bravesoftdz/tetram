@@ -187,7 +187,6 @@ end;
 
 procedure TfrmCustomize.FormCreate(Sender: TObject);
 begin
-  customizing := True;
   PrepareLV(Self);
   FillCategories;
   FillCommands(csAll);

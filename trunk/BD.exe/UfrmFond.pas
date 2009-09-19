@@ -2,20 +2,27 @@ unit UfrmFond;
 
 interface
 
-{.$D-}
+{ .$D- }
 {$WARN SYMBOL_DEPRECATED OFF}
 
-uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ImgList, Menus,
-  ComCtrls, ExtCtrls, Buttons, ActnList, Printers, iniFiles, jpeg, Contnrs, ToolWin, UBdtForms,
-  PngImageList, pngImage, PngFunctions;
+uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ImgList, Menus, ComCtrls, ExtCtrls, Buttons, ActnList,
+  Printers, iniFiles, jpeg, Contnrs, ToolWin, UBdtForms, PngImageList, pngImage, PngFunctions, UHistorique;
+
+const
+  MSG_COMMANDELINE = WM_USER + 1;
+  MSG_ACTIVATE = WM_USER + 2;
 
 type
+  RMSGSendData = record
+    l: Integer;
+    a: array [0 .. 2047] of Char;
+  end;
+
   TActionUpdate = function: Boolean of object;
 
   TStack = class(Contnrs.TStack) // surcharge pour pouvoir acceder à List
-    //  published
-    //    property List;
+    // published
+    // property List;
   end;
 
   TfrmFond = class(TbdtForm)
@@ -186,15 +193,21 @@ type
     procedure actMiseAJourExecute(Sender: TObject);
     procedure actModeScriptsExecute(Sender: TObject);
     procedure actPublierExecute(Sender: TObject);
-    procedure FormKeyDown(Sender: TObject; var Key: Word;      Shift: TShiftState);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure actFicheModifierExecute(Sender: TObject);
+    procedure ToolBar1Click(Sender: TObject);
   private
     { Déclarations privées }
     FToolOriginal: TStringList;
     FModalWindows: TStack;
     procedure ChargeToolBarres(sl: TStringList);
-    procedure WMSyscommand(var msg: TWmSysCommand); message WM_SYSCOMMAND;
-    procedure HistoriqueChanged(Sender: TObject);
+    procedure WMSyscommand(var msg: TWmSysCommand);
+    message WM_SYSCOMMAND;
+    procedure WMCopyData(var msg: TWMCopyData);
+    message WM_COPYDATA;
+    procedure MsgActivate(var msg: TMessage);
+    message MSG_ACTIVATE;
+    procedure HistoriqueChanged(Sender: TObject; LastAction: TConsult);
     procedure HistoriqueChosen(Sender: TObject);
   protected
     procedure Loaded; override;
@@ -218,19 +231,17 @@ implementation
 
 {$R *.DFM}
 
-uses
-  ProceduresBDtk, UfrmRepertoire, CommonConst, UfrmOptions, UfrmStatsGeneral,
-  UfrmStatsEmprunteurs, UfrmStatsAlbums, LoadComplet, Impression, UfrmGestion, UfrmCustomize,
-  UfrmAboutBox, UdmPrinc, Types, Procedures, UHistorique, UfrmEntretien, ShellAPI, Math,
-  UfrmScripts, UfrmPublier;
+uses ProceduresBDtk, UfrmRepertoire, CommonConst, UfrmOptions, UfrmStatsGeneral, UfrmStatsEmprunteurs, UfrmStatsAlbums, LoadComplet, Impression,
+  UfrmGestion, UfrmCustomize, UfrmAboutBox, UdmPrinc, Types, Procedures, UfrmEntretien, ShellAPI, Math, UfrmScripts, UfrmPublier, JumpList, ShlObj;
 
 procedure TfrmFond.WMSyscommand(var msg: TWmSysCommand);
 begin
   case (msg.CmdType and $FFF0) of
-    SC_CLOSE: actQuitter.Execute;
+    SC_CLOSE:
+      actQuitter.Execute;
     else
       inherited;
-  end;
+    end;
 end;
 
 procedure TfrmFond.FormDestroy(Sender: TObject);
@@ -240,8 +251,10 @@ begin
   with TIniFile.Create(FichierIni) do
     try
       case WindowState of
-        wsMaximized: DeleteKey('Options', 'WS');
-        wsNormal: WriteString('Options', 'WS', Format('%dx%d-%dx%d', [Width, Height, Left, Top]));
+        wsMaximized:
+          DeleteKey('Options', 'WS');
+        wsNormal:
+          WriteString('Options', 'WS', Format('%dx%d-%dx%d', [Width, Height, Left, Top]));
       end;
     finally
       Free;
@@ -259,8 +272,10 @@ procedure TfrmFond.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftStat
 begin
   if ssAlt in Shift then
     case Key of
-      VK_LEFT: HistoriqueBack.Execute;
-      VK_RIGHT: HistoriqueNext.Execute;
+      VK_LEFT:
+        HistoriqueBack.Execute;
+      VK_RIGHT:
+        HistoriqueNext.Execute;
     end;
 end;
 
@@ -312,43 +327,43 @@ begin
     p := Round(V * (1 - S / 255));
     q := Round(V * (1 - S * f / 255));
     t := Round(V * (1 - S * (1 - f) / 255));
-    case (h div 40) mod 6 of
+    case (H div 40) mod 6 of
       0:
-      begin
-        R := V;
-        G := t;
-        B := p;
-      end;
+        begin
+          R := V;
+          G := t;
+          B := p;
+        end;
       1:
-      begin
-        R := q;
-        G := V;
-        B := p;
-      end;
+        begin
+          R := q;
+          G := V;
+          B := p;
+        end;
       2:
-      begin
-        R := p;
-        G := V;
-        B := t;
-      end;
+        begin
+          R := p;
+          G := V;
+          B := t;
+        end;
       3:
-      begin
-        R := p;
-        G := q;
-        B := V;
-      end;
+        begin
+          R := p;
+          G := q;
+          B := V;
+        end;
       4:
-      begin
-        R := t;
-        G := p;
-        B := V;
-      end;
+        begin
+          R := t;
+          G := p;
+          B := V;
+        end;
       5:
-      begin
-        R := V;
-        G := p;
-        B := q;
-      end;
+        begin
+          R := V;
+          G := p;
+          B := q;
+        end;
     end;
   end;
 end;
@@ -366,11 +381,11 @@ end;
 
 procedure PNGtoGray(png: TPNGImage);
 var
-  h, w: Integer;
+  H, w: Integer;
 begin
-  for h := 0 to Pred(png.Height) do
+  for H := 0 to Pred(png.Height) do
     for w := 0 to Pred(png.Width) do
-      png.Pixels[w, h] := ColorToGray(png.Pixels[w, h]);
+      png.Pixels[w, H] := ColorToGray(png.Pixels[w, H]);
 end;
 
 procedure TfrmFond.FormCreate(Sender: TObject);
@@ -388,7 +403,7 @@ begin
       if Assigned(tlb.Action) then
       begin
         if TActionList(tlb.Action.Owner) <> ActionList1 then
-          FToolOriginal.Add(Format('b%d=%s', [i, tlb.Action.Name]));
+          FToolOriginal.Add(Format('b%d=%s', [i, tlb.Action.name]));
       end
       else if (tlb.Caption = '-') then
         FToolOriginal.Add(Format('b%d=%s', [i, 'X']));
@@ -403,11 +418,11 @@ begin
   imlNotation_32x32.BeginUpdate;
   imlNotation_16x16.BeginUpdate;
   imlNotation_32x32.PngImages.Insert(0).Assign(imlNotation_32x32.PngImages[3]);
-  MakeImageGrayscale(imlNotation_32x32.PngImages[0].PngImage);
-//  for i := 0 to Pred(imlNotation_32x32.Count) do
-//    imlNotation_16x16.PngImages.Add.Assign(imlNotation_32x32.PngImages[i]);
+  MakeImageGrayscale(imlNotation_32x32.PngImages[0].pngImage);
+  // for i := 0 to Pred(imlNotation_32x32.Count) do
+  // imlNotation_16x16.PngImages.Add.Assign(imlNotation_32x32.PngImages[i]);
   imlNotation_16x16.PngImages.Insert(0).Assign(imlNotation_16x16.PngImages[1]);
-  MakeImageGrayscale(imlNotation_16x16.PngImages[0].PngImage);
+  MakeImageGrayscale(imlNotation_16x16.PngImages[0].pngImage);
   imlNotation_32x32.EndUpdate;
   imlNotation_16x16.EndUpdate;
 
@@ -417,7 +432,7 @@ begin
   for i := 0 to Pred(boutons_32x32_hot.Count) do
   begin
     boutons_32x32_norm.PngImages.Add.Assign(boutons_32x32_hot.PngImages[i]);
-    MakeImageBlended(boutons_32x32_norm.PngImages[i].PngImage);
+    MakeImageBlended(boutons_32x32_norm.PngImages[i].pngImage);
 
     boutons_16x16_hot.PngImages.Add.Assign(boutons_32x32_hot.PngImages[i]);
     boutons_16x16_norm.PngImages.Add.Assign(boutons_32x32_norm.PngImages[i]);
@@ -538,7 +553,7 @@ end;
 
 procedure TfrmFond.actQuitterExecute(Sender: TObject);
 var
-  i: integer;
+  i: Integer;
 begin
   i := 0;
   while i < Application.ComponentCount do
@@ -579,15 +594,15 @@ end;
 
 procedure TfrmFond.ChargeToolBarres(sl: TStringList);
 
-  function GetAction(ActionList: TActionList; Name: string): TAction;
+  function GetAction(ActionList: TActionList; name: string): TAction;
   var
     act: TContainedAction;
   begin
-    if not SameText(Copy(Name, 1, 3), 'act') then
-      Name := 'act' + Name;
+    if not SameText(Copy(name, 1, 3), 'act') then
+      name := 'act' + name;
     Result := nil;
     for act in ActionList do
-      if SameText(Name, act.Name) then
+      if SameText(name, act.name) then
       begin
         Result := act as TAction;
         Exit;
@@ -776,7 +791,7 @@ begin
     actAfficheRecherche.Enabled := ModeConsult;
     actAfficheStock.Enabled := ModeConsult;
     actAfficheAchats.Enabled := ModeConsult;
-    actModeConsultation.Checked := Assigned(FrmRepertoire);
+    actModeConsultation.Checked := Assigned(frmRepertoire);
     actModeGestion.Checked := Assigned(FrmGestions);
     actModeConsultation.Enabled := not actModeConsultation.Checked;
     actModeGestion.Enabled := not actModeGestion.Checked;
@@ -806,8 +821,8 @@ begin
   if actModeGestion.Checked then
     Exit;
   LockWindow := TLockWindow.Create(Self);
-  if Assigned(FrmRepertoire) then
-    FreeAndNil(FrmRepertoire);
+  if Assigned(frmRepertoire) then
+    FreeAndNil(frmRepertoire);
   Application.CreateForm(TFrmGestions, FrmGestions);
   SetChildForm(FrmGestions);
 end;
@@ -820,8 +835,8 @@ begin
     Exit;
   LockWindow := TLockWindow.Create(Self);
   FrmGestions := nil;
-  Application.CreateForm(TFrmRepertoire, FrmRepertoire);
-  SetChildForm(FrmRepertoire, alLeft);
+  Application.CreateForm(TFrmRepertoire, frmRepertoire);
+  SetChildForm(frmRepertoire, alLeft);
   Historique.Refresh;
 end;
 
@@ -857,6 +872,11 @@ begin
   actStatsListeCompletesAlbums.Execute;
 end;
 
+procedure TfrmFond.ToolBar1Click(Sender: TObject);
+begin
+  showmessage(Application.Title);
+end;
+
 procedure TfrmFond.StatsAlbumsEmpruntesAppExecute(Sender: TObject);
 begin
   actStatsAlbumsEmpruntes.ActionComponent := TComponent(Sender);
@@ -867,7 +887,8 @@ procedure TfrmFond.ActionList1Update(Action: TBasicAction; var Handled: Boolean)
 begin
   CheminBase.Caption := DMPrinc.UIBDataBase.DatabaseName;
   HistoriqueBack.Enabled := (TGlobalVar.Mode_en_cours = mdConsult) and Bool(Historique.CurrentConsultation);
-  HistoriqueNext.Enabled := (TGlobalVar.Mode_en_cours = mdConsult) and Bool(Historique.CountConsultation) and (Historique.CurrentConsultation <> Historique.CountConsultation - 1);
+  HistoriqueNext.Enabled := (TGlobalVar.Mode_en_cours = mdConsult) and Bool(Historique.CountConsultation) and
+    (Historique.CurrentConsultation <> Historique.CountConsultation - 1);
 end;
 
 function TfrmFond.SetModalChildForm(Form: TForm; Alignement: TAlign): Integer;
@@ -891,8 +912,8 @@ begin
   end
   else
     CurrentMenu := FCurrentForm.Menu;
-  if Assigned(FrmRepertoire) then
-    FrmRepertoire.Visible := False;
+  if Assigned(frmRepertoire) then
+    frmRepertoire.Visible := False;
   FModalWindows.Push(Form);
   try
     Form.Show;
@@ -907,8 +928,8 @@ begin
     FModalWindows.Pop;
     if FModalWindows.Count > 0 then
       TForm(FModalWindows.Peek).Enabled := True;
-    if Assigned(FrmRepertoire) then
-      FrmRepertoire.Visible := FModalWindows.Count = 0;
+    if Assigned(frmRepertoire) then
+      frmRepertoire.Visible := FModalWindows.Count = 0;
     MergeMenu(CurrentMenu);
     Application.ModalFinished;
   end;
@@ -960,6 +981,25 @@ begin
     ProcessMenuItem(MenuItem);
 end;
 
+procedure TfrmFond.MsgActivate(var msg: TMessage);
+begin
+  Application.Restore;
+  Application.BringToFront;
+end;
+
+procedure TfrmFond.WMCopyData(var msg: TWMCopyData);
+var
+  data: ^RMSGSendData;
+begin
+  data := msg.CopyDataStruct^.lpData;
+  case msg.CopyDataStruct^.dwData of
+    MSG_COMMANDELINE:
+      begin
+        AnalyseLigneCommande(Copy(data.a, 0, data.l * SizeOf(Char)));
+      end;
+  end;
+end;
+
 procedure TfrmFond.SetChildForm(Form: TForm; Alignement: TAlign = alClient);
 var
   LockWindow: ILockWindow;
@@ -982,7 +1022,7 @@ begin
   Form.Parent := Self;
   Form.Visible := True;
   Form.Align := Alignement;
-  if not (Form is TFrmRepertoire) then
+  if not(Form is TFrmRepertoire) then
   begin
     FCurrentForm := Form;
     MergeMenu(FCurrentForm.Menu);
@@ -991,7 +1031,7 @@ begin
     FCurrentForm := nil;
   if Form is TFrmRepertoire then
     Splitter1.Left := ClientWidth - Splitter1.Width;
-  Form.left := 0;
+  Form.Left := 0;
 end;
 
 procedure TfrmFond.HistoriqueBackExecute(Sender: TObject);
@@ -1045,7 +1085,7 @@ procedure TfrmFond.MeasureMenuItem(Sender: TObject; ACanvas: TCanvas; var Width,
   var
     NonClientMetrics: TNonClientMetrics;
   begin
-    NonClientMetrics.cbSize := sizeof(NonClientMetrics);
+    NonClientMetrics.cbSize := SizeOf(NonClientMetrics);
     if SystemParametersInfo(SPI_GETNONCLIENTMETRICS, 0, @NonClientMetrics, 0) then
     begin
       Height := NonClientMetrics.iMenuHeight;
@@ -1072,16 +1112,29 @@ begin
   DMPrinc.CheckVersion(True);
 end;
 
-procedure TfrmFond.HistoriqueChanged(Sender: TObject);
+procedure TfrmFond.HistoriqueChanged(Sender: TObject; LastAction: TConsult);
 const
   MaxNbItems = 10;
 var
   i: Integer;
   mnu: TMenuItem;
+  sinfo: SHARDAPPIDINFOLINK;
+  sh: TShellLink;
 begin
-  //  mnuBack.Items.Count = Historique.CurrentConsultation;
-  //  mnuNext.Items.Count = Historique.CountConsultation - Historique.CurrentConsultation - 1;
-  //  mnuCurrent.Items.Count = 1 (Historique.CurrentConsultation);
+  if CheckWin32Version(6, 1) and (LastAction.Description <> '') and (LastAction.CommandLine <> '') then
+  begin
+    sinfo.pszAppID := PChar(Application.ExeName);
+    sh := TShellLink.Create;
+    try
+      sh.DisplayName := LastAction.Description;
+      sh.Arguments := LastAction.CommandLine;
+      sh.IconIndex := 1;
+      sinfo.psl := sh.AsIShellLink;
+    finally
+      sh.Free;
+    end;
+    SHAddToRecentDocs(SHARD_APPIDINFOLINK, @sinfo);
+  end;
 
   mnuBack.Clear;
   for i := Max(0, Historique.CurrentConsultation - MaxNbItems) to (Historique.CurrentConsultation - 1) do
@@ -1139,18 +1192,18 @@ end;
 
 procedure TfrmFond.Loaded;
 var
-  s, Taille, Position: string;
+  S, Taille, Position: string;
   i, iWidth, iHeight, iLeft, iTop: Integer;
 begin
   inherited;
   with TIniFile.Create(FichierIni) do
     try
-      s := ReadString('Options', 'WS', '');
-      if s <> '' then
+      S := ReadString('Options', 'WS', '');
+      if S <> '' then
         try
-          i := Pos('-', s);
-          Taille := Copy(s, 1, i - 1);
-          Position := Copy(s, i + 1, MaxInt);
+          i := Pos('-', S);
+          Taille := Copy(S, 1, i - 1);
+          Position := Copy(S, i + 1, MaxInt);
 
           i := Pos('x', Taille);
           iWidth := StrToInt(Copy(Taille, 1, i - 1));
@@ -1177,9 +1230,10 @@ const
 var
   i: Integer;
 begin
-//  imlNotation_32x32.PngImages[Notation].PngImage.Draw(Canvas, Rect(aRect.Left, aRect.Top, aRect.Left + 16, aRect.Top + 16));
+  // imlNotation_32x32.PngImages[Notation].PngImage.Draw(Canvas, Rect(aRect.Left, aRect.Top, aRect.Left + 16, aRect.Top + 16));
 
-  if not TGlobalVar.Utilisateur.Options.AfficheNoteListes then Exit;
+  if not TGlobalVar.Utilisateur.Options.AfficheNoteListes then
+    Exit;
 
   aRect.Left := aRect.Right - imgSize * 4 - 4;
   aRect.Right := aRect.Left + imgSize;
@@ -1190,12 +1244,11 @@ begin
     for i := 1 to 4 do
     begin
       if i >= Notation then
-        imlNotation_16x16.PngImages[0].PngImage.Draw(Canvas, aRect)
+        imlNotation_16x16.PngImages[0].pngImage.Draw(Canvas, aRect)
       else
-        imlNotation_16x16.PngImages[1].PngImage.Draw(Canvas, aRect);
+        imlNotation_16x16.PngImages[1].pngImage.Draw(Canvas, aRect);
       OffsetRect(aRect, imgSize, 0);
     end;
 end;
 
 end.
-

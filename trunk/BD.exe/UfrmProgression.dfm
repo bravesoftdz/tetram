@@ -52,7 +52,6 @@ object frmProgression: TfrmProgression
     Anchors = [akLeft, akTop, akRight]
     Position = 50
     Smooth = True
-    Style = Sender
     TabOrder = 0
   end
   inline framBoutons1: TframBoutons
@@ -64,6 +63,7 @@ object frmProgression: TfrmProgression
     TabOrder = 1
     ExplicitTop = 49
     ExplicitWidth = 367
+    ExplicitHeight = 25
     inherited btnOK: TButton
       Left = 204
       ExplicitLeft = 204

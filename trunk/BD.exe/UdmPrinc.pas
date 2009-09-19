@@ -2,9 +2,7 @@ unit UdmPrinc;
 
 interface
 
-uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, AppEvnts,
-  SyncObjs, jpeg, Menus, uib;
+uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, AppEvnts, SyncObjs, jpeg, Menus, uib;
 
 const
   AntiAliasing = True;
@@ -24,6 +22,7 @@ type
   private
     { Déclarations privées }
     FUILock: TCriticalSection;
+    procedure MakeJumpList;
   public
     { Déclarations publiques }
     function CheckVersions(Affiche_act: TAffiche_act; Force: Boolean = True): Boolean;
@@ -31,6 +30,8 @@ type
   end;
 
 function OuvreSession: Boolean;
+procedure BdtkInitProc;
+procedure AnalyseLigneCommande(cmdLine: string);
 
 function dmPrinc: TdmPrinc;
 
@@ -38,12 +39,11 @@ implementation
 
 {$R *.DFM}
 
-uses
-  CommonConst, Commun, Textes, UdmCommun, UIBLib, Divers, IniFiles, Procedures, UHistorique, Math, UIBase, Updates,
-  UfrmFond, CheckVersionNet, DateUtils, UMAJODS;
+uses CommonConst, Commun, Textes, UdmCommun, UIBLib, Divers, IniFiles, Procedures, UHistorique, Math, UIBase, Updates, UfrmFond, CheckVersionNet,
+  DateUtils, UMAJODS, JumpList, UfrmSplash, Proc_Gestions;
 
 var
-  FDMPrinc: TDMPrinc = nil;
+  FDMPrinc: TdmPrinc = nil;
 
 function dmPrinc: TdmPrinc;
 var
@@ -54,7 +54,7 @@ begin
     cs := TCriticalSection.Create;
     cs.Enter;
     try
-      Application.CreateForm(TDMPrinc, FDMPrinc);
+      Application.CreateForm(TdmPrinc, FDMPrinc);
     finally
       cs.Leave;
       cs.Free;
@@ -67,7 +67,7 @@ function OuvreSession: Boolean;
 begin
   try
     Result := True;
-    with DMPrinc do
+    with dmPrinc do
     begin
       UIBDataBase.Connected := False;
       UIBDataBase.DatabaseName := DatabasePath;
@@ -91,7 +91,7 @@ begin
     if not Assigned(dmCommun) then
       Application.CreateForm(TdmCommun, dmCommun);
   except
-    AffMessage(rsOuvertureSessionRate + #13#13 + Exception(ExceptObject).Message, mtError, [mbOk], True);
+    AffMessage(rsOuvertureSessionRate + #13#13 + Exception(ExceptObject).message, mtError, [mbOk], True);
     Result := False;
   end;
 end;
@@ -111,7 +111,7 @@ type
       Affiche_act('Mise à jour ' + Version + '...');
       Script := TUIBScript.Create(nil);
       try
-        Script.Transaction := GetTransaction(UIBDatabase);
+        Script.Transaction := GetTransaction(UIBDataBase);
         ProcMAJ(Script);
 
         Script.Script.Text := 'UPDATE OPTIONS SET Valeur = ' + QuotedStr(Version) + ' WHERE Nom_Option = ''Version'';';
@@ -160,7 +160,7 @@ type
 
 var
   FBUpdate: TFBUpdate;
-  msg: string;
+  Msg: string;
 begin
   Result := False;
 
@@ -190,17 +190,17 @@ begin
       Free;
     end;
 
-  msg := 'BDthèque ne peut pas utiliser cette base de données.'#13#10'Version de la base de données: ' + CurrentVersion;
+  Msg := 'BDthèque ne peut pas utiliser cette base de données.'#13#10'Version de la base de données: ' + CurrentVersion;
 
   if CurrentVersion > TGlobalVar.Utilisateur.ExeVersion then
   begin
-    ShowMessage('Base de données trop récente.'#13#10 + msg);
+    ShowMessage('Base de données trop récente.'#13#10 + Msg);
     Exit;
   end;
 
   if TGlobalVar.Utilisateur.ExeVersion > CurrentVersion then
   begin
-    if not (Force or (MessageDlg(msg + #13#10'Voulez-vous la mettre à jour?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)) then
+    if not(Force or (MessageDlg(Msg + #13#10'Voulez-vous la mettre à jour?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)) then
       Exit;
 
     MAJ_ODS;
@@ -247,6 +247,7 @@ end;
 procedure TdmPrinc.DataModuleCreate(Sender: TObject);
 begin
   FUILock := TCriticalSection.Create;
+  MakeJumpList;
 end;
 
 procedure TdmPrinc.DataModuleDestroy(Sender: TObject);
@@ -255,10 +256,27 @@ begin
   FUILock.Free;
 end;
 
+procedure TdmPrinc.MakeJumpList;
+var
+  jl: TJumpList;
+begin
+  // TJumpList vérifie si on est au moins en Windows 7
+  jl := TJumpList.Create(nil);
+  try
+    jl.Tasks.AddShellLink('Ajouter un nouvel album', '/album=new', ' ', '', 2);
+    jl.Tasks.AddShellLink('Ajouter une nouvelle série', '/serie=new', '', '', 2);
+    jl.Tasks.AddShellLink('Ajouter un nouvel auteur', '/auteur=new', '', '', 2);
+    jl.DisplayKnowCategories := [jlkcRecent];
+    jl.Commit;
+  finally
+    jl.Free;
+  end;
+end;
+
 function TdmPrinc.CheckVersion(Force: Boolean): Boolean;
-  // Valeurs de retour:
-  // False: pas de mise à jour ou mise à jour "reportée"
-  // True: mise à jour et utilisateur demande à fermer l'appli
+// Valeurs de retour:
+// False: pas de mise à jour ou mise à jour "reportée"
+// True: mise à jour et utilisateur demande à fermer l'appli
 var
   doVerif: Boolean;
 begin
@@ -276,7 +294,7 @@ begin
         doVerif := WeeksBetween(Now, TGlobalVar.Utilisateur.Options.LastVerifMAJ) > 0;
       else // une fois par mois
         doVerif := MonthsBetween(Now, TGlobalVar.Utilisateur.Options.LastVerifMAJ) > 0;
-    end;
+      end;
 
   if not doVerif then
     Result := False
@@ -292,5 +310,141 @@ begin
   end;
 end;
 
-end.
+procedure AnalyseLigneCommande(cmdLine: string);
+var
+  gestAdd: TActionGestionAdd;
+  ForceGestion: Boolean;
+  PageToOpen: TActionConsultation;
+  ModeToOpen: TActionConsultation;
+  ParamValue: string;
+  GuidToOpen: TGUID;
+begin
+  if TGlobalVar.Mode_en_cours <> mdEditing then
+  begin
+    ModeToOpen := fcModeConsultation;
+    PageToOpen := fcActionBack;
+    gestAdd := nil;
+    if Procedures.FindCmdLineSwitch(cmdLine, 'album', ParamValue) then
+    begin
+      PageToOpen := fcAlbum;
+      gestAdd := AjouterAlbums;
+    end
+    else if Procedures.FindCmdLineSwitch(cmdLine, 'serie', ParamValue) then
+    begin
+      PageToOpen := fcSerie;
+      gestAdd := AjouterSeries;
+    end
+    else if Procedures.FindCmdLineSwitch(cmdLine, 'auteur', ParamValue) then
+    begin
+      PageToOpen := fcAuteur;
+      gestAdd := AjouterAuteurs;
+    end;
+    ForceGestion := SameText(ParamValue, 'new') and not Procedures.FindCmdLineSwitch(cmdLine, 'scripts');
+    if not ForceGestion and (PageToOpen <> fcActionBack) then
+      GuidToOpen := StringToGUID(ParamValue);
+    // je force en mode gestion quand on demande la création d'un nouvel élément
+    // mais rien n'y oblige
+    if not TGlobalVar.Utilisateur.Options.ModeDemarrage or ForceGestion then
+      ModeToOpen := fcModeGestion;
+    if Procedures.FindCmdLineSwitch(cmdLine, 'scripts') then
+      ModeToOpen := fcModeScript;
+    Historique.AddWaiting(ModeToOpen);
+    if ModeToOpen <> fcModeScript then
+      if ForceGestion then
+        Historique.AddWaiting(fcGestionAjout, nil, nil, @gestAdd, nil, '')
+      else
+        Historique.AddWaiting(PageToOpen, GuidToOpen);
+  end;
+end;
 
+function GetHandleOtherInstance: HWND;
+var
+  TitreApplication: string;
+begin
+  TitreApplication := Application.Title;
+  Application.Title := ''; // on change le titre car sinon, on trouverait toujours une Application déjà lancée (la notre!)
+  try
+    try
+      Result := FindWindow('TfrmFond', PChar(TitreApplication)); // renvoie le Handle de la première fenêtre de Class (type) ClassName et de titre TitreApplication (0 s'il n'y en a pas)
+    finally
+      Application.Title := TitreApplication; // restauration du vrai titre
+    end;
+  except
+    Result := 0;
+  end;
+end;
+
+procedure BdtkInitProc;
+var
+  Debut: TDateTime;
+  hdl: THandle;
+  data: RMSGSendData;
+  CD: TCopyDataStruct;
+  s: string;
+begin
+  TGlobalVar.Mode_en_cours := mdLoad;
+  Application.Title := '© TeträmCorp ' + TitreApplication + ' ' + TGlobalVar.Utilisateur.AppVersion;
+  if not Bool(CreateMutex(nil, True, 'TetramCorpBDMutex')) then
+    RaiseLastOSError
+  else if GetLastError = ERROR_ALREADY_EXISTS then
+  begin
+    hdl := GetHandleOtherInstance;
+    if hdl = 0 then
+      ShowMessage('Une instance de BDthèque est déjà ouverte!')
+    else
+    begin
+      if ParamCount > 0 then
+      begin
+        ZeroMemory(@data, SizeOF(RMSGSendData));
+        s := GetCommandLine;
+        data.l := Length(s);
+        CopyMemory(@data.a, @s[1], data.l * SizeOF(Char));
+        CD.dwData := MSG_COMMANDELINE;
+        CD.cbData := SizeOF(data);
+        CD.lpData := @data;
+        SendMessage(hdl, WM_COPYDATA, wParam(INVALID_HANDLE_VALUE), LPARAM(@CD));
+      end;
+      SendMessage(hdl, MSG_ACTIVATE, 0, 0);
+    end;
+    Exit;
+  end;
+
+  // if not CheckCriticalFiles then Halt;
+
+  FrmSplash := TFrmSplash.Create(nil);
+  try
+    FrmSplash.Show;
+    Application.ProcessMessages;
+    Debut := Now;
+
+    FrmSplash.Affiche_act(VerificationVersion + '...');
+    if dmPrinc.CheckVersion(False) then
+      Exit;
+    if not OuvreSession then
+      Exit;
+    if not dmPrinc.CheckVersions(FrmSplash.Affiche_act) then
+      Exit;
+
+    FrmSplash.Affiche_act(ChargementOptions + '...');
+    LitOptions;
+
+    FrmSplash.Affiche_act(ChargementApp + '...');
+    Application.CreateForm(TfrmFond, frmFond);
+    FrmSplash.Affiche_act(ChargementDatabase + '...');
+    Historique.AddConsultation(fcRecherche);
+    AnalyseLigneCommande(GetCommandLine);
+
+    FrmSplash.Affiche_act(FinChargement + '...');
+    ChangeCurseur(crHandPoint, 'MyHandPoint', 'MyCursor');
+    while SecondsBetween(Now, Debut) < 1 do // au moins 1 seconde d'affichage du splash
+    begin
+      FrmSplash.Show;
+      FrmSplash.Update;
+    end;
+  finally
+    FrmSplash.Free;
+  end;
+  Application.MainForm.Show;
+end;
+
+end.

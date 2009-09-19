@@ -2,47 +2,26 @@ unit UHistorique;
 
 interface
 
-uses
-  SysUtils, Windows, Classes, Contnrs, Commun;
+uses SysUtils, Windows, Classes, Contnrs, Commun;
 
 type
-  TActionConsultation = (
-    fcActionBack,
-    fcActionRefresh,
-    fcAlbum,
-    fcEmprunteur,
-    fcAuteur,
-    fcCouverture,
-    fcRecherche,
-    fcStock,
-    fcPreview,
-    fcSeriesIncompletes,
-    fcPrevisionsSorties,
-    fcRecreateToolBar,
-    fcPrevisionsAchats,
-    fcRefreshRepertoire,
-    fcRefreshRepertoireData,
-    fcParaBD,
-    fcImageParaBD,
-    fcSerie,
-    fcGestionAjout,
-    fcGestionModif,
-    fcGestionSupp,
-    fcGestionAchat,
-    fcScripts,
-    fcConflitImport,
-    fcGallerie
-  );
+  TActionConsultation = (fcActionBack, fcActionRefresh, fcAlbum, fcEmprunteur, fcAuteur, fcCouverture, fcRecherche, fcStock, fcPreview,
+    fcSeriesIncompletes, fcPrevisionsSorties, fcRecreateToolBar, fcPrevisionsAchats, fcRefreshRepertoire, fcRefreshRepertoireData, fcParaBD,
+    fcImageParaBD, fcSerie, fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcScripts, fcConflitImport, fcGallerie,
+    fcModeConsultation, fcModeGestion, fcModeScript);
 
 type
   TConsultCallback = procedure(Data: Pointer);
 
   TConsult = class
+  private
+    FDescription: string;
+    procedure SetDescription(const Value: string);
+  public
     Action: TActionConsultation;
     ReferenceGUID, ReferenceGUID2: TGUID;
     Reference, Reference2: Integer;
     Data: Pointer;
-    Description: string;
     Stream: TMemoryStream;
 
     GestionCallback: TConsultCallback;
@@ -55,7 +34,11 @@ type
     destructor Destroy; override;
 
     procedure Assign(Consult: TConsult);
+    function CommandLine: string;
+    property Description: string read FDescription write SetDescription;
   end;
+
+  THistoriqueChange = procedure(Sender: TObject; LastAction: TConsult) of object;
 
   THistory = class
   private
@@ -63,13 +46,13 @@ type
     FCurrentConsultation: Integer;
     FLockCount: Integer;
     FListWaiting: TObjectList;
-    FOnChange: TNotifyEvent;
+    FOnChange: THistoriqueChange;
     function GetCountConsultation: Integer;
     function Open(Consult: TConsult; WithLock: Boolean): Boolean;
     procedure Lock;
     procedure Unlock;
     function GetWaiting: Boolean;
-    procedure Delete(Index: Integer);
+    procedure Delete(index: Integer);
     procedure AddConsultation(Consult: TConsult); overload;
     procedure EditConsultation(Consult: TConsult); overload;
     function GetCurrentConsult: TConsult;
@@ -83,8 +66,10 @@ type
     procedure AddWaiting(Consultation: TActionConsultation; Ref: Integer = -1; Ref2: Integer = -1); overload;
     procedure AddWaiting(Consultation: TActionConsultation; const Ref: TGUID; Ref2: Integer = -1); overload;
     procedure AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: TGUID); overload;
-    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Valeur: string = ''); overload;
-    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Ref: TGUID; const Valeur: string = ''); overload;
+    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Valeur: string = '');
+      overload;
+    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Ref: TGUID;
+      const Valeur: string = ''); overload;
 
     procedure Refresh;
     procedure Back;
@@ -94,14 +79,14 @@ type
     procedure First;
     procedure Clear;
     procedure ProcessNext;
-    function GetDescription(Index: Integer): string;
+    function GetDescription(index: Integer): string;
     procedure SetDescription(const Value: string);
-    procedure GoConsultation(Index: Integer);
+    procedure GoConsultation(index: Integer);
     property CurrentConsultation: Integer read FCurrentConsultation;
     property CurrentConsult: TConsult read GetCurrentConsult;
     property CountConsultation: Integer read GetCountConsultation;
     property Waiting: Boolean read GetWaiting;
-    property OnChange: TNotifyEvent read FOnChange write FOnChange;
+    property OnChange: THistoriqueChange read FOnChange write FOnChange;
   end;
 
 var
@@ -111,15 +96,15 @@ procedure RefreshCallBack(Data: Pointer);
 
 implementation
 
-uses
-  MAJ, UfrmFond, Forms, Proc_Gestions;
+uses MAJ, UfrmFond, Forms, Proc_Gestions;
 
 const
   UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcScripts, fcConflitImport];
+  Modes = [fcModeConsultation, fcModeGestion, fcModeScript];
   NoSaveHistorique = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire, fcRefreshRepertoireData]
-    // à cause des callback, les appels de gestion ne peuvent pas être sauvés dans l'historique
-    // et puis je vois pas bien à quoi ça pourrait servir
-    + UsedInGestion;
+  // à cause des callback, les appels de gestion ne peuvent pas être sauvés dans l'historique
+  // et puis je vois pas bien à quoi ça pourrait servir
+    + UsedInGestion + Modes;
   CanRefresh = [fcAlbum, fcEmprunteur, fcAuteur, fcSeriesIncompletes, fcPrevisionsSorties, fcPrevisionsAchats, fcGallerie];
   MustRefresh = [fcRecherche, fcStock];
 
@@ -152,11 +137,12 @@ begin
       begin
         if Consult.Action in MustRefresh then
           Modifie
-        else if not (Consult.Action in CanRefresh) or (Reference <> Consult.Reference) or (not IsEqualGUID(ReferenceGUID, Consult.ReferenceGUID)) or (Reference2 <> Consult.Reference2) or (not IsEqualGUID(ReferenceGUID2, Consult.ReferenceGUID2)) then
+        else if not(Consult.Action in CanRefresh) or (Reference <> Consult.Reference) or (not IsEqualGUID(ReferenceGUID, Consult.ReferenceGUID)) or
+          (Reference2 <> Consult.Reference2) or (not IsEqualGUID(ReferenceGUID2, Consult.ReferenceGUID2)) then
           Ajoute;
       end
-    else
-      Ajoute;
+      else
+        Ajoute;
   end;
 end;
 
@@ -223,7 +209,8 @@ begin
   AddWaiting(Consultation, Callback, CallbackData, Proc, VTV, GUID_NULL, Valeur);
 end;
 
-procedure THistory.AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Ref: TGUID; const Valeur: string);
+procedure THistory.AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Ref: TGUID;
+  const Valeur: string);
 begin
   FListWaiting.Add(TConsult.Create);
   with TConsult(FListWaiting.Last) do
@@ -270,11 +257,11 @@ begin
   FListWaiting := TObjectList.Create(True);
 end;
 
-procedure THistory.Delete(Index: Integer);
+procedure THistory.Delete(index: Integer);
 begin
-  if (Index < 0) or (Index >= FListConsultation.Count) then
+  if (index < 0) or (index >= FListConsultation.Count) then
     Exit;
-  FListConsultation.Delete(Index);
+  FListConsultation.Delete(index);
 end;
 
 destructor THistory.Destroy;
@@ -324,16 +311,16 @@ begin
   Result := TConsult(FListConsultation[FCurrentConsultation]);
 end;
 
-function THistory.GetDescription(Index: Integer): string;
+function THistory.GetDescription(index: Integer): string;
 var
   Consult: TConsult;
 begin
-  Consult := TConsult(FListConsultation[Index]);
+  Consult := TConsult(FListConsultation[index]);
 
   Result := Consult.Description;
 
   if Result = '' then
-    if Index = FCurrentConsultation then
+    if index = FCurrentConsultation then
     begin
       Consult.Description := 'Ask: ' + FormatDateTime('c', Now);
       Result := Consult.Description;
@@ -350,11 +337,11 @@ begin
   Result := Bool(FListWaiting.Count);
 end;
 
-procedure THistory.GoConsultation(Index: Integer);
+procedure THistory.GoConsultation(index: Integer);
 begin
-  if (Index < 0) or (Index >= FListConsultation.Count) then
+  if (index < 0) or (index >= FListConsultation.Count) then
     Exit;
-  FCurrentConsultation := Index;
+  FCurrentConsultation := index;
   Refresh;
 end;
 
@@ -387,39 +374,65 @@ begin
   if WithLock then
     Lock;
   try
-    if not (Consult.Action in NoSaveHistorique) then
+    if not(Consult.Action in NoSaveHistorique) then
       AddConsultation(Consult);
-    //if (Consult.Action in UsedInGestion) then
-    //  frmFond.actModeGestion.Execute;
+    // if (Consult.Action in UsedInGestion) then
+    // frmFond.actModeGestion.Execute;
     case Consult.Action of
-      fcActionBack: Back;
-      fcActionRefresh: Result := Open(CurrentConsult, True);
-      fcAlbum: Result := MAJConsultationAlbum(Consult.ReferenceGUID);
-      fcEmprunteur: Result := MAJConsultationEmprunteur(Consult.ReferenceGUID);
-      fcSerie: Result := MAJConsultationSerie(Consult.ReferenceGUID);
-      fcAuteur: Result := MAJConsultationAuteur(Consult.ReferenceGUID);
-      fcParaBD: Result := MAJConsultationParaBD(Consult.ReferenceGUID);
-      fcCouverture, fcImageParaBD: Result := ZoomCouverture(Consult.Action = fcImageParaBD, Consult.ReferenceGUID, Consult.ReferenceGUID2);
-      fcRecherche: MAJRecherche(Consult.ReferenceGUID, Consult.Reference2, Consult.Stream);
-      fcStock: MAJStock;
-      fcPreview: frmFond.SetModalChildForm(TForm(Consult.Reference));
-      fcGallerie: Result := MAJGallerie(Consult.Reference2, Consult.ReferenceGUID);
-      fcSeriesIncompletes: MAJSeriesIncompletes;
-      fcPrevisionsSorties: MAJPrevisionsSorties;
-      fcRecreateToolBar: frmFond.RechargeToolBar;
-      fcPrevisionsAchats: MAJPrevisionsAchats;
-      fcRefreshRepertoire: frmFond.actActualiseRepertoire.Execute;
-      fcRefreshRepertoireData: frmFond.actActualiseRepertoireData;
+      fcModeConsultation:
+        frmFond.actModeConsultation.Execute;
+      fcModeGestion:
+        frmFond.actModeGestion.Execute;
+      fcModeScript:
+        frmFond.actModeScripts.Execute;
+      fcActionBack:
+        Back;
+      fcActionRefresh:
+        Result := Open(CurrentConsult, True);
+      fcAlbum:
+        Result := MAJConsultationAlbum(Consult.ReferenceGUID);
+      fcEmprunteur:
+        Result := MAJConsultationEmprunteur(Consult.ReferenceGUID);
+      fcSerie:
+        Result := MAJConsultationSerie(Consult.ReferenceGUID);
+      fcAuteur:
+        Result := MAJConsultationAuteur(Consult.ReferenceGUID);
+      fcParaBD:
+        Result := MAJConsultationParaBD(Consult.ReferenceGUID);
+      fcCouverture, fcImageParaBD:
+        Result := ZoomCouverture(Consult.Action = fcImageParaBD, Consult.ReferenceGUID, Consult.ReferenceGUID2);
+      fcRecherche:
+        MAJRecherche(Consult.ReferenceGUID, Consult.Reference2, Consult.Stream);
+      fcStock:
+        MAJStock;
+      fcPreview:
+        frmFond.SetModalChildForm(TForm(Consult.Reference));
+      fcGallerie:
+        Result := MAJGallerie(Consult.Reference2, Consult.ReferenceGUID);
+      fcSeriesIncompletes:
+        MAJSeriesIncompletes;
+      fcPrevisionsSorties:
+        MAJPrevisionsSorties;
+      fcRecreateToolBar:
+        frmFond.RechargeToolBar;
+      fcPrevisionsAchats:
+        MAJPrevisionsAchats;
+      fcRefreshRepertoire:
+        frmFond.actActualiseRepertoire.Execute;
+      fcRefreshRepertoireData:
+        frmFond.actActualiseRepertoireData;
       fcScripts:
         if Assigned(Consult.GestionCallback) then
           doCallback := MAJScript(Consult.GestionVTV)
         else
           MAJScript(nil);
-      fcConflitImport: frmFond.SetModalChildForm(TForm(Consult.Reference));
+      fcConflitImport:
+        frmFond.SetModalChildForm(TForm(Consult.Reference));
 
       fcGestionAjout:
         if not IsEqualGUID(GUID_NULL, Consult.ReferenceGUID) then
-          doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAddWithRef(Consult.GestionProc)(Consult.GestionVTV, Consult.ReferenceGUID, Consult.GestionValeur))
+          doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAddWithRef(Consult.GestionProc)(Consult.GestionVTV, Consult.ReferenceGUID,
+              Consult.GestionValeur))
         else
           doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAdd(Consult.GestionProc)(Consult.GestionVTV, Consult.GestionValeur));
       fcGestionModif:
@@ -427,12 +440,15 @@ begin
           doCallback := TActionGestionModif(Consult.GestionProc)(Consult.GestionVTV)
         else
           doCallback := TActionGestionModif2(Consult.GestionProc)(Consult.ReferenceGUID);
-      fcGestionSupp: doCallback := TActionGestionSupp(Consult.GestionProc)(Consult.GestionVTV);
-      fcGestionAchat: doCallback := TActionGestionAchat(Consult.GestionProc)(Consult.GestionVTV);
+      fcGestionSupp:
+        doCallback := TActionGestionSupp(Consult.GestionProc)(Consult.GestionVTV);
+      fcGestionAchat:
+        doCallback := TActionGestionAchat(Consult.GestionProc)(Consult.GestionVTV);
     end;
     if doCallback then
     begin
-      if Assigned(Consult.GestionCallback) then Consult.GestionCallback(Consult.GestionCallbackData);
+      if Assigned(Consult.GestionCallback) then
+        Consult.GestionCallback(Consult.GestionCallbackData);
       AddWaiting(fcRefreshRepertoire);
     end;
 
@@ -446,8 +462,8 @@ begin
     if WithLock then
       Unlock;
   end;
-  if Assigned(FOnChange) then
-    FOnChange(Self);
+  if Assigned(FOnChange) and not(Consult.Action in NoSaveHistorique) then
+    FOnChange(Self, Consult);
 end;
 
 procedure THistory.ProcessNext;
@@ -466,7 +482,7 @@ end;
 
 procedure THistory.Refresh;
 begin
-  //  Open(FListConsultation[FCurrentConsultation], True);
+  // Open(FListConsultation[FCurrentConsultation], True);
   AddWaiting(fcActionRefresh);
 end;
 
@@ -490,10 +506,24 @@ begin
   ReferenceGUID2 := Consult.ReferenceGUID2;
   Reference := Consult.Reference;
   Reference2 := Consult.Reference2;
-  Description := Consult.Description;
+  FDescription := Consult.FDescription;
   Stream.Position := 0;
   Stream.CopyFrom(Consult.Stream, 0);
   Data := Consult.Data;
+end;
+
+function TConsult.CommandLine: string;
+begin
+  case Action of
+    fcAlbum:
+      Result := '/album=' + GUIDToString(ReferenceGUID);
+    fcSerie:
+      Result := '/serie=' + GUIDToString(ReferenceGUID);
+    fcAuteur:
+      Result := '/auteur=' + GUIDToString(ReferenceGUID);
+    else
+      Result := '';
+    end;
 end;
 
 constructor TConsult.Create;
@@ -509,11 +539,19 @@ begin
   inherited;
 end;
 
+procedure TConsult.SetDescription(const Value: string);
+begin
+  FDescription := Value;
+  if Assigned(Historique.OnChange) then
+    Historique.OnChange(Historique, Self);
+end;
+
 initialization
-  Historique := THistory.Create;
+
+Historique := THistory.Create;
 
 finalization
-  Historique.Free;
+
+Historique.Free;
 
 end.
-

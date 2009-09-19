@@ -2,9 +2,8 @@ unit Procedures;
 
 interface
 
-uses
-  SysUtils, Windows, Classes, Dialogs, ComCtrls, ExtCtrls, Controls, Forms, Graphics, CommonConst, UIB, jpeg, GraphicEx,
-  StdCtrls, ComboCheck, UIBLib, Commun;
+uses SysUtils, Windows, Classes, Dialogs, ComCtrls, ExtCtrls, Controls, Forms, Graphics, CommonConst, UIB, jpeg, GraphicEx, StdCtrls, ComboCheck,
+  UIBLib, Commun;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
 
@@ -32,7 +31,7 @@ type
   end;
 
 function AjoutMvt(const ID_Emprunteur, RefObjet: TGUID; DateE: TDateTime; Pret: Boolean): Boolean;
-procedure InitScrollBoxTableChamps(ScrollBox: TScrollBox; const Table: string; Ref: Integer; Editable: Boolean = False);
+procedure InitScrollBoxTableChamps(ScrollBox: TScrollBox; const Table: string; ref: Integer; Editable: Boolean = False);
 procedure VideListePointer(ListView: TListView);
 
 function GetShellImage(const Path: string; Large, Open: Boolean): Integer;
@@ -64,8 +63,10 @@ type
     destructor Destroy; override;
   end;
 
-function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: TGUID; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream; overload;
-function GetCouvertureStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream; overload;
+function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: TGUID; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False;
+  Effet3D: Integer = 0): TStream; overload;
+function GetCouvertureStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0)
+  : TStream; overload;
 procedure LoadCouverture(isParaBD: Boolean; const ID_Couverture: TGUID; Picture: TPicture);
 function GetJPEGStream(const Fichier: string): TStream;
 function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = True): string;
@@ -73,12 +74,12 @@ function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = Tru
 procedure LoadCombo(Categorie: Integer; Combo: TLightComboCheck);
 procedure LoadStrings(Categorie: Integer; Strings: TStrings);
 
+function FindCmdLineSwitch(const cmdLine, Switch: string): Boolean; overload;
+function FindCmdLineSwitch(const cmdLine, Switch: string; out Value: string): Boolean; overload;
+
 implementation
 
-uses
-  Divers, Textes, ShellAPI, LabeledCheckBox,
-  MaskUtils, Mask, UdmPrinc, IniFiles, Math, VirtualTrees, EditLabeled, ActnList,
-  Types, UBdtForms;
+uses Divers, Textes, ShellAPI, LabeledCheckBox, MaskUtils, Mask, UdmPrinc, IniFiles, Math, VirtualTrees, EditLabeled, ActnList, Types, UBdtForms;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
 begin
@@ -133,8 +134,8 @@ begin
           marge := (Image.Height - hauteuraff) div 2;
           Image.Canvas.StretchDraw(Rect(0, marge, largeuraff, marge + hauteuraff), Graphic);
         end
-      else
-        Image.Canvas.Draw((largeuraff - largeurimg) div 2, (hauteuraff - hauteurimg) div 2, Graphic);
+        else
+          Image.Canvas.Draw((largeuraff - largeurimg) div 2, (hauteuraff - hauteurimg) div 2, Graphic);
       Result := True;
     finally
       Free;
@@ -168,7 +169,8 @@ begin
       SQL.Text := 'SELECT FIRST 1 Valeur FROM OPTIONS WHERE NOM_OPTION = ? ORDER BY DM_OPTIONS DESC';
       Prepare(True);
       TGlobalVar.Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', CurrencyString);
-      FormatMonnaie := IIf(CurrencyFormat in [0, 2], TGlobalVar.Utilisateur.Options.SymboleMonnetaire + IIf(CurrencyFormat = 2, ' ', ''), '') + FormatMonnaieCourt + IIf(CurrencyFormat in [1, 3], IIf(CurrencyFormat = 3, ' ', '') + TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '');
+      FormatMonnaie := IIf(CurrencyFormat in [0, 2], TGlobalVar.Utilisateur.Options.SymboleMonnetaire + IIf(CurrencyFormat = 2, ' ', ''), '')
+        + FormatMonnaieCourt + IIf(CurrencyFormat in [1, 3], IIf(CurrencyFormat = 3, ' ', '') + TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '');
       RepImages := LitStr(op, 'RepImages', RepImages);
     finally
       Transaction.Free;
@@ -189,7 +191,8 @@ begin
       TGlobalVar.Utilisateur.Options.VerifMAJDelai := ReadInteger('Divers', 'VerifMAJDelai', 4);
       TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums := ReadBool('DIVERS', 'SerieObligatoireAlbums', False);
       TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD := ReadBool('DIVERS', 'SerieObligatoireParaBD', False);
-      TGlobalVar.Utilisateur.Options.RepertoireScripts := IncludeTrailingPathDelimiter(ReadString('DIVERS', 'Scripts', IncludeTrailingPathDelimiter(ExtractFilePath(Application.ExeName)) + 'scripts'));
+      TGlobalVar.Utilisateur.Options.RepertoireScripts := IncludeTrailingPathDelimiter
+        (ReadString('DIVERS', 'Scripts', IncludeTrailingPathDelimiter(ExtractFilePath(Application.ExeName)) + 'scripts'));
       TGlobalVar.Utilisateur.Options.AfficheNoteListes := ReadBool('DIVERS', 'AfficheNoteListes', True);
 
       TGlobalVar.Utilisateur.Options.SiteWeb.Adresse := ReadString('WWW', 'Adresse', '');
@@ -292,9 +295,9 @@ begin
   AListItem := LV.Selected;
   if not Assigned(AListItem) then
     Exit;
-  if not (AListItem.Index + Sens in [0..LV.Items.Count - 1]) then
+  if not(AListItem.index + Sens in [0 .. LV.Items.Count - 1]) then
     Exit;
-  TmpAListItem := LV.Items[AListItem.Index + Sens];
+  TmpAListItem := LV.Items[AListItem.index + Sens];
   if not Assigned(TmpAListItem) then
     Exit;
   LV.Items.BeginUpdate;
@@ -416,7 +419,7 @@ begin
       end;
     Result := True;
   except
-    AffMessage(ErrorSaveMvt + #13#10 + Exception(ExceptObject).Message, mtWarning, [mbOk], True);
+    AffMessage(ErrorSaveMvt + #13#10 + Exception(ExceptObject).message, mtWarning, [mbOk], True);
   end;
 end;
 
@@ -436,7 +439,7 @@ begin
   end;
 end;
 
-procedure InitScrollBoxTableChamps(ScrollBox: TScrollBox; const Table: string; Ref: Integer; Editable: Boolean = False);
+procedure InitScrollBoxTableChamps(ScrollBox: TScrollBox; const Table: string; ref: Integer; Editable: Boolean = False);
 var
   t: Integer;
   c: TComponent;
@@ -468,7 +471,7 @@ begin
       begin
         Transaction := Desc.Transaction;
         SQL.Text := 'SELECT * FROM ' + Table + ' WHERE RefSupport = ?';
-        Params.AsInteger[0] := Ref;
+        Params.AsInteger[0] := ref;
         FetchBlobs := True;
         Open;
       end;
@@ -486,172 +489,178 @@ begin
             TypeChamp := Fields.FieldType[Champ];
             case TypeChamp of
               uftChar, uftVarchar, uftInteger, uftFloat:
-              begin
-                l := TLabel.Create(ScrollBox.Owner);
-                with l do
                 begin
-                  Top := t;
-                  Parent := ScrollBox;
-                  Caption := Fields.ByNameAsString['TEXTECHAMP'] + ' :';
-                  Left := 4;
-                  Inc(t, Height);
-                  Name := 'Compo' + IntToStr(ScrollBox.Owner.ComponentCount);
-                end;
-                if Editable then
-                  c := TEditLabeled.Create(ScrollBox.Owner)
-                else
-                  c := TEdit.Create(ScrollBox.Owner);
-                with TEdit(c) do
-                begin
-                  Anchors := [akLeft, akTop, akRight];
-                  BevelKind := bkTile;
-                  BorderStyle := bsNone;
-                  Top := t;
-                  Parent := ScrollBox;
-                  Left := 4;
-                  Width := ScrollBox.Width - 12 - GetSystemMetrics(SM_CXVSCROLL);
-                  Inc(t, Height);
-                  Name := Champs.Fields.SqlName[Champ];
-                  if not (Champs.Eof or Champs.Fields.IsNull[Champ]) then
-                    Text := Champs.Fields.AsString[Champ]
-                  else
-                    Text := '';
-                  if Editable then
+                  l := TLabel.Create(ScrollBox.Owner);
+                  with l do
                   begin
-                    with TEditLabeled(c) do
+                    Top := t;
+                    Parent := ScrollBox;
+                    Caption := Fields.ByNameAsString['TEXTECHAMP'] + ' :';
+                    Left := 4;
+                    Inc(t, Height);
+                    name := 'Compo' + IntToStr(ScrollBox.Owner.ComponentCount);
+                  end;
+                  if Editable then
+                    c := TEditLabeled.Create(ScrollBox.Owner)
+                  else
+                    c := TEdit.Create(ScrollBox.Owner);
+                  with TEdit(c) do
+                  begin
+                    Anchors := [akLeft, akTop, akRight];
+                    BevelKind := bkTile;
+                    BorderStyle := bsNone;
+                    Top := t;
+                    Parent := ScrollBox;
+                    Left := 4;
+                    Width := ScrollBox.Width - 12 - GetSystemMetrics(SM_CXVSCROLL);
+                    Inc(t, Height);
+                    name := Champs.Fields.SqlName[Champ];
+                    if not(Champs.Eof or Champs.Fields.IsNull[Champ]) then
+                      Text := Champs.Fields.AsString[Champ]
+                    else
+                      Text := '';
+                    if Editable then
                     begin
-                      LinkControls.Add(l);
-                      case TypeChamp of
-                        uftChar, uftVarchar: TypeDonnee := tdChaine;
-                        uftInteger: TypeDonnee := tdEntierSigne;
-                        uftFloat: TypeDonnee := tdNumericSigne;
+                      with TEditLabeled(c) do
+                      begin
+                        LinkControls.Add(l);
+                        case TypeChamp of
+                          uftChar, uftVarchar:
+                            TypeDonnee := tdChaine;
+                          uftInteger:
+                            TypeDonnee := tdEntierSigne;
+                          uftFloat:
+                            TypeDonnee := tdNumericSigne;
+                        end;
                       end;
-                    end;
-                  end
-                  else
-                    ReadOnly := True;
-                end;
-              end;
-              uftSmallInt:
-              begin
-                if Editable then
-                  c := TCheckBoxLabeled.Create(ScrollBox.Owner)
-                else
-                  c := TLabeledCheckBox.Create(ScrollBox.Owner);
-                with TCheckBox(c) do
-                begin
-                  Anchors := [akLeft, akTop, akRight];
-                  Top := t;
-                  Parent := ScrollBox;
-                  Name := Champs.Fields.SqlName[Champ];
-                  s := Fields.ByNameAsString['TEXTECHAMP'];
-                  Caption := s;
-                  Left := 4;
-                  Width := TForm(ScrollBox.Owner).Canvas.TextWidth(s) + 32;
-                  Inc(t, Height + 4);
-                  Checked := not (Champs.Eof or Champs.Fields.IsNull[Champ]) and Champs.Fields.AsBoolean[Champ];
-//                  if Editable then
-//                  begin
-//                    with TCheckBoxLabeled(c) do
-//                    begin
-//                    end;
-//                  end;
-                end;
-              end;
-              uftBlob:
-              begin
-                l := TLabel.Create(ScrollBox.Owner);
-                with l do
-                begin
-                  Top := t;
-                  Parent := ScrollBox;
-                  Caption := Fields.ByNameAsString['TEXTECHAMP'] + ' :';
-                  Left := 4;
-                  Inc(t, Height);
-                  Name := 'Compo' + IntToStr(ScrollBox.Owner.ComponentCount);
-                end;
-                if Editable then
-                  c := TMemoLabeled.Create(ScrollBox.Owner)
-                else
-                  c := TMemo.Create(ScrollBox.Owner);
-                with TMemo(c) do
-                begin
-                  Anchors := [akLeft, akTop, akRight];
-                  BevelKind := bkTile;
-                  BorderStyle := bsNone;
-                  Top := t;
-                  Parent := ScrollBox;
-                  Left := 4;
-                  Width := ScrollBox.Width - 12 - GetSystemMetrics(SM_CXVSCROLL);
-                  ClientHeight := 4 * TForm(ScrollBox.Owner).Canvas.TextHeight('A');
-                  Inc(t, Height + 4);
-                  Name := Champs.Fields.SqlName[Champ];
-                  if not (Champs.Eof or Champs.Fields.IsNull[Champ]) then
-                    Lines.Text := Champs.Fields.AsString[Champ]
-                  else
-                    Lines.Text := '';
-                  WordWrap := True;
-                  if Editable then
-                  begin
-                    with TMemoLabeled(c) do
-                    begin
-                      LinkControls.Add(l);
-                    end;
-                  end
-                  else
-                  begin
-                    ReadOnly := True;
-                    ScrollBars := ssVertical;
+                    end
+                    else
+                      readonly := True;
                   end;
                 end;
-              end;
-              uftDate, uftTime, uftTimestamp:
-              begin
-                l := TLabel.Create(ScrollBox.Owner);
-                with l do
+              uftSmallInt:
                 begin
-                  Top := t;
-                  Parent := ScrollBox;
-                  Caption := Fields.ByNameAsString['TEXTECHAMP'] + ' :';
-                  Left := 4;
-                  Inc(t, Height);
-                  Name := 'Compo' + IntToStr(ScrollBox.Owner.ComponentCount);
-                end;
-                if Editable then
-                  c := TEditLabeled.Create(ScrollBox.Owner)
-                else
-                  c := TEdit.Create(ScrollBox.Owner);
-                with TEdit(c) do
-                begin
-                  Anchors := [akLeft, akTop, akRight];
-                  BevelKind := bkTile;
-                  BorderStyle := bsNone;
-                  Top := t;
-                  Parent := ScrollBox;
-                  Left := 4;
-                  Width := ScrollBox.Width - 12 - GetSystemMetrics(SM_CXVSCROLL);
-                  Inc(t, Height + 4);
-                  Name := Champs.Fields.SqlName[Champ];
-                  if not (Champs.Eof or Champs.Fields.IsNull[Champ]) then
-                    Text := Champs.Fields.AsString[Champ]
-                  else
-                    Text := '';
                   if Editable then
-                  begin
-                    with TEditLabeled(c) do
-                    begin
-                      LinkControls.Add(l);
-                      case TypeChamp of
-                        uftDate: TypeDonnee := tdDate;
-                        uftTime: TypeDonnee := tdHeure;
-                        uftTimestamp: TypeDonnee := tdDateHeure;
-                      end;
-                    end;
-                  end
+                    c := TCheckBoxLabeled.Create(ScrollBox.Owner)
                   else
-                    TEdit(c).ReadOnly := True;
+                    c := TLabeledCheckBox.Create(ScrollBox.Owner);
+                  with TCheckBox(c) do
+                  begin
+                    Anchors := [akLeft, akTop, akRight];
+                    Top := t;
+                    Parent := ScrollBox;
+                    name := Champs.Fields.SqlName[Champ];
+                    s := Fields.ByNameAsString['TEXTECHAMP'];
+                    Caption := s;
+                    Left := 4;
+                    Width := TForm(ScrollBox.Owner).Canvas.TextWidth(s) + 32;
+                    Inc(t, Height + 4);
+                    Checked := not(Champs.Eof or Champs.Fields.IsNull[Champ]) and Champs.Fields.AsBoolean[Champ];
+                    // if Editable then
+                    // begin
+                    // with TCheckBoxLabeled(c) do
+                    // begin
+                    // end;
+                    // end;
+                  end;
                 end;
-              end;
+              uftBlob:
+                begin
+                  l := TLabel.Create(ScrollBox.Owner);
+                  with l do
+                  begin
+                    Top := t;
+                    Parent := ScrollBox;
+                    Caption := Fields.ByNameAsString['TEXTECHAMP'] + ' :';
+                    Left := 4;
+                    Inc(t, Height);
+                    name := 'Compo' + IntToStr(ScrollBox.Owner.ComponentCount);
+                  end;
+                  if Editable then
+                    c := TMemoLabeled.Create(ScrollBox.Owner)
+                  else
+                    c := TMemo.Create(ScrollBox.Owner);
+                  with TMemo(c) do
+                  begin
+                    Anchors := [akLeft, akTop, akRight];
+                    BevelKind := bkTile;
+                    BorderStyle := bsNone;
+                    Top := t;
+                    Parent := ScrollBox;
+                    Left := 4;
+                    Width := ScrollBox.Width - 12 - GetSystemMetrics(SM_CXVSCROLL);
+                    ClientHeight := 4 * TForm(ScrollBox.Owner).Canvas.TextHeight('A');
+                    Inc(t, Height + 4);
+                    name := Champs.Fields.SqlName[Champ];
+                    if not(Champs.Eof or Champs.Fields.IsNull[Champ]) then
+                      Lines.Text := Champs.Fields.AsString[Champ]
+                    else
+                      Lines.Text := '';
+                    WordWrap := True;
+                    if Editable then
+                    begin
+                      with TMemoLabeled(c) do
+                      begin
+                        LinkControls.Add(l);
+                      end;
+                    end
+                    else
+                    begin
+                      readonly := True;
+                      ScrollBars := ssVertical;
+                    end;
+                  end;
+                end;
+              uftDate, uftTime, uftTimestamp:
+                begin
+                  l := TLabel.Create(ScrollBox.Owner);
+                  with l do
+                  begin
+                    Top := t;
+                    Parent := ScrollBox;
+                    Caption := Fields.ByNameAsString['TEXTECHAMP'] + ' :';
+                    Left := 4;
+                    Inc(t, Height);
+                    name := 'Compo' + IntToStr(ScrollBox.Owner.ComponentCount);
+                  end;
+                  if Editable then
+                    c := TEditLabeled.Create(ScrollBox.Owner)
+                  else
+                    c := TEdit.Create(ScrollBox.Owner);
+                  with TEdit(c) do
+                  begin
+                    Anchors := [akLeft, akTop, akRight];
+                    BevelKind := bkTile;
+                    BorderStyle := bsNone;
+                    Top := t;
+                    Parent := ScrollBox;
+                    Left := 4;
+                    Width := ScrollBox.Width - 12 - GetSystemMetrics(SM_CXVSCROLL);
+                    Inc(t, Height + 4);
+                    name := Champs.Fields.SqlName[Champ];
+                    if not(Champs.Eof or Champs.Fields.IsNull[Champ]) then
+                      Text := Champs.Fields.AsString[Champ]
+                    else
+                      Text := '';
+                    if Editable then
+                    begin
+                      with TEditLabeled(c) do
+                      begin
+                        LinkControls.Add(l);
+                        case TypeChamp of
+                          uftDate:
+                            TypeDonnee := tdDate;
+                          uftTime:
+                            TypeDonnee := tdHeure;
+                          uftTimestamp:
+                            TypeDonnee := tdDateHeure;
+                        end;
+                      end;
+                    end
+                    else
+                      TEdit(c).readonly := True;
+                  end;
+                end;
             end; // case Champ.Datatype
           end; // if Assigned(Champ)
           Next;
@@ -697,20 +706,20 @@ end;
 
 function ChangeLight(Value, FromValue, ToValue: Integer; Color, ToColor: TColor): TColor;
 
-  function Min(a, b: integer): integer; inline;
+  function Min(a, b: Integer): Integer; inline;
   begin
     if a < b then
-      result := a
+      Result := a
     else
-      result := b;
+      Result := b;
   end;
 
-  function Max(a, b: integer): integer; inline;
+  function Max(a, b: Integer): Integer; inline;
   begin
     if a > b then
-      result := a
+      Result := a
     else
-      result := b;
+      Result := b;
   end;
 
 var
@@ -729,7 +738,7 @@ function ResizePicture(Image: TPicture; Hauteur, Largeur: Integer; AntiAliasing,
 var
   NewLargeur, NewHauteur, i: Integer;
   Bmp: TBitmap;
-//  Trace: array of TPoint;
+  // Trace: array of TPoint;
 begin
   Result := TMemoryStream.Create;
   try
@@ -782,14 +791,14 @@ begin
           Bmp.Canvas.Pen.Style := psSolid;
           Bmp.Canvas.Brush.Color := clGray;
           Bmp.Canvas.Brush.Style := bsSolid;
-          //          SetLength(Trace, 6);
-          //          Trace[0] := Point(0, NewHauteur);
-          //          Trace[1] := Point(0 + Effet3D, Bmp.Height);
-          //          Trace[2] := Point(Bmp.Width, Bmp.Height);
-          //          Trace[3] := Point(Bmp.Width, 0 + Effet3D);
-          //          Trace[4] := Point(NewLargeur, 0);
-          //          Trace[5] := Point(NewLargeur, NewHauteur);
-          //          Bmp.Canvas.Polygon(Trace);
+          // SetLength(Trace, 6);
+          // Trace[0] := Point(0, NewHauteur);
+          // Trace[1] := Point(0 + Effet3D, Bmp.Height);
+          // Trace[2] := Point(Bmp.Width, Bmp.Height);
+          // Trace[3] := Point(Bmp.Width, 0 + Effet3D);
+          // Trace[4] := Point(NewLargeur, 0);
+          // Trace[5] := Point(NewLargeur, NewHauteur);
+          // Bmp.Canvas.Polygon(Trace);
 
           for i := 0 to Effet3D do
           begin
@@ -824,7 +833,8 @@ begin
   end;
 end;
 
-function GetCouvertureStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream;
+function GetCouvertureStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0)
+  : TStream;
 var
   Couverture: TPicture;
   img: TJPEGImage;
@@ -848,7 +858,8 @@ begin
   end;
 end;
 
-function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: TGUID; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream;
+function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: TGUID; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False;
+  Effet3D: Integer = 0): TStream;
 var
   Couverture: TPicture;
 begin
@@ -932,11 +943,11 @@ function GetJPEGStream(const Fichier: string): TStream;
 
 var
   jImg: TJPEGImage;
-  Img: TPicture;
+  img: TPicture;
   graphClass: TGraphicClass;
   graph: TGraphic;
   f: TFileStream;
-  buffer: array[0..2] of Byte;
+  buffer: array [0 .. 2] of Byte;
 begin
   f := TFileStream.Create(Fichier, fmOpenRead or fmShareDenyWrite);
 
@@ -1117,7 +1128,7 @@ begin
         begin
           Caption := ' ';
           Valeur := -1;
-          Index := 0;
+          index := 0;
         end;
 
       Combo.Value := Combo.DefaultValueChecked;
@@ -1127,5 +1138,139 @@ begin
     end;
 end;
 
-end.
+function FindCmdLineSwitch(const cmdLine, Switch: string): Boolean;
+var
+  dummy: string;
+begin
+  Result := FindCmdLineSwitch(cmdLine, Switch, dummy);
+end;
 
+function FindCmdLineSwitch(const cmdLine, Switch: string; out Value: string): Boolean;
+
+  function GetParamStr(p: PChar; var Param: string): PChar;
+  var
+    i, Len: Integer;
+    Start, s: PChar;
+  begin
+    // U-OK
+    while True do
+    begin
+      while (p[0] <> #0) and (p[0] <= ' ') do
+        Inc(p);
+      if (p[0] = '"') and (p[1] = '"') then
+        Inc(p, 2)
+      else
+        Break;
+    end;
+    Len := 0;
+    Start := p;
+    while p[0] > ' ' do
+    begin
+      if p[0] = '"' then
+      begin
+        Inc(p);
+        while (p[0] <> #0) and (p[0] <> '"') do
+        begin
+          Inc(Len);
+          Inc(p);
+        end;
+        if p[0] <> #0 then
+          Inc(p);
+      end
+      else
+      begin
+        Inc(Len);
+        Inc(p);
+      end;
+    end;
+
+    SetLength(Param, Len);
+
+    p := Start;
+    s := pointer(Param);
+    i := 0;
+    while p[0] > ' ' do
+    begin
+      if p[0] = '"' then
+      begin
+        Inc(p);
+        while (p[0] <> #0) and (p[0] <> '"') do
+        begin
+          s[i] := p^;
+          Inc(p);
+          Inc(i);
+        end;
+        if p[0] <> #0 then
+          Inc(p);
+      end
+      else
+      begin
+        s[i] := p^;
+        Inc(p);
+        Inc(i);
+      end;
+    end;
+
+    Result := p;
+  end;
+
+  function ParamCount: Integer;
+  var
+    p: PChar;
+    s: string;
+  begin
+    // U-OK
+    Result := 0;
+    p := GetParamStr(PChar(cmdLine), s);
+    while True do
+    begin
+      p := GetParamStr(p, s);
+      if s = '' then
+        Break;
+      Inc(Result);
+    end;
+  end;
+
+type
+  PCharArray = array [0 .. 0] of PChar;
+
+  function ParamStr(index: Integer): string;
+  var
+    p: PChar;
+    buffer: array [0 .. 260] of Char;
+  begin
+    Result := '';
+    if index = 0 then
+      SetString(Result, buffer, GetModuleFileName(0, buffer, Length(buffer)))
+    else
+    begin
+      p := PChar(cmdLine);
+      while True do
+      begin
+        p := GetParamStr(p, Result);
+        if (index = 0) or (Result = '') then
+          Break;
+        Dec(index);
+      end;
+    end;
+  end;
+
+var
+  i: Integer;
+  s: string;
+begin
+  for i := 1 to ParamCount do
+  begin
+    s := ParamStr(i);
+    if (SwitchChars = []) or CharInSet(s[1], SwitchChars) then
+      if (AnsiCompareText(Copy(s, 2, Length(Switch)), Switch) = 0) then
+      begin
+        Value := Copy(s, Length(Switch) + 3, MaxInt);
+        Result := True;
+        Exit;
+      end;
+  end;
+  Result := False;
+end;
+
+end.

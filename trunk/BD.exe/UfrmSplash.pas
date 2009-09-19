@@ -31,7 +31,7 @@ var
 
 implementation
 
-uses UfrmFond, CommonConst;
+uses UfrmFond, CommonConst, ProceduresBDtk;
 
 {$R *.DFM}
 
@@ -39,6 +39,8 @@ procedure TfrmSplash.FormCreate(Sender: TObject);
 var
   FormRgn: hRgn;
 begin
+  ImageFond.Picture.Bitmap.LoadFromResourceName(HInstance, 'ABOUT');
+
   Cursor := crHourglass;
   //  ClientHeight := ImageFond.Height + ImageFond.Top;
   //  ClientWidth := ImageFond.Width + ImageFond.Left;
@@ -67,9 +69,6 @@ end;
 
 procedure TfrmSplash.FormDestroy(Sender: TObject);
 begin
-  TGlobalVar.Utilisateur.AppVersion := Copy(VersionLabel1.Caption, Length(VersionLabel1.InfoPrefix) + 1, Length(VersionLabel1.Caption) - Length(VersionLabel1.InfoPrefix));
-  Application.Title := '© TeträmCorp ' + TitreApplication + TGlobalVar.Utilisateur.AppVersion;
-  frmFond.Caption := Application.Title;
   Cursor := crDefault;
 end;
 

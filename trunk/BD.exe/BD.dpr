@@ -1,5 +1,4 @@
 program BD;
-
 {$R 'ressources.res' 'ressources.rc'}
 {$R 'scripts_maj.res' 'mises à jour\scripts_maj.rc'}
 
@@ -105,7 +104,6 @@ uses
   LoadCompletImport in 'LoadCompletImport.pas',
   UfrmValidationImport in 'Scripts\UfrmValidationImport.pas' {frmValidationImport},
   UfrmScriptChoix in 'Scripts\UfrmScriptChoix.pas' {frmScriptChoix},
-  UfrmProgression in 'UfrmProgression.pas' {frmProgression},
   UScriptsHTMLFunctions in 'Scripts\UScriptsHTMLFunctions.pas',
   UfrmScriptEditOption in 'Scripts\UfrmScriptEditOption.pas' {frmScriptEditOption},
   UfrmScriptOption in 'Scripts\UfrmScriptOption.pas' {frmScriptOption},
@@ -165,69 +163,18 @@ uses
   UfrmScriptsUpdate in 'Scripts\UfrmScriptsUpdate.pas' {frmScriptsUpdate},
   VirtualTreeBdtk in 'VirtualTreeBdtk.pas',
   UMAJ2_1_1_10 in 'mises à jour\UMAJ2_1_1_10.pas',
-  UMAJ2_1_1_17 in 'mises à jour\UMAJ2_1_1_17.pas';
+  UMAJ2_1_1_17 in 'mises à jour\UMAJ2_1_1_17.pas',
+  UfrmProgression in 'UfrmProgression.pas' {frmProgression};
 
 {$R *.RES}
 {$R curseurs.res}
 {$INCLUDE FastMM4Options.inc}
 
-var
-  Debut: TDateTime;
 begin
-  Application.MainFormOnTaskbar := True;
-  TGlobalVar.Mode_en_cours := mdLoad;
+  InitProc := @BdtkInitProc;
   Application.Title := 'BDthèque';
-  if not Bool(CreateMutex(nil, True, 'TetramCorpBDMutex')) then
-    RaiseLastOSError
-  else if GetLastError = ERROR_ALREADY_EXISTS then
-  begin
-    ShowMessage('Une instance de BDthèque est déjà ouverte!');
-    Exit;
-  end;
-
-  //  if not CheckCriticalFiles then Halt;
-
-  FrmSplash := TFrmSplash.Create(nil);
-  try
-    FrmSplash.Show;
-    Application.ProcessMessages;
-    Debut := now;
-
-    FrmSplash.Affiche_act(VerificationVersion + '...');
-    if DMPrinc.CheckVersion(False) then
-      Exit;
-    if not OuvreSession then
-      Exit;
-    if not DMPrinc.CheckVersions(FrmSplash.Affiche_act) then
-      Exit;
-
-    FrmSplash.Affiche_act(ChargementOptions + '...');
-    LitOptions;
-
-    FrmSplash.Affiche_act(ChargementApp + '...');
-    Application.CreateForm(TfrmFond, frmFond);
-  FrmSplash.Affiche_act(ChargementDatabase + '...');
-    Historique.AddConsultation(fcRecherche);
-    if TGlobalVar.Utilisateur.Options.ModeDemarrage then
-      frmFond.actModeConsultation.Execute
-    else
-      frmFond.actModeGestion.Execute;
-
-    if FindCmdLineSwitch('scripts') then
-      frmFond.actModeScripts.Execute;
-
-    FrmSplash.Affiche_act(FinChargement + '...');
-    ChangeCurseur(crHandPoint, 'MyHandPoint', 'MyCursor');
-    while SecondsBetween(Now, Debut) < 1 do // au moins 1 seconde d'affichage du splash
-    begin
-      FrmSplash.Show;
-      FrmSplash.Update;
-    end;
-  finally
-    FrmSplash.Free;
-  end;
-  // Fond.Show
-  Application.MainForm.Show;
+  Application.MainFormOnTaskbar := True;
+  Application.Initialize;
   Application.Run;
 end.
 

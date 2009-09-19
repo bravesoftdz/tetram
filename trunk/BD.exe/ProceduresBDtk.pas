@@ -165,6 +165,7 @@ begin
       end;
     FForm.op.Caption := tmp;
   end;
+  Application.ProcessMessages; // merci D2010
 end;
 
 procedure TWaiting.ShowProgression(const Texte: string; Etape: TEtapeProgression);
