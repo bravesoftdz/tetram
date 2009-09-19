@@ -1,4 +1,13 @@
-﻿-=-=-=-=-=-    2.2.0.0 - 16/08/2009    -=-=-=-=-=-
+﻿-=-=-=-=-=-    2.2.0.133 - 19/09/2009    -=-=-=-=-=-
+
+* Nouveautés * 
+      - Raccourcis disponibles quand le programme est ajouté à la barre de 
+         taches ou le menu démarrer de Windows 7
+
+* Corrections * 
+      - Amélioration de l'intégration avec Windows Vista et Windows 7
+
+-=-=-=-=-=-    2.2.0.0 - 16/08/2009    -=-=-=-=-=-
 
 * Nouveautés * 
       - Possibilité d'attribuer une note/appréciation personnelle à chaque 

@@ -11,7 +11,7 @@ AppVerName=BDthèque {#SetupSetting("AppVersion")}
 AppMutex=TetramCorpBDMutex
 AppPublisher=Teträm Corp
 AppPublisherURL=http://www.tetram.org
-AppSupportURL=mailto:dev@tetram.org
+AppSupportURL=http://forums.tetram.org
 AppUpdatesURL=http://www.tetram.org
 UninstallDisplayIcon={app}\BD.exe
 DefaultDirName={pf}\Teträm Corp\BDthèque
@@ -55,7 +55,7 @@ Source: ..\..\bin\fbembed.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\firebird.msg; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\ib_util.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\UDF\BDT_UDF.dll; DestDir: {app}\UDF; Flags: ignoreversion
-Source: Base vide\BD.GDB; DestDir: {app}; Flags: onlyifdoesntexist ignoreversion
+Source: Base vide\BD.GDB; DestDir: {userappdata}\TetramCorp\BDTheque; Flags: onlyifdoesntexist ignoreversion; Tasks: ; Languages: 
 Source: What's New.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\icuuc30.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\icuin30.dll; DestDir: {app}; Flags: ignoreversion
