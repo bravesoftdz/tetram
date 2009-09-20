@@ -5,7 +5,7 @@
     <Description/>
     <ScriptVersion>1</ScriptVersion>
     <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Sun, 16 Aug 2009 20:18:43 +0200</LastUpdate>
+    <LastUpdate>Sun, 20 Sep 2009 15:18:27 +0200</LastUpdate>
   </Infos>
   <Options>
     <Option Label="Recherche Gl&#xE9;nat BD" Values="Oui|Non" Default="Oui"/>
