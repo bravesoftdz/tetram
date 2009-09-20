@@ -2,7 +2,7 @@ unit UfrmFond;
 
 interface
 
-{ .$D- }
+{.$D-}
 {$WARN SYMBOL_DEPRECATED OFF}
 
 uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ImgList, Menus, ComCtrls, ExtCtrls, Buttons, ActnList,
@@ -195,7 +195,6 @@ type
     procedure actPublierExecute(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure actFicheModifierExecute(Sender: TObject);
-    procedure ToolBar1Click(Sender: TObject);
   private
     { Déclarations privées }
     FToolOriginal: TStringList;
@@ -411,7 +410,6 @@ begin
   end;
   FToolCurrent := TStringList.Create;
   FToolCurrent.Assign(FToolOriginal);
-  LoadToolBarres;
   Caption := Application.Title;
   Historique.OnChange := HistoriqueChanged;
 
@@ -440,6 +438,12 @@ begin
   boutons_32x32_norm.EndUpdate;
   boutons_16x16_norm.EndUpdate;
   boutons_16x16_hot.EndUpdate;
+
+  if TGlobalVar.Utilisateur.Options.GrandesIconesMenus then
+    Menu.Images := boutons_32x32_hot
+  else
+    Menu.Images := boutons_16x16_hot;
+  LoadToolBarres;
 end;
 
 procedure TfrmFond.actChangementOptionsExecute(Sender: TObject);
@@ -872,11 +876,6 @@ begin
   actStatsListeCompletesAlbums.Execute;
 end;
 
-procedure TfrmFond.ToolBar1Click(Sender: TObject);
-begin
-  showmessage(Application.Title);
-end;
-
 procedure TfrmFond.StatsAlbumsEmpruntesAppExecute(Sender: TObject);
 begin
   actStatsAlbumsEmpruntes.ActionComponent := TComponent(Sender);
@@ -886,8 +885,8 @@ end;
 procedure TfrmFond.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
   CheminBase.Caption := DMPrinc.UIBDataBase.DatabaseName;
-  HistoriqueBack.Enabled := (TGlobalVar.Mode_en_cours = mdConsult) and Bool(Historique.CurrentConsultation);
-  HistoriqueNext.Enabled := (TGlobalVar.Mode_en_cours = mdConsult) and Bool(Historique.CountConsultation) and
+  HistoriqueBack.Enabled := (TGlobalVar.Mode_en_cours = mdConsult) and LongBool(Historique.CurrentConsultation);
+  HistoriqueNext.Enabled := (TGlobalVar.Mode_en_cours = mdConsult) and LongBool(Historique.CountConsultation) and
     (Historique.CurrentConsultation <> Historique.CountConsultation - 1);
 end;
 

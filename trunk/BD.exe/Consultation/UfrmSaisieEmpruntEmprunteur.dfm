@@ -442,6 +442,7 @@ object frmSaisieEmpruntEmprunteur: TfrmSaisieEmpruntEmprunteur
         BevelKind = bkTile
         BorderStyle = bsNone
         Header.AutoSizeIndex = 0
+        Header.DefaultHeight = 17
         Header.Font.Charset = DEFAULT_CHARSET
         Header.Font.Color = clWindowText
         Header.Font.Height = -11
@@ -462,7 +463,7 @@ object frmSaisieEmpruntEmprunteur: TfrmSaisieEmpruntEmprunteur
           item
             Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
             Position = 0
-            Width = 522
+            Width = 526
           end>
       end
       inline FrameRechercheRapide1: TframRechercheRapide

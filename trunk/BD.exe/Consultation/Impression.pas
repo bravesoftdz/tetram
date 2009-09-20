@@ -849,9 +849,9 @@ begin
               fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransEmprunts, rsTransPage, Prn.GetPageNumber]), 0, Edition.Emprunts.NBEmprunts + 2);
               for index := 0 to Pred(Edition.Emprunts.NBEmprunts) do
               begin
-                Prn.WriteLineColumn(0, -1, '#' + IntToStr(index) + ' (' + IIf(TEmprunt(Edition.Emprunts.Emprunts[index]).Pret, rsTransPret, rsTransRetour) + ')');
-                Prn.WriteLineColumn(1, -2, TEmprunt(Edition.Emprunts.Emprunts[index]).ChaineAffichage);
-                Prn.WriteLineColumn(2, -2, TEmprunt(Edition.Emprunts.Emprunts[index]).Emprunteur.ChaineAffichage);
+                Prn.WriteLineColumn(0, -1, '#' + IntToStr(index) + ' (' + IIf(Edition.Emprunts.Emprunts[index].Pret, rsTransPret, rsTransRetour) + ')');
+                Prn.WriteLineColumn(1, -2, Edition.Emprunts.Emprunts[index].ChaineAffichage);
+                Prn.WriteLineColumn(2, -2, Edition.Emprunts.Emprunts[index].Emprunteur.ChaineAffichage);
                 fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransEmprunts, rsTransPage, Prn.GetPageNumber]), epNext);
               end;
           end;
@@ -900,9 +900,9 @@ begin
           fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransEmprunts, rsTransPage, Prn.GetPageNumber]), 0, Emprunteur.Emprunts.NBEmprunts + 2);
           for index := 0 to Emprunteur.Emprunts.Emprunts.Count - 1 do
           begin
-            Prn.WriteLineColumn(0, IIf(Index = 0, -2, -1), '#' + IntToStr(index) + ' (' + IIf(TEmprunt(Emprunteur.Emprunts.Emprunts[index]).Pret, rsTransPret, rsTransRetour) + ')');
-            Prn.WriteLineColumn(1, -2, TEmprunt(Emprunteur.Emprunts.Emprunts[index]).ChaineAffichage);
-            Prn.WriteLineColumn(2, -2, TEmprunt(Emprunteur.Emprunts.Emprunts[index]).Album.ChaineAffichage);
+            Prn.WriteLineColumn(0, IIf(Index = 0, -2, -1), '#' + IntToStr(index) + ' (' + IIf(Emprunteur.Emprunts.Emprunts[index].Pret, rsTransPret, rsTransRetour) + ')');
+            Prn.WriteLineColumn(1, -2, Emprunteur.Emprunts.Emprunts[index].ChaineAffichage);
+            Prn.WriteLineColumn(2, -2, Emprunteur.Emprunts.Emprunts[index].Album.ChaineAffichage);
             fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransEmprunts, rsTransPage, Prn.GetPageNumber]), epNext);
           end;
       end;

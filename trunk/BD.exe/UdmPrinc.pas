@@ -384,7 +384,7 @@ var
 begin
   TGlobalVar.Mode_en_cours := mdLoad;
   Application.Title := '© TeträmCorp ' + TitreApplication + ' ' + TGlobalVar.Utilisateur.AppVersion;
-  if not Bool(CreateMutex(nil, True, 'TetramCorpBDMutex')) then
+  if not LongBool(CreateMutex(nil, True, 'TetramCorpBDMutex')) then
     RaiseLastOSError
   else if GetLastError = ERROR_ALREADY_EXISTS then
   begin

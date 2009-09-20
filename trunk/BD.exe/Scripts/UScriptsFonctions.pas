@@ -2,13 +2,13 @@ unit UScriptsFonctions;
 
 interface
 
-uses
-  Windows, SysUtils, Classes, Dialogs, WinInet, StrUtils, Math, UMetadata, TypeRec, Generics.Collections, UNet, jpeg;
+uses Windows, SysUtils, Classes, Dialogs, WinInet, StrUtils, Math, UMetadata, TypeRec, Generics.Collections, UNet, jpeg;
 
 type
   TScriptChoix = class
 
-    type TChoix = class
+  type
+    TChoix = class
       FLibelle, FCommentaire, FData: string;
       FImage: TJPEGImage;
 
@@ -16,7 +16,8 @@ type
       destructor Destroy; override;
     end;
 
-    type TCategorie = class
+  type
+    TCategorie = class
       FNom: string;
       Choix: TObjectList<TChoix>;
 
@@ -27,8 +28,8 @@ type
   private
     FList: TObjectList<TCategorie>;
     FTitre: string;
-    function GetCategorie(const Name: string): TCategorie; overload;
-    function GetCategorie(const Name: string; Force: Boolean): TCategorie; overload;
+    function GetCategorie(const name: string): TCategorie; overload;
+    function GetCategorie(const name: string; Force: Boolean): TCategorie; overload;
   public
     constructor Create;
     destructor Destroy; override;
@@ -40,20 +41,20 @@ type
 
     function CategorieCount: Integer;
     function ChoixCount: Integer;
-    function CategorieChoixCount(const Name: string): Integer;
+    function CategorieChoixCount(const name: string): Integer;
 
-    property Categorie[const Name: string]: TCategorie read GetCategorie;
+    property Categorie[const name: string]: TCategorie read GetCategorie;
     property Titre: string read FTitre write FTitre;
   end;
 
-function GetPage(const url: string; UTF8: Boolean = True): string;
-function PostPage(const url: string; const Pieces: array of RAttachement; UTF8: Boolean = True): string;
+function GetPage(const URL: string; UTF8: Boolean = True): string;
+function PostPage(const URL: string; const Pieces: array of RAttachement; UTF8: Boolean = True): string;
 function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;
 function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteur;
-function AskSearchEntry(const Labels: array of string; var Search: string; var Index: Integer): Boolean;
+function AskSearchEntry(const Labels: array of string; var Search: string; var index: Integer): Boolean;
 procedure Split(SL: TStringList; const Chaine: string; Sep: Char);
 function CombineURL(const Root, URL: string): string;
-function ScriptStrToFloatDef(const S: string; const Default: Extended): Extended;
+function ScriptStrToFloatDef(const S: string; const default: Extended): Extended;
 
 function ScriptChangeFileExt(const FileName, Extension: string): string;
 function ScriptChangeFilePath(const FileName, Path: string): string;
@@ -66,14 +67,13 @@ function ScriptExcludeTrailingPathDelimiter(const S: string): string;
 
 function DateTimeToRFC822(T: TDateTime): string;
 function TryRFC822ToDateTime(const S: string; out Value: TDateTime): Boolean;
-function RFC822ToDateTime(const s: String): TDateTime;
-function RFC822ToDateTimeDef(const s: String; Default: TDateTime): TDateTime;
+function RFC822ToDateTime(const S: string): TDateTime;
+function RFC822ToDateTimeDef(const S: string; default: TDateTime): TDateTime;
 
 implementation
 
-uses
-  ProceduresBDtk, UBdtForms, EditLabeled, StdCtrls, Controls, Forms, UframBoutons,
-  UfrmScriptChoix, OverbyteIcsHttpProt, CommonConst, Procedures, SysConst;
+uses ProceduresBDtk, UBdtForms, EditLabeled, StdCtrls, Controls, Forms, UframBoutons, UfrmScriptChoix, OverbyteIcsHttpProt, CommonConst, Procedures,
+  SysConst;
 
 const
   PathDelim = '/';
@@ -158,11 +158,11 @@ begin
   Result := FList.Count;
 end;
 
-function TScriptChoix.CategorieChoixCount(const Name: string): Integer;
+function TScriptChoix.CategorieChoixCount(const name: string): Integer;
 var
   Categorie: TCategorie;
 begin
-  Categorie := GetCategorie(Name);
+  Categorie := GetCategorie(name);
   if Assigned(Categorie) then
     Result := Categorie.Choix.Count
   else
@@ -178,20 +178,20 @@ begin
     Inc(Result, Categorie.Choix.Count);
 end;
 
-function TScriptChoix.GetCategorie(const Name: string): TCategorie;
+function TScriptChoix.GetCategorie(const name: string): TCategorie;
 begin
-  Result := GetCategorie(Name, True);
+  Result := GetCategorie(name, True);
 end;
 
-function TScriptChoix.GetCategorie(const Name: string; Force: Boolean): TCategorie;
+function TScriptChoix.GetCategorie(const name: string; Force: Boolean): TCategorie;
 begin
   for Result in FList do
-    if SameText(Result.FNom, Name) then
+    if SameText(Result.FNom, name) then
       Exit;
 
   Result := TCategorie.Create;
   FList.Add(Result);
-  Result.FNom := Name;
+  Result.FNom := name;
 end;
 
 procedure TScriptChoix.ResetList;
@@ -211,7 +211,7 @@ begin
       SetList(Self.FList);
       if ShowModal <> mrOk then
         Exit;
-      Result := FList[VirtualStringTree1.GetFirstSelected.Parent.Index].Choix[VirtualStringTree1.GetFirstSelected.Index].FData;
+      Result := FList[VirtualStringTree1.GetFirstSelected.Parent.index].Choix[VirtualStringTree1.GetFirstSelected.index].FData;
     finally
       Free;
     end;
@@ -263,16 +263,16 @@ begin
   end;
 end;
 
-function PostPage(const url: string; const Pieces: array of RAttachement; UTF8: Boolean): string;
+function PostPage(const URL: string; const Pieces: array of RAttachement; UTF8: Boolean): string;
 var
   ss: TStringStream;
 begin
   if UTF8 then
     ss := TStringStream.Create('', TEncoding.UTF8)
   else
-    ss := TStringStream.Create('', TEncoding.Default);
+    ss := TStringStream.Create('', TEncoding.default);
   try
-    if LoadStreamURL(url, Pieces, ss) = 200 then
+    if LoadStreamURL(URL, Pieces, ss) = 200 then
       Result := ss.DataString
     else
       Result := '';
@@ -281,21 +281,28 @@ begin
   end;
 end;
 
-function GetPage(const url: string; UTF8: Boolean): string;
+function GetPage(const URL: string; UTF8: Boolean): string;
 var
   ss: TStringStream;
+  ms: TMemoryStream;
 begin
   if UTF8 then
     ss := TStringStream.Create('', TEncoding.UTF8)
   else
-    ss := TStringStream.Create('', TEncoding.Default);
+    ss := TStringStream.Create('', TEncoding.default);
+  ms := TMemoryStream.Create;
   try
-    if LoadStreamURL(url, [], ss) = 200 then
-      Result := ss.DataString
+    if LoadStreamURL(URL, [], ms) = 200 then
+    begin
+      ms.Position := 0;
+      ss.CopyFrom(ms, ms.Size);
+      Result := ss.DataString;
+    end
     else
       Result := '';
   finally
     ss.Free;
+    ms.Free;
   end;
 end;
 
@@ -329,363 +336,392 @@ end;
 type
   TCrackLabel = class(TLabel);
 
-function AskSearchEntry(const Labels: array of string; var Search: string; var Index: Integer): Boolean;
-var
-  F: TdummyForm;
-  E: TEditLabeled;
-  L: array of TLabel;
-  i, t, maxW: Integer;
-begin
-  Result := False;
-  if Length(Labels) = 0 then
-    Exit;
+    function AskSearchEntry(const Labels: array of string; var Search: string; var index: Integer): Boolean;
 
-  SetLength(L, Length(Labels));
-  t := 0;
-  F := TdummyForm.Create(nil);
-  try
-    F.Position := poMainFormCenter;
-    E := nil;
-    maxW := 0;
+  var
+    F: TdummyForm;
+    E: TEditLabeled;
+    L: array of TLabel;
+    i, T, maxW: Integer;
+  begin
+    Result := False;
+    if Length(Labels) = 0 then
+      Exit;
 
-    for i := Low(Labels) to High(Labels) do
+    SetLength(L, Length(Labels));
+    T := 0;
+    F := TdummyForm.Create(nil);
+    try
+      F.Position := poMainFormCenter;
+      E := nil;
+      maxW := 0;
+
+      for i := low(Labels) to high(Labels) do
+      begin
+        L[i] := TLabel.Create(F);
+        L[i].Parent := F;
+
+        L[i].WordWrap := True;
+        L[i].AutoSize := True;
+        L[i].Caption := Labels[i];
+        L[i].Left := 0;
+        L[i].Width := 150;
+        TCrackLabel(L[i]).AdjustBounds;
+        L[i].Visible := True;
+        L[i].Transparent := True;
+
+        if L[i].Width > maxW then
+          maxW := L[i].Width;
+      end;
+
+      for i := low(Labels) to high(Labels) do
+      begin
+        E := TEditLabeled.Create(F);
+        E.Parent := F;
+        E.Tag := i;
+        E.BevelKind := bkTile;
+        E.BorderStyle := bsNone;
+        E.LinkControls.Add(L[i]);
+        E.Left := L[i].Left + maxW + 8;
+        E.Width := 250;
+        E.Visible := True;
+        if (Search <> '') and (index = i) then
+          E.Text := Search;
+        E.OnChange := F.editChange;
+
+        if E.Height > L[i].Height then
+        begin
+          E.Top := T;
+          T := T + E.Height + 8;
+          L[i].Top := E.Top + (E.Height - L[i].Height) div 2;
+        end
+        else
+        begin
+          L[i].Top := T;
+          T := T + L[i].Height + 8;
+          E.Top := L[i].Top + (L[i].Height - E.Height) div 2;
+        end;
+      end;
+
+      with TframBoutons.Create(F) do
+      begin
+        Align := alNone;
+        Parent := F;
+        Top := T + 8;
+        Left := 0;
+        Width := E.Left + E.Width;
+      end;
+
+      F.AutoSize := True;
+      F.BorderStyle := bsDialog;
+      F.BorderWidth := 8;
+      F.PopupMode := pmAuto;
+      Result := F.ShowModal = mrOk;
+
+      if Result then
+      begin
+        Search := '';
+        for i := 0 to Pred(F.ControlCount) do
+          if (F.Controls[i] is TEditLabeled) and (TEditLabeled(F.Controls[i]).Text <> '') then
+            with F.Controls[i] as TEditLabeled do
+            begin
+              Search := Trim(Text);
+              index := Tag;
+            end;
+        Result := Search <> '';
+      end;
+    finally
+      F.Free;
+    end;
+  end;
+
+  procedure Split(SL: TStringList; const Chaine: string; Sep: Char);
+  begin
+    SL.Delimiter := Sep;
+    SL.DelimitedText := Chaine;
+  end;
+
+  function CombineURL(const Root, URL: string): string;
+
+  var
+    buffer: array of Char;
+    lbuffer: Cardinal;
+  begin
+    lbuffer := 0;
+    InternetCombineUrl(PChar(Root), PChar(URL), nil, lbuffer, ICU_BROWSER_MODE);
+    SetLength(buffer, lbuffer);
+    ZeroMemory(buffer, Length(buffer));
+    InternetCombineUrl(PChar(Root), PChar(URL), PChar(buffer), lbuffer, ICU_BROWSER_MODE);
+    Result := PChar(buffer);
+  end;
+
+  function ScriptFormatSettings: TFormatSettings;
+  begin
+    GetLocaleFormatSettings(1033, Result);
+  end;
+
+  function ScriptStrToFloatDef(const S: string; const default: Extended): Extended;
+  begin
+    Result := StrToFloatDef(S, default, ScriptFormatSettings);
+  end;
+
+  function ScriptIsPathDelimiter(const S: string; index: Integer): Boolean;
+  begin
+    Result := (index > 0) and (index <= Length(S)) and (S[index] = PathDelim) and (ByteType(S, index) = mbSingleByte);
+  end;
+
+  function ScriptIncludeTrailingPathDelimiter(const S: string): string;
+  begin
+    Result := S;
+    if not ScriptIsPathDelimiter(Result, Length(Result)) then
+      Result := Result + PathDelim;
+  end;
+
+  function ScriptExcludeTrailingPathDelimiter(const S: string): string;
+  begin
+    Result := S;
+    if ScriptIsPathDelimiter(Result, Length(Result)) then
+      SetLength(Result, Length(Result) - 1);
+  end;
+
+  function ScriptChangeFileExt(const FileName, Extension: string): string;
+
+  var
+    i: Integer;
+  begin
+    i := LastDelimiter('.' + PathDelim + DriveDelim, FileName);
+    if (i = 0) or (FileName[i] <> '.') then
+      i := MaxInt;
+    Result := Copy(FileName, 1, i - 1) + Extension;
+  end;
+
+  function ScriptChangeFilePath(const FileName, Path: string): string;
+  begin
+    Result := ScriptIncludeTrailingPathDelimiter(Path) + ScriptExtractFileName(FileName);
+  end;
+
+  function ScriptExtractFilePath(const FileName: string): string;
+
+  var
+    i: Integer;
+  begin
+    i := LastDelimiter(PathDelim + DriveDelim, FileName);
+    Result := Copy(FileName, 1, i);
+  end;
+
+  function ScriptExtractFileDir(const FileName: string): string;
+
+  var
+    i: Integer;
+  begin
+    i := LastDelimiter(PathDelim + DriveDelim, FileName);
+    if (i > 1) and (FileName[i] = PathDelim) and (not IsDelimiter(PathDelim + DriveDelim, FileName, i - 1)) then
+      Dec(i);
+    Result := Copy(FileName, 1, i);
+  end;
+
+  function ScriptExtractFileName(const FileName: string): string;
+
+  var
+    i: Integer;
+  begin
+    i := LastDelimiter(PathDelim + DriveDelim, FileName);
+    Result := Copy(FileName, i + 1, MaxInt);
+  end;
+
+  function ScriptExtractFileExt(const FileName: string): string;
+
+  var
+    i: Integer;
+  begin
+    i := LastDelimiter('.' + PathDelim + DriveDelim, FileName);
+    if (i > 0) and (FileName[i] = '.') then
+      Result := Copy(FileName, i, MaxInt)
+    else
+      Result := '';
+  end;
+
+  function OffsetFromUTC: TDateTime;
+
+  var
+    iBias: Integer;
+    tmez: TTimeZoneInformation;
+  begin
+    iBias := 0;
+    case GetTimeZoneInformation(tmez) of
+      TIME_ZONE_ID_UNKNOWN:
+        iBias := tmez.Bias;
+      TIME_ZONE_ID_DAYLIGHT:
+        iBias := tmez.Bias + tmez.DaylightBias;
+      TIME_ZONE_ID_STANDARD:
+        iBias := tmez.Bias + tmez.StandardBias;
+    end;
+    { We use ABS because EncodeTime will only accept positive values }
+    Result := EncodeTime(Abs(iBias) div 60, Abs(iBias) mod 60, 0, 0);
+    { The GetTimeZone function returns values oriented towards converting
+      a GMT time into a local time.  We wish to do the opposite by returning
+      the difference between the local time and GMT.  So I just make a positive
+      value negative and leave a negative value as positive }
+    if iBias > 0 then
+      Result := 0 - Result;
+  end;
+
+  function TimeZoneBias: string;
+
+  var
+    TZI: TTimeZoneInformation;
+    TZIResult, aBias: Integer;
+  begin
+    TZIResult := GetTimeZoneInformation(TZI);
+    if TZIResult = -1 then
+      Result := 'GMT'
+    else
     begin
-      L[i] := TLabel.Create(F);
-      L[i].Parent := F;
+      if TZIResult = TIME_ZONE_ID_DAYLIGHT then { 10/05/99 }
+        aBias := TZI.Bias + TZI.DaylightBias
+      else
+        aBias := TZI.Bias + TZI.StandardBias;
+      Result := Format('-%.2d%.2d', [Abs(aBias) div 60, Abs(aBias) mod 60]);
+      if aBias < 0 then
+        Result[1] := '+';
+    end;
+  end;
 
-      L[i].WordWrap := True;
-      L[i].AutoSize := True;
-      L[i].Caption := Labels[i];
-      L[i].Left := 0;
-      L[i].Width := 150;
-      TCrackLabel(L[i]).AdjustBounds;
-      L[i].Visible := True;
-      L[i].Transparent := True;
+  const
+    RFC822_Days: array [1 .. 7] of string = ('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
+    RFC822_Months: array [1 .. 12] of string = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
 
-      if L[i].Width > maxW then
-        maxW := L[i].Width;
+    function DateTimeToRFC822(T: TDateTime): string;
+
+  var
+    Year, Month, Day: Word;
+    Hour, Min, Sec, MSec: Word;
+  begin
+    DecodeDate(T, Year, Month, Day);
+    DecodeTime(T, Hour, Min, Sec, MSec);
+    { Format is 'ddd, d mmm yyyy hh:mm:ss GMTOffset' with english names }
+    Result := Format('%s, %d %s %4d %02.2d:%02.2d:%02.2d %s', [RFC822_Days[DayOfWeek(T)], Day, RFC822_Months[Month], Year, Hour, Min, Sec,
+      TimeZoneBias]);
+  end;
+
+  function TryRFC822ToDateTime(const S: string; out Value: TDateTime): Boolean;
+
+  var
+    P1, P2: Integer;
+    ADateStr: string;
+    aLst: TStringList;
+    aMonthLabel: string;
+    aFormatSettings: TFormatSettings;
+    aTimeZoneStr: string;
+    aTimeZoneDelta: TDateTime;
+
+    function MonthWithLeadingChar(const AMonth: string): string;
+    begin
+      if Length(AMonth) = 1 then
+        Result := '0' + AMonth
+      else
+        Result := AMonth;
     end;
 
-    for i := Low(Labels) to High(Labels) do
     begin
-      E := TEditLabeled.Create(F);
-      E.Parent := F;
-      E.Tag := i;
-      E.BevelKind := bkTile;
-      E.BorderStyle := bsNone;
-      E.LinkControls.Add(L[i]);
-      E.Left := L[i].Left + maxW + 8;
-      E.Width := 250;
-      E.Visible := True;
-      if (Search <> '') and (Index = i) then
-        E.Text := Search;
-      E.OnChange := F.editChange;
+      Result := False;
 
-      if E.Height > L[i].Height then
+      ADateStr := S; // 'Wdy, DD-Mon-YYYY HH:MM:SS GMT' or 'Wdy, DD-Mon-YYYY HH:MM:SS +0200' or '23 Aug 2004 06:48:46 -0700'
+      P1 := Pos(',', ADateStr);
+      if P1 > 0 then
+        Delete(ADateStr, 1, P1); // ' DD-Mon-YYYY HH:MM:SS GMT' or ' DD-Mon-YYYY HH:MM:SS +0200' or '23 Aug 2004 06:48:46 -0700'
+      ADateStr := Trim(ADateStr); // 'DD-Mon-YYYY HH:MM:SS GMT' or 'DD-Mon-YYYY HH:MM:SS +0200' or '23 Aug 2004 06:48:46 -0700'
+
+      P1 := Pos(':', ADateStr);
+      P2 := Pos('-', ADateStr);
+      while (P2 > 0) and (P2 < P1) do
       begin
-        E.Top := t;
-        t := t + E.Height + 8;
-        L[i].Top := E.Top + (E.Height - L[i].Height) div 2;
-      end
-      else
-      begin
-        L[i].Top := t;
-        t := t + L[i].Height + 8;
-        E.Top := L[i].Top + (L[i].Height - E.Height) div 2;
+        Delete(ADateStr, P2, 1);
+        Dec(P1);
+        P2 := PosEx('-', ADateStr, P2);
+      end; // 'DD Mon YYYY HH:MM:SS GMT' or 'DD Mon YYYY HH:MM:SS +0200' or '23 Aug 2004 06:48:46 -0700'
+      while Pos('  ', ADateStr) > 0 do
+        ADateStr := StringReplace(ADateStr, '  ', ' ', [rfReplaceAll]); // 'DD Mon YYYY HH:MM:SS GMT' or 'DD Mon YYYY HH:MM:SS +0200'
+      aLst := TStringList.Create;
+      try
+        aLst.Text := StringReplace(ADateStr, ' ', #13#10, [rfReplaceAll]);
+        if aLst.Count < 5 then
+          Exit;
+
+        aMonthLabel := Trim(aLst[1]);
+        P1 := 1;
+        while (P1 <= 12) and (not SameText(RFC822_Months[P1], aMonthLabel)) do
+          Inc(P1);
+        if P1 > 12 then
+          Exit;
+
+        GetLocaleFormatSettings(GetSystemDefaultLCID, aFormatSettings);
+        aFormatSettings.DateSeparator := '/';
+        aFormatSettings.TimeSeparator := ':';
+        aFormatSettings.ShortDateFormat := 'dd/mm/yyyy';
+        aFormatSettings.ShortTimeFormat := 'hh:nn:zz';
+
+        aTimeZoneStr := UpperCase(aLst[4]);
+        aTimeZoneStr := StringReplace(aTimeZoneStr, '(', '', []);
+        aTimeZoneStr := StringReplace(aTimeZoneStr, ')', '', []);
+        aTimeZoneStr := Trim(aTimeZoneStr);
+        if aTimeZoneStr = '' then
+          Exit;
+
+        if (Length(aTimeZoneStr) >= 5) and CharInSet(aTimeZoneStr[1], ['+', '-']) and CharInSet
+          (aTimeZoneStr[2], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) and CharInSet
+          (aTimeZoneStr[3], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) and CharInSet
+          (aTimeZoneStr[4], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) and CharInSet
+          (aTimeZoneStr[5], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) then
+        begin
+          aTimeZoneDelta := EncodeTime(StrToInt(Copy(aTimeZoneStr, 2, 2)), StrToInt(Copy(aTimeZoneStr, 4, 2)), 0, 0);
+          if aTimeZoneStr[1] = '+' then
+            aTimeZoneDelta := -1 * aTimeZoneDelta;
+        end
+        else if aTimeZoneStr = 'GMT' then
+          aTimeZoneDelta := 0
+        else if aTimeZoneStr = 'UTC' then
+          aTimeZoneDelta := 0
+        else if aTimeZoneStr = 'UT' then
+          aTimeZoneDelta := 0
+        else if aTimeZoneStr = 'EST' then
+          aTimeZoneDelta := 5 / HoursPerDay
+        else if aTimeZoneStr = 'EDT' then
+          aTimeZoneDelta := 4 / HoursPerDay
+        else if aTimeZoneStr = 'CST' then
+          aTimeZoneDelta := 6 / HoursPerDay
+        else if aTimeZoneStr = 'CDT' then
+          aTimeZoneDelta := 5 / HoursPerDay
+        else if aTimeZoneStr = 'MST' then
+          aTimeZoneDelta := 7 / HoursPerDay
+        else if aTimeZoneStr = 'MDT' then
+          aTimeZoneDelta := 6 / HoursPerDay
+        else if aTimeZoneStr = 'PST' then
+          aTimeZoneDelta := 8 / HoursPerDay
+        else if aTimeZoneStr = 'PDT' then
+          aTimeZoneDelta := 7 / HoursPerDay
+        else
+          Exit;
+
+        ADateStr := Trim(aLst[0]) + '/' + MonthWithLeadingChar(IntToStr(P1)) + '/' + Trim(aLst[2]) + ' ' + Trim(aLst[3]); // 'DD/MM/YYYY HH:MM:SS'
+        Result := TryStrToDateTime(ADateStr, Value, aFormatSettings);
+        if Result then
+          Value := Value + aTimeZoneDelta + OffsetFromUTC;
+      finally
+        aLst.Free;
       end;
     end;
 
-    with TframBoutons.Create(F) do
+    function RFC822ToDateTime(const S: string): TDateTime;
     begin
-      Align := alNone;
-      Parent := F;
-      Top := t + 8;
-      Left := 0;
-      Width := E.Left + E.Width;
+      if not TryRFC822ToDateTime(S, Result) then
+        raise EConvertError.CreateResFmt(@SInvalidDateTime, [S]);
     end;
 
-    F.AutoSize := True;
-    F.BorderStyle := bsDialog;
-    F.BorderWidth := 8;
-    F.PopupMode := pmAuto;
-    Result := F.ShowModal = mrOk;
-
-    if Result then
+    function RFC822ToDateTimeDef(const S: string; default: TDateTime): TDateTime;
     begin
-      Search := '';
-      for i := 0 to Pred(F.ControlCount) do
-        if (F.Controls[i] is TEditLabeled) and (TEditLabeled(F.Controls[i]).Text <> '') then
-          with F.Controls[i] as TEditLabeled do
-          begin
-            Search := Trim(Text);
-            Index := Tag;
-          end;
-      Result := Search <> '';
+      if not TryRFC822ToDateTime(S, Result) then
+        Result := default;
     end;
-  finally
-    F.Free;
-  end;
-end;
-
-procedure Split(SL: TStringList; const Chaine: string; Sep: Char);
-begin
-  SL.Delimiter := Sep;
-  SL.DelimitedText := Chaine;
-end;
-
-function CombineURL(const Root, URL: string): string;
-var
-  buffer: array of char;
-  lbuffer: Cardinal;
-begin
-  lbuffer := 0;
-  InternetCombineUrl(PChar(Root), PChar(URL), nil, lbuffer, ICU_BROWSER_MODE);
-  SetLength(buffer, lbuffer);
-  ZeroMemory(buffer, Length(buffer));
-  InternetCombineUrl(PChar(Root), PChar(URL), PChar(buffer), lbuffer, ICU_BROWSER_MODE);
-  Result := PChar(buffer);
-end;
-
-function ScriptFormatSettings: TFormatSettings;
-begin
-  GetLocaleFormatSettings(1033, Result);
-end;
-
-function ScriptStrToFloatDef(const S: string; const Default: Extended): Extended;
-begin
-  Result := StrToFloatDef(S, Default, ScriptFormatSettings);
-end;
-
-function ScriptIsPathDelimiter(const S: string; Index: Integer): Boolean;
-begin
-  Result := (Index > 0) and (Index <= Length(S)) and (S[Index] = PathDelim) and (ByteType(S, Index) = mbSingleByte);
-end;
-
-function ScriptIncludeTrailingPathDelimiter(const S: string): string;
-begin
-  Result := S;
-  if not ScriptIsPathDelimiter(Result, Length(Result)) then
-    Result := Result + PathDelim;
-end;
-
-function ScriptExcludeTrailingPathDelimiter(const S: string): string;
-begin
-  Result := S;
-  if ScriptIsPathDelimiter(Result, Length(Result)) then
-    SetLength(Result, Length(Result) - 1);
-end;
-
-function ScriptChangeFileExt(const FileName, Extension: string): string;
-var
-  I: Integer;
-begin
-  I := LastDelimiter('.' + PathDelim + DriveDelim, Filename);
-  if (I = 0) or (FileName[I] <> '.') then
-    I := MaxInt;
-  Result := Copy(FileName, 1, I - 1) + Extension;
-end;
-
-function ScriptChangeFilePath(const FileName, Path: string): string;
-begin
-  Result := ScriptIncludeTrailingPathDelimiter(Path) + ScriptExtractFileName(FileName);
-end;
-
-function ScriptExtractFilePath(const FileName: string): string;
-var
-  I: Integer;
-begin
-  I := LastDelimiter(PathDelim + DriveDelim, FileName);
-  Result := Copy(FileName, 1, I);
-end;
-
-function ScriptExtractFileDir(const FileName: string): string;
-var
-  I: Integer;
-begin
-  I := LastDelimiter(PathDelim + DriveDelim, Filename);
-  if (I > 1) and (FileName[I] = PathDelim) and
-    (not IsDelimiter(PathDelim + DriveDelim, FileName, I - 1)) then
-    Dec(I);
-  Result := Copy(FileName, 1, I);
-end;
-
-function ScriptExtractFileName(const FileName: string): string;
-var
-  I: Integer;
-begin
-  I := LastDelimiter(PathDelim + DriveDelim, FileName);
-  Result := Copy(FileName, I + 1, MaxInt);
-end;
-
-function ScriptExtractFileExt(const FileName: string): string;
-var
-  I: Integer;
-begin
-  I := LastDelimiter('.' + PathDelim + DriveDelim, FileName);
-  if (I > 0) and (FileName[I] = '.') then
-    Result := Copy(FileName, I, MaxInt)
-  else
-    Result := '';
-end;
-
-function OffsetFromUTC: TDateTime;
-var
-  iBias: Integer;
-  tmez: TTimeZoneInformation;
-begin
-  iBias := 0;
-  case GetTimeZoneInformation(tmez) of
-    TIME_ZONE_ID_UNKNOWN: iBias := tmez.Bias;
-    TIME_ZONE_ID_DAYLIGHT: iBias := tmez.Bias + tmez.DaylightBias;
-    TIME_ZONE_ID_STANDARD: iBias := tmez.Bias + tmez.StandardBias;
-  end;
-  {We use ABS because EncodeTime will only accept positive values}
-  Result := EncodeTime(Abs(iBias) div 60, Abs(iBias) mod 60, 0, 0);
-  {The GetTimeZone function returns values oriented towards converting
-   a GMT time into a local time.  We wish to do the opposite by returning
-   the difference between the local time and GMT.  So I just make a positive
-   value negative and leave a negative value as positive}
-  if iBias > 0 then
-    Result := 0 - Result;
-end;
-
-function TimeZoneBias: string;
-var
-  TZI: TTimeZoneInformation;
-  TZIResult, aBias: Integer;
-begin
-  TZIResult := GetTimeZoneInformation(TZI);
-  if TZIResult = -1 then
-    Result := 'GMT'
-  else begin
-     if TZIResult = TIME_ZONE_ID_DAYLIGHT then   { 10/05/99 }
-       aBias := TZI.Bias + TZI.DayLightBias
-     else
-       aBias := TZI.Bias + TZI.StandardBias;
-     Result := Format('-%.2d%.2d', [Abs(aBias) div 60, Abs(aBias) mod 60]);
-     if aBias < 0 then Result[1] := '+';
-  end;
-end;
-
-const
-  RFC822_Days : array [1..7] of string = ('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
-  RFC822_Months : array [1..12] of string = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
-
-function DateTimeToRFC822(T: TDateTime): string;
-var
-  Year, Month, Day: Word;
-  Hour, Min, Sec, MSec: Word;
-begin
-  DecodeDate(T, Year, Month, Day);
-  DecodeTime(T, Hour, Min, Sec, MSec);
-  { Format is 'ddd, d mmm yyyy hh:mm:ss GMTOffset' with english names }
-  Result := Format('%s, %d %s %4d %02.2d:%02.2d:%02.2d %s',
-                   [RFC822_Days[DayOfWeek(T)],
-                    Day, RFC822_Months[Month], Year,
-                    Hour, Min, Sec,
-                    TimeZoneBias]);
-end;
-
-function TryRFC822ToDateTime(const S: string; out Value: TDateTime): Boolean;
-var
-  P1,P2: Integer;
-  ADateStr: string;
-  aLst: TStringList;
-  aMonthLabel: string;
-  aFormatSettings: TFormatSettings;
-  aTimeZoneStr: string;
-  aTimeZoneDelta: TDateTime;
-
-  function MonthWithLeadingChar(const AMonth: string): string;
-  begin
-    if Length(AMonth) = 1 then
-      Result := '0' + AMonth
-    else
-      Result := AMonth;
-  end;
-
-begin
-  Result := False;
-
-  ADateStr := S; //'Wdy, DD-Mon-YYYY HH:MM:SS GMT' or 'Wdy, DD-Mon-YYYY HH:MM:SS +0200' or '23 Aug 2004 06:48:46 -0700'
-  P1 := Pos(',', ADateStr);
-  if P1 > 0 then Delete(ADateStr, 1, P1); //' DD-Mon-YYYY HH:MM:SS GMT' or ' DD-Mon-YYYY HH:MM:SS +0200' or '23 Aug 2004 06:48:46 -0700'
-  ADateStr := Trim(ADateStr); //'DD-Mon-YYYY HH:MM:SS GMT' or 'DD-Mon-YYYY HH:MM:SS +0200' or '23 Aug 2004 06:48:46 -0700'
-
-  P1 := Pos(':', ADateStr);
-  P2 := Pos('-', ADateStr);
-  while (P2 > 0) and (P2 < P1) do begin
-    Delete(ADateStr, P2, 1);
-    Dec(P1);
-    P2 := PosEx('-', ADateStr, P2);
-  end; //'DD Mon YYYY HH:MM:SS GMT' or 'DD Mon YYYY HH:MM:SS +0200' or '23 Aug 2004 06:48:46 -0700'
-  while Pos('  ', ADateStr) > 0 do
-    ADateStr := StringReplace(ADateStr, '  ', ' ', [rfReplaceAll]); //'DD Mon YYYY HH:MM:SS GMT' or 'DD Mon YYYY HH:MM:SS +0200'
-  aLst := TStringList.Create;
-  try
-    aLst.Text := StringReplace(ADateStr, ' ', #13#10, [rfReplaceAll]);
-    if aLst.Count < 5 then Exit;
-
-    aMonthLabel := Trim(aLst[1]);
-    P1 := 1;
-    while (p1 <= 12) and (not SameText(RFC822_Months[P1], aMonthLabel)) do Inc(P1);
-    if P1 > 12 then Exit;
-
-    GetLocaleFormatSettings(GetSystemDefaultLCID, aFormatSettings);
-    aFormatSettings.DateSeparator := '/';
-    aFormatSettings.TimeSeparator := ':';
-    aFormatSettings.ShortDateFormat := 'dd/mm/yyyy';
-    aFormatSettings.ShortTimeFormat := 'hh:nn:zz';
-
-    aTimeZoneStr := UpperCase(aLst[4]);
-    aTimeZoneStr := StringReplace(aTimeZoneStr, '(', '', []);
-    aTimeZoneStr := StringReplace(aTimeZoneStr, ')', '', []);
-    aTimeZoneStr := Trim(aTimeZoneStr);
-    if aTimeZoneStr = '' then Exit;
-
-    if (Length(aTimeZoneStr) >= 5) and
-      CharInSet(aTimeZoneStr[1], ['+','-']) and
-      CharInSet(aTimeZoneStr[2], ['0','1','2','3','4','5','6','7','8','9']) and
-      CharInSet(aTimeZoneStr[3], ['0','1','2','3','4','5','6','7','8','9']) and
-      CharInSet(aTimeZoneStr[4], ['0','1','2','3','4','5','6','7','8','9']) and
-      CharInSet(aTimeZoneStr[5], ['0','1','2','3','4','5','6','7','8','9']) then
-    begin
-      aTimeZoneDelta := EncodeTime(StrToInt(Copy(aTimeZoneStr, 2, 2)), StrToInt(Copy(aTimeZoneStr, 4, 2)), 0, 0);
-      if aTimeZoneStr[1] = '+' then aTimeZoneDelta := -1 * aTimeZoneDelta;
-    end
-    else if aTimeZoneStr = 'GMT' then aTimeZoneDelta := 0
-    else if aTimeZoneStr = 'UTC' then aTimeZoneDelta := 0
-    else if aTimeZoneStr = 'UT'  then aTimeZoneDelta := 0
-    else if aTimeZoneStr = 'EST' then aTimeZoneDelta := 5 / HoursPerDay
-    else if aTimeZoneStr = 'EDT' then aTimeZoneDelta := 4 / HoursPerDay
-    else if aTimeZoneStr = 'CST' then aTimeZoneDelta := 6 / HoursPerDay
-    else if aTimeZoneStr = 'CDT' then aTimeZoneDelta := 5 / HoursPerDay
-    else if aTimeZoneStr = 'MST' then aTimeZoneDelta := 7 / HoursPerDay
-    else if aTimeZoneStr = 'MDT' then aTimeZoneDelta := 6 / HoursPerDay
-    else if aTimeZoneStr = 'PST' then aTimeZoneDelta := 8 / HoursPerDay
-    else if aTimeZoneStr = 'PDT' then aTimeZoneDelta := 7 / HoursPerDay
-    else
-      Exit;
-
-    ADateStr := Trim(aLst[0]) + '/' + MonthWithLeadingChar(IntToStr(P1))  + '/' + Trim(aLst[2]) + ' ' + Trim(aLst[3]); //'DD/MM/YYYY HH:MM:SS'
-    Result := TryStrToDateTime(ADateStr, Value, aFormatSettings);
-    if Result then Value := Value + aTimeZoneDelta + OffSetFromUTC;
-  finally
-    aLst.Free;
-  end;
-end;
-
-function RFC822ToDateTime(const s: String): TDateTime;
-begin
-  if not TryRFC822ToDateTime(S, Result) then
-    raise EConvertError.CreateResFmt(@SInvalidDateTime, [S]);
-end;
-
-function RFC822ToDateTimeDef(const s: String; Default: TDateTime): TDateTime;
-begin
-  if not TryRFC822ToDateTime(S, Result) then
-    Result := Default;
-end;
 
 end.
-

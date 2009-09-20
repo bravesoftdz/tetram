@@ -130,7 +130,7 @@ procedure THistory.AddConsultation(Consult: TConsult);
   end;
 
 begin
-  if not Bool(FLockCount) then
+  if not LongBool(FLockCount) then
   begin
     if (FCurrentConsultation > -1) and (Consult.Action = CurrentConsult.Action) then
       with CurrentConsult do
@@ -334,7 +334,7 @@ end;
 
 function THistory.GetWaiting: Boolean;
 begin
-  Result := Bool(FListWaiting.Count);
+  Result := LongBool(FListWaiting.Count);
 end;
 
 procedure THistory.GoConsultation(index: Integer);
@@ -358,7 +358,7 @@ end;
 
 procedure THistory.Next;
 begin
-  if Bool(CountConsultation) and (FCurrentConsultation < CountConsultation - 1) then
+  if LongBool(CountConsultation) and (FCurrentConsultation < CountConsultation - 1) then
   begin
     Inc(FCurrentConsultation);
     Refresh;

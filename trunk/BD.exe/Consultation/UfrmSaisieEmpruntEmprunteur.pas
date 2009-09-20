@@ -168,7 +168,7 @@ begin
   except
     AffMessage(Exception(ExceptObject).Message, mtError, [mbOk], True);
   end;
-  Frame11.btnOK.Enabled := Bool(ListView1.Items.Count);
+  Frame11.btnOK.Enabled := LongBool(ListView1.Items.Count);
 end;
 
 procedure TfrmSaisieEmpruntEmprunteur.ListView1DblClick(Sender: TObject);
@@ -180,7 +180,7 @@ begin
     PA.Free;
     ListView1.Selected.Delete;
   end;
-  Frame11.btnOK.Enabled := Bool(ListView1.Items.Count);
+  Frame11.btnOK.Enabled := LongBool(ListView1.Items.Count);
 end;
 
 procedure TfrmSaisieEmpruntEmprunteur.FormDestroy(Sender: TObject);

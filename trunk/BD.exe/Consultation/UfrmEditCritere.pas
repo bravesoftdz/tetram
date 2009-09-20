@@ -341,9 +341,9 @@ begin
       uftTime: valeur.TypeDonnee := tdHeure;
       uftTimestamp: valeur.TypeDonnee := tdDateHeure;
     end;
-  signes.Visible := Bool(signes.Items.Count);
+  signes.Visible := LongBool(signes.Items.Count);
   if signes.Visible then signes.Checked := False;
-  Critere2.Visible := Bool(Critere2.Items.Count);
+  Critere2.Visible := LongBool(Critere2.Items.Count);
   if Critere2.Visible then Critere2.Checked := False;
   signes.Width := IIf(Critere2.Visible, wMin, wMax);
 end;

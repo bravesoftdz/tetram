@@ -82,6 +82,8 @@ object frmPublier: TfrmPublier
     Width = 113
     Height = 17
     Caption = 'Envoyer les images'
+    Checked = True
+    State = cbChecked
     TabOrder = 1
   end
   object Button1: TButton

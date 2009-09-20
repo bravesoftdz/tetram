@@ -1207,7 +1207,7 @@ end;
 procedure TEmprunt.Fill(Query: TUIBQuery);
 begin
   inherited;
-  Pret := Bool(Query.Fields.ByNameAsInteger['PretEmprunt']);
+  Pret := LongBool(Query.Fields.ByNameAsInteger['PretEmprunt']);
   Date := Query.Fields.ByNameAsDateTime['DateEmprunt'];
   try
     Emprunteur.Fill(Query);

@@ -201,7 +201,7 @@ end;
 
 procedure TfrmConsultationEmprunteur.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
-  Retour1.Enabled := Bool(ListeEmprunts.SelectedCount);
+  Retour1.Enabled := LongBool(ListeEmprunts.SelectedCount);
 end;
 
 procedure TfrmConsultationEmprunteur.Retour1Execute(Sender: TObject);

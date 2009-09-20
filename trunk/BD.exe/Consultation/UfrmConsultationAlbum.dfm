@@ -1180,6 +1180,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         BorderStyle = bsNone
         ButtonFillMode = fmShaded
         Header.AutoSizeIndex = 1
+        Header.DefaultHeight = 17
         Header.Font.Charset = DEFAULT_CHARSET
         Header.Font.Color = clWindowText
         Header.Font.Height = -11
@@ -1206,7 +1207,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
           end
           item
             Position = 1
-            Width = 413
+            Width = 415
             WideText = 'Emprunteur'
           end>
       end
@@ -1390,6 +1391,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       BorderStyle = bsNone
       Color = clWhite
       Header.AutoSizeIndex = 0
+      Header.DefaultHeight = 17
       Header.Font.Charset = DEFAULT_CHARSET
       Header.Font.Color = clWindowText
       Header.Font.Height = -11

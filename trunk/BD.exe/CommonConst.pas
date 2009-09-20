@@ -83,7 +83,7 @@ var
 begin
   op.Wnd := INVALID_HANDLE_VALUE;
   op.wFunc := FO_DELETE;
-  op.pFrom := PChar(TempPath + '*');
+  op.pFrom := PChar(IncludeTrailingPathDelimiter(TempPath)+ '*');
   op.fFlags := FOF_SILENT or FOF_NOCONFIRMATION or FOF_NOERRORUI;
   SHFileOperation(op);
 end;

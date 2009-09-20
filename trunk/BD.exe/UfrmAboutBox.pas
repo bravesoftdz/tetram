@@ -312,7 +312,7 @@ begin
               // Test for the server type.
             else if (OSVERSIONINFOEX.wProductType = VER_NT_SERVER) or (OSVERSIONINFOEX.wProductType = VER_NT_DOMAIN_CONTROLLER) then
             begin
-              if BOOL(OSVERSIONINFOEX.wSuiteMask and VER_SUITE_ENTERPRISE) then
+              if LongBool(OSVERSIONINFOEX.wSuiteMask and VER_SUITE_ENTERPRISE) then
                 Result := Result + ' Server 4.0, Enterprise Edition'
               else
                 Result := Result + ' Server';
