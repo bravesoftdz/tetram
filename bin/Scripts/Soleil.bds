@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>1</ScriptVersion>
+    <ScriptVersion>1.1</ScriptVersion>
     <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Sun, 16 Aug 2009 20:19:14 +0200</LastUpdate>
+    <LastUpdate>Sun, 27 Sep 2009 11:56:22 +0200</LastUpdate>
   </Infos>
   <Options/>
   <Code>program Soleil;
@@ -180,9 +180,14 @@ var
 begin
   entry := AlbumToImport.DefaultSearch;
   index := 0;
-  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie&apos;], entry, index) then Exit;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie&apos;, &apos;Lien&apos;], entry, index) then Exit;
 
-  id_album := RechercheParTitre(entry);
+  id_album := &apos;&apos;;
+  case index of
+    0: id_album := RechercheParTitre(entry);
+    1: id_album := entry
+  end;
+
   if id_album &lt;&gt; &apos;&apos; then
     ParseAlbum(id_album);
 end.</Code>
