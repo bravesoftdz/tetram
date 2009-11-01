@@ -2,10 +2,8 @@ unit UfrmValidationImport;
 
 interface
 
-uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, LoadComplet, ExtCtrls, CheckLst, Menus, jpeg,
-  UframBoutons, ComboCheck, EditLabeled, ComCtrls;
+uses Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Generics.Collections, TypeRec, Dialogs, StdCtrls, LoadComplet,
+  ExtCtrls, CheckLst, Menus, jpeg, UframBoutons, ComboCheck, EditLabeled, ComCtrls;
 
 type
   TfrmValidationImport = class(TForm)
@@ -136,10 +134,7 @@ type
 
 implementation
 
-uses
-  Commun, Procedures, CommonConst, Generics.Collections, TypeRec,
-  UBdtForms;
-
+uses Commun, Procedures, CommonConst, UBdtForms;
 {$R *.dfm}
 
 procedure TfrmValidationImport.VisuClose(Sender: TObject);
@@ -149,7 +144,7 @@ end;
 
 procedure TfrmValidationImport.cbxEtatBeforeShowPop(Sender: TObject; Menu: TPopupMenu; var Continue: Boolean);
 begin
-  // on autorise pas l'ouverture du menu
+  // on n'autorise pas l'ouverture du menu
   Continue := False;
 end;
 
@@ -193,12 +188,12 @@ begin
   DefaultEdition := TEditionComplete.Create(GUID_NULL);
   DefaultValues.Editions.Editions.Add(DefaultEdition);
 
-  LoadCombo(1 {Etat}, cbxEtat);
-  LoadCombo(2 {Reliure}, cbxReliure);
-  LoadCombo(3 {TypeEdition}, cbxEdition);
-  LoadCombo(4 {Orientation}, cbxOrientation);
-  LoadCombo(5 {Format}, cbxFormat);
-  LoadCombo(8 {Sens de lecture}, cbxSensLecture);
+  LoadCombo(1 { Etat } , cbxEtat);
+  LoadCombo(2 { Reliure } , cbxReliure);
+  LoadCombo(3 { TypeEdition } , cbxEdition);
+  LoadCombo(4 { Orientation } , cbxOrientation);
+  LoadCombo(5 { Format } , cbxFormat);
+  LoadCombo(8 { Sens de lecture } , cbxSensLecture);
 end;
 
 procedure TfrmValidationImport.FormDestroy(Sender: TObject);
@@ -304,7 +299,7 @@ procedure TfrmValidationImport.framBoutons1btnOKClick(Sender: TObject);
   end;
 
 begin
-  //Album
+  // Album
   FAlbum.Titre := SetValue(edTitreAlbum, CheckBox1, DefaultValues.Titre);
   FAlbum.MoisParution := SetValue(edMoisParution, CheckBox3, DefaultValues.MoisParution);
   FAlbum.AnneeParution := SetValue(edAnneeParution, CheckBox4, DefaultValues.AnneeParution);
@@ -319,7 +314,7 @@ begin
   SetValue(FAlbum.Sujet, mmResumeAlbum, CheckBox11);
   SetValue(FAlbum.Notes, mmNotesAlbum, CheckBox12);
 
-  //Série
+  // Série
   FAlbum.Serie.Titre := SetValue(edTitreSerie, CheckBox13, DefaultValues.Serie.Titre);
   FAlbum.Serie.SiteWeb := SetValue(edSiteWebSerie, CheckBox16, DefaultValues.Serie.SiteWeb);
   FAlbum.Serie.NbAlbums := SetValue(edNbAlbums, CheckBox19, DefaultValues.Serie.NbAlbums);
@@ -334,7 +329,7 @@ begin
   FAlbum.Serie.Editeur.SiteWeb := SetValue(edSiteWebEditeurSerie, CheckBoxLabeled6, DefaultValues.Serie.Editeur.SiteWeb);
   FAlbum.Serie.Collection.NomCollection := SetValue(edCollectionSerie, CheckBoxLabeled7, DefaultValues.Serie.Collection.NomCollection);
 
-  //Edition
+  // Edition
   if FAlbum.Editions.Editions.Count > 0 then
     with FAlbum.Editions.Editions[0] do
     begin
@@ -412,7 +407,7 @@ procedure TfrmValidationImport.SetAlbum(Value: TAlbumComplet);
   procedure ChangeState(Chk: TCheckBox; Ctrl: TControl);
   begin
     Chk.Enabled := Chk.Checked;
-    Ctrl.Enabled := Chk.Enabled and not (Ctrl is TPanel);
+    Ctrl.Enabled := Chk.Enabled and not(Ctrl is TPanel);
   end;
 
   procedure LoadValue(const Value: string; Ctrl: TEdit; Chk: TCheckBox; const Defaut: string); overload;
@@ -438,13 +433,24 @@ procedure TfrmValidationImport.SetAlbum(Value: TAlbumComplet);
 
   procedure LoadValue(Value: TStrings; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
   var
-    i: Integer;
+    i, p: Integer;
+    s: string;
   begin
+    Ctrl.Items.Clear;
     for i := Pred(Value.Count) downto 0 do
-      if Trim(Value[i]) = '' then Value.Delete(i);
-    Ctrl.Items.Assign(Value);
-    for i := 0 to Pred(Ctrl.Items.Count) do
-      Ctrl.Checked[i] := True;
+    begin
+      s := Trim(Value[i]);
+      if s = '' then
+        Value.Delete(i)
+      else
+      begin
+        p := Pos('=', s);
+        if (p > 0) and not IsEqualGUID(StringToGUIDDef(Copy(s, 1, p - 1), GUID_FULL), GUID_FULL) then
+          s := Copy(s, p + 1, MaxInt);
+        Ctrl.Items.Insert(0, s);
+        Ctrl.Checked[0] := True;
+      end;
+    end;
     Chk.Checked := Ctrl.Items.Count > 0;
     ChangeState(Chk, Ctrl);
   end;
@@ -456,7 +462,7 @@ procedure TfrmValidationImport.SetAlbum(Value: TAlbumComplet);
     Ctrl.Items.Clear;
     for i := 0 to Pred(Value.Count) do
     begin
-      Ctrl.Items.Add(Value[i].Personne.Nom);
+      Ctrl.Items.Add(Value[i].Personne.ChaineAffichage);
       Ctrl.Checked[i] := True;
     end;
     Chk.Checked := Ctrl.Items.Count > 0;
@@ -507,7 +513,7 @@ procedure TfrmValidationImport.SetAlbum(Value: TAlbumComplet);
 begin
   FAlbum := Value;
 
-  //Album
+  // Album
   LoadValue(FAlbum.Titre, edTitreAlbum, CheckBox1, DefaultValues.Titre);
   LoadValue(FAlbum.MoisParution, edMoisParution, CheckBox3, DefaultValues.MoisParution);
   LoadValue(FAlbum.AnneeParution, edAnneeParution, CheckBox4, DefaultValues.AnneeParution);
@@ -527,7 +533,7 @@ begin
   LoadValue(FAlbum.Sujet, mmResumeAlbum, CheckBox11);
   LoadValue(FAlbum.Notes, mmNotesAlbum, CheckBox12);
 
-  //Série
+  // Série
   LoadValue(FAlbum.Serie.Titre, edTitreSerie, CheckBox13, DefaultValues.Serie.Titre);
   LoadValue(FAlbum.Serie.SiteWeb, edSiteWebSerie, CheckBox16, DefaultValues.Serie.SiteWeb);
   LoadValue(FAlbum.Serie.NbAlbums, edNbAlbums, CheckBox19, DefaultValues.Serie.NbAlbums);
@@ -542,8 +548,7 @@ begin
   LoadValue(FAlbum.Serie.Editeur.SiteWeb, edSiteWebEditeurSerie, CheckBoxLabeled6, DefaultValues.Serie.Editeur.SiteWeb);
   LoadValue(FAlbum.Serie.Collection.NomCollection, edCollectionSerie, CheckBoxLabeled7, DefaultValues.Serie.Collection.NomCollection);
 
-  TabSheet2.TabVisible :=
-    CheckBox13.Checked{ or
+  TabSheet2.TabVisible := CheckBox13.Checked { or
     CheckBox16.Checked or
     CheckBox19.Checked or
     CheckBox14.Checked or
@@ -555,7 +560,7 @@ begin
     CheckBox18.Checked or
     CheckBoxLabeled5.Checked or
     CheckBoxLabeled6.Checked or
-    CheckBoxLabeled7.Checked};
+    CheckBoxLabeled7.Checked } ;
 
   // Edition
   TabSheet3.TabVisible := FAlbum.FusionneEditions and (FAlbum.Editions.Editions.Count > 0);
@@ -566,7 +571,7 @@ begin
       LoadValue(Editeur.SiteWeb, edSiteWebEditeur, CheckBox21, DefaultEdition.Editeur.SiteWeb);
       LoadValue(Collection.NomCollection, edCollection, CheckBox22, DefaultEdition.Collection.NomCollection);
       LoadValue(AnneeEdition, edAnneeEdition, CheckBox29, DefaultEdition.AnneeEdition);
-      //if Prix <> 0 then
+      // if Prix <> 0 then
       LoadValue(FormatCurr(FormatMonnaie, Prix), edPrix, Label9, FormatCurr(FormatMonnaie, DefaultEdition.Prix));
       LoadValue(Gratuit, pnGratuit, CheckBox30, DefaultEdition.Gratuit);
       LoadValue(ISBN, edISBN, Label11, DefaultEdition.ISBN);
@@ -577,7 +582,7 @@ begin
       LoadValue(SensLecture, cbxSensLecture, CheckBox27);
       LoadValue(FormatEdition, cbxFormat, CheckBox28);
       LoadValue(AnneeCote, edAnneeCote, Label24, DefaultEdition.AnneeCote);
-      //if PrixCote <> 0 then
+      // if PrixCote <> 0 then
       LoadValue(FormatCurr(FormatMonnaie, PrixCote), edPrixCote, Label25, FormatCurr(FormatMonnaie, DefaultEdition.PrixCote));
       LoadValue(Couleur, pnCouleur, CheckBox31, DefaultEdition.Couleur);
       LoadValue(VO, pnVO, CheckBox32, DefaultEdition.VO);

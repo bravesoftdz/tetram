@@ -27,6 +27,7 @@ type
   public
     ObjetImport: TObjetComplet;
     SelectedValue: TGUID;
+    SelectedText: string;
     function ShowModalEx: TModalResult;
   published
     property Mode: TVirtualMode read GetMode write SetMode;
@@ -161,6 +162,7 @@ begin
     end;
   until Result in [mrOk, mrCancel, mrIgnore];
   SelectedValue := framVTEdit1.CurrentValue;
+  SelectedText := framVTEdit1.VTEdit.Text;
 end;
 
 end.

@@ -236,7 +236,6 @@ begin
   Result := mrCancel;
   if not Bouton in [0 .. 2] then
     Exit;
-{$IFDEF DEBUG}
   if CanUseTaskDialog then
     with TTaskDialog.Create(nil) do
       try
@@ -261,7 +260,6 @@ begin
         Free;
       end
     else
-{$ENDIF DEBUG}
       with TFrmChoix.Create(Application) do
         try
           BtnChoix1.Caption := Texte1;
@@ -319,24 +317,20 @@ begin
 end;
 
 function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption): TModalResult;
-{$IFDEF DEBUG}
 var
   i: TDetailSerieOption;
-{$ENDIF DEBUG}
 begin
   Result := mrCancel;
-{$IFDEF DEBUG}
   if CanUseTaskDialog then
     with TTaskDialog.Create(nil) do
       try
-        for i := low(TDetailSerieOption) to high(TDetailSerieOption) do
-          if i >= NiveauDetailMax then
-            with Buttons.Add do
-            begin
-              Caption := LibelleDetailSerieOption[NiveauDetailMax][i];
-              default := i = NiveauDetailMax;
-              ModalResult := 110 + Integer(i);
-            end;
+        for i := NiveauDetailMax to high(TDetailSerieOption) do
+          with Buttons.Add do
+          begin
+            Caption := LibelleDetailSerieOption[NiveauDetailMax][i];
+            default := i = NiveauDetailMax;
+            ModalResult := 110 + Integer(i);
+          end;
 
         Flags := [tfAllowDialogCancellation, tfUseCommandLinks];
         CommonButtons := [tcbCancel];
@@ -350,7 +344,6 @@ begin
         Free;
       end
     else
-{$ENDIF DEBUG}
       with TFrmChoixDetailSerie.Create(Application) do
         try
           // cacher la checkbox avant d'assigner MaxNiveauDetail
@@ -368,24 +361,20 @@ end;
 
 function ChoisirDetailSerie(NiveauDetailMax: TDetailSerieOption; out DetailSerieOption: TDetailSerieOption; out PrevisionsManquants: Boolean)
   : TModalResult;
-{$IFDEF DEBUG}
 var
   i: TDetailSerieOption;
-{$ENDIF DEBUG}
 begin
   Result := mrCancel;
-{$IFDEF DEBUG}
   if CanUseTaskDialog then
     with TTaskDialog.Create(nil) do
       try
-        for i := low(TDetailSerieOption) to high(TDetailSerieOption) do
-          if i >= NiveauDetailMax then
-            with Buttons.Add do
-            begin
-              Caption := LibelleDetailSerieOption[NiveauDetailMax][i];
-              default := i = NiveauDetailMax;
-              ModalResult := 110 + Integer(i);
-            end;
+        for i := NiveauDetailMax to high(TDetailSerieOption) do
+          with Buttons.Add do
+          begin
+            Caption := LibelleDetailSerieOption[NiveauDetailMax][i];
+            default := i = NiveauDetailMax;
+            ModalResult := 110 + Integer(i);
+          end;
 
         with RadioButtons.Add do
         begin
@@ -413,7 +402,6 @@ begin
         Free;
       end
     else
-{$ENDIF DEBUG}
       with TFrmChoixDetailSerie.Create(Application) do
         try
           MaxNiveauDetail := NiveauDetailMax;

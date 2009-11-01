@@ -126,8 +126,8 @@ var
     s: string;
   begin
     Reponse.Size := 0;
-    if LoadStreamURL(URL, Param, Reponse) <> 200 then
-      raise Exception.Create('Impossible d''accéder au site:'#13#10'- vérifier le paramétrage de l''adresse'#13#10'- Assurez-vous que le modèle est bien chargé sur le site');
+    if LoadStreamURL(URL, Param, Reponse, False) <> 200 then
+      raise Exception.Create('Impossible d''accéder au site:'#13#10'- vérifiez le paramétrage de l''adresse'#13#10'- Assurez-vous que le modèle est bien chargé sur le site');
     Reponse.Position := 0;
     slReponse.LoadFromStream(Reponse);
     memo1.Lines.Text := Reponse.DataString;

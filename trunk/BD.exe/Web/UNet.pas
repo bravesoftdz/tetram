@@ -10,8 +10,9 @@ type
     IsFichier: Boolean;
   end;
 
-function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream): Word; overload;
-function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; out DocName: string): Word; overload;
+function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; ShowProgress: Boolean = True): Word; overload;
+function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; out DocName: string; ShowProgress: Boolean = True)
+  : Word; overload;
 
 implementation
 
@@ -137,277 +138,302 @@ begin
       ss.write(Buffer[0], lbuffer);
       if Assigned(Stream) then
         Stream.CopyFrom(ss, 0);
-    end
-    finally
-      ss.Free;
     end;
+  finally
+    ss.Free;
   end;
+end;
 
-  function LoadStreamURL2(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream): Word;
-  const
-    FLAG_ICC_FORCE_CONNECTION = 1;
-  var
-    fs: TFileStream;
-    MemoryStream: TMemoryStream;
-    hISession, hConnect, hRequest: HINTERNET;
-    URLComponents: TURLComponents;
-    httpHeader: string;
-    Buffer: array of Char;
-    BytesRead, lbuffer: Cardinal;
-    i: Integer;
-    idRequete, Serveur, Agent, Action: string;
-  begin
-    idRequete := '26846888314793'; // valeur arbitraire: voir s'il faut la changer à chaque requête mais il semble que non
-    Result := 0;
-    Agent := Format('%s/%s', [ChangeFileExt(ExtractFileName(Application.ExeName), ''), GetInfoVersion(Application.ExeName)]);
-    hISession := InternetOpen(PChar(Agent), INTERNET_OPEN_TYPE_PRECONFIG, nil, nil, 0);
-    if (hISession = nil) then
+function LoadStreamURL2(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream): Word;
+const
+  FLAG_ICC_FORCE_CONNECTION = 1;
+var
+  fs: TFileStream;
+  MemoryStream: TMemoryStream;
+  hISession, hConnect, hRequest: HINTERNET;
+  URLComponents: TURLComponents;
+  httpHeader: string;
+  Buffer: array of Char;
+  BytesRead, lbuffer: Cardinal;
+  i: Integer;
+  idRequete, Serveur, Agent, Action: string;
+begin
+  idRequete := '26846888314793'; // valeur arbitraire: voir s'il faut la changer à chaque requête mais il semble que non
+  Result := 0;
+  Agent := Format('%s/%s', [ChangeFileExt(ExtractFileName(Application.ExeName), ''), GetInfoVersion(Application.ExeName)]);
+  hISession := InternetOpen(PChar(Agent), INTERNET_OPEN_TYPE_PRECONFIG, nil, nil, 0);
+  if (hISession = nil) then
+    RaiseLastOSError;
+  try
+    ZeroMemory(@URLComponents, SizeOf(URLComponents));
+    URLComponents.dwStructSize := SizeOf(URLComponents);
+    URLComponents.dwHostNameLength := 1;
+    URLComponents.dwSchemeLength := 1;
+    URLComponents.dwUserNameLength := 1;
+    URLComponents.dwPasswordLength := 1;
+    URLComponents.dwUrlPathLength := 1;
+    if not InternetCrackUrl(PChar(URL), Length(URL), 0, URLComponents) then
       RaiseLastOSError;
+    if not(URLComponents.nScheme in [INTERNET_SERVICE_HTTP, INTERNET_SERVICE_FTP]) then
+      raise Exception.Create('Type d''adresse non supporté:'#13#10 + URL);
+    Serveur := Copy(URLComponents.lpszHostName, 1, Pos('/', string(URLComponents.lpszHostName) + '/') - 1);
+    Serveur := Copy(Serveur, 1, Pos(':', Serveur + ':') - 1);
+    hConnect := InternetConnect(hISession, PChar(Serveur), URLComponents.nPort, URLComponents.lpszUserName, URLComponents.lpszPassword,
+      URLComponents.nScheme, 0, 0);
+    if (hConnect = nil) then
+      RaiseLastInternetError;
     try
-      ZeroMemory(@URLComponents, SizeOf(URLComponents));
-      URLComponents.dwStructSize := SizeOf(URLComponents);
-      URLComponents.dwHostNameLength := 1;
-      URLComponents.dwSchemeLength := 1;
-      URLComponents.dwUserNameLength := 1;
-      URLComponents.dwPasswordLength := 1;
-      URLComponents.dwUrlPathLength := 1;
-      if not InternetCrackUrl(PChar(URL), Length(URL), 0, URLComponents) then
+      if Length(Pieces) = 0 then
+        Action := 'GET'
+      else
+        Action := 'POST';
+      hRequest := HttpOpenRequest(hConnect, PChar(Action), URLComponents.lpszUrlPath, nil, nil, nil,
+        INTERNET_FLAG_NO_CACHE_WRITE or INTERNET_FLAG_RELOAD, 0);
+      if (hRequest = nil) then
         RaiseLastOSError;
-      if not(URLComponents.nScheme in [INTERNET_SERVICE_HTTP, INTERNET_SERVICE_FTP]) then
-        raise Exception.Create('Type d''adresse non supporté:'#13#10 + URL);
-      Serveur := Copy(URLComponents.lpszHostName, 1, Pos('/', string(URLComponents.lpszHostName) + '/') - 1);
-      Serveur := Copy(Serveur, 1, Pos(':', Serveur + ':') - 1);
-      hConnect := InternetConnect(hISession, PChar(Serveur), URLComponents.nPort, URLComponents.lpszUserName, URLComponents.lpszPassword,
-        URLComponents.nScheme, 0, 0);
-      if (hConnect = nil) then
-        RaiseLastInternetError;
       try
-        if Length(Pieces) = 0 then
-          Action := 'GET'
-        else
-          Action := 'POST';
-        hRequest := HttpOpenRequest(hConnect, PChar(Action), URLComponents.lpszUrlPath, nil, nil, nil,
-          INTERNET_FLAG_NO_CACHE_WRITE or INTERNET_FLAG_RELOAD, 0);
-        if (hRequest = nil) then
-          RaiseLastOSError;
+        MemoryStream := TMemoryStream.Create;
         try
-          MemoryStream := TMemoryStream.Create;
-          try
-            MemoryStream.Position := 0;
+          MemoryStream.Position := 0;
 
-            httpHeader := '';
+          httpHeader := '';
 
-            if Length(Pieces) > 0 then
-            begin
-              for i := low(Pieces) to high(Pieces) do
-                if Pieces[i].IsFichier then
-                begin
-                  fs := TFileStream.Create(Pieces[i].Valeur, fmOpenRead or fmShareDenyWrite);
-                  try
-                    httpHeader := '-----------------------------' + idRequete + #13#10;
-                    httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + Pieces[i].Nom + '"; filename="' + ExtractFileName
-                      (Pieces[i].Valeur) + '"'#13#10;
-                    httpHeader := httpHeader + 'Content-Type: application/octet-stream'#13#10;
-                    httpHeader := httpHeader + 'Content-Length: ' + IntToStr(fs.Size) + #13#10;
-                    httpHeader := httpHeader + #13#10;
-                    MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader) * SizeOf(Char));
-                    MemoryStream.CopyFrom(fs, fs.Size);
-                    httpHeader := #13#10;
-                    MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader) * SizeOf(Char));
-                  finally
-                    fs.Free;
-                  end;
-                end
-                else
-                begin
-                  httpHeader := '-----------------------------' + idRequete + #13#10;
-                  httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + Pieces[i].Nom + '"'#13#10;
-                  httpHeader := httpHeader + #13#10;
-                  httpHeader := httpHeader + Pieces[i].Valeur + #13#10;
-                  MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader) * SizeOf(Char));
-                end;
-              httpHeader := '-----------------------------' + idRequete + '--'#13#10;
-              MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader) * SizeOf(Char));
-
-              httpHeader := 'Content-Type: multipart/form-data; boundary=---------------------------' + idRequete + #13#10;
-            end;
-
-            // httpHeader := httpHeader + 'Accept: text/*'#13#10;
-            httpHeader := httpHeader + 'Accept-Language: fr'#13#10;
-            httpHeader := httpHeader + 'Accept-Encoding: deflate'#13#10;
-            httpHeader := httpHeader + 'Accept-Charset: ISO-8859-1'#13#10;
-
-            if not HttpSendRequest(hRequest, PChar(httpHeader), Length(httpHeader), MemoryStream.Memory, MemoryStream.Size) then
-              RaiseLastOSError;
-
-            Result := GetAnwser(hRequest, MemoryStream);
-            if Result = 200 then
-            begin
-              lbuffer := 16384;
-              SetLength(Buffer, lbuffer);
-              if Assigned(StreamAnswer) then
-                StreamAnswer.Size := 0;
-              while InternetReadFile(hRequest, Buffer, lbuffer, BytesRead) do
+          if Length(Pieces) > 0 then
+          begin
+            for i := low(Pieces) to high(Pieces) do
+              if Pieces[i].IsFichier then
               begin
-                if Assigned(StreamAnswer) then
-                  StreamAnswer.write(Buffer[0], BytesRead);
-                if BytesRead < lbuffer then
-                  Break;
+                fs := TFileStream.Create(Pieces[i].Valeur, fmOpenRead or fmShareDenyWrite);
+                try
+                  httpHeader := '-----------------------------' + idRequete + #13#10;
+                  httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + Pieces[i].Nom + '"; filename="' + ExtractFileName
+                    (Pieces[i].Valeur) + '"'#13#10;
+                  httpHeader := httpHeader + 'Content-Type: application/octet-stream'#13#10;
+                  httpHeader := httpHeader + 'Content-Length: ' + IntToStr(fs.Size) + #13#10;
+                  httpHeader := httpHeader + #13#10;
+                  MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader) * SizeOf(Char));
+                  MemoryStream.CopyFrom(fs, fs.Size);
+                  httpHeader := #13#10;
+                  MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader) * SizeOf(Char));
+                finally
+                  fs.Free;
+                end;
+              end
+              else
+              begin
+                httpHeader := '-----------------------------' + idRequete + #13#10;
+                httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + Pieces[i].Nom + '"'#13#10;
+                httpHeader := httpHeader + #13#10;
+                httpHeader := httpHeader + Pieces[i].Valeur + #13#10;
+                MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader) * SizeOf(Char));
               end;
+            httpHeader := '-----------------------------' + idRequete + '--'#13#10;
+            MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader) * SizeOf(Char));
+
+            httpHeader := 'Content-Type: multipart/form-data; boundary=---------------------------' + idRequete + #13#10;
+          end;
+
+          // httpHeader := httpHeader + 'Accept: text/*'#13#10;
+          httpHeader := httpHeader + 'Accept-Language: fr'#13#10;
+          httpHeader := httpHeader + 'Accept-Encoding: deflate'#13#10;
+          httpHeader := httpHeader + 'Accept-Charset: ISO-8859-1'#13#10;
+
+          if not HttpSendRequest(hRequest, PChar(httpHeader), Length(httpHeader), MemoryStream.Memory, MemoryStream.Size) then
+            RaiseLastOSError;
+
+          Result := GetAnwser(hRequest, MemoryStream);
+          if Result = 200 then
+          begin
+            lbuffer := 16384;
+            SetLength(Buffer, lbuffer);
+            if Assigned(StreamAnswer) then
+              StreamAnswer.Size := 0;
+            while InternetReadFile(hRequest, Buffer, lbuffer, BytesRead) do
+            begin
               if Assigned(StreamAnswer) then
-                StreamAnswer.Seek(0, soFromBeginning);
+                StreamAnswer.write(Buffer[0], BytesRead);
+              if BytesRead < lbuffer then
+                Break;
             end;
-          finally
-            MemoryStream.Free;
+            if Assigned(StreamAnswer) then
+              StreamAnswer.Seek(0, soFromBeginning);
           end;
         finally
-          InternetCloseHandle(hRequest);
+          MemoryStream.Free;
         end;
       finally
-        InternetCloseHandle(hConnect);
+        InternetCloseHandle(hRequest);
       end;
     finally
-      InternetCloseHandle(hISession);
+      InternetCloseHandle(hConnect);
     end;
+  finally
+    InternetCloseHandle(hISession);
+  end;
+end;
+
+type
+  TDownloader = class
+    FHttpCli: THttpCli;
+    FUserCancel: Integer;
+    FWaiting: IWaiting;
+
+    constructor Create;
+    destructor Destroy; override;
+
+    procedure RequestDone(Sender: TObject; RqType: THttpRequest; ErrCode: Word);
+    procedure DocData(Sender: TObject; Buffer: Pointer; Len: Integer);
+    procedure SendData(Sender: TObject; Buffer: Pointer; Len: Integer);
   end;
 
-  type
-    TDownloader = class
-      FHttpCli: THttpCli;
-      FUserCancel: Integer;
-      FWaiting: IWaiting;
+constructor TDownloader.Create;
+begin
+  inherited;
+  FUserCancel := 0;
+  FHttpCli := THttpCli.Create(nil);
+  FHttpCli.RequestVer := '1.1';
+  FHttpCli.Agent := Format('%s/%s', [ChangeFileExt(ExtractFileName(Application.ExeName), ''), GetInfoVersion(Application.ExeName)]);
+  FHttpCli.AcceptLanguage := 'fr';
+  FHttpCli.OnRequestDone := RequestDone;
+  FHttpCli.OnDocData := DocData;
+  FHttpCli.OnSendData := SendData;
+  // FHttpCli.IcsLogger := TIcsLogger.Create(FHttpCli);
+  // FHttpCli.IcsLogger.LogOptions := [loDestFile, loAddStamp, loWsockErr, loWsockInfo, loWsockDump, loSslErr, loSslInfo, loSslDump, loProtSpecErr,
+  // loProtSpecInfo, loProtSpecDump];
+  // FHttpCli.IcsLogger.LogFileName := 'd:\icslog.log';
+  // FHttpCli.IcsLogger.LogFileOption := lfoOverwrite;
+  FHttpCli.MultiThreaded := True;
+end;
 
-      constructor Create;
-      destructor Destroy; override;
+destructor TDownloader.Destroy;
+begin
+  FWaiting := nil;
+  FHttpCli.Free;
+  inherited;
+end;
 
-      procedure RequestDone(Sender: TObject; RqType: THttpRequest; ErrCode: Word);
-      procedure DocData(Sender: TObject; Buffer: Pointer; Len: Integer);
+procedure TDownloader.DocData(Sender: TObject; Buffer: Pointer; Len: Integer);
+begin
+  if FUserCancel > 0 then
+    FHttpCli.Abort;
+  if Assigned(FWaiting) then
+    FWaiting.ShowProgression('', FHttpCli.RcvdCount, FHttpCli.ContentLength);
+end;
 
-    end;
+procedure TDownloader.SendData(Sender: TObject; Buffer: Pointer; Len: Integer);
+begin
+  if FUserCancel > 0 then
+    FHttpCli.Abort;
+  // les ICS ne permettent pas de gérer une progressbar en envoi
+  // if Assigned(FWaiting) then
+  // FWaiting.ShowProgression('', FHttpCli.RcvdCount, FHttpCli.ContentLength);
+end;
 
-  constructor TDownloader.Create;
-  begin
-    inherited;
-    FUserCancel := 0;
-    FHttpCli := THttpCli.Create(nil);
-    FHttpCli.RequestVer := '1.1';
-    FHttpCli.Agent := Format('%s/%s', [ChangeFileExt(ExtractFileName(Application.ExeName), ''), GetInfoVersion(Application.ExeName)]);
-    FHttpCli.AcceptLanguage := 'fr';
-    FHttpCli.OnRequestDone := RequestDone;
-    FHttpCli.OnDocData := DocData;
-//    FHttpCli.IcsLogger := TIcsLogger.Create(FHttpCli);
-//    FHttpCli.IcsLogger.LogOptions := [loDestFile, loAddStamp, loWsockErr, loWsockInfo, loWsockDump, loSslErr, loSslInfo, loSslDump, loProtSpecErr,
-//      loProtSpecInfo, loProtSpecDump];
-//    FHttpCli.IcsLogger.LogFileName := 'd:\icslog.log';
-//    FHttpCli.IcsLogger.LogFileOption := lfoOverwrite;
-    FHttpCli.MultiThreaded := True;
-  end;
+procedure TDownloader.RequestDone(Sender: TObject; RqType: THttpRequest; ErrCode: Word);
+begin
+  if Assigned(FWaiting) then
+    FWaiting.ShowProgression('', epFin);
+end;
 
-  destructor TDownloader.Destroy;
-  begin
-    FWaiting := nil;
-    FHttpCli.Free;
-    inherited;
-  end;
+function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; ShowProgress: Boolean): Word;
+var
+  dummy: string;
+begin
+  Result := LoadStreamURL(URL, Pieces, StreamAnswer, dummy, ShowProgress);
+end;
 
-  procedure TDownloader.DocData(Sender: TObject; Buffer: Pointer; Len: Integer);
-  begin
-    if FUserCancel > 0 then
-      FHttpCli.Abort;
-    if Assigned(FWaiting) then
-      FWaiting.ShowProgression('', FHttpCli.RcvdCount, FHttpCli.ContentLength);
-  end;
+function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; out DocName: string; ShowProgress: Boolean): Word;
+var
+  MemoryStream: TMemoryStream;
+  fs: TFileStream;
+  i: Integer;
+  idRequete: string;
+  httpHeader: RawByteString;
+  dl: TDownloader;
+begin
+  idRequete := '26846888314793'; // valeur arbitraire: voir s'il faut la changer à chaque requête mais il semble que non
+  MemoryStream := TMemoryStream.Create;
+  dl := TDownloader.Create;
+  with dl do
+    try
+      if Pos('%', URL) > 0 then
+        FHttpCli.URL := URL
+      else
+        FHttpCli.URL := URLEncode(URL);
+      FHttpCli.SendStream := MemoryStream;
+      FHttpCli.RcvdStream := StreamAnswer;
 
-  procedure TDownloader.RequestDone(Sender: TObject; RqType: THttpRequest; ErrCode: Word);
-  begin
-    FWaiting := nil;
-  end;
+      MemoryStream.Position := 0;
 
-  function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream): Word;
-  var
-    dummy: string;
-  begin
-    Result := LoadStreamURL(URL, Pieces, StreamAnswer, dummy);
-  end;
+      httpHeader := '';
 
-  function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; out DocName: string): Word;
-  var
-    MemoryStream: TMemoryStream;
-    fs: TFileStream;
-    i: Integer;
-    idRequete: string;
-    httpHeader: RawByteString;
-    dl: TDownloader;
-  begin
-    idRequete := '26846888314793'; // valeur arbitraire: voir s'il faut la changer à chaque requête mais il semble que non
-    MemoryStream := TMemoryStream.Create;
-    dl := TDownloader.Create;
-    with dl do
-      try
-        if Pos('%', URL) > 0 then
-          FHttpCli.URL := URL
-        else
-          FHttpCli.URL := URLEncode(URL);
-        FHttpCli.SendStream := MemoryStream;
-        FHttpCli.RcvdStream := StreamAnswer;
-
-        MemoryStream.Position := 0;
-
-        httpHeader := '';
-
-        if Length(Pieces) > 0 then
-        begin
-          for i := low(Pieces) to high(Pieces) do
-            if Pieces[i].IsFichier then
-            begin
-              fs := TFileStream.Create(Pieces[i].Valeur, fmOpenRead or fmShareDenyWrite);
-              try
-                httpHeader := '-----------------------------' + UTF8Encode(idRequete) + #13#10;
-                httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + UTF8Encode(Pieces[i].Nom) + '"; filename="' + UTF8Encode
-                  (ExtractFileName(Pieces[i].Valeur)) + '"'#13#10;
-                httpHeader := httpHeader + 'Content-Type: application/octet-stream'#13#10;
-                httpHeader := httpHeader + 'Content-Length: ' + UTF8Encode(IntToStr(fs.Size)) + #13#10;
-                httpHeader := httpHeader + #13#10;
-                MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
-                MemoryStream.CopyFrom(fs, fs.Size);
-                httpHeader := #13#10;
-                MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
-              finally
-                fs.Free;
-              end;
-            end
-            else
-            begin
+      if Length(Pieces) > 0 then
+      begin
+        for i := low(Pieces) to high(Pieces) do
+          if Pieces[i].IsFichier then
+          begin
+            fs := TFileStream.Create(Pieces[i].Valeur, fmOpenRead or fmShareDenyWrite);
+            try
               httpHeader := '-----------------------------' + UTF8Encode(idRequete) + #13#10;
-              httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + UTF8Encode(Pieces[i].Nom) + '"'#13#10;
+              httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + UTF8Encode(Pieces[i].Nom) + '"; filename="' + UTF8Encode
+                (ExtractFileName(Pieces[i].Valeur)) + '"'#13#10;
+              httpHeader := httpHeader + 'Content-Type: application/octet-stream'#13#10;
+              httpHeader := httpHeader + 'Content-Length: ' + UTF8Encode(IntToStr(fs.Size)) + #13#10;
               httpHeader := httpHeader + #13#10;
-              httpHeader := httpHeader + UTF8Encode(Pieces[i].Valeur) + #13#10;
               MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
+              MemoryStream.CopyFrom(fs, fs.Size);
+              httpHeader := #13#10;
+              MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
+            finally
+              fs.Free;
             end;
+          end
+          else
+          begin
+            httpHeader := '-----------------------------' + UTF8Encode(idRequete) + #13#10;
+            httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + UTF8Encode(Pieces[i].Nom) + '"'#13#10;
+            httpHeader := httpHeader + #13#10;
+            httpHeader := httpHeader + UTF8Encode(Pieces[i].Valeur) + #13#10;
+            MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
+          end;
 
-          httpHeader := '-----------------------------' + UTF8Encode(idRequete) + '--'#13#10;
-          MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
+        httpHeader := '-----------------------------' + UTF8Encode(idRequete) + '--'#13#10;
+        MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
 
-          FHttpCli.ContentTypePost := 'multipart/form-data; charset=UTF-8; boundary=---------------------------' + idRequete;
-        end;
+        FHttpCli.ContentTypePost := 'multipart/form-data; charset=UTF-8; boundary=---------------------------' + idRequete;
+      end;
 
-        MemoryStream.Position := 0;
+      MemoryStream.Position := 0;
 
+      if ShowProgress then
+      begin
         FWaiting := TWaiting.Create('Chargement des données...', 1, @FUserCancel, False);
         // pour forcer la fenêtre à afficher des choses dès son apparition
         FWaiting.ShowProgression(URL, FHttpCli.RcvdCount, FHttpCli.ContentLength);
+      end;
+      try
         if Length(Pieces) > 0 then
           FHttpCli.Post
         else
           FHttpCli.Get;
-
-        Result := FHttpCli.StatusCode;
-        // à remplacer pas la valeur du header 'filename' ou equivalent
-        DocName := FHttpCli.ContentType;
-      finally
-        MemoryStream.Free;
-        Free;
+      except
+        on E: EHttpException do
+        else
+          raise ;
       end;
-  end;
+
+      Result := FHttpCli.StatusCode;
+      // à remplacer pas la valeur du header 'filename' ou equivalent
+      for i := 0 to Pred(FHttpCli.RcvdHeader.Count) do
+        if SameText('filename: ', Copy(FHttpCli.RcvdHeader[i], 1, 10)) then
+        begin
+          DocName := Copy(FHttpCli.RcvdHeader[i], 11, MaxInt);
+          Break;
+        end;
+    finally
+      MemoryStream.Free;
+      Free;
+    end;
+end;
 
 end.

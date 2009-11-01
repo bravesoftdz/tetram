@@ -26,14 +26,16 @@ object frmChoixDetailSerie: TfrmChoixDetailSerie
     ParentBackground = False
     ParentColor = False
     TabOrder = 1
-    ExplicitLeft = -114
-    ExplicitTop = 220
+    ExplicitTop = 221
+    ExplicitWidth = 387
     inherited btnOK: TButton
       Left = 224
       Visible = False
+      ExplicitLeft = 224
     end
     inherited btnAnnuler: TButton
       Left = 304
+      ExplicitLeft = 304
     end
   end
   object CheckBox1: TCheckBox

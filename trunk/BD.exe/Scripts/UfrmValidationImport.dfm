@@ -47,7 +47,7 @@ object frmValidationImport: TfrmValidationImport
     Top = 0
     Width = 520
     Height = 505
-    ActivePage = TabSheet3
+    ActivePage = TabSheet1
     Style = tsFlatButtons
     TabOrder = 1
     object TabSheet1: TTabSheet

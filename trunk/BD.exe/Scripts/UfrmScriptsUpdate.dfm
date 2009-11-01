@@ -1,6 +1,6 @@
 object frmScriptsUpdate: TfrmScriptsUpdate
-  Left = 0
-  Top = 0
+  Left = 177
+  Top = 233
   BorderIcons = [biSystemMenu, biMaximize]
   Caption = 'Mise '#224' jour des scripts'
   ClientHeight = 498
@@ -12,7 +12,7 @@ object frmScriptsUpdate: TfrmScriptsUpdate
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
-  Position = poMainFormCenter
+  Position = poDesigned
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
@@ -105,6 +105,7 @@ object frmScriptsUpdate: TfrmScriptsUpdate
     Anchors = [akLeft, akTop, akRight, akBottom]
     CheckImageKind = ckLightTick
     Header.AutoSizeIndex = 0
+    Header.DefaultHeight = 17
     Header.Font.Charset = DEFAULT_CHARSET
     Header.Font.Color = clWindowText
     Header.Font.Height = -11

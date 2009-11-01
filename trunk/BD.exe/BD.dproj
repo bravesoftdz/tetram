@@ -2,7 +2,7 @@
 		<PropertyGroup>
 			<ProjectGuid>{022E3FB6-83D5-4439-8F05-C27BDD308694}</ProjectGuid>
 			<MainSource>BD.dpr</MainSource>
-			<Config Condition="'$(Config)'==''">Debug DCU</Config>
+			<Config Condition="'$(Config)'==''">Débogage</Config>
 			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
 			<ProjectVersion>12.0</ProjectVersion>
 		</PropertyGroup>
@@ -32,6 +32,7 @@
 			<Base>true</Base>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Base)'!=''">
+			<DCC_Define>FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT;PCRE_LINKONREQUEST;$(DCC_Define)</DCC_Define>
 			<BRCC_CompilerToUse>rc</BRCC_CompilerToUse>
 			<DCC_UNIT_PLATFORM>false</DCC_UNIT_PLATFORM>
 			<DCC_DependencyCheckOutputName>..\..\bin\BD.exe</DCC_DependencyCheckOutputName>
@@ -40,7 +41,7 @@
 			<DCC_ExeOutput>..\..\bin</DCC_ExeOutput>
 			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;$(DCC_UnitAlias)</DCC_UnitAlias>
 			<DCC_SYMBOL_PLATFORM>false</DCC_SYMBOL_PLATFORM>
-			<DCC_Define>FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT;PCRE_LINKONREQUEST;$(DCC_Define)</DCC_Define>
+			<BRCC_Defines>FB2;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT;PCRE_LINKONREQUEST;$(BRCC_Defines)</BRCC_Defines>
 			<DCC_Platform>x86</DCC_Platform>
 			<DCC_K>false</DCC_K>
 			<DCC_F>false</DCC_F>
@@ -412,7 +413,7 @@
 						<VersionInfo Name="MajorVer">2</VersionInfo>
 						<VersionInfo Name="MinorVer">2</VersionInfo>
 						<VersionInfo Name="Release">1</VersionInfo>
-						<VersionInfo Name="Build">1</VersionInfo>
+						<VersionInfo Name="Build">53</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -424,7 +425,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">2.2.1.1</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">2.2.1.53</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2009</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks"/>
