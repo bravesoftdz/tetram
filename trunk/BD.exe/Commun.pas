@@ -1,4 +1,4 @@
-ï»¿unit Commun;
+unit Commun;
 
 interface
 
@@ -190,7 +190,7 @@ var
   s, CleanCode: string;
   l: integer;
 begin
-  CleanCode := Copy(ClearISBN(Code), 1, 13); // une fois nettoyÃ©, le code ne peut contenir que 13 caractÃ¨res
+  CleanCode := Copy(ClearISBN(Code), 1, 13); // une fois nettoyé, le code ne peut contenir que 13 caractères
   s := CleanCode;
   if Length(s) > 10 then s := Copy(CleanCode, 4, 10); // ISBN13 = 3 premiers car de l'isbn13 + '-' + ISBN
   if Length(s) < 10 then Exit;
@@ -290,8 +290,8 @@ end;
 function FormatTitreAlbum(Simple, AvecSerie: Boolean; const Titre, Serie: string; Tome, TomeDebut, TomeFin: Integer; Integrale, HorsSerie: Boolean): string;
 const
   resTome: array[False..True] of string = ('T. ', 'Tome ');
-  resHS: array[False..True] of string = ('HS', 'Hors-sÃ©rie');
-  resIntegrale: array[False..True] of string = ('INT.', 'IntÃ©grale');
+  resHS: array[False..True] of string = ('HS', 'Hors-série');
+  resIntegrale: array[False..True] of string = ('INT.', 'Intégrale');
 var
   sSerie, sAlbum, s2, sTome: string;
 begin
@@ -309,7 +309,7 @@ begin
   if Integrale then
   begin
     s2 := NonZero(IntToStr(TomeDebut));
-    AjoutString(s2, NonZero(IntToStr(TomeFin)), ' Ã  ');
+    AjoutString(s2, NonZero(IntToStr(TomeFin)), ' à ');
     AjoutString(sTome, resIntegrale[sAlbum = ''], ' - ', '', TrimRight(' ' + NonZero(IntToStr(Tome))));
     AjoutString(sTome, s2, ' ', '[', ']');
   end
