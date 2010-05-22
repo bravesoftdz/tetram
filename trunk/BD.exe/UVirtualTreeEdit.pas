@@ -9,7 +9,7 @@ type
   TJvComboEdit = class(JvToolEdit.TJvComboEdit)
 
     type TJvPopupVirtualTree = class(TJvPopupWindow)
-    private
+    strict private
       FTreeView: TVirtualStringTree;
       FClickedPosition: TPoint;
       procedure TreeViewMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -25,7 +25,7 @@ type
       property Value: Variant read GetValue write SetValue;
     end;
 
-  private
+  strict private
     type TCrackWinControl = class(TWinControl);
   var
     FInternalCurrentValue: TGUID;

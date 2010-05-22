@@ -2,9 +2,7 @@ unit UfrmPublier;
 
 interface
 
-uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, ComCtrls, ExtCtrls, UframBoutons, UBdtForms;
+uses Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ComCtrls, ExtCtrls, UframBoutons, UBdtForms;
 
 type
   TfrmPublier = class(TBdtForm)
@@ -34,9 +32,7 @@ implementation
 
 {$R *.dfm}
 
-uses
-  UNet, Divers, Updates, DIMime, DIMimeStreams, UIB, UIBLib, UdmPrinc, Commun, DateUtils,
-  Procedures, CommonConst, VarUtils, StrUtils;
+uses UNet, Divers, Updates, DIMime, DIMimeStreams, UIB, UIBLib, UdmPrinc, Commun, DateUtils, Procedures, CommonConst, VarUtils, StrUtils;
 
 type
   TSynchroSpecial = (tsNone, tsImages);
@@ -51,20 +47,16 @@ type
   end;
 
 const
-  TablesSynchro: array[1..13] of RInfoTable = (
-    (TableName: 'PERSONNES'; ID: 'id_personne'; UpperFields: 'nompersonne'),
-    (TableName: 'EDITEURS'; ID: 'id_editeur'; UpperFields: 'nomediteur'),
-    (TableName: 'COLLECTIONS'; ID: 'id_collection'; UpperFields: 'nomcollection'),
-    (TableName: 'SERIES'; ID: 'id_serie'; SkipFields: 'etat=1.0.0.1@reliure=1.0.0.1@typeedition=1.0.0.1@orientation=1.0.0.1@formatedition=1.0.0.1@senslecture=1.0.0.1@vo=1.0.0.1@couleur=1.0.0.1@notation'; UpperFields: 'titreserie@sujetserie@remarquesserie'),
-    (TableName: 'ALBUMS'; ID: 'id_album'; SkipFields: 'notation'; UpperFields: 'titrealbum@sujetalbum@remarquesalbum'),
-    (TableName: 'EDITIONS'; ID: 'id_edition'),
-    (TableName: 'AUTEURS'; ID: 'id_auteur'),
-    (TableName: 'GENRES'; ID: 'id_genre'; UpperFields: 'genre'),
-    (TableName: 'GENRESERIES'; ID: 'id_genreseries'),
-    (TableName: 'LISTES'; ID: 'id_liste'),
-    (TableName: 'ALBUMS_MANQUANTS'; UpperFields: 'titreserie'; ProcedureStockee: 'ALBUMS_MANQUANTS(1, 1, NULL)'),
-    (TableName: 'PREVISIONS_SORTIES'; UpperFields: 'titreserie'; ProcedureStockee: 'PREVISIONS_SORTIES(1, NULL)'),
-    (TableName: 'COUVERTURES'; ID: 'id_couverture'; TypeSynchro: tsImages; SkipFields: 'stockagecouverture@imagecouverture@fichiercouverture'));
+  TablesSynchro: array [1 .. 13] of RInfoTable = ((TableName: 'PERSONNES'; ID: 'id_personne'; UpperFields: 'nompersonne'), (TableName: 'EDITEURS';
+      ID: 'id_editeur'; UpperFields: 'nomediteur'), (TableName: 'COLLECTIONS'; ID: 'id_collection'; UpperFields: 'nomcollection'),
+    (TableName: 'SERIES'; ID: 'id_serie'; SkipFields:
+        'etat=1.0.0.1@reliure=1.0.0.1@typeedition=1.0.0.1@orientation=1.0.0.1@formatedition=1.0.0.1@senslecture=1.0.0.1@vo=1.0.0.1@couleur=1.0.0.1@notation';
+      UpperFields: 'titreserie@sujetserie@remarquesserie'), (TableName: 'ALBUMS'; ID: 'id_album'; SkipFields: 'notation';
+      UpperFields: 'titrealbum@sujetalbum@remarquesalbum'), (TableName: 'EDITIONS'; ID: 'id_edition'), (TableName: 'AUTEURS'; ID: 'id_auteur'),
+    (TableName: 'GENRES'; ID: 'id_genre'; UpperFields: 'genre'), (TableName: 'GENRESERIES'; ID: 'id_genreseries'), (TableName: 'LISTES';
+      ID: 'id_liste'), (TableName: 'ALBUMS_MANQUANTS'; UpperFields: 'titreserie'; ProcedureStockee: 'ALBUMS_MANQUANTS(1, 1, NULL)'),
+    (TableName: 'PREVISIONS_SORTIES'; UpperFields: 'titreserie'; ProcedureStockee: 'PREVISIONS_SORTIES(1, NULL)'), (TableName: 'COUVERTURES';
+      ID: 'id_couverture'; TypeSynchro: tsImages; SkipFields: 'stockagecouverture@imagecouverture@fichiercouverture'));
 
 procedure TfrmPublier.Button1Click(Sender: TObject);
 const
@@ -82,40 +74,40 @@ var
   URL: string;
   MaxBodySize: Integer;
 
-  function GetCode(Index: Integer): string;
+  function GetCode(index: Integer): string;
   begin
-    Result := slReponse[Index];
+    Result := slReponse[index];
     if Pos(':', Result) > 0 then
       Result := Copy(Result, 1, Pos(':', Result) - 1);
   end;
 
-  function GetLabel(var Index: Integer): string;
+  function GetLabel(var index: Integer): string;
   var
     Code, Ligne: string;
   begin
-    Code := GetCode(Index);
-    Ligne := slReponse[Index];
+    Code := GetCode(index);
+    Ligne := slReponse[index];
     Result := Copy(Ligne, Length(Code) + 3, Length(Ligne));
-    Inc(Index);
-    while (slReponse.Count > Index) and (GetCode(Index) = '') do
+    Inc(index);
+    while (slReponse.Count > index) and (GetCode(index) = '') do
     begin
-      Ligne := slReponse[Index];
+      Ligne := slReponse[index];
       Result := Result + #13#10 + Copy(Ligne, Length(Code) + 3, Length(Ligne));
-      Inc(Index);
+      Inc(index);
     end;
-    Dec(Index);
+    Dec(index);
   end;
 
-  function IsError(Index: Integer): Boolean;
+  function IsError(index: Integer): Boolean;
   begin
-    Result := GetCode(Index) = 'ERROR';
+    Result := GetCode(index) = 'ERROR';
   end;
 
-  procedure Decoupe(Index: Integer; out s1, s2: string);
+  procedure Decoupe(index: Integer; out s1, s2: string);
   var
     s: string;
   begin
-    s := GetLabel(Index);
+    s := GetLabel(index);
     s1 := Copy(s, 1, Pos('=', s) - 1);
     s2 := Copy(s, Pos('=', s) + 1, MaxInt);
   end;
@@ -127,10 +119,11 @@ var
   begin
     Reponse.Size := 0;
     if LoadStreamURL(URL, Param, Reponse, False) <> 200 then
-      raise Exception.Create('Impossible d''accéder au site:'#13#10'- vérifiez le paramétrage de l''adresse'#13#10'- Assurez-vous que le modèle est bien chargé sur le site');
+      raise Exception.Create(
+        'Impossible d''accéder au site:'#13#10'- vérifiez le paramétrage de l''adresse'#13#10'- Assurez-vous que le modèle est bien chargé sur le site');
     Reponse.Position := 0;
     slReponse.LoadFromStream(Reponse);
-    memo1.Lines.Text := Reponse.DataString;
+    Memo1.Lines.Text := Reponse.DataString;
     l := 0;
     s := GetLabel(l);
     Inc(l);
@@ -186,7 +179,8 @@ var
 
     i := 5;
     if IsError(4) then
-      raise Exception.Create('Impossible de se connecter à la base de données MySQL:'#13#10'- vérifier le paramétrage de la base de données'#13#10'- Assurez-vous que le modèle est bien chargé sur le site après avoir regénéré le site'#13#10#13#10 + GetLabel(i));
+      raise Exception.Create(
+        'Impossible de se connecter à la base de données MySQL:'#13#10'- vérifier le paramétrage de la base de données'#13#10'- Assurez-vous que le modèle est bien chargé sur le site après avoir regénéré le site'#13#10#13#10 + GetLabel(i));
     Decoupe(4, s1, s2);
     if s1 <> 'mysql_version' then
       raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
@@ -211,18 +205,19 @@ var
       while c^ <> #0 do
       begin
         case c^ of
-          ' ', '0'..'9', 'a'..'z', 'A'..'Z': Result := Result + c^;
+          ' ', '0' .. '9', 'a' .. 'z', 'A' .. 'Z': Result := Result + c^;
           else
             Result := Result + '&#' + IntToStr(Ord(c^)) + ';';
-        end;
+          end;
         Inc(c);
       end;
     end;
   end;
 
-  procedure SendOption(const cle, valeur: string);
+  procedure SendOption(const cle, Valeur: string);
   begin
-    SendData(2, '<data><table>options</table><primarykey>cle</primarykey><records><record><cle>' + CleanHTTP(cle) + '</cle><valeur>' + CleanHTTP(valeur) + '</valeur></record></records></data>');
+    SendData(2, '<data><table>options</table><primarykey>cle</primarykey><records><record><cle>' + CleanHTTP(cle) + '</cle><valeur>' + CleanHTTP
+        (Valeur) + '</valeur></record></records></data>');
   end;
 
   function GetOption(const cle: string): string;
@@ -334,8 +329,8 @@ var
     enteteXML, bodyXML, recordXML, champ, s: string;
     contenuChamp: WideString;
     i, l: Integer;
-    //    ms: TMemoryStream;
-    //    ss: TStringStream;
+    // ms: TMemoryStream;
+    // ss: TStringStream;
     listFields, listUpperFields: TList;
   begin
     listFields := TList.Create;
@@ -357,7 +352,7 @@ var
             l := l + Length(champ) + 2;
             if db_version >= Copy(s, l, PosEx('@', s, l) - l) then
               listFields.Add(Pointer(i));
-            Continue; // ce n'est pas grave si on ne fait pas le test du champ à upper: si on le passer c'est qu'il ne l'est pas
+            Continue; // ce n'est pas grave si on ne fait pas le test du champ à upper: si on l'a passé c'est qu'il ne l'est pas
           end;
           if Pos('@' + champ + '@', s) = 0 then
             listFields.Add(Pointer(i));
@@ -389,38 +384,41 @@ var
               case Fields.FieldType[i] of
                 uftDate: contenuChamp := DateToStr(Fields.AsDate[i], SQLSettings);
                 uftTimestamp: contenuChamp := DateToStr(Fields.AsDateTime[i], SQLSettings) + ' ' + TimeToStr(Fields.AsDateTime[i], SQLSettings);
-                //            uftBlob:
-                //              begin
-                //                ms := TMemoryStream.Create;
-                //                ss := TStringStream.Create('');
-                //                try
-                //                  Fields.ReadBlob(i, ms);
-                //                  ms.Position := 0;
-                //                  MimeEncodeStream(ms, ss);
-                //                  champ := ss.DataString;
-                //                finally
-                //                  ms.Free;
-                //                  ss.Free;
-                //                end;
-                //              end;
+                // uftBlob:
+                // begin
+                // ms := TMemoryStream.Create;
+                // ss := TStringStream.Create('');
+                // try
+                // Fields.ReadBlob(i, ms);
+                // ms.Position := 0;
+                // MimeEncodeStream(ms, ss);
+                // champ := ss.DataString;
+                // finally
+                // ms.Free;
+                // ss.Free;
+                // end;
+                // end;
                 uftNumeric: contenuChamp := StringReplace(Fields.AsString[i], DecimalSeparator, '.', []);
                 else
                   contenuChamp := Trim(Fields.AsString[i]);
-              end;
-              //          if Fields.FieldType[i] <> uftBlob then
+                end;
+              // if Fields.FieldType[i] <> uftBlob then
 
-              if contenuChamp = '' then
-              begin
-                AjoutString(recordXML, Format('<%s null="T" />', [champ]), '');
-                if listUpperFields.IndexOf(Pointer(i)) <> -1 then
-                  AjoutString(recordXML, Format('<%s null="T" />', ['upper' + champ]), '');
-              end
-              else
-              begin
-                AjoutString(recordXML, CleanHTTP(contenuChamp), '', Format('<%s%s>', [champ, IIf(Fields.FieldType[i] = uftBlob, {' type="B"'} '', '')]), Format('</%s>', [champ]));
-                if listUpperFields.IndexOf(Pointer(i)) <> -1 then
-                  AjoutString(recordXML, CleanHTTP(UpperCase(SansAccents(contenuChamp))), '', Format('<%s%s>', ['upper' + champ, IIf(Fields.FieldType[i] = uftBlob, {' type="B"'} '', '')]), Format('</%s>', ['upper' + champ]));
-              end;
+            end;
+
+            if contenuChamp = '' then
+            begin
+              AjoutString(recordXML, Format('<%s null="T" />', [champ]), '');
+              if listUpperFields.IndexOf(Pointer(i)) <> -1 then
+                AjoutString(recordXML, Format('<%s null="T" />', ['upper' + champ]), '');
+            end
+            else
+            begin
+              AjoutString(recordXML, CleanHTTP(contenuChamp), '', Format('<%s%s>', [champ, IIf(Fields.FieldType[i] = uftBlob,
+                    { ' type="B"' } '', '')]), Format('</%s>', [champ]));
+              if listUpperFields.IndexOf(Pointer(i)) <> -1 then
+                AjoutString(recordXML, CleanHTTP(UpperCase(SansAccents(contenuChamp))), '', Format
+                    ('<%s%s>', ['upper' + champ, IIf(Fields.FieldType[i] = uftBlob, { ' type="B"' } '', '')]), Format('</%s>', ['upper' + champ]));
             end;
           end;
           AjoutString(bodyXML, recordXML, '', '<record' + IIf(isDelete, ' action="D"', '') + '>', '</record>');
@@ -496,7 +494,8 @@ var
 
       if InfoTable.ID <> '' then
       begin
-        SQL.Text := 'select ID as ' + InfoTable.ID + ' from suppressions where tablename = :table and dm_suppressions >= :UpgradeFromDate order by dm_suppressions';
+        SQL.Text := 'select ID as ' + InfoTable.ID +
+          ' from suppressions where tablename = :table and dm_suppressions >= :UpgradeFromDate order by dm_suppressions';
         Prepare(True);
         Params.AsString[0] := Copy(InfoTable.TableName, 1, Params.SQLLen[0]);
         Params.AsDate[1] := Trunc(UpgradeFromDate);
@@ -534,7 +533,8 @@ var
         l := 0;
         if GetLabel(l) = 'file not found' then
         begin
-          ms := GetCouvertureStream(False, StringToGUIDDef(Fields.ByNameAsString[InfoTable.ID], GUID_NULL), 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing);
+          ms := GetCouvertureStream(False, StringToGUIDDef(Fields.ByNameAsString[InfoTable.ID], GUID_NULL), 400, 500,
+            TGlobalVar.Utilisateur.Options.AntiAliasing);
           if Assigned(ms) then
           begin
             es := TStringStream.Create('');
@@ -582,7 +582,7 @@ begin
   try
     SetLength(Param, ParamLengthMin);
     Param[0].Nom := 'auth_key';
-    Param[0].Valeur := TGlobalVar.Utilisateur.Options.SiteWeb.Cle;
+    Param[0].Valeur := TGlobalVar.Utilisateur.Options.SiteWeb.cle;
     Param[1].Nom := 'isExe';
     Param[1].Valeur := '';
 
@@ -605,7 +605,7 @@ begin
         FetchBlobs := True;
 
         rc := 0;
-        for i := Low(TablesSynchro) to High(TablesSynchro) do
+        for i := low(TablesSynchro) to high(TablesSynchro) do
           with TablesSynchro[i] do
             if ((version_mini = '') or (db_version >= version_mini)) and ((version_maxi = '') or (db_version < version_maxi)) then
               case TypeSynchro of
@@ -614,7 +614,7 @@ begin
                     Inc(rc, CompteUpdates(TablesSynchro[i]) * 2); // la synchro des images est faite en 2 fois : les données puis les fichiers
                 else
                   Inc(rc, CompteUpdates(TablesSynchro[i]));
-              end;
+                end;
 
         if rc = 0 then
           ShowMessage('Rien à publier')
@@ -625,7 +625,7 @@ begin
           ProgressBar1.Position := 0;
           ProgressBar1.Max := 1;
 
-          for i := Low(TablesSynchro) to High(TablesSynchro) do
+          for i := low(TablesSynchro) to high(TablesSynchro) do
             with TablesSynchro[i] do
               if ((version_mini = '') or (db_version >= version_mini)) and ((version_maxi = '') or (db_version < version_maxi)) then
               begin
@@ -633,11 +633,11 @@ begin
                 StartTimeTable := Now;
                 case TypeSynchro of
                   tsNone:
-                  begin
-                    if RadioButton3.Checked or (ProcedureStockee <> '') then
-                      SendData(1, 'TRUNCATE TABLE /*DB_PREFIX*/' + LowerCase(TableName), False);
-                    SendDonnees(TablesSynchro[i]);
-                  end;
+                    begin
+                      if RadioButton3.Checked or (ProcedureStockee <> '') then
+                        SendData(1, 'TRUNCATE TABLE /*DB_PREFIX*/' + LowerCase(TableName), False);
+                      SendDonnees(TablesSynchro[i]);
+                    end;
                   tsImages:
                     if CheckBox2.Checked then
                     begin
@@ -682,4 +682,3 @@ begin
 end;
 
 end.
-

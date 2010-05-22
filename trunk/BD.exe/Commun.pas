@@ -37,7 +37,7 @@ type
   end;
 
   THourGlass = class(TInterfacedObject, IHourGlass)
-  private
+  strict private
     FOldCursor: TCursor;
   public
     constructor Create;

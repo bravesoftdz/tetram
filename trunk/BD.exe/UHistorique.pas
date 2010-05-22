@@ -14,7 +14,7 @@ type
   TConsultCallback = procedure(Data: Pointer);
 
   TConsult = class
-  private
+  strict private
     FDescription: string;
     procedure SetDescription(const Value: string);
   public
@@ -41,7 +41,7 @@ type
   THistoriqueChange = procedure(Sender: TObject; LastAction: TConsult) of object;
 
   THistory = class
-  private
+  strict private
     FListConsultation: TObjectList;
     FCurrentConsultation: Integer;
     FLockCount: Integer;
@@ -358,7 +358,7 @@ end;
 
 procedure THistory.Next;
 begin
-  if LongBool(CountConsultation) and (FCurrentConsultation < CountConsultation - 1) then
+  if (CountConsultation > 0) and (FCurrentConsultation < CountConsultation - 1) then
   begin
     Inc(FCurrentConsultation);
     Refresh;

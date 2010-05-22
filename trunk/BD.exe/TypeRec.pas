@@ -13,8 +13,8 @@ type
 
   TBasePointeur = class(TObject)
   private
-    class var FPreparedQuery: TUIBQuery;
     class var cs: TCriticalSection;
+    class var FPreparedQuery: TUIBQuery;
     class procedure GetFieldIndices; virtual;
     class function GetFieldIndex(const Name: string): Integer;
   protected
@@ -124,7 +124,7 @@ type
   end;
 
   TAlbum = class(TBasePointeur)
-  private
+  strict private
     class var IndexID_Album: Integer;
     class var IndexTome: Integer;
     class var IndexTomeDebut: Integer;
@@ -141,6 +141,7 @@ type
     class var IndexAchat: Integer;
     class var IndexComplet: Integer;
     class var IndexNotation: Integer;
+  private
     class procedure GetFieldIndices; override;
   public
     Tome: Integer;

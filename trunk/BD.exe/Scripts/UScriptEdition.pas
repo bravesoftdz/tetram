@@ -7,7 +7,7 @@ uses
 
 type
   TScriptEdition = class(TScript)
-  private
+  strict private
     FTabSheet: TTabSheet;
     FEditor: TSynEdit;
     FSB: TStatusBar;
@@ -204,7 +204,7 @@ var
 begin
   info := InfoScript(Index);
   if Assigned(info) then
-    Result := info.FEditor
+    Result := info.Editor
   else
     Result := nil;
 end;
@@ -215,7 +215,7 @@ var
 begin
   info := InfoScriptByScriptName(Script);
   if Assigned(info) then
-    Result := info.FEditor
+    Result := info.Editor
   else
     Result := nil;
 end;

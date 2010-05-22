@@ -29,7 +29,7 @@ type
   end;
 
   TWaiting = class(TInterfacedObject, IWaiting)
-  private
+  strict private
     FTimer: TTimer;
 
     FCaption, FMessage: string;
@@ -55,7 +55,7 @@ type
   end;
 
   TModeEditing = class(TInterfacedObject, IModeEditing)
-  private
+  strict private
     FOldMode: TModeConsult;
   public
     constructor Create;

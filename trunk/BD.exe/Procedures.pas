@@ -41,7 +41,7 @@ type
   end;
 
   TLockWindow = class(TInterfacedObject, ILockWindow)
-  private
+  strict private
     FLocked: Boolean;
   public
     constructor Create(Form: TWinControl);
@@ -53,7 +53,7 @@ type
   end;
 
   TInformation = class(TInterfacedObject, IInformation)
-  private
+  strict private
     FInfo: TForm;
     FLabel: TLabel;
     procedure SetupDialog;

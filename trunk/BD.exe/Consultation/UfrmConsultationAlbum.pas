@@ -143,8 +143,7 @@ type
     procedure vstSerieDblClick(Sender: TObject);
     procedure N7Click(Sender: TObject);
     procedure vstSerieAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
-  private
-    { Déclarations privées }
+  strict private
     CurrentCouverture: Integer;
     FAlbum: TAlbumComplet;
     FCurrentEdition: TEditionComplete;
@@ -239,7 +238,7 @@ end;
 
 procedure TfrmConsultationAlbum.Imprimer2Click(Sender: TObject);
 begin
-  ImpressionCouvertureAlbum(ID_Album, TCouverture(FCurrentEdition.Couvertures[CurrentCouverture]).ID, TComponent(Sender).Tag = 1);
+  ImpressionCouvertureAlbum(ID_Album, FCurrentEdition.Couvertures[CurrentCouverture].ID, TComponent(Sender).Tag = 1);
 end;
 
 procedure TfrmConsultationAlbum.ListeEmpruntsDblClick(Sender: TObject);
@@ -249,7 +248,7 @@ end;
 
 procedure TfrmConsultationAlbum.CouvertureDblClick(Sender: TObject);
 begin
-  Historique.AddWaiting(fcCouverture, ID_Album, TCouverture(FCurrentEdition.Couvertures[CurrentCouverture]).ID);
+  Historique.AddWaiting(fcCouverture, ID_Album, FCurrentEdition.Couvertures[CurrentCouverture].ID);
 end;
 
 procedure TfrmConsultationAlbum.VDTButton4Click(Sender: TObject);
@@ -312,7 +311,7 @@ begin
     CurrentCouverture := Num;
     Couverture.Picture := nil;
     try
-      ms := GetCouvertureStream(False, TCouverture(FCurrentEdition.Couvertures[Num]).ID, Couverture.Height, Couverture.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(False, FCurrentEdition.Couvertures[Num].ID, Couverture.Height, Couverture.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
       if Assigned(ms) then try
         jpg := TJPEGImage.Create;
         try
@@ -391,8 +390,8 @@ type
 function TEmpruntCompare.Compare(const Left, Right: TEmprunt): Integer;
 begin
   case FSortColumn of
-    0: Result := CompareDate(TEmprunt(Left).Date, TEmprunt(Right).Date);
-    1: Result := CompareText(TEmprunt(Left).Emprunteur.Nom, TEmprunt(Right).Emprunteur.Nom);
+    0: Result := CompareDate(Left.Date, Right.Date);
+    1: Result := CompareText(Left.Emprunteur.Nom, Right.Emprunteur.Nom);
     else
       Result := 0;
   end;
@@ -490,7 +489,7 @@ begin
     end;
   finally
     CurrentCouverture := 0;
-    VDTButton3.Visible := Assigned(FCurrentEdition) and (FCurrentEdition.Couvertures.Count > 1);
+    VDTButton3.Visible := (FCurrentEdition <> nil) and (FCurrentEdition.Couvertures.Count > 1);
     VDTButton4.Visible := VDTButton3.Visible;
   end;
 end;

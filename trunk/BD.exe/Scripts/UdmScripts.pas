@@ -22,7 +22,7 @@ type
     procedure PSScriptDebugger1Breakpoint(Sender: TObject; const FileName: AnsiString; Position, Row, Col: Cardinal);
     procedure PSScriptDebugger1LineInfo(Sender: TObject; const FileName: AnsiString; Position, Row, Col: Cardinal);
     procedure PSScriptDebugger1Idle(Sender: TObject);
-  private
+  strict private
     FActiveLine, FRunToCursor, FErrorLine: Cardinal;
     FActiveFile, FRunToCursorFile, FErrorFile: AnsiString;
     FScriptList: TScriptList;

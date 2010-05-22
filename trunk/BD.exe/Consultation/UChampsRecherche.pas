@@ -116,7 +116,7 @@ begin
       begin
         Table := _ChampsRecherche[iChamp].NomTable;
         Qry.Close;
-        Qry.SQL.Text := 'select first 0 * from ' + string(Table);
+        Qry.SQL.Text := 'select first 0 * from ' + Table;
         Qry.Open;
 
         while iChamp <= High(_ChampsRecherche) do

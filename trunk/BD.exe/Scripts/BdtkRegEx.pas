@@ -9,6 +9,7 @@ type
   TBdtkRegEx = class
   private
     FRegEx: TJclRegEx;
+  strict private
     FLastFoundPos: Integer;
     FSearchString: string;
   public

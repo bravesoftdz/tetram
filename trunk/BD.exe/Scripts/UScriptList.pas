@@ -28,7 +28,7 @@ type
   TScriptClass = class of TScript;
 
   TScript = class
-  private
+  strict private
     FCode: TStringList;
     FOptions: TObjectList<TOption>;
     FFileName: string;

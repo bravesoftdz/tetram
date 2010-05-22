@@ -1700,6 +1700,7 @@ object frmEditAlbum: TfrmEditAlbum
       ButtonFillMode = fmShaded
       CheckImageKind = ckDarkCheck
       Header.AutoSizeIndex = 0
+      Header.DefaultHeight = 17
       Header.Font.Charset = DEFAULT_CHARSET
       Header.Font.Color = clWindowText
       Header.Font.Height = -11
@@ -1723,7 +1724,7 @@ object frmEditAlbum: TfrmEditAlbum
       Columns = <
         item
           Position = 1
-          Width = 449
+          Width = 453
         end
         item
           Position = 0
@@ -1990,7 +1991,7 @@ object frmEditAlbum: TfrmEditAlbum
   object ImageList1: TImageList
     Left = 344
     Bitmap = {
-      494C010101000300040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101010003000C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

@@ -45,7 +45,7 @@ type
   TOnCompareNodeString = procedure(Sender: TBaseVirtualTree; Node: PVirtualNode; const Text: string; var Concorde: Boolean) of object;
 
   TVirtualStringTree = class(VirtualTreeBdtk.TVirtualStringTree)
-  private
+  strict private
     FMemorizedIndexNode: Boolean;
     FIndexNode: Cardinal;
 

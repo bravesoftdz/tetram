@@ -2,10 +2,8 @@ unit UfrmConsultationAuteur;
 
 interface
 
-uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls, ProceduresBDtk,
-  VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, jpeg, Procedures, ShellAPI, VirtualTree, LoadComplet, UBdtForms,
-  StrUtils;
+uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls, ProceduresBDtk,
+  VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, jpeg, Procedures, ShellAPI, VirtualTree, LoadComplet, UBdtForms, StrUtils;
 
 type
   TfrmConsultationAuteur = class(TBdtForm, IImpressionApercu, IFicheEditable)
@@ -42,13 +40,12 @@ type
     procedure vstSeriesInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure vstSeriesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure vstSeriesInitChildren(Sender: TBaseVirtualTree; Node: PVirtualNode; var ChildCount: Cardinal);
-    procedure vstSeriesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+    procedure vstSeriesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+      TextType: TVSTTextType);
     procedure FicheApercuExecute(Sender: TObject);
     procedure FicheModifierExecute(Sender: TObject);
-    procedure vstSeriesAfterItemPaint(Sender: TBaseVirtualTree;
-      TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
-  private
-    { Déclarations privées }
+    procedure vstSeriesAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
+  strict private
     FAuteur: TAuteurComplet;
     procedure ImpressionExecute(Sender: TObject);
     procedure ApercuExecute(Sender: TObject);
@@ -69,11 +66,11 @@ implementation
 
 {$R *.DFM}
 
-uses Commun, TypeRec, Impression, DateUtils, UHistorique,
-  Proc_Gestions, UfrmFond;
+uses Commun, TypeRec, Impression, DateUtils, UHistorique, Proc_Gestions, UfrmFond;
 
 type
   PNodeInfo = ^RNodeInfo;
+
   RNodeInfo = record
     Serie: TSerieComplete;
     Album: TAlbum;
@@ -82,7 +79,8 @@ type
 
 procedure TfrmConsultationAuteur.lvScenaristesDblClick(Sender: TObject);
 begin
-  if Assigned(TListView(Sender).Selected) then Historique.AddWaiting(fcRecherche, TAuteur(TListView(Sender).Selected.Data).Personne.ID, 0);
+  if Assigned(TListView(Sender).Selected) then
+    Historique.AddWaiting(fcRecherche, TAuteur(TListView(Sender).Selected.Data).Personne.ID, 0);
 end;
 
 procedure TfrmConsultationAuteur.FormCreate(Sender: TObject);
@@ -109,9 +107,12 @@ begin
 end;
 
 procedure TfrmConsultationAuteur.vstSeriesAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
+var
+  NodeInfo: PNodeInfo;
 begin
-  if vstSeries.GetNodeLevel(Node) > 0 then
-    frmFond.DessineNote(TargetCanvas, ItemRect, TAlbum(vstSeries.GetNodeBasePointer(Node)).Notation);
+  NodeInfo := Sender.GetNodeData(Node);
+  if NodeInfo.Album <> nil then
+    frmFond.DessineNote(TargetCanvas, ItemRect, NodeInfo.Album.Notation);
 end;
 
 procedure TfrmConsultationAuteur.vstSeriesDblClick(Sender: TObject);
@@ -119,9 +120,12 @@ var
   NodeInfo: PNodeInfo;
 begin
   NodeInfo := vstSeries.GetNodeData(vstSeries.GetFirstSelected);
-  if Assigned(NodeInfo) then begin
-    if Assigned(NodeInfo.Album) then Historique.AddWaiting(fcAlbum, NodeInfo.Album.ID);
-    if Assigned(NodeInfo.ParaBD) then Historique.AddWaiting(fcParaBD, NodeInfo.ParaBD.ID);
+  if Assigned(NodeInfo) then
+  begin
+    if Assigned(NodeInfo.Album) then
+      Historique.AddWaiting(fcAlbum, NodeInfo.Album.ID);
+    if Assigned(NodeInfo.ParaBD) then
+      Historique.AddWaiting(fcParaBD, NodeInfo.ParaBD.ID);
   end;
 end;
 
@@ -171,12 +175,14 @@ begin
 
   edNom.Caption := FormatTitre(FAuteur.NomAuteur);
   Caption := 'Fiche d''auteur - ' + FAuteur.ChaineAffichage;
-  if FAuteur.SiteWeb <> '' then begin
+  if FAuteur.SiteWeb <> '' then
+  begin
     edNom.Font.Color := clBlue;
     edNom.Font.Style := edNom.Font.Style + [fsUnderline];
     edNom.Cursor := crHandPoint;
   end
-  else begin
+  else
+  begin
     edNom.Font.Color := clWindowText;
     edNom.Font.Style := edNom.Font.Style - [fsUnderline];
     edNom.Cursor := crDefault;
@@ -186,31 +192,32 @@ begin
   vstSeries.RootNodeCount := FAuteur.Series.Count;
 end;
 
-procedure TfrmConsultationAuteur.vstSeriesInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+procedure TfrmConsultationAuteur.vstSeriesInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode;
+  var InitialStates: TVirtualNodeInitStates);
 var
   NodeInfo, ParentNodeInfo: PNodeInfo;
 begin
   NodeInfo := Sender.GetNodeData(Node);
-  if Sender.GetNodeLevel(Node) = 0 then begin
-    NodeInfo.Serie := TSerieComplete(FAuteur.Series[Node.Index]);
-    NodeInfo.Album := nil;
-    NodeInfo.ParaBD := nil;
+  NodeInfo.Album := nil;
+  NodeInfo.ParaBD := nil;
+  if Sender.GetNodeLevel(Node) = 0 then
+  begin
+    NodeInfo.Serie := TSerieComplete(FAuteur.Series[Node.index]);
     if (NodeInfo.Serie.Albums.Count + NodeInfo.Serie.ParaBD.Count) > 0 then
       Include(InitialStates, ivsHasChildren)
     else
       Exclude(InitialStates, ivsHasChildren);
   end
-  else begin
+  else
+  begin
     ParentNodeInfo := Sender.GetNodeData(ParentNode);
 
     NodeInfo.Serie := nil;
-    NodeInfo.Album := nil;
-    NodeInfo.ParaBD := nil;
 
-    if Integer(Node.Index) < ParentNodeInfo.Serie.Albums.Count then
-      NodeInfo.Album := TAlbum(ParentNodeInfo.Serie.Albums[Node.Index])
+    if Integer(Node.index) < ParentNodeInfo.Serie.Albums.Count then
+      NodeInfo.Album := TAlbum(ParentNodeInfo.Serie.Albums[Node.index])
     else
-      NodeInfo.ParaBD := TParaBD(ParentNodeInfo.Serie.ParaBD[Integer(Node.Index) - ParentNodeInfo.Serie.Albums.Count]);
+      NodeInfo.ParaBD := TParaBD(ParentNodeInfo.Serie.ParaBD[Integer(Node.index) - ParentNodeInfo.Serie.Albums.Count]);
   end;
 end;
 
@@ -219,30 +226,39 @@ var
   NodeInfo: PNodeInfo;
 begin
   NodeInfo := Sender.GetNodeData(Node);
-  if Sender.GetNodeLevel(Node) = 0 then begin
+  if Sender.GetNodeLevel(Node) = 0 then
+  begin
     ChildCount := NodeInfo.Serie.Albums.Count + NodeInfo.Serie.ParaBD.Count;
   end;
 end;
 
-procedure TfrmConsultationAuteur.vstSeriesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
+procedure TfrmConsultationAuteur.vstSeriesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
+  var CellText: string);
 var
   NodeInfo: PNodeInfo;
 begin
   CellText := '';
-  if TextType = ttNormal then begin
+  if TextType = ttNormal then
+  begin
     NodeInfo := Sender.GetNodeData(Node);
-    if Assigned(NodeInfo.Serie) then begin
+    if Assigned(NodeInfo.Serie) then
+    begin
       CellText := FormatTitre(NodeInfo.Serie.Titre);
-      if CellText = '' then CellText := '<Sans série>';
+      if CellText = '' then
+        CellText := '<Sans série>';
     end
-    else begin
-      if Assigned(NodeInfo.Album) then CellText := NodeInfo.Album.ChaineAffichage;
-      if Assigned(NodeInfo.ParaBD) then CellText := NodeInfo.ParaBD.ChaineAffichage;
+    else
+    begin
+      if Assigned(NodeInfo.Album) then
+        CellText := NodeInfo.Album.ChaineAffichage;
+      if Assigned(NodeInfo.ParaBD) then
+        CellText := NodeInfo.ParaBD.ChaineAffichage;
     end;
   end;
 end;
 
-procedure TfrmConsultationAuteur.vstSeriesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+procedure TfrmConsultationAuteur.vstSeriesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+  TextType: TVSTTextType);
 begin
   if Sender.GetNodeLevel(Node) = 0 then
     TargetCanvas.Font.Style := TargetCanvas.Font.Style + [fsBold]
@@ -271,4 +287,3 @@ begin
 end;
 
 end.
-

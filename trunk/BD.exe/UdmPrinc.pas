@@ -19,12 +19,10 @@ type
     procedure ApplicationEvents1Message(var Msg: tagMSG; var Handled: Boolean);
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
-  private
-    { Déclarations privées }
+  strict private
     FUILock: TCriticalSection;
     procedure MakeJumpList;
   public
-    { Déclarations publiques }
     function CheckVersions(Affiche_act: TAffiche_act; Force: Boolean = True): Boolean;
     function CheckVersion(Force: Boolean): Boolean;
   end;

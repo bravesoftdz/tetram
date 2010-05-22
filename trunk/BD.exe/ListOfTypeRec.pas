@@ -8,7 +8,8 @@ uses
 type
   TMyObjectList<T: class> = class(TObjectList<T>)
     constructor Create(AOwnsObjects: Boolean = True);
-    procedure Move(oldIndex, newIndex: Integer);
+    // 21/11/2009: n'est plus utile avec D2010 ?
+    // procedure Move(oldIndex, newIndex: Integer);
   end;
 
 implementation
@@ -28,21 +29,21 @@ begin
     ), AOwnsObjects);
 end;
 
-procedure TMyObjectList<T>.Move(oldIndex, newIndex: Integer);
-var
-  savOwnsObject: Boolean;
-  A: T;
-begin
-  savOwnsObject := OwnsObjects;
-  try
-    OwnsObjects := False; // sinon l'affectation des nouvelles places détruira les objets remplacés
-
-    A := Items[oldIndex];
-    Items[oldIndex] := Items[newIndex];
-    Items[newIndex] := A;
-  finally
-    OwnsObjects := savOwnsObject;
-  end;
-end;
+//procedure TMyObjectList<T>.Move(oldIndex, newIndex: Integer);
+//var
+//  savOwnsObject: Boolean;
+//  A: T;
+//begin
+//  savOwnsObject := OwnsObjects;
+//  try
+//    OwnsObjects := False; // sinon l'affectation des nouvelles places détruira les objets remplacés
+//
+//    A := Items[oldIndex];
+//    Items[oldIndex] := Items[newIndex];
+//    Items[newIndex] := A;
+//  finally
+//    OwnsObjects := savOwnsObject;
+//  end;
+//end;
 
 end.

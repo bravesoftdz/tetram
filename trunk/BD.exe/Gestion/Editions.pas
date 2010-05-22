@@ -177,7 +177,7 @@ begin
     Result := GUID_NULL;
 end;
 
-function CreationLambdaChampSimple(const TypeInfo, Table, Generateur, Champ, ChampRef, ValeurDefaut: string): TGUID;
+function CreationLambdaChampSimple(const TypeInfo, Table, Champ, ChampRef, ValeurDefaut: string): TGUID;
 var
   Chaine: string;
   hg: IHourGlass;
@@ -223,13 +223,12 @@ begin
     end;
 end;
 
-function EditionLambdaChampSimple(const TypeInfo, Table, Generateur, Champ, ChampRef: string; const Reference: TGUID): Boolean;
+function EditionLambdaChampSimple(const TypeInfo, Table, Champ, ChampRef: string; const Reference: TGUID): Boolean;
 var
   Chaine: string;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  Chaine := '';
   Result := False;
   with TUIBQuery.Create(nil) do
     try
@@ -569,7 +568,7 @@ end;
 
 function EditionCollection(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 begin
-  Result := EditionCollection(ID, GUID_NULL, Creation);
+  Result := EditionCollection(ID, GUID_NULL, Creation, Valeur);
 end;
 
 function EditionCollection(const ID: TGUID; const ID_Editeur: TGUID; Creation: Boolean; const Valeur: string): Boolean;
@@ -602,12 +601,12 @@ end;
 
 function CreationGenre(const Genre: string; Source: TObjetComplet = nil): TGUID;
 begin
-  Result := CreationLambdaChampSimple(Textes.rsGenre, 'GENRES', 'AI_ID_Genre', 'Genre', 'ID_Genre', Genre);
+  Result := CreationLambdaChampSimple(Textes.rsGenre, 'GENRES', 'Genre', 'ID_Genre', Genre);
 end;
 
 function EditionGenre(const ID: TGUID): Boolean;
 begin
-  Result := EditionLambdaChampSimple(Textes.rsGenre, 'GENRES', 'AI_ID_Genre', 'Genre', 'ID_Genre', ID);
+  Result := EditionLambdaChampSimple(Textes.rsGenre, 'GENRES', 'Genre', 'ID_Genre', ID);
 end;
 
 function DelGenre(const ID: TGUID): Boolean;
@@ -618,7 +617,7 @@ end;
 
 function CreationAuteur(const Auteur: string): TGUID;
 begin
-  Result := CreationLambdaChampSimple(Textes.rsAuteur, 'PERSONNES', 'AI_ID_Personne', 'NomPersonne', 'ID_Personne', Auteur);
+  Result := CreationLambdaChampSimple(Textes.rsAuteur, 'PERSONNES', 'NomPersonne', 'ID_Personne', Auteur);
 end;
 
 function CreationAuteur2(const Auteur: string): TGUID;

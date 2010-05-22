@@ -156,10 +156,8 @@ type
     procedure vtEditEditeursVTEditChange(Sender: TObject);
     procedure vtEditCollectionsVTEditChange(Sender: TObject);
     procedure btnScriptClick(Sender: TObject);
-  private
-    { Déclarations privées }
+  strict private
     FAlbum: TAlbumComplet;
-    FAlbumImport: TAlbumComplet;
     FCurrentEditionComplete: TEditionComplete;
     FEditeurCollectionSelected: array of Boolean;
     FEditionChanging: Boolean;
@@ -174,6 +172,8 @@ type
     procedure AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage); overload;
     function GetID_Album: TGUID;
     function GetCreation: Boolean;
+  private
+    FAlbumImport: TAlbumComplet;
     procedure SaveToObject;
   public
     { Déclarations publiques }
@@ -1290,7 +1290,7 @@ begin
     end;
     pt := vstImages.ClientToScreen(Point(X, Y));
     pmChoixCategorie.PopupComponent := TComponent(Node.Index);
-    pmChoixCategorie.Tag := TCouverture(FCurrentEditionComplete.Couvertures[Node.Index]).Categorie;
+    pmChoixCategorie.Tag := FCurrentEditionComplete.Couvertures[Node.Index].Categorie;
     pmChoixCategorie.Popup(pt.X, pt.Y);
   end;
 end;

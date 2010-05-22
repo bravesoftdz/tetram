@@ -260,7 +260,6 @@ begin
   FDest := TfrmScripts.Create(frmFond);
   try
     FDest.dmScripts.AlbumToImport := Data;
-    Result := True;
 
     // AlbumToUpdate pourrait être différent dans le finally
     isUpdate := FDest.dmScripts.AlbumToUpdate;

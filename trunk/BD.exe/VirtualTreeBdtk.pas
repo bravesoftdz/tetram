@@ -7,7 +7,7 @@ uses
 
 type
   TVirtualStringTree = class(VirtualTrees.TVirtualStringTree)
-  private
+  strict private
     FSynchroBackground: Boolean;
     FLinkControls: TControlList;
 

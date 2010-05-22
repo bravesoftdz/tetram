@@ -7,7 +7,7 @@ uses
 
 type
   TSynDebugPlugin = class(TSynEditPlugin)
-  private
+  strict private
     FDebug: TDebugInfos;
   protected
     procedure AfterPaint(ACanvas: TCanvas; const AClip: TRect; FirstLine, LastLine: Integer); override;

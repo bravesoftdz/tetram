@@ -25,7 +25,7 @@ type
       destructor Destroy; override;
     end;
 
-  private
+  strict private
     FList: TObjectList<TCategorie>;
     FTitre: string;
     function GetCategorie(const name: string): TCategorie; overload;
