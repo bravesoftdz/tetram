@@ -579,7 +579,7 @@
 						<VersionInfo Name="MajorVer">2</VersionInfo>
 						<VersionInfo Name="MinorVer">2</VersionInfo>
 						<VersionInfo Name="Release">1</VersionInfo>
-						<VersionInfo Name="Build">118</VersionInfo>
+						<VersionInfo Name="Build">120</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -591,7 +591,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">2.2.1.118</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">2.2.1.120</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2009</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks"/>

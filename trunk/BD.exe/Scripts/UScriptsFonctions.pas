@@ -28,8 +28,7 @@ type
   strict private
     FList: TObjectList<TCategorie>;
     FTitre: string;
-    function GetCategorie(const name: string): TCategorie; overload;
-    function GetCategorie(const name: string; Force: Boolean): TCategorie; overload;
+    function GetCategorie(const name: string): TCategorie;
   public
     constructor Create;
     destructor Destroy; override;
@@ -179,11 +178,6 @@ begin
 end;
 
 function TScriptChoix.GetCategorie(const name: string): TCategorie;
-begin
-  Result := GetCategorie(name, True);
-end;
-
-function TScriptChoix.GetCategorie(const name: string; Force: Boolean): TCategorie;
 begin
   for Result in FList do
     if SameText(Result.FNom, name) then
@@ -643,8 +637,6 @@ begin
     P1 := 1;
     while (P1 <= 12) and (not SameText(RFC822_Months[P1], aMonthLabel)) do
       Inc(P1);
-    if P1 > 12 then
-      Exit;
 
     GetLocaleFormatSettings(GetSystemDefaultLCID, aFormatSettings);
     aFormatSettings.DateSeparator := '/';
