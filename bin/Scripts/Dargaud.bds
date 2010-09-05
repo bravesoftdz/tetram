@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>1</ScriptVersion>
+    <ScriptVersion>1.1</ScriptVersion>
     <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Sun, 16 Aug 2009 20:17:50 +0200</LastUpdate>
+    <LastUpdate>Mon, 22 Mar 2010 18:54:24 +0100</LastUpdate>
   </Infos>
   <Options/>
   <Code>program Dargaud;
@@ -262,9 +262,13 @@ var
 begin
   entry := AlbumToImport.DefaultSearch;
   index := 0;
-  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie&apos;], entry, index) then Exit;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie&apos;, &apos;ID de l&apos;&apos;album&apos;], entry, index) then Exit;
 
-  id_album := RechercheParTitre(entry);
+  case index of
+    1: id_album := entry;
+    else
+      id_album := RechercheParTitre(entry);
+  end;
   if id_album &lt;&gt; &apos;&apos; then
     ParseAlbum(id_album);
 end.</Code>

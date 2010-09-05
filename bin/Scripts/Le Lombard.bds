@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>2</ScriptVersion>
+    <ScriptVersion>2.1</ScriptVersion>
     <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Sun, 27 Sep 2009 13:15:28 +0200</LastUpdate>
+    <LastUpdate>Fri, 16 Oct 2009 17:26:45 +0200</LastUpdate>
   </Infos>
   <Options/>
   <Code>program LeLombard;
@@ -48,7 +48,6 @@ var
   sl: TStringList;
 begin
   page := GetPage(CombineURL(urlSite, id_album), True);
-  writetofile(page, &apos;d:\search.txt&apos;);
 
   re := TBdtkRegEx.Create;
   try
