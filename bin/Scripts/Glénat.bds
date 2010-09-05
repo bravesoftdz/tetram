@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
 <Script>
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>1.1</ScriptVersion>
+    <ScriptVersion>1.2</ScriptVersion>
     <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Sun, 27 Sep 2009 11:46:17 +0200</LastUpdate>
+    <LastUpdate>Sun, 5 Sep 2010 10:37:49 +0200</LastUpdate>
   </Infos>
   <Options>
     <Option Label="Recherche Gl&#xE9;nat BD" Values="Oui|Non" Default="Oui"/>
@@ -28,7 +28,7 @@ const
    + &apos;&lt;/font&gt;&lt;/div&gt;(?s-:.*?)&lt;td(?:.*?)&gt;&lt;font(?:.*?)&gt;(?&lt;editeur&gt;.*?)&lt;/font&gt;(?s-:.*?)&lt;/td&gt;(?s-:.*?)&lt;/tr&gt;&apos;;
 
   regExMangaCouverture = &apos;&lt;div class=&quot;fiche_gauche&quot;&gt;(?s-:.*?)&lt;img src=&quot;(?&lt;couverture&gt;.*?)&quot;(?:.*?)/&gt;(?s-:.*?)&lt;div(?:.*?)&gt;(?s-:.*?)&lt;img(?:.*?)/&gt;(?s-:.*?)&lt;p(?:.*?)&gt;(?s-:.*?)&lt;br /&gt;(?&lt;edition&gt;.*?)&lt;/p&gt;(?s-:.*?)&lt;/div&gt;(?s-:.*?)&lt;/div&gt;&apos;;
-  regExMangaInfos = &apos;&lt;div class=&quot;fiche_droite&quot;&gt;((?s-).*?)&lt;/div&gt;&apos;;
+  regExMangaInfos = &apos;&lt;div class=&quot;fiche_droite&quot;&gt;((?s-).*?)&lt;div class=&quot;clearring&quot;&gt;&apos;;
   regExMangaSerie = &apos;&lt;h1(?:.*?)&gt;(?&lt;titre_serie&gt;.*?)(?:#(?&lt;tome&gt;\d+)|)*&lt;/h1&gt;&apos;;
   regExMangaTitre = &apos;&lt;h2(?:.*?)&gt;(?&lt;titre_album&gt;.*?)&lt;/h2&gt;&apos;;
   regExMangaDetail = &apos;&lt;p(?:.*?)&gt;(?&lt;data&gt;(?s-).*?)&lt;/p&gt;&apos;; // infos, puis r&#xE9;sum&#xE9;
@@ -127,12 +127,14 @@ begin
       AlbumToImport.Serie.Collection := ExtractRegEx(data, &apos;&lt;a(?:.*?)&gt;(?:Collection )?(.*?)&lt;/a&gt;&apos;);
       AlbumToImport.Edition.Collection := AlbumToImport.Serie.Collection;
       AlbumToImport.Edition.NombreDePages := StrToIntDef(ExtractRegEx(data, &apos;(\d+) pages&apos;), 0);
-      AlbumToImport.Edition.ISBN := ExtractRegEx(data, &apos;EAN/ISBN(?:[ |:]*)([\d|x|X]+)&apos;);
+      AlbumToImport.Edition.ISBN := CleanISBN(ExtractRegEx(data, &apos;ISBN(?:[ |:]*)([\d|x|X|-]+)&apos;));
+      if AlbumToImport.Edition.ISBN = &apos;&apos; then
+        AlbumToImport.Edition.ISBN := CleanISBN(ExtractRegEx(data, &apos;EAN(?:[ |:]*)([\d|x|X|-]+)&apos;));
       AlbumToImport.Edition.Prix := StrToFloatDef(ExtractRegEx(data, &apos;Prix(?:[ |:]*)([\d|.|,]+)&apos;), 0);
 
       with TStringList.Create do
         try
-          Split(ExtractRegEx(data, &apos;Paru en ([\w|\d| ]*)&apos;), &apos; &apos;);
+          Split(ExtractRegEx(data, &apos;Paru en ([\w|\d|&#xFB;|&#xE9;|&#xE8;|&#xEA;| ]*)&apos;), &apos; &apos;);
           if Count &gt; 0 then
             AlbumToImport.AnneeParution := StrToIntDef(Strings[Count - 1], 0);
           if Count &gt; 1 then
@@ -140,6 +142,9 @@ begin
         finally
           Free;
         end;
+
+      if ExtractRegEx(s, &apos;&lt;div id=&quot;Alerte&quot;&gt;((?s-).*?)&lt;/div&gt;&apos;) &lt;&gt; &apos;&apos; then
+        re.BeginSearch(s, &apos;&lt;div id=&quot;Alerte&quot;&gt;(?:(?s-).*?)&lt;/div&gt;[\r|\n|\t|\s]*&apos; + regExMangaDetail);
 
       if re.Next then
         AlbumToImport.Sujet.Text := HTMLText(re.GetCaptureByName(&apos;data&apos;));

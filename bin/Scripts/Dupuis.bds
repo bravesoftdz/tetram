@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
 <Script>
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>1.1</ScriptVersion>
+    <ScriptVersion>1.2</ScriptVersion>
     <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Sun, 27 Sep 2009 11:43:26 +0200</LastUpdate>
+    <LastUpdate>Sat, 29 May 2010 15:38:22 +0200</LastUpdate>
   </Infos>
   <Options/>
   <Code>program Dupuis;
@@ -78,6 +78,8 @@ begin
   AlbumToImport.Edition.Editeur.NomEditeur := &apos;Dupuis&apos;;
   AlbumToImport.Edition.Editeur.SiteWeb := &apos;http://www.dupuis.com&apos;;
   AlbumToImport.Edition.Collection := ExtractRegEx(page, regExAlbumCollection);
+  if Pos(&apos;TOUS PUBLIC&apos;, UpperCase(AlbumToImport.Edition.Collection)) &gt; 0 then
+    AlbumToImport.Edition.Collection := &apos;&apos;;
 
   Fiche := ExtractRegEx(page, regExAlbumFiche);
   AlbumToImport.Edition.ISBN := CleanISBN(ExtractRegEx(Fiche, regExAlbumISBN));
