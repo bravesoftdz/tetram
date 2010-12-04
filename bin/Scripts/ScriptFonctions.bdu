@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
 <Script>
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>1</ScriptVersion>
+    <ScriptVersion>2</ScriptVersion>
     <BDVersion>2.1.0.17</BDVersion>
-    <LastUpdate>Fri, 8 May 2009 12:05:32 +0200</LastUpdate>
+    <LastUpdate>Sat, 4 Dec 2010 15:48:53 +0100</LastUpdate>
   </Infos>
   <Options/>
   <Code>unit ScriptFonctions;
@@ -56,7 +56,7 @@ begin
     Result := 1;
     Exit;
   end;
-  if ChaineIn(Chaine, [&apos;février&apos;, &apos;fevrier&apos;, &apos;february&apos;, &apos;fev&apos;, &apos;fév&apos;, &apos;fevr&apos;, &apos;févr&apos;, &apos;feb&apos;, &apos;fev.&apos;, &apos;fév.&apos;, &apos;fevr.&apos;, &apos;févr.&apos;, &apos;feb.&apos;]) then begin
+  if ChaineIn(Chaine, [&apos;f&#xE9;vrier&apos;, &apos;fevrier&apos;, &apos;february&apos;, &apos;fev&apos;, &apos;f&#xE9;v&apos;, &apos;fevr&apos;, &apos;f&#xE9;vr&apos;, &apos;feb&apos;, &apos;fev.&apos;, &apos;f&#xE9;v.&apos;, &apos;fevr.&apos;, &apos;f&#xE9;vr.&apos;, &apos;feb.&apos;]) then begin
     Result := 2;
     Exit;
   end;
@@ -80,7 +80,7 @@ begin
     Result := 7;
     Exit;
   end;
-  if ChaineIn(Chaine, [&apos;août&apos;, &apos;aout&apos;, &apos;august&apos;, &apos;aug&apos;, &apos;aug.&apos;]) then begin
+  if ChaineIn(Chaine, [&apos;ao&#xFB;t&apos;, &apos;aout&apos;, &apos;august&apos;, &apos;aug&apos;, &apos;aug.&apos;]) then begin
     Result := 8;
     Exit;
   end;
@@ -96,7 +96,7 @@ begin
     Result := 11;
     Exit;
   end;
-  if ChaineIn(Chaine, [&apos;décembre&apos;, &apos;decembre&apos;, &apos;december&apos;, &apos;dec&apos;, &apos;déc&apos;, &apos;dec.&apos;, &apos;déc.&apos;]) then begin
+  if ChaineIn(Chaine, [&apos;d&#xE9;cembre&apos;, &apos;decembre&apos;, &apos;december&apos;, &apos;dec&apos;, &apos;d&#xE9;c&apos;, &apos;dec.&apos;, &apos;d&#xE9;c.&apos;]) then begin
     Result := 12;
     Exit;
   end;
@@ -111,6 +111,8 @@ var
 begin
   Titre := Trim(Titre);
   Result := Titre;
+  if Result = &apos;&apos; then Exit;
+  if Copy(Result, Length(Result), 1) = &apos;]&apos; then Exit;
   pEspace := Pos(&apos; &apos;, Titre);
   pApostrophe := Pos(&apos;&apos;&apos;&apos;, Titre);
   if (pApostrophe &gt; 0) and ((pEspace = 0) or (pApostrophe &lt; pEspace)) then pEspace := pApostrophe + 1; // + 1 pour prendre l&apos;apostrophe dans le mot
@@ -118,6 +120,29 @@ begin
   Mot := Copy(Titre, 1, pEspace - 1);
   if not ChaineIn(LowerCase(Mot), [&apos;l&apos;&apos;&apos;, &apos;un&apos;, &apos;une&apos;, &apos;des&apos;, &apos;le&apos;, &apos;la&apos;, &apos;les&apos;]) then Exit;
   Result := Trim(Copy(Titre, pEspace, Length(Titre))) + &apos; [&apos; + Mot + &apos;]&apos;;
+end;
+
+function PrepareTitre2(Titre: string): string;
+var
+  p: Integer;
+  Mot: string;
+begin
+  try
+    Titre := Trim(Titre);
+    Result := Titre;
+    if Result = &apos;&apos; then Exit;
+    if Copy(Result, Length(Result), 1) &lt;&gt; &apos;)&apos; then Exit;
+    p := Length(Result) - 1;
+    while (p &gt; 0) and (Result[p] &lt;&gt; &apos;(&apos;) do
+      p := p - 1;
+    if p = 0 then Exit;
+
+    Mot := Copy(Titre, p + 1, Length(Result) - p - 1);
+    if not ChaineIn(LowerCase(Mot), [&apos;l&apos;&apos;&apos;, &apos;un&apos;, &apos;une&apos;, &apos;des&apos;, &apos;le&apos;, &apos;la&apos;, &apos;les&apos;]) then Exit;
+    Result := Trim(Copy(Titre, 1, p - 1)) + &apos; [&apos; + Mot + &apos;]&apos;;
+  finally
+    Result := PrepareTitre(Result);
+  end;
 end;
 
 end.</Code>

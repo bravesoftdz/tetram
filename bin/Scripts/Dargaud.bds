@@ -1,31 +1,37 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
 <Script>
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>1.1</ScriptVersion>
+    <ScriptVersion>2</ScriptVersion>
     <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Mon, 22 Mar 2010 18:54:24 +0100</LastUpdate>
+    <LastUpdate>Sat, 4 Dec 2010 15:48:33 +0100</LastUpdate>
   </Infos>
-  <Options/>
+  <Options>
+    <Option Label="Miniatures dans les recherches" Values="Oui|Non" Default="Oui"/>
+  </Options>
   <Code>program Dargaud;
 
-uses ScriptFonctions;
+uses ScriptFonctions, DefaultRegEx;
 
 const
-  urlSearch = &apos;http://www.dargaud.com/front/recherche/default.aspx?mot=&apos;;
-  urlInfoAlbum = &apos;http://www.dargaud.com/front/albums/xml/album.aspx?id=&apos;; // + id_album
-  urlInfoAlbumPlanches = &apos;http://www.dargaud.com/front/albums/xml/planches.aspx?id=&apos;; // + id_album
-  urlInfoAlbumSerie = &apos;http://www.dargaud.com/front/albums/xml/album_serie.aspx?id=&apos;; // + id_album
+  urlSite = &apos;http://www.dargaud.com&apos;;
+  urlSearch = urlSite + &apos;/resultat-recherche.html&apos;;
 
+  urlInfoAlbumSerie = &apos;http://www.dargaud.com/front/albums/xml/album_serie.aspx?id=&apos;; // + id_album
   urlInfoSerie = &apos;http://www.dargaud.com/front/albums/series/xml/serie.aspx?id=&apos;; // + id_serie
   urlPageSerie = &apos;http://www.dargaud.com/front/albums/series/serie.aspx?id=&apos;; // + id_serie
 
-  regExResultAlbums = &apos;&lt;object id=&apos;&apos;header(?:.*?)classid=&apos;&apos;clsid:D27CDB6E-AE6D-11cf-96B8-444553540000(?:.*?)value=(?:.*?)titre=Albums(?:.*?)&lt;/object&gt;&lt;/td&gt;[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*&lt;td&gt;&amp;nbsp;&lt;/td&gt;&apos;;
-  regExResultSeries = &apos;&lt;object id=&apos;&apos;header(?:.*?)classid=&apos;&apos;clsid:D27CDB6E-AE6D-11cf-96B8-444553540000(?:.*?)value=(?:.*?)titre=S&#xE9;ries(?:.*?)&lt;/object&gt;&lt;/td&gt;[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*&lt;td&gt;&amp;nbsp;&lt;/td&gt;&apos;;
-  regExResult = &apos;&lt;td class=&quot;result&quot;&gt;&lt;span&gt;(?:.*?)&lt;/span&gt;(.*?)&lt;/td&gt;&apos;;
-  regExResultAlbumsTitre = &apos;&lt;a class=&quot;rechercheBold&quot; href=&quot;(?:.*?)&quot;&gt;(.*?)&lt;/a&gt;&apos;;
-  regExResultAlbumsDetails = &apos;&lt;br&gt;&amp;nbsp;&amp;nbsp;%s&amp;nbsp;: &lt;/span&gt;&lt;a class=&quot;recherche&quot; href=(?:.*?)&gt;(.*?)&lt;/a&gt;&apos;;
+  regExResultAlbums = &apos;&lt;div class=&quot;album&quot;(?:.*?)&gt;[\r|\n|\t|\s]*(&lt;div(?:&lt;div(?s-:.)*?&lt;/div&gt;[\r|\n|\t|\s]*|(?s-:.)*?)&lt;/div&gt;[\r|\n|\t|\s]*|(?s-:.)*?)&lt;/div&gt;&apos;;
+  regExResult = &apos;&lt;div id=&quot;liste-albums&quot;&gt;((?s-).*?)&lt;div id=&quot;footer&quot;&gt;&apos;;
+  regExResultAlbumsTitre = &apos;&lt;div class=&quot;album-titre&quot;&gt;[\r|\n|\t|\s]*&apos; + regExURL + &apos;[\r|\n|\t|\s]*&lt;/div&gt;&apos;;
+
+  regExInfosDiv = &apos;&lt;div %s=&quot;%s&quot;(?:.*?)&gt;[\r|\n|\t|\s]*(&lt;div(?:&lt;div(?s-:.)*?&lt;/div&gt;[\r|\n|\t|\s]*|(?s-:.)*?)&lt;/div&gt;[\r|\n|\t|\s]*|(?s-:.)*?)[\r|\n|\t|\s]*&lt;/div&gt;&apos;;
+  regExInfosSpan = &apos;&lt;span %s=&quot;%s&quot;(?:.*?)&gt;[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*&lt;/span&gt;&apos;;
+
+  regExAlbumInfos = &apos;&lt;div id=&quot;contenu-bloc-droite&quot;&gt;((?s-).*?)&lt;div id=&quot;footer&quot;&gt;&apos;;
+  regExAlbumDetails = &apos;&lt;li&gt;[\r|\n|\t|\s]*&lt;span class=&quot;fonction&quot;(?:.*?)&gt;%s(?s-:.)*?&lt;/span&gt;[\r|\n|\t|\s]*((?s-).*?)[\r|\n|\t|\s]*&lt;/li&gt;&apos;;
+
 
   regExSerieInfos = &apos;&lt;serie(?: id=&quot;(?&lt;id_serie&gt;\d*)&quot;| titre=&quot;(?&lt;titre_serie&gt;.*?)&quot;| texte=&quot;(?&lt;resume&gt;.*?)&quot;|.*?)*&gt;(?s-:.*?)&lt;/serie&gt;&apos;;
   // pcre refuse qu&apos;on utilise une seule expression (manifestement un bug)
@@ -35,63 +41,70 @@ const
   regExSerieAlbum = &apos;&lt;album(?: type=&quot;(?&lt;type&gt;.*?)&quot;| id=&quot;(?&lt;id_album&gt;\d*)&quot;| titre=&quot;(?&lt;titre_album&gt;.*?)&quot;| auteurs=&quot;(?&lt;auteurs&gt;.*?)&quot;| annee=&quot;(?&lt;annee&gt;\d*?)&quot;|.*?)*/&gt;&apos;;
 
   regExAlbumSerieInfos = &apos;&lt;album_serie(?: ser_id=&quot;(?&lt;id_serie&gt;\d*)&quot;| nbr_alb=&quot;(?&lt;nbalbums&gt;\d*)&quot;| ser_titre=&quot;(?&lt;titre_serie&gt;.*?)&quot;|.*?)*&gt;(?s-:.*?)&lt;/album_serie&gt;&apos;;
-  regExAlbumInfos = &apos;&lt;album(?: id=&quot;(?&lt;id_album&gt;\d*)&quot;| texte=&quot;(?&lt;resume&gt;.*?)&quot;| prix=&quot;(?&lt;prix&gt;.*?)&quot;| tome=&quot;(?:\D*?)(?&lt;tome&gt;\d*?)&quot;| pages=&quot;(?&lt;nbpages&gt;\d*)&quot;| isbn=&quot;(?&lt;isbn&gt;[\d|X]*)&quot;| titre=&quot;(?&lt;titre&gt;.*?)&quot;| date=&quot;(?&lt;parution&gt;.*?)&quot;|.*?)*&gt;(?s-:.*?)&lt;peoples&gt;(?&lt;auteurs&gt;.*?)&lt;/peoples&gt;(?s-:.*?)&lt;/album&gt;&apos;;
   regExAuteurInfos = &apos;&lt;people(?: type=&quot;(?&lt;metier&gt;.*?)&quot;| nom=&quot;(?&lt;nom&gt;.*?)&quot;|.*?)*/&gt;&apos;;
-  regExAlbumPlanche = &apos;&lt;media chemin=&quot;(.*?)&quot; /&gt;&apos;;
 
 procedure ParseAlbum(const id_album: string);
 var
-  page, metier, s: string;
-  re: TBdtkRegEx;
+  page, metier, nom, s, id_serie: string;
   sl: TStringList;
   p: Integer;
 begin
+  page := GetPage(CombineUrl(urlSite, id_album), True);
+
   with TBdtkRegEx.Create do
   try
     // album
-    page := GetPage(urlInfoAlbum + id_album, True);
-    if BeginSearch(page, regExAlbumInfos) and Next then begin
-      AlbumToImport.Titre := PrepareTitre(GetCaptureByName(&apos;titre&apos;));
-      AlbumToImport.Tome := StrToIntDef(GetCaptureByName(&apos;tome&apos;), 0);
+    s := ExtractRegEx(page, regExAlbumInfos);
 
-      sl := TStringList.Create;
-      try
-        sl.Split(GetCaptureByName(&apos;parution&apos;), &apos; &apos;);
-        if sl.Count &gt; 0 then
-          AlbumToImport.AnneeParution := StrToIntDef(sl[sl.Count - 1], 0);
-        if sl.Count &gt; 1 then
-          AlbumToImport.MoisParution := TraduitMois(sl[sl.Count - 2]);
-      finally
-        sl.Free;
+    AlbumToImport.Titre := PrepareTitre2(ExtractRegEx(s, Format(regExInfosDiv, [&apos;id&apos;, &apos;titre-album&apos;])));
+    AlbumToImport.Serie.Titre := PrepareTitre2(ExtractRegEx(s, Format(regExInfosDiv, [&apos;id&apos;, &apos;titre-serie&apos;])));
+    AlbumToImport.Tome := StrToIntDef(ExtractRegEx(s, Format(regExInfosSpan, [&apos;class&apos;, &apos;nb-tome&apos;])), 0);
+
+    s := ExtractRegEx(page, Format(regExInfosDiv, [&apos;id&apos;, &apos;contenu-a-propos&apos;]));
+
+    AlbumToImport.Sujet.Text := HTMLText(ExtractRegEx(s, Format(regExInfosDiv, [&apos;class&apos;, &apos;contenu&apos;])));
+    if BeginSearch(s, Format(regExInfosDiv, [&apos;class&apos;, &apos;auteur&apos;])) then
+      while Find(s) do
+      begin
+        metier := ExtractRegEx(s, Format(regExInfosSpan, [&apos;class&apos;, &apos;fonction&apos;]));
+        metier := Copy(metier, 1, Pos(&apos; &apos;, metier) - 1);
+
+        nom := ExtractRegExGroup(ExtractRegEx(s, Format(regExInfosSpan, [&apos;class&apos;, &apos;nom&apos;])), regExURL, &apos;texte&apos;);
+
+        if metier = &apos;dessinateur&apos; then
+          AlbumToImport.Dessinateurs.Add(MakeAuteur(nom, maDessinateur));
+        if metier = &apos;sc&#xE9;nariste&apos; then
+          AlbumToImport.Scenaristes.Add(MakeAuteur(nom, maScenariste));
+        if metier = &apos;coloriste&apos; then
+          AlbumToImport.Coloristes.Add(MakeAuteur(nom, maColoriste));
       end;
 
-      AlbumToImport.Sujet.Text := HTMLText(GetCaptureByName(&apos;resume&apos;));
+    s := ExtractRegEx(page, Format(regExInfosDiv, [&apos;id&apos;, &apos;contenu-fiche&apos;]));
 
-      re := TBdtkRegEx.Create;
-      try
-        if re.BeginSearch(GetCaptureByName(&apos;auteurs&apos;), regExAuteurInfos) then
-          while re.Next do
-          begin
-            metier := re.GetCaptureByName(&apos;metier&apos;);
-            if metier = &apos;des&apos; then
-              AlbumToImport.Dessinateurs.Add(MakeAuteur(re.GetCaptureByName(&apos;nom&apos;), maDessinateur));
-            if metier = &apos;sce&apos; then
-              AlbumToImport.Scenaristes.Add(MakeAuteur(re.GetCaptureByName(&apos;nom&apos;), maScenariste));
-            if metier = &apos;col&apos; then
-              AlbumToImport.Coloristes.Add(MakeAuteur(re.GetCaptureByName(&apos;nom&apos;), maColoriste));
-          end;
-      finally
-        re.Free;
-      end;
 
-      AlbumToImport.Edition.Editeur.NomEditeur := &apos;Dargaud&apos;;
-      AlbumToImport.Edition.Editeur.SiteWeb := &apos;http://www.dargaud.com&apos;;
-      AlbumToImport.Edition.ISBN := GetCaptureByName(&apos;isbn&apos;);
-      AlbumToImport.Edition.NombreDePages := StrToIntDef(GetCaptureByName(&apos;nbpages&apos;), 0);
-      sl := TStringList.Create;
-      try
-        sl.Split(GetCaptureByName(&apos;prix&apos;), &apos; &apos;);
+    sl := TStringList.Create;
+    try
+      sl.Split(ExtractRegEx(page, Format(regExAlbumDetails, [&apos;date de parution&apos;])), &apos; &apos;);
+      if sl.Count &gt; 0 then
+        AlbumToImport.AnneeParution := StrToIntDef(sl[sl.Count - 1], 0);
+      if sl.Count &gt; 1 then
+        AlbumToImport.MoisParution := TraduitMois(sl[sl.Count - 2]);
+    finally
+      sl.Free;
+    end;
+
+    AlbumToImport.Edition.Editeur.NomEditeur := &apos;Dargaud&apos;;
+    AlbumToImport.Edition.Editeur.SiteWeb := &apos;http://www.dargaud.com&apos;;
+    AlbumToImport.Edition.ISBN := ExtractRegEx(page, Format(regExAlbumDetails, [&apos;EAN&apos;]));
+    AlbumToImport.Edition.NombreDePages := StrToIntDef(ExtractRegEx(page, Format(regExAlbumDetails, [&apos;nombre de pages&apos;])), 0);
+    sl := TStringList.Create;
+    try
+      s := Trim(ExtractRegEx(page, Format(regExAlbumDetails, [&apos;prix&apos;])));
+      if Pos(&apos; &apos;, s) &gt; 0 then
+      begin
+        sl.Split(s, &apos; &apos;);
         p := sl.IndexOf(&apos;E&apos;);
+        if p = -1 then p := sl.IndexOf(&apos;&#x20AC;&apos;);
         if p &gt; 0 then
         begin
           s := &apos;&apos;;
@@ -103,155 +116,144 @@ begin
           end;
           AlbumToImport.Edition.Prix := StrToFloat(StringReplace(s, &apos;,&apos;, &apos;.&apos;, [rfReplaceAll]));
         end;
-      finally
-        sl.Free;
-      end;
+      end
+      else
+        AlbumToImport.Edition.Prix := StrToFloat(StringReplace(ExtractRegEx(s, regExNumeric), &apos;,&apos;, &apos;.&apos;, [rfReplaceAll]));
+
+    finally
+      sl.Free;
     end;
 
+    // couverture et planches
+    if BeginSearch(ExtractRegEx(page, Format(regExInfosDiv, [&apos;class&apos;, &apos;serie-couverture&apos;])), regExIMG) then
+      while Find(s) do
+      begin
+        s := Trim(s);
+        if Pos(&apos;couv&apos;, s) &gt; 0 then
+          AlbumToImport.Edition.AddImageFromURL(s, ctiCouverture)
+        else
+          AlbumToImport.Edition.AddImageFromURL(s, ctiPlanche);
+      end;
+
+    id_serie := &apos;&apos;;
+    if BeginSearch(ExtractRegEx(page, Format(regExInfosDiv, [&apos;id&apos;, &apos;chemin-fer&apos;])), regExURL) then
+      while Next do id_serie := GetCaptureByName(&apos;lien&apos;);
+
+    AlbumToImport.Serie.Editeur.NomEditeur := &apos;Dargaud&apos;;
+    AlbumToImport.Serie.Editeur.SiteWeb := &apos;http://www.dargaud.com&apos;;
+
     // lien album serie
-    page := GetPage(urlInfoAlbumSerie + id_album, True);
-    if BeginSearch(page, regExAlbumSerieInfos) and Next then begin
-      AlbumToImport.Serie.Titre := PrepareTitre(GetCaptureByName(&apos;titre_serie&apos;));
-      AlbumToImport.Serie.NbAlbums := StrToIntDef(GetCaptureByName(&apos;nbalbums&apos;), 0);
-      AlbumToImport.Serie.SiteWeb := urlPageSerie + GetCaptureByName(&apos;id_serie&apos;);
-      AlbumToImport.Serie.Editeur.NomEditeur := &apos;Dargaud&apos;;
-      AlbumToImport.Serie.Editeur.SiteWeb := &apos;http://www.dargaud.com&apos;;
+    if id_serie &lt;&gt; &apos;&apos; then
+    begin
+      AlbumToImport.Serie.SiteWeb := id_serie;
 
-      // s&#xE9;rie
-      page := GetPage(urlInfoSerie + GetCaptureByName(&apos;id_serie&apos;), True);
-      if BeginSearch(page, regExSerieInfos) and Next then begin
-        AlbumToImport.Serie.Titre := PrepareTitre(GetCaptureByName(&apos;titre_serie&apos;));
-        AlbumToImport.Serie.Sujet.Text := HTMLText(GetCaptureByName(&apos;resume&apos;));
-      end;
+      page := GetPage(id_serie, True);
 
-      re := TBdtkRegEx.Create;
-      try
-        if re.BeginSearch(ExtractRegEx(page, regExSerieAuteurs), regExAuteurInfos) then
-          while re.Next do
-          begin
-            metier := re.GetCaptureByName(&apos;metier&apos;);
-            if metier = &apos;des&apos; then
-              AlbumToImport.Serie.Dessinateurs.Add(MakeAuteur(re.GetCaptureByName(&apos;nom&apos;), maDessinateur));
-            if metier = &apos;sce&apos; then
-              AlbumToImport.Serie.Scenaristes.Add(MakeAuteur(re.GetCaptureByName(&apos;nom&apos;), maScenariste));
-            if metier = &apos;col&apos; then
-              AlbumToImport.Serie.Coloristes.Add(MakeAuteur(re.GetCaptureByName(&apos;nom&apos;), maColoriste));
-          end;
-      finally
-        re.Free;
-      end;
+      s := ExtractRegEx(page, regExAlbumInfos);
+
+      AlbumToImport.Serie.Titre := PrepareTitre2(ExtractRegEx(page, Format(regExInfosDiv, [&apos;id&apos;, &apos;titre-serie&apos;])));
+
+      s := ExtractRegEx(page, Format(regExInfosDiv, [&apos;id&apos;, &apos;contenu-a-propos&apos;]));
+
+      AlbumToImport.Serie.Sujet.Text := HTMLText(ExtractRegEx(s, Format(regExInfosDiv, [&apos;class&apos;, &apos;contenu&apos;])));
+      if BeginSearch(s, Format(regExInfosDiv, [&apos;class&apos;, &apos;auteur&apos;])) then
+        while Find(s) do
+        begin
+          metier := ExtractRegEx(s, Format(regExInfosSpan, [&apos;class&apos;, &apos;fonction&apos;]));
+          metier := Copy(metier, 1, Pos(&apos; &apos;, metier) - 1);
+
+          nom := ExtractRegExGroup(ExtractRegEx(s, Format(regExInfosSpan, [&apos;class&apos;, &apos;nom&apos;])), regExURL, &apos;texte&apos;);
+
+          if metier = &apos;dessinateur&apos; then
+            AlbumToImport.Serie.Dessinateurs.Add(MakeAuteur(nom, maDessinateur));
+          if metier = &apos;sc&#xE9;nariste&apos; then
+            AlbumToImport.Serie.Scenaristes.Add(MakeAuteur(nom, maScenariste));
+          if metier = &apos;coloriste&apos; then
+            AlbumToImport.Serie.Coloristes.Add(MakeAuteur(nom, maColoriste));
+        end;
+
+//      AlbumToImport.Serie.NbAlbums := StrToIntDef(GetCaptureByName(&apos;nbalbums&apos;), 0);
     end;
   finally
     Free;
   end;
 
-  // couverture et planches
-  page := GetPage(urlInfoAlbumPlanches + id_album, True);
-  re := TBdtkRegEx.Create;
-  try
-    p := 1;
-    if re.BeginSearch(page, regExAlbumPlanche) then
-      while re.Find(s) do
-      begin
-        s := CombineURL(urlInfoAlbum, s);
-        if p = 1 then
-          AlbumToImport.Edition.AddImageFromURL(s, ctiCouverture)
-        else
-          AlbumToImport.Edition.AddImageFromURL(s, ctiPlanche);
-        p := p + 1;
-      end;
-  finally
-    re.Free;
-  end;
-
   AlbumToImport.Import;
 end;
 
-function RechercheParSerie(const id_serie: string): string;
+function RechercheParTitre(const Cle, Titre: string): string;
 var
-  page: string;
-  id_album, titre_album, commentaire: string;
-  re: TBdtkRegEx;
+  Miniatures: Boolean;
+  s, sAlbum, thumb: string;
+  re, re2: TBdtkRegEx;
   c: TScriptChoix;
+  lien, titre_album, commentaire: string;
+  Pieces: array of RAttachement;
 begin
-  Result := &apos;&apos;;
+  Miniatures := GetOptionValue(&apos;Miniatures dans les recherches&apos;, &apos;Oui&apos;) = &apos;Oui&apos;;
 
-  page := GetPage(urlInfoSerie + id_serie, True);
+  Result := &apos;&apos;;
+  SetLength(Pieces, 8);
+  Pieces[0].Nom := &apos;serie&apos;;
+  Pieces[0].Valeur := &apos;Par s&#xE9;rie&apos;;
+  Pieces[0].isFichier := False;
+  Pieces[1].Nom := &apos;album&apos;;
+  Pieces[1].Valeur := &apos;Par album&apos;;
+  Pieces[1].isFichier := False;
+  Pieces[2].Nom := &apos;auteur&apos;;
+  Pieces[2].Valeur := &apos;Par auteur&apos;;
+  Pieces[2].isFichier := False;
+  Pieces[3].Nom := &apos;genre&apos;;
+  Pieces[3].Valeur := &apos;Par genre&apos;;
+  Pieces[3].isFichier := False;
+  Pieces[4].Nom := &apos;age&apos;;
+  Pieces[4].Valeur := &apos;Par &#xE2;ge&apos;;
+  Pieces[4].isFichier := False;
+  Pieces[5].Nom := &apos;cles&apos;;
+  Pieces[5].Valeur := &apos;Par mots cl&#xE9;s&apos;;
+  Pieces[5].isFichier := False;
+  Pieces[6].Nom := &apos;prix&apos;;
+  Pieces[6].Valeur := &apos;&apos;;
+  Pieces[6].isFichier := False;
+
+  Pieces[7].Nom := Cle;
+  Pieces[7].Valeur := Titre;
+  Pieces[7].isFichier := False;
+
+  s := PostPage(urlSearch, Pieces, True);
   c := TScriptChoix.Create;
   re := TBdtkRegEx.Create;
-  try
-    c.Titre := &apos;S&#xE9;rie &quot;&apos; + ExtractRegExGroup(page, regExSerieInfos, &apos;titre_serie&apos;) + &apos;&quot;&apos;;
-    if re.BeginSearch(ExtractRegEx(page, regExSerieAlbums), regExSerieAlbum) then
-      while re.Next do
-        if re.GetCaptureByName(&apos;type&apos;) = &apos;alb&apos; then begin
-          id_album := re.GetCaptureByName(&apos;id_album&apos;);
-          titre_album := re.GetCaptureByName(&apos;titre_album&apos;);
-          commentaire := &apos;&apos;;
-          AjoutString1(commentaire, re.GetCaptureByName(&apos;annee&apos;), #13#10, &apos;Ann&#xE9;e: &apos;, &apos;&apos;);
-          AjoutString1(commentaire, re.GetCaptureByName(&apos;auteurs&apos;), #13#10, &apos;Auteur(s): &apos;, &apos;&apos;);
-          c.AjoutChoix(&apos;Album&apos;, titre_album, commentaire, id_album);
-        end;
-
-    if c.ChoixCount &gt; 0 then
-      Result := c.Show
-    else
-      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourn&#xE9; de r&#xE9;sultat.&apos;);
-  finally
-    re.Free;
-    c.Free;
-  end;
-end;
-
-function RechercheParTitre(const Titre: string): string;
-var
-  s, sAlbum, sSerie: string;
-  re: TBdtkRegEx;
-  c: TScriptChoix;
-  id, titre_album, commentaire: string;
-  Added: Boolean;
-begin
-  Result := &apos;&apos;;
-  s := GetPage(urlSearch + Titre, True);
-  c := TScriptChoix.Create;
-  re := TBdtkRegEx.Create;
+  re2 := TBdtkRegEx.Create;
   try
     c.Titre := &apos;R&#xE9;sultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
-    Added := False;
-    if re.BeginSearch(ExtractRegEx(s, regExResultAlbums), regExResult) then
-      while re.Find(sAlbum) do begin
-        id := ExtractRegEx(sAlbum, &apos;album\.aspx\?id=(.*?)&quot;&apos;);
-        titre_album := ExtractRegEx(sAlbum, regExResultAlbumsTitre);
-        commentaire := &apos;&apos;;
-        AjoutString1(commentaire, ExtractRegEx(sAlbum, Format(regExResultAlbumsDetails, [&apos;S&#xE9;rie&apos;])), #13#10, &apos;S&#xE9;rie: &apos;, &apos;&apos;);
-        AjoutString1(commentaire, ExtractRegEx(sAlbum, Format(regExResultAlbumsDetails, [&apos;Dessin&apos;])), #13#10, &apos;Dessin: &apos;, &apos;&apos;);
-        AjoutString1(commentaire, ExtractRegEx(sAlbum, Format(regExResultAlbumsDetails, [&apos;Sc&#xE9;nario&apos;])), #13#10, &apos;Sc&#xE9;nario: &apos;, &apos;&apos;);
-        c.AjoutChoix(&apos;Album&apos;, titre_album, commentaire, &apos;A&apos; + id);
-        Added := True;
-      end;
-    if not Added then c.AjoutChoix(&apos;Album&apos;, &apos;Aucun&apos;, &apos;&apos;, &apos;&apos;);
+    if re.BeginSearch(ExtractRegEx(s, regExResult), regExResultAlbums) then
+      while re.Find(sAlbum) do
+        if re2.BeginSearch(sAlbum, regExResultAlbumsTitre) and re2.Match then
+        begin
+          lien := re2.GetCaptureByName(&apos;lien&apos;);
+          titre_album := re2.GetCaptureByName(&apos;texte&apos;);
 
-    Added := False;
-    if re.BeginSearch(ExtractRegEx(s, regExResultSeries), regExResult) then
-      while re.Find(sSerie) do begin
-        id := ExtractRegEx(sSerie, &apos;serie\.aspx\?id=(.*?)&quot;&apos;);
-        titre_album := ExtractRegEx(sSerie, regExResultAlbumsTitre);
-        c.AjoutChoix(&apos;S&#xE9;rie&apos;, titre_album, &apos;&apos;, &apos;S&apos; + id);
-        Added := True;
-      end;
-    if not Added then c.AjoutChoix(&apos;S&#xE9;rie&apos;, &apos;Aucune&apos;, &apos;&apos;, &apos;&apos;);
+          commentaire := &apos;&apos;;
+          AjoutString1(commentaire, ExtractRegEx(sAlbum, Format(regExInfosDiv, [&apos;class&apos;, &apos;album-serie&apos;])), #13#10, &apos;S&#xE9;rie: &apos;, &apos;&apos;);
+          AjoutString1(commentaire, ExtractRegEx(sAlbum, Format(regExInfosDiv, [&apos;class&apos;, &apos;album-tome&apos;])), #13#10, &apos;&apos;, &apos;&apos;);
 
+          if Miniatures then
+            thumb := Trim(ExtractRegEx(sAlbum, regExIMG))
+          else
+            thumb := &apos;&apos;;
+
+          if thumb &lt;&gt; &apos;&apos; then
+            c.AjoutChoixWithThumb(&apos;Album&apos;, titre_album, commentaire, lien, thumb)
+          else
+            c.AjoutChoix(&apos;Album&apos;, titre_album, commentaire, lien);
+        end;
     if c.ChoixCount &gt; 0 then
       Result := c.Show
     else
       ShowMessage(&apos;La recherche n&apos;&apos;a pas retourn&#xE9; de r&#xE9;sultat.&apos;);
-
-    if Result = &apos;&apos; then Exit;
-    if Result[1] = &apos;A&apos; then
-      Result := Copy(Result, 2, Length(Result))
-    else
-      Result := RechercheParSerie(Copy(Result, 2, Length(Result)));
   finally
     re.Free;
+    re2.Free;
     c.Free;
   end;
 end;
@@ -262,12 +264,14 @@ var
 begin
   entry := AlbumToImport.DefaultSearch;
   index := 0;
-  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie&apos;, &apos;ID de l&apos;&apos;album&apos;], entry, index) then Exit;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album&apos;, &apos;Titre de la s&#xE9;rie&apos;, &apos;Auteur&apos;, &apos;ID de l&apos;&apos;album&apos;], entry, index) then Exit;
 
   case index of
-    1: id_album := entry;
+    0: id_album := RechercheParTitre(&apos;album&apos;, entry);
+    1: id_album := RechercheParTitre(&apos;serie&apos;, entry);
+    2: id_album := RechercheParTitre(&apos;auteur&apos;, entry);
     else
-      id_album := RechercheParTitre(entry);
+      id_album := entry;
   end;
   if id_album &lt;&gt; &apos;&apos; then
     ParseAlbum(id_album);
