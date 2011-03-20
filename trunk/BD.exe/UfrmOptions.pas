@@ -27,7 +27,6 @@ type
     BtDef: TButton;
     BrowseDirectoryDlg1: TBrowseDirectoryDlg;
     Label9: TLabel;
-    ComboBox1: TComboBox;
     Edit1: TEditLabeled;
     ListView1: TVDTListView;
     TabSheet1: TTabSheet;
@@ -78,6 +77,7 @@ type
     Label14: TLabel;
     VDTButton1: TVDTButton;
     AfficherNotesListes: TCheckBox;
+    ComboBox1: TComboBox;
     procedure btnOKClick(Sender: TObject);
     procedure calculKeyPress(Sender: TObject; var Key: Char);
     procedure calculExit(Sender: TObject);

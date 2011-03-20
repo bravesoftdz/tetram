@@ -2,15 +2,14 @@ unit Updates;
 
 interface
 
-uses
-  Contnrs, Classes, UIB, Divers, Generics.Collections, Generics.Defaults;
+uses Contnrs, Classes, UIB, Divers, Generics.Collections, Generics.Defaults;
 
 type
   TUpdateFBCallback = procedure(Query: TUIBScript);
   TUpdateMySQLCallback = procedure(Script: TStrings);
 
   TBdtkUpdate = class
-    Version: TFileVersion;
+    Version: TVersionNumber;
   end;
 
   TBdtkUpdateComparer<T: TBdtkUpdate> = class(TComparer<T>)
@@ -29,13 +28,13 @@ var
   ListFBUpdates: TObjectList<TFBUpdate> = nil;
   ListMySQLUpdates: TObjectList<TMySQLUpdate> = nil;
 
-procedure RegisterFBUpdate(Version: string; ProcMAJ: TUpdateFBCallback);
-procedure RegisterMySQLUpdate(Version: string; ProcMAJ: TUpdateMySQLCallback);
+procedure RegisterFBUpdate(Version: TVersionNumber; ProcMAJ: TUpdateFBCallback);
+procedure RegisterMySQLUpdate(Version: TVersionNumber; ProcMAJ: TUpdateMySQLCallback);
 procedure LoadScript(const resName: string; Script: TStrings);
 
 implementation
 
-procedure RegisterFBUpdate(Version: string; ProcMAJ: TUpdateFBCallback);
+procedure RegisterFBUpdate(Version: TVersionNumber; ProcMAJ: TUpdateFBCallback);
 var
   Update: TFBUpdate;
   comp: IComparer<TFBUpdate>;
@@ -49,7 +48,7 @@ begin
   ListFBUpdates.Sort(comp);
 end;
 
-procedure RegisterMySQLUpdate(Version: string; ProcMAJ: TUpdateMySQLCallback);
+procedure RegisterMySQLUpdate(Version: TVersionNumber; ProcMAJ: TUpdateMySQLCallback);
 var
   Update: TMySQLUpdate;
   comp: IComparer<TMySQLUpdate>;
@@ -78,8 +77,7 @@ end;
 
 { TBdtkUpdate.TBdtkUpdateComparer<T> }
 
-function TBdtkUpdateComparer<T>.Compare(const Left, Right: T)
-  : Integer;
+function TBdtkUpdateComparer<T>.Compare(const Left, Right: T): Integer;
 begin
   Result := Left.Version - Right.Version;
 end;

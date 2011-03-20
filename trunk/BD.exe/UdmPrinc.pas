@@ -96,11 +96,11 @@ end;
 
 function TdmPrinc.CheckVersions(Affiche_act: TAffiche_act; Force: Boolean): Boolean;
 var
-  CurrentVersion: TFileVersion;
+  CurrentVersion: TVersionNumber;
 type
   TProcedure = procedure(Query: TUIBScript);
 
-  procedure ProcessUpdate(const Version: TFileVersion; ProcMAJ: TProcedure);
+  procedure ProcessUpdate(const Version: TVersionNumber; ProcMAJ: TProcedure);
   var
     Script: TUIBScript;
   begin
@@ -166,7 +166,8 @@ begin
     try
       Transaction := GetTransaction(UIBDataBase);
 
-      SQL.Text := 'SELECT VALEUR FROM OPTIONS WHERE Nom_option = ''Version''';
+      SQL.Text := 'SELECT VALEUR FROM OPTIONS WHERE Nom_option = ?';
+      Params.AsString[0] := 'Version';
       Open;
       if not Eof then
         CurrentVersion := Fields.AsString[0]
@@ -174,9 +175,10 @@ begin
       begin
         CurrentVersion := '0.0.0.0';
         try
-          SQL.Text := 'INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES (''Version'', ?)';
+          SQL.Text := 'INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES (?, ?)';
           Prepare(True);
-          Params.AsString[0] := Copy(CurrentVersion, 1, Params.SQLLen[0]);
+          Params.AsString[0] := 'Version';
+          Params.AsString[1] := Copy(CurrentVersion, 1, Params.SQLLen[0]);
           ExecSQL;
         except
           // Pour s'assurer qu'il y'a la ligne dans la table options
@@ -190,18 +192,18 @@ begin
 
   Msg := 'BDthèque ne peut pas utiliser cette base de données.'#13#10'Version de la base de données: ' + CurrentVersion;
 
-  if CurrentVersion > TGlobalVar.Utilisateur.ExeVersion then
+  if (CurrentVersion > ListFBUpdates.Last.Version) and (CurrentVersion > TGlobalVar.Utilisateur.ExeVersion) then
   begin
     ShowMessage('Base de données trop récente.'#13#10 + Msg);
     Exit;
   end;
 
-  if TGlobalVar.Utilisateur.ExeVersion > CurrentVersion then
+  if ListFBUpdates.Last.Version > CurrentVersion then
   begin
     if not(Force or (MessageDlg(Msg + #13#10'Voulez-vous la mettre à jour?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)) then
       Exit;
 
-    MAJ_ODS;
+    MAJ_ODS(False);
 
     for FBUpdate in ListFBUpdates do
       ProcessUpdate(FBUpdate.Version, FBUpdate.UpdateCallback);
@@ -210,7 +212,9 @@ begin
       try
         Transaction := GetTransaction(UIBDataBase);
 
-        SQL.Text := 'UPDATE OPTIONS SET Valeur = ' + QuotedStr(TGlobalVar.Utilisateur.ExeVersion) + ' WHERE Nom_Option = ''Version'';';
+        SQL.Text := 'UPDATE OPTIONS SET Valeur = ? WHERE Nom_Option = ?';
+        Params.AsString[0] := ListFBUpdates.Last.Version;
+        Params.AsString[1] := 'Version';
         ExecSQL;
         Transaction.Commit;
       finally
@@ -221,7 +225,7 @@ begin
 
   CheckIndex;
 
-  if (TGlobalVar.Utilisateur.ExeVersion > CurrentVersion) and not Force then
+  if (ListFBUpdates.Last.Version > CurrentVersion) and not Force then
     ShowMessage('Mise à jour terminée.');
   Result := True;
 end;
@@ -258,7 +262,7 @@ procedure TdmPrinc.MakeJumpList;
 var
   jl: TJumpList;
 begin
-  // TJumpList vérifie si on est au moins en Windows 7
+  // pas besoin de vérifier si on est au moins en Windows 7, TJumpList le fait
   jl := TJumpList.Create(nil);
   try
     jl.Tasks.AddShellLink('Ajouter un nouvel album', '/album=new', '', '', 2);
@@ -298,7 +302,7 @@ begin
     Result := False
   else
   begin
-    Result := CheckVersionNet.CheckVersion(SansAccents(Application.Title), 'bdtheque', TGlobalVar.Utilisateur.ExeVersion, Force, not Force) = 1;
+    Result := CheckVersionNet.CheckVersion('TetramCorpBDTheque', 'bdtheque', TGlobalVar.Utilisateur.ExeVersion, Force, not Force) = 1;
     with TIniFile.Create(FichierIni) do
       try
         WriteInteger('Divers', 'LastVerifMAJ', Trunc(Now));
@@ -388,6 +392,7 @@ begin
   begin
     hdl := GetHandleOtherInstance;
     if hdl = 0 then
+      // c'est pas vrai mais bon... comme on devrait jamais passer là...
       ShowMessage('Une instance de BDthèque est déjà ouverte!')
     else
     begin

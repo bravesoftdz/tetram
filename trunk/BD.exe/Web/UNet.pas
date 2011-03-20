@@ -5,7 +5,7 @@ interface
 uses Windows, SysUtils, Classes, Forms, Messages;
 
 type
-  RAttachement = record
+  RAttachement = packed record
     Nom, Valeur: string;
     IsFichier: Boolean;
   end;
@@ -294,14 +294,17 @@ begin
   FHttpCli.RequestVer := '1.1';
   FHttpCli.Agent := Format('%s/%s', [ChangeFileExt(ExtractFileName(Application.ExeName), ''), GetInfoVersion(Application.ExeName)]);
   FHttpCli.AcceptLanguage := 'fr';
+//  FHttpCli.FollowRelocation := False;
   FHttpCli.OnRequestDone := RequestDone;
   FHttpCli.OnDocData := DocData;
   FHttpCli.OnSendData := SendData;
-  // FHttpCli.IcsLogger := TIcsLogger.Create(FHttpCli);
-  // FHttpCli.IcsLogger.LogOptions := [loDestFile, loAddStamp, loWsockErr, loWsockInfo, loWsockDump, loSslErr, loSslInfo, loSslDump, loProtSpecErr,
-  // loProtSpecInfo, loProtSpecDump];
-  // FHttpCli.IcsLogger.LogFileName := 'd:\icslog.log';
-  // FHttpCli.IcsLogger.LogFileOption := lfoOverwrite;
+
+//   FHttpCli.IcsLogger := TIcsLogger.Create(FHttpCli);
+//   FHttpCli.IcsLogger.LogOptions := [loDestFile, loAddStamp, loWsockErr, loWsockInfo, loWsockDump, loSslErr, loSslInfo, loSslDump, loProtSpecErr,
+//   loProtSpecInfo, loProtSpecDump];
+//   FHttpCli.IcsLogger.LogFileName := 'd:\icslog.log';
+//   FHttpCli.IcsLogger.LogFileOption := lfoOverwrite;
+
   FHttpCli.MultiThreaded := True;
 end;
 

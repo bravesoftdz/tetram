@@ -2,11 +2,11 @@ object frmConsultationAlbum: TfrmConsultationAlbum
   Left = 440
   Top = 64
   Caption = 'Fiche d'#39'album'
-  ClientHeight = 872
+  ClientHeight = 854
   ClientWidth = 532
   Color = clWhite
   Constraints.MinWidth = 530
-  Font.Charset = ANSI_CHARSET
+  Font.Charset = DEFAULT_CHARSET
   Font.Color = clBlack
   Font.Height = -11
   Font.Name = 'Tahoma'
@@ -22,14 +22,14 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     Left = 0
     Top = 0
     Width = 532
-    Height = 872
+    Height = 854
     Align = alClient
     BorderStyle = bsNone
     ParentBackground = True
     TabOrder = 0
     DesignSize = (
       532
-      872)
+      854)
     object Label4: TLabel
       Left = 374
       Top = 164
@@ -38,7 +38,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Alignment = taCenter
       Anchors = [akTop, akRight]
       Caption = 'Pas d'#39'image'
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = clRed
       Font.Height = -17
       Font.Name = 'Tahoma'
@@ -56,7 +56,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Caption = 'Notes'
       Color = clWhite
       FocusControl = remarques
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
@@ -74,7 +74,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Caption = 'Histoire'
       Color = clWhite
       FocusControl = sujet
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
@@ -91,7 +91,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Alignment = taRightJustify
       Caption = 'Genres'
       Color = clWhite
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
@@ -108,7 +108,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Alignment = taRightJustify
       Caption = 'S'#233'rie :'
       Color = clWhite
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
@@ -127,7 +127,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Caption = 'Dessins'
       Color = clWhite
       FocusControl = lvDessinateurs
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
@@ -145,7 +145,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Caption = 'Scenario'
       Color = clWhite
       FocusControl = lvScenaristes
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
@@ -162,7 +162,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Alignment = taRightJustify
       Caption = 'S'#233'rie'
       Color = clWhite
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
@@ -179,7 +179,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
       Caption = 'Titre'
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Tahoma'
@@ -199,7 +199,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Alignment = taRightJustify
       Caption = 'Titre :'
       Color = clWhite
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
@@ -440,7 +440,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Caption = 'Couleurs'
       Color = clWhite
       FocusControl = lvColoristes
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
@@ -457,7 +457,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Alignment = taRightJustify
       Caption = 'Parution :'
       Color = clWhite
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
@@ -485,7 +485,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
       Caption = 'S'#233'rie'
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = clBlack
       Font.Height = -12
       Font.Name = 'Tahoma'
@@ -507,7 +507,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Alignment = taRightJustify
       Caption = 'Tome :'
       Color = clWhite
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
@@ -529,7 +529,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 869
+      Top = 851
       Width = 532
       Height = 3
       Align = alBottom
@@ -545,7 +545,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Alignment = taCenter
       Anchors = [akTop, akRight]
       Caption = 'Impossible de charger l'#39'image'
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = clRed
       Font.Height = -17
       Font.Name = 'Tahoma'
@@ -557,14 +557,13 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       ExplicitLeft = 351
     end
     object Couverture: TImage
-      Left = 311
-      Top = 51
+      Left = 314
+      Top = 53
       Width = 215
       Height = 246
       Anchors = [akTop, akRight]
       Center = True
       IncrementalDisplay = True
-      ExplicitLeft = 301
     end
     object VDTButton1: TVDTButton
       Left = 311
@@ -804,7 +803,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Alignment = taRightJustify
         Caption = 'ISBN :'
         Color = clWhite
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -821,7 +820,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Alignment = taRightJustify
         Caption = 'Editeur :'
         Color = clWhite
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -838,7 +837,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Alignment = taRightJustify
         Caption = 'Prix :'
         Color = clWhite
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -854,7 +853,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Height = 13
         Caption = 'Emprunts'
         Color = clWhite
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -879,7 +878,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Alignment = taRightJustify
         Caption = 'Collection :'
         Color = clWhite
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -904,7 +903,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Alignment = taRightJustify
         Caption = 'Ann'#233'e :'
         Color = clWhite
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -936,7 +935,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Alignment = taRightJustify
         Caption = 'Etat :'
         Color = clWhite
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -961,7 +960,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Alignment = taRightJustify
         Caption = 'Reliure :'
         Color = clWhite
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -987,7 +986,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'Notes :'
         Color = clWhite
         FocusControl = edNotes
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -1004,7 +1003,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Alignment = taRightJustify
         Caption = 'Achet'#233' le :'
         Color = clWhite
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -1028,7 +1027,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Alignment = taRightJustify
         Caption = 'Pages :'
         Color = clWhite
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -1052,7 +1051,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Alignment = taRightJustify
         Caption = 'Orientation :'
         Color = clWhite
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -1076,7 +1075,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Height = 13
         Caption = 'Format :'
         Color = clWhite
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -1108,7 +1107,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Alignment = taRightJustify
         Caption = 'Cote :'
         Color = clWhite
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -1125,7 +1124,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Alignment = taRightJustify
         Caption = 'Sens de lecture :'
         Color = clWhite
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -1150,7 +1149,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Alignment = taRightJustify
         Caption = 'N'#176' perso :'
         Color = clWhite
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -1207,7 +1206,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
           end
           item
             Position = 1
-            Width = 415
+            Width = 413
             WideText = 'Emprunteur'
           end>
       end
@@ -1244,7 +1243,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Height = 13
         Alignment = taLeftJustify
         Caption = 'Offert'
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -1254,7 +1253,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         EditLabel.Width = 30
         EditLabel.Height = 13
         EditLabel.Caption = 'Offert'
-        EditLabel.Font.Charset = ANSI_CHARSET
+        EditLabel.Font.Charset = DEFAULT_CHARSET
         EditLabel.Font.Color = 12615680
         EditLabel.Font.Height = -11
         EditLabel.Font.Name = 'Tahoma'
@@ -1269,7 +1268,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Height = 13
         Alignment = taLeftJustify
         Caption = 'VO'
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -1279,7 +1278,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         EditLabel.Width = 14
         EditLabel.Height = 13
         EditLabel.Caption = 'VO'
-        EditLabel.Font.Charset = ANSI_CHARSET
+        EditLabel.Font.Charset = DEFAULT_CHARSET
         EditLabel.Font.Color = 12615680
         EditLabel.Font.Height = -11
         EditLabel.Font.Name = 'Tahoma'
@@ -1294,7 +1293,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Height = 13
         Alignment = taLeftJustify
         Caption = 'D'#233'dicac'#233
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -1304,7 +1303,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         EditLabel.Width = 43
         EditLabel.Height = 13
         EditLabel.Caption = 'D'#233'dicac'#233
-        EditLabel.Font.Charset = ANSI_CHARSET
+        EditLabel.Font.Charset = DEFAULT_CHARSET
         EditLabel.Font.Color = 12615680
         EditLabel.Font.Height = -11
         EditLabel.Font.Name = 'Tahoma'
@@ -1319,7 +1318,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Height = 13
         Alignment = taLeftJustify
         Caption = 'Stock'
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -1329,7 +1328,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         EditLabel.Width = 26
         EditLabel.Height = 13
         EditLabel.Caption = 'Stock'
-        EditLabel.Font.Charset = ANSI_CHARSET
+        EditLabel.Font.Charset = DEFAULT_CHARSET
         EditLabel.Font.Color = 12615680
         EditLabel.Font.Height = -11
         EditLabel.Font.Name = 'Tahoma'
@@ -1344,7 +1343,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Height = 13
         Alignment = taLeftJustify
         Caption = 'Couleur'
-        Font.Charset = ANSI_CHARSET
+        Font.Charset = DEFAULT_CHARSET
         Font.Color = 12615680
         Font.Height = -11
         Font.Name = 'Tahoma'
@@ -1354,7 +1353,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         EditLabel.Width = 37
         EditLabel.Height = 13
         EditLabel.Caption = 'Couleur'
-        EditLabel.Font.Charset = ANSI_CHARSET
+        EditLabel.Font.Charset = DEFAULT_CHARSET
         EditLabel.Font.Color = 12615680
         EditLabel.Font.Height = -11
         EditLabel.Font.Name = 'Tahoma'
@@ -1411,7 +1410,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Width = 13
       Height = 13
       Caption = 'Int'#233'grale'
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
@@ -1421,7 +1420,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       EditLabel.Width = 44
       EditLabel.Height = 13
       EditLabel.Caption = 'Int'#233'grale'
-      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Charset = DEFAULT_CHARSET
       EditLabel.Font.Color = 12615680
       EditLabel.Font.Height = -11
       EditLabel.Font.Name = 'Tahoma'
@@ -1435,7 +1434,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Width = 13
       Height = 13
       Caption = 'Hors s'#233'rie'
-      Font.Charset = ANSI_CHARSET
+      Font.Charset = DEFAULT_CHARSET
       Font.Color = 12615680
       Font.Height = -11
       Font.Name = 'Tahoma'
@@ -1445,7 +1444,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       EditLabel.Width = 48
       EditLabel.Height = 13
       EditLabel.Caption = 'Hors s'#233'rie'
-      EditLabel.Font.Charset = ANSI_CHARSET
+      EditLabel.Font.Charset = DEFAULT_CHARSET
       EditLabel.Font.Color = 12615680
       EditLabel.Font.Height = -11
       EditLabel.Font.Name = 'Tahoma'

@@ -17,7 +17,6 @@ uses
   UfrmFond in 'UfrmFond.pas' {frmFond},
   UdmPrinc in 'UdmPrinc.pas' {dmPrinc: TDataModule},
   UfrmRepertoire in 'Consultation\UfrmRepertoire.pas' {frmRepertoire},
-  UfrmConsultationAlbum in 'Consultation\UfrmConsultationAlbum.pas' {frmConsultationAlbum},
   UfrmConsultationAuteur in 'Consultation\UfrmConsultationAuteur.pas' {frmConsultationAuteur},
   UfrmConsultationEmprunteur in 'Consultation\UfrmConsultationEmprunteur.pas' {frmConsultationEmprunteur},
   UfrmConsultationSerie in 'Consultation\UfrmConsultationSerie.pas' {frmConsultationSerie},
@@ -164,7 +163,9 @@ uses
   VirtualTreeBdtk in 'VirtualTreeBdtk.pas',
   UMAJ2_1_1_10 in 'mises à jour\UMAJ2_1_1_10.pas',
   UMAJ2_1_1_17 in 'mises à jour\UMAJ2_1_1_17.pas',
-  UfrmProgression in 'UfrmProgression.pas' {frmProgression};
+  UfrmProgression in 'UfrmProgression.pas' {frmProgression},
+  UMAJ2_1_1_155 in 'mises à jour\UMAJ2_1_1_155.pas',
+  UfrmConsultationAlbum in 'Consultation\UfrmConsultationAlbum.pas' {frmConsultationAlbum};
 
 {$R *.RES}
 {$R curseurs.res}

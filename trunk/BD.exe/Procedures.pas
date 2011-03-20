@@ -79,7 +79,8 @@ function FindCmdLineSwitch(const cmdLine, Switch: string; out Value: string): Bo
 
 implementation
 
-uses Divers, Textes, ShellAPI, LabeledCheckBox, MaskUtils, Mask, UdmPrinc, IniFiles, Math, VirtualTrees, EditLabeled, ActnList, Types, UBdtForms;
+uses Divers, Textes, ShellAPI, LabeledCheckBox, MaskUtils, Mask, UdmPrinc, IniFiles, Math, VirtualTrees, EditLabeled, ActnList, Types, UBdtForms,
+  StrUtils;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
 begin
@@ -151,7 +152,7 @@ procedure LitOptions;
       Params.AsString[0] := Copy(Champ, 1, Params.SQLLen[0]);
       Open;
       if not Eof then
-        Result := Fields.AsString[0]
+        Result := Fields.AsUnicodeString[0]
       else
         Result := Defaut;
     end;
@@ -169,8 +170,9 @@ begin
       SQL.Text := 'SELECT FIRST 1 Valeur FROM OPTIONS WHERE NOM_OPTION = ? ORDER BY DM_OPTIONS DESC';
       Prepare(True);
       TGlobalVar.Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', CurrencyString);
-      FormatMonnaie := IIf(CurrencyFormat in [0, 2], TGlobalVar.Utilisateur.Options.SymboleMonnetaire + IIf(CurrencyFormat = 2, ' ', ''), '')
-        + FormatMonnaieCourt + IIf(CurrencyFormat in [1, 3], IIf(CurrencyFormat = 3, ' ', '') + TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '');
+      FormatMonnaie := IfThen(CurrencyFormat in [0, 2], TGlobalVar.Utilisateur.Options.SymboleMonnetaire + IfThen(CurrencyFormat = 2, ' ', ''), '')
+        + FormatMonnaieCourt + IfThen(CurrencyFormat in [1, 3], IfThen(CurrencyFormat = 3, ' ', '')
+          + TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '');
       RepImages := LitStr(op, 'RepImages', RepImages);
     finally
       Transaction.Free;

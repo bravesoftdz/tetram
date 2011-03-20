@@ -15,7 +15,7 @@ type
 
   RScriptInfos = record
     Auteur, Description: string;
-    ScriptVersion, BDVersion: TFileVersion;
+    ScriptVersion, BDVersion: TVersionNumber;
     LastUpdate: TDateTime;
   end;
 

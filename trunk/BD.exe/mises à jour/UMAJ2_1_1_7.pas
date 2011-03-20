@@ -8,7 +8,8 @@ uses UIB, Updates;
 
 procedure MAJ2_1_1_7(Query: TUIBScript);
 begin
-  with Query do begin
+  with Query do
+  begin
     Script.Clear;
 
     Script.Add('create domain t_ident50 as varchar(50) character set iso8859_1 collate fr_fr_ci_ai;');
@@ -202,7 +203,7 @@ begin
 end;
 
 initialization
-  RegisterFBUpdate('2.1.1.7', @MAJ2_1_1_7);
 
+RegisterFBUpdate('2.1.1.7', @MAJ2_1_1_7);
 
 end.

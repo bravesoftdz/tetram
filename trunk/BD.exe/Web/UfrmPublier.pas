@@ -65,7 +65,7 @@ var
   Reponse: TStringStream;
   slReponse: TStringList;
   Param: array of RAttachement;
-  db_version, UpgradeTodb_version: TFileVersion;
+  db_version, UpgradeTodb_version: TVersionNumber;
   UpgradeFromDate: TDate;
   s1, s2: string;
   qry: TUIBQuery;
@@ -160,7 +160,7 @@ var
     Decoupe(0, s1, s2);
     if s1 <> 'intf_version' then
       raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
-    if TFileVersion(s2) < '1' then
+    if TVersionNumber(s2) < '1' then
       raise Exception.Create('Version d''interface non supportée.'#13#10'Veuillez mettre à jour BDThèque.');
 
     Decoupe(1, s1, s2);

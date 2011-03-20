@@ -7,11 +7,11 @@ object dmPrinc: TdmPrinc
   object UIBDataBase: TUIBDataBase
     Params.Strings = (
       'sql_dialect=3'
-      'lc_ctype=NONE'
+      'lc_ctype=UTF8'
       'user_name='
       'password=')
     DatabaseName = 'G:\Programmation\MEDIA.KIT\BDth'#232'que 1.0\BD.GDB'
-    CharacterSet = csNONE
+    CharacterSet = csUTF8
     LibraryName = 'fbembed.dll'
     Left = 32
     Top = 16

@@ -2,7 +2,7 @@ unit UfrmFond;
 
 interface
 
-{.$D-}
+{ .$D- }
 {$WARN SYMBOL_DEPRECATED OFF}
 
 uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ImgList, Menus, ComCtrls, ExtCtrls, Buttons, ActnList,
@@ -1240,14 +1240,20 @@ begin
   aRect.Bottom := aRect.Top + imgSize;
 
   if Notation > 0 then
-    for i := 1 to 4 do
+    if Notation = 1 then
     begin
-      if i >= Notation then
-        imlNotation_16x16.PngImages[0].pngImage.Draw(Canvas, aRect)
-      else
-        imlNotation_16x16.PngImages[1].pngImage.Draw(Canvas, aRect);
+      imlNotation_16x16.PngImages[3].pngImage.Draw(Canvas, aRect);
       OffsetRect(aRect, imgSize, 0);
-    end;
+    end
+    else
+      for i := 1 to 4 do
+      begin
+        if i >= Notation then
+          // imlNotation_16x16.PngImages[0].pngImage.Draw(Canvas, aRect)
+        else
+          imlNotation_16x16.PngImages[1].pngImage.Draw(Canvas, aRect);
+        OffsetRect(aRect, imgSize, 0);
+      end;
 end;
 
 end.

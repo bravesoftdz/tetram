@@ -228,7 +228,7 @@ begin
   vstImages.TreeOptions.MiscOptions := vstImages.TreeOptions.MiscOptions + [toCheckSupport];
   vstImages.TreeOptions.PaintOptions := vstImages.TreeOptions.PaintOptions - [toShowButtons, toShowRoot, toShowTreeLines];
   FEditionChanging := False;
-  edPrix.CurrencyChar := WideChar(TGlobalVar.Utilisateur.Options.SymboleMonnetaire[1]);
+  edPrix.CurrencyChar := TGlobalVar.Utilisateur.Options.SymboleMonnetaire[1];
   FScenaristesSelected := False;
   FDessinateursSelected := False;
   FColoristesSelected := False;

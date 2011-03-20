@@ -60,7 +60,7 @@ type
 
   RUtilisateur = record
     Options: ROptions;
-    ExeVersion, AppVersion: TFileVersion;
+    ExeVersion, AppVersion: TVersionNumber;
   end;
 
   TModeConsult = (mdLoad, mdConsult, mdEdit, mdEditing, mdEntretien, mdImportation, mdExportation, mdScript);

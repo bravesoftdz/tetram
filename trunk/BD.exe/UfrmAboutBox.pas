@@ -1,6 +1,6 @@
 unit UfrmAboutBox;
 
-{.$D-}
+{ .$D- }
 interface
 
 uses Windows, SysUtils, Classes, Graphics, Forms, Controls, StdCtrls, ProceduresBDtk, Buttons, ExtCtrls, verslabp, ShellAPI, jpeg, Dialogs, UBdtForms;
@@ -33,7 +33,7 @@ type
 
 implementation
 
-uses Procedures;
+uses Procedures, Math;
 
 resourcestring
   MemoirePhysique = 'Physique';
@@ -83,47 +83,57 @@ const
   VER_NT_WORKSTATION = $1;
   VER_NT_DOMAIN_CONTROLLER = $2;
   VER_NT_SERVER = $3;
-  PRODUCT_BUSINESS = $6; // Business
-  PRODUCT_BUSINESS_N = $10; // Business N
-  PRODUCT_CLUSTER_SERVER = $12; // HPC Edition
-  PRODUCT_DATACENTER_SERVER = $8; // Server Datacenter (full installation)
-  PRODUCT_DATACENTER_SERVER_CORE = $C; // Server Datacenter (core installation)
-  PRODUCT_DATACENTER_SERVER_CORE_V = $27; // Server Datacenter without Hyper-V (core installation)
-  PRODUCT_DATACENTER_SERVER_V = $25; // Server Datacenter without Hyper-V (full installation)
-  PRODUCT_ENTERPRISE = $4; // Enterprise
-  PRODUCT_ENTERPRISE_N = $1B; // Enterprise N
-  PRODUCT_ENTERPRISE_SERVER = $A; // Server Enterprise (full installation)
-  PRODUCT_ENTERPRISE_SERVER_CORE = $E; // Server Enterprise (core installation)
-  PRODUCT_ENTERPRISE_SERVER_CORE_V = $29; // Server Enterprise without Hyper-V (core installation)
-  PRODUCT_ENTERPRISE_SERVER_IA64 = $F; // Server Enterprise for Itanium-based Systems
-  PRODUCT_ENTERPRISE_SERVER_V = $26; // Server Enterprise without Hyper-V (full installation)
-  PRODUCT_HOME_BASIC = $2; // Home Basic
-  PRODUCT_HOME_BASIC_N = $5; // Home Basic N
-  PRODUCT_HOME_PREMIUM = $3; // Home Premium
-  PRODUCT_HOME_PREMIUM_N = $1A; // Home Premium N
-  PRODUCT_HYPERV = $2A; // Server Hyper-V
-  PRODUCT_MEDIUMBUSINESS_SERVER_MANAGEMENT = $1E; // Windows Essential Business Server Management Server
-  PRODUCT_MEDIUMBUSINESS_SERVER_MESSAGING = $20; // Windows Essential Business Server Messaging Server
-  PRODUCT_MEDIUMBUSINESS_SERVER_SECURITY = $1F; // Windows Essential Business Server Security Server
-  PRODUCT_SERVER_FOR_SMALLBUSINESS = $18; // Windows Server 2008 for Windows Essential Server Solutions
-  PRODUCT_SERVER_FOR_SMALLBUSINESS_V = $23; // Windows Server 2008 without Hyper-V for Windows Essential Server Solutions
-  PRODUCT_SMALLBUSINESS_SERVER = $9; // Windows Small Business Server
-  PRODUCT_SMALLBUSINESS_SERVER_PREMIUM = $19;
-  PRODUCT_STANDARD_SERVER = $7; // Server Standard (full installation)
-  PRODUCT_STANDARD_SERVER_CORE = $D; // Server Standard (core installation)
-  PRODUCT_STANDARD_SERVER_CORE_V = $28; // Server Standard without Hyper-V (core installation)
-  PRODUCT_STANDARD_SERVER_V = $24; // Server Standard without Hyper-V (full installation)
-  PRODUCT_STARTER = $B; // Starter
-  PRODUCT_STORAGE_ENTERPRISE_SERVER = $17; // Storage Server Enterprise
-  PRODUCT_STORAGE_EXPRESS_SERVER = $14; // Storage Server Express
-  PRODUCT_STORAGE_STANDARD_SERVER = $15; // Storage Server Standard
-  PRODUCT_STORAGE_WORKGROUP_SERVER = $16; // Storage Server Workgroup
-  PRODUCT_UNDEFINED = $0; // An unknown product
-  PRODUCT_ULTIMATE = $1; // Ultimate
-  PRODUCT_ULTIMATE_N = $1C; // Ultimate N
-  PRODUCT_WEB_SERVER = $11; // Web Server (full installation)
-  PRODUCT_WEB_SERVER_CORE = $1D; // Web Server (core installation)
-  SM_SERVERR2 = 89;
+  PRODUCT_BUSINESS = $00000006; // Business
+  PRODUCT_BUSINESS_N = $00000010; // Business N
+  PRODUCT_CLUSTER_SERVER = $00000012; // HPC Edition
+  PRODUCT_DATACENTER_SERVER = $00000008; // Server Datacenter (full installation)
+  PRODUCT_DATACENTER_SERVER_CORE = $0000000C; // Server Datacenter (core installation)
+  PRODUCT_DATACENTER_SERVER_CORE_V = $00000027; // Server Datacenter without Hyper-V (core installation)
+  PRODUCT_DATACENTER_SERVER_V = $00000025; // Server Datacenter without Hyper-V (full installation)
+  PRODUCT_ENTERPRISE = $00000004; // Enterprise
+  PRODUCT_ENTERPRISE_E = $00000046; // Not supported
+  PRODUCT_ENTERPRISE_N = $0000001B; // Enterprise N
+  PRODUCT_ENTERPRISE_SERVER = $0000000A; // Server Enterprise (full installation)
+  PRODUCT_ENTERPRISE_SERVER_CORE = $0000000E; // Server Enterprise (core installation)
+  PRODUCT_ENTERPRISE_SERVER_CORE_V = $00000029; // Server Enterprise without Hyper-V (core installation)
+  PRODUCT_ENTERPRISE_SERVER_IA64 = $0000000F; // Server Enterprise for Itanium-based Systems
+  PRODUCT_ENTERPRISE_SERVER_V = $00000026; // Server Enterprise without Hyper-V (full installation)
+  PRODUCT_HOME_BASIC = $00000002; // Home Basic
+  PRODUCT_HOME_BASIC_E = $00000043; // Not supported
+  PRODUCT_HOME_BASIC_N = $00000005; // Home Basic N
+  PRODUCT_HOME_PREMIUM = $00000003; // Home Premium
+  PRODUCT_HOME_PREMIUM_E = $00000044; // Not supported
+  PRODUCT_HOME_PREMIUM_N = $0000001A; // Home Premium N
+  PRODUCT_HYPERV = $0000002A; // Microsoft Hyper-V Server
+  PRODUCT_MEDIUMBUSINESS_SERVER_MANAGEMENT = $0000001E; // Windows Essential Business Server Management Server
+  PRODUCT_MEDIUMBUSINESS_SERVER_MESSAGING = $00000020; // Windows Essential Business Server Messaging Server
+  PRODUCT_MEDIUMBUSINESS_SERVER_SECURITY = $0000001F; // Windows Essential Business Server Security Server
+  PRODUCT_PROFESSIONAL = $00000030; // Professional
+  PRODUCT_PROFESSIONAL_E = $00000045; // Not supported
+  PRODUCT_PROFESSIONAL_N = $00000031; // Professional N
+  PRODUCT_SERVER_FOR_SMALLBUSINESS = $00000018; // Windows Server 2008 for Windows Essential Server Solutions
+  PRODUCT_SERVER_FOR_SMALLBUSINESS_V = $00000023; // Windows Server 2008 without Hyper-V for Windows Essential Server Solutions
+  PRODUCT_SERVER_FOUNDATION = $00000021; // Server Foundation
+  PRODUCT_SMALLBUSINESS_SERVER = $00000009; // Windows Small Business Server
+  PRODUCT_SMALLBUSINESS_SERVER_PREMIUM = $00000019; // Windows Small Business Server Prenium
+  PRODUCT_SOLUTION_EMBEDDEDSERVER = $00000038; // Windows MultiPoint Server
+  PRODUCT_STANDARD_SERVER = $00000007; // Server Standard (full installation)
+  PRODUCT_STANDARD_SERVER_CORE = $0000000D; // Server Standard (core installation)
+  PRODUCT_STANDARD_SERVER_CORE_V = $00000028; // Server Standard without Hyper-V (core installation)
+  PRODUCT_STANDARD_SERVER_V = $00000024; // Server Standard without Hyper-V (full installation)
+  PRODUCT_STARTER = $0000000B; // Starter
+  PRODUCT_STARTER_E = $00000042; // Not supported
+  PRODUCT_STARTER_N = $0000002F; // Starter N
+  PRODUCT_STORAGE_ENTERPRISE_SERVER = $00000017; // Storage Server Enterprise
+  PRODUCT_STORAGE_EXPRESS_SERVER = $00000014; // Storage Server Express
+  PRODUCT_STORAGE_STANDARD_SERVER = $00000015; // Storage Server Standard
+  PRODUCT_STORAGE_WORKGROUP_SERVER = $00000016; // Storage Server Workgroup
+  PRODUCT_UNDEFINED = $00000000; // An unknown product
+  PRODUCT_ULTIMATE = $00000001; // Ultimate
+  PRODUCT_ULTIMATE_E = $00000047; // Not supported
+  PRODUCT_ULTIMATE_N = $0000001C; // Ultimate N
+  PRODUCT_WEB_SERVER = $00000011; // Web Server (full installation)
+  PRODUCT_WEB_SERVER_CORE = $0000001D; // Web Server (core installation)  SM_SERVERR2 = 89;
   PROCESSOR_ARCHITECTURE_INTEL = 0;
   PROCESSOR_ARCHITECTURE_IA64 = 6;
   PROCESSOR_ARCHITECTURE_AMD64 = 9;
@@ -170,24 +180,26 @@ begin
 
         if (OSVERSIONINFO.dwMajorVersion = 6) then
         begin
-          if (OSVERSIONINFO.dwMinorVersion = 1) then
-            if (OSVERSIONINFOEX.wProductType = VER_NT_WORKSTATION) then
-              Result := 'Windows 7'
-            else
-              Result := 'Windows Server 2008 R2';
-
           if (OSVERSIONINFO.dwMinorVersion = 0) then
             if (OSVERSIONINFOEX.wProductType = VER_NT_WORKSTATION) then
               Result := 'Windows Vista'
             else
               Result := 'Windows Server 2008';
 
+          if (OSVERSIONINFO.dwMinorVersion = 1) then
+            if (OSVERSIONINFOEX.wProductType = VER_NT_WORKSTATION) then
+              Result := 'Windows 7'
+            else
+              Result := 'Windows Server 2008 R2';
+
           pGPI := GetProcAddress(GetModuleHandle('kernel32.dll'), 'GetProductInfo');
-          pGPI(6, 0, 0, 0, dwType);
+          pGPI(OSVERSIONINFO.dwMajorVersion, OSVERSIONINFO.dwMinorVersion, 0, 0, dwType);
 
           case dwType of
             PRODUCT_ULTIMATE:
               Result := Result + ' Ultimate Edition';
+            PRODUCT_PROFESSIONAL:
+              Result := Result + ' Professional';
             PRODUCT_HOME_PREMIUM:
               Result := Result + ' Home Premium Edition';
             PRODUCT_HOME_BASIC:
@@ -376,6 +388,30 @@ begin
   end;
 end;
 
+function formatSize(bytes: int64; fmt: string = '%.2f'): string;
+const
+  units: array [0 .. 4] of string = ('o', 'Ko', 'Mo', 'Go', 'To');
+var
+  b: double;
+  e: integer;
+begin
+  b := bytes;
+  // On gére le cas des tailles de fichier négatives
+  if (b > 0) then
+  begin
+    e := trunc(logn(1024, b));
+    // Si on a pas l'unité on retourne en To
+    e := min( high(units), e);
+    b := b / Power(1024, e);
+  end
+  else
+  begin
+    b := 0;
+    e := 0;
+  end;
+  Result := Format(fmt + ' %s', [b, units[e]]);
+end;
+
 procedure TfrmAboutBox.FormCreate(Sender: TObject);
 const
   FC: array [1 .. 2] of Integer = (31, 16);
@@ -385,8 +421,6 @@ const
   Back: array [1 .. 2] of TColor = (clGray, clWhite);
 var
   MemoryStatus: TMemoryStatus;
-  v: DWORD;
-  unite: string;
 begin
   Image1.Picture.Bitmap.LoadFromResourceName(HInstance, 'ABOUT');
 
@@ -395,81 +429,10 @@ begin
   MemoryStatus.dwLength := sizeof(MemoryStatus);
   GlobalMemoryStatus(MemoryStatus);
 
-  v := MemoryStatus.dwTotalPhys;
-  unite := 'Octets';
-  if v > 1024 then
-  begin
-    v := Variant(v / 1024);
-    unite := 'Ko';
-  end;
-  if v > 1024 then
-  begin
-    v := Variant(v / 1024);
-    unite := 'Mo';
-  end;
-  if v > 1024 then
-  begin
-    v := Variant(v / 1024);
-    unite := 'Go';
-  end;
-  LbMemoirePhysique.Caption := Format(MemoirePhysique + ': %.0n %s', [StrToFloat(IntToStr(v)), unite]);
-
-  v := MemoryStatus.dwAvailPhys;
-  unite := 'Octets';
-  if v > 1024 then
-  begin
-    v := Variant(v / 1024);
-    unite := 'Ko';
-  end;
-  if v > 1024 then
-  begin
-    v := Variant(v / 1024);
-    unite := 'Mo';
-  end;
-  if v > 1024 then
-  begin
-    v := Variant(v / 1024);
-    unite := 'Go';
-  end;
-  LbMemoireLibre.Caption := Format(MemoirePhysiqueDisponible + ': %.0n %s (%d%%)', [StrToFloat(IntToStr(v)), unite, 100 - MemoryStatus.dwMemoryLoad]);
-
-  v := MemoryStatus.dwTotalVirtual;
-  unite := 'Octets';
-  if v > 1024 then
-  begin
-    v := Variant(v / 1024);
-    unite := 'Ko';
-  end;
-  if v > 1024 then
-  begin
-    v := Variant(v / 1024);
-    unite := 'Mo';
-  end;
-  if v > 1024 then
-  begin
-    v := Variant(v / 1024);
-    unite := 'Go';
-  end;
-  LbMemoireVirtuelle.Caption := Format(MemoireVirtuelle + ': %.0n %s', [StrToFloat(IntToStr(v)), unite]);
-
-  v := MemoryStatus.dwAvailVirtual;
-  unite := 'Octets';
-  if v > 1024 then
-  begin
-    v := Variant(v / 1024);
-    unite := 'Ko';
-  end;
-  if v > 1024 then
-  begin
-    v := Variant(v / 1024);
-    unite := 'Mo';
-  end;
-  if v > 1024 then
-  begin
-    v := Variant(v / 1024);
-    unite := 'Go';
-  end;
-  LbMemoireVirtuelleDisponible.Caption := Format(MemoireVirtuelleDisponible + ': %.0n %s', [StrToFloat(IntToStr(v)), unite]);
+  LbMemoirePhysique.Caption := MemoirePhysique + ': ' + formatSize(MemoryStatus.dwTotalPhys);
+  LbMemoireLibre.Caption := MemoirePhysique + ': ' + formatSize(MemoryStatus.dwAvailPhys) + Format(' (%d%%)', [100 - MemoryStatus.dwMemoryLoad]);
+  LbMemoireVirtuelle.Caption := MemoireVirtuelle + ': ' + formatSize(MemoryStatus.dwTotalVirtual);
+  LbMemoireVirtuelleDisponible.Caption := MemoireVirtuelleDisponible + ': ' + formatSize(MemoryStatus.dwAvailVirtual);
 end;
 
 procedure TfrmAboutBox.ImLogoClick(Sender: TObject);
