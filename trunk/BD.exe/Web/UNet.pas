@@ -16,7 +16,7 @@ function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamA
 
 implementation
 
-uses WinInet, OverbyteIcsHttpProt, OverbyteIcsLogger, ProceduresBDtk, AnsiStrings;
+uses WinInet, OverbyteIcsHttpProt, OverbyteIcsLogger, ProceduresBDtk, AnsiStrings, OverbyteIcsWSocket, OverbyteIcsLIBEAY;
 
 function URLEncode(const URL: string): string;
 var
@@ -158,7 +158,7 @@ var
   i: Integer;
   idRequete, Serveur, Agent, Action: string;
 begin
-  idRequete := '26846888314793'; // valeur arbitraire: voir s'il faut la changer à chaque requête mais il semble que non
+  idRequete := '---------------------------26846888314793'; // valeur arbitraire: voir s'il faut la changer à chaque requête mais il semble que non
   Result := 0;
   Agent := Format('%s/%s', [ChangeFileExt(ExtractFileName(Application.ExeName), ''), GetInfoVersion(Application.ExeName)]);
   hISession := InternetOpen(PChar(Agent), INTERNET_OPEN_TYPE_PRECONFIG, nil, nil, 0);
@@ -205,7 +205,7 @@ begin
               begin
                 fs := TFileStream.Create(Pieces[i].Valeur, fmOpenRead or fmShareDenyWrite);
                 try
-                  httpHeader := '-----------------------------' + idRequete + #13#10;
+                  httpHeader := '--' + idRequete + #13#10;
                   httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + Pieces[i].Nom + '"; filename="' + ExtractFileName
                     (Pieces[i].Valeur) + '"'#13#10;
                   httpHeader := httpHeader + 'Content-Type: application/octet-stream'#13#10;
@@ -221,16 +221,16 @@ begin
               end
               else
               begin
-                httpHeader := '-----------------------------' + idRequete + #13#10;
+                httpHeader := '--' + idRequete + #13#10;
                 httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + Pieces[i].Nom + '"'#13#10;
                 httpHeader := httpHeader + #13#10;
                 httpHeader := httpHeader + Pieces[i].Valeur + #13#10;
                 MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader) * SizeOf(Char));
               end;
-            httpHeader := '-----------------------------' + idRequete + '--'#13#10;
+            httpHeader := '--' + idRequete + '--'#13#10;
             MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader) * SizeOf(Char));
 
-            httpHeader := 'Content-Type: multipart/form-data; boundary=---------------------------' + idRequete + #13#10;
+            httpHeader := 'Content-Type: multipart/form-data; boundary=' + idRequete + #13#10;
           end;
 
           // httpHeader := httpHeader + 'Accept: text/*'#13#10;
@@ -274,7 +274,8 @@ end;
 
 type
   TDownloader = class
-    FHttpCli: THttpCli;
+    FSslContext: TSslContext;
+    FHttpCli: TSslHttpCli;
     FUserCancel: Integer;
     FWaiting: IWaiting;
 
@@ -290,20 +291,24 @@ constructor TDownloader.Create;
 begin
   inherited;
   FUserCancel := 0;
-  FHttpCli := THttpCli.Create(nil);
+
+  FSslContext := TSslContext.Create(nil);
+
+  FHttpCli := TSslHttpCli.Create(nil);
+  FHttpCli.SslContext := FSslContext;
   FHttpCli.RequestVer := '1.1';
   FHttpCli.Agent := Format('%s/%s', [ChangeFileExt(ExtractFileName(Application.ExeName), ''), GetInfoVersion(Application.ExeName)]);
   FHttpCli.AcceptLanguage := 'fr';
-//  FHttpCli.FollowRelocation := False;
+  // FHttpCli.FollowRelocation := False;
   FHttpCli.OnRequestDone := RequestDone;
   FHttpCli.OnDocData := DocData;
   FHttpCli.OnSendData := SendData;
 
-//   FHttpCli.IcsLogger := TIcsLogger.Create(FHttpCli);
-//   FHttpCli.IcsLogger.LogOptions := [loDestFile, loAddStamp, loWsockErr, loWsockInfo, loWsockDump, loSslErr, loSslInfo, loSslDump, loProtSpecErr,
-//   loProtSpecInfo, loProtSpecDump];
-//   FHttpCli.IcsLogger.LogFileName := 'd:\icslog.log';
-//   FHttpCli.IcsLogger.LogFileOption := lfoOverwrite;
+  // FHttpCli.IcsLogger := TIcsLogger.Create(FHttpCli);
+  // FHttpCli.IcsLogger.LogOptions := [loDestFile, loAddStamp, loWsockErr, loWsockInfo, loWsockDump, loSslErr, loSslInfo, loSslDump, loProtSpecErr,
+  // loProtSpecInfo, loProtSpecDump];
+  // FHttpCli.IcsLogger.LogFileName := 'd:\icslog.log';
+  // FHttpCli.IcsLogger.LogFileOption := lfoOverwrite;
 
   FHttpCli.MultiThreaded := True;
 end;
@@ -312,6 +317,7 @@ destructor TDownloader.Destroy;
 begin
   FWaiting := nil;
   FHttpCli.Free;
+  FSslContext.Free;
   inherited;
 end;
 
@@ -354,7 +360,8 @@ var
   httpHeader: RawByteString;
   dl: TDownloader;
 begin
-  idRequete := '26846888314793'; // valeur arbitraire: voir s'il faut la changer à chaque requête mais il semble que non
+  Result := 0;
+  idRequete := '---------------------------26846888314793'; // valeur arbitraire: voir s'il faut la changer à chaque requête mais il semble que non
   MemoryStream := TMemoryStream.Create;
   dl := TDownloader.Create;
   with dl do
@@ -377,7 +384,7 @@ begin
           begin
             fs := TFileStream.Create(Pieces[i].Valeur, fmOpenRead or fmShareDenyWrite);
             try
-              httpHeader := '-----------------------------' + UTF8Encode(idRequete) + #13#10;
+              httpHeader := '--' + UTF8Encode(idRequete) + #13#10;
               httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + UTF8Encode(Pieces[i].Nom) + '"; filename="' + UTF8Encode
                 (ExtractFileName(Pieces[i].Valeur)) + '"'#13#10;
               httpHeader := httpHeader + 'Content-Type: application/octet-stream'#13#10;
@@ -393,17 +400,17 @@ begin
           end
           else
           begin
-            httpHeader := '-----------------------------' + UTF8Encode(idRequete) + #13#10;
+            httpHeader := '--' + UTF8Encode(idRequete) + #13#10;
             httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + UTF8Encode(Pieces[i].Nom) + '"'#13#10;
             httpHeader := httpHeader + #13#10;
             httpHeader := httpHeader + UTF8Encode(Pieces[i].Valeur) + #13#10;
             MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
           end;
 
-        httpHeader := '-----------------------------' + UTF8Encode(idRequete) + '--'#13#10;
+        httpHeader := '--' + UTF8Encode(idRequete) + '--'#13#10;
         MemoryStream.WriteBuffer(httpHeader[1], Length(httpHeader));
 
-        FHttpCli.ContentTypePost := 'multipart/form-data; charset=UTF-8; boundary=---------------------------' + idRequete;
+        FHttpCli.ContentTypePost := 'multipart/form-data; charset=UTF-8; boundary=' + idRequete;
       end;
 
       MemoryStream.Position := 0;
