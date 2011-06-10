@@ -469,7 +469,7 @@ begin
     end;
     lISBN := Length(cs);
     if not (lISBN in [10, 13]) then
-      if EditionComplete.AnneeEdition >= 2007 then
+      if (EditionComplete.AnneeEdition = 0) or (EditionComplete.AnneeEdition >= 2007) then
         lISBN := 13
       else
         lISBN := 10;

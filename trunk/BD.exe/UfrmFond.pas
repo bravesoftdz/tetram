@@ -844,6 +844,11 @@ begin
   Historique.Refresh;
 end;
 
+procedure TfrmFond.actModeScriptsExecute(Sender: TObject);
+begin
+  Historique.AddWaiting(fcScripts);
+end;
+
 procedure TfrmFond.actStatsInfosBDthequeExecute(Sender: TObject);
 begin
   ImpressionInfosBDtheque(TAction(Sender).ActionComponent.Tag = 1);
@@ -1172,11 +1177,6 @@ end;
 procedure TfrmFond.HistoriqueChosen(Sender: TObject);
 begin
   Historique.GoConsultation(TComponent(Sender).Tag);
-end;
-
-procedure TfrmFond.actModeScriptsExecute(Sender: TObject);
-begin
-  Historique.AddWaiting(fcScripts);
 end;
 
 procedure TfrmFond.actPublierExecute(Sender: TObject);

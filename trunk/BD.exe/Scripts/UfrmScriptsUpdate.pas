@@ -13,8 +13,12 @@ type
     FScriptName: string;
     FURL: string;
   public
-    ScriptInfos: RScriptInfos;
+    ScriptInfos: TScriptInfos;
     LocalScript: TScript;
+
+    constructor Create;
+    destructor Destroy; override;
+
     property URL: string read FURL;
     property ScriptName: string read FScriptName;
   end;
@@ -164,6 +168,7 @@ procedure TfrmScriptsUpdate.GetOnlineList(List: TObjectList<TOnlineScript>);
 
 var
   xml: TJclSimpleXML;
+  ss: TStringStream;
   script: TOnlineScript;
   i: Integer;
   url: string;
@@ -173,7 +178,14 @@ begin
   try
     url := 'http://www.tetram.org/scriptsupdate.php?code=bdtheque';
     if LightComboCheck1.Value = 1 then url := url + '&contrib';
-    xml.LoadFromString(GetPage(url, False));
+//    ss := TStringStream.Create(GetPage(url, True));
+//    try
+//  09/06/2011: bug dans la jcl = tentative d'utilisation de l'utf16 ce qui n'est pas supporté avec delphi
+      xml.LoadFromString(GetPage(url, True));
+//      xml.LoadFromStream(ss);
+//    finally
+//      ss.Free;
+//    end;
     xml.Options := xml.Options + [sxoAutoCreate];
     for i := 0 to Pred(xml.Root.Items.Count) do
       with xml.Root.Items[i] do begin
@@ -314,6 +326,19 @@ begin
   begin
     TargetCanvas.Font.Color := clInactiveCaptionText;
   end;
+end;
+
+{ TOnlineScript }
+
+constructor TOnlineScript.Create;
+begin
+  ScriptInfos := TScriptInfos.Create;
+end;
+
+destructor TOnlineScript.Destroy;
+begin
+  ScriptInfos.Free;
+  inherited;
 end;
 
 end.

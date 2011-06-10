@@ -2,9 +2,8 @@ unit UdmScripts;
 
 interface
 
-uses
-  SysUtils, Windows, Forms, Classes, uPSComponent, uPSComponent_COM, uPSComponent_Default, UScriptList, UScriptUtils,
-  LoadComplet, LoadCompletImport, uPSRuntime, uPSDebugger, uPSI_BdtkRegEx, uPSI_BdtkObjects;
+uses SysUtils, Windows, Forms, Classes, uPSComponent, uPSComponent_COM, uPSComponent_Default, UScriptList, UScriptUtils, LoadComplet,
+  LoadCompletImport, uPSRuntime, uPSDebugger, uPSI_BdtkRegEx, uPSI_BdtkObjects, uPSI_superobject;
 
 type
   TdmScripts = class(TDataModule)
@@ -36,6 +35,7 @@ type
     FOnIdle: TNotifyEvent;
     FPSImport_RegExpr: TPSImport_BdtkRegEx;
     FPSImport_BdtkObjects: TPSImport_BdtkObjects;
+    FPSImport_superobject: TPSImport_superobject;
     FRunningScript: TScript;
 
     procedure SetActiveFile(const Value: AnsiString);
@@ -57,7 +57,7 @@ type
     function TranslatePositionEx(out Proc, Position: Cardinal; Row: Cardinal; const Fn: AnsiString): Boolean;
     procedure GetUncompiledCode(Lines: TStrings);
     procedure WriteToConsole(const Chaine: string);
-    function GetVar(const Name: AnsiString; out s: AnsiString): PIFVariant;
+    function GetVar(const name: AnsiString; out s: AnsiString): PIFVariant;
     function GetVariableValue(const VarName: AnsiString; Actif: Boolean): AnsiString;
 
     property ScriptList: TScriptList read FScriptList write FScriptList;
@@ -85,10 +85,7 @@ type
 
 implementation
 
-uses
-  AnsiStrings, Procedures, UfrmScripts, Divers, UScriptsFonctions,
-  UScriptsHTMLFunctions, Dialogs, StrUtils, uPSUtils, uPSDisassembly, uPSCompiler;
-
+uses AnsiStrings, Procedures, UfrmScripts, Divers, UScriptsFonctions, UScriptsHTMLFunctions, Dialogs, StrUtils, uPSUtils, uPSDisassembly, uPSCompiler;
 {$R *.dfm}
 
 type
@@ -96,11 +93,9 @@ type
 
   TPositionData = packed record
     FileName: AnsiString;
-    Position,
-    Row,
-    Col,
-    SourcePosition: Cardinal;
+    Position, Row, Col, SourcePosition: Cardinal;
   end;
+
   PFunctionInfo = ^TFunctionInfo;
 
   TFunctionInfo = packed record
@@ -125,6 +120,8 @@ begin
   TPSPluginItem(PSScriptDebugger1.Plugins.Add).Plugin := FPSImport_RegExpr;
   FPSImport_BdtkObjects := TPSImport_BdtkObjects.Create(Self);
   TPSPluginItem(PSScriptDebugger1.Plugins.Add).Plugin := FPSImport_BdtkObjects;
+  FPSImport_superobject := TPSImport_superobject.Create(Self);
+  TPSPluginItem(PSScriptDebugger1.Plugins.Add).Plugin := FPSImport_superobject;
 end;
 
 procedure TdmScripts.DataModuleDestroy(Sender: TObject);
@@ -180,19 +177,22 @@ var
   i: Integer;
 begin
   for i := 0 to Pred(FListTypesImages.Count) do
-    PSScriptDebugger1.Comp.AddConstantN('cti' + AnsiStrings.StringReplace(AnsiString(SansAccents(FListTypesImages.ValueFromIndex[i])), ' ', '_', [rfReplaceAll]), 'integer').SetInt(StrToInt(AnsiString(FListTypesImages.Names[i])));
+    PSScriptDebugger1.Comp.AddConstantN('cti' + AnsiStrings.StringReplace(AnsiString(SansAccents(FListTypesImages.ValueFromIndex[i])), ' ', '_',
+        [rfReplaceAll]), 'integer').SetInt(StrToInt(AnsiString(FListTypesImages.Names[i])));
 
   PSScriptDebugger1.AddMethod(Self, @TdmScripts.WriteToConsole, 'procedure WriteToConsole(const Chaine: string);');
   PSScriptDebugger1.AddMethod(Self, @TdmScripts.WriteToFile, 'procedure WriteToFile(const Chaine, FileName: string);');
   PSScriptDebugger1.AddMethod(FRunningScript, @TScript.OptionValue, 'function GetOptionValue(const OptionName, Default: string): string;');
-  PSScriptDebugger1.AddMethod(FRunningScript, @TScript.OptionValueIndex, 'function GetOptionValueIndex(const OptionName: string; Default: Integer): Integer;');
+  PSScriptDebugger1.AddMethod(FRunningScript, @TScript.OptionValueIndex,
+    'function GetOptionValueIndex(const OptionName: string; Default: Integer): Integer;');
 
   PSScriptDebugger1.AddFunction(@GetPage, 'function GetPage(const url: string; UTF8: Boolean): string;');
   PSScriptDebugger1.Comp.AddTypeS('RAttachement', 'record Nom, Valeur: string; IsFichier: Boolean; end');
   PSScriptDebugger1.AddFunction(@PostPage, 'function PostPage(const url: string; const Pieces: array of RAttachement; UTF8: Boolean): string;');
   PSScriptDebugger1.AddFunction(@findInfo, 'function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;');
   PSScriptDebugger1.AddFunction(@MakeAuteur, 'function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteur;');
-  PSScriptDebugger1.AddFunction(@AskSearchEntry, 'function AskSearchEntry(const Labels: array of string; var Search: string; var Index: Integer): Boolean');
+  PSScriptDebugger1.AddFunction(@AskSearchEntry,
+    'function AskSearchEntry(const Labels: array of string; var Search: string; var Index: Integer): Boolean');
   PSScriptDebugger1.AddFunction(@CombineURL, 'function CombineURL(const Root, URL: string): string;');
   PSScriptDebugger1.AddFunction(@HTMLDecode, 'function HTMLDecode(const Chaine: string): string;');
   PSScriptDebugger1.AddFunction(@HTMLText, 'function HTMLText(const Chaine: string): string;');
@@ -214,7 +214,8 @@ begin
 
   PSScriptDebugger1.Comp.AddTypeS('TReplaceFlag', '(rfReplaceAll, rfIgnoreCase)');
   PSScriptDebugger1.Comp.AddTypeS('TReplaceFlags', 'set of TReplaceFlag');
-  PSScriptDebugger1.AddFunction(@SysUtils.StringReplace, 'function StringReplace(const S, OldPattern, NewPattern: string; Flags: TReplaceFlags): string;');
+  PSScriptDebugger1.AddFunction(@SysUtils.StringReplace,
+    'function StringReplace(const S, OldPattern, NewPattern: string; Flags: TReplaceFlags): string;');
   PSScriptDebugger1.AddFunction(@ScriptStrToFloatDef, 'function StrToFloatDef(const S: string; const Default: Extended): Extended;');
 
   PSScriptDebugger1.AddRegisteredVariable('AlbumToImport', 'TAlbumComplet');
@@ -321,15 +322,15 @@ end;
 procedure TdmScripts.GetUncompiledCode(Lines: TStrings);
 var
   s: AnsiString;
-  script: string;
+  Script: string;
   i, j: LongInt;
   fi: PFunctionInfo;
   pt: TIfList;
   r: PPositionData;
 begin
   PSScriptDebugger1.GetCompiled(s);
-  IFPS3DataToText(s, script);
-  Lines.Text := script;
+  IFPS3DataToText(s, Script);
+  Lines.Text := Script;
 
   Lines.Add('[DEBUG DATA]');
   for i := 0 to TCrackPSDebugExec(PSScriptDebugger1.Exec).FDebugDataForProcs.Count - 1 do
@@ -338,12 +339,12 @@ begin
     pt := fi^.FPositionTable;
     if fi^.Func is TPSExternalProcRec then
       with TPSExternalProcRec(fi^.Func) do
-        Lines.Add(Format('ExternalProc: %s %s', [Name, Decl]))
-    else if fi^.Func is TPSInternalProcRec then
-      with TPSInternalProcRec(fi^.Func) do
-        Lines.Add(Format('InternalProc: %s %s', [ExportName, ExportDecl]))
-    else
-      Lines.Add('unknown proc');
+        Lines.Add(Format('ExternalProc: %s %s', [name, Decl]))
+      else if fi^.Func is TPSInternalProcRec then
+        with TPSInternalProcRec(fi^.Func) do
+          Lines.Add(Format('InternalProc: %s %s', [ExportName, ExportDecl]))
+        else
+          Lines.Add('unknown proc');
 
     for j := 0 to pt.Count - 1 do
     begin
@@ -358,8 +359,8 @@ var
   Buffer, Preamble: TBytes;
   fs: TFileStream;
 begin
-  Buffer := TEncoding.Default.GetBytes(Chaine);
-  Preamble := TEncoding.Default.GetPreamble;
+  Buffer := TEncoding.default.GetBytes(Chaine);
+  Preamble := TEncoding.default.GetPreamble;
 
   if FileExists(FileName) then
     fs := TFileStream.Create(FileName, fmOpenWrite)
@@ -382,16 +383,16 @@ begin
     FConsole.Add(Chaine);
 end;
 
-function TdmScripts.GetVar(const Name: AnsiString; out s: AnsiString): PIFVariant;
+function TdmScripts.GetVar(const name: AnsiString; out s: AnsiString): PIFVariant;
 var
-  i: Longint;
+  i: LongInt;
   s1: AnsiString;
 begin
-  s := UpperCase(Name);
+  s := UpperCase(name);
   if AnsiStrings.AnsiPos('.', s) > 0 then
   begin
     s1 := AnsiString(Copy(string(s), 1, AnsiStrings.AnsiPos('.', s) - 1));
-    delete(s, 1, AnsiStrings.AnsiPos('.', Name));
+    delete(s, 1, AnsiStrings.AnsiPos('.', name));
   end
   else
   begin
@@ -410,7 +411,7 @@ begin
     if Result = nil then
     begin
       for i := 0 to Exec.CurrentProcParams.Count - 1 do
-        if Uppercase(Exec.CurrentProcParams[i]) = s1 then
+        if UpperCase(Exec.CurrentProcParams[i]) = s1 then
         begin
           Result := Exec.GetProcParam(i);
           break;
@@ -419,7 +420,7 @@ begin
     if Result = nil then
     begin
       for i := 0 to Exec.GlobalVarNames.Count - 1 do
-        if Uppercase(Exec.GlobalVarNames[i]) = s1 then
+        if UpperCase(Exec.GlobalVarNames[i]) = s1 then
         begin
           Result := Exec.GetGlobalVar(i);
           break;
@@ -444,13 +445,13 @@ begin
     end
     else
       Result := '{Valeur inaccessible}'
-  else
-    Result := '<désactivé>';
+    else
+      Result := '<désactivé>';
 end;
 
 function TdmScripts.Compile(Script: TScript; out Msg: TMessageInfo): Boolean;
 var
-  i: Longint;
+  i: LongInt;
 begin
   FRunningScript := Script;
   PSScriptDebugger1.MainFileName := FRunningScript.ScriptName;
@@ -475,7 +476,8 @@ end;
 function TdmScripts.Execute: Boolean;
 begin
   FAlbumToImport.Clear;
-  FConsole.Clear;
+  if Assigned(FConsole) then
+    FConsole.Clear;
   if PSScriptDebugger1.Execute then
   begin
     ErrorLine := 0;
@@ -485,11 +487,9 @@ begin
   begin
     ErrorLine := PSScriptDebugger1.ExecErrorRow;
     ErrorFile := PSScriptDebugger1.ExecErrorFileName;
-    DebugPlugin.Messages.AddRuntimeErrorMessage(
-      ErrorFile,
-      AnsiString(Format('%s (Bytecode %d:%d)', [PSScriptDebugger1.ExecErrorToString, PSScriptDebugger1.ExecErrorProcNo, PSScriptDebugger1.ExecErrorByteCodePosition])),
-      PSScriptDebugger1.ExecErrorRow,
-      PSScriptDebugger1.ExecErrorCol);
+    DebugPlugin.Messages.AddRuntimeErrorMessage
+      (ErrorFile, AnsiString(Format('%s (Bytecode %d:%d)', [PSScriptDebugger1.ExecErrorToString, PSScriptDebugger1.ExecErrorProcNo,
+          PSScriptDebugger1.ExecErrorByteCodePosition])), PSScriptDebugger1.ExecErrorRow, PSScriptDebugger1.ExecErrorCol);
     Result := False;
   end;
 end;
@@ -517,14 +517,14 @@ begin
           PSScriptDebugger1.SetBreakPoint('', Line)
         else
           PSScriptDebugger1.SetBreakPoint(Script, Line)
-      else if Script = PSScriptDebugger1.MainFileName then
-        PSScriptDebugger1.ClearBreakPoint('', Line)
-      else
-        PSScriptDebugger1.ClearBreakPoint(Script, Line);
+        else if Script = PSScriptDebugger1.MainFileName then
+          PSScriptDebugger1.ClearBreakPoint('', Line)
+        else
+          PSScriptDebugger1.ClearBreakPoint(Script, Line);
   end
   else
   begin // suppression du point d'arrêt
-    DebugPlugin.Breakpoints.Delete(i);
+    DebugPlugin.Breakpoints.delete(i);
     if Running then
       PSScriptDebugger1.ClearBreakPoint(Script, Line);
   end;

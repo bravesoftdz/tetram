@@ -33,7 +33,7 @@
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Base)'!=''">
 			<DCC_Inlining>off</DCC_Inlining>
-			<DCC_Define>FB25;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT;PCRE_LINKONREQUEST;NO_ADVANCED_HTTP_CLIENT_FEATURES;UseContentCoding;$(DCC_Define)</DCC_Define>
+			<DCC_Define>FB25;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT;PCRE_LINKONREQUEST;NO_ADVANCED_HTTP_CLIENT_FEATURES;UseContentCoding;USE_SSL;NO_OSSL_VERSION_CHECK;$(DCC_Define)</DCC_Define>
 			<BRCC_CompilerToUse>rc</BRCC_CompilerToUse>
 			<DCC_UNIT_PLATFORM>false</DCC_UNIT_PLATFORM>
 			<DCC_DependencyCheckOutputName>..\..\bin\BD.exe</DCC_DependencyCheckOutputName>
@@ -368,6 +368,9 @@
 			<DCCReference Include="Consultation\UfrmConsultationAlbum.pas">
 				<Form>frmConsultationAlbum</Form>
 			</DCCReference>
+			<DCCReference Include="Scripts\uPSR_superobject.pas"/>
+			<DCCReference Include="Scripts\uPSC_superobject.pas"/>
+			<DCCReference Include="Scripts\uPSI_superobject.pas"/>
 			<None Include="ModelSupport_BD\default.txaPackage"/>
 			<None Include="ModelSupport_BD\default.txvpck"/>
 			<None Include="ModelSupport_BD\TypeRec\default.txvpck"/>
@@ -571,7 +574,7 @@
 						<Parameters Name="UseLauncher">False</Parameters>
 						<Parameters Name="LoadAllSymbols">True</Parameters>
 						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
-						<Parameters Name="RunParams">/test</Parameters>
+						<Parameters Name="RunParams">/scripts</Parameters>
 					</Parameters>
 					<VersionInfo>
 						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
@@ -579,7 +582,7 @@
 						<VersionInfo Name="MajorVer">2</VersionInfo>
 						<VersionInfo Name="MinorVer">2</VersionInfo>
 						<VersionInfo Name="Release">1</VersionInfo>
-						<VersionInfo Name="Build">161</VersionInfo>
+						<VersionInfo Name="Build">177</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -591,7 +594,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">2.2.1.161</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">2.2.1.177</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2011</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks"/>

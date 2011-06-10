@@ -3,7 +3,7 @@ object frmScripts: TfrmScripts
   Top = 157
   Caption = 'Script'
   ClientHeight = 670
-  ClientWidth = 862
+  ClientWidth = 882
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -21,9 +21,9 @@ object frmScripts: TfrmScripts
   object PageControl2: TPageControl
     Left = 0
     Top = 29
-    Width = 862
+    Width = 882
     Height = 641
-    ActivePage = tbEdition
+    ActivePage = tbScripts
     Align = alClient
     PopupMenu = PopupMenu1
     Style = tsButtons
@@ -35,7 +35,7 @@ object frmScripts: TfrmScripts
       object ToolBar1: TToolBar
         Left = 0
         Top = 0
-        Width = 854
+        Width = 874
         Height = 22
         AutoSize = True
         Caption = 'ToolBar1'
@@ -66,7 +66,7 @@ object frmScripts: TfrmScripts
       object Panel2: TPanel
         Left = 0
         Top = 22
-        Width = 854
+        Width = 874
         Height = 588
         Align = alClient
         BevelOuter = bvNone
@@ -74,7 +74,7 @@ object frmScripts: TfrmScripts
         ShowCaption = False
         TabOrder = 1
         DesignSize = (
-          854
+          874
           588)
         object Label1: TLabel
           Left = 0
@@ -94,7 +94,7 @@ object frmScripts: TfrmScripts
         object Panel4: TPanel
           Left = 0
           Top = 6
-          Width = 854
+          Width = 874
           Height = 257
           Anchors = [akLeft, akTop, akRight]
           BevelOuter = bvNone
@@ -102,7 +102,7 @@ object frmScripts: TfrmScripts
           ShowCaption = False
           TabOrder = 0
           object Splitter3: TSplitter
-            Left = 621
+            Left = 641
             Top = 0
             Height = 257
             Align = alRight
@@ -111,7 +111,7 @@ object frmScripts: TfrmScripts
             ExplicitHeight = 39
           end
           object ListBox2: TListBox
-            Left = 624
+            Left = 644
             Top = 0
             Width = 230
             Height = 257
@@ -119,7 +119,6 @@ object frmScripts: TfrmScripts
             Align = alRight
             BevelKind = bkTile
             BorderStyle = bsNone
-            ItemHeight = 16
             TabOrder = 0
             OnData = ListBox1Data
             OnDblClick = ListBox1DblClick
@@ -127,7 +126,7 @@ object frmScripts: TfrmScripts
           object ListView1: TListView
             Left = 0
             Top = 0
-            Width = 621
+            Width = 641
             Height = 257
             Align = alClient
             BevelKind = bkTile
@@ -144,7 +143,7 @@ object frmScripts: TfrmScripts
         object Panel5: TPanel
           Left = 0
           Top = 269
-          Width = 854
+          Width = 874
           Height = 100
           Anchors = [akLeft, akTop, akRight]
           BevelKind = bkTile
@@ -153,7 +152,7 @@ object frmScripts: TfrmScripts
           ShowCaption = False
           TabOrder = 1
           DesignSize = (
-            850
+            870
             96)
           object Label2: TLabel
             Left = 8
@@ -251,7 +250,7 @@ object frmScripts: TfrmScripts
           object Memo1: TMemo
             Left = 84
             Top = 46
-            Width = 757
+            Width = 777
             Height = 43
             Anchors = [akLeft, akTop, akRight, akBottom]
             BevelInner = bvNone
@@ -282,16 +281,17 @@ object frmScripts: TfrmScripts
       object Splitter1: TSplitter
         Left = 0
         Top = 420
-        Width = 854
+        Width = 874
         Height = 4
         Cursor = crVSplit
         Align = alBottom
         ExplicitTop = 369
+        ExplicitWidth = 854
       end
       object ToolBar2: TToolBar
         Left = 0
         Top = 0
-        Width = 854
+        Width = 874
         Height = 22
         AutoSize = True
         Caption = 'ToolBar2'
@@ -341,7 +341,7 @@ object frmScripts: TfrmScripts
       object pcScripts: TPageControl
         Left = 0
         Top = 22
-        Width = 854
+        Width = 874
         Height = 398
         Align = alClient
         PopupMenu = PopupMenu1
@@ -351,7 +351,7 @@ object frmScripts: TfrmScripts
       object Panel1: TPanel
         Left = 0
         Top = 424
-        Width = 854
+        Width = 874
         Height = 186
         Align = alBottom
         BevelOuter = bvNone
@@ -359,7 +359,7 @@ object frmScripts: TfrmScripts
         ShowCaption = False
         TabOrder = 2
         object Splitter2: TSplitter
-          Left = 584
+          Left = 604
           Top = 0
           Height = 186
           Align = alRight
@@ -370,7 +370,7 @@ object frmScripts: TfrmScripts
         object PageControl1: TPageControl
           Left = 0
           Top = 0
-          Width = 584
+          Width = 604
           Height = 186
           ActivePage = TabSheet1
           Align = alClient
@@ -380,12 +380,13 @@ object frmScripts: TfrmScripts
             object vstMessages: TVirtualStringTree
               Left = 0
               Top = 0
-              Width = 576
+              Width = 596
               Height = 158
               Align = alClient
               BevelKind = bkTile
               BorderStyle = bsNone
               Header.AutoSizeIndex = 3
+              Header.DefaultHeight = 17
               Header.Font.Charset = DEFAULT_CHARSET
               Header.Font.Color = clWindowText
               Header.Font.Height = -11
@@ -416,7 +417,7 @@ object frmScripts: TfrmScripts
                 end
                 item
                   Position = 3
-                  Width = 202
+                  Width = 222
                   WideText = 'Message'
                 end>
             end
@@ -427,13 +428,14 @@ object frmScripts: TfrmScripts
             object vstSuivis: TVirtualStringTree
               Left = 0
               Top = 0
-              Width = 576
+              Width = 596
               Height = 158
               Align = alClient
               BevelKind = bkTile
               BorderStyle = bsNone
               CheckImageKind = ckSystem
               Header.AutoSizeIndex = 1
+              Header.DefaultHeight = 17
               Header.Font.Charset = DEFAULT_CHARSET
               Header.Font.Color = clWindowText
               Header.Font.Height = -11
@@ -459,7 +461,7 @@ object frmScripts: TfrmScripts
                 end
                 item
                   Position = 1
-                  Width = 426
+                  Width = 446
                   WideText = 'Valeur'
                 end>
             end
@@ -470,13 +472,14 @@ object frmScripts: TfrmScripts
             object vstBreakpoints: TVirtualStringTree
               Left = 0
               Top = 0
-              Width = 576
+              Width = 596
               Height = 158
               Align = alClient
               BevelKind = bkTile
               BorderStyle = bsNone
               CheckImageKind = ckSystem
               Header.AutoSizeIndex = 1
+              Header.DefaultHeight = 17
               Header.Font.Charset = DEFAULT_CHARSET
               Header.Font.Color = clWindowText
               Header.Font.Height = -11
@@ -501,7 +504,7 @@ object frmScripts: TfrmScripts
                 end
                 item
                   Position = 1
-                  Width = 472
+                  Width = 492
                   WideText = 'Fichier'
                 end>
             end
@@ -512,7 +515,7 @@ object frmScripts: TfrmScripts
             object mmConsole: TMemo
               Left = 0
               Top = 0
-              Width = 576
+              Width = 596
               Height = 158
               Align = alClient
               BevelKind = bkTile
@@ -525,11 +528,11 @@ object frmScripts: TfrmScripts
           end
         end
         object Panel3: TPageControl
-          Left = 587
+          Left = 607
           Top = 0
           Width = 267
           Height = 186
-          ActivePage = TabSheet5
+          ActivePage = TabSheet4
           Align = alRight
           TabOrder = 1
           object TabSheet4: TTabSheet
@@ -543,7 +546,6 @@ object frmScripts: TfrmScripts
               Align = alClient
               BevelKind = bkTile
               BorderStyle = bsNone
-              ItemHeight = 16
               PopupMenu = PopupMenu2
               TabOrder = 0
               OnData = ListBox1Data
@@ -662,6 +664,20 @@ object frmScripts: TfrmScripts
               CurrencyChar = #0
             end
           end
+          object Alias: TTabSheet
+            Caption = 'Alias'
+            ImageIndex = 2
+            object Memo2: TMemo
+              Left = 3
+              Top = 3
+              Width = 253
+              Height = 152
+              Lines.Strings = (
+                'Memo2')
+              TabOrder = 0
+              OnChange = EditLabeled1Change
+            end
+          end
         end
       end
     end
@@ -669,24 +685,24 @@ object frmScripts: TfrmScripts
   inline framBoutons1: TframBoutons
     Left = 0
     Top = 0
-    Width = 862
+    Width = 882
     Height = 29
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 862
+    ExplicitWidth = 882
     DesignSize = (
-      862
+      882
       29)
     inherited btnOK: TButton
-      Left = 699
+      Left = 719
       Visible = False
-      ExplicitLeft = 699
+      ExplicitLeft = 719
     end
     inherited btnAnnuler: TButton
-      Left = 779
+      Left = 799
       Caption = 'Fermer'
       OnClick = framBoutons1btnAnnulerClick
-      ExplicitLeft = 779
+      ExplicitLeft = 799
     end
   end
   object SynPasSyn1: TSynPasSyn

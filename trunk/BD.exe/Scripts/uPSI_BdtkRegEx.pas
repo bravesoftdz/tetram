@@ -2,8 +2,7 @@ unit uPSI_BdtkRegEx;
 
 interface
 
-uses
-  SysUtils, Classes, uPSComponent, uPSCompiler, uPSRuntime;
+uses SysUtils, Classes, uPSComponent, uPSCompiler, uPSRuntime;
 
 type
   TPSImport_BdtkRegEx = class(TPSPlugin)
@@ -14,9 +13,7 @@ type
 
 implementation
 
-uses
-  uPSC_BdtkRegEx,
-  uPSR_BdtkRegEx;
+uses uPSC_BdtkRegEx, uPSR_BdtkRegEx;
 
 { TPSImport_PerlRegEx }
 

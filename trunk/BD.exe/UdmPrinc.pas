@@ -341,7 +341,7 @@ begin
       PageToOpen := fcAuteur;
       gestAdd := AjouterAuteurs;
     end;
-    ForceGestion := SameText(ParamValue, 'new') and not Procedures.FindCmdLineSwitch(cmdLine, 'scripts');
+    ForceGestion := SameText(ParamValue, 'new');
     if not ForceGestion and (PageToOpen <> fcActionBack) then
       GuidToOpen := StringToGUID(ParamValue);
     // je force en mode gestion quand on demande la création d'un nouvel élément
@@ -349,9 +349,13 @@ begin
     if not TGlobalVar.Utilisateur.Options.ModeDemarrage or ForceGestion then
       ModeToOpen := fcModeGestion;
     if Procedures.FindCmdLineSwitch(cmdLine, 'scripts') then
-      ModeToOpen := fcModeScript;
+    begin
+      ModeToOpen := fcModeGestion;
+      PageToOpen := fcScripts;
+      ForceGestion := False;
+    end;
     Historique.AddWaiting(ModeToOpen);
-    if ModeToOpen <> fcModeScript then
+//    if ModeToOpen <> fcModeScript then
       if ForceGestion then
         Historique.AddWaiting(fcGestionAjout, nil, nil, @gestAdd, nil, '')
       else

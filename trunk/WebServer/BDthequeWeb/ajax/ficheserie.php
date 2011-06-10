@@ -22,7 +22,7 @@ $collection = load_and_fetch('select * from /*DB_PREFIX*/collections where id_co
 				<TH align=right>Collection&nbsp;:</TH><TD><?echo _out(format_titre($collection->nomcollection))?></TD>
 			</TR>
 <?
-$rs = load_sql('select g.* from /*DB_PREFIX*/genres g inner join /*DB_PREFIX*/genreseries gs on g.id_genre = gs.id_genre where id_serie '.format_string_null($album->id_serie));
+$rs = load_sql('select g.* from /*DB_PREFIX*/genres g inner join /*DB_PREFIX*/genreseries gs on g.id_genre = gs.id_genre where gs.id_serie '.format_string_null($album->id_serie)).' order by g.genre';
 if (mysql_num_rows($rs))
 {
 	$s = '';
@@ -63,7 +63,7 @@ if ($serie->remarquesserie)
 ?>
 
 <?
-$rs = load_sql('select id_album, titrealbum, integrale, horsserie, tome, tomedebut, tomefin, id_serie from /*DB_PREFIX*/albums where id_serie'.format_string_null($serie->id_serie).' order by horsserie, integrale, tome');
+$rs = load_sql('select id_album, titrealbum, integrale, horsserie, tome, tomedebut, tomefin, id_serie from /*DB_PREFIX*/albums where id_serie'.format_string_null($serie->id_serie).' order by horsserie, integrale, tome, anneeparution, moisparution');
 if (mysql_num_rows($rs))
 {
 ?>

@@ -2,8 +2,7 @@ unit UScriptEdition;
 
 interface
 
-uses
-  AnsiStrings, SysUtils, Windows, Classes, UScriptList, SynEdit, ComCtrls;
+uses AnsiStrings, SysUtils, Windows, Classes, UScriptList, SynEdit, ComCtrls;
 
 type
   TScriptEdition = class(TScript)
@@ -16,7 +15,7 @@ type
   public
     constructor Create; override;
 
-    procedure SetFileName(const Value: String); override;
+    procedure SetFileName(const Value: string); override;
     procedure SaveToFile(const FileName: string); override;
     procedure GetScriptLines(Lines: TStrings); override;
 
@@ -27,24 +26,27 @@ type
   end;
 
   TScriptListEdition = class(TScriptList)
-    function InfoScript(Index: Integer): TScriptEdition; overload;
+    function InfoScript(index: Integer): TScriptEdition; overload;
     function InfoScript(TabSheet: TTabSheet): TScriptEdition; overload;
     function InfoScript(Editor: TSynEdit): TScriptEdition; overload;
     function InfoScriptByScriptName(const Script: AnsiString): TScriptEdition;
 
-    function ScriptName(Index: Integer): AnsiString; overload;
+    function ScriptName(index: Integer): AnsiString; overload;
     function ScriptName(TabSheet: TTabSheet): AnsiString; overload;
     function ScriptName(Editor: TSynEdit): AnsiString; overload;
 
-    function ScriptFileName(Index: Integer): string; overload;
+    function ScriptFileName(index: Integer): string; overload;
     function ScriptFileName(TabSheet: TTabSheet): string; overload;
     function ScriptFileName(Editor: TSynEdit): string; overload;
 
-    function EditorByIndex(Index: Integer): TSynEdit;
+    function EditorByIndex(index: Integer): TSynEdit;
     function EditorByScriptName(const Script: AnsiString): TSynEdit;
   end;
 
 implementation
+
+uses
+  CommonConst, Dialogs;
 
 constructor TScriptEdition.Create;
 begin
@@ -54,8 +56,15 @@ end;
 
 procedure TScriptEdition.GetScriptLines(Lines: TStrings);
 begin
+  Lines.Clear;
   if Assigned(Editor) then
-    Lines.Assign(Editor.Lines)
+  begin
+    with ScriptInfos do
+      if ((BDVersion = '') or (BDVersion <= TGlobalVar.Utilisateur.ExeVersion)) then
+        Lines.Assign(Editor.Lines)
+      else
+        ShowMessage('Le script "' + string(ScriptName) + '" n''est pas compatible avec cette version de BDthèque.')
+  end
   else
     inherited;
 end;
@@ -66,10 +75,11 @@ begin
   Modifie := False;
 end;
 
-procedure TScriptEdition.SetFileName(const Value: String);
+procedure TScriptEdition.SetFileName(const Value: string);
 begin
   inherited;
-  if Assigned(FTabSheet) then FTabSheet.Caption := string(ScriptName);
+  if Assigned(FTabSheet) then
+    FTabSheet.Caption := string(ScriptName);
 end;
 
 procedure TScriptEdition.SetModifie(const Value: Boolean);
@@ -85,11 +95,11 @@ begin
       SB.Panels[1].Text := '';
 end;
 
-function TScriptListEdition.ScriptName(Index: Integer): AnsiString;
+function TScriptListEdition.ScriptName(index: Integer): AnsiString;
 var
   info: TScriptEdition;
 begin
-  info := InfoScript(Index);
+  info := InfoScript(index);
   if Assigned(info) then
     Result := info.ScriptName
   else
@@ -118,11 +128,11 @@ begin
     Result := '';
 end;
 
-function TScriptListEdition.ScriptFileName(Index: Integer): string;
+function TScriptListEdition.ScriptFileName(index: Integer): string;
 var
   info: TScriptEdition;
 begin
-  info := InfoScript(Index);
+  info := InfoScript(index);
   if Assigned(info) then
     Result := info.FileName
   else
@@ -151,10 +161,10 @@ begin
     Result := '';
 end;
 
-function TScriptListEdition.InfoScript(Index: Integer): TScriptEdition;
+function TScriptListEdition.InfoScript(index: Integer): TScriptEdition;
 begin
-  if (Index >= 0) and (Index <= Count - 1) then
-    Result := TScriptEdition(Items[Index])
+  if (index >= 0) and (index <= Count - 1) then
+    Result := TScriptEdition(Items[index])
   else
     Result := nil;
 end;
@@ -186,23 +196,15 @@ begin
 end;
 
 function TScriptListEdition.InfoScriptByScriptName(const Script: AnsiString): TScriptEdition;
-var
-  i: Integer;
 begin
-  Result := nil;
-  for i := 0 to Pred(Count) do
-    if AnsiSameText(Items[i].ScriptName, Script) then
-    begin
-      Result := TScriptEdition(Items[i]);
-      Exit;
-    end;
+  Result := inherited FindScript(Script, [skMain, skUnit]) as TScriptEdition;
 end;
 
-function TScriptListEdition.EditorByIndex(Index: Integer): TSynEdit;
+function TScriptListEdition.EditorByIndex(index: Integer): TSynEdit;
 var
   info: TScriptEdition;
 begin
-  info := InfoScript(Index);
+  info := InfoScript(index);
   if Assigned(info) then
     Result := info.Editor
   else

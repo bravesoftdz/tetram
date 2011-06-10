@@ -296,19 +296,21 @@ begin
 
   FHttpCli := TSslHttpCli.Create(nil);
   FHttpCli.SslContext := FSslContext;
+// 09/06/2011 dans certains cas particuliers, la redirection ne fonctionne pas si on est en 1.1
   FHttpCli.RequestVer := '1.1';
+//  FHttpCli.RequestVer := '1.0';
   FHttpCli.Agent := Format('%s/%s', [ChangeFileExt(ExtractFileName(Application.ExeName), ''), GetInfoVersion(Application.ExeName)]);
   FHttpCli.AcceptLanguage := 'fr';
-  // FHttpCli.FollowRelocation := False;
+  FHttpCli.FollowRelocation := True;
   FHttpCli.OnRequestDone := RequestDone;
   FHttpCli.OnDocData := DocData;
   FHttpCli.OnSendData := SendData;
 
-  // FHttpCli.IcsLogger := TIcsLogger.Create(FHttpCli);
-  // FHttpCli.IcsLogger.LogOptions := [loDestFile, loAddStamp, loWsockErr, loWsockInfo, loWsockDump, loSslErr, loSslInfo, loSslDump, loProtSpecErr,
-  // loProtSpecInfo, loProtSpecDump];
-  // FHttpCli.IcsLogger.LogFileName := 'd:\icslog.log';
-  // FHttpCli.IcsLogger.LogFileOption := lfoOverwrite;
+  FHttpCli.IcsLogger := TIcsLogger.Create(FHttpCli);
+  FHttpCli.IcsLogger.LogOptions := [loDestFile, loAddStamp, loWsockErr, loWsockInfo, loWsockDump, loSslErr, loSslInfo, loSslDump, loProtSpecErr,
+    loProtSpecInfo, loProtSpecDump];
+  FHttpCli.IcsLogger.LogFileName := 'd:\icslog.log';
+  FHttpCli.IcsLogger.LogFileOption := lfoOverwrite;
 
   FHttpCli.MultiThreaded := True;
 end;

@@ -378,12 +378,12 @@ begin
           Transaction := GetTransaction(DMPrinc.UIBDataBase);
 
         if ChampSupp <> '' then
-          SQL.Add(Format('UPDATE %s set %s = True', [Table, ChampSupp]))
+          SQL.Add(Format('update %s set %s = True', [Table, ChampSupp]))
         else
-          SQL.Add(Format('DELETE FROM %s', [Table]));
+          SQL.Add(Format('delete from %s', [Table]));
 
         if Reference <> '' then
-          SQL.Add(Format('WHERE %s = ''%s''', [Reference, GUIDToString(Valeur)]));
+          SQL.Add(Format('where %s = ''%s''', [Reference, GUIDToString(Valeur)]));
         ExecSQL;
         Transaction.Commit;
         Result := True;

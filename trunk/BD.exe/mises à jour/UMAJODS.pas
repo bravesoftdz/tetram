@@ -46,11 +46,12 @@ begin
       DMPrinc.UIBRestore.OnVerbose := UIBVerbose;
       DMPrinc.UIBRestore.Verbose := True;
       DMPrinc.UIBRestore.BackupFiles.Text := FichierBackup;
+      DMPrinc.UIBRestore.FixMetadataCharset := csWIN1252;
+      DMPrinc.UIBRestore.FixDataCharset := csWIN1252;
       if pre25 then
-      begin
-        DMPrinc.UIBRestore.FixMetadataCharset := 'WIN1252';
-        DMPrinc.UIBRestore.FixDataCharset := 'WIN1252';
-      end;
+        DMPrinc.UIBRestore.Options := DMPrinc.UIBRestore.Options + [roFixMetadataCharset, roFixDataCharset]
+      else
+        DMPrinc.UIBRestore.Options := DMPrinc.UIBRestore.Options - [roFixMetadataCharset, roFixDataCharset];
       DMPrinc.UIBRestore.Run;
       s := Copy(Memo1.Lines[Memo1.Lines.Count - 2], 1, Length(FinRestore));
       if not SameText(s, FinRestore) then

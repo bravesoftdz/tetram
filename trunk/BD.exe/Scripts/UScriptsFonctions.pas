@@ -379,8 +379,11 @@ begin
       E.Left := L[i].Left + maxW + 8;
       E.Width := 250;
       E.Visible := True;
-      if (Search <> '') and (index = i) then
+      if (index = i) then
+      begin
+        F.ActiveControl := E;
         E.Text := Search;
+      end;
       E.OnChange := F.editChange;
 
       if E.Height > L[i].Height then

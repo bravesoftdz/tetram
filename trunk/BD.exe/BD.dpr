@@ -165,7 +165,10 @@ uses
   UMAJ2_1_1_17 in 'mises à jour\UMAJ2_1_1_17.pas',
   UfrmProgression in 'UfrmProgression.pas' {frmProgression},
   UMAJ2_1_1_155 in 'mises à jour\UMAJ2_1_1_155.pas',
-  UfrmConsultationAlbum in 'Consultation\UfrmConsultationAlbum.pas' {frmConsultationAlbum};
+  UfrmConsultationAlbum in 'Consultation\UfrmConsultationAlbum.pas' {frmConsultationAlbum},
+  uPSR_superobject in 'Scripts\uPSR_superobject.pas',
+  uPSC_superobject in 'Scripts\uPSC_superobject.pas',
+  uPSI_superobject in 'Scripts\uPSI_superobject.pas';
 
 {$R *.RES}
 {$R curseurs.res}

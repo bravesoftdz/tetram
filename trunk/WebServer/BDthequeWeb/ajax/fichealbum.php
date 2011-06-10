@@ -48,7 +48,7 @@ if (NonZero($album->anneeparution) != '')
 ?>
 
 <?
-$rs = load_sql('select g.* from /*DB_PREFIX*/genres g inner join /*DB_PREFIX*/genreseries gs on g.id_genre = gs.id_genre where id_serie '.format_string_null($album->id_serie));
+$rs = load_sql('select g.* from /*DB_PREFIX*/genres g inner join /*DB_PREFIX*/genreseries gs on g.id_genre = gs.id_genre where gs.id_serie '.format_string_null($album->id_serie)).' order by g.genre';
 if (mysql_num_rows($rs))
 {
 	$s = '';
