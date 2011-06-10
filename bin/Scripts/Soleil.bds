@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
 <Script>
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
     <ScriptVersion>1.1</ScriptVersion>
     <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Sun, 27 Sep 2009 11:56:22 +0200</LastUpdate>
+    <LastUpdate>Thu, 9 Jun 2011 16:18:01 +0200</LastUpdate>
+    <Alias aka="Soleil Productions"/>
   </Infos>
   <Options/>
   <Code>program Soleil;
@@ -13,8 +14,8 @@
 uses ScriptFonctions;
 
 const
-  urlSite = &apos;http://www.soleilprod.com&apos;;
-  urlSearch = &apos;/index.php?page=Recherche&amp;mc=&apos;;
+  urlSite = &apos;http://soleilprod.com&apos;;
+  urlSearch = &apos;/recherche&apos;;
 
   regExResultAlbums = &apos;&lt;table(?:.*?)&gt;[\r|\n|\t|\s]*&lt;tr&gt;[\r|\n|\t|\s]*&lt;td class=&quot;titreResultat&quot;&gt;Dans les albums(?s-:.*?)&lt;/tr&gt;((?s-).*?)&lt;/table&gt;&apos;;
   regExResult = &apos;&lt;span class=&quot;bloctxt-03&quot;&gt;&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;(?&lt;titre_album&gt;.*?)&lt;/a&gt;&lt;/span&gt;&lt;br /&gt;[\r|\n|\t|\s]*&lt;span class=&quot;bloctxt-06&quot;&gt;(?&lt;commentaire&gt;(?s-).*?)&lt;/span&gt;&apos;;
@@ -148,9 +149,23 @@ var
   re: TBdtkRegEx;
   c: TScriptChoix;
   id, titre_album, commentaire: string;
+  Pieces: array of RAttachement;
 begin
   Result := &apos;&apos;;
-  page := GetPage(urlSite + urlSearch + Titre, False);
+  SetLength(Pieces, 3);
+  Pieces[0].Nom := &apos;SearchForm[mode]&apos;;
+  Pieces[0].Valeur := &apos;0&apos;;
+  Pieces[0].isFichier := False;
+  Pieces[1].Nom := &apos;SearchForm[term]&apos;;
+  Pieces[1].Valeur := Titre;
+  Pieces[1].isFichier := False;
+  Pieces[2].Nom := &apos;yt1&apos;;
+  Pieces[2].Valeur := &apos;submit&apos;;
+  Pieces[2].isFichier := False;
+  page := PostPage(urlSite + urlSearch, Pieces, False);
+
+writetoconsole(urlSite + urlSearch + &apos; - &apos; + Titre);
+writetoconsole(page);
 
   c := TScriptChoix.Create;
   re := TBdtkRegEx.Create;
