@@ -285,6 +285,7 @@ begin
   with HTMLTagCRLF do
   begin
     Add('br');
+    Add('br/');
     Add('p');
     Add('/p');
     Add('h1');

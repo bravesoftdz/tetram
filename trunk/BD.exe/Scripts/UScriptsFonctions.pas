@@ -47,7 +47,9 @@ type
   end;
 
 function GetPage(const URL: string; UTF8: Boolean = True): string;
+function GetPageWithHeaders(const URL: string; UTF8: Boolean = True): string;
 function PostPage(const URL: string; const Pieces: array of RAttachement; UTF8: Boolean = True): string;
+function PostPageWithHeaders(const URL: string; const Pieces: array of RAttachement; UTF8: Boolean = True): string;
 function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;
 function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteur;
 function AskSearchEntry(const Labels: array of string; var Search: string; var index: Integer): Boolean;
@@ -72,7 +74,7 @@ function RFC822ToDateTimeDef(const S: string; default: TDateTime): TDateTime;
 implementation
 
 uses ProceduresBDtk, UBdtForms, EditLabeled, StdCtrls, Controls, Forms, UframBoutons, UfrmScriptChoix, OverbyteIcsHttpProt, CommonConst, Procedures,
-  SysConst;
+  SysConst, Graphics;
 
 const
   PathDelim = '/';
@@ -100,56 +102,56 @@ var
   Choix: TChoix;
   ms: TStream;
 begin
-  SetLength(tmpFile, MAX_PATH + 1);
-  FillMemory(@tmpFile[1], Length(tmpFile) * SizeOf(Char), 1);
-  GetTempFileName(PChar(TempPath), 'bdk', 0, @tmpFile[1]);
-  P := @tmpFile[1];
-  while P^ <> #0 do
-    Inc(P);
-  SetLength(tmpFile, (Integer(P) - Integer(@tmpFile[1])) div SizeOf(Char));
-
-  Stream := TFileStream.Create(tmpFile, fmOpenReadWrite, fmShareExclusive);
-  try
-    try
-      LoadImage := LoadStreamURL(URL, [], Stream, docType) = 200;
-    finally
-      Stream.Free;
-    end;
-
-    Choix := TChoix.Create;
-    GetCategorie(Categorie).Choix.Add(Choix);
-    Choix.FLibelle := Libelle;
-    Choix.FCommentaire := Commentaire;
-    Choix.FData := Data;
-    if LoadImage then
-    begin
-      ms := GetCouvertureStream(tmpFile, 70, 70, TGlobalVar.Utilisateur.Options.AntiAliasing);
-      if Assigned(ms) then
-        try
-          Choix.FImage := TJPEGImage.Create;
-          try
-            Choix.FImage.LoadFromStream(ms);
-          except
-            FreeAndNil(Choix.FImage);
-          end;
-        finally
-          FreeAndNil(ms);
-        end;
-    end;
-  finally
-    DeleteFile(tmpFile);
-  end;
-end;
-
-procedure TScriptChoix.AjoutChoix(const Categorie, Libelle, Commentaire, Data: string);
-var
-  Choix: TChoix;
-begin
   Choix := TChoix.Create;
   GetCategorie(Categorie).Choix.Add(Choix);
   Choix.FLibelle := Libelle;
   Choix.FCommentaire := Commentaire;
   Choix.FData := Data;
+
+  if URL <> '' then
+    try
+      SetLength(tmpFile, MAX_PATH + 1);
+      ZeroMemory(@tmpFile[1], Length(tmpFile) * SizeOf(Char));
+      GetTempFileName(PChar(TempPath), 'bdk', 0, @tmpFile[1]);
+      P := @tmpFile[1];
+      while P^ <> #0 do
+        Inc(P);
+      SetLength(tmpFile, (Integer(P) - Integer(@tmpFile[1])) div SizeOf(Char));
+
+      Stream := TFileStream.Create(tmpFile, fmOpenReadWrite, fmShareExclusive);
+      try
+        try
+          LoadImage := LoadStreamURL(URL, [], Stream, docType) = 200;
+        finally
+          Stream.Free;
+        end;
+
+        if LoadImage then
+        begin
+          ms := GetCouvertureStream(tmpFile, 70, 70, TGlobalVar.Utilisateur.Options.AntiAliasing);
+          if Assigned(ms) then
+            try
+              Choix.FImage := TJPEGImage.Create;
+              try
+                Choix.FImage.LoadFromStream(ms);
+              except
+                FreeAndNil(Choix.FImage);
+              end;
+            finally
+              FreeAndNil(ms);
+            end;
+        end;
+      finally
+        DeleteFile(tmpFile);
+      end;
+    except
+      //
+    end;
+end;
+
+procedure TScriptChoix.AjoutChoix(const Categorie, Libelle, Commentaire, Data: string);
+begin
+  AjoutChoixWithThumb(Categorie, Libelle, Commentaire, Data, '');
 end;
 
 function TScriptChoix.CategorieCount: Integer;
@@ -257,7 +259,7 @@ begin
   end;
 end;
 
-function PostPage(const URL: string; const Pieces: array of RAttachement; UTF8: Boolean): string;
+function _PostPage(const URL: string; const Pieces: array of RAttachement; UTF8, IncludeHeaders: Boolean): string;
 var
   ss: TStringStream;
 begin
@@ -266,7 +268,35 @@ begin
   else
     ss := TStringStream.Create('', TEncoding.default);
   try
-    if LoadStreamURL(URL, Pieces, ss) = 200 then
+    if LoadStreamURL(URL, Pieces, ss, True, IncludeHeaders) = 200 then
+      Result := ss.DataString
+    else
+      Result := '';
+  finally
+    ss.Free;
+  end;
+end;
+
+function PostPage(const URL: string; const Pieces: array of RAttachement; UTF8: Boolean): string;
+begin
+  Result := _PostPage(URL, Pieces, UTF8, False);
+end;
+
+function PostPageWithHeaders(const URL: string; const Pieces: array of RAttachement; UTF8: Boolean): string;
+begin
+  Result := _PostPage(URL, Pieces, UTF8, True);
+end;
+
+function _GetPage(const URL: string; UTF8, IncludeHeaders: Boolean): string;
+var
+  ss: TStringStream;
+begin
+  if UTF8 then
+    ss := TStringStream.Create('', TEncoding.UTF8)
+  else
+    ss := TStringStream.Create('', TEncoding.default);
+  try
+    if LoadStreamURL(URL, [], ss, True, IncludeHeaders) = 200 then
       Result := ss.DataString
     else
       Result := '';
@@ -276,28 +306,13 @@ begin
 end;
 
 function GetPage(const URL: string; UTF8: Boolean): string;
-var
-  ss: TStringStream;
-  ms: TMemoryStream;
 begin
-  if UTF8 then
-    ss := TStringStream.Create('', TEncoding.UTF8)
-  else
-    ss := TStringStream.Create('', TEncoding.default);
-  ms := TMemoryStream.Create;
-  try
-    if LoadStreamURL(URL, [], ms) = 200 then
-    begin
-      ms.Position := 0;
-      ss.CopyFrom(ms, ms.Size);
-      Result := ss.DataString;
-    end
-    else
-      Result := '';
-  finally
-    ss.Free;
-    ms.Free;
-  end;
+  Result := _GetPage(URL, UTF8, False);
+end;
+
+function GetPageWithHeaders(const URL: string; UTF8: Boolean): string;
+begin
+  Result := _GetPage(URL, UTF8, True);
 end;
 
 function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteur;
@@ -335,14 +350,17 @@ function AskSearchEntry(const Labels: array of string; var Search: string; var i
 var
   F: TdummyForm;
   E: TEditLabeled;
-  L: array of TLabel;
-  i, T, maxW: Integer;
+  Titre, SousTitre: string;
+  L, SubL: array of TLabel;
+  i, T, maxW, P: Integer;
 begin
   Result := False;
   if Length(Labels) = 0 then
     Exit;
 
   SetLength(L, Length(Labels));
+  SetLength(SubL, Length(Labels));
+  ZeroMemory(SubL, SizeOf(SubL));
   T := 0;
   F := TdummyForm.Create(nil);
   try
@@ -352,12 +370,21 @@ begin
 
     for i := low(Labels) to high(Labels) do
     begin
+      Titre := Labels[i];
+      SousTitre := '';
+      P := Pos('|', Titre);
+      if P > 0 then
+      begin
+        SousTitre := Copy(Titre, P + 1, MaxInt);
+        Titre := Copy(Titre, 1, P - 1);
+      end;
+
       L[i] := TLabel.Create(F);
       L[i].Parent := F;
 
       L[i].WordWrap := True;
       L[i].AutoSize := True;
-      L[i].Caption := Labels[i];
+      L[i].Caption := Titre;
       L[i].Left := 0;
       L[i].Width := 150;
       TCrackLabel(L[i]).AdjustBounds;
@@ -366,6 +393,20 @@ begin
 
       if L[i].Width > maxW then
         maxW := L[i].Width;
+
+      if SousTitre <> '' then
+      begin
+        SubL[i] := TLabel.Create(F);
+        SubL[i].Parent := F;
+
+        SubL[i].WordWrap := True;
+        SubL[i].AutoSize := True;
+        SubL[i].Caption := SousTitre;
+        SubL[i].Left := 0;
+        SubL[i].Visible := True;
+        SubL[i].Transparent := True;
+        SubL[i].Font.Style := SubL[i].Font.Style + [fsItalic];
+      end;
     end;
 
     for i := low(Labels) to high(Labels) do
@@ -397,6 +438,14 @@ begin
         L[i].Top := T;
         T := T + L[i].Height + 8;
         E.Top := L[i].Top + (L[i].Height - E.Height) div 2;
+      end;
+
+      if Assigned(SubL[i]) then
+      begin
+        SubL[i].Top := T - 8;
+        SubL[i].Width := E.Left + E.Width;
+        TCrackLabel(SubL[i]).AdjustBounds;
+        T := T + SubL[i].Height;
       end;
     end;
 
@@ -457,8 +506,11 @@ begin
 end;
 
 function ScriptStrToFloatDef(const S: string; const default: Extended): Extended;
+var
+  fs: TFormatSettings;
 begin
-  Result := StrToFloatDef(S, default, ScriptFormatSettings);
+  fs := ScriptFormatSettings;
+  Result := StrToFloatDef(StringReplace(S, ',', fs.DecimalSeparator, []), default, fs);
 end;
 
 function ScriptIsPathDelimiter(const S: string; index: Integer): Boolean;

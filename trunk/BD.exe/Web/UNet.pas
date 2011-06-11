@@ -10,9 +10,10 @@ type
     IsFichier: Boolean;
   end;
 
-function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; ShowProgress: Boolean = True): Word; overload;
-function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; out DocName: string; ShowProgress: Boolean = True)
-  : Word; overload;
+function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; ShowProgress: Boolean = True;
+  IncludeHeaders: Boolean = False): Word; overload;
+function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; out DocName: string; ShowProgress: Boolean = True;
+  IncludeHeaders: Boolean = False): Word; overload;
 
 implementation
 
@@ -296,9 +297,9 @@ begin
 
   FHttpCli := TSslHttpCli.Create(nil);
   FHttpCli.SslContext := FSslContext;
-// 09/06/2011 dans certains cas particuliers, la redirection ne fonctionne pas si on est en 1.1
-  FHttpCli.RequestVer := '1.1';
-//  FHttpCli.RequestVer := '1.0';
+  // 09/06/2011 dans certains cas particuliers, la redirection ne fonctionne pas si on est en 1.1
+  // FHttpCli.RequestVer := '1.1';
+  FHttpCli.RequestVer := '1.0';
   FHttpCli.Agent := Format('%s/%s', [ChangeFileExt(ExtractFileName(Application.ExeName), ''), GetInfoVersion(Application.ExeName)]);
   FHttpCli.AcceptLanguage := 'fr';
   FHttpCli.FollowRelocation := True;
@@ -346,20 +347,21 @@ begin
     FWaiting.ShowProgression('', epFin);
 end;
 
-function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; ShowProgress: Boolean): Word;
+function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; ShowProgress, IncludeHeaders: Boolean): Word;
 var
   dummy: string;
 begin
-  Result := LoadStreamURL(URL, Pieces, StreamAnswer, dummy, ShowProgress);
+  Result := LoadStreamURL(URL, Pieces, StreamAnswer, dummy, ShowProgress, IncludeHeaders);
 end;
 
-function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; out DocName: string; ShowProgress: Boolean): Word;
+function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; out DocName: string;
+  ShowProgress, IncludeHeaders: Boolean): Word;
 var
   MemoryStream: TMemoryStream;
   fs: TFileStream;
   i: Integer;
   idRequete: string;
-  httpHeader: RawByteString;
+  httpHeader, s: RawByteString;
   dl: TDownloader;
 begin
   Result := 0;
@@ -442,6 +444,21 @@ begin
           DocName := Copy(FHttpCli.RcvdHeader[i], 11, MaxInt);
           Break;
         end;
+
+      if IncludeHeaders then
+      begin
+        MemoryStream.Size := 0;
+        StreamAnswer.Position := 0;
+        MemoryStream.CopyFrom(StreamAnswer, 0);
+
+        FHttpCli.RcvdHeader.Add('X-URL-Origin: ' + FHttpCli.URL);
+        FHttpCli.RcvdHeader.Add('X-URL-Final: ' + FHttpCli.Location);
+        s := FHttpCli.RcvdHeader.Text + #13#10;
+        StreamAnswer.Size := 0;
+        StreamAnswer.WriteBuffer(s[1], Length(s));
+        MemoryStream.Position := 0;
+        StreamAnswer.CopyFrom(MemoryStream, 0);
+      end;
     finally
       MemoryStream.Free;
       Free;

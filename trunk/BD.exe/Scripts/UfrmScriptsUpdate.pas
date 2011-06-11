@@ -168,7 +168,7 @@ procedure TfrmScriptsUpdate.GetOnlineList(List: TObjectList<TOnlineScript>);
 
 var
   xml: TJclSimpleXML;
-  ss: TStringStream;
+//  ss: TStringStream;
   script: TOnlineScript;
   i: Integer;
   url: string;

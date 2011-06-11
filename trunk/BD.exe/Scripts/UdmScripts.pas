@@ -187,8 +187,10 @@ begin
     'function GetOptionValueIndex(const OptionName: string; Default: Integer): Integer;');
 
   PSScriptDebugger1.AddFunction(@GetPage, 'function GetPage(const url: string; UTF8: Boolean): string;');
+  PSScriptDebugger1.AddFunction(@GetPageWithHeaders, 'function GetPageWithHeaders(const url: string; UTF8: Boolean): string;');
   PSScriptDebugger1.Comp.AddTypeS('RAttachement', 'record Nom, Valeur: string; IsFichier: Boolean; end');
   PSScriptDebugger1.AddFunction(@PostPage, 'function PostPage(const url: string; const Pieces: array of RAttachement; UTF8: Boolean): string;');
+  PSScriptDebugger1.AddFunction(@PostPageWithHeaders, 'function PostPageWithHeaders(const url: string; const Pieces: array of RAttachement; UTF8: Boolean): string;');
   PSScriptDebugger1.AddFunction(@findInfo, 'function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;');
   PSScriptDebugger1.AddFunction(@MakeAuteur, 'function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteur;');
   PSScriptDebugger1.AddFunction(@AskSearchEntry,

@@ -76,7 +76,7 @@ type
 
 implementation
 
-uses StrUtils, CommonConst, UScriptsFonctions;
+uses StrUtils, CommonConst, UScriptsFonctions, JclStreams;
 
 constructor TScript.Create;
 begin
@@ -248,7 +248,7 @@ begin
         Delete(s, Length(s) - Length(sLineBreak) + 1, Length(sLineBreak));
       Root.Items.ItemNamed['Code'].Value := s;
 
-      SaveToFile(aFileName);
+      SaveToFile(aFileName, seUTF8);
     finally
       Free;
     end;
