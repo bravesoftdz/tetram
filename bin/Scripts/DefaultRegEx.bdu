@@ -1,16 +1,18 @@
-<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Script>
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
     <ScriptVersion>2</ScriptVersion>
     <BDVersion>2.1.0.17</BDVersion>
-    <LastUpdate>Sat, 4 Dec 2010 15:48:43 +0100</LastUpdate>
+    <LastUpdate>Sat, 11 Jun 2011 17:07:26 +0200</LastUpdate>
   </Infos>
   <Options/>
   <Code>unit DefaultRegEx;
 
 const
+  regExURLOrigin = &apos;X-URL-Origin: (.*?)[\r|\n]&apos;;
+  regExURLFinal = &apos;X-URL-Final: (.*?)[\r|\n]&apos;;
   regExURL = &apos;&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;(?&lt;texte&gt;(?s-).*?)&lt;/a&gt;&apos;;
   regExIMG = &apos;&lt;img(?: src=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;&apos;;
   regExNumeric = &apos;(\d+(?:,|\.)?\d*)&apos;;

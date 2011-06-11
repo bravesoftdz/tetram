@@ -1,14 +1,15 @@
-<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Script>
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
     <ScriptVersion>1</ScriptVersion>
     <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Thu, 9 Jun 2011 15:08:19 +0200</LastUpdate>
+    <LastUpdate>Sat, 11 Jun 2011 17:20:04 +0200</LastUpdate>
   </Infos>
   <Options>
     <Option Label="Miniatures dans les recherches" Values="Oui|Non" Default="Oui"/>
+    <Option Label="Date d&apos;&#xE9;dition = Date de parution" Values="Oui|Non" Default="Oui"/>
   </Options>
   <Code>program GoogleEbooks;
 
@@ -36,8 +37,11 @@ begin
     AlbumToImport.Edition.AnneeEdition := annee;
 
     // on a qu&apos;une date d&apos;&#xE9;dition, pas de parution
-    // AlbumToImport.AnneeParution := annee;
-    // AlbumToImport.MoisParution := mois;
+    if GetOptionValue(&apos;Date d&apos;&apos;&#xE9;dition = Date de parution&apos;, &apos;Oui&apos;) = &apos;Oui&apos; then
+    begin
+      AlbumToImport.AnneeParution := annee;
+      AlbumToImport.MoisParution := mois;
+    end;
 
     if annee &lt; 2007 then type_isbn := &apos;ISBN_10&apos;;
   end;
