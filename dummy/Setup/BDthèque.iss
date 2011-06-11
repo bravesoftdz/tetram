@@ -60,6 +60,8 @@ Source: What's New.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\icuuc30.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\icuin30.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\icudt30.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\ssleay32.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\libeay32.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\intl\fbintl.dll; DestDir: {app}\Intl; Flags: ignoreversion
 Source: ..\..\bin\intl\fbintl.conf; DestDir: {app}\Intl; Flags: ignoreversion
 Source: ..\..\bin\WebServer\Site par défaut.zip; DestDir: {app}\WebServer; Flags: ignoreversion
@@ -69,7 +71,7 @@ Source: ..\..\bin\DelZip179.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\msvcp80.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\msvcr80.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\Microsoft.VC80.CRT.manifest; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\pcre3.dll; DestDir: {app}; Flags: ignoreversion
+;Source: ..\..\bin\pcre3.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\scripts\*.bds; DestDir: {app}\Scripts; Flags: ignoreversion promptifolder
 Source: ..\..\bin\scripts\*.bdu; DestDir: {app}\Scripts; Flags: ignoreversion promptifolder
 
