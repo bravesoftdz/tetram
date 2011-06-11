@@ -307,11 +307,11 @@ begin
   FHttpCli.OnDocData := DocData;
   FHttpCli.OnSendData := SendData;
 
-  FHttpCli.IcsLogger := TIcsLogger.Create(FHttpCli);
-  FHttpCli.IcsLogger.LogOptions := [loDestFile, loAddStamp, loWsockErr, loWsockInfo, loWsockDump, loSslErr, loSslInfo, loSslDump, loProtSpecErr,
-    loProtSpecInfo, loProtSpecDump];
-  FHttpCli.IcsLogger.LogFileName := 'd:\icslog.log';
-  FHttpCli.IcsLogger.LogFileOption := lfoOverwrite;
+//  FHttpCli.IcsLogger := TIcsLogger.Create(FHttpCli);
+//  FHttpCli.IcsLogger.LogOptions := [loDestFile, loAddStamp, loWsockErr, loWsockInfo, loWsockDump, loSslErr, loSslInfo, loSslDump, loProtSpecErr,
+//    loProtSpecInfo, loProtSpecDump];
+//  FHttpCli.IcsLogger.LogFileName := 'd:\icslog.log';
+//  FHttpCli.IcsLogger.LogFileOption := lfoOverwrite;
 
   FHttpCli.MultiThreaded := True;
 end;
