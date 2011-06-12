@@ -1469,7 +1469,7 @@ end;
 
 procedure TfrmScripts.ListBox1Data(Control: TWinControl; index: Integer; var Data: string);
 begin
-  Data := FProjetScript.Options[index].FLibelle + ': ' + FProjetScript.Options[index].FChooseValue;
+  Data := FProjetScript.Options[index].FLibelle + ': ' + FProjetScript.Options[index].ChooseValue;
 end;
 
 procedure TfrmScripts.ListBox1DblClick(Sender: TObject);
@@ -1484,12 +1484,12 @@ begin
     try
       RadioGroup1.Caption := Option.FLibelle;
       RadioGroup1.Items.Text := StringReplace(Option.FValues, '|', sLineBreak, [rfReplaceAll]);
-      RadioGroup1.ItemIndex := RadioGroup1.Items.IndexOf(Option.FChooseValue);
+      RadioGroup1.ItemIndex := RadioGroup1.Items.IndexOf(Option.ChooseValue);
       RadioGroup1.Height := 21 + 20 * RadioGroup1.Items.Count;
       ClientHeight := RadioGroup1.Height + framBoutons1.Height + 4;
       if ShowModal = mrOk then
       begin
-        Option.FChooseValue := RadioGroup1.Items[RadioGroup1.ItemIndex];
+        Option.ChooseValue := RadioGroup1.Items[RadioGroup1.ItemIndex];
 
         with TUIBQuery.Create(nil) do
           try
@@ -1498,7 +1498,7 @@ begin
             Prepare(True);
             Params.AsString[0] := Copy(string(FProjetScript.ScriptName), 1, Params.SQLLen[0]);
             Params.AsString[1] := Copy(Option.FLibelle, 1, Params.SQLLen[1]);
-            Params.AsString[2] := Copy(Option.FChooseValue, 1, Params.SQLLen[2]);
+            Params.AsString[2] := Copy(Option.ChooseValue, 1, Params.SQLLen[2]);
             Execute;
             Transaction.Commit;
           finally
@@ -1545,7 +1545,7 @@ begin
           begin
             Option := FProjetScript.OptionByName(Fields.AsString[0]);
             if Assigned(Option) then
-              Option.FChooseValue := Fields.AsString[1];
+              Option.ChooseValue := Fields.AsString[1];
             Next;
           end;
         finally
@@ -2247,7 +2247,7 @@ begin
   Option := TOption.Create;
   if EditOption(Option) then
   begin
-    Option.FChooseValue := Option.FDefaultValue;
+    Option.ChooseValue := Option.FDefaultValue;
     FProjetScript.Options.Add(Option);
     RefreshOptions;
   end

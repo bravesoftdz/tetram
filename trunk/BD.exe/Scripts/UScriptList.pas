@@ -19,9 +19,15 @@ type
   end;
 
   TOption = class
+  private
+    FChooseValue: string;
+    function GetChooseValue: string;
+  public
     FLibelle: string;
     FValues, FDefaultValue: string;
-    FChooseValue: string;
+
+    function IsValidValue(const Value: string): Boolean;
+    property ChooseValue: string read GetChooseValue write FChooseValue;
   end;
 
   TScriptClass = class of TScript;
@@ -50,6 +56,7 @@ type
     procedure Save;
     function OptionByName(const OptionName: string): TOption;
     function OptionValue(const OptionName, default: string): string;
+    function CheckOptionValue(const OptionName, Value: string): Boolean;
     function OptionValueIndex(const OptionName: string; default: Integer): Integer;
     procedure GetScriptLines(Lines: TStrings); virtual;
 
@@ -77,6 +84,11 @@ type
 implementation
 
 uses StrUtils, CommonConst, UScriptsFonctions, JclStreams;
+
+function TScript.CheckOptionValue(const OptionName, Value: string): Boolean;
+begin
+  Result := SameText(OptionValue(OptionName, ''), Value);
+end;
 
 constructor TScript.Create;
 begin
@@ -345,6 +357,27 @@ begin
   Clear;
   GetFiles(Path, ExtMainScript);
   GetFiles(Path, ExtUnit);
+end;
+
+{ TOption }
+
+function TOption.GetChooseValue: string;
+begin
+  if IsValidValue(FChooseValue) then
+    Result := FChooseValue
+  else
+    Result := FDefaultValue;
+end;
+
+function TOption.IsValidValue(const Value: string): Boolean;
+begin
+  with TStringList.Create do
+    try
+      Text := StringReplace(FValues, '|', sLineBreak, [rfReplaceAll]);
+      Result := IndexOf(Value) <> -1;
+    finally
+      Free;
+    end
 end;
 
 end.

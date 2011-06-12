@@ -185,6 +185,9 @@ begin
   PSScriptDebugger1.AddMethod(FRunningScript, @TScript.OptionValue, 'function GetOptionValue(const OptionName, Default: string): string;');
   PSScriptDebugger1.AddMethod(FRunningScript, @TScript.OptionValueIndex,
     'function GetOptionValueIndex(const OptionName: string; Default: Integer): Integer;');
+  PSScriptDebugger1.AddMethod(FRunningScript, @TScript.CheckOptionValue,
+    'function CheckOptionValue(const OptionName, Value: string): Boolean;');
+
 
   PSScriptDebugger1.AddFunction(@GetPage, 'function GetPage(const url: string; UTF8: Boolean): string;');
   PSScriptDebugger1.AddFunction(@GetPageWithHeaders, 'function GetPageWithHeaders(const url: string; UTF8: Boolean): string;');
