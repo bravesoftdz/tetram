@@ -371,172 +371,7 @@
 			<DCCReference Include="Scripts\uPSR_superobject.pas"/>
 			<DCCReference Include="Scripts\uPSC_superobject.pas"/>
 			<DCCReference Include="Scripts\uPSI_superobject.pas"/>
-			<None Include="ModelSupport_BD\default.txaPackage"/>
-			<None Include="ModelSupport_BD\default.txvpck"/>
-			<None Include="ModelSupport_BD\TypeRec\default.txvpck"/>
-			<None Include="ModelSupport_BD\BD\default.txvpck"/>
-			<None Include="ModelSupport_BD\BD\default.txaPackage"/>
-			<None Include="ModelSupport_BD\LoadComplet\default.txvpck"/>
-			<None Include="ModelSupport_BD\LoadCompletImport\default.txvpck"/>
-			<None Include="ModelSupport_BD\ListOfTypeRec\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_2_19\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_3_07\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_3_16\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmEditCritere\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmGallerie\default.txvpck"/>
-			<None Include="ModelSupport_BD\Commun\default.txvpck"/>
-			<None Include="ModelSupport_BD\uPSR_BdtkRegEx\default.txvpck"/>
-			<None Include="ModelSupport_BD\UHistorique\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_0_9\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmScriptChoix\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ2_1_1_17\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmEditEditeur\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ2_1_1_4\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ1_2_3_14\default.txvpck"/>
-			<None Include="ModelSupport_BD\UframConvertisseur\default.txvpck"/>
-			<None Include="ModelSupport_BD\uPSC_BdtkObjects\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmCustomize\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmScriptEditOption\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmStatsGeneral\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmVerbose\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ2_1_0_0\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmRepertoire\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmZoomCouverture\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMySQLMAJ1_0_0_2\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ2_1_0_22\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_2_23\default.txvpck"/>
-			<None Include="ModelSupport_BD\UChampsRecherche\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_2_2\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmScriptsUpdate\default.txvpck"/>
-			<None Include="ModelSupport_BD\IDHashMap\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmChoixDetailSerie\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmChoixDetail\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJODS\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmEditAchatAlbum\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ2_0_1_0\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmFusionEditions\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_3_27\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_2_3\default.txvpck"/>
-			<None Include="ModelSupport_BD\ProceduresBDtk\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmEditCritereTri\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmSaisieEmpruntEmprunteur\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmEditAuteur\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ1_2_0_0\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ1_0_0_0\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmEditCollection\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmProgression\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ2_1_1_2\default.txvpck"/>
-			<None Include="ModelSupport_BD\UImportXML\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_1_7\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmPrevisionsSorties\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ2_1_1_10\default.txvpck"/>
-			<None Include="ModelSupport_BD\CommonConst\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmOptions\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmValidationImport\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ1_2_3_26\default.txvpck"/>
-			<None Include="ModelSupport_BD\UdmCommun\default.txvpck"/>
-			<None Include="ModelSupport_BD\MAJ\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ1_2_0_8\default.txvpck"/>
-			<None Include="ModelSupport_BD\Proc_Gestions\default.txvpck"/>
-			<None Include="ModelSupport_BD\UNet\default.txvpck"/>
-			<None Include="ModelSupport_BD\Updates\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ2_0_0_5\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmEntretien\default.txvpck"/>
-			<None Include="ModelSupport_BD\uPSR_BdtkObjects\default.txvpck"/>
-			<None Include="ModelSupport_BD\Procedures\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_3_14\default.txvpck"/>
-			<None Include="ModelSupport_BD\UframVTEdit\default.txvpck"/>
-			<None Include="ModelSupport_BD\UVirtualTreeEdit\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ2_1_0_72\default.txvpck"/>
-			<None Include="ModelSupport_BD\Textes\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_2_5\default.txvpck"/>
-			<None Include="ModelSupport_BD\VirtualTree\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_3_02\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ1_2_1_0\default.txvpck"/>
-			<None Include="ModelSupport_BD\UScriptsFonctions\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmGestion\default.txvpck"/>
-			<None Include="ModelSupport_BD\UframRechercheRapide\default.txvpck"/>
-			<None Include="ModelSupport_BD\UScriptEdition\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmEditSerie\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmEditAlbum\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ1_2_2_0\default.txvpck"/>
-			<None Include="ModelSupport_BD\uPSI_BdtkObjects\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_3_24\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ1_1_0_0\default.txvpck"/>
-			<None Include="ModelSupport_BD\UBdtForms\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmWizardImport\default.txvpck"/>
-			<None Include="ModelSupport_BD\UdmScripts\default.txvpck"/>
-			<None Include="ModelSupport_BD\UScriptList\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmScriptOption\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ1_0_0_3\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmEditParaBD\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmScriptSearch\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmPublier\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_0_6\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmEditEmprunteur\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmFond\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_3_25\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMySQLMAJ1_0_0_0\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_2_7\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmConvertisseur\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmStock\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ1_2_3_20\default.txvpck"/>
-			<None Include="ModelSupport_BD\Editions\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ2_1_0_16\default.txvpck"/>
-			<None Include="ModelSupport_BD\DIMimeStreams\default.txvpck"/>
-			<None Include="ModelSupport_BD\uPSI_BdtkRegEx\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmStatsAlbums\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmSeriesIncompletes\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ2_1_1_7\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmSaisieEmpruntAlbum\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_3_22\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ2_1_1_8\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_3_19\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmAboutBox\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmStatsEmprunteurs\default.txvpck"/>
-			<None Include="ModelSupport_BD\UScriptsHTMLfunctions\default.txvpck"/>
-			<None Include="ModelSupport_BD\DIMime\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmControlImport\default.txvpck"/>
-			<None Include="ModelSupport_BD\Impression\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmScripts\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ1_2_3_3\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmPreview\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMetadata\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_3_23\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmConsultationSerie\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMySQLMAJ1_0_0_1\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmExportation\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmConsultationEmprunteur\default.txvpck"/>
-			<None Include="ModelSupport_BD\UScriptUtils\default.txvpck"/>
-			<None Include="ModelSupport_BD\UframBoutons\default.txvpck"/>
-			<None Include="ModelSupport_BD\uPSC_BdtkRegEx\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmConsultationAuteur\default.txvpck"/>
-			<None Include="ModelSupport_BD\BdtkRegEx\default.txvpck"/>
-			<None Include="ModelSupport_BD\VirtualTreeBdtk\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmPrevisionAchats\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ1_0_0_2\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_0_8\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_3_21\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmConsultationAlbum\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_1_2\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ1_2_3_22\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmSplash\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ1_2_3_25\default.txvpck"/>
-			<None Include="ModelSupport_BD\UScriptDebug\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmRecherche\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmChoix\default.txvpck"/>
-			<None Include="ModelSupport_BD\UdmPrinc\default.txvpck"/>
-			<None Include="ModelSupport_BD\UMAJ0_0_3_01\default.txvpck"/>
-			<None Include="ModelSupport_BD\UfrmConsultationParaBD\default.txvpck"/>
-			<None Include="ModelSupport_BD\LoadComplet\default.txaPackage"/>
-			<None Include="ModelSupport_BD\TypeRec\default.txaPackage"/>
-			<None Include="ModelSupport_BD\Commun\default.txaPackage"/>
-			<None Include="ModelSupport_BD\LoadCompletImport\default.txaPackage"/>
-			<None Include="ModelSupport_BD\ListOfTypeRec\default.txaPackage"/>
-			<None Include="ModelSupport_BD\Impression\default.txaPackage"/>
-			<None Include="ModelSupport_BD\Editions\default.txaPackage"/>
-			<None Include="ModelSupport_BD\MAJ\default.txaPackage"/>
-			<None Include="ModelSupport_BD\UMetadata\default.txaPackage"/>
+			<DCCReference Include="mises à jour\UMAJ2_2_2_233.pas"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
 			</BuildConfiguration>
@@ -560,7 +395,8 @@
 		<Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
 		<PropertyGroup>
 			<PreBuildEvent><![CDATA[rem del "$(PROJECTDIR)\dcu\*.dcu"]]></PreBuildEvent>
-			<PostBuildEvent><![CDATA[rem copy "d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB" d:\MEDIA.KIT\BDThèque\bin /y]]></PostBuildEvent>
+			<PostBuildEvent><![CDATA[rem copy "d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB" d:\MEDIA.KIT\BDThèque\bin /y
+rem copy "C:\Users\Thierry\Desktop\bases BD\install\BD.GDB" d:\MEDIA.KIT\BDThèque\bin /y]]></PostBuildEvent>
 		</PropertyGroup>
 		<ProjectExtensions>
 			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
@@ -574,15 +410,14 @@
 						<Parameters Name="UseLauncher">False</Parameters>
 						<Parameters Name="LoadAllSymbols">True</Parameters>
 						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
-						<Parameters Name="RunParams">/scripts</Parameters>
 					</Parameters>
 					<VersionInfo>
 						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
 						<VersionInfo Name="AutoIncBuild">True</VersionInfo>
 						<VersionInfo Name="MajorVer">2</VersionInfo>
 						<VersionInfo Name="MinorVer">2</VersionInfo>
-						<VersionInfo Name="Release">2</VersionInfo>
-						<VersionInfo Name="Build">212</VersionInfo>
+						<VersionInfo Name="Release">3</VersionInfo>
+						<VersionInfo Name="Build">1</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -594,7 +429,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">2.2.2.212</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">2.2.3.1</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2011</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks"/>
@@ -608,7 +443,7 @@
 						<Excluded_Packages Name="$(BDS)\bin\dclofficexp140.bpl">Composants Microsoft Office XP Sample Automation Server Wrapper</Excluded_Packages>
 					</Excluded_Packages>
 				</Delphi.Personality>
-				<ModelSupport>True</ModelSupport>
+				<ModelSupport>False</ModelSupport>
 			</BorlandProject>
 			<ProjectFileVersion>12</ProjectFileVersion>
 		</ProjectExtensions>

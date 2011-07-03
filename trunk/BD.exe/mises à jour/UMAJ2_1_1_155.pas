@@ -12,30 +12,6 @@ begin
   begin
     Script.Clear;
 
-    Script.Add('alter table options');
-    Script.Add('  alter valeur to old_valeur,');
-    Script.Add('  add valeur varchar(255) character set UTF8;');
-    Script.Add('update options set valeur = cast(old_valeur as varchar(255) character set WIN1252);');
-    Script.Add('alter table options drop old_valeur;');
-
-    Script.Add('alter table options_scripts');
-    Script.Add('  alter valeur to old_valeur,');
-    Script.Add('  add valeur varchar(255) character set UTF8;');
-    Script.Add('update options_scripts set valeur = cast(old_valeur as varchar(255) character set WIN1252);');
-    Script.Add('alter table options_scripts drop old_valeur;');
-
-    Script.Add('alter table conversions');
-    Script.Add('  alter monnaie1 to old_monnaie1,');
-    Script.Add('  alter monnaie2 to old_monnaie2,');
-    Script.Add('  add monnaie1 varchar(5) character set utf8,');
-    Script.Add('  add monnaie2 varchar(5) character set utf8;');
-    Script.Add('update conversions set');
-    Script.Add('  monnaie1 = cast(cast(old_monnaie1 as varchar(5) character set none) as varchar(5) character set win1252),');
-    Script.Add('  monnaie2 = cast(cast(old_monnaie2 as varchar(5) character set none) as varchar(5) character set win1252);');
-    Script.Add('alter table conversions');
-    Script.Add('  drop old_monnaie1,');
-    Script.Add('  drop old_monnaie2;');
-
     Script.Add('alter procedure achatalbums_by_editeur (');
     Script.Add('    id_editeur type of column editeurs.id_editeur,');
     Script.Add('    filtre varchar(125))');

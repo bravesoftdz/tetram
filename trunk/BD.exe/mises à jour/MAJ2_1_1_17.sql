@@ -1,12 +1,12 @@
 alter table albums add notation smallint;
 alter table series add notation smallint;
 
-insert into listes (id_liste, ref, categorie, ordre, defaut, libelle) values ('{A773AB5C-1605-4096-A3C3-18864F37E19C}', 0, 9, 1, 1, 'Pas noté');
-insert into listes (id_liste, ref, categorie, ordre, defaut, libelle) values ('{E5A68997-3492-4E26-A026-9F3857B62322}', 1, 9, 2, 0, 'Très mauvais');
+insert into listes (id_liste, ref, categorie, ordre, defaut, libelle) values ('{A773AB5C-1605-4096-A3C3-18864F37E19C}', 0, 9, 1, 1, 'Pas notÃ©');
+insert into listes (id_liste, ref, categorie, ordre, defaut, libelle) values ('{E5A68997-3492-4E26-A026-9F3857B62322}', 1, 9, 2, 0, 'TrÃ¨s mauvais');
 insert into listes (id_liste, ref, categorie, ordre, defaut, libelle) values ('{8CB56F5D-E08E-460E-B234-0AE67E279DF3}', 2, 9, 3, 0, 'Mauvais');
 insert into listes (id_liste, ref, categorie, ordre, defaut, libelle) values ('{CA13548A-79FD-4212-8763-4AA67834B5B4}', 3, 9, 4, 0, 'Moyen');
 insert into listes (id_liste, ref, categorie, ordre, defaut, libelle) values ('{99FE9442-96E4-4389-B6A0-30DFF4609A72}', 4, 9, 5, 0, 'Bien');
-insert into listes (id_liste, ref, categorie, ordre, defaut, libelle) values ('{C1FFC725-83E3-4766-A1E7-AC3F9360C96E}', 5, 9, 6, 0, 'Très bien');
+insert into listes (id_liste, ref, categorie, ordre, defaut, libelle) values ('{C1FFC725-83E3-4766-A1E7-AC3F9360C96E}', 5, 9, 6, 0, 'TrÃ¨s bien');
 
 alter procedure proc_emprunts
 returns (

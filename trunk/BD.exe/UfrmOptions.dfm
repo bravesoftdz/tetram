@@ -73,7 +73,7 @@ object frmOptions: TfrmOptions
     Width = 360
     Height = 378
     Cursor = crHandPoint
-    ActivePage = TabSheet2
+    ActivePage = options
     Align = alClient
     HotTrack = True
     Images = ImageList1

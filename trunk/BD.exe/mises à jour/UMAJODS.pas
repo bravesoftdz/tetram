@@ -103,7 +103,7 @@ begin
     name := 'UIBDBDst';
     Params.Clear;
     Params.Add('sql_dialect=3');
-    Params.Add('lc_ctype=UTF8');
+    Params.Add('lc_ctype=ISO8859_1');
     UserName := 'SYSDBA';
     PassWord := 'masterkey';
   end;

@@ -462,9 +462,9 @@ begin
         diffmois = 0;
       else
         diffmois = CURRENTMOIS - MOISPRECEDENT;
-      /* non pondéré: sommeponderee = sommeponderee + (((CURRENTANNEE - ANNEEPRECEDENTE) * 12 + (COALESCE(CURRENTMOIS, 1) - COALESCE(MOISPRECEDENT, 1))) / (CURRENTTOME - TOMEPRECEDENT)); */
+      /* non pondÃ©rÃ©: sommeponderee = sommeponderee + (((CURRENTANNEE - ANNEEPRECEDENTE) * 12 + (COALESCE(CURRENTMOIS, 1) - COALESCE(MOISPRECEDENT, 1))) / (CURRENTTOME - TOMEPRECEDENT)); */
       sommeponderee = sommeponderee + (((CURRENTANNEE - ANNEEPRECEDENTE) * 12 + diffmois) / (CURRENTTOME - TOMEPRECEDENT)) * CURRENTTOME;
-      /* non pondéré: comptealbum = comptealbum + 1;*/
+      /* non pondÃ©rÃ©: comptealbum = comptealbum + 1;*/
       comptealbum = comptealbum + CURRENTTOME;
     end
     tomeprecedent = CURRENTTOME;

@@ -918,7 +918,7 @@ begin
       c.nomcollection
     from
       liste_tomes(:withintegrale, :in_idserie) a
-      /* pas de left join: on cherche les manquants pour compléter les séries */
+      /* pas de left join: on cherche les manquants pour complÃ©ter les sÃ©ries */
       inner join series s on
         a.id_serie = s.id_serie
       left join editeurs e on
@@ -985,8 +985,8 @@ begin
     end
   end
 
-  /* on ne peut pas utiliser un "union": le order by de la première requête
-     est impératif */
+  /* on ne peut pas utiliser un "union": le order by de la premiÃ¨re requÃªte
+     est impÃ©ratif */
   countserie = 0;
   achat = null;
   for
@@ -1612,7 +1612,7 @@ begin
   anneeprecedente = -1;
   moisprecedent = null;
   for select tome, anneeparution, moisparution, s.id_serie
-      /* pas de left join: on calcul les prévisions de sorties des nouveautés des séries */
+      /* pas de left join: on calcul les prÃ©visions de sorties des nouveautÃ©s des sÃ©ries */
       from albums a inner join series s on s.id_serie = a.id_serie
       where s.suivresorties = 1
             and a.horsserie = 0 and a.integrale = 0 and a.anneeparution is not null
@@ -1648,9 +1648,9 @@ begin
         diffmois = 0;
       else
         diffmois = currentmois - moisprecedent;
-      /* non pondéré: sommeponderee = sommeponderee + (((CURRENTANNEE - ANNEEPRECEDENTE) * 12 + (COALESCE(CURRENTMOIS, 1) - COALESCE(MOISPRECEDENT, 1))) / (CURRENTTOME - TOMEPRECEDENT)); */
+      /* non pondÃ©rÃ©: sommeponderee = sommeponderee + (((CURRENTANNEE - ANNEEPRECEDENTE) * 12 + (COALESCE(CURRENTMOIS, 1) - COALESCE(MOISPRECEDENT, 1))) / (CURRENTTOME - TOMEPRECEDENT)); */
       sommeponderee = sommeponderee + (((currentannee - anneeprecedente) * 12 + diffmois) / (currenttome - tomeprecedent)) * currenttome;
-      /* non pondéré: comptealbum = comptealbum + 1;*/
+      /* non pondÃ©rÃ©: comptealbum = comptealbum + 1;*/
       comptealbum = comptealbum + currenttome;
     end
     tomeprecedent = currenttome;

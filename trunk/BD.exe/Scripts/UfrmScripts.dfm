@@ -32,10 +32,6 @@ object frmScripts: TfrmScripts
     object tbScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object ToolBar1: TToolBar
         Left = 0
         Top = 0
@@ -282,10 +278,6 @@ object frmScripts: TfrmScripts
     end
     object tbEdition: TTabSheet
       Caption = 'Edition'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Splitter1: TSplitter
         Left = 0
         Top = 420
@@ -385,10 +377,6 @@ object frmScripts: TfrmScripts
           TabOrder = 0
           object TabSheet1: TTabSheet
             Caption = 'Messages'
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object vstMessages: TVirtualStringTree
               Left = 0
               Top = 0
@@ -429,7 +417,7 @@ object frmScripts: TfrmScripts
                 end
                 item
                   Position = 3
-                  Width = 226
+                  Width = 222
                   WideText = 'Message'
                 end>
             end
@@ -437,10 +425,6 @@ object frmScripts: TfrmScripts
           object TabSheet2: TTabSheet
             Caption = 'Points de suivi'
             ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object vstSuivis: TVirtualStringTree
               Left = 0
               Top = 0
@@ -477,7 +461,7 @@ object frmScripts: TfrmScripts
                 end
                 item
                   Position = 1
-                  Width = 450
+                  Width = 446
                   WideText = 'Valeur'
                 end>
             end
@@ -485,10 +469,6 @@ object frmScripts: TfrmScripts
           object TabSheet3: TTabSheet
             Caption = 'Points d'#39'arr'#234't'
             ImageIndex = 2
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object vstBreakpoints: TVirtualStringTree
               Left = 0
               Top = 0
@@ -524,7 +504,7 @@ object frmScripts: TfrmScripts
                 end
                 item
                   Position = 1
-                  Width = 496
+                  Width = 492
                   WideText = 'Fichier'
                 end>
             end
@@ -532,10 +512,6 @@ object frmScripts: TfrmScripts
           object TabSheet6: TTabSheet
             Caption = 'Sortie'
             ImageIndex = 3
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object mmConsole: TMemo
               Left = 0
               Top = 0
@@ -561,10 +537,6 @@ object frmScripts: TfrmScripts
           TabOrder = 1
           object TabSheet4: TTabSheet
             Caption = 'Options'
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object ListBox1: TListBox
               Left = 0
               Top = 0
@@ -583,10 +555,6 @@ object frmScripts: TfrmScripts
           object TabSheet5: TTabSheet
             Caption = 'Informations'
             ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object Label11: TLabel
               Left = 3
               Top = 6
@@ -699,10 +667,6 @@ object frmScripts: TfrmScripts
           object Alias: TTabSheet
             Caption = 'Alias'
             ImageIndex = 2
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object Memo2: TMemo
               Left = 3
               Top = 3
