@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Script>
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
     <ScriptVersion>1.1</ScriptVersion>
     <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Sun, 27 Sep 2009 11:56:06 +0200</LastUpdate>
+    <LastUpdate>Sun, 12 Jun 2011 17:30:16 +0200</LastUpdate>
   </Infos>
   <Options/>
   <Code>program Pika;

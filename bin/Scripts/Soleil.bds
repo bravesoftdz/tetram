@@ -5,7 +5,7 @@
     <Description/>
     <ScriptVersion>2</ScriptVersion>
     <BDVersion>2.2.1.185</BDVersion>
-    <LastUpdate>Sat, 11 Jun 2011 18:03:27 +0200</LastUpdate>
+    <LastUpdate>Sun, 12 Jun 2011 15:01:35 +0200</LastUpdate>
     <Alias aka="Soleil Productions"/>
   </Infos>
   <Options>
@@ -57,7 +57,7 @@ begin
   with TStringList.Create do
     try
       // c&apos;est l&apos;ann&#xE9;e de la derni&#xE8;re &#xE9;dition qui est indiqu&#xE9;e, par la date de parution
-      DateParution := GetOptionValue(&apos;Date d&apos;&apos;&#xE9;dition = Date de parution&apos;, &apos;Oui&apos;) = &apos;Oui&apos;;
+      DateParution := CheckOptionValue(&apos;Date d&apos;&apos;&#xE9;dition = Date de parution&apos;, &apos;Oui&apos;);
       Split(ExtractRegEx(page, regExAlbumEdition), &apos;/&apos;);
       if Count &gt; 0 then
       begin
@@ -99,7 +99,7 @@ begin
     while re.Find(s) do
       AlbumToImport.Sujet.Add(HTMLText(s));
 
-    AuteursSerie := GetOptionValue(&apos;Liste des auteurs&apos;, &apos;Album et s&#xE9;rie&apos;) = &apos;Album et s&#xE9;rie&apos;;
+    AuteursSerie := CheckOptionValue(&apos;Liste des auteurs&apos;, &apos;Album et s&#xE9;rie&apos;);
 
     if re.BeginSearch(ExtractRegEx(page, regExAlbumScenariste), regExURL) then
       while re.Next do
@@ -146,7 +146,7 @@ var
   Miniatures: Boolean;
   searchSerie: boolean;
 begin
-  Miniatures := GetOptionValue(&apos;Miniatures dans les recherches&apos;, &apos;Oui&apos;) = &apos;Oui&apos;;
+  Miniatures := CheckOptionValue(&apos;Miniatures dans les recherches&apos;, &apos;Oui&apos;);
   Result := &apos;&apos;;
 
   c := TScriptChoix.Create;
