@@ -1,4 +1,6 @@
-﻿-=-=-=-=-=-    2.2.1.0 - 20/09/2009    -=-=-=-=-=-
+﻿-=-=-=-=-=-    2.2.3.0 - 03/07/2011    -=-=-=-=-=-
+
+-=-=-=-=-=-    2.2.1.0 - 20/09/2009    -=-=-=-=-=-
 
 * Nouveautés * 
       - Raccourcis disponibles quand le programme est ajouté à la barre de 

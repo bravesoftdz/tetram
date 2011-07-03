@@ -55,7 +55,7 @@ Source: ..\..\bin\fbembed.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\firebird.msg; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\ib_util.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\UDF\BDT_UDF.dll; DestDir: {app}\UDF; Flags: ignoreversion
-Source: Base vide\BD.GDB; DestDir: {userappdata}\TetramCorp\BDTheque; Flags: onlyifdoesntexist ignoreversion; Tasks: ; Languages: 
+Source: Base vide\BD.GDB; DestDir: {userappdata}\TetramCorp\BDTheque; Flags: onlyifdoesntexist ignoreversion; Check: FirstInstall
 Source: What's New.txt; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\icuuc30.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\icuin30.dll; DestDir: {app}; Flags: ignoreversion
@@ -121,6 +121,11 @@ UninstallRegKey=SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{A86E29B5-D1
     Label2: TLabel;
     RadioButton1: TRadioButton;
     RadioButton2: TRadioButton;
+
+  function FirstInstall: Boolean;
+  begin
+    Result := not IsUpdate;
+  end;
 
   procedure CustomForm_Activate(Page: TWizardPage);
   begin
