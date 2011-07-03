@@ -195,6 +195,7 @@ type
     procedure actPublierExecute(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure actFicheModifierExecute(Sender: TObject);
+    procedure CheminBaseExecute(Sender: TObject);
   private
     { Déclarations privées }
     FToolOriginal: TStringList;
@@ -696,6 +697,11 @@ begin
     NewAction(nil);
   NewAction(HistoriqueNext);
   NewAction(HistoriqueBack);
+end;
+
+procedure TfrmFond.CheminBaseExecute(Sender: TObject);
+begin
+  ShellExecute(Application.DialogHandle, nil, PChar('explorer.exe'), PChar('/select,' + DatabasePath), nil, SW_NORMAL);
 end;
 
 procedure TfrmFond.LoadToolBarres;
