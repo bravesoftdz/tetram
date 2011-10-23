@@ -149,7 +149,7 @@ procedure LitOptions;
   begin
     with Table do
     begin
-      Params.AsString[0] := Copy(Champ, 1, Params.SQLLen[0]);
+      Params.AsString[0] := Copy(Champ, 1, Params.MaxStrLen[0]);
       Open;
       if not Eof then
         Result := Fields.AsUnicodeString[0]
@@ -169,9 +169,9 @@ begin
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'SELECT FIRST 1 Valeur FROM OPTIONS WHERE NOM_OPTION = ? ORDER BY DM_OPTIONS DESC';
       Prepare(True);
-      TGlobalVar.Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', CurrencyString);
-      FormatMonnaie := IfThen(CurrencyFormat in [0, 2], TGlobalVar.Utilisateur.Options.SymboleMonnetaire + IfThen(CurrencyFormat = 2, ' ', ''), '')
-        + FormatMonnaieCourt + IfThen(CurrencyFormat in [1, 3], IfThen(CurrencyFormat = 3, ' ', '')
+      TGlobalVar.Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', FormatSettings.CurrencyString);
+      FormatMonnaie := IfThen(FormatSettings.CurrencyFormat in [0, 2], TGlobalVar.Utilisateur.Options.SymboleMonnetaire + IfThen(FormatSettings.CurrencyFormat = 2, ' ', ''), '')
+        + FormatMonnaieCourt + IfThen(FormatSettings.CurrencyFormat in [1, 3], IfThen(FormatSettings.CurrencyFormat = 3, ' ', '')
           + TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '');
       RepImages := LitStr(op, 'RepImages', RepImages);
     finally
@@ -193,8 +193,6 @@ begin
       TGlobalVar.Utilisateur.Options.VerifMAJDelai := ReadInteger('Divers', 'VerifMAJDelai', 4);
       TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums := ReadBool('DIVERS', 'SerieObligatoireAlbums', False);
       TGlobalVar.Utilisateur.Options.SerieObligatoireParaBD := ReadBool('DIVERS', 'SerieObligatoireParaBD', False);
-      TGlobalVar.Utilisateur.Options.RepertoireScripts := IncludeTrailingPathDelimiter
-        (ReadString('DIVERS', 'Scripts', IncludeTrailingPathDelimiter(ExtractFilePath(Application.ExeName)) + 'scripts'));
       TGlobalVar.Utilisateur.Options.AfficheNoteListes := ReadBool('DIVERS', 'AfficheNoteListes', True);
 
       TGlobalVar.Utilisateur.Options.SiteWeb.Adresse := ReadString('WWW', 'Adresse', '');
@@ -220,7 +218,7 @@ procedure EcritOptions;
     begin
       SQL.Text := 'UPDATE OR INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES (:Nom_Option, :Valeur) MATCHING (Nom_Option)';
       Prepare(True);
-      Params.AsString[1] := Copy(Champ, 1, Params.SQLLen[0]);
+      Params.AsString[1] := Copy(Champ, 1, Params.MaxStrLen[0]);
       Params.AsCurrency[1] := Valeur;
       ExecSQL;
     end;
@@ -232,8 +230,8 @@ procedure EcritOptions;
     begin
       SQL.Text := 'UPDATE OR INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES (:Nom_Option, :Valeur) MATCHING (Nom_Option)';
       Prepare(True);
-      Params.AsString[0] := Copy(Champ, 1, Params.SQLLen[0]);
-      Params.AsString[1] := Copy(Valeur, 1, Params.SQLLen[1]);
+      Params.AsString[0] := Copy(Champ, 1, Params.MaxStrLen[0]);
+      Params.AsString[1] := Copy(Valeur, 1, Params.MaxStrLen[1]);
       ExecSQL;
     end;
   end;
@@ -464,7 +462,7 @@ begin
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'SELECT Champ, TEXTECHAMP FROM description_typesupport WHERE Upper(TableChamps) = ? ORDER BY ordrechamp';
       Prepare(True);
-      Params.AsString[0] := Copy(UpperCase(Table), 1, Params.SQLLen[0]);
+      Params.AsString[0] := Copy(UpperCase(Table), 1, Params.MaxStrLen[0]);
       Open;
     end;
     if not Desc.Eof then
@@ -902,8 +900,8 @@ begin
             Chemin := RepImages;
           SQL.Text := 'SELECT BlobContent FROM LOADBLOBFROMFILE(:Chemin, :Fichier);';
           Prepare(True);
-          Params.AsString[0] := Copy(Chemin, 1, Params.SQLLen[0]);
-          Params.AsString[1] := Copy(Fichier, 1, Params.SQLLen[1]);
+          Params.AsString[0] := Copy(Chemin, 1, Params.MaxStrLen[0]);
+          Params.AsString[1] := Copy(Fichier, 1, Params.MaxStrLen[1]);
           Open;
           if Eof then
           begin
@@ -1066,8 +1064,8 @@ begin
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'SELECT * FROM SearchFileName(:Chemin, :Fichier, :Reserve)';
       Prepare(True);
-      Params.AsString[0] := Copy(IncludeTrailingPathDelimiter(Chemin), 1, Params.SQLLen[0]);
-      Params.AsString[1] := Copy(Fichier, 1, Params.SQLLen[1]);
+      Params.AsString[0] := Copy(IncludeTrailingPathDelimiter(Chemin), 1, Params.MaxStrLen[0]);
+      Params.AsString[1] := Copy(Fichier, 1, Params.MaxStrLen[1]);
       Params.AsBoolean[2] := Reserve;
       Open;
       Result := ExtractFileName(Fields.AsString[0]);

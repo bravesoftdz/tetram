@@ -344,7 +344,7 @@ begin
   else
     Prn.WriteLineColumn(1, -2, NonZero(IntToStr(Album.Tome)));
   Prn.WriteLineColumn(0, -1, rsTransAnneeParution + ' :');
-  Prn.WriteLineColumn(1, -2, IIf(Album.MoisParution > 0, ShortMonthNames[Album.MoisParution] + ' ', '') + NonZero(IntToStr(Album.AnneeParution)));
+  Prn.WriteLineColumn(1, -2, IIf(Album.MoisParution > 0, FormatSettings.ShortMonthNames[Album.MoisParution] + ' ', '') + NonZero(IntToStr(Album.AnneeParution)));
 
   s := '';
   for i := 0 to Album.Serie.Genres.Count - 1 do
@@ -2123,7 +2123,7 @@ begin
           else
             AjoutString(s, NonZero(IntToStr(PAl.Tome)), ' - ', 'Tome ');
 
-          AjoutString(s, IIf(PAl.MoisParution > 0, ShortMonthNames[PAl.MoisParution] + ' ', '') + NonZero(IntToStr(PAl.AnneeParution)), ' - ');
+          AjoutString(s, IIf(PAl.MoisParution > 0, FormatSettings.ShortMonthNames[PAl.MoisParution] + ' ', '') + NonZero(IntToStr(PAl.AnneeParution)), ' - ');
           AjoutString(s, FormatTitre(PAl.Titre), ' - ');
           if PAl.PrixCalcule then
             AjoutString(s, FormatCurr(FormatMonnaie, PAl.Prix), ' - ');

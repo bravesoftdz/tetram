@@ -154,6 +154,7 @@ object frmStock: TfrmStock
     BevelKind = bkTile
     BorderStyle = bsNone
     Header.AutoSizeIndex = 2
+    Header.DefaultHeight = 17
     Header.Font.Charset = DEFAULT_CHARSET
     Header.Font.Color = clWindowText
     Header.Font.Height = -11

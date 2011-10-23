@@ -1173,7 +1173,7 @@ end;
 
 function TEmprunt.ChaineAffichage(dummy: Boolean = True): string;
 begin
-  Result := FormatDateTime(ShortDateFormat, Date);
+  Result := FormatDateTime(FormatSettings.ShortDateFormat, Date);
 end;
 
 constructor TEmprunt.Create;

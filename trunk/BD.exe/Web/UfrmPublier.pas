@@ -398,7 +398,7 @@ var
                 // ss.Free;
                 // end;
                 // end;
-                uftNumeric: contenuChamp := StringReplace(Fields.AsString[i], DecimalSeparator, '.', []);
+                uftNumeric: contenuChamp := StringReplace(Fields.AsString[i], FormatSettings.DecimalSeparator, '.', []);
                 else
                   contenuChamp := Trim(Fields.AsString[i]);
                 end;
@@ -469,7 +469,7 @@ var
       begin
         SQL.Text := 'select count(*) from suppressions where tablename = :table and dm_suppressions >= :UpgradeFromDate';
         Prepare(True);
-        Params.AsString[0] := Copy(InfoTable.TableName, 1, Params.SQLLen[0]);
+        Params.AsString[0] := Copy(InfoTable.TableName, 1, Params.MaxStrLen[0]);
         Params.AsDate[1] := Trunc(UpgradeFromDate);
         Open;
         Inc(Result, Fields.AsInteger[0]);
@@ -497,7 +497,7 @@ var
         SQL.Text := 'select ID as ' + InfoTable.ID +
           ' from suppressions where tablename = :table and dm_suppressions >= :UpgradeFromDate order by dm_suppressions';
         Prepare(True);
-        Params.AsString[0] := Copy(InfoTable.TableName, 1, Params.SQLLen[0]);
+        Params.AsString[0] := Copy(InfoTable.TableName, 1, Params.MaxStrLen[0]);
         Params.AsDate[1] := Trunc(UpgradeFromDate);
         Open;
         SendDataset(InfoTable, qry, True);

@@ -502,7 +502,7 @@ end;
 
 function ScriptFormatSettings: TFormatSettings;
 begin
-  GetLocaleFormatSettings(1033, Result);
+  Result := TFormatSettings.Create(1033);
 end;
 
 function ScriptStrToFloatDef(const S: string; const default: Extended): Extended;
@@ -693,7 +693,7 @@ begin
     while (P1 <= 12) and (not SameText(RFC822_Months[P1], aMonthLabel)) do
       Inc(P1);
 
-    GetLocaleFormatSettings(GetSystemDefaultLCID, aFormatSettings);
+    aFormatSettings := TFormatSettings.Create(GetSystemDefaultLCID);
     aFormatSettings.DateSeparator := '/';
     aFormatSettings.TimeSeparator := ':';
     aFormatSettings.ShortDateFormat := 'dd/mm/yyyy';

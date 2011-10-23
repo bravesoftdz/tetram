@@ -178,7 +178,7 @@ begin
           SQL.Text := 'INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES (?, ?)';
           Prepare(True);
           Params.AsString[0] := 'Version';
-          Params.AsString[1] := Copy(CurrentVersion, 1, Params.SQLLen[0]);
+          Params.AsString[1] := Copy(CurrentVersion, 1, Params.MaxStrLen[0]);
           ExecSQL;
         except
           // Pour s'assurer qu'il y'a la ligne dans la table options
@@ -198,7 +198,7 @@ begin
     Exit;
   end;
 
-  if ListFBUpdates.Last.Version > CurrentVersion then
+  if (ListFBUpdates.Last.Version > CurrentVersion) or (UIBDataBase.InfoPageSize < DBPageSize) then
   begin
     if not(Force or (MessageDlg(Msg + #13#10'Voulez-vous la mettre à jour?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)) then
       Exit;

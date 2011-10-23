@@ -47,8 +47,8 @@ begin
     Transaction := GetTransaction(DMPrinc.UIBDataBase);
     SQL.Text := 'SELECT Monnaie1, Monnaie2, Taux FROM conversions WHERE Monnaie1 = ? OR Monnaie2 = ?';
     Prepare(True);
-    Params.AsString[0] := Copy(TGlobalVar.Utilisateur.Options.SymboleMonnetaire, 1, Params.SQLLen[0]);
-    Params.AsString[1] := Copy(TGlobalVar.Utilisateur.Options.SymboleMonnetaire, 1, Params.SQLLen[1]);
+    Params.AsString[0] := Copy(TGlobalVar.Utilisateur.Options.SymboleMonnetaire, 1, Params.MaxStrLen[0]);
+    Params.AsString[1] := Copy(TGlobalVar.Utilisateur.Options.SymboleMonnetaire, 1, Params.MaxStrLen[1]);
     Open;
     i := 0;
     while not EOF do begin

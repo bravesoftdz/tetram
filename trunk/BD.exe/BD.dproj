@@ -4,7 +4,11 @@
 			<MainSource>BD.dpr</MainSource>
 			<Config Condition="'$(Config)'==''">Débogage</Config>
 			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
-			<ProjectVersion>12.0</ProjectVersion>
+			<ProjectVersion>12.3</ProjectVersion>
+			<Base>True</Base>
+			<Platform>Win32</Platform>
+			<AppType>Application</AppType>
+			<FrameworkType>VCL</FrameworkType>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
 			<Base>true</Base>
@@ -77,11 +81,9 @@
 			</DelphiCompile>
 			<RcCompile Include="ressources.rc">
 				<ContainerId>RC</ContainerId>
-				<ContainerId>RC</ContainerId>
 				<Form>ressources.res</Form>
 			</RcCompile>
 			<RcCompile Include="mises à jour\scripts_maj.rc">
-				<ContainerId>RC</ContainerId>
 				<ContainerId>RC</ContainerId>
 				<Form>scripts_maj.res</Form>
 			</RcCompile>
@@ -372,8 +374,9 @@
 			<DCCReference Include="Scripts\uPSC_superobject.pas"/>
 			<DCCReference Include="Scripts\uPSI_superobject.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_2_2_233.pas"/>
-			<BuildConfiguration Include="Base">
-				<Key>Base</Key>
+			<BuildConfiguration Include="Débogage">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
 			</BuildConfiguration>
 			<BuildConfiguration Include="FullDebug">
 				<Key>Cfg_4</Key>
@@ -383,16 +386,16 @@
 				<Key>Cfg_3</Key>
 				<CfgParent>Cfg_2</CfgParent>
 			</BuildConfiguration>
-			<BuildConfiguration Include="Débogage">
-				<Key>Cfg_2</Key>
-				<CfgParent>Base</CfgParent>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
 			</BuildConfiguration>
 			<BuildConfiguration Include="Release">
 				<Key>Cfg_1</Key>
 				<CfgParent>Base</CfgParent>
 			</BuildConfiguration>
 		</ItemGroup>
-		<Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
+		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
+		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
 		<PropertyGroup>
 			<PreBuildEvent><![CDATA[rem del "$(PROJECTDIR)\dcu\*.dcu"]]></PreBuildEvent>
 			<PostBuildEvent><![CDATA[rem copy "d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB" d:\MEDIA.KIT\BDThèque\bin /y
@@ -406,18 +409,14 @@ rem copy "C:\Users\Thierry\Desktop\bases BD\install\BD.GDB" d:\MEDIA.KIT\BDThèq
 					<Source>
 						<Source Name="MainSource">BD.dpr</Source>
 					</Source>
-					<Parameters>
-						<Parameters Name="UseLauncher">False</Parameters>
-						<Parameters Name="LoadAllSymbols">True</Parameters>
-						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
-					</Parameters>
+					<Parameters/>
 					<VersionInfo>
 						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
 						<VersionInfo Name="AutoIncBuild">True</VersionInfo>
 						<VersionInfo Name="MajorVer">2</VersionInfo>
 						<VersionInfo Name="MinorVer">2</VersionInfo>
 						<VersionInfo Name="Release">3</VersionInfo>
-						<VersionInfo Name="Build">1</VersionInfo>
+						<VersionInfo Name="Build">11</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -429,7 +428,7 @@ rem copy "C:\Users\Thierry\Desktop\bases BD\install\BD.GDB" d:\MEDIA.KIT\BDThèq
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">2.2.3.1</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">2.2.3.11</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2011</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks"/>
@@ -439,11 +438,14 @@ rem copy "C:\Users\Thierry\Desktop\bases BD\install\BD.GDB" d:\MEDIA.KIT\BDThèq
 						<VersionInfoKeys Name="Comments"/>
 					</VersionInfoKeys>
 					<Excluded_Packages>
-						<Excluded_Packages Name="$(BDS)\bin\dcloffice2k140.bpl">Composants Microsoft Office 2000 Sample Automation Server Wrapper</Excluded_Packages>
-						<Excluded_Packages Name="$(BDS)\bin\dclofficexp140.bpl">Composants Microsoft Office XP Sample Automation Server Wrapper</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dcloffice2k140.bpl">Composants Microsoft Office 2000 Sample Automation Server Wrapper</Excluded_Packages>
+						<Excluded_Packages Name="$(BDSBIN)\dclofficexp140.bpl">Composants Microsoft Office XP Sample Automation Server Wrapper</Excluded_Packages>
 					</Excluded_Packages>
 				</Delphi.Personality>
 				<ModelSupport>False</ModelSupport>
+				<Platforms>
+					<Platform value="Win32">True</Platform>
+				</Platforms>
 			</BorlandProject>
 			<ProjectFileVersion>12</ProjectFileVersion>
 		</ProjectExtensions>

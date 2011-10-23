@@ -131,7 +131,7 @@ end;
 
 procedure TfrmSaisieEmpruntEmprunteur.date_pretChange(Sender: TObject);
 begin
-  ListView1.Selected.SubItems[0] := FormatDateTime(ShortDateFormat, date_pret.Date);
+  ListView1.Selected.SubItems[0] := FormatDateTime(FormatSettings.ShortDateFormat, date_pret.Date);
 end;
 
 procedure TfrmSaisieEmpruntEmprunteur.ToolButton1Click(Sender: TObject);
@@ -160,7 +160,7 @@ begin
         PA.Fill(ID_Album, ID_Edition);
       Data := PA;
       Caption := PA.ChaineAffichage(True);
-      SubItems.Add(FormatDateTime(ShortDateFormat, Date));
+      SubItems.Add(FormatDateTime(FormatSettings.ShortDateFormat, Date));
       SubItems.Add(v[PA.Stock]);
       SubItems.Add(GUIDToString(ID_Edition));
     end;

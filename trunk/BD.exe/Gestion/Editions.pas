@@ -196,7 +196,7 @@ begin
         Transaction := GetTransaction(DMPrinc.UIBDataBase);
         SQL.Text := Format('SELECT %s FROM %s WHERE %s = ?', [ChampRef, Table, Champ]);
         Prepare(True);
-        Params.AsString[0] := Copy(Chaine, 1, Params.SQLLen[0]);
+        Params.AsString[0] := Copy(Chaine, 1, Params.MaxStrLen[0]);
         Open;
         if not Eof then
           raise Exception.CreateFmt(rsTitreStillUsed, [TypeInfo]);
@@ -209,7 +209,7 @@ begin
         SQL.Text := Format('INSERT INTO %s (%s, %s) VALUES (?, ?)', [Table, ChampRef, Champ]);
         Prepare(True);
         Params.AsString[0] := GUIDToString(Result);
-        Params.AsString[1] := Copy(Chaine, 1, Params.SQLLen[1]);
+        Params.AsString[1] := Copy(Chaine, 1, Params.MaxStrLen[1]);
         ExecSQL;
         Transaction.Commit;
       except
@@ -251,7 +251,7 @@ begin
         Params.Clear;
         SQL.Text := Format('SELECT %s FROM %s WHERE %s = ? AND %s <> ?', [ChampRef, Table, Champ, ChampRef]);
         Prepare(True);
-        Params.AsString[0] := Copy(Chaine, 1, Params.SQLLen[0]);
+        Params.AsString[0] := Copy(Chaine, 1, Params.MaxStrLen[0]);
         Params.AsString[1] := GUIDToString(Reference);
         Open;
         if not Eof then
@@ -259,7 +259,7 @@ begin
 
         SQL.Text := Format('UPDATE %s SET %s = ? WHERE %s = ?', [Table, Champ, ChampRef]);
         Prepare(True);
-        Params.AsString[0] := Copy(Chaine, 1, Params.SQLLen[0]);
+        Params.AsString[0] := Copy(Chaine, 1, Params.MaxStrLen[0]);
         Params.AsString[1] := GUIDToString(Reference);
         ExecSQL;
         Transaction.Commit;

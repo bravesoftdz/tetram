@@ -35,7 +35,7 @@ type
     procedure Item2Click(Sender: TObject);
     procedure ListeEmpruntsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
     procedure ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
-    procedure ListeEmpruntsHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ListeEmpruntsHeaderClick(Sender: TVTHeader;   HitInfo: TVTHeaderHitInfo);
     procedure ListeEmpruntsDblClick(Sender: TObject);
     procedure ListeEmpruntsGetPopupMenu(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; const P: TPoint; var AskParent: Boolean; var PopupMenu: TPopupMenu);
     procedure Retour1Execute(Sender: TObject);
@@ -164,10 +164,10 @@ begin
   if FSortDirection = sdDescending then Result := -Result;
 end;
 
-procedure TfrmStock.ListeEmpruntsHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+procedure TfrmStock.ListeEmpruntsHeaderClick(Sender: TVTHeader;   HitInfo: TVTHeaderHitInfo);
 begin
-  if Column <> FSortColumn then
-    if Column = 0 then
+  if HitInfo.Column <> FSortColumn then
+    if HitInfo.Column = 0 then
       FSortDirection := sdDescending
     else
       FSortDirection := sdAscending
@@ -178,7 +178,7 @@ begin
       FSortDirection := sdAscending;
   end;
   if FSortColumn <> -1 then ListeEmprunts.Header.Columns[FSortColumn].ImageIndex := -1;
-  FSortColumn := Column;
+  FSortColumn := HitInfo.Column;
   if FSortDirection = sdAscending then
     ListeEmprunts.Header.Columns[FSortColumn].ImageIndex := 0
   else

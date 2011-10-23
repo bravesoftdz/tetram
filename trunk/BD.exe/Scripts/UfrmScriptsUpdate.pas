@@ -96,7 +96,7 @@ begin
     while Assigned(Node) do
     begin
       script := onlineScripts[Node.Index];
-      fichier := IncludeTrailingPathDelimiter(TGlobalVar.Utilisateur.Options.RepertoireScripts) + script.FScriptName;
+      fichier := IncludeTrailingPathDelimiter(RepScripts) + script.FScriptName;
 
       SetLength(tmpFile, MAX_PATH + 1);
       FillMemory(@tmpFile[1], Length(tmpFile) * SizeOf(Char), 1);
@@ -127,7 +127,7 @@ begin
       Node := VirtualStringTree1.GetNextChecked(Node);
     end;
 
-    dmScripts.ScriptList.LoadDir(TGlobalVar.Utilisateur.Options.RepertoireScripts);
+    dmScripts.ScriptList.LoadDir(RepScripts);
   finally
     FUpdating := False;
   end;

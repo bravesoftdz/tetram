@@ -240,7 +240,7 @@ begin
     begin
       Fichier := Fields.AsString[1];
       UpdateQuery.Prepare(True);
-      UpdateQuery.Params.AsString[0] := Copy(ChangeFileExt(ExtractFileName(Fichier), ''), 1, UpdateQuery.Params.SQLLen[0]);
+      UpdateQuery.Params.AsString[0] := Copy(ChangeFileExt(ExtractFileName(Fichier), ''), 1, UpdateQuery.Params.MaxStrLen[0]);
       if ExtractFilePath(Fichier) = '' then
         FichiersImages.Add(RepImages + Fichier)
       else
@@ -266,7 +266,7 @@ begin
       Prepare(True);
       for i := 0 to Pred(FichiersImages.Count) do
       begin
-        Params.AsString[0] := Copy(FichiersImages[i], 1, Params.SQLLen[0]);
+        Params.AsString[0] := Copy(FichiersImages[i], 1, Params.MaxStrLen[0]);
         Open;
         if Fields.AsInteger[0] <> 0 then
           ShowMessage(FichiersImages[i] + #13#13 + SysErrorMessage(Fields.AsInteger[0]));
@@ -314,8 +314,8 @@ begin
     while not Eof do
     begin
       Fichier := SearchNewFileName(RepImages, Fields.AsString[1] + '.jpg', True);
-      ExtractQuery.Params.AsString[0] := Copy(RepImages, 1, ExtractQuery.Params.SQLLen[0]);
-      ExtractQuery.Params.AsString[1] := Copy(Fichier, 1, ExtractQuery.Params.SQLLen[1]);
+      ExtractQuery.Params.AsString[0] := Copy(RepImages, 1, ExtractQuery.Params.MaxStrLen[0]);
+      ExtractQuery.Params.AsString[1] := Copy(Fichier, 1, ExtractQuery.Params.MaxStrLen[1]);
       Stream := GetCouvertureStream(False, StringToGUID(Fields.AsString[0]), -1, -1, False);
       try
         ExtractQuery.ParamsSetBlob(2, Stream);
@@ -324,7 +324,7 @@ begin
       end;
       ExtractQuery.Open;
 
-      UpdateQuery.Params.AsString[0] := Copy(Fichier, 1, UpdateQuery.Params.SQLLen[0]);
+      UpdateQuery.Params.AsString[0] := Copy(Fichier, 1, UpdateQuery.Params.MaxStrLen[0]);
       UpdateQuery.Params.AsString[1] := Fields.AsString[0];
       UpdateQuery.ExecSQL;
       Inc(nbExtrais);

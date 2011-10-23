@@ -1496,9 +1496,9 @@ begin
             Transaction := GetTransaction(dmPrinc.UIBDataBase);
             SQL.Text := 'update or insert into options_scripts (script, nom_option, valeur) values (:script, :nom_option, :valeur)';
             Prepare(True);
-            Params.AsString[0] := Copy(string(FProjetScript.ScriptName), 1, Params.SQLLen[0]);
-            Params.AsString[1] := Copy(Option.FLibelle, 1, Params.SQLLen[1]);
-            Params.AsString[2] := Copy(Option.ChooseValue, 1, Params.SQLLen[2]);
+            Params.AsString[0] := Copy(string(FProjetScript.ScriptName), 1, Params.MaxStrLen[0]);
+            Params.AsString[1] := Copy(Option.FLibelle, 1, Params.MaxStrLen[1]);
+            Params.AsString[2] := Copy(Option.ChooseValue, 1, Params.MaxStrLen[2]);
             Execute;
             Transaction.Commit;
           finally
@@ -1539,7 +1539,7 @@ begin
           Transaction := GetTransaction(dmPrinc.UIBDataBase);
           SQL.Text := 'select nom_option, valeur from options_scripts where script = :script';
           Prepare(True);
-          Params.AsString[0] := Copy(string(FProjetScript.ScriptName), 1, Params.SQLLen[0]);
+          Params.AsString[0] := Copy(string(FProjetScript.ScriptName), 1, Params.MaxStrLen[0]);
           Open;
           while not Eof do
           begin
@@ -1898,7 +1898,7 @@ begin
   ListView1.Items.BeginUpdate;
   try
     ListView1.Items.Clear;
-    FScriptList.LoadDir(TGlobalVar.Utilisateur.Options.RepertoireScripts);
+    FScriptList.LoadDir(RepScripts);
     for Script in FScriptList do
       if Script.ScriptKind = skMain then
         with ListView1.Items.Add do

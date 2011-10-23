@@ -107,6 +107,7 @@ object frmOptions: TfrmOptions
           Height = 263
           Caption = 'G'#233'n'#233'ral'
           TabOrder = 0
+          ExplicitWidth = 350
           object Label3: TLabel
             Left = 14
             Top = 95
@@ -340,6 +341,7 @@ object frmOptions: TfrmOptions
           Height = 59
           Caption = 'Impression'
           TabOrder = 1
+          ExplicitWidth = 350
           object FicheAlbumCouverture: TCheckBox
             Left = 14
             Top = 5
@@ -368,6 +370,7 @@ object frmOptions: TfrmOptions
           Height = 80
           Caption = 'Mode Gestion'
           TabOrder = 2
+          ExplicitWidth = 350
           object Label14: TLabel
             Left = 14
             Top = 23
@@ -402,6 +405,10 @@ object frmOptions: TfrmOptions
     object TabSheet2: TTabSheet
       Caption = 'Monnaies'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         352
         330)
@@ -491,11 +498,9 @@ object frmOptions: TfrmOptions
           object Label10: TLabel
             Left = 2
             Top = 2
-            Width = 153
-            Height = 14
+            Width = 3
+            Height = 13
             Align = alClient
-            ExplicitWidth = 3
-            ExplicitHeight = 13
           end
         end
         inline Frame12: TframBoutons
@@ -573,6 +578,10 @@ object frmOptions: TfrmOptions
     object TabSheet1: TTabSheet
       Caption = 'Site web'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object GroupBox3: TGroupBox
         Left = 0
         Top = 0

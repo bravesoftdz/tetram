@@ -7,6 +7,10 @@ uses
 
 type
   TMyObjectList<T: class> = class(TObjectList<T>)
+  private
+    // 28/08/2011: avec DelphiXE, il ne faut surtout pas déclarer de variables
+    // sinon elles partageront l'espace mémoire des classes descendant de TMyObjectList<>
+  public
     constructor Create(AOwnsObjects: Boolean = True);
     // 21/11/2009: n'est plus utile avec D2010 ?
     // procedure Move(oldIndex, newIndex: Integer);

@@ -1206,7 +1206,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
           end
           item
             Position = 1
-            Width = 415
+            Width = 413
             WideText = 'Emprunteur'
           end>
       end

@@ -30,6 +30,8 @@ object dmPrinc: TdmPrinc
   object UIBRestore: TUIBRestore
     LibraryName = 'fbembed.dll'
     Options = [roReplace, roCreateNewDB]
+    FixMetadataCharset = csNONE
+    FixDataCharset = csNONE
     Left = 136
     Top = 184
   end

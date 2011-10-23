@@ -85,6 +85,7 @@ object frmExportation: TfrmExportation
     BevelKind = bkTile
     BorderStyle = bsNone
     Header.AutoSizeIndex = 0
+    Header.DefaultHeight = 17
     Header.Font.Charset = DEFAULT_CHARSET
     Header.Font.Color = clWindowText
     Header.Font.Height = -11
@@ -121,6 +122,7 @@ object frmExportation: TfrmExportation
     BorderStyle = bsNone
     DragOperations = [doCopy]
     Header.AutoSizeIndex = 0
+    Header.DefaultHeight = 17
     Header.Font.Charset = DEFAULT_CHARSET
     Header.Font.Color = clWindowText
     Header.Font.Height = -11

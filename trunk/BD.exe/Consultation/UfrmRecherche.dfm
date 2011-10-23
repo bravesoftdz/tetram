@@ -131,6 +131,7 @@ object frmRecherche: TfrmRecherche
         BevelKind = bkTile
         BorderStyle = bsNone
         Header.AutoSizeIndex = -1
+        Header.DefaultHeight = 17
         Header.Font.Charset = DEFAULT_CHARSET
         Header.Font.Color = clWindowText
         Header.Font.Height = -11
@@ -222,7 +223,6 @@ object frmRecherche: TfrmRecherche
         Hint = 'M'#233'thode (recherche multi-crit'#232'res)'
         BevelKind = bkTile
         Style = csDropDownList
-        ItemHeight = 13
         TabOrder = 3
         Visible = False
         OnChange = methodeChange
@@ -313,6 +313,7 @@ object frmRecherche: TfrmRecherche
     BevelKind = bkTile
     BorderStyle = bsNone
     Header.AutoSizeIndex = 0
+    Header.DefaultHeight = 17
     Header.Font.Charset = DEFAULT_CHARSET
     Header.Font.Color = clWindowText
     Header.Font.Height = -11

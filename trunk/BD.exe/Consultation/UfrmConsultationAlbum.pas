@@ -127,7 +127,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure ListeEmpruntsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean; var ImageIndex: Integer);
     procedure ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
-    procedure ListeEmpruntsHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure ListeEmpruntsHeaderClick(Sender: TVTHeader;   HitInfo: TVTHeaderHitInfo);
     procedure lvEditionsClick(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure EditeurClick(Sender: TObject);
@@ -402,10 +402,10 @@ begin
   Result := -inherited;
 end;
 
-procedure TfrmConsultationAlbum.ListeEmpruntsHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+procedure TfrmConsultationAlbum.ListeEmpruntsHeaderClick(Sender: TVTHeader;   HitInfo: TVTHeaderHitInfo);
 begin
-  if Column <> FSortColumn then
-    if Column = 0 then
+  if HitInfo.Column <> FSortColumn then
+    if HitInfo.Column = 0 then
       FSortDirection := sdDescending
     else
       FSortDirection := sdAscending
@@ -416,7 +416,7 @@ begin
       FSortDirection := sdAscending;
   end;
   if FSortColumn <> -1 then ListeEmprunts.Header.Columns[FSortColumn].ImageIndex := -1;
-  FSortColumn := Column;
+  FSortColumn := HitInfo.Column;
   if FSortDirection = sdAscending then
     ListeEmprunts.Header.Columns[FSortColumn].ImageIndex := 0
   else
@@ -567,7 +567,7 @@ begin
     cbIntegrale.Caption := s2;
   end;
   HorsSerie.Checked := FAlbum.HorsSerie;
-  AnneeParution.Caption := IIf(FAlbum.MoisParution > 0, ShortMonthNames[FAlbum.MoisParution] + ' ', '') + NonZero(IntToStr(FAlbum.AnneeParution));
+  AnneeParution.Caption := IIf(FAlbum.MoisParution > 0, FormatSettings.ShortMonthNames[FAlbum.MoisParution] + ' ', '') + NonZero(IntToStr(FAlbum.AnneeParution));
   s := FAlbum.Sujet.Text;
   if s = '' then s := FAlbum.Serie.Sujet.Text;
   Sujet.Text := s;

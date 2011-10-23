@@ -33,7 +33,7 @@ var
 
     Qry.SQL.Text := 'select id, always from import_associations where chaine = :chaine and typedata = :typedata and parentid = :parentid';
     Qry.Prepare(True);
-    Qry.Params.AsString[0] := Copy(Texte, 1, Qry.Params.SQLLen[0]);
+    Qry.Params.AsString[0] := Copy(Texte, 1, Qry.Params.MaxStrLen[0]);
     Qry.Params.AsInteger[1] := Integer(TypeData);
     Qry.Params.AsString[2] := GUIDToString(ParentID);
     Qry.Open;
@@ -97,7 +97,7 @@ var
         Qry.Prepare(True);
         // pourquoi l'utilisation du mot clé "const" sur le paramètre Texte provoque ici une opération de pointeur incorrecte après
         // la création d'une nouvelle série est autre grand mystère
-        Qry.Params.AsString[0] := Copy(Texte, 1, Qry.Params.SQLLen[0]);
+        Qry.Params.AsString[0] := Copy(Texte, 1, Qry.Params.MaxStrLen[0]);
         Qry.Params.AsString[1] := GUIDToString(Result);
         Qry.Params.AsString[2] := GUIDToString(ParentID);
         Qry.Params.AsInteger[3] := Integer(TypeData);

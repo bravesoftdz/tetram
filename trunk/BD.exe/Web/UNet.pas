@@ -453,7 +453,7 @@ begin
 
         FHttpCli.RcvdHeader.Add('X-URL-Origin: ' + FHttpCli.URL);
         FHttpCli.RcvdHeader.Add('X-URL-Final: ' + FHttpCli.Location);
-        s := FHttpCli.RcvdHeader.Text + #13#10;
+        s := RawByteString(FHttpCli.RcvdHeader.Text) + #13#10;
         StreamAnswer.Size := 0;
         StreamAnswer.WriteBuffer(s[1], Length(s));
         MemoryStream.Position := 0;

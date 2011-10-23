@@ -49,9 +49,9 @@ end;
 
 procedure TframConvertisseur.Edit1KeyPress(Sender: TObject; var Key: Char);
 begin
-  if not CharInSet(Key, ['0'..'9', #8, DecimalSeparator, '.', ',']) then Key := #0;
-  if CharInSet(Key, ['.', ',']) then Key := DecimalSeparator;
-  if (Pos(DecimalSeparator, Edit1.Text) <> 0) and (Key = DecimalSeparator) then Key := #0;
+  if not CharInSet(Key, ['0'..'9', #8, FormatSettings.DecimalSeparator, '.', ',']) then Key := #0;
+  if CharInSet(Key, ['.', ',']) then Key := FormatSettings.DecimalSeparator;
+  if (Pos(FormatSettings.DecimalSeparator, Edit1.Text) <> 0) and (Key = FormatSettings.DecimalSeparator) then Key := #0;
 end;
 
 end.

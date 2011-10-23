@@ -24,9 +24,14 @@ type
   end;
 
   TParamInfoArray = array of TParamInfoRecord;
+  TGetScript = function(const Fichier: AnsiString): TSynEdit of object;
 
   TDebugList<T: class> = class(TObjectList<T>)
   private
+    // 27/08/2011: si on met cette variable et la propriété qui va avec dans TBreakpointList,
+    // on se paye un écrasement de mémoire entre FGetScript et FView
+    // merci Delphi XE !!!
+    FGetScript: TGetScript;
     FView: TVirtualStringTree;
     procedure SetView(const Value: TVirtualStringTree);
   protected
@@ -39,6 +44,7 @@ type
     function Current: T;
     function Last: T;
     property View: TVirtualStringTree read FView write SetView;
+    property Editor: TGetScript read FGetScript write FGetScript;
   end;
 
   TBreakpointInfo = class
@@ -81,11 +87,7 @@ type
     function AddInfoMessage(const Fichier, Text: AnsiString; Line: Cardinal = 0; Char: Cardinal = 0): Integer;
   end;
 
-  TGetScript = function(const Fichier: AnsiString): TSynEdit of object;
-
   TBreakpointList = class(TDebugList<TBreakpointInfo>)
-  private
-    FGetScript: TGetScript;
   protected
     procedure Notify(const Value: TBreakpointInfo; Action: TCollectionNotification); override;
   public
@@ -93,8 +95,6 @@ type
     function Exists(const Fichier: AnsiString; const ALine: Cardinal): Boolean;
     procedure AddBreakpoint(const Fichier: AnsiString; const ALine: Cardinal);
     function Toggle(const Fichier: AnsiString; const ALine: Cardinal): Boolean;
-
-    property Editor: TGetScript read FGetScript write FGetScript;
   end;
 
   TDebugInfos = class
@@ -187,6 +187,8 @@ begin
 end;
 
 procedure TBreakpointList.Notify(const Value: TBreakpointInfo; Action: TCollectionNotification);
+var
+  Editor: TCustomSynEdit;
 begin
   inherited;
   case Action of
@@ -195,7 +197,8 @@ begin
       //Editor.InvalidateLine(TBreakpointInfo(Ptr).Line);
       //Editor.InvalidateGutterLine(TBreakpointInfo(Ptr).Line);
       // InvalidateLine et InvalidateGutterLine bizarrement insuffisants dans certains cas
-      Value.FEditor.Invalidate;
+      Editor := FGetScript(Value.Fichier);
+      if Assigned(Editor) then Editor.Invalidate;
     end;
     cnRemoved:
       ;

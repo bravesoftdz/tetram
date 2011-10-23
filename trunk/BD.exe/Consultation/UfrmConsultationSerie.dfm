@@ -430,6 +430,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       BorderStyle = bsNone
       ButtonFillMode = fmShaded
       Header.AutoSizeIndex = -1
+      Header.DefaultHeight = 17
       Header.Font.Charset = DEFAULT_CHARSET
       Header.Font.Color = clWindowText
       Header.Font.Height = -11
@@ -460,6 +461,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       ButtonFillMode = fmShaded
       CheckImageKind = ckDarkCheck
       Header.AutoSizeIndex = -1
+      Header.DefaultHeight = 17
       Header.Font.Charset = DEFAULT_CHARSET
       Header.Font.Color = clWindowText
       Header.Font.Height = -11

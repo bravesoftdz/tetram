@@ -98,7 +98,7 @@ begin
   Result := CreateResult(FormatTitre(Titre));
 end;
 
-function LevenshteinDistance(const s1, s2: string): Integer;
+function LevenshteinDistance(s1, s2: PAnsiChar): Integer; cdecl; export;
 const
   cost_ins = 1;
   cost_del = 1;
@@ -492,7 +492,8 @@ exports
   CompareChaines1 name 'IdenticalString1',
   CompareChaines2 name 'IdenticalString2',
   FormatTitle,
-  UDFLength name 'Length';
+  UDFLength name 'Length',
+  LevenshteinDistance;
 
 begin
 end.

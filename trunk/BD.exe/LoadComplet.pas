@@ -1665,7 +1665,7 @@ begin
         Prepare(True);
         for i := 0 to Pred(FichiersImages.Count) do
         begin
-          Params.AsString[0] := Copy(FichiersImages[i], 1, Params.SQLLen[0]);
+          Params.AsString[0] := Copy(FichiersImages[i], 1, Params.MaxStrLen[0]);
           Open;
           if Fields.AsInteger[0] <> 0 then
             ShowMessage(FichiersImages[i] + #13#13 + SysErrorMessage(Fields.AsInteger[0]));
@@ -2346,7 +2346,7 @@ begin
       for i := 0 to Pred(Genres.Count) do
       begin
         Params.AsString[0] := GUIDToString(ID_Serie);
-        Params.AsString[1] := Copy(Genres.Names[i], 1, Params.SQLLen[1]);
+        Params.AsString[1] := Copy(Genres.Names[i], 1, Params.MaxStrLen[1]);
         ExecSQL;
       end;
 
@@ -3323,8 +3323,8 @@ begin
       Transaction := UseTransaction;
 
       SQL.Clear;
-      SQL.Add('update or insert into personnes (id_');
-      SQL.Add('  personne, nompersonne, siteweb, biographie');
+      SQL.Add('update or insert into personnes (');
+      SQL.Add('  id_personne, nompersonne, siteweb, biographie');
       SQL.Add(') values (');
       SQL.Add('  :id_personne, :nompersonne, :siteweb, :biographie');
       SQL.Add(')');
@@ -3850,7 +3850,7 @@ begin
       begin
         if Trim(FAssociations[i]) <> '' then
         begin
-          Params.AsString[0] := Copy(Trim(FAssociations[i]), 1, Params.SQLLen[0]);
+          Params.AsString[0] := Copy(Trim(FAssociations[i]), 1, Params.MaxStrLen[0]);
           Params.AsString[1] := GUIDToString(ID);
           Params.AsString[2] := GUIDToString(ParentID);
           Params.AsInteger[3] := Integer(TypeData);

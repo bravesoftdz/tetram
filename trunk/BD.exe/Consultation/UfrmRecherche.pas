@@ -54,7 +54,7 @@ type
     procedure btnRechercheClick(Sender: TObject);
     procedure VTResultGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure VTResultPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
-    procedure VTResultHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure VTResultHeaderClick(Sender: TVTHeader;   HitInfo: TVTHeaderHitInfo);
     procedure LightComboCheck1Change(Sender: TObject);
     procedure Edit2KeyPress(Sender: TObject; var Key: Char);
     procedure PageControl1Change(Sender: TObject);
@@ -419,19 +419,19 @@ begin
   if FSortDirection = sdDescending then Result := -Result;
 end;
 
-procedure TfrmRecherche.VTResultHeaderClick(Sender: TVTHeader; Column: TColumnIndex; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+procedure TfrmRecherche.VTResultHeaderClick(Sender: TVTHeader;   HitInfo: TVTHeaderHitInfo);
 begin
   // attention: resultatsinfos n'est pas trié!!!!
   Exit;
 
-  if Column <> FSortColumn then
+  if HitInfo.Column <> FSortColumn then
     FSortDirection := sdAscending
   else if FSortDirection = sdAscending then
     FSortDirection := sdDescending
   else
     FSortDirection := sdAscending;
   if FSortColumn <> -1 then VTResult.Header.Columns[FSortColumn].ImageIndex := -1;
-  FSortColumn := Column;
+  FSortColumn := HitInfo.Column;
   if FSortDirection = sdAscending then
     VTResult.Header.Columns[FSortColumn].ImageIndex := 0
   else

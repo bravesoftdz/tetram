@@ -166,8 +166,8 @@ begin
         Params.IsNull[0] := True
       else
         Params.AsString[0] := GUIDToString(PC.ID);
-      Params.AsString[1] := Copy(PC.Monnaie1, 1, Params.SQLLen[1]);
-      Params.AsString[2] := Copy(PC.Monnaie2, 1, Params.SQLLen[2]);
+      Params.AsString[1] := Copy(PC.Monnaie1, 1, Params.MaxStrLen[1]);
+      Params.AsString[2] := Copy(PC.Monnaie2, 1, Params.MaxStrLen[2]);
       Params.AsDouble[3] := PC.Taux;
       ExecSQL;
     end;
@@ -182,8 +182,8 @@ end;
 
 procedure TfrmOptions.calculKeyPress(Sender: TObject; var Key: Char);
 begin
-  if not CharInSet(Key, [#8, '0'..'9', ',', '.', DecimalSeparator]) then Key := #0;
-  if CharInSet(Key, ['.', ',']) then Key := DecimalSeparator;
+  if not CharInSet(Key, [#8, '0'..'9', ',', '.', FormatSettings.DecimalSeparator]) then Key := #0;
+  if CharInSet(Key, ['.', ',']) then Key := FormatSettings.DecimalSeparator;
 end;
 
 procedure TfrmOptions.calculExit(Sender: TObject);
@@ -191,7 +191,7 @@ begin
   try
     TEdit(Sender).Text := FormatCurr(FormatMonnaieCourt, StrToCurr(TEdit(Sender).Text));
   except
-    TEdit(Sender).Text := Format('0%s00', [DecimalSeparator]);
+    TEdit(Sender).Text := Format('0%s00', [FormatSettings.DecimalSeparator]);
   end;
 end;
 
@@ -257,7 +257,7 @@ begin
   with ComboBox1.Items, TGlobalVar.Utilisateur.Options do
   begin
     if IndexOf(SymboleMonnetaire) = -1 then Add(SymboleMonnetaire);
-    if IndexOf(CurrencyString) = -1 then Add(CurrencyString);
+    if IndexOf(FormatSettings.CurrencyString) = -1 then Add(FormatSettings.CurrencyString);
   end;
 
   with TGlobalVar.Utilisateur.Options do
@@ -342,7 +342,7 @@ procedure TfrmOptions.SpeedButton1Click(Sender: TObject);
 begin
   ComboBox2.Text := '';
   ComboBox3.Text := '';
-  Edit1.Text := Format('0%s00', [DecimalSeparator]);
+  Edit1.Text := Format('0%s00', [FormatSettings.DecimalSeparator]);
   ;
   Panel4.Visible := True;
   SpeedButton2.Enabled := False;
@@ -386,7 +386,7 @@ begin
   try
     TEdit(Sender).Text := FloatToStr(StrToFloat(TEdit(Sender).Text));
   except
-    TEdit(Sender).Text := Format('0%s00', [DecimalSeparator]);
+    TEdit(Sender).Text := Format('0%s00', [FormatSettings.DecimalSeparator]);
   end;
 end;
 

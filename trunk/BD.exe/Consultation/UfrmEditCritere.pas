@@ -122,7 +122,7 @@ begin
               5: Result.TestSQL := Result.TestSQL + ' IS NULL';
             end
           else
-            Result.TestSQL := Result.TestSQL + signes.Caption + StringReplace(valeur.Text, DecimalSeparator, '.', []);
+            Result.TestSQL := Result.TestSQL + signes.Caption + StringReplace(valeur.Text, FormatSettings.DecimalSeparator, '.', []);
         uftChar, uftVarchar, uftBlob:
           case Result.iSignes of
             1: // Vide ou contient

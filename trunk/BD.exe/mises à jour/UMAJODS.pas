@@ -4,16 +4,19 @@ interface
 
 uses SysUtils, Windows, Classes, Forms;
 
-procedure MAJ_ODS(FullRebuild: Boolean);
+
+const
+  FB_ODS = '11.2';
+  DBPageSize = 16384;
+
+  procedure MAJ_ODS(FullRebuild: Boolean);
 
 implementation
 
 uses CommonConst, UfrmVerbose, UdmPrinc, Divers, UIB, UIBLib, UIBMetadata, UIBConst;
 
-const
-  FB_ODS = '11.2';
 
-procedure MAJ_ODS_BackupRestore;
+procedure MAJ_ODS_BackupRestore(DBPageSize: Integer);
 const
   FinBackup = 'gbak:closing file, committing, and finishing.';
   FinRestore = 'gbak:    committing metadata';
@@ -43,6 +46,7 @@ begin
 
       DMPrinc.UIBDataBase.Connected := False;
       Application.ProcessMessages;
+      DMPrinc.UIBRestore.PageSize := DBPageSize;
       DMPrinc.UIBRestore.OnVerbose := UIBVerbose;
       DMPrinc.UIBRestore.Verbose := True;
       DMPrinc.UIBRestore.BackupFiles.Text := FichierBackup;
@@ -379,8 +383,11 @@ end;
 procedure MAJ_ODS(FullRebuild: Boolean);
 var
   AvailableSpace, TotalSpace: Int64;
+  toUpgrade: Boolean;
 begin
-  if Format('%d.%d', [DMPrinc.UIBDataBase.InfoOdsVersion, DMPrinc.UIBDataBase.InfoOdsMinorVersion]) < TVersionNumber(FB_ODS) then
+  toUpgrade := Format('%d.%d', [DMPrinc.UIBDataBase.InfoOdsVersion, DMPrinc.UIBDataBase.InfoOdsMinorVersion]) < TVersionNumber(FB_ODS);
+  toUpgrade := toUpgrade or (dmPrinc.UIBDataBase.InfoPageSize < DBPageSize);
+  if toUpgrade then
   begin
     GetDiskFreeSpaceEx(PChar(TempPath), AvailableSpace, TotalSpace, nil);
     if AvailableSpace < 2 * (DMPrinc.UIBDataBase.InfoDbSizeInPages * DMPrinc.UIBDataBase.InfoPageSize) then
@@ -392,7 +399,7 @@ begin
     // if FullRebuild then
     // RebuildDB
     // else
-    MAJ_ODS_BackupRestore;
+    MAJ_ODS_BackupRestore(DBPageSize);
   end;
 end;
 
