@@ -76,7 +76,7 @@ public class GenericDaoImpl<T, ID extends Serializable> implements
 	}
 
 	@SuppressWarnings("unchecked")
-	public Map<Object, List<T>> getListByProperty(String propertyName)
+	public Map<Object, List<T>> getListGroupByProperty(String propertyName)
 			throws IllegalArgumentException, SecurityException,
 			IllegalAccessException, NoSuchFieldException {
 		StringBuffer queryString = new StringBuffer();

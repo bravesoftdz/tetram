@@ -16,7 +16,7 @@ public interface GenericDao<T, ID extends Serializable> {
 
 	public void refresh(T entity);
 
-	public Map<Object, List<T>> getListByProperty(String propertyName)
+	public Map<Object, List<T>> getListGroupByProperty(String propertyName)
 			throws IllegalArgumentException, SecurityException,
 			IllegalAccessException, NoSuchFieldException;
 
