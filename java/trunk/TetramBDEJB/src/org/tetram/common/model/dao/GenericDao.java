@@ -2,6 +2,7 @@ package org.tetram.common.model.dao;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 public interface GenericDao<T, ID extends Serializable> {
 	
@@ -14,5 +15,9 @@ public interface GenericDao<T, ID extends Serializable> {
 	public void makeTransient(T entity);
 
 	public void refresh(T entity);
+
+	public Map<Object, List<T>> getListByProperty(String propertyName)
+			throws IllegalArgumentException, SecurityException,
+			IllegalAccessException, NoSuchFieldException;
 
 }
