@@ -43,35 +43,35 @@ public class AuteurAlbum implements Serializable {
 	@Column(nullable = false, insertable = false, updatable = false)
 	private MetierAuteur metier;
 
-	protected String getId() {
+	public String getId() {
 		return id;
 	}
 
-	protected void setId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	protected Auteur getAuteur() {
+	public Auteur getAuteur() {
 		return auteur;
 	}
 
-	protected void setAuteur(Auteur auteur) {
+	public void setAuteur(Auteur auteur) {
 		this.auteur = auteur;
 	}
 
-	protected Album getAlbum() {
+	public Album getAlbum() {
 		return album;
 	}
 
-	protected void setAlbum(Album album) {
+	public void setAlbum(Album album) {
 		this.album = album;
 	}
 
-	protected MetierAuteur getMetier() {
+	public MetierAuteur getMetier() {
 		return metier;
 	}
 
-	protected void setMetier(MetierAuteur metier) {
+	public void setMetier(MetierAuteur metier) {
 		this.metier = metier;
 	}
 

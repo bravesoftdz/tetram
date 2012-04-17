@@ -49,51 +49,51 @@ public class EditionImage implements Serializable {
 			@AttributeOverride(name = "fichier", column = @Column(name = "fichiercouverture")) })
 	private Fichier image;
 
-	protected String getId() {
+	public String getId() {
 		return id;
 	}
 
-	protected void setId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	protected Album getAlbum() {
+	public Album getAlbum() {
 		return album;
 	}
 
-	protected void setAlbum(Album album) {
+	public void setAlbum(Album album) {
 		this.album = album;
 	}
 
-	protected Edition getEdition() {
+	public Edition getEdition() {
 		return edition;
 	}
 
-	protected void setEdition(Edition edition) {
+	public void setEdition(Edition edition) {
 		this.edition = edition;
 	}
 
-	protected ParametreCouverture getCategorie() {
+	public ParametreCouverture getCategorie() {
 		return categorie;
 	}
 
-	protected void setCategorie(ParametreCouverture categorie) {
+	public void setCategorie(ParametreCouverture categorie) {
 		this.categorie = categorie;
 	}
 
-	protected Fichier getImage() {
+	public Fichier getImage() {
 		return image;
 	}
 
-	protected void setImage(Fichier image) {
+	public void setImage(Fichier image) {
 		this.image = image;
 	}
 
-	protected Integer getOrdre() {
+	public Integer getOrdre() {
 		return ordre;
 	}
 
-	protected void setOrdre(Integer ordre) {
+	public void setOrdre(Integer ordre) {
 		this.ordre = ordre;
 	}
 

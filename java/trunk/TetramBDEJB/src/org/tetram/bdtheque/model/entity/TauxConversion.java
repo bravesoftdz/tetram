@@ -32,35 +32,35 @@ public class TauxConversion implements Serializable {
 	@AttributeOverride(name = "symbole", column = @Column(name = "monnaie2"))
 	private Monnaie monnaie2;
 
-	protected String getId() {
+	public String getId() {
 		return id;
 	}
 
-	protected void setId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	protected BigDecimal getTaux() {
+	public BigDecimal getTaux() {
 		return taux;
 	}
 
-	protected void setTaux(BigDecimal taux) {
+	public void setTaux(BigDecimal taux) {
 		this.taux = taux;
 	}
 
-	protected Monnaie getMonnaie1() {
+	public Monnaie getMonnaie1() {
 		return monnaie1;
 	}
 
-	protected void setMonnaie1(Monnaie monnaie1) {
+	public void setMonnaie1(Monnaie monnaie1) {
 		this.monnaie1 = monnaie1;
 	}
 
-	protected Monnaie getMonnaie2() {
+	public Monnaie getMonnaie2() {
 		return monnaie2;
 	}
 
-	protected void setMonnaie2(Monnaie monnaie2) {
+	public void setMonnaie2(Monnaie monnaie2) {
 		this.monnaie2 = monnaie2;
 	}
 

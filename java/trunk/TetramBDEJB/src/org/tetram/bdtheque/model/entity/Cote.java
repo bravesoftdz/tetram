@@ -22,19 +22,19 @@ public class Cote implements Serializable {
 	@Column(name = "prixcote")
 	private BigDecimal prix;
 
-	protected Integer getAnnee() {
+	public Integer getAnnee() {
 		return annee;
 	}
 
-	protected void setAnnee(Integer annee) {
+	public void setAnnee(Integer annee) {
 		this.annee = annee;
 	}
 
-	protected BigDecimal getPrix() {
+	public BigDecimal getPrix() {
 		return prix;
 	}
 
-	protected void setPrix(BigDecimal prix) {
+	public void setPrix(BigDecimal prix) {
 		this.prix = prix;
 	}
 }

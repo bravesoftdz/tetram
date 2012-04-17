@@ -47,51 +47,51 @@ public class ConfigurationEdition implements Serializable {
 	@Where(clause = "categorie=8")
 	private ParametreSensLecture sensLecture;
 
-	protected ParametreEtat getEtat() {
+	public ParametreEtat getEtat() {
 		return etat;
 	}
 
-	protected void setEtat(ParametreEtat etat) {
+	public void setEtat(ParametreEtat etat) {
 		this.etat = etat;
 	}
 
-	protected ParametreOrientation getOrientation() {
+	public ParametreOrientation getOrientation() {
 		return orientation;
 	}
 
-	protected void setOrientation(ParametreOrientation orientation) {
+	public void setOrientation(ParametreOrientation orientation) {
 		this.orientation = orientation;
 	}
 
-	protected ParametreEdition getEdition() {
+	public ParametreEdition getEdition() {
 		return edition;
 	}
 
-	protected void setEdition(ParametreEdition edition) {
+	public void setEdition(ParametreEdition edition) {
 		this.edition = edition;
 	}
 
-	protected ParametreFormat getFormat() {
+	public ParametreFormat getFormat() {
 		return format;
 	}
 
-	protected void setFormat(ParametreFormat format) {
+	public void setFormat(ParametreFormat format) {
 		this.format = format;
 	}
 
-	protected ParametreSensLecture getSensLecture() {
+	public ParametreSensLecture getSensLecture() {
 		return sensLecture;
 	}
 
-	protected void setSensLecture(ParametreSensLecture sensLecture) {
+	public void setSensLecture(ParametreSensLecture sensLecture) {
 		this.sensLecture = sensLecture;
 	}
 
-	protected ParametreReliure getReliure() {
+	public ParametreReliure getReliure() {
 		return reliure;
 	}
 
-	protected void setReliure(ParametreReliure reliure) {
+	public void setReliure(ParametreReliure reliure) {
 		this.reliure = reliure;
 	}
 

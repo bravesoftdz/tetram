@@ -30,27 +30,27 @@ public class Collection implements Serializable {
 	@JoinColumn(name = "id_editeur")
 	private Editeur editeur;
 
-	protected String getId() {
+	public String getId() {
 		return id;
 	}
 
-	protected void setId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	protected String getNom() {
+	public String getNom() {
 		return nom;
 	}
 
-	protected void setNom(String nom) {
+	public void setNom(String nom) {
 		this.nom = nom;
 	}
 
-	protected Editeur getEditeur() {
+	public Editeur getEditeur() {
 		return editeur;
 	}
 
-	protected void setEditeur(Editeur editeur) {
+	public void setEditeur(Editeur editeur) {
 		this.editeur = editeur;
 	}
 

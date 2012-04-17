@@ -36,27 +36,27 @@ public class CoteEdition implements Serializable {
 	@JoinColumn(name = "id_edition")
 	private Edition edition;
 
-	protected String getId() {
+	public String getId() {
 		return id;
 	}
 
-	protected void setId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	protected Cote getCote() {
+	public Cote getCote() {
 		return cote;
 	}
 
-	protected void setCote(Cote cote) {
+	public void setCote(Cote cote) {
 		this.cote = cote;
 	}
 
-	protected Edition getEdition() {
+	public Edition getEdition() {
 		return edition;
 	}
 
-	protected void setEdition(Edition edition) {
+	public void setEdition(Edition edition) {
 		this.edition = edition;
 	}
 }

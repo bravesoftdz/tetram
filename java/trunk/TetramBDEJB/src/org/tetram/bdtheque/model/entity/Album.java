@@ -71,147 +71,147 @@ public class Album implements Serializable {
 	@Where(clause = "metier=2")
 	private List<ColoristeAlbum> coloristes;
 
-	protected String getId() {
+	public String getId() {
 		return id;
 	}
 
-	protected void setId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	protected Integer getMoisParution() {
+	public Integer getMoisParution() {
 		return moisParution;
 	}
 
-	protected void setMoisParution(Integer moisParution) {
+	public void setMoisParution(Integer moisParution) {
 		this.moisParution = moisParution;
 	}
 
-	protected Integer getAnneeParution() {
+	public Integer getAnneeParution() {
 		return anneeParution;
 	}
 
-	protected void setAnneeParution(Integer anneeParution) {
+	public void setAnneeParution(Integer anneeParution) {
 		this.anneeParution = anneeParution;
 	}
 
-	protected Serie getSerie() {
+	public Serie getSerie() {
 		return serie;
 	}
 
-	protected void setSerie(Serie serie) {
+	public void setSerie(Serie serie) {
 		this.serie = serie;
 	}
 
-	protected Integer getTome() {
+	public Integer getTome() {
 		return tome;
 	}
 
-	protected void setTome(Integer tome) {
+	public void setTome(Integer tome) {
 		this.tome = tome;
 	}
 
-	protected Integer getTomeDebut() {
+	public Integer getTomeDebut() {
 		return tomeDebut;
 	}
 
-	protected void setTomeDebut(Integer tomeDebut) {
+	public void setTomeDebut(Integer tomeDebut) {
 		this.tomeDebut = tomeDebut;
 	}
 
-	protected Integer getTomeFin() {
+	public Integer getTomeFin() {
 		return tomeFin;
 	}
 
-	protected void setTomeFin(Integer tomeFin) {
+	public void setTomeFin(Integer tomeFin) {
 		this.tomeFin = tomeFin;
 	}
 
-	protected boolean isHorsSerie() {
+	public boolean isHorsSerie() {
 		return horsSerie;
 	}
 
-	protected void setHorsSerie(boolean horsSerie) {
+	public void setHorsSerie(boolean horsSerie) {
 		this.horsSerie = horsSerie;
 	}
 
-	protected boolean isAchat() {
+	public boolean isAchat() {
 		return achat;
 	}
 
-	protected void setAchat(boolean achat) {
+	public void setAchat(boolean achat) {
 		this.achat = achat;
 	}
 
-	protected int getNbEditions() {
+	public int getNbEditions() {
 		return nbEditions;
 	}
 
-	protected void setNbEditions(int nbEditions) {
+	public void setNbEditions(int nbEditions) {
 		this.nbEditions = nbEditions;
 	}
 
-	protected List<Edition> getEditions() {
+	public List<Edition> getEditions() {
 		return editions;
 	}
 
-	protected void setEditions(List<Edition> editions) {
+	public void setEditions(List<Edition> editions) {
 		this.editions = editions;
 	}
 
-	protected boolean isComplet() {
+	public boolean isComplet() {
 		return complet;
 	}
 
-	protected void setComplet(boolean complet) {
+	public void setComplet(boolean complet) {
 		this.complet = complet;
 	}
 
-	protected String getTitre() {
+	public String getTitre() {
 		return titre;
 	}
 
-	protected void setTitre(String titre) {
+	public void setTitre(String titre) {
 		this.titre = titre;
 	}
 
-	protected Blob getResume() {
+	public Blob getResume() {
 		return resume;
 	}
 
-	protected void setResume(Blob resume) {
+	public void setResume(Blob resume) {
 		this.resume = resume;
 	}
 
-	protected Blob getCommentaires() {
+	public Blob getCommentaires() {
 		return commentaires;
 	}
 
-	protected void setCommentaires(Blob commentaires) {
+	public void setCommentaires(Blob commentaires) {
 		this.commentaires = commentaires;
 	}
 
-	protected List<ScenaristeAlbum> getScenaristes() {
+	public List<ScenaristeAlbum> getScenaristes() {
 		return scenaristes;
 	}
 
-	protected void setScenaristes(List<ScenaristeAlbum> scenaristes) {
+	public void setScenaristes(List<ScenaristeAlbum> scenaristes) {
 		this.scenaristes = scenaristes;
 	}
 
-	protected List<DessinateurAlbum> getDessinateurs() {
+	public List<DessinateurAlbum> getDessinateurs() {
 		return dessinateurs;
 	}
 
-	protected void setDessinateurs(List<DessinateurAlbum> dessinateurs) {
+	public void setDessinateurs(List<DessinateurAlbum> dessinateurs) {
 		this.dessinateurs = dessinateurs;
 	}
 
-	protected List<ColoristeAlbum> getColoristes() {
+	public List<ColoristeAlbum> getColoristes() {
 		return coloristes;
 	}
 
-	protected void setColoristes(List<ColoristeAlbum> coloristes) {
+	public void setColoristes(List<ColoristeAlbum> coloristes) {
 		this.coloristes = coloristes;
 	}
 

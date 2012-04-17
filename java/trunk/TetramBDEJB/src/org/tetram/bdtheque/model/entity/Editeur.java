@@ -34,35 +34,35 @@ public class Editeur implements Serializable {
 	@OneToMany(mappedBy = "editeur", fetch = FetchType.LAZY)
 	private Set<Collection> collections = new HashSet<Collection>();
 
-	protected String getId() {
+	public String getId() {
 		return id;
 	}
 
-	protected void setId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	protected String getNom() {
+	public String getNom() {
 		return nom;
 	}
 
-	protected void setNom(String nom) {
+	public void setNom(String nom) {
 		this.nom = nom;
 	}
 
-	protected String getSiteWeb() {
+	public String getSiteWeb() {
 		return siteWeb;
 	}
 
-	protected void setSiteWeb(String siteWeb) {
+	public void setSiteWeb(String siteWeb) {
 		this.siteWeb = siteWeb;
 	}
 
-	protected Set<Collection> getCollections() {
+	public Set<Collection> getCollections() {
 		return collections;
 	}
 
-	protected void setCollections(Set<Collection> collections) {
+	public void setCollections(Set<Collection> collections) {
 		this.collections = collections;
 	}
 }

@@ -29,19 +29,19 @@ public class AuteurParaBD implements Serializable {
 	@JoinColumn(name="id_personne")
 	private Auteur auteur;
 
-	protected String getId() {
+	public String getId() {
 		return id;
 	}
 
-	protected void setId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	protected Auteur getAuteur() {
+	public Auteur getAuteur() {
 		return auteur;
 	}
 
-	protected void setAuteur(Auteur auteur) {
+	public void setAuteur(Auteur auteur) {
 		this.auteur = auteur;
 	}
 }

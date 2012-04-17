@@ -14,11 +14,11 @@ public class Monnaie implements Serializable {
 	
 	private String symbole;
 
-	protected String getSymbole() {
+	public String getSymbole() {
 		return symbole;
 	}
 
-	protected void setSymbole(String symbole) {
+	public void setSymbole(String symbole) {
 		this.symbole = symbole;
 	}
 }

@@ -79,179 +79,179 @@ public class Edition implements Serializable {
 	@OrderColumn(name = "ordre")
 	private List<EditionImage> images;
 
-	protected String getId() {
+	public String getId() {
 		return id;
 	}
 
-	protected void setId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	protected Album getAlbum() {
+	public Album getAlbum() {
 		return album;
 	}
 
-	protected void setAlbum(Album album) {
+	public void setAlbum(Album album) {
 		this.album = album;
 	}
 
-	protected Editeur getEditeur() {
+	public Editeur getEditeur() {
 		return editeur;
 	}
 
-	protected void setEditeur(Editeur editeur) {
+	public void setEditeur(Editeur editeur) {
 		this.editeur = editeur;
 	}
 
-	protected Collection getCollection() {
+	public Collection getCollection() {
 		return collection;
 	}
 
-	protected void setCollection(Collection collection) {
+	public void setCollection(Collection collection) {
 		this.collection = collection;
 	}
 
-	protected Integer getAnneeEdition() {
+	public Integer getAnneeEdition() {
 		return anneeEdition;
 	}
 
-	protected void setAnneeEdition(Integer anneeEdition) {
+	public void setAnneeEdition(Integer anneeEdition) {
 		this.anneeEdition = anneeEdition;
 	}
 
-	protected BigDecimal getPrix() {
+	public BigDecimal getPrix() {
 		return prix;
 	}
 
-	protected void setPrix(BigDecimal prix) {
+	public void setPrix(BigDecimal prix) {
 		this.prix = prix;
 	}
 
-	protected Boolean getVo() {
+	public Boolean getVo() {
 		return vo;
 	}
 
-	protected void setVo(Boolean vo) {
+	public void setVo(Boolean vo) {
 		this.vo = vo;
 	}
 
-	protected Boolean getCouleur() {
+	public Boolean getCouleur() {
 		return couleur;
 	}
 
-	protected void setCouleur(Boolean couleur) {
+	public void setCouleur(Boolean couleur) {
 		this.couleur = couleur;
 	}
 
-	protected String getIsbn() {
+	public String getIsbn() {
 		return isbn;
 	}
 
-	protected void setIsbn(String isbn) {
+	public void setIsbn(String isbn) {
 		this.isbn = isbn;
 	}
 
-	protected Boolean getPrete() {
+	public Boolean getPrete() {
 		return prete;
 	}
 
-	protected void setPrete(Boolean prete) {
+	public void setPrete(Boolean prete) {
 		this.prete = prete;
 	}
 
-	protected Boolean getStock() {
+	public Boolean getStock() {
 		return stock;
 	}
 
-	protected void setStock(Boolean stock) {
+	public void setStock(Boolean stock) {
 		this.stock = stock;
 	}
 
-	protected Boolean getDedicace() {
+	public Boolean getDedicace() {
 		return dedicace;
 	}
 
-	protected void setDedicace(Boolean dedicace) {
+	public void setDedicace(Boolean dedicace) {
 		this.dedicace = dedicace;
 	}
 
-	protected Date getDateAchat() {
+	public Date getDateAchat() {
 		return dateAchat;
 	}
 
-	protected void setDateAchat(Date dateAchat) {
+	public void setDateAchat(Date dateAchat) {
 		this.dateAchat = dateAchat;
 	}
 
-	protected Boolean getGratuit() {
+	public Boolean getGratuit() {
 		return gratuit;
 	}
 
-	protected void setGratuit(Boolean gratuit) {
+	public void setGratuit(Boolean gratuit) {
 		this.gratuit = gratuit;
 	}
 
-	protected Boolean getOffert() {
+	public Boolean getOffert() {
 		return offert;
 	}
 
-	protected void setOffert(Boolean offert) {
+	public void setOffert(Boolean offert) {
 		this.offert = offert;
 	}
 
-	protected Integer getNbPages() {
+	public Integer getNbPages() {
 		return nbPages;
 	}
 
-	protected void setNbPages(Integer nbPages) {
+	public void setNbPages(Integer nbPages) {
 		this.nbPages = nbPages;
 	}
 
-	protected ConfigurationEdition getEtat() {
+	public ConfigurationEdition getEtat() {
 		return etat;
 	}
 
-	protected void setEtat(ConfigurationEdition etat) {
+	public void setEtat(ConfigurationEdition etat) {
 		this.etat = etat;
 	}
 
-	protected Cote getCote() {
+	public Cote getCote() {
 		return cote;
 	}
 
-	protected void setCote(Cote cote) {
+	public void setCote(Cote cote) {
 		this.cote = cote;
 	}
 
-	protected String getNumeroPerso() {
+	public String getNumeroPerso() {
 		return numeroPerso;
 	}
 
-	protected void setNumeroPerso(String numeroPerso) {
+	public void setNumeroPerso(String numeroPerso) {
 		this.numeroPerso = numeroPerso;
 	}
 
-	protected Blob getCommentaires() {
+	public Blob getCommentaires() {
 		return commentaires;
 	}
 
-	protected void setCommentaires(Blob commentaires) {
+	public void setCommentaires(Blob commentaires) {
 		this.commentaires = commentaires;
 	}
 
-	protected List<CoteEdition> getCotes() {
+	public List<CoteEdition> getCotes() {
 		return cotes;
 	}
 
-	protected void setCotes(List<CoteEdition> cotes) {
+	public void setCotes(List<CoteEdition> cotes) {
 		this.cotes = cotes;
 	}
 
-	protected List<EditionImage> getImages() {
+	public List<EditionImage> getImages() {
 		return images;
 	}
 
-	protected void setImages(List<EditionImage> images) {
+	public void setImages(List<EditionImage> images) {
 		this.images = images;
 	}
 

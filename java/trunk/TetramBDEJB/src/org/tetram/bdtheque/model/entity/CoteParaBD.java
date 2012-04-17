@@ -33,27 +33,27 @@ public class CoteParaBD implements Serializable {
 	@JoinColumn(name = "id_parabd")
 	private ParaBD paraBD;
 
-	protected String getId() {
+	public String getId() {
 		return id;
 	}
 
-	protected void setId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	protected Cote getCote() {
+	public Cote getCote() {
 		return cote;
 	}
 
-	protected void setCote(Cote cote) {
+	public void setCote(Cote cote) {
 		this.cote = cote;
 	}
 
-	protected ParaBD getParaBD() {
+	public ParaBD getParaBD() {
 		return paraBD;
 	}
 
-	protected void setParaBD(ParaBD paraBD) {
+	public void setParaBD(ParaBD paraBD) {
 		this.paraBD = paraBD;
 	}
 

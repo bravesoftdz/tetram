@@ -85,163 +85,163 @@ public class Serie implements Serializable {
 	@OneToMany(mappedBy = "serie", fetch = FetchType.LAZY)
 	private List<ParaBD> paraBD;
 
-	protected String getId() {
+	public String getId() {
 		return id;
 	}
 
-	protected void setId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	protected Editeur getEditeur() {
+	public Editeur getEditeur() {
 		return editeur;
 	}
 
-	protected void setEditeur(Editeur editeur) {
+	public void setEditeur(Editeur editeur) {
 		this.editeur = editeur;
 	}
 
-	protected Collection getCollection() {
+	public Collection getCollection() {
 		return collection;
 	}
 
-	protected void setCollection(Collection collection) {
+	public void setCollection(Collection collection) {
 		this.collection = collection;
 	}
 
-	protected Boolean getTerminee() {
+	public Boolean getTerminee() {
 		return terminee;
 	}
 
-	protected void setTerminee(Boolean terminee) {
+	public void setTerminee(Boolean terminee) {
 		this.terminee = terminee;
 	}
 
-	protected Boolean getComplete() {
+	public Boolean getComplete() {
 		return complete;
 	}
 
-	protected void setComplete(Boolean complete) {
+	public void setComplete(Boolean complete) {
 		this.complete = complete;
 	}
 
-	protected String getSiteWeb() {
+	public String getSiteWeb() {
 		return siteWeb;
 	}
 
-	protected void setSiteWeb(String siteWeb) {
+	public void setSiteWeb(String siteWeb) {
 		this.siteWeb = siteWeb;
 	}
 
-	protected Boolean getSuivreManquants() {
+	public Boolean getSuivreManquants() {
 		return suivreManquants;
 	}
 
-	protected void setSuivreManquants(Boolean suivreManquants) {
+	public void setSuivreManquants(Boolean suivreManquants) {
 		this.suivreManquants = suivreManquants;
 	}
 
-	protected Boolean getSuivreSorties() {
+	public Boolean getSuivreSorties() {
 		return suivreSorties;
 	}
 
-	protected void setSuivreSorties(Boolean suivreSorties) {
+	public void setSuivreSorties(Boolean suivreSorties) {
 		this.suivreSorties = suivreSorties;
 	}
 
-	protected Integer getNbAlbums() {
+	public Integer getNbAlbums() {
 		return nbAlbums;
 	}
 
-	protected void setNbAlbums(Integer nbAlbums) {
+	public void setNbAlbums(Integer nbAlbums) {
 		this.nbAlbums = nbAlbums;
 	}
 
-	protected ConfigurationEdition getEtat() {
+	public ConfigurationEdition getEtat() {
 		return etat;
 	}
 
-	protected void setEtat(ConfigurationEdition etat) {
+	public void setEtat(ConfigurationEdition etat) {
 		this.etat = etat;
 	}
 
-	protected Boolean getVo() {
+	public Boolean getVo() {
 		return vo;
 	}
 
-	protected void setVo(Boolean vo) {
+	public void setVo(Boolean vo) {
 		this.vo = vo;
 	}
 
-	protected Boolean getCouleur() {
+	public Boolean getCouleur() {
 		return couleur;
 	}
 
-	protected void setCouleur(Boolean couleur) {
+	public void setCouleur(Boolean couleur) {
 		this.couleur = couleur;
 	}
 
-	protected String getTitre() {
+	public String getTitre() {
 		return titre;
 	}
 
-	protected void setTitre(String titre) {
+	public void setTitre(String titre) {
 		this.titre = titre;
 	}
 
-	protected String getSujet() {
+	public String getSujet() {
 		return sujet.toString();
 	}
 
-	protected void setSujet(Blob sujet) {
+	public void setSujet(Blob sujet) {
 		this.sujet = sujet;
 	}
 
-	protected Blob getCommentaires() {
+	public Blob getCommentaires() {
 		return commentaires;
 	}
 
-	protected void setCommentaires(Blob commentaires) {
+	public void setCommentaires(Blob commentaires) {
 		this.commentaires = commentaires;
 	}
 
-	protected List<Genre> getGenres() {
+	public List<Genre> getGenres() {
 		return genres;
 	}
 
-	protected void setGenres(List<Genre> genres) {
+	public void setGenres(List<Genre> genres) {
 		this.genres = genres;
 	}
 
-	protected List<ParaBD> getParaBD() {
+	public List<ParaBD> getParaBD() {
 		return paraBD;
 	}
 
-	protected void setParaBD(List<ParaBD> paraBD) {
+	public void setParaBD(List<ParaBD> paraBD) {
 		this.paraBD = paraBD;
 	}
 
-	protected List<ScenaristeSerie> getScenaristes() {
+	public List<ScenaristeSerie> getScenaristes() {
 		return scenaristes;
 	}
 
-	protected void setScenaristes(List<ScenaristeSerie> scenaristes) {
+	public void setScenaristes(List<ScenaristeSerie> scenaristes) {
 		this.scenaristes = scenaristes;
 	}
 
-	protected List<DessinateurSerie> getDessinateurs() {
+	public List<DessinateurSerie> getDessinateurs() {
 		return dessinateurs;
 	}
 
-	protected void setDessinateurs(List<DessinateurSerie> dessinateurs) {
+	public void setDessinateurs(List<DessinateurSerie> dessinateurs) {
 		this.dessinateurs = dessinateurs;
 	}
 
-	protected List<ColoristeSerie> getColoristes() {
+	public List<ColoristeSerie> getColoristes() {
 		return coloristes;
 	}
 
-	protected void setColoristes(List<ColoristeSerie> coloristes) {
+	public void setColoristes(List<ColoristeSerie> coloristes) {
 		this.coloristes = coloristes;
 	}
 

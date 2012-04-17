@@ -75,155 +75,155 @@ public class ParaBD implements Serializable {
 	@OrderColumn(name = "anneecote")
 	private List<CoteParaBD> cotes;
 
-	protected String getId() {
+	public String getId() {
 		return id;
 	}
 
-	protected void setId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	protected Serie getSerie() {
+	public Serie getSerie() {
 		return serie;
 	}
 
-	protected void setSerie(Serie serie) {
+	public void setSerie(Serie serie) {
 		this.serie = serie;
 	}
 
-	protected String getTitre() {
+	public String getTitre() {
 		return titre;
 	}
 
-	protected void setTitre(String titre) {
+	public void setTitre(String titre) {
 		this.titre = titre;
 	}
 
-	protected Blob getCommentaire() {
+	public Blob getCommentaire() {
 		return commentaire;
 	}
 
-	protected void setCommentaire(Blob commentaire) {
+	public void setCommentaire(Blob commentaire) {
 		this.commentaire = commentaire;
 	}
 
-	protected boolean isAchat() {
+	public boolean isAchat() {
 		return achat;
 	}
 
-	protected void setAchat(boolean achat) {
+	public void setAchat(boolean achat) {
 		this.achat = achat;
 	}
 
-	protected boolean isComplet() {
+	public boolean isComplet() {
 		return complet;
 	}
 
-	protected void setComplet(boolean complet) {
+	public void setComplet(boolean complet) {
 		this.complet = complet;
 	}
 
-	protected boolean isDedicace() {
+	public boolean isDedicace() {
 		return dedicace;
 	}
 
-	protected void setDedicace(boolean dedicace) {
+	public void setDedicace(boolean dedicace) {
 		this.dedicace = dedicace;
 	}
 
-	protected boolean isNumerote() {
+	public boolean isNumerote() {
 		return numerote;
 	}
 
-	protected void setNumerote(boolean numerote) {
+	public void setNumerote(boolean numerote) {
 		this.numerote = numerote;
 	}
 
-	protected Integer getAnnee() {
+	public Integer getAnnee() {
 		return annee;
 	}
 
-	protected void setAnnee(Integer annee) {
+	public void setAnnee(Integer annee) {
 		this.annee = annee;
 	}
 
-	protected BigDecimal getPrix() {
+	public BigDecimal getPrix() {
 		return prix;
 	}
 
-	protected void setPrix(BigDecimal prix) {
+	public void setPrix(BigDecimal prix) {
 		this.prix = prix;
 	}
 
-	protected boolean isPrete() {
+	public boolean isPrete() {
 		return prete;
 	}
 
-	protected void setPrete(boolean prete) {
+	public void setPrete(boolean prete) {
 		this.prete = prete;
 	}
 
-	protected boolean isStock() {
+	public boolean isStock() {
 		return stock;
 	}
 
-	protected void setStock(boolean stock) {
+	public void setStock(boolean stock) {
 		this.stock = stock;
 	}
 
-	protected Date getDateAchat() {
+	public Date getDateAchat() {
 		return dateAchat;
 	}
 
-	protected void setDateAchat(Date dateAchat) {
+	public void setDateAchat(Date dateAchat) {
 		this.dateAchat = dateAchat;
 	}
 
-	protected boolean isGratuit() {
+	public boolean isGratuit() {
 		return gratuit;
 	}
 
-	protected void setGratuit(boolean gratuit) {
+	public void setGratuit(boolean gratuit) {
 		this.gratuit = gratuit;
 	}
 
-	protected boolean isOffert() {
+	public boolean isOffert() {
 		return offert;
 	}
 
-	protected void setOffert(boolean offert) {
+	public void setOffert(boolean offert) {
 		this.offert = offert;
 	}
 
-	protected List<Auteur> getAuteurs() {
+	public List<Auteur> getAuteurs() {
 		return auteurs;
 	}
 
-	protected void setAuteurs(List<Auteur> auteurs) {
+	public void setAuteurs(List<Auteur> auteurs) {
 		this.auteurs = auteurs;
 	}
 
-	protected Cote getCote() {
+	public Cote getCote() {
 		return cote;
 	}
 
-	protected void setCote(Cote cote) {
+	public void setCote(Cote cote) {
 		this.cote = cote;
 	}
 
-	protected List<CoteParaBD> getCotes() {
+	public List<CoteParaBD> getCotes() {
 		return cotes;
 	}
 
-	protected void setCotes(List<CoteParaBD> cotes) {
+	public void setCotes(List<CoteParaBD> cotes) {
 		this.cotes = cotes;
 	}
 
-	protected void setImage(Fichier image) {
+	public void setImage(Fichier image) {
 		this.image = image;
 	}
 
-	protected Fichier getImage() {
+	public Fichier getImage() {
 		return image;
 	}
 }

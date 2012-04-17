@@ -29,35 +29,35 @@ public class Auteur implements Serializable {
 	private Blob biographie;
 	private String siteWeb;
 
-	protected String getId() {
+	public String getId() {
 		return id;
 	}
 
-	protected void setId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	protected String getNom() {
+	public String getNom() {
 		return nom;
 	}
 
-	protected void setNom(String nom) {
+	public void setNom(String nom) {
 		this.nom = nom;
 	}
 
-	protected Blob getBiographie() {
+	public Blob getBiographie() {
 		return biographie;
 	}
 
-	protected void setBiographie(Blob biographie) {
+	public void setBiographie(Blob biographie) {
 		this.biographie = biographie;
 	}
 
-	protected String getSiteWeb() {
+	public String getSiteWeb() {
 		return siteWeb;
 	}
 
-	protected void setSiteWeb(String siteWeb) {
+	public void setSiteWeb(String siteWeb) {
 		this.siteWeb = siteWeb;
 	}
 }

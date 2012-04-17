@@ -36,51 +36,51 @@ public class ParametreListe implements Serializable {
 	@Column(insertable = false, updatable = false)
 	private int categorie;
 
-	protected int getValeur() {
+	public int getValeur() {
 		return valeur;
 	}
 
-	protected void setValeur(int valeur) {
+	public void setValeur(int valeur) {
 		this.valeur = valeur;
 	}
 
-	protected String getId() {
+	public String getId() {
 		return id;
 	}
 
-	protected void setId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	protected String getLibelle() {
+	public String getLibelle() {
 		return libelle;
 	}
 
-	protected void setLibelle(String libelle) {
+	public void setLibelle(String libelle) {
 		this.libelle = libelle;
 	}
 
-	protected int getOrdre() {
+	public int getOrdre() {
 		return ordre;
 	}
 
-	protected void setOrdre(int ordre) {
+	public void setOrdre(int ordre) {
 		this.ordre = ordre;
 	}
 
-	protected boolean isDefaut() {
+	public boolean isDefaut() {
 		return defaut;
 	}
 
-	protected void setDefaut(boolean defaut) {
+	public void setDefaut(boolean defaut) {
 		this.defaut = defaut;
 	}
 
-	protected int getCategorie() {
+	public int getCategorie() {
 		return categorie;
 	}
 
-	protected void setCategorie(int categorie) {
+	public void setCategorie(int categorie) {
 		this.categorie = categorie;
 	}
 

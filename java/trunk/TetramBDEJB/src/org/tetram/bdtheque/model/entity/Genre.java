@@ -34,27 +34,27 @@ public class Genre implements Serializable {
 			CascadeType.MERGE }, mappedBy = "genres")
 	private List<Serie> series;
 
-	protected String getId() {
+	public String getId() {
 		return id;
 	}
 
-	protected void setId(String id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
-	protected String getNom() {
+	public String getNom() {
 		return nom;
 	}
 
-	protected void setNom(String nom) {
+	public void setNom(String nom) {
 		this.nom = nom;
 	}
 
-	protected List<Serie> getSeries() {
+	public List<Serie> getSeries() {
 		return series;
 	}
 
-	protected void setSeries(List<Serie> series) {
+	public void setSeries(List<Serie> series) {
 		this.series = series;
 	}
 

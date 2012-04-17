@@ -21,27 +21,27 @@ public class Fichier implements Serializable {
 	private boolean stockage;
 	private String fichier;
 
-	protected Blob getImage() {
+	public Blob getImage() {
 		return image;
 	}
 
-	protected void setImage(Blob image) {
+	public void setImage(Blob image) {
 		this.image = image;
 	}
 
-	protected boolean isStockage() {
+	public boolean isStockage() {
 		return stockage;
 	}
 
-	protected void setStockage(boolean stockage) {
+	public void setStockage(boolean stockage) {
 		this.stockage = stockage;
 	}
 
-	protected String getFichier() {
+	public String getFichier() {
 		return fichier;
 	}
 
-	protected void setFichier(String fichier) {
+	public void setFichier(String fichier) {
 		this.fichier = fichier;
 	}
 }

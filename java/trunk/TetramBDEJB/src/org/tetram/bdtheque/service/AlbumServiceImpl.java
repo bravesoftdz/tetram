@@ -17,9 +17,6 @@ public class AlbumServiceImpl implements AlbumService {
 
 	private BDthequeDaoFactory bdthequeDaoFactory;
 
-//	@EJB
-//	private ActionAlert actionAlert;
-
 	@PersistenceContext(unitName = "TetramOrgBDthequeServiceLocal")
 	private EntityManager manager;
 
