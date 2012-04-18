@@ -22,57 +22,57 @@ import javax.persistence.Table;
 @Table(name = "auteurs_series")
 public class AuteurSerie implements Serializable {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@GeneratedValue
-	@Id
-	@Column(name = "id_auteur_series")
-	private String id;
+  @GeneratedValue
+  @Id
+  @Column(name = "id_auteur_series")
+  private String id;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_personne")
-	private Auteur auteur;
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_serie")
-	private Serie serie;
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "id_personne")
+  private Auteur auteur;
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "id_serie")
+  private Serie serie;
 
-	@Enumerated
-	@Column(nullable = false, insertable = false, updatable = false)
-	private MetierAuteur metier;
+  @Enumerated
+  @Column(nullable = false, insertable = false, updatable = false)
+  private MetierAuteur metier;
 
-	public String getId() {
-		return id;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public Auteur getAuteur() {
-		return auteur;
-	}
+  public Auteur getAuteur() {
+    return auteur;
+  }
 
-	public void setAuteur(Auteur auteur) {
-		this.auteur = auteur;
-	}
+  public void setAuteur(Auteur auteur) {
+    this.auteur = auteur;
+  }
 
-	public Serie getSerie() {
-		return serie;
-	}
+  public Serie getSerie() {
+    return serie;
+  }
 
-	public void setSerie(Serie serie) {
-		this.serie = serie;
-	}
+  public void setSerie(Serie serie) {
+    this.serie = serie;
+  }
 
-	public MetierAuteur getMetier() {
-		return metier;
-	}
+  public MetierAuteur getMetier() {
+    return metier;
+  }
 
-	public void setMetier(MetierAuteur metier) {
-		this.metier = metier;
-	}
+  public void setMetier(MetierAuteur metier) {
+    this.metier = metier;
+  }
 
 }

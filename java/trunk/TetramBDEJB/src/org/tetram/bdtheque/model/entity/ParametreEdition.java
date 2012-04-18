@@ -9,9 +9,9 @@ import org.tetram.bdtheque.model.entity.ParametreListe;
 @DiscriminatorValue("3")
 public class ParametreEdition extends ParametreListe {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
 }

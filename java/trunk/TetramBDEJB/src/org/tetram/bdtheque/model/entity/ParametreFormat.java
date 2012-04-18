@@ -7,9 +7,9 @@ import javax.persistence.Entity;
 @DiscriminatorValue("5")
 public class ParametreFormat extends ParametreListe {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
 }

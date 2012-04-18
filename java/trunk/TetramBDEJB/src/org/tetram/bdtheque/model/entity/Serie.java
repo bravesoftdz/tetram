@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.sql.Blob;
 import java.util.List;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -25,224 +27,236 @@ import org.hibernate.annotations.Where;
 @Table(name = "series")
 public class Serie implements Serializable {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@GeneratedValue
-	@Id
-	@Column(name = "id_serie")
-	private String id;
+  @GeneratedValue
+  @Id
+  @Column(name = "id_serie")
+  private String id;
 
-	@ManyToOne(optional = false, fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_editeur")
-	private Editeur editeur;
+  @ManyToOne(optional = false, fetch = FetchType.LAZY)
+  @JoinColumn(name = "id_editeur")
+  private Editeur editeur;
 
-	@ManyToOne(optional = true, fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_collection")
-	private Collection collection;
+  @ManyToOne(optional = true, fetch = FetchType.LAZY)
+  @JoinColumn(name = "id_collection")
+  private Collection collection;
 
-	private Boolean terminee;
-	private Boolean complete;
-	private String siteWeb;
-	private Boolean suivreManquants;
-	private Boolean suivreSorties;
-	private Boolean vo;
-	private Boolean couleur;
-	@NotNull
-	@Column(name = "titreserie", nullable = false)
-	private String titre;
-	@Lob
-	@Column(name = "sujetserie")
-	private Blob sujet;
-	@Lob
-	@Column(name = "remarquesserie")
-	private Blob commentaires;
-	@Column(name = "nb_albums")
-	private Integer nbAlbums;
+  private Boolean terminee;
+  private Boolean complete;
+  private String siteWeb;
+  private Boolean suivreManquants;
+  private Boolean suivreSorties;
+  private Boolean vo;
+  private Boolean couleur;
+  @NotNull
+  @AttributeOverrides({ @AttributeOverride(name = "titre", column = @Column(name = "titreserie", nullable = false)),
+      @AttributeOverride(name = "initialeTitre", column = @Column(name = "initialetitreserie", nullable = false)) })
+  private Titre titre;
+  @Lob
+  @Column(name = "sujetserie")
+  private Blob sujet;
+  @Lob
+  @Column(name = "remarquesserie")
+  private Blob commentaires;
+  @Column(name = "nb_albums")
+  private Integer nbAlbums;
 
-	@Embedded
-	private ConfigurationEdition etat;
+  @OneToMany(mappedBy = "serie", fetch = FetchType.LAZY)
+  private List<Album> albums;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "genreseries", joinColumns = @JoinColumn(name = "id_serie"), inverseJoinColumns = @JoinColumn(name = "id_genre"))
-	private List<Genre> genres;
+  @Embedded
+  private ConfigurationEdition etat;
 
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_serie", insertable = false, updatable = false)
-	@Where(clause = "metier=0")
-	private List<ScenaristeSerie> scenaristes;
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_serie", insertable = false, updatable = false)
-	@Where(clause = "metier=1")
-	private List<DessinateurSerie> dessinateurs;
-	@OneToMany(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_serie", insertable = false, updatable = false)
-	@Where(clause = "metier=2")
-	private List<ColoristeSerie> coloristes;
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(name = "genreseries", joinColumns = @JoinColumn(name = "id_serie"), inverseJoinColumns = @JoinColumn(name = "id_genre"))
+  private List<Genre> genres;
 
-	@OneToMany(mappedBy = "serie", fetch = FetchType.LAZY)
-	private List<ParaBD> paraBD;
+  @OneToMany(fetch = FetchType.LAZY)
+  @JoinColumn(name = "id_serie", insertable = false, updatable = false)
+  @Where(clause = "metier=0")
+  private List<ScenaristeSerie> scenaristes;
+  @OneToMany(fetch = FetchType.LAZY)
+  @JoinColumn(name = "id_serie", insertable = false, updatable = false)
+  @Where(clause = "metier=1")
+  private List<DessinateurSerie> dessinateurs;
+  @OneToMany(fetch = FetchType.LAZY)
+  @JoinColumn(name = "id_serie", insertable = false, updatable = false)
+  @Where(clause = "metier=2")
+  private List<ColoristeSerie> coloristes;
 
-	public String getId() {
-		return id;
-	}
+  @OneToMany(mappedBy = "serie", fetch = FetchType.LAZY)
+  private List<ParaBD> paraBD;
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public Editeur getEditeur() {
-		return editeur;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public void setEditeur(Editeur editeur) {
-		this.editeur = editeur;
-	}
+  public Editeur getEditeur() {
+    return editeur;
+  }
 
-	public Collection getCollection() {
-		return collection;
-	}
+  public void setEditeur(Editeur editeur) {
+    this.editeur = editeur;
+  }
 
-	public void setCollection(Collection collection) {
-		this.collection = collection;
-	}
+  public Collection getCollection() {
+    return collection;
+  }
 
-	public Boolean getTerminee() {
-		return terminee;
-	}
+  public void setCollection(Collection collection) {
+    this.collection = collection;
+  }
 
-	public void setTerminee(Boolean terminee) {
-		this.terminee = terminee;
-	}
+  public Boolean getTerminee() {
+    return terminee;
+  }
 
-	public Boolean getComplete() {
-		return complete;
-	}
+  public void setTerminee(Boolean terminee) {
+    this.terminee = terminee;
+  }
 
-	public void setComplete(Boolean complete) {
-		this.complete = complete;
-	}
+  public Boolean getComplete() {
+    return complete;
+  }
 
-	public String getSiteWeb() {
-		return siteWeb;
-	}
+  public void setComplete(Boolean complete) {
+    this.complete = complete;
+  }
 
-	public void setSiteWeb(String siteWeb) {
-		this.siteWeb = siteWeb;
-	}
+  public String getSiteWeb() {
+    return siteWeb;
+  }
 
-	public Boolean getSuivreManquants() {
-		return suivreManquants;
-	}
+  public void setSiteWeb(String siteWeb) {
+    this.siteWeb = siteWeb;
+  }
 
-	public void setSuivreManquants(Boolean suivreManquants) {
-		this.suivreManquants = suivreManquants;
-	}
+  public Boolean getSuivreManquants() {
+    return suivreManquants;
+  }
 
-	public Boolean getSuivreSorties() {
-		return suivreSorties;
-	}
+  public void setSuivreManquants(Boolean suivreManquants) {
+    this.suivreManquants = suivreManquants;
+  }
 
-	public void setSuivreSorties(Boolean suivreSorties) {
-		this.suivreSorties = suivreSorties;
-	}
+  public Boolean getSuivreSorties() {
+    return suivreSorties;
+  }
 
-	public Integer getNbAlbums() {
-		return nbAlbums;
-	}
+  public void setSuivreSorties(Boolean suivreSorties) {
+    this.suivreSorties = suivreSorties;
+  }
 
-	public void setNbAlbums(Integer nbAlbums) {
-		this.nbAlbums = nbAlbums;
-	}
+  public Integer getNbAlbums() {
+    return nbAlbums;
+  }
 
-	public ConfigurationEdition getEtat() {
-		return etat;
-	}
+  public void setNbAlbums(Integer nbAlbums) {
+    this.nbAlbums = nbAlbums;
+  }
 
-	public void setEtat(ConfigurationEdition etat) {
-		this.etat = etat;
-	}
+  public ConfigurationEdition getEtat() {
+    return etat;
+  }
 
-	public Boolean getVo() {
-		return vo;
-	}
+  public void setEtat(ConfigurationEdition etat) {
+    this.etat = etat;
+  }
 
-	public void setVo(Boolean vo) {
-		this.vo = vo;
-	}
+  public Boolean getVo() {
+    return vo;
+  }
 
-	public Boolean getCouleur() {
-		return couleur;
-	}
+  public void setVo(Boolean vo) {
+    this.vo = vo;
+  }
 
-	public void setCouleur(Boolean couleur) {
-		this.couleur = couleur;
-	}
+  public Boolean getCouleur() {
+    return couleur;
+  }
 
-	public String getTitre() {
-		return titre;
-	}
+  public void setCouleur(Boolean couleur) {
+    this.couleur = couleur;
+  }
 
-	public void setTitre(String titre) {
-		this.titre = titre;
-	}
+  public Titre getTitre() {
+    return titre;
+  }
 
-	public String getSujet() {
-		return sujet.toString();
-	}
+  public void setTitre(Titre titre) {
+    this.titre = titre;
+  }
 
-	public void setSujet(Blob sujet) {
-		this.sujet = sujet;
-	}
+  public String getSujet() {
+    return sujet.toString();
+  }
 
-	public Blob getCommentaires() {
-		return commentaires;
-	}
+  public void setSujet(Blob sujet) {
+    this.sujet = sujet;
+  }
 
-	public void setCommentaires(Blob commentaires) {
-		this.commentaires = commentaires;
-	}
+  public Blob getCommentaires() {
+    return commentaires;
+  }
 
-	public List<Genre> getGenres() {
-		return genres;
-	}
+  public void setCommentaires(Blob commentaires) {
+    this.commentaires = commentaires;
+  }
 
-	public void setGenres(List<Genre> genres) {
-		this.genres = genres;
-	}
+  public List<Genre> getGenres() {
+    return genres;
+  }
 
-	public List<ParaBD> getParaBD() {
-		return paraBD;
-	}
+  public void setGenres(List<Genre> genres) {
+    this.genres = genres;
+  }
 
-	public void setParaBD(List<ParaBD> paraBD) {
-		this.paraBD = paraBD;
-	}
+  public List<ParaBD> getParaBD() {
+    return paraBD;
+  }
 
-	public List<ScenaristeSerie> getScenaristes() {
-		return scenaristes;
-	}
+  public void setParaBD(List<ParaBD> paraBD) {
+    this.paraBD = paraBD;
+  }
 
-	public void setScenaristes(List<ScenaristeSerie> scenaristes) {
-		this.scenaristes = scenaristes;
-	}
+  public List<ScenaristeSerie> getScenaristes() {
+    return scenaristes;
+  }
 
-	public List<DessinateurSerie> getDessinateurs() {
-		return dessinateurs;
-	}
+  public void setScenaristes(List<ScenaristeSerie> scenaristes) {
+    this.scenaristes = scenaristes;
+  }
 
-	public void setDessinateurs(List<DessinateurSerie> dessinateurs) {
-		this.dessinateurs = dessinateurs;
-	}
+  public List<DessinateurSerie> getDessinateurs() {
+    return dessinateurs;
+  }
 
-	public List<ColoristeSerie> getColoristes() {
-		return coloristes;
-	}
+  public void setDessinateurs(List<DessinateurSerie> dessinateurs) {
+    this.dessinateurs = dessinateurs;
+  }
 
-	public void setColoristes(List<ColoristeSerie> coloristes) {
-		this.coloristes = coloristes;
-	}
+  public List<ColoristeSerie> getColoristes() {
+    return coloristes;
+  }
+
+  public void setColoristes(List<ColoristeSerie> coloristes) {
+    this.coloristes = coloristes;
+  }
+
+  protected List<Album> getAlbums() {
+    return albums;
+  }
+
+  protected void setAlbums(List<Album> albums) {
+    this.albums = albums;
+  }
 
 }

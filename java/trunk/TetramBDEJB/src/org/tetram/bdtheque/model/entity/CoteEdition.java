@@ -18,45 +18,45 @@ import org.hibernate.annotations.NaturalId;
 @Table(name = "cotes")
 public class CoteEdition implements Serializable {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@GeneratedValue
-	@Id
-	@Column(name = "id_cote")
-	private String id;
+  @GeneratedValue
+  @Id
+  @Column(name = "id_cote")
+  private String id;
 
-	@Embedded
-	private Cote cote;
+  @Embedded
+  private Cote cote;
 
-	@NaturalId
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_edition")
-	private Edition edition;
+  @NaturalId
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "id_edition")
+  private Edition edition;
 
-	public String getId() {
-		return id;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public Cote getCote() {
-		return cote;
-	}
+  public Cote getCote() {
+    return cote;
+  }
 
-	public void setCote(Cote cote) {
-		this.cote = cote;
-	}
+  public void setCote(Cote cote) {
+    this.cote = cote;
+  }
 
-	public Edition getEdition() {
-		return edition;
-	}
+  public Edition getEdition() {
+    return edition;
+  }
 
-	public void setEdition(Edition edition) {
-		this.edition = edition;
-	}
+  public void setEdition(Edition edition) {
+    this.edition = edition;
+  }
 }

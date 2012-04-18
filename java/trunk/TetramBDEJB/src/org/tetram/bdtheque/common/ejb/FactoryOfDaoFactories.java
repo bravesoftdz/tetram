@@ -7,5 +7,5 @@ import org.tetram.bdtheque.model.dao.BDthequeDaoFactory;
 
 @Local
 public interface FactoryOfDaoFactories {
-	BDthequeDaoFactory createBDthequeDaoFactory( EntityManager manager );
+  BDthequeDaoFactory createBDthequeDaoFactory(EntityManager manager);
 }

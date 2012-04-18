@@ -16,29 +16,33 @@ import org.tetram.bdtheque.model.entity.Album;
 @Stateless(name = "albumService")
 public class AlbumServiceImpl implements AlbumService {
 
-	@EJB
-	private FactoryOfDaoFactories daoFactories;
+  @EJB
+  private FactoryOfDaoFactories daoFactories;
 
-	private BDthequeDaoFactory bdthequeDaoFactory;
+  private BDthequeDaoFactory bdthequeDaoFactory;
 
-	@PersistenceContext(unitName = "TetramOrgBDthequeServiceLocal")
-	private EntityManager manager;
+  @PersistenceContext(unitName = "TetramOrgBDthequeServiceLocal")
+  private EntityManager manager;
 
-	@PostConstruct
-	public void init() {
-		this.bdthequeDaoFactory = this.daoFactories
-				.createBDthequeDaoFactory(this.manager);
-	}
+  @PostConstruct
+  public void init() {
+    this.bdthequeDaoFactory = this.daoFactories.createBDthequeDaoFactory(this.manager);
+  }
 
-	
-	public Map<Object, List<Album>> getListByAnnee() throws IllegalArgumentException, SecurityException, IllegalAccessException, NoSuchFieldException {
-		return bdthequeDaoFactory.getAlbumDao().getListGroupByProperty("anneeParution");
-	}
+  public Map<Object, List<Album>> getListByAnnee()
+      throws IllegalArgumentException,
+        SecurityException,
+        IllegalAccessException,
+        NoSuchFieldException {
+    return bdthequeDaoFactory.getAlbumDao().getListGroupByProperty("anneeParution");
+  }
 
-	
-	public Map<Object, List<Album>> getListByInitiale() throws IllegalArgumentException, SecurityException, IllegalAccessException, NoSuchFieldException {
-		return bdthequeDaoFactory.getAlbumDao().getListGroupByProperty("initialeTitre");
-	}
+  public Map<Object, List<Album>> getListByInitiale()
+      throws IllegalArgumentException,
+        SecurityException,
+        IllegalAccessException,
+        NoSuchFieldException {
+    return bdthequeDaoFactory.getAlbumDao().getListGroupByProperty("initialeTitre");
+  }
 
-	
 }

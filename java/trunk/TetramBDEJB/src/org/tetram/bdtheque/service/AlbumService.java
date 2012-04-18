@@ -9,7 +9,15 @@ import org.tetram.bdtheque.model.entity.Album;
 
 @Local
 public interface AlbumService {
-	public Map<Object, List<Album>> getListByAnnee() throws IllegalArgumentException, SecurityException, IllegalAccessException, NoSuchFieldException;
+  public Map<Object, List<Album>> getListByAnnee()
+      throws IllegalArgumentException,
+        SecurityException,
+        IllegalAccessException,
+        NoSuchFieldException;
 
-	public Map<Object, List<Album>> getListByInitiale() throws IllegalArgumentException, SecurityException, IllegalAccessException, NoSuchFieldException;
+  public Map<Object, List<Album>> getListByInitiale()
+      throws IllegalArgumentException,
+        SecurityException,
+        IllegalAccessException,
+        NoSuchFieldException;
 }

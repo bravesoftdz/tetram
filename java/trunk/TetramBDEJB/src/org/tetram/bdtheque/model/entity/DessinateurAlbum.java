@@ -5,11 +5,11 @@ import javax.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("1")
-public class DessinateurAlbum extends AuteurAlbum{
+public class DessinateurAlbum extends AuteurAlbum {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
 }

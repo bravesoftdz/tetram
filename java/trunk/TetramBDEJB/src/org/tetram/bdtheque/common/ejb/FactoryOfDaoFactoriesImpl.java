@@ -9,8 +9,8 @@ import org.tetram.bdtheque.model.dao.BDthequeDaoFactoryImpl;
 @Stateless(name = "factoryOfDaoFactories")
 public class FactoryOfDaoFactoriesImpl implements FactoryOfDaoFactories {
 
-	public BDthequeDaoFactory createBDthequeDaoFactory(EntityManager manager) {
-		return new BDthequeDaoFactoryImpl(manager);
-	}
+  public BDthequeDaoFactory createBDthequeDaoFactory(EntityManager manager) {
+    return new BDthequeDaoFactoryImpl(manager);
+  }
 
 }

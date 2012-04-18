@@ -16,45 +16,45 @@ import javax.persistence.Table;
 @Table(name = "cotes_parabd")
 public class CoteParaBD implements Serializable {
 
-	/**
+  /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-	@GeneratedValue
-	@Id
-	@Column(name = "id_cote")
-	private String id;
+  @GeneratedValue
+  @Id
+  @Column(name = "id_cote")
+  private String id;
 
-	@Embedded
-	private Cote cote;
+  @Embedded
+  private Cote cote;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_parabd")
-	private ParaBD paraBD;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "id_parabd")
+  private ParaBD paraBD;
 
-	public String getId() {
-		return id;
-	}
+  public String getId() {
+    return id;
+  }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	public Cote getCote() {
-		return cote;
-	}
+  public Cote getCote() {
+    return cote;
+  }
 
-	public void setCote(Cote cote) {
-		this.cote = cote;
-	}
+  public void setCote(Cote cote) {
+    this.cote = cote;
+  }
 
-	public ParaBD getParaBD() {
-		return paraBD;
-	}
+  public ParaBD getParaBD() {
+    return paraBD;
+  }
 
-	public void setParaBD(ParaBD paraBD) {
-		this.paraBD = paraBD;
-	}
+  public void setParaBD(ParaBD paraBD) {
+    this.paraBD = paraBD;
+  }
 
 }

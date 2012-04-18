@@ -5,19 +5,21 @@ import java.util.List;
 import java.util.Map;
 
 public interface GenericDao<T, ID extends Serializable> {
-	
-	public T findById(ID id);
 
-	public List<T> findAll();
+  public T findById(ID id);
 
-	public T makePersistent(T entity);
+  public List<T> findAll();
 
-	public void makeTransient(T entity);
+  public T makePersistent(T entity);
 
-	public void refresh(T entity);
+  public void makeTransient(T entity);
 
-	public Map<Object, List<T>> getListGroupByProperty(String propertyName)
-			throws IllegalArgumentException, SecurityException,
-			IllegalAccessException, NoSuchFieldException;
+  public void refresh(T entity);
+
+  public Map<Object, List<T>> getListGroupByProperty(String propertyName)
+      throws IllegalArgumentException,
+        SecurityException,
+        IllegalAccessException,
+        NoSuchFieldException;
 
 }
