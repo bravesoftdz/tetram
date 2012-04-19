@@ -27,9 +27,14 @@ public class Titre implements Serializable {
 
   protected void setTitre(String titre) {
     this.titre = titre;
-    upperTitre = titre.toUpperCase();
-    initialeTitre = titre.charAt(0);
-    if (!Character.isLetterOrDigit(initialeTitre)) initialeTitre = '#';
+    if (titre == null) {
+      upperTitre = null;
+      initialeTitre = null;
+    } else {
+      upperTitre = titre.toUpperCase();
+      initialeTitre = titre.charAt(0);
+      if (!Character.isLetterOrDigit(initialeTitre)) initialeTitre = '#';
+    }
   }
 
   protected Character getInitialeTitre() {

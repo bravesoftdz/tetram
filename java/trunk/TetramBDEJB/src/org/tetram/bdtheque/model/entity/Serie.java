@@ -53,7 +53,8 @@ public class Serie implements Serializable {
   private Boolean vo;
   private Boolean couleur;
   @NotNull
-  @AttributeOverrides({ @AttributeOverride(name = "titre", column = @Column(name = "titreserie", nullable = false)),
+  @AttributeOverrides({
+      @AttributeOverride(name = "titre", column = @Column(name = "titreserie", nullable = false, length = 150)),
       @AttributeOverride(name = "initialeTitre", column = @Column(name = "initialetitreserie", nullable = false)) })
   private Titre titre;
   @Lob
@@ -87,6 +88,9 @@ public class Serie implements Serializable {
   @JoinColumn(name = "id_serie", insertable = false, updatable = false)
   @Where(clause = "metier=2")
   private List<ColoristeSerie> coloristes;
+
+  @ManyToOne
+  private ParametreNote notation;
 
   @OneToMany(mappedBy = "serie", fetch = FetchType.LAZY)
   private List<ParaBD> paraBD;
@@ -257,6 +261,14 @@ public class Serie implements Serializable {
 
   protected void setAlbums(List<Album> albums) {
     this.albums = albums;
+  }
+
+  public ParametreNote getNotation() {
+    return notation;
+  }
+
+  public void setNotation(ParametreNote notation) {
+    this.notation = notation;
   }
 
 }

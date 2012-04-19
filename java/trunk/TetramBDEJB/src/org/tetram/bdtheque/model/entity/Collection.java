@@ -26,7 +26,8 @@ public class Collection implements Serializable {
   @Id
   @Column(name = "id_collection")
   private String id;
-  @AttributeOverrides({ @AttributeOverride(name = "titre", column = @Column(name = "nomcollection", nullable = false)),
+  @AttributeOverrides({
+      @AttributeOverride(name = "titre", column = @Column(name = "nomcollection", nullable = false, length = 50)),
       @AttributeOverride(name = "initialetitre", column = @Column(name = "initialenomcollection", nullable = false)) })
   private Titre nom;
   @ManyToOne(optional = false, fetch = FetchType.LAZY)

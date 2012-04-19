@@ -6,6 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -39,7 +40,7 @@ public class AuteurAlbum implements Serializable {
   @JoinColumn(name = "id_album")
   private Album album;
 
-  @Enumerated
+  @Enumerated(EnumType.ORDINAL)
   @Column(nullable = false, insertable = false, updatable = false)
   private MetierAuteur metier;
 

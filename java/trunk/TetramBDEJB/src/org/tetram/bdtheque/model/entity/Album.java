@@ -52,11 +52,12 @@ public class Album implements Serializable {
   private int nbEditions;
   @OneToMany(mappedBy = "album", fetch = FetchType.LAZY)
   private List<Edition> editions;
-  @Formula("(case when NBEDITIONS > 0 then 1 else 0 end)")
+  @Formula("case when nbeditions > 0 then 1 else 0 end")
   private boolean complet;
 
-  @AttributeOverrides({ @AttributeOverride(name = "titre", column = @Column(name = "titrealbum", nullable = false)),
-      @AttributeOverride(name = "initialeTitre", column = @Column(name = "initialetitrealbum", nullable = false)) })
+  @AttributeOverrides({
+      @AttributeOverride(name = "titre", column = @Column(name = "titrealbum", nullable = true, length = 150)),
+      @AttributeOverride(name = "initialeTitre", column = @Column(name = "initialetitrealbum", nullable = true)) })
   private Titre titre;
   @Lob
   @Column(name = "sujetalbum")
@@ -77,6 +78,9 @@ public class Album implements Serializable {
   @JoinColumn(name = "id_album", insertable = false, updatable = false)
   @Where(clause = "metier=2")
   private List<ColoristeAlbum> coloristes;
+
+  @ManyToOne
+  private ParametreNote notation;
 
   public String getId() {
     return id;
@@ -228,6 +232,14 @@ public class Album implements Serializable {
 
   public void setIntegrale(boolean integrale) {
     this.integrale = integrale;
+  }
+
+  protected ParametreNote getNotation() {
+    return notation;
+  }
+
+  protected void setNotation(ParametreNote notation) {
+    this.notation = notation;
   }
 
 }

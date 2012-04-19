@@ -41,8 +41,9 @@ public class ParaBD implements Serializable {
   @JoinColumn(name = "id_serie")
   private Serie serie;
 
-  @AttributeOverrides({ @AttributeOverride(name = "titre", column = @Column(name = "titreparabd")),
-      @AttributeOverride(name = "initialeTitre", column = @Column(name = "initialetitreparabd")) })
+  @AttributeOverrides({
+      @AttributeOverride(name = "titre", column = @Column(name = "titreparabd", nullable = true, length = 150)),
+      @AttributeOverride(name = "initialeTitre", column = @Column(name = "initialetitreparabd", nullable = true)) })
   private Titre titre;
   @Lob
   @Column(name = "description")

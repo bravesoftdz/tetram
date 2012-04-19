@@ -29,7 +29,8 @@ public class Genre implements Serializable {
   @Column(name = "id_genre")
   private String id;
   @NotNull
-  @AttributeOverrides({ @AttributeOverride(name = "titre", column = @Column(name = "genre", nullable = false)),
+  @AttributeOverrides({
+      @AttributeOverride(name = "titre", column = @Column(name = "genre", nullable = false, length = 30)),
       @AttributeOverride(name = "initialetitre", column = @Column(name = "initialegenre", nullable = false)) })
   private Titre nom;
 
