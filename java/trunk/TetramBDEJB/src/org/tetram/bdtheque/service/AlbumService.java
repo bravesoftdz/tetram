@@ -3,11 +3,11 @@ package org.tetram.bdtheque.service;
 import java.util.List;
 import java.util.Map;
 
-import javax.ejb.Local;
+import javax.ejb.Remote;
 
 import org.tetram.bdtheque.model.entity.Album;
 
-@Local
+@Remote
 public interface AlbumService {
   public Map<Object, List<Album>> getListByAnnee()
       throws IllegalArgumentException,
@@ -20,4 +20,6 @@ public interface AlbumService {
         SecurityException,
         IllegalAccessException,
         NoSuchFieldException;
+  
+  public String test();
 }
