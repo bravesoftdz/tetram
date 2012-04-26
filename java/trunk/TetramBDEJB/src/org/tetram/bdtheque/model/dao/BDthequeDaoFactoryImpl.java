@@ -4,6 +4,8 @@ import javax.persistence.EntityManager;
 
 public class BDthequeDaoFactoryImpl implements BDthequeDaoFactory {
 
+  private static final long serialVersionUID = 1L;
+  
   private EntityManager manager;
 
   public BDthequeDaoFactoryImpl(EntityManager manager) {

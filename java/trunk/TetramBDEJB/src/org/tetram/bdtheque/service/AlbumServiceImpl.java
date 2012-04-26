@@ -22,7 +22,6 @@ public class AlbumServiceImpl implements AlbumService {
   private BDthequeDaoFactory bdthequeDaoFactory;
 
   @PersistenceContext
-  // (unitName = "TetramOrgBDthequeServiceLocal")
   private EntityManager manager;
 
   @PostConstruct
@@ -49,6 +48,11 @@ public class AlbumServiceImpl implements AlbumService {
   public String test() {
     // TODO Auto-generated method stub
     return new String("ceci est un test");
+  }
+
+  @Override
+  public BDthequeDaoFactory getbdthequeDaoFactory() {
+    return bdthequeDaoFactory;
   }
 
 }

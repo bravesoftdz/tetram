@@ -5,10 +5,13 @@ import java.util.Map;
 
 import javax.ejb.Remote;
 
+import org.tetram.bdtheque.model.dao.BDthequeDaoFactory;
 import org.tetram.bdtheque.model.entity.Album;
 
 @Remote
 public interface AlbumService {
+  BDthequeDaoFactory getbdthequeDaoFactory();
+
   public Map<Object, List<Album>> getListByAnnee()
       throws IllegalArgumentException,
         SecurityException,

@@ -16,5 +16,17 @@
 	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/org/hibernate/main/hibernate-core-4.0.1.Final.jar"/>
 	<classpathentry kind="lib" path="C:/Java/Jaybird-2.2.0beta-1JDK_1.6/jaybird-full-2.2.0.jar"/>
 	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/bin/client/jboss-client.jar"/>
+	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/org/jboss/as/jpa/main/jboss-as-jpa-7.1.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/org/jboss/as/jpa/hibernate/4/jboss-as-jpa-hibernate4-7.1.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/org/jboss/as/jpa/util/main/jboss-as-jpa-util-7.1.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/org/jboss/as/jpa/spi/main/jboss-as-jpa-spi-7.1.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/org/jboss/as/jpa/openjpa/main/jboss-as-jpa-openjpa-7.1.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/org/jboss/as/server/main/jboss-as-server-7.1.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/org/jboss/msc/main/jboss-msc-1.0.2.GA.jar"/>
+	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/org/hibernate/main/hibernate-entitymanager-4.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/org/hibernate/main/hibernate-commons-annotations-4.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/org/hibernate/main/hibernate-infinispan-4.0.1.Final.jar"/>
+	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/org/jboss/ejb3/main/jboss-ejb3-ext-api-2.0.0.jar"/>
+	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/javax/persistence/api/main/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

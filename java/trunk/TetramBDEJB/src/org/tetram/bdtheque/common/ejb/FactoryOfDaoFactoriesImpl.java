@@ -9,6 +9,8 @@ import org.tetram.bdtheque.model.dao.BDthequeDaoFactoryImpl;
 @Stateless(name = "factoryOfDaoFactories")
 public class FactoryOfDaoFactoriesImpl implements FactoryOfDaoFactories {
 
+  private static final long serialVersionUID = 1L;
+
   public BDthequeDaoFactory createBDthequeDaoFactory(EntityManager manager) {
     return new BDthequeDaoFactoryImpl(manager);
   }
