@@ -10,7 +10,7 @@ import org.tetram.bdtheque.model.entity.Album;
 
 @Remote
 public interface AlbumService {
-  BDthequeDaoFactory getbdthequeDaoFactory();
+  public BDthequeDaoFactory getbdthequeDaoFactory();
 
   public Map<Object, List<Album>> getListByAnnee()
       throws IllegalArgumentException,
