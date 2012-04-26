@@ -25,63 +25,63 @@ public class ParametreListe implements Serializable {
 
   @Id
   @Column(name = "ref")
-  private int valeur;
+  private Integer valeur;
   @GeneratedValue
   @Column(name = "id_liste", nullable = false)
   private String id;
   @Column(nullable = false)
   private String libelle;
-  private int ordre;
-  private boolean defaut;
+  private Integer ordre;
+  private Boolean defaut;
   @Column(insertable = false, updatable = false)
-  private int categorie;
+  private Integer categorie;
 
-  public int getValeur() {
-    return valeur;
-  }
-
-  public void setValeur(int valeur) {
-    this.valeur = valeur;
+  public Integer getCategorie() {
+    return categorie;
   }
 
   public String getId() {
     return id;
   }
 
-  public void setId(String id) {
-    this.id = id;
-  }
-
   public String getLibelle() {
     return libelle;
+  }
+
+  public Integer getOrdre() {
+    return ordre;
+  }
+
+  public Integer getValeur() {
+    return valeur;
+  }
+
+  public Boolean isDefaut() {
+    return defaut;
+  }
+
+  public void setCategorie(Integer categorie) {
+    this.categorie = categorie;
+  }
+
+  public void setDefaut(Boolean defaut) {
+    this.defaut = defaut;
+  }
+
+  public void setId(String id) {
+    this.id = id;
   }
 
   public void setLibelle(String libelle) {
     this.libelle = libelle;
   }
 
-  public int getOrdre() {
-    return ordre;
-  }
-
-  public void setOrdre(int ordre) {
+  public void setOrdre(Integer ordre) {
     this.ordre = ordre;
   }
 
-  public boolean isDefaut() {
-    return defaut;
-  }
-
-  public void setDefaut(boolean defaut) {
-    this.defaut = defaut;
-  }
-
-  public int getCategorie() {
-    return categorie;
-  }
-
-  public void setCategorie(int categorie) {
-    this.categorie = categorie;
+  public void setValeur(Integer valeur) {
+    this.valeur = valeur;
   }
 
 }

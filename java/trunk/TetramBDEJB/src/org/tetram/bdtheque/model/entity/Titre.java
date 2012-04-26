@@ -15,12 +15,12 @@ public class Titre implements Serializable {
    */
   private static final long serialVersionUID = 1L;
 
-  @Access(AccessType.PROPERTY)
   private String titre;
   private Character initialeTitre;
   @Transient
   private String upperTitre;
 
+  @Access(AccessType.PROPERTY)
   protected String getTitre() {
     return titre;
   }

@@ -80,6 +80,8 @@ public class Album implements Serializable {
   private List<ColoristeAlbum> coloristes;
 
   @ManyToOne
+  @JoinColumn(name="notation", insertable = false, updatable = false)
+  @Where(clause = "categorie=9")
   private ParametreNote notation;
 
   public String getId() {

@@ -90,6 +90,8 @@ public class Serie implements Serializable {
   private List<ColoristeSerie> coloristes;
 
   @ManyToOne
+  @JoinColumn(name="notation", insertable = false, updatable = false)
+  @Where(clause = "categorie=9")
   private ParametreNote notation;
 
   @OneToMany(mappedBy = "serie", fetch = FetchType.LAZY)
