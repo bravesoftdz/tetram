@@ -1,18 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence
-    xmlns="http://java.sun.com/xml/ns/persistence"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
-    version="1.0">
-   
-    <persistence-unit name="TetramOrgBDthequeServiceLocal">
-        <provider>org.hibernate.ejb.HibernatePersistence</provider>
-        <jta-data-source>java:jboss/datasources/bdtheque</jta-data-source>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
+	version="1.0">
 
-        <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.FirebirdDialect"/>
-            <property name="hibernate.show_sql" value="true" />
-        </properties>
-    </persistence-unit> 
-   
+	<persistence-unit name="TetramOrgBDthequeServiceLocal">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<jta-data-source>java:jboss/datasources/bdtheque</jta-data-source>
+
+		<class>org.tetram.bdtheque.model.entity.Album</class>
+		<class>org.tetram.bdtheque.model.entity.Auteur</class>
+		<class>org.tetram.bdtheque.model.entity.AuteurAlbum</class>
+		<class>org.tetram.bdtheque.model.entity.AuteurParaBD</class>
+		<class>org.tetram.bdtheque.model.entity.AuteurSerie</class>
+		<class>org.tetram.bdtheque.model.entity.Collection</class>
+		<class>org.tetram.bdtheque.model.entity.ColoristeAlbum</class>
+		<class>org.tetram.bdtheque.model.entity.ColoristeSerie</class>
+		<class>org.tetram.bdtheque.model.entity.DessinateurAlbum</class>
+		<class>org.tetram.bdtheque.model.entity.DessinateurSerie</class>
+		<class>org.tetram.bdtheque.model.entity.Editeur</class>
+		<class>org.tetram.bdtheque.model.entity.Edition</class>
+		<class>org.tetram.bdtheque.model.entity.Genre</class>
+		<class>org.tetram.bdtheque.model.entity.MetierAuteur</class>
+		<class>org.tetram.bdtheque.model.entity.ParaBD</class>
+		<class>org.tetram.bdtheque.model.entity.ParametreListe</class>
+		<class>org.tetram.bdtheque.model.entity.ParametreEtat</class>
+		<class>org.tetram.bdtheque.model.entity.ParametreReliure</class>
+		<class>org.tetram.bdtheque.model.entity.ParametreOrientation</class>
+		<class>org.tetram.bdtheque.model.entity.ParametreEdition</class>
+		<class>org.tetram.bdtheque.model.entity.ParametreFormat</class>
+		<class>org.tetram.bdtheque.model.entity.ParametreSensLecture</class>
+		<class>org.tetram.bdtheque.model.entity.ParametreCouverture</class>
+		<class>org.tetram.bdtheque.model.entity.ParametreNote</class>
+		<class>org.tetram.bdtheque.model.entity.ParametreParaBD</class>
+		<class>org.tetram.bdtheque.model.entity.ScenaristeAlbum</class>
+		<class>org.tetram.bdtheque.model.entity.ScenaristeSerie</class>
+		<class>org.tetram.bdtheque.model.entity.Serie</class>
+		<class>org.tetram.bdtheque.model.entity.CoteEdition</class>
+		<class>org.tetram.bdtheque.model.entity.CoteParaBD</class>
+		<class>org.tetram.bdtheque.model.entity.TauxConversion</class>
+		<class>org.tetram.bdtheque.model.entity.EditionImage</class>
+
+
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.FirebirdDialect" />
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.use_outer_join" value="true" />
+		</properties>
+	</persistence-unit>
+
 </persistence>
