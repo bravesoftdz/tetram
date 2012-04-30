@@ -4,20 +4,24 @@ import javax.persistence.EntityManager;
 
 public class BDthequeDaoFactoryImpl implements BDthequeDaoFactory {
 
-  private static final long serialVersionUID = 1L;
-  
-  private EntityManager manager;
+	private static final long serialVersionUID = 1L;
 
-  public BDthequeDaoFactoryImpl(EntityManager manager) {
-    this.manager = manager;
-  }
+	private EntityManager manager;
 
-  public EntityManager getManager() {
-    return this.manager;
-  }
+	public BDthequeDaoFactoryImpl(EntityManager manager) {
+		this.manager = manager;
+	}
 
-  public AlbumDao getAlbumDao() {
-    return new AlbumDaoImpl(manager);
-  }
+	public EntityManager getManager() {
+		return this.manager;
+	}
+
+	public AlbumDao getAlbumDao() {
+		return new AlbumDaoImpl(manager);
+	}
+
+	public AuteurDao getAuteurDao() {
+		return new AuteurDaoImpl(manager);
+	}
 
 }

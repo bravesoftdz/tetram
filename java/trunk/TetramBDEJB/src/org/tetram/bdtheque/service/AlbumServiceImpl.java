@@ -8,6 +8,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceContextType;
 
 import org.tetram.bdtheque.common.ejb.FactoryOfDaoFactories;
 import org.tetram.bdtheque.model.dao.BDthequeDaoFactory;
@@ -16,42 +17,44 @@ import org.tetram.bdtheque.model.entity.Album;
 @Stateless(name = "albumService")
 public class AlbumServiceImpl implements AlbumService {
 
-  @EJB
-  private FactoryOfDaoFactories daoFactories;
+	@EJB
+	private FactoryOfDaoFactories daoFactories;
 
-  private BDthequeDaoFactory bdthequeDaoFactory;
+	private BDthequeDaoFactory bdthequeDaoFactory;
 
-  @PersistenceContext
-  private EntityManager manager;
+	@PersistenceContext(type = PersistenceContextType.EXTENDED)
+	private EntityManager manager;
 
-  @PostConstruct
-  public void init() {
-    this.bdthequeDaoFactory = this.daoFactories.createBDthequeDaoFactory(this.manager);
-  }
+	@PostConstruct
+	public void init() {
+		this.bdthequeDaoFactory = this.daoFactories
+				.createBDthequeDaoFactory(this.manager);
+	}
 
-  public Map<Object, List<Album>> getListByAnnee()
-      throws IllegalArgumentException,
-        SecurityException,
-        IllegalAccessException,
-        NoSuchFieldException {
-    return bdthequeDaoFactory.getAlbumDao().getListGroupByProperty("anneeParution");
-  }
+	public Map<Object, List<Album>> getListByAnnee()
+			throws IllegalArgumentException, SecurityException,
+			IllegalAccessException, NoSuchFieldException {
+		return bdthequeDaoFactory.getAlbumDao().getListGroupByProperty(
+				"anneeParution");
+	}
 
-  public Map<Object, List<Album>> getListByInitiale()
-      throws IllegalArgumentException,
-        SecurityException,
-        IllegalAccessException,
-        NoSuchFieldException {
-    return bdthequeDaoFactory.getAlbumDao().getListGroupByProperty("initialeTitre");
-  }
+	public Map<Object, List<Album>> getListByInitiale()
+			throws IllegalArgumentException, SecurityException,
+			IllegalAccessException, NoSuchFieldException {
+		return bdthequeDaoFactory.getAlbumDao().getListGroupByProperty(
+				"initialeTitre");
+	}
 
-  public String test() {
-    return new String("ceci est un test");
-  }
+	public String test() {
+		return new String("ceci est un test");
+	}
 
-  @Override
-  public BDthequeDaoFactory getbdthequeDaoFactory() {
-    return bdthequeDaoFactory;
-  }
+	public BDthequeDaoFactory getbdthequeDaoFactory() {
+		return bdthequeDaoFactory;
+	}
+
+	public Album getAlbum(String id) {
+		return bdthequeDaoFactory.getAlbumDao().findById(id);
+	}
 
 }

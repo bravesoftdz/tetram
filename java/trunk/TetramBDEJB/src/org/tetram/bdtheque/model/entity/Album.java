@@ -236,11 +236,11 @@ public class Album implements Serializable {
     this.integrale = integrale;
   }
 
-  protected ParametreNote getNotation() {
+  public ParametreNote getNotation() {
     return notation;
   }
 
-  protected void setNotation(ParametreNote notation) {
+  public void setNotation(ParametreNote notation) {
     this.notation = notation;
   }
 

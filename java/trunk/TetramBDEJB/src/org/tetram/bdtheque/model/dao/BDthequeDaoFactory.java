@@ -5,8 +5,10 @@ import java.io.Serializable;
 import javax.persistence.EntityManager;
 
 public interface BDthequeDaoFactory extends Serializable {
-  public EntityManager getManager();
+	public EntityManager getManager();
 
-  public AlbumDao getAlbumDao();
+	public AlbumDao getAlbumDao();
+
+	public AuteurDao getAuteurDao();
 
 }

@@ -25,4 +25,6 @@ public interface AlbumService {
         NoSuchFieldException;
   
   public String test();
+  
+  public Album getAlbum(String id);
 }

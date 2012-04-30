@@ -21,11 +21,11 @@ public class Titre implements Serializable {
   private String upperTitre;
 
   @Access(AccessType.PROPERTY)
-  protected String getTitre() {
+  public String getTitre() {
     return titre;
   }
 
-  protected void setTitre(String titre) {
+  public void setTitre(String titre) {
     this.titre = titre;
     if (titre == null) {
       upperTitre = null;
@@ -37,11 +37,11 @@ public class Titre implements Serializable {
     }
   }
 
-  protected Character getInitialeTitre() {
+  public Character getInitialeTitre() {
     return initialeTitre;
   }
 
-  protected String getUpperTitre() {
+  public String getUpperTitre() {
     return upperTitre;
   }
 
