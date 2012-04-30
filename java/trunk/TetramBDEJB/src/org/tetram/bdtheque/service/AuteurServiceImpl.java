@@ -2,7 +2,7 @@ package org.tetram.bdtheque.service;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceContextType;
@@ -12,7 +12,7 @@ import org.tetram.bdtheque.model.dao.AuteurDao;
 import org.tetram.bdtheque.model.dao.BDthequeDaoFactory;
 import org.tetram.bdtheque.model.entity.Auteur;
 
-@Stateful(name = "auteurService")
+@Stateless(name = "auteurService")
 public class AuteurServiceImpl implements AuteurService {
 
 	@EJB

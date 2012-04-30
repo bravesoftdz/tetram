@@ -31,7 +31,7 @@ public class Editeur implements Serializable {
   @NotNull
   @AttributeOverrides({
       @AttributeOverride(name = "titre", column = @Column(name = "nomediteur", nullable = false, length = 50)),
-      @AttributeOverride(name = "initialetitre", column = @Column(name = "initialenomediteur", nullable = false)) })
+      @AttributeOverride(name = "initialeTitre", column = @Column(name = "initialenomediteur", nullable = false)) })
   private Titre nom;
   private String siteWeb;
 

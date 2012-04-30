@@ -31,7 +31,7 @@ public class Genre implements Serializable {
   @NotNull
   @AttributeOverrides({
       @AttributeOverride(name = "titre", column = @Column(name = "genre", nullable = false, length = 30)),
-      @AttributeOverride(name = "initialetitre", column = @Column(name = "initialegenre", nullable = false)) })
+      @AttributeOverride(name = "initialeTitre", column = @Column(name = "initialegenre", nullable = false)) })
   private Titre nom;
 
   @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "genres")

@@ -27,7 +27,7 @@ public class Auteur implements Serializable {
   private String id;
   @AttributeOverrides({
       @AttributeOverride(name = "titre", column = @Column(name = "nompersonne", nullable = false, length = 150)),
-      @AttributeOverride(name = "initialetitre", column = @Column(name = "initialenompersonne", nullable = false)) })
+      @AttributeOverride(name = "initialeTitre", column = @Column(name = "initialenompersonne", nullable = false)) })
   private Titre nom;
   @Lob
   private Blob biographie;

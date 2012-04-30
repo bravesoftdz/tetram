@@ -6,14 +6,19 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.tetram.bdtheque.model.entity.Album;
 import org.tetram.bdtheque.model.entity.Auteur;
+import org.tetram.bdtheque.service.AlbumService;
 import org.tetram.bdtheque.service.AuteurService;
 
 public class ClientTest {
 
+	private static final String id_album = "{0D603312-BA1A-467D-A572-F76FB3FFBA18}";
+	private static final String id_auteur = "{88F9D09B-4C3E-4291-B7BB-ED14DAE7624A}";
+
 	public static void main(String[] args) throws NamingException {
 		ClientTest test = new ClientTest();
-		test.doTest();
+		test.doTestAlbum();
 	}
 
 	public ClientTest() {
@@ -70,7 +75,7 @@ public class ClientTest {
 		return (T) lookup;
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "unused" })
 	private static <T> T lookupRemoteStateful(Class<?> classToFind)
 			throws NamingException {
 		Hashtable<String, String> jndiProperties = new Hashtable<String, String>();
@@ -83,15 +88,26 @@ public class ClientTest {
 		return (T) lookup;
 	}
 
-	private void doTest() throws NamingException {
-		AuteurService auteurService = lookupRemoteStateful(AuteurService.class);
+	private void doTestAuteur() throws NamingException {
+		AuteurService auteurService = lookupRemoteStateless(AuteurService.class);
 		System.out.println(auteurService == null ? "not assigned" : "assigned");
 		System.out.println(auteurService);
 
 		Auteur auteur = auteurService
-				.getAuteur("{0D603312-BA1A-467D-A572-F76FB3FFBA18}");
+				.getAuteur(id_auteur);
 		System.out.println(auteur == null ? "not assigned" : "assigned");
-		System.out.println(auteur.toString());
+		System.out.println(auteur.getNom().getTitre());
+	}
+
+	private void doTestAlbum() throws NamingException {
+		AlbumService albumService = lookupRemoteStateless(AlbumService.class);
+		System.out.println(albumService == null ? "not assigned" : "assigned");
+		System.out.println(albumService);
+
+		Album album = albumService
+				.getAlbum(id_album);
+		System.out.println(album == null ? "not assigned" : "assigned");
+		System.out.println(album.getTitre().getTitre());
 	}
 
 }
