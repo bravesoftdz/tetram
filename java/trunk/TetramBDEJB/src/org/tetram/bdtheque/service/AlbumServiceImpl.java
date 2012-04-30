@@ -46,7 +46,6 @@ public class AlbumServiceImpl implements AlbumService {
   }
 
   public String test() {
-    // TODO Auto-generated method stub
     return new String("ceci est un test");
   }
 
