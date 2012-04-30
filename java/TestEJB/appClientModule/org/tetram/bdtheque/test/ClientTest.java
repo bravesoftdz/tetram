@@ -63,8 +63,8 @@ public class ClientTest {
 		return ejbName;
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <T> T lookupRemoteStateless(Class<?> classToFind)
+	@SuppressWarnings({ "unchecked" })
+	protected static <T> T lookupRemoteStateless(Class<?> classToFind)
 			throws NamingException {
 		Hashtable<String, String> jndiProperties = new Hashtable<String, String>();
 		jndiProperties.put(Context.URL_PKG_PREFIXES,
@@ -75,8 +75,8 @@ public class ClientTest {
 		return (T) lookup;
 	}
 
-	@SuppressWarnings({ "unchecked", "unused" })
-	private static <T> T lookupRemoteStateful(Class<?> classToFind)
+	@SuppressWarnings({ "unchecked" })
+	protected static <T> T lookupRemoteStateful(Class<?> classToFind)
 			throws NamingException {
 		Hashtable<String, String> jndiProperties = new Hashtable<String, String>();
 		jndiProperties.put(Context.URL_PKG_PREFIXES,
@@ -88,7 +88,7 @@ public class ClientTest {
 		return (T) lookup;
 	}
 
-	private void doTestAuteur() throws NamingException {
+	public void doTestAuteur() throws NamingException {
 		AuteurService auteurService = lookupRemoteStateless(AuteurService.class);
 		System.out.println(auteurService == null ? "not assigned" : "assigned");
 		System.out.println(auteurService);
@@ -99,7 +99,7 @@ public class ClientTest {
 		System.out.println(auteur.getNom().getTitre());
 	}
 
-	private void doTestAlbum() throws NamingException {
+	public void doTestAlbum() throws NamingException {
 		AlbumService albumService = lookupRemoteStateless(AlbumService.class);
 		System.out.println(albumService == null ? "not assigned" : "assigned");
 		System.out.println(albumService);
