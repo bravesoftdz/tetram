@@ -29,7 +29,7 @@ public class GenericDaoImpl<T, ID extends Serializable> implements GenericDao<T,
   @SuppressWarnings("unchecked")
   public T findById(ID id) {
     T entity = (T) getSession().load(persistentClass, id);
-
+    getSession().update(entity);
     return entity;
   }
 
