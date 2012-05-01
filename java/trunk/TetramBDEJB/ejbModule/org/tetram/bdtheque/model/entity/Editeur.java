@@ -19,54 +19,54 @@ import javax.validation.constraints.NotNull;
 @Table(name = "editeurs")
 public class Editeur implements Serializable {
 
-  /**
+	/**
 	 * 
 	 */
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  @GeneratedValue
-  @Id
-  @Column(name = "id_editeur")
-  private String id;
-  @NotNull
-  @AttributeOverrides({
-      @AttributeOverride(name = "titre", column = @Column(name = "nomediteur", nullable = false, length = 50)),
-      @AttributeOverride(name = "initialeTitre", column = @Column(name = "initialenomediteur", nullable = false)) })
-  private Titre nom;
-  private String siteWeb;
+	@GeneratedValue
+	@Id
+	@Column(name = "id_editeur")
+	private String id;
+	@NotNull
+	@AttributeOverrides({
+			@AttributeOverride(name = "titre", column = @Column(name = "nomediteur", nullable = false, length = 50)),
+			@AttributeOverride(name = "initialeTitre", column = @Column(name = "initialenomediteur", nullable = false)) })
+	private Titre nom;
+	private String siteWeb;
 
-  @OneToMany(mappedBy = "editeur", fetch = FetchType.LAZY)
-  private Set<Collection> collections = new HashSet<Collection>();
+	@OneToMany(mappedBy = "editeur", fetch = FetchType.LAZY)
+	private Set<Collection> collections = new HashSet<Collection>();
 
-  public String getId() {
-    return id;
-  }
+	public String getId() {
+		return id;
+	}
 
-  public void setId(String id) {
-    this.id = id;
-  }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-  public Titre getNom() {
-    return nom;
-  }
+	public Titre getNom() {
+		return nom;
+	}
 
-  public void setNom(Titre nom) {
-    this.nom = nom;
-  }
+	public void setNom(Titre nom) {
+		this.nom = nom;
+	}
 
-  public String getSiteWeb() {
-    return siteWeb;
-  }
+	public String getSiteWeb() {
+		return siteWeb;
+	}
 
-  public void setSiteWeb(String siteWeb) {
-    this.siteWeb = siteWeb;
-  }
+	public void setSiteWeb(String siteWeb) {
+		this.siteWeb = siteWeb;
+	}
 
-  public Set<Collection> getCollections() {
-    return collections;
-  }
+	public Set<Collection> getCollections() {
+		return collections;
+	}
 
-  public void setCollections(Set<Collection> collections) {
-    this.collections = collections;
-  }
+	public void setCollections(Set<Collection> collections) {
+		this.collections = collections;
+	}
 }

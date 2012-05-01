@@ -10,39 +10,40 @@ import javax.persistence.Transient;
 @Embeddable
 public class Titre implements Serializable {
 
-  /**
+	/**
    * 
    */
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  private String titre;
-  private Character initialeTitre;
-  @Transient
-  private String upperTitre;
+	private String titre;
+	private Character initialeTitre;
+	@Transient
+	private String upperTitre;
 
-  @Access(AccessType.PROPERTY)
-  public String getTitre() {
-    return titre;
-  }
+	@Access(AccessType.PROPERTY)
+	public String getTitre() {
+		return titre;
+	}
 
-  public void setTitre(String titre) {
-    this.titre = titre;
-    if (titre == null) {
-      upperTitre = null;
-      initialeTitre = null;
-    } else {
-      upperTitre = titre.toUpperCase();
-      initialeTitre = titre.charAt(0);
-      if (!Character.isLetterOrDigit(initialeTitre)) initialeTitre = '#';
-    }
-  }
+	public void setTitre(String titre) {
+		this.titre = titre;
+		if (titre == null) {
+			upperTitre = null;
+			initialeTitre = null;
+		} else {
+			upperTitre = titre.toUpperCase();
+			initialeTitre = titre.charAt(0);
+			if (!Character.isLetterOrDigit(initialeTitre))
+				initialeTitre = '#';
+		}
+	}
 
-  public Character getInitialeTitre() {
-    return initialeTitre;
-  }
+	public Character getInitialeTitre() {
+		return initialeTitre;
+	}
 
-  public String getUpperTitre() {
-    return upperTitre;
-  }
+	public String getUpperTitre() {
+		return upperTitre;
+	}
 
 }

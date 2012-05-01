@@ -18,70 +18,70 @@ import javax.persistence.Table;
 @DiscriminatorColumn(name = "categorie", discriminatorType = DiscriminatorType.INTEGER)
 public class ParametreListe implements Serializable {
 
-  /**
+	/**
 	 * 
 	 */
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  @Id
-  @Column(name = "ref")
-  private Integer valeur;
-  @GeneratedValue
-  @Column(name = "id_liste", nullable = false)
-  private String id;
-  @Column(nullable = false)
-  private String libelle;
-  private Integer ordre;
-  private Boolean defaut;
-  @Column(insertable = false, updatable = false)
-  private Integer categorie;
+	@Id
+	@Column(name = "ref")
+	private Integer valeur;
+	@GeneratedValue
+	@Column(name = "id_liste", nullable = false)
+	private String id;
+	@Column(nullable = false)
+	private String libelle;
+	private Integer ordre;
+	private Boolean defaut;
+	@Column(insertable = false, updatable = false)
+	private Integer categorie;
 
-  public Integer getCategorie() {
-    return categorie;
-  }
+	public Integer getCategorie() {
+		return categorie;
+	}
 
-  public String getId() {
-    return id;
-  }
+	public String getId() {
+		return id;
+	}
 
-  public String getLibelle() {
-    return libelle;
-  }
+	public String getLibelle() {
+		return libelle;
+	}
 
-  public Integer getOrdre() {
-    return ordre;
-  }
+	public Integer getOrdre() {
+		return ordre;
+	}
 
-  public Integer getValeur() {
-    return valeur;
-  }
+	public Integer getValeur() {
+		return valeur;
+	}
 
-  public Boolean isDefaut() {
-    return defaut;
-  }
+	public Boolean isDefaut() {
+		return defaut;
+	}
 
-  public void setCategorie(Integer categorie) {
-    this.categorie = categorie;
-  }
+	public void setCategorie(Integer categorie) {
+		this.categorie = categorie;
+	}
 
-  public void setDefaut(Boolean defaut) {
-    this.defaut = defaut;
-  }
+	public void setDefaut(Boolean defaut) {
+		this.defaut = defaut;
+	}
 
-  public void setId(String id) {
-    this.id = id;
-  }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-  public void setLibelle(String libelle) {
-    this.libelle = libelle;
-  }
+	public void setLibelle(String libelle) {
+		this.libelle = libelle;
+	}
 
-  public void setOrdre(Integer ordre) {
-    this.ordre = ordre;
-  }
+	public void setOrdre(Integer ordre) {
+		this.ordre = ordre;
+	}
 
-  public void setValeur(Integer valeur) {
-    this.valeur = valeur;
-  }
+	public void setValeur(Integer valeur) {
+		this.valeur = valeur;
+	}
 
 }

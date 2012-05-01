@@ -4,9 +4,9 @@ import javax.naming.NamingException;
 
 import org.tetram.bdtheque.model.entity.Album;
 import org.tetram.bdtheque.model.entity.Auteur;
-import org.tetram.bdtheque.service.ServiceLocator;
-import org.tetram.bdtheque.service.remote.AlbumService;
-import org.tetram.bdtheque.service.remote.AuteurService;
+import org.tetram.bdtheque.service.remote.AlbumServiceRemote;
+import org.tetram.bdtheque.service.remote.AuteurServiceRemote;
+import org.tetram.bdtheque.service.remote.ServiceLocator;
 
 public class ClientTest {
 
@@ -23,8 +23,8 @@ public class ClientTest {
 	}
 
 	public void doTestAlbum() throws NamingException {
-		AlbumService albumService = ServiceLocator.getInstance().lookup(
-				AlbumService.class, false);
+		AlbumServiceRemote albumService = ServiceLocator.getInstance().lookup(
+				AlbumServiceRemote.class, false);
 		System.out.println("albumService : "
 				+ (albumService == null ? "not assigned" : "assigned"));
 		System.out.println("albumService : " + albumService);
@@ -36,8 +36,8 @@ public class ClientTest {
 	}
 
 	public void doTestAuteur() throws NamingException {
-		AuteurService auteurService = ServiceLocator.getInstance().lookup(
-				AuteurService.class, true);
+		AuteurServiceRemote auteurService = ServiceLocator.getInstance().lookup(
+				AuteurServiceRemote.class, true);
 		System.out.println("auteurService : "
 				+ (auteurService == null ? "not assigned" : "assigned"));
 		System.out.println("auteurService : " + auteurService);

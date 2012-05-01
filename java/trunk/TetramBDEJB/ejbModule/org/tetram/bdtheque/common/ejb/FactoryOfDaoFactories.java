@@ -9,5 +9,5 @@ import org.tetram.bdtheque.model.dao.BDthequeDaoFactory;
 
 @Remote
 public interface FactoryOfDaoFactories extends Serializable {
-  public BDthequeDaoFactory createBDthequeDaoFactory(EntityManager manager);
+	public BDthequeDaoFactory createBDthequeDaoFactory(EntityManager manager);
 }

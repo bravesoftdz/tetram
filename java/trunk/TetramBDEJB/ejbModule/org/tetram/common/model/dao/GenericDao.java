@@ -6,20 +6,19 @@ import java.util.Map;
 
 public interface GenericDao<T, ID extends Serializable> {
 
-  public T findById(ID id);
+	public T findById(ID id);
 
-  public List<T> findAll();
+	public List<T> findAll();
 
-  public T makePersistent(T entity);
+	public T makePersistent(T entity);
 
-  public void makeTransient(T entity);
+	public void makeTransient(T entity);
 
-  public void refresh(T entity);
+	public void refresh(T entity);
 
-  public Map<Object, List<T>> getListGroupByProperty(String propertyName)
-      throws IllegalArgumentException,
-        SecurityException,
-        IllegalAccessException,
-        NoSuchFieldException;
+	public Map<Object, List<T>> getListGroupByProperty(String propertyName);
+
+	public Map<Object, List<T>> getListGroupByProperty(String HQLpropertyName,
+			String JAVApropertyName);
 
 }

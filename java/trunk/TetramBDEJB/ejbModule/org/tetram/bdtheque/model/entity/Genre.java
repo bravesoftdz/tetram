@@ -19,46 +19,47 @@ import javax.validation.constraints.NotNull;
 @Table(name = "genres")
 public class Genre implements Serializable {
 
-  /**
+	/**
 	 * 
 	 */
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  @GeneratedValue
-  @Id
-  @Column(name = "id_genre")
-  private String id;
-  @NotNull
-  @AttributeOverrides({
-      @AttributeOverride(name = "titre", column = @Column(name = "genre", nullable = false, length = 30)),
-      @AttributeOverride(name = "initialeTitre", column = @Column(name = "initialegenre", nullable = false)) })
-  private Titre nom;
+	@GeneratedValue
+	@Id
+	@Column(name = "id_genre")
+	private String id;
+	@NotNull
+	@AttributeOverrides({
+			@AttributeOverride(name = "titre", column = @Column(name = "genre", nullable = false, length = 30)),
+			@AttributeOverride(name = "initialeTitre", column = @Column(name = "initialegenre", nullable = false)) })
+	private Titre nom;
 
-  @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE }, mappedBy = "genres")
-  private List<Serie> series;
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
+			CascadeType.MERGE }, mappedBy = "genres")
+	private List<Serie> series;
 
-  public String getId() {
-    return id;
-  }
+	public String getId() {
+		return id;
+	}
 
-  public void setId(String id) {
-    this.id = id;
-  }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-  public Titre getNom() {
-    return nom;
-  }
+	public Titre getNom() {
+		return nom;
+	}
 
-  public void setNom(Titre nom) {
-    this.nom = nom;
-  }
+	public void setNom(Titre nom) {
+		this.nom = nom;
+	}
 
-  public List<Serie> getSeries() {
-    return series;
-  }
+	public List<Serie> getSeries() {
+		return series;
+	}
 
-  public void setSeries(List<Serie> series) {
-    this.series = series;
-  }
+	public void setSeries(List<Serie> series) {
+		this.series = series;
+	}
 
 }

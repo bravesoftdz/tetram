@@ -7,9 +7,9 @@ import javax.persistence.Entity;
 @DiscriminatorValue("0")
 public class ScenaristeAlbum extends AuteurAlbum {
 
-  /**
+	/**
 	 * 
 	 */
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
 }

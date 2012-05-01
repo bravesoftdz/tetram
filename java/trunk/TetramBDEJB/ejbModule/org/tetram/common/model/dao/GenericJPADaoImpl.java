@@ -2,6 +2,8 @@ package org.tetram.common.model.dao;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,26 +85,73 @@ public class GenericJPADaoImpl<T, ID extends Serializable> implements
 		}
 	}
 
+	private Field lookForField(String fieldName) {
+		try {
+			return persistentClass.getField(fieldName);
+		} catch (NoSuchFieldException e) {
+			return null;
+		}
+	}
+
+	private Method lookForGetter(String fieldName) {
+		// recherche d'un getter "getPropertyName" sans paramètres
+		try {
+			return persistentClass.getMethod(
+					"get" + String.valueOf(fieldName.charAt(0)).toUpperCase()
+							+ fieldName.substring(1), (Class<?>[]) null);
+		} catch (NoSuchMethodException e) {
+			return null;
+		}
+	}
+
+	public Map<Object, List<T>> getListGroupByProperty(String propertyName) {
+		return getListGroupByProperty(propertyName, propertyName);
+	}
+
 	@SuppressWarnings("unchecked")
-	public Map<Object, List<T>> getListGroupByProperty(String propertyName)
-			throws IllegalArgumentException, SecurityException,
-			IllegalAccessException, NoSuchFieldException {
+	public Map<Object, List<T>> getListGroupByProperty(String HQLpropertyName,
+			String JAVApropertyName) {
 		StringBuffer queryString = new StringBuffer();
 		Query query;
 
 		queryString.append("from " + persistentClass.getName());
-		queryString.append("order by " + propertyName);
+		queryString.append("order by " + HQLpropertyName);
 
 		query = entityManager.createQuery(queryString.toString());
 		Iterator<?> it = query.getResultList().iterator();
 
 		Object obj;
 		Object propertyValue;
-		Field propertyField = persistentClass.getField(propertyName);
+		Field propertyField = lookForField(JAVApropertyName);
+		Method methode = lookForGetter(JAVApropertyName);
 		Map<Object, List<T>> result = new HashMap<Object, List<T>>();
 		while (it.hasNext()) {
 			obj = it.next();
-			propertyValue = propertyField.get(obj);
+			if (propertyField != null)
+				try {
+					propertyValue = propertyField.get(obj);
+				} catch (IllegalArgumentException e) {
+					propertyValue = null;
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					propertyValue = null;
+					e.printStackTrace();
+				}
+			else if (methode != null)
+				try {
+					propertyValue = methode.invoke(obj, (Object[]) null);
+				} catch (IllegalArgumentException e) {
+					propertyValue = null;
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					propertyValue = null;
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					propertyValue = null;
+					e.printStackTrace();
+				}
+			else
+				propertyValue = null;
 
 			if (!result.containsKey(propertyValue)) {
 				result.put(propertyValue, new ArrayList<T>());

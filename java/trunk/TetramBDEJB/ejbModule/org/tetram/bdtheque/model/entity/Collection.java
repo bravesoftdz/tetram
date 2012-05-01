@@ -17,45 +17,45 @@ import javax.persistence.Table;
 @Table(name = "collections")
 public class Collection implements Serializable {
 
-  /**
+	/**
 	 * 
 	 */
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  @GeneratedValue
-  @Id
-  @Column(name = "id_collection")
-  private String id;
-  @AttributeOverrides({
-      @AttributeOverride(name = "titre", column = @Column(name = "nomcollection", nullable = false, length = 50)),
-      @AttributeOverride(name = "initialeTitre", column = @Column(name = "initialenomcollection", nullable = false)) })
-  private Titre nom;
-  @ManyToOne(optional = false, fetch = FetchType.LAZY)
-  @JoinColumn(name = "id_editeur")
-  private Editeur editeur;
+	@GeneratedValue
+	@Id
+	@Column(name = "id_collection")
+	private String id;
+	@AttributeOverrides({
+			@AttributeOverride(name = "titre", column = @Column(name = "nomcollection", nullable = false, length = 50)),
+			@AttributeOverride(name = "initialeTitre", column = @Column(name = "initialenomcollection", nullable = false)) })
+	private Titre nom;
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_editeur")
+	private Editeur editeur;
 
-  public String getId() {
-    return id;
-  }
+	public String getId() {
+		return id;
+	}
 
-  public void setId(String id) {
-    this.id = id;
-  }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-  public Titre getNom() {
-    return nom;
-  }
+	public Titre getNom() {
+		return nom;
+	}
 
-  public void setNom(Titre nom) {
-    this.nom = nom;
-  }
+	public void setNom(Titre nom) {
+		this.nom = nom;
+	}
 
-  public Editeur getEditeur() {
-    return editeur;
-  }
+	public Editeur getEditeur() {
+		return editeur;
+	}
 
-  public void setEditeur(Editeur editeur) {
-    this.editeur = editeur;
-  }
+	public void setEditeur(Editeur editeur) {
+		this.editeur = editeur;
+	}
 
 }

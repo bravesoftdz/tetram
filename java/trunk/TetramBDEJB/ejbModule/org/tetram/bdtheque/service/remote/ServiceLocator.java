@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.service;
+package org.tetram.bdtheque.service.remote;
 
 import java.util.Hashtable;
 
@@ -26,7 +26,7 @@ public class ServiceLocator {
 	}
 
 	private static String buildEjbName(Class<?> classToBuild, boolean stateful)
-			throws NamingException {		
+			throws NamingException {
 		// The app name is the application name of the deployed EJBs. This is
 		// typically the ear name
 		// without the .ear suffix. However, the application name could be
@@ -58,7 +58,7 @@ public class ServiceLocator {
 		final String ejbName = "ejb:" + appName + "/" + moduleName + "/"
 				+ distinctName + "/" + beanName + "!" + viewClassName
 				+ (stateful ? "?stateful" : "");
-		
+
 		System.out.println("ejbName : " + ejbName);
 
 		return ejbName;

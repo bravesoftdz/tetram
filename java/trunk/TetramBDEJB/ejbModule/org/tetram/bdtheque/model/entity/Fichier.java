@@ -10,38 +10,38 @@ import javax.persistence.Lob;
 @Embeddable
 public class Fichier implements Serializable {
 
-  /**
+	/**
 	 * 
 	 */
-  private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-  @Lob
-  @Column(nullable = true)
-  private Blob image;
-  private boolean stockage;
-  private String fichier;
+	@Lob
+	@Column(nullable = true)
+	private Blob image;
+	private boolean stockage;
+	private String fichier;
 
-  public Blob getImage() {
-    return image;
-  }
+	public Blob getImage() {
+		return image;
+	}
 
-  public void setImage(Blob image) {
-    this.image = image;
-  }
+	public void setImage(Blob image) {
+		this.image = image;
+	}
 
-  public boolean isStockage() {
-    return stockage;
-  }
+	public boolean isStockage() {
+		return stockage;
+	}
 
-  public void setStockage(boolean stockage) {
-    this.stockage = stockage;
-  }
+	public void setStockage(boolean stockage) {
+		this.stockage = stockage;
+	}
 
-  public String getFichier() {
-    return fichier;
-  }
+	public String getFichier() {
+		return fichier;
+	}
 
-  public void setFichier(String fichier) {
-    this.fichier = fichier;
-  }
+	public void setFichier(String fichier) {
+		this.fichier = fichier;
+	}
 }

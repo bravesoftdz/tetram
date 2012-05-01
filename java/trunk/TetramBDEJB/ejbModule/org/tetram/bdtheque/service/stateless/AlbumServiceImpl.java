@@ -12,10 +12,11 @@ import javax.persistence.PersistenceContext;
 import org.tetram.bdtheque.common.ejb.FactoryOfDaoFactories;
 import org.tetram.bdtheque.model.dao.BDthequeDaoFactory;
 import org.tetram.bdtheque.model.entity.Album;
-import org.tetram.bdtheque.service.remote.AlbumService;
+import org.tetram.bdtheque.service.local.AlbumServiceLocal;
+import org.tetram.bdtheque.service.remote.AlbumServiceRemote;
 
-@Stateless(name = "albumService")
-public class AlbumServiceImpl implements AlbumService {
+@Stateless(mappedName = "albumService")
+public class AlbumServiceImpl implements AlbumServiceRemote, AlbumServiceLocal {
 
 	@EJB
 	private FactoryOfDaoFactories daoFactories;
@@ -31,16 +32,12 @@ public class AlbumServiceImpl implements AlbumService {
 				.createBDthequeDaoFactory(this.manager);
 	}
 
-	public Map<Object, List<Album>> getListByAnnee()
-			throws IllegalArgumentException, SecurityException,
-			IllegalAccessException, NoSuchFieldException {
+	public Map<Object, List<Album>> getListByAnnee() {
 		return bdthequeDaoFactory.getAlbumDao().getListGroupByProperty(
 				"anneeParution");
 	}
 
-	public Map<Object, List<Album>> getListByInitiale()
-			throws IllegalArgumentException, SecurityException,
-			IllegalAccessException, NoSuchFieldException {
+	public Map<Object, List<Album>> getListByInitiale() {
 		return bdthequeDaoFactory.getAlbumDao().getListGroupByProperty(
 				"initialeTitre");
 	}
