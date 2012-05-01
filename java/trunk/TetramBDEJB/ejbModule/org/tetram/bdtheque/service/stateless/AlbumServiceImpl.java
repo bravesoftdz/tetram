@@ -15,7 +15,7 @@ import org.tetram.bdtheque.model.entity.Album;
 import org.tetram.bdtheque.service.local.AlbumServiceLocal;
 import org.tetram.bdtheque.service.remote.AlbumServiceRemote;
 
-@Stateless(mappedName = "albumService")
+@Stateless(name = "albumService")
 public class AlbumServiceImpl implements AlbumServiceRemote, AlbumServiceLocal {
 
 	@EJB

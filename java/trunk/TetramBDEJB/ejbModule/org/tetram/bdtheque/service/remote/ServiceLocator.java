@@ -52,6 +52,10 @@ public class ServiceLocator {
 		String beanName = classToBuild.getSimpleName();
 		beanName = String.valueOf(beanName.charAt(0)).toLowerCase()
 				+ beanName.substring(1);
+		if (beanName.endsWith("Remote")) 
+			beanName = beanName.substring(0, beanName.length() - "Remote".length());
+		else if (beanName.endsWith("Local")) 
+			beanName= beanName.substring(0, beanName.length() - "Local".length());
 		// the remote view fully qualified class name
 		final String viewClassName = classToBuild.getName();
 		// let's do the lookup
