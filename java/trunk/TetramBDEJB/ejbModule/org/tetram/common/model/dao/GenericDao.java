@@ -18,7 +18,7 @@ public interface GenericDao<T, ID extends Serializable> {
 
 	public Map<Object, List<T>> getListGroupByProperty(String propertyName);
 
-	public Map<Object, List<T>> getListGroupByProperty(String HQLpropertyName,
-			String JAVApropertyName);
+	public Map<Object, List<T>> getListGroupByProperty(String propertyName,
+			String fieldName);
 
 }

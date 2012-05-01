@@ -105,21 +105,21 @@ public class GenericHibernateDaoImpl<T, ID extends Serializable> implements
 	}
 
 	@SuppressWarnings("unchecked")
-	public Map<Object, List<T>> getListGroupByProperty(String HQLpropertyName,
-			String JAVApropertyName) {
+	public Map<Object, List<T>> getListGroupByProperty(String propertyName,
+			String fieldName) {
 		StringBuffer queryString = new StringBuffer();
 		Query query;
 
 		queryString.append("from " + persistentClass.getName());
-		queryString.append("order by " + HQLpropertyName);
+		queryString.append("order by " + propertyName);
 
 		query = session.createQuery(queryString.toString());
 		Iterator<?> it = query.iterate();
 
 		Object obj;
 		Object propertyValue;
-		Field propertyField = lookForField(JAVApropertyName);
-		Method methode = lookForGetter(JAVApropertyName);
+		Field propertyField = lookForField(fieldName);
+		Method methode = lookForGetter(fieldName);
 		Map<Object, List<T>> result = new HashMap<Object, List<T>>();
 		while (it.hasNext()) {
 			obj = it.next();
