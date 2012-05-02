@@ -3,6 +3,7 @@
 	<name>TetramBDTheque</name>
 	<comment></comment>
 	<projects>
+		<project>TetramBDEJB</project>
 		<project>TetramBDWebapp</project>
 	</projects>
 	<buildSpec>
