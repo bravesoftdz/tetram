@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<policy>
+  <application-policy name="EncryptedFireBirdDbRealm_gesqual">
+       <authentication>
+          <login-module code="org.jboss.resource.security.SecureIdentityLoginModule" flag="required">
+             <module-option name="username">SYSDBA</module-option>
+             <module-option name="password">667f11fbdfef90b6d7b145018f031a36</module-option>
+          </login-module>
+       </authentication>
+  </application-policy>
+</policy>
