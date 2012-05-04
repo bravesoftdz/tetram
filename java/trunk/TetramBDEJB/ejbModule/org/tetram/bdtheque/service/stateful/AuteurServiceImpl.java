@@ -48,4 +48,8 @@ public class AuteurServiceImpl implements AuteurServiceRemote,
 				"initialeNom");
 	}
 
+	public List<Auteur> findAll() {
+		return auteurDao.findAll();
+	}
+
 }

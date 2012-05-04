@@ -9,6 +9,8 @@ import org.tetram.bdtheque.model.entity.Auteur;
 
 @Local
 public interface AuteurServiceLocal {
+	public List<Auteur> findAll();
+	
 	public Map<Object, List<Auteur>> getListByInitiale()
 			throws IllegalArgumentException, SecurityException,
 			IllegalAccessException, NoSuchFieldException;
