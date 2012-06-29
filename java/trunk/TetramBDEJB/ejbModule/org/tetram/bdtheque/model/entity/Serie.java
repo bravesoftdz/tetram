@@ -2,7 +2,6 @@ package org.tetram.bdtheque.model.entity;
 
 import java.io.Serializable;
 import java.sql.Blob;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
