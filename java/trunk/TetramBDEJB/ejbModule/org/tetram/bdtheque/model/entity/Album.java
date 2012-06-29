@@ -2,7 +2,7 @@ package org.tetram.bdtheque.model.entity;
 
 import java.io.Serializable;
 import java.sql.Blob;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -51,7 +51,7 @@ public class Album implements Serializable {
 	private boolean achat;
 	private int nbEditions;
 	@OneToMany(mappedBy = "album", fetch = FetchType.LAZY)
-	private List<Edition> editions;
+	private Set<Edition> editions;
 	@Formula("case when nbeditions > 0 then 1 else 0 end")
 	private boolean complet;
 
@@ -69,15 +69,15 @@ public class Album implements Serializable {
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_album", insertable = false, updatable = false)
 	@Where(clause = "metier=0")
-	private List<ScenaristeAlbum> scenaristes;
+	private Set<ScenaristeAlbum> scenaristes;
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_album", insertable = false, updatable = false)
 	@Where(clause = "metier=1")
-	private List<DessinateurAlbum> dessinateurs;
+	private Set<DessinateurAlbum> dessinateurs;
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_album", insertable = false, updatable = false)
 	@Where(clause = "metier=2")
-	private List<ColoristeAlbum> coloristes;
+	private Set<ColoristeAlbum> coloristes;
 
 	@ManyToOne
 	@JoinColumn(name = "notation", insertable = false, updatable = false)
@@ -164,11 +164,11 @@ public class Album implements Serializable {
 		this.nbEditions = nbEditions;
 	}
 
-	public List<Edition> getEditions() {
+	public Set<Edition> getEditions() {
 		return editions;
 	}
 
-	public void setEditions(List<Edition> editions) {
+	public void setEditions(Set<Edition> editions) {
 		this.editions = editions;
 	}
 
@@ -204,27 +204,27 @@ public class Album implements Serializable {
 		this.commentaires = commentaires;
 	}
 
-	public List<ScenaristeAlbum> getScenaristes() {
+	public Set<ScenaristeAlbum> getScenaristes() {
 		return scenaristes;
 	}
 
-	public void setScenaristes(List<ScenaristeAlbum> scenaristes) {
+	public void setScenaristes(Set<ScenaristeAlbum> scenaristes) {
 		this.scenaristes = scenaristes;
 	}
 
-	public List<DessinateurAlbum> getDessinateurs() {
+	public Set<DessinateurAlbum> getDessinateurs() {
 		return dessinateurs;
 	}
 
-	public void setDessinateurs(List<DessinateurAlbum> dessinateurs) {
+	public void setDessinateurs(Set<DessinateurAlbum> dessinateurs) {
 		this.dessinateurs = dessinateurs;
 	}
 
-	public List<ColoristeAlbum> getColoristes() {
+	public Set<ColoristeAlbum> getColoristes() {
 		return coloristes;
 	}
 
-	public void setColoristes(List<ColoristeAlbum> coloristes) {
+	public void setColoristes(Set<ColoristeAlbum> coloristes) {
 		this.coloristes = coloristes;
 	}
 

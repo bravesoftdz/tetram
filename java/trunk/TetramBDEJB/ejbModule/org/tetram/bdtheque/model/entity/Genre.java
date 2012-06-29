@@ -1,7 +1,7 @@
 package org.tetram.bdtheque.model.entity;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -36,7 +36,7 @@ public class Genre implements Serializable {
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST,
 			CascadeType.MERGE }, mappedBy = "genres")
-	private List<Serie> series;
+	private Set<Serie> series;
 
 	public String getId() {
 		return id;
@@ -54,11 +54,11 @@ public class Genre implements Serializable {
 		this.nom = nom;
 	}
 
-	public List<Serie> getSeries() {
+	public Set<Serie> getSeries() {
 		return series;
 	}
 
-	public void setSeries(List<Serie> series) {
+	public void setSeries(Set<Serie> series) {
 		this.series = series;
 	}
 

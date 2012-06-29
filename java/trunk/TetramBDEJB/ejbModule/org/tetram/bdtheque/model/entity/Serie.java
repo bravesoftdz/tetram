@@ -3,6 +3,7 @@ package org.tetram.bdtheque.model.entity;
 import java.io.Serializable;
 import java.sql.Blob;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -67,27 +68,27 @@ public class Serie implements Serializable {
 	private Integer nbAlbums;
 
 	@OneToMany(mappedBy = "serie", fetch = FetchType.LAZY)
-	private List<Album> albums;
+	private Set<Album> albums;
 
 	@Embedded
 	private ConfigurationEdition etat;
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "genreseries", joinColumns = @JoinColumn(name = "id_serie"), inverseJoinColumns = @JoinColumn(name = "id_genre"))
-	private List<Genre> genres;
+	private Set<Genre> genres;
 
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_serie", insertable = false, updatable = false)
 	@Where(clause = "metier=0")
-	private List<ScenaristeSerie> scenaristes;
+	private Set<ScenaristeSerie> scenaristes;
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_serie", insertable = false, updatable = false)
 	@Where(clause = "metier=1")
-	private List<DessinateurSerie> dessinateurs;
+	private Set<DessinateurSerie> dessinateurs;
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_serie", insertable = false, updatable = false)
 	@Where(clause = "metier=2")
-	private List<ColoristeSerie> coloristes;
+	private Set<ColoristeSerie> coloristes;
 
 	@ManyToOne
 	@JoinColumn(name = "notation", insertable = false, updatable = false)
@@ -95,7 +96,7 @@ public class Serie implements Serializable {
 	private ParametreNote notation;
 
 	@OneToMany(mappedBy = "serie", fetch = FetchType.LAZY)
-	private List<ParaBD> paraBD;
+	private Set<ParaBD> paraBD;
 
 	public String getId() {
 		return id;
@@ -217,51 +218,51 @@ public class Serie implements Serializable {
 		this.commentaires = commentaires;
 	}
 
-	public List<Genre> getGenres() {
+	public Set<Genre> getGenres() {
 		return genres;
 	}
 
-	public void setGenres(List<Genre> genres) {
+	public void setGenres(Set<Genre> genres) {
 		this.genres = genres;
 	}
 
-	public List<ParaBD> getParaBD() {
+	public Set<ParaBD> getParaBD() {
 		return paraBD;
 	}
 
-	public void setParaBD(List<ParaBD> paraBD) {
+	public void setParaBD(Set<ParaBD> paraBD) {
 		this.paraBD = paraBD;
 	}
 
-	public List<ScenaristeSerie> getScenaristes() {
+	public Set<ScenaristeSerie> getScenaristes() {
 		return scenaristes;
 	}
 
-	public void setScenaristes(List<ScenaristeSerie> scenaristes) {
+	public void setScenaristes(Set<ScenaristeSerie> scenaristes) {
 		this.scenaristes = scenaristes;
 	}
 
-	public List<DessinateurSerie> getDessinateurs() {
+	public Set<DessinateurSerie> getDessinateurs() {
 		return dessinateurs;
 	}
 
-	public void setDessinateurs(List<DessinateurSerie> dessinateurs) {
+	public void setDessinateurs(Set<DessinateurSerie> dessinateurs) {
 		this.dessinateurs = dessinateurs;
 	}
 
-	public List<ColoristeSerie> getColoristes() {
+	public Set<ColoristeSerie> getColoristes() {
 		return coloristes;
 	}
 
-	public void setColoristes(List<ColoristeSerie> coloristes) {
+	public void setColoristes(Set<ColoristeSerie> coloristes) {
 		this.coloristes = coloristes;
 	}
 
-	protected List<Album> getAlbums() {
+	protected Set<Album> getAlbums() {
 		return albums;
 	}
 
-	protected void setAlbums(List<Album> albums) {
+	protected void setAlbums(Set<Album> albums) {
 		this.albums = albums;
 	}
 
