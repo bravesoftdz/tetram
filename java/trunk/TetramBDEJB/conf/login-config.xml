@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <policy>
-  <application-policy name="EncryptedFireBirdDbRealm_gesqual">
+  <application-policy name="EncryptedFireBirdDbRealm_BDTheque">
        <authentication>
           <login-module code="org.jboss.resource.security.SecureIdentityLoginModule" flag="required">
              <module-option name="username">SYSDBA</module-option>

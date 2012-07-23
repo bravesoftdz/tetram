@@ -1,8 +1,8 @@
 package org.tetram.bdtheque.model.entity;
 
 import java.io.Serializable;
-import java.sql.Blob;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Lob;
@@ -17,15 +17,19 @@ public class Fichier implements Serializable {
 
 	@Lob
 	@Column(nullable = true)
-	private Blob image;
+	private Byte[] image;
+	
+	@Basic
 	private boolean stockage;
+	
+	@Basic(optional = false)
 	private String fichier;
 
-	public Blob getImage() {
+	public Byte[] getImage() {
 		return image;
 	}
 
-	public void setImage(Blob image) {
+	public void setImage(Byte[] image) {
 		this.image = image;
 	}
 

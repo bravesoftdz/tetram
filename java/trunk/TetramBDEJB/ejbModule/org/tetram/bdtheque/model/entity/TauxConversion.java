@@ -29,6 +29,7 @@ public class TauxConversion implements Serializable {
 	@Embedded
 	@AttributeOverride(name = "symbole", column = @Column(name = "monnaie1"))
 	private Monnaie monnaie1;
+	
 	@Embedded
 	@AttributeOverride(name = "symbole", column = @Column(name = "monnaie2"))
 	private Monnaie monnaie2;

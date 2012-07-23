@@ -1,6 +1,7 @@
 package org.tetram.proof;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -31,8 +32,9 @@ public class AuteurController {
 	 * Perform search This retrieves all ZoneCodes from database
 	 */
 	public void search() {
+		Date debut = new Date();
 		zoneCodes = auteurService.findAll();
-		messages.info("Search completed. {0} records found", zoneCodes.size());
+		messages.info("Search completed. {0} records found ({1} ms)", zoneCodes.size(), new Date().getTime() - debut.getTime());
 	}
 
 	/**

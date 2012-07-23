@@ -14,9 +14,6 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/TetramBDEJB"/>
 	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/org/jboss/ejb3/main/jboss-ejb3-ext-api-2.0.0.jar"/>
-	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/org/javassist/main/javassist-3.15.0-GA.jar"/>
 	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/org/hibernate/validator/main/hibernate-validator-4.2.0.Final.jar"/>
-	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/modules/org/jboss/ejb-client/main/jboss-ejb-client-1.0.5.Final.jar"/>
-	<classpathentry kind="lib" path="C:/Java/jboss-as-7.1.1.Final/bin/client/jboss-client.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
