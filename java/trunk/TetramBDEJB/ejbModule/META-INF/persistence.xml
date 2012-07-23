@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://java.sun.com/xml/ns/persistence"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd"
-	version="1.0">
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
 
 	<persistence-unit name="TetramOrgBDthequeServiceLocal">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
@@ -21,7 +21,6 @@
 		<class>org.tetram.bdtheque.model.entity.Editeur</class>
 		<class>org.tetram.bdtheque.model.entity.Edition</class>
 		<class>org.tetram.bdtheque.model.entity.Genre</class>
-		<class>org.tetram.bdtheque.model.entity.MetierAuteur</class>
 		<class>org.tetram.bdtheque.model.entity.ParaBD</class>
 		<class>org.tetram.bdtheque.model.entity.ParametreListe</class>
 		<class>org.tetram.bdtheque.model.entity.ParametreEtat</class>
@@ -40,6 +39,11 @@
 		<class>org.tetram.bdtheque.model.entity.CoteParaBD</class>
 		<class>org.tetram.bdtheque.model.entity.TauxConversion</class>
 		<class>org.tetram.bdtheque.model.entity.EditionImage</class>
+		<class>org.tetram.bdtheque.model.entity.Fichier</class>
+		<class>org.tetram.bdtheque.model.entity.Titre</class>
+		<class>org.tetram.bdtheque.model.entity.Monnaie</class>
+		<class>org.tetram.bdtheque.model.entity.Cote</class>
+		<class>org.tetram.bdtheque.model.entity.ConfigurationEdition</class>
 
 
 		<exclude-unlisted-classes>true</exclude-unlisted-classes>
