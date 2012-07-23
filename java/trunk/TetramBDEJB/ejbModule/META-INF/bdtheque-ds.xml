@@ -6,12 +6,12 @@
 		</connection-url>
 		<driver>jaybird-full-2.2.0.jar</driver>
 		<pool></pool>
-		<security-domain>EncryptedFireBirdDbRealm_BDTheque</security-domain>
 		<!-- 
+		<security-domain>EncryptedFireBirdDbRealm_BDTheque</security-domain>
+		 -->
 		<security>
 			<user-name>SYSDBA</user-name>
 			<password>masterkey</password>
 		</security>
-		 -->
 	</datasource>
 </datasources>
