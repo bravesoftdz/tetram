@@ -116,11 +116,11 @@ public class Album implements Serializable {
 		this.serie = serie;
 	}
 
-	public Integer getTome() {
+	public Integer getTomezzz() {
 		return tome;
 	}
 
-	public void setTome(Integer tome) {
+	public void setTomezzz(Integer tome) {
 		this.tome = tome;
 	}
 
