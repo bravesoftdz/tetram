@@ -5,11 +5,11 @@ interface
 uses
   Windows, SysUtils, DB, Classes, ComCtrls, UIB, StdCtrls, Commun, UMetaData, SyncObjs, Generics.Collections;
 
-//  IMPORTANT: Ref doit TOUJOURS être le premier champ des records
-//  Les strings DOIVENT être limités pour pouvoir utiliser CopyMemory(Pd, Ps, SizeOf(Ps^));
+// IMPORTANT: Ref doit TOUJOURS être le premier champ des records
+// Les strings DOIVENT être limités pour pouvoir utiliser CopyMemory(Pd, Ps, SizeOf(Ps^));
 
 type
-  TEditionsEmpruntees = array of array[0..1] of TGUID;
+  TEditionsEmpruntees = array of array [0 .. 1] of TGUID;
 
   TBasePointeur = class(TObject)
   private
@@ -48,10 +48,10 @@ type
 
   TCouverture = class(TBasePointeur)
   public
-    OldNom, NewNom: string{[255]};
+    OldNom, NewNom: string { [255] };
     OldStockee, NewStockee: Boolean;
     Categorie: Smallint;
-    sCategorie: string{[50]};
+    sCategorie: string { [50] };
 
     procedure Assign(Ps: TBasePointeur); override;
 
@@ -63,10 +63,10 @@ type
 
   TParaBD = class(TBasePointeur)
   public
-    Titre: string{[150]};
+    Titre: string { [150] };
     ID_Serie: TGUID;
-    Serie: string{[150]};
-    sCategorie: string{[50]};
+    Serie: string { [150] };
+    sCategorie: string { [50] };
     Achat: Boolean;
     Complet: Boolean;
 
@@ -81,7 +81,7 @@ type
 
   TPersonnage = class(TBasePointeur)
   public
-    Nom: string{[150]};
+    Nom: string { [150] };
 
     procedure Assign(Ps: TBasePointeur); override;
 
@@ -112,7 +112,7 @@ type
 
   TEditeur = class(TBasePointeur)
   public
-    NomEditeur: string{[50]};
+    NomEditeur: string { [50] };
 
     procedure Assign(Ps: TBasePointeur); override;
 
@@ -147,11 +147,11 @@ type
     Tome: Integer;
     TomeDebut: Integer;
     TomeFin: Integer;
-    Titre: string{[150]};
+    Titre: string { [150] };
     ID_Serie: TGUID;
-    Serie: string{[150]};
+    Serie: string { [150] };
     ID_Editeur: TGUID;
-    Editeur: string{[50]};
+    Editeur: string { [50] };
     AnneeParution, MoisParution: Integer;
     Stock: Boolean;
     Integrale: Boolean;
@@ -173,7 +173,7 @@ type
 
   TCollection = class(TBasePointeur)
   public
-    NomCollection: string{[50]};
+    NomCollection: string { [50] };
     Editeur: TEditeur;
 
     procedure Assign(Ps: TBasePointeur); override;
@@ -190,7 +190,7 @@ type
 
   TSerie = class(TBasePointeur)
   public
-    TitreSerie: string{[150]};
+    TitreSerie: string { [150] };
     Editeur: TEditeur;
     Collection: TCollection;
 
@@ -209,7 +209,7 @@ type
   TEdition = class(TBasePointeur)
   public
     AnneeEdition: Integer;
-    ISBN: string{[17]};
+    ISBN: string { [17] };
     Editeur: TEditeur;
     Collection: TCollection;
 
@@ -226,7 +226,7 @@ type
 
   TEmprunteur = class(TBasePointeur)
   public
-    Nom: string{[100]};
+    Nom: string { [100] };
 
     procedure Assign(Ps: TBasePointeur); override;
 
@@ -239,7 +239,7 @@ type
   end;
 
   TConversion = class(TBasePointeur)
-    Monnaie1, Monnaie2: string{[5]};
+    Monnaie1, Monnaie2: string { [5] };
     Taux: Double;
 
     procedure Fill(Query: TUIBQuery); override;
@@ -248,7 +248,7 @@ type
 
   TGenre = class(TBasePointeur)
   public
-    Genre: string{[50]};
+    Genre: string { [50] };
     Quantite: Integer;
 
     procedure Assign(Ps: TBasePointeur); override;
@@ -326,8 +326,7 @@ begin
       LV.Items.Delete(i);
     end;
   finally
-    if DoClear then
-      LV.Items.Clear;
+    if DoClear then LV.Items.Clear;
     LV.Items.EndUpdate;
   end;
 end;
@@ -337,11 +336,9 @@ var
   i: Integer;
 begin
   try
-    for i := 0 to Pred(List.Count) do
-      TBasePointeur(List[i]).Free;
+    for i := 0 to Pred(List.Count) do TBasePointeur(List[i]).Free;
   finally
-    if DoClear then
-      List.Clear;
+    if DoClear then List.Clear;
   end;
 end;
 
@@ -355,8 +352,7 @@ begin
       ListBox.Items.Objects[i].Free;
     end;
   finally
-    if DoClear then
-      ListBox.Items.Clear;
+    if DoClear then ListBox.Items.Clear;
   end;
 end;
 
@@ -369,10 +365,8 @@ end;
 class function TBasePointeur.NonNull(Query: TUIBQuery; const Champ: string; Default: Integer): Integer;
 begin
   try
-    if Query.Fields.ByNameIsNull[Champ] then
-      Result := Default
-    else
-      Result := Query.Fields.ByNameAsInteger[Champ];
+    if Query.Fields.ByNameIsNull[Champ] then Result := Default
+    else Result := Query.Fields.ByNameAsInteger[Champ];
   except
     Result := Default;
   end;
@@ -381,10 +375,8 @@ end;
 class function TBasePointeur.NonNull(Query: TUIBQuery; const Champ: string): TGUID;
 begin
   try
-    if Query.Fields.ByNameIsNull[Champ] then
-      Result := GUID_NULL
-    else
-      Result := StringToGUID(Query.Fields.ByNameAsString[Champ]);
+    if Query.Fields.ByNameIsNull[Champ] then Result := GUID_NULL
+    else Result := StringToGUID(Query.Fields.ByNameAsString[Champ]);
   except
     Result := GUID_NULL;
   end;
@@ -393,10 +385,8 @@ end;
 class function TBasePointeur.NonNull(Query: TUIBQuery; Champ, Default: Integer): Integer;
 begin
   try
-    if (Champ = -1) or Query.Fields.IsNull[Champ] then
-      Result := Default
-    else
-      Result := Query.Fields.AsInteger[Champ];
+    if (Champ = -1) or Query.Fields.IsNull[Champ] then Result := Default
+    else Result := Query.Fields.AsInteger[Champ];
   except
     Result := Default;
   end;
@@ -405,10 +395,8 @@ end;
 class function TBasePointeur.NonNull(Query: TUIBQuery; Champ: Integer): TGUID;
 begin
   try
-    if (Champ = -1) or Query.Fields.IsNull[Champ] then
-      Result := GUID_NULL
-    else
-      Result := StringToGUID(Query.Fields.AsString[Champ]);
+    if (Champ = -1) or Query.Fields.IsNull[Champ] then Result := GUID_NULL
+    else Result := StringToGUID(Query.Fields.AsString[Champ]);
   except
     Result := GUID_NULL;
   end;
@@ -422,8 +410,7 @@ end;
 class function TBasePointeur.GetFieldIndex(const Name: string): Integer;
 begin
   for Result := 0 to Pred(FPreparedQuery.Fields.FieldCount) do
-    if SameText(FPreparedQuery.Fields.AliasName[Result], Name) then
-      Exit;
+    if SameText(FPreparedQuery.Fields.AliasName[Result], Name) then Exit;
   Result := -1;
 end;
 
@@ -458,8 +445,7 @@ end;
 class procedure TBasePointeur.Prepare(Q: TUIBQuery);
 begin
   Assert(FPreparedQuery = nil, 'Ne peut pas être préparée plusieurs fois');
-  if not Assigned(cs) then
-    cs := TCriticalSection.Create;
+  if not Assigned(cs) then cs := TCriticalSection.Create;
   cs.Enter;
   FPreparedQuery := Q;
   GetFieldIndices;
@@ -517,7 +503,7 @@ end;
 
 class function TCouverture.Make(Query: TUIBQuery): TCouverture;
 begin
-  Result := TCouverture(inherited Make(Query));
+  Result := TCouverture( inherited Make(Query));
 end;
 
 { TEditeur }
@@ -535,7 +521,7 @@ end;
 
 class function TEditeur.Duplicate(Ps: TEditeur): TEditeur;
 begin
-  Result := TEditeur(inherited Duplicate(Ps));
+  Result := TEditeur( inherited Duplicate(Ps));
 end;
 
 procedure TEditeur.Clear;
@@ -553,16 +539,16 @@ end;
 
 procedure TEditeur.Fill(const ID_Editeur: TGUID);
 var
-  q: TUIBQuery;
+  Q: TUIBQuery;
 begin
-  q := TUIBQuery.Create(nil);
-  with q do
+  Q := TUIBQuery.Create(nil);
+  with Q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'SELECT NOMEDITEUR, ID_Editeur FROM EDITEURS WHERE ID_Editeur = ?';
       Params.AsString[0] := GUIDToString(ID_Editeur);
       Open;
-      Fill(q);
+      Fill(Q);
     finally
       Transaction.Free;
       Free;
@@ -597,16 +583,16 @@ end;
 
 procedure TPersonnage.Fill(const ID_Personne: TGUID);
 var
-  q: TUIBQuery;
+  Q: TUIBQuery;
 begin
-  q := TUIBQuery.Create(nil);
-  with q do
+  Q := TUIBQuery.Create(nil);
+  with Q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'select nompersonne, id_personne from personnes where id_personne = ?';
       Params.AsString[0] := GUIDToString(ID_Personne);
       Open;
-      Fill(q);
+      Fill(Q);
     finally
       Transaction.Free;
       Free;
@@ -668,7 +654,7 @@ end;
 
 class function TAuteur.Make(Query: TUIBQuery): TAuteur;
 begin
-  Result := TAuteur(inherited Make(Query));
+  Result := TAuteur( inherited Make(Query));
 end;
 
 { TAlbum }
@@ -707,7 +693,7 @@ begin
   Stock := True;
   Achat := False;
   Complet := True;
-  Notation := 0;
+  Notation := 900;
 
   if Assigned(FPreparedQuery) then
   begin
@@ -720,22 +706,14 @@ begin
     Integrale := Query.Fields.AsBoolean[IndexIntegrale];
     HorsSerie := Query.Fields.AsBoolean[IndexHorsSerie];
     ID_Editeur := NonNull(Query, IndexID_Editeur);
-    if IndexTitreSerie <> -1 then
-      Serie := Query.Fields.AsString[IndexTitreSerie];
-    if IndexNomEditeur <> -1 then
-      Editeur := Query.Fields.AsString[IndexNomEditeur];
-    if IndexMoisParution <> -1 then
-      MoisParution := Query.Fields.AsInteger[IndexMoisParution];
-    if IndexAnneeParution <> -1 then
-      AnneeParution := Query.Fields.AsInteger[IndexAnneeParution];
-    if IndexStock <> -1 then
-      Stock := Query.Fields.AsBoolean[IndexStock];
-    if IndexAchat <> -1 then
-      Achat := Query.Fields.AsBoolean[IndexAchat];
-    if IndexComplet <> -1 then
-      Complet := Query.Fields.AsBoolean[IndexComplet];
-    if IndexNotation <> -1 then
-      Notation := Query.Fields.AsSmallint[IndexNotation];
+    if IndexTitreSerie <> -1 then Serie := Query.Fields.AsString[IndexTitreSerie];
+    if IndexNomEditeur <> -1 then Editeur := Query.Fields.AsString[IndexNomEditeur];
+    if IndexMoisParution <> -1 then MoisParution := Query.Fields.AsInteger[IndexMoisParution];
+    if IndexAnneeParution <> -1 then AnneeParution := Query.Fields.AsInteger[IndexAnneeParution];
+    if IndexStock <> -1 then Stock := Query.Fields.AsBoolean[IndexStock];
+    if IndexAchat <> -1 then Achat := Query.Fields.AsBoolean[IndexAchat];
+    if IndexComplet <> -1 then Complet := Query.Fields.AsBoolean[IndexComplet];
+    if IndexNotation <> -1 then Notation := Query.Fields.AsSmallint[IndexNotation];
   end
   else
   begin
@@ -781,11 +759,13 @@ begin
     except
     end;
   end;
+
+  if Notation = 0 then Notation := 900;
 end;
 
 class function TAlbum.Duplicate(Ps: TAlbum): TAlbum;
 begin
-  Result := TAlbum(inherited Duplicate(Ps));
+  Result := TAlbum( inherited Duplicate(Ps));
 end;
 
 procedure TAlbum.Fill(const ID_Album: TGUID);
@@ -795,13 +775,14 @@ end;
 
 procedure TAlbum.Fill(const ID_Album, ID_Edition: TGUID);
 var
-  q: TUIBQuery;
+  Q: TUIBQuery;
 begin
-  q := TUIBQuery.Create(nil);
-  with q do
+  Q := TUIBQuery.Create(nil);
+  with Q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'SELECT a.ID_Album, a.TitreAlbum, a.HorsSerie, a.Integrale, a.Tome, a.TomeDebut, a.TomeFin, a.ID_Serie, a.Achat, a.Complet, a.TitreSerie';
+      SQL.Text :=
+        'SELECT a.ID_Album, a.TitreAlbum, a.HorsSerie, a.Integrale, a.Tome, a.TomeDebut, a.TomeFin, a.ID_Serie, a.Achat, a.Complet, a.TitreSerie';
       SQL.Add('FROM VW_LISTE_ALBUMS a');
       SQL.Add('WHERE a.ID_ALBUM = :ID_Album');
       if not IsEqualGUID(ID_Edition, GUID_NULL) then
@@ -811,10 +792,9 @@ begin
         SQL.Add('AND e.ID_Edition = :ID_Edition');
       end;
       Params.AsString[0] := GUIDToString(ID_Album);
-      if not IsEqualGUID(ID_Edition, GUID_NULL) then
-        Params.AsString[1] := GUIDToString(ID_Edition);
+      if not IsEqualGUID(ID_Edition, GUID_NULL) then Params.AsString[1] := GUIDToString(ID_Edition);
       Open;
-      Fill(q);
+      Fill(Q);
     finally
       Transaction.Free;
       Free;
@@ -828,7 +808,7 @@ end;
 
 class function TAlbum.Make(Query: TUIBQuery): TAlbum;
 begin
-  Result := TAlbum(inherited Make(Query));
+  Result := TAlbum( inherited Make(Query));
 end;
 
 class procedure TAlbum.GetFieldIndices;
@@ -865,8 +845,7 @@ end;
 function TCollection.ChaineAffichage(Simple: Boolean = True): string;
 begin
   Result := FormatTitre(NomCollection);
-  if not Simple then
-    AjoutString(Result, FormatTitre(Editeur.NomEditeur), ' ', '(', ')');
+  if not Simple then AjoutString(Result, FormatTitre(Editeur.NomEditeur), ' ', '(', ')');
 end;
 
 constructor TCollection.Create;
@@ -883,7 +862,7 @@ end;
 
 class function TCollection.Duplicate(Ps: TCollection): TCollection;
 begin
-  Result := TCollection(inherited Duplicate(Ps));
+  Result := TCollection( inherited Duplicate(Ps));
 end;
 
 procedure TCollection.Clear;
@@ -907,16 +886,16 @@ end;
 
 procedure TCollection.Fill(const ID_Collection: TGUID);
 var
-  q: TUIBQuery;
+  Q: TUIBQuery;
 begin
-  q := TUIBQuery.Create(nil);
-  with q do
+  Q := TUIBQuery.Create(nil);
+  with Q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'select id_collection, nomcollection from collections where id_collection = ?';
       Params.AsString[0] := GUIDToString(ID_Collection);
       Open;
-      Fill(q);
+      Fill(Q);
     finally
       Transaction.Free;
       Free;
@@ -937,10 +916,8 @@ function TSerie.ChaineAffichage(Simple: Boolean): string;
 var
   s: string;
 begin
-  if Simple then
-    Result := TitreSerie
-  else
-    Result := FormatTitre(TitreSerie);
+  if Simple then Result := TitreSerie
+  else Result := FormatTitre(TitreSerie);
   s := '';
   AjoutString(s, FormatTitre(Editeur.NomEditeur), ' ');
   AjoutString(s, FormatTitre(Collection.NomCollection), ' - ');
@@ -949,7 +926,7 @@ end;
 
 class function TSerie.Duplicate(Ps: TSerie): TSerie;
 begin
-  Result := TSerie(inherited Duplicate(Ps));
+  Result := TSerie( inherited Duplicate(Ps));
 end;
 
 constructor TSerie.Create;
@@ -992,16 +969,16 @@ end;
 
 procedure TSerie.Fill(const ID_Serie: TGUID);
 var
-  q: TUIBQuery;
+  Q: TUIBQuery;
 begin
-  q := TUIBQuery.Create(nil);
-  with q do
+  Q := TUIBQuery.Create(nil);
+  with Q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'SELECT ID_Serie, TitreSerie FROM SERIES WHERE ID_Serie = :ID_Serie';
       Params.AsString[0] := GUIDToString(ID_Serie);
       Open;
-      Fill(q);
+      Fill(Q);
     finally
       Transaction.Free;
       Free;
@@ -1030,7 +1007,7 @@ end;
 
 class function TEdition.Duplicate(Ps: TEdition): TEdition;
 begin
-  Result := TEdition(inherited Duplicate(Ps));
+  Result := TEdition( inherited Duplicate(Ps));
 end;
 
 constructor TEdition.Create;
@@ -1083,7 +1060,7 @@ end;
 
 class function TEmprunteur.Duplicate(Ps: TEmprunteur): TEmprunteur;
 begin
-  Result := TEmprunteur(inherited Duplicate(Ps));
+  Result := TEmprunteur( inherited Duplicate(Ps));
 end;
 
 procedure TEmprunteur.Clear;
@@ -1101,16 +1078,16 @@ end;
 
 procedure TEmprunteur.Fill(const ID_Emprunteur: TGUID);
 var
-  q: TUIBQuery;
+  Q: TUIBQuery;
 begin
-  q := TUIBQuery.Create(nil);
-  with q do
+  Q := TUIBQuery.Create(nil);
+  with Q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'SELECT ID_Emprunteur, NomEmprunteur FROM Emprunteurs WHERE ID_Emprunteur = ?';
       Params.AsString[0] := GUIDToString(ID_Emprunteur);
       Open;
-      Fill(q);
+      Fill(Q);
     finally
       Transaction.Free;
       Free;
@@ -1119,7 +1096,7 @@ end;
 
 class function TEmprunteur.Make(Query: TUIBQuery): TEmprunteur;
 begin
-  Result := TEmprunteur(inherited Make(Query));
+  Result := TEmprunteur( inherited Make(Query));
 end;
 
 { TGenre }
@@ -1156,7 +1133,7 @@ end;
 
 class function TGenre.Make(Query: TUIBQuery): TGenre;
 begin
-  Result := TGenre(inherited Make(Query));
+  Result := TGenre( inherited Make(Query));
 end;
 
 { TEmprunt }
@@ -1194,7 +1171,7 @@ end;
 
 class function TEmprunt.Duplicate(Ps: TEmprunt): TEmprunt;
 begin
-  Result := TEmprunt(inherited Duplicate(Ps));
+  Result := TEmprunt( inherited Duplicate(Ps));
 end;
 
 procedure TEmprunt.Clear;
@@ -1248,21 +1225,15 @@ function TParaBD.ChaineAffichage(Simple: Boolean; AvecSerie: Boolean): string;
 var
   s: string;
 begin
-  if Simple then
-    Result := Titre
-  else
-    Result := FormatTitre(Titre);
+  if Simple then Result := Titre
+  else Result := FormatTitre(Titre);
   s := '';
   if AvecSerie then
-    if Result = '' then
-      Result := FormatTitre(Serie)
-    else
-      AjoutString(s, FormatTitre(Serie), ' - ');
+    if Result = '' then Result := FormatTitre(Serie)
+    else AjoutString(s, FormatTitre(Serie), ' - ');
   AjoutString(s, sCategorie, ' - ');
-  if Result = '' then
-    Result := s
-  else
-    AjoutString(Result, s, ' ', '(', ')');
+  if Result = '' then Result := s
+  else AjoutString(Result, s, ' ', '(', ')');
 end;
 
 procedure TParaBD.Fill(Query: TUIBQuery);
@@ -1294,14 +1265,15 @@ end;
 
 class function TParaBD.Make(Query: TUIBQuery): TParaBD;
 begin
-  Result := TParaBD(inherited Make(Query));
+  Result := TParaBD( inherited Make(Query));
 end;
 
 initialization
-  TBasePointeur.cs := nil;
+
+TBasePointeur.cs := nil;
 
 finalization
-  TBasePointeur.cs.Free;
+
+TBasePointeur.cs.Free;
 
 end.
-

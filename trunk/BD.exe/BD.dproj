@@ -374,6 +374,7 @@
 			<DCCReference Include="Scripts\uPSC_superobject.pas"/>
 			<DCCReference Include="Scripts\uPSI_superobject.pas"/>
 			<DCCReference Include="mises à jour\UMAJ2_2_2_233.pas"/>
+			<DCCReference Include="mises à jour\UMAJ2_2_3_13.pas"/>
 			<BuildConfiguration Include="Débogage">
 				<Key>Cfg_2</Key>
 				<CfgParent>Base</CfgParent>
@@ -416,7 +417,7 @@ rem copy "C:\Users\Thierry\Desktop\bases BD\install\BD.GDB" d:\MEDIA.KIT\BDThèq
 						<VersionInfo Name="MajorVer">2</VersionInfo>
 						<VersionInfo Name="MinorVer">2</VersionInfo>
 						<VersionInfo Name="Release">3</VersionInfo>
-						<VersionInfo Name="Build">11</VersionInfo>
+						<VersionInfo Name="Build">13</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -428,7 +429,7 @@ rem copy "C:\Users\Thierry\Desktop\bases BD\install\BD.GDB" d:\MEDIA.KIT\BDThèq
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">2.2.3.11</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">2.2.3.13</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2011</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks"/>

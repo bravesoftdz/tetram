@@ -1235,6 +1235,8 @@ const
 var
   i: Integer;
 begin
+  Notation := Notation - 900;
+
   // imlNotation_32x32.PngImages[Notation].PngImage.Draw(Canvas, Rect(aRect.Left, aRect.Top, aRect.Left + 16, aRect.Top + 16));
 
   if not TGlobalVar.Utilisateur.Options.AfficheNoteListes then

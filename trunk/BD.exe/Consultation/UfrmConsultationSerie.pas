@@ -119,7 +119,7 @@ begin
     TitreSerie.Font.Style := TitreSerie.Font.Style - [fsUnderline];
     TitreSerie.Cursor := crDefault;
   end;
-  Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FSerie.Notation].PngImage);
+  Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FSerie.Notation - 900].PngImage);
 
   Editeur.Caption := FormatTitre(FSerie.Editeur.NomEditeur);
   if FSerie.Editeur.SiteWeb <> '' then begin
@@ -292,7 +292,7 @@ end;
 procedure TfrmConsultationSerie.N7Click(Sender: TObject);
 begin
   FSerie.ChangeNotation(TMenuItem(Sender).Tag);
-  Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FSerie.Notation].PngImage);
+  Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FSerie.Notation - 900].PngImage);
 end;
 
 end.

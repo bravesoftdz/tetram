@@ -47,10 +47,6 @@ object frmRecherche: TfrmRecherche
     TabOrder = 0
     object TabSheet3: TTabSheet
       Caption = 'Recherche simple'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         392
         191)
@@ -243,10 +239,6 @@ object frmRecherche: TfrmRecherche
         OnChange = PageControl1Change
         object TabSheet1: TTabSheet
           Caption = 'Filtre'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object TreeView1: TTreeView
             Left = 0
             Top = 0

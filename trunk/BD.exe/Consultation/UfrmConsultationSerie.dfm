@@ -552,36 +552,37 @@ object frmConsultationSerie: TfrmConsultationSerie
     Left = 120
     Top = 40
     object N2: TMenuItem
+      Tag = 900
       Caption = 'Pas d'#39'avis'
       ImageIndex = 0
       OnClick = N7Click
     end
     object N3: TMenuItem
-      Tag = 1
+      Tag = 901
       Caption = 'Tr'#232's mauvais'
       ImageIndex = 1
       OnClick = N7Click
     end
     object N4: TMenuItem
-      Tag = 2
+      Tag = 902
       Caption = 'Mauvais'
       ImageIndex = 2
       OnClick = N7Click
     end
     object N5: TMenuItem
-      Tag = 3
+      Tag = 903
       Caption = 'Moyen'
       ImageIndex = 3
       OnClick = N7Click
     end
     object N6: TMenuItem
-      Tag = 4
+      Tag = 904
       Caption = 'Bien'
       ImageIndex = 4
       OnClick = N7Click
     end
     object N7: TMenuItem
-      Tag = 5
+      Tag = 905
       Caption = 'Tr'#232's bien'
       ImageIndex = 5
       OnClick = N7Click

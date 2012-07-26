@@ -2,7 +2,9 @@ unit LoadComplet;
 
 interface
 
-uses SysUtils, Windows, Classes, Dialogs, TypeRec, Commun, CommonConst, UdmPrinc, UIB, DateUtils, ListOfTypeRec, Contnrs, UChampsRecherche,
+uses
+  SysUtils, Windows, Classes, Dialogs, TypeRec, Commun, CommonConst, UdmPrinc,
+  UIB, DateUtils, ListOfTypeRec, Contnrs, UChampsRecherche,
   Generics.Collections, Generics.Defaults, VirtualTree;
 
 type
@@ -39,7 +41,8 @@ type
     procedure Clear; override;
     procedure PrepareInstance; override;
     procedure SaveToDatabase; overload;
-    procedure SaveToDatabase(UseTransaction: TUIBTransaction); overload; virtual;
+    procedure SaveToDatabase(UseTransaction: TUIBTransaction);
+      overload; virtual;
     procedure New(ClearInstance: Boolean = True);
     function ChaineAffichage(dummy: Boolean = True): string; virtual;
     procedure FillAssociations(TypeData: TVirtualMode);
@@ -63,10 +66,12 @@ type
     FNBEmprunts: Integer;
     FEmprunts: TObjectList<TEmprunt>;
   public
-    constructor Create(const Reference: TGUID; Source: TSrcEmprunt = seTous; Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1;
-      Avant: TDateTime = -1; EnCours: Boolean = False; Stock: Boolean = False); reintroduce; overload;
+    constructor Create(const Reference: TGUID; Source: TSrcEmprunt = seTous;
+      Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1; Avant: TDateTime = -1;
+      EnCours: Boolean = False; Stock: Boolean = False); reintroduce; overload;
     destructor Destroy; override;
-    procedure Fill(const Reference: TGUID; Source: TSrcEmprunt = seTous; Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1; Avant: TDateTime = -1;
+    procedure Fill(const Reference: TGUID; Source: TSrcEmprunt = seTous;
+      Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1; Avant: TDateTime = -1;
       EnCours: Boolean = False; Stock: Boolean = False); reintroduce;
     procedure Clear; override;
     procedure PrepareInstance; override;
@@ -160,11 +165,13 @@ type
     class procedure GetDefaultValues;
   public
     constructor Create(const Reference, IdAuteur: TGUID); reintroduce; overload;
-    constructor Create(const Reference, IdAuteur: TGUID; Force: Boolean); reintroduce; overload;
+    constructor Create(const Reference, IdAuteur: TGUID; Force: Boolean);
+      reintroduce; overload;
     destructor Destroy; override;
     procedure Fill(const Reference: TGUID); overload; override;
     procedure Fill(const Reference, IdAuteur: TGUID); reintroduce; overload;
-    procedure Fill(const Reference, IdAuteur: TGUID; Force: Boolean); reintroduce; overload;
+    procedure Fill(const Reference, IdAuteur: TGUID; Force: Boolean);
+      reintroduce; overload;
     procedure Clear; override;
     procedure PrepareInstance; override;
     procedure SaveToDatabase(UseTransaction: TUIBTransaction); override;
@@ -184,7 +191,8 @@ type
     property Collection: TCollection read FCollection;
     property SiteWeb: string read FSiteWeb write SetSiteWeb;
     property Complete: Boolean read FComplete write FComplete;
-    property SuivreManquants: Boolean read FSuivreManquants write FSuivreManquants;
+    property SuivreManquants: Boolean read FSuivreManquants
+      write FSuivreManquants;
     property SuivreSorties: Boolean read FSuivreSorties write FSuivreSorties;
     property NbAlbums: Integer read FNbAlbums write FNbAlbums;
     property Albums: TObjectList<TAlbum>read FAlbums;
@@ -302,7 +310,8 @@ type
     property DateAchat: TDateTime read FDateAchat write FDateAchat;
     property sDateAchat: string read Get_sDateAchat;
     property Notes: TStringList read FNotes;
-    property NumeroPerso: string { [25] } read FNumeroPerso write SetNumeroPerso;
+    property NumeroPerso: string { [25] } read FNumeroPerso
+      write SetNumeroPerso;
     property Emprunts: TEmpruntsComplet read FEmprunts;
     property Couvertures: TMyObjectList<TCouverture>read FCouvertures;
   end;
@@ -314,7 +323,8 @@ type
     procedure Fill(const Reference: TGUID; Stock: Integer = -1); reintroduce;
     procedure PrepareInstance; override;
     procedure Clear; override;
-    constructor Create(const Reference: TGUID; Stock: Integer = -1); reintroduce; overload;
+    constructor Create(const Reference: TGUID; Stock: Integer = -1);
+      reintroduce; overload;
     destructor Destroy; override;
     procedure FusionneInto(Dest: TEditionsCompletes);
   published
@@ -354,12 +364,14 @@ type
     procedure SaveToDatabase(UseTransaction: TUIBTransaction); override;
     procedure Acheter(Prevision: Boolean);
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
-    function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
+    function ChaineAffichage(Simple, AvecSerie: Boolean): string;
+      reintroduce; overload;
     procedure ChangeNotation(Note: Integer);
 
     procedure FusionneInto(Dest: TAlbumComplet);
     property ReadyToFusion: Boolean read FReadyToFusion write FReadyToFusion;
-    property FusionneEditions: Boolean read FFusionneEditions write FFusionneEditions;
+    property FusionneEditions: Boolean read FFusionneEditions
+      write FFusionneEditions;
     property DefaultSearch: string read FDefaultSearch write FDefaultSearch;
   published
     property Complet: Boolean read FComplet;
@@ -441,7 +453,8 @@ type
     FMaxEmprunteurs: Integer;
   strict private
     procedure CreateStats(Stats: TStats); overload;
-    procedure CreateStats(Stats: TStats; const ID_Editeur: TGUID; const Editeur: string); overload;
+    procedure CreateStats(Stats: TStats; const ID_Editeur: TGUID;
+      const Editeur: string); overload;
   public
     constructor Create(Complete: Boolean); reintroduce; overload;
     destructor Destroy; override;
@@ -479,8 +492,10 @@ type
     property PrixAlbumMaximun: Currency read FPrixAlbumMaximun;
     property ListAlbumsMin: TObjectList<TAlbum>read FListAlbumsMin;
     property ListAlbumsMax: TObjectList<TAlbum>read FListAlbumsMax;
-    property ListEmprunteursMin: TObjectList<TEmprunteur>read FListEmprunteursMin;
-    property ListEmprunteursMax: TObjectList<TEmprunteur>read FListEmprunteursMax;
+    property ListEmprunteursMin: TObjectList<TEmprunteur>
+      read FListEmprunteursMin;
+    property ListEmprunteursMax: TObjectList<TEmprunteur>
+      read FListEmprunteursMax;
     property ListGenre: TObjectList<TGenre>read FListGenre;
     property ListEditeurs: TObjectList<TStats>read FListEditeurs;
   end;
@@ -502,11 +517,13 @@ type
   strict private
     FSeries: TObjectList<TSerieIncomplete>;
   public
-    constructor Create(AvecIntegrales, AvecAchats: Boolean); reintroduce; overload;
+    constructor Create(AvecIntegrales, AvecAchats: Boolean);
+      reintroduce; overload;
     constructor Create(const ID_Serie: TGUID); reintroduce; overload;
     destructor Destroy; override;
     procedure Fill(const Reference: TGUID); overload; override;
-    procedure Fill(AvecIntegrales, AvecAchats: Boolean; const ID_Serie: TGUID); reintroduce; overload;
+    procedure Fill(AvecIntegrales, AvecAchats: Boolean; const ID_Serie: TGUID);
+      reintroduce; overload;
     procedure Clear; override;
     procedure PrepareInstance; override;
   published
@@ -542,13 +559,15 @@ type
     destructor Destroy; override;
     procedure Fill(const Reference: TGUID); overload; override;
     procedure Fill(AvecAchats: Boolean); reintroduce; overload;
-    procedure Fill(AvecAchats: Boolean; const ID_Serie: TGUID); reintroduce; overload;
+    procedure Fill(AvecAchats: Boolean; const ID_Serie: TGUID);
+      reintroduce; overload;
     procedure PrepareInstance; override;
     procedure Clear; override;
   published
     property AnneesPassees: TObjectList<TPrevisionSortie>read FAnneesPassees;
     property AnneeEnCours: TObjectList<TPrevisionSortie>read FAnneeEnCours;
-    property AnneesProchaines: TObjectList<TPrevisionSortie>read FAnneesProchaines;
+    property AnneesProchaines: TObjectList<TPrevisionSortie>
+      read FAnneesProchaines;
   end;
 
   TParaBDComplet = class(TObjetComplet)
@@ -585,11 +604,13 @@ type
     procedure Acheter(Prevision: Boolean);
 
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
-    function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
+    function ChaineAffichage(Simple, AvecSerie: Boolean): string;
+      reintroduce; overload;
   published
     property ID_ParaBD: TGUID read FID write FID;
     property AnneeEdition: Integer read FAnneeEdition write FAnneeEdition;
-    property CategorieParaBD: ROption read FCategorieParaBD write FCategorieParaBD;
+    property CategorieParaBD: ROption read FCategorieParaBD
+      write FCategorieParaBD;
     property AnneeCote: Integer read FAnneeCote write FAnneeCote;
     property Titre: string { [150] } read FTitre write SetTitre;
     property Auteurs: TObjectList<TAuteur>read FAuteurs;
@@ -674,7 +695,8 @@ type
   TRechercheSimple = (rsAuteur, rsSerie, rsEditeur, rsGenre, rsCollection);
 
 const
-  TLblRechercheSimple: array [TRechercheSimple] of string = ('Auteur', 'Serie', 'Editeur', 'Genre', 'Collection');
+  TLblRechercheSimple: array [TRechercheSimple] of string = ('Auteur', 'Serie',
+    'Editeur', 'Genre', 'Collection');
 
 type
   TRecherche = class(TBaseComplet)
@@ -691,7 +713,8 @@ type
     procedure Clear; override;
     procedure ClearCriteres;
     procedure Fill; reintroduce; overload;
-    procedure Fill(Recherche: TRechercheSimple; const ID: TGUID; const Libelle: string); reintroduce; overload;
+    procedure Fill(Recherche: TRechercheSimple; const ID: TGUID;
+      const Libelle: string); reintroduce; overload;
 
     function AddCritere(Parent: TGroupCritere): TCritere;
     function AddGroup(Parent: TGroupCritere): TGroupCritere;
@@ -700,7 +723,8 @@ type
     procedure Delete(Item: TCritereTri); overload;
 
     constructor Create; overload; override;
-    constructor Create(Recherche: TRechercheSimple; const ID: TGUID; const Libelle: string); reintroduce; overload;
+    constructor Create(Recherche: TRechercheSimple; const ID: TGUID;
+      const Libelle: string); reintroduce; overload;
     destructor Destroy; override;
 
     procedure SaveToStream(Stream: TStream);
@@ -709,7 +733,9 @@ type
 
 implementation
 
-uses UIBLib, Divers, StdCtrls, Procedures, Textes, StrUtils, UMetadata, Controls, UfrmFusionEditions;
+uses
+  UIBLib, Divers, StdCtrls, Procedures, Textes, StrUtils, UMetadata, Controls,
+  UfrmFusionEditions;
 
 function MakeOption(Value: Integer; const Caption: string): ROption;
 begin
@@ -753,7 +779,8 @@ begin
   Stream.write(Chaine[1], Length(Chaine));
 end;
 
-class procedure TBaseComplet.WriteStringLN(Stream: TStream; const Chaine: string);
+class procedure TBaseComplet.WriteStringLN(Stream: TStream;
+  const Chaine: string);
 begin
   WriteString(Stream, Chaine + #13#10);
 end;
@@ -790,7 +817,8 @@ end;
 
 function TAlbumComplet.ChaineAffichage(Simple, AvecSerie: Boolean): string;
 begin
-  Result := FormatTitreAlbum(Simple, AvecSerie, Titre, Serie.Titre, Tome, TomeDebut, TomeFin, Integrale, HorsSerie);
+  Result := FormatTitreAlbum(Simple, AvecSerie, Titre, Serie.Titre, Tome,
+    TomeDebut, TomeFin, Integrale, HorsSerie);
 end;
 
 procedure TAlbumComplet.ChangeNotation(Note: Integer);
@@ -829,7 +857,7 @@ begin
   TomeFin := 0;
   HorsSerie := False;
   Integrale := False;
-  Notation := -1;
+  Notation := 900;
 
   Scenaristes.Clear;
   Dessinateurs.Clear;
@@ -891,8 +919,11 @@ begin
         Self.Integrale := Fields.ByNameAsBoolean['integrale'];
         Self.HorsSerie := Fields.ByNameAsBoolean['horsserie'];
         Self.Notation := Fields.ByNameAsSmallint['notation'];
+        if Self.Notation = 0 then
+          Self.Notation := 900;
 
-        Self.Serie.Fill(StringToGUIDDef(Fields.ByNameAsString['id_serie'], GUID_NULL));
+        Self.Serie.Fill(StringToGUIDDef(Fields.ByNameAsString['id_serie'],
+          GUID_NULL));
 
         FComplet := Fields.ByNameAsBoolean['complet'];
 
@@ -928,7 +959,8 @@ end;
 
 procedure TAlbumComplet.FusionneInto(Dest: TAlbumComplet);
 
-  function NotInList(Auteur: TAuteur; List: TObjectList<TAuteur>): Boolean; inline;
+  function NotInList(Auteur: TAuteur; List: TObjectList<TAuteur>)
+    : Boolean; inline;
   var
     i: Integer;
   begin
@@ -981,7 +1013,8 @@ begin
       Dest.Notes.Assign(Notes);
 
     // Série
-    if not IsEqualGUID(ID_Serie, DefaultAlbum.ID_Serie) and not IsEqualGUID(ID_Serie, Dest.ID_Serie) then
+    if not IsEqualGUID(ID_Serie, DefaultAlbum.ID_Serie) and
+      not IsEqualGUID(ID_Serie, Dest.ID_Serie) then
       Dest.ID_Serie := ID_Serie;
 
     if FusionneEditions then
@@ -1178,7 +1211,8 @@ begin
   with TUIBQuery.Create(nil) do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'select categorie, ref, libelle from listes where defaut = 1 and categorie in (1,2,3,4,5,8)';
+      SQL.Text :=
+        'select categorie, ref, libelle from listes where defaut = 1 and categorie in (1,2,3,4,5,8)';
       Open;
       while not Eof do
       begin
@@ -1186,15 +1220,20 @@ begin
           1:
             FDefaultEtat := MakeOption(Fields.AsInteger[1], Fields.AsString[2]);
           2:
-            FDefaultReliure := MakeOption(Fields.AsInteger[1], Fields.AsString[2]);
+            FDefaultReliure := MakeOption(Fields.AsInteger[1],
+              Fields.AsString[2]);
           3:
-            FDefaultTypeEdition := MakeOption(Fields.AsInteger[1], Fields.AsString[2]);
+            FDefaultTypeEdition := MakeOption(Fields.AsInteger[1],
+              Fields.AsString[2]);
           4:
-            FDefaultOrientation := MakeOption(Fields.AsInteger[1], Fields.AsString[2]);
+            FDefaultOrientation := MakeOption(Fields.AsInteger[1],
+              Fields.AsString[2]);
           5:
-            FDefaultFormatEdition := MakeOption(Fields.AsInteger[1], Fields.AsString[2]);
+            FDefaultFormatEdition := MakeOption(Fields.AsInteger[1],
+              Fields.AsString[2]);
           8:
-            FDefaultSensLecture := MakeOption(Fields.AsInteger[1], Fields.AsString[2]);
+            FDefaultSensLecture := MakeOption(Fields.AsInteger[1],
+              Fields.AsString[2]);
         end;
         Next;
       end;
@@ -1294,8 +1333,10 @@ begin
 
       if not RecInconnu then
       begin
-        Self.ID_Album := StringToGUIDDef(Fields.ByNameAsString['id_album'], GUID_NULL);
-        Self.Editeur.Fill(StringToGUIDDef(Fields.ByNameAsString['id_editeur'], GUID_NULL));
+        Self.ID_Album := StringToGUIDDef(Fields.ByNameAsString['id_album'],
+          GUID_NULL);
+        Self.Editeur.Fill(StringToGUIDDef(Fields.ByNameAsString['id_editeur'],
+          GUID_NULL));
         Self.Collection.Fill(q);
         Self.AnneeEdition := Fields.ByNameAsInteger['anneeedition'];
         Self.Prix := Fields.ByNameAsCurrency['prix'];
@@ -1307,13 +1348,20 @@ begin
         Self.Prete := Fields.ByNameAsBoolean['prete'];
         Self.Stock := Fields.ByNameAsBoolean['stock'];
         Self.ISBN := FormatISBN(Trim(Fields.ByNameAsString['isbn']));
-        Self.TypeEdition := MakeOption(Fields.ByNameAsInteger['typeedition'], Trim(Fields.ByNameAsString['stypeedition']));
+        Self.TypeEdition := MakeOption(Fields.ByNameAsInteger['typeedition'],
+          Trim(Fields.ByNameAsString['stypeedition']));
         Self.NombreDePages := Fields.ByNameAsInteger['nombredepages'];
-        Self.Etat := MakeOption(Fields.ByNameAsInteger['etat'], Trim(Fields.ByNameAsString['setat']));
-        Self.Reliure := MakeOption(Fields.ByNameAsInteger['reliure'], Trim(Fields.ByNameAsString['sreliure']));
-        Self.Orientation := MakeOption(Fields.ByNameAsInteger['orientation'], Trim(Fields.ByNameAsString['sorientation']));
-        Self.FormatEdition := MakeOption(Fields.ByNameAsInteger['formatedition'], Trim(Fields.ByNameAsString['sformatedition']));
-        Self.SensLecture := MakeOption(Fields.ByNameAsInteger['senslecture'], Trim(Fields.ByNameAsString['ssenslecture']));
+        Self.Etat := MakeOption(Fields.ByNameAsInteger['etat'],
+          Trim(Fields.ByNameAsString['setat']));
+        Self.Reliure := MakeOption(Fields.ByNameAsInteger['reliure'],
+          Trim(Fields.ByNameAsString['sreliure']));
+        Self.Orientation := MakeOption(Fields.ByNameAsInteger['orientation'],
+          Trim(Fields.ByNameAsString['sorientation']));
+        Self.FormatEdition :=
+          MakeOption(Fields.ByNameAsInteger['formatedition'],
+          Trim(Fields.ByNameAsString['sformatedition']));
+        Self.SensLecture := MakeOption(Fields.ByNameAsInteger['senslecture'],
+          Trim(Fields.ByNameAsString['ssenslecture']));
         Self.DateAchat := Fields.ByNameAsDate['dateachat'];
         Self.Notes.Text := Fields.ByNameAsString['notes'];
         Self.AnneeCote := Fields.ByNameAsInteger['anneecote'];
@@ -1351,9 +1399,11 @@ var
 begin
   DefaultEdition := TEditionComplete.Create;
   try
-    if not IsEqualGUID(Editeur.ID_Editeur, DefaultEdition.Editeur.ID_Editeur) and not IsEqualGUID(Editeur.ID_Editeur, Dest.Editeur.ID_Editeur) then
+    if not IsEqualGUID(Editeur.ID_Editeur, DefaultEdition.Editeur.ID_Editeur)
+      and not IsEqualGUID(Editeur.ID_Editeur, Dest.Editeur.ID_Editeur) then
       Dest.Editeur.Fill(Editeur.ID_Editeur);
-    if not IsEqualGUID(Collection.ID, DefaultEdition.Collection.ID) and not IsEqualGUID(Collection.ID, Dest.Collection.ID) then
+    if not IsEqualGUID(Collection.ID, DefaultEdition.Collection.ID) and
+      not IsEqualGUID(Collection.ID, Dest.Collection.ID) then
       Dest.Collection.Fill(Collection.ID);
 
     if TypeEdition.Value <> DefaultEdition.TypeEdition.Value then
@@ -1544,27 +1594,35 @@ begin
 
         q1.SQL.Clear;
         q1.SQL.Add('insert into couvertures (');
-        q1.SQL.Add('  id_edition, id_album, fichiercouverture, stockagecouverture, ordre, categorieimage');
+        q1.SQL.Add
+          ('  id_edition, id_album, fichiercouverture, stockagecouverture, ordre, categorieimage');
         q1.SQL.Add(') values (');
-        q1.SQL.Add('  :id_edition, :id_album, :fichiercouverture, 0, :ordre, :categorieimage');
+        q1.SQL.Add
+          ('  :id_edition, :id_album, :fichiercouverture, 0, :ordre, :categorieimage');
         q1.SQL.Add(')');
 
-        q6.SQL.Text := 'select result from saveblobtofile(:Chemin, :Fichier, :BlobContent)';
+        q6.SQL.Text :=
+          'select result from saveblobtofile(:Chemin, :Fichier, :BlobContent)';
 
         q2.SQL.Clear;
         q2.SQL.Add('insert into couvertures (');
-        q2.SQL.Add('  id_edition, id_album, fichiercouverture, stockagecouverture, ordre, imagecouverture, categorieimage');
+        q2.SQL.Add
+          ('  id_edition, id_album, fichiercouverture, stockagecouverture, ordre, imagecouverture, categorieimage');
         q2.SQL.Add(') values (');
-        q2.SQL.Add('  :id_edition, :id_album, :fichiercouverture, 1, :ordre, :imagecouverture, :categorieimage');
+        q2.SQL.Add
+          ('  :id_edition, :id_album, :fichiercouverture, 1, :ordre, :imagecouverture, :categorieimage');
         q2.SQL.Add(')');
 
-        q3.SQL.Text := 'update couvertures set imagecouverture = :imagecouverture, stockagecouverture = 1 where id_couverture = :id_couverture';
+        q3.SQL.Text :=
+          'update couvertures set imagecouverture = :imagecouverture, stockagecouverture = 1 where id_couverture = :id_couverture';
 
-        q4.SQL.Text := 'update couvertures set imagecouverture = null, stockagecouverture = 0 where id_couverture = :id_couverture';
+        q4.SQL.Text :=
+          'update couvertures set imagecouverture = null, stockagecouverture = 0 where id_couverture = :id_couverture';
 
         q5.SQL.Clear;
         q5.SQL.Add('update couvertures set');
-        q5.SQL.Add('  fichiercouverture = :fichiercouverture, ordre = :ordre, categorieimage = :categorieimage');
+        q5.SQL.Add
+          ('  fichiercouverture = :fichiercouverture, ordre = :ordre, categorieimage = :categorieimage');
         q5.SQL.Add('where');
         q5.SQL.Add('  id_couverture = :id_couverture');
 
@@ -1574,7 +1632,8 @@ begin
             if (not PC.NewStockee) then
             begin // couvertures liées (q1)
               PC.OldNom := PC.NewNom;
-              PC.NewNom := SearchNewFileName(RepImages, ExtractFileName(PC.NewNom), True);
+              PC.NewNom := SearchNewFileName(RepImages,
+                ExtractFileName(PC.NewNom), True);
               q6.Params.ByNameAsString['chemin'] := RepImages;
               q6.Params.ByNameAsString['fichier'] := PC.NewNom;
               Stream := GetCouvertureStream(PC.OldNom, -1, -1, False);
@@ -1585,7 +1644,8 @@ begin
               end;
               q6.Open;
 
-              q1.Params.ByNameAsString['id_edition'] := GUIDToString(ID_Edition);
+              q1.Params.ByNameAsString['id_edition'] :=
+                GUIDToString(ID_Edition);
               q1.Params.ByNameAsString['id_album'] := GUIDToString(ID_Album);
               q1.Params.ByNameAsString['fichiercouverture'] := PC.NewNom;
               q1.Params.ByNameAsInteger['ordre'] := Couvertures.IndexOf(PC);
@@ -1594,9 +1654,11 @@ begin
             end
             else if FileExists(PC.NewNom) then
             begin // couvertures stockées (q2)
-              q2.Params.ByNameAsString['id_edition'] := GUIDToString(ID_Edition);
+              q2.Params.ByNameAsString['id_edition'] :=
+                GUIDToString(ID_Edition);
               q2.Params.ByNameAsString['id_album'] := GUIDToString(ID_Album);
-              q2.Params.ByNameAsString['fichiercouverture'] := ChangeFileExt(ExtractFileName(PC.NewNom), '');
+              q2.Params.ByNameAsString['fichiercouverture'] :=
+                ChangeFileExt(ExtractFileName(PC.NewNom), '');
               q2.Params.ByNameAsInteger['ordre'] := Couvertures.IndexOf(PC);
               Stream := GetJPEGStream(PC.NewNom);
               try
@@ -1617,7 +1679,8 @@ begin
                 if (PC.NewStockee) then
                 begin // conversion couvertures liées en stockées (q3)
                   q3.ParamsSetBlob('imagecouverture', Stream);
-                  q3.Params.ByNameAsString['id_couverture'] := GUIDToString(PC.ID);
+                  q3.Params.ByNameAsString['id_couverture'] :=
+                    GUIDToString(PC.ID);
                   q3.ExecSQL;
                   if ExtractFilePath(PC.NewNom) = '' then
                     FichiersImages.Add(RepImages + PC.NewNom)
@@ -1627,13 +1690,15 @@ begin
                 end
                 else
                 begin // conversion couvertures stockées en liées
-                  PC.NewNom := SearchNewFileName(RepImages, PC.NewNom + '.jpg', True);
+                  PC.NewNom := SearchNewFileName(RepImages,
+                    PC.NewNom + '.jpg', True);
                   q6.Params.ByNameAsString['chemin'] := RepImages;
                   q6.Params.ByNameAsString['fichier'] := PC.NewNom;
                   q6.ParamsSetBlob('blobcontent', Stream);
                   q6.Open;
 
-                  q4.Params.ByNameAsString['id_couverture'] := GUIDToString(PC.ID);
+                  q4.Params.ByNameAsString['id_couverture'] :=
+                    GUIDToString(PC.ID);
                   q4.ExecSQL;
                 end;
               finally
@@ -1668,7 +1733,8 @@ begin
           Params.AsString[0] := Copy(FichiersImages[i], 1, Params.MaxStrLen[0]);
           Open;
           if Fields.AsInteger[0] <> 0 then
-            ShowMessage(FichiersImages[i] + #13#13 + SysErrorMessage(Fields.AsInteger[0]));
+            ShowMessage(FichiersImages[i] + #13#13 +
+              SysErrorMessage(Fields.AsInteger[0]));
         end;
         Transaction.Commit;
       end;
@@ -1773,10 +1839,14 @@ begin
             if CheckBox1.Checked then
               FusionsGUID[i] := GUID_NULL
             else
-              FusionsGUID[i] := TEditionComplete(lbEditions.Items.Objects[lbEditions.ItemIndex]).ID_Edition;
+              FusionsGUID[i] :=
+                TEditionComplete(lbEditions.Items.Objects[lbEditions.ItemIndex])
+                .ID_Edition;
         end;
-        OptionsFusion[i].ImporterImages := CheckBox2.Checked and (Editions[i].Couvertures.Count > 0);
-        OptionsFusion[i].RemplacerImages := CheckBox3.Checked and OptionsFusion[i].ImporterImages;
+        OptionsFusion[i].ImporterImages := CheckBox2.Checked and
+          (Editions[i].Couvertures.Count > 0);
+        OptionsFusion[i].RemplacerImages := CheckBox3.Checked and
+          OptionsFusion[i].ImporterImages;
       finally
         Free;
       end;
@@ -1854,7 +1924,8 @@ begin
   with q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'select nomemprunteur, adresseemprunteur from emprunteurs where id_emprunteur = ?';
+      SQL.Text :=
+        'select nomemprunteur, adresseemprunteur from emprunteurs where id_emprunteur = ?';
       Params.AsString[0] := GUIDToString(Reference);
       FetchBlobs := True;
       Open;
@@ -1934,7 +2005,8 @@ begin
   with TUIBQuery.Create(nil) do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'select categorie, ref, libelle from listes where defaut = 1 and categorie in (1,2,3,4,5,8)';
+      SQL.Text :=
+        'select categorie, ref, libelle from listes where defaut = 1 and categorie in (1,2,3,4,5,8)';
       Open;
       while not Eof do
       begin
@@ -1942,15 +2014,20 @@ begin
           1:
             FDefaultEtat := MakeOption(Fields.AsInteger[1], Fields.AsString[2]);
           2:
-            FDefaultReliure := MakeOption(Fields.AsInteger[1], Fields.AsString[2]);
+            FDefaultReliure := MakeOption(Fields.AsInteger[1],
+              Fields.AsString[2]);
           3:
-            FDefaultTypeEdition := MakeOption(Fields.AsInteger[1], Fields.AsString[2]);
+            FDefaultTypeEdition := MakeOption(Fields.AsInteger[1],
+              Fields.AsString[2]);
           4:
-            FDefaultOrientation := MakeOption(Fields.AsInteger[1], Fields.AsString[2]);
+            FDefaultOrientation := MakeOption(Fields.AsInteger[1],
+              Fields.AsString[2]);
           5:
-            FDefaultFormatEdition := MakeOption(Fields.AsInteger[1], Fields.AsString[2]);
+            FDefaultFormatEdition := MakeOption(Fields.AsInteger[1],
+              Fields.AsString[2]);
           8:
-            FDefaultSensLecture := MakeOption(Fields.AsInteger[1], Fields.AsString[2]);
+            FDefaultSensLecture := MakeOption(Fields.AsInteger[1],
+              Fields.AsString[2]);
         end;
         Next;
       end;
@@ -2030,7 +2107,7 @@ begin
   SuivreManquants := True;
   SuivreSorties := True;
   NbAlbums := 0;
-  Notation := -1;
+  Notation := 900;
 end;
 
 constructor TSerieComplete.Create(const Reference, IdAuteur: TGUID);
@@ -2039,7 +2116,8 @@ begin
   Fill(Reference, IdAuteur);
 end;
 
-constructor TSerieComplete.Create(const Reference, IdAuteur: TGUID; Force: Boolean);
+constructor TSerieComplete.Create(const Reference, IdAuteur: TGUID;
+  Force: Boolean);
 begin
   inherited Create;
   Fill(Reference, IdAuteur, Force);
@@ -2109,25 +2187,37 @@ begin
       begin
         Self.Titre := Fields.ByNameAsString['titreserie'];
         Self.Notation := Fields.ByNameAsSmallint['notation'];
+        if Self.Notation = 0 then
+          Self.Notation := 900;
         Self.Terminee := Fields.ByNameAsInteger['terminee'];
         Self.VO := Fields.ByNameAsInteger['vo'];
         Self.Couleur := Fields.ByNameAsInteger['couleur'];
-        Self.SuivreSorties := RecInconnu or Fields.ByNameAsBoolean['suivresorties'];
+        Self.SuivreSorties := RecInconnu or Fields.ByNameAsBoolean
+          ['suivresorties'];
         Self.Complete := Fields.ByNameAsBoolean['complete'];
-        Self.SuivreManquants := RecInconnu or Fields.ByNameAsBoolean['suivremanquants'];
+        Self.SuivreManquants := RecInconnu or Fields.ByNameAsBoolean
+          ['suivremanquants'];
         Self.NbAlbums := Fields.ByNameAsInteger['nb_albums'];
         Self.Sujet.Text := Fields.ByNameAsString['sujetserie'];
         Self.Notes.Text := Fields.ByNameAsString['remarquesserie'];
         Self.SiteWeb := Trim(Fields.ByNameAsString['siteweb']);
 
-        Self.TypeEdition := MakeOption(Fields.ByNameAsInteger['typeedition'], Trim(Fields.ByNameAsString['stypeedition']));
-        Self.Etat := MakeOption(Fields.ByNameAsInteger['etat'], Trim(Fields.ByNameAsString['setat']));
-        Self.Reliure := MakeOption(Fields.ByNameAsInteger['reliure'], Trim(Fields.ByNameAsString['sreliure']));
-        Self.Orientation := MakeOption(Fields.ByNameAsInteger['orientation'], Trim(Fields.ByNameAsString['sorientation']));
-        Self.FormatEdition := MakeOption(Fields.ByNameAsInteger['formatedition'], Trim(Fields.ByNameAsString['sformatedition']));
-        Self.SensLecture := MakeOption(Fields.ByNameAsInteger['senslecture'], Trim(Fields.ByNameAsString['ssenslecture']));
+        Self.TypeEdition := MakeOption(Fields.ByNameAsInteger['typeedition'],
+          Trim(Fields.ByNameAsString['stypeedition']));
+        Self.Etat := MakeOption(Fields.ByNameAsInteger['etat'],
+          Trim(Fields.ByNameAsString['setat']));
+        Self.Reliure := MakeOption(Fields.ByNameAsInteger['reliure'],
+          Trim(Fields.ByNameAsString['sreliure']));
+        Self.Orientation := MakeOption(Fields.ByNameAsInteger['orientation'],
+          Trim(Fields.ByNameAsString['sorientation']));
+        Self.FormatEdition :=
+          MakeOption(Fields.ByNameAsInteger['formatedition'],
+          Trim(Fields.ByNameAsString['sformatedition']));
+        Self.SensLecture := MakeOption(Fields.ByNameAsInteger['senslecture'],
+          Trim(Fields.ByNameAsString['ssenslecture']));
 
-        Self.Editeur.Fill(StringToGUIDDef(Fields.ByNameAsString['id_editeur'], GUID_NULL));
+        Self.Editeur.Fill(StringToGUIDDef(Fields.ByNameAsString['id_editeur'],
+          GUID_NULL));
         Self.Collection.Fill(q);
         FetchBlobs := False;
 
@@ -2324,7 +2414,8 @@ begin
         if IsEqualGUID(Self.ID_Collection, GUID_NULL) then
           Params.ByNameIsNull['id_collection'] := True
         else
-          Params.ByNameAsString['id_collection'] := GUIDToString(Self.ID_Collection);
+          Params.ByNameAsString['id_collection'] :=
+            GUIDToString(Self.ID_Collection);
       end;
       S := Self.Sujet.Text;
       if S <> '' then
@@ -2427,7 +2518,8 @@ begin
   with q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'select nomediteur, siteweb from editeurs where id_editeur = ?';
+      SQL.Text :=
+        'select nomediteur, siteweb from editeurs where id_editeur = ?';
       Params.AsString[0] := GUIDToString(Reference);
       Open;
       RecInconnu := Eof;
@@ -2505,7 +2597,8 @@ begin
   CreateStats(Stats, GUID_NULL, '');
 end;
 
-procedure TStats.CreateStats(Stats: TStats; const ID_Editeur: TGUID; const Editeur: string);
+procedure TStats.CreateStats(Stats: TStats; const ID_Editeur: TGUID;
+  const Editeur: string);
 var
   q: TUIBQuery;
   hg: IHourGlass;
@@ -2561,7 +2654,8 @@ begin
       SQL.Clear;
       SQL.Add('select count(distinct a.id_serie) from albums a');
       if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('inner join editions e on e.id_album = a.id_album and e.id_editeur=' + QuotedStr(GUIDToString(ID_Editeur)))
+        SQL.Add('inner join editions e on e.id_album = a.id_album and e.id_editeur='
+          + QuotedStr(GUIDToString(ID_Editeur)))
       else
         SQL.Add('');
       Open;
@@ -2574,9 +2668,11 @@ begin
       Stats.FNbSeriesTerminee := Fields.AsInteger[0];
       Close;
 
-      SQL.Text := 'select min(a.anneeparution) as minannee, max(a.anneeparution) as maxannee from albums a';
+      SQL.Text :=
+        'select min(a.anneeparution) as minannee, max(a.anneeparution) as maxannee from albums a';
       if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('inner join editions e on e.id_album = a.id_album and e.id_editeur=' + QuotedStr(GUIDToString(ID_Editeur)));
+        SQL.Add('inner join editions e on e.id_album = a.id_album and e.id_editeur='
+          + QuotedStr(GUIDToString(ID_Editeur)));
       Open;
       Stats.FMinAnnee := 0;
       Stats.FMaxAnnee := 0;
@@ -2624,7 +2720,8 @@ begin
       Stats.FPrixAlbumMaximun := 0;
       if not Eof and Fields.ByNameAsBoolean['countprix'] then
       begin
-        Stats.FPrixAlbumMoyen := Fields.ByNameAsCurrency['sumprix'] / Fields.ByNameAsInteger['countprix'];
+        Stats.FPrixAlbumMoyen := Fields.ByNameAsCurrency['sumprix'] /
+          Fields.ByNameAsInteger['countprix'];
         Stats.FPrixAlbumMinimun := Fields.ByNameAsCurrency['minprix'];
         Stats.FPrixAlbumMaximun := Fields.ByNameAsCurrency['maxprix'];
       end;
@@ -2642,20 +2739,25 @@ begin
       Open;
       Stats.FNbAlbumsSansPrix := 0;
       if not Eof then
-        Stats.FNbAlbumsSansPrix := Fields.ByNameAsInteger['countref'] - Stats.NbAlbumsGratuit;
-      Stats.FValeurEstimee := Stats.ValeurConnue + Stats.NbAlbumsSansPrix * Stats.PrixAlbumMoyen;
+        Stats.FNbAlbumsSansPrix := Fields.ByNameAsInteger['countref'] -
+          Stats.NbAlbumsGratuit;
+      Stats.FValeurEstimee := Stats.ValeurConnue + Stats.NbAlbumsSansPrix *
+        Stats.PrixAlbumMoyen;
 
       Close;
       SQL.Text := 'select count(distinct st.id_emprunteur) from statut st';
       if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('inner join editions e on e.id_edition = st.id_edition and e.id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
+        SQL.Add('inner join editions e on e.id_edition = st.id_edition and e.id_editeur = '
+          + QuotedStr(GUIDToString(ID_Editeur)));
       Open;
       Stats.FNbEmprunteurs := Fields.AsInteger[0];
 
       Close;
-      SQL.Text := 'select count(st.id_emprunteur)/' + IntToStr(Stats.NbEmprunteurs) + ' as moy from statut st';
+      SQL.Text := 'select count(st.id_emprunteur)/' +
+        IntToStr(Stats.NbEmprunteurs) + ' as moy from statut st';
       if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('inner join editions e on e.id_edition = st.id_edition and e.id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
+        SQL.Add('inner join editions e on e.id_edition = st.id_edition and e.id_editeur = '
+          + QuotedStr(GUIDToString(ID_Editeur)));
       SQL.Add('where st.pretemprunt = 1');
       Stats.FMoyEmprunteurs := 0;
       if LongBool(Stats.FNbEmprunteurs) then
@@ -2673,7 +2775,8 @@ begin
       SQL.Add('  inner join emprunteurs e on');
       SQL.Add('    e.id_emprunteur = st.id_emprunteur');
       if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('  inner join editions ed on ed.id_edition = st.id_edition and ed.id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
+        SQL.Add('  inner join editions ed on ed.id_edition = st.id_edition and ed.id_editeur = '
+          + QuotedStr(GUIDToString(ID_Editeur)));
       SQL.Add('where');
       SQL.Add('  (st.pretemprunt = 1)');
       SQL.Add('group by');
@@ -2694,7 +2797,8 @@ begin
         Close;
         Open;
         repeat
-          if Fields.ByNameAsInteger['countnumero'] in [Stats.MinEmprunteurs, Stats.MaxEmprunteurs] then
+          if Fields.ByNameAsInteger['countnumero']
+            in [Stats.MinEmprunteurs, Stats.MaxEmprunteurs] then
           begin
             if Fields.ByNameAsInteger['countnumero'] = Stats.MinEmprunteurs then
               Stats.ListEmprunteursMin.Insert(0, TEmprunteur.Make(q))
@@ -2709,14 +2813,17 @@ begin
       SQL.Clear;
       SQL.Add('select count(distinct st.id_edition) from statut st');
       if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('inner join editions e on e.id_edition = st.id_edition and e.id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
+        SQL.Add('inner join editions e on e.id_edition = st.id_edition and e.id_editeur = '
+          + QuotedStr(GUIDToString(ID_Editeur)));
       Open;
       Stats.FNbEmpruntes := Fields.AsInteger[0];
 
       Close;
-      SQL.Text := 'select count(st.id_edition)/' + IntToStr(Stats.FNbEmpruntes) + ' as moy from statut st';
+      SQL.Text := 'select count(st.id_edition)/' + IntToStr(Stats.FNbEmpruntes)
+        + ' as moy from statut st';
       if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('inner join editions e on e.id_edition = st.id_edition and e.id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
+        SQL.Add('inner join editions e on e.id_edition = st.id_edition and e.id_editeur = '
+          + QuotedStr(GUIDToString(ID_Editeur)));
       SQL.Add('where st.pretemprunt = 1');
       Stats.FMoyEmpruntes := 0;
       if LongBool(Stats.FNbEmpruntes) then
@@ -2769,7 +2876,8 @@ begin
           Stats.ListAlbumsMax.Insert(0, TAlbum.Make(q));
           Next;
         end;
-        if (Stats.MinEmpruntes > 0) and (Stats.MinEmpruntes <> Stats.MaxEmpruntes) then
+        if (Stats.MinEmpruntes > 0) and
+          (Stats.MinEmpruntes <> Stats.MaxEmpruntes) then
         begin
           Close;
           Params.AsInteger[0] := Stats.MinEmpruntes;
@@ -2828,7 +2936,8 @@ begin
         begin
           PS := TStats.Create;
           ListEditeurs.Add(PS);
-          CreateStats(PS, StringToGUID(Fields.AsString[0]), Trim(Fields.AsString[1]));
+          CreateStats(PS, StringToGUID(Fields.AsString[0]),
+            Trim(Fields.AsString[1]));
           Next;
         end;
       finally
@@ -2858,8 +2967,8 @@ begin
   Emprunts.Clear;
 end;
 
-constructor TEmpruntsComplet.Create(const Reference: TGUID; Source: TSrcEmprunt; Sens: TSensEmprunt; Apres, Avant: TDateTime;
-  EnCours, Stock: Boolean);
+constructor TEmpruntsComplet.Create(const Reference: TGUID; Source: TSrcEmprunt;
+  Sens: TSensEmprunt; Apres, Avant: TDateTime; EnCours, Stock: Boolean);
 begin
   inherited Create;
   Fill(Reference, Source, Sens, Apres, Avant, EnCours, Stock);
@@ -2871,7 +2980,8 @@ begin
   inherited;
 end;
 
-procedure TEmpruntsComplet.Fill(const Reference: TGUID; Source: TSrcEmprunt; Sens: TSensEmprunt; Apres, Avant: TDateTime; EnCours, Stock: Boolean);
+procedure TEmpruntsComplet.Fill(const Reference: TGUID; Source: TSrcEmprunt;
+  Sens: TSensEmprunt; Apres, Avant: TDateTime; EnCours, Stock: Boolean);
 var
   q: TUIBQuery;
 
@@ -2884,16 +2994,22 @@ var
     with TStringList.Create do
       try
         case Source of
-          seAlbum: Add('id_edition = ' + QuotedStr(GUIDToString(Reference)));
-          seEmprunteur: Add('id_emprunteur = ' + QuotedStr(GUIDToString(Reference)));
-          seTous: ;
+          seAlbum:
+            Add('id_edition = ' + QuotedStr(GUIDToString(Reference)));
+          seEmprunteur:
+            Add('id_emprunteur = ' + QuotedStr(GUIDToString(Reference)));
+          seTous:
+            ;
         end;
         if EnCours then
           Add('prete = 1');
         case Sens of
-          ssPret: Add('pretemprunt = 1');
-          ssRetour: Add('pretemprunt = 0');
-          ssTous: ;
+          ssPret:
+            Add('pretemprunt = 1');
+          ssRetour:
+            Add('pretemprunt = 0');
+          ssTous:
+            ;
         end;
         if Apres >= 0 then
           Add('dateemprunt >= :dateapres');
@@ -2908,7 +3024,8 @@ var
             q.SQL.Add('and');
           q.SQL.Add(Strings[i]);
         end;
-        q.SQL.Add('order by dateemprunt desc, id_statut asc'); // le dernier saisi a priorité en cas de "même date"
+        q.SQL.Add('order by dateemprunt desc, id_statut asc');
+        // le dernier saisi a priorité en cas de "même date"
       finally
         Free;
       end;
@@ -2988,7 +3105,8 @@ begin
   inherited;
 end;
 
-procedure TSeriesIncompletes.Fill(AvecIntegrales, AvecAchats: Boolean; const ID_Serie: TGUID);
+procedure TSeriesIncompletes.Fill(AvecIntegrales, AvecAchats: Boolean;
+  const ID_Serie: TGUID);
 var
   q: TUIBQuery;
   CurrentSerie, dummy: TGUID;
@@ -3014,7 +3132,8 @@ begin
   with q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'select * from albums_manquants(:withintegrales, :withachats, :id_serie) order by titreserie, tome';
+      SQL.Text :=
+        'select * from albums_manquants(:withintegrales, :withachats, :id_serie) order by titreserie, tome';
       Params.AsBoolean[0] := AvecIntegrales;
       Params.AsBoolean[1] := AvecAchats;
       if not IsEqualGUID(ID_Serie, GUID_NULL) then
@@ -3186,7 +3305,8 @@ function TPrevisionSortie.GetsAnnee: string;
 begin
   Result := IntToStr(Annee);
   if Mois > 0 then
-    Result := Choose(Mois - 1, ['début', 'début', 'début', 'début', 'mi', 'mi', 'mi', 'mi', 'fin', 'fin', 'fin', 'fin']) + ' ' + Result;
+    Result := Choose(Mois - 1, ['début', 'début', 'début', 'début', 'mi', 'mi',
+      'mi', 'mi', 'fin', 'fin', 'fin', 'fin']) + ' ' + Result;
 end;
 
 { TSerieIncomplete }
@@ -3252,7 +3372,8 @@ begin
   with q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'select nompersonne, siteweb, biographie from personnes where id_personne = ?';
+      SQL.Text :=
+        'select nompersonne, siteweb, biographie from personnes where id_personne = ?';
       Params.AsString[0] := GUIDToString(Reference);
       FetchBlobs := True;
       Open;
@@ -3294,7 +3415,8 @@ begin
           if Fields.IsNull[1] then
             Series.Insert(0, TSerieComplete.Create(GUID_NULL, ID_Auteur, True))
           else
-            Series.Add(TSerieComplete.Create(StringToGUID(Fields.AsString[1]), ID_Auteur, True));
+            Series.Add(TSerieComplete.Create(StringToGUID(Fields.AsString[1]),
+              ID_Auteur, True));
           Next;
         end;
       end;
@@ -3455,7 +3577,9 @@ begin
         Self.Titre := Fields.ByNameAsString['titreparabd'];
         Self.AnneeEdition := Fields.ByNameAsInteger['annee'];
         Self.Description.Text := Fields.ByNameAsString['description'];
-        Self.CategorieParaBD := MakeOption(Fields.ByNameAsInteger['categorieparabd'], Fields.ByNameAsString['scategorieparabd']);
+        Self.CategorieParaBD :=
+          MakeOption(Fields.ByNameAsInteger['categorieparabd'],
+          Fields.ByNameAsString['scategorieparabd']);
         Self.Prix := Fields.ByNameAsCurrency['prix'];
         Self.Dedicace := Fields.ByNameAsBoolean['dedicace'];
         Self.Numerote := Fields.ByNameAsBoolean['numerote'];
@@ -3470,7 +3594,8 @@ begin
 
         ImageStockee := Fields.ByNameAsBoolean['stockageparabd'];
         FichierImage := Fields.ByNameAsString['fichierparabd'];
-        HasImage := (Fields.ByNameAsSmallint['hasblobimage'] = 1) or (FichierImage <> '');
+        HasImage := (Fields.ByNameAsSmallint['hasblobimage'] = 1) or
+          (FichierImage <> '');
 
         OldImageStockee := ImageStockee;
         OldFichierImage := FichierImage;
@@ -3588,34 +3713,41 @@ begin
 
       if not HasImage then
       begin
-        SQL.Text := 'update parabd set imageparabd = null, stockageparabd = 0, fichierparabd = null where id_parabd = :id_parabd';
+        SQL.Text :=
+          'update parabd set imageparabd = null, stockageparabd = 0, fichierparabd = null where id_parabd = :id_parabd';
         Params.ByNameAsString['id_parabd'] := GUIDToString(ID_ParaBD);
         ExecSQL;
       end
-      else if (OldFichierImage <> FichierImage) or (OldImageStockee <> ImageStockee) then
+      else if (OldFichierImage <> FichierImage) or
+        (OldImageStockee <> ImageStockee) then
       begin
         if ImageStockee then
         begin
-          SQL.Text := 'update parabd set imageparabd = :imageparabd, stockageparabd = 1, fichierparabd = :fichierparabd where id_parabd = :id_parabd';
+          SQL.Text :=
+            'update parabd set imageparabd = :imageparabd, stockageparabd = 1, fichierparabd = :fichierparabd where id_parabd = :id_parabd';
           if ExtractFilePath(FichierImage) = '' then
-            FichierImage := IncludeTrailingPathDelimiter(RepImages) + FichierImage;
+            FichierImage := IncludeTrailingPathDelimiter(RepImages) +
+              FichierImage;
           Stream := GetCouvertureStream(FichierImage, -1, -1, False);
           try
             ParamsSetBlob('imageparabd', Stream);
           finally
             Stream.Free;
           end;
-          Params.ByNameAsString['fichierparabd'] := ExtractFileName(FichierImage);
+          Params.ByNameAsString['fichierparabd'] :=
+            ExtractFileName(FichierImage);
         end
         else
         begin
-          SQL.Text := 'select result from saveblobtofile(:chemin, :fichier, :blobcontent)';
+          SQL.Text :=
+            'select result from saveblobtofile(:chemin, :fichier, :blobcontent)';
           if ExtractFilePath(FichierImage) = '' then
             Stream := GetCouvertureStream(True, ID_ParaBD, -1, -1, False)
           else
             Stream := GetCouvertureStream(FichierImage, -1, -1, False);
           try
-            FichierImage := SearchNewFileName(RepImages, ExtractFileName(FichierImage), True);
+            FichierImage := SearchNewFileName(RepImages,
+              ExtractFileName(FichierImage), True);
             Params.ByNameAsString['chemin'] := RepImages;
             Params.ByNameAsString['fichier'] := FichierImage;
             ParamsSetBlob('blobcontent', Stream);
@@ -3624,7 +3756,8 @@ begin
           end;
           Open;
 
-          SQL.Text := 'update parabd set imageparabd = null, stockageparabd = 0, fichierparabd = :fichierparabd where id_parabd = :id_parabd';
+          SQL.Text :=
+            'update parabd set imageparabd = null, stockageparabd = 0, fichierparabd = :fichierparabd where id_parabd = :id_parabd';
           Params.ByNameAsString['fichierparabd'] := FichierImage;
         end;
         Params.ByNameAsString['id_parabd'] := GUIDToString(ID_ParaBD);
@@ -3676,7 +3809,8 @@ begin
   with q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'select nomcollection, id_editeur from collections where id_collection = ?';
+      SQL.Text :=
+        'select nomcollection, id_editeur from collections where id_collection = ?';
       Params.AsString[0] := GUIDToString(Reference);
       Open;
       RecInconnu := Eof;
@@ -3684,7 +3818,8 @@ begin
       if not RecInconnu then
       begin
         Self.NomCollection := Fields.ByNameAsString['nomcollection'];
-        Self.ID_Editeur := StringToGUIDDef(Fields.ByNameAsString['id_editeur'], GUID_NULL);
+        Self.ID_Editeur := StringToGUIDDef(Fields.ByNameAsString['id_editeur'],
+          GUID_NULL);
       end;
     finally
       Transaction.Free;
@@ -3772,7 +3907,8 @@ begin
   with TUIBQuery.Create(nil) do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'select chaine, always from import_associations where typedata = :typedata and id = :id and always = 1';
+      SQL.Text :=
+        'select chaine, always from import_associations where typedata = :typedata and id = :id and always = 1';
       Params.AsInteger[0] := Integer(TypeData);
       Params.AsString[1] := GUIDToString(ID);
       Open;
@@ -3832,25 +3968,29 @@ begin
   end;
 end;
 
-procedure TObjetComplet.SaveAssociations(TypeData: TVirtualMode; const ParentID: TGUID);
+procedure TObjetComplet.SaveAssociations(TypeData: TVirtualMode;
+  const ParentID: TGUID);
 var
   i: Integer;
 begin
   with TUIBQuery.Create(nil) do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'delete from import_associations where typedata = :typedata and id = :id and always = 1';
+      SQL.Text :=
+        'delete from import_associations where typedata = :typedata and id = :id and always = 1';
       Params.AsInteger[0] := Integer(TypeData);
       Params.AsString[1] := GUIDToString(ID);
       Execute;
 
-      SQL.Text := 'update or insert into import_associations (chaine, id, parentid, typedata, always) values (:chaine, :id, :parentid, :typedata, 1)';
+      SQL.Text :=
+        'update or insert into import_associations (chaine, id, parentid, typedata, always) values (:chaine, :id, :parentid, :typedata, 1)';
       Prepare(True);
       for i := 0 to Pred(FAssociations.Count) do
       begin
         if Trim(FAssociations[i]) <> '' then
         begin
-          Params.AsString[0] := Copy(Trim(FAssociations[i]), 1, Params.MaxStrLen[0]);
+          Params.AsString[0] := Copy(Trim(FAssociations[i]), 1,
+            Params.MaxStrLen[0]);
           Params.AsString[1] := GUIDToString(ID);
           Params.AsString[2] := GUIDToString(ParentID);
           Params.AsInteger[3] := Integer(TypeData);
@@ -3891,7 +4031,8 @@ begin
   TypeRecherche := trAucune;
 end;
 
-constructor TRecherche.Create(Recherche: TRechercheSimple; const ID: TGUID; const Libelle: string);
+constructor TRecherche.Create(Recherche: TRechercheSimple; const ID: TGUID;
+  const Libelle: string);
 begin
   inherited Create;
   PrepareInstance;
@@ -3919,7 +4060,8 @@ var
     i := slFrom.IndexOf('genreseries');
     if i <> -1 then
     begin
-      Result := Result + ' left outer join genreseries on genreseries.id_serie = albums.id_serie';
+      Result := Result +
+        ' left outer join genreseries on genreseries.id_serie = albums.id_serie';
       slFrom.Delete(i);
     end;
   end;
@@ -3971,7 +4113,8 @@ var
         if Result = '' then
           Result := '(' + ProcessCritere(p as TGroupCritere) + ')'
         else
-          Result := Result + sBool + '(' + ProcessCritere(p as TGroupCritere) + ')';
+          Result := Result + sBool + '(' +
+            ProcessCritere(p as TGroupCritere) + ')';
       end;
   end;
 
@@ -4028,19 +4171,34 @@ begin
             if Fields.ByNameIsNull[CritereTri.Champ] then
               S := S + '<vide>'
             else if CritereTri._Champ.Booleen then
-              S := S + IIf(Fields.ByNameAsBoolean[CritereTri.Champ], 'Oui', 'Non')
+              S := S + IIf(Fields.ByNameAsBoolean[CritereTri.Champ],
+                'Oui', 'Non')
             else
               case CritereTri._Champ.Special of
-                csISBN: S := S + FormatISBN(Fields.ByNameAsString[CritereTri.Champ]);
-                csTitre: S := S + FormatTitre(Fields.ByNameAsString[CritereTri.Champ]);
-                csMonnaie: S := S + FormatCurr(FormatMonnaie, Fields.ByNameAsCurrency[CritereTri.Champ]);
-                else case CritereTri._Champ.TypeData of
-                    uftDate: S := S + FormatDateTime('dd mmm yyyy', Fields.ByNameAsDate[CritereTri.Champ]);
-                    uftTime: S := S + FormatDateTime('hh:mm:ss', Fields.ByNameAsTime[CritereTri.Champ]);
-                    uftTimestamp: S := S + FormatDateTime('dd mmm yyyy, hh:mm:ss', Fields.ByNameAsDateTime[CritereTri.Champ]);
-                    else S := S + StringReplace(AdjustLineBreaks(Fields.ByNameAsString[CritereTri.Champ], tlbsCRLF), #13#10, '\n', [rfReplaceAll]);
-                    end;
+                csISBN:
+                  S := S + FormatISBN(Fields.ByNameAsString[CritereTri.Champ]);
+                csTitre:
+                  S := S + FormatTitre(Fields.ByNameAsString[CritereTri.Champ]);
+                csMonnaie:
+                  S := S + FormatCurr(FormatMonnaie,
+                    Fields.ByNameAsCurrency[CritereTri.Champ]);
+              else
+                case CritereTri._Champ.TypeData of
+                  uftDate:
+                    S := S + FormatDateTime('dd mmm yyyy',
+                      Fields.ByNameAsDate[CritereTri.Champ]);
+                  uftTime:
+                    S := S + FormatDateTime('hh:mm:ss',
+                      Fields.ByNameAsTime[CritereTri.Champ]);
+                  uftTimestamp:
+                    S := S + FormatDateTime('dd mmm yyyy, hh:mm:ss',
+                      Fields.ByNameAsDateTime[CritereTri.Champ]);
+                else
+                  S := S + StringReplace
+                    (AdjustLineBreaks(Fields.ByNameAsString[CritereTri.Champ],
+                    tlbsCRLF), #13#10, '\n', [rfReplaceAll]);
                 end;
+              end;
           end;
         ResultatsInfos.Add(S);
         Next;
@@ -4067,9 +4225,11 @@ begin
   inherited;
 end;
 
-procedure TRecherche.Fill(Recherche: TRechercheSimple; const ID: TGUID; const Libelle: string);
+procedure TRecherche.Fill(Recherche: TRechercheSimple; const ID: TGUID;
+  const Libelle: string);
 const
-  Proc: array [0 .. 4] of string = ('albums_by_auteur(?, null)', 'albums_by_serie(?, null)', 'albums_by_editeur(?, null)',
+  Proc: array [0 .. 4] of string = ('albums_by_auteur(?, null)',
+    'albums_by_serie(?, null)', 'albums_by_editeur(?, null)',
     'albums_by_genre(?, null)', 'albums_by_collection(?, null)');
 var
   q: TUIBQuery;
@@ -4094,15 +4254,20 @@ begin
         S := '';
         while not Eof do
         begin
-          if IsEqualGUID(oldID_Album, StringToGUID(Fields.ByNameAsString['id_album'])) and (oldIndex <> -1) then
+          if IsEqualGUID(oldID_Album,
+            StringToGUID(Fields.ByNameAsString['id_album'])) and
+            (oldIndex <> -1) then
           begin
             if Recherche = rsAuteur then
             begin
               S := ResultatsInfos[oldIndex];
               case TMetierAuteur(Fields.ByNameAsInteger['metier']) of
-                maScenariste: AjoutString(S, rsTransScenario, ', ');
-                maDessinateur: AjoutString(S, rsTransDessins, ', ');
-                maColoriste: AjoutString(S, rsTransCouleurs, ', ');
+                maScenariste:
+                  AjoutString(S, rsTransScenario, ', ');
+                maDessinateur:
+                  AjoutString(S, rsTransDessins, ', ');
+                maColoriste:
+                  AjoutString(S, rsTransCouleurs, ', ');
               end;
               ResultatsInfos[oldIndex] := S;
             end;
@@ -4114,9 +4279,12 @@ begin
             Resultats.Add(Album);
             if Recherche = rsAuteur then
               case TMetierAuteur(Fields.ByNameAsInteger['metier']) of
-                maScenariste: oldIndex := ResultatsInfos.Add(rsTransScenario);
-                maDessinateur: oldIndex := ResultatsInfos.Add(rsTransDessins);
-                maColoriste: oldIndex := ResultatsInfos.Add(rsTransCouleurs);
+                maScenariste:
+                  oldIndex := ResultatsInfos.Add(rsTransScenario);
+                maDessinateur:
+                  oldIndex := ResultatsInfos.Add(rsTransDessins);
+                maColoriste:
+                  oldIndex := ResultatsInfos.Add(rsTransCouleurs);
               end
             else
               ResultatsInfos.Add('');
@@ -4185,14 +4353,20 @@ procedure TRecherche.LoadFromStream(Stream: TStream);
     Stream.read(Result[1], l);
   end;
 
-  function CreateCritere(CritereType: Integer; ParentCritere: TBaseCritere): TBaseCritere;
+  function CreateCritere(CritereType: Integer; ParentCritere: TBaseCritere)
+    : TBaseCritere;
   begin
-    Assert(not Assigned(ParentCritere) or (ParentCritere is TGroupCritere), 'Architecture des critères incorrecte.');
+    Assert(not Assigned(ParentCritere) or (ParentCritere is TGroupCritere),
+      'Architecture des critères incorrecte.');
     case CritereType of
-      0: Result := AddGroup(ParentCritere as TGroupCritere);
-      1: Result := AddCritere(ParentCritere as TGroupCritere);
-      else raise Exception.Create('Type de critère inconnu: ' + IntToStr(CritereType));
-      end;
+      0:
+        Result := AddGroup(ParentCritere as TGroupCritere);
+      1:
+        Result := AddCritere(ParentCritere as TGroupCritere);
+    else
+      raise Exception.Create('Type de critère inconnu: ' +
+        IntToStr(CritereType));
+    end;
     Result.LoadFromStream(Stream);
   end;
 

@@ -222,6 +222,7 @@ begin
     end
     else if LightComboCheck1.ValidValue(TypeSimple) then
     begin
+      PageControl1.ActivePageIndex := 0;
       LightComboCheck1.Value := TypeSimple;
       VTPersonnes.CurrentValue := Reference;
       SpeedButton1Click(nil);

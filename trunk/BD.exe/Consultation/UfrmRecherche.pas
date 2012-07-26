@@ -118,7 +118,8 @@ begin
   btnRecherche.Font.Style := btnRecherche.Font.Style + [fsBold];
   VTPersonnes.Mode := vmPersonnes;
   TypeRecherche := Recherche.TypeRecherche;
-  TreeView1.Items.AddChild(nil, 'Critères').Data := Recherche.Criteres;
+  TreeView1.Selected := TreeView1.Items.AddChild(nil, 'Critères');
+  TreeView1.Selected.Data := Recherche.Criteres;
   methode.ItemIndex := Integer(Recherche.Criteres.GroupOption);
 end;
 
@@ -208,8 +209,8 @@ begin
   begin
     if Assigned(TreeView2.Selected) then
     begin
-      Critere := TreeView1.Selected.Data;
-      TreeView1.Selected.Delete;
+      Critere := TreeView2.Selected.Data;
+      TreeView2.Selected.Delete;
       Recherche.Delete(Critere);
     end;
   end;
@@ -506,6 +507,7 @@ procedure TfrmRecherche.LoadRechFromStream(Stream: TStream);
 
 begin
   Recherche.LoadFromStream(Stream);
+  Recherche.TypeRecherche := trComplexe;
 
   TreeView1.Items.BeginUpdate;
   try

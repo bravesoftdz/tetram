@@ -117,7 +117,7 @@ begin
   ForceDirectories(AppData);
 
   // si le fichier ini est dans le même répertoire que l'exe (correspond à la version de développement)
-  // alors on utiliser les anciennes valeurs par défaut
+  // alors on utilise les anciennes valeurs par défaut
   if FileExists(ExtractFilePath(Application.ExeName) + FichierIni) then
   begin
     FichierIni := ExtractFilePath(Application.ExeName) + FichierIni;

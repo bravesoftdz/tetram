@@ -2,7 +2,7 @@ object frmConsultationAuteur: TfrmConsultationAuteur
   Left = 486
   Top = 211
   Caption = 'Fiche d'#39'auteur'
-  ClientHeight = 759
+  ClientHeight = 779
   ClientWidth = 522
   Color = clWhite
   Constraints.MinWidth = 530
@@ -22,14 +22,15 @@ object frmConsultationAuteur: TfrmConsultationAuteur
     Left = 0
     Top = 0
     Width = 522
-    Height = 759
+    Height = 779
     Align = alClient
     BorderStyle = bsNone
     ParentBackground = True
     TabOrder = 0
+    ExplicitHeight = 759
     DesignSize = (
       522
-      759)
+      779)
     object l_sujet: TLabel
       Left = 3
       Top = 41
@@ -104,11 +105,12 @@ object frmConsultationAuteur: TfrmConsultationAuteur
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 756
+      Top = 776
       Width = 522
       Height = 3
       Align = alBottom
       Shape = bsSpacer
+      ExplicitTop = 756
     end
     object edBiographie: TMemo
       Left = 59

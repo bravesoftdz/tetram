@@ -169,7 +169,8 @@ uses
   uPSR_superobject in 'Scripts\uPSR_superobject.pas',
   uPSC_superobject in 'Scripts\uPSC_superobject.pas',
   uPSI_superobject in 'Scripts\uPSI_superobject.pas',
-  UMAJ2_2_2_233 in 'mises à jour\UMAJ2_2_2_233.pas';
+  UMAJ2_2_2_233 in 'mises à jour\UMAJ2_2_2_233.pas',
+  UMAJ2_2_3_13 in 'mises à jour\UMAJ2_2_3_13.pas';
 
 {$R *.RES}
 {$R curseurs.res}
