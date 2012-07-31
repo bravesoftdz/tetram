@@ -4,13 +4,24 @@
 			<MainSource>BD.dpr</MainSource>
 			<Config Condition="'$(Config)'==''">Débogage</Config>
 			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
-			<ProjectVersion>12.3</ProjectVersion>
+			<ProjectVersion>13.4</ProjectVersion>
 			<Base>True</Base>
-			<Platform>Win32</Platform>
 			<AppType>Application</AppType>
 			<FrameworkType>VCL</FrameworkType>
+			<Platform Condition="'$(Platform)'==''">Win32</Platform>
+			<TargetedPlatforms>1</TargetedPlatforms>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
+			<Base_Win64>true</Base_Win64>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
+			<Base_Win32>true</Base_Win32>
+			<CfgParent>Base</CfgParent>
 			<Base>true</Base>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
@@ -36,6 +47,15 @@
 			<Base>true</Base>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Base)'!=''">
+			<VerInfo_AutoGenVersion>true</VerInfo_AutoGenVersion>
+			<VerInfo_Build>16</VerInfo_Build>
+			<VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.16;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2011;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2;Comments=</VerInfo_Keys>
+			<VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+			<DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;$(DCC_Namespace)</DCC_Namespace>
+			<VerInfo_MajorVer>2</VerInfo_MajorVer>
+			<VerInfo_MinorVer>2</VerInfo_MinorVer>
+			<VerInfo_Locale>1036</VerInfo_Locale>
+			<VerInfo_Release>3</VerInfo_Release>
 			<DCC_Inlining>off</DCC_Inlining>
 			<DCC_Define>FB25;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT;PCRE_LINKONREQUEST;NO_ADVANCED_HTTP_CLIENT_FEATURES;UseContentCoding;USE_SSL;NO_OSSL_VERSION_CHECK;$(DCC_Define)</DCC_Define>
 			<BRCC_CompilerToUse>rc</BRCC_CompilerToUse>
@@ -44,7 +64,6 @@
 			<DCC_UnitSearchPath>$(Compos)\PrintObject;$(Compos)\VDTButton;$(Compos)\VersLabP;$(Compos)\ScanEdit;$(Compos)\ReadOnlycheckBox;$(Compos)\Labeled;$(Compos)\ProgressBar;$(Compos)\BrowseDirectory;$(Compos)\TrayIcon;$(Compos)\GraphicEx\GraphicEx;$(Compos)\ComboCheck;$(Compos)\VirtualTreeView\VirtualEditTree;$(Compos)\VirtualTreeView\VTSourceOnly\Source;$(Compos)\CheckVersionNet;$(Compos)\;$(Compos)\jvcl\jcl\source\common;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
 			<DCC_ImageBase>00400000</DCC_ImageBase>
 			<DCC_ExeOutput>..\..\bin</DCC_ExeOutput>
-			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE;$(DCC_UnitAlias)</DCC_UnitAlias>
 			<DCC_SYMBOL_PLATFORM>false</DCC_SYMBOL_PLATFORM>
 			<DCC_Platform>x86</DCC_Platform>
 			<DCC_K>false</DCC_K>
@@ -53,9 +72,26 @@
 			<DCC_N>true</DCC_N>
 			<DCC_E>false</DCC_E>
 			<DCC_WriteableConstants>true</DCC_WriteableConstants>
-			<DCC_UsePackage>VCL50;VCLX50;VCLSMP50;QRPT50;VCLDB50;VCLBDE50;VCLDBX50;TEEUI50;TEEDB50;TEE50;TEEQR50;NMFAST50;dclocx50;dclaxserver50;ibevnt50;VCLIB50;VCLIE50;INETDB50;INET50;vcl;rtl;dbrtl;vcldb;webdsnap;inetdb;inet;xmlrtl;vclx;vclie;indy;bdertl;VclSmp;MediaKit</DCC_UsePackage>
+			<DCC_UsePackage>VCL50;VCLX50;VCLSMP50;QRPT50;VCLDB50;VCLBDE50;VCLDBX50;TEEUI50;TEEDB50;TEE50;TEEQR50;NMFAST50;dclocx50;dclaxserver50;ibevnt50;VCLIB50;VCLIE50;INETDB50;INET50;vcl;rtl;dbrtl;vcldb;webdsnap;inetdb;inet;xmlrtl;vclx;vclie;indy;bdertl;VclSmp;MediaKit;$(DCC_UsePackage)</DCC_UsePackage>
 			<DCC_DcuOutput>dcu</DCC_DcuOutput>
 			<DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base_Win64)'!=''">
+			<Icon_MainIcon>BD_Icon.ico</Icon_MainIcon>
+			<Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base_Win32)'!=''">
+			<VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+			<PreBuildEvent><![CDATA[rem del "$(PROJECTDIR)\dcu\*.dcu"
+$(PreBuildEvent)]]></PreBuildEvent>
+			<DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+			<Icon_MainIcon>BD_Icon.ico</Icon_MainIcon>
+			<VerInfo_Locale>1033</VerInfo_Locale>
+			<PostBuildEvent><![CDATA[rem copy "d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB" d:\MEDIA.KIT\BDThèque\bin /y
+rem copy "C:\Users\Thierry\Desktop\bases BD\install\BD.GDB" d:\MEDIA.KIT\BDThèque\bin /y
+$(PostBuildEvent)]]></PostBuildEvent>
+			<VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+			<Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Cfg_1)'!=''">
 			<DCC_AssertionsAtRuntime>false</DCC_AssertionsAtRuntime>
@@ -76,7 +112,7 @@
 			<DCC_Define>FullDebugMode;ClearLogFileOnStartup;LoadDebugDLLDynamically;$(DCC_Define)</DCC_Define>
 		</PropertyGroup>
 		<ItemGroup>
-			<DelphiCompile Include="BD.dpr">
+			<DelphiCompile Include="$(MainSource)">
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
 			<RcCompile Include="ressources.rc">
@@ -397,11 +433,6 @@
 		</ItemGroup>
 		<Import Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')" Project="$(BDS)\Bin\CodeGear.Delphi.Targets"/>
 		<Import Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')" Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj"/>
-		<PropertyGroup>
-			<PreBuildEvent><![CDATA[rem del "$(PROJECTDIR)\dcu\*.dcu"]]></PreBuildEvent>
-			<PostBuildEvent><![CDATA[rem copy "d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB" d:\MEDIA.KIT\BDThèque\bin /y
-rem copy "C:\Users\Thierry\Desktop\bases BD\install\BD.GDB" d:\MEDIA.KIT\BDThèque\bin /y]]></PostBuildEvent>
-		</PropertyGroup>
 		<ProjectExtensions>
 			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
 			<Borland.ProjectType>VCLApplication</Borland.ProjectType>
@@ -417,7 +448,7 @@ rem copy "C:\Users\Thierry\Desktop\bases BD\install\BD.GDB" d:\MEDIA.KIT\BDThèq
 						<VersionInfo Name="MajorVer">2</VersionInfo>
 						<VersionInfo Name="MinorVer">2</VersionInfo>
 						<VersionInfo Name="Release">3</VersionInfo>
-						<VersionInfo Name="Build">13</VersionInfo>
+						<VersionInfo Name="Build">16</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
 						<VersionInfo Name="PreRelease">False</VersionInfo>
 						<VersionInfo Name="Special">False</VersionInfo>
@@ -429,7 +460,7 @@ rem copy "C:\Users\Thierry\Desktop\bases BD\install\BD.GDB" d:\MEDIA.KIT\BDThèq
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription"/>
-						<VersionInfoKeys Name="FileVersion">2.2.3.13</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">2.2.3.16</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2011</VersionInfoKeys>
 						<VersionInfoKeys Name="LegalTrademarks"/>
@@ -445,9 +476,42 @@ rem copy "C:\Users\Thierry\Desktop\bases BD\install\BD.GDB" d:\MEDIA.KIT\BDThèq
 				</Delphi.Personality>
 				<ModelSupport>False</ModelSupport>
 				<Platforms>
+					<Platform value="Win64">False</Platform>
 					<Platform value="Win32">True</Platform>
 				</Platforms>
 			</BorlandProject>
 			<ProjectFileVersion>12</ProjectFileVersion>
 		</ProjectExtensions>
+		<PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win32'">
+			<PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
+			<PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+			<PreLinkEvent/>
+			<PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+			<PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
+			<PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Débogage' And '$(Platform)'=='Win32'">
+			<PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
+			<PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+			<PreLinkEvent/>
+			<PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+			<PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
+			<PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug DCU' And '$(Platform)'=='Win32'">
+			<PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
+			<PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+			<PreLinkEvent/>
+			<PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+			<PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
+			<PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='FullDebug' And '$(Platform)'=='Win32'">
+			<PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
+			<PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+			<PreLinkEvent/>
+			<PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+			<PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
+			<PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+		</PropertyGroup>
 	</Project>
