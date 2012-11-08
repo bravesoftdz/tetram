@@ -9,10 +9,6 @@
   <artifactId>bdthequeweb-ejb</artifactId>
   <dependencies>
   <dependency>
-  	<groupId>javax.jms</groupId>
-  	<artifactId>jms</artifactId>
-  </dependency>
-  <dependency>
   	<groupId>javax.transaction</groupId>
   	<artifactId>jta</artifactId>
   </dependency>
@@ -27,10 +23,6 @@
   <dependency>
   	<groupId>org.hibernate.javax.persistence</groupId>
   	<artifactId>hibernate-jpa-2.0-api</artifactId>
-  </dependency>
-  <dependency>
-  	<groupId>org.jboss.ejb3</groupId>
-  	<artifactId>jboss-ejb3-api</artifactId>
   </dependency>
   </dependencies>
 </project>
