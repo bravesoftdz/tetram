@@ -112,6 +112,6 @@
 		</dependencies>
 	</dependencyManagement>
 	<scm>
-		<connection>scm:svn:http://dev.tetram.org/svn/bdtheque/java/trunk</connection>
+		<url>http://dev.tetram.org/svn/bdtheque/java/trunk</url>
 	</scm>
 </project>
