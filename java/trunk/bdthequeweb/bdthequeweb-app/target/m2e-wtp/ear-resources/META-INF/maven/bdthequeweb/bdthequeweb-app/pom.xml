@@ -9,7 +9,7 @@
   <packaging>ear</packaging>
   <dependencies>
   	<dependency>
-  		<groupId>bdthequeweb-ejb</groupId>
+  		<groupId>bdthequeweb</groupId>
   		<artifactId>bdthequeweb-ejb</artifactId>
   	</dependency>
   	<dependency>

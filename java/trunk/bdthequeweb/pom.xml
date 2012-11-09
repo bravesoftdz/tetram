@@ -56,7 +56,7 @@
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
-				<groupId>bdthequeweb-ejb</groupId>
+				<groupId>bdthequeweb</groupId>
 				<artifactId>bdthequeweb-ejb</artifactId>
 				<version>0.0.1-SNAPSHOT</version>
 			</dependency>
@@ -130,7 +130,4 @@
 		<connection>scm:svn:http://dev.tetram.org/svn/bdtheque/java/trunk</connection>
 		<developerConnection>scm:svn:http://dev.tetram.org/svn/bdtheque/java/trunk</developerConnection>
 	</scm>
-	<properties>
-		<org.richfaces.bom.version>4.1.0.Final</org.richfaces.bom.version>
-	</properties>
 </project>
