@@ -24,4 +24,5 @@
   	<artifactId>hibernate-jpa-2.0-api</artifactId>
   </dependency>
   </dependencies>
+  <packaging>ejb</packaging>
 </project>
