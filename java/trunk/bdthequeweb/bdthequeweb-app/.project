@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>bdthequeweb-app.ear</name>
+	<name>bdthequeweb.ear</name>
 	<comment></comment>
 	<projects>
 		<project>bdthequeweb-gui.war</project>
