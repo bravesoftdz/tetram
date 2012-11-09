@@ -99,9 +99,27 @@
 				<version>0.0.1-SNAPSHOT</version>
 				<type>ear</type>
 			</dependency>
+			<dependency>
+				<groupId>org.richfaces</groupId>
+				<artifactId>richfaces-bom</artifactId>
+				<version>${org.richfaces.bom.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.spec</groupId>
+				<artifactId>jboss-javaee-web-6.0</artifactId>
+				<version>3.0.1.Final</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 	<scm>
-		<url>http://dev.tetram.org/svn/bdtheque/java/trunk</url>
+		<connection>scm:svn:http://dev.tetram.org/svn/bdtheque/java/trunk</connection>
+		<developerConnection>scm:svn:http://dev.tetram.org/svn/bdtheque/java/trunk</developerConnection>
 	</scm>
+	<properties>
+		<org.richfaces.bom.version>4.1.0.Final</org.richfaces.bom.version>
+	</properties>
 </project>
