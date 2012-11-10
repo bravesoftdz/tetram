@@ -21,4 +21,15 @@
 			<location>D:/Java/jboss-as-7.1.1.Final/standalone/configuration/standalone.xml</location>
 		</link>
 	</linkedResources>
+	<filteredResources>
+		<filter>
+			<id>1352564513911</id>
+			<name></name>
+			<type>26</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+				<arguments>1.0-projectRelativePath-matches-false-false-bdthequeweb*</arguments>
+			</matcher>
+		</filter>
+	</filteredResources>
 </projectDescription>
