@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Dependencies: com.google.guava
+Build-Jdk: 1.6.0_37
+Built-By: Thierry
+Created-By: Maven Integration for Eclipse
+
