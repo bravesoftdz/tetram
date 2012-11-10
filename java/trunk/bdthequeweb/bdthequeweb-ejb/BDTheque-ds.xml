@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<datasources xmlns="http://www.jboss.org/ironjacamar/schema">
+ <datasource jndi-name="java:jboss/datasources/BDTheque" enabled="true" 
+     use-java-context="true" pool-name="BDTheque">
+  <connection-url>jdbc:firebirdsql:127.0.0.1/3050:D:\MEDIA.KIT\BDThèque\bin\bd.gdb</connection-url>
+  <!--  
+  <driver>jaybird-2.2.1.jar</driver>
+  -->
+  <driver-class>org.firebirdsql.jdbc.FBDriver</driver-class>
+  <pool></pool>
+  <security>
+   <user-name>SYSDBA</user-name>
+   <password>masterkey</password>
+  </security>
+ </datasource>
+</datasources>
