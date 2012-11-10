@@ -3,10 +3,10 @@
     <wb-module deploy-name="bdthequeweb-app-0.0.1-SNAPSHOT">
         <wb-resource deploy-path="/" source-path="/target/m2e-wtp/ear-resources"/>
         <wb-resource deploy-path="/" source-path="/src/main/application" tag="defaultRootSource"/>
-        <dependent-module archiveName="bdthequeweb-ejb-0.0.1-SNAPSHOT.jar" deploy-path="/" handle="module:/resource/bdthequeweb-ejb.jar/bdthequeweb-ejb.jar">
+        <dependent-module archiveName="bdthequeweb-ejb-0.0.1-SNAPSHOT.jar" deploy-path="/" handle="module:/resource/bdthequeweb-ejb/bdthequeweb-ejb">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="bdthequeweb-gui-0.0.1-SNAPSHOT.war" deploy-path="/" handle="module:/resource/bdthequeweb-gui.war/bdthequeweb-gui.war">
+        <dependent-module archiveName="bdthequeweb-gui-0.0.1-SNAPSHOT.war" deploy-path="/" handle="module:/resource/bdthequeweb-gui/bdthequeweb-gui">
             <dependency-type>uses</dependency-type>
         </dependent-module>
     </wb-module>

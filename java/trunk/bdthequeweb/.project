@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/site/standalone.xml</name>
+			<type>1</type>
+			<location>D:/Java/jboss-as-7.1.1.Final/standalone/configuration/standalone.xml</location>
+		</link>
+	</linkedResources>
 </projectDescription>

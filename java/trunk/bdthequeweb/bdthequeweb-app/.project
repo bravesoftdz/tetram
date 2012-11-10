@@ -3,8 +3,8 @@
 	<name>bdthequeweb-app.ear</name>
 	<comment></comment>
 	<projects>
-		<project>bdthequeweb-gui.war</project>
-		<project>bdthequeweb-ejb.jar</project>
+		<project>bdthequeweb-ejb</project>
+		<project>bdthequeweb-gui</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
