@@ -67,6 +67,11 @@
 						<port>8080</port>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.jboss.seam</groupId>
+					<artifactId>seam-cdk-helper</artifactId>
+					<version>1.0</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -86,6 +91,10 @@
 			<plugin>
 				<groupId>org.jboss.as.plugins</groupId>
 				<artifactId>jboss-as-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.jboss.seam</groupId>
+				<artifactId>seam-cdk-helper</artifactId>
 			</plugin>
 		</plugins>
 	</build>
