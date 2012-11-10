@@ -52,6 +52,8 @@
 								<Dependencies>com.google.guava</Dependencies>
 							</manifestEntries>
 						</archive>
+						<failOnMissingWebXml>true</failOnMissingWebXml>
+						<webXml>src/main/webapp/WEB-INF/web.xml</webXml>
 					</configuration>
 				</plugin>
 				<plugin>
