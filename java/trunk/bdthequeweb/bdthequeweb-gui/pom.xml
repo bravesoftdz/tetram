@@ -34,5 +34,9 @@
 			<groupId>org.jboss</groupId>
 			<artifactId>jboss-ejb-client</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.jboss.seam.solder</groupId>
+			<artifactId>seam-solder</artifactId>
+		</dependency>
 	</dependencies>
 </project>
