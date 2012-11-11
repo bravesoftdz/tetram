@@ -14,7 +14,7 @@
 	<properties>
 		<jboss-as.version>7.1.1.Final</jboss-as.version>
 		<richfaces.version>4.2.3.Final</richfaces.version>
-		<seam.version>3.1.0.Final</seam.version>
+		<seam.version>3.2.0-SNAPSHOT</seam.version>
 	</properties>
 	<build>
 		<pluginManagement>
