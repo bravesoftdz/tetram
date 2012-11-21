@@ -1,0 +1,71 @@
+<h1>Edition list</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Version</th>
+            <th>Created</th>
+            <th>Stock</th>
+            <th>Prix</th>
+            <th>Anneecote</th>
+            <th>Isbn</th>
+            <th>Gratuit</th>
+            <th>Prete</th>
+            <th>Nombredepages</th>
+            <th>Numeroperso</th>
+            <th>Notes</th>
+            <th>Anneeedition</th>
+            <th>Dedicace</th>
+            <th>Couleur</th>
+            <th>Prixcote</th>
+            <th>Dateachat</th>
+            <th>Offert</th>
+            <th>Vo</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('edition_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{% if entity.version %}{{ entity.version|date('Y-m-d H:i:s') }}{% endif %}</td>
+            <td>{% if entity.created %}{{ entity.created|date('Y-m-d H:i:s') }}{% endif %}</td>
+            <td>{{ entity.stock }}</td>
+            <td>{{ entity.prix }}</td>
+            <td>{{ entity.anneeCote }}</td>
+            <td>{{ entity.isbn }}</td>
+            <td>{{ entity.gratuit }}</td>
+            <td>{{ entity.prete }}</td>
+            <td>{{ entity.nombreDePages }}</td>
+            <td>{{ entity.numeroPerso }}</td>
+            <td>{{ entity.notes }}</td>
+            <td>{{ entity.anneeEdition }}</td>
+            <td>{{ entity.dedicace }}</td>
+            <td>{{ entity.couleur }}</td>
+            <td>{{ entity.prixCote }}</td>
+            <td>{% if entity.dateAchat %}{{ entity.dateAchat|date('Y-m-d H:i:s') }}{% endif %}</td>
+            <td>{{ entity.offert }}</td>
+            <td>{{ entity.vo }}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('edition_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('edition_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('edition_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>

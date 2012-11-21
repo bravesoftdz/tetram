@@ -1,0 +1,30 @@
+album:
+    pattern:  /
+    defaults: { _controller: "BDThequeDataModelBundle:Album:index" }
+
+album_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "BDThequeDataModelBundle:Album:show" }
+
+album_new:
+    pattern:  /new
+    defaults: { _controller: "BDThequeDataModelBundle:Album:new" }
+
+album_create:
+    pattern:  /create
+    defaults: { _controller: "BDThequeDataModelBundle:Album:create" }
+    requirements: { _method: post }
+
+album_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "BDThequeDataModelBundle:Album:edit" }
+
+album_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "BDThequeDataModelBundle:Album:update" }
+    requirements: { _method: post }
+
+album_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "BDThequeDataModelBundle:Album:delete" }
+    requirements: { _method: post }

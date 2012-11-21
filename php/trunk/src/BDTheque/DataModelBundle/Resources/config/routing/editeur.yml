@@ -1,0 +1,30 @@
+editeur:
+    pattern:  /
+    defaults: { _controller: "BDThequeDataModelBundle:Editeur:index" }
+
+editeur_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "BDThequeDataModelBundle:Editeur:show" }
+
+editeur_new:
+    pattern:  /new
+    defaults: { _controller: "BDThequeDataModelBundle:Editeur:new" }
+
+editeur_create:
+    pattern:  /create
+    defaults: { _controller: "BDThequeDataModelBundle:Editeur:create" }
+    requirements: { _method: post }
+
+editeur_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "BDThequeDataModelBundle:Editeur:edit" }
+
+editeur_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "BDThequeDataModelBundle:Editeur:update" }
+    requirements: { _method: post }
+
+editeur_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "BDThequeDataModelBundle:Editeur:delete" }
+    requirements: { _method: post }

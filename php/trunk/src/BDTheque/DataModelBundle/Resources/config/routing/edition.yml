@@ -1,0 +1,30 @@
+edition:
+    pattern:  /
+    defaults: { _controller: "BDThequeDataModelBundle:Edition:index" }
+
+edition_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "BDThequeDataModelBundle:Edition:show" }
+
+edition_new:
+    pattern:  /new
+    defaults: { _controller: "BDThequeDataModelBundle:Edition:new" }
+
+edition_create:
+    pattern:  /create
+    defaults: { _controller: "BDThequeDataModelBundle:Edition:create" }
+    requirements: { _method: post }
+
+edition_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "BDThequeDataModelBundle:Edition:edit" }
+
+edition_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "BDThequeDataModelBundle:Edition:update" }
+    requirements: { _method: post }
+
+edition_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "BDThequeDataModelBundle:Edition:delete" }
+    requirements: { _method: post }

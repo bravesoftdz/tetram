@@ -1,0 +1,30 @@
+collection:
+    pattern:  /
+    defaults: { _controller: "BDThequeDataModelBundle:Collection:index" }
+
+collection_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "BDThequeDataModelBundle:Collection:show" }
+
+collection_new:
+    pattern:  /new
+    defaults: { _controller: "BDThequeDataModelBundle:Collection:new" }
+
+collection_create:
+    pattern:  /create
+    defaults: { _controller: "BDThequeDataModelBundle:Collection:create" }
+    requirements: { _method: post }
+
+collection_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "BDThequeDataModelBundle:Collection:edit" }
+
+collection_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "BDThequeDataModelBundle:Collection:update" }
+    requirements: { _method: post }
+
+collection_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "BDThequeDataModelBundle:Collection:delete" }
+    requirements: { _method: post }
