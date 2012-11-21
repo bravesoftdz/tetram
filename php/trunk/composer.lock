@@ -76,18 +76,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/data-fixtures.git",
-                "reference": "a95d7839a7794c7c9b22d64e859ee70658d977fe"
+                "reference": "98e059213cd8bf70f1203a3c9acc3c7e8afc2c89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/data-fixtures/archive/a95d7839a7794c7c9b22d64e859ee70658d977fe.zip",
-                "reference": "a95d7839a7794c7c9b22d64e859ee70658d977fe",
+                "url": "https://github.com/doctrine/data-fixtures/archive/98e059213cd8bf70f1203a3c9acc3c7e8afc2c89.zip",
+                "reference": "98e059213cd8bf70f1203a3c9acc3c7e8afc2c89",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.2"
             },
-            "time": "1351735543",
+            "time": "1353423624",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -181,12 +181,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/doctrine/DoctrineBundle.git",
-                "reference": "47df202dfb4ad38e15d6aed8a53e722b30c9f9fd"
+                "reference": "ac854d9452272d43b80a9043e0f33c2b9dd2cdd5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/doctrine/DoctrineBundle/archive/47df202dfb4ad38e15d6aed8a53e722b30c9f9fd.zip",
-                "reference": "47df202dfb4ad38e15d6aed8a53e722b30c9f9fd",
+                "url": "https://github.com/doctrine/DoctrineBundle/archive/ac854d9452272d43b80a9043e0f33c2b9dd2cdd5.zip",
+                "reference": "ac854d9452272d43b80a9043e0f33c2b9dd2cdd5",
                 "shasum": ""
             },
             "require": {
@@ -194,7 +194,7 @@
                 "doctrine/dbal": ">=2.2,<2.4-dev",
                 "symfony/framework-bundle": ">=2.1,<2.3-dev",
                 "symfony/doctrine-bridge": ">=2.1,<2.3-dev",
-                "jdorn/sql-formatter": "v1.0.1"
+                "jdorn/sql-formatter": ">=1.1,<2.0"
             },
             "require-dev": {
                 "doctrine/orm": ">=2.2,<2.4-dev",
@@ -204,7 +204,7 @@
             "suggest": {
                 "doctrine/orm": "The Doctrine ORM integration is optional in the bundle."
             },
-            "time": "1353074073",
+            "time": "1353489818",
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
@@ -1159,12 +1159,12 @@
             "source": {
                 "type": "git",
                 "url": "git://github.com/symfony/symfony.git",
-                "reference": "8f33f2ea86cf4ecf2fb959ca80bd6fe0b5a71694"
+                "reference": "b3c3e89462d058afc35c59cdd71a4b6c4b6cdbcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/symfony/symfony/archive/8f33f2ea86cf4ecf2fb959ca80bd6fe0b5a71694.zip",
-                "reference": "8f33f2ea86cf4ecf2fb959ca80bd6fe0b5a71694",
+                "url": "https://github.com/symfony/symfony/archive/b3c3e89462d058afc35c59cdd71a4b6c4b6cdbcc.zip",
+                "reference": "b3c3e89462d058afc35c59cdd71a4b6c4b6cdbcc",
                 "shasum": ""
             },
             "require": {
@@ -1213,7 +1213,7 @@
                 "propel/propel1": "dev-master",
                 "monolog/monolog": "1.*"
             },
-            "time": "1353321329",
+            "time": "1353417693",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1343,9 +1343,7 @@
             ]
         }
     ],
-    "packages-dev": [
-
-    ],
+    "packages-dev": null,
     "aliases": [
 
     ],
