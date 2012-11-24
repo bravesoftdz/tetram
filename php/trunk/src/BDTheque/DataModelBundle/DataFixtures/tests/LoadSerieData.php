@@ -45,7 +45,7 @@ EOL
         $serie->setSiteWeb(null);
         $manager->persist($serie);
         $this->setReference("SERIE-" . $serie->getTitre(), $serie);
-        
+
         $serie = new Serie();
         $serie->setEditeur($this->getReference("EDITEUR-Soleil"));
         $serie->setCollection($this->getReference("COLLECTION-Soleil-Quadrant solaire"));

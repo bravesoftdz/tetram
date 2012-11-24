@@ -4,7 +4,6 @@ namespace BDTheque\DataModelBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use BDTheque\DataModelBundle\Entity\Album;
 use BDTheque\DataModelBundle\Form\AlbumType;
 
@@ -12,29 +11,27 @@ use BDTheque\DataModelBundle\Form\AlbumType;
  * Album controller.
  *
  */
-class AlbumController extends Controller
-{
+class AlbumController extends Controller {
+
     /**
      * Lists all Album entities.
      *
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('BDThequeDataModelBundle:Album')->findAll();
 
         return $this->render('BDThequeDataModelBundle:Album:index.html.twig', array(
-            'entities' => $entities,
-        ));
+                    'entities' => $entities,
+                ));
     }
 
     /**
      * Finds and displays a Album entity.
      *
      */
-    public function showAction($id)
-    {
+    public function showAction($id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BDThequeDataModelBundle:Album')->find($id);
@@ -46,32 +43,30 @@ class AlbumController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('BDThequeDataModelBundle:Album:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        ));
+                    'entity' => $entity,
+                    'delete_form' => $deleteForm->createView(),));
     }
 
     /**
      * Displays a form to create a new Album entity.
      *
      */
-    public function newAction()
-    {
+    public function newAction() {
         $entity = new Album();
-        $form   = $this->createForm(new AlbumType(), $entity);
+        $form = $this->createForm(new AlbumType(), $entity);
 
         return $this->render('BDThequeDataModelBundle:Album:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+                    'entity' => $entity,
+                    'form' => $form->createView(),
+                ));
     }
 
     /**
      * Creates a new Album entity.
      *
      */
-    public function createAction(Request $request)
-    {
-        $entity  = new Album();
+    public function createAction(Request $request) {
+        $entity = new Album();
         $form = $this->createForm(new AlbumType(), $entity);
         $form->bind($request);
 
@@ -84,17 +79,16 @@ class AlbumController extends Controller
         }
 
         return $this->render('BDThequeDataModelBundle:Album:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+                    'entity' => $entity,
+                    'form' => $form->createView(),
+                ));
     }
 
     /**
      * Displays a form to edit an existing Album entity.
      *
      */
-    public function editAction($id)
-    {
+    public function editAction($id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BDThequeDataModelBundle:Album')->find($id);
@@ -107,18 +101,17 @@ class AlbumController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('BDThequeDataModelBundle:Album:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+                    'entity' => $entity,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
     }
 
     /**
      * Edits an existing Album entity.
      *
      */
-    public function updateAction(Request $request, $id)
-    {
+    public function updateAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BDThequeDataModelBundle:Album')->find($id);
@@ -139,18 +132,17 @@ class AlbumController extends Controller
         }
 
         return $this->render('BDThequeDataModelBundle:Album:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+                    'entity' => $entity,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
     }
 
     /**
      * Deletes a Album entity.
      *
      */
-    public function deleteAction(Request $request, $id)
-    {
+    public function deleteAction(Request $request, $id) {
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -169,11 +161,11 @@ class AlbumController extends Controller
         return $this->redirect($this->generateUrl('album'));
     }
 
-    private function createDeleteForm($id)
-    {
+    private function createDeleteForm($id) {
         return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
+                        ->add('id', 'hidden')
+                        ->getForm()
         ;
     }
+
 }

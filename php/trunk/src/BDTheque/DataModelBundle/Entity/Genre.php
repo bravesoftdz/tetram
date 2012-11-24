@@ -20,6 +20,10 @@ class Genre extends BaseEntityItem {
      */
     private $genre;
 
+    public function __toString() {
+        return StringUtils::formatTitre($this->genre);
+    }
+
     /**
      * Set genre
      *

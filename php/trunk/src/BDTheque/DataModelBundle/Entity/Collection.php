@@ -33,6 +33,10 @@ class Collection extends BaseEntityItem {
      */
     private $editeur;
 
+    public function __toString() {
+        return StringUtils::formatTitre($this->nomCollection);
+    }
+
     /**
      * Set nomCollection
      *

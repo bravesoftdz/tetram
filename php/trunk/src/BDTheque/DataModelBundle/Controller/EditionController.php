@@ -4,7 +4,6 @@ namespace BDTheque\DataModelBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use BDTheque\DataModelBundle\Entity\Edition;
 use BDTheque\DataModelBundle\Form\EditionType;
 
@@ -12,29 +11,27 @@ use BDTheque\DataModelBundle\Form\EditionType;
  * Edition controller.
  *
  */
-class EditionController extends Controller
-{
+class EditionController extends Controller {
+
     /**
      * Lists all Edition entities.
      *
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('BDThequeDataModelBundle:Edition')->findAll();
 
         return $this->render('BDThequeDataModelBundle:Edition:index.html.twig', array(
-            'entities' => $entities,
-        ));
+                    'entities' => $entities,
+                ));
     }
 
     /**
      * Finds and displays a Edition entity.
      *
      */
-    public function showAction($id)
-    {
+    public function showAction($id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BDThequeDataModelBundle:Edition')->find($id);
@@ -46,32 +43,30 @@ class EditionController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('BDThequeDataModelBundle:Edition:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        ));
+                    'entity' => $entity,
+                    'delete_form' => $deleteForm->createView(),));
     }
 
     /**
      * Displays a form to create a new Edition entity.
      *
      */
-    public function newAction()
-    {
+    public function newAction() {
         $entity = new Edition();
-        $form   = $this->createForm(new EditionType(), $entity);
+        $form = $this->createForm(new EditionType(), $entity);
 
         return $this->render('BDThequeDataModelBundle:Edition:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+                    'entity' => $entity,
+                    'form' => $form->createView(),
+                ));
     }
 
     /**
      * Creates a new Edition entity.
      *
      */
-    public function createAction(Request $request)
-    {
-        $entity  = new Edition();
+    public function createAction(Request $request) {
+        $entity = new Edition();
         $form = $this->createForm(new EditionType(), $entity);
         $form->bind($request);
 
@@ -84,17 +79,16 @@ class EditionController extends Controller
         }
 
         return $this->render('BDThequeDataModelBundle:Edition:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+                    'entity' => $entity,
+                    'form' => $form->createView(),
+                ));
     }
 
     /**
      * Displays a form to edit an existing Edition entity.
      *
      */
-    public function editAction($id)
-    {
+    public function editAction($id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BDThequeDataModelBundle:Edition')->find($id);
@@ -107,18 +101,17 @@ class EditionController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('BDThequeDataModelBundle:Edition:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+                    'entity' => $entity,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
     }
 
     /**
      * Edits an existing Edition entity.
      *
      */
-    public function updateAction(Request $request, $id)
-    {
+    public function updateAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BDThequeDataModelBundle:Edition')->find($id);
@@ -139,18 +132,17 @@ class EditionController extends Controller
         }
 
         return $this->render('BDThequeDataModelBundle:Edition:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+                    'entity' => $entity,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
     }
 
     /**
      * Deletes a Edition entity.
      *
      */
-    public function deleteAction(Request $request, $id)
-    {
+    public function deleteAction(Request $request, $id) {
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -169,11 +161,11 @@ class EditionController extends Controller
         return $this->redirect($this->generateUrl('edition'));
     }
 
-    private function createDeleteForm($id)
-    {
+    private function createDeleteForm($id) {
         return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
+                        ->add('id', 'hidden')
+                        ->getForm()
         ;
     }
+
 }

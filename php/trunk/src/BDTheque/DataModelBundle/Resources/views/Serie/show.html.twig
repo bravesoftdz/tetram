@@ -1,4 +1,4 @@
-{% extends "BDThequeDataModelBundle::layout.html.twig" %}
+{% extends "BDThequeDataModelBundle::main.layout.html.twig" %}
 
 {% block content %}
 <h1>Serie</h1>
@@ -86,8 +86,8 @@
     <li>
         <form action="{{ path('serie_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
-    </li>
-</ul>
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    </ul>
 {% endblock %}

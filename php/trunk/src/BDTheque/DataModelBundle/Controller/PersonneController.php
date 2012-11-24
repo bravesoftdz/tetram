@@ -4,7 +4,6 @@ namespace BDTheque\DataModelBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use BDTheque\DataModelBundle\Entity\Personne;
 use BDTheque\DataModelBundle\Form\PersonneType;
 
@@ -12,29 +11,27 @@ use BDTheque\DataModelBundle\Form\PersonneType;
  * Personne controller.
  *
  */
-class PersonneController extends Controller
-{
+class PersonneController extends Controller {
+
     /**
      * Lists all Personne entities.
      *
      */
-    public function indexAction()
-    {
+    public function indexAction() {
         $em = $this->getDoctrine()->getManager();
 
         $entities = $em->getRepository('BDThequeDataModelBundle:Personne')->findAll();
 
         return $this->render('BDThequeDataModelBundle:Personne:index.html.twig', array(
-            'entities' => $entities,
-        ));
+                    'entities' => $entities,
+                ));
     }
 
     /**
      * Finds and displays a Personne entity.
      *
      */
-    public function showAction($id)
-    {
+    public function showAction($id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BDThequeDataModelBundle:Personne')->find($id);
@@ -46,32 +43,30 @@ class PersonneController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('BDThequeDataModelBundle:Personne:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        ));
+                    'entity' => $entity,
+                    'delete_form' => $deleteForm->createView(),));
     }
 
     /**
      * Displays a form to create a new Personne entity.
      *
      */
-    public function newAction()
-    {
+    public function newAction() {
         $entity = new Personne();
-        $form   = $this->createForm(new PersonneType(), $entity);
+        $form = $this->createForm(new PersonneType(), $entity);
 
         return $this->render('BDThequeDataModelBundle:Personne:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+                    'entity' => $entity,
+                    'form' => $form->createView(),
+                ));
     }
 
     /**
      * Creates a new Personne entity.
      *
      */
-    public function createAction(Request $request)
-    {
-        $entity  = new Personne();
+    public function createAction(Request $request) {
+        $entity = new Personne();
         $form = $this->createForm(new PersonneType(), $entity);
         $form->bind($request);
 
@@ -84,17 +79,16 @@ class PersonneController extends Controller
         }
 
         return $this->render('BDThequeDataModelBundle:Personne:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+                    'entity' => $entity,
+                    'form' => $form->createView(),
+                ));
     }
 
     /**
      * Displays a form to edit an existing Personne entity.
      *
      */
-    public function editAction($id)
-    {
+    public function editAction($id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BDThequeDataModelBundle:Personne')->find($id);
@@ -107,18 +101,17 @@ class PersonneController extends Controller
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('BDThequeDataModelBundle:Personne:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+                    'entity' => $entity,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
     }
 
     /**
      * Edits an existing Personne entity.
      *
      */
-    public function updateAction(Request $request, $id)
-    {
+    public function updateAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('BDThequeDataModelBundle:Personne')->find($id);
@@ -139,18 +132,17 @@ class PersonneController extends Controller
         }
 
         return $this->render('BDThequeDataModelBundle:Personne:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+                    'entity' => $entity,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
     }
 
     /**
      * Deletes a Personne entity.
      *
      */
-    public function deleteAction(Request $request, $id)
-    {
+    public function deleteAction(Request $request, $id) {
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -169,11 +161,11 @@ class PersonneController extends Controller
         return $this->redirect($this->generateUrl('personne'));
     }
 
-    private function createDeleteForm($id)
-    {
+    private function createDeleteForm($id) {
         return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
+                        ->add('id', 'hidden')
+                        ->getForm()
         ;
     }
+
 }

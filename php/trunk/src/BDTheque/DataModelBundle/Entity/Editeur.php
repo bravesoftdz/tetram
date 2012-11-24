@@ -38,6 +38,10 @@ class Editeur extends BaseEntityItem {
         $this->collections = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    public function __toString() {
+        return StringUtils::formatTitre($this->nomEditeur);
+    }
+
     /**
      * Set nomEditeur
      *
