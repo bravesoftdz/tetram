@@ -7,6 +7,6 @@ jQuery(document).ready(function () {
         changeYear: true
     });
    
-    $('.uidate').datepicker({
-        });
+    $('.uidate').datepicker();
+    $('.uibutton').button();
 });
