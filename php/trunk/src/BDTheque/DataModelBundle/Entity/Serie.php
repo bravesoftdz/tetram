@@ -8,12 +8,7 @@ use BDTheque\DataModelBundle\Utils\StringUtils;
 /**
  * BDTheque\DataModelBundle\Entity\Serie
  *
- * @ORM\Table(
- *      name="series",
- *      indexes={
- *          @ORM\Index(name="serie_defaultOrder", columns={"personne_id","album_id","metier"})
- *      }
- *  )
+ * @ORM\Table(name="series")
  * @ORM\Entity(repositoryClass="BDTheque\DataModelBundle\Repository\SerieRepository")
  */
 class Serie extends BaseEntityItem {
