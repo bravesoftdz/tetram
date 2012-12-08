@@ -1,11 +1,12 @@
-{% extends "BDThequeDataModelBundle::edit.layout.html.twig" %}
+{% extends "BDThequeDataModelBundle::editForm.layout.html.twig" %}
 
-{% block content %}
+{% block contentPanel %}
 <h1>Genre edit</h1>
 
 <form action="{{ path('genre_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
     {{ form_widget(edit_form) }}
         <p>
+            
             <button type="submit" class="uibutton">Edit</button>
         </p>
     </form>

@@ -1,0 +1,13 @@
+{% extends "BDThequeDataModelBundle::main.layout.html.twig" %}
+
+{% block leftPanel %}
+<a href={{ path('initiale_list', {'class':'album'}) }} >Albums</a>
+<a href={{ path('initiale_list', {'class':'achat'}) }} >Achats</a>
+<a href={{ path('initiale_list', {'class':'serie'}) }} >Series</a>
+<a href={{ path('initiale_list', {'class':'editeur'}) }} >Editeurs</a>
+<a href={{ path('initiale_list', {'class':'collection'}) }} >Collections</a>
+<a href={{ path('initiale_list', {'class':'genre'}) }} >Genres</a>
+{% endblock %}
+
+{% block contentPanel %}
+{% endblock %}

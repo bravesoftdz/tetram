@@ -1,6 +1,6 @@
-{% extends "BDThequeDataModelBundle::edit.layout.html.twig" %}
+{% extends "BDThequeDataModelBundle::editForm.layout.html.twig" %}
 
-{% block content %}
+{% block contentPanel %}
 <h1>Genre creation</h1>
 
 <form action="{{ path('genre_create') }}" method="post" {{ form_enctype(form) }}>
