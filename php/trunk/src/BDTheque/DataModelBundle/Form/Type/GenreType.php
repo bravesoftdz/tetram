@@ -1,6 +1,6 @@
 <?php
 
-namespace BDTheque\DataModelBundle\Form;
+namespace BDTheque\DataModelBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,7 +10,7 @@ class GenreType extends AbstractType {
 
     public function buildForm(FormBuilderInterface $builder, array $options) {
         $builder
-                ->add('version')
+                ->add('version', null)
                 ->add('created')
                 ->add('genre')
                 ->add('initiale')

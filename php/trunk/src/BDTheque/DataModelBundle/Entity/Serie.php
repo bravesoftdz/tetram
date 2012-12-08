@@ -8,8 +8,13 @@ use BDTheque\DataModelBundle\Utils\StringUtils;
 /**
  * BDTheque\DataModelBundle\Entity\Serie
  *
- * @ORM\Table(name="series")
- * @ORM\Entity(repositoryClass="BDTheque\DataModelBundle\Entity\SerieRepository")
+ * @ORM\Table(
+ *      name="series",
+ *      indexes={
+ *          @ORM\Index(name="serie_defaultOrder", columns={"personne_id","album_id","metier"})
+ *      }
+ *  )
+ * @ORM\Entity(repositoryClass="BDTheque\DataModelBundle\Repository\SerieRepository")
  */
 class Serie extends BaseEntityItem {
 
@@ -155,6 +160,10 @@ class Serie extends BaseEntityItem {
         $this->dessinateurs = new \Doctrine\Common\Collections\ArrayCollection();
         $this->coloristes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->genres = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function getLabel() {
+        return StringUtils::buildTitreSerie(false, $this->titre, $this->editeur, $this->collection);
     }
 
     /**

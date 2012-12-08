@@ -5,7 +5,7 @@ namespace BDTheque\DataModelBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use BDTheque\DataModelBundle\Entity\Collection;
-use BDTheque\DataModelBundle\Form\CollectionType;
+use BDTheque\DataModelBundle\Form\Type\CollectionType;
 
 /**
  * Collection controller.

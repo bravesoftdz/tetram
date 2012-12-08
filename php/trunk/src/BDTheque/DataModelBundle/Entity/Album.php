@@ -9,7 +9,7 @@ use BDTheque\DataModelBundle\Utils\StringUtils;
  * BDTheque\DataModelBundle\Entity\Album
  *
  * @ORM\Table(name="albums")
- * @ORM\Entity(repositoryClass="BDTheque\DataModelBundle\Entity\AlbumRepository")
+ * @ORM\Entity(repositoryClass="BDTheque\DataModelBundle\Repository\AlbumRepository")
  */
 class Album extends BaseEntityItem {
 

@@ -13,7 +13,7 @@ use BDTheque\DataModelBundle\Utils\StringUtils;
  *      uniqueConstraints={
  *          @ORM\UniqueConstraint(name="collection_idx", columns={"nomCollection","editeur_id"})
  *      })
- * @ORM\Entity(repositoryClass="BDTheque\DataModelBundle\Entity\CollectionRepository")
+ * @ORM\Entity(repositoryClass="BDTheque\DataModelBundle\Repository\CollectionRepository")
  */
 class Collection extends BaseEntityItem {
 

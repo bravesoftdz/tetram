@@ -5,7 +5,7 @@ namespace BDTheque\DataModelBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use BDTheque\DataModelBundle\Entity\Personne;
-use BDTheque\DataModelBundle\Form\PersonneType;
+use BDTheque\DataModelBundle\Form\Type\PersonneType;
 
 /**
  * Personne controller.

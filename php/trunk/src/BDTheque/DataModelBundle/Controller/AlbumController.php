@@ -5,7 +5,7 @@ namespace BDTheque\DataModelBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use BDTheque\DataModelBundle\Entity\Album;
-use BDTheque\DataModelBundle\Form\AlbumType;
+use BDTheque\DataModelBundle\Form\Type\AlbumType;
 
 /**
  * Album controller.

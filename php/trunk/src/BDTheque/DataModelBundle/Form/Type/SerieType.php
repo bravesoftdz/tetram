@@ -1,6 +1,6 @@
 <?php
 
-namespace BDTheque\DataModelBundle\Form;
+namespace BDTheque\DataModelBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,9 +25,9 @@ class SerieType extends AbstractType {
                 ->add('vo')
                 ->add('notation')
                 ->add('initiale')
-                ->add('collection')
+                ->add('collection', 'collection_selector')
                 ->add('genres')
-                ->add('editeur')
+                ->add('editeur', 'editeur_selector')
         ;
     }
 

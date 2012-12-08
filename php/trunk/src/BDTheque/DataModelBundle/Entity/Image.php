@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * BDTheque\DataModelBundle\Entity\Image
  *
  * @ORM\Table(name="images")
- * @ORM\Entity(repositoryClass="BDTheque\DataModelBundle\Entity\ImageRepository")
+ * @ORM\Entity(repositoryClass="BDTheque\DataModelBundle\Repository\ImageRepository")
  */
 class Image extends BaseEntity {
 

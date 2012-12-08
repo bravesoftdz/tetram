@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * BDTheque\DataModelBundle\Entity\Edition
  *
  * @ORM\Table(name="editions")
- * @ORM\Entity(repositoryClass="BDTheque\DataModelBundle\Entity\EditionRepository")
+ * @ORM\Entity(repositoryClass="BDTheque\DataModelBundle\Repository\EditionRepository")
  */
 class Edition extends BaseEntity {
 

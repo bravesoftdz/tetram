@@ -5,7 +5,7 @@ namespace BDTheque\DataModelBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use BDTheque\DataModelBundle\Entity\Serie;
-use BDTheque\DataModelBundle\Form\SerieType;
+use BDTheque\DataModelBundle\Form\Type\SerieType;
 
 /**
  * Serie controller.
@@ -20,7 +20,7 @@ class SerieController extends Controller {
     public function indexAction() {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('BDThequeDataModelBundle:Serie')->findAll();
+        $entities = $em->getRepository('BDThequeDataModelBundle:Serie')->listAll();
 
         return $this->render('BDThequeDataModelBundle:Serie:index.html.twig', array(
                     'entities' => $entities,

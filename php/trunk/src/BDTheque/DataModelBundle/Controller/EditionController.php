@@ -5,7 +5,7 @@ namespace BDTheque\DataModelBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use BDTheque\DataModelBundle\Entity\Edition;
-use BDTheque\DataModelBundle\Form\EditionType;
+use BDTheque\DataModelBundle\Form\Type\EditionType;
 
 /**
  * Edition controller.
