@@ -28,3 +28,5 @@ class PersonneManager extends BaseManager {
     }
 
 }
+
+?>

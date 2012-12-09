@@ -4,7 +4,7 @@ namespace BDTheque\DataModelBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-class BaseEntityRepository extends EntityRepository {
+abstract class BaseEntityRepository extends EntityRepository {
 
     public function getInitiales() {
         $query = $this->_em->createQueryBuilder()

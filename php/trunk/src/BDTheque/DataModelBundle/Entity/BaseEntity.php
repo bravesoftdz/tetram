@@ -35,7 +35,7 @@ abstract class BaseEntity {
      * @ORM\Column(name="created", type="datetime")
      */
     private $created;
-
+    
     /**
      * Get id
      *
@@ -69,3 +69,5 @@ abstract class BaseEntity {
     }
 
 }
+
+?>

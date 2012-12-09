@@ -4,7 +4,7 @@ namespace BDTheque\DataModelBundle\Repository;
 
 use BDTheque\DataModelBundle\Repository\BaseEntityRepository;
 
-class BaseEntityItemRepository extends BaseEntityRepository {
+abstract class BaseEntityItemRepository extends BaseEntityRepository {
 
     public function getInitiales() {
         $query = $this->_em->createQuery('select e.initiale, count(e.id) _count from ' . $this->getClassName() . ' e group by e.initiale');
@@ -12,8 +12,14 @@ class BaseEntityItemRepository extends BaseEntityRepository {
     }
 
     public function getByInitiales($initiale) {
-        $query = $this->_em->createQuery('select e.id, e from ' . $this->getClassName() . ' e where e.initiale = ?1')->setParameter(1, $initiale);
-        return $query->getArrayResult();
+        $query = $this->_em->createQueryBuilder()
+                ->select('e.id', 'e obj')
+                ->from($this->getEntityName(), 'e')
+                ->where('e.initiale = ?1')
+                ->getQuery()
+                ->setParameter(1, $initiale);
+
+        return $query->getResult();
     }
 
 }

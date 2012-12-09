@@ -40,3 +40,5 @@ class AlbumType extends AbstractType {
     }
 
 }
+
+?>

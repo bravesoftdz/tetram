@@ -1,25 +1,34 @@
 <html>
     <head>
-	<meta charset="UTF-8" />
-	<title>{% block title %}BDThèque{% endblock %}</title>
+        <meta charset="UTF-8" />
+        <title>{% block title %}BDThèque{% endblock %}</title>
 {% javascripts 
-    '@BDThequeDataModelBundle/Resources/public/js/jquery-1.8.3.min.js'
-    '@BDThequeDataModelBundle/Resources/public/js/jquery-ui-1.9.1.custom.min.js'
+    '@BDThequeDataModelBundle/Resources/public/js/*.min.js'
     '@BDThequeDataModelBundle/Resources/public/*.js' %}
-	<script type="text/javascript" src="{{ asset_url }}"></script>
+        <script type="text/javascript" src="{{ asset_url }}"></script>
 {% endjavascripts %}
 {% stylesheets filter='cssrewrite'
-    'bundles/bdthequedatamodel/css/*.css' 
-    'bundles/bdthequedatamodel/css/pepper-grinder/jquery-ui-1.9.1.custom.min.css' %}
-	<link rel="stylesheet" href="{{ asset_url }}" />
+    'bundles/bdthequedatamodel/css/pepper-grinder/*.min.css' 
+    'bundles/bdthequedatamodel/css/*.css' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
 {% endstylesheets %}
 {% block extra_header %}{% endblock %}
     </head>
     <body>
-	<div id=toolBar>{% block toolBar %}{% endblock %}</div>
-	<div id=statusBar>{% block statusBar %}{% endblock %}</div>
-	<div id=leftPanel>{% block leftPanel %}{% endblock %}</div>
-	<div id=editPanel>{% block editPanel %}{% endblock %}</div>
-	<div id=contentPanel>{% block contentPanel %}{% endblock %}</div>
-    </body>
-</html>
+        <div id=wait style="display: none;">
+{#
+            <img src="{{ asset('bundles/bdthequedatamodel/images/loading.gif') }}" valign="center">
+#}
+{% image '@BDThequeDataModelBundle/Resources/public/images/loading.gif' %}
+                <img src="{{ asset_url }}" valign="center">
+{% endimage %}
+                &nbsp;Chargement des données...
+            </div>
+            <div id=toolBar>{% block toolBar %}{% endblock %}</div>
+            <div id=statusBar>{% block statusBar %}{% endblock %}</div>
+            <div id=leftPanel>{% block leftPanel %}{% endblock %}</div>
+            <div id=editPanel>{% block editPanel %}{% endblock %}</div>
+            <div id=contentPanel>{% block contentPanel %}{% endblock %}</div>
+{% block extra_footer %}{% endblock %}
+        </body>
+    </html>

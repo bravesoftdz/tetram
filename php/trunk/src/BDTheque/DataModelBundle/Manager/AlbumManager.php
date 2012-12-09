@@ -28,3 +28,5 @@ class AlbumManager extends BaseManager {
     }
 
 }
+
+?>

@@ -28,3 +28,5 @@ class GenreManager extends BaseManager {
     }
 
 }
+
+?>

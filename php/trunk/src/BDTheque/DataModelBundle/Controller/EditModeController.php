@@ -15,5 +15,6 @@ class EditModeController extends Controller {
         return $this->render('BDThequeDataModelBundle::editMode.layout.html.twig');
     }
 
-
 }
+
+?>

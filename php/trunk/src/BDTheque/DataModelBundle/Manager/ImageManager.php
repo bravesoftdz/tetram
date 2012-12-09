@@ -28,3 +28,5 @@ class ImageManager extends BaseManager {
     }
 
 }
+
+?>

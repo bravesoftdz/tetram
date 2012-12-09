@@ -7,3 +7,5 @@ use BDTheque\DataModelBundle\Repository\BaseEntityRepository;
 class EditionRepository extends BaseEntityRepository {
     
 }
+
+?>

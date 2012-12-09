@@ -28,3 +28,5 @@ class CollectionManager extends BaseManager {
     }
 
 }
+
+?>

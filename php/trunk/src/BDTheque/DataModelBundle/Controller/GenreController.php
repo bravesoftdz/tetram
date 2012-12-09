@@ -169,3 +169,5 @@ class GenreController extends Controller {
     }
 
 }
+
+?>

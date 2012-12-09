@@ -10,3 +10,5 @@ abstract class BaseManager {
     }
 
 }
+
+?>

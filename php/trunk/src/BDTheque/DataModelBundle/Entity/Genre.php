@@ -24,6 +24,10 @@ class Genre extends BaseEntityItem {
         return StringUtils::formatTitre($this->genre);
     }
 
+    public function getLabel(){
+        return StringUtils::formatTitre($this->genre);
+    }
+    
     /**
      * Set genre
      *
@@ -47,3 +51,5 @@ class Genre extends BaseEntityItem {
     }
 
 }
+
+?>

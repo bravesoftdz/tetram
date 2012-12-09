@@ -614,3 +614,5 @@ class Serie extends BaseEntityItem {
     }
 
 }
+
+?>

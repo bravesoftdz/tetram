@@ -21,3 +21,5 @@ class SerieRepository extends BaseEntityItemRepository {
     }
 
 }
+
+?>

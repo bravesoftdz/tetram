@@ -1,30 +1,30 @@
 personne:
     pattern:  /
-    defaults: { _controller: "BDThequeDataModelBundle:Personne:index" }
+    defaults: { _controller: BDThequeDataModelBundle:Personne:index }
 
 personne_show:
     pattern:  /{id}/show
-    defaults: { _controller: "BDThequeDataModelBundle:Personne:show" }
+    defaults: { _controller: BDThequeDataModelBundle:Personne:show }
 
 personne_new:
     pattern:  /new
-    defaults: { _controller: "BDThequeDataModelBundle:Personne:new" }
+    defaults: { _controller: BDThequeDataModelBundle:Personne:new }
 
 personne_create:
     pattern:  /create
-    defaults: { _controller: "BDThequeDataModelBundle:Personne:create" }
+    defaults: { _controller: BDThequeDataModelBundle:Personne:create }
     requirements: { _method: post }
 
 personne_edit:
     pattern:  /{id}/edit
-    defaults: { _controller: "BDThequeDataModelBundle:Personne:edit" }
+    defaults: { _controller: BDThequeDataModelBundle:Personne:edit }
 
 personne_update:
     pattern:  /{id}/update
-    defaults: { _controller: "BDThequeDataModelBundle:Personne:update" }
+    defaults: { _controller: BDThequeDataModelBundle:Personne:update }
     requirements: { _method: post }
 
 personne_delete:
     pattern:  /{id}/delete
-    defaults: { _controller: "BDThequeDataModelBundle:Personne:delete" }
+    defaults: { _controller: BDThequeDataModelBundle:Personne:delete }
     requirements: { _method: post }

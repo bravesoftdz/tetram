@@ -27,3 +27,5 @@ class Configuration implements ConfigurationInterface {
     }
 
 }
+
+?>

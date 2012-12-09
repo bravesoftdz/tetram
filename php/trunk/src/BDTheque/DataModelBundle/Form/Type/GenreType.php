@@ -28,3 +28,5 @@ class GenreType extends AbstractType {
     }
 
 }
+
+?>

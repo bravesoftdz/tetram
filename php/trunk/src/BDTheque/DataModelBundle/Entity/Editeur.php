@@ -122,3 +122,5 @@ class Editeur extends BaseEntityItem {
     }
 
 }
+
+?>

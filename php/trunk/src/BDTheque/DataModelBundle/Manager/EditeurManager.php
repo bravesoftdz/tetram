@@ -28,3 +28,5 @@ class EditeurManager extends BaseManager {
     }
 
 }
+
+?>

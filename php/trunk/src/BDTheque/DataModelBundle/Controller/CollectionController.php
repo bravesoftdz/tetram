@@ -169,3 +169,5 @@ class CollectionController extends Controller {
     }
 
 }
+
+?>

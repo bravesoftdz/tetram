@@ -1,5 +1,5 @@
 /*!
- * jQuery UI Effects Fade 1.9.1
+ * jQuery UI Effects Fade 1.9.2
  * http://jqueryui.com
  *
  * Copyright 2012 jQuery Foundation and other contributors
@@ -13,18 +13,18 @@
  */
 (function( $, undefined ) {
 
-    $.effects.effect.fade = function( o, done ) {
-        var el = $( this ),
-        mode = $.effects.setMode( el, o.mode || "toggle" );
+$.effects.effect.fade = function( o, done ) {
+	var el = $( this ),
+		mode = $.effects.setMode( el, o.mode || "toggle" );
 
-        el.animate({
-            opacity: mode
-        }, {
-            queue: false,
-            duration: o.duration,
-            easing: o.easing,
-            complete: done
-        });
-    };
+	el.animate({
+		opacity: mode
+	}, {
+		queue: false,
+		duration: o.duration,
+		easing: o.easing,
+		complete: done
+	});
+};
 
 })( jQuery );

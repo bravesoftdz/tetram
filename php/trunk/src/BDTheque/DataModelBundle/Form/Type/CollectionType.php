@@ -29,3 +29,5 @@ class CollectionType extends AbstractType {
     }
 
 }
+
+?>

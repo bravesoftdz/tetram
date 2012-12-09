@@ -1,30 +1,30 @@
 serie:
     pattern:  /
-    defaults: { _controller: "BDThequeDataModelBundle:Serie:index" }
+    defaults: { _controller: BDThequeDataModelBundle:Serie:index }
 
 serie_show:
     pattern:  /{id}/show
-    defaults: { _controller: "BDThequeDataModelBundle:Serie:show" }
+    defaults: { _controller: BDThequeDataModelBundle:Serie:show }
 
 serie_new:
     pattern:  /new
-    defaults: { _controller: "BDThequeDataModelBundle:Serie:new" }
+    defaults: { _controller: BDThequeDataModelBundle:Serie:new }
 
 serie_create:
     pattern:  /create
-    defaults: { _controller: "BDThequeDataModelBundle:Serie:create" }
+    defaults: { _controller: BDThequeDataModelBundle:Serie:create }
     requirements: { _method: post }
 
 serie_edit:
     pattern:  /{id}/edit
-    defaults: { _controller: "BDThequeDataModelBundle:Serie:edit" }
+    defaults: { _controller: BDThequeDataModelBundle:Serie:edit }
 
 serie_update:
     pattern:  /{id}/update
-    defaults: { _controller: "BDThequeDataModelBundle:Serie:update" }
+    defaults: { _controller: BDThequeDataModelBundle:Serie:update }
     requirements: { _method: post }
 
 serie_delete:
     pattern:  /{id}/delete
-    defaults: { _controller: "BDThequeDataModelBundle:Serie:delete" }
+    defaults: { _controller: BDThequeDataModelBundle:Serie:delete }
     requirements: { _method: post }

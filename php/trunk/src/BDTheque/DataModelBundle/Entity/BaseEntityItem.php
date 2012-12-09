@@ -18,6 +18,10 @@ abstract class BaseEntityItem extends BaseEntity {
      */
     protected $initiale;
 
+    public function getLabel() {
+        return sprintf('{%s_%d}', strval($this), $this->getId());
+    }
+
     public function setInitiale($initiale) {
         $this->initiale = $initiale;
     }

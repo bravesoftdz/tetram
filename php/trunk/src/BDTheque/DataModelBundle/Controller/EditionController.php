@@ -169,3 +169,5 @@ class EditionController extends Controller {
     }
 
 }
+
+?>

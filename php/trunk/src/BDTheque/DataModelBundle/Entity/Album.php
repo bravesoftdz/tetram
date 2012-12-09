@@ -550,3 +550,5 @@ class Album extends BaseEntityItem {
     }
 
 }
+
+?>

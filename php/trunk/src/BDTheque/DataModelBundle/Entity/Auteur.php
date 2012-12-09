@@ -79,3 +79,5 @@ abstract class Auteur extends BaseEntityRelation {
     }
 
 }
+
+?>

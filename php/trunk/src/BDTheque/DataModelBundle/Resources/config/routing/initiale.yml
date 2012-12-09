@@ -1,9 +1,12 @@
 initiale_list:
-    pattern:  /{class}
-    defaults: { _controller: "BDThequeDataModelBundle:Initiale:list" }
-
+  pattern:  /{class}/{_format}
+  defaults: { _controller: BDThequeDataModelBundle:Initiale:list, _format: html }
+  requirements:
+    _format: html|json
+ 
 initiale_detail:
-    pattern:  /{class}/{initiale}
-    defaults: { _controller: "BDThequeDataModelBundle:Initiale:detail" }
-    requirements:
-        initiale: "[\*a-zA-Z]"
+  pattern:  /{class}/{initiale}/{_format}
+  defaults: { _controller: BDThequeDataModelBundle:Initiale:detail, _format: html }
+  requirements:
+    initiale: "[\#0-9a-zA-Z]"
+    _format: html|json

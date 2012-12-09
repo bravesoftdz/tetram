@@ -26,3 +26,5 @@ class BDThequeDataModelExtension extends Extension {
     }
 
 }
+
+?>

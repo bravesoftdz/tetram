@@ -28,3 +28,5 @@ class SerieManager extends BaseManager {
     }
 
 }
+
+?>

@@ -55,38 +55,4 @@ abstract class AuteurAlbum extends Auteur {
 
 }
 
-/**
- * @ORM\Entity
- */
-class ScenaristeAlbum extends AuteurAlbum {
-
-    public function setAlbum(Album $album) {
-        $album->addScenariste($this);
-        return parent::setAlbum($album);
-    }
-
-}
-
-/**
- * @ORM\Entity
- */
-class DessinateurAlbum extends AuteurAlbum {
-
-    public function setAlbum(Album $album) {
-        $album->addDessinateur($this);
-        return parent::setAlbum($album);
-    }
-
-}
-
-/**
- * @ORM\Entity
- */
-class ColoristeAlbum extends AuteurAlbum {
-
-    public function setAlbum(Album $album) {
-        $album->addColoriste($this);
-        return parent::setAlbum($album);
-    }
-
-}
+?>

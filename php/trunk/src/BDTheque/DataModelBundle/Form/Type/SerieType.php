@@ -42,3 +42,5 @@ class SerieType extends AbstractType {
     }
 
 }
+
+?>

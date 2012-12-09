@@ -18,7 +18,7 @@ abstract class StringUtils {
 
     public static function extractInitialeFromString($chaine) {
         $fc = ucfirst(self::stripAccents(substr(trim($chaine), 0, 1)));
-        if ($fc < 'A' || $fc > 'Z')
+        if (!ctype_alnum($fc))
             $fc = '#';
         return $fc;
     }

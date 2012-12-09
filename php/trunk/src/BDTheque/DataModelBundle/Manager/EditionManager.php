@@ -28,3 +28,5 @@ class EditionManager extends BaseManager {
     }
 
 }
+
+?>

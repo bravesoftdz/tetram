@@ -7,3 +7,5 @@ use BDTheque\DataModelBundle\Repository\BaseEntityItemRepository;
 class AlbumRepository extends BaseEntityItemRepository {
     
 }
+
+?>

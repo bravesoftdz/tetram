@@ -55,38 +55,4 @@ abstract class AuteurSerie extends Auteur {
 
 }
 
-/**
- * @ORM\Entity
- */
-class ScenaristeSerie extends AuteurSerie {
-
-    public function setSerie(Serie $serie) {
-        $serie->addScenariste($this);
-        return parent::setSerie($serie);
-    }
-
-}
-
-/**
- * @ORM\Entity
- */
-class DessinateurSerie extends AuteurSerie {
-
-    public function setSerie(Serie $serie) {
-        $serie->addDessinateur($this);
-        return parent::setSerie($serie);
-    }
-
-}
-
-/**
- * @ORM\Entity
- */
-class ColoristeSerie extends AuteurSerie {
-
-    public function setSerie(Serie $serie) {
-        $serie->addColoriste($this);
-        return parent::setSerie($serie);
-    }
-
-}
+?>
