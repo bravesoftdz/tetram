@@ -1,7 +1,7 @@
-<?
+<?php
 include_once('../routines.php');
 ?>
-<?
+<?php
 switch ($_REQUEST['GroupBy'])
 {
 	case 1: // par année
@@ -40,10 +40,10 @@ while ($row = mysql_fetch_array($rs, MYSQL_NUM))
 		$count = $row[2];
 	}
 ?>
-<div class=treeNode <?echo $c++ % 2?' style="background-color: #e5e5ff;"':''?>>
-    <a href='#' onclick='return treeLoad("treeChild<? echo $ref ?>", "listetreenode.php?ref=<? echo urlencode($ref) ?>&GroupBy=<?echo $_REQUEST['GroupBy']?>", this)'><? echo _out($display) ?></a>&nbsp;&nbsp;&nbsp;- (<?echo $count?>)
+<div class=treeNode <?php echo $c++ % 2?' style="background-color: #e5e5ff;"':''?>>
+    <a href='#' onclick='return treeLoad("treeChild<?php echo $ref ?>", "listetreenode.php?ref=<?php echo urlencode($ref) ?>&GroupBy=<?php echo $_REQUEST['GroupBy']?>", this)'><?php echo _out($display) ?></a>&nbsp;&nbsp;&nbsp;- (<?php echo $count?>)
 </div>
-<div class=treeChildNode id=treeChild<? echo $ref ?> style="display:"></div>
-<? 
+<div class=treeChildNode id=treeChild<?php echo $ref ?> style="display:"></div>
+<?php 
 } 
 ?>

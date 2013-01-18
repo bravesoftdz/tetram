@@ -1,7 +1,7 @@
-<?
+<?php
 require_once '../routines.php';
 ?>
-<?
+<?php
 switch ($_REQUEST['action'])
 {
 	case 'treenode':
@@ -41,17 +41,17 @@ switch ($_REQUEST['action'])
 <div id=repertoire_header>
 	<form method=post action=repinitiales.php>
 		<select name=GroupBy id=GroupBy onChange="AjaxUpdate('repertoire_body', 'repertoire_albums.php?GroupBy='+this.options[this.selectedIndex].value, false);">
-			<option value=0<? echo $_REQUEST['GroupBy'] == 0?' selected':''; ?>>Titre</option>
-			<option value=5<? echo $_REQUEST['GroupBy'] == 5?' selected':''; ?>>Série</option>
-			<option value=3<? echo $_REQUEST['GroupBy'] == 3?' selected':''; ?>>Editeur</option>
-			<option value=2<? echo $_REQUEST['GroupBy'] == 2?' selected':''; ?>>Collection</option>
-			<option value=4<? echo $_REQUEST['GroupBy'] == 4?' selected':''; ?>>Genre</option>
-			<option value=1<? echo $_REQUEST['GroupBy'] == 1?' selected':''; ?>>Année de parution</option>
+			<option value=0<?php echo $_REQUEST['GroupBy'] == 0?' selected':''; ?>>Titre</option>
+			<option value=5<?php echo $_REQUEST['GroupBy'] == 5?' selected':''; ?>>Série</option>
+			<option value=3<?php echo $_REQUEST['GroupBy'] == 3?' selected':''; ?>>Editeur</option>
+			<option value=2<?php echo $_REQUEST['GroupBy'] == 2?' selected':''; ?>>Collection</option>
+			<option value=4<?php echo $_REQUEST['GroupBy'] == 4?' selected':''; ?>>Genre</option>
+			<option value=1<?php echo $_REQUEST['GroupBy'] == 1?' selected':''; ?>>Année de parution</option>
 		</select>
 	</form>
 </div>
 <div id=repertoire_body>
-<?
+<?php
 		}
 		
 		switch ($_REQUEST['GroupBy'])
@@ -92,18 +92,18 @@ switch ($_REQUEST['action'])
 				$count = $row[2];
 			}
 ?>
-<div class=treeNode <?echo $c++ % 2?' style="background-color: #e5e5ff;"':''?>>
-    <a href='#' onclick='return treeLoad("treeChild<? echo $ref ?>", "repertoire_albums.php?action=treenode&ref=<? echo urlencode($ref) ?>&GroupBy=<?echo $_REQUEST['GroupBy']?>", this)'><? echo _out($display) ?></a>&nbsp;&nbsp;&nbsp;- (<?echo $count?>)
+<div class=treeNode <?php echo $c++ % 2?' style="background-color: #e5e5ff;"':''?>>
+    <a href='#' onclick='return treeLoad("treeChild<?php echo $ref ?>", "repertoire_albums.php?action=treenode&ref=<?php echo urlencode($ref) ?>&GroupBy=<?php echo $_REQUEST['GroupBy']?>", this)'><?php echo _out($display) ?></a>&nbsp;&nbsp;&nbsp;- (<?php echo $count?>)
 </div>
-<div class=treeChildNode id=treeChild<? echo $ref ?> style="display:"></div>
-<? 
+<div class=treeChildNode id=treeChild<?php echo $ref ?> style="display:"></div>
+<?php 
 		}
 
 		if (!isset($_REQUEST['GroupBy']))
 		{
 ?>
 </div>
-<?
+<?php
 		}
 }	
 ?>

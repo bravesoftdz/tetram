@@ -1,4 +1,4 @@
-<?
+<?php
 if (!isset($_REQUEST['isExe'])) echo "<pre>\n";
 
 $intf_version = '1';
@@ -7,7 +7,7 @@ require_once 'db.php';
 function Message($code, $msg)
 {
 	if (is_string($msg))
-		foreach(split("\r\n", $msg) as $l)
+		foreach(explode("\r\n", $msg) as $l)
 			if (isset($_REQUEST['isExe']))
 				echo "$code: $l\n";
 			else
@@ -200,7 +200,7 @@ switch ($action)
 			exit;
 		}
 
-		$lines = split("@@", $data);
+		$lines = explode("@@", $data);
 		foreach($lines as $sql)
 		if (trim($sql) != '') {
 			prepare_sql($sql);

@@ -1,4 +1,4 @@
-<?
+<?php
 require_once 'config.inc';
 
 if (substr($db_prefix, -1, 1) != '_') $db_prefix .= '_';

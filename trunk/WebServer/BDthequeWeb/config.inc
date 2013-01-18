@@ -1,4 +1,4 @@
-<?
+<?php
 
 $db_host = 'localhost';
 $db_user = 'thierry.rl';

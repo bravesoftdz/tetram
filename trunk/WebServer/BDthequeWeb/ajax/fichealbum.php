@@ -1,22 +1,23 @@
-<?
+<?php
 include_once '../routines.php';
 ?>
-<?
+<?php
 $symbole_monetaire = get_option('moneysymbol');
 $album = load_and_fetch('select * from /*DB_PREFIX*/albums where id_album '.format_string_null($_REQUEST['ref']));
 $serie = load_and_fetch('select * from /*DB_PREFIX*/series where id_serie '.format_string_null($album->id_serie));
 ?>
 <div class=entete>
-	<H1><? echo _out(display_titrealbum($album)) ?></H1>
+	<H1><?php echo _out(display_titrealbum($album)) ?></H1>
 </div>
 <div class=body>
-	<TABLE border=0 width=100%>
-		<TBODY valign=top>
-			<TR>
-				<TH align=right width=1>Série&nbsp;:</TH><TD width=100%><?echo AjaxLink('serie', $album->id_serie, display_titreserie($serie), 'série') ?></TD>
-				<TD rowspan=10 align=right>
-			</TR>
-<?
+	<table border=0 width=100%>
+		<tbody valign=top>
+			<tr>
+				<th align=right width=1>Série&nbsp;:</th>
+				<td width=100%><?php echo AjaxLink('serie', $album->id_serie, display_titreserie($serie), 'série') ?></td>
+				<td rowspan=10 align=right>
+			</tr>
+<?php
 $s = '';
  
 if ($album->integrale) 
@@ -29,25 +30,27 @@ elseif (NonZero($album->tome)!='')
 if ($s != '') 
 { 
 ?>
-			<TR>
-				<TH align=right></TH><TD width=100%><?echo _out($s)?></TD>
-			</TR>
-<? 
+			<tr>
+				<th align=right width=1></th>
+				<td width=100%><?php echo _out($s)?></td>
+			</tr>
+<?php 
 } 
 ?>
 
-<? 
+<?php 
 if (NonZero($album->anneeparution) != '') 
 { 
 ?>
-			<TR>
-				<TH align=right>Parution&nbsp;:</TH><TD width=100%><?echo ($album->moisparution > 0 ? $mois[$album->moisparution].' ' : '').NonZero($album->anneeparution) ?></TD>
-			</TR>
-<? 
+			<tr>
+				<th align=right width=1>Parution&nbsp;:</th>
+				<td width=100%><?php echo ($album->moisparution > 0 ? $mois[$album->moisparution].' ' : '').NonZero($album->anneeparution) ?></td>
+			</tr>
+<?php 
 } 
 ?>
 
-<?
+<?php
 $rs = load_sql('select g.* from /*DB_PREFIX*/genres g inner join /*DB_PREFIX*/genreseries gs on g.id_genre = gs.id_genre where gs.id_serie '.format_string_null($album->id_serie)).' order by g.genre';
 if (mysql_num_rows($rs))
 {
@@ -55,105 +58,107 @@ if (mysql_num_rows($rs))
 	while ($row = mysql_fetch_object($rs))
 		$s .= ($s == ''?'':', ').format_titre($row->genre);
 ?>
-			<TR>
-				<TH align=right>Genre(s)&nbsp;:</TH>
-				<TD><?echo _out($s)?></TD>
-			</TR>
-<? 
+			<tr>
+				<th align=right width=1>Genre(s)&nbsp;:</th>
+				<td><?php echo _out($s)?></td>
+			</tr>
+<?php 
 } 
 mysql_free_result($rs);
 ?>
 
-<?
+<?php
 $rs = load_sql('select p.* from /*DB_PREFIX*/personnes p inner join /*DB_PREFIX*/auteurs a on p.id_personne = a.id_personne where a.metier = 0 and a.id_album '.format_string_null($album->id_album).' order by a.metier, p.uppernompersonne');
 if (mysql_num_rows($rs))
 {
 ?>
-			<TR>
-				<TH align=right>Scénario&nbsp;:</TH>
-				<TD>
-<?
+			<tr>
+				<th align=right width=1>Scénario&nbsp;:</th>
+				<td>
+<?php
 	while ($row = mysql_fetch_object($rs)) 
 		echo AjaxLink('personne', $row->id_personne, format_titre($row->nompersonne), 'auteur').'<br>';
 ?>
-				</TD>
-			</TR>
-<?
+				</td>
+			</tr>
+<?php
 } 
 ?>
 
-<?
+<?php
 $rs = load_sql('select p.* from /*DB_PREFIX*/personnes p inner join /*DB_PREFIX*/auteurs a on p.id_personne = a.id_personne where a.metier = 1 and a.id_album '.format_string_null($album->id_album).' order by a.metier, p.uppernompersonne');
 if (mysql_num_rows($rs))
 {
 ?>
-			<TR>
-				<TH align=right>Dessins&nbsp;:</TH>
-				<TD>
-<?
+			<tr>
+				<th align=right width=1>Dessins&nbsp;:</th>
+				<td>
+<?php
 	while ($row = mysql_fetch_object($rs)) 
 		echo AjaxLink('personne', $row->id_personne, format_titre($row->nompersonne), 'auteur').'<br>';
 ?>
-				</TD>
-			</TR>
-<?
+				</td>
+			</tr>
+<?php
 } 
 ?>
 
-<?
+<?php
 $rs = load_sql('select p.* from /*DB_PREFIX*/personnes p inner join /*DB_PREFIX*/auteurs a on p.id_personne = a.id_personne where a.metier = 2 and a.id_album '.format_string_null($album->id_album).' order by a.metier, p.uppernompersonne');
 if (mysql_num_rows($rs))
 {
 ?>
-			<TR>
-				<TH align=right>Couleurs&nbsp;:</TH>
-				<TD>
-<?
+			<tr>
+				<th align=right width=1>Couleurs&nbsp;:</th>
+				<td>
+<?php
 	while ($row = mysql_fetch_object($rs)) 
 		echo AjaxLink('personne', $row->id_personne, format_titre($row->nompersonne), 'auteur').'<br>';
 ?>
-				</TD>
-			</TR>
-<?
+				</td>
+			</tr>
+<?php
 }
 ?>
 
-<? 
+<?php 
 if ($album->sujetalbum || $serie->sujetserie) 
 {
 ?>
-			<TR><TD>&nbsp;</TD></TR>
-			<TR>
-				<TH align=right>Histoire&nbsp;:</TH><TD><?echo _out($album->sujetalbum?$album->sujetalbum:$serie->sujetserie)?></TD>
-			</TR>
-<?
+			<tr><td>&nbsp;</td></tr>
+			<tr>
+				<th align=right width=1>Histoire&nbsp;:</th>
+				<td><?php echo _out($album->sujetalbum?$album->sujetalbum:$serie->sujetserie)?></td>
+			</tr>
+<?php
 } 
 ?>
 
-<? 
+<?php 
 if ($album->remarquesalbum || $serie->remarquesserie) 
 {
 ?>
-			<TR><TD>&nbsp;</TD></TR>
-			<TR>
-				<TH align=right>Notes&nbsp;:</TH><TD><?echo _out($album->remarquesalbum?$album->remarquesalbum:$serie->remarquesserie)?></TD>
-			</TR>
-<?
+			<tr><td>&nbsp;</td></tr>
+			<tr>
+				<th align=right width=1>Notes&nbsp;:</th>
+				<td><?php echo _out($album->remarquesalbum?$album->remarquesalbum:$serie->remarquesserie)?></td>
+			</tr>
+<?php
 } 
 ?>
 
-<?
+<?php
 $rs = load_sql('select * from /*DB_PREFIX*/editions where id_album'.format_string_null($album->id_album));
 if (mysql_num_rows($rs) > 0)
 { 
 ?>
-			<TR><TD>&nbsp;</TD></TR>
-			<TR>
-				<TH align=right>Editions&nbsp;:</TH>
+			<tr><td>&nbsp;</td></tr>
+			<tr>
+				<th align=right width=1>Editions&nbsp;:</th>
 			<!--/tr>
 			<tr-->
-				<TD colspan=2>
-<?
+				<td colspan=2>
+<?php
 	while ($edition = mysql_fetch_object($rs))
 	{
 		$editeur = load_and_fetch('select * from /*DB_PREFIX*/editeurs where id_editeur'.format_string_null($edition->id_editeur));
@@ -162,70 +167,83 @@ if (mysql_num_rows($rs) > 0)
 		$reliure = load_and_fetch('select * from /*DB_PREFIX*/listes where categorie = 2 and ref'.format_string_null($edition->reliure));
 		$etat = load_and_fetch('select * from /*DB_PREFIX*/listes where categorie = 1 and ref'.format_string_null($edition->etat));
 ?>
-					<TABLE>
-						<TR>
-							<TD valign=top>
-								<TABLE>
-									<TR>
-										<TH align=right>Editeur&nbsp;:</TH><TD width=100><?echo $editeur->siteweb!=''?"<A target=_blank href=$editeur->siteweb>":''?><?echo _out(format_titre($editeur->nomediteur))?><?echo $editeur->siteweb!=''?'</a>':''?></TD>
-<? 
+					<table>
+						<tr>
+							<td valign=top>
+								<table>
+									<tr>
+										<th align=right width=1>Editeur&nbsp;:</th>
+										<td width=100><?php echo $editeur->siteweb!=''?"<a target=_blank href=$editeur->siteweb>":''?><?php echo _out(format_titre($editeur->nomediteur))?><?php echo $editeur->siteweb!=''?'</a>':''?></td>
+<?php 
 		if ($collection->nomcollection) 
 		{ 
 ?>
-										<TH align=right>Collection&nbsp;:</TH><TD><?echo _out(format_titre($collection->nomcollection))?></TD>
-<? 
+										<th align=right width=1>Collection&nbsp;:</th>
+										<td><?php echo _out(format_titre($collection->nomcollection))?></td>
+<?php 
 		} 
 ?>
-									</TR>
-									<TR>
-										<TH align=right>Année&nbsp;:</TH><TD><?echo NonZero($edition->anneeedition)?></TD>
-										<TH align=right>ISBN&nbsp;:</TH><TD><?echo format_isbn($edition->isbn)?></TD>
-									</TR>
-									<TR>
-										<TH align=right>Couleur&nbsp;:</TH><TD><?echo $edition->couleur?'Oui':'Non'?></TD>
-<? 
+									</tr>
+									<tr>
+										<th align=right width=1>Année&nbsp;:</th>
+										<td><?php echo NonZero($edition->anneeedition)?></td>
+										<th align=right width=1>ISBN&nbsp;:</th>
+										<td><?php echo format_isbn($edition->isbn)?></td>
+									</tr>
+									<tr>
+										<th align=right width=1>Couleur&nbsp;:</th>
+										<td><?php echo $edition->couleur?'Oui':'Non'?></td>
+<?php 
 		if ($edition->vo) 
 		{ 
 ?>
-										<TH align=right>VO&nbsp;:</TH><TD><?echo $edition->vo?'Oui':'Non'?></TD>
-<? 
+										<th align=right width=1>VO&nbsp;:</th>
+										<td><?php echo $edition->vo?'Oui':'Non'?></td>
+<?php 
 		} 
 ?>
-									</TR>
-									<TR>
-										<TH align=right>Type&nbsp;d'édition&nbsp;:</TH><TD><?echo str_replace(' ', '&nbsp;', _out($type_edition->libelle))?></TD>
-										<TH align=right>Reliure&nbsp;:</TH><TD><?echo str_replace(' ', '&nbsp;', _out($reliure->libelle))?></TD>
-									</TR>
-									<TR>
-										<TH align=right>Etat&nbsp;:</TH><TD><?echo str_replace(' ', '&nbsp;', _out($etat->libelle))?></TD>
-										<TH align=right>Dédicacé&nbsp;:</TH><TD><?echo $edition->dedicace?'Oui':'Non'?></TD>
-									</TR>
-<? 
+									</tr>
+									<tr>
+										<th align=right width=1>Type&nbsp;d'édition&nbsp;:</th>
+										<td><?php echo str_replace(' ', '&nbsp;', _out($type_edition->libelle))?></td>
+										<th align=right width=1>Reliure&nbsp;:</th>
+										<td><?php echo str_replace(' ', '&nbsp;', _out($reliure->libelle))?></td>
+									</tr>
+									<tr>
+										<th align=right width=1>Etat&nbsp;:</th>
+										<td><?php echo str_replace(' ', '&nbsp;', _out($etat->libelle))?></td>
+										<th align=right width=1>Dédicacé&nbsp;:</th>
+										<td><?php echo $edition->dedicace?'Oui':'Non'?></td>
+									</tr>
+<?php 
 		if ($edition->dateachat || $edition->prix) 
 		{ 
 ?>
-									<TR>
-										<TH align=right>Acheté&nbsp;le&nbsp;:</TH><TD><?echo str_replace(' ', '&nbsp;', _out(AfficheDateSQL($edition->dateachat)))?></TD>
-										<TH align=right>Prix&nbsp;:</TH><TD><?echo $edition->prix?str_replace(' ', '&nbsp;', number_format($edition->prix, 2, ',', ' ')).' '.$symbole_monetaire:''?></TD>
-									</TR>
-<? 
+									<tr>
+										<th align=right width=1>Acheté&nbsp;le&nbsp;:</th>
+										<td><?php echo str_replace(' ', '&nbsp;', _out(AfficheDateSQL($edition->dateachat)))?></td>
+										<th align=right width=1>Prix&nbsp;:</th>
+										<td><?php echo $edition->prix?str_replace(' ', '&nbsp;', number_format($edition->prix, 2, ',', ' ')).' '.$symbole_monetaire:''?></td>
+									</tr>
+<?php 
 		} 
 ?>
 
-<?
+<?php
 		if ($edition->prixcote) 
 		{ 
 ?>
-									<TR>
-										<TH align=right>Cote&nbsp;:</TH><TD><?echo sprintf('%s&nbsp;%s;&nbsp;(%d)', str_replace(' ', '&nbsp;', number_format($edition->prixcote, 2, ',', ' ')), $symbole_monetaire, $edition->anneecote)?></TD>
-									</TR>
-<? 
+									<tr>
+										<th align=right width=1>Cote&nbsp;:</th>
+										<td><?php echo sprintf('%s&nbsp;%s;&nbsp;(%d)', str_replace(' ', '&nbsp;', number_format($edition->prixcote, 2, ',', ' ')), $symbole_monetaire, $edition->anneecote)?></td>
+									</tr>
+<?php 
 		} 
 ?>
-									<TR><TD>&nbsp;</TD></TR>
-								</TABLE>
-							</TD>
-<?
+									<tr><td>&nbsp;</td></tr>
+								</table>
+							</td>
+<?php
 		$images = load_sql('select * from /*DB_PREFIX*/couvertures where id_edition'.format_string_null($edition->id_edition).' order by categorieimage, ordre');
 		$nrow = mysql_num_rows($images);
 		if ($nrow > 0)
@@ -234,41 +252,41 @@ if (mysql_num_rows($rs) > 0)
 			$filename = build_img_filepath($rep_images, $db_prefix, $image->id_couverture);
 			$type_image = load_and_fetch('select * from /*DB_PREFIX*/listes where categorie = 6 and ref'.format_string_null($image->categorieimage));
 ?>
-							<TD><A href=# onclick='return Zoom("zoomimage", "<? echo $filename ?>")'><img border=0 height=150 src="<? echo $filename ?>" alt="<?echo _out($type_image->libelle)?>"></a>
-						</TR>
-<?
+							<td><a href=# onclick='return Zoom("zoomimage", "<?php echo $filename ?>")'><img border=0 height=150 src="<?php echo $filename ?>" alt="<?php echo _out($type_image->libelle)?>"></a>
+						</tr>
+<?php
 			if ($nrow > 1)
 			{
 ?>
-						<TR>
-							<TD colspan=2 align=right>
-<?
+						<tr>
+							<td colspan=2 align=right>
+<?php
 				while ($image = mysql_fetch_object($images))
 				{ 
 					$filename = build_img_filepath($rep_images, $db_prefix, $image->id_couverture);
 					$type_image = load_and_fetch('select * from /*DB_PREFIX*/listes where categorie = 6 and ref'.format_string_null($image->categorieimage));
 ?>
-								<A href=# onclick='return Zoom("zoomimage", "<? echo $filename ?>")'><img border=0 height=150 src="<? echo $filename ?>" alt="<?echo _out($type_image->libelle)?>"></a>
-<?
+								<a href=# onclick='return Zoom("zoomimage", "<?php echo $filename ?>")'><img border=0 height=150 src="<?php echo $filename ?>" alt="<?php echo _out($type_image->libelle)?>"></a>
+<?php
 				} 
 ?>
-							</TD>
-						</TR>
-<?
+							</td>
+						</tr>
+<?php
 			} 
 ?>
-<?
+<?php
 		} 
 ?>
-					</TABLE>
-<?
+					</table>
+<?php
 	} 
 ?>
-				</TD>
-			</TR>
-<?
+				</td>
+			</tr>
+<?php
 } 
 ?>
-		</TBODY>
-	</TABLE>
+		</tbody>
+	</table>
 </div>

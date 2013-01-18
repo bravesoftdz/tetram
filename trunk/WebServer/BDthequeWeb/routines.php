@@ -1,4 +1,4 @@
-<?
+<?php
 require_once 'db.php';
 unset($FormatTitreAlbum);
 
@@ -258,8 +258,8 @@ function _out($str)
 function AjaxLink($type, $id, $titre, $category='')
 {
 ?>
-<a href=# onclick='return AjaxUpdate("detail", "fiche<?echo $type?>.php?ref=<? echo $id ?>", "<?echo ucfirst($category!=''?$category:$type)?> : " + this.title)' title="<? echo _out(htmlspecialchars($titre)) ?>"><? echo _out($titre) ?></a>
-<?
+<a href=# onclick='return AjaxUpdate("detail", "fiche<?php echo $type?>.php?ref=<?php echo $id ?>", "<?php echo ucfirst($category!=''?$category:$type)?> : " + this.title)' title="<?php echo _out(htmlspecialchars($titre)) ?>"><?php echo _out($titre) ?></a>
+<?php
 }
 
 ?>

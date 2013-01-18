@@ -1,4 +1,4 @@
-﻿<?
+﻿<?php
 include_once '../routines.php';
 ?>
 <div class=entete>
@@ -6,7 +6,7 @@ include_once '../routines.php';
 </div>
 <div class=body>
 	<TABLE border=0 width=100%>
-<?
+<?php
 $albums = load_sql('select * from /*DB_PREFIX*/albums_manquants order by uppertitreserie, tome');
 $current_serie = null;
 
@@ -29,11 +29,11 @@ function write_serie()
 	
 	update_serie();
 ?>
-			<TR<?echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
-				<TD><? echo AjaxLink('serie', $current_album->id_serie, display_titreserie($current_album), 'série')?></TD>
-				<TD><?echo implode(', ', $manquants_serie)?></TD>
+			<TR<?php echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
+				<TD><?php echo AjaxLink('serie', $current_album->id_serie, display_titreserie($current_album), 'série')?></TD>
+				<TD><?php echo implode(', ', $manquants_serie)?></TD>
 			</TR>
-<?
+<?php
 }
 
 $current_serie = -1;

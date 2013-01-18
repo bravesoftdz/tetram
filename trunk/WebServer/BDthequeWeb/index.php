@@ -1,4 +1,4 @@
-﻿<?
+﻿<?php
 require_once 'db.php';
 require_once 'routines.php';
 ?>
@@ -7,7 +7,7 @@ require_once 'routines.php';
 	<HEAD>
 		<TITLE>BDThèque</TITLE>
 		<LINK rel=stylesheet href=styles.css type=text/css>
-<?
+<?php
  if (ereg("MSIE", $_SERVER["HTTP_USER_AGENT"])) 
 	echo "		<LINK rel=stylesheet href=stylesIE.css type=text/css>\n";
 else
@@ -80,7 +80,7 @@ else
 	</div>
 </div>
 <div id=bottombar>
-<?
+<?php
 $albums = load_and_fetch('select count(*) as c from /*DB_PREFIX*/albums');
 $editions = load_and_fetch('select count(*) as c from /*DB_PREFIX*/editions');
 $series = load_and_fetch('select count(*) as c from /*DB_PREFIX*/series');
@@ -90,9 +90,9 @@ $editeurs = load_and_fetch('select count(*) as c from /*DB_PREFIX*/editeurs');
 	<TABLE cellpadding=0 cellspacing=0 border=0 width=100% height=100%>
 		<tr height=100%>
 			<td valign=bottom>
-				<b><?echo $albums->c?></b> albums connus pour <b><?echo $editions->c?></b> albums dans la biliothèque,<br>
-				répartis sur <b><?echo $series->c?></b> séries chez <b><?echo $editeurs->c?></b> éditeurs,<br>
-				et réalisés par <b><?echo $auteurs->c?></b> auteurs.
+				<b><?php echo $albums->c?></b> albums connus pour <b><?php echo $editions->c?></b> albums dans la biliothèque,<br>
+				répartis sur <b><?php echo $series->c?></b> séries chez <b><?php echo $editeurs->c?></b> éditeurs,<br>
+				et réalisés par <b><?php echo $auteurs->c?></b> auteurs.
 				<br>
 				<a href=# onclick='AjaxUpdate("detail", "modifs.php", this.title)' title="Dernières modifications">Dernières modifications</a>
 			</td>

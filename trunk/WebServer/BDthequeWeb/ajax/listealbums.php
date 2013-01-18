@@ -1,7 +1,7 @@
-<?
+<?php
 include_once '../routines.php';
 ?>
-<?
+<?php
 $ref = $_REQUEST['ref'];
 if ($ref == '-1') $ref = '';
 $ref = format_string_null($ref, true);
@@ -40,17 +40,17 @@ $rs = load_sql($sql);
 </div>
 <div id=listealbums_body>
 	<TABLE width=100%>
-<?
+<?php
 	$c = 0;
 	while ($row = mysql_fetch_object($rs)) 
 	{
 ?>
-		<TR<?echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
-			<TD class=TitreAlbum><A href=# onclick="return AjaxUpdate('detail', 'fichealbum.php?ref=<? echo $row->id_album ?>')"><? echo _out(display_titrealbum($row)) ?></A></TD>
+		<TR<?php echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
+			<TD class=TitreAlbum><A href=# onclick="return AjaxUpdate('detail', 'fichealbum.php?ref=<?php echo $row->id_album ?>')"><?php echo _out(display_titrealbum($row)) ?></A></TD>
 			<TD width=10></TD>
-			<TD class=Serie><A href=# onclick="return AjaxUpdate('detail', 'ficheserie.php?ref=<? echo $row->id_serie ?>')"><? echo _out(display_titreserie($row)) ?></A></TD>
+			<TD class=Serie><A href=# onclick="return AjaxUpdate('detail', 'ficheserie.php?ref=<?php echo $row->id_serie ?>')"><?php echo _out(display_titreserie($row)) ?></A></TD>
 		</TR>
-<?
+<?php
 	}
 ?>
 	</TABLE>

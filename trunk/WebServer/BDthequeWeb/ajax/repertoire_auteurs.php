@@ -1,8 +1,8 @@
-<?
+<?php
 require_once '../routines.php';
 ?>
 
-<?
+<?php
 switch ($_REQUEST['action'])
 {
 	case 'treenode':
@@ -26,11 +26,11 @@ switch ($_REQUEST['action'])
 			$ref = $row[0];
 			$count = $row[1];
 ?>
-<div class=treeNode <?echo $c++ % 2?' style="background-color: #e5e5ff;"':''?>>
-    <a href='#' onclick='return treeLoad("treeChild<? echo $ref ?>", "repertoire_auteurs.php?action=treenode&ref=<? echo urlencode($ref) ?>", this)'><? echo _out($display) ?></a>&nbsp;&nbsp;&nbsp;- (<?echo $count?>)
+<div class=treeNode <?php echo $c++ % 2?' style="background-color: #e5e5ff;"':''?>>
+    <a href='#' onclick='return treeLoad("treeChild<?php echo $ref ?>", "repertoire_auteurs.php?action=treenode&ref=<?php echo urlencode($ref) ?>", this)'><?php echo _out($display) ?></a>&nbsp;&nbsp;&nbsp;- (<?php echo $count?>)
 </div>
-<div class=treeChildNode id=treeChild<? echo $ref ?> style="display:"></div>
-<? 
+<div class=treeChildNode id=treeChild<?php echo $ref ?> style="display:"></div>
+<?php 
 		} 
 }
 ?>

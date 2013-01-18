@@ -1,4 +1,4 @@
-﻿<?
+﻿<?php
 include_once '../routines.php';
 ?>
 <div class=entete>
@@ -6,7 +6,7 @@ include_once '../routines.php';
 </div>
 <div class=body>
 	<TABLE border=0 width=100%>
-<?
+<?php
 $ajouts = load_sql("select *, cast(date_creation as date) = cast(date_modif as date) is_creation from /*DB_PREFIX*/vw_dernieres_modifs order by date_modif desc limit 0,30");
 
 while ($ajout = mysql_fetch_object($ajouts))
@@ -14,7 +14,7 @@ while ($ajout = mysql_fetch_object($ajouts))
 			?>
 		<tr>
 			<td>
-			<?
+			<?php
 	echo $ajout->date_modif.' - ';
 	switch ($ajout->typedata)
 	{
@@ -40,7 +40,7 @@ while ($ajout = mysql_fetch_object($ajouts))
 			?>
 			</td>
 		</tr>
-			<?
+			<?php
 }
 ?>
 	</TABLE>
