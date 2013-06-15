@@ -25,7 +25,7 @@ public class InitialeBean {
     }
 
     public String getLabel() {
-        if ("-1".equals(value))
+        if (value == null || "-1".equals(value))
             return "<Inconnu>";
         else
             return label.trim();
@@ -36,8 +36,11 @@ public class InitialeBean {
     }
 
     @Override
-    public String toString() {
-        return value.toString();
+    public int hashCode() {
+        if (value == null)
+            return new Integer(0).hashCode();
+        else
+            return super.hashCode();
     }
 
     public static InitialeBean createInstance(Class<? extends InitialeBean> aClass, String label, int count, String value) {

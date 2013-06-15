@@ -21,7 +21,7 @@ import java.util.Map;
 
 public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableListAdapter {
 
-    private List<InitialeBean> listInitiales;
+    private List<? extends InitialeBean> listInitiales;
     private Map<Integer, List<T>> mapData;
     InitialeRepertoireDao dao;
     Context context;
@@ -71,7 +71,7 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
     public long getGroupId(int groupPosition) {
         ensureInitiales();
         InitialeBean initiale = listInitiales.get(groupPosition);
-        return initiale.getValue().hashCode();
+        return initiale.hashCode();
     }
 
     @Override
@@ -79,7 +79,7 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
         ensureInitiales();
         InitialeBean initiale = listInitiales.get(groupPosition);
         ensureData(groupPosition);
-        return (initiale.getValue() + mapData.get(groupPosition).get(childPosition).getId()).hashCode();
+        return initiale.hashCode() + mapData.get(groupPosition).get(childPosition).getId().hashCode();
     }
 
     @Override

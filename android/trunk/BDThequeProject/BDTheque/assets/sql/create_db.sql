@@ -94,3 +94,34 @@ create table auteurs_series (
     dc_auteurs_series  timestamp not null,
     dm_auteurs_series  timestamp not null
 );
+
+create table editions (
+    id_edition     char(38) not null primary key,
+    id_album       char(38) not null,
+    id_editeur     char(38) not null,
+    id_collection  char(38),
+    anneeedition   smallint,
+    prix           numeric(15,2),
+    vo             smallint default 0,
+    couleur        smallint default 1,
+    prete          smallint default 0,
+    stock          smallint default 1,
+    dedicace       smallint default 0,
+    dateachat      date,
+    gratuit        smallint default 0,
+    offert         smallint default 0,
+    nombredepages  integer,
+    anneecote      smallint,
+    prixcote       numeric(15,2),
+    dc_editions    timestamp not null,
+    dm_editions    timestamp not null,
+    isbn           char(13),
+    numeroperso    varchar(25),
+    notes          text,
+    etat           char(38),
+    reliure        char(38),
+    typeedition    char(38),
+    orientation    char(38),
+    formatedition  char(38),
+    senslecture    char(38)
+);

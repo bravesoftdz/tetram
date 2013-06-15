@@ -58,6 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 RunSQL(db, "sql/init_collections.sql");
                 RunSQL(db, "sql/init_series.sql");
                 RunSQL(db, "sql/init_albums.sql");
+                RunSQL(db, "sql/init_editions.sql");
                 RunSQL(db, "sql/init_personnes.sql");
                 RunSQL(db, "sql/init_auteurs.sql");
                 RunSQL(db, "sql/init_auteurs_series.sql");
