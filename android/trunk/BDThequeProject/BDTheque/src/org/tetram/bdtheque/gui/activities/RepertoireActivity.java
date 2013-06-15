@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -14,27 +15,20 @@ import org.jetbrains.annotations.NotNull;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.Shakespeare;
 import org.tetram.bdtheque.UserConfig;
-import org.tetram.bdtheque.data.dao.*;
+import org.tetram.bdtheque.data.dao.InitialeRepertoireDao;
+import org.tetram.bdtheque.data.factories.DaoFactory;
 import org.tetram.bdtheque.gui.adapter.MenuAdapter;
 import org.tetram.bdtheque.gui.adapter.MenuEntry;
 import org.tetram.bdtheque.gui.adapter.RepertoireAdapter;
 import org.tetram.bdtheque.gui.utils.ExpandableListFragment;
+import org.tetram.bdtheque.gui.utils.ModeRepertoire;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RepertoireActivity extends Activity implements ActionBar.OnNavigationListener {
+public class RepertoireActivity extends Activity implements ActionBar.OnNavigationListener, SearchManager.OnCancelListener {
 
     private static final int REQUEST_CONFIG = 0;
-
-    private static final int REPERTOIRE_ALBUMS_TITRE = 10;
-    private static final int REPERTOIRE_ALBUMS_SERIE = 11;
-    private static final int REPERTOIRE_ALBUMS_EDITEUR = 12;
-    private static final int REPERTOIRE_ALBUMS_GENRE = 13;
-    private static final int REPERTOIRE_ALBUMS_ANNEE = 14;
-    private static final int REPERTOIRE_ALBUMS_COLLECTION = 15;
-    private static final int REPERTOIRE_SERIES = 20;
-    private static final int REPERTOIRE_AUTEURS = 30;
 
     private int currentNavigationItem;
     private ShareActionProvider shareProvider;
@@ -51,15 +45,16 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
             currentNavigationItem = savedInstanceState.getInt("navigationItem", 0);
         }
 
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchManager.setOnCancelListener(this);
+
+        MenuEntry defaultMenu = null;
         List<MenuEntry> menuEntries = new ArrayList<MenuEntry>();
-        menuEntries.add(new MenuEntry(getString(R.string.menuRepertoireAlbumsTitre), REPERTOIRE_ALBUMS_TITRE));
-        menuEntries.add(new MenuEntry(getString(R.string.menuRepertoireAlbumsSerie), REPERTOIRE_ALBUMS_SERIE));
-        menuEntries.add(new MenuEntry(getString(R.string.menuRepertoireAlbumsEditeur), REPERTOIRE_ALBUMS_EDITEUR));
-        menuEntries.add(new MenuEntry(getString(R.string.menuRepertoireAlbumsGenre), REPERTOIRE_ALBUMS_GENRE));
-        menuEntries.add(new MenuEntry(getString(R.string.menuRepertoireAlbumsAnnee), REPERTOIRE_ALBUMS_ANNEE));
-        menuEntries.add(new MenuEntry(getString(R.string.menuRepertoireAlbumsCollection), REPERTOIRE_ALBUMS_COLLECTION));
-        menuEntries.add(new MenuEntry(getString(R.string.menuRepertoireSeries), REPERTOIRE_SERIES));
-        menuEntries.add(new MenuEntry(getString(R.string.menuRepertoireAuteurs), REPERTOIRE_AUTEURS));
+        for (ModeRepertoire mode : ModeRepertoire.values()) {
+            MenuEntry menu = mode.getMenuEntry(this);
+            if (mode.getDefault()) defaultMenu = menu;
+            menuEntries.add(menu);
+        }
 
         MenuAdapter mSpinnerAdapter = new MenuAdapter(this, android.R.layout.simple_spinner_dropdown_item, menuEntries);
 
@@ -67,7 +62,7 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
         actionBar.setTitle("");
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
-        actionBar.setSelectedNavigationItem(0);
+        actionBar.setSelectedNavigationItem(defaultMenu == null ? 0 : menuEntries.indexOf(defaultMenu));
 
         UserConfig.getInstance().reloadConfig(this);
         handleIntent(getIntent());
@@ -82,7 +77,7 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
     @Override
     public boolean onNavigationItemSelected(int position, long itemId) {
         currentNavigationItem = position;
-        repertoire.setRepertoireMode((int) itemId);
+        repertoire.setRepertoireMode(ModeRepertoire.values()[((int) itemId)]);
         return true;
     }
 
@@ -104,10 +99,8 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
             startActivity(wordIntent);
             */
         } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            // handles a search query
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            Toast.makeText(this, query, Toast.LENGTH_LONG).show();
-            // showResults(query);
+            repertoire.dao.setFiltre(intent.getStringExtra(SearchManager.QUERY));
+            repertoire.refreshList();
         }
     }
 
@@ -154,9 +147,16 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
         switch (requestCode) {
             case REQUEST_CONFIG:
                 UserConfig.getInstance().reloadConfig(this);
-                repertoire.setRepertoireMode(currentNavigationItem);
+                repertoire.refreshList();
                 break;
         }
+    }
+
+    @Override
+    public void onCancel() {
+        if ("".equals(repertoire.dao.getFiltre())) return;
+        repertoire.dao.setFiltre(null);
+        repertoire.refreshList();
     }
 
     /**
@@ -195,7 +195,7 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
         int mCurCheckPosition = 0;
 
         InitialeRepertoireDao<?, ?> dao;
-        private int repertoireMode;
+        private ModeRepertoire repertoireMode;
 
         @Override
         public void onActivityCreated(Bundle savedInstanceState) {
@@ -255,38 +255,16 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
  */
         }
 
-        public void setRepertoireMode(int repertoireMode) {
+        public void setRepertoireMode(ModeRepertoire repertoireMode) {
             if (this.repertoireMode != repertoireMode)
                 mCurCheckPosition = 0;
             this.repertoireMode = repertoireMode;
-            switch (this.repertoireMode) {
-                case REPERTOIRE_ALBUMS_TITRE:
-                    dao = new AlbumLiteDao(getActivity());
-                    break;
-                case REPERTOIRE_ALBUMS_SERIE:
-                    dao = new AlbumLiteSerieDao(getActivity());
-                    break;
-                case REPERTOIRE_ALBUMS_EDITEUR :
-                    dao = new AlbumLiteEditeurDao(getActivity());
-                    break;
-                case REPERTOIRE_ALBUMS_GENRE :
-                    dao = new AlbumLiteGenreDao(getActivity());
-                    break;
-                case REPERTOIRE_ALBUMS_ANNEE :
-                    dao = new AlbumLiteAnneeDao(getActivity());
-                    break;
-                case REPERTOIRE_ALBUMS_COLLECTION :
-                    dao = new AlbumLiteCollectionDao(getActivity());
-                    break;
-                case REPERTOIRE_SERIES:
-                    dao = new SerieLiteDao(getActivity());
-                    break;
-                case REPERTOIRE_AUTEURS:
-                    dao = new AuteurLiteDao(getActivity());
-                    break;
-            }
+            dao = DaoFactory.getDao(repertoireMode.getDaoClass(), getActivity());
 
-            // Populate list with our static array of titles.
+            refreshList();
+        }
+
+        private void refreshList() {
             setListAdapter(new RepertoireAdapter(getActivity(), dao));
 
             // Check to see if we have a frame in which to embed the details
@@ -302,7 +280,7 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
             }
         }
 
-        public int getRepertoireMode() {
+        public ModeRepertoire getRepertoireMode() {
             return repertoireMode;
         }
     }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sql_initiales">select %2$s, count(*) from %1$s group by %2$s</string>
+    <string name="sql_initiales">select %2$s, count(*) from %1$s where 1 = 1 %3$s group by %2$s</string>
+
     <string name="sql_initiales_albums"><![CDATA[
 select
     coalesce(a.initialetitrealbum, s.initialetitreserie), count(a.id_album)
@@ -32,17 +33,19 @@ order by
     a.tomedebut, a.tomefin,
     a.anneeparution, a.moisparution
     ]]></string>
+
     <string name="sql_initiales_collections"><![CDATA[
 select
-    initialenomcollection, count(id_collection)
+    c.initialenomcollection, count(c.id_collection)
 from
-    collections
+    collections c
 where
     1 = 1
     %s
 group by
-    initialenomcollection
+    c.initialenomcollection
     ]]></string>
+
     <string name="sql_series_by_initiale"><![CDATA[
 select
     s.id_serie, s.titreserie,
@@ -58,17 +61,19 @@ where
 order by
     s.titreserie, e.nomediteur, c.nomcollection
     ]]></string>
+
     <string name="sql_editeurs_by_initiale"><![CDATA[
 select
-    id_editeur, nomediteur
+    e.id_editeur, e.nomediteur
 from
-    editeurs
+    editeurs e
 where
-    initialenomediteur %1$s
+    e.initialenomediteur %1$s
     %2$s
 order by
-    nomediteur
+    e.nomediteur
         ]]></string>
+
     <string name="sql_collections_by_initiale"><![CDATA[
 select
     c.id_collection, c.nomcollection, e.id_editeur, e.nomediteur
@@ -81,19 +86,21 @@ where
 order by
     c.nomcollection
         ]]></string>
+
     <string name="sql_auteurs_by_initiale"><![CDATA[
 select
-    id_personne, nompersonne
+    p.id_personne, p.nompersonne
 from
-    personnes
+    personnes p
 where
-    initialenompersonne %s
+    p.initialenompersonne %s
 order by
-    nompersonne
+    p.nompersonne
         ]]></string>
+
     <string name="sql_annees_albums"><![CDATA[
 select
-    cast(coalesce(a.anneeparution, -1) as smallint), count(a.id_album)
+    a.anneeparution, count(a.id_album)
 from
     albums a
     left join series s on
@@ -102,7 +109,7 @@ where
     1 = 1
     %s
 group by
-    1
+    a.anneeparution
     ]]></string>
     <string name="sql_albums_by_annee"><![CDATA[
 select
@@ -122,9 +129,10 @@ order by
     a.tomedebut, a.tomefin,
     a.anneeparution, a.moisparution
     ]]></string>
+
     <string name="sql_editeurs_albums"><![CDATA[
 select
-    cast(coalesce(e.nomediteur, \'-1\') as varchar(50)), count(a.id_album), e.id_editeur
+    e.nomediteur, count(a.id_album), e.id_editeur
 from
     albums a
     left join series s on
@@ -161,4 +169,126 @@ order by
     a.tomedebut, a.tomefin,
     a.anneeparution, a.moisparution
     ]]></string>
+
+    <string name="sql_series_albums"><![CDATA[
+select
+    s.titreserie, count(a.id_album), s.id_serie
+from
+    albums a
+    left join series s on
+        s.id_serie = a.id_serie
+where
+    1 = 1
+    %s
+group by
+    s.titreserie, s.id_serie
+    ]]></string>
+    <string name="sql_albums_by_serie"><![CDATA[
+select
+    a.id_album, a.titrealbum, a.tome, a.tomedebut, a.tomefin,
+    a.horsserie, a.integrale, a.moisparution, a.anneeparution,
+    a.notation, a.id_serie, s.titreserie,
+    a.achat
+from
+    albums a
+    left join series s on
+        s.id_serie = a.id_serie
+where
+    s.id_serie %s
+order by
+    a.horsserie, a.integrale, a.tome,
+    a.tomedebut, a.tomefin,
+    a.anneeparution, a.moisparution,
+    coalesce(a.titrealbum, s.titreserie), s.titreserie
+    ]]></string>
+
+    <string name="sql_collections_albums"><![CDATA[
+select
+    c.nomcollection, count(a.id_album), c.id_collection,
+    case when c.id_collection is not null then e.nomediteur end,
+    case when c.id_collection is not null then e.id_editeur end
+from
+    albums a
+    left join series s on
+        s.id_serie = a.id_serie
+    left join editions ed on
+        ed.id_album = a.id_album
+    left join collections c on
+        ed.id_collection = c.id_collection
+    left join editeurs e on
+        e.id_editeur = ed.id_editeur
+where
+    1 = 1
+    %s
+group by
+    c.nomcollection, c.id_collection, 4, 5
+    ]]></string>
+    <string name="sql_albums_by_collection"><![CDATA[
+select
+    a.id_album, a.titrealbum, a.tome, a.tomedebut, a.tomefin,
+    a.horsserie, a.integrale, a.moisparution, a.anneeparution,
+    a.notation, a.id_serie, s.titreserie,
+    a.achat
+from
+    albums a
+    left join series s on
+        s.id_serie = a.id_serie
+    left join editions e on
+        a.id_album = e.id_album
+where
+    e.id_collection %s
+order by
+    a.horsserie, a.integrale, a.tome,
+    a.tomedebut, a.tomefin,
+    a.anneeparution, a.moisparution,
+    coalesce(a.titrealbum, s.titreserie), s.titreserie
+    ]]></string>
+
+    <string name="sql_genres_albums"><![CDATA[
+select
+    g.genre, count(a.id_album), g.id_genre
+from
+    albums a
+    left join series s on
+        s.id_serie = a.id_serie
+    left join genreseries gs on
+        gs.id_serie = a.id_serie
+    left join genres g on
+        gs.id_genre = g.id_genre
+where
+    1 = 1
+    %s
+group by
+    g.genre, g.id_genre
+    ]]></string>
+    <string name="sql_albums_by_genre"><![CDATA[
+select
+    a.id_album, a.titrealbum, a.tome, a.tomedebut, a.tomefin,
+    a.horsserie, a.integrale, a.moisparution, a.anneeparution,
+    a.notation, a.id_serie, s.titreserie,
+    a.achat
+from
+    albums a
+    left join series s on
+        s.id_serie = a.id_serie
+    left join genreseries gs on
+        gs.id_serie = a.id_serie
+    left join genres g on
+        gs.id_genre = g.id_genre
+where
+    g.id_genre %s
+order by
+    coalesce(a.titrealbum, s.titreserie), s.titreserie,
+    a.horsserie, a.integrale, a.tome,
+    a.tomedebut, a.tomefin,
+    a.anneeparution, a.moisparution
+    ]]></string>
+
+    <string name="sql_searchfield_albums">coalesce(a.titrealbum, s.titreserie)</string>
+    <string name="sql_searchfield_series">s.titreserie</string>
+    <string name="sql_searchfield_editeurs">e.nomediteur</string>
+    <string name="sql_searchfield_collections">c.nomcollection</string>
+    <string name="sql_searchfield_genres">g.genre</string>
+    <string name="sql_searchfield_auteurs">p.nompersonne</string>
+
 </resources>

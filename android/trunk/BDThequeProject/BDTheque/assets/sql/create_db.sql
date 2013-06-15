@@ -125,3 +125,19 @@ create table editions (
     formatedition  char(38),
     senslecture    char(38)
 );
+
+create table genreseries (
+    id_genreseries  char(38) not null primary key,
+    id_serie        char(38) not null,
+    id_genre        char(38) not null,
+    dc_genreseries  timestamp not null,
+    dm_genreseries  timestamp not null
+);
+
+create table genres (
+    id_genre       char(38) not null primary key,
+    dc_genres      timestamp not null,
+    dm_genres      timestamp not null,
+    initialegenre  char(1),
+    genre          varchar(30)
+);

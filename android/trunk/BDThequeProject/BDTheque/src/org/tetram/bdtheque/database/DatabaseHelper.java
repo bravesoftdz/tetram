@@ -62,6 +62,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 RunSQL(db, "sql/init_personnes.sql");
                 RunSQL(db, "sql/init_auteurs.sql");
                 RunSQL(db, "sql/init_auteurs_series.sql");
+                RunSQL(db, "sql/init_genres.sql");
+                RunSQL(db, "sql/init_genres_series.sql");
 //            case 2:
 //                RunSQL(db, "sql/upgrade_to_v3.sql");
             default: {

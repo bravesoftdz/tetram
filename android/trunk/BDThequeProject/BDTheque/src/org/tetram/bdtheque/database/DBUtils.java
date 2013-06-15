@@ -9,10 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-/**
- * Created by Thierry on 02/06/13.
- */
-class DBUtils {
+public class DBUtils {
 
     public static void vacuum(SQLiteDatabase db) {
         db.execSQL("VACUUM");
@@ -107,4 +104,7 @@ class DBUtils {
         }
     }
 
+    public static String quotedStr(String string) {
+        return "'" + string.replace("'", "''") + "'";
+    }
 }
