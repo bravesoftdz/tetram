@@ -56,85 +56,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="39ca6de2-686d-499f-8558-40188d71acbd" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/adapter" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/drawable/etoile_empty.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/drawable/etoile_full.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/drawable/etoile_gray.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/menu" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/utils" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/utils" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/utils" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/AlbumLiteBean.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/AlbumLiteFactory.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/AuteurLiteBean.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/AuteurLiteFactory.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/BeanFactory.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/CollectionLiteBean.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/CollectionLiteFactory.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/utils/DaoUtils.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/EditeurLiteFactory.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/utils/ExpandableListFragment.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/InitialeBean.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/InitialeFormatedBean.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/InitialeSerieBean.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/adapter/MenuAdapter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/adapter/MenuEntry.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/RechercheActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/adapter/RepertoireAdapter.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/SerieBean.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/SerieLiteBean.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/SerieLiteFactory.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/SettingsActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/SettingsFragment.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/utils/StringUtils.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/TreeNodeBean.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/UserConfig.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/codeStyleSettings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/drawable/custom_ratingbar.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/assets/sql/init_albums.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/assets/sql/init_auteurs.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/assets/sql/init_auteurs_series.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/assets/sql/init_collections.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/assets/sql/init_editeurs.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/assets/sql/init_personnes.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/assets/sql/init_series.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/menu/options_menu.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/values/pref_values.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/xml/preferences.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/xml/recherche.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/values/sql.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/values/styles.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/layout/treenode_bean.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/layout/treenode_initiale.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/layout/treeview.xml" />
-      <change type="DELETED" beforePath="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\local.properties" afterPath="" />
-      <change type="MOVED" beforePath="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\src\org\tetram\bdtheque\activities\GestionActivity.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/GestionActivity.java" />
-      <change type="MOVED" beforePath="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\src\org\tetram\bdtheque\activities\RepertoireActivity.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/RepertoireActivity.java" />
-      <change type="MOVED" beforePath="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\src\org\tetram\bdtheque\bean\CommonBean.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/CommonBean.java" />
-      <change type="MOVED" beforePath="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\src\org\tetram\bdtheque\bean\EditeurBean.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/EditeurBean.java" />
-      <change type="MOVED" beforePath="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\src\org\tetram\bdtheque\bean\EditeurLiteBean.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/EditeurLiteBean.java" />
-      <change type="MOVED" beforePath="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\src\org\tetram\bdtheque\dao\CommonDao.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/CommonDao.java" />
-      <change type="MOVED" beforePath="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\src\org\tetram\bdtheque\dao\EditeurLiteDao.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/EditeurLiteDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/AndroidManifest.xml" afterPath="$PROJECT_DIR$/BDTheque/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/BDTheque.iml" afterPath="$PROJECT_DIR$/BDTheque/BDTheque.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDThequeProject.iml" afterPath="$PROJECT_DIR$/BDThequeProject.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/database/DDLConstants.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/database/DDLConstants.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/database/DatabaseHelper.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/database/DatabaseHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/Shakespeare.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/Shakespeare.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/res/layout/consultation.xml" afterPath="$PROJECT_DIR$/BDTheque/res/layout/consultation.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/res/layout-land/consultation.xml" afterPath="$PROJECT_DIR$/BDTheque/res/layout-land/consultation.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/assets/sql/create_db.sql" afterPath="$PROJECT_DIR$/BDTheque/assets/sql/create_db.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/gradle.xml" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/res/values/strings.xml" afterPath="$PROJECT_DIR$/BDTheque/res/values/strings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MOVED" beforePath="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\src\org\tetram\bdtheque\activities" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities" />
-      <change type="MOVED" beforePath="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\src\org\tetram\bdtheque\bean" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean" />
-      <change type="MOVED" beforePath="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\src\org\tetram\bdtheque\dao" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao" />
     </list>
     <ignored path="BDTheque.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -909,14 +832,14 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2927928" sideWeight="0.30640668" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32297298" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32297298" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32702702" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286908" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2483745" sideWeight="0.6280323" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32837838" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1859558" sideWeight="0.67702705" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.1859558" sideWeight="0.67702705" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2588889" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" x="92" y="92" width="1416" height="676" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
