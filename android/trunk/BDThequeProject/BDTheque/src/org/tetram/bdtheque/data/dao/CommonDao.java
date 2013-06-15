@@ -1,22 +1,24 @@
-package org.tetram.bdtheque.dao;
+package org.tetram.bdtheque.data.dao;
 
 import android.content.Context;
-
 import org.tetram.bdtheque.database.DatabaseHelper;
 
-/**
- * Created by Thierry on 02/06/13.
- */
-public class CommonDao<T> {
+public abstract class CommonDao<T> {
 
     private DatabaseHelper db;
+    private Context context;
 
     public CommonDao(Context context) {
         db = new DatabaseHelper(context);
+        this.context = context;
     }
 
     public DatabaseHelper getDb() {
         return db;
+    }
+
+    public Context getContext() {
+        return context;
     }
 
 }

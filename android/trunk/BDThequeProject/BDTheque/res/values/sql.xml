@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sql_initiales">select %2$s, count(*) from %1$s group by %2$s</string>
+    <string name="sql_initiales_albums"><![CDATA[
+select
+    coalesce(a.initialetitrealbum, s.initialetitreserie), count(a.id_album)
+from
+    albums a
+    left join series s on
+        a.id_serie = s.id_serie
+where
+    1 = 1
+    %s
+group by
+    1
+    ]]></string>
+    <string name="sql_albums_by_initiale"><![CDATA[
+select
+    a.id_album, a.titrealbum, a.tome, a.tomedebut, a.tomefin,
+    a.horsserie, a.integrale, a.moisparution, a.anneeparution,
+    a.notation, a.id_serie, s.titreserie,
+    a.achat
+from
+    albums a
+    left join series s on
+        s.id_serie = a.id_serie
+where
+    coalesce(a.initialetitrealbum, s.initialetitreserie) %s
+order by
+    coalesce(a.titrealbum, s.titreserie), s.titreserie,
+    a.horsserie, a.integrale, a.tome,
+    a.tomedebut, a.tomefin,
+    a.anneeparution, a.moisparution
+    ]]></string>
+    <string name="sql_initiales_collections"><![CDATA[
+select
+    initialenomcollection, count(id_collection)
+from
+    collections
+where
+    1 = 1
+    %s
+group by
+    initialenomcollection
+    ]]></string>
+    <string name="sql_series_by_initiale"><![CDATA[
+select
+    s.id_serie, s.titreserie,
+    s.id_editeur, e.nomediteur, s.id_collection, c.nomcollection
+from
+    series s
+    left join editeurs e on
+        s.id_editeur = e.id_editeur
+    left join collections c on
+        s.id_collection = c.id_collection
+where
+    s.initialetitreserie %s
+order by
+    s.titreserie, e.nomediteur, c.nomcollection
+    ]]></string>
+    <string name="sql_editeurs_by_initiale"><![CDATA[
+select
+    id_editeur, nomediteur
+from
+    editeurs
+where
+    initialenomediteur %1$s
+    %2$s
+order by
+    nomediteur
+        ]]></string>
+    <string name="sql_collections_by_initiale"><![CDATA[
+select
+    c.id_collection, c.nomcollection, e.id_editeur, e.nomediteur
+from
+    collections c
+    inner join editeurs e on
+        e.id_editeur = c.id_editeur
+where
+    c.initialenomcollection %s
+order by
+    c.nomcollection
+        ]]></string>
+    <string name="sql_auteurs_by_initiale"><![CDATA[
+select
+    id_personne, nompersonne
+from
+    personnes
+where
+    initialenompersonne %s
+order by
+    nompersonne
+        ]]></string>
+    <string name="sql_annees_albums"><![CDATA[
+select
+    cast(coalesce(a.anneeparution, -1) as smallint), count(a.id_album)
+from
+    albums a
+    left join series s on
+        s.id_serie = a.id_serie
+where
+    1 = 1
+    %s
+group by
+    1
+    ]]></string>
+    <string name="sql_albums_by_annee"><![CDATA[
+select
+    a.id_album, a.titrealbum, a.tome, a.tomedebut, a.tomefin,
+    a.horsserie, a.integrale, a.moisparution, a.anneeparution,
+    a.notation, a.id_serie, s.titreserie,
+    a.achat
+from
+    albums a
+    left join series s on
+        s.id_serie = a.id_serie
+where
+    a.anneeparution %s
+order by
+    coalesce(a.titrealbum, s.titreserie), s.titreserie,
+    a.horsserie, a.integrale, a.tome,
+    a.tomedebut, a.tomefin,
+    a.anneeparution, a.moisparution
+    ]]></string>
+    <string name="sql_editeurs_albums"><![CDATA[
+select
+    cast(coalesce(e.nomediteur, \'-1\') as varchar(50)), count(a.id_album), e.id_editeur
+from
+    albums a
+    left join series s on
+        s.id_serie = a.id_serie
+    left join editions ed on
+        ed.id_album = a.id_album
+    left join editeurs e on
+        e.id_editeur = ed.id_editeur
+where
+    1 = 1
+    %s
+group by
+    e.nomediteur, e.id_editeur
+    ]]></string>
+    <string name="sql_albums_by_editeur"><![CDATA[
+select
+    a.id_album, a.titrealbum, a.tome, a.tomedebut, a.tomefin,
+    a.horsserie, a.integrale, a.moisparution, a.anneeparution,
+    a.notation, a.id_serie, s.titreserie,
+    a.achat
+from
+    albums a
+    left join series s on
+        s.id_serie = a.id_serie
+    left join editions ed on
+        ed.id_album = a.id_album
+    left join editeurs e on
+        e.id_editeur = ed.id_editeur
+where
+    e.id_editeur %s
+order by
+    coalesce(a.titrealbum, s.titreserie), s.titreserie,
+    a.horsserie, a.integrale, a.tome,
+    a.tomedebut, a.tomefin,
+    a.anneeparution, a.moisparution
+    ]]></string>
+</resources>

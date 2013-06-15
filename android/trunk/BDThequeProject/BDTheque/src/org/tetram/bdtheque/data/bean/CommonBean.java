@@ -1,10 +1,7 @@
-package org.tetram.bdtheque.bean;
+package org.tetram.bdtheque.data.bean;
 
 import java.util.UUID;
 
-/**
- * Created by Thierry on 02/06/13.
- */
 public class CommonBean {
     private UUID id;
 
@@ -15,4 +12,5 @@ public class CommonBean {
     public void setId(UUID id) {
         this.id = id;
     }
+
 }

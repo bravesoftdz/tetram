@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/search"
+        android:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_search"
+
+        />
+
+    <item
+        android:id="@+id/menu_share"
+        android:title="@string/share"
+        android:showAsAction="ifRoom"
+        android:actionProviderClass="android.widget.ShareActionProvider"
+        />
+
+    <item
+        android:id="@+id/menu_options"
+        android:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_preferences"/>
+</menu>

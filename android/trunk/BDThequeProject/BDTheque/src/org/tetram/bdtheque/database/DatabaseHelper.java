@@ -7,15 +7,12 @@ import android.util.Log;
 
 import java.io.IOException;
 
-/**
- * Created by Thierry on 02/06/13.
- */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     static final String TAG = "BDThequeDatabaseHelper";
 
     private static final String DATABASE_NAME = "bdtheque";
-    private static final int DATABASE_VERSION = 0;
+    private static final int DATABASE_VERSION = 2;
 
     private Context context;
 
@@ -39,6 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         RunSQL(db, "sql/create_db.sql");
+        onUpgrade(db, 0, DATABASE_VERSION);
     }
 
     /*
@@ -55,9 +53,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         switch (oldVersion) {
             case 0:
-                RunSQL(db, "sql/upgrade_to_v1.sql");
             case 1:
-                RunSQL(db, "sql/upgrade_to_v2.sql");
+                RunSQL(db, "sql/init_editeurs.sql");
+                RunSQL(db, "sql/init_collections.sql");
+                RunSQL(db, "sql/init_series.sql");
+                RunSQL(db, "sql/init_albums.sql");
+                RunSQL(db, "sql/init_personnes.sql");
+                RunSQL(db, "sql/init_auteurs.sql");
+                RunSQL(db, "sql/init_auteurs_series.sql");
+//            case 2:
+//                RunSQL(db, "sql/upgrade_to_v3.sql");
             default: {
 
             }
