@@ -1,5 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.UUID;
 
 public interface TreeNodeBean {
@@ -7,5 +9,6 @@ public interface TreeNodeBean {
 
     String getTreeNodeText();
 
+    @Nullable
     Float getTreeNodeRating();
 }

@@ -1,6 +1,7 @@
 package org.tetram.bdtheque.gui.adapter;
 
 import android.content.Context;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,71 +16,71 @@ import org.tetram.bdtheque.data.bean.TreeNodeBean;
 import org.tetram.bdtheque.data.dao.InitialeRepertoireDao;
 import org.tetram.bdtheque.utils.StringUtils;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+@SuppressWarnings("unchecked")
 public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableListAdapter {
 
     private List<? extends InitialeBean> listInitiales;
-    private Map<Integer, List<T>> mapData;
-    InitialeRepertoireDao dao;
+    private SparseArray<List<T>> mapData;
+    InitialeRepertoireDao repertoireDao;
     Context context;
 
-    public RepertoireAdapter(Context context, InitialeRepertoireDao dao) {
+    public RepertoireAdapter(final Context context, final InitialeRepertoireDao dao) {
+        super();
         this.context = context;
-        this.dao = dao;
+        this.repertoireDao = dao;
     }
 
     private void ensureInitiales() {
-        if (listInitiales == null)
-            listInitiales = dao.getInitiales();
+        if (this.listInitiales == null)
+            this.listInitiales = this.repertoireDao.getInitiales();
     }
 
-    private void ensureData(Integer initiale) {
-        if (mapData == null)
-            mapData = new HashMap<Integer, List<T>>(getGroupCount());
+    private void ensureData(final Integer initiale) {
+        if (this.mapData == null)
+            this.mapData = new SparseArray<>(getGroupCount());
 
-        if (!mapData.containsKey(initiale))
-            mapData.put(initiale, dao.getData(listInitiales.get(initiale)));
+        if (this.mapData.indexOfKey(initiale) < 0)
+            this.mapData.put(initiale, this.repertoireDao.getData(this.listInitiales.get(initiale)));
     }
 
     @Override
     public int getGroupCount() {
         ensureInitiales();
-        return listInitiales.size();
+        return this.listInitiales.size();
     }
 
     @Override
-    public int getChildrenCount(int groupPosition) {
+    public int getChildrenCount(final int groupPosition) {
         ensureData(groupPosition);
-        return mapData.get(groupPosition).size();
+        return this.mapData.get(groupPosition).size();
     }
 
     @Override
-    public Object getGroup(int groupPosition) {
-        return listInitiales.get(groupPosition);
+    public Object getGroup(final int groupPosition) {
+        return this.listInitiales.get(groupPosition);
     }
 
     @Override
-    public Object getChild(int groupPosition, int childPosition) {
+    public Object getChild(final int groupPosition, final int childPosition) {
         ensureData(groupPosition);
-        return mapData.get(groupPosition).get(childPosition);
+        return this.mapData.get(groupPosition).get(childPosition);
     }
 
     @Override
-    public long getGroupId(int groupPosition) {
+    public long getGroupId(final int groupPosition) {
         ensureInitiales();
-        InitialeBean initiale = listInitiales.get(groupPosition);
+        final InitialeBean initiale = this.listInitiales.get(groupPosition);
         return initiale.hashCode();
     }
 
     @Override
-    public long getChildId(int groupPosition, int childPosition) {
+    public long getChildId(final int groupPosition, final int childPosition) {
         ensureInitiales();
-        InitialeBean initiale = listInitiales.get(groupPosition);
+        InitialeBean initiale = this.listInitiales.get(groupPosition);
         ensureData(groupPosition);
-        return initiale.hashCode() + mapData.get(groupPosition).get(childPosition).getId().hashCode();
+        return initiale.hashCode() + this.mapData.get(groupPosition).get(childPosition).getId().hashCode();
     }
 
     @Override
@@ -90,11 +91,11 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         ensureInitiales();
-        InitialeBean initiale = listInitiales.get(groupPosition);
+        InitialeBean initiale = this.listInitiales.get(groupPosition);
 
         View view = convertView;
         if (view == null) {
-            LayoutInflater inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inf = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inf.inflate(R.layout.treenode_initiale, null);
         }
 
@@ -110,11 +111,11 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
     @Override
     public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         ensureData(groupPosition);
-        TreeNodeBean bean = mapData.get(groupPosition).get(childPosition);
+        TreeNodeBean bean = this.mapData.get(groupPosition).get(childPosition);
 
         View view = convertView;
         if (view == null) {
-            LayoutInflater inf = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inf = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inf.inflate(R.layout.treenode_bean, null);
         }
 
@@ -122,11 +123,12 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
         textView.setText(bean.getTreeNodeText());
         RatingBar ratingBar = (RatingBar) view.findViewById(R.id.ratingBar);
         ratingBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return true;
             }
         });
-        if (UserConfig.getInstance().getAfficheNoteListes() && bean.getTreeNodeRating() != null) {
+        if (UserConfig.getInstance().shouldAfficheNoteListes() && (bean.getTreeNodeRating() != null)) {
             ratingBar.setRating(bean.getTreeNodeRating() - 1);
             ratingBar.setVisibility(View.VISIBLE);
         } else

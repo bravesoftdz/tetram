@@ -5,11 +5,8 @@ public class InitialeBean {
     private int count;
     private String label;
 
-    public InitialeBean() {
-    }
-
     public String getValue() {
-        return value;
+        return this.value;
     }
 
     public void setValue(String value) {
@@ -17,7 +14,7 @@ public class InitialeBean {
     }
 
     public Integer getCount() {
-        return count;
+        return this.count;
     }
 
     public void setCount(int count) {
@@ -25,20 +22,21 @@ public class InitialeBean {
     }
 
     public String getLabel() {
-        if (value == null || "-1".equals(value))
+        if ((this.value == null) || "-1".equals(this.value))
             return "<Inconnu>";
         else
-            return label.trim();
+            return this.label.trim();
     }
 
     public void setLabel(String label) {
         this.label = label;
     }
 
+    @SuppressWarnings("NonFinalFieldReferencedInHashCode")
     @Override
     public int hashCode() {
-        if (value == null)
-            return new Integer(0).hashCode();
+        if (this.value == null)
+            return Integer.valueOf(0).hashCode();
         else
             return super.hashCode();
     }
@@ -46,7 +44,7 @@ public class InitialeBean {
     public static InitialeBean createInstance(Class<? extends InitialeBean> aClass, String label, int count, String value) {
         InitialeBean t = null;
         try {
-            t = aClass.newInstance();
+            t = aClass.getConstructor().newInstance();
             t.setLabel(label);
             t.setValue(value);
             t.setCount(count);

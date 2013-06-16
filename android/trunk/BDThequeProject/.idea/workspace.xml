@@ -62,27 +62,45 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="39ca6de2-686d-499f-8558-40188d71acbd" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/drawable/splash.bmp" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/DaoFactory.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/utils/ModeRepertoire.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/SplashActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/assets/sql/init_genres.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/assets/sql/init_genres_series.sql" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/BDTheque/res/layout/splash.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/AndroidManifest.xml" afterPath="$PROJECT_DIR$/BDTheque/AndroidManifest.xml" />
+      <change type="MOVED" beforePath="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\src\org\tetram\bdtheque\database\DatabaseHelper.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/database/BDDatabaseHelper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/AlbumLiteBean.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/AlbumLiteBean.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/AlbumLiteFactory.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/AlbumLiteFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/AuteurLiteBean.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/AuteurLiteBean.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/AuteurLiteFactory.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/AuteurLiteFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/BeanFactory.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/BeanFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/CollectionLiteBean.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/CollectionLiteBean.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/CollectionLiteFactory.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/CollectionLiteFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/CommonBean.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/CommonBean.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/CommonDao.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/CommonDao.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/database/DBUtils.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/database/DBUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/database/DatabaseHelper.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/database/DatabaseHelper.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/database/DDLConstants.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/database/DDLConstants.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/DaoFactory.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/DaoFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/utils/DaoUtils.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/utils/DaoUtils.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/EditeurBean.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/EditeurBean.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/EditeurLiteBean.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/EditeurLiteBean.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/EditeurLiteDao.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/EditeurLiteDao.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/EditeurLiteFactory.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/EditeurLiteFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/utils/ExpandableListFragment.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/utils/ExpandableListFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/GestionActivity.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/GestionActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/InitialeBean.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/InitialeBean.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/InitialeSerieBean.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/InitialeSerieBean.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/utils/ModeRepertoire.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/utils/ModeRepertoire.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/RechercheActivity.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/RechercheActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/RepertoireActivity.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/RepertoireActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/assets/sql/create_db.sql" afterPath="$PROJECT_DIR$/BDTheque/assets/sql/create_db.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/res/drawable/custom_ratingbar.xml" afterPath="$PROJECT_DIR$/BDTheque/res/drawable/custom_ratingbar.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/res/values/sql.xml" afterPath="$PROJECT_DIR$/BDTheque/res/values/sql.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/adapter/RepertoireAdapter.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/adapter/RepertoireAdapter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/SerieLiteBean.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/SerieLiteBean.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/SerieLiteFactory.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/SerieLiteFactory.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/SettingsActivity.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/SettingsActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/SettingsFragment.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/SettingsFragment.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/SplashActivity.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/SplashActivity.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/utils/StringUtils.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/utils/StringUtils.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/TreeNodeBean.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/TreeNodeBean.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/UserConfig.java" afterPath="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/UserConfig.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/res/menu/options_menu.xml" afterPath="$PROJECT_DIR$/BDTheque/res/menu/options_menu.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/res/xml/recherche.xml" afterPath="$PROJECT_DIR$/BDTheque/res/xml/recherche.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/res/values/strings.xml" afterPath="$PROJECT_DIR$/BDTheque/res/values/strings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MOVED" beforePath="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\res\drawable\etoile_empty.png" afterPath="$PROJECT_DIR$/BDTheque/res/drawable/ic_etoile_empty.png" />
-      <change type="MOVED" beforePath="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\res\drawable\etoile_full.png" afterPath="$PROJECT_DIR$/BDTheque/res/drawable/ic_etoile_full.png" />
-      <change type="MOVED" beforePath="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\res\drawable\etoile_gray.png" afterPath="$PROJECT_DIR$/BDTheque/res/drawable/ic_etoile_gray.png" />
-      <change type="MOVED" beforePath="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\res\drawable\icon.png" afterPath="$PROJECT_DIR$/BDTheque/res/drawable/ic_app.png" />
     </list>
     <ignored path="BDTheque.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -105,23 +123,7 @@
     <disable_hints />
   </component>
   <component name="DebuggerManager">
-    <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true">
-      <breakpoint url="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/AlbumLiteEditeurDao.java" line="24" class="org.tetram.bdtheque.data.dao.AlbumLiteEditeurDao" package="org.tetram.bdtheque.data.dao">
-        <option name="ENABLED" value="false" />
-        <option name="LOG_ENABLED" value="false" />
-        <option name="LOG_EXPRESSION_ENABLED" value="false" />
-        <option name="REMOVE_AFTER_HIT" value="false" />
-        <option name="SUSPEND_POLICY" value="SuspendAll" />
-        <option name="SUSPEND" value="true" />
-        <option name="COUNT_FILTER_ENABLED" value="false" />
-        <option name="COUNT_FILTER" value="0" />
-        <option name="CONDITION_ENABLED" value="true" />
-        <option name="CLASS_FILTERS_ENABLED" value="false" />
-        <option name="INSTANCE_FILTERS_ENABLED" value="false" />
-        <option name="CONDITION" value="&#13;&#13;JAVA" />
-        <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
-      </breakpoint>
-    </line_breakpoints>
+    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_any default_suspend_policy="SuspendAll" default_condition_enabled="true">
       <breakpoint>
         <option name="NOTIFY_CAUGHT" value="false" />
@@ -158,7 +160,7 @@
         <option name="LOG_MESSAGE" value="&#13;&#13;JAVA" />
       </breakpoint>
     </breakpoint_any>
-    <ui_properties default_suspend_policy="SuspendAll" default_condition_enabled="true" />
+    <line_breakpoints default_suspend_policy="SuspendAll" default_condition_enabled="true" />
     <breakpoint_rules />
     <ui_properties />
   </component>
@@ -167,7 +169,86 @@
     <favorites_list name="BDTheque" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="CommonDao.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/CommonDao.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="11" column="39" selection-start="329" selection-end="329" vertical-scroll-proportion="0.3135246" vertical-offset="17" max-vertical-offset="527">
+              <folding>
+                <element signature="e#126#164#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AuteurLiteBean.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/AuteurLiteBean.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="21" column="23" selection-start="499" selection-end="499" vertical-scroll-proportion="0.0" vertical-offset="39" max-vertical-offset="578">
+              <folding>
+                <element signature="e#437#475#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DaoFactory.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/DaoFactory.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="22" column="0" selection-start="787" selection-end="787" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="408">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CollectionLiteBean.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/CollectionLiteBean.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="27" column="16" selection-start="745" selection-end="745" vertical-scroll-proportion="0.0" vertical-offset="127" max-vertical-offset="799">
+              <folding>
+                <element signature="e#690#728#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="StringUtils.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/utils/StringUtils.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="21" column="12" selection-start="831" selection-end="831" vertical-scroll-proportion="0.0" vertical-offset="114" max-vertical-offset="5423">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="InitialeBean.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/InitialeBean.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="50" column="9" selection-start="1249" selection-end="1249" vertical-scroll-proportion="0.0" vertical-offset="583" max-vertical-offset="1071">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RepertoireAdapter.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/adapter/RepertoireAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="41" column="42" selection-start="1391" selection-end="1391" vertical-scroll-proportion="0.0" vertical-offset="263" max-vertical-offset="2193">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="RepertoireActivity.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/RepertoireActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="49" column="48" selection-start="1856" selection-end="1856" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5508">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -247,22 +328,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/AlbumLiteGenreDao.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/AlbumLiteSerieDao.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/AuteurLiteDao.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/SerieLiteDao.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/InitialeRepertoireDao.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/CommonBean.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/AlbumLiteBean.java" />
+        <option value="$PROJECT_DIR$/BDTheque/res/xml/recherche.xml" />
+        <option value="$PROJECT_DIR$/BDTheque/res/drawable/custom_ratingbar.xml" />
+        <option value="$PROJECT_DIR$/BDTheque/res/values/styles.xml" />
+        <option value="$PROJECT_DIR$/BDTheque/res/layout/consultation.xml" />
+        <option value="$PROJECT_DIR$/BDTheque/res/menu/options_menu.xml" />
+        <option value="$PROJECT_DIR$/BDTheque/res/values/strings.xml" />
+        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/AuteurLiteBean.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/DaoFactory.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/utils/ModeRepertoire.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/CommonRepertoireDao.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/CollectionLiteDao.java" />
-        <option value="$PROJECT_DIR$/BDTheque/res/values/sql.xml" />
-        <option value="$PROJECT_DIR$/BDTheque/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/BDTheque/res/layout/splash.xml" />
-        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/database/DBUtils.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/EditeurLiteDao.java" />
-        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/SplashActivity.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/CollectionLiteBean.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/utils/StringUtils.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/InitialeBean.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/adapter/RepertoireAdapter.java" />
         <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/RepertoireActivity.java" />
+        <option value="$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/CommonDao.java" />
       </list>
     </option>
   </component>
@@ -270,8 +351,10 @@
     <treeState />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="width" value="1600" />
-    <option name="height" value="900" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
+    <option name="width" value="1616" />
+    <option name="height" value="916" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -286,40 +369,10 @@
           <State>
             <id>Android Lint</id>
           </State>
-          <State>
-            <id>Code style issues</id>
-          </State>
-          <State>
-            <id>General</id>
-          </State>
-          <State>
-            <id>Groovy</id>
-          </State>
-          <State>
-            <id>J2ME issues</id>
-          </State>
-          <State>
-            <id>Java language level migration aids</id>
-          </State>
-          <State>
-            <id>Naming conventions</id>
-          </State>
-          <State>
-            <id>Probable bugs</id>
-          </State>
-          <State>
-            <id>Spelling</id>
-          </State>
-          <State>
-            <id>Threading issues</id>
-          </State>
-          <State>
-            <id>Threading issuesGroovy</id>
-          </State>
         </expanded-state>
         <selected-state>
           <State>
-            <id>ConstantConditions</id>
+            <id>AndroidLintMenuTitle</id>
           </State>
         </selected-state>
       </profile-state>
@@ -351,6 +404,34 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Default">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+        <subPane subId="Problems" />
+        <subPane subId="Production">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+        <subPane subId="Tests" />
+        <subPane subId="All">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -358,6 +439,10 @@
               <option name="myItemId" value="BDTheque" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="External Libraries" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ExternalLibrariesNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -366,6 +451,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="BDThequeProject" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BDTheque" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BDThequeProject" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="gradle" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="wrapper" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -380,6 +483,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="BDTheque" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BDTheque" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BDThequeProject" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BDTheque" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -413,63 +534,59 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope">
-        <subPane subId="Default">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-        <subPane subId="Problems" />
-        <subPane subId="Production">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-        <subPane subId="Tests" />
-        <subPane subId="All">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="project.structure.last.edited" value="Modules" />
     <property name="SHOW_ALL_PROCESSES" value="false" />
-    <property name="project.structure.proportion" value="0.15" />
-    <property name="OverrideImplement.combined" value="true" />
     <property name="options.splitter.main.proportions" value="0.3" />
-    <property name="recentsLimit" value="5" />
     <property name="MemberChooser.sorted" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/build.gradle" />
-    <property name="DEBUGGABLE_DEVICE" value="4107861c707e7f4f" />
+    <property name="recentsLimit" value="5" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth2" value="109" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth1" value="103" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth0" value="114" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth5" value="789" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth4" value="115" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeWidth3" value="114" />
     <property name="DEBUGGABLE_PROCESS" value="org.tetram.bdtheque" />
-    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="AVD_for_10_1in_WXGA_Tablet" />
     <property name="OverrideImplement.overriding.sorted" value="false" />
     <property name="FullScreen" value="false" />
-    <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="GoToFile.includeJavaFiles" value="false" />
-    <property name="full.screen.before.presentation.mode" value="false" />
-    <property name="options.lastSelected" value="Errors" />
+    <property name="options.lastSelected" value="Groovy compiler" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="4107861c707e7f4f" />
     <property name="MemberChooser.copyJavadoc" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth1" value="122" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth0" value="122" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth3" value="75" />
+    <property name="OverrideImplement.combined" value="true" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth2" value="122" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder0" value="0" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder3" value="3" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder5" value="5" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatOrder4" value="4" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/build.gradle" />
+    <property name="DEBUGGABLE_DEVICE" value="4107861c707e7f4f" />
+    <property name="GoToClass.toSaveIncludeLibraries" value="false" />
+    <property name="MemberChooser.showClasses" value="true" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth4" value="107" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_flatWidth5" value="796" />
+    <property name="full.screen.before.presentation.mode" value="false" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder5" value="5" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder3" value="3" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder4" value="4" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder2" value="2" />
+    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="4107861c707e7f4f" />
+    <property name="FileHistory.org.jetbrains.idea.svn.history.SvnHistoryProvider_treeOrder0" value="0" />
     <property name="restartRequiresConfirmation" value="true" />
-    <property name="dynamic.classpath" value="false" />
     <property name="options.searchVisible" value="true" />
+    <property name="dynamic.classpath" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
@@ -488,15 +605,127 @@
       <recent name="org.tetram.bdtheque.dao" />
       <recent name="org.tetram.bdtheque.bean" />
     </key>
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="org.tetram.bdtheque" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\res\xml" />
       <recent name="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\res\values" />
       <recent name="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\res\layout-w600dp" />
       <recent name="C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\res\drawable" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="org.tetram.bdtheque" />
+    </key>
+  </component>
+  <component name="RestoreUpdateTree">
+    <UpdateInfo date="Moments ago" ActionInfo="_Update">
+      <UpdatedFiles>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Updated from server" />
+          <option name="myStatusName" value="Changed on server" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="CHANGED_ON_SERVER" />
+          <FILE-GROUP>
+            <option name="myUpdateName" value="Updated" />
+            <option name="myStatusName" value="Changed" />
+            <option name="mySupportsDeletion" value="false" />
+            <option name="myCanBeAbsent" value="false" />
+            <option name="myId" value="UPDATED" />
+          </FILE-GROUP>
+          <FILE-GROUP>
+            <option name="myUpdateName" value="Created" />
+            <option name="myStatusName" value="Created" />
+            <option name="mySupportsDeletion" value="false" />
+            <option name="myCanBeAbsent" value="false" />
+            <option name="myId" value="CREATED" />
+          </FILE-GROUP>
+          <FILE-GROUP>
+            <option name="myUpdateName" value="Deleted" />
+            <option name="myStatusName" value="Deleted" />
+            <option name="mySupportsDeletion" value="false" />
+            <option name="myCanBeAbsent" value="true" />
+            <option name="myId" value="REMOVED_FROM_REPOSITORY" />
+          </FILE-GROUP>
+          <FILE-GROUP>
+            <option name="myUpdateName" value="Restored" />
+            <option name="myStatusName" value="Will be restored" />
+            <option name="mySupportsDeletion" value="false" />
+            <option name="myCanBeAbsent" value="false" />
+            <option name="myId" value="RESTORED" />
+          </FILE-GROUP>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Modified" />
+          <option name="myStatusName" value="Modified" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MODIFIED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Skipped" />
+          <option name="myStatusName" value="Skipped" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="SKIPPED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Merged with conflicts" />
+          <option name="myStatusName" value="Will be merged with conflicts" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MERGED_WITH_CONFLICTS" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Merged with tree conflicts" />
+          <option name="myStatusName" value="Merged with tree conflicts" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
+          <PATH vcs="svn" revision="647">C:\Users\Thierry\Documents\BDThèque\Android\BDThequeProject\BDTheque\project.properties</PATH>
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Merged with property conflicts" />
+          <option name="myStatusName" value="Will be merged with property conflicts" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Merged" />
+          <option name="myStatusName" value="Will be merged" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="MERGED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Not in repository" />
+          <option name="myStatusName" value="Not in repository" />
+          <option name="mySupportsDeletion" value="true" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="UNKNOWN" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Locally added" />
+          <option name="myStatusName" value="Locally added" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="LOCALLY_ADDED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Locally removed" />
+          <option name="myStatusName" value="Locally removed" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="LOCALLY_REMOVED" />
+        </FILE-GROUP>
+        <FILE-GROUP>
+          <option name="myUpdateName" value="Switched" />
+          <option name="myStatusName" value="Switched" />
+          <option name="mySupportsDeletion" value="false" />
+          <option name="myCanBeAbsent" value="false" />
+          <option name="myId" value="SWITCHED" />
+        </FILE-GROUP>
+      </UpdatedFiles>
+    </UpdateInfo>
   </component>
   <component name="RunManager" selected="Android Application.BDTheque">
     <configuration default="false" name="All in BDTheque" type="JUnit" factoryName="JUnit" temporary="true">
@@ -731,7 +960,11 @@
       <created>1371263441117</created>
       <updated>1371263441117</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003">
+      <created>1371330946115</created>
+      <updated>1371330946115</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -758,34 +991,35 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1600" height="900" extended-state="0" />
-    <editor active="false" />
+    <frame x="-8" y="-8" width="1616" height="916" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32882884" sideWeight="0.67409474" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32729805" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32882884" sideWeight="0.67409474" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42213643" sideWeight="0.67409474" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.42213643" sideWeight="0.6855263" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32567567" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37196764" sideWeight="0.659948" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.31536388" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298153" sideWeight="0.5" order="10" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298153" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.1859558" sideWeight="0.21621622" order="3" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32210243" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32189974" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32702702" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32947233" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3286908" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32749325" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2483745" sideWeight="0.7418919" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.39986995" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.19115734" sideWeight="0.6778976" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2046332" sideWeight="0.6781003" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2574124" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Documentation" active="true" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" x="92" y="92" width="1416" height="676" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="SVN Repositories" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32916668" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Thumbnails" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32884097" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32479784" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32938075" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32837838" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -889,50 +1123,29 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$APPLICATION_HOME_DIR$/sdk/sources/android-16/android/app/Activity.java">
+    <entry file="file://$PROJECT_DIR$/BDTheque/res/layout/treeview.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1823" column="16" selection-start="81240" selection-end="81240" vertical-scroll-proportion="0.33333334" vertical-offset="29473" max-vertical-offset="87159">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="816">
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/res/layout/consultation.xml">
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="14" selection-start="550" selection-end="550" vertical-scroll-proportion="-8.84" vertical-offset="0" max-vertical-offset="323">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$APPLICATION_HOME_DIR$/sdk/platforms/android-16/android.jar!/android/R.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1917" column="32" selection-start="117057" selection-end="117057" vertical-scroll-proportion="0.5466667" vertical-offset="32285" max-vertical-offset="32810">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/res/drawable/ic_app.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/res/drawable/ic_etoile_gray.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/res/drawable/ic_app2.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="43" selection-start="753" selection-end="753" vertical-scroll-proportion="0.64761907" vertical-offset="0" max-vertical-offset="833">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/res/drawable-xxhdpi/ic_app2.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/res/layout/splash.xml">
+    <entry file="file://$PROJECT_DIR$/BDTheque/res/layout-land/consultation.xml">
       <provider editor-type-id="text-editor">
-        <state line="3" column="38" selection-start="151" selection-end="151" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="238">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="707">
           <folding />
         </state>
       </provider>
@@ -940,61 +1153,100 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/project.properties">
+    <entry file="file://$PROJECT_DIR$/BDTheque/gen/org/tetram/bdtheque/Manifest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="525">
+        <state line="5" column="19" selection-start="177" selection-end="177" vertical-scroll-proportion="0.11612022" vertical-offset="0" max-vertical-offset="732">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/BDTheque.iml">
+    <entry file="file://$PROJECT_DIR$/BDTheque/gen/org/tetram/bdtheque/R.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="697">
+        <state line="5" column="19" selection-start="170" selection-end="170" vertical-scroll-proportion="0.11612022" vertical-offset="0" max-vertical-offset="732">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/database/DBUtils.java">
+    <entry file="file://$PROJECT_DIR$/BDTheque/gen/org/tetram/bdtheque/BuildConfig.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="0" selection-start="268" selection-end="268" vertical-scroll-proportion="0.14255765" vertical-offset="0" max-vertical-offset="1836">
+        <state line="5" column="19" selection-start="129" selection-end="129" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="187">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/AlbumLiteDao.java">
+    <entry file="file://$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="13" selection-start="302" selection-end="302" vertical-scroll-proportion="0.14255765" vertical-offset="0" max-vertical-offset="561">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="732">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/EditeurLiteDao.java">
+    <entry file="file://$PROJECT_DIR$/BDTheque/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="17" column="0" selection-start="577" selection-end="577" vertical-scroll-proportion="0.3207547" vertical-offset="0" max-vertical-offset="477">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="833">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/SplashActivity.java">
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/AuteurLiteBean.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="20" selection-start="2861" selection-end="2861" vertical-scroll-proportion="0.0" vertical-offset="1053" max-vertical-offset="1836">
+        <state line="21" column="23" selection-start="499" selection-end="499" vertical-scroll-proportion="0.0" vertical-offset="39" max-vertical-offset="578">
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#437#475#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/RepertoireActivity.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="298" column="36" selection-start="11440" selection-end="11440" vertical-scroll-proportion="0.33333334" vertical-offset="4499" max-vertical-offset="5423">
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/factories/DaoFactory.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="15" selection-start="874" selection-end="874" vertical-scroll-proportion="0.6792453" vertical-offset="16" max-vertical-offset="493">
+        <state line="22" column="0" selection-start="787" selection-end="787" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="408">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/CollectionLiteBean.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="16" selection-start="745" selection-end="745" vertical-scroll-proportion="0.0" vertical-offset="127" max-vertical-offset="799">
+          <folding>
+            <element signature="e#690#728#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/utils/StringUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="21" column="12" selection-start="831" selection-end="831" vertical-scroll-proportion="0.0" vertical-offset="114" max-vertical-offset="5423">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/bean/InitialeBean.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="50" column="9" selection-start="1249" selection-end="1249" vertical-scroll-proportion="0.0" vertical-offset="583" max-vertical-offset="1071">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/adapter/RepertoireAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="42" selection-start="1391" selection-end="1391" vertical-scroll-proportion="0.0" vertical-offset="263" max-vertical-offset="2193">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/gui/activities/RepertoireActivity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="49" column="48" selection-start="1856" selection-end="1856" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="5508">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/BDTheque/src/org/tetram/bdtheque/data/dao/CommonDao.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="39" selection-start="329" selection-end="329" vertical-scroll-proportion="0.3135246" vertical-offset="17" max-vertical-offset="527">
+          <folding>
+            <element signature="e#126#164#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1004,11 +1256,12 @@
       <state key="ArtifactsStructureConfigurable.UI">
         <settings>
           <artifact-editor />
-          <last-edited>unnamed</last-edited>
+          <last-edited>BDTheque</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.5" />
               </list>
             </option>
           </splitter-proportions>
@@ -1039,7 +1292,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>Android 4.2.2</last-edited>
+          <last-edited>Android 4.0.3</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1051,7 +1304,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>BDTheque</last-edited>
+          <last-edited>Android|BDTheque</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

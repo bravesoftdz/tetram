@@ -7,23 +7,23 @@ import android.util.Log;
 
 import java.io.IOException;
 
-public class DatabaseHelper extends SQLiteOpenHelper {
+public class BDDatabaseHelper extends SQLiteOpenHelper {
 
-    static final String TAG = "BDThequeDatabaseHelper";
+    static final String LOG_TAG = "BDThequeDatabaseHelper";
 
     private static final String DATABASE_NAME = "bdtheque";
     private static final int DATABASE_VERSION = 2;
 
-    private Context context;
+    private final Context context;
 
-    public DatabaseHelper(Context context) {
+    public BDDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context;
     }
 
-    private void RunSQL(SQLiteDatabase db, String scriptName) {
+    private void runSQL(SQLiteDatabase db, String scriptName) {
         try {
-            DBUtils.executeSqlScript(context, db, scriptName);
+            DBUtils.executeSqlScript(this.context, db, scriptName);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onCreate(SQLiteDatabase db) {
-        RunSQL(db, "sql/create_db.sql");
+        runSQL(db, "sql/create_db.sql");
         onUpgrade(db, 0, DATABASE_VERSION);
     }
 
@@ -48,24 +48,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-                + newVersion + ".");
+        Log.w(LOG_TAG, "Upgrading database from version " + oldVersion + " to " + newVersion + ".");
 
         switch (oldVersion) {
             case 0:
             case 1:
-                RunSQL(db, "sql/init_editeurs.sql");
-                RunSQL(db, "sql/init_collections.sql");
-                RunSQL(db, "sql/init_series.sql");
-                RunSQL(db, "sql/init_albums.sql");
-                RunSQL(db, "sql/init_editions.sql");
-                RunSQL(db, "sql/init_personnes.sql");
-                RunSQL(db, "sql/init_auteurs.sql");
-                RunSQL(db, "sql/init_auteurs_series.sql");
-                RunSQL(db, "sql/init_genres.sql");
-                RunSQL(db, "sql/init_genres_series.sql");
+                runSQL(db, "sql/init_editeurs.sql");
+                runSQL(db, "sql/init_collections.sql");
+                runSQL(db, "sql/init_series.sql");
+                runSQL(db, "sql/init_albums.sql");
+                runSQL(db, "sql/init_editions.sql");
+                runSQL(db, "sql/init_personnes.sql");
+                runSQL(db, "sql/init_auteurs.sql");
+                runSQL(db, "sql/init_auteurs_series.sql");
+                runSQL(db, "sql/init_genres.sql");
+                runSQL(db, "sql/init_genres_series.sql");
 //            case 2:
-//                RunSQL(db, "sql/upgrade_to_v3.sql");
+//                runSQL(db, "sql/upgrade_to_v3.sql");
             default: {
 
             }

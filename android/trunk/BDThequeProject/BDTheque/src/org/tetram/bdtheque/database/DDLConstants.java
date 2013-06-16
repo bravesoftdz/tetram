@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.database;
 
+@SuppressWarnings("UnusedDeclaration")
 public class DDLConstants {
 
     public static final String SERIES_TABLENAME = "SERIES";

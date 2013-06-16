@@ -7,6 +7,7 @@ import android.text.method.PasswordTransformationMethod;
 import org.tetram.bdtheque.R;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
@@ -33,29 +34,24 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
         updatePrefSummary(findPreference(key));
     }
 
-    private void initSummary(Preference p) {
+    private static void initSummary(Preference p) {
         if (p instanceof PreferenceCategory) {
             PreferenceCategory pCat = (PreferenceCategory) p;
-            for (int i = 0; i < pCat.getPreferenceCount(); i++) {
+            for (int i = 0; i < pCat.getPreferenceCount(); i++)
                 initSummary(pCat.getPreference(i));
-            }
-        } else {
+        } else
             updatePrefSummary(p);
-        }
     }
 
-    private void updatePrefSummary(Preference p) {
+    private static void updatePrefSummary(Preference p) {
         if (p instanceof ListPreference) {
             ListPreference listPref = (ListPreference) p;
             p.setSummary(listPref.getEntry());
         }
         if (p instanceof EditTextPreference) {
             EditTextPreference editTextPref = (EditTextPreference) p;
-            if (editTextPref.getEditText().getTransformationMethod() instanceof PasswordTransformationMethod) {
-                // p.setSummary("I am not going to display a password!");
-            } else {
+            if (!(editTextPref.getEditText().getTransformationMethod() instanceof PasswordTransformationMethod))
                 p.setSummary(editTextPref.getText());
-            }
         }
 
     }

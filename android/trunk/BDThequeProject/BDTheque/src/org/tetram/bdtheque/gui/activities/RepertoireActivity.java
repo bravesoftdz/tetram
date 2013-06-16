@@ -12,6 +12,7 @@ import android.util.TypedValue;
 import android.view.*;
 import android.widget.*;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.Shakespeare;
 import org.tetram.bdtheque.UserConfig;
@@ -39,20 +40,20 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
         super.onCreate(savedInstanceState);
         setContentView(R.layout.consultation);
 
-        repertoire = (TitlesFragment) getFragmentManager().findFragmentById(R.id.titles);
+        this.repertoire = (TitlesFragment) getFragmentManager().findFragmentById(R.id.titles);
 
         if (savedInstanceState != null) {
-            currentNavigationItem = savedInstanceState.getInt("navigationItem", 0);
+            this.currentNavigationItem = savedInstanceState.getInt("navigationItem", 0);
         }
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchManager.setOnCancelListener(this);
 
         MenuEntry defaultMenu = null;
-        List<MenuEntry> menuEntries = new ArrayList<MenuEntry>();
+        List<MenuEntry> menuEntries = new ArrayList<>();
         for (ModeRepertoire mode : ModeRepertoire.values()) {
             MenuEntry menu = mode.getMenuEntry(this);
-            if (mode.getDefault()) defaultMenu = menu;
+            if (mode.isDefault()) defaultMenu = menu;
             menuEntries.add(menu);
         }
 
@@ -62,7 +63,7 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
         actionBar.setTitle("");
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
-        actionBar.setSelectedNavigationItem(defaultMenu == null ? 0 : menuEntries.indexOf(defaultMenu));
+        actionBar.setSelectedNavigationItem((defaultMenu == null) ? 0 : menuEntries.indexOf(defaultMenu));
 
         UserConfig.getInstance().reloadConfig(this);
         handleIntent(getIntent());
@@ -71,13 +72,13 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
     @Override
     protected void onSaveInstanceState(@NotNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("navigationItem", currentNavigationItem);
+        outState.putInt("navigationItem", this.currentNavigationItem);
     }
 
     @Override
-    public boolean onNavigationItemSelected(int position, long itemId) {
-        currentNavigationItem = position;
-        repertoire.setRepertoireMode(ModeRepertoire.values()[((int) itemId)]);
+    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+        this.currentNavigationItem = itemPosition;
+        this.repertoire.setRepertoireMode(ModeRepertoire.values()[((int) itemId)]);
         return true;
     }
 
@@ -90,17 +91,19 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
         handleIntent(intent);
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     private void handleIntent(Intent intent) {
-        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+        String s = intent.getAction();
+        if (s.equals(Intent.ACTION_VIEW)) {
             // handles a click on a search suggestion; launches activity to show word
             /*
             Intent wordIntent = new Intent(this, WordActivity.class);
             wordIntent.setData(intent.getData());
             startActivity(wordIntent);
             */
-        } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            repertoire.dao.setFiltre(intent.getStringExtra(SearchManager.QUERY));
-            repertoire.refreshList();
+        } else if (s.equals(Intent.ACTION_SEARCH)) {
+            this.repertoire.repertoireDao.setFiltre(intent.getStringExtra(SearchManager.QUERY));
+            this.repertoire.refreshList();
         }
     }
 
@@ -109,14 +112,14 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
 
-        shareProvider = (ShareActionProvider) menu.findItem(R.id.menu_share).getActionProvider();
-        shareProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
-        shareProvider.setShareIntent(CreateShareIntent());
+        this.shareProvider = (ShareActionProvider) menu.findItem(R.id.menu_share).getActionProvider();
+        this.shareProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+        this.shareProvider.setShareIntent(createShareIntent());
 
         return super.onCreateOptionsMenu(menu);
     }
 
-    public Intent CreateShareIntent() {
+    public static Intent createShareIntent() {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("plain/text");
         intent.putExtra(Intent.EXTRA_TEXT, "Test");
@@ -130,7 +133,7 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
                 onSearchRequested();
                 return true;
             case R.id.menu_share:
-                shareProvider.setShareIntent(CreateShareIntent());
+                this.shareProvider.setShareIntent(createShareIntent());
                 return true;
             case R.id.menu_options:
                 startActivityForResult(new Intent(this, SettingsActivity.class), REQUEST_CONFIG);
@@ -147,16 +150,16 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
         switch (requestCode) {
             case REQUEST_CONFIG:
                 UserConfig.getInstance().reloadConfig(this);
-                repertoire.refreshList();
+                this.repertoire.refreshList();
                 break;
         }
     }
 
     @Override
     public void onCancel() {
-        if ("".equals(repertoire.dao.getFiltre())) return;
-        repertoire.dao.setFiltre(null);
-        repertoire.refreshList();
+        if ("".equals(this.repertoire.repertoireDao.getFiltre())) return;
+        this.repertoire.repertoireDao.setFiltre(null);
+        this.repertoire.refreshList();
     }
 
     /**
@@ -165,6 +168,7 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
      */
     public static class FicheActivity extends Activity {
 
+        @SuppressWarnings("VariableNotUsedInsideIf")
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
@@ -191,10 +195,10 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
      * database to the user as appropriate based on the currrent UI layout.
      */
     public static class TitlesFragment extends ExpandableListFragment {
-        boolean mDualPane;
-        int mCurCheckPosition = 0;
+        boolean dualPane;
+        int curCheckPosition;
 
-        InitialeRepertoireDao<?, ?> dao;
+        InitialeRepertoireDao<?, ?> repertoireDao;
         private ModeRepertoire repertoireMode;
 
         @Override
@@ -202,18 +206,18 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
             super.onActivityCreated(savedInstanceState);
             if (savedInstanceState != null) {
                 // Restore last state for checked position.
-                mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
+                this.curCheckPosition = savedInstanceState.getInt("curChoice", 0);
             }
         }
 
         @Override
         public void onSaveInstanceState(Bundle outState) {
             super.onSaveInstanceState(outState);
-            outState.putInt("curChoice", mCurCheckPosition);
+            outState.putInt("curChoice", this.curCheckPosition);
         }
 
         @Override
-        public void onListItemClick(ExpandableListView l, View v, int position, long id) {
+        public void onListItemClick(ExpandableListView listView, View view, int position, long id) {
             showDetails(position);
         }
 
@@ -223,9 +227,9 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
          * whole new activity in which it is displayed.
          */
         void showDetails(int index) {
-            mCurCheckPosition = index;
+            this.curCheckPosition = index;
 /*
-            if (mDualPane) {
+            if (dualPane) {
                 // We can display everything in-place with fragments, so update
                 // the list to highlight the selected item and show the database.
                 getListView().setItemChecked(index, true);
@@ -257,31 +261,32 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
 
         public void setRepertoireMode(ModeRepertoire repertoireMode) {
             if (this.repertoireMode != repertoireMode)
-                mCurCheckPosition = 0;
+                this.curCheckPosition = 0;
             this.repertoireMode = repertoireMode;
-            dao = DaoFactory.getDao(repertoireMode.getDaoClass(), getActivity());
+            this.repertoireDao = DaoFactory.getDao(repertoireMode.getDaoClass(), getActivity());
 
             refreshList();
         }
 
         private void refreshList() {
-            setListAdapter(new RepertoireAdapter(getActivity(), dao));
+            setListAdapter(new RepertoireAdapter(getActivity(), this.repertoireDao));
 
             // Check to see if we have a frame in which to embed the details
             // fragment directly in the containing UI.
             View detailsFrame = getActivity().findViewById(R.id.details);
-            mDualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
+            this.dualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
 
-            if (mDualPane) {
+            if (this.dualPane) {
                 // In dual-pane mode, the list view highlights the selected item.
-                getListView().setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+                getListView().setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
                 // Make sure our UI is in the correct state.
-                showDetails(mCurCheckPosition);
+                showDetails(this.curCheckPosition);
             }
         }
 
+        @SuppressWarnings("UnusedDeclaration")
         public ModeRepertoire getRepertoireMode() {
-            return repertoireMode;
+            return this.repertoireMode;
         }
     }
 
@@ -296,24 +301,25 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
          * Create a new instance of FicheFragment, initialized to
          * show the text at 'index'.
          */
+        @SuppressWarnings("UnusedDeclaration")
         public static FicheFragment newInstance(int index) {
-            FicheFragment f = new FicheFragment();
+            FicheFragment ficheFragment = new FicheFragment();
 
             // Supply index input as an argument.
             Bundle args = new Bundle();
             args.putInt("index", index);
-            f.setArguments(args);
+            ficheFragment.setArguments(args);
 
-            return f;
+            return ficheFragment;
         }
 
         public int getShownIndex() {
             return getArguments().getInt("index", 0);
         }
 
+        @Nullable
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             if (container == null) {
                 // We have different layouts, and in one of them this
                 // fragment's containing frame doesn't exist.  The fragment

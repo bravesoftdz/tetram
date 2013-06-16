@@ -1,7 +1,9 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.utils.StringUtils;
 
+@SuppressWarnings("UnusedDeclaration")
 public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
 
     private String titre;
@@ -15,7 +17,7 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
     private Boolean achat, complet;
 
     public String getTitre() {
-        return titre;
+        return this.titre;
     }
 
     public void setTitre(String titre) {
@@ -23,7 +25,7 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
     }
 
     public Integer getTome() {
-        return tome;
+        return this.tome;
     }
 
     public void setTome(Integer tome) {
@@ -31,7 +33,7 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
     }
 
     public Integer getTomeDebut() {
-        return tomeDebut;
+        return this.tomeDebut;
     }
 
     public void setTomeDebut(Integer tomeDebut) {
@@ -39,23 +41,23 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
     }
 
     public Integer getTomeFin() {
-        return tomeFin;
+        return this.tomeFin;
     }
 
     public void setTomeFin(Integer tomeFin) {
         this.tomeFin = tomeFin;
     }
 
-    public Boolean getHorsSerie() {
-        return horsSerie;
+    public Boolean isHorsSerie() {
+        return this.horsSerie;
     }
 
     public void setHorsSerie(Boolean horsSerie) {
         this.horsSerie = horsSerie;
     }
 
-    public Boolean getIntegrale() {
-        return integrale;
+    public Boolean isIntegrale() {
+        return this.integrale;
     }
 
     public void setIntegrale(Boolean integrale) {
@@ -63,7 +65,7 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
     }
 
     public Integer getMoisParution() {
-        return moisParution;
+        return this.moisParution;
     }
 
     public void setMoisParution(Integer moisParution) {
@@ -71,7 +73,7 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
     }
 
     public Integer getAnneeParution() {
-        return anneeParution;
+        return this.anneeParution;
     }
 
     public void setAnneeParution(Integer anneeParution) {
@@ -79,7 +81,7 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
     }
 
     public Integer getNotation() {
-        return notation;
+        return this.notation;
     }
 
     public void setNotation(Integer notation) {
@@ -87,23 +89,23 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
     }
 
     public SerieLiteBean getSerie() {
-        return serie;
+        return this.serie;
     }
 
     public void setSerie(SerieLiteBean serie) {
         this.serie = serie;
     }
 
-    public Boolean getAchat() {
-        return achat;
+    public Boolean isAchat() {
+        return this.achat;
     }
 
     public void setAchat(Boolean achat) {
         this.achat = achat;
     }
 
-    public Boolean getComplet() {
-        return complet;
+    public Boolean isComplet() {
+        return this.complet;
     }
 
     public void setComplet(Boolean complet) {
@@ -115,7 +117,7 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
                 simple,
                 avecSerie,
                 this.titre,
-                (serie != null ? serie.getTitre() : null),
+                (this.serie != null) ? this.serie.getTitre() : null,
                 this.tome,
                 this.tomeDebut,
                 this.tomeFin,
@@ -128,8 +130,9 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
         return getLabel(false, true);
     }
 
+    @Nullable
     @Override
     public Float getTreeNodeRating() {
-        return this.notation == null ? null : Float.valueOf(this.notation);
+        return (this.notation == null) ? null : Float.valueOf(this.notation);
     }
 }

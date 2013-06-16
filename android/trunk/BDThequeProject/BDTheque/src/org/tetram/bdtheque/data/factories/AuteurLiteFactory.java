@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.factories;
 
 import android.content.Context;
 import android.database.Cursor;
+import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.AuteurLiteBean;
 import org.tetram.bdtheque.database.DDLConstants;
 
@@ -10,13 +11,14 @@ import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldUUID;
 
 public class AuteurLiteFactory implements BeanFactory<AuteurLiteBean> {
 
+    @Nullable
     @Override
     public AuteurLiteBean loadFromCursor(Context context, Cursor cursor, boolean mustExists) {
-        AuteurLiteBean a = new AuteurLiteBean();
-        a.setId(getFieldUUID(cursor, DDLConstants.AUTEURS_ID));
-        if (mustExists && a.getId() == null) return null;
-        a.setNom(getFieldString(cursor, DDLConstants.AUTEURS_NOM));
-        return a;
+        AuteurLiteBean bean = new AuteurLiteBean();
+        bean.setId(getFieldUUID(cursor, DDLConstants.AUTEURS_ID));
+        if (mustExists && (bean.getId() == null)) return null;
+        bean.setNom(getFieldString(cursor, DDLConstants.AUTEURS_NOM));
+        return bean;
     }
 
 }

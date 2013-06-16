@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.widget.Toast;
 import org.tetram.bdtheque.R;
 
+@SuppressWarnings("UnusedDeclaration")
 public class RechercheActivity extends Activity {
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.xml.recherche);

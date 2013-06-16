@@ -1,24 +1,26 @@
 package org.tetram.bdtheque.data.dao;
 
 import android.content.Context;
-import org.tetram.bdtheque.database.DatabaseHelper;
+import org.tetram.bdtheque.database.BDDatabaseHelper;
 
+@SuppressWarnings("UnusedDeclaration")
 public abstract class CommonDao<T> {
 
-    private DatabaseHelper db;
-    private Context context;
+    private final BDDatabaseHelper databaseHelper;
+    private final Context context;
 
     public CommonDao(Context context) {
-        db = new DatabaseHelper(context);
+        super();
+        this.databaseHelper = new BDDatabaseHelper(context);
         this.context = context;
     }
 
-    public DatabaseHelper getDb() {
-        return db;
+    public BDDatabaseHelper getDatabaseHelper() {
+        return this.databaseHelper;
     }
 
     public Context getContext() {
-        return context;
+        return this.context;
     }
 
 }

@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.utils.StringUtils;
 
 public class AuteurLiteBean extends CommonBean implements TreeNodeBean {
@@ -11,13 +12,15 @@ public class AuteurLiteBean extends CommonBean implements TreeNodeBean {
         return StringUtils.formatTitre(this.nom);
     }
 
+    @Nullable
     @Override
     public Float getTreeNodeRating() {
         return null;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public String getNom() {
-        return nom;
+        return this.nom;
     }
 
     public void setNom(String nom) {

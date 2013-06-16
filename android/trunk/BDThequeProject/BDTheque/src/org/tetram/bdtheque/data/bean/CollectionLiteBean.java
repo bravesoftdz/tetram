@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.utils.StringUtils;
 
 public class CollectionLiteBean extends CommonBean implements TreeNodeBean {
@@ -8,7 +9,7 @@ public class CollectionLiteBean extends CommonBean implements TreeNodeBean {
     private EditeurLiteBean editeur;
 
     public String getNom() {
-        return nom;
+        return this.nom;
     }
 
     public void setNom(String nom) {
@@ -23,6 +24,7 @@ public class CollectionLiteBean extends CommonBean implements TreeNodeBean {
             return result;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void setEditeur(EditeurLiteBean editeur) {
         this.editeur = editeur;
     }
@@ -32,6 +34,7 @@ public class CollectionLiteBean extends CommonBean implements TreeNodeBean {
         return getLabel(true);
     }
 
+    @Nullable
     @Override
     public Float getTreeNodeRating() {
         return null;

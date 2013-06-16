@@ -18,15 +18,16 @@ public enum ModeRepertoire {
     private final int value;
     private final int resId;
     private final Class<? extends InitialeRepertoireDao<?, ?>> daoClass;
-    private boolean defaultMode;
+    private final boolean defaultMode;
 
-    ModeRepertoire(int value, int resId, Class<? extends InitialeRepertoireDao<?, ?>> daoClass, boolean defaultMode) {
+    ModeRepertoire(final int value, final int resId, final Class<? extends InitialeRepertoireDao<?, ?>> daoClass, final boolean defaultMode) {
         this.value = value;
         this.resId = resId;
         this.daoClass = daoClass;
         this.defaultMode = defaultMode;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public int getValue() {
         return this.value;
     }
@@ -39,11 +40,11 @@ public enum ModeRepertoire {
         return this.daoClass;
     }
 
-    public MenuEntry getMenuEntry(Context context) {
+    public MenuEntry getMenuEntry(final Context context) {
         return new MenuEntry(context.getString(getResId()), this.ordinal());
     }
 
-    public boolean getDefault() {
-        return defaultMode;
+    public boolean isDefault() {
+        return this.defaultMode;
     }
 }

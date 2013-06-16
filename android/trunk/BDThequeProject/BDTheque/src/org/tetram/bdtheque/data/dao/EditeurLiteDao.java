@@ -9,6 +9,7 @@ import org.tetram.bdtheque.database.DDLConstants;
 
 import java.util.List;
 
+@SuppressWarnings("UnusedDeclaration")
 public class EditeurLiteDao extends CommonRepertoireDao<EditeurLiteBean, InitialeBean> {
 
     public EditeurLiteDao(Context context) {

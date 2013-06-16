@@ -5,29 +5,31 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 public class UserConfig {
-    private static UserConfig ourInstance = new UserConfig();
+    private static final UserConfig ourInstance = new UserConfig();
 
     public static UserConfig getInstance() {
         return ourInstance;
     }
 
     private UserConfig() {
+        super();
     }
 
+    @SuppressWarnings("RedundantFieldInitialization")
     private int formatTitreAlbum = 0;
     private boolean afficheNoteListes = true;
 
-    public void reloadConfig(Context context) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+    public void reloadConfig(final Context context) {
+        final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         this.formatTitreAlbum = Integer.valueOf(sharedPref.getString(context.getString(R.string.pref_formatTitreAlbum), "0"));
         this.afficheNoteListes = sharedPref.getBoolean(context.getString(R.string.pref_notationListe), true);
     }
 
     public int getFormatTitreAlbum() {
-        return formatTitreAlbum;
+        return this.formatTitreAlbum;
     }
 
-    public boolean getAfficheNoteListes() {
-        return afficheNoteListes;
+    public boolean shouldAfficheNoteListes() {
+        return this.afficheNoteListes;
     }
 }

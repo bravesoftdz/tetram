@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+@SuppressWarnings("UnusedDeclaration")
 public class DBUtils {
 
     public static void vacuum(SQLiteDatabase db) {
@@ -43,7 +44,7 @@ public class DBUtils {
         } else {
             count = executeSqlStatements(db, lines);
         }
-        Log.i(DatabaseHelper.TAG, "Executed " + count + " statements from SQL script '" + assetFilename + "'");
+        Log.i(BDDatabaseHelper.LOG_TAG, "Executed " + count + " statements from SQL script '" + assetFilename + "'");
         return count;
     }
 
@@ -62,7 +63,7 @@ public class DBUtils {
         int count = 0;
         for (String line : statements) {
             line = line.trim();
-            if (line.length() > 0) {
+            if (!line.isEmpty()) {
                 db.execSQL(line);
                 count++;
             }
@@ -104,7 +105,7 @@ public class DBUtils {
         }
     }
 
-    public static String quotedStr(String string) {
-        return "'" + string.replace("'", "''") + "'";
+    public static String quotedStr(String s) {
+        return "'" + s.replace("'", "''") + "'";
     }
 }

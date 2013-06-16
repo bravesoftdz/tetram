@@ -14,42 +14,41 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 import org.tetram.bdtheque.R;
 
-public class ExpandableListFragment extends Fragment
-        implements View.OnCreateContextMenuListener,
-        ExpandableListView.OnChildClickListener, ExpandableListView.OnGroupCollapseListener,
+@SuppressWarnings("UnusedDeclaration")
+public class ExpandableListFragment extends Fragment implements
+        ExpandableListView.OnChildClickListener,
+        ExpandableListView.OnGroupCollapseListener,
         ExpandableListView.OnGroupExpandListener {
 
     static final int INTERNAL_EMPTY_ID = 0x00ff0001;
     static final int INTERNAL_PROGRESS_CONTAINER_ID = 0x00ff0002;
     static final int INTERNAL_LIST_CONTAINER_ID = 0x00ff0003;
 
-    final private Handler mHandler = new Handler();
+    private final Handler handler = new Handler();
 
-    final private Runnable mRequestFocus = new Runnable() {
+    private final Runnable requestFocus = new Runnable() {
+        @Override
         public void run() {
-            mExpandableList.focusableViewAvailable(mExpandableList);
+            ExpandableListFragment.this.expandableList.focusableViewAvailable(ExpandableListFragment.this.expandableList);
         }
     };
 
-    final private AdapterView.OnItemClickListener mOnClickListener
-            = new AdapterView.OnItemClickListener() {
-        public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-            onListItemClick((ExpandableListView) parent, v, position, id);
+    private final AdapterView.OnItemClickListener onClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+            onListItemClick((ExpandableListView) parent, view, position, id);
         }
     };
 
-    ExpandableListAdapter mAdapter;
-    ExpandableListView mExpandableList;
-    boolean mFinishedStart = false;
-    View mEmptyView;
-    TextView mStandardEmptyView;
-    View mProgressContainer;
-    View mExpandableListContainer;
-    CharSequence mEmptyText;
-    boolean mExpandableListShown;
-
-    public ExpandableListFragment() {
-    }
+    ExpandableListAdapter listAdapter;
+    ExpandableListView expandableList;
+    boolean finishedStart;
+    View emptyView;
+    TextView emptyTextView;
+    View progressContainer;
+    View expandableListContainer;
+    CharSequence emptyText;
+    boolean expandableListShown;
 
     /**
      * Provide default implementation to return a simple list view.  Subclasses
@@ -66,7 +65,7 @@ public class ExpandableListFragment extends Fragment
      * way to have the built-in indeterminant progress state be shown.
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         return inflater.inflate(R.layout.treeview, container);
     }
 
@@ -74,7 +73,7 @@ public class ExpandableListFragment extends Fragment
      * Attach to list view once the view hierarchy has been created.
      */
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(final View view, final Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ensureList();
     }
@@ -84,11 +83,11 @@ public class ExpandableListFragment extends Fragment
      */
     @Override
     public void onDestroyView() {
-        mHandler.removeCallbacks(mRequestFocus);
-        mExpandableList = null;
-        mExpandableListShown = false;
-        mEmptyView = mProgressContainer = mExpandableListContainer = null;
-        mStandardEmptyView = null;
+        this.handler.removeCallbacks(this.requestFocus);
+        this.expandableList = null;
+        this.expandableListShown = false;
+        this.emptyView = this.progressContainer = this.expandableListContainer = null;
+        this.emptyTextView = null;
         super.onDestroyView();
     }
 
@@ -98,23 +97,23 @@ public class ExpandableListFragment extends Fragment
      * getListView().getItemAtPosition(position) if they need to access the
      * data associated with the selected item.
      *
-     * @param l        The ListView where the click happened
-     * @param v        The view that was clicked within the ListView
+     * @param listView The ListView where the click happened
+     * @param view     The view that was clicked within the ListView
      * @param position The position of the view in the list
      * @param id       The row id of the item that was clicked
      */
-    public void onListItemClick(ExpandableListView l, View v, int position, long id) {
+    public void onListItemClick(final ExpandableListView listView, final View view, final int position, final long id) {
     }
 
     /**
      * Provide the cursor for the list view.
      */
-    public void setListAdapter(ExpandableListAdapter adapter) {
-        boolean hadAdapter = mAdapter != null;
-        mAdapter = adapter;
-        if (mExpandableList != null) {
-            mExpandableList.setAdapter(adapter);
-            if (!mExpandableListShown && !hadAdapter) {
+    public void setListAdapter(final ExpandableListAdapter adapter) {
+        final boolean hadAdapter = this.listAdapter != null;
+        this.listAdapter = adapter;
+        if (this.expandableList != null) {
+            this.expandableList.setAdapter(adapter);
+            if (!this.expandableListShown && !hadAdapter) {
                 // The list was hidden, and previously didn't have an
                 // adapter.  It is now time to show it.
                 setListShown(true, getView().getWindowToken() != null);
@@ -126,11 +125,11 @@ public class ExpandableListFragment extends Fragment
      * Set the currently selected list item to the specified
      * position with the adapter's data
      *
-     * @param position
+     * @param position the position of the item to be selected
      */
-    public void setSelection(int position) {
+    public void setSelection(final int position) {
         ensureList();
-        mExpandableList.setSelection(position);
+        this.expandableList.setSelection(position);
     }
 
     /**
@@ -138,7 +137,7 @@ public class ExpandableListFragment extends Fragment
      */
     public int getSelectedItemPosition() {
         ensureList();
-        return mExpandableList.getSelectedItemPosition();
+        return this.expandableList.getSelectedItemPosition();
     }
 
     /**
@@ -146,7 +145,7 @@ public class ExpandableListFragment extends Fragment
      */
     public long getSelectedItemId() {
         ensureList();
-        return mExpandableList.getSelectedItemId();
+        return this.expandableList.getSelectedItemId();
     }
 
     /**
@@ -154,7 +153,7 @@ public class ExpandableListFragment extends Fragment
      */
     public ExpandableListView getListView() {
         ensureList();
-        return mExpandableList;
+        return this.expandableList;
     }
 
     /**
@@ -162,16 +161,17 @@ public class ExpandableListFragment extends Fragment
      * be shown when the list is empty.  If you would like to have it
      * shown, call this method to supply the text it should use.
      */
-    public void setEmptyText(CharSequence text) {
+    @SuppressWarnings({"UnusedDeclaration", "VariableNotUsedInsideIf"})
+    public void setEmptyText(final CharSequence text) {
         ensureList();
-        if (mStandardEmptyView == null) {
+        if (this.emptyTextView == null) {
             throw new IllegalStateException("Can't be used with a custom content view");
         }
-        mStandardEmptyView.setText(text);
-        if (mEmptyText == null) {
-            mExpandableList.setEmptyView(mStandardEmptyView);
+        this.emptyTextView.setText(text);
+        if (this.emptyText == null) {
+            this.expandableList.setEmptyView(this.emptyTextView);
         }
-        mEmptyText = text;
+        this.emptyText = text;
     }
 
     /**
@@ -188,7 +188,7 @@ public class ExpandableListFragment extends Fragment
      * @param shown If true, the list view is shown; if false, the progress
      *              indicator.  The initial value is true.
      */
-    public void setListShown(boolean shown) {
+    public void setListShown(final boolean shown) {
         setListShown(shown, true);
     }
 
@@ -196,7 +196,7 @@ public class ExpandableListFragment extends Fragment
      * Like {@link #setListShown(boolean)}, but no animation is used when
      * transitioning from the previous state.
      */
-    public void setListShownNoAnimation(boolean shown) {
+    public void setListShownNoAnimation(final boolean shown) {
         setListShown(shown, false);
     }
 
@@ -210,39 +210,35 @@ public class ExpandableListFragment extends Fragment
      * @param animate If true, an animation will be used to transition to the
      *                new state.
      */
-    private void setListShown(boolean shown, boolean animate) {
+    private void setListShown(final boolean shown, final boolean animate) {
         ensureList();
-        if (mProgressContainer == null) {
+        if (this.progressContainer == null) {
             throw new IllegalStateException("Can't be used with a custom content view");
         }
-        if (mExpandableListShown == shown) {
+        if (this.expandableListShown == shown) {
             return;
         }
-        mExpandableListShown = shown;
+        this.expandableListShown = shown;
         if (shown) {
             if (animate) {
-                mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
-                        getActivity(), android.R.anim.fade_out));
-                mExpandableListContainer.startAnimation(AnimationUtils.loadAnimation(
-                        getActivity(), android.R.anim.fade_in));
+                this.progressContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
+                this.expandableListContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
             } else {
-                mProgressContainer.clearAnimation();
-                mExpandableListContainer.clearAnimation();
+                this.progressContainer.clearAnimation();
+                this.expandableListContainer.clearAnimation();
             }
-            mProgressContainer.setVisibility(View.GONE);
-            mExpandableListContainer.setVisibility(View.VISIBLE);
+            this.progressContainer.setVisibility(View.GONE);
+            this.expandableListContainer.setVisibility(View.VISIBLE);
         } else {
             if (animate) {
-                mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
-                        getActivity(), android.R.anim.fade_in));
-                mExpandableListContainer.startAnimation(AnimationUtils.loadAnimation(
-                        getActivity(), android.R.anim.fade_out));
+                this.progressContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in));
+                this.expandableListContainer.startAnimation(AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out));
             } else {
-                mProgressContainer.clearAnimation();
-                mExpandableListContainer.clearAnimation();
+                this.progressContainer.clearAnimation();
+                this.expandableListContainer.clearAnimation();
             }
-            mProgressContainer.setVisibility(View.VISIBLE);
-            mExpandableListContainer.setVisibility(View.GONE);
+            this.progressContainer.setVisibility(View.VISIBLE);
+            this.expandableListContainer.setVisibility(View.GONE);
         }
     }
 
@@ -250,29 +246,29 @@ public class ExpandableListFragment extends Fragment
      * Get the ListAdapter associated with this activity's ListView.
      */
     public ExpandableListAdapter getListAdapter() {
-        return mAdapter;
+        return this.listAdapter;
     }
 
     private void ensureList() {
-        if (mExpandableList != null) {
+        if (this.expandableList != null) {
             return;
         }
-        View root = getView();
-        if (root == null) {
+        final View rootView = getView();
+        if (rootView == null) {
             throw new IllegalStateException("Content view not yet created");
         }
-        if (root instanceof ExpandableListView) {
-            mExpandableList = (ExpandableListView) root;
+        if (rootView instanceof ExpandableListView) {
+            this.expandableList = (ExpandableListView) rootView;
         } else {
-            mStandardEmptyView = (TextView) root.findViewById(INTERNAL_EMPTY_ID);
-            if (mStandardEmptyView == null) {
-                mEmptyView = root.findViewById(android.R.id.empty);
+            this.emptyTextView = (TextView) rootView.findViewById(INTERNAL_EMPTY_ID);
+            if (this.emptyTextView == null) {
+                this.emptyView = rootView.findViewById(android.R.id.empty);
             } else {
-                mStandardEmptyView.setVisibility(View.GONE);
+                this.emptyTextView.setVisibility(View.GONE);
             }
-            mProgressContainer = root.findViewById(INTERNAL_PROGRESS_CONTAINER_ID);
-            mExpandableListContainer = root.findViewById(INTERNAL_LIST_CONTAINER_ID);
-            View rawExpandableListView = root.findViewById(android.R.id.list);
+            this.progressContainer = rootView.findViewById(INTERNAL_PROGRESS_CONTAINER_ID);
+            this.expandableListContainer = rootView.findViewById(INTERNAL_LIST_CONTAINER_ID);
+            final View rawExpandableListView = rootView.findViewById(android.R.id.list);
             if (!(rawExpandableListView instanceof ExpandableListView)) {
                 if (rawExpandableListView == null) {
                     throw new RuntimeException(
@@ -283,28 +279,28 @@ public class ExpandableListFragment extends Fragment
                         "Content has view with id attribute 'android.R.id.list' "
                                 + "that is not a ListView class");
             }
-            mExpandableList = (ExpandableListView) rawExpandableListView;
-            if (mEmptyView != null) {
-                mExpandableList.setEmptyView(mEmptyView);
-            } else if (mEmptyText != null) {
-                mStandardEmptyView.setText(mEmptyText);
-                mExpandableList.setEmptyView(mStandardEmptyView);
+            this.expandableList = (ExpandableListView) rawExpandableListView;
+            if (this.emptyView != null) {
+                this.expandableList.setEmptyView(this.emptyView);
+            } else if (this.emptyText != null) {
+                this.emptyTextView.setText(this.emptyText);
+                this.expandableList.setEmptyView(this.emptyTextView);
             }
         }
-        mExpandableListShown = true;
-        mExpandableList.setOnItemClickListener(mOnClickListener);
-        if (mAdapter != null) {
-            ExpandableListAdapter adapter = mAdapter;
-            mAdapter = null;
+        this.expandableListShown = true;
+        this.expandableList.setOnItemClickListener(this.onClickListener);
+        if (this.listAdapter != null) {
+            final ExpandableListAdapter adapter = this.listAdapter;
+            this.listAdapter = null;
             setListAdapter(adapter);
         } else {
             // We are starting without an adapter, so assume we won't
             // have our data right away and start with the progress indicator.
-            if (mProgressContainer != null) {
+            if (this.progressContainer != null) {
                 setListShown(false, false);
             }
         }
-        mHandler.post(mRequestFocus);
+        this.handler.post(this.requestFocus);
     }
 
     /**
@@ -317,7 +313,7 @@ public class ExpandableListFragment extends Fragment
      * {@inheritDoc}
      */
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenu.ContextMenuInfo menuInfo) {
     }
 
     /**
@@ -325,21 +321,23 @@ public class ExpandableListFragment extends Fragment
      * <p/>
      * {@inheritDoc}
      */
-    public boolean onChildClick(ExpandableListView parent, View v, int groupPosition,
-                                int childPosition, long id) {
+    @Override
+    public boolean onChildClick(final ExpandableListView parent, final View v, final int groupPosition, final int childPosition, final long id) {
         return false;
     }
 
     /**
      * Override this for receiving callbacks when a group has been collapsed.
      */
-    public void onGroupCollapse(int groupPosition) {
+    @Override
+    public void onGroupCollapse(final int groupPosition) {
     }
 
     /**
      * Override this for receiving callbacks when a group has been expanded.
      */
-    public void onGroupExpand(int groupPosition) {
+    @Override
+    public void onGroupExpand(final int groupPosition) {
     }
 
 //    /**
@@ -361,26 +359,27 @@ public class ExpandableListFragment extends Fragment
      * @see android.app.Activity#onContentChanged()
      */
 
+    @SuppressWarnings("ConstantConditions")
     public void onContentChanged() {
 //        super.onContentChanged();
-        View emptyView = getView().findViewById(android.R.id.empty);
-        mExpandableList = (ExpandableListView) getView().findViewById(android.R.id.list);
-        if (mExpandableList == null) {
+        final View tmpEmptyView = getView().findViewById(android.R.id.empty);
+        this.expandableList = (ExpandableListView) getView().findViewById(android.R.id.list);
+        if (this.expandableList == null) {
             throw new RuntimeException(
                     "Your content must have a ExpandableListView whose id attribute is " +
                             "'android.R.id.list'");
         }
-        if (emptyView != null) {
-            mExpandableList.setEmptyView(emptyView);
+        if (tmpEmptyView != null) {
+            this.expandableList.setEmptyView(tmpEmptyView);
         }
-        mExpandableList.setOnChildClickListener(this);
-        mExpandableList.setOnGroupExpandListener(this);
-        mExpandableList.setOnGroupCollapseListener(this);
+        this.expandableList.setOnChildClickListener(this);
+        this.expandableList.setOnGroupExpandListener(this);
+        this.expandableList.setOnGroupCollapseListener(this);
 
-        if (mFinishedStart) {
-            setListAdapter(mAdapter);
+        if (this.finishedStart) {
+            setListAdapter(this.listAdapter);
         }
-        mFinishedStart = true;
+        this.finishedStart = true;
     }
 
     /**
@@ -391,7 +390,7 @@ public class ExpandableListFragment extends Fragment
      */
     public ExpandableListView getExpandableListView() {
         ensureList();
-        return mExpandableList;
+        return this.expandableList;
     }
 
     /**
@@ -399,7 +398,7 @@ public class ExpandableListFragment extends Fragment
      * ExpandableListView.
      */
     public ExpandableListAdapter getExpandableListAdapter() {
-        return mAdapter;
+        return this.listAdapter;
     }
 
     /**
@@ -408,7 +407,7 @@ public class ExpandableListFragment extends Fragment
      * @return The ID of the currently selected group or child.
      */
     public long getSelectedId() {
-        return mExpandableList.getSelectedId();
+        return this.expandableList.getSelectedId();
     }
 
     /**
@@ -423,7 +422,7 @@ public class ExpandableListFragment extends Fragment
      *         selected group or child's position and type.
      */
     public long getSelectedPosition() {
-        return mExpandableList.getSelectedPosition();
+        return this.expandableList.getSelectedPosition();
     }
 
     /**
@@ -437,8 +436,8 @@ public class ExpandableListFragment extends Fragment
      *                          it is collapsed.
      * @return Whether the selection was successfully set on the child.
      */
-    public boolean setSelectedChild(int groupPosition, int childPosition, boolean shouldExpandGroup) {
-        return mExpandableList.setSelectedChild(groupPosition, childPosition, shouldExpandGroup);
+    public boolean putSelectedChild(final int groupPosition, final int childPosition, final boolean shouldExpandGroup) {
+        return this.expandableList.setSelectedChild(groupPosition, childPosition, shouldExpandGroup);
     }
 
     /**
@@ -446,7 +445,7 @@ public class ExpandableListFragment extends Fragment
      *
      * @param groupPosition The position of the group that should be selected.
      */
-    public void setSelectedGroup(int groupPosition) {
-        mExpandableList.setSelectedGroup(groupPosition);
+    public void setSelectedGroup(final int groupPosition) {
+        this.expandableList.setSelectedGroup(groupPosition);
     }
 }

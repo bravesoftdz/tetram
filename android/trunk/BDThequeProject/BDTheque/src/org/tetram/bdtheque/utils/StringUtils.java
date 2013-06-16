@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@SuppressWarnings("UnusedDeclaration")
 public abstract class StringUtils {
 
     public static final UUID GUID_FULL = GUIDStringToUUID("{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}");
@@ -21,27 +22,27 @@ public abstract class StringUtils {
     static {
         Map<Boolean, String> aMap;
 
-        aMap = new HashMap<Boolean, String>();
+        aMap = new HashMap<>();
         aMap.put(false, "T. ");
         aMap.put(true, "Tome ");
         RES_TOME = Collections.unmodifiableMap(aMap);
 
-        aMap = new HashMap<Boolean, String>();
+        aMap = new HashMap<>();
         aMap.put(false, "HS");
         aMap.put(true, "Hors-Série");
         RES_HORSERIE = Collections.unmodifiableMap(aMap);
 
-        aMap = new HashMap<Boolean, String>();
+        aMap = new HashMap<>();
         aMap.put(false, "INT.");
         aMap.put(true, "Intégrale");
         RES_INTEGRALE = Collections.unmodifiableMap(aMap);
     }
 
-    public static UUID GUIDStringToUUID(String guid) {
+    public static UUID GUIDStringToUUID(final String guid) {
         return UUID.fromString(guid.substring(2, guid.length() - 2));
     }
 
-    public static UUID GUIDStringToUUIDDef(String guid, UUID defaultguid) {
+    public static UUID GUIDStringToUUIDDef(final String guid, final UUID defaultguid) {
         try {
             return UUID.fromString(guid.substring(2, guid.length() - 2));
         } catch (Exception e) {
@@ -49,16 +50,17 @@ public abstract class StringUtils {
         }
     }
 
-    public static String ajoutString(String chaine, String ajout, String espace) {
+    public static String ajoutString(final String chaine, final String ajout, final String espace) {
         return ajoutString(chaine, ajout, espace, "", "");
     }
 
-    public static String ajoutString(String chaine, String ajout, String espace, String avant) {
+    public static String ajoutString(final String chaine, final String ajout, final String espace, final String avant) {
         return ajoutString(chaine, ajout, espace, avant, "");
     }
 
-    public static String ajoutString(String chaine, String ajout, String espace, String avant, String apres) {
-        String s;
+    @SuppressWarnings("StringConcatenationMissingWhitespace")
+    public static String ajoutString(String chaine, final String ajout, final String espace, final String avant, final String apres) {
+        final String s;
         if (chaine == null) chaine = "";
         if (!"".equals(ajout)) {
             s = avant + ajout + apres;
@@ -69,14 +71,14 @@ public abstract class StringUtils {
         return chaine + s;
     }
 
-    public static String nonZero(String s) {
-        if (s == null || "0".equals(s.trim()))
+    public static String nonZero(final String s) {
+        if ((s == null) || "0".equals(s.trim()))
             return "";
         return s;
     }
 
-    public static String nonZero(Integer i) {
-        if (i == null || Integer.valueOf(0).equals(i))
+    public static String nonZero(final Integer i) {
+        if ((i == null) || Integer.valueOf(0).equals(i))
             return "";
         return i.toString();
     }
@@ -235,40 +237,41 @@ begin
 end;
 */
 
-    public static String clearISBN(String code) {
-        StringBuilder result = new StringBuilder();
-        for (char c : code.toUpperCase().toCharArray())
-            if (Character.isDigit(c) || c == 'X')
+    public static String clearISBN(final String code) {
+        final StringBuilder result = new StringBuilder();
+        for (final char c : code.toUpperCase().toCharArray())
+            if (Character.isDigit(c) || (c == 'X'))
                 result.append(c);
         return result.toString();
     }
 
-    public static String formatTitre(String titre) {
+    @SuppressWarnings("StringConcatenationMissingWhitespace")
+    public static String formatTitre(final String titre) {
         if (titre == null) return "";
-        int p = titre.lastIndexOf('[');
+        final int p = titre.lastIndexOf('[');
         if (p == -1) return titre.trim();
 
-        int p2 = titre.lastIndexOf(']');
+        final int p2 = titre.lastIndexOf(']');
         if (p2 < p) return titre.trim();
 
-        String article = titre.substring(p + 1, p2);
+        final String article = titre.substring(p + 1, p2);
         return (article + (article.endsWith("'") ? "" : " ") + titre.substring(0, p - 1) + titre.substring(p2 + 1)).trim();
     }
 
-    public static String trimRight(String str) {
-        int start = 0;
-        int last = str.length() - 1;
+    public static String trimRight(final String str) {
+        final int start = 0;
+        final int last = str.length() - 1;
         int end = last;
-        while ((end >= start) && (str.charAt(end) == ' ')){
+        while ((end >= start) && (str.charAt(end) == ' ')) {
             end--;
         }
         if (end == last) {
             return str;
         }
-        return str.substring(start, end+1);
+        return str.substring(start, end + 1);
     }
 
-    public static String formatTitreAlbum(boolean simple, boolean avecSerie, String titre, String serie, Integer tome, Integer tomeDebut, Integer tomeFin, boolean integrale, boolean horsSerie) {
+    public static String formatTitreAlbum(final boolean simple, final boolean avecSerie, final String titre, final String serie, final Integer tome, final Integer tomeDebut, final Integer tomeFin, final boolean integrale, final boolean horsSerie) {
         String sAlbum;
         if (simple)
             sAlbum = titre;
@@ -284,7 +287,7 @@ end;
 
         String sTome;
         if (integrale) {
-            String s = ajoutString(nonZero(tomeDebut), nonZero(tomeFin), " à ");
+            final String s = ajoutString(nonZero(tomeDebut), nonZero(tomeFin), " à ");
             sTome = ajoutString("", RES_INTEGRALE.get("".equals(sAlbum)), " - ", "", trimRight(" " + nonZero(tome)));
             sTome = ajoutString(sTome, s, " ", "[", "]");
         } else if (horsSerie)
