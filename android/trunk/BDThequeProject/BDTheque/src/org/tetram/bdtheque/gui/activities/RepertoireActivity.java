@@ -3,19 +3,31 @@ package org.tetram.bdtheque.gui.activities;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.TypedValue;
-import android.view.*;
-import android.widget.*;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.ExpandableListView;
+import android.widget.ScrollView;
+import android.widget.ShareActionProvider;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.R;
-import org.tetram.bdtheque.Shakespeare;
 import org.tetram.bdtheque.UserConfig;
+import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.dao.InitialeRepertoireDao;
 import org.tetram.bdtheque.data.factories.DaoFactory;
 import org.tetram.bdtheque.gui.adapter.MenuAdapter;
@@ -94,14 +106,14 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
     @SuppressWarnings("StatementWithEmptyBody")
     private void handleIntent(Intent intent) {
         String s = intent.getAction();
-        if (s.equals(Intent.ACTION_VIEW)) {
+        if (Intent.ACTION_VIEW.equals(s)) {
             // handles a click on a search suggestion; launches activity to show word
             /*
             Intent wordIntent = new Intent(this, WordActivity.class);
             wordIntent.setData(intent.getData());
             startActivity(wordIntent);
             */
-        } else if (s.equals(Intent.ACTION_SEARCH)) {
+        } else if (Intent.ACTION_SEARCH.equals(s)) {
             this.repertoire.repertoireDao.setFiltre(intent.getStringExtra(SearchManager.QUERY));
             this.repertoire.refreshList();
         }
@@ -217,8 +229,13 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
         }
 
         @Override
-        public void onListItemClick(ExpandableListView listView, View view, int position, long id) {
-            showDetails(position);
+        public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+            // Toast.makeText(this.getActivity(), String.format("onChildClick(groupPosition: %d, childPosition: %d, id: %d)", groupPosition, childPosition, id), Toast.LENGTH_LONG).show();
+
+            Object selectedItem = getExpandableListAdapter().getChild(groupPosition, childPosition);
+            Toast.makeText(this.getActivity(), String.format("%s: %s", selectedItem.getClass().getSimpleName(), ((CommonBean) selectedItem).getId().toString()), Toast.LENGTH_LONG).show();
+            //showDetails(position);
+            return true;
         }
 
         /**
@@ -228,15 +245,15 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
          */
         void showDetails(int index) {
             this.curCheckPosition = index;
-/*
-            if (dualPane) {
+
+            if (this.dualPane) {
                 // We can display everything in-place with fragments, so update
                 // the list to highlight the selected item and show the database.
-                getListView().setItemChecked(index, true);
+                getExpandableListView().setItemChecked(index, true);
 
                 // Check what fragment is currently shown, replace if needed.
                 FicheFragment details = (FicheFragment) getFragmentManager().findFragmentById(R.id.details);
-                if (details == null || details.getShownIndex() != index) {
+                if ((details == null) || (details.getShownIndex() != index)) {
                     // Make new fragment to show this selection.
                     details = FicheFragment.newInstance(index);
 
@@ -256,7 +273,6 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
                 intent.putExtra("index", index);
                 startActivity(intent);
             }
- */
         }
 
         public void setRepertoireMode(ModeRepertoire repertoireMode) {
@@ -270,15 +286,16 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
 
         private void refreshList() {
             setListAdapter(new RepertoireAdapter(getActivity(), this.repertoireDao));
+            onContentChanged();
 
             // Check to see if we have a frame in which to embed the details
             // fragment directly in the containing UI.
             View detailsFrame = getActivity().findViewById(R.id.details);
-            this.dualPane = detailsFrame != null && detailsFrame.getVisibility() == View.VISIBLE;
+            this.dualPane = (detailsFrame != null) && (detailsFrame.getVisibility() == View.VISIBLE);
 
             if (this.dualPane) {
                 // In dual-pane mode, the list view highlights the selected item.
-                getListView().setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+                getExpandableListView().setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
                 // Make sure our UI is in the correct state.
                 showDetails(this.curCheckPosition);
             }
@@ -295,13 +312,11 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
      * This is the secondary fragment, displaying the details of a particular
      * item.
      */
-
     public static class FicheFragment extends Fragment {
         /**
          * Create a new instance of FicheFragment, initialized to
          * show the text at 'index'.
          */
-        @SuppressWarnings("UnusedDeclaration")
         public static FicheFragment newInstance(int index) {
             FicheFragment ficheFragment = new FicheFragment();
 
@@ -329,14 +344,18 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
                 // just run the code below, where we would create and return
                 // the view hierarchy; it would just never be used.
                 return null;
-            }
+            } else
+                return buildView(inflater, container, savedInstanceState);
 
+        }
+
+        public View buildView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             ScrollView scroller = new ScrollView(getActivity());
             TextView text = new TextView(getActivity());
             int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getActivity().getResources().getDisplayMetrics());
             text.setPadding(padding, padding, padding, padding);
             scroller.addView(text);
-            text.setText(Shakespeare.DIALOGUE[getShownIndex()]);
+            // text.setText(Shakespeare.DIALOGUE[getShownIndex()]);
             return scroller;
         }
     }

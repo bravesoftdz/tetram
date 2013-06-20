@@ -238,10 +238,10 @@ from
 where
     e.id_collection %s
 order by
+    coalesce(a.titrealbum, s.titreserie), s.titreserie,
     a.horsserie, a.integrale, a.tome,
     a.tomedebut, a.tomefin,
-    a.anneeparution, a.moisparution,
-    coalesce(a.titrealbum, s.titreserie), s.titreserie
+    a.anneeparution, a.moisparution
     ]]></string>
 
     <string name="sql_genres_albums"><![CDATA[

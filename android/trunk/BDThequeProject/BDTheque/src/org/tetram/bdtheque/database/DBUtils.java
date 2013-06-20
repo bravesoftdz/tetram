@@ -17,7 +17,7 @@ public class DBUtils {
     }
 
     /**
-     * Calls {@link #executeSqlScript(Context, SQLiteDatabase, String, boolean)} with transactional set to true.
+     * Calls {@link #executeSqlScript(android.content.Context, android.database.sqlite.SQLiteDatabase, String, boolean)} with transactional set to true.
      *
      * @return number of statements executed.
      */

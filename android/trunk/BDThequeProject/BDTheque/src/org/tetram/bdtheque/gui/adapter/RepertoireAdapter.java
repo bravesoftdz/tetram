@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
+
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.UserConfig;
 import org.tetram.bdtheque.data.bean.InitialeBean;
@@ -141,4 +142,5 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
     }
+
 }
