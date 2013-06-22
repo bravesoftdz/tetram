@@ -1,8 +1,10 @@
-package org.tetram.bdtheque;
+package org.tetram.bdtheque.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import org.tetram.bdtheque.R;
 
 public class UserConfig {
     private static final UserConfig ourInstance = new UserConfig();

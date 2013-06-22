@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.CommonBean;
@@ -15,36 +14,41 @@ import org.tetram.bdtheque.data.factories.DaoFactory;
 import org.tetram.bdtheque.gui.activities.FicheActivity;
 import org.tetram.bdtheque.gui.adapter.RepertoireAdapter;
 import org.tetram.bdtheque.gui.utils.ModeRepertoire;
+import org.tetram.bdtheque.utils.ShowFragmentClass;
 
 public class TitlesFragment extends ExpandableListFragment {
     boolean dualPane;
-    int curCheckPosition;
+    Integer curChildPosition, curGroupPosition;
 
     private InitialeRepertoireDao<?, ?> repertoireDao;
     private ModeRepertoire repertoireMode;
+    private boolean synchroScroll;
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
             // Restore last state for checked position.
-            this.curCheckPosition = savedInstanceState.getInt("curChoice", 0);
+            this.repertoireMode = (ModeRepertoire) savedInstanceState.getSerializable("repertoireMode");
+            this.curGroupPosition = (Integer) savedInstanceState.get("curGroupPosition");
+            this.curChildPosition = (Integer) savedInstanceState.get("curChildPosition");
+            this.synchroScroll = true;
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("curChoice", this.curCheckPosition);
+        outState.putSerializable("repertoireMode", this.repertoireMode);
+        if (this.curGroupPosition != null)
+            outState.putInt("curGroupPosition", this.curGroupPosition);
+        if (this.curChildPosition != null)
+            outState.putInt("curChildPosition", this.curChildPosition);
     }
 
     @Override
     public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-        // Toast.makeText(this.getActivity(), String.format("onChildClick(groupPosition: %d, childPosition: %d, id: %d)", groupPosition, childPosition, id), Toast.LENGTH_LONG).show();
-
-        Object selectedItem = getExpandableListAdapter().getChild(groupPosition, childPosition);
-        Toast.makeText(this.getActivity(), String.format("%s: %s", selectedItem.getClass().getSimpleName(), ((CommonBean) selectedItem).getId().toString()), Toast.LENGTH_LONG).show();
-        //showDetails(position);
+        showDetails(groupPosition, childPosition);
         return true;
     }
 
@@ -53,24 +57,35 @@ public class TitlesFragment extends ExpandableListFragment {
      * displaying a fragments in-place in the current UI, or starting a
      * whole new activity in which it is displayed.
      */
-    void showDetails(int index) {
-        this.curCheckPosition = index;
+    void showDetails(Integer groupPosition, Integer childPosition) {
+        this.curGroupPosition = groupPosition;
+        this.curChildPosition = childPosition;
+
+        if ((groupPosition == null) || (childPosition == null)) return;
+
+        CommonBean bean = (CommonBean) getExpandableListAdapter().getChild(groupPosition, childPosition);
 
         if (this.dualPane) {
             // We can display everything in-place with fragments, so update
             // the list to highlight the selected item and show the database.
-            getExpandableListView().setItemChecked(index, true);
+            if (this.synchroScroll) {
+                this.expandableListView.expandGroup(groupPosition, false);
+                this.expandableListView.setSelectedChild(groupPosition, childPosition, true);
+                this.synchroScroll = false;
+            }
 
             // Check what fragments is currently shown, replace if needed.
             FicheFragment details = (FicheFragment) getFragmentManager().findFragmentById(R.id.details);
-            if ((details == null) || (details.getShownIndex() != index)) {
-                // Make new fragments to show this selection.
-                details = FicheFragment.newInstance(index);
-
+            if ((details == null) || (!details.getShownId().equals(bean.getId()))) {
                 // Execute a transaction, replacing any existing fragments
                 // with this one inside the frame.
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.replace(R.id.details, details);
+                // Make new fragments to show this selection.
+
+                ShowFragmentClass a = bean.getClass().getAnnotation(ShowFragmentClass.class);
+                if (a == null) return;
+
+                ft.replace(R.id.details, FicheFragment.newInstance(a.value(), bean));
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.commit();
             }
@@ -80,14 +95,16 @@ public class TitlesFragment extends ExpandableListFragment {
             // the dialog fragments with selected text.
             Intent intent = new Intent();
             intent.setClass(getActivity(), FicheActivity.class);
-            intent.putExtra("index", index);
+            intent.putExtra("bean", bean);
             startActivity(intent);
         }
     }
 
     public void setRepertoireMode(ModeRepertoire repertoireMode) {
-        if (this.repertoireMode != repertoireMode)
-            this.curCheckPosition = 0;
+        if (this.repertoireMode != repertoireMode) {
+            this.curGroupPosition = null;
+            this.curChildPosition = null;
+        }
         this.repertoireMode = repertoireMode;
         this.setRepertoireDao(DaoFactory.getDao(repertoireMode.getDaoClass(), getActivity()));
 
@@ -103,11 +120,12 @@ public class TitlesFragment extends ExpandableListFragment {
         View detailsFrame = getActivity().findViewById(R.id.details);
         this.dualPane = (detailsFrame != null) && (detailsFrame.getVisibility() == View.VISIBLE);
 
-        if (this.dualPane) {
+        if (this.curChildPosition != null) {
             // In dual-pane mode, the list view highlights the selected item.
-            getExpandableListView().setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+            if (this.dualPane)
+                this.expandableListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
             // Make sure our UI is in the correct state.
-            showDetails(this.curCheckPosition);
+            showDetails(this.curGroupPosition, this.curChildPosition);
         }
     }
 

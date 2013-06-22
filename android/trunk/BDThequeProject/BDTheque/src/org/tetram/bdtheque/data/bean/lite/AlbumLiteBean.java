@@ -1,9 +1,19 @@
-package org.tetram.bdtheque.data.bean;
+package org.tetram.bdtheque.data.bean.lite;
+
+import android.os.Parcel;
 
 import org.jetbrains.annotations.Nullable;
+import org.tetram.bdtheque.data.bean.CommonBean;
+import org.tetram.bdtheque.data.bean.TreeNodeBean;
+import org.tetram.bdtheque.data.factories.AlbumLiteFactory;
+import org.tetram.bdtheque.gui.activities.fragments.FicheAlbumFragment;
+import org.tetram.bdtheque.utils.BeanFactoryClass;
+import org.tetram.bdtheque.utils.ShowFragmentClass;
 import org.tetram.bdtheque.utils.StringUtils;
 
 @SuppressWarnings("UnusedDeclaration")
+@BeanFactoryClass(AlbumLiteFactory.class)
+@ShowFragmentClass(FicheAlbumFragment.class)
 public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
 
     private String titre;
@@ -15,6 +25,61 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
     private Integer notation;
     private SerieLiteBean serie;
     private Boolean achat, complet;
+
+    @SuppressWarnings("FieldNameHidesFieldInSuperclass")
+    public static final Creator<AlbumLiteBean> CREATOR = new Creator<AlbumLiteBean>() {
+        @Override
+        public AlbumLiteBean createFromParcel(Parcel source) {
+            return new AlbumLiteBean(source);
+        }
+
+        @Override
+        public AlbumLiteBean[] newArray(int size) {
+            return new AlbumLiteBean[size];
+        }
+    };
+
+    public AlbumLiteBean(Parcel in) {
+        super(in);
+    }
+
+    public AlbumLiteBean() {
+        super();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeString(this.titre);
+        dest.writeValue(this.tome);
+        dest.writeValue(this.tomeDebut);
+        dest.writeValue(this.tomeFin);
+        dest.writeValue(this.horsSerie);
+        dest.writeValue(this.integrale);
+        dest.writeValue(this.moisParution);
+        dest.writeValue(this.anneeParution);
+        dest.writeValue(this.notation);
+        dest.writeParcelable(this.serie, flags);
+        dest.writeValue(this.achat);
+        dest.writeValue(this.complet);
+    }
+
+    @Override
+    public void readFromParcel(Parcel in) {
+        super.readFromParcel(in);
+        this.titre = in.readString();
+        this.tome = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.tomeDebut = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.tomeFin = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.horsSerie = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.integrale = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.moisParution = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.anneeParution = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.notation = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.serie = in.readParcelable(SerieLiteBean.class.getClassLoader());
+        this.achat = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.complet = (Boolean) in.readValue(Boolean.class.getClassLoader());
+    }
 
     public String getTitre() {
         return this.titre;

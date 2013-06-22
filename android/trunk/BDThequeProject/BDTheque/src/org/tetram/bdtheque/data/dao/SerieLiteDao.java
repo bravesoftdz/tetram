@@ -4,7 +4,7 @@ import android.content.Context;
 
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.InitialeBean;
-import org.tetram.bdtheque.data.bean.SerieLiteBean;
+import org.tetram.bdtheque.data.bean.lite.SerieLiteBean;
 import org.tetram.bdtheque.data.factories.SerieLiteFactory;
 import org.tetram.bdtheque.database.DDLConstants;
 

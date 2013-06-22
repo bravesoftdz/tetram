@@ -11,11 +11,11 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import org.tetram.bdtheque.R;
-import org.tetram.bdtheque.UserConfig;
 import org.tetram.bdtheque.data.bean.InitialeBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
 import org.tetram.bdtheque.data.dao.InitialeRepertoireDao;
 import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.utils.UserConfig;
 
 import java.util.List;
 

@@ -3,8 +3,8 @@ package org.tetram.bdtheque.data.dao;
 import android.content.Context;
 
 import org.tetram.bdtheque.R;
-import org.tetram.bdtheque.data.bean.AlbumLiteBean;
 import org.tetram.bdtheque.data.bean.InitialeFormatedBean;
+import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
 import org.tetram.bdtheque.data.factories.AlbumLiteFactory;
 
 import java.util.List;

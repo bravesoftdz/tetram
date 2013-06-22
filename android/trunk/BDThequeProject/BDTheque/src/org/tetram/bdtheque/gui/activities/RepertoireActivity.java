@@ -13,11 +13,11 @@ import android.widget.ShareActionProvider;
 
 import org.jetbrains.annotations.NotNull;
 import org.tetram.bdtheque.R;
-import org.tetram.bdtheque.UserConfig;
 import org.tetram.bdtheque.gui.activities.fragments.TitlesFragment;
 import org.tetram.bdtheque.gui.adapter.MenuAdapter;
 import org.tetram.bdtheque.gui.adapter.MenuEntry;
 import org.tetram.bdtheque.gui.utils.ModeRepertoire;
+import org.tetram.bdtheque.utils.UserConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,19 +26,19 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
 
     private static final int REQUEST_CONFIG = 0;
 
-    private int currentNavigationItem;
+    private int currentNavigationItem = -1;
     private ShareActionProvider shareProvider;
     private TitlesFragment repertoire;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.consultation);
+        setContentView(R.layout.repertoire);
 
         this.repertoire = (TitlesFragment) getFragmentManager().findFragmentById(R.id.titles);
 
         if (savedInstanceState != null) {
-            this.currentNavigationItem = savedInstanceState.getInt("navigationItem", 0);
+            this.currentNavigationItem = savedInstanceState.getInt("navigationItem", -1);
         }
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -58,7 +58,12 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
         actionBar.setTitle("");
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
         actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
-        actionBar.setSelectedNavigationItem((defaultMenu == null) ? 0 : menuEntries.indexOf(defaultMenu));
+        if (this.currentNavigationItem > -1)
+            actionBar.setSelectedNavigationItem(this.currentNavigationItem);
+        else if (defaultMenu != null)
+            actionBar.setSelectedNavigationItem(menuEntries.indexOf(defaultMenu));
+        else
+            actionBar.setSelectedNavigationItem(0);
 
         UserConfig.getInstance().reloadConfig(this);
         handleIntent(getIntent());

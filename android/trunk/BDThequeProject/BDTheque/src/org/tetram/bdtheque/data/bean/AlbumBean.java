@@ -2,28 +2,28 @@ package org.tetram.bdtheque.data.bean;
 
 import android.os.Parcel;
 
-import org.tetram.bdtheque.data.bean.lite.EditeurLiteBean;
-import org.tetram.bdtheque.data.factories.EditeurFactory;
+import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
+import org.tetram.bdtheque.data.factories.AlbumFactory;
 import org.tetram.bdtheque.utils.BeanFactoryClass;
 
 @SuppressWarnings("UnusedDeclaration")
-@BeanFactoryClass(EditeurFactory.class)
-public class EditeurBean extends EditeurLiteBean {
+@BeanFactoryClass(AlbumFactory.class)
+public class AlbumBean extends AlbumLiteBean {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
-    public static final Creator<EditeurBean> CREATOR = new Creator<EditeurBean>() {
+    public static final Creator<AlbumBean> CREATOR = new Creator<AlbumBean>() {
         @Override
-        public EditeurBean createFromParcel(Parcel source) {
-            return new EditeurBean(source);
+        public AlbumBean createFromParcel(Parcel source) {
+            return new AlbumBean(source);
         }
 
         @Override
-        public EditeurBean[] newArray(int size) {
-            return new EditeurBean[size];
+        public AlbumBean[] newArray(int size) {
+            return new AlbumBean[size];
         }
     };
 
-    public EditeurBean(Parcel in) {
+    public AlbumBean(Parcel in) {
         super(in);
     }
 

@@ -2,33 +2,41 @@ package org.tetram.bdtheque.gui.activities.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ScrollView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import org.jetbrains.annotations.Nullable;
+import org.tetram.bdtheque.data.bean.CommonBean;
 
-public class FicheFragment extends Fragment {
-    /**
-     * Create a new instance of FicheFragment, initialized to
-     * show the text at 'index'.
-     */
-    public static FicheFragment newInstance(int index) {
-        FicheFragment ficheFragment = new FicheFragment();
+import java.lang.reflect.InvocationTargetException;
+import java.util.UUID;
 
-        // Supply index input as an argument.
+public abstract class FicheFragment extends Fragment {
+
+    @Nullable
+    public static FicheFragment newInstance(Class<? extends FicheFragment> classFiche, CommonBean bean) {
+        FicheFragment ficheFragment = null;
+        try {
+            ficheFragment = classFiche.getConstructor().newInstance();
+        } catch (java.lang.InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        } catch (NoSuchMethodException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
         Bundle args = new Bundle();
-        args.putInt("index", index);
+        args.putParcelable("bean", bean);
         ficheFragment.setArguments(args);
 
         return ficheFragment;
     }
 
-    public int getShownIndex() {
-        return getArguments().getInt("index", 0);
+    public UUID getShownId() {
+        return ((CommonBean) getArguments().getParcelable("bean")).getId();
     }
 
     @Nullable
@@ -43,18 +51,21 @@ public class FicheFragment extends Fragment {
             // just run the code below, where we would create and return
             // the view hierarchy; it would just never be used.
             return null;
-        } else
-            return buildView(inflater, container, savedInstanceState);
+        } else {
+            ScrollView view = new ScrollView(getActivity());
+            buildView(inflater, view, savedInstanceState);
+            return view;
+        }
 
     }
 
+    @Nullable
     public View buildView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        ScrollView scroller = new ScrollView(getActivity());
-        TextView text = new TextView(getActivity());
-        int padding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getActivity().getResources().getDisplayMetrics());
-        text.setPadding(padding, padding, padding, padding);
-        scroller.addView(text);
-        // text.setText(Shakespeare.DIALOGUE[getShownIndex()]);
-        return scroller;
+        CommonBean bean = getArguments().getParcelable("bean");
+
+        Toast.makeText(this.getActivity(), String.format("%s: %s", bean.getClass().getSimpleName(), bean.getId().toString()), Toast.LENGTH_LONG).show();
+
+        return null;
     }
+
 }

@@ -15,15 +15,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I extends InitialeBean> extends CommonDao<B> implements InitialeRepertoireDao<B, I> {
+public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I extends InitialeBean>
+        extends CommonDaoImpl<B>
+        implements InitialeRepertoireDao<B, I> {
 
     private final Class<? extends BeanFactory<B>> beanFactoryClass;
     private final Class<I> initialeClass;
     private String filtre;
 
-    protected CommonRepertoireDao(Context context, Class<I> initialeFactoryClass, Class<? extends BeanFactory<B>> beanFactoryClass) {
+    protected CommonRepertoireDao(Context context, Class<I> initialeClass, Class<? extends BeanFactory<B>> beanFactoryClass) {
         super(context);
-        this.initialeClass = initialeFactoryClass;
+        this.initialeClass = initialeClass;
         this.beanFactoryClass = beanFactoryClass;
     }
 

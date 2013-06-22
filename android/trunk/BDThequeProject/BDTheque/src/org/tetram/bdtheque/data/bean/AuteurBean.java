@@ -2,13 +2,13 @@ package org.tetram.bdtheque.data.bean;
 
 import android.os.Parcel;
 
-import org.tetram.bdtheque.data.bean.lite.EditeurLiteBean;
-import org.tetram.bdtheque.data.factories.EditeurFactory;
+import org.tetram.bdtheque.data.bean.lite.AuteurLiteBean;
+import org.tetram.bdtheque.data.factories.AuteurFactory;
 import org.tetram.bdtheque.utils.BeanFactoryClass;
 
 @SuppressWarnings("UnusedDeclaration")
-@BeanFactoryClass(EditeurFactory.class)
-public class EditeurBean extends EditeurLiteBean {
+@BeanFactoryClass(AuteurFactory.class)
+public class AuteurBean extends AuteurLiteBean {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<EditeurBean> CREATOR = new Creator<EditeurBean>() {
@@ -23,7 +23,7 @@ public class EditeurBean extends EditeurLiteBean {
         }
     };
 
-    public EditeurBean(Parcel in) {
+    public AuteurBean(Parcel in) {
         super(in);
     }
 

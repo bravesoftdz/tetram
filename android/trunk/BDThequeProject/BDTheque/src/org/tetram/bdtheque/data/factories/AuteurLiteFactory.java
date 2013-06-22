@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import org.jetbrains.annotations.Nullable;
-import org.tetram.bdtheque.data.bean.AuteurLiteBean;
+import org.tetram.bdtheque.data.bean.lite.AuteurLiteBean;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldString;
