@@ -11,18 +11,22 @@
         android:id="@+id/text_value"
         android:textStyle="bold"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:textSize="24sp"
-        android:layout_marginTop="8sp"
-        android:layout_marginBottom="8sp"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|left"
+        android:singleLine="false"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="6sp"
+        android:textSize="@dimen/textSize"
+        android:gravity="center_vertical"
+        android:minHeight="48sp"/>
 
     <TextView
         android:id="@+id/text_count"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8sp"
-        android:textSize="24sp"
-        android:layout_marginTop="8sp"
-        android:layout_marginBottom="8sp"/>
+        android:textSize="@dimen/textSize"
+        android:layout_marginLeft="6sp"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"/>
 
 </LinearLayout>

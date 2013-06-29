@@ -12,7 +12,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
         android:id="@+id/textView"
         android:layout_gravity="center_vertical|left"
         android:singleLine="false"
@@ -24,16 +23,17 @@
         android:layout_alignParentBottom="false"
         android:layout_toLeftOf="@+id/ratingBar"
         android:layout_centerVertical="true"
-        android:layout_marginBottom="8sp"
-        android:layout_marginTop="8sp"
-        android:layout_marginRight="6sp"/>
+        android:layout_marginRight="6sp"
+        android:textSize="@dimen/textSize"
+        android:minHeight="48sp"
+        android:gravity="fill_vertical"/>
 
     <RatingBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/ratingBar"
         android:numStars="4"
-        android:stepSize="0.5"
+        android:stepSize="1"
         android:visibility="visible"
         style="@style/CustomRatingBar"
         android:layout_gravity="center_vertical|right"
