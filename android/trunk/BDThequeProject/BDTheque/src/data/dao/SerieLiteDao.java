@@ -25,4 +25,5 @@ public class SerieLiteDao extends CommonRepertoireDao<SerieLiteBean, InitialeBea
     public List<SerieLiteBean> getData(InitialeBean initiale) {
         return super.getData(R.string.sql_series_by_initiale, initiale, getFiltre(R.string.sql_searchfield_series));
     }
+
 }

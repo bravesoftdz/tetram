@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.RatingBar;
+import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import org.tetram.bdtheque.R;
@@ -17,15 +18,19 @@ import org.tetram.bdtheque.data.dao.InitialeRepertoireDao;
 import org.tetram.bdtheque.utils.StringUtils;
 import org.tetram.bdtheque.utils.UserConfig;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableListAdapter {
+public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableListAdapter implements SectionIndexer {
 
     private List<? extends InitialeBean> listInitiales;
     private SparseArray<List<T>> mapData;
     InitialeRepertoireDao repertoireDao;
     Context context;
+    private final LinkedHashMap<Character, Integer> sectionsPositions = new LinkedHashMap<>();
+    private final List<Character> sections = new ArrayList<>();
 
     public RepertoireAdapter(final Context context, final InitialeRepertoireDao dao) {
         super();
@@ -34,8 +39,21 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
     }
 
     private void ensureInitiales() {
-        if (this.listInitiales == null)
+        if (this.listInitiales == null) {
             this.listInitiales = this.repertoireDao.getInitiales();
+
+            InitialeBean initialeBean;
+            Character c, prevC = null;
+            for (int i = 0; i < this.listInitiales.size(); i++) {
+                initialeBean = this.listInitiales.get(i);
+                c = Character.toUpperCase(initialeBean.getLabel().charAt(0));
+                if (!c.equals(prevC)) {
+                    this.sectionsPositions.put(c, i);
+                    prevC = c;
+                }
+            }
+            this.sections.addAll(this.sectionsPositions.keySet());
+        }
     }
 
     private void ensureData(final Integer initiale) {
@@ -143,4 +161,29 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
         return true;
     }
 
+
+    @Override
+    public Object[] getSections() {
+        ensureInitiales();
+        return this.sections.toArray();
+    }
+
+    @SuppressWarnings("SuspiciousMethodCalls")
+    @Override
+    public int getPositionForSection(int section) {
+        return this.sectionsPositions.get(this.sections.get(section));
+    }
+
+    @Override
+    public int getSectionForPosition(int position) {
+/*
+        int section = 0;
+        while (this.sectionsPositions.get(this.sections.get(section)) < position)
+            section++;
+        if (section < this.sectionsPositions.size())
+            return this.sectionsPositions.get(this.sections.get(section));
+        else
+*/
+        return 0;
+    }
 }

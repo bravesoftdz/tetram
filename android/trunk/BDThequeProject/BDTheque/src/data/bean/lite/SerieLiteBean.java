@@ -98,4 +98,5 @@ public class SerieLiteBean extends CommonBean implements TreeNodeBean {
     public void setEditeur(EditeurLiteBean editeur) {
         this.editeur = editeur;
     }
+
 }

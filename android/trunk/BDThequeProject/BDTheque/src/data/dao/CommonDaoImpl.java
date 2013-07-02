@@ -23,7 +23,7 @@ public abstract class CommonDaoImpl<T extends CommonBean> implements CommonDao<T
     private final Class<?> beanClass;
     private final String tableName;
     private BeanFactory beanFactory;
-    private final String primaryKey;
+    final String primaryKey;
 
     public CommonDaoImpl(Context context) {
         super();

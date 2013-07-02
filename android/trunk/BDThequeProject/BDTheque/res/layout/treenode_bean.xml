@@ -24,7 +24,7 @@
         android:layout_toLeftOf="@+id/ratingBar"
         android:layout_centerVertical="true"
         android:layout_marginRight="6sp"
-        android:textSize="@dimen/textSize"
+        android:textAppearance="@android:style/TextAppearance"
         android:minHeight="48sp"
         android:gravity="fill_vertical"/>
 

@@ -37,9 +37,9 @@
             android:id="@android:id/list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:drawSelectorOnTop="false"
             tools:listitem="@layout/treenode_bean"
-            android:choiceMode="singleChoice"/>
+            android:choiceMode="singleChoice"
+            />
     </FrameLayout>
 
 </FrameLayout>

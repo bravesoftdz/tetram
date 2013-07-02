@@ -21,6 +21,11 @@ public class InitialeBean {
         this.count = count;
     }
 
+    @Override
+    public String toString() {
+        return getLabel();
+    }
+
     public String getLabel() {
         if ((this.value == null) || "-1".equals(this.value))
             return "<Inconnu>";

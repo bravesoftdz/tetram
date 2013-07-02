@@ -3,6 +3,7 @@ package org.tetram.bdtheque.data.bean;
 import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
+import org.tetram.bdtheque.data.bean.lite.SerieLiteBean;
 import org.tetram.bdtheque.data.factories.AlbumFactory;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
@@ -23,6 +24,9 @@ public class AlbumBean extends AlbumLiteBean {
             return new AlbumBean[size];
         }
     };
+    private String sujet;
+    private String notes;
+    private SerieBean serie;
 
     public AlbumBean() {
         super();
@@ -40,5 +44,36 @@ public class AlbumBean extends AlbumLiteBean {
     @Override
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
+    }
+
+    @Override
+    public SerieBean getSerie() {
+        return this.serie;
+    }
+
+    @Override
+    public void setSerie(SerieLiteBean serie) {
+        throw new UnsupportedOperationException();
+    }
+
+    @SuppressWarnings("OverloadedMethodsWithSameNumberOfParameters")
+    public void setSerie(SerieBean serie) {
+        this.serie = serie;
+    }
+
+    public String getSujet() {
+        return this.sujet;
+    }
+
+    public void setSujet(String sujet) {
+        this.sujet = sujet;
+    }
+
+    public String getNotes() {
+        return this.notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

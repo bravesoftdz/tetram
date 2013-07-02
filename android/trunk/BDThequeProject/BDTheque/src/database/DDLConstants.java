@@ -7,6 +7,7 @@ public class DDLConstants {
     public static final String SERIES_ID = "ID_SERIE";
     public static final String SERIES_TITRE = "TITRESERIE";
     public static final String SERIES_INITIALE = "INITIALETITRESERIE";
+    public static final String SERIES_SITEWEB = "SITEWEB";
 
     public static final String ALBUMS_TABLENAME = "ALBUMS";
     public static final String ALBUMS_ID = "ID_ALBUM";
@@ -22,6 +23,8 @@ public class DDLConstants {
     public static final String ALBUMS_NOTATION = "NOTATION";
     public static final String ALBUMS_ACHAT = "ACHAT";
     public static final String ALBUMS_COMPLET = "COMPLET";
+    public static final String ALBUMS_SUJET = "SUJETALBUM";
+    public static final String ALBUMS_NOTES = "REMARQUESALBUM";
 
     public static final String EDITEURS_TABLENAME = "EDITEURS";
     public static final String EDITEURS_ID = "ID_EDITEUR";

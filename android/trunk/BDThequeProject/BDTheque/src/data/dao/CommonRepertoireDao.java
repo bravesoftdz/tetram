@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.InitialeBean;
@@ -15,7 +14,6 @@ import org.tetram.bdtheque.database.DBUtils;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I extends InitialeBean>
         extends CommonDaoImpl<B>
@@ -110,9 +108,12 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
             return String.format("%s like %s", searchField, DBUtils.quotedStr("%" + this.filtre + "%"));
     }
 
+/*
+    // pour les lite bean, la méthode est différente de CommonDaoImpl#getById
     @Nullable
     @Override
     public B getById(UUID beanId) {
         return null;
     }
+*/
 }

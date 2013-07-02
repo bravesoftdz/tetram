@@ -1,6 +1,7 @@
 package org.tetram.bdtheque.gui.utils;
 
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 public abstract class UIUtils {
@@ -17,7 +18,11 @@ public abstract class UIUtils {
     }
 
     private static <T> void setUIValue(View v, T value) {
-        if (v instanceof TextView)
+        if (value == null) return;
+        if (v instanceof CheckBox)
+            ((CheckBox) v).setChecked((Boolean) value);
+        else if (v instanceof TextView)
             ((TextView) v).setText(String.valueOf(value));
+
     }
 }

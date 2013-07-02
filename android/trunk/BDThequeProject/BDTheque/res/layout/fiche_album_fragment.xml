@@ -1,14 +1,145 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              style="@android:style/Theme.Holo.Light">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                style="@style/fiche_consultation"
+                tools:context=".gui.activities.FicheActivity"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fiche_album_serie"
+        android:id="@+id/label_album_serie"
+        android:layout_alignBaseline="@+id/album_serie"
+        style="@style/fiche_label"
+        android:layout_alignRight="@+id/label_album_parution"
+        android:textAppearance="@android:style/TextAppearance"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/album_serie"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/label_album_serie"
+        android:textAppearance="@android:style/TextAppearance.Large"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fiche_album_titre"
+        android:id="@+id/label_album_titre"
+        android:layout_alignBaseline="@+id/album_titre"
+        android:layout_alignRight="@+id/label_album_parution"
+        style="@style/fiche_label"
+        android:textAppearance="@android:style/TextAppearance"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/album_titre"
+        android:layout_below="@+id/album_serie"
+        android:textStyle="bold"
+        android:layout_toRightOf="@+id/label_album_titre"
+        android:textAppearance="@android:style/TextAppearance.Large"/>
+
+    <TextView
+        style="@style/fiche_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fiche_album_tome"
+        android:id="@+id/label_album_tome"
+        android:layout_alignBaseline="@+id/album_tome"
+        android:layout_alignRight="@+id/label_album_parution"
+        android:textAppearance="@android:style/TextAppearance"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/album_tome"
+        android:layout_below="@+id/album_titre"
+        android:layout_toRightOf="@+id/label_album_tome"
+        android:textAppearance="@android:style/TextAppearance"/>
+
+    <TextView
+        style="@style/fiche_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fiche_album_parution"
+        android:id="@+id/label_album_parution"
+        android:layout_alignBaseline="@+id/album_parution"
+        android:textAppearance="@android:style/TextAppearance"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/album_parution"
+        android:layout_below="@+id/album_tome"
+        android:layout_toRightOf="@+id/label_album_parution"
+        android:textAppearance="@android:style/TextAppearance"/>
+
+    <org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fiche_album_integrale"
+        android:id="@+id/album_integrale"
+        android:layout_alignParentRight="true"
+        android:layout_alignBaseline="@+id/album_tome"
+        style="@style/fiche_label"
+        android:layout_toRightOf="@+id/label_album_tome"
+        android:layout_marginLeft="100dp"
+        android:textAppearance="@android:style/TextAppearance"/>
+
+    <org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fiche_album_horsserie"
+        android:id="@+id/album_horsserie"
+        android:layout_alignBaseline="@+id/album_parution"
+        style="@style/fiche_label"
+        android:layout_alignLeft="@+id/album_integrale"
+        android:textAppearance="@android:style/TextAppearance"
+        />
+
+    <TextView
+        style="@style/fiche_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fiche_album_histoire"
+        android:id="@+id/label_album_histoire"
+        android:layout_alignBaseline="@+id/album_histoire"
+        android:layout_alignRight="@+id/label_album_parution"
+        android:textAppearance="@android:style/TextAppearance"
+        android:singleLine="false"/>
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/album_titre"/>
+        android:id="@+id/album_histoire"
+        android:layout_below="@+id/album_parution"
+        android:layout_toRightOf="@+id/label_album_parution"
+        android:textAppearance="@android:style/TextAppearance"/>
 
-</LinearLayout>
+    <TextView
+        style="@style/fiche_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/fiche_album_notes"
+        android:id="@+id/label_album_notes"
+        android:layout_alignBaseline="@+id/album_notes"
+        android:layout_alignRight="@+id/label_album_parution"
+        android:textAppearance="@android:style/TextAppearance"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/album_notes"
+        android:layout_below="@+id/album_histoire"
+        android:layout_toRightOf="@+id/label_album_parution"
+        android:textAppearance="@android:style/TextAppearance"/>
+
+</RelativeLayout>

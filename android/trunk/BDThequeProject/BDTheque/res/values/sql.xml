@@ -29,7 +29,7 @@ from
 where
     coalesce(a.initialetitrealbum, s.initialetitreserie) %s
 order by
-    coalesce(a.titrealbum, s.titreserie), s.titreserie,
+    coalesce(a.titrealbum, s.titreserie) collate nocase, s.titreserie collate nocase,
     a.horsserie, a.integrale, a.tome,
     a.tomedebut, a.tomefin,
     a.anneeparution, a.moisparution
@@ -60,7 +60,7 @@ from
 where
     s.initialetitreserie %s
 order by
-    s.titreserie, e.nomediteur, c.nomcollection
+    s.titreserie collate nocase, e.nomediteur collate nocase, c.nomcollection collate nocase
     ]]></string>
 
     <string name="sql_editeurs_by_initiale"><![CDATA[
@@ -72,7 +72,7 @@ where
     e.initialenomediteur %1$s
     %2$s
 order by
-    e.nomediteur
+    e.nomediteur collate nocase
         ]]></string>
 
     <string name="sql_collections_by_initiale"><![CDATA[
@@ -85,7 +85,7 @@ from
 where
     c.initialenomcollection %s
 order by
-    c.nomcollection
+    c.nomcollection collate nocase
         ]]></string>
 
     <string name="sql_auteurs_by_initiale"><![CDATA[
@@ -96,7 +96,7 @@ from
 where
     p.initialenompersonne %s
 order by
-    p.nompersonne
+    p.nompersonne collate nocase
         ]]></string>
 
     <string name="sql_annees_albums"><![CDATA[
@@ -125,7 +125,7 @@ from
 where
     a.anneeparution %s
 order by
-    coalesce(a.titrealbum, s.titreserie), s.titreserie,
+    coalesce(a.titrealbum, s.titreserie) collate nocase, s.titreserie collate nocase,
     a.horsserie, a.integrale, a.tome,
     a.tomedebut, a.tomefin,
     a.anneeparution, a.moisparution
@@ -147,6 +147,8 @@ where
     %s
 group by
     e.nomediteur, e.id_editeur
+order by
+    e.nomediteur collate nocase
     ]]></string>
     <string name="sql_albums_by_editeur"><![CDATA[
 select
@@ -165,7 +167,7 @@ from
 where
     e.id_editeur %s
 order by
-    coalesce(a.titrealbum, s.titreserie), s.titreserie,
+    coalesce(a.titrealbum, s.titreserie) collate nocase, s.titreserie collate nocase,
     a.horsserie, a.integrale, a.tome,
     a.tomedebut, a.tomefin,
     a.anneeparution, a.moisparution
@@ -183,6 +185,8 @@ where
     %s
 group by
     s.titreserie, s.id_serie
+order by
+    s.titreserie collate nocase
     ]]></string>
     <string name="sql_albums_by_serie"><![CDATA[
 select
@@ -200,7 +204,7 @@ order by
     a.horsserie, a.integrale, a.tome,
     a.tomedebut, a.tomefin,
     a.anneeparution, a.moisparution,
-    coalesce(a.titrealbum, s.titreserie), s.titreserie
+    coalesce(a.titrealbum, s.titreserie) collate nocase, s.titreserie collate nocase
     ]]></string>
 
     <string name="sql_collections_albums"><![CDATA[
@@ -223,6 +227,8 @@ where
     %s
 group by
     c.nomcollection, c.id_collection, 4, 5
+order by
+    c.nomcollection collate nocase
     ]]></string>
     <string name="sql_albums_by_collection"><![CDATA[
 select
@@ -239,7 +245,7 @@ from
 where
     e.id_collection %s
 order by
-    coalesce(a.titrealbum, s.titreserie), s.titreserie,
+    coalesce(a.titrealbum, s.titreserie) collate nocase, s.titreserie collate nocase,
     a.horsserie, a.integrale, a.tome,
     a.tomedebut, a.tomefin,
     a.anneeparution, a.moisparution
@@ -261,6 +267,8 @@ where
     %s
 group by
     g.genre, g.id_genre
+order by
+    g.genre collate nocase
     ]]></string>
     <string name="sql_albums_by_genre"><![CDATA[
 select
@@ -279,7 +287,7 @@ from
 where
     g.id_genre %s
 order by
-    coalesce(a.titrealbum, s.titreserie), s.titreserie,
+    coalesce(a.titrealbum, s.titreserie) collate nocase, s.titreserie collate nocase,
     a.horsserie, a.integrale, a.tome,
     a.tomedebut, a.tomefin,
     a.anneeparution, a.moisparution

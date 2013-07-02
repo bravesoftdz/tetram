@@ -7,13 +7,13 @@ import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
+import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import org.tetram.bdtheque.R;
@@ -28,7 +28,6 @@ import org.tetram.bdtheque.R;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class ExpandableListFragment extends Fragment implements
-        OnCreateContextMenuListener,
         ExpandableListView.OnChildClickListener,
         ExpandableListView.OnGroupCollapseListener,
         ExpandableListView.OnGroupExpandListener {
@@ -148,6 +147,7 @@ public class ExpandableListFragment extends Fragment implements
         this.expandableListAdapter = adapter;
         if (this.expandableListView != null) {
             this.expandableListView.setAdapter(adapter);
+            this.expandableListView.setFastScrollEnabled(adapter instanceof SectionIndexer);
             if (!this.mListShown && !hadAdapter) {
                 // The list was hidden, and previously didn't have an
                 // adapter.  It is now time to show it.
