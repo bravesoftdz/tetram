@@ -5,6 +5,7 @@ import android.database.Cursor;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.SerieBean;
+import org.tetram.bdtheque.data.dao.GenreDao;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import java.net.URL;
@@ -28,6 +29,7 @@ public class SerieFactory implements BeanFactory<SerieBean> {
             e.printStackTrace();
             bean.setSiteWeb(null);
         }
+        new GenreDao(context).loadListForSerie(bean.getGenres(), bean.getId());
         return bean;
     }
 }

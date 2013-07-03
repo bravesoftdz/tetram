@@ -21,8 +21,8 @@ public abstract class CommonDaoImpl<T extends CommonBean> implements CommonDao<T
     private final BDDatabaseHelper databaseHelper;
     private final Context context;
     private final Class<?> beanClass;
-    private final String tableName;
-    private BeanFactory beanFactory;
+    final String tableName;
+    BeanFactory beanFactory;
     final String primaryKey;
 
     public CommonDaoImpl(Context context) {

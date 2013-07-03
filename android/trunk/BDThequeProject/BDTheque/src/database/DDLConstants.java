@@ -39,4 +39,9 @@ public class DDLConstants {
     public static final String AUTEURS_NOM = "NOMPERSONNE";
     public static final String AUTEURS_INITIALE = "INITIALENOMPERSONNE";
 
+    public static final String GENRES_TABLENAME = "GENRES";
+    public static final String GENRES_ID = "ID_GENRE";
+    public static final String GENRES_NOM = "GENRE";
+
+    public static final String GENRESERIES_TABLENAME = "GENRESERIES";
 }

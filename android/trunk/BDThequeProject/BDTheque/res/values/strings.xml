@@ -23,8 +23,12 @@
     <string name="fiche_album_parution">Parution :</string>
     <string name="fiche_album_integrale">Intégrale</string>
     <string name="fiche_album_horsserie">Hors série</string>
+    <string name="fiche_album_genres">Genre :</string>
     <string name="fiche_album_histoire">Histoire :</string>
     <string name="fiche_album_notes">Notes :</string>
+    <string name="fiche_album_scenaristes">Scénario :</string>
+    <string name="fiche_album_dessinateurs">Dessins :</string>
+    <string name="fiche_album_coloristes">Couleurs :</string>
 
     <string-array name="pref_formatTitreAlbum_entries">
         <item>Album (Serie - Tome)</item>

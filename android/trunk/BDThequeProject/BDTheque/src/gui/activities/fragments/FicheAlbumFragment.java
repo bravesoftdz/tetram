@@ -49,6 +49,7 @@ public class FicheAlbumFragment extends FicheFragment {
             } else {
                 UIUtils.setUIElement(v, R.id.album_serie, titreSerie);
             }
+            UIUtils.setUIElement(v, R.id.album_genres, album.getSerie().getGenreList());
         }
         UIUtils.setUIElement(v, R.id.album_titre, StringUtils.formatTitre(album.getTitre()));
         UIUtils.setUIElement(v, R.id.album_tome, StringUtils.nonZero(album.getTome()));
