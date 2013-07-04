@@ -34,14 +34,24 @@ public class DDLConstants {
     public static final String COLLECTIONS_TABLENAME = "COLLECTIONS";
     public static final String COLLECTIONS_ID = "ID_COLLECTION";
 
-    public static final String AUTEURS_TABLENAME = "PERSONNES";
-    public static final String AUTEURS_ID = "ID_PERSONNE";
-    public static final String AUTEURS_NOM = "NOMPERSONNE";
-    public static final String AUTEURS_INITIALE = "INITIALENOMPERSONNE";
+    public static final String PERSONNES_TABLENAME = "PERSONNES";
+    public static final String PERSONNES_ID = "ID_PERSONNE";
+    public static final String PERSONNES_NOM = "NOMPERSONNE";
+    public static final String PERSONNES_INITIALE = "INITIALENOMPERSONNE";
+    public static final String PERSONNES_SITEWEB = "SITEWEB";
+    public static final String PERSONNES_BIOGRAPHIE = "BIOGRAPHIE";
+
+    public static final String AUTEURS_TABLENAME = "AUTEURS";
+    public static final String AUTEURS_ID = "ID_AUTEUR";
+    public static final String AUTEURS_METIER = "METIER";
+
+    public static final String AUTEURS_SERIES_TABLENAME = "AUTEURS_SERIES";
+    public static final String AUTEURS_SERIES_ID = "ID_AUTEUR_SERIES";
+    public static final String AUTEURS_SERIES_METIER = "METIER";
 
     public static final String GENRES_TABLENAME = "GENRES";
     public static final String GENRES_ID = "ID_GENRE";
-    public static final String GENRES_NOM = "GENRE";
 
+    public static final String GENRES_NOM = "GENRE";
     public static final String GENRESERIES_TABLENAME = "GENRESERIES";
 }
