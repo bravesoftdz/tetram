@@ -5,7 +5,7 @@ import android.content.Context;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
-import org.tetram.bdtheque.data.bean.lite.AuteurLiteBean;
+import org.tetram.bdtheque.data.bean.lite.PersonneLiteBean;
 import org.tetram.bdtheque.data.bean.lite.SerieLiteBean;
 import org.tetram.bdtheque.data.dao.AlbumLiteAnneeDao;
 import org.tetram.bdtheque.data.dao.AlbumLiteCollectionDao;
@@ -13,11 +13,12 @@ import org.tetram.bdtheque.data.dao.AlbumLiteDao;
 import org.tetram.bdtheque.data.dao.AlbumLiteEditeurDao;
 import org.tetram.bdtheque.data.dao.AlbumLiteGenreDao;
 import org.tetram.bdtheque.data.dao.AlbumLiteSerieDao;
-import org.tetram.bdtheque.data.dao.AuteurLiteDao;
 import org.tetram.bdtheque.data.dao.InitialeRepertoireDao;
+import org.tetram.bdtheque.data.dao.PersonneLiteDao;
 import org.tetram.bdtheque.data.dao.SerieLiteDao;
 import org.tetram.bdtheque.gui.adapter.MenuEntry;
 
+@SuppressWarnings("UnusedDeclaration")
 public enum ModeRepertoire {
     REPERTOIRE_ALBUMS_TITRE(10, R.string.menuRepertoireAlbumsTitre, AlbumLiteDao.class, AlbumLiteBean.class, false),
     REPERTOIRE_ALBUMS_SERIE(11, R.string.menuRepertoireAlbumsSerie, AlbumLiteSerieDao.class, AlbumLiteBean.class, true),
@@ -26,7 +27,7 @@ public enum ModeRepertoire {
     REPERTOIRE_ALBUMS_ANNEE(14, R.string.menuRepertoireAlbumsAnnee, AlbumLiteAnneeDao.class, AlbumLiteBean.class, false),
     REPERTOIRE_ALBUMS_COLLECTION(15, R.string.menuRepertoireAlbumsCollection, AlbumLiteCollectionDao.class, AlbumLiteBean.class, false),
     REPERTOIRE_SERIES(20, R.string.menuRepertoireSeries, SerieLiteDao.class, SerieLiteBean.class, false),
-    REPERTOIRE_AUTEURS(30, R.string.menuRepertoireAuteurs, AuteurLiteDao.class, AuteurLiteBean.class, false);
+    REPERTOIRE_PERSONNES(30, R.string.menuRepertoirePersonnes, PersonneLiteDao.class, PersonneLiteBean.class, false);
 
     private final int value;
     private final int resId;

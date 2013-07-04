@@ -6,7 +6,9 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.jetbrains.annotations.Nullable;
@@ -76,6 +78,11 @@ public class FicheAlbumFragment extends FicheFragment {
                             " ", "[", "]")
             );
         }
+
+        ((ListView) v.findViewById(R.id.album_scenaristes)).setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getScenaristes()));
+        ((ListView) v.findViewById(R.id.album_dessinateurs)).setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getDessinateurs()));
+        ((ListView) v.findViewById(R.id.album_coloristes)).setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getColoristes()));
+
         UIUtils.setUIElement(v, R.id.album_horsserie, album.isHorsSerie());
         UIUtils.setUIElement(v, R.id.album_histoire, album.getSujet());
         UIUtils.setUIElement(v, R.id.album_notes, album.getNotes());
