@@ -5,17 +5,17 @@ import android.os.Parcel;
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
-import org.tetram.bdtheque.data.factories.AuteurLiteFactory;
+import org.tetram.bdtheque.data.factories.PersonneLiteFactory;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
-import org.tetram.bdtheque.gui.activities.fragments.FicheAuteurFragment;
+import org.tetram.bdtheque.gui.activities.fragments.FichePersonneFragment;
 import org.tetram.bdtheque.gui.utils.ShowFragmentClass;
 import org.tetram.bdtheque.utils.StringUtils;
 
 @SuppressWarnings("UnusedDeclaration")
-@ShowFragmentClass(FicheAuteurFragment.class)
-@Entity(tableName = DDLConstants.AUTEURS_TABLENAME, primaryKey = DDLConstants.AUTEURS_ID, factoryClass = AuteurLiteFactory.class)
-public class AuteurLiteBean extends CommonBean implements TreeNodeBean {
+@ShowFragmentClass(FichePersonneFragment.class)
+@Entity(tableName = DDLConstants.PERSONNES_TABLENAME, primaryKey = DDLConstants.PERSONNES_ID, factoryClass = PersonneLiteFactory.class)
+public class PersonneLiteBean extends CommonBean implements TreeNodeBean {
 
     private String nom;
 
@@ -32,11 +32,11 @@ public class AuteurLiteBean extends CommonBean implements TreeNodeBean {
         }
     };
 
-    public AuteurLiteBean(Parcel in) {
+    public PersonneLiteBean(Parcel in) {
         super(in);
     }
 
-    public AuteurLiteBean() {
+    public PersonneLiteBean() {
         super();
     }
 

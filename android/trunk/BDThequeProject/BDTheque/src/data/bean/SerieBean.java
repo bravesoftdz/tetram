@@ -19,6 +19,10 @@ public class SerieBean extends SerieLiteBean {
     private URL siteWeb;
     private final List<GenreBean> genres = new ArrayList<>();
 
+    private final List<AuteurBean> scenaristes = new ArrayList<>();
+    private final List<AuteurBean> dessinateurs = new ArrayList<>();
+    private final List<AuteurBean> coloristes = new ArrayList<>();
+
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<SerieBean> CREATOR = new Creator<SerieBean>() {
         @Override
@@ -43,11 +47,24 @@ public class SerieBean extends SerieLiteBean {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
+        if (this.siteWeb == null)
+            dest.writeValue(null);
+        else
+            dest.writeValue(this.siteWeb.toExternalForm());
+        dest.writeTypedList(this.genres);
+        dest.writeTypedList(this.scenaristes);
+        dest.writeTypedList(this.dessinateurs);
+        dest.writeTypedList(this.coloristes);
     }
 
     @Override
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
+        this.siteWeb = (URL) in.readValue(URL.class.getClassLoader());
+        in.readTypedList(this.genres, GenreBean.CREATOR);
+        in.readTypedList(this.scenaristes, AuteurBean.CREATOR);
+        in.readTypedList(this.dessinateurs, AuteurBean.CREATOR);
+        in.readTypedList(this.coloristes, AuteurBean.CREATOR);
     }
 
     public URL getSiteWeb() {
@@ -67,6 +84,18 @@ public class SerieBean extends SerieLiteBean {
         for (GenreBean genre : this.genres)
             s = StringUtils.ajoutString(s, genre.getNom(), ", ");
         return s;
+    }
+
+    public List<AuteurBean> getScenaristes() {
+        return this.scenaristes;
+    }
+
+    public List<AuteurBean> getDessinateurs() {
+        return this.dessinateurs;
+    }
+
+    public List<AuteurBean> getColoristes() {
+        return this.coloristes;
     }
 
 }

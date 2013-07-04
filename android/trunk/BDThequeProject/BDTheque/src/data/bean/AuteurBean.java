@@ -2,30 +2,32 @@ package org.tetram.bdtheque.data.bean;
 
 import android.os.Parcel;
 
-import org.tetram.bdtheque.data.bean.lite.AuteurLiteBean;
-import org.tetram.bdtheque.data.factories.AuteurFactory;
-import org.tetram.bdtheque.data.utils.Entity;
-import org.tetram.bdtheque.database.DDLConstants;
+import org.tetram.bdtheque.data.bean.lite.PersonneLiteBean;
 
-@SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.AUTEURS_TABLENAME, primaryKey = DDLConstants.AUTEURS_ID, factoryClass = AuteurFactory.class)
-public class AuteurBean extends AuteurLiteBean {
+public class AuteurBean extends CommonBean {
+
+    private PersonneLiteBean personne;
+    private AuteurMetier metier;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
-    public static final Creator<EditeurBean> CREATOR = new Creator<EditeurBean>() {
+    public static final Creator<AuteurBean> CREATOR = new Creator<AuteurBean>() {
         @Override
-        public EditeurBean createFromParcel(Parcel source) {
-            return new EditeurBean(source);
+        public AuteurBean createFromParcel(Parcel source) {
+            return new AuteurBean(source);
         }
 
         @Override
-        public EditeurBean[] newArray(int size) {
-            return new EditeurBean[size];
+        public AuteurBean[] newArray(int size) {
+            return new AuteurBean[size];
         }
     };
 
     public AuteurBean(Parcel in) {
         super(in);
+    }
+
+    public AuteurBean() {
+        super();
     }
 
     @Override
@@ -36,5 +38,26 @@ public class AuteurBean extends AuteurLiteBean {
     @Override
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
+    }
+
+    @Override
+    public String toString() {
+        return this.personne.getTreeNodeText();
+    }
+
+    public PersonneLiteBean getPersonne() {
+        return this.personne;
+    }
+
+    public void setPersonne(PersonneLiteBean personne) {
+        this.personne = personne;
+    }
+
+    public AuteurMetier getMetier() {
+        return this.metier;
+    }
+
+    public void setMetier(AuteurMetier metier) {
+        this.metier = metier;
     }
 }

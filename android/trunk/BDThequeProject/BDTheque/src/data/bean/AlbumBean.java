@@ -8,6 +8,9 @@ import org.tetram.bdtheque.data.factories.AlbumFactory;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.ALBUMS_TABLENAME, primaryKey = DDLConstants.ALBUMS_ID, factoryClass = AlbumFactory.class)
 public class AlbumBean extends AlbumLiteBean {
@@ -27,6 +30,9 @@ public class AlbumBean extends AlbumLiteBean {
     private String sujet;
     private String notes;
     private SerieBean serie;
+    private final List<AuteurBean> scenaristes = new ArrayList<>();
+    private final List<AuteurBean> dessinateurs = new ArrayList<>();
+    private final List<AuteurBean> coloristes = new ArrayList<>();
 
     public AlbumBean() {
         super();
@@ -75,5 +81,17 @@ public class AlbumBean extends AlbumLiteBean {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public List<AuteurBean> getScenaristes() {
+        return this.scenaristes;
+    }
+
+    public List<AuteurBean> getDessinateurs() {
+        return this.dessinateurs;
+    }
+
+    public List<AuteurBean> getColoristes() {
+        return this.coloristes;
     }
 }

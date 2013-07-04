@@ -28,6 +28,10 @@ public class EditeurBean extends EditeurLiteBean {
         super(in);
     }
 
+    public EditeurBean() {
+        super();
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
