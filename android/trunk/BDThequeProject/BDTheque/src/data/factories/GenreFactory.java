@@ -15,9 +15,15 @@ public class GenreFactory implements BeanFactory<GenreBean> {
     @Override
     public GenreBean loadFromCursor(Context context, Cursor cursor, boolean mustExists) {
         GenreBean bean = new GenreBean();
-        bean.setId(getFieldUUID(cursor, DDLConstants.GENRES_ID));
-        if (mustExists && (bean.getId() == null)) return null;
-        bean.setNom(getFieldString(cursor, DDLConstants.GENRES_NOM));
+        if (!loadFromCursor(context, cursor, mustExists, bean)) return null;
         return bean;
+    }
+
+    @Override
+    public boolean loadFromCursor(Context context, Cursor cursor, boolean mustExists, GenreBean bean) {
+        bean.setId(getFieldUUID(cursor, DDLConstants.GENRES_ID));
+        if (mustExists && (bean.getId() == null)) return false;
+        bean.setNom(getFieldString(cursor, DDLConstants.GENRES_NOM));
+        return true;
     }
 }

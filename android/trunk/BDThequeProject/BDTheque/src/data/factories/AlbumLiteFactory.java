@@ -18,8 +18,14 @@ public class AlbumLiteFactory implements BeanFactory<AlbumLiteBean> {
     @Override
     public AlbumLiteBean loadFromCursor(Context context, Cursor cursor, boolean mustExists) {
         AlbumLiteBean bean = new AlbumLiteBean();
+        if (!loadFromCursor(context, cursor, mustExists, bean)) return null;
+        return bean;
+    }
+
+    @Override
+    public boolean loadFromCursor(Context context, Cursor cursor, boolean mustExists, AlbumLiteBean bean) {
         bean.setId(getFieldUUID(cursor, DDLConstants.ALBUMS_ID));
-        if (mustExists && (bean.getId() == null)) return null;
+        if (mustExists && (bean.getId() == null)) return false;
         bean.setTitre(getFieldString(cursor, DDLConstants.ALBUMS_TITRE));
         bean.setTome(getFieldInteger(cursor, DDLConstants.ALBUMS_TOME));
         bean.setTomeDebut(getFieldInteger(cursor, DDLConstants.ALBUMS_TOMEDEBUT));
@@ -32,7 +38,7 @@ public class AlbumLiteFactory implements BeanFactory<AlbumLiteBean> {
         bean.setSerie(new SerieLiteFactory().loadFromCursor(context, cursor, false));
         bean.setAchat(getFieldBoolean(cursor, DDLConstants.ALBUMS_ACHAT));
         bean.setComplet(getFieldBoolean(cursor, DDLConstants.ALBUMS_COMPLET));
-        return bean;
+        return true;
     }
 
 }

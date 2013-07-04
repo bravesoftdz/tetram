@@ -16,12 +16,18 @@ public class SerieLiteFactory implements BeanFactory<SerieLiteBean> {
     @Override
     public SerieLiteBean loadFromCursor(Context context, Cursor cursor, boolean mustExists) {
         SerieLiteBean bean = new SerieLiteBean();
+        if (!loadFromCursor(context, cursor, mustExists, bean)) return null;
+        return bean;
+    }
+
+    @Override
+    public boolean loadFromCursor(Context context, Cursor cursor, boolean mustExists, SerieLiteBean bean) {
         bean.setId(getFieldUUID(cursor, DDLConstants.SERIES_ID));
-        if (mustExists && (bean.getId() == null)) return null;
+        if (mustExists && (bean.getId() == null)) return false;
         bean.setTitre(getFieldString(cursor, DDLConstants.SERIES_TITRE));
         bean.setEditeur(new EditeurLiteFactory().loadFromCursor(context, cursor, false));
         bean.setCollection(new CollectionLiteFactory().loadFromCursor(context, cursor, false));
-        return bean;
+        return true;
     }
 
 }

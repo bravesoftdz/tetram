@@ -10,6 +10,13 @@ public class EditeurFactory implements BeanFactory<EditeurBean> {
     @Nullable
     @Override
     public EditeurBean loadFromCursor(Context context, Cursor cursor, boolean mustExists) {
-        return null;
+        EditeurBean bean = new EditeurBean();
+        if (!loadFromCursor(context, cursor, mustExists, bean)) return null;
+        return bean;
+    }
+
+    @Override
+    public boolean loadFromCursor(Context context, Cursor cursor, boolean mustExists, EditeurBean bean) {
+        return false;
     }
 }

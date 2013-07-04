@@ -16,10 +16,16 @@ public class EditeurLiteFactory implements BeanFactory<EditeurLiteBean> {
     @Override
     public EditeurLiteBean loadFromCursor(Context context, Cursor cursor, boolean mustExists) {
         EditeurLiteBean bean = new EditeurLiteBean();
-        bean.setId(getFieldUUID(cursor, DDLConstants.EDITEURS_ID));
-        if (mustExists && (bean.getId() == null)) return null;
-        bean.setNom(getFieldString(cursor, DDLConstants.EDITEURS_NOM));
+        if (!loadFromCursor(context, cursor, mustExists, bean)) return null;
         return bean;
+    }
+
+    @Override
+    public boolean loadFromCursor(Context context, Cursor cursor, boolean mustExists, EditeurLiteBean bean) {
+        bean.setId(getFieldUUID(cursor, DDLConstants.EDITEURS_ID));
+        if (mustExists && (bean.getId() == null)) return false;
+        bean.setNom(getFieldString(cursor, DDLConstants.EDITEURS_NOM));
+        return true;
     }
 
 }

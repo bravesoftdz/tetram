@@ -5,9 +5,12 @@ import android.database.Cursor;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.AlbumBean;
+import org.tetram.bdtheque.data.bean.AuteurBean;
+import org.tetram.bdtheque.data.dao.AuteurDao;
 import org.tetram.bdtheque.data.dao.SerieDao;
 import org.tetram.bdtheque.database.DDLConstants;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldBoolean;
@@ -20,8 +23,14 @@ public class AlbumFactory implements BeanFactory<AlbumBean> {
     @Override
     public AlbumBean loadFromCursor(Context context, Cursor cursor, boolean mustExists) {
         AlbumBean bean = new AlbumBean();
+        if (!loadFromCursor(context, cursor, mustExists, bean)) return null;
+        return bean;
+    }
+
+    @Override
+    public boolean loadFromCursor(Context context, Cursor cursor, boolean mustExists, AlbumBean bean) {
         bean.setId(getFieldUUID(cursor, DDLConstants.ALBUMS_ID));
-        if (mustExists && (bean.getId() == null)) return null;
+        if (mustExists && (bean.getId() == null)) return false;
         bean.setTitre(getFieldString(cursor, DDLConstants.ALBUMS_TITRE));
         bean.setTome(getFieldInteger(cursor, DDLConstants.ALBUMS_TOME));
         bean.setTomeDebut(getFieldInteger(cursor, DDLConstants.ALBUMS_TOMEDEBUT));
@@ -37,6 +46,21 @@ public class AlbumFactory implements BeanFactory<AlbumBean> {
         bean.setComplet(getFieldBoolean(cursor, DDLConstants.ALBUMS_COMPLET));
         bean.setSujet(getFieldString(cursor, DDLConstants.ALBUMS_SUJET));
         bean.setNotes(getFieldString(cursor, DDLConstants.ALBUMS_NOTES));
-        return bean;
+
+        List<AuteurBean> auteurs = new AuteurDao(context).getAuteurs(bean);
+        for (AuteurBean auteur : auteurs)
+            switch (auteur.getMetier()) {
+                case SCENARISTE:
+                    bean.getScenaristes().add(auteur);
+                    break;
+                case DESSINATEUR:
+                    bean.getDessinateurs().add(auteur);
+                    break;
+                case COLORISTE:
+                    bean.getColoristes().add(auteur);
+                    break;
+            }
+
+        return true;
     }
 }
