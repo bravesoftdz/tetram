@@ -8,7 +8,6 @@ import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.factories.BeanFactory;
 import org.tetram.bdtheque.data.utils.Entity;
-import org.tetram.bdtheque.database.BDDatabaseHelper;
 import org.tetram.bdtheque.utils.GenericUtils;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -16,19 +15,15 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
 
 @SuppressWarnings("UnusedDeclaration")
-public abstract class CommonDaoImpl<T extends CommonBean> implements CommonDao<T> {
+public abstract class CommonDaoImpl<T extends CommonBean> extends DefaultDao<T> implements CommonDao<T> {
 
-    private final BDDatabaseHelper databaseHelper;
-    private final Context context;
     private final Class<?> beanClass;
     final String tableName;
     BeanFactory beanFactory;
     final String primaryKey;
 
     public CommonDaoImpl(Context context) {
-        super();
-        this.databaseHelper = new BDDatabaseHelper(context);
-        this.context = context;
+        super(context);
 
         this.beanClass = GenericUtils.getTypeArguments(CommonDaoImpl.class, getClass()).get(0);
         Entity a = this.beanClass.getAnnotation(Entity.class);
@@ -43,16 +38,6 @@ public abstract class CommonDaoImpl<T extends CommonBean> implements CommonDao<T
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public BDDatabaseHelper getDatabaseHelper() {
-        return this.databaseHelper;
-    }
-
-    @Override
-    public Context getContext() {
-        return this.context;
     }
 
     @SuppressWarnings("unchecked")
