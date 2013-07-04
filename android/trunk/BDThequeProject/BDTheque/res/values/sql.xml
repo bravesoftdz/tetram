@@ -88,7 +88,7 @@ order by
     c.nomcollection collate nocase
         ]]></string>
 
-    <string name="sql_auteurs_by_initiale"><![CDATA[
+    <string name="sql_personnes_by_initiale"><![CDATA[
 select
     p.id_personne, p.nompersonne
 from
@@ -298,6 +298,6 @@ order by
     <string name="sql_searchfield_editeurs">e.nomediteur</string>
     <string name="sql_searchfield_collections">c.nomcollection</string>
     <string name="sql_searchfield_genres">g.genre</string>
-    <string name="sql_searchfield_auteurs">p.nompersonne</string>
+    <string name="sql_searchfield_personnes">p.nompersonne</string>
 
 </resources>

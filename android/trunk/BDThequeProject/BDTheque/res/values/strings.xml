@@ -8,7 +8,7 @@
     <string name="menu_options"/>
     <string name="pref_notationListe">notationListe</string>
     <string name="pref_formatTitreAlbum">formatTitreAlbum</string>
-    <string name="menuRepertoireAuteurs">Auteurs</string>
+    <string name="menuRepertoirePersonnes">Auteurs</string>
     <string name="menuRepertoireSeries">Séries</string>
     <string name="menuRepertoireAlbumsTitre">Albums par titre</string>
     <string name="menuRepertoireAlbumsSerie">Albums par série</string>
