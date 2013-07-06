@@ -2,13 +2,13 @@ package org.tetram.bdtheque.gui.activities.fragments;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.text.format.DateFormat;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import org.jetbrains.annotations.Nullable;
@@ -17,13 +17,13 @@ import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.AlbumBean;
 import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.dao.AlbumDao;
+import org.tetram.bdtheque.gui.components.LinearListView;
 import org.tetram.bdtheque.gui.utils.UIUtils;
 import org.tetram.bdtheque.utils.StringUtils;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 @SuppressWarnings("UnusedDeclaration")
 public class FicheAlbumFragment extends FicheFragment {
@@ -40,7 +40,7 @@ public class FicheAlbumFragment extends FicheFragment {
 
         if (album == null) return null;
 
-        View v = inflater.inflate(R.layout.fiche_album_fragment, container);
+        View v = inflater.inflate(R.layout.fiche_album_fragment, container, false);
         if (album.getSerie() != null) {
             String titreSerie = StringUtils.formatTitre(album.getSerie().getTitre());
             if (album.getSerie().getSiteWeb() != null) {
@@ -55,18 +55,18 @@ public class FicheAlbumFragment extends FicheFragment {
         }
         UIUtils.setUIElement(v, R.id.album_titre, StringUtils.formatTitre(album.getTitre()));
         UIUtils.setUIElement(v, R.id.album_tome, StringUtils.nonZero(album.getTome()));
-        DateFormat parutionFormat;
+        String parutionFormat;
         Date dateParution;
         if ((album.getAnneeParution() != null) && (album.getAnneeParution() > 0)) {
             final Calendar calendar = Calendar.getInstance();
             if ((album.getMoisParution() != null) && (album.getMoisParution() > 0)) {
-                parutionFormat = new SimpleDateFormat("MMM yyyy");
-                calendar.set(album.getAnneeParution(), album.getMoisParution() - 1, 1);
+                parutionFormat = "MMM yyyy";
+                dateParution = new GregorianCalendar(album.getAnneeParution(), album.getMoisParution() - 1, 1).getTime();
             } else {
-                parutionFormat = new SimpleDateFormat("yyyy");
-                calendar.set(album.getAnneeParution(), Calendar.JANUARY, 1);
+                parutionFormat = "yyyy";
+                dateParution = new GregorianCalendar(album.getAnneeParution(), Calendar.JANUARY, 1).getTime();
             }
-            UIUtils.setUIElement(v, R.id.album_parution, parutionFormat.format(calendar.getTime()));
+            UIUtils.setUIElement(v, R.id.album_parution, DateFormat.format(parutionFormat, dateParution));
         }
         UIUtils.setUIElement(v, R.id.album_integrale, album.isIntegrale());
         String s;
@@ -79,9 +79,19 @@ public class FicheAlbumFragment extends FicheFragment {
             );
         }
 
-        ((ListView) v.findViewById(R.id.album_scenaristes)).setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getScenaristes()));
-        ((ListView) v.findViewById(R.id.album_dessinateurs)).setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getDessinateurs()));
-        ((ListView) v.findViewById(R.id.album_coloristes)).setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getColoristes()));
+        LinearListView listView;
+
+        listView = (LinearListView) v.findViewById(R.id.album_scenaristes);
+        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getScenaristes()));
+        //listView.setMinimumHeight(Math.min(album.getScenaristes().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
+
+        listView = (LinearListView) v.findViewById(R.id.album_dessinateurs);
+        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getDessinateurs()));
+        //listView.setMinimumHeight(Math.min(album.getDessinateurs().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
+
+        listView = (LinearListView) v.findViewById(R.id.album_coloristes);
+        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getColoristes()));
+        //listView.setMinimumHeight(Math.min(album.getColoristes().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
 
         UIUtils.setUIElement(v, R.id.album_horsserie, album.isHorsSerie());
         UIUtils.setUIElement(v, R.id.album_histoire, album.getSujet());

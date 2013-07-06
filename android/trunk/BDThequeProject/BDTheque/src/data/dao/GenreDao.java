@@ -31,11 +31,14 @@ public class GenreDao extends CommonDaoImpl<GenreBean> {
                 "g." + DDLConstants.GENRES_NOM,
                 null
         );
-
-        while (cursor.moveToNext()) {
-            GenreBean genre = (GenreBean) this.beanFactory.loadFromCursor(getContext(), cursor, true);
-            if (genre != null)
-                list.add(genre);
+        try {
+            while (cursor.moveToNext()) {
+                GenreBean genre = (GenreBean) this.beanFactory.loadFromCursor(getContext(), cursor, true);
+                if (genre != null)
+                    list.add(genre);
+            }
+        } finally {
+            cursor.close();
         }
     }
 }

@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
 import org.jetbrains.annotations.Nullable;
@@ -52,8 +51,11 @@ public abstract class FicheFragment extends Fragment {
             // the view hierarchy; it would just never be used.
             return null;
         } else {
-            ScrollView view = new ScrollView(getActivity());
-            buildView(inflater, view, savedInstanceState);
+            //ScrollView view = new ScrollView(getActivity());
+            //buildView(inflater, view, savedInstanceState);
+            //return view;
+
+            final View view = buildView(inflater, container, savedInstanceState);
             return view;
         }
 

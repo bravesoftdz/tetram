@@ -36,14 +36,17 @@ public class AuteurDao extends DefaultDao<AuteurBean> {
                 null
         );
 
-        final AuteurAlbumFactory factory = new AuteurAlbumFactory();
-        while (cursor.moveToNext()) {
-            AuteurBean auteur = factory.loadFromCursor(getContext(), cursor, true);
-            if (auteur != null)
-                list.add(auteur);
+        try {
+            final AuteurAlbumFactory factory = new AuteurAlbumFactory();
+            while (cursor.moveToNext()) {
+                AuteurBean auteur = factory.loadFromCursor(getContext(), cursor, true);
+                if (auteur != null)
+                    list.add(auteur);
+            }
+            return list;
+        } finally {
+            cursor.close();
         }
-
-        return list;
     }
 
     public List<AuteurBean> getAuteurs(SerieLiteBean serie) {
@@ -62,14 +65,17 @@ public class AuteurDao extends DefaultDao<AuteurBean> {
                 null
         );
 
-        final AuteurSerieFactory factory = new AuteurSerieFactory();
-        while (cursor.moveToNext()) {
-            AuteurBean auteur = factory.loadFromCursor(getContext(), cursor, true);
-            if (auteur != null)
-                list.add(auteur);
+        try {
+            final AuteurSerieFactory factory = new AuteurSerieFactory();
+            while (cursor.moveToNext()) {
+                AuteurBean auteur = factory.loadFromCursor(getContext(), cursor, true);
+                if (auteur != null)
+                    list.add(auteur);
+            }
+            return list;
+        } finally {
+            cursor.close();
         }
-
-        return list;
     }
 
 }

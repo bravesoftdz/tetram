@@ -5,7 +5,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_gravity="left|center_vertical"
-              android:paddingLeft="40sp">
+              android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft">
 
     <TextView
         android:id="@+id/text_value"
@@ -18,7 +18,7 @@
         android:layout_marginRight="6sp"
         android:textAppearance="@android:style/TextAppearance"
         android:gravity="center_vertical"
-        android:minHeight="48sp"/>
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"/>
 
     <TextView
         android:id="@+id/text_count"

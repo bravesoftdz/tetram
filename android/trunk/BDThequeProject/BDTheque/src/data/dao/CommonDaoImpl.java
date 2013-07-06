@@ -56,8 +56,12 @@ public abstract class CommonDaoImpl<T extends CommonBean> extends DefaultDao<T> 
                 null
         );
 
-        if (cursor.moveToFirst())
-            return (T) this.beanFactory.loadFromCursor(getContext(), cursor, true);
+        try {
+            if (cursor.moveToFirst())
+                return (T) this.beanFactory.loadFromCursor(getContext(), cursor, true);
+        } finally {
+            cursor.close();
+        }
 
         return null;
     }

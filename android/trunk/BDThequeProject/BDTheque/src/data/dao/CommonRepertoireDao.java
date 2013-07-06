@@ -47,32 +47,38 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
         }
         sWhere += filtre == null || "".equals(filtre) ? "" : " and " + filtre;
         Cursor cursor = rdb.rawQuery(getContext().getString(resId, sWhere), params);
-
-        List<B> result = new ArrayList<>();
-        BeanFactory<B> beanFactory = null;
         try {
-            beanFactory = this.beanFactoryClass.getConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+            List<B> result = new ArrayList<>();
+            BeanFactory<B> factory = null;
+            try {
+                factory = this.beanFactoryClass.getConstructor().newInstance();
+            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
 
-        while (cursor.moveToNext()) {
-            result.add(beanFactory.loadFromCursor(getContext(), cursor, true));
+            while (cursor.moveToNext()) {
+                result.add(factory.loadFromCursor(getContext(), cursor, true));
+            }
+            return result;
+        } finally {
+            cursor.close();
         }
-        return result;
     }
 
     @SuppressWarnings("unchecked")
     private List<I> getInitiales(String sql) {
         SQLiteDatabase rdb = getDatabaseHelper().getReadableDatabase();
         Cursor cursor = rdb.rawQuery(sql, null);
-
-        int cValue = (cursor.getColumnCount() == 2) ? 0 : 2;
-        List<I> result = new ArrayList<>();
-        while (cursor.moveToNext()) {
-            result.add((I) InitialeBean.createInstance(this.initialeClass, cursor.getString(0), cursor.getInt(1), cursor.getString(cValue)));
+        try {
+            int cValue = (cursor.getColumnCount() == 2) ? 0 : 2;
+            List<I> result = new ArrayList<>();
+            while (cursor.moveToNext()) {
+                result.add((I) InitialeBean.createInstance(this.initialeClass, cursor.getString(0), cursor.getInt(1), cursor.getString(cValue)));
+            }
+            return result;
+        } finally {
+            cursor.close();
         }
-        return result;
     }
 
     public final List<I> getInitiales(int resId) {

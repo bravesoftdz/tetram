@@ -7,7 +7,8 @@
                 android:orientation="horizontal"
                 android:clickable="false"
                 android:focusable="false"
-                android:longClickable="false">
+                android:longClickable="false"
+                android:paddingLeft="?android:attr/expandableListPreferredItemPaddingLeft">
 
     <TextView
         android:layout_width="wrap_content"
@@ -15,18 +16,13 @@
         android:id="@+id/textView"
         android:layout_gravity="center_vertical|left"
         android:singleLine="false"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="40dp"
-        android:layout_alignParentTop="false"
-        android:layout_alignWithParentIfMissing="false"
-        android:layout_alignParentRight="false"
-        android:layout_alignParentBottom="false"
         android:layout_toLeftOf="@+id/ratingBar"
         android:layout_centerVertical="true"
         android:layout_marginRight="6sp"
         android:textAppearance="@android:style/TextAppearance"
-        android:minHeight="48sp"
-        android:gravity="fill_vertical"/>
+        android:minHeight="?android:attr/listPreferredItemHeightSmall"
+        android:gravity="fill_vertical"
+        android:layout_alignParentLeft="true"/>
 
     <RatingBar
         android:layout_width="wrap_content"
@@ -38,12 +34,7 @@
         style="@style/CustomRatingBar"
         android:layout_gravity="center_vertical|right"
         android:clickable="false"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentTop="false"
-        android:layout_alignParentRight="true"
-        android:layout_alignWithParentIfMissing="false"
-        android:layout_alignParentBottom="false"
         android:layout_centerVertical="true"
-        />
+        android:layout_alignParentRight="true"/>
 
 </RelativeLayout>
