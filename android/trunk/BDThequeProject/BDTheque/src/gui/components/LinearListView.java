@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+@SuppressWarnings("UnusedDeclaration")
 public class LinearListView extends LinearLayout {
     private Adapter adapter;
     private final Observer observer = new Observer(this);
