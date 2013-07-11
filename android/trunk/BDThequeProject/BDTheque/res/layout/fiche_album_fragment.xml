@@ -256,7 +256,7 @@
                 android:layout_column="0"
                 android:layout_gravity="right"/>
 
-            <org.tetram.bdtheque.gui.components.LinearListView
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/album_histoire"

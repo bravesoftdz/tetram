@@ -23,6 +23,9 @@ public class SerieBean extends SerieLiteBean {
     private final List<AuteurBean> dessinateurs = new ArrayList<>();
     private final List<AuteurBean> coloristes = new ArrayList<>();
 
+    private String sujet;
+    private String notes;
+
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<SerieBean> CREATOR = new Creator<SerieBean>() {
         @Override
@@ -52,6 +55,8 @@ public class SerieBean extends SerieLiteBean {
         else
             dest.writeValue(this.siteWeb.toExternalForm());
         dest.writeTypedList(this.genres);
+        dest.writeString(this.sujet);
+        dest.writeString(this.notes);
         dest.writeTypedList(this.scenaristes);
         dest.writeTypedList(this.dessinateurs);
         dest.writeTypedList(this.coloristes);
@@ -62,6 +67,8 @@ public class SerieBean extends SerieLiteBean {
         super.readFromParcel(in);
         this.siteWeb = (URL) in.readValue(URL.class.getClassLoader());
         in.readTypedList(this.genres, GenreBean.CREATOR);
+        this.sujet = in.readString();
+        this.notes = in.readString();
         in.readTypedList(this.scenaristes, AuteurBean.CREATOR);
         in.readTypedList(this.dessinateurs, AuteurBean.CREATOR);
         in.readTypedList(this.coloristes, AuteurBean.CREATOR);
@@ -98,4 +105,19 @@ public class SerieBean extends SerieLiteBean {
         return this.coloristes;
     }
 
+    public String getSujet() {
+        return this.sujet;
+    }
+
+    public void setSujet(String sujet) {
+        this.sujet = sujet;
+    }
+
+    public String getNotes() {
+        return this.notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
 }

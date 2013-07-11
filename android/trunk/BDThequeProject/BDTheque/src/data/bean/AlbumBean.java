@@ -45,11 +45,23 @@ public class AlbumBean extends AlbumLiteBean {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
+        dest.writeParcelable(this.serie, flags);
+        dest.writeString(this.sujet);
+        dest.writeString(this.notes);
+        dest.writeTypedList(this.scenaristes);
+        dest.writeTypedList(this.dessinateurs);
+        dest.writeTypedList(this.coloristes);
     }
 
     @Override
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
+        this.serie = in.readParcelable(SerieBean.class.getClassLoader());
+        this.sujet = in.readString();
+        this.notes = in.readString();
+        in.readTypedList(this.scenaristes, AuteurBean.CREATOR);
+        in.readTypedList(this.dessinateurs, AuteurBean.CREATOR);
+        in.readTypedList(this.coloristes, AuteurBean.CREATOR);
     }
 
     @Override

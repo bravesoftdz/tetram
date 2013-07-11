@@ -55,8 +55,7 @@ public abstract class FicheFragment extends Fragment {
             //buildView(inflater, view, savedInstanceState);
             //return view;
 
-            final View view = buildView(inflater, container, savedInstanceState);
-            return view;
+            return buildView(inflater, container, savedInstanceState);
         }
 
     }

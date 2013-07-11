@@ -39,6 +39,8 @@ public class SerieFactory implements BeanFactory<SerieBean> {
             bean.setSiteWeb(null);
         }
         new GenreDao(context).loadListForSerie(bean.getGenres(), bean.getId());
+        bean.setSujet(getFieldString(cursor, DDLConstants.SERIES_SUJET));
+        bean.setNotes(getFieldString(cursor, DDLConstants.SERIES_NOTES));
 
         List<AuteurBean> auteurs = new AuteurDao(context).getAuteurs(bean);
         for (AuteurBean auteur : auteurs)

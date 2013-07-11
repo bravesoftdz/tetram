@@ -5,7 +5,8 @@
               android:orientation="horizontal"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              tools:context=".activities.RepertoireActivity">
+              tools:context=".activities.RepertoireActivity"
+              android:baselineAligned="false">
 
     <fragment
         class="org.tetram.bdtheque.gui.activities.fragments.TitlesFragment"

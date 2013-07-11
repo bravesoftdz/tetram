@@ -4,6 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
+import android.widget.Toast;
+
+import org.tetram.bdtheque.BDThequeApplication;
 
 import java.io.IOException;
 
@@ -53,6 +56,7 @@ public class BDDatabaseHelper extends SQLiteOpenHelper {
         switch (oldVersion) {
             case 0:
             case 1:
+                Toast.makeText(BDThequeApplication.getInstance().getApplicationContext(), "Chargement des données initiales...", Toast.LENGTH_LONG).show();
                 runSQL(db, "sql/init_editeurs.sql");
                 runSQL(db, "sql/init_collections.sql");
                 runSQL(db, "sql/init_series.sql");

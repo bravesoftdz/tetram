@@ -16,6 +16,7 @@ import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.AlbumBean;
 import org.tetram.bdtheque.data.bean.CommonBean;
+import org.tetram.bdtheque.data.bean.SerieBean;
 import org.tetram.bdtheque.data.dao.AlbumDao;
 import org.tetram.bdtheque.gui.components.LinearListView;
 import org.tetram.bdtheque.gui.utils.UIUtils;
@@ -39,26 +40,26 @@ public class FicheAlbumFragment extends FicheFragment {
         AlbumBean album = dao.getById(bean.getId());
 
         if (album == null) return null;
+        final SerieBean serie = album.getSerie();
 
         View v = inflater.inflate(R.layout.fiche_album_fragment, container, false);
-        if (album.getSerie() != null) {
-            String titreSerie = StringUtils.formatTitre(album.getSerie().getTitre());
-            if (album.getSerie().getSiteWeb() != null) {
-                titreSerie = String.format("<a href=\"%s\">%s</a>", album.getSerie().getSiteWeb(), titreSerie);
+        if (serie != null) {
+            String titreSerie = StringUtils.formatTitre(serie.getTitre());
+            if (serie.getSiteWeb() != null) {
+                titreSerie = String.format("<a href=\"%s\">%s</a>", serie.getSiteWeb(), titreSerie);
                 final TextView textView = (TextView) v.findViewById(R.id.album_serie);
                 textView.setMovementMethod(LinkMovementMethod.getInstance());
                 textView.setText(Html.fromHtml(titreSerie));
             } else {
                 UIUtils.setUIElement(v, R.id.album_serie, titreSerie);
             }
-            UIUtils.setUIElement(v, R.id.album_genres, album.getSerie().getGenreList());
+            UIUtils.setUIElement(v, R.id.album_genres, serie.getGenreList());
         }
         UIUtils.setUIElement(v, R.id.album_titre, StringUtils.formatTitre(album.getTitre()));
         UIUtils.setUIElement(v, R.id.album_tome, StringUtils.nonZero(album.getTome()));
         String parutionFormat;
         Date dateParution;
         if ((album.getAnneeParution() != null) && (album.getAnneeParution() > 0)) {
-            final Calendar calendar = Calendar.getInstance();
             if ((album.getMoisParution() != null) && (album.getMoisParution() > 0)) {
                 parutionFormat = "MMM yyyy";
                 dateParution = new GregorianCalendar(album.getAnneeParution(), album.getMoisParution() - 1, 1).getTime();
@@ -69,7 +70,6 @@ public class FicheAlbumFragment extends FicheFragment {
             UIUtils.setUIElement(v, R.id.album_parution, DateFormat.format(parutionFormat, dateParution));
         }
         UIUtils.setUIElement(v, R.id.album_integrale, album.isIntegrale());
-        String s;
         if (album.isIntegrale()) {
             ((CheckBox) v.findViewById(R.id.album_integrale)).setText(
                     StringUtils.ajoutString(
@@ -94,8 +94,14 @@ public class FicheAlbumFragment extends FicheFragment {
         //listView.setMinimumHeight(Math.min(album.getColoristes().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
 
         UIUtils.setUIElement(v, R.id.album_horsserie, album.isHorsSerie());
-        UIUtils.setUIElement(v, R.id.album_histoire, album.getSujet());
-        UIUtils.setUIElement(v, R.id.album_notes, album.getNotes());
+        String sujet = album.getSujet();
+        if ((serie != null) && ((sujet == null) || "".equals(sujet)))
+            sujet = serie.getSujet();
+        UIUtils.setUIElement(v, R.id.album_histoire, sujet);
+        String notes = album.getNotes();
+        if ((serie != null) && ((notes == null) || "".equals(notes)))
+            notes = serie.getNotes();
+        UIUtils.setUIElement(v, R.id.album_notes, notes);
 
         return v;
     }

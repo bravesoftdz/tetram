@@ -46,7 +46,7 @@ public class LinearListView extends LinearLayout {
 
         @Override
         public void onChanged() {
-            List<View> oldViews = new ArrayList<View>(this.context.getChildCount());
+            List<View> oldViews = new ArrayList<>(this.context.getChildCount());
 
             for (int i = 0; i < this.context.getChildCount(); i++)
                 oldViews.add(this.context.getChildAt(i));
