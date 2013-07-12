@@ -4,6 +4,10 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
+import org.tetram.bdtheque.data.bean.CommonBean;
+import org.tetram.bdtheque.gui.activities.fragments.FicheFragment;
+import org.tetram.bdtheque.gui.utils.ShowFragmentClass;
+
 public class FicheActivity extends Activity {
 
     @SuppressWarnings("VariableNotUsedInsideIf")
@@ -19,6 +23,13 @@ public class FicheActivity extends Activity {
         }
 
         if (savedInstanceState == null) {
+            CommonBean bean = getIntent().getParcelableExtra("bean");
+
+            ShowFragmentClass a = bean.getClass().getAnnotation(ShowFragmentClass.class);
+            if (a == null) return;
+
+            getFragmentManager().beginTransaction().add(android.R.id.content, FicheFragment.newInstance(a.value(), bean)).commit();
+
             // During initial setup, plug in the details fragments.
 /*
             FicheFragment details = new FicheFragment();

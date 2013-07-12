@@ -56,4 +56,7 @@ public class DDLConstants {
 
     public static final String GENRES_NOM = "GENRE";
     public static final String GENRESERIES_TABLENAME = "GENRESERIES";
+
+    public static final String EDITIONS_TABLENAME = "EDITIONS";
+    public static final String EDITIONS_ID = "ID_EDITION";
 }

@@ -1,35 +1,23 @@
 package org.tetram.bdtheque.gui.activities.fragments;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.format.DateFormat;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.TextView;
+import android.widget.TabHost;
 
 import org.jetbrains.annotations.Nullable;
-import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.AlbumBean;
 import org.tetram.bdtheque.data.bean.CommonBean;
-import org.tetram.bdtheque.data.bean.SerieBean;
 import org.tetram.bdtheque.data.dao.AlbumDao;
-import org.tetram.bdtheque.gui.components.LinearListView;
-import org.tetram.bdtheque.gui.utils.UIUtils;
-import org.tetram.bdtheque.utils.StringUtils;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-@SuppressWarnings("UnusedDeclaration")
 public class FicheAlbumFragment extends FicheFragment {
 
-    @SuppressWarnings("MagicConstant")
+    private static final String TAB_DETAILS = "détails";
+    private static final String TAB_EDITIONS = "éditions";
+
     @Nullable
     @Override
     public View buildView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,70 +27,44 @@ public class FicheAlbumFragment extends FicheFragment {
         AlbumDao dao = new AlbumDao(getActivity());
         AlbumBean album = dao.getById(bean.getId());
 
-        if (album == null) return null;
-        final SerieBean serie = album.getSerie();
-
         View v = inflater.inflate(R.layout.fiche_album_fragment, container, false);
-        if (serie != null) {
-            String titreSerie = StringUtils.formatTitre(serie.getTitre());
-            if (serie.getSiteWeb() != null) {
-                titreSerie = String.format("<a href=\"%s\">%s</a>", serie.getSiteWeb(), titreSerie);
-                final TextView textView = (TextView) v.findViewById(R.id.album_serie);
-                textView.setMovementMethod(LinkMovementMethod.getInstance());
-                textView.setText(Html.fromHtml(titreSerie));
-            } else {
-                UIUtils.setUIElement(v, R.id.album_serie, titreSerie);
-            }
-            UIUtils.setUIElement(v, R.id.album_genres, serie.getGenreList());
-        }
-        UIUtils.setUIElement(v, R.id.album_titre, StringUtils.formatTitre(album.getTitre()));
-        UIUtils.setUIElement(v, R.id.album_tome, StringUtils.nonZero(album.getTome()));
-        String parutionFormat;
-        Date dateParution;
-        if ((album.getAnneeParution() != null) && (album.getAnneeParution() > 0)) {
-            if ((album.getMoisParution() != null) && (album.getMoisParution() > 0)) {
-                parutionFormat = "MMM yyyy";
-                dateParution = new GregorianCalendar(album.getAnneeParution(), album.getMoisParution() - 1, 1).getTime();
-            } else {
-                parutionFormat = "yyyy";
-                dateParution = new GregorianCalendar(album.getAnneeParution(), Calendar.JANUARY, 1).getTime();
-            }
-            UIUtils.setUIElement(v, R.id.album_parution, DateFormat.format(parutionFormat, dateParution));
-        }
-        UIUtils.setUIElement(v, R.id.album_integrale, album.isIntegrale());
-        if (album.isIntegrale()) {
-            ((CheckBox) v.findViewById(R.id.album_integrale)).setText(
-                    StringUtils.ajoutString(
-                            BDThequeApplication.getInstance().getString(R.string.fiche_album_integrale),
-                            StringUtils.ajoutString(StringUtils.nonZero(album.getTomeDebut()), StringUtils.nonZero(album.getTomeFin()), " à "),
-                            " ", "[", "]")
-            );
-        }
 
-        LinearListView listView;
+        TabHost tabHost = (TabHost) v.findViewById(android.R.id.tabhost);
+        tabHost.setup();
 
-        listView = (LinearListView) v.findViewById(R.id.album_scenaristes);
-        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getScenaristes()));
-        //listView.setMinimumHeight(Math.min(album.getScenaristes().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
+        if (album.getEditions().isEmpty())
+            v.findViewById(android.R.id.tabs).setVisibility(View.GONE);
 
-        listView = (LinearListView) v.findViewById(R.id.album_dessinateurs);
-        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getDessinateurs()));
-        //listView.setMinimumHeight(Math.min(album.getDessinateurs().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
+        TabHost.TabSpec spec;
 
-        listView = (LinearListView) v.findViewById(R.id.album_coloristes);
-        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getColoristes()));
-        //listView.setMinimumHeight(Math.min(album.getColoristes().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
+        spec = tabHost.newTabSpec(TAB_DETAILS);
+        spec.setIndicator(TAB_DETAILS);
+        spec.setContent(R.id.tab_album_detail);
+        tabHost.addTab(spec);
 
-        UIUtils.setUIElement(v, R.id.album_horsserie, album.isHorsSerie());
-        String sujet = album.getSujet();
-        if ((serie != null) && ((sujet == null) || "".equals(sujet)))
-            sujet = serie.getSujet();
-        UIUtils.setUIElement(v, R.id.album_histoire, sujet);
-        String notes = album.getNotes();
-        if ((serie != null) && ((notes == null) || "".equals(notes)))
-            notes = serie.getNotes();
-        UIUtils.setUIElement(v, R.id.album_notes, notes);
+        spec = tabHost.newTabSpec(TAB_EDITIONS);
+        spec.setIndicator(TAB_EDITIONS);
+        spec.setContent(R.id.tab_album_editions);
+        tabHost.addTab(spec);
+
+        FicheAlbumDetailFragment detailFragment = (FicheAlbumDetailFragment) FicheFragment.newInstance(FicheAlbumDetailFragment.class, album);
+        FicheAlbumEditionsFragment editionsFragment = (FicheAlbumEditionsFragment) FicheFragment.newInstance(FicheAlbumEditionsFragment.class, album);
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.tab_album_detail, detailFragment);
+        fragmentTransaction.replace(R.id.tab_album_editions, editionsFragment);
+        fragmentTransaction.commit();
 
         return v;
     }
+
+/*
+    private View createTabView(final String text, final int id) {
+        View view = LayoutInflater.from(this).inflate(R.layout.tabs_icon, null);
+        ImageView imageView = (ImageView) view.findViewById(R.id.tab_icon);
+        imageView.setImageDrawable(getResources().getDrawable(id));
+        ((TextView) view.findViewById(R.id.tab_text)).setText(text);
+        return view;
+    }
+*/
 }

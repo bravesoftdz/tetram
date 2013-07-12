@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.AlbumBean;
 import org.tetram.bdtheque.data.bean.AuteurBean;
 import org.tetram.bdtheque.data.dao.AuteurDao;
+import org.tetram.bdtheque.data.dao.EditionDao;
 import org.tetram.bdtheque.data.dao.SerieDao;
 import org.tetram.bdtheque.database.DDLConstants;
 
@@ -60,6 +61,8 @@ public class AlbumFactory implements BeanFactory<AlbumBean> {
                     bean.getColoristes().add(auteur);
                     break;
             }
+
+        new EditionDao(context).loadListForAlbum(bean.getEditions(), bean.getId());
 
         return true;
     }

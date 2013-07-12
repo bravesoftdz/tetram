@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.CommonBean;
@@ -62,9 +61,8 @@ public abstract class FicheFragment extends Fragment {
 
     @Nullable
     public View buildView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        CommonBean bean = getArguments().getParcelable("bean");
-
-        Toast.makeText(this.getActivity(), String.format("%s: %s", bean.getClass().getSimpleName(), bean.getId().toString()), Toast.LENGTH_LONG).show();
+        // CommonBean bean = getArguments().getParcelable("bean");
+        // Toast.makeText(this.getActivity(), String.format("%s: %s", bean.getClass().getSimpleName(), bean.getId().toString()), Toast.LENGTH_LONG).show();
 
         return null;
     }

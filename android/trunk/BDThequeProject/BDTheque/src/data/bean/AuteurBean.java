@@ -33,11 +33,13 @@ public class AuteurBean extends CommonBean {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
+        dest.writeSerializable(this.metier);
     }
 
     @Override
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
+        this.metier = (AuteurMetier) in.readSerializable();
     }
 
     @Override

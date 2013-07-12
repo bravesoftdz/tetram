@@ -33,6 +33,7 @@ public class AlbumBean extends AlbumLiteBean {
     private final List<AuteurBean> scenaristes = new ArrayList<>();
     private final List<AuteurBean> dessinateurs = new ArrayList<>();
     private final List<AuteurBean> coloristes = new ArrayList<>();
+    private final List<EditionBean> editions = new ArrayList<>();
 
     public AlbumBean() {
         super();
@@ -51,6 +52,7 @@ public class AlbumBean extends AlbumLiteBean {
         dest.writeTypedList(this.scenaristes);
         dest.writeTypedList(this.dessinateurs);
         dest.writeTypedList(this.coloristes);
+        dest.writeTypedList(this.editions);
     }
 
     @Override
@@ -62,6 +64,7 @@ public class AlbumBean extends AlbumLiteBean {
         in.readTypedList(this.scenaristes, AuteurBean.CREATOR);
         in.readTypedList(this.dessinateurs, AuteurBean.CREATOR);
         in.readTypedList(this.coloristes, AuteurBean.CREATOR);
+        in.readTypedList(this.editions, EditionBean.CREATOR);
     }
 
     @Override
@@ -105,5 +108,9 @@ public class AlbumBean extends AlbumLiteBean {
 
     public List<AuteurBean> getColoristes() {
         return this.coloristes;
+    }
+
+    public List<EditionBean> getEditions() {
+        return this.editions;
     }
 }
