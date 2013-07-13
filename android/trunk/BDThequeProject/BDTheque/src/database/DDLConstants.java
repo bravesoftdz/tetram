@@ -36,6 +36,7 @@ public class DDLConstants {
 
     public static final String COLLECTIONS_TABLENAME = "COLLECTIONS";
     public static final String COLLECTIONS_ID = "ID_COLLECTION";
+    public static final String COLLECTIONS_NOM = "NOMCOLLECTION";
 
     public static final String PERSONNES_TABLENAME = "PERSONNES";
     public static final String PERSONNES_ID = "ID_PERSONNE";

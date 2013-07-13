@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TabHost;
 
 import org.jetbrains.annotations.Nullable;
+import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.AlbumBean;
 import org.tetram.bdtheque.data.bean.CommonBean;
@@ -29,7 +30,7 @@ public class FicheAlbumFragment extends FicheFragment {
 
         View v = inflater.inflate(R.layout.fiche_album_fragment, container, false);
 
-        TabHost tabHost = (TabHost) v.findViewById(android.R.id.tabhost);
+        final TabHost tabHost = (TabHost) v.findViewById(android.R.id.tabhost);
         tabHost.setup();
 
         if (album.getEditions().isEmpty())
@@ -43,9 +44,17 @@ public class FicheAlbumFragment extends FicheFragment {
         tabHost.addTab(spec);
 
         spec = tabHost.newTabSpec(TAB_EDITIONS);
-        spec.setIndicator(TAB_EDITIONS);
+        spec.setIndicator(getResources().getQuantityString(R.plurals.fiche_album_tab_editions, album.getEditions().size()));
         spec.setContent(R.id.tab_album_editions);
         tabHost.addTab(spec);
+
+        tabHost.setCurrentTab(BDThequeApplication.getFicheAlbumLastShownTab());
+        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                BDThequeApplication.setFicheAlbumLastShownTab(tabHost.getCurrentTab());
+            }
+        });
 
         FicheAlbumDetailFragment detailFragment = (FicheAlbumDetailFragment) FicheFragment.newInstance(FicheAlbumDetailFragment.class, album);
         FicheAlbumEditionsFragment editionsFragment = (FicheAlbumEditionsFragment) FicheFragment.newInstance(FicheAlbumEditionsFragment.class, album);

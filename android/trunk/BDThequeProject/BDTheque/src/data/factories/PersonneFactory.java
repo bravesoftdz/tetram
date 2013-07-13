@@ -3,7 +3,6 @@ package org.tetram.bdtheque.data.factories;
 import android.content.Context;
 import android.database.Cursor;
 
-import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.PersonneBean;
 import org.tetram.bdtheque.database.DDLConstants;
 
@@ -12,15 +11,7 @@ import java.net.URL;
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldString;
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldUUID;
 
-public class PersonneFactory implements BeanFactory<PersonneBean> {
-    @Nullable
-    @Override
-    public PersonneBean loadFromCursor(Context context, Cursor cursor, boolean mustExists) {
-        PersonneBean bean = new PersonneBean();
-        if (!loadFromCursor(context, cursor, mustExists, bean)) return null;
-        return bean;
-    }
-
+public class PersonneFactory extends BeanFactoryImpl<PersonneBean> {
     @Override
     public boolean loadFromCursor(Context context, Cursor cursor, boolean mustExists, PersonneBean bean) {
         bean.setId(getFieldUUID(cursor, DDLConstants.PERSONNES_ID));

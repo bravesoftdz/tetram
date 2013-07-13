@@ -12,7 +12,6 @@ import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldInteger;
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldUUID;
 
 public class AuteurSerieFactory extends AuteurFactory {
-
     @Override
     public boolean loadFromCursor(Context context, Cursor cursor, boolean mustExists, AuteurBean bean) {
         bean.setId(getFieldUUID(cursor, DDLConstants.AUTEURS_SERIES_ID));

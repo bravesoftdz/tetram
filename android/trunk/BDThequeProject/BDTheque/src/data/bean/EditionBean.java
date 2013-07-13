@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.bean;
 
 import android.os.Parcel;
 
+import org.tetram.bdtheque.data.bean.lite.CollectionLiteBean;
 import org.tetram.bdtheque.data.factories.EditionFactory;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
@@ -25,6 +26,7 @@ public class EditionBean extends CommonBean {
             return new EditionBean[size];
         }
     };
+    private CollectionLiteBean collection;
 
     public EditionBean(Parcel in) {
         super(in);
@@ -39,6 +41,7 @@ public class EditionBean extends CommonBean {
         super.writeToParcel(dest, flags);
         dest.writeString(this.isbn);
         dest.writeParcelable(this.editeur, flags);
+        dest.writeParcelable(this.collection, flags);
     }
 
     @Override
@@ -46,6 +49,7 @@ public class EditionBean extends CommonBean {
         super.readFromParcel(in);
         this.isbn = in.readString();
         this.editeur = in.readParcelable(EditeurBean.class.getClassLoader());
+        this.collection = in.readParcelable(CollectionLiteBean.class.getClassLoader());
     }
 
     public String getISBN() {
@@ -62,5 +66,13 @@ public class EditionBean extends CommonBean {
 
     public void setEditeur(EditeurBean editeur) {
         this.editeur = editeur;
+    }
+
+    public CollectionLiteBean getCollection() {
+        return this.collection;
+    }
+
+    public void setCollection(CollectionLiteBean collection) {
+        this.collection = collection;
     }
 }

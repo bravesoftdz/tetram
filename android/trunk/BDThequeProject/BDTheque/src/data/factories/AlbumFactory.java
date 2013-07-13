@@ -3,7 +3,6 @@ package org.tetram.bdtheque.data.factories;
 import android.content.Context;
 import android.database.Cursor;
 
-import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.AlbumBean;
 import org.tetram.bdtheque.data.bean.AuteurBean;
 import org.tetram.bdtheque.data.dao.AuteurDao;
@@ -19,15 +18,7 @@ import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldInteger;
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldString;
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldUUID;
 
-public class AlbumFactory implements BeanFactory<AlbumBean> {
-    @Nullable
-    @Override
-    public AlbumBean loadFromCursor(Context context, Cursor cursor, boolean mustExists) {
-        AlbumBean bean = new AlbumBean();
-        if (!loadFromCursor(context, cursor, mustExists, bean)) return null;
-        return bean;
-    }
-
+public class AlbumFactory extends BeanFactoryImpl<AlbumBean> {
     @Override
     public boolean loadFromCursor(Context context, Cursor cursor, boolean mustExists, AlbumBean bean) {
         bean.setId(getFieldUUID(cursor, DDLConstants.ALBUMS_ID));

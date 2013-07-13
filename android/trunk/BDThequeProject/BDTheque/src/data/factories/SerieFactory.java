@@ -3,7 +3,6 @@ package org.tetram.bdtheque.data.factories;
 import android.content.Context;
 import android.database.Cursor;
 
-import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.AuteurBean;
 import org.tetram.bdtheque.data.bean.SerieBean;
 import org.tetram.bdtheque.data.dao.AuteurDao;
@@ -18,15 +17,7 @@ import java.util.List;
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldString;
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldUUID;
 
-public class SerieFactory implements BeanFactory<SerieBean> {
-    @Nullable
-    @Override
-    public SerieBean loadFromCursor(Context context, Cursor cursor, boolean mustExists) {
-        SerieBean bean = new SerieBean();
-        if (!loadFromCursor(context, cursor, mustExists, bean)) return null;
-        return bean;
-    }
-
+public class SerieFactory extends BeanFactoryImpl<SerieBean> {
     @Override
     public boolean loadFromCursor(Context context, Cursor cursor, boolean mustExists, SerieBean bean) {
         bean.setId(getFieldUUID(cursor, DDLConstants.SERIES_ID));
