@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.data.bean.lite;
+package org.tetram.bdtheque.data.lite.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
-import org.tetram.bdtheque.data.factories.SerieLiteFactory;
+import org.tetram.bdtheque.data.factories.lite.SerieLiteFactory;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.gui.activities.fragments.FicheSerieFragment;

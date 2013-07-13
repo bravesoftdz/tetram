@@ -2,9 +2,9 @@ package org.tetram.bdtheque.data.bean;
 
 import android.os.Parcel;
 
-import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
-import org.tetram.bdtheque.data.bean.lite.SerieLiteBean;
 import org.tetram.bdtheque.data.factories.AlbumFactory;
+import org.tetram.bdtheque.data.lite.bean.AlbumLiteBean;
+import org.tetram.bdtheque.data.lite.bean.SerieLiteBean;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
 

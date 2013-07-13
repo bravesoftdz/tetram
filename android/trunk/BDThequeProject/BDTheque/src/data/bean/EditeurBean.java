@@ -2,14 +2,18 @@ package org.tetram.bdtheque.data.bean;
 
 import android.os.Parcel;
 
-import org.tetram.bdtheque.data.bean.lite.EditeurLiteBean;
 import org.tetram.bdtheque.data.factories.EditeurFactory;
+import org.tetram.bdtheque.data.lite.bean.EditeurLiteBean;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
+
+import java.net.URL;
 
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.EDITEURS_TABLENAME, primaryKey = DDLConstants.EDITEURS_ID, factoryClass = EditeurFactory.class)
 public class EditeurBean extends EditeurLiteBean {
+
+    private URL siteWeb;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<EditeurBean> CREATOR = new Creator<EditeurBean>() {
@@ -35,10 +39,23 @@ public class EditeurBean extends EditeurLiteBean {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
+        if (this.siteWeb == null)
+            dest.writeValue(null);
+        else
+            dest.writeValue(this.siteWeb.toExternalForm());
     }
 
     @Override
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
+        this.siteWeb = (URL) in.readValue(URL.class.getClassLoader());
+    }
+
+    public URL getSiteWeb() {
+        return this.siteWeb;
+    }
+
+    public void setSiteWeb(URL siteWeb) {
+        this.siteWeb = siteWeb;
     }
 }

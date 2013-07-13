@@ -32,6 +32,7 @@ public class DDLConstants {
     public static final String EDITEURS_ID = "ID_EDITEUR";
     public static final String EDITEURS_NOM = "NOMEDITEUR";
     public static final String EDITEURS_INITIALE = "INITIALENOMEDITEUR";
+    public static final String EDITEURS_SITEWEB = "SITEWEB";
 
     public static final String COLLECTIONS_TABLENAME = "COLLECTIONS";
     public static final String COLLECTIONS_ID = "ID_COLLECTION";
@@ -53,10 +54,11 @@ public class DDLConstants {
 
     public static final String GENRES_TABLENAME = "GENRES";
     public static final String GENRES_ID = "ID_GENRE";
-
     public static final String GENRES_NOM = "GENRE";
+
     public static final String GENRESERIES_TABLENAME = "GENRESERIES";
 
     public static final String EDITIONS_TABLENAME = "EDITIONS";
     public static final String EDITIONS_ID = "ID_EDITION";
+    public static final String EDITIONS_ISBN = "ISBN";
 }

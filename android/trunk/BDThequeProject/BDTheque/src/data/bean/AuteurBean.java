@@ -2,7 +2,7 @@ package org.tetram.bdtheque.data.bean;
 
 import android.os.Parcel;
 
-import org.tetram.bdtheque.data.bean.lite.PersonneLiteBean;
+import org.tetram.bdtheque.data.lite.bean.PersonneLiteBean;
 
 public class AuteurBean extends CommonBean {
 

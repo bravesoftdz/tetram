@@ -1,7 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
-import org.tetram.bdtheque.data.bean.lite.CollectionLiteBean;
 import org.tetram.bdtheque.data.factories.CollectionFactory;
+import org.tetram.bdtheque.data.lite.bean.CollectionLiteBean;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
 

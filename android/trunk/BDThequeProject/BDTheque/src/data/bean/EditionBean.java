@@ -10,6 +10,9 @@ import org.tetram.bdtheque.database.DDLConstants;
 @Entity(tableName = DDLConstants.EDITIONS_TABLENAME, primaryKey = DDLConstants.EDITIONS_ID, factoryClass = EditionFactory.class)
 public class EditionBean extends CommonBean {
 
+    private String isbn;
+    private EditeurBean editeur;
+
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<EditionBean> CREATOR = new Creator<EditionBean>() {
         @Override
@@ -34,11 +37,30 @@ public class EditionBean extends CommonBean {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
+        dest.writeString(this.isbn);
+        dest.writeParcelable(this.editeur, flags);
     }
 
     @Override
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
+        this.isbn = in.readString();
+        this.editeur = in.readParcelable(EditeurBean.class.getClassLoader());
     }
 
+    public String getISBN() {
+        return this.isbn;
+    }
+
+    public void setISBN(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public EditeurBean getEditeur() {
+        return this.editeur;
+    }
+
+    public void setEditeur(EditeurBean editeur) {
+        this.editeur = editeur;
+    }
 }

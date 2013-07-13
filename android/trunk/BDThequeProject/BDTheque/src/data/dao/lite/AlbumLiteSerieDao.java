@@ -1,11 +1,12 @@
-package org.tetram.bdtheque.data.dao;
+package org.tetram.bdtheque.data.dao.lite;
 
 import android.content.Context;
 
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.InitialeSerieBean;
-import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
-import org.tetram.bdtheque.data.factories.AlbumLiteFactory;
+import org.tetram.bdtheque.data.dao.CommonRepertoireDao;
+import org.tetram.bdtheque.data.factories.lite.AlbumLiteFactory;
+import org.tetram.bdtheque.data.lite.bean.AlbumLiteBean;
 
 import java.util.List;
 

@@ -4,18 +4,18 @@ import android.content.Context;
 
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.CommonBean;
-import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
-import org.tetram.bdtheque.data.bean.lite.PersonneLiteBean;
-import org.tetram.bdtheque.data.bean.lite.SerieLiteBean;
-import org.tetram.bdtheque.data.dao.AlbumLiteAnneeDao;
-import org.tetram.bdtheque.data.dao.AlbumLiteCollectionDao;
-import org.tetram.bdtheque.data.dao.AlbumLiteDao;
-import org.tetram.bdtheque.data.dao.AlbumLiteEditeurDao;
-import org.tetram.bdtheque.data.dao.AlbumLiteGenreDao;
-import org.tetram.bdtheque.data.dao.AlbumLiteSerieDao;
 import org.tetram.bdtheque.data.dao.InitialeRepertoireDao;
-import org.tetram.bdtheque.data.dao.PersonneLiteDao;
-import org.tetram.bdtheque.data.dao.SerieLiteDao;
+import org.tetram.bdtheque.data.dao.lite.AlbumLiteAnneeDao;
+import org.tetram.bdtheque.data.dao.lite.AlbumLiteCollectionDao;
+import org.tetram.bdtheque.data.dao.lite.AlbumLiteDao;
+import org.tetram.bdtheque.data.dao.lite.AlbumLiteEditeurDao;
+import org.tetram.bdtheque.data.dao.lite.AlbumLiteGenreDao;
+import org.tetram.bdtheque.data.dao.lite.AlbumLiteSerieDao;
+import org.tetram.bdtheque.data.dao.lite.PersonneLiteDao;
+import org.tetram.bdtheque.data.dao.lite.SerieLiteDao;
+import org.tetram.bdtheque.data.lite.bean.AlbumLiteBean;
+import org.tetram.bdtheque.data.lite.bean.PersonneLiteBean;
+import org.tetram.bdtheque.data.lite.bean.SerieLiteBean;
 import org.tetram.bdtheque.gui.adapter.MenuEntry;
 
 @SuppressWarnings("UnusedDeclaration")

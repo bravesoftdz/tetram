@@ -5,10 +5,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.tetram.bdtheque.data.bean.AuteurBean;
-import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
-import org.tetram.bdtheque.data.bean.lite.SerieLiteBean;
 import org.tetram.bdtheque.data.factories.AuteurAlbumFactory;
 import org.tetram.bdtheque.data.factories.AuteurSerieFactory;
+import org.tetram.bdtheque.data.lite.bean.AlbumLiteBean;
+import org.tetram.bdtheque.data.lite.bean.SerieLiteBean;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 

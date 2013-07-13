@@ -1,11 +1,11 @@
-package org.tetram.bdtheque.data.bean.lite;
+package org.tetram.bdtheque.data.lite.bean;
 
 import android.os.Parcel;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
-import org.tetram.bdtheque.data.factories.CollectionLiteFactory;
+import org.tetram.bdtheque.data.factories.lite.CollectionLiteFactory;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;

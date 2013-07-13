@@ -5,6 +5,7 @@ import android.database.Cursor;
 
 import org.tetram.bdtheque.data.bean.AuteurBean;
 import org.tetram.bdtheque.data.bean.AuteurMetier;
+import org.tetram.bdtheque.data.factories.lite.PersonneLiteFactory;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldInteger;

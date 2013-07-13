@@ -2,8 +2,8 @@ package org.tetram.bdtheque.test.gui.adapter;
 
 import android.test.AndroidTestCase;
 
-import org.tetram.bdtheque.data.dao.AlbumLiteDao;
 import org.tetram.bdtheque.data.dao.DaoFactory;
+import org.tetram.bdtheque.data.dao.lite.AlbumLiteDao;
 import org.tetram.bdtheque.gui.adapter.RepertoireAdapter;
 
 import java.util.HashMap;

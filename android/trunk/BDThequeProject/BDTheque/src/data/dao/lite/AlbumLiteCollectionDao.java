@@ -1,17 +1,18 @@
-package org.tetram.bdtheque.data.dao;
+package org.tetram.bdtheque.data.dao.lite;
 
 import android.content.Context;
 
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.InitialeFormatedBean;
-import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
-import org.tetram.bdtheque.data.factories.AlbumLiteFactory;
+import org.tetram.bdtheque.data.dao.CommonRepertoireDao;
+import org.tetram.bdtheque.data.factories.lite.AlbumLiteFactory;
+import org.tetram.bdtheque.data.lite.bean.AlbumLiteBean;
 
 import java.util.List;
 
-public class AlbumLiteEditeurDao extends CommonRepertoireDao<AlbumLiteBean, InitialeFormatedBean> {
+public class AlbumLiteCollectionDao extends CommonRepertoireDao<AlbumLiteBean, InitialeFormatedBean> {
 
-    public AlbumLiteEditeurDao(Context context) {
+    public AlbumLiteCollectionDao(Context context) {
         super(context, InitialeFormatedBean.class, AlbumLiteFactory.class);
     }
 
@@ -24,13 +25,13 @@ public class AlbumLiteEditeurDao extends CommonRepertoireDao<AlbumLiteBean, Init
     @SuppressWarnings("StringConcatenationMissingWhitespace")
     @Override
     public List<InitialeFormatedBean> getInitiales() {
-        return super.getInitiales(R.string.sql_editeurs_albums, buildFiltre() + "a.nbeditions > 0");
+        return super.getInitiales(R.string.sql_collections_albums, buildFiltre() + "a.nbeditions > 0");
     }
 
     @SuppressWarnings("StringConcatenationMissingWhitespace")
     @Override
     public List<AlbumLiteBean> getData(InitialeFormatedBean initiale) {
-        return super.getData(R.string.sql_albums_by_editeur, initiale, buildFiltre() + "a.nbeditions > 0");
+        return super.getData(R.string.sql_albums_by_collection, initiale, buildFiltre() + "a.nbeditions > 0");
     }
 
 }
