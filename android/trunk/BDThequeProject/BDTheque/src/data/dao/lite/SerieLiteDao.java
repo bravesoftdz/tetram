@@ -4,9 +4,9 @@ import android.content.Context;
 
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.InitialeBean;
+import org.tetram.bdtheque.data.bean.lite.SerieLiteBean;
 import org.tetram.bdtheque.data.dao.CommonRepertoireDao;
 import org.tetram.bdtheque.data.factories.lite.SerieLiteFactory;
-import org.tetram.bdtheque.data.lite.bean.SerieLiteBean;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import java.util.List;

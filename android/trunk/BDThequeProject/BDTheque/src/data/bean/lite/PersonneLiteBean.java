@@ -1,39 +1,42 @@
-package org.tetram.bdtheque.data.lite.bean;
+package org.tetram.bdtheque.data.bean.lite;
 
 import android.os.Parcel;
-import android.os.Parcelable;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
-import org.tetram.bdtheque.data.factories.lite.EditeurLiteFactory;
+import org.tetram.bdtheque.data.factories.lite.PersonneLiteFactory;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
+import org.tetram.bdtheque.gui.activities.fragments.FichePersonneFragment;
+import org.tetram.bdtheque.gui.utils.ShowFragmentClass;
 import org.tetram.bdtheque.utils.StringUtils;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.EDITEURS_TABLENAME, primaryKey = DDLConstants.EDITEURS_ID, factoryClass = EditeurLiteFactory.class)
-public class EditeurLiteBean extends CommonBean implements TreeNodeBean {
+@ShowFragmentClass(FichePersonneFragment.class)
+@Entity(tableName = DDLConstants.PERSONNES_TABLENAME, primaryKey = DDLConstants.PERSONNES_ID, factoryClass = PersonneLiteFactory.class)
+public class PersonneLiteBean extends CommonBean implements TreeNodeBean {
+
     private String nom;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
-    public static final Parcelable.Creator<EditeurLiteBean> CREATOR = new Parcelable.Creator<EditeurLiteBean>() {
+    public static final Creator<CollectionLiteBean> CREATOR = new Creator<CollectionLiteBean>() {
         @Override
-        public EditeurLiteBean createFromParcel(Parcel source) {
-            return new EditeurLiteBean(source);
+        public CollectionLiteBean createFromParcel(Parcel source) {
+            return new CollectionLiteBean(source);
         }
 
         @Override
-        public EditeurLiteBean[] newArray(int size) {
-            return new EditeurLiteBean[size];
+        public CollectionLiteBean[] newArray(int size) {
+            return new CollectionLiteBean[size];
         }
     };
 
-    public EditeurLiteBean(Parcel in) {
+    public PersonneLiteBean(Parcel in) {
         super(in);
     }
 
-    public EditeurLiteBean() {
+    public PersonneLiteBean() {
         super();
     }
 
@@ -49,14 +52,6 @@ public class EditeurLiteBean extends CommonBean implements TreeNodeBean {
         this.nom = in.readString();
     }
 
-    public String getNom() {
-        return this.nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
     @Override
     public String getTreeNodeText() {
         return StringUtils.formatTitre(this.nom);
@@ -68,4 +63,12 @@ public class EditeurLiteBean extends CommonBean implements TreeNodeBean {
         return null;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
+    public String getNom() {
+        return this.nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
 }

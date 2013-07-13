@@ -2,8 +2,8 @@ package org.tetram.bdtheque.data.bean;
 
 import android.os.Parcel;
 
+import org.tetram.bdtheque.data.bean.lite.PersonneLiteBean;
 import org.tetram.bdtheque.data.factories.PersonneFactory;
-import org.tetram.bdtheque.data.lite.bean.PersonneLiteBean;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
 

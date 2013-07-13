@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.data.lite.bean;
+package org.tetram.bdtheque.data.bean.lite;
 
 import android.os.Parcel;
 
