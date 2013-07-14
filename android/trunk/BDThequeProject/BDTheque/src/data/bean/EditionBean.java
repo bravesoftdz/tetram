@@ -13,6 +13,11 @@ public class EditionBean extends CommonBean {
 
     private String isbn;
     private EditeurBean editeur;
+    private CollectionLiteBean collection;
+    private boolean stock;
+    private boolean couleur;
+    private boolean dedicace;
+    private boolean offert;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<EditionBean> CREATOR = new Creator<EditionBean>() {
@@ -26,7 +31,7 @@ public class EditionBean extends CommonBean {
             return new EditionBean[size];
         }
     };
-    private CollectionLiteBean collection;
+    private Integer annee;
 
     public EditionBean(Parcel in) {
         super(in);
@@ -42,6 +47,11 @@ public class EditionBean extends CommonBean {
         dest.writeString(this.isbn);
         dest.writeParcelable(this.editeur, flags);
         dest.writeParcelable(this.collection, flags);
+        dest.writeValue(this.annee);
+        dest.writeValue(this.stock);
+        dest.writeValue(this.couleur);
+        dest.writeValue(this.dedicace);
+        dest.writeValue(this.offert);
     }
 
     @Override
@@ -50,6 +60,11 @@ public class EditionBean extends CommonBean {
         this.isbn = in.readString();
         this.editeur = in.readParcelable(EditeurBean.class.getClassLoader());
         this.collection = in.readParcelable(CollectionLiteBean.class.getClassLoader());
+        this.annee = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.stock = (boolean) in.readValue(Boolean.class.getClassLoader());
+        this.couleur = (boolean) in.readValue(Boolean.class.getClassLoader());
+        this.dedicace = (boolean) in.readValue(Boolean.class.getClassLoader());
+        this.offert = (boolean) in.readValue(Boolean.class.getClassLoader());
     }
 
     public String getISBN() {
@@ -74,5 +89,45 @@ public class EditionBean extends CommonBean {
 
     public void setCollection(CollectionLiteBean collection) {
         this.collection = collection;
+    }
+
+    public boolean isStock() {
+        return this.stock;
+    }
+
+    public void setStock(boolean stock) {
+        this.stock = stock;
+    }
+
+    public boolean isCouleur() {
+        return this.couleur;
+    }
+
+    public void setCouleur(boolean couleur) {
+        this.couleur = couleur;
+    }
+
+    public boolean isDedicace() {
+        return this.dedicace;
+    }
+
+    public void setDedicace(boolean dedicace) {
+        this.dedicace = dedicace;
+    }
+
+    public boolean isOffert() {
+        return this.offert;
+    }
+
+    public void setOffert(boolean offert) {
+        this.offert = offert;
+    }
+
+    public Integer getAnnee() {
+        return this.annee;
+    }
+
+    public void setAnnee(Integer annee) {
+        this.annee = annee;
     }
 }

@@ -10,6 +10,8 @@ import org.tetram.bdtheque.database.DDLConstants;
 
 import java.util.UUID;
 
+import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldBoolean;
+import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldInteger;
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldString;
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldUUID;
 
@@ -24,6 +26,11 @@ public class EditionFactory extends BeanFactoryImpl<EditionBean> {
         final UUID collectionId = getFieldUUID(cursor, DDLConstants.COLLECTIONS_ID);
         if (collectionId != null)
             bean.setCollection(new CollectionLiteDao(context).getById(collectionId));
+        bean.setAnnee(getFieldInteger(cursor, DDLConstants.EDITIONS_ANNEEEDITION));
+        bean.setStock(getFieldBoolean(cursor, DDLConstants.EDITIONS_STOCK));
+        bean.setCouleur(getFieldBoolean(cursor, DDLConstants.EDITIONS_COULEUR));
+        bean.setDedicace(getFieldBoolean(cursor, DDLConstants.EDITIONS_DEDICACE));
+        bean.setOffert(getFieldBoolean(cursor, DDLConstants.EDITIONS_OFFERT));
 
         return true;
     }

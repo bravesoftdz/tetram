@@ -62,4 +62,9 @@ public class DDLConstants {
     public static final String EDITIONS_TABLENAME = "EDITIONS";
     public static final String EDITIONS_ID = "ID_EDITION";
     public static final String EDITIONS_ISBN = "ISBN";
+    public static final String EDITIONS_STOCK = "STOCK";
+    public static final String EDITIONS_COULEUR = "COULEUR";
+    public static final String EDITIONS_DEDICACE = "DEDICACE";
+    public static final String EDITIONS_OFFERT = "OFFERT";
+    public static final String EDITIONS_ANNEEEDITION = "ANNEEEDITION";
 }

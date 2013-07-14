@@ -36,6 +36,16 @@
     <string name="fiche_edition_isbn">ISBN :</string>
     <string name="fiche_edition_editeur">Editeur :</string>
     <string name="fiche_edition_collection">Collection :</string>
+    <string name="fiche_edition_année">Année :</string>
+    <string name="fiche_edition_stock">Stock</string>
+    <string name="fiche_edtion_couleur">Couleur</string>
+    <string name="fiche_edition_vo">VO</string>
+    <string name="fiche_edition_dedicacé">Dédicacé</string>
+    <string name="fiche_edition_offert">Offert</string>
+    <string name="fiche_edition_prix">Prix :</string>
+    <string name="fiche_edition_offertle">Offert le :</string>
+    <string name="fiche_edition_achetéle">Acheté le :</string>
+    <string name="fiche_edition_notes">Notes :</string>
 
     <string-array name="pref_formatTitreAlbum_entries">
         <item>Album (Serie - Tome)</item>
