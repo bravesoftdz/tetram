@@ -15,6 +15,14 @@ import java.util.List;
 @Entity(tableName = DDLConstants.ALBUMS_TABLENAME, primaryKey = DDLConstants.ALBUMS_ID, factoryClass = AlbumFactory.class)
 public class AlbumBean extends AlbumLiteBean {
 
+    private String sujet;
+    private String notes;
+    private SerieBean serie;
+    private final List<AuteurBean> scenaristes = new ArrayList<>();
+    private final List<AuteurBean> dessinateurs = new ArrayList<>();
+    private final List<AuteurBean> coloristes = new ArrayList<>();
+    private final List<EditionBean> editions = new ArrayList<>();
+
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<AlbumBean> CREATOR = new Creator<AlbumBean>() {
         @Override
@@ -27,13 +35,6 @@ public class AlbumBean extends AlbumLiteBean {
             return new AlbumBean[size];
         }
     };
-    private String sujet;
-    private String notes;
-    private SerieBean serie;
-    private final List<AuteurBean> scenaristes = new ArrayList<>();
-    private final List<AuteurBean> dessinateurs = new ArrayList<>();
-    private final List<AuteurBean> coloristes = new ArrayList<>();
-    private final List<EditionBean> editions = new ArrayList<>();
 
     public AlbumBean() {
         super();

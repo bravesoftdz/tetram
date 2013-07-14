@@ -14,26 +14,26 @@ import org.tetram.bdtheque.database.DDLConstants;
 import java.net.URL;
 import java.util.List;
 
-import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldString;
-import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldUUID;
+import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldAsString;
+import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldAsUUID;
 
 public class SerieFactory extends BeanFactoryImpl<SerieBean> {
     @Override
     public boolean loadFromCursor(Context context, Cursor cursor, boolean mustExists, SerieBean bean) {
-        bean.setId(getFieldUUID(cursor, DDLConstants.SERIES_ID));
+        bean.setId(getFieldAsUUID(cursor, DDLConstants.SERIES_ID));
         if (mustExists && (bean.getId() == null)) return false;
-        bean.setTitre(getFieldString(cursor, DDLConstants.SERIES_TITRE));
+        bean.setTitre(getFieldAsString(cursor, DDLConstants.SERIES_TITRE));
         bean.setEditeur(new EditeurLiteFactory().loadFromCursor(context, cursor, false));
         bean.setCollection(new CollectionLiteFactory().loadFromCursor(context, cursor, false));
         try {
-            bean.setSiteWeb(new URL(getFieldString(cursor, DDLConstants.SERIES_SITEWEB)));
+            bean.setSiteWeb(new URL(getFieldAsString(cursor, DDLConstants.SERIES_SITEWEB)));
         } catch (Exception e) {
             e.printStackTrace();
             bean.setSiteWeb(null);
         }
         new GenreDao(context).loadListForSerie(bean.getGenres(), bean.getId());
-        bean.setSujet(getFieldString(cursor, DDLConstants.SERIES_SUJET));
-        bean.setNotes(getFieldString(cursor, DDLConstants.SERIES_NOTES));
+        bean.setSujet(getFieldAsString(cursor, DDLConstants.SERIES_SUJET));
+        bean.setNotes(getFieldAsString(cursor, DDLConstants.SERIES_NOTES));
 
         List<AuteurBean> auteurs = new AuteurDao(context).getAuteurs(bean);
         for (AuteurBean auteur : auteurs)

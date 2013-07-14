@@ -67,4 +67,12 @@ public class DDLConstants {
     public static final String EDITIONS_DEDICACE = "DEDICACE";
     public static final String EDITIONS_OFFERT = "OFFERT";
     public static final String EDITIONS_ANNEEEDITION = "ANNEEEDITION";
+    public static final String EDITIONS_DATEACHAT = "DATEACHAT";
+    public static final String EDITIONS_NOTES = "NOTES";
+    public static final String EDITIONS_NOMBREDEPAGES = "NOMBREDEPAGES";
+    public static final String EDITIONS_NUMEROPERSO = "NUMEROPERSO";
+    public static final String EDITIONS_GRATUIT = "GRATUIT";
+    public static final String EDITIONS_ANNEECOTE = "ANNEECOTE";
+    public static final String EDITIONS_PRIX = "PRIX";
+    public static final String EDITIONS_PRIXCOTE = "PRIXCOTE";
 }

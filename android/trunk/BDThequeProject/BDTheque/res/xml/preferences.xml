@@ -13,4 +13,9 @@
         android:title="Afficher l'appréciation personnelle dans les listes"
         android:defaultValue="true"
         />
+
+    <EditTextPreference
+        android:key="@string/pref_symboleMonetaire"
+        android:title="Symbole monétaire"
+        />
 </PreferenceScreen>

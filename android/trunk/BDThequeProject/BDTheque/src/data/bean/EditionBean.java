@@ -7,6 +7,8 @@ import org.tetram.bdtheque.data.factories.EditionFactory;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
 
+import java.util.Date;
+
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.EDITIONS_TABLENAME, primaryKey = DDLConstants.EDITIONS_ID, factoryClass = EditionFactory.class)
 public class EditionBean extends CommonBean {
@@ -18,6 +20,13 @@ public class EditionBean extends CommonBean {
     private boolean couleur;
     private boolean dedicace;
     private boolean offert;
+    private Integer annee;
+    private Date dateAquisition;
+    private String notes;
+    private Integer pages;
+    private String numeroPerso;
+    private boolean gratuit;
+    private Double prix;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<EditionBean> CREATOR = new Creator<EditionBean>() {
@@ -31,7 +40,8 @@ public class EditionBean extends CommonBean {
             return new EditionBean[size];
         }
     };
-    private Integer annee;
+    private Double prixCote;
+    private Integer anneeCote;
 
     public EditionBean(Parcel in) {
         super(in);
@@ -48,10 +58,18 @@ public class EditionBean extends CommonBean {
         dest.writeParcelable(this.editeur, flags);
         dest.writeParcelable(this.collection, flags);
         dest.writeValue(this.annee);
+        dest.writeValue(this.prix);
         dest.writeValue(this.stock);
         dest.writeValue(this.couleur);
         dest.writeValue(this.dedicace);
         dest.writeValue(this.offert);
+        dest.writeValue(this.dateAquisition);
+        dest.writeString(this.notes);
+        dest.writeValue(this.pages);
+        dest.writeString(this.numeroPerso);
+        dest.writeValue(this.gratuit);
+        dest.writeValue(this.anneeCote);
+        dest.writeValue(this.prixCote);
     }
 
     @Override
@@ -61,10 +79,18 @@ public class EditionBean extends CommonBean {
         this.editeur = in.readParcelable(EditeurBean.class.getClassLoader());
         this.collection = in.readParcelable(CollectionLiteBean.class.getClassLoader());
         this.annee = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.prix = (Double) in.readValue(Double.class.getClassLoader());
         this.stock = (boolean) in.readValue(Boolean.class.getClassLoader());
         this.couleur = (boolean) in.readValue(Boolean.class.getClassLoader());
         this.dedicace = (boolean) in.readValue(Boolean.class.getClassLoader());
         this.offert = (boolean) in.readValue(Boolean.class.getClassLoader());
+        this.dateAquisition = (Date) in.readValue(Date.class.getClassLoader());
+        this.notes = in.readString();
+        this.pages = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.numeroPerso = in.readString();
+        this.gratuit = (boolean) in.readValue(Boolean.class.getClassLoader());
+        this.anneeCote = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.prixCote = (Double) in.readValue(Double.class.getClassLoader());
     }
 
     public String getISBN() {
@@ -129,5 +155,69 @@ public class EditionBean extends CommonBean {
 
     public void setAnnee(Integer annee) {
         this.annee = annee;
+    }
+
+    public Date getDateAquisition() {
+        return this.dateAquisition;
+    }
+
+    public void setDateAquisition(Date dateAquisition) {
+        this.dateAquisition = dateAquisition;
+    }
+
+    public String getNotes() {
+        return this.notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public Integer getPages() {
+        return this.pages;
+    }
+
+    public void setPages(Integer pages) {
+        this.pages = pages;
+    }
+
+    public String getNumeroPerso() {
+        return this.numeroPerso;
+    }
+
+    public void setNumeroPerso(String numeroPerso) {
+        this.numeroPerso = numeroPerso;
+    }
+
+    public boolean isGratuit() {
+        return this.gratuit;
+    }
+
+    public void setGratuit(boolean gratuit) {
+        this.gratuit = gratuit;
+    }
+
+    public Double getPrix() {
+        return this.prix;
+    }
+
+    public void setPrix(Double prix) {
+        this.prix = prix;
+    }
+
+    public Double getPrixCote() {
+        return this.prixCote;
+    }
+
+    public void setPrixCote(Double prixCote) {
+        this.prixCote = prixCote;
+    }
+
+    public Integer getAnneeCote() {
+        return this.anneeCote;
+    }
+
+    public void setAnneeCote(Integer anneeCote) {
+        this.anneeCote = anneeCote;
     }
 }

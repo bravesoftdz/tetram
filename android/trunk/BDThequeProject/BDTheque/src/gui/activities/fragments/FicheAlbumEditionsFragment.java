@@ -2,6 +2,7 @@ package org.tetram.bdtheque.gui.activities.fragments;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.text.format.DateFormat;
 import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,9 @@ import org.tetram.bdtheque.data.bean.EditeurBean;
 import org.tetram.bdtheque.data.bean.EditionBean;
 import org.tetram.bdtheque.data.bean.lite.CollectionLiteBean;
 import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.utils.UserConfig;
+
+import java.util.Date;
 
 import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElement;
 
@@ -83,33 +87,46 @@ public class FicheAlbumEditionsFragment extends FicheFragment {
         setUIElement(this.view, R.id.edition_couleur, this.currentEdition.isCouleur());
         setUIElement(this.view, R.id.edition_dédicacé, this.currentEdition.isDedicace());
         setUIElement(this.view, R.id.edition_offert, this.currentEdition.isOffert());
-
 /*
       TypeEdition.Caption := FCurrentEdition.TypeEdition.Caption;
       Reliure.Caption := FCurrentEdition.Reliure.Caption;
       Etat.Caption := FCurrentEdition.Etat.Caption;
-      Pages.Caption := NonZero(IntToStr(FCurrentEdition.NombreDePages));
       lbOrientation.Caption := FCurrentEdition.Orientation.Caption;
       lbFormat.Caption := FCurrentEdition.FormatEdition.Caption;
       lbSensLecture.Caption := FCurrentEdition.SensLecture.Caption;
-      lbNumeroPerso.Caption := FCurrentEdition.NumeroPerso;
 */
-        if (this.currentEdition.isOffert())
-            setUIElement(this.view, R.id.label_edition_aquisition, getResources().getString(R.string.fiche_edition_offertle));
+        if (this.currentEdition.isGratuit())
+            setUIElement(this.view, R.id.edition_prix, getResources().getString(R.string.gratuit));
+        else {
+            final Double prix = this.currentEdition.getPrix();
+            if ((prix == null) || prix.equals(0.0))
+                setUIElement(this.view, R.id.edition_prix, "");
+            else
+                setUIElement(this.view, R.id.edition_prix, UserConfig.getInstance().getFormatMonetaire().format(prix));
+        }
+
+        final Double prixCote = this.currentEdition.getPrixCote();
+        if ((prixCote != null) && (prixCote > 0))
+            setUIElement(this.view, R.id.edition_cote, String.format("%s (%d)", UserConfig.getInstance().getFormatMonetaire().format(prixCote), this.currentEdition.getAnneeCote()));
         else
-            setUIElement(this.view, R.id.label_edition_aquisition, getResources().getString(R.string.fiche_edition_achetéle));
+            this.view.findViewById(R.id.fiche_edition_row_cote).setVisibility(View.GONE);
+        {
+            if (this.currentEdition.isOffert()) {
+                setUIElement(this.view, R.id.label_edition_aquisition, getResources().getString(R.string.fiche_edition_offertle));
+            } else
+                setUIElement(this.view, R.id.label_edition_aquisition, getResources().getString(R.string.fiche_edition_achetéle));
+        }
+        final Date dateAquisition = this.currentEdition.getDateAquisition();
+        if (dateAquisition != null)
+            setUIElement(this.view, R.id.edition_aquisition, DateFormat.getDateFormat(getActivity()).format(dateAquisition));
+        else
+            this.view.findViewById(R.id.fiche_edition_row_aquisition).setVisibility(View.GONE);
+        setUIElement(this.view, R.id.edition_notes, this.currentEdition.getNotes(), R.id.fiche_edition_row_notes);
+        setUIElement(this.view, R.id.edition_numero, this.currentEdition.getNumeroPerso(), R.id.fiche_edition_row_numero);
+        setUIElement(this.view, R.id.edition_pages, StringUtils.nonZero(this.currentEdition.getPages()), R.id.fiche_edition_row_pages);
+
 /*
-      AcheteLe.Caption := FCurrentEdition.sDateAchat;
-      edNotes.Text := FCurrentEdition.Notes.Text;
-
       ShowCouverture(0);
-      if FCurrentEdition.Gratuit then Prix.Caption := rsTransGratuit
-      else if FCurrentEdition.Prix = 0 then Prix.Caption := ''
-      else Prix.Caption := FormatCurr(FormatMonnaie, FCurrentEdition.Prix);
-
-      if FCurrentEdition.PrixCote > 0 then
-          lbCote.Caption := Format('%s (%d)', [FormatCurr(FormatMonnaie, FCurrentEdition.PrixCote), FCurrentEdition.AnneeCote])
-      else lbCote.Caption := '';
 */
     }
 }
