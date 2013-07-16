@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.bean;
 
 import android.os.Parcel;
 
+import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
 import org.tetram.bdtheque.data.bean.lite.SerieLiteBean;
 import org.tetram.bdtheque.data.factories.SerieFactory;
 import org.tetram.bdtheque.data.utils.Entity;
@@ -22,6 +23,8 @@ public class SerieBean extends SerieLiteBean {
     private final List<AuteurBean> scenaristes = new ArrayList<>();
     private final List<AuteurBean> dessinateurs = new ArrayList<>();
     private final List<AuteurBean> coloristes = new ArrayList<>();
+
+    private final List<AlbumLiteBean> albums = new ArrayList<>();
 
     private String sujet;
     private String notes;
@@ -60,6 +63,7 @@ public class SerieBean extends SerieLiteBean {
         dest.writeTypedList(this.scenaristes);
         dest.writeTypedList(this.dessinateurs);
         dest.writeTypedList(this.coloristes);
+        dest.writeTypedList(this.albums);
     }
 
     @Override
@@ -72,6 +76,7 @@ public class SerieBean extends SerieLiteBean {
         in.readTypedList(this.scenaristes, AuteurBean.CREATOR);
         in.readTypedList(this.dessinateurs, AuteurBean.CREATOR);
         in.readTypedList(this.coloristes, AuteurBean.CREATOR);
+        in.readTypedList(this.albums, AlbumLiteBean.CREATOR);
     }
 
     public URL getSiteWeb() {
@@ -119,5 +124,9 @@ public class SerieBean extends SerieLiteBean {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public List<AlbumLiteBean> getAlbums() {
+        return albums;
     }
 }

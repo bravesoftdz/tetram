@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.gui.adapter;
+package org.tetram.bdtheque.gui.adapters;
 
 import android.content.Context;
 import android.util.SparseArray;

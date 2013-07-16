@@ -4,7 +4,7 @@ import android.test.AndroidTestCase;
 
 import org.tetram.bdtheque.data.dao.DaoFactory;
 import org.tetram.bdtheque.data.dao.lite.AlbumLiteDao;
-import org.tetram.bdtheque.gui.adapter.RepertoireAdapter;
+import org.tetram.bdtheque.gui.adapters.RepertoireAdapter;
 
 public class RepertoireAdapterTest extends AndroidTestCase {
 
@@ -41,13 +41,13 @@ public class RepertoireAdapterTest extends AndroidTestCase {
     @SuppressWarnings("ConstantJUnitAssertArgument")
     public void testGetSectionForPosition() throws Exception {
 /*
-        final Integer position = this.adapter.getPositionForSection(0);
-        final int section = this.adapter.getSectionForPosition(position);
+        final Integer position = this.adapters.getPositionForSection(0);
+        final int section = this.adapters.getSectionForPosition(position);
         assertEquals(0, section);
-        assertEquals(5, this.adapter.getSectionForPosition(this.adapter.getPositionForSection(5)));
-        assertEquals(10, this.adapter.getSectionForPosition(this.adapter.getPositionForSection(10)));
-        assertEquals(15, this.adapter.getSectionForPosition(this.adapter.getPositionForSection(15)));
-        assertEquals(20, this.adapter.getSectionForPosition(this.adapter.getPositionForSection(20)));
+        assertEquals(5, this.adapters.getSectionForPosition(this.adapters.getPositionForSection(5)));
+        assertEquals(10, this.adapters.getSectionForPosition(this.adapters.getPositionForSection(10)));
+        assertEquals(15, this.adapters.getSectionForPosition(this.adapters.getPositionForSection(15)));
+        assertEquals(20, this.adapters.getSectionForPosition(this.adapters.getPositionForSection(20)));
 */
         assertTrue(true);
     }

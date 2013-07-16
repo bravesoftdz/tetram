@@ -13,9 +13,9 @@ import android.widget.ShareActionProvider;
 
 import org.jetbrains.annotations.NotNull;
 import org.tetram.bdtheque.R;
-import org.tetram.bdtheque.gui.activities.fragments.TitlesFragment;
-import org.tetram.bdtheque.gui.adapter.MenuAdapter;
-import org.tetram.bdtheque.gui.adapter.MenuEntry;
+import org.tetram.bdtheque.gui.adapters.MenuAdapter;
+import org.tetram.bdtheque.gui.adapters.MenuEntry;
+import org.tetram.bdtheque.gui.fragments.TitlesFragment;
 import org.tetram.bdtheque.gui.utils.ModeRepertoire;
 import org.tetram.bdtheque.utils.UserConfig;
 

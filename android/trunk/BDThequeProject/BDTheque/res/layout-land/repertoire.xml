@@ -9,7 +9,7 @@
               android:baselineAligned="false">
 
     <fragment
-        class="org.tetram.bdtheque.gui.activities.fragments.TitlesFragment"
+        class="org.tetram.bdtheque.gui.fragments.TitlesFragment"
         android:id="@+id/titles"
         android:layout_weight="1"
         android:layout_width="0px"

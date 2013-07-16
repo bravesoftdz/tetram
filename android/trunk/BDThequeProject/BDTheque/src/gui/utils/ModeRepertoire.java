@@ -16,7 +16,7 @@ import org.tetram.bdtheque.data.dao.lite.AlbumLiteGenreDao;
 import org.tetram.bdtheque.data.dao.lite.AlbumLiteSerieDao;
 import org.tetram.bdtheque.data.dao.lite.PersonneLiteDao;
 import org.tetram.bdtheque.data.dao.lite.SerieLiteDao;
-import org.tetram.bdtheque.gui.adapter.MenuEntry;
+import org.tetram.bdtheque.gui.adapters.MenuEntry;
 
 @SuppressWarnings("UnusedDeclaration")
 public enum ModeRepertoire {

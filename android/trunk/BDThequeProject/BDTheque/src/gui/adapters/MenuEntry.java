@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.gui.adapter;
+package org.tetram.bdtheque.gui.adapters;
 
 public class MenuEntry {
     private final String label;

@@ -3,7 +3,7 @@ package org.tetram.bdtheque.gui.activities;
 import android.app.Activity;
 import android.os.Bundle;
 
-import org.tetram.bdtheque.gui.activities.fragments.SettingsFragment;
+import org.tetram.bdtheque.gui.fragments.SettingsFragment;
 
 public class SettingsActivity extends Activity {
 

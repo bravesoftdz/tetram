@@ -9,7 +9,7 @@ import org.tetram.bdtheque.data.bean.TreeNodeBean;
 import org.tetram.bdtheque.data.factories.lite.SerieLiteFactory;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
-import org.tetram.bdtheque.gui.activities.fragments.FicheSerieFragment;
+import org.tetram.bdtheque.gui.fragments.FicheSerieFragment;
 import org.tetram.bdtheque.gui.utils.ShowFragmentClass;
 import org.tetram.bdtheque.utils.StringUtils;
 

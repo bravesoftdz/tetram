@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.gui.activities.fragments;
+package org.tetram.bdtheque.gui.fragments;
 
 import android.os.Bundle;
 import android.text.Html;

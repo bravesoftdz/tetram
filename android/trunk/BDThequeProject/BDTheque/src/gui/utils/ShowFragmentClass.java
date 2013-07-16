@@ -1,6 +1,6 @@
 package org.tetram.bdtheque.gui.utils;
 
-import org.tetram.bdtheque.gui.activities.fragments.FicheFragment;
+import org.tetram.bdtheque.gui.fragments.FicheFragment;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;

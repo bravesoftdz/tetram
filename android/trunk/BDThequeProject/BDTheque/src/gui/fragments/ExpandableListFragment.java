@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.gui.activities.fragments;
+package org.tetram.bdtheque.gui.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -150,7 +150,7 @@ public class ExpandableListFragment extends Fragment implements
             this.expandableListView.setFastScrollEnabled(adapter instanceof SectionIndexer);
             if (!this.mListShown && !hadAdapter) {
                 // The list was hidden, and previously didn't have an
-                // adapter.  It is now time to show it.
+                // adapters.  It is now time to show it.
                 setListShown(true, getView().getWindowToken() != null);
             }
         }
@@ -158,7 +158,7 @@ public class ExpandableListFragment extends Fragment implements
 
     /**
      * Set the currently selected list item to the specified
-     * position with the adapter's data
+     * position with the adapters's data
      */
     public void setSelection(int position) {
         ensureList();
@@ -206,7 +206,7 @@ public class ExpandableListFragment extends Fragment implements
      * <p/>
      * <p>Applications do not normally need to use this themselves.  The default
      * behavior of ListFragment is to start with the list not being shown, only
-     * showing it once an adapter is given with {@link #setListAdapter(android.widget.ExpandableListAdapter)}.
+     * showing it once an adapters is given with {@link #setListAdapter(android.widget.ExpandableListAdapter)}.
      * If the list at that point had not been shown, when it does get shown
      * it will be do without the user ever seeing the hidden state.
      *
@@ -297,7 +297,7 @@ public class ExpandableListFragment extends Fragment implements
         if (this.expandableListAdapter != null) {
             setListAdapter(this.expandableListAdapter);
         } else {
-            // We are starting without an adapter, so assume we won't
+            // We are starting without an adapters, so assume we won't
             // have our data right away and start with the progress indicator.
             setListShown(false, false);
         }

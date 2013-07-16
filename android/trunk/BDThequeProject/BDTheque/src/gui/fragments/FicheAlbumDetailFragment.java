@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.gui.activities.fragments;
+package org.tetram.bdtheque.gui.fragments;
 
 import android.os.Bundle;
 import android.text.Html;
@@ -7,8 +7,10 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import org.jetbrains.annotations.Nullable;
@@ -16,6 +18,7 @@ import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.AlbumBean;
 import org.tetram.bdtheque.data.bean.SerieBean;
+import org.tetram.bdtheque.gui.adapters.ListLiteBeanAdapter;
 import org.tetram.bdtheque.gui.components.LinearListView;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -50,9 +53,16 @@ public class FicheAlbumDetailFragment extends FicheFragment {
                 setUIElement(v, R.id.album_serie, titreSerie);
             }
             setUIElement(v, R.id.album_genres, serie.getGenreList(), R.id.fiche_album_row_genres);
+            final ListView listAlbums = (ListView) v.findViewById(R.id.album_albums);
+            listAlbums.setAdapter(new ListLiteBeanAdapter<>(getActivity(), android.R.layout.simple_list_item_checked, serie.getAlbums()));
+            listAlbums.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+            for (int i = 0; i < serie.getAlbums().size(); i++)
+                if (album.getId().equals(serie.getAlbums().get(i).getId()))
+                    listAlbums.setItemChecked(i, true);
         } else {
             v.findViewById(R.id.fiche_album_row_serie).setVisibility(View.GONE);
             v.findViewById(R.id.fiche_album_row_genres).setVisibility(View.GONE);
+            v.findViewById(R.id.fiche_album_row_albums).setVisibility(View.GONE);
         }
         setUIElement(v, R.id.album_titre, StringUtils.formatTitre(album.getTitre()), R.id.fiche_album_row_titre);
         setUIElement(v, R.id.album_tome, StringUtils.nonZero(album.getTome()));
@@ -78,25 +88,25 @@ public class FicheAlbumDetailFragment extends FicheFragment {
             );
         }
 
-        LinearListView listView;
+        LinearListView listAuteurs;
 
         if (album.getScenaristes().isEmpty())
             v.findViewById(R.id.fiche_album_row_scenaristes).setVisibility(View.GONE);
-        listView = (LinearListView) v.findViewById(R.id.album_scenaristes);
-        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getScenaristes()));
-        //listView.setMinimumHeight(Math.min(album.getScenaristes().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
+        listAuteurs = (LinearListView) v.findViewById(R.id.album_scenaristes);
+        listAuteurs.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getScenaristes()));
+        //listAuteurs.setMinimumHeight(Math.min(album.getScenaristes().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
 
         if (album.getDessinateurs().isEmpty())
             v.findViewById(R.id.fiche_album_row_dessinateurs).setVisibility(View.GONE);
-        listView = (LinearListView) v.findViewById(R.id.album_dessinateurs);
-        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getDessinateurs()));
-        //listView.setMinimumHeight(Math.min(album.getDessinateurs().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
+        listAuteurs = (LinearListView) v.findViewById(R.id.album_dessinateurs);
+        listAuteurs.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getDessinateurs()));
+        //listAuteurs.setMinimumHeight(Math.min(album.getDessinateurs().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
 
         if (album.getColoristes().isEmpty())
             v.findViewById(R.id.fiche_album_row_coloristes).setVisibility(View.GONE);
-        listView = (LinearListView) v.findViewById(R.id.album_coloristes);
-        listView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getColoristes()));
-        //listView.setMinimumHeight(Math.min(album.getColoristes().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
+        listAuteurs = (LinearListView) v.findViewById(R.id.album_coloristes);
+        listAuteurs.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getColoristes()));
+        //listAuteurs.setMinimumHeight(Math.min(album.getColoristes().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
 
         setUIElement(v, R.id.album_horsserie, album.isHorsSerie());
         String sujet = album.getSujet();

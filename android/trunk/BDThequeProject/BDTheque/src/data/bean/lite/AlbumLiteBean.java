@@ -8,7 +8,7 @@ import org.tetram.bdtheque.data.bean.TreeNodeBean;
 import org.tetram.bdtheque.data.factories.lite.AlbumLiteFactory;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
-import org.tetram.bdtheque.gui.activities.fragments.FicheAlbumFragment;
+import org.tetram.bdtheque.gui.fragments.FicheAlbumFragment;
 import org.tetram.bdtheque.gui.utils.ShowFragmentClass;
 import org.tetram.bdtheque.utils.StringUtils;
 

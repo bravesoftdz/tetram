@@ -5,7 +5,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 
 import org.tetram.bdtheque.data.bean.CommonBean;
-import org.tetram.bdtheque.gui.activities.fragments.FicheFragment;
+import org.tetram.bdtheque.gui.fragments.FicheFragment;
 import org.tetram.bdtheque.gui.utils.ShowFragmentClass;
 
 public class FicheActivity extends Activity {

@@ -7,6 +7,7 @@ import org.tetram.bdtheque.data.bean.AuteurBean;
 import org.tetram.bdtheque.data.bean.SerieBean;
 import org.tetram.bdtheque.data.dao.AuteurDao;
 import org.tetram.bdtheque.data.dao.GenreDao;
+import org.tetram.bdtheque.data.dao.lite.AlbumLiteDao;
 import org.tetram.bdtheque.data.factories.lite.CollectionLiteFactory;
 import org.tetram.bdtheque.data.factories.lite.EditeurLiteFactory;
 import org.tetram.bdtheque.database.DDLConstants;
@@ -48,6 +49,8 @@ public class SerieFactory extends BeanFactoryImpl<SerieBean> {
                     bean.getColoristes().add(auteur);
                     break;
             }
+
+        new AlbumLiteDao(context).loadListForSerie(bean.getAlbums(), bean.getId());
 
         return true;
     }

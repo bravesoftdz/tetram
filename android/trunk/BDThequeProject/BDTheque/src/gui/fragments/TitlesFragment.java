@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.gui.activities.fragments;
+package org.tetram.bdtheque.gui.fragments;
 
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.dao.DaoFactory;
 import org.tetram.bdtheque.data.dao.InitialeRepertoireDao;
 import org.tetram.bdtheque.gui.activities.FicheActivity;
-import org.tetram.bdtheque.gui.adapter.RepertoireAdapter;
+import org.tetram.bdtheque.gui.adapters.RepertoireAdapter;
 import org.tetram.bdtheque.gui.utils.ModeRepertoire;
 import org.tetram.bdtheque.gui.utils.ShowFragmentClass;
 
