@@ -36,48 +36,56 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
     public List<B> getData(int resId, InitialeBean initiale, String filtre) {
         SQLiteDatabase rdb = getDatabaseHelper().getReadableDatabase();
         assert rdb != null;
-        String v = initiale.getValue();
-        String[] params = null;
-        String sWhere;
-        if ((v == null) || "-1".equals(v))
-            sWhere = "is null";
-        else {
-            sWhere = " = ?";
-            params = new String[]{v};
-        }
-        sWhere += filtre == null || "".equals(filtre) ? "" : " and " + filtre;
-        Cursor cursor = rdb.rawQuery(getContext().getString(resId, sWhere), params);
         try {
-            List<B> result = new ArrayList<>();
-            BeanFactory<B> factory = null;
+            String v = initiale.getValue();
+            String[] params = null;
+            String sWhere;
+            if ((v == null) || "-1".equals(v))
+                sWhere = "is null";
+            else {
+                sWhere = " = ?";
+                params = new String[]{v};
+            }
+            sWhere += filtre == null || "".equals(filtre) ? "" : " and " + filtre;
+            Cursor cursor = rdb.rawQuery(getContext().getString(resId, sWhere), params);
             try {
-                factory = this.beanFactoryClass.getConstructor().newInstance();
-            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
+                List<B> result = new ArrayList<>();
+                BeanFactory<B> factory = null;
+                try {
+                    factory = this.beanFactoryClass.getConstructor().newInstance();
+                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                    e.printStackTrace();
+                }
 
-            while (cursor.moveToNext()) {
-                result.add(factory.loadFromCursor(getContext(), cursor, true));
+                while (cursor.moveToNext()) {
+                    result.add(factory.loadFromCursor(getContext(), cursor, true));
+                }
+                return result;
+            } finally {
+                cursor.close();
             }
-            return result;
         } finally {
-            cursor.close();
+            rdb.close();
         }
     }
 
     @SuppressWarnings("unchecked")
     private List<I> getInitiales(String sql) {
         SQLiteDatabase rdb = getDatabaseHelper().getReadableDatabase();
-        Cursor cursor = rdb.rawQuery(sql, null);
         try {
-            int cValue = (cursor.getColumnCount() == 2) ? 0 : 2;
-            List<I> result = new ArrayList<>();
-            while (cursor.moveToNext()) {
-                result.add((I) InitialeBean.createInstance(this.initialeClass, cursor.getString(0), cursor.getInt(1), cursor.getString(cValue)));
+            Cursor cursor = rdb.rawQuery(sql, null);
+            try {
+                int cValue = (cursor.getColumnCount() == 2) ? 0 : 2;
+                List<I> result = new ArrayList<>();
+                while (cursor.moveToNext()) {
+                    result.add((I) InitialeBean.createInstance(this.initialeClass, cursor.getString(0), cursor.getInt(1), cursor.getString(cValue)));
+                }
+                return result;
+            } finally {
+                cursor.close();
             }
-            return result;
         } finally {
-            cursor.close();
+            rdb.close();
         }
     }
 

@@ -75,4 +75,18 @@ public class DDLConstants {
     public static final String EDITIONS_ANNEECOTE = "ANNEECOTE";
     public static final String EDITIONS_PRIX = "PRIX";
     public static final String EDITIONS_PRIXCOTE = "PRIXCOTE";
+    public static final String EDITIONS_ETAT = "ETAT";
+    public static final String EDITIONS_RELIURE = "RELIURE";
+    public static final String EDITIONS_TYPEEDITION = "TYPEEDITION";
+    public static final String EDITIONS_ORIENTATION = "ORIENTATION";
+    public static final String EDITIONS_FORMATEDITION = "FORMATEDITION";
+    public static final String EDITIONS_SENSLECTURE = "SENSLECTURE";
+
+    public static final String LISTES_TABLENAME = "LISTES";
+    public static final String LISTES_ID = "ID_LISTE";
+    public static final String LISTES_CATEGORIE = "CATEGORIE";
+    public static final String LISTES_REF = "REF";
+    public static final String LISTES_ORDRE = "ORDRE";
+    public static final String LISTES_DEFAUT = "DEFAUT";
+    public static final String LISTES_LIBELLE = "LIBELLE";
 }

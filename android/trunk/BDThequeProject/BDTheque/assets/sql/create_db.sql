@@ -141,3 +141,16 @@ create table genres (
     initialegenre  char(1),
     genre          varchar(30)
 );
+
+create table listes (
+  id_liste        char(38) not null,
+  ref             integer not null,
+  categorie       integer not null,
+  ordre           integer,
+  defaut          smallint default 0,
+  dc_listes       timestamp not null,
+  dm_listes       timestamp not null,
+  libelle         varchar(50),
+  constraint listes_pk primary key (categorie, ref)
+);
+

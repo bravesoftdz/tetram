@@ -67,6 +67,7 @@ public class BDDatabaseHelper extends SQLiteOpenHelper {
                 runSQL(db, "sql/init_auteurs_series.sql");
                 runSQL(db, "sql/init_genres.sql");
                 runSQL(db, "sql/init_genres_series.sql");
+                runSQL(db, "sql/init_listes.sql");
 //            case 2:
 //                runSQL(db, "sql/upgrade_to_v3.sql");
             default: {

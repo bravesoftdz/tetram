@@ -27,26 +27,30 @@ public class EditionDao extends CommonDaoImpl<EditionBean> {
 
         SQLiteDatabase rdb = getDatabaseHelper().getReadableDatabase();
         assert rdb != null;
-        Cursor cursor = rdb.query(
-                DDLConstants.EDITIONS_TABLENAME,
-                null,
-                String.format("%1$s = ?", DDLConstants.ALBUMS_ID),
-                new String[]{StringUtils.UUIDToGUIDString(albumId)},
-                null,
-                null,
-                null,
-                null
-        );
-
         try {
-            final EditionFactory factory = new EditionFactory();
-            while (cursor.moveToNext()) {
-                EditionBean editionBean = factory.loadFromCursor(getContext(), cursor, true);
-                if (editionBean != null)
-                    editions.add(editionBean);
+            Cursor cursor = rdb.query(
+                    DDLConstants.EDITIONS_TABLENAME,
+                    null,
+                    String.format("%1$s = ?", DDLConstants.ALBUMS_ID),
+                    new String[]{StringUtils.UUIDToGUIDString(albumId)},
+                    null,
+                    null,
+                    null,
+                    null
+            );
+
+            try {
+                final EditionFactory factory = new EditionFactory();
+                while (cursor.moveToNext()) {
+                    EditionBean editionBean = factory.loadFromCursor(getContext(), cursor, true);
+                    if (editionBean != null)
+                        editions.add(editionBean);
+                }
+            } finally {
+                cursor.close();
             }
         } finally {
-            cursor.close();
+            rdb.close();
         }
 
     }

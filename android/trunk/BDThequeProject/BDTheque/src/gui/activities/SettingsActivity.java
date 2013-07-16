@@ -6,6 +6,7 @@ import android.os.Bundle;
 import org.tetram.bdtheque.gui.activities.fragments.SettingsFragment;
 
 public class SettingsActivity extends Activity {
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -13,4 +14,5 @@ public class SettingsActivity extends Activity {
                 .replace(android.R.id.content, new SettingsFragment())
                 .commit();
     }
+
 }

@@ -69,6 +69,20 @@ public abstract class DaoUtils {
     }
 
     @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
+    public static boolean getFieldAsBool(Cursor cursor, String fieldName) {
+        return getFieldAsBool(cursor, fieldName, false);
+    }
+
+    @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
+    public static boolean getFieldAsBool(Cursor cursor, String fieldName, boolean defaut) {
+        Boolean fieldAsBoolean = getFieldAsBoolean(cursor, fieldName);
+        if (fieldAsBoolean == null)
+            return defaut;
+        else
+            return fieldAsBoolean;
+    }
+
+    @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
     @Nullable
     public static Boolean getFieldAsBoolean(Cursor cursor, String fieldName) {
         Integer i = getFieldAsInteger(cursor, fieldName);

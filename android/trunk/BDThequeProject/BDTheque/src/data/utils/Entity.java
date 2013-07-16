@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 public @interface Entity {
     String tableName();
 
-    String primaryKey();
+    String[] primaryKey();
 
     Class<? extends BeanFactory> factoryClass();
 }

@@ -27,6 +27,14 @@ public class EditionBean extends CommonBean {
     private String numeroPerso;
     private boolean gratuit;
     private Double prix;
+    private Double prixCote;
+    private Integer anneeCote;
+    private ListeBean typeEdition;
+    private ListeBean reliure;
+    private ListeBean etat;
+    private ListeBean orientation;
+    private ListeBean formatEdition;
+    private ListeBean sensLecture;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<EditionBean> CREATOR = new Creator<EditionBean>() {
@@ -40,8 +48,6 @@ public class EditionBean extends CommonBean {
             return new EditionBean[size];
         }
     };
-    private Double prixCote;
-    private Integer anneeCote;
 
     public EditionBean(Parcel in) {
         super(in);
@@ -70,6 +76,12 @@ public class EditionBean extends CommonBean {
         dest.writeValue(this.gratuit);
         dest.writeValue(this.anneeCote);
         dest.writeValue(this.prixCote);
+        dest.writeParcelable(this.typeEdition, flags);
+        dest.writeParcelable(this.reliure, flags);
+        dest.writeParcelable(this.etat, flags);
+        dest.writeParcelable(this.orientation, flags);
+        dest.writeParcelable(this.formatEdition, flags);
+        dest.writeParcelable(this.sensLecture, flags);
     }
 
     @Override
@@ -91,6 +103,12 @@ public class EditionBean extends CommonBean {
         this.gratuit = (boolean) in.readValue(Boolean.class.getClassLoader());
         this.anneeCote = (Integer) in.readValue(Integer.class.getClassLoader());
         this.prixCote = (Double) in.readValue(Double.class.getClassLoader());
+        this.typeEdition = in.readParcelable(ListeBean.class.getClassLoader());
+        this.reliure = in.readParcelable(ListeBean.class.getClassLoader());
+        this.etat = in.readParcelable(ListeBean.class.getClassLoader());
+        this.orientation = in.readParcelable(ListeBean.class.getClassLoader());
+        this.formatEdition = in.readParcelable(ListeBean.class.getClassLoader());
+        this.sensLecture = in.readParcelable(ListeBean.class.getClassLoader());
     }
 
     public String getISBN() {
@@ -219,5 +237,53 @@ public class EditionBean extends CommonBean {
 
     public void setAnneeCote(Integer anneeCote) {
         this.anneeCote = anneeCote;
+    }
+
+    public void setTypeEdition(ListeBean typeEdition) {
+        this.typeEdition = typeEdition;
+    }
+
+    public ListeBean getTypeEdition() {
+        return this.typeEdition;
+    }
+
+    public void setReliure(ListeBean reliure) {
+        this.reliure = reliure;
+    }
+
+    public ListeBean getReliure() {
+        return this.reliure;
+    }
+
+    public void setEtat(ListeBean etat) {
+        this.etat = etat;
+    }
+
+    public ListeBean getEtat() {
+        return this.etat;
+    }
+
+    public void setOrientation(ListeBean orientation) {
+        this.orientation = orientation;
+    }
+
+    public ListeBean getOrientation() {
+        return this.orientation;
+    }
+
+    public void setFormatEdition(ListeBean formatEdition) {
+        this.formatEdition = formatEdition;
+    }
+
+    public ListeBean getFormatEdition() {
+        return this.formatEdition;
+    }
+
+    public void setSensLecture(ListeBean sensLecture) {
+        this.sensLecture = sensLecture;
+    }
+
+    public ListeBean getSensLecture() {
+        return this.sensLecture;
     }
 }

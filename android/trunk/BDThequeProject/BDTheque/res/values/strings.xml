@@ -51,6 +51,12 @@
     <string name="gratuit">Gratuit</string>
     <string name="pref_symboleMonetaire">symboleMonetaire</string>
     <string name="fiche_edition_cote">Cote :</string>
+    <string name="fiche_edition_typeedition">Type d\'édition :</string>
+    <string name="fiche_edition_reliure">Reliure :</string>
+    <string name="fiche_edition_etatedition">Etat :</string>
+    <string name="fiche_edition_orientation">Orientation :</string>
+    <string name="fiche_edition_formatedition">Format :</string>
+    <string name="fiche_edition_senslecture">Sens de lecture :</string>
 
     <string-array name="pref_formatTitreAlbum_entries">
         <item>Album (Serie - Tome)</item>

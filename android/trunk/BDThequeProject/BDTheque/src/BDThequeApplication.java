@@ -21,6 +21,7 @@ public class BDThequeApplication extends Application {
         ourInstance = this;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit().putString(getString(R.string.pref_symboleMonetaire), UserConfig.getInstance().getSymboleMonetaire()).commit();
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 
     public static int getFicheAlbumLastShownTab() {

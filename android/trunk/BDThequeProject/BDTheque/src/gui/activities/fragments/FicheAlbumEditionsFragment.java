@@ -87,14 +87,14 @@ public class FicheAlbumEditionsFragment extends FicheFragment {
         setUIElement(this.view, R.id.edition_couleur, this.currentEdition.isCouleur());
         setUIElement(this.view, R.id.edition_dédicacé, this.currentEdition.isDedicace());
         setUIElement(this.view, R.id.edition_offert, this.currentEdition.isOffert());
-/*
-      TypeEdition.Caption := FCurrentEdition.TypeEdition.Caption;
-      Reliure.Caption := FCurrentEdition.Reliure.Caption;
-      Etat.Caption := FCurrentEdition.Etat.Caption;
-      lbOrientation.Caption := FCurrentEdition.Orientation.Caption;
-      lbFormat.Caption := FCurrentEdition.FormatEdition.Caption;
-      lbSensLecture.Caption := FCurrentEdition.SensLecture.Caption;
-*/
+
+        setUIElement(this.view, R.id.edition_typeedition, this.currentEdition.getTypeEdition(), R.id.fiche_edition_row_typeedition);
+        setUIElement(this.view, R.id.edition_reliure, this.currentEdition.getReliure(), R.id.fiche_edition_row_reliure);
+        setUIElement(this.view, R.id.edition_etatedition, this.currentEdition.getEtat(), R.id.fiche_edition_row_etatedition);
+        setUIElement(this.view, R.id.edition_orientation, this.currentEdition.getOrientation(), R.id.fiche_edition_row_orientation);
+        setUIElement(this.view, R.id.edition_formatedition, this.currentEdition.getFormatEdition(), R.id.fiche_edition_row_formatedition);
+        setUIElement(this.view, R.id.edition_senslecture, this.currentEdition.getSensLecture(), R.id.fiche_edition_row_senslecture);
+
         if (this.currentEdition.isGratuit())
             setUIElement(this.view, R.id.edition_prix, getResources().getString(R.string.gratuit));
         else {

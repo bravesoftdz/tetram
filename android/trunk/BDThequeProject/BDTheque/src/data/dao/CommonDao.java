@@ -8,6 +8,7 @@ import org.tetram.bdtheque.database.BDDatabaseHelper;
 
 import java.util.UUID;
 
+@SuppressWarnings("UnusedDeclaration")
 public interface CommonDao<T extends CommonBean> {
     BDDatabaseHelper getDatabaseHelper();
 
@@ -15,4 +16,7 @@ public interface CommonDao<T extends CommonBean> {
 
     @Nullable
     T getById(UUID beanId);
+
+    @Nullable
+    T getByParams(Object... param);
 }
