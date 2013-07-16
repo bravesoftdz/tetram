@@ -3,6 +3,7 @@ package org.tetram.bdtheque.gui.adapters;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -23,6 +24,7 @@ public class ListLiteBeanAdapter<T extends TreeNodeBean> extends ArrayAdapter<T>
         TextView view = (TextView) super.getView(position, convertView, parent);
         T item = getItem(position);
         view.setText(item.getTreeNodeText());
+        view.setLayoutParams(new AbsListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         return view;
     }
 }

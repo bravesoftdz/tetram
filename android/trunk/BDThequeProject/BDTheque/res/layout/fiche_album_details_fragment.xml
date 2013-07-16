@@ -294,29 +294,5 @@
                 android:layout_span="2"/>
         </TableRow>
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/fiche_album_row_albums">
-
-            <TextView
-                style="@style/fiche_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/fiche_album_albums"
-                android:id="@+id/label_album_albums"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_column="0"
-                android:layout_gravity="right"/>
-
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/album_albums"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_span="2"
-                tools:listitem="@android:layout/simple_list_item_checked"/>
-        </TableRow>
-
     </TableLayout>
 </ScrollView>

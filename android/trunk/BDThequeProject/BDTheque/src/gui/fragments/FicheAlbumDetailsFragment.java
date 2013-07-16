@@ -7,10 +7,8 @@ import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +16,6 @@ import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.AlbumBean;
 import org.tetram.bdtheque.data.bean.SerieBean;
-import org.tetram.bdtheque.gui.adapters.ListLiteBeanAdapter;
 import org.tetram.bdtheque.gui.components.LinearListView;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -29,7 +26,7 @@ import java.util.GregorianCalendar;
 import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElement;
 
 @SuppressWarnings("UnusedDeclaration")
-public class FicheAlbumDetailFragment extends FicheFragment {
+public class FicheAlbumDetailsFragment extends FicheFragment {
 
     @SuppressWarnings("MagicConstant")
     @Nullable
@@ -41,7 +38,7 @@ public class FicheAlbumDetailFragment extends FicheFragment {
         if (album == null) return null;
         final SerieBean serie = album.getSerie();
 
-        View v = inflater.inflate(R.layout.fiche_album_detail_fragment, container, false);
+        View v = inflater.inflate(R.layout.fiche_album_details_fragment, container, false);
         if (serie != null) {
             String titreSerie = StringUtils.formatTitre(serie.getTitre());
             if (serie.getSiteWeb() != null) {
@@ -53,16 +50,9 @@ public class FicheAlbumDetailFragment extends FicheFragment {
                 setUIElement(v, R.id.album_serie, titreSerie);
             }
             setUIElement(v, R.id.album_genres, serie.getGenreList(), R.id.fiche_album_row_genres);
-            final ListView listAlbums = (ListView) v.findViewById(R.id.album_albums);
-            listAlbums.setAdapter(new ListLiteBeanAdapter<>(getActivity(), android.R.layout.simple_list_item_checked, serie.getAlbums()));
-            listAlbums.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-            for (int i = 0; i < serie.getAlbums().size(); i++)
-                if (album.getId().equals(serie.getAlbums().get(i).getId()))
-                    listAlbums.setItemChecked(i, true);
         } else {
             v.findViewById(R.id.fiche_album_row_serie).setVisibility(View.GONE);
             v.findViewById(R.id.fiche_album_row_genres).setVisibility(View.GONE);
-            v.findViewById(R.id.fiche_album_row_albums).setVisibility(View.GONE);
         }
         setUIElement(v, R.id.album_titre, StringUtils.formatTitre(album.getTitre()), R.id.fiche_album_row_titre);
         setUIElement(v, R.id.album_tome, StringUtils.nonZero(album.getTome()));

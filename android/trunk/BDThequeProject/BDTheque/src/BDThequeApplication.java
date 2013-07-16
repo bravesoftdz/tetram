@@ -9,7 +9,7 @@ import org.tetram.bdtheque.utils.UserConfig;
 @SuppressWarnings("ClassNamePrefixedWithPackageName")
 public class BDThequeApplication extends Application {
     private static BDThequeApplication ourInstance;
-    private static int ficheAlbumLastShownTab;
+    private static String ficheAlbumLastShownTab;
 
     public static BDThequeApplication getInstance() {
         return ourInstance;
@@ -24,11 +24,11 @@ public class BDThequeApplication extends Application {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
     }
 
-    public static int getFicheAlbumLastShownTab() {
+    public static String getFicheAlbumLastShownTab() {
         return ficheAlbumLastShownTab;
     }
 
-    public static void setFicheAlbumLastShownTab(int tabPosition) {
+    public static void setFicheAlbumLastShownTab(String tabPosition) {
         BDThequeApplication.ficheAlbumLastShownTab = tabPosition;
     }
 }
