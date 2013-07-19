@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ShareActionProvider;
+import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
 import org.tetram.bdtheque.R;
@@ -20,6 +21,8 @@ import org.tetram.bdtheque.gui.utils.ModeRepertoire;
 import org.tetram.bdtheque.utils.UserConfig;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class RepertoireActivity extends Activity implements ActionBar.OnNavigationListener, SearchManager.OnCancelListener {
@@ -29,6 +32,7 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
     private int currentNavigationItem = -1;
     private ShareActionProvider shareProvider;
     private TitlesFragment repertoire;
+    private Date lastBackClick = new Date(0);
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -162,4 +166,16 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
         this.repertoire.refreshList();
     }
 
+
+    @Override
+    public void onBackPressed() {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(this.lastBackClick);
+        cal.add(Calendar.SECOND, 3);
+        if ((getFragmentManager().getBackStackEntryCount() == 0) && new Date().after(cal.getTime())) {
+            this.lastBackClick = new Date();
+            Toast.makeText(this, "Appuyer à nouveau pour quitter.", Toast.LENGTH_LONG).show();
+        } else
+            super.onBackPressed();
+    }
 }

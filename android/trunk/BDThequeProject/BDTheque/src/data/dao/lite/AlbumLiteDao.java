@@ -4,19 +4,16 @@ import android.content.Context;
 
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.InitialeBean;
-import org.tetram.bdtheque.data.bean.InitialeSerieBean;
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
 import org.tetram.bdtheque.data.dao.CommonRepertoireDao;
-import org.tetram.bdtheque.data.factories.lite.AlbumLiteFactory;
-import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.data.factories.lite.AlbumLiteAbstractFactory;
 
 import java.util.List;
-import java.util.UUID;
 
 public class AlbumLiteDao extends CommonRepertoireDao<AlbumLiteBean, InitialeBean> {
 
     public AlbumLiteDao(Context context) {
-        super(context, InitialeBean.class, AlbumLiteFactory.class);
+        super(context, InitialeBean.class, AlbumLiteAbstractFactory.AlbumLiteFactory.class);
     }
 
     private String buildFiltre() {
@@ -36,11 +33,5 @@ public class AlbumLiteDao extends CommonRepertoireDao<AlbumLiteBean, InitialeBea
     public List<AlbumLiteBean> getData(InitialeBean initiale) {
         return super.getData(R.string.sql_albums_by_initiale, initiale, buildFiltre() + "a.nbeditions > 0");
     }
-
-    public void loadListForSerie(List<AlbumLiteBean> list, UUID serieId) {
-        list.clear();
-        list.addAll(super.getData(R.string.sql_albums_by_serie, InitialeBean.createInstance(InitialeSerieBean.class, null, 0, StringUtils.UUIDToGUIDString(serieId))));
-    }
-
 
 }

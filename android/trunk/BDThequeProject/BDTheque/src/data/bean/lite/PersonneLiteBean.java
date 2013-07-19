@@ -20,15 +20,15 @@ public class PersonneLiteBean extends CommonBean implements TreeNodeBean {
     private String nom;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
-    public static final Creator<CollectionLiteBean> CREATOR = new Creator<CollectionLiteBean>() {
+    public static final Creator<PersonneLiteBean> CREATOR = new Creator<PersonneLiteBean>() {
         @Override
-        public CollectionLiteBean createFromParcel(Parcel source) {
-            return new CollectionLiteBean(source);
+        public PersonneLiteBean createFromParcel(Parcel source) {
+            return new PersonneLiteBean(source);
         }
 
         @Override
-        public CollectionLiteBean[] newArray(int size) {
-            return new CollectionLiteBean[size];
+        public PersonneLiteBean[] newArray(int size) {
+            return new PersonneLiteBean[size];
         }
     };
 

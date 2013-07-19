@@ -1,15 +1,12 @@
 package org.tetram.bdtheque.gui.fragments;
 
 import android.os.Bundle;
-import android.text.Html;
 import android.text.format.DateFormat;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.TextView;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.BDThequeApplication;
@@ -24,6 +21,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElement;
+import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElementURL;
 
 @SuppressWarnings("UnusedDeclaration")
 public class FicheAlbumDetailsFragment extends FicheFragment {
@@ -40,21 +38,13 @@ public class FicheAlbumDetailsFragment extends FicheFragment {
 
         View v = inflater.inflate(R.layout.fiche_album_details_fragment, container, false);
         if (serie != null) {
-            String titreSerie = StringUtils.formatTitre(serie.getTitre());
-            if (serie.getSiteWeb() != null) {
-                titreSerie = String.format("<a href=\"%s\">%s</a>", serie.getSiteWeb(), titreSerie);
-                final TextView textView = (TextView) v.findViewById(R.id.album_serie);
-                textView.setMovementMethod(LinkMovementMethod.getInstance());
-                textView.setText(Html.fromHtml(titreSerie));
-            } else {
-                setUIElement(v, R.id.album_serie, titreSerie);
-            }
+            setUIElementURL(v, R.id.album_serie, StringUtils.formatTitreAcceptNull(serie.getTitre()), serie.getSiteWeb(), 0);
             setUIElement(v, R.id.album_genres, serie.getGenreList(), R.id.fiche_album_row_genres);
         } else {
             v.findViewById(R.id.fiche_album_row_serie).setVisibility(View.GONE);
             v.findViewById(R.id.fiche_album_row_genres).setVisibility(View.GONE);
         }
-        setUIElement(v, R.id.album_titre, StringUtils.formatTitre(album.getTitre()), R.id.fiche_album_row_titre);
+        setUIElement(v, R.id.album_titre, StringUtils.formatTitreAcceptNull(album.getTitre()), R.id.fiche_album_row_titre);
         setUIElement(v, R.id.album_tome, StringUtils.nonZero(album.getTome()));
         String parutionFormat;
         Date dateParution;

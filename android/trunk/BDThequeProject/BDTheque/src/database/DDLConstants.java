@@ -10,6 +10,7 @@ public class DDLConstants {
     public static final String SERIES_SITEWEB = "SITEWEB";
     public static final String SERIES_SUJET = "SUJETSERIE";
     public static final String SERIES_NOTES = "REMARQUESSERIE";
+    public static final String SERIES_NOTATION = "NOTATION";
 
     public static final String ALBUMS_TABLENAME = "ALBUMS";
     public static final String ALBUMS_ID = "ID_ALBUM";

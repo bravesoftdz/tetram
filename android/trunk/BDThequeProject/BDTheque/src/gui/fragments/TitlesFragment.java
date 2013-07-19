@@ -65,27 +65,31 @@ public class TitlesFragment extends ExpandableListFragment {
 
         CommonBean bean = (CommonBean) getExpandableListAdapter().getChild(groupPosition, childPosition);
 
-        if (this.dualPane) {
-            // We can display everything in-place with fragments, so update
-            // the list to highlight the selected item and show the database.
-            if (this.synchroScroll) {
-                this.expandableListView.expandGroup(groupPosition, false);
-                this.expandableListView.setSelectedChild(groupPosition, childPosition, true);
-                this.synchroScroll = false;
-            }
+        // We can display everything in-place with fragments, so update
+        // the list to highlight the selected item and show the database.
+        if (this.synchroScroll) {
+            this.expandableListView.expandGroup(groupPosition, false);
+            this.expandableListView.setSelectedChild(groupPosition, childPosition, true);
+            this.synchroScroll = false;
+        }
 
+        showDetails(bean);
+    }
+
+    void showDetails(CommonBean bean) {
+        if (this.dualPane) {
             // Check what fragments is currently shown, replace if needed.
             FicheFragment details = (FicheFragment) getFragmentManager().findFragmentById(R.id.details);
             if ((details == null) || (!details.getShownId().equals(bean.getId()))) {
                 // Execute a transaction, replacing any existing fragments
                 // with this one inside the frame.
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
-                // Make new fragments to show this selection.
 
+                // Make new fragments to show this selection.
                 ShowFragmentClass a = bean.getClass().getAnnotation(ShowFragmentClass.class);
                 if (a == null) return;
 
-                ft.replace(R.id.details, FicheFragment.newInstance(a.value(), bean));
+                ft.replace(R.id.details, FicheFragment.newInstance(a.value(), bean)).addToBackStack(null);
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.commit();
             }

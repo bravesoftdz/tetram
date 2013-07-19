@@ -12,7 +12,14 @@ import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldAsInteger;
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldAsString;
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldAsUUID;
 
-public class AlbumLiteFactory extends BeanFactoryImpl<AlbumLiteBean> {
+public abstract class AlbumLiteAbstractFactory<T extends AlbumLiteBean> extends BeanFactoryImpl<T> {
+
+    public static class AlbumLiteFactory extends AlbumLiteAbstractFactory<AlbumLiteBean> {
+    }
+
+    public static class AlbumWithoutSerieLiteFactory extends AlbumLiteAbstractFactory<AlbumLiteBean.AlbumWithoutSerieLiteBean> {
+    }
+
     @Override
     public boolean loadFromCursor(Context context, Cursor cursor, boolean mustExists, AlbumLiteBean bean) {
         bean.setId(getFieldAsUUID(cursor, DDLConstants.ALBUMS_ID));

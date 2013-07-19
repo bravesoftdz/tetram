@@ -7,6 +7,7 @@ import org.tetram.bdtheque.data.bean.lite.SerieLiteBean;
 import org.tetram.bdtheque.data.factories.BeanFactoryImpl;
 import org.tetram.bdtheque.database.DDLConstants;
 
+import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldAsInteger;
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldAsString;
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldAsUUID;
 
@@ -18,6 +19,7 @@ public class SerieLiteFactory extends BeanFactoryImpl<SerieLiteBean> {
         bean.setTitre(getFieldAsString(cursor, DDLConstants.SERIES_TITRE));
         bean.setEditeur(new EditeurLiteFactory().loadFromCursor(context, cursor, false));
         bean.setCollection(new CollectionLiteFactory().loadFromCursor(context, cursor, false));
+        bean.setNotation(getFieldAsInteger(cursor, DDLConstants.SERIES_NOTATION));
         return true;
     }
 

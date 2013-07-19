@@ -64,37 +64,38 @@ public class StringUtilsTest extends TestCase {
         assertEquals("2-921548-21-6", StringUtils.formatISBN("2921548216"));
     }
 
+    @SuppressWarnings("JUnitTestMethodWithNoAssertions")
     public void testClearISBN() throws Exception {
 
     }
 
     public void testFormatTitre() throws Exception {
-        assertEquals("test", StringUtils.formatTitre("test"));
-        assertEquals("un test", StringUtils.formatTitre("test[un]"));
-        assertEquals("un test", StringUtils.formatTitre("test[un] "));
-        assertEquals("un test", StringUtils.formatTitre("test [un]"));
-        assertEquals("un test", StringUtils.formatTitre("test [ un]"));
-        assertEquals("un test", StringUtils.formatTitre("test [un ]"));
-        assertEquals("un test", StringUtils.formatTitre("test [un ] "));
-        assertEquals("un test de plus", StringUtils.formatTitre("test [un]de plus"));
-        assertEquals("un test  de plus", StringUtils.formatTitre("test [ un ] de plus"));
-        assertEquals("un test de plus", StringUtils.formatTitre("test[un] de plus"));
-        assertEquals("un testde plus", StringUtils.formatTitre("test[un]de plus"));
+        assertEquals("test", StringUtils.formatTitreAcceptNull("test"));
+        assertEquals("un test", StringUtils.formatTitreAcceptNull("test[un]"));
+        assertEquals("un test", StringUtils.formatTitreAcceptNull("test[un] "));
+        assertEquals("un test", StringUtils.formatTitreAcceptNull("test [un]"));
+        assertEquals("un test", StringUtils.formatTitreAcceptNull("test [ un]"));
+        assertEquals("un test", StringUtils.formatTitreAcceptNull("test [un ]"));
+        assertEquals("un test", StringUtils.formatTitreAcceptNull("test [un ] "));
+        assertEquals("un test de plus", StringUtils.formatTitreAcceptNull("test [un]de plus"));
+        assertEquals("un test  de plus", StringUtils.formatTitreAcceptNull("test [ un ] de plus"));
+        assertEquals("un test de plus", StringUtils.formatTitreAcceptNull("test[un] de plus"));
+        assertEquals("un testde plus", StringUtils.formatTitreAcceptNull("test[un]de plus"));
 
-        assertEquals("l'test", StringUtils.formatTitre("test[l']"));
-        assertEquals("l'test", StringUtils.formatTitre("test[l'] "));
-        assertEquals("l'test", StringUtils.formatTitre("test [l']"));
-        assertEquals("l'test", StringUtils.formatTitre("test [ l']"));
-        assertEquals("l'test", StringUtils.formatTitre("test [l' ]"));
-        assertEquals("l'test", StringUtils.formatTitre("test [l' ] "));
-        assertEquals("l'test de plus", StringUtils.formatTitre("test [l']de plus"));
-        assertEquals("l'test  de plus", StringUtils.formatTitre("test [ l' ] de plus"));
-        assertEquals("l'test de plus", StringUtils.formatTitre("test[l'] de plus"));
-        assertEquals("l'testde plus", StringUtils.formatTitre("test[l']de plus"));
+        assertEquals("l'test", StringUtils.formatTitreAcceptNull("test[l']"));
+        assertEquals("l'test", StringUtils.formatTitreAcceptNull("test[l'] "));
+        assertEquals("l'test", StringUtils.formatTitreAcceptNull("test [l']"));
+        assertEquals("l'test", StringUtils.formatTitreAcceptNull("test [ l']"));
+        assertEquals("l'test", StringUtils.formatTitreAcceptNull("test [l' ]"));
+        assertEquals("l'test", StringUtils.formatTitreAcceptNull("test [l' ] "));
+        assertEquals("l'test de plus", StringUtils.formatTitreAcceptNull("test [l']de plus"));
+        assertEquals("l'test  de plus", StringUtils.formatTitreAcceptNull("test [ l' ] de plus"));
+        assertEquals("l'test de plus", StringUtils.formatTitreAcceptNull("test[l'] de plus"));
+        assertEquals("l'testde plus", StringUtils.formatTitreAcceptNull("test[l']de plus"));
 
-        assertEquals("Trolls de Troy", StringUtils.formatTitre("Trolls de Troy"));
-        assertEquals("Le Scorpion", StringUtils.formatTitre("Scorpion [Le]"));
-        assertEquals("L'Etape", StringUtils.formatTitre("Etape [L']"));
+        assertEquals("Trolls de Troy", StringUtils.formatTitreAcceptNull("Trolls de Troy"));
+        assertEquals("Le Scorpion", StringUtils.formatTitreAcceptNull("Scorpion [Le]"));
+        assertEquals("L'Etape", StringUtils.formatTitreAcceptNull("Etape [L']"));
     }
 
     public void testTrimRight() throws Exception {
@@ -104,6 +105,7 @@ public class StringUtilsTest extends TestCase {
         assertEquals("   xxxx", StringUtils.trimRight("   xxxx"));
     }
 
+    @SuppressWarnings("JUnitTestMethodWithNoAssertions")
     public void testFormatTitreAlbum() throws Exception {
 
     }

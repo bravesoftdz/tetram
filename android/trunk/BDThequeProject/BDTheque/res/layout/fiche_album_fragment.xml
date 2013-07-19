@@ -29,7 +29,7 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/tab_album_detail"/>
+                android:id="@+id/tab_album_details"/>
 
             <FrameLayout
                 android:layout_width="wrap_content"

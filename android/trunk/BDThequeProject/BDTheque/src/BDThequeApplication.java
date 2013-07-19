@@ -10,6 +10,8 @@ import org.tetram.bdtheque.utils.UserConfig;
 public class BDThequeApplication extends Application {
     private static BDThequeApplication ourInstance;
     private static String ficheAlbumLastShownTab;
+    private static String ficheSerieLastShownTab;
+    private static String fichePersonneLastShownTab;
 
     public static BDThequeApplication getInstance() {
         return ourInstance;
@@ -30,5 +32,21 @@ public class BDThequeApplication extends Application {
 
     public static void setFicheAlbumLastShownTab(String tabPosition) {
         BDThequeApplication.ficheAlbumLastShownTab = tabPosition;
+    }
+
+    public static String getFicheSerieLastShownTab() {
+        return ficheSerieLastShownTab;
+    }
+
+    public static void setFicheSerieLastShownTab(String tabPosition) {
+        BDThequeApplication.ficheSerieLastShownTab = tabPosition;
+    }
+
+    public static String getFichePersonneLastShownTab() {
+        return fichePersonneLastShownTab;
+    }
+
+    public static void setFichePersonneLastShownTab(String tabPosition) {
+        BDThequeApplication.fichePersonneLastShownTab = tabPosition;
     }
 }

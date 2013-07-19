@@ -293,6 +293,44 @@ order by
     a.anneeparution, a.moisparution
     ]]></string>
 
+    <string name="sql_series_albums_for_auteur"><![CDATA[
+select
+    s.titreserie, count(distinct a.id_album), s.id_serie
+from
+    albums a
+    left join series s on
+        s.id_serie = a.id_serie
+    inner join auteurs aa on
+        aa.id_album = a.id_album
+where
+    1 = 1
+    %s
+group by
+    s.titreserie, s.id_serie
+order by
+    s.titreserie collate nocase
+    ]]></string>
+    <string name="sql_albums_by_serie_for_auteur"><![CDATA[
+select distinct
+    a.id_album, a.titrealbum, a.tome, a.tomedebut, a.tomefin,
+    a.horsserie, a.integrale, a.moisparution, a.anneeparution,
+    a.notation, a.id_serie, s.titreserie,
+    a.achat
+from
+    albums a
+    left join series s on
+        s.id_serie = a.id_serie
+    inner join auteurs aa on
+        aa.id_album = a.id_album
+where
+    s.id_serie %s
+order by
+    a.horsserie, a.integrale, a.tome,
+    a.tomedebut, a.tomefin,
+    a.anneeparution, a.moisparution,
+    coalesce(a.titrealbum, s.titreserie) collate nocase, s.titreserie collate nocase
+    ]]></string>
+
     <string name="sql_searchfield_albums">coalesce(a.titrealbum, s.titreserie)</string>
     <string name="sql_searchfield_series">s.titreserie</string>
     <string name="sql_searchfield_editeurs">e.nomediteur</string>

@@ -5,7 +5,7 @@ import android.os.Parcel;
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
-import org.tetram.bdtheque.data.factories.lite.AlbumLiteFactory;
+import org.tetram.bdtheque.data.factories.lite.AlbumLiteAbstractFactory;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.gui.fragments.FicheAlbumFragment;
@@ -14,8 +14,15 @@ import org.tetram.bdtheque.utils.StringUtils;
 
 @SuppressWarnings("UnusedDeclaration")
 @ShowFragmentClass(FicheAlbumFragment.class)
-@Entity(tableName = DDLConstants.ALBUMS_TABLENAME, primaryKey = DDLConstants.ALBUMS_ID, factoryClass = AlbumLiteFactory.class)
+@Entity(tableName = DDLConstants.ALBUMS_TABLENAME, primaryKey = DDLConstants.ALBUMS_ID, factoryClass = AlbumLiteAbstractFactory.AlbumLiteFactory.class)
 public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
+
+    public static class AlbumWithoutSerieLiteBean extends AlbumLiteBean {
+        @Override
+        public String getTreeNodeText() {
+            return getLabel(false, false);
+        }
+    }
 
     private String titre;
     private Integer tome;

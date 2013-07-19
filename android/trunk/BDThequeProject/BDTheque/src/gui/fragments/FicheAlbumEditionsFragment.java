@@ -1,16 +1,13 @@
 package org.tetram.bdtheque.gui.fragments;
 
 import android.os.Bundle;
-import android.text.Html;
 import android.text.format.DateFormat;
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.R;
@@ -24,6 +21,7 @@ import org.tetram.bdtheque.utils.UserConfig;
 import java.util.Date;
 
 import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElement;
+import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElementURL;
 
 public class FicheAlbumEditionsFragment extends FicheFragment {
 
@@ -66,21 +64,12 @@ public class FicheAlbumEditionsFragment extends FicheFragment {
         setUIElement(this.view, R.id.edition_isbn, StringUtils.formatISBN(this.currentEdition.getISBN()));
 
         final EditeurBean editeur = this.currentEdition.getEditeur();
-        String nomEditeur = StringUtils.formatTitre(editeur.getNom());
-        if (editeur.getSiteWeb() != null) {
-            nomEditeur = String.format("<a href=\"%s\">%s</a>", editeur.getSiteWeb(), nomEditeur);
-            final TextView textView = (TextView) this.view.findViewById(R.id.edition_editeur);
-            textView.setMovementMethod(LinkMovementMethod.getInstance());
-            textView.setText(Html.fromHtml(nomEditeur));
-        } else {
-            setUIElement(this.view, R.id.edition_editeur, nomEditeur);
-        }
-
+        setUIElementURL(this.view, R.id.edition_editeur, StringUtils.formatTitreAcceptNull(editeur.getNom()), editeur.getSiteWeb(), 0);
         final CollectionLiteBean collection = this.currentEdition.getCollection();
         if (collection == null)
             this.view.findViewById(R.id.fiche_edition_row_collection).setVisibility(View.GONE);
         else
-            setUIElement(this.view, R.id.edition_collection, StringUtils.formatTitre(collection.getNom()));
+            setUIElement(this.view, R.id.edition_collection, StringUtils.formatTitreAcceptNull(collection.getNom()));
 
         setUIElement(this.view, R.id.edition_année, StringUtils.nonZero(this.currentEdition.getAnnee()));
         setUIElement(this.view, R.id.edition_stock, this.currentEdition.isStock());

@@ -28,10 +28,12 @@ public class FicheAlbumFragment extends FicheFragment {
 
         final CommonBean bean = getArguments().getParcelable("bean");
         final AlbumDao dao = new AlbumDao(getActivity());
-        final AlbumBean album = dao.getById(bean.getId());
-        final SerieBean serie = album.getSerie();
+        final AlbumBean albumBean = dao.getById(bean.getId());
+        final SerieBean serieBean = albumBean.getSerie();
 
         View v = inflater.inflate(R.layout.fiche_album_fragment, container, false);
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
         final TabHost tabHost = (TabHost) v.findViewById(android.R.id.tabhost);
         tabHost.setup();
@@ -40,22 +42,30 @@ public class FicheAlbumFragment extends FicheFragment {
 
         spec = tabHost.newTabSpec(TAB_DETAILS);
         spec.setIndicator(getResources().getString(R.string.fiche_album_tab_details));
-        spec.setContent(R.id.tab_album_detail);
+        spec.setContent(R.id.tab_album_details);
         tabHost.addTab(spec);
+        FicheAlbumDetailsFragment detailFragment = (FicheAlbumDetailsFragment) FicheFragment.newInstance(FicheAlbumDetailsFragment.class, albumBean);
+        fragmentTransaction.replace(R.id.tab_album_details, detailFragment);
 
-        if (!album.getEditions().isEmpty()) {
+        if (!albumBean.getEditions().isEmpty()) {
             spec = tabHost.newTabSpec(TAB_EDITIONS);
-            spec.setIndicator(getResources().getQuantityString(R.plurals.fiche_album_tab_editions, album.getEditions().size()));
+            spec.setIndicator(getResources().getQuantityString(R.plurals.fiche_album_tab_editions, albumBean.getEditions().size()));
             spec.setContent(R.id.tab_album_editions);
             tabHost.addTab(spec);
+            FicheAlbumEditionsFragment editionsFragment = (FicheAlbumEditionsFragment) FicheFragment.newInstance(FicheAlbumEditionsFragment.class, albumBean);
+            fragmentTransaction.replace(R.id.tab_album_editions, editionsFragment);
         }
 
-        if ((serie != null) && (serie.getAlbums().size() > 1)) {
+        if ((serieBean != null) && (serieBean.getAlbums().size() > 1)) {
             spec = tabHost.newTabSpec(TAB_ALBUMS);
-            spec.setIndicator(getResources().getString(R.string.fiche_album_tab_albums));
+            spec.setIndicator(getResources().getString(R.string.fiche_serie_tab_albums));
             spec.setContent(R.id.tab_album_albums);
             tabHost.addTab(spec);
+            FicheSerieAlbumsFragment albumsFragment = (FicheSerieAlbumsFragment) FicheFragment.newInstance(FicheSerieAlbumsFragment.class, albumBean);
+            fragmentTransaction.replace(R.id.tab_album_albums, albumsFragment);
         }
+
+        fragmentTransaction.commit();
 
         if (tabHost.getTabWidget().getTabCount() <= 1)
             v.findViewById(android.R.id.tabs).setVisibility(View.GONE);
@@ -68,17 +78,6 @@ public class FicheAlbumFragment extends FicheFragment {
                 BDThequeApplication.setFicheAlbumLastShownTab(tabHost.getCurrentTabTag());
             }
         });
-
-        // TODO: à voir s'il faut optimiser pour charger les fragments uniquement s'ils seront affichables (= que le tab associé est accessible)
-        FicheAlbumDetailsFragment detailFragment = (FicheAlbumDetailsFragment) FicheFragment.newInstance(FicheAlbumDetailsFragment.class, album);
-        FicheAlbumEditionsFragment editionsFragment = (FicheAlbumEditionsFragment) FicheFragment.newInstance(FicheAlbumEditionsFragment.class, album);
-        FicheAlbumAlbumsFragment albumsFragment = (FicheAlbumAlbumsFragment) FicheFragment.newInstance(FicheAlbumAlbumsFragment.class, album);
-
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.tab_album_detail, detailFragment);
-        fragmentTransaction.replace(R.id.tab_album_editions, editionsFragment);
-        fragmentTransaction.replace(R.id.tab_album_albums, albumsFragment);
-        fragmentTransaction.commit();
 
         return v;
     }

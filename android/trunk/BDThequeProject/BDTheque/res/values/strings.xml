@@ -59,7 +59,21 @@
     <string name="fiche_edition_senslecture">Sens de lecture :</string>
     <string name="fiche_album_albums">Albums de la série :</string>
     <string name="fiche_album_tab_details">Détails</string>
-    <string name="fiche_album_tab_albums">Albums de la série</string>
+    <string name="fiche_serie_tab_details">Détails</string>
+    <string name="fiche_serie_tab_albums">Albums de la série</string>
+    <string name="fiche_serie_titre">Titre :</string>
+    <string name="fiche_serie_genres">Genre :</string>
+    <string name="fiche_serie_scenaristes">Scénario :</string>
+    <string name="fiche_serie_dessinateurs">Dessins :</string>
+    <string name="fiche_serie_coloristes">Couleurs :</string>
+    <string name="fiche_serie_histoire">Histoire :</string>
+    <string name="fiche_serie_notes">Notes :</string>
+    <string name="fiche_serie_editeur">Editeur :</string>
+    <string name="fiche_serie_collection">Collection :</string>
+    <string name="fiche_personne_tab_bibliographie">Bibliographie</string>
+    <string name="fiche_personne_tab_details">Biographie</string>
+    <string name="fiche_personne_biographie">Biographie :</string>
+    <string name="fiche_personne_nom">Nom :</string>
 
     <string-array name="pref_formatTitreAlbum_entries">
         <item>Album (Serie - Tome)</item>

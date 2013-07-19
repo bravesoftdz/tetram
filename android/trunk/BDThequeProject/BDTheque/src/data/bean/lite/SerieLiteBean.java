@@ -21,6 +21,7 @@ public class SerieLiteBean extends CommonBean implements TreeNodeBean {
     private String titre;
     private CollectionLiteBean collection;
     private EditeurLiteBean editeur;
+    private Integer notation;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Parcelable.Creator<SerieLiteBean> CREATOR = new Parcelable.Creator<SerieLiteBean>() {
@@ -49,6 +50,7 @@ public class SerieLiteBean extends CommonBean implements TreeNodeBean {
         dest.writeString(this.titre);
         dest.writeParcelable(this.collection, flags);
         dest.writeParcelable(this.editeur, flags);
+        dest.writeValue(this.notation);
     }
 
     @Override
@@ -57,14 +59,7 @@ public class SerieLiteBean extends CommonBean implements TreeNodeBean {
         this.titre = in.readString();
         this.collection = in.readParcelable(CollectionLiteBean.class.getClassLoader());
         this.editeur = in.readParcelable(EditeurLiteBean.class.getClassLoader());
-    }
-
-    public String getTitre() {
-        return this.titre;
-    }
-
-    public void setTitre(String titre) {
-        this.titre = titre;
+        this.notation = (Integer) in.readValue(Integer.class.getClassLoader());
     }
 
     private String chaineAffichage(boolean simple) {
@@ -88,15 +83,40 @@ public class SerieLiteBean extends CommonBean implements TreeNodeBean {
     @Nullable
     @Override
     public Float getTreeNodeRating() {
-        return null;
+        return (this.notation == null) ? null : Float.valueOf(this.notation);
+
+    }
+
+    public String getTitre() {
+        return this.titre;
+    }
+
+    public void setTitre(String titre) {
+        this.titre = titre;
+    }
+
+    public EditeurLiteBean getEditeur() {
+        return this.editeur;
+    }
+
+    public void setEditeur(EditeurLiteBean editeur) {
+        this.editeur = editeur;
+    }
+
+    public CollectionLiteBean getCollection() {
+        return this.collection;
     }
 
     public void setCollection(CollectionLiteBean collection) {
         this.collection = collection;
     }
 
-    public void setEditeur(EditeurLiteBean editeur) {
-        this.editeur = editeur;
+    public Integer getNotation() {
+        return this.notation;
+    }
+
+    public void setNotation(Integer notation) {
+        this.notation = notation;
     }
 
 }

@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.utils;
 
+import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.R;
 import org.xml.sax.Attributes;
@@ -276,7 +277,10 @@ end;
     public static final String SEARCH_ISBN_GROUP = "//ISBNRangeMessage/EAN.UCCPrefixes/EAN.UCC[Prefix='%2$s']/Rules/Rule[ValueLower<=%1$s and ValueUpper>=%1$s]/Length";
     public static final String SEARCH_ISBN_PUBLISHER = "//ISBNRangeMessage/RegistrationGroups/Group[Prefix='%2$s-%3$s']/Rules/Rule[ValueLower<=%1$s and ValueUpper>=%1$s]/Length";
 
+    @Nullable
     public static String formatISBN(String isbn) {
+        if (isbn == null) return null;
+
         decodeISBNRules();
 
         String result;
@@ -309,14 +313,21 @@ end;
     public static String clearISBN(final String code) {
         final StringBuilder result = new StringBuilder();
         for (final char c : code.toUpperCase().toCharArray())
-            if (Character.isDigit(c) || (c == 'X'))
+            if (Character.isDigit(c) || (c == 'X')) {
                 result.append(c);
+            }
         return result.toString();
     }
 
-    @SuppressWarnings("StringConcatenationMissingWhitespace")
     public static String formatTitre(final String titre) {
-        if (titre == null) return "";
+        String s = formatTitreAcceptNull(titre);
+        return (s == null) ? "" : s;
+    }
+
+    @Nullable
+    @SuppressWarnings("StringConcatenationMissingWhitespace")
+    public static String formatTitreAcceptNull(final String titre) {
+        if (titre == null) return null;
         final int p = titre.lastIndexOf('[');
         if (p == -1) return titre.trim();
 
@@ -354,7 +365,7 @@ end;
             if ("".equals(sAlbum))
                 sAlbum = formatTitre(serie);
             else
-                sSerie = formatTitre(serie);
+                sSerie = formatTitreAcceptNull(serie);
 
         String sTome;
         if (integrale) {

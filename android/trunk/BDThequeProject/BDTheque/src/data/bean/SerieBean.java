@@ -24,6 +24,8 @@ public class SerieBean extends SerieLiteBean {
     private final List<AuteurBean> dessinateurs = new ArrayList<>();
     private final List<AuteurBean> coloristes = new ArrayList<>();
 
+    private EditeurBean editeur;
+
     private final List<AlbumLiteBean> albums = new ArrayList<>();
 
     private String sujet;
@@ -64,6 +66,7 @@ public class SerieBean extends SerieLiteBean {
         dest.writeTypedList(this.dessinateurs);
         dest.writeTypedList(this.coloristes);
         dest.writeTypedList(this.albums);
+        dest.writeParcelable(this.editeur, flags);
     }
 
     @Override
@@ -77,6 +80,7 @@ public class SerieBean extends SerieLiteBean {
         in.readTypedList(this.dessinateurs, AuteurBean.CREATOR);
         in.readTypedList(this.coloristes, AuteurBean.CREATOR);
         in.readTypedList(this.albums, AlbumLiteBean.CREATOR);
+        this.editeur = in.readParcelable(EditeurBean.class.getClassLoader());
     }
 
     public URL getSiteWeb() {
@@ -127,6 +131,17 @@ public class SerieBean extends SerieLiteBean {
     }
 
     public List<AlbumLiteBean> getAlbums() {
-        return albums;
+        return this.albums;
     }
+
+    @Override
+    public EditeurBean getEditeur() {
+        return this.editeur;
+    }
+
+    @SuppressWarnings("MethodOverloadsMethodOfSuperclass")
+    public void setEditeur(EditeurBean editeur) {
+        this.editeur = editeur;
+    }
+
 }
