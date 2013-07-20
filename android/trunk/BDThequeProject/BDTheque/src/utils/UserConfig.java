@@ -25,7 +25,7 @@ public class UserConfig {
     private int formatTitreAlbum = 0;
     private boolean afficheNoteListes = true;
     private String symboleMonetaire = DecimalFormatSymbols.getInstance().getCurrencySymbol();
-    private DecimalFormat formatMonetaire = buildFormatMonetaire();
+    private final DecimalFormat formatMonetaire = buildFormatMonetaire();
 
     public void reloadConfig(final Context context) {
         final SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
@@ -44,10 +44,6 @@ public class UserConfig {
 
     public String getSymboleMonetaire() {
         return this.symboleMonetaire;
-    }
-
-    public void setSymboleMonetaire(String symboleMonetaire) {
-        this.symboleMonetaire = symboleMonetaire;
     }
 
     private DecimalFormat buildFormatMonetaire() {
