@@ -8,6 +8,7 @@ import org.tetram.bdtheque.data.bean.AuteurBean;
 import org.tetram.bdtheque.data.dao.AuteurDao;
 import org.tetram.bdtheque.data.dao.EditionDao;
 import org.tetram.bdtheque.data.dao.SerieDao;
+import org.tetram.bdtheque.data.utils.Notation;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class AlbumFactory extends BeanFactoryImpl<AlbumBean> {
         bean.setIntegrale(getFieldAsBoolean(cursor, DDLConstants.ALBUMS_INTEGRALE));
         bean.setMoisParution(getFieldAsInteger(cursor, DDLConstants.ALBUMS_MOISPARUTION));
         bean.setAnneeParution(getFieldAsInteger(cursor, DDLConstants.ALBUMS_ANNEEPARUTION));
-        bean.setNotation(getFieldAsInteger(cursor, DDLConstants.ALBUMS_NOTATION));
+        bean.setNotation(Notation.fromValue(getFieldAsInteger(cursor, DDLConstants.ALBUMS_NOTATION)));
         final UUID serieId = getFieldAsUUID(cursor, DDLConstants.SERIES_ID);
         if (serieId != null) bean.setSerie(new SerieDao(context).getById(serieId));
         bean.setAchat(getFieldAsBoolean(cursor, DDLConstants.ALBUMS_ACHAT));

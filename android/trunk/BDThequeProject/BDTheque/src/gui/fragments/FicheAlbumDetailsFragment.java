@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.BDThequeApplication;
@@ -37,6 +38,9 @@ public class FicheAlbumDetailsFragment extends FicheFragment {
         final SerieBean serie = album.getSerie();
 
         View v = inflater.inflate(R.layout.fiche_album_details_fragment, container, false);
+
+        if (album.getNotation() != null)
+            ((ImageView) v.findViewById(R.id.album_notation)).setImageResource(album.getNotation().getResDrawable());
         if (serie != null) {
             setUIElementURL(v, R.id.album_serie, StringUtils.formatTitreAcceptNull(serie.getTitre()), serie.getSiteWeb(), 0);
             setUIElement(v, R.id.album_genres, serie.getGenreList(), R.id.fiche_album_row_genres);

@@ -3,11 +3,11 @@ package org.tetram.bdtheque.data.bean.lite;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
 import org.tetram.bdtheque.data.factories.lite.SerieLiteFactory;
 import org.tetram.bdtheque.data.utils.Entity;
+import org.tetram.bdtheque.data.utils.Notation;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.gui.fragments.FicheSerieFragment;
 import org.tetram.bdtheque.gui.utils.ShowFragmentClass;
@@ -21,7 +21,7 @@ public class SerieLiteBean extends CommonBean implements TreeNodeBean {
     private String titre;
     private CollectionLiteBean collection;
     private EditeurLiteBean editeur;
-    private Integer notation;
+    private Notation notation;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Parcelable.Creator<SerieLiteBean> CREATOR = new Parcelable.Creator<SerieLiteBean>() {
@@ -59,7 +59,7 @@ public class SerieLiteBean extends CommonBean implements TreeNodeBean {
         this.titre = in.readString();
         this.collection = in.readParcelable(CollectionLiteBean.class.getClassLoader());
         this.editeur = in.readParcelable(EditeurLiteBean.class.getClassLoader());
-        this.notation = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.notation = (Notation) in.readValue(Notation.class.getClassLoader());
     }
 
     private String chaineAffichage(boolean simple) {
@@ -80,11 +80,9 @@ public class SerieLiteBean extends CommonBean implements TreeNodeBean {
         return chaineAffichage(false);
     }
 
-    @Nullable
     @Override
     public Float getTreeNodeRating() {
-        return (this.notation == null) ? null : Float.valueOf(this.notation);
-
+        return (float) this.notation.getValue();
     }
 
     public String getTitre() {
@@ -111,11 +109,11 @@ public class SerieLiteBean extends CommonBean implements TreeNodeBean {
         this.collection = collection;
     }
 
-    public Integer getNotation() {
+    public Notation getNotation() {
         return this.notation;
     }
 
-    public void setNotation(Integer notation) {
+    public void setNotation(Notation notation) {
         this.notation = notation;
     }
 

@@ -74,6 +74,12 @@
     <string name="fiche_personne_tab_details">Biographie</string>
     <string name="fiche_personne_biographie">Biographie :</string>
     <string name="fiche_personne_nom">Nom :</string>
+    <string name="notation_0">Pas d\'avis</string>
+    <string name="notation_1">Très mauvais</string>
+    <string name="notation_2">Mauvais</string>
+    <string name="notation_3">Moyen</string>
+    <string name="notation_4">Bien</string>
+    <string name="notation_5">Très bien</string>
 
     <string-array name="pref_formatTitreAlbum_entries">
         <item>Album (Serie - Tome)</item>

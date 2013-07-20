@@ -2,11 +2,11 @@ package org.tetram.bdtheque.data.bean.lite;
 
 import android.os.Parcel;
 
-import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
 import org.tetram.bdtheque.data.factories.lite.AlbumLiteAbstractFactory;
 import org.tetram.bdtheque.data.utils.Entity;
+import org.tetram.bdtheque.data.utils.Notation;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.gui.fragments.FicheAlbumFragment;
 import org.tetram.bdtheque.gui.utils.ShowFragmentClass;
@@ -30,7 +30,7 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
     private Boolean horsSerie;
     private Boolean integrale;
     private Integer moisParution, anneeParution;
-    private Integer notation;
+    private Notation notation = Notation.PAS_NOTE;
     private SerieLiteBean serie;
     private Boolean achat, complet;
 
@@ -83,7 +83,7 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
         this.integrale = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.moisParution = (Integer) in.readValue(Integer.class.getClassLoader());
         this.anneeParution = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.notation = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.notation = (Notation) in.readValue(Notation.class.getClassLoader());
         this.serie = in.readParcelable(SerieLiteBean.class.getClassLoader());
         this.achat = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.complet = (Boolean) in.readValue(Boolean.class.getClassLoader());
@@ -153,11 +153,11 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
         this.anneeParution = anneeParution;
     }
 
-    public Integer getNotation() {
+    public Notation getNotation() {
         return this.notation;
     }
 
-    public void setNotation(Integer notation) {
+    public void setNotation(Notation notation) {
         this.notation = notation;
     }
 
@@ -203,9 +203,8 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
         return getLabel(false, true);
     }
 
-    @Nullable
     @Override
     public Float getTreeNodeRating() {
-        return (this.notation == null) ? null : Float.valueOf(this.notation);
+        return (float) this.notation.getValue();
     }
 }

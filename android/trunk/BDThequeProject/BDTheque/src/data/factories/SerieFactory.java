@@ -10,6 +10,7 @@ import org.tetram.bdtheque.data.dao.EditeurDao;
 import org.tetram.bdtheque.data.dao.GenreDao;
 import org.tetram.bdtheque.data.dao.lite.AlbumLiteSerieDao;
 import org.tetram.bdtheque.data.dao.lite.CollectionLiteDao;
+import org.tetram.bdtheque.data.utils.Notation;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import java.net.URL;
@@ -25,7 +26,7 @@ public class SerieFactory extends BeanFactoryImpl<SerieBean> {
         bean.setId(getFieldAsUUID(cursor, DDLConstants.SERIES_ID));
         if (mustExists && (bean.getId() == null)) return false;
         bean.setTitre(getFieldAsString(cursor, DDLConstants.SERIES_TITRE));
-        bean.setNotation(getFieldAsInteger(cursor, DDLConstants.SERIES_NOTATION));
+        bean.setNotation(Notation.fromValue(getFieldAsInteger(cursor, DDLConstants.SERIES_NOTATION)));
         bean.setEditeur(new EditeurDao(context).getById(getFieldAsUUID(cursor, DDLConstants.EDITEURS_ID)));
         bean.setCollection(new CollectionLiteDao(context).getById(getFieldAsUUID(cursor, DDLConstants.COLLECTIONS_ID)));
         try {

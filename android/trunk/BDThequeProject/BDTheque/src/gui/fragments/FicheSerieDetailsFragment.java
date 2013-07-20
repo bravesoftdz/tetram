@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.R;
@@ -31,6 +32,8 @@ public class FicheSerieDetailsFragment extends FicheFragment {
 
         View v = inflater.inflate(R.layout.fiche_serie_details_fragment, container, false);
 
+        if (serie.getNotation() != null)
+            ((ImageView) v.findViewById(R.id.serie_notation)).setImageResource(serie.getNotation().getResDrawable());
         setUIElementURL(v, R.id.serie_titre, StringUtils.formatTitreAcceptNull(serie.getTitre()), serie.getSiteWeb(), 0);
         final EditeurBean editeur = serie.getEditeur();
         setUIElementURL(v, R.id.serie_editeur, StringUtils.formatTitreAcceptNull(editeur.getNom()), editeur.getSiteWeb(), 0);

@@ -5,6 +5,7 @@ import android.database.Cursor;
 
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
 import org.tetram.bdtheque.data.factories.BeanFactoryImpl;
+import org.tetram.bdtheque.data.utils.Notation;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldAsBoolean;
@@ -32,7 +33,7 @@ public abstract class AlbumLiteAbstractFactory<T extends AlbumLiteBean> extends 
         bean.setIntegrale(getFieldAsBoolean(cursor, DDLConstants.ALBUMS_INTEGRALE));
         bean.setMoisParution(getFieldAsInteger(cursor, DDLConstants.ALBUMS_MOISPARUTION));
         bean.setAnneeParution(getFieldAsInteger(cursor, DDLConstants.ALBUMS_ANNEEPARUTION));
-        bean.setNotation(getFieldAsInteger(cursor, DDLConstants.ALBUMS_NOTATION));
+        bean.setNotation(Notation.fromValue(getFieldAsInteger(cursor, DDLConstants.ALBUMS_NOTATION)));
         bean.setSerie(new SerieLiteFactory().loadFromCursor(context, cursor, false));
         bean.setAchat(getFieldAsBoolean(cursor, DDLConstants.ALBUMS_ACHAT));
         bean.setComplet(getFieldAsBoolean(cursor, DDLConstants.ALBUMS_COMPLET));
