@@ -3,7 +3,9 @@ package org.tetram.bdtheque.data.bean;
 import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.lite.EditeurLiteBean;
+import org.tetram.bdtheque.data.dao.EditeurDao;
 import org.tetram.bdtheque.data.factories.EditeurFactory;
+import org.tetram.bdtheque.data.utils.BeanDaoClass;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
@@ -12,6 +14,7 @@ import java.net.URL;
 
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.EDITEURS_TABLENAME, primaryKey = DDLConstants.EDITEURS_ID, factoryClass = EditeurFactory.class)
+@BeanDaoClass(EditeurDao.class)
 public class EditeurBean extends EditeurLiteBean {
 
     @Field(fieldName = DDLConstants.EDITEURS_SITEWEB)

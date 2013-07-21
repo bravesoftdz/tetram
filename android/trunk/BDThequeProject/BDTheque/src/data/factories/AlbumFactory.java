@@ -12,7 +12,7 @@ import java.util.List;
 
 public class AlbumFactory extends BeanFactoryImpl<AlbumBean> {
     @Override
-    public boolean loadFromCursor(Context context, Cursor cursor, AlbumBean bean) {
+    public boolean loadFromCursor(Context context, Cursor cursor, boolean inline, AlbumBean bean) {
         List<AuteurBean> auteurs = new AuteurDao(context).getAuteurs(bean);
         for (AuteurBean auteur : auteurs)
             switch (auteur.getMetier()) {

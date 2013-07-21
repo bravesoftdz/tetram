@@ -13,7 +13,7 @@ import java.util.List;
 
 public class SerieFactory extends BeanFactoryImpl<SerieBean> {
     @Override
-    public boolean loadFromCursor(Context context, Cursor cursor, SerieBean bean) {
+    public boolean loadFromCursor(Context context, Cursor cursor, boolean inline, SerieBean bean) {
         new GenreDao(context).loadListForSerie(bean.getGenres(), bean.getId());
 
         List<AuteurBean> auteurs = new AuteurDao(context).getAuteurs(bean);

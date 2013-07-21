@@ -4,8 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.tetram.bdtheque.data.bean.CommonBean;
-import org.tetram.bdtheque.data.bean.Notation;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
+import org.tetram.bdtheque.data.bean.enums.Notation;
 import org.tetram.bdtheque.data.dao.lite.SerieLiteDao;
 import org.tetram.bdtheque.data.factories.lite.SerieLiteFactory;
 import org.tetram.bdtheque.data.utils.BeanDaoClass;

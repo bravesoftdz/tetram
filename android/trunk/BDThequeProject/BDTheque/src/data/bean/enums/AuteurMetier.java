@@ -1,7 +1,8 @@
-package org.tetram.bdtheque.data.bean;
+package org.tetram.bdtheque.data.bean.enums;
 
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("UnusedDeclaration")
 public enum AuteurMetier {
     SCENARISTE(0), DESSINATEUR(1), COLORISTE(2);
 

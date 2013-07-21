@@ -20,6 +20,7 @@ public class CollectionLiteBean extends CommonBean implements TreeNodeBean {
 
     @Field(fieldName = DDLConstants.COLLECTIONS_NOM)
     private String nom;
+
     @Field(fieldName = DDLConstants.EDITEURS_ID)
     private EditeurLiteBean editeur;
 
@@ -58,25 +59,12 @@ public class CollectionLiteBean extends CommonBean implements TreeNodeBean {
         this.editeur = in.readParcelable(EditeurLiteBean.class.getClassLoader());
     }
 
-    public String getNom() {
-        return this.nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
     public String getLabel(boolean simple) {
         String result = StringUtils.formatTitre(this.nom);
         if (!simple)
             return StringUtils.ajoutString(result, StringUtils.formatTitre(this.editeur.getNom()), " ", "(", ")");
         else
             return result;
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void setEditeur(EditeurLiteBean editeur) {
-        this.editeur = editeur;
     }
 
     @Override
@@ -88,5 +76,22 @@ public class CollectionLiteBean extends CommonBean implements TreeNodeBean {
     @Override
     public Float getTreeNodeRating() {
         return null;
+    }
+
+    public String getNom() {
+        return this.nom;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public EditeurLiteBean getEditeur() {
+        return this.editeur;
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void setEditeur(EditeurLiteBean editeur) {
+        this.editeur = editeur;
     }
 }

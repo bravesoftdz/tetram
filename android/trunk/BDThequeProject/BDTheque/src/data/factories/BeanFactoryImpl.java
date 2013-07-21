@@ -80,34 +80,34 @@ public abstract class BeanFactoryImpl<T extends CommonBean> implements BeanFacto
     }
 
     @Override
-    public boolean loadFromCursor(Context context, Cursor cursor, T bean) {
+    public boolean loadFromCursor(Context context, Cursor cursor, boolean inline, T bean) {
         return true;
     }
 
     @SuppressWarnings("unchecked")
     @Nullable
     @Override
-    public T loadFromCursor(Context context, Cursor cursor) {
+    public T loadFromCursor(Context context, Cursor cursor, boolean inline) {
         T bean = null;
         try {
             bean = (T) this.beanClass.getConstructor().newInstance();
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         }
-        LoadResult res = loadByAnnotation(context, cursor, bean);
+        LoadResult res = loadByAnnotation(context, cursor, inline, bean);
         switch (res) {
             case NOTFOUND:
                 return null;
             case ERROR:
             case OK:
             default:
-                if (!loadFromCursor(context, cursor, bean))
+                if (!loadFromCursor(context, cursor, inline, bean))
                     return null;
                 return bean;
         }
     }
 
-    private void loadProperty(T bean, PropertyDescriptor descriptor, Cursor cursor, Context context) {
+    private void loadProperty(T bean, PropertyDescriptor descriptor, Cursor cursor, Context context, boolean inline) {
         final Class<?> fieldType = descriptor.field.getType();
         try {
             if (fieldType.equals(String.class))
@@ -127,20 +127,33 @@ public abstract class BeanFactoryImpl<T extends CommonBean> implements BeanFacto
                 else
                     descriptor.setter.invoke(bean, getFieldAsBool(cursor, descriptor.dbFieldName, defaultBooleanValue.value()));
             } else if (fieldType.isEnum()) {
-                Method enumFromValue = fieldType.getMethod("fromValue", int.class);
+                Method enumFromValue;
+                try {
+                    enumFromValue = fieldType.getMethod("fromValue", int.class);
+                } catch (NoSuchMethodException e) {
+                    enumFromValue = fieldType.getMethod("fromValue", Integer.class);
+                }
                 descriptor.setter.invoke(bean, enumFromValue.invoke(null, getFieldAsInteger(cursor, descriptor.dbFieldName)));
             } else if (CommonBean.class.isAssignableFrom(fieldType)) {
-                BeanDaoClass daoClass = descriptor.field.getAnnotation(BeanDaoClass.class);
-                if (daoClass == null)
-                    daoClass = fieldType.getAnnotation(BeanDaoClass.class);
-                if (daoClass == null) {
+                if (inline) {
                     Entity e = fieldType.getAnnotation(Entity.class);
                     BeanFactory factory = e.factoryClass().getConstructor().newInstance();
-                    descriptor.setter.invoke(bean, factory.loadFromCursor(context, cursor));
+                    descriptor.setter.invoke(bean, factory.loadFromCursor(context, cursor, inline));
                 } else {
-                    final CommonDao dao = DaoFactory.getDao(daoClass.value(), context);
-                    final UUID subBeanId = getFieldAsUUID(cursor, descriptor.dbFieldName);
-                    if (subBeanId != null) descriptor.setter.invoke(bean, dao.getById(subBeanId));
+                    BeanDaoClass daoClass = descriptor.field.getAnnotation(BeanDaoClass.class);
+                    if (daoClass == null)
+                        daoClass = fieldType.getAnnotation(BeanDaoClass.class);
+                    if (daoClass == null) {
+                        Entity e = fieldType.getAnnotation(Entity.class);
+                        BeanFactory factory = e.factoryClass().getConstructor().newInstance();
+                        descriptor.setter.invoke(bean, factory.loadFromCursor(context, cursor, inline));
+                    } else {
+                        final UUID subBeanId = getFieldAsUUID(cursor, descriptor.dbFieldName);
+                        if (subBeanId != null) {
+                            final CommonDao dao = DaoFactory.getDao(daoClass.value(), context);
+                            descriptor.setter.invoke(bean, dao.getById(subBeanId));
+                        }
+                    }
                 }
             } else if (fieldType.equals(UUID.class))
                 descriptor.setter.invoke(bean, getFieldAsUUID(cursor, descriptor.dbFieldName));
@@ -155,7 +168,7 @@ public abstract class BeanFactoryImpl<T extends CommonBean> implements BeanFacto
         }
     }
 
-    private LoadResult loadByAnnotation(Context context, Cursor cursor, T bean) {
+    private LoadResult loadByAnnotation(Context context, Cursor cursor, boolean inline, T bean) {
         List<PropertyDescriptor> fields = buildAnnotationList(this.beanClass);
         if (fields.isEmpty()) return LoadResult.ERROR;
 
@@ -163,7 +176,7 @@ public abstract class BeanFactoryImpl<T extends CommonBean> implements BeanFacto
         if (bean.getId() == null) return LoadResult.NOTFOUND;
 
         for (PropertyDescriptor property : fields)
-            loadProperty(bean, property, cursor, context);
+            loadProperty(bean, property, cursor, context, inline);
 
         return LoadResult.ERROR;
     }

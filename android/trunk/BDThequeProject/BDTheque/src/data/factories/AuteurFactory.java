@@ -7,5 +7,5 @@ import org.tetram.bdtheque.data.bean.AuteurBean;
 
 public abstract class AuteurFactory extends BeanFactoryImpl<AuteurBean> {
     @Override
-    public abstract boolean loadFromCursor(Context context, Cursor cursor, AuteurBean bean);
+    public abstract boolean loadFromCursor(Context context, Cursor cursor, boolean inline, AuteurBean bean);
 }

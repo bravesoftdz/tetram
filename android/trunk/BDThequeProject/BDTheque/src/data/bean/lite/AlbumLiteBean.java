@@ -3,8 +3,8 @@ package org.tetram.bdtheque.data.bean.lite;
 import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.CommonBean;
-import org.tetram.bdtheque.data.bean.Notation;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
+import org.tetram.bdtheque.data.bean.enums.Notation;
 import org.tetram.bdtheque.data.dao.lite.AlbumLiteDao;
 import org.tetram.bdtheque.data.factories.lite.AlbumLiteAbstractFactory;
 import org.tetram.bdtheque.data.utils.BeanDaoClass;

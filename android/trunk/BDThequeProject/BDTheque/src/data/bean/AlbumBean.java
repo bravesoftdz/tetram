@@ -3,7 +3,6 @@ package org.tetram.bdtheque.data.bean;
 import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
-import org.tetram.bdtheque.data.bean.lite.SerieLiteBean;
 import org.tetram.bdtheque.data.dao.AlbumDao;
 import org.tetram.bdtheque.data.factories.AlbumFactory;
 import org.tetram.bdtheque.data.utils.BeanDaoClass;
@@ -80,12 +79,7 @@ public class AlbumBean extends AlbumLiteBean {
         return this.serie;
     }
 
-    @Override
-    public void setSerie(SerieLiteBean serie) {
-        throw new UnsupportedOperationException();
-    }
-
-    @SuppressWarnings("OverloadedMethodsWithSameNumberOfParameters")
+    @SuppressWarnings({"OverloadedMethodsWithSameNumberOfParameters", "MethodOverloadsMethodOfSuperclass"})
     public void setSerie(SerieBean serie) {
         this.serie = serie;
     }

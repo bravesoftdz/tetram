@@ -68,7 +68,7 @@ public abstract class CommonDaoImpl<T extends CommonBean> extends DefaultDao<T> 
 
             try {
                 if (cursor.moveToFirst())
-                    return (T) this.beanFactory.loadFromCursor(getContext(), cursor);
+                    return (T) this.beanFactory.loadFromCursor(getContext(), cursor, false);
             } finally {
                 cursor.close();
             }
@@ -110,7 +110,7 @@ public abstract class CommonDaoImpl<T extends CommonBean> extends DefaultDao<T> 
 
             try {
                 if (cursor.moveToFirst())
-                    return (T) this.beanFactory.loadFromCursor(getContext(), cursor);
+                    return (T) this.beanFactory.loadFromCursor(getContext(), cursor, false);
             } finally {
                 cursor.close();
             }

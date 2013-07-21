@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.data.bean;
+package org.tetram.bdtheque.data.bean.enums;
 
 import android.content.Context;
 

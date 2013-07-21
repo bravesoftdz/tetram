@@ -14,7 +14,7 @@ import java.util.List;
 @SuppressWarnings("UnusedDeclaration")
 public class EditeurLiteDao extends CommonRepertoireDao<EditeurLiteBean, InitialeBean> {
 
-    EditeurLiteDao(Context context) {
+    public EditeurLiteDao(Context context) {
         super(context, InitialeBean.class, EditeurLiteFactory.class);
     }
 

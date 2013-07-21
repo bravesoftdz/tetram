@@ -58,7 +58,7 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
                 }
 
                 while (cursor.moveToNext()) {
-                    result.add(factory.loadFromCursor(getContext(), cursor));
+                    result.add(factory.loadFromCursor(getContext(), cursor, true));
                 }
                 return result;
             } finally {

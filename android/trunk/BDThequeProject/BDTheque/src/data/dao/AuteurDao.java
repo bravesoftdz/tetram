@@ -40,7 +40,7 @@ public class AuteurDao extends DefaultDao<AuteurBean> {
             try {
                 final AuteurAlbumFactory factory = new AuteurAlbumFactory();
                 while (cursor.moveToNext()) {
-                    AuteurBean auteur = factory.loadFromCursor(getContext(), cursor);
+                    AuteurBean auteur = factory.loadFromCursor(getContext(), cursor, false);
                     if (auteur != null)
                         list.add(auteur);
                 }
@@ -73,7 +73,7 @@ public class AuteurDao extends DefaultDao<AuteurBean> {
             try {
                 final AuteurSerieFactory factory = new AuteurSerieFactory();
                 while (cursor.moveToNext()) {
-                    AuteurBean auteur = factory.loadFromCursor(getContext(), cursor);
+                    AuteurBean auteur = factory.loadFromCursor(getContext(), cursor, false);
                     if (auteur != null)
                         list.add(auteur);
                 }

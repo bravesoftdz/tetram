@@ -2,8 +2,10 @@ package org.tetram.bdtheque.data.bean;
 
 import android.os.Parcel;
 
+import org.tetram.bdtheque.data.bean.enums.AuteurMetier;
 import org.tetram.bdtheque.data.bean.lite.PersonneLiteBean;
 
+@SuppressWarnings("UnusedDeclaration")
 public class AuteurBean extends CommonBean {
 
     private PersonneLiteBean personne;

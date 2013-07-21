@@ -75,17 +75,22 @@ public abstract class StringUtils {
         return ajoutString(chaine, ajout, espace, avant, "");
     }
 
-    @SuppressWarnings("StringConcatenationMissingWhitespace")
     public static String ajoutString(String chaine, final String ajout, final String espace, final String avant, final String apres) {
-        final String s;
-        if (chaine == null) chaine = "";
-        if (!"".equals(ajout)) {
-            s = avant + ajout + apres;
-            if (!"".equals(chaine)) chaine += espace;
-        } else {
-            s = ajout;
+        final StringBuilder stringBuilder = new StringBuilder(
+                ((chaine == null) ? 0 : chaine.length())
+                        + ((ajout == null) ? 0 : ajout.length())
+                        + ((espace == null) ? 0 : espace.length())
+                        + ((avant == null) ? 0 : avant.length())
+                        + ((apres == null) ? 0 : apres.length())
+        );
+        if (chaine != null) stringBuilder.append(chaine);
+        if ((ajout != null) && !"".equals(ajout)) {
+            if ((stringBuilder.length() > 0) && (espace != null)) stringBuilder.append(espace);
+            if (avant != null) stringBuilder.append(avant);
+            stringBuilder.append(ajout);
+            if (apres != null) stringBuilder.append(apres);
         }
-        return chaine + s;
+        return stringBuilder.toString();
     }
 
     public static String nonZero(final String s) {
@@ -283,7 +288,6 @@ end;
 
         decodeISBNRules();
 
-        String result;
 
         isbn = isbn.toUpperCase().substring(0, Math.min(isbn.length(), 13));
         String prefix = "978";
@@ -304,14 +308,23 @@ end;
         Integer publisherSize = getLengthForPrefix(isbnGroups, prefix + '-' + group, Integer.valueOf(s1));
         String publisher = s.substring(groupSize, groupSize + publisherSize);
 
-        result = group + '-' + publisher + '-' + s.substring(groupSize + publisherSize, 9) + '-' + s.substring(s.length() - 1, s.length());
-        if (isbn.length() > 10)
-            result = prefix + '-' + result;
-        return result;
+        StringBuilder result = new StringBuilder(13 + 4);
+        if (isbn.length() > 10) {
+            result.append(prefix);
+            result.append('-');
+        }
+        result.append(group);
+        result.append('-');
+        result.append(publisher);
+        result.append('-');
+        result.append(s.substring(groupSize + publisherSize, 9));
+        result.append('-');
+        result.append(s.substring(s.length() - 1, s.length()));
+        return result.toString();
     }
 
     public static String clearISBN(final String code) {
-        final StringBuilder result = new StringBuilder();
+        final StringBuilder result = new StringBuilder(code.length());
         for (final char c : code.toUpperCase().toCharArray())
             if (Character.isDigit(c) || (c == 'X')) {
                 result.append(c);
@@ -337,7 +350,15 @@ end;
         final String article = titre.substring(p + 1, p2).trim();
         final String debut = titre.substring(0, p);
         final String fin = titre.substring(p2 + 1);
-        return (article + (article.endsWith("'") ? "" : " ") + debut + fin).trim();
+
+        final StringBuilder result = new StringBuilder(titre.length());
+        result.append(article);
+        if (!article.endsWith("'"))
+            result.append(" ");
+        result.append(debut);
+        result.append(fin);
+
+        return result.toString().trim();
     }
 
     public static String trimRight(final String str) {

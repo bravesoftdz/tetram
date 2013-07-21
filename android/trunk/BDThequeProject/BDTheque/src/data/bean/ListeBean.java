@@ -2,7 +2,7 @@ package org.tetram.bdtheque.data.bean;
 
 import android.os.Parcel;
 
-import org.jetbrains.annotations.Nullable;
+import org.tetram.bdtheque.data.bean.enums.ListeCategorie;
 import org.tetram.bdtheque.data.dao.ListeDao;
 import org.tetram.bdtheque.data.factories.ListeFactory;
 import org.tetram.bdtheque.data.utils.BeanDaoClass;
@@ -15,33 +15,6 @@ import org.tetram.bdtheque.utils.StringUtils;
 @Entity(tableName = DDLConstants.LISTES_TABLENAME, primaryKey = DDLConstants.LISTES_ID, factoryClass = ListeFactory.class)
 @BeanDaoClass(ListeDao.class)
 public class ListeBean extends CommonBean {
-    public enum ListeCategorie {
-        ETAT(1),
-        RELIURE(2),
-        TYPE_EDITION(3),
-        ORIENTATION(4),
-        FORMAT_EDITION(5),
-        CATEGORIE_IMAGE(6),
-        CATEGORIE_PARABD(7),
-        SENS_LECTURE(8);
-
-        private final int value;
-
-        ListeCategorie(int value) {
-            this.value = value;
-        }
-
-        @Nullable
-        public static ListeCategorie fromValue(int value) {
-            for (ListeCategorie type : values())
-                if (type.value == value) return type;
-            return null;
-        }
-
-        public int getValue() {
-            return this.value;
-        }
-    }
 
     @Field(fieldName = DDLConstants.LISTES_REF)
     private Integer ref;

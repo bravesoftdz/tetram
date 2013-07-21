@@ -8,8 +8,8 @@ import org.tetram.bdtheque.data.bean.CommonBean;
 
 public interface BeanFactory<T extends CommonBean> {
     @Nullable
-    public T loadFromCursor(Context context, Cursor cursor);
+    public T loadFromCursor(Context context, Cursor cursor, boolean inline);
 
     @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
-    public boolean loadFromCursor(Context context, Cursor cursor, T bean);
+    public boolean loadFromCursor(Context context, Cursor cursor, boolean inline, T bean);
 }

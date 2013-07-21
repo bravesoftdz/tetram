@@ -34,7 +34,7 @@ public class GenreDao extends CommonDaoImpl<GenreBean> {
             );
             try {
                 while (cursor.moveToNext()) {
-                    GenreBean genre = (GenreBean) this.beanFactory.loadFromCursor(getContext(), cursor);
+                    GenreBean genre = (GenreBean) this.beanFactory.loadFromCursor(getContext(), cursor, false);
                     if (genre != null)
                         list.add(genre);
                 }
