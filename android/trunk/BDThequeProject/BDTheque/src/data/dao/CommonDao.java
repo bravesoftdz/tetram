@@ -19,4 +19,6 @@ public interface CommonDao<T extends CommonBean> {
 
     @Nullable
     T getByParams(Object... param);
+
+    T saveOrUpdate(T bean);
 }

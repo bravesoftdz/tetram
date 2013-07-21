@@ -68,7 +68,7 @@ public abstract class CommonDaoImpl<T extends CommonBean> extends DefaultDao<T> 
 
             try {
                 if (cursor.moveToFirst())
-                    return (T) this.beanFactory.loadFromCursor(getContext(), cursor, true);
+                    return (T) this.beanFactory.loadFromCursor(getContext(), cursor);
             } finally {
                 cursor.close();
             }
@@ -110,7 +110,7 @@ public abstract class CommonDaoImpl<T extends CommonBean> extends DefaultDao<T> 
 
             try {
                 if (cursor.moveToFirst())
-                    return (T) this.beanFactory.loadFromCursor(getContext(), cursor, true);
+                    return (T) this.beanFactory.loadFromCursor(getContext(), cursor);
             } finally {
                 cursor.close();
             }
@@ -119,6 +119,29 @@ public abstract class CommonDaoImpl<T extends CommonBean> extends DefaultDao<T> 
         }
 
         return null;
+    }
+
+    @Override
+    public T saveOrUpdate(T bean) {
+        SQLiteDatabase wdb = getDatabaseHelper().getWritableDatabase();
+        try {
+            if (bean.getId() == null)
+                wdb.insert(
+                        this.tableName,
+                        null,
+                        null
+                );
+            else
+                wdb.update(
+                        this.tableName,
+                        null,
+                        this.primaryKey[0] + " = ?",
+                        new String[]{StringUtils.UUIDToGUIDString(bean.getId())}
+                );
+        } finally {
+            wdb.close();
+        }
+        return bean;
     }
 
 }

@@ -5,6 +5,7 @@ import android.os.Parcel;
 import org.tetram.bdtheque.data.bean.lite.PersonneLiteBean;
 import org.tetram.bdtheque.data.factories.PersonneFactory;
 import org.tetram.bdtheque.data.utils.Entity;
+import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import java.net.URL;
@@ -13,7 +14,9 @@ import java.net.URL;
 @Entity(tableName = DDLConstants.PERSONNES_TABLENAME, primaryKey = DDLConstants.PERSONNES_ID, factoryClass = PersonneFactory.class)
 public class PersonneBean extends PersonneLiteBean {
 
+    @Field(fieldName = DDLConstants.PERSONNES_SITEWEB)
     private URL siteWeb;
+    @Field(fieldName = DDLConstants.PERSONNES_BIOGRAPHIE)
     private String biographie;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

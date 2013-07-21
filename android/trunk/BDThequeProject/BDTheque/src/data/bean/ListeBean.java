@@ -3,13 +3,17 @@ package org.tetram.bdtheque.data.bean;
 import android.os.Parcel;
 
 import org.jetbrains.annotations.Nullable;
+import org.tetram.bdtheque.data.dao.ListeDao;
 import org.tetram.bdtheque.data.factories.ListeFactory;
+import org.tetram.bdtheque.data.utils.BeanDaoClass;
 import org.tetram.bdtheque.data.utils.Entity;
+import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.LISTES_TABLENAME, primaryKey = DDLConstants.LISTES_ID, factoryClass = ListeFactory.class)
+@BeanDaoClass(ListeDao.class)
 public class ListeBean extends CommonBean {
     public enum ListeCategorie {
         ETAT(1),
@@ -39,10 +43,15 @@ public class ListeBean extends CommonBean {
         }
     }
 
+    @Field(fieldName = DDLConstants.LISTES_REF)
     private Integer ref;
+    @Field(fieldName = DDLConstants.LISTES_CATEGORIE)
     private ListeCategorie categorie;
+    @Field(fieldName = DDLConstants.LISTES_ORDRE)
     private Integer ordre;
+    @Field(fieldName = DDLConstants.LISTES_DEFAUT)
     private Integer defaut;
+    @Field(fieldName = DDLConstants.LISTES_LIBELLE)
     private String libelle;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

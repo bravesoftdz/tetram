@@ -26,7 +26,7 @@ public class FichePersonneBibliographieFragment extends FicheFragment {
         View view = inflater.inflate(R.layout.fiche_personne_bibliographie_fragment, container, false);
 
         ExpandableListView listBibliographie = (ExpandableListView) view.findViewById(R.id.personne_bibliographie);
-        final BibliographieDao dao = DaoFactory.getRepertoireDao(BibliographieDao.class, getActivity());
+        final BibliographieDao dao = DaoFactory.getDao(BibliographieDao.class, getActivity());
         dao.setPersonne(bean);
         listBibliographie.setAdapter(new RepertoireAdapter(getActivity(), dao));
         listBibliographie.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {

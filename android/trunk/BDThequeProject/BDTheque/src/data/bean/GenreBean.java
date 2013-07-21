@@ -4,12 +4,14 @@ import android.os.Parcel;
 
 import org.tetram.bdtheque.data.factories.GenreFactory;
 import org.tetram.bdtheque.data.utils.Entity;
+import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.GENRES_TABLENAME, primaryKey = DDLConstants.GENRES_ID, factoryClass = GenreFactory.class)
 public class GenreBean extends CommonBean {
 
+    @Field(fieldName = DDLConstants.GENRES_NOM)
     private String nom;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

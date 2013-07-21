@@ -6,14 +6,20 @@ import android.os.Parcelable;
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
+import org.tetram.bdtheque.data.dao.lite.EditeurLiteDao;
 import org.tetram.bdtheque.data.factories.lite.EditeurLiteFactory;
+import org.tetram.bdtheque.data.utils.BeanDaoClass;
 import org.tetram.bdtheque.data.utils.Entity;
+import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.EDITEURS_TABLENAME, primaryKey = DDLConstants.EDITEURS_ID, factoryClass = EditeurLiteFactory.class)
+@BeanDaoClass(EditeurLiteDao.class)
 public class EditeurLiteBean extends CommonBean implements TreeNodeBean {
+
+    @Field(fieldName = DDLConstants.EDITEURS_NOM)
     private String nom;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

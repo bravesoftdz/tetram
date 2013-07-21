@@ -4,8 +4,11 @@ import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
 import org.tetram.bdtheque.data.bean.lite.SerieLiteBean;
+import org.tetram.bdtheque.data.dao.AlbumDao;
 import org.tetram.bdtheque.data.factories.AlbumFactory;
+import org.tetram.bdtheque.data.utils.BeanDaoClass;
 import org.tetram.bdtheque.data.utils.Entity;
+import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import java.util.ArrayList;
@@ -13,10 +16,14 @@ import java.util.List;
 
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.ALBUMS_TABLENAME, primaryKey = DDLConstants.ALBUMS_ID, factoryClass = AlbumFactory.class)
+@BeanDaoClass(AlbumDao.class)
 public class AlbumBean extends AlbumLiteBean {
 
+    @Field(fieldName = DDLConstants.ALBUMS_SUJET)
     private String sujet;
+    @Field(fieldName = DDLConstants.ALBUMS_NOTES)
     private String notes;
+    @Field(fieldName = DDLConstants.SERIES_ID)
     private SerieBean serie;
     private final List<AuteurBean> scenaristes = new ArrayList<>();
     private final List<AuteurBean> dessinateurs = new ArrayList<>();

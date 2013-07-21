@@ -4,10 +4,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.tetram.bdtheque.data.bean.CommonBean;
+import org.tetram.bdtheque.data.bean.Notation;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
+import org.tetram.bdtheque.data.dao.lite.SerieLiteDao;
 import org.tetram.bdtheque.data.factories.lite.SerieLiteFactory;
+import org.tetram.bdtheque.data.utils.BeanDaoClass;
 import org.tetram.bdtheque.data.utils.Entity;
-import org.tetram.bdtheque.data.utils.Notation;
+import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.gui.fragments.FicheSerieFragment;
 import org.tetram.bdtheque.gui.utils.ShowFragmentClass;
@@ -16,11 +19,16 @@ import org.tetram.bdtheque.utils.StringUtils;
 @SuppressWarnings("UnusedDeclaration")
 @ShowFragmentClass(FicheSerieFragment.class)
 @Entity(tableName = DDLConstants.SERIES_TABLENAME, primaryKey = DDLConstants.SERIES_ID, factoryClass = SerieLiteFactory.class)
+@BeanDaoClass(SerieLiteDao.class)
 public class SerieLiteBean extends CommonBean implements TreeNodeBean {
 
+    @Field(fieldName = DDLConstants.SERIES_TITRE)
     private String titre;
+    @Field(fieldName = DDLConstants.COLLECTIONS_ID)
     private CollectionLiteBean collection;
+    @Field(fieldName = DDLConstants.EDITEURS_ID)
     private EditeurLiteBean editeur;
+    @Field(fieldName = DDLConstants.SERIES_NOTATION)
     private Notation notation;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

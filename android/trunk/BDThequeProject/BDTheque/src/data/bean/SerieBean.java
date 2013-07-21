@@ -4,8 +4,11 @@ import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
 import org.tetram.bdtheque.data.bean.lite.SerieLiteBean;
+import org.tetram.bdtheque.data.dao.SerieDao;
 import org.tetram.bdtheque.data.factories.SerieFactory;
+import org.tetram.bdtheque.data.utils.BeanDaoClass;
 import org.tetram.bdtheque.data.utils.Entity;
+import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -15,8 +18,10 @@ import java.util.List;
 
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.SERIES_TABLENAME, primaryKey = DDLConstants.SERIES_ID, factoryClass = SerieFactory.class)
+@BeanDaoClass(SerieDao.class)
 public class SerieBean extends SerieLiteBean {
 
+    @Field(fieldName = DDLConstants.SERIES_SITEWEB)
     private URL siteWeb;
     private final List<GenreBean> genres = new ArrayList<>();
 
@@ -24,11 +29,14 @@ public class SerieBean extends SerieLiteBean {
     private final List<AuteurBean> dessinateurs = new ArrayList<>();
     private final List<AuteurBean> coloristes = new ArrayList<>();
 
+    @Field(fieldName = DDLConstants.EDITEURS_ID)
     private EditeurBean editeur;
 
     private final List<AlbumLiteBean> albums = new ArrayList<>();
 
+    @Field(fieldName = DDLConstants.SERIES_SUJET)
     private String sujet;
+    @Field(fieldName = DDLConstants.SERIES_NOTES)
     private String notes;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

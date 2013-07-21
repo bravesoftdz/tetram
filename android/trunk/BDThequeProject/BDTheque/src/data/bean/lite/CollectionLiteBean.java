@@ -5,16 +5,22 @@ import android.os.Parcel;
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
+import org.tetram.bdtheque.data.dao.lite.CollectionLiteDao;
 import org.tetram.bdtheque.data.factories.lite.CollectionLiteFactory;
+import org.tetram.bdtheque.data.utils.BeanDaoClass;
 import org.tetram.bdtheque.data.utils.Entity;
+import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.COLLECTIONS_TABLENAME, primaryKey = DDLConstants.COLLECTIONS_ID, factoryClass = CollectionLiteFactory.class)
+@BeanDaoClass(CollectionLiteDao.class)
 public class CollectionLiteBean extends CommonBean implements TreeNodeBean {
 
+    @Field(fieldName = DDLConstants.COLLECTIONS_NOM)
     private String nom;
+    @Field(fieldName = DDLConstants.EDITEURS_ID)
     private EditeurLiteBean editeur;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

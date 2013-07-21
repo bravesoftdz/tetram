@@ -4,7 +4,9 @@ import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.lite.CollectionLiteBean;
 import org.tetram.bdtheque.data.factories.EditionFactory;
+import org.tetram.bdtheque.data.utils.DefaultBooleanValue;
 import org.tetram.bdtheque.data.utils.Entity;
+import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import java.util.Date;
@@ -13,27 +15,54 @@ import java.util.Date;
 @Entity(tableName = DDLConstants.EDITIONS_TABLENAME, primaryKey = DDLConstants.EDITIONS_ID, factoryClass = EditionFactory.class)
 public class EditionBean extends CommonBean {
 
+    @Field(fieldName = DDLConstants.EDITIONS_ISBN)
     private String isbn;
+    @Field(fieldName = DDLConstants.EDITEURS_ID)
     private EditeurBean editeur;
+    @Field(fieldName = DDLConstants.COLLECTIONS_ID)
     private CollectionLiteBean collection;
-    private boolean stock;
-    private boolean couleur;
-    private boolean dedicace;
-    private boolean offert;
+    @Field(fieldName = DDLConstants.EDITIONS_ANNEEEDITION)
     private Integer annee;
+    @Field(fieldName = DDLConstants.EDITIONS_STOCK)
+    @DefaultBooleanValue(true)
+    private boolean stock;
+    @Field(fieldName = DDLConstants.EDITIONS_COULEUR)
+    @DefaultBooleanValue(true)
+    private boolean couleur;
+    @Field(fieldName = DDLConstants.EDITIONS_DEDICACE)
+    @DefaultBooleanValue(false)
+    private boolean dedicace;
+    @Field(fieldName = DDLConstants.EDITIONS_OFFERT)
+    @DefaultBooleanValue(false)
+    private boolean offert;
+    @Field(fieldName = DDLConstants.EDITIONS_DATEACHAT)
     private Date dateAquisition;
+    @Field(fieldName = DDLConstants.EDITIONS_NOTES)
     private String notes;
+    @Field(fieldName = DDLConstants.EDITIONS_NOMBREDEPAGES)
     private Integer pages;
+    @Field(fieldName = DDLConstants.EDITIONS_NUMEROPERSO)
     private String numeroPerso;
+    @Field(fieldName = DDLConstants.EDITIONS_GRATUIT)
+    @DefaultBooleanValue(false)
     private boolean gratuit;
+    @Field(fieldName = DDLConstants.EDITIONS_PRIX)
     private Double prix;
-    private Double prixCote;
+    @Field(fieldName = DDLConstants.EDITIONS_ANNEECOTE)
     private Integer anneeCote;
+    @Field(fieldName = DDLConstants.EDITIONS_PRIXCOTE)
+    private Double prixCote;
+    @Field(fieldName = DDLConstants.EDITIONS_TYPEEDITION)
     private ListeBean typeEdition;
+    @Field(fieldName = DDLConstants.EDITIONS_RELIURE)
     private ListeBean reliure;
+    @Field(fieldName = DDLConstants.EDITIONS_ETAT)
     private ListeBean etat;
+    @Field(fieldName = DDLConstants.EDITIONS_ORIENTATION)
     private ListeBean orientation;
+    @Field(fieldName = DDLConstants.EDITIONS_FORMATEDITION)
     private ListeBean formatEdition;
+    @Field(fieldName = DDLConstants.EDITIONS_SENSLECTURE)
     private ListeBean sensLecture;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
@@ -111,11 +140,11 @@ public class EditionBean extends CommonBean {
         this.sensLecture = in.readParcelable(ListeBean.class.getClassLoader());
     }
 
-    public String getISBN() {
+    public String getIsbn() {
         return this.isbn;
     }
 
-    public void setISBN(String isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 

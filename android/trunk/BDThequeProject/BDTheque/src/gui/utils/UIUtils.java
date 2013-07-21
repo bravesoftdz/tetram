@@ -49,7 +49,7 @@ public abstract class UIUtils {
 
     @Nullable
     public static <T> View setUIElement(View parent, int resId, T value, int resRowId) {
-        if ((resRowId != -1) && isEmpty(value)) {
+        if ((resRowId > 0) && isEmpty(value)) {
             parent.findViewById(resRowId).setVisibility(View.GONE);
             return null;
         }

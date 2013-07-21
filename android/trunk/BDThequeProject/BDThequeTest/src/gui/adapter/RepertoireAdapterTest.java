@@ -13,7 +13,7 @@ public class RepertoireAdapterTest extends AndroidTestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        this.adapter = new RepertoireAdapter(getContext(), DaoFactory.getRepertoireDao(AlbumLiteDao.class, getContext()));
+        this.adapter = new RepertoireAdapter(getContext(), DaoFactory.getDao(AlbumLiteDao.class, getContext()));
         this.adapter.getSections();
     }
 

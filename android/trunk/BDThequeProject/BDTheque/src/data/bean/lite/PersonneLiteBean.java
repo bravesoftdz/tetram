@@ -7,6 +7,7 @@ import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
 import org.tetram.bdtheque.data.factories.lite.PersonneLiteFactory;
 import org.tetram.bdtheque.data.utils.Entity;
+import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.gui.fragments.FichePersonneFragment;
 import org.tetram.bdtheque.gui.utils.ShowFragmentClass;
@@ -17,6 +18,7 @@ import org.tetram.bdtheque.utils.StringUtils;
 @Entity(tableName = DDLConstants.PERSONNES_TABLENAME, primaryKey = DDLConstants.PERSONNES_ID, factoryClass = PersonneLiteFactory.class)
 public class PersonneLiteBean extends CommonBean implements TreeNodeBean {
 
+    @Field(fieldName = DDLConstants.PERSONNES_NOM)
     private String nom;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

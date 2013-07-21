@@ -61,7 +61,7 @@ public class FicheAlbumEditionsFragment extends FicheFragment {
 
     private void loadEdition(EditionBean edition) {
         this.currentEdition = edition;
-        setUIElement(this.view, R.id.edition_isbn, StringUtils.formatISBN(this.currentEdition.getISBN()));
+        setUIElement(this.view, R.id.edition_isbn, StringUtils.formatISBN(this.currentEdition.getIsbn()));
 
         final EditeurBean editeur = this.currentEdition.getEditeur();
         setUIElementURL(this.view, R.id.edition_editeur, StringUtils.formatTitreAcceptNull(editeur.getNom()), editeur.getSiteWeb(), 0);

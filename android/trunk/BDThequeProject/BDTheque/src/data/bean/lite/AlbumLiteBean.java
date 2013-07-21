@@ -3,10 +3,13 @@ package org.tetram.bdtheque.data.bean.lite;
 import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.CommonBean;
+import org.tetram.bdtheque.data.bean.Notation;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
+import org.tetram.bdtheque.data.dao.lite.AlbumLiteDao;
 import org.tetram.bdtheque.data.factories.lite.AlbumLiteAbstractFactory;
+import org.tetram.bdtheque.data.utils.BeanDaoClass;
 import org.tetram.bdtheque.data.utils.Entity;
-import org.tetram.bdtheque.data.utils.Notation;
+import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.gui.fragments.FicheAlbumFragment;
 import org.tetram.bdtheque.gui.utils.ShowFragmentClass;
@@ -15,6 +18,7 @@ import org.tetram.bdtheque.utils.StringUtils;
 @SuppressWarnings("UnusedDeclaration")
 @ShowFragmentClass(FicheAlbumFragment.class)
 @Entity(tableName = DDLConstants.ALBUMS_TABLENAME, primaryKey = DDLConstants.ALBUMS_ID, factoryClass = AlbumLiteAbstractFactory.AlbumLiteFactory.class)
+@BeanDaoClass(AlbumLiteDao.class)
 public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
 
     public static class AlbumWithoutSerieLiteBean extends AlbumLiteBean {
@@ -24,15 +28,30 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
         }
     }
 
+    @Field(fieldName = DDLConstants.ALBUMS_TITRE)
     private String titre;
+    @Field(fieldName = DDLConstants.ALBUMS_TOME)
     private Integer tome;
-    private Integer tomeDebut, tomeFin;
+    @Field(fieldName = DDLConstants.ALBUMS_TOMEDEBUT)
+    private Integer tomeDebut;
+    @Field(fieldName = DDLConstants.ALBUMS_TOMEFIN)
+    private Integer tomeFin;
+    @Field(fieldName = DDLConstants.ALBUMS_HORSSERIE)
     private Boolean horsSerie;
+    @Field(fieldName = DDLConstants.ALBUMS_INTEGRALE)
     private Boolean integrale;
-    private Integer moisParution, anneeParution;
+    @Field(fieldName = DDLConstants.ALBUMS_MOISPARUTION)
+    private Integer moisParution;
+    @Field(fieldName = DDLConstants.ALBUMS_ANNEEPARUTION)
+    private Integer anneeParution;
+    @Field(fieldName = DDLConstants.ALBUMS_NOTATION)
     private Notation notation = Notation.PAS_NOTE;
+    @Field(fieldName = DDLConstants.SERIES_ID)
     private SerieLiteBean serie;
-    private Boolean achat, complet;
+    @Field(fieldName = DDLConstants.ALBUMS_ACHAT)
+    private Boolean achat;
+    @Field(fieldName = DDLConstants.ALBUMS_COMPLET)
+    private Boolean complet;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<AlbumLiteBean> CREATOR = new Creator<AlbumLiteBean>() {
@@ -87,6 +106,29 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
         this.serie = in.readParcelable(SerieLiteBean.class.getClassLoader());
         this.achat = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.complet = (Boolean) in.readValue(Boolean.class.getClassLoader());
+    }
+
+    public String getLabel(boolean simple, boolean avecSerie) {
+        return StringUtils.formatTitreAlbum(
+                simple,
+                avecSerie,
+                this.titre,
+                (this.serie != null) ? this.serie.getTitre() : null,
+                this.tome,
+                this.tomeDebut,
+                this.tomeFin,
+                this.integrale,
+                this.horsSerie);
+    }
+
+    @Override
+    public String getTreeNodeText() {
+        return getLabel(false, true);
+    }
+
+    @Override
+    public Float getTreeNodeRating() {
+        return (float) this.notation.getValue();
     }
 
     public String getTitre() {
@@ -183,28 +225,5 @@ public class AlbumLiteBean extends CommonBean implements TreeNodeBean {
 
     public void setComplet(Boolean complet) {
         this.complet = complet;
-    }
-
-    public String getLabel(boolean simple, boolean avecSerie) {
-        return StringUtils.formatTitreAlbum(
-                simple,
-                avecSerie,
-                this.titre,
-                (this.serie != null) ? this.serie.getTitre() : null,
-                this.tome,
-                this.tomeDebut,
-                this.tomeFin,
-                this.integrale,
-                this.horsSerie);
-    }
-
-    @Override
-    public String getTreeNodeText() {
-        return getLabel(false, true);
-    }
-
-    @Override
-    public Float getTreeNodeRating() {
-        return (float) this.notation.getValue();
     }
 }
