@@ -1,8 +1,6 @@
 package org.tetram.bdtheque.database;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -58,32 +56,18 @@ public class BDDatabaseHelper extends SQLiteOpenHelper {
         switch (oldVersion) {
             case 0:
             case 1:
-                final DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case DialogInterface.BUTTON_POSITIVE:
-                                Toast.makeText(BDThequeApplication.getInstance().getApplicationContext(), "Chargement des données initiales...", Toast.LENGTH_LONG).show();
-                                runSQL(db, "sql/init_editeurs.sql");
-                                runSQL(db, "sql/init_collections.sql");
-                                runSQL(db, "sql/init_series.sql");
-                                runSQL(db, "sql/init_albums.sql");
-                                runSQL(db, "sql/init_editions.sql");
-                                runSQL(db, "sql/init_personnes.sql");
-                                runSQL(db, "sql/init_auteurs.sql");
-                                runSQL(db, "sql/init_auteurs_series.sql");
-                                runSQL(db, "sql/init_genres.sql");
-                                runSQL(db, "sql/init_genres_series.sql");
-                                runSQL(db, "sql/init_listes.sql");
-                            case DialogInterface.BUTTON_NEGATIVE:
-                        }
-                    }
-                };
-                new AlertDialog.Builder(BDThequeApplication.getInstance())
-                        .setMessage("Voulez-vous charger les données de présentation ?")
-                        .setPositiveButton(android.R.string.yes, dialogClickListener)
-                        .setNegativeButton(android.R.string.no, dialogClickListener)
-                        .show();
+                Toast.makeText(BDThequeApplication.getInstance().getApplicationContext(), "Chargement des données initiales...", Toast.LENGTH_LONG).show();
+                runSQL(db, "sql/init_editeurs.sql");
+                runSQL(db, "sql/init_collections.sql");
+                runSQL(db, "sql/init_series.sql");
+                runSQL(db, "sql/init_albums.sql");
+                runSQL(db, "sql/init_editions.sql");
+                runSQL(db, "sql/init_personnes.sql");
+                runSQL(db, "sql/init_auteurs.sql");
+                runSQL(db, "sql/init_auteurs_series.sql");
+                runSQL(db, "sql/init_genres.sql");
+                runSQL(db, "sql/init_genres_series.sql");
+                runSQL(db, "sql/init_listes.sql");
 //            case 2:
 //                runSQL(db, "sql/upgrade_to_v3.sql");
             default: {

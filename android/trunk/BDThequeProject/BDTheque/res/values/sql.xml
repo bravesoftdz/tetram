@@ -320,6 +320,10 @@ from
         gs.id_serie = s.id_serie
     left join genres g on
         gs.id_genre = g.id_genre
+    left join editeurs e on
+        s.id_editeur = e.id_editeur
+    left join collections c on
+        s.id_collection = c.id_collection
 where
     g.id_genre %s
 order by
