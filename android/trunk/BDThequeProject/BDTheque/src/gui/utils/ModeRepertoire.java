@@ -16,6 +16,7 @@ import org.tetram.bdtheque.data.dao.lite.AlbumLiteGenreDao;
 import org.tetram.bdtheque.data.dao.lite.AlbumLiteSerieDao;
 import org.tetram.bdtheque.data.dao.lite.PersonneLiteDao;
 import org.tetram.bdtheque.data.dao.lite.SerieLiteDao;
+import org.tetram.bdtheque.data.dao.lite.SerieLiteGenreDao;
 import org.tetram.bdtheque.gui.adapters.MenuEntry;
 
 @SuppressWarnings("UnusedDeclaration")
@@ -26,7 +27,8 @@ public enum ModeRepertoire {
     REPERTOIRE_ALBUMS_GENRE(13, R.string.menuRepertoireAlbumsGenre, AlbumLiteGenreDao.class, AlbumLiteBean.class, false),
     REPERTOIRE_ALBUMS_ANNEE(14, R.string.menuRepertoireAlbumsAnnee, AlbumLiteAnneeDao.class, AlbumLiteBean.class, false),
     REPERTOIRE_ALBUMS_COLLECTION(15, R.string.menuRepertoireAlbumsCollection, AlbumLiteCollectionDao.class, AlbumLiteBean.class, false),
-    REPERTOIRE_SERIES(20, R.string.menuRepertoireSeries, SerieLiteDao.class, SerieLiteBean.class, false),
+    REPERTOIRE_SERIES_TITRE(20, R.string.menuRepertoireSeriesTitre, SerieLiteDao.class, SerieLiteBean.class, false),
+    REPERTOIRE_SERIES_GENRE(21, R.string.menuRepertoireSeriesGenre, SerieLiteGenreDao.class, SerieLiteBean.class, false),
     REPERTOIRE_PERSONNES(30, R.string.menuRepertoirePersonnes, PersonneLiteDao.class, PersonneLiteBean.class, false);
 
     private final int value;

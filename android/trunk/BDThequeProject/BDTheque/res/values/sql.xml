@@ -259,7 +259,7 @@ from
     left join series s on
         s.id_serie = a.id_serie
     left join genreseries gs on
-        gs.id_serie = a.id_serie
+        gs.id_serie = s.id_serie
     left join genres g on
         gs.id_genre = g.id_genre
 where
@@ -281,7 +281,7 @@ from
     left join series s on
         s.id_serie = a.id_serie
     left join genreseries gs on
-        gs.id_serie = a.id_serie
+        gs.id_serie = s.id_serie
     left join genres g on
         gs.id_genre = g.id_genre
 where
@@ -291,6 +291,39 @@ order by
     a.horsserie, a.integrale, a.tome,
     a.tomedebut, a.tomefin,
     a.anneeparution, a.moisparution
+    ]]></string>
+
+    <string name="sql_genres_series"><![CDATA[
+select
+    g.genre, count(s.id_serie), g.id_genre
+from
+    series s
+    left join genreseries gs on
+        gs.id_serie = s.id_serie
+    left join genres g on
+        gs.id_genre = g.id_genre
+where
+    1 = 1
+    %s
+group by
+    g.genre, g.id_genre
+order by
+    g.genre collate nocase
+    ]]></string>
+    <string name="sql_series_by_genre"><![CDATA[
+select
+    s.id_serie, s.titreserie,
+    s.id_editeur, e.nomediteur, s.id_collection, c.nomcollection
+from
+    series s
+    left join genreseries gs on
+        gs.id_serie = s.id_serie
+    left join genres g on
+        gs.id_genre = g.id_genre
+where
+    g.id_genre %s
+order by
+    s.titreserie collate nocase, e.nomediteur collate nocase, c.nomcollection collate nocase
     ]]></string>
 
     <string name="sql_series_albums_for_auteur"><![CDATA[
