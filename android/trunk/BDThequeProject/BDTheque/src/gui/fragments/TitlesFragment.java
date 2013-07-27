@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ExpandableListView;
 
+import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.dao.DaoFactory;
@@ -17,7 +18,6 @@ import org.tetram.bdtheque.gui.utils.ModeRepertoire;
 import org.tetram.bdtheque.gui.utils.ShowFragmentClass;
 
 public class TitlesFragment extends ExpandableListFragment {
-    boolean dualPane;
     Integer curChildPosition, curGroupPosition;
 
     private InitialeRepertoireDao<?, ?> repertoireDao;
@@ -77,7 +77,7 @@ public class TitlesFragment extends ExpandableListFragment {
     }
 
     void showDetails(CommonBean bean) {
-        if (this.dualPane) {
+        if (BDThequeApplication.getInstance().isRepertoireDualPanel()) {
             // Check what fragments is currently shown, replace if needed.
             FicheFragment details = (FicheFragment) getFragmentManager().findFragmentById(R.id.details);
             if ((details == null) || (!details.getShownId().equals(bean.getId()))) {
@@ -93,7 +93,6 @@ public class TitlesFragment extends ExpandableListFragment {
                 ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                 ft.commit();
             }
-
         } else {
             // Otherwise we need to launch a new activity to display
             // the dialog fragments with selected text.
@@ -119,16 +118,9 @@ public class TitlesFragment extends ExpandableListFragment {
         setListAdapter(new RepertoireAdapter(getActivity(), this.getRepertoireDao()));
         onContentChanged();
 
-        // Check to see if we have a frame in which to embed the details
-        // fragments directly in the containing UI.
-        View detailsFrame = getActivity().findViewById(R.id.details);
-        this.dualPane = (detailsFrame != null) && (detailsFrame.getVisibility() == View.VISIBLE);
-
         if (this.curChildPosition != null) {
-            // In dual-pane mode, the list view highlights the selected item.
-            if (this.dualPane)
+            if (BDThequeApplication.getInstance().isRepertoireDualPanel())
                 this.expandableListView.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-            // Make sure our UI is in the correct state.
             showDetails(this.curGroupPosition, this.curChildPosition);
         }
     }

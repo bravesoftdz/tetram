@@ -37,19 +37,29 @@ public class FicheAlbumDetailsFragment extends FicheFragment {
         if (album == null) return null;
         final SerieBean serie = album.getSerie();
 
-        View v = inflater.inflate(R.layout.fiche_album_details_fragment, container, false);
+        View view = inflater.inflate(R.layout.fiche_album_details_fragment, container, false);
 
+        final ImageView imageView = (ImageView) view.findViewById(R.id.album_notation);
         if (album.getNotation() != null)
-            ((ImageView) v.findViewById(R.id.album_notation)).setImageResource(album.getNotation().getResDrawable());
+            imageView.setImageResource(album.getNotation().getResDrawable());
+        imageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                NotationDialogFragment dialog = new NotationDialogFragment();
+                dialog.show(getFragmentManager(), "NotationDialogFragment");
+                return false;
+            }
+        });
+
         if (serie != null) {
-            setUIElementURL(v, R.id.album_serie, StringUtils.formatTitreAcceptNull(serie.getTitre()), serie.getSiteWeb(), 0);
-            setUIElement(v, R.id.album_genres, serie.getGenreList(), R.id.fiche_album_row_genres);
+            setUIElementURL(view, R.id.album_serie, StringUtils.formatTitreAcceptNull(serie.getTitre()), serie.getSiteWeb(), 0);
+            setUIElement(view, R.id.album_genres, serie.getGenreList(), R.id.fiche_album_row_genres);
         } else {
-            v.findViewById(R.id.fiche_album_row_serie).setVisibility(View.GONE);
-            v.findViewById(R.id.fiche_album_row_genres).setVisibility(View.GONE);
+            view.findViewById(R.id.fiche_album_row_serie).setVisibility(View.GONE);
+            view.findViewById(R.id.fiche_album_row_genres).setVisibility(View.GONE);
         }
-        setUIElement(v, R.id.album_titre, StringUtils.formatTitreAcceptNull(album.getTitre()), R.id.fiche_album_row_titre);
-        setUIElement(v, R.id.album_tome, StringUtils.nonZero(album.getTome()));
+        setUIElement(view, R.id.album_titre, StringUtils.formatTitreAcceptNull(album.getTitre()), R.id.fiche_album_row_titre);
+        setUIElement(view, R.id.album_tome, StringUtils.nonZero(album.getTome()));
         String parutionFormat;
         Date dateParution;
         if ((album.getAnneeParution() != null) && (album.getAnneeParution() > 0)) {
@@ -60,11 +70,11 @@ public class FicheAlbumDetailsFragment extends FicheFragment {
                 parutionFormat = "yyyy";
                 dateParution = new GregorianCalendar(album.getAnneeParution(), Calendar.JANUARY, 1).getTime();
             }
-            setUIElement(v, R.id.album_parution, DateFormat.format(parutionFormat, dateParution));
+            setUIElement(view, R.id.album_parution, DateFormat.format(parutionFormat, dateParution));
         }
-        setUIElement(v, R.id.album_integrale, album.isIntegrale());
+        setUIElement(view, R.id.album_integrale, album.isIntegrale());
         if (album.isIntegrale()) {
-            ((CheckBox) v.findViewById(R.id.album_integrale)).setText(
+            ((CheckBox) view.findViewById(R.id.album_integrale)).setText(
                     StringUtils.ajoutString(
                             BDThequeApplication.getInstance().getString(R.string.fiche_album_integrale),
                             StringUtils.ajoutString(StringUtils.nonZero(album.getTomeDebut()), StringUtils.nonZero(album.getTomeFin()), " à "),
@@ -75,34 +85,34 @@ public class FicheAlbumDetailsFragment extends FicheFragment {
         LinearListView listAuteurs;
 
         if (album.getScenaristes().isEmpty())
-            v.findViewById(R.id.fiche_album_row_scenaristes).setVisibility(View.GONE);
-        listAuteurs = (LinearListView) v.findViewById(R.id.album_scenaristes);
+            view.findViewById(R.id.fiche_album_row_scenaristes).setVisibility(View.GONE);
+        listAuteurs = (LinearListView) view.findViewById(R.id.album_scenaristes);
         listAuteurs.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getScenaristes()));
         //listAuteurs.setMinimumHeight(Math.min(album.getScenaristes().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
 
         if (album.getDessinateurs().isEmpty())
-            v.findViewById(R.id.fiche_album_row_dessinateurs).setVisibility(View.GONE);
-        listAuteurs = (LinearListView) v.findViewById(R.id.album_dessinateurs);
+            view.findViewById(R.id.fiche_album_row_dessinateurs).setVisibility(View.GONE);
+        listAuteurs = (LinearListView) view.findViewById(R.id.album_dessinateurs);
         listAuteurs.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getDessinateurs()));
         //listAuteurs.setMinimumHeight(Math.min(album.getDessinateurs().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
 
         if (album.getColoristes().isEmpty())
-            v.findViewById(R.id.fiche_album_row_coloristes).setVisibility(View.GONE);
-        listAuteurs = (LinearListView) v.findViewById(R.id.album_coloristes);
+            view.findViewById(R.id.fiche_album_row_coloristes).setVisibility(View.GONE);
+        listAuteurs = (LinearListView) view.findViewById(R.id.album_coloristes);
         listAuteurs.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getColoristes()));
         //listAuteurs.setMinimumHeight(Math.min(album.getColoristes().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
 
-        setUIElement(v, R.id.album_horsserie, album.isHorsSerie());
+        setUIElement(view, R.id.album_horsserie, album.isHorsSerie());
         String sujet = album.getSujet();
         if ((serie != null) && ((sujet == null) || "".equals(sujet)))
             sujet = serie.getSujet();
-        setUIElement(v, R.id.album_histoire, sujet, R.id.fiche_album_row_histoire);
+        setUIElement(view, R.id.album_histoire, sujet, R.id.fiche_album_row_histoire);
 
         String notes = album.getNotes();
         if ((serie != null) && ((notes == null) || "".equals(notes)))
             notes = serie.getNotes();
-        setUIElement(v, R.id.album_notes, notes, R.id.fiche_album_row_notes);
+        setUIElement(view, R.id.album_notes, notes, R.id.fiche_album_row_notes);
 
-        return v;
+        return view;
     }
 }

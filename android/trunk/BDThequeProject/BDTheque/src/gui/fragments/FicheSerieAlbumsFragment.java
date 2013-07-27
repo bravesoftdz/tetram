@@ -41,9 +41,7 @@ public class FicheSerieAlbumsFragment extends FicheFragment {
             listAlbums.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    CommonBean commonBean = (CommonBean) parent.getAdapter().getItem(position);
-                    TitlesFragment titlesFragment = (TitlesFragment) getFragmentManager().findFragmentById(R.id.titles);
-                    titlesFragment.showDetails(commonBean);
+                    showFiche((CommonBean) parent.getAdapter().getItem(position));
                 }
             });
             if (album != null)

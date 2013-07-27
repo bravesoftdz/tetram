@@ -2,6 +2,7 @@ package org.tetram.bdtheque;
 
 import android.app.Application;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 
 import org.tetram.bdtheque.utils.UserConfig;
@@ -9,13 +10,10 @@ import org.tetram.bdtheque.utils.UserConfig;
 @SuppressWarnings("ClassNamePrefixedWithPackageName")
 public class BDThequeApplication extends Application {
     private static BDThequeApplication ourInstance;
+
     private static String ficheAlbumLastShownTab;
     private static String ficheSerieLastShownTab;
     private static String fichePersonneLastShownTab;
-
-    public static BDThequeApplication getInstance() {
-        return ourInstance;
-    }
 
     @Override
     public void onCreate() {
@@ -24,6 +22,15 @@ public class BDThequeApplication extends Application {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.edit().putString(getString(R.string.pref_symboleMonetaire), UserConfig.getInstance().getSymboleMonetaire()).commit();
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+    }
+
+    public static BDThequeApplication getInstance() {
+        return ourInstance;
+    }
+
+    public boolean isRepertoireDualPanel() {
+        final Configuration configuration = getResources().getConfiguration();
+        return (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) && (configuration.screenWidthDp >= 650);
     }
 
     public static String getFicheAlbumLastShownTab() {

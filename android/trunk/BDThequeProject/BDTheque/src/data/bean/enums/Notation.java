@@ -14,6 +14,8 @@ public enum Notation {
     BIEN(4, R.drawable.notation_4, R.string.notation_4),
     TRES_BIEN(5, R.drawable.notation_5, R.string.notation_5);
 
+    public static final Notation DEFAULT_NOTATION = PAS_NOTE;
+
     private final int value;
     private final int resDrawable;
     private final int resLabel;
@@ -25,15 +27,15 @@ public enum Notation {
     }
 
     public static Notation fromValue(Integer note) {
-        if (note == null) return PAS_NOTE;
+        if (note == null) return DEFAULT_NOTATION;
         for (Notation notation : Notation.values())
             if (note.equals(notation.getValue()))
                 return notation;
-        return PAS_NOTE;
+        return DEFAULT_NOTATION;
     }
 
     public MenuEntry getMenuEntry(final Context context) {
-        return new MenuEntry(context.getString(getResLabel()), this.ordinal());
+        return new MenuEntry(context.getString(this.resLabel), this.value, this.resDrawable);
     }
 
     public int getValue() {
@@ -46,6 +48,10 @@ public enum Notation {
 
     public int getResLabel() {
         return this.resLabel;
+    }
+
+    public boolean isDefault() {
+        return this.equals(DEFAULT_NOTATION);
     }
 
 }

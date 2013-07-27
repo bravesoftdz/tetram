@@ -82,7 +82,7 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
     @Override
     public boolean onNavigationItemSelected(int itemPosition, long itemId) {
         this.currentNavigationItem = itemPosition;
-        this.repertoire.setRepertoireMode(ModeRepertoire.values()[((int) itemId)]);
+        this.repertoire.setRepertoireMode(ModeRepertoire.fromValue((int) itemId));
         return true;
     }
 

@@ -1,13 +1,17 @@
 package org.tetram.bdtheque.gui.fragments;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import org.jetbrains.annotations.Nullable;
+import org.tetram.bdtheque.BDThequeApplication;
+import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.CommonBean;
+import org.tetram.bdtheque.gui.activities.FicheActivity;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.UUID;
@@ -35,6 +39,18 @@ public abstract class FicheFragment extends Fragment {
 
     public UUID getShownId() {
         return ((CommonBean) getArguments().getParcelable("bean")).getId();
+    }
+
+    public void showFiche(CommonBean bean) {
+        if (BDThequeApplication.getInstance().isRepertoireDualPanel()) {
+            TitlesFragment titlesFragment = (TitlesFragment) getFragmentManager().findFragmentById(R.id.titles);
+            titlesFragment.showDetails(bean);
+        } else {
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), FicheActivity.class);
+            intent.putExtra("bean", bean);
+            startActivity(intent);
+        }
     }
 
     @Nullable
