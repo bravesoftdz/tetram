@@ -165,7 +165,8 @@ public abstract class BeanFactoryImpl<T extends CommonBean> implements BeanFacto
         if (bean.getId() == null) return LoadResult.NOTFOUND;
 
         for (PropertyDescriptor property : fields)
-            loadProperty(bean, property, cursor, context, inline, loadDescriptor);
+            if (!property.equals(this.descriptor.getPrimaryKey()))
+                loadProperty(bean, property, cursor, context, inline, loadDescriptor);
 
         return LoadResult.ERROR;
     }

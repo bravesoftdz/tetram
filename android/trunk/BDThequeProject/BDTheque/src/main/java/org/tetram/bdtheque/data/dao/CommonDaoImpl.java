@@ -59,7 +59,7 @@ public abstract class CommonDaoImpl<T extends CommonBean> extends DefaultDao<T> 
 
         final String sql = qryBuilder.buildQuery(
                 queryInfo.getFields().toArray(new String[queryInfo.getFields().size()]),
-                String.format("%s.%s = ?", queryInfo.getTableAlias(), this.descriptor.getPrimaryKey()),
+                String.format("%s = ?", queryInfo.getColumns().get(this.descriptor.getPrimaryKey().getField()).getFullFieldName()),
                 null,
                 null,
                 null,
@@ -112,7 +112,7 @@ public abstract class CommonDaoImpl<T extends CommonBean> extends DefaultDao<T> 
 
         final String sql = qryBuilder.buildQuery(
                 queryInfo.getFields().toArray(new String[queryInfo.getFields().size()]),
-                String.format("%s.%s = ?", queryInfo.getTableAlias(), this.descriptor.getPrimaryKey()),
+                String.format("%s = ?", queryInfo.getColumns().get(this.descriptor.getPrimaryKey().getField()).getFullFieldName()),
                 null,
                 null,
                 null,
@@ -162,7 +162,7 @@ public abstract class CommonDaoImpl<T extends CommonBean> extends DefaultDao<T> 
                 wdb.update(
                         this.descriptor.getTableName(),
                         null,
-                        this.descriptor.getPrimaryKey() + " = ?",
+                        this.descriptor.getPrimaryKey().getDbFieldName() + " = ?",
                         new String[]{StringUtils.UUIDToGUIDString(bean.getId())}
                 );
         } finally {

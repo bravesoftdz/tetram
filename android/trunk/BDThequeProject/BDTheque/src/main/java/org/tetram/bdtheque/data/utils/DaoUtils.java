@@ -218,49 +218,44 @@ public abstract class DaoUtils {
 
     public static QueryInfo getQueryInfo(SQLDescriptor descriptor) {
         QueryInfo result = new QueryInfo();
-        return buildQueryInfo(result, descriptor, null, null, 0);
+        return buildQueryInfo(result, descriptor, null, null, null, 0);
     }
 
-    private static QueryInfo buildQueryInfo(QueryInfo queryInfo, SQLDescriptor descriptor, String masterTableAlias, String masterFieldName, Integer indicator) {
+    private static QueryInfo buildQueryInfo(QueryInfo queryInfo, SQLDescriptor descriptor, SQLDescriptor masterDescriptor, String masterTableAlias, PropertySQLDescriptor masterField, Integer indicator) {
         if (indicator != null) queryInfo.indicator = indicator;
 
-        queryInfo.tableAlias = getSQLAlias(descriptor.getTableName(), queryInfo.indicator);
+        String tableAlias = getSQLAlias(descriptor.getTableName(), queryInfo.indicator);
 
-        if (masterTableAlias == null)
-            queryInfo.tables.add(String.format("%s %s", descriptor.tableName, queryInfo.tableAlias));
+        if (masterField == null)
+            queryInfo.tables.add(String.format("%s %s", descriptor.tableName, tableAlias));
         else {
-            String join = String.format("%s.%s=%s.%s", queryInfo.tableAlias, descriptor.primaryKey, masterTableAlias, masterFieldName);
-            queryInfo.tables.add(String.format((descriptor.notNullable.contains(masterFieldName) ? "inner" : "left") + " join %s %s on (%s)", descriptor.tableName, queryInfo.tableAlias, join));
+            String join = String.format("%s.%s=%s", tableAlias, descriptor.primaryKey, masterField.fullFieldName);
+            queryInfo.tables.add(String.format((masterField.isNullable() ? "left" : "inner") + " join %s %s on (%s)", descriptor.tableName, tableAlias, join));
         }
-
-        String fieldAlias;
-        String fullFieldName;
-
-        for (String field : descriptor.getColumns()) {
-            fieldAlias = getSQLAlias(field, indicator);
-            fullFieldName = String.format("%s.%s", queryInfo.tableAlias, field);
-            queryInfo.fields.add(fullFieldName);
-            queryInfo.sqlAliasMapping.put(fullFieldName, String.format("%s %s", fullFieldName, fieldAlias));
-            queryInfo.loadDescriptor.getAlias().put(field, fieldAlias);
-        }
-
-        List<PropertyDescriptor> properties = getPropertiesDescriptors(descriptor.beanClass);
 
         int localIndicator = queryInfo.indicator;
-        for (Map.Entry<java.lang.reflect.Field, SQLDescriptor> childDescriptor : descriptor.getChildSQLDescriptorsList().entrySet()) {
-            final String field = childDescriptor.getKey();
-            fieldAlias = getSQLAlias(field, localIndicator);
-            fullFieldName = String.format("%s.%s", queryInfo.tableAlias, field);
-            queryInfo.fields.add(fullFieldName);
-            queryInfo.sqlAliasMapping.put(fullFieldName, String.format("%s %s", fullFieldName, fieldAlias));
-            queryInfo.loadDescriptor.getAlias().put(field, fieldAlias);
 
-            final QueryInfo childQueryInfo = buildQueryInfo(queryInfo, childDescriptor.getValue(), queryInfo.tableAlias, field, ++queryInfo.indicator);
-            queryInfo.indicator = childQueryInfo.indicator;
-            queryInfo.tables.addAll(childQueryInfo.tables);
-            queryInfo.fields.addAll(childQueryInfo.fields);
-            queryInfo.loadDescriptor.getChildAlias().put(fieldAlias, childQueryInfo.loadDescriptor);
-            queryInfo.sqlAliasMapping.putAll(childQueryInfo.sqlAliasMapping);
+        for (Map.Entry<PropertyDescriptor, SQLDescriptor> column : descriptor.getColumns().entrySet()) {
+            PropertySQLDescriptor property = new PropertySQLDescriptor();
+
+            property.property = column.getKey();
+            String fieldName = property.property.dbFieldName;
+            property.aliasName = getSQLAlias(fieldName, localIndicator);
+            property.fullFieldName = String.format("%s.%s", tableAlias, fieldName);
+            queryInfo.fields.add(property.fullFieldName);
+            queryInfo.sqlAliasMapping.put(property.fullFieldName, String.format("%s %s", property.fullFieldName, property.aliasName));
+            queryInfo.loadDescriptor.getAlias().put(column.getKey(), property.aliasName);
+            queryInfo.columns.put(property.property.field, property);
+
+            if (column.getValue() != null) {
+                final QueryInfo childQueryInfo = buildQueryInfo(queryInfo, column.getValue(), descriptor, tableAlias, property, ++queryInfo.indicator);
+                queryInfo.indicator = childQueryInfo.indicator;
+                queryInfo.tables.addAll(childQueryInfo.tables);
+                queryInfo.fields.addAll(childQueryInfo.fields);
+                queryInfo.loadDescriptor.getChildAlias().put(property.aliasName, childQueryInfo.loadDescriptor);
+                queryInfo.sqlAliasMapping.putAll(childQueryInfo.sqlAliasMapping);
+                queryInfo.columns.putAll(childQueryInfo.columns);
+            }
         }
         return queryInfo;
     }
@@ -357,15 +352,12 @@ public abstract class DaoUtils {
          * utilisé uniquement en interne pour générer les alias
          */
         private int indicator;
-        private String tableAlias;
+
         private List<String> tables = new ArrayList<>();
         private List<String> fields = new ArrayList<>();
         private LoadDescriptor loadDescriptor = new LoadDescriptor();
         private Map<String, String> sqlAliasMapping = new HashMap<>();
-
-        public String getTableAlias() {
-            return this.tableAlias;
-        }
+        private Map<java.lang.reflect.Field, PropertySQLDescriptor> columns = new HashMap<>();
 
         public List<String> getTables() {
             return this.tables;
@@ -381,6 +373,10 @@ public abstract class DaoUtils {
 
         public Map<String, String> getSqlAliasMapping() {
             return this.sqlAliasMapping;
+        }
+
+        public Map<java.lang.reflect.Field, PropertySQLDescriptor> getColumns() {
+            return this.columns;
         }
     }
 
