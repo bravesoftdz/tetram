@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.R;
-import org.tetram.bdtheque.data.bean.CommonBean;
+import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.gui.activities.FicheActivity;
 
 import java.lang.reflect.InvocationTargetException;

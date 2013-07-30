@@ -9,7 +9,7 @@ import android.widget.ExpandableListView;
 
 import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.R;
-import org.tetram.bdtheque.data.bean.CommonBean;
+import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.dao.DaoFactory;
 import org.tetram.bdtheque.data.dao.InitialeRepertoireDao;
 import org.tetram.bdtheque.gui.activities.FicheActivity;
@@ -66,7 +66,7 @@ public class TitlesFragment extends ExpandableListFragment {
         CommonBean bean = (CommonBean) getExpandableListAdapter().getChild(groupPosition, childPosition);
 
         // We can display everything in-place with fragments, so update
-        // the list to highlight the selected item and show the database.
+        // the list to highlight the selected item and show the org.tetram.bdtheque.database.
         if (this.synchroScroll) {
             this.expandableListView.expandGroup(groupPosition, false);
             this.expandableListView.setSelectedChild(groupPosition, childPosition, true);

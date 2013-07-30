@@ -10,7 +10,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 @Inherited
 public @interface Field {
-    static String DEFAULT_FIELDNAME = "** default field name **";
+    String fieldName() default "";
 
-    String fieldName() default DEFAULT_FIELDNAME;
+    boolean primaryKey() default false;
+
+    boolean nullable() default true;
 }

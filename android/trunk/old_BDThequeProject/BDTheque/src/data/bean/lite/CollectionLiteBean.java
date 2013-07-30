@@ -3,26 +3,19 @@ package org.tetram.bdtheque.data.bean.lite;
 import android.os.Parcel;
 
 import org.jetbrains.annotations.Nullable;
-import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
+import org.tetram.bdtheque.data.bean.abstracts.CollectionBeanAbstract;
 import org.tetram.bdtheque.data.dao.lite.CollectionLiteDao;
 import org.tetram.bdtheque.data.factories.lite.CollectionLiteFactory;
 import org.tetram.bdtheque.data.utils.BeanDaoClass;
 import org.tetram.bdtheque.data.utils.Entity;
-import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.COLLECTIONS_TABLENAME, primaryKey = DDLConstants.COLLECTIONS_ID, factoryClass = CollectionLiteFactory.class)
+@Entity(tableName = DDLConstants.COLLECTIONS_TABLENAME, factoryClass = CollectionLiteFactory.class)
 @BeanDaoClass(CollectionLiteDao.class)
-public class CollectionLiteBean extends CommonBean implements TreeNodeBean {
-
-    @Field(fieldName = DDLConstants.COLLECTIONS_NOM)
-    private String nom;
-
-    @Field(fieldName = DDLConstants.EDITEURS_ID)
-    private EditeurLiteBean editeur;
+public class CollectionLiteBean extends CollectionBeanAbstract implements TreeNodeBean {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<CollectionLiteBean> CREATOR = new Creator<CollectionLiteBean>() {
@@ -48,15 +41,11 @@ public class CollectionLiteBean extends CommonBean implements TreeNodeBean {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeString(this.nom);
-        dest.writeParcelable(this.editeur, flags);
     }
 
     @Override
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
-        this.nom = in.readString();
-        this.editeur = in.readParcelable(EditeurLiteBean.class.getClassLoader());
     }
 
     public String getLabel(boolean simple) {
@@ -78,20 +67,4 @@ public class CollectionLiteBean extends CommonBean implements TreeNodeBean {
         return null;
     }
 
-    public String getNom() {
-        return this.nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public EditeurLiteBean getEditeur() {
-        return this.editeur;
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public void setEditeur(EditeurLiteBean editeur) {
-        this.editeur = editeur;
-    }
 }

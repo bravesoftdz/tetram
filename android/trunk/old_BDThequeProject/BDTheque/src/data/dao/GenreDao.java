@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.tetram.bdtheque.data.bean.GenreBean;
+import org.tetram.bdtheque.data.factories.FactoriesFactory;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -23,7 +24,7 @@ public class GenreDao extends CommonDaoImpl<GenreBean> {
         assert rdb != null;
         try {
             Cursor cursor = rdb.query(
-                    String.format("%1$s g inner join %2$s gs on g.%3$s = gs.%3$s", this.tableName, DDLConstants.GENRESERIES_TABLENAME, DDLConstants.GENRES_ID),
+                    String.format("%1$s g inner join %2$s gs on g.%3$s = gs.%3$s", this.getDescriptor().getTableName(), DDLConstants.GENRESERIES_TABLENAME, DDLConstants.GENRES_ID),
                     new String[]{"g.*"},
                     String.format("gs.%1$s = ?", DDLConstants.SERIES_ID),
                     new String[]{StringUtils.UUIDToGUIDString(serieId)},
@@ -34,7 +35,7 @@ public class GenreDao extends CommonDaoImpl<GenreBean> {
             );
             try {
                 while (cursor.moveToNext()) {
-                    GenreBean genre = (GenreBean) this.beanFactory.loadFromCursor(getContext(), cursor, false);
+                    GenreBean genre = (GenreBean) FactoriesFactory.getFactoryForBean(this.getBeanClass()).loadFromCursor(getContext(), cursor, false, null);
                     if (genre != null)
                         list.add(genre);
                 }

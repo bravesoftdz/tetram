@@ -129,7 +129,7 @@ public class ExpandableListFragment extends Fragment implements
      * This method will be called when an item in the list is selected.
      * Subclasses should override. Subclasses can call
      * getListView().getItemAtPosition(position) if they need to access the
-     * data associated with the selected item.
+     * org.tetram.bdtheque.data associated with the selected item.
      *
      * @param listView The ListView where the click happened
      * @param view     The view that was clicked within the ListView
@@ -158,7 +158,7 @@ public class ExpandableListFragment extends Fragment implements
 
     /**
      * Set the currently selected list item to the specified
-     * position with the adapters's data
+     * position with the adapters's org.tetram.bdtheque.data
      */
     public void setSelection(int position) {
         ensureList();
@@ -201,7 +201,7 @@ public class ExpandableListFragment extends Fragment implements
 
     /**
      * Control whether the list is being displayed.  You can make it not
-     * displayed if you are waiting for the initial data to show in it.  During
+     * displayed if you are waiting for the initial org.tetram.bdtheque.data to show in it.  During
      * this time an indeterminant progress indicator will be shown instead.
      * <p/>
      * <p>Applications do not normally need to use this themselves.  The default
@@ -227,7 +227,7 @@ public class ExpandableListFragment extends Fragment implements
 
     /**
      * Control whether the list is being displayed.  You can make it not
-     * displayed if you are waiting for the initial data to show in it.  During
+     * displayed if you are waiting for the initial org.tetram.bdtheque.data to show in it.  During
      * this time an indeterminant progress indicator will be shown instead.
      *
      * @param shown   If true, the list view is shown; if false, the progress
@@ -298,7 +298,7 @@ public class ExpandableListFragment extends Fragment implements
             setListAdapter(this.expandableListAdapter);
         } else {
             // We are starting without an adapters, so assume we won't
-            // have our data right away and start with the progress indicator.
+            // have our org.tetram.bdtheque.data right away and start with the progress indicator.
             setListShown(false, false);
         }
         this.mHandler.post(this.mRequestFocus);

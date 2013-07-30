@@ -12,9 +12,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Inherited
 public @interface Entity {
-    String tableName();
-
-    String[] primaryKey();
+    String tableName() default "";
 
     Class<? extends BeanFactory> factoryClass();
 }

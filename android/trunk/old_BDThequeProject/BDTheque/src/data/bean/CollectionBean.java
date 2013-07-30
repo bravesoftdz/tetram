@@ -9,7 +9,7 @@ import org.tetram.bdtheque.database.DDLConstants;
 
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.COLLECTIONS_TABLENAME, primaryKey = DDLConstants.COLLECTIONS_ID, factoryClass = CollectionFactory.class)
+@Entity(tableName = DDLConstants.COLLECTIONS_TABLENAME, factoryClass = CollectionFactory.class)
 @BeanDaoClass(CollectionDao.class)
 public class CollectionBean extends CollectionLiteBean {
 }

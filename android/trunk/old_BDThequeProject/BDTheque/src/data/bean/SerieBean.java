@@ -2,8 +2,8 @@ package org.tetram.bdtheque.data.bean;
 
 import android.os.Parcel;
 
+import org.tetram.bdtheque.data.bean.abstracts.SerieBeanAbstract;
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
-import org.tetram.bdtheque.data.bean.lite.SerieLiteBean;
 import org.tetram.bdtheque.data.dao.SerieDao;
 import org.tetram.bdtheque.data.factories.SerieFactory;
 import org.tetram.bdtheque.data.utils.BeanDaoClass;
@@ -17,19 +17,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.SERIES_TABLENAME, primaryKey = DDLConstants.SERIES_ID, factoryClass = SerieFactory.class)
+@Entity(tableName = DDLConstants.SERIES_TABLENAME, factoryClass = SerieFactory.class)
 @BeanDaoClass(SerieDao.class)
-public class SerieBean extends SerieLiteBean {
+public class SerieBean extends SerieBeanAbstract {
 
     @Field(fieldName = DDLConstants.SERIES_SITEWEB)
     private URL siteWeb;
     private final List<GenreBean> genres = new ArrayList<>();
 
-    private final List<AuteurBean> scenaristes = new ArrayList<>();
-    private final List<AuteurBean> dessinateurs = new ArrayList<>();
-    private final List<AuteurBean> coloristes = new ArrayList<>();
+    private final List<AuteurSerieBean> scenaristes = new ArrayList<>();
+    private final List<AuteurSerieBean> dessinateurs = new ArrayList<>();
+    private final List<AuteurSerieBean> coloristes = new ArrayList<>();
 
-    @Field(fieldName = DDLConstants.EDITEURS_ID)
+    @Field(fieldName = DDLConstants.EDITEURS_ID, nullable = false)
     private EditeurBean editeur;
 
     private final List<AlbumLiteBean> albums = new ArrayList<>();
@@ -84,9 +84,9 @@ public class SerieBean extends SerieLiteBean {
         in.readTypedList(this.genres, GenreBean.CREATOR);
         this.sujet = in.readString();
         this.notes = in.readString();
-        in.readTypedList(this.scenaristes, AuteurBean.CREATOR);
-        in.readTypedList(this.dessinateurs, AuteurBean.CREATOR);
-        in.readTypedList(this.coloristes, AuteurBean.CREATOR);
+        in.readTypedList(this.scenaristes, AuteurSerieBean.CREATOR);
+        in.readTypedList(this.dessinateurs, AuteurSerieBean.CREATOR);
+        in.readTypedList(this.coloristes, AuteurSerieBean.CREATOR);
         in.readTypedList(this.albums, AlbumLiteBean.CREATOR);
         this.editeur = in.readParcelable(EditeurBean.class.getClassLoader());
     }
@@ -110,15 +110,15 @@ public class SerieBean extends SerieLiteBean {
         return s;
     }
 
-    public List<AuteurBean> getScenaristes() {
+    public List<AuteurSerieBean> getScenaristes() {
         return this.scenaristes;
     }
 
-    public List<AuteurBean> getDessinateurs() {
+    public List<AuteurSerieBean> getDessinateurs() {
         return this.dessinateurs;
     }
 
-    public List<AuteurBean> getColoristes() {
+    public List<AuteurSerieBean> getColoristes() {
         return this.coloristes;
     }
 
@@ -142,12 +142,10 @@ public class SerieBean extends SerieLiteBean {
         return this.albums;
     }
 
-    @Override
     public EditeurBean getEditeur() {
         return this.editeur;
     }
 
-    @SuppressWarnings("MethodOverloadsMethodOfSuperclass")
     public void setEditeur(EditeurBean editeur) {
         this.editeur = editeur;
     }

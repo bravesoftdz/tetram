@@ -26,7 +26,7 @@ public class DBUtils {
     }
 
     /**
-     * Executes the given SQL asset in the given database (SQL file should be UTF-8). The database file may contain
+     * Executes the given SQL asset in the given org.tetram.bdtheque.database (SQL file should be UTF-8). The org.tetram.bdtheque.database file may contain
      * multiple SQL statements. Statements are split using a simple regular expression (something like
      * "semicolon before a line break"), not by analyzing the SQL syntax. This will work for many SQL files, but check
      * yours.
@@ -72,7 +72,7 @@ public class DBUtils {
     }
 
     /**
-     * Copies all available data from in to out without closing any stream.
+     * Copies all available org.tetram.bdtheque.data from in to out without closing any stream.
      *
      * @return number of bytes copied
      */

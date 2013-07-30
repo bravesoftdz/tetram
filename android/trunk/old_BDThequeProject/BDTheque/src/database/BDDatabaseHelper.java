@@ -33,7 +33,7 @@ public class BDDatabaseHelper extends SQLiteOpenHelper {
     }
 
     /*
-     * Called when the database is created for the first time. This is where the
+     * Called when the org.tetram.bdtheque.database is created for the first time. This is where the
      * creation of tables and the initial population of the tables should happen.
      */
     @Override
@@ -43,7 +43,7 @@ public class BDDatabaseHelper extends SQLiteOpenHelper {
     }
 
     /*
-     * Called when the database needs to be upgraded. The implementation
+     * Called when the org.tetram.bdtheque.database needs to be upgraded. The implementation
      * should use this method to drop tables, add tables, or do anything else it
      * needs to upgrade to the new schema version.
      * This method executes within a transaction.  If an exception is thrown, all changes
@@ -51,7 +51,7 @@ public class BDDatabaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(final SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(LOG_TAG, "Upgrading database from version " + oldVersion + " to " + newVersion + ".");
+        Log.w(LOG_TAG, "Upgrading org.tetram.bdtheque.database from version " + oldVersion + " to " + newVersion + ".");
 
         switch (oldVersion) {
             case 0:

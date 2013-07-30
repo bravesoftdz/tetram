@@ -11,8 +11,8 @@ import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.AlbumBean;
-import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.SerieBean;
+import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.dao.AlbumDao;
 
 public class FicheAlbumFragment extends FicheFragment {

@@ -4,23 +4,19 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import org.jetbrains.annotations.Nullable;
-import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
+import org.tetram.bdtheque.data.bean.abstracts.EditeurBeanAbstract;
 import org.tetram.bdtheque.data.dao.lite.EditeurLiteDao;
 import org.tetram.bdtheque.data.factories.lite.EditeurLiteFactory;
 import org.tetram.bdtheque.data.utils.BeanDaoClass;
 import org.tetram.bdtheque.data.utils.Entity;
-import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.EDITEURS_TABLENAME, primaryKey = DDLConstants.EDITEURS_ID, factoryClass = EditeurLiteFactory.class)
+@Entity(tableName = DDLConstants.EDITEURS_TABLENAME, factoryClass = EditeurLiteFactory.class)
 @BeanDaoClass(EditeurLiteDao.class)
-public class EditeurLiteBean extends CommonBean implements TreeNodeBean {
-
-    @Field(fieldName = DDLConstants.EDITEURS_NOM)
-    private String nom;
+public class EditeurLiteBean extends EditeurBeanAbstract implements TreeNodeBean {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Parcelable.Creator<EditeurLiteBean> CREATOR = new Parcelable.Creator<EditeurLiteBean>() {
@@ -46,21 +42,11 @@ public class EditeurLiteBean extends CommonBean implements TreeNodeBean {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeString(this.nom);
     }
 
     @Override
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
-        this.nom = in.readString();
-    }
-
-    public String getNom() {
-        return this.nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
     }
 
     @Override

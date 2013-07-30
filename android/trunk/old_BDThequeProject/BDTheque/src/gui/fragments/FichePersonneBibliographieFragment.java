@@ -8,8 +8,8 @@ import android.widget.ExpandableListView;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.R;
-import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.PersonneBean;
+import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.dao.DaoFactory;
 import org.tetram.bdtheque.data.dao.lite.BibliographieDao;
 import org.tetram.bdtheque.gui.adapters.RepertoireAdapter;

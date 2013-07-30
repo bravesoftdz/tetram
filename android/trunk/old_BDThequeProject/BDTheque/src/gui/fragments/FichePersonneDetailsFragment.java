@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.PersonneBean;
 import org.tetram.bdtheque.utils.StringUtils;
@@ -14,7 +13,6 @@ import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElement;
 
 public class FichePersonneDetailsFragment extends FicheFragment {
 
-    @Nullable
     @Override
     public View buildView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.buildView(inflater, container, savedInstanceState);

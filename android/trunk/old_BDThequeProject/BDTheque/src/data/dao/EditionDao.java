@@ -42,7 +42,7 @@ public class EditionDao extends CommonDaoImpl<EditionBean> {
             try {
                 final EditionFactory factory = new EditionFactory();
                 while (cursor.moveToNext()) {
-                    EditionBean editionBean = factory.loadFromCursor(getContext(), cursor, false);
+                    EditionBean editionBean = factory.loadFromCursor(getContext(), cursor, false, null);
                     if (editionBean != null)
                         editions.add(editionBean);
                 }

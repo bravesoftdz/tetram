@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.data.bean;
+package org.tetram.bdtheque.data.bean.abstracts;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,8 +6,6 @@ import android.os.Parcelable;
 import java.util.UUID;
 
 public abstract class CommonBean implements Parcelable {
-    @SuppressWarnings("InstanceVariableNamingConvention")
-    private UUID id;
 
     public CommonBean(Parcel in) {
         super();
@@ -25,19 +23,15 @@ public abstract class CommonBean implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(this.id);
+        dest.writeValue(this.getId());
     }
 
     public void readFromParcel(Parcel in) {
-        this.id = (UUID) in.readValue(UUID.class.getClassLoader());
+        this.setId((UUID) in.readValue(UUID.class.getClassLoader()));
     }
 
-    public UUID getId() {
-        return this.id;
-    }
+    public abstract UUID getId();
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+    public abstract void setId(UUID id);
 
 }

@@ -3,11 +3,10 @@ package org.tetram.bdtheque.data.bean.lite;
 import android.os.Parcel;
 
 import org.jetbrains.annotations.Nullable;
-import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
+import org.tetram.bdtheque.data.bean.abstracts.PersonneBeanAbstract;
 import org.tetram.bdtheque.data.factories.lite.PersonneLiteFactory;
 import org.tetram.bdtheque.data.utils.Entity;
-import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.gui.fragments.FichePersonneFragment;
 import org.tetram.bdtheque.gui.utils.ShowFragmentClass;
@@ -15,11 +14,8 @@ import org.tetram.bdtheque.utils.StringUtils;
 
 @SuppressWarnings("UnusedDeclaration")
 @ShowFragmentClass(FichePersonneFragment.class)
-@Entity(tableName = DDLConstants.PERSONNES_TABLENAME, primaryKey = DDLConstants.PERSONNES_ID, factoryClass = PersonneLiteFactory.class)
-public class PersonneLiteBean extends CommonBean implements TreeNodeBean {
-
-    @Field(fieldName = DDLConstants.PERSONNES_NOM)
-    private String nom;
+@Entity(tableName = DDLConstants.PERSONNES_TABLENAME, factoryClass = PersonneLiteFactory.class)
+public class PersonneLiteBean extends PersonneBeanAbstract implements TreeNodeBean {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<PersonneLiteBean> CREATOR = new Creator<PersonneLiteBean>() {
@@ -45,13 +41,11 @@ public class PersonneLiteBean extends CommonBean implements TreeNodeBean {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeString(this.nom);
     }
 
     @Override
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
-        this.nom = in.readString();
     }
 
     @Override
@@ -65,12 +59,4 @@ public class PersonneLiteBean extends CommonBean implements TreeNodeBean {
         return null;
     }
 
-    @SuppressWarnings("UnusedDeclaration")
-    public String getNom() {
-        return this.nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
 }

@@ -46,9 +46,9 @@ public class DDLConstants {
     public static final String PERSONNES_SITEWEB = "SITEWEB";
     public static final String PERSONNES_BIOGRAPHIE = "BIOGRAPHIE";
 
-    public static final String AUTEURS_TABLENAME = "AUTEURS";
-    public static final String AUTEURS_ID = "ID_AUTEUR";
-    public static final String AUTEURS_METIER = "METIER";
+    public static final String AUTEURS_ALBUMS_TABLENAME = "AUTEURS";
+    public static final String AUTEURS_ALBUMS_ID = "ID_AUTEUR";
+    public static final String AUTEURS_ALBUMS_METIER = "METIER";
 
     public static final String AUTEURS_SERIES_TABLENAME = "AUTEURS_SERIES";
     public static final String AUTEURS_SERIES_ID = "ID_AUTEUR_SERIES";

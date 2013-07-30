@@ -5,6 +5,19 @@ public class InitialeBean {
     private int count;
     private String label;
 
+    public static InitialeBean createInstance(Class<? extends InitialeBean> aClass, String label, int count, String value) {
+        InitialeBean t = null;
+        try {
+            t = aClass.getConstructor().newInstance();
+            t.setLabel(label);
+            t.setValue(value);
+            t.setCount(count);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return t;
+    }
+
     public String getValue() {
         return this.value;
     }
@@ -21,6 +34,15 @@ public class InitialeBean {
         this.count = count;
     }
 
+    @SuppressWarnings("NonFinalFieldReferencedInHashCode")
+    @Override
+    public int hashCode() {
+        if (this.value == null)
+            return Integer.valueOf(0).hashCode();
+        else
+            return super.hashCode();
+    }
+
     @Override
     public String toString() {
         return getLabel();
@@ -35,28 +57,6 @@ public class InitialeBean {
 
     public void setLabel(String label) {
         this.label = label;
-    }
-
-    @SuppressWarnings("NonFinalFieldReferencedInHashCode")
-    @Override
-    public int hashCode() {
-        if (this.value == null)
-            return Integer.valueOf(0).hashCode();
-        else
-            return super.hashCode();
-    }
-
-    public static InitialeBean createInstance(Class<? extends InitialeBean> aClass, String label, int count, String value) {
-        InitialeBean t = null;
-        try {
-            t = aClass.getConstructor().newInstance();
-            t.setLabel(label);
-            t.setValue(value);
-            t.setCount(count);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return t;
     }
 
 }
