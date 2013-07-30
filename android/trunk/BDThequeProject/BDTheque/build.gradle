@@ -28,8 +28,38 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 18
+        /*
+          Lu depuis AndroidManifest.xml
+
+          minSdkVersion 16
+          targetSdkVersion 18
+          versionCode 1
+          versionName "1.0"
+        */
     }
 
+    signingConfigs {
+        release {
+            storeFile file("../keystore.jks")
+            storePassword "280776"
+            keyAlias "bdtheque"
+            keyPassword "280776"
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+        debug {
+            packageNameSuffix ".debug"
+        }
+        /*
+        jnidebug.initWith(buildTypes.debug)
+        jnidebug {
+            packageNameSuffix ".jnidebug"
+            jnidebugBuild true
+        }
+        */
+    }
 }
