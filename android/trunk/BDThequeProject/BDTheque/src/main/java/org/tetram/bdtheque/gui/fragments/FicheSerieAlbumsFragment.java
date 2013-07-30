@@ -10,8 +10,8 @@ import android.widget.ListView;
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.AlbumBean;
-import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.SerieBean;
+import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.gui.adapters.ListLiteBeanAdapter;
 
 public class FicheSerieAlbumsFragment extends FicheFragment {

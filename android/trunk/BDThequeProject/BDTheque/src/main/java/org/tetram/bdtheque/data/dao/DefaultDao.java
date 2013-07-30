@@ -2,7 +2,7 @@ package org.tetram.bdtheque.data.dao;
 
 import android.content.Context;
 
-import org.tetram.bdtheque.data.bean.CommonBean;
+import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.database.BDDatabaseHelper;
 
 @SuppressWarnings("UnusedDeclaration")

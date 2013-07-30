@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import org.jetbrains.annotations.Nullable;
-import org.tetram.bdtheque.data.bean.CommonBean;
+import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.factories.FactoriesFactory;
 import org.tetram.bdtheque.data.utils.DaoUtils;
 import org.tetram.bdtheque.utils.GenericUtils;

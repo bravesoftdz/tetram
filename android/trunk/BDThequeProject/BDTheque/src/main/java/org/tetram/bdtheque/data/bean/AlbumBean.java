@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.ALBUMS_TABLENAME, primaryKey = DDLConstants.ALBUMS_ID, factoryClass = AlbumFactory.class)
+@Entity(tableName = DDLConstants.ALBUMS_TABLENAME, factoryClass = AlbumFactory.class)
 @BeanDaoClass(AlbumDao.class)
 public class AlbumBean extends AlbumBeanAbstract {
 

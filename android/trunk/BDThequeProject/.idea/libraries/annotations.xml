@@ -2,10 +2,6 @@
   <library name="annotations">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/BDTheque/libs/annotations.jar!/" />
-      <root url="jar://$PROJECT_DIR$/BDTheque/libs/annotations.jar!/" />
-      <root url="jar://$PROJECT_DIR$/BDTheque/libs/annotations.jar!/" />
-      <root url="jar://$PROJECT_DIR$/BDTheque/libs/annotations.jar!/" />
-      <root url="jar://$PROJECT_DIR$/BDTheque/libs/annotations.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

@@ -3,7 +3,7 @@ package org.tetram.bdtheque.data.utils;
 import android.database.Cursor;
 
 import org.jetbrains.annotations.Nullable;
-import org.tetram.bdtheque.data.bean.CommonBean;
+import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.lang.reflect.Method;
@@ -20,13 +20,13 @@ import java.util.UUID;
 @SuppressWarnings("UnusedDeclaration")
 public abstract class DaoUtils {
 
+    public static final int MAX_SQL_ALIAS_LENGTH = 25;
     private static final Map<Class<? extends CommonBean>, List<PropertyDescriptor>> propertyDescriptorsList = new HashMap<>();
     private static final Map<Class<? extends CommonBean>, SQLDescriptor> sqlDescriptorsList = new HashMap<>();
     private static final SimpleDateFormat simpleDateTimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.zzz");
     private static final SimpleDateFormat sqlDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.zzz");
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
     private static final SimpleDateFormat sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    public static final int MAX_SQL_ALIAS_LENGTH = 25;
     private static Map<Class<? extends CommonBean>, QueryInfo> queryInfoList = new HashMap<>();
 
     private DaoUtils() {
@@ -188,15 +188,10 @@ public abstract class DaoUtils {
                 result.tableName = a.tableName();
             else
                 result.tableName = clasz.getSimpleName().toUpperCase() + "S";
-            if (!a.primaryKey().isEmpty())
-                result.primaryKey = a.primaryKey();
-            else if (!a.tableName().isEmpty())
-                result.primaryKey = "ID_" + a.tableName();
-            else
-                result.primaryKey = "ID_" + clasz.getSimpleName().toUpperCase();
-
             List<PropertyDescriptor> properties = getPropertiesDescriptors(clasz);
             for (PropertyDescriptor property : properties) {
+                if (property.annotation.primaryKey())
+                    result.primaryKey = property;
                 final Class<?> propertyType = property.field.getType();
                 if (CommonBean.class.isAssignableFrom(propertyType))
                     result.columns.put(property, getSQLDescriptor((Class<? extends CommonBean>) propertyType));
@@ -241,13 +236,6 @@ public abstract class DaoUtils {
         String fieldAlias;
         String fullFieldName;
 
-        fieldAlias = getSQLAlias(descriptor.getPrimaryKey(), indicator);
-        fullFieldName = String.format("%s.%s", queryInfo.tableAlias, descriptor.getPrimaryKey());
-        queryInfo.fields.add(fullFieldName);
-        queryInfo.sqlAliasMapping.put(fullFieldName, String.format("%s %s", fullFieldName, fieldAlias));
-        queryInfo.loadDescriptor.getAlias().put(descriptor.getPrimaryKey(), fieldAlias);
-        queryInfo.loadDescriptor.setPrimaryKeyAlias(fieldAlias);
-
         for (String field : descriptor.getColumns()) {
             fieldAlias = getSQLAlias(field, indicator);
             fullFieldName = String.format("%s.%s", queryInfo.tableAlias, field);
@@ -271,7 +259,6 @@ public abstract class DaoUtils {
             queryInfo.indicator = childQueryInfo.indicator;
             queryInfo.tables.addAll(childQueryInfo.tables);
             queryInfo.fields.addAll(childQueryInfo.fields);
-            childQueryInfo.loadDescriptor.setPrimaryKeyAlias(fieldAlias);
             queryInfo.loadDescriptor.getChildAlias().put(fieldAlias, childQueryInfo.loadDescriptor);
             queryInfo.sqlAliasMapping.putAll(childQueryInfo.sqlAliasMapping);
         }
@@ -332,7 +319,7 @@ public abstract class DaoUtils {
     public static class SQLDescriptor {
         public Class<? extends CommonBean> beanClass;
         private String tableName;
-        private String primaryKey;
+        private PropertyDescriptor primaryKey;
         private Map<PropertyDescriptor, SQLDescriptor> columns = new HashMap<>();
 
         public Class<? extends CommonBean> getBeanClass() {
@@ -343,7 +330,7 @@ public abstract class DaoUtils {
             return this.tableName;
         }
 
-        public String getPrimaryKey() {
+        public PropertyDescriptor getPrimaryKey() {
             return this.primaryKey;
         }
 
@@ -353,13 +340,8 @@ public abstract class DaoUtils {
     }
 
     public static class LoadDescriptor {
-        private String primaryKeyAlias;
         private final Map<DaoUtils.PropertyDescriptor, String> alias = new HashMap<>();
         private final Map<String, LoadDescriptor> childAlias = new HashMap<>();
-
-        public String getPrimaryKeyAlias() {
-            return this.primaryKeyAlias;
-        }
 
         public Map<DaoUtils.PropertyDescriptor, String> getAlias() {
             return this.alias;
@@ -368,10 +350,6 @@ public abstract class DaoUtils {
         public Map<String, LoadDescriptor> getChildAlias() {
             return this.childAlias;
         }
-
-        public void setPrimaryKeyAlias(String primaryKeyAlias) {
-            this.primaryKeyAlias = primaryKeyAlias;
-        }
     }
 
     public static class QueryInfo {
@@ -379,7 +357,6 @@ public abstract class DaoUtils {
          * utilisé uniquement en interne pour générer les alias
          */
         private int indicator;
-
         private String tableAlias;
         private List<String> tables = new ArrayList<>();
         private List<String> fields = new ArrayList<>();

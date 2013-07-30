@@ -14,7 +14,7 @@ import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.EDITEURS_TABLENAME, primaryKey = DDLConstants.EDITEURS_ID, factoryClass = EditeurLiteFactory.class)
+@Entity(tableName = DDLConstants.EDITEURS_TABLENAME, factoryClass = EditeurLiteFactory.class)
 @BeanDaoClass(EditeurLiteDao.class)
 public class EditeurLiteBean extends EditeurBeanAbstract implements TreeNodeBean {
 

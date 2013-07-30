@@ -5,9 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.tetram.bdtheque.R;
-import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.InitialeBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
+import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.factories.BeanFactory;
 import org.tetram.bdtheque.database.DBUtils;
 

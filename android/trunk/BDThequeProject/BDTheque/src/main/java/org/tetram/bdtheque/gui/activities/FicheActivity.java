@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import org.tetram.bdtheque.BDThequeApplication;
-import org.tetram.bdtheque.data.bean.CommonBean;
+import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.gui.fragments.FicheFragment;
 import org.tetram.bdtheque.gui.utils.ShowFragmentClass;
 

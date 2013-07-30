@@ -12,5 +12,7 @@ import java.lang.annotation.Target;
 public @interface Field {
     String fieldName() default "";
 
+    boolean primaryKey() default false;
+
     boolean nullable() default true;
 }

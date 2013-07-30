@@ -2,13 +2,18 @@ package org.tetram.bdtheque.data.bean.abstracts;
 
 import android.os.Parcel;
 
-import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.lite.EditeurLiteBean;
 import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 
+import java.util.UUID;
+
 @SuppressWarnings("UnusedDeclaration")
 public abstract class CollectionBeanAbstract extends CommonBean {
+
+    @SuppressWarnings("InstanceVariableNamingConvention")
+    @Field(fieldName = DDLConstants.COLLECTIONS_ID, primaryKey = true)
+    protected UUID id;
     @Field(fieldName = DDLConstants.COLLECTIONS_NOM)
     protected String nom;
     @Field(fieldName = DDLConstants.EDITEURS_ID, nullable = false)
@@ -36,6 +41,15 @@ public abstract class CollectionBeanAbstract extends CommonBean {
         this.editeur = in.readParcelable(EditeurLiteBean.class.getClassLoader());
     }
 
+    @Override
+    public UUID getId() {
+        return this.id;
+    }
+
+    @Override
+    public void setId(UUID id) {
+        this.id = id;
+    }
 
     public String getNom() {
         return this.nom;

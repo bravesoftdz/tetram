@@ -2,19 +2,23 @@ package org.tetram.bdtheque.data.bean.abstracts;
 
 import android.os.Parcel;
 
-import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.enums.Notation;
 import org.tetram.bdtheque.data.bean.lite.CollectionLiteBean;
 import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 
+import java.util.UUID;
+
 @SuppressWarnings("UnusedDeclaration")
 public abstract class SerieBeanAbstract extends CommonBean {
+
+    @SuppressWarnings("InstanceVariableNamingConvention")
+    @Field(fieldName = DDLConstants.SERIES_ID, primaryKey = true)
+    protected UUID id;
     @Field(fieldName = DDLConstants.SERIES_TITRE)
     protected String titre;
     @Field(fieldName = DDLConstants.SERIES_NOTATION)
     protected Notation notation;
-
     @Field(fieldName = DDLConstants.COLLECTIONS_ID, nullable = true)
     protected CollectionLiteBean collection;
 
@@ -40,6 +44,16 @@ public abstract class SerieBeanAbstract extends CommonBean {
         this.titre = in.readString();
         this.notation = (Notation) in.readValue(Notation.class.getClassLoader());
         this.collection = in.readParcelable(CollectionLiteBean.class.getClassLoader());
+    }
+
+    @Override
+    public UUID getId() {
+        return this.id;
+    }
+
+    @Override
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getTitre() {

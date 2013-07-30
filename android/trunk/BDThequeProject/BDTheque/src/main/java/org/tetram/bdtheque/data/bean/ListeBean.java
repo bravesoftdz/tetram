@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.bean;
 
 import android.os.Parcel;
 
+import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.bean.enums.ListeCategorie;
 import org.tetram.bdtheque.data.dao.ListeDao;
 import org.tetram.bdtheque.data.factories.ListeFactory;
@@ -11,21 +12,12 @@ import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 
+import java.util.UUID;
+
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.LISTES_TABLENAME, primaryKey = DDLConstants.LISTES_ID, factoryClass = ListeFactory.class)
+@Entity(tableName = DDLConstants.LISTES_TABLENAME, factoryClass = ListeFactory.class)
 @BeanDaoClass(ListeDao.class)
 public class ListeBean extends CommonBean {
-
-    @Field(fieldName = DDLConstants.LISTES_REF)
-    private Integer ref;
-    @Field(fieldName = DDLConstants.LISTES_CATEGORIE)
-    private ListeCategorie categorie;
-    @Field(fieldName = DDLConstants.LISTES_ORDRE)
-    private Integer ordre;
-    @Field(fieldName = DDLConstants.LISTES_DEFAUT)
-    private Integer defaut;
-    @Field(fieldName = DDLConstants.LISTES_LIBELLE)
-    private String libelle;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<ListeBean> CREATOR = new Creator<ListeBean>() {
@@ -39,6 +31,19 @@ public class ListeBean extends CommonBean {
             return new ListeBean[size];
         }
     };
+    @SuppressWarnings("InstanceVariableNamingConvention")
+    @Field(fieldName = DDLConstants.LISTES_ID, primaryKey = true)
+    private UUID id;
+    @Field(fieldName = DDLConstants.LISTES_REF)
+    private Integer ref;
+    @Field(fieldName = DDLConstants.LISTES_CATEGORIE)
+    private ListeCategorie categorie;
+    @Field(fieldName = DDLConstants.LISTES_ORDRE)
+    private Integer ordre;
+    @Field(fieldName = DDLConstants.LISTES_DEFAUT)
+    private Integer defaut;
+    @Field(fieldName = DDLConstants.LISTES_LIBELLE)
+    private String libelle;
 
     public ListeBean(Parcel in) {
         super(in);
@@ -68,6 +73,16 @@ public class ListeBean extends CommonBean {
         this.ordre = (Integer) in.readValue(integerClassLoader);
         this.defaut = (Integer) in.readValue(integerClassLoader);
         this.libelle = (String) in.readValue(String.class.getClassLoader());
+    }
+
+    @Override
+    public UUID getId() {
+        return this.id;
+    }
+
+    @Override
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     @Override

@@ -13,7 +13,7 @@ import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.COLLECTIONS_TABLENAME, primaryKey = DDLConstants.COLLECTIONS_ID, factoryClass = CollectionLiteFactory.class)
+@Entity(tableName = DDLConstants.COLLECTIONS_TABLENAME, factoryClass = CollectionLiteFactory.class)
 @BeanDaoClass(CollectionLiteDao.class)
 public class CollectionLiteBean extends CollectionBeanAbstract implements TreeNodeBean {
 

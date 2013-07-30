@@ -12,15 +12,12 @@ import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 
+import java.util.UUID;
+
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.AUTEURS_ALBUMS_TABLENAME, primaryKey = DDLConstants.AUTEURS_ALBUMS_ID, factoryClass = AuteurAlbumFactory.class)
+@Entity(tableName = DDLConstants.AUTEURS_ALBUMS_TABLENAME, factoryClass = AuteurAlbumFactory.class)
 @BeanDaoClass(AuteurAlbumDao.class)
 public class AuteurAlbumBean extends AuteurBeanAbstract {
-
-    @Field(fieldName = DDLConstants.ALBUMS_ID, nullable = false)
-    private AlbumLiteBean album;
-    @Field(fieldName = DDLConstants.AUTEURS_ALBUMS_METIER)
-    private AuteurMetier metier;
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<AuteurAlbumBean> CREATOR = new Creator<AuteurAlbumBean>() {
@@ -34,6 +31,13 @@ public class AuteurAlbumBean extends AuteurBeanAbstract {
             return new AuteurAlbumBean[size];
         }
     };
+    @SuppressWarnings("InstanceVariableNamingConvention")
+    @Field(fieldName = DDLConstants.AUTEURS_ALBUMS_ID, primaryKey = true)
+    private UUID id;
+    @Field(fieldName = DDLConstants.ALBUMS_ID, nullable = false)
+    private AlbumLiteBean album;
+    @Field(fieldName = DDLConstants.AUTEURS_ALBUMS_METIER)
+    private AuteurMetier metier;
 
     public AuteurAlbumBean(Parcel in) {
         super(in);
@@ -55,6 +59,16 @@ public class AuteurAlbumBean extends AuteurBeanAbstract {
         super.readFromParcel(in);
         this.album = in.readParcelable(AlbumLiteBean.class.getClassLoader());
         this.metier = (AuteurMetier) in.readSerializable();
+    }
+
+    @Override
+    public UUID getId() {
+        return this.id;
+    }
+
+    @Override
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public AlbumLiteBean getAlbum() {

@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.bean;
 
 import android.os.Parcel;
 
+import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.bean.lite.CollectionLiteBean;
 import org.tetram.bdtheque.data.factories.EditionFactory;
 import org.tetram.bdtheque.data.utils.DefaultBooleanValue;
@@ -10,11 +11,27 @@ import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import java.util.Date;
+import java.util.UUID;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.EDITIONS_TABLENAME, primaryKey = DDLConstants.EDITIONS_ID, factoryClass = EditionFactory.class)
+@Entity(tableName = DDLConstants.EDITIONS_TABLENAME, factoryClass = EditionFactory.class)
 public class EditionBean extends CommonBean {
 
+    @SuppressWarnings("FieldNameHidesFieldInSuperclass")
+    public static final Creator<EditionBean> CREATOR = new Creator<EditionBean>() {
+        @Override
+        public EditionBean createFromParcel(Parcel source) {
+            return new EditionBean(source);
+        }
+
+        @Override
+        public EditionBean[] newArray(int size) {
+            return new EditionBean[size];
+        }
+    };
+    @SuppressWarnings("InstanceVariableNamingConvention")
+    @Field(fieldName = DDLConstants.EDITIONS_ID, primaryKey = true)
+    private UUID id;
     @Field(fieldName = DDLConstants.EDITIONS_ISBN)
     private String isbn;
     @Field(fieldName = DDLConstants.EDITEURS_ID, nullable = false)
@@ -64,19 +81,6 @@ public class EditionBean extends CommonBean {
     private ListeBean formatEdition;
     @Field(fieldName = DDLConstants.EDITIONS_SENSLECTURE, nullable = true)
     private ListeBean sensLecture;
-
-    @SuppressWarnings("FieldNameHidesFieldInSuperclass")
-    public static final Creator<EditionBean> CREATOR = new Creator<EditionBean>() {
-        @Override
-        public EditionBean createFromParcel(Parcel source) {
-            return new EditionBean(source);
-        }
-
-        @Override
-        public EditionBean[] newArray(int size) {
-            return new EditionBean[size];
-        }
-    };
 
     public EditionBean(Parcel in) {
         super(in);
@@ -138,6 +142,16 @@ public class EditionBean extends CommonBean {
         this.orientation = in.readParcelable(ListeBean.class.getClassLoader());
         this.formatEdition = in.readParcelable(ListeBean.class.getClassLoader());
         this.sensLecture = in.readParcelable(ListeBean.class.getClassLoader());
+    }
+
+    @Override
+    public UUID getId() {
+        return this.id;
+    }
+
+    @Override
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getIsbn() {
@@ -268,51 +282,51 @@ public class EditionBean extends CommonBean {
         this.anneeCote = anneeCote;
     }
 
-    public void setTypeEdition(ListeBean typeEdition) {
-        this.typeEdition = typeEdition;
-    }
-
     public ListeBean getTypeEdition() {
         return this.typeEdition;
     }
 
-    public void setReliure(ListeBean reliure) {
-        this.reliure = reliure;
+    public void setTypeEdition(ListeBean typeEdition) {
+        this.typeEdition = typeEdition;
     }
 
     public ListeBean getReliure() {
         return this.reliure;
     }
 
-    public void setEtat(ListeBean etat) {
-        this.etat = etat;
+    public void setReliure(ListeBean reliure) {
+        this.reliure = reliure;
     }
 
     public ListeBean getEtat() {
         return this.etat;
     }
 
-    public void setOrientation(ListeBean orientation) {
-        this.orientation = orientation;
+    public void setEtat(ListeBean etat) {
+        this.etat = etat;
     }
 
     public ListeBean getOrientation() {
         return this.orientation;
     }
 
-    public void setFormatEdition(ListeBean formatEdition) {
-        this.formatEdition = formatEdition;
+    public void setOrientation(ListeBean orientation) {
+        this.orientation = orientation;
     }
 
     public ListeBean getFormatEdition() {
         return this.formatEdition;
     }
 
-    public void setSensLecture(ListeBean sensLecture) {
-        this.sensLecture = sensLecture;
+    public void setFormatEdition(ListeBean formatEdition) {
+        this.formatEdition = formatEdition;
     }
 
     public ListeBean getSensLecture() {
         return this.sensLecture;
+    }
+
+    public void setSensLecture(ListeBean sensLecture) {
+        this.sensLecture = sensLecture;
     }
 }

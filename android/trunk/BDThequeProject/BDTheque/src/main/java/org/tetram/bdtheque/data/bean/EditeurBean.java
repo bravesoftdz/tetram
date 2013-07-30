@@ -13,7 +13,7 @@ import org.tetram.bdtheque.database.DDLConstants;
 import java.net.URL;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.EDITEURS_TABLENAME, primaryKey = DDLConstants.EDITEURS_ID, factoryClass = EditeurFactory.class)
+@Entity(tableName = DDLConstants.EDITEURS_TABLENAME, factoryClass = EditeurFactory.class)
 @BeanDaoClass(EditeurDao.class)
 public class EditeurBean extends EditeurLiteBean {
 

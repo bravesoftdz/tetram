@@ -3,7 +3,7 @@ package org.tetram.bdtheque.gui.utils;
 import android.content.Context;
 
 import org.tetram.bdtheque.R;
-import org.tetram.bdtheque.data.bean.CommonBean;
+import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
 import org.tetram.bdtheque.data.bean.lite.PersonneLiteBean;
 import org.tetram.bdtheque.data.bean.lite.SerieLiteBean;

@@ -11,7 +11,7 @@ import org.tetram.bdtheque.database.DDLConstants;
 import java.net.URL;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.PERSONNES_TABLENAME, primaryKey = DDLConstants.PERSONNES_ID, factoryClass = PersonneFactory.class)
+@Entity(tableName = DDLConstants.PERSONNES_TABLENAME, factoryClass = PersonneFactory.class)
 public class PersonneBean extends PersonneLiteBean {
 
     @Field(fieldName = DDLConstants.PERSONNES_SITEWEB)

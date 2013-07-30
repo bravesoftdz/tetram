@@ -2,13 +2,18 @@ package org.tetram.bdtheque.data.bean.abstracts;
 
 import android.os.Parcel;
 
-import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.enums.Notation;
 import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 
+import java.util.UUID;
+
 @SuppressWarnings("UnusedDeclaration")
 public abstract class AlbumBeanAbstract extends CommonBean {
+
+    @SuppressWarnings("InstanceVariableNamingConvention")
+    @Field(fieldName = DDLConstants.ALBUMS_ID, primaryKey = true)
+    protected UUID id;
     @Field(fieldName = DDLConstants.ALBUMS_TITRE)
     protected String titre;
     @Field(fieldName = DDLConstants.ALBUMS_TOME)
@@ -70,6 +75,16 @@ public abstract class AlbumBeanAbstract extends CommonBean {
         this.notation = (Notation) in.readValue(Notation.class.getClassLoader());
         this.achat = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.complet = (Boolean) in.readValue(Boolean.class.getClassLoader());
+    }
+
+    @Override
+    public UUID getId() {
+        return this.id;
+    }
+
+    @Override
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getTitre() {

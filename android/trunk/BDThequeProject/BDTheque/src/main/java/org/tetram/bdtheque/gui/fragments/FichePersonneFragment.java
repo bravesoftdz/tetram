@@ -10,8 +10,8 @@ import android.widget.TabHost;
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.R;
-import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.bean.PersonneBean;
+import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.dao.PersonneDao;
 
 @SuppressWarnings("UnusedDeclaration")

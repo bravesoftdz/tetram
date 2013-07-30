@@ -149,7 +149,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:layout_gravity="center_vertical"/>
 
-                <org.tetram.bdtheque.org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
+                <org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/fiche_album_horsserie"

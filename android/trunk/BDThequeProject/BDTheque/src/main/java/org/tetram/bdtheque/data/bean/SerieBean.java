@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.SERIES_TABLENAME, primaryKey = DDLConstants.SERIES_ID, factoryClass = SerieFactory.class)
+@Entity(tableName = DDLConstants.SERIES_TABLENAME, factoryClass = SerieFactory.class)
 @BeanDaoClass(SerieDao.class)
 public class SerieBean extends SerieBeanAbstract {
 

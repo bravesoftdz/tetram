@@ -2,18 +2,24 @@ package org.tetram.bdtheque.data.bean.abstracts;
 
 import android.os.Parcel;
 
-import org.tetram.bdtheque.data.bean.CommonBean;
 import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 
+import java.util.UUID;
+
 @SuppressWarnings("UnusedDeclaration")
 public abstract class PersonneBeanAbstract extends CommonBean {
+
+    @SuppressWarnings("InstanceVariableNamingConvention")
+    @Field(fieldName = DDLConstants.PERSONNES_ID, primaryKey = true)
+    protected UUID id;
     @Field(fieldName = DDLConstants.PERSONNES_NOM)
     protected String nom;
 
     public PersonneBeanAbstract(Parcel in) {
         super(in);
     }
+
 
     public PersonneBeanAbstract() {
         super();
@@ -29,6 +35,16 @@ public abstract class PersonneBeanAbstract extends CommonBean {
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
         this.nom = in.readString();
+    }
+
+    @Override
+    public UUID getId() {
+        return this.id;
+    }
+
+    @Override
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getNom() {

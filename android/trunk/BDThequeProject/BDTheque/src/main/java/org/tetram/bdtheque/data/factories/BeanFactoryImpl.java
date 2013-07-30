@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 
 import org.jetbrains.annotations.Nullable;
-import org.tetram.bdtheque.data.bean.CommonBean;
+import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.dao.CommonDao;
 import org.tetram.bdtheque.data.dao.DaoFactory;
 import org.tetram.bdtheque.data.utils.BeanDaoClass;
@@ -158,9 +158,9 @@ public abstract class BeanFactoryImpl<T extends CommonBean> implements BeanFacto
         List<PropertyDescriptor> fields = DaoUtils.getPropertiesDescriptors(this.beanClass);
         if (fields.isEmpty()) return LoadResult.ERROR;
 
-        String dbFieldName = this.descriptor.getPrimaryKey();
+        String dbFieldName = this.descriptor.getPrimaryKey().getDbFieldName();
         if (loadDescriptor != null)
-            dbFieldName = loadDescriptor.getPrimaryKeyAlias();
+            dbFieldName = loadDescriptor.getAlias().get(this.descriptor.getPrimaryKey());
         bean.setId(getFieldAsUUID(cursor, dbFieldName));
         if (bean.getId() == null) return LoadResult.NOTFOUND;
 
