@@ -1,0 +1,12 @@
+construire requête SQL à partir d'une classe
+	* convertir les propriétés en nom complet SQL + alias
+	* convertir les dépendances en left/inner join
+
+construire filtre where à partir d'un nom de propriété
+	* convertir nom de propriété en nom complet SQL
+
+construire order by à partir d'un nom de propriété
+	* convertir nom de propriété en nom complet SQL
+
+renseigner les propriétés d'une classe
+	* convertir propriété en alias SQL (ou inversement)
