@@ -49,9 +49,12 @@ public abstract class UIUtils {
 
     @Nullable
     public static <T> View setUIElement(View parent, int resId, T value, int resRowId) {
-        if ((resRowId > 0) && isEmpty(value)) {
-            parent.findViewById(resRowId).setVisibility(View.GONE);
-            return null;
+        if (resRowId > 0) {
+            if (isEmpty(value)) {
+                parent.findViewById(resRowId).setVisibility(View.GONE);
+                return null;
+            } else
+                parent.findViewById(resRowId).setVisibility(View.VISIBLE);
         }
 
         View v = parent.findViewById(resId);

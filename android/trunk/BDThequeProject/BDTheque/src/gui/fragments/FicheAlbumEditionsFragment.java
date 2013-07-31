@@ -69,7 +69,7 @@ public class FicheAlbumEditionsFragment extends FicheFragment {
         if (collection == null)
             this.view.findViewById(R.id.fiche_edition_row_collection).setVisibility(View.GONE);
         else
-            setUIElement(this.view, R.id.edition_collection, StringUtils.formatTitreAcceptNull(collection.getNom()));
+            setUIElement(this.view, R.id.edition_collection, StringUtils.formatTitreAcceptNull(collection.getNom()), R.id.fiche_edition_row_collection);
 
         setUIElement(this.view, R.id.edition_année, StringUtils.nonZero(this.currentEdition.getAnnee()));
         setUIElement(this.view, R.id.edition_stock, this.currentEdition.isStock());

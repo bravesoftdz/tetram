@@ -65,6 +65,8 @@ public abstract class CommonDaoImpl<T extends CommonBean> extends DefaultDao<T> 
                 null
         );
 
+//        Log.i(getClass().getCanonicalName(), sql);
+
         SQLiteDatabase rdb = getDatabaseHelper().getReadableDatabase();
         assert rdb != null;
         try {

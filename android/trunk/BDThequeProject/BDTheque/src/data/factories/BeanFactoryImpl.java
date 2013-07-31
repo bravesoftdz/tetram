@@ -87,6 +87,7 @@ public abstract class BeanFactoryImpl<T extends CommonBean> implements BeanFacto
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void loadProperty(T bean, PropertyDescriptor descriptor, Cursor cursor, Context context, boolean inline, DaoUtils.LoadDescriptor loadDescriptor) {
         final Class<?> fieldType = descriptor.getField().getType();
         try {
@@ -122,17 +123,13 @@ public abstract class BeanFactoryImpl<T extends CommonBean> implements BeanFacto
                 if (loadDescriptor != null)
                     childLoadDescriptor = loadDescriptor.getChildAlias().get(dbFieldName);
                 if (inline) {
-                    Entity e = fieldType.getAnnotation(Entity.class);
-                    BeanFactory factory = e.factoryClass().getConstructor().newInstance();
-                    descriptor.getSetter().invoke(bean, factory.loadFromCursor(context, cursor, inline, childLoadDescriptor));
+                    descriptor.getSetter().invoke(bean, FactoriesFactory.getFactoryForBean((Class<? extends CommonBean>) fieldType).loadFromCursor(context, cursor, inline, childLoadDescriptor));
                 } else {
                     BeanDaoClass daoClass = descriptor.getField().getAnnotation(BeanDaoClass.class);
                     if (daoClass == null)
                         daoClass = fieldType.getAnnotation(BeanDaoClass.class);
                     if (daoClass == null) {
-                        Entity e = fieldType.getAnnotation(Entity.class);
-                        BeanFactory factory = e.factoryClass().getConstructor().newInstance();
-                        descriptor.getSetter().invoke(bean, factory.loadFromCursor(context, cursor, inline, childLoadDescriptor));
+                        descriptor.getSetter().invoke(bean, FactoriesFactory.getFactoryForBean((Class<? extends CommonBean>) fieldType).loadFromCursor(context, cursor, inline, childLoadDescriptor));
                     } else {
                         final UUID subBeanId = getFieldAsUUID(cursor, dbFieldName);
                         if (subBeanId != null) {
@@ -148,7 +145,7 @@ public abstract class BeanFactoryImpl<T extends CommonBean> implements BeanFacto
             else /*if (List.class.isAssignableFrom(fieldType))*/ {
 
             }
-        } catch (IllegalAccessException | InvocationTargetException | InstantiationException | NoSuchMethodException e) {
+        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
         } catch (MalformedURLException ignored) {
         }

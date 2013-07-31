@@ -9,6 +9,7 @@ import org.tetram.bdtheque.data.utils.DefaultBooleanValue;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
+import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.Date;
 import java.util.UUID;
@@ -142,6 +143,18 @@ public class EditionBean extends CommonBean {
         this.orientation = in.readParcelable(ListeBean.class.getClassLoader());
         this.formatEdition = in.readParcelable(ListeBean.class.getClassLoader());
         this.sensLecture = in.readParcelable(ListeBean.class.getClassLoader());
+    }
+
+    @Override
+    public String toString() {
+        String result = "";
+        if (this.editeur != null)
+        result = StringUtils.ajoutString(result, StringUtils.formatTitre(this.editeur.getNom()), " ");
+        if (this.collection != null)
+            result = StringUtils.ajoutString(result, StringUtils.formatTitre(this.collection.getNom()), " ", "(", ")");
+        result = StringUtils.ajoutString(result, StringUtils.nonZero(this.annee), " ", "[", "]");
+        result = StringUtils.ajoutString(result, StringUtils.formatISBN(this.isbn), " - ", "ISBN ");
+        return result;
     }
 
     @Override

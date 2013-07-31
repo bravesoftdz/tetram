@@ -217,11 +217,11 @@ public abstract class DaoUtils {
     }
 
     public static QueryInfo getQueryInfo(SQLDescriptor descriptor) {
-        QueryInfo result = new QueryInfo();
-        return buildQueryInfo(result, descriptor, null, null, null, 0);
+        return buildQueryInfo(descriptor, null, null, null, 0);
     }
 
-    private static QueryInfo buildQueryInfo(QueryInfo queryInfo, SQLDescriptor descriptor, SQLDescriptor masterDescriptor, String masterTableAlias, PropertySQLDescriptor masterField, Integer indicator) {
+    private static QueryInfo buildQueryInfo(SQLDescriptor descriptor, SQLDescriptor masterDescriptor, String masterTableAlias, PropertySQLDescriptor masterField, Integer indicator) {
+        QueryInfo queryInfo = new QueryInfo();
         if (indicator != null) queryInfo.indicator = indicator;
 
         String tableAlias = getSQLAlias(descriptor.getTableName(), queryInfo.indicator);
@@ -229,8 +229,8 @@ public abstract class DaoUtils {
         if (masterField == null)
             queryInfo.tables.add(String.format("%s %s", descriptor.tableName, tableAlias));
         else {
-            String join = String.format("%s.%s=%s", tableAlias, descriptor.primaryKey, masterField.fullFieldName);
-            queryInfo.tables.add(String.format((masterField.isNullable() ? "left" : "inner") + " join %s %s on (%s)", descriptor.tableName, tableAlias, join));
+            String join = String.format("%s.%s=%s", tableAlias, descriptor.primaryKey.dbFieldName, masterField.fullFieldName);
+            queryInfo.tables.add(String.format((masterField.isNullable() ? "LEFT" : "INNER") + " JOIN %s %s ON (%s)", descriptor.tableName, tableAlias, join));
         }
 
         int localIndicator = queryInfo.indicator;
@@ -242,13 +242,15 @@ public abstract class DaoUtils {
             String fieldName = property.property.dbFieldName;
             property.aliasName = getSQLAlias(fieldName, localIndicator);
             property.fullFieldName = String.format("%s.%s", tableAlias, fieldName);
+
             queryInfo.fields.add(property.fullFieldName);
             queryInfo.sqlAliasMapping.put(property.fullFieldName, String.format("%s %s", property.fullFieldName, property.aliasName));
             queryInfo.loadDescriptor.getAlias().put(column.getKey(), property.aliasName);
             queryInfo.columns.put(property.property.field, property);
 
             if (column.getValue() != null) {
-                final QueryInfo childQueryInfo = buildQueryInfo(queryInfo, column.getValue(), descriptor, tableAlias, property, ++queryInfo.indicator);
+                property.masterProperty = masterField;
+                final QueryInfo childQueryInfo = buildQueryInfo(column.getValue(), descriptor, tableAlias, property, ++queryInfo.indicator);
                 queryInfo.indicator = childQueryInfo.indicator;
                 queryInfo.tables.addAll(childQueryInfo.tables);
                 queryInfo.fields.addAll(childQueryInfo.fields);
@@ -292,7 +294,7 @@ public abstract class DaoUtils {
         private PropertyDescriptor property;
         private String aliasName;
         private String fullFieldName;
-        private boolean nullable = true;
+        private PropertySQLDescriptor masterProperty;
 
         public PropertyDescriptor getProperty() {
             return this.property;
@@ -307,7 +309,14 @@ public abstract class DaoUtils {
         }
 
         public boolean isNullable() {
-            return this.nullable;
+            boolean result = this.property.annotation.nullable();
+            if (this.masterProperty != null)
+                result = result || this.masterProperty.isNullable();
+            return result;
+        }
+
+        public PropertySQLDescriptor getMasterProperty() {
+            return this.masterProperty;
         }
     }
 

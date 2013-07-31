@@ -66,10 +66,6 @@ public abstract class FicheFragment extends Fragment {
             // the view hierarchy; it would just never be used.
             return null;
         } else {
-            //ScrollView view = new ScrollView(getActivity());
-            //buildView(inflater, view, savedInstanceState);
-            //return view;
-
             return buildView(inflater, container, savedInstanceState);
         }
 
