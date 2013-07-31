@@ -1,0 +1,65 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:0.5.+'
+    }
+}
+
+apply plugin: 'android'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.android.support:support-v4:13.0.+'
+    compile files('libs/annotations.jar')
+}
+
+android {
+    compileSdkVersion 16
+    buildToolsVersion "18.0.0"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_7
+        targetCompatibility = JavaVersion.VERSION_1_7
+    }
+
+    defaultConfig {
+        /*
+          Lu depuis AndroidManifest.xml
+
+          minSdkVersion 16
+          targetSdkVersion 18
+          versionCode 1
+          versionName "1.0"
+        */
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("../keystore.jks")
+            storePassword "280776"
+            keyAlias "bdtheque"
+            keyPassword "280776"
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+        debug {
+            packageNameSuffix ".debug"
+        }
+        /*
+        jnidebug.initWith(buildTypes.debug)
+        jnidebug {
+            packageNameSuffix ".jnidebug"
+            jnidebugBuild true
+        }
+        */
+    }
+}
