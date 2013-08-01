@@ -20,6 +20,7 @@ public class FicheAlbumFragment extends FicheFragment {
     private static final String TAB_DETAILS = "détails";
     private static final String TAB_EDITIONS = "éditions";
     private static final String TAB_ALBUMS = "albums";
+    private static final String TAB_IMAGES = "images";
 
     @Nullable
     @Override
@@ -54,6 +55,13 @@ public class FicheAlbumFragment extends FicheFragment {
             tabHost.addTab(spec);
             FicheAlbumEditionsFragment editionsFragment = (FicheAlbumEditionsFragment) FicheFragment.newInstance(FicheAlbumEditionsFragment.class, albumBean);
             fragmentTransaction.replace(R.id.tab_album_editions, editionsFragment);
+
+            spec = tabHost.newTabSpec(TAB_IMAGES);
+            spec.setIndicator(getResources().getString(R.string.fiche_album_tab_images));
+            spec.setContent(R.id.tab_album_images);
+            tabHost.addTab(spec);
+            FicheAlbumImagesFragment imagesFragment = (FicheAlbumImagesFragment) FicheFragment.newInstance(FicheAlbumImagesFragment.class, albumBean);
+            fragmentTransaction.replace(R.id.tab_album_images, imagesFragment);
         }
 
         if ((serieBean != null) && (serieBean.getAlbums().size() > 1)) {

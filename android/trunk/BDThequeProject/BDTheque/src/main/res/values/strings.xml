@@ -33,7 +33,7 @@
     <string name="fiche_album_coloristes">Couleurs :</string>
     <plurals name="fiche_album_tab_editions">
         <item quantity="one">Edition</item>
-        <item quantity="other">Edition</item>
+        <item quantity="other">Editions</item>
     </plurals>
     <string name="fiche_edition_isbn">ISBN :</string>
     <string name="fiche_edition_editeur">Editeur :</string>
@@ -86,6 +86,7 @@
     <string name="initiale_sans_serie"><![CDATA[<Sans série>]]></string>
     <string name="msg_confirm_quit">Appuyer à nouveau pour quitter.</string>
     <string name="msg_chargement_donnees">Chargement des données initiales…</string>
+    <string name="fiche_album_tab_images">Images</string>
 
     <string-array name="pref_formatTitreAlbum_entries">
         <item>Album (Série - Tome)</item>

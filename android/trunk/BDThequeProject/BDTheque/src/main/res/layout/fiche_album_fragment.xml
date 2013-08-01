@@ -39,6 +39,11 @@
             <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/tab_album_images"/>
+
+            <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:id="@+id/tab_album_albums"/>
         </FrameLayout>
 
