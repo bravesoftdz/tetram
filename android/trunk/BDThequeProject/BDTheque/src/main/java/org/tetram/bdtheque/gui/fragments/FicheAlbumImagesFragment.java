@@ -1,7 +1,7 @@
 package org.tetram.bdtheque.gui.fragments;
 
 import android.os.Bundle;
-import android.text.format.DateFormat;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,16 +13,7 @@ import android.widget.Toast;
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.AlbumBean;
-import org.tetram.bdtheque.data.bean.EditeurBean;
 import org.tetram.bdtheque.data.bean.EditionBean;
-import org.tetram.bdtheque.data.bean.lite.CollectionLiteBean;
-import org.tetram.bdtheque.utils.StringUtils;
-import org.tetram.bdtheque.utils.UserConfig;
-
-import java.util.Date;
-
-import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElement;
-import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElementURL;
 
 public class FicheAlbumImagesFragment extends FicheFragment {
 
@@ -60,7 +51,7 @@ public class FicheAlbumImagesFragment extends FicheFragment {
         this.view.findViewById(R.id.edition_btn_next).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), getActivity().getExternalFilesDir(null).toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString(), Toast.LENGTH_LONG).show();
             }
         });
 

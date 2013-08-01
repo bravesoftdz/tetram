@@ -56,4 +56,5 @@ public class BDThequeApplication extends Application {
     public static void setFichePersonneLastShownTab(String tabPosition) {
         BDThequeApplication.fichePersonneLastShownTab = tabPosition;
     }
+
 }
