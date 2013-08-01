@@ -2,18 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="org.tetram.bdtheque"
           android:versionCode="1"
-          android:versionName="1.0">
+          android:versionName="1.0"
+          android:installLocation="auto">
 
     <uses-sdk
-            android:minSdkVersion="16"
-            android:targetSdkVersion="18"/>
+        android:minSdkVersion="16"
+        android:targetSdkVersion="18"/>
 
     <application
-            android:allowBackup="true"
-            android:icon="@drawable/ic_launcher"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme"
-            android:name=".BDThequeApplication">
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        android:name=".BDThequeApplication">
 
         <activity android:name=".gui.activities.SplashActivity">
             <intent-filter>
@@ -23,16 +24,16 @@
         </activity>
 
         <activity
-                android:name=".gui.activities.RepertoireActivity"
-                android:launchMode="singleTop">
+            android:name=".gui.activities.RepertoireActivity"
+            android:launchMode="singleTop">
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>
             </intent-filter>
 
             <meta-data
-                    android:name="android.app.searchable"
-                    android:resource="@xml/recherche"/>
+                android:name="android.app.searchable"
+                android:resource="@xml/recherche"/>
         </activity>
 
         <activity android:name=".gui.activities.FicheActivity"/>
@@ -47,16 +48,16 @@
         </activity>
 
         <activity
-                android:name=".dummy.ItemListActivity"
-                android:label="@string/app_name">
+            android:name=".dummy.ItemListActivity"
+            android:label="@string/app_name">
         </activity>
         <activity
-                android:name=".dummy.ItemDetailActivity"
-                android:label="@string/title_item_detail"
-                android:parentActivityName=".ItemListActivity">
+            android:name=".dummy.ItemDetailActivity"
+            android:label="@string/title_item_detail"
+            android:parentActivityName=".ItemListActivity">
             <meta-data
-                    android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".ItemListActivity"/>
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ItemListActivity"/>
         </activity>
     </application>
 
