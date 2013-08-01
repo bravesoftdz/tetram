@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.gui.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;
@@ -28,17 +29,20 @@ import java.util.List;
 public class RepertoireActivity extends Activity implements ActionBar.OnNavigationListener, SearchManager.OnCancelListener {
 
     private static final int REQUEST_CONFIG = 0;
+    private Toast confirmMsg;
 
     private int currentNavigationItem = -1;
     private ShareActionProvider shareProvider;
     private TitlesFragment repertoire;
     private Date lastBackClick = new Date(0);
 
+    @SuppressLint("ShowToast")
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.repertoire);
 
+        this.confirmMsg = Toast.makeText(this, getString(R.string.msg_confirm_quit), Toast.LENGTH_SHORT);
         this.repertoire = (TitlesFragment) getFragmentManager().findFragmentById(R.id.titles);
 
         if (savedInstanceState != null) {
@@ -174,8 +178,10 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
         cal.add(Calendar.SECOND, 3);
         if ((getFragmentManager().getBackStackEntryCount() == 0) && new Date().after(cal.getTime())) {
             this.lastBackClick = new Date();
-            Toast.makeText(this, getString(R.string.msg_confirm_quit), Toast.LENGTH_LONG).show();
-        } else
+            this.confirmMsg.show();
+        } else {
+            this.confirmMsg.cancel();
             super.onBackPressed();
+        }
     }
 }

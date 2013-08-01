@@ -7,6 +7,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import org.tetram.bdtheque.BDThequeApplication;
+import org.tetram.bdtheque.BuildConfig;
+import org.tetram.bdtheque.R;
 
 import java.io.IOException;
 
@@ -56,18 +58,20 @@ public class BDDatabaseHelper extends SQLiteOpenHelper {
         switch (oldVersion) {
             case 0:
             case 1:
-                Toast.makeText(BDThequeApplication.getInstance().getApplicationContext(), "Chargement des données initiales...", Toast.LENGTH_LONG).show();
-                runSQL(db, "sql/init_editeurs.sql");
-                runSQL(db, "sql/init_collections.sql");
-                runSQL(db, "sql/init_series.sql");
-                runSQL(db, "sql/init_albums.sql");
-                runSQL(db, "sql/init_editions.sql");
-                runSQL(db, "sql/init_personnes.sql");
-                runSQL(db, "sql/init_auteurs.sql");
-                runSQL(db, "sql/init_auteurs_series.sql");
-                runSQL(db, "sql/init_genres.sql");
-                runSQL(db, "sql/init_genres_series.sql");
-                runSQL(db, "sql/init_listes.sql");
+                if (BuildConfig.DEBUG) {
+                    Toast.makeText(BDThequeApplication.getInstance().getApplicationContext(), this.context.getString(R.string.msg_chargement_donnees), Toast.LENGTH_LONG).show();
+                    runSQL(db, "sql/init_editeurs.sql");
+                    runSQL(db, "sql/init_collections.sql");
+                    runSQL(db, "sql/init_series.sql");
+                    runSQL(db, "sql/init_albums.sql");
+                    runSQL(db, "sql/init_editions.sql");
+                    runSQL(db, "sql/init_personnes.sql");
+                    runSQL(db, "sql/init_auteurs.sql");
+                    runSQL(db, "sql/init_auteurs_series.sql");
+                    runSQL(db, "sql/init_genres.sql");
+                    runSQL(db, "sql/init_genres_series.sql");
+                    runSQL(db, "sql/init_listes.sql");
+                }
 //            case 2:
 //                runSQL(db, "sql/upgrade_to_v3.sql");
             default: {

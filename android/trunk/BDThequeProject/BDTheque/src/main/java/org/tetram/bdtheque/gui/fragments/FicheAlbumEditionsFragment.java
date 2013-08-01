@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.gui.fragments;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
@@ -8,8 +9,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.jetbrains.annotations.Nullable;
+import org.tetram.bdtheque.BuildConfig;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.AlbumBean;
 import org.tetram.bdtheque.data.bean.EditeurBean;
@@ -62,6 +65,16 @@ public class FicheAlbumEditionsFragment extends FicheFragment {
     private void loadEdition(EditionBean edition) {
         this.currentEdition = edition;
         setUIElement(this.view, R.id.edition_isbn, StringUtils.formatISBN(this.currentEdition.getIsbn()));
+
+/*
+        View isbn = this.view.findViewById(R.id.edition_isbn);
+        isbn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), String.format("w: %d; sw: %d", getResources().getConfiguration().screenWidthDp, getResources().getConfiguration().smallestScreenWidthDp), Toast.LENGTH_SHORT).show();
+            }
+        });
+*/
 
         final EditeurBean editeur = this.currentEdition.getEditeur();
         setUIElementURL(this.view, R.id.edition_editeur, StringUtils.formatTitreAcceptNull(editeur.getNom()), editeur.getSiteWeb(), 0);

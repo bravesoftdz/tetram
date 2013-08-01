@@ -28,9 +28,10 @@
                 android:columnOrderPreserved="true"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:shrinkColumns="0,1"
-                android:stretchColumns="2"
-                android:orientation="vertical">
+                android:shrinkColumns="0"
+                android:orientation="vertical"
+                android:stretchColumns="1"
+                android:measureWithLargestChild="false">
 
             <TableRow
                     android:layout_width="fill_parent"
@@ -53,7 +54,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_gravity="center_vertical"
                         android:layout_column="1"
-                        android:layout_span="2"/>
+                    />
             </TableRow>
 
             <TableRow
@@ -77,7 +78,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_gravity="center_vertical"
                         android:layout_column="1"
-                        android:layout_span="2"/>
+                    />
 
             </TableRow>
 
@@ -103,7 +104,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_gravity="center_vertical"
                         android:layout_column="1"
-                        android:layout_span="2"/>
+                    />
             </TableRow>
 
             <TableRow
@@ -128,41 +129,71 @@
                         android:layout_gravity="center_vertical"
                         android:layout_column="1"
                         android:minWidth="100dp"
-                        android:layout_marginRight="-2dp"/>
+                        android:layout_marginRight="-2dp"
+                    />
 
-                <org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
-                        style="@style/fiche_label"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_column="2"
-                        android:layout_marginTop="-8dp"
-                        android:layout_marginBottom="-8dp"
-                        android:layout_marginLeft="-5dp"
-                        android:text="@string/fiche_edition_stock"
-                        android:id="@+id/edition_stock"
-                        android:checked="false"/>
             </TableRow>
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="-6dp"
+                android:layout_marginBottom="-6dp">
 
                 <org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
                         style="@style/fiche_label"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_column="1"
-                        android:layout_marginBottom="-8dp"
-                        android:layout_marginTop="-8dp"
-                        android:text="@string/fiche_edtion_couleur"
-                        android:id="@+id/edition_couleur"/>
+                        android:text="@string/fiche_edition_stock"
+                        android:id="@+id/edition_stock"
+                        android:checked="false"
+                    />
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_marginTop="-6dp"
+                    android:layout_marginBottom="-6dp">
 
                 <org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
                         style="@style/fiche_label"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_column="2"
-                        android:layout_marginTop="-8dp"
-                        android:layout_marginBottom="-8dp"
+                        android:layout_column="1"
+                        android:text="@string/fiche_edtion_couleur"
+                        android:id="@+id/edition_couleur"
+                    />
+
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="-6dp"
+                android:layout_marginBottom="-6dp">
+
+                <org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
+                        style="@style/fiche_label"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="1"
                         android:text="@string/fiche_edition_dedicace"
-                        android:id="@+id/edition_dedicace"/>
+                        android:id="@+id/edition_dedicace"
+                    />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:layout_marginTop="-6dp"
+                android:layout_marginBottom="-6dp">
+
+                <org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
+                        style="@style/fiche_label"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_column="1"
+                        android:text="@string/fiche_edition_offert"
+                        android:id="@+id/edition_offert"
+                    />
             </TableRow>
 
             <TableRow
@@ -190,15 +221,32 @@
                         android:minWidth="100dp"
                         android:layout_marginRight="-2dp"/>
 
-                <org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
+            </TableRow>
+
+            <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:id="@+id/fiche_edition_row_aquisition">
+
+                <TextView
                         style="@style/fiche_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Aquisition"
+                        android:id="@+id/label_edition_aquisition"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_column="2"
-                        android:layout_marginTop="-8dp"
-                        android:layout_marginBottom="-8dp"
-                        android:text="@string/fiche_edition_offert"
-                        android:layout_marginLeft="-5dp"
-                        android:id="@+id/edition_offert"/>
+                        android:layout_column="0"
+                        android:layout_gravity="center_vertical|right"
+                        tools:ignore="HardcodedText"/>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_aquisition"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_gravity="center_vertical"
+                        android:layout_column="1"
+                    />
             </TableRow>
 
             <TableRow
@@ -226,33 +274,7 @@
                         android:layout_column="1"
                         android:minWidth="100dp"
                         android:layout_marginRight="-2dp"
-                        android:layout_span="2"/>
-            </TableRow>
-
-            <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:id="@+id/fiche_edition_row_aquisition">
-
-                <TextView
-                        style="@style/fiche_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Aquisition"
-                        android:id="@+id/label_edition_aquisition"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_column="0"
-                        android:layout_gravity="center_vertical|right"
-                        tools:ignore="HardcodedText"/>
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/edition_aquisition"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_gravity="center_vertical"
-                        android:layout_column="1"
-                        android:layout_span="2"/>
+                    />
             </TableRow>
 
             <TableRow
@@ -275,7 +297,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/edition_pages"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_span="2"/>
+                        android:layout_column="1"/>
             </TableRow>
 
             <TableRow
@@ -298,7 +320,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/edition_typeedition"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_span="2"/>
+                        android:layout_column="1"/>
             </TableRow>
 
             <TableRow
@@ -321,7 +343,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/edition_reliure"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_span="2"/>
+                        android:layout_column="1"/>
             </TableRow>
 
             <TableRow
@@ -344,7 +366,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/edition_etatedition"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_span="2"/>
+                        android:layout_column="1"/>
             </TableRow>
 
             <TableRow
@@ -367,7 +389,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/edition_orientation"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_span="2"/>
+                        android:layout_column="1"/>
             </TableRow>
 
             <TableRow
@@ -390,7 +412,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/edition_formatedition"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_span="2"/>
+                        android:layout_column="1"/>
             </TableRow>
 
             <TableRow
@@ -413,7 +435,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/edition_senslecture"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_span="2"/>
+                        android:layout_column="1"/>
             </TableRow>
 
             <TableRow
@@ -436,7 +458,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/edition_notes"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_span="2"/>
+                        android:layout_column="1"/>
             </TableRow>
 
             <TableRow
@@ -459,7 +481,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/edition_numero"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_span="2"/>
+                        android:layout_column="1"/>
             </TableRow>
         </TableLayout>
     </ScrollView>

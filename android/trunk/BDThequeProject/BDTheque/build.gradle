@@ -50,8 +50,12 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
+            // pas nécessaire
+            // buildConfig "public final static boolean HAS_PROTOTYPE_FEATURE = false;"
         }
         debug {
+            // pas nécessaire
+            // buildConfig "public final static boolean HAS_PROTOTYPE_FEATURE = true;"
             packageNameSuffix ".debug"
         }
         /*

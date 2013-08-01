@@ -42,7 +42,7 @@
     <string name="fiche_edition_stock">Stock</string>
     <string name="fiche_edtion_couleur">Couleur</string>
     <string name="fiche_edition_vo">VO</string>
-    <string name="fiche_edition_dedicace">Dédicacé :</string>
+    <string name="fiche_edition_dedicace">Dédicacé</string>
     <string name="fiche_edition_offert">Offert</string>
     <string name="fiche_edition_prix">Prix :</string>
     <string name="fiche_edition_offertle">Offert le :</string>
@@ -85,6 +85,7 @@
     <string name="title_item_detail">details</string>
     <string name="initiale_sans_serie"><![CDATA[<Sans série>]]></string>
     <string name="msg_confirm_quit">Appuyer à nouveau pour quitter.</string>
+    <string name="msg_chargement_donnees">Chargement des données initiales…</string>
 
     <string-array name="pref_formatTitreAlbum_entries">
         <item>Album (Série - Tome)</item>
