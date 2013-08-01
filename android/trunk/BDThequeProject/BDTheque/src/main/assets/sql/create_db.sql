@@ -154,3 +154,16 @@ create table listes (
   constraint listes_pk primary key (categorie, ref)
 );
 
+create table couvertures(
+  id_couverture       char(38) not null,
+  id_album            char(38),
+  id_edition          char(38),
+  ordre               integer,
+  stockagecouverture  smallint,
+  imagecouverture     data,
+  dc_couvertures      timestamp not null,
+  dm_couvertures      timestamp not null,
+  fichiercouverture   varchar(255),
+  categorieimage      char(38),
+  constraint couvertures_pk primary key (id_couverture)
+);
