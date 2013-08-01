@@ -12,8 +12,8 @@ import java.util.Map;
 @SuppressWarnings({"ClassNamePrefixedWithPackageName", "UnusedDeclaration"})
 public class FactoriesFactory {
 
-    private static final Map<Class<? extends BeanFactory<?>>, BeanFactory<?>> factories = new HashMap<>();
-    private static final Map<Class<? extends CommonBean>, BeanFactory<?>> factoriesBean = new HashMap<>();
+    private static final Map<Class<? extends BeanFactory<?>>, BeanFactory<?>> factories = new HashMap<Class<? extends BeanFactory<?>>, BeanFactory<?>>();
+    private static final Map<Class<? extends CommonBean>, BeanFactory<?>> factoriesBean = new HashMap<Class<? extends CommonBean>, BeanFactory<?>>();
 
     @SuppressWarnings("unchecked")
     public static <T extends BeanFactory<?>> T getFactory(Class<T> factoryClass) {
@@ -23,7 +23,13 @@ public class FactoriesFactory {
                 Constructor<T> constructor = factoryClass.getConstructor();
                 factory = constructor.newInstance();
                 factories.put(factoryClass, factory);
-            } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
                 e.printStackTrace();
             }
         return (T) factory;

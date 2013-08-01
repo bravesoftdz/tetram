@@ -24,10 +24,10 @@ public class AlbumBean extends AlbumBeanAbstract {
     private String notes;
     @Field(fieldName = DDLConstants.SERIES_ID, nullable = true)
     private SerieBean serie;
-    private final List<AuteurAlbumBean> scenaristes = new ArrayList<>();
-    private final List<AuteurAlbumBean> dessinateurs = new ArrayList<>();
-    private final List<AuteurAlbumBean> coloristes = new ArrayList<>();
-    private final List<EditionBean> editions = new ArrayList<>();
+    private final List<AuteurAlbumBean> scenaristes = new ArrayList<AuteurAlbumBean>();
+    private final List<AuteurAlbumBean> dessinateurs = new ArrayList<AuteurAlbumBean>();
+    private final List<AuteurAlbumBean> coloristes = new ArrayList<AuteurAlbumBean>();
+    private final List<EditionBean> editions = new ArrayList<EditionBean>();
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<AlbumBean> CREATOR = new Creator<AlbumBean>() {

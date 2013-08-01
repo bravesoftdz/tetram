@@ -28,7 +28,7 @@ public abstract class UIUtils {
         else {
             try {
                 Method method = aClass.getMethod("isEmpty", (Class[]) null);
-                return (boolean) method.invoke(o);
+                return (Boolean) method.invoke(o);
             } catch (Exception e) {
                 return false;
             }

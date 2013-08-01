@@ -29,7 +29,7 @@ public class NotationDialogFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final ListView listView = (ListView) inflater.inflate(R.layout.dialog_notation, null);
 
-        List<MenuEntry> menuEntries = new ArrayList<>();
+        List<MenuEntry> menuEntries = new ArrayList<MenuEntry>();
         for (Notation notation : Notation.values())
             menuEntries.add(notation.getMenuEntry(getActivity()));
 

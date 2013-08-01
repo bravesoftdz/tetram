@@ -49,7 +49,7 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
         searchManager.setOnCancelListener(this);
 
         MenuEntry defaultMenu = null;
-        List<MenuEntry> menuEntries = new ArrayList<>();
+        List<MenuEntry> menuEntries = new ArrayList<MenuEntry>();
         for (ModeRepertoire mode : ModeRepertoire.values()) {
             MenuEntry menu = mode.getMenuEntry(this);
             if (mode.isDefault()) defaultMenu = menu;
@@ -174,7 +174,7 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
         cal.add(Calendar.SECOND, 3);
         if ((getFragmentManager().getBackStackEntryCount() == 0) && new Date().after(cal.getTime())) {
             this.lastBackClick = new Date();
-            Toast.makeText(this, "Appuyer à nouveau pour quitter.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.msg_confirm_quit), Toast.LENGTH_LONG).show();
         } else
             super.onBackPressed();
     }

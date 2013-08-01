@@ -49,11 +49,17 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
             sWhere += filtre == null || "".equals(filtre) ? "" : " and " + filtre;
             Cursor cursor = rdb.rawQuery(getContext().getString(resId, sWhere), params);
             try {
-                List<B> result = new ArrayList<>();
+                List<B> result = new ArrayList<B>();
                 BeanFactory<B> factory = null;
                 try {
                     factory = this.beanFactoryClass.getConstructor().newInstance();
-                } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
 
@@ -76,7 +82,7 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
             Cursor cursor = rdb.rawQuery(sql, null);
             try {
                 int cValue = (cursor.getColumnCount() == 2) ? 0 : 2;
-                List<I> result = new ArrayList<>();
+                List<I> result = new ArrayList<I>();
                 while (cursor.moveToNext()) {
                     result.add((I) InitialeBean.createInstance(this.initialeClass, cursor.getString(0), cursor.getInt(1), cursor.getString(cValue)));
                 }

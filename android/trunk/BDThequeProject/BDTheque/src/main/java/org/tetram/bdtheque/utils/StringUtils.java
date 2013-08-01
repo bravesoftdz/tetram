@@ -35,17 +35,17 @@ public abstract class StringUtils {
     static {
         Map<Boolean, String> aMap;
 
-        aMap = new HashMap<>();
+        aMap = new HashMap<Boolean, String>();
         aMap.put(false, "T. ");
         aMap.put(true, "Tome ");
         RES_TOME = Collections.unmodifiableMap(aMap);
 
-        aMap = new HashMap<>();
+        aMap = new HashMap<Boolean, String>();
         aMap.put(false, "HS");
         aMap.put(true, "Hors-Série");
         RES_HORSERIE = Collections.unmodifiableMap(aMap);
 
-        aMap = new HashMap<>();
+        aMap = new HashMap<Boolean, String>();
         aMap.put(false, "INT.");
         aMap.put(true, "Intégrale");
         RES_INTEGRALE = Collections.unmodifiableMap(aMap);
@@ -187,8 +187,8 @@ end;
 
         InputStream inputStream = BDThequeApplication.getInstance().getResources().openRawResource(R.raw.isbnranges_original);
         try {
-            isbnPrefixes = new HashMap<>();
-            isbnGroups = new HashMap<>();
+            isbnPrefixes = new HashMap<String, List<ISBNRule>>();
+            isbnGroups = new HashMap<String, List<ISBNRule>>();
 
             SAXParser parseur = SAXParserFactory.newInstance().newSAXParser();
             parseur.parse(inputStream, new DefaultHandler() {
@@ -200,52 +200,54 @@ end;
 
                 @Override
                 public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-                    switch (qName.toLowerCase()) {
-                        case "ean.uccprefixes":
-                            currentList = isbnPrefixes;
-                            break;
-                        case "registrationgroups":
-                            currentList = isbnGroups;
-                            break;
-                        case "rule":
-                            currentRule = new ISBNRule();
-                            break;
+                    String s = qName.toLowerCase();
+                    if ("ean.uccprefixes".equals(s)) {
+                        currentList = isbnPrefixes;
+
+                    } else if ("registrationgroups".equals(s)) {
+                        currentList = isbnGroups;
+
+                    } else if ("rule".equals(s)) {
+                        currentRule = new ISBNRule();
+
                     }
                     tmpValue = "";
                 }
 
                 @Override
                 public void endElement(String uri, String localName, String qName) throws SAXException {
-                    switch (qName.toLowerCase()) {
-                        case "valuelower":
-                            currentRule.valueLower = Integer.valueOf(tmpValue);
-                            break;
-                        case "range":
-                            Integer p = tmpValue.indexOf('-');
-                            currentRule.valueLower = Integer.valueOf(tmpValue.substring(0, p));
-                            tmpValue = tmpValue.substring(p + 1);
-                            // volontairement pas de break pour continuer sur valueupper
-                            // break;
-                        case "valueupper":
-                            currentRule.valueUpper = Integer.valueOf(tmpValue);
-                            break;
-                        case "length":
-                            currentRule.length = Integer.valueOf(tmpValue);
-                            break;
-                        case "prefix":
-                            prefix = tmpValue;
-                            break;
+                    String s = qName.toLowerCase();
+                    if ("valuelower".equals(s)) {
+                        currentRule.valueLower = Integer.valueOf(tmpValue);
 
-                        case "rule":
-                            List<ISBNRule> list;
-                            if (!currentList.containsKey(prefix))
-                                list = new ArrayList<>();
-                            else
-                                list = currentList.get(prefix);
-                            list.add(currentRule);
-                            currentList.put(prefix, list);
-                            currentRule = null;
-                            break;
+                    } else if ("range".equals(s)) {
+                        Integer p = tmpValue.indexOf('-');
+                        currentRule.valueLower = Integer.valueOf(tmpValue.substring(0, p));
+                        tmpValue = tmpValue.substring(p + 1);
+                        // volontairement pas de break pour continuer sur valueupper
+                        // break;
+
+                        currentRule.valueUpper = Integer.valueOf(tmpValue);
+
+                    } else if ("valueupper".equals(s)) {
+                        currentRule.valueUpper = Integer.valueOf(tmpValue);
+
+                    } else if ("length".equals(s)) {
+                        currentRule.length = Integer.valueOf(tmpValue);
+
+                    } else if ("prefix".equals(s)) {
+                        prefix = tmpValue;
+
+                    } else if ("rule".equals(s)) {
+                        List<ISBNRule> list;
+                        if (!currentList.containsKey(prefix))
+                            list = new ArrayList<ISBNRule>();
+                        else
+                            list = currentList.get(prefix);
+                        list.add(currentRule);
+                        currentList.put(prefix, list);
+                        currentRule = null;
+
                     }
                     tmpValue = null;
                 }
@@ -258,7 +260,11 @@ end;
                 }
             });
 
-        } catch (ParserConfigurationException | SAXException | IOException e) {
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {

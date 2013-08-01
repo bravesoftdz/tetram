@@ -21,13 +21,13 @@ import java.util.UUID;
 public abstract class DaoUtils {
 
     public static final int MAX_SQL_ALIAS_LENGTH = 25;
-    private static final Map<Class<? extends CommonBean>, List<PropertyDescriptor>> propertyDescriptorsList = new HashMap<>();
-    private static final Map<Class<? extends CommonBean>, SQLDescriptor> sqlDescriptorsList = new HashMap<>();
+    private static final Map<Class<? extends CommonBean>, List<PropertyDescriptor>> propertyDescriptorsList = new HashMap<Class<? extends CommonBean>, List<PropertyDescriptor>>();
+    private static final Map<Class<? extends CommonBean>, SQLDescriptor> sqlDescriptorsList = new HashMap<Class<? extends CommonBean>, SQLDescriptor>();
     private static final SimpleDateFormat simpleDateTimeFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss.zzz");
     private static final SimpleDateFormat sqlDateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.zzz");
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy");
     private static final SimpleDateFormat sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    private static Map<Class<? extends CommonBean>, QueryInfo> queryInfoList = new HashMap<>();
+    private static Map<Class<? extends CommonBean>, QueryInfo> queryInfoList = new HashMap<Class<? extends CommonBean>, QueryInfo>();
 
     private DaoUtils() {
         super();
@@ -136,7 +136,7 @@ public abstract class DaoUtils {
     private static List<PropertyDescriptor> buildPropertiesDescriptors(Class<? extends CommonBean> masterClasz, Class<? extends CommonBean> clasz) {
         List<PropertyDescriptor> result = propertyDescriptorsList.get(clasz);
         if (null == result) {
-            result = new ArrayList<>();
+            result = new ArrayList<PropertyDescriptor>();
             java.lang.reflect.Field[] fields = clasz.getDeclaredFields();
 
             for (java.lang.reflect.Field field : fields) {
@@ -361,7 +361,7 @@ public abstract class DaoUtils {
         public Class<? extends CommonBean> beanClass;
         private String tableName;
         private PropertyDescriptor primaryKey;
-        private Map<PropertyDescriptor, SQLDescriptor> columns = new HashMap<>();
+        private Map<PropertyDescriptor, SQLDescriptor> columns = new HashMap<PropertyDescriptor, SQLDescriptor>();
 
         public Class<? extends CommonBean> getBeanClass() {
             return this.beanClass;
@@ -381,8 +381,8 @@ public abstract class DaoUtils {
     }
 
     public static class LoadDescriptor {
-        private final Map<PropertyDescriptor, String> alias = new HashMap<>();
-        private final Map<String, LoadDescriptor> childAlias = new HashMap<>();
+        private final Map<PropertyDescriptor, String> alias = new HashMap<PropertyDescriptor, String>();
+        private final Map<String, LoadDescriptor> childAlias = new HashMap<String, LoadDescriptor>();
 
         public Map<PropertyDescriptor, String> getAlias() {
             return this.alias;
@@ -400,11 +400,11 @@ public abstract class DaoUtils {
         private int indicator;
 
         private Class<? extends CommonBean> beanClass;
-        private List<String> tables = new ArrayList<>();
-        private List<String> fields = new ArrayList<>();
+        private List<String> tables = new ArrayList<String>();
+        private List<String> fields = new ArrayList<String>();
         private LoadDescriptor loadDescriptor = new LoadDescriptor();
-        private Map<String, String> sqlAliasMapping = new HashMap<>();
-        private Map<java.lang.reflect.Field, PropertySQLDescriptor> columns = new HashMap<>();
+        private Map<String, String> sqlAliasMapping = new HashMap<String, String>();
+        private Map<java.lang.reflect.Field, PropertySQLDescriptor> columns = new HashMap<java.lang.reflect.Field, PropertySQLDescriptor>();
 
         public Class<? extends CommonBean> getBeanClass() {
             return this.beanClass;

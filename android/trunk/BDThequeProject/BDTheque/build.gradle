@@ -20,11 +20,11 @@ dependencies {
 
 android {
     compileSdkVersion 16
-    buildToolsVersion "18.0.0"
+    buildToolsVersion "18.0.1"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_7
-        targetCompatibility = JavaVersion.VERSION_1_7
+        sourceCompatibility = JavaVersion.VERSION_1_6
+        targetCompatibility = JavaVersion.VERSION_1_6
     }
 
     defaultConfig {

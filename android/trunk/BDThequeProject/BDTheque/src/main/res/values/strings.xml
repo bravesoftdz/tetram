@@ -84,6 +84,7 @@
     <string name="notation_5">Très bien</string>
     <string name="title_item_detail">details</string>
     <string name="initiale_sans_serie"><![CDATA[<Sans série>]]></string>
+    <string name="msg_confirm_quit">Appuyer à nouveau pour quitter.</string>
 
     <string-array name="pref_formatTitreAlbum_entries">
         <item>Album (Série - Tome)</item>

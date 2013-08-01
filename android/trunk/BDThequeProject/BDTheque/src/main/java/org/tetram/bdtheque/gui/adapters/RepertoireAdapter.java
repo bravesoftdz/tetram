@@ -29,8 +29,8 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
     private SparseArray<List<T>> mapData;
     InitialeRepertoireDao repertoireDao;
     Context context;
-    private final LinkedHashMap<Character, Integer> sectionsPositions = new LinkedHashMap<>();
-    private final List<Character> sections = new ArrayList<>();
+    private final LinkedHashMap<Character, Integer> sectionsPositions = new LinkedHashMap<Character, Integer>();
+    private final List<Character> sections = new ArrayList<Character>();
 
     public RepertoireAdapter(final Context context, final InitialeRepertoireDao dao) {
         super();
@@ -58,7 +58,7 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
 
     private void ensureData(final Integer initiale) {
         if (this.mapData == null)
-            this.mapData = new SparseArray<>(getGroupCount());
+            this.mapData = new SparseArray<List<T>>(getGroupCount());
 
         if (this.mapData.indexOfKey(initiale) < 0)
             this.mapData.put(initiale, this.repertoireDao.getData(this.listInitiales.get(initiale)));

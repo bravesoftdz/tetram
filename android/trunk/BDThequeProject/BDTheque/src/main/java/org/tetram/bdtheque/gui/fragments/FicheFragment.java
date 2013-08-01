@@ -23,10 +23,15 @@ public abstract class FicheFragment extends Fragment {
         FicheFragment ficheFragment = null;
         try {
             ficheFragment = classFiche.getConstructor().newInstance();
-        } catch (java.lang.InstantiationException | IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
             return null;
-        } catch (NoSuchMethodException | InvocationTargetException e) {
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (java.lang.InstantiationException e) {
+            e.printStackTrace();
+            return null;
+        } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
 

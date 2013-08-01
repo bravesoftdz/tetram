@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.AlbumBean;
+import org.tetram.bdtheque.data.bean.AuteurAlbumBean;
 import org.tetram.bdtheque.data.bean.SerieBean;
 import org.tetram.bdtheque.gui.components.LinearListView;
 import org.tetram.bdtheque.utils.StringUtils;
@@ -87,19 +88,19 @@ public class FicheAlbumDetailsFragment extends FicheFragment {
         if (album.getScenaristes().isEmpty())
             view.findViewById(R.id.fiche_album_row_scenaristes).setVisibility(View.GONE);
         listAuteurs = (LinearListView) view.findViewById(R.id.album_scenaristes);
-        listAuteurs.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getScenaristes()));
+        listAuteurs.setAdapter(new ArrayAdapter<AuteurAlbumBean>(getActivity(), android.R.layout.simple_list_item_1, album.getScenaristes()));
         //listAuteurs.setMinimumHeight(Math.min(album.getScenaristes().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
 
         if (album.getDessinateurs().isEmpty())
             view.findViewById(R.id.fiche_album_row_dessinateurs).setVisibility(View.GONE);
         listAuteurs = (LinearListView) view.findViewById(R.id.album_dessinateurs);
-        listAuteurs.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getDessinateurs()));
+        listAuteurs.setAdapter(new ArrayAdapter<AuteurAlbumBean>(getActivity(), android.R.layout.simple_list_item_1, album.getDessinateurs()));
         //listAuteurs.setMinimumHeight(Math.min(album.getDessinateurs().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
 
         if (album.getColoristes().isEmpty())
             view.findViewById(R.id.fiche_album_row_coloristes).setVisibility(View.GONE);
         listAuteurs = (LinearListView) view.findViewById(R.id.album_coloristes);
-        listAuteurs.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getColoristes()));
+        listAuteurs.setAdapter(new ArrayAdapter<AuteurAlbumBean>(getActivity(), android.R.layout.simple_list_item_1, album.getColoristes()));
         //listAuteurs.setMinimumHeight(Math.min(album.getColoristes().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
 
         setUIElement(view, R.id.album_horsserie, album.isHorsSerie());

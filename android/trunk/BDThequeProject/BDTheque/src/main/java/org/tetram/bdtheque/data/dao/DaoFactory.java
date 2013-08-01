@@ -14,7 +14,13 @@ public class DaoFactory {
         try {
             Constructor<T> constructor = daoClass.getConstructor(Context.class);
             dao = constructor.newInstance(context);
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+        } catch (InstantiationException  e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
 
@@ -27,7 +33,13 @@ public class DaoFactory {
         try {
             Constructor<T> constructor = daoClass.getConstructor(Context.class);
             dao = constructor.newInstance(context);
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
 

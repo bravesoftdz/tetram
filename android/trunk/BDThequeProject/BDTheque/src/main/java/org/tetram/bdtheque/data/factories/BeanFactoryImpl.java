@@ -70,7 +70,13 @@ public abstract class BeanFactoryImpl<T extends CommonBean> implements BeanFacto
         T bean = null;
         try {
             bean = this.beanClass.getConstructor().newInstance();
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         LoadResult res = loadByAnnotation(context, cursor, inline, loadDescriptor, bean);
@@ -144,9 +150,13 @@ public abstract class BeanFactoryImpl<T extends CommonBean> implements BeanFacto
             else /*if (List.class.isAssignableFrom(fieldType))*/ {
 
             }
-        } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+        } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (MalformedURLException ignored) {
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 

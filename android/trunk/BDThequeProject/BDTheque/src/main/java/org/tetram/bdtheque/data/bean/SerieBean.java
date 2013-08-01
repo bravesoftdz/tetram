@@ -33,11 +33,11 @@ public class SerieBean extends SerieBeanAbstract {
             return new SerieBean[size];
         }
     };
-    private final List<GenreSerieBean> genres = new ArrayList<>();
-    private final List<AuteurSerieBean> scenaristes = new ArrayList<>();
-    private final List<AuteurSerieBean> dessinateurs = new ArrayList<>();
-    private final List<AuteurSerieBean> coloristes = new ArrayList<>();
-    private final List<AlbumLiteBean> albums = new ArrayList<>();
+    private final List<GenreSerieBean> genres = new ArrayList<GenreSerieBean>();
+    private final List<AuteurSerieBean> scenaristes = new ArrayList<AuteurSerieBean>();
+    private final List<AuteurSerieBean> dessinateurs = new ArrayList<AuteurSerieBean>();
+    private final List<AuteurSerieBean> coloristes = new ArrayList<AuteurSerieBean>();
+    private final List<AlbumLiteBean> albums = new ArrayList<AlbumLiteBean>();
     @Field(fieldName = DDLConstants.SERIES_SITEWEB)
     private URL siteWeb;
     @Field(fieldName = DDLConstants.EDITEURS_ID, nullable = false)
