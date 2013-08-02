@@ -43,10 +43,7 @@ public class PersonneBean extends PersonneLiteBean {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        if (this.siteWeb == null)
-            dest.writeValue(null);
-        else
-            dest.writeValue(this.siteWeb.toExternalForm());
+        dest.writeValue(this.siteWeb);
         dest.writeString(this.biographie);
     }
 

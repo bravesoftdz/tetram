@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import org.tetram.bdtheque.data.bean.EditionBean;
+import org.tetram.bdtheque.data.bean.lite.EditionLiteBean;
 import org.tetram.bdtheque.data.factories.EditionFactory;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;

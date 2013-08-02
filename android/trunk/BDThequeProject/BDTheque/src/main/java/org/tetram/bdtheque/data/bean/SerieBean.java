@@ -58,10 +58,7 @@ public class SerieBean extends SerieBeanAbstract {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        if (this.siteWeb == null)
-            dest.writeValue(null);
-        else
-            dest.writeValue(this.siteWeb.toExternalForm());
+        dest.writeValue(this.siteWeb);
         dest.writeTypedList(this.genres);
         dest.writeString(this.sujet);
         dest.writeString(this.notes);

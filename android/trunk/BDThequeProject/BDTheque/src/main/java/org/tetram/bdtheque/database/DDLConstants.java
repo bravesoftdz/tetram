@@ -91,4 +91,12 @@ public class DDLConstants {
     public static final String LISTES_ORDRE = "ORDRE";
     public static final String LISTES_DEFAUT = "DEFAUT";
     public static final String LISTES_LIBELLE = "LIBELLE";
+
+    public static final String IMAGES_TABLENAME = "COUVERTURES";
+    public static final String IMAGES_ID = "ID_COUVERTURE";
+    public static final String IMAGES_ORDRE = "ORDRE";
+    public static final String IMAGES_STOCKAGE = "STOCKAGECOUVERTURE";
+    public static final String IMAGES_DATA = "IMAGECOUVERTURE";
+    public static final String IMAGES_FICHIER = "FICHIERCOUVERTURE";
+    public static final String IMAGES_CATEGORIE = "CATEGORIEIMAGE";
 }

@@ -116,7 +116,7 @@ public abstract class CommonDaoImpl<T extends CommonBean> extends DefaultDao<T> 
                 null, // String.format("%s = ?", queryInfo.getColumns().get(this.descriptor.getPrimaryKey().getField()).getFullFieldName()),
                 null,
                 null,
-                null,
+                orderBy,
                 null
         );
         Log.i(getClass().getCanonicalName(), sql);

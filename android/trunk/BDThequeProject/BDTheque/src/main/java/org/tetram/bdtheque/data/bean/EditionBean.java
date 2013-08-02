@@ -2,21 +2,23 @@ package org.tetram.bdtheque.data.bean;
 
 import android.os.Parcel;
 
-import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
-import org.tetram.bdtheque.data.bean.lite.CollectionLiteBean;
+import org.tetram.bdtheque.data.bean.lite.EditionLiteBean;
+import org.tetram.bdtheque.data.dao.EditionDao;
 import org.tetram.bdtheque.data.factories.EditionFactory;
+import org.tetram.bdtheque.data.utils.BeanDaoClass;
 import org.tetram.bdtheque.data.utils.DefaultBooleanValue;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.data.utils.Field;
 import org.tetram.bdtheque.database.DDLConstants;
-import org.tetram.bdtheque.utils.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.UUID;
+import java.util.List;
 
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.EDITIONS_TABLENAME, factoryClass = EditionFactory.class)
-public class EditionBean extends CommonBean {
+@BeanDaoClass(EditionDao.class)
+public class EditionBean extends EditionLiteBean {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<EditionBean> CREATOR = new Creator<EditionBean>() {
@@ -30,20 +32,7 @@ public class EditionBean extends CommonBean {
             return new EditionBean[size];
         }
     };
-    @SuppressWarnings("InstanceVariableNamingConvention")
-    @Field(fieldName = DDLConstants.EDITIONS_ID, primaryKey = true)
-    private UUID id;
-    @Field(fieldName = DDLConstants.EDITIONS_ISBN)
-    private String isbn;
-    @Field(fieldName = DDLConstants.EDITEURS_ID, nullable = false)
-    private EditeurBean editeur;
-    @Field(fieldName = DDLConstants.COLLECTIONS_ID, nullable = true)
-    private CollectionLiteBean collection;
-    @Field(fieldName = DDLConstants.EDITIONS_ANNEEEDITION)
-    private Integer annee;
-    @Field(fieldName = DDLConstants.EDITIONS_STOCK)
-    @DefaultBooleanValue(true)
-    private boolean stock;
+    public final List<ImageBean> images = new ArrayList<ImageBean>();
     @Field(fieldName = DDLConstants.EDITIONS_COULEUR)
     @DefaultBooleanValue(true)
     private boolean couleur;
@@ -94,12 +83,7 @@ public class EditionBean extends CommonBean {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeString(this.isbn);
-        dest.writeParcelable(this.editeur, flags);
-        dest.writeParcelable(this.collection, flags);
-        dest.writeValue(this.annee);
         dest.writeValue(this.prix);
-        dest.writeValue(this.stock);
         dest.writeValue(this.couleur);
         dest.writeValue(this.dedicace);
         dest.writeValue(this.offert);
@@ -116,17 +100,13 @@ public class EditionBean extends CommonBean {
         dest.writeParcelable(this.orientation, flags);
         dest.writeParcelable(this.formatEdition, flags);
         dest.writeParcelable(this.sensLecture, flags);
+        dest.writeTypedList(this.getImages());
     }
 
     @Override
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
-        this.isbn = in.readString();
-        this.editeur = in.readParcelable(EditeurBean.class.getClassLoader());
-        this.collection = in.readParcelable(CollectionLiteBean.class.getClassLoader());
-        this.annee = (Integer) in.readValue(Integer.class.getClassLoader());
         this.prix = (Double) in.readValue(Double.class.getClassLoader());
-        this.stock = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.couleur = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.dedicace = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.offert = (Boolean) in.readValue(Boolean.class.getClassLoader());
@@ -143,60 +123,11 @@ public class EditionBean extends CommonBean {
         this.orientation = in.readParcelable(ListeBean.class.getClassLoader());
         this.formatEdition = in.readParcelable(ListeBean.class.getClassLoader());
         this.sensLecture = in.readParcelable(ListeBean.class.getClassLoader());
+        in.readTypedList(this.getImages(), ImageBean.CREATOR);
     }
 
-    @Override
-    public String toString() {
-        String result = "";
-        if (this.editeur != null)
-            result = StringUtils.ajoutString(result, StringUtils.formatTitre(this.editeur.getNom()), " ");
-        if (this.collection != null)
-            result = StringUtils.ajoutString(result, StringUtils.formatTitre(this.collection.getNom()), " ", "(", ")");
-        result = StringUtils.ajoutString(result, StringUtils.nonZero(this.annee), " ", "[", "]");
-        result = StringUtils.ajoutString(result, StringUtils.formatISBN(this.isbn), " - ", "ISBN ");
-        return result;
-    }
-
-    @Override
-    public UUID getId() {
-        return this.id;
-    }
-
-    @Override
-    public void setId(UUID id) {
-        this.id = id;
-    }
-
-    public String getIsbn() {
-        return this.isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public EditeurBean getEditeur() {
-        return this.editeur;
-    }
-
-    public void setEditeur(EditeurBean editeur) {
-        this.editeur = editeur;
-    }
-
-    public CollectionLiteBean getCollection() {
-        return this.collection;
-    }
-
-    public void setCollection(CollectionLiteBean collection) {
-        this.collection = collection;
-    }
-
-    public boolean isStock() {
-        return this.stock;
-    }
-
-    public void setStock(boolean stock) {
-        this.stock = stock;
+    public List<ImageBean> getImages() {
+        return this.images;
     }
 
     public boolean isCouleur() {
@@ -221,14 +152,6 @@ public class EditionBean extends CommonBean {
 
     public void setOffert(boolean offert) {
         this.offert = offert;
-    }
-
-    public Integer getAnnee() {
-        return this.annee;
-    }
-
-    public void setAnnee(Integer annee) {
-        this.annee = annee;
     }
 
     public Date getDateAquisition() {

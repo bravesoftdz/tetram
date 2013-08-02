@@ -1,73 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-        >
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/album_list_editions"
-            android:spinnerStyle="@android:style/Widget.Spinner.DropDown"
-            />
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/album_list_editions"
+        android:spinnerStyle="@android:style/Widget.Spinner.DropDown"/>
 
-    <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            >
 
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/edition_btn_prev"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:src="@android:drawable/ic_media_rew"
-            tools:ignore="ContentDescription"/>
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/edition_btn_next"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:src="@android:drawable/ic_media_ff"
-            tools:ignore="ContentDescription"/>
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_toRightOf="@+id/edition_btn_prev"
-            android:layout_alignBottom="@+id/edition_btn_prev"
-            android:layout_alignTop="@+id/edition_btn_prev"
-            android:layout_toLeftOf="@+id/edition_btn_next"
-            android:rowCount="3"
-            android:columnCount="3">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/edition_type_image"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:layout_centerInParent="true"/>
-        </RelativeLayout>
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/edition_image"
-            android:scaleType="fitCenter"
-            tools:ignore="ContentDescription"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@+id/edition_btn_prev"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentLeft="true"/>
-
-    </RelativeLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/edition_image"
+        tools:layout="@layout/fiche_image_fragment"/>
 </LinearLayout>

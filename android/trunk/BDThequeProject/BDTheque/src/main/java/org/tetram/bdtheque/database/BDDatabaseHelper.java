@@ -53,13 +53,14 @@ public class BDDatabaseHelper extends SQLiteOpenHelper {
      */
     @Override
     public void onUpgrade(final SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(LOG_TAG, "Upgrading org.tetram.bdtheque.database from version " + oldVersion + " to " + newVersion + ".");
+        Log.w(LOG_TAG, this.context.getString(R.string.msg_upgrade_database, oldVersion, newVersion));
 
         switch (oldVersion) {
             case 0:
             case 1:
+                Toast.makeText(BDThequeApplication.getInstance().getApplicationContext(), this.context.getString(R.string.msg_chargement_donnees), Toast.LENGTH_LONG).show();
+                runSQL(db, "sql/init_listes.sql");
                 if (BuildConfig.DEBUG) {
-                    Toast.makeText(BDThequeApplication.getInstance().getApplicationContext(), this.context.getString(R.string.msg_chargement_donnees), Toast.LENGTH_LONG).show();
                     runSQL(db, "sql/init_editeurs.sql");
                     runSQL(db, "sql/init_collections.sql");
                     runSQL(db, "sql/init_series.sql");
@@ -70,7 +71,6 @@ public class BDDatabaseHelper extends SQLiteOpenHelper {
                     runSQL(db, "sql/init_auteurs_series.sql");
                     runSQL(db, "sql/init_genres.sql");
                     runSQL(db, "sql/init_genres_series.sql");
-                    runSQL(db, "sql/init_listes.sql");
                     runSQL(db, "sql/init_couvertures.sql");
                 }
 //            case 2:

@@ -2,11 +2,11 @@ package org.tetram.bdtheque.gui.activities;
 
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,7 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class RepertoireActivity extends Activity implements ActionBar.OnNavigationListener, SearchManager.OnCancelListener {
+public class RepertoireActivity extends FragmentActivity implements ActionBar.OnNavigationListener, SearchManager.OnCancelListener {
 
     private static final int REQUEST_CONFIG = 0;
     private Toast confirmMsg;
@@ -43,7 +43,7 @@ public class RepertoireActivity extends Activity implements ActionBar.OnNavigati
         setContentView(R.layout.repertoire);
 
         this.confirmMsg = Toast.makeText(this, getString(R.string.msg_confirm_quit), Toast.LENGTH_SHORT);
-        this.repertoire = (TitlesFragment) getFragmentManager().findFragmentById(R.id.titles);
+        this.repertoire = (TitlesFragment) getSupportFragmentManager().findFragmentById(R.id.titles);
 
         if (savedInstanceState != null) {
             this.currentNavigationItem = savedInstanceState.getInt("navigationItem", -1);

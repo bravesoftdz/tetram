@@ -1,24 +1,27 @@
 package org.tetram.bdtheque.gui.fragments;
 
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.Parcelable;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.AlbumBean;
 import org.tetram.bdtheque.data.bean.EditionBean;
 
+import java.util.ArrayList;
+
 public class FicheAlbumImagesFragment extends FicheFragment {
 
     @SuppressWarnings("FieldCanBeLocal")
     private EditionBean currentEdition;
+    @SuppressWarnings("FieldCanBeLocal")
     private View view;
 
     @Nullable
@@ -45,23 +48,20 @@ public class FicheAlbumImagesFragment extends FicheFragment {
 
             }
         });
-        listEditions.setSelection(0);
-        loadEdition((EditionBean) listEditions.getAdapter().getItem(0));
-
-        this.view.findViewById(R.id.edition_btn_next).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString(), Toast.LENGTH_LONG).show();
-            }
-        });
+        int position;
+        if ((this.currentEdition != null) && album.getEditions().contains(this.currentEdition))
+            position = album.getEditions().indexOf(this.currentEdition);
+        else
+            position = 0;
+        listEditions.setSelection(position);
+        loadEdition((EditionBean) listEditions.getAdapter().getItem(position));
 
         return this.view;
     }
 
     private void loadEdition(EditionBean edition) {
         this.currentEdition = edition;
-/*
-      ShowCouverture(0);
-*/
+        getFragmentManager().beginTransaction().replace(R.id.edition_image, ImageFragment.getFragment(this.currentEdition.getImages(), true)).commit();
     }
+
 }
