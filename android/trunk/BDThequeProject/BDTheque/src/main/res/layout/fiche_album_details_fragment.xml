@@ -85,7 +85,10 @@
     <ScrollView
             android:measureAllChildren="true"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:descendantFocusability="beforeDescendants">
 
         <TableLayout
                 style="@style/fiche_consultation"
