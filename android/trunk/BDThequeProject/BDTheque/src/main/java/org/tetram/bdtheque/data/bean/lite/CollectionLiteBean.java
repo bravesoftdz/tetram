@@ -2,9 +2,9 @@ package org.tetram.bdtheque.data.bean.lite;
 
 import android.os.Parcel;
 
-import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
 import org.tetram.bdtheque.data.bean.abstracts.CollectionBeanAbstract;
+import org.tetram.bdtheque.data.bean.enums.Notation;
 import org.tetram.bdtheque.data.dao.lite.CollectionLiteDao;
 import org.tetram.bdtheque.data.factories.lite.CollectionLiteFactory;
 import org.tetram.bdtheque.data.utils.BeanDaoClass;
@@ -61,10 +61,9 @@ public class CollectionLiteBean extends CollectionBeanAbstract implements TreeNo
         return getLabel(true);
     }
 
-    @Nullable
     @Override
-    public Float getTreeNodeRating() {
-        return null;
+    public Notation getTreeNodeRating() {
+        return Notation.PAS_NOTE;
     }
 
 }

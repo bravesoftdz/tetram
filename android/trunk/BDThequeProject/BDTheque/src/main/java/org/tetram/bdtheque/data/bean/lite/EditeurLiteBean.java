@@ -3,9 +3,9 @@ package org.tetram.bdtheque.data.bean.lite;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
 import org.tetram.bdtheque.data.bean.abstracts.EditeurBeanAbstract;
+import org.tetram.bdtheque.data.bean.enums.Notation;
 import org.tetram.bdtheque.data.dao.lite.EditeurLiteDao;
 import org.tetram.bdtheque.data.factories.lite.EditeurLiteFactory;
 import org.tetram.bdtheque.data.utils.BeanDaoClass;
@@ -54,10 +54,9 @@ public class EditeurLiteBean extends EditeurBeanAbstract implements TreeNodeBean
         return StringUtils.formatTitre(this.nom);
     }
 
-    @Nullable
     @Override
-    public Float getTreeNodeRating() {
-        return null;
+    public Notation getTreeNodeRating() {
+        return Notation.PAS_NOTE;
     }
 
 }

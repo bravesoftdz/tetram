@@ -1,8 +1,6 @@
 package org.tetram.bdtheque.gui.fragments;
 
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.AlbumBean;
 import org.tetram.bdtheque.data.bean.EditionBean;
-
-import java.util.ArrayList;
 
 public class FicheAlbumImagesFragment extends FicheFragment {
 
@@ -61,7 +57,10 @@ public class FicheAlbumImagesFragment extends FicheFragment {
 
     private void loadEdition(EditionBean edition) {
         this.currentEdition = edition;
-        getFragmentManager().beginTransaction().replace(R.id.edition_image, ImageFragment.getFragment(this.currentEdition.getImages(), true)).commit();
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.edition_image, ImageFragment.getFragment(this.currentEdition.getImages(), 0, true))
+                .commit();
     }
 
 }

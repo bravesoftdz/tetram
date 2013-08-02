@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.BDThequeApplication;
@@ -23,7 +22,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElement;
-import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElementURL;
 
 @SuppressWarnings("UnusedDeclaration")
 public class FicheAlbumDetailsFragment extends FicheFragment {
@@ -40,26 +38,11 @@ public class FicheAlbumDetailsFragment extends FicheFragment {
 
         View view = inflater.inflate(R.layout.fiche_album_details_fragment, container, false);
 
-        final ImageView imageView = (ImageView) view.findViewById(R.id.album_notation);
-        if (album.getNotation() != null)
-            imageView.setImageResource(album.getNotation().getResDrawable());
-        imageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                NotationDialogFragment dialog = new NotationDialogFragment();
-                dialog.show(getFragmentManager(), "NotationDialogFragment");
-                return false;
-            }
-        });
-
         if (serie != null) {
-            setUIElementURL(view, R.id.album_serie, StringUtils.formatTitreAcceptNull(serie.getTitre()), serie.getSiteWeb(), 0);
             setUIElement(view, R.id.album_genres, serie.getGenreList(), R.id.fiche_album_row_genres);
         } else {
-            view.findViewById(R.id.fiche_album_row_serie).setVisibility(View.GONE);
             view.findViewById(R.id.fiche_album_row_genres).setVisibility(View.GONE);
         }
-        setUIElement(view, R.id.album_titre, StringUtils.formatTitreAcceptNull(album.getTitre()), R.id.fiche_album_row_titre);
         setUIElement(view, R.id.album_tome, StringUtils.nonZero(album.getTome()));
         String parutionFormat;
         Date dateParution;

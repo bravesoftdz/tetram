@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-        >
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:orientation="vertical">
 
     <Spinner
             android:layout_width="match_parent"
@@ -15,27 +17,25 @@
             />
 
     <ScrollView
+            android:measureAllChildren="true"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            >
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|right">
 
         <TableLayout
                 style="@style/fiche_consultation"
                 android:rowOrderPreserved="true"
                 android:columnOrderPreserved="true"
-                android:layout_width="fill_parent"
+                android:measureWithLargestChild="false"
+                android:useDefaultMargins="false"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:shrinkColumns="0"
                 android:orientation="vertical"
-                android:stretchColumns="1"
-                android:measureWithLargestChild="false">
+                android:stretchColumns="1">
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                 <TextView
                         style="@style/fiche_label"
@@ -53,13 +53,12 @@
                         android:id="@+id/edition_isbn"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_gravity="center_vertical"
-                        android:layout_column="1"
-                    />
+                        />
             </TableRow>
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                 <TextView
                         style="@style/fiche_label"
@@ -78,13 +77,13 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_gravity="center_vertical"
                         android:layout_column="1"
-                    />
+                        />
 
             </TableRow>
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:id="@+id/fiche_edition_row_collection">
 
                 <TextView
@@ -104,12 +103,12 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_gravity="center_vertical"
                         android:layout_column="1"
-                    />
+                        />
             </TableRow>
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
                 <TextView
                         style="@style/fiche_label"
@@ -130,15 +129,15 @@
                         android:layout_column="1"
                         android:minWidth="100dp"
                         android:layout_marginRight="-2dp"
-                    />
+                        />
 
             </TableRow>
 
             <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginTop="-6dp"
-                android:layout_marginBottom="-6dp">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="-6dp"
+                    android:layout_marginBottom="-6dp">
 
                 <org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
                         style="@style/fiche_label"
@@ -147,12 +146,13 @@
                         android:text="@string/fiche_edition_stock"
                         android:id="@+id/edition_stock"
                         android:checked="false"
-                    />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
             </TableRow>
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="-6dp"
                     android:layout_marginBottom="-6dp">
 
@@ -162,15 +162,16 @@
                         android:layout_column="1"
                         android:text="@string/fiche_edtion_couleur"
                         android:id="@+id/edition_couleur"
-                    />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
 
             </TableRow>
 
             <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginTop="-6dp"
-                android:layout_marginBottom="-6dp">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="-6dp"
+                    android:layout_marginBottom="-6dp">
 
                 <org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
                         style="@style/fiche_label"
@@ -178,14 +179,15 @@
                         android:layout_column="1"
                         android:text="@string/fiche_edition_dedicace"
                         android:id="@+id/edition_dedicace"
-                    />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
             </TableRow>
 
             <TableRow
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginTop="-6dp"
-                android:layout_marginBottom="-6dp">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="-6dp"
+                    android:layout_marginBottom="-6dp">
 
                 <org.tetram.bdtheque.gui.components.ReadOnlyCheckBox
                         style="@style/fiche_label"
@@ -193,12 +195,13 @@
                         android:layout_column="1"
                         android:text="@string/fiche_edition_offert"
                         android:id="@+id/edition_offert"
-                    />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
             </TableRow>
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
 
 
                 <TextView
@@ -219,13 +222,13 @@
                         android:layout_gravity="center_vertical"
                         android:layout_column="1"
                         android:minWidth="100dp"
-                        android:layout_marginRight="-2dp"/>
+                        />
 
             </TableRow>
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:id="@+id/fiche_edition_row_aquisition">
 
                 <TextView
@@ -246,12 +249,12 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_gravity="center_vertical"
                         android:layout_column="1"
-                    />
+                        />
             </TableRow>
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:id="@+id/fiche_edition_row_cote">
 
 
@@ -273,13 +276,12 @@
                         android:layout_gravity="center_vertical"
                         android:layout_column="1"
                         android:minWidth="100dp"
-                        android:layout_marginRight="-2dp"
-                    />
+                        />
             </TableRow>
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:id="@+id/fiche_edition_row_pages">
 
                 <TextView
@@ -293,7 +295,7 @@
                         android:layout_gravity="right"/>
 
                 <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/edition_pages"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -301,8 +303,8 @@
             </TableRow>
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:id="@+id/fiche_edition_row_typeedition">
 
                 <TextView
@@ -313,10 +315,11 @@
                         android:id="@+id/label_edition_typeedition"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_column="0"
-                        android:layout_gravity="right"/>
+                        android:layout_gravity="right"
+                        />
 
                 <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/edition_typeedition"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -324,8 +327,8 @@
             </TableRow>
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:id="@+id/fiche_edition_row_reliure">
 
                 <TextView
@@ -336,10 +339,11 @@
                         android:id="@+id/label_edition_reliure"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_column="0"
-                        android:layout_gravity="right"/>
+                        android:layout_gravity="right"
+                        />
 
                 <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/edition_reliure"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -347,8 +351,8 @@
             </TableRow>
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:id="@+id/fiche_edition_row_etatedition">
 
                 <TextView
@@ -362,7 +366,7 @@
                         android:layout_gravity="right"/>
 
                 <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/edition_etatedition"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -370,8 +374,8 @@
             </TableRow>
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:id="@+id/fiche_edition_row_orientation">
 
                 <TextView
@@ -385,7 +389,7 @@
                         android:layout_gravity="right"/>
 
                 <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/edition_orientation"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -393,8 +397,8 @@
             </TableRow>
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:id="@+id/fiche_edition_row_formatedition">
 
                 <TextView
@@ -408,7 +412,7 @@
                         android:layout_gravity="right"/>
 
                 <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/edition_formatedition"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -416,8 +420,8 @@
             </TableRow>
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:id="@+id/fiche_edition_row_senslecture">
 
                 <TextView
@@ -428,10 +432,11 @@
                         android:id="@+id/label_edition_senslecture"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_column="0"
-                        android:layout_gravity="right"/>
+                        android:layout_gravity="right"
+                        />
 
                 <TextView
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/edition_senslecture"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -439,31 +444,8 @@
             </TableRow>
 
             <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:id="@+id/fiche_edition_row_notes">
-
-                <TextView
-                        style="@style/fiche_label"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/fiche_edition_notes"
-                        android:id="@+id/label_edition_notes"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_column="0"
-                        android:layout_gravity="right"/>
-
-                <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/edition_notes"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:layout_column="1"/>
-            </TableRow>
-
-            <TableRow
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:id="@+id/fiche_edition_row_numero">
 
                 <TextView
@@ -483,6 +465,19 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_column="1"/>
             </TableRow>
+            <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/fiche_edition_row_notes">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/edition_notes"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:layout_span="2"/>
+            </TableRow>
+
         </TableLayout>
     </ScrollView>
 </LinearLayout>

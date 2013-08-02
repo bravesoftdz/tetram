@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
 import org.tetram.bdtheque.data.bean.abstracts.SerieBeanAbstract;
+import org.tetram.bdtheque.data.bean.enums.Notation;
 import org.tetram.bdtheque.data.dao.lite.SerieLiteDao;
 import org.tetram.bdtheque.data.factories.lite.SerieLiteFactory;
 import org.tetram.bdtheque.data.utils.BeanDaoClass;
@@ -76,8 +77,8 @@ public class SerieLiteBean extends SerieBeanAbstract implements TreeNodeBean {
     }
 
     @Override
-    public Float getTreeNodeRating() {
-        return (float) this.notation.getValue();
+    public Notation getTreeNodeRating() {
+        return this.notation;
     }
 
     public EditeurLiteBean getEditeur() {

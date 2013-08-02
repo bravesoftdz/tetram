@@ -19,7 +19,11 @@ public class ImageActivity extends FragmentActivity {
         setContentView(view);
 
         ArrayList<ImageBean> images = getIntent().getParcelableArrayListExtra("images");
+        int currentImage = getIntent().getIntExtra("currentImage", 0);
 
-        getSupportFragmentManager().beginTransaction().add(android.R.id.content, ImageFragment.getFragment(images, false)).commit();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .add(android.R.id.content, ImageFragment.getFragment(images, currentImage, false))
+                .commit();
     }
 }

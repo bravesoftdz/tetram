@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TabHost;
 
 import org.jetbrains.annotations.Nullable;
@@ -14,11 +15,15 @@ import org.tetram.bdtheque.data.bean.AlbumBean;
 import org.tetram.bdtheque.data.bean.SerieBean;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.dao.AlbumDao;
+import org.tetram.bdtheque.utils.StringUtils;
+
+import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElement;
+import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElementURL;
 
 public class FicheAlbumFragment extends FicheFragment {
 
-    private static final String TAB_DETAILS = "dÃ©tails";
-    private static final String TAB_EDITIONS = "Ã©ditions";
+    private static final String TAB_DETAILS = "détails";
+    private static final String TAB_EDITIONS = "éditions";
     private static final String TAB_ALBUMS = "albums";
     private static final String TAB_IMAGES = "images";
 
@@ -35,6 +40,25 @@ public class FicheAlbumFragment extends FicheFragment {
         View v = inflater.inflate(R.layout.fiche_album_fragment, container, false);
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
+        final ImageView imageView = (ImageView) v.findViewById(R.id.album_notation);
+        if (albumBean.getNotation() != null)
+            imageView.setImageResource(albumBean.getNotation().getResDrawable());
+        imageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                NotationDialogFragment dialog = new NotationDialogFragment();
+                dialog.show(getFragmentManager(), "NotationDialogFragment");
+                return false;
+            }
+        });
+
+        if (serieBean != null) {
+            setUIElementURL(v, R.id.album_serie, StringUtils.formatTitreAcceptNull(serieBean.getTitre()), serieBean.getSiteWeb(), 0);
+        } else {
+            v.findViewById(R.id.fiche_album_row_serie).setVisibility(View.GONE);
+        }
+        setUIElement(v, R.id.album_titre, StringUtils.formatTitreAcceptNull(albumBean.getTitre()), R.id.fiche_album_row_titre);
 
         final TabHost tabHost = (TabHost) v.findViewById(android.R.id.tabhost);
         tabHost.setup();
@@ -90,13 +114,4 @@ public class FicheAlbumFragment extends FicheFragment {
         return v;
     }
 
-/*
-    private View createTabView(final String text, final int id) {
-        View view = LayoutInflater.from(this).inflate(R.layout.tabs_icon, null);
-        ImageView imageView = (ImageView) view.findViewById(R.id.tab_icon);
-        imageView.setImageDrawable(getResources().getDrawable(id));
-        ((TextView) view.findViewById(R.id.tab_text)).setText(text);
-        return view;
-    }
-*/
 }

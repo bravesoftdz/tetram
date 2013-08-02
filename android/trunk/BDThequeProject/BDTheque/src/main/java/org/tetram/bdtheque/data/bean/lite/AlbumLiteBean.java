@@ -4,6 +4,7 @@ import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
 import org.tetram.bdtheque.data.bean.abstracts.AlbumBeanAbstract;
+import org.tetram.bdtheque.data.bean.enums.Notation;
 import org.tetram.bdtheque.data.dao.lite.AlbumLiteDao;
 import org.tetram.bdtheque.data.factories.lite.AlbumLiteAbstractFactory;
 import org.tetram.bdtheque.data.utils.BeanDaoClass;
@@ -62,8 +63,8 @@ public class AlbumLiteBean extends AlbumBeanAbstract implements TreeNodeBean {
     }
 
     @Override
-    public Float getTreeNodeRating() {
-        return (float) this.notation.getValue();
+    public Notation getTreeNodeRating() {
+        return this.notation;
     }
 
     public String getLabel(boolean simple, boolean avecSerie) {

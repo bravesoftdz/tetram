@@ -14,6 +14,7 @@ import android.widget.TextView;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.InitialeBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
+import org.tetram.bdtheque.data.bean.enums.Notation;
 import org.tetram.bdtheque.data.dao.InitialeRepertoireDao;
 import org.tetram.bdtheque.utils.StringUtils;
 import org.tetram.bdtheque.utils.UserConfig;
@@ -147,8 +148,8 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
                 return true;
             }
         });
-        if (UserConfig.getInstance().shouldAfficheNoteListes() && (bean.getTreeNodeRating() != null)) {
-            ratingBar.setRating(bean.getTreeNodeRating() - 1);
+        if (UserConfig.getInstance().shouldAfficheNoteListes() && ((bean.getTreeNodeRating().compareTo(Notation.PAS_NOTE)) > 0)) {
+            ratingBar.setRating(bean.getTreeNodeRating().getValue() - 1);
             ratingBar.setVisibility(View.VISIBLE);
         } else
             ratingBar.setVisibility(View.GONE);

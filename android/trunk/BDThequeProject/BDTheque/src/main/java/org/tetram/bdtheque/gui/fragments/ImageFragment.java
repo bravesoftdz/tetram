@@ -27,10 +27,11 @@ public class ImageFragment extends Fragment {
     private List<ImageBean> imagesList;
     private ImageView imageView;
 
-    public static ImageFragment getFragment(List<ImageBean> images, boolean clickable) {
+    public static ImageFragment getFragment(List<ImageBean> images, int currentImage, boolean clickable) {
         Bundle args = new Bundle();
         args.putBoolean("clickable", clickable);
         args.putParcelableArrayList("images", (ArrayList<? extends Parcelable>) images);
+        args.putInt("currentImage", currentImage);
 
         ImageFragment imageFragment = new ImageFragment();
         imageFragment.setArguments(args);
@@ -62,16 +63,21 @@ public class ImageFragment extends Fragment {
             List<ImageBean> images = getArguments().getParcelableArrayList("images");
             if (images != null) setImagesList(images);
 
-            if (getArguments().getBoolean("clickable", false))
+            if (getArguments().getBoolean("clickable", false)) {
                 this.imageView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent();
                         intent.setClass(getActivity(), ImageActivity.class);
                         intent.putParcelableArrayListExtra("images", (ArrayList<? extends Parcelable>) ImageFragment.this.imagesList);
+                        intent.putExtra("currentImage", ImageFragment.this.currentImage);
                         startActivity(intent);
                     }
                 });
+            }
+
+            this.currentImage = getArguments().getInt("currentImage", 0);
+            showImage(this.currentImage);
         }
 
         // ne sert pas à grand chose puisque j'ai pas trouvé d'autre solution que de recréer le fragment à chaque fois

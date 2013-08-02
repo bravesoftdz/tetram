@@ -2,9 +2,9 @@ package org.tetram.bdtheque.data.bean.lite;
 
 import android.os.Parcel;
 
-import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
 import org.tetram.bdtheque.data.bean.abstracts.PersonneBeanAbstract;
+import org.tetram.bdtheque.data.bean.enums.Notation;
 import org.tetram.bdtheque.data.factories.lite.PersonneLiteFactory;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
@@ -53,10 +53,9 @@ public class PersonneLiteBean extends PersonneBeanAbstract implements TreeNodeBe
         return StringUtils.formatTitre(this.nom);
     }
 
-    @Nullable
     @Override
-    public Float getTreeNodeRating() {
-        return null;
+    public Notation getTreeNodeRating() {
+        return Notation.PAS_NOTE;
     }
 
 }
