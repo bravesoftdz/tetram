@@ -36,7 +36,7 @@ public class FicheSerieAlbumsFragment extends FicheFragment {
 
         View v = inflater.inflate(R.layout.fiche_serie_albums_fragment, container, false);
         if (serie != null) {
-            final ListView listAlbums = (ListView) v.findViewById(R.id.album_albums);
+            final ListView listAlbums = (ListView) v.findViewById(R.id.serie_albums);
             final int itemLayout = (album == null) ? android.R.layout.simple_list_item_1 : R.layout.simple_list_item_single_choice;
             listAlbums.setAdapter(new ListLiteBeanAdapter<AlbumLiteBean>(getActivity(), itemLayout, serie.getAlbums()));
             listAlbums.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -1,7 +1,7 @@
 create table albums (
     id_album            char(38) not null primary key,
-    moisparution        SMALLINT,
-    anneeparution       SMALLINT,
+    moisparution        smallint,
+    anneeparution       smallint,
     id_serie            char(38),
     tome                smallint default null,
     tomedebut           smallint,
@@ -9,7 +9,7 @@ create table albums (
     horsserie           smallint default 0,
     integrale           smallint default 0,
     achat               smallint default 0,
-    nbeditions          INTEGER DEFAULT 0,
+    nbeditions          integer default 0,
     -- complet             COMPUTED BY (case when NBEDITIONS > 0 then 1 else 0 end),
     initialetitrealbum  char(1),
     dc_albums           timestamp not null,

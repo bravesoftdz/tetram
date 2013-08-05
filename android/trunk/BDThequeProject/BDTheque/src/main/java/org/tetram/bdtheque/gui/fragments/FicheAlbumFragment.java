@@ -22,8 +22,8 @@ import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElementURL;
 
 public class FicheAlbumFragment extends FicheFragment {
 
-    private static final String TAB_DETAILS = "détails";
-    private static final String TAB_EDITIONS = "éditions";
+    private static final String TAB_DETAILS = "details";
+    private static final String TAB_EDITIONS = "editions";
     private static final String TAB_ALBUMS = "albums";
     private static final String TAB_IMAGES = "images";
 
@@ -37,30 +37,33 @@ public class FicheAlbumFragment extends FicheFragment {
         final AlbumBean albumBean = dao.getById(bean.getId());
         final SerieBean serieBean = albumBean.getSerie();
 
-        View v = inflater.inflate(R.layout.fiche_album_fragment, container, false);
+        View view = inflater.inflate(R.layout.fiche_album_fragment, container, false);
 
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-
-        final ImageView imageView = (ImageView) v.findViewById(R.id.album_notation);
+        final ImageView imageView = (ImageView) view.findViewById(R.id.album_notation);
         if (albumBean.getNotation() != null)
             imageView.setImageResource(albumBean.getNotation().getResDrawable());
         imageView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
                 NotationDialogFragment dialog = new NotationDialogFragment();
+                Bundle args = new Bundle();
+                args.putParcelable("bean", bean);
+                dialog.setArguments(args);
                 dialog.show(getFragmentManager(), "NotationDialogFragment");
                 return false;
             }
         });
 
         if (serieBean != null) {
-            setUIElementURL(v, R.id.album_serie, StringUtils.formatTitreAcceptNull(serieBean.getTitre()), serieBean.getSiteWeb(), 0);
+            setUIElementURL(view, R.id.album_serie, StringUtils.formatTitreAcceptNull(serieBean.getTitre()), serieBean.getSiteWeb(), 0);
         } else {
-            v.findViewById(R.id.fiche_album_row_serie).setVisibility(View.GONE);
+            view.findViewById(R.id.fiche_album_row_serie).setVisibility(View.GONE);
         }
-        setUIElement(v, R.id.album_titre, StringUtils.formatTitreAcceptNull(albumBean.getTitre()), R.id.fiche_album_row_titre);
+        setUIElement(view, R.id.album_titre, StringUtils.formatTitreAcceptNull(albumBean.getTitre()), R.id.fiche_album_row_titre);
 
-        final TabHost tabHost = (TabHost) v.findViewById(android.R.id.tabhost);
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
+        final TabHost tabHost = (TabHost) view.findViewById(android.R.id.tabhost);
         tabHost.setup();
 
         TabHost.TabSpec spec;
@@ -100,7 +103,7 @@ public class FicheAlbumFragment extends FicheFragment {
         fragmentTransaction.commit();
 
         if (tabHost.getTabWidget().getTabCount() <= 1)
-            v.findViewById(android.R.id.tabs).setVisibility(View.GONE);
+            view.findViewById(android.R.id.tabs).setVisibility(View.GONE);
 
         if (!"".equals(BDThequeApplication.getFicheAlbumLastShownTab()))
             tabHost.setCurrentTabByTag(BDThequeApplication.getFicheAlbumLastShownTab());
@@ -111,7 +114,7 @@ public class FicheAlbumFragment extends FicheFragment {
             }
         });
 
-        return v;
+        return view;
     }
 
 }

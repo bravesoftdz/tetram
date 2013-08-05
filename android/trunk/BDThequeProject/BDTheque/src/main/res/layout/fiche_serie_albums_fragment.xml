@@ -7,7 +7,7 @@
           android:layout_height="match_parent"
           android:layout_marginLeft="16dp"
           android:layout_marginRight="16dp"
-          android:id="@+id/album_albums"
+          android:id="@+id/serie_albums"
           android:textAppearance="?android:attr/textAppearanceMedium"
           android:layout_span="2"
           tools:listitem="@layout/simple_list_item_single_choice"

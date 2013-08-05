@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TabHost;
 
 import org.jetbrains.annotations.Nullable;
@@ -14,11 +15,14 @@ import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.SerieBean;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.dao.SerieDao;
+import org.tetram.bdtheque.utils.StringUtils;
+
+import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElementURL;
 
 @SuppressWarnings("UnusedDeclaration")
 public class FicheSerieFragment extends FicheFragment {
 
-    private static final String TAB_DETAILS = "détails";
+    private static final String TAB_DETAILS = "details";
     private static final String TAB_ALBUMS = "albums";
 
     @Nullable
@@ -30,11 +34,28 @@ public class FicheSerieFragment extends FicheFragment {
         final SerieDao dao = new SerieDao(getActivity());
         final SerieBean serieBean = dao.getById(bean.getId());
 
-        View v = inflater.inflate(R.layout.fiche_serie_fragment, container, false);
+        View view = inflater.inflate(R.layout.fiche_serie_fragment, container, false);
+
+        final ImageView imageView = (ImageView) view.findViewById(R.id.serie_notation);
+        if (serieBean.getNotation() != null)
+            imageView.setImageResource(serieBean.getNotation().getResDrawable());
+        imageView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                NotationDialogFragment dialog = new NotationDialogFragment();
+                Bundle args = new Bundle();
+                args.putParcelable("bean", bean);
+                dialog.setArguments(args);
+                dialog.show(getFragmentManager(), "NotationDialogFragment");
+                return false;
+            }
+        });
+
+        setUIElementURL(view, R.id.serie_titre, StringUtils.formatTitreAcceptNull(serieBean.getTitre()), serieBean.getSiteWeb(), 0);
 
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 
-        final TabHost tabHost = (TabHost) v.findViewById(android.R.id.tabhost);
+        final TabHost tabHost = (TabHost) view.findViewById(android.R.id.tabhost);
         tabHost.setup();
 
         TabHost.TabSpec spec;
@@ -58,7 +79,7 @@ public class FicheSerieFragment extends FicheFragment {
         fragmentTransaction.commit();
 
         if (tabHost.getTabWidget().getTabCount() <= 1)
-            v.findViewById(android.R.id.tabs).setVisibility(View.GONE);
+            view.findViewById(android.R.id.tabs).setVisibility(View.GONE);
 
         if (!"".equals(BDThequeApplication.getFicheSerieLastShownTab()))
             tabHost.setCurrentTabByTag(BDThequeApplication.getFicheSerieLastShownTab());
@@ -69,16 +90,7 @@ public class FicheSerieFragment extends FicheFragment {
             }
         });
 
-        return v;
-    }
-
-/*
-    private View createTabView(final String text, final int id) {
-        View view = LayoutInflater.from(this).inflate(R.layout.tabs_icon, null);
-        ImageView imageView = (ImageView) view.findViewById(R.id.tab_icon);
-        imageView.setImageDrawable(getResources().getDrawable(id));
-        ((TextView) view.findViewById(R.id.tab_text)).setText(text);
         return view;
     }
-*/
+
 }

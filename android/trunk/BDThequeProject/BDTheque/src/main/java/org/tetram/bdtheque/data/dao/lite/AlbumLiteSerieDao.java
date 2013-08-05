@@ -28,13 +28,13 @@ public class AlbumLiteSerieDao extends CommonRepertoireDao<AlbumLiteBean.AlbumWi
     @SuppressWarnings("StringConcatenationMissingWhitespace")
     @Override
     public List<InitialeSerieBean> getInitiales() {
-        return super.getInitiales(R.string.sql_series_albums, buildFiltre() /*+ "a.nbeditions > 0"*/);
+        return super.getInitiales(R.string.sql_series_albums, buildFiltre() + "a.nbeditions > 0");
     }
 
     @SuppressWarnings("StringConcatenationMissingWhitespace")
     @Override
     public List<AlbumLiteBean.AlbumWithoutSerieLiteBean> getData(InitialeSerieBean initiale) {
-        return super.getData(R.string.sql_albums_by_serie, initiale, buildFiltre()/* + "a.nbeditions > 0"*/);
+        return super.getData(R.string.sql_albums_by_serie, initiale, buildFiltre() + "a.nbeditions > 0");
     }
 
     public void loadListForSerie(List<AlbumLiteBean> list, UUID serieId) {

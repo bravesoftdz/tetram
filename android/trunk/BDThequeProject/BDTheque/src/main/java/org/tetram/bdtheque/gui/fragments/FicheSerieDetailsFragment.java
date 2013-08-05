@@ -33,19 +33,6 @@ public class FicheSerieDetailsFragment extends FicheFragment {
 
         View view = inflater.inflate(R.layout.fiche_serie_details_fragment, container, false);
 
-        final ImageView imageView = (ImageView) view.findViewById(R.id.serie_notation);
-        if (serie.getNotation() != null)
-            imageView.setImageResource(serie.getNotation().getResDrawable());
-        imageView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                NotationDialogFragment dialog = new NotationDialogFragment();
-                dialog.show(getFragmentManager(), "NotationDialogFragment");
-                return false;
-            }
-        });
-
-        setUIElementURL(view, R.id.serie_titre, StringUtils.formatTitreAcceptNull(serie.getTitre()), serie.getSiteWeb(), 0);
         final EditeurBean editeur = serie.getEditeur();
         setUIElementURL(view, R.id.serie_editeur, StringUtils.formatTitreAcceptNull(editeur.getNom()), editeur.getSiteWeb(), 0);
         final CollectionLiteBean collection = serie.getCollection();
