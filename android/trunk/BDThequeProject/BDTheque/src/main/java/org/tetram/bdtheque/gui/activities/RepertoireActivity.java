@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.SearchView;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
@@ -26,7 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class RepertoireActivity extends FragmentActivity implements ActionBar.OnNavigationListener, SearchManager.OnCancelListener {
+public class RepertoireActivity extends FragmentActivity implements ActionBar.OnNavigationListener{
 
     private static final int REQUEST_CONFIG = 0;
     private Toast confirmMsg;
@@ -50,7 +51,6 @@ public class RepertoireActivity extends FragmentActivity implements ActionBar.On
         }
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        searchManager.setOnCancelListener(this);
 
         MenuEntry defaultMenu = null;
         List<MenuEntry> menuEntries = new ArrayList<MenuEntry>();
@@ -110,8 +110,7 @@ public class RepertoireActivity extends FragmentActivity implements ActionBar.On
             startActivity(wordIntent);
             */
         } else if (Intent.ACTION_SEARCH.equals(s)) {
-            this.repertoire.getRepertoireDao().setFiltre(intent.getStringExtra(SearchManager.QUERY));
-            this.repertoire.refreshList();
+            this.repertoire.setFiltre(intent.getStringExtra(SearchManager.QUERY));
         }
     }
 
@@ -123,6 +122,27 @@ public class RepertoireActivity extends FragmentActivity implements ActionBar.On
         this.shareProvider = (ShareActionProvider) menu.findItem(R.id.menu_share).getActionProvider();
         this.shareProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
         this.shareProvider.setShareIntent(createShareIntent());
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setIconifiedByDefault(true);
+
+        menu.findItem(R.id.action_search).setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                return true;
+            }
+
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                Intent intent = new Intent(Intent.ACTION_SEARCH);
+                intent.putExtra(SearchManager.QUERY, "");
+                handleIntent(intent);
+                return true;
+            }
+        });
+
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -137,9 +157,11 @@ public class RepertoireActivity extends FragmentActivity implements ActionBar.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.search:
+            /*
+            case R.id.action_search:
                 onSearchRequested();
                 return true;
+                */
             case R.id.menu_share:
                 this.shareProvider.setShareIntent(createShareIntent());
                 return true;
@@ -147,7 +169,7 @@ public class RepertoireActivity extends FragmentActivity implements ActionBar.On
                 startActivityForResult(new Intent(this, SettingsActivity.class), REQUEST_CONFIG);
                 return true;
             default:
-                return false;
+                return super.onOptionsItemSelected(item);
         }
     }
 
@@ -162,14 +184,6 @@ public class RepertoireActivity extends FragmentActivity implements ActionBar.On
                 break;
         }
     }
-
-    @Override
-    public void onCancel() {
-        if ("".equals(this.repertoire.getRepertoireDao().getFiltre())) return;
-        this.repertoire.getRepertoireDao().setFiltre(null);
-        this.repertoire.refreshList();
-    }
-
 
     @Override
     public void onBackPressed() {

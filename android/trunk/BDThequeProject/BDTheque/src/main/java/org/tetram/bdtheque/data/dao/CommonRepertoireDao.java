@@ -21,7 +21,7 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
 
     private final Class<? extends BeanFactory<B>> beanFactoryClass;
     private final Class<I> initialeClass;
-    private String filtre;
+    private String filtre = "";
 
     protected CommonRepertoireDao(Context context, Class<I> initialeClass, Class<? extends BeanFactory<B>> beanFactoryClass) {
         super(context);
@@ -109,7 +109,7 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
 
     @Override
     public void setFiltre(String filtre) {
-        this.filtre = filtre;
+        this.filtre = filtre == null ? "" : filtre;
     }
 
     @Override

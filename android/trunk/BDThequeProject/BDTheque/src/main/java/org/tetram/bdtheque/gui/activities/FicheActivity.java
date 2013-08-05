@@ -21,6 +21,8 @@ public class FicheActivity extends FragmentActivity {
             return;
         }
 
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         if (savedInstanceState == null) {
             CommonBean bean = getIntent().getParcelableExtra("bean");
 

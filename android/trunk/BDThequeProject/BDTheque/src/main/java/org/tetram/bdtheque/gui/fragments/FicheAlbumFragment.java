@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.AlbumBean;
+import org.tetram.bdtheque.data.bean.EditionBean;
 import org.tetram.bdtheque.data.bean.SerieBean;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.dao.AlbumDao;
@@ -83,12 +84,17 @@ public class FicheAlbumFragment extends FicheFragment {
             FicheAlbumEditionsFragment editionsFragment = (FicheAlbumEditionsFragment) FicheFragment.newInstance(FicheAlbumEditionsFragment.class, albumBean);
             fragmentTransaction.replace(R.id.tab_album_editions, editionsFragment);
 
-            spec = tabHost.newTabSpec(TAB_IMAGES);
-            spec.setIndicator(getResources().getString(R.string.fiche_album_tab_images));
-            spec.setContent(R.id.tab_album_images);
-            tabHost.addTab(spec);
-            FicheAlbumImagesFragment imagesFragment = (FicheAlbumImagesFragment) FicheFragment.newInstance(FicheAlbumImagesFragment.class, albumBean);
-            fragmentTransaction.replace(R.id.tab_album_images, imagesFragment);
+            int nbImages = 0;
+            for (EditionBean edition : albumBean.getEditions())
+                nbImages += edition.getImages().size();
+            if (nbImages > 0) {
+                spec = tabHost.newTabSpec(TAB_IMAGES);
+                spec.setIndicator(getResources().getString(R.string.fiche_album_tab_images));
+                spec.setContent(R.id.tab_album_images);
+                tabHost.addTab(spec);
+                FicheAlbumImagesFragment imagesFragment = (FicheAlbumImagesFragment) FicheFragment.newInstance(FicheAlbumImagesFragment.class, albumBean);
+                fragmentTransaction.replace(R.id.tab_album_images, imagesFragment);
+            }
         }
 
         if ((serieBean != null) && (serieBean.getAlbums().size() > 1)) {

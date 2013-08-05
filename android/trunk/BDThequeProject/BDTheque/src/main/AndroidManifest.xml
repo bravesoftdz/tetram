@@ -18,6 +18,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
+
         <activity android:name="org.tetram.bdtheque.gui.activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -36,7 +37,9 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/recherche"/>
         </activity>
-        <activity android:name="org.tetram.bdtheque.gui.activities.FicheActivity"/>
+        <activity
+            android:name="org.tetram.bdtheque.gui.activities.FicheActivity"
+            android:parentActivityName="org.tetram.bdtheque.gui.activities.RepertoireActivity" />
         <activity android:name="org.tetram.bdtheque.gui.activities.GestionActivity"/>
         <activity android:name="org.tetram.bdtheque.gui.activities.SettingsActivity">
             <intent-filter>
@@ -44,18 +47,6 @@
 
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
-        </activity>
-        <activity
-            android:name="org.tetram.bdtheque.dummy.ItemListActivity"
-            android:label="@string/app_name">
-        </activity>
-        <activity
-            android:name="org.tetram.bdtheque.dummy.ItemDetailActivity"
-            android:label="@string/title_item_detail"
-            android:parentActivityName=".ItemListActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ItemListActivity"/>
         </activity>
         <activity android:name="org.tetram.bdtheque.gui.activities.ImageActivity"/>
     </application>

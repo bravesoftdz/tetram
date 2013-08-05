@@ -125,6 +125,15 @@ public class TitlesFragment extends ExpandableListFragment {
         }
     }
 
+    public void setFiltre(String filtre) {
+        if (!this.repertoireDao.getFiltre().equalsIgnoreCase(filtre)) {
+            this.curGroupPosition = null;
+            this.curChildPosition = null;
+            this.repertoireDao.setFiltre(filtre);
+            refreshList();
+        }
+    }
+
     @SuppressWarnings("UnusedDeclaration")
     public ModeRepertoire getRepertoireMode() {
         return this.repertoireMode;

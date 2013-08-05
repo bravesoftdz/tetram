@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.bean;
 
 import android.os.Parcel;
 
+import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
 import org.tetram.bdtheque.data.bean.lite.EditionLiteBean;
 import org.tetram.bdtheque.data.dao.EditionDao;
 import org.tetram.bdtheque.data.factories.EditionFactory;
@@ -32,7 +33,7 @@ public class EditionBean extends EditionLiteBean {
             return new EditionBean[size];
         }
     };
-    public final List<ImageBean> images = new ArrayList<ImageBean>();
+    private final List<ImageBean> images = new ArrayList<ImageBean>();
     @Field(fieldName = DDLConstants.EDITIONS_COULEUR)
     @DefaultBooleanValue(true)
     private boolean couleur;
@@ -71,6 +72,8 @@ public class EditionBean extends EditionLiteBean {
     private ListeBean formatEdition;
     @Field(fieldName = DDLConstants.EDITIONS_SENSLECTURE, nullable = true)
     private ListeBean sensLecture;
+    @Field(fieldName = DDLConstants.ALBUMS_ID, nullable = false)
+    private AlbumLiteBean album;
 
     public EditionBean(Parcel in) {
         super(in);
@@ -83,6 +86,7 @@ public class EditionBean extends EditionLiteBean {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
+        dest.writeParcelable(this.album, flags);
         dest.writeValue(this.prix);
         dest.writeValue(this.couleur);
         dest.writeValue(this.dedicace);
@@ -106,6 +110,7 @@ public class EditionBean extends EditionLiteBean {
     @Override
     public void readFromParcel(Parcel in) {
         super.readFromParcel(in);
+        this.album = in.readParcelable(AlbumLiteBean.class.getClassLoader());
         this.prix = (Double) in.readValue(Double.class.getClassLoader());
         this.couleur = (Boolean) in.readValue(Boolean.class.getClassLoader());
         this.dedicace = (Boolean) in.readValue(Boolean.class.getClassLoader());
@@ -124,10 +129,6 @@ public class EditionBean extends EditionLiteBean {
         this.formatEdition = in.readParcelable(ListeBean.class.getClassLoader());
         this.sensLecture = in.readParcelable(ListeBean.class.getClassLoader());
         in.readTypedList(this.getImages(), ImageBean.CREATOR);
-    }
-
-    public List<ImageBean> getImages() {
-        return this.images;
     }
 
     public boolean isCouleur() {
@@ -264,5 +265,17 @@ public class EditionBean extends EditionLiteBean {
 
     public void setSensLecture(ListeBean sensLecture) {
         this.sensLecture = sensLecture;
+    }
+
+    public List<ImageBean> getImages() {
+        return this.images;
+    }
+
+    public AlbumLiteBean getAlbum() {
+        return this.album;
+    }
+
+    public void setAlbum(AlbumLiteBean album) {
+        this.album = album;
     }
 }
