@@ -14,13 +14,14 @@ import org.tetram.bdtheque.utils.GenericUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import static org.tetram.bdtheque.data.utils.DaoUtils.PropertyDescriptor;
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldAsBool;
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldAsBoolean;
 import static org.tetram.bdtheque.data.utils.DaoUtils.getFieldAsDate;
@@ -93,7 +94,7 @@ public abstract class BeanFactoryImpl<T extends CommonBean> implements BeanFacto
     }
 
     @SuppressWarnings("unchecked")
-    private void loadProperty(T bean, PropertyDescriptor descriptor, Cursor cursor, Context context, boolean inline, DaoUtils.LoadDescriptor loadDescriptor) {
+    private void loadSimpleProperty(T bean, DaoUtils.SimplePropertyDescriptor descriptor, Cursor cursor, Context context, boolean inline, DaoUtils.LoadDescriptor loadDescriptor) {
         final Class<?> fieldType = descriptor.getField().getType();
         try {
             String dbFieldName = descriptor.getDbFieldName();
@@ -147,9 +148,6 @@ public abstract class BeanFactoryImpl<T extends CommonBean> implements BeanFacto
                 descriptor.getSetter().invoke(bean, getFieldAsUUID(cursor, dbFieldName));
             else if (fieldType.equals(URL.class))
                 descriptor.getSetter().invoke(bean, new URL(getFieldAsString(cursor, dbFieldName)));
-            else /*if (List.class.isAssignableFrom(fieldType))*/ {
-
-            }
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (MalformedURLException ignored) {
@@ -160,8 +158,26 @@ public abstract class BeanFactoryImpl<T extends CommonBean> implements BeanFacto
         }
     }
 
+    @SuppressWarnings("UnusedParameters")
+    private void loadMultipleProperty(T bean, DaoUtils.MultiplePropertyDescriptor property, Cursor cursor, Context context, boolean inline, DaoUtils.LoadDescriptor loadDescriptor) {
+        // TODO
+        Type type = property.getField().getGenericType();
+        if (type instanceof ParameterizedType) {
+            ParameterizedType pt = (ParameterizedType) type;
+            System.out.println("raw type: " + pt.getRawType());
+            System.out.println("owner type: " + pt.getOwnerType());
+            System.out.println("actual type args:");
+            for (Type t : pt.getActualTypeArguments()) {
+                System.out.println("    " + t);
+            }
+
+            Type subBeanType = pt.getActualTypeArguments()[0];
+        }
+
+    }
+
     private LoadResult loadByAnnotation(Context context, Cursor cursor, boolean inline, DaoUtils.LoadDescriptor loadDescriptor, T bean) {
-        List<PropertyDescriptor> fields = DaoUtils.getPropertiesDescriptors(this.beanClass);
+        List<DaoUtils.PropertyDescriptor> fields = DaoUtils.getPropertiesDescriptors(this.beanClass);
         if (fields.isEmpty()) return LoadResult.ERROR;
 
         String dbFieldName = this.descriptor.getPrimaryKey().getDbFieldName();
@@ -170,11 +186,18 @@ public abstract class BeanFactoryImpl<T extends CommonBean> implements BeanFacto
         bean.setId(getFieldAsUUID(cursor, dbFieldName));
         if (bean.getId() == null) return LoadResult.NOTFOUND;
 
-        for (PropertyDescriptor property : fields)
+        for (DaoUtils.PropertyDescriptor property : fields)
             if (!property.equals(this.descriptor.getPrimaryKey()))
                 loadProperty(bean, property, cursor, context, inline, loadDescriptor);
 
         return LoadResult.ERROR;
+    }
+
+    private void loadProperty(T bean, DaoUtils.PropertyDescriptor property, Cursor cursor, Context context, boolean inline, DaoUtils.LoadDescriptor loadDescriptor) {
+        if (property instanceof DaoUtils.SimplePropertyDescriptor)
+            loadSimpleProperty(bean, (DaoUtils.SimplePropertyDescriptor) property, cursor, context, inline, loadDescriptor);
+        if (property instanceof DaoUtils.MultiplePropertyDescriptor)
+            loadMultipleProperty(bean, (DaoUtils.MultiplePropertyDescriptor) property, cursor, context, inline, loadDescriptor);
     }
 
 }

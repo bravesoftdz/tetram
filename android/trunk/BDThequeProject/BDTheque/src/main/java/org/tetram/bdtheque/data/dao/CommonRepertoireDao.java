@@ -129,7 +129,7 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
     }
 
 /*
-    // pour les lite bean, la méthode est différente de CommonDaoImpl#getById
+    // pour les lite bean, la méthode est différente de {CommonDaoImpl#getById}
     @Nullable
     @Override
     public B getById(UUID beanId) {

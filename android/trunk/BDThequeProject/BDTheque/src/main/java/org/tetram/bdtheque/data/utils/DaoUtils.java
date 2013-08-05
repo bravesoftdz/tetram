@@ -141,27 +141,39 @@ public abstract class DaoUtils {
 
             for (java.lang.reflect.Field field : fields) {
                 if (!Modifier.isStatic(field.getModifiers())) {
-                    PropertyDescriptor property = new PropertyDescriptor();
-                    property.annotation = field.getAnnotation(Field.class);
-                    if (property.annotation != null) {
-                        property.field = field;
-                        property.dbFieldName = field.getName();
-                        if (!property.annotation.fieldName().isEmpty())
-                            property.dbFieldName = property.annotation.fieldName();
+                    SimplePropertyDescriptor simpleProperty = new SimplePropertyDescriptor();
+                    simpleProperty.annotation = field.getAnnotation(Field.class);
+                    if (simpleProperty.annotation != null) {
+                        simpleProperty.field = field;
+                        simpleProperty.dbFieldName = field.getName();
+                        if (!simpleProperty.annotation.fieldName().isEmpty())
+                            simpleProperty.dbFieldName = simpleProperty.annotation.fieldName();
                         final String setterName = String.format("set%s%s", field.getName().substring(0, 1).toUpperCase(), field.getName().substring(1));
                         try {
-                            property.setter = masterClasz.getMethod(setterName, field.getType());
+                            simpleProperty.setter = masterClasz.getMethod(setterName, field.getType());
                         } catch (NoSuchMethodException e) {
                             e.printStackTrace();
                         }
                         final boolean isBoolean = field.getType().equals(boolean.class) || field.getType().equals(Boolean.class);
                         final String getterName = String.format("%s%s%s", isBoolean ? "is" : "get", field.getName().substring(0, 1).toUpperCase(), field.getName().substring(1));
                         try {
-                            property.getter = masterClasz.getMethod(getterName);
+                            simpleProperty.getter = masterClasz.getMethod(getterName);
                         } catch (NoSuchMethodException e) {
                             e.printStackTrace();
                         }
-                        result.add(property);
+                        result.add(simpleProperty);
+                    }
+                    MultiplePropertyDescriptor multipleProperty = new MultiplePropertyDescriptor();
+                    multipleProperty.annotation = field.getAnnotation(OneToMany.class);
+                    if (multipleProperty.annotation != null) {
+                        multipleProperty.field = field;
+                        final String getterName = String.format("%s%s%s", "get", field.getName().substring(0, 1).toUpperCase(), field.getName().substring(1));
+                        try {
+                            multipleProperty.getter = masterClasz.getMethod(getterName);
+                        } catch (NoSuchMethodException e) {
+                            e.printStackTrace();
+                        }
+                        result.add(multipleProperty);
                     }
                 }
             }
@@ -190,13 +202,16 @@ public abstract class DaoUtils {
                 result.tableName = clasz.getSimpleName().toUpperCase() + "S";
             List<PropertyDescriptor> properties = getPropertiesDescriptors(clasz);
             for (PropertyDescriptor property : properties) {
-                if (property.annotation.primaryKey())
-                    result.primaryKey = property;
-                final Class<?> propertyType = property.field.getType();
-                if (CommonBean.class.isAssignableFrom(propertyType))
-                    result.columns.put(property, getSQLDescriptor((Class<? extends CommonBean>) propertyType));
-                else
-                    result.columns.put(property, null);
+                if (property instanceof SimplePropertyDescriptor) {
+                    SimplePropertyDescriptor simpleProperty = (SimplePropertyDescriptor) property;
+                    if (simpleProperty.annotation.primaryKey())
+                        result.primaryKey = simpleProperty;
+                    final Class<?> propertyType = property.getField().getType();
+                    if (CommonBean.class.isAssignableFrom(propertyType))
+                        result.columns.put(simpleProperty, getSQLDescriptor((Class<? extends CommonBean>) propertyType));
+                    else
+                        result.columns.put(simpleProperty, null);
+                }
             }
         }
         return result;
@@ -236,7 +251,7 @@ public abstract class DaoUtils {
 
         int localIndicator = queryInfo.indicator;
 
-        for (Map.Entry<PropertyDescriptor, SQLDescriptor> column : descriptor.getColumns().entrySet()) {
+        for (Map.Entry<SimplePropertyDescriptor, SQLDescriptor> column : descriptor.getColumns().entrySet()) {
             PropertySQLDescriptor property = new PropertySQLDescriptor();
 
             property.property = column.getKey();
@@ -247,7 +262,7 @@ public abstract class DaoUtils {
             queryInfo.fields.add(property.fullFieldName);
             queryInfo.sqlAliasMapping.put(property.fullFieldName, String.format("%s %s", property.fullFieldName, property.aliasName));
             queryInfo.loadDescriptor.getAlias().put(column.getKey(), property.aliasName);
-            queryInfo.columns.put(property.property.field, property);
+            queryInfo.columns.put(property.property.getField(), property);
 
             if (column.getValue() != null) {
                 property.masterProperty = masterField;
@@ -300,11 +315,13 @@ public abstract class DaoUtils {
     }
 
     public static class PropertyDescriptor {
-        private Field annotation;
-        private java.lang.reflect.Field field;
-        private String dbFieldName;
-        private Method setter;
-        private Method getter;
+        protected java.lang.reflect.Field field;
+        protected Method setter;
+        protected Method getter;
+
+        public java.lang.reflect.Field getField() {
+            return this.field;
+        }
 
         public Method getGetter() {
             return this.getter;
@@ -314,26 +331,28 @@ public abstract class DaoUtils {
             return this.setter;
         }
 
-        public String getDbFieldName() {
-            return this.dbFieldName;
-        }
+    }
 
-        public java.lang.reflect.Field getField() {
-            return this.field;
-        }
+    public static class SimplePropertyDescriptor extends PropertyDescriptor {
+        private Field annotation;
+        private String dbFieldName;
 
         public Field getAnnotation() {
             return this.annotation;
         }
+
+        public String getDbFieldName() {
+            return this.dbFieldName;
+        }
     }
 
     public static class PropertySQLDescriptor {
-        private PropertyDescriptor property;
+        private SimplePropertyDescriptor property;
         private String aliasName;
         private String fullFieldName;
         private PropertySQLDescriptor masterProperty;
 
-        public PropertyDescriptor getProperty() {
+        public SimplePropertyDescriptor getProperty() {
             return this.property;
         }
 
@@ -360,8 +379,8 @@ public abstract class DaoUtils {
     public static class SQLDescriptor {
         public Class<? extends CommonBean> beanClass;
         private String tableName;
-        private PropertyDescriptor primaryKey;
-        private Map<PropertyDescriptor, SQLDescriptor> columns = new HashMap<PropertyDescriptor, SQLDescriptor>();
+        private SimplePropertyDescriptor primaryKey;
+        private Map<SimplePropertyDescriptor, SQLDescriptor> columns = new HashMap<SimplePropertyDescriptor, SQLDescriptor>();
 
         public Class<? extends CommonBean> getBeanClass() {
             return this.beanClass;
@@ -371,20 +390,20 @@ public abstract class DaoUtils {
             return this.tableName;
         }
 
-        public PropertyDescriptor getPrimaryKey() {
+        public SimplePropertyDescriptor getPrimaryKey() {
             return this.primaryKey;
         }
 
-        public Map<PropertyDescriptor, SQLDescriptor> getColumns() {
+        public Map<SimplePropertyDescriptor, SQLDescriptor> getColumns() {
             return this.columns;
         }
     }
 
     public static class LoadDescriptor {
-        private final Map<PropertyDescriptor, String> alias = new HashMap<PropertyDescriptor, String>();
+        private final Map<SimplePropertyDescriptor, String> alias = new HashMap<SimplePropertyDescriptor, String>();
         private final Map<String, LoadDescriptor> childAlias = new HashMap<String, LoadDescriptor>();
 
-        public Map<PropertyDescriptor, String> getAlias() {
+        public Map<SimplePropertyDescriptor, String> getAlias() {
             return this.alias;
         }
 
@@ -398,7 +417,6 @@ public abstract class DaoUtils {
          * utilisé uniquement en interne pour générer les alias
          */
         private int indicator;
-
         private Class<? extends CommonBean> beanClass;
         private List<String> tables = new ArrayList<String>();
         private List<String> fields = new ArrayList<String>();
@@ -431,4 +449,12 @@ public abstract class DaoUtils {
         }
     }
 
+    public static class MultiplePropertyDescriptor extends PropertyDescriptor {
+        private OneToMany annotation;
+
+        private OneToMany getAnnotation() {
+            return this.annotation;
+        }
+
+    }
 }

@@ -10,4 +10,6 @@ import java.lang.annotation.Target;
 public @interface OneToMany {
     String mappedBy();
     String orderBy() default "";
+    FetchType fetch() default FetchType.LAZY;
+    java.lang.Class	targetEntity() default void.class;
 }
