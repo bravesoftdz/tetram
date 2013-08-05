@@ -4,8 +4,8 @@ import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.factories.GenreFactory;
-import org.tetram.bdtheque.data.utils.Entity;
-import org.tetram.bdtheque.data.utils.Field;
+import org.tetram.bdtheque.data.orm.annotations.Entity;
+import org.tetram.bdtheque.data.orm.annotations.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import java.util.UUID;

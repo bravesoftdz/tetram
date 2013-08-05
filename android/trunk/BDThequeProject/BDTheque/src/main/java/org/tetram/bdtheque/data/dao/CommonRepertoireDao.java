@@ -8,25 +8,24 @@ import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.InitialeBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
-import org.tetram.bdtheque.data.factories.BeanFactory;
 import org.tetram.bdtheque.database.DBUtils;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.tetram.bdtheque.data.orm.BeanLoader.loadFromCursor;
+import static org.tetram.bdtheque.data.orm.Core.getDatabaseHelper;
 
 public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I extends InitialeBean>
         extends CommonDaoImpl<B>
         implements InitialeRepertoireDao<B, I> {
 
-    private final Class<? extends BeanFactory<B>> beanFactoryClass;
     private final Class<I> initialeClass;
     private String filtre = "";
 
-    protected CommonRepertoireDao(Context context, Class<I> initialeClass, Class<? extends BeanFactory<B>> beanFactoryClass) {
+    protected CommonRepertoireDao(Context context, Class<I> initialeClass) {
         super(context);
         this.initialeClass = initialeClass;
-        this.beanFactoryClass = beanFactoryClass;
     }
 
     public List<B> getData(int resId, InitialeBean initiale) {
@@ -50,21 +49,8 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
             Cursor cursor = rdb.rawQuery(getContext().getString(resId, sWhere), params);
             try {
                 List<B> result = new ArrayList<B>();
-                BeanFactory<B> factory = null;
-                try {
-                    factory = this.beanFactoryClass.getConstructor().newInstance();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-
                 while (cursor.moveToNext()) {
-                    result.add(factory.loadFromCursor(getContext(), cursor, true, null));
+                    result.add(loadFromCursor(this.getBeanClass(), getContext(), cursor, true, null));
                 }
                 return result;
             } finally {

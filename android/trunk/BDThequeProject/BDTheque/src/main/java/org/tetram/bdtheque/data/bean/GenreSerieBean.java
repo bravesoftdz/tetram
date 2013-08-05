@@ -6,9 +6,9 @@ import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.bean.lite.SerieLiteBean;
 import org.tetram.bdtheque.data.dao.GenreSerieDao;
 import org.tetram.bdtheque.data.factories.GenreSerieFactory;
-import org.tetram.bdtheque.data.utils.BeanDaoClass;
-import org.tetram.bdtheque.data.utils.Entity;
-import org.tetram.bdtheque.data.utils.Field;
+import org.tetram.bdtheque.data.orm.annotations.BeanDaoClass;
+import org.tetram.bdtheque.data.orm.annotations.Entity;
+import org.tetram.bdtheque.data.orm.annotations.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import java.util.UUID;

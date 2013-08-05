@@ -3,20 +3,14 @@ package org.tetram.bdtheque.data.bean.lite;
 import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.EditeurBean;
-import org.tetram.bdtheque.data.bean.EditionBean;
-import org.tetram.bdtheque.data.bean.ImageBean;
-import org.tetram.bdtheque.data.bean.ListeBean;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
-import org.tetram.bdtheque.data.factories.EditionFactory;
 import org.tetram.bdtheque.data.factories.EditionLiteFactory;
-import org.tetram.bdtheque.data.utils.DefaultBooleanValue;
-import org.tetram.bdtheque.data.utils.Entity;
-import org.tetram.bdtheque.data.utils.Field;
+import org.tetram.bdtheque.data.orm.annotations.DefaultBooleanValue;
+import org.tetram.bdtheque.data.orm.annotations.Entity;
+import org.tetram.bdtheque.data.orm.annotations.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 
-import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @SuppressWarnings("UnusedDeclaration")

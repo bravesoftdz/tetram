@@ -6,10 +6,10 @@ import org.tetram.bdtheque.data.bean.abstracts.SerieBeanAbstract;
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
 import org.tetram.bdtheque.data.dao.SerieDao;
 import org.tetram.bdtheque.data.factories.SerieFactory;
-import org.tetram.bdtheque.data.utils.BeanDaoClass;
-import org.tetram.bdtheque.data.utils.Entity;
-import org.tetram.bdtheque.data.utils.Field;
-import org.tetram.bdtheque.data.utils.OneToMany;
+import org.tetram.bdtheque.data.orm.annotations.BeanDaoClass;
+import org.tetram.bdtheque.data.orm.annotations.Entity;
+import org.tetram.bdtheque.data.orm.annotations.Field;
+import org.tetram.bdtheque.data.orm.annotations.OneToMany;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -36,11 +36,11 @@ public class SerieBean extends SerieBeanAbstract {
     };
     @OneToMany(mappedBy = "serie")
     private final List<GenreSerieBean> genres = new ArrayList<GenreSerieBean>();
-    @OneToMany(mappedBy = "serie")
+    @OneToMany(mappedBy = "serie", filtered = "metier = 0")
     private final List<AuteurSerieBean> scenaristes = new ArrayList<AuteurSerieBean>();
-    @OneToMany(mappedBy = "serie")
+    @OneToMany(mappedBy = "serie", filtered = "metier = 1")
     private final List<AuteurSerieBean> dessinateurs = new ArrayList<AuteurSerieBean>();
-    @OneToMany(mappedBy = "serie")
+    @OneToMany(mappedBy = "serie", filtered = "metier = 2")
     private final List<AuteurSerieBean> coloristes = new ArrayList<AuteurSerieBean>();
     @OneToMany(mappedBy = "serie")
     private final List<AlbumLiteBean> albums = new ArrayList<AlbumLiteBean>();

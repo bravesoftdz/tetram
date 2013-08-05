@@ -2,7 +2,7 @@ package org.tetram.bdtheque.data.factories;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
-import org.tetram.bdtheque.data.utils.Entity;
+import org.tetram.bdtheque.data.orm.annotations.Entity;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

@@ -4,7 +4,7 @@ import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.enums.AuteurMetier;
 import org.tetram.bdtheque.data.bean.lite.PersonneLiteBean;
-import org.tetram.bdtheque.data.utils.Field;
+import org.tetram.bdtheque.data.orm.annotations.Field;
 import org.tetram.bdtheque.database.DDLConstants;
 
 @SuppressWarnings("UnusedDeclaration")

@@ -7,8 +7,8 @@ import org.tetram.bdtheque.data.bean.abstracts.CollectionBeanAbstract;
 import org.tetram.bdtheque.data.bean.enums.Notation;
 import org.tetram.bdtheque.data.dao.lite.CollectionLiteDao;
 import org.tetram.bdtheque.data.factories.lite.CollectionLiteFactory;
-import org.tetram.bdtheque.data.utils.BeanDaoClass;
-import org.tetram.bdtheque.data.utils.Entity;
+import org.tetram.bdtheque.data.orm.annotations.BeanDaoClass;
+import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 

@@ -6,7 +6,6 @@ import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.InitialeBean;
 import org.tetram.bdtheque.data.bean.lite.PersonneLiteBean;
 import org.tetram.bdtheque.data.dao.CommonRepertoireDao;
-import org.tetram.bdtheque.data.factories.lite.PersonneLiteFactory;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
 public class PersonneLiteDao extends CommonRepertoireDao<PersonneLiteBean, InitialeBean> {
 
     public PersonneLiteDao(Context context) {
-        super(context, InitialeBean.class, PersonneLiteFactory.class);
+        super(context, InitialeBean.class);
     }
 
     @Override

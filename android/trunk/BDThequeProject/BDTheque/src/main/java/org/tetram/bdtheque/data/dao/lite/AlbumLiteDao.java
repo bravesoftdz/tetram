@@ -6,14 +6,13 @@ import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.InitialeBean;
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
 import org.tetram.bdtheque.data.dao.CommonRepertoireDao;
-import org.tetram.bdtheque.data.factories.lite.AlbumLiteAbstractFactory;
 
 import java.util.List;
 
 public class AlbumLiteDao extends CommonRepertoireDao<AlbumLiteBean, InitialeBean> {
 
     public AlbumLiteDao(Context context) {
-        super(context, InitialeBean.class, AlbumLiteAbstractFactory.AlbumLiteFactory.class);
+        super(context, InitialeBean.class);
     }
 
     private String buildFiltre() {

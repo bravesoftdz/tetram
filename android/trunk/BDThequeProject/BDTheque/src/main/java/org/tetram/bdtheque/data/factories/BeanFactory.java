@@ -3,14 +3,10 @@ package org.tetram.bdtheque.data.factories;
 import android.content.Context;
 import android.database.Cursor;
 
-import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
-import org.tetram.bdtheque.data.utils.DaoUtils;
+import org.tetram.bdtheque.data.orm.LoadDescriptor;
 
 public interface BeanFactory<T extends CommonBean> {
-    @Nullable
-    public T loadFromCursor(Context context, Cursor cursor, boolean inline, DaoUtils.LoadDescriptor loadDescriptor);
-
-    @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
-    public boolean loadFromCursor(Context context, Cursor cursor, boolean inline, DaoUtils.LoadDescriptor loadDescriptor, T bean);
+    @SuppressWarnings({"BooleanMethodNameMustStartWithQuestion", "UnusedDeclaration"})
+    public boolean loadFromCursor(Context context, Cursor cursor, boolean inline, LoadDescriptor loadDescriptor, T bean);
 }

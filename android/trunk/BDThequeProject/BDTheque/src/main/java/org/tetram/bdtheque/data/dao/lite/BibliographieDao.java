@@ -7,7 +7,6 @@ import org.tetram.bdtheque.data.bean.InitialeSerieBean;
 import org.tetram.bdtheque.data.bean.PersonneBean;
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
 import org.tetram.bdtheque.data.dao.CommonRepertoireDao;
-import org.tetram.bdtheque.data.factories.lite.AlbumLiteAbstractFactory;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -19,7 +18,7 @@ public class BibliographieDao extends CommonRepertoireDao<AlbumLiteBean.AlbumWit
     private PersonneBean personne;
 
     public BibliographieDao(Context context) {
-        super(context, InitialeSerieBean.class, AlbumLiteAbstractFactory.AlbumWithoutSerieLiteFactory.class);
+        super(context, InitialeSerieBean.class);
     }
 
     private String buildFiltre() {

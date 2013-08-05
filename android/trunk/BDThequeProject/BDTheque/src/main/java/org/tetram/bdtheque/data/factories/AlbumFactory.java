@@ -7,13 +7,13 @@ import org.tetram.bdtheque.data.bean.AlbumBean;
 import org.tetram.bdtheque.data.bean.AuteurAlbumBean;
 import org.tetram.bdtheque.data.dao.AuteurAlbumDao;
 import org.tetram.bdtheque.data.dao.EditionDao;
-import org.tetram.bdtheque.data.utils.DaoUtils;
+import org.tetram.bdtheque.data.orm.LoadDescriptor;
 
 import java.util.List;
 
 public class AlbumFactory extends BeanFactoryImpl<AlbumBean> {
     @Override
-    public boolean loadFromCursor(Context context, Cursor cursor, boolean inline, DaoUtils.LoadDescriptor loadDescriptor, AlbumBean bean) {
+    public boolean loadFromCursor(Context context, Cursor cursor, boolean inline, LoadDescriptor loadDescriptor, AlbumBean bean) {
         List<AuteurAlbumBean> auteurs = new AuteurAlbumDao(context).getAuteurs(bean);
         for (AuteurAlbumBean auteur : auteurs)
             switch (auteur.getMetier()) {
@@ -28,7 +28,7 @@ public class AlbumFactory extends BeanFactoryImpl<AlbumBean> {
                     break;
             }
 
-        new EditionDao(context).loadListForAlbum(bean.getEditions(), bean.getId());
+        new EditionDao(context).loadListForAlbum(bean.getEditions(), bean);
 
         return true;
     }

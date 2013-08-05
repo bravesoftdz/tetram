@@ -6,11 +6,11 @@ import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
 import org.tetram.bdtheque.data.bean.lite.EditionLiteBean;
 import org.tetram.bdtheque.data.dao.EditionDao;
 import org.tetram.bdtheque.data.factories.EditionFactory;
-import org.tetram.bdtheque.data.utils.BeanDaoClass;
-import org.tetram.bdtheque.data.utils.DefaultBooleanValue;
-import org.tetram.bdtheque.data.utils.Entity;
-import org.tetram.bdtheque.data.utils.Field;
-import org.tetram.bdtheque.data.utils.OneToMany;
+import org.tetram.bdtheque.data.orm.annotations.BeanDaoClass;
+import org.tetram.bdtheque.data.orm.annotations.DefaultBooleanValue;
+import org.tetram.bdtheque.data.orm.annotations.Entity;
+import org.tetram.bdtheque.data.orm.annotations.Field;
+import org.tetram.bdtheque.data.orm.annotations.OneToMany;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import java.util.ArrayList;

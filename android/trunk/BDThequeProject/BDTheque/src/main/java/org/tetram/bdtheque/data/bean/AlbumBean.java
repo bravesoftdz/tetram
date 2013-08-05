@@ -3,13 +3,12 @@ package org.tetram.bdtheque.data.bean;
 import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.abstracts.AlbumBeanAbstract;
-import org.tetram.bdtheque.data.bean.lite.EditionLiteBean;
 import org.tetram.bdtheque.data.dao.AlbumDao;
 import org.tetram.bdtheque.data.factories.AlbumFactory;
-import org.tetram.bdtheque.data.utils.BeanDaoClass;
-import org.tetram.bdtheque.data.utils.Entity;
-import org.tetram.bdtheque.data.utils.Field;
-import org.tetram.bdtheque.data.utils.OneToMany;
+import org.tetram.bdtheque.data.orm.annotations.BeanDaoClass;
+import org.tetram.bdtheque.data.orm.annotations.Entity;
+import org.tetram.bdtheque.data.orm.annotations.Field;
+import org.tetram.bdtheque.data.orm.annotations.OneToMany;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import java.util.ArrayList;
@@ -26,11 +25,11 @@ public class AlbumBean extends AlbumBeanAbstract {
     private String notes;
     @Field(fieldName = DDLConstants.SERIES_ID, nullable = true)
     private SerieBean serie;
-    @OneToMany(mappedBy = "album")
+    @OneToMany(mappedBy = "album", filtered = "metier = 0")
     private final List<AuteurAlbumBean> scenaristes = new ArrayList<AuteurAlbumBean>();
-    @OneToMany(mappedBy = "album")
+    @OneToMany(mappedBy = "album", filtered = "metier = 1")
     private final List<AuteurAlbumBean> dessinateurs = new ArrayList<AuteurAlbumBean>();
-    @OneToMany(mappedBy = "album")
+    @OneToMany(mappedBy = "album", filtered = "metier = 2")
     private final List<AuteurAlbumBean> coloristes = new ArrayList<AuteurAlbumBean>();
     @OneToMany(mappedBy = "album")
     private final List<EditionBean> editions = new ArrayList<EditionBean>();

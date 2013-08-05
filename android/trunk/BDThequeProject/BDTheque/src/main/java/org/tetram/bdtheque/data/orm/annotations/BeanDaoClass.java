@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.data.utils;
+package org.tetram.bdtheque.data.orm.annotations;
 
 import org.tetram.bdtheque.data.dao.CommonDao;
 
