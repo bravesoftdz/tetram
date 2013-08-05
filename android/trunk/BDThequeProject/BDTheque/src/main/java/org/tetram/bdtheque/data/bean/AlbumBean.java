@@ -9,6 +9,7 @@ import org.tetram.bdtheque.data.factories.AlbumFactory;
 import org.tetram.bdtheque.data.utils.BeanDaoClass;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.data.utils.Field;
+import org.tetram.bdtheque.data.utils.OneToMany;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import java.util.ArrayList;
@@ -25,9 +26,13 @@ public class AlbumBean extends AlbumBeanAbstract {
     private String notes;
     @Field(fieldName = DDLConstants.SERIES_ID, nullable = true)
     private SerieBean serie;
+    @OneToMany(mappedBy = "album")
     private final List<AuteurAlbumBean> scenaristes = new ArrayList<AuteurAlbumBean>();
+    @OneToMany(mappedBy = "album")
     private final List<AuteurAlbumBean> dessinateurs = new ArrayList<AuteurAlbumBean>();
+    @OneToMany(mappedBy = "album")
     private final List<AuteurAlbumBean> coloristes = new ArrayList<AuteurAlbumBean>();
+    @OneToMany(mappedBy = "album")
     private final List<EditionBean> editions = new ArrayList<EditionBean>();
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

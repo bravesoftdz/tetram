@@ -2,9 +2,9 @@ package org.tetram.bdtheque.data.dao;
 
 import android.content.Context;
 
-import org.tetram.bdtheque.data.bean.lite.EditionLiteBean;
 import org.tetram.bdtheque.data.bean.ImageBean;
 import org.tetram.bdtheque.data.bean.abstracts.AlbumBeanAbstract;
+import org.tetram.bdtheque.data.bean.lite.EditionLiteBean;
 import org.tetram.bdtheque.data.utils.DaoUtils;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -15,6 +15,7 @@ public class ImageDao extends CommonDaoImpl<ImageBean> {
         super(context);
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public void loadListForAlbum(List<ImageBean> list, AlbumBeanAbstract album) {
         list.clear();
 

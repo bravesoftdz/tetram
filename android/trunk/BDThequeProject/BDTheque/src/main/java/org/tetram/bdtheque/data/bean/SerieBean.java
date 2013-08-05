@@ -9,6 +9,7 @@ import org.tetram.bdtheque.data.factories.SerieFactory;
 import org.tetram.bdtheque.data.utils.BeanDaoClass;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.data.utils.Field;
+import org.tetram.bdtheque.data.utils.OneToMany;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -33,10 +34,15 @@ public class SerieBean extends SerieBeanAbstract {
             return new SerieBean[size];
         }
     };
+    @OneToMany(mappedBy = "serie")
     private final List<GenreSerieBean> genres = new ArrayList<GenreSerieBean>();
+    @OneToMany(mappedBy = "serie")
     private final List<AuteurSerieBean> scenaristes = new ArrayList<AuteurSerieBean>();
+    @OneToMany(mappedBy = "serie")
     private final List<AuteurSerieBean> dessinateurs = new ArrayList<AuteurSerieBean>();
+    @OneToMany(mappedBy = "serie")
     private final List<AuteurSerieBean> coloristes = new ArrayList<AuteurSerieBean>();
+    @OneToMany(mappedBy = "serie")
     private final List<AlbumLiteBean> albums = new ArrayList<AlbumLiteBean>();
     @Field(fieldName = DDLConstants.SERIES_SITEWEB)
     private URL siteWeb;

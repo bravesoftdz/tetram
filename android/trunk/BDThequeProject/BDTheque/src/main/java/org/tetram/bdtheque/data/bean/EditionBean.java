@@ -10,6 +10,7 @@ import org.tetram.bdtheque.data.utils.BeanDaoClass;
 import org.tetram.bdtheque.data.utils.DefaultBooleanValue;
 import org.tetram.bdtheque.data.utils.Entity;
 import org.tetram.bdtheque.data.utils.Field;
+import org.tetram.bdtheque.data.utils.OneToMany;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class EditionBean extends EditionLiteBean {
             return new EditionBean[size];
         }
     };
+    @OneToMany(mappedBy = "edition")
     private final List<ImageBean> images = new ArrayList<ImageBean>();
     @Field(fieldName = DDLConstants.EDITIONS_COULEUR)
     @DefaultBooleanValue(true)
