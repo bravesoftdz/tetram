@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 
 import org.tetram.bdtheque.BDThequeApplication;
@@ -115,7 +116,11 @@ public class TitlesFragment extends ExpandableListFragment {
     }
 
     public void refreshList() {
-        setListAdapter(new RepertoireAdapter(getActivity(), this.getRepertoireDao(), this.expandableListView));
+        ExpandableListAdapter adapter = getExpandableListAdapter();
+        if (adapter == null)
+            setListAdapter(new RepertoireAdapter(getActivity(), this.getRepertoireDao(), this.expandableListView));
+        else
+            ((RepertoireAdapter) adapter).setRepertoireDao(this.getRepertoireDao());
         onContentChanged();
 
         if (this.curChildPosition != null) {

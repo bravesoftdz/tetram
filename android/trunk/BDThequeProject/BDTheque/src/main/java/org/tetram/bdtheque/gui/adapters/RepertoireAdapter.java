@@ -7,7 +7,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AlphabetIndexer;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.RatingBar;
@@ -29,15 +28,15 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableListAdapter implements SectionIndexer, AbsListView.OnScrollListener {
 
-    private List<? extends InitialeBean> listInitiales;
-    private SparseArray<List<T>> mapData;
-    InitialeRepertoireDao repertoireDao;
     private final ExpandableListView expandableListView;
-    Context context;
     private final LinkedHashMap<Character, Integer> sectionsPositions = new LinkedHashMap<Character, Integer>();
     private final List<Character> sections = new ArrayList<Character>();
-    private boolean manualScroll;
     private final List<Character> realListInitiales = new ArrayList<Character>();
+    InitialeRepertoireDao repertoireDao;
+    Context context;
+    private List<? extends InitialeBean> listInitiales;
+    private SparseArray<List<T>> mapData;
+    private boolean manualScroll;
 
     public RepertoireAdapter(final Context context, final InitialeRepertoireDao dao, ExpandableListView expandableListView) {
         super();
@@ -45,6 +44,13 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
         this.repertoireDao = dao;
         this.expandableListView = expandableListView;
         this.expandableListView.setOnScrollListener(this);
+    }
+
+    public void setRepertoireDao(InitialeRepertoireDao repertoireDao) {
+        this.repertoireDao = repertoireDao;
+        this.listInitiales = null;
+        this.mapData = null;
+        this.notifyDataSetChanged();
     }
 
     @Override
@@ -60,7 +66,6 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
     private void ensureInitiales() {
         if (this.listInitiales == null) {
             this.listInitiales = this.repertoireDao.getInitiales();
-
 /*
             InitialeBean initialeBean;
             Character c, prevC = null;
@@ -74,6 +79,7 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
             }
             this.sections.addAll(this.sectionsPositions.keySet());
 */
+            this.realListInitiales.clear();
             for (InitialeBean initiale : this.listInitiales)
                 this.realListInitiales.add(Character.toUpperCase(initiale.getRawLabel().charAt(0)));
         }
@@ -130,10 +136,6 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
         return true;
     }
 
-    private static class GroupViewHolder {
-        TextView textValue, textCount;
-    }
-
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         ensureInitiales();
@@ -159,11 +161,6 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
         holder.textCount.setText(StringUtils.ajoutString("", StringUtils.nonZero(initiale.getCount()), " ", "(", ")"));
 
         return view;
-    }
-
-    private static class ItemViewHolder {
-        TextView text;
-        RatingBar ratingBar;
     }
 
     @Override
@@ -208,7 +205,6 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
         return true;
     }
 
-
     @Override
     public Object[] getSections() {
         ensureInitiales();
@@ -236,5 +232,14 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
     @Override
     public int getSectionForPosition(int position) {
         return ExpandableListView.getPackedPositionGroup(this.expandableListView.getExpandableListPosition(position));
+    }
+
+    private static class GroupViewHolder {
+        TextView textValue, textCount;
+    }
+
+    private static class ItemViewHolder {
+        TextView text;
+        RatingBar ratingBar;
     }
 }
