@@ -106,7 +106,7 @@ public abstract class Core {
     }
 
     @SuppressWarnings({"unchecked", "StringConcatenationMissingWhitespace"})
-    public static SQLDescriptor getSQLDescriptor(Class<? extends CommonBean> clasz){
+    public static SQLDescriptor getSQLDescriptor(Class<? extends CommonBean> clasz) {
         SQLDescriptor result = sqlDescriptorsList.get(clasz);
         if (result == null) {
             result = new SQLDescriptor();

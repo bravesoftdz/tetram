@@ -27,7 +27,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class RepertoireActivity extends FragmentActivity implements ActionBar.OnNavigationListener{
+public class RepertoireActivity extends FragmentActivity implements ActionBar.OnNavigationListener {
 
     private static final int REQUEST_CONFIG = 0;
     private Toast confirmMsg;

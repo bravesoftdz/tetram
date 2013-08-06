@@ -1,7 +1,5 @@
 package org.tetram.bdtheque.data.orm.annotations;
 
-import org.tetram.bdtheque.data.factories.BeanFactory;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;

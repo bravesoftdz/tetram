@@ -1,7 +1,5 @@
 package org.tetram.bdtheque.data.dao;
 
-import android.content.Context;
-
 import org.tetram.bdtheque.data.bean.ImageBean;
 import org.tetram.bdtheque.data.bean.abstracts.AlbumBeanAbstract;
 import org.tetram.bdtheque.data.bean.lite.EditionLiteBean;

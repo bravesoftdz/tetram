@@ -1,6 +1,5 @@
 package org.tetram.bdtheque.data.factories;
 
-import android.content.Context;
 import android.database.Cursor;
 
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;

@@ -12,7 +12,7 @@ public class DaoFactory {
         try {
             Constructor<T> constructor = daoClass.getConstructor();
             dao = constructor.newInstance();
-        } catch (InstantiationException  e) {
+        } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
             e.printStackTrace();
