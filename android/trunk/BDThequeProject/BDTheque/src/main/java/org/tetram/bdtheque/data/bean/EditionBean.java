@@ -8,6 +8,8 @@ import org.tetram.bdtheque.data.orm.annotations.DefaultBooleanValue;
 import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.data.orm.annotations.Field;
 import org.tetram.bdtheque.data.orm.annotations.OneToMany;
+import org.tetram.bdtheque.data.orm.annotations.Order;
+import org.tetram.bdtheque.data.orm.annotations.OrderBy;
 import org.tetram.bdtheque.database.DDLConstants;
 
 import java.util.ArrayList;
@@ -31,6 +33,7 @@ public class EditionBean extends EditionLiteBean {
         }
     };
     @OneToMany(mappedBy = "edition")
+    @OrderBy(@Order(field = "ordre"))
     private final List<ImageBean> images = new ArrayList<ImageBean>();
     @Field(fieldName = DDLConstants.EDITIONS_COULEUR)
     @DefaultBooleanValue(true)

@@ -13,6 +13,8 @@ import java.lang.annotation.Target;
 public @interface OneToMany {
     String mappedBy();
 
+    boolean useFactory() default false;
+
     FetchType fetch() default FetchType.LAZY;
 
     java.lang.Class targetEntity() default void.class;

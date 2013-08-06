@@ -7,6 +7,7 @@ import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.data.orm.annotations.Field;
 import org.tetram.bdtheque.data.orm.annotations.Filters;
 import org.tetram.bdtheque.data.orm.annotations.OneToMany;
+import org.tetram.bdtheque.data.orm.annotations.OrderBy;
 import org.tetram.bdtheque.database.BDDatabaseHelper;
 
 import java.lang.reflect.InvocationTargetException;
@@ -86,6 +87,7 @@ public abstract class Core {
                             multipleProperty.beanClass = (Class<? extends CommonBean>) pt.getActualTypeArguments()[0];
                         }
                         multipleProperty.filters = field.getAnnotation(Filters.class);
+                        multipleProperty.orderBy = field.getAnnotation(OrderBy.class);
                         final String getterName = String.format("%s%s%s", "get", field.getName().substring(0, 1).toUpperCase(), field.getName().substring(1));
                         try {
                             multipleProperty.getter = masterClasz.getMethod(getterName);

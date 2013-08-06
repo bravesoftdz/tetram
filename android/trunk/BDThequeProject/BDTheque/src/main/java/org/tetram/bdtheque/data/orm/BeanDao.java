@@ -3,6 +3,7 @@ package org.tetram.bdtheque.data.orm;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
+import android.util.Log;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
@@ -49,8 +50,9 @@ public abstract class BeanDao {
                 null
         );
 
-        Cursor cursor = rdb.rawQuery(sql, new String[]{StringUtils.UUIDToGUIDString(beanId)});
+//        Log.i(BeanDao.class.getName(), sql);
 
+        Cursor cursor = rdb.rawQuery(sql, new String[]{StringUtils.UUIDToGUIDString(beanId)});
         try {
             if (cursor.moveToFirst())
                 return BeanLoader.loadFromCursor(
@@ -110,10 +112,10 @@ public abstract class BeanDao {
                 null
         );
 
+        Log.i(BeanDao.class.getName(), sql);
+
         List<T> result = new ArrayList<T>();
-
         Cursor cursor = rdb.rawQuery(sql, selectionArgs);
-
         try {
             if (cursor.moveToFirst())
                 do {

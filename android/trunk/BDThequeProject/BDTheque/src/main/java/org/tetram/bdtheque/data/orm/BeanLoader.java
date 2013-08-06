@@ -74,7 +74,8 @@ public abstract class BeanLoader {
         if (property instanceof SimplePropertyDescriptor)
             loadSimpleProperty(bean, (SimplePropertyDescriptor) property, cursor, inline, loadDescriptor);
         else if (property instanceof MultiplePropertyDescriptor)
-            loadMultipleProperty(bean, (MultiplePropertyDescriptor) property);
+            if (!((MultiplePropertyDescriptor) property).annotation.useFactory())
+                loadMultipleProperty(bean, (MultiplePropertyDescriptor) property);
     }
 
     @SuppressWarnings("unchecked")
@@ -148,7 +149,7 @@ public abstract class BeanLoader {
                     filtre.append(String.format(" and (%s = %s)", queryInfo.getFullFieldname(filter.field()), filter.value()));
 
             StringBuilder orderBy = new StringBuilder(150);
-            if (property.getFilters() != null)
+            if (property.getOrderBy() != null)
                 for (Order order : property.getOrderBy().value())
                     orderBy.append(queryInfo.getFullFieldname(order.field())).append(order.asc() ? "" : " DESC");
 
