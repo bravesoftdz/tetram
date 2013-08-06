@@ -3,9 +3,7 @@ package org.tetram.bdtheque.data.bean;
 import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.abstracts.AlbumBeanAbstract;
-import org.tetram.bdtheque.data.dao.AlbumDao;
 import org.tetram.bdtheque.data.factories.AlbumFactory;
-import org.tetram.bdtheque.data.orm.annotations.BeanDaoClass;
 import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.data.orm.annotations.Field;
 import org.tetram.bdtheque.data.orm.annotations.OneToMany;
@@ -16,7 +14,6 @@ import java.util.List;
 
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.ALBUMS_TABLENAME, factoryClass = AlbumFactory.class)
-@BeanDaoClass(AlbumDao.class)
 public class AlbumBean extends AlbumBeanAbstract {
 
     @Field(fieldName = DDLConstants.ALBUMS_SUJET)

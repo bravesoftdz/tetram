@@ -14,7 +14,7 @@ import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.SerieBean;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
-import org.tetram.bdtheque.data.dao.SerieDao;
+import org.tetram.bdtheque.data.orm.BeanDao;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElementURL;
@@ -31,8 +31,7 @@ public class FicheSerieFragment extends FicheFragment {
         super.buildView(inflater, container, savedInstanceState);
 
         final CommonBean bean = getArguments().getParcelable("bean");
-        final SerieDao dao = new SerieDao(getActivity());
-        final SerieBean serieBean = dao.getById(bean.getId());
+        final SerieBean serieBean = BeanDao.getById(SerieBean.class, bean.getId());
 
         View view = inflater.inflate(R.layout.fiche_serie_fragment, container, false);
 

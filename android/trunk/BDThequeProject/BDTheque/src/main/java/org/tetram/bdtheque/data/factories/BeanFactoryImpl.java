@@ -1,6 +1,5 @@
 package org.tetram.bdtheque.data.factories;
 
-import android.content.Context;
 import android.database.Cursor;
 
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
@@ -21,7 +20,7 @@ public abstract class BeanFactoryImpl<T extends CommonBean> implements BeanFacto
     }
 
     @Override
-    public boolean loadFromCursor(Context context, Cursor cursor, boolean inline, LoadDescriptor loadDescriptor, T bean) {
+    public boolean loadFromCursor(Cursor cursor, boolean inline, LoadDescriptor loadDescriptor, T bean) {
         return true;
     }
 

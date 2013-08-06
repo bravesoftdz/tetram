@@ -1,6 +1,5 @@
 package org.tetram.bdtheque.data.factories;
 
-import android.content.Context;
 import android.database.Cursor;
 
 import org.tetram.bdtheque.data.bean.AlbumBean;
@@ -13,8 +12,8 @@ import java.util.List;
 
 public class AlbumFactory extends BeanFactoryImpl<AlbumBean> {
     @Override
-    public boolean loadFromCursor(Context context, Cursor cursor, boolean inline, LoadDescriptor loadDescriptor, AlbumBean bean) {
-        List<AuteurAlbumBean> auteurs = new AuteurAlbumDao(context).getAuteurs(bean);
+    public boolean loadFromCursor(Cursor cursor, boolean inline, LoadDescriptor loadDescriptor, AlbumBean bean) {
+        List<AuteurAlbumBean> auteurs = new AuteurAlbumDao().getAuteurs(bean);
         for (AuteurAlbumBean auteur : auteurs)
             switch (auteur.getMetier()) {
                 case SCENARISTE:
@@ -28,7 +27,7 @@ public class AlbumFactory extends BeanFactoryImpl<AlbumBean> {
                     break;
             }
 
-        new EditionDao(context).loadListForAlbum(bean.getEditions(), bean);
+        new EditionDao().loadListForAlbum(bean.getEditions(), bean);
 
         return true;
     }

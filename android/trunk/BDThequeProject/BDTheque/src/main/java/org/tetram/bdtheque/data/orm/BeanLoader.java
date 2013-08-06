@@ -1,13 +1,9 @@
 package org.tetram.bdtheque.data.orm;
 
-import android.content.Context;
 import android.database.Cursor;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
-import org.tetram.bdtheque.data.dao.CommonDao;
-import org.tetram.bdtheque.data.dao.DaoFactory;
-import org.tetram.bdtheque.data.orm.annotations.BeanDaoClass;
 import org.tetram.bdtheque.data.orm.annotations.DefaultBooleanValue;
 
 import java.lang.reflect.InvocationTargetException;
@@ -18,17 +14,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import static org.tetram.bdtheque.data.orm.Core.getPropertiesDescriptors;
-import static org.tetram.bdtheque.data.orm.Core.getQueryInfo;
-import static org.tetram.bdtheque.data.orm.Core.getSQLDescriptor;
-import static org.tetram.bdtheque.data.orm.FieldLoader.getFieldAsBool;
-import static org.tetram.bdtheque.data.orm.FieldLoader.getFieldAsBoolean;
-import static org.tetram.bdtheque.data.orm.FieldLoader.getFieldAsDate;
-import static org.tetram.bdtheque.data.orm.FieldLoader.getFieldAsDouble;
-import static org.tetram.bdtheque.data.orm.FieldLoader.getFieldAsInteger;
-import static org.tetram.bdtheque.data.orm.FieldLoader.getFieldAsString;
-import static org.tetram.bdtheque.data.orm.FieldLoader.getFieldAsUUID;
-
 public abstract class BeanLoader {
     private BeanLoader() {
         super();
@@ -36,7 +21,7 @@ public abstract class BeanLoader {
 
     @Nullable
     @SuppressWarnings("unchecked")
-    public static <T extends CommonBean> T loadFromCursor(Class<T> beanClass, Context context, Cursor cursor, boolean inline, LoadDescriptor loadDescriptor) {
+    public static <T extends CommonBean> T loadFromCursor(Class<T> beanClass, Cursor cursor, boolean inline, LoadDescriptor loadDescriptor) {
         T bean = null;
         try {
             bean = beanClass.getConstructor().newInstance();
@@ -49,68 +34,69 @@ public abstract class BeanLoader {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        LoadResult res = loadByAnnotation(context, cursor, inline, loadDescriptor, bean);
+        LoadResult res = loadByAnnotation(cursor, inline, loadDescriptor, bean);
         switch (res) {
             case NOTFOUND:
                 return null;
             case ERROR:
             case OK:
             default:
-//                if (!loadFromCursor(context, cursor, inline, loadDescriptor, bean))
-//                    return null;
+                SQLDescriptor descriptor = Core.getSQLDescriptor(beanClass);
+                if ((descriptor.factory != null) && !descriptor.factory.loadFromCursor(cursor, inline, loadDescriptor, bean))
+                    return null;
                 return bean;
         }
     }
 
-    private static <T extends CommonBean> LoadResult loadByAnnotation(Context context, Cursor cursor, boolean inline, LoadDescriptor loadDescriptor, T bean) {
-        List<PropertyDescriptor> fields = getPropertiesDescriptors(bean.getClass());
+    private static <T extends CommonBean> LoadResult loadByAnnotation(Cursor cursor, boolean inline, LoadDescriptor loadDescriptor, T bean) {
+        List<PropertyDescriptor> fields = Core.getPropertiesDescriptors(bean.getClass());
         if (fields.isEmpty()) return LoadResult.ERROR;
 
-        SQLDescriptor descriptor = getSQLDescriptor(bean.getClass());
+        SQLDescriptor descriptor = Core.getSQLDescriptor(bean.getClass());
 
         String dbFieldName = descriptor.getPrimaryKey().getDbFieldName();
         if (loadDescriptor != null)
             dbFieldName = loadDescriptor.getAlias().get(descriptor.getPrimaryKey());
-        bean.setId(getFieldAsUUID(cursor, dbFieldName));
+        bean.setId(FieldLoader.getFieldAsUUID(cursor, dbFieldName));
         if (bean.getId() == null) return LoadResult.NOTFOUND;
 
         for (PropertyDescriptor property : fields)
             if (!property.equals(descriptor.getPrimaryKey()))
-                loadProperty(bean, property, cursor, context, inline, loadDescriptor);
+                loadProperty(bean, property, cursor, inline, loadDescriptor);
 
         return LoadResult.ERROR;
     }
 
-    private static <T extends CommonBean> void loadProperty(T bean, PropertyDescriptor property, Cursor cursor, Context context, boolean inline, LoadDescriptor loadDescriptor) {
+    private static <T extends CommonBean> void loadProperty(T bean, PropertyDescriptor property, Cursor cursor, boolean inline, LoadDescriptor loadDescriptor) {
         if (property instanceof SimplePropertyDescriptor)
-            loadSimpleProperty(bean, (SimplePropertyDescriptor) property, cursor, context, inline, loadDescriptor);
+            loadSimpleProperty(bean, (SimplePropertyDescriptor) property, cursor, inline, loadDescriptor);
         if (property instanceof MultiplePropertyDescriptor)
-            loadMultipleProperty(bean, (MultiplePropertyDescriptor) property, cursor, context, inline, loadDescriptor);
+            loadMultipleProperty(bean, (MultiplePropertyDescriptor) property, cursor, inline, loadDescriptor);
     }
 
     @SuppressWarnings("unchecked")
-    private static <T extends CommonBean> void loadSimpleProperty(T bean, SimplePropertyDescriptor descriptor, Cursor cursor, Context context, boolean inline, LoadDescriptor loadDescriptor) {
+    private static <T extends CommonBean> void loadSimpleProperty(T bean, SimplePropertyDescriptor descriptor, Cursor cursor, boolean inline, LoadDescriptor loadDescriptor) {
         final Class<?> fieldType = descriptor.getField().getType();
         try {
             String dbFieldName = descriptor.getDbFieldName();
             if (loadDescriptor != null)
                 dbFieldName = loadDescriptor.getAlias().get(descriptor);
             if (fieldType.equals(String.class))
-                descriptor.getSetter().invoke(bean, getFieldAsString(cursor, dbFieldName));
+                descriptor.getSetter().invoke(bean, FieldLoader.getFieldAsString(cursor, dbFieldName));
             else if (fieldType.equals(Integer.class) || fieldType.equals(int.class))
-                descriptor.getSetter().invoke(bean, getFieldAsInteger(cursor, dbFieldName));
+                descriptor.getSetter().invoke(bean, FieldLoader.getFieldAsInteger(cursor, dbFieldName));
             else if (fieldType.equals(Double.class))
-                descriptor.getSetter().invoke(bean, getFieldAsDouble(cursor, dbFieldName));
+                descriptor.getSetter().invoke(bean, FieldLoader.getFieldAsDouble(cursor, dbFieldName));
             else if (fieldType.equals(Date.class))
-                descriptor.getSetter().invoke(bean, getFieldAsDate(cursor, dbFieldName));
+                descriptor.getSetter().invoke(bean, FieldLoader.getFieldAsDate(cursor, dbFieldName));
             else if (fieldType.equals(Boolean.class))
-                descriptor.getSetter().invoke(bean, getFieldAsBoolean(cursor, dbFieldName));
+                descriptor.getSetter().invoke(bean, FieldLoader.getFieldAsBoolean(cursor, dbFieldName));
             else if (fieldType.equals(boolean.class)) {
                 DefaultBooleanValue defaultBooleanValue = descriptor.getField().getAnnotation(DefaultBooleanValue.class);
                 if (defaultBooleanValue == null)
-                    descriptor.getSetter().invoke(bean, getFieldAsBool(cursor, dbFieldName));
+                    descriptor.getSetter().invoke(bean, FieldLoader.getFieldAsBool(cursor, dbFieldName));
                 else
-                    descriptor.getSetter().invoke(bean, getFieldAsBool(cursor, dbFieldName, defaultBooleanValue.value()));
+                    descriptor.getSetter().invoke(bean, FieldLoader.getFieldAsBool(cursor, dbFieldName, defaultBooleanValue.value()));
             } else if (fieldType.isEnum()) {
                 Method enumFromValue;
                 try {
@@ -118,31 +104,22 @@ public abstract class BeanLoader {
                 } catch (NoSuchMethodException e) {
                     enumFromValue = fieldType.getMethod("fromValue", Integer.class);
                 }
-                descriptor.getSetter().invoke(bean, enumFromValue.invoke(null, getFieldAsInteger(cursor, dbFieldName)));
+                descriptor.getSetter().invoke(bean, enumFromValue.invoke(null, FieldLoader.getFieldAsInteger(cursor, dbFieldName)));
             } else if (CommonBean.class.isAssignableFrom(fieldType)) {
                 LoadDescriptor childLoadDescriptor = null;
                 if (loadDescriptor != null)
                     childLoadDescriptor = loadDescriptor.getChildAlias().get(dbFieldName);
                 if (inline) {
-                    descriptor.getSetter().invoke(bean, loadFromCursor((Class<? extends CommonBean>) fieldType, context, cursor, inline, childLoadDescriptor));
+                    descriptor.getSetter().invoke(bean, loadFromCursor((Class<? extends CommonBean>) fieldType, cursor, inline, childLoadDescriptor));
                 } else {
-                    BeanDaoClass daoClass = descriptor.getField().getAnnotation(BeanDaoClass.class);
-                    if (daoClass == null)
-                        daoClass = fieldType.getAnnotation(BeanDaoClass.class);
-                    if (daoClass == null) {
-                        descriptor.getSetter().invoke(bean, loadFromCursor((Class<? extends CommonBean>) fieldType, context, cursor, inline, childLoadDescriptor));
-                    } else {
-                        final UUID subBeanId = getFieldAsUUID(cursor, dbFieldName);
-                        if (subBeanId != null) {
-                            final CommonDao dao = DaoFactory.getDao(daoClass.value(), context);
-                            descriptor.getSetter().invoke(bean, dao.getById(subBeanId));
-                        }
-                    }
+                    final UUID subBeanId = FieldLoader.getFieldAsUUID(cursor, dbFieldName);
+                    if (subBeanId != null)
+                        descriptor.getSetter().invoke(bean, BeanDao.getById((Class<? extends CommonBean>) fieldType, subBeanId));
                 }
             } else if (fieldType.equals(UUID.class))
-                descriptor.getSetter().invoke(bean, getFieldAsUUID(cursor, dbFieldName));
+                descriptor.getSetter().invoke(bean, FieldLoader.getFieldAsUUID(cursor, dbFieldName));
             else if (fieldType.equals(URL.class))
-                descriptor.getSetter().invoke(bean, new URL(getFieldAsString(cursor, dbFieldName)));
+                descriptor.getSetter().invoke(bean, new URL(FieldLoader.getFieldAsString(cursor, dbFieldName)));
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         } catch (MalformedURLException ignored) {
@@ -154,12 +131,12 @@ public abstract class BeanLoader {
     }
 
     @SuppressWarnings({"UnusedParameters", "unchecked"})
-    private static <T extends CommonBean> void loadMultipleProperty(T bean, MultiplePropertyDescriptor property, Cursor cursor, Context context, boolean inline, LoadDescriptor loadDescriptor) {
+    private static <T extends CommonBean> void loadMultipleProperty(T bean, MultiplePropertyDescriptor property, Cursor cursor, boolean inline, LoadDescriptor loadDescriptor) {
         try {
             List<? extends CommonBean> list = (List<? extends CommonBean>) property.getGetter().invoke(bean);
             list.clear();
 
-            QueryInfo queryInfo = getQueryInfo(bean.getClass());
+            QueryInfo queryInfo = Core.getQueryInfo(bean.getClass());
 
             String filtre = String.format("%s = ?", queryInfo.getFullFieldname(property.getAnnotation().mappedBy()));
             String order = null;

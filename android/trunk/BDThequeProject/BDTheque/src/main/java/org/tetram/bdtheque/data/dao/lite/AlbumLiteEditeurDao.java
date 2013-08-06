@@ -12,7 +12,7 @@ import java.util.List;
 public class AlbumLiteEditeurDao extends CommonRepertoireDao<AlbumLiteBean, InitialeFormatedBean> {
 
     public AlbumLiteEditeurDao(Context context) {
-        super(context, InitialeFormatedBean.class);
+        super(InitialeFormatedBean.class);
     }
 
     private String buildFiltre() {

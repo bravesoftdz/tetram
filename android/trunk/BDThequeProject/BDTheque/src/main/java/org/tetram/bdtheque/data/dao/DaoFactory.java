@@ -1,7 +1,5 @@
 package org.tetram.bdtheque.data.dao;
 
-import android.content.Context;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
@@ -9,11 +7,11 @@ import java.lang.reflect.InvocationTargetException;
 public class DaoFactory {
 
     @SuppressWarnings("unchecked")
-    public static <T extends CommonDao<?>> T getDao(Class<T> daoClass, Context context) {
+    public static <T extends CommonDao<?>> T getDao(Class<T> daoClass) {
         CommonDao<?> dao = null;
         try {
-            Constructor<T> constructor = daoClass.getConstructor(Context.class);
-            dao = constructor.newInstance(context);
+            Constructor<T> constructor = daoClass.getConstructor();
+            dao = constructor.newInstance();
         } catch (InstantiationException  e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {
@@ -28,11 +26,11 @@ public class DaoFactory {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends InitialeRepertoireDao<?, ?>> T getRepertoireDao(Class<T> daoClass, Context context) {
+    public static <T extends InitialeRepertoireDao<?, ?>> T getRepertoireDao(Class<T> daoClass) {
         InitialeRepertoireDao<?, ?> dao = null;
         try {
-            Constructor<T> constructor = daoClass.getConstructor(Context.class);
-            dao = constructor.newInstance(context);
+            Constructor<T> constructor = daoClass.getConstructor();
+            dao = constructor.newInstance();
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

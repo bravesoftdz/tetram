@@ -4,9 +4,7 @@ import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.abstracts.SerieBeanAbstract;
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
-import org.tetram.bdtheque.data.dao.SerieDao;
 import org.tetram.bdtheque.data.factories.SerieFactory;
-import org.tetram.bdtheque.data.orm.annotations.BeanDaoClass;
 import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.data.orm.annotations.Field;
 import org.tetram.bdtheque.data.orm.annotations.OneToMany;
@@ -19,7 +17,6 @@ import java.util.List;
 
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.SERIES_TABLENAME, factoryClass = SerieFactory.class)
-@BeanDaoClass(SerieDao.class)
 public class SerieBean extends SerieBeanAbstract {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

@@ -109,7 +109,7 @@ public class TitlesFragment extends ExpandableListFragment {
             this.curChildPosition = null;
         }
         this.repertoireMode = repertoireMode;
-        this.setRepertoireDao(DaoFactory.getRepertoireDao(repertoireMode.getDaoClass(), getActivity()));
+        this.setRepertoireDao(DaoFactory.getRepertoireDao(repertoireMode.getDaoClass()));
 
         refreshList();
     }

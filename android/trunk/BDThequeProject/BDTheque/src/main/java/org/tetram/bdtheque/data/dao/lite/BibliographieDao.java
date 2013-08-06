@@ -1,7 +1,5 @@
 package org.tetram.bdtheque.data.dao.lite;
 
-import android.content.Context;
-
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.InitialeSerieBean;
 import org.tetram.bdtheque.data.bean.PersonneBean;
@@ -17,8 +15,8 @@ public class BibliographieDao extends CommonRepertoireDao<AlbumLiteBean.AlbumWit
 
     private PersonneBean personne;
 
-    public BibliographieDao(Context context) {
-        super(context, InitialeSerieBean.class);
+    public BibliographieDao() {
+        super(InitialeSerieBean.class);
     }
 
     private String buildFiltre() {

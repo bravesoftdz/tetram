@@ -5,9 +5,6 @@ import android.os.Parcel;
 import org.tetram.bdtheque.data.bean.abstracts.AuteurBeanAbstract;
 import org.tetram.bdtheque.data.bean.enums.AuteurMetier;
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
-import org.tetram.bdtheque.data.dao.AuteurAlbumDao;
-import org.tetram.bdtheque.data.factories.AuteurAlbumFactory;
-import org.tetram.bdtheque.data.orm.annotations.BeanDaoClass;
 import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.data.orm.annotations.Field;
 import org.tetram.bdtheque.database.DDLConstants;
@@ -16,7 +13,6 @@ import java.util.UUID;
 
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.AUTEURS_ALBUMS_TABLENAME, factoryClass = AuteurAlbumFactory.class)
-@BeanDaoClass(AuteurAlbumDao.class)
 public class AuteurAlbumBean extends AuteurBeanAbstract {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

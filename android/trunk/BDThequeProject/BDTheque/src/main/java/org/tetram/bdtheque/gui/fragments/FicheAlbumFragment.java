@@ -15,7 +15,7 @@ import org.tetram.bdtheque.data.bean.AlbumBean;
 import org.tetram.bdtheque.data.bean.EditionBean;
 import org.tetram.bdtheque.data.bean.SerieBean;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
-import org.tetram.bdtheque.data.dao.AlbumDao;
+import org.tetram.bdtheque.data.orm.BeanDao;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElement;
@@ -34,8 +34,7 @@ public class FicheAlbumFragment extends FicheFragment {
         super.buildView(inflater, container, savedInstanceState);
 
         final CommonBean bean = getArguments().getParcelable("bean");
-        final AlbumDao dao = new AlbumDao(getActivity());
-        final AlbumBean albumBean = dao.getById(bean.getId());
+        final AlbumBean albumBean = BeanDao.getById(AlbumBean.class, bean.getId());
         final SerieBean serieBean = albumBean.getSerie();
 
         View view = inflater.inflate(R.layout.fiche_album_fragment, container, false);

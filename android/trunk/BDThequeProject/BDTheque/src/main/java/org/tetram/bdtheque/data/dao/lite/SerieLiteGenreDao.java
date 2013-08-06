@@ -12,7 +12,7 @@ import java.util.List;
 public class SerieLiteGenreDao extends CommonRepertoireDao<SerieLiteBean, InitialeBean> {
 
     public SerieLiteGenreDao(Context context) {
-        super(context, InitialeBean.class);
+        super(InitialeBean.class);
     }
 
     @SuppressWarnings("StringConcatenationMissingWhitespace")

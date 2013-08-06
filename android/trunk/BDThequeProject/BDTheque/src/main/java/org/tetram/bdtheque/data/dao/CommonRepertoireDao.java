@@ -1,9 +1,9 @@
 package org.tetram.bdtheque.data.dao;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.InitialeBean;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
@@ -23,8 +23,8 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
     private final Class<I> initialeClass;
     private String filtre = "";
 
-    protected CommonRepertoireDao(Context context, Class<I> initialeClass) {
-        super(context);
+    protected CommonRepertoireDao(Class<I> initialeClass) {
+        super();
         this.initialeClass = initialeClass;
     }
 
@@ -46,11 +46,11 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
                 params = new String[]{v};
             }
             sWhere += filtre == null || "".equals(filtre) ? "" : " and " + filtre;
-            Cursor cursor = rdb.rawQuery(getContext().getString(resId, sWhere), params);
+            Cursor cursor = rdb.rawQuery(BDThequeApplication.getInstance().getString(resId, sWhere), params);
             try {
                 List<B> result = new ArrayList<B>();
                 while (cursor.moveToNext()) {
-                    result.add(loadFromCursor(this.getBeanClass(), getContext(), cursor, true, null));
+                    result.add(loadFromCursor(this.getBeanClass(), cursor, true, null));
                 }
                 return result;
             } finally {
@@ -86,11 +86,11 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
     }
 
     public final List<I> getInitiales(int resId, String filtre) {
-        return getInitiales(getContext().getString(resId, ((filtre == null) || "".equals(filtre)) ? "" : (" and " + filtre)));
+        return getInitiales(BDThequeApplication.getInstance().getString(resId, ((filtre == null) || "".equals(filtre)) ? "" : (" and " + filtre)));
     }
 
     public final List<I> getInitiales(String tableName, String fieldName, String filtre) {
-        return getInitiales(getContext().getString(R.string.sql_initiales, tableName, fieldName, filtre));
+        return getInitiales(BDThequeApplication.getInstance().getString(R.string.sql_initiales, tableName, fieldName, filtre));
     }
 
     @Override
@@ -104,7 +104,7 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
     }
 
     public String getFiltre(int resId) {
-        return getFiltre(getContext().getString(resId));
+        return getFiltre(BDThequeApplication.getInstance().getString(resId));
     }
 
     public String getFiltre(String searchField) {

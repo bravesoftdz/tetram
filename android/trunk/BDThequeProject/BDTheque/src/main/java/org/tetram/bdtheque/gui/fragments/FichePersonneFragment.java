@@ -12,7 +12,7 @@ import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.PersonneBean;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
-import org.tetram.bdtheque.data.dao.PersonneDao;
+import org.tetram.bdtheque.data.orm.BeanDao;
 
 @SuppressWarnings("UnusedDeclaration")
 public class FichePersonneFragment extends FicheFragment {
@@ -26,8 +26,7 @@ public class FichePersonneFragment extends FicheFragment {
         super.buildView(inflater, container, savedInstanceState);
 
         final CommonBean bean = getArguments().getParcelable("bean");
-        final PersonneDao dao = new PersonneDao(getActivity());
-        final PersonneBean personneBean = dao.getById(bean.getId());
+        final PersonneBean personneBean = BeanDao.getById(PersonneBean.class, bean.getId());
 
         View v = inflater.inflate(R.layout.fiche_personne_fragment, container, false);
 

@@ -12,7 +12,7 @@ import java.util.List;
 public class AlbumLiteGenreDao extends CommonRepertoireDao<AlbumLiteBean, InitialeBean> {
 
     public AlbumLiteGenreDao(Context context) {
-        super(context, InitialeBean.class);
+        super(InitialeBean.class);
     }
 
     private String buildFiltre() {

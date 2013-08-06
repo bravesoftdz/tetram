@@ -14,5 +14,5 @@ import java.lang.annotation.Target;
 public @interface Entity {
     String tableName() default "";
 
-    Class<? extends BeanFactory> factoryClass();
+    java.lang.Class factoryClass() default void.class;
 }

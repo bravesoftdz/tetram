@@ -12,9 +12,6 @@ import java.util.List;
 import static org.tetram.bdtheque.data.orm.Core.getQueryInfo;
 
 public class GenreSerieDao extends CommonDaoImpl<GenreSerieBean> {
-    public GenreSerieDao(Context context) {
-        super(context);
-    }
 
     public void loadListForSerie(List<GenreSerieBean> list, SerieBeanAbstract serie) {
         list.clear();

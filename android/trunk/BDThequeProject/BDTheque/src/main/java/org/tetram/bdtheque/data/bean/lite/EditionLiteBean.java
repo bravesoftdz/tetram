@@ -4,7 +4,6 @@ import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.EditeurBean;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
-import org.tetram.bdtheque.data.factories.EditionLiteFactory;
 import org.tetram.bdtheque.data.orm.annotations.DefaultBooleanValue;
 import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.data.orm.annotations.Field;

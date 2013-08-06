@@ -13,9 +13,6 @@ import java.util.List;
 import static org.tetram.bdtheque.data.orm.Core.getQueryInfo;
 
 public class ImageDao extends CommonDaoImpl<ImageBean> {
-    public ImageDao(Context context) {
-        super(context);
-    }
 
     @SuppressWarnings("UnusedDeclaration")
     public void loadListForAlbum(List<ImageBean> list, AlbumBeanAbstract album) {

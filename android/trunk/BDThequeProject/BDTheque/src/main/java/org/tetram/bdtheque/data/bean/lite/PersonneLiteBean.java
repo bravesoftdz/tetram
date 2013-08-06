@@ -5,7 +5,6 @@ import android.os.Parcel;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
 import org.tetram.bdtheque.data.bean.abstracts.PersonneBeanAbstract;
 import org.tetram.bdtheque.data.bean.enums.Notation;
-import org.tetram.bdtheque.data.factories.lite.PersonneLiteFactory;
 import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.gui.fragments.FichePersonneFragment;

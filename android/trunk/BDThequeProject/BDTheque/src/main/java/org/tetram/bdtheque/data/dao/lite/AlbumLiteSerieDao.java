@@ -14,8 +14,8 @@ import java.util.UUID;
 
 public class AlbumLiteSerieDao extends CommonRepertoireDao<AlbumLiteBean.AlbumWithoutSerieLiteBean, InitialeSerieBean> {
 
-    public AlbumLiteSerieDao(Context context) {
-        super(context, InitialeSerieBean.class);
+    public AlbumLiteSerieDao() {
+        super(InitialeSerieBean.class);
     }
 
     private String buildFiltre() {

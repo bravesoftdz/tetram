@@ -12,9 +12,6 @@ import java.util.List;
 import static org.tetram.bdtheque.data.orm.Core.getQueryInfo;
 
 public class EditionDao extends CommonDaoImpl<EditionBean> {
-    public EditionDao(Context context) {
-        super(context);
-    }
 
     public void loadListForAlbum(List<EditionBean> editions, AlbumBeanAbstract album) {
         loadListForAlbum(editions, album, null);

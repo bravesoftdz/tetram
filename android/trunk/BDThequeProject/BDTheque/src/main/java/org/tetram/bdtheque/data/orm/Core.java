@@ -2,11 +2,13 @@ package org.tetram.bdtheque.data.orm;
 
 import org.tetram.bdtheque.BDThequeApplication;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
+import org.tetram.bdtheque.data.factories.BeanFactory;
 import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.data.orm.annotations.Field;
 import org.tetram.bdtheque.data.orm.annotations.OneToMany;
 import org.tetram.bdtheque.database.BDDatabaseHelper;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -104,11 +106,11 @@ public abstract class Core {
     }
 
     @SuppressWarnings({"unchecked", "StringConcatenationMissingWhitespace"})
-    public static SQLDescriptor getSQLDescriptor(Class<? extends CommonBean> clasz) {
+    public static SQLDescriptor getSQLDescriptor(Class<? extends CommonBean> clasz){
         SQLDescriptor result = sqlDescriptorsList.get(clasz);
         if (result == null) {
             result = new SQLDescriptor();
-            // l'instanciation du BeanFactory va appeler getSQLDescriptor
+            // au cas où l'instanciation du BeanFactory appelerait getSQLDescriptor
             sqlDescriptorsList.put(clasz, result);
             result.beanClass = clasz;
             Entity a = clasz.getAnnotation(Entity.class);
@@ -116,6 +118,18 @@ public abstract class Core {
                 result.tableName = a.tableName();
             else
                 result.tableName = clasz.getSimpleName().toUpperCase() + "S";
+            if (BeanFactory.class.isAssignableFrom(a.factoryClass()))
+                try {
+                    result.factory = (BeanFactory) a.factoryClass().getConstructor().newInstance();
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
             List<PropertyDescriptor> properties = getPropertiesDescriptors(clasz);
             for (PropertyDescriptor property : properties) {
                 if (property instanceof SimplePropertyDescriptor) {

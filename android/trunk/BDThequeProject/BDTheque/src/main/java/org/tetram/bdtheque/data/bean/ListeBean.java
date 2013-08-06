@@ -4,9 +4,6 @@ import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.bean.enums.ListeCategorie;
-import org.tetram.bdtheque.data.dao.ListeDao;
-import org.tetram.bdtheque.data.factories.ListeFactory;
-import org.tetram.bdtheque.data.orm.annotations.BeanDaoClass;
 import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.data.orm.annotations.Field;
 import org.tetram.bdtheque.database.DDLConstants;
@@ -15,8 +12,7 @@ import org.tetram.bdtheque.utils.StringUtils;
 import java.util.UUID;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.LISTES_TABLENAME, factoryClass = ListeFactory.class)
-@BeanDaoClass(ListeDao.class)
+@Entity(tableName = DDLConstants.LISTES_TABLENAME)
 public class ListeBean extends CommonBean {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

@@ -3,7 +3,6 @@ package org.tetram.bdtheque.data.bean;
 import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.lite.PersonneLiteBean;
-import org.tetram.bdtheque.data.factories.PersonneFactory;
 import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.data.orm.annotations.Field;
 import org.tetram.bdtheque.database.DDLConstants;
@@ -11,7 +10,7 @@ import org.tetram.bdtheque.database.DDLConstants;
 import java.net.URL;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.PERSONNES_TABLENAME, factoryClass = PersonneFactory.class)
+@Entity(tableName = DDLConstants.PERSONNES_TABLENAME)
 public class PersonneBean extends PersonneLiteBean {
 
     @Field(fieldName = DDLConstants.PERSONNES_SITEWEB)

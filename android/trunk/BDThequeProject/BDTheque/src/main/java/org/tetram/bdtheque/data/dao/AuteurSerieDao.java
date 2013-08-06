@@ -12,9 +12,6 @@ import java.util.List;
 import static org.tetram.bdtheque.data.orm.Core.getQueryInfo;
 
 public class AuteurSerieDao extends CommonDaoImpl<AuteurSerieBean> {
-    public AuteurSerieDao(Context context) {
-        super(context);
-    }
 
     public List<AuteurSerieBean> getAuteurs(SerieBeanAbstract serie) {
         QueryInfo queryInfo = getQueryInfo(this.getBeanClass());

@@ -5,9 +5,6 @@ import android.os.Parcel;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
 import org.tetram.bdtheque.data.bean.lite.EditionLiteBean;
-import org.tetram.bdtheque.data.dao.ImageDao;
-import org.tetram.bdtheque.data.factories.ImageFactory;
-import org.tetram.bdtheque.data.orm.annotations.BeanDaoClass;
 import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.data.orm.annotations.Field;
 import org.tetram.bdtheque.database.DDLConstants;
@@ -16,7 +13,6 @@ import java.util.UUID;
 
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.IMAGES_TABLENAME, factoryClass = ImageFactory.class)
-@BeanDaoClass(ImageDao.class)
 public class ImageBean extends CommonBean {
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<ImageBean> CREATOR = new Creator<ImageBean>() {

@@ -5,9 +5,6 @@ import android.os.Parcel;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
 import org.tetram.bdtheque.data.bean.abstracts.AlbumBeanAbstract;
 import org.tetram.bdtheque.data.bean.enums.Notation;
-import org.tetram.bdtheque.data.dao.lite.AlbumLiteDao;
-import org.tetram.bdtheque.data.factories.lite.AlbumLiteAbstractFactory;
-import org.tetram.bdtheque.data.orm.annotations.BeanDaoClass;
 import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.data.orm.annotations.Field;
 import org.tetram.bdtheque.database.DDLConstants;
@@ -18,7 +15,6 @@ import org.tetram.bdtheque.utils.StringUtils;
 @SuppressWarnings("UnusedDeclaration")
 @ShowFragmentClass(FicheAlbumFragment.class)
 @Entity(tableName = DDLConstants.ALBUMS_TABLENAME, factoryClass = AlbumLiteAbstractFactory.AlbumLiteFactory.class)
-@BeanDaoClass(AlbumLiteDao.class)
 public class AlbumLiteBean extends AlbumBeanAbstract implements TreeNodeBean {
 
     @Field(fieldName = DDLConstants.SERIES_ID, nullable = true)

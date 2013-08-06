@@ -6,9 +6,6 @@ import android.os.Parcelable;
 import org.tetram.bdtheque.data.bean.TreeNodeBean;
 import org.tetram.bdtheque.data.bean.abstracts.SerieBeanAbstract;
 import org.tetram.bdtheque.data.bean.enums.Notation;
-import org.tetram.bdtheque.data.dao.lite.SerieLiteDao;
-import org.tetram.bdtheque.data.factories.lite.SerieLiteFactory;
-import org.tetram.bdtheque.data.orm.annotations.BeanDaoClass;
 import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.data.orm.annotations.Field;
 import org.tetram.bdtheque.database.DDLConstants;
@@ -19,7 +16,6 @@ import org.tetram.bdtheque.utils.StringUtils;
 @SuppressWarnings("UnusedDeclaration")
 @ShowFragmentClass(FicheSerieFragment.class)
 @Entity(tableName = DDLConstants.SERIES_TABLENAME, factoryClass = SerieLiteFactory.class)
-@BeanDaoClass(SerieLiteDao.class)
 public class SerieLiteBean extends SerieBeanAbstract implements TreeNodeBean {
 
     @Field(fieldName = DDLConstants.EDITEURS_ID, nullable = false)

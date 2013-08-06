@@ -13,7 +13,7 @@ import java.util.List;
 public class SerieLiteDao extends CommonRepertoireDao<SerieLiteBean, InitialeBean> {
 
     public SerieLiteDao(Context context) {
-        super(context, InitialeBean.class);
+        super(InitialeBean.class);
     }
 
     @Override
