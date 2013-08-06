@@ -14,7 +14,7 @@ import org.tetram.bdtheque.utils.StringUtils;
 
 @SuppressWarnings("UnusedDeclaration")
 @ShowFragmentClass(FicheAlbumFragment.class)
-@Entity(tableName = DDLConstants.ALBUMS_TABLENAME, factoryClass = AlbumLiteAbstractFactory.AlbumLiteFactory.class)
+@Entity(tableName = DDLConstants.ALBUMS_TABLENAME)
 public class AlbumLiteBean extends AlbumBeanAbstract implements TreeNodeBean {
 
     @Field(fieldName = DDLConstants.SERIES_ID, nullable = true)

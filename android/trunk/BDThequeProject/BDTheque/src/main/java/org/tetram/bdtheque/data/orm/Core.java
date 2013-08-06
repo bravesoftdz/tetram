@@ -5,6 +5,7 @@ import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.factories.BeanFactory;
 import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.data.orm.annotations.Field;
+import org.tetram.bdtheque.data.orm.annotations.Filters;
 import org.tetram.bdtheque.data.orm.annotations.OneToMany;
 import org.tetram.bdtheque.database.BDDatabaseHelper;
 
@@ -82,9 +83,9 @@ public abstract class Core {
                         Type type = field.getGenericType();
                         if (type instanceof ParameterizedType) {
                             ParameterizedType pt = (ParameterizedType) type;
-                            multipleProperty.subBeanType = (Class<? extends CommonBean>) pt.getActualTypeArguments()[0];
+                            multipleProperty.beanClass = (Class<? extends CommonBean>) pt.getActualTypeArguments()[0];
                         }
-
+                        multipleProperty.filters = field.getAnnotation(Filters.class);
                         final String getterName = String.format("%s%s%s", "get", field.getName().substring(0, 1).toUpperCase(), field.getName().substring(1));
                         try {
                             multipleProperty.getter = masterClasz.getMethod(getterName);

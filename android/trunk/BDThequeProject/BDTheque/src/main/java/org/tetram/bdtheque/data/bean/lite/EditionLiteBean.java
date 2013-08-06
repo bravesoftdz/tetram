@@ -13,7 +13,7 @@ import org.tetram.bdtheque.utils.StringUtils;
 import java.util.UUID;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.EDITIONS_TABLENAME, factoryClass = EditionLiteFactory.class)
+@Entity(tableName = DDLConstants.EDITIONS_TABLENAME)
 public class EditionLiteBean extends CommonBean {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

@@ -4,10 +4,13 @@ import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.abstracts.SerieBeanAbstract;
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
-import org.tetram.bdtheque.data.factories.SerieFactory;
 import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.data.orm.annotations.Field;
+import org.tetram.bdtheque.data.orm.annotations.Filter;
+import org.tetram.bdtheque.data.orm.annotations.Filters;
 import org.tetram.bdtheque.data.orm.annotations.OneToMany;
+import org.tetram.bdtheque.data.orm.annotations.Order;
+import org.tetram.bdtheque.data.orm.annotations.OrderBy;
 import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -16,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.SERIES_TABLENAME, factoryClass = SerieFactory.class)
+@Entity(tableName = DDLConstants.SERIES_TABLENAME)
 public class SerieBean extends SerieBeanAbstract {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
@@ -32,12 +35,16 @@ public class SerieBean extends SerieBeanAbstract {
         }
     };
     @OneToMany(mappedBy = "serie")
+    @OrderBy(@Order(field = "genre.nom"))
     private final List<GenreSerieBean> genres = new ArrayList<GenreSerieBean>();
-    @OneToMany(mappedBy = "serie", filtered = "metier = 0")
+    @OneToMany(mappedBy = "serie")
+    @Filters(@Filter(field = "metier", value = "0"))
     private final List<AuteurSerieBean> scenaristes = new ArrayList<AuteurSerieBean>();
-    @OneToMany(mappedBy = "serie", filtered = "metier = 1")
+    @OneToMany(mappedBy = "serie")
+    @Filters(@Filter(field = "metier", value = "1"))
     private final List<AuteurSerieBean> dessinateurs = new ArrayList<AuteurSerieBean>();
-    @OneToMany(mappedBy = "serie", filtered = "metier = 2")
+    @OneToMany(mappedBy = "serie")
+    @Filters(@Filter(field = "metier", value = "2"))
     private final List<AuteurSerieBean> coloristes = new ArrayList<AuteurSerieBean>();
     @OneToMany(mappedBy = "serie")
     private final List<AlbumLiteBean> albums = new ArrayList<AlbumLiteBean>();

@@ -4,7 +4,6 @@ import android.os.Parcel;
 
 import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
 import org.tetram.bdtheque.data.bean.lite.EditionLiteBean;
-import org.tetram.bdtheque.data.factories.EditionFactory;
 import org.tetram.bdtheque.data.orm.annotations.DefaultBooleanValue;
 import org.tetram.bdtheque.data.orm.annotations.Entity;
 import org.tetram.bdtheque.data.orm.annotations.Field;
@@ -16,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.EDITIONS_TABLENAME, factoryClass = EditionFactory.class)
+@Entity(tableName = DDLConstants.EDITIONS_TABLENAME)
 public class EditionBean extends EditionLiteBean {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

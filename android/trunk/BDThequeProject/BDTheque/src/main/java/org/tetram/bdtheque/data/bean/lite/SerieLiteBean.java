@@ -15,7 +15,7 @@ import org.tetram.bdtheque.utils.StringUtils;
 
 @SuppressWarnings("UnusedDeclaration")
 @ShowFragmentClass(FicheSerieFragment.class)
-@Entity(tableName = DDLConstants.SERIES_TABLENAME, factoryClass = SerieLiteFactory.class)
+@Entity(tableName = DDLConstants.SERIES_TABLENAME)
 public class SerieLiteBean extends SerieBeanAbstract implements TreeNodeBean {
 
     @Field(fieldName = DDLConstants.EDITEURS_ID, nullable = false)

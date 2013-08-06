@@ -12,7 +12,7 @@ import org.tetram.bdtheque.database.DDLConstants;
 import java.util.UUID;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.IMAGES_TABLENAME, factoryClass = ImageFactory.class)
+@Entity(tableName = DDLConstants.IMAGES_TABLENAME)
 public class ImageBean extends CommonBean {
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<ImageBean> CREATOR = new Creator<ImageBean>() {

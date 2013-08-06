@@ -10,7 +10,7 @@ import org.tetram.bdtheque.database.DDLConstants;
 import java.util.UUID;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.GENRES_TABLENAME, factoryClass = GenreFactory.class)
+@Entity(tableName = DDLConstants.GENRES_TABLENAME)
 public class GenreBean extends CommonBean {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

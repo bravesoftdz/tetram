@@ -10,7 +10,7 @@ import org.tetram.bdtheque.database.DDLConstants;
 import java.net.URL;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.EDITEURS_TABLENAME, factoryClass = EditeurFactory.class)
+@Entity(tableName = DDLConstants.EDITEURS_TABLENAME)
 public class EditeurBean extends EditeurLiteBean {
 
     @Field(fieldName = DDLConstants.EDITEURS_SITEWEB)

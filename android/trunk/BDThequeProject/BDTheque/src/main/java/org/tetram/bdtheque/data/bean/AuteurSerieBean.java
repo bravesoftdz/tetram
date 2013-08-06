@@ -12,7 +12,7 @@ import org.tetram.bdtheque.database.DDLConstants;
 import java.util.UUID;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.AUTEURS_SERIES_TABLENAME, factoryClass = AuteurSerieFactory.class)
+@Entity(tableName = DDLConstants.AUTEURS_SERIES_TABLENAME)
 public class AuteurSerieBean extends AuteurBeanAbstract {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

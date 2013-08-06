@@ -5,6 +5,9 @@ import android.database.Cursor;
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.orm.annotations.DefaultBooleanValue;
+import org.tetram.bdtheque.data.orm.annotations.Filter;
+import org.tetram.bdtheque.data.orm.annotations.Order;
+import org.tetram.bdtheque.utils.StringUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -70,8 +73,8 @@ public abstract class BeanLoader {
     private static <T extends CommonBean> void loadProperty(T bean, PropertyDescriptor property, Cursor cursor, boolean inline, LoadDescriptor loadDescriptor) {
         if (property instanceof SimplePropertyDescriptor)
             loadSimpleProperty(bean, (SimplePropertyDescriptor) property, cursor, inline, loadDescriptor);
-        if (property instanceof MultiplePropertyDescriptor)
-            loadMultipleProperty(bean, (MultiplePropertyDescriptor) property, cursor, inline, loadDescriptor);
+        else if (property instanceof MultiplePropertyDescriptor)
+            loadMultipleProperty(bean, (MultiplePropertyDescriptor) property);
     }
 
     @SuppressWarnings("unchecked")
@@ -130,26 +133,28 @@ public abstract class BeanLoader {
         }
     }
 
-    @SuppressWarnings({"UnusedParameters", "unchecked"})
-    private static <T extends CommonBean> void loadMultipleProperty(T bean, MultiplePropertyDescriptor property, Cursor cursor, boolean inline, LoadDescriptor loadDescriptor) {
+    @SuppressWarnings({"unchecked", "StringBufferReplaceableByString"})
+    private static <T extends CommonBean, B extends CommonBean> void loadMultipleProperty(T bean, MultiplePropertyDescriptor property) {
         try {
-            List<? extends CommonBean> list = (List<? extends CommonBean>) property.getGetter().invoke(bean);
+            List<B> list = (List<B>) property.getGetter().invoke(bean);
             list.clear();
 
-            QueryInfo queryInfo = Core.getQueryInfo(bean.getClass());
+            QueryInfo queryInfo = Core.getQueryInfo(property.beanClass);
 
-            String filtre = String.format("%s = ?", queryInfo.getFullFieldname(property.getAnnotation().mappedBy()));
-            String order = null;
-            if (!property.getAnnotation().orderBy().isEmpty())
-                order = queryInfo.getFullFieldname(property.getAnnotation().orderBy());
+            StringBuilder filtre = new StringBuilder(150);
+            filtre.append(String.format("%s = ?", queryInfo.getFullFieldname(property.getAnnotation().mappedBy())));
+            if (property.getFilters() != null)
+                for (Filter filter : property.getFilters().value())
+                    filtre.append(String.format(" and (%s = %s)", queryInfo.getFullFieldname(filter.field()), filter.value()));
 
-/*
-            new CommonDaoImpl<property.getSubBeanType()>();
-            CommonDao<?> dao = DaoFactory.getDao(property.getSubBeanType(), context);
-            List<? extends CommonBean> tmpList = dao.getList(filtre, new String[]{StringUtils.UUIDToGUIDString(bean.getId())}, order);
+            StringBuilder orderBy = new StringBuilder(150);
+            if (property.getFilters() != null)
+                for (Order order : property.getOrderBy().value())
+                    orderBy.append(queryInfo.getFullFieldname(order.field())).append(order.asc() ? "" : " DESC");
+
+            list.clear();
+            List<B> tmpList = (List<B>) BeanDao.getList(property.beanClass, filtre.toString(), new String[]{StringUtils.UUIDToGUIDString(bean.getId())}, orderBy.toString());
             list.addAll(tmpList);
-*/
-
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InvocationTargetException e) {

@@ -13,7 +13,7 @@ import org.tetram.bdtheque.utils.StringUtils;
 
 @SuppressWarnings("UnusedDeclaration")
 @ShowFragmentClass(FichePersonneFragment.class)
-@Entity(tableName = DDLConstants.PERSONNES_TABLENAME, factoryClass = PersonneLiteFactory.class)
+@Entity(tableName = DDLConstants.PERSONNES_TABLENAME)
 public class PersonneLiteBean extends PersonneBeanAbstract implements TreeNodeBean {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

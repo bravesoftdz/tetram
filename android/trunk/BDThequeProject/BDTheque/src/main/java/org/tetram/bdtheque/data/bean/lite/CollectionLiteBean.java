@@ -10,7 +10,7 @@ import org.tetram.bdtheque.database.DDLConstants;
 import org.tetram.bdtheque.utils.StringUtils;
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.COLLECTIONS_TABLENAME, factoryClass = CollectionLiteFactory.class)
+@Entity(tableName = DDLConstants.COLLECTIONS_TABLENAME)
 public class CollectionLiteBean extends CollectionBeanAbstract implements TreeNodeBean {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")

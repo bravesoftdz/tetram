@@ -6,6 +6,6 @@ import org.tetram.bdtheque.database.DDLConstants;
 
 
 @SuppressWarnings("UnusedDeclaration")
-@Entity(tableName = DDLConstants.COLLECTIONS_TABLENAME, factoryClass = CollectionFactory.class)
+@Entity(tableName = DDLConstants.COLLECTIONS_TABLENAME)
 public class CollectionBean extends CollectionLiteBean {
 }
