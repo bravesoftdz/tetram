@@ -28,7 +28,7 @@ public class FichePersonneBibliographieFragment extends FicheFragment {
         ExpandableListView listBibliographie = (ExpandableListView) view.findViewById(R.id.personne_bibliographie);
         final BibliographieDao dao = DaoFactory.getDao(BibliographieDao.class);
         dao.setPersonne(bean);
-        listBibliographie.setAdapter(new RepertoireAdapter(getActivity(), dao));
+        listBibliographie.setAdapter(new RepertoireAdapter(getActivity(), dao, listBibliographie));
         listBibliographie.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {

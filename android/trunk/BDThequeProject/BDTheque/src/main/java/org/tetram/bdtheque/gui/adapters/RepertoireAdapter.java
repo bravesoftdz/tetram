@@ -6,7 +6,10 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AlphabetIndexer;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ExpandableListView;
 import android.widget.RatingBar;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
@@ -24,25 +27,41 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 @SuppressWarnings("unchecked")
-public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableListAdapter implements SectionIndexer {
+public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableListAdapter implements SectionIndexer, AbsListView.OnScrollListener {
 
     private List<? extends InitialeBean> listInitiales;
     private SparseArray<List<T>> mapData;
     InitialeRepertoireDao repertoireDao;
+    private final ExpandableListView expandableListView;
     Context context;
     private final LinkedHashMap<Character, Integer> sectionsPositions = new LinkedHashMap<Character, Integer>();
     private final List<Character> sections = new ArrayList<Character>();
+    private boolean manualScroll;
+    private final List<Character> realListInitiales = new ArrayList<Character>();
 
-    public RepertoireAdapter(final Context context, final InitialeRepertoireDao dao) {
+    public RepertoireAdapter(final Context context, final InitialeRepertoireDao dao, ExpandableListView expandableListView) {
         super();
         this.context = context;
         this.repertoireDao = dao;
+        this.expandableListView = expandableListView;
+        this.expandableListView.setOnScrollListener(this);
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        this.manualScroll = scrollState == SCROLL_STATE_TOUCH_SCROLL;
     }
 
     private void ensureInitiales() {
         if (this.listInitiales == null) {
             this.listInitiales = this.repertoireDao.getInitiales();
 
+/*
             InitialeBean initialeBean;
             Character c, prevC = null;
             for (int i = 0; i < this.listInitiales.size(); i++) {
@@ -54,6 +73,9 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
                 }
             }
             this.sections.addAll(this.sectionsPositions.keySet());
+*/
+            for (InitialeBean initiale : this.listInitiales)
+                this.realListInitiales.add(Character.toUpperCase(initiale.getRawLabel().charAt(0)));
         }
     }
 
@@ -108,24 +130,40 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
         return true;
     }
 
+    private static class GroupViewHolder {
+        TextView textValue, textCount;
+    }
+
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         ensureInitiales();
         InitialeBean initiale = this.listInitiales.get(groupPosition);
 
+        GroupViewHolder holder;
+
         View view = convertView;
         if (view == null) {
             LayoutInflater inf = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inf.inflate(R.layout.treenode_initiale, null);
+
+            holder = new GroupViewHolder();
+            holder.textValue = (TextView) view.findViewById(R.id.text_value);
+            holder.textCount = (TextView) view.findViewById(R.id.text_count);
+
+            view.setTag(holder);
+        } else {
+            holder = (GroupViewHolder) view.getTag();
         }
 
-        TextView textView;
-        textView = (TextView) view.findViewById(R.id.text_value);
-        textView.setText(initiale.getLabel());
-        textView = (TextView) view.findViewById(R.id.text_count);
-        textView.setText(StringUtils.ajoutString("", StringUtils.nonZero(initiale.getCount()), " ", "(", ")"));
+        holder.textValue.setText(initiale.getLabel());
+        holder.textCount.setText(StringUtils.ajoutString("", StringUtils.nonZero(initiale.getCount()), " ", "(", ")"));
 
         return view;
+    }
+
+    private static class ItemViewHolder {
+        TextView text;
+        RatingBar ratingBar;
     }
 
     @Override
@@ -133,26 +171,34 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
         ensureData(groupPosition);
         TreeNodeBean bean = this.mapData.get(groupPosition).get(childPosition);
 
+        ItemViewHolder holder;
+
         View view = convertView;
         if (view == null) {
             LayoutInflater inf = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inf.inflate(R.layout.treenode_bean, null);
+
+            holder = new ItemViewHolder();
+            holder.text = (TextView) view.findViewById(R.id.textView);
+            holder.ratingBar = (RatingBar) view.findViewById(R.id.ratingBar);
+
+            view.setTag(holder);
+        } else {
+            holder = (ItemViewHolder) view.getTag();
         }
 
-        TextView textView = (TextView) view.findViewById(R.id.textView);
-        textView.setText(bean.getTreeNodeText());
-        RatingBar ratingBar = (RatingBar) view.findViewById(R.id.ratingBar);
-        ratingBar.setOnTouchListener(new View.OnTouchListener() {
+        holder.text.setText(bean.getTreeNodeText());
+        holder.ratingBar.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 return true;
             }
         });
         if (UserConfig.getInstance().shouldAfficheNoteListes() && ((bean.getTreeNodeRating().compareTo(Notation.PAS_NOTE)) > 0)) {
-            ratingBar.setRating(bean.getTreeNodeRating().getValue() - 1);
-            ratingBar.setVisibility(View.VISIBLE);
+            holder.ratingBar.setRating(bean.getTreeNodeRating().getValue() - 1);
+            holder.ratingBar.setVisibility(View.VISIBLE);
         } else
-            ratingBar.setVisibility(View.GONE);
+            holder.ratingBar.setVisibility(View.GONE);
 
         return view;
     }
@@ -166,25 +212,29 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
     @Override
     public Object[] getSections() {
         ensureInitiales();
-        return this.sections.toArray();
+//        return this.sections.toArray();
+//        return this.listInitiales.toArray();
+        return this.realListInitiales.toArray();
     }
 
     @SuppressWarnings("SuspiciousMethodCalls")
     @Override
     public int getPositionForSection(int section) {
-        return this.sectionsPositions.get(this.sections.get(section));
+        if (this.manualScroll) {
+/*
+            int flatSection = ExpandableListView.getPackedPositionGroup(this.expandableListView.getExpandableListPosition(section));
+            Log.i(this.getClass().getName(), String.valueOf(section) + " - " + String.valueOf(flatSection));
+            Character character = this.sections.get(flatSection);
+            return this.sectionsPositions.get(character);
+*/
+            return section;
+        } else {
+            return this.expandableListView.getFlatListPosition(ExpandableListView.getPackedPositionForGroup(section));
+        }
     }
 
     @Override
     public int getSectionForPosition(int position) {
-/*
-        int section = 0;
-        while (this.sectionsPositions.get(this.sections.get(section)) < position)
-            section++;
-        if (section < this.sectionsPositions.size())
-            return this.sectionsPositions.get(this.sections.get(section));
-        else
-*/
-        return 0;
+        return ExpandableListView.getPackedPositionGroup(this.expandableListView.getExpandableListPosition(position));
     }
 }

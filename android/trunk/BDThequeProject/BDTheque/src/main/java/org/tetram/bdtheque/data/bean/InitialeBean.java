@@ -49,14 +49,17 @@ public class InitialeBean {
     }
 
     public String getLabel() {
-        if ((this.value == null) || "-1".equals(this.value))
-            return "<Inconnu>";
-        else
-            return this.label.trim();
+        return this.getRawLabel();
     }
 
     public void setLabel(String label) {
         this.label = label;
     }
 
+    public String getRawLabel() {
+        if ((this.value == null) || "-1".equals(this.value))
+            return "<Inconnu>";
+        else
+            return this.label.trim();
+    }
 }

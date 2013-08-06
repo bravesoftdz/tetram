@@ -6,10 +6,10 @@ import org.tetram.bdtheque.R;
 public class InitialeSerieBean extends InitialeFormatedBean {
 
     @Override
-    public String getLabel() {
+    public String getRawLabel() {
         if ((getValue() == null) || "-1".equals(getValue()))
             return BDThequeApplication.getInstance().getString(R.string.initiale_sans_serie);
         else
-            return super.getLabel();
+            return super.getRawLabel();
     }
 }

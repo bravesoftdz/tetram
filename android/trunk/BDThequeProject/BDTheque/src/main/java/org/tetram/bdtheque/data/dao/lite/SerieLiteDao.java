@@ -1,7 +1,5 @@
 package org.tetram.bdtheque.data.dao.lite;
 
-import android.content.Context;
-
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.InitialeBean;
 import org.tetram.bdtheque.data.bean.lite.SerieLiteBean;
@@ -12,7 +10,7 @@ import java.util.List;
 
 public class SerieLiteDao extends CommonRepertoireDao<SerieLiteBean, InitialeBean> {
 
-    public SerieLiteDao(Context context) {
+    public SerieLiteDao() {
         super(InitialeBean.class);
     }
 

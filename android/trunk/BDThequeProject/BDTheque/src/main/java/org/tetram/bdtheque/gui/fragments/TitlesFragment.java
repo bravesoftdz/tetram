@@ -115,7 +115,7 @@ public class TitlesFragment extends ExpandableListFragment {
     }
 
     public void refreshList() {
-        setListAdapter(new RepertoireAdapter(getActivity(), this.getRepertoireDao()));
+        setListAdapter(new RepertoireAdapter(getActivity(), this.getRepertoireDao(), this.expandableListView));
         onContentChanged();
 
         if (this.curChildPosition != null) {
