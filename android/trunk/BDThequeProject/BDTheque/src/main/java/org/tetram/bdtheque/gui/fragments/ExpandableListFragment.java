@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ExpandableListAdapter;
 import android.widget.ExpandableListView;
 import android.widget.ListView;
@@ -77,33 +76,6 @@ public class ExpandableListFragment extends Fragment implements
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-/*
-        FrameLayout root = new FrameLayout(getActivity());
-
-        FrameLayout lframe = new FrameLayout(getActivity());
-        lframe.setId(INTERNAL_LIST_CONTAINER_ID);
-
-        TextView tv = new TextView(getActivity());
-        tv.setId(INTERNAL_EMPTY_ID);
-        tv.setGravity(Gravity.CENTER);
-        lframe.addView(tv,
-                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-        ExpandableListView lv = new ExpandableListView(getActivity());
-        lv.setId(android.R.id.list);
-        lv.setDrawSelectorOnTop(false);
-        lframe.addView(lv,
-                new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-        root.addView(lframe, new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-        ListView.LayoutParams lp =
-                new ListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        root.setLayoutParams(lp);
-
-        return root;
-*/
         return inflater.inflate(R.layout.treeview, container);
     }
 

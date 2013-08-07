@@ -29,7 +29,9 @@ import java.util.List;
 public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableListAdapter implements SectionIndexer, AbsListView.OnScrollListener {
 
     private final ExpandableListView expandableListView;
+    @SuppressWarnings("UnusedDeclaration")
     private final LinkedHashMap<Character, Integer> sectionsPositions = new LinkedHashMap<Character, Integer>();
+    @SuppressWarnings("UnusedDeclaration")
     private final List<Character> sections = new ArrayList<Character>();
     private final List<Character> realListInitiales = new ArrayList<Character>();
     InitialeRepertoireDao repertoireDao;
@@ -95,6 +97,8 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
 
     @Override
     public int getGroupCount() {
+        if (this.repertoireDao == null) return 0;
+
         ensureInitiales();
         return this.listInitiales.size();
     }
@@ -207,6 +211,8 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
 
     @Override
     public Object[] getSections() {
+        if (this.repertoireDao == null) return new Object[0];
+
         ensureInitiales();
 //        return this.sections.toArray();
 //        return this.listInitiales.toArray();
