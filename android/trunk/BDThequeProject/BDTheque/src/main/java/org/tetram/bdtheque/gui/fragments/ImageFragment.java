@@ -100,7 +100,7 @@ public class ImageFragment extends Fragment {
             setUIElement(this.view, R.id.image_type_image, imageBean.getCategorieImage().getLibelle());
 
             if (BuildConfig.DEBUG) {
-                String fileName = "img_" + imageBean.getId().toString().toLowerCase().replaceAll("-", "_");
+                String fileName = "demo_img_" + imageBean.getId().toString().toLowerCase().replaceAll("-", "_");
                 int resID = getResources().getIdentifier(fileName, "drawable", getActivity().getPackageName());
                 this.imageView.setImageResource(resID);
             }

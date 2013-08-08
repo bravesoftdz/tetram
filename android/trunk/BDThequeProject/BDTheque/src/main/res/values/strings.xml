@@ -87,9 +87,8 @@
     <string name="msg_confirm_quit">Appuyer à nouveau pour quitter.</string>
     <string name="msg_chargement_donnees">Chargement des données initiales…</string>
     <string name="fiche_album_tab_images">Images</string>
-    <string name="msg_upgrade_database">Upgrading org.tetram.bdtheque.database from version %1$d to
-        %2$d.
-    </string>
+    <string name="msg_upgrade_database">Upgrading database from version %1$d to %2$d.</string>
+    <string name="msg_chargement">Chargement</string>
 
     <string-array name="pref_formatTitreAlbum_entries">
         <item>Album (Série - Tome)</item>

@@ -1,1 +1,1 @@
-include ':BDTheque'
+include ':libraries:bdtheque-dependencies', ':libraries:android-styled-dialogs', ':BDTheque'

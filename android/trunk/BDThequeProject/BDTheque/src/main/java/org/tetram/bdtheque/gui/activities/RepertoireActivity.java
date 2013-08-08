@@ -20,6 +20,7 @@ import org.tetram.bdtheque.gui.adapters.MenuAdapter;
 import org.tetram.bdtheque.gui.adapters.MenuEntry;
 import org.tetram.bdtheque.gui.fragments.TitlesFragment;
 import org.tetram.bdtheque.gui.utils.ModeRepertoire;
+import org.tetram.bdtheque.utils.BuildDemoImages;
 import org.tetram.bdtheque.utils.UserConfig;
 
 import java.util.ArrayList;
@@ -75,6 +76,8 @@ public class RepertoireActivity extends FragmentActivity implements ActionBar.On
 
         UserConfig.getInstance().reloadConfig(this);
         handleIntent(getIntent());
+
+        new BuildDemoImages(this).execute();
     }
 
     @Override
