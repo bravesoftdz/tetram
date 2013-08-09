@@ -15,6 +15,7 @@ import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
+import org.tetram.bdtheque.BuildConfig;
 import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.gui.adapters.MenuAdapter;
 import org.tetram.bdtheque.gui.adapters.MenuEntry;
@@ -77,7 +78,8 @@ public class RepertoireActivity extends FragmentActivity implements ActionBar.On
         UserConfig.getInstance().reloadConfig(this);
         handleIntent(getIntent());
 
-        new BuildDemoImages(this).execute();
+        if (BuildConfig.DEBUG)
+            new BuildDemoImages(this).execute();
     }
 
     @Override

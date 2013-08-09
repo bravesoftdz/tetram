@@ -71,10 +71,10 @@
     <orderEntry type="jdk" jdkName="Android 4.1.2 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="annotations" level="project" />
-    <orderEntry type="library" exported="" name="universal-image-loader-1.8.3" level="project" />
     <orderEntry type="library" exported="" name="support-v4-18.0.0" level="project" />
     <orderEntry type="library" exported="" name="support-v13-18.0.0" level="project" />
     <orderEntry type="library" exported="" name="ComAndroidSupportAppcompatV71800.aar" level="project" />
+    <orderEntry type="library" exported="" name="universal-image-loader-1.8.6" level="project" />
   </component>
 </module>
 

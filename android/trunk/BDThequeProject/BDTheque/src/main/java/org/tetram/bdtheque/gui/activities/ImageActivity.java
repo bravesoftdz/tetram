@@ -18,6 +18,8 @@ public class ImageActivity extends FragmentActivity {
         view.setId(android.R.id.content);
         setContentView(view);
 
+        getActionBar().hide();
+
         ArrayList<ImageBean> images = getIntent().getParcelableArrayListExtra("images");
         int currentImage = getIntent().getIntExtra("currentImage", 0);
 

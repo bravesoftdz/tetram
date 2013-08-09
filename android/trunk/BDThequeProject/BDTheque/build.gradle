@@ -27,6 +27,10 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_6
     }
 
+    dexOptions {
+        //incremental true
+    }
+
     defaultConfig {
         /*
           Lu depuis AndroidManifest.xml
@@ -47,15 +51,23 @@ android {
         }
     }
 
+    productFlavors {
+
+    }
+
     buildTypes {
         release {
             signingConfig signingConfigs.release
-            // pas nécessaire
-            // buildConfig "public final static boolean HAS_PROTOTYPE_FEATURE = false;"
+            buildConfig "public final static boolean TRIAL = false;"
         }
+
+        trial.initWith(buildTypes.release)
+        trial {
+            buildConfig "public final static boolean TRIAL = true;"
+        }
+
         debug {
-            // pas nécessaire
-            // buildConfig "public final static boolean HAS_PROTOTYPE_FEATURE = true;"
+            buildConfig "public final static boolean TRIAL = false;"
             packageNameSuffix ".debug"
         }
         /*
