@@ -170,6 +170,7 @@ public class ImageFragment extends Fragment {
             return this.images.size();
         }
 
+        @SuppressWarnings("UnusedAssignment")
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
             View imageLayout = this.inflater.inflate(R.layout.fiche_image_fragment_page, container, false);
@@ -177,7 +178,7 @@ public class ImageFragment extends Fragment {
             final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
 
             ImageBean imageBean = this.images.get(position);
-            String imagePath;
+            String imagePath = "";
             if (BuildConfig.DEBUG)
                 imagePath = new File(this.externalDir, "demo_img_" + imageBean.getId().toString().toLowerCase().replaceAll("-", "_")).toString();
 
