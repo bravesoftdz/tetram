@@ -15,10 +15,7 @@ import org.tetram.bdtheque.data.bean.EditionBean;
 
 public class FicheAlbumImagesFragment extends FicheFragment {
 
-    @SuppressWarnings("FieldCanBeLocal")
     private EditionBean currentEdition;
-    @SuppressWarnings("FieldCanBeLocal")
-    private View view;
 
     @Nullable
     @Override
@@ -28,9 +25,9 @@ public class FicheAlbumImagesFragment extends FicheFragment {
         AlbumBean album = getArguments().getParcelable("bean");
         if (album == null) return null;
 
-        this.view = inflater.inflate(R.layout.fiche_album_images_fragment, container, false);
+        View v = inflater.inflate(R.layout.fiche_album_images_fragment, container, false);
 
-        Spinner listEditions = (Spinner) this.view.findViewById(R.id.album_list_editions);
+        Spinner listEditions = (Spinner) v.findViewById(R.id.album_list_editions);
         if (album.getEditions().size() <= 1) listEditions.setVisibility(View.GONE);
         listEditions.setAdapter(new ArrayAdapter<EditionBean>(getActivity(), android.R.layout.simple_list_item_1, album.getEditions()));
         listEditions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -52,14 +49,14 @@ public class FicheAlbumImagesFragment extends FicheFragment {
         listEditions.setSelection(position);
         loadEdition((EditionBean) listEditions.getAdapter().getItem(position));
 
-        return this.view;
+        return v;
     }
 
     private void loadEdition(EditionBean edition) {
         this.currentEdition = edition;
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.edition_image, ImageFragment.getFragment(this.currentEdition.getImages(), 0, true))
+                .replace(R.id.edition_image, ImageFragment.getFragment(this.currentEdition.getImages(), true))
                 .commit();
     }
 

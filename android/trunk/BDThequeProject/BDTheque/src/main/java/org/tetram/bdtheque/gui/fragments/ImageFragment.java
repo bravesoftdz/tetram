@@ -36,17 +36,13 @@ import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElement;
 
 public class ImageFragment extends Fragment {
 
-    private int currentImage;
-    private View view;
     private List<ImageBean> imagesList;
-    private ImageView imageView;
     private boolean clickable;
 
-    public static ImageFragment getFragment(List<ImageBean> images, int currentImage, boolean clickable) {
+    public static ImageFragment getFragment(List<ImageBean> images, boolean clickable) {
         Bundle args = new Bundle();
         args.putBoolean("clickable", clickable);
         args.putParcelableArrayList("images", (ArrayList<? extends Parcelable>) images);
-        args.putInt("currentImage", currentImage);
 
         ImageFragment imageFragment = new ImageFragment();
         imageFragment.setArguments(args);
@@ -54,7 +50,13 @@ public class ImageFragment extends Fragment {
         return imageFragment;
     }
 
-    private static final String STATE_POSITION = "STATE_POSITION";
+    public static ImageFragment getFragment(List<ImageBean> images, int currentImage, boolean clickable) {
+        ImageFragment imageFragment = getFragment(images, clickable);
+        Bundle args = imageFragment.getArguments();
+        args.putInt("currentImage", currentImage);
+
+        return imageFragment;
+    }
 
     protected ImageLoader imageLoader = ImageLoader.getInstance();
     DisplayImageOptions options;
@@ -72,16 +74,20 @@ public class ImageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        this.view = inflater.inflate(R.layout.fiche_image_fragment, container, false);
+        View view = inflater.inflate(R.layout.fiche_image_fragment, container, false);
+
+        int currentImage = 0;
 
         if (getArguments() != null) {
             this.imagesList = getArguments().getParcelableArrayList("images");
-            this.currentImage = getArguments().getInt("currentImage", 0);
+            if (getArguments().containsKey("currentImage"))
+                currentImage = getArguments().getInt("currentImage", 0);
             this.clickable = getArguments().getBoolean("clickable", false);
         }
 
         if (savedInstanceState != null) {
-            this.currentImage = savedInstanceState.getInt(STATE_POSITION);
+            currentImage = savedInstanceState.getInt("currentImage");
+            getArguments().putInt("currentImage", currentImage);
         }
 
         this.options = new DisplayImageOptions.Builder()
@@ -90,73 +96,40 @@ public class ImageFragment extends Fragment {
                 .resetViewBeforeLoading(true)
                 .cacheOnDisc(true)
                 .imageScaleType(ImageScaleType.EXACTLY)
-                .bitmapConfig(Bitmap.Config.RGB_565)
+                .bitmapConfig(Bitmap.Config.ARGB_8888)
                 .displayer(new FadeInBitmapDisplayer(300))
                 .build();
 
-        this.pager = (ViewPager) this.view.findViewById(R.id.pager);
-        this.pager.setAdapter(new ImagePagerAdapter(this.imagesList, this.clickable));
-        this.pager.setCurrentItem(this.currentImage);
+        this.pager = (ViewPager) view.findViewById(R.id.pager);
+        this.pager.setAdapter(new ImagePagerAdapter());
+        this.pager.setCurrentItem(currentImage);
 
-        return this.view;
-    }
-
-    private void showImage(int i) {
-        this.currentImage = i;
-        if (this.currentImage < 0) this.currentImage = this.imagesList.size() - 1;
-        if (this.currentImage >= this.imagesList.size()) this.currentImage = 0;
-
-        // s'il y a plusieurs editions, certaines n'ont peut etre pas d'images
-        if (!this.imagesList.isEmpty()) {
-            ImageBean imageBean = this.imagesList.get(this.currentImage);
-            setUIElement(this.view, R.id.image_type_image, imageBean.getCategorieImage().getLibelle());
-
-            if (BuildConfig.DEBUG) {
-                String fileName = "demo_img_" + imageBean.getId().toString().toLowerCase().replaceAll("-", "_");
-                int resID = getResources().getIdentifier(fileName, "drawable", getActivity().getPackageName());
-                this.imageView.setImageResource(resID);
-            }
-        }
+        return view;
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("currentImage", this.currentImage);
+        outState.putInt("currentImage", this.pager.getCurrentItem());
     }
 
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
-            this.currentImage = savedInstanceState.getInt("currentImage");
-            showImage(this.currentImage);
+            this.pager.setCurrentItem(savedInstanceState.getInt("currentImage", 0));
         }
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    public List<ImageBean> getImagesList() {
-        return this.imagesList;
-    }
-
-    public void setImagesList(List<ImageBean> imagesList) {
-        this.imagesList = imagesList;
-        showImage(this.currentImage);
     }
 
     @SuppressWarnings("NonStaticInnerClassInSecureContext")
     private class ImagePagerAdapter extends PagerAdapter {
 
-        private final List<ImageBean> images;
         private final LayoutInflater inflater;
         private final String externalDir;
-        private final boolean clickable;
 
-        ImagePagerAdapter(List<ImageBean> images, boolean clickable) {
+        ImagePagerAdapter() {
             super();
-            this.clickable = clickable;
             this.externalDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES).toString();
-            this.images = images;
             this.inflater = getLayoutInflater(null);
         }
 
@@ -167,7 +140,7 @@ public class ImageFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return this.images.size();
+            return ImageFragment.this.imagesList.size();
         }
 
         @SuppressWarnings("UnusedAssignment")
@@ -177,7 +150,7 @@ public class ImageFragment extends Fragment {
             ImageView imageView = (ImageView) imageLayout.findViewById(R.id.image);
             final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
 
-            ImageBean imageBean = this.images.get(position);
+            ImageBean imageBean = ImageFragment.this.imagesList.get(position);
             String imagePath = "";
             if (BuildConfig.DEBUG)
                 imagePath = new File(this.externalDir, "demo_img_" + imageBean.getId().toString().toLowerCase().replaceAll("-", "_")).toString();
@@ -218,7 +191,7 @@ public class ImageFragment extends Fragment {
                 @Override
                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                     spinner.setVisibility(View.GONE);
-                    if (ImagePagerAdapter.this.clickable) {
+                    if (ImageFragment.this.clickable) {
                         view.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
