@@ -16,6 +16,7 @@ repositories {
 dependencies {
     compile project(':libraries:bdtheque-dependencies')
     compile project(':libraries:android-styled-dialogs')
+    compile project(':libraries:universal-image-loader')
 }
 
 android {
