@@ -35,6 +35,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @see FileNameGenerator
  * @since 1.0.0
  */
+@SuppressWarnings("UnusedDeclaration")
 public abstract class LimitedDiscCache extends BaseDiscCache {
 
     private static final int INVALID_SIZE = -1;
@@ -65,59 +66,62 @@ public abstract class LimitedDiscCache extends BaseDiscCache {
     public LimitedDiscCache(File cacheDir, FileNameGenerator fileNameGenerator, int sizeLimit) {
         super(cacheDir, fileNameGenerator);
         this.sizeLimit = sizeLimit;
-        cacheSize = new AtomicInteger();
+        this.cacheSize = new AtomicInteger();
         calculateCacheSizeAndFillUsageMap();
     }
 
+    @SuppressWarnings("InstanceMethodNamingConvention")
     private void calculateCacheSizeAndFillUsageMap() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 int size = 0;
-                File[] cachedFiles = cacheDir.listFiles();
+                File[] cachedFiles = LimitedDiscCache.this.cacheDir.listFiles();
                 if (cachedFiles != null) { // rarely but it can happen, don't know why
                     for (File cachedFile : cachedFiles) {
                         size += getSize(cachedFile);
-                        lastUsageDates.put(cachedFile, cachedFile.lastModified());
+                        LimitedDiscCache.this.lastUsageDates.put(cachedFile, cachedFile.lastModified());
                     }
-                    cacheSize.set(size);
+                    LimitedDiscCache.this.cacheSize.set(size);
                 }
             }
         }).start();
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void put(String key, File file) {
         int valueSize = getSize(file);
-        int curCacheSize = cacheSize.get();
+        int curCacheSize = this.cacheSize.get();
 
-        while (curCacheSize + valueSize > sizeLimit) {
+        while ((curCacheSize + valueSize) > this.sizeLimit) {
             int freedSize = removeNext();
             if (freedSize == INVALID_SIZE) break; // cache is empty (have nothing to delete)
-            curCacheSize = cacheSize.addAndGet(-freedSize);
+            curCacheSize = this.cacheSize.addAndGet(-freedSize);
         }
-        cacheSize.addAndGet(valueSize);
+        this.cacheSize.addAndGet(valueSize);
 
         Long currentTime = System.currentTimeMillis();
         file.setLastModified(currentTime);
-        lastUsageDates.put(file, currentTime);
+        this.lastUsageDates.put(file, currentTime);
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public File get(String key) {
         File file = super.get(key);
 
         Long currentTime = System.currentTimeMillis();
         file.setLastModified(currentTime);
-        lastUsageDates.put(file, currentTime);
+        this.lastUsageDates.put(file, currentTime);
 
         return file;
     }
 
     @Override
     public void clear() {
-        lastUsageDates.clear();
-        cacheSize.set(0);
+        this.lastUsageDates.clear();
+        this.cacheSize.set(0);
         super.clear();
     }
 
@@ -125,13 +129,13 @@ public abstract class LimitedDiscCache extends BaseDiscCache {
      * Remove next file and returns it's size
      */
     private int removeNext() {
-        if (lastUsageDates.isEmpty()) {
+        if (this.lastUsageDates.isEmpty()) {
             return INVALID_SIZE;
         }
         Long oldestUsage = null;
         File mostLongUsedFile = null;
-        Set<Entry<File, Long>> entries = lastUsageDates.entrySet();
-        synchronized (lastUsageDates) {
+        Set<Entry<File, Long>> entries = this.lastUsageDates.entrySet();
+        synchronized (this.lastUsageDates) {
             for (Entry<File, Long> entry : entries) {
                 if (mostLongUsedFile == null) {
                     mostLongUsedFile = entry.getKey();
@@ -151,10 +155,10 @@ public abstract class LimitedDiscCache extends BaseDiscCache {
             if (mostLongUsedFile.exists()) {
                 fileSize = getSize(mostLongUsedFile);
                 if (mostLongUsedFile.delete()) {
-                    lastUsageDates.remove(mostLongUsedFile);
+                    this.lastUsageDates.remove(mostLongUsedFile);
                 }
             } else {
-                lastUsageDates.remove(mostLongUsedFile);
+                this.lastUsageDates.remove(mostLongUsedFile);
             }
         }
         return fileSize;

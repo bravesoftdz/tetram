@@ -19,6 +19,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -36,6 +38,7 @@ public final class StorageUtils {
     private static final String INDIVIDUAL_DIR_NAME = "uil-images";
 
     private StorageUtils() {
+        super();
     }
 
     /**
@@ -46,6 +49,7 @@ public final class StorageUtils {
      * @param context Application context
      * @return Cache {@link File directory}
      */
+    @SuppressWarnings("VariableNotUsedInsideIf")
     public static File getCacheDirectory(Context context) {
         File appCacheDir = null;
         if (MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) && hasExternalStoragePermission(context)) {
@@ -87,17 +91,20 @@ public final class StorageUtils {
      * @param cacheDir Cache directory path (e.g.: "AppCacheDir", "AppDir/cache/images")
      * @return Cache {@link File directory}
      */
+    @SuppressWarnings("UnusedDeclaration")
     public static File getOwnCacheDirectory(Context context, String cacheDir) {
         File appCacheDir = null;
         if (MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) && hasExternalStoragePermission(context)) {
             appCacheDir = new File(Environment.getExternalStorageDirectory(), cacheDir);
         }
-        if (appCacheDir == null || (!appCacheDir.exists() && !appCacheDir.mkdirs())) {
+        if ((appCacheDir == null) || (!appCacheDir.exists() && !appCacheDir.mkdirs())) {
             appCacheDir = context.getCacheDir();
         }
         return appCacheDir;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    @Nullable
     private static File getExternalCacheDir(Context context) {
         File dataDir = new File(new File(Environment.getExternalStorageDirectory(), "Android"), "data");
         File appCacheDir = new File(new File(dataDir, context.getPackageName()), "cache");

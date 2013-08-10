@@ -31,6 +31,7 @@ public final class IoUtils {
     private static final int BUFFER_SIZE = 32 * 1024; // 32 KB
 
     private IoUtils() {
+        super();
     }
 
     public static void copyStream(InputStream is, OutputStream os) throws IOException {

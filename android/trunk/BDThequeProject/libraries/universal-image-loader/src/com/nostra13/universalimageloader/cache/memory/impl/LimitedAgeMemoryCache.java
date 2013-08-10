@@ -30,6 +30,7 @@ import java.util.Map;
  * @see MemoryCacheAware
  * @since 1.3.1
  */
+@SuppressWarnings("UnusedDeclaration")
 public class LimitedAgeMemoryCache<K, V> implements MemoryCacheAware<K, V> {
 
     private final MemoryCacheAware<K, V> cache;
@@ -49,38 +50,38 @@ public class LimitedAgeMemoryCache<K, V> implements MemoryCacheAware<K, V> {
 
     @Override
     public boolean put(K key, V value) {
-        boolean putSuccesfully = cache.put(key, value);
+        boolean putSuccesfully = this.cache.put(key, value);
         if (putSuccesfully) {
-            loadingDates.put(key, System.currentTimeMillis());
+            this.loadingDates.put(key, System.currentTimeMillis());
         }
         return putSuccesfully;
     }
 
     @Override
     public V get(K key) {
-        Long loadingDate = loadingDates.get(key);
-        if (loadingDate != null && System.currentTimeMillis() - loadingDate > maxAge) {
-            cache.remove(key);
-            loadingDates.remove(key);
+        Long loadingDate = this.loadingDates.get(key);
+        if ((loadingDate != null) && ((System.currentTimeMillis() - loadingDate) > this.maxAge)) {
+            this.cache.remove(key);
+            this.loadingDates.remove(key);
         }
 
-        return cache.get(key);
+        return this.cache.get(key);
     }
 
     @Override
     public void remove(K key) {
-        cache.remove(key);
-        loadingDates.remove(key);
+        this.cache.remove(key);
+        this.loadingDates.remove(key);
     }
 
     @Override
     public Collection<K> keys() {
-        return cache.keys();
+        return this.cache.keys();
     }
 
     @Override
     public void clear() {
-        cache.clear();
-        loadingDates.clear();
+        this.cache.clear();
+        this.loadingDates.clear();
     }
 }

@@ -51,7 +51,7 @@ public class LruMemoryCache implements MemoryCacheAware<String, Bitmap> {
         }
 
         synchronized (this) {
-            return map.get(key);
+            return this.map.get(key);
         }
     }
 
@@ -60,19 +60,19 @@ public class LruMemoryCache implements MemoryCacheAware<String, Bitmap> {
      */
     @Override
     public final boolean put(String key, Bitmap value) {
-        if (key == null || value == null) {
+        if ((key == null) || (value == null)) {
             throw new NullPointerException("key == null || value == null");
         }
 
         synchronized (this) {
-            size += sizeOf(key, value);
-            Bitmap previous = map.put(key, value);
+            this.size += sizeOf(key, value);
+            Bitmap previous = this.map.put(key, value);
             if (previous != null) {
-                size -= sizeOf(key, previous);
+                this.size -= sizeOf(key, previous);
             }
         }
 
-        trimToSize(maxSize);
+        trimToSize(this.maxSize);
         return true;
     }
 
@@ -86,22 +86,22 @@ public class LruMemoryCache implements MemoryCacheAware<String, Bitmap> {
             String key;
             Bitmap value;
             synchronized (this) {
-                if (size < 0 || (map.isEmpty() && size != 0)) {
+                if ((this.size < 0) || (this.map.isEmpty() && (this.size != 0))) {
                     throw new IllegalStateException(getClass().getName() + ".sizeOf() is reporting inconsistent results!");
                 }
 
-                if (size <= maxSize || map.isEmpty()) {
+                if ((this.size <= maxSize) || this.map.isEmpty()) {
                     break;
                 }
 
-                Map.Entry<String, Bitmap> toEvict = map.entrySet().iterator().next();
+                Map.Entry<String, Bitmap> toEvict = this.map.entrySet().iterator().next();
                 if (toEvict == null) {
                     break;
                 }
                 key = toEvict.getKey();
                 value = toEvict.getValue();
-                map.remove(key);
-                size -= sizeOf(key, value);
+                this.map.remove(key);
+                this.size -= sizeOf(key, value);
             }
         }
     }
@@ -116,9 +116,9 @@ public class LruMemoryCache implements MemoryCacheAware<String, Bitmap> {
         }
 
         synchronized (this) {
-            Bitmap previous = map.remove(key);
+            Bitmap previous = this.map.remove(key);
             if (previous != null) {
-                size -= sizeOf(key, previous);
+                this.size -= sizeOf(key, previous);
             }
         }
     }
@@ -126,7 +126,7 @@ public class LruMemoryCache implements MemoryCacheAware<String, Bitmap> {
     @Override
     public Collection<String> keys() {
         synchronized (this) {
-            return new HashSet<String>(map.keySet());
+            return new HashSet<String>(this.map.keySet());
         }
     }
 
@@ -140,12 +140,12 @@ public class LruMemoryCache implements MemoryCacheAware<String, Bitmap> {
      * <p/>
      * An entry's size must not change while it is in the cache.
      */
-    private int sizeOf(String key, Bitmap value) {
+    private static int sizeOf(@SuppressWarnings("UnusedParameters") String key, Bitmap value) {
         return value.getRowBytes() * value.getHeight();
     }
 
     @Override
-    public synchronized final String toString() {
-        return String.format("LruCache[maxSize=%d]", maxSize);
+    public final synchronized String toString() {
+        return String.format("LruCache[maxSize=%d]", this.maxSize);
     }
 }

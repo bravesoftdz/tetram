@@ -47,12 +47,12 @@ public interface ImageDownloader {
     public enum Scheme {
         HTTP("http"), HTTPS("https"), FILE("file"), CONTENT("content"), ASSETS("assets"), DRAWABLE("drawable"), UNKNOWN("");
 
-        private String scheme;
-        private String uriPrefix;
+        private final String scheme;
+        private final String uriPrefix;
 
         Scheme(String scheme) {
             this.scheme = scheme;
-            uriPrefix = scheme + "://";
+            this.uriPrefix = scheme + "://";
         }
 
         /**
@@ -63,24 +63,25 @@ public interface ImageDownloader {
          */
         public static Scheme ofUri(String uri) {
             if (uri != null) {
-                for (Scheme s : values()) {
-                    if (s.belongsTo(uri)) {
-                        return s;
+                for (Scheme scheme : values()) {
+                    if (scheme.belongsTo(uri)) {
+                        return scheme;
                     }
                 }
             }
             return UNKNOWN;
         }
 
+        @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
         private boolean belongsTo(String uri) {
-            return uri.toLowerCase(Locale.US).startsWith(uriPrefix);
+            return uri.toLowerCase(Locale.US).startsWith(this.uriPrefix);
         }
 
         /**
          * Appends scheme to incoming path
          */
         public String wrap(String path) {
-            return uriPrefix + path;
+            return String.format("%s%s", this.uriPrefix, path);
         }
 
         /**
@@ -88,9 +89,9 @@ public interface ImageDownloader {
          */
         public String crop(String uri) {
             if (!belongsTo(uri)) {
-                throw new IllegalArgumentException(String.format("URI [%1$s] doesn't have expected scheme [%2$s]", uri, scheme));
+                throw new IllegalArgumentException(String.format("URI [%1$s] doesn't have expected scheme [%2$s]", uri, this.scheme));
             }
-            return uri.substring(uriPrefix.length());
+            return uri.substring(this.uriPrefix.length());
         }
     }
 }

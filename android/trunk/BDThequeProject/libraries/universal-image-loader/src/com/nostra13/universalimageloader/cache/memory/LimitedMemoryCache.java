@@ -53,8 +53,9 @@ public abstract class LimitedMemoryCache<K, V> extends BaseMemoryCache<K, V> {
      * @param sizeLimit Maximum size for cache (in bytes)
      */
     public LimitedMemoryCache(int sizeLimit) {
+        super();
         this.sizeLimit = sizeLimit;
-        cacheSize = new AtomicInteger();
+        this.cacheSize = new AtomicInteger();
         if (sizeLimit > MAX_NORMAL_CACHE_SIZE) {
             L.w("You set too large memory cache size (more than %1$d Mb)", MAX_NORMAL_CACHE_SIZE_IN_MB);
         }
@@ -65,17 +66,17 @@ public abstract class LimitedMemoryCache<K, V> extends BaseMemoryCache<K, V> {
         boolean putSuccessfully = false;
         // Try to add value to hard cache
         int valueSize = getSize(value);
-        int sizeLimit = getSizeLimit();
-        int curCacheSize = cacheSize.get();
-        if (valueSize < sizeLimit) {
-            while (curCacheSize + valueSize > sizeLimit) {
+        int limit = getSizeLimit();
+        int curCacheSize = this.cacheSize.get();
+        if (valueSize < limit) {
+            while ((curCacheSize + valueSize) > limit) {
                 V removedValue = removeNext();
-                if (hardCache.remove(removedValue)) {
-                    curCacheSize = cacheSize.addAndGet(-getSize(removedValue));
+                if (this.hardCache.remove(removedValue)) {
+                    curCacheSize = this.cacheSize.addAndGet(-getSize(removedValue));
                 }
             }
-            hardCache.add(value);
-            cacheSize.addAndGet(valueSize);
+            this.hardCache.add(value);
+            this.cacheSize.addAndGet(valueSize);
 
             putSuccessfully = true;
         }
@@ -88,8 +89,8 @@ public abstract class LimitedMemoryCache<K, V> extends BaseMemoryCache<K, V> {
     public void remove(K key) {
         V value = super.get(key);
         if (value != null) {
-            if (hardCache.remove(value)) {
-                cacheSize.addAndGet(-getSize(value));
+            if (this.hardCache.remove(value)) {
+                this.cacheSize.addAndGet(-getSize(value));
             }
         }
         super.remove(key);
@@ -97,13 +98,13 @@ public abstract class LimitedMemoryCache<K, V> extends BaseMemoryCache<K, V> {
 
     @Override
     public void clear() {
-        hardCache.clear();
-        cacheSize.set(0);
+        this.hardCache.clear();
+        this.cacheSize.set(0);
         super.clear();
     }
 
     protected int getSizeLimit() {
-        return sizeLimit;
+        return this.sizeLimit;
     }
 
     protected abstract int getSize(V value);

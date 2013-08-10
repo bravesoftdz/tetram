@@ -57,7 +57,7 @@ public class LRULimitedMemoryCache extends LimitedMemoryCache<String, Bitmap> {
     @Override
     public boolean put(String key, Bitmap value) {
         if (super.put(key, value)) {
-            lruCache.put(key, value);
+            this.lruCache.put(key, value);
             return true;
         } else {
             return false;
@@ -66,19 +66,19 @@ public class LRULimitedMemoryCache extends LimitedMemoryCache<String, Bitmap> {
 
     @Override
     public Bitmap get(String key) {
-        lruCache.get(key); // call "get" for LRU logic
+        this.lruCache.get(key); // call "get" for LRU logic
         return super.get(key);
     }
 
     @Override
     public void remove(String key) {
-        lruCache.remove(key);
+        this.lruCache.remove(key);
         super.remove(key);
     }
 
     @Override
     public void clear() {
-        lruCache.clear();
+        this.lruCache.clear();
         super.clear();
     }
 
@@ -90,8 +90,8 @@ public class LRULimitedMemoryCache extends LimitedMemoryCache<String, Bitmap> {
     @Override
     protected Bitmap removeNext() {
         Bitmap mostLongUsedValue = null;
-        synchronized (lruCache) {
-            Iterator<Entry<String, Bitmap>> it = lruCache.entrySet().iterator();
+        synchronized (this.lruCache) {
+            Iterator<Entry<String, Bitmap>> it = this.lruCache.entrySet().iterator();
             if (it.hasNext()) {
                 Entry<String, Bitmap> entry = it.next();
                 mostLongUsedValue = entry.getValue();

@@ -38,6 +38,7 @@ import java.util.Set;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
+@SuppressWarnings("UnusedDeclaration")
 public class LargestLimitedMemoryCache extends LimitedMemoryCache<String, Bitmap> {
     /**
      * Contains strong references to stored objects (keys) and last object usage date (in milliseconds). If hard cache
@@ -53,7 +54,7 @@ public class LargestLimitedMemoryCache extends LimitedMemoryCache<String, Bitmap
     @Override
     public boolean put(String key, Bitmap value) {
         if (super.put(key, value)) {
-            valueSizes.put(value, getSize(value));
+            this.valueSizes.put(value, getSize(value));
             return true;
         } else {
             return false;
@@ -64,14 +65,14 @@ public class LargestLimitedMemoryCache extends LimitedMemoryCache<String, Bitmap
     public void remove(String key) {
         Bitmap value = super.get(key);
         if (value != null) {
-            valueSizes.remove(value);
+            this.valueSizes.remove(value);
         }
         super.remove(key);
     }
 
     @Override
     public void clear() {
-        valueSizes.clear();
+        this.valueSizes.clear();
         super.clear();
     }
 
@@ -84,8 +85,8 @@ public class LargestLimitedMemoryCache extends LimitedMemoryCache<String, Bitmap
     protected Bitmap removeNext() {
         Integer maxSize = null;
         Bitmap largestValue = null;
-        Set<Entry<Bitmap, Integer>> entries = valueSizes.entrySet();
-        synchronized (valueSizes) {
+        Set<Entry<Bitmap, Integer>> entries = this.valueSizes.entrySet();
+        synchronized (this.valueSizes) {
             for (Entry<Bitmap, Integer> entry : entries) {
                 if (largestValue == null) {
                     largestValue = entry.getKey();
@@ -99,7 +100,7 @@ public class LargestLimitedMemoryCache extends LimitedMemoryCache<String, Bitmap
                 }
             }
         }
-        valueSizes.remove(largestValue);
+        this.valueSizes.remove(largestValue);
         return largestValue;
     }
 

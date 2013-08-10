@@ -30,6 +30,7 @@ import java.util.List;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.6.3
  */
+@SuppressWarnings("UnusedDeclaration")
 public final class MemoryCacheUtil {
 
     private static final String URI_AND_SIZE_SEPARATOR = "_";
@@ -43,15 +44,15 @@ public final class MemoryCacheUtil {
      * Pattern for cache key - <b>[imageUri]_[width]x[height]</b>.
      */
     public static String generateKey(String imageUri, ImageSize targetSize) {
-        return new StringBuilder(imageUri).append(URI_AND_SIZE_SEPARATOR).append(targetSize.getWidth()).append(WIDTH_AND_HEIGHT_SEPARATOR).append(targetSize.getHeight()).toString();
+        return String.format("%s%s%d%s%d", imageUri, URI_AND_SIZE_SEPARATOR, targetSize.getWidth(), WIDTH_AND_HEIGHT_SEPARATOR, targetSize.getHeight());
     }
 
     public static Comparator<String> createFuzzyKeyComparator() {
         return new Comparator<String>() {
             @Override
-            public int compare(String key1, String key2) {
-                String imageUri1 = key1.substring(0, key1.lastIndexOf(URI_AND_SIZE_SEPARATOR));
-                String imageUri2 = key2.substring(0, key2.lastIndexOf(URI_AND_SIZE_SEPARATOR));
+            public int compare(String lhs, String rhs) {
+                String imageUri1 = lhs.substring(0, lhs.lastIndexOf(URI_AND_SIZE_SEPARATOR));
+                String imageUri2 = rhs.substring(0, rhs.lastIndexOf(URI_AND_SIZE_SEPARATOR));
                 return imageUri1.compareTo(imageUri2);
             }
         };

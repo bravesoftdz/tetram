@@ -40,7 +40,7 @@ public class FadeInBitmapDisplayer implements BitmapDisplayer {
     public Bitmap display(Bitmap bitmap, ImageView imageView, LoadedFrom loadedFrom) {
         imageView.setImageBitmap(bitmap);
 
-        animate(imageView, durationMillis);
+        animate(imageView, this.durationMillis);
 
         return bitmap;
     }

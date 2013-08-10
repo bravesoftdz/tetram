@@ -43,6 +43,7 @@ import com.nostra13.universalimageloader.utils.L;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
+@SuppressWarnings("UnusedDeclaration")
 public class ImageLoader {
 
     public static final String TAG = ImageLoader.class.getSimpleName();
@@ -63,7 +64,7 @@ public class ImageLoader {
     private final ImageLoadingListener emptyListener = new SimpleImageLoadingListener();
     private final BitmapDisplayer fakeBitmapDisplayer = new FakeBitmapDisplayer();
 
-    private volatile static ImageLoader instance;
+    private static volatile ImageLoader instance;
 
     /**
      * Returns singleton class instance
@@ -96,7 +97,7 @@ public class ImageLoader {
         }
         if (this.configuration == null) {
             if (configuration.writeLogs) L.d(LOG_INIT_CONFIG);
-            engine = new ImageLoaderEngine(configuration);
+            this.engine = new ImageLoaderEngine(configuration);
             this.configuration = configuration;
         } else {
             L.w(WARNING_RE_INIT_CONFIG);
@@ -108,7 +109,7 @@ public class ImageLoader {
      * configuration}; <b>false</b> - otherwise
      */
     public boolean isInited() {
-        return configuration != null;
+        return this.configuration != null;
     }
 
     /**
@@ -181,14 +182,14 @@ public class ImageLoader {
             throw new IllegalArgumentException(ERROR_WRONG_ARGUMENTS);
         }
         if (listener == null) {
-            listener = emptyListener;
+            listener = this.emptyListener;
         }
         if (options == null) {
-            options = configuration.defaultDisplayImageOptions;
+            options = this.configuration.defaultDisplayImageOptions;
         }
 
         if (TextUtils.isEmpty(uri)) {
-            engine.cancelDisplayTaskFor(imageView);
+            this.engine.cancelDisplayTaskFor(imageView);
             listener.onLoadingStarted(uri, imageView);
             if (options.shouldShowImageForEmptyUri()) {
                 imageView.setImageResource(options.getImageForEmptyUri());
@@ -199,19 +200,19 @@ public class ImageLoader {
             return;
         }
 
-        ImageSize targetSize = ImageSizeUtils.defineTargetSizeForView(imageView, configuration.maxImageWidthForMemoryCache, configuration.maxImageHeightForMemoryCache);
+        ImageSize targetSize = ImageSizeUtils.defineTargetSizeForView(imageView, this.configuration.maxImageWidthForMemoryCache, this.configuration.maxImageHeightForMemoryCache);
         String memoryCacheKey = MemoryCacheUtil.generateKey(uri, targetSize);
-        engine.prepareDisplayTaskFor(imageView, memoryCacheKey);
+        this.engine.prepareDisplayTaskFor(imageView, memoryCacheKey);
 
         listener.onLoadingStarted(uri, imageView);
-        Bitmap bmp = configuration.memoryCache.get(memoryCacheKey);
-        if (bmp != null && !bmp.isRecycled()) {
-            if (configuration.writeLogs) L.d(LOG_LOAD_IMAGE_FROM_MEMORY_CACHE, memoryCacheKey);
+        Bitmap bmp = this.configuration.memoryCache.get(memoryCacheKey);
+        if ((bmp != null) && !bmp.isRecycled()) {
+            if (this.configuration.writeLogs) L.d(LOG_LOAD_IMAGE_FROM_MEMORY_CACHE, memoryCacheKey);
 
             if (options.shouldPostProcess()) {
-                ImageLoadingInfo imageLoadingInfo = new ImageLoadingInfo(uri, imageView, targetSize, memoryCacheKey, options, listener, engine.getLockForUri(uri));
-                ProcessAndDisplayImageTask displayTask = new ProcessAndDisplayImageTask(engine, bmp, imageLoadingInfo, options.getHandler());
-                engine.submit(displayTask);
+                ImageLoadingInfo imageLoadingInfo = new ImageLoadingInfo(uri, imageView, targetSize, memoryCacheKey, options, listener, this.engine.getLockForUri(uri));
+                ProcessAndDisplayImageTask displayTask = new ProcessAndDisplayImageTask(this.engine, bmp, imageLoadingInfo, options.getHandler());
+                this.engine.submit(displayTask);
             } else {
                 options.getDisplayer().display(bmp, imageView, LoadedFrom.MEMORY_CACHE);
                 listener.onLoadingComplete(uri, imageView, bmp);
@@ -225,9 +226,9 @@ public class ImageLoader {
                 }
             }
 
-            ImageLoadingInfo imageLoadingInfo = new ImageLoadingInfo(uri, imageView, targetSize, memoryCacheKey, options, listener, engine.getLockForUri(uri));
-            LoadAndDisplayImageTask displayTask = new LoadAndDisplayImageTask(engine, imageLoadingInfo, options.getHandler());
-            engine.submit(displayTask);
+            ImageLoadingInfo imageLoadingInfo = new ImageLoadingInfo(uri, imageView, targetSize, memoryCacheKey, options, listener, this.engine.getLockForUri(uri));
+            LoadAndDisplayImageTask displayTask = new LoadAndDisplayImageTask(this.engine, imageLoadingInfo, options.getHandler());
+            this.engine.submit(displayTask);
         }
     }
 
@@ -304,20 +305,20 @@ public class ImageLoader {
     public void loadImage(String uri, ImageSize targetImageSize, DisplayImageOptions options, ImageLoadingListener listener) {
         checkConfiguration();
         if (targetImageSize == null) {
-            targetImageSize = new ImageSize(configuration.maxImageWidthForMemoryCache, configuration.maxImageHeightForMemoryCache);
+            targetImageSize = new ImageSize(this.configuration.maxImageWidthForMemoryCache, this.configuration.maxImageHeightForMemoryCache);
         }
         if (options == null) {
-            options = configuration.defaultDisplayImageOptions;
+            options = this.configuration.defaultDisplayImageOptions;
         }
 
         DisplayImageOptions optionsWithFakeDisplayer;
         if (options.getDisplayer() instanceof FakeBitmapDisplayer) {
             optionsWithFakeDisplayer = options;
         } else {
-            optionsWithFakeDisplayer = new DisplayImageOptions.Builder().cloneFrom(options).displayer(fakeBitmapDisplayer).build();
+            optionsWithFakeDisplayer = new DisplayImageOptions.Builder().cloneFrom(options).displayer(this.fakeBitmapDisplayer).build();
         }
 
-        ImageView fakeImage = new ImageView(configuration.context);
+        ImageView fakeImage = new ImageView(this.configuration.context);
         fakeImage.setLayoutParams(new LayoutParams(targetImageSize.getWidth(), targetImageSize.getHeight()));
         fakeImage.setScaleType(ScaleType.CENTER_CROP);
 
@@ -329,8 +330,9 @@ public class ImageLoader {
      *
      * @throws IllegalStateException if configuration wasn't initialized
      */
+    @SuppressWarnings("NonBooleanMethodNameMayNotStartWithQuestion")
     private void checkConfiguration() {
-        if (configuration == null) {
+        if (this.configuration == null) {
             throw new IllegalStateException(ERROR_NOT_INIT);
         }
     }
@@ -342,7 +344,7 @@ public class ImageLoader {
      */
     public MemoryCacheAware<String, Bitmap> getMemoryCache() {
         checkConfiguration();
-        return configuration.memoryCache;
+        return this.configuration.memoryCache;
     }
 
     /**
@@ -352,7 +354,7 @@ public class ImageLoader {
      */
     public void clearMemoryCache() {
         checkConfiguration();
-        configuration.memoryCache.clear();
+        this.configuration.memoryCache.clear();
     }
 
     /**
@@ -362,7 +364,7 @@ public class ImageLoader {
      */
     public DiscCacheAware getDiscCache() {
         checkConfiguration();
-        return configuration.discCache;
+        return this.configuration.discCache;
     }
 
     /**
@@ -372,14 +374,14 @@ public class ImageLoader {
      */
     public void clearDiscCache() {
         checkConfiguration();
-        configuration.discCache.clear();
+        this.configuration.discCache.clear();
     }
 
     /**
      * Returns URI of image which is loading at this moment into passed {@link ImageView}
      */
     public String getLoadingUriForView(ImageView imageView) {
-        return engine.getLoadingUriForView(imageView);
+        return this.engine.getLoadingUriForView(imageView);
     }
 
     /**
@@ -388,7 +390,7 @@ public class ImageLoader {
      * @param imageView {@link ImageView} for which display task will be cancelled
      */
     public void cancelDisplayTask(ImageView imageView) {
-        engine.cancelDisplayTaskFor(imageView);
+        this.engine.cancelDisplayTaskFor(imageView);
     }
 
     /**
@@ -402,7 +404,7 @@ public class ImageLoader {
      *                             to allow engine to download images from network.
      */
     public void denyNetworkDownloads(boolean denyNetworkDownloads) {
-        engine.denyNetworkDownloads(denyNetworkDownloads);
+        this.engine.denyNetworkDownloads(denyNetworkDownloads);
     }
 
     /**
@@ -413,7 +415,7 @@ public class ImageLoader {
      *                          - otherwise.
      */
     public void handleSlowNetwork(boolean handleSlowNetwork) {
-        engine.handleSlowNetwork(handleSlowNetwork);
+        this.engine.handleSlowNetwork(handleSlowNetwork);
     }
 
     /**
@@ -421,14 +423,14 @@ public class ImageLoader {
      * Already running tasks are not paused.
      */
     public void pause() {
-        engine.pause();
+        this.engine.pause();
     }
 
     /**
      * Resumes waiting "load&display" tasks
      */
     public void resume() {
-        engine.resume();
+        this.engine.resume();
     }
 
     /**
@@ -436,7 +438,7 @@ public class ImageLoader {
      * ImageLoader still can be used after calling this method.
      */
     public void stop() {
-        engine.stop();
+        this.engine.stop();
     }
 
     /**
@@ -445,9 +447,9 @@ public class ImageLoader {
      * method.
      */
     public void destroy() {
-        if (configuration != null && configuration.writeLogs) L.d(LOG_DESTROY);
+        if ((this.configuration != null) && this.configuration.writeLogs) L.d(LOG_DESTROY);
         stop();
-        engine = null;
-        configuration = null;
+        this.engine = null;
+        this.configuration = null;
     }
 }

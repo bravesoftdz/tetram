@@ -15,13 +15,13 @@ public class FlushedInputStream extends FilterInputStream {
     }
 
     @Override
-    public long skip(long n) throws IOException {
+    public long skip(long byteCount) throws IOException {
         long totalBytesSkipped = 0L;
-        while (totalBytesSkipped < n) {
-            long bytesSkipped = in.skip(n - totalBytesSkipped);
+        while (totalBytesSkipped < byteCount) {
+            long bytesSkipped = this.in.skip(byteCount - totalBytesSkipped);
             if (bytesSkipped == 0L) {
-                int by_te = read();
-                if (by_te < 0) {
+                int readByte = read();
+                if (readByte < 0) {
                     break; // we reached EOF
                 } else {
                     bytesSkipped = 1; // we read one byte

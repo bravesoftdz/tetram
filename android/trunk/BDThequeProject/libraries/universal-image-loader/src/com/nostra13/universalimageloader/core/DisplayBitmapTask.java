@@ -33,6 +33,7 @@ import java.lang.ref.Reference;
  * @see BitmapDisplayer
  * @since 1.3.1
  */
+@SuppressWarnings("ConstantNamingConvention")
 final class DisplayBitmapTask implements Runnable {
 
     private static final String LOG_DISPLAY_IMAGE_IN_IMAGEVIEW = "Display image in ImageView (loaded from %1$s) [%2$s]";
@@ -52,28 +53,30 @@ final class DisplayBitmapTask implements Runnable {
 
     public DisplayBitmapTask(Bitmap bitmap, ImageLoadingInfo imageLoadingInfo, ImageLoaderEngine engine, LoadedFrom loadedFrom) {
         this.bitmap = bitmap;
-        imageUri = imageLoadingInfo.uri;
-        imageViewRef = imageLoadingInfo.imageViewRef;
-        memoryCacheKey = imageLoadingInfo.memoryCacheKey;
-        displayer = imageLoadingInfo.options.getDisplayer();
-        listener = imageLoadingInfo.listener;
+        this.imageUri = imageLoadingInfo.uri;
+        this.imageViewRef = imageLoadingInfo.imageViewRef;
+        this.memoryCacheKey = imageLoadingInfo.memoryCacheKey;
+        this.displayer = imageLoadingInfo.options.getDisplayer();
+        this.listener = imageLoadingInfo.listener;
         this.engine = engine;
         this.loadedFrom = loadedFrom;
     }
 
+    @Override
     public void run() {
-        ImageView imageView = imageViewRef.get();
+        ImageView imageView = this.imageViewRef.get();
         if (imageView == null) {
-            if (loggingEnabled) L.d(LOG_TASK_CANCELLED_IMAGEVIEW_LOST, memoryCacheKey);
-            listener.onLoadingCancelled(imageUri, imageView);
+            if (this.loggingEnabled) L.d(LOG_TASK_CANCELLED_IMAGEVIEW_LOST, this.memoryCacheKey);
+            this.listener.onLoadingCancelled(this.imageUri, imageView);
         } else if (isViewWasReused(imageView)) {
-            if (loggingEnabled) L.d(LOG_TASK_CANCELLED_IMAGEVIEW_REUSED, memoryCacheKey);
-            listener.onLoadingCancelled(imageUri, imageView);
+            if (this.loggingEnabled) L.d(LOG_TASK_CANCELLED_IMAGEVIEW_REUSED, this.memoryCacheKey);
+            this.listener.onLoadingCancelled(this.imageUri, imageView);
         } else {
-            if (loggingEnabled) L.d(LOG_DISPLAY_IMAGE_IN_IMAGEVIEW, loadedFrom, memoryCacheKey);
-            Bitmap displayedBitmap = displayer.display(bitmap, imageView, loadedFrom);
-            listener.onLoadingComplete(imageUri, imageView, displayedBitmap);
-            engine.cancelDisplayTaskFor(imageView);
+            if (this.loggingEnabled)
+                L.d(LOG_DISPLAY_IMAGE_IN_IMAGEVIEW, this.loadedFrom, this.memoryCacheKey);
+            Bitmap displayedBitmap = this.displayer.display(this.bitmap, imageView, this.loadedFrom);
+            this.listener.onLoadingComplete(this.imageUri, imageView, displayedBitmap);
+            this.engine.cancelDisplayTaskFor(imageView);
         }
     }
 
@@ -81,8 +84,8 @@ final class DisplayBitmapTask implements Runnable {
      * Checks whether memory cache key (image URI) for current ImageView is actual
      */
     private boolean isViewWasReused(ImageView imageView) {
-        String currentCacheKey = engine.getLoadingUriForView(imageView);
-        return !memoryCacheKey.equals(currentCacheKey);
+        String currentCacheKey = this.engine.getLoadingUriForView(imageView);
+        return !this.memoryCacheKey.equals(currentCacheKey);
     }
 
     void setLoggingEnabled(boolean loggingEnabled) {

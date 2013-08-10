@@ -15,6 +15,7 @@
  *******************************************************************************/
 package com.nostra13.universalimageloader.core;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -44,8 +45,9 @@ class ImageLoaderEngine {
 
     private Executor taskExecutor;
     private Executor taskExecutorForCachedImages;
-    private ExecutorService taskDistributor;
+    private final ExecutorService taskDistributor;
 
+    @SuppressLint("UseSparseArrays")
     private final Map<Integer, String> cacheKeysForImageViews = Collections.synchronizedMap(new HashMap<Integer, String>());
     private final Map<String, ReentrantLock> uriLocks = new WeakHashMap<String, ReentrantLock>();
 
@@ -56,25 +58,25 @@ class ImageLoaderEngine {
     ImageLoaderEngine(ImageLoaderConfiguration configuration) {
         this.configuration = configuration;
 
-        taskExecutor = configuration.taskExecutor;
-        taskExecutorForCachedImages = configuration.taskExecutorForCachedImages;
+        this.taskExecutor = configuration.taskExecutor;
+        this.taskExecutorForCachedImages = configuration.taskExecutorForCachedImages;
 
-        taskDistributor = Executors.newCachedThreadPool();
+        this.taskDistributor = Executors.newCachedThreadPool();
     }
 
     /**
      * Submits task to execution pool
      */
     void submit(final LoadAndDisplayImageTask task) {
-        taskDistributor.execute(new Runnable() {
+        this.taskDistributor.execute(new Runnable() {
             @Override
             public void run() {
-                boolean isImageCachedOnDisc = configuration.discCache.get(task.getLoadingUri()).exists();
+                boolean isImageCachedOnDisc = ImageLoaderEngine.this.configuration.discCache.get(task.getLoadingUri()).exists();
                 initExecutorsIfNeed();
                 if (isImageCachedOnDisc) {
-                    taskExecutorForCachedImages.execute(task);
+                    ImageLoaderEngine.this.taskExecutorForCachedImages.execute(task);
                 } else {
-                    taskExecutor.execute(task);
+                    ImageLoaderEngine.this.taskExecutor.execute(task);
                 }
             }
         });
@@ -85,27 +87,27 @@ class ImageLoaderEngine {
      */
     void submit(ProcessAndDisplayImageTask task) {
         initExecutorsIfNeed();
-        taskExecutorForCachedImages.execute(task);
+        this.taskExecutorForCachedImages.execute(task);
     }
 
     private void initExecutorsIfNeed() {
-        if (!configuration.customExecutor && ((ExecutorService) taskExecutor).isShutdown()) {
-            taskExecutor = createTaskExecutor();
+        if (!this.configuration.customExecutor && ((ExecutorService) this.taskExecutor).isShutdown()) {
+            this.taskExecutor = createTaskExecutor();
         }
-        if (!configuration.customExecutorForCachedImages && ((ExecutorService) taskExecutorForCachedImages).isShutdown()) {
-            taskExecutorForCachedImages = createTaskExecutor();
+        if (!this.configuration.customExecutorForCachedImages && ((ExecutorService) this.taskExecutorForCachedImages).isShutdown()) {
+            this.taskExecutorForCachedImages = createTaskExecutor();
         }
     }
 
     private Executor createTaskExecutor() {
-        return DefaultConfigurationFactory.createExecutor(configuration.threadPoolSize, configuration.threadPriority, configuration.tasksProcessingType);
+        return DefaultConfigurationFactory.createExecutor(this.configuration.threadPoolSize, this.configuration.threadPriority, this.configuration.tasksProcessingType);
     }
 
     /**
      * Returns URI of image which is loading at this moment into passed {@link ImageView}
      */
     String getLoadingUriForView(ImageView imageView) {
-        return cacheKeysForImageViews.get(imageView.hashCode());
+        return this.cacheKeysForImageViews.get(imageView.hashCode());
     }
 
     /**
@@ -113,7 +115,7 @@ class ImageLoaderEngine {
      * ImageView at exact moment.
      */
     void prepareDisplayTaskFor(ImageView imageView, String memoryCacheKey) {
-        cacheKeysForImageViews.put(imageView.hashCode(), memoryCacheKey);
+        this.cacheKeysForImageViews.put(imageView.hashCode(), memoryCacheKey);
     }
 
     /**
@@ -122,7 +124,7 @@ class ImageLoaderEngine {
      * @param imageView {@link ImageView} for which display task will be cancelled
      */
     void cancelDisplayTaskFor(ImageView imageView) {
-        cacheKeysForImageViews.remove(imageView.hashCode());
+        this.cacheKeysForImageViews.remove(imageView.hashCode());
     }
 
     /**
@@ -136,7 +138,7 @@ class ImageLoaderEngine {
      *                             to allow engine to download images from network.
      */
     void denyNetworkDownloads(boolean denyNetworkDownloads) {
-        networkDenied.set(denyNetworkDownloads);
+        this.networkDenied.set(denyNetworkDownloads);
     }
 
     /**
@@ -147,7 +149,7 @@ class ImageLoaderEngine {
      *                          - otherwise.
      */
     void handleSlowNetwork(boolean handleSlowNetwork) {
-        slowNetwork.set(handleSlowNetwork);
+        this.slowNetwork.set(handleSlowNetwork);
     }
 
     /**
@@ -155,16 +157,16 @@ class ImageLoaderEngine {
      * Already running tasks are not paused.
      */
     void pause() {
-        paused.set(true);
+        this.paused.set(true);
     }
 
     /**
      * Resumes engine work. Paused "load&display" tasks will continue its work.
      */
     void resume() {
-        synchronized (paused) {
-            paused.set(false);
-            paused.notifyAll();
+        synchronized (this.paused) {
+            this.paused.set(false);
+            this.paused.notifyAll();
         }
     }
 
@@ -172,35 +174,35 @@ class ImageLoaderEngine {
      * Stops engine, cancels all running and scheduled display image tasks. Clears internal data.
      */
     void stop() {
-        if (!configuration.customExecutor) {
-            ((ExecutorService) taskExecutor).shutdownNow();
+        if (!this.configuration.customExecutor) {
+            ((ExecutorService) this.taskExecutor).shutdownNow();
         }
-        if (!configuration.customExecutorForCachedImages) {
-            ((ExecutorService) taskExecutorForCachedImages).shutdownNow();
+        if (!this.configuration.customExecutorForCachedImages) {
+            ((ExecutorService) this.taskExecutorForCachedImages).shutdownNow();
         }
 
-        cacheKeysForImageViews.clear();
-        uriLocks.clear();
+        this.cacheKeysForImageViews.clear();
+        this.uriLocks.clear();
     }
 
     ReentrantLock getLockForUri(String uri) {
-        ReentrantLock lock = uriLocks.get(uri);
+        ReentrantLock lock = this.uriLocks.get(uri);
         if (lock == null) {
             lock = new ReentrantLock();
-            uriLocks.put(uri, lock);
+            this.uriLocks.put(uri, lock);
         }
         return lock;
     }
 
     AtomicBoolean getPause() {
-        return paused;
+        return this.paused;
     }
 
     boolean isNetworkDenied() {
-        return networkDenied.get();
+        return this.networkDenied.get();
     }
 
     boolean isSlowNetwork() {
-        return slowNetwork.get();
+        return this.slowNetwork.get();
     }
 }

@@ -38,6 +38,7 @@ import com.nostra13.universalimageloader.utils.L;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.5.6
  */
+@SuppressWarnings("UnusedDeclaration")
 public class RoundedBitmapDisplayer implements BitmapDisplayer {
 
     private final int roundPixels;
@@ -48,7 +49,7 @@ public class RoundedBitmapDisplayer implements BitmapDisplayer {
 
     @Override
     public Bitmap display(Bitmap bitmap, ImageView imageView, LoadedFrom loadedFrom) {
-        Bitmap roundedBitmap = roundCorners(bitmap, imageView, roundPixels);
+        Bitmap roundedBitmap = roundCorners(bitmap, imageView, this.roundPixels);
         imageView.setImageBitmap(roundedBitmap);
         return roundedBitmap;
     }
@@ -62,6 +63,7 @@ public class RoundedBitmapDisplayer implements BitmapDisplayer {
      * @param roundPixels
      * @return Result bitmap with rounded corners
      */
+    @SuppressWarnings("JavaDoc")
     public static Bitmap roundCorners(Bitmap bitmap, ImageView imageView, int roundPixels) {
         Bitmap roundBitmap;
 

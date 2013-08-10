@@ -17,6 +17,8 @@ package com.nostra13.universalimageloader.core.assist;
 
 import com.nostra13.universalimageloader.cache.disc.DiscCacheAware;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.File;
 
 /**
@@ -26,6 +28,7 @@ import java.io.File;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.8.0
  */
+@SuppressWarnings("UnusedDeclaration")
 public final class DiscCacheUtil {
 
     private DiscCacheUtil() {
@@ -34,6 +37,7 @@ public final class DiscCacheUtil {
     /**
      * Returns {@link File} of cached image or <b>null</b> if image was not cached in disc cache
      */
+    @Nullable
     public static File findInCache(String imageUri, DiscCacheAware discCache) {
         File image = discCache.get(imageUri);
         return image.exists() ? image : null;

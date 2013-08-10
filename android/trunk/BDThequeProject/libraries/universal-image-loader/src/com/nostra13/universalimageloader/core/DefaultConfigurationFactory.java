@@ -38,6 +38,8 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
@@ -74,6 +76,7 @@ public class DefaultConfigurationFactory {
     /**
      * Creates default implementation of {@link DiscCacheAware} depends on incoming parameters
      */
+    @SuppressWarnings("MethodParameterNamingConvention")
     public static DiscCacheAware createDiscCache(Context context, FileNameGenerator discCacheFileNameGenerator, int discCacheSize, int discCacheFileCount) {
         if (discCacheSize > 0) {
             File individualCacheDir = StorageUtils.getIndividualCacheDirectory(context);
@@ -156,15 +159,17 @@ public class DefaultConfigurationFactory {
 
         DefaultThreadFactory(int threadPriority) {
             this.threadPriority = threadPriority;
-            SecurityManager s = System.getSecurityManager();
-            group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
-            namePrefix = "pool-" + poolNumber.getAndIncrement() + "-thread-";
+            SecurityManager securityManager = System.getSecurityManager();
+            this.group = (securityManager != null) ? securityManager.getThreadGroup() : Thread.currentThread().getThreadGroup();
+            this.namePrefix = "pool-" + poolNumber.getAndIncrement() + "-thread-";
         }
 
-        public Thread newThread(Runnable r) {
-            Thread t = new Thread(group, r, namePrefix + threadNumber.getAndIncrement(), 0);
+        @NotNull
+        @Override
+        public Thread newThread(@NotNull Runnable r) {
+            Thread t = new Thread(this.group, r, String.format("%s%d", this.namePrefix, this.threadNumber.getAndIncrement()), 0);
             if (t.isDaemon()) t.setDaemon(false);
-            t.setPriority(threadPriority);
+            t.setPriority(this.threadPriority);
             return t;
         }
     }

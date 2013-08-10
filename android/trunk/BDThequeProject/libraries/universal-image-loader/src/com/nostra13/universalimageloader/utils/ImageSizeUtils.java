@@ -52,15 +52,16 @@ public final class ImageSizeUtils {
         final DisplayMetrics displayMetrics = imageView.getContext().getResources().getDisplayMetrics();
 
         final LayoutParams params = imageView.getLayoutParams();
-        int width = (params != null && params.width == LayoutParams.WRAP_CONTENT) ? 0 : imageView.getWidth(); // Get actual image width
-        if (width <= 0 && params != null) width = params.width; // Get layout width parameter
+        int width = ((params != null) && (params.width == LayoutParams.WRAP_CONTENT)) ? 0 : imageView.getWidth(); // Get actual image width
+        if ((width <= 0) && (params != null)) width = params.width; // Get layout width parameter
         if (width <= 0)
             width = getImageViewFieldValue(imageView, "mMaxWidth"); // Check maxWidth parameter
         if (width <= 0) width = maxImageWidth;
         if (width <= 0) width = displayMetrics.widthPixels;
 
-        int height = (params != null && params.height == LayoutParams.WRAP_CONTENT) ? 0 : imageView.getHeight(); // Get actual image height
-        if (height <= 0 && params != null) height = params.height; // Get layout height parameter
+        int height = ((params != null) && (params.height == LayoutParams.WRAP_CONTENT)) ? 0 : imageView.getHeight(); // Get actual image height
+        if ((height <= 0) && (params != null))
+            height = params.height; // Get layout height parameter
         if (height <= 0)
             height = getImageViewFieldValue(imageView, "mMaxHeight"); // Check maxHeight parameter
         if (height <= 0) height = maxImageHeight;
@@ -75,7 +76,7 @@ public final class ImageSizeUtils {
             Field field = ImageView.class.getDeclaredField(fieldName);
             field.setAccessible(true);
             int fieldValue = (Integer) field.get(object);
-            if (fieldValue > 0 && fieldValue < Integer.MAX_VALUE) {
+            if ((fieldValue > 0) && (fieldValue < Integer.MAX_VALUE)) {
                 value = fieldValue;
             }
         } catch (Exception e) {
@@ -125,7 +126,7 @@ public final class ImageSizeUtils {
         switch (viewScaleType) {
             case FIT_INSIDE:
                 if (powerOf2Scale) {
-                    while (srcWidth / 2 >= targetWidth || srcHeight / 2 >= targetHeight) { // ||
+                    while (((srcWidth / 2) >= targetWidth) || ((srcHeight / 2) >= targetHeight)) { // ||
                         srcWidth /= 2;
                         srcHeight /= 2;
                         scale *= 2;
@@ -136,7 +137,7 @@ public final class ImageSizeUtils {
                 break;
             case CROP:
                 if (powerOf2Scale) {
-                    while (srcWidth / 2 >= targetWidth && srcHeight / 2 >= targetHeight) { // &&
+                    while (((srcWidth / 2) >= targetWidth) && ((srcHeight / 2) >= targetHeight)) { // &&
                         srcWidth /= 2;
                         srcHeight /= 2;
                         scale *= 2;
@@ -187,7 +188,7 @@ public final class ImageSizeUtils {
 
         int destWidth;
         int destHeight;
-        if ((viewScaleType == ViewScaleType.FIT_INSIDE && widthScale >= heightScale) || (viewScaleType == ViewScaleType.CROP && widthScale < heightScale)) {
+        if (((viewScaleType == ViewScaleType.FIT_INSIDE) && (widthScale >= heightScale)) || ((viewScaleType == ViewScaleType.CROP) && (widthScale < heightScale))) {
             destWidth = targetWidth;
             destHeight = (int) (srcHeight / widthScale);
         } else {
@@ -196,7 +197,7 @@ public final class ImageSizeUtils {
         }
 
         float scale = 1;
-        if ((!stretch && destWidth < srcWidth && destHeight < srcHeight) || (stretch && destWidth != srcWidth && destHeight != srcHeight)) {
+        if ((!stretch && (destWidth < srcWidth) && (destHeight < srcHeight)) || (stretch && (destWidth != srcWidth) && (destHeight != srcHeight))) {
             scale = (float) destWidth / srcWidth;
         }
 

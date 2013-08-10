@@ -6,6 +6,9 @@
 
 package com.nostra13.universalimageloader.core.assist.deque;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -165,6 +168,7 @@ import java.util.Stack;
  * @since 1.6
  */
 
+@SuppressWarnings({"ClassNamePrefixedWithPackageName", "UnusedDeclaration"})
 public interface Deque<E> extends Queue<E> {
     /**
      * Inserts the specified element at the front of this deque if it is
@@ -220,6 +224,7 @@ public interface Deque<E> extends Queue<E> {
      * @throws IllegalArgumentException if some property of the specified
      *                                  element prevents it from being added to this deque
      */
+    @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
     boolean offerFirst(E e);
 
     /**
@@ -238,6 +243,7 @@ public interface Deque<E> extends Queue<E> {
      * @throws IllegalArgumentException if some property of the specified
      *                                  element prevents it from being added to this deque
      */
+    @SuppressWarnings("BooleanMethodNameMustStartWithQuestion")
     boolean offerLast(E e);
 
     /**
@@ -303,6 +309,7 @@ public interface Deque<E> extends Queue<E> {
      *
      * @return the head of this deque, or <tt>null</tt> if this deque is empty
      */
+    @Nullable
     E peekFirst();
 
     /**
@@ -311,6 +318,7 @@ public interface Deque<E> extends Queue<E> {
      *
      * @return the tail of this deque, or <tt>null</tt> if this deque is empty
      */
+    @Nullable
     E peekLast();
 
     /**
@@ -373,6 +381,7 @@ public interface Deque<E> extends Queue<E> {
      * @throws IllegalArgumentException if some property of the specified
      *                                  element prevents it from being added to this deque
      */
+    @Override
     boolean add(E e);
 
     /**
@@ -396,6 +405,7 @@ public interface Deque<E> extends Queue<E> {
      * @throws IllegalArgumentException if some property of the specified
      *                                  element prevents it from being added to this deque
      */
+    @Override
     boolean offer(E e);
 
     /**
@@ -409,6 +419,7 @@ public interface Deque<E> extends Queue<E> {
      * @return the head of the queue represented by this deque
      * @throws NoSuchElementException if this deque is empty
      */
+    @Override
     E remove();
 
     /**
@@ -421,6 +432,7 @@ public interface Deque<E> extends Queue<E> {
      * @return the first element of this deque, or <tt>null</tt> if
      * this deque is empty
      */
+    @Override
     E poll();
 
     /**
@@ -434,6 +446,7 @@ public interface Deque<E> extends Queue<E> {
      * @return the head of the queue represented by this deque
      * @throws NoSuchElementException if this deque is empty
      */
+    @Override
     E element();
 
     /**
@@ -446,6 +459,7 @@ public interface Deque<E> extends Queue<E> {
      * @return the head of the queue represented by this deque, or
      * <tt>null</tt> if this deque is empty
      */
+    @Override
     E peek();
 
 
@@ -498,14 +512,15 @@ public interface Deque<E> extends Queue<E> {
      * <p/>
      * <p>This method is equivalent to {@link #removeFirstOccurrence}.
      *
-     * @param o element to be removed from this deque, if present
+     * @param object element to be removed from this deque, if present
      * @return <tt>true</tt> if an element was removed as a result of this call
      * @throws ClassCastException   if the class of the specified element
      *                              is incompatible with this deque (optional)
      * @throws NullPointerException if the specified element is null and this
      *                              deque does not permit null elements (optional)
      */
-    boolean remove(Object o);
+    @Override
+    boolean remove(Object object);
 
     /**
      * Returns <tt>true</tt> if this deque contains the specified element.
@@ -513,20 +528,22 @@ public interface Deque<E> extends Queue<E> {
      * at least one element <tt>e</tt> such that
      * <tt>(o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e))</tt>.
      *
-     * @param o element whose presence in this deque is to be tested
+     * @param object element whose presence in this deque is to be tested
      * @return <tt>true</tt> if this deque contains the specified element
      * @throws ClassCastException   if the type of the specified element
      *                              is incompatible with this deque (optional)
      * @throws NullPointerException if the specified element is null and this
      *                              deque does not permit null elements (optional)
      */
-    boolean contains(Object o);
+    @Override
+    boolean contains(Object object);
 
     /**
      * Returns the number of elements in this deque.
      *
      * @return the number of elements in this deque
      */
+    @Override
     public int size();
 
     /**
@@ -535,6 +552,8 @@ public interface Deque<E> extends Queue<E> {
      *
      * @return an iterator over the elements in this deque in proper sequence
      */
+    @NotNull
+    @Override
     Iterator<E> iterator();
 
     /**

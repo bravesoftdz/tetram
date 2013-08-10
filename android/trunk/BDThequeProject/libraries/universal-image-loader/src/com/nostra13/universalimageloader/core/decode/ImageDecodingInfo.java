@@ -57,11 +57,12 @@ public class ImageDecodingInfo {
         this.downloader = downloader;
         this.extraForDownloader = displayOptions.getExtraForDownloader();
 
-        decodingOptions = new Options();
-        copyOptions(displayOptions.getDecodingOptions(), decodingOptions);
+        this.decodingOptions = new Options();
+        copyOptions(displayOptions.getDecodingOptions(), this.decodingOptions);
     }
 
-    private void copyOptions(Options srcOptions, Options destOptions) {
+    @TargetApi(Build.VERSION_CODES.DONUT)
+    private static void copyOptions(Options srcOptions, Options destOptions) {
         destOptions.inDensity = srcOptions.inDensity;
         destOptions.inDither = srcOptions.inDither;
         destOptions.inInputShareable = srcOptions.inInputShareable;
@@ -77,13 +78,13 @@ public class ImageDecodingInfo {
         if (Build.VERSION.SDK_INT >= 11) copyOptions11(srcOptions, destOptions);
     }
 
-    @TargetApi(10)
-    private void copyOptions10(Options srcOptions, Options destOptions) {
+    @TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
+    private static void copyOptions10(Options srcOptions, Options destOptions) {
         destOptions.inPreferQualityOverSpeed = srcOptions.inPreferQualityOverSpeed;
     }
 
-    @TargetApi(11)
-    private void copyOptions11(Options srcOptions, Options destOptions) {
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private static void copyOptions11(Options srcOptions, Options destOptions) {
         destOptions.inBitmap = srcOptions.inBitmap;
         destOptions.inMutable = srcOptions.inMutable;
     }
@@ -92,14 +93,14 @@ public class ImageDecodingInfo {
      * @return Original {@linkplain MemoryCacheUtil#generateKey(String, ImageSize) image key} (used in memory cache).
      */
     public String getImageKey() {
-        return imageKey;
+        return this.imageKey;
     }
 
     /**
      * @return Image URI for decoding (usually image from disc cache)
      */
     public String getImageUri() {
-        return imageUri;
+        return this.imageUri;
     }
 
     /**
@@ -107,7 +108,7 @@ public class ImageDecodingInfo {
      * image scale type} and {@linkplain ViewScaleType view scale type}.
      */
     public ImageSize getTargetSize() {
-        return targetSize;
+        return this.targetSize;
     }
 
     /**
@@ -115,34 +116,34 @@ public class ImageDecodingInfo {
      * of decoded bitmap.
      */
     public ImageScaleType getImageScaleType() {
-        return imageScaleType;
+        return this.imageScaleType;
     }
 
     /**
      * @return {@linkplain ViewScaleType View scale type}. This parameter affects result size of decoded bitmap.
      */
     public ViewScaleType getViewScaleType() {
-        return viewScaleType;
+        return this.viewScaleType;
     }
 
     /**
      * @return Downloader for image loading
      */
     public ImageDownloader getDownloader() {
-        return downloader;
+        return this.downloader;
     }
 
     /**
      * @return Auxiliary object for downloader
      */
     public Object getExtraForDownloader() {
-        return extraForDownloader;
+        return this.extraForDownloader;
     }
 
     /**
      * @return Decoding options
      */
     public Options getDecodingOptions() {
-        return decodingOptions;
+        return this.decodingOptions;
     }
 }

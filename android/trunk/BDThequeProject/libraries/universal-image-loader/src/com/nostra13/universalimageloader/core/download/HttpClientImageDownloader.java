@@ -34,7 +34,7 @@ import java.io.InputStream;
  */
 public class HttpClientImageDownloader extends BaseImageDownloader {
 
-    private HttpClient httpClient;
+    private final HttpClient httpClient;
 
     public HttpClientImageDownloader(Context context, HttpClient httpClient) {
         super(context);
@@ -44,7 +44,7 @@ public class HttpClientImageDownloader extends BaseImageDownloader {
     @Override
     protected InputStream getStreamFromNetwork(String imageUri, Object extra) throws IOException {
         HttpGet httpRequest = new HttpGet(imageUri);
-        HttpResponse response = httpClient.execute(httpRequest);
+        HttpResponse response = this.httpClient.execute(httpRequest);
         HttpEntity entity = response.getEntity();
         BufferedHttpEntity bufHttpEntity = new BufferedHttpEntity(entity);
         return bufHttpEntity.getContent();

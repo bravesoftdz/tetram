@@ -21,6 +21,7 @@ package com.nostra13.universalimageloader.core.assist;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
+@SuppressWarnings("UnusedDeclaration")
 public class FailReason {
 
     private final FailType type;
@@ -36,14 +37,14 @@ public class FailReason {
      * @return {@linkplain FailType Fail type}
      */
     public FailType getType() {
-        return type;
+        return this.type;
     }
 
     /**
      * @return Thrown exception/error, can be <b>null</b>
      */
     public Throwable getCause() {
-        return cause;
+        return this.cause;
     }
 
     /**

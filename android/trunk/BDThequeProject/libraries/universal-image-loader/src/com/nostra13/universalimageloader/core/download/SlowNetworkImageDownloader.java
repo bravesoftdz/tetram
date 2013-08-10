@@ -37,7 +37,7 @@ public class SlowNetworkImageDownloader implements ImageDownloader {
 
     @Override
     public InputStream getStream(String imageUri, Object extra) throws IOException {
-        InputStream imageStream = wrappedDownloader.getStream(imageUri, extra);
+        InputStream imageStream = this.wrappedDownloader.getStream(imageUri, extra);
         switch (Scheme.ofUri(imageUri)) {
             case HTTP:
             case HTTPS:

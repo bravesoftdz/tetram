@@ -48,10 +48,10 @@ class ProcessAndDisplayImageTask implements Runnable {
 
     @Override
     public void run() {
-        if (engine.configuration.writeLogs)
-            L.d(LOG_POSTPROCESS_IMAGE, imageLoadingInfo.memoryCacheKey);
-        BitmapProcessor processor = imageLoadingInfo.options.getPostProcessor();
-        final Bitmap processedBitmap = processor.process(bitmap);
-        handler.post(new DisplayBitmapTask(processedBitmap, imageLoadingInfo, engine, LoadedFrom.MEMORY_CACHE));
+        if (this.engine.configuration.writeLogs)
+            L.d(LOG_POSTPROCESS_IMAGE, this.imageLoadingInfo.memoryCacheKey);
+        BitmapProcessor processor = this.imageLoadingInfo.options.getPostProcessor();
+        final Bitmap processedBitmap = processor.process(this.bitmap);
+        this.handler.post(new DisplayBitmapTask(processedBitmap, this.imageLoadingInfo, this.engine, LoadedFrom.MEMORY_CACHE));
     }
 }

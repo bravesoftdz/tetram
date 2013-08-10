@@ -15,8 +15,10 @@
  *******************************************************************************/
 package com.nostra13.universalimageloader.core;
 
+import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory.Options;
+import android.os.Build;
 import android.os.Handler;
 import android.widget.ImageView;
 
@@ -75,100 +77,100 @@ public final class DisplayImageOptions {
     private final Handler handler;
 
     private DisplayImageOptions(Builder builder) {
-        stubImage = builder.stubImage;
-        imageForEmptyUri = builder.imageForEmptyUri;
-        imageOnFail = builder.imageOnFail;
-        resetViewBeforeLoading = builder.resetViewBeforeLoading;
-        cacheInMemory = builder.cacheInMemory;
-        cacheOnDisc = builder.cacheOnDisc;
-        imageScaleType = builder.imageScaleType;
-        decodingOptions = builder.decodingOptions;
-        delayBeforeLoading = builder.delayBeforeLoading;
-        extraForDownloader = builder.extraForDownloader;
-        preProcessor = builder.preProcessor;
-        postProcessor = builder.postProcessor;
-        displayer = builder.displayer;
-        handler = builder.handler;
+        this.stubImage = builder.stubImage;
+        this.imageForEmptyUri = builder.imageForEmptyUri;
+        this.imageOnFail = builder.imageOnFail;
+        this.resetViewBeforeLoading = builder.resetViewBeforeLoading;
+        this.cacheInMemory = builder.cacheInMemory;
+        this.cacheOnDisc = builder.cacheOnDisc;
+        this.imageScaleType = builder.imageScaleType;
+        this.decodingOptions = builder.decodingOptions;
+        this.delayBeforeLoading = builder.delayBeforeLoading;
+        this.extraForDownloader = builder.extraForDownloader;
+        this.preProcessor = builder.preProcessor;
+        this.postProcessor = builder.postProcessor;
+        this.displayer = builder.displayer;
+        this.handler = builder.handler;
     }
 
     public boolean shouldShowStubImage() {
-        return stubImage != 0;
+        return this.stubImage != 0;
     }
 
     public boolean shouldShowImageForEmptyUri() {
-        return imageForEmptyUri != 0;
+        return this.imageForEmptyUri != 0;
     }
 
     public boolean shouldShowImageOnFail() {
-        return imageOnFail != 0;
+        return this.imageOnFail != 0;
     }
 
     public boolean shouldPreProcess() {
-        return preProcessor != null;
+        return this.preProcessor != null;
     }
 
     public boolean shouldPostProcess() {
-        return postProcessor != null;
+        return this.postProcessor != null;
     }
 
     public boolean shouldDelayBeforeLoading() {
-        return delayBeforeLoading > 0;
+        return this.delayBeforeLoading > 0;
     }
 
     public int getStubImage() {
-        return stubImage;
+        return this.stubImage;
     }
 
     public int getImageForEmptyUri() {
-        return imageForEmptyUri;
+        return this.imageForEmptyUri;
     }
 
     public int getImageOnFail() {
-        return imageOnFail;
+        return this.imageOnFail;
     }
 
     public boolean isResetViewBeforeLoading() {
-        return resetViewBeforeLoading;
+        return this.resetViewBeforeLoading;
     }
 
     public boolean isCacheInMemory() {
-        return cacheInMemory;
+        return this.cacheInMemory;
     }
 
     public boolean isCacheOnDisc() {
-        return cacheOnDisc;
+        return this.cacheOnDisc;
     }
 
     public ImageScaleType getImageScaleType() {
-        return imageScaleType;
+        return this.imageScaleType;
     }
 
     public Options getDecodingOptions() {
-        return decodingOptions;
+        return this.decodingOptions;
     }
 
     public int getDelayBeforeLoading() {
-        return delayBeforeLoading;
+        return this.delayBeforeLoading;
     }
 
     public Object getExtraForDownloader() {
-        return extraForDownloader;
+        return this.extraForDownloader;
     }
 
     public BitmapProcessor getPreProcessor() {
-        return preProcessor;
+        return this.preProcessor;
     }
 
     public BitmapProcessor getPostProcessor() {
-        return postProcessor;
+        return this.postProcessor;
     }
 
     public BitmapDisplayer getDisplayer() {
-        return displayer;
+        return this.displayer;
     }
 
     public Handler getHandler() {
-        return (handler == null ? new Handler() : handler);
+        return ((this.handler == null) ? new Handler() : this.handler);
     }
 
     /**
@@ -176,6 +178,7 @@ public final class DisplayImageOptions {
      *
      * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
      */
+    @SuppressWarnings({"UnusedDeclaration", "RedundantFieldInitialization"})
     public static class Builder {
         private int stubImage = 0;
         private int imageForEmptyUri = 0;
@@ -192,9 +195,10 @@ public final class DisplayImageOptions {
         private BitmapDisplayer displayer = DefaultConfigurationFactory.createBitmapDisplayer();
         private Handler handler = null;
 
+        @TargetApi(Build.VERSION_CODES.DONUT)
         public Builder() {
-            decodingOptions.inPurgeable = true;
-            decodingOptions.inInputShareable = true;
+            this.decodingOptions.inPurgeable = true;
+            this.decodingOptions.inInputShareable = true;
         }
 
         /**
@@ -203,7 +207,7 @@ public final class DisplayImageOptions {
          * @param stubImageRes Stub image resource
          */
         public Builder showStubImage(int stubImageRes) {
-            stubImage = stubImageRes;
+            this.stubImage = stubImageRes;
             return this;
         }
 
@@ -214,7 +218,7 @@ public final class DisplayImageOptions {
          * @param imageRes Image resource
          */
         public Builder showImageForEmptyUri(int imageRes) {
-            imageForEmptyUri = imageRes;
+            this.imageForEmptyUri = imageRes;
             return this;
         }
 
@@ -225,7 +229,7 @@ public final class DisplayImageOptions {
          * @param imageRes Image resource
          */
         public Builder showImageOnFail(int imageRes) {
-            imageOnFail = imageRes;
+            this.imageOnFail = imageRes;
             return this;
         }
 
@@ -235,13 +239,14 @@ public final class DisplayImageOptions {
          * @deprecated Use {@link #resetViewBeforeLoading(boolean) resetViewBeforeLoading(true)} instead
          */
         public Builder resetViewBeforeLoading() {
-            resetViewBeforeLoading = true;
+            this.resetViewBeforeLoading = true;
             return this;
         }
 
         /**
          * Sets whether {@link android.widget.ImageView ImageView} will be reset (set <b>null</b>) before image loading start
          */
+        @SuppressWarnings("MethodParameterNamingConvention")
         public Builder resetViewBeforeLoading(boolean resetViewBeforeLoading) {
             this.resetViewBeforeLoading = resetViewBeforeLoading;
             return this;
@@ -253,7 +258,7 @@ public final class DisplayImageOptions {
          * @deprecated Use {@link #cacheInMemory(boolean) cacheInMemory(true)} instead
          */
         public Builder cacheInMemory() {
-            cacheInMemory = true;
+            this.cacheInMemory = true;
             return this;
         }
 
@@ -271,7 +276,7 @@ public final class DisplayImageOptions {
          * @deprecated Use {@link #cacheOnDisc(boolean) cacheOnDisc(true)} instead
          */
         public Builder cacheOnDisc() {
-            cacheOnDisc = true;
+            this.cacheOnDisc = true;
             return this;
         }
 
@@ -298,7 +303,7 @@ public final class DisplayImageOptions {
         public Builder bitmapConfig(Bitmap.Config bitmapConfig) {
             if (bitmapConfig == null)
                 throw new IllegalArgumentException("bitmapConfig can't be null");
-            decodingOptions.inPreferredConfig = bitmapConfig;
+            this.decodingOptions.inPreferredConfig = bitmapConfig;
             return this;
         }
 
@@ -375,20 +380,20 @@ public final class DisplayImageOptions {
          * Sets all options equal to incoming options
          */
         public Builder cloneFrom(DisplayImageOptions options) {
-            stubImage = options.stubImage;
-            imageForEmptyUri = options.imageForEmptyUri;
-            imageOnFail = options.imageOnFail;
-            resetViewBeforeLoading = options.resetViewBeforeLoading;
-            cacheInMemory = options.cacheInMemory;
-            cacheOnDisc = options.cacheOnDisc;
-            imageScaleType = options.imageScaleType;
-            decodingOptions = options.decodingOptions;
-            delayBeforeLoading = options.delayBeforeLoading;
-            extraForDownloader = options.extraForDownloader;
-            preProcessor = options.preProcessor;
-            postProcessor = options.postProcessor;
-            displayer = options.displayer;
-            handler = options.handler;
+            this.stubImage = options.stubImage;
+            this.imageForEmptyUri = options.imageForEmptyUri;
+            this.imageOnFail = options.imageOnFail;
+            this.resetViewBeforeLoading = options.resetViewBeforeLoading;
+            this.cacheInMemory = options.cacheInMemory;
+            this.cacheOnDisc = options.cacheOnDisc;
+            this.imageScaleType = options.imageScaleType;
+            this.decodingOptions = options.decodingOptions;
+            this.delayBeforeLoading = options.delayBeforeLoading;
+            this.extraForDownloader = options.extraForDownloader;
+            this.preProcessor = options.preProcessor;
+            this.postProcessor = options.postProcessor;
+            this.displayer = options.displayer;
+            this.handler = options.handler;
             return this;
         }
 
