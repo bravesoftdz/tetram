@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@android:id/tabhost"
-        android:layout_gravity="center_vertical|left"
-        android:orientation="vertical">
+<TabHost
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@android:id/tabhost"
+    android:layout_gravity="center_vertical|left">
 
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-        <ImageView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/album_notation"
@@ -24,7 +28,7 @@
                 tools:ignore="HardcodedText"
                 android:layout_gravity="top"/>
 
-        <TableLayout
+            <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -32,13 +36,13 @@
                 android:shrinkColumns="1"
                 android:measureWithLargestChild="true">
 
-            <TableRow
+                <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:id="@+id/fiche_album_row_serie">
 
-                <TextView
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/fiche_album_serie"
@@ -47,21 +51,21 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_gravity="center_vertical|right"/>
 
-                <TextView
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/album_serie"
                         android:textStyle="bold"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         />
-            </TableRow>
+                </TableRow>
 
-            <TableRow
+                <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:id="@+id/fiche_album_row_titre">
 
-                <TextView
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/fiche_album_titre"
@@ -70,7 +74,7 @@
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:layout_gravity="center_vertical|right"/>
 
-                <TextView
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/album_titre"
@@ -78,21 +82,52 @@
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:layout_gravity="center_vertical"
                         android:autoText="false"/>
-            </TableRow>
-        </TableLayout>
-    </LinearLayout>
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
 
-    <com.viewpagerindicator.TabPageIndicator
-            android:id="@+id/tabs"
+        <HorizontalScrollView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            />
+            android:fillViewport="true"
+            android:scrollbars="none">
 
-    <android.support.v4.view.ViewPager
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:tabStripEnabled="true"
+                style="?android:tabWidgetStyle"
+                />
+        </HorizontalScrollView>
+
+        <FrameLayout
             android:id="@android:id/tabcontent"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
 
-</LinearLayout>
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tab_album_details"/>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tab_album_editions"/>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tab_album_images"/>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/tab_album_albums"/>
+        </FrameLayout>
+
+    </LinearLayout>
+</TabHost>
