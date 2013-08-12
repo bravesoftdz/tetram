@@ -16,6 +16,7 @@
  */
 package com.viewpagerindicator;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -23,6 +24,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.view.MotionEventCompat;
@@ -33,6 +35,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
+import org.jetbrains.annotations.NotNull;
+
 import static android.graphics.Paint.ANTI_ALIAS_FLAG;
 import static android.widget.LinearLayout.HORIZONTAL;
 import static android.widget.LinearLayout.VERTICAL;
@@ -41,13 +45,13 @@ import static android.widget.LinearLayout.VERTICAL;
  * Draws circles (one for each view). The current view position is filled and
  * others are only stroked.
  */
+@SuppressWarnings("UnusedDeclaration")
 public class CirclePageIndicator extends View implements PageIndicator {
     private static final int INVALID_POINTER = -1;
-
-    private float mRadius;
     private final Paint mPaintPageFill = new Paint(ANTI_ALIAS_FLAG);
     private final Paint mPaintStroke = new Paint(ANTI_ALIAS_FLAG);
     private final Paint mPaintFill = new Paint(ANTI_ALIAS_FLAG);
+    private float mRadius;
     private ViewPager mViewPager;
     private ViewPager.OnPageChangeListener mListener;
     private int mCurrentPage;
@@ -57,7 +61,6 @@ public class CirclePageIndicator extends View implements PageIndicator {
     private int mOrientation;
     private boolean mCentered;
     private boolean mSnap;
-
     private int mTouchSlop;
     private float mLastMotionX = -1;
     private int mActivePointerId = INVALID_POINTER;
@@ -72,6 +75,7 @@ public class CirclePageIndicator extends View implements PageIndicator {
         this(context, attrs, R.attr.vpiCirclePageIndicatorStyle);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public CirclePageIndicator(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         if (isInEditMode()) return;
@@ -90,62 +94,65 @@ public class CirclePageIndicator extends View implements PageIndicator {
         //Retrieve styles attributes
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CirclePageIndicator, defStyle, 0);
 
-        mCentered = a.getBoolean(R.styleable.CirclePageIndicator_centered, defaultCentered);
-        mOrientation = a.getInt(R.styleable.CirclePageIndicator_android_orientation, defaultOrientation);
-        mPaintPageFill.setStyle(Style.FILL);
-        mPaintPageFill.setColor(a.getColor(R.styleable.CirclePageIndicator_pageColor, defaultPageColor));
-        mPaintStroke.setStyle(Style.STROKE);
-        mPaintStroke.setColor(a.getColor(R.styleable.CirclePageIndicator_strokeColor, defaultStrokeColor));
-        mPaintStroke.setStrokeWidth(a.getDimension(R.styleable.CirclePageIndicator_strokeWidth, defaultStrokeWidth));
-        mPaintFill.setStyle(Style.FILL);
-        mPaintFill.setColor(a.getColor(R.styleable.CirclePageIndicator_fillColor, defaultFillColor));
-        mRadius = a.getDimension(R.styleable.CirclePageIndicator_radius, defaultRadius);
-        mSnap = a.getBoolean(R.styleable.CirclePageIndicator_snap, defaultSnap);
+        this.mCentered = a.getBoolean(R.styleable.CirclePageIndicator_centered, defaultCentered);
+        this.mOrientation = a.getInt(R.styleable.CirclePageIndicator_android_orientation, defaultOrientation);
+        this.mPaintPageFill.setStyle(Style.FILL);
+        this.mPaintPageFill.setColor(a.getColor(R.styleable.CirclePageIndicator_pageColor, defaultPageColor));
+        this.mPaintStroke.setStyle(Style.STROKE);
+        this.mPaintStroke.setColor(a.getColor(R.styleable.CirclePageIndicator_strokeColor, defaultStrokeColor));
+        this.mPaintStroke.setStrokeWidth(a.getDimension(R.styleable.CirclePageIndicator_strokeWidth, defaultStrokeWidth));
+        this.mPaintFill.setStyle(Style.FILL);
+        this.mPaintFill.setColor(a.getColor(R.styleable.CirclePageIndicator_fillColor, defaultFillColor));
+        this.mRadius = a.getDimension(R.styleable.CirclePageIndicator_radius, defaultRadius);
+        this.mSnap = a.getBoolean(R.styleable.CirclePageIndicator_snap, defaultSnap);
 
         Drawable background = a.getDrawable(R.styleable.CirclePageIndicator_android_background);
         if (background != null) {
-            setBackgroundDrawable(background);
+            setBackground(background);
         }
 
         a.recycle();
 
         final ViewConfiguration configuration = ViewConfiguration.get(context);
-        mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
-    }
-
-
-    public void setCentered(boolean centered) {
-        mCentered = centered;
-        invalidate();
+        this.mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
     }
 
     public boolean isCentered() {
-        return mCentered;
+        return this.mCentered;
     }
 
-    public void setPageColor(int pageColor) {
-        mPaintPageFill.setColor(pageColor);
+    public void setCentered(boolean centered) {
+        this.mCentered = centered;
         invalidate();
     }
 
     public int getPageColor() {
-        return mPaintPageFill.getColor();
+        return this.mPaintPageFill.getColor();
     }
 
-    public void setFillColor(int fillColor) {
-        mPaintFill.setColor(fillColor);
+    public void setPageColor(int pageColor) {
+        this.mPaintPageFill.setColor(pageColor);
         invalidate();
     }
 
     public int getFillColor() {
-        return mPaintFill.getColor();
+        return this.mPaintFill.getColor();
+    }
+
+    public void setFillColor(int fillColor) {
+        this.mPaintFill.setColor(fillColor);
+        invalidate();
+    }
+
+    public int getOrientation() {
+        return this.mOrientation;
     }
 
     public void setOrientation(int orientation) {
         switch (orientation) {
             case HORIZONTAL:
             case VERTICAL:
-                mOrientation = orientation;
+                this.mOrientation = orientation;
                 requestLayout();
                 break;
 
@@ -154,59 +161,55 @@ public class CirclePageIndicator extends View implements PageIndicator {
         }
     }
 
-    public int getOrientation() {
-        return mOrientation;
+    public int getStrokeColor() {
+        return this.mPaintStroke.getColor();
     }
 
     public void setStrokeColor(int strokeColor) {
-        mPaintStroke.setColor(strokeColor);
-        invalidate();
-    }
-
-    public int getStrokeColor() {
-        return mPaintStroke.getColor();
-    }
-
-    public void setStrokeWidth(float strokeWidth) {
-        mPaintStroke.setStrokeWidth(strokeWidth);
+        this.mPaintStroke.setColor(strokeColor);
         invalidate();
     }
 
     public float getStrokeWidth() {
-        return mPaintStroke.getStrokeWidth();
+        return this.mPaintStroke.getStrokeWidth();
     }
 
-    public void setRadius(float radius) {
-        mRadius = radius;
+    public void setStrokeWidth(float strokeWidth) {
+        this.mPaintStroke.setStrokeWidth(strokeWidth);
         invalidate();
     }
 
     public float getRadius() {
-        return mRadius;
+        return this.mRadius;
     }
 
-    public void setSnap(boolean snap) {
-        mSnap = snap;
+    public void setRadius(float radius) {
+        this.mRadius = radius;
         invalidate();
     }
 
     public boolean isSnap() {
-        return mSnap;
+        return this.mSnap;
+    }
+
+    public void setSnap(boolean snap) {
+        this.mSnap = snap;
+        invalidate();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (mViewPager == null) {
+        if (this.mViewPager == null) {
             return;
         }
-        final int count = mViewPager.getAdapter().getCount();
+        final int count = this.mViewPager.getAdapter().getCount();
         if (count == 0) {
             return;
         }
 
-        if (mCurrentPage >= count) {
+        if (this.mCurrentPage >= count) {
             setCurrentItem(count - 1);
             return;
         }
@@ -215,7 +218,7 @@ public class CirclePageIndicator extends View implements PageIndicator {
         int longPaddingBefore;
         int longPaddingAfter;
         int shortPaddingBefore;
-        if (mOrientation == HORIZONTAL) {
+        if (this.mOrientation == HORIZONTAL) {
             longSize = getWidth();
             longPaddingBefore = getPaddingLeft();
             longPaddingAfter = getPaddingRight();
@@ -227,25 +230,25 @@ public class CirclePageIndicator extends View implements PageIndicator {
             shortPaddingBefore = getPaddingLeft();
         }
 
-        final float threeRadius = mRadius * 3;
-        final float shortOffset = shortPaddingBefore + mRadius;
-        float longOffset = longPaddingBefore + mRadius;
-        if (mCentered) {
+        final float threeRadius = this.mRadius * 3;
+        final float shortOffset = shortPaddingBefore + this.mRadius;
+        float longOffset = longPaddingBefore + this.mRadius;
+        if (this.mCentered) {
             longOffset += ((longSize - longPaddingBefore - longPaddingAfter) / 2.0f) - ((count * threeRadius) / 2.0f);
         }
 
         float dX;
         float dY;
 
-        float pageFillRadius = mRadius;
-        if (mPaintStroke.getStrokeWidth() > 0) {
-            pageFillRadius -= mPaintStroke.getStrokeWidth() / 2.0f;
+        float pageFillRadius = this.mRadius;
+        if (this.mPaintStroke.getStrokeWidth() > 0) {
+            pageFillRadius -= this.mPaintStroke.getStrokeWidth() / 2.0f;
         }
 
         //Draw stroked circles
         for (int iLoop = 0; iLoop < count; iLoop++) {
             float drawLong = longOffset + (iLoop * threeRadius);
-            if (mOrientation == HORIZONTAL) {
+            if (this.mOrientation == HORIZONTAL) {
                 dX = drawLong;
                 dY = shortOffset;
             } else {
@@ -253,61 +256,62 @@ public class CirclePageIndicator extends View implements PageIndicator {
                 dY = drawLong;
             }
             // Only paint fill if not completely transparent
-            if (mPaintPageFill.getAlpha() > 0) {
-                canvas.drawCircle(dX, dY, pageFillRadius, mPaintPageFill);
+            if (this.mPaintPageFill.getAlpha() > 0) {
+                canvas.drawCircle(dX, dY, pageFillRadius, this.mPaintPageFill);
             }
 
             // Only paint stroke if a stroke width was non-zero
-            if (pageFillRadius != mRadius) {
-                canvas.drawCircle(dX, dY, mRadius, mPaintStroke);
+            if (pageFillRadius != this.mRadius) {
+                canvas.drawCircle(dX, dY, this.mRadius, this.mPaintStroke);
             }
         }
 
         //Draw the filled circle according to the current scroll
-        float cx = (mSnap ? mSnapPage : mCurrentPage) * threeRadius;
-        if (!mSnap) {
-            cx += mPageOffset * threeRadius;
+        float cx = (this.mSnap ? this.mSnapPage : this.mCurrentPage) * threeRadius;
+        if (!this.mSnap) {
+            cx += this.mPageOffset * threeRadius;
         }
-        if (mOrientation == HORIZONTAL) {
+        if (this.mOrientation == HORIZONTAL) {
             dX = longOffset + cx;
             dY = shortOffset;
         } else {
             dX = shortOffset;
             dY = longOffset + cx;
         }
-        canvas.drawCircle(dX, dY, mRadius, mPaintFill);
+        canvas.drawCircle(dX, dY, this.mRadius, this.mPaintFill);
     }
 
-    public boolean onTouchEvent(android.view.MotionEvent ev) {
-        if (super.onTouchEvent(ev)) {
+    @Override
+    public boolean onTouchEvent(@NotNull android.view.MotionEvent event) {
+        if (super.onTouchEvent(event)) {
             return true;
         }
-        if ((mViewPager == null) || (mViewPager.getAdapter().getCount() == 0)) {
+        if ((this.mViewPager == null) || (this.mViewPager.getAdapter().getCount() == 0)) {
             return false;
         }
 
-        final int action = ev.getAction() & MotionEventCompat.ACTION_MASK;
+        final int action = event.getAction() & MotionEventCompat.ACTION_MASK;
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
-                mLastMotionX = ev.getX();
+                this.mActivePointerId = MotionEventCompat.getPointerId(event, 0);
+                this.mLastMotionX = event.getX();
                 break;
 
             case MotionEvent.ACTION_MOVE: {
-                final int activePointerIndex = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
-                final float x = MotionEventCompat.getX(ev, activePointerIndex);
-                final float deltaX = x - mLastMotionX;
+                final int activePointerIndex = MotionEventCompat.findPointerIndex(event, this.mActivePointerId);
+                final float x = MotionEventCompat.getX(event, activePointerIndex);
+                final float deltaX = x - this.mLastMotionX;
 
-                if (!mIsDragging) {
-                    if (Math.abs(deltaX) > mTouchSlop) {
-                        mIsDragging = true;
+                if (!this.mIsDragging) {
+                    if (Math.abs(deltaX) > this.mTouchSlop) {
+                        this.mIsDragging = true;
                     }
                 }
 
-                if (mIsDragging) {
-                    mLastMotionX = x;
-                    if (mViewPager.isFakeDragging() || mViewPager.beginFakeDrag()) {
-                        mViewPager.fakeDragBy(deltaX);
+                if (this.mIsDragging) {
+                    this.mLastMotionX = x;
+                    if (this.mViewPager.isFakeDragging() || this.mViewPager.beginFakeDrag()) {
+                        this.mViewPager.fakeDragBy(deltaX);
                     }
                 }
 
@@ -316,64 +320,65 @@ public class CirclePageIndicator extends View implements PageIndicator {
 
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                if (!mIsDragging) {
-                    final int count = mViewPager.getAdapter().getCount();
+                if (!this.mIsDragging) {
+                    final int count = this.mViewPager.getAdapter().getCount();
                     final int width = getWidth();
                     final float halfWidth = width / 2f;
                     final float sixthWidth = width / 6f;
 
-                    if ((mCurrentPage > 0) && (ev.getX() < halfWidth - sixthWidth)) {
+                    if ((this.mCurrentPage > 0) && (event.getX() < (halfWidth - sixthWidth))) {
                         if (action != MotionEvent.ACTION_CANCEL) {
-                            mViewPager.setCurrentItem(mCurrentPage - 1);
+                            this.mViewPager.setCurrentItem(this.mCurrentPage - 1);
                         }
                         return true;
-                    } else if ((mCurrentPage < count - 1) && (ev.getX() > halfWidth + sixthWidth)) {
+                    } else if ((this.mCurrentPage < (count - 1)) && (event.getX() > (halfWidth + sixthWidth))) {
                         if (action != MotionEvent.ACTION_CANCEL) {
-                            mViewPager.setCurrentItem(mCurrentPage + 1);
+                            this.mViewPager.setCurrentItem(this.mCurrentPage + 1);
                         }
                         return true;
                     }
                 }
 
-                mIsDragging = false;
-                mActivePointerId = INVALID_POINTER;
-                if (mViewPager.isFakeDragging()) mViewPager.endFakeDrag();
+                this.mIsDragging = false;
+                this.mActivePointerId = INVALID_POINTER;
+                if (this.mViewPager.isFakeDragging()) this.mViewPager.endFakeDrag();
                 break;
 
             case MotionEventCompat.ACTION_POINTER_DOWN: {
-                final int index = MotionEventCompat.getActionIndex(ev);
-                mLastMotionX = MotionEventCompat.getX(ev, index);
-                mActivePointerId = MotionEventCompat.getPointerId(ev, index);
+                final int index = MotionEventCompat.getActionIndex(event);
+                this.mLastMotionX = MotionEventCompat.getX(event, index);
+                this.mActivePointerId = MotionEventCompat.getPointerId(event, index);
                 break;
             }
 
             case MotionEventCompat.ACTION_POINTER_UP:
-                final int pointerIndex = MotionEventCompat.getActionIndex(ev);
-                final int pointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
-                if (pointerId == mActivePointerId) {
-                    final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
-                    mActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex);
+                final int pointerIndex = MotionEventCompat.getActionIndex(event);
+                final int pointerId = MotionEventCompat.getPointerId(event, pointerIndex);
+                if (pointerId == this.mActivePointerId) {
+                    final int newPointerIndex = (pointerIndex == 0) ? 1 : 0;
+                    this.mActivePointerId = MotionEventCompat.getPointerId(event, newPointerIndex);
                 }
-                mLastMotionX = MotionEventCompat.getX(ev, MotionEventCompat.findPointerIndex(ev, mActivePointerId));
+                this.mLastMotionX = MotionEventCompat.getX(event, MotionEventCompat.findPointerIndex(event, this.mActivePointerId));
                 break;
         }
 
         return true;
     }
 
+    @SuppressWarnings("ObjectEquality")
     @Override
     public void setViewPager(ViewPager view) {
-        if (mViewPager == view) {
+        if (this.mViewPager == view) {
             return;
         }
-        if (mViewPager != null) {
-            mViewPager.setOnPageChangeListener(null);
+        if (this.mViewPager != null) {
+            this.mViewPager.setOnPageChangeListener(null);
         }
         if (view.getAdapter() == null) {
             throw new IllegalStateException("ViewPager does not have adapter instance.");
         }
-        mViewPager = view;
-        mViewPager.setOnPageChangeListener(this);
+        this.mViewPager = view;
+        this.mViewPager.setOnPageChangeListener(this);
         invalidate();
     }
 
@@ -385,11 +390,11 @@ public class CirclePageIndicator extends View implements PageIndicator {
 
     @Override
     public void setCurrentItem(int item) {
-        if (mViewPager == null) {
+        if (this.mViewPager == null) {
             throw new IllegalStateException("ViewPager has not been bound.");
         }
-        mViewPager.setCurrentItem(item);
-        mCurrentPage = item;
+        this.mViewPager.setCurrentItem(item);
+        this.mCurrentPage = item;
         invalidate();
     }
 
@@ -400,40 +405,40 @@ public class CirclePageIndicator extends View implements PageIndicator {
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        mScrollState = state;
+        this.mScrollState = state;
 
-        if (mListener != null) {
-            mListener.onPageScrollStateChanged(state);
+        if (this.mListener != null) {
+            this.mListener.onPageScrollStateChanged(state);
         }
     }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        mCurrentPage = position;
-        mPageOffset = positionOffset;
+        this.mCurrentPage = position;
+        this.mPageOffset = positionOffset;
         invalidate();
 
-        if (mListener != null) {
-            mListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+        if (this.mListener != null) {
+            this.mListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
         }
     }
 
     @Override
     public void onPageSelected(int position) {
-        if (mSnap || mScrollState == ViewPager.SCROLL_STATE_IDLE) {
-            mCurrentPage = position;
-            mSnapPage = position;
+        if (this.mSnap || (this.mScrollState == ViewPager.SCROLL_STATE_IDLE)) {
+            this.mCurrentPage = position;
+            this.mSnapPage = position;
             invalidate();
         }
 
-        if (mListener != null) {
-            mListener.onPageSelected(position);
+        if (this.mListener != null) {
+            this.mListener.onPageSelected(position);
         }
     }
 
     @Override
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
-        mListener = listener;
+        this.mListener = listener;
     }
 
     /*
@@ -443,7 +448,7 @@ public class CirclePageIndicator extends View implements PageIndicator {
      */
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if (mOrientation == HORIZONTAL) {
+        if (this.mOrientation == HORIZONTAL) {
             setMeasuredDimension(measureLong(widthMeasureSpec), measureShort(heightMeasureSpec));
         } else {
             setMeasuredDimension(measureShort(widthMeasureSpec), measureLong(heightMeasureSpec));
@@ -461,14 +466,14 @@ public class CirclePageIndicator extends View implements PageIndicator {
         int specMode = MeasureSpec.getMode(measureSpec);
         int specSize = MeasureSpec.getSize(measureSpec);
 
-        if ((specMode == MeasureSpec.EXACTLY) || (mViewPager == null)) {
+        if ((specMode == MeasureSpec.EXACTLY) || (this.mViewPager == null)) {
             //We were told how big to be
             result = specSize;
         } else {
             //Calculate the width according the views count
-            final int count = mViewPager.getAdapter().getCount();
+            final int count = this.mViewPager.getAdapter().getCount();
             result = (int) (getPaddingLeft() + getPaddingRight()
-                    + (count * 2 * mRadius) + (count - 1) * mRadius + 1);
+                    + (count * 2 * this.mRadius) + ((count - 1) * this.mRadius) + 1);
             //Respect AT_MOST value if that was what is called for by measureSpec
             if (specMode == MeasureSpec.AT_MOST) {
                 result = Math.min(result, specSize);
@@ -493,7 +498,7 @@ public class CirclePageIndicator extends View implements PageIndicator {
             result = specSize;
         } else {
             //Measure the height
-            result = (int) (2 * mRadius + getPaddingTop() + getPaddingBottom() + 1);
+            result = (int) ((2 * this.mRadius) + getPaddingTop() + getPaddingBottom() + 1);
             //Respect AT_MOST value if that was what is called for by measureSpec
             if (specMode == MeasureSpec.AT_MOST) {
                 result = Math.min(result, specSize);
@@ -506,8 +511,8 @@ public class CirclePageIndicator extends View implements PageIndicator {
     public void onRestoreInstanceState(Parcelable state) {
         SavedState savedState = (SavedState) state;
         super.onRestoreInstanceState(savedState.getSuperState());
-        mCurrentPage = savedState.currentPage;
-        mSnapPage = savedState.currentPage;
+        this.mCurrentPage = savedState.currentPage;
+        this.mSnapPage = savedState.currentPage;
         requestLayout();
     }
 
@@ -515,11 +520,23 @@ public class CirclePageIndicator extends View implements PageIndicator {
     public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         SavedState savedState = new SavedState(superState);
-        savedState.currentPage = mCurrentPage;
+        savedState.currentPage = this.mCurrentPage;
         return savedState;
     }
 
     static class SavedState extends BaseSavedState {
+        @SuppressWarnings({"UnusedDeclaration", "FieldNameHidesFieldInSuperclass"})
+        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+            @Override
+            public SavedState createFromParcel(Parcel source) {
+                return new SavedState(source);
+            }
+
+            @Override
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
         int currentPage;
 
         public SavedState(Parcelable superState) {
@@ -528,26 +545,13 @@ public class CirclePageIndicator extends View implements PageIndicator {
 
         private SavedState(Parcel in) {
             super(in);
-            currentPage = in.readInt();
+            this.currentPage = in.readInt();
         }
 
         @Override
-        public void writeToParcel(Parcel dest, int flags) {
+        public void writeToParcel(@NotNull Parcel dest, int flags) {
             super.writeToParcel(dest, flags);
-            dest.writeInt(currentPage);
+            dest.writeInt(this.currentPage);
         }
-
-        @SuppressWarnings("UnusedDeclaration")
-        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
-            @Override
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
-            }
-
-            @Override
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        };
     }
 }

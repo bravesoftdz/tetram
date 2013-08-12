@@ -1,11 +1,15 @@
 package com.viewpagerindicator;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.view.View;
 import android.widget.LinearLayout;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A simple extension of a regular linear layout that supports the divider API
@@ -14,8 +18,9 @@ import android.widget.LinearLayout;
  * same orientation as the layout you should wrap the child in a simple
  * {@link android.widget.FrameLayout} so it can receive the margin.
  */
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 class IcsLinearLayout extends LinearLayout {
-    private static final int[] LL = new int[]{
+    private static final int[] LL = {
         /* 0 */ android.R.attr.divider,
         /* 1 */ android.R.attr.showDividers,
         /* 2 */ android.R.attr.dividerPadding,
@@ -23,12 +28,11 @@ class IcsLinearLayout extends LinearLayout {
     private static final int LL_DIVIDER = 0;
     private static final int LL_SHOW_DIVIDER = 1;
     private static final int LL_DIVIDER_PADDING = 2;
-
+    private final int mShowDividers;
+    private final int mDividerPadding;
     private Drawable mDivider;
     private int mDividerWidth;
     private int mDividerHeight;
-    private int mShowDividers;
-    private int mDividerPadding;
 
 
     public IcsLinearLayout(Context context, int themeAttr) {
@@ -36,49 +40,52 @@ class IcsLinearLayout extends LinearLayout {
 
         TypedArray a = context.obtainStyledAttributes(null, LL, themeAttr, 0);
         setDividerDrawable(a.getDrawable(IcsLinearLayout.LL_DIVIDER));
-        mDividerPadding = a.getDimensionPixelSize(LL_DIVIDER_PADDING, 0);
-        mShowDividers = a.getInteger(LL_SHOW_DIVIDER, SHOW_DIVIDER_NONE);
+        this.mDividerPadding = a.getDimensionPixelSize(LL_DIVIDER_PADDING, 0);
+        this.mShowDividers = a.getInteger(LL_SHOW_DIVIDER, SHOW_DIVIDER_NONE);
         a.recycle();
     }
 
+    @SuppressWarnings("ObjectEquality")
+    @Override
     public void setDividerDrawable(Drawable divider) {
-        if (divider == mDivider) {
+        if (divider == this.mDivider) {
             return;
         }
-        mDivider = divider;
+        this.mDivider = divider;
         if (divider != null) {
-            mDividerWidth = divider.getIntrinsicWidth();
-            mDividerHeight = divider.getIntrinsicHeight();
+            this.mDividerWidth = divider.getIntrinsicWidth();
+            this.mDividerHeight = divider.getIntrinsicHeight();
         } else {
-            mDividerWidth = 0;
-            mDividerHeight = 0;
+            this.mDividerWidth = 0;
+            this.mDividerHeight = 0;
         }
         setWillNotDraw(divider == null);
         requestLayout();
     }
 
+    @SuppressWarnings("MethodParameterNamingConvention")
     @Override
-    protected void measureChildWithMargins(View child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+    protected void measureChildWithMargins(@NotNull View child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
         final int index = indexOfChild(child);
         final int orientation = getOrientation();
         final LayoutParams params = (LayoutParams) child.getLayoutParams();
         if (hasDividerBeforeChildAt(index)) {
             if (orientation == VERTICAL) {
                 //Account for the divider by pushing everything up
-                params.topMargin = mDividerHeight;
+                params.topMargin = this.mDividerHeight;
             } else {
                 //Account for the divider by pushing everything left
-                params.leftMargin = mDividerWidth;
+                params.leftMargin = this.mDividerWidth;
             }
         }
 
         final int count = getChildCount();
-        if (index == count - 1) {
+        if (index == (count - 1)) {
             if (hasDividerBeforeChildAt(count)) {
                 if (orientation == VERTICAL) {
-                    params.bottomMargin = mDividerHeight;
+                    params.bottomMargin = this.mDividerHeight;
                 } else {
-                    params.rightMargin = mDividerWidth;
+                    params.rightMargin = this.mDividerWidth;
                 }
             }
         }
@@ -87,7 +94,7 @@ class IcsLinearLayout extends LinearLayout {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (mDivider != null) {
+        if (this.mDivider != null) {
             if (getOrientation() == VERTICAL) {
                 drawDividersVertical(canvas);
             } else {
@@ -102,7 +109,7 @@ class IcsLinearLayout extends LinearLayout {
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
 
-            if (child != null && child.getVisibility() != GONE) {
+            if ((child != null) && (child.getVisibility() != GONE)) {
                 if (hasDividerBeforeChildAt(i)) {
                     final android.widget.LinearLayout.LayoutParams lp = (android.widget.LinearLayout.LayoutParams) child.getLayoutParams();
                     final int top = child.getTop() - lp.topMargin/* - mDividerHeight*/;
@@ -113,9 +120,9 @@ class IcsLinearLayout extends LinearLayout {
 
         if (hasDividerBeforeChildAt(count)) {
             final View child = getChildAt(count - 1);
-            int bottom = 0;
+            int bottom;
             if (child == null) {
-                bottom = getHeight() - getPaddingBottom() - mDividerHeight;
+                bottom = getHeight() - getPaddingBottom() - this.mDividerHeight;
             } else {
                 //final LayoutParams lp = (LayoutParams) child.getLayoutParams();
                 bottom = child.getBottom()/* + lp.bottomMargin*/;
@@ -129,7 +136,7 @@ class IcsLinearLayout extends LinearLayout {
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
 
-            if (child != null && child.getVisibility() != GONE) {
+            if ((child != null) && (child.getVisibility() != GONE)) {
                 if (hasDividerBeforeChildAt(i)) {
                     final android.widget.LinearLayout.LayoutParams lp = (android.widget.LinearLayout.LayoutParams) child.getLayoutParams();
                     final int left = child.getLeft() - lp.leftMargin/* - mDividerWidth*/;
@@ -140,9 +147,9 @@ class IcsLinearLayout extends LinearLayout {
 
         if (hasDividerBeforeChildAt(count)) {
             final View child = getChildAt(count - 1);
-            int right = 0;
+            int right;
             if (child == null) {
-                right = getWidth() - getPaddingRight() - mDividerWidth;
+                right = getWidth() - getPaddingRight() - this.mDividerWidth;
             } else {
                 //final LayoutParams lp = (LayoutParams) child.getLayoutParams();
                 right = child.getRight()/* + lp.rightMargin*/;
@@ -152,22 +159,22 @@ class IcsLinearLayout extends LinearLayout {
     }
 
     private void drawHorizontalDivider(Canvas canvas, int top) {
-        mDivider.setBounds(getPaddingLeft() + mDividerPadding, top,
-                getWidth() - getPaddingRight() - mDividerPadding, top + mDividerHeight);
-        mDivider.draw(canvas);
+        this.mDivider.setBounds(getPaddingLeft() + this.mDividerPadding, top,
+                getWidth() - getPaddingRight() - this.mDividerPadding, top + this.mDividerHeight);
+        this.mDivider.draw(canvas);
     }
 
     private void drawVerticalDivider(Canvas canvas, int left) {
-        mDivider.setBounds(left, getPaddingTop() + mDividerPadding,
-                left + mDividerWidth, getHeight() - getPaddingBottom() - mDividerPadding);
-        mDivider.draw(canvas);
+        this.mDivider.setBounds(left, getPaddingTop() + this.mDividerPadding,
+                left + this.mDividerWidth, getHeight() - getPaddingBottom() - this.mDividerPadding);
+        this.mDivider.draw(canvas);
     }
 
     private boolean hasDividerBeforeChildAt(int childIndex) {
-        if (childIndex == 0 || childIndex == getChildCount()) {
+        if ((childIndex == 0) || (childIndex == getChildCount())) {
             return false;
         }
-        if ((mShowDividers & SHOW_DIVIDER_MIDDLE) != 0) {
+        if ((this.mShowDividers & SHOW_DIVIDER_MIDDLE) != 0) {
             boolean hasVisibleViewBefore = false;
             for (int i = childIndex - 1; i >= 0; i--) {
                 if (getChildAt(i).getVisibility() != GONE) {
