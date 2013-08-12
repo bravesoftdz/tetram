@@ -33,7 +33,7 @@ public class FicheAlbumFragment extends FicheFragment {
     public View buildView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.buildView(inflater, container, savedInstanceState);
 
-        final CommonBean bean = getArguments().getParcelable("bean");
+        final CommonBean bean = getArguments().getParcelable(FicheFragment.BEAN);
         final AlbumBean albumBean = BeanDao.getById(AlbumBean.class, bean.getId());
         final SerieBean serieBean = albumBean.getSerie();
 
@@ -47,7 +47,7 @@ public class FicheAlbumFragment extends FicheFragment {
             public boolean onLongClick(View v) {
                 NotationDialogFragment dialog = new NotationDialogFragment();
                 Bundle args = new Bundle();
-                args.putParcelable("bean", bean);
+                args.putParcelable(FicheFragment.BEAN, bean);
                 dialog.setArguments(args);
                 dialog.show(getFragmentManager(), "NotationDialogFragment");
                 return false;

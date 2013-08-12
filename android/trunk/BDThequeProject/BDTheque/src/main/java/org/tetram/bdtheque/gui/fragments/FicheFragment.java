@@ -18,6 +18,8 @@ import java.util.UUID;
 
 public abstract class FicheFragment extends Fragment {
 
+    public static final String BEAN = "org.tetram.bdtheque.gui.fragments.FicheFragment.BEAN";
+
     @Nullable
     public static FicheFragment newInstance(Class<? extends FicheFragment> classFiche, CommonBean bean) {
         FicheFragment ficheFragment = null;
@@ -36,14 +38,14 @@ public abstract class FicheFragment extends Fragment {
         }
 
         Bundle args = new Bundle();
-        args.putParcelable("bean", bean);
+        args.putParcelable(BEAN, bean);
         ficheFragment.setArguments(args);
 
         return ficheFragment;
     }
 
     public UUID getShownId() {
-        return ((CommonBean) getArguments().getParcelable("bean")).getId();
+        return ((CommonBean) getArguments().getParcelable(BEAN)).getId();
     }
 
     public void showFiche(CommonBean bean) {
@@ -53,7 +55,7 @@ public abstract class FicheFragment extends Fragment {
         } else {
             Intent intent = new Intent();
             intent.setClass(getActivity(), FicheActivity.class);
-            intent.putExtra("bean", bean);
+            intent.putExtra(BEAN, bean);
             startActivity(intent);
         }
     }
@@ -78,7 +80,7 @@ public abstract class FicheFragment extends Fragment {
 
     @Nullable
     public View buildView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // CommonBean bean = getArguments().getParcelable("bean");
+        // CommonBean bean = getArguments().getParcelable(FicheFragment.BEAN);
         // Toast.makeText(this.getActivity(), String.format("%s: %s", bean.getClass().getSimpleName(), bean.getId().toString()), Toast.LENGTH_LONG).show();
 
         return null;

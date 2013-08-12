@@ -32,7 +32,7 @@ public class FicheAlbumDetailsFragment extends FicheFragment {
     public View buildView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.buildView(inflater, container, savedInstanceState);
 
-        AlbumBean album = getArguments().getParcelable("bean");
+        AlbumBean album = getArguments().getParcelable(FicheFragment.BEAN);
         if (album == null) return null;
         final SerieBean serie = album.getSerie();
 

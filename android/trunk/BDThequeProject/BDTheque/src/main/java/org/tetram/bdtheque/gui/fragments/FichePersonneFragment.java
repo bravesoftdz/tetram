@@ -25,7 +25,7 @@ public class FichePersonneFragment extends FicheFragment {
     public View buildView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.buildView(inflater, container, savedInstanceState);
 
-        final CommonBean bean = getArguments().getParcelable("bean");
+        final CommonBean bean = getArguments().getParcelable(FicheFragment.BEAN);
         final PersonneBean personneBean = BeanDao.getById(PersonneBean.class, bean.getId());
 
         View v = inflater.inflate(R.layout.fiche_personne_fragment, container, false);

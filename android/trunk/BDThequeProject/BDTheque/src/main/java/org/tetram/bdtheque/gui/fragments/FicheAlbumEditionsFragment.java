@@ -34,7 +34,7 @@ public class FicheAlbumEditionsFragment extends FicheFragment {
     public View buildView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.buildView(inflater, container, savedInstanceState);
 
-        AlbumBean album = getArguments().getParcelable("bean");
+        AlbumBean album = getArguments().getParcelable(FicheFragment.BEAN);
         if (album == null) return null;
 
         this.view = inflater.inflate(R.layout.fiche_album_editions_fragment, container, false);
@@ -62,16 +62,6 @@ public class FicheAlbumEditionsFragment extends FicheFragment {
     private void loadEdition(EditionBean edition) {
         this.currentEdition = edition;
         setUIElement(this.view, R.id.edition_isbn, StringUtils.formatISBN(this.currentEdition.getIsbn()));
-
-/*
-        View isbn = this.view.findViewById(R.id.edition_isbn);
-        isbn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), String.format("w: %d; sw: %d", getResources().getConfiguration().screenWidthDp, getResources().getConfiguration().smallestScreenWidthDp), Toast.LENGTH_SHORT).show();
-            }
-        });
-*/
 
         final EditeurBean editeur = this.currentEdition.getEditeur();
         setUIElementURL(this.view, R.id.edition_editeur, StringUtils.formatTitreAcceptNull(editeur.getNom()), editeur.getSiteWeb(), 0);
@@ -123,9 +113,5 @@ public class FicheAlbumEditionsFragment extends FicheFragment {
         setUIElement(this.view, R.id.edition_notes, this.currentEdition.getNotes(), R.id.fiche_edition_row_notes);
         setUIElement(this.view, R.id.edition_numero, this.currentEdition.getNumeroPerso(), R.id.fiche_edition_row_numero);
         setUIElement(this.view, R.id.edition_pages, StringUtils.nonZero(this.currentEdition.getPages()), R.id.fiche_edition_row_pages);
-
-/*
-      ShowCouverture(0);
-*/
     }
 }

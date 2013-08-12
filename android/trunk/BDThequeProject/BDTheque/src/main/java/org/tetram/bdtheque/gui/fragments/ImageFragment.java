@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.gui.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -32,17 +33,32 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import uk.co.senab.photoview.PhotoView;
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElement;
 
 public class ImageFragment extends Fragment {
 
+    public static final String IMAGE_FRAGMENT_SAVED_STATE = "org.tetram.bdtheque.gui.fragments.ImageFragment.SAVED_STATE";
+    public static final String IMAGE_FRAGMENT_IMAGES = "org.tetram.bdtheque.gui.fragments.ImageFragment.IMAGES";
+    public static final String IMAGE_FRAGMENT_POSITION = "org.tetram.bdtheque.gui.fragments.ImageFragment.CURRENT_IMAGE";
+    public static final String IMAGE_FRAGMENT_CLICKABLE = "org.tetram.bdtheque.gui.fragments.ImageFragment.CLICKABLE";
+    private static final int UPDATE_POSITION = 0;
+    protected ImageLoader imageLoader = ImageLoader.getInstance();
+    DisplayImageOptions options;
+    ViewPager pager;
     private List<ImageBean> imagesList;
     private boolean clickable;
+    private int currentImage;
+    private OnPageChangeListener pageChangeListener;
 
-    public static ImageFragment getFragment(List<ImageBean> images, boolean clickable) {
+    public static ImageFragment getFragment(List<ImageBean> images, boolean clickable, Bundle savedBundle) {
         Bundle args = new Bundle();
-        args.putBoolean("clickable", clickable);
-        args.putParcelableArrayList("images", (ArrayList<? extends Parcelable>) images);
+        args.putBoolean(IMAGE_FRAGMENT_CLICKABLE, clickable);
+        args.putParcelableArrayList(IMAGE_FRAGMENT_IMAGES, (ArrayList<? extends Parcelable>) images);
+        if (savedBundle != null)
+            args.putBundle(IMAGE_FRAGMENT_SAVED_STATE, savedBundle);
 
         ImageFragment imageFragment = new ImageFragment();
         imageFragment.setArguments(args);
@@ -51,16 +67,12 @@ public class ImageFragment extends Fragment {
     }
 
     public static ImageFragment getFragment(List<ImageBean> images, int currentImage, boolean clickable) {
-        ImageFragment imageFragment = getFragment(images, clickable);
+        ImageFragment imageFragment = getFragment(images, clickable, null);
         Bundle args = imageFragment.getArguments();
-        args.putInt("currentImage", currentImage);
+        args.putInt(IMAGE_FRAGMENT_POSITION, currentImage);
 
         return imageFragment;
     }
-
-    protected ImageLoader imageLoader = ImageLoader.getInstance();
-    DisplayImageOptions options;
-    ViewPager pager;
 
     /*
                 // Special cases
@@ -76,18 +88,20 @@ public class ImageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fiche_image_fragment, container, false);
 
-        int currentImage = 0;
+        this.currentImage = 0;
 
         if (getArguments() != null) {
-            this.imagesList = getArguments().getParcelableArrayList("images");
-            if (getArguments().containsKey("currentImage"))
-                currentImage = getArguments().getInt("currentImage", 0);
-            this.clickable = getArguments().getBoolean("clickable", false);
+            this.imagesList = getArguments().getParcelableArrayList(IMAGE_FRAGMENT_IMAGES);
+            if (getArguments().containsKey(IMAGE_FRAGMENT_SAVED_STATE))
+                this.currentImage = getArguments().getBundle(IMAGE_FRAGMENT_SAVED_STATE).getInt(IMAGE_FRAGMENT_POSITION, 0);
+            else if (getArguments().containsKey(IMAGE_FRAGMENT_POSITION))
+                this.currentImage = getArguments().getInt(IMAGE_FRAGMENT_POSITION, 0);
+            this.clickable = getArguments().getBoolean(IMAGE_FRAGMENT_CLICKABLE, false);
         }
 
         if (savedInstanceState != null) {
-            currentImage = savedInstanceState.getInt("currentImage");
-            getArguments().putInt("currentImage", currentImage);
+            this.currentImage = savedInstanceState.getInt(IMAGE_FRAGMENT_POSITION);
+            getArguments().putInt(IMAGE_FRAGMENT_POSITION, this.currentImage);
         }
 
         this.options = new DisplayImageOptions.Builder()
@@ -102,23 +116,64 @@ public class ImageFragment extends Fragment {
 
         this.pager = (ViewPager) view.findViewById(R.id.pager);
         this.pager.setAdapter(new ImagePagerAdapter());
-        this.pager.setCurrentItem(currentImage);
+        this.pager.setCurrentItem(this.currentImage);
+        this.pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                pageSelected(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         return view;
+    }
+
+    private void pageSelected(int position) {
+        this.currentImage = position;
+        if (this.pageChangeListener != null)
+            this.pageChangeListener.onPageSelected(position);
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("currentImage", this.pager.getCurrentItem());
+        outState.putInt(IMAGE_FRAGMENT_POSITION, this.pager.getCurrentItem());
     }
 
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
-            this.pager.setCurrentItem(savedInstanceState.getInt("currentImage", 0));
+            this.pager.setCurrentItem(savedInstanceState.getInt(IMAGE_FRAGMENT_POSITION, 0));
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == UPDATE_POSITION) {
+            if (resultCode == Activity.RESULT_OK) {
+                this.pager.setCurrentItem(data.getIntExtra(IMAGE_FRAGMENT_POSITION, 0));
+            }
+        } else
+            super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public void setPageChangeListener(OnPageChangeListener pageChangeListener) {
+        this.pageChangeListener = pageChangeListener;
+    }
+
+    public interface OnPageChangeListener {
+        public void onPageSelected(int position);
     }
 
     @SuppressWarnings("NonStaticInnerClassInSecureContext")
@@ -186,20 +241,22 @@ public class ImageFragment extends Fragment {
                     Toast.makeText(ImageFragment.this.getActivity(), message, Toast.LENGTH_SHORT).show();
 
                     spinner.setVisibility(View.GONE);
+                    ((PhotoView) view).setZoomable(false);
                 }
 
                 @Override
                 public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
                     spinner.setVisibility(View.GONE);
                     if (ImageFragment.this.clickable) {
-                        view.setOnClickListener(new View.OnClickListener() {
+                        ((PhotoView) view).setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
+                            @SuppressWarnings("AnonymousClassVariableHidesContainingMethodVariable")
                             @Override
-                            public void onClick(View v) {
+                            public void onPhotoTap(View view, float x, float y) {
                                 Intent intent = new Intent();
                                 intent.setClass(getActivity(), ImageActivity.class);
-                                intent.putParcelableArrayListExtra("images", (ArrayList<? extends Parcelable>) ImageFragment.this.imagesList);
-                                intent.putExtra("currentImage", position);
-                                startActivity(intent);
+                                intent.putParcelableArrayListExtra(IMAGE_FRAGMENT_IMAGES, (ArrayList<? extends Parcelable>) ImageFragment.this.imagesList);
+                                intent.putExtra(IMAGE_FRAGMENT_POSITION, position);
+                                startActivityForResult(intent, UPDATE_POSITION);
                             }
                         });
 

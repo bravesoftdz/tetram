@@ -1,4 +1,5 @@
 include ':libraries:bdtheque-dependencies'
 include ':libraries:android-styled-dialogs'
 include ':libraries:universal-image-loader'
+include ':libraries:photoview'
 include ':BDTheque'

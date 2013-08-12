@@ -73,6 +73,7 @@
     <orderEntry type="module" module-name="bdtheque-dependencies" exported="" />
     <orderEntry type="module" module-name="android-styled-dialogs" exported="" />
     <orderEntry type="module" module-name="universal-image-loader" exported="" />
+    <orderEntry type="module" module-name="photoview" exported="" />
   </component>
 </module>
 

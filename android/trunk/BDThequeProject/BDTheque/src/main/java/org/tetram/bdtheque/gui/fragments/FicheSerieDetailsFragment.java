@@ -27,7 +27,7 @@ public class FicheSerieDetailsFragment extends FicheFragment {
     public View buildView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.buildView(inflater, container, savedInstanceState);
 
-        final SerieBean serie = getArguments().getParcelable("bean");
+        final SerieBean serie = getArguments().getParcelable(FicheFragment.BEAN);
         if (serie == null) return null;
 
         View view = inflater.inflate(R.layout.fiche_serie_details_fragment, container, false);

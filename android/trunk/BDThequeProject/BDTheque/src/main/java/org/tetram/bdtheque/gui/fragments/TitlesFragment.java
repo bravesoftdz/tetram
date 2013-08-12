@@ -99,7 +99,7 @@ public class TitlesFragment extends ExpandableListFragment {
             // the dialog fragments with selected text.
             Intent intent = new Intent();
             intent.setClass(getActivity(), FicheActivity.class);
-            intent.putExtra("bean", bean);
+            intent.putExtra(FicheFragment.BEAN, bean);
             startActivity(intent);
         }
     }

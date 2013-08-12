@@ -30,7 +30,7 @@ public class FicheSerieFragment extends FicheFragment {
     public View buildView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.buildView(inflater, container, savedInstanceState);
 
-        final CommonBean bean = getArguments().getParcelable("bean");
+        final CommonBean bean = getArguments().getParcelable(FicheFragment.BEAN);
         final SerieBean serieBean = BeanDao.getById(SerieBean.class, bean.getId());
 
         View view = inflater.inflate(R.layout.fiche_serie_fragment, container, false);
@@ -43,7 +43,7 @@ public class FicheSerieFragment extends FicheFragment {
             public boolean onLongClick(View v) {
                 NotationDialogFragment dialog = new NotationDialogFragment();
                 Bundle args = new Bundle();
-                args.putParcelable("bean", bean);
+                args.putParcelable(FicheFragment.BEAN, bean);
                 dialog.setArguments(args);
                 dialog.show(getFragmentManager(), "NotationDialogFragment");
                 return false;

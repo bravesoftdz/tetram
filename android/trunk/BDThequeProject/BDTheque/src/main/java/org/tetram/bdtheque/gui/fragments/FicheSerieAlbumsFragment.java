@@ -23,7 +23,7 @@ public class FicheSerieAlbumsFragment extends FicheFragment {
     public View buildView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.buildView(inflater, container, savedInstanceState);
 
-        CommonBean bean = getArguments().getParcelable("bean");
+        CommonBean bean = getArguments().getParcelable(FicheFragment.BEAN);
         SerieBean serie;
         AlbumBean album;
         if (bean instanceof AlbumBean) {

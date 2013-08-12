@@ -12,6 +12,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 
 public abstract class UIUtils {
+
     private UIUtils() {
         super();
     }
