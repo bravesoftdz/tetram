@@ -193,14 +193,13 @@ public class TabPageIndicator extends HorizontalScrollView implements PageIndica
         notifyDataSetChanged();
     }
 
-    @SuppressWarnings("CastToIncompatibleInterface")
     @Override
     public void notifyDataSetChanged() {
         this.mTabLayout.removeAllViews();
         PagerAdapter adapter = this.mViewPager.getAdapter();
         IconPagerAdapter iconAdapter = null;
-        if (IconPagerAdapter.class.isAssignableFrom(adapter.getClass())) {
-            iconAdapter = (IconPagerAdapter) adapter;
+        if (IconPagerAdapter.class.isInstance(adapter)) {
+            iconAdapter = IconPagerAdapter.class.cast(adapter);
         }
         final int count = adapter.getCount();
         for (int i = 0; i < count; i++) {

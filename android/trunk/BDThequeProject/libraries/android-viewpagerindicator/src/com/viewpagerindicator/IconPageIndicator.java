@@ -35,13 +35,27 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
  * This widget implements the dynamic action bar tab behavior that can change
  * across different configurations or circumstances.
  */
+@SuppressWarnings("UnusedDeclaration")
 @TargetApi(Build.VERSION_CODES.CUPCAKE)
 public class IconPageIndicator extends HorizontalScrollView implements PageIndicator {
     private final IcsLinearLayout mIconsLayout;
+    private final OnClickListener mIconClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            IconView imageView = (IconView) v;
+            final int oldSelected = IconPageIndicator.this.mViewPager.getCurrentItem();
+            final int newSelected = imageView.getIndex();
+            IconPageIndicator.this.mViewPager.setCurrentItem(newSelected);
+            if ((oldSelected == newSelected) && (IconPageIndicator.this.iconReselectedListener != null)) {
+                IconPageIndicator.this.iconReselectedListener.onIconReselected(newSelected);
+            }
+        }
+    };
     private ViewPager mViewPager;
     private OnPageChangeListener mListener;
     private Runnable mIconSelector;
     private int mSelectedIndex;
+    private OnIconReselectedListener iconReselectedListener;
 
     public IconPageIndicator(Context context) {
         this(context, null);
@@ -128,15 +142,16 @@ public class IconPageIndicator extends HorizontalScrollView implements PageIndic
         notifyDataSetChanged();
     }
 
-    @SuppressWarnings("CastToIncompatibleInterface")
     @Override
     public void notifyDataSetChanged() {
         this.mIconsLayout.removeAllViews();
-        IconPagerAdapter iconAdapter = (IconPagerAdapter) this.mViewPager.getAdapter();
+        IconPagerAdapter iconAdapter = IconPagerAdapter.class.cast(this.mViewPager.getAdapter());
         int count = iconAdapter.getCount();
         for (int i = 0; i < count; i++) {
-            ImageView view = new ImageView(getContext(), null, R.attr.vpiIconPageIndicatorStyle);
+            IconView view = new IconView(getContext(), null, R.attr.vpiIconPageIndicatorStyle);
+            view.setIndex(i);
             view.setImageResource(iconAdapter.getIconResId(i));
+            view.setOnClickListener(this.mIconClickListener);
             this.mIconsLayout.addView(view);
         }
         if (this.mSelectedIndex > count) {
@@ -174,5 +189,45 @@ public class IconPageIndicator extends HorizontalScrollView implements PageIndic
     @Override
     public void setOnPageChangeListener(OnPageChangeListener listener) {
         this.mListener = listener;
+    }
+
+    public void setIconReselectedListener(OnIconReselectedListener listener) {
+        this.iconReselectedListener = listener;
+    }
+
+    /**
+     * Interface for a callback when the selected tab has been reselected.
+     */
+    public interface OnIconReselectedListener {
+        /**
+         * Callback when the selected tab has been reselected.
+         *
+         * @param position Position of the current center item.
+         */
+        void onIconReselected(int position);
+    }
+
+    private static class IconView extends ImageView {
+        private int index;
+
+        public IconView(Context context) {
+            super(context);
+        }
+
+        public IconView(Context context, AttributeSet attrs) {
+            super(context, attrs);
+        }
+
+        public IconView(Context context, AttributeSet attrs, int defStyle) {
+            super(context, attrs, defStyle);
+        }
+
+        private int getIndex() {
+            return this.index;
+        }
+
+        private void setIndex(int index) {
+            this.index = index;
+        }
     }
 }

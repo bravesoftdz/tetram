@@ -17,24 +17,30 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="sdlDialogStyle">@style/DialogStyleLight.Custom</item>
         <item name="vpiTabPageIndicatorStyle">@style/CustomTabPageIndicator</item>
+        <item name="vpiIconPageIndicatorStyle">@style/Widget.IconPageIndicator</item>
     </style>
 
     <style name="CustomTabPageIndicator" parent="Widget.TabPageIndicator">
-        <item name="android:background">@drawable/custom_tab_indicator</item>
-        <item name="android:textAppearance">@style/CustomTabPageIndicator.Text</item>
         <item name="android:textColor">#FF555555</item>
-        <item name="android:textSize">16sp</item>
-        <item name="android:divider">@drawable/custom_tab_indicator_divider</item>
-        <item name="android:dividerPadding">10dp</item>
-        <item name="android:showDividers">middle</item>
-        <item name="android:paddingLeft">8dp</item>
-        <item name="android:paddingRight">8dp</item>
-        <item name="android:fadingEdge">horizontal</item>
-        <item name="android:fadingEdgeLength">8dp</item>
+        <!--
+                <item name="android:background">@drawable/custom_tab_indicator</item>
+                <item name="android:textAppearance">@style/CustomTabPageIndicator.Text</item>
+                <item name="android:textSize">16sp</item>
+                <item name="android:divider">@drawable/custom_tab_indicator_divider</item>
+                <item name="android:dividerPadding">10dp</item>
+                <item name="android:showDividers">middle</item>
+                <item name="android:paddingLeft">8dp</item>
+                <item name="android:paddingRight">8dp</item>
+                <item name="android:fadingEdge">horizontal</item>
+                <item name="android:fadingEdgeLength">8dp</item>
+        -->
     </style>
 
     <style name="CustomTabPageIndicator.Text" parent="android:TextAppearance.Medium">
-        <item name="android:typeface">monospace</item>
+        <!--
+            <item name="android:typeface">monospace</item>
+        -->
+        <item name="android:textColor">#336699</item>
     </style>
 
     <style name="CustomRatingBar" parent="android:Widget.DeviceDefault.RatingBar.Small">
@@ -48,23 +54,23 @@
         <item name="android:textSize">@dimen/textSizeNormal</item>
     </style>
 
-    <style name="fiche_label">
+    <style name="fiche_label" parent="android:TextAppearance.Medium">
         <item name="android:textColor">#336699</item>
         <item name="android:layout_marginRight">4dp</item>
     </style>
 
     <style name="DialogStyleLight.Custom">
         <!-- anything can be left out: -->
-<!--
-        <item name="titleTextColor">@color/dialog_title_text</item>
-        <item name="titleSeparatorColor">@color/dialog_title_separator</item>
-        <item name="messageTextColor">@color/dialog_message_text</item>
-        <item name="buttonTextColor">@color/dialog_button_text</item>
-        <item name="buttonSeparatorColor">@color/dialog_button_separator</item>
-        <item name="buttonBackgroundColorNormal">@color/dialog_button_normal</item>
-        <item name="buttonBackgroundColorPressed">@color/dialog_button_pressed</item>
-        <item name="buttonBackgroundColorFocused">@color/dialog_button_focused</item>
-        <item name="dialogBackground">@drawable/dialog_background</item>
--->
+        <!--
+                <item name="titleTextColor">@color/dialog_title_text</item>
+                <item name="titleSeparatorColor">@color/dialog_title_separator</item>
+                <item name="messageTextColor">@color/dialog_message_text</item>
+                <item name="buttonTextColor">@color/dialog_button_text</item>
+                <item name="buttonSeparatorColor">@color/dialog_button_separator</item>
+                <item name="buttonBackgroundColorNormal">@color/dialog_button_normal</item>
+                <item name="buttonBackgroundColorPressed">@color/dialog_button_pressed</item>
+                <item name="buttonBackgroundColorFocused">@color/dialog_button_focused</item>
+                <item name="dialogBackground">@drawable/dialog_background</item>
+        -->
     </style>
 </resources>

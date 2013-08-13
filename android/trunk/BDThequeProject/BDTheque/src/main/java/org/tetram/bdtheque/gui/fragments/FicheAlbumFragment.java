@@ -1,12 +1,14 @@
 package org.tetram.bdtheque.gui.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TabHost;
+
+import com.viewpagerindicator.PageIndicator;
+import com.viewpagerindicator.TabPageIndicator;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.BDThequeApplication;
@@ -16,17 +18,17 @@ import org.tetram.bdtheque.data.bean.EditionBean;
 import org.tetram.bdtheque.data.bean.SerieBean;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.orm.BeanDao;
+import org.tetram.bdtheque.gui.adapters.ViewPagerAdapter;
 import org.tetram.bdtheque.utils.StringUtils;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.tetram.bdtheque.gui.adapters.ViewPagerAdapter.TabDescriptor;
 import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElement;
 import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElementURL;
 
 public class FicheAlbumFragment extends FicheFragment {
-
-    private static final String TAB_DETAILS = "details";
-    private static final String TAB_EDITIONS = "editions";
-    private static final String TAB_ALBUMS = "albums";
-    private static final String TAB_IMAGES = "images";
 
     @Nullable
     @Override
@@ -39,6 +41,7 @@ public class FicheAlbumFragment extends FicheFragment {
 
         View view = inflater.inflate(R.layout.fiche_album_fragment, container, false);
 
+        //<editor-fold desc="Header">
         final ImageView imageView = (ImageView) view.findViewById(R.id.album_notation);
         if (albumBean.getNotation() != null)
             imageView.setImageResource(albumBean.getNotation().getResDrawable());
@@ -60,62 +63,65 @@ public class FicheAlbumFragment extends FicheFragment {
             view.findViewById(R.id.fiche_album_row_serie).setVisibility(View.GONE);
         }
         setUIElement(view, R.id.album_titre, StringUtils.formatTitreAcceptNull(albumBean.getTitre()), R.id.fiche_album_row_titre);
+        //</editor-fold>
 
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        ViewPager tabsContent = (ViewPager) view.findViewById(android.R.id.tabcontent);
 
-        final TabHost tabHost = (TabHost) view.findViewById(android.R.id.tabhost);
-        tabHost.setup();
+        List<TabDescriptor> tabList = new ArrayList<TabDescriptor>();
 
-        TabHost.TabSpec spec;
-
-        spec = tabHost.newTabSpec(TAB_DETAILS);
-        spec.setIndicator(getResources().getString(R.string.fiche_album_tab_details));
-        spec.setContent(R.id.tab_album_details);
-        tabHost.addTab(spec);
-        FicheAlbumDetailsFragment detailFragment = (FicheAlbumDetailsFragment) FicheFragment.newInstance(FicheAlbumDetailsFragment.class, albumBean);
-        fragmentTransaction.replace(R.id.tab_album_details, detailFragment);
+        tabList.add(new TabDescriptor(
+                getResources().getString(R.string.fiche_album_tab_details),
+                R.drawable.tab_icon_details,
+                FicheFragment.newInstance(FicheAlbumDetailsFragment.class, albumBean)
+        ));
 
         if (!albumBean.getEditions().isEmpty()) {
-            spec = tabHost.newTabSpec(TAB_EDITIONS);
-            spec.setIndicator(getResources().getQuantityString(R.plurals.fiche_album_tab_editions, albumBean.getEditions().size()));
-            spec.setContent(R.id.tab_album_editions);
-            tabHost.addTab(spec);
-            FicheAlbumEditionsFragment editionsFragment = (FicheAlbumEditionsFragment) FicheFragment.newInstance(FicheAlbumEditionsFragment.class, albumBean);
-            fragmentTransaction.replace(R.id.tab_album_editions, editionsFragment);
+            tabList.add(new TabDescriptor(
+                    getResources().getQuantityString(R.plurals.fiche_album_tab_editions, albumBean.getEditions().size()),
+                    R.drawable.tab_icon_editions,
+                    FicheFragment.newInstance(FicheAlbumEditionsFragment.class, albumBean)
+            ));
 
             int nbImages = 0;
             for (EditionBean edition : albumBean.getEditions())
                 nbImages += edition.getImages().size();
             if (nbImages > 0) {
-                spec = tabHost.newTabSpec(TAB_IMAGES);
-                spec.setIndicator(getResources().getString(R.string.fiche_album_tab_images));
-                spec.setContent(R.id.tab_album_images);
-                tabHost.addTab(spec);
-                FicheAlbumImagesFragment imagesFragment = (FicheAlbumImagesFragment) FicheFragment.newInstance(FicheAlbumImagesFragment.class, albumBean);
-                fragmentTransaction.replace(R.id.tab_album_images, imagesFragment);
+                tabList.add(new TabDescriptor(
+                        getResources().getQuantityString(R.plurals.fiche_album_tab_images, nbImages),
+                        R.drawable.tab_icon_images,
+                        FicheFragment.newInstance(FicheAlbumImagesFragment.class, albumBean)
+                ));
             }
         }
 
         if ((serieBean != null) && (serieBean.getAlbums().size() > 1)) {
-            spec = tabHost.newTabSpec(TAB_ALBUMS);
-            spec.setIndicator(getResources().getString(R.string.fiche_serie_tab_albums));
-            spec.setContent(R.id.tab_album_albums);
-            tabHost.addTab(spec);
-            FicheSerieAlbumsFragment albumsFragment = (FicheSerieAlbumsFragment) FicheFragment.newInstance(FicheSerieAlbumsFragment.class, albumBean);
-            fragmentTransaction.replace(R.id.tab_album_albums, albumsFragment);
+            tabList.add(new TabDescriptor(
+                    getResources().getString(R.string.fiche_serie_tab_albums),
+                    R.drawable.tab_icon_albums,
+                    FicheFragment.newInstance(FicheSerieAlbumsFragment.class, albumBean)
+            ));
         }
 
-        fragmentTransaction.commit();
+        tabsContent.setAdapter(new ViewPagerAdapter(getFragmentManager(), tabList));
 
-        if (tabHost.getTabWidget().getTabCount() <= 1)
-            view.findViewById(android.R.id.tabs).setVisibility(View.GONE);
-
-        if (!"".equals(BDThequeApplication.getFicheAlbumLastShownTab()))
-            tabHost.setCurrentTabByTag(BDThequeApplication.getFicheAlbumLastShownTab());
-        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+        View tabs = view.findViewById(android.R.id.tabs);
+        PageIndicator pageIndicator = (PageIndicator) tabs;
+        if (tabList.size() <= 1) tabs.setVisibility(View.GONE);
+        pageIndicator.setViewPager(tabsContent, BDThequeApplication.getFicheAlbumLastShownTab());
+        pageIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onTabChanged(String tabId) {
-                BDThequeApplication.setFicheAlbumLastShownTab(tabHost.getCurrentTabTag());
+            public void onPageScrolled(int i, float v, int i2) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                BDThequeApplication.setFicheAlbumLastShownTab(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
             }
         });
 

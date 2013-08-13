@@ -31,10 +31,6 @@
     <string name="fiche_album_scenaristes">Scénario :</string>
     <string name="fiche_album_dessinateurs">Dessins :</string>
     <string name="fiche_album_coloristes">Couleurs :</string>
-    <plurals name="fiche_album_tab_editions">
-        <item quantity="one">Edition</item>
-        <item quantity="other">Editions</item>
-    </plurals>
     <string name="fiche_edition_isbn">ISBN :</string>
     <string name="fiche_edition_editeur">Editeur :</string>
     <string name="fiche_edition_collection">Collection :</string>
@@ -61,6 +57,14 @@
     <string name="fiche_edition_senslecture">Sens de lecture :</string>
     <string name="fiche_album_albums">Albums de la série :</string>
     <string name="fiche_album_tab_details">Détails</string>
+    <plurals name="fiche_album_tab_editions">
+        <item quantity="one">Edition</item>
+        <item quantity="other">Editions</item>
+    </plurals>
+    <plurals name="fiche_album_tab_images">
+        <item quantity="one">Image</item>
+        <item quantity="other">Images</item>
+    </plurals>
     <string name="fiche_serie_tab_details">Détails</string>
     <string name="fiche_serie_tab_albums">Albums de la série</string>
     <string name="fiche_serie_titre">Titre :</string>
