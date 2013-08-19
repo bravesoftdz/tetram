@@ -17,7 +17,11 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="sdlDialogStyle">@style/DialogStyleLight.Custom</item>
         <item name="vpiTabPageIndicatorStyle">@style/CustomTabPageIndicator</item>
-        <item name="vpiIconPageIndicatorStyle">@style/Widget.IconPageIndicator</item>
+        <item name="vpiIconPageIndicatorStyle">@style/CustomIconPageIndicator</item>
+    </style>
+
+    <style name="CustomIconPageIndicator" parent="Widget.IconPageIndicator">
+        <item name="android:height">50dp</item>
     </style>
 
     <style name="CustomTabPageIndicator" parent="Widget.TabPageIndicator">
