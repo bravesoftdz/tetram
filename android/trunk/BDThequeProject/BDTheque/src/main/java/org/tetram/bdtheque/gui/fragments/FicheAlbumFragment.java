@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.viewpagerindicator.PageIndicator;
-import com.viewpagerindicator.TabPageIndicator;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.BDThequeApplication;

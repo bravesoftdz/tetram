@@ -18,8 +18,8 @@ public class BDThequeApplication extends Application {
     private static BDThequeApplication ourInstance;
 
     private static int ficheAlbumLastShownTab;
-    private static String ficheSerieLastShownTab;
-    private static String fichePersonneLastShownTab;
+    private static int ficheSerieLastShownTab;
+    private static int fichePersonneLastShownTab;
 
     @Override
     public void onCreate() {
@@ -48,19 +48,19 @@ public class BDThequeApplication extends Application {
         BDThequeApplication.ficheAlbumLastShownTab = tabPosition;
     }
 
-    public static String getFicheSerieLastShownTab() {
+    public static int getFicheSerieLastShownTab() {
         return ficheSerieLastShownTab;
     }
 
-    public static void setFicheSerieLastShownTab(String tabPosition) {
+    public static void setFicheSerieLastShownTab(int tabPosition) {
         BDThequeApplication.ficheSerieLastShownTab = tabPosition;
     }
 
-    public static String getFichePersonneLastShownTab() {
+    public static int getFichePersonneLastShownTab() {
         return fichePersonneLastShownTab;
     }
 
-    public static void setFichePersonneLastShownTab(String tabPosition) {
+    public static void setFichePersonneLastShownTab(int tabPosition) {
         BDThequeApplication.fichePersonneLastShownTab = tabPosition;
     }
 

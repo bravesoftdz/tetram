@@ -2,12 +2,13 @@ package org.tetram.bdtheque.gui.fragments;
 
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TabHost;
+
+import com.viewpagerindicator.PageIndicator;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.BDThequeApplication;
@@ -15,15 +16,16 @@ import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.SerieBean;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.orm.BeanDao;
+import org.tetram.bdtheque.gui.adapters.ViewPagerAdapter;
 import org.tetram.bdtheque.utils.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElementURL;
 
 @SuppressWarnings("UnusedDeclaration")
 public class FicheSerieFragment extends FicheFragment {
-
-    private static final String TAB_DETAILS = "details";
-    private static final String TAB_ALBUMS = "albums";
 
     @Nullable
     @Override
@@ -35,6 +37,7 @@ public class FicheSerieFragment extends FicheFragment {
 
         View view = inflater.inflate(R.layout.fiche_serie_fragment, container, false);
 
+        //<editor-fold desc="Header">
         final ImageView imageView = (ImageView) view.findViewById(R.id.serie_notation);
         if (serieBean.getNotation() != null)
             imageView.setImageResource(serieBean.getNotation().getResDrawable());
@@ -51,41 +54,46 @@ public class FicheSerieFragment extends FicheFragment {
         });
 
         setUIElementURL(view, R.id.serie_titre, StringUtils.formatTitreAcceptNull(serieBean.getTitre()), serieBean.getSiteWeb(), 0);
+        //</editor-fold>
 
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        ViewPager tabsContent = (ViewPager) view.findViewById(android.R.id.tabcontent);
 
-        final TabHost tabHost = (TabHost) view.findViewById(android.R.id.tabhost);
-        tabHost.setup();
+        List<ViewPagerAdapter.TabDescriptor> tabList = new ArrayList<ViewPagerAdapter.TabDescriptor>();
 
-        TabHost.TabSpec spec;
-
-        spec = tabHost.newTabSpec(TAB_DETAILS);
-        spec.setIndicator(getResources().getString(R.string.fiche_serie_tab_details));
-        spec.setContent(R.id.tab_serie_details);
-        tabHost.addTab(spec);
-        FicheSerieDetailsFragment detailFragment = (FicheSerieDetailsFragment) FicheFragment.newInstance(FicheSerieDetailsFragment.class, serieBean);
-        fragmentTransaction.replace(R.id.tab_serie_details, detailFragment);
+        tabList.add(new ViewPagerAdapter.TabDescriptor(
+                getResources().getString(R.string.fiche_serie_tab_details),
+                R.drawable.tab_icon_details,
+                FicheFragment.newInstance(FicheSerieDetailsFragment.class, serieBean)
+        ));
 
         if (!serieBean.getAlbums().isEmpty()) {
-            spec = tabHost.newTabSpec(TAB_ALBUMS);
-            spec.setIndicator(getResources().getString(R.string.fiche_serie_tab_albums));
-            spec.setContent(R.id.tab_serie_albums);
-            tabHost.addTab(spec);
-            FicheSerieAlbumsFragment albumsFragment = (FicheSerieAlbumsFragment) FicheFragment.newInstance(FicheSerieAlbumsFragment.class, serieBean);
-            fragmentTransaction.replace(R.id.tab_serie_albums, albumsFragment);
+            tabList.add(new ViewPagerAdapter.TabDescriptor(
+                    getResources().getString(R.string.fiche_serie_tab_albums),
+                    R.drawable.tab_icon_albums,
+                    FicheFragment.newInstance(FicheAlbumEditionsFragment.class, serieBean)
+            ));
         }
 
-        fragmentTransaction.commit();
+        tabsContent.setAdapter(new ViewPagerAdapter(getFragmentManager(), tabList));
 
-        if (tabHost.getTabWidget().getTabCount() <= 1)
-            view.findViewById(android.R.id.tabs).setVisibility(View.GONE);
-
-        if (!"".equals(BDThequeApplication.getFicheSerieLastShownTab()))
-            tabHost.setCurrentTabByTag(BDThequeApplication.getFicheSerieLastShownTab());
-        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+        View tabs = view.findViewById(android.R.id.tabs);
+        PageIndicator pageIndicator = (PageIndicator) tabs;
+        if (tabList.size() <= 1) tabs.setVisibility(View.GONE);
+        pageIndicator.setViewPager(tabsContent, BDThequeApplication.getFicheSerieLastShownTab());
+        pageIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onTabChanged(String tabId) {
-                BDThequeApplication.setFicheSerieLastShownTab(tabHost.getCurrentTabTag());
+            public void onPageScrolled(int i, float v, int i2) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                BDThequeApplication.setFicheSerieLastShownTab(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
             }
         });
 

@@ -7,5 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Filter {
     String field();
+
     String value();
 }

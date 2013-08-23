@@ -55,7 +55,7 @@ public class FicheAlbumImagesFragment extends FicheFragment {
         loadEdition((EditionBean) listEditions.getAdapter().getItem(this.currentEditionPosition));
 
         if ((savedInstanceState != null) && savedInstanceState.containsKey(IMAGE_FRAGMENT_TAG))
-            this.lastImageFragmentState =  savedInstanceState.getBundle(IMAGE_FRAGMENT_TAG);
+            this.lastImageFragmentState = savedInstanceState.getBundle(IMAGE_FRAGMENT_TAG);
 
         return v;
     }

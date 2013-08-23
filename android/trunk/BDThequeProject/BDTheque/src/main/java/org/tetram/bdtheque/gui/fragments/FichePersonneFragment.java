@@ -1,11 +1,12 @@
 package org.tetram.bdtheque.gui.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TabHost;
+
+import com.viewpagerindicator.PageIndicator;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.BDThequeApplication;
@@ -13,6 +14,13 @@ import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.PersonneBean;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
 import org.tetram.bdtheque.data.orm.BeanDao;
+import org.tetram.bdtheque.gui.adapters.ViewPagerAdapter;
+import org.tetram.bdtheque.utils.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.tetram.bdtheque.gui.utils.UIUtils.setUIElement;
 
 @SuppressWarnings("UnusedDeclaration")
 public class FichePersonneFragment extends FicheFragment {
@@ -28,44 +36,53 @@ public class FichePersonneFragment extends FicheFragment {
         final CommonBean bean = getArguments().getParcelable(FicheFragment.BEAN);
         final PersonneBean personneBean = BeanDao.getById(PersonneBean.class, bean.getId());
 
-        View v = inflater.inflate(R.layout.fiche_personne_fragment, container, false);
+        View view = inflater.inflate(R.layout.fiche_personne_fragment, container, false);
 
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        //<editor-fold desc="Header">
+        setUIElement(view, R.id.personne_nom, StringUtils.formatTitre(personneBean.getNom()));
+        //</editor-fold>
 
-        final TabHost tabHost = (TabHost) v.findViewById(android.R.id.tabhost);
-        tabHost.setup();
+        ViewPager tabsContent = (ViewPager) view.findViewById(android.R.id.tabcontent);
 
-        TabHost.TabSpec spec;
+        List<ViewPagerAdapter.TabDescriptor> tabList = new ArrayList<ViewPagerAdapter.TabDescriptor>();
 
-        spec = tabHost.newTabSpec(TAB_DETAILS);
-        spec.setIndicator(getResources().getString(R.string.fiche_personne_tab_details));
-        spec.setContent(R.id.tab_personne_details);
-        tabHost.addTab(spec);
-        FichePersonneDetailsFragment detailFragment = (FichePersonneDetailsFragment) FicheFragment.newInstance(FichePersonneDetailsFragment.class, personneBean);
-        fragmentTransaction.replace(R.id.tab_personne_details, detailFragment);
+        if (!personneBean.getBiographie().isEmpty())
+            tabList.add(new ViewPagerAdapter.TabDescriptor(
+                    getResources().getString(R.string.fiche_personne_tab_details),
+                    R.drawable.tab_icon_details,
+                    FicheFragment.newInstance(FichePersonneDetailsFragment.class, personneBean)
+            ));
 
-        spec = tabHost.newTabSpec(TAB_BIBLIOGRAPHIE);
-        spec.setIndicator(getResources().getString(R.string.fiche_personne_tab_bibliographie));
-        spec.setContent(R.id.tab_personne_bibliographie);
-        tabHost.addTab(spec);
-        FichePersonneBibliographieFragment bibliographieFragment = (FichePersonneBibliographieFragment) FicheFragment.newInstance(FichePersonneBibliographieFragment.class, personneBean);
-        fragmentTransaction.replace(R.id.tab_personne_bibliographie, bibliographieFragment);
+        tabList.add(new ViewPagerAdapter.TabDescriptor(
+                getResources().getString(R.string.fiche_personne_tab_bibliographie),
+                R.drawable.tab_icon_albums,
+                FicheFragment.newInstance(FichePersonneBibliographieFragment.class, personneBean)
+        ));
 
-        fragmentTransaction.commit();
+        tabsContent.setAdapter(new ViewPagerAdapter(getFragmentManager(), tabList));
 
-        if (tabHost.getTabWidget().getTabCount() <= 1)
-            v.findViewById(android.R.id.tabs).setVisibility(View.GONE);
-
-        if (!"".equals(BDThequeApplication.getFichePersonneLastShownTab()))
-            tabHost.setCurrentTabByTag(BDThequeApplication.getFichePersonneLastShownTab());
-        tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+        View tabs = view.findViewById(android.R.id.tabs);
+        PageIndicator pageIndicator = (PageIndicator) tabs;
+        if (tabList.size() <= 1) tabs.setVisibility(View.GONE);
+        pageIndicator.setViewPager(tabsContent, BDThequeApplication.getFichePersonneLastShownTab());
+        pageIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onTabChanged(String tabId) {
-                BDThequeApplication.setFichePersonneLastShownTab(tabHost.getCurrentTabTag());
+            public void onPageScrolled(int i, float v, int i2) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                BDThequeApplication.setFichePersonneLastShownTab(i);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
             }
         });
 
-        return v;
+        return view;
     }
 
 /*
