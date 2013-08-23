@@ -70,7 +70,7 @@ public class FicheSerieFragment extends FicheFragment {
             tabList.add(new ViewPagerAdapter.TabDescriptor(
                     getResources().getString(R.string.fiche_serie_tab_albums),
                     R.drawable.tab_icon_albums,
-                    FicheFragment.newInstance(FicheAlbumEditionsFragment.class, serieBean)
+                    FicheFragment.newInstance(FicheSerieAlbumsFragment.class, serieBean)
             ));
         }
 

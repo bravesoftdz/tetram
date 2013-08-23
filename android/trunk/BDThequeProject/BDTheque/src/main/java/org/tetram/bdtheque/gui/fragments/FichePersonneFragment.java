@@ -46,7 +46,7 @@ public class FichePersonneFragment extends FicheFragment {
 
         List<ViewPagerAdapter.TabDescriptor> tabList = new ArrayList<ViewPagerAdapter.TabDescriptor>();
 
-        if (!personneBean.getBiographie().isEmpty())
+        if ((personneBean.getBiographie() != null) && !personneBean.getBiographie().isEmpty())
             tabList.add(new ViewPagerAdapter.TabDescriptor(
                     getResources().getString(R.string.fiche_personne_tab_details),
                     R.drawable.tab_icon_details,

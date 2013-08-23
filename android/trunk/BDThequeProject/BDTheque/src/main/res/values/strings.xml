@@ -95,6 +95,7 @@
     <string name="msg_chargement">Chargement</string>
     <string name="msg_loading_demo_data_done">Chargement des données de démo terminé.</string>
     <string name="msg_loading_demo_data">Chargement des données de démo</string>
+    <string name="fiche_personne_bibliographie">Bibliographie :</string>
 
     <string-array name="pref_formatTitreAlbum_entries">
         <item>Album (Série - Tome)</item>
