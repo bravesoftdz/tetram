@@ -16,6 +16,7 @@
 
 package eu.inmite.android.lib.dialogs;
 
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
@@ -69,7 +70,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
 	/**
 	 * Custom dialog builder
 	 */
-	@SuppressWarnings("UnusedDeclaration")
+    @SuppressWarnings("UnusedDeclaration")
     protected static class Builder {
 
 		private final DialogFragment mDialogFragment;
@@ -77,7 +78,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
 		private final ViewGroup mContainer;
 		private final LayoutInflater mInflater;
 
-		private CharSequence mTitle = null;
+		private CharSequence mTitle;
 		private CharSequence mPositiveButtonText;
 		private View.OnClickListener mPositiveButtonListener;
 		private CharSequence mNegativeButtonText;
@@ -260,14 +261,15 @@ public abstract class BaseDialogFragment extends DialogFragment {
 			return v;
 		}
 
-		private View getDialogLayoutAndInitTitle() {
+		@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+        private View getDialogLayoutAndInitTitle() {
 			View v = this.mInflater.inflate(R.layout.dialog_part_title, this.mContainer, false);
 			TextView tvTitle = (TextView) v.findViewById(R.id.sdl__title);
 			View viewTitleDivider = v.findViewById(R.id.sdl__titleDivider);
 			if (this.mTitle != null) {
 				tvTitle.setText(this.mTitle);
 				tvTitle.setTextColor(this.mTitleTextColor);
-				viewTitleDivider.setBackgroundDrawable(new ColorDrawable(this.mTitleSeparatorColor));
+				viewTitleDivider.setBackground(new ColorDrawable(this.mTitleSeparatorColor));
 			} else {
 				tvTitle.setVisibility(View.GONE);
 				viewTitleDivider.setVisibility(View.GONE);
@@ -275,11 +277,12 @@ public abstract class BaseDialogFragment extends DialogFragment {
 			return v;
 		}
 
-		private void addButtons(LinearLayout llListDialog) {
-			if (this.mNegativeButtonText != null || this.mNeutralButtonText != null || this.mPositiveButtonText != null) {
+		@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+        private void addButtons(LinearLayout llListDialog) {
+			if ((this.mNegativeButtonText != null) || (this.mNeutralButtonText != null) || (this.mPositiveButtonText != null)) {
 				View viewButtonPanel = this.mInflater.inflate(R.layout.dialog_part_button_panel, llListDialog, false);
 				LinearLayout llButtonPanel = (LinearLayout) viewButtonPanel.findViewById(R.id.dialog_button_panel);
-				viewButtonPanel.findViewById(R.id.dialog_horizontal_separator).setBackgroundDrawable(new ColorDrawable(this.mButtonSeparatorColor));
+				viewButtonPanel.findViewById(R.id.dialog_horizontal_separator).setBackground(new ColorDrawable(this.mButtonSeparatorColor));
 
 				boolean addDivider = false;
 
@@ -300,7 +303,8 @@ public abstract class BaseDialogFragment extends DialogFragment {
 			}
 		}
 
-		private boolean addNegativeButton(ViewGroup parent, boolean addDivider) {
+		@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+        private boolean addNegativeButton(ViewGroup parent, boolean addDivider) {
 			if (this.mNegativeButtonText != null) {
 				if (addDivider) {
 					addDivider(parent);
@@ -308,7 +312,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
 				Button btn = (Button) this.mInflater.inflate(R.layout.dialog_part_button, parent, false);
 				btn.setText(this.mNegativeButtonText);
 				btn.setTextColor(this.mButtonTextColor);
-				btn.setBackgroundDrawable(getButtonBackground());
+				btn.setBackground(getButtonBackground());
 				btn.setOnClickListener(this.mNegativeButtonListener);
 				parent.addView(btn);
 				return true;
@@ -316,7 +320,8 @@ public abstract class BaseDialogFragment extends DialogFragment {
 			return addDivider;
 		}
 
-		private boolean addPositiveButton(ViewGroup parent, boolean addDivider) {
+		@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+        private boolean addPositiveButton(ViewGroup parent, boolean addDivider) {
 			if (this.mPositiveButtonText != null) {
 				if (addDivider) {
 					addDivider(parent);
@@ -324,7 +329,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
 				Button btn = (Button) this.mInflater.inflate(R.layout.dialog_part_button, parent, false);
 				btn.setText(this.mPositiveButtonText);
 				btn.setTextColor(this.mButtonTextColor);
-				btn.setBackgroundDrawable(getButtonBackground());
+				btn.setBackground(getButtonBackground());
 				btn.setOnClickListener(this.mPositiveButtonListener);
 				parent.addView(btn);
 				return true;
@@ -332,7 +337,8 @@ public abstract class BaseDialogFragment extends DialogFragment {
 			return addDivider;
 		}
 
-		private boolean addNeutralButton(ViewGroup parent, boolean addDivider) {
+		@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+        private boolean addNeutralButton(ViewGroup parent, boolean addDivider) {
 			if (this.mNeutralButtonText != null) {
 				if (addDivider) {
 					addDivider(parent);
@@ -340,7 +346,7 @@ public abstract class BaseDialogFragment extends DialogFragment {
 				Button btn = (Button) this.mInflater.inflate(R.layout.dialog_part_button, parent, false);
 				btn.setText(this.mNeutralButtonText);
 				btn.setTextColor(this.mButtonTextColor);
-				btn.setBackgroundDrawable(getButtonBackground());
+				btn.setBackground(getButtonBackground());
 				btn.setOnClickListener(this.mNeutralButtonListener);
 				parent.addView(btn);
 				return true;
@@ -348,9 +354,10 @@ public abstract class BaseDialogFragment extends DialogFragment {
 			return addDivider;
 		}
 
-		private void addDivider(ViewGroup parent) {
+		@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+        private void addDivider(ViewGroup parent) {
 			View view = this.mInflater.inflate(R.layout.dialog_part_button_separator, parent, false);
-			view.findViewById(R.id.dialog_button_separator).setBackgroundDrawable(new ColorDrawable(this.mButtonSeparatorColor));
+			view.findViewById(R.id.dialog_button_separator).setBackground(new ColorDrawable(this.mButtonSeparatorColor));
 			parent.addView(view);
 		}
 
