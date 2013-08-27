@@ -201,7 +201,7 @@ public class ImageFragment extends Fragment {
         @SuppressWarnings("UnusedAssignment")
         @Override
         public Object instantiateItem(ViewGroup container, final int position) {
-            View imageLayout = this.inflater.inflate(R.layout.fiche_image_fragment_page, container, false);
+            final View imageLayout = this.inflater.inflate(R.layout.fiche_image_fragment_page, container, false);
             ImageView imageView = (ImageView) imageLayout.findViewById(R.id.image);
             final ProgressBar spinner = (ProgressBar) imageLayout.findViewById(R.id.loading);
 
@@ -238,7 +238,8 @@ public class ImageFragment extends Fragment {
                             message = "Unknown error";
                             break;
                     }
-                    Toast.makeText(ImageFragment.this.getActivity(), message, Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(ImageFragment.this.getActivity(), message, Toast.LENGTH_SHORT).show();
+                    setUIElement(imageLayout, R.id.image_type_image, message);
 
                     spinner.setVisibility(View.GONE);
                     ((PhotoView) view).setZoomable(false);

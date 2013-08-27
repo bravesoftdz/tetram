@@ -36,7 +36,8 @@
             android:layout_gravity="center"
             android:adjustViewBounds="true"
             android:contentDescription=""
-            tools:ignore="ContentDescription"/>
+            tools:ignore="ContentDescription"
+            />
 
         <ProgressBar
             android:id="@+id/loading"
