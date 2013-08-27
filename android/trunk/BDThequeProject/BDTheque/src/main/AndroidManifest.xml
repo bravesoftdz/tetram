@@ -12,6 +12,14 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
+    <permission android:name="org.tetram.bdtheque.provider.READ_PROVIDER"/>
+    <permission android:name="org.tetram.bdtheque.provider.READ_PROVIDER_TEMPORARY"/>
+    <permission android:name="org.tetram.bdtheque.provider.WRITE_PROVIDER"/>
+
+    <uses-permission android:name="org.tetram.bdtheque.provider.READ_PROVIDER"/>
+    <uses-permission android:name="org.tetram.bdtheque.provider.READ_PROVIDER_TEMPORARY"/>
+    <uses-permission android:name="org.tetram.bdtheque.provider.WRITE_PROVIDER"/>
+
     <application
         android:name="org.tetram.bdtheque.BDThequeApplication"
         android:allowBackup="true"
@@ -39,7 +47,7 @@
         </activity>
         <activity
             android:name="org.tetram.bdtheque.gui.activities.FicheActivity"
-            android:parentActivityName="org.tetram.bdtheque.gui.activities.RepertoireActivity" />
+            android:parentActivityName="org.tetram.bdtheque.gui.activities.RepertoireActivity"/>
         <activity android:name="org.tetram.bdtheque.gui.activities.GestionActivity"/>
         <activity android:name="org.tetram.bdtheque.gui.activities.SettingsActivity">
             <intent-filter>
@@ -49,6 +57,18 @@
             </intent-filter>
         </activity>
         <activity android:name="org.tetram.bdtheque.gui.activities.ImageActivity"/>
+
+        <provider
+            android:authorities="org.tetram.bdtheque.provider"
+            android:name=".provider.BDContentProvider"
+            android:enabled="true"
+            android:exported="false"
+            android:readPermission="org.tetram.bdtheque.provider.READ_PROVIDER"
+            android:writePermission="org.tetram.bdtheque.provider.WRITE_PROVIDER"
+            android:grantUriPermissions="false">
+            <grant-uri-permission android:pathPrefix="content://org.tetram.bdtheque.provider"/>
+        </provider>
+
     </application>
 
 </manifest>
