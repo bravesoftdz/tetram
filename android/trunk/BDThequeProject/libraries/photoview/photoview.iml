@@ -65,6 +65,8 @@
     <orderEntry type="jdk" jdkName="Android 4.1.2 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="bdtheque-dependencies" exported="" />
+    <orderEntry type="library" exported="" scope="TEST" name="support-v4-18.0.0" level="project" />
+    <orderEntry type="library" exported="" scope="TEST" name="support-v13-18.0.0" level="project" />
   </component>
 </module>
 
