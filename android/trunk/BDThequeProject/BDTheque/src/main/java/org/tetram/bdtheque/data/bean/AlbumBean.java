@@ -9,12 +9,15 @@ import org.tetram.bdtheque.data.orm.annotations.Filter;
 import org.tetram.bdtheque.data.orm.annotations.Filters;
 import org.tetram.bdtheque.data.orm.annotations.OneToMany;
 import org.tetram.bdtheque.database.DDLConstants;
+import org.tetram.bdtheque.provider.BDThequeContracts;
+import org.tetram.bdtheque.provider.ExportProvider;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.ALBUMS_TABLENAME)
+@ExportProvider(uriTableName = BDThequeContracts.TABLE_ALBUM)
 public class AlbumBean extends AlbumBeanAbstract {
 
     @Field(fieldName = DDLConstants.ALBUMS_SUJET)

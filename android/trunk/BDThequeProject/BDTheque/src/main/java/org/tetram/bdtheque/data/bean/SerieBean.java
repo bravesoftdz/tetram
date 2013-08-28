@@ -12,6 +12,8 @@ import org.tetram.bdtheque.data.orm.annotations.OneToMany;
 import org.tetram.bdtheque.data.orm.annotations.Order;
 import org.tetram.bdtheque.data.orm.annotations.OrderBy;
 import org.tetram.bdtheque.database.DDLConstants;
+import org.tetram.bdtheque.provider.BDThequeContracts;
+import org.tetram.bdtheque.provider.ExportProvider;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.net.URL;
@@ -20,6 +22,7 @@ import java.util.List;
 
 @SuppressWarnings("UnusedDeclaration")
 @Entity(tableName = DDLConstants.SERIES_TABLENAME)
+@ExportProvider(uriTableName = BDThequeContracts.TABLE_SERIE)
 public class SerieBean extends SerieBeanAbstract {
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
