@@ -22,8 +22,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import static android.provider.BaseColumns._ID;
 import static org.tetram.bdtheque.provider.BDThequeContracts.AUTORITHY;
 import static org.tetram.bdtheque.provider.BDThequeContracts.SCHEME;
 
@@ -120,14 +120,18 @@ public class BDContentProvider extends ContentProvider {
 
         SQLiteQueryBuilder qry = new SQLiteQueryBuilder();
         qry.setTables(queryInfo.getTables().get(0));
-        projection + new String[]("");
+
+        String[] qryProjections = new String[((projection != null) ? projection.length : 0) + 1];
+        qryProjections[0] = String.format("%s as %s", queryInfo.getColumns().get(descriptor.getPrimaryKey().getField()).getFullFieldName(), _ID);
+        if (projection != null)
+            System.arraycopy(projection, 0, qryProjections, 1, projection.length);
 
         if ((uriCode & ROW_MASK) == ROW_MASK)
             qry.appendWhere(String.format("%s = ?", queryInfo.getColumns().get(descriptor.getPrimaryKey().getField()).getFullFieldName()));
 
         SQLiteDatabase rdb = this.dbHelper.getReadableDatabase();
         Cursor cursor = qry.query(rdb,
-                null,
+                qryProjections,
                 null,
                 null,
                 null,
