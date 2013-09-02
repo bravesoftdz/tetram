@@ -16,12 +16,15 @@ import org.tetram.bdtheque.data.orm.Core;
 import org.tetram.bdtheque.data.orm.QueryInfo;
 import org.tetram.bdtheque.data.orm.SQLDescriptor;
 import org.tetram.bdtheque.database.BDDatabaseHelper;
+import org.tetram.bdtheque.utils.StringUtils;
 
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
+import java.util.UUID;
 
 import static android.provider.BaseColumns._ID;
 import static org.tetram.bdtheque.provider.BDThequeContracts.AUTORITHY;
@@ -34,9 +37,6 @@ public class BDContentProvider extends ContentProvider {
 
     private static final int TABLE_MASK = 0x1 | 0x2;
     private static final int ROW_MASK = 0x4;
-
-    private static final int TABLE_ALBUM_CODE = 0x01;
-    private static final int TABLE_SERIE_CODE = 0x02;
 
     @SuppressWarnings("StringConcatenationMissingWhitespace")
     private static final Uri BASE_URI = Uri.parse(SCHEME + AUTORITHY);
@@ -87,7 +87,7 @@ public class BDContentProvider extends ContentProvider {
                 tablesMap.put(a.uriTableName(), aClass);
 
                 uriMatcher.addURI(AUTORITHY, a.uriTableName(), tablesMap.size());
-                uriMatcher.addURI(AUTORITHY, a.uriTableName() + "/#", tablesMap.size() | ROW_MASK);
+                uriMatcher.addURI(AUTORITHY, a.uriTableName() + "/*", tablesMap.size() | ROW_MASK);
             }
         }
     }
@@ -108,10 +108,6 @@ public class BDContentProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder, CancellationSignal cancellationSignal) {
         int uriCode = uriMatcher.match(uri);
 
-        Integer id;
-        if ((uriCode & ROW_MASK) == ROW_MASK)
-            id = Integer.valueOf(uri.getLastPathSegment());
-
         Class<? extends CommonBean> beanClass = tablesMap.get(uri.getPathSegments().get(0));
         if (beanClass == null) return null;
 
@@ -122,21 +118,29 @@ public class BDContentProvider extends ContentProvider {
         qry.setTables(queryInfo.getTables().get(0));
 
         String[] qryProjections = new String[((projection != null) ? projection.length : 0) + 1];
-        qryProjections[0] = String.format("%s as %s", queryInfo.getColumns().get(descriptor.getPrimaryKey().getField()).getFullFieldName(), _ID);
+        qryProjections[0] = String.format("rowid as %s", _ID);
         if (projection != null)
             System.arraycopy(projection, 0, qryProjections, 1, projection.length);
 
-        if ((uriCode & ROW_MASK) == ROW_MASK)
-            qry.appendWhere(String.format("%s = ?", queryInfo.getColumns().get(descriptor.getPrimaryKey().getField()).getFullFieldName()));
+        String[] qrySelectionArgs;
+        if ((uriCode & ROW_MASK) == ROW_MASK) {
+            qrySelectionArgs = new String[((selectionArgs != null) ? selectionArgs.length : 0) + 1];
+            System.arraycopy(selectionArgs, 0, qrySelectionArgs, 1, selectionArgs.length);
+
+            PrimaryKey primaryKey = new PrimaryKey(uri, queryInfo.getColumns().get(descriptor.getPrimaryKey().getField()).getFullFieldName()).invoke();
+            qrySelectionArgs[0] = primaryKey.getIdValue();
+            qry.appendWhere(String.format("%s = ?", primaryKey.getPrimaryKey()));
+        } else
+            qrySelectionArgs = selectionArgs;
 
         SQLiteDatabase rdb = this.dbHelper.getReadableDatabase();
         Cursor cursor = qry.query(rdb,
                 qryProjections,
+                selection,
+                qrySelectionArgs,
                 null,
                 null,
-                null,
-                null,
-                null,
+                sortOrder,
                 null,
                 cancellationSignal);
 
@@ -176,5 +180,38 @@ public class BDContentProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         return 0;
+    }
+
+    private static class PrimaryKey {
+        private final Uri uri;
+        private String idValue;
+        private String primaryKey;
+
+        public PrimaryKey(Uri uri, String primaryKey) {
+            this.uri = uri;
+            this.primaryKey = primaryKey;
+        }
+
+        public String getIdValue() {
+            return this.idValue;
+        }
+
+        public String getPrimaryKey() {
+            return this.primaryKey;
+        }
+
+        public PrimaryKey invoke() {
+            this.idValue = this.uri.getLastPathSegment();
+            Scanner sc = new Scanner(this.idValue);
+            if (sc.hasNextInt())
+                this.primaryKey = "ROWID";
+            else {
+                try {
+                    this.idValue = StringUtils.UUIDToGUIDString(UUID.fromString(this.idValue));
+                } catch (Exception ignored) {
+                }
+            }
+            return this;
+        }
     }
 }
