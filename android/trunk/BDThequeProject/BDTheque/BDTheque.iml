@@ -71,6 +71,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="support-v4-18.0.0" level="project" />
     <orderEntry type="module" module-name="universal-image-loader" exported="" />
+    <orderEntry type="library" exported="" name="annotations" level="project" />
     <orderEntry type="module" module-name="android-styled-dialogs" exported="" />
     <orderEntry type="library" exported="" name="support-v13-18.0.0" level="project" />
     <orderEntry type="module" module-name="android-viewpagerindicator" exported="" />
