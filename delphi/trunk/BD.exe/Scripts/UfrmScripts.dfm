@@ -398,7 +398,6 @@ object frmScripts: TfrmScripts
               BevelKind = bkTile
               BorderStyle = bsNone
               Header.AutoSizeIndex = 3
-              Header.DefaultHeight = 17
               Header.Font.Charset = DEFAULT_CHARSET
               Header.Font.Color = clWindowText
               Header.Font.Height = -11
@@ -450,7 +449,6 @@ object frmScripts: TfrmScripts
               BevelKind = bkTile
               BorderStyle = bsNone
               Header.AutoSizeIndex = 1
-              Header.DefaultHeight = 17
               Header.Font.Charset = DEFAULT_CHARSET
               Header.Font.Color = clWindowText
               Header.Font.Height = -11
@@ -497,7 +495,6 @@ object frmScripts: TfrmScripts
               BevelKind = bkTile
               BorderStyle = bsNone
               Header.AutoSizeIndex = 1
-              Header.DefaultHeight = 17
               Header.Font.Charset = DEFAULT_CHARSET
               Header.Font.Color = clWindowText
               Header.Font.Height = -11
@@ -738,10 +735,6 @@ object frmScripts: TfrmScripts
       OnClick = framBoutons1btnAnnulerClick
       ExplicitLeft = 799
     end
-  end
-  object SynPasSyn1: TSynPasSyn
-    PackageSource = False
-    Left = 328
   end
   object SynEditSearch1: TSynEditSearch
     Left = 296
@@ -1017,48 +1010,6 @@ object frmScripts: TfrmScripts
     object Enregistrer1: TMenuItem
       Action = actEnregistrer
     end
-  end
-  object SynEditParamShow: TSynCompletionProposal
-    DefaultType = ctParams
-    Options = [scoLimitToMatchedText, scoUseInsertList, scoUsePrettyText, scoEndCharCompletion, scoCompleteWithTab, scoCompleteWithEnter]
-    EndOfTokenChr = '()[]. '
-    TriggerChars = '.'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    TitleFont.Charset = DEFAULT_CHARSET
-    TitleFont.Color = clBtnText
-    TitleFont.Height = -11
-    TitleFont.Name = 'MS Sans Serif'
-    TitleFont.Style = [fsBold]
-    Columns = <>
-    OnExecute = SynEditParamShowExecute
-    ShortCut = 8224
-    Left = 224
-  end
-  object SynEditAutoComplete: TSynCompletionProposal
-    Options = [scoLimitToMatchedText, scoUseInsertList, scoUsePrettyText, scoEndCharCompletion, scoCompleteWithTab, scoCompleteWithEnter]
-    EndOfTokenChr = '()[]. '
-    TriggerChars = '.'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -11
-    Font.Name = 'Tahoma'
-    Font.Style = []
-    TitleFont.Charset = DEFAULT_CHARSET
-    TitleFont.Color = clBtnText
-    TitleFont.Height = -11
-    TitleFont.Name = 'MS Sans Serif'
-    TitleFont.Style = [fsBold]
-    Columns = <
-      item
-        BiggestWord = 'constructor'
-      end>
-    OnExecute = SynEditAutoCompleteExecute
-    ShortCut = 16416
-    Left = 260
   end
   object PopupMenu2: TPopupMenu
     Left = 520

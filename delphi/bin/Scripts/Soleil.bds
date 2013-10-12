@@ -5,7 +5,8 @@
     <Description/>
     <ScriptVersion>2</ScriptVersion>
     <BDVersion>2.2.1.185</BDVersion>
-    <LastUpdate>Sun, 12 Jun 2011 15:01:35 +0200</LastUpdate>
+    <LastUpdate>Thu, 30 Aug 2012 12:43:25 +0200</LastUpdate>
+    <Engine>PascalScript</Engine>
     <Alias aka="Soleil Productions"/>
   </Infos>
   <Options>

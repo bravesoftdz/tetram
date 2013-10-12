@@ -67,6 +67,7 @@ object frmEntretien: TfrmEntretien
     Header.Font.Height = -11
     Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
+    Header.Height = 17
     Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
     HintMode = hmTooltip
     ParentShowHint = False

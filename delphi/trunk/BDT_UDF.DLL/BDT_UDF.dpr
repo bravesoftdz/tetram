@@ -20,7 +20,7 @@ var
 begin
   s := Chaine + #0;
   Result := ib_util_malloc(Length(s));
-  StrCopy(Result, PAnsiChar(s));
+  AnsiStrings.StrCopy(Result, PAnsiChar(s));
 end;
 
 function Trim(Chaine: PAnsiChar): PAnsiChar; cdecl; export;
@@ -477,7 +477,7 @@ end;
 
 function UDFLength(Chaine: PAnsiChar): Integer; cdecl; export;
 begin
-  Result := StrLen(Chaine);
+  Result := AnsiStrings.StrLen(Chaine);
 end;
 
 exports

@@ -1,0 +1,60 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{34D6FF5D-C4A3-41B4-A9F2-A7188CB01A71}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="BDT_UDF.DLL\BDT_UDF.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="BDPic.DLL\BDPic.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="BD.exe\BD.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="BDT_UDF">
+        <MSBuild Projects="BDT_UDF.DLL\BDT_UDF.dproj"/>
+    </Target>
+    <Target Name="BDT_UDF:Clean">
+        <MSBuild Projects="BDT_UDF.DLL\BDT_UDF.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="BDT_UDF:Make">
+        <MSBuild Projects="BDT_UDF.DLL\BDT_UDF.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="BDPic">
+        <MSBuild Projects="BDPic.DLL\BDPic.dproj"/>
+    </Target>
+    <Target Name="BDPic:Clean">
+        <MSBuild Projects="BDPic.DLL\BDPic.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="BDPic:Make">
+        <MSBuild Projects="BDPic.DLL\BDPic.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="BD">
+        <MSBuild Projects="BD.exe\BD.dproj"/>
+    </Target>
+    <Target Name="BD:Clean">
+        <MSBuild Projects="BD.exe\BD.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="BD:Make">
+        <MSBuild Projects="BD.exe\BD.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="BDT_UDF;BDPic;BD"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="BDT_UDF:Clean;BDPic:Clean;BD:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="BDT_UDF:Make;BDPic:Make;BD:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

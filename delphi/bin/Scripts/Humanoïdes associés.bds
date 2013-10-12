@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Script>
   <Infos>
     <Auteur>Tetram Corp</Auteur>
@@ -6,6 +6,7 @@
     <ScriptVersion>2</ScriptVersion>
     <BDVersion>2.2.0.0</BDVersion>
     <LastUpdate>Sun, 27 Sep 2009 20:19:40 +0200</LastUpdate>
+    <Engine>PascalScript</Engine>
   </Infos>
   <Options>
     <Option Label="Miniatures dans les recherches" Values="Oui|Non" Default="Oui"/>

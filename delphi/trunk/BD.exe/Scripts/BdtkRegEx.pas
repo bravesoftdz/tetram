@@ -8,7 +8,7 @@ uses
 type
   TBdtkRegEx = class
   private
-    FRegEx: TJclRegEx;
+    FRegEx: TJclAnsiRegEx;
   strict private
     FLastFoundPos: Integer;
     FSearchString: string;
@@ -85,7 +85,7 @@ end;
 constructor TBdtkRegEx.Create;
 begin
   inherited;
-  FRegEx := TJclRegEx.Create;
+  FRegEx := TJclAnsiRegEx.Create;
   FRegEx.Options := [roMultiLine, roIgnoreCase, roUTF8, roNewLineAny];
 end;
 

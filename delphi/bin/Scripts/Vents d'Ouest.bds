@@ -1,16 +1,13 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Script>
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>1</ScriptVersion>
+    <ScriptVersion>2</ScriptVersion>
     <BDVersion>2.1.0.17</BDVersion>
-    <LastUpdate>Fri, 8 May 2009 11:26:16 +0200</LastUpdate>
+    <LastUpdate>Sat, 1 Sep 2012 17:50:12 +0200</LastUpdate>
+    <Engine>DWScript</Engine>
   </Infos>
   <Options/>
-  <Code>program VentsdOuest;
-
-begin
-  ShowMessage(&apos;Utiliser le script Glenat.&apos;);
-end.</Code>
+  <Code>ShowMessage(&apos;Utiliser le script Glenat.&apos;);</Code>
 </Script>

@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Buttons,
-  VirtualTrees, VDTButton, ExtCtrls, ActnList, Browss, StdActns, ProceduresBDtk, UBdtForms,
-  PngSpeedButton;
+  VirtualTrees, VDTButton, ExtCtrls, VCL.ActnList, Browss, StdActns, ProceduresBDtk, UBdtForms,
+  PngSpeedButton, System.Actions;
 
 type
   TfrmEntretien = class(TbdtForm)

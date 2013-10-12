@@ -6,6 +6,7 @@
     <ScriptVersion>1.1</ScriptVersion>
     <BDVersion>2.2.0.0</BDVersion>
     <LastUpdate>Sun, 3 Jul 2011 19:37:46 +0200</LastUpdate>
+    <Engine>PascalScript</Engine>
   </Infos>
   <Options>
     <Option Label="Type de recherche" Values="Uniquement BD|Uniquement Jeunesse|Les deux" Default="Les deux"/>

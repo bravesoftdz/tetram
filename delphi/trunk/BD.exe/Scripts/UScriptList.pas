@@ -2,7 +2,7 @@ unit UScriptList;
 
 interface
 
-uses Windows, AnsiStrings, SysUtils, Classes, Generics.Collections, JclSimpleXML, Divers, Dialogs;
+uses Windows, AnsiStrings, SysUtils, Classes, Generics.Collections, JclSimpleXML, Divers, Dialogs, UScriptEditor, ComCtrls;
 
 const
   ExtMainScript = '.bds';
@@ -11,11 +11,13 @@ const
 type
   TScriptKind = (skMain, skUnit);
   TScriptKinds = set of TScriptKind;
+  TScriptEngine = (seNone, sePascalScript, seDWScript);
 
   TScriptInfos = class
     Auteur, Description: string;
     ScriptVersion, BDVersion: TVersionNumber;
     LastUpdate: TDateTime;
+    Engine: TScriptEngine;
   end;
 
   TOption = class
@@ -37,9 +39,14 @@ type
     FCode: TStringList;
     FOptions: TObjectList<TOption>;
     FFileName: string;
-    FScriptName: AnsiString;
+    FScriptName: string;
     FScriptKind: TScriptKind;
     FLoaded: Boolean;
+    FTabSheet: TTabSheet;
+    FEditor: TScriptEditor;
+    FSB: TStatusBar;
+    FModifie: Boolean;
+    procedure SetModifie(const Value: Boolean);
   private
     FAlias: TStringList;
     FScriptInfos: TScriptInfos;
@@ -62,28 +69,46 @@ type
 
     property ScriptInfos: TScriptInfos read GetScriptInfos write FScriptInfos;
     property FileName: string read FFileName write SetFileName;
-    property ScriptName: AnsiString read FScriptName;
+    property ScriptName: string read FScriptName;
     property ScriptKind: TScriptKind read FScriptKind;
     property Code: TStringList read FCode;
-    property Options: TObjectList<TOption>read FOptions;
+    property Options: TObjectList<TOption> read FOptions;
     property Loaded: Boolean read FLoaded write FLoaded;
     property Alias: TStringList read FAlias write SetAlias;
+    property TabSheet: TTabSheet read FTabSheet write FTabSheet;
+    property Editor: TScriptEditor read FEditor write FEditor;
+    property SB: TStatusBar read FSB write FSB;
+    property Modifie: Boolean read FModifie write SetModifie;
   end;
 
   TScriptList = class(TObjectList<TScript>)
-  private
-    FScriptClass: TScriptClass;
   public
-    constructor Create(ScriptClass: TScriptClass); reintroduce;
+    constructor Create; reintroduce;
     procedure LoadDir(const Dir: string);
-    function FindScript(const ScriptName: AnsiString; ScriptKinds: TScriptKinds = [skUnit]): TScript;
-    function FindScriptAlias(const AliasName: AnsiString; ScriptKinds: TScriptKinds = [skUnit]): TScript;
-    function GetScriptLines(const ScriptName: AnsiString; Output: TStrings; ScriptKinds: TScriptKinds = [skUnit]): Boolean; virtual;
+    function FindScript(const ScriptName: string; ScriptKinds: TScriptKinds = [skUnit]): TScript;
+    function FindScriptAlias(const AliasName: string; ScriptKinds: TScriptKinds = [skUnit]): TScript;
+    function GetScriptLines(const ScriptName: string; Output: TStrings; ScriptKinds: TScriptKinds = [skUnit]): Boolean; virtual;
+
+    function InfoScript(index: Integer): TScript; overload;
+    function InfoScript(TabSheet: TTabSheet): TScript; overload;
+    function InfoScript(Editor: TScriptEditor): TScript; overload;
+    function InfoScriptByScriptName(const Script: string): TScript;
+
+    function ScriptName(index: Integer): string; overload;
+    function ScriptName(TabSheet: TTabSheet): string; overload;
+    function ScriptName(Editor: TScriptEditor): string; overload;
+
+    function ScriptFileName(index: Integer): string; overload;
+    function ScriptFileName(TabSheet: TTabSheet): string; overload;
+    function ScriptFileName(Editor: TScriptEditor): string; overload;
+
+    function EditorByIndex(index: Integer): TScriptEditor;
+    function EditorByScriptName(const Script: string): TScriptEditor;
   end;
 
 implementation
 
-uses StrUtils, CommonConst, UScriptsFonctions, JclStreams;
+uses System.StrUtils, CommonConst, UScriptsFonctions, JclStreams, System.TypInfo;
 
 function TScript.CheckOptionValue(const OptionName, Value: string): Boolean;
 begin
@@ -102,6 +127,7 @@ begin
   FAlias.Duplicates := dupIgnore;
   FAlias.CaseSensitive := False;
   FLoaded := False;
+  FModifie := False;
 end;
 
 destructor TScript.Destroy;
@@ -122,9 +148,21 @@ end;
 
 procedure TScript.GetScriptLines(Lines: TStrings);
 begin
-  if not FLoaded then
-    Load;
-  Lines.Assign(FCode);
+  Lines.Clear;
+  if Assigned(Editor) then
+  begin
+    with ScriptInfos do
+      if ((BDVersion = '') or (BDVersion <= TGlobalVar.Utilisateur.ExeVersion)) then
+        Lines.Assign(Editor.Lines)
+      else
+        ShowMessage('Le script "' + string(ScriptName) + '" n''est pas compatible avec cette version de BDthèque.')
+  end
+  else
+  begin
+    if not FLoaded then
+      Load;
+    Lines.Assign(FCode);
+  end;
 end;
 
 procedure TScript.Load;
@@ -145,6 +183,9 @@ begin
         FScriptInfos.ScriptVersion := Items.ItemNamed['ScriptVersion'].Value;
         FScriptInfos.BDVersion := Items.ItemNamed['BDVersion'].Value;
         FScriptInfos.LastUpdate := RFC822ToDateTimeDef(Items.ItemNamed['LastUpdate'].Value, 0);
+        FScriptInfos.Engine := TScriptEngine(GetEnumValue(TypeInfo(TScriptEngine), 'se' + Items.ItemNamed['Engine'].Value));
+        if Ord(FScriptInfos.Engine) <= Ord(seNone) then
+          FScriptInfos.Engine := sePascalScript;
 
         FAlias.Clear;
         for i := 0 to Pred(Items.Count) do
@@ -209,8 +250,8 @@ begin
       finally
         Free;
       end
-    else
-      Result := default;
+  else
+    Result := default;
 end;
 
 procedure TScript.Save;
@@ -238,6 +279,7 @@ begin
         Items.Add('BDVersion').Value := ScriptInfos.BDVersion;
         if ScriptInfos.LastUpdate > 0 then
           Items.Add('LastUpdate').Value := DateTimeToRFC822(ScriptInfos.LastUpdate);
+        Items.Add('Engine').Value := Copy(GetEnumName(TypeInfo(TScriptEngine), Ord(ScriptInfos.Engine)), 3, MaxInt);
 
         for i := 0 to Pred(FAlias.Count) do
           Items.Add('Alias').Properties.Add('aka', FAlias[i]);
@@ -261,6 +303,7 @@ begin
       Root.Items.ItemNamed['Code'].Value := s;
 
       SaveToFile(aFileName, seUTF8);
+      Modifie := False;
     finally
       Free;
     end;
@@ -274,28 +317,64 @@ end;
 procedure TScript.SetFileName(const Value: string);
 begin
   FFileName := Value;
-  FScriptName := AnsiString(ChangeFileExt(ExtractFileName(FFileName), ''));
+  FScriptName := ChangeFileExt(ExtractFileName(FFileName), '');
   if SameText(ExtractFileExt(FFileName), ExtMainScript) then
     FScriptKind := skMain
   else
     FScriptKind := skUnit;
+  if Assigned(FTabSheet) then
+    FTabSheet.Caption := ScriptName;
 end;
 
-constructor TScriptList.Create(ScriptClass: TScriptClass);
+procedure TScript.SetModifie(const Value: Boolean);
+begin
+  FModifie := Value;
+  if Assigned(SB) and (SB.Panels.Count >= 2) then
+    if FModifie then
+    begin
+      SB.Panels[1].Text := 'Modifié';
+      ScriptInfos.LastUpdate := Now;
+    end
+    else
+      SB.Panels[1].Text := '';
+end;
+
+constructor TScriptList.Create;
 begin
   inherited Create(True);
-  FScriptClass := ScriptClass;
 end;
 
-function TScriptList.FindScript(const ScriptName: AnsiString; ScriptKinds: TScriptKinds = [skUnit]): TScript;
+function TScriptList.EditorByIndex(index: Integer): TScriptEditor;
+var
+  info: TScript;
+begin
+  info := InfoScript(index);
+  if Assigned(info) then
+    Result := info.Editor
+  else
+    Result := nil;
+end;
+
+function TScriptList.EditorByScriptName(const Script: string): TScriptEditor;
+var
+  info: TScript;
+begin
+  info := InfoScriptByScriptName(Script);
+  if Assigned(info) then
+    Result := info.Editor
+  else
+    Result := nil;
+end;
+
+function TScriptList.FindScript(const ScriptName: string; ScriptKinds: TScriptKinds = [skUnit]): TScript;
 begin
   for Result in Self do
-    if (Result.ScriptKind in ScriptKinds) and AnsiStrings.SameText(Result.ScriptName, ScriptName) then
+    if (Result.ScriptKind in ScriptKinds) and SameText(Result.ScriptName, ScriptName) then
       Exit;
   Result := nil;
 end;
 
-function TScriptList.FindScriptAlias(const AliasName: AnsiString; ScriptKinds: TScriptKinds): TScript;
+function TScriptList.FindScriptAlias(const AliasName: string; ScriptKinds: TScriptKinds): TScript;
 begin
   for Result in Self do
     if (Result.ScriptKind in ScriptKinds) and (Result.Alias.IndexOf(string(AliasName)) <> -1) then
@@ -304,7 +383,7 @@ begin
 
 end;
 
-function TScriptList.GetScriptLines(const ScriptName: AnsiString; Output: TStrings; ScriptKinds: TScriptKinds = [skUnit]): Boolean;
+function TScriptList.GetScriptLines(const ScriptName: string; Output: TStrings; ScriptKinds: TScriptKinds = [skUnit]): Boolean;
 var
   Script: TScript;
 begin
@@ -324,6 +403,45 @@ begin
   end;
 end;
 
+function TScriptList.InfoScript(index: Integer): TScript;
+begin
+  if (index >= 0) and (index <= Count - 1) then
+    Result := Items[index]
+  else
+    Result := nil;
+end;
+
+function TScriptList.InfoScript(Editor: TScriptEditor): TScript;
+var
+  i: Integer;
+begin
+  Result := nil;
+  for i := 0 to Pred(Count) do
+    if Items[i].Editor = Editor then
+    begin
+      Result := Items[i];
+      Exit;
+    end;
+end;
+
+function TScriptList.InfoScript(TabSheet: TTabSheet): TScript;
+var
+  i: Integer;
+begin
+  Result := nil;
+  for i := 0 to Pred(Count) do
+    if Items[i].TabSheet = TabSheet then
+    begin
+      Result := Items[i];
+      Exit;
+    end;
+end;
+
+function TScriptList.InfoScriptByScriptName(const Script: string): TScript;
+begin
+  Result := FindScript(Script, [skMain, skUnit]);
+end;
+
 procedure TScriptList.LoadDir(const Dir: string);
 
   procedure GetFiles(const Path, Ext: string);
@@ -339,7 +457,7 @@ procedure TScriptList.LoadDir(const Dir: string);
         begin
           if (sr.Attr and faDirectory) = 0 then
           begin
-            Script := FScriptClass.Create;
+            Script := TScript.Create;
             Script.FileName := Path + sr.name;
             Add(Script);
           end;
@@ -357,6 +475,72 @@ begin
   Clear;
   GetFiles(Path, ExtMainScript);
   GetFiles(Path, ExtUnit);
+end;
+
+function TScriptList.ScriptFileName(index: Integer): string;
+var
+  info: TScript;
+begin
+  info := InfoScript(index);
+  if Assigned(info) then
+    Result := info.FileName
+  else
+    Result := '';
+end;
+
+function TScriptList.ScriptFileName(TabSheet: TTabSheet): string;
+var
+  info: TScript;
+begin
+  info := InfoScript(TabSheet);
+  if Assigned(info) then
+    Result := info.FileName
+  else
+    Result := '';
+end;
+
+function TScriptList.ScriptFileName(Editor: TScriptEditor): string;
+var
+  info: TScript;
+begin
+  info := InfoScript(Editor);
+  if Assigned(info) then
+    Result := info.FileName
+  else
+    Result := '';
+end;
+
+function TScriptList.ScriptName(index: Integer): string;
+var
+  info: TScript;
+begin
+  info := InfoScript(index);
+  if Assigned(info) then
+    Result := info.ScriptName
+  else
+    Result := '';
+end;
+
+function TScriptList.ScriptName(Editor: TScriptEditor): string;
+var
+  info: TScript;
+begin
+  info := InfoScript(Editor);
+  if Assigned(info) then
+    Result := info.ScriptName
+  else
+    Result := '';
+end;
+
+function TScriptList.ScriptName(TabSheet: TTabSheet): string;
+var
+  info: TScript;
+begin
+  info := InfoScript(TabSheet);
+  if Assigned(info) then
+    Result := info.ScriptName
+  else
+    Result := '';
 end;
 
 { TOption }

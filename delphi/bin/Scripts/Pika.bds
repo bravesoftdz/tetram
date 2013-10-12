@@ -3,9 +3,10 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>1.1</ScriptVersion>
+    <ScriptVersion>1.2</ScriptVersion>
     <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Sun, 12 Jun 2011 17:30:16 +0200</LastUpdate>
+    <LastUpdate>Sat, 21 Jul 2012 11:29:48 +0200</LastUpdate>
+    <Engine>PascalScript</Engine>
   </Infos>
   <Options/>
   <Code>program Pika;
@@ -20,7 +21,8 @@ const
   regExResultsGlobaleLigne = &apos;&lt;div(?:.*?)&gt;[\r|\n|\t|\s]*&lt;table(?:.*?)&gt;((?s-).*?)&lt;/table&gt;(?s-:.*?)&lt;/div&gt;&apos;;
   regExResultsGlobaleLigneDecoupe = regExURL;
 
-  regExAlbumSerie = &apos;&lt;td(?:.*?)pattern-volume(?:.*?)&gt;(?s-:.*?)&lt;a(?: href=&quot;(?&lt;lien_serie&gt;.*?)&quot;|.*?)*&gt;(?&lt;titre_serie&gt;\D*)(?&lt;tome&gt;\d*)?&lt;/a&gt;(?s-:.*?)&lt;a(?:.*?)&gt;(?&lt;collection&gt;.*)&lt;/a&gt;(?s-:.*?)&lt;/td&gt;&apos;;
+  regExAlbumSerie = &apos;&lt;td(?:.*?)pattern-volume(?:.*?)&gt;(?s-:.*?)&lt;a(?: href=&quot;(?&lt;lien_serie&gt;.*?)&quot;|.*?)*&gt;(?&lt;titre_serie&gt;.*?)&lt;/a&gt;(?s-:.*?)&lt;a(?:.*?)&gt;(?&lt;collection&gt;.*)&lt;/a&gt;(?s-:.*?)&lt;/td&gt;&apos;;
+  regExAlbumTome = &apos;(?&lt;tome&gt;\d*)?$&apos;;
 
   regExAlbumParution = &apos;&lt;span style=&quot;color: #AAA; text-transform: uppercase&quot;&gt;parution : &lt;/span&gt;([\d|/|\s]*)&lt;br /&gt;&apos;;
   regExAlbumSensLecture = &apos;&lt;span style=&quot;color: #AAA; text-transform: uppercase&quot;&gt;sens de lecture : &lt;/span&gt;(.*?)&lt;br /&gt;&apos;;
@@ -51,7 +53,9 @@ begin
     begin
       AlbumToImport.Serie.Titre := PrepareTitre(re.GetCaptureByName(&apos;titre_serie&apos;));
       AlbumToImport.Serie.SiteWeb := CombineURL(urlSite, re.GetCaptureByName(&apos;lien_serie&apos;));
-      AlbumToImport.Tome := StrToIntDef(re.GetCaptureByName(&apos;tome&apos;), 0);
+      AlbumToImport.Tome := StrToIntDef(ExtractRegEx(AlbumToImport.Serie.Titre, regExAlbumTome), 0);
+      if AlbumToImport.Tome &gt; 0 then
+        AlbumToImport.Serie.Titre := Copy(AlbumToImport.Serie.Titre, 1, Length(AlbumToImport.Serie.Titre) - Length(IntToStr(AlbumToImport.Tome)) - 1);
 
       AlbumToImport.Serie.Collection := PrepareTitre(re.GetCaptureByName(&apos;collection&apos;));
       AlbumToImport.Edition.Collection := AlbumToImport.Serie.Collection;

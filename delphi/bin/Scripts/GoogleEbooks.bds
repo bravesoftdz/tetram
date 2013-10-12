@@ -6,6 +6,7 @@
     <ScriptVersion>1</ScriptVersion>
     <BDVersion>2.2.0.0</BDVersion>
     <LastUpdate>Sat, 11 Jun 2011 17:20:04 +0200</LastUpdate>
+    <Engine>PascalScript</Engine>
   </Infos>
   <Options>
     <Option Label="Miniatures dans les recherches" Values="Oui|Non" Default="Oui"/>

@@ -48,7 +48,7 @@ type
     onlineScripts: TObjectList<TOnlineScript>;
     FUpdating: Boolean;
   public
-    dmScripts: TdmScripts;
+    dmScripts: IMasterEngineInterface;
     procedure GetOnlineList(List: TObjectList<TOnlineScript>);
   end;
 

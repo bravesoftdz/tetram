@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Script>
   <Infos>
     <Auteur>Tetram Corp</Auteur>
@@ -6,6 +6,7 @@
     <ScriptVersion>1.2</ScriptVersion>
     <BDVersion>2.2.0.0</BDVersion>
     <LastUpdate>Sun, 5 Sep 2010 10:37:49 +0200</LastUpdate>
+    <Engine>PascalScript</Engine>
   </Infos>
   <Options>
     <Option Label="Recherche Gl&#xE9;nat BD" Values="Oui|Non" Default="Oui"/>

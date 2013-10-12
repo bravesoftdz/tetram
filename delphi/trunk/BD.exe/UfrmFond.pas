@@ -6,7 +6,8 @@ interface
 {$WARN SYMBOL_DEPRECATED OFF}
 
 uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ImgList, Menus, ComCtrls, ExtCtrls, Buttons, ActnList,
-  Printers, iniFiles, jpeg, Contnrs, ToolWin, UBdtForms, PngImageList, pngImage, PngFunctions, UHistorique;
+  Printers, iniFiles, jpeg, Contnrs, ToolWin, UBdtForms, PngImageList, pngImage, PngFunctions, UHistorique,
+  System.Actions;
 
 const
   MSG_COMMANDELINE = WM_USER + 1;
