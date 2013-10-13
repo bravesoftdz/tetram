@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls,
   UfrmFond, VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, VirtualTree, ProceduresBDtk, UbdtForms, StrUtils,
   jpeg, ShellAPI, LoadComplet, CRFurtif, Generics.Defaults, PngSpeedButton, pngimage,
-  LabeledCheckBox;
+  LabeledCheckBox, System.Actions;
 
 type
   TfrmConsultationAlbum = class(TBdtForm, IImpressionApercu, IFicheEditable)
@@ -62,8 +62,6 @@ type
     Lbl_numero: TLabel;
     Lbl_type: TLabel;
     Label3: TLabel;
-    Label2: TLabel;
-    nbemprunts: TLabel;
     Label9: TLabel;
     Collection: TLabel;
     Label16: TLabel;
@@ -82,8 +80,6 @@ type
     lbOrientation: TLabel;
     Label19: TLabel;
     lbFormat: TLabel;
-    ListeEmprunts: TVirtualStringTree;
-    btnAjouter: TButton;
     edNotes: TMemo;
     Label18: TLabel;
     lbCote: TLabel;
@@ -116,11 +112,9 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure ImpRep(Sender: TObject);
-    procedure btnAjouterClick(Sender: TObject);
     procedure Impression1Click(Sender: TObject);
     procedure Imprimer1Click(Sender: TObject);
     procedure Imprimer2Click(Sender: TObject);
-    procedure ListeEmpruntsDblClick(Sender: TObject);
     procedure CouvertureDblClick(Sender: TObject);
     procedure VDTButton4Click(Sender: TObject);
     procedure VDTButton3Click(Sender: TObject);
@@ -128,7 +122,6 @@ type
     procedure ListeEmpruntsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean;
       var ImageIndex: Integer);
     procedure ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
-    procedure ListeEmpruntsHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo);
     procedure lvEditionsClick(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure EditeurClick(Sender: TObject);
@@ -168,6 +161,7 @@ type
 implementation
 
 {$R *.DFM}
+
 uses
   Commun, TypeRec, CommonConst, MAJ, Impression, DateUtils, UHistorique, Procedures,
   Divers, Textes, Proc_Gestions;
@@ -192,10 +186,8 @@ begin
   FAlbum := TAlbumComplet.Create;
   PrepareLV(Self);
   CurrentCouverture := 0;
-  ListeEmprunts.Header.Columns[0].Width := 100;
   FSortColumn := 0;
   FSortDirection := sdDescending;
-  ListeEmprunts.Header.Columns[1].ImageIndex := 1;
   Couverture.Picture := nil;
 end;
 
@@ -211,7 +203,6 @@ begin
   lvDessinateurs.Items.Count := 0;
   lvColoristes.Items.Count := 0;
   vstSerie.Mode := vmNone;
-  ListeEmprunts.Clear;
   lvEditions.Items.Clear;
   FCurrentEdition := nil;
 end;
@@ -219,15 +210,9 @@ end;
 procedure TfrmConsultationAlbum.ImpRep(Sender: TObject);
 begin
   if lvEditions.ItemIndex > -1 then
-      ImpressionFicheAlbum(ID_Album, TEditionComplete(lvEditions.Items.Objects[lvEditions.ItemIndex]).ID_Edition, TComponent(Sender).Tag = 1)
+    ImpressionFicheAlbum(ID_Album, TEditionComplete(lvEditions.Items.Objects[lvEditions.ItemIndex]).ID_Edition, TComponent(Sender).Tag = 1)
   else
     ImpressionFicheAlbum(ID_Album, GUID_NULL, TComponent(Sender).Tag = 1);
-end;
-
-procedure TfrmConsultationAlbum.btnAjouterClick(Sender: TObject);
-begin
-  if SaisieMouvementAlbum(ID_Album, TEditionComplete(lvEditions.Items.Objects[lvEditions.ItemIndex]).ID_Edition, cbStock.Checked) then
-      Historique.Refresh;
 end;
 
 procedure TfrmConsultationAlbum.Impression1Click(Sender: TObject);
@@ -245,12 +230,6 @@ begin
   ImpressionCouvertureAlbum(ID_Album, FCurrentEdition.Couvertures[CurrentCouverture].ID, TComponent(Sender).Tag = 1);
 end;
 
-procedure TfrmConsultationAlbum.ListeEmpruntsDblClick(Sender: TObject);
-begin
-  if Assigned(ListeEmprunts.FocusedNode) then
-      Historique.AddWaiting(fcEmprunteur, TEmprunt(FCurrentEdition.Emprunts.Emprunts[ListeEmprunts.FocusedNode.Index]).Emprunteur.ID);
-end;
-
 procedure TfrmConsultationAlbum.CouvertureDblClick(Sender: TObject);
 begin
   Historique.AddWaiting(fcCouverture, ID_Album, FCurrentEdition.Couvertures[CurrentCouverture].ID);
@@ -263,7 +242,8 @@ end;
 
 procedure TfrmConsultationAlbum.vstSerieAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
 begin
-  if vstSerie.GetNodeLevel(Node) > 0 then frmFond.DessineNote(TargetCanvas, ItemRect, TAlbum(vstSerie.GetNodeBasePointer(Node)).Notation);
+  if vstSerie.GetNodeLevel(Node) > 0 then
+    frmFond.DessineNote(TargetCanvas, ItemRect, TAlbum(vstSerie.GetNodeBasePointer(Node)).Notation);
 end;
 
 procedure TfrmConsultationAlbum.vstSerieDblClick(Sender: TObject);
@@ -271,7 +251,7 @@ var
   val: TGUID;
 begin
   val := vstSerie.CurrentValue;
-  if ( not IsEqualGUID(val, GUID_NULL)) and ( not IsEqualGUID(val, ID_Album)) then
+  if (not IsEqualGUID(val, GUID_NULL)) and (not IsEqualGUID(val, ID_Album)) then
     Historique.AddWaiting(fcAlbum, val);
 end;
 
@@ -281,8 +261,10 @@ var
   Album: TBasePointeur;
 begin
   Album := vstSerie.GetNodeBasePointer(Node);
-  if Assigned(Album) and IsEqualGUID(Album.ID, ID_Album) then ImageIndex := 13
-  else ImageIndex := -1;
+  if Assigned(Album) and IsEqualGUID(Album.ID, ID_Album) then
+    ImageIndex := 13
+  else
+    ImageIndex := -1;
 end;
 
 procedure TfrmConsultationAlbum.VDTButton1Click(Sender: TObject);
@@ -318,8 +300,7 @@ begin
     CurrentCouverture := Num;
     Couverture.Picture := nil;
     try
-      ms := GetCouvertureStream(False, FCurrentEdition.Couvertures[Num].ID, Couverture.Height, Couverture.Width,
-        TGlobalVar.Utilisateur.Options.AntiAliasing);
+      ms := GetCouvertureStream(False, FCurrentEdition.Couvertures[Num].ID, Couverture.Height, Couverture.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
       if Assigned(ms) then
         try
           jpg := TJPEGImage.Create;
@@ -333,7 +314,8 @@ begin
         finally
           ms.Free;
         end
-      else Couverture.Picture.Assign(nil);
+      else
+        Couverture.Picture.Assign(nil);
     except
       Couverture.Picture.Assign(nil);
     end;
@@ -360,7 +342,8 @@ begin
       Couverture.Cursor := crHandPoint;
     end;
   end
-  else Couverture.Picture.Assign(nil);
+  else
+    Couverture.Picture.Assign(nil);
 end;
 
 procedure TfrmConsultationAlbum.FormShow(Sender: TObject);
@@ -374,16 +357,20 @@ procedure TfrmConsultationAlbum.ListeEmpruntsGetImageIndex(Sender: TBaseVirtualT
   var Ghosted: Boolean; var ImageIndex: Integer);
 begin
   if Column = 0 then
-    if TEmprunt(FCurrentEdition.Emprunts.Emprunts[Node.Index]).Pret then ImageIndex := 3
-    else ImageIndex := 2;
+    if TEmprunt(FCurrentEdition.Emprunts.Emprunts[Node.Index]).Pret then
+      ImageIndex := 3
+    else
+      ImageIndex := 2;
 end;
 
 procedure TfrmConsultationAlbum.ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: string);
 begin
   case Column of
-    0: CellText := DateToStr(TEmprunt(FCurrentEdition.Emprunts.Emprunts[Node.Index]).Date);
-    1: CellText := TEmprunt(FCurrentEdition.Emprunts.Emprunts[Node.Index]).Emprunteur.ChaineAffichage;
+    0:
+      CellText := DateToStr(TEmprunt(FCurrentEdition.Emprunts.Emprunts[Node.Index]).Date);
+    1:
+      CellText := TEmprunt(FCurrentEdition.Emprunts.Emprunts[Node.Index]).Emprunteur.ChaineAffichage;
   end;
 end;
 
@@ -399,10 +386,12 @@ type
 function TEmpruntCompare.Compare(const Left, Right: TEmprunt): Integer;
 begin
   case FSortColumn of
-    0: Result := CompareDate(Left.Date, Right.Date);
-    1: Result := CompareText(Left.Emprunteur.Nom, Right.Emprunteur.Nom);
-    else
-      Result := 0;
+    0:
+      Result := CompareDate(Left.Date, Right.Date);
+    1:
+      Result := CompareText(Left.Emprunteur.Nom, Right.Emprunteur.Nom);
+  else
+    Result := 0;
   end;
 end;
 
@@ -411,31 +400,12 @@ begin
   Result := - inherited;
 end;
 
-procedure TfrmConsultationAlbum.ListeEmpruntsHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo);
-begin
-  if HitInfo.Column <> FSortColumn then
-    if HitInfo.Column = 0 then FSortDirection := sdDescending
-    else FSortDirection := sdAscending
-  else
-  begin
-    if FSortDirection = sdAscending then FSortDirection := sdDescending
-    else FSortDirection := sdAscending;
-  end;
-  if FSortColumn <> -1 then
-    ListeEmprunts.Header.Columns[FSortColumn].ImageIndex := -1;
-  FSortColumn := HitInfo.Column;
-  if FSortDirection = sdAscending then ListeEmprunts.Header.Columns[FSortColumn].ImageIndex := 0
-  else ListeEmprunts.Header.Columns[FSortColumn].ImageIndex := 1;
-  if FSortDirection = sdDescending then FCurrentEdition.Emprunts.Emprunts.Sort(TEmpruntCompareDesc.Create)
-  else FCurrentEdition.Emprunts.Emprunts.Sort(TEmpruntCompare.Create);
-  ListeEmprunts.Invalidate;
-end;
-
 procedure TfrmConsultationAlbum.lvEditionsClick(Sender: TObject);
 begin
   PanelEdition.Visible := lvEditions.ItemIndex > -1;
   try
-    if not PanelEdition.Visible then FCurrentEdition := nil
+    if not PanelEdition.Visible then
+      FCurrentEdition := nil
     else
     begin
       FCurrentEdition := TEditionComplete(lvEditions.Items.Objects[lvEditions.ItemIndex]);
@@ -468,22 +438,25 @@ begin
       lbFormat.Caption := FCurrentEdition.FormatEdition.Caption;
       lbSensLecture.Caption := FCurrentEdition.SensLecture.Caption;
       lbNumeroPerso.Caption := FCurrentEdition.NumeroPerso;
-      if cbOffert.Checked then Label12.Caption := rsTransOffertLe + ' :'
-      else Label12.Caption := rsTransAcheteLe + ' :';
+      if cbOffert.Checked then
+        Label12.Caption := rsTransOffertLe + ' :'
+      else
+        Label12.Caption := rsTransAcheteLe + ' :';
       AcheteLe.Caption := FCurrentEdition.sDateAchat;
       edNotes.Text := FCurrentEdition.Notes.Text;
 
       ShowCouverture(0);
-      if FCurrentEdition.Gratuit then Prix.Caption := rsTransGratuit
-      else if FCurrentEdition.Prix = 0 then Prix.Caption := ''
-      else Prix.Caption := FormatCurr(FormatMonnaie, FCurrentEdition.Prix);
+      if FCurrentEdition.Gratuit then
+        Prix.Caption := rsTransGratuit
+      else if FCurrentEdition.Prix = 0 then
+        Prix.Caption := ''
+      else
+        Prix.Caption := FormatCurr(FormatMonnaie, FCurrentEdition.Prix);
 
       if FCurrentEdition.PrixCote > 0 then
-          lbCote.Caption := Format('%s (%d)', [FormatCurr(FormatMonnaie, FCurrentEdition.PrixCote), FCurrentEdition.AnneeCote])
-      else lbCote.Caption := '';
-
-      ListeEmprunts.RootNodeCount := FCurrentEdition.Emprunts.Emprunts.Count;
-      nbemprunts.Caption := IntToStr(FCurrentEdition.Emprunts.nbemprunts);
+        lbCote.Caption := Format('%s (%d)', [FormatCurr(FormatMonnaie, FCurrentEdition.PrixCote), FCurrentEdition.AnneeCote])
+      else
+        lbCote.Caption := '';
     end;
   finally
     CurrentCouverture := 0;
@@ -523,7 +496,8 @@ var
   s: string;
 begin
   s := FCurrentEdition.Editeur.SiteWeb;
-  if s <> '' then ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
+  if s <> '' then
+    ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
 end;
 
 function TfrmConsultationAlbum.GetID_Album: TGUID;
@@ -541,7 +515,7 @@ begin
   FAlbum.Fill(Value);
 
   Caption := 'Fiche d''album - ' + FAlbum.ChaineAffichage;
-  TitreSerie.Caption := FormatTitre(FAlbum.Serie.Titre);
+  TitreSerie.Caption := FormatTitre(FAlbum.Serie.TitreSerie);
   if FAlbum.Serie.SiteWeb <> '' then
   begin
     TitreSerie.Font.Color := clBlue;
@@ -554,7 +528,7 @@ begin
     TitreSerie.Font.Style := TitreSerie.Font.Style - [fsUnderline];
     TitreSerie.Cursor := crDefault;
   end;
-  TitreAlbum.Caption := FormatTitre(FAlbum.Titre);
+  TitreAlbum.Caption := FormatTitre(FAlbum.TitreAlbum);
   Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FAlbum.Notation - 900].pngimage);
   Tome.Caption := NonZero(IntToStr(FAlbum.Tome));
   cbIntegrale.Checked := FAlbum.Integrale;
@@ -579,7 +553,8 @@ begin
   remarques.Text := s;
 
   s := '';
-  for i := 0 to Pred(FAlbum.Serie.Genres.Count) do AjoutString(s, FAlbum.Serie.Genres.ValueFromIndex[i], ', ');
+  for i := 0 to Pred(FAlbum.Serie.Genres.Count) do
+    AjoutString(s, FAlbum.Serie.Genres.ValueFromIndex[i], ', ');
   Memo1.Lines.Text := s;
 
   lvScenaristes.Items.BeginUpdate;
@@ -598,18 +573,22 @@ begin
   vstSerie.Filtre := 'id_serie = ' + QuotedStr(GUIDToString(FAlbum.Serie.ID_Serie));
   vstSerie.UseFiltre := True;
   vstSerie.MakeVisibleValue(FAlbum.ID_Album);
-  if FAlbum.Serie.Albums.Count = 1 then vstSerie.Images := nil
-  else vstSerie.Images := frmFond.ShareImageList;
+  if FAlbum.Serie.Albums.Count = 1 then
+    vstSerie.Images := nil
+  else
+    vstSerie.Images := frmFond.ShareImageList;
 
   lvEditions.Items.BeginUpdate;
-  for PEd in FAlbum.Editions.Editions do lvEditions.AddItem(PEd.ChaineAffichage, PEd);
+  for PEd in FAlbum.Editions.Editions do
+    lvEditions.AddItem(PEd.ChaineAffichage, PEd);
   lvEditions.Items.EndUpdate;
   lvEditions.Visible := FAlbum.Editions.Editions.Count > 1;
 end;
 
 procedure TfrmConsultationAlbum.TitreSerieDblClick(Sender: TObject);
 begin
-  if IsDownKey(VK_CONTROL) then Historique.AddWaiting(fcSerie, FAlbum.Serie.ID_Serie);
+  if IsDownKey(VK_CONTROL) then
+    Historique.AddWaiting(fcSerie, FAlbum.Serie.ID_Serie);
 end;
 
 procedure TfrmConsultationAlbum.TitreSerieClick(Sender: TObject);
@@ -619,7 +598,8 @@ begin
   if not IsDownKey(VK_CONTROL) then
   begin
     s := FAlbum.Serie.SiteWeb;
-    if s <> '' then ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
+    if s <> '' then
+      ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
   end;
 end;
 

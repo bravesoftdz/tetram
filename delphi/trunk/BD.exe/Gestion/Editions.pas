@@ -7,36 +7,36 @@ uses
 
 {
   Principes de base:
-    * Creation
-        - ouvre une transaction
-        - renseigne les valeur par défaut
-        - appel la proc d'edition
+  * Creation
+  - ouvre une transaction
+  - renseigne les valeur par défaut
+  - appel la proc d'edition
 
-    * Edition
-        - reprend ou ouvre une transaction
-        - modifie l'enregistrement
-        - ferme la transaction
+  * Edition
+  - reprend ou ouvre une transaction
+  - modifie l'enregistrement
+  - ferme la transaction
 
-    * Del
-        - ouvre une transaction
-        - efface l'enregistrement
-        - ferme la transaction
+  * Del
+  - ouvre une transaction
+  - efface l'enregistrement
+  - ferme la transaction
 
   Cas des tables à champ unique
-    * Creation
-        - ouvre une transaction
-        - renseigne les valeur par défaut
-        - ferme la transaction
+  * Creation
+  - ouvre une transaction
+  - renseigne les valeur par défaut
+  - ferme la transaction
 
-    * Edition
-        - ouvre une transaction
-        - modifie l'enregistrement
-        - ferme la transaction
+  * Edition
+  - ouvre une transaction
+  - modifie l'enregistrement
+  - ferme la transaction
 
-    * Del
-        - ouvre une transaction
-        - efface l'enregistrement
-        - ferme la transaction
+  * Del
+  - ouvre une transaction
+  - efface l'enregistrement
+  - ferme la transaction
 
 }
 
@@ -72,12 +72,15 @@ function DelGenre(const ID: TGUID): Boolean;
 
 function CreationAuteur(const Auteur: string): TGUID;
 function CreationAuteur2(const Auteur: string): TGUID;
-function EditionAuteur(const ID: TGUID; Creation: Boolean = False; const Auteur: string = ''): Boolean;
+function EditionAuteur(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionAuteur(Source: TObjetComplet): Boolean; overload;
 function DelAuteur(const ID: TGUID): Boolean;
 
-function CreationEmprunteur(const Emprunteur: string): TGUID;
-function EditionEmprunteur(const ID: TGUID; Creation: Boolean = False; const Emprunteur: string = ''): Boolean;
-function DelEmprunteur(const ID: TGUID): Boolean;
+function CreationUnivers(const Valeur: string): TGUID; overload;
+function CreationUnivers(Source: TObjetComplet): TGUID; overload;
+function EditionUnivers(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionUnivers(Source: TObjetComplet): Boolean; overload;
+function DelUnivers(const ID: TGUID): Boolean;
 
 function CreationSerie(const Valeur: string): TGUID; overload;
 function CreationSerie(Source: TObjetComplet): TGUID; overload;
@@ -88,10 +91,13 @@ function DelSerie(const ID: TGUID): Boolean;
 function CreationParaBD(const Valeur: string): TGUID;
 function EditionParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
 function EditionParaBD(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionParaBD(Source: TObjetComplet; Achat: Boolean): Boolean; overload;
+function EditionParaBD(Source: TObjetComplet): Boolean; overload;
 function DelParaBD(const ID: TGUID): Boolean;
 
 function CreationAchatParaBD(const Valeur: string): TGUID;
-function EditionAchatParaBD(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean;
+function EditionAchatParaBD(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionAchatParaBD(Source: TObjetComplet): Boolean; overload;
 function DelAchatParaBD(const ID: TGUID): Boolean;
 
 implementation
@@ -99,7 +105,7 @@ implementation
 uses
   UIB, Commun, UfrmEditAlbum, UfrmEditSerie, UfrmEditEmprunteur, Textes, UfrmEditEditeur, UdmPrinc,
   Math, UfrmFond, Procedures, ProceduresBDtk, UfrmEditCollection, UfrmEditAuteur, UfrmEditParaBD,
-  UfrmEditAchatAlbum;
+  UfrmEditAchatAlbum, UfrmEditUnivers;
 
 function FindRec(const Table, Champ: string; const Reference: TGUID; WithMessage: Boolean): Boolean;
 begin
@@ -118,7 +124,7 @@ begin
     end;
 end;
 
-//**********************************************************************************************
+// **********************************************************************************************
 type
   TLambdaEdition = function(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
   TLambdaEditionSrc = function(Source: TObjetComplet): Boolean;
@@ -300,7 +306,7 @@ begin
     end;
 end;
 
-//**********************************************************************************************
+// **********************************************************************************************
 
 function CreationAchatAlbum(const Valeur: string): TGUID;
 begin
@@ -337,7 +343,7 @@ begin
   Album := TAlbumComplet.Create(ID);
   try
     if Creation then
-      Album.Titre := Valeur;
+      Album.TitreAlbum := Valeur;
     Result := EditionAchatAlbum(Album);
   finally
     Album.Free;
@@ -366,7 +372,7 @@ begin
       Free;
     end;
 end;
-//**********************************************************************************************
+// **********************************************************************************************
 
 function CreationAlbum(Source: TObjetComplet): TGUID;
 begin
@@ -414,7 +420,7 @@ begin
   Album := TAlbumComplet.Create(ID);
   try
     if Creation then
-      Album.Titre := Valeur;
+      Album.TitreAlbum := Valeur;
     Result := EditionAlbum(Album, Achat);
   finally
     Album.Free;
@@ -430,7 +436,7 @@ function DelAlbum(const ID: TGUID): Boolean;
 begin
   Result := DelLambda('ALBUMS', 'ID_Album', ID);
 end;
-//**********************************************************************************************
+// **********************************************************************************************
 
 function CreationSerie(const Valeur: string): TGUID;
 begin
@@ -465,14 +471,14 @@ var
   Serie: TSerieComplete;
 begin
   Result := False;
-  if frmFond.IsShowing(TFrmEditEditeur) then
+  if frmFond.IsShowing(TFrmEditSerie) then
     Exit;
   if not Creation and not FindRec('SERIES', 'ID_Serie', ID, True) then
     Exit;
   Serie := TSerieComplete.Create(ID);
   try
     if Creation then
-      Serie.Titre := Valeur;
+      Serie.TitreSerie := Valeur;
     Result := EditionSerie(Serie);
   finally
     Serie.Free;
@@ -483,7 +489,60 @@ function DelSerie(const ID: TGUID): Boolean;
 begin
   Result := DelLambda('SERIES', 'ID_Serie', ID);
 end;
-//**********************************************************************************************
+// **********************************************************************************************
+
+function CreationUnivers(const Valeur: string): TGUID; overload;
+begin
+  Result := CreationLambda(EditionUnivers, Valeur, TFrmEditUnivers);
+end;
+
+function CreationUnivers(Source: TObjetComplet): TGUID; overload;
+begin
+  Result := CreationLambda(EditionUnivers, Source, TFrmEditUnivers);
+end;
+
+function EditionUnivers(Source: TObjetComplet): Boolean; overload;
+var
+  hg: IHourGlass;
+  me: IModeEditing;
+  f: TFrmEditUnivers;
+begin
+  hg := THourGlass.Create;
+  me := TModeEditing.Create;
+  f := TFrmEditUnivers.Create(Application);
+  try
+    f.Univers := TUniversComplet(Source);
+    hg := nil;
+    Result := frmFond.SetModalChildForm(f) = mrOk;
+  finally
+    f.Free;
+  end;
+end;
+
+function EditionUnivers(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+var
+  Univers: TUniversComplet;
+begin
+  Result := False;
+  if frmFond.IsShowing(TFrmEditUnivers) then
+    Exit;
+  if not Creation and not FindRec('UNIVERS', 'ID_Univers', ID, True) then
+    Exit;
+  Univers := TUniversComplet.Create(ID);
+  try
+    if Creation then
+      Univers.NomUnivers := Valeur;
+    Result := EditionUnivers(Univers);
+  finally
+    Univers.Free;
+  end;
+end;
+
+function DelUnivers(const ID: TGUID): Boolean;
+begin
+  Result := DelLambda('UNIVERS', 'ID_Univers', ID);
+end;
+// **********************************************************************************************
 
 function CreationEditeur(const Valeur: string): TGUID;
 begin
@@ -536,7 +595,7 @@ function DelEditeur(const ID: TGUID): Boolean;
 begin
   Result := DelLambda('EDITEURS', 'ID_Editeur', ID);
 end;
-//*************************************************************************************************************************
+// *************************************************************************************************************************
 
 function CreationCollection(const ID_Editeur: TGUID; const Valeur: string): TGUID;
 begin
@@ -597,7 +656,7 @@ function DelCollection(const ID: TGUID): Boolean;
 begin
   Result := DelLambda('COLLECTIONS', 'ID_Collection', ID);
 end;
-//************************************************************************************************************************
+// ************************************************************************************************************************
 
 function CreationGenre(const Genre: string; Source: TObjetComplet = nil): TGUID;
 begin
@@ -613,7 +672,7 @@ function DelGenre(const ID: TGUID): Boolean;
 begin
   Result := DelLambda('Genres', 'ID_Genre', ID);
 end;
-//**********************************************************************************************
+// **********************************************************************************************
 
 function CreationAuteur(const Auteur: string): TGUID;
 begin
@@ -625,105 +684,95 @@ begin
   Result := CreationLambda(EditionAuteur, Auteur, TFrmEditAuteur);
 end;
 
-function EditionAuteur(const ID: TGUID; Creation: Boolean; const Auteur: string): Boolean;
+function EditionAuteur(Source: TObjetComplet): Boolean; overload;
 var
   hg: IHourGlass;
   me: IModeEditing;
   f: TFrmEditAuteur;
+begin
+  hg := THourGlass.Create;
+  me := TModeEditing.Create;
+  f := TFrmEditAuteur.Create(Application);
+  try
+    f.Auteur := TAuteurComplet(Source);
+    hg := nil;
+    Result := frmFond.SetModalChildForm(f) = mrOk;
+  finally
+    f.Free;
+  end;
+end;
+
+function EditionAuteur(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+var
+  Auteur: TAuteurComplet;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditAuteur) then
     Exit;
   if not Creation and not FindRec('Personnes', 'ID_Personne', ID, True) then
     Exit;
-  hg := THourGlass.Create;
-  me := TModeEditing.Create;
-  f := TFrmEditAuteur.Create(Application);
-  with f do
-    try
-      ID_Auteur := ID;
-      if Creation then
-        edNom.Text := Auteur;
-      hg := nil;
-      Result := frmFond.SetModalChildForm(f) = mrOk;
-    finally
-      Free;
-    end;
+  Auteur := TAuteurComplet.Create(ID);
+  try
+    if Creation then
+      Auteur.NomAuteur := Valeur;
+    Result := EditionAuteur(Auteur);
+  finally
+    Auteur.Free;
+  end;
 end;
 
 function DelAuteur(const ID: TGUID): Boolean;
 begin
   Result := DelLambda('PERSONNES', 'ID_Personne', ID);
 end;
-//**********************************************************************************************
-
-function CreationEmprunteur(const Emprunteur: string): TGUID;
-begin
-  Result := CreationLambda(EditionEmprunteur, Emprunteur, TFrmEditEmprunteur);
-end;
-
-function EditionEmprunteur(const ID: TGUID; Creation: Boolean; const Emprunteur: string): Boolean;
-var
-  hg: IHourGlass;
-  me: IModeEditing;
-  f: TFrmEditEmprunteur;
-begin
-  Result := False;
-  if frmFond.IsShowing(TFrmEditEmprunteur) then
-    Exit;
-  if not Creation and not FindRec('Emprunteurs', 'ID_Emprunteur', ID, True) then
-    Exit;
-  hg := THourGlass.Create;
-  me := TModeEditing.Create;
-  f := TFrmEditEmprunteur.Create(Application);
-  with f do
-    try
-      ID_Emprunteur := ID;
-      if Creation then
-        edNom.Text := Emprunteur;
-      hg := nil;
-      Result := frmFond.SetModalChildForm(f) = mrOk;
-    finally
-      Free;
-    end;
-end;
-
-function DelEmprunteur(const ID: TGUID): Boolean;
-begin
-  Result := DelLambda('Emprunteurs', 'ID_Emprunteur', ID);
-end;
-//**********************************************************************************************
+// **********************************************************************************************
 
 function CreationParaBD(const Valeur: string): TGUID;
 begin
   Result := CreationLambda(EditionParaBD, Valeur, TFrmEditParaBD);
 end;
 
-function EditionParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean;
+function EditionParaBD(Source: TObjetComplet): Boolean; overload;
+begin
+  Result := EditionParaBD(Source, False);
+end;
+
+function EditionParaBD(Source: TObjetComplet; Achat: Boolean): Boolean; overload;
 var
   hg: IHourGlass;
   me: IModeEditing;
   f: TFrmEditParaBD;
+begin
+  hg := THourGlass.Create;
+  me := TModeEditing.Create;
+  f := TFrmEditParaBD.Create(Application);
+  try
+    f.isAchat := Achat;
+    f.ParaBD := TParaBDComplet(Source);
+    hg := nil;
+    Result := frmFond.SetModalChildForm(f) = mrOk;
+  finally
+    f.Free;
+  end;
+end;
+
+function EditionParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
+var
+  ParaBD: TParaBDComplet;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditParaBD) then
     Exit;
   if not Creation and not FindRec('ParaBD', 'ID_ParaBD', ID, True) then
     Exit;
-  hg := THourGlass.Create;
-  me := TModeEditing.Create;
-  f := TFrmEditParaBD.Create(Application);
-  with f do
-    try
-      isAchat := Achat;
-      ID_ParaBD := ID;
-      if Creation then
-        edTitre.Text := Valeur;
-      hg := nil;
-      Result := frmFond.SetModalChildForm(f) = mrOk;
-    finally
-      Free;
-    end;
+  ParaBD := TParaBDComplet.Create(ID);
+  try
+    if Creation then
+      ParaBD.TitreParaBD := Valeur;
+    Result := EditionParaBD(ParaBD, Achat);
+  finally
+    ParaBD.Free;
+  end;
 end;
 
 function EditionParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
@@ -735,37 +784,48 @@ function DelParaBD(const ID: TGUID): Boolean;
 begin
   Result := DelLambda('ParaBD', 'ID_ParaBD', ID);
 end;
-//**********************************************************************************************
+// **********************************************************************************************
 
 function CreationAchatParaBD(const Valeur: string): TGUID;
 begin
   Result := CreationLambda(EditionAchatParaBD, Valeur, TFrmEditParaBD);
 end;
 
-function EditionAchatParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionAchatParaBD(Source: TObjetComplet): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;
-  f: TFrmEditParaBD;
+  f: TFrmEditAchatParaBD;
 begin
-  Result := False;
-  if frmFond.IsShowing(TFrmEditAchatParaBD) then
-    Exit;
-  if not Creation and not FindRec('ParaBD', 'ID_ParaBD', ID, True) then
-    Exit;
   hg := THourGlass.Create;
   me := TModeEditing.Create;
   f := TFrmEditAchatParaBD.Create(Application);
-  with f do
-    try
-      ID_ParaBD := ID;
-      if Creation then
-        edTitre.Text := Valeur;
-      hg := nil;
-      Result := frmFond.SetModalChildForm(f) = mrOk;
-    finally
-      Free;
-    end;
+  try
+    f.ParaBD := TParaBDComplet(Source);
+    hg := nil;
+    Result := frmFond.SetModalChildForm(f) = mrOk;
+  finally
+    f.Free;
+  end;
+end;
+
+function EditionAchatParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+var
+  ParaBD: TParaBDComplet;
+begin
+  Result := False;
+  if frmFond.IsShowing(TFrmEditParaBD) then
+    Exit;
+  if not Creation and not FindRec('ParaBD', 'ID_ParaBD', ID, True) then
+    Exit;
+  ParaBD := TParaBDComplet.Create(ID);
+  try
+    if Creation then
+      ParaBD.TitreParaBD := Valeur;
+    Result := EditionAchatParaBD(ParaBD);
+  finally
+    ParaBD.Free;
+  end;
 end;
 
 function DelAchatParaBD(const ID: TGUID): Boolean;
@@ -790,6 +850,6 @@ begin
       Free;
     end;
 end;
-//**********************************************************************************************
-end.
 
+// **********************************************************************************************
+end.

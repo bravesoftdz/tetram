@@ -251,7 +251,7 @@ begin
           frmValidationImport.Album := Self;
         end;
 
-        dummyID := CheckValue(Serie.Titre, vmSeries, GUID_NULL, Serie);
+        dummyID := CheckValue(Serie.TitreSerie, vmSeries, GUID_NULL, Serie);
         if IsEqualGuid(dummyID, GUID_NULL) then
           Exit;
         if not IsEqualGuid(dummyID, GUID_FULL) then

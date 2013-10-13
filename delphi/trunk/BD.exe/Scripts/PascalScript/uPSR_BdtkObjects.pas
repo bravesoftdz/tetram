@@ -104,12 +104,12 @@ end;
 
 procedure TAlbumCompletTitre_W(Self: TAlbumComplet; const T: string);
 begin
-  Self.Titre := T;
+  Self.TitreAlbum := T;
 end;
 
 procedure TAlbumCompletTitre_R(Self: TAlbumComplet; var T: string);
 begin
-  T := Self.Titre;
+  T := Self.TitreAlbum;
 end;
 
 procedure TAlbumCompletTomeFin_W(Self: TAlbumComplet; const T: Integer);
@@ -499,12 +499,12 @@ end;
 
 procedure TSerieCompleteTitre_W(Self: TSerieComplete; const T: string);
 begin
-  Self.Titre := T;
+  Self.TitreSerie := T;
 end;
 
 procedure TSerieCompleteTitre_R(Self: TSerieComplete; var T: string);
 begin
-  T := Self.Titre;
+  T := Self.TitreSerie;
 end;
 
 procedure TEditeurCompletSiteWeb_W(Self: TEditeurComplet; const T: string);

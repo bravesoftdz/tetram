@@ -141,7 +141,7 @@ begin
   else
   begin
     rbNouvelAlbum.Checked := True;
-    edTitre.Text := FAlbum.Titre;
+    edTitre.Text := FAlbum.TitreAlbum;
     edMoisParution.Text := NonZero(IntToStr(FAlbum.MoisParution));
     edAnneeParution.Text := NonZero(IntToStr(FAlbum.AnneeParution));
     edTome.Text := NonZero(IntToStr(FAlbum.Tome));
@@ -248,7 +248,7 @@ var
 begin
   hg := THourGlass.Create;
 
-  FAlbum.Titre := Trim(edTitre.Text);
+  FAlbum.TitreAlbum := Trim(edTitre.Text);
   if edAnneeParution.Text = '' then
   begin
     FAlbum.AnneeParution := 0;
@@ -402,10 +402,10 @@ procedure TfrmEditAchatAlbum.btnScriptClick(Sender: TObject);
 begin
   FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
   FAlbumImport := TAlbumComplet.Create;
-  if FAlbum.Titre <> '' then
-    FAlbumImport.DefaultSearch := FormatTitre(FAlbum.Titre)
+  if FAlbum.TitreAlbum <> '' then
+    FAlbumImport.DefaultSearch := FormatTitre(FAlbum.TitreAlbum)
   else
-    FAlbumImport.DefaultSearch := FormatTitre(FAlbum.Serie.Titre);
+    FAlbumImport.DefaultSearch := FormatTitre(FAlbum.Serie.TitreSerie);
   FAlbumImport.FusionneEditions := False;
   Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
 end;

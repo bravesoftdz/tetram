@@ -135,8 +135,8 @@ begin
           marge := (Image.Height - hauteuraff) div 2;
           Image.Canvas.StretchDraw(Rect(0, marge, largeuraff, marge + hauteuraff), Graphic);
         end
-        else
-          Image.Canvas.Draw((largeuraff - largeurimg) div 2, (hauteuraff - hauteurimg) div 2, Graphic);
+      else
+        Image.Canvas.Draw((largeuraff - largeurimg) div 2, (hauteuraff - hauteurimg) div 2, Graphic);
       Result := True;
     finally
       Free;
@@ -170,9 +170,9 @@ begin
       SQL.Text := 'SELECT FIRST 1 Valeur FROM OPTIONS WHERE NOM_OPTION = ? ORDER BY DM_OPTIONS DESC';
       Prepare(True);
       TGlobalVar.Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', FormatSettings.CurrencyString);
-      FormatMonnaie := IfThen(FormatSettings.CurrencyFormat in [0, 2], TGlobalVar.Utilisateur.Options.SymboleMonnetaire + IfThen(FormatSettings.CurrencyFormat = 2, ' ', ''), '')
-        + FormatMonnaieCourt + IfThen(FormatSettings.CurrencyFormat in [1, 3], IfThen(FormatSettings.CurrencyFormat = 3, ' ', '')
-          + TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '');
+      FormatMonnaie := IfThen(FormatSettings.CurrencyFormat in [0, 2], TGlobalVar.Utilisateur.Options.SymboleMonnetaire +
+        IfThen(FormatSettings.CurrencyFormat = 2, ' ', ''), '') + FormatMonnaieCourt + IfThen(FormatSettings.CurrencyFormat in [1, 3],
+        IfThen(FormatSettings.CurrencyFormat = 3, ' ', '') + TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '');
       RepImages := LitStr(op, 'RepImages', RepImages);
     finally
       Transaction.Free;
@@ -833,8 +833,7 @@ begin
   end;
 end;
 
-function GetCouvertureStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0)
-  : TStream;
+function GetCouvertureStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream;
 var
   Couverture: TPicture;
   img: TJPEGImage;

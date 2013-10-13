@@ -78,7 +78,9 @@ object frmFond: TfrmFond
     object ToolButton4: TToolButton
       Left = 155
       Top = 0
-      Action = actAfficheStock
+      Hint = 'Ouvre ou r'#233'actualise la fen'#234'tre des emprunts'
+      Caption = 'Albums pr'#234't'#233's'
+      ImageIndex = 2
     end
     object ToolButton6: TToolButton
       Left = 194
@@ -148,7 +150,7 @@ object frmFond: TfrmFond
     Left = 56
     Top = 136
     Bitmap = {
-      494C010104000600380010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010104000600400010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -476,14 +478,6 @@ object frmFond: TfrmFond
       ShortCut = 123
       OnExecute = actAfficheStatsGeneralesExecute
     end
-    object actAfficheStatsEmprunteurs: TAction
-      Category = 'Statistiques'
-      Caption = 'Emprunteurs'
-      Hint = 'Statistiques sur les emprunteurs'
-      ImageIndex = 5
-      ShortCut = 8315
-      OnExecute = actAfficheStatsEmprunteursExecute
-    end
     object actAfficheStatsAlbums: TAction
       Category = 'Statistiques'
       Caption = 'Albums'
@@ -499,14 +493,6 @@ object frmFond: TfrmFond
       ImageIndex = 1
       ShortCut = 113
       OnExecute = actAfficheRechercheExecute
-    end
-    object actAfficheStock: TAction
-      Category = 'Outils'
-      Caption = 'Albums pr'#234't'#233's'
-      Hint = 'Ouvre ou r'#233'actualise la fen'#234'tre des emprunts'
-      ImageIndex = 2
-      ShortCut = 117
-      OnExecute = actAfficheStockExecute
     end
     object actImpression: TAction
       Tag = 2
@@ -1085,20 +1071,6 @@ object frmFond: TfrmFond
       ImageIndex = 3
       OnExecute = StatsListeCompletesAlbumsAppExecute
     end
-    object StatsAlbumsEmpruntesApp: TAction
-      Tag = 1
-      Category = 'Statistiques'
-      Caption = 'Aper'#231'u avant impression'
-      ImageIndex = 4
-      OnExecute = StatsAlbumsEmpruntesAppExecute
-    end
-    object StatsAlbumsEmpruntesPrn: TAction
-      Tag = 2
-      Category = 'Statistiques'
-      Caption = 'Imprimer'
-      ImageIndex = 3
-      OnExecute = StatsAlbumsEmpruntesAppExecute
-    end
   end
   object MainMenu1: TMainMenu
     Left = 160
@@ -1144,11 +1116,15 @@ object frmFond: TfrmFond
             ImageIndex = 5
             object Aperuavantimpression2: TMenuItem
               Tag = 1
-              Action = StatsAlbumsEmpruntesApp
+              Caption = 'Aper'#231'u avant impression'
+              ImageIndex = 4
+              OnClick = StatsAlbumsEmpruntesAppExecute
             end
             object Imprimer2: TMenuItem
               Tag = 2
-              Action = StatsAlbumsEmpruntesPrn
+              Caption = 'Imprimer'
+              ImageIndex = 3
+              OnClick = StatsAlbumsEmpruntesAppExecute
             end
           end
         end
@@ -1202,8 +1178,10 @@ object frmFond: TfrmFond
         Action = actAfficheRecherche
       end
       object Albumsemprunts1: TMenuItem
-        Action = actAfficheStock
         Caption = 'Albums emprunt'#233's'
+        Hint = 'Ouvre ou r'#233'actualise la fen'#234'tre des emprunts'
+        ImageIndex = 2
+        ShortCut = 117
       end
       object AfficheSeriesIncompletes1: TMenuItem
         Action = actAfficheSeriesIncompletes
@@ -1226,7 +1204,11 @@ object frmFond: TfrmFond
           Action = actAfficheStatsGenerales
         end
         object Emprunteurs1: TMenuItem
-          Action = actAfficheStatsEmprunteurs
+          Caption = 'Emprunteurs'
+          Hint = 'Statistiques sur les emprunteurs'
+          ImageIndex = 5
+          ShortCut = 8315
+          OnClick = actAfficheStatsEmprunteursExecute
         end
         object Albums2: TMenuItem
           Action = actAfficheStatsAlbums

@@ -32,7 +32,6 @@ type
     actChangementOptions: TAction;
     actAideContextuelle: TAction;
     actAfficheStatsGenerales: TAction;
-    actAfficheStock: TAction;
     PrinterSetupDialog1: TPrinterSetupDialog;
     actAfficheRecherche: TAction;
     actImpression: TAction;
@@ -40,7 +39,6 @@ type
     actActualiseRepertoire: TAction;
     actRelireOptions: TAction;
     actQuitter: TAction;
-    actAfficheStatsEmprunteurs: TAction;
     actAfficheStatsAlbums: TAction;
     actPersonnaliseBarre: TAction;
     boutons_16x16_hot: TPngImageList;
@@ -59,8 +57,6 @@ type
     StatsInfosBDPrn: TAction;
     StatsListeCompletesAlbumsApp: TAction;
     StatsListeCompletesAlbumsPrn: TAction;
-    StatsAlbumsEmpruntesApp: TAction;
-    StatsAlbumsEmpruntesPrn: TAction;
     CheminBase: TAction;
     actChangeMode: TAction;
     HistoriqueBack: TAction;
@@ -156,7 +152,6 @@ type
     procedure actChangementOptionsExecute(Sender: TObject);
     procedure actAideContextuelleExecute(Sender: TObject);
     procedure actAfficheStatsGeneralesExecute(Sender: TObject);
-    procedure actAfficheStockExecute(Sender: TObject);
     procedure actAfficheRechercheExecute(Sender: TObject);
     procedure actImpressionExecute(Sender: TObject);
     procedure actApercuImpressionExecute(Sender: TObject);
@@ -202,12 +197,9 @@ type
     FToolOriginal: TStringList;
     FModalWindows: TStack;
     procedure ChargeToolBarres(sl: TStringList);
-    procedure WMSyscommand(var msg: TWmSysCommand);
-    message WM_SYSCOMMAND;
-    procedure WMCopyData(var msg: TWMCopyData);
-    message WM_COPYDATA;
-    procedure MsgActivate(var msg: TMessage);
-    message MSG_ACTIVATE;
+    procedure WMSyscommand(var msg: TWmSysCommand); message WM_SYSCOMMAND;
+    procedure WMCopyData(var msg: TWMCopyData); message WM_COPYDATA;
+    procedure MsgActivate(var msg: TMessage); message MSG_ACTIVATE;
     procedure HistoriqueChanged(Sender: TObject; LastAction: TConsult);
     procedure HistoriqueChosen(Sender: TObject);
   protected
@@ -240,9 +232,9 @@ begin
   case (msg.CmdType and $FFF0) of
     SC_CLOSE:
       actQuitter.Execute;
-    else
-      inherited;
-    end;
+  else
+    inherited;
+  end;
 end;
 
 procedure TfrmFond.FormDestroy(Sender: TObject);
@@ -493,11 +485,6 @@ begin
     end;
 end;
 
-procedure TfrmFond.actAfficheStockExecute(Sender: TObject);
-begin
-  Historique.AddWaiting(fcStock);
-end;
-
 procedure TfrmFond.actAfficheRechercheExecute(Sender: TObject);
 begin
   Historique.AddWaiting(fcRecherche);
@@ -540,7 +527,8 @@ begin
   if actActualiseRepertoire.Enabled then
   begin
     frmRepertoire.vstAlbums.ReinitNodes(1);
-    frmRepertoire.vstEmprunteurs.ReinitNodes(1);
+    frmRepertoire.vstSeries.ReinitNodes(1);
+    frmRepertoire.vstUnivers.ReinitNodes(1);
     frmRepertoire.vstAuteurs.ReinitNodes(1);
   end;
 end;
@@ -548,7 +536,8 @@ end;
 procedure TfrmFond.actActualiseRepertoireExecute(Sender: TObject);
 begin
   frmRepertoire.vstAlbums.InitializeRep;
-  frmRepertoire.vstEmprunteurs.InitializeRep;
+  frmRepertoire.vstSeries.InitializeRep;
+  frmRepertoire.vstUnivers.InitializeRep;
   frmRepertoire.vstAuteurs.InitializeRep;
 end;
 
@@ -800,7 +789,6 @@ begin
       end;
     end;
     actAfficheRecherche.Enabled := ModeConsult;
-    actAfficheStock.Enabled := ModeConsult;
     actAfficheAchats.Enabled := ModeConsult;
     actModeConsultation.Checked := Assigned(frmRepertoire);
     actModeGestion.Checked := Assigned(FrmGestions);

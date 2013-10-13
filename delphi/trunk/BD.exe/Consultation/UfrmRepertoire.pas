@@ -10,10 +10,8 @@ uses
 type
   TfrmRepertoire = class(TbdtForm)
     PageRep: TPageControl;
-    TabEmprunteurs: TTabSheet;
     TabAlbums: TTabSheet;
     vstAlbums: TVirtualStringTree;
-    vstEmprunteurs: TVirtualStringTree;
     LightComboCheck1: TLightComboCheck;
     Label1: TLabel;
     TabAuteurs: TTabSheet;
@@ -23,10 +21,12 @@ type
     vstParaBD: TVirtualStringTree;
     vstSeries: TVirtualStringTree;
     FrameRechercheRapideAlbums: TFramRechercheRapide;
-    FrameRechercheRapideEmprunteurs: TFramRechercheRapide;
     FrameRechercheRapideAuteurs: TFramRechercheRapide;
     FrameRechercheRapideSeries: TFramRechercheRapide;
     FrameRechercheRapideParaBD: TFramRechercheRapide;
+    TabUnivers: TTabSheet;
+    vstUnivers: TVirtualStringTree;
+    FrameRechercheRapideUnivers: TframRechercheRapide;
     procedure FormCreate(Sender: TObject);
     procedure vstAlbumsDblClick(Sender: TObject);
     procedure LightComboCheck1Change(Sender: TObject);
@@ -52,34 +52,34 @@ uses
 const
   PosAlbums = 0;
   PosSeries = 1;
-  PosAuteurs = 2;
-  PosParaBD = 3;
-  PosEmprunteurs = 4;
+  PosUnivers = 2;
+  PosAuteurs = 3;
+  PosParaBD = 4;
 
 procedure TfrmRepertoire.FormCreate(Sender: TObject);
 begin
   TGlobalVar.Mode_en_cours := mdConsult;
   PrepareLV(Self);
   TabAlbums.PageIndex := PosAlbums;
-  TabEmprunteurs.PageIndex := PosEmprunteurs;
   TabAuteurs.PageIndex := PosAuteurs;
   TabSeries.PageIndex := PosSeries;
+  TabUnivers.PageIndex := PosUnivers;
   TabParaBD.PageIndex := PosParaBD;
 
   ChargeImage(vstAlbums.Background, 'FONDVT');
-  ChargeImage(vstEmprunteurs.Background, 'FONDVT');
+  ChargeImage(vstUnivers.Background, 'FONDVT');
   ChargeImage(vstAuteurs.Background, 'FONDVT');
   ChargeImage(vstSeries.Background, 'FONDVT');
   ChargeImage(vstParaBD.Background, 'FONDVT');
 
   FrameRechercheRapideAlbums.VirtualTreeView := vstAlbums;
   FrameRechercheRapideAlbums.ShowNewButton := False;
-  FrameRechercheRapideEmprunteurs.VirtualTreeView := vstEmprunteurs;
-  FrameRechercheRapideEmprunteurs.ShowNewButton := False;
   FrameRechercheRapideAuteurs.VirtualTreeView := vstAuteurs;
   FrameRechercheRapideAuteurs.ShowNewButton := False;
   FrameRechercheRapideSeries.VirtualTreeView := vstSeries;
   FrameRechercheRapideSeries.ShowNewButton := False;
+  FrameRechercheRapideUnivers.VirtualTreeView := vstUnivers;
+  FrameRechercheRapideUnivers.ShowNewButton := False;
   FrameRechercheRapideParaBD.VirtualTreeView := vstParaBD;
   FrameRechercheRapideParaBD.ShowNewButton := False;
 
@@ -94,9 +94,9 @@ begin
   finally
     Free;
   end;
-  vstEmprunteurs.Mode := vmEmprunteurs;
   vstAuteurs.Mode := vmPersonnes;
   vstSeries.Mode := vmSeries;
+  vstUnivers.Mode := vmUnivers;
   vstParaBD.Mode := vmParaBDSerie;
 end;
 
@@ -111,12 +111,12 @@ begin
   case PageRep.ActivePageIndex of
     PosAlbums: with vstAlbums do
         if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcAlbum, CurrentValue);
-    PosEmprunteurs: with vstEmprunteurs do
-        if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcEmprunteur, CurrentValue);
     PosAuteurs: with vstAuteurs do
         if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcAuteur, CurrentValue);
     PosSeries: with vstSeries do
         if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcSerie, CurrentValue);
+    PosUnivers: with vstUnivers do
+        if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcUnivers, CurrentValue);
     PosParaBD: with vstParaBD do
         if GetNodeLevel(FocusedNode) > 0 then Historique.AddWaiting(fcParaBD, CurrentValue);
   end;

@@ -14,7 +14,8 @@ procedure ImpressionEmprunts(Previsualisation: Boolean; Source: TSrcEmprunt = se
 
 procedure ImpressionFicheAlbum(const Reference, ID_Edition: TGUID; Previsualisation: Boolean);
 procedure ImpressionFicheAuteur(const Reference: TGUID; Previsualisation: Boolean);
-procedure ImpressionSerie(const Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheSerie(const Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheUnivers(const Reference: TGUID; Previsualisation: Boolean);
 procedure ImpressionEmpruntsAlbum(const Reference: TGUID; Previsualisation: Boolean);
 procedure ImpressionFicheParaBD(const Reference: TGUID; Previsualisation: Boolean);
 
@@ -235,9 +236,9 @@ begin
 
   Prn.SetTopOfPage;
   Prn.WriteLineColumn(0, -2, rsTransTitre + ' :');
-  Prn.WriteLineColumn(5, -2, FormatTitre(ParaBD.Titre));
+  Prn.WriteLineColumn(5, -2, FormatTitre(ParaBD.TitreParaBD));
   Prn.WriteLineColumn(0, -1, rsTransSerie + ' :');
-  Prn.WriteLineColumn(5, -2, FormatTitre(ParaBD.Serie.Titre));
+  Prn.WriteLineColumn(5, -2, FormatTitre(ParaBD.Serie.TitreSerie));
   Prn.NewLines(2);
 
   Prn.WriteLineColumn(0, -1, ParaBD.CategorieParaBD.Caption);
@@ -324,9 +325,9 @@ begin
   Prn.SetTopOfPage;
 
   Prn.WriteLineColumn(0, -2, rsTransSerie + ' :');
-  Prn.WriteLineColumn(5, -2, FormatTitre(Album.Serie.Titre));
+  Prn.WriteLineColumn(5, -2, FormatTitre(Album.Serie.TitreSerie));
   Prn.WriteLineColumn(0, -1, rsTransAlbum + ' :');
-  Prn.WriteLineColumn(5, -2, FormatTitre(Album.Titre));
+  Prn.WriteLineColumn(5, -2, FormatTitre(Album.TitreAlbum));
   Prn.NewLines(2);
 
   if Album.HorsSerie then
@@ -430,7 +431,7 @@ begin
   end;
 end;
 
-procedure ImpressionSerie(const Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionFicheSerie(const Reference: TGUID; Previsualisation: Boolean);
 var
   fWaiting: IWaiting;
   Serie: TSerieComplete;
@@ -460,7 +461,7 @@ begin
       PreparePrintObject(Prn, Previsualisation, rsTransFiche);
 
       Prn.SetHeaderDimensions1(-1, -1, -1, 20, False, 0, clWhite);
-      Prn.SetHeaderInformation1(0, 5, FormatTitre(Serie.Titre), taCenter, Prn.Font.name, 24, [fsBold]);
+      Prn.SetHeaderInformation1(0, 5, FormatTitre(Serie.TitreSerie), taCenter, Prn.Font.name, 24, [fsBold]);
 
       Prn.CreateColumn1(0, 10, 30, taRightJustify, Prn.Font.name, 12, [fsBold]);
       Prn.CreateColumn1(1, 42, 30, taLeftJustify, Prn.Font.name, 12, []);
@@ -667,6 +668,10 @@ begin
   end;
 end;
 
+procedure ImpressionFicheUnivers(const Reference: TGUID; Previsualisation: Boolean);
+begin
+end;
+
 procedure ImpressionFicheAlbum(const Reference, ID_Edition: TGUID; Previsualisation: Boolean);
 var
   i: Integer;
@@ -796,7 +801,7 @@ begin
       fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransSeries, rsTransPage, Prn.GetPageNumber]), epNext);
       for Serie in Auteur.Series do
       begin
-        Prn.WriteLineColumn(0, fl, FormatTitre(Serie.Titre) + ' :');
+        Prn.WriteLineColumn(0, fl, FormatTitre(Serie.TitreSerie) + ' :');
         for Album in Serie.Albums do
           Prn.WriteColumn(1, -1, Album.ChaineAffichage);
         fl := -1;
@@ -868,7 +873,7 @@ begin
 
       Prn.SetHeaderDimensions1(-1, -1, -1, 20, False, 0, clWhite);
       Prn.SetHeaderInformation1(0, 5, rsTitreListeEmprunts, taCenter, Prn.Font.name, 24, [fsBold]);
-      Prn.SetHeaderInformation1(1, -1, FormatTitre(Album.Titre), taCenter, Prn.Font.name, 16, [fsBold]);
+      Prn.SetHeaderInformation1(1, -1, FormatTitre(Album.TitreAlbum), taCenter, Prn.Font.name, 16, [fsBold]);
 
       Prn.CreateColumn1(0, 15, 15, taLeftJustify, Prn.Font.name, 12, []);
       Prn.CreateColumn1(1, 45, -1, taLeftJustify, Prn.Font.name, 12, []);
@@ -1775,9 +1780,9 @@ begin
       PreparePrintObject(Prn, Previsualisation, rsTransImage);
 
       Prn.SetHeaderDimensions1(-1, -1, -1, 20, False, 0, clWhite);
-      Prn.SetHeaderInformation1(0, 5, FormatTitre(Album.Titre), taCenter, Prn.Font.name, 24, [fsBold]);
+      Prn.SetHeaderInformation1(0, 5, FormatTitre(Album.TitreAlbum), taCenter, Prn.Font.name, 24, [fsBold]);
       s := '';
-      AjoutString(s, FormatTitre(Album.Serie.Titre), ' - ');
+      AjoutString(s, FormatTitre(Album.Serie.TitreSerie), ' - ');
       if Album.Integrale then
         AjoutString(s, 'INT.' + NonZero(IntToStr(Album.Tome)), ' - ')
       else if Album.HorsSerie then
@@ -1837,9 +1842,9 @@ begin
       PreparePrintObject(Prn, Previsualisation, rsTransImage);
 
       Prn.SetHeaderDimensions1(-1, -1, -1, 20, False, 0, clWhite);
-      Prn.SetHeaderInformation1(0, 5, FormatTitre(ParaBD.Titre), taCenter, Prn.Font.name, 24, [fsBold]);
+      Prn.SetHeaderInformation1(0, 5, FormatTitre(ParaBD.TitreParaBD), taCenter, Prn.Font.name, 24, [fsBold]);
       s := '';
-      AjoutString(s, FormatTitre(ParaBD.Serie.Titre), ' - ');
+      AjoutString(s, FormatTitre(ParaBD.Serie.TitreSerie), ' - ');
       AjoutString(s, ParaBD.CategorieParaBD.Caption, ' - ');
       Prn.SetHeaderInformation1(1, -1, s, taCenter, Prn.Font.name, 16, [fsBold]);
 

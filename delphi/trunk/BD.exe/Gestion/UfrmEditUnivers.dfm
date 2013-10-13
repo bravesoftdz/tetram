@@ -1,40 +1,37 @@
-object frmEditAuteur: TfrmEditAuteur
-  Left = 537
-  Top = 280
-  HorzScrollBar.Visible = False
-  VertScrollBar.Visible = False
+object frmEditUnivers: TfrmEditUnivers
+  Left = 302
+  Top = 146
   ActiveControl = edNom
-  BorderIcons = []
-  BorderStyle = bsSingle
-  Caption = 'frmEditAuteur'
-  ClientHeight = 562
-  ClientWidth = 731
+  Caption = 'Saisie d'#39'Univers'
+  ClientHeight = 920
+  ClientWidth = 798
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
-  OldCreateOrder = True
-  Position = poMainFormCenter
+  OldCreateOrder = False
+  OnCreate = FormCreate
+  OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
   object Bevel1: TBevel
     Left = 0
     Top = 29
-    Width = 731
+    Width = 798
     Height = 4
     Align = alTop
     Shape = bsBottomLine
     ExplicitTop = 25
-    ExplicitWidth = 717
+    ExplicitWidth = 742
   end
   object Label28: TLabel
     Left = 8
     Top = 4
-    Width = 64
+    Width = 72
     Height = 23
-    Caption = 'Auteur'
+    Caption = 'Univers'
     Font.Charset = ANSI_CHARSET
     Font.Color = clWindowText
     Font.Height = -19
@@ -42,54 +39,52 @@ object frmEditAuteur: TfrmEditAuteur
     Font.Style = [fsBold]
     ParentFont = False
   end
-  object ScrollBox1: TScrollBox
+  object ScrollBox2: TScrollBox
     Left = 0
     Top = 33
-    Width = 731
-    Height = 529
+    Width = 798
+    Height = 887
     Align = alClient
     BorderStyle = bsNone
+    Constraints.MinWidth = 650
     TabOrder = 0
+    ExplicitLeft = 40
+    ExplicitTop = 29
     DesignSize = (
-      731
-      529)
-    object Label3: TLabel
-      Left = 42
+      798
+      887)
+    object Label2: TLabel
+      Left = 62
       Top = 7
       Width = 28
       Height = 13
       Alignment = taRightJustify
       Caption = 'Nom :'
       FocusControl = edNom
-      Transparent = True
       Layout = tlCenter
     end
-    object Label1: TLabel
-      Left = 13
-      Top = 57
-      Width = 57
-      Height = 13
-      Alignment = taRightJustify
-      Caption = 'Biographie :'
-      FocusControl = edBiographie
-      Transparent = True
-      Layout = tlCenter
+    object Bevel2: TBevel
+      Left = 165
+      Top = 186
+      Width = 467
+      Height = 6
+      Anchors = [akLeft, akTop, akRight]
+      Shape = bsTopLine
     end
-    object Label2: TLabel
-      Left = 22
-      Top = 32
-      Width = 48
+    object Label6: TLabel
+      Left = 30
+      Top = 59
+      Width = 60
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Site web :'
-      FocusControl = edSite
-      Layout = tlCenter
+      Caption = 'Description :'
+      FocusControl = edDescription
     end
     object VDTButton13: TVDTButton
-      Left = 701
+      Left = 769
       Top = 30
       Width = 23
-      Height = 18
+      Height = 20
       Anchors = [akTop, akRight]
       Enabled = False
       OnClick = VDTButton13Click
@@ -125,11 +120,36 @@ object frmEditAuteur: TfrmEditAuteur
         893708AB398E77913EF34A5E9AF82B9B1E99095E38A5C85284E2C608F9FF6DE3
         3F46038B558452BD6059268919EDEE3681C6123142E2DFC17F03DFC55B0C5750
         2E1C0000000049454E44AE426082}
-      ExplicitLeft = 687
+    end
+    object Label1: TLabel
+      Left = 42
+      Top = 33
+      Width = 48
+      Height = 13
+      Hint = 'R'#233'f'#233'rence du support'
+      Alignment = taRightJustify
+      Caption = 'Site web :'
+      Layout = tlCenter
+    end
+    object Label3: TLabel
+      Left = 49
+      Top = 198
+      Width = 41
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Albums :'
     end
     object Label4: TLabel
-      Left = 4
-      Top = 305
+      Left = 44
+      Top = 323
+      Width = 46
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Para-BD :'
+    end
+    object Label10: TLabel
+      Left = 24
+      Top = 481
       Width = 66
       Height = 13
       Alignment = taRightJustify
@@ -139,48 +159,85 @@ object frmEditAuteur: TfrmEditAuteur
       Layout = tlCenter
     end
     object Bevel4: TBevel
-      Left = 197
-      Top = 292
-      Width = 362
+      Left = 165
+      Top = 469
+      Width = 467
       Height = 6
       Anchors = [akLeft, akTop, akRight]
       Shape = bsTopLine
-      ExplicitWidth = 366
     end
-    object edBiographie: TMemoLabeled
-      Left = 73
-      Top = 54
-      Width = 653
-      Height = 231
-      Anchors = [akLeft, akTop, akRight]
-      BevelKind = bkTile
-      BorderStyle = bsNone
-      ScrollBars = ssBoth
-      TabOrder = 2
-      LinkControls = <
-        item
-          Control = Label1
-        end>
+    object Label5: TLabel
+      Left = 5
+      Top = 146
+      Width = 85
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Univers principal :'
+      Visible = False
     end
     object edNom: TEditLabeled
-      Left = 73
+      Left = 96
       Top = 4
-      Width = 653
+      Width = 696
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       TabOrder = 0
+      OnChange = edNomChange
       LinkControls = <
         item
-          Control = Label3
+          Control = Label2
         end>
       CurrencyChar = #0
     end
+    object edDescription: TMemoLabeled
+      Left = 96
+      Top = 56
+      Width = 696
+      Height = 81
+      Anchors = [akLeft, akTop, akRight]
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      ScrollBars = ssVertical
+      TabOrder = 2
+      LinkControls = <
+        item
+          Control = Label6
+        end>
+    end
+    object vtAlbums: TVirtualStringTree
+      Left = 96
+      Top = 198
+      Width = 696
+      Height = 119
+      Anchors = [akLeft, akTop, akRight]
+      AnimationDuration = 0
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      ButtonFillMode = fmShaded
+      Header.AutoSizeIndex = -1
+      Header.Font.Charset = DEFAULT_CHARSET
+      Header.Font.Color = clWindowText
+      Header.Font.Height = -11
+      Header.Font.Name = 'Tahoma'
+      Header.Font.Style = []
+      Header.MainColumn = -1
+      Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
+      HintAnimation = hatNone
+      HintMode = hmTooltip
+      HotCursor = crHandPoint
+      Indent = 8
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 4
+      OnDblClick = vtAlbumsDblClick
+      Columns = <>
+    end
     object edSite: TEditLabeled
-      Left = 73
-      Top = 29
-      Width = 627
+      Left = 96
+      Top = 30
+      Width = 672
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -192,48 +249,102 @@ object frmEditAuteur: TfrmEditAuteur
       OnChange = edSiteChange
       LinkControls = <
         item
-          Control = Label2
+          Control = Label1
         end>
       CurrencyChar = #0
     end
+    object vtParaBD: TVirtualStringTree
+      Left = 96
+      Top = 323
+      Width = 696
+      Height = 140
+      Anchors = [akLeft, akTop, akRight]
+      AnimationDuration = 0
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      ButtonFillMode = fmShaded
+      Header.AutoSizeIndex = -1
+      Header.Font.Charset = DEFAULT_CHARSET
+      Header.Font.Color = clWindowText
+      Header.Font.Height = -11
+      Header.Font.Name = 'Tahoma'
+      Header.Font.Style = []
+      Header.MainColumn = -1
+      Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
+      HintAnimation = hatNone
+      HintMode = hmTooltip
+      HotCursor = crHandPoint
+      Indent = 8
+      ParentShowHint = False
+      ShowHint = True
+      TabOrder = 5
+      OnDblClick = vtParaBDDblClick
+      Columns = <>
+    end
     object edAssociations: TMemoLabeled
-      Left = 73
-      Top = 302
-      Width = 653
+      Left = 96
+      Top = 478
+      Width = 696
       Height = 105
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       ScrollBars = ssBoth
-      TabOrder = 3
+      TabOrder = 6
       WordWrap = False
       LinkControls = <
         item
-          Control = Label4
+          Control = Label10
         end>
+    end
+    inline vtEditUnivers: TframVTEdit
+      Left = 96
+      Top = 143
+      Width = 696
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 3
+      Visible = False
+      ExplicitLeft = 96
+      ExplicitTop = 143
+      ExplicitWidth = 696
+      inherited btReset: TVDTButton
+        Left = 633
+        ExplicitLeft = 284
+      end
+      inherited btNew: TVDTButton
+        Left = 675
+        ExplicitLeft = 326
+      end
+      inherited btEdit: TVDTButton
+        Left = 654
+        ExplicitLeft = 305
+      end
+      inherited VTEdit: TJvComboEdit
+        Width = 633
+        ExplicitWidth = 259
+      end
     end
   end
   inline Frame11: TframBoutons
     Left = 0
     Top = 0
-    Width = 731
+    Width = 798
     Height = 29
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 731
+    ExplicitWidth = 798
     inherited btnOK: TButton
-      Left = 560
-      Width = 87
+      Left = 624
+      Width = 90
       Caption = 'Enregistrer'
-      Images = nil
       OnClick = Frame11btnOKClick
-      ExplicitLeft = 560
-      ExplicitWidth = 87
+      ExplicitLeft = 624
+      ExplicitWidth = 90
     end
     inherited btnAnnuler: TButton
-      Left = 648
-      Images = nil
-      ExplicitLeft = 648
+      Left = 715
+      ExplicitLeft = 715
     end
   end
 end

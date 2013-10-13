@@ -6,11 +6,10 @@ uses
   Windows, SysUtils, Forms, Controls, ComCtrls, TypeRec, LoadComplet, Classes, Commun;
 
 function MAJConsultationAlbum(const Reference: TGUID): Boolean;
-function MAJConsultationEmprunteur(const Reference: TGUID): Boolean;
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;
+function MAJConsultationUnivers(const Reference: TGUID): Boolean;
 function MAJConsultationParaBD(const Reference: TGUID): Boolean;
 function MAJConsultationSerie(const Reference: TGUID): Boolean;
-procedure MAJStock;
 procedure MAJSeriesIncompletes;
 procedure MAJPrevisionsSorties;
 procedure MAJPrevisionsAchats;
@@ -19,16 +18,12 @@ function MAJGallerie(TypeGallerie: Integer; const Reference: TGUID): Boolean;
 function ZoomCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID): Boolean;
 function MAJScript(Data: TAlbumComplet): Boolean;
 
-function SaisieMouvementAlbum(const MvtID_Album, MvtID_Edition: TGUID; MvtPret: Boolean; const MvtID_Emprunteur: string = sGUID_NULL): Boolean;
-function SaisieMouvementEmprunteur(const MvtID_Emprunteur: TGUID; const MvtID_Album: TEditionsEmpruntees): Boolean;
-
 implementation
 
 uses
-  CommonConst, UfrmStock, UfrmFond, DB, StdCtrls, UfrmSeriesIncompletes,
-  UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmConsultationEmprunteur, UfrmSaisieEmpruntAlbum, UfrmSaisieEmpruntEmprunteur, UfrmRecherche,
-  UfrmZoomCouverture, UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique,
-  UfrmConsultationParaBD, UfrmConsultationSerie, UfrmScripts, UfrmGallerie;
+  CommonConst, UfrmFond, DB, StdCtrls, UfrmSeriesIncompletes, UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmRecherche,
+  UfrmZoomCouverture, UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique, UfrmConsultationParaBD, UfrmConsultationSerie, UfrmScripts, UfrmGallerie,
+  UfrmConsultationUnivers;
 
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;
 var
@@ -36,9 +31,10 @@ var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  // if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
   Result := not IsEqualGUID(Reference, GUID_NULL);
-  if not Result then Exit;
+  if not Result then
+    Exit;
   FDest := TFrmConsultationAuteur.Create(frmFond);
   try
     FDest.ID_Auteur := Reference;
@@ -55,9 +51,10 @@ var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  // if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
   Result := not IsEqualGUID(Reference, GUID_NULL);
-  if not Result then Exit;
+  if not Result then
+    Exit;
   FDest := TFrmConsultationAlbum.Create(frmFond);
   try
     FDest.ID_Album := Reference;
@@ -74,14 +71,35 @@ var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  // if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
   Result := not IsEqualGUID(Reference, GUID_NULL);
-  if not Result then Exit;
+  if not Result then
+    Exit;
   FDest := TFrmConsultationSerie.Create(frmFond);
   try
     FDest.ID_Serie := Reference;
     Historique.SetDescription(FDest.Caption);
     Result := not FDest.Serie.RecInconnu;
+  finally
+    frmFond.SetChildForm(FDest);
+  end;
+end;
+
+function MAJConsultationUnivers(const Reference: TGUID): Boolean;
+var
+  FDest: TFrmConsultationUnivers;
+  hg: IHourGlass;
+begin
+  hg := THourGlass.Create;
+  // if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  Result := not IsEqualGUID(Reference, GUID_NULL);
+  if not Result then
+    Exit;
+  FDest := TFrmConsultationUnivers.Create(frmFond);
+  try
+    FDest.ID_Univers := Reference;
+    Historique.SetDescription(FDest.Caption);
+    Result := not FDest.Univers.RecInconnu;
   finally
     frmFond.SetChildForm(FDest);
   end;
@@ -93,9 +111,10 @@ var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  // if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
   Result := not IsEqualGUID(Reference, GUID_NULL);
-  if not Result then Exit;
+  if not Result then
+    Exit;
   FDest := TFrmConsultationParaBD.Create(frmFond);
   try
     FDest.ID_ParaBD := Reference;
@@ -104,61 +123,6 @@ begin
   finally
     frmFond.SetChildForm(FDest);
   end;
-end;
-
-function MAJConsultationEmprunteur(const Reference: TGUID): Boolean;
-var
-  FDest: TFrmConsultationEmprunteur;
-  hg: IHourGlass;
-begin
-  hg := THourGlass.Create;
-  //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
-  Result := not IsEqualGUID(Reference, GUID_NULL);
-  if not Result then Exit;
-  FDest := TFrmConsultationEmprunteur.Create(frmFond);
-  try
-    FDest.ID_Emprunteur := Reference;
-    Historique.SetDescription(FDest.Caption);
-    Result := not FDest.Emprunteur.RecInconnu;
-  finally
-    frmFond.SetChildForm(FDest);
-  end;
-end;
-
-function SaisieMouvementAlbum(const MvtID_Album, MvtID_Edition: TGUID; MvtPret: Boolean; const MvtID_Emprunteur: string): Boolean;
-begin
-  Result := False;
-  if TGlobalVar.Mode_en_cours <> mdConsult then
-    Exit;
-
-  with TfrmSaisieEmpruntAlbum.Create(frmFond) do
-    try
-      pret.Checked := MvtPret;
-      ID_Album := MvtID_Album;
-      ID_Edition := MvtID_Edition;
-      ID_Emprunteur := StringToGUID(MvtID_Emprunteur);
-      Result := ShowModal = mrOk;
-    finally
-      Free;
-    end;
-end;
-
-function SaisieMouvementEmprunteur(const MvtID_Emprunteur: TGUID; const MvtID_Album: TEditionsEmpruntees): Boolean;
-var
-  i: Integer;
-begin
-  Result := False;
-  if TGlobalVar.Mode_en_cours <> mdConsult then
-    Exit;
-  with TfrmSaisieEmpruntEmprunteur.Create(frmFond) do
-    try
-      ID_Emprunteur := MvtID_Emprunteur;
-      for i := Low(MvtID_Album) to High(MvtID_Album) do
-        AjouteAlbum(MvtID_Album[i][0], MvtID_Album[i][1]);
-      Result := ShowModal = mrOk;
-    finally
-      Free;
-    end;
 end;
 
 procedure _MAJFenetre(FormClass: TFormClass);
@@ -185,18 +149,13 @@ begin
   _MAJFenetre(TfrmSeriesIncompletes);
 end;
 
-procedure MAJStock;
-begin
-  _MAJFenetre(TFrmStock);
-end;
-
 procedure MAJRecherche(const Reference: TGUID; TypeSimple: Integer; Stream: TMemoryStream);
 var
   FDest: TFrmRecherche;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  if not (TGlobalVar.Mode_en_cours in [mdEdit, mdConsult]) then
+  if not(TGlobalVar.Mode_en_cours in [mdEdit, mdConsult]) then
     Exit;
   FDest := TFrmRecherche.Create(frmFond);
   with FDest do
@@ -238,8 +197,9 @@ function ZoomCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID):
 var
   FDest: TFrmZoomCouverture;
 begin
-  Result := not (IsEqualGUID(ID_Item, GUID_NULL) or IsEqualGUID(ID_Couverture, GUID_NULL));
-  if not Result then Exit;
+  Result := not(IsEqualGUID(ID_Item, GUID_NULL) or IsEqualGUID(ID_Couverture, GUID_NULL));
+  if not Result then
+    Exit;
   FDest := TFrmZoomCouverture.Create(frmFond);
   with FDest do
     try
@@ -254,7 +214,7 @@ function MAJScript(Data: TAlbumComplet): Boolean;
 var
   FDest: TfrmScripts;
   isUpdate: Boolean;
-//  hg: IHourGlass;
+  // hg: IHourGlass;
 begin
   // hg := THourGlass.Create;
   isUpdate := False;
@@ -278,16 +238,21 @@ var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  //  if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
+  // if not (Mode_en_cours in [mdEdit, mdConsult]) then Exit;
   Result := not IsEqualGUID(Reference, GUID_NULL);
-  if not Result then Exit;
+  if not Result then
+    Exit;
   FDest := TfrmGallerie.Create(frmFond);
   try
     case TypeGallerie of
-      1: FDest.ID_Serie := Reference;
-      2: FDest.ID_Album := Reference;
-      3: FDest.ID_Edition := Reference;
-      else Exit;
+      1:
+        FDest.ID_Serie := Reference;
+      2:
+        FDest.ID_Album := Reference;
+      3:
+        FDest.ID_Edition := Reference;
+    else
+      Exit;
     end;
     Historique.SetDescription(FDest.Caption);
     Result := True;
@@ -297,4 +262,3 @@ begin
 end;
 
 end.
-

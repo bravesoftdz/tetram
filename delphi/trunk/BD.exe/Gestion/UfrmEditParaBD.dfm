@@ -14,7 +14,6 @@ object frmEditParaBD: TfrmEditParaBD
   OldCreateOrder = False
   OnActivate = FormActivate
   OnCreate = FormCreate
-  OnDestroy = FormDestroy
   OnShow = FormShow
   PixelsPerInch = 96
   TextHeight = 13
@@ -64,7 +63,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object Label6: TLabel
       Left = 2
-      Top = 81
+      Top = 114
       Width = 60
       Height = 13
       Alignment = taRightJustify
@@ -74,7 +73,7 @@ object frmEditParaBD: TfrmEditParaBD
     object btCreateur: TVDTButton
       Tag = 1
       Left = 278
-      Top = 206
+      Top = 239
       Width = 57
       Height = 72
       Caption = 'Auteur /'#13#10'Cr'#233'ateur'
@@ -101,7 +100,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object Label19: TLabel
       Left = 17
-      Top = 210
+      Top = 243
       Width = 45
       Height = 13
       Alignment = taRightJustify
@@ -119,7 +118,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object Label20: TLabel
       Left = 31
-      Top = 31
+      Top = 33
       Width = 31
       Height = 13
       Alignment = taRightJustify
@@ -127,16 +126,15 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object Bevel4: TBevel
       Left = 139
-      Top = 285
+      Top = 318
       Width = 290
       Height = 7
       Anchors = [akLeft, akTop, akRight]
       Shape = bsTopLine
-      ExplicitWidth = 293
     end
     object Label24: TLabel
       Left = 67
-      Top = 365
+      Top = 400
       Width = 38
       Height = 13
       Alignment = taRightJustify
@@ -145,7 +143,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object Label25: TLabel
       Left = 163
-      Top = 365
+      Top = 400
       Width = 30
       Height = 13
       Alignment = taRightJustify
@@ -154,7 +152,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object VDTButton14: TVDTButton
       Left = 263
-      Top = 362
+      Top = 397
       Width = 96
       Height = 21
       Caption = 'Convertisseur'
@@ -187,7 +185,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object Label10: TLabel
       Left = 24
-      Top = 56
+      Top = 87
       Width = 38
       Height = 13
       Alignment = taRightJustify
@@ -196,7 +194,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object Label18: TLabel
       Left = 142
-      Top = 302
+      Top = 335
       Width = 52
       Height = 13
       Alignment = taRightJustify
@@ -205,7 +203,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object Label9: TLabel
       Left = 168
-      Top = 327
+      Top = 362
       Width = 25
       Height = 13
       Alignment = taRightJustify
@@ -214,7 +212,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object SpeedButton3: TVDTButton
       Left = 263
-      Top = 323
+      Top = 358
       Width = 96
       Height = 21
       Caption = 'Convertisseur'
@@ -247,7 +245,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object Label12: TLabel
       Left = 117
-      Top = 56
+      Top = 87
       Width = 31
       Height = 13
       Alignment = taRightJustify
@@ -256,7 +254,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object cbxCategorie: TLightComboCheck
       Left = 148
-      Top = 56
+      Top = 87
       Width = 166
       Height = 13
       Checked = False
@@ -272,11 +270,20 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object Bevel3: TBevel
       Left = 139
-      Top = 195
+      Top = 228
       Width = 290
       Height = 6
       Anchors = [akLeft, akTop, akRight]
       Shape = bsTopLine
+    end
+    object Label11: TLabel
+      Left = 19
+      Top = 58
+      Width = 43
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Univers :'
+      Visible = False
     end
     object edTitre: TEditLabeled
       Left = 68
@@ -295,14 +302,14 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object description: TMemoLabeled
       Left = 68
-      Top = 78
+      Top = 111
       Width = 436
       Height = 111
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       ScrollBars = ssVertical
-      TabOrder = 5
+      TabOrder = 6
       LinkControls = <
         item
           Control = Label6
@@ -310,7 +317,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object lvAuteurs: TVDTListViewLabeled
       Left = 335
-      Top = 207
+      Top = 240
       Width = 169
       Height = 72
       Anchors = [akLeft, akTop, akRight]
@@ -321,7 +328,7 @@ object frmEditParaBD: TfrmEditParaBD
         end>
       OwnerData = True
       SortType = stNone
-      TabOrder = 7
+      TabOrder = 8
       OnData = lvAuteursData
       OnKeyDown = lvAuteursKeyDown
       LinkControls = <
@@ -331,13 +338,13 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object edAnneeCote: TEditLabeled
       Left = 111
-      Top = 362
+      Top = 397
       Width = 46
       Height = 21
       BevelKind = bkTile
       BorderStyle = bsNone
       MaxLength = 4
-      TabOrder = 12
+      TabOrder = 13
       LinkControls = <
         item
           Control = Label24
@@ -347,7 +354,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object edPrixCote: TEditLabeled
       Left = 196
-      Top = 362
+      Top = 397
       Width = 64
       Height = 21
       AutoSelect = False
@@ -356,7 +363,7 @@ object frmEditParaBD: TfrmEditParaBD
       BorderStyle = bsNone
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 13
+      TabOrder = 14
       LinkControls = <
         item
           Control = Label25
@@ -369,13 +376,13 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object edAnneeEdition: TEditLabeled
       Left = 68
-      Top = 53
+      Top = 84
       Width = 46
       Height = 21
       BevelKind = bkTile
       BorderStyle = bsNone
       MaxLength = 4
-      TabOrder = 2
+      TabOrder = 3
       LinkControls = <
         item
           Control = Label10
@@ -385,7 +392,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object cbStock: TCheckBoxLabeled
       Left = 442
-      Top = 302
+      Top = 335
       Width = 61
       Height = 13
       Anchors = [akTop, akRight]
@@ -394,22 +401,22 @@ object frmEditParaBD: TfrmEditParaBD
       Ctl3D = True
       ParentCtl3D = False
       State = cbChecked
-      TabOrder = 14
+      TabOrder = 15
       LinkControls = <
         item
           Control = cbStock
         end>
     end
     object cbGratuit: TCheckBoxLabeled
-      Left = 69
-      Top = 325
+      Left = 68
+      Top = 361
       Width = 53
       Height = 16
       Cursor = crHandPoint
       Caption = 'Gratuit'
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 9
+      TabOrder = 10
       OnClick = cbGratuitClick
       LinkControls = <
         item
@@ -417,15 +424,15 @@ object frmEditParaBD: TfrmEditParaBD
         end>
     end
     object cbOffert: TCheckBoxLabeled
-      Left = 69
-      Top = 300
+      Left = 68
+      Top = 334
       Width = 53
       Height = 16
       Cursor = crHandPoint
       Caption = 'Offert'
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 8
+      TabOrder = 9
       OnClick = cbOffertClick
       LinkControls = <
         item
@@ -434,14 +441,14 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object dtpAchat: TDateTimePickerLabeled
       Left = 196
-      Top = 298
+      Top = 331
       Width = 101
       Height = 21
       Date = 38158.758085983800000000
       Time = 38158.758085983800000000
       ShowCheckbox = True
       Checked = False
-      TabOrder = 10
+      TabOrder = 11
       LinkControls = <
         item
           Control = Label18
@@ -449,7 +456,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object edPrix: TEditLabeled
       Left = 196
-      Top = 323
+      Top = 358
       Width = 64
       Height = 21
       AutoSelect = False
@@ -458,7 +465,7 @@ object frmEditParaBD: TfrmEditParaBD
       BorderStyle = bsNone
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 11
+      TabOrder = 12
       OnChange = edPrixChange
       LinkControls = <
         item
@@ -472,14 +479,14 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object cbDedicace: TCheckBoxLabeled
       Left = 334
-      Top = 55
+      Top = 86
       Width = 64
       Height = 16
       Cursor = crHandPoint
       Caption = 'D'#233'dicac'#233
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 3
+      TabOrder = 4
       LinkControls = <
         item
           Control = cbDedicace
@@ -493,7 +500,7 @@ object frmEditParaBD: TfrmEditParaBD
       Anchors = [akTop, akRight]
       BevelInner = bvLowered
       Caption = ' '
-      TabOrder = 15
+      TabOrder = 16
       object imgVisu: TImage
         Left = 2
         Top = 25
@@ -1341,14 +1348,14 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object cbNumerote: TCheckBoxLabeled
       Left = 422
-      Top = 55
+      Top = 86
       Width = 64
       Height = 16
       Cursor = crHandPoint
       Caption = 'Num'#233'rot'#233
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 4
+      TabOrder = 5
       LinkControls = <
         item
           Control = cbNumerote
@@ -1356,13 +1363,13 @@ object frmEditParaBD: TfrmEditParaBD
     end
     inline vtEditSeries: TframVTEdit
       Left = 68
-      Top = 28
+      Top = 30
       Width = 436
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 1
       ExplicitLeft = 68
-      ExplicitTop = 28
+      ExplicitTop = 30
       ExplicitWidth = 436
       inherited btReset: TVDTButton
         Left = 373
@@ -1377,19 +1384,21 @@ object frmEditParaBD: TfrmEditParaBD
         ExplicitLeft = 394
       end
       inherited VTEdit: TJvComboEdit
+        Top = 1
         Width = 373
         OnChange = vtEditSeriesVTEditChange
+        ExplicitTop = 1
         ExplicitWidth = 373
       end
     end
     inline vtEditPersonnes: TframVTEdit
       Left = 68
-      Top = 207
+      Top = 240
       Width = 204
       Height = 21
-      TabOrder = 6
+      TabOrder = 7
       ExplicitLeft = 68
-      ExplicitTop = 207
+      ExplicitTop = 240
       ExplicitWidth = 204
       inherited btReset: TVDTButton
         Left = 141
@@ -1407,6 +1416,34 @@ object frmEditParaBD: TfrmEditParaBD
         Width = 141
         OnChange = vtEditPersonnesVTEditChange
         ExplicitWidth = 141
+      end
+    end
+    inline vtEditUnivers: TframVTEdit
+      Left = 68
+      Top = 57
+      Width = 436
+      Height = 21
+      Anchors = [akLeft, akTop, akRight]
+      TabOrder = 2
+      Visible = False
+      ExplicitLeft = 68
+      ExplicitTop = 57
+      ExplicitWidth = 436
+      inherited btReset: TVDTButton
+        Left = 373
+        ExplicitLeft = 284
+      end
+      inherited btNew: TVDTButton
+        Left = 415
+        ExplicitLeft = 326
+      end
+      inherited btEdit: TVDTButton
+        Left = 394
+        ExplicitLeft = 305
+      end
+      inherited VTEdit: TJvComboEdit
+        Width = 373
+        ExplicitWidth = 259
       end
     end
   end

@@ -3,7 +3,8 @@ unit UfrmConsultationAuteur;
 interface
 
 uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls, ProceduresBDtk,
-  VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, jpeg, Procedures, ShellAPI, VirtualTree, LoadComplet, UBdtForms, StrUtils;
+  VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, jpeg, Procedures, ShellAPI, VirtualTree, LoadComplet, UBdtForms, StrUtils,
+  System.Actions;
 
 type
   TfrmConsultationAuteur = class(TBdtForm, IImpressionApercu, IFicheEditable)
@@ -243,7 +244,7 @@ begin
     NodeInfo := Sender.GetNodeData(Node);
     if Assigned(NodeInfo.Serie) then
     begin
-      CellText := FormatTitre(NodeInfo.Serie.Titre);
+      CellText := FormatTitre(NodeInfo.Serie.TitreSerie);
       if CellText = '' then
         CellText := '<Sans série>';
     end

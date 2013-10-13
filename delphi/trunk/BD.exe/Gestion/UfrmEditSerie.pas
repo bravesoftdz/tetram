@@ -20,9 +20,9 @@ type
     Bevel3: TBevel;
     Bevel2: TBevel;
     Label6: TLabel;
-    histoire: TMemoLabeled;
+    edHistoire: TMemoLabeled;
     Label7: TLabel;
-    remarques: TMemoLabeled;
+    edNotes: TMemoLabeled;
     cbTerminee: TCheckBoxLabeled;
     cbManquants: TCheckBoxLabeled;
     vtAlbums: TVirtualStringTree;
@@ -68,6 +68,8 @@ type
     Label10: TLabel;
     Bevel4: TBevel;
     Label28: TLabel;
+    vtEditUnivers: TframVTEdit;
+    Label11: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
@@ -112,8 +114,6 @@ uses
 
 const
   RemplacerValeur = 'Remplacer %s par %s ?';
-  PasModifier = 'Impossible de modifier le support !';
-  PasAjouter = 'Impossible d''ajouter le support !';
 
 procedure TfrmEditSerie.FormCreate(Sender: TObject);
 begin
@@ -129,6 +129,8 @@ begin
   vtEditCollections.VTEdit.PopupWindow.TreeView.UseFiltre := True;
   vtEditCollections.VTEdit.LinkControls.Add(Label8);
   vtEditEditeurs.VTEdit.LinkControls.Add(Label5);
+  vtEditUnivers.Mode := vmUnivers;
+  vtEditUnivers.VTEdit.LinkControls.Add(Label11);
   vtAlbums.Mode := vmNone;
   vtAlbums.UseFiltre := True;
   vtParaBD.Mode := vmNone;
@@ -173,7 +175,7 @@ begin
     Exit;
   end;
 
-  FSerie.Titre := Trim(edTitre.Text);
+  FSerie.TitreSerie := Trim(edTitre.Text);
   FSerie.Terminee := Integer(cbTerminee.State);
   FSerie.SuivreSorties := cbSorties.Checked;
   FSerie.Complete := cbComplete.Checked;
@@ -182,8 +184,9 @@ begin
   FSerie.SiteWeb := Trim(edSite.Text);
   FSerie.ID_Editeur := vtEditEditeurs.CurrentValue;
   FSerie.ID_Collection := vtEditCollections.CurrentValue;
-  FSerie.Sujet.Text := histoire.Text;
-  FSerie.Notes.Text := remarques.Text;
+  FSerie.Sujet.Text := edHistoire.Text;
+  FSerie.Notes.Text := edNotes.Text;
+  FSerie.ID_Univers := vtEditUnivers.CurrentValue;
 
   FSerie.VO := Integer(cbVO.State);
   FSerie.Couleur := Integer(cbCouleur.State);
@@ -217,7 +220,7 @@ begin
   lvDessinateurs.Items.BeginUpdate;
   lvColoristes.Items.BeginUpdate;
   try
-    edTitre.Text := FSerie.Titre;
+    edTitre.Text := FSerie.TitreSerie;
     if FSerie.Terminee = -1 then
       cbTerminee.State := cbGrayed
     else
@@ -227,11 +230,12 @@ begin
     vtEditCollections.CurrentValue := FSerie.ID_Collection;
     cbComplete.Checked := FSerie.Complete;
     cbManquants.Checked := FSerie.SuivreManquants;
-    histoire.Text := FSerie.Sujet.Text;
-    remarques.Text := FSerie.Notes.Text;
+    edHistoire.Text := FSerie.Sujet.Text;
+    edNotes.Text := FSerie.Notes.Text;
     edSite.Text := FSerie.SiteWeb;
     if FSerie.NbAlbums > 0 then
       edNbAlbums.Text := IntToStr(FSerie.NbAlbums);
+    vtEditUnivers.CurrentValue := FSerie.ID_Univers;
 
     lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
     lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;

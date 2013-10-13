@@ -145,6 +145,7 @@ object frmConsultationAuteur: TfrmConsultationAuteur
       Header.Font.Height = -11
       Header.Font.Name = 'Tahoma'
       Header.Font.Style = []
+      Header.Height = 17
       Header.Options = [hoColumnResize, hoDrag]
       TabOrder = 1
       OnAfterItemPaint = vstSeriesAfterItemPaint

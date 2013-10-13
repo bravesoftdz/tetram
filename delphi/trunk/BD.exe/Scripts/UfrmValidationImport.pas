@@ -300,7 +300,7 @@ procedure TfrmValidationImport.framBoutons1btnOKClick(Sender: TObject);
 
 begin
   // Album
-  FAlbum.Titre := SetValue(edTitreAlbum, CheckBox1, DefaultValues.Titre);
+  FAlbum.TitreAlbum := SetValue(edTitreAlbum, CheckBox1, DefaultValues.TitreAlbum);
   FAlbum.MoisParution := SetValue(edMoisParution, CheckBox3, DefaultValues.MoisParution);
   FAlbum.AnneeParution := SetValue(edAnneeParution, CheckBox4, DefaultValues.AnneeParution);
   FAlbum.Tome := SetValue(edTome, CheckBox2, DefaultValues.Tome);
@@ -315,7 +315,7 @@ begin
   SetValue(FAlbum.Notes, mmNotesAlbum, CheckBox12);
 
   // Série
-  FAlbum.Serie.Titre := SetValue(edTitreSerie, CheckBox13, DefaultValues.Serie.Titre);
+  FAlbum.Serie.TitreSerie := SetValue(edTitreSerie, CheckBox13, DefaultValues.Serie.TitreSerie);
   FAlbum.Serie.SiteWeb := SetValue(edSiteWebSerie, CheckBox16, DefaultValues.Serie.SiteWeb);
   FAlbum.Serie.NbAlbums := SetValue(edNbAlbums, CheckBox19, DefaultValues.Serie.NbAlbums);
   FAlbum.Serie.Terminee := SetValue(pnTerminee, CheckBox14, DefaultValues.Serie.Terminee);
@@ -514,7 +514,7 @@ begin
   FAlbum := Value;
 
   // Album
-  LoadValue(FAlbum.Titre, edTitreAlbum, CheckBox1, DefaultValues.Titre);
+  LoadValue(FAlbum.TitreAlbum, edTitreAlbum, CheckBox1, DefaultValues.TitreAlbum);
   LoadValue(FAlbum.MoisParution, edMoisParution, CheckBox3, DefaultValues.MoisParution);
   LoadValue(FAlbum.AnneeParution, edAnneeParution, CheckBox4, DefaultValues.AnneeParution);
   LoadValue(FAlbum.Tome, edTome, CheckBox2, DefaultValues.Tome);
@@ -534,7 +534,7 @@ begin
   LoadValue(FAlbum.Notes, mmNotesAlbum, CheckBox12);
 
   // Série
-  LoadValue(FAlbum.Serie.Titre, edTitreSerie, CheckBox13, DefaultValues.Serie.Titre);
+  LoadValue(FAlbum.Serie.TitreSerie, edTitreSerie, CheckBox13, DefaultValues.Serie.TitreSerie);
   LoadValue(FAlbum.Serie.SiteWeb, edSiteWebSerie, CheckBox16, DefaultValues.Serie.SiteWeb);
   LoadValue(FAlbum.Serie.NbAlbums, edNbAlbums, CheckBox19, DefaultValues.Serie.NbAlbums);
   LoadValue(FAlbum.Serie.Terminee, pnTerminee, CheckBox14, DefaultValues.Serie.Terminee);

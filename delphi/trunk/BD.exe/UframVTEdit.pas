@@ -101,8 +101,8 @@ begin
       Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierCollections, VT, '');
     vmEditeurs:
       Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierEditeurs, VT, '');
-    vmEmprunteurs:
-      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierEmprunteurs, VT, '');
+    vmUnivers:
+      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierUnivers, VT, '');
     vmGenres:
       Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierGenres, VT, '');
     vmPersonnes:
@@ -151,8 +151,8 @@ begin
         Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterCollections2, VT, FParentValue, newText);
     vmEditeurs:
       Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterEditeurs, VT, newText);
-    vmEmprunteurs:
-      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterEmprunteurs, VT, newText);
+    vmUnivers:
+      Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterUnivers, VT, newText);
     vmGenres:
       Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterGenres, VT, newText);
     vmPersonnes:

@@ -53,13 +53,14 @@ type
     vtEditPersonnes: TframVTEdit;
     Bevel3: TBevel;
     Label28: TLabel;
+    vtEditUnivers: TframVTEdit;
+    Label11: TLabel;
     procedure cbOffertClick(Sender: TObject);
     procedure cbGratuitClick(Sender: TObject);
     procedure edPrixChange(Sender: TObject);
     procedure SpeedButton3Click(Sender: TObject);
     procedure VDTButton14Click(Sender: TObject);
     procedure FormActivate(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
     procedure VDTButton1Click(Sender: TObject);
@@ -77,17 +78,18 @@ type
     FisAchat: Boolean;
     FParaBD: TParaBDComplet;
     FDateAchat: TDateTime;
-    procedure SetID_ParaBD(const Value: TGUID);
+    procedure SetParaBD(const Value: TParaBDComplet);
     function GetID_ParaBD: TGUID;
     { Déclarations privées }
   public
     { Déclarations publiques }
     property isCreation: Boolean read FCreation;
     property isAchat: Boolean read FisAchat write FisAchat;
-    property ID_ParaBD: TGUID read GetID_ParaBD write SetID_ParaBD;
+    property ID_ParaBD: TGUID read GetID_ParaBD;
+    property ParaBD: TParaBDComplet read FParaBD write SetParaBD;
   end;
 
-  TFrmEditAchatParaBD = class(TFrmEditParaBD)
+  TFrmEditAchatParaBD = class(TfrmEditParaBD)
   public
     constructor Create(AOwner: TComponent); override;
   end;
@@ -99,7 +101,6 @@ uses
   UMetadata;
 
 {$R *.dfm}
-
 { TFrmEditAchatParaBD }
 
 constructor TFrmEditAchatParaBD.Create(AOwner: TComponent);
@@ -110,23 +111,23 @@ end;
 
 { TFrmEditParaBD }
 
-procedure TfrmEditParaBD.SetID_ParaBD(const Value: TGUID);
+procedure TfrmEditParaBD.SetParaBD(const Value: TParaBDComplet);
 var
   Stream: TStream;
   jpg: TJPEGImage;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  FParaBD.Fill(Value);
+  FParaBD := Value;
 
   lvAuteurs.Items.BeginUpdate;
   try
-    edTitre.Text := FParaBD.Titre;
+    edTitre.Text := FParaBD.TitreParaBD;
     edAnneeEdition.Text := NonZero(IntToStr(FParaBD.AnneeEdition));
     cbxCategorie.Value := FParaBD.CategorieParaBD.Value;
     cbDedicace.Checked := FParaBD.Dedicace;
     cbNumerote.Checked := FParaBD.Numerote;
-    description.Text := FParaBD.Description.Text;
+    description.Text := FParaBD.description.Text;
 
     vtEditSeries.CurrentValue := FParaBD.Serie.ID_Serie;
 
@@ -151,21 +152,22 @@ begin
 
     lvAuteurs.Items.Count := FParaBD.Auteurs.Count;
 
-    if FParaBD.HasImage then cbImageBDD.Checked := FParaBD.ImageStockee;
+    if FParaBD.HasImage then
+      cbImageBDD.Checked := FParaBD.ImageStockee;
 
     Stream := GetCouvertureStream(True, FParaBD.ID_ParaBD, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
     if Assigned(Stream) then
-    try
-      jpg := TJPEGImage.Create;
       try
-        jpg.LoadFromStream(Stream);
-        imgVisu.Picture.Assign(jpg);
+        jpg := TJPEGImage.Create;
+        try
+          jpg.LoadFromStream(Stream);
+          imgVisu.Picture.Assign(jpg);
+        finally
+          FreeAndNil(jpg);
+        end;
       finally
-        FreeAndNil(jpg);
+        FreeAndNil(Stream);
       end;
-    finally
-      FreeAndNil(Stream);
-    end;
   finally
     lvAuteurs.Items.EndUpdate;
   end;
@@ -181,12 +183,14 @@ end;
 
 procedure TfrmEditParaBD.cbGratuitClick(Sender: TObject);
 begin
-  if cbGratuit.Checked then edPrix.Text := '';
+  if cbGratuit.Checked then
+    edPrix.Text := '';
 end;
 
 procedure TfrmEditParaBD.edPrixChange(Sender: TObject);
 begin
-  if edPrix.Text <> '' then cbGratuit.Checked := False;
+  if edPrix.Text <> '' then
+    cbGratuit.Checked := False;
 end;
 
 procedure TfrmEditParaBD.SpeedButton3Click(Sender: TObject);
@@ -218,23 +222,18 @@ begin
   Invalidate;
 end;
 
-procedure TfrmEditParaBD.FormDestroy(Sender: TObject);
-begin
-  FParaBD.Free;
-end;
-
 procedure TfrmEditParaBD.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
   vtEditSeries.Mode := vmSeries;
   vtEditSeries.VTEdit.LinkControls.Add(Label20);
+  vtEditUnivers.Mode := vmUnivers;
+  vtEditUnivers.VTEdit.LinkControls.Add(Label11);
   vtEditPersonnes.Mode := vmPersonnes;
   vtEditPersonnes.VTEdit.LinkControls.Add(Label19);
   vtEditPersonnes.AfterEdit := OnEditPersonnes;
 
-  LoadCombo(7 {Catégorie ParaBD}, cbxCategorie);
-
-  FParaBD := TParaBDComplet.Create;
+  LoadCombo(7 { Catégorie ParaBD } , cbxCategorie);
 
   VDTButton1.Click;
 end;
@@ -280,12 +279,12 @@ begin
 
   hg := THourGlass.Create;
 
-  FParaBD.Titre := Trim(edTitre.Text);
+  FParaBD.TitreParaBD := Trim(edTitre.Text);
   FParaBD.AnneeEdition := StrToIntDef(edAnneeEdition.Text, 0);
   FParaBD.CategorieParaBD := MakeOption(cbxCategorie.Value, cbxCategorie.Caption);
   FParaBD.Dedicace := cbDedicace.Checked;
   FParaBD.Numerote := cbNumerote.Checked;
-  FParaBD.Description.Text := description.Text;
+  FParaBD.description.Text := description.Text;
   FParaBD.AnneeCote := AnneeCote;
   FParaBD.PrixCote := PrixCote;
   FParaBD.Gratuit := cbGratuit.Checked;
@@ -300,7 +299,8 @@ begin
   FParaBD.ImageStockee := cbImageBDD.Checked;
 
   FParaBD.SaveToDatabase;
-  if isAchat then FParaBD.Acheter(False);
+  if isAchat then
+    FParaBD.Acheter(False);
 
   ModalResult := mrOk;
 end;
@@ -329,17 +329,17 @@ begin
       FParaBD.FichierImage := FileName;
       Stream := GetCouvertureStream(FParaBD.FichierImage, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
       if Assigned(Stream) then
-      try
-        jpg := TJPEGImage.Create;
         try
-          jpg.LoadFromStream(Stream);
-          imgVisu.Picture.Assign(jpg);
+          jpg := TJPEGImage.Create;
+          try
+            jpg.LoadFromStream(Stream);
+            imgVisu.Picture.Assign(jpg);
+          finally
+            FreeAndNil(jpg);
+          end;
         finally
-          FreeAndNil(jpg);
+          FreeAndNil(Stream);
         end;
-      finally
-        FreeAndNil(Stream);
-      end;
     end;
   end;
 end;
@@ -369,6 +369,8 @@ end;
 procedure TfrmEditParaBD.vtEditSeriesVTEditChange(Sender: TObject);
 begin
   FParaBD.Serie.Fill(vtEditSeries.CurrentValue);
+  vtEditUnivers.Visible := IsEqualGUID(FParaBD.Serie.ID_Serie, GUID_NULL);
+  Label11.Visible := IsEqualGUID(FParaBD.Serie.ID_Serie, GUID_NULL);
 end;
 
 procedure TfrmEditParaBD.OnEditPersonnes(Sender: TObject);
@@ -377,24 +379,25 @@ var
   Auteur: TAuteur;
   CurrentAuteur: TPersonnage;
 begin
-    CurrentAuteur := vtEditPersonnes.VTEdit.Data;
-    for i := 0 to Pred(lvAuteurs.Items.Count) do
+  CurrentAuteur := vtEditPersonnes.VTEdit.Data;
+  for i := 0 to Pred(lvAuteurs.Items.Count) do
+  begin
+    Auteur := lvAuteurs.Items[i].Data;
+    if IsEqualGUID(Auteur.Personne.ID, vtEditPersonnes.CurrentValue) then
     begin
-      Auteur := lvAuteurs.Items[i].Data;
-      if IsEqualGUID(Auteur.Personne.ID, vtEditPersonnes.CurrentValue) then
-      begin
-        Auteur.Personne.Assign(CurrentAuteur);
-        lvAuteurs.Items[i].Caption := Auteur.ChaineAffichage;
-      end;
+      Auteur.Personne.Assign(CurrentAuteur);
+      lvAuteurs.Items[i].Caption := Auteur.ChaineAffichage;
     end;
-    lvAuteurs.Invalidate;
+  end;
+  lvAuteurs.Invalidate;
 end;
 
 procedure TfrmEditParaBD.btCreateurClick(Sender: TObject);
 var
   PA: TAuteur;
 begin
-  if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then Exit;
+  if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
+    Exit;
   PA := TAuteur.Create;
   PA.Fill(TPersonnage(vtEditPersonnes.VTEdit.Data), ID_ParaBD, GUID_NULL, TMetierAuteur(0));
   FParaBD.Auteurs.Add(PA);
@@ -407,9 +410,11 @@ procedure TfrmEditParaBD.lvAuteursKeyDown(Sender: TObject; var Key: Word; Shift:
 var
   src: TListView;
 begin
-  if Key <> VK_DELETE then Exit;
+  if Key <> VK_DELETE then
+    Exit;
   src := TListView(Sender);
-  if src = lvAuteurs then FParaBD.Auteurs.Delete(src.Selected.Index);
+  if src = lvAuteurs then
+    FParaBD.Auteurs.Delete(src.Selected.Index);
   lvAuteurs.Items.Count := FParaBD.Auteurs.Count;
   src.Invalidate;
   vtEditPersonnesVTEditChange(vtEditPersonnes.VTEdit);
@@ -421,7 +426,8 @@ begin
   // Cheched := False est réinitialisé au premier affichage du compo (à la création de son handle)
   dtpAchat.Date := Now;
   dtpAchat.Checked := FDateAchat > 0;
-  if dtpAchat.Checked then dtpAchat.Date := FDateAchat;
+  if dtpAchat.Checked then
+    dtpAchat.Date := FDateAchat;
 end;
 
 function TfrmEditParaBD.GetID_ParaBD: TGUID;
@@ -444,4 +450,3 @@ begin
 end;
 
 end.
-

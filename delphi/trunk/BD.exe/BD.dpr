@@ -18,15 +18,11 @@ uses
   UdmPrinc in 'UdmPrinc.pas' {dmPrinc: TDataModule},
   UfrmRepertoire in 'Consultation\UfrmRepertoire.pas' {frmRepertoire},
   UfrmConsultationAuteur in 'Consultation\UfrmConsultationAuteur.pas' {frmConsultationAuteur},
-  UfrmConsultationEmprunteur in 'Consultation\UfrmConsultationEmprunteur.pas' {frmConsultationEmprunteur},
   UfrmConsultationSerie in 'Consultation\UfrmConsultationSerie.pas' {frmConsultationSerie},
   UfrmConsultationParaBD in 'Consultation\UfrmConsultationParaBD.pas' {frmConsultationParaBD},
   UfrmZoomCouverture in 'Consultation\UfrmZoomCouverture.pas' {frmZoomCouverture},
   UfrmRecherche in 'Consultation\UfrmRecherche.pas' {frmRecherche},
   UfrmEditCritereTri in 'Consultation\UfrmEditCritereTri.pas' {frmEditCritereTri},
-  UfrmStock in 'Consultation\UfrmStock.pas' {frmStock},
-  UfrmSaisieEmpruntAlbum in 'Consultation\UfrmSaisieEmpruntAlbum.pas' {frmSaisieEmpruntAlbum},
-  UfrmSaisieEmpruntEmprunteur in 'Consultation\UfrmSaisieEmpruntEmprunteur.pas' {frmSaisieEmpruntEmprunteur},
   UfrmStatsGeneral in 'Consultation\UfrmStatsGeneral.pas' {frmStatsGenerales},
   UfrmStatsEmprunteurs in 'Consultation\UfrmStatsEmprunteurs.pas' {frmStatsEmprunteurs},
   UfrmStatsAlbums in 'Consultation\UfrmStatsAlbums.pas' {frmStatsAlbums},
@@ -178,7 +174,9 @@ uses
   UDW_CommonFunctions in 'Scripts\DWScript\UDW_CommonFunctions.pas',
   UDW_BdtkRegEx in 'Scripts\DWScript\UDW_BdtkRegEx.pas',
   UDW_BdtkObjects in 'Scripts\DWScript\UDW_BdtkObjects.pas',
-  UDWUnit in 'Scripts\DWScript\UDWUnit.pas';
+  UDWUnit in 'Scripts\DWScript\UDWUnit.pas',
+  UfrmConsultationUnivers in 'Consultation\UfrmConsultationUnivers.pas' {frmConsultationUnivers},
+  UfrmEditUnivers in 'Gestion\UfrmEditUnivers.pas' {frmEditUnivers};
 
 {$R *.RES}
 {$R curseurs.res}

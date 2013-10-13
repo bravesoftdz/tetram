@@ -13,6 +13,7 @@ const
   LengthNomEditeur = 50; // LengthNom;
   LengthNomCollection = 50; // LengthNom;
   LengthNomEmprunteur = LengthNom;
+  LengthNomUnivers = 50;
   LengthURL = 255;
   LengthNumPerso = 25;
 

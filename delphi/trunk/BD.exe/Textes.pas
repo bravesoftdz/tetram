@@ -181,8 +181,11 @@ const
   rsLienEmprunteur = 'Attention, les albums qui ont un lien avec cet emprunteur en seront détachés.';
   rsSupprimerEmprunteur = 'Êtes-vous sûr de vouloir supprimer cet emprunteur ?';
 
-  rsLienSerie = 'Attention, les albums qui ont un lien avec cette série seront supprimés.';
+  rsLienSerie = 'Attention, les albums qui ont un lien avec cette série en seront détachés.';
   rsSupprimerSerie = 'Êtes-vous sûr de vouloir supprimer cette série ?';
+
+  rsLienUnivers = 'Attention, les séries et les albums qui ont un lien avec cet univers en seront détachés.';
+  rsSupprimerUnivers = 'Êtes-vous sûr de vouloir supprimer cet univers ?';
 
   rsLienEdition = 'Attention, les emprunts de cette édition seront supprimés.';
   rsSupprimerEdition = 'Êtes-vous sûr de vouloir supprimer cette édition ?';

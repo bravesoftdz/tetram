@@ -42,10 +42,10 @@ function ModifierSeries(VT: TVirtualStringTree; Source: TObjetComplet = nil): Bo
 function ModifierSeries2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
 function SupprimerSeries(VT: TVirtualStringTree): Boolean;
 
-function AjouterEmprunteurs(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
-function ModifierEmprunteurs(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
-function ModifierEmprunteurs2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
-function SupprimerEmprunteurs(VT: TVirtualStringTree): Boolean;
+function AjouterUnivers(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
+function ModifierUnivers(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function ModifierUnivers2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function SupprimerUnivers(VT: TVirtualStringTree): Boolean;
 
 function AjouterCollections2(VT: TVirtualStringTree; const ID_Editeur: TGUID; const Valeur: string): TGUID;
 function AjouterCollections(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
@@ -67,7 +67,7 @@ implementation
 uses
   Textes, Procedures, TypeRec;
 
-//******************************************************************************************************
+// ******************************************************************************************************
 
 function AjouterEditeurs(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
 begin
@@ -117,7 +117,7 @@ begin
   else
     VT.ClearIndexNode;
 end;
-//********************************************************************************************************
+// ********************************************************************************************************
 
 function AjouterAchatsAlbum(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
 begin
@@ -170,7 +170,7 @@ begin
   else
     VT.ClearIndexNode;
 end;
-//*********************************************************************************************************
+// *********************************************************************************************************
 
 function AjouterAlbums(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
 begin
@@ -235,7 +235,7 @@ begin
   else
     VT.ClearIndexNode;
 end;
-//*********************************************************************************************************
+// *********************************************************************************************************
 
 function AjouterGenres(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
 begin
@@ -282,7 +282,7 @@ begin
   else
     VT.ClearIndexNode;
 end;
-//********************************************************************************************************************
+// ********************************************************************************************************************
 
 function AjouterAuteurs(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
 begin
@@ -343,7 +343,7 @@ begin
   else
     VT.ClearIndexNode;
 end;
-//********************************************************************************************************************
+// ********************************************************************************************************************
 
 function AjouterSeries(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
 begin
@@ -395,11 +395,14 @@ begin
   else
     VT.ClearIndexNode;
 end;
-//********************************************************************************************************************
+// ********************************************************************************************************************
 
-function AjouterEmprunteurs(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
+function AjouterUnivers(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
 begin
-  Result := CreationEmprunteur(Valeur);
+  if Assigned(Source) then
+    Result := CreationUnivers(Source)
+  else
+    Result := CreationUnivers(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then
     Exit;
   if Assigned(VT) then
@@ -409,22 +412,22 @@ begin
   end;
 end;
 
-function ModifierEmprunteurs2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function ModifierUnivers2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
 begin
   Result := False;
   if IsEqualGUID(ID, GUID_NULL) then
     Exit;
-  Result := EditionEmprunteur(ID);
+  Result := EditionUnivers(ID);
 end;
 
-function ModifierEmprunteurs(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function ModifierUnivers(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
 begin
-  Result := ModifierEmprunteurs2(VT.CurrentValue);
+  Result := ModifierUnivers2(VT.CurrentValue);
   if Result then
     VT.InitializeRep;
 end;
 
-function SupprimerEmprunteurs(VT: TVirtualStringTree): Boolean;
+function SupprimerUnivers(VT: TVirtualStringTree): Boolean;
 var
   i: TGUID;
 begin
@@ -433,9 +436,9 @@ begin
   if IsEqualGUID(i, GUID_NULL) then
     Exit;
   VT.MemorizeIndexNode;
-  if AffMessage(rsLienEmprunteur + #13 + rsSupprimerEmprunteur, mtConfirmation, [mbYes, mbNo], True) <> mrYes then
+  if AffMessage(rsLienUnivers + #13 + rsSupprimerUnivers, mtConfirmation, [mbYes, mbNo], True) <> mrYes then
     Exit;
-  Result := DelEmprunteur(i);
+  Result := DelUnivers(i);
   if Result then
   begin
     VT.InitializeRep(False);
@@ -444,7 +447,7 @@ begin
   else
     VT.ClearIndexNode;
 end;
-//********************************************************************************************************************
+// ********************************************************************************************************************
 
 function AjouterCollections2(VT: TVirtualStringTree; const ID_Editeur: TGUID; const Valeur: string): TGUID;
 begin
@@ -506,7 +509,7 @@ begin
   else
     VT.ClearIndexNode;
 end;
-//********************************************************************************************************************
+// ********************************************************************************************************************
 
 function AjouterParaBD(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
 begin
@@ -568,7 +571,7 @@ begin
   else
     VT.ClearIndexNode;
 end;
-//*********************************************************************************************************
+// *********************************************************************************************************
 
 function AjouterAchatsParaBD(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
 begin
@@ -621,6 +624,6 @@ begin
   else
     VT.ClearIndexNode;
 end;
-//*********************************************************************************************************
-end.
 
+// *********************************************************************************************************
+end.

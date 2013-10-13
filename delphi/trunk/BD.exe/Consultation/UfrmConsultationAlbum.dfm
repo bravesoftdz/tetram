@@ -846,30 +846,6 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         ParentFont = False
         Transparent = True
       end
-      object Label2: TLabel
-        Left = 14
-        Top = 205
-        Width = 45
-        Height = 13
-        Caption = 'Emprunts'
-        Color = clWhite
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = 12615680
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentColor = False
-        ParentFont = False
-        ShowAccelChar = False
-        Transparent = True
-      end
-      object nbemprunts: TLabel
-        Left = 71
-        Top = 205
-        Width = 3
-        Height = 13
-        Transparent = True
-      end
       object Label9: TLabel
         Left = 0
         Top = 33
@@ -1166,61 +1142,6 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Caption = 'Numero personnel'
         ShowAccelChar = False
       end
-      object ListeEmprunts: TVirtualStringTree
-        Left = 8
-        Top = 224
-        Width = 515
-        Height = 116
-        Anchors = [akLeft, akTop, akRight]
-        AnimationDuration = 0
-        BevelInner = bvLowered
-        BevelOuter = bvNone
-        BevelKind = bkFlat
-        BorderStyle = bsNone
-        ButtonFillMode = fmShaded
-        Header.AutoSizeIndex = 1
-        Header.DefaultHeight = 17
-        Header.Font.Charset = DEFAULT_CHARSET
-        Header.Font.Color = clWindowText
-        Header.Font.Height = -11
-        Header.Font.Name = 'Tahoma'
-        Header.Font.Style = []
-        Header.Images = frmFond.ImageList1
-        Header.MainColumn = 1
-        Header.Options = [hoAutoResize, hoColumnResize, hoShowImages, hoVisible]
-        Header.Style = hsPlates
-        HotCursor = crHandPoint
-        Images = frmFond.ImageList1
-        TabOrder = 2
-        TreeOptions.PaintOptions = [toHideFocusRect, toHotTrack, toShowDropmark, toThemeAware, toUseBlendedImages]
-        TreeOptions.SelectionOptions = [toFullRowSelect, toMultiSelect]
-        OnDblClick = ListeEmpruntsDblClick
-        OnGetText = ListeEmpruntsGetText
-        OnGetImageIndex = ListeEmpruntsGetImageIndex
-        OnHeaderClick = ListeEmpruntsHeaderClick
-        Columns = <
-          item
-            Position = 0
-            Width = 100
-            WideText = 'Date'
-          end
-          item
-            Position = 1
-            Width = 413
-            WideText = 'Emprunteur'
-          end>
-      end
-      object btnAjouter: TButton
-        Left = 451
-        Top = 202
-        Width = 72
-        Height = 20
-        Cursor = crHandPoint
-        Anchors = [akTop, akRight]
-        Caption = 'Ajouter'
-        TabOrder = 1
-        OnClick = btnAjouterClick
-      end
       object edNotes: TMemo
         Left = 56
         Top = 134
@@ -1249,7 +1170,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 3
+        TabOrder = 1
         EditLabel.Width = 30
         EditLabel.Height = 13
         EditLabel.Caption = 'Offert'
@@ -1274,7 +1195,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 4
+        TabOrder = 2
         EditLabel.Width = 14
         EditLabel.Height = 13
         EditLabel.Caption = 'VO'
@@ -1299,7 +1220,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 5
+        TabOrder = 3
         EditLabel.Width = 43
         EditLabel.Height = 13
         EditLabel.Caption = 'D'#233'dicac'#233
@@ -1324,7 +1245,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 6
+        TabOrder = 4
         EditLabel.Width = 26
         EditLabel.Height = 13
         EditLabel.Caption = 'Stock'
@@ -1349,7 +1270,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
-        TabOrder = 7
+        TabOrder = 5
         EditLabel.Width = 37
         EditLabel.Height = 13
         EditLabel.Caption = 'Couleur'
@@ -1396,6 +1317,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Header.Font.Height = -11
       Header.Font.Name = 'Tahoma'
       Header.Font.Style = []
+      Header.Height = 17
       Header.MainColumn = -1
       Header.Options = [hoColumnResize, hoDrag]
       TabOrder = 8

@@ -36,12 +36,11 @@ type
     btGenre: TVDTButton;
     btCollections: TVDTButton;
     btSeries: TVDTButton;
-    btEmprunteurs: TVDTButton;
+    btUnivers: TVDTButton;
     Bevel1: TBevel;
     Bevel3: TBevel;
     VirtualTreeView: TVirtualStringTree;
     Bevel2: TBevel;
-    Bevel5: TBevel;
     btAchatsAlbums: TVDTButton;
     Bevel6: TBevel;
     Bevel7: TBevel;
@@ -66,7 +65,7 @@ type
   protected
   private
     { Déclarations privées }
-    GestionAchatAlbum, GestionAlbum, GestionAuteur, GestionGenre, GestionCollection, GestionEmprunteur, GestionEditeur, GestionSerie, GestionParaBD, GestionAchatParaBD: RInfo_Gestion;
+    GestionAchatAlbum, GestionAlbum, GestionAuteur, GestionGenre, GestionCollection, GestionUnivers, GestionEditeur, GestionSerie, GestionParaBD, GestionAchatParaBD: RInfo_Gestion;
     LastButton: TSpeedButton;
     procedure AssignIG(var IG: RInfo_Gestion; Ajouter: TActionGestionAdd; Modifier: TActionGestionModif; Supprimer: TActionGestionSupp; const Liste_Hint, Ajout_Hint, Modif_Hint, Supp_Hint: string; Mode: TVirtualMode; const Filtre: string = ''; Acheter: TActionGestionAchat = nil; Importer: Boolean = False; Exporter: Boolean = False);
   public
@@ -91,10 +90,10 @@ const
   HintAjoutAuteur = 'Ajouter un auteur';
   HintModifAuteur = 'Modifier l''auteur sélectionné';
   HintSuppAuteur = 'Supprimer l''auteur sélectionné';
-  HintListeEmprunteurs = 'Liste des emprunteurs';
-  HintAjoutEmprunteur = 'Ajouter un emprunteur';
-  HintModifEmprunteur = 'Modifier l''emprunteur sélectionné';
-  HintSuppEmprunteur = 'Supprimer l''emprunteur sélectionné';
+  HintListeUnivers = 'Liste des univers';
+  HintAjoutUnivers = 'Ajouter un univers';
+  HintModifUnivers = 'Modifier l''univers sélectionné';
+  HintSuppUnivers = 'Supprimer l''univers sélectionné';
   HintListeSeries = 'Liste des séries';
   HintAjoutSerie = 'Ajouter une série';
   HintModifSerie = 'Modifier la série sélectionnée';
@@ -166,7 +165,7 @@ begin
     Exit;
   if test(Result, btAuteurs, SB, GestionAuteur) then
     Exit;
-  if test(Result, btEmprunteurs, SB, GestionEmprunteur) then
+  if test(Result, btUnivers, SB, GestionUnivers) then
     Exit;
   if test(Result, btEditeurs, SB, GestionEditeur) then
     Exit;
@@ -200,9 +199,9 @@ begin
   AssignIG(GestionGenre, AjouterGenres, ModifierGenres, SupprimerGenres,
     HintListeGenres, HintAjoutGenre, HintModifGenre, HintSuppGenre,
     vmGenres);
-  AssignIG(GestionEmprunteur, AjouterEmprunteurs, ModifierEmprunteurs, SupprimerEmprunteurs,
-    HintListeEmprunteurs, HintAjoutEmprunteur, HintModifEmprunteur, HintSuppEmprunteur,
-    vmEmprunteurs);
+  AssignIG(GestionUnivers, AjouterUnivers, ModifierUnivers, SupprimerUnivers,
+    HintListeUnivers, HintAjoutUnivers, HintModifUnivers, HintSuppUnivers,
+    vmUnivers);
   AssignIG(GestionSerie, AjouterSeries, ModifierSeries, SupprimerSeries,
     HintListeSeries, HintAjoutSerie, HintModifSerie, HintSuppSerie,
     vmSeries);

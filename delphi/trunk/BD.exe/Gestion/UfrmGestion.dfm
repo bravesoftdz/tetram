@@ -482,7 +482,7 @@ object frmGestions: TfrmGestions
     end
     object btEditeurs: TVDTButton
       Left = 5
-      Top = 131
+      Top = 157
       Width = 95
       Height = 25
       Anchors = [akLeft, akTop, akRight]
@@ -492,7 +492,7 @@ object frmGestions: TfrmGestions
     end
     object btAuteurs: TVDTButton
       Left = 5
-      Top = 98
+      Top = 124
       Width = 95
       Height = 25
       Anchors = [akLeft, akTop, akRight]
@@ -502,7 +502,7 @@ object frmGestions: TfrmGestions
     end
     object btGenre: TVDTButton
       Left = 5
-      Top = 189
+      Top = 215
       Width = 95
       Height = 25
       Anchors = [akLeft, akTop, akRight]
@@ -512,7 +512,7 @@ object frmGestions: TfrmGestions
     end
     object btCollections: TVDTButton
       Left = 5
-      Top = 156
+      Top = 182
       Width = 95
       Height = 25
       Anchors = [akLeft, akTop, akRight]
@@ -522,7 +522,7 @@ object frmGestions: TfrmGestions
     end
     object btSeries: TVDTButton
       Left = 5
-      Top = 65
+      Top = 90
       Width = 95
       Height = 25
       Anchors = [akLeft, akTop, akRight]
@@ -532,7 +532,7 @@ object frmGestions: TfrmGestions
     end
     object Bevel1: TBevel
       Left = 19
-      Top = 125
+      Top = 151
       Width = 65
       Height = 3
       Anchors = [akLeft, akTop, akRight]
@@ -540,7 +540,7 @@ object frmGestions: TfrmGestions
     end
     object Bevel3: TBevel
       Left = 19
-      Top = 183
+      Top = 209
       Width = 65
       Height = 3
       Anchors = [akLeft, akTop, akRight]
@@ -549,14 +549,6 @@ object frmGestions: TfrmGestions
     object Bevel2: TBevel
       Left = 19
       Top = 58
-      Width = 65
-      Height = 4
-      Anchors = [akLeft, akTop, akRight]
-      Shape = bsBottomLine
-    end
-    object Bevel5: TBevel
-      Left = 19
-      Top = 249
       Width = 65
       Height = 4
       Anchors = [akLeft, akTop, akRight]
@@ -574,7 +566,7 @@ object frmGestions: TfrmGestions
     end
     object Bevel6: TBevel
       Left = 19
-      Top = 92
+      Top = 118
       Width = 65
       Height = 3
       Anchors = [akLeft, akTop, akRight]
@@ -582,7 +574,7 @@ object frmGestions: TfrmGestions
     end
     object Bevel8: TBevel
       Left = 19
-      Top = 215
+      Top = 241
       Width = 65
       Height = 4
       Anchors = [akLeft, akTop, akRight]
@@ -590,7 +582,7 @@ object frmGestions: TfrmGestions
     end
     object btParaBD: TVDTButton
       Left = 5
-      Top = 222
+      Top = 248
       Width = 95
       Height = 25
       Anchors = [akLeft, akTop, akRight]
@@ -609,14 +601,14 @@ object frmGestions: TfrmGestions
       Visible = False
       OnClick = SpeedButton1Click
     end
-    object btEmprunteurs: TVDTButton
+    object btUnivers: TVDTButton
       Left = 5
-      Top = 256
+      Top = 65
       Width = 95
       Height = 25
       Anchors = [akLeft, akTop, akRight]
       GroupIndex = 1
-      Caption = 'Emprunteurs'
+      Caption = 'Univers'
       OnClick = SpeedButton1Click
     end
   end

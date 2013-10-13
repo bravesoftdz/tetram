@@ -137,9 +137,6 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="Consultation\UfrmConsultationAuteur.pas">
             <Form>frmConsultationAuteur</Form>
         </DCCReference>
-        <DCCReference Include="Consultation\UfrmConsultationEmprunteur.pas">
-            <Form>frmConsultationEmprunteur</Form>
-        </DCCReference>
         <DCCReference Include="Consultation\UfrmConsultationSerie.pas">
             <Form>frmConsultationSerie</Form>
         </DCCReference>
@@ -154,15 +151,6 @@ $(PostBuildEvent)]]></PostBuildEvent>
         </DCCReference>
         <DCCReference Include="Consultation\UfrmEditCritereTri.pas">
             <Form>frmEditCritereTri</Form>
-        </DCCReference>
-        <DCCReference Include="Consultation\UfrmStock.pas">
-            <Form>frmStock</Form>
-        </DCCReference>
-        <DCCReference Include="Consultation\UfrmSaisieEmpruntAlbum.pas">
-            <Form>frmSaisieEmpruntAlbum</Form>
-        </DCCReference>
-        <DCCReference Include="Consultation\UfrmSaisieEmpruntEmprunteur.pas">
-            <Form>frmSaisieEmpruntEmprunteur</Form>
         </DCCReference>
         <DCCReference Include="Consultation\UfrmStatsGeneral.pas">
             <Form>frmStatsGenerales</Form>
@@ -422,6 +410,14 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="Scripts\DWScript\UDW_BdtkRegEx.pas"/>
         <DCCReference Include="Scripts\DWScript\UDW_BdtkObjects.pas"/>
         <DCCReference Include="Scripts\DWScript\UDWUnit.pas"/>
+        <DCCReference Include="Consultation\UfrmConsultationUnivers.pas">
+            <Form>frmConsultationUnivers</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Gestion\UfrmEditUnivers.pas">
+            <Form>frmEditUnivers</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <BuildConfiguration Include="Débogage">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

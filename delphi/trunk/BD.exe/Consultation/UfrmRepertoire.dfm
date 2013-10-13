@@ -134,6 +134,7 @@ object frmRepertoire: TfrmRepertoire
         Header.Font.Height = -11
         Header.Font.Name = 'Tahoma'
         Header.Font.Style = []
+        Header.Height = 17
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
         HintAnimation = hatNone
         HintMode = hmTooltip
@@ -176,71 +177,9 @@ object frmRepertoire: TfrmRepertoire
         end
       end
     end
-    object TabEmprunteurs: TTabSheet
-      Caption = 'Emprunteurs'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
-      DesignSize = (
-        337
-        373)
-      object vstEmprunteurs: TVirtualStringTree
-        Left = 2
-        Top = 25
-        Width = 333
-        Height = 347
-        Anchors = [akLeft, akTop, akRight, akBottom]
-        AnimationDuration = 0
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        Header.AutoSizeIndex = -1
-        Header.DefaultHeight = 17
-        Header.Font.Charset = DEFAULT_CHARSET
-        Header.Font.Color = clWindowText
-        Header.Font.Height = -11
-        Header.Font.Name = 'Tahoma'
-        Header.Font.Style = []
-        Header.MainColumn = -1
-        Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-        HintAnimation = hatNone
-        Indent = 8
-        TabOrder = 1
-        OnDblClick = vstAlbumsDblClick
-        Columns = <>
-      end
-      inline FrameRechercheRapideEmprunteurs: TframRechercheRapide
-        Left = 2
-        Top = 2
-        Width = 333
-        Height = 21
-        Anchors = [akLeft, akTop, akRight]
-        TabOrder = 0
-        ExplicitLeft = 2
-        ExplicitTop = 2
-        ExplicitWidth = 333
-        inherited btNext: TVDTButton
-          Left = 292
-          ExplicitLeft = 292
-        end
-        inherited btNew: TVDTButton
-          Left = 312
-          ExplicitLeft = 312
-        end
-        inherited edSearch: TEditLabeled
-          Width = 293
-          OnKeyPress = FrameRechercheRapideedSearchKeyPress
-          ExplicitWidth = 293
-        end
-      end
-    end
     object TabAuteurs: TTabSheet
       Caption = 'Auteurs'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         337
         373)
@@ -260,6 +199,7 @@ object frmRepertoire: TfrmRepertoire
         Header.Font.Height = -11
         Header.Font.Name = 'Tahoma'
         Header.Font.Style = []
+        Header.Height = 17
         Header.MainColumn = -1
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
         HintAnimation = hatNone
@@ -296,10 +236,6 @@ object frmRepertoire: TfrmRepertoire
     object TabSeries: TTabSheet
       Caption = 'S'#233'ries'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         337
         373)
@@ -319,6 +255,7 @@ object frmRepertoire: TfrmRepertoire
         Header.Font.Height = -11
         Header.Font.Name = 'Tahoma'
         Header.Font.Style = []
+        Header.Height = 17
         Header.MainColumn = -1
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
         HintAnimation = hatNone
@@ -355,10 +292,6 @@ object frmRepertoire: TfrmRepertoire
     object TabParaBD: TTabSheet
       Caption = 'Para-BD'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         337
         373)
@@ -378,6 +311,7 @@ object frmRepertoire: TfrmRepertoire
         Header.Font.Height = -11
         Header.Font.Name = 'Tahoma'
         Header.Font.Style = []
+        Header.Height = 17
         Header.MainColumn = -1
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
         HintAnimation = hatNone
@@ -387,6 +321,62 @@ object frmRepertoire: TfrmRepertoire
         Columns = <>
       end
       inline FrameRechercheRapideParaBD: TframRechercheRapide
+        Left = 2
+        Top = 2
+        Width = 333
+        Height = 21
+        Anchors = [akLeft, akTop, akRight]
+        TabOrder = 0
+        ExplicitLeft = 2
+        ExplicitTop = 2
+        ExplicitWidth = 333
+        inherited btNext: TVDTButton
+          Left = 292
+          ExplicitLeft = 292
+        end
+        inherited btNew: TVDTButton
+          Left = 312
+          ExplicitLeft = 312
+        end
+        inherited edSearch: TEditLabeled
+          Width = 293
+          OnKeyPress = FrameRechercheRapideedSearchKeyPress
+          ExplicitWidth = 293
+        end
+      end
+    end
+    object TabUnivers: TTabSheet
+      Caption = 'Univers'
+      ImageIndex = 5
+      DesignSize = (
+        337
+        373)
+      object vstUnivers: TVirtualStringTree
+        Left = 4
+        Top = 26
+        Width = 333
+        Height = 347
+        Anchors = [akLeft, akTop, akRight, akBottom]
+        AnimationDuration = 0
+        BevelKind = bkTile
+        BorderStyle = bsNone
+        Header.AutoSizeIndex = -1
+        Header.DefaultHeight = 17
+        Header.Font.Charset = DEFAULT_CHARSET
+        Header.Font.Color = clWindowText
+        Header.Font.Height = -11
+        Header.Font.Name = 'Tahoma'
+        Header.Font.Style = []
+        Header.Height = 17
+        Header.MainColumn = -1
+        Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
+        HintAnimation = hatNone
+        Indent = 8
+        TabOrder = 1
+        OnDblClick = vstAlbumsDblClick
+        Columns = <>
+      end
+      inline FrameRechercheRapideUnivers: TframRechercheRapide
         Left = 2
         Top = 2
         Width = 333

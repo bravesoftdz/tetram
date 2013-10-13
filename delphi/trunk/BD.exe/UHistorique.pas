@@ -5,10 +5,9 @@ interface
 uses SysUtils, Windows, Classes, Contnrs, Commun;
 
 type
-  TActionConsultation = (fcActionBack, fcActionRefresh, fcAlbum, fcEmprunteur, fcAuteur, fcCouverture, fcRecherche, fcStock, fcPreview,
-    fcSeriesIncompletes, fcPrevisionsSorties, fcRecreateToolBar, fcPrevisionsAchats, fcRefreshRepertoire, fcRefreshRepertoireData, fcParaBD,
-    fcImageParaBD, fcSerie, fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcScripts, fcConflitImport, fcGallerie,
-    fcModeConsultation, fcModeGestion, fcModeScript);
+  TActionConsultation = (fcActionBack, fcActionRefresh, fcAlbum, fcAuteur, fcCouverture, fcRecherche, fcPreview, fcSeriesIncompletes,
+    fcPrevisionsSorties, fcRecreateToolBar, fcPrevisionsAchats, fcRefreshRepertoire, fcRefreshRepertoireData, fcParaBD, fcImageParaBD, fcSerie, fcGestionAjout,
+    fcGestionModif, fcGestionSupp, fcGestionAchat, fcScripts, fcConflitImport, fcGallerie, fcModeConsultation, fcModeGestion, fcModeScript, fcUnivers);
 
 type
   TConsultCallback = procedure(Data: Pointer);
@@ -66,8 +65,7 @@ type
     procedure AddWaiting(Consultation: TActionConsultation; Ref: Integer = -1; Ref2: Integer = -1); overload;
     procedure AddWaiting(Consultation: TActionConsultation; const Ref: TGUID; Ref2: Integer = -1); overload;
     procedure AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: TGUID); overload;
-    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Valeur: string = '');
-      overload;
+    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Valeur: string = ''); overload;
     procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Ref: TGUID;
       const Valeur: string = ''); overload;
 
@@ -105,8 +103,8 @@ const
   // à cause des callback, les appels de gestion ne peuvent pas être sauvés dans l'historique
   // et puis je vois pas bien à quoi ça pourrait servir
     + UsedInGestion + Modes;
-  CanRefresh = [fcAlbum, fcEmprunteur, fcAuteur, fcSeriesIncompletes, fcPrevisionsSorties, fcPrevisionsAchats, fcGallerie];
-  MustRefresh = [fcRecherche, fcStock];
+  CanRefresh = [fcAlbum, fcAuteur, fcSeriesIncompletes, fcPrevisionsSorties, fcPrevisionsAchats, fcGallerie, fcUnivers];
+  MustRefresh = [fcRecherche];
 
 procedure RefreshCallBack(Data: Pointer);
 begin
@@ -141,8 +139,8 @@ begin
           (Reference2 <> Consult.Reference2) or (not IsEqualGUID(ReferenceGUID2, Consult.ReferenceGUID2)) then
           Ajoute;
       end
-      else
-        Ajoute;
+    else
+      Ajoute;
   end;
 end;
 
@@ -391,20 +389,18 @@ begin
         Result := Open(CurrentConsult, True);
       fcAlbum:
         Result := MAJConsultationAlbum(Consult.ReferenceGUID);
-      fcEmprunteur:
-        Result := MAJConsultationEmprunteur(Consult.ReferenceGUID);
       fcSerie:
         Result := MAJConsultationSerie(Consult.ReferenceGUID);
       fcAuteur:
         Result := MAJConsultationAuteur(Consult.ReferenceGUID);
+      fcUnivers:
+        Result := MAJConsultationUnivers(Consult.ReferenceGUID);
       fcParaBD:
         Result := MAJConsultationParaBD(Consult.ReferenceGUID);
       fcCouverture, fcImageParaBD:
         Result := ZoomCouverture(Consult.Action = fcImageParaBD, Consult.ReferenceGUID, Consult.ReferenceGUID2);
       fcRecherche:
         MAJRecherche(Consult.ReferenceGUID, Consult.Reference2, Consult.Stream);
-      fcStock:
-        MAJStock;
       fcPreview:
         frmFond.SetModalChildForm(TForm(Consult.Reference));
       fcGallerie:
@@ -432,7 +428,7 @@ begin
       fcGestionAjout:
         if not IsEqualGUID(GUID_NULL, Consult.ReferenceGUID) then
           doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAddWithRef(Consult.GestionProc)(Consult.GestionVTV, Consult.ReferenceGUID,
-              Consult.GestionValeur))
+            Consult.GestionValeur))
         else
           doCallback := not IsEqualGUID(GUID_NULL, TActionGestionAdd(Consult.GestionProc)(Consult.GestionVTV, Consult.GestionValeur));
       fcGestionModif:
@@ -521,9 +517,9 @@ begin
       Result := '/serie=' + GUIDToString(ReferenceGUID);
     fcAuteur:
       Result := '/auteur=' + GUIDToString(ReferenceGUID);
-    else
-      Result := '';
-    end;
+  else
+    Result := '';
+  end;
 end;
 
 constructor TConsult.Create;

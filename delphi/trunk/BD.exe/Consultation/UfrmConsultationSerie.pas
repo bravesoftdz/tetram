@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls,
   ComCtrls, VDTButton, Buttons, VirtualTree, Procedures, ProceduresBDtk, UBdtForms, StrUtils,
-  ActnList, Menus, PngSpeedButton, LabeledCheckBox;
+  ActnList, Menus, PngSpeedButton, LabeledCheckBox, System.Actions;
 
 type
   TfrmConsultationSerie = class(TBdtForm, IImpressionApercu, IFicheEditable)
@@ -108,7 +108,7 @@ begin
   FSerie.Fill(Value);
 
   Caption := 'Fiche de série - ' + FSerie.ChaineAffichage;
-  TitreSerie.Caption := FormatTitre(FSerie.Titre);
+  TitreSerie.Caption := FormatTitre(FSerie.TitreSerie);
   if FSerie.SiteWeb <> '' then begin
     TitreSerie.Font.Color := clBlue;
     TitreSerie.Font.Style := TitreSerie.Font.Style + [fsUnderline];
@@ -261,7 +261,7 @@ end;
 
 procedure TfrmConsultationSerie.ImpRep(Sender: TObject);
 begin
-  ImpressionSerie(ID_Serie, TComponent(Sender).Tag = 1);
+  ImpressionFicheSerie(ID_Serie, TComponent(Sender).Tag = 1);
 end;
 
 procedure TfrmConsultationSerie.ImpressionExecute(Sender: TObject);

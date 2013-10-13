@@ -104,6 +104,8 @@ type
     vtEditPersonnes: TframVTEdit;
     btnScript: TButton;
     Label28: TLabel;
+    vtEditUnivers: TframVTEdit;
+    Label29: TLabel;
     procedure ajoutClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -204,6 +206,7 @@ begin
   PrepareLV(Self);
 
   vtEditSerie.VTEdit.LinkControls.Add(Label20);
+  vtEditUnivers.VTEdit.LinkControls.Add(Label29);
   vtEditEditeurs.VTEdit.LinkControls.Add(Label5);
   vtEditCollections.VTEdit.LinkControls.Add(Label8);
 
@@ -215,6 +218,7 @@ begin
   FCurrentEditionComplete := nil;
   vtEditPersonnes.Mode := vmPersonnes;
   vtEditEditeurs.Mode := vmEditeurs;
+  vtEditUnivers.Mode := vmUnivers;
   vtEditCollections.Mode := vmNone;
   vtEditCollections.VTEdit.PopupWindow.TreeView.UseFiltre := True;
   vtEditSerie.Mode := vmSeries;
@@ -268,7 +272,7 @@ begin
   lvColoristes.Items.BeginUpdate;
   vtEditions.Items.BeginUpdate;
   try
-    edTitre.Text := FAlbum.Titre;
+    edTitre.Text := FAlbum.TitreAlbum;
     edMoisParution.Text := NonZero(IntToStr(FAlbum.MoisParution));
     edAnneeParution.Text := NonZero(IntToStr(FAlbum.AnneeParution));
     edTome.Text := NonZero(IntToStr(FAlbum.Tome));
@@ -291,6 +295,8 @@ begin
     vtEditSerie.VTEdit.OnChange := nil;
     vtEditSerie.CurrentValue := FAlbum.ID_Serie;
     vtEditSerie.VTEdit.OnChange := JvComboEdit1Change;
+    vtEditUnivers.Visible := IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
+    Label29.Visible := IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
 
     // tout ce mic mac pour l'actualisation par script
     OldvtEditionsItemIndex := vtEditions.ItemIndex;
@@ -346,6 +352,7 @@ begin
     begin
       frm.SaveToObject;
       frm.vtEditSerie.VTEdit.PopupWindow.TreeView.InitializeRep;
+      frm.vtEditUnivers.VTEdit.PopupWindow.TreeView.InitializeRep;
       frm.vtEditPersonnes.VTEdit.PopupWindow.TreeView.InitializeRep;
       frm.vtEditEditeurs.VTEdit.PopupWindow.TreeView.InitializeRep;
       frm.vtEditCollections.VTEdit.PopupWindow.TreeView.InitializeRep;
@@ -367,10 +374,10 @@ procedure TfrmEditAlbum.btnScriptClick(Sender: TObject);
 begin
   FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
   FAlbumImport := TAlbumComplet.Create;
-  if FAlbum.Titre <> '' then
-    FAlbumImport.DefaultSearch := FormatTitre(FAlbum.Titre)
+  if FAlbum.TitreAlbum <> '' then
+    FAlbumImport.DefaultSearch := FormatTitre(FAlbum.TitreAlbum)
   else
-    FAlbumImport.DefaultSearch := FormatTitre(FAlbum.Serie.Titre);
+    FAlbumImport.DefaultSearch := FormatTitre(FAlbum.Serie.TitreSerie);
   Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
 end;
 
@@ -516,7 +523,7 @@ begin
 
   hg := THourGlass.Create;
 
-  FAlbum.Titre := Trim(edTitre.Text);
+  FAlbum.TitreAlbum := Trim(edTitre.Text);
   if edAnneeParution.Text = '' then
   begin
     FAlbum.AnneeParution := 0;
@@ -1125,6 +1132,8 @@ var
   Auteur: TAuteur;
 begin
   FAlbum.ID_Serie := vtEditSerie.CurrentValue;
+  vtEditUnivers.Visible := IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
+  Label29.Visible := IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
   if not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL) then
   begin
     if not (FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then

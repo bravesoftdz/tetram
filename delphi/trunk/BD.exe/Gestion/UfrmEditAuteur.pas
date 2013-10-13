@@ -26,16 +26,15 @@ type
     procedure Frame11btnOKClick(Sender: TObject);
     procedure edSiteChange(Sender: TObject);
     procedure VDTButton13Click(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
   private
     { Déclarations privées }
     FAuteur: TAuteurComplet;
-    procedure SetID_Auteur(const Value: TGUID);
+    procedure SetAuteur(const Value: TAuteurComplet);
     function GetID_Auteur: TGUID;
   public
     { Déclarations publiques }
-    property ID_Auteur: TGUID read GetID_Auteur write SetID_Auteur;
+    property ID_Auteur: TGUID read GetID_Auteur;
+    property Auteur: TAuteurComplet read FAuteur write SetAuteur;
   end;
 
 implementation
@@ -44,12 +43,12 @@ uses Commun, ShellAPI, Procedures, Textes, VirtualTree;
 
 {$R *.DFM}
 
-procedure TfrmEditAuteur.SetID_Auteur(const Value: TGUID);
+procedure TfrmEditAuteur.SetAuteur(const Value: TAuteurComplet);
 var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  FAuteur.Fill(Value);
+  FAuteur := Value;
   FAuteur.FillAssociations(vmPersonnes);
 
   edNom.Text := FAuteur.NomAuteur;
@@ -86,16 +85,6 @@ end;
 procedure TfrmEditAuteur.VDTButton13Click(Sender: TObject);
 begin
   ShellExecute(Application.DialogHandle, nil, PChar(edSite.Text), nil, nil, SW_NORMAL);
-end;
-
-procedure TfrmEditAuteur.FormCreate(Sender: TObject);
-begin
-  FAuteur := TAuteurComplet.Create;
-end;
-
-procedure TfrmEditAuteur.FormDestroy(Sender: TObject);
-begin
-  FAuteur.Free;
 end;
 
 function TfrmEditAuteur.GetID_Auteur: TGUID;

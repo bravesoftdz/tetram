@@ -138,5 +138,6 @@ object framVTEdit: TframVTEdit
     ParentFlat = False
     BorderStyle = bsNone
     TabOrder = 0
+    Text = ''
   end
 end

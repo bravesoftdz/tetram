@@ -142,7 +142,6 @@ begin
         vmAlbumsGenre,
         vmAlbumsSerie: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterAlbums, FVirtualTreeView, edSearch.Text);
       vmGenres: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterGenres, FVirtualTreeView, edSearch.Text);
-      vmEmprunteurs: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterEmprunteurs, FVirtualTreeView, edSearch.Text);
       vmParaBDSerie: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterParaBD, FVirtualTreeView, edSearch.Text);
       else
         Assert(True, 'Mode non prévu dans l''ajout')

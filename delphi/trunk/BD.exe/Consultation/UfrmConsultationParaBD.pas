@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, StrUtils,
   Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls, UfrmFond, Procedures,
   ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms,
-  LabeledCheckBox;
+  LabeledCheckBox, System.Actions;
 
 type
   TfrmConsultationParaBD = class(TBdtForm, IImpressionApercu, IFicheEditable)
@@ -105,7 +105,7 @@ begin
   FParaBD.Fill(Value);
 
   Caption := 'Fiche de para-BD - ' + FParaBD.ChaineAffichage;
-  TitreSerie.Caption := FormatTitre(FParaBD.Serie.Titre);
+  TitreSerie.Caption := FormatTitre(FParaBD.Serie.TitreSerie);
   if FParaBD.Serie.SiteWeb <> '' then begin
     TitreSerie.Font.Color := clBlue;
     TitreSerie.Font.Style := TitreSerie.Font.Style + [fsUnderline];
@@ -116,7 +116,7 @@ begin
     TitreSerie.Font.Style := TitreSerie.Font.Style - [fsUnderline];
     TitreSerie.Cursor := crDefault;
   end;
-  TitreParaBD.Caption := FormatTitre(FParaBD.Titre);
+  TitreParaBD.Caption := FormatTitre(FParaBD.TitreParaBD);
   TypeParaBD.Caption := FParaBD.CategorieParaBD.Caption;
   AnneeEdition.Caption := NonZero(IntToStr(FParaBD.AnneeEdition));
   cbDedicace.Checked := FParaBD.Dedicace;

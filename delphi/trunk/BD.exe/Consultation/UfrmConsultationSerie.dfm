@@ -436,6 +436,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Header.Font.Height = -11
       Header.Font.Name = 'Tahoma'
       Header.Font.Style = []
+      Header.Height = 17
       Header.MainColumn = -1
       Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
       HintAnimation = hatNone
@@ -467,6 +468,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Header.Font.Height = -11
       Header.Font.Name = 'Tahoma'
       Header.Font.Style = []
+      Header.Height = 17
       Header.MainColumn = -1
       Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
       ParentColor = True
