@@ -174,7 +174,8 @@ uses
   UDW_BdtkObjects in 'Scripts\DWScript\UDW_BdtkObjects.pas',
   UDWUnit in 'Scripts\DWScript\UDWUnit.pas',
   UfrmConsultationUnivers in 'Consultation\UfrmConsultationUnivers.pas' {frmConsultationUnivers},
-  UfrmEditUnivers in 'Gestion\UfrmEditUnivers.pas' {frmEditUnivers};
+  UfrmEditUnivers in 'Gestion\UfrmEditUnivers.pas' {frmEditUnivers},
+  UMAJ2_2_3_16 in 'mises à jour\UMAJ2_2_3_16.pas';
 
 {$R *.RES}
 {$R curseurs.res}
