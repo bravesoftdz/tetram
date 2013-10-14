@@ -4223,7 +4223,7 @@ begin
   with q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'select nomunivers, id_universparent, description, siteweb from univers where id_univers = ?';
+      SQL.Text := 'select nomunivers, id_univers_parent, description, siteweb from univers where id_univers = ?';
       Params.AsString[0] := GUIDToString(Reference);
       Open;
       RecInconnu := Eof;
@@ -4231,7 +4231,7 @@ begin
       if not RecInconnu then
       begin
         Self.NomUnivers := Fields.ByNameAsString['nomunivers'];
-        Self.ID_UniversParent := StringToGUIDDef(Fields.ByNameAsString['id_universparent'], GUID_NULL);
+        Self.ID_UniversParent := StringToGUIDDef(Fields.ByNameAsString['id_univers_parent'], GUID_NULL);
         Self.Description.Text := Fields.ByNameAsString['description'];
         Self.SiteWeb := Trim(Fields.ByNameAsString['siteweb']);
       end;
@@ -4264,9 +4264,9 @@ begin
 
       SQL.Clear;
       SQL.Add('update or insert into univers (');
-      SQL.Add('  id_univers, nomunivers, id_universparent, description, siteweb');
+      SQL.Add('  id_univers, nomunivers, id_univers_parent, description, siteweb');
       SQL.Add(') values (');
-      SQL.Add('  :id_univers, :nomunivers, :id_universparent, :description, :siteweb');
+      SQL.Add('  :id_univers, :nomunivers, :id_univers_parent, :description, :siteweb');
       SQL.Add(')');
 
       if IsEqualGUID(GUID_NULL, ID_Univers) then
@@ -4281,9 +4281,9 @@ begin
       else
         Params.ByNameIsNull['description'] := True;
       if IsEqualGUID(GUID_NULL, ID_UniversParent) then
-        Params.ByNameIsNull['id_universparent'] := True
+        Params.ByNameIsNull['id_univers_parent'] := True
       else
-        Params.ByNameAsString['id_universparent'] := GUIDToString(ID_UniversParent);
+        Params.ByNameAsString['id_univers_parent'] := GUIDToString(ID_UniversParent);
       ExecSQL;
       Transaction.Commit;
     finally

@@ -106,11 +106,11 @@ begin
   edSite.Text := FUnivers.SiteWeb;
 
   vtAlbums.Filtre := 'ID_Univers = ' + QuotedStr(GUIDToString(ID_Univers));
-  vtAlbums.Mode := vmAlbumsSerie;
+  vtAlbums.Mode := vmAlbumsUnivers;
   vtAlbums.FullExpand;
 
   vtParaBD.Filtre := 'ID_Univers = ' + QuotedStr(GUIDToString(ID_Univers));
-  vtParaBD.Mode := vmParaBDSerie;
+  vtParaBD.Mode := vmParaBDUnivers;
   vtParaBD.FullExpand;
 
   vtEditUnivers.VTEdit.PopupWindow.TreeView.Filtre := 'ID_Univers <> ' + QuotedStr(GUIDToString(ID_Univers));

@@ -24,7 +24,7 @@ object frmRepertoire: TfrmRepertoire
     Width = 345
     Height = 401
     Cursor = crHandPoint
-    ActivePage = TabAlbums
+    ActivePage = TabUnivers
     Align = alClient
     HotTrack = True
     TabOrder = 0
@@ -352,8 +352,8 @@ object frmRepertoire: TfrmRepertoire
         337
         373)
       object vstUnivers: TVirtualStringTree
-        Left = 4
-        Top = 26
+        Left = 2
+        Top = 25
         Width = 333
         Height = 347
         Anchors = [akLeft, akTop, akRight, akBottom]
