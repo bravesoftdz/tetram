@@ -34,7 +34,6 @@ type
     procedure lvScenaristesDblClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure Imprimer1Click(Sender: TObject);
     procedure vstSeriesDblClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure edNomClick(Sender: TObject);
@@ -100,11 +99,6 @@ end;
 procedure TfrmConsultationAuteur.ClearForm;
 begin
   vstSeries.RootNodeCount := 0;
-end;
-
-procedure TfrmConsultationAuteur.Imprimer1Click(Sender: TObject);
-begin
-  ImpressionEmpruntsAlbum(ID_Auteur, TComponent(Sender).Tag = 1);
 end;
 
 procedure TfrmConsultationAuteur.vstSeriesAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);

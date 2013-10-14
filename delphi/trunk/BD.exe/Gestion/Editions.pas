@@ -103,7 +103,7 @@ function DelAchatParaBD(const ID: TGUID): Boolean;
 implementation
 
 uses
-  UIB, Commun, UfrmEditAlbum, UfrmEditSerie, UfrmEditEmprunteur, Textes, UfrmEditEditeur, UdmPrinc,
+  UIB, Commun, UfrmEditAlbum, UfrmEditSerie, Textes, UfrmEditEditeur, UdmPrinc,
   Math, UfrmFond, Procedures, ProceduresBDtk, UfrmEditCollection, UfrmEditAuteur, UfrmEditParaBD,
   UfrmEditAchatAlbum, UfrmEditUnivers;
 

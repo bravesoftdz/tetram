@@ -4,7 +4,7 @@ object frmStatsAlbums: TfrmStatsAlbums
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'Statistiques sur les albums'
-  ClientHeight = 308
+  ClientHeight = 238
   ClientWidth = 396
   Color = clWhite
   Font.Charset = ANSI_CHARSET
@@ -16,14 +16,6 @@ object frmStatsAlbums: TfrmStatsAlbums
   Position = poScreenCenter
   PixelsPerInch = 96
   TextHeight = 15
-  object Bevel3: TBevel
-    Left = 0
-    Top = 204
-    Width = 396
-    Height = 67
-    Align = alBottom
-    Shape = bsTopLine
-  end
   object Bevel1: TBevel
     Left = 0
     Top = 0
@@ -42,68 +34,6 @@ object frmStatsAlbums: TfrmStatsAlbums
     Caption = '> ann'#233'e >'
     ShowAccelChar = False
     Transparent = True
-  end
-  object Label11: TLabel
-    Left = 38
-    Top = 211
-    Width = 110
-    Height = 15
-    Alignment = taRightJustify
-    Caption = 'Albums emprunt'#233's :'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = [fsBold]
-    ParentFont = False
-    ShowAccelChar = False
-    Transparent = True
-  end
-  object Label12: TLabel
-    Left = 236
-    Top = 211
-    Width = 138
-    Height = 15
-    Hint = 'Nombre moyen d'#39'emprunts par albums'
-    Alignment = taRightJustify
-    Caption = 'Nombre moyen d'#39'emprunts :'
-    ShowAccelChar = False
-    Transparent = True
-  end
-  object Label13: TLabel
-    Left = 322
-    Top = 227
-    Width = 52
-    Height = 15
-    Hint = 'Nombre maximum d'#39'emprunts'
-    Alignment = taRightJustify
-    Caption = 'maximum :'
-    ShowAccelChar = False
-    Transparent = True
-  end
-  object Label14: TLabel
-    Left = 323
-    Top = 249
-    Width = 51
-    Height = 15
-    Hint = 'Nombre minimum d'#39'emprunts'
-    Alignment = taRightJustify
-    Caption = 'minimum :'
-    ShowAccelChar = False
-    Transparent = True
-  end
-  object nb_empruntee: TLabel
-    Left = 154
-    Top = 211
-    Width = 3
-    Height = 15
-    Hint = 'Nombre d'#39'albums emprunt'#233's'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = []
-    ParentFont = False
   end
   object max_empruntee: TLabel
     Left = 380
@@ -178,25 +108,12 @@ object frmStatsAlbums: TfrmStatsAlbums
   end
   object Bevel2: TBevel
     Left = 0
-    Top = 271
+    Top = 201
     Width = 396
     Height = 37
     Align = alBottom
     Shape = bsTopLine
-  end
-  object Bevel4: TBevel
-    Left = 12
-    Top = 226
-    Width = 306
-    Height = 17
-    Style = bsRaised
-  end
-  object Bevel6: TBevel
-    Left = 12
-    Top = 248
-    Width = 306
-    Height = 17
-    Style = bsRaised
+    ExplicitTop = 272
   end
   object Label2: TLabel
     Left = 2
@@ -406,45 +323,9 @@ object frmStatsAlbums: TfrmStatsAlbums
     TabOrder = 0
     OnExit = listeExit
   end
-  object listmaxempruntee: TListBox
-    Left = 13
-    Top = 227
-    Width = 304
-    Height = 15
-    Hint = 'Liste des albums les plus emprunt'#233's'
-    BorderStyle = bsNone
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = []
-    IntegralHeight = True
-    ItemHeight = 15
-    ParentFont = False
-    TabOrder = 1
-    OnExit = listeExit
-  end
-  object listminempruntee: TListBox
-    Left = 13
-    Top = 249
-    Width = 304
-    Height = 15
-    Hint = 'Liste des albums les moins emprunt'#233's'
-    BorderStyle = bsNone
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = []
-    IntegralHeight = True
-    ItemHeight = 15
-    ParentFont = False
-    TabOrder = 2
-    OnExit = listeExit
-  end
   object fermer: TButton
     Left = 160
-    Top = 277
+    Top = 209
     Width = 77
     Height = 22
     Cursor = crHandPoint
@@ -452,6 +333,6 @@ object frmStatsAlbums: TfrmStatsAlbums
     Caption = 'Fermer'
     Default = True
     ModalResult = 1
-    TabOrder = 3
+    TabOrder = 1
   end
 end

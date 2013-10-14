@@ -6,7 +6,7 @@ object frmStatsGenerales: TfrmStatsGenerales
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'Informations sur la BDth'#232'que'
-  ClientHeight = 334
+  ClientHeight = 175
   ClientWidth = 504
   Color = clWhite
   Font.Charset = ANSI_CHARSET
@@ -31,22 +31,6 @@ object frmStatsGenerales: TfrmStatsGenerales
     Top = 81
     Width = 504
     Height = 64
-    Align = alTop
-    Shape = bsBottomLine
-  end
-  object Bevel7: TBevel
-    Left = 0
-    Top = 145
-    Width = 504
-    Height = 68
-    Align = alTop
-    Shape = bsBottomLine
-  end
-  object Bevel8: TBevel
-    Left = 0
-    Top = 213
-    Width = 504
-    Height = 65
     Align = alTop
     Shape = bsBottomLine
   end
@@ -124,9 +108,9 @@ object frmStatsGenerales: TfrmStatsGenerales
     Transparent = True
   end
   object Label12: TLabel
-    Left = 49
+    Left = 50
     Top = 107
-    Width = 87
+    Width = 86
     Height = 15
     Alignment = taRightJustify
     Caption = 'Valeur connue :'
@@ -140,9 +124,9 @@ object frmStatsGenerales: TfrmStatsGenerales
     Transparent = True
   end
   object Label13: TLabel
-    Left = 46
+    Left = 47
     Top = 121
-    Width = 90
+    Width = 89
     Height = 15
     Alignment = taRightJustify
     Caption = 'Valeur estim'#233'e :'
@@ -152,98 +136,6 @@ object frmStatsGenerales: TfrmStatsGenerales
     Font.Name = 'Times New Roman'
     Font.Style = [fsBold]
     ParentFont = False
-    ShowAccelChar = False
-    Transparent = True
-  end
-  object Label14: TLabel
-    Left = 64
-    Top = 149
-    Width = 79
-    Height = 15
-    Alignment = taRightJustify
-    Caption = 'Emprunteurs :'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = [fsBold]
-    ParentFont = False
-    ShowAccelChar = False
-    Transparent = True
-  end
-  object Label15: TLabel
-    Left = 290
-    Top = 149
-    Width = 138
-    Height = 15
-    Alignment = taRightJustify
-    Caption = 'Nombre moyen d'#39'emprunts :'
-    ShowAccelChar = False
-    Transparent = True
-  end
-  object Label16: TLabel
-    Left = 376
-    Top = 164
-    Width = 52
-    Height = 15
-    Alignment = taRightJustify
-    Caption = 'maximum :'
-    ShowAccelChar = False
-    Transparent = True
-  end
-  object Label17: TLabel
-    Left = 377
-    Top = 185
-    Width = 51
-    Height = 15
-    Alignment = taRightJustify
-    Caption = 'minimum :'
-    ShowAccelChar = False
-    Transparent = True
-  end
-  object Label18: TLabel
-    Left = 33
-    Top = 215
-    Width = 110
-    Height = 15
-    Alignment = taRightJustify
-    Caption = 'Albums emprunt'#233's :'
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlack
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = [fsBold]
-    ParentFont = False
-    ShowAccelChar = False
-    Transparent = True
-  end
-  object Label19: TLabel
-    Left = 290
-    Top = 215
-    Width = 138
-    Height = 15
-    Alignment = taRightJustify
-    Caption = 'Nombre moyen d'#39'emprunts :'
-    ShowAccelChar = False
-    Transparent = True
-  end
-  object Label20: TLabel
-    Left = 376
-    Top = 230
-    Width = 52
-    Height = 15
-    Alignment = taRightJustify
-    Caption = 'maximum :'
-    ShowAccelChar = False
-    Transparent = True
-  end
-  object Label21: TLabel
-    Left = 377
-    Top = 251
-    Width = 51
-    Height = 15
-    Alignment = taRightJustify
-    Caption = 'minimum :'
     ShowAccelChar = False
     Transparent = True
   end
@@ -416,32 +308,6 @@ object frmStatsGenerales: TfrmStatsGenerales
     ParentFont = False
     Transparent = True
   end
-  object nb_emprunteurs: TLabel
-    Left = 148
-    Top = 149
-    Width = 3
-    Height = 15
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = []
-    ParentFont = False
-    Transparent = True
-  end
-  object nb_empruntee: TLabel
-    Left = 148
-    Top = 215
-    Width = 3
-    Height = 15
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = []
-    ParentFont = False
-    Transparent = True
-  end
   object PrixMax: TLabel
     Left = 344
     Top = 88
@@ -468,34 +334,6 @@ object frmStatsGenerales: TfrmStatsGenerales
     Font.Style = []
     ParentFont = False
     Transparent = True
-  end
-  object Bevel1: TBevel
-    Left = 29
-    Top = 165
-    Width = 347
-    Height = 16
-    Style = bsRaised
-  end
-  object Bevel2: TBevel
-    Left = 29
-    Top = 186
-    Width = 347
-    Height = 16
-    Style = bsRaised
-  end
-  object Bevel3: TBevel
-    Left = 29
-    Top = 231
-    Width = 347
-    Height = 16
-    Style = bsRaised
-  end
-  object Bevel4: TBevel
-    Left = 29
-    Top = 252
-    Width = 347
-    Height = 16
-    Style = bsRaised
   end
   object Label1: TLabel
     Left = 34
@@ -574,7 +412,7 @@ object frmStatsGenerales: TfrmStatsGenerales
   end
   object fermer: TButton
     Left = 216
-    Top = 292
+    Top = 151
     Width = 72
     Height = 21
     Cursor = crHandPoint
@@ -582,73 +420,5 @@ object frmStatsGenerales: TfrmStatsGenerales
     Default = True
     ModalResult = 1
     TabOrder = 0
-  end
-  object listmaxemprunteurs: TListBox
-    Left = 31
-    Top = 165
-    Width = 344
-    Height = 15
-    BorderStyle = bsNone
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = []
-    IntegralHeight = True
-    ItemHeight = 15
-    ParentFont = False
-    TabOrder = 1
-    OnExit = listeExit
-  end
-  object listminemprunteurs: TListBox
-    Left = 31
-    Top = 186
-    Width = 344
-    Height = 15
-    BorderStyle = bsNone
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = []
-    IntegralHeight = True
-    ItemHeight = 15
-    ParentFont = False
-    TabOrder = 2
-    OnExit = listeExit
-  end
-  object listmaxempruntee: TListBox
-    Left = 31
-    Top = 231
-    Width = 344
-    Height = 15
-    BorderStyle = bsNone
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = []
-    IntegralHeight = True
-    ItemHeight = 15
-    ParentFont = False
-    TabOrder = 3
-    OnExit = listeExit
-  end
-  object listminempruntee: TListBox
-    Left = 31
-    Top = 252
-    Width = 344
-    Height = 15
-    BorderStyle = bsNone
-    Font.Charset = ANSI_CHARSET
-    Font.Color = clBlue
-    Font.Height = -13
-    Font.Name = 'Times New Roman'
-    Font.Style = []
-    IntegralHeight = True
-    ItemHeight = 15
-    ParentFont = False
-    TabOrder = 4
-    OnExit = listeExit
   end
 end

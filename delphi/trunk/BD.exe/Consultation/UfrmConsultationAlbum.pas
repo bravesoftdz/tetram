@@ -113,15 +113,11 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure ImpRep(Sender: TObject);
     procedure Impression1Click(Sender: TObject);
-    procedure Imprimer1Click(Sender: TObject);
     procedure Imprimer2Click(Sender: TObject);
     procedure CouvertureDblClick(Sender: TObject);
     procedure VDTButton4Click(Sender: TObject);
     procedure VDTButton3Click(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure ListeEmpruntsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex; var Ghosted: Boolean;
-      var ImageIndex: Integer);
-    procedure ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure lvEditionsClick(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure EditeurClick(Sender: TObject);
@@ -218,11 +214,6 @@ end;
 procedure TfrmConsultationAlbum.Impression1Click(Sender: TObject);
 begin
   ImpRep(Sender);
-end;
-
-procedure TfrmConsultationAlbum.Imprimer1Click(Sender: TObject);
-begin
-  ImpressionEmpruntsAlbum(ID_Album, TComponent(Sender).Tag = 1);
 end;
 
 procedure TfrmConsultationAlbum.Imprimer2Click(Sender: TObject);
@@ -351,53 +342,6 @@ begin
   lvEditions.ItemIndex := 0;
   lvEditions.OnClick(lvEditions);
   Resize;
-end;
-
-procedure TfrmConsultationAlbum.ListeEmpruntsGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
-  var Ghosted: Boolean; var ImageIndex: Integer);
-begin
-  if Column = 0 then
-    if TEmprunt(FCurrentEdition.Emprunts.Emprunts[Node.Index]).Pret then
-      ImageIndex := 3
-    else
-      ImageIndex := 2;
-end;
-
-procedure TfrmConsultationAlbum.ListeEmpruntsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
-  var CellText: string);
-begin
-  case Column of
-    0:
-      CellText := DateToStr(TEmprunt(FCurrentEdition.Emprunts.Emprunts[Node.Index]).Date);
-    1:
-      CellText := TEmprunt(FCurrentEdition.Emprunts.Emprunts[Node.Index]).Emprunteur.ChaineAffichage;
-  end;
-end;
-
-type
-  TEmpruntCompare = class(TComparer<TEmprunt>)
-    function Compare(const Left, Right: TEmprunt): Integer; override;
-  end;
-
-  TEmpruntCompareDesc = class(TEmpruntCompare)
-    function Compare(const Left, Right: TEmprunt): Integer; override;
-  end;
-
-function TEmpruntCompare.Compare(const Left, Right: TEmprunt): Integer;
-begin
-  case FSortColumn of
-    0:
-      Result := CompareDate(Left.Date, Right.Date);
-    1:
-      Result := CompareText(Left.Emprunteur.Nom, Right.Emprunteur.Nom);
-  else
-    Result := 0;
-  end;
-end;
-
-function TEmpruntCompareDesc.Compare(const Left, Right: TEmprunt): Integer;
-begin
-  Result := - inherited;
 end;
 
 procedure TfrmConsultationAlbum.lvEditionsClick(Sender: TObject);

@@ -150,7 +150,7 @@ object frmFond: TfrmFond
     Left = 56
     Top = 136
     Bitmap = {
-      494C010104000600400010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C0101040006004C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -462,13 +462,6 @@ object frmFond: TfrmFond
       Hint = 'Imprime la listes compl'#232'te des albums'
       ImageIndex = 5
       OnExecute = actStatsListeCompletesAlbumsExecute
-    end
-    object actStatsAlbumsEmpruntes: TAction
-      Category = 'Statistiques'
-      Caption = 'Albums emprunt'#233's'
-      Hint = 'Imprime la listes des Albums emprunt'#233's'
-      ImageIndex = 5
-      OnExecute = actStatsAlbumsEmpruntesExecute
     end
     object actAfficheStatsGenerales: TAction
       Category = 'Statistiques'
@@ -1111,22 +1104,6 @@ object frmFond: TfrmFond
               Action = StatsListeCompletesAlbumsPrn
             end
           end
-          object Albumsempruntes1: TMenuItem
-            Caption = 'Albums emprunt'#233's'
-            ImageIndex = 5
-            object Aperuavantimpression2: TMenuItem
-              Tag = 1
-              Caption = 'Aper'#231'u avant impression'
-              ImageIndex = 4
-              OnClick = StatsAlbumsEmpruntesAppExecute
-            end
-            object Imprimer2: TMenuItem
-              Tag = 2
-              Caption = 'Imprimer'
-              ImageIndex = 3
-              OnClick = StatsAlbumsEmpruntesAppExecute
-            end
-          end
         end
         object N5: TMenuItem
           Caption = '-'
@@ -1177,12 +1154,6 @@ object frmFond: TfrmFond
       object Recherche1: TMenuItem
         Action = actAfficheRecherche
       end
-      object Albumsemprunts1: TMenuItem
-        Caption = 'Albums emprunt'#233's'
-        Hint = 'Ouvre ou r'#233'actualise la fen'#234'tre des emprunts'
-        ImageIndex = 2
-        ShortCut = 117
-      end
       object AfficheSeriesIncompletes1: TMenuItem
         Action = actAfficheSeriesIncompletes
       end
@@ -1202,13 +1173,6 @@ object frmFond: TfrmFond
         Caption = 'Statistiques'
         object Gnrales1: TMenuItem
           Action = actAfficheStatsGenerales
-        end
-        object Emprunteurs1: TMenuItem
-          Caption = 'Emprunteurs'
-          Hint = 'Statistiques sur les emprunteurs'
-          ImageIndex = 5
-          ShortCut = 8315
-          OnClick = actAfficheStatsEmprunteursExecute
         end
         object Albums2: TMenuItem
           Action = actAfficheStatsAlbums

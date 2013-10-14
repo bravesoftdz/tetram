@@ -3,22 +3,8 @@ unit LoadComplet;
 interface
 
 uses
-  SysUtils,
-  Windows,
-  Classes,
-  Dialogs,
-  TypeRec,
-  Commun,
-  CommonConst,
-  UdmPrinc,
-  UIB,
-  DateUtils,
-  ListOfTypeRec,
-  Contnrs,
-  UChampsRecherche,
-  Generics.Collections,
-  Generics.Defaults,
-  VirtualTree;
+  SysUtils, Windows, Classes, Dialogs, TypeRec, Commun, CommonConst, UdmPrinc, UIB, DateUtils, ListOfTypeRec, Contnrs, UChampsRecherche, Generics.Collections,
+  Generics.Defaults, VirtualTree;
 
 type
   ROption = record
@@ -68,26 +54,6 @@ type
   end;
 
   TListComplet = class(TBaseComplet)
-  end;
-
-  TSrcEmprunt = (seTous, seAlbum, seEmprunteur);
-  TSensEmprunt = (ssTous, ssPret, ssRetour);
-
-  TEmpruntsComplet = class(TListComplet)
-  strict private
-    FNBEmprunts: Integer;
-    FEmprunts: TObjectList<TEmprunt>;
-  public
-    constructor Create(const Reference: TGUID; Source: TSrcEmprunt = seTous; Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1; Avant: TDateTime = -1;
-      EnCours: Boolean = False; Stock: Boolean = False); reintroduce; overload;
-    destructor Destroy; override;
-    procedure Fill(const Reference: TGUID; Source: TSrcEmprunt = seTous; Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1; Avant: TDateTime = -1;
-      EnCours: Boolean = False; Stock: Boolean = False); reintroduce;
-    procedure Clear; override;
-    procedure PrepareInstance; override;
-  published
-    property Emprunts: TObjectList<TEmprunt> read FEmprunts;
-    property NBEmprunts: Integer read FNBEmprunts write FNBEmprunts;
   end;
 
   TEditeurComplet = class(TObjetComplet)
@@ -291,7 +257,6 @@ type
     FCollection: TCollection;
     FFormatEdition: ROption;
     FTypeEdition: ROption;
-    FEmprunts: TEmpruntsComplet;
     FPrixCote: Currency;
     FOrientation: ROption;
     FDateAchat: TDateTime;
@@ -348,7 +313,6 @@ type
     property sDateAchat: string read Get_sDateAchat;
     property Notes: TStringList read FNotes;
     property NumeroPerso: string { [25] } read FNumeroPerso write SetNumeroPerso;
-    property Emprunts: TEmpruntsComplet read FEmprunts;
     property Couvertures: TMyObjectList<TCouverture> read FCouvertures;
   end;
 
@@ -433,37 +397,11 @@ type
     property Univers: TUniversComplet read FUnivers;
   end;
 
-  TEmprunteurComplet = class(TObjetComplet)
-  strict private
-    FNom: string;
-    FEmprunts: TEmpruntsComplet;
-    FAdresse: TStringList;
-    procedure SetNom(const Value: string); inline;
-  public
-    procedure Fill(const Reference: TGUID); override;
-    procedure Clear; override;
-    procedure PrepareInstance; override;
-    destructor Destroy; override;
-    procedure SaveToDatabase(UseTransaction: TUIBTransaction); override;
-    function ChaineAffichage(dummy: Boolean = True): string; override;
-  published
-    property ID_Emprunteur: TGUID read FID write FID;
-    property Nom: string { [100] }
-      read FNom write SetNom;
-    property Adresse: TStringList read FAdresse;
-    property Emprunts: TEmpruntsComplet read FEmprunts;
-  end;
-
   TStats = class(TInfoComplet)
   strict private
     FNbAlbumsGratuit: Integer;
-    FListEmprunteursMin: TObjectList<TEmprunteur>;
-    FMoyEmpruntes: Integer;
     FNbAlbumsNB: Integer;
     FPrixAlbumMaximun: Currency;
-    FNbEmprunteurs: Integer;
-    FMinEmprunteurs: Integer;
-    FMaxEmpruntes: Integer;
     FPrixAlbumMoyen: Currency;
     FValeurConnue: Currency;
     FNbAlbumsIntegrale: Integer;
@@ -473,15 +411,11 @@ type
     FNbSeries: Integer;
     FListEditeurs: TObjectList<TStats>;
     FPrixAlbumMinimun: Currency;
-    FNbEmpruntes: Integer;
-    FMinEmpruntes: Integer;
     FValeurEstimee: Currency;
     FMinAnnee: Integer;
     FNbAlbumsOffert: Integer;
     FNbSeriesTerminee: Integer;
     FListAlbumsMin: TObjectList<TAlbum>;
-    FMoyEmprunteurs: Integer;
-    FListEmprunteursMax: TObjectList<TEmprunteur>;
     FNbAlbumsVO: Integer;
     FNbAlbumsSansPrix: Integer;
     FNbAlbums: Integer;
@@ -489,7 +423,6 @@ type
     FNbAlbumsStock: Integer;
     FEditeur: string;
     FListGenre: TObjectList<TGenre>;
-    FMaxEmprunteurs: Integer;
   strict private
     procedure CreateStats(Stats: TStats); overload;
     procedure CreateStats(Stats: TStats; const ID_Editeur: TGUID; const Editeur: string); overload;
@@ -514,14 +447,6 @@ type
     property NbAlbumsGratuit: Integer read FNbAlbumsGratuit;
     property MinAnnee: Integer read FMinAnnee;
     property MaxAnnee: Integer read FMaxAnnee;
-    property NbEmprunteurs: Integer read FNbEmprunteurs;
-    property MoyEmprunteurs: Integer read FMoyEmprunteurs;
-    property MinEmprunteurs: Integer read FMinEmprunteurs;
-    property MaxEmprunteurs: Integer read FMaxEmprunteurs;
-    property NbEmpruntes: Integer read FNbEmpruntes;
-    property MoyEmpruntes: Integer read FMoyEmpruntes;
-    property MinEmpruntes: Integer read FMinEmpruntes;
-    property MaxEmpruntes: Integer read FMaxEmpruntes;
     property NbAlbumsSansPrix: Integer read FNbAlbumsSansPrix;
     property ValeurConnue: Currency read FValeurConnue;
     property ValeurEstimee: Currency read FValeurEstimee;
@@ -530,8 +455,6 @@ type
     property PrixAlbumMaximun: Currency read FPrixAlbumMaximun;
     property ListAlbumsMin: TObjectList<TAlbum> read FListAlbumsMin;
     property ListAlbumsMax: TObjectList<TAlbum> read FListAlbumsMax;
-    property ListEmprunteursMin: TObjectList<TEmprunteur> read FListEmprunteursMin;
-    property ListEmprunteursMax: TObjectList<TEmprunteur> read FListEmprunteursMax;
     property ListGenre: TObjectList<TGenre> read FListGenre;
     property ListEditeurs: TObjectList<TStats> read FListEditeurs;
   end;
@@ -1296,7 +1219,6 @@ begin
   ID_Edition := GUID_NULL;
   Editeur.Clear;
   Collection.Clear;
-  Emprunts.Clear;
   Couvertures.Clear;
   Notes.Clear;
 
@@ -1330,7 +1252,6 @@ begin
   FreeAndNil(FCouvertures);
   FreeAndNil(FEditeur);
   FreeAndNil(FCollection);
-  FreeAndNil(FEmprunts);
   FreeAndNil(FNotes);
   inherited;
 end;
@@ -1404,8 +1325,6 @@ begin
         Self.AnneeCote := Fields.ByNameAsInteger['anneecote'];
         Self.PrixCote := Fields.ByNameAsCurrency['prixcote'];
         Self.NumeroPerso := Fields.ByNameAsString['numeroperso'];
-
-        Self.Emprunts.Fill(Self.ID_Edition, seAlbum);
 
         Close;
         SQL.Clear;
@@ -1773,7 +1692,6 @@ begin
   inherited;
   FEditeur := TEditeurComplet.Create;
   FCollection := TCollection.Create;
-  FEmprunts := TEmpruntsComplet.Create;
   FCouvertures := TMyObjectList<TCouverture>.Create;
   FNotes := TStringList.Create;
 end;
@@ -1902,104 +1820,6 @@ procedure TEditionsCompletes.PrepareInstance;
 begin
   inherited;
   FEditions := TObjectList<TEditionComplete>.Create;
-end;
-
-{ TEmprunteurComplet }
-
-function TEmprunteurComplet.ChaineAffichage(dummy: Boolean = True): string;
-begin
-  Result := FormatTitre(Nom);
-end;
-
-procedure TEmprunteurComplet.Clear;
-begin
-  inherited;
-  ID_Emprunteur := GUID_NULL;
-  Nom := '';
-  Adresse.Clear;
-  Emprunts.Clear;
-end;
-
-destructor TEmprunteurComplet.Destroy;
-begin
-  FreeAndNil(FAdresse);
-  FreeAndNil(FEmprunts);
-  inherited;
-end;
-
-procedure TEmprunteurComplet.Fill(const Reference: TGUID);
-var
-  q: TUIBQuery;
-begin
-  inherited;
-  if IsEqualGUID(Reference, GUID_NULL) then
-    Exit;
-  Self.ID_Emprunteur := Reference;
-  q := TUIBQuery.Create(nil);
-  with q do
-    try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'select nomemprunteur, adresseemprunteur from emprunteurs where id_emprunteur = ?';
-      Params.AsString[0] := GUIDToString(Reference);
-      FetchBlobs := True;
-      Open;
-      RecInconnu := Eof;
-      if not RecInconnu then
-      begin
-        Self.Nom := Fields.ByNameAsString['nomemprunteur'];
-        Self.Adresse.Text := Fields.ByNameAsString['adresseemprunteur'];
-
-        Self.Emprunts.Fill(Self.ID_Emprunteur, seEmprunteur);
-
-        Close;
-      end;
-    finally
-      q.Transaction.Free;
-      q.Free;
-    end;
-end;
-
-procedure TEmprunteurComplet.PrepareInstance;
-begin
-  inherited;
-  FAdresse := TStringList.Create;
-  FEmprunts := TEmpruntsComplet.Create;
-end;
-
-procedure TEmprunteurComplet.SaveToDatabase(UseTransaction: TUIBTransaction);
-var
-  S: string;
-begin
-  inherited;
-  with TUIBQuery.Create(nil) do
-    try
-      Transaction := UseTransaction;
-
-      SQL.Clear;
-      SQL.Add('update or insert into emprunteurs (');
-      SQL.Add('  id_emprunteur, nomemprunteur, adresseemprunteur');
-      SQL.Add(') values (');
-      SQL.Add('  :id_emprunteur, :nomemprunteur, :adresseemprunteur');
-      SQL.Add(')');
-
-      if IsEqualGUID(GUID_NULL, ID_Emprunteur) then
-        Params.ByNameIsNull['id_emprunteur'] := True
-      else
-        Params.ByNameAsString['id_emprunteur'] := GUIDToString(ID_Emprunteur);
-      Params.ByNameAsString['nomemprunteur'] := Trim(Nom);
-      S := Self.Adresse.Text;
-      ParamsSetBlob('adresseemprunteur', S);
-
-      ExecSQL;
-      Transaction.Commit;
-    finally
-      Free;
-    end;
-end;
-
-procedure TEmprunteurComplet.SetNom(const Value: string);
-begin
-  FNom := Copy(Value, 1, LengthNomEmprunteur);
 end;
 
 { TSerieComplete }
@@ -2591,8 +2411,6 @@ end;
 procedure TStats.Clear;
 begin
   inherited;
-  ListEmprunteursMax.Clear;
-  ListEmprunteursMin.Clear;
   ListAlbumsMax.Clear;
   ListAlbumsMin.Clear;
   ListGenre.Clear;
@@ -2750,143 +2568,6 @@ begin
       if not Eof then
         Stats.FNbAlbumsSansPrix := Fields.ByNameAsInteger['countref'] - Stats.NbAlbumsGratuit;
       Stats.FValeurEstimee := Stats.ValeurConnue + Stats.NbAlbumsSansPrix * Stats.PrixAlbumMoyen;
-
-      Close;
-      SQL.Text := 'select count(distinct st.id_emprunteur) from statut st';
-      if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('inner join editions e on e.id_edition = st.id_edition and e.id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
-      Open;
-      Stats.FNbEmprunteurs := Fields.AsInteger[0];
-
-      Close;
-      SQL.Text := 'select count(st.id_emprunteur)/' + IntToStr(Stats.NbEmprunteurs) + ' as moy from statut st';
-      if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('inner join editions e on e.id_edition = st.id_edition and e.id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
-      SQL.Add('where st.pretemprunt = 1');
-      Stats.FMoyEmprunteurs := 0;
-      if LongBool(Stats.FNbEmprunteurs) then
-      begin
-        Open;
-        Stats.FMoyEmprunteurs := Fields.ByNameAsInteger['moy'];
-      end;
-
-      Close;
-      SQL.Clear;
-      SQL.Add('select');
-      SQL.Add('  count(e.id_emprunteur) as countnumero, e.nomemprunteur, e.id_emprunteur');
-      SQL.Add('from');
-      SQL.Add('  statut st');
-      SQL.Add('  inner join emprunteurs e on');
-      SQL.Add('    e.id_emprunteur = st.id_emprunteur');
-      if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('  inner join editions ed on ed.id_edition = st.id_edition and ed.id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
-      SQL.Add('where');
-      SQL.Add('  (st.pretemprunt = 1)');
-      SQL.Add('group by');
-      SQL.Add('  e.id_emprunteur, e.nomemprunteur');
-      SQL.Add('order by');
-      SQL.Add('  1 desc, e.nomemprunteur desc');
-      Open;
-      Stats.FMinEmprunteurs := 0;
-      Stats.FMaxEmprunteurs := 0;
-      if not Eof then
-      begin
-        Stats.FMaxEmprunteurs := Fields.ByNameAsInteger['countnumero'];
-        while not Eof do
-          Next; // last;
-        Stats.FMinEmprunteurs := Fields.ByNameAsInteger['countnumero'];
-        if Stats.FMinEmprunteurs = Stats.FMaxEmprunteurs then
-          Stats.FMinEmprunteurs := 0;
-        Close;
-        Open;
-        repeat
-          if Fields.ByNameAsInteger['countnumero'] in [Stats.MinEmprunteurs, Stats.MaxEmprunteurs] then
-          begin
-            if Fields.ByNameAsInteger['countnumero'] = Stats.MinEmprunteurs then
-              Stats.ListEmprunteursMin.Insert(0, TEmprunteur.Make(q))
-            else
-              Stats.ListEmprunteursMax.Insert(0, TEmprunteur.Make(q));
-          end;
-          Next;
-        until Eof;
-      end;
-
-      Close;
-      SQL.Clear;
-      SQL.Add('select count(distinct st.id_edition) from statut st');
-      if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('inner join editions e on e.id_edition = st.id_edition and e.id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
-      Open;
-      Stats.FNbEmpruntes := Fields.AsInteger[0];
-
-      Close;
-      SQL.Text := 'select count(st.id_edition)/' + IntToStr(Stats.FNbEmpruntes) + ' as moy from statut st';
-      if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('inner join editions e on e.id_edition = st.id_edition and e.id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
-      SQL.Add('where st.pretemprunt = 1');
-      Stats.FMoyEmpruntes := 0;
-      if LongBool(Stats.FNbEmpruntes) then
-      begin
-        Open;
-        Stats.FMoyEmpruntes := Fields.ByNameAsInteger['moy'];
-      end;
-
-      Close;
-      SQL.Clear;
-      SQL.Add('select distinct');
-      SQL.Add('  count(id_edition)');
-      SQL.Add('from');
-      SQL.Add('  vw_emprunts');
-      SQL.Add('where');
-      SQL.Add('  (pretemprunt = 1)');
-      if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-        SQL.Add('  and id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
-      SQL.Add('group by');
-      SQL.Add('  id_edition');
-      SQL.Add('order by');
-      SQL.Add('  1');
-      Open;
-      Stats.FMinEmpruntes := 0;
-      Stats.FMaxEmpruntes := 0;
-      if not Eof then
-      begin
-        Stats.FMaxEmpruntes := Fields.AsInteger[0];
-        while not Eof do
-          Next; // Last;
-        Stats.FMinEmpruntes := Fields.AsInteger[0];
-        if Stats.FMinEmpruntes = Stats.MaxEmpruntes then
-          Stats.FMinEmpruntes := 0;
-
-        Close;
-        SQL.Clear;
-        SQL.Add('select');
-        SQL.Add('  *');
-        SQL.Add('from');
-        SQL.Add('  vw_emprunts');
-        SQL.Add('where');
-        SQL.Add('  (pretemprunt = 1)');
-        if not IsEqualGUID(ID_Editeur, GUID_NULL) then
-          SQL.Add('and id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)));
-        SQL.Add('  and id_edition in (select id_edition from statut where pretemprunt = 1 group by id_edition having count(id_edition) = :countedition)');
-        Params.AsInteger[0] := Stats.MaxEmpruntes;
-        Open;
-        while not Eof do
-        begin
-          Stats.ListAlbumsMax.Insert(0, TAlbum.Make(q));
-          Next;
-        end;
-        if (Stats.MinEmpruntes > 0) and (Stats.MinEmpruntes <> Stats.MaxEmpruntes) then
-        begin
-          Close;
-          Params.AsInteger[0] := Stats.MinEmpruntes;
-          Open;
-          while not Eof do
-          begin
-            Stats.ListAlbumsMin.Insert(0, TAlbum.Make(q));
-            Next;
-          end;
-        end;
-      end;
     finally
       Transaction.Free;
       Free;
@@ -2895,8 +2576,6 @@ end;
 
 destructor TStats.Destroy;
 begin
-  FreeAndNil(FListEmprunteursMax);
-  FreeAndNil(FListEmprunteursMin);
   FreeAndNil(FListAlbumsMax);
   FreeAndNil(FListAlbumsMin);
   FreeAndNil(FListGenre);
@@ -2947,131 +2626,10 @@ end;
 procedure TStats.PrepareInstance;
 begin
   inherited;
-  FListEmprunteursMax := TObjectList<TEmprunteur>.Create;
   FListAlbumsMax := TObjectList<TAlbum>.Create;
-  FListEmprunteursMin := TObjectList<TEmprunteur>.Create;
   FListAlbumsMin := TObjectList<TAlbum>.Create;
   FListGenre := TObjectList<TGenre>.Create;
   FListEditeurs := TObjectList<TStats>.Create;
-end;
-
-{ TEmpruntsComplet }
-
-procedure TEmpruntsComplet.Clear;
-begin
-  inherited;
-  FNBEmprunts := 0;
-  Emprunts.Clear;
-end;
-
-constructor TEmpruntsComplet.Create(const Reference: TGUID; Source: TSrcEmprunt; Sens: TSensEmprunt; Apres, Avant: TDateTime; EnCours, Stock: Boolean);
-begin
-  inherited Create;
-  Fill(Reference, Source, Sens, Apres, Avant, EnCours, Stock);
-end;
-
-destructor TEmpruntsComplet.Destroy;
-begin
-  FreeAndNil(FEmprunts);
-  inherited;
-end;
-
-procedure TEmpruntsComplet.Fill(const Reference: TGUID; Source: TSrcEmprunt; Sens: TSensEmprunt; Apres, Avant: TDateTime; EnCours, Stock: Boolean);
-var
-  q: TUIBQuery;
-
-  procedure MakeQuery;
-  var
-    i: Integer;
-  begin
-    q.SQL.Text := 'select * from vw_emprunts';
-
-    with TStringList.Create do
-      try
-        case Source of
-          seAlbum:
-            Add('id_edition = ' + QuotedStr(GUIDToString(Reference)));
-          seEmprunteur:
-            Add('id_emprunteur = ' + QuotedStr(GUIDToString(Reference)));
-          seTous:
-            ;
-        end;
-        if EnCours then
-          Add('prete = 1');
-        case Sens of
-          ssPret:
-            Add('pretemprunt = 1');
-          ssRetour:
-            Add('pretemprunt = 0');
-          ssTous:
-            ;
-        end;
-        if Apres >= 0 then
-          Add('dateemprunt >= :dateapres');
-        if Avant >= 0 then
-          Add('dateemprunt <= :dateavant');
-
-        for i := 0 to Count - 1 do
-        begin
-          if i = 0 then
-            q.SQL.Add('where')
-          else
-            q.SQL.Add('and');
-          q.SQL.Add(Strings[i]);
-        end;
-        q.SQL.Add('order by dateemprunt desc, id_statut asc');
-        // le dernier saisi a priorité en cas de "même date"
-      finally
-        Free;
-      end;
-    if Apres >= 0 then
-      q.Params.ByNameAsDateTime['dateapres'] := Apres;
-    if Avant >= 0 then
-      q.Params.ByNameAsDateTime['dateavant'] := Avant;
-  end;
-
-var
-  PE: TEmprunt;
-  S: TStringList;
-  Ref: string;
-begin
-  inherited Fill(GUID_NULL);
-  q := TUIBQuery.Create(nil);
-  with q do
-    try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      S := TStringList.Create;
-      Self.NBEmprunts := 0;
-      try
-        MakeQuery;
-        Open;
-        S.Clear;
-        while not Eof do
-        begin
-          Ref := Fields.ByNameAsString['id_edition'];
-          if not Stock or (S.IndexOf(Ref) = -1) then
-          begin
-            S.Add(Ref);
-            PE := TEmprunt(TEmprunt.Make(q));
-            if PE.Pret then
-              Inc(Self.FNBEmprunts);
-            Self.Emprunts.Add(PE);
-          end;
-          Next;
-        end;
-      finally
-        S.Free;
-      end;
-    finally
-      Transaction.Free;
-      Free;
-    end;
-end;
-
-procedure TEmpruntsComplet.PrepareInstance;
-begin
-  inherited;
-  FEmprunts := TObjectList<TEmprunt>.Create;
 end;
 
 { TSeriesIncompletes }

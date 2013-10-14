@@ -155,9 +155,6 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="Consultation\UfrmStatsGeneral.pas">
             <Form>frmStatsGenerales</Form>
         </DCCReference>
-        <DCCReference Include="Consultation\UfrmStatsEmprunteurs.pas">
-            <Form>frmStatsEmprunteurs</Form>
-        </DCCReference>
         <DCCReference Include="Consultation\UfrmStatsAlbums.pas">
             <Form>frmStatsAlbums</Form>
         </DCCReference>
@@ -187,9 +184,6 @@ $(PostBuildEvent)]]></PostBuildEvent>
         </DCCReference>
         <DCCReference Include="Gestion\UfrmEditAuteur.pas">
             <Form>frmEditAuteur</Form>
-        </DCCReference>
-        <DCCReference Include="Gestion\UfrmEditEmprunteur.pas">
-            <Form>frmEditEmprunteur</Form>
         </DCCReference>
         <DCCReference Include="Gestion\UfrmEditParaBD.pas">
             <Form>frmEditParaBD</Form>

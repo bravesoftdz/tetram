@@ -9,14 +9,7 @@ uses
 type
   TfrmStatsAlbums = class(TbdtForm)
     Label7: TLabel;
-    Label11: TLabel;
-    Label12: TLabel;
-    Label13: TLabel;
-    Label14: TLabel;
     genre: TListBox;
-    listmaxempruntee: TListBox;
-    listminempruntee: TListBox;
-    nb_empruntee: TLabel;
     max_empruntee: TLabel;
     moy_empruntee: TLabel;
     min_empruntee: TLabel;
@@ -26,9 +19,6 @@ type
     Bevel5: TBevel;
     Bevel1: TBevel;
     Bevel2: TBevel;
-    Bevel3: TBevel;
-    Bevel4: TBevel;
-    Bevel6: TBevel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
@@ -83,15 +73,6 @@ begin
     for i := 0 to Info.ListGenre.Count - 1 do
       with TGenre(Info.ListGenre[i]) do
         Result.genre.Items.Add(Format('%s - ' + FormatPourcent, [ChaineAffichage, Quantite, MulDiv(Quantite, 100, Info.NbAlbums)]));
-
-    nb_empruntee.Caption := IntToStr(Info.NbEmpruntes);
-    moy_empruntee.Caption := IntToStr(Info.MoyEmpruntes);
-    max_empruntee.Caption := IntToStr(Info.MaxEmpruntes);
-    for i := 0 to Info.ListAlbumsMax.Count - 1 do
-      listmaxempruntee.Items.Add(TAlbum(Info.ListAlbumsMax[i]).ChaineAffichage);
-    min_empruntee.Caption := IntToStr(Info.MinEmpruntes);
-    for i := 0 to Info.ListAlbumsMin.Count - 1 do
-      listminempruntee.Items.Add(TAlbum(Info.ListAlbumsMin[i]).ChaineAffichage);
   end;
 end;
 

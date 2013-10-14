@@ -2,7 +2,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
   Left = 440
   Top = 64
   Caption = 'Fiche d'#39'album'
-  ClientHeight = 854
+  ClientHeight = 581
   ClientWidth = 532
   Color = clWhite
   Constraints.MinWidth = 530
@@ -22,14 +22,15 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     Left = 0
     Top = 0
     Width = 532
-    Height = 854
+    Height = 581
     Align = alClient
     BorderStyle = bsNone
     ParentBackground = True
     TabOrder = 0
+    ExplicitHeight = 640
     DesignSize = (
       532
-      854)
+      581)
     object Label4: TLabel
       Left = 374
       Top = 164
@@ -529,13 +530,14 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 851
+      Top = 578
       Width = 532
       Height = 3
       Align = alBottom
       Shape = bsSpacer
-      ExplicitTop = 812
-      ExplicitWidth = 522
+      ExplicitLeft = -3
+      ExplicitTop = 602
+      ExplicitWidth = 515
     end
     object Label18: TLabel
       Left = 361
@@ -656,7 +658,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     object remarques: TMemo
       Left = 59
       Top = 392
-      Width = 467
+      Width = 433
       Height = 65
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -671,7 +673,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     object sujet: TMemo
       Left = 59
       Top = 320
-      Width = 467
+      Width = 433
       Height = 67
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -686,7 +688,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     object lvScenaristes: TVDTListView
       Left = 59
       Top = 135
-      Width = 243
+      Width = 209
       Height = 35
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -706,7 +708,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     object lvDessinateurs: TVDTListView
       Left = 59
       Top = 176
-      Width = 243
+      Width = 209
       Height = 36
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -727,7 +729,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     object Memo1: TMemo
       Left = 59
       Top = 94
-      Width = 243
+      Width = 209
       Height = 34
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -742,7 +744,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     object lvColoristes: TVDTListView
       Left = 59
       Top = 218
-      Width = 243
+      Width = 209
       Height = 36
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -761,17 +763,17 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object PanelEdition: TPanel
       Left = 3
-      Top = 464
-      Width = 523
-      Height = 345
+      Top = 374
+      Width = 489
+      Height = 203
       Anchors = [akLeft, akTop, akRight]
       BevelOuter = bvNone
       Caption = ' '
       ParentColor = True
       TabOrder = 6
       DesignSize = (
-        523
-        345)
+        489
+        203)
       object ISBN: TLabel
         Left = 56
         Top = 3
@@ -1145,7 +1147,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       object edNotes: TMemo
         Left = 56
         Top = 134
-        Width = 467
+        Width = 433
         Height = 40
         Anchors = [akLeft, akTop, akRight]
         BevelInner = bvLowered
@@ -1156,6 +1158,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         ReadOnly = True
         ScrollBars = ssVertical
         TabOrder = 0
+        ExplicitWidth = 467
       end
       object cbOffert: TLabeledCheckBox
         Left = 233
@@ -1286,7 +1289,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     object lvEditions: TListBox
       Left = 346
       Top = 467
-      Width = 180
+      Width = 146
       Height = 62
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -1301,7 +1304,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     object vstSerie: TVirtualStringTree
       Left = 59
       Top = 259
-      Width = 243
+      Width = 209
       Height = 56
       Cursor = crHandPoint
       Anchors = [akLeft, akTop, akRight]
@@ -1384,7 +1387,6 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Category = 'Emprunts'
       Caption = 'Aper'#231'u avant impression'
       ImageIndex = 4
-      OnExecute = Imprimer1Click
     end
     object FicheApercu: TAction
       Tag = 1
@@ -1412,7 +1414,6 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Category = 'Emprunts'
       Caption = 'Imprimer'
       ImageIndex = 3
-      OnExecute = Imprimer1Click
     end
     object CouvertureImprime: TAction
       Tag = 2

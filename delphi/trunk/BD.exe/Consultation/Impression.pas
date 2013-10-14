@@ -9,18 +9,11 @@ procedure ImpressionListeCompleteAlbums(Previsualisation: Boolean);
 
 procedure ImpressionInfosBDtheque(Previsualisation: Boolean);
 
-procedure ImpressionEmprunts(Previsualisation: Boolean; Source: TSrcEmprunt = seTous; Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1;
-  Avant: TDateTime = -1; EnCours: Boolean = False; Stock: Boolean = False);
-
 procedure ImpressionFicheAlbum(const Reference, ID_Edition: TGUID; Previsualisation: Boolean);
 procedure ImpressionFicheAuteur(const Reference: TGUID; Previsualisation: Boolean);
 procedure ImpressionFicheSerie(const Reference: TGUID; Previsualisation: Boolean);
 procedure ImpressionFicheUnivers(const Reference: TGUID; Previsualisation: Boolean);
-procedure ImpressionEmpruntsAlbum(const Reference: TGUID; Previsualisation: Boolean);
 procedure ImpressionFicheParaBD(const Reference: TGUID; Previsualisation: Boolean);
-
-procedure ImpressionFicheEmprunteur(const Reference: TGUID; Previsualisation: Boolean);
-procedure ImpressionEmpruntsEmprunteur(const Reference: TGUID; Previsualisation: Boolean);
 
 procedure ImpressionRecherche(Recherche: TRecherche; Previsualisation: Boolean);
 procedure ImpressionCouvertureAlbum(const Reference, ID_Couverture: TGUID; Previsualisation: Boolean);
@@ -817,155 +810,6 @@ begin
   end;
 end;
 
-procedure ImpressionFicheEmprunteur(const Reference: TGUID; Previsualisation: Boolean);
-var
-  Emprunteur: TEmprunteurComplet;
-  fWaiting: IWaiting;
-  Prn: TPrintObject;
-begin
-  if IsEqualGUID(Reference, GUID_NULL) then
-    Exit;
-  fWaiting := TWaiting.Create;
-  fWaiting.ShowProgression(rsTransConfig, 0, 2);
-  Emprunteur := TEmprunteurComplet.Create(Reference);
-  try
-    Prn := TPrintObject.Create(frmFond);
-    try
-      PreparePrintObject(Prn, Previsualisation, rsTransFiche);
-
-      Prn.SetHeaderDimensions1(-1, -1, -1, 20, False, 0, clWhite);
-      Prn.SetHeaderInformation1(0, 5, Emprunteur.Nom, taCenter, Prn.Font.name, 24, [fsBold]);
-
-      Prn.CreateColumn1(0, 10, 70, taLeftJustify, Prn.Font.name, 12, [fsBold]);
-      Prn.CreateColumn1(1, 20, -1, taLeftJustify, Prn.Font.name, 12, []);
-
-      fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransCoordonnees, rsTransPage, Prn.GetPageNumber]), epNext);
-      Prn.WriteLineColumn(0, -2, rsTransCoordonnees + ' :');
-      Prn.WriteColumn(1, -1, Emprunteur.Adresse.Text);
-    finally
-      fWaiting.ShowProgression(rsTransImpression + '...', epNext);
-      if Prn.Printing then
-        Prn.Quit;
-      Prn.Free;
-    end;
-  finally
-    Emprunteur.Free;
-  end;
-end;
-
-procedure ImpressionEmpruntsAlbum(const Reference: TGUID; Previsualisation: Boolean);
-var
-  index, i: Integer;
-  Album: TAlbumComplet;
-  Edition: TEditionComplete;
-  fWaiting: IWaiting;
-  Prn: TPrintObject;
-begin
-  if IsEqualGUID(Reference, GUID_NULL) then
-    Exit;
-  fWaiting := TWaiting.Create;
-  fWaiting.ShowProgression(rsTransConfig, 0, 1);
-  Album := TAlbumComplet.Create(Reference);
-  try
-    Prn := TPrintObject.Create(frmFond);
-    try
-      PreparePrintObject(Prn, Previsualisation, rsTitreListeEmprunts);
-
-      Prn.SetHeaderDimensions1(-1, -1, -1, 20, False, 0, clWhite);
-      Prn.SetHeaderInformation1(0, 5, rsTitreListeEmprunts, taCenter, Prn.Font.name, 24, [fsBold]);
-      Prn.SetHeaderInformation1(1, -1, FormatTitre(Album.TitreAlbum), taCenter, Prn.Font.name, 16, [fsBold]);
-
-      Prn.CreateColumn1(0, 15, 15, taLeftJustify, Prn.Font.name, 12, []);
-      Prn.CreateColumn1(1, 45, -1, taLeftJustify, Prn.Font.name, 12, []);
-      Prn.CreateColumn1(2, Prn.Detail.Width / 2, -1, taLeftJustify, Prn.Font.name, 12, []);
-
-      Prn.SetFontInformation1(Prn.Font.name, 5, []);
-      Edition := TEditionComplete.Create;
-      try
-        for i := 0 to Pred(Album.Editions.Editions.Count) do
-        begin
-          Edition := Album.Editions.Editions[i];
-          if Album.Editions.Editions.Count > 1 then
-            Prn.WriteLineColumn(0, IIf(i = 0, -2, -1), Edition.ChaineAffichage);
-          case Edition.Emprunts.NBEmprunts of
-            0: Prn.WriteLineColumn(0, -1, rsNoEmprunts);
-            else
-              fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransEmprunts, rsTransPage, Prn.GetPageNumber]), 0,
-                Edition.Emprunts.NBEmprunts + 2);
-              for index := 0 to Pred(Edition.Emprunts.NBEmprunts) do
-              begin
-                Prn.WriteLineColumn(0, -1, '#' + IntToStr(index) + ' (' + IIf(Edition.Emprunts.Emprunts[index].Pret, rsTransPret, rsTransRetour)
-                    + ')');
-                Prn.WriteLineColumn(1, -2, Edition.Emprunts.Emprunts[index].ChaineAffichage);
-                Prn.WriteLineColumn(2, -2, Edition.Emprunts.Emprunts[index].Emprunteur.ChaineAffichage);
-                fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransEmprunts, rsTransPage, Prn.GetPageNumber]), epNext);
-              end;
-            end;
-        end;
-      finally
-        Edition.Free;
-      end;
-    finally
-      fWaiting.ShowProgression(rsTransImpression + '...', epNext);
-      if Prn.Printing then
-        Prn.Quit;
-      Prn.Free;
-    end;
-  finally
-    Album.Free;
-  end;
-end;
-
-procedure ImpressionEmpruntsEmprunteur(const Reference: TGUID; Previsualisation: Boolean);
-var
-  index: Integer;
-  Emprunteur: TEmprunteurComplet;
-  fWaiting: IWaiting;
-  Prn: TPrintObject;
-begin
-  if IsEqualGUID(Reference, GUID_NULL) then
-    Exit;
-  fWaiting := TWaiting.Create;
-  fWaiting.ShowProgression(rsTransConfig, 0, 1);
-  Emprunteur := TEmprunteurComplet.Create(Reference);
-  try
-    Prn := TPrintObject.Create(frmFond);
-    try
-      PreparePrintObject(Prn, Previsualisation, rsTitreListeEmprunts);
-
-      Prn.SetHeaderDimensions1(-1, -1, -1, 20, False, 0, clWhite);
-      Prn.SetHeaderInformation1(0, 5, rsTitreListeEmprunts, taCenter, Prn.Font.name, 24, [fsBold]);
-      Prn.SetHeaderInformation1(1, -1, Emprunteur.Nom, taCenter, Prn.Font.name, 16, [fsBold]);
-
-      Prn.CreateColumn1(0, 15, 15, taLeftJustify, Prn.Font.name, 12, []);
-      Prn.CreateColumn1(1, 45, -1, taLeftJustify, Prn.Font.name, 12, []);
-      Prn.CreateColumn1(2, Prn.Detail.Width / 2, -1, taLeftJustify, Prn.Font.name, 12, []);
-      Prn.SetFontInformation1(Prn.Font.name, 5, []);
-
-      case Emprunteur.Emprunts.NBEmprunts of
-        0: Prn.WriteLineColumn(0, -1, rsNoEmprunts);
-        else
-          fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransEmprunts, rsTransPage, Prn.GetPageNumber]), 0, Emprunteur.Emprunts.NBEmprunts + 2);
-          for index := 0 to Emprunteur.Emprunts.Emprunts.Count - 1 do
-          begin
-            Prn.WriteLineColumn(0, IIf(index = 0, -2, -1), '#' + IntToStr(index) + ' (' + IIf(Emprunteur.Emprunts.Emprunts[index].Pret, rsTransPret,
-                rsTransRetour) + ')');
-            Prn.WriteLineColumn(1, -2, Emprunteur.Emprunts.Emprunts[index].ChaineAffichage);
-            Prn.WriteLineColumn(2, -2, Emprunteur.Emprunts.Emprunts[index].Album.ChaineAffichage);
-            fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransEmprunts, rsTransPage, Prn.GetPageNumber]), epNext);
-          end;
-        end;
-    finally
-      fWaiting.ShowProgression(rsTransImpression + '...', epNext);
-      if Prn.Printing then
-        Prn.Quit;
-      Prn.Free;
-    end;
-  finally
-    Emprunteur.Free;
-  end;
-end;
-
 procedure ImpressionListeCompleteAlbums(Previsualisation: Boolean);
 var
   index: Integer;
@@ -1170,63 +1014,6 @@ begin
   end;
 end;
 
-procedure ImpressionEmprunts(Previsualisation: Boolean; Source: TSrcEmprunt = seTous; Sens: TSensEmprunt = ssTous; Apres: TDateTime = -1;
-  Avant: TDateTime = -1; EnCours: Boolean = False; Stock: Boolean = False);
-var
-  index: Integer;
-  Emprunts: TEmpruntsComplet;
-  Titre: string;
-  fWaiting: IWaiting;
-  Prn: TPrintObject;
-begin
-  if Source = seEmprunteur then
-    Exit;
-  fWaiting := TWaiting.Create;
-  fWaiting.ShowProgression(rsTransConfig + '...', 0, 1);
-  Emprunts := TEmpruntsComplet.Create(GUID_NULL, Source, Sens, Apres, Avant, EnCours, Stock);
-  case Source of
-    seAlbum: Titre := rsListeAlbumsEmpruntes;
-    else
-      Titre := rsListeEmprunts;
-    end;
-  try
-    Prn := TPrintObject.Create(frmFond);
-    try
-      PreparePrintObject(Prn, Previsualisation, Titre);
-
-      Prn.SetHeaderDimensions1(-1, -1, -1, 20, False, 0, clWhite);
-      Prn.SetHeaderInformation1(0, 5, Titre, taCenter, Prn.Font.name, 24, [fsBold]);
-      if Avant > -1 then
-        Prn.SetHeaderInformation1(-1, -1, 'Avant le ' + DateToStr(Avant), taCenter, Prn.Font.name, 12, [fsItalic]);
-      if Apres > -1 then
-        Prn.SetHeaderInformation1(-1, -1, 'Après le ' + DateToStr(Apres), taCenter, Prn.Font.name, 12, [fsItalic]);
-
-      Prn.CreateColumn1(0, 15, 15, taLeftJustify, Prn.Font.name, 12, []);
-      Prn.CreateColumn1(1, 30, -1, taLeftJustify, Prn.Font.name, 12, []);
-      Prn.CreateColumn1(2, 35, -1, taLeftJustify, Prn.Font.name, 10, [fsItalic]);
-      Prn.CreateColumn1(3, 45, -1, taLeftJustify, Prn.Font.name, 10, [fsItalic, fsUnderline]);
-
-      fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransEmprunts, rsTransPage, Prn.GetPageNumber]), 0, Emprunts.NBEmprunts + 2);
-      for index := 0 to Emprunts.Emprunts.Count - 1 do
-      begin
-        Prn.WriteLineColumn(0, -1, '#' + IntToStr(index + 1));
-        if not IsEqualGUID(TEmprunt(Emprunts.Emprunts[index]).Album.ID, GUID_NULL) then
-          Prn.WriteLineColumn(1, -2, TEmprunt(Emprunts.Emprunts[index]).Album.ChaineAffichage);
-        Prn.WriteLineColumn(3, -1, Format(rsTransEmprunteLePar, [TEmprunt(Emprunts.Emprunts[index]).ChaineAffichage, TEmprunt
-              (Emprunts.Emprunts[index]).Emprunteur.ChaineAffichage]));
-        fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransEmprunts, rsTransPage, Prn.GetPageNumber]), epNext);
-      end;
-    finally
-      fWaiting.ShowProgression(rsTransImpression + '...', epNext);
-      if Prn.Printing then
-        Prn.Quit;
-      Prn.Free;
-    end;
-  finally
-    Emprunts.Free;
-  end;
-end;
-
 procedure ImpressionInfosBDtheque(Previsualisation: Boolean);
 var
   fWaiting: IWaiting;
@@ -1311,69 +1098,6 @@ var
     Prn.CreateColumn1(7, 147, 15, taLeftJustify, Prn.Font.name, 10, []);
     Prn.CreateColumn1(8, 110, 35, taRightJustify, Prn.Font.name, 10, []);
     Prn.CreateColumn1(9, 120, -1, taLeftJustify, Prn.Font.name, 10, [fsItalic]);
-
-    Prn.NextLineFont(Prn.Columns[0].Font);
-    Prn.NextLine;
-    Prn.DrawLine(Prn.Detail.Left, Prn.GetYPosition, Prn.Detail.Left + Prn.Detail.Width, Prn.GetYPosition, 1, clBlack);
-    Prn.NextLine;
-    Prn.WriteLineColumn(0, -2, rsTransEmprunteurs + ' :');
-    Prn.WriteLineColumn(1, -2, IntToStr(R.NbEmprunteurs));
-    Prn.WriteLineColumn(2, -2, rsNombreMoyenEmprunts + ' :');
-    Prn.WriteLineColumn(3, -2, IntToStr(R.MoyEmprunteurs));
-
-    YPos := Prn.GetYPosition;
-    Prn.WriteLineColumn(5, -1, rsTransMinimum + ' :');
-    Prn.WriteLineColumn(4, -2, Format('%d (%d)', [R.MinEmprunteurs, R.ListEmprunteursMin.Count]));
-    for i := 0 to R.ListEmprunteursMin.Count - 1 do
-    begin
-      Prn.WriteLineColumn(6, -1, IIf(i = 5, '...', TEmprunteur(R.ListEmprunteursMin[i]).ChaineAffichage));
-      if i = 5 then
-        Break;
-    end;
-    YPosMax := Prn.GetYPosition;
-    Prn.SetYPosition(YPos);
-    Prn.WriteLineColumn(8, -1, rsTransMaximum + ' :');
-    Prn.WriteLineColumn(7, -2, Format('%d (%d)', [R.MaxEmprunteurs, R.ListEmprunteursMax.Count]));
-    for i := 0 to R.ListEmprunteursMax.Count - 1 do
-    begin
-      Prn.WriteLineColumn(9, -1, IIf(i = 5, '...', TEmprunteur(R.ListEmprunteursMax[i]).ChaineAffichage));
-      if i = 5 then
-        Break;
-    end;
-    if R.ListEmprunteursMin.Count > R.ListEmprunteursMax.Count then
-      Prn.SetYPosition(YPosMax);
-
-    fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbumsEmpruntes, rsTransPage, Prn.GetPageNumber]), epNext);
-    Prn.NextLineFont(Prn.Columns[0].Font);
-    Prn.NextLine;
-    Prn.DrawLine(Prn.Detail.Left, Prn.GetYPosition, Prn.Detail.Left + Prn.Detail.Width, Prn.GetYPosition, 1, clBlack);
-    Prn.NextLine;
-    Prn.WriteLineColumn(0, -2, rsTransAlbumsEmpruntes + ' :');
-    Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbEmpruntes, MulDiv(R.NbEmpruntes, 100, R.NbAlbums)]));
-    Prn.WriteLineColumn(2, -2, rsNombreMoyenEmprunts + ' :');
-    Prn.WriteLineColumn(3, -2, IntToStr(R.MoyEmpruntes));
-
-    YPos := Prn.GetYPosition;
-    Prn.WriteLineColumn(5, -1, rsTransMinimum + ' :');
-    Prn.WriteLineColumn(4, -2, Format('%d (%d)', [R.MinEmprunteurs, R.ListAlbumsMin.Count]));
-    for i := 0 to R.ListAlbumsMin.Count - 1 do
-    begin
-      Prn.WriteLineColumn(6, -1, IIf(i = 5, '...', TAlbum(R.ListAlbumsMin[i]).ChaineAffichage));
-      if i = 5 then
-        Break;
-    end;
-    YPosMax := Prn.GetYPosition;
-    Prn.SetYPosition(YPos);
-    Prn.WriteLineColumn(8, -1, rsTransMaximum + ' :');
-    Prn.WriteLineColumn(7, -2, Format('%d (%d)', [R.MaxEmpruntes, R.ListAlbumsMax.Count]));
-    for i := 0 to R.ListAlbumsMax.Count - 1 do
-    begin
-      Prn.WriteLineColumn(9, -1, IIf(i = 5, '...', TAlbum(R.ListAlbumsMax[i]).ChaineAffichage));
-      if i = 5 then
-        Break;
-    end;
-    if R.ListAlbumsMin.Count > R.ListAlbumsMax.Count then
-      Prn.SetYPosition(YPosMax);
 
     fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransGenres, rsTransPage, Prn.GetPageNumber]), epNext);
     for i := 0 to Prn.Columns.Count - 1 do

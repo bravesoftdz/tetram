@@ -91,6 +91,7 @@ object frmExportation: TfrmExportation
     Header.Font.Height = -11
     Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
+    Header.Height = 17
     Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
     HintAnimation = hatNone
     HintMode = hmTooltip
@@ -107,7 +108,7 @@ object frmExportation: TfrmExportation
       item
         Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
         Position = 0
-        Width = 678
+        Width = 682
       end>
   end
   object vstAlbums: TVirtualStringTree
@@ -128,6 +129,7 @@ object frmExportation: TfrmExportation
     Header.Font.Height = -11
     Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
+    Header.Height = 17
     Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
     HintAnimation = hatNone
     HintMode = hmTooltip
@@ -140,7 +142,7 @@ object frmExportation: TfrmExportation
       item
         Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
         Position = 0
-        Width = 678
+        Width = 682
       end>
   end
   object SaveDialog1: TSaveDialog

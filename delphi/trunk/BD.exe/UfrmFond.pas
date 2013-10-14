@@ -51,7 +51,6 @@ type
     actModeEntretien: TAction;
     actStatsInfosBDtheque: TAction;
     actStatsListeCompletesAlbums: TAction;
-    actStatsAlbumsEmpruntes: TAction;
     ActionsStatistiques: TActionList;
     StatsInfosBDApp: TAction;
     StatsInfosBDPrn: TAction;
@@ -97,22 +96,17 @@ type
     N5: TMenuItem;
     Basededonnes1: TMenuItem;
     Listecompltedesalbums1: TMenuItem;
-    Albumsempruntes1: TMenuItem;
     Aperuavantimpression1: TMenuItem;
     Imprimer1: TMenuItem;
-    Aperuavantimpression2: TMenuItem;
-    Imprimer2: TMenuItem;
     InformationsBDthque1: TMenuItem;
     Aperuavantimpression3: TMenuItem;
     Imprimer3: TMenuItem;
     Recherche1: TMenuItem;
-    Albumsemprunts1: TMenuItem;
     AfficheSeriesIncompletes1: TMenuItem;
     AffichePrevisionsSorties1: TMenuItem;
     N6: TMenuItem;
     Statistiques1: TMenuItem;
     Gnrales1: TMenuItem;
-    Emprunteurs1: TMenuItem;
     Albums2: TMenuItem;
     N7: TMenuItem;
     Options1: TMenuItem;
@@ -159,7 +153,6 @@ type
     procedure actActualiseRepertoireExecute(Sender: TObject);
     procedure actRelireOptionsExecute(Sender: TObject);
     procedure actQuitterExecute(Sender: TObject);
-    procedure actAfficheStatsEmprunteursExecute(Sender: TObject);
     procedure actAfficheStatsAlbumsExecute(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure actPersonnaliseBarreExecute(Sender: TObject);
@@ -169,12 +162,9 @@ type
     procedure actAideAboutExecute(Sender: TObject);
     procedure actModeGestionExecute(Sender: TObject);
     procedure actStatsInfosBDthequeExecute(Sender: TObject);
-    procedure StatsEmpruntsExecute(Sender: TObject);
     procedure actStatsListeCompletesAlbumsExecute(Sender: TObject);
-    procedure actStatsAlbumsEmpruntesExecute(Sender: TObject);
     procedure StatsInfosBDAppExecute(Sender: TObject);
     procedure StatsListeCompletesAlbumsAppExecute(Sender: TObject);
-    procedure StatsAlbumsEmpruntesAppExecute(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure actModeConsultationExecute(Sender: TObject);
     procedure HistoriqueBackExecute(Sender: TObject);
@@ -224,7 +214,7 @@ implementation
 
 {$R *.DFM}
 
-uses ProceduresBDtk, UfrmRepertoire, CommonConst, UfrmOptions, UfrmStatsGeneral, UfrmStatsEmprunteurs, UfrmStatsAlbums, LoadComplet, Impression,
+uses ProceduresBDtk, UfrmRepertoire, CommonConst, UfrmOptions, UfrmStatsGeneral, UfrmStatsAlbums, LoadComplet, Impression,
   UfrmGestion, UfrmCustomize, UfrmAboutBox, UdmPrinc, Types, Procedures, UfrmEntretien, ShellAPI, Math, UfrmScripts, UfrmPublier, JumpList, ShlObj;
 
 procedure TfrmFond.WMSyscommand(var msg: TWmSysCommand);
@@ -559,20 +549,6 @@ begin
   Close;
 end;
 
-procedure TfrmFond.actAfficheStatsEmprunteursExecute(Sender: TObject);
-var
-  R: TStats;
-begin
-  R := TStats.Create(False);
-  with TStatsEmprunteursCreate(Self, R) do
-    try
-      ShowModal;
-    finally
-      Free;
-      R.Free;
-    end;
-end;
-
 procedure TfrmFond.actAfficheStatsAlbumsExecute(Sender: TObject);
 var
   R: TStats;
@@ -849,19 +825,9 @@ begin
   ImpressionInfosBDtheque(TAction(Sender).ActionComponent.Tag = 1);
 end;
 
-procedure TfrmFond.StatsEmpruntsExecute(Sender: TObject);
-begin
-  ImpressionEmprunts(TAction(Sender).ActionComponent.Tag = 1, seTous, ssTous, -1, -1, True, True);
-end;
-
 procedure TfrmFond.actStatsListeCompletesAlbumsExecute(Sender: TObject);
 begin
   ImpressionListeCompleteAlbums(TAction(Sender).ActionComponent.Tag = 1);
-end;
-
-procedure TfrmFond.actStatsAlbumsEmpruntesExecute(Sender: TObject);
-begin
-  ImpressionEmprunts(TAction(Sender).ActionComponent.Tag = 1, seTous, ssTous, -1, -1, True, True);
 end;
 
 procedure TfrmFond.StatsInfosBDAppExecute(Sender: TObject);
@@ -874,12 +840,6 @@ procedure TfrmFond.StatsListeCompletesAlbumsAppExecute(Sender: TObject);
 begin
   actStatsListeCompletesAlbums.ActionComponent := TComponent(Sender);
   actStatsListeCompletesAlbums.Execute;
-end;
-
-procedure TfrmFond.StatsAlbumsEmpruntesAppExecute(Sender: TObject);
-begin
-  actStatsAlbumsEmpruntes.ActionComponent := TComponent(Sender);
-  actStatsAlbumsEmpruntes.Execute;
 end;
 
 procedure TfrmFond.ActionList1Update(Action: TBasicAction; var Handled: Boolean);

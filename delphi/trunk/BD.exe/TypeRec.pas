@@ -5,12 +5,7 @@ interface
 uses
   Windows, SysUtils, DB, Classes, ComCtrls, UIB, StdCtrls, Commun, UMetaData, SyncObjs, Generics.Collections;
 
-// IMPORTANT: Ref doit TOUJOURS être le premier champ des records
-// Les strings DOIVENT être limités pour pouvoir utiliser CopyMemory(Pd, Ps, SizeOf(Ps^));
-
 type
-  TEditionsEmpruntees = array of array [0 .. 1] of TGUID;
-
   TBasePointeur = class(TObject)
   private
     class var cs: TCriticalSection;
@@ -237,20 +232,6 @@ type
     class function Duplicate(Ps: TEdition): TEdition;
   end;
 
-  TEmprunteur = class(TBasePointeur)
-  public
-    Nom: string { [100] };
-
-    procedure Assign(Ps: TBasePointeur); override;
-
-    procedure Fill(Query: TUIBQuery); overload; override;
-    procedure Fill(const ID_Emprunteur: TGUID); reintroduce; overload;
-    function ChaineAffichage(dummy: Boolean = True): string; override;
-    procedure Clear; override;
-    class function Duplicate(Ps: TEmprunteur): TEmprunteur;
-    class function Make(Query: TUIBQuery): TEmprunteur;
-  end;
-
   TConversion = class(TBasePointeur)
     Monnaie1, Monnaie2: string { [5] };
     Taux: Double;
@@ -271,25 +252,6 @@ type
     procedure Clear; override;
 
     class function Make(Query: TUIBQuery): TGenre;
-  end;
-
-  TEmprunt = class(TBasePointeur)
-  public
-    Emprunteur: TEmprunteur;
-    Album: TAlbum;
-    Edition: TEdition;
-    Date: TDateTime;
-    Pret: Boolean;
-
-    procedure Assign(Ps: TBasePointeur); override;
-
-    constructor Create; override;
-    destructor Destroy; override;
-
-    procedure Fill(Query: TUIBQuery); override;
-    function ChaineAffichage(dummy: Boolean = True): string; override;
-    procedure Clear; override;
-    class function Duplicate(Ps: TEmprunt): TEmprunt;
   end;
 
 implementation
@@ -1084,60 +1046,6 @@ begin
   Collection.Fill(Query);
 end;
 
-{ TEmprunteur }
-
-procedure TEmprunteur.Assign(Ps: TBasePointeur);
-begin
-  inherited;
-  Nom := TEmprunteur(Ps).Nom;
-end;
-
-function TEmprunteur.ChaineAffichage(dummy: Boolean = True): string;
-begin
-  Result := FormatTitre(Nom);
-end;
-
-class function TEmprunteur.Duplicate(Ps: TEmprunteur): TEmprunteur;
-begin
-  Result := TEmprunteur(inherited Duplicate(Ps));
-end;
-
-procedure TEmprunteur.Clear;
-begin
-  inherited;
-  Nom := '';
-end;
-
-procedure TEmprunteur.Fill(Query: TUIBQuery);
-begin
-  inherited;
-  ID := NonNull(Query, 'ID_Emprunteur');
-  Nom := Query.Fields.ByNameAsString['NomEmprunteur'];
-end;
-
-procedure TEmprunteur.Fill(const ID_Emprunteur: TGUID);
-var
-  Q: TUIBQuery;
-begin
-  Q := TUIBQuery.Create(nil);
-  with Q do
-    try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'SELECT ID_Emprunteur, NomEmprunteur FROM Emprunteurs WHERE ID_Emprunteur = ?';
-      Params.AsString[0] := GUIDToString(ID_Emprunteur);
-      Open;
-      Fill(Q);
-    finally
-      Transaction.Free;
-      Free;
-    end;
-end;
-
-class function TEmprunteur.Make(Query: TUIBQuery): TEmprunteur;
-begin
-  Result := TEmprunteur(inherited Make(Query));
-end;
-
 { TGenre }
 
 procedure TGenre.Assign(Ps: TBasePointeur);
@@ -1173,74 +1081,6 @@ end;
 class function TGenre.Make(Query: TUIBQuery): TGenre;
 begin
   Result := TGenre(inherited Make(Query));
-end;
-
-{ TEmprunt }
-
-procedure TEmprunt.Assign(Ps: TBasePointeur);
-begin
-  inherited;
-  Pret := TEmprunt(Ps).Pret;
-  Date := TEmprunt(Ps).Date;
-  Emprunteur.Assign(TEmprunt(Ps).Emprunteur);
-  Album.Assign(TEmprunt(Ps).Album);
-  Edition.Assign(TEmprunt(Ps).Edition);
-end;
-
-function TEmprunt.ChaineAffichage(dummy: Boolean = True): string;
-begin
-  Result := FormatDateTime(FormatSettings.ShortDateFormat, Date);
-end;
-
-constructor TEmprunt.Create;
-begin
-  inherited;
-  Album := TAlbum.Create;
-  Emprunteur := TEmprunteur.Create;
-  Edition := TEdition.Create;
-end;
-
-destructor TEmprunt.Destroy;
-begin
-  FreeAndNil(Album);
-  FreeAndNil(Emprunteur);
-  FreeAndNil(Edition);
-  inherited;
-end;
-
-class function TEmprunt.Duplicate(Ps: TEmprunt): TEmprunt;
-begin
-  Result := TEmprunt(inherited Duplicate(Ps));
-end;
-
-procedure TEmprunt.Clear;
-begin
-  inherited;
-  Album.Clear;
-  Emprunteur.Clear;
-  Edition.Clear;
-end;
-
-procedure TEmprunt.Fill(Query: TUIBQuery);
-begin
-  inherited;
-  Pret := LongBool(Query.Fields.ByNameAsInteger['PretEmprunt']);
-  Date := Query.Fields.ByNameAsDateTime['DateEmprunt'];
-  try
-    Emprunteur.Fill(Query);
-  except
-    Emprunteur.Clear;
-  end;
-  try
-    Album.Fill(Query);
-  except
-    Album.Clear;
-  end;
-  try
-    Edition.Fill(Query);
-  except
-    Edition.Clear;
-  end;
 end;
 
 { TParaBD }

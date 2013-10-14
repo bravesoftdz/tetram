@@ -16,14 +16,6 @@ type
     Spshtinter: TLabel;
     Label12: TLabel;
     Label13: TLabel;
-    Label14: TLabel;
-    Label15: TLabel;
-    Label16: TLabel;
-    Label17: TLabel;
-    Label18: TLabel;
-    Label19: TLabel;
-    Label20: TLabel;
-    Label21: TLabel;
     fermer: TButton;
     nb_Albums: TLabel;
     AlbumsNB: TLabel;
@@ -38,22 +30,10 @@ type
     moy_empruntee: TLabel;
     TotalEstime: TLabel;
     TotalConnu: TLabel;
-    nb_emprunteurs: TLabel;
-    nb_empruntee: TLabel;
-    listmaxemprunteurs: TListBox;
-    listminemprunteurs: TListBox;
-    listmaxempruntee: TListBox;
-    listminempruntee: TListBox;
     PrixMax: TLabel;
     PrixMin: TLabel;
-    Bevel1: TBevel;
-    Bevel2: TBevel;
-    Bevel3: TBevel;
-    Bevel4: TBevel;
     Bevel5: TBevel;
     Bevel6: TBevel;
-    Bevel7: TBevel;
-    Bevel8: TBevel;
     Label1: TLabel;
     nb_Series: TLabel;
     Label9: TLabel;
@@ -100,24 +80,6 @@ begin
     PrixMoy.Left := i - PrixMoy.Width;
     totalestime.Left := i - totalestime.Width;
     totalconnu.Left := i - totalconnu.Width;
-
-    nb_emprunteurs.Caption := IntToStr(Info.NbEmprunteurs);
-    moy_emprunteurs.Caption := IntToStr(Info.MoyEmprunteurs);
-    max_emprunteurs.Caption := IntToStr(Info.MaxEmprunteurs);
-    for i := 0 to Info.ListEmprunteursMax.Count - 1 do
-      listmaxemprunteurs.Items.Add(TEmprunteur(Info.ListEmprunteursMax[i]).ChaineAffichage);
-    min_emprunteurs.Caption := IntToStr(Info.MinEmprunteurs);
-    for i := 0 to Info.ListEmprunteursMin.Count - 1 do
-      listminemprunteurs.Items.Add(TEmprunteur(Info.ListEmprunteursMin[i]).ChaineAffichage);
-
-    nb_empruntee.Caption := IntToStr(Info.NbEmpruntes);
-    moy_empruntee.Caption := IntToStr(Info.MoyEmpruntes);
-    max_empruntee.Caption := IntToStr(Info.MaxEmpruntes);
-    for i := 0 to Info.ListAlbumsMax.Count - 1 do
-      listmaxempruntee.Items.Add(TAlbum(Info.ListAlbumsMax[i]).ChaineAffichage);
-    min_empruntee.Caption := IntToStr(Info.MinEmpruntes);
-    for i := 0 to Info.ListAlbumsMin.Count - 1 do
-      listminempruntee.Items.Add(TAlbum(Info.ListAlbumsMin[i]).ChaineAffichage);
   end;
 end;
 

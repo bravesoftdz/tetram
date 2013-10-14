@@ -1257,10 +1257,6 @@ begin
   begin
     OldIndex := vtEditions.ItemIndex;
 
-    if (FCurrentEditionComplete.Emprunts.Emprunts.Count > 0) and
-     (AffMessage(rsLienEdition + #13 + rsSupprimerEdition, mtConfirmation, [mbYes, mbNo], True) <> mrYes) then
-      Exit;
-
     FCurrentEditionComplete := nil;
     vtEditions.DeleteSelected;
     FAlbum.Editions.Editions.Delete(OldIndex);
