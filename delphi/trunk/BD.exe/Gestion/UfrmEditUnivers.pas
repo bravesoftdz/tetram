@@ -93,9 +93,7 @@ end;
 
 procedure TfrmEditUnivers.SetUnivers(Value: TUniversComplet);
 var
-  i: Integer;
   hg: IHourGlass;
-  s: string;
 begin
   hg := THourGlass.Create;
   FUnivers := Value;
@@ -105,15 +103,17 @@ begin
   edDescription.Text := FUnivers.Description.Text;
   edSite.Text := FUnivers.SiteWeb;
 
-  vtAlbums.Filtre := 'ID_Univers = ' + QuotedStr(GUIDToString(ID_Univers));
+  vtAlbums.Filtre := 'Branche_Univers containing ' + QuotedStr('|' + GUIDToString(ID_Univers) + '|');
   vtAlbums.Mode := vmAlbumsUnivers;
   vtAlbums.FullExpand;
 
-  vtParaBD.Filtre := 'ID_Univers = ' + QuotedStr(GUIDToString(ID_Univers));
-  vtParaBD.Mode := vmParaBDUnivers;
-  vtParaBD.FullExpand;
+  // vtParaBD.Filtre := 'Branche_Univers containing ' + QuotedStr('|' + GUIDToString(ID_Univers) + '|');
+  // vtParaBD.Mode := vmParaBDUnivers;
+  // vtParaBD.FullExpand;
 
-  vtEditUnivers.VTEdit.PopupWindow.TreeView.Filtre := 'ID_Univers <> ' + QuotedStr(GUIDToString(ID_Univers));
+  vtEditUnivers.Mode := vmUnivers;
+  vtEditUnivers.VTEdit.PopupWindow.TreeView.UseFiltre := True;
+  vtEditUnivers.VTEdit.PopupWindow.TreeView.Filtre := 'Branche not containing ' + QuotedStr('|' + GUIDToString(ID_Univers) + '|');
   vtEditUnivers.CurrentValue := FUnivers.ID_UniversParent;
 
   // pour le moment

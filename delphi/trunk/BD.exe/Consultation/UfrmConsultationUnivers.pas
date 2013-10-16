@@ -28,11 +28,14 @@ type
     FicheModifier: TAction;
     Modifier1: TMenuItem;
     N1: TMenuItem;
+    Label1: TLabel;
+    UniversParent: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure NomUniversClick(Sender: TObject);
     procedure FicheApercuExecute(Sender: TObject);
     procedure FicheModifierExecute(Sender: TObject);
+    procedure UniversParentDblClick(Sender: TObject);
   private
     FUnivers: TUniversComplet;
     function GetID_Univers: TGUID;
@@ -67,10 +70,6 @@ begin
 end;
 
 procedure TfrmConsultationUnivers.SetID_Univers(const Value: TGUID);
-var
-  Auteur: TAuteur;
-  ms: TStream;
-  jpg: TJPEGImage;
 begin
   ClearForm;
   FUnivers.Fill(Value);
@@ -87,7 +86,14 @@ begin
     NomUnivers.Font.Style := NomUnivers.Font.Style - [fsUnderline];
     NomUnivers.Cursor := crDefault;
   end;
+  UniversParent.Caption := FormatTitre(FUnivers.UniversParent.NomUnivers);
   Description.Text := FUnivers.Description.Text;
+end;
+
+procedure TfrmConsultationUnivers.UniversParentDblClick(Sender: TObject);
+begin
+  if not IsEqualGUID(FUnivers.UniversParent.ID, GUID_NULL) then
+    Historique.AddWaiting(fcUnivers, FUnivers.UniversParent.ID, 0);
 end;
 
 procedure TfrmConsultationUnivers.ClearForm;

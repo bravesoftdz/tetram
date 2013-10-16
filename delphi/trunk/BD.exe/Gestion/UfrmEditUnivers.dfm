@@ -48,8 +48,6 @@ object frmEditUnivers: TfrmEditUnivers
     BorderStyle = bsNone
     Constraints.MinWidth = 650
     TabOrder = 0
-    ExplicitLeft = 40
-    ExplicitTop = 29
     DesignSize = (
       798
       887)
@@ -173,7 +171,6 @@ object frmEditUnivers: TfrmEditUnivers
       Height = 13
       Alignment = taRightJustify
       Caption = 'Univers principal :'
-      Visible = False
     end
     object edNom: TEditLabeled
       Left = 96
@@ -304,7 +301,6 @@ object frmEditUnivers: TfrmEditUnivers
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 3
-      Visible = False
       ExplicitLeft = 96
       ExplicitTop = 143
       ExplicitWidth = 696
@@ -322,7 +318,7 @@ object frmEditUnivers: TfrmEditUnivers
       end
       inherited VTEdit: TJvComboEdit
         Width = 633
-        ExplicitWidth = 259
+        ExplicitWidth = 633
       end
     end
   end

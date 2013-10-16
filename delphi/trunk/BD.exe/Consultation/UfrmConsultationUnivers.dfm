@@ -29,12 +29,12 @@ object frmConsultationUnivers: TfrmConsultationUnivers
       842
       489)
     object l_sujet: TLabel
-      Left = 1
-      Top = 35
-      Width = 53
+      Left = 29
+      Top = 53
+      Width = 60
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Description'
+      Caption = 'Description :'
       Color = clWhite
       FocusControl = Description
       Font.Charset = ANSI_CHARSET
@@ -47,9 +47,9 @@ object frmConsultationUnivers: TfrmConsultationUnivers
       Transparent = True
     end
     object NomUnivers: TLabel
-      Left = 59
+      Left = 95
       Top = 5
-      Width = 775
+      Width = 739
       Height = 23
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -67,7 +67,7 @@ object frmConsultationUnivers: TfrmConsultationUnivers
       OnClick = NomUniversClick
     end
     object Label6: TLabel
-      Left = 25
+      Left = 61
       Top = 10
       Width = 28
       Height = 13
@@ -92,10 +92,49 @@ object frmConsultationUnivers: TfrmConsultationUnivers
       Align = alBottom
       Shape = bsSpacer
     end
+    object Label1: TLabel
+      Left = 4
+      Top = 29
+      Width = 85
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Univers principal :'
+      Color = clWhite
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 12615680
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      ShowAccelChar = False
+      Transparent = True
+    end
+    object UniversParent: TLabel
+      Left = 95
+      Top = 29
+      Width = 739
+      Height = 13
+      Anchors = [akLeft, akTop, akRight]
+      AutoSize = False
+      Caption = 'Univers parent'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      ShowAccelChar = False
+      Transparent = True
+      Layout = tlCenter
+      WordWrap = True
+      OnClick = NomUniversClick
+      OnDblClick = UniversParentDblClick
+    end
     object Description: TMemo
-      Left = 59
-      Top = 34
-      Width = 775
+      Left = 95
+      Top = 50
+      Width = 739
       Height = 119
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered

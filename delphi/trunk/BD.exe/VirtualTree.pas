@@ -201,12 +201,12 @@ const
     SEARCHORDER: 'COALESCE(TITREALBUM, TITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
     DEFAULTFILTRE: 'ACHAT = 1'),
     ( // vmUnivers
-    FILTRECOUNT: 'VW_INITIALES_UNIVERS'; Filtre: 'UNIVERS_BY_INITIALE(?)';
+    FILTRECOUNT: 'INITIALES_UNIVERS(?)'; Filtre: 'UNIVERS_BY_INITIALE(?, ?)';
     FIELDS: 'ID_UNIVERS, NOMUNIVERS';
     INITIALEFIELDS: 'INITIALENOMUNIVERS'; INITIALEVALUE: 'INITIALENOMUNIVERS'; REFFIELDS: 'ID_UNIVERS'; TABLESEARCH: 'UNIVERS';
     FIELDSEARCH: 'NOMUNIVERS'),
     ( // vmAlbumsUnivers
-    FILTRECOUNT: 'UNIVERS_ALBUMS(?)'; Filtre: 'ALBUMS_BY_SERIE(?, ?)';
+    FILTRECOUNT: 'UNIVERS_ALBUMS(?)'; Filtre: 'ALBUMS_BY_UNIVERS(?, ?)';
     FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET, NOTATION';
     INITIALEFIELDS: 'NOMUNIVERS'; INITIALEVALUE: 'ID_UNIVERS'; REFFIELDS: 'ID_ALBUM'; TABLESEARCH: 'VW_LISTE_ALBUMS';
     FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)';
@@ -389,7 +389,7 @@ begin
   if (FMode <> vmNone) and (GetNodeLevel(Node) = 0) then
   begin
     case FMode of
-      vmAlbums, vmAlbumsAnnee, vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie, vmAchatsAlbumsEditeur:
+      vmAlbums, vmAlbumsAnnee, vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie, vmAchatsAlbumsEditeur, vmAlbumsUnivers:
         ClassPointeur := TAlbum;
       vmPersonnes:
         ClassPointeur := TPersonnage;
@@ -401,7 +401,7 @@ begin
         ClassPointeur := TEditeur;
       vmCollections:
         ClassPointeur := TCollection;
-      vmParaBDSerie:
+      vmParaBDSerie, vmParaBDUnivers:
         ClassPointeur := TParaBD;
       vmUnivers:
         ClassPointeur := TUnivers;
