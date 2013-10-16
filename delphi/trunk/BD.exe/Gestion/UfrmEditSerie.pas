@@ -93,6 +93,7 @@ type
     procedure vtEditPersonnesVTEditChange(Sender: TObject);
     procedure OnEditPersonne(Sender: TObject);
     procedure vtEditEditeursVTEditChange(Sender: TObject);
+    procedure vtEditUniversVTEditChange(Sender: TObject);
   private
     { Déclarations privées }
     FSerie: TSerieComplete;
@@ -363,6 +364,11 @@ begin
   btScenariste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVScenaristes);
   btDessinateur.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVDessinateurs);
   btColoriste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVColoristes);
+end;
+
+procedure TfrmEditSerie.vtEditUniversVTEditChange(Sender: TObject);
+begin
+  FSerie.ID_Univers := vtEditUnivers.CurrentValue;
 end;
 
 procedure TfrmEditSerie.vtGenresDblClick(Sender: TObject);

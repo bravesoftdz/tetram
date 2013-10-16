@@ -108,6 +108,8 @@ type
     cbDedicace: TLabeledCheckBox;
     cbStock: TLabeledCheckBox;
     cbCouleur: TLabeledCheckBox;
+    Label2: TLabel;
+    Univers: TLabel;
     procedure lvScenaristesDblClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -134,6 +136,8 @@ type
     procedure vstSerieDblClick(Sender: TObject);
     procedure N7Click(Sender: TObject);
     procedure vstSerieAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
+    procedure UniversClick(Sender: TObject);
+    procedure UniversDblClick(Sender: TObject);
   strict private
     CurrentCouverture: Integer;
     FAlbum: TAlbumComplet;
@@ -473,6 +477,20 @@ begin
     TitreSerie.Cursor := crDefault;
   end;
   TitreAlbum.Caption := FormatTitre(FAlbum.TitreAlbum);
+  Univers.Caption := FormatTitre(FAlbum.Univers.NomUnivers);
+  if FAlbum.Univers.SiteWeb <> '' then
+  begin
+    Univers.Font.Color := clBlue;
+    Univers.Font.Style := Univers.Font.Style + [fsUnderline];
+    Univers.Cursor := crHandPoint;
+  end
+  else
+  begin
+    Univers.Font.Color := clBlack;
+    Univers.Font.Style := Univers.Font.Style - [fsUnderline];
+    Univers.Cursor := crDefault;
+  end;
+
   Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FAlbum.Notation - 900].pngimage);
   Tome.Caption := NonZero(IntToStr(FAlbum.Tome));
   cbIntegrale.Checked := FAlbum.Integrale;
@@ -532,7 +550,25 @@ end;
 procedure TfrmConsultationAlbum.TitreSerieDblClick(Sender: TObject);
 begin
   if IsDownKey(VK_CONTROL) then
-    Historique.AddWaiting(fcSerie, FAlbum.Serie.ID_Serie);
+    Historique.AddWaiting(fcSerie, FAlbum.ID_Serie);
+end;
+
+procedure TfrmConsultationAlbum.UniversClick(Sender: TObject);
+var
+  s: string;
+begin
+  if not IsDownKey(VK_CONTROL) then
+  begin
+    s := FAlbum.Univers.SiteWeb;
+    if s <> '' then
+      ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
+  end;
+end;
+
+procedure TfrmConsultationAlbum.UniversDblClick(Sender: TObject);
+begin
+  if IsDownKey(VK_CONTROL) then
+    Historique.AddWaiting(fcUnivers, FAlbum.ID_Univers);
 end;
 
 procedure TfrmConsultationAlbum.TitreSerieClick(Sender: TObject);

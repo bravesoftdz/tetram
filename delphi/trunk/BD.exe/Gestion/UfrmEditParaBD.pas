@@ -73,6 +73,7 @@ type
     procedure vtEditSeriesVTEditChange(Sender: TObject);
     procedure vtEditPersonnesVTEditChange(Sender: TObject);
     procedure OnEditPersonnes(Sender: TObject);
+    procedure vtEditUniversVTEditChange(Sender: TObject);
   private
     FCreation: Boolean;
     FisAchat: Boolean;
@@ -129,7 +130,12 @@ begin
     cbNumerote.Checked := FParaBD.Numerote;
     description.Text := FParaBD.description.Text;
 
+    vtEditSeries.VTEdit.OnChange := nil;
     vtEditSeries.CurrentValue := FParaBD.Serie.ID_Serie;
+    vtEditSeries.VTEdit.OnChange := vtEditSeriesVTEditChange;
+    vtEditUnivers.Visible := IsEqualGUID(FParaBD.Serie.ID_Serie, GUID_NULL);
+    Label11.Visible := IsEqualGUID(FParaBD.Serie.ID_Serie, GUID_NULL);
+    vtEditUnivers.CurrentValue := FParaBD.Univers.ID_Univers;
 
     cbOffert.Checked := FParaBD.Offert;
     cbGratuit.Checked := FParaBD.Gratuit;
@@ -368,9 +374,16 @@ end;
 
 procedure TfrmEditParaBD.vtEditSeriesVTEditChange(Sender: TObject);
 begin
-  FParaBD.Serie.Fill(vtEditSeries.CurrentValue);
+  FParaBD.ID_Serie := vtEditSeries.CurrentValue;
   vtEditUnivers.Visible := IsEqualGUID(FParaBD.Serie.ID_Serie, GUID_NULL);
   Label11.Visible := IsEqualGUID(FParaBD.Serie.ID_Serie, GUID_NULL);
+  if not IsEqualGUID(FParaBD.ID_Serie, GUID_NULL) then
+    vtEditUnivers.CurrentValue := FParaBD.Serie.ID_Univers;
+end;
+
+procedure TfrmEditParaBD.vtEditUniversVTEditChange(Sender: TObject);
+begin
+  FParaBD.ID_Univers := vtEditUnivers.CurrentValue;
 end;
 
 procedure TfrmEditParaBD.OnEditPersonnes(Sender: TObject);

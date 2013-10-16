@@ -108,6 +108,7 @@ type
     procedure Clear; override;
     procedure PrepareInstance; override;
     procedure SaveToDatabase(UseTransaction: TUIBTransaction); override;
+    function ChaineAffichage(dummy: Boolean = True): string; override;
   published
     property ID_Univers: TGUID read FID write FID;
     property NomUnivers: string read FNomUnivers write SetNomUnivers;
@@ -550,6 +551,11 @@ type
     FUnivers: TUniversComplet;
     function Get_sDateAchat: string;
     procedure SetTitreParaBD(const Value: string); inline;
+  private
+    function GetID_Serie: TGUID;
+    function GetID_Univers: TGUID;
+    procedure SetID_Serie(const Value: TGUID);
+    procedure SetID_Univers(const Value: TGUID);
   public
     procedure Fill(const Reference: TGUID); override;
     procedure Clear; override;
@@ -563,6 +569,8 @@ type
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
   published
     property ID_ParaBD: TGUID read FID write FID;
+    property ID_Serie: TGUID read GetID_Serie write SetID_Serie;
+    property ID_Univers: TGUID read GetID_Univers write SetID_Univers;
     property AnneeEdition: Integer read FAnneeEdition write FAnneeEdition;
     property CategorieParaBD: ROption read FCategorieParaBD write FCategorieParaBD;
     property AnneeCote: Integer read FAnneeCote write FAnneeCote;
@@ -856,7 +864,7 @@ begin
       SQL.Clear;
       SQL.Add('select');
       SQL.Add('  titrealbum, moisparution, anneeparution, id_serie, tome, tomedebut, tomefin, sujetalbum,');
-      SQL.Add('  remarquesalbum, horsserie, integrale, complet, notation');
+      SQL.Add('  remarquesalbum, horsserie, integrale, complet, notation, id_univers');
       SQL.Add('from');
       SQL.Add('  albums');
       SQL.Add('where');
@@ -3163,6 +3171,16 @@ begin
     end;
 end;
 
+function TParaBDComplet.GetID_Serie: TGUID;
+begin
+  Result := Serie.ID_Serie;
+end;
+
+function TParaBDComplet.GetID_Univers: TGUID;
+begin
+  Result := Univers.ID_Univers;
+end;
+
 function TParaBDComplet.Get_sDateAchat: string;
 begin
   if Self.DateAchat > 0 then
@@ -3312,6 +3330,16 @@ begin
     finally
       Free;
     end;
+end;
+
+procedure TParaBDComplet.SetID_Serie(const Value: TGUID);
+begin
+  Serie.Fill(Value);
+end;
+
+procedure TParaBDComplet.SetID_Univers(const Value: TGUID);
+begin
+  Univers.Fill(Value);
 end;
 
 procedure TParaBDComplet.SetTitreParaBD(const Value: string);
@@ -4197,6 +4225,11 @@ begin
 end;
 
 { TUniversComplet }
+
+function TUniversComplet.ChaineAffichage(dummy: Boolean): string;
+begin
+  Result := FormatTitre(NomUnivers);
+end;
 
 procedure TUniversComplet.Clear;
 begin

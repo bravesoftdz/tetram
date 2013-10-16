@@ -1185,7 +1185,7 @@ begin
   with Q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'select nomunivers, iid_univers from univers where id_univers = ?';
+      SQL.Text := 'select nomunivers, id_univers from univers where id_univers = ?';
       Params.AsString[0] := GUIDToString(ID_Univers);
       Open;
       Fill(Q);

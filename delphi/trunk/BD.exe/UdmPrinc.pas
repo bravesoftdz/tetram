@@ -294,21 +294,25 @@ begin
         doVerif := DaysBetween(Now, TGlobalVar.Utilisateur.Options.LastVerifMAJ) > 0;
       3: // une fois par semaine
         doVerif := WeeksBetween(Now, TGlobalVar.Utilisateur.Options.LastVerifMAJ) > 0;
-      else // une fois par mois
-        doVerif := MonthsBetween(Now, TGlobalVar.Utilisateur.Options.LastVerifMAJ) > 0;
-      end;
+    else // une fois par mois
+      doVerif := MonthsBetween(Now, TGlobalVar.Utilisateur.Options.LastVerifMAJ) > 0;
+    end;
 
   if not doVerif then
     Result := False
   else
   begin
-    Result := CheckVersionNet.CheckVersion('TetramCorpBDTheque', 'bdtheque', TGlobalVar.Utilisateur.ExeVersion, Force, not Force) = 1;
-    with TIniFile.Create(FichierIni) do
-      try
-        WriteInteger('Divers', 'LastVerifMAJ', Trunc(Now));
-      finally
-        Free;
-      end;
+    try
+      Result := CheckVersionNet.CheckVersion('TetramCorpBDTheque', 'bdtheque', TGlobalVar.Utilisateur.ExeVersion, Force, not Force) = 1;
+      with TIniFile.Create(FichierIni) do
+        try
+          WriteInteger('Divers', 'LastVerifMAJ', Trunc(Now));
+        finally
+          Free;
+        end;
+    except
+      Result := False;
+    end;
   end;
 end;
 
@@ -355,11 +359,11 @@ begin
       ForceGestion := False;
     end;
     Historique.AddWaiting(ModeToOpen);
-//    if ModeToOpen <> fcModeScript then
-      if ForceGestion then
-        Historique.AddWaiting(fcGestionAjout, nil, nil, @gestAdd, nil, '')
-      else
-        Historique.AddWaiting(PageToOpen, GuidToOpen);
+    // if ModeToOpen <> fcModeScript then
+    if ForceGestion then
+      Historique.AddWaiting(fcGestionAjout, nil, nil, @gestAdd, nil, '')
+    else
+      Historique.AddWaiting(PageToOpen, GuidToOpen);
   end;
 end;
 
@@ -371,7 +375,8 @@ begin
   Application.Title := ''; // on change le titre car sinon, on trouverait toujours une Application déjà lancée (la notre!)
   try
     try
-      Result := FindWindow('TfrmFond', PChar(TitreApplication)); // renvoie le Handle de la première fenêtre de Class (type) ClassName et de titre TitreApplication (0 s'il n'y en a pas)
+      Result := FindWindow('TfrmFond', PChar(TitreApplication));
+      // renvoie le Handle de la première fenêtre de Class (type) ClassName et de titre TitreApplication (0 s'il n'y en a pas)
     finally
       Application.Title := TitreApplication; // restauration du vrai titre
     end;

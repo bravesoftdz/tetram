@@ -49,8 +49,6 @@ object frmEditSerie: TfrmEditSerie
     BorderStyle = bsNone
     Constraints.MinWidth = 650
     TabOrder = 0
-    ExplicitLeft = 8
-    ExplicitTop = 49
     DesignSize = (
       798
       887)
@@ -89,7 +87,7 @@ object frmEditSerie: TfrmEditSerie
     end
     object Label15: TLabel
       Left = 537
-      Top = 284
+      Top = 285
       Width = 255
       Height = 13
       Anchors = [akLeft, akTop, akRight]
@@ -734,7 +732,6 @@ object frmEditSerie: TfrmEditSerie
       Height = 13
       Alignment = taRightJustify
       Caption = 'Univers :'
-      Visible = False
     end
     object edTitre: TEditLabeled
       Left = 81
@@ -754,7 +751,7 @@ object frmEditSerie: TfrmEditSerie
     end
     object vtGenres: TVirtualStringTree
       Left = 537
-      Top = 192
+      Top = 195
       Width = 255
       Height = 90
       Anchors = [akLeft, akTop, akRight]
@@ -1184,7 +1181,6 @@ object frmEditSerie: TfrmEditSerie
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 2
-      Visible = False
       ExplicitLeft = 81
       ExplicitTop = 55
       ExplicitWidth = 711
@@ -1202,7 +1198,8 @@ object frmEditSerie: TfrmEditSerie
       end
       inherited VTEdit: TJvComboEdit
         Width = 648
-        ExplicitWidth = 259
+        OnChange = vtEditUniversVTEditChange
+        ExplicitWidth = 648
       end
     end
   end

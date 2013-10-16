@@ -158,6 +158,7 @@ type
     procedure vtEditEditeursVTEditChange(Sender: TObject);
     procedure vtEditCollectionsVTEditChange(Sender: TObject);
     procedure btnScriptClick(Sender: TObject);
+    procedure vtEditUniversVTEditChange(Sender: TObject);
   strict private
     FAlbum: TAlbumComplet;
     FCurrentEditionComplete: TEditionComplete;
@@ -295,6 +296,7 @@ begin
     vtEditSerie.VTEdit.OnChange := nil;
     vtEditSerie.CurrentValue := FAlbum.ID_Serie;
     vtEditSerie.VTEdit.OnChange := JvComboEdit1Change;
+    vtEditUnivers.CurrentValue := FAlbum.ID_Univers;
     vtEditUnivers.Visible := IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
     Label29.Visible := IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
 
@@ -692,7 +694,8 @@ procedure TfrmEditAlbum.OnEditSerie(Sender: TObject);
 var
   i: TGUID;
 begin
-  FAlbum.Serie.Fill(FAlbum.Serie.ID_Serie);
+  // on recharge la série
+  FAlbum.ID_Serie := FAlbum.ID_Serie;
   i := vtEditCollections.CurrentValue;
   vtEditEditeurs.VTEdit.PopupWindow.TreeView.InitializeRep;
   vtEditCollections.VTEdit.PopupWindow.TreeView.InitializeRep;
@@ -1136,6 +1139,7 @@ begin
   Label29.Visible := IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
   if not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL) then
   begin
+    vtEditUnivers.CurrentValue := FAlbum.Serie.Id_Univers;
     if not (FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then
       try
         lvScenaristes.Items.BeginUpdate;
@@ -1266,6 +1270,11 @@ begin
       vtEditions.ItemIndex := Pred(vtEditions.Items.Count);
     vtEditionsClick(vtEditions);
   end;
+end;
+
+procedure TfrmEditAlbum.vtEditUniversVTEditChange(Sender: TObject);
+begin
+  FAlbum.ID_Univers := vtEditUnivers.CurrentValue;
 end;
 
 procedure TfrmEditAlbum.VDTButton14Click(Sender: TObject);

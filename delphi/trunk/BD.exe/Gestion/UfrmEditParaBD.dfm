@@ -1443,7 +1443,8 @@ object frmEditParaBD: TfrmEditParaBD
       end
       inherited VTEdit: TJvComboEdit
         Width = 373
-        ExplicitWidth = 259
+        OnChange = vtEditUniversVTEditChange
+        ExplicitWidth = 373
       end
     end
   end
