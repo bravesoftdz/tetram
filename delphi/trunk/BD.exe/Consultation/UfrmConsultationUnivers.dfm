@@ -93,12 +93,12 @@ object frmConsultationUnivers: TfrmConsultationUnivers
       Shape = bsSpacer
     end
     object Label1: TLabel
-      Left = 4
+      Left = 11
       Top = 29
-      Width = 85
+      Width = 78
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Univers principal :'
+      Caption = 'Univers parent :'
       Color = clWhite
       Font.Charset = ANSI_CHARSET
       Font.Color = 12615680
@@ -131,6 +131,40 @@ object frmConsultationUnivers: TfrmConsultationUnivers
       OnClick = NomUniversClick
       OnDblClick = UniversParentDblClick
     end
+    object Label3: TLabel
+      Left = 48
+      Top = 175
+      Width = 41
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Albums :'
+      Color = clWhite
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 12615680
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      Transparent = True
+    end
+    object Label4: TLabel
+      Left = 43
+      Top = 300
+      Width = 46
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Para-BD :'
+      Color = clWhite
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 12615680
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      Transparent = True
+    end
     object Description: TMemo
       Left = 95
       Top = 50
@@ -145,6 +179,67 @@ object frmConsultationUnivers: TfrmConsultationUnivers
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 0
+    end
+    object vtAlbums: TVirtualStringTree
+      Left = 95
+      Top = 175
+      Width = 739
+      Height = 119
+      Anchors = [akLeft, akTop, akRight]
+      AnimationDuration = 0
+      BevelInner = bvLowered
+      BevelOuter = bvNone
+      BevelKind = bkFlat
+      BorderStyle = bsNone
+      ButtonFillMode = fmShaded
+      Header.AutoSizeIndex = -1
+      Header.DefaultHeight = 17
+      Header.Font.Charset = DEFAULT_CHARSET
+      Header.Font.Color = clWindowText
+      Header.Font.Height = -11
+      Header.Font.Name = 'Tahoma'
+      Header.Font.Style = []
+      Header.Height = 17
+      Header.MainColumn = -1
+      Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
+      HintAnimation = hatNone
+      HintMode = hmTooltip
+      HotCursor = crHandPoint
+      Indent = 8
+      ParentColor = True
+      TabOrder = 1
+      OnAfterItemPaint = vtAlbumsAfterItemPaint
+      OnDblClick = vtAlbumsDblClick
+      Columns = <>
+    end
+    object vtParaBD: TVirtualStringTree
+      Left = 95
+      Top = 300
+      Width = 739
+      Height = 130
+      Anchors = [akLeft, akTop, akRight]
+      BevelInner = bvLowered
+      BevelOuter = bvNone
+      BevelKind = bkFlat
+      BorderStyle = bsNone
+      ButtonFillMode = fmShaded
+      CheckImageKind = ckDarkCheck
+      Header.AutoSizeIndex = -1
+      Header.DefaultHeight = 17
+      Header.Font.Charset = DEFAULT_CHARSET
+      Header.Font.Color = clWindowText
+      Header.Font.Height = -11
+      Header.Font.Name = 'Tahoma'
+      Header.Font.Style = []
+      Header.Height = 17
+      Header.MainColumn = -1
+      Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
+      ParentColor = True
+      TabOrder = 2
+      TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
+      TreeOptions.StringOptions = []
+      OnDblClick = vtParaBDDblClick
+      Columns = <>
     end
   end
   object MainMenu1: TMainMenu

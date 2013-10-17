@@ -655,10 +655,10 @@ type
   end;
 
   TTypeRecherche = (trAucune, trSimple, trComplexe);
-  TRechercheSimple = (rsAuteur, rsSerie, rsEditeur, rsGenre, rsCollection);
+  TRechercheSimple = (rsAuteur, rsUnivers, rsSerie, rsEditeur, rsGenre, rsCollection);
 
 const
-  TLblRechercheSimple: array [TRechercheSimple] of string = ('Auteur', 'Serie', 'Editeur', 'Genre', 'Collection');
+  TLblRechercheSimple: array [TRechercheSimple] of string = ('Auteur', 'Univers', 'Serie', 'Editeur', 'Genre', 'Collection');
 
 type
   TRecherche = class(TBaseComplet)
@@ -3617,15 +3617,17 @@ var
     // SERIES
     // EDITIONS
     // GENRESERIES
+    // UNIVERS
 
-    Result := 'albums inner join editions on albums.id_album = editions.id_album left join series on albums.id_serie = series.id_serie';
+    Result := 'albums inner join editions on albums.id_album = editions.id_album left join series on albums.id_serie = series.id_serie left join univers on univers.id_univers = albums.id_univers';
     slFrom.Delete(slFrom.IndexOf('albums'));
     slFrom.Delete(slFrom.IndexOf('series'));
     slFrom.Delete(slFrom.IndexOf('editions'));
+    slFrom.Delete(slFrom.IndexOf('univers'));
     i := slFrom.IndexOf('genreseries');
     if i <> -1 then
     begin
-      Result := Result + ' left outer join genreseries on genreseries.id_serie = albums.id_serie';
+      Result := Result + ' left join genreseries on genreseries.id_serie = albums.id_serie';
       slFrom.Delete(i);
     end;
   end;
@@ -3707,6 +3709,7 @@ begin
       slFrom.Add('albums');
       slFrom.Add('series');
       slFrom.Add('editions');
+      slFrom.Add('univers');
       sWhere := ProcessCritere(Criteres);
 
       SQL.Add('from ' + ProcessTables);
@@ -3783,8 +3786,8 @@ end;
 
 procedure TRecherche.Fill(Recherche: TRechercheSimple; const ID: TGUID; const Libelle: string);
 const
-  Proc: array [0 .. 4] of string = ('albums_by_auteur(?, null)', 'albums_by_serie(?, null)', 'albums_by_editeur(?, null)', 'albums_by_genre(?, null)',
-    'albums_by_collection(?, null)');
+  Proc: array [0 .. 5] of string = ('albums_by_auteur(?, null)', 'albums_by_univers(?, null)', 'albums_by_serie(?, null)', 'albums_by_editeur(?, null)',
+    'albums_by_genre(?, null)', 'albums_by_collection(?, null)');
 var
   q: TUIBQuery;
   S: string;

@@ -44,7 +44,8 @@ begin
     Script.Add('');
     Script.Add('  new.dm_univers = cast(''now'' as timestamp);');
     Script.Add('  if (inserting or new.dc_univers is null) then new.dc_univers = new.dm_univers;');
-    Script.Add('end;');
+    Script.Add('end');
+    Script.Add(';');
 
     Script.Add('create or alter trigger univers_dv for univers');
     Script.Add('active before insert or update position 0');
@@ -66,7 +67,8 @@ begin
     Script.Add('        id_univers = new.id_univers_parent');
     Script.Add('      into');
     Script.Add('        new.id_univers_racine;');
-    Script.Add('end;');
+    Script.Add('end');
+    Script.Add(';');
 
     Script.Add('create or alter trigger univers_univers_ref for univers');
     Script.Add('active after update or delete position 0');
@@ -88,14 +90,16 @@ begin
     Script.Add('      update parabd set id_univers_racine = new.id_univers_racine where id_univers = new.id_univers and id_univers_racine is distinct from new.id_univers_racine;');
     Script.Add('    end');
     Script.Add('  end');
-    Script.Add('end;');
+    Script.Add('end');
+    Script.Add(';');
 
     Script.Add('create or alter trigger univers_logsup_ad0 for univers');
     Script.Add('active after delete position 0');
     Script.Add('as');
     Script.Add('begin');
     Script.Add('  insert into suppressions(tablename, fieldname, id) values (''UNIVERS'', ''id_univers'', old.id_univers);');
-    Script.Add('end;');
+    Script.Add('end');
+    Script.Add(';');
 
     Script.Add('create or alter trigger series_dv for series');
     Script.Add('active before insert or update position 0');
@@ -112,7 +116,8 @@ begin
     Script.Add('    else');
     Script.Add('      select id_univers_racine from univers where id_univers = new.id_univers into new.id_univers_racine;');
     Script.Add('  end');
-    Script.Add('end;');
+    Script.Add('end');
+    Script.Add(';');
 
     Script.Add('create or alter trigger series_au0 for series');
     Script.Add('active after update position 0');
@@ -122,7 +127,8 @@ begin
     Script.Add('    update albums set id_univers = new.id_univers where id_serie = new.id_serie;');
     Script.Add('    update parabd set id_univers = new.id_univers where id_serie = new.id_serie;');
     Script.Add('  end');
-    Script.Add('end;');
+    Script.Add('end');
+    Script.Add(';');
 
     Script.Add('create or alter trigger parabd_dv for parabd');
     Script.Add('active before insert or update position 0');
@@ -154,7 +160,8 @@ begin
     Script.Add('    else');
     Script.Add('      select id_univers_racine from univers where id_univers = new.id_univers into new.id_univers_racine;');
     Script.Add('  end');
-    Script.Add('end;');
+    Script.Add('end');
+    Script.Add(';');
 
     Script.Add('create or alter trigger albums_dv for albums');
     Script.Add('active before insert or update position 0');
@@ -184,40 +191,34 @@ begin
     Script.Add('    else');
     Script.Add('      select id_univers_racine from univers where id_univers = new.id_univers into new.id_univers_racine;');
     Script.Add('  end');
-    Script.Add('end;');
+    Script.Add('end');
+    Script.Add(';');
 
     Script.Add('drop trigger albums_idserie_biu;');
 
-    Script.Add('create or alter procedure liste_univers');
-    Script.Add('returns (');
-    Script.Add('    initialenomunivers type of column univers.initialenomunivers,');
-    Script.Add('    nomunivers type of column univers.nomunivers,');
-    Script.Add('    id_univers type of column univers.id_univers,');
-    Script.Add('    id_univers_parent type of column univers.id_univers_parent,');
-    Script.Add('    id_univers_racine type of column univers.id_univers_racine,');
-    Script.Add('    branche varchar(5000) character set none)');
-    Script.Add('as');
-    Script.Add('declare variable id_dummy type of column univers.id_univers_parent;');
-    Script.Add('begin');
-    Script.Add('  for');
-    Script.Add('    select');
-    Script.Add('      initialenomunivers, nomunivers, id_univers, id_univers_parent, id_univers_racine');
-    Script.Add('    from');
-    Script.Add('      univers');
-    Script.Add('    into');
-    Script.Add('      :initialenomunivers, :nomunivers, :id_univers, :id_univers_parent, :id_univers_racine');
-    Script.Add('  do');
-    Script.Add('  begin');
-    Script.Add('    branche = ''|'' || :id_univers || ''|'';');
-    Script.Add('    id_dummy = :id_univers_parent;');
-    Script.Add('    while (:id_dummy is not null) do begin');
-    Script.Add('      branche = :branche || :id_dummy || ''|'';');
-    Script.Add('      select id_univers_parent from univers where id_univers = :id_dummy into :id_dummy;');
-    Script.Add('    end');
+    Script.Add('create or alter view vw_liste_univers as');
+    Script.Add('with recursive liste_univers as (');
+    Script.Add('  select');
+    Script.Add('    id_univers, nomunivers, initialenomunivers, id_univers_parent, id_univers_racine, cast(''|'' || id_univers || ''|'' as varchar(5000)) branche');
+    Script.Add('  from');
+    Script.Add('    univers');
+    Script.Add('  where');
+    Script.Add('    id_univers_parent is null');
     Script.Add('');
-    Script.Add('    suspend;');
-    Script.Add('  end');
-    Script.Add('end;');
+    Script.Add('  union all');
+    Script.Add('');
+    Script.Add('  select');
+    Script.Add('    ch.id_univers, ch.nomunivers, ch.initialenomunivers, ch.id_univers_parent, ch.id_univers_racine, ''|'' || ch.id_univers || pa.branche');
+    Script.Add('  from');
+    Script.Add('    univers ch');
+    Script.Add('    inner join liste_univers pa on');
+    Script.Add('      ch.id_univers_parent = pa.id_univers');
+    Script.Add('  )');
+    Script.Add('select');
+    Script.Add('  id_univers, nomunivers, initialenomunivers, id_univers_parent, id_univers_racine, branche');
+    Script.Add('from');
+    Script.Add('  liste_univers');
+    Script.Add(';');
 
     Script.Add('create or alter procedure initiales_univers (');
     Script.Add('    filtre varchar(150))');
@@ -234,14 +235,15 @@ begin
     Script.Add('    ''select');
     Script.Add('      initialenomunivers, count(id_univers)');
     Script.Add('    from');
-    Script.Add('      liste_univers '' || swhere || ''');
+    Script.Add('      vw_liste_univers '' || swhere || ''');
     Script.Add('    group by');
     Script.Add('      1''');
     Script.Add('    into');
     Script.Add('      :initialenomunivers, :countinitiale');
     Script.Add('  do');
     Script.Add('    suspend;');
-    Script.Add('end;');
+    Script.Add('end');
+    Script.Add(';');
 
     Script.Add('create or alter view vw_liste_albums(');
     Script.Add('    id_album,');
@@ -273,7 +275,7 @@ begin
     Script.Add('  albums a');
     Script.Add('  left join series s on');
     Script.Add('    s.id_serie = a.id_serie');
-    Script.Add('  left join liste_univers u on');
+    Script.Add('  left join vw_liste_univers u on');
     Script.Add('    u.id_univers = a.id_univers');
     Script.Add(';');
 
@@ -326,7 +328,8 @@ begin
     Script.Add('  begin');
     Script.Add('    suspend;');
     Script.Add('  end');
-    Script.Add('end;');
+    Script.Add('end');
+    Script.Add(';');
 
     Script.Add('create or alter procedure univers_by_initiale (');
     Script.Add('    initiale t_initiale_utf8,');
@@ -344,7 +347,7 @@ begin
     Script.Add('    ''select');
     Script.Add('      id_univers, nomunivers');
     Script.Add('    from');
-    Script.Add('      liste_univers');
+    Script.Add('      vw_liste_univers');
     Script.Add('    where');
     Script.Add('      initialenomunivers = '''''' ||: initiale || '''''' '' || swhere || ''');
     Script.Add('    order by');
@@ -353,7 +356,8 @@ begin
     Script.Add('      :id_univers, :nomunivers');
     Script.Add('  do');
     Script.Add('    suspend;');
-    Script.Add('end;');
+    Script.Add('end');
+    Script.Add(';');
 
     Script.Add('create or alter procedure univers_albums (');
     Script.Add('    filtre varchar(125) character set none)');
@@ -381,7 +385,34 @@ begin
     Script.Add('      :nomunivers, :id_univers, :countunivers');
     Script.Add('  do');
     Script.Add('    suspend;');
-    Script.Add('end;');
+    Script.Add('end');
+    Script.Add(';');
+
+    Script.Add('create or alter view vw_liste_parabd (');
+    Script.Add(' id_parabd,');
+    Script.Add(' titreparabd,');
+    Script.Add(' id_serie,');
+    Script.Add(' titreserie,');
+    Script.Add(' achat,');
+    Script.Add(' complet,');
+    Script.Add(' scategorie,');
+    Script.Add(' id_univers,');
+    Script.Add(' nomunivers,');
+    Script.Add(' id_univers_racine,');
+    Script.Add(' branche_univers');
+    Script.Add(') as');
+    Script.Add('select');
+    Script.Add('  p.id_parabd, p.titreparabd, p.id_serie, s.titreserie, p.achat, p.complet, lc.libelle,');
+    Script.Add('  p.id_univers, u.nomunivers, p.id_univers_racine, u.branche');
+    Script.Add('from');
+    Script.Add('  parabd p');
+    Script.Add('  left join series s on');
+    Script.Add('    s.id_serie = p.id_serie');
+    Script.Add('  left join listes lc on');
+    Script.Add('    lc.ref = p.categorieparabd and lc.categorie = 7');
+    Script.Add('  left join vw_liste_univers u on');
+    Script.Add('    u.id_univers = p.id_univers');
+    Script.Add(';');
 
 {$IFDEF DEBUG}
     Script.Add('insert into univers (id_univers, nomunivers, id_univers_parent) values (''{B68B648F-557A-46E7-A748-2E7AD8BA3237}'', ''1'', null);');

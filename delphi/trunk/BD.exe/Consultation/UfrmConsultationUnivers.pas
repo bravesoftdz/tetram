@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, StrUtils,
   Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls, UfrmFond, Procedures,
-  ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms,
+  ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms, VirtualTree,
   LabeledCheckBox, System.Actions;
 
 type
@@ -30,12 +30,19 @@ type
     N1: TMenuItem;
     Label1: TLabel;
     UniversParent: TLabel;
+    Label3: TLabel;
+    vtAlbums: TVirtualStringTree;
+    Label4: TLabel;
+    vtParaBD: TVirtualStringTree;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure NomUniversClick(Sender: TObject);
     procedure FicheApercuExecute(Sender: TObject);
     procedure FicheModifierExecute(Sender: TObject);
     procedure UniversParentDblClick(Sender: TObject);
+    procedure vtAlbumsAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
+    procedure vtAlbumsDblClick(Sender: TObject);
+    procedure vtParaBDDblClick(Sender: TObject);
   private
     FUnivers: TUniversComplet;
     function GetID_Univers: TGUID;
@@ -61,7 +68,6 @@ uses Commun, TypeRec, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, 
   Proc_Gestions;
 
 {$R *.dfm}
-
 { TfrmConsultationUnivers }
 
 function TfrmConsultationUnivers.GetID_Univers: TGUID;
@@ -76,18 +82,28 @@ begin
 
   Caption := 'Fiche d''univers - ' + FUnivers.ChaineAffichage;
   NomUnivers.Caption := FormatTitre(FUnivers.NomUnivers);
-  if FUnivers.SiteWeb <> '' then begin
+  if FUnivers.SiteWeb <> '' then
+  begin
     NomUnivers.Font.Color := clBlue;
     NomUnivers.Font.Style := NomUnivers.Font.Style + [fsUnderline];
     NomUnivers.Cursor := crHandPoint;
   end
-  else begin
+  else
+  begin
     NomUnivers.Font.Color := clWindowText;
     NomUnivers.Font.Style := NomUnivers.Font.Style - [fsUnderline];
     NomUnivers.Cursor := crDefault;
   end;
   UniversParent.Caption := FormatTitre(FUnivers.UniversParent.NomUnivers);
   Description.Text := FUnivers.Description.Text;
+
+  vtAlbums.Filtre := 'Branche_Univers containing ' + QuotedStr(GUIDToString(ID_Univers));
+  vtAlbums.Mode := vmAlbumsSerie;
+  vtAlbums.FullExpand;
+
+  vtParaBD.Filtre := 'Branche_Univers containing ' + QuotedStr(GUIDToString(ID_Univers));
+  vtParaBD.Mode := vmParaBDSerie;
+  vtParaBD.FullExpand;
 end;
 
 procedure TfrmConsultationUnivers.UniversParentDblClick(Sender: TObject);
@@ -96,9 +112,28 @@ begin
     Historique.AddWaiting(fcUnivers, FUnivers.UniversParent.ID, 0);
 end;
 
+procedure TfrmConsultationUnivers.vtAlbumsAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
+begin
+  if vtAlbums.GetNodeLevel(Node) > 0 then
+    frmFond.DessineNote(TargetCanvas, ItemRect, TAlbum(vtAlbums.GetNodeBasePointer(Node)).Notation);
+end;
+
+procedure TfrmConsultationUnivers.vtAlbumsDblClick(Sender: TObject);
+begin
+  Historique.AddWaiting(fcAlbum, vtAlbums.CurrentValue);
+end;
+
+procedure TfrmConsultationUnivers.vtParaBDDblClick(Sender: TObject);
+begin
+  Historique.AddWaiting(fcParaBD, vtParaBD.CurrentValue);
+end;
+
 procedure TfrmConsultationUnivers.ClearForm;
 begin
-
+  vtAlbums.Mode := vmNone;
+  vtAlbums.UseFiltre := True;
+  vtParaBD.Mode := vmNone;
+  vtParaBD.UseFiltre := True;
 end;
 
 procedure TfrmConsultationUnivers.FormCreate(Sender: TObject);
@@ -117,7 +152,8 @@ procedure TfrmConsultationUnivers.NomUniversClick(Sender: TObject);
 var
   s: string;
 begin
-  if not IsDownKey(VK_CONTROL) then begin
+  if not IsDownKey(VK_CONTROL) then
+  begin
     s := FUnivers.SiteWeb;
     if s <> '' then
       ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
@@ -170,4 +206,3 @@ begin
 end;
 
 end.
-

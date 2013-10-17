@@ -63,6 +63,7 @@ const
   //  rsTransNationalite = 'Nationalité';
   rsTransNombreDEditions = 'Nombre d''éditions';
   rsTransNombreDePages = 'Nombre de pages';
+  rsTransNomUnivers = 'Nom univers';
   rsTransNotes = 'Notes';
   rsTransNumerote = 'Numéroté';
   rsTransNumeroPerso = 'Numérotation personnelle';

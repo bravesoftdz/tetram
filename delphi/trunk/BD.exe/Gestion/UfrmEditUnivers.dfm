@@ -165,12 +165,12 @@ object frmEditUnivers: TfrmEditUnivers
       Shape = bsTopLine
     end
     object Label5: TLabel
-      Left = 5
+      Left = 12
       Top = 146
-      Width = 85
+      Width = 78
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Univers principal :'
+      Caption = 'Univers parent :'
     end
     object edNom: TEditLabeled
       Left = 96

@@ -104,12 +104,12 @@ begin
   edSite.Text := FUnivers.SiteWeb;
 
   vtAlbums.Filtre := 'Branche_Univers containing ' + QuotedStr('|' + GUIDToString(ID_Univers) + '|');
-  vtAlbums.Mode := vmAlbumsUnivers;
+  vtAlbums.Mode := vmAlbumsSerie;
   vtAlbums.FullExpand;
 
-  // vtParaBD.Filtre := 'Branche_Univers containing ' + QuotedStr('|' + GUIDToString(ID_Univers) + '|');
-  // vtParaBD.Mode := vmParaBDUnivers;
-  // vtParaBD.FullExpand;
+  vtParaBD.Filtre := 'Branche_Univers containing ' + QuotedStr('|' + GUIDToString(ID_Univers) + '|');
+  vtParaBD.Mode := vmParaBDSerie;
+  vtParaBD.FullExpand;
 
   vtEditUnivers.Mode := vmUnivers;
   vtEditUnivers.VTEdit.PopupWindow.TreeView.UseFiltre := True;

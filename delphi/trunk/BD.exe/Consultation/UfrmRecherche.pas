@@ -5,7 +5,8 @@ interface
 uses
   SysUtils, Windows, Messages, Classes, Forms, Graphics, Controls, Menus, StdCtrls, Buttons, ComCtrls, ExtCtrls, ToolWin, Commun,
   VirtualTrees, VirtualTree, ActnList, VDTButton, ComboCheck, ProceduresBDtk,
-  UframRechercheRapide, LoadComplet, UBdtForms, Generics.Defaults;
+  UframRechercheRapide, LoadComplet, UBdtForms, Generics.Defaults,
+  System.Actions;
 
 type
   TfrmRecherche = class(TBdtForm, IImpressionApercu)
@@ -54,7 +55,7 @@ type
     procedure btnRechercheClick(Sender: TObject);
     procedure VTResultGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure VTResultPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
-    procedure VTResultHeaderClick(Sender: TVTHeader;   HitInfo: TVTHeaderHitInfo);
+    procedure VTResultHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo);
     procedure LightComboCheck1Change(Sender: TObject);
     procedure Edit2KeyPress(Sender: TObject; var Key: Char);
     procedure PageControl1Change(Sender: TObject);
@@ -105,7 +106,7 @@ begin
   for i := Low(TRechercheSimple) to High(TRechercheSimple) do
     LightComboCheck1.Items.Add(TLblRechercheSimple[i]).Valeur := Ord(i);
   LightComboCheck1.Value := 0;
-  ChargeImage(VTPersonnes.Background, 'FONDVT');
+  ChargeImage(vtPersonnes.Background, 'FONDVT');
   ChargeImage(VTResult.Background, 'FONDVT');
   FrameRechercheRapide1.VirtualTreeView := vtPersonnes;
   FrameRechercheRapide1.ShowNewButton := False;
@@ -116,7 +117,7 @@ begin
   VTResult.TreeOptions.PaintOptions := VTResult.TreeOptions.PaintOptions - [toShowButtons, toShowDropmark, toShowRoot];
 
   btnRecherche.Font.Style := btnRecherche.Font.Style + [fsBold];
-  VTPersonnes.Mode := vmPersonnes;
+  vtPersonnes.Mode := vmPersonnes;
   TypeRecherche := Recherche.TypeRecherche;
   TreeView1.Selected := TreeView1.Items.AddChild(nil, 'Critères');
   TreeView1.Selected.Data := Recherche.Criteres;
@@ -132,15 +133,18 @@ begin
   if PageControl1.ActivePage = TabSheet1 then
   begin
     ToModif := TreeView1.Selected;
-    if not (Assigned(ToModif) and (Integer(ToModif.Data) > 0)) then Exit;
+    if not(Assigned(ToModif) and (Integer(ToModif.Data) > 0)) then
+      Exit;
     p := ToModif.Data;
     with TFrmEditCritere.Create(Self) do
     begin
       try
         Critere := p;
-        if ShowModal <> mrOk then Exit;
+        if ShowModal <> mrOk then
+          Exit;
         p.Assign(Critere);
-        if TypeRecherche = trComplexe then TypeRecherche := trAucune;
+        if TypeRecherche = trComplexe then
+          TypeRecherche := trAucune;
         ReconstructLabels(ToModif.Parent);
       finally
         Free;
@@ -150,15 +154,18 @@ begin
   else
   begin
     ToModif := TreeView2.Selected;
-    if not Assigned(ToModif) then Exit;
+    if not Assigned(ToModif) then
+      Exit;
     p2 := ToModif.Data;
     with TFrmEditCritereTri.Create(Self) do
     begin
       try
         Critere := p2;
-        if ShowModal <> mrOk then Exit;
+        if ShowModal <> mrOk then
+          Exit;
         p2.Assign(Critere);
-        if TypeRecherche = trComplexe then TypeRecherche := trAucune;
+        if TypeRecherche = trComplexe then
+          TypeRecherche := trAucune;
         ReconstructSortLabel(ToModif);
       finally
         Free;
@@ -193,7 +200,8 @@ var
   Critere: TCritereTri;
   ParentNode: TTreeNode;
 begin
-  if TypeRecherche = trComplexe then TypeRecherche := trAucune;
+  if TypeRecherche = trComplexe then
+    TypeRecherche := trAucune;
   if PageControl1.ActivePage = TabSheet1 then
   begin
     if Assigned(TreeView1.Selected) and (TreeView1.Selected <> TreeView1.Items.GetFirstNode) then
@@ -246,8 +254,10 @@ begin
   RechercheApercu.Enabled := Value <> trAucune;
   RechercheImprime.Enabled := RechercheApercu.Enabled;
   case Value of
-    trComplexe: PageControl2.ActivePageIndex := 1;
-    trSimple: PageControl2.ActivePageIndex := 0;
+    trComplexe:
+      PageControl2.ActivePageIndex := 1;
+    trSimple:
+      PageControl2.ActivePageIndex := 0;
   end;
   FTypeRecherche := Value;
   frmFond.actImpression.Update;
@@ -256,9 +266,9 @@ end;
 
 procedure TfrmRecherche.SpeedButton1Click(Sender: TObject);
 begin
-  if not IsEqualGUID(VTPersonnes.CurrentValue, GUID_NULL) then
+  if not IsEqualGUID(vtPersonnes.CurrentValue, GUID_NULL) then
   begin
-    CritereSimple := VTPersonnes.CurrentValue;
+    CritereSimple := vtPersonnes.CurrentValue;
     PageControl2.ActivePageIndex := 0;
     VTResult.RootNodeCount := 0;
     lbResult.Caption := '';
@@ -275,12 +285,14 @@ end;
 
 procedure TfrmRecherche.VTResultDblClick(Sender: TObject);
 begin
-  if Assigned(VTResult.FocusedNode) then Historique.AddWaiting(fcAlbum, Recherche.Resultats[VTResult.FocusedNode.Index].ID);
+  if Assigned(VTResult.FocusedNode) then
+    Historique.AddWaiting(fcAlbum, Recherche.Resultats[VTResult.FocusedNode.Index].ID);
 end;
 
 procedure TfrmRecherche.methodeChange(Sender: TObject);
 begin
-  if (TypeRecherche = trComplexe) then TypeRecherche := trAucune;
+  if (TypeRecherche = trComplexe) then
+    TypeRecherche := trAucune;
   TGroupCritere(TreeView1.Selected.Parent.Data).GroupOption := TGroupOption(methode.ItemIndex);
   ReconstructLabels(TreeView1.Selected.Parent);
 end;
@@ -295,7 +307,8 @@ begin
   Modif.Enabled := Assigned(Node) and (TBaseCritere(Node.Data) is TCritere);
   moins.Enabled := Assigned(Node);
   methode.Visible := Assigned(Node) and Assigned(Node.Parent) and (TBaseCritere(Node.Parent.Data) is TGroupCritere);
-  if methode.Visible then methode.ItemIndex := Integer(TGroupCritere(Node.Parent.Data).GroupOption);
+  if methode.Visible then
+    methode.ItemIndex := Integer(TGroupCritere(Node.Parent.Data).GroupOption);
 end;
 
 procedure TfrmRecherche.TreeView1Collapsing(Sender: TObject; Node: TTreeNode; var AllowCollapse: Boolean);
@@ -308,11 +321,13 @@ var
   p: TCritere;
   ParentNode: TTreeNode;
 begin
-  if not Assigned(TreeView1.Selected) then Exit;
+  if not Assigned(TreeView1.Selected) then
+    Exit;
   with TFrmEditCritere.Create(Self) do
   begin
     try
-      if ShowModal <> mrOk then Exit;
+      if ShowModal <> mrOk then
+        Exit;
       if TBaseCritere(TreeView1.Selected.Data) is TGroupCritere then
         ParentNode := TreeView1.Selected
       else
@@ -326,7 +341,8 @@ begin
         ReconstructLabels(ParentNode);
         Selected := True;
       end;
-      if TypeRecherche = trComplexe then TypeRecherche := trAucune;
+      if TypeRecherche = trComplexe then
+        TypeRecherche := trAucune;
     finally
       Free;
     end;
@@ -383,19 +399,25 @@ begin
   CellText := '';
   if TextType = ttNormal then
     case Column of
-      0: CellText := FormatTitre(Recherche.Resultats[Node.Index].Titre);
-      1: CellText := NonZero(IntToStr(Recherche.Resultats[Node.Index].Tome));
-      2: CellText := FormatTitre(Recherche.Resultats[Node.Index].Serie);
+      0:
+        CellText := FormatTitre(Recherche.Resultats[Node.Index].Titre);
+      1:
+        CellText := NonZero(IntToStr(Recherche.Resultats[Node.Index].Tome));
+      2:
+        CellText := FormatTitre(Recherche.Resultats[Node.Index].Serie);
     end
   else if (Recherche.TypeRecherche = trSimple) and (Recherche.ResultatsInfos.Count > 0) then
     case Column of
-      0: AjoutString(CellText, Recherche.ResultatsInfos[Node.Index], '', '(', ')');
+      0:
+        AjoutString(CellText, Recherche.ResultatsInfos[Node.Index], '', '(', ')');
     end;
 end;
 
-procedure TfrmRecherche.VTResultPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+procedure TfrmRecherche.VTResultPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+  TextType: TVSTTextType);
 begin
-  if TextType = ttStatic then TargetCanvas.Font.Style := TargetCanvas.Font.Style + [fsItalic];
+  if TextType = ttStatic then
+    TargetCanvas.Font.Style := TargetCanvas.Font.Style + [fsItalic];
 end;
 
 type
@@ -406,21 +428,24 @@ type
 function TAlbumCompare.Compare(const Left, Right: TAlbum): Integer;
 begin
   case FSortColumn of
-    0: Result := CompareText(TAlbum(Left).Titre, TAlbum(Right).Titre);
-    1: Result := CompareValue(TAlbum(Left).Tome, TAlbum(Right).Tome);
+    0:
+      Result := CompareText(TAlbum(Left).Titre, TAlbum(Right).Titre);
+    1:
+      Result := CompareValue(TAlbum(Left).Tome, TAlbum(Right).Tome);
     2:
       begin
         Result := CompareText(TAlbum(Left).Serie, TAlbum(Right).Serie);
         if Result = 0 then
           Result := CompareValue(TAlbum(Left).Tome, TAlbum(Right).Tome);
       end;
-    else
-      Result := 0;
+  else
+    Result := 0;
   end;
-  if FSortDirection = sdDescending then Result := -Result;
+  if FSortDirection = sdDescending then
+    Result := -Result;
 end;
 
-procedure TfrmRecherche.VTResultHeaderClick(Sender: TVTHeader;   HitInfo: TVTHeaderHitInfo);
+procedure TfrmRecherche.VTResultHeaderClick(Sender: TVTHeader; HitInfo: TVTHeaderHitInfo);
 begin
   // attention: resultatsinfos n'est pas trié!!!!
   Exit;
@@ -431,7 +456,8 @@ begin
     FSortDirection := sdDescending
   else
     FSortDirection := sdAscending;
-  if FSortColumn <> -1 then VTResult.Header.Columns[FSortColumn].ImageIndex := -1;
+  if FSortColumn <> -1 then
+    VTResult.Header.Columns[FSortColumn].ImageIndex := -1;
   FSortColumn := HitInfo.Column;
   if FSortDirection = sdAscending then
     VTResult.Header.Columns[FSortColumn].ImageIndex := 0
@@ -446,17 +472,13 @@ end;
 
 procedure TfrmRecherche.LightComboCheck1Change(Sender: TObject);
 const
-  NewMode: array[0..4] of TVirtualMode = (vmPersonnes,
-    vmSeries,
-    vmEditeurs,
-    vmGenres,
-    vmCollections);
+  NewMode: array [0 .. 5] of TVirtualMode = (vmPersonnes, vmUnivers, vmSeries, vmEditeurs, vmGenres, vmCollections);
 var
   Mode: TVirtualMode;
 begin
   Mode := NewMode[LightComboCheck1.Value];
-  if (VTPersonnes.Mode <> Mode) then
-    VTPersonnes.Mode := Mode;
+  if (vtPersonnes.Mode <> Mode) then
+    vtPersonnes.Mode := Mode;
 end;
 
 procedure TfrmRecherche.ApercuExecute(Sender: TObject);
@@ -550,11 +572,13 @@ var
   p: TCritereTri;
   Node: TTreeNode;
 begin
-  if not Assigned(TreeView1.Selected) then Exit;
+  if not Assigned(TreeView1.Selected) then
+    Exit;
   with TFrmEditCritereTri.Create(Self) do
   begin
     try
-      if ShowModal <> mrOk then Exit;
+      if ShowModal <> mrOk then
+        Exit;
 
       p := Recherche.AddSort;
       p.Assign(Critere);
@@ -565,7 +589,8 @@ begin
         ReconstructSortLabel(Node);
         Selected := True;
       end;
-      if TypeRecherche = trComplexe then TypeRecherche := trAucune;
+      if TypeRecherche = trComplexe then
+        TypeRecherche := trAucune;
     finally
       Free;
     end;
@@ -585,4 +610,3 @@ begin
 end;
 
 end.
-

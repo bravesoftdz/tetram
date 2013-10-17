@@ -41,7 +41,7 @@ object frmRecherche: TfrmRecherche
     Width = 400
     Height = 222
     Cursor = crHandPoint
-    ActivePage = TabSheet4
+    ActivePage = TabSheet3
     Align = alTop
     Style = tsFlatButtons
     TabOrder = 0
@@ -133,6 +133,7 @@ object frmRecherche: TfrmRecherche
         Header.Font.Height = -11
         Header.Font.Name = 'Tahoma'
         Header.Font.Style = []
+        Header.Height = 17
         Header.MainColumn = -1
         Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
         HintAnimation = hatNone
@@ -311,6 +312,7 @@ object frmRecherche: TfrmRecherche
     Header.Font.Height = -11
     Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
+    Header.Height = 17
     Header.Images = frmFond.ImageList1
     Header.Options = [hoAutoResize, hoColumnResize, hoShowImages, hoVisible]
     Header.Style = hsPlates
