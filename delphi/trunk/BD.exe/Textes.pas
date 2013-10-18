@@ -102,6 +102,7 @@ const
   //  rsTransTotal = 'Total';
   //  rsTransTranche = 'Tranche';
   rsTransTypeEdition = 'Type d''édition';
+  rsTransUnivers = 'Univers';
   rsTransVO = 'VO';
 
   rsAlbumsNB = 'Albums N&B';

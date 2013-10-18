@@ -23,7 +23,7 @@ type
     TypeData: TUIBFieldType;
   end;
 
-  TArrayOfChamp = array[1..43] of RChamp;
+  TArrayOfChamp = array[1..44] of RChamp;
   PArrayOfChamp = ^TArrayOfChamp;
 
 function ChampsRecherche: PArrayOfChamp;
@@ -87,7 +87,8 @@ const
     (Groupe: GP_EDITIONS; ID: 39; NomTable: 'EDITIONS'; NomChamp: 'numeroperso'; LibelleChamp: rsTransNumeroPerso; ChampImpressionTri: True),
     (Groupe: GP_EDITIONS; ID: 40; NomTable: 'EDITIONS'; NomChamp: 'senslecture'; LibelleChamp: rsTransSensLecture; Special: csSensLecture; ChampImpressionTri: False),
     (Groupe: GP_SERIES; ID: 37; NomTable: 'GENRESERIES'; NomChamp: 'ID_GENRE'; LibelleChamp: rsTransGenre + ' *'; Special: csGenre),
-    (Groupe: GP_UNIVERS; ID: 43; NomTable: 'UNIVERS'; NomChamp: 'NomUnivers'; LibelleChamp: rsTransNomUnivers; Special: csTitre)
+    (Groupe: GP_UNIVERS; ID: 43; NomTable: 'UNIVERS'; NomChamp: 'NomUnivers'; LibelleChamp: rsTransNomUnivers; Special: csTitre),
+    (Groupe: GP_UNIVERS; ID: 44; NomTable: 'UNIVERS'; NomChamp: 'Description'; LibelleChamp: rsTransDescription + ' ' + rsTransUnivers)
     );
 
 function ChampByID(Id: Integer): PChamp;

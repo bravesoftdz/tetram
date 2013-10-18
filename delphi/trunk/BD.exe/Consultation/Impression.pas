@@ -1126,6 +1126,7 @@ var
       NbLignes := Ceil(R.ListGenre.Count / 2);
     i := 0;
     YPos := Prn.GetYPosition;
+    YPosMax := YPos;
     while i < R.ListGenre.Count do
     begin
       Prn.WriteLineColumn(1 + 4 * ColonneGenre, -1, TGenre(R.ListGenre[i]).ChaineAffichage);
