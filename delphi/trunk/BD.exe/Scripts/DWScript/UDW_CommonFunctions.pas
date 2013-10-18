@@ -3,7 +3,7 @@ unit UDW_CommonFunctions;
 interface
 
 uses
-  System.Classes, System.SysUtils, UDWUnit, Variants, StrUtils, dwsSymbols, dwsMagicExprs, dwsExprs, dwsFunctions, dwsExprList;
+  System.Classes, System.SysUtils, UDWUnit, Variants, StrUtils, dwsSymbols, dwsMagicExprs, dwsExprs, dwsFunctions, dwsExprList, UdmScripts;
 
 type
   TDW_CommonFunctionsUnit = class(TDW_Unit)
@@ -13,43 +13,31 @@ type
     procedure PostPageEval(info: TProgramInfo);
     procedure PostPageWithHeadersEval(info: TProgramInfo);
     procedure AskSearchEntryEval(info: TProgramInfo);
+
+    procedure StringReplaceEval(info: TProgramInfo);
+    procedure CombineURLEval(info: TProgramInfo);
+    procedure HTMLDecodeEval(info: TProgramInfo);
+    procedure HTMLTextEval(info: TProgramInfo);
+    procedure ChangeFileExtEval(info: TProgramInfo);
+    procedure ChangeFilePathEval(info: TProgramInfo);
+    procedure ExtractFilePathEval(info: TProgramInfo);
+    procedure ExtractFileDirEval(info: TProgramInfo);
+    procedure ExtractFileNameEval(info: TProgramInfo);
+    procedure ExtractFileExtEval(info: TProgramInfo);
+    procedure IncludeTrailingPathDelimiterEval(info: TProgramInfo);
+    procedure ExcludeTrailingPathDelimiterEval(info: TProgramInfo);
+    procedure ShowMessageEval(info: TProgramInfo);
+    procedure WriteToFileEval(info: TProgramInfo);
+    procedure WriteToConsoleEval(info: TProgramInfo);
+    procedure findInfoEval(info: TProgramInfo);
   public
-    constructor Create(AOwner: TComponent); override;
-  end;
-
-  TShowMessageFunc = class(TInternalMagicProcedure)
-    procedure DoEvalProc(const args: TExprBaseListExec); override;
-  end;
-
-  TStringReplaceFuncURL = class(TInternalMagicStringFunction)
-    procedure DoEvalAsString(const args: TExprBaseListExec; var Result: UnicodeString); override;
-  end;
-
-  TCombineURL = class(TInternalMagicStringFunction)
-    procedure DoEvalAsString(const args: TExprBaseListExec; var Result: UnicodeString); override;
-  end;
-
-  TGetPage = class(TInternalMagicStringFunction)
-    procedure DoEvalAsString(const args: TExprBaseListExec; var Result: UnicodeString); override;
-  end;
-
-  TGetPageWithHeaders = class(TInternalMagicStringFunction)
-    procedure DoEvalAsString(const args: TExprBaseListExec; var Result: UnicodeString); override;
-  end;
-
-  THTMLDecode = class(TInternalMagicStringFunction)
-    procedure DoEvalAsString(const args: TExprBaseListExec; var Result: UnicodeString); override;
-  end;
-
-  THTMLText = class(TInternalMagicStringFunction)
-    procedure DoEvalAsString(const args: TExprBaseListExec; var Result: UnicodeString); override;
+    constructor Create(MasterEngine: IMasterEngine); override;
   end;
 
 implementation
 
 uses
-  dwsUnitSymbols, Dialogs, UScriptsFonctions, UScriptUtils, UNet,
-  UScriptsHTMLFunctions, dwsUtils;
+  dwsUnitSymbols, Dialogs, UScriptsFonctions, UScriptUtils, UNet, UScriptsHTMLFunctions, dwsUtils;
 
 const // type constants
   cFloat = 'Float';
@@ -62,89 +50,64 @@ const
   rfReplaceAllVal = Ord(rfReplaceAll) + 1;
   rfIgnoreCaseVal = Ord(rfIgnoreCase) + 1;
 
-procedure InitEnum(systemTable: TSystemSymbolTable; unitSyms: TUnitMainSymbols; unitTable: TSymbolTable);
-var
-  E: TTypeSymbol;
-begin
-  E := TEnumerationSymbol.Create('TReplaceFlags', systemTable.TypInteger, enumClassic);
-  unitTable.AddSymbol(E);
-  unitTable.AddSymbol(TElementSymbol.Create('rfReplaceAll', E, rfReplaceAllVal, False));
-  unitTable.AddSymbol(TElementSymbol.Create('rfIgnoreCase', E, rfIgnoreCaseVal, False));
-end;
-
-{ TCombineURL }
-
-procedure TCombineURL.DoEvalAsString(const args: TExprBaseListExec; var Result: UnicodeString);
-begin
-  Result := CombineURL(args.AsString[0], args.AsString[1]);
-end;
-
-{ TGetPage }
-
-procedure TGetPage.DoEvalAsString(const args: TExprBaseListExec; var Result: UnicodeString);
-begin
-  Result := GetPage(args.AsString[0], args.AsBoolean[1]);
-end;
-
-{ TGetPageWithHeaders }
-
-procedure TGetPageWithHeaders.DoEvalAsString(const args: TExprBaseListExec; var Result: UnicodeString);
-begin
-  Result := GetPageWithHeaders(args.AsString[0], args.AsBoolean[1]);
-end;
-
-{ THTMLText }
-
-procedure THTMLText.DoEvalAsString(const args: TExprBaseListExec; var Result: UnicodeString);
-begin
-  Result := HTMLText(args.AsString[0]);
-end;
-
-{ THTMLDecode }
-
-procedure THTMLDecode.DoEvalAsString(const args: TExprBaseListExec; var Result: UnicodeString);
-begin
-  Result := HTMLDecode(args.AsString[0]);
-end;
-
-{ TShowMessageFunc }
-
-procedure TShowMessageFunc.DoEvalProc(const args: TExprBaseListExec);
-begin
-  ShowMessage(args.AsString[0]);
-end;
-
-{ TDW_CommonFunctionsUnit }
+  { TDW_CommonFunctionsUnit }
 
 procedure TDW_CommonFunctionsUnit.AskSearchEntryEval(info: TProgramInfo);
 var
   obj: IScriptObj;
-  dyn: TScriptDynamicArray;
-
   search: string;
   index: Integer;
   a: array of string;
   i: Integer;
 begin
-  obj := IScriptObj(IUnknown(info.ParamAsVariant[0]));
-  dyn := obj.ExternalObject as TScriptDynamicArray;
-
   search := info.ValueAsString['search'];
   index := info.ValueAsInteger['index'];
 
-  SetLength(a, dyn.DataLength);
-  for i := 0 to Pred(dyn.DataLength) do
-    a[i] := VarToStr(dyn.AsVariant[i]);
+  obj := info.Params[0].ScriptObj;
+  SetLength(a, obj.DataLength);
+  for i := 0 to Pred(obj.DataLength) do
+    a[i] := VarToStr(obj.AsVariant[i]);
 
   info.ResultAsBoolean := AskSearchEntry(a, search, index);
   info.ValueAsString['search'] := search;
   info.ValueAsInteger['index'] := index;
 end;
 
-constructor TDW_CommonFunctionsUnit.Create(AOwner: TComponent);
+procedure TDW_CommonFunctionsUnit.ChangeFileExtEval(info: TProgramInfo);
+begin
+  info.ResultAsString := ScriptChangeFileExt(info.ParamAsString[0], info.ParamAsString[1]);
+end;
+
+procedure TDW_CommonFunctionsUnit.ChangeFilePathEval(info: TProgramInfo);
+begin
+  info.ResultAsString := ScriptChangeFilePath(info.ParamAsString[0], info.ParamAsString[1]);
+end;
+
+procedure TDW_CommonFunctionsUnit.CombineURLEval(info: TProgramInfo);
+begin
+  info.ResultAsString := CombineURL(info.ParamAsString[0], info.ParamAsString[1]);
+end;
+
+constructor TDW_CommonFunctionsUnit.Create(MasterEngine: IMasterEngine);
 begin
   inherited;
   UnitName := 'BDCommon';
+
+  with Enumerations.Add do
+  begin
+    Name := 'TReplaceFlags';
+    Style := enumClassic;
+    with Elements.Add do
+    begin
+      Name := 'rfReplaceAll';
+      UserDefValue := rfReplaceAllVal;
+    end;
+    with Elements.Add do
+    begin
+      Name := 'rfIgnoreCase';
+      UserDefValue := rfIgnoreCaseVal;
+    end;
+  end;
 
   with Records.Add do
   begin
@@ -166,47 +129,69 @@ begin
     end;
   end;
 
-  with Functions.Add do
-  begin
-    Name := 'GetPage';
-    ResultType := 'String';
-    ConvertFuncParams(Parameters, ['url', cString, 'UTF8', cBoolean]);
-    OnEval := GetPageEval;
-  end;
-  with Functions.Add do
-  begin
-    Name := 'GetPageWithHeaders';
-    ResultType := 'String';
-    ConvertFuncParams(Parameters, ['url', cString, 'UTF8', cBoolean]);
-    OnEval := GetPageWithHeadersEval;
-  end;
   with Arrays.Add do
   begin
     Name := 'ArrayOfAttachement';
     DataType := 'RAttachement';
     IsDynamic := True;
   end;
-  with Functions.Add do
-  begin
-    Name := 'PostPage';
-    ResultType := 'String';
-    ConvertFuncParams(Parameters, ['url', cString, 'Pieces', 'ArrayOfAttachement', 'UTF8', cBoolean]);
-    OnEval := PostPageEval;
-  end;
-  with Functions.Add do
-  begin
-    Name := 'PostPageWithHeaders';
-    ResultType := 'String';
-    ConvertFuncParams(Parameters, ['url', cString, 'Pieces', 'ArrayOfAttachement', 'UTF8', cBoolean]);
-    OnEval := PostPageWithHeadersEval;
-  end;
-  with Functions.Add do
-  begin
-    Name := 'AskSearchEntry';
-    ResultType := 'Boolean';
-    ConvertFuncParams(Parameters, ['Labels', 'array of string', '@Search', 'string', '@Index', 'Integer']);
-    OnEval := AskSearchEntryEval;
-  end;
+
+  RegisterFunction('GetPage', cString, ['url', cString, 'UTF8', cBoolean], GetPageEval);
+  RegisterFunction('GetPageWithHeaders', cString, ['url', cString, 'UTF8', cBoolean], GetPageWithHeadersEval);
+  RegisterFunction('PostPage', cString, ['url', cString, 'Pieces', 'ArrayOfAttachement', 'UTF8', cBoolean], PostPageEval);
+  RegisterFunction('PostPageWithHeaders', cString, ['url', cString, 'Pieces', 'ArrayOfAttachement', 'UTF8', cBoolean], PostPageWithHeadersEval);
+  RegisterFunction('AskSearchEntry', cBoolean, ['Labels', 'array of string', '@Search', 'string', '@Index', 'Integer'], AskSearchEntryEval);
+
+  RegisterProcedure('WriteToConsole', ['Chaine', cString], WriteToConsoleEval);
+  RegisterProcedure('WriteToFile', ['Chaine', cString, 'FileName', cString], WriteToFileEval);
+
+  RegisterFunction('findInfo', cString, ['sDebut', cString, 'sFin', cString, 'sChaine', cString, 'sDefault', cString], findInfoEval);
+
+  RegisterFunction('CombineURL', cString, ['Root', cString, 'URL', cString], CombineURLEval);
+  RegisterFunction('HTMLDecode', cString, ['Chaine', cString], HTMLDecodeEval);
+  RegisterFunction('HTMLText', cString, ['Chaine', cString], HTMLTextEval);
+
+  RegisterFunction('ChangeFileExt', cString, ['URL', cString, 'Extension', cString], ChangeFileExtEval);
+  RegisterFunction('ChangeFilePath', cString, ['URL', cString, 'Path', cString], ChangeFilePathEval);
+  RegisterFunction('ExtractFilePath', cString, ['URL', cString], ExtractFilePathEval);
+  RegisterFunction('ExtractFileDir', cString, ['URL', cString], ExtractFileDirEval);
+  RegisterFunction('ExtractFileName', cString, ['URL', cString], ExtractFileNameEval);
+  RegisterFunction('ExtractFileExt', cString, ['URL', cString], ExtractFileExtEval);
+  RegisterFunction('IncludeTrailingPathDelimiter', cString, ['URL', cString], IncludeTrailingPathDelimiterEval);
+  RegisterFunction('ExcludeTrailingPathDelimiter', cString, ['URL', cString], ExcludeTrailingPathDelimiterEval);
+
+  RegisterProcedure('ShowMessage', ['Msg', cString], ShowMessageEval);
+  RegisterFunction('StringReplace', cString, ['S', cString, 'OldPattern', cString, 'NewPattern', cString, 'Flags', 'TReplaceFlags'], StringReplaceEval);
+end;
+
+procedure TDW_CommonFunctionsUnit.ExcludeTrailingPathDelimiterEval(info: TProgramInfo);
+begin
+  info.ResultAsString := ScriptExcludeTrailingPathDelimiter(info.ParamAsString[0]);
+end;
+
+procedure TDW_CommonFunctionsUnit.ExtractFileDirEval(info: TProgramInfo);
+begin
+  info.ResultAsString := ScriptExtractFileDir(info.ParamAsString[0]);
+end;
+
+procedure TDW_CommonFunctionsUnit.ExtractFileExtEval(info: TProgramInfo);
+begin
+  info.ResultAsString := ScriptExtractFileExt(info.ParamAsString[0]);
+end;
+
+procedure TDW_CommonFunctionsUnit.ExtractFileNameEval(info: TProgramInfo);
+begin
+  info.ResultAsString := ScriptExtractFileName(info.ParamAsString[0]);
+end;
+
+procedure TDW_CommonFunctionsUnit.ExtractFilePathEval(info: TProgramInfo);
+begin
+  info.ResultAsString := ScriptExtractFilePath(info.ParamAsString[0]);
+end;
+
+procedure TDW_CommonFunctionsUnit.findInfoEval(info: TProgramInfo);
+begin
+  info.ResultAsString := findInfo(info.ParamAsString[0], info.ParamAsString[1], info.ParamAsString[2], info.ParamAsString[3]);
 end;
 
 procedure TDW_CommonFunctionsUnit.GetPageEval(info: TProgramInfo);
@@ -219,23 +204,36 @@ begin
   info.ResultAsString := GetPageWithHeaders(info.ParamAsString[0], info.ParamAsBoolean[1]);
 end;
 
+procedure TDW_CommonFunctionsUnit.HTMLDecodeEval(info: TProgramInfo);
+begin
+  info.ResultAsString := HTMLDecode(info.ParamAsString[0]);
+end;
+
+procedure TDW_CommonFunctionsUnit.HTMLTextEval(info: TProgramInfo);
+begin
+  info.ResultAsString := HTMLText(info.ParamAsString[0]);
+end;
+
+procedure TDW_CommonFunctionsUnit.IncludeTrailingPathDelimiterEval(info: TProgramInfo);
+begin
+  info.ResultAsString := ScriptIncludeTrailingPathDelimiter(info.ParamAsString[0]);
+end;
+
 procedure TDW_CommonFunctionsUnit.PostPageEval(info: TProgramInfo);
 const
   nbFields = 3;
 var
   obj: IScriptObj;
-  dyn: TScriptDynamicArray;
   a: array of RAttachement;
   i: Integer;
 begin
-  obj := IScriptObj(IUnknown(info.ParamAsVariant[1]));
-  dyn := obj.ExternalObject as TScriptDynamicArray;
-  SetLength(a, dyn.DataLength div nbFields);
-  for i := 0 to Pred(dyn.DataLength div nbFields) do
+  obj := info.Params[1].ScriptObj;
+  SetLength(a, obj.DataLength div nbFields);
+  for i := 0 to Pred(obj.DataLength div nbFields) do
   begin
-    a[i].Nom := dyn.AsString[i * nbFields];
-    a[i].Valeur := dyn.AsString[i * nbFields + 1];
-    a[i].IsFichier := dyn.AsBoolean[i * nbFields + 2];
+    a[i].Nom := obj.AsString[i * nbFields];
+    a[i].Valeur := obj.AsString[i * nbFields + 1];
+    a[i].IsFichier := obj.AsBoolean[i * nbFields + 2];
   end;
   info.ResultAsString := PostPage(info.ParamAsString[0], a, info.ParamAsBoolean[2]);
 end;
@@ -245,74 +243,67 @@ const
   nbFields = 3;
 var
   obj: IScriptObj;
-  dyn: TScriptDynamicArray;
   a: array of RAttachement;
   i: Integer;
 begin
-  obj := IScriptObj(IUnknown(info.ParamAsVariant[1]));
-  dyn := obj.ExternalObject as TScriptDynamicArray;
-  SetLength(a, dyn.DataLength div nbFields);
-  for i := 0 to Pred(dyn.DataLength div nbFields) do
+  obj := info.Params[1].ScriptObj;
+  SetLength(a, obj.DataLength div nbFields);
+  for i := 0 to Pred(obj.DataLength div nbFields) do
   begin
-    a[i].Nom := dyn.AsString[i * nbFields];
-    a[i].Valeur := dyn.AsString[i * nbFields + 1];
-    a[i].IsFichier := dyn.AsBoolean[i * nbFields + 2];
+    a[i].Nom := obj.AsString[i * nbFields];
+    a[i].Valeur := obj.AsString[i * nbFields + 1];
+    a[i].IsFichier := obj.AsBoolean[i * nbFields + 2];
   end;
   info.ResultAsString := PostPageWithHeaders(info.ParamAsString[0], a, info.ParamAsBoolean[2]);
 end;
 
-{ TStringReplaceFuncURL }
+procedure TDW_CommonFunctionsUnit.ShowMessageEval(info: TProgramInfo);
+begin
+  ShowMessage(info.ParamAsString[0]);
+end;
 
-procedure TStringReplaceFuncURL.DoEvalAsString(const args: TExprBaseListExec; var Result: UnicodeString);
+procedure TDW_CommonFunctionsUnit.StringReplaceEval(info: TProgramInfo);
 var
   v: TReplaceFlags;
 begin
   v := [];
-  if (args.AsInteger[3] and rfReplaceAllVal) = rfReplaceAllVal then
+  if (info.ParamAsInteger[3] and rfReplaceAllVal) = rfReplaceAllVal then
     Include(v, rfReplaceAll);
-  if (args.AsInteger[3] and rfIgnoreCaseVal) = rfIgnoreCaseVal then
+  if (info.ParamAsInteger[3] and rfIgnoreCaseVal) = rfIgnoreCaseVal then
     Include(v, rfIgnoreCase);
-  Result := StringReplace(args.AsString[0], args.AsString[1], args.AsString[2], v);
+  info.ResultAsString := StringReplace(info.ParamAsString[0], info.ParamAsString[1], info.ParamAsString[2], v);
 end;
 
-initialization
+procedure TDW_CommonFunctionsUnit.WriteToConsoleEval(info: TProgramInfo);
+begin
+  MasterEngine.WriteToConsole(info.ParamAsString[0]);
+end;
 
-RegisterInternalSymbolsProc(InitEnum);
+procedure TDW_CommonFunctionsUnit.WriteToFileEval(info: TProgramInfo);
+var
+  Buffer, Preamble: TBytes;
+  fs: TFileStream;
+  FileName, Chaine: string;
+begin
+  Chaine := info.ParamAsString[0];
+  FileName := info.ParamAsString[1];
 
-(*
-  PSScriptDebugger1.AddMethod(Self, @TdmPascalScript.WriteToConsole, 'procedure WriteToConsole(const Chaine: string);');
-  PSScriptDebugger1.AddMethod(Self, @TdmPascalScript.WriteToFile, 'procedure WriteToFile(const Chaine, FileName: string);');
-*)
+  Buffer := TEncoding.default.GetBytes(Chaine);
+  Preamble := TEncoding.default.GetPreamble;
 
-(*
-  PSScriptDebugger1.AddFunction(@findInfo, 'function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;');
-*)
-RegisterInternalStringFunction(TCombineURL, 'CombineURL', ['Root', cString, 'URL', cString], [iffStateLess]);
-RegisterInternalStringFunction(THTMLDecode, 'HTMLDecode', ['Chaine', cString], [iffStateLess]);
-RegisterInternalStringFunction(THTMLText, 'HTMLText', ['Chaine', cString], [iffStateLess]);
+  if FileExists(FileName) then
+    fs := TFileStream.Create(FileName, fmOpenWrite)
+  else
+    fs := TFileStream.Create(FileName, fmCreate or fmOpenWrite);
+  try
+    fs.Size := 0;
 
-(*
-  PSScriptDebugger1.AddFunction(@ScriptChangeFileExt, 'function ChangeFileExt(const URL, Extension: string): string;');
-  PSScriptDebugger1.AddFunction(@ScriptChangeFilePath, 'function ChangeFilePath(const URL, Path: string): string;');
-  PSScriptDebugger1.AddFunction(@ScriptExtractFilePath, 'function ExtractFilePath(const URL: string): string;');
-  PSScriptDebugger1.AddFunction(@ScriptExtractFileDir, 'function ExtractFileDir(const URL: string): string;');
-  PSScriptDebugger1.AddFunction(@ScriptExtractFileName, 'function ExtractFileName(const URL: string): string;');
-  PSScriptDebugger1.AddFunction(@ScriptExtractFileExt, 'function ExtractFileExt(const URL: string): string;');
-  PSScriptDebugger1.AddFunction(@ScriptIncludeTrailingPathDelimiter, 'function IncludeTrailingPathDelimiter(const URL: string): string;');
-  PSScriptDebugger1.AddFunction(@ScriptExcludeTrailingPathDelimiter, 'function ExcludeTrailingPathDelimiter(const URL: string): string;');
-
-  PSScriptDebugger1.AddFunction(@System.SysUtils.Format, 'function Format(const Format: string; const Args: array of const): string;');
-
-  PSScriptDebugger1.AddFunction(@System.SysUtils.SameText, 'function SameText(const S1, S2: string): Boolean;');
-  PSScriptDebugger1.AddFunction(@StrUtils.PosEx, 'function PosEx(const SubStr, S: string; Offset: Cardinal): Integer;');
-*)
-
-RegisterInternalProcedure(TShowMessageFunc, 'ShowMessage', ['Msg', 'string']);
-RegisterInternalStringFunction(TStringReplaceFuncURL, 'StringReplace', ['S', 'string', 'OldPattern', 'string', 'NewPattern', 'string', 'Flags', 'TReplaceFlags']);
-
-(*
-  PSScriptDebugger1.AddFunction(@ScriptStrToFloatDef, 'function StrToFloatDef(const S: string; const Default: Extended): Extended;');
-*)
+    if Length(Preamble) > 0 then
+      fs.WriteBuffer(Preamble[0], Length(Preamble));
+    fs.WriteBuffer(Buffer[0], Length(Buffer));
+  finally
+    fs.Free;
+  end;
+end;
 
 end.
-

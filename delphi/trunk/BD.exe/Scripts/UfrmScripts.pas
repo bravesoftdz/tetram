@@ -224,7 +224,7 @@ type
     function IsExecutableLine(aLine: Integer): Boolean;
     procedure OnBreakPoint;
   public
-    dmScripts: IMasterEngineInterface;
+    dmScripts: IMasterEngine;
     property Compiled: Boolean read FCompiled write SetCompiled;
     property Projet: string read GetProjet write SetProjet;
     property ProjetOuvert: Boolean read FProjetOuvert write SetProjetOuvert;
@@ -1376,6 +1376,7 @@ end;
 
 function TfrmScripts.Execute: Boolean;
 begin
+  dmScripts.AlbumToImport.Clear;
   Result := dmScripts.Engine.Run;
   if (dmScripts.DebugPlugin.Messages.Count > 0) then
     GoToMessage(dmScripts.DebugPlugin.Messages.Last);

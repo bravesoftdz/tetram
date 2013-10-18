@@ -11,9 +11,9 @@ uses
 type
   TDWScriptEngineFactory = class(TEngineFactory)
   private
-    FMasterEngine: IMasterEngineInterface;
+    FMasterEngine: IMasterEngine;
   public
-    constructor Create(MasterEngine: IMasterEngineInterface); override;
+    constructor Create(MasterEngine: IMasterEngine); override;
     function GetInstance: IEngineInterface; override;
   end;
 
@@ -21,7 +21,7 @@ type
   private
     FScript: string;
     FProgram: IdwsProgram;
-    FMasterEngine: IMasterEngineInterface;
+    FMasterEngine: IMasterEngine;
     DWScript: TDelphiWebScript;
     DWDebugger: TdwsDebugger;
     dwsUnit: TdwsUnit;
@@ -47,7 +47,7 @@ type
     function FillMessages(Msgs: TdwsMessageList): TMessageInfo;
     function CorrectScriptName(const Script: String): String;
   public
-    constructor Create(MasterEngine: IMasterEngineInterface);
+    constructor Create(MasterEngine: IMasterEngine);
     destructor Destroy; override;
 
     procedure AssignScript(Script: TStrings);
@@ -98,9 +98,9 @@ implementation
 
 uses UDWScriptEditor, Procedures, dwsSymbols;
 
-{ TPascalScriptEngineFactory }
+{ TDWScriptEngineFactory }
 
-constructor TDWScriptEngineFactory.Create(MasterEngine: IMasterEngineInterface);
+constructor TDWScriptEngineFactory.Create(MasterEngine: IMasterEngine);
 begin
   inherited;
   FMasterEngine := MasterEngine;
@@ -233,7 +233,7 @@ begin
   Result := (FProgram <> nil) and not FProgram.Msgs.HasErrors;
 end;
 
-constructor TdmDWScript.Create(MasterEngine: IMasterEngineInterface);
+constructor TdmDWScript.Create(MasterEngine: IMasterEngine);
 begin
   FMasterEngine := MasterEngine;
 
@@ -243,10 +243,10 @@ begin
   FUseDebugInfo := True;
   SynDWSSyn := TSynDWSSyn.Create(nil);
   dwsClassesLib := TdwsClassesLib.Create(nil);
-  bdRegEx := TDW_BdtkRegExUnit.Create(nil);
-  bdObjects := TDW_BdtkObjectsUnit.Create(nil);
+  bdRegEx := TDW_BdtkRegExUnit.Create(FMasterEngine);
+  bdObjects := TDW_BdtkObjectsUnit.Create(FMasterEngine);
   bdObjects.OnAfterInitUnitTable := AfterInitbdObjects;
-  bdCommonFunctions := TDW_CommonFunctionsUnit.Create(nil);
+  bdCommonFunctions := TDW_CommonFunctionsUnit.Create(FMasterEngine);
   dwsUnit := TdwsUnit.Create(nil);
   dwsUnit.unitName := 'Options';
   with dwsUnit.Functions.Add do

@@ -66,7 +66,7 @@ type
   TAfterExecuteEvent = procedure of object;
   TBreakPointEvent = procedure of object;
 
-  IMasterEngineInterface = interface
+  IMasterEngine = interface
     ['{C093B526-5485-4059-8516-5CBF1A3808AE}']
     function GetTypeEngine: TScriptEngine;
     procedure SetTypeEngine(const Value: TScriptEngine);
@@ -102,17 +102,19 @@ type
     function GetOnBreakPoint: TBreakPointEvent;
     procedure SetOnBreakPoint(const Value: TBreakPointEvent);
     property OnBreakPoint: TBreakPointEvent read GetOnBreakPoint write SetOnBreakPoint;
+
+    procedure WriteToConsole(const Chaine: string);
   end;
 
   TEngineFactory = class
   public
-    constructor Create(MasterEngine: IMasterEngineInterface); virtual; abstract;
+    constructor Create(MasterEngine: IMasterEngine); virtual; abstract;
     function GetInstance: IEngineInterface; virtual; abstract;
   end;
 
   TEngineFactoryClass = class of TEngineFactory;
 
-  TdmScripts = class(TInterfacedObject, IMasterEngineInterface)
+  TdmScripts = class(TInterfacedObject, IMasterEngine)
   strict private
     FOnBreakPoint: TBreakPointEvent;
     FScriptList: TScriptList;
@@ -140,6 +142,8 @@ type
   public
     constructor Create;
     destructor Destroy; override;
+
+    procedure WriteToConsole(const Chaine: string);
 
     function GetAlbumToUpdate: Boolean;
     property AlbumToImport: TAlbumComplet read GetAlbumToImport write SetAlbumToImport;
@@ -289,6 +293,12 @@ begin
     FDebugPlugin.Breakpoints.delete(i);
   if Assigned(FEngine) and FEngine.Running then
     FEngine.ResetBreakpoints;
+end;
+
+procedure TdmScripts.WriteToConsole(const Chaine: string);
+begin
+  if Assigned(FConsole) then
+    FConsole.Add(Chaine);
 end;
 
 initialization

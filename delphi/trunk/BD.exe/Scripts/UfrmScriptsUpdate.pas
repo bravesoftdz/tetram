@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Menus,
   Dialogs, UdmScripts, Generics.Collections, UScriptList, VirtualTrees, VirtualTreeBdtk,
-  StdCtrls, UframBoutons, ActnList, ComCtrls, ComboCheck;
+  StdCtrls, UframBoutons, ActnList, ComCtrls, ComboCheck, System.Actions;
 
 type
   TOnlineScript = class
@@ -48,7 +48,7 @@ type
     onlineScripts: TObjectList<TOnlineScript>;
     FUpdating: Boolean;
   public
-    dmScripts: IMasterEngineInterface;
+    dmScripts: IMasterEngine;
     procedure GetOnlineList(List: TObjectList<TOnlineScript>);
   end;
 

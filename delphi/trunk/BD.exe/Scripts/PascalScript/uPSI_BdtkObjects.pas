@@ -8,7 +8,7 @@ uses
 type
   TPSImport_BdtkObjects = class(TPSPlugin)
   public
-    MasterEngine: IMasterEngineInterface;
+    MasterEngine: IMasterEngine;
     procedure CompileImport1(CompExec: TPSScript); override;
     procedure ExecImport1(CompExec: TPSScript; const ri: TPSRuntimeClassImporter); override;
   end;

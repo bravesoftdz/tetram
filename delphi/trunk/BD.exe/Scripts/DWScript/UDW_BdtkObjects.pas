@@ -3,7 +3,7 @@ unit UDW_BdtkObjects;
 interface
 
 uses
-  System.SysUtils, System.Classes, UDWUnit, dwsComp, dwsExprs, dialogs;
+  System.SysUtils, System.Classes, UDWUnit, dwsComp, dwsExprs, dialogs, UdmScripts;
 
 type
   TDW_BdtkObjectsUnit = class(TDW_Unit)
@@ -34,7 +34,7 @@ type
 
     procedure MakeAuteurEval(info: TProgramInfo);
   public
-    constructor Create(AOwner: TComponent); override;
+    constructor Create(MasterEngine: IMasterEngine); override;
   published
     procedure OnTAlbumComplet_ImportEval(info: TProgramInfo; ExtObject: TObject);
     procedure OnTAlbumComplet_ClearEval(info: TProgramInfo; ExtObject: TObject);
@@ -69,7 +69,7 @@ uses
 
 { TDW_BdtkObjects }
 
-constructor TDW_BdtkObjectsUnit.Create(AOwner: TComponent);
+constructor TDW_BdtkObjectsUnit.Create(MasterEngine: IMasterEngine);
 begin
   inherited;
   UnitName := 'BdtkObjects';
@@ -80,7 +80,6 @@ end;
 procedure TDW_BdtkObjectsUnit.MakeAuteurEval(info: TProgramInfo);
 begin
   info.ResultAsVariant := GetScriptObjFromExternal(info, MakeAuteur(info.ParamAsString[0], TMetierAuteur(info.ParamAsInteger[1])));
-  // info.ResultAsVariant := info.RegisterExternalObject(MakeAuteur(info.ParamAsString[0], TMetierAuteur(info.ParamAsInteger[1])));
 end;
 
 procedure TDW_BdtkObjectsUnit.OnTAlbumComplet_ClearEval(info: TProgramInfo; ExtObject: TObject);
@@ -143,7 +142,6 @@ begin
     Album.Editions.Editions[0].New;
   end;
   info.ResultAsVariant := GetScriptObjFromExternal(info, Album.Editions.Editions[0]);
-  // info.ResultAsVariant := info.RegisterExternalObject(Album.Editions.Editions[0]);
 end;
 
 procedure TDW_BdtkObjectsUnit.TAuteurNomAuteur(info: TProgramInfo; ExtObject: TObject);
@@ -170,7 +168,8 @@ end;
 
 procedure TDW_BdtkObjectsUnit.OnTScriptChoix_AjoutChoixWithThumbEval(info: TProgramInfo; ExtObject: TObject);
 begin
-  (ExtObject as TScriptChoix).AjoutChoixWithThumb(info.ParamAsString[0], info.ParamAsString[1], info.ParamAsString[2], info.ParamAsString[3], info.ParamAsString[4]);
+  (ExtObject as TScriptChoix).AjoutChoixWithThumb(info.ParamAsString[0], info.ParamAsString[1], info.ParamAsString[2], info.ParamAsString[3],
+    info.ParamAsString[4]);
 end;
 
 procedure TDW_BdtkObjectsUnit.OnTScriptChoix_CategorieChoixCountEval(info: TProgramInfo; ExtObject: TObject);
@@ -316,13 +315,7 @@ begin
   RegisterProperty(c, 'NomAuteur', 'string', TAuteurNomAuteur, TAuteurNomAuteur);
   RegisterProperty(c, 'Metier', 'TMetierAuteur', HandleDynamicProperty, HandleDynamicProperty);
 
-  with Functions.Add do
-  begin
-    Name := 'MakeAuteur';
-    ResultType := 'TAuteur';
-    ConvertFuncParams(Parameters, ['Nom', 'string', 'Metier', 'TMetierAuteur']);
-    OnEval := MakeAuteurEval;
-  end;
+  RegisterFunction('MakeAuteur', 'TAuteur', ['Nom', 'string', 'Metier', 'TMetierAuteur'], MakeAuteurEval);
 end;
 
 procedure TDW_BdtkObjectsUnit.Register_TEditeurComplet;

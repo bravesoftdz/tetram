@@ -3,7 +3,7 @@ unit UDW_BdtkRegEx;
 interface
 
 uses
-  UDWUnit, System.Classes, dwsComp, dwsExprs, dwsSymbols;
+  UDWUnit, System.Classes, dwsComp, dwsExprs, dwsSymbols, UdmScripts;
 
 type
   TDW_BdtkRegExUnit = class(TDW_Unit)
@@ -12,7 +12,7 @@ type
     procedure ExtractRegExEval(info: TProgramInfo);
     procedure ExtractRegExGroupEval(info: TProgramInfo);
   public
-    constructor Create(AOwner: TComponent); override;
+    constructor Create(MasterEngine: IMasterEngine); override;
   published
     procedure OnTBdtkRegEx_CreateEval(info: TProgramInfo; var ExtObject: TObject);
     procedure OnTBdtkRegEx_BeginSearchEval(info: TProgramInfo; ExtObject: TObject);
@@ -29,7 +29,7 @@ uses
 
 { TDW_BdtkRegExUnit }
 
-constructor TDW_BdtkRegExUnit.Create(AOwner: TComponent);
+constructor TDW_BdtkRegExUnit.Create(MasterEngine: IMasterEngine);
 var
   c: TdwsClass;
 begin
@@ -45,29 +45,9 @@ begin
   RegisterMethod(c, 'Match', 'Boolean', []);
   RegisterMethod(c, 'GetCaptureByName', 'string', ['&Group', 'string']);
 
-  with Functions.Add do
-  begin
-    Name := 'MatchRegEx';
-    ResultType := 'Boolean';
-    ConvertFuncParams(Parameters, ['&Chaine', 'string', '&aRegEx', 'string']);
-    OnEval := MatchRegExEval;
-  end;
-
-  with Functions.Add do
-  begin
-    Name := 'ExtractRegEx';
-    ResultType := 'String';
-    ConvertFuncParams(Parameters, ['&Chaine', 'string', '&aRegEx', 'string']);
-    OnEval := ExtractRegExEval;
-  end;
-
-  with Functions.Add do
-  begin
-    Name := 'ExtractRegExGroup';
-    ResultType := 'String';
-    ConvertFuncParams(Parameters, ['&Chaine', 'string', '&aRegEx', 'string', '&Group', 'string']);
-    OnEval := ExtractRegExGroupEval;
-  end;
+  RegisterFunction('MatchRegEx', 'Boolean', ['&Chaine', 'string', '&aRegEx', 'string'], MatchRegExEval);
+  RegisterFunction('ExtractRegEx', 'String', ['&Chaine', 'string', '&aRegEx', 'string'], ExtractRegExEval);
+  RegisterFunction('ExtractRegExGroup', 'String', ['&Chaine', 'string', '&aRegEx', 'string', '&Group', 'string'], ExtractRegExGroupEval);
 end;
 
 procedure TDW_BdtkRegExUnit.ExtractRegExEval(info: TProgramInfo);

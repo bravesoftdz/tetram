@@ -10,9 +10,9 @@ uses
 type
   TPascalScriptEngineFactory = class(TEngineFactory)
   private
-    FMasterEngine: IMasterEngineInterface;
+    FMasterEngine: IMasterEngine;
   public
-    constructor Create(MasterEngine: IMasterEngineInterface); override;
+    constructor Create(MasterEngine: IMasterEngine); override;
     function GetInstance: IEngineInterface; override;
   end;
 
@@ -31,7 +31,7 @@ type
     procedure PSScriptDebugger1LineInfo(Sender: TObject; const FileName: AnsiString; Position, Row, Col: Cardinal);
     procedure PSScriptDebugger1Idle(Sender: TObject);
   strict private
-    FMasterEngine: IMasterEngineInterface;
+    FMasterEngine: IMasterEngine;
     FActiveLine, FRunToCursor, FErrorLine: Cardinal;
     FActiveFile, FRunToCursorFile, FErrorFile: string;
     FListTypesImages: TStringList;
@@ -43,8 +43,8 @@ type
     FPSImport_superobject: TPSImport_superobject;
     FRunningScript: TScript;
 
-    procedure SetMasterEngine(Value: IMasterEngineInterface);
-    function GetMasterEngine: IMasterEngineInterface;
+    procedure SetMasterEngine(Value: IMasterEngine);
+    function GetMasterEngine: IMasterEngine;
     function GetNewEditor(AOwner: TComponent): TScriptEditor;
 
     procedure SetRunToCursorFile(const Value: string);
@@ -64,7 +64,7 @@ type
   public
     frmScripts: TForm;
 
-    constructor Create(MasterEngine: IMasterEngineInterface);
+    constructor Create(MasterEngine: IMasterEngine);
     destructor Destroy; override;
 
     function Compile(Script: TScript; out Msg: TMessageInfo): Boolean; overload;
@@ -99,7 +99,7 @@ type
 
     procedure AssignScript(Script: TStrings);
 
-    property MasterEngine: IMasterEngineInterface read GetMasterEngine write SetMasterEngine;
+    property MasterEngine: IMasterEngine read GetMasterEngine write SetMasterEngine;
 
     function Run: Boolean;
     procedure Pause;
@@ -142,7 +142,7 @@ begin
     Result := Script;
 end;
 
-constructor TdmPascalScript.Create(MasterEngine: IMasterEngineInterface);
+constructor TdmPascalScript.Create(MasterEngine: IMasterEngine);
 begin
   SetMasterEngine(MasterEngine);
 
@@ -253,7 +253,7 @@ begin
   Result := string(PSScriptDebugger1.MainFileName);
 end;
 
-function TdmPascalScript.GetMasterEngine: IMasterEngineInterface;
+function TdmPascalScript.GetMasterEngine: IMasterEngine;
 begin
   Result := FMasterEngine;
 end;
@@ -405,7 +405,7 @@ begin
   FErrorLine := Value;
 end;
 
-procedure TdmPascalScript.SetMasterEngine(Value: IMasterEngineInterface);
+procedure TdmPascalScript.SetMasterEngine(Value: IMasterEngine);
 begin
   FMasterEngine := Value;
 end;
@@ -537,8 +537,7 @@ end;
 
 procedure TdmPascalScript.WriteToConsole(const Chaine: string);
 begin
-  if Assigned(MasterEngine.Console) then
-    MasterEngine.Console.Add(Chaine);
+  MasterEngine.WriteToConsole(Chaine);
 end;
 
 function TdmPascalScript.GetVar(const name: AnsiString; out s: AnsiString): PIFVariant;
@@ -668,7 +667,7 @@ end;
 
 { TPascalScriptEngineFactory }
 
-constructor TPascalScriptEngineFactory.Create(MasterEngine: IMasterEngineInterface);
+constructor TPascalScriptEngineFactory.Create(MasterEngine: IMasterEngine);
 begin
   inherited;
   FMasterEngine := MasterEngine;

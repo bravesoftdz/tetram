@@ -213,6 +213,9 @@ type
     property SensLecture: ROption read FSensLecture write FSensLecture;
     property Notation: Integer read FNotation write FNotation;
     property Univers: TUniversComplet read FUnivers;
+
+    // pour rétrocompatibilité pour les scripts
+    property Titre: string read FTitreSerie write SetTitreSerie;
   end;
 
   TAuteurComplet = class(TObjetComplet)
@@ -396,6 +399,9 @@ type
     property Editions: TEditionsCompletes read FEditions;
     property Notation: Integer read FNotation write FNotation;
     property Univers: TUniversComplet read FUnivers;
+
+    // pour rétrocompatibilité pour les scripts
+    property Titre: string read FTitreAlbum write SetTitreAlbum;
   end;
 
   TStats = class(TInfoComplet)
