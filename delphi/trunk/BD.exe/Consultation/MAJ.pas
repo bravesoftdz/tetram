@@ -220,10 +220,10 @@ begin
   isUpdate := False;
   FDest := TfrmScripts.Create(frmFond);
   try
-    FDest.dmScripts.AlbumToImport := Data;
+    FDest.MasterEngine.AlbumToImport := Data;
 
     // AlbumToUpdate pourrait être différent dans le finally
-    isUpdate := FDest.dmScripts.AlbumToUpdate;
+    isUpdate := FDest.MasterEngine.AlbumToUpdate;
     FDest.Label1.Visible := not isUpdate;
     Result := frmFond.SetModalChildForm(FDest) = mrOk
   finally

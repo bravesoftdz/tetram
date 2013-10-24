@@ -424,6 +424,21 @@ $(PostBuildEvent)]]></PostBuildEvent>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="mises à jour\UMAJ2_2_3_16.pas"/>
+        <DCCReference Include="Scripts\UframWatches.pas">
+            <Form>framWatches</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Scripts\UframBreakpoints.pas">
+            <Form>framBreakpoints</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Scripts\UframMessages.pas">
+            <Form>framMessages</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
         <BuildConfiguration Include="Débogage">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

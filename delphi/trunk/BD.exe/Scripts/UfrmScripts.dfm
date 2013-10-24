@@ -32,10 +32,6 @@ object frmScripts: TfrmScripts
     object tbScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object ToolBar1: TToolBar
         Left = 0
         Top = 0
@@ -124,8 +120,6 @@ object frmScripts: TfrmScripts
             BevelKind = bkTile
             BorderStyle = bsNone
             TabOrder = 0
-            OnData = ListBox1Data
-            OnDblClick = ListBox1DblClick
           end
           object ListView1: TListView
             Left = 0
@@ -282,10 +276,6 @@ object frmScripts: TfrmScripts
     end
     object tbEdition: TTabSheet
       Caption = 'Edition'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Splitter1: TSplitter
         Left = 0
         Top = 420
@@ -367,174 +357,140 @@ object frmScripts: TfrmScripts
         ShowCaption = False
         TabOrder = 2
         object Splitter2: TSplitter
-          Left = 604
+          Left = 603
           Top = 0
           Height = 186
           Align = alRight
-          ExplicitLeft = 637
-          ExplicitTop = 20
-          ExplicitHeight = 220
+          ExplicitLeft = 542
+          ExplicitTop = 6
         end
         object PageControl1: TPageControl
           Left = 0
           Top = 0
-          Width = 604
+          Width = 603
           Height = 186
-          ActivePage = TabSheet2
+          ActivePage = tabMessages
           Align = alClient
           TabOrder = 0
-          object TabSheet1: TTabSheet
+          ExplicitWidth = 604
+          object tabMessages: TTabSheet
             Caption = 'Messages'
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
-            object vstMessages: TVirtualStringTree
+            ExplicitWidth = 596
+            inline framMessages1: TframMessages
               Left = 0
               Top = 0
-              Width = 596
+              Width = 595
               Height = 158
               Align = alClient
-              BevelKind = bkTile
-              BorderStyle = bsNone
-              Header.AutoSizeIndex = 3
-              Header.Font.Charset = DEFAULT_CHARSET
-              Header.Font.Color = clWindowText
-              Header.Font.Height = -11
-              Header.Font.Name = 'MS Sans Serif'
-              Header.Font.Style = []
-              Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoVisible]
-              Header.Style = hsPlates
               TabOrder = 0
-              TreeOptions.PaintOptions = [toShowDropmark, toShowTreeLines, toThemeAware, toUseBlendedImages]
-              TreeOptions.SelectionOptions = [toFullRowSelect]
-              OnDblClick = vstMessagesDblClick
-              OnGetText = vstMessagesGetText
-              Columns = <
-                item
-                  Position = 0
-                  Width = 100
-                  WideText = 'Contexte'
-                end
-                item
-                  Position = 1
-                  Width = 120
-                  WideText = 'Type'
-                end
-                item
-                  Position = 2
-                  Width = 150
-                  WideText = 'Fichier'
-                end
-                item
-                  Position = 3
-                  Width = 226
-                  WideText = 'Message'
-                end>
+              ExplicitLeft = 248
+              ExplicitTop = -82
+              inherited vstMessages: TVirtualStringTree
+                Width = 595
+                Height = 158
+                OnDblClick = vstMessagesDblClick
+                ExplicitLeft = 0
+                ExplicitWidth = 320
+                ExplicitHeight = 240
+                Columns = <
+                  item
+                    Position = 0
+                    Width = 100
+                    WideText = 'Contexte'
+                  end
+                  item
+                    Position = 1
+                    Width = 120
+                    WideText = 'Type'
+                  end
+                  item
+                    Position = 2
+                    Width = 150
+                    WideText = 'Fichier'
+                  end
+                  item
+                    Position = 3
+                    Width = 221
+                    WideText = 'Message'
+                  end>
+              end
             end
           end
-          object TabSheet2: TTabSheet
+          object tabWatches: TTabSheet
             Caption = 'Points de suivi'
             ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
-            object vstSuivis: TVirtualStringTree
+            ExplicitWidth = 596
+            inline framWatches1: TframWatches
               Left = 0
               Top = 0
-              Width = 596
+              Width = 595
               Height = 158
               Align = alClient
-              BevelKind = bkTile
-              BorderStyle = bsNone
-              Header.AutoSizeIndex = 1
-              Header.Font.Charset = DEFAULT_CHARSET
-              Header.Font.Color = clWindowText
-              Header.Font.Height = -11
-              Header.Font.Name = 'MS Sans Serif'
-              Header.Font.Style = []
-              Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoVisible]
-              Header.Style = hsPlates
               TabOrder = 0
-              TreeOptions.MiscOptions = [toAcceptOLEDrop, toCheckSupport, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
-              TreeOptions.PaintOptions = [toShowDropmark, toShowTreeLines, toThemeAware, toUseBlendedImages]
-              TreeOptions.SelectionOptions = [toFullRowSelect, toMultiSelect]
-              OnChecked = vstSuivisChecked
-              OnEditing = vstSuivisEditing
-              OnGetText = vstSuivisGetText
-              OnPaintText = vstSuivisPaintText
-              OnInitNode = vstSuivisInitNode
-              OnNewText = vstSuivisNewText
-              Columns = <
-                item
-                  Position = 0
-                  Width = 146
-                  WideText = 'Expression'
-                end
-                item
-                  Position = 1
-                  Width = 450
-                  WideText = 'Valeur'
-                end>
+              ExplicitLeft = 248
+              ExplicitTop = -82
+              inherited vstSuivis: TVirtualStringTree
+                Width = 595
+                Height = 158
+                ExplicitLeft = 0
+                ExplicitWidth = 320
+                ExplicitHeight = 240
+                Columns = <
+                  item
+                    Position = 0
+                    Width = 146
+                    WideText = 'Expression'
+                  end
+                  item
+                    Position = 1
+                    Width = 445
+                    WideText = 'Valeur'
+                  end>
+              end
             end
           end
-          object TabSheet3: TTabSheet
+          object tabBreakpoints: TTabSheet
             Caption = 'Points d'#39'arr'#234't'
             ImageIndex = 2
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
-            object vstBreakpoints: TVirtualStringTree
+            ExplicitWidth = 596
+            inline framBreakpoints1: TframBreakpoints
               Left = 0
               Top = 0
-              Width = 596
+              Width = 595
               Height = 158
               Align = alClient
-              BevelKind = bkTile
-              BorderStyle = bsNone
-              Header.AutoSizeIndex = 1
-              Header.Font.Charset = DEFAULT_CHARSET
-              Header.Font.Color = clWindowText
-              Header.Font.Height = -11
-              Header.Font.Name = 'MS Sans Serif'
-              Header.Font.Style = []
-              Header.Options = [hoAutoResize, hoColumnResize, hoDrag, hoVisible]
-              Header.Style = hsPlates
               TabOrder = 0
-              TreeOptions.MiscOptions = [toAcceptOLEDrop, toCheckSupport, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
-              TreeOptions.PaintOptions = [toShowDropmark, toShowTreeLines, toThemeAware, toUseBlendedImages]
-              TreeOptions.SelectionOptions = [toFullRowSelect]
-              OnChecked = vstBreakpointsChecked
-              OnDblClick = vstBreakpointsDblClick
-              OnGetText = vstBreakpointsGetText
-              OnPaintText = vstBreakpointsPaintText
-              OnInitNode = vstBreakpointsInitNode
-              Columns = <
-                item
-                  Position = 0
-                  Width = 100
-                  WideText = 'Position'
-                end
-                item
-                  Position = 1
-                  Width = 496
-                  WideText = 'Fichier'
-                end>
+              ExplicitLeft = 276
+              ExplicitTop = -82
+              inherited vstBreakpoints: TVirtualStringTree
+                Width = 595
+                Height = 158
+                OnDblClick = vstBreakpointsDblClick
+                ExplicitLeft = 0
+                ExplicitWidth = 320
+                ExplicitHeight = 240
+                Columns = <
+                  item
+                    Position = 0
+                    Width = 100
+                    WideText = 'Position'
+                  end
+                  item
+                    Position = 1
+                    Width = 491
+                    WideText = 'Fichier'
+                  end>
+              end
             end
           end
-          object TabSheet6: TTabSheet
+          object tabConsole: TTabSheet
             Caption = 'Sortie'
             ImageIndex = 3
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
+            ExplicitWidth = 596
             object mmConsole: TMemo
               Left = 0
               Top = 0
-              Width = 596
+              Width = 595
               Height = 158
               Align = alClient
               BevelKind = bkTile
@@ -543,171 +499,151 @@ object frmScripts: TfrmScripts
               TabOrder = 0
               WantTabs = True
               OnChange = mmConsoleChange
+              ExplicitWidth = 596
             end
           end
         end
-        object Panel3: TPageControl
-          Left = 607
+        inline framScriptInfos1: TframScriptInfos
+          Left = 606
           Top = 0
-          Width = 267
+          Width = 268
           Height = 186
-          ActivePage = TabSheet4
           Align = alRight
           TabOrder = 1
-          object TabSheet4: TTabSheet
-            Caption = 'Options'
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
-            object ListBox1: TListBox
-              Left = 0
-              Top = 0
-              Width = 259
-              Height = 158
-              Style = lbVirtual
-              Align = alClient
-              BevelKind = bkTile
-              BorderStyle = bsNone
-              PopupMenu = PopupMenu2
-              TabOrder = 0
-              OnData = ListBox1Data
-              OnDblClick = ListBox1DblClick
+          ExplicitLeft = 606
+          ExplicitWidth = 268
+          ExplicitHeight = 186
+          inherited Panel3: TPageControl
+            Width = 268
+            Height = 186
+            ExplicitLeft = -13
+            ExplicitTop = 3
+            ExplicitWidth = 320
+            ExplicitHeight = 240
+            inherited TabSheet4: TTabSheet
+              ExplicitLeft = 4
+              ExplicitTop = 24
+              ExplicitWidth = 312
+              ExplicitHeight = 212
+              inherited ListBox1: TListBox
+                Width = 260
+                Height = 158
+                ExplicitLeft = 56
+                ExplicitTop = 36
+                ExplicitWidth = 312
+                ExplicitHeight = 212
+              end
+            end
+            inherited TabSheet5: TTabSheet
+              ExplicitLeft = 4
+              ExplicitTop = 24
+              ExplicitWidth = 312
+              ExplicitHeight = 212
+              inherited EditLabeled1: TEditLabeled
+                LinkControls = <
+                  item
+                    Control = framScriptInfos1.Label11
+                  end>
+              end
+              inherited MemoLabeled1: TMemoLabeled
+                LinkControls = <
+                  item
+                    Control = framScriptInfos1.Label14
+                  end>
+              end
+              inherited EditLabeled2: TEditLabeled
+                LinkControls = <
+                  item
+                    Control = framScriptInfos1.Label12
+                  end>
+              end
+              inherited EditLabeled3: TEditLabeled
+                LinkControls = <
+                  item
+                    Control = framScriptInfos1.Label13
+                  end>
+              end
+            end
+            inherited Alias: TTabSheet
+              ExplicitLeft = 4
+              ExplicitTop = 24
+              ExplicitWidth = 312
+              ExplicitHeight = 212
             end
           end
-          object TabSheet5: TTabSheet
-            Caption = 'Informations'
-            ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
-            object Label11: TLabel
-              Left = 3
-              Top = 6
-              Width = 45
-              Height = 13
-              Caption = 'Auteur :'
-              Font.Charset = DEFAULT_CHARSET
-              Font.Color = clWindowText
-              Font.Height = -11
-              Font.Name = 'Tahoma'
-              Font.Style = [fsBold]
-              ParentFont = False
-            end
-            object Label12: TLabel
-              Left = 3
-              Top = 33
-              Width = 48
-              Height = 13
-              Caption = 'Version :'
-              Font.Charset = DEFAULT_CHARSET
-              Font.Color = clWindowText
-              Font.Height = -11
-              Font.Name = 'Tahoma'
-              Font.Style = [fsBold]
-              ParentFont = False
-            end
-            object Label13: TLabel
-              Left = 3
-              Top = 60
-              Width = 123
-              Height = 13
-              Caption = 'Version de BDth'#232'que :'
-              Font.Charset = DEFAULT_CHARSET
-              Font.Color = clWindowText
-              Font.Height = -11
-              Font.Name = 'Tahoma'
-              Font.Style = [fsBold]
-              ParentFont = False
-            end
-            object Label14: TLabel
-              Left = 3
-              Top = 87
-              Width = 70
-              Height = 13
-              Caption = 'Description :'
-              Font.Charset = DEFAULT_CHARSET
-              Font.Color = clWindowText
-              Font.Height = -11
-              Font.Name = 'Tahoma'
-              Font.Style = [fsBold]
-              ParentFont = False
-            end
-            object EditLabeled1: TEditLabeled
-              Left = 79
-              Top = 3
-              Width = 177
-              Height = 21
-              TabOrder = 0
-              Text = 'EditLabeled1'
-              OnChange = EditLabeled1Change
-              LinkControls = <
-                item
-                  Control = Label11
-                end>
-              CurrencyChar = #0
-            end
-            object MemoLabeled1: TMemoLabeled
-              Left = 79
-              Top = 84
-              Width = 177
-              Height = 71
-              Lines.Strings = (
-                'MemoLabeled1')
-              TabOrder = 3
-              OnChange = EditLabeled1Change
-              LinkControls = <
-                item
-                  Control = Label14
-                end>
-            end
-            object EditLabeled2: TEditLabeled
-              Left = 79
-              Top = 30
-              Width = 177
-              Height = 21
-              TabOrder = 1
-              Text = 'EditLabeled1'
-              OnChange = EditLabeled1Change
-              LinkControls = <
-                item
-                  Control = Label12
-                end>
-              CurrencyChar = #0
-            end
-            object EditLabeled3: TEditLabeled
-              Left = 132
-              Top = 57
-              Width = 124
-              Height = 21
-              TabOrder = 2
-              Text = 'EditLabeled1'
-              OnChange = EditLabeled1Change
-              LinkControls = <
-                item
-                  Control = Label13
-                end>
-              CurrencyChar = #0
-            end
+          inherited PopupMenu2: TPopupMenu
+            Top = 40
           end
-          object Alias: TTabSheet
-            Caption = 'Alias'
-            ImageIndex = 2
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
-            object Memo2: TMemo
-              Left = 3
-              Top = 3
-              Width = 253
-              Height = 152
-              Lines.Strings = (
-                'Memo2')
-              TabOrder = 0
-              OnChange = EditLabeled1Change
-            end
+        end
+      end
+      object PanelMain: TPanel
+        Left = 0
+        Top = 22
+        Width = 874
+        Height = 398
+        Align = alClient
+        BevelOuter = bvNone
+        Caption = 'PanelMain'
+        DoubleBuffered = True
+        ParentDoubleBuffered = False
+        ShowCaption = False
+        TabOrder = 3
+        object PanelEditor: TPanel
+          Left = 0
+          Top = 0
+          Width = 874
+          Height = 398
+          Align = alClient
+          BevelOuter = bvNone
+          BorderWidth = 5
+          FullRepaint = False
+          ParentBackground = False
+          TabOrder = 0
+          ExplicitWidth = 610
+          object ImageTabs: TImage
+            Left = 5
+            Top = 5
+            Width = 864
+            Height = 22
+            Align = alTop
+            ExplicitWidth = 663
+          end
+          object StatusBar: TStatusBar
+            Left = 5
+            Top = 374
+            Width = 864
+            Height = 19
+            Panels = <
+              item
+                Alignment = taCenter
+                Width = 84
+              end
+              item
+                Alignment = taCenter
+                Width = 72
+              end
+              item
+                Alignment = taCenter
+                Width = 84
+              end
+              item
+                Width = 50
+              end>
+            ExplicitWidth = 600
+          end
+          object pnlPageControl: TPanel
+            Left = 5
+            Top = 27
+            Width = 864
+            Height = 347
+            Align = alClient
+            BevelOuter = bvNone
+            Color = clWindow
+            ParentBackground = False
+            ParentShowHint = False
+            ShowHint = False
+            TabOrder = 1
+            ExplicitWidth = 600
           end
         end
       end
@@ -736,8 +672,9 @@ object frmScripts: TfrmScripts
       ExplicitLeft = 799
     end
   end
-  object SynEditSearch1: TSynEditSearch
-    Left = 296
+  object SynEditSearch: TSynEditSearch
+    Left = 48
+    Top = 112
   end
   object ActionList1: TActionList
     Images = frmFond.boutons_32x32_hot
@@ -1412,5 +1349,57 @@ object frmScripts: TfrmScripts
       end>
     Left = 363
     Bitmap = {}
+  end
+  object SynMacroRecorder: TSynMacroRecorder
+    RecordShortCut = 24658
+    PlaybackShortCut = 24656
+    Left = 48
+    Top = 160
+  end
+  object SynCodeCompletion: TSynCompletionProposal
+    Options = [scoLimitToMatchedText, scoUseInsertList, scoUsePrettyText, scoUseBuiltInTimer, scoEndCharCompletion, scoCompleteWithTab, scoCompleteWithEnter]
+    NbLinesInWindow = 6
+    EndOfTokenChr = '()[]. '
+    TriggerChars = '.'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clBtnText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = [fsBold]
+    Columns = <>
+    ShortCut = 16416
+    Left = 48
+    Top = 208
+  end
+  object SynParameters: TSynCompletionProposal
+    DefaultType = ctParams
+    Options = [scoLimitToMatchedText, scoUsePrettyText, scoUseBuiltInTimer]
+    ClBackground = clInfoBk
+    Width = 262
+    EndOfTokenChr = '()[]. '
+    TriggerChars = '('
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    TitleFont.Charset = DEFAULT_CHARSET
+    TitleFont.Color = clBtnText
+    TitleFont.Height = -11
+    TitleFont.Name = 'MS Sans Serif'
+    TitleFont.Style = [fsBold]
+    Columns = <>
+    ShortCut = 24608
+    Left = 48
+    Top = 256
+  end
+  object dwsDebugger: TdwsDebugger
+    Left = 201
+    Top = 113
   end
 end

@@ -175,7 +175,10 @@ uses
   UDWUnit in 'Scripts\DWScript\UDWUnit.pas',
   UfrmConsultationUnivers in 'Consultation\UfrmConsultationUnivers.pas' {frmConsultationUnivers},
   UfrmEditUnivers in 'Gestion\UfrmEditUnivers.pas' {frmEditUnivers},
-  UMAJ2_2_3_16 in 'mises à jour\UMAJ2_2_3_16.pas';
+  UMAJ2_2_3_16 in 'mises à jour\UMAJ2_2_3_16.pas',
+  UframWatches in 'Scripts\UframWatches.pas' {framWatches: TFrame},
+  UframBreakpoints in 'Scripts\UframBreakpoints.pas' {framBreakpoints: TFrame},
+  UframMessages in 'Scripts\UframMessages.pas' {framMessages: TFrame};
 
 {$R *.RES}
 {$R curseurs.res}
