@@ -78,6 +78,7 @@ type
     procedure WriteToConsole(const Chaine: string);
     function GetVar(const name: AnsiString; out s: AnsiString): PIFVariant;
     function GetVariableValue(const VarName: string): string;
+    function GetWatchValue(const VarName: string): string;
 
     property ActiveLine: Cardinal read GetActiveLine write SetActiveLine;
     property ActiveFile: string read GetActiveFile write SetActiveFile;
@@ -601,6 +602,11 @@ begin
   end
   else
     Result := '{Valeur inaccessible}'
+end;
+
+function TdmPascalScript.GetWatchValue(const VarName: string): string;
+begin
+  Result := GetVariableValue(VarName);
 end;
 
 procedure TdmPascalScript.AssignScript(Script: TStrings);

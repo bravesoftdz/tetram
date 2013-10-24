@@ -3,7 +3,7 @@ unit UdmDWScript;
 interface
 
 uses
-  System.SysUtils, Winapi.Windows, Forms, System.Classes, UScriptList,
+  System.SysUtils, Winapi.Windows, Forms, System.Classes, UScriptList, Variants,
   UScriptUtils, LoadComplet, LoadCompletImport, dwsComp, dwsDebugger, dwsCompiler, dwsExprs, dwsFunctions,
   UdmScripts, UScriptEditor, SynHighlighterDWS, UDW_BdtkRegEx, UDW_BdtkObjects, dwsClassesLibModule, UDW_CommonFunctions,
   dwsErrors;
@@ -53,6 +53,7 @@ type
     procedure AssignScript(Script: TStrings);
 
     procedure ResetBreakpoints;
+    procedure ResetWatches;
 
     function Compile(ABuild: Boolean; out Msg: TMessageInfo): Boolean; overload;
     function Compile(Script: TScript; out Msg: TMessageInfo): Boolean; overload;
@@ -81,6 +82,7 @@ type
     function GetExecutableLines(const AUnitName: string): TLineNumbers;
     function TranslatePosition(out Proc, Position: Cardinal; Row: Cardinal; const Fn: string): Boolean;
     function GetVariableValue(const VarName: string): string;
+    function GetWatchValue(const VarName: string): string;
 
     procedure Pause;
     procedure StepInto;
@@ -190,7 +192,8 @@ begin
           else if m is TRuntimeErrorMessage then
             FMasterEngine.DebugPlugin.Messages.AddRuntimeErrorMessage(Filename, Text, ScriptPos.Line, ScriptPos.Col)
           else if (m is TCompilerErrorMessage) or (m is TSyntaxErrorMessage) then
-            Result := FMasterEngine.DebugPlugin.Messages[FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(Filename, Text, tmError, ScriptPos.Line, ScriptPos.Col)]
+            Result := FMasterEngine.DebugPlugin.Messages[FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(Filename, Text, tmError, ScriptPos.Line,
+              ScriptPos.Col)]
           else
             FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(Filename, Text, tmUnknown, ScriptPos.Line, ScriptPos.Col);
         end
@@ -302,8 +305,8 @@ begin
 
   DWDebugger := TdwsDebugger.Create(nil);
   DWDebugger.OnStateChanged := DebuggerStateChanged;
-  DWScript := TDelphiWebScript.Create(nil);
 
+  DWScript := TDelphiWebScript.Create(nil);
   DWScript.AddUnit(dwsClassesLib.dwsUnit);
   DWScript.AddUnit(dwsUnit);
   DWScript.AddUnit(bdRegEx);
@@ -342,6 +345,7 @@ begin
   FMasterEngine := nil;
   SynDWSSyn.Free;
   DWScript.Free;
+  DWDebugger.Watches.Clean;
   DWDebugger.Breakpoints.Clean;
   DWDebugger.Free;
   bdCommonFunctions.Free;
@@ -428,7 +432,7 @@ end;
 
 function TdmDWScript.GetRunning: Boolean;
 begin
-  Result := not (DWDebugger.State in [dsDebugDone, dsIdle]);
+  Result := not(DWDebugger.State in [dsDebugDone, dsIdle]);
 end;
 
 procedure TdmDWScript.GetUncompiledCode(Lines: TStrings);
@@ -446,6 +450,36 @@ begin
   Result := DWDebugger.EvaluateAsString(VarName);
 end;
 
+function TdmDWScript.GetWatchValue(const VarName: string): string;
+var
+  dwsW: TdwsDebuggerWatch;
+  i: Integer;
+  v: variant;
+begin
+  dwsW := TdwsDebuggerWatch.Create;
+  try
+    dwsW.ExpressionText := VarName;
+    i := DWDebugger.Watches.IndexOf(dwsW);
+  finally
+    dwsW.Free;
+  end;
+  Result := '{Expression inconnue}';
+  if i > -1 then
+  begin
+    dwsW := DWDebugger.Watches[i];
+    if dwsW.ValueInfo = nil then
+      Result := '{Valeur inaccessible}'
+    else
+    begin
+      v := dwsW.ValueInfo.Value;
+      Result := VarToStr(v);
+      if VarIsStr(v) then
+        Result := '''' + Result + '''';
+    end;
+    dwsW.ClearEvaluator;
+  end;
+end;
+
 procedure TdmDWScript.Pause;
 begin
   DWDebugger.Suspend;
@@ -460,6 +494,7 @@ function TdmDWScript.Run: Boolean;
 var
   exec: IdwsProgramExecution;
 begin
+  ResetWatches;
   ResetBreakpoints;
   if not FUseDebugInfo then
     exec := FProgram.Execute
@@ -540,18 +575,17 @@ var
   bp: TBreakpointInfo;
   dwsBP: TdwsDebuggerBreakpoint;
   i: Integer;
-  dummy: Boolean;
+  added: Boolean;
 begin
   DWDebugger.Breakpoints.Clean;
   if FUseDebugInfo then
-  begin
     for bp in FMasterEngine.DebugPlugin.Breakpoints do
     begin
       dwsBP := TdwsDebuggerBreakpoint.Create;
       dwsBP.Line := bp.Line;
       dwsBP.SourceName := CorrectScriptName(bp.Fichier);
-      i := DWDebugger.Breakpoints.AddOrFind(dwsBP, dummy);
-      if not dummy then
+      i := DWDebugger.Breakpoints.AddOrFind(dwsBP, added);
+      if not added then
         dwsBP.Free
       else
       begin
@@ -559,8 +593,31 @@ begin
         dwsBP.Enabled := bp.Active;
       end;
     end;
-  end;
   DWDebugger.Breakpoints.BreakPointsChanged;
+end;
+
+procedure TdmDWScript.ResetWatches;
+var
+  wi: TWatchInfo;
+  dwsW: TdwsDebuggerWatch;
+  i: Integer;
+  added: Boolean;
+begin
+  DWDebugger.Watches.Clean;
+  if FUseDebugInfo then
+    for wi in FMasterEngine.DebugPlugin.Watches do
+    begin
+      dwsW := TdwsDebuggerWatch.Create;
+      dwsW.ExpressionText := wi.Name;
+      i := DWDebugger.Watches.AddOrFind(dwsW, added);
+      if not added then
+        dwsW.Free
+      else
+      begin
+        // dwsW := DWDebugger.Watches[i];
+        // dwsW.Enabled := wi.Active;
+      end;
+    end;
 end;
 
 function TdmDWScript.TranslatePosition(out Proc, Position: Cardinal; Row: Cardinal; const Fn: string): Boolean;
