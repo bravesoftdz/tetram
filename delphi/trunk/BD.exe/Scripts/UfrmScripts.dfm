@@ -73,6 +73,7 @@ object frmScripts: TfrmScripts
         Caption = 'Panel2'
         ShowCaption = False
         TabOrder = 1
+        ExplicitTop = 28
         DesignSize = (
           874
           588)
@@ -372,10 +373,8 @@ object frmScripts: TfrmScripts
           ActivePage = tabMessages
           Align = alClient
           TabOrder = 0
-          ExplicitWidth = 604
           object tabMessages: TTabSheet
             Caption = 'Messages'
-            ExplicitWidth = 596
             inline framMessages1: TframMessages
               Left = 0
               Top = 0
@@ -383,15 +382,14 @@ object frmScripts: TfrmScripts
               Height = 158
               Align = alClient
               TabOrder = 0
-              ExplicitLeft = 248
-              ExplicitTop = -82
+              ExplicitWidth = 595
+              ExplicitHeight = 158
               inherited vstMessages: TVirtualStringTree
                 Width = 595
                 Height = 158
                 OnDblClick = vstMessagesDblClick
                 ExplicitLeft = 0
-                ExplicitWidth = 320
-                ExplicitHeight = 240
+                ExplicitWidth = 595
                 Columns = <
                   item
                     Position = 0
@@ -419,7 +417,6 @@ object frmScripts: TfrmScripts
           object tabWatches: TTabSheet
             Caption = 'Points de suivi'
             ImageIndex = 1
-            ExplicitWidth = 596
             inline framWatches1: TframWatches
               Left = 0
               Top = 0
@@ -427,14 +424,13 @@ object frmScripts: TfrmScripts
               Height = 158
               Align = alClient
               TabOrder = 0
-              ExplicitLeft = 248
-              ExplicitTop = -82
+              ExplicitWidth = 595
+              ExplicitHeight = 158
               inherited vstSuivis: TVirtualStringTree
                 Width = 595
                 Height = 158
                 ExplicitLeft = 0
-                ExplicitWidth = 320
-                ExplicitHeight = 240
+                ExplicitWidth = 595
                 Columns = <
                   item
                     Position = 0
@@ -452,7 +448,6 @@ object frmScripts: TfrmScripts
           object tabBreakpoints: TTabSheet
             Caption = 'Points d'#39'arr'#234't'
             ImageIndex = 2
-            ExplicitWidth = 596
             inline framBreakpoints1: TframBreakpoints
               Left = 0
               Top = 0
@@ -460,15 +455,14 @@ object frmScripts: TfrmScripts
               Height = 158
               Align = alClient
               TabOrder = 0
-              ExplicitLeft = 276
-              ExplicitTop = -82
+              ExplicitWidth = 595
+              ExplicitHeight = 158
               inherited vstBreakpoints: TVirtualStringTree
                 Width = 595
                 Height = 158
                 OnDblClick = vstBreakpointsDblClick
                 ExplicitLeft = 0
-                ExplicitWidth = 320
-                ExplicitHeight = 240
+                ExplicitWidth = 595
                 Columns = <
                   item
                     Position = 0
@@ -486,7 +480,6 @@ object frmScripts: TfrmScripts
           object tabConsole: TTabSheet
             Caption = 'Sortie'
             ImageIndex = 3
-            ExplicitWidth = 596
             object mmConsole: TMemo
               Left = 0
               Top = 0
@@ -499,7 +492,6 @@ object frmScripts: TfrmScripts
               TabOrder = 0
               WantTabs = True
               OnChange = mmConsoleChange
-              ExplicitWidth = 596
             end
           end
         end
@@ -516,29 +508,19 @@ object frmScripts: TfrmScripts
           inherited Panel3: TPageControl
             Width = 268
             Height = 186
-            ExplicitLeft = -13
-            ExplicitTop = 3
-            ExplicitWidth = 320
-            ExplicitHeight = 240
+            ExplicitWidth = 268
+            ExplicitHeight = 186
             inherited TabSheet4: TTabSheet
-              ExplicitLeft = 4
-              ExplicitTop = 24
-              ExplicitWidth = 312
-              ExplicitHeight = 212
+              ExplicitWidth = 260
+              ExplicitHeight = 158
               inherited ListBox1: TListBox
                 Width = 260
                 Height = 158
-                ExplicitLeft = 56
-                ExplicitTop = 36
-                ExplicitWidth = 312
-                ExplicitHeight = 212
+                ExplicitWidth = 260
+                ExplicitHeight = 158
               end
             end
             inherited TabSheet5: TTabSheet
-              ExplicitLeft = 4
-              ExplicitTop = 24
-              ExplicitWidth = 312
-              ExplicitHeight = 212
               inherited EditLabeled1: TEditLabeled
                 LinkControls = <
                   item
@@ -563,12 +545,6 @@ object frmScripts: TfrmScripts
                     Control = framScriptInfos1.Label13
                   end>
               end
-            end
-            inherited Alias: TTabSheet
-              ExplicitLeft = 4
-              ExplicitTop = 24
-              ExplicitWidth = 312
-              ExplicitHeight = 212
             end
           end
           inherited PopupMenu2: TPopupMenu
@@ -599,7 +575,6 @@ object frmScripts: TfrmScripts
           FullRepaint = False
           ParentBackground = False
           TabOrder = 0
-          ExplicitWidth = 610
           object ImageTabs: TImage
             Left = 5
             Top = 5
@@ -629,7 +604,6 @@ object frmScripts: TfrmScripts
               item
                 Width = 50
               end>
-            ExplicitWidth = 600
           end
           object pnlPageControl: TPanel
             Left = 5
@@ -643,7 +617,6 @@ object frmScripts: TfrmScripts
             ParentShowHint = False
             ShowHint = False
             TabOrder = 1
-            ExplicitWidth = 600
           end
         end
       end
@@ -833,21 +806,6 @@ object frmScripts: TfrmScripts
       ImageIndex = 13
       OnExecute = actEditExecute
     end
-    object actCreerOption: TAction
-      Category = 'Script'
-      Caption = 'Cr'#233'er une option'
-      OnExecute = actCreerOptionExecute
-    end
-    object actRetirerOption: TAction
-      Category = 'Script'
-      Caption = 'Retirer une option'
-      OnExecute = actRetirerOptionExecute
-    end
-    object actModifierOption: TAction
-      Category = 'Script'
-      Caption = 'Modifier une option'
-      OnExecute = actModifierOptionExecute
-    end
   end
   object MainMenu1: TMainMenu
     Left = 440
@@ -946,18 +904,6 @@ object frmScripts: TfrmScripts
     end
     object Enregistrer1: TMenuItem
       Action = actEnregistrer
-    end
-  end
-  object PopupMenu2: TPopupMenu
-    Left = 520
-    object Creruneoption1: TMenuItem
-      Action = actCreerOption
-    end
-    object Modifieruneoption1: TMenuItem
-      Action = actModifierOption
-    end
-    object Retireruneoption1: TMenuItem
-      Action = actRetirerOption
     end
   end
   object lstDebugImages: TPngImageList

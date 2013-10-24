@@ -1,4 +1,4 @@
-unit UdmScripts;
+unit UMasterEngine;
 
 interface
 
@@ -22,7 +22,7 @@ type
     function GetRunning: Boolean;
     property Running: Boolean read GetRunning;
 
-    function GetMainSpecialName: string;
+    function GetSpecialMainUnitName: string;
 
     function GetDebugMode: TDebugMode;
     property DebugMode: TDebugMode read GetDebugMode;
@@ -89,6 +89,10 @@ type
     function GetScriptList: TScriptList;
     property ScriptList: TScriptList read GetScriptList;
 
+    procedure SelectProjectScript(ProjectScript: TScript);
+    function GetProjectScript: TScript;
+    property ProjectScript: TScript read GetProjectScript;
+
     function GetConsole: TStrings;
     procedure SetConsole(const Value: TStrings);
     property Console: TStrings read GetConsole write SetConsole;
@@ -115,10 +119,11 @@ type
 
   TEngineFactoryClass = class of TEngineFactory;
 
-  TdmScripts = class(TInterfacedObject, IMasterEngine)
+  TMasterEngine = class(TInterfacedObject, IMasterEngine)
   strict private
     FOnBreakPoint: TBreakPointEvent;
     FScriptList: TScriptList;
+    FProjectScript: TScript;
     FDebugPlugin: TDebugInfos;
     FTypeEngine: TScriptEngine;
     FEngine: IEngineInterface;
@@ -140,6 +145,8 @@ type
     procedure ToggleBreakPoint(const Script: string; Line: Cardinal; Keep: Boolean);
     function GetOnBreakPoint: TBreakPointEvent;
     procedure SetOnBreakPoint(const Value: TBreakPointEvent);
+    procedure SelectProjectScript(ProjectScript: TScript);
+    function GetProjectScript: TScript;
   public
     constructor Create;
     destructor Destroy; override;
@@ -170,23 +177,28 @@ end;
 
 { TdmScripts }
 
-function TdmScripts.GetAlbumToUpdate: Boolean;
+function TMasterEngine.GetAlbumToUpdate: Boolean;
 begin
   Result := FAlbumToImport <> FInternalAlbumToImport;
 end;
 
-function TdmScripts.GetConsole: TStrings;
+function TMasterEngine.GetConsole: TStrings;
 begin
   Result := FConsole;
 end;
 
-procedure TdmScripts.AfterExecute;
+function TMasterEngine.GetProjectScript: TScript;
+begin
+  Result := FProjectScript;
+end;
+
+procedure TMasterEngine.AfterExecute;
 begin
   if Assigned(FOnAfterExecute) then
     FOnAfterExecute;
 end;
 
-constructor TdmScripts.Create;
+constructor TMasterEngine.Create;
 begin
   FDebugPlugin := TDebugInfos.Create;
   FInternalAlbumToImport := TAlbumComplet.Create;
@@ -194,7 +206,7 @@ begin
   FScriptList := TScriptList.Create;
 end;
 
-destructor TdmScripts.Destroy;
+destructor TMasterEngine.Destroy;
 begin
   SetTypeEngine(seNone);
   FInternalAlbumToImport.Free;
@@ -203,42 +215,51 @@ begin
   inherited;
 end;
 
-function TdmScripts.GetAlbumToImport: TAlbumComplet;
+function TMasterEngine.GetAlbumToImport: TAlbumComplet;
 begin
   Result := FInternalAlbumToImport;
 end;
 
-function TdmScripts.GetDebugPlugin: TDebugInfos;
+function TMasterEngine.GetDebugPlugin: TDebugInfos;
 begin
   Result := FDebugPlugin;
 end;
 
-function TdmScripts.GetEngine: IEngineInterface;
+function TMasterEngine.GetEngine: IEngineInterface;
 begin
   Result := FEngine;
 end;
 
-function TdmScripts.GetOnAfterExecute: TAfterExecuteEvent;
+function TMasterEngine.GetOnAfterExecute: TAfterExecuteEvent;
 begin
   Result := FOnAfterExecute;
 end;
 
-function TdmScripts.GetOnBreakPoint: TBreakPointEvent;
+function TMasterEngine.GetOnBreakPoint: TBreakPointEvent;
 begin
   Result := FOnBreakPoint;
 end;
 
-function TdmScripts.GetScriptList: TScriptList;
+function TMasterEngine.GetScriptList: TScriptList;
 begin
   Result := FScriptList;
 end;
 
-function TdmScripts.GetTypeEngine: TScriptEngine;
+function TMasterEngine.GetTypeEngine: TScriptEngine;
 begin
   Result := FTypeEngine;
 end;
 
-procedure TdmScripts.SetAlbumToImport(const Value: TAlbumComplet);
+procedure TMasterEngine.SelectProjectScript(ProjectScript: TScript);
+begin
+  if FProjectScript = ProjectScript then
+    Exit;
+
+  FProjectScript := ProjectScript;
+  SetTypeEngine(FProjectScript.ScriptInfos.Engine);
+end;
+
+procedure TMasterEngine.SetAlbumToImport(const Value: TAlbumComplet);
 begin
   if (GetEngine = nil) or (not GetEngine.Running) then
   begin
@@ -249,22 +270,22 @@ begin
   end;
 end;
 
-procedure TdmScripts.SetConsole(const Value: TStrings);
+procedure TMasterEngine.SetConsole(const Value: TStrings);
 begin
   FConsole := Value;
 end;
 
-procedure TdmScripts.SetOnAfterExecute(const Value: TAfterExecuteEvent);
+procedure TMasterEngine.SetOnAfterExecute(const Value: TAfterExecuteEvent);
 begin
   FOnAfterExecute := Value;
 end;
 
-procedure TdmScripts.SetOnBreakPoint(const Value: TBreakPointEvent);
+procedure TMasterEngine.SetOnBreakPoint(const Value: TBreakPointEvent);
 begin
   FOnBreakPoint := Value;
 end;
 
-procedure TdmScripts.SetTypeEngine(const Value: TScriptEngine);
+procedure TMasterEngine.SetTypeEngine(const Value: TScriptEngine);
 var
   EngineFactoryClass: TEngineFactoryClass;
 begin
@@ -281,7 +302,7 @@ begin
     FEngine := nil;
 end;
 
-procedure TdmScripts.ToggleBreakPoint(const Script: string; Line: Cardinal; Keep: Boolean);
+procedure TMasterEngine.ToggleBreakPoint(const Script: string; Line: Cardinal; Keep: Boolean);
 var
   i: Integer;
 begin
@@ -296,7 +317,7 @@ begin
     FEngine.ResetBreakpoints;
 end;
 
-procedure TdmScripts.WriteToConsole(const Chaine: string);
+procedure TMasterEngine.WriteToConsole(const Chaine: string);
 begin
   if Assigned(FConsole) then
     FConsole.Add(Chaine);

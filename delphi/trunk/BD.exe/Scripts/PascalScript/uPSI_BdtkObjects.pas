@@ -3,7 +3,7 @@ unit uPSI_BdtkObjects;
 interface
 
 uses
-  SysUtils, Classes, uPSComponent, uPSCompiler, uPSRuntime, UdmScripts;
+  SysUtils, Classes, uPSComponent, uPSCompiler, uPSRuntime, UMasterEngine;
 
 type
   TPSImport_BdtkObjects = class(TPSPlugin)

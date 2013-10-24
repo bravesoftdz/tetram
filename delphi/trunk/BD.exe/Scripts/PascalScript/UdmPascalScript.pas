@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, Winapi.Windows, Forms, System.Classes, uPSComponent, uPSComponent_COM, uPSComponent_Default, UScriptList, UScriptUtils, LoadComplet, IDHashMap,
-  LoadCompletImport, uPSRuntime, uPSDebugger, uPSI_BdtkRegEx, uPSI_BdtkObjects, uPSI_superobject, UdmScripts, UScriptEditor, SynCompletionProposal,
+  LoadCompletImport, uPSRuntime, uPSDebugger, uPSI_BdtkRegEx, uPSI_BdtkObjects, uPSI_superobject, UMasterEngine, UScriptEditor, SynCompletionProposal,
   SynEditHighlighter, SynHighlighterPas;
 
 type
@@ -69,7 +69,7 @@ type
 
     function Compile(Script: TScript; out Msg: TMessageInfo): Boolean; overload;
     function Execute: Boolean;
-    function GetMainSpecialName: string;
+    function GetSpecialMainUnitName: string;
 
     function GetExecutableLines(const AUnitName: string): TLineNumbers;
     function TranslatePosition(out Proc, Position: Cardinal; Row: Cardinal; const Fn: string): Boolean;
@@ -225,7 +225,7 @@ end;
 
 function TdmPascalScript.GetDebugMode: TDebugMode;
 begin
-  Result := UdmScripts.TDebugMode(PSScriptDebugger1.Exec.DebugMode);
+  Result := UMasterEngine.TDebugMode(PSScriptDebugger1.Exec.DebugMode);
 end;
 
 function TdmPascalScript.GetNewEditor(AOwner: TComponent): TScriptEditor;
@@ -249,7 +249,7 @@ begin
   // Result := [];
 end;
 
-function TdmPascalScript.GetMainSpecialName: string;
+function TdmPascalScript.GetSpecialMainUnitName: string;
 begin
   Result := string(PSScriptDebugger1.MainFileName);
 end;
@@ -619,7 +619,7 @@ var
   i: LongInt;
 begin
   FRunningScript := Script;
-  PSScriptDebugger1.MainFileName := AnsiString(FRunningScript.ScriptName);
+  PSScriptDebugger1.MainFileName := AnsiString(FRunningScript.ScriptUnitName);
   FRunningScript.GetScriptLines(PSScriptDebugger1.Script);
   Result := PSScriptDebugger1.Compile;
   FMasterEngine.DebugPlugin.Messages.Clear;

@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, Winapi.Windows, Forms, System.Classes, UScriptList, Variants,
   UScriptUtils, LoadComplet, LoadCompletImport, dwsComp, dwsDebugger, dwsCompiler, dwsExprs, dwsFunctions,
-  UdmScripts, UScriptEditor, SynHighlighterDWS, UDW_BdtkRegEx, UDW_BdtkObjects, dwsClassesLibModule, UDW_CommonFunctions,
+  UMasterEngine, UScriptEditor, SynHighlighterDWS, UDW_BdtkRegEx, UDW_BdtkObjects, dwsClassesLibModule, UDW_CommonFunctions,
   dwsErrors;
 
 type
@@ -60,7 +60,7 @@ type
     function Run: Boolean;
 
     function GetRunning: Boolean;
-    function GetMainSpecialName: string;
+    function GetSpecialMainUnitName: string;
 
     function GetDebugMode: TDebugMode;
 
@@ -425,7 +425,7 @@ begin
   end;
 end;
 
-function TdmDWScript.GetMainSpecialName: string;
+function TdmDWScript.GetSpecialMainUnitName: string;
 begin
   Result := '*MainModule*';
 end;
@@ -474,7 +474,7 @@ begin
       v := dwsW.ValueInfo.Value;
       Result := VarToStr(v);
       if VarIsStr(v) then
-        Result := '''' + Result + '''';
+        Result := QuotedStr(Result);
     end;
     dwsW.ClearEvaluator;
   end;
@@ -565,7 +565,7 @@ end;
 function TdmDWScript.CorrectScriptName(const Script: String): String;
 begin
   if Script = '' then
-    Result := GetMainSpecialName
+    Result := GetSpecialMainUnitName
   else
     Result := Script;
 end;

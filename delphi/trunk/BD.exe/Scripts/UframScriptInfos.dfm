@@ -12,15 +12,8 @@ object framScriptInfos: TframScriptInfos
     ActivePage = TabSheet4
     Align = alClient
     TabOrder = 0
-    ExplicitLeft = 53
-    ExplicitWidth = 267
-    ExplicitHeight = 186
     object TabSheet4: TTabSheet
       Caption = 'Options'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object ListBox1: TListBox
         Left = 0
         Top = 0
@@ -34,17 +27,11 @@ object framScriptInfos: TframScriptInfos
         TabOrder = 0
         OnData = ListBox1Data
         OnDblClick = ListBox1DblClick
-        ExplicitWidth = 259
-        ExplicitHeight = 158
       end
     end
     object TabSheet5: TTabSheet
       Caption = 'Informations'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label11: TLabel
         Left = 3
         Top = 6
@@ -157,10 +144,6 @@ object framScriptInfos: TframScriptInfos
     object Alias: TTabSheet
       Caption = 'Alias'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Memo2: TMemo
         Left = 3
         Top = 3
@@ -177,10 +160,34 @@ object framScriptInfos: TframScriptInfos
     Left = 28
     Top = 32
     object Creruneoption1: TMenuItem
+      Action = actCreerOption
     end
     object Modifieruneoption1: TMenuItem
+      Action = actModifierOption
     end
     object Retireruneoption1: TMenuItem
+      Action = actRetirerOption
+    end
+  end
+  object ActionList1: TActionList
+    Images = frmFond.boutons_32x32_hot
+    OnUpdate = ActionList1Update
+    Left = 124
+    Top = 32
+    object actCreerOption: TAction
+      Category = 'Script'
+      Caption = 'Cr'#233'er une option'
+      OnExecute = actCreerOptionExecute
+    end
+    object actRetirerOption: TAction
+      Category = 'Script'
+      Caption = 'Retirer une option'
+      OnExecute = actRetirerOptionExecute
+    end
+    object actModifierOption: TAction
+      Category = 'Script'
+      Caption = 'Modifier une option'
+      OnExecute = actModifierOptionExecute
     end
   end
 end

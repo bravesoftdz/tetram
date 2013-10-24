@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
-  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VirtualTrees, UdmScripts;
+  Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, VirtualTrees, UMasterEngine;
 
 type
   TframMessages = class(TFrame)
@@ -65,7 +65,7 @@ begin
       1:
         CellText := string(TypeMessage);
       2:
-        if Fichier = MasterEngine.Engine.GetMainSpecialName then
+        if Fichier = MasterEngine.Engine.GetSpecialMainUnitName then
           // CellText := Projet
         else
           CellText := string(Fichier);

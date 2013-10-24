@@ -151,7 +151,7 @@ var
 
 var
   dummyID: TGUID;
-  i, j: Integer;
+  i: Integer;
   PA: TAuteur;
   DefaultEdition, Edition, Edition2: TEditionComplete;
 begin

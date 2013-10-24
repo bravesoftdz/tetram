@@ -3,7 +3,7 @@ unit UDWScriptEditor;
 interface
 
 uses
-  System.SysUtils, Winapi.Windows, System.Classes, UScriptEditor, UdmScripts,
+  System.SysUtils, Winapi.Windows, System.Classes, UScriptEditor, UMasterEngine,
   UScriptUtils;
 
 type

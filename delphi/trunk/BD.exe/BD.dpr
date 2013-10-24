@@ -164,7 +164,7 @@ uses
   uPSI_superobject in 'Scripts\PascalScript\uPSI_superobject.pas',
   UMAJ2_2_2_233 in 'mises à jour\UMAJ2_2_2_233.pas',
   UMAJ2_2_3_13 in 'mises à jour\UMAJ2_2_3_13.pas',
-  UdmScripts in 'Scripts\UdmScripts.pas' {dmScripts: TDataModule},
+  UMasterEngine in 'Scripts\UMasterEngine.pas' {dmScripts: TDataModule},
   UPascalScriptEditor in 'Scripts\PascalScript\UPascalScriptEditor.pas',
   UScriptEditor in 'Scripts\UScriptEditor.pas',
   UDWScriptEditor in 'Scripts\DWScript\UDWScriptEditor.pas',
@@ -178,7 +178,8 @@ uses
   UMAJ2_2_3_16 in 'mises à jour\UMAJ2_2_3_16.pas',
   UframWatches in 'Scripts\UframWatches.pas' {framWatches: TFrame},
   UframBreakpoints in 'Scripts\UframBreakpoints.pas' {framBreakpoints: TFrame},
-  UframMessages in 'Scripts\UframMessages.pas' {framMessages: TFrame};
+  UframMessages in 'Scripts\UframMessages.pas' {framMessages: TFrame},
+  UframScriptInfos in 'Scripts\UframScriptInfos.pas' {framScriptInfos: TFrame};
 
 {$R *.RES}
 {$R curseurs.res}

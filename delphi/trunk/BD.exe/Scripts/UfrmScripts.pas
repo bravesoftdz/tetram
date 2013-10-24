@@ -5,7 +5,7 @@ interface
 uses Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, SynEditHighlighter, SynEdit, ImgList,
   StrUtils, SynEditMiscClasses, SynEditSearch, StdActns, ActnList, Menus, SynEditTypes, ComCtrls, UScriptUtils, VirtualTrees, StdCtrls,
   ExtCtrls, LoadComplet, SynEditKeyCmds, UBdtForms, Generics.Collections, ToolWin, UfrmFond, UScriptEditor,
-  PngImageList, UdmScripts, UScriptList, UScriptDebug, UframBoutons, EditLabeled,
+  PngImageList, UMasterEngine, UScriptList, UScriptDebug, UframBoutons, EditLabeled,
   System.Actions, SynCompletionProposal, SynEditPlugins, SynMacroRecorder,
   dwsDebugger, UframWatches, UframBreakpoints, UframMessages, UframScriptInfos;
 
@@ -65,13 +65,6 @@ type
     actRunWithoutDebug: TAction;
     Excutersansdbuguer1: TMenuItem;
     actEdit: TAction;
-    PopupMenu2: TPopupMenu;
-    actCreerOption: TAction;
-    actRetirerOption: TAction;
-    Creruneoption1: TMenuItem;
-    Retireruneoption1: TMenuItem;
-    actModifierOption: TAction;
-    Modifieruneoption1: TMenuItem;
     ToolBar1: TToolBar;
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;
@@ -161,9 +154,6 @@ type
     procedure PageControl2Change(Sender: TObject);
     procedure ListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure actEditExecute(Sender: TObject);
-    procedure actCreerOptionExecute(Sender: TObject);
-    procedure actRetirerOptionExecute(Sender: TObject);
-    procedure actModifierOptionExecute(Sender: TObject);
     procedure actPauseExecute(Sender: TObject);
     procedure mmConsoleChange(Sender: TObject);
     procedure framBoutons1btnAnnulerClick(Sender: TObject);
@@ -175,7 +165,7 @@ type
     FProjetOuvert: Boolean;
     FForceClose: Boolean;
 
-    FCurrentScript, FProjetScript: TScript;
+    FCurrentScript: TScript;
     FOpenedScript: TObjectList<TScript>;
     FRefreshingDescription: Boolean;
     FMasterEngine: IMasterEngine;
@@ -191,14 +181,13 @@ type
     procedure GoToMessage(msg: TMessageInfo);
     procedure GoToBreakpoint(msg: TBreakpointInfo);
 {$ENDREGION}
-    function GetScript(const Script: string): TScriptEditor;
+    function GetScript(const UnitName: string): TScriptEditor;
     procedure SetCompiled(const Value: Boolean);
     function GetProjet: string;
     procedure SetProjet(const Value: string);
     procedure LoadScript(const Script: string);
     procedure RefreshOptions;
     procedure RefreshDescription(Script: TScript);
-    function EditOption(Option: TOption): Boolean;
     procedure ClearPages;
     procedure SetProjetOuvert(const Value: Boolean);
     procedure LoadScripts;
@@ -228,12 +217,12 @@ uses
   UScriptsHTMLFunctions, JclSimpleXML, UdmPrinc, UfrmScriptOption, UfrmScriptEditOption, UfrmScriptsUpdate,
   UdmPascalScript;
 
-function TfrmScripts.GetScript(const Script: string): TScriptEditor;
+function TfrmScripts.GetScript(const UnitName: string): TScriptEditor;
 begin
-  if (Script = '') or (Script = MasterEngine.Engine.GetMainSpecialName) then
-    Result := MasterEngine.ScriptList.EditorByScriptName(Projet)
+  if (UnitName = '') or (UnitName = MasterEngine.Engine.GetSpecialMainUnitName) then
+    Result := MasterEngine.ScriptList.EditorByUnitName(Projet)
   else
-    Result := MasterEngine.ScriptList.EditorByScriptName(Script);
+    Result := MasterEngine.ScriptList.EditorByUnitName(UnitName);
 end;
 
 procedure TfrmScripts.Button1Click(Sender: TObject);
@@ -260,8 +249,8 @@ begin
   if PageControl2.ActivePageIndex = 0 then
     ProjetOuvert := False;
   RefreshOptions;
-  RefreshDescription(FProjetScript);
-  Panel3.ActivePageIndex := 0;
+  RefreshDescription(MasterEngine.ProjectScript);
+  framScriptInfos1.Panel3.ActivePageIndex := 0;
 end;
 
 {$REGION 'Edition'}
@@ -278,14 +267,14 @@ const
 
 procedure TfrmScripts.seScript1GutterClick(Sender: TObject; Button: TMouseButton; X, Y, Line: Integer; Mark: TSynEditMark);
 var
-  ScriptName: string;
+  ScriptUnitName: string;
 begin
   if X <= TSynEdit(Sender).Gutter.LeftOffset then
   begin
-    ScriptName := MasterEngine.ScriptList.ScriptName(TScriptEditor(Sender));
-    if ScriptName = FProjetScript.ScriptName then
-      ScriptName := MasterEngine.Engine.GetMainSpecialName;
-    MasterEngine.ToggleBreakPoint(ScriptName, Line, False);
+    ScriptUnitName := MasterEngine.ScriptList.ScriptUnitName(TScriptEditor(Sender));
+    if ScriptUnitName = MasterEngine.ProjectScript.ScriptUnitName then
+      ScriptUnitName := MasterEngine.Engine.GetSpecialMainUnitName;
+    MasterEngine.ToggleBreakPoint(ScriptUnitName, Line, False);
   end;
 end;
 
@@ -293,14 +282,14 @@ procedure TfrmScripts.seScript1GutterPaint(Sender: TObject; aLine, X, Y: Integer
 var
   IconIndex: Integer;
   i: Integer;
-  Script: string;
+  ScriptUnitName: string;
   Proc, Pos: Cardinal;
 begin
-  Script := MasterEngine.ScriptList.ScriptName(TScriptEditor(Sender));
-  if Script = FProjetScript.ScriptName then
-    Script := MasterEngine.Engine.GetMainSpecialName;
+  ScriptUnitName := MasterEngine.ScriptList.ScriptUnitName(TScriptEditor(Sender));
+  if ScriptUnitName = MasterEngine.ProjectScript.ScriptUnitName then
+    ScriptUnitName := MasterEngine.Engine.GetSpecialMainUnitName;
   IconIndex := -1;
-  i := MasterEngine.DebugPlugin.Breakpoints.IndexOf(Script, aLine);
+  i := MasterEngine.DebugPlugin.Breakpoints.IndexOf(ScriptUnitName, aLine);
   if i <> -1 then
   begin
     if not MasterEngine.Engine.Running then
@@ -310,7 +299,7 @@ begin
         IconIndex := imgGutterBREAKDISABLED
     else
     begin
-      if (Cardinal(aLine) = MasterEngine.Engine.ActiveLine) and SameText(MasterEngine.Engine.ActiveFile, Script) then
+      if (Cardinal(aLine) = MasterEngine.Engine.ActiveLine) and SameText(MasterEngine.Engine.ActiveFile, ScriptUnitName) then
         IconIndex := imgGutterEXECLINEBP
       else if MasterEngine.DebugPlugin.Breakpoints[i].Active then
         IconIndex := imgGutterBREAKVALID
@@ -320,13 +309,13 @@ begin
   end
   else
   begin
-    if (MasterEngine.Engine.DebugMode = UdmScripts.dmPaused) and (Cardinal(aLine) = MasterEngine.Engine.ActiveLine) and
-      SameText(MasterEngine.Engine.ActiveFile, Script) then
+    if (MasterEngine.Engine.DebugMode = UMasterEngine.dmPaused) and (Cardinal(aLine) = MasterEngine.Engine.ActiveLine) and
+      SameText(MasterEngine.Engine.ActiveFile, ScriptUnitName) then
       IconIndex := imgGutterEXECLINE;
   end;
 
   if Compiled then
-    if IsExecutableLine(aLine) or MasterEngine.Engine.TranslatePosition(Proc, Pos, aLine, Script) then
+    if IsExecutableLine(aLine) or MasterEngine.Engine.TranslatePosition(Proc, Pos, aLine, ScriptUnitName) then
       case IconIndex of
         - 1:
           IconIndex := imgGutterCOMPLINE;
@@ -354,9 +343,9 @@ var
   Script: string;
   Proc, Pos: Cardinal;
 begin
-  Script := MasterEngine.ScriptList.ScriptName(TScriptEditor(Sender));
-  if Script = FProjetScript.ScriptName then
-    Script := MasterEngine.Engine.GetMainSpecialName;
+  Script := MasterEngine.ScriptList.ScriptUnitName(TScriptEditor(Sender));
+  if Script = MasterEngine.ProjectScript.ScriptUnitName then
+    Script := MasterEngine.Engine.GetSpecialMainUnitName;
   i := MasterEngine.DebugPlugin.Breakpoints.IndexOf(Script, Line);
 
   if (Cardinal(Line) = MasterEngine.Engine.ActiveLine) and SameText(MasterEngine.Engine.ActiveFile, Script) then
@@ -524,7 +513,7 @@ begin
 
   if (MasterEngine.Engine.ErrorLine > 0) then
   begin
-    Editor := MasterEngine.ScriptList.EditorByScriptName(MasterEngine.Engine.ErrorFile);
+    Editor := MasterEngine.ScriptList.EditorByUnitName(MasterEngine.Engine.ErrorFile);
     if Editor <> nil then
     begin
       Editor.InvalidateLine(MasterEngine.Engine.ErrorLine);
@@ -536,12 +525,12 @@ end;
 
 procedure TfrmScripts.actFermerExecute(Sender: TObject);
 begin
-  if not FForceClose and (FCurrentScript.ScriptName = Projet) then
+  if not FForceClose and (FCurrentScript.ScriptUnitName = Projet) then
     Exit;
 
   if FCurrentScript.Modifie then
   begin
-    case MessageDlg('L''unité "' + string(FCurrentScript.ScriptName) + '" a été modifiée, voulez-vous l''enregistrer?', mtConfirmation,
+    case MessageDlg('L''unité "' + string(FCurrentScript.ScriptUnitName) + '" a été modifiée, voulez-vous l''enregistrer?', mtConfirmation,
       [mbYes, mbNo, mbCancel], 0) of
       mrYes:
         actEnregistrer.Execute;
@@ -588,24 +577,25 @@ end;
 procedure TfrmScripts.ListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
 var
   Option: TOption;
+  Script: TScript;
 begin
   if Selected and Assigned(Item) then
   begin
-    FProjetScript := TScript(Item.Data);
+    Script := TScript(Item.Data);
+    Script.Load;
+    MasterEngine.SelectProjectScript(Script);
 
-    FProjetScript.Load;
-    MasterEngine.TypeEngine := FProjetScript.ScriptInfos.Engine;
-    if FProjetScript.Options.Count > 0 then
+    if MasterEngine.ProjectScript.Options.Count > 0 then
       with TUIBQuery.Create(nil) do
         try
           Transaction := GetTransaction(dmPrinc.UIBDataBase);
           SQL.Text := 'select nom_option, valeur from options_scripts where script = :script';
           Prepare(True);
-          Params.AsString[0] := Copy(string(FProjetScript.ScriptName), 1, Params.MaxStrLen[0]);
+          Params.AsString[0] := Copy(string(MasterEngine.ProjectScript.ScriptUnitName), 1, Params.MaxStrLen[0]);
           Open;
           while not Eof do
           begin
-            Option := FProjetScript.OptionByName(Fields.AsString[0]);
+            Option := MasterEngine.ProjectScript.OptionByName(Fields.AsString[0]);
             if Assigned(Option) then
               Option.ChooseValue := Fields.AsString[1];
             Next;
@@ -624,10 +614,9 @@ begin
     // ou dans certains cas quand l'exécution du script à généré une erreur de script
     ProjetOuvert := False;
     MasterEngine.TypeEngine := seNone;
-    FProjetScript := nil;
   end;
   RefreshOptions;
-  RefreshDescription(FProjetScript);
+  RefreshDescription(MasterEngine.ProjectScript);
 end;
 
 procedure TfrmScripts.seScript1ProcessUserCommand(Sender: TObject; var Command: TSynEditorCommand; var AChar: Char; Data: Pointer);
@@ -648,7 +637,7 @@ begin
   end
   else
     FCurrentScript := nil;
-  TabSheet4.TabVisible := FCurrentScript = FProjetScript;
+  framScriptInfos1.TabSheet4.TabVisible := FCurrentScript = MasterEngine.ProjectScript;
   RefreshDescription(FCurrentScript);
 end;
 
@@ -687,19 +676,13 @@ begin
   EditUndo1.Enabled := Assigned(Editor) and Editor.Focused and Editor.CanUndo;
   EditRedo1.Enabled := Assigned(Editor) and Editor.Focused and Editor.CanRedo;
   actRun.Enabled := (FProjetOuvert or actEdit.Enabled) and ((MasterEngine.Engine = nil) or not MasterEngine.Engine.Running or
-    (MasterEngine.Engine.DebugMode = UdmScripts.dmPaused));
+    (MasterEngine.Engine.DebugMode = UMasterEngine.dmPaused));
   actRunWithoutDebug.Visible := MasterEngine.AlbumToUpdate;
   actRunWithoutDebug.Enabled := actRunWithoutDebug.Visible and actRun.Enabled and not MasterEngine.Engine.Running;
-  actPause.Enabled := (MasterEngine.Engine <> nil) and MasterEngine.Engine.Running and (MasterEngine.Engine.DebugMode = UdmScripts.dmRun);
-  actCreerOption.Visible := FProjetOuvert;
-  actCreerOption.Enabled := FProjetOuvert;
-  actRetirerOption.Visible := FProjetOuvert;
-  actRetirerOption.Enabled := FProjetOuvert and (ListBox1.ItemIndex <> -1);
-  actModifierOption.Visible := FProjetOuvert;
-  actModifierOption.Enabled := FProjetOuvert and (ListBox1.ItemIndex <> -1);
-  actFermer.Enabled := Assigned(Editor) and (FForceClose or (FCurrentScript <> FProjetScript));
+  actPause.Enabled := (MasterEngine.Engine <> nil) and MasterEngine.Engine.Running and (MasterEngine.Engine.DebugMode = UMasterEngine.dmRun);
+  actFermer.Enabled := Assigned(Editor) and (FForceClose or (FCurrentScript <> MasterEngine.ProjectScript));
   actEnregistrer.Enabled := Assigned(Editor);
-  actReset.Enabled := (MasterEngine.Engine <> nil) and MasterEngine.Engine.Running and (MasterEngine.Engine.DebugMode in [UdmScripts.dmPaused]);
+  actReset.Enabled := (MasterEngine.Engine <> nil) and MasterEngine.Engine.Running and (MasterEngine.Engine.DebugMode in [UMasterEngine.dmPaused]);
   actCompile.Enabled := (MasterEngine.Engine <> nil) and not MasterEngine.Engine.Running;
 
   // sinon les actions court-circuitent les raccouris sur les autres composants
@@ -726,7 +709,7 @@ end;
 
 function TfrmScripts.GetProjet: string;
 begin
-  Result := FProjetScript.ScriptName;
+  Result := MasterEngine.ProjectScript.ScriptUnitName;
 end;
 
 procedure TfrmScripts.SetProjet(const Value: string);
@@ -787,7 +770,7 @@ begin
   end;
 
   FOpenedScript := TObjectList<TScript>.Create(False);
-  MasterEngine := TdmScripts.Create;
+  MasterEngine := TMasterEngine.Create;
   MasterEngine.Console := mmConsole.Lines;
   MasterEngine.DebugPlugin.OnGetScript := GetScript;
   MasterEngine.OnAfterExecute := AfterExecute;
@@ -861,7 +844,7 @@ var
   LockWindow: ILockWindow;
   Info: TScript;
 begin
-  Info := MasterEngine.ScriptList.InfoScriptByScriptName(Script);
+  Info := MasterEngine.ScriptList.InfoScriptByUnitName(Script);
   // doit être fait avant la création de page pour s'assurer de l'existence du fichier
   if not Assigned(Info) then
     raise Exception.Create('Impossible de trouver l''unité ' + string(Script) + '.');
@@ -877,7 +860,7 @@ begin
 
     Info.TabSheet := TTabSheet.Create(pcScripts);
     Info.TabSheet.PageControl := pcScripts;
-    Info.TabSheet.Caption := string(Info.ScriptName);
+    Info.TabSheet.Caption := string(Info.ScriptUnitName);
 
     Info.Editor := MasterEngine.Engine.GetNewEditor(Info.TabSheet);
     Info.Editor.Parent := Info.TabSheet;
@@ -919,7 +902,7 @@ begin
         with ListView1.Items.Add do
         begin
           Data := Script;
-          Caption := string(Script.ScriptName);
+          Caption := string(Script.ScriptUnitName);
         end;
   finally
     ListView1.Items.EndUpdate;
@@ -965,12 +948,6 @@ begin
   end;
 end;
 
-procedure TfrmScripts.actModifierOptionExecute(Sender: TObject);
-begin
-  if EditOption(FProjetScript.Options[ListBox1.ItemIndex]) then
-    RefreshOptions;
-end;
-
 procedure TfrmScripts.actPauseExecute(Sender: TObject);
 begin
   MasterEngine.Engine.Pause;
@@ -981,13 +958,6 @@ procedure TfrmScripts.actResetExecute(Sender: TObject);
 begin
   if MasterEngine.Engine.Running then
     MasterEngine.Engine.Stop;
-end;
-
-procedure TfrmScripts.actRetirerOptionExecute(Sender: TObject);
-begin
-  FProjetScript.Options.Delete(ListBox1.ItemIndex);
-  FProjetScript.Modifie := True;
-  RefreshOptions;
 end;
 
 procedure TfrmScripts.actDecompileExecute(Sender: TObject);
@@ -1001,7 +971,7 @@ end;
 
 procedure TfrmScripts.actBreakpointExecute(Sender: TObject);
 begin
-  MasterEngine.ToggleBreakPoint(FCurrentScript.ScriptName, FCurrentScript.Editor.CaretY, False);
+  MasterEngine.ToggleBreakPoint(FCurrentScript.ScriptUnitName, FCurrentScript.Editor.CaretY, False);
 end;
 
 procedure TfrmScripts.actAddSuiviExecute(Sender: TObject);
@@ -1011,7 +981,7 @@ end;
 
 procedure TfrmScripts.actRunToCursorExecute(Sender: TObject);
 begin
-  MasterEngine.Engine.setRunTo(FCurrentScript.Editor.CaretY, FCurrentScript.ScriptName);
+  MasterEngine.Engine.setRunTo(FCurrentScript.Editor.CaretY, FCurrentScript.ScriptUnitName);
   actRun.Execute;
 end;
 
@@ -1096,49 +1066,6 @@ begin
     Compile;
 end;
 
-function TfrmScripts.EditOption(Option: TOption): Boolean;
-var
-  s: string;
-begin
-  with TfrmScriptEditOption.Create(nil) do
-    try
-      EditLabeled1.Text := Option.FLibelle;
-      MemoLabeled1.Lines.Text := StringReplace(Option.FValues, '|', sLineBreak, [rfReplaceAll]);
-      EditLabeled2.Text := Option.FDefaultValue;
-
-      Result := ShowModal = mrOk;
-      if Result then
-      begin
-        Option.FLibelle := EditLabeled1.Text;
-        s := MemoLabeled1.Lines.Text;
-        while EndsText(sLineBreak, s) do
-          Delete(s, Length(s) - Length(sLineBreak) + 1, Length(sLineBreak));
-        s := StringReplace(s, sLineBreak, '|', [rfReplaceAll]);
-        Option.FValues := s;
-        Option.FDefaultValue := EditLabeled2.Text;
-
-        FProjetScript.Modifie := True;
-      end;
-    finally
-      Free;
-    end;
-end;
-
-procedure TfrmScripts.actCreerOptionExecute(Sender: TObject);
-var
-  Option: TOption;
-begin
-  Option := TOption.Create;
-  if EditOption(Option) then
-  begin
-    Option.ChooseValue := Option.FDefaultValue;
-    FProjetScript.Options.Add(Option);
-    RefreshOptions;
-  end
-  else
-    Option.Free;
-end;
-
 procedure TfrmScripts.actRunExecute(Sender: TObject);
 begin
   if MasterEngine.Engine.Running then
@@ -1195,7 +1122,7 @@ function TfrmScripts.Compile: Boolean;
 var
   msg: TMessageInfo;
 begin
-  Result := MasterEngine.Engine.Compile(FProjetScript, msg);
+  Result := MasterEngine.Engine.Compile(MasterEngine.ProjectScript, msg);
   Compiled := Result;
   if Assigned(msg) then
     GoToMessage(msg);
@@ -1246,9 +1173,9 @@ begin
   if Compiled then
   begin
     if PageControl1.ActivePageIndex = 0 then
-      LineNumbers := MasterEngine.Engine.GetExecutableLines(MasterEngine.Engine.GetMainSpecialName)
+      LineNumbers := MasterEngine.Engine.GetExecutableLines(MasterEngine.Engine.GetSpecialMainUnitName)
     else
-      LineNumbers := MasterEngine.Engine.GetExecutableLines(FCurrentScript.ScriptName);
+      LineNumbers := MasterEngine.Engine.GetExecutableLines(FCurrentScript.ScriptUnitName);
     for i := 0 to Length(LineNumbers) - 1 do
       FCurrentScript.Editor.FExecutableLines[LineNumbers[i]] := True;
   end;

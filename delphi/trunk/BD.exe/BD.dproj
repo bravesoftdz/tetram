@@ -402,9 +402,8 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="Scripts\PascalScript\uPSI_superobject.pas"/>
         <DCCReference Include="mises à jour\UMAJ2_2_2_233.pas"/>
         <DCCReference Include="mises à jour\UMAJ2_2_3_13.pas"/>
-        <DCCReference Include="Scripts\UdmScripts.pas">
+        <DCCReference Include="Scripts\UMasterEngine.pas">
             <Form>dmScripts</Form>
-            <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
         <DCCReference Include="Scripts\PascalScript\UPascalScriptEditor.pas"/>
@@ -436,6 +435,11 @@ $(PostBuildEvent)]]></PostBuildEvent>
         </DCCReference>
         <DCCReference Include="Scripts\UframMessages.pas">
             <Form>framMessages</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="Scripts\UframScriptInfos.pas">
+            <Form>framScriptInfos</Form>
             <FormType>dfm</FormType>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
