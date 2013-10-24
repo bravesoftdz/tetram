@@ -50,6 +50,7 @@ type
     function GetExecutableLines(const AUnitName: string): TLineNumbers;
     function TranslatePosition(out Proc, Position: Cardinal; Row: Cardinal; const Fn: string): Boolean;
     function GetVariableValue(const VarName: string): string;
+    function GetWatchValue(const VarName: string): string;
 
     procedure Pause;
     procedure StepInto;
