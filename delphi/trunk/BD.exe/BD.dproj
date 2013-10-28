@@ -118,8 +118,8 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCC_Define>FullDebugMode;ClearLogFileOnStartup;LoadDebugDLLDynamically;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_4_Win32)'!=''">
-        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.19;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2011;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.0;Comments=</VerInfo_Keys>
-        <VerInfo_Build>19</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.20;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2011;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.0;Comments=</VerInfo_Keys>
+        <VerInfo_Build>20</VerInfo_Build>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -326,7 +326,6 @@ $(PostBuildEvent)]]></PostBuildEvent>
             <Form>frmScriptOption</Form>
         </DCCReference>
         <DCCReference Include="Scripts\UScriptList.pas"/>
-        <DCCReference Include="Scripts\UScriptDebug.pas"/>
         <DCCReference Include="mises à jour\UMAJ2_1_1_7.pas"/>
         <DCCReference Include="mises à jour\UMAJ0_0_0_6.pas"/>
         <DCCReference Include="mises à jour\UMAJ0_0_0_8.pas"/>
@@ -480,7 +479,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
                     <VersionInfo Name="MajorVer">2</VersionInfo>
                     <VersionInfo Name="MinorVer">2</VersionInfo>
                     <VersionInfo Name="Release">3</VersionInfo>
-                    <VersionInfo Name="Build">25</VersionInfo>
+                    <VersionInfo Name="Build">26</VersionInfo>
                     <VersionInfo Name="Debug">False</VersionInfo>
                     <VersionInfo Name="PreRelease">False</VersionInfo>
                     <VersionInfo Name="Special">False</VersionInfo>
@@ -492,7 +491,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
                 <VersionInfoKeys>
                     <VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
                     <VersionInfoKeys Name="FileDescription"/>
-                    <VersionInfoKeys Name="FileVersion">2.2.3.25</VersionInfoKeys>
+                    <VersionInfoKeys Name="FileVersion">2.2.3.26</VersionInfoKeys>
                     <VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
                     <VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2011</VersionInfoKeys>
                     <VersionInfoKeys Name="LegalTrademarks"/>

@@ -59,7 +59,7 @@ type
     procedure SetActive(const Value: Boolean);
   public
     Line: Cardinal;
-    Fichier: string;
+    ScriptUnitName: string;
     destructor Destroy; override;
     property Active: Boolean read FActive write SetActive;
   end;
@@ -68,7 +68,7 @@ type
   TTypeMessage = (tmUnknown, tmError, tmHint, tmWarning);
 
   TMessageInfo = class(TDebugItem<TMessageInfo>)
-    Fichier, TypeMessage, Text: string;
+    ScriptUnitName, TypeMessage, Text: string;
     Line, Char: Cardinal;
     Category: TCategoryMessage;
   end;
@@ -96,10 +96,10 @@ type
   protected
     procedure Notify(const Value: TBreakpointInfo; Action: TCollectionNotification); override;
   public
-    function IndexOf(const Fichier: string; const ALine: Cardinal): Integer;
-    function Exists(const Fichier: string; const ALine: Cardinal): Boolean;
-    procedure AddBreakpoint(const Fichier: string; const ALine: Cardinal);
-    function Toggle(const Fichier: string; const ALine: Cardinal): Boolean;
+    function IndexOf(const UnitName: string; const ALine: Cardinal): Integer;
+    function Exists(const UnitName: string; const ALine: Cardinal): Boolean;
+    procedure AddBreakpoint(const UnitName: string; const ALine: Cardinal);
+    function Toggle(const UnitName: string; const ALine: Cardinal): Boolean;
   end;
 
   TDebugInfos = class
@@ -142,28 +142,28 @@ implementation
 
 { TBreakpointList }
 
-function TBreakpointList.IndexOf(const Fichier: string; const ALine: Cardinal): Integer;
+function TBreakpointList.IndexOf(const UnitName: string; const ALine: Cardinal): Integer;
 begin
   Result := 0;
-  while (Result < Count) and ((Items[Result].Line <> ALine) or not SameText(Items[Result].Fichier, Fichier)) do
+  while (Result < Count) and ((Items[Result].Line <> ALine) or not SameText(Items[Result].ScriptUnitName, UnitName)) do
     Inc(Result);
   if Result = Count then
     Result := -1;
 end;
 
-function TBreakpointList.Exists(const Fichier: string; const ALine: Cardinal): Boolean;
+function TBreakpointList.Exists(const UnitName: string; const ALine: Cardinal): Boolean;
 begin
-  Result := IndexOf(Fichier, ALine) <> -1;
+  Result := IndexOf(UnitName, ALine) <> -1;
 end;
 
-function TBreakpointList.Toggle(const Fichier: string; const ALine: Cardinal): Boolean;
+function TBreakpointList.Toggle(const UnitName: string; const ALine: Cardinal): Boolean;
 var
   i: Integer;
 begin
-  i := IndexOf(Fichier, ALine);
+  i := IndexOf(UnitName, ALine);
   if i = -1 then
   begin
-    AddBreakpoint(Fichier, ALine);
+    AddBreakpoint(UnitName, ALine);
     Result := True;
   end
   else
@@ -173,15 +173,15 @@ begin
   end;
 end;
 
-procedure TBreakpointList.AddBreakpoint(const Fichier: string; const ALine: Cardinal);
+procedure TBreakpointList.AddBreakpoint(const UnitName: string; const ALine: Cardinal);
 var
   BP: TBreakpointInfo;
 begin
-  if (IndexOf(Fichier, ALine) = -1) then
+  if (IndexOf(UnitName, ALine) = -1) then
   begin
     BP := TBreakpointInfo.Create(Self);
     BP.Line := ALine;
-    BP.Fichier := Fichier;
+    BP.ScriptUnitName := UnitName;
     BP.Active := True;
     Add(BP);
   end;
@@ -196,7 +196,7 @@ begin
     cnAdded, cnExtracted:
       begin
         // InvalidateLine et InvalidateGutterLine bizarrement insuffisants dans certains cas
-        Editor := FGetScript(Value.Fichier);
+        Editor := FGetScript(Value.ScriptUnitName);
         if Assigned(Editor) then
         begin
           Editor.Invalidate;
@@ -212,7 +212,7 @@ begin
     Sort(TComparer<TBreakpointInfo>.Construct(
           function(const Left, Right: TBreakpointInfo): Integer
       begin
-        Result := CompareText(Left.Fichier, Right.Fichier);
+        Result := CompareText(Left.ScriptUnitName, Right.ScriptUnitName);
         if Result = 0 then
           Result := Left.Line - Right.Line;
       end));
@@ -368,7 +368,7 @@ begin
     tmHint:
       Msg.TypeMessage := 'Conseil';
   end;
-  Msg.Fichier := Fichier;
+  Msg.ScriptUnitName := Fichier;
   Msg.Text := Text;
   Msg.Line := Line;
   Msg.Char := Char;
@@ -382,7 +382,7 @@ begin
   Msg := TMessageInfo.Create(Self);
   Result := Add(Msg);
   Msg.TypeMessage := 'Information';
-  Msg.Fichier := Fichier;
+  Msg.ScriptUnitName := Fichier;
   Msg.Text := Text;
   Msg.Line := Line;
   Msg.Char := Char;
@@ -396,7 +396,7 @@ begin
   Msg := TMessageInfo.Create(Self);
   Result := Add(Msg);
   Msg.TypeMessage := 'Erreur';
-  Msg.Fichier := Fichier;
+  Msg.ScriptUnitName := Fichier;
   Msg.Text := Text;
   Msg.Line := Line;
   Msg.Char := Char;
@@ -590,7 +590,7 @@ procedure TBreakpointInfo.UpdateEditor;
 var
   Script: TScriptEditor;
 begin
-  Script := List.FGetScript(Fichier);
+  Script := List.FGetScript(ScriptUnitName);
   if Script <> nil then
   begin
     Script.InvalidateLine(Line);

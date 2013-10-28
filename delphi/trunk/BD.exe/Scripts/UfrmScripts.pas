@@ -5,11 +5,40 @@ interface
 uses Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, SynEditHighlighter, SynEdit, ImgList,
   StrUtils, SynEditMiscClasses, SynEditSearch, StdActns, ActnList, Menus, SynEditTypes, ComCtrls, UScriptUtils, VirtualTrees, StdCtrls,
   ExtCtrls, LoadComplet, SynEditKeyCmds, UBdtForms, Generics.Collections, ToolWin, UfrmFond, UScriptEditor,
-  PngImageList, UMasterEngine, UScriptList, UScriptDebug, UframBoutons, EditLabeled,
+  PngImageList, UMasterEngine, UScriptList, UframBoutons, EditLabeled,
   System.Actions, SynCompletionProposal, SynEditPlugins, SynMacroRecorder,
   dwsDebugger, UframWatches, UframBreakpoints, UframMessages, UframScriptInfos;
 
 type
+  TfrmScripts = class;
+
+  TLineChangedState = (csOriginal, csModified, csSaved);
+
+  TEditorPage = class(TWinControl)
+  private
+    FScript: TScript;
+    FTabSheet: TTabSheet;
+    FModifie: Boolean;
+    FEditor: TScriptEditor;
+    FSB: TStatusBar;
+    FMasterEngine: IMasterEngine;
+    FfrmScripts: TfrmScripts;
+    FExecutableLines: TBits;
+    FLineChangedState: array of TLineChangedState;
+    procedure SetModifie(const Value: Boolean);
+  public
+    constructor Create(AOwner: TPageControl; AfrmScripts: TfrmScripts; AScript: TScript); reintroduce;
+  published
+    property frmScripts: TfrmScripts read FfrmScripts;
+    property MasterEngine: IMasterEngine read FMasterEngine;
+
+    property Script: TScript read FScript;
+    property TabSheet: TTabSheet read FTabSheet write FTabSheet;
+    property Editor: TScriptEditor read FEditor write FEditor;
+    property SB: TStatusBar read FSB write FSB;
+    property Modifie: Boolean read FModifie write SetModifie;
+  end;
+
   TfrmScripts = class(TbdtForm)
     SynEditSearch: TSynEditSearch;
     ActionList1: TActionList;
@@ -102,11 +131,6 @@ type
     Label6: TLabel;
     Memo1: TMemo;
     Button1: TButton;
-    PanelMain: TPanel;
-    PanelEditor: TPanel;
-    ImageTabs: TImage;
-    StatusBar: TStatusBar;
-    pnlPageControl: TPanel;
     SynMacroRecorder: TSynMacroRecorder;
     SynCodeCompletion: TSynCompletionProposal;
     SynParameters: TSynCompletionProposal;
@@ -165,8 +189,8 @@ type
     FProjetOuvert: Boolean;
     FForceClose: Boolean;
 
-    FCurrentScript: TScript;
-    FOpenedScript: TObjectList<TScript>;
+    FCurrentPage: TEditorPage;
+    FOpenedScript: TObjectList<TEditorPage>;
     FRefreshingDescription: Boolean;
     FMasterEngine: IMasterEngine;
 {$REGION 'Exécution'}
@@ -185,7 +209,7 @@ type
     procedure SetCompiled(const Value: Boolean);
     function GetProjet: string;
     procedure SetProjet(const Value: string);
-    procedure LoadScript(const Script: string);
+    procedure LoadScript(const UnitName: string);
     procedure RefreshOptions;
     procedure RefreshDescription(Script: TScript);
     procedure ClearPages;
@@ -215,7 +239,7 @@ implementation
 uses
   UfrmScriptSearch, UScriptsFonctions, CommonConst, UIB, Procedures, BdtkRegEx, Commun, Divers,
   UScriptsHTMLFunctions, JclSimpleXML, UdmPrinc, UfrmScriptOption, UfrmScriptEditOption, UfrmScriptsUpdate,
-  UdmPascalScript;
+  UdmPascalScript, SynHighlighterDWS;
 
 function TfrmScripts.GetScript(const UnitName: string): TScriptEditor;
 begin
@@ -416,7 +440,7 @@ procedure TfrmScripts.SearchFind1Execute(Sender: TObject);
 var
   dummyReplace: string;
 begin
-  with FCurrentScript.Editor do
+  with FCurrentPage.Editor do
     if SelAvail and (BlockBegin.Line = BlockEnd.Line) then
     begin
       FLastSearch := SelText;
@@ -454,38 +478,38 @@ procedure TfrmScripts.SearchFindNext1Execute(Sender: TObject);
 begin
   if FLastSearch = '' then
     SearchFind1Execute(SearchFind1)
-  else if FCurrentScript.Editor.SearchReplace(FLastSearch, FLastReplace, FSearchOptions) = 0 then
+  else if FCurrentPage.Editor.SearchReplace(FLastSearch, FLastReplace, FSearchOptions) = 0 then
     ShowMessage('Texte non trouvé');
 end;
 
 procedure TfrmScripts.EditCut1Execute(Sender: TObject);
 begin
-  FCurrentScript.Editor.CutToClipboard;
+  FCurrentPage.Editor.CutToClipboard;
 end;
 
 procedure TfrmScripts.EditCopy1Execute(Sender: TObject);
 begin
-  FCurrentScript.Editor.CopyToClipboard;
+  FCurrentPage.Editor.CopyToClipboard;
 end;
 
 procedure TfrmScripts.EditPaste1Execute(Sender: TObject);
 begin
-  FCurrentScript.Editor.PasteFromClipboard;
+  FCurrentPage.Editor.PasteFromClipboard;
 end;
 
 procedure TfrmScripts.EditSelectAll1Execute(Sender: TObject);
 begin
-  FCurrentScript.Editor.SelectAll;
+  FCurrentPage.Editor.SelectAll;
 end;
 
 procedure TfrmScripts.EditUndo1Execute(Sender: TObject);
 begin
-  FCurrentScript.Editor.Undo;
+  FCurrentPage.Editor.Undo;
 end;
 
 procedure TfrmScripts.EditRedo1Execute(Sender: TObject);
 begin
-  FCurrentScript.Editor.Redo;
+  FCurrentPage.Editor.Redo;
 end;
 
 procedure TfrmScripts.seScript1ReplaceText(Sender: TObject; const ASearch, AReplace: string; Line, Column: Integer; var Action: TSynReplaceAction);
@@ -525,12 +549,12 @@ end;
 
 procedure TfrmScripts.actFermerExecute(Sender: TObject);
 begin
-  if not FForceClose and (FCurrentScript.ScriptUnitName = Projet) then
+  if not FForceClose and (FCurrentPage.Script.ScriptUnitName = Projet) then
     Exit;
 
-  if FCurrentScript.Modifie then
+  if FCurrentPage.Modifie then
   begin
-    case MessageDlg('L''unité "' + string(FCurrentScript.ScriptUnitName) + '" a été modifiée, voulez-vous l''enregistrer?', mtConfirmation,
+    case MessageDlg('L''unité "' + string(FCurrentPage.Script.ScriptUnitName) + '" a été modifiée, voulez-vous l''enregistrer?', mtConfirmation,
       [mbYes, mbNo, mbCancel], 0) of
       mrYes:
         actEnregistrer.Execute;
@@ -542,11 +566,11 @@ begin
   end;
   FOpenedScript.Delete(pcScripts.ActivePageIndex);
   pcScripts.ActivePage.Free;
-  FCurrentScript.TabSheet := nil;
-  FCurrentScript.Editor := nil;
-  FCurrentScript.SB := nil;
-  FCurrentScript.Modifie := False;
-  FCurrentScript.Loaded := False;
+  // FCurrentPage.TabSheet := nil;
+  // FCurrentPage.Editor := nil;
+  // FCurrentPage.SB := nil;
+  // FCurrentPage.Modifie := False;
+  // FCurrentPage.Script.Loaded := False;
   pcScriptsChange(nil);
 end;
 
@@ -557,7 +581,7 @@ end;
 
 procedure TfrmScripts.actEnregistrerExecute(Sender: TObject);
 begin
-  with FOpenedScript[pcScripts.ActivePageIndex] do
+  with FOpenedScript[pcScripts.ActivePageIndex].Script do
   begin
     Code.Assign(Editor.Lines);
     Save;
@@ -623,7 +647,7 @@ procedure TfrmScripts.seScript1ProcessUserCommand(Sender: TObject; var Command: 
 begin
   case Command - ecUserFirst of
     1:
-      LoadScript(FCurrentScript.Editor.WordAtCursor);
+      LoadScript(FCurrentPage.Editor.WordAtCursor);
   end;
 end;
 
@@ -631,14 +655,14 @@ procedure TfrmScripts.pcScriptsChange(Sender: TObject);
 begin
   if pcScripts.ActivePageIndex > -1 then
   begin
-    FCurrentScript := FOpenedScript[pcScripts.ActivePageIndex];
+    FCurrentPage := FOpenedScript[pcScripts.ActivePageIndex];
     InitExecutableLines;
     ShowExecutableLines;
   end
   else
-    FCurrentScript := nil;
-  framScriptInfos1.TabSheet4.TabVisible := FCurrentScript = MasterEngine.ProjectScript;
-  RefreshDescription(FCurrentScript);
+    FCurrentPage := nil;
+  framScriptInfos1.TabSheet4.TabVisible := FCurrentPage.Script = MasterEngine.ProjectScript;
+  RefreshDescription(FCurrentPage.Script);
 end;
 
 procedure TfrmScripts.seScript1KeyPress(Sender: TObject; var Key: Char);
@@ -663,8 +687,8 @@ procedure TfrmScripts.ActionList1Update(Action: TBasicAction; var Handled: Boole
 var
   Editor: TSynEdit;
 begin
-  if Assigned(FCurrentScript) then
-    Editor := FCurrentScript.Editor
+  if Assigned(FCurrentPage) then
+    Editor := FCurrentPage.Editor
   else
     Editor := nil;
   Handled := True;
@@ -680,7 +704,7 @@ begin
   actRunWithoutDebug.Visible := MasterEngine.AlbumToUpdate;
   actRunWithoutDebug.Enabled := actRunWithoutDebug.Visible and actRun.Enabled and not MasterEngine.Engine.Running;
   actPause.Enabled := (MasterEngine.Engine <> nil) and MasterEngine.Engine.Running and (MasterEngine.Engine.DebugMode = UMasterEngine.dmRun);
-  actFermer.Enabled := Assigned(Editor) and (FForceClose or (FCurrentScript <> MasterEngine.ProjectScript));
+  actFermer.Enabled := Assigned(Editor) and (FForceClose or (FCurrentPage.Script <> MasterEngine.ProjectScript));
   actEnregistrer.Enabled := Assigned(Editor);
   actReset.Enabled := (MasterEngine.Engine <> nil) and MasterEngine.Engine.Running and (MasterEngine.Engine.DebugMode in [UMasterEngine.dmPaused]);
   actCompile.Enabled := (MasterEngine.Engine <> nil) and not MasterEngine.Engine.Running;
@@ -739,10 +763,10 @@ end;
 procedure TfrmScripts.SetCompiled(const Value: Boolean);
 begin
   FCompiled := Value;
-  if Assigned(FCurrentScript) and Assigned(FCurrentScript.Editor) then
+  if Assigned(FCurrentPage) and Assigned(FCurrentPage.Editor) then
   begin
     ClearExecutableLines;
-    FCurrentScript.Editor.Invalidate;
+    FCurrentPage.Editor.Invalidate;
   end;
 end;
 
@@ -769,7 +793,7 @@ begin
     ToolBar2.HotImages := frmFond.boutons_16x16_hot;
   end;
 
-  FOpenedScript := TObjectList<TScript>.Create(False);
+  FOpenedScript := TObjectList<TEditorPage>.Create;
   MasterEngine := TMasterEngine.Create;
   MasterEngine.Console := mmConsole.Lines;
   MasterEngine.DebugPlugin.OnGetScript := GetScript;
@@ -839,54 +863,24 @@ begin
   ListBox2.Invalidate;
 end;
 
-procedure TfrmScripts.LoadScript(const Script: string);
+procedure TfrmScripts.LoadScript(const UnitName: string);
 var
   LockWindow: ILockWindow;
-  Info: TScript;
+  Script: TScript;
 begin
-  Info := MasterEngine.ScriptList.InfoScriptByUnitName(Script);
+  Script := MasterEngine.ScriptList.InfoScriptByUnitName(UnitName);
   // doit être fait avant la création de page pour s'assurer de l'existence du fichier
-  if not Assigned(Info) then
-    raise Exception.Create('Impossible de trouver l''unité ' + string(Script) + '.');
+  if not Assigned(Script) then
+    raise Exception.Create('Impossible de trouver l''unité ' + string(UnitName) + '.');
 
-  if not Assigned(Info.Editor) then
+  if not Assigned(Script.Editor) then
   begin
     // if not Info.Loaded then
-    Info.Load; // on force le rechargement pour être sûr de bien avoir la dernière version
-
+    Script.Load; // on force le rechargement pour être sûr de bien avoir la dernière version
     LockWindow := TLockWindow.Create(pcScripts);
-
-    FOpenedScript.Add(Info);
-
-    Info.TabSheet := TTabSheet.Create(pcScripts);
-    Info.TabSheet.PageControl := pcScripts;
-    Info.TabSheet.Caption := string(Info.ScriptUnitName);
-
-    Info.Editor := MasterEngine.Engine.GetNewEditor(Info.TabSheet);
-    Info.Editor.Parent := Info.TabSheet;
-    Info.Editor.SearchEngine := SynEditSearch;
-    Info.Editor.OnChange := seScript1Change;
-    Info.Editor.OnGutterClick := seScript1GutterClick;
-    Info.Editor.OnGutterPaint := seScript1GutterPaint;
-    Info.Editor.OnReplaceText := seScript1ReplaceText;
-    Info.Editor.OnSpecialLineColors := seScript1SpecialLineColors;
-    Info.Editor.OnStatusChange := seScript1StatusChange;
-    Info.Editor.OnProcessUserCommand := seScript1ProcessUserCommand;
-    Info.Editor.OnKeyPress := seScript1KeyPress;
-    Info.Editor.AddKey(ecUserFirst + 1, VK_RETURN, [ssCtrl]);
-
-    TSynDebugPlugin.Create(Info.Editor, MasterEngine.DebugPlugin);
-    Info.Editor.Lines.Assign(Info.Code);
-
-    Info.SB := TStatusBar.Create(Info.TabSheet);
-    Info.SB.Parent := Info.TabSheet;
-    Info.SB.Panels.Add.Width := 50;
-    Info.SB.Panels.Add.Width := 50;
-    Info.SB.Panels.Add.Width := 50;
-
-    Info.TabSheet.Visible := True;
+    FOpenedScript.Add(TEditorPage.Create(pcScripts, Self, Script));
   end;
-  GoToPosition(Info.Editor, 1, 1);
+  GoToPosition(Script.Editor, 1, 1);
 end;
 
 procedure TfrmScripts.LoadScripts;
@@ -971,17 +965,17 @@ end;
 
 procedure TfrmScripts.actBreakpointExecute(Sender: TObject);
 begin
-  MasterEngine.ToggleBreakPoint(FCurrentScript.ScriptUnitName, FCurrentScript.Editor.CaretY, False);
+  MasterEngine.ToggleBreakPoint(FCurrentPage.Script.ScriptUnitName, FCurrentPage.Editor.CaretY, False);
 end;
 
 procedure TfrmScripts.actAddSuiviExecute(Sender: TObject);
 begin
-  MasterEngine.DebugPlugin.Watches.AddWatch(FCurrentScript.Editor.WordAtCursor);
+  MasterEngine.DebugPlugin.Watches.AddWatch(FCurrentPage.Editor.WordAtCursor);
 end;
 
 procedure TfrmScripts.actRunToCursorExecute(Sender: TObject);
 begin
-  MasterEngine.Engine.setRunTo(FCurrentScript.Editor.CaretY, FCurrentScript.ScriptUnitName);
+  MasterEngine.Engine.setRunTo(FCurrentPage.Editor.CaretY, FCurrentPage.Script.ScriptUnitName);
   actRun.Execute;
 end;
 
@@ -998,10 +992,10 @@ begin
   if msg = nil then
     Exit;
 
-  Editor := GetScript(msg.Fichier);
+  Editor := GetScript(msg.ScriptUnitName);
   if not Assigned(Editor) then
-    LoadScript(msg.Fichier);
-  GoToPosition(msg.Fichier, msg.Line, msg.Char);
+    LoadScript(msg.ScriptUnitName);
+  GoToPosition(msg.ScriptUnitName, msg.Line, msg.Char);
   PageControl1.ActivePage := tabMessages;
 end;
 
@@ -1019,10 +1013,10 @@ procedure TfrmScripts.GoToBreakpoint(msg: TBreakpointInfo);
 var
   Editor: TSynEdit;
 begin
-  Editor := GetScript(msg.Fichier);
+  Editor := GetScript(msg.ScriptUnitName);
   if not Assigned(Editor) then
-    LoadScript(msg.Fichier);
-  GoToPosition(msg.Fichier, msg.Line, 0);
+    LoadScript(msg.ScriptUnitName);
+  GoToPosition(msg.ScriptUnitName, msg.Line, 0);
   PageControl1.ActivePage := tabBreakpoints;
 end;
 
@@ -1072,7 +1066,7 @@ begin
   begin
     MasterEngine.Engine.ActiveLine := 0;
     MasterEngine.Engine.ActiveFile := '';
-    FCurrentScript.Editor.Refresh;
+    FCurrentPage.Editor.Refresh;
     MasterEngine.Engine.Resume;
   end
   else
@@ -1111,7 +1105,7 @@ end;
 procedure TfrmScripts.AfterExecute;
 begin
   if pcScripts.PageCount > 0 then
-    FCurrentScript.Editor.Refresh;
+    FCurrentPage.Editor.Refresh;
   PageControl1.ActivePage := TTabSheet(mmConsole.Parent);
   frmFond.MergeMenu(Menu);
   if MasterEngine.AlbumToUpdate then
@@ -1143,8 +1137,8 @@ end;
 
 function TfrmScripts.IsExecutableLine(aLine: Integer): Boolean;
 begin
-  if aLine < Length(FCurrentScript.Editor.FExecutableLines) then
-    Result := FCurrentScript.Editor.FExecutableLines[aLine]
+  if aLine < Length(FCurrentPage.Editor.FExecutableLines) then
+    Result := FCurrentPage.Editor.FExecutableLines[aLine]
   else
     Result := False;
 end;
@@ -1153,15 +1147,15 @@ procedure TfrmScripts.ClearExecutableLines;
 var
   i: Integer;
 begin
-  for i := 0 to Length(FCurrentScript.Editor.FExecutableLines) - 1 do
-    FCurrentScript.Editor.FExecutableLines[i] := False;
-  FCurrentScript.Editor.InvalidateGutter;
+  for i := 0 to Length(FCurrentPage.Editor.FExecutableLines) - 1 do
+    FCurrentPage.Editor.FExecutableLines[i] := False;
+  FCurrentPage.Editor.InvalidateGutter;
 end;
 
 procedure TfrmScripts.InitExecutableLines;
 begin
-  SetLength(FCurrentScript.Editor.FExecutableLines, 0);
-  SetLength(FCurrentScript.Editor.FExecutableLines, FCurrentScript.Editor.Lines.Count);
+  SetLength(FCurrentPage.Editor.FExecutableLines, 0);
+  SetLength(FCurrentPage.Editor.FExecutableLines, FCurrentPage.Editor.Lines.Count);
 end;
 
 procedure TfrmScripts.ShowExecutableLines;
@@ -1175,17 +1169,194 @@ begin
     if PageControl1.ActivePageIndex = 0 then
       LineNumbers := MasterEngine.Engine.GetExecutableLines(MasterEngine.Engine.GetSpecialMainUnitName)
     else
-      LineNumbers := MasterEngine.Engine.GetExecutableLines(FCurrentScript.ScriptUnitName);
+      LineNumbers := MasterEngine.Engine.GetExecutableLines(FCurrentPage.Script.ScriptUnitName);
     for i := 0 to Length(LineNumbers) - 1 do
-      FCurrentScript.Editor.FExecutableLines[LineNumbers[i]] := True;
+      FCurrentPage.Editor.FExecutableLines[LineNumbers[i]] := True;
   end;
-  FCurrentScript.Editor.InvalidateGutter;
+  FCurrentPage.Editor.InvalidateGutter;
 end;
 
 procedure TfrmScripts.OnBreakPoint;
 begin
   framWatches1.Invalidate;
   GoToPosition(MasterEngine.Engine.ActiveFile, MasterEngine.Engine.ActiveLine, 0);
+end;
+
+{ TEditorPageSynEditPlugin }
+
+type
+  TEditorPageSynEditPlugin = class(TSynEditPlugin)
+  protected
+    FPage: TEditorPage;
+    procedure LinesInserted(FirstLine, Count: Integer); override;
+    procedure LinesDeleted(FirstLine, Count: Integer); override;
+    procedure PaintTransient(ACanvas: TCanvas; ATransientType: TTransientType); override;
+  public
+    constructor Create(APage: TEditorPage);
+  end;
+
+constructor TEditorPageSynEditPlugin.Create(APage: TEditorPage);
+begin
+  inherited Create(APage.Editor);
+  FPage := APage;
+end;
+
+procedure TEditorPageSynEditPlugin.LinesInserted(FirstLine, Count: Integer);
+var
+  i, iLineCount: Integer;
+begin
+  // Track the executable lines
+  iLineCount := FPage.Editor.Lines.Count;
+  FPage.FExecutableLines.Size := iLineCount;
+  for i := iLineCount - 1 downto FirstLine + Count do
+    FPage.FExecutableLines[i] := FPage.FExecutableLines[i - Count];
+  for i := FirstLine + Count - 1 downto FirstLine do
+    FPage.FExecutableLines[i] := False;
+
+  SetLength(FPage.FLineChangedState, iLineCount);
+  for i := iLineCount - 1 downto FirstLine + Count do
+    FPage.FLineChangedState[i] := FPage.FLineChangedState[i - Count];
+  for i := FirstLine + Count - 1 downto FirstLine - 1 do
+    FPage.FLineChangedState[i] := csModified;
+
+  // Track the breakpoint lines in the debugger
+  with FPage.MasterEngine.DebugPlugin do
+  begin
+    for i := 0 to Breakpoints.Count - 1 do
+      if Breakpoints[i].ScriptUnitName = FPage.Script.ScriptUnitName then
+        if Breakpoints[i].Line >= Cardinal(FirstLine) then
+          Breakpoints[i].Line := Breakpoints[i].Line + Cardinal(Count);
+
+    for i := 0 to Messages.Count - 1 do
+      if Messages[i].ScriptUnitName = FPage.Script.ScriptUnitName then
+        if Messages[i].Line >= Cardinal(FirstLine) then
+          Messages[i].Line := Messages[i].Line + Cardinal(Count);
+  end;
+
+  // Redraw the gutter for updated icons.
+  FPage.Editor.InvalidateGutter;
+end;
+
+procedure TEditorPageSynEditPlugin.PaintTransient(ACanvas: TCanvas; ATransientType: TTransientType);
+var
+  Pt: TPoint;
+  Rct: TRect;
+  MouseBufferCoord: TBufferCoord;
+  Attri: TSynHighlighterAttributes;
+  TokenType, Start: Integer;
+  TokenName: String;
+  OldFont: TFont;
+begin
+  // only handle after transient
+  if ATransientType <> ttAfter then
+    Exit;
+
+  // only continue if [CTRL] is pressed
+  if not(ssCtrl in KeyboardStateToShiftState) then
+    Exit;
+
+  Pt := Editor.ScreenToClient(Mouse.CursorPos);
+  MouseBufferCoord := Editor.DisplayToBufferPos(Editor.PixelsToRowColumn(Pt.X, Pt.Y));
+  Editor.GetHighlighterAttriAtRowColEx(MouseBufferCoord, TokenName, TokenType, Start, Attri);
+
+  if TtkTokenKind(TokenType) <> tkIdentifier then
+    Exit;
+
+  with Editor do
+    Pt := RowColumnToPixels(BufferToDisplayPos(WordStartEx(MouseBufferCoord)));
+
+  Rct := Rect(Pt.X, Pt.Y, Pt.X + Editor.CharWidth * Length(TokenName), Pt.Y + Editor.LineHeight);
+
+  OldFont := TFont.Create;
+  try
+    OldFont.Assign(ACanvas.Font);
+    ACanvas.Font.Color := clBlue;
+    ACanvas.Font.Style := [fsUnderline];
+    ACanvas.TextRect(Rct, Pt.X, Pt.Y, TokenName);
+    ACanvas.Font := OldFont;
+  finally
+    OldFont.Free;
+  end;
+end;
+
+procedure TEditorPageSynEditPlugin.LinesDeleted(FirstLine, Count: Integer);
+var
+  i: Integer;
+begin
+  // Track the executable lines
+  for i := FirstLine - 1 to FPage.FExecutableLines.Size - Count - 1 do
+    FPage.FExecutableLines[i] := FPage.FExecutableLines[i + Count];
+  FPage.FExecutableLines.Size := FPage.FExecutableLines.Size - Count;
+
+  // Track the executable lines
+  for i := FirstLine - 1 to Length(FPage.FLineChangedState) - Count - 1 do
+    FPage.FLineChangedState[i] := FPage.FLineChangedState[i + Count];
+  SetLength(FPage.FLineChangedState, Length(FPage.FLineChangedState) - Count);
+
+  // Track the breakpoint lines in the debugger
+  with FPage.MasterEngine.DebugPlugin do
+  begin
+    for i := Pred(Breakpoints.Count) downto 0 do
+      if Breakpoints[i].ScriptUnitName = FPage.Script.ScriptUnitName then
+        if Breakpoints[i].Line in [FirstLine .. FirstLine + Count] then
+          Breakpoints.Delete(i)
+        else if Breakpoints[i].Line >= Cardinal(FirstLine) then
+          Breakpoints[i].Line := Breakpoints[i].Line - Cardinal(Count);
+    for i := Pred(Messages.Count) downto 0 do
+      if Messages[i].ScriptUnitName = FPage.Script.ScriptUnitName then
+        if Messages[i].Line in [FirstLine .. FirstLine + Count] then
+          Messages.Delete(i)
+        else if Messages[i].Line >= Cardinal(FirstLine) then
+          Messages[i].Line := Messages[i].Line - Cardinal(Count);
+  end;
+
+  // Redraw the gutter for updated icons.
+  FPage.Editor.InvalidateGutter;
+end;
+
+{ TEditorPage }
+
+constructor TEditorPage.Create(AOwner: TPageControl; AfrmScripts: TfrmScripts; AScript: TScript);
+begin
+  inherited Create(AOwner);
+
+  FfrmScripts := AfrmScripts;
+  FMasterEngine := FfrmScripts.MasterEngine;
+  FScript := AScript;
+
+  TabSheet := TTabSheet.Create(AOwner);
+  TabSheet.PageControl := AOwner;
+  TabSheet.Caption := string(Script.ScriptUnitName);
+
+  Editor := MasterEngine.Engine.GetNewEditor(Script.TabSheet);
+  Editor.Parent := Script.TabSheet;
+  Editor.SearchEngine := FfrmScripts.SynEditSearch;
+  Editor.OnChange := FfrmScripts.seScript1Change;
+  Editor.OnGutterClick := FfrmScripts.seScript1GutterClick;
+  Editor.OnGutterPaint := FfrmScripts.seScript1GutterPaint;
+  Editor.OnReplaceText := FfrmScripts.seScript1ReplaceText;
+  Editor.OnSpecialLineColors := FfrmScripts.seScript1SpecialLineColors;
+  Editor.OnStatusChange := FfrmScripts.seScript1StatusChange;
+  Editor.OnProcessUserCommand := FfrmScripts.seScript1ProcessUserCommand;
+  Editor.OnKeyPress := FfrmScripts.seScript1KeyPress;
+  Editor.AddKey(ecUserFirst + 1, VK_RETURN, [ssCtrl]);
+
+  TEditorPageSynEditPlugin.Create(Self);
+  Editor.Lines.Assign(Script.Code);
+
+  SB := TStatusBar.Create(Script.TabSheet);
+  SB.Parent := Script.TabSheet;
+  SB.Panels.Add.Width := 50;
+  SB.Panels.Add.Width := 50;
+  SB.Panels.Add.Width := 50;
+
+  TabSheet.Visible := True;
+end;
+
+procedure TEditorPage.SetModifie(const Value: Boolean);
+begin
+  FModifie := Value;
+  FScript.Modifie := Value;
 end;
 
 end.

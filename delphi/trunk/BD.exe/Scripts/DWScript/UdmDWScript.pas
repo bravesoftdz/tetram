@@ -583,7 +583,7 @@ begin
     begin
       dwsBP := TdwsDebuggerBreakpoint.Create;
       dwsBP.Line := bp.Line;
-      dwsBP.SourceName := CorrectScriptName(bp.Fichier);
+      dwsBP.SourceName := CorrectScriptName(bp.ScriptUnitName);
       i := DWDebugger.Breakpoints.AddOrFind(dwsBP, added);
       if not added then
         dwsBP.Free

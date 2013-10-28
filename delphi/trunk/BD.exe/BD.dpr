@@ -101,7 +101,6 @@ uses
   UfrmScriptEditOption in 'Scripts\UfrmScriptEditOption.pas' {frmScriptEditOption},
   UfrmScriptOption in 'Scripts\UfrmScriptOption.pas' {frmScriptOption},
   UScriptList in 'Scripts\UScriptList.pas',
-  UScriptDebug in 'Scripts\UScriptDebug.pas',
   UMAJ2_1_1_7 in 'mises à jour\UMAJ2_1_1_7.pas',
   UMAJ0_0_0_6 in 'mises à jour\UMAJ0_0_0_6.pas',
   UMAJ0_0_0_8 in 'mises à jour\UMAJ0_0_0_8.pas',

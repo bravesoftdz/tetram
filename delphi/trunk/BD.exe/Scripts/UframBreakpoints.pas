@@ -45,7 +45,7 @@ end;
 procedure TframBreakpoints.vstBreakpointsChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
 begin
   with MasterEngine.DebugPlugin.Breakpoints[Node.Index] do
-    MasterEngine.ToggleBreakPoint(Fichier, Line, True);
+    MasterEngine.ToggleBreakPoint(ScriptUnitName, Line, True);
   MasterEngine.DebugPlugin.Breakpoints.View.InvalidateNode(Node);
 end;
 
@@ -59,10 +59,10 @@ begin
       0:
         CellText := 'Ligne ' + IntToStr(Line);
       1:
-        if Fichier = MasterEngine.Engine.GetSpecialMainUnitName then
+        if ScriptUnitName = MasterEngine.Engine.GetSpecialMainUnitName then
           // CellText := Projet
         else
-          CellText := string(Fichier);
+          CellText := string(ScriptUnitName);
     end;
 end;
 

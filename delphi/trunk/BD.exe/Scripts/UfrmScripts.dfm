@@ -73,7 +73,6 @@ object frmScripts: TfrmScripts
         Caption = 'Panel2'
         ShowCaption = False
         TabOrder = 1
-        ExplicitTop = 28
         DesignSize = (
           874
           588)
@@ -549,74 +548,6 @@ object frmScripts: TfrmScripts
           end
           inherited PopupMenu2: TPopupMenu
             Top = 40
-          end
-        end
-      end
-      object PanelMain: TPanel
-        Left = 0
-        Top = 22
-        Width = 874
-        Height = 398
-        Align = alClient
-        BevelOuter = bvNone
-        Caption = 'PanelMain'
-        DoubleBuffered = True
-        ParentDoubleBuffered = False
-        ShowCaption = False
-        TabOrder = 3
-        object PanelEditor: TPanel
-          Left = 0
-          Top = 0
-          Width = 874
-          Height = 398
-          Align = alClient
-          BevelOuter = bvNone
-          BorderWidth = 5
-          FullRepaint = False
-          ParentBackground = False
-          TabOrder = 0
-          object ImageTabs: TImage
-            Left = 5
-            Top = 5
-            Width = 864
-            Height = 22
-            Align = alTop
-            ExplicitWidth = 663
-          end
-          object StatusBar: TStatusBar
-            Left = 5
-            Top = 374
-            Width = 864
-            Height = 19
-            Panels = <
-              item
-                Alignment = taCenter
-                Width = 84
-              end
-              item
-                Alignment = taCenter
-                Width = 72
-              end
-              item
-                Alignment = taCenter
-                Width = 84
-              end
-              item
-                Width = 50
-              end>
-          end
-          object pnlPageControl: TPanel
-            Left = 5
-            Top = 27
-            Width = 864
-            Height = 347
-            Align = alClient
-            BevelOuter = bvNone
-            Color = clWindow
-            ParentBackground = False
-            ParentShowHint = False
-            ShowHint = False
-            TabOrder = 1
           end
         end
       end

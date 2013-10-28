@@ -65,10 +65,10 @@ begin
       1:
         CellText := string(TypeMessage);
       2:
-        if Fichier = MasterEngine.Engine.GetSpecialMainUnitName then
+        if ScriptUnitName = MasterEngine.Engine.GetSpecialMainUnitName then
           // CellText := Projet
         else
-          CellText := string(Fichier);
+          CellText := string(ScriptUnitName);
       3:
         CellText := string(Text);
     end;

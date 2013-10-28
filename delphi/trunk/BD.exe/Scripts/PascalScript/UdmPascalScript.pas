@@ -665,10 +665,10 @@ begin
   if PSScriptDebugger1.UseDebugInfo then
     for bp in FMasterEngine.DebugPlugin.Breakpoints do
       if bp.Active then
-        if bp.Fichier = string(PSScriptDebugger1.MainFileName) then
+        if bp.ScriptUnitName = string(PSScriptDebugger1.MainFileName) then
           PSScriptDebugger1.SetBreakPoint('', bp.Line)
         else
-          PSScriptDebugger1.SetBreakPoint(AnsiString(bp.Fichier), bp.Line);
+          PSScriptDebugger1.SetBreakPoint(AnsiString(bp.ScriptUnitName), bp.Line);
 end;
 
 { TPascalScriptEngineFactory }
