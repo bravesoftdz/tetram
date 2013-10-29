@@ -3,7 +3,7 @@ unit UDW_BdtkRegEx;
 interface
 
 uses
-  UDWUnit, System.Classes, dwsComp, dwsExprs, dwsSymbols, UMasterEngine;
+  UDWUnit, System.Classes, dwsComp, dwsExprs, dwsSymbols, UScriptEngineIntf;
 
 type
   TDW_BdtkRegExUnit = class(TDW_Unit)

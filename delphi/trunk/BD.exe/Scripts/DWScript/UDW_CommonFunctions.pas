@@ -3,7 +3,7 @@ unit UDW_CommonFunctions;
 interface
 
 uses
-  System.Classes, System.SysUtils, UDWUnit, Variants, StrUtils, dwsSymbols, dwsMagicExprs, dwsExprs, dwsFunctions, dwsExprList, UMasterEngine;
+  System.Classes, System.SysUtils, UDWUnit, Variants, StrUtils, dwsSymbols, dwsMagicExprs, dwsExprs, dwsFunctions, dwsExprList, UScriptEngineIntf;
 
 type
   TDW_CommonFunctionsUnit = class(TDW_Unit)

@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, Winapi.Windows, Forms, System.Classes, UScriptList, Variants,
   UScriptUtils, LoadComplet, LoadCompletImport, dwsComp, dwsDebugger, dwsCompiler, dwsExprs, dwsFunctions,
-  UMasterEngine, UScriptEditor, SynHighlighterDWS, UDW_BdtkRegEx, UDW_BdtkObjects, dwsClassesLibModule, UDW_CommonFunctions,
+  UMasterEngine, UScriptEngineIntf, UScriptEditor, SynHighlighterDWS, UDW_BdtkRegEx, UDW_BdtkObjects, dwsClassesLibModule, UDW_CommonFunctions,
   dwsErrors;
 
 type
@@ -44,7 +44,7 @@ type
     procedure AfterInitbdObjects(Sender: TObject);
     procedure DebuggerStateChanged(Sender: TObject);
 
-    function FillMessages(Msgs: TdwsMessageList): TMessageInfo;
+    function FillMessages(Msgs: TdwsMessageList): IMessageInfo;
     function CorrectScriptName(const Script: String): String;
   public
     constructor Create(MasterEngine: IMasterEngine);
@@ -55,8 +55,8 @@ type
     procedure ResetBreakpoints;
     procedure ResetWatches;
 
-    function Compile(ABuild: Boolean; out Msg: TMessageInfo): Boolean; overload;
-    function Compile(Script: TScript; out Msg: TMessageInfo): Boolean; overload;
+    function Compile(ABuild: Boolean; out Msg: IMessageInfo): Boolean; overload;
+    function Compile(Script: TScript; out Msg: IMessageInfo): Boolean; overload;
     function Run: Boolean;
 
     function GetRunning: Boolean;
@@ -94,6 +94,7 @@ type
     procedure setRunTo(Position: Integer; const Filename: string);
 
     function GetNewEditor(AOwner: TComponent): TScriptEditor;
+    function isTokenIdentifier(TokenType: Integer): Boolean;
   end;
 
 implementation
@@ -166,7 +167,7 @@ begin
   info.ResultAsInteger := FRunningScript.OptionValueIndex(info.ValueAsString['OptionName'], info.ValueAsInteger['Default']);
 end;
 
-function TdmDWScript.FillMessages(Msgs: TdwsMessageList): TMessageInfo;
+function TdmDWScript.FillMessages(Msgs: TdwsMessageList): IMessageInfo;
 var
   i: Integer;
   m: TdwsMessage;
@@ -208,7 +209,7 @@ begin
   info.ResultAsBoolean := FRunningScript.CheckOptionValue(info.ValueAsString['OptionName'], info.ValueAsString['Default']);
 end;
 
-function TdmDWScript.Compile(Script: TScript; out Msg: TMessageInfo): Boolean;
+function TdmDWScript.Compile(Script: TScript; out Msg: IMessageInfo): Boolean;
 var
   SL: TStringList;
 begin
@@ -223,7 +224,7 @@ begin
   Result := Compile(True, Msg);
 end;
 
-function TdmDWScript.Compile(ABuild: Boolean; out Msg: TMessageInfo): Boolean;
+function TdmDWScript.Compile(ABuild: Boolean; out Msg: IMessageInfo): Boolean;
 begin
   if ABuild or not Assigned(FProgram) then
   begin
@@ -402,7 +403,7 @@ function TdmDWScript.GetExecutableLines(const AUnitName: string): TLineNumbers;
 var
   i: Integer;
   Breakpointables: TdwsBreakpointableLines;
-  Msg: TMessageInfo;
+  Msg: IMessageInfo;
   Lines: Tbits;
 begin
   SetLength(Result, 0);
@@ -478,6 +479,11 @@ begin
     end;
     dwsW.ClearEvaluator;
   end;
+end;
+
+function TdmDWScript.isTokenIdentifier(TokenType: Integer): Boolean;
+begin
+  Result := TtkTokenKind(TokenType) = tkIdentifier;
 end;
 
 procedure TdmDWScript.Pause;
@@ -572,7 +578,7 @@ end;
 
 procedure TdmDWScript.ResetBreakpoints;
 var
-  bp: TBreakpointInfo;
+  bp: IBreakpointInfo;
   dwsBP: TdwsDebuggerBreakpoint;
   i: Integer;
   added: Boolean;
@@ -598,9 +604,9 @@ end;
 
 procedure TdmDWScript.ResetWatches;
 var
-  wi: TWatchInfo;
+  wi: IWatchInfo;
   dwsW: TdwsDebuggerWatch;
-  i: Integer;
+  // i: Integer;
   added: Boolean;
 begin
   DWDebugger.Watches.Clean;
@@ -609,7 +615,7 @@ begin
     begin
       dwsW := TdwsDebuggerWatch.Create;
       dwsW.ExpressionText := wi.Name;
-      i := DWDebugger.Watches.AddOrFind(dwsW, added);
+      { i := } DWDebugger.Watches.AddOrFind(dwsW, added);
       if not added then
         dwsW.Free
       else

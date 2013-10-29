@@ -5,7 +5,7 @@ interface
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, EditLabeled,
-  Vcl.ComCtrls, UScriptList, Vcl.Menus, System.Actions, Vcl.ActnList, UMasterEngine;
+  Vcl.ComCtrls, UScriptList, Vcl.Menus, System.Actions, Vcl.ActnList, UScriptEngineIntf;
 
 type
   TframScriptInfos = class(TFrame)

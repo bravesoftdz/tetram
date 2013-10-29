@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Menus,
-  Dialogs, UMasterEngine, Generics.Collections, UScriptList, VirtualTrees, VirtualTreeBdtk,
+  Dialogs, UScriptEngineIntf, Generics.Collections, UScriptList, VirtualTrees, VirtualTreeBdtk,
   StdCtrls, UframBoutons, ActnList, ComCtrls, ComboCheck, System.Actions;
 
 type

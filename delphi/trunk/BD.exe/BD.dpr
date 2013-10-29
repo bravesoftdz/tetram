@@ -178,7 +178,9 @@ uses
   UframWatches in 'Scripts\UframWatches.pas' {framWatches: TFrame},
   UframBreakpoints in 'Scripts\UframBreakpoints.pas' {framBreakpoints: TFrame},
   UframMessages in 'Scripts\UframMessages.pas' {framMessages: TFrame},
-  UframScriptInfos in 'Scripts\UframScriptInfos.pas' {framScriptInfos: TFrame};
+  UframScriptInfos in 'Scripts\UframScriptInfos.pas' {framScriptInfos: TFrame},
+  UfrmScriptGotoLine in 'Scripts\UfrmScriptGotoLine.pas' {frmScriptGotoLine},
+  UScriptEngineIntf in 'Scripts\UScriptEngineIntf.pas';
 
 {$R *.RES}
 {$R curseurs.res}

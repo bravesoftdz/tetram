@@ -4,7 +4,7 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Types, StdCtrls, SynEdit, Controls, VirtualTrees, Contnrs, uPSCompiler, uPSUtils,
-  Generics.Collections, Generics.Defaults, UScriptEditor;
+  Generics.Collections, Generics.Defaults, UScriptEditor, UScriptEngineIntf;
 
 type
   TInfoType = (itProcedure, itFunction, itType, itVar, itConstant, itField, itConstructor);
@@ -24,77 +24,117 @@ type
   end;
 
   TParamInfoArray = array of TParamInfoRecord;
-  TGetScript = function(const Fichier: string): TScriptEditor of object;
 
-  TDebugList<T: class> = class(TObjectList<T>)
+  TDebugList<I: IDebugItem> = class(TList<I>, IDebugList<I>)
   private
     // 27/08/2011: si on met cette variable et la propriété qui va avec dans TBreakpointList,
     // on se paye un écrasement de mémoire entre FGetScript et FView
     // merci Delphi XE !!!
-    FGetScript: TGetScript;
+    FGetScript: TGetScriptEditorMethod;
     FView: TVirtualStringTree;
+    function GetView: TVirtualStringTree;
     procedure SetView(const Value: TVirtualStringTree);
+    function ItemCount: Integer;
   protected
-    procedure Notify(const Value: T; Action: TCollectionNotification); override;
+    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
+    function GetItemInterface(Index: Integer): I;
+    procedure Notify(const Value: I; Action: TCollectionNotification); override;
   public
     destructor Destroy; override;
     procedure Clear; reintroduce;
     procedure UpdateView;
     procedure DeleteCurrent;
-    function Current: T;
-    function Last: T;
-    property View: TVirtualStringTree read FView write SetView;
-    property Editor: TGetScript read FGetScript write FGetScript;
+    function Current: I;
+    function Last: I;
+
+    property Editor: TGetScriptEditorMethod read FGetScript write FGetScript;
   end;
 
-  TDebugItem<T: class> = class abstract
-    List: TDebugList<T>;
-    constructor Create(List: TDebugList<T>);
+  TDebugItem<I: IDebugItem> = class abstract(TInterfacedObject)
+  public
+    List: TDebugList<I>;
+    constructor Create(List: TDebugList<I>);
   end;
 
-  TBreakpointInfo = class(TDebugItem<TBreakpointInfo>)
+  TBreakpointInfo = class(TDebugItem<IBreakpointInfo>, IBreakpointInfo)
   private
     FActive: Boolean;
+    FLine: Cardinal;
+    FScriptUnitName: string;
     procedure UpdateEditor;
+    function GetLine: Cardinal;
+    procedure SetLine(const Value: Cardinal);
+    function GetScriptUnitName: string;
+    procedure SetScriptUnitName(const Value: string);
+    function GetActive: Boolean;
     procedure SetActive(const Value: Boolean);
   public
-    Line: Cardinal;
-    ScriptUnitName: string;
     destructor Destroy; override;
-    property Active: Boolean read FActive write SetActive;
+
+    property Line: Cardinal read GetLine write SetLine;
+    property ScriptUnitName: string read GetScriptUnitName write SetScriptUnitName;
+    property Active: Boolean read GetActive write SetActive;
   end;
 
-  TCategoryMessage = (cmInfo, cmCompileError, cmRuntimeError);
-  TTypeMessage = (tmUnknown, tmError, tmHint, tmWarning);
+  TMessageInfo = class(TDebugItem<IMessageInfo>, IMessageInfo)
+  private
+    FScriptUnitName, FTypeMessage, FText: string;
+    FLine, FChar: Cardinal;
+    FCategory: TCategoryMessage;
 
-  TMessageInfo = class(TDebugItem<TMessageInfo>)
-    ScriptUnitName, TypeMessage, Text: string;
-    Line, Char: Cardinal;
-    Category: TCategoryMessage;
+    function GetScriptUnitName: string;
+    procedure SetScriptUnitName(const Value: string);
+    function GetTypeMessage: string;
+    procedure SetTypeMessage(const Value: string);
+    function GetText: string;
+    procedure SetText(const Value: string);
+    function GetLine: Cardinal;
+    procedure SetLine(const Value: Cardinal);
+    function GetChar: Cardinal;
+    procedure SetChar(const Value: Cardinal);
+    function GetCategory: TCategoryMessage;
+    procedure SetCategory(const Value: TCategoryMessage);
+  public
+    property ScriptUnitName: string read GetScriptUnitName write SetScriptUnitName;
+    property TypeMessage: string read GetTypeMessage write SetTypeMessage;
+    property Text: string read GetText write SetText;
+    property Line: Cardinal read GetLine write SetLine;
+    property Char: Cardinal read GetChar write SetChar;
+    property Category: TCategoryMessage read GetCategory write SetCategory;
   end;
 
-  TWatchInfo = class(TDebugItem<TWatchInfo>)
-    Name: string;
-    Active: Boolean;
+  TWatchInfo = class(TDebugItem<IWatchInfo>, IWatchInfo)
+  private
+    FName: string;
+    FActive: Boolean;
+    function GetName: string;
+    procedure SetName(const Value: string);
+    function GetActive: Boolean;
+    procedure SetActive(const Value: Boolean);
+  public
+    property Name: string read GetName write SetName;
+    property Active: Boolean read GetActive write SetActive;
   end;
 
-  TWatchList = class(TDebugList<TWatchInfo>)
+  TWatchList = class(TDebugList<IWatchInfo>, IWatchList)
   public
     function IndexOfName(const VarName: string): Integer;
     function CountActive: Integer;
     procedure AddWatch(const VarName: string);
   end;
 
-  TMessageList = class(TDebugList<TMessageInfo>)
+  TMessageList = class(TDebugList<IMessageInfo>, IMessageList)
   public
     function AddCompileErrorMessage(const Fichier, Text: string; TypeMessage: TTypeMessage; Line, Char: Cardinal): Integer;
     function AddRuntimeErrorMessage(const Fichier, Text: string; Line, Char: Cardinal): Integer;
     function AddInfoMessage(const Fichier, Text: string; Line: Cardinal = 0; Char: Cardinal = 0): Integer;
   end;
 
-  TBreakpointList = class(TDebugList<TBreakpointInfo>)
+  TBreakpointList = class(TDebugList<IBreakpointInfo>, IBreakpointList)
   protected
-    procedure Notify(const Value: TBreakpointInfo; Action: TCollectionNotification); override;
+    procedure Notify(const Value: IBreakpointInfo; Action: TCollectionNotification); override;
   public
     function IndexOf(const UnitName: string; const ALine: Cardinal): Integer;
     function Exists(const UnitName: string; const ALine: Cardinal): Boolean;
@@ -102,7 +142,7 @@ type
     function Toggle(const UnitName: string; const ALine: Cardinal): Boolean;
   end;
 
-  TDebugInfos = class
+  TDebugInfos = class(TObject, IDebugInfos)
   private
     FCurrentLine: Integer;
     FCursorLine: Integer;
@@ -111,22 +151,37 @@ type
     FBreakpointsList: TBreakpointList;
     FWatchesList: TWatchList;
     FMessagesList: TMessageList;
-    function GetScript: TGetScript;
-    procedure SetScript(const Value: TGetScript);
 
+    procedure SetCurrentLine(const Value: Integer);
+    function GetCurrentLine: Integer;
+    procedure SetCursorLine(const Value: Integer);
+    function GetCursorLine: Integer;
+    procedure SetErrorLine(const Value: Integer);
+    function GetErrorLine: Integer;
+
+    function GetBreakpointsList: IBreakpointList;
+    function GetWatchesList: IWatchList;
+    function GetMessagesList: IMessageList;
+
+    function GetScript: TGetScriptEditorMethod;
+    procedure SetScript(const Value: TGetScriptEditorMethod);
+
+  protected
+    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
+    function _AddRef: Integer; stdcall;
+    function _Release: Integer; stdcall;
   public
     constructor Create;
     destructor Destroy; override;
 
-    property CurrentLine: Integer read FCurrentLine write FCurrentLine;
-    property CursorLine: Integer read FCursorLine write FCursorLine;
-    property ErrorLine: Integer read FErrorLine write FErrorLine;
+    property CurrentLine: Integer read GetCurrentLine write SetCurrentLine;
+    property CursorLine: Integer read GetCursorLine write SetCursorLine;
+    property ErrorLine: Integer read GetErrorLine write SetErrorLine;
 
-    property Breakpoints: TBreakpointList read FBreakpointsList;
-    property Watches: TWatchList read FWatchesList;
-    property Messages: TMessageList read FMessagesList;
-
-    property OnGetScript: TGetScript read GetScript write SetScript;
+    property Breakpoints: IBreakpointList read GetBreakpointsList;
+    property Watches: IWatchList read GetWatchesList;
+    property Messages: IMessageList read GetMessagesList;
+    property OnGetScript: TGetScriptEditorMethod read GetScript write SetScript;
   end;
 
   TStringArray = array of string;
@@ -158,17 +213,17 @@ end;
 
 function TBreakpointList.Toggle(const UnitName: string; const ALine: Cardinal): Boolean;
 var
-  i: Integer;
+  I: Integer;
 begin
-  i := IndexOf(UnitName, ALine);
-  if i = -1 then
+  I := IndexOf(UnitName, ALine);
+  if I = -1 then
   begin
     AddBreakpoint(UnitName, ALine);
     Result := True;
   end
   else
   begin
-    Delete(i);
+    Delete(I);
     Result := False;
   end;
 end;
@@ -187,7 +242,7 @@ begin
   end;
 end;
 
-procedure TBreakpointList.Notify(const Value: TBreakpointInfo; Action: TCollectionNotification);
+procedure TBreakpointList.Notify(const Value: IBreakpointInfo; Action: TCollectionNotification);
 var
   Editor: TCustomSynEdit;
 begin
@@ -209,8 +264,8 @@ begin
   end;
 
   if Action = cnAdded then
-    Sort(TComparer<TBreakpointInfo>.Construct(
-          function(const Left, Right: TBreakpointInfo): Integer
+    Sort(TComparer<IBreakpointInfo>.Construct(
+      function(const Left, Right: IBreakpointInfo): Integer
       begin
         Result := CompareText(Left.ScriptUnitName, Right.ScriptUnitName);
         if Result = 0 then
@@ -223,9 +278,9 @@ end;
 constructor TDebugInfos.Create;
 begin
   inherited;
-  FBreakpointsList := TBreakpointList.Create(True);
-  FWatchesList := TWatchList.Create(True);
-  FMessagesList := TMessageList.Create(True);
+  FBreakpointsList := TBreakpointList.Create;
+  FWatchesList := TWatchList.Create;
+  FMessagesList := TMessageList.Create;
 end;
 
 destructor TDebugInfos.Destroy;
@@ -236,19 +291,82 @@ begin
   inherited;
 end;
 
-function TDebugInfos.GetScript: TGetScript;
+function TDebugInfos.GetBreakpointsList: IBreakpointList;
+begin
+  Result := FBreakpointsList;
+end;
+
+function TDebugInfos.GetCurrentLine: Integer;
+begin
+  Result := FCurrentLine;
+end;
+
+function TDebugInfos.GetCursorLine: Integer;
+begin
+  Result := FCursorLine;
+end;
+
+function TDebugInfos.GetErrorLine: Integer;
+begin
+  Result := FErrorLine;
+end;
+
+function TDebugInfos.GetMessagesList: IMessageList;
+begin
+  Result := FMessagesList;
+end;
+
+function TDebugInfos.GetScript: TGetScriptEditorMethod;
 begin
   Result := FBreakpointsList.FGetScript;
 end;
 
-procedure TDebugInfos.SetScript(const Value: TGetScript);
+function TDebugInfos.GetWatchesList: IWatchList;
+begin
+  Result := FWatchesList;
+end;
+
+function TDebugInfos.QueryInterface(const IID: TGUID; out Obj): HResult;
+begin
+  if GetInterface(IID, Obj) then
+    Result := 0
+  else
+    Result := E_NOINTERFACE;
+end;
+
+procedure TDebugInfos.SetCurrentLine(const Value: Integer);
+begin
+  FCurrentLine := Value;
+end;
+
+procedure TDebugInfos.SetCursorLine(const Value: Integer);
+begin
+  FCursorLine := Value;
+end;
+
+procedure TDebugInfos.SetErrorLine(const Value: Integer);
+begin
+  FErrorLine := Value;
+end;
+
+procedure TDebugInfos.SetScript(const Value: TGetScriptEditorMethod);
 begin
   FBreakpointsList.FGetScript := Value;
 end;
 
+function TDebugInfos._AddRef: Integer;
+begin
+  Result := 1;
+end;
+
+function TDebugInfos._Release: Integer;
+begin
+  Result := 0;
+end;
+
 { TDebugList }
 
-procedure TDebugList<T>.Clear;
+procedure TDebugList<I>.Clear;
 begin
   if Assigned(FView) then
     FView.BeginUpdate;
@@ -261,15 +379,15 @@ begin
   end;
 end;
 
-function TDebugList<T>.Current: T;
+function TDebugList<I>.Current: I;
 begin
   Result := nil;
   if not Assigned(FView) or (FView.GetFirstSelected = nil) then
     Exit;
-  Result := Items[FView.GetFirstSelected.Index];
+  Result := GetItemInterface(FView.GetFirstSelected.Index);
 end;
 
-procedure TDebugList<T>.DeleteCurrent;
+procedure TDebugList<I>.DeleteCurrent;
 begin
   if Assigned(FView) then
   begin
@@ -278,21 +396,36 @@ begin
   end;
 end;
 
-destructor TDebugList<T>.Destroy;
+destructor TDebugList<I>.Destroy;
 begin
   SetView(nil);
   inherited;
 end;
 
-function TDebugList<T>.Last: T;
+function TDebugList<I>.GetItemInterface(Index: Integer): I;
+begin
+  Result := Items[Index];
+end;
+
+function TDebugList<I>.GetView: TVirtualStringTree;
+begin
+  Result := FView;
+end;
+
+function TDebugList<I>.ItemCount: Integer;
+begin
+  Result := Count;
+end;
+
+function TDebugList<I>.Last: I;
 begin
   if Count > 0 then
-    Result := Items[Count - 1]
+    Result := GetItemInterface(Count - 1)
   else
     Result := nil;
 end;
 
-procedure TDebugList<T>.Notify(const Value: T; Action: TCollectionNotification);
+procedure TDebugList<I>.Notify(const Value: I; Action: TCollectionNotification);
 begin
   inherited;
   case Action of
@@ -301,7 +434,15 @@ begin
   end;
 end;
 
-procedure TDebugList<T>.SetView(const Value: TVirtualStringTree);
+function TDebugList<I>.QueryInterface(const IID: TGUID; out Obj): HResult;
+begin
+  if GetInterface(IID, Obj) then
+    Result := 0
+  else
+    Result := E_NOINTERFACE;
+end;
+
+procedure TDebugList<I>.SetView(const Value: TVirtualStringTree);
 begin
   if Assigned(FView) then
     FView.RootNodeCount := 0;
@@ -310,12 +451,22 @@ begin
     FView.RootNodeCount := Count;
 end;
 
-procedure TDebugList<T>.UpdateView;
+procedure TDebugList<I>.UpdateView;
 begin
   if not Assigned(FView) then
     Exit;
   FView.RootNodeCount := Count;
   FView.Invalidate;
+end;
+
+function TDebugList<I>._AddRef: Integer;
+begin
+  Result := 1;
+end;
+
+function TDebugList<I>._Release: Integer;
+begin
+  Result := 0;
 end;
 
 { TWatchList }
@@ -327,15 +478,15 @@ begin
   if (VarName <> '') and (IndexOfName(VarName) = -1) then
   begin
     Watch := TWatchInfo.Create(Self);
-    Watch.Name := VarName;
-    Watch.Active := True;
+    Watch.FName := VarName;
+    Watch.FActive := True;
     Add(Watch);
   end;
 end;
 
 function TWatchList.CountActive: Integer;
 var
-  Watch: TWatchInfo;
+  Watch: IWatchInfo;
 begin
   Result := 0;
   for Watch in Self do
@@ -362,17 +513,17 @@ begin
   Result := Add(Msg);
   case TypeMessage of
     tmError:
-      Msg.TypeMessage := 'Erreur';
+      Msg.FTypeMessage := 'Erreur';
     tmWarning:
-      Msg.TypeMessage := 'Avertissement';
+      Msg.FTypeMessage := 'Avertissement';
     tmHint:
-      Msg.TypeMessage := 'Conseil';
+      Msg.FTypeMessage := 'Conseil';
   end;
-  Msg.ScriptUnitName := Fichier;
-  Msg.Text := Text;
-  Msg.Line := Line;
-  Msg.Char := Char;
-  Msg.Category := cmCompileError;
+  Msg.FScriptUnitName := Fichier;
+  Msg.FText := Text;
+  Msg.FLine := Line;
+  Msg.FChar := Char;
+  Msg.FCategory := cmCompileError;
 end;
 
 function TMessageList.AddInfoMessage(const Fichier, Text: string; Line, Char: Cardinal): Integer;
@@ -381,12 +532,12 @@ var
 begin
   Msg := TMessageInfo.Create(Self);
   Result := Add(Msg);
-  Msg.TypeMessage := 'Information';
-  Msg.ScriptUnitName := Fichier;
-  Msg.Text := Text;
-  Msg.Line := Line;
-  Msg.Char := Char;
-  Msg.Category := cmInfo;
+  Msg.FTypeMessage := 'Information';
+  Msg.FScriptUnitName := Fichier;
+  Msg.FText := Text;
+  Msg.FLine := Line;
+  Msg.FChar := Char;
+  Msg.FCategory := cmInfo;
 end;
 
 function TMessageList.AddRuntimeErrorMessage(const Fichier, Text: string; Line, Char: Cardinal): Integer;
@@ -395,12 +546,12 @@ var
 begin
   Msg := TMessageInfo.Create(Self);
   Result := Add(Msg);
-  Msg.TypeMessage := 'Erreur';
-  Msg.ScriptUnitName := Fichier;
-  Msg.Text := Text;
-  Msg.Line := Line;
-  Msg.Char := Char;
-  Msg.Category := cmRuntimeError;
+  Msg.FTypeMessage := 'Erreur';
+  Msg.FScriptUnitName := Fichier;
+  Msg.FText := Text;
+  Msg.FLine := Line;
+  Msg.FChar := Char;
+  Msg.FCategory := cmRuntimeError;
 end;
 
 { TBreakpointInfo }
@@ -411,10 +562,35 @@ begin
   inherited;
 end;
 
+function TBreakpointInfo.GetActive: Boolean;
+begin
+  Result := FActive;
+end;
+
+function TBreakpointInfo.GetLine: Cardinal;
+begin
+  Result := FLine;
+end;
+
+function TBreakpointInfo.GetScriptUnitName: string;
+begin
+  Result := FScriptUnitName;
+end;
+
 procedure TBreakpointInfo.SetActive(const Value: Boolean);
 begin
   FActive := Value;
   UpdateEditor;
+end;
+
+procedure TBreakpointInfo.SetLine(const Value: Cardinal);
+begin
+  FLine := Value;
+end;
+
+procedure TBreakpointInfo.SetScriptUnitName(const Value: string);
+begin
+  FScriptUnitName := Value;
 end;
 
 procedure AddToTStrings(const Strings: TStringArray; List: TStrings);
@@ -457,7 +633,7 @@ const
   cThreeFourths = 24;
   cHighBits = $F0000000;
 var
-  i: Integer;
+  I: Integer;
   P: PChar;
   Temp: Cardinal;
 begin
@@ -465,14 +641,14 @@ begin
   Result := 0;
   P := PChar(UpperCase(S));
 
-  i := Length(S);
-  while i > 0 do
+  I := Length(S);
+  while I > 0 do
   begin
     Result := (Result shl cOneEight) + Ord(P^);
     Temp := Result and cHighBits;
     if Temp <> 0 then
       Result := (Result xor (Temp shr cThreeFourths)) and (not cHighBits);
-    Dec(i);
+    Dec(I);
     Inc(P);
   end;
 end;
@@ -534,12 +710,12 @@ function BaseTypeCompatible(p1, p2: Integer): Boolean;
     case b of
       btU8, btS8, btU16, btS16, btU32, btS32
 {$IFNDEF PS_NOINT64}
-      , btS64
+        , btS64
 {$ENDIF}
-      :
+        :
         Result := True;
-      else
-        Result := False;
+    else
+      Result := False;
     end;
   end;
 
@@ -548,8 +724,8 @@ function BaseTypeCompatible(p1, p2: Integer): Boolean;
     case b of
       btSingle, btDouble, btCurrency, btExtended:
         Result := True;
-      else
-        Result := False;
+    else
+      Result := False;
     end;
   end;
 
@@ -558,22 +734,28 @@ function BaseTypeCompatible(p1, p2: Integer): Boolean;
     case b of
       btSingle, btDouble, btCurrency, btExtended, btU8, btS8, btU16, btS16, btU32, btS32
 {$IFNDEF PS_NOINT64}
-      , btS64
+        , btS64
 {$ENDIF}
-      :
+        :
         Result := True;
-      else
-        Result := False;
+    else
+      Result := False;
     end;
 
   end;
 
 begin
-  if ((p1 = btProcPtr) and (p2 = p1)) or (p1 = btPointer) or (p2 = btPointer) or ((p1 = btNotificationVariant) or (p1 = btVariant)) or ((p2 = btNotificationVariant) or (p2 = btVariant)) or (IsIntType(p1) and IsIntType(p2)) or (IsRealType(p1) and IsIntRealType(p2)) or (((p1 = btPchar) or (p1 = btString)) and ((p2 = btString) or (p2 = btPchar))) or (((p1 = btPchar) or (p1 = btString)) and (p2 = btChar)) or ((p1 = btChar) and (p2 = btChar)) or ((p1 = btSet) and (p2 = btSet)) or
+  if ((p1 = btProcPtr) and (p2 = p1)) or (p1 = btPointer) or (p2 = btPointer) or ((p1 = btNotificationVariant) or (p1 = btVariant)) or
+    ((p2 = btNotificationVariant) or (p2 = btVariant)) or (IsIntType(p1) and IsIntType(p2)) or (IsRealType(p1) and IsIntRealType(p2)) or
+    (((p1 = btPchar) or (p1 = btString)) and ((p2 = btString) or (p2 = btPchar))) or (((p1 = btPchar) or (p1 = btString)) and (p2 = btChar)) or
+    ((p1 = btChar) and (p2 = btChar)) or ((p1 = btSet) and (p2 = btSet)) or
 {$IFNDEF PS_NOWIDESTRING}
-  ((p1 = btWideChar) and (p2 = btChar)) or ((p1 = btWideChar) and (p2 = btWideChar)) or ((p1 = btWidestring) and (p2 = btChar)) or ((p1 = btWidestring) and (p2 = btWideChar)) or ((p1 = btWidestring) and ((p2 = btString) or (p2 = btPchar))) or ((p1 = btWidestring) and (p2 = btWidestring)) or (((p1 = btPchar) or (p1 = btString)) and (p2 = btWidestring)) or (((p1 = btPchar) or (p1 = btString)) and (p2 = btWideChar)) or (((p1 = btPchar) or (p1 = btString)) and (p2 = btChar)) or
+    ((p1 = btWideChar) and (p2 = btChar)) or ((p1 = btWideChar) and (p2 = btWideChar)) or ((p1 = btWidestring) and (p2 = btChar)) or
+    ((p1 = btWidestring) and (p2 = btWideChar)) or ((p1 = btWidestring) and ((p2 = btString) or (p2 = btPchar))) or ((p1 = btWidestring) and (p2 = btWidestring)
+    ) or (((p1 = btPchar) or (p1 = btString)) and (p2 = btWidestring)) or (((p1 = btPchar) or (p1 = btString)) and (p2 = btWideChar)) or
+    (((p1 = btPchar) or (p1 = btString)) and (p2 = btChar)) or
 {$ENDIF}
-  ((p1 = btRecord) and (p2 = btRecord)) or ((p1 = btEnum) and (p2 = btEnum)) then
+    ((p1 = btRecord) and (p2 = btRecord)) or ((p1 = btEnum) and (p2 = btEnum)) then
     Result := True
   else
     Result := False;
@@ -581,8 +763,9 @@ end;
 
 { TDebugItem }
 
-constructor TDebugItem<T>.Create(List: TDebugList<T>);
+constructor TDebugItem<I>.Create(List: TDebugList<I>);
 begin
+  // inherited;
   Self.List := List;
 end;
 
@@ -596,6 +779,90 @@ begin
     Script.InvalidateLine(Line);
     Script.InvalidateGutterLine(Line);
   end;
+end;
+
+{ TMessageInfo }
+
+function TMessageInfo.GetCategory: TCategoryMessage;
+begin
+  Result := FCategory;
+end;
+
+function TMessageInfo.GetChar: Cardinal;
+begin
+  Result := FChar;
+end;
+
+function TMessageInfo.GetLine: Cardinal;
+begin
+  Result := FLine;
+end;
+
+function TMessageInfo.GetScriptUnitName: string;
+begin
+  Result := FScriptUnitName;
+end;
+
+function TMessageInfo.GetText: string;
+begin
+  Result := FText;
+end;
+
+function TMessageInfo.GetTypeMessage: string;
+begin
+  Result := FTypeMessage;
+end;
+
+procedure TMessageInfo.SetCategory(const Value: TCategoryMessage);
+begin
+  FCategory := Value;
+end;
+
+procedure TMessageInfo.SetChar(const Value: Cardinal);
+begin
+  FChar := Value;
+end;
+
+procedure TMessageInfo.SetLine(const Value: Cardinal);
+begin
+  FLine := Value;
+end;
+
+procedure TMessageInfo.SetScriptUnitName(const Value: string);
+begin
+  FScriptUnitName := Value;
+end;
+
+procedure TMessageInfo.SetText(const Value: string);
+begin
+  FText := Value;
+end;
+
+procedure TMessageInfo.SetTypeMessage(const Value: string);
+begin
+  FTypeMessage := Value;
+end;
+
+{ TWatchInfo }
+
+function TWatchInfo.GetActive: Boolean;
+begin
+  Result := FActive;
+end;
+
+function TWatchInfo.GetName: string;
+begin
+  Result := FName;
+end;
+
+procedure TWatchInfo.SetActive(const Value: Boolean);
+begin
+  FActive := Value;
+end;
+
+procedure TWatchInfo.SetName(const Value: string);
+begin
+  FName := Value;
 end;
 
 end.

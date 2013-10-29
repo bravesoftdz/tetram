@@ -3,8 +3,10 @@ unit UdmPascalScript;
 interface
 
 uses
-  System.SysUtils, Winapi.Windows, Forms, System.Classes, uPSComponent, uPSComponent_COM, uPSComponent_Default, UScriptList, UScriptUtils, LoadComplet, IDHashMap,
-  LoadCompletImport, uPSRuntime, uPSDebugger, uPSI_BdtkRegEx, uPSI_BdtkObjects, uPSI_superobject, UMasterEngine, UScriptEditor, SynCompletionProposal,
+  System.SysUtils, Winapi.Windows, Forms, System.Classes, uPSComponent, uPSComponent_COM, uPSComponent_Default, UScriptList, UScriptUtils, LoadComplet,
+  IDHashMap,
+  LoadCompletImport, uPSRuntime, uPSDebugger, uPSI_BdtkRegEx, uPSI_BdtkObjects, uPSI_superobject, UMasterEngine, UScriptEngineIntf, UScriptEditor,
+  SynCompletionProposal,
   SynEditHighlighter, SynHighlighterPas;
 
 type
@@ -45,7 +47,9 @@ type
 
     procedure SetMasterEngine(Value: IMasterEngine);
     function GetMasterEngine: IMasterEngine;
+
     function GetNewEditor(AOwner: TComponent): TScriptEditor;
+    function isTokenIdentifier(TokenType: Integer): Boolean;
 
     procedure SetRunToCursorFile(const Value: string);
     function GetRunning: Boolean;
@@ -67,7 +71,7 @@ type
     constructor Create(MasterEngine: IMasterEngine);
     destructor Destroy; override;
 
-    function Compile(Script: TScript; out Msg: TMessageInfo): Boolean; overload;
+    function Compile(Script: TScript; out Msg: IMessageInfo): Boolean; overload;
     function Execute: Boolean;
     function GetSpecialMainUnitName: string;
 
@@ -225,7 +229,7 @@ end;
 
 function TdmPascalScript.GetDebugMode: TDebugMode;
 begin
-  Result := UMasterEngine.TDebugMode(PSScriptDebugger1.Exec.DebugMode);
+  Result := UScriptEngineIntf.TDebugMode(PSScriptDebugger1.Exec.DebugMode);
 end;
 
 function TdmPascalScript.GetNewEditor(AOwner: TComponent): TScriptEditor;
@@ -291,7 +295,8 @@ var
   i: Integer;
 begin
   for i := 0 to Pred(FListTypesImages.Count) do
-    PSScriptDebugger1.Comp.AddConstantN('cti' + AnsiStrings.StringReplace(AnsiString(SansAccents(FListTypesImages.ValueFromIndex[i])), ' ', '_', [rfReplaceAll]), 'integer').SetInt(StrToInt(AnsiString(FListTypesImages.Names[i])));
+    PSScriptDebugger1.Comp.AddConstantN('cti' + AnsiStrings.StringReplace(AnsiString(SansAccents(FListTypesImages.ValueFromIndex[i])), ' ', '_', [rfReplaceAll]
+      ), 'integer').SetInt(StrToInt(AnsiString(FListTypesImages.Names[i])));
 
   PSScriptDebugger1.AddMethod(Self, @TdmPascalScript.WriteToConsole, 'procedure WriteToConsole(const Chaine: string);');
   PSScriptDebugger1.AddMethod(Self, @TdmPascalScript.WriteToFile, 'procedure WriteToFile(const Chaine, FileName: string);');
@@ -303,7 +308,8 @@ begin
   PSScriptDebugger1.AddFunction(@GetPageWithHeaders, 'function GetPageWithHeaders(const url: string; UTF8: Boolean): string;');
   PSScriptDebugger1.Comp.AddTypeS('RAttachement', 'record Nom, Valeur: string; IsFichier: Boolean; end');
   PSScriptDebugger1.AddFunction(@PostPage, 'function PostPage(const url: string; const Pieces: array of RAttachement; UTF8: Boolean): string;');
-  PSScriptDebugger1.AddFunction(@PostPageWithHeaders, 'function PostPageWithHeaders(const url: string; const Pieces: array of RAttachement; UTF8: Boolean): string;');
+  PSScriptDebugger1.AddFunction(@PostPageWithHeaders,
+    'function PostPageWithHeaders(const url: string; const Pieces: array of RAttachement; UTF8: Boolean): string;');
   PSScriptDebugger1.AddFunction(@findInfo, 'function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;');
   PSScriptDebugger1.AddFunction(@MakeAuteur, 'function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteur;');
   PSScriptDebugger1.AddFunction(@AskSearchEntry, 'function AskSearchEntry(const Labels: array of string; var Search: string; var Index: Integer): Boolean');
@@ -328,7 +334,8 @@ begin
 
   PSScriptDebugger1.Comp.AddTypeS('TReplaceFlag', '(rfReplaceAll, rfIgnoreCase)');
   PSScriptDebugger1.Comp.AddTypeS('TReplaceFlags', 'set of TReplaceFlag');
-  PSScriptDebugger1.AddFunction(@System.SysUtils.StringReplace, 'function StringReplace(const S, OldPattern, NewPattern: string; Flags: TReplaceFlags): string;');
+  PSScriptDebugger1.AddFunction(@System.SysUtils.StringReplace,
+    'function StringReplace(const S, OldPattern, NewPattern: string; Flags: TReplaceFlags): string;');
   PSScriptDebugger1.AddFunction(@ScriptStrToFloatDef, 'function StrToFloatDef(const S: string; const Default: Extended): Extended;');
 
   PSScriptDebugger1.AddRegisteredVariable('AlbumToImport', 'TAlbumComplet');
@@ -609,12 +616,17 @@ begin
   Result := GetVariableValue(VarName);
 end;
 
+function TdmPascalScript.isTokenIdentifier(TokenType: Integer): Boolean;
+begin
+  Result := TtkTokenKind(TokenType) = tkIdentifier;
+end;
+
 procedure TdmPascalScript.AssignScript(Script: TStrings);
 begin
   PSScriptDebugger1.Script.Assign(Script);
 end;
 
-function TdmPascalScript.Compile(Script: TScript; out Msg: TMessageInfo): Boolean;
+function TdmPascalScript.Compile(Script: TScript; out Msg: IMessageInfo): Boolean;
 var
   i: LongInt;
 begin
@@ -632,7 +644,8 @@ begin
         FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(string(ModuleName), string(ShortMessageToString), tmHint, Row, Col)
       else if ClassType = TPSPascalCompilerError then
       begin
-        Msg := FMasterEngine.DebugPlugin.Messages[FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(string(ModuleName), string(ShortMessageToString), tmError, Row, Col)];
+        Msg := FMasterEngine.DebugPlugin.Messages[FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(string(ModuleName), string(ShortMessageToString),
+          tmError, Row, Col)];
       end
       else
         FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(string(ModuleName), string(ShortMessageToString), tmUnknown, Row, Col);
@@ -652,23 +665,28 @@ begin
   begin
     ErrorLine := PSScriptDebugger1.ExecErrorRow;
     ErrorFile := string(PSScriptDebugger1.ExecErrorFileName);
-    FMasterEngine.DebugPlugin.Messages.AddRuntimeErrorMessage(ErrorFile, Format('%s (Bytecode %d:%d)', [PSScriptDebugger1.ExecErrorToString, PSScriptDebugger1.ExecErrorProcNo, PSScriptDebugger1.ExecErrorByteCodePosition]), PSScriptDebugger1.ExecErrorRow, PSScriptDebugger1.ExecErrorCol);
+    FMasterEngine.DebugPlugin.Messages.AddRuntimeErrorMessage(ErrorFile,
+      Format('%s (Bytecode %d:%d)', [PSScriptDebugger1.ExecErrorToString, PSScriptDebugger1.ExecErrorProcNo, PSScriptDebugger1.ExecErrorByteCodePosition]),
+      PSScriptDebugger1.ExecErrorRow, PSScriptDebugger1.ExecErrorCol);
     Result := False;
   end;
 end;
 
 procedure TdmPascalScript.ResetBreakpoints;
 var
-  bp: TBreakpointInfo;
+  i: Integer;
+  bp: IBreakpointInfo;
 begin
   PSScriptDebugger1.ClearBreakPoints;
   if PSScriptDebugger1.UseDebugInfo then
     for bp in FMasterEngine.DebugPlugin.Breakpoints do
+    begin
       if bp.Active then
         if bp.ScriptUnitName = string(PSScriptDebugger1.MainFileName) then
           PSScriptDebugger1.SetBreakPoint('', bp.Line)
         else
           PSScriptDebugger1.SetBreakPoint(AnsiString(bp.ScriptUnitName), bp.Line);
+    end;
 end;
 
 { TPascalScriptEngineFactory }

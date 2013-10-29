@@ -4,113 +4,9 @@ interface
 
 uses
   System.SysUtils, System.Classes, UScriptList, System.Generics.Collections,
-  UScriptUtils, LoadComplet, UScriptEditor;
+  UScriptUtils, LoadComplet, UScriptEditor, UScriptEngineIntf;
 
 type
-  TDebugMode = (dmRun, dmStepOver, dmStepInto, dmPaused);
-  TLineNumbers = array of Integer;
-
-  IEngineInterface = interface
-    ['{640DAE0F-93CC-40A1-922C-E884D5F0F19C}']
-    procedure AssignScript(Script: TStrings);
-
-    procedure ResetBreakpoints;
-
-    function Compile(Script: TScript; out Msg: TMessageInfo): Boolean;
-    function Run: Boolean;
-
-    function GetRunning: Boolean;
-    property Running: Boolean read GetRunning;
-
-    function GetSpecialMainUnitName: string;
-
-    function GetDebugMode: TDebugMode;
-    property DebugMode: TDebugMode read GetDebugMode;
-
-    function GetActiveLine: Cardinal;
-    procedure SetActiveLine(const Value: Cardinal);
-    property ActiveLine: Cardinal read GetActiveLine write SetActiveLine;
-
-    function GetActiveFile: string;
-    procedure SetActiveFile(const Value: string);
-    property ActiveFile: string read GetActiveFile write SetActiveFile;
-
-    function GetErrorLine: Cardinal;
-    procedure SetErrorLine(const Value: Cardinal);
-    property ErrorLine: Cardinal read GetErrorLine write SetErrorLine;
-
-    function GetErrorFile: string;
-    procedure SetErrorFile(const Value: string);
-    property ErrorFile: string read GetErrorFile write SetErrorFile;
-
-    function GetUseDebugInfo: Boolean;
-    procedure SetUseDebugInfo(Value: Boolean);
-    property UseDebugInfo: Boolean read GetUseDebugInfo write SetUseDebugInfo;
-
-    function GetExecutableLines(const AUnitName: string): TLineNumbers;
-    function TranslatePosition(out Proc, Position: Cardinal; Row: Cardinal; const Fn: string): Boolean;
-    function GetVariableValue(const VarName: string): string;
-    function GetWatchValue(const VarName: string): string;
-
-    procedure Pause;
-    procedure StepInto;
-    procedure StepOver;
-    procedure Resume;
-    procedure Stop;
-
-    procedure GetUncompiledCode(Lines: TStrings);
-    procedure setRunTo(Position: Integer; const Filename: string);
-
-    function GetNewEditor(AOwner: TComponent): TScriptEditor;
-  end;
-
-  TAfterExecuteEvent = procedure of object;
-  TBreakPointEvent = procedure of object;
-
-  IMasterEngine = interface
-    ['{C093B526-5485-4059-8516-5CBF1A3808AE}']
-    function GetTypeEngine: TScriptEngine;
-    procedure SetTypeEngine(const Value: TScriptEngine);
-    property TypeEngine: TScriptEngine read GetTypeEngine write SetTypeEngine;
-
-    function GetEngine: IEngineInterface;
-    property Engine: IEngineInterface read GetEngine;
-
-    function GetAlbumToUpdate: Boolean;
-    property AlbumToUpdate: Boolean read GetAlbumToUpdate;
-
-    function GetAlbumToImport: TAlbumComplet;
-    procedure SetAlbumToImport(const Value: TAlbumComplet);
-    property AlbumToImport: TAlbumComplet read GetAlbumToImport write SetAlbumToImport;
-
-    function GetDebugPlugin: TDebugInfos;
-    property DebugPlugin: TDebugInfos read GetDebugPlugin;
-
-    function GetScriptList: TScriptList;
-    property ScriptList: TScriptList read GetScriptList;
-
-    procedure SelectProjectScript(ProjectScript: TScript);
-    function GetProjectScript: TScript;
-    property ProjectScript: TScript read GetProjectScript;
-
-    function GetConsole: TStrings;
-    procedure SetConsole(const Value: TStrings);
-    property Console: TStrings read GetConsole write SetConsole;
-
-    function GetOnAfterExecute: TAfterExecuteEvent;
-    procedure SetOnAfterExecute(const Value: TAfterExecuteEvent);
-    property OnAfterExecute: TAfterExecuteEvent read GetOnAfterExecute write SetOnAfterExecute;
-    procedure AfterExecute;
-
-    procedure ToggleBreakPoint(const Script: string; Line: Cardinal; Keep: Boolean);
-
-    function GetOnBreakPoint: TBreakPointEvent;
-    procedure SetOnBreakPoint(const Value: TBreakPointEvent);
-    property OnBreakPoint: TBreakPointEvent read GetOnBreakPoint write SetOnBreakPoint;
-
-    procedure WriteToConsole(const Chaine: string);
-  end;
-
   TEngineFactory = class
   public
     constructor Create(MasterEngine: IMasterEngine); virtual; abstract;
@@ -130,9 +26,10 @@ type
     FInternalAlbumToImport, FAlbumToImport: TAlbumComplet;
     FConsole: TStrings;
     FOnAfterExecute: TAfterExecuteEvent;
+    FCompiled: Boolean;
     function GetAlbumToImport: TAlbumComplet;
     procedure SetAlbumToImport(const Value: TAlbumComplet);
-    function GetDebugPlugin: TDebugInfos;
+    function GetDebugPlugin: IDebugInfos;
     function GetScriptList: TScriptList;
     function GetEngine: IEngineInterface;
     function GetTypeEngine: TScriptEngine;
@@ -142,11 +39,14 @@ type
     function GetOnAfterExecute: TAfterExecuteEvent;
     procedure SetOnAfterExecute(const Value: TAfterExecuteEvent);
     procedure AfterExecute;
-    procedure ToggleBreakPoint(const Script: string; Line: Cardinal; Keep: Boolean);
+    procedure ToggleBreakPoint(const UnitName: string; Line: Cardinal; Keep: Boolean);
     function GetOnBreakPoint: TBreakPointEvent;
     procedure SetOnBreakPoint(const Value: TBreakPointEvent);
     procedure SelectProjectScript(ProjectScript: TScript);
     function GetProjectScript: TScript;
+    procedure SetCompiled(const Value: Boolean);
+    function GetCompiled: Boolean;
+    function GetInternalUnitName(Script: TScript): string;
   public
     constructor Create;
     destructor Destroy; override;
@@ -180,6 +80,11 @@ end;
 function TMasterEngine.GetAlbumToUpdate: Boolean;
 begin
   Result := FAlbumToImport <> FInternalAlbumToImport;
+end;
+
+function TMasterEngine.GetCompiled: Boolean;
+begin
+  Result := FCompiled;
 end;
 
 function TMasterEngine.GetConsole: TStrings;
@@ -220,7 +125,7 @@ begin
   Result := FInternalAlbumToImport;
 end;
 
-function TMasterEngine.GetDebugPlugin: TDebugInfos;
+function TMasterEngine.GetDebugPlugin: IDebugInfos;
 begin
   Result := FDebugPlugin;
 end;
@@ -228,6 +133,13 @@ end;
 function TMasterEngine.GetEngine: IEngineInterface;
 begin
   Result := FEngine;
+end;
+
+function TMasterEngine.GetInternalUnitName(Script: TScript): string;
+begin
+  Result := Script.ScriptUnitName;
+  if Result = GetProjectScript.ScriptUnitName then
+    Result := GetEngine.GetSpecialMainUnitName;
 end;
 
 function TMasterEngine.GetOnAfterExecute: TAfterExecuteEvent;
@@ -270,6 +182,11 @@ begin
   end;
 end;
 
+procedure TMasterEngine.SetCompiled(const Value: Boolean);
+begin
+  FCompiled := Value;
+end;
+
 procedure TMasterEngine.SetConsole(const Value: TStrings);
 begin
   FConsole := Value;
@@ -302,17 +219,17 @@ begin
     FEngine := nil;
 end;
 
-procedure TMasterEngine.ToggleBreakPoint(const Script: string; Line: Cardinal; Keep: Boolean);
+procedure TMasterEngine.ToggleBreakPoint(const UnitName: string; Line: Cardinal; Keep: Boolean);
 var
   i: Integer;
 begin
-  i := FDebugPlugin.Breakpoints.IndexOf(Script, Line);
+  i := FDebugPlugin.Breakpoints.IndexOf(UnitName, Line);
   if i = -1 then // nouveau point d'arrêt
-    FDebugPlugin.Breakpoints.AddBreakpoint(Script, Line)
+    FDebugPlugin.Breakpoints.AddBreakpoint(UnitName, Line)
   else if Keep then // changement d'état du point d'arrêt
     FDebugPlugin.Breakpoints[i].Active := not FDebugPlugin.Breakpoints[i].Active
   else // suppression du point d'arrêt
-    FDebugPlugin.Breakpoints.delete(i);
+    FDebugPlugin.Breakpoints.Delete(i);
   if Assigned(FEngine) and FEngine.Running then
     FEngine.ResetBreakpoints;
 end;

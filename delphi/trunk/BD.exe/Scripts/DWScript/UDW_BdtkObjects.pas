@@ -3,7 +3,7 @@ unit UDW_BdtkObjects;
 interface
 
 uses
-  System.SysUtils, System.Classes, UDWUnit, dwsComp, dwsExprs, dialogs, UMasterEngine;
+  System.SysUtils, System.Classes, UDWUnit, dwsComp, dwsExprs, dialogs, UScriptEngineIntf;
 
 type
   TDW_BdtkObjectsUnit = class(TDW_Unit)
