@@ -6,7 +6,7 @@ uses
   System.SysUtils, Winapi.Windows, Forms, System.Classes, UScriptList, Variants,
   UScriptUtils, LoadComplet, LoadCompletImport, dwsComp, dwsDebugger, dwsCompiler, dwsExprs, dwsFunctions,
   UMasterEngine, UScriptEngineIntf, UScriptEditor, SynHighlighterDWS, UDW_BdtkRegEx, UDW_BdtkObjects, dwsClassesLibModule, UDW_CommonFunctions,
-  dwsErrors;
+  dwsErrors, UDWUnit, Vcl.Graphics, dwsJSONConnector;
 
 type
   TDWScriptEngineFactory = class(TEngineFactory)
@@ -14,6 +14,7 @@ type
     FMasterEngine: IMasterEngine;
   public
     constructor Create(MasterEngine: IMasterEngine); override;
+    destructor Destroy; override;
     function GetInstance: IEngineInterface; override;
   end;
 
@@ -24,14 +25,15 @@ type
     FMasterEngine: IMasterEngine;
     DWScript: TDelphiWebScript;
     DWDebugger: TdwsDebugger;
-    dwsUnit: TdwsUnit;
+    dwsUnit: TDW_Unit;
     bdRegEx: TDW_BdtkRegExUnit;
     bdObjects: TDW_BdtkObjectsUnit;
     dwsClassesLib: TdwsClassesLib;
+    dwsJSONLib: TdwsJSONLibModule;
     bdCommonFunctions: TDW_CommonFunctionsUnit;
     SynDWSSyn: TSynDWSSyn;
     FActiveLine, FRunToCursor, FErrorLine: Cardinal;
-    FActiveFile, FRunToCursorFile, FErrorFile: string;
+    FActiveUnitName, FRunToCursorFile, FErrorUnitName: string;
     FRunningScript: TScript;
     FListTypesImages: TStringList;
     FUseDebugInfo: Boolean;
@@ -67,14 +69,14 @@ type
     function GetActiveLine: Cardinal;
     procedure SetActiveLine(const Value: Cardinal);
 
-    function GetActiveFile: string;
-    procedure SetActiveFile(const Value: string);
+    function GetActiveUnitName: string;
+    procedure SetActiveUnitName(const Value: string);
 
     function GetErrorLine: Cardinal;
     procedure SetErrorLine(const Value: Cardinal);
 
-    function GetErrorFile: string;
-    procedure SetErrorFile(const Value: string);
+    function GetErrorUnitName: string;
+    procedure SetErrorUnitName(const Value: string);
 
     function GetUseDebugInfo: Boolean;
     procedure SetUseDebugInfo(Value: Boolean);
@@ -83,6 +85,8 @@ type
     function TranslatePosition(out Proc, Position: Cardinal; Row: Cardinal; const Fn: string): Boolean;
     function GetVariableValue(const VarName: string): string;
     function GetWatchValue(const VarName: string): string;
+    function GetCompletionProposal(Proposal, Code: TStrings; CurrentEditor: TScriptEditor): Boolean;
+    function GetParametersProposal(Proposal, Code: TStrings; CurrentEditor: TScriptEditor; out BestProposal: Integer): Boolean;
 
     procedure Pause;
     procedure StepInto;
@@ -99,7 +103,7 @@ type
 
 implementation
 
-uses UDWScriptEditor, Procedures, dwsSymbols;
+uses UDWScriptEditor, Procedures, dwsSymbols, dwsSuggestions, dwsUtils;
 
 { TDWScriptEngineFactory }
 
@@ -107,6 +111,12 @@ constructor TDWScriptEngineFactory.Create(MasterEngine: IMasterEngine);
 begin
   inherited;
   FMasterEngine := MasterEngine;
+end;
+
+destructor TDWScriptEngineFactory.Destroy;
+begin
+  FMasterEngine := nil;
+  inherited;
 end;
 
 function TDWScriptEngineFactory.GetInstance: IEngineInterface;
@@ -133,7 +143,7 @@ var
 begin
   SL := TStringList.Create;
   try
-    if not FMasterEngine.ScriptList.GetScriptLines(scriptName, SL) then
+    if not FMasterEngine.GetScriptLines(scriptName, SL) then
       raise Exception.CreateFmt('Script file name not found "%s"', [scriptName]);
 
     scriptSource := SL.Text;
@@ -148,7 +158,7 @@ var
 begin
   SL := TStringList.Create;
   try
-    if not FMasterEngine.ScriptList.GetScriptLines(unitName, SL) then
+    if not FMasterEngine.GetScriptLines(unitName, SL) then
       raise Exception.CreateFmt('Unit file name not found "%s"', [unitName]);
 
     unitSource := SL.Text;
@@ -216,7 +226,7 @@ begin
   FRunningScript := Script;
   SL := TStringList.Create;
   try
-    Script.GetScriptLines(SL);
+    FMasterEngine.GetScriptLines(Script, SL);
     FScript := SL.Text;
   finally
     SL.Free;
@@ -251,58 +261,12 @@ begin
   bdObjects := TDW_BdtkObjectsUnit.Create(FMasterEngine);
   bdObjects.OnAfterInitUnitTable := AfterInitbdObjects;
   bdCommonFunctions := TDW_CommonFunctionsUnit.Create(FMasterEngine);
-  dwsUnit := TdwsUnit.Create(nil);
+  dwsJSONLib:= TdwsJSONLibModule.Create(nil);
+  dwsUnit := TDW_Unit.Create(FMasterEngine);
   dwsUnit.unitName := 'Options';
-  with dwsUnit.Functions.Add do
-  begin
-    Name := 'GetOptionValue';
-    ResultType := 'String';
-    with Parameters.Add do
-    begin
-      Name := 'OptionName';
-      DataType := 'String';
-    end;
-    with Parameters.Add do
-    begin
-      Name := 'Default';
-      DataType := 'String';
-    end;
-    OnEval := dwsUnitFunctionsGetOptionValueEval;
-  end;
-
-  with dwsUnit.Functions.Add do
-  begin
-    Name := 'GetOptionValueIndex';
-    ResultType := 'Integer';
-    with Parameters.Add do
-    begin
-      Name := 'OptionName';
-      DataType := 'String';
-    end;
-    with Parameters.Add do
-    begin
-      Name := 'Default';
-      DataType := 'Integer';
-    end;
-    OnEval := dwsUnitFunctionsGetOptionValueIndexEval;
-  end;
-
-  with dwsUnit.Functions.Add do
-  begin
-    Name := 'CheckOptionValue';
-    ResultType := 'Boolean';
-    with Parameters.Add do
-    begin
-      Name := 'OptionName';
-      DataType := 'String';
-    end;
-    with Parameters.Add do
-    begin
-      Name := 'Default';
-      DataType := 'String';
-    end;
-    OnEval := dwsUnitFunctionsCheckOptionValueEval;
-  end;
+  dwsUnit.RegisterFunction('GetOptionValue', 'String', ['OptionName', 'String', 'Default', 'String'], dwsUnitFunctionsGetOptionValueEval);
+  dwsUnit.RegisterFunction('GetOptionValueIndex', 'Integer', ['OptionName', 'String', 'Default', 'Integer'], dwsUnitFunctionsGetOptionValueIndexEval);
+  dwsUnit.RegisterFunction('CheckOptionValue', 'Boolean', ['OptionName', 'String', 'Default', 'String'], dwsUnitFunctionsCheckOptionValueEval);
 
   DWDebugger := TdwsDebugger.Create(nil);
   DWDebugger.OnStateChanged := DebuggerStateChanged;
@@ -313,6 +277,7 @@ begin
   DWScript.AddUnit(bdRegEx);
   DWScript.AddUnit(bdObjects);
   DWScript.AddUnit(bdCommonFunctions);
+  dwsJSONLib.Script := DWScript;
   DWScript.Config.CompilerOptions := DWScript.Config.CompilerOptions + [coSymbolDictionary];
   DWScript.Config.OnNeedUnit := Self.dwsOnNeedUnitEvent;
   DWScript.Config.OnInclude := Self.OnIncludeEvent;
@@ -329,7 +294,7 @@ begin
       ;
     dsDebugSuspended:
       begin
-        SetActiveFile(TdwsDebugger(Sender).CurrentScriptPos.SourceFile.Name);
+        SetActiveUnitName(TdwsDebugger(Sender).CurrentScriptPos.SourceFile.Name);
         SetActiveLine(TdwsDebugger(Sender).CurrentScriptPos.Line);
         FMasterEngine.OnBreakPoint;
       end;
@@ -345,10 +310,11 @@ begin
   FProgram := nil;
   FMasterEngine := nil;
   SynDWSSyn.Free;
-  DWScript.Free;
   DWDebugger.Watches.Clean;
   DWDebugger.Breakpoints.Clean;
   DWDebugger.Free;
+  DWScript.Free;
+  dwsJSONLib.Free;
   bdCommonFunctions.Free;
   bdRegEx.Free;
   bdObjects.Free;
@@ -358,9 +324,90 @@ begin
   inherited;
 end;
 
-function TdmDWScript.GetActiveFile: string;
+function TdmDWScript.GetActiveUnitName: string;
 begin
-  Result := FActiveFile;
+  Result := FActiveUnitName;
+end;
+
+function TdmDWScript.GetCompletionProposal(Proposal, Code: TStrings; CurrentEditor: TScriptEditor): Boolean;
+var
+  Msg: IMessageInfo;
+  SourceFile: TSourceFile;
+  ScriptPos: TScriptPos;
+  Suggestions: IdwsSuggestions;
+  SuggestionIndex: Integer;
+  Item, AddOn: string;
+begin
+  Result := False;
+
+  // get script program
+  if not Compile(FMasterEngine.ProjectScript, Msg) then
+    Exit;
+
+  // ok, get the compiled "program" from DWS
+  SourceFile := FProgram.SourceList.MainScript.SourceFile;
+  ScriptPos := TScriptPos.Create(SourceFile, CurrentEditor.CaretY, CurrentEditor.CaretX);
+  Suggestions := TDWSSuggestions.Create(FProgram, ScriptPos, [soNoReservedWords]);
+
+  // now populate the suggestion box
+  for SuggestionIndex := 0 to Suggestions.Count - 1 do
+  begin
+    // discard empty suggestions
+    if Suggestions.Caption[SuggestionIndex] = '' then
+      Continue;
+
+    with CurrentEditor.Highlighter.KeywordAttribute do
+      Item := '\color{' + ColorToString(Foreground) + '}';
+
+    case Suggestions.Category[SuggestionIndex] of
+      scUnit:
+        Item := Item + 'unit';
+      scType:
+        Item := Item + 'type';
+      scClass:
+        Item := Item + 'class';
+      scRecord:
+        Item := Item + 'record';
+      scInterface:
+        Item := Item + 'interface';
+      scFunction:
+        Item := Item + 'function';
+      scProcedure:
+        Item := Item + 'procedure';
+      scMethod:
+        Item := Item + 'method';
+      scConstructor:
+        Item := Item + 'constructor';
+      scDestructor:
+        Item := Item + 'destructor';
+      scProperty:
+        Item := Item + 'property';
+      scEnum:
+        Item := Item + 'enum';
+      scElement:
+        Item := Item + 'element';
+      scParameter:
+        Item := Item + 'param';
+      scVariable:
+        Item := Item + 'var';
+      scConst:
+        Item := Item + 'const';
+      scReservedWord:
+        Item := Item + 'reserved';
+    end;
+
+    Item := Item + ' \column{}';
+    with CurrentEditor.Highlighter.IdentifierAttribute do
+      Item := Item + '\color{' + ColorToString(Foreground) + '}';
+    Item := Item + Suggestions.Code[SuggestionIndex];
+    AddOn := Suggestions.Caption[SuggestionIndex];
+    Delete(AddOn, 1, Length(Suggestions.Code[SuggestionIndex]));
+    Item := Item + '\style{-B}' + AddOn;
+    Proposal.Add(Item);
+    Code.Add(Suggestions.Code[SuggestionIndex]);
+  end;
+
+  Result := True;
 end;
 
 function TdmDWScript.GetActiveLine: Cardinal;
@@ -376,9 +423,9 @@ begin
     Result := dmRun;
 end;
 
-function TdmDWScript.GetErrorFile: string;
+function TdmDWScript.GetErrorUnitName: string;
 begin
-  Result := FErrorFile;
+  Result := FErrorUnitName;
 end;
 
 function TdmDWScript.GetErrorLine: Cardinal;
@@ -390,6 +437,189 @@ function TdmDWScript.GetNewEditor(AOwner: TComponent): TScriptEditor;
 begin
   Result := TDWScriptEditor.Create(AOwner);
   Result.Highlighter := SynDWSSyn;
+end;
+
+function TdmDWScript.GetParametersProposal(Proposal, Code: TStrings; CurrentEditor: TScriptEditor; out BestProposal: Integer): Boolean;
+
+  procedure GetParameterInfosForCursor(const AProgram: IdwsProgram; Col, Line: Integer; var ParameterInfos: TStrings; InfoPosition: Integer = 0);
+
+    procedure ParamsToInfo(const AParams: TParamsSymbolTable);
+    var
+      Y: Integer;
+      ParamsStr: string;
+    begin
+      ParamsStr := '';
+      if (AParams <> nil) and (AParams.Count > 0) then
+      begin
+        if InfoPosition >= AParams.Count then
+          Exit;
+
+        ParamsStr := '"' + AParams[0].Description + ';"';
+        for Y := 1 to AParams.Count - 1 do
+          ParamsStr := ParamsStr + ',"' + AParams[Y].Description + ';"';
+      end
+      else if InfoPosition > 0 then
+        Exit;
+
+      if (ParameterInfos.IndexOf(ParamsStr) < 0) then
+        ParameterInfos.Add(ParamsStr);
+    end;
+
+  var
+    Overloads: TFuncSymbolList;
+
+    procedure CollectMethodOverloads(methSym: TMethodSymbol);
+    var
+      Member: TSymbol;
+      Struct: TCompositeTypeSymbol;
+      LastOverloaded: TMethodSymbol;
+    begin
+      LastOverloaded := methSym;
+      Struct := methSym.StructSymbol;
+      repeat
+        for Member in Struct.Members do
+        begin
+          if not UnicodeSameText(Member.Name, methSym.Name) then
+            Continue;
+          if not(Member is TMethodSymbol) then
+            Continue;
+
+          LastOverloaded := TMethodSymbol(Member);
+          if not Overloads.ContainsChildMethodOf(LastOverloaded) then
+            Overloads.Add(LastOverloaded);
+        end;
+
+        Struct := Struct.Parent;
+      until (Struct = nil) or not LastOverloaded.IsOverloaded;
+    end;
+
+  var
+    ItemIndex: Integer;
+    FuncSymbol: TFuncSymbol;
+
+    SymbolDictionary: TdwsSymbolDictionary;
+    Symbol, TestSymbol: TSymbol;
+  begin
+    SymbolDictionary := AProgram.SymbolDictionary;
+    Symbol := SymbolDictionary.FindSymbolAtPosition(Col, Line, GetSpecialMainUnitName);
+
+    if (Symbol is TSourceMethodSymbol) then
+    begin
+      Overloads := TFuncSymbolList.Create;
+      try
+        CollectMethodOverloads(TSourceMethodSymbol(Symbol));
+        for ItemIndex := 0 to Overloads.Count - 1 do
+        begin
+          FuncSymbol := Overloads[ItemIndex];
+          ParamsToInfo(FuncSymbol.Params);
+        end;
+      finally
+        Overloads.Free;
+      end;
+    end
+    else if (Symbol is TFuncSymbol) then
+    begin
+      ParamsToInfo(TFuncSymbol(Symbol).Params);
+
+      if TFuncSymbol(Symbol).IsOverloaded then
+      begin
+        for ItemIndex := 0 to SymbolDictionary.Count - 1 do
+        begin
+          TestSymbol := SymbolDictionary.Items[ItemIndex].Symbol;
+
+          if (TestSymbol.ClassType = Symbol.ClassType) and SameText(TFuncSymbol(TestSymbol).Name, TFuncSymbol(Symbol).Name) and (TestSymbol <> Symbol) then
+            ParamsToInfo(TFuncSymbol(TestSymbol).Params);
+        end;
+      end
+    end;
+
+    // check if no parameters at all is an option, if so: replace and move to top
+    ItemIndex := ParameterInfos.IndexOf('');
+    if ItemIndex >= 0 then
+    begin
+      ParameterInfos.Delete(ItemIndex);
+      ParameterInfos.Insert(0, '"<pas de paramètres requis>"');
+    end;
+  end;
+
+var
+  LineText: string;
+  LocLine: string;
+  TmpX: Integer;
+  StartX, ParenCounter: Integer;
+  Msg: IMessageInfo;
+begin
+  Result := False;
+
+  // get script program
+  if not Compile(FMasterEngine.ProjectScript, Msg) then
+    Exit;
+
+  // get current line
+  LineText := CurrentEditor.LineText;
+
+  with CurrentEditor do
+  begin
+    LocLine := LineText;
+
+    // go back from the cursor and find the first open paren
+    TmpX := CaretX;
+    if TmpX > Length(LocLine) then
+      TmpX := Length(LocLine)
+    else
+      Dec(TmpX);
+    BestProposal := 0;
+
+    while (TmpX > 0) and not Result do
+    begin
+      if LocLine[TmpX] = ',' then
+      begin
+        Inc(BestProposal);
+        Dec(TmpX);
+      end
+      else if LocLine[TmpX] = ')' then
+      begin
+        // we found a close, go till it's opening paren
+        ParenCounter := 1;
+        Dec(TmpX);
+        while (TmpX > 0) and (ParenCounter > 0) do
+        begin
+          if LocLine[TmpX] = ')' then
+            Inc(ParenCounter)
+          else if LocLine[TmpX] = '(' then
+            Dec(ParenCounter);
+          Dec(TmpX);
+        end;
+        if TmpX > 0 then
+          Dec(TmpX); // eat the open paren
+      end
+      else if LocLine[TmpX] = '(' then
+      begin
+        // we have a valid open paren, lets see what the word before it is
+        StartX := TmpX;
+        while (TmpX > 0) and not IsIdentChar(LocLine[TmpX]) do
+          Dec(TmpX);
+        if TmpX > 0 then
+        begin
+          while (TmpX > 0) and IsIdentChar(LocLine[TmpX]) do
+            Dec(TmpX);
+          Inc(TmpX);
+
+          GetParameterInfosForCursor(FProgram, TmpX, CurrentEditor.CaretY, Proposal, BestProposal);
+
+          Result := Proposal.Count > 0;
+
+          if not Result then
+          begin
+            TmpX := StartX;
+            Dec(TmpX);
+          end;
+        end;
+      end
+      else
+        Dec(TmpX)
+    end;
+  end;
 end;
 
 function TdmDWScript.GetExecutableLines(const AUnitName: string): TLineNumbers;
@@ -408,8 +638,7 @@ var
 begin
   SetLength(Result, 0);
 
-  Compile(False, Msg);
-  if not Assigned(FProgram) then
+  if not Compile(False, Msg) then
     Exit;
 
   Breakpointables := TdwsBreakpointableLines.Create(FProgram);
@@ -518,13 +747,13 @@ begin
   if not Result then
   begin
     FErrorLine := exec.Msgs.LastMessagePos.Line;
-    FErrorFile := CorrectScriptName(exec.Msgs.LastMessagePos.SourceFile.Name);
+    FErrorUnitName := CorrectScriptName(exec.Msgs.LastMessagePos.SourceFile.Name);
   end;
 end;
 
-procedure TdmDWScript.SetActiveFile(const Value: string);
+procedure TdmDWScript.SetActiveUnitName(const Value: string);
 begin
-  FActiveFile := CorrectScriptName(Value);
+  FActiveUnitName := CorrectScriptName(Value);
 end;
 
 procedure TdmDWScript.SetActiveLine(const Value: Cardinal);
@@ -532,9 +761,9 @@ begin
   FActiveLine := Value;
 end;
 
-procedure TdmDWScript.SetErrorFile(const Value: string);
+procedure TdmDWScript.SetErrorUnitName(const Value: string);
 begin
-  FErrorFile := CorrectScriptName(Value);
+  FErrorUnitName := CorrectScriptName(Value);
 end;
 
 procedure TdmDWScript.SetErrorLine(const Value: Cardinal);

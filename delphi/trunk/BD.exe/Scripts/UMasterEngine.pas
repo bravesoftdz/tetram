@@ -3,7 +3,7 @@ unit UMasterEngine;
 interface
 
 uses
-  System.SysUtils, System.Classes, UScriptList, System.Generics.Collections,
+  System.SysUtils, System.Classes, UScriptList, System.Generics.Collections, Dialogs,
   UScriptUtils, LoadComplet, UScriptEditor, UScriptEngineIntf;
 
 type
@@ -20,7 +20,7 @@ type
     FOnBreakPoint: TBreakPointEvent;
     FScriptList: TScriptList;
     FProjectScript: TScript;
-    FDebugPlugin: TDebugInfos;
+    FDebugPlugin: IDebugInfos;
     FTypeEngine: TScriptEngine;
     FEngine: IEngineInterface;
     FInternalAlbumToImport, FAlbumToImport: TAlbumComplet;
@@ -47,6 +47,8 @@ type
     procedure SetCompiled(const Value: Boolean);
     function GetCompiled: Boolean;
     function GetInternalUnitName(Script: TScript): string;
+    function GetScriptLines(const UnitName: string; Output: TStrings; ScriptKinds: TScriptKinds = [skUnit]): Boolean; overload;
+    function GetScriptLines(Script: TScript; Lines: TStrings): Boolean; overload;
   public
     constructor Create;
     destructor Destroy; override;
@@ -64,6 +66,8 @@ procedure RegisterEngineScript(Engine: TScriptEngine; const EngineFactoryClass: 
 implementation
 
 { %CLASSGROUP 'System.Classes.TPersistent' }
+
+uses CommonConst;
 
 var
   Engines: TDictionary<TScriptEngine, TEngineFactoryClass> = nil;
@@ -115,7 +119,7 @@ destructor TMasterEngine.Destroy;
 begin
   SetTypeEngine(seNone);
   FInternalAlbumToImport.Free;
-  FDebugPlugin.Free;
+  FDebugPlugin := nil;
   FScriptList.Free;
   inherited;
 end;
@@ -150,6 +154,37 @@ end;
 function TMasterEngine.GetOnBreakPoint: TBreakPointEvent;
 begin
   Result := FOnBreakPoint;
+end;
+
+function TMasterEngine.GetScriptLines(const UnitName: string; Output: TStrings; ScriptKinds: TScriptKinds = [skUnit]): Boolean;
+var
+  Script: TScript;
+begin
+  Result := False;
+  Output.Clear;
+  Script := FScriptList.FindScriptByUnitName(UnitName, ScriptKinds);
+  if Assigned(Script) then
+    Result := GetScriptLines(Script, Output);
+end;
+
+function TMasterEngine.GetScriptLines(Script: TScript; Lines: TStrings): Boolean;
+var
+  Editor: TScriptEditor;
+begin
+  Lines.Clear;
+  Editor := nil;
+  if Assigned(FDebugPlugin.OnGetScriptEditor) then
+    Editor := FDebugPlugin.OnGetScriptEditor(Script.ScriptUnitName);
+  if Editor <> nil then
+  begin
+    with Script.ScriptInfos do
+      if ((BDVersion = '') or (BDVersion <= TGlobalVar.Utilisateur.ExeVersion)) then
+        Lines.Assign(Editor.Lines)
+      else
+        ShowMessage('Le script "' + string(Script.ScriptUnitName) + '" n''est pas compatible avec cette version de BDthèque.')
+  end
+  else
+    Script.GetScriptLines(Lines);
 end;
 
 function TMasterEngine.GetScriptList: TScriptList;

@@ -111,7 +111,7 @@ type
     function AddInfoMessage(const Fichier, Text: string; Line: Cardinal = 0; Char: Cardinal = 0): Integer;
   end;
 
-  TGetScriptEditorMethod = function(const Fichier: string): TScriptEditor of object;
+  TGetScriptEditorCallback = function(const ScriptUnitName: string): TScriptEditor of object;
 
   IEngineInterface = interface
     ['{640DAE0F-93CC-40A1-922C-E884D5F0F19C}']
@@ -134,17 +134,17 @@ type
     procedure SetActiveLine(const Value: Cardinal);
     property ActiveLine: Cardinal read GetActiveLine write SetActiveLine;
 
-    function GetActiveFile: string;
-    procedure SetActiveFile(const Value: string);
-    property ActiveFile: string read GetActiveFile write SetActiveFile;
+    function GetActiveUnitName: string;
+    procedure SetActiveUnitName(const Value: string);
+    property ActiveUnitName: string read GetActiveUnitName write SetActiveUnitName;
 
     function GetErrorLine: Cardinal;
     procedure SetErrorLine(const Value: Cardinal);
     property ErrorLine: Cardinal read GetErrorLine write SetErrorLine;
 
-    function GetErrorFile: string;
-    procedure SetErrorFile(const Value: string);
-    property ErrorFile: string read GetErrorFile write SetErrorFile;
+    function GetErrorUnitName: string;
+    procedure SetErrorUnitName(const Value: string);
+    property ErrorUnitName: string read GetErrorUnitName write SetErrorUnitName;
 
     function GetUseDebugInfo: Boolean;
     procedure SetUseDebugInfo(Value: Boolean);
@@ -167,6 +167,9 @@ type
     function isTokenIdentifier(TokenType: Integer): Boolean;
 
     function GetNewEditor(AOwner: TComponent): TScriptEditor;
+
+    function GetCompletionProposal(Proposal, Code: TStrings; CurrentEditor: TScriptEditor): Boolean;
+    function GetParametersProposal(Proposal, Code: TStrings; CurrentEditor: TScriptEditor; out BestProposal: Integer): Boolean;
   end;
 
   IDebugInfos = interface
@@ -188,9 +191,9 @@ type
     function GetMessagesList: IMessageList;
     property Messages: IMessageList read GetMessagesList;
 
-    function GetScript: TGetScriptEditorMethod;
-    procedure SetScript(const Value: TGetScriptEditorMethod);
-    property OnGetScript: TGetScriptEditorMethod read GetScript write SetScript;
+    function GetOnGetScriptEditor: TGetScriptEditorCallback;
+    procedure SetOnGetScriptEditor(const Value: TGetScriptEditorCallback);
+    property OnGetScriptEditor: TGetScriptEditorCallback read GetOnGetScriptEditor write SetOnGetScriptEditor;
   end;
 
   TAfterExecuteEvent = procedure of object;
@@ -242,6 +245,8 @@ type
     property OnBreakPoint: TBreakPointEvent read GetOnBreakPoint write SetOnBreakPoint;
 
     function GetInternalUnitName(Script: TScript): string;
+    function GetScriptLines(const UnitName: string; Output: TStrings; ScriptKinds: TScriptKinds = [skUnit]): Boolean; overload;
+    function GetScriptLines(Script: TScript; Lines: TStrings): Boolean; overload;
 
     procedure WriteToConsole(const Chaine: string);
   end;

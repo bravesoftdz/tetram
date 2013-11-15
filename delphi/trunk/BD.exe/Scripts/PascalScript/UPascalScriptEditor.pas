@@ -3,7 +3,7 @@ unit UPascalScriptEditor;
 interface
 
 uses
-  System.SysUtils, Winapi.Windows, System.Classes, UScriptEditor, UMasterEngine, UScriptUtils;
+  System.SysUtils, Winapi.Windows, System.Classes, UScriptEditor, UScriptUtils;
 
 type
   TPascalScriptEditor = class(TScriptEditor)

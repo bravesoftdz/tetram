@@ -30,14 +30,25 @@ type
     procedure WriteToFileEval(info: TProgramInfo);
     procedure WriteToConsoleEval(info: TProgramInfo);
     procedure findInfoEval(info: TProgramInfo);
+
   public
-    constructor Create(MasterEngine: IMasterEngine); override;
+    constructor Create(const MasterEngine: IMasterEngine); override;
+
+    procedure Register_TStream;
+  published
+    procedure OnTStream_DestroyEval(ExtObject: TObject);
+    procedure OnTStream_ReadEval(info: TProgramInfo; ExtObject: TObject);
+    procedure OnTStream_WriteEval(info: TProgramInfo; ExtObject: TObject);
+    procedure OnTStream_SeekEval(info: TProgramInfo; ExtObject: TObject);
+    procedure OnTStream_ReadBufferEval(info: TProgramInfo; ExtObject: TObject);
+    procedure OnTStream_WriteBufferEval(info: TProgramInfo; ExtObject: TObject);
+    procedure OnTStream_CopyFromEval(info: TProgramInfo; ExtObject: TObject);
   end;
 
 implementation
 
 uses
-  dwsUnitSymbols, Dialogs, UScriptsFonctions, UScriptUtils, UNet, UScriptsHTMLFunctions, dwsUtils;
+  dwsUnitSymbols, Dialogs, UScriptsFonctions, UScriptUtils, UNet, UScriptsHTMLFunctions, dwsUtils, dwsComp;
 
 const // type constants
   cFloat = 'Float';
@@ -88,10 +99,16 @@ begin
   info.ResultAsString := CombineURL(info.ParamAsString[0], info.ParamAsString[1]);
 end;
 
-constructor TDW_CommonFunctionsUnit.Create(MasterEngine: IMasterEngine);
+constructor TDW_CommonFunctionsUnit.Create(const MasterEngine: IMasterEngine);
 begin
   inherited;
   UnitName := 'BDCommon';
+
+  RegisterType('LongInt', 'Integer');
+  RegisterType('Word', 'Integer');
+  RegisterType('Int64', 'Integer');
+
+  Register_TStream;
 
   with Enumerations.Add do
   begin
@@ -219,6 +236,55 @@ begin
   info.ResultAsString := ScriptIncludeTrailingPathDelimiter(info.ParamAsString[0]);
 end;
 
+procedure TDW_CommonFunctionsUnit.OnTStream_CopyFromEval(info: TProgramInfo; ExtObject: TObject);
+begin
+  TStream(ExtObject).CopyFrom(TStream(info.ParamAsObject[0]), info.ParamAsInteger[1]);
+end;
+
+procedure TDW_CommonFunctionsUnit.OnTStream_DestroyEval(ExtObject: TObject);
+begin
+  ExtObject.Free;
+end;
+
+procedure TDW_CommonFunctionsUnit.OnTStream_ReadBufferEval(info: TProgramInfo; ExtObject: TObject);
+var
+  buffer: string;
+begin
+  buffer := info.ValueAsString['Buffer'];
+  TStream(ExtObject).ReadBuffer(buffer, info.ParamAsInteger[1]);
+  info.ValueAsString['Buffer'] := buffer;
+end;
+
+procedure TDW_CommonFunctionsUnit.OnTStream_ReadEval(info: TProgramInfo; ExtObject: TObject);
+var
+  buffer: string;
+begin
+  buffer := info.ValueAsString['Buffer'];
+  info.ResultAsInteger := TStream(ExtObject).Read(buffer, info.ParamAsInteger[1]);
+  info.ValueAsString['Buffer'] := buffer;
+end;
+
+procedure TDW_CommonFunctionsUnit.OnTStream_SeekEval(info: TProgramInfo; ExtObject: TObject);
+begin
+  info.ResultAsInteger := TStream(ExtObject).Seek(info.ParamAsInteger[0], info.ParamAsInteger[1]);
+end;
+
+procedure TDW_CommonFunctionsUnit.OnTStream_WriteBufferEval(info: TProgramInfo; ExtObject: TObject);
+var
+  buffer: string;
+begin
+  buffer := info.ParamAsString[0];
+  TStream(ExtObject).WriteBuffer(buffer, info.ParamAsInteger[1]);
+end;
+
+procedure TDW_CommonFunctionsUnit.OnTStream_WriteEval(info: TProgramInfo; ExtObject: TObject);
+var
+  buffer: string;
+begin
+  buffer := info.ParamAsString[0];
+  TStream(ExtObject).Write(buffer, info.ParamAsInteger[1]);
+end;
+
 procedure TDW_CommonFunctionsUnit.PostPageEval(info: TProgramInfo);
 const
   nbFields = 3;
@@ -281,14 +347,14 @@ end;
 
 procedure TDW_CommonFunctionsUnit.WriteToFileEval(info: TProgramInfo);
 var
-  Buffer, Preamble: TBytes;
+  buffer, Preamble: TBytes;
   fs: TFileStream;
   FileName, Chaine: string;
 begin
   Chaine := info.ParamAsString[0];
   FileName := info.ParamAsString[1];
 
-  Buffer := TEncoding.default.GetBytes(Chaine);
+  buffer := TEncoding.default.GetBytes(Chaine);
   Preamble := TEncoding.default.GetPreamble;
 
   if FileExists(FileName) then
@@ -300,10 +366,28 @@ begin
 
     if Length(Preamble) > 0 then
       fs.WriteBuffer(Preamble[0], Length(Preamble));
-    fs.WriteBuffer(Buffer[0], Length(Buffer));
+    fs.WriteBuffer(buffer[0], Length(buffer));
   finally
     fs.Free;
   end;
+end;
+
+procedure TDW_CommonFunctionsUnit.Register_TStream;
+var
+  c: TdwsClass;
+begin
+  c := RegisterClass('TStream');
+  c.IsAbstract := True;
+
+  RegisterDestructor(c);
+  RegisterMethod(c, 'Read', 'LongInt', ['Buffer', 'String', 'Count', 'LongInt']);
+  RegisterMethod(c, 'Write', 'LongInt', ['Buffer', 'String', 'Count', 'LongInt']);
+  RegisterMethod(c, 'Seek', 'LongInt', ['Offset', 'LongInt', 'Origin', 'Word']);
+  RegisterMethod(c, 'ReadBuffer', ['Buffer', 'String', 'Count', 'LongInt']);
+  RegisterMethod(c, 'WriteBuffer', ['Buffer', 'String', 'Count', 'LongInt']);
+  RegisterMethod(c, 'CopyFrom', 'LongInt', ['Source', 'TStream', 'Count', 'Int64']);
+  RegisterProperty(c, 'Position', 'LongInt', HandleDynamicProperty, HandleDynamicProperty);
+  RegisterProperty(c, 'Size', 'LongInt', HandleDynamicProperty, HandleDynamicProperty);
 end;
 
 end.

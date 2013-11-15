@@ -11,51 +11,59 @@ type
   private
     FExternalInstances: TDictionary<IScriptObj, TObject>;
     FScriptObjInstances: TDictionary<TObject, IScriptObj>;
-    FMasterEngine: IMasterEngine;
+    FMasterEngine: Pointer;
 
-    function RegisterMethod(c: TdwsClass; Kind: TMethodKind; const MethodName, ResultType: string; Params: array of String; Event: TMethodEvalEvent;
+    function RegisterMethod(m: TdwsMethods; Kind: TMethodKind; const MethodName, ResultType: string; Params: array of String; Event: TMethodEvalEvent;
       Visibility: TdwsVisibility = cvPublic; Attributes: TMethodAttributes = []): TdwsMethod; overload;
     procedure HandleDestroy(info: TProgramInfo; ExternalObject: TObject);
     function GetMethod(MethodName: string): TMethod;
+    function GetMasterEngine: IMasterEngine;
   protected
     procedure InitUnitTable(systemTable: TSystemSymbolTable; unitSyms: TUnitMainSymbols; operators: TOperators; UnitTable: TUnitSymbolTable); override;
     procedure OnCleanClass(ExternalObject: TObject);
     function GetScriptObjFromExternal(info: TProgramInfo; AObject: TObject): IScriptObj;
     function GetExternalFromScriptObj(ScriptObj: IScriptObj): TObject;
   public
-    constructor Create(MasterEngine: IMasterEngine); reintroduce; virtual;
+    constructor Create(const MasterEngine: IMasterEngine); reintroduce; virtual;
     destructor Destroy; override;
 
     procedure ConvertFuncParams(Params: TdwsParameters; const funcParams: array of string);
 
+    function RegisterInterface(const Name: string; const AncestorName: string = ''): TdwsInterface;
     function RegisterClass(const Name: string; const AncestorName: string = ''): TdwsClass;
     function RegisterConstructor(c: TdwsClass; Params: array of String; Visibility: TdwsVisibility = cvPublic; Attributes: TMethodAttributes = [])
       : TdwsConstructor;
     procedure RegisterDestructor(c: TdwsClass);
+
     function RegisterMethod(c: TdwsClass; const MethodName, ResultType: string; Params: array of String; Visibility: TdwsVisibility = cvPublic;
       Attributes: TMethodAttributes = []): TdwsMethod; overload;
     function RegisterMethod(c: TdwsClass; const MethodName: string; Params: array of String; Visibility: TdwsVisibility = cvPublic;
       Attributes: TMethodAttributes = []): TdwsMethod; overload;
+
+    function RegisterMethod(i: TdwsInterface; const MethodName, ResultType: string; Params: array of String): TdwsMethod; overload;
+    function RegisterMethod(i: TdwsInterface; const MethodName: string; Params: array of String): TdwsMethod; overload;
+
     function RegisterProperty(c: TdwsClass; const PropertyName, PropertyType: string; ReadWrite: Boolean): TdwsProperty; overload;
     function RegisterProperty(c: TdwsClass; const PropertyName, PropertyType: string; EvalRead: TMethodEvalEvent; EvalWrite: TMethodEvalEvent = nil)
       : TdwsProperty; overload;
     function RegisterProperty(c: TdwsClass; const PropertyName, PropertyType: string; Params: array of String; EvalRead: TMethodEvalEvent;
       EvalWrite: TMethodEvalEvent = nil): TdwsProperty; overload;
 
+    function RegisterType(const AliasName, TypeName: string): TdwsSynonym;
     function RegisterFunction(const FunctionName, ResultType: string; Params: array of String; EvalFunc: TFuncEvalEvent): TdwsFunction;
     function RegisterProcedure(const FunctionName: string; Params: array of String; EvalFunc: TFuncEvalEvent): TdwsFunction;
 
-    property MasterEngine: IMasterEngine read FMasterEngine;
+    property MasterEngine: IMasterEngine read GetMasterEngine;
   end;
 
 implementation
 
 { TDW_Unit }
 
-constructor TDW_Unit.Create(MasterEngine: IMasterEngine);
+constructor TDW_Unit.Create(const MasterEngine: IMasterEngine);
 begin
   inherited Create(nil);
-  FMasterEngine := MasterEngine;
+  FMasterEngine := Pointer(MasterEngine);
   FExternalInstances := TDictionary<IScriptObj, TObject>.Create;
   FScriptObjInstances := TDictionary<TObject, IScriptObj>.Create;
 end;
@@ -70,6 +78,11 @@ end;
 function TDW_Unit.GetExternalFromScriptObj(ScriptObj: IScriptObj): TObject;
 begin
   FExternalInstances.TryGetValue(ScriptObj, Result);
+end;
+
+function TDW_Unit.GetMasterEngine: IMasterEngine;
+begin
+  Result := IMasterEngine(FMasterEngine);
 end;
 
 function TDW_Unit.GetMethod(MethodName: string): TMethod;
@@ -131,9 +144,9 @@ procedure TDW_Unit.ConvertFuncParams(Params: TdwsParameters; const funcParams: a
 
   procedure ParamDefaultValue(p: Integer; paramRec: TdwsParameter);
   begin
-    paramRec.DefaultValue := Trim(Copy(paramRec.Name, p + 1, MaxInt));
+    paramRec.DefaultValue := Trim(Copy(paramRec.DataType, p + 1, MaxInt));
     paramRec.HasDefaultValue := True;
-    paramRec.Name := Trim(Copy(paramRec.Name, 1, p - 1));
+    paramRec.DataType := Trim(Copy(paramRec.DataType, 1, p - 1));
   end;
 
 var
@@ -159,11 +172,11 @@ begin
       // paramRec.IsConstParam := False;
     end;
 
-    p := Pos('=', paramRec.Name);
+    paramRec.DataType := funcParams[x + 1];
+
+    p := Pos('=', paramRec.DataType);
     if p > 0 then
       ParamDefaultValue(p, paramRec);
-
-    paramRec.DataType := funcParams[x + 1];
 
     Inc(x, 2);
   end;
@@ -186,7 +199,7 @@ begin
   Result.OnEval := TAssignExternalObjectEvent(GetMethod('On' + c.Name + '_CreateEval'));
   Result.Attributes := Attributes;
   if c.Methods.IndexOf('Destroy') = -1 then
-    RegisterMethod(c, mkDestructor, 'Destroy', '', [], HandleDestroy, cvPublic, [maOverride]);
+    RegisterMethod(c.Methods, mkDestructor, 'Destroy', '', [], HandleDestroy, cvPublic, [maOverride]);
 end;
 
 procedure TDW_Unit.RegisterDestructor(c: TdwsClass);
@@ -204,24 +217,32 @@ begin
   Result.OnEval := EvalFunc;
 end;
 
+function TDW_Unit.RegisterInterface(const Name, AncestorName: string): TdwsInterface;
+begin
+  Result := Interfaces.Add;
+  Result.Name := Name;
+  Result.Ancestor := AncestorName;
+  Forwards.Add.Name := Result.Name;
+end;
+
 function TDW_Unit.RegisterMethod(c: TdwsClass; const MethodName, ResultType: string; Params: array of String; Visibility: TdwsVisibility;
   Attributes: TMethodAttributes): TdwsMethod;
 begin
-  Result := RegisterMethod(c, mkFunction, MethodName, ResultType, Params, TMethodEvalEvent(GetMethod('On' + c.Name + '_' + MethodName + 'Eval')), Visibility,
-    Attributes);
+  Result := RegisterMethod(c.Methods, mkFunction, MethodName, ResultType, Params, TMethodEvalEvent(GetMethod('On' + c.Name + '_' + MethodName + 'Eval')),
+    Visibility, Attributes);
 end;
 
 function TDW_Unit.RegisterMethod(c: TdwsClass; const MethodName: string; Params: array of String; Visibility: TdwsVisibility; Attributes: TMethodAttributes)
   : TdwsMethod;
 begin
-  Result := RegisterMethod(c, mkProcedure, MethodName, '', Params, TMethodEvalEvent(GetMethod('On' + c.Name + '_' + MethodName + 'Eval')), Visibility,
+  Result := RegisterMethod(c.Methods, mkProcedure, MethodName, '', Params, TMethodEvalEvent(GetMethod('On' + c.Name + '_' + MethodName + 'Eval')), Visibility,
     Attributes);
 end;
 
-function TDW_Unit.RegisterMethod(c: TdwsClass; Kind: TMethodKind; const MethodName, ResultType: string; Params: array of String; Event: TMethodEvalEvent;
+function TDW_Unit.RegisterMethod(m: TdwsMethods; Kind: TMethodKind; const MethodName, ResultType: string; Params: array of String; Event: TMethodEvalEvent;
   Visibility: TdwsVisibility = cvPublic; Attributes: TMethodAttributes = []): TdwsMethod;
 begin
-  Result := c.Methods.Add;
+  Result := m.Add;
   Result.Name := MethodName;
   Result.ResultType := ResultType;
   Result.OnEval := Event;
@@ -245,7 +266,7 @@ var
 begin
   aRead := 'Get' + PropertyName;
   aWrite := '';
-  RegisterMethod(c, mkFunction, aRead, PropertyType, Params, EvalRead, cvPrivate);
+  RegisterMethod(c.Methods, mkFunction, aRead, PropertyType, Params, EvalRead, cvPrivate);
   if Assigned(EvalWrite) then
   begin
     aWrite := 'Set' + PropertyName;
@@ -254,7 +275,7 @@ begin
       p[i] := Params[i];
     p[Length(p) - 2] := 'Value';
     p[Length(p) - 1] := PropertyType;
-    RegisterMethod(c, mkProcedure, aWrite, '', p, EvalWrite, cvPrivate);
+    RegisterMethod(c.Methods, mkProcedure, aWrite, '', p, EvalWrite, cvPrivate);
   end;
   Result := c.Properties.Add;
   with Result do
@@ -264,6 +285,16 @@ begin
     ReadAccess := aRead;
     WriteAccess := aWrite;
     ConvertFuncParams(Parameters, Params);
+  end;
+end;
+
+function TDW_Unit.RegisterType(const AliasName, TypeName: string): TdwsSynonym;
+begin
+  Result := Synonyms.Add;
+  with Result do
+  begin
+    Name := AliasName;
+    DataType := TypeName;
   end;
 end;
 
@@ -289,6 +320,16 @@ begin
     if ReadWrite then
       WriteAccess := ReadAccess;
   end;
+end;
+
+function TDW_Unit.RegisterMethod(i: TdwsInterface; const MethodName, ResultType: string; Params: array of String): TdwsMethod;
+begin
+  Result := RegisterMethod(i.Methods, mkFunction, MethodName, ResultType, Params, TMethodEvalEvent(nil), cvPublic, []);
+end;
+
+function TDW_Unit.RegisterMethod(i: TdwsInterface; const MethodName: string; Params: array of String): TdwsMethod;
+begin
+  Result := RegisterMethod(i.Methods, mkProcedure, MethodName, '', Params, TMethodEvalEvent(nil), cvPublic, []);
 end;
 
 end.

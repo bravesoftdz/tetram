@@ -32,10 +32,6 @@ object frmScripts: TfrmScripts
     object tbScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object ToolBar1: TToolBar
         Left = 0
         Top = 0
@@ -378,10 +374,6 @@ object frmScripts: TfrmScripts
           TabOrder = 0
           object tabMessages: TTabSheet
             Caption = 'Messages'
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             inline framMessages1: TframMessages
               Left = 0
               Top = 0
@@ -415,7 +407,7 @@ object frmScripts: TfrmScripts
                   end
                   item
                     Position = 3
-                    Width = 225
+                    Width = 221
                     WideText = 'Message'
                   end>
               end
@@ -424,10 +416,6 @@ object frmScripts: TfrmScripts
           object tabWatches: TTabSheet
             Caption = 'Points de suivi'
             ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             inline framWatches1: TframWatches
               Left = 0
               Top = 0
@@ -450,7 +438,7 @@ object frmScripts: TfrmScripts
                   end
                   item
                     Position = 1
-                    Width = 449
+                    Width = 445
                     WideText = 'Valeur'
                   end>
               end
@@ -459,10 +447,6 @@ object frmScripts: TfrmScripts
           object tabBreakpoints: TTabSheet
             Caption = 'Points d'#39'arr'#234't'
             ImageIndex = 2
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             inline framBreakpoints1: TframBreakpoints
               Left = 0
               Top = 0
@@ -486,7 +470,7 @@ object frmScripts: TfrmScripts
                   end
                   item
                     Position = 1
-                    Width = 495
+                    Width = 491
                     WideText = 'Fichier'
                   end>
               end
@@ -495,10 +479,6 @@ object frmScripts: TfrmScripts
           object tabConsole: TTabSheet
             Caption = 'Sortie'
             ImageIndex = 3
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object mmConsole: TMemo
               Left = 0
               Top = 0
@@ -530,8 +510,6 @@ object frmScripts: TfrmScripts
             ExplicitWidth = 268
             ExplicitHeight = 186
             inherited TabSheet4: TTabSheet
-              ExplicitLeft = 4
-              ExplicitTop = 24
               ExplicitWidth = 260
               ExplicitHeight = 158
               inherited ListBox1: TListBox
@@ -542,10 +520,6 @@ object frmScripts: TfrmScripts
               end
             end
             inherited TabSheet5: TTabSheet
-              ExplicitLeft = 4
-              ExplicitTop = 24
-              ExplicitWidth = 312
-              ExplicitHeight = 212
               inherited EditLabeled1: TEditLabeled
                 LinkControls = <
                   item
@@ -570,12 +544,6 @@ object frmScripts: TfrmScripts
                     Control = framScriptInfos1.Label13
                   end>
               end
-            end
-            inherited Alias: TTabSheet
-              ExplicitLeft = 4
-              ExplicitTop = 24
-              ExplicitWidth = 312
-              ExplicitHeight = 212
             end
           end
           inherited PopupMenu2: TPopupMenu
@@ -875,6 +843,8 @@ object frmScripts: TfrmScripts
     Width = 27
     PngImages = <
       item
+        Background = clWindow
+        Name = 'PngImage0'
         PngImage.Data = {
           89504E470D0A1A0A0000000D494844520000001B0000001108060000002C4FD7
           33000000097048597300000B1300000B1301009A9C1800000A4F694343505068
@@ -983,10 +953,10 @@ object frmScripts: TfrmScripts
           198D9DD063717573C0E10D764593A91925067EC01B7705118228B5BA761235C7
           F5DA966C86298A0A82777D336A4F46E25FDDFEF01BEC792514C38E6A1C29EC37
           79F06AEEEB8CB9410000000049454E44AE426082}
-        Name = 'PngImage0'
-        Background = clWindow
       end
       item
+        Background = clWindow
+        Name = 'PngImage6'
         PngImage.Data = {
           89504E470D0A1A0A0000000D494844520000001B0000001108060000002C4FD7
           330000001974455874536F6674776172650041646F626520496D616765526561
@@ -1015,10 +985,10 @@ object frmScripts: TfrmScripts
           44EF638CF831EE68199C9CABF3F8849E601AF8AADEB8244A1025F9C88897DF11
           65D4ED0BA374A3471427A71C9E8F3E37F769D4EEBA83955E89A0616B656B0AFB
           0D56DF9CEE6E1E9B270000000049454E44AE426082}
-        Name = 'PngImage6'
-        Background = clWindow
       end
       item
+        Background = clWindow
+        Name = 'PngImage7'
         PngImage.Data = {
           89504E470D0A1A0A0000000D494844520000001B0000001108060000002C4FD7
           330000001974455874536F6674776172650041646F626520496D616765526561
@@ -1045,10 +1015,10 @@ object frmScripts: TfrmScripts
           1D2CE3CBCD3693B366D51B1C9412E05BB2311010208448A9D5E2CFD1ED545F54
           2A65C95E6FC8BE3CE7ED21EBBE7EBBD5F391BE16CE4A48866DD7DA56D81F7B32
           63EE431CC9D60000000049454E44AE426082}
-        Name = 'PngImage7'
-        Background = clWindow
       end
       item
+        Background = clWindow
+        Name = 'PngImage1'
         PngImage.Data = {
           89504E470D0A1A0A0000000D494844520000001B0000001108060000002C4FD7
           33000000097048597300000B1300000B1301009A9C1800000A4F694343505068
@@ -1138,10 +1108,10 @@ object frmScripts: TfrmScripts
           2008034078167E8D99B7F1ACCAA4938B11E240571A2E2903A0AA70638D5D61EE
           8E21120D234039158BEFA045BC01CF185B1CB406DB20E5CF9891C61AFB079B81
           5746DF1E7F196E0000000049454E44AE426082}
-        Name = 'PngImage1'
-        Background = clWindow
       end
       item
+        Background = clWindow
+        Name = 'PngImage2'
         PngImage.Data = {
           89504E470D0A1A0A0000000D494844520000001B0000001108060000002C4FD7
           330000001974455874536F6674776172650041646F626520496D616765526561
@@ -1161,10 +1131,10 @@ object frmScripts: TfrmScripts
           FEEC81A9A1623E63D70616599781A9971168C917A0A9319F0FFFDA88AC867AC5
           153033F1DA72A4002D5261FCFB7FCEA7E33FEFA0ABA19A65443B8A9E9601003B
           BEFBDFD38B62E60000000049454E44AE426082}
-        Name = 'PngImage2'
-        Background = clWindow
       end
       item
+        Background = clWindow
+        Name = 'PngImage3'
         PngImage.Data = {
           89504E470D0A1A0A0000000D494844520000001B0000001108060000002C4FD7
           330000001974455874536F6674776172650041646F626520496D616765526561
@@ -1203,10 +1173,10 @@ object frmScripts: TfrmScripts
           0A09D35BB784DAA2CB66E6DF61884A34D6B2523512E11F49B29B9F30314C4658
           922626FDE19F84107775D417FC128BB312F1306D365A5DA65728288BC8EAE7C1
           2BC2E01DC7D5DD92BB0AFB13114651FDA886C1440000000049454E44AE426082}
-        Name = 'PngImage3'
-        Background = clWindow
       end
       item
+        Background = clWindow
+        Name = 'PngImage4'
         PngImage.Data = {
           89504E470D0A1A0A0000000D494844520000001B0000001108060000002C4FD7
           330000001974455874536F6674776172650041646F626520496D616765526561
@@ -1225,10 +1195,10 @@ object frmScripts: TfrmScripts
           59411DFDB22E01D14D204BB3F6AB4973EBA386DD7745874994F020055521872C
           2AC7C6CD570D33D88F2FF597B057541EE7DF22D24A9E0000000049454E44AE42
           6082}
-        Name = 'PngImage4'
-        Background = clWindow
       end
       item
+        Background = clWindow
+        Name = 'PngImage5'
         PngImage.Data = {
           89504E470D0A1A0A0000000D494844520000001B0000001108060000002C4FD7
           330000001974455874536F6674776172650041646F626520496D616765526561
@@ -1253,8 +1223,6 @@ object frmScripts: TfrmScripts
           E862598AFC2F3247B2AA280A64B03CADE4F3D3C94261ACBCB3F35E4B01FFAD36
           12DB2370382BCB2731BB212C5D87CB8A92114BA537A891B4243DC465CDA2A819
           D6AE682BEC07FBBB57EE4EA9B76E0000000049454E44AE426082}
-        Name = 'PngImage5'
-        Background = clWindow
       end>
     Left = 363
     Bitmap = {}
@@ -1288,6 +1256,8 @@ object frmScripts: TfrmScripts
         ColumnWidth = 100
         DefaultFontStyle = [fsBold]
       end>
+    OnExecute = SynCodeCompletionExecute
+    OnShow = SynCodeCompletionShow
     ShortCut = 16416
     Left = 48
     Top = 208
@@ -1310,6 +1280,7 @@ object frmScripts: TfrmScripts
     TitleFont.Name = 'MS Sans Serif'
     TitleFont.Style = [fsBold]
     Columns = <>
+    OnExecute = SynParametersExecute
     ShortCut = 24608
     Left = 48
     Top = 256

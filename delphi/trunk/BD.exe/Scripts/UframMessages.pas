@@ -66,7 +66,7 @@ begin
         CellText := string(TypeMessage);
       2:
         if ScriptUnitName = MasterEngine.Engine.GetSpecialMainUnitName then
-          // CellText := Projet
+          CellText := MasterEngine.ProjectScript.ScriptUnitName
         else
           CellText := string(ScriptUnitName);
       3:

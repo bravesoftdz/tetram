@@ -12,7 +12,7 @@ type
     procedure ExtractRegExEval(info: TProgramInfo);
     procedure ExtractRegExGroupEval(info: TProgramInfo);
   public
-    constructor Create(MasterEngine: IMasterEngine); override;
+    constructor Create(const MasterEngine: IMasterEngine); override;
   published
     procedure OnTBdtkRegEx_CreateEval(info: TProgramInfo; var ExtObject: TObject);
     procedure OnTBdtkRegEx_BeginSearchEval(info: TProgramInfo; ExtObject: TObject);
@@ -29,7 +29,7 @@ uses
 
 { TDW_BdtkRegExUnit }
 
-constructor TDW_BdtkRegExUnit.Create(MasterEngine: IMasterEngine);
+constructor TDW_BdtkRegExUnit.Create(const MasterEngine: IMasterEngine);
 var
   c: TdwsClass;
 begin

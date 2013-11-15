@@ -7,30 +7,9 @@ uses
   Generics.Collections, Generics.Defaults, UScriptEditor, UScriptEngineIntf;
 
 type
-  TInfoType = (itProcedure, itFunction, itType, itVar, itConstant, itField, itConstructor);
-  TInfoTypes = set of TInfoType;
-
-  TParamInfoRecord = record
-    Name: Cardinal;
-    OrgName: string;
-    Params: string;
-    OrgParams: string;
-    Father: Cardinal;
-    Nr: Integer;
-    ReturnTyp: Cardinal;
-    Typ: TInfoType;
-    HasFields: Boolean;
-    SubType: Cardinal;
-  end;
-
-  TParamInfoArray = array of TParamInfoRecord;
-
   TDebugList<I: IDebugItem> = class(TList<I>, IDebugList<I>)
   private
-    // 27/08/2011: si on met cette variable et la propriété qui va avec dans TBreakpointList,
-    // on se paye un écrasement de mémoire entre FGetScript et FView
-    // merci Delphi XE !!!
-    FGetScript: TGetScriptEditorMethod;
+    FGetScriptEditorCallback: TGetScriptEditorCallback;
     FView: TVirtualStringTree;
     function GetView: TVirtualStringTree;
     procedure SetView(const Value: TVirtualStringTree);
@@ -49,7 +28,7 @@ type
     function Current: I;
     function Last: I;
 
-    property Editor: TGetScriptEditorMethod read FGetScript write FGetScript;
+    property GetScriptEditorCallback: TGetScriptEditorCallback read FGetScriptEditorCallback write FGetScriptEditorCallback;
   end;
 
   TDebugItem<I: IDebugItem> = class abstract(TInterfacedObject)
@@ -142,7 +121,7 @@ type
     function Toggle(const UnitName: string; const ALine: Cardinal): Boolean;
   end;
 
-  TDebugInfos = class(TObject, IDebugInfos)
+  TDebugInfos = class(TInterfacedObject, IDebugInfos)
   private
     FCurrentLine: Integer;
     FCursorLine: Integer;
@@ -163,13 +142,8 @@ type
     function GetWatchesList: IWatchList;
     function GetMessagesList: IMessageList;
 
-    function GetScript: TGetScriptEditorMethod;
-    procedure SetScript(const Value: TGetScriptEditorMethod);
-
-  protected
-    function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
-    function _AddRef: Integer; stdcall;
-    function _Release: Integer; stdcall;
+    function GetOnGetScriptEditor: TGetScriptEditorCallback;
+    procedure SetOnGetScriptEditor(const Value: TGetScriptEditorCallback);
   public
     constructor Create;
     destructor Destroy; override;
@@ -181,17 +155,8 @@ type
     property Breakpoints: IBreakpointList read GetBreakpointsList;
     property Watches: IWatchList read GetWatchesList;
     property Messages: IMessageList read GetMessagesList;
-    property OnGetScript: TGetScriptEditorMethod read GetScript write SetScript;
+    property OnGetScriptEditor: TGetScriptEditorCallback read GetOnGetScriptEditor write SetOnGetScriptEditor;
   end;
-
-  TStringArray = array of string;
-
-procedure AddToTStrings(const Strings: TStringArray; List: TStrings);
-function Explode(const Trenner: string; Text: string): TStringArray;
-function GetTypeName(Typ: TPSType): string;
-function GetParams(Decl: TPSParametersDecl; const Delim: string = ''): string;
-function BaseTypeCompatible(p1, p2: Integer): Boolean;
-function HashString(const S: string): Cardinal;
 
 implementation
 
@@ -244,14 +209,16 @@ end;
 
 procedure TBreakpointList.Notify(const Value: IBreakpointInfo; Action: TCollectionNotification);
 var
-  Editor: TCustomSynEdit;
+  Editor: TScriptEditor;
 begin
   inherited;
   case Action of
     cnAdded, cnExtracted:
       begin
+        Editor := nil;
         // InvalidateLine et InvalidateGutterLine bizarrement insuffisants dans certains cas
-        Editor := FGetScript(Value.ScriptUnitName);
+        if Assigned(GetScriptEditorCallback) then
+          Editor := GetScriptEditorCallback(Value.ScriptUnitName);
         if Assigned(Editor) then
         begin
           Editor.Invalidate;
@@ -316,22 +283,14 @@ begin
   Result := FMessagesList;
 end;
 
-function TDebugInfos.GetScript: TGetScriptEditorMethod;
+function TDebugInfos.GetOnGetScriptEditor: TGetScriptEditorCallback;
 begin
-  Result := FBreakpointsList.FGetScript;
+  Result := FBreakpointsList.GetScriptEditorCallback;
 end;
 
 function TDebugInfos.GetWatchesList: IWatchList;
 begin
   Result := FWatchesList;
-end;
-
-function TDebugInfos.QueryInterface(const IID: TGUID; out Obj): HResult;
-begin
-  if GetInterface(IID, Obj) then
-    Result := 0
-  else
-    Result := E_NOINTERFACE;
 end;
 
 procedure TDebugInfos.SetCurrentLine(const Value: Integer);
@@ -349,19 +308,11 @@ begin
   FErrorLine := Value;
 end;
 
-procedure TDebugInfos.SetScript(const Value: TGetScriptEditorMethod);
+procedure TDebugInfos.SetOnGetScriptEditor(const Value: TGetScriptEditorCallback);
 begin
-  FBreakpointsList.FGetScript := Value;
-end;
-
-function TDebugInfos._AddRef: Integer;
-begin
-  Result := 1;
-end;
-
-function TDebugInfos._Release: Integer;
-begin
-  Result := 0;
+  FBreakpointsList.GetScriptEditorCallback := Value;
+  FWatchesList.GetScriptEditorCallback := Value;
+  FMessagesList.GetScriptEditorCallback := Value;
 end;
 
 { TDebugList }
@@ -593,174 +544,6 @@ begin
   FScriptUnitName := Value;
 end;
 
-procedure AddToTStrings(const Strings: TStringArray; List: TStrings);
-var
-  Dummy: Integer;
-begin
-  for Dummy := 0 to high(Strings) do
-  begin
-    List.Add(string(Strings[Dummy]));
-  end;
-end;
-
-procedure Split(const Trenner, Text: string; var Text1, Text2: string);
-var
-  EndPos: Integer;
-begin
-  EndPos := Pos(Trenner, Text);
-  if EndPos = 0 then
-    EndPos := Length(Text) + 1;
-
-  Text1 := Copy(Text, 1, EndPos - 1);
-
-  Text2 := Copy(Text, EndPos + Length(Trenner), Length(Text));
-end;
-
-function Explode(const Trenner: string; Text: string): TStringArray;
-begin
-  Result := nil;
-  while Text <> '' do
-  begin
-    SetLength(Result, Length(Result) + 1);
-    Split(Trenner, Text, Result[high(Result)], Text);
-  end;
-end;
-
-function HashString(const S: string): Cardinal;
-const
-  cLongBits = 32;
-  cOneEight = 4;
-  cThreeFourths = 24;
-  cHighBits = $F0000000;
-var
-  I: Integer;
-  P: PChar;
-  Temp: Cardinal;
-begin
-  { TODO : I should really be processing 4 bytes at once... }
-  Result := 0;
-  P := PChar(UpperCase(S));
-
-  I := Length(S);
-  while I > 0 do
-  begin
-    Result := (Result shl cOneEight) + Ord(P^);
-    Temp := Result and cHighBits;
-    if Temp <> 0 then
-      Result := (Result xor (Temp shr cThreeFourths)) and (not cHighBits);
-    Dec(I);
-    Inc(P);
-  end;
-end;
-
-function GetTypeName(Typ: TPSType): string;
-begin
-  if Typ.OriginalName <> '' then
-    Result := string(Typ.OriginalName)
-  else
-  begin
-    if Typ.ClassType = TPSArrayType then
-      Result := 'array of ' + GetTypeName(TPSArrayType(Typ).ArrayTypeNo)
-    else if Typ.ClassType = TPSRecordType then
-      Result := 'record'
-    else if Typ.ClassType = TPSEnumType then
-      Result := 'enum';
-  end;
-end;
-
-function GetParams(Decl: TPSParametersDecl; const Delim: string = ''): string;
-var
-  Dummy: Integer;
-begin
-  Assert(Decl <> nil);
-  Result := '';
-  if Decl.ParamCount > 0 then
-  begin
-    Result := Result + ' (';
-    for Dummy := 0 to Decl.ParamCount - 1 do
-    begin
-      if Dummy <> 0 then
-        Result := Result + '; ';
-
-      Result := Result + Delim;
-
-      if (Decl.Params[Dummy].Mode = pmOut) then
-        Result := Result + 'out ';
-      if (Decl.Params[Dummy].Mode = pmInOut) then
-        Result := Result + 'var ';
-
-      Result := Result + string(Decl.Params[Dummy].OrgName);
-
-      if Decl.Params[Dummy].aType <> nil then
-        Result := Result + ': ' + GetTypeName(Decl.Params[Dummy].aType);
-
-      Result := Result + Delim;
-    end;
-    Result := Result + ')';
-  end;
-
-  if Decl.Result <> nil then
-    Result := Result + ': ' + GetTypeName(Decl.Result);
-end;
-
-function BaseTypeCompatible(p1, p2: Integer): Boolean;
-
-  function IsIntType(b: TPSBaseType): Boolean;
-  begin
-    case b of
-      btU8, btS8, btU16, btS16, btU32, btS32
-{$IFNDEF PS_NOINT64}
-        , btS64
-{$ENDIF}
-        :
-        Result := True;
-    else
-      Result := False;
-    end;
-  end;
-
-  function IsRealType(b: TPSBaseType): Boolean;
-  begin
-    case b of
-      btSingle, btDouble, btCurrency, btExtended:
-        Result := True;
-    else
-      Result := False;
-    end;
-  end;
-
-  function IsIntRealType(b: TPSBaseType): Boolean;
-  begin
-    case b of
-      btSingle, btDouble, btCurrency, btExtended, btU8, btS8, btU16, btS16, btU32, btS32
-{$IFNDEF PS_NOINT64}
-        , btS64
-{$ENDIF}
-        :
-        Result := True;
-    else
-      Result := False;
-    end;
-
-  end;
-
-begin
-  if ((p1 = btProcPtr) and (p2 = p1)) or (p1 = btPointer) or (p2 = btPointer) or ((p1 = btNotificationVariant) or (p1 = btVariant)) or
-    ((p2 = btNotificationVariant) or (p2 = btVariant)) or (IsIntType(p1) and IsIntType(p2)) or (IsRealType(p1) and IsIntRealType(p2)) or
-    (((p1 = btPchar) or (p1 = btString)) and ((p2 = btString) or (p2 = btPchar))) or (((p1 = btPchar) or (p1 = btString)) and (p2 = btChar)) or
-    ((p1 = btChar) and (p2 = btChar)) or ((p1 = btSet) and (p2 = btSet)) or
-{$IFNDEF PS_NOWIDESTRING}
-    ((p1 = btWideChar) and (p2 = btChar)) or ((p1 = btWideChar) and (p2 = btWideChar)) or ((p1 = btWidestring) and (p2 = btChar)) or
-    ((p1 = btWidestring) and (p2 = btWideChar)) or ((p1 = btWidestring) and ((p2 = btString) or (p2 = btPchar))) or ((p1 = btWidestring) and (p2 = btWidestring)
-    ) or (((p1 = btPchar) or (p1 = btString)) and (p2 = btWidestring)) or (((p1 = btPchar) or (p1 = btString)) and (p2 = btWideChar)) or
-    (((p1 = btPchar) or (p1 = btString)) and (p2 = btChar)) or
-{$ENDIF}
-    ((p1 = btRecord) and (p2 = btRecord)) or ((p1 = btEnum) and (p2 = btEnum)) then
-    Result := True
-  else
-    Result := False;
-end;
-
 { TDebugItem }
 
 constructor TDebugItem<I>.Create(List: TDebugList<I>);
@@ -771,13 +554,15 @@ end;
 
 procedure TBreakpointInfo.UpdateEditor;
 var
-  Script: TScriptEditor;
+  Editor: TScriptEditor;
 begin
-  Script := List.FGetScript(ScriptUnitName);
-  if Script <> nil then
+  Editor := nil;
+  if Assigned(List.GetScriptEditorCallback) then
+    Editor := List.GetScriptEditorCallback(ScriptUnitName);
+  if Editor <> nil then
   begin
-    Script.InvalidateLine(Line);
-    Script.InvalidateGutterLine(Line);
+    Editor.InvalidateLine(Line);
+    Editor.InvalidateGutterLine(Line);
   end;
 end;
 

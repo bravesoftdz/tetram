@@ -60,7 +60,7 @@ begin
         CellText := 'Ligne ' + IntToStr(Line);
       1:
         if ScriptUnitName = MasterEngine.Engine.GetSpecialMainUnitName then
-          // CellText := Projet
+          CellText := MasterEngine.ProjectScript.ScriptUnitName
         else
           CellText := string(ScriptUnitName);
     end;

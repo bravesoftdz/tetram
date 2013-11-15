@@ -197,10 +197,8 @@ type
     procedure actFermerExecute(Sender: TObject);
     procedure actEnregistrerExecute(Sender: TObject);
     procedure ListView1DblClick(Sender: TObject);
-    procedure seScript1ProcessUserCommand(Sender: TObject; var Command: TSynEditorCommand; var AChar: Char; Data: Pointer);
     procedure actRunWithoutDebugExecute(Sender: TObject);
     procedure pcScriptsChange(Sender: TObject);
-    procedure seScript1KeyPress(Sender: TObject; var Key: Char);
     procedure PageControl2Change(Sender: TObject);
     procedure ListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
     procedure actEditExecute(Sender: TObject);
@@ -208,6 +206,9 @@ type
     procedure mmConsoleChange(Sender: TObject);
     procedure framBoutons1btnAnnulerClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure SynCodeCompletionShow(Sender: TObject);
+    procedure SynCodeCompletionExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var X, Y: Integer; var CanExecute: Boolean);
+    procedure SynParametersExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var X, Y: Integer; var CanExecute: Boolean);
   private
     FLastSearch, FLastReplace: string;
     FSearchOptions: TSynSearchOptions;
@@ -227,14 +228,14 @@ type
     procedure WMSyscommand(var msg: TWmSysCommand); message WM_SYSCOMMAND;
 {$REGION 'Débuggage'}
     procedure GoToPosition(Editor: TSynEdit; Line, Char: Cardinal); overload;
-    procedure GoToPosition(Script: string; Line, Char: Cardinal); overload; inline;
+    procedure GoToPosition(ScriptUnitName: string; Line, Char: Cardinal); overload; inline;
     procedure GoToMessage(msg: IMessageInfo);
     procedure GoToBreakpoint(msg: IBreakpointInfo);
 {$ENDREGION}
     function GetPageFromUnitName(const UnitName: string): TEditorPage;
     function GetPageForScript(const Script: TScript): TEditorPage;
 
-    function GetScript(const UnitName: string): TScriptEditor;
+    function GetScriptEditor(const UnitName: string): TScriptEditor;
     procedure SetCompiled(const Value: Boolean);
     function GetProjet: string;
     procedure SetProjet(const Value: string);
@@ -281,7 +282,7 @@ const
   imgGutterEXECLINE = 6;
   imgGutterBREAKDISABLED = 7;
 
-function TfrmScripts.GetScript(const UnitName: string): TScriptEditor;
+function TfrmScripts.GetScriptEditor(const UnitName: string): TScriptEditor;
 begin
   if (UnitName = '') or (UnitName = MasterEngine.Engine.GetSpecialMainUnitName) then
     Result := FOpenedScript.EditorByUnitName(Projet)
@@ -403,7 +404,7 @@ begin
 
   if (MasterEngine.Engine.ErrorLine > 0) then
   begin
-    Editor := FOpenedScript.EditorByUnitName(MasterEngine.Engine.ErrorFile);
+    Editor := FOpenedScript.EditorByUnitName(MasterEngine.Engine.ErrorUnitName);
     if Editor <> nil then
     begin
       Editor.InvalidateLine(MasterEngine.Engine.ErrorLine);
@@ -509,14 +510,6 @@ begin
   RefreshDescription(MasterEngine.ProjectScript);
 end;
 
-procedure TfrmScripts.seScript1ProcessUserCommand(Sender: TObject; var Command: TSynEditorCommand; var AChar: Char; Data: Pointer);
-begin
-  case Command of
-    ecOpenFileUnderCursor:
-      LoadScript(FCurrentPage.Editor.WordAtCursor);
-  end;
-end;
-
 procedure TfrmScripts.pcScriptsChange(Sender: TObject);
 begin
   if pcScripts.ActivePageIndex > -1 then
@@ -533,12 +526,6 @@ begin
     framScriptInfos1.TabSheet4.TabVisible := False;
     RefreshDescription(nil);
   end
-end;
-
-procedure TfrmScripts.seScript1KeyPress(Sender: TObject; var Key: Char);
-begin
-  if (Key = ' ') and ((GetKeyState(VK_CONTROL) < 0) or (GetKeyState(VK_SHIFT) < 0)) then
-    Key := #0;
 end;
 {$ENDREGION}
 
@@ -689,7 +676,7 @@ begin
   FOpenedScript := TEditorPagesList.Create;
   MasterEngine := TMasterEngine.Create;
   MasterEngine.Console := mmConsole.Lines;
-  MasterEngine.DebugPlugin.OnGetScript := GetScript;
+  MasterEngine.DebugPlugin.OnGetScriptEditor := GetScriptEditor;
   MasterEngine.OnAfterExecute := AfterExecute;
   MasterEngine.OnBreakPoint := OnBreakPoint;
   // MasterEngine.OnIdle := PSScriptDebugger1Idle;
@@ -704,11 +691,15 @@ begin
 end;
 
 procedure TfrmScripts.FormDestroy(Sender: TObject);
+var
+  i: integer;
 begin
   ProjetOuvert := False;
   MasterEngine.TypeEngine := seNone;
   ClearPages;
   FOpenedScript.Free;
+  MasterEngine.Console := nil;
+  MasterEngine.DebugPlugin.OnGetScriptEditor := nil;
   MasterEngine := nil;
 end;
 
@@ -841,7 +832,7 @@ end;
 procedure TfrmScripts.actPauseExecute(Sender: TObject);
 begin
   MasterEngine.Engine.Pause;
-  GoToPosition(MasterEngine.Engine.ActiveFile, MasterEngine.Engine.ActiveLine, 1);
+  GoToPosition(MasterEngine.Engine.ActiveUnitName, MasterEngine.Engine.ActiveLine, 1);
 end;
 
 procedure TfrmScripts.actResetExecute(Sender: TObject);
@@ -888,7 +879,7 @@ begin
   if msg = nil then
     Exit;
 
-  Editor := GetScript(msg.ScriptUnitName);
+  Editor := GetScriptEditor(msg.ScriptUnitName);
   if not Assigned(Editor) then
     LoadScript(msg.ScriptUnitName);
   GoToPosition(msg.ScriptUnitName, msg.Line, msg.Char);
@@ -909,23 +900,23 @@ procedure TfrmScripts.GoToBreakpoint(msg: IBreakpointInfo);
 var
   Editor: TSynEdit;
 begin
-  Editor := GetScript(msg.ScriptUnitName);
+  Editor := GetScriptEditor(msg.ScriptUnitName);
   if not Assigned(Editor) then
     LoadScript(msg.ScriptUnitName);
   GoToPosition(msg.ScriptUnitName, msg.Line, 0);
   PageControl1.ActivePage := tabBreakpoints;
 end;
 
-procedure TfrmScripts.GoToPosition(Script: string; Line, Char: Cardinal);
+procedure TfrmScripts.GoToPosition(ScriptUnitName: string; Line, Char: Cardinal);
 var
   Editor: TSynEdit;
 begin
-  Editor := GetScript(Script);
+  Editor := GetScriptEditor(ScriptUnitName);
   if not Assigned(Editor) then
   begin
-    // pas besoin de convertir ActiveFile puisque si Script = GetMainSpecialName, GetScript aura forcément trouvé l'editeur du projet
-    LoadScript(MasterEngine.Engine.ActiveFile);
-    Editor := GetScript(MasterEngine.Engine.ActiveFile);
+    // pas besoin de convertir ActiveUnitName puisque si Script = GetMainSpecialName, GetScriptEditor aura forcément trouvé l'editeur du projet
+    LoadScript(MasterEngine.Engine.ActiveUnitName);
+    Editor := GetScriptEditor(MasterEngine.Engine.ActiveUnitName);
   end;
   GoToPosition(Editor, Line, Char);
 end;
@@ -961,7 +952,7 @@ begin
   if MasterEngine.Engine.Running then
   begin
     MasterEngine.Engine.ActiveLine := 0;
-    MasterEngine.Engine.ActiveFile := '';
+    MasterEngine.Engine.ActiveUnitName := '';
     FCurrentPage.Editor.Refresh;
     MasterEngine.Engine.Resume;
   end
@@ -1069,10 +1060,84 @@ begin
   // FCurrentPage.Editor.InvalidateGutter;
 end;
 
+procedure TfrmScripts.SynCodeCompletionExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var X, Y: Integer; var CanExecute: Boolean);
+var
+  Proposal: TSynCompletionProposal;
+begin
+  CanExecute := False;
+
+  // use this handler only in case the kind is set to ctCode!
+  Assert(Kind = ctCode);
+  Assert(Sender is TSynCompletionProposal);
+
+  // check the proposal type
+  Proposal := TSynCompletionProposal(Sender);
+  Proposal.InsertList.Clear;
+  Proposal.ItemList.Clear;
+
+  if Assigned(Proposal.Form) then
+  begin
+    Proposal.Form.DoubleBuffered := True;
+    Proposal.Resizeable := True;
+    Proposal.Form.Resizeable := True;
+    Proposal.Form.BorderStyle := bsSizeToolWin;
+  end;
+
+  CanExecute := MasterEngine.Engine.GetCompletionProposal(Proposal.ItemList, Proposal.InsertList, FCurrentPage.Editor);
+
+  if Proposal.InsertList.Count <> Proposal.ItemList.Count then
+    Proposal.InsertList.Assign(Proposal.ItemList);
+end;
+
+procedure TfrmScripts.SynCodeCompletionShow(Sender: TObject);
+var
+  CompletionProposalForm: TSynBaseCompletionProposalForm;
+begin
+  inherited;
+
+  if (Sender <> nil) and (Sender is TSynBaseCompletionProposalForm) then
+  begin
+    CompletionProposalForm := TSynBaseCompletionProposalForm(Sender);
+    try
+      CompletionProposalForm.DoubleBuffered := True;
+
+      if CompletionProposalForm.Height > 300 then
+        CompletionProposalForm.Height := 300
+    except
+      on Exception do;
+    end;
+  end;
+end;
+
+procedure TfrmScripts.SynParametersExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var X, Y: Integer; var CanExecute: Boolean);
+var
+  Proposal: TSynCompletionProposal;
+  BestProposal: Integer;
+begin
+  CanExecute := False;
+
+  // use this handler only in case the kind is set to ctCode!
+  Assert(Kind = ctParams);
+  Assert(Sender is TSynCompletionProposal);
+
+  // check the proposal type
+  Proposal := TSynCompletionProposal(Sender);
+  Proposal.InsertList.Clear;
+  Proposal.ItemList.Clear;
+
+  CanExecute := MasterEngine.Engine.GetParametersProposal(Proposal.ItemList, Proposal.InsertList, FCurrentPage.Editor, BestProposal);
+
+  if Proposal.InsertList.Count <> Proposal.ItemList.Count then
+    Proposal.InsertList.Assign(Proposal.ItemList);
+
+  if CanExecute then
+    TSynCompletionProposal(Sender).Form.CurrentIndex := BestProposal;
+end;
+
 procedure TfrmScripts.OnBreakPoint;
 begin
   framWatches1.Invalidate;
-  GoToPosition(MasterEngine.Engine.ActiveFile, MasterEngine.Engine.ActiveLine, 0);
+  GoToPosition(MasterEngine.Engine.ActiveUnitName, MasterEngine.Engine.ActiveLine, 0);
 end;
 
 { TEditorPageSynEditPlugin }
@@ -1256,13 +1321,12 @@ begin
   Editor.OnGutterPaint := SynEditGutterPaint;
   Editor.OnReplaceText := SynEditorReplaceText;
   Editor.OnSpecialLineColors := SynEditorSpecialLineColors;
-  Editor.OnProcessUserCommand := FfrmScripts.seScript1ProcessUserCommand;
-  Editor.OnKeyPress := FfrmScripts.seScript1KeyPress;
+  Editor.OnProcessUserCommand := SynEditorCommandProcessed;
 
   // *******************************
   // FEditor.OnMouseMove := SynEditorMouseMove;
   //
-  // FEditor.OnCommandProcessed := SynEditorCommandProcessed;
+  // FEditor.OnCommandProcessed := ;
   //
   // FEditor.OnClick := SynEditorClick;
   // FEditor.OnKeyDown := SynEditorKeyDown;
@@ -1270,8 +1334,8 @@ begin
 
   Editor.AddKey(ecGotoXY, 47, [ssAlt]);
   Editor.AddKey(ecOpenFileUnderCursor, VK_RETURN, [ssCtrl]);
-  Editor.AddKey(ecToggleDeclImpl, VK_UP, [ssCtrl, ssShift]);
-  Editor.AddKey(ecToggleDeclImpl, VK_DOWN, [ssCtrl, ssShift]);
+  // Editor.AddKey(ecToggleDeclImpl, VK_UP, [ssCtrl, ssShift]);
+  // Editor.AddKey(ecToggleDeclImpl, VK_DOWN, [ssCtrl, ssShift]);
 
   FfrmScripts.SynMacroRecorder.AddEditor(FEditor);
   FfrmScripts.SynParameters.AddEditor(FEditor);
@@ -1302,6 +1366,8 @@ begin
   SB.Free;
 
   TabSheet.Free;
+
+  FMasterEngine := nil;
 
   inherited;
 end;
@@ -1366,7 +1432,7 @@ var
   i: Integer;
 begin
   ClearExecutableLines;
-  LineNumbers := MasterEngine.Engine.GetExecutableLines(UnitName);
+  LineNumbers := MasterEngine.Engine.GetExecutableLines(MasterEngine.GetInternalUnitName(FScript));
   for i := 0 to Length(LineNumbers) - 1 do
     FExecutableLines[LineNumbers[i]] := True;
   Editor.InvalidateGutter;
@@ -1392,7 +1458,7 @@ begin
         IconIndex := imgGutterBREAKDISABLED
     else
     begin
-      if (Cardinal(aLine) = MasterEngine.Engine.ActiveLine) and SameText(MasterEngine.Engine.ActiveFile, ScriptUnitName) then
+      if (Cardinal(aLine) = MasterEngine.Engine.ActiveLine) and SameText(MasterEngine.Engine.ActiveUnitName, ScriptUnitName) then
         IconIndex := imgGutterEXECLINEBP
       else if MasterEngine.DebugPlugin.Breakpoints[i].Active then
         IconIndex := imgGutterBREAKVALID
@@ -1403,7 +1469,7 @@ begin
   else
   begin
     if (MasterEngine.Engine.DebugMode = UScriptEngineIntf.dmPaused) and (Cardinal(aLine) = MasterEngine.Engine.ActiveLine) and
-      SameText(MasterEngine.Engine.ActiveFile, ScriptUnitName) then
+      SameText(MasterEngine.Engine.ActiveUnitName, ScriptUnitName) then
       IconIndex := imgGutterEXECLINE;
   end;
 
@@ -1479,7 +1545,7 @@ begin
   ScriptUnitName := MasterEngine.GetInternalUnitName(FScript);
   i := MasterEngine.DebugPlugin.Breakpoints.IndexOf(ScriptUnitName, Line);
 
-  if (Cardinal(Line) = MasterEngine.Engine.ActiveLine) and SameText(MasterEngine.Engine.ActiveFile, ScriptUnitName) then
+  if (Cardinal(Line) = MasterEngine.Engine.ActiveLine) and SameText(MasterEngine.Engine.ActiveUnitName, ScriptUnitName) then
   begin
     Special := True;
     FG := clWhite;
@@ -1507,8 +1573,8 @@ begin
       BG := clLime;
     end;
   end
-  else if (MasterEngine.Engine.ErrorLine > 0) and (Cardinal(Line) = MasterEngine.Engine.ErrorLine) and SameText(MasterEngine.Engine.ErrorFile, ScriptUnitName)
-  then
+  else if (MasterEngine.Engine.ErrorLine > 0) and (Cardinal(Line) = MasterEngine.Engine.ErrorLine) and
+    SameText(MasterEngine.Engine.ErrorUnitName, ScriptUnitName) then
   begin
     Special := True;
     FG := clWhite;

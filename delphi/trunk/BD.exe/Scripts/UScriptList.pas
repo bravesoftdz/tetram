@@ -84,8 +84,6 @@ type
     function FindScriptByUnitName(const UnitName: string; ScriptKinds: TScriptKinds = [skUnit]): TScript;
     function FindScriptByAlias(const AliasName: string; ScriptKinds: TScriptKinds = [skUnit]): TScript;
 
-    function GetScriptLines(const UnitName: string; Output: TStrings; ScriptKinds: TScriptKinds = [skUnit]): Boolean; virtual;
-
     function InfoScriptByUnitName(const UnitName: string): TScript;
   end;
 
@@ -132,20 +130,14 @@ end;
 procedure TScript.GetScriptLines(Lines: TStrings);
 begin
   Lines.Clear;
-  // if Assigned(Editor) then
-  // begin
-  // with ScriptInfos do
-  // if ((BDVersion = '') or (BDVersion <= TGlobalVar.Utilisateur.ExeVersion)) then
-  // Lines.Assign(Editor.Lines)
-  // else
-  // ShowMessage('Le script "' + string(UnitName) + '" n''est pas compatible avec cette version de BDthèque.')
-  // end
-  // else
-  // begin
   if not FLoaded then
     Load;
-  Lines.Assign(FCode);
-  // end;
+
+  with ScriptInfos do
+    if ((BDVersion = '') or (BDVersion <= TGlobalVar.Utilisateur.ExeVersion)) then
+      Lines.Assign(FCode)
+    else
+      ShowMessage('Le script "' + string(ScriptUnitName) + '" n''est pas compatible avec cette version de BDthèque.')
 end;
 
 procedure TScript.Load;
@@ -334,26 +326,6 @@ begin
       Exit;
   Result := nil;
 
-end;
-
-function TScriptList.GetScriptLines(const UnitName: string; Output: TStrings; ScriptKinds: TScriptKinds = [skUnit]): Boolean;
-var
-  Script: TScript;
-begin
-  Result := False;
-  Output.Clear;
-  Script := FindScriptByUnitName(UnitName, ScriptKinds);
-  if Assigned(Script) then
-  begin
-    with Script.ScriptInfos do
-      if ((BDVersion = '') or (BDVersion <= TGlobalVar.Utilisateur.ExeVersion)) then
-      begin
-        Script.GetScriptLines(Output);
-        Result := True;
-      end
-      else
-        ShowMessage('Le script "' + string(Script.ScriptUnitName) + '" n''est pas compatible avec cette version de BDthèque.');
-  end;
 end;
 
 function TScriptList.InfoScriptByUnitName(const UnitName: string): TScript;

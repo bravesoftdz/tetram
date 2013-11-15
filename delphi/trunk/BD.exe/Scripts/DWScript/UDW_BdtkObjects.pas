@@ -34,7 +34,7 @@ type
 
     procedure MakeAuteurEval(info: TProgramInfo);
   public
-    constructor Create(MasterEngine: IMasterEngine); override;
+    constructor Create(const MasterEngine: IMasterEngine); override;
   published
     procedure OnTAlbumComplet_ImportEval(info: TProgramInfo; ExtObject: TObject);
     procedure OnTAlbumComplet_ClearEval(info: TProgramInfo; ExtObject: TObject);
@@ -69,7 +69,7 @@ uses
 
 { TDW_BdtkObjects }
 
-constructor TDW_BdtkObjectsUnit.Create(MasterEngine: IMasterEngine);
+constructor TDW_BdtkObjectsUnit.Create(const MasterEngine: IMasterEngine);
 begin
   inherited;
   UnitName := 'BdtkObjects';
@@ -239,11 +239,7 @@ end;
 
 procedure TDW_BdtkObjectsUnit.Register_Classes;
 begin
-  with TdwsSynonym(Synonyms.Add) do
-  begin
-    Name := 'Currency';
-    DataType := 'Float';
-  end;
+  RegisterType('Currency', 'Float');
 
   Register_TObjectList;
 
