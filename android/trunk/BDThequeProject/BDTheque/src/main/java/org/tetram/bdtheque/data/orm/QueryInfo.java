@@ -16,7 +16,7 @@ public class QueryInfo {
     final Map<String, String> sqlAliasMapping = new HashMap<String, String>();
     final Map<java.lang.reflect.Field, PropertySQLDescriptor> columns = new HashMap<java.lang.reflect.Field, PropertySQLDescriptor>();
     /**
-     * utilisé uniquement en interne pour générer les alias
+     * utilisÃ© uniquement en interne pour gÃ©nÃ©rer les alias
      */
     int indicator;
     Class<? extends CommonBean> beanClass;

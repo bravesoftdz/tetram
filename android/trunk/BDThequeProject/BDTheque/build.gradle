@@ -1,17 +1,4 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.5.+'
-    }
-}
-
 apply plugin: 'android'
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     compile project(':libraries:bdtheque-dependencies')
@@ -23,7 +10,7 @@ dependencies {
 
 android {
     compileSdkVersion 16
-    buildToolsVersion "18.0.1"
+    buildToolsVersion "19"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_6

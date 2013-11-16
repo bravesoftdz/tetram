@@ -1,17 +1,4 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:0.5.+'
-    }
-}
-
 apply plugin: 'android-library'
-
-repositories {
-    mavenCentral()
-}
 
 dependencies {
     compile 'com.android.support:support-v13:18.0.+'
@@ -22,7 +9,7 @@ dependencies {
 
 android {
     compileSdkVersion 16
-    buildToolsVersion "18.0.1"
+    buildToolsVersion "19"
 
     defaultConfig {
         minSdkVersion 16

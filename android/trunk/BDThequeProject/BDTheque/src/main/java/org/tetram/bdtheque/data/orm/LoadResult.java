@@ -2,15 +2,15 @@ package org.tetram.bdtheque.data.orm;
 
 public enum LoadResult {
     /**
-     * L'entité a été chargée
+     * L'entitÃ© a Ã©tÃ© chargÃ©e
      */
     OK,
     /**
-     * L'entité contient des annotations @Field mais le curseur ne contient pas d'enregistrement à charger
+     * L'entitÃ© contient des annotations @Field mais le curseur ne contient pas d'enregistrement Ã  charger
      */
     NOTFOUND,
     /**
-     * l'entité n'utilise pas les annotations @Field
+     * l'entitÃ© n'utilise pas les annotations @Field
      */
     ERROR
 }
