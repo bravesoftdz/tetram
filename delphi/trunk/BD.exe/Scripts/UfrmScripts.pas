@@ -692,7 +692,7 @@ end;
 
 procedure TfrmScripts.FormDestroy(Sender: TObject);
 var
-  i: integer;
+  i: Integer;
 begin
   ProjetOuvert := False;
   MasterEngine.TypeEngine := seNone;
@@ -929,13 +929,13 @@ begin
   if (Line < Cardinal(Editor.TopLine + 2)) or (Line > Cardinal(Editor.TopLine + Editor.LinesInWindow - 2)) then
     Editor.TopLine := Line - Cardinal(Editor.LinesInWindow div 2);
 
-  Editor.CaretY := Line;
-  Editor.CaretX := Char;
-  Editor.Invalidate; // Line et GutterLine sont insuffisants pour certains cas
   PageControl2.ActivePage := tbEdition;
   pcScripts.ActivePage := TTabSheet(Editor.Parent);
   pcScriptsChange(nil);
   Editor.SetFocus;
+  Editor.CaretY := Line;
+  Editor.CaretX := Char;
+  Editor.Invalidate; // Line et GutterLine sont insuffisants pour certains cas
 end;
 
 {$ENDREGION}
@@ -966,6 +966,7 @@ end;
 function TfrmScripts.Execute: Boolean;
 begin
   MasterEngine.AlbumToImport.Clear;
+  mmConsole.Clear;
   Result := MasterEngine.Engine.Run;
   if (MasterEngine.DebugPlugin.Messages.ItemCount > 0) then
     GoToMessage(MasterEngine.DebugPlugin.Messages.Last);
@@ -1135,9 +1136,16 @@ begin
 end;
 
 procedure TfrmScripts.OnBreakPoint;
+var
+  i: Integer;
 begin
   framWatches1.Invalidate;
-  GoToPosition(MasterEngine.Engine.ActiveUnitName, MasterEngine.Engine.ActiveLine, 0);
+
+  i := FMasterEngine.DebugPlugin.Breakpoints.IndexOf(MasterEngine.Engine.ActiveUnitName, MasterEngine.Engine.ActiveLine);
+  if i > -1 then
+    GoToBreakpoint(FMasterEngine.DebugPlugin.Breakpoints[i])
+  else
+    GoToPosition(MasterEngine.Engine.ActiveUnitName, MasterEngine.Engine.ActiveLine, 0);
 end;
 
 { TEditorPageSynEditPlugin }

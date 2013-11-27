@@ -23,7 +23,7 @@ object frmScripts: TfrmScripts
     Top = 29
     Width = 882
     Height = 641
-    ActivePage = tbScripts
+    ActivePage = tbEdition
     Align = alClient
     PopupMenu = PopupMenu1
     Style = tsButtons
@@ -369,7 +369,7 @@ object frmScripts: TfrmScripts
           Top = 0
           Width = 603
           Height = 186
-          ActivePage = tabMessages
+          ActivePage = tabConsole
           Align = alClient
           TabOrder = 0
           object tabMessages: TTabSheet

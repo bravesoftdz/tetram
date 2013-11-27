@@ -707,7 +707,8 @@ procedure TdmPascalScript.PSScriptDebugger1Breakpoint(Sender: TObject; const Fil
 begin
   ActiveLine := Row;
   ActiveUnitName := string(FileName);
-  FMasterEngine.DebugPlugin.Watches.UpdateView;
+
+  FMasterEngine.OnBreakPoint;
 
   if Assigned(FOnBreakpoint) then
     FOnBreakpoint(Sender, AnsiString(ActiveUnitName), Position, ActiveLine, Col);
@@ -787,7 +788,7 @@ begin
     PSScriptDebugger1.Pause;
 
   if PSScriptDebugger1.Exec.DebugMode in [uPSDebugger.dmPaused, uPSDebugger.dmStepInto] then
-    FMasterEngine.DebugPlugin.Watches.UpdateView;
+    FMasterEngine.OnBreakPoint;
 
   if Assigned(FOnLineInfo) then
     FOnLineInfo(Sender, AnsiString(ActiveUnitName), Position, ActiveLine, Col);

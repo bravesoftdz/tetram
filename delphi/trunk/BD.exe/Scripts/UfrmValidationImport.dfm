@@ -3,8 +3,8 @@ object frmValidationImport: TfrmValidationImport
   Top = 0
   ActiveControl = framBoutons1.btnOK
   Caption = 'Donn'#233'es r'#233'cup'#233'r'#233'es'
-  ClientHeight = 535
-  ClientWidth = 526
+  ClientHeight = 573
+  ClientWidth = 519
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,8 +20,8 @@ object frmValidationImport: TfrmValidationImport
   TextHeight = 13
   inline framBoutons1: TframBoutons
     Left = 0
-    Top = 508
-    Width = 526
+    Top = 546
+    Width = 519
     Height = 27
     Align = alBottom
     TabOrder = 0
@@ -29,14 +29,14 @@ object frmValidationImport: TfrmValidationImport
     ExplicitWidth = 526
     ExplicitHeight = 27
     inherited btnOK: TButton
-      Left = 363
+      Left = 356
       Top = 4
       OnClick = framBoutons1btnOKClick
       ExplicitLeft = 363
       ExplicitTop = 4
     end
     inherited btnAnnuler: TButton
-      Left = 443
+      Left = 436
       Top = 4
       ExplicitLeft = 443
       ExplicitTop = 4
@@ -46,19 +46,16 @@ object frmValidationImport: TfrmValidationImport
     Left = 0
     Top = 0
     Width = 520
-    Height = 505
-    ActivePage = TabSheet1
+    Height = 545
+    ActivePage = TabSheet2
     Style = tsFlatButtons
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Album'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitHeight = 474
       object Label17: TLabel
         Left = 428
-        Top = 128
+        Top = 143
         Width = 6
         Height = 13
         Alignment = taRightJustify
@@ -102,9 +99,9 @@ object frmValidationImport: TfrmValidationImport
       end
       object edTome: TEditLabeled
         Left = 144
-        Top = 32
+        Top = 35
         Width = 361
-        Height = 22
+        Height = 21
         BevelKind = bkTile
         BorderStyle = bsNone
         MaxLength = 3
@@ -119,7 +116,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox2: TCheckBoxLabeled
         Left = 8
-        Top = 34
+        Top = 37
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -132,9 +129,9 @@ object frmValidationImport: TfrmValidationImport
       end
       object edMoisParution: TEditLabeled
         Left = 144
-        Top = 57
+        Top = 62
         Width = 361
-        Height = 20
+        Height = 21
         BevelKind = bkTile
         BorderStyle = bsNone
         MaxLength = 2
@@ -149,7 +146,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox3: TCheckBoxLabeled
         Left = 8
-        Top = 59
+        Top = 64
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -162,9 +159,9 @@ object frmValidationImport: TfrmValidationImport
       end
       object edAnneeParution: TEditLabeled
         Left = 144
-        Top = 80
+        Top = 89
         Width = 361
-        Height = 20
+        Height = 21
         BevelKind = bkTile
         BorderStyle = bsNone
         MaxLength = 4
@@ -179,7 +176,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox4: TCheckBoxLabeled
         Left = 8
-        Top = 82
+        Top = 91
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -192,7 +189,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object pnHorsSerie: TPanel
         Left = 144
-        Top = 103
+        Top = 115
         Width = 361
         Height = 20
         BevelOuter = bvNone
@@ -228,7 +225,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox5: TCheckBoxLabeled
         Left = 8
-        Top = 105
+        Top = 117
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -241,7 +238,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object pnIntegrale: TPanel
         Left = 144
-        Top = 125
+        Top = 140
         Width = 98
         Height = 20
         BevelOuter = bvNone
@@ -250,7 +247,7 @@ object frmValidationImport: TfrmValidationImport
         TabOrder = 10
         object RadioButton3: TRadioButtonLabeled
           Left = 3
-          Top = 2
+          Top = 1
           Width = 41
           Height = 17
           Caption = 'Oui'
@@ -262,7 +259,7 @@ object frmValidationImport: TfrmValidationImport
         end
         object RadioButton4: TRadioButtonLabeled
           Left = 50
-          Top = 2
+          Top = 1
           Width = 48
           Height = 17
           Caption = 'Non'
@@ -277,7 +274,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox6: TCheckBoxLabeled
         Left = 8
-        Top = 127
+        Top = 142
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -290,7 +287,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object edTomeDebut: TEditLabeled
         Left = 383
-        Top = 125
+        Top = 140
         Width = 39
         Height = 20
         BevelKind = bkTile
@@ -307,7 +304,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object edTomeFin: TEditLabeled
         Left = 440
-        Top = 125
+        Top = 140
         Width = 39
         Height = 20
         BevelKind = bkTile
@@ -324,7 +321,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox7: TCheckBoxLabeled
         Left = 322
-        Top = 127
+        Top = 143
         Width = 55
         Height = 17
         Alignment = taLeftJustify
@@ -337,7 +334,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object cklScenaristes: TCheckListBoxLabeled
         Left = 144
-        Top = 148
+        Top = 166
         Width = 361
         Height = 34
         BevelKind = bkTile
@@ -352,7 +349,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox8: TCheckBoxLabeled
         Left = 8
-        Top = 150
+        Top = 168
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -365,7 +362,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object cklDessinateurs: TCheckListBoxLabeled
         Left = 144
-        Top = 185
+        Top = 206
         Width = 361
         Height = 34
         BevelKind = bkTile
@@ -380,7 +377,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox9: TCheckBoxLabeled
         Left = 8
-        Top = 186
+        Top = 207
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -393,7 +390,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object cklColoristes: TCheckListBoxLabeled
         Left = 144
-        Top = 222
+        Top = 246
         Width = 361
         Height = 34
         BevelKind = bkTile
@@ -408,7 +405,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox10: TCheckBoxLabeled
         Left = 8
-        Top = 224
+        Top = 248
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -421,7 +418,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object mmResumeAlbum: TMemoLabeled
         Left = 144
-        Top = 259
+        Top = 286
         Width = 361
         Height = 57
         BevelKind = bkTile
@@ -436,7 +433,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox11: TCheckBoxLabeled
         Left = 8
-        Top = 261
+        Top = 288
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -449,7 +446,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object mmNotesAlbum: TMemoLabeled
         Left = 144
-        Top = 319
+        Top = 349
         Width = 361
         Height = 57
         BevelKind = bkTile
@@ -464,7 +461,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox12: TCheckBoxLabeled
         Left = 8
-        Top = 321
+        Top = 351
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -479,10 +476,7 @@ object frmValidationImport: TfrmValidationImport
     object TabSheet2: TTabSheet
       Caption = 'S'#233'rie'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitHeight = 474
       object edTitreSerie: TEditLabeled
         Left = 144
         Top = 8
@@ -513,9 +507,9 @@ object frmValidationImport: TfrmValidationImport
       end
       object edSiteWebSerie: TEditLabeled
         Left = 144
-        Top = 32
+        Top = 35
         Width = 361
-        Height = 22
+        Height = 21
         BevelKind = bkTile
         BorderStyle = bsNone
         MaxLength = 3
@@ -529,7 +523,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox16: TCheckBoxLabeled
         Left = 8
-        Top = 34
+        Top = 37
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -542,9 +536,9 @@ object frmValidationImport: TfrmValidationImport
       end
       object edNbAlbums: TEditLabeled
         Left = 144
-        Top = 57
+        Top = 62
         Width = 361
-        Height = 22
+        Height = 21
         BevelKind = bkTile
         BorderStyle = bsNone
         MaxLength = 3
@@ -557,28 +551,15 @@ object frmValidationImport: TfrmValidationImport
         TypeDonnee = tdEntier
         CurrencyChar = #0
       end
-      object CheckBox19: TCheckBoxLabeled
-        Left = 8
-        Top = 59
-        Width = 130
-        Height = 17
-        Alignment = taLeftJustify
-        Caption = 'Nombre d'#39'albums'
-        TabOrder = 5
-        LinkControls = <
-          item
-            Control = CheckBox19
-          end>
-      end
       object pnTerminee: TPanel
         Left = 144
-        Top = 82
+        Top = 114
         Width = 361
         Height = 20
         BevelOuter = bvNone
         Caption = ' '
         Enabled = False
-        TabOrder = 6
+        TabOrder = 9
         object RadioButton5: TRadioButtonLabeled
           Left = 3
           Top = 2
@@ -620,12 +601,12 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox14: TCheckBoxLabeled
         Left = 8
-        Top = 84
+        Top = 116
         Width = 130
         Height = 17
         Alignment = taLeftJustify
         Caption = 'Termin'#233'e'
-        TabOrder = 7
+        TabOrder = 10
         LinkControls = <
           item
             Control = CheckBox14
@@ -633,7 +614,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object cklGenres: TCheckListBoxLabeled
         Left = 144
-        Top = 105
+        Top = 140
         Width = 361
         Height = 34
         BevelKind = bkTile
@@ -648,12 +629,12 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox15: TCheckBoxLabeled
         Left = 8
-        Top = 107
+        Top = 142
         Width = 130
         Height = 17
         Alignment = taLeftJustify
         Caption = 'Genres'
-        TabOrder = 9
+        TabOrder = 11
         LinkControls = <
           item
             Control = CheckBox15
@@ -661,35 +642,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object mmResumeSerie: TMemoLabeled
         Left = 144
-        Top = 325
-        Width = 361
-        Height = 57
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        ReadOnly = True
-        ScrollBars = ssVertical
-        TabOrder = 22
-        LinkControls = <
-          item
-            Control = CheckBox17
-          end>
-      end
-      object CheckBox17: TCheckBoxLabeled
-        Left = 8
-        Top = 327
-        Width = 130
-        Height = 17
-        Alignment = taLeftJustify
-        Caption = 'R'#233'sum'#233
-        TabOrder = 23
-        LinkControls = <
-          item
-            Control = CheckBox17
-          end>
-      end
-      object mmNotesSerie: TMemoLabeled
-        Left = 144
-        Top = 385
+        Top = 381
         Width = 361
         Height = 57
         BevelKind = bkTile
@@ -699,17 +652,45 @@ object frmValidationImport: TfrmValidationImport
         TabOrder = 24
         LinkControls = <
           item
+            Control = CheckBox17
+          end>
+      end
+      object CheckBox17: TCheckBoxLabeled
+        Left = 8
+        Top = 383
+        Width = 130
+        Height = 17
+        Alignment = taLeftJustify
+        Caption = 'R'#233'sum'#233
+        TabOrder = 25
+        LinkControls = <
+          item
+            Control = CheckBox17
+          end>
+      end
+      object mmNotesSerie: TMemoLabeled
+        Left = 144
+        Top = 444
+        Width = 361
+        Height = 57
+        BevelKind = bkTile
+        BorderStyle = bsNone
+        ReadOnly = True
+        ScrollBars = ssVertical
+        TabOrder = 26
+        LinkControls = <
+          item
             Control = CheckBox18
           end>
       end
       object CheckBox18: TCheckBoxLabeled
         Left = 8
-        Top = 387
+        Top = 446
         Width = 130
         Height = 17
         Alignment = taLeftJustify
         Caption = 'Notes'
-        TabOrder = 25
+        TabOrder = 27
         LinkControls = <
           item
             Control = CheckBox18
@@ -717,35 +698,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object cklScenaristesSerie: TCheckListBoxLabeled
         Left = 144
-        Top = 214
-        Width = 361
-        Height = 34
-        BevelKind = bkTile
-        BorderStyle = bsNone
-        Columns = 2
-        ItemHeight = 13
-        TabOrder = 16
-        LinkControls = <
-          item
-            Control = CheckBoxLabeled2
-          end>
-      end
-      object CheckBoxLabeled2: TCheckBoxLabeled
-        Left = 8
-        Top = 216
-        Width = 130
-        Height = 17
-        Alignment = taLeftJustify
-        Caption = 'Sc'#233'naristes'
-        TabOrder = 17
-        LinkControls = <
-          item
-            Control = CheckBoxLabeled2
-          end>
-      end
-      object cklDessinateursSerie: TCheckListBoxLabeled
-        Left = 144
-        Top = 251
+        Top = 261
         Width = 361
         Height = 34
         BevelKind = bkTile
@@ -755,25 +708,25 @@ object frmValidationImport: TfrmValidationImport
         TabOrder = 18
         LinkControls = <
           item
-            Control = CheckBoxLabeled3
+            Control = CheckBoxLabeled2
           end>
       end
-      object CheckBoxLabeled3: TCheckBoxLabeled
+      object CheckBoxLabeled2: TCheckBoxLabeled
         Left = 8
-        Top = 252
+        Top = 263
         Width = 130
         Height = 17
         Alignment = taLeftJustify
-        Caption = 'Dessinateurs'
+        Caption = 'Sc'#233'naristes'
         TabOrder = 19
         LinkControls = <
           item
-            Control = CheckBoxLabeled3
+            Control = CheckBoxLabeled2
           end>
       end
-      object cklColoristesSerie: TCheckListBoxLabeled
+      object cklDessinateursSerie: TCheckListBoxLabeled
         Left = 144
-        Top = 288
+        Top = 301
         Width = 361
         Height = 34
         BevelKind = bkTile
@@ -783,17 +736,45 @@ object frmValidationImport: TfrmValidationImport
         TabOrder = 20
         LinkControls = <
           item
+            Control = CheckBoxLabeled3
+          end>
+      end
+      object CheckBoxLabeled3: TCheckBoxLabeled
+        Left = 8
+        Top = 302
+        Width = 130
+        Height = 17
+        Alignment = taLeftJustify
+        Caption = 'Dessinateurs'
+        TabOrder = 21
+        LinkControls = <
+          item
+            Control = CheckBoxLabeled3
+          end>
+      end
+      object cklColoristesSerie: TCheckListBoxLabeled
+        Left = 144
+        Top = 341
+        Width = 361
+        Height = 34
+        BevelKind = bkTile
+        BorderStyle = bsNone
+        Columns = 2
+        ItemHeight = 13
+        TabOrder = 22
+        LinkControls = <
+          item
             Control = CheckBoxLabeled4
           end>
       end
       object CheckBoxLabeled4: TCheckBoxLabeled
         Left = 8
-        Top = 290
+        Top = 343
         Width = 130
         Height = 17
         Alignment = taLeftJustify
         Caption = 'Coloristes'
-        TabOrder = 21
+        TabOrder = 23
         LinkControls = <
           item
             Control = CheckBoxLabeled4
@@ -801,12 +782,12 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBoxLabeled5: TCheckBoxLabeled
         Left = 10
-        Top = 144
+        Top = 182
         Width = 130
         Height = 17
         Alignment = taLeftJustify
         Caption = 'Editeur'
-        TabOrder = 11
+        TabOrder = 13
         LinkControls = <
           item
             Control = CheckBoxLabeled5
@@ -814,13 +795,13 @@ object frmValidationImport: TfrmValidationImport
       end
       object edNomEditeurSerie: TEditLabeled
         Left = 144
-        Top = 142
+        Top = 180
         Width = 361
         Height = 21
         BevelKind = bkTile
         BorderStyle = bsNone
         ReadOnly = True
-        TabOrder = 10
+        TabOrder = 12
         LinkControls = <
           item
             Control = CheckBoxLabeled5
@@ -829,13 +810,13 @@ object frmValidationImport: TfrmValidationImport
       end
       object edSiteWebEditeurSerie: TEditLabeled
         Left = 232
-        Top = 166
+        Top = 206
         Width = 273
         Height = 21
         BevelKind = bkTile
         BorderStyle = bsNone
         ReadOnly = True
-        TabOrder = 12
+        TabOrder = 14
         LinkControls = <
           item
             Control = CheckBoxLabeled6
@@ -844,12 +825,12 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBoxLabeled6: TCheckBoxLabeled
         Left = 144
-        Top = 167
+        Top = 208
         Width = 82
         Height = 17
         Alignment = taLeftJustify
         Caption = 'Site web'
-        TabOrder = 13
+        TabOrder = 15
         LinkControls = <
           item
             Control = CheckBoxLabeled6
@@ -857,13 +838,13 @@ object frmValidationImport: TfrmValidationImport
       end
       object edCollectionSerie: TEditLabeled
         Left = 144
-        Top = 190
+        Top = 234
         Width = 361
         Height = 21
         BevelKind = bkTile
         BorderStyle = bsNone
         ReadOnly = True
-        TabOrder = 14
+        TabOrder = 16
         LinkControls = <
           item
             Control = CheckBoxLabeled7
@@ -872,28 +853,67 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBoxLabeled7: TCheckBoxLabeled
         Left = 8
-        Top = 192
+        Top = 236
         Width = 130
         Height = 17
         Alignment = taLeftJustify
         Caption = 'Collection'
-        TabOrder = 15
+        TabOrder = 17
         LinkControls = <
           item
             Control = CheckBoxLabeled7
+          end>
+      end
+      object edUnivers: TEditLabeled
+        Left = 144
+        Top = 89
+        Width = 361
+        Height = 21
+        BevelKind = bkTile
+        BorderStyle = bsNone
+        MaxLength = 3
+        ReadOnly = True
+        TabOrder = 6
+        LinkControls = <
+          item
+          end>
+        TypeDonnee = tdEntier
+        CurrencyChar = #0
+      end
+      object CheckBox19: TCheckBoxLabeled
+        Left = 8
+        Top = 64
+        Width = 130
+        Height = 17
+        Alignment = taLeftJustify
+        Caption = 'Univers'
+        TabOrder = 5
+        LinkControls = <
+          item
+            Control = CheckBox19
+          end>
+      end
+      object CheckBoxLabeled8: TCheckBoxLabeled
+        Left = 8
+        Top = 91
+        Width = 130
+        Height = 17
+        Alignment = taLeftJustify
+        Caption = 'Nombre d'#39'albums'
+        TabOrder = 7
+        LinkControls = <
+          item
+            Control = CheckBoxLabeled8
           end>
       end
     end
     object TabSheet3: TTabSheet
       Caption = 'Edition'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitHeight = 486
       object cbxEtat: TLightComboCheck
         Left = 144
-        Top = 151
+        Top = 169
         Width = 361
         Height = 13
         Checked = False
@@ -911,7 +931,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object cbxEdition: TLightComboCheck
         Left = 144
-        Top = 168
+        Top = 188
         Width = 361
         Height = 13
         Checked = False
@@ -929,7 +949,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object cbxReliure: TLightComboCheck
         Left = 144
-        Top = 185
+        Top = 207
         Width = 361
         Height = 13
         Checked = False
@@ -947,7 +967,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object cbxOrientation: TLightComboCheck
         Left = 144
-        Top = 201
+        Top = 226
         Width = 361
         Height = 13
         Checked = False
@@ -965,7 +985,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object cbxSensLecture: TLightComboCheck
         Left = 144
-        Top = 219
+        Top = 245
         Width = 361
         Height = 13
         Checked = False
@@ -983,7 +1003,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object cbxFormat: TLightComboCheck
         Left = 144
-        Top = 236
+        Top = 264
         Width = 361
         Height = 13
         Checked = False
@@ -1001,7 +1021,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object imgVisu: TImage
         Left = 408
-        Top = 368
+        Top = 411
         Width = 97
         Height = 102
         Cursor = crHandPoint
@@ -1038,7 +1058,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object edSiteWebEditeur: TEditLabeled
         Left = 232
-        Top = 32
+        Top = 35
         Width = 273
         Height = 21
         BevelKind = bkTile
@@ -1053,7 +1073,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox21: TCheckBoxLabeled
         Left = 144
-        Top = 33
+        Top = 37
         Width = 82
         Height = 17
         Alignment = taLeftJustify
@@ -1066,7 +1086,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object edCollection: TEditLabeled
         Left = 144
-        Top = 56
+        Top = 62
         Width = 361
         Height = 21
         BevelKind = bkTile
@@ -1081,7 +1101,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox22: TCheckBoxLabeled
         Left = 8
-        Top = 58
+        Top = 64
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -1094,7 +1114,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object edAnneeEdition: TEditLabeled
         Left = 144
-        Top = 80
+        Top = 89
         Width = 361
         Height = 21
         BevelKind = bkTile
@@ -1110,7 +1130,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox29: TCheckBoxLabeled
         Left = 8
-        Top = 82
+        Top = 91
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -1123,7 +1143,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object edPrix: TEditLabeled
         Left = 144
-        Top = 104
+        Top = 116
         Width = 175
         Height = 21
         AutoSelect = False
@@ -1145,7 +1165,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object Label9: TCheckBoxLabeled
         Left = 8
-        Top = 105
+        Top = 118
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -1158,7 +1178,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object pnGratuit: TPanel
         Left = 408
-        Top = 104
+        Top = 116
         Width = 97
         Height = 20
         BevelOuter = bvNone
@@ -1194,7 +1214,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox30: TCheckBoxLabeled
         Left = 325
-        Top = 106
+        Top = 118
         Width = 77
         Height = 17
         Alignment = taLeftJustify
@@ -1207,9 +1227,9 @@ object frmValidationImport: TfrmValidationImport
       end
       object edISBN: TEditLabeled
         Left = 144
-        Top = 128
+        Top = 143
         Width = 361
-        Height = 20
+        Height = 21
         AutoSelect = False
         AutoSize = False
         BevelKind = bkTile
@@ -1229,7 +1249,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object Label11: TCheckBoxLabeled
         Left = 8
-        Top = 128
+        Top = 145
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -1242,7 +1262,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox23: TCheckBoxLabeled
         Left = 8
-        Top = 150
+        Top = 168
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -1255,7 +1275,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox24: TCheckBoxLabeled
         Left = 8
-        Top = 167
+        Top = 187
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -1268,7 +1288,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox25: TCheckBoxLabeled
         Left = 8
-        Top = 184
+        Top = 206
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -1281,7 +1301,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox26: TCheckBoxLabeled
         Left = 8
-        Top = 200
+        Top = 225
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -1294,7 +1314,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox27: TCheckBoxLabeled
         Left = 8
-        Top = 216
+        Top = 244
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -1307,7 +1327,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox28: TCheckBoxLabeled
         Left = 8
-        Top = 232
+        Top = 263
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -1320,7 +1340,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object pnCouleur: TPanel
         Left = 144
-        Top = 255
+        Top = 283
         Width = 361
         Height = 20
         BevelOuter = bvNone
@@ -1356,7 +1376,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox31: TCheckBoxLabeled
         Left = 8
-        Top = 254
+        Top = 285
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -1369,7 +1389,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object pnVO: TPanel
         Left = 144
-        Top = 274
+        Top = 305
         Width = 361
         Height = 20
         BevelOuter = bvNone
@@ -1403,7 +1423,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object edNbPages: TEditLabeled
         Left = 144
-        Top = 296
+        Top = 330
         Width = 361
         Height = 21
         BevelKind = bkTile
@@ -1420,7 +1440,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox33: TCheckBoxLabeled
         Left = 8
-        Top = 298
+        Top = 332
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -1433,7 +1453,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object edAnneeCote: TEditLabeled
         Left = 144
-        Top = 320
+        Top = 357
         Width = 361
         Height = 21
         BevelKind = bkTile
@@ -1450,7 +1470,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object Label24: TCheckBoxLabeled
         Left = 8
-        Top = 322
+        Top = 359
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -1463,7 +1483,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object edPrixCote: TEditLabeled
         Left = 144
-        Top = 344
+        Top = 384
         Width = 361
         Height = 21
         AutoSelect = False
@@ -1485,7 +1505,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object Label25: TCheckBoxLabeled
         Left = 8
-        Top = 346
+        Top = 386
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -1498,7 +1518,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object cklImages: TCheckListBoxLabeled
         Left = 144
-        Top = 368
+        Top = 411
         Width = 258
         Height = 102
         BevelKind = bkTile
@@ -1514,7 +1534,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBoxLabeled1: TCheckBoxLabeled
         Left = 8
-        Top = 368
+        Top = 411
         Width = 130
         Height = 17
         Alignment = taLeftJustify
@@ -1527,7 +1547,7 @@ object frmValidationImport: TfrmValidationImport
       end
       object CheckBox32: TCheckBoxLabeled
         Left = 8
-        Top = 276
+        Top = 307
         Width = 130
         Height = 17
         Alignment = taLeftJustify

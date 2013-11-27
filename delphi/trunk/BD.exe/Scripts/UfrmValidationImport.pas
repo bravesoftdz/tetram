@@ -48,7 +48,6 @@ type
     CheckBox17: TCheckBoxLabeled;
     mmNotesSerie: TMemoLabeled;
     CheckBox18: TCheckBoxLabeled;
-    CheckBox19: TCheckBoxLabeled;
     edNbAlbums: TEditLabeled;
     cbxEtat: TLightComboCheck;
     cbxEdition: TLightComboCheck;
@@ -116,6 +115,9 @@ type
     edAnneeEdition: TEditLabeled;
     CheckBox29: TCheckBoxLabeled;
     CheckBox32: TCheckBoxLabeled;
+    edUnivers: TEditLabeled;
+    CheckBox19: TCheckBoxLabeled;
+    CheckBoxLabeled8: TCheckBoxLabeled;
     procedure FormCreate(Sender: TObject);
     procedure framBoutons1btnOKClick(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
