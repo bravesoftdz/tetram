@@ -5,7 +5,7 @@
     <Description/>
     <ScriptVersion>2.1</ScriptVersion>
     <BDVersion>2.1.0.17</BDVersion>
-    <LastUpdate>Thu, 30 Aug 2012 15:48:36 +0200</LastUpdate>
+    <LastUpdate>Wed, 27 Nov 2013 13:56:14 +0100</LastUpdate>
     <Engine>PascalScript</Engine>
   </Infos>
   <Options/>
@@ -16,6 +16,7 @@ const
   regExURLFinal = &apos;X-URL-Final: (.*?)[\r|\n]&apos;;
   regExURL = &apos;&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;(?&lt;texte&gt;(?s-).*?)&lt;/a&gt;&apos;;
   regExIMG = &apos;&lt;img(?: src=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*/?&gt;&apos;;
+  regExIFRAME = &apos;&lt;iframe(?: src=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*(?:&gt;(?&lt;content&gt;.*?)&lt;/iframe|/)?&gt;&apos;;
   regExNumeric = &apos;(\d+(?:,|\.)?\d*)&apos;;
 
 end.</Code>
