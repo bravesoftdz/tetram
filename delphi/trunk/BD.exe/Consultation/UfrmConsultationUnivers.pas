@@ -98,11 +98,11 @@ begin
   Description.Text := FUnivers.Description.Text;
 
   vtAlbums.Filtre := 'Branche_Univers containing ' + QuotedStr(GUIDToString(ID_Univers));
-  vtAlbums.Mode := vmAlbumsSerie;
+  vtAlbums.Mode := vmAlbumsSerieUnivers;
   vtAlbums.FullExpand;
 
   vtParaBD.Filtre := 'Branche_Univers containing ' + QuotedStr(GUIDToString(ID_Univers));
-  vtParaBD.Mode := vmParaBDSerie;
+  vtParaBD.Mode := vmParaBDSerieUnivers;
   vtParaBD.FullExpand;
 end;
 

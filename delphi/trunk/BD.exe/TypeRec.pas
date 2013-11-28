@@ -116,6 +116,7 @@ type
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
     class function Duplicate(Ps: TUnivers): TUnivers; reintroduce;
+    class function Make(Query: TUIBQuery): TUnivers; reintroduce;
   end;
 
   TEditeur = class(TBasePointeur)
@@ -1199,6 +1200,11 @@ procedure TUnivers.Fill(Query: TUIBQuery);
 begin
   ID := NonNull(Query, 'ID_Univers');
   NomUnivers := Query.Fields.ByNameAsString['NomUnivers'];
+end;
+
+class function TUnivers.Make(Query: TUIBQuery): TUnivers;
+begin
+  Result := TUnivers(inherited Make(Query));
 end;
 
 initialization

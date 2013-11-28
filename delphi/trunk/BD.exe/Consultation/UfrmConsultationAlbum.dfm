@@ -2,8 +2,8 @@ object frmConsultationAlbum: TfrmConsultationAlbum
   Left = 440
   Top = 64
   Caption = 'Fiche d'#39'album'
-  ClientHeight = 711
-  ClientWidth = 532
+  ClientHeight = 722
+  ClientWidth = 599
   Color = clWhite
   Constraints.MinWidth = 530
   Font.Charset = DEFAULT_CHARSET
@@ -21,20 +21,19 @@ object frmConsultationAlbum: TfrmConsultationAlbum
   object ScrollBox2: TScrollBox
     Left = 0
     Top = 0
-    Width = 532
-    Height = 711
+    Width = 599
+    Height = 722
     Align = alClient
     BorderStyle = bsNone
     ParentBackground = True
     TabOrder = 0
-    ExplicitLeft = 8
-    ExplicitTop = -128
+    ExplicitHeight = 827
     DesignSize = (
-      532
-      711)
+      599
+      722)
     object Label4: TLabel
-      Left = 374
-      Top = 164
+      Left = 408
+      Top = 137
       Width = 89
       Height = 21
       Alignment = taCenter
@@ -47,11 +46,11 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Font.Style = []
       ParentFont = False
       Transparent = True
-      ExplicitLeft = 364
+      ExplicitLeft = 327
     end
     object l_remarques: TLabel
       Left = 29
-      Top = 410
+      Top = 434
       Width = 28
       Height = 13
       Alignment = taRightJustify
@@ -69,7 +68,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object l_sujet: TLabel
       Left = 21
-      Top = 339
+      Top = 363
       Width = 36
       Height = 13
       Alignment = taRightJustify
@@ -87,7 +86,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object Label1: TLabel
       Left = 23
-      Top = 112
+      Top = 136
       Width = 34
       Height = 13
       Alignment = taRightJustify
@@ -122,7 +121,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object l_acteurs: TLabel
       Left = 21
-      Top = 194
+      Top = 217
       Width = 36
       Height = 13
       Alignment = taRightJustify
@@ -140,7 +139,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object l_realisation: TLabel
       Left = 16
-      Top = 153
+      Top = 176
       Width = 41
       Height = 13
       Alignment = taRightJustify
@@ -158,7 +157,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object Label5: TLabel
       Left = 33
-      Top = 277
+      Top = 301
       Width = 24
       Height = 13
       Alignment = taRightJustify
@@ -176,7 +175,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     object TitreAlbum: TLabel
       Left = 94
       Top = 27
-      Width = 430
+      Width = 517
       Height = 23
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -191,6 +190,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Transparent = True
       Layout = tlCenter
       WordWrap = True
+      ExplicitWidth = 430
     end
     object Label6: TLabel
       Left = 59
@@ -211,8 +211,8 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Transparent = True
     end
     object VDTButton3: TCRFurtifLight
-      Left = 481
-      Top = 312
+      Left = 515
+      Top = 336
       Width = 21
       Height = 20
       Cursor = crHandPoint
@@ -319,10 +319,11 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       NumGlyphs = 4
       Visible = False
       OnClick = VDTButton3Click
+      ExplicitLeft = 434
     end
     object VDTButton4: TCRFurtifLight
-      Left = 505
-      Top = 312
+      Left = 539
+      Top = 336
       Width = 21
       Height = 20
       Cursor = crHandPoint
@@ -429,10 +430,11 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       NumGlyphs = 4
       Visible = False
       OnClick = VDTButton4Click
+      ExplicitLeft = 458
     end
     object Label7: TLabel
       Left = 15
-      Top = 236
+      Top = 258
       Width = 42
       Height = 13
       Alignment = taRightJustify
@@ -449,8 +451,8 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Transparent = True
     end
     object Label11: TLabel
-      Left = 10
-      Top = 85
+      Left = 41
+      Top = 66
       Width = 47
       Height = 13
       Alignment = taRightJustify
@@ -467,8 +469,8 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Transparent = True
     end
     object AnneeParution: TLabel
-      Left = 60
-      Top = 85
+      Left = 91
+      Top = 66
       Width = 70
       Height = 13
       Alignment = taCenter
@@ -479,7 +481,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     object TitreSerie: TLabel
       Left = 94
       Top = 3
-      Width = 430
+      Width = 517
       Height = 23
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -499,8 +501,8 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       ExplicitWidth = 433
     end
     object Label14: TLabel
-      Left = 24
-      Top = 70
+      Left = 55
+      Top = 51
       Width = 33
       Height = 13
       Alignment = taRightJustify
@@ -517,8 +519,8 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Transparent = True
     end
     object Tome: TLabel
-      Left = 60
-      Top = 70
+      Left = 91
+      Top = 51
       Width = 70
       Height = 13
       Alignment = taCenter
@@ -528,8 +530,8 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 708
-      Width = 532
+      Top = 719
+      Width = 599
       Height = 3
       Align = alBottom
       Shape = bsSpacer
@@ -538,8 +540,8 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       ExplicitWidth = 515
     end
     object Label18: TLabel
-      Left = 361
-      Top = 204
+      Left = 395
+      Top = 177
       Width = 114
       Height = 42
       Alignment = taCenter
@@ -554,20 +556,21 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Transparent = True
       Visible = False
       WordWrap = True
-      ExplicitLeft = 351
+      ExplicitLeft = 314
     end
     object Couverture: TImage
-      Left = 314
-      Top = 53
+      Left = 348
+      Top = 52
       Width = 215
-      Height = 259
+      Height = 283
       Anchors = [akTop, akRight]
       Center = True
       IncrementalDisplay = True
+      ExplicitLeft = 267
     end
     object VDTButton1: TVDTButton
-      Left = 311
-      Top = 312
+      Left = 345
+      Top = 336
       Width = 20
       Height = 20
       Anchors = [akTop, akRight]
@@ -603,10 +606,11 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         FB57FD8522C99080D088688532608C54E6A71549382DC7C9341E8FA7A7A9EE65
         D60793318FE5C5314D61CAFE6798068484C9AF17CADE500D4214EEEECEDE11AF
         EF9FF413DFF6506512AFC4930000000049454E44AE426082}
+      ExplicitLeft = 264
     end
     object VDTButton2: TVDTButton
       Left = 37
-      Top = 312
+      Top = 336
       Width = 20
       Height = 20
       OnClick = VDTButton2Click
@@ -653,12 +657,12 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Transparent = True
     end
     object Label2: TLabel
-      Left = 45
-      Top = 51
-      Width = 43
+      Left = 21
+      Top = 94
+      Width = 36
       Height = 13
       Alignment = taRightJustify
-      Caption = 'Univers :'
+      Caption = 'Univers'
       Color = clWhite
       Font.Charset = DEFAULT_CHARSET
       Font.Color = 12615680
@@ -670,19 +674,10 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       ShowAccelChar = False
       Transparent = True
     end
-    object Univers: TLabel
-      Left = 94
-      Top = 51
-      Width = 36
-      Height = 13
-      Caption = 'Univers'
-      OnClick = UniversClick
-      OnDblClick = UniversDblClick
-    end
     object remarques: TMemo
       Left = 60
-      Top = 410
-      Width = 416
+      Top = 434
+      Width = 503
       Height = 65
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -696,8 +691,8 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object sujet: TMemo
       Left = 60
-      Top = 338
-      Width = 416
+      Top = 362
+      Width = 503
       Height = 67
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -711,9 +706,9 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object lvScenaristes: TVDTListView
       Left = 60
-      Top = 153
-      Width = 192
-      Height = 35
+      Top = 176
+      Width = 279
+      Height = 36
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
       BevelOuter = bvNone
@@ -731,8 +726,8 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object lvDessinateurs: TVDTListView
       Left = 60
-      Top = 194
-      Width = 192
+      Top = 217
+      Width = 279
       Height = 36
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -752,8 +747,8 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object Memo1: TMemo
       Left = 60
-      Top = 112
-      Width = 192
+      Top = 136
+      Width = 279
       Height = 34
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -767,8 +762,8 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object lvColoristes: TVDTListView
       Left = 60
-      Top = 236
-      Width = 192
+      Top = 258
+      Width = 279
       Height = 36
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -787,8 +782,8 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object PanelEdition: TPanel
       Left = 4
-      Top = 481
-      Width = 472
+      Top = 505
+      Width = 559
       Height = 203
       Anchors = [akLeft, akTop, akRight]
       BevelOuter = bvNone
@@ -796,7 +791,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       ParentColor = True
       TabOrder = 6
       DesignSize = (
-        472
+        559
         203)
       object ISBN: TLabel
         Left = 56
@@ -1171,7 +1166,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       object edNotes: TMemo
         Left = 56
         Top = 134
-        Width = 416
+        Width = 503
         Height = 40
         Anchors = [akLeft, akTop, akRight]
         BevelInner = bvLowered
@@ -1182,7 +1177,6 @@ object frmConsultationAlbum: TfrmConsultationAlbum
         ReadOnly = True
         ScrollBars = ssVertical
         TabOrder = 0
-        ExplicitWidth = 433
       end
       object cbOffert: TLabeledCheckBox
         Left = 233
@@ -1313,7 +1307,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     object lvEditions: TListBox
       Left = 346
       Top = 481
-      Width = 129
+      Width = 216
       Height = 62
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -1327,8 +1321,8 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object vstSerie: TVirtualStringTree
       Left = 60
-      Top = 277
-      Width = 192
+      Top = 301
+      Width = 279
       Height = 55
       Cursor = crHandPoint
       Anchors = [akLeft, akTop, akRight]
@@ -1354,8 +1348,8 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       Columns = <>
     end
     object cbIntegrale: TLabeledCheckBox
-      Left = 172
-      Top = 70
+      Left = 203
+      Top = 51
       Width = 13
       Height = 13
       Caption = 'Int'#233'grale'
@@ -1378,8 +1372,8 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       ReadOnly = True
     end
     object HorsSerie: TLabeledCheckBox
-      Left = 172
-      Top = 85
+      Left = 203
+      Top = 66
       Width = 13
       Height = 13
       Caption = 'Hors s'#233'rie'
@@ -1400,6 +1394,26 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       EditLabel.Font.Style = []
       EditLabel.ParentFont = False
       ReadOnly = True
+    end
+    object lvUnivers: TVDTListView
+      Left = 60
+      Top = 94
+      Width = 280
+      Height = 36
+      Anchors = [akLeft, akTop, akRight]
+      BevelInner = bvLowered
+      BevelOuter = bvNone
+      BevelKind = bkFlat
+      Color = clWhite
+      Columns = <
+        item
+          MinWidth = 150
+          Width = 231
+        end>
+      OwnerData = True
+      TabOrder = 11
+      OnData = lvUniversData
+      OnDblClick = lvUniversDblClick
     end
   end
   object ActionList1: TActionList
@@ -1498,7 +1512,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
   object PopupMenu1: TPopupMenu
     Images = frmFond.imlNotation_32x32
     Left = 8
-    Top = 64
+    Top = 48
     object N2: TMenuItem
       Tag = 900
       Caption = 'Pas d'#39'avis'

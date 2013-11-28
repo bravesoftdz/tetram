@@ -109,7 +109,7 @@ type
     cbStock: TLabeledCheckBox;
     cbCouleur: TLabeledCheckBox;
     Label2: TLabel;
-    Univers: TLabel;
+    lvUnivers: TVDTListView;
     procedure lvScenaristesDblClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -136,8 +136,8 @@ type
     procedure vstSerieDblClick(Sender: TObject);
     procedure N7Click(Sender: TObject);
     procedure vstSerieAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
-    procedure UniversClick(Sender: TObject);
-    procedure UniversDblClick(Sender: TObject);
+    procedure lvUniversData(Sender: TObject; Item: TListItem);
+    procedure lvUniversDblClick(Sender: TObject);
   strict private
     CurrentCouverture: Integer;
     FAlbum: TAlbumComplet;
@@ -176,6 +176,18 @@ begin
     Historique.AddWaiting(fcAuteur, TAuteur(TListView(Sender).Selected.Data).Personne.ID, 0);
 end;
 
+procedure TfrmConsultationAlbum.lvUniversData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FAlbum.UniversFull[Item.Index];
+  Item.Caption := TUnivers(Item.Data).ChaineAffichage;
+end;
+
+procedure TfrmConsultationAlbum.lvUniversDblClick(Sender: TObject);
+begin
+  if Assigned(TListView(Sender).Selected) then
+    Historique.AddWaiting(fcUnivers, TUnivers(TListView(Sender).Selected.Data).ID, 0);
+end;
+
 procedure TfrmConsultationAlbum.FicheModifierExecute(Sender: TObject);
 begin
   Historique.AddWaiting(fcGestionModif, @RefreshCallBack, nil, @ModifierAlbums2, nil, FAlbum.ID);
@@ -199,6 +211,7 @@ end;
 
 procedure TfrmConsultationAlbum.ClearForm;
 begin
+  lvUnivers.Items.Count := 0;
   lvScenaristes.Items.Count := 0;
   lvDessinateurs.Items.Count := 0;
   lvColoristes.Items.Count := 0;
@@ -477,19 +490,6 @@ begin
     TitreSerie.Cursor := crDefault;
   end;
   TitreAlbum.Caption := FormatTitre(FAlbum.TitreAlbum);
-  Univers.Caption := FormatTitre(FAlbum.Univers.NomUnivers);
-  if FAlbum.Univers.SiteWeb <> '' then
-  begin
-    Univers.Font.Color := clBlue;
-    Univers.Font.Style := Univers.Font.Style + [fsUnderline];
-    Univers.Cursor := crHandPoint;
-  end
-  else
-  begin
-    Univers.Font.Color := clBlack;
-    Univers.Font.Style := Univers.Font.Style - [fsUnderline];
-    Univers.Cursor := crDefault;
-  end;
 
   Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FAlbum.Notation - 900].pngimage);
   Tome.Caption := NonZero(IntToStr(FAlbum.Tome));
@@ -519,14 +519,17 @@ begin
     AjoutString(s, FAlbum.Serie.Genres.ValueFromIndex[i], ', ');
   Memo1.Lines.Text := s;
 
+  lvUnivers.Items.BeginUpdate;
   lvScenaristes.Items.BeginUpdate;
   lvDessinateurs.Items.BeginUpdate;
   lvColoristes.Items.BeginUpdate;
 
+  lvUnivers.Items.Count := FAlbum.UniversFull.Count;
   lvScenaristes.Items.Count := FAlbum.Scenaristes.Count;
   lvDessinateurs.Items.Count := FAlbum.Dessinateurs.Count;
   lvColoristes.Items.Count := FAlbum.Coloristes.Count;
 
+  lvUnivers.Items.EndUpdate;
   lvScenaristes.Items.EndUpdate;
   lvDessinateurs.Items.EndUpdate;
   lvColoristes.Items.EndUpdate;
@@ -551,24 +554,6 @@ procedure TfrmConsultationAlbum.TitreSerieDblClick(Sender: TObject);
 begin
   if IsDownKey(VK_CONTROL) then
     Historique.AddWaiting(fcSerie, FAlbum.ID_Serie);
-end;
-
-procedure TfrmConsultationAlbum.UniversClick(Sender: TObject);
-var
-  s: string;
-begin
-  if not IsDownKey(VK_CONTROL) then
-  begin
-    s := FAlbum.Univers.SiteWeb;
-    if s <> '' then
-      ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
-  end;
-end;
-
-procedure TfrmConsultationAlbum.UniversDblClick(Sender: TObject);
-begin
-  if IsDownKey(VK_CONTROL) then
-    Historique.AddWaiting(fcUnivers, FAlbum.ID_Univers);
 end;
 
 procedure TfrmConsultationAlbum.TitreSerieClick(Sender: TObject);

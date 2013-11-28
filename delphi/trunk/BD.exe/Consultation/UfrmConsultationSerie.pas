@@ -12,7 +12,6 @@ type
     ScrollBox2: TScrollBox;
     l_remarques: TLabel;
     l_sujet: TLabel;
-    Label1: TLabel;
     l_acteurs: TLabel;
     l_realisation: TLabel;
     Label6: TLabel;
@@ -23,7 +22,6 @@ type
     sujet: TMemo;
     lvScenaristes: TVDTListView;
     lvDessinateurs: TVDTListView;
-    Memo1: TMemo;
     lvColoristes: TVDTListView;
     vtAlbums: TVirtualStringTree;
     vtParaBD: TVirtualStringTree;
@@ -53,6 +51,10 @@ type
     N7: TMenuItem;
     Image1: TImage;
     cbTerminee: TLabeledCheckBox;
+    Label2: TLabel;
+    lvUnivers: TVDTListView;
+    Label1: TLabel;
+    Memo1: TMemo;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure TitreSerieClick(Sender: TObject);
@@ -64,8 +66,12 @@ type
     procedure FicheModifierExecute(Sender: TObject);
     procedure VDTButton1Click(Sender: TObject);
     procedure N7Click(Sender: TObject);
-    procedure vtAlbumsAfterItemPaint(Sender: TBaseVirtualTree;
-      TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
+    procedure vtAlbumsAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
+    procedure lvUniversDblClick(Sender: TObject);
+    procedure lvScenaristesData(Sender: TObject; Item: TListItem);
+    procedure lvDessinateursData(Sender: TObject; Item: TListItem);
+    procedure lvColoristesData(Sender: TObject; Item: TListItem);
+    procedure lvUniversData(Sender: TObject; Item: TListItem);
   private
     FSerie: TSerieComplete;
     function GetID_Serie: TGUID;
@@ -90,7 +96,6 @@ uses Commun, Divers, TypeRec, ShellAPI, UHistorique, Impression, Proc_Gestions,
   UfrmFond;
 
 {$R *.dfm}
-
 { TFrmConsultationSerie }
 
 function TfrmConsultationSerie.GetID_Serie: TGUID;
@@ -101,7 +106,6 @@ end;
 procedure TfrmConsultationSerie.SetID_Serie(const Value: TGUID);
 var
   s: string;
-  Auteur: TAuteur;
   i: Integer;
 begin
   ClearForm;
@@ -109,12 +113,14 @@ begin
 
   Caption := 'Fiche de série - ' + FSerie.ChaineAffichage;
   TitreSerie.Caption := FormatTitre(FSerie.TitreSerie);
-  if FSerie.SiteWeb <> '' then begin
+  if FSerie.SiteWeb <> '' then
+  begin
     TitreSerie.Font.Color := clBlue;
     TitreSerie.Font.Style := TitreSerie.Font.Style + [fsUnderline];
     TitreSerie.Cursor := crHandPoint;
   end
-  else begin
+  else
+  begin
     TitreSerie.Font.Color := clWindowText;
     TitreSerie.Font.Style := TitreSerie.Font.Style - [fsUnderline];
     TitreSerie.Cursor := crDefault;
@@ -122,12 +128,14 @@ begin
   Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FSerie.Notation - 900].PngImage);
 
   Editeur.Caption := FormatTitre(FSerie.Editeur.NomEditeur);
-  if FSerie.Editeur.SiteWeb <> '' then begin
+  if FSerie.Editeur.SiteWeb <> '' then
+  begin
     Editeur.Font.Color := clBlue;
     Editeur.Font.Style := [fsUnderline];
     Editeur.Cursor := crHandPoint;
   end
-  else begin
+  else
+  begin
     Editeur.Font.Color := clWindowText;
     Editeur.Font.Style := [];
     Editeur.Cursor := crDefault;
@@ -135,36 +143,27 @@ begin
   Collection.Caption := FSerie.Collection.ChaineAffichage;
   cbTerminee.State := TCheckBoxState(FSerie.Terminee);
 
-  Sujet.Text := FSerie.Sujet.Text;
-  Remarques.Text := FSerie.Notes.Text;
+  sujet.Text := FSerie.sujet.Text;
+  remarques.Text := FSerie.Notes.Text;
 
   s := '';
   for i := 0 to Pred(FSerie.Genres.Count) do
     AjoutString(s, FSerie.Genres.ValueFromIndex[i], ', ');
   Memo1.Text := s;
 
+  lvUnivers.Items.BeginUpdate;
   lvScenaristes.Items.BeginUpdate;
-  for Auteur in FSerie.Scenaristes do
-    with lvScenaristes.Items.Add do begin
-      Data := Auteur;
-      Caption := Auteur.ChaineAffichage;
-    end;
-  lvScenaristes.Items.EndUpdate;
-
   lvDessinateurs.Items.BeginUpdate;
-  for Auteur in FSerie.Dessinateurs do
-    with lvDessinateurs.Items.Add do begin
-      Data := Auteur;
-      Caption := Auteur.ChaineAffichage;
-    end;
-  lvDessinateurs.Items.EndUpdate;
-
   lvColoristes.Items.BeginUpdate;
-  for Auteur in FSerie.Coloristes do
-    with lvColoristes.Items.Add do begin
-      Data := Auteur;
-      Caption := Auteur.ChaineAffichage;
-    end;
+
+  lvUnivers.Items.Count := FSerie.Univers.Count;
+  lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
+  lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
+  lvColoristes.Items.Count := FSerie.Coloristes.Count;
+
+  lvUnivers.Items.EndUpdate;
+  lvScenaristes.Items.EndUpdate;
+  lvDessinateurs.Items.EndUpdate;
   lvColoristes.Items.EndUpdate;
 
   vtAlbums.Filtre := 'ID_Serie = ' + QuotedStr(GUIDToString(ID_Serie));
@@ -178,6 +177,7 @@ end;
 
 procedure TfrmConsultationSerie.ClearForm;
 begin
+  lvUnivers.Items.Count := 0;
   lvScenaristes.Items.Count := 0;
   lvDessinateurs.Items.Count := 0;
   lvColoristes.Items.Count := 0;
@@ -274,9 +274,40 @@ begin
   Result := True;
 end;
 
+procedure TfrmConsultationSerie.lvColoristesData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FSerie.Coloristes[Item.Index];
+  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+end;
+
+procedure TfrmConsultationSerie.lvDessinateursData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FSerie.Dessinateurs[Item.Index];
+  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+end;
+
+procedure TfrmConsultationSerie.lvScenaristesData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FSerie.Scenaristes[Item.Index];
+  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+end;
+
 procedure TfrmConsultationSerie.lvScenaristesDblClick(Sender: TObject);
 begin
-  if Assigned(TListView(Sender).Selected) then Historique.AddWaiting(fcAuteur, TAuteur(TListView(Sender).Selected.Data).Personne.ID, 0);
+  if Assigned(TListView(Sender).Selected) then
+    Historique.AddWaiting(fcAuteur, TAuteur(TListView(Sender).Selected.Data).Personne.ID, 0);
+end;
+
+procedure TfrmConsultationSerie.lvUniversData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FSerie.Univers[Item.Index];
+  Item.Caption := TUnivers(Item.Data).ChaineAffichage;
+end;
+
+procedure TfrmConsultationSerie.lvUniversDblClick(Sender: TObject);
+begin
+  if Assigned(TListView(Sender).Selected) then
+    Historique.AddWaiting(fcUnivers, TUnivers(TListView(Sender).Selected.Data).ID, 0);
 end;
 
 procedure TfrmConsultationSerie.ModificationExecute(Sender: TObject);
@@ -296,4 +327,3 @@ begin
 end;
 
 end.
-

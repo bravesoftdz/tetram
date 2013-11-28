@@ -29,14 +29,33 @@
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win32)'!=''">
+        <Cfg_1_Win32>true</Cfg_1_Win32>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Débogage' or '$(Cfg_2)'!=''">
         <Cfg_2>true</Cfg_2>
         <CfgParent>Base</CfgParent>
         <Base>true</Base>
     </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_2)'=='true') or '$(Cfg_2_Win32)'!=''">
+        <Cfg_2_Win32>true</Cfg_2_Win32>
+        <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
+        <Base>true</Base>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Debug DCU' or '$(Cfg_3)'!=''">
         <Cfg_3>true</Cfg_3>
         <CfgParent>Cfg_2</CfgParent>
+        <Cfg_2>true</Cfg_2>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_3)'=='true') or '$(Cfg_3_Win32)'!=''">
+        <Cfg_3_Win32>true</Cfg_3_Win32>
+        <CfgParent>Cfg_3</CfgParent>
+        <Cfg_3>true</Cfg_3>
         <Cfg_2>true</Cfg_2>
         <Base>true</Base>
     </PropertyGroup>
@@ -85,11 +104,9 @@
         <DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
-        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <PreBuildEvent><![CDATA[rem del "$(PROJECTDIR)\dcu\*.dcu"
 $(PreBuildEvent)]]></PreBuildEvent>
         <DCC_Namespace>System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
-        <Icon_MainIcon>BD_Icon.ico</Icon_MainIcon>
         <PostBuildEvent><![CDATA[rem copy "d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB" d:\MEDIA.KIT\BDThèque\bin /y
 rem copy "C:\Users\Thierry\Desktop\bases BD\install\BD.GDB" d:\MEDIA.KIT\BDThèque\bin /y
 $(PostBuildEvent)]]></PostBuildEvent>
@@ -106,11 +123,24 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
         <DCC_DebugInformation>false</DCC_DebugInformation>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <VerInfo_Build>17</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.17;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2011;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.0;Comments=</VerInfo_Keys>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2_Win32)'!=''">
+        <VerInfo_Build>17</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.17;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2011;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.0;Comments=</VerInfo_Keys>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_3)'!=''">
         <DCC_DebugDCUs>true</DCC_DebugDCUs>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_3_Win32)'!=''">
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_4)'!=''">
         <DCC_Optimize>false</DCC_Optimize>
@@ -118,8 +148,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCC_Define>FullDebugMode;ClearLogFileOnStartup;LoadDebugDLLDynamically;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_4_Win32)'!=''">
-        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.28;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2011;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.0;Comments=</VerInfo_Keys>
-        <VerInfo_Build>28</VerInfo_Build>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
     </PropertyGroup>
     <ItemGroup>
         <DelphiCompile Include="$(MainSource)">
@@ -440,6 +469,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
             <Form>frmScriptGotoLine</Form>
         </DCCReference>
         <DCCReference Include="Scripts\UScriptEngineIntf.pas"/>
+        <DCCReference Include="mises à jour\UMAJ2_2_3_17.pas"/>
         <None Include="ModelSupport_BD\BD\default.txaPackage"/>
         <None Include="ModelSupport_BD\default.txaPackage"/>
         <None Include="ModelSupport_BD\BD\default.txvpck"/>
@@ -483,7 +513,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
                     <VersionInfo Name="MajorVer">2</VersionInfo>
                     <VersionInfo Name="MinorVer">2</VersionInfo>
                     <VersionInfo Name="Release">3</VersionInfo>
-                    <VersionInfo Name="Build">34</VersionInfo>
+                    <VersionInfo Name="Build">41</VersionInfo>
                     <VersionInfo Name="Debug">False</VersionInfo>
                     <VersionInfo Name="PreRelease">False</VersionInfo>
                     <VersionInfo Name="Special">False</VersionInfo>
@@ -495,7 +525,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
                 <VersionInfoKeys>
                     <VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
                     <VersionInfoKeys Name="FileDescription"/>
-                    <VersionInfoKeys Name="FileVersion">2.2.3.34</VersionInfoKeys>
+                    <VersionInfoKeys Name="FileVersion">2.2.3.41</VersionInfoKeys>
                     <VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
                     <VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2011</VersionInfoKeys>
                     <VersionInfoKeys Name="LegalTrademarks"/>

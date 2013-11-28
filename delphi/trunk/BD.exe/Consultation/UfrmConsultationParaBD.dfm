@@ -2,8 +2,8 @@ object frmConsultationParaBD: TfrmConsultationParaBD
   Left = 1405
   Top = 196
   Caption = 'frmConsultationParaBD'
-  ClientHeight = 489
-  ClientWidth = 842
+  ClientHeight = 575
+  ClientWidth = 755
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clBlack
@@ -19,17 +19,19 @@ object frmConsultationParaBD: TfrmConsultationParaBD
   object ScrollBox2: TScrollBox
     Left = 0
     Top = 0
-    Width = 842
-    Height = 489
+    Width = 755
+    Height = 575
     Align = alClient
     BorderStyle = bsNone
     ParentBackground = True
     TabOrder = 0
+    ExplicitWidth = 842
+    ExplicitHeight = 489
     DesignSize = (
-      842
-      489)
+      755
+      575)
     object lbNoImage: TLabel
-      Left = 636
+      Left = 549
       Top = 248
       Width = 89
       Height = 21
@@ -43,10 +45,11 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       Font.Style = []
       ParentFont = False
       Transparent = True
+      ExplicitLeft = 636
     end
     object l_sujet: TLabel
       Left = 1
-      Top = 137
+      Top = 170
       Width = 53
       Height = 13
       Alignment = taRightJustify
@@ -82,7 +85,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
     end
     object l_realisation: TLabel
       Left = 15
-      Top = 95
+      Top = 128
       Width = 38
       Height = 13
       Alignment = taRightJustify
@@ -101,7 +104,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
     object TitreParaBD: TLabel
       Left = 59
       Top = 5
-      Width = 775
+      Width = 688
       Height = 23
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -116,6 +119,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       Transparent = True
       Layout = tlCenter
       WordWrap = True
+      ExplicitWidth = 775
     end
     object Label6: TLabel
       Left = 24
@@ -166,7 +170,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
     object TitreSerie: TLabel
       Left = 59
       Top = 27
-      Width = 775
+      Width = 688
       Height = 23
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -183,17 +187,20 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       WordWrap = True
       OnClick = TitreSerieClick
       OnDblClick = TitreSerieDblClick
+      ExplicitWidth = 775
     end
     object Bevel1: TBevel
       Left = 0
-      Top = 486
-      Width = 842
+      Top = 572
+      Width = 755
       Height = 3
       Align = alBottom
       Shape = bsSpacer
+      ExplicitTop = 486
+      ExplicitWidth = 842
     end
     object lbInvalidImage: TLabel
-      Left = 623
+      Left = 536
       Top = 292
       Width = 114
       Height = 42
@@ -209,17 +216,18 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       Transparent = True
       Visible = False
       WordWrap = True
+      ExplicitLeft = 623
     end
     object Prix: TLabel
       Left = 88
-      Top = 428
+      Top = 461
       Width = 18
       Height = 13
       Caption = 'Prix'
     end
     object Label3: TLabel
       Left = 57
-      Top = 428
+      Top = 461
       Width = 25
       Height = 13
       Alignment = taRightJustify
@@ -236,7 +244,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
     end
     object Label12: TLabel
       Left = 124
-      Top = 428
+      Top = 461
       Width = 52
       Height = 13
       Alignment = taRightJustify
@@ -253,7 +261,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
     end
     object AcheteLe: TLabel
       Left = 184
-      Top = 428
+      Top = 461
       Width = 45
       Height = 13
       Caption = 'Achet'#233' le'
@@ -288,7 +296,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
     end
     object Label2: TLabel
       Left = 52
-      Top = 444
+      Top = 477
       Width = 30
       Height = 13
       Alignment = taRightJustify
@@ -305,24 +313,43 @@ object frmConsultationParaBD: TfrmConsultationParaBD
     end
     object lbCote: TLabel
       Left = 88
-      Top = 444
+      Top = 477
       Width = 23
       Height = 13
       Caption = 'Cote'
     end
     object ImageParaBD: TImage
-      Left = 524
+      Left = 437
       Top = 51
       Width = 312
-      Height = 414
+      Height = 439
       Anchors = [akTop, akRight]
       Center = True
       IncrementalDisplay = True
+      ExplicitLeft = 524
+    end
+    object Label4: TLabel
+      Left = 17
+      Top = 87
+      Width = 36
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Univers'
+      Color = clWhite
+      FocusControl = lvUnivers
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 12615680
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      Transparent = True
     end
     object Description: TMemo
       Left = 59
-      Top = 136
-      Width = 458
+      Top = 169
+      Width = 371
       Height = 257
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -333,11 +360,12 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 0
+      ExplicitWidth = 458
     end
     object lvAuteurs: TVDTListView
       Left = 59
-      Top = 95
-      Width = 458
+      Top = 128
+      Width = 371
       Height = 35
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -349,8 +377,11 @@ object frmConsultationParaBD: TfrmConsultationParaBD
           MinWidth = 150
           Width = 231
         end>
+      OwnerData = True
       TabOrder = 1
+      OnData = lvAuteursData
       OnDblClick = lvAuteursDblClick
+      ExplicitWidth = 458
     end
     object cbDedicace: TLabeledCheckBox
       Left = 172
@@ -402,7 +433,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
     end
     object cbOffert: TLabeledCheckBox
       Left = 98
-      Top = 400
+      Top = 433
       Width = 13
       Height = 13
       Alignment = taLeftJustify
@@ -427,7 +458,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
     end
     object cbStock: TLabeledCheckBox
       Left = 185
-      Top = 400
+      Top = 433
       Width = 13
       Height = 13
       Alignment = taLeftJustify
@@ -449,6 +480,27 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       EditLabel.Font.Style = []
       EditLabel.ParentFont = False
       ReadOnly = True
+    end
+    object lvUnivers: TVDTListView
+      Left = 59
+      Top = 87
+      Width = 371
+      Height = 35
+      Anchors = [akLeft, akTop, akRight]
+      BevelInner = bvLowered
+      BevelOuter = bvNone
+      BevelKind = bkFlat
+      Color = clWhite
+      Columns = <
+        item
+          MinWidth = 150
+          Width = 231
+        end>
+      OwnerData = True
+      TabOrder = 6
+      OnData = lvUniversData
+      OnDblClick = lvUniversDblClick
+      ExplicitWidth = 458
     end
   end
   object MainMenu1: TMainMenu

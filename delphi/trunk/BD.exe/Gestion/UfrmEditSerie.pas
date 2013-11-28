@@ -187,7 +187,8 @@ begin
   FSerie.ID_Collection := vtEditCollections.CurrentValue;
   FSerie.Sujet.Text := edHistoire.Text;
   FSerie.Notes.Text := edNotes.Text;
-  FSerie.ID_Univers := vtEditUnivers.CurrentValue;
+// TODO: remplacer par une liste de TUniversComplet
+//  FSerie.ID_Univers := vtEditUnivers.CurrentValue;
 
   FSerie.VO := Integer(cbVO.State);
   FSerie.Couleur := Integer(cbCouleur.State);
@@ -236,7 +237,8 @@ begin
     edSite.Text := FSerie.SiteWeb;
     if FSerie.NbAlbums > 0 then
       edNbAlbums.Text := IntToStr(FSerie.NbAlbums);
-    vtEditUnivers.CurrentValue := FSerie.ID_Univers;
+// TODO: remplacer par une liste de TUniversComplet
+//    vtEditUnivers.CurrentValue := FSerie.ID_Univers;
 
     lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
     lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
@@ -368,7 +370,8 @@ end;
 
 procedure TfrmEditSerie.vtEditUniversVTEditChange(Sender: TObject);
 begin
-  FSerie.ID_Univers := vtEditUnivers.CurrentValue;
+// TODO: remplacer par une liste de TUniversComplet
+//  FSerie.ID_Univers := vtEditUnivers.CurrentValue;
 end;
 
 procedure TfrmEditSerie.vtGenresDblClick(Sender: TObject);

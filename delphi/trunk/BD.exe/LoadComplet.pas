@@ -149,15 +149,13 @@ type
     FOrientation: ROption;
     FSensLecture: ROption;
     FNotation: Integer;
-    FUnivers: TUniversComplet;
+    FUnivers: TObjectList<TUnivers>;
     function GetID_Editeur: TGUID; inline;
     procedure SetID_Editeur(const Value: TGUID); inline;
     function GetID_Collection: TGUID; inline;
     procedure SetID_Collection(const Value: TGUID); inline;
     procedure SetTitreSerie(const Value: string); inline;
     procedure SetSiteWeb(const Value: string); inline;
-    function GetID_Univers: TGUID;
-    procedure SetID_Univers(const Value: TGUID);
 
   class var
     FGetDefaultDone: Boolean;
@@ -185,7 +183,6 @@ type
     property ID_Serie: TGUID read FID write FID;
     property ID_Editeur: TGUID read GetID_Editeur write SetID_Editeur;
     property ID_Collection: TGUID read GetID_Collection write SetID_Collection;
-    property ID_Univers: TGUID read GetID_Univers write SetID_Univers;
     property TitreSerie: string read FTitreSerie write SetTitreSerie;
     property Terminee: Integer read FTerminee write FTerminee;
     property Genres: TStringList read FGenres;
@@ -212,7 +209,7 @@ type
     property Orientation: ROption read FOrientation write FOrientation;
     property SensLecture: ROption read FSensLecture write FSensLecture;
     property Notation: Integer read FNotation write FNotation;
-    property Univers: TUniversComplet read FUnivers;
+    property Univers: TObjectList<TUnivers> read FUnivers;
 
     // pour rétrocompatibilité pour les scripts
     property Titre: string read FTitreSerie write SetTitreSerie;
@@ -356,12 +353,10 @@ type
     FFusionneEditions: Boolean;
     FNotation: Integer;
     FDefaultSearch: string;
-    FUnivers: TUniversComplet;
+    FUnivers, FUniversFull: TObjectList<TUnivers>;
     function GetID_Serie: TGUID; inline;
     procedure SetID_Serie(const Value: TGUID); inline;
     procedure SetTitreAlbum(const Value: string); inline;
-    function GetID_Univers: TGUID;
-    procedure SetID_Univers(const Value: TGUID);
   public
     procedure Fill(const Reference: TGUID); override;
     procedure Clear; override;
@@ -381,7 +376,6 @@ type
     property Complet: Boolean read FComplet;
     property ID_Album: TGUID read FID write FID;
     property ID_Serie: TGUID read GetID_Serie write SetID_Serie;
-    property ID_Univers: TGUID read GetID_Univers write SetID_Univers;
     property TitreAlbum: string read FTitreAlbum write SetTitreAlbum;
     property Serie: TSerieComplete read FSerie;
     property MoisParution: Integer read FMoisParution write FMoisParution;
@@ -398,7 +392,8 @@ type
     property Notes: TStringList read FNotes;
     property Editions: TEditionsCompletes read FEditions;
     property Notation: Integer read FNotation write FNotation;
-    property Univers: TUniversComplet read FUnivers;
+    property Univers: TObjectList<TUnivers> read FUnivers;
+    property UniversFull: TObjectList<TUnivers> read FUniversFull;
 
     // pour rétrocompatibilité pour les scripts
     property Titre: string read FTitreAlbum write SetTitreAlbum;
@@ -554,14 +549,12 @@ type
     FFichierImage: string;
     FImageStockee: Boolean;
     FHasImage: Boolean;
-    FUnivers: TUniversComplet;
+    FUnivers, FUniversFull: TObjectList<TUnivers>;
     function Get_sDateAchat: string;
     procedure SetTitreParaBD(const Value: string); inline;
   private
     function GetID_Serie: TGUID;
-    function GetID_Univers: TGUID;
     procedure SetID_Serie(const Value: TGUID);
-    procedure SetID_Univers(const Value: TGUID);
   public
     procedure Fill(const Reference: TGUID); override;
     procedure Clear; override;
@@ -576,7 +569,6 @@ type
   published
     property ID_ParaBD: TGUID read FID write FID;
     property ID_Serie: TGUID read GetID_Serie write SetID_Serie;
-    property ID_Univers: TGUID read GetID_Univers write SetID_Univers;
     property AnneeEdition: Integer read FAnneeEdition write FAnneeEdition;
     property CategorieParaBD: ROption read FCategorieParaBD write FCategorieParaBD;
     property AnneeCote: Integer read FAnneeCote write FAnneeCote;
@@ -596,7 +588,8 @@ type
     property HasImage: Boolean read FHasImage write FHasImage;
     property ImageStockee: Boolean read FImageStockee write FImageStockee;
     property FichierImage: string read FFichierImage write FFichierImage;
-    property Univers: TUniversComplet read FUnivers;
+    property Univers: TObjectList<TUnivers> read FUnivers;
+    property UniversFull: TObjectList<TUnivers> read FUniversFull;
   end;
 
   TGroupOption = (goEt, goOu);
@@ -837,6 +830,7 @@ begin
   Notes.Clear;
   Serie.Clear;
   Univers.Clear;
+  UniversFull.Clear;
 
   Editions.Clear;
 end;
@@ -851,6 +845,7 @@ begin
   FreeAndNil(FSerie);
   FreeAndNil(FEditions);
   FreeAndNil(FUnivers);
+  FreeAndNil(FUniversFull);
   inherited;
 end;
 
@@ -870,7 +865,7 @@ begin
       SQL.Clear;
       SQL.Add('select');
       SQL.Add('  titrealbum, moisparution, anneeparution, id_serie, tome, tomedebut, tomefin, sujetalbum,');
-      SQL.Add('  remarquesalbum, horsserie, integrale, complet, notation, id_univers');
+      SQL.Add('  remarquesalbum, horsserie, integrale, complet, notation');
       SQL.Add('from');
       SQL.Add('  albums');
       SQL.Add('where');
@@ -896,9 +891,33 @@ begin
           Self.Notation := 900;
 
         Self.Serie.Fill(StringToGUIDDef(Fields.ByNameAsString['id_serie'], GUID_NULL));
-        Self.Univers.Fill(StringToGUIDDef(Fields.ByNameAsString['id_univers'], GUID_NULL));
 
         FComplet := Fields.ByNameAsBoolean['complet'];
+
+        Close;
+        SQL.Clear;
+        SQL.Add('select');
+        SQL.Add('  u.*');
+        SQL.Add('from');
+        SQL.Add('  univers u');
+        SQL.Add('  inner join albums_univers au on');
+        SQL.Add('    au.id_univers = u.id_univers');
+        SQL.Add('where');
+        SQL.Add('  au.source_album = 1 and au.id_album = ?');
+        Params.AsString[0] := GUIDToString(Reference);
+        Open;
+        TUnivers.Prepare(q);
+        try
+          while not Eof do
+          begin
+            Self.Univers.Add(TUnivers.Make(q));
+            Next;
+          end;
+        finally
+          TUnivers.Unprepare;
+        end;
+        Self.UniversFull.AddRange(Self.Serie.Univers);
+        Self.UniversFull.AddRange(Self.Univers);
 
         Close;
         SQL.Text := 'select * from proc_auteurs(?, null, null)';
@@ -988,8 +1007,9 @@ begin
     if not IsEqualGUID(ID_Serie, DefaultAlbum.ID_Serie) and not IsEqualGUID(ID_Serie, Dest.ID_Serie) then
       Dest.ID_Serie := ID_Serie;
     // Univers
-    if not IsEqualGUID(ID_Univers, DefaultAlbum.ID_Univers) and not IsEqualGUID(ID_Univers, Dest.ID_Univers) then
-      Dest.ID_Univers := ID_Univers;
+    // TODO: remplacer par une liste de TUniversComplet
+    // if not IsEqualGUID(ID_Univers, DefaultAlbum.ID_Univers) and not IsEqualGUID(ID_Univers, Dest.ID_Univers) then
+    // Dest.ID_Univers := ID_Univers;
 
     if FusionneEditions then
       Editions.FusionneInto(Dest.Editions);
@@ -1001,11 +1021,6 @@ end;
 function TAlbumComplet.GetID_Serie: TGUID;
 begin
   Result := Serie.ID_Serie;
-end;
-
-function TAlbumComplet.GetID_Univers: TGUID;
-begin
-  Result := Univers.ID_Univers;
 end;
 
 procedure TAlbumComplet.PrepareInstance;
@@ -1020,7 +1035,8 @@ begin
   FNotes := TStringList.Create;
   FSerie := TSerieComplete.Create;
   FEditions := TEditionsCompletes.Create;
-  FUnivers := TUniversComplet.Create;
+  FUnivers := TObjectList<TUnivers>.Create;
+  FUniversFull := TObjectList<TUnivers>.Create(False);
 end;
 
 procedure TAlbumComplet.SaveToDatabase(UseTransaction: TUIBTransaction);
@@ -1030,6 +1046,7 @@ var
   Auteur: TAuteur;
   hg: IHourGlass;
   Edition: TEditionComplete;
+  Univers: TUnivers;
 begin
   inherited;
   hg := THourGlass.Create;
@@ -1041,10 +1058,10 @@ begin
       SQL.Clear;
       SQL.Add('update or insert into albums (');
       SQL.Add('  id_album, titrealbum, moisparution, anneeparution, id_serie, tome, tomedebut, tomefin,');
-      SQL.Add('  horsserie, integrale, sujetalbum, remarquesalbum, id_univers');
+      SQL.Add('  horsserie, integrale, sujetalbum, remarquesalbum');
       SQL.Add(') values (');
       SQL.Add('  :id_album, :titrealbum, :moisparution, :anneeparution, :id_serie, :tome, :tomedebut, :tomefin,');
-      SQL.Add('  :horsserie, :integrale, :sujetalbum, :remarquesalbum, :id_univers');
+      SQL.Add('  :horsserie, :integrale, :sujetalbum, :remarquesalbum');
       SQL.Add(')');
       Prepare(True);
 
@@ -1098,10 +1115,6 @@ begin
         Params.ByNameIsNull['ID_SERIE'] := True
       else
         Params.ByNameAsString['id_serie'] := GUIDToString(ID_Serie);
-      if IsEqualGUID(GUID_NULL, ID_Univers) then
-        Params.ByNameIsNull['id_univers'] := True
-      else
-        Params.ByNameAsString['id_univers'] := GUIDToString(ID_Univers);
       ExecSQL;
 
       SupprimerToutDans('', 'auteurs', 'id_album', ID_Album);
@@ -1130,6 +1143,28 @@ begin
         Params.AsString[0] := GUIDToString(ID_Album);
         Params.AsInteger[1] := 2;
         Params.AsString[2] := GUIDToString(Auteur.Personne.ID);
+        ExecSQL;
+      end;
+
+      S := '';
+      for Univers in FUnivers do
+        AjoutString(S, QuotedStr(GUIDToString(Univers.ID)), ',');
+      SQL.Clear;
+      SQL.Add('update albums_univers set source_album = 0');
+      SQL.Add('where');
+      SQL.Add('  id_album = ?');
+      if S <> '' then
+        SQL.Add('  and id_univers not in (' + S + ')');
+      Params.AsString[0] := GUIDToString(ID_Album);
+      ExecSQL;
+
+      SQL.Clear;
+      SQL.Add('update or insert into albums_univers (id_album, id_univers, source_album) values (:id_album, :id_univers, 1)');
+      Prepare(True);
+      for Univers in FUnivers do
+      begin
+        Params.AsString[0] := GUIDToString(ID_Album);
+        Params.AsString[1] := GUIDToString(Univers.ID);
         ExecSQL;
       end;
 
@@ -1171,11 +1206,6 @@ end;
 procedure TAlbumComplet.SetID_Serie(const Value: TGUID);
 begin
   Serie.Fill(Value);
-end;
-
-procedure TAlbumComplet.SetID_Univers(const Value: TGUID);
-begin
-  Univers.Fill(Value);
 end;
 
 procedure TAlbumComplet.SetTitreAlbum(const Value: string);
@@ -2004,7 +2034,7 @@ begin
       SQL.Add('  coalesce(s.formatedition, -1) as formatedition, lf.libelle as sformatedition,');
       SQL.Add('  coalesce(s.typeedition, -1) as typeedition, lte.libelle as stypeedition,');
       SQL.Add('  coalesce(s.senslecture, -1) as senslecture, lsl.libelle as ssenslecture,');
-      SQL.Add('  s.notation, s.id_univers');
+      SQL.Add('  s.notation');
       SQL.Add('from');
       SQL.Add('  series s');
       SQL.Add('  left join collections c on');
@@ -2053,8 +2083,30 @@ begin
 
         Self.Editeur.Fill(StringToGUIDDef(Fields.ByNameAsString['id_editeur'], GUID_NULL));
         Self.Collection.Fill(q);
-        Self.Univers.Fill(StringToGUIDDef(Fields.ByNameAsString['id_univers'], GUID_NULL));
         FetchBlobs := False;
+
+        Close;
+        SQL.Clear;
+        SQL.Add('select');
+        SQL.Add('  u.*');
+        SQL.Add('from');
+        SQL.Add('  univers u');
+        SQL.Add('  inner join series_univers su on');
+        SQL.Add('    su.id_univers = u.id_univers');
+        SQL.Add('where');
+        SQL.Add('  su.id_serie = ?');
+        Params.AsString[0] := GUIDToString(Reference);
+        Open;
+        TUnivers.Prepare(q);
+        try
+          while not Eof do
+          begin
+            Self.Univers.Add(TUnivers.Make(q));
+            Next;
+          end;
+        finally
+          TUnivers.Unprepare;
+        end;
 
         Close;
         SQL.Clear;
@@ -2168,11 +2220,6 @@ begin
   Result := Editeur.ID_Editeur;
 end;
 
-function TSerieComplete.GetID_Univers: TGUID;
-begin
-  Result := FUnivers.ID_Univers;
-end;
-
 procedure TSerieComplete.PrepareInstance;
 begin
   inherited;
@@ -2185,7 +2232,7 @@ begin
   FNotes := TStringList.Create;
   FEditeur := TEditeurComplet.Create;
   FCollection := TCollection.Create;
-  FUnivers := TUniversComplet.Create;
+  FUnivers := TObjectList<TUnivers>.Create(True);
   FScenaristes := TObjectList<TAuteur>.Create(True);
   FDessinateurs := TObjectList<TAuteur>.Create(True);
   FColoristes := TObjectList<TAuteur>.Create(True);
@@ -2196,6 +2243,7 @@ var
   S: string;
   i: Integer;
   Auteur: TAuteur;
+  Univers: TUnivers;
 begin
   inherited;
   with TUIBQuery.Create(nil) do
@@ -2206,11 +2254,11 @@ begin
       SQL.Add('update or insert into series (');
       SQL.Add('  id_serie, titreserie, terminee, suivresorties, complete, suivremanquants, siteweb, id_editeur,');
       SQL.Add('  id_collection, sujetserie, remarquesserie, nb_albums, vo, couleur, etat, reliure, typeedition,');
-      SQL.Add('  orientation, formatedition, senslecture, id_univers');
+      SQL.Add('  orientation, formatedition, senslecture');
       SQL.Add(') values (');
       SQL.Add('  :id_serie, :titreserie, :terminee, :suivresorties, :complete, :suivremanquants, :siteweb, :id_editeur,');
       SQL.Add('  :id_collection, :sujetserie, :remarquesserie, :nb_albums, :vo, :couleur, :etat, :reliure, :typeedition,');
-      SQL.Add('  :orientation, :formatedition, :senslecture, :id_univers');
+      SQL.Add('  :orientation, :formatedition, :senslecture');
       SQL.Add(')');
 
       if IsEqualGUID(GUID_NULL, ID_Serie) then
@@ -2267,10 +2315,6 @@ begin
         ParamsSetBlob('remarquesserie', S)
       else
         Params.ByNameIsNull['remarquesserie'] := True;
-      if IsEqualGUID(GUID_NULL, ID_Univers) then
-        Params.ByNameIsNull['id_univers'] := True
-      else
-        Params.ByNameAsString['id_univers'] := GUIDToString(ID_Univers);
 
       ExecSQL;
 
@@ -2314,6 +2358,28 @@ begin
         ExecSQL;
       end;
 
+      S := '';
+      for Univers in FUnivers do
+        AjoutString(S, QuotedStr(GUIDToString(Univers.ID)), ',');
+      SQL.Clear;
+      SQL.Add('delete from series_univers');
+      SQL.Add('where');
+      SQL.Add('  id_serie = ?');
+      if S <> '' then
+        SQL.Add('  and id_univers not in (' + S + ')');
+      Params.AsString[0] := GUIDToString(ID_Serie);
+      ExecSQL;
+
+      SQL.Clear;
+      SQL.Add('update or insert into series_univers (id_serie, id_univers) values (:id_serie, :id_univers)');
+      Prepare(True);
+      for Univers in FUnivers do
+      begin
+        Params.AsString[0] := GUIDToString(ID_Serie);
+        Params.AsString[1] := GUIDToString(Univers.ID);
+        ExecSQL;
+      end;
+
       Transaction.Commit;
     finally
       Free;
@@ -2328,11 +2394,6 @@ end;
 procedure TSerieComplete.SetID_Editeur(const Value: TGUID);
 begin
   Editeur.Fill(Value);
-end;
-
-procedure TSerieComplete.SetID_Univers(const Value: TGUID);
-begin
-  Univers.Fill(Value);
 end;
 
 procedure TSerieComplete.SetSiteWeb(const Value: string);
@@ -3096,6 +3157,7 @@ begin
   Description.Clear;
   Serie.Clear;
   Univers.Clear;
+  UniversFull.Clear;
 end;
 
 destructor TParaBDComplet.Destroy;
@@ -3122,7 +3184,7 @@ begin
       FetchBlobs := True;
       SQL.Clear;
       SQL.Add('select');
-      SQL.Add('  titreparabd, annee, id_serie, achat, description, dedicace, numerote, anneecote, prixcote, id_univers,');
+      SQL.Add('  titreparabd, annee, id_serie, achat, description, dedicace, numerote, anneecote, prixcote,');
       SQL.Add('  gratuit, offert, dateachat, prix, stock, categorieparabd, lc.libelle as scategorieparabd,');
       SQL.Add('  fichierparabd, stockageparabd, case when imageparabd is null then 0 else 1 end as hasblobimage');
       SQL.Add('from');
@@ -3151,7 +3213,6 @@ begin
         Self.DateAchat := Fields.ByNameAsDate['dateachat'];
         Self.AnneeCote := Fields.ByNameAsInteger['anneecote'];
         Self.PrixCote := Fields.ByNameAsCurrency['prixcote'];
-        Self.Univers.Fill(StringToGUIDDef(Fields.ByNameAsString['id_univers'], GUID_NULL));
 
         Serie := StringToGUIDDef(Fields.ByNameAsString['id_serie'], GUID_NULL);
 
@@ -3162,6 +3223,31 @@ begin
         OldImageStockee := ImageStockee;
         OldFichierImage := FichierImage;
         OldHasImage := HasImage;
+
+        Close;
+        SQL.Clear;
+        SQL.Add('select');
+        SQL.Add('  u.*');
+        SQL.Add('from');
+        SQL.Add('  univers u');
+        SQL.Add('  inner join parabd_univers pu on');
+        SQL.Add('    pu.id_univers = u.id_univers');
+        SQL.Add('where');
+        SQL.Add('  pu.source_parabd = 1 and pu.id_parabd = ?');
+        Params.AsString[0] := GUIDToString(Reference);
+        Open;
+        TUnivers.Prepare(q);
+        try
+          while not Eof do
+          begin
+            Self.Univers.Add(TUnivers.Make(q));
+            Next;
+          end;
+        finally
+          TUnivers.Unprepare;
+        end;
+        Self.UniversFull.AddRange(Self.Serie.Univers);
+        Self.UniversFull.AddRange(Self.Univers);
 
         Close;
         SQL.Text := 'select * from proc_auteurs(null, null, ?)';
@@ -3182,11 +3268,6 @@ begin
   Result := Serie.ID_Serie;
 end;
 
-function TParaBDComplet.GetID_Univers: TGUID;
-begin
-  Result := Univers.ID_Univers;
-end;
-
 function TParaBDComplet.Get_sDateAchat: string;
 begin
   if Self.DateAchat > 0 then
@@ -3202,6 +3283,7 @@ var
   hg: IHourGlass;
   Stream: TStream;
   Auteur: TAuteur;
+  Univers: TUnivers;
 begin
   inherited;
   hg := THourGlass.Create;
@@ -3213,10 +3295,10 @@ begin
       SQL.Clear;
       SQL.Add('update or insert into parabd (');
       SQL.Add('  id_parabd, titreparabd, annee, id_serie, categorieparabd, dedicace, numerote, anneecote,');
-      SQL.Add('  prixcote, gratuit, offert, dateachat, prix, stock, description, complet, id_univers');
+      SQL.Add('  prixcote, gratuit, offert, dateachat, prix, stock, description, complet');
       SQL.Add(') values (');
       SQL.Add('  :id_parabd, :titreparabd, :annee, :id_serie, :categorieparabd, :dedicace, :numerote, :anneecote,');
-      SQL.Add('  :prixcote, :gratuit, :offert, :dateachat, :prix, :stock, :description, 1, :id_univers');
+      SQL.Add('  :prixcote, :gratuit, :offert, :dateachat, :prix, :stock, :description, 1');
       SQL.Add(')');
 
       if IsEqualGUID(GUID_NULL, ID_ParaBD) then
@@ -3267,10 +3349,6 @@ begin
         Params.ByNameIsNull['id_serie'] := True
       else
         Params.ByNameAsString['id_serie'] := GUIDToString(Serie.ID_Serie);
-      if Serie.RecInconnu or IsEqualGUID(Serie.ID_Univers, GUID_NULL) then
-        Params.ByNameIsNull['id_univers'] := True
-      else
-        Params.ByNameAsString['id_univers'] := GUIDToString(Serie.ID_Univers);
       ExecSQL;
 
       SupprimerToutDans('', 'auteurs_parabd', 'id_parabd', ID_ParaBD);
@@ -3284,6 +3362,28 @@ begin
       begin
         Params.AsString[0] := GUIDToString(ID_ParaBD);
         Params.AsString[1] := GUIDToString(Auteur.Personne.ID);
+        ExecSQL;
+      end;
+
+      S := '';
+      for Univers in FUnivers do
+        AjoutString(S, QuotedStr(GUIDToString(Univers.ID)), ',');
+      SQL.Clear;
+      SQL.Add('update parabd_univers set source_parabd = 0');
+      SQL.Add('where');
+      SQL.Add('  id_parabd = ?');
+      if S <> '' then
+        SQL.Add('  and id_univers not in (' + S + ')');
+      Params.AsString[0] := GUIDToString(ID_ParaBD);
+      ExecSQL;
+
+      SQL.Clear;
+      SQL.Add('update or insert into parabd_univers (id_parabd, id_univers, source_parabd) values (:id_parabd, :id_univers, 1)');
+      Prepare(True);
+      for Univers in FUnivers do
+      begin
+        Params.AsString[0] := GUIDToString(ID_ParaBD);
+        Params.AsString[1] := GUIDToString(Univers.ID);
         ExecSQL;
       end;
 
@@ -3343,11 +3443,6 @@ begin
   Serie.Fill(Value);
 end;
 
-procedure TParaBDComplet.SetID_Univers(const Value: TGUID);
-begin
-  Univers.Fill(Value);
-end;
-
 procedure TParaBDComplet.SetTitreParaBD(const Value: string);
 begin
   FTitreParaBD := Copy(Value, 1, LengthTitreParaBD);
@@ -3359,7 +3454,8 @@ begin
   FDescription := TStringList.Create;
   FAuteurs := TObjectList<TAuteur>.Create;
   FSerie := TSerieComplete.Create;
-  FUnivers := TUniversComplet.Create;
+  FUnivers := TObjectList<TUnivers>.Create;
+  FUniversFull := TObjectList<TUnivers>.Create(False);
 end;
 
 { TCollectionComplete }

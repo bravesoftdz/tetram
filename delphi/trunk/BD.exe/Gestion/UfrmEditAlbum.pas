@@ -296,9 +296,11 @@ begin
     vtEditSerie.VTEdit.OnChange := nil;
     vtEditSerie.CurrentValue := FAlbum.ID_Serie;
     vtEditSerie.VTEdit.OnChange := JvComboEdit1Change;
-    vtEditUnivers.CurrentValue := FAlbum.ID_Univers;
-    vtEditUnivers.Visible := IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
-    Label29.Visible := IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
+
+// TODO: remplacer par une liste de TUniversComplet
+//    vtEditUnivers.CurrentValue := FAlbum.ID_Univers;
+//    vtEditUnivers.Visible := IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
+//    Label29.Visible := IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
 
     // tout ce mic mac pour l'actualisation par script
     OldvtEditionsItemIndex := vtEditions.ItemIndex;
@@ -1139,7 +1141,8 @@ begin
   Label29.Visible := IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
   if not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL) then
   begin
-    vtEditUnivers.CurrentValue := FAlbum.Serie.Id_Univers;
+// TODO: remplacer par une liste de TUniversComplet
+//    vtEditUnivers.CurrentValue := FAlbum.Serie.Id_Univers;
     if not (FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then
       try
         lvScenaristes.Items.BeginUpdate;
@@ -1274,7 +1277,8 @@ end;
 
 procedure TfrmEditAlbum.vtEditUniversVTEditChange(Sender: TObject);
 begin
-  FAlbum.ID_Univers := vtEditUnivers.CurrentValue;
+// TODO: remplacer par une liste de TUniversComplet
+//  FAlbum.ID_Univers := vtEditUnivers.CurrentValue;
 end;
 
 procedure TfrmEditAlbum.VDTButton14Click(Sender: TObject);

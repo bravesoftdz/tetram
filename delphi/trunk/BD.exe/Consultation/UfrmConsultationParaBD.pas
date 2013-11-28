@@ -52,6 +52,8 @@ type
     cbNumerote: TLabeledCheckBox;
     cbOffert: TLabeledCheckBox;
     cbStock: TLabeledCheckBox;
+    lvUnivers: TVDTListView;
+    Label4: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure lvAuteursDblClick(Sender: TObject);
@@ -61,6 +63,9 @@ type
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
     procedure FicheApercuExecute(Sender: TObject);
     procedure FicheModifierExecute(Sender: TObject);
+    procedure lvAuteursData(Sender: TObject; Item: TListItem);
+    procedure lvUniversData(Sender: TObject; Item: TListItem);
+    procedure lvUniversDblClick(Sender: TObject);
   private
     FParaBD: TParaBDComplet;
     function GetID_ParaBD: TGUID;
@@ -87,7 +92,6 @@ uses Commun, TypeRec, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, 
   Proc_Gestions;
 
 {$R *.dfm}
-
 { TFrmConsultationParaBD }
 
 function TfrmConsultationParaBD.GetID_ParaBD: TGUID;
@@ -97,7 +101,6 @@ end;
 
 procedure TfrmConsultationParaBD.SetID_ParaBD(const Value: TGUID);
 var
-  Auteur: TAuteur;
   ms: TStream;
   jpg: TJPEGImage;
 begin
@@ -106,12 +109,14 @@ begin
 
   Caption := 'Fiche de para-BD - ' + FParaBD.ChaineAffichage;
   TitreSerie.Caption := FormatTitre(FParaBD.Serie.TitreSerie);
-  if FParaBD.Serie.SiteWeb <> '' then begin
+  if FParaBD.Serie.SiteWeb <> '' then
+  begin
     TitreSerie.Font.Color := clBlue;
     TitreSerie.Font.Style := TitreSerie.Font.Style + [fsUnderline];
     TitreSerie.Cursor := crHandPoint;
   end
-  else begin
+  else
+  begin
     TitreSerie.Font.Color := clWindowText;
     TitreSerie.Font.Style := TitreSerie.Font.Style - [fsUnderline];
     TitreSerie.Cursor := crDefault;
@@ -126,12 +131,14 @@ begin
     l_realisation.Caption := rsTransAuteurs
   else
     l_realisation.Caption := rsTransCreateurs;
+
+  lvUnivers.Items.BeginUpdate;
   lvAuteurs.Items.BeginUpdate;
-  for Auteur in FParaBD.Auteurs do
-    with lvAuteurs.Items.Add do begin
-      Data := Auteur;
-      Caption := Auteur.ChaineAffichage;
-    end;
+
+  lvUnivers.Items.Count := FParaBD.UniversFull.Count;
+  lvAuteurs.Items.Count := FParaBD.Auteurs.Count;
+
+  lvUnivers.Items.EndUpdate;
   lvAuteurs.Items.EndUpdate;
 
   Description.Text := FParaBD.Description.Text;
@@ -157,22 +164,24 @@ begin
 
   lbNoImage.Visible := not FParaBD.HasImage;
 
-  if FParaBD.HasImage then begin
+  if FParaBD.HasImage then
+  begin
     ImageParaBD.Picture := nil;
     try
       ms := GetCouvertureStream(True, ID_ParaBD, ImageParaBD.Height, ImageParaBD.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
-      if Assigned(ms) then try
-        jpg := TJPEGImage.Create;
+      if Assigned(ms) then
         try
-          jpg.LoadFromStream(ms);
-          ImageParaBD.Picture.Assign(jpg);
-          ImageParaBD.Transparent := False;
+          jpg := TJPEGImage.Create;
+          try
+            jpg.LoadFromStream(ms);
+            ImageParaBD.Picture.Assign(jpg);
+            ImageParaBD.Transparent := False;
+          finally
+            FreeAndNil(jpg);
+          end;
         finally
-          FreeAndNil(jpg);
-        end;
-      finally
-        FreeAndNil(ms);
-      end
+          FreeAndNil(ms);
+        end
       else
         ImageParaBD.Picture.Assign(nil);
     except
@@ -180,7 +189,8 @@ begin
     end;
 
     lbInvalidImage.Visible := not Assigned(ImageParaBD.Picture.Graphic);
-    if lbInvalidImage.Visible then begin
+    if lbInvalidImage.Visible then
+    begin
       ImageParaBD.OnDblClick := nil;
       ImageParaBD.Cursor := crDefault;
       ms := TResourceStream.Create(HInstance, 'IMAGENONVALIDE', RT_RCDATA);
@@ -194,7 +204,8 @@ begin
         ms.Free;
       end;
     end
-    else begin
+    else
+    begin
       ImageParaBD.OnDblClick := CouvertureDblClick;
       ImageParaBD.Cursor := crHandPoint;
     end;
@@ -210,6 +221,7 @@ end;
 
 procedure TfrmConsultationParaBD.ClearForm;
 begin
+  lvUnivers.Items.Count := 0;
   lvAuteurs.Items.Count := 0;
 end;
 
@@ -225,16 +237,36 @@ begin
   FParaBD.Free;
 end;
 
+procedure TfrmConsultationParaBD.lvAuteursData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FParaBD.Auteurs[Item.Index];
+  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+end;
+
 procedure TfrmConsultationParaBD.lvAuteursDblClick(Sender: TObject);
 begin
-  if Assigned(TListView(Sender).Selected) then Historique.AddWaiting(fcAuteur, TAuteur(TListView(Sender).Selected.Data).Personne.ID, 0);
+  if Assigned(TListView(Sender).Selected) then
+    Historique.AddWaiting(fcAuteur, TAuteur(TListView(Sender).Selected.Data).Personne.ID, 0);
+end;
+
+procedure TfrmConsultationParaBD.lvUniversData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FParaBD.UniversFull[Item.Index];
+  Item.Caption := TUnivers(Item.Data).ChaineAffichage;
+end;
+
+procedure TfrmConsultationParaBD.lvUniversDblClick(Sender: TObject);
+begin
+  if Assigned(TListView(Sender).Selected) then
+    Historique.AddWaiting(fcUnivers, TUnivers(TListView(Sender).Selected.Data).ID, 0);
 end;
 
 procedure TfrmConsultationParaBD.TitreSerieClick(Sender: TObject);
 var
   s: string;
 begin
-  if not IsDownKey(VK_CONTROL) then begin
+  if not IsDownKey(VK_CONTROL) then
+  begin
     s := FParaBD.Serie.SiteWeb;
     if s <> '' then
       ShellExecute(Application.DialogHandle, nil, PChar(s), nil, nil, SW_NORMAL);
@@ -304,4 +336,3 @@ begin
 end;
 
 end.
-

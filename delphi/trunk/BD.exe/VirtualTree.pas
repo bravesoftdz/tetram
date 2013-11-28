@@ -31,7 +31,7 @@ type
   // !!! Les valeurs ne doivent pas être changées
   TVirtualMode = (vmNone = 0, vmAlbums = 1, vmCollections = 2, vmEditeurs = 3, {vmEmprunteurs = 4, }vmGenres = 5, vmPersonnes = 6, vmSeries = 7,
     vmAlbumsAnnee = 8, vmAlbumsCollection = 9, vmAlbumsEditeur = 10, vmAlbumsGenre = 11, vmAlbumsSerie = 12, vmParaBDSerie = 13, vmAchatsAlbumsEditeur = 14,
-    vmUnivers = 15);
+    vmUnivers = 15, vmAlbumsSerieUnivers = 16, vmParaBDSerieUnivers = 17);
 
   TOnCompareNodeString = procedure(Sender: TBaseVirtualTree; Node: PVirtualNode; const Text: string; var Concorde: Boolean) of object;
 
@@ -221,7 +221,23 @@ const
     FIELDS: 'ID_UNIVERS, NOMUNIVERS';
     INITIALEFIELDS: 'INITIALENOMUNIVERS'; INITIALEVALUE: 'INITIALENOMUNIVERS'; REFFIELDS: 'ID_UNIVERS'; TABLESEARCH: 'UNIVERS';
     FIELDSEARCH: 'NOMUNIVERS';
-    ClassPointeur: TUnivers)
+    ClassPointeur: TUnivers),
+    ( // vmAlbumsSerieUnivers
+    FILTRECOUNT: 'SERIES_ALBUMS(?)'; Filtre: 'ALBUMS_BY_SERIE(?, ?)';
+    FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET, NOTATION';
+    INITIALEFIELDS: 'TITRESERIE'; INITIALEVALUE: 'ID_SERIE'; REFFIELDS: 'ID_ALBUM'; TABLESEARCH: 'VW_LISTE_ALBUMS_UNIVERS';
+    FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)';
+    SEARCHORDER: 'COALESCE(TITREALBUM, TITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
+    DEFAULTFILTRE: 'COMPLET = 1';
+    ClassPointeur: TAlbum),
+    ( // vmParaBDSerieUnivers
+    FILTRECOUNT: 'SERIES_PARABD(?)'; Filtre: 'PARABD_BY_SERIE(?, ?)';
+    FIELDS: 'ID_PARABD, TITREPARABD, ID_SERIE, TITRESERIE, ACHAT, COMPLET, SCATEGORIE';
+    INITIALEFIELDS: 'TITRESERIE'; INITIALEVALUE: 'ID_SERIE'; REFFIELDS: 'ID_PARABD'; TABLESEARCH: 'VW_LISTE_PARABD_UNIVERS';
+    FIELDSEARCH: 'COALESCE(TITREPARABD, TITRESERIE)';
+    SEARCHORDER: 'COALESCE(TITREPARABD, TITRESERIE)';
+    DEFAULTFILTRE: 'COMPLET = 1';
+    ClassPointeur: TParaBD)
   );
 
 implementation
@@ -308,7 +324,7 @@ begin
       if TextType = ttStatic then
         Exit;
       case FMode of
-        vmAlbums, vmAlbumsAnnee, vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie, vmAchatsAlbumsEditeur:
+        vmAlbums, vmAlbumsAnnee, vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie, vmAchatsAlbumsEditeur, vmAlbumsSerieUnivers:
           begin
             PA := RNodeInfo(GetNodeData(Node)^).Detail as TAlbum;
             case Header.Columns.Count of
@@ -356,7 +372,7 @@ begin
           begin
             Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(False);
           end;
-        vmParaBDSerie:
+        vmParaBDSerie, vmParaBDSerieUnivers:
           begin
             Text := RNodeInfo(GetNodeData(Node)^).Detail.ChaineAffichage(False);
           end;
@@ -370,7 +386,7 @@ begin
             Text := FCountPointers[Node.Index].Initiale
           else
             case FMode of
-              vmAlbumsSerie, vmParaBDSerie:
+              vmAlbumsSerie, vmAlbumsSerieUnivers, vmParaBDSerie, vmParaBDSerieUnivers:
                 Text := '<Sans série>';
             else
               Text := '<Inconnu>';
@@ -451,10 +467,10 @@ begin
     end
     else
       case FMode of
-        vmAlbums, vmAlbumsAnnee, vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie, vmAchatsAlbumsEditeur:
+        vmAlbums, vmAlbumsAnnee, vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie, vmAchatsAlbumsEditeur, vmAlbumsSerieUnivers:
           if FShowAchat and TAlbum(InfoNode.Detail).Achat then
             Canvas.Font.Style := Canvas.Font.Style + [fsItalic];
-        vmParaBDSerie:
+        vmParaBDSerie, vmParaBDSerieUnivers:
           if FShowAchat and TParaBD(InfoNode.Detail).Achat then
             Canvas.Font.Style := Canvas.Font.Style + [fsItalic];
       end;
@@ -714,7 +730,7 @@ begin
             SetLength(FCountPointers, Length(FCountPointers) + 250);
           FCountPointers[i].Count := FIELDS.AsInteger[1];
           FCountPointers[i].Initiale := FIELDS.AsString[0];
-          if FMode in [vmAlbumsSerie, vmAlbumsEditeur, vmAlbumsCollection, vmAchatsAlbumsEditeur] then
+          if FMode in [vmAlbumsSerie, vmAlbumsEditeur, vmAlbumsCollection, vmAchatsAlbumsEditeur, vmAlbumsSerieUnivers] then
             FCountPointers[i].Initiale := FormatTitre(FCountPointers[i].Initiale);
           if FMode = vmAlbumsCollection then
             AjoutString(FCountPointers[i].Initiale, FormatTitre(FIELDS.AsString[3]), ' ', '(', ')');

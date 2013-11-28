@@ -3,7 +3,7 @@ object frmConsultationSerie: TfrmConsultationSerie
   Top = 58
   Caption = 'frmConsultationSerie'
   ClientHeight = 805
-  ClientWidth = 862
+  ClientWidth = 692
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clBlack
@@ -19,19 +19,20 @@ object frmConsultationSerie: TfrmConsultationSerie
   object ScrollBox2: TScrollBox
     Left = 0
     Top = 0
-    Width = 862
+    Width = 692
     Height = 805
     Align = alClient
     BorderStyle = bsNone
     ParentBackground = True
     TabOrder = 0
     OnClick = EditeurClick
+    ExplicitWidth = 862
     DesignSize = (
-      862
+      692
       805)
     object l_remarques: TLabel
       Left = 25
-      Top = 296
+      Top = 324
       Width = 28
       Height = 13
       Alignment = taRightJustify
@@ -49,7 +50,7 @@ object frmConsultationSerie: TfrmConsultationSerie
     end
     object l_sujet: TLabel
       Left = 17
-      Top = 225
+      Top = 253
       Width = 36
       Height = 13
       Alignment = taRightJustify
@@ -65,26 +66,9 @@ object frmConsultationSerie: TfrmConsultationSerie
       ParentFont = False
       Transparent = True
     end
-    object Label1: TLabel
-      Left = 499
-      Top = 46
-      Width = 34
-      Height = 13
-      Alignment = taRightJustify
-      Caption = 'Genres'
-      Color = clWhite
-      Font.Charset = ANSI_CHARSET
-      Font.Color = 12615680
-      Font.Height = -11
-      Font.Name = 'Tahoma'
-      Font.Style = []
-      ParentColor = False
-      ParentFont = False
-      Transparent = True
-    end
     object l_acteurs: TLabel
       Left = 17
-      Top = 128
+      Top = 168
       Width = 36
       Height = 13
       Alignment = taRightJustify
@@ -102,7 +86,7 @@ object frmConsultationSerie: TfrmConsultationSerie
     end
     object l_realisation: TLabel
       Left = 12
-      Top = 87
+      Top = 128
       Width = 41
       Height = 13
       Alignment = taRightJustify
@@ -138,7 +122,7 @@ object frmConsultationSerie: TfrmConsultationSerie
     end
     object Label7: TLabel
       Left = 11
-      Top = 170
+      Top = 209
       Width = 42
       Height = 13
       Alignment = taRightJustify
@@ -157,7 +141,7 @@ object frmConsultationSerie: TfrmConsultationSerie
     object TitreSerie: TLabel
       Left = 96
       Top = 5
-      Width = 758
+      Width = 590
       Height = 23
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -173,19 +157,21 @@ object frmConsultationSerie: TfrmConsultationSerie
       Layout = tlCenter
       WordWrap = True
       OnClick = TitreSerieClick
+      ExplicitWidth = 632
     end
     object Bevel1: TBevel
       Left = 0
       Top = 802
-      Width = 862
+      Width = 692
       Height = 3
       Align = alBottom
       Shape = bsSpacer
       ExplicitTop = 783
+      ExplicitWidth = 862
     end
     object Label4: TLabel
       Left = 14
-      Top = 495
+      Top = 521
       Width = 39
       Height = 13
       Alignment = taRightJustify
@@ -202,7 +188,7 @@ object frmConsultationSerie: TfrmConsultationSerie
     end
     object Label3: TLabel
       Left = 19
-      Top = 370
+      Top = 396
       Width = 34
       Height = 13
       Alignment = taRightJustify
@@ -270,7 +256,7 @@ object frmConsultationSerie: TfrmConsultationSerie
     end
     object VDTButton1: TVDTButton
       Left = 33
-      Top = 469
+      Top = 495
       Width = 20
       Height = 20
       OnClick = VDTButton1Click
@@ -316,10 +302,45 @@ object frmConsultationSerie: TfrmConsultationSerie
       PopupMenu = PopupMenu1
       Transparent = True
     end
+    object Label2: TLabel
+      Left = 17
+      Top = 87
+      Width = 36
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Univers'
+      Color = clWhite
+      FocusControl = lvUnivers
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 12615680
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      Transparent = True
+    end
+    object Label1: TLabel
+      Left = 392
+      Top = 90
+      Width = 34
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Genres'
+      Color = clWhite
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 12615680
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      Transparent = True
+    end
     object remarques: TMemo
       Left = 59
-      Top = 296
-      Width = 797
+      Top = 324
+      Width = 627
       Height = 65
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -330,11 +351,12 @@ object frmConsultationSerie: TfrmConsultationSerie
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 0
+      ExplicitWidth = 672
     end
     object sujet: TMemo
       Left = 59
-      Top = 224
-      Width = 797
+      Top = 252
+      Width = 627
       Height = 67
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -345,11 +367,12 @@ object frmConsultationSerie: TfrmConsultationSerie
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 1
+      ExplicitWidth = 672
     end
     object lvScenaristes: TVDTListView
       Left = 59
-      Top = 87
-      Width = 797
+      Top = 128
+      Width = 627
       Height = 35
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -361,13 +384,16 @@ object frmConsultationSerie: TfrmConsultationSerie
           MinWidth = 150
           Width = 231
         end>
+      OwnerData = True
       TabOrder = 2
+      OnData = lvScenaristesData
       OnDblClick = lvScenaristesDblClick
+      ExplicitWidth = 672
     end
     object lvDessinateurs: TVDTListView
       Left = 59
-      Top = 128
-      Width = 797
+      Top = 168
+      Width = 627
       Height = 36
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -379,29 +405,17 @@ object frmConsultationSerie: TfrmConsultationSerie
           MinWidth = 150
           Width = 231
         end>
+      OwnerData = True
       SortType = stData
       TabOrder = 3
+      OnData = lvDessinateursData
       OnDblClick = lvScenaristesDblClick
-    end
-    object Memo1: TMemo
-      Left = 538
-      Top = 46
-      Width = 318
-      Height = 34
-      Anchors = [akLeft, akTop, akRight]
-      BevelInner = bvLowered
-      BevelKind = bkFlat
-      BevelOuter = bvNone
-      BorderStyle = bsNone
-      ParentColor = True
-      ReadOnly = True
-      ScrollBars = ssVertical
-      TabOrder = 4
+      ExplicitWidth = 672
     end
     object lvColoristes: TVDTListView
       Left = 59
-      Top = 170
-      Width = 797
+      Top = 209
+      Width = 627
       Height = 36
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -413,14 +427,17 @@ object frmConsultationSerie: TfrmConsultationSerie
           MinWidth = 150
           Width = 231
         end>
+      OwnerData = True
       SortType = stData
-      TabOrder = 5
+      TabOrder = 4
+      OnData = lvColoristesData
       OnDblClick = lvScenaristesDblClick
+      ExplicitWidth = 672
     end
     object vtAlbums: TVirtualStringTree
       Left = 59
-      Top = 370
-      Width = 797
+      Top = 396
+      Width = 627
       Height = 119
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
@@ -444,15 +461,16 @@ object frmConsultationSerie: TfrmConsultationSerie
       HotCursor = crHandPoint
       Indent = 8
       ParentColor = True
-      TabOrder = 6
+      TabOrder = 5
       OnAfterItemPaint = vtAlbumsAfterItemPaint
       OnDblClick = vtAlbumsDblClick
+      ExplicitWidth = 672
       Columns = <>
     end
     object vtParaBD: TVirtualStringTree
       Left = 59
-      Top = 495
-      Width = 797
+      Top = 521
+      Width = 627
       Height = 130
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
@@ -472,10 +490,11 @@ object frmConsultationSerie: TfrmConsultationSerie
       Header.MainColumn = -1
       Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
       ParentColor = True
-      TabOrder = 7
+      TabOrder = 6
       TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
       TreeOptions.StringOptions = []
       OnDblClick = vtParaBDDblClick
+      ExplicitWidth = 672
       Columns = <>
     end
     object cbTerminee: TLabeledCheckBox
@@ -491,7 +510,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Font.Name = 'Tahoma'
       Font.Style = []
       ParentFont = False
-      TabOrder = 8
+      TabOrder = 7
       EditLabel.Width = 44
       EditLabel.Height = 13
       EditLabel.Caption = 'Termin'#233'e'
@@ -503,12 +522,47 @@ object frmConsultationSerie: TfrmConsultationSerie
       EditLabel.ParentFont = False
       ReadOnly = True
     end
+    object lvUnivers: TVDTListView
+      Left = 59
+      Top = 87
+      Width = 319
+      Height = 35
+      Anchors = [akLeft, akTop]
+      BevelInner = bvLowered
+      BevelOuter = bvNone
+      BevelKind = bkFlat
+      Color = clWhite
+      Columns = <
+        item
+          MinWidth = 150
+          Width = 231
+        end>
+      OwnerData = True
+      TabOrder = 8
+      OnData = lvUniversData
+      OnDblClick = lvUniversDblClick
+    end
+    object Memo1: TMemo
+      Left = 432
+      Top = 87
+      Width = 254
+      Height = 35
+      Anchors = [akLeft, akTop, akRight]
+      BevelInner = bvLowered
+      BevelKind = bkFlat
+      BevelOuter = bvNone
+      BorderStyle = bsNone
+      ParentColor = True
+      ReadOnly = True
+      ScrollBars = ssVertical
+      TabOrder = 9
+      ExplicitWidth = 299
+    end
   end
   object MainMenu1: TMainMenu
     AutoMerge = True
     Images = frmFond.boutons_32x32_hot
-    Left = 416
-    Top = 24
+    Left = 408
     object Fiche1: TMenuItem
       Caption = 'Fiche'
       object Modifier1: TMenuItem
@@ -526,8 +580,7 @@ object frmConsultationSerie: TfrmConsultationSerie
     end
   end
   object ActionList1: TActionList
-    Left = 448
-    Top = 24
+    Left = 440
     object FicheApercu: TAction
       Tag = 1
       Category = 'Fiche'
