@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, EditLabeled, VirtualTrees, ComCtrls, VDTButton,
   ExtCtrls, Buttons, UframBoutons, VirtualTree, TypeRec, UframRechercheRapide, LoadComplet,
-  CRFurtif, UBdtForms, Generics.Collections, PngSpeedButton, UframVTEdit;
+  UBdtForms, Generics.Collections, PngSpeedButton, UframVTEdit;
 
 type
   TfrmEditAchatAlbum = class(TbdtForm)

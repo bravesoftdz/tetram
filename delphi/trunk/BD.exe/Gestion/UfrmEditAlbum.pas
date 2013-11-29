@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, ExtCtrls, DBCtrls, StdCtrls, ImgList, EditLabeled,
   VDTButton, ExtDlgs, Mask, ComCtrls, Buttons, VirtualTrees, VirtualTree, Menus, TypeRec, ActnList, LoadComplet, ComboCheck,
-  UframRechercheRapide, CRFurtif, UframBoutons, UBdtForms, Generics.Collections, StrUtils,
+  UframRechercheRapide, UframBoutons, UBdtForms, Generics.Collections, StrUtils,
   JvExMask, JvToolEdit, UVirtualTreeEdit, UfrmFond, PngSpeedButton,
   UframVTEdit, LoadCompletImport;
 
@@ -23,17 +23,17 @@ type
     remarques: TMemoLabeled;
     Label7: TLabel;
     lvScenaristes: TVDTListViewLabeled;
-    btScenariste: TCRFurtifLight;
+    btScenariste: TVDTButton;
     lvDessinateurs: TVDTListViewLabeled;
-    btDessinateur: TCRFurtifLight;
+    btDessinateur: TVDTButton;
     Label19: TLabel;
     vstImages: TVirtualStringTree;
-    ChoixImage: TCRFurtifLight;
-    VDTButton4: TCRFurtifLight;
-    VDTButton5: TCRFurtifLight;
+    ChoixImage: TVDTButton;
+    VDTButton4: TVDTButton;
+    VDTButton5: TVDTButton;
     Bevel1: TBevel;
     Label20: TLabel;
-    btColoriste: TCRFurtifLight;
+    btColoriste: TVDTButton;
     lvColoristes: TVDTListViewLabeled;
     cbIntegrale: TCheckBoxLabeled;
     Label1: TLabel;
@@ -65,7 +65,7 @@ type
     cbxOrientation: TLightComboCheck;
     Label23: TLabel;
     cbxFormat: TLightComboCheck;
-    VDTButton13: TCRFurtifLight;
+    VDTButton13: TVDTButton;
     edPrix: TEditLabeled;
     edAnneeEdition: TEditLabeled;
     edISBN: TEditLabeled;
@@ -106,6 +106,8 @@ type
     Label28: TLabel;
     vtEditUnivers: TframVTEdit;
     Label29: TLabel;
+    btUnivers: TVDTButton;
+    lvUnivers: TVDTListViewLabeled;
     procedure ajoutClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -159,6 +161,9 @@ type
     procedure vtEditCollectionsVTEditChange(Sender: TObject);
     procedure btnScriptClick(Sender: TObject);
     procedure vtEditUniversVTEditChange(Sender: TObject);
+    procedure lvUniversData(Sender: TObject; Item: TListItem);
+    procedure lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure btUniversClick(Sender: TObject);
   strict private
     FAlbum: TAlbumComplet;
     FCurrentEditionComplete: TEditionComplete;
@@ -207,7 +212,6 @@ begin
   PrepareLV(Self);
 
   vtEditSerie.VTEdit.LinkControls.Add(Label20);
-  vtEditUnivers.VTEdit.LinkControls.Add(Label29);
   vtEditEditeurs.VTEdit.LinkControls.Add(Label5);
   vtEditCollections.VTEdit.LinkControls.Add(Label8);
 
@@ -240,13 +244,13 @@ begin
 
   FCategoriesImages := TStringList.Create;
 
-  LoadCombo(1 {Etat}, cbxEtat);
-  LoadCombo(2 {Reliure}, cbxReliure);
-  LoadCombo(3 {TypeEdition}, cbxEdition);
-  LoadCombo(4 {Orientation}, cbxOrientation);
-  LoadCombo(5 {Format}, cbxFormat);
-  LoadStrings(6 {Categorie d'image}, FCategoriesImages);
-  LoadCombo(8 {Sens de lecture}, cbxSensLecture);
+  LoadCombo(1 { Etat } , cbxEtat);
+  LoadCombo(2 { Reliure } , cbxReliure);
+  LoadCombo(3 { TypeEdition } , cbxEdition);
+  LoadCombo(4 { Orientation } , cbxOrientation);
+  LoadCombo(5 { Format } , cbxFormat);
+  LoadStrings(6 { Categorie d'image } , FCategoriesImages);
+  LoadCombo(8 { Sens de lecture } , cbxSensLecture);
 
   for i := 0 to Pred(FCategoriesImages.Count) do
   begin
@@ -285,6 +289,7 @@ begin
     remarques.Text := FAlbum.Notes.Text;
     cbIntegraleClick(cbIntegrale);
 
+    lvUnivers.Items.Count := FAlbum.Univers.Count;
     lvScenaristes.Items.Count := FAlbum.Scenaristes.Count;
     lvDessinateurs.Items.Count := FAlbum.Dessinateurs.Count;
     lvColoristes.Items.Count := FAlbum.Coloristes.Count;
@@ -296,11 +301,6 @@ begin
     vtEditSerie.VTEdit.OnChange := nil;
     vtEditSerie.CurrentValue := FAlbum.ID_Serie;
     vtEditSerie.VTEdit.OnChange := JvComboEdit1Change;
-
-// TODO: remplacer par une liste de TUniversComplet
-//    vtEditUnivers.CurrentValue := FAlbum.ID_Univers;
-//    vtEditUnivers.Visible := IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
-//    Label29.Visible := IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
 
     // tout ce mic mac pour l'actualisation par script
     OldvtEditionsItemIndex := vtEditions.ItemIndex;
@@ -385,14 +385,29 @@ begin
   Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
 end;
 
+procedure TfrmEditAlbum.btUniversClick(Sender: TObject);
+begin
+  if IsEqualGUID(vtEditUnivers.CurrentValue, GUID_NULL) then
+    Exit;
+
+  FAlbum.Univers.Add(TUnivers.Duplicate(TUnivers(vtEditUnivers.VTEdit.Data)));
+  lvUnivers.Items.Count := FAlbum.Univers.Count;
+  lvUnivers.Invalidate;
+
+  vtEditUniversVTEditChange(vtEditUnivers.VTEdit);
+end;
+
 procedure TfrmEditAlbum.ajoutClick(Sender: TObject);
 begin
   if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
     Exit;
   case TSpeedButton(Sender).Tag of
-    1: AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TPersonnage(vtEditPersonnes.VTEdit.Data), FScenaristesSelected);
-    2: AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TPersonnage(vtEditPersonnes.VTEdit.Data), FDessinateursSelected);
-    3: AjouteAuteur(FAlbum.Coloristes, lvColoristes, TPersonnage(vtEditPersonnes.VTEdit.Data), FColoristesSelected);
+    1:
+      AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TPersonnage(vtEditPersonnes.VTEdit.Data), FScenaristesSelected);
+    2:
+      AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TPersonnage(vtEditPersonnes.VTEdit.Data), FDessinateursSelected);
+    3:
+      AjouteAuteur(FAlbum.Coloristes, lvColoristes, TPersonnage(vtEditPersonnes.VTEdit.Data), FColoristesSelected);
   end;
   framVTEdit1VTEditChange(vtEditPersonnes.VTEdit);
 end;
@@ -436,7 +451,7 @@ var
   AfficheEdition, lISBN: Integer;
   cs: string;
 begin
-  //  if TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  // if TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
   if TGlobalVar.Utilisateur.Options.SerieObligatoireAlbums and IsEqualGUID(vtEditSerie.CurrentValue, GUID_NULL) then
   begin
     AffMessage(rsSerieObligatoire, mtInformation, [mbOk], True);
@@ -444,7 +459,7 @@ begin
     ModalResult := mrNone;
     Exit;
   end;
-  //  if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  // if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
   if (Length(Trim(edTitre.Text)) = 0) and IsEqualGUID(vtEditSerie.CurrentValue, GUID_NULL) then
   begin
     AffMessage(rsTitreObligatoireAlbumSansSerie, mtInformation, [mbOk], True);
@@ -452,7 +467,7 @@ begin
     ModalResult := mrNone;
     Exit;
   end;
-  if not (StrToIntDef(edMoisParution.Text, 1) in [1..12]) then
+  if not(StrToIntDef(edMoisParution.Text, 1) in [1 .. 12]) then
   begin
     AffMessage(rsMoisParutionIncorrect, mtInformation, [mbOk], True);
     edMoisParution.SetFocus;
@@ -475,11 +490,11 @@ begin
     if cs = '' then
     begin
       // l'utilisation de l'isbn n'étant obligatoire que depuis "quelques années", les bd anciennes n'en n'ont pas: donc pas obligatoire de le saisir
-      //      AffMessage('Le numéro ISBN est obligatoire !', mtInformation, [mbOk], True);
-      //      AfficheEdition := i;
+      // AffMessage('Le numéro ISBN est obligatoire !', mtInformation, [mbOk], True);
+      // AfficheEdition := i;
     end;
     lISBN := Length(cs);
-    if not (lISBN in [10, 13]) then
+    if not(lISBN in [10, 13]) then
       if (EditionComplete.AnneeEdition = 0) or (EditionComplete.AnneeEdition >= 2007) then
         lISBN := 13
       else
@@ -491,8 +506,8 @@ begin
       end
       else
       begin
-        //        AffMessage('Le numéro ISBN est obligatoire !', mtInformation, [mbOk], True);
-        //        AfficheEdition := i;
+        // AffMessage('Le numéro ISBN est obligatoire !', mtInformation, [mbOk], True);
+        // AfficheEdition := i;
       end;
     if (EditionComplete.AnneeCote * EditionComplete.PrixCote = 0) and (EditionComplete.AnneeCote + EditionComplete.PrixCote <> 0) then
     begin
@@ -575,9 +590,9 @@ var
 
 begin
   IdPersonne := vtEditPersonnes.CurrentValue;
-  btScenariste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVScenaristes);
-  btDessinateur.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVDessinateurs);
-  btColoriste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVColoristes);
+  btScenariste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(lvScenaristes);
+  btDessinateur.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(lvDessinateurs);
+  btColoriste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(lvColoristes);
 end;
 
 procedure TfrmEditAlbum.edTitreChange(Sender: TObject);
@@ -719,7 +734,7 @@ end;
 procedure TfrmEditAlbum.FormShow(Sender: TObject);
 begin
   // la selection de l'édition doit se faire ici à cause d'un bug du TDateTimePicker:
-  //   il se forcerait à "Checked = True" si on le fait dans le SetID_Album
+  // il se forcerait à "Checked = True" si on le fait dans le SetID_Album
   if vtEditions.ItemIndex = -1 then
   begin
     vtEditions.ItemIndex := 0;
@@ -735,12 +750,15 @@ begin
   PC := FCurrentEditionComplete.Couvertures[Node.Index];
   CellText := '';
   case Column of
-    0: CellText := PC.NewNom;
-    1: CellText := PC.sCategorie;
+    0:
+      CellText := PC.NewNom;
+    1:
+      CellText := PC.sCategorie;
   end;
 end;
 
-procedure TfrmEditAlbum.vstImagesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+procedure TfrmEditAlbum.vstImagesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+  TextType: TVSTTextType);
 var
   PC: TCouverture;
 begin
@@ -802,7 +820,7 @@ begin
     EditionComplete.SensLecture := MakeOption(IIf(RecInconnu or (SensLecture.Value = -1), cbxSensLecture.DefaultValueChecked, SensLecture.Value), '');
     EditionComplete.TypeEdition := MakeOption(IIf(RecInconnu or (TypeEdition.Value = -1), cbxEdition.DefaultValueChecked, TypeEdition.Value), '');
   end;
-  //  if not IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
+  // if not IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
   if not IsEqualGUID(vtEditSerie.CurrentValue, GUID_NULL) then
   begin
     EditionComplete.Editeur.ID_Editeur := TSerie(vtEditSerie.VTEdit.Data).Editeur.ID;
@@ -836,7 +854,7 @@ var
 begin
   cs := edISBN.Text;
   lISBN := Length(cs);
-  if not (lISBN in [10, 13]) then
+  if not(lISBN in [10, 13]) then
     if StrToIntDef(edAnneeEdition.Text, StrToIntDef(edAnneeParution.Text, YearOf(Now))) >= 2007 then
       lISBN := 13
     else
@@ -880,11 +898,11 @@ begin
 end;
 
 procedure TfrmEditAlbum.vstImagesEditing(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
-//var
-//  PC: TCouverture;
+// var
+// PC: TCouverture;
 begin
-  //  PC := FCurrentEditionComplete.Couvertures[Node.Index];
-  //  Allowed := (PC.Reference <> -1) and (PC.NewStockee) and (PC.NewStockee = PC.OldStockee);
+  // PC := FCurrentEditionComplete.Couvertures[Node.Index];
+  // Allowed := (PC.Reference <> -1) and (PC.NewStockee) and (PC.NewStockee = PC.OldStockee);
 
   // devrait être autorisé aussi pour changer le nom de l'image
   // l'édition de la catégorie d'image n'est pas gérée par le virtualtreeview
@@ -897,8 +915,10 @@ var
 begin
   PC := FCurrentEditionComplete.Couvertures[Node.Index];
   case Column of
-    0: PC.NewNom := NewText;
-    1: ;
+    0:
+      PC.NewNom := NewText;
+    1:
+      ;
   end;
 end;
 
@@ -1095,7 +1115,7 @@ var
   ms: TStream;
   jpg: TJPEGImage;
   Couverture: TImage;
-  Frm: TForm;
+  frm: TForm;
 begin
   if not Assigned(vstImages.FocusedNode) then
     Exit;
@@ -1108,24 +1128,24 @@ begin
   if Assigned(ms) then
     try
       jpg := TJPEGImage.Create;
-      Frm := TbdtForm.Create(Self);
-      Couverture := TImage.Create(Frm);
+      frm := TbdtForm.Create(Self);
+      Couverture := TImage.Create(frm);
       try
         jpg.LoadFromStream(ms);
-        Frm.BorderIcons := [];
-        Frm.BorderStyle := bsToolWindow;
-        Frm.Position := poOwnerFormCenter;
-        Couverture.Parent := Frm;
+        frm.BorderIcons := [];
+        frm.BorderStyle := bsToolWindow;
+        frm.Position := poOwnerFormCenter;
+        Couverture.Parent := frm;
         Couverture.Picture.Assign(jpg);
         Couverture.Cursor := crHandPoint;
         Couverture.OnClick := VisuClose;
         Couverture.AutoSize := True;
-        Frm.AutoSize := True;
-        Frm.ShowModal;
+        frm.AutoSize := True;
+        frm.ShowModal;
       finally
         FreeAndNil(jpg);
         FreeAndNil(Couverture);
-        FreeAndNil(Frm);
+        FreeAndNil(frm);
       end;
     finally
       FreeAndNil(ms);
@@ -1137,13 +1157,9 @@ var
   Auteur: TAuteur;
 begin
   FAlbum.ID_Serie := vtEditSerie.CurrentValue;
-  vtEditUnivers.Visible := IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
-  Label29.Visible := IsEqualGUID(FAlbum.ID_Serie, GUID_NULL);
   if not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL) then
   begin
-// TODO: remplacer par une liste de TUniversComplet
-//    vtEditUnivers.CurrentValue := FAlbum.Serie.Id_Univers;
-    if not (FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then
+    if not(FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then
       try
         lvScenaristes.Items.BeginUpdate;
         lvDessinateurs.Items.BeginUpdate;
@@ -1240,7 +1256,9 @@ begin
   if InputQuery('EAN-ISBN', 'Saisir le numéro EAN-ISBN de l''édition :', Code) then
   begin
     dummy := Code;
-    if not VerifieEAN(dummy) and (MessageDlg(Code + #13#13'Le caractère de contrôle de ce numéro EAN-ISBN n''est pas correct.'#13#10'Voulez-vous néanmoins utiliser ce code barre?', mtWarning, [mbYes, mbNo], 0) = mrNo) then
+    if not VerifieEAN(dummy) and
+      (MessageDlg(Code + #13#13'Le caractère de contrôle de ce numéro EAN-ISBN n''est pas correct.'#13#10'Voulez-vous néanmoins utiliser ce code barre?',
+      mtWarning, [mbYes, mbNo], 0) = mrNo) then
       Exit;
     if StrToIntDef(edAnneeEdition.Text, 0) >= 2007 then
     begin // en 2007, les ISBN passent à 13 caractères
@@ -1252,7 +1270,7 @@ begin
       Code := Copy(Code, 4, 9);
       VerifieISBN(Code, 10);
     end;
-    edisbn.Text := Code;
+    edISBN.Text := Code;
   end;
 end;
 
@@ -1276,9 +1294,25 @@ begin
 end;
 
 procedure TfrmEditAlbum.vtEditUniversVTEditChange(Sender: TObject);
+var
+  IdUnivers: TGUID;
+
+  function NotIn(LV: TListView): Boolean;
+  var
+    i: Integer;
+  begin
+    i := 0;
+    Result := True;
+    while Result and (i <= Pred(LV.Items.Count)) do
+    begin
+      Result := not IsEqualGUID(TUnivers(LV.Items[i].Data).ID, IdUnivers);
+      Inc(i);
+    end;
+  end;
+
 begin
-// TODO: remplacer par une liste de TUniversComplet
-//  FAlbum.ID_Univers := vtEditUnivers.CurrentValue;
+  IdUnivers := vtEditUnivers.CurrentValue;
+  btUnivers.Enabled := (not IsEqualGUID(IdUnivers, GUID_NULL)) and NotIn(lvUnivers);
 end;
 
 procedure TfrmEditAlbum.VDTButton14Click(Sender: TObject);
@@ -1337,6 +1371,25 @@ begin
   Item.Caption := TAuteur(Item.Data).ChaineAffichage;
 end;
 
+procedure TfrmEditAlbum.lvUniversData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FAlbum.Univers[Item.Index];
+  Item.Caption := TUnivers(Item.Data).ChaineAffichage;
+end;
+
+procedure TfrmEditAlbum.lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+var
+  src: TListView;
+begin
+  if Key <> VK_DELETE then
+    Exit;
+  src := TListView(Sender);
+  FAlbum.Univers.Delete(src.Selected.Index);
+  lvUnivers.Items.Count := FAlbum.Univers.Count;
+  src.Invalidate;
+  vtEditUniversVTEditChange(vtEditUnivers.VTEdit);
+end;
+
 procedure TfrmEditAlbum.lvDessinateursData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FAlbum.Dessinateurs[Item.Index];
@@ -1360,4 +1413,3 @@ begin
 end;
 
 end.
-

@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls,
   UfrmFond, VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, VirtualTree, ProceduresBDtk, UbdtForms, StrUtils,
-  jpeg, ShellAPI, LoadComplet, CRFurtif, Generics.Defaults, PngSpeedButton, pngimage,
+  jpeg, ShellAPI, LoadComplet, Generics.Defaults, PngSpeedButton, pngimage,
   LabeledCheckBox, System.Actions;
 
 type
@@ -33,8 +33,8 @@ type
     Label5: TLabel;
     TitreAlbum: TLabel;
     Label6: TLabel;
-    VDTButton3: TCRFurtifLight;
-    VDTButton4: TCRFurtifLight;
+    VDTButton3: TVDTButton;
+    VDTButton4: TVDTButton;
     Memo1: TMemo;
     lvColoristes: TVDTListView;
     Label7: TLabel;

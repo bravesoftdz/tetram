@@ -490,7 +490,7 @@ begin
     Script.Add('');
     Script.Add('  for execute statement');
     Script.Add('    ''select');
-    Script.Add('      cast(''''-1'''' as varchar(150)), id_serie, count(id_album)');
+    Script.Add('      cast(''''-1'''' as varchar(150)), id_serie, count(distinct id_album)');
     Script.Add('    from');
     Script.Add('      vw_liste_albums'' || :nom_vue || ''');
     Script.Add('    where');
@@ -504,7 +504,7 @@ begin
     Script.Add('');
     Script.Add('  for execute statement');
     Script.Add('    ''select');
-    Script.Add('      titreserie, id_serie, count(id_album)');
+    Script.Add('      titreserie, id_serie, count(distinct id_album)');
     Script.Add('    from');
     Script.Add('      vw_liste_albums'' || :nom_vue || ''');
     Script.Add('    where');
@@ -536,7 +536,7 @@ begin
     Script.Add('');
     Script.Add('  for execute statement');
     Script.Add('    ''select');
-    Script.Add('      cast(''''-1'''' as varchar(150)), id_serie, count(id_parabd)');
+    Script.Add('      cast(''''-1'''' as varchar(150)), id_serie, count(distinct id_parabd)');
     Script.Add('    from');
     Script.Add('      vw_liste_parabd'' || :nom_vue || ''');
     Script.Add('    where');
@@ -550,7 +550,7 @@ begin
     Script.Add('');
     Script.Add('  for execute statement');
     Script.Add('    ''select');
-    Script.Add('      titreserie, id_serie, count(id_parabd)');
+    Script.Add('      titreserie, id_serie, count(distinct id_parabd)');
     Script.Add('    from');
     Script.Add('      vw_liste_parabd'' || :nom_vue || ''');
     Script.Add('    where');
@@ -596,7 +596,7 @@ begin
     Script.Add('    nom_vue = ''_univers'';');
     Script.Add('');
     Script.Add('  for execute statement');
-    Script.Add('    ''select');
+    Script.Add('    ''select distinct');
     Script.Add('      id_album, titrealbum, tome, tomedebut, tomefin, horsserie,');
     Script.Add('      integrale, moisparution, anneeparution, notation, id_serie,');
     Script.Add('      titreserie, achat, complet');
@@ -643,7 +643,7 @@ begin
     Script.Add('    nom_vue = ''_univers'';');
     Script.Add('');
     Script.Add('  for');
-    Script.Add('    execute statement ''select');
+    Script.Add('    execute statement ''select distinct');
     Script.Add('      id_parabd, titreparabd, id_parabd, titreserie, achat, complet, scategorie');
     Script.Add('    from');
     Script.Add('      vw_liste_parabd'' || :nom_vue || ''');

@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Buttons, VDTButton, CRFurtif, StdCtrls, Mask, JvExMask,
+  Dialogs, Buttons, VDTButton, StdCtrls, Mask, JvExMask,
   JvToolEdit, UVirtualTreeEdit, VirtualTree, UHistorique, PngSpeedButton, UfrmFond;
 
 type

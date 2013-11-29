@@ -133,7 +133,7 @@ object frmConsultationUnivers: TfrmConsultationUnivers
     end
     object Label3: TLabel
       Left = 48
-      Top = 175
+      Top = 135
       Width = 41
       Height = 13
       Alignment = taRightJustify
@@ -150,7 +150,7 @@ object frmConsultationUnivers: TfrmConsultationUnivers
     end
     object Label4: TLabel
       Left = 43
-      Top = 300
+      Top = 348
       Width = 46
       Height = 13
       Alignment = taRightJustify
@@ -169,7 +169,7 @@ object frmConsultationUnivers: TfrmConsultationUnivers
       Left = 95
       Top = 50
       Width = 739
-      Height = 119
+      Height = 79
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
       BevelKind = bkFlat
@@ -182,9 +182,9 @@ object frmConsultationUnivers: TfrmConsultationUnivers
     end
     object vtAlbums: TVirtualStringTree
       Left = 95
-      Top = 175
+      Top = 135
       Width = 739
-      Height = 119
+      Height = 207
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
       BevelInner = bvLowered
@@ -214,9 +214,9 @@ object frmConsultationUnivers: TfrmConsultationUnivers
     end
     object vtParaBD: TVirtualStringTree
       Left = 95
-      Top = 300
+      Top = 348
       Width = 739
-      Height = 130
+      Height = 101
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
       BevelOuter = bvNone

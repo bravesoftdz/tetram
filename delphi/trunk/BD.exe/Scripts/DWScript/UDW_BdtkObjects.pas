@@ -9,6 +9,8 @@ type
   TDW_BdtkObjectsUnit = class(TDW_Unit)
   private
     procedure Register_TObjectList;
+    procedure Register_TUnivers;
+    procedure Register_TObjectListOfUnivers;
     procedure Register_TAuteur;
     procedure Register_TObjectListOfAuteur;
     procedure Register_TEditeurComplet;
@@ -39,9 +41,13 @@ type
     procedure OnTAlbumComplet_ImportEval(info: TProgramInfo; ExtObject: TObject);
     procedure OnTAlbumComplet_ClearEval(info: TProgramInfo; ExtObject: TObject);
 
+    procedure OnTUnivers_CreateEval(info: TProgramInfo; var ExtObject: TObject);
+
     procedure OnTAuteur_CreateEval(info: TProgramInfo; var ExtObject: TObject);
 
     procedure OnTEditionComplete_AddImageFromURLEval(info: TProgramInfo; ExtObject: TObject);
+
+    procedure OnTObjectListOfUnivers_ItemsEval(info: TProgramInfo; ExtObject: TObject);
 
     procedure OnTObjectListOfAuteur_ItemsEval(info: TProgramInfo; ExtObject: TObject);
 
@@ -118,6 +124,15 @@ begin
     fkFunction:
       info.ResultAsVariant := GetScriptObjFromExternal(info, (ExtObject as TObjectList<TAuteur>).Items[info.ParamAsInteger[0]]);
     // info.ResultAsVariant := info.RegisterExternalObject((ExtObject as TObjectList<TAuteur>).Items[info.ParamAsInteger[0]]);
+  end;
+end;
+
+procedure TDW_BdtkObjectsUnit.OnTObjectListOfUnivers_ItemsEval(info: TProgramInfo; ExtObject: TObject);
+begin
+  case TMethodSymbol(info.FuncSym).Kind of
+    fkFunction:
+      info.ResultAsVariant := GetScriptObjFromExternal(info, (ExtObject as TObjectList<TUnivers>).Items[info.ParamAsInteger[0]]);
+    // info.ResultAsVariant := info.RegisterExternalObject((ExtObject as TObjectList<TUnivers>).Items[info.ParamAsInteger[0]]);
   end;
 end;
 
@@ -205,6 +220,11 @@ end;
 procedure TDW_BdtkObjectsUnit.OnTScriptChoix_ShowEval(info: TProgramInfo; ExtObject: TObject);
 begin
   info.ResultAsString := (ExtObject as TScriptChoix).Show;
+end;
+
+procedure TDW_BdtkObjectsUnit.OnTUnivers_CreateEval(info: TProgramInfo; var ExtObject: TObject);
+begin
+  ExtObject := TUnivers.Create;
 end;
 
 procedure TDW_BdtkObjectsUnit.TScriptChoixTitre(info: TProgramInfo; ExtObject: TObject);
@@ -396,6 +416,17 @@ begin
   RegisterMethod(c, 'Insert', ['Index', 'Integer', 'AObject', 'TAuteur']);
 end;
 
+procedure TDW_BdtkObjectsUnit.Register_TObjectListOfUnivers;
+var
+  c: TdwsClass;
+begin
+  c := RegisterClass('TObjectListOfUnivers', 'TObjectList');
+
+  RegisterProperty(c, 'Items', 'TUnivers', ['Index', 'Integer'], OnTObjectListOfUnivers_ItemsEval).IsDefault := True;
+  RegisterMethod(c, 'Add', 'Integer', ['AObject', 'TUnivers']);
+  RegisterMethod(c, 'Insert', ['Index', 'Integer', 'AObject', 'TUnivers']);
+end;
+
 procedure TDW_BdtkObjectsUnit.Register_TScriptChoix;
 var
   c: TdwsClass;
@@ -432,6 +463,15 @@ begin
   RegisterProperty(c, 'Scenaristes', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , HandleDynamicProperty);
   RegisterProperty(c, 'Dessinateurs', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , HandleDynamicProperty);
   RegisterProperty(c, 'Coloristes', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , HandleDynamicProperty);
+end;
+
+procedure TDW_BdtkObjectsUnit.Register_TUnivers;
+var
+  c: TdwsClass;
+begin
+  c := RegisterClass('TUnivers');
+
+  RegisterProperty(c, 'NomUnivers', 'string', HandleDynamicProperty, HandleDynamicProperty);
 end;
 
 end.

@@ -10,9 +10,9 @@ object framBoutons: TframBoutons
     451
     29)
   object btnOK: TButton
-    Left = 288
+    Left = 285
     Top = 6
-    Width = 79
+    Width = 77
     Height = 21
     Cursor = crHandPoint
     Hint = 'Valider les modifcations'

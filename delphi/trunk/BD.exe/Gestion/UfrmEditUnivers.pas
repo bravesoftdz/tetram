@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, ExtCtrls, DBCtrls, Mask, Buttons, VDTButton, ComCtrls,
-  EditLabeled, VirtualTrees, VirtualTree, LoadComplet, Menus, ExtDlgs, UframRechercheRapide, CRFurtif, UframBoutons, UBdtForms,
+  EditLabeled, VirtualTrees, VirtualTree, LoadComplet, Menus, ExtDlgs, UframRechercheRapide, UframBoutons, UBdtForms,
   ComboCheck, StrUtils, PngSpeedButton, UframVTEdit;
 
 type
@@ -103,17 +103,17 @@ begin
   edDescription.Text := FUnivers.Description.Text;
   edSite.Text := FUnivers.SiteWeb;
 
-  vtAlbums.Filtre := 'Branche_Univers containing ' + QuotedStr('|' + GUIDToString(ID_Univers) + '|');
+  vtAlbums.Filtre := 'branche_univers containing ' + QuotedStr('|' + GUIDToString(ID_Univers) + '|');
   vtAlbums.Mode := vmAlbumsSerie;
   vtAlbums.FullExpand;
 
-  vtParaBD.Filtre := 'Branche_Univers containing ' + QuotedStr('|' + GUIDToString(ID_Univers) + '|');
+  vtParaBD.Filtre := 'branche_univers containing ' + QuotedStr('|' + GUIDToString(ID_Univers) + '|');
   vtParaBD.Mode := vmParaBDSerie;
   vtParaBD.FullExpand;
 
   vtEditUnivers.Mode := vmUnivers;
   vtEditUnivers.VTEdit.PopupWindow.TreeView.UseFiltre := True;
-  vtEditUnivers.VTEdit.PopupWindow.TreeView.Filtre := 'Branche not containing ' + QuotedStr('|' + GUIDToString(ID_Univers) + '|');
+  vtEditUnivers.VTEdit.PopupWindow.TreeView.Filtre := 'branche not containing ' + QuotedStr('|' + GUIDToString(ID_Univers) + '|');
   vtEditUnivers.CurrentValue := FUnivers.ID_UniversParent;
 
   // pour le moment
@@ -160,3 +160,4 @@ begin
 end;
 
 end.
+

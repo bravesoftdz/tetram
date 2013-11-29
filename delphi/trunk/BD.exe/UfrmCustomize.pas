@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Menus,
   StdCtrls, ComCtrls, CheckLst, ActnList, VDTButton, Buttons, ExtCtrls, UframBoutons,
-  ToolWin, IniFiles, CRFurtif, UBdtForms;
+  ToolWin, IniFiles, UBdtForms, PngSpeedButton;
 
 type
   TfrmCustomize = class(TbdtForm)
@@ -13,16 +13,15 @@ type
     Label4: TLabel;
     GroupBox1: TGroupBox;
     Label3: TLabel;
-    VDTButton2: TCRFurtifLight;
-    VDTButton3: TCRFurtifLight;
-    VDTButton4: TCRFurtifLight;
+    VDTButton2: TVDTButton;
+    VDTButton3: TVDTButton;
+    VDTButton4: TVDTButton;
     Frame11: TframBoutons;
     Cats: TListBox;
     Commands: TVDTListView;
     VDTListView1: TVDTListView;
-    ToolBar1: TToolBar;
-    ToolButton1: TToolButton;
-    ToolButton4: TToolButton;
+    ToolButton1: TVDTButton;
+    ToolButton4: TVDTButton;
     procedure CatsClick(Sender: TObject);
     procedure CommandsChange(Sender: TObject; Item: TListItem; Change: TItemChange);
     procedure FormCreate(Sender: TObject);

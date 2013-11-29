@@ -139,7 +139,7 @@ object frmEditUnivers: TfrmEditUnivers
     end
     object Label4: TLabel
       Left = 44
-      Top = 323
+      Top = 367
       Width = 46
       Height = 13
       Alignment = taRightJustify
@@ -207,7 +207,7 @@ object frmEditUnivers: TfrmEditUnivers
       Left = 96
       Top = 198
       Width = 696
-      Height = 119
+      Height = 163
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
       BevelKind = bkTile
@@ -252,9 +252,9 @@ object frmEditUnivers: TfrmEditUnivers
     end
     object vtParaBD: TVirtualStringTree
       Left = 96
-      Top = 323
+      Top = 367
       Width = 696
-      Height = 140
+      Height = 96
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
       BevelKind = bkTile

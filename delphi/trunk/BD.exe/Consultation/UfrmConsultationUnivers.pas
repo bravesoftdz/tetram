@@ -97,11 +97,11 @@ begin
   UniversParent.Caption := FormatTitre(FUnivers.UniversParent.NomUnivers);
   Description.Text := FUnivers.Description.Text;
 
-  vtAlbums.Filtre := 'Branche_Univers containing ' + QuotedStr(GUIDToString(ID_Univers));
+  vtAlbums.Filtre := 'branche_univers containing ' + QuotedStr(GUIDToString(ID_Univers));
   vtAlbums.Mode := vmAlbumsSerieUnivers;
   vtAlbums.FullExpand;
 
-  vtParaBD.Filtre := 'Branche_Univers containing ' + QuotedStr(GUIDToString(ID_Univers));
+  vtParaBD.Filtre := 'branche_univers containing ' + QuotedStr(GUIDToString(ID_Univers));
   vtParaBD.Mode := vmParaBDSerieUnivers;
   vtParaBD.FullExpand;
 end;

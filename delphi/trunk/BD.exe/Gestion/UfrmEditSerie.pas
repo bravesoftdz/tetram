@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, ExtCtrls, DBCtrls, Mask, Buttons, VDTButton, ComCtrls,
-  EditLabeled, VirtualTrees, VirtualTree, LoadComplet, Menus, ExtDlgs, UframRechercheRapide, CRFurtif, UframBoutons, UBdtForms,
+  EditLabeled, VirtualTrees, VirtualTree, LoadComplet, Menus, ExtDlgs, UframRechercheRapide, UframBoutons, UBdtForms,
   ComboCheck, StrUtils, PngSpeedButton, UframVTEdit;
 
 type
@@ -29,10 +29,10 @@ type
     VDTButton13: TVDTButton;
     edSite: TEditLabeled;
     Label1: TLabel;
-    btScenariste: TCRFurtifLight;
-    btDessinateur: TCRFurtifLight;
+    btScenariste: TVDTButton;
+    btDessinateur: TVDTButton;
     Label19: TLabel;
-    btColoriste: TCRFurtifLight;
+    btColoriste: TVDTButton;
     lvScenaristes: TVDTListViewLabeled;
     lvDessinateurs: TVDTListViewLabeled;
     lvColoristes: TVDTListViewLabeled;
@@ -70,6 +70,8 @@ type
     Label28: TLabel;
     vtEditUnivers: TframVTEdit;
     Label11: TLabel;
+    btUnivers: TVDTButton;
+    lvUnivers: TVDTListViewLabeled;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure Frame11btnOKClick(Sender: TObject);
@@ -94,6 +96,9 @@ type
     procedure OnEditPersonne(Sender: TObject);
     procedure vtEditEditeursVTEditChange(Sender: TObject);
     procedure vtEditUniversVTEditChange(Sender: TObject);
+    procedure btUniversClick(Sender: TObject);
+    procedure lvUniversData(Sender: TObject; Item: TListItem);
+    procedure lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Déclarations privées }
     FSerie: TSerieComplete;
@@ -138,17 +143,17 @@ begin
   vtParaBD.UseFiltre := True;
   vtEditPersonnes.AfterEdit := OnEditPersonne;
 
-  LoadCombo(1 {Etat}, cbxEtat);
+  LoadCombo(1 { Etat } , cbxEtat);
   cbxEtat.Value := -1;
-  LoadCombo(2 {Reliure}, cbxReliure);
+  LoadCombo(2 { Reliure } , cbxReliure);
   cbxReliure.Value := -1;
-  LoadCombo(3 {TypeEdition}, cbxEdition);
+  LoadCombo(3 { TypeEdition } , cbxEdition);
   cbxEdition.Value := -1;
-  LoadCombo(4 {Orientation}, cbxOrientation);
+  LoadCombo(4 { Orientation } , cbxOrientation);
   cbxOrientation.Value := -1;
-  LoadCombo(5 {Format}, cbxFormat);
+  LoadCombo(5 { Format } , cbxFormat);
   cbxFormat.Value := -1;
-  LoadCombo(8 {Sens de lecture}, cbxSensLecture);
+  LoadCombo(8 { Sens de lecture } , cbxSensLecture);
   cbxSensLecture.Value := -1;
 end;
 
@@ -187,8 +192,6 @@ begin
   FSerie.ID_Collection := vtEditCollections.CurrentValue;
   FSerie.Sujet.Text := edHistoire.Text;
   FSerie.Notes.Text := edNotes.Text;
-// TODO: remplacer par une liste de TUniversComplet
-//  FSerie.ID_Univers := vtEditUnivers.CurrentValue;
 
   FSerie.VO := Integer(cbVO.State);
   FSerie.Couleur := Integer(cbCouleur.State);
@@ -237,9 +240,8 @@ begin
     edSite.Text := FSerie.SiteWeb;
     if FSerie.NbAlbums > 0 then
       edNbAlbums.Text := IntToStr(FSerie.NbAlbums);
-// TODO: remplacer par une liste de TUniversComplet
-//    vtEditUnivers.CurrentValue := FSerie.ID_Univers;
 
+    lvUnivers.Items.Count := FSerie.Univers.Count;
     lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
     lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
     lvColoristes.Items.Count := FSerie.Coloristes.Count;
@@ -363,15 +365,31 @@ var
 
 begin
   IdPersonne := vtEditPersonnes.CurrentValue;
-  btScenariste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVScenaristes);
-  btDessinateur.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVDessinateurs);
-  btColoriste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVColoristes);
+  btScenariste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(lvScenaristes);
+  btDessinateur.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(lvDessinateurs);
+  btColoriste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(lvColoristes);
 end;
 
 procedure TfrmEditSerie.vtEditUniversVTEditChange(Sender: TObject);
+var
+  IdUnivers: TGUID;
+
+  function NotIn(LV: TListView): Boolean;
+  var
+    i: Integer;
+  begin
+    i := 0;
+    Result := True;
+    while Result and (i <= Pred(LV.Items.Count)) do
+    begin
+      Result := not IsEqualGUID(TUnivers(LV.Items[i].Data).ID, IdUnivers);
+      Inc(i);
+    end;
+  end;
+
 begin
-// TODO: remplacer par une liste de TUniversComplet
-//  FSerie.ID_Univers := vtEditUnivers.CurrentValue;
+  IdUnivers := vtEditUnivers.CurrentValue;
+  btUnivers.Enabled := (not IsEqualGUID(IdUnivers, GUID_NULL)) and NotIn(lvUnivers);
 end;
 
 procedure TfrmEditSerie.vtGenresDblClick(Sender: TObject);
@@ -441,29 +459,29 @@ begin
     Exit;
   case TSpeedButton(Sender).Tag of
     1:
-    begin
-      PA := TAuteur.Create;
-      PA.Fill(TPersonnage(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maScenariste);
-      FSerie.Scenaristes.Add(PA);
-      lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
-      lvScenaristes.Invalidate;
-    end;
+      begin
+        PA := TAuteur.Create;
+        PA.Fill(TPersonnage(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maScenariste);
+        FSerie.Scenaristes.Add(PA);
+        lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
+        lvScenaristes.Invalidate;
+      end;
     2:
-    begin
-      PA := TAuteur.Create;
-      PA.Fill(TPersonnage(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maDessinateur);
-      FSerie.Dessinateurs.Add(PA);
-      lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
-      lvDessinateurs.Invalidate;
-    end;
+      begin
+        PA := TAuteur.Create;
+        PA.Fill(TPersonnage(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maDessinateur);
+        FSerie.Dessinateurs.Add(PA);
+        lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
+        lvDessinateurs.Invalidate;
+      end;
     3:
-    begin
-      PA := TAuteur.Create;
-      PA.Fill(TPersonnage(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maColoriste);
-      FSerie.Coloristes.Add(PA);
-      lvColoristes.Items.Count := FSerie.Coloristes.Count;
-      lvColoristes.Invalidate;
-    end;
+      begin
+        PA := TAuteur.Create;
+        PA.Fill(TPersonnage(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maColoriste);
+        FSerie.Coloristes.Add(PA);
+        lvColoristes.Items.Count := FSerie.Coloristes.Count;
+        lvColoristes.Invalidate;
+      end;
   end;
   vtEditPersonnesVTEditChange(vtEditPersonnes.VTEdit);
 end;
@@ -512,6 +530,26 @@ begin
   Item.Caption := TAuteur(Item.Data).ChaineAffichage;
 end;
 
+procedure TfrmEditSerie.lvUniversData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FSerie.Univers[Item.Index];
+  Item.Caption := TUnivers(Item.Data).ChaineAffichage;
+end;
+
+procedure TfrmEditSerie.lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+var
+  src: TListView;
+begin
+  if Key <> VK_DELETE then
+    Exit;
+  src := TListView(Sender);
+  if src = lvUnivers then
+    FSerie.Univers.Delete(src.Selected.Index);
+  lvUnivers.Items.Count := FSerie.Univers.Count;
+  src.Invalidate;
+  vtEditUniversVTEditChange(vtEditUnivers.VTEdit);
+end;
+
 procedure TfrmEditSerie.lvDessinateursData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FSerie.Dessinateurs[Item.Index];
@@ -532,6 +570,18 @@ end;
 procedure TfrmEditSerie.cbTermineeClick(Sender: TObject);
 begin
   cbSorties.Checked := not cbTerminee.Checked;
+end;
+
+procedure TfrmEditSerie.btUniversClick(Sender: TObject);
+begin
+  if IsEqualGUID(vtEditUnivers.CurrentValue, GUID_NULL) then
+    Exit;
+
+  FSerie.Univers.Add(TUnivers.Duplicate(TUnivers(vtEditUnivers.VTEdit.Data)));
+  lvUnivers.Items.Count := FSerie.Univers.Count;
+  lvUnivers.Invalidate;
+
+  vtEditUniversVTEditChange(vtEditUnivers.VTEdit);
 end;
 
 procedure TfrmEditSerie.cbCompleteClick(Sender: TObject);

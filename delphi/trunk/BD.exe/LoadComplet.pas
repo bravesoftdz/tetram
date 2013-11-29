@@ -951,7 +951,7 @@ end;
 
 procedure TAlbumComplet.FusionneInto(Dest: TAlbumComplet);
 
-  function NotInList(Auteur: TAuteur; List: TObjectList<TAuteur>): Boolean; inline;
+  function NotInList(Auteur: TAuteur; List: TObjectList<TAuteur>): Boolean; inline; overload;
   var
     i: Integer;
   begin
@@ -964,9 +964,23 @@ procedure TAlbumComplet.FusionneInto(Dest: TAlbumComplet);
     end;
   end;
 
+  function NotInList(Univers: TUnivers; List: TObjectList<TUnivers>): Boolean; inline; overload;
+  var
+    i: Integer;
+  begin
+    i := 0;
+    Result := True;
+    while Result and (i <= Pred(List.Count)) do
+    begin
+      Result := not IsEqualGUID(List[i].ID, Univers.ID);
+      Inc(i);
+    end;
+  end;
+
 var
   DefaultAlbum: TAlbumComplet;
   Auteur: TAuteur;
+  Univers: TUnivers;
 begin
   DefaultAlbum := TAlbumComplet.Create;
   try
@@ -1006,10 +1020,11 @@ begin
     // Série
     if not IsEqualGUID(ID_Serie, DefaultAlbum.ID_Serie) and not IsEqualGUID(ID_Serie, Dest.ID_Serie) then
       Dest.ID_Serie := ID_Serie;
+
     // Univers
-    // TODO: remplacer par une liste de TUniversComplet
-    // if not IsEqualGUID(ID_Univers, DefaultAlbum.ID_Univers) and not IsEqualGUID(ID_Univers, Dest.ID_Univers) then
-    // Dest.ID_Univers := ID_Univers;
+    for Univers in Self.Univers do
+      if NotInList(Univers, Dest.Univers) then
+        Dest.Univers.Add(TUnivers.Duplicate(Univers));
 
     if FusionneEditions then
       Editions.FusionneInto(Dest.Editions);

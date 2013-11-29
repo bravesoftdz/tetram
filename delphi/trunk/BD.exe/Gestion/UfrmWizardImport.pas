@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, ActnList, CRFurtif, UBdtForms,
-  pngimage;
+  Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls, ActnList, UBdtForms,
+  pngimage, System.Actions, PngSpeedButton, VDTButton;
 
 type
   TPageControl = class(ComCtrls.TPageControl)
@@ -55,9 +55,9 @@ type
     Label14: TLabel;
     ListBox1: TListBox;
     ListBox2: TListBox;
-    VDTButton2: TCRFurtifLight;
-    VDTButton4: TCRFurtifLight;
-    VDTButton3: TCRFurtifLight;
+    VDTButton2: TVDTButton;
+    VDTButton4: TVDTButton;
+    VDTButton3: TVDTButton;
     procedure FormCreate(Sender: TObject);
     procedure actPreviousPageExecute(Sender: TObject);
     procedure actNextPageExecute(Sender: TObject);

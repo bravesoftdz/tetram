@@ -15,9 +15,11 @@ uses
 { compile-time registration functions }
 procedure SIRegister_TStringList(CL: TPSPascalCompiler);
 procedure SIRegister_TObjectList(CL: TPSPascalCompiler);
+procedure SIRegister_TObjectListOfUnivers(CL: TPSPascalCompiler);
 procedure SIRegister_TObjectListOfAuteur(CL: TPSPascalCompiler);
 procedure SIRegister_TObjectListOfEditionComplete(CL: TPSPascalCompiler);
 
+procedure SIRegister_TUnivers(CL: TPSPascalCompiler);
 procedure SIRegister_TAuteur(CL: TPSPascalCompiler);
 procedure SIRegister_TAlbumComplet(CL: TPSPascalCompiler);
 procedure SIRegister_TEditionComplete(CL: TPSPascalCompiler);
@@ -49,6 +51,17 @@ begin
   begin
     RegisterMethod('procedure Delete(Index: Integer)');
     RegisterProperty('Count', 'Integer', iptR);
+  end;
+end;
+
+procedure SIRegister_TObjectListOfUnivers(CL: TPSPascalCompiler);
+begin
+  with CL.AddClassN(CL.FindClass('TObjectList' {TObjectList<>}), 'TObjectListOfUnivers') do
+  begin
+    RegisterMethod('function Add(AObject: TUnivers): Integer');
+    RegisterMethod('procedure Insert(Index: Integer; AObject: TUnivers)');
+    RegisterProperty('Items', 'TUnivers Integer', iptRW);
+    SetDefaultPropery('Items');
   end;
 end;
 
@@ -164,6 +177,14 @@ begin
   end;
 end;
 
+procedure SIRegister_TUnivers(CL: TPSPascalCompiler);
+begin
+  with CL.AddClassN(CL.FindClass('TObject' {TBaseRec}), 'TUnivers') do
+  begin
+    RegisterProperty('NomUnivers', 'string', iptRW);
+  end;
+end;
+
 procedure SIRegister_TAuteur(CL: TPSPascalCompiler);
 begin
   CL.AddTypeS('TMetierAuteur', '(maScenariste, maDessinateur, maColoriste)');
@@ -196,6 +217,8 @@ begin
   SIRegister_TStringList(CL);
   SIRegister_TObjectList(CL);
 
+  SIRegister_TUnivers(CL);
+  SIRegister_TObjectListOfUnivers(CL);
   SIRegister_TAuteur(CL);
   SIRegister_TObjectListOfAuteur(CL);
   SIRegister_TEditeurComplet(CL);

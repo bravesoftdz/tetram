@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, EditLabeled, VirtualTrees, ComCtrls, VDTButton,
   VirtualTree, ComboCheck, ExtCtrls, Buttons, UframRechercheRapide, ExtDlgs, LoadComplet,
-  CRFurtif, UframBoutons, UBdtForms, PngSpeedButton, UframVTEdit;
+  UframBoutons, UBdtForms, PngSpeedButton, UframVTEdit;
 
 type
   TfrmEditParaBD = class(TbdtForm)
@@ -42,10 +42,10 @@ type
     imgVisu: TImage;
     cbNumerote: TCheckBoxLabeled;
     Panel3: TPanel;
-    ChoixImage: TCRFurtifLight;
+    ChoixImage: TVDTButton;
     Panel4: TPanel;
     cbImageBDD: TCheckBoxLabeled;
-    VDTButton1: TCRFurtifLight;
+    VDTButton1: TVDTButton;
     ChoixImageDialog: TOpenPictureDialog;
     Frame11: TframBoutons;
     Bevel2: TBevel;
@@ -55,6 +55,8 @@ type
     Label28: TLabel;
     vtEditUnivers: TframVTEdit;
     Label11: TLabel;
+    lvUnivers: TVDTListViewLabeled;
+    btUnivers: TVDTButton;
     procedure cbOffertClick(Sender: TObject);
     procedure cbGratuitClick(Sender: TObject);
     procedure edPrixChange(Sender: TObject);
@@ -74,6 +76,9 @@ type
     procedure vtEditPersonnesVTEditChange(Sender: TObject);
     procedure OnEditPersonnes(Sender: TObject);
     procedure vtEditUniversVTEditChange(Sender: TObject);
+    procedure btUniversClick(Sender: TObject);
+    procedure lvUniversData(Sender: TObject; Item: TListItem);
+    procedure lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     FCreation: Boolean;
     FisAchat: Boolean;
@@ -121,64 +126,61 @@ begin
   hg := THourGlass.Create;
   FParaBD := Value;
 
+  edTitre.Text := FParaBD.TitreParaBD;
+  edAnneeEdition.Text := NonZero(IntToStr(FParaBD.AnneeEdition));
+  cbxCategorie.Value := FParaBD.CategorieParaBD.Value;
+  cbDedicace.Checked := FParaBD.Dedicace;
+  cbNumerote.Checked := FParaBD.Numerote;
+  description.Text := FParaBD.description.Text;
+
+  vtEditSeries.VTEdit.OnChange := nil;
+  vtEditSeries.CurrentValue := FParaBD.Serie.ID_Serie;
+  vtEditSeries.VTEdit.OnChange := vtEditSeriesVTEditChange;
+
+  cbOffert.Checked := FParaBD.Offert;
+  cbGratuit.Checked := FParaBD.Gratuit;
+  cbOffertClick(nil);
+
+  // artifice pour contourner un bug du TDateTimePicker
+  // dtpAchat est initialisé dans le OnShow de la fenêtre
+  FDateAchat := FParaBD.DateAchat;
+
+  if FParaBD.Prix = 0 then
+    edPrix.Text := ''
+  else
+    edPrix.Text := FormatCurr(FormatMonnaie, FParaBD.Prix);
+  edAnneeCote.Text := NonZero(IntToStr(FParaBD.AnneeCote));
+  if FParaBD.PrixCote = 0 then
+    edPrixCote.Text := ''
+  else
+    edPrixCote.Text := FormatCurr(FormatMonnaie, FParaBD.PrixCote);
+  cbStock.Checked := FParaBD.Stock;
+
+  lvUnivers.Items.BeginUpdate;
   lvAuteurs.Items.BeginUpdate;
-  try
-    edTitre.Text := FParaBD.TitreParaBD;
-    edAnneeEdition.Text := NonZero(IntToStr(FParaBD.AnneeEdition));
-    cbxCategorie.Value := FParaBD.CategorieParaBD.Value;
-    cbDedicace.Checked := FParaBD.Dedicace;
-    cbNumerote.Checked := FParaBD.Numerote;
-    description.Text := FParaBD.description.Text;
 
-    vtEditSeries.VTEdit.OnChange := nil;
-    vtEditSeries.CurrentValue := FParaBD.Serie.ID_Serie;
-    vtEditSeries.VTEdit.OnChange := vtEditSeriesVTEditChange;
+  lvUnivers.Items.Count := FParaBD.Univers.Count;
+  lvAuteurs.Items.Count := FParaBD.Auteurs.Count;
 
-// TODO: remplacer par une liste de TUniversComplet
-//    vtEditUnivers.Visible := IsEqualGUID(FParaBD.Serie.ID_Serie, GUID_NULL);
-//    Label11.Visible := IsEqualGUID(FParaBD.Serie.ID_Serie, GUID_NULL);
-//    vtEditUnivers.CurrentValue := FParaBD.Univers.ID_Univers;
+  lvUnivers.Items.EndUpdate;
+  lvAuteurs.Items.EndUpdate;
 
-    cbOffert.Checked := FParaBD.Offert;
-    cbGratuit.Checked := FParaBD.Gratuit;
-    cbOffertClick(nil);
+  if FParaBD.HasImage then
+    cbImageBDD.Checked := FParaBD.ImageStockee;
 
-    // artifice pour contourner un bug du TDateTimePicker
-    // dtpAchat est initialisé dans le OnShow de la fenêtre
-    FDateAchat := FParaBD.DateAchat;
-
-    if FParaBD.Prix = 0 then
-      edPrix.Text := ''
-    else
-      edPrix.Text := FormatCurr(FormatMonnaie, FParaBD.Prix);
-    edAnneeCote.Text := NonZero(IntToStr(FParaBD.AnneeCote));
-    if FParaBD.PrixCote = 0 then
-      edPrixCote.Text := ''
-    else
-      edPrixCote.Text := FormatCurr(FormatMonnaie, FParaBD.PrixCote);
-    cbStock.Checked := FParaBD.Stock;
-
-    lvAuteurs.Items.Count := FParaBD.Auteurs.Count;
-
-    if FParaBD.HasImage then
-      cbImageBDD.Checked := FParaBD.ImageStockee;
-
-    Stream := GetCouvertureStream(True, FParaBD.ID_ParaBD, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
-    if Assigned(Stream) then
+  Stream := GetCouvertureStream(True, FParaBD.ID_ParaBD, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
+  if Assigned(Stream) then
+    try
+      jpg := TJPEGImage.Create;
       try
-        jpg := TJPEGImage.Create;
-        try
-          jpg.LoadFromStream(Stream);
-          imgVisu.Picture.Assign(jpg);
-        finally
-          FreeAndNil(jpg);
-        end;
+        jpg.LoadFromStream(Stream);
+        imgVisu.Picture.Assign(jpg);
       finally
-        FreeAndNil(Stream);
+        FreeAndNil(jpg);
       end;
-  finally
-    lvAuteurs.Items.EndUpdate;
-  end;
+    finally
+      FreeAndNil(Stream);
+    end;
 end;
 
 procedure TfrmEditParaBD.cbOffertClick(Sender: TObject);
@@ -313,6 +315,18 @@ begin
   ModalResult := mrOk;
 end;
 
+procedure TfrmEditParaBD.btUniversClick(Sender: TObject);
+begin
+  if IsEqualGUID(vtEditUnivers.CurrentValue, GUID_NULL) then
+    Exit;
+
+  FParaBD.Univers.Add(TUnivers.Duplicate(TUnivers(vtEditUnivers.VTEdit.Data)));
+  lvUnivers.Items.Count := FParaBD.Univers.Count;
+  lvUnivers.Invalidate;
+
+  vtEditUniversVTEditChange(vtEditUnivers.VTEdit);
+end;
+
 procedure TfrmEditParaBD.VDTButton1Click(Sender: TObject);
 begin
   imgVisu.Picture := nil;
@@ -377,17 +391,28 @@ end;
 procedure TfrmEditParaBD.vtEditSeriesVTEditChange(Sender: TObject);
 begin
   FParaBD.ID_Serie := vtEditSeries.CurrentValue;
-  vtEditUnivers.Visible := IsEqualGUID(FParaBD.Serie.ID_Serie, GUID_NULL);
-  Label11.Visible := IsEqualGUID(FParaBD.Serie.ID_Serie, GUID_NULL);
-// TODO: remplacer par une liste de TUniversComplet
-//  if not IsEqualGUID(FParaBD.ID_Serie, GUID_NULL) then
-//    vtEditUnivers.CurrentValue := FParaBD.Serie.ID_Univers;
 end;
 
 procedure TfrmEditParaBD.vtEditUniversVTEditChange(Sender: TObject);
+var
+  IdUnivers: TGUID;
+
+  function NotIn(LV: TListView): Boolean;
+  var
+    i: Integer;
+  begin
+    i := 0;
+    Result := True;
+    while Result and (i <= Pred(LV.Items.Count)) do
+    begin
+      Result := not IsEqualGUID(TUnivers(LV.Items[i].Data).ID, IdUnivers);
+      Inc(i);
+    end;
+  end;
+
 begin
-// TODO: remplacer par une liste de TUniversComplet
-//  FParaBD.ID_Univers := vtEditUnivers.CurrentValue;
+  IdUnivers := vtEditUnivers.CurrentValue;
+  btUnivers.Enabled := (not IsEqualGUID(IdUnivers, GUID_NULL)) and NotIn(lvUnivers);
 end;
 
 procedure TfrmEditParaBD.OnEditPersonnes(Sender: TObject);
@@ -435,6 +460,26 @@ begin
   lvAuteurs.Items.Count := FParaBD.Auteurs.Count;
   src.Invalidate;
   vtEditPersonnesVTEditChange(vtEditPersonnes.VTEdit);
+end;
+
+procedure TfrmEditParaBD.lvUniversData(Sender: TObject; Item: TListItem);
+begin
+  Item.Data := FParaBD.Univers[Item.Index];
+  Item.Caption := TUnivers(Item.Data).ChaineAffichage;
+end;
+
+procedure TfrmEditParaBD.lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+var
+  src: TListView;
+begin
+  if Key <> VK_DELETE then
+    Exit;
+  src := TListView(Sender);
+  if src = lvUnivers then
+    FParaBD.Univers.Delete(src.Selected.Index);
+  lvUnivers.Items.Count := FParaBD.Univers.Count;
+  src.Invalidate;
+  vtEditUniversVTEditChange(vtEditUnivers.VTEdit);
 end;
 
 procedure TfrmEditParaBD.FormShow(Sender: TObject);
