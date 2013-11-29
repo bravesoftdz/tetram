@@ -27,7 +27,6 @@ object frmConsultationAuteur: TfrmConsultationAuteur
     BorderStyle = bsNone
     ParentBackground = True
     TabOrder = 0
-    ExplicitHeight = 759
     DesignSize = (
       522
       779)

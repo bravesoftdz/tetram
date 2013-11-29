@@ -2126,48 +2126,6 @@ begin
         Close;
         SQL.Clear;
         SQL.Add('select');
-        SQL.Add('  id_album, titrealbum, integrale, horsserie, tome, tomedebut, tomefin, id_serie, notation');
-        SQL.Add('from');
-        SQL.Add('  albums');
-        SQL.Add('where');
-        if IsEqualGUID(Reference, GUID_NULL) then
-          SQL.Add('  (id_serie is null or id_serie = ?)')
-        else
-          SQL.Add('  id_serie = ?');
-        if not IsEqualGUID(FIdAuteur, GUID_NULL) then
-          SQL.Add('  and id_album in (select id_album from auteurs where id_personne = ?)');
-        SQL.Add('order by');
-        SQL.Add('  horsserie nulls first, integrale nulls first, tome nulls first, anneeparution, moisparution');
-        Params.AsString[0] := GUIDToString(Reference);
-        if not IsEqualGUID(FIdAuteur, GUID_NULL) then
-          Params.AsString[1] := GUIDToString(FIdAuteur);
-        Open;
-        TAlbum.FillList(TList<TBasePointeur>(Self.Albums), q);
-
-        Close;
-        SQL.Clear;
-        SQL.Add('select');
-        SQL.Add('  id_parabd, titreparabd, id_serie, titreserie, achat, complet, scategorie');
-        SQL.Add('from');
-        SQL.Add('  vw_liste_parabd');
-        SQL.Add('where');
-        if IsEqualGUID(Reference, GUID_NULL) then
-          SQL.Add('  (id_serie is null or id_serie = ?)')
-        else
-          SQL.Add('  id_serie = ?');
-        if not IsEqualGUID(FIdAuteur, GUID_NULL) then
-          SQL.Add('and id_parabd in (select id_parabd from auteurs_parabd where id_personne = ?)');
-        SQL.Add('order by');
-        SQL.Add('  titreparabd');
-        Params.AsString[0] := GUIDToString(Reference);
-        if not IsEqualGUID(FIdAuteur, GUID_NULL) then
-          Params.AsString[1] := GUIDToString(FIdAuteur);
-        Open;
-        TParaBD.FillList(TList<TBasePointeur>(Self.ParaBD), q);
-
-        Close;
-        SQL.Clear;
-        SQL.Add('select');
         SQL.Add('  g.id_genre, g.genre');
         SQL.Add('from');
         SQL.Add('  genreseries s');
@@ -2207,6 +2165,48 @@ begin
           TAuteur.Unprepare;
         end;
       end;
+
+      Close;
+      SQL.Clear;
+      SQL.Add('select');
+      SQL.Add('  id_album, titrealbum, integrale, horsserie, tome, tomedebut, tomefin, id_serie, notation');
+      SQL.Add('from');
+      SQL.Add('  albums');
+      SQL.Add('where');
+      if IsEqualGUID(Reference, GUID_NULL) then
+        SQL.Add('  (id_serie is null or id_serie = ?)')
+      else
+        SQL.Add('  id_serie = ?');
+      if not IsEqualGUID(FIdAuteur, GUID_NULL) then
+        SQL.Add('  and id_album in (select id_album from auteurs where id_personne = ?)');
+      SQL.Add('order by');
+      SQL.Add('  horsserie nulls first, integrale nulls first, tome nulls first, anneeparution, moisparution');
+      Params.AsString[0] := GUIDToString(Reference);
+      if not IsEqualGUID(FIdAuteur, GUID_NULL) then
+        Params.AsString[1] := GUIDToString(FIdAuteur);
+      Open;
+      TAlbum.FillList(TList<TBasePointeur>(Self.Albums), q);
+
+      Close;
+      SQL.Clear;
+      SQL.Add('select');
+      SQL.Add('  id_parabd, titreparabd, id_serie, titreserie, achat, complet, scategorie');
+      SQL.Add('from');
+      SQL.Add('  vw_liste_parabd');
+      SQL.Add('where');
+      if IsEqualGUID(Reference, GUID_NULL) then
+        SQL.Add('  (id_serie is null or id_serie = ?)')
+      else
+        SQL.Add('  id_serie = ?');
+      if not IsEqualGUID(FIdAuteur, GUID_NULL) then
+        SQL.Add('and id_parabd in (select id_parabd from auteurs_parabd where id_personne = ?)');
+      SQL.Add('order by');
+      SQL.Add('  titreparabd');
+      Params.AsString[0] := GUIDToString(Reference);
+      if not IsEqualGUID(FIdAuteur, GUID_NULL) then
+        Params.AsString[1] := GUIDToString(FIdAuteur);
+      Open;
+      TParaBD.FillList(TList<TBasePointeur>(Self.ParaBD), q);
     finally
       q.Transaction.Free;
       q.Free;

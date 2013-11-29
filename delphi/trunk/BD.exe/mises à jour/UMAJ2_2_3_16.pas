@@ -220,31 +220,6 @@ begin
     Script.Add('  liste_univers');
     Script.Add(';');
 
-    Script.Add('create or alter procedure initiales_univers (');
-    Script.Add('    filtre varchar(150))');
-    Script.Add('returns (');
-    Script.Add('    initialenomunivers type of column univers.initialenomunivers,');
-    Script.Add('    countinitiale integer)');
-    Script.Add('as');
-    Script.Add('declare variable swhere varchar(156);');
-    Script.Add('begin');
-    Script.Add('  swhere = '''';');
-    Script.Add('  if (filtre is not null and filtre <> '''') then');
-    Script.Add('    swhere = ''where '' || filtre;');
-    Script.Add('  for execute statement');
-    Script.Add('    ''select');
-    Script.Add('      initialenomunivers, count(id_univers)');
-    Script.Add('    from');
-    Script.Add('      vw_liste_univers '' || swhere || ''');
-    Script.Add('    group by');
-    Script.Add('      1''');
-    Script.Add('    into');
-    Script.Add('      :initialenomunivers, :countinitiale');
-    Script.Add('  do');
-    Script.Add('    suspend;');
-    Script.Add('end');
-    Script.Add(';');
-
     Script.Add('create or alter view vw_liste_albums(');
     Script.Add('    id_album,');
     Script.Add('    titrealbum,');
@@ -413,14 +388,6 @@ begin
     Script.Add('  left join vw_liste_univers u on');
     Script.Add('    u.id_univers = p.id_univers');
     Script.Add(';');
-
-{$IFDEF DEBUG}
-    Script.Add('insert into univers (id_univers, nomunivers, id_univers_parent) values (''{B68B648F-557A-46E7-A748-2E7AD8BA3237}'', ''1'', null);');
-    Script.Add('insert into univers (id_univers, nomunivers, id_univers_parent) values (''{CCAD0B74-34BA-4700-8845-5887CB7D6F71}'', ''2'', null);');
-    Script.Add('insert into univers (id_univers, nomunivers, id_univers_parent) values (''{035B1F45-B3B2-4714-9B29-9F700F22AB77}'', ''3_2'', ''{CCAD0B74-34BA-4700-8845-5887CB7D6F71}'');');
-    Script.Add('insert into univers (id_univers, nomunivers, id_univers_parent) values (''{8C61EE3C-3CA5-4B95-97C0-F458FE03935B}'', ''4_2'', ''{CCAD0B74-34BA-4700-8845-5887CB7D6F71}'');');
-    Script.Add('insert into univers (id_univers, nomunivers, id_univers_parent) values (''{E71C8D22-8232-4ED2-8059-4219E4AFA374}'', ''5_3_2'', ''{035B1F45-B3B2-4714-9B29-9F700F22AB77}'');');
-{$ENDIF}
 
     ExecuteScript;
   end;

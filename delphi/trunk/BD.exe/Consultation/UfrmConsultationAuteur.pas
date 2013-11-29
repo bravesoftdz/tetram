@@ -40,8 +40,7 @@ type
     procedure vstSeriesInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure vstSeriesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure vstSeriesInitChildren(Sender: TBaseVirtualTree; Node: PVirtualNode; var ChildCount: Cardinal);
-    procedure vstSeriesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
-      TextType: TVSTTextType);
+    procedure vstSeriesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
     procedure FicheApercuExecute(Sender: TObject);
     procedure FicheModifierExecute(Sender: TObject);
     procedure vstSeriesAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
@@ -187,8 +186,7 @@ begin
   vstSeries.RootNodeCount := FAuteur.Series.Count;
 end;
 
-procedure TfrmConsultationAuteur.vstSeriesInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode;
-  var InitialStates: TVirtualNodeInitStates);
+procedure TfrmConsultationAuteur.vstSeriesInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
 var
   NodeInfo, ParentNodeInfo: PNodeInfo;
 begin
@@ -197,7 +195,7 @@ begin
   NodeInfo.ParaBD := nil;
   if Sender.GetNodeLevel(Node) = 0 then
   begin
-    NodeInfo.Serie := TSerieComplete(FAuteur.Series[Node.index]);
+    NodeInfo.Serie := FAuteur.Series[Node.index];
     if (NodeInfo.Serie.Albums.Count + NodeInfo.Serie.ParaBD.Count) > 0 then
       Include(InitialStates, ivsHasChildren)
     else
@@ -210,9 +208,9 @@ begin
     NodeInfo.Serie := nil;
 
     if Integer(Node.index) < ParentNodeInfo.Serie.Albums.Count then
-      NodeInfo.Album := TAlbum(ParentNodeInfo.Serie.Albums[Node.index])
+      NodeInfo.Album := ParentNodeInfo.Serie.Albums[Node.index]
     else
-      NodeInfo.ParaBD := TParaBD(ParentNodeInfo.Serie.ParaBD[Integer(Node.index) - ParentNodeInfo.Serie.Albums.Count]);
+      NodeInfo.ParaBD := ParentNodeInfo.Serie.ParaBD[Integer(Node.index) - ParentNodeInfo.Serie.Albums.Count];
   end;
 end;
 

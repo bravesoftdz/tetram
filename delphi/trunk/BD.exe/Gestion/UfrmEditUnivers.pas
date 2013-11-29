@@ -113,7 +113,7 @@ begin
 
   vtEditUnivers.Mode := vmUnivers;
   vtEditUnivers.VTEdit.PopupWindow.TreeView.UseFiltre := True;
-  vtEditUnivers.VTEdit.PopupWindow.TreeView.Filtre := 'branche not containing ' + QuotedStr('|' + GUIDToString(ID_Univers) + '|');
+  vtEditUnivers.VTEdit.PopupWindow.TreeView.Filtre := 'branche_univers not containing ' + QuotedStr('|' + GUIDToString(ID_Univers) + '|');
   vtEditUnivers.CurrentValue := FUnivers.ID_UniversParent;
 
   // pour le moment
