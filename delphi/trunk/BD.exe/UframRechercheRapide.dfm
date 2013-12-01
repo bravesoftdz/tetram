@@ -88,4 +88,11 @@ object framRechercheRapide: TframRechercheRapide
     LinkControls = <>
     CurrencyChar = #0
   end
+  object TimerDelay: TTimer
+    Enabled = False
+    Interval = 800
+    OnTimer = TimerDelayTimer
+    Left = 64
+    Top = 65528
+  end
 end

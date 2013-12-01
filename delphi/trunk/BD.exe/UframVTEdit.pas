@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Buttons, VDTButton, StdCtrls, Mask, JvExMask,
-  JvToolEdit, UVirtualTreeEdit, VirtualTree, UHistorique, PngSpeedButton, UfrmFond;
+  JvToolEdit, UVirtualTreeEdit, VirtualTree, UHistorique, PngSpeedButton, UfrmFond,
+  Vcl.ExtCtrls;
 
 type
   TframVTEdit = class(TFrame)
@@ -66,6 +67,7 @@ begin
     if not IsEqualGUID(ParentValue, GUID_NULL) then
       case Mode of
         vmCollections: Filtre := 'id_editeur = ' + QuotedStr(GUIDToString(ParentValue));
+        vmUnivers: Filtre := 'branche_univers not containing ' + QuotedStr('|' + GUIDToString(ParentValue) + '|');
         else
           Filtre := '';
       end

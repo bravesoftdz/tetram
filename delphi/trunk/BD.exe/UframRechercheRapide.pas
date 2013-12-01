@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, VirtualTree, Buttons, VDTButton, StdCtrls, EditLabeled,
-  PngSpeedButton;
+  PngSpeedButton, Vcl.ExtCtrls;
 
 type
   TOnSearchEvent = procedure(Sender: TObject; NextSearch: Boolean) of object;
@@ -15,9 +15,11 @@ type
     edSearch: TEditLabeled;
     btNext: TVDTButton;
     btNew: TVDTButton;
+    TimerDelay: TTimer;
     procedure edSearchChange(Sender: TObject);
     procedure edSearchKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure btNewClick(Sender: TObject);
+    procedure TimerDelayTimer(Sender: TObject);
   private
     FVirtualTreeView: TVirtualStringTree;
     FOnSearch: TOnSearchEvent;
@@ -42,7 +44,7 @@ type
 implementation
 
 uses
-  Proc_Gestions, UHistorique;
+  Proc_Gestions, UHistorique, DateUtils;
 
 {$R *.dfm}
 
@@ -75,7 +77,8 @@ end;
 
 procedure TframRechercheRapide.edSearchChange(Sender: TObject);
 begin
-  DoSearch(Sender = btNext);
+  TimerDelay.Enabled := False;
+  TimerDelay.Enabled := True;
 end;
 
 procedure TframRechercheRapide.edSearchKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -125,6 +128,12 @@ begin
   edSearch.Enabled := Assigned(FVirtualTreeView);
   btNext.Enabled := edSearch.Enabled;
   btNew.Enabled := edSearch.Enabled;
+end;
+
+procedure TframRechercheRapide.TimerDelayTimer(Sender: TObject);
+begin
+  TimerDelay.Enabled := False;
+  DoSearch(False);
 end;
 
 procedure TframRechercheRapide.btNewClick(Sender: TObject);

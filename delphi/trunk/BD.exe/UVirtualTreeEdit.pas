@@ -3,12 +3,13 @@ unit UVirtualTreeEdit;
 interface
 
 uses
-  SysUtils, Windows, Classes, Controls, Messages, JvToolEdit, VirtualTrees, VirtualTree, Variants, EditLabeled, LinkControls;
+  SysUtils, Windows, Classes, Controls, Messages, JvToolEdit, VirtualTrees, VirtualTree, Variants, EditLabeled, LinkControls, Vcl.ExtCtrls;
 
 type
   TJvComboEdit = class(JvToolEdit.TJvComboEdit)
 
-    type TJvPopupVirtualTree = class(TJvPopupWindow)
+  type
+    TJvPopupVirtualTree = class(TJvPopupWindow)
     strict private
       FTreeView: TVirtualStringTree;
       FClickedPosition: TPoint;
@@ -26,13 +27,16 @@ type
     end;
 
   strict private
-    type TCrackWinControl = class(TWinControl);
+  type
+    TCrackWinControl = class(TWinControl);
+
   var
     FInternalCurrentValue: TGUID;
     FReloadValue: Boolean;
     FInternalValueChanged: TNotifyEvent;
     FLinkControls: TControlList;
     FLastSearch: string;
+    FTimerDelay: TTimer;
 
     procedure SetLinkControls(const Value: TControlList);
     procedure SetMode(const Value: TVirtualMode);
@@ -49,6 +53,7 @@ type
     procedure Change; override;
     procedure DoEnter; override;
     procedure DoExit; override;
+    procedure TimerDelayEvent(Sender: TObject);
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -79,12 +84,17 @@ begin
   ImageKind := ikDropDown;
   FInternalCurrentValue := GUID_NULL;
   FReloadValue := True;
+  FTimerDelay := TTimer.Create(Self);
+  FTimerDelay.Enabled := False;
+  FTimerDelay.Interval := 800;
+  FTimerDelay.OnTimer := TimerDelayEvent;
   FPopup := TJvPopupVirtualTree.Create(Self);
   TJvPopupWindow(FPopup).OnCloseUp := PopupCloseUp;
 end;
 
 destructor TJvComboEdit.Destroy;
 begin
+  FTimerDelay.Free;
   TJvPopupWindow(FPopup).OnCloseUp := nil;
   FPopup.Parent := nil;
   FreeAndNil(FPopup);
@@ -96,7 +106,10 @@ end;
 procedure TJvComboEdit.Change;
 begin
   if FReloadValue then
-    PopupWindow.SetValue(Self.Text);
+  begin
+    FTimerDelay.Enabled := False;
+    FTimerDelay.Enabled := True;
+  end;
   if (Screen.ActiveControl = Self) and not PopupVisible then
     PopupDropDown(False);
   inherited;
@@ -147,7 +160,7 @@ end;
 
 procedure TJvComboEdit.KeyDown(var Key: Word; Shift: TShiftState);
 var
-  msg: TWMKey;
+  Msg: TWMKey;
 begin
   if not ReadOnly then
   begin
@@ -155,7 +168,7 @@ begin
       VK_PRIOR, VK_NEXT, VK_UP, VK_DOWN, VK_RETURN:
         if PopupVisible then
         begin
-          with msg do
+          with Msg do
           begin
             Msg := WM_KEYDOWN;
             CharCode := Key;
@@ -166,37 +179,36 @@ begin
               KeyData := 0;
             Result := 0;
           end;
-          TCrackWinControl(PopupWindow.TreeView).Dispatch(msg);
+          TCrackWinControl(PopupWindow.TreeView).Dispatch(Msg);
           Key := 0;
         end;
       VK_F3:
-      begin
-        PopupWindow.TreeView.Find(Self.Text, True);
-        Key := 0;
-      end;
+        begin
+          PopupWindow.TreeView.Find(Self.Text, True);
+          Key := 0;
+        end;
     end;
   end;
   inherited KeyDown(Key, Shift);
 end;
-
 
 procedure TJvComboEdit.Paint;
 begin
   inherited;
   if Text = '' then
     with TControlCanvas.Create do
-    try
-      Control := Self;
-      Font.Color := clInactiveCaptionText;
-      TextRect(Self.BoundsRect, 0, 0, FLastSearch);
-    finally
-      Free;
-    end;
+      try
+        Control := Self;
+        Font.Color := clInactiveCaptionText;
+        TextRect(Self.BoundsRect, 0, 0, FLastSearch);
+      finally
+        Free;
+      end;
 end;
 
 procedure TJvComboEdit.PopupChange;
 begin
-  //  SetInternalCurrentValue(PopupWindow.TreeView.CurrentValue);
+  // SetInternalCurrentValue(PopupWindow.TreeView.CurrentValue);
 end;
 
 procedure TJvComboEdit.PopupCloseUp(Sender: TObject; Accept: Boolean);
@@ -259,6 +271,12 @@ end;
 procedure TJvComboEdit.SetPopupValue(const Value: Variant);
 begin
   PopupWindow.SetValue(GuidToString(FInternalCurrentValue));
+end;
+
+procedure TJvComboEdit.TimerDelayEvent(Sender: TObject);
+begin
+  FTimerDelay.Enabled := False;
+  PopupWindow.SetValue(Self.Text);
 end;
 
 constructor TJvComboEdit.TJvPopupVirtualTree.Create(AOwner: TComponent);
@@ -326,4 +344,3 @@ begin
 end;
 
 end.
-
