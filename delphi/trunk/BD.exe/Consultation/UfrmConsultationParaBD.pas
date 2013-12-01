@@ -127,7 +127,7 @@ begin
   cbDedicace.Checked := FParaBD.Dedicace;
   cbNumerote.Checked := FParaBD.Numerote;
 
-  if FParaBD.CategorieParaBD.Value = 0 then
+  if FParaBD.CategorieParaBD.Value = 700 then
     l_realisation.Caption := rsTransAuteurs
   else
     l_realisation.Caption := rsTransCreateurs;

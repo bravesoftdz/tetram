@@ -1396,7 +1396,7 @@ begin
         SQL.Add('where');
         SQL.Add('  id_edition = ?');
         SQL.Add('order by');
-        SQL.Add('  c.categorieimage nulls first, c.ordre');
+        SQL.Add('  l.ordre nulls last, c.ordre');
         Params.AsString[0] := GUIDToString(Self.ID_Edition);
         Open;
         TCouverture.FillList(TList<TBasePointeur>(Self.Couvertures), q);

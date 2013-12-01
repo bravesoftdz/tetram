@@ -625,9 +625,9 @@ begin
           PC.OldStockee := TGlobalVar.Utilisateur.Options.ImagesStockees;
           PC.NewStockee := PC.OldStockee;
           if FCurrentEditionComplete.Couvertures.Count = 1 then
-            PC.Categorie := 0
+            PC.Categorie := 600
           else
-            PC.Categorie := 1;
+            PC.Categorie := 601;
           PC.sCategorie := FCategoriesImages.Values[IntToStr(PC.Categorie)];
         end;
       finally

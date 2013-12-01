@@ -505,7 +505,7 @@ end;
 
 procedure TfrmEditParaBD.cbxCategorieChange(Sender: TObject);
 begin
-  if cbxCategorie.Value = 0 then
+  if cbxCategorie.Value = 700 then
     btCreateur.Caption := 'Auteur'
   else
     btCreateur.Caption := 'Créateur';

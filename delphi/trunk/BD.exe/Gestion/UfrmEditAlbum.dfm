@@ -50,7 +50,6 @@ object frmEditAlbum: TfrmEditAlbum
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
-    ExplicitWidth = 742
     DesignSize = (
       734
       779)
@@ -172,8 +171,8 @@ object frmEditAlbum: TfrmEditAlbum
     end
     object ChoixImage: TVDTButton
       Tag = 1
-      Left = 4
-      Top = 592
+      Left = 3
+      Top = 593
       Width = 52
       Height = 130
       Caption = 'Images'
@@ -1058,7 +1057,6 @@ object frmEditAlbum: TfrmEditAlbum
           Control = Label2
         end>
       CurrencyChar = #0
-      ExplicitWidth = 682
     end
     object histoire: TMemoLabeled
       Left = 56
@@ -1074,7 +1072,6 @@ object frmEditAlbum: TfrmEditAlbum
         item
           Control = Label6
         end>
-      ExplicitWidth = 281
     end
     object remarques: TMemoLabeled
       Left = 376
@@ -1090,7 +1087,6 @@ object frmEditAlbum: TfrmEditAlbum
         item
           Control = Label7
         end>
-      ExplicitLeft = 384
     end
     object lvScenaristes: TVDTListViewLabeled
       Left = 459
@@ -1112,7 +1108,6 @@ object frmEditAlbum: TfrmEditAlbum
         item
           Control = btScenariste
         end>
-      ExplicitWidth = 279
     end
     object lvDessinateurs: TVDTListViewLabeled
       Left = 459
@@ -1134,7 +1129,6 @@ object frmEditAlbum: TfrmEditAlbum
         item
           Control = btDessinateur
         end>
-      ExplicitWidth = 279
     end
     object vstImages: TVirtualStringTree
       Left = 56
@@ -1169,7 +1163,6 @@ object frmEditAlbum: TfrmEditAlbum
       OnMouseUp = vstImagesMouseUp
       OnNewText = vstImagesNewText
       OnStructureChange = vstImagesStructureChange
-      ExplicitWidth = 553
       Columns = <
         item
           Position = 1
@@ -1200,7 +1193,6 @@ object frmEditAlbum: TfrmEditAlbum
         item
           Control = btColoriste
         end>
-      ExplicitWidth = 279
     end
     object cbIntegrale: TCheckBoxLabeled
       Left = 316
@@ -1341,7 +1333,7 @@ object frmEditAlbum: TfrmEditAlbum
       TabOrder = 1
       ExplicitLeft = 56
       ExplicitTop = 30
-      ExplicitWidth = 682
+      ExplicitWidth = 674
       inherited btReset: TVDTButton
         Left = 611
         ExplicitLeft = 619
@@ -1357,7 +1349,7 @@ object frmEditAlbum: TfrmEditAlbum
       inherited VTEdit: TJvComboEdit
         Width = 611
         OnChange = JvComboEdit1Change
-        ExplicitWidth = 619
+        ExplicitWidth = 611
       end
     end
     inline vtEditPersonnes: TframVTEdit
@@ -1411,7 +1403,7 @@ object frmEditAlbum: TfrmEditAlbum
       inherited VTEdit: TJvComboEdit
         Width = 218
         OnChange = vtEditUniversVTEditChange
-        ExplicitWidth = 619
+        ExplicitWidth = 218
       end
     end
     object lvUnivers: TVDTListViewLabeled
@@ -1434,7 +1426,6 @@ object frmEditAlbum: TfrmEditAlbum
         item
           Control = btUnivers
         end>
-      ExplicitWidth = 279
     end
   end
   inline Frame11: TframBoutons
@@ -1444,7 +1435,7 @@ object frmEditAlbum: TfrmEditAlbum
     Height = 29
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 742
+    ExplicitWidth = 734
     DesignSize = (
       734
       29)
@@ -1453,12 +1444,12 @@ object frmEditAlbum: TfrmEditAlbum
       Width = 87
       Caption = 'Enregistrer'
       OnClick = Frame11btnOKClick
-      ExplicitLeft = 571
+      ExplicitLeft = 563
       ExplicitWidth = 87
     end
     inherited btnAnnuler: TButton
       Left = 651
-      ExplicitLeft = 659
+      ExplicitLeft = 651
     end
   end
   object btnScript: TButton
@@ -1490,7 +1481,7 @@ object frmEditAlbum: TfrmEditAlbum
   object ImageList1: TImageList
     Left = 344
     Bitmap = {
-      494C010101000300740010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010101000300780010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
