@@ -181,7 +181,8 @@ uses
   UframScriptInfos in 'Scripts\UframScriptInfos.pas' {framScriptInfos: TFrame},
   UfrmScriptGotoLine in 'Scripts\UfrmScriptGotoLine.pas' {frmScriptGotoLine},
   UScriptEngineIntf in 'Scripts\UScriptEngineIntf.pas',
-  UMAJ2_2_3_17 in 'mises à jour\UMAJ2_2_3_17.pas';
+  UMAJ2_2_3_17 in 'mises à jour\UMAJ2_2_3_17.pas',
+  UMAJ2_2_3_19 in 'mises à jour\UMAJ2_2_3_19.pas';
 
 {$R *.RES}
 {$R curseurs.res}

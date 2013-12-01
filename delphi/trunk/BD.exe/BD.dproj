@@ -124,8 +124,8 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCC_DebugInformation>false</DCC_DebugInformation>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <VerInfo_Build>17</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.17;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2011;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.0;Comments=</VerInfo_Keys>
+        <VerInfo_Build>20</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.20;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2011;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.0;Comments=</VerInfo_Keys>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -470,6 +470,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         </DCCReference>
         <DCCReference Include="Scripts\UScriptEngineIntf.pas"/>
         <DCCReference Include="mises à jour\UMAJ2_2_3_17.pas"/>
+        <DCCReference Include="mises à jour\UMAJ2_2_3_19.pas"/>
         <None Include="ModelSupport_BD\BD\default.txaPackage"/>
         <None Include="ModelSupport_BD\default.txaPackage"/>
         <None Include="ModelSupport_BD\BD\default.txvpck"/>
@@ -513,7 +514,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
                     <VersionInfo Name="MajorVer">2</VersionInfo>
                     <VersionInfo Name="MinorVer">2</VersionInfo>
                     <VersionInfo Name="Release">3</VersionInfo>
-                    <VersionInfo Name="Build">41</VersionInfo>
+                    <VersionInfo Name="Build">44</VersionInfo>
                     <VersionInfo Name="Debug">False</VersionInfo>
                     <VersionInfo Name="PreRelease">False</VersionInfo>
                     <VersionInfo Name="Special">False</VersionInfo>
@@ -525,7 +526,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
                 <VersionInfoKeys>
                     <VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
                     <VersionInfoKeys Name="FileDescription"/>
-                    <VersionInfoKeys Name="FileVersion">2.2.3.41</VersionInfoKeys>
+                    <VersionInfoKeys Name="FileVersion">2.2.3.44</VersionInfoKeys>
                     <VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
                     <VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2011</VersionInfoKeys>
                     <VersionInfoKeys Name="LegalTrademarks"/>
@@ -731,35 +732,35 @@ $(PostBuildEvent)]]></PostBuildEvent>
     </ProjectExtensions>
     <Import Project="$(MSBuildProjectName).deployproj" Condition="Exists('$(MSBuildProjectName).deployproj')"/>
     <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win32'">
-        <PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
+        <PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
+        <PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Débogage' And '$(Platform)'=='Win32'">
-        <PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
+        <PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
+        <PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Debug DCU' And '$(Platform)'=='Win32'">
-        <PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
+        <PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
+        <PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='FullDebug' And '$(Platform)'=='Win32'">
-        <PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
+        <PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
+        <PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
 </Project>

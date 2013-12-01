@@ -753,14 +753,6 @@ begin
     Script.Add('alter table series drop id_univers, drop id_univers_racine;');
     Script.Add('drop view vw_liste_univers;');
 
-{$IFDEF DEBUG}
-    Script.Add('insert into univers (id_univers, nomunivers, id_univers_parent) values (''{B68B648F-557A-46E7-A748-2E7AD8BA3237}'', ''1'', null);');
-    Script.Add('insert into univers (id_univers, nomunivers, id_univers_parent) values (''{CCAD0B74-34BA-4700-8845-5887CB7D6F71}'', ''2'', null);');
-    Script.Add('insert into univers (id_univers, nomunivers, id_univers_parent) values (''{035B1F45-B3B2-4714-9B29-9F700F22AB77}'', ''3_2'', ''{CCAD0B74-34BA-4700-8845-5887CB7D6F71}'');');
-    Script.Add('insert into univers (id_univers, nomunivers, id_univers_parent) values (''{8C61EE3C-3CA5-4B95-97C0-F458FE03935B}'', ''4_2'', ''{CCAD0B74-34BA-4700-8845-5887CB7D6F71}'');');
-    Script.Add('insert into univers (id_univers, nomunivers, id_univers_parent) values (''{E71C8D22-8232-4ED2-8059-4219E4AFA374}'', ''5_3_2'', ''{035B1F45-B3B2-4714-9B29-9F700F22AB77}'');');
-{$ENDIF}
-
     ExecuteScript;
   end;
 end;

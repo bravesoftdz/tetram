@@ -263,6 +263,8 @@ begin
 
   Register_TObjectList;
 
+  Register_TUnivers;
+  Register_TObjectListOfUnivers;
   Register_TAuteur;
   Register_TObjectListOfAuteur;
   Register_TEditeurComplet;
