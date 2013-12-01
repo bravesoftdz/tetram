@@ -23,6 +23,14 @@ begin
     Script.Add('    id_univers_parent = old.id_univers;');
     Script.Add('end;');
 
+    Script.Add('create or alter trigger series_ad0 for series');
+    Script.Add('active after delete position 0');
+    Script.Add('as');
+    Script.Add('begin');
+    Script.Add('  update albums set id_serie = null where id_serie = old.id_serie;');
+    Script.Add('  update parabd set id_serie = null where id_serie = old.id_serie;');
+    Script.Add('end;');
+
     ExecuteScript;
   end;
 end;
