@@ -395,8 +395,10 @@ object frmRepertoire: TfrmRepertoire
           ExplicitLeft = 312
         end
         inherited edSearch: TEditLabeled
+          Top = -3
           Width = 293
           OnKeyPress = FrameRechercheRapideedSearchKeyPress
+          ExplicitTop = -3
           ExplicitWidth = 293
         end
       end

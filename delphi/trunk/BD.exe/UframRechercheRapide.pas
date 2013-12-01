@@ -54,12 +54,14 @@ end;
 
 procedure TframRechercheRapide.DoOnNew;
 begin
-  if Assigned(FOnNew) then FOnNew(Self);
+  if Assigned(FOnNew) then
+    FOnNew(Self);
 end;
 
 procedure TframRechercheRapide.DoOnSearch(NextSearch: Boolean);
 begin
-  if Assigned(FOnSearch) then FOnSearch(Self, NextSearch);
+  if Assigned(FOnSearch) then
+    FOnSearch(Self, NextSearch);
 end;
 
 procedure TframRechercheRapide.DoSearch(NextSearch: Boolean);
@@ -78,7 +80,8 @@ end;
 
 procedure TframRechercheRapide.edSearchKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
 begin
-  if Key = VK_F3 then DoSearch(True);
+  if Key = VK_F3 then
+    DoSearch(True);
 end;
 
 function TframRechercheRapide.GetShowNewButton: Boolean;
@@ -130,21 +133,26 @@ begin
     FOnNew(Self)
   else if Assigned(FVirtualTreeView) then
     case FVirtualTreeView.Mode of
-      vmNone: ;
-      vmEditeurs: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterEditeurs, FVirtualTreeView, edSearch.Text);
-      vmCollections: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterCollections, FVirtualTreeView, edSearch.Text);
-      vmPersonnes: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterAuteurs, FVirtualTreeView, edSearch.Text);
-      vmSeries: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterSeries, FVirtualTreeView, edSearch.Text);
-      vmAlbums,
-        vmAlbumsAnnee,
-        vmAlbumsCollection,
-        vmAlbumsEditeur,
-        vmAlbumsGenre,
-        vmAlbumsSerie: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterAlbums, FVirtualTreeView, edSearch.Text);
-      vmGenres: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterGenres, FVirtualTreeView, edSearch.Text);
-      vmParaBDSerie: Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterParaBD, FVirtualTreeView, edSearch.Text);
-      else
-        Assert(True, 'Mode non prévu dans l''ajout')
+      vmNone:
+        ;
+      vmEditeurs:
+        Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterEditeurs, FVirtualTreeView, edSearch.Text);
+      vmCollections:
+        Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterCollections, FVirtualTreeView, edSearch.Text);
+      vmPersonnes:
+        Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterAuteurs, FVirtualTreeView, edSearch.Text);
+      vmSeries:
+        Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterSeries, FVirtualTreeView, edSearch.Text);
+      vmAlbums, vmAlbumsAnnee, vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie:
+        Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterAlbums, FVirtualTreeView, edSearch.Text);
+      vmGenres:
+        Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterGenres, FVirtualTreeView, edSearch.Text);
+      vmParaBDSerie:
+        Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterParaBD, FVirtualTreeView, edSearch.Text);
+      vmUnivers:
+        Historique.AddWaiting(fcGestionAjout, nil, nil, @AjouterUnivers, FVirtualTreeView, edSearch.Text);
+    else
+      Assert(True, 'Mode non prévu dans l''ajout')
     end;
 end;
 
@@ -157,4 +165,3 @@ begin
 end;
 
 end.
-

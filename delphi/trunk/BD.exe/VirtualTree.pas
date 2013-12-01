@@ -246,6 +246,7 @@ uses
   UIB, UdmPrinc, Commun, Types, UIBLib, Divers;
 
 { TVirtualStringTree }
+
 procedure TVirtualStringTree.ClearIndexNode;
 begin
   FMemorizedIndexNode := False;
@@ -483,8 +484,7 @@ var
   nCurrent, nFind: PVirtualNode;
   i: Integer;
 begin
-  if (Text <> FLastFindText) then
-    GetNext := False;
+  GetNext := GetNext and SameText(Text, FLastFindText);
   FLastFindText := Text;
   if FMode = vmNone then
   begin
@@ -516,15 +516,12 @@ begin
   end
   else
   begin
-    if (Length(FFindArray) = 0) then
-      GetNext := False;
     if Text = '' then
     begin
       CurrentValue := GUID_NULL;
       SetLength(FFindArray, 0);
-      Exit;
-    end;
-    if GetNext then
+    end
+    else if GetNext and (Length(FFindArray) > 0) then
     begin
       iCurrent := CurrentValue;
       iFind := FFindArray[0];
