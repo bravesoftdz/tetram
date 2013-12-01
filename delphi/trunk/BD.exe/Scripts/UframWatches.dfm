@@ -41,7 +41,7 @@ object framWatches: TframWatches
       end
       item
         Position = 1
-        Width = 170
+        Width = 174
         WideText = 'Valeur'
       end>
   end

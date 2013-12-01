@@ -1,5 +1,5 @@
-ABOUT  BITMAP "images\imgAbout.bmp"
-IMAGENONVALIDE  RCDATA "images\brokenimage.jpg"
+ABOUT   BITMAP  "images\imgAbout.bmp"
+IMAGENONVALIDE  RCDATA  "images\brokenimage.jpg"
 
 ; attention, les ressources icones sont triés par ordre alphabetique
 ; et l'icon de l'appli s'appelle MAINICON

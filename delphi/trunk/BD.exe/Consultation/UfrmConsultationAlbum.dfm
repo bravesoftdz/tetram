@@ -100,7 +100,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       ParentFont = False
       Transparent = True
     end
-    object l_annee: TLabel
+    object lbTitreSerie: TLabel
       Left = 57
       Top = 8
       Width = 31

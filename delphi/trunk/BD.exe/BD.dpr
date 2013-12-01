@@ -1,6 +1,6 @@
 program BD;
-{$R 'ressources.res' 'ressources.rc'}
 {$R 'scripts_maj.res' 'mises à jour\scripts_maj.rc'}
+{$R *.dres}
 
 uses
   FastMM4,
@@ -182,7 +182,8 @@ uses
   UfrmScriptGotoLine in 'Scripts\UfrmScriptGotoLine.pas' {frmScriptGotoLine},
   UScriptEngineIntf in 'Scripts\UScriptEngineIntf.pas',
   UMAJ2_2_3_17 in 'mises à jour\UMAJ2_2_3_17.pas',
-  UMAJ2_2_3_19 in 'mises à jour\UMAJ2_2_3_19.pas';
+  UMAJ2_2_3_19 in 'mises à jour\UMAJ2_2_3_19.pas',
+  UMAJ2_2_3_21 in 'mises à jour\UMAJ2_2_3_21.pas';
 
 {$R *.RES}
 {$R curseurs.res}

@@ -21,7 +21,7 @@ type
     l_remarques: TLabel;
     l_sujet: TLabel;
     Label1: TLabel;
-    l_annee: TLabel;
+    lbTitreSerie: TLabel;
     remarques: TMemo;
     sujet: TMemo;
     l_acteurs: TLabel;
@@ -476,18 +476,28 @@ begin
   FAlbum.Fill(Value);
 
   Caption := 'Fiche d''album - ' + FAlbum.ChaineAffichage;
-  TitreSerie.Caption := FormatTitre(FAlbum.Serie.TitreSerie);
-  if FAlbum.Serie.SiteWeb <> '' then
+  if IsEqualGUID(FAlbum.Serie.ID_Serie, GUID_NULL) then
   begin
-    TitreSerie.Font.Color := clBlue;
-    TitreSerie.Font.Style := TitreSerie.Font.Style + [fsUnderline];
-    TitreSerie.Cursor := crHandPoint;
+    TitreSerie.Visible := False;
+    lbTitreSerie.Visible := False;
   end
   else
   begin
-    TitreSerie.Font.Color := clBlack;
-    TitreSerie.Font.Style := TitreSerie.Font.Style - [fsUnderline];
-    TitreSerie.Cursor := crDefault;
+    TitreSerie.Visible := True;
+    lbTitreSerie.Visible := True;
+    TitreSerie.Caption := FormatTitre(FAlbum.Serie.TitreSerie);
+    if FAlbum.Serie.SiteWeb <> '' then
+    begin
+      TitreSerie.Font.Color := clBlue;
+      TitreSerie.Font.Style := TitreSerie.Font.Style + [fsUnderline];
+      TitreSerie.Cursor := crHandPoint;
+    end
+    else
+    begin
+      TitreSerie.Font.Color := clBlack;
+      TitreSerie.Font.Style := TitreSerie.Font.Style - [fsUnderline];
+      TitreSerie.Cursor := crDefault;
+    end;
   end;
   TitreAlbum.Caption := FormatTitre(FAlbum.TitreAlbum);
 
@@ -534,14 +544,27 @@ begin
   lvDessinateurs.Items.EndUpdate;
   lvColoristes.Items.EndUpdate;
 
-  vstSerie.Mode := vmAlbumsSerie;
-  vstSerie.Filtre := 'id_serie = ' + QuotedStr(GUIDToString(FAlbum.Serie.ID_Serie));
-  vstSerie.UseFiltre := True;
-  vstSerie.MakeVisibleValue(FAlbum.ID_Album);
-  if FAlbum.Serie.Albums.Count = 1 then
-    vstSerie.Images := nil
+  if IsEqualGUID(FAlbum.Serie.ID_Serie, GUID_NULL) then
+  begin
+    vstSerie.Visible := False;
+    Label5.Visible := False;
+    VDTButton2.Visible := False;
+  end
   else
-    vstSerie.Images := frmFond.ShareImageList;
+  begin
+    vstSerie.Visible := True;
+    Label5.Visible := True;
+    VDTButton2.Visible := True;
+
+    vstSerie.Mode := vmAlbumsSerie;
+    vstSerie.Filtre := 'id_serie = ' + QuotedStr(GUIDToString(FAlbum.Serie.ID_Serie));
+    vstSerie.UseFiltre := True;
+    vstSerie.MakeVisibleValue(FAlbum.ID_Album);
+    if FAlbum.Serie.Albums.Count = 1 then
+      vstSerie.Images := nil
+    else
+      vstSerie.Images := frmFond.ShareImageList;
+  end;
 
   lvEditions.Items.BeginUpdate;
   for PEd in FAlbum.Editions.Editions do

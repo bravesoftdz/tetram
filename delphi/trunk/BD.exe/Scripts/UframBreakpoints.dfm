@@ -39,7 +39,7 @@ object framBreakpoints: TframBreakpoints
       end
       item
         Position = 1
-        Width = 216
+        Width = 220
         WideText = 'Fichier'
       end>
   end

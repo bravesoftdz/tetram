@@ -73,11 +73,12 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <BRCC_CompilerToUse>rc</BRCC_CompilerToUse>
         <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
         <Icon_MainIcon>BD_Icon.ico</Icon_MainIcon>
         <Manifest_File>None</Manifest_File>
-        <VerInfo_Build>19</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.19;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2011;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.0;Comments=</VerInfo_Keys>
+        <VerInfo_Build>22</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.22;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2011;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.0;Comments=</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_Namespace>Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;System;Xml;Data;Datasnap;Web;Soap;Winapi;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_MajorVer>2</VerInfo_MajorVer>
@@ -86,7 +87,6 @@
         <VerInfo_Release>3</VerInfo_Release>
         <DCC_Inlining>off</DCC_Inlining>
         <DCC_Define>FB25;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT;PCRE_STATICLINK;NO_ADVANCED_HTTP_CLIENT_FEATURES;UseContentCoding;USE_SSL;NO_OSSL_VERSION_CHECK;$(DCC_Define)</DCC_Define>
-        <BRCC_CompilerToUse>rc</BRCC_CompilerToUse>
         <DCC_UNIT_PLATFORM>false</DCC_UNIT_PLATFORM>
         <DCC_DependencyCheckOutputName>..\..\bin\BD.exe</DCC_DependencyCheckOutputName>
         <DCC_ImageBase>00400000</DCC_ImageBase>
@@ -124,8 +124,8 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCC_DebugInformation>false</DCC_DebugInformation>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.21;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2011;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.0;Comments=</VerInfo_Keys>
-        <VerInfo_Build>21</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.22;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2011;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.0;Comments=</VerInfo_Keys>
+        <VerInfo_Build>22</VerInfo_Build>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -152,10 +152,6 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <RcCompile Include="ressources.rc">
-            <ContainerId>RC</ContainerId>
-            <Form>ressources.res</Form>
-        </RcCompile>
         <RcCompile Include="mises à jour\scripts_maj.rc">
             <ContainerId>RC</ContainerId>
             <Form>scripts_maj.res</Form>
@@ -469,12 +465,33 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="Scripts\UScriptEngineIntf.pas"/>
         <DCCReference Include="mises à jour\UMAJ2_2_3_17.pas"/>
         <DCCReference Include="mises à jour\UMAJ2_2_3_19.pas"/>
+        <DCCReference Include="mises à jour\UMAJ2_2_3_21.pas"/>
         <None Include="ModelSupport_BD\BD\default.txaPackage"/>
         <None Include="ModelSupport_BD\default.txaPackage"/>
         <None Include="ModelSupport_BD\BD\default.txvpck"/>
         <None Include="ModelSupport_BD\default.txvpck"/>
         <None Include="ModelSupport_BD\LoadComplet\default.txvpck"/>
         <None Include="ModelSupport_BD\LoadComplet\default.txaPackage"/>
+        <RcItem Include="images\network.png">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>BT_LINK</ResourceId>
+        </RcItem>
+        <RcItem Include="images\brokenimage.jpg">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>IMAGENONVALIDE</ResourceId>
+        </RcItem>
+        <RcItem Include="images\imgAbout.bmp">
+            <ResourceType>BITMAP</ResourceType>
+            <ResourceId>ABOUT</ResourceId>
+        </RcItem>
+        <RcItem Include="images\my-documents.ico">
+            <ResourceType>ICON</ResourceType>
+            <ResourceId>MAINICON_1</ResourceId>
+        </RcItem>
+        <RcItem Include="images\unknown.ico">
+            <ResourceType>ICON</ResourceType>
+            <ResourceId>MAINICON_2</ResourceId>
+        </RcItem>
         <BuildConfiguration Include="Débogage">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -512,7 +529,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
                     <VersionInfo Name="MajorVer">2</VersionInfo>
                     <VersionInfo Name="MinorVer">2</VersionInfo>
                     <VersionInfo Name="Release">3</VersionInfo>
-                    <VersionInfo Name="Build">47</VersionInfo>
+                    <VersionInfo Name="Build">48</VersionInfo>
                     <VersionInfo Name="Debug">False</VersionInfo>
                     <VersionInfo Name="PreRelease">False</VersionInfo>
                     <VersionInfo Name="Special">False</VersionInfo>
@@ -524,7 +541,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
                 <VersionInfoKeys>
                     <VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
                     <VersionInfoKeys Name="FileDescription"/>
-                    <VersionInfoKeys Name="FileVersion">2.2.3.47</VersionInfoKeys>
+                    <VersionInfoKeys Name="FileVersion">2.2.3.48</VersionInfoKeys>
                     <VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
                     <VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2011</VersionInfoKeys>
                     <VersionInfoKeys Name="LegalTrademarks"/>
