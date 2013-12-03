@@ -21,8 +21,29 @@ $collection = load_and_fetch('select * from /*DB_PREFIX*/collections where id_co
 			<TR>
 				<TH align=right width=1>Collection&nbsp;:</TH><TD><?php echo _out(format_titre($collection->nomcollection))?></TD>
 			</TR>
+
 <?php
-$rs = load_sql('select g.* from /*DB_PREFIX*/genres g inner join /*DB_PREFIX*/genreseries gs on g.id_genre = gs.id_genre where gs.id_serie '.format_string_null($album->id_serie)).' order by g.genre';
+$rs = load_sql('select u.id_univers, u.nomunivers from /*DB_PREFIX*/univers u inner join /*DB_PREFIX*/series_univers su on su.id_univers = u.id_univers where id_serie'.format_string_null($serie->id_serie).' order by uppernomunivers');
+if (mysql_num_rows($rs))
+{
+?>
+			<TR><TD>&nbsp;</TD></TR>
+			<TR>
+				<TH align=right width=1>Univers&nbsp;:</TH>
+				<TD>
+<?php
+	while ($univers = mysql_fetch_object($rs))
+		echo AjaxLink('univers', $univers>id_univers, format_titre($univers->nomunivers)).'<br>';
+?>
+				</TD>
+			</TR>
+<?php 
+} 
+mysql_free_result($rs);
+?>
+
+<?php
+$rs = load_sql('select g.* from /*DB_PREFIX*/genres g inner join /*DB_PREFIX*/genreseries gs on g.id_genre = gs.id_genre where gs.id_serie '.format_string_null($serie->id_serie)).' order by g.genre';
 if (mysql_num_rows($rs))
 {
 	$s = '';
@@ -79,6 +100,7 @@ if (mysql_num_rows($rs))
 			</TR>
 <?php 
 } 
+mysql_free_result($rs);
 ?>
 		</TBODY>
 	</TABLE>

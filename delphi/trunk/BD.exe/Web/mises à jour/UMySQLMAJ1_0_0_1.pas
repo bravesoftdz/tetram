@@ -25,7 +25,7 @@ begin
 end;
 
 initialization
-  RegisterMySQLUpdate('1.0.0.1', @MAJ1_0_0_1);
+
+RegisterMySQLUpdate('1.0.0.1', @MAJ1_0_0_1);
 
 end.
-

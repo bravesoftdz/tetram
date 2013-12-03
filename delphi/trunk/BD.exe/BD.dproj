@@ -466,6 +466,8 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="mises à jour\UMAJ2_2_3_17.pas"/>
         <DCCReference Include="mises à jour\UMAJ2_2_3_19.pas"/>
         <DCCReference Include="mises à jour\UMAJ2_2_3_21.pas"/>
+        <DCCReference Include="Web\mises à jour\UMySQLMAJ1_0_0_3.pas"/>
+        <DCCReference Include="mises à jour\UMAJ2_2_3_22.pas"/>
         <None Include="ModelSupport_BD\BD\default.txaPackage"/>
         <None Include="ModelSupport_BD\default.txaPackage"/>
         <None Include="ModelSupport_BD\BD\default.txvpck"/>

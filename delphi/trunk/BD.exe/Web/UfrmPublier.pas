@@ -47,16 +47,24 @@ type
   end;
 
 const
-  TablesSynchro: array [1 .. 13] of RInfoTable = ((TableName: 'PERSONNES'; ID: 'id_personne'; UpperFields: 'nompersonne'), (TableName: 'EDITEURS';
-      ID: 'id_editeur'; UpperFields: 'nomediteur'), (TableName: 'COLLECTIONS'; ID: 'id_collection'; UpperFields: 'nomcollection'),
-    (TableName: 'SERIES'; ID: 'id_serie'; SkipFields:
-        'etat=1.0.0.1@reliure=1.0.0.1@typeedition=1.0.0.1@orientation=1.0.0.1@formatedition=1.0.0.1@senslecture=1.0.0.1@vo=1.0.0.1@couleur=1.0.0.1@notation';
-      UpperFields: 'titreserie@sujetserie@remarquesserie'), (TableName: 'ALBUMS'; ID: 'id_album'; SkipFields: 'notation';
-      UpperFields: 'titrealbum@sujetalbum@remarquesalbum'), (TableName: 'EDITIONS'; ID: 'id_edition'), (TableName: 'AUTEURS'; ID: 'id_auteur'),
-    (TableName: 'GENRES'; ID: 'id_genre'; UpperFields: 'genre'), (TableName: 'GENRESERIES'; ID: 'id_genreseries'), (TableName: 'LISTES';
-      ID: 'id_liste'), (TableName: 'ALBUMS_MANQUANTS'; UpperFields: 'titreserie'; ProcedureStockee: 'ALBUMS_MANQUANTS(1, 1, NULL)'),
-    (TableName: 'PREVISIONS_SORTIES'; UpperFields: 'titreserie'; ProcedureStockee: 'PREVISIONS_SORTIES(1, NULL)'), (TableName: 'COUVERTURES';
-      ID: 'id_couverture'; TypeSynchro: tsImages; SkipFields: 'stockagecouverture@imagecouverture@fichiercouverture'));
+  TablesSynchro: array [1 .. 16] of RInfoTable = (
+    (TableName: 'PERSONNES'; ID: 'id_personne'; UpperFields: 'nompersonne'),
+    (TableName: 'EDITEURS'; ID: 'id_editeur'; UpperFields: 'nomediteur'),
+    (TableName: 'COLLECTIONS'; ID: 'id_collection'; UpperFields: 'nomcollection'),
+    (TableName: 'SERIES'; ID: 'id_serie'; SkipFields: 'etat=1.0.0.1@reliure=1.0.0.1@typeedition=1.0.0.1@orientation=1.0.0.1@formatedition=1.0.0.1@senslecture=1.0.0.1@vo=1.0.0.1@couleur=1.0.0.1@notation'; UpperFields: 'titreserie@sujetserie@remarquesserie'),
+    (TableName: 'ALBUMS'; ID: 'id_album'; SkipFields: 'notation'; UpperFields: 'titrealbum@sujetalbum@remarquesalbum'),
+    (TableName: 'EDITIONS'; ID: 'id_edition'),
+    (TableName: 'AUTEURS'; ID: 'id_auteur'),
+    (TableName: 'GENRES'; ID: 'id_genre'; UpperFields: 'genre'),
+    (TableName: 'GENRESERIES'; ID: 'id_genreseries'),
+    (TableName: 'LISTES'; ID: 'id_liste'),
+    (TableName: 'ALBUMS_MANQUANTS'; UpperFields: 'titreserie'; ProcedureStockee: 'ALBUMS_MANQUANTS(1, 1, NULL)'),
+    (TableName: 'PREVISIONS_SORTIES'; UpperFields: 'titreserie'; ProcedureStockee: 'PREVISIONS_SORTIES(1, NULL)'),
+    (TableName: 'COUVERTURES'; ID: 'id_couverture'; TypeSynchro: tsImages; SkipFields: 'stockagecouverture@imagecouverture@fichiercouverture'),
+    (TableName: 'UNIVERS'; ID: 'id_univers'; UpperFields: 'nomunivers'),
+    (TableName: 'SERIES_UNIVERS'; ID: 'id_serie_univers'),
+    (TableName: 'ALBUMS_UNIVERS'; ID: 'id_album_univers')
+  );
 
 procedure TfrmPublier.Button1Click(Sender: TObject);
 const

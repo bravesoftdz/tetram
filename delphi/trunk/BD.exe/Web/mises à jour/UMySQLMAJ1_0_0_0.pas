@@ -256,7 +256,6 @@ begin
     Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
-
     Add('create view /*DB_PREFIX*/vw_liste_albums(');
     Add('    id_album,');
     Add('    titrealbum,');
@@ -429,7 +428,7 @@ begin
 end;
 
 initialization
-  RegisterMySQLUpdate('1.0.0.0', @MAJ1_0_0_0);
+
+RegisterMySQLUpdate('1.0.0.0', @MAJ1_0_0_0);
 
 end.
-

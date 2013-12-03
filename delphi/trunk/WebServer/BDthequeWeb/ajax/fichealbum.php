@@ -51,6 +51,26 @@ if (NonZero($album->anneeparution) != '')
 ?>
 
 <?php
+$rs = load_sql('select u.id_univers, u.nomunivers from /*DB_PREFIX*/univers u inner join /*DB_PREFIX*/albums_univers su on su.id_univers = u.id_univers where id_album'.format_string_null($album->id_album).' order by uppernomunivers');
+if (mysql_num_rows($rs))
+{
+?>
+			<TR><TD>&nbsp;</TD></TR>
+			<TR>
+				<TH align=right width=1>Univers&nbsp;:</TH>
+				<TD>
+<?php
+	while ($univers = mysql_fetch_object($rs))
+		echo AjaxLink('univers', $univers>id_univers, format_titre($univers->nomunivers)).'<br>';
+?>
+				</TD>
+			</TR>
+<?php 
+} 
+mysql_free_result($rs);
+?>
+
+<?php
 $rs = load_sql('select g.* from /*DB_PREFIX*/genres g inner join /*DB_PREFIX*/genreseries gs on g.id_genre = gs.id_genre where gs.id_serie '.format_string_null($album->id_serie)).' order by g.genre';
 if (mysql_num_rows($rs))
 {
