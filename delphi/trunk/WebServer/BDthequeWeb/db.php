@@ -2,16 +2,16 @@
 require_once 'config.inc';
 
 if (substr($db_prefix, -1, 1) != '_') $db_prefix .= '_';
-$db_ok = mysql_connect($db_host, $db_user, $db_pass) && mysql_select_db($db_name);
+$db_link = new mysqli($db_host, $db_user, $db_pass, $db_name) or die($db_link->connect_error);
 if (substr($rep_images, strlen($rep_images), -1) != '/') $rep_images .= '/';
 $nb_requetes_sql = 0;
 $start_time = gettimeofday(false);
 $start_time = (float) ($start_time['sec'] + $start_time['usec'] / 1000000.0);
-if ($db_ok)
+if ($db_link)
 {
-	mysql_query('set names utf-8');
-	mysql_query('set character_set utf-8');
-	mysql_query('set character_set_results utf-8');
+	$db_link->query('set names utf-8');
+	$db_link->query('set character_set utf-8');
+	$db_link->query('set character_set_results utf-8');
 }
 
 function prepare_sql(&$sql)
@@ -36,9 +36,10 @@ function format_string_null($string, $is_where = false)
 function load_sql($sql)
 {
 	global $nb_requetes_sql;
+	global $db_link;
 	
 	prepare_sql($sql);
-	$rs = mysql_query($sql) or die(mysql_error());
+	$rs = $db_link->query($sql) or die($db_link->error);
 	$nb_requetes_sql++;
 	return $rs;
 }
@@ -46,8 +47,8 @@ function load_sql($sql)
 function load_and_fetch($sql)
 {
 	$rs = load_sql($sql);
-	$obj = mysql_fetch_object($rs);
-	mysql_free_result($rs);
+	$obj = $rs->fetch_object();
+	$rs->free();
 	return $obj;
 }
 

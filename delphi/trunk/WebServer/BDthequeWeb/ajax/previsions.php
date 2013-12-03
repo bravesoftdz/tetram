@@ -13,14 +13,14 @@ include_once '../routines.php';
 		</TR>
 <?php
 $albums = load_sql('select * from /*DB_PREFIX*/previsions_sorties where anneeparution > '.date('Y').' order by anneeparution desc, moisparution desc, uppertitreserie');
-if (mysql_num_rows($albums))
+if ($albums && $albums->num_rows)
 {
 ?>
 		<TR>
 			<TD colspan=2><hr width=90%><H3>Prochaines ann&eacute;es</H3></TD>
 		</TR>
 <?php
-	while ($album = mysql_fetch_object($albums))
+	while ($album = $albums->fetch_object())
 	{ 
 ?>
 		<TR<?php echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
@@ -34,14 +34,14 @@ if (mysql_num_rows($albums))
 
 <?php
 $albums = load_sql('select * from /*DB_PREFIX*/previsions_sorties where anneeparution = '.date('Y').' order by anneeparution desc, moisparution desc, uppertitreserie');
-if (mysql_num_rows($albums))
+if ($albums && $albums->num_rows)
 {
 ?>
 		<TR valign=top>
 			<TD colspan=2><hr width=90%><H3>Ann&eacute;e en cours</H3></TD>
 		</TR>
 <?php
-	while ($album = mysql_fetch_object($albums))
+	while ($album = $albums->fetch_object())
 	{ 
 ?>
 		<TR<?php echo $c++ % 2?' bgcolor=#e5e5ff':''?>>
@@ -55,14 +55,14 @@ if (mysql_num_rows($albums))
 
 <?php
 $albums = load_sql('select * from /*DB_PREFIX*/previsions_sorties where anneeparution < '.date('Y').' order by anneeparution desc, moisparution desc, uppertitreserie');
-if (mysql_num_rows($albums))
+if ($albums && $albums->num_rows)
 {
 ?>
 		<TR valign=top>
 			<TD colspan=2><hr width=90%><H3>Années passées</H3></TD>
 		</TR>
 <?php
-	while ($album = mysql_fetch_object($albums))
+	while ($album = $albums->fetch_object())
 	{ 
 ?>
 		<TR<?php echo $c++ % 2?' bgcolor=#e5e5ff':''?>>

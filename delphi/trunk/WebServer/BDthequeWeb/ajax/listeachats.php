@@ -21,7 +21,7 @@ $rs = load_sql($sql);
 	<TABLE width=100%>
 <?php
 	$c = 0;
-	while ($row = mysql_fetch_object($rs)) 
+	while ($row = $rs->fetch_object()) 
 	{
 ?>
 		<TR<?php echo $c++ % 2?' bgcolor=#e5e5ff':''?>>

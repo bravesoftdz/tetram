@@ -51,31 +51,31 @@ if (NonZero($album->anneeparution) != '')
 ?>
 
 <?php
-$rs = load_sql('select u.id_univers, u.nomunivers from /*DB_PREFIX*/univers u inner join /*DB_PREFIX*/albums_univers su on su.id_univers = u.id_univers where id_album'.format_string_null($album->id_album).' order by uppernomunivers');
-if (mysql_num_rows($rs))
+$rs = load_sql('select u.* from /*DB_PREFIX*/univers u inner join /*DB_PREFIX*/albums_univers au on au.id_univers = u.id_univers where au.id_album'.format_string_null($album->id_album).' order by u.uppernomunivers');
+if ($rs && $rs->num_rows)
 {
 ?>
-			<TR><TD>&nbsp;</TD></TR>
-			<TR>
-				<TH align=right width=1>Univers&nbsp;:</TH>
-				<TD>
+			<tr><td>&nbsp;</td></tr>
+			<tr>
+				<th align=right width=1>Univers&nbsp;:</th>
+				<td>
 <?php
-	while ($univers = mysql_fetch_object($rs))
-		echo AjaxLink('univers', $univers>id_univers, format_titre($univers->nomunivers)).'<br>';
+	while ($univers = $rs->fetch_object())
+		echo AjaxLink('univers', $univers->id_univers, format_titre($univers->nomunivers)).'<br>';
 ?>
-				</TD>
-			</TR>
+				</td>
+			</tr>
 <?php 
 } 
-mysql_free_result($rs);
+$rs->free();
 ?>
 
 <?php
-$rs = load_sql('select g.* from /*DB_PREFIX*/genres g inner join /*DB_PREFIX*/genreseries gs on g.id_genre = gs.id_genre where gs.id_serie '.format_string_null($album->id_serie)).' order by g.genre';
-if (mysql_num_rows($rs))
+$rs = load_sql('select g.* from /*DB_PREFIX*/genres g inner join /*DB_PREFIX*/genreseries gs on g.id_genre = gs.id_genre where gs.id_serie '.format_string_null($album->id_serie).' order by g.genre');
+if ($rs && $rs->num_rows)
 {
 	$s = '';
-	while ($row = mysql_fetch_object($rs))
+	while ($row = $rs->fetch_object())
 		$s .= ($s == ''?'':', ').format_titre($row->genre);
 ?>
 			<tr>
@@ -84,61 +84,64 @@ if (mysql_num_rows($rs))
 			</tr>
 <?php 
 } 
-mysql_free_result($rs);
+$rs->free();
 ?>
 
 <?php
 $rs = load_sql('select p.* from /*DB_PREFIX*/personnes p inner join /*DB_PREFIX*/auteurs a on p.id_personne = a.id_personne where a.metier = 0 and a.id_album '.format_string_null($album->id_album).' order by a.metier, p.uppernompersonne');
-if (mysql_num_rows($rs))
+if ($rs && $rs->num_rows)
 {
 ?>
 			<tr>
 				<th align=right width=1>Scénario&nbsp;:</th>
 				<td>
 <?php
-	while ($row = mysql_fetch_object($rs)) 
-		echo AjaxLink('personne', $row->id_personne, format_titre($row->nompersonne), 'auteur').'<br>';
-?>
-				</td>
-			</tr>
-<?php
-} 
-?>
-
-<?php
-$rs = load_sql('select p.* from /*DB_PREFIX*/personnes p inner join /*DB_PREFIX*/auteurs a on p.id_personne = a.id_personne where a.metier = 1 and a.id_album '.format_string_null($album->id_album).' order by a.metier, p.uppernompersonne');
-if (mysql_num_rows($rs))
-{
-?>
-			<tr>
-				<th align=right width=1>Dessins&nbsp;:</th>
-				<td>
-<?php
-	while ($row = mysql_fetch_object($rs)) 
-		echo AjaxLink('personne', $row->id_personne, format_titre($row->nompersonne), 'auteur').'<br>';
-?>
-				</td>
-			</tr>
-<?php
-} 
-?>
-
-<?php
-$rs = load_sql('select p.* from /*DB_PREFIX*/personnes p inner join /*DB_PREFIX*/auteurs a on p.id_personne = a.id_personne where a.metier = 2 and a.id_album '.format_string_null($album->id_album).' order by a.metier, p.uppernompersonne');
-if (mysql_num_rows($rs))
-{
-?>
-			<tr>
-				<th align=right width=1>Couleurs&nbsp;:</th>
-				<td>
-<?php
-	while ($row = mysql_fetch_object($rs)) 
+	while ($row = $rs->fetch_object()) 
 		echo AjaxLink('personne', $row->id_personne, format_titre($row->nompersonne), 'auteur').'<br>';
 ?>
 				</td>
 			</tr>
 <?php
 }
+$rs->free();
+?>
+
+<?php
+$rs = load_sql('select p.* from /*DB_PREFIX*/personnes p inner join /*DB_PREFIX*/auteurs a on p.id_personne = a.id_personne where a.metier = 1 and a.id_album '.format_string_null($album->id_album).' order by a.metier, p.uppernompersonne');
+if ($rs && $rs->num_rows)
+{
+?>
+			<tr>
+				<th align=right width=1>Dessins&nbsp;:</th>
+				<td>
+<?php
+	while ($row = $rs->fetch_object()) 
+		echo AjaxLink('personne', $row->id_personne, format_titre($row->nompersonne), 'auteur').'<br>';
+?>
+				</td>
+			</tr>
+<?php
+}
+$rs->free();
+?>
+
+<?php
+$rs = load_sql('select p.* from /*DB_PREFIX*/personnes p inner join /*DB_PREFIX*/auteurs a on p.id_personne = a.id_personne where a.metier = 2 and a.id_album '.format_string_null($album->id_album).' order by a.metier, p.uppernompersonne');
+if ($rs && $rs->num_rows)
+{
+?>
+			<tr>
+				<th align=right width=1>Couleurs&nbsp;:</th>
+				<td>
+<?php
+	while ($row = $rs->fetch_object()) 
+		echo AjaxLink('personne', $row->id_personne, format_titre($row->nompersonne), 'auteur').'<br>';
+?>
+				</td>
+			</tr>
+<?php
+}
+$rs->free();
 ?>
 
 <?php 
@@ -169,7 +172,7 @@ if ($album->remarquesalbum || $serie->remarquesserie)
 
 <?php
 $rs = load_sql('select * from /*DB_PREFIX*/editions where id_album'.format_string_null($album->id_album));
-if (mysql_num_rows($rs) > 0)
+if ($rs && $rs->num_rows)
 { 
 ?>
 			<tr><td>&nbsp;</td></tr>
@@ -179,7 +182,7 @@ if (mysql_num_rows($rs) > 0)
 			<tr-->
 				<td colspan=2>
 <?php
-	while ($edition = mysql_fetch_object($rs))
+	while ($edition = $rs->fetch_object())
 	{
 		$editeur = load_and_fetch('select * from /*DB_PREFIX*/editeurs where id_editeur'.format_string_null($edition->id_editeur));
 		$collection = load_and_fetch('select * from /*DB_PREFIX*/collections where id_collection'.format_string_null($edition->id_collection));
@@ -195,7 +198,7 @@ if (mysql_num_rows($rs) > 0)
 										<th align=right width=1>Editeur&nbsp;:</th>
 										<td width=100><?php echo $editeur->siteweb!=''?"<a target=_blank href=$editeur->siteweb>":''?><?php echo _out(format_titre($editeur->nomediteur))?><?php echo $editeur->siteweb!=''?'</a>':''?></td>
 <?php 
-		if ($collection->nomcollection) 
+		if ($collection) 
 		{ 
 ?>
 										<th align=right width=1>Collection&nbsp;:</th>
@@ -225,13 +228,13 @@ if (mysql_num_rows($rs) > 0)
 									</tr>
 									<tr>
 										<th align=right width=1>Type&nbsp;d'édition&nbsp;:</th>
-										<td><?php echo str_replace(' ', '&nbsp;', _out($type_edition->libelle))?></td>
+										<td><?php echo str_replace(' ', '&nbsp;', _out($type_edition ? $type_edition->libelle : ''))?></td>
 										<th align=right width=1>Reliure&nbsp;:</th>
-										<td><?php echo str_replace(' ', '&nbsp;', _out($reliure->libelle))?></td>
+										<td><?php echo str_replace(' ', '&nbsp;', _out($reliure ? $reliure->libelle : ''))?></td>
 									</tr>
 									<tr>
 										<th align=right width=1>Etat&nbsp;:</th>
-										<td><?php echo str_replace(' ', '&nbsp;', _out($etat->libelle))?></td>
+										<td><?php echo str_replace(' ', '&nbsp;', _out($etat ? $etat->libelle : ''))?></td>
 										<th align=right width=1>Dédicacé&nbsp;:</th>
 										<td><?php echo $edition->dedicace?'Oui':'Non'?></td>
 									</tr>
@@ -265,10 +268,10 @@ if (mysql_num_rows($rs) > 0)
 							</td>
 <?php
 		$images = load_sql('select * from /*DB_PREFIX*/couvertures where id_edition'.format_string_null($edition->id_edition).' order by categorieimage, ordre');
-		$nrow = mysql_num_rows($images);
+		$nrow = $images->num_rows;
 		if ($nrow > 0)
 		{
-			$image = mysql_fetch_object($images);
+			$image = $images->fetch_object();
 			$filename = build_img_filepath($rep_images, $db_prefix, $image->id_couverture);
 			$type_image = load_and_fetch('select * from /*DB_PREFIX*/listes where categorie = 6 and ref'.format_string_null($image->categorieimage));
 ?>
@@ -281,7 +284,7 @@ if (mysql_num_rows($rs) > 0)
 						<tr>
 							<td colspan=2 align=right>
 <?php
-				while ($image = mysql_fetch_object($images))
+				while ($image = $images->fetch_object())
 				{ 
 					$filename = build_img_filepath($rep_images, $db_prefix, $image->id_couverture);
 					$type_image = load_and_fetch('select * from /*DB_PREFIX*/listes where categorie = 6 and ref'.format_string_null($image->categorieimage));
@@ -300,12 +303,13 @@ if (mysql_num_rows($rs) > 0)
 ?>
 					</table>
 <?php
-	} 
+	}
 ?>
 				</td>
 			</tr>
 <?php
 } 
+$rs->free();
 ?>
 		</tbody>
 	</table>

@@ -1,9 +1,9 @@
-<?php
+<?
 
 $db_host = 'localhost';
-$db_user = 'thierry.rl';
+$db_user = 'root';
 $db_pass = '280776';
-$db_name = 'bdtheque';
+$db_name = 'bdtheque_test';
 $db_prefix = 'bdt';
 $db_key = 'blabla';
 $rep_images = 'images';

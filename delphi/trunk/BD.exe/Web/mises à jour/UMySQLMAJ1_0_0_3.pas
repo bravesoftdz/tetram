@@ -16,6 +16,7 @@ begin
     Add('  nomunivers varchar(150) NOT NULL,');
     Add('  uppernomunivers varchar(150) default NULL,');
     Add('  id_univers_parent char(38),');
+    Add('  id_univers_racine char(38),');
     Add('  description longtext,');
     Add('  siteweb varchar(255) default NULL,');
     Add('  initialenomunivers char(1) NOT NULL,');
@@ -24,8 +25,9 @@ begin
     Add('  dm_univers timestamp,');
     Add('  PRIMARY KEY  (id_univers),');
     Add('  KEY id_univers_parent (id_univers_parent),');
+    Add('  KEY id_univers_racine (id_univers_racine),');
     Add('  FULLTEXT KEY uppernomunivers (uppernomunivers),');
-    Add('  FULLTEXT KEY branche_univers (branche_univers),');
+    Add('  FULLTEXT KEY branche_univers (branche_univers)');
     Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
@@ -33,8 +35,10 @@ begin
     Add('  id_serie_univers char(38) NOT NULL,');
     Add('  id_serie char(38) NOT NULL,');
     Add('  id_univers char(38) NOT NULL,');
+    Add('  dc_series_univers timestamp,');
+    Add('  dm_series_univers timestamp,');
     Add('  PRIMARY KEY  (id_serie,id_univers),');
-    Add('  KEY id_serie_univers (id_serie_univers),');
+    Add('  KEY id_serie_univers (id_serie_univers)');
     Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 
@@ -44,8 +48,10 @@ begin
     Add('  id_univers char(38) NOT NULL,');
     Add('  source_album smallint(6) default 0,');
     Add('  source_serie smallint(6) default 0,');
+    Add('  dc_albums_univers timestamp,');
+    Add('  dm_albums_univers timestamp,');
     Add('  PRIMARY KEY  (id_album,id_univers),');
-    Add('  KEY id_album_univers (id_album_univers),');
+    Add('  KEY id_album_univers (id_album_univers)');
     Add(') DEFAULT CHARSET=utf8;');
     Add('@@');
 

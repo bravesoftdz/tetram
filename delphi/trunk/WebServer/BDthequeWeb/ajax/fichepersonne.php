@@ -36,7 +36,7 @@ if ($personne->biographie)
 
 <?php
 $rs = load_sql('select distinct la.id_serie, la.titreserie from /*DB_PREFIX*/vw_liste_albums la inner join /*DB_PREFIX*/auteurs a on la.id_album = a.id_album where coalesce(la.titreserie, \'\') <> \'\' and a.id_personne '.format_string_null($personne->id_personne).' order by uppertitreserie');
-if (mysql_num_rows($rs))
+if ($rs && $rs->num_rows)
 {
 ?>
 			<TR><TD>&nbsp;</TD></TR>
@@ -44,18 +44,19 @@ if (mysql_num_rows($rs))
 				<TH align=right width=1>Série(s)&nbsp;:</TH>
 				<TD>
 <?php
-	while ($row = mysql_fetch_object($rs)) 
+	while ($row = $rs->fetch_object()) 
 		echo AjaxLink('serie', $row->id_serie, display_titreserie($row), 's�rie').'<br>';
 ?>
 				</TD>
 			</TR>
 <?php
 } 
+$rs->free();
 ?>
 
 <?php
 $rs = load_sql('select la.* from /*DB_PREFIX*/vw_liste_albums la inner join /*DB_PREFIX*/auteurs a on la.id_album = a.id_album where a.metier = 0 and a.id_personne '.format_string_null($personne->id_personne).' order by coalesce(uppertitrealbum, uppertitreserie), uppertitreserie, horsserie, integrale, tome, tomedebut, tomefin, anneeparution, moisparution');
-if (mysql_num_rows($rs))
+if ($rs && $rs->num_rows)
 {
 ?>
 			<TR><TD>&nbsp;</TD></TR>
@@ -63,18 +64,19 @@ if (mysql_num_rows($rs))
 				<TH align=right width=1>Scénario&nbsp;:</TH>
 				<TD>
 <?php
-	while ($row = mysql_fetch_object($rs))
+	while ($row = $rs->fetch_object())
 		echo AjaxLink('album', $row->id_album, display_titrealbum($row, false, true)).'<br>';
 ?>
 				</TD>
 			</TR>
 <?php
-} 
+}
+$rs->free();
 ?>
 
 <?php
 $rs = load_sql('select la.* from /*DB_PREFIX*/vw_liste_albums la inner join /*DB_PREFIX*/auteurs a on la.id_album = a.id_album where a.metier = 1 and a.id_personne '.format_string_null($personne->id_personne).' order by coalesce(uppertitrealbum, uppertitreserie), uppertitreserie, horsserie, integrale, tome, tomedebut, tomefin, anneeparution, moisparution');
-if (mysql_num_rows($rs))
+if ($rs && $rs->num_rows)
 {
 ?>
 			<TR><TD>&nbsp;</TD></TR>
@@ -82,18 +84,19 @@ if (mysql_num_rows($rs))
 				<TH align=right width=1>Dessins&nbsp;:</TH>
 				<TD>
 <?php
-	while ($row = mysql_fetch_object($rs))
+	while ($row = $rs->fetch_object())
 		echo AjaxLink('album', $row->id_album, display_titrealbum($row, false, true)).'<br>';
 ?>
 				</TD>
 			</TR>
 <?php
-} 
+}
+$rs->free();
 ?>
 
 <?php
 $rs = load_sql('select la.* from /*DB_PREFIX*/vw_liste_albums la inner join /*DB_PREFIX*/auteurs a on la.id_album = a.id_album where a.metier = 2 and a.id_personne '.format_string_null($personne->id_personne).' order by coalesce(uppertitrealbum, uppertitreserie), uppertitreserie, horsserie, integrale, tome, tomedebut, tomefin, anneeparution, moisparution');
-if (mysql_num_rows($rs))
+if ($rs && $rs->num_rows)
 {
 ?>
 			<TR><TD>&nbsp;</TD></TR>
@@ -101,15 +104,16 @@ if (mysql_num_rows($rs))
 				<TH align=right width=1>Couleurs&nbsp;:</TH>
 				<TD>
 <?php
-	while ($row = mysql_fetch_object($rs))
+	while ($row = $rs->fetch_object())
 		echo AjaxLink('album', $row->id_album, display_titrealbum($row, false, true)).'<br>';
 ?>
 				</TD>
 			</TR>
 <?php
-} 
+}
+$rs->free();
 ?>
 
-		</TBODY>
-	</TABLE>
+		</tbody>
+	</table>
 </div>

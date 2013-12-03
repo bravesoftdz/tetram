@@ -9,7 +9,7 @@ include_once '../routines.php';
 <?php
 $ajouts = load_sql("select *, cast(date_creation as date) = cast(date_modif as date) is_creation from /*DB_PREFIX*/vw_dernieres_modifs order by date_modif desc limit 0,30");
 
-while ($ajout = mysql_fetch_object($ajouts))
+while ($ajout = $ajouts->fetch_object())
 {
 			?>
 		<tr>

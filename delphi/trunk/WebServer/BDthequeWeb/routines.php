@@ -119,7 +119,17 @@ function build_titrealbum($simple, $avecserie, $titrealbum, $titreserie, $tome, 
 
 function display_titrealbum($album, $simple = false, $avecserie = false)
 {
-	return build_titrealbum($simple, $avecserie, $album->titrealbum, $album->titreserie, $album->tome, $album->tomedebut, $album->tomefin, $album->integrale, $album->horsserie);
+	return build_titrealbum(
+		$simple, 
+		$avecserie, 
+		$album->titrealbum, 
+		property_exists($album, 'titreserie') ? $album->titreserie : '', 
+		$album->tome, 
+		$album->tomedebut, 
+		$album->tomefin, 
+		$album->integrale, 
+		$album->horsserie
+	);
 }
 
 function build_titreserie($simple, $titreserie, $editeur, $collection)
@@ -137,7 +147,12 @@ function build_titreserie($simple, $titreserie, $editeur, $collection)
 
 function display_titreserie($serie, $simple = false)
 {
-	return build_titreserie($simple, $serie->titreserie, $serie->nomediteur, $serie->nomcollection);
+	return build_titreserie(
+		$simple, 
+		$serie->titreserie, 
+		property_exists($serie, 'nomediteur') ? $serie->nomediteur : '', 
+		property_exists($serie, 'nomcollection') ? $serie->nomcollection : ''
+	);
 }
 
 function format_isbn($isbn)

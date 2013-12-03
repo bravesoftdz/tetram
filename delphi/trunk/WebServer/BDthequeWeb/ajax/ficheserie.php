@@ -10,21 +10,28 @@ $collection = load_and_fetch('select * from /*DB_PREFIX*/collections where id_co
 	<H1><?php echo _out(display_titreserie($serie))?></H1>
 </div>
 <div class=body>
-	<TABLE border=0 width=100%>
-		<TBODY valign=top>
-			<TR>
-				<TH align=right width=1></TH><TD width=100%><?php echo $serie->terminee==1?'Serie terminée':'Serie en cours'?></TD>
-			</TR>
-			<TR>
-				<TH align=right width=1>Editeur&nbsp;:</TH><TD width=100%><?php echo $editeur->siteweb?"<a target=_blank href=$editeur->siteweb>":''?><?php echo _out(format_titre($editeur->nomediteur))?><?php echo $editeur->siteweb?"</a>":''?></TD>
-			</TR>
-			<TR>
-				<TH align=right width=1>Collection&nbsp;:</TH><TD><?php echo _out(format_titre($collection->nomcollection))?></TD>
-			</TR>
+	<table border=0 width=100%>
+		<tbody valign=top>
+			<tr>
+				<th align=right width=1></th><td width=100%><?php echo $serie->terminee==1?'Serie terminée':'Serie en cours'?></TD>
+			</tr>
+			<tr>
+				<th align=right width=1>Editeur&nbsp;:</TH><TD width=100%><?php echo $editeur->siteweb?"<a target=_blank href=$editeur->siteweb>":''?><?php echo _out(format_titre($editeur->nomediteur))?><?php echo $editeur->siteweb?"</a>":''?></TD>
+			</tr>
+<?php
+if ($collection) 
+{
+?>
+			<tr>
+				<th align=right width=1>Collection&nbsp;:</TH><TD><?php echo _out(format_titre($collection->nomcollection))?></TD>
+			</tr>
+<?php 
+} 
+?>
 
 <?php
-$rs = load_sql('select u.id_univers, u.nomunivers from /*DB_PREFIX*/univers u inner join /*DB_PREFIX*/series_univers su on su.id_univers = u.id_univers where id_serie'.format_string_null($serie->id_serie).' order by uppernomunivers');
-if (mysql_num_rows($rs))
+$rs = load_sql('select u.id_univers, u.nomunivers from /*DB_PREFIX*/univers u inner join /*DB_PREFIX*/series_univers su on su.id_univers = u.id_univers where su.id_serie'.format_string_null($serie->id_serie).' order by u.uppernomunivers');
+if ($rs && $rs->num_rows)
 {
 ?>
 			<TR><TD>&nbsp;</TD></TR>
@@ -32,22 +39,22 @@ if (mysql_num_rows($rs))
 				<TH align=right width=1>Univers&nbsp;:</TH>
 				<TD>
 <?php
-	while ($univers = mysql_fetch_object($rs))
-		echo AjaxLink('univers', $univers>id_univers, format_titre($univers->nomunivers)).'<br>';
+	while ($univers = $rs->fetch_object())
+		echo AjaxLink('univers', $univers->id_univers, format_titre($univers->nomunivers)).'<br>';
 ?>
 				</TD>
 			</TR>
 <?php 
 } 
-mysql_free_result($rs);
+$rs->free();
 ?>
 
 <?php
-$rs = load_sql('select g.* from /*DB_PREFIX*/genres g inner join /*DB_PREFIX*/genreseries gs on g.id_genre = gs.id_genre where gs.id_serie '.format_string_null($serie->id_serie)).' order by g.genre';
-if (mysql_num_rows($rs))
+$rs = load_sql('select g.* from /*DB_PREFIX*/genres g inner join /*DB_PREFIX*/genreseries gs on g.id_genre = gs.id_genre where gs.id_serie '.format_string_null($serie->id_serie).' order by g.genre');
+if ($rs && $rs->num_rows)
 {
 	$s = '';
-	while ($row = mysql_fetch_object($rs))
+	while ($row = $rs->fetch_object())
 		$s .= ($s == ''?'':', ').format_titre($row->genre);
 ?>
 			<TR>
@@ -56,7 +63,7 @@ if (mysql_num_rows($rs))
 			</TR>
 <?php 
 } 
-mysql_free_result($rs);
+$rs->free();
 ?>
 
 <?php 
@@ -85,7 +92,7 @@ if ($serie->remarquesserie)
 
 <?php
 $rs = load_sql('select id_album, titrealbum, integrale, horsserie, tome, tomedebut, tomefin, id_serie from /*DB_PREFIX*/albums where id_serie'.format_string_null($serie->id_serie).' order by horsserie, integrale, tome, anneeparution, moisparution');
-if (mysql_num_rows($rs))
+if ($rs && $rs->num_rows)
 {
 ?>
 			<TR><TD>&nbsp;</TD></TR>
@@ -93,15 +100,15 @@ if (mysql_num_rows($rs))
 				<TH align=right width=1>Albums&nbsp;:</TH>
 				<TD>
 <?php
-	while ($album = mysql_fetch_object($rs))
+	while ($album = $rs->fetch_object())
 		echo AjaxLink('album', $album->id_album, display_titrealbum($album)).'<br>';
 ?>
 				</TD>
 			</TR>
 <?php 
 } 
-mysql_free_result($rs);
+$rs->free();
 ?>
-		</TBODY>
-	</TABLE>
+		</tbody>
+	</table>
 </div>

@@ -2,6 +2,9 @@
 require_once '../routines.php';
 ?>
 <?php
+if (!isset($_REQUEST['action'])) $_REQUEST['action'] = '';
+$groupby = !isset($_REQUEST['GroupBy']) ? 0 : $_REQUEST['GroupBy'];
+
 switch ($_REQUEST['action'])
 {
 	case 'treenode':
@@ -9,7 +12,7 @@ switch ($_REQUEST['action'])
 		if ($ref == '-1') $ref = '';
 		$ref = format_string_null($ref, true);
 
-		switch ($_REQUEST['GroupBy'])
+		switch ($groupby)
 		{
 			case 1: // par année
 				$sql = 'select id_album, titrealbum, tome, tomedebut, tomefin, horsserie, integrale, moisparution, anneeparution, id_serie, titreserie, achat, complet from /*DB_PREFIX*/vw_liste_albums where anneeparution '.$ref.' order by coalesce(uppertitrealbum, uppertitreserie), uppertitreserie, horsserie, integrale, tome, tomedebut, tomefin, anneeparution, moisparution';
@@ -31,7 +34,7 @@ switch ($_REQUEST['action'])
 				$sql = 'select a.id_album, a.titrealbum, a.tome, a.tomedebut, a.tomefin, a.horsserie, a.integrale, a.moisparution, a.anneeparution, a.id_serie, s.titreserie, a.achat, a.complet from /*DB_PREFIX*/albums a left join /*DB_PREFIX*/series s on s.id_serie = a.id_serie where coalesce(a.initialetitrealbum, s.initialetitreserie) '.$ref.' order by coalesce(uppertitrealbum, uppertitreserie), uppertitreserie, horsserie, integrale, tome, tomedebut, tomefin, anneeparution, moisparution';
 		}
 		$rs = load_sql($sql);
-		while ($row = mysql_fetch_object($rs)) 
+		while ($row = $rs->fetch_object()) 
 			echo AjaxLink('album', $row->id_album, display_titrealbum($row, false, true)).'<br/>';
 		break;
 	default:
@@ -41,12 +44,12 @@ switch ($_REQUEST['action'])
 <div id=repertoire_header>
 	<form method=post action=repinitiales.php>
 		<select name=GroupBy id=GroupBy onChange="AjaxUpdate('repertoire_body', 'repertoire_albums.php?GroupBy='+this.options[this.selectedIndex].value, false);">
-			<option value=0<?php echo $_REQUEST['GroupBy'] == 0?' selected':''; ?>>Titre</option>
-			<option value=5<?php echo $_REQUEST['GroupBy'] == 5?' selected':''; ?>>Série</option>
-			<option value=3<?php echo $_REQUEST['GroupBy'] == 3?' selected':''; ?>>Editeur</option>
-			<option value=2<?php echo $_REQUEST['GroupBy'] == 2?' selected':''; ?>>Collection</option>
-			<option value=4<?php echo $_REQUEST['GroupBy'] == 4?' selected':''; ?>>Genre</option>
-			<option value=1<?php echo $_REQUEST['GroupBy'] == 1?' selected':''; ?>>Année de parution</option>
+			<option value=0<?php echo $groupby == 0?' selected':''; ?>>Titre</option>
+			<option value=5<?php echo $groupby == 5?' selected':''; ?>>Série</option>
+			<option value=3<?php echo $groupby == 3?' selected':''; ?>>Editeur</option>
+			<option value=2<?php echo $groupby == 2?' selected':''; ?>>Collection</option>
+			<option value=4<?php echo $groupby == 4?' selected':''; ?>>Genre</option>
+			<option value=1<?php echo $groupby == 1?' selected':''; ?>>Année de parution</option>
 		</select>
 	</form>
 </div>
@@ -54,7 +57,7 @@ switch ($_REQUEST['action'])
 <?php
 		}
 		
-		switch ($_REQUEST['GroupBy'])
+		switch ($groupby)
 		{
 			case 1: // par année
 				$sql = '(select -1 as anneeparution, count(id_album) from /*DB_PREFIX*/vw_liste_albums where anneeparution is null group by anneeparution) union (select anneeparution, count(id_album) from /*DB_PREFIX*/vw_liste_albums where anneeparution is not null group by anneeparution)';
@@ -76,12 +79,12 @@ switch ($_REQUEST['action'])
 				$sql = 'select coalesce(a.initialetitrealbum, s.initialetitreserie), count(a.id_album) from /*DB_PREFIX*/albums a left join /*DB_PREFIX*/series s on a.id_serie = s.id_serie group by 1';
 		}
 		prepare_sql($sql);
-		$rs = mysql_query($sql) or die(mysql_error());
+		$rs = $db_link->query($sql) or die($db_link->error);
 		$c = 0;
-		while ($row = mysql_fetch_array($rs, MYSQL_NUM)) 
+		while ($row = $rs->fetch_array(MYSQL_NUM)) 
 		{
 			$display = $row[0]=='-1' ? '&lt;Inconnu&gt;':format_titre($row[0]);
-			if (mysql_num_fields($rs) == 2) 
+			if (count($row) == 2) 
 			{
 				$ref = $row[0];
 				$count = $row[1];
@@ -93,7 +96,7 @@ switch ($_REQUEST['action'])
 			}
 ?>
 <div class=treeNode <?php echo $c++ % 2?' style="background-color: #e5e5ff;"':''?>>
-    <a href='#' onclick='return treeLoad("treeChild<?php echo $ref ?>", "repertoire_albums.php?action=treenode&ref=<?php echo urlencode($ref) ?>&GroupBy=<?php echo $_REQUEST['GroupBy']?>", this)'><?php echo _out($display) ?></a>&nbsp;&nbsp;&nbsp;- (<?php echo $count?>)
+    <a href='#' onclick='return treeLoad("treeChild<?php echo $ref ?>", "repertoire_albums.php?action=treenode&ref=<?php echo urlencode($ref) ?>&GroupBy=<?php echo $groupby ?>", this)'><?php echo _out($display) ?></a>&nbsp;&nbsp;&nbsp;- (<?php echo $count?>)
 </div>
 <div class=treeChildNode id=treeChild<?php echo $ref ?> style="display:"></div>
 <?php 

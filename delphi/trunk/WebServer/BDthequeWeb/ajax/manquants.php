@@ -37,7 +37,7 @@ function write_serie()
 }
 
 $current_serie = -1;
-while ($album = mysql_fetch_object($albums))
+while ($album = $albums->fetch_object())
 {
 	if ($current_serie != $album->id_serie)
 	{

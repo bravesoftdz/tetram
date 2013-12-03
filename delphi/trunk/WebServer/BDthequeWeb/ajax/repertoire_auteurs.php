@@ -3,6 +3,8 @@ require_once '../routines.php';
 ?>
 
 <?php
+if (!isset($_REQUEST['action'])) $_REQUEST['action'] = '';
+
 switch ($_REQUEST['action'])
 {
 	case 'treenode':
@@ -12,15 +14,16 @@ switch ($_REQUEST['action'])
 		$sql = 'select id_personne, nompersonne from /*DB_PREFIX*/personnes where initialenompersonne '.$ref.' order by uppernompersonne';
 		$rs = load_sql($sql);
 
-		while ($row = mysql_fetch_object($rs)) 
+		while ($row = $rs->fetch_object()) 
 			echo AjaxLink('personne', $row->id_personne, format_titre($row->nompersonne), 'auteur').'<br/>';
+		$rs->free();
 		break;
 	default:
 		$sql = 'select initialenompersonne, count(id_personne) from  /*DB_PREFIX*/personnes group by initialenompersonne';
 		prepare_sql($sql);
-		$rs = mysql_query($sql) or die(mysql_error());
+		$rs = $db_link->query($sql) or die($db_link->error);
 		$c = 0;
-		while ($row = mysql_fetch_array($rs, MYSQL_NUM)) 
+		while ($row = $rs->fetch_array(MYSQL_NUM)) 
 		{
 			$display = $row[0]=='-1' ? '&lt;Inconnu&gt;':format_titre($row[0]);
 			$ref = $row[0];
@@ -32,5 +35,6 @@ switch ($_REQUEST['action'])
 <div class=treeChildNode id=treeChild<?php echo $ref ?> style="display:"></div>
 <?php 
 		} 
+		$rs->free();
 }
 ?>

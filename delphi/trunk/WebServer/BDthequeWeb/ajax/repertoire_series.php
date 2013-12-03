@@ -3,6 +3,8 @@ require_once '../routines.php';
 ?>
 
 <?php
+if (!isset($_REQUEST['action'])) $_REQUEST['action'] = '';
+
 switch ($_REQUEST['action'])
 {
 	case 'treenode':
@@ -12,15 +14,16 @@ switch ($_REQUEST['action'])
 		$sql = 'select id_serie, titreserie, s.id_editeur, nomediteur, s.id_collection, nomcollection from /*DB_PREFIX*/series s left join /*DB_PREFIX*/editeurs e on s.id_editeur = e.id_editeur left join /*DB_PREFIX*/collections c on s.id_collection = c.id_collection where initialetitreserie '.$ref.' order by uppertitreserie, uppernomediteur, uppernomcollection';
 		$rs = load_sql($sql);
 
-		while ($row = mysql_fetch_object($rs)) 
+		while ($row = $rs->fetch_object()) 
 			echo AjaxLink('serie', $row->id_serie, display_titreserie($row, false, true), 'série').'<br/>';
+		$rs->free();
 		break;
 	default:
 		$sql = 'select initialetitreserie, count(id_serie) from /*DB_PREFIX*/series group by initialetitreserie';
 		prepare_sql($sql);
-		$rs = mysql_query($sql) or die(mysql_error());
+		$rs = $db_link->query($sql) or die($db_link->error);
 		$c = 0;
-		while ($row = mysql_fetch_array($rs, MYSQL_NUM)) 
+		while ($row = $rs->fetch_array(MYSQL_NUM)) 
 		{
 			$display = $row[0]=='-1' ? '&lt;Inconnu&gt;':format_titre($row[0]);
 			$ref = $row[0];
@@ -31,6 +34,7 @@ switch ($_REQUEST['action'])
 </div>
 <div class=treeChildNode id=treeChild<?php echo $ref ?> style="display:"></div>
 <?php 
-		} 
+		}
+		$rs->free();
 }
 ?>

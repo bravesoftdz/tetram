@@ -2,7 +2,8 @@
 include_once('../routines.php');
 ?>
 <?php
-switch ($_REQUEST['GroupBy'])
+$groupby = !isset($_REQUEST['GroupBy']) ? 0 : $_REQUEST['GroupBy'];
+switch ($groupby)
 {
 	case 1: // par année
 		$sql = '(select -1 as anneeparution, count(id_album) from /*DB_PREFIX*/vw_liste_albums where anneeparution is null group by anneeparution) union (select anneeparution, count(id_album) from /*DB_PREFIX*/vw_liste_albums where anneeparution is not null group by anneeparution)';
@@ -24,12 +25,12 @@ switch ($_REQUEST['GroupBy'])
 		$sql = 'select coalesce(a.initialetitrealbum, s.initialetitreserie), count(a.id_album) from /*DB_PREFIX*/albums a left join /*DB_PREFIX*/series s on a.id_serie = s.id_serie group by 1';
 }
 prepare_sql($sql);
-$rs = mysql_query($sql) or die(mysql_error());
+$rs = $db_link->query($sql) or die($db_link->error);
 $c = 0;
-while ($row = mysql_fetch_array($rs, MYSQL_NUM)) 
+while ($row = $rs->fetch_array(MYSQL_NUM)) 
 {
 	$display = $row[0]=='-1' ? '&lt;Inconnu&gt;':format_titre($row[0]);
-	if (mysql_num_fields($rs) == 2) 
+	if (count($rs) == 2) 
 	{
 		$ref = $row[0];
 		$count = $row[1];
@@ -41,7 +42,7 @@ while ($row = mysql_fetch_array($rs, MYSQL_NUM))
 	}
 ?>
 <div class=treeNode <?php echo $c++ % 2?' style="background-color: #e5e5ff;"':''?>>
-    <a href='#' onclick='return treeLoad("treeChild<?php echo $ref ?>", "listetreenode.php?ref=<?php echo urlencode($ref) ?>&GroupBy=<?php echo $_REQUEST['GroupBy']?>", this)'><?php echo _out($display) ?></a>&nbsp;&nbsp;&nbsp;- (<?php echo $count?>)
+    <a href='#' onclick='return treeLoad("treeChild<?php echo $ref ?>", "listetreenode.php?ref=<?php echo urlencode($ref) ?>&GroupBy=<?php echo $groupby ?>", this)'><?php echo _out($display) ?></a>&nbsp;&nbsp;&nbsp;- (<?php echo $count?>)
 </div>
 <div class=treeChildNode id=treeChild<?php echo $ref ?> style="display:"></div>
 <?php 
