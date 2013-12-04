@@ -18,7 +18,7 @@ type
     Label20: TLabel;
     Bevel4: TBevel;
     edTitre: TEditLabeled;
-    description: TMemoLabeled;
+    edDescription: TMemoLabeled;
     lvAuteurs: TVDTListViewLabeled;
     Label24: TLabel;
     edAnneeCote: TEditLabeled;
@@ -131,7 +131,7 @@ begin
   cbxCategorie.Value := FParaBD.CategorieParaBD.Value;
   cbDedicace.Checked := FParaBD.Dedicace;
   cbNumerote.Checked := FParaBD.Numerote;
-  description.Text := FParaBD.description.Text;
+  edDescription.Text := FParaBD.Description;
 
   vtEditSeries.VTEdit.OnChange := nil;
   vtEditSeries.CurrentValue := FParaBD.Serie.ID_Serie;
@@ -294,7 +294,7 @@ begin
   FParaBD.CategorieParaBD := MakeOption(cbxCategorie.Value, cbxCategorie.Caption);
   FParaBD.Dedicace := cbDedicace.Checked;
   FParaBD.Numerote := cbNumerote.Checked;
-  FParaBD.description.Text := description.Text;
+  FParaBD.Description := edDescription.Text;
   FParaBD.AnneeCote := AnneeCote;
   FParaBD.PrixCote := PrixCote;
   FParaBD.Gratuit := cbGratuit.Checked;

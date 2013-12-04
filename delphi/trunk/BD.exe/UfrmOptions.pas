@@ -104,7 +104,7 @@ type
 
 implementation
 
-uses CommonConst, UdmPrinc, TypeRec, UIB, Commun, Procedures, Updates;
+uses CommonConst, UdmPrinc, TypeRec, UIB, Commun, Procedures, Updates, IOUtils;
 
 {$R *.DFM}
 
@@ -114,13 +114,15 @@ var
   i: Integer;
 begin
   if RepImages <> VDTButton1.Caption then
-    if MessageDlg('Vous avez choisi de modifier le répertoire de stockage des images.'#13'N''oubliez pas de déplacer les fichiers de l''ancien répertoire vers le nouveau.', mtWarning, mbOKCancel, 0) = mrCancel then
+    if MessageDlg
+      ('Vous avez choisi de modifier le répertoire de stockage des images.'#13'N''oubliez pas de déplacer les fichiers de l''ancien répertoire vers le nouveau.',
+      mtWarning, mbOKCancel, 0) = mrCancel then
     begin
       ModalResult := mrNone;
       Exit;
     end;
 
-  with TGlobalVar.Utilisateur.Options do
+  with TGlobalVar.Utilisateur.options do
   begin
     SymboleMonnetaire := ComboBox1.Text;
     ModeDemarrage := not OpenStart.Checked;
@@ -155,35 +157,37 @@ begin
     SiteWeb.Paquets := StrToInt(ComboBox6.Text);
   end;
   with TUIBQuery.Create(nil) do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Text := 'UPDATE OR INSERT INTO CONVERSIONS (ID_Conversion, Monnaie1, Monnaie2, Taux) VALUES (?, ?, ?, ?) MATCHING (id_conversion)';
-    Prepare(True);
-    for i := 0 to ListView1.Items.Count - 1 do
-    begin
-      PC := ListView1.Items[i].Data;
-      if IsEqualGUID(GUID_NULL, PC.ID) then
-        Params.IsNull[0] := True
-      else
-        Params.AsString[0] := GUIDToString(PC.ID);
-      Params.AsString[1] := Copy(PC.Monnaie1, 1, Params.MaxStrLen[1]);
-      Params.AsString[2] := Copy(PC.Monnaie2, 1, Params.MaxStrLen[2]);
-      Params.AsDouble[3] := PC.Taux;
-      ExecSQL;
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Text := 'UPDATE OR INSERT INTO CONVERSIONS (ID_Conversion, Monnaie1, Monnaie2, Taux) VALUES (?, ?, ?, ?) MATCHING (id_conversion)';
+      Prepare(True);
+      for i := 0 to ListView1.Items.Count - 1 do
+      begin
+        PC := ListView1.Items[i].Data;
+        if IsEqualGUID(GUID_NULL, PC.ID) then
+          Params.IsNull[0] := True
+        else
+          Params.AsString[0] := GUIDToString(PC.ID);
+        Params.AsString[1] := Copy(PC.Monnaie1, 1, Params.MaxStrLen[1]);
+        Params.AsString[2] := Copy(PC.Monnaie2, 1, Params.MaxStrLen[2]);
+        Params.AsDouble[3] := PC.Taux;
+        ExecSQL;
+      end;
+      Transaction.Commit;
+    finally
+      Transaction.Free;
+      Free;
     end;
-    Transaction.Commit;
-  finally
-    Transaction.Free;
-    Free;
-  end;
   EcritOptions;
   LitOptions;
 end;
 
 procedure TfrmOptions.calculKeyPress(Sender: TObject; var Key: Char);
 begin
-  if not CharInSet(Key, [#8, '0'..'9', ',', '.', FormatSettings.DecimalSeparator]) then Key := #0;
-  if CharInSet(Key, ['.', ',']) then Key := FormatSettings.DecimalSeparator;
+  if not CharInSet(Key, [#8, '0' .. '9', ',', '.', FormatSettings.DecimalSeparator]) then
+    Key := #0;
+  if CharInSet(Key, ['.', ',']) then
+    Key := FormatSettings.DecimalSeparator;
 end;
 
 procedure TfrmOptions.calculExit(Sender: TObject);
@@ -198,8 +202,8 @@ end;
 procedure TfrmOptions.FormCreate(Sender: TObject);
 var
   q: TUIBQuery;
-  sr: TSearchRec;
   MySQLUpdate: TMySQLUpdate;
+  fileName: String;
 begin
   PrepareLV(Self);
   LitOptions;
@@ -207,15 +211,9 @@ begin
     ComboBox5.Items.Insert(0, MySQLUpdate.Version);
   ComboBox5.ItemIndex := 0;
 
-  if FindFirst(RepWebServer + '*.zip', faAnyFile, sr) = 0 then
-  try
-    repeat
-      if not SameText(sr.Name, 'interface.zip') then
-        ComboBox4.Items.Add(ChangeFileExt(sr.Name, ''));
-    until FindNext(sr) > 0;
-  finally
-    FindClose(sr);
-  end;
+  for fileName in TDirectory.GetFiles(RepWebServer, '*.zip') do
+    if not SameFileName(TPath.GetFileName(fileName), 'interface.zip') then
+      ComboBox4.Items.Add(TPath.GetFileNameWithoutExtension(fileName));
 
   PageControl1.ActivePage := PageControl1.Pages[0];
   ImageChargee := False;
@@ -223,44 +221,46 @@ begin
 
   q := TUIBQuery.Create(nil);
   with q do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    SQL.Add('SELECT Monnaie1 AS Monnaie FROM conversions');
-    SQL.Add('UNION');
-    SQL.Add('SELECT Monnaie2 AS Monnaie FROM conversions');
-    Open;
-    while not EOF do
-    begin
-      ComboBox1.Items.Add(Fields.ByNameAsString['Monnaie']);
-      ComboBox2.Items.Add(Fields.ByNameAsString['Monnaie']);
-      ComboBox3.Items.Add(Fields.ByNameAsString['Monnaie']);
-      Next;
-    end;
-    Close;
-    SQL.Clear;
-    SQL.Text := 'SELECT Id_Conversion, Monnaie1, Monnaie2, Taux FROM conversions';
-    Open;
-    while not EOF do
-    begin
-      with ListView1.Items.Add do
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      SQL.Add('SELECT Monnaie1 AS Monnaie FROM conversions');
+      SQL.Add('UNION');
+      SQL.Add('SELECT Monnaie2 AS Monnaie FROM conversions');
+      Open;
+      while not Eof do
       begin
-        Data := TConversion.Make(Q);
-        Caption := TConversion(Data).ChaineAffichage;
-        SubItems.Add('0');
+        ComboBox1.Items.Add(Fields.ByNameAsString['Monnaie']);
+        ComboBox2.Items.Add(Fields.ByNameAsString['Monnaie']);
+        ComboBox3.Items.Add(Fields.ByNameAsString['Monnaie']);
+        Next;
       end;
-      Next;
+      Close;
+      SQL.Clear;
+      SQL.Text := 'SELECT Id_Conversion, Monnaie1, Monnaie2, Taux FROM conversions';
+      Open;
+      while not Eof do
+      begin
+        with ListView1.Items.Add do
+        begin
+          Data := TConversion.Make(q);
+          Caption := TConversion(Data).ChaineAffichage;
+          SubItems.Add('0');
+        end;
+        Next;
+      end;
+    finally
+      Transaction.Free;
+      Free;
     end;
-  finally
-    Transaction.Free;
-    Free;
-  end;
-  with ComboBox1.Items, TGlobalVar.Utilisateur.Options do
+  with ComboBox1.Items, TGlobalVar.Utilisateur.options do
   begin
-    if IndexOf(SymboleMonnetaire) = -1 then Add(SymboleMonnetaire);
-    if IndexOf(FormatSettings.CurrencyString) = -1 then Add(FormatSettings.CurrencyString);
+    if IndexOf(SymboleMonnetaire) = -1 then
+      Add(SymboleMonnetaire);
+    if IndexOf(FormatSettings.CurrencyString) = -1 then
+      Add(FormatSettings.CurrencyString);
   end;
 
-  with TGlobalVar.Utilisateur.Options do
+  with TGlobalVar.Utilisateur.options do
   begin
     ComboBox1.ItemIndex := ComboBox1.Items.IndexOf(SymboleMonnetaire);
     OpenStart.Checked := not ModeDemarrage;
@@ -308,7 +308,8 @@ begin
   begin
     PC := SItem.Data;
     i := SItem;
-    if i.SubItems[0] <> '1' then i.SubItems[0] := '2';
+    if i.SubItems[0] <> '1' then
+      i.SubItems[0] := '2';
     SItem := nil;
   end
   else
@@ -342,8 +343,7 @@ procedure TfrmOptions.SpeedButton1Click(Sender: TObject);
 begin
   ComboBox2.Text := '';
   ComboBox3.Text := '';
-  Edit1.Text := Format('0%s00', [FormatSettings.DecimalSeparator]);
-  ;
+  Edit1.Text := Format('0%s00', [FormatSettings.DecimalSeparator]);;
   Panel4.Visible := True;
   SpeedButton2.Enabled := False;
   SpeedButton3.Enabled := False;
@@ -352,14 +352,16 @@ end;
 procedure TfrmOptions.ComboBox2Change(Sender: TObject);
 begin
   if Sender is TComboBox then
-    if Length(TComboBox(Sender).Text) > 5 then TComboBox(Sender).Text := Copy(TComboBox(Sender).Text, 1, 5);
+    if Length(TComboBox(Sender).Text) > 5 then
+      TComboBox(Sender).Text := Copy(TComboBox(Sender).Text, 1, 5);
   Label10.Caption := Format('1 %s = %s %s', [ComboBox2.Text, Edit1.Text, ComboBox3.Text]);
   Frame12.btnOK.Enabled := (ComboBox2.Text <> '') and (Edit1.Text <> '') and (ComboBox3.Text <> '');
 end;
 
 procedure TfrmOptions.SpeedButton3Click(Sender: TObject);
 begin
-  if not Assigned(ListView1.Selected) or Panel4.Visible then Exit;
+  if not Assigned(ListView1.Selected) or Panel4.Visible then
+    Exit;
   SItem := ListView1.Selected;
   ComboBox2.Text := TConversion(SItem.Data).Monnaie1;
   ComboBox3.Text := TConversion(SItem.Data).Monnaie2;
@@ -376,7 +378,8 @@ end;
 
 procedure TfrmOptions.SpeedButton2Click(Sender: TObject);
 begin
-  if not Assigned(ListView1.Selected) or Panel4.Visible then Exit;
+  if not Assigned(ListView1.Selected) or Panel4.Visible then
+    Exit;
   TConversion(ListView1.Selected.Data).Free;
   ListView1.Selected.Delete;
 end;
@@ -411,7 +414,8 @@ procedure TfrmOptions.VDTButton1Click(Sender: TObject);
 begin
   BrowseDirectoryDlg1.Selection := TVDTButton(Sender).Caption;
   BrowseDirectoryDlg1.Title := 'Sélectionnez le ' + LowerCase(TVDTButton(Sender).Hint);
-  if BrowseDirectoryDlg1.Execute then TVDTButton(Sender).Caption := BrowseDirectoryDlg1.Selection;
+  if BrowseDirectoryDlg1.Execute then
+    TVDTButton(Sender).Caption := BrowseDirectoryDlg1.Selection;
 end;
 
 procedure TfrmOptions.FormShow(Sender: TObject);
@@ -422,37 +426,38 @@ end;
 procedure TfrmOptions.Button1Click(Sender: TObject);
 var
   repSave: string;
+  sl: TStringList;
 begin
-  if not BrowseDirectoryDlg2.Execute then Exit;
+  if not BrowseDirectoryDlg2.Execute then
+    Exit;
   repSave := IncludeTrailingBackslash(BrowseDirectoryDlg2.Selection);
   ForceDirectories(repSave);
   ZipMaster1.ZipFileName := RepWebServer + 'interface.zip';
   ZipMaster1.ExtrBaseDir := repSave;
   ZipMaster1.Extract;
-  ZipMaster1.ZipFileName := RepWebServer + TGlobalVar.Utilisateur.Options.SiteWeb.Modele + '.zip';
+  ZipMaster1.ZipFileName := RepWebServer + TGlobalVar.Utilisateur.options.SiteWeb.Modele + '.zip';
   ZipMaster1.ExtrBaseDir := repSave;
   ZipMaster1.Extract;
-  with TStringList.Create do
+  sl := TStringList.Create;
   try
-    Add('<?');
-    Add('');
-    Add('$db_host = ''' + StringReplace(Edit4.Text, '''', '\''', [rfReplaceAll]) + ''';');
-    Add('$db_user = ''' + StringReplace(Edit5.Text, '''', '\''', [rfReplaceAll]) + ''';');
-    Add('$db_pass = ''' + StringReplace(Edit7.Text, '''', '\''', [rfReplaceAll]) + ''';');
-    Add('$db_name = ''' + StringReplace(Edit8.Text, '''', '\''', [rfReplaceAll]) + ''';');
-    Add('$db_prefix = ''' + StringReplace(Edit6.Text, '''', '\''', [rfReplaceAll]) + ''';');
-    Add('$db_key = ''' + StringReplace(Edit3.Text, '''', '\''', [rfReplaceAll]) + ''';');
-    Add('$rep_images = ''images'';');
-    Add('');
-    Add('');
-    Add('if (file_exists(''config_ex.inc'')) include_once ''config_ex.inc'';');
-    Add('');
-    Add('?>');
-    SaveToFile(repSave + 'config.inc');
+    sl.Add('<?');
+    sl.Add('');
+    sl.Add('$db_host = ''' + StringReplace(Edit4.Text, '''', '\''', [rfReplaceAll]) + ''';');
+    sl.Add('$db_user = ''' + StringReplace(Edit5.Text, '''', '\''', [rfReplaceAll]) + ''';');
+    sl.Add('$db_pass = ''' + StringReplace(Edit7.Text, '''', '\''', [rfReplaceAll]) + ''';');
+    sl.Add('$db_name = ''' + StringReplace(Edit8.Text, '''', '\''', [rfReplaceAll]) + ''';');
+    sl.Add('$db_prefix = ''' + StringReplace(Edit6.Text, '''', '\''', [rfReplaceAll]) + ''';');
+    sl.Add('$db_key = ''' + StringReplace(Edit3.Text, '''', '\''', [rfReplaceAll]) + ''';');
+    sl.Add('$rep_images = ''images'';');
+    sl.Add('');
+    sl.Add('');
+    sl.Add('if (file_exists(''config_ex.inc'')) include_once ''config_ex.inc'';');
+    sl.Add('');
+    sl.Add('?>');
+    sl.SaveToFile(repSave + 'config.inc');
   finally
-    Free;
+    sl.Free;
   end;
 end;
 
 end.
-

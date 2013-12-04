@@ -3,7 +3,7 @@ unit LoadComplet;
 interface
 
 uses
-  SysUtils, Windows, Classes, Dialogs, TypeRec, Commun, CommonConst, UdmPrinc, UIB, DateUtils, ListOfTypeRec, Contnrs, UChampsRecherche, Generics.Collections,
+  SysUtils, Windows, Classes, Dialogs, TypeRec, Commun, CommonConst, UdmPrinc, UIB, DateUtils, ListOfTypeRec, UChampsRecherche, Generics.Collections,
   Generics.Defaults, VirtualTree;
 
 type
@@ -15,6 +15,14 @@ type
 function MakeOption(Value: Integer; const Caption: string): ROption; inline;
 
 type
+  LongString = record
+  private
+    Value: string;
+  public
+    class operator Implicit(a: string): LongString;
+    class operator Implicit(a: LongString): string;
+  end;
+
   TBaseComplet = class(TPersistent)
   protected
     class procedure WriteString(Stream: TStream; const Chaine: string);
@@ -96,7 +104,7 @@ type
   strict private
     FNomUnivers: string;
     FUniversParent: TUnivers;
-    FDescription: TStringList;
+    FDescription: LongString;
     FSiteWeb: string;
     procedure SetNomUnivers(const Value: string); inline;
     function GetID_UniversParent: TGUID; inline;
@@ -113,7 +121,7 @@ type
     property ID_Univers: TGUID read FID write FID;
     property NomUnivers: string read FNomUnivers write SetNomUnivers;
     property SiteWeb: string read FSiteWeb write SetSiteWeb;
-    property Description: TStringList read FDescription;
+    property Description: LongString read FDescription write FDescription;
     property UniversParent: TUnivers read FUniversParent;
     property ID_UniversParent: TGUID read GetID_UniversParent write SetID_UniversParent;
   end;
@@ -125,8 +133,8 @@ type
 
     FTitreSerie: string;
     FTerminee: Integer;
-    FSujet: TStringList;
-    FNotes: TStringList;
+    FSujet: LongString;
+    FNotes: Longstring;
     FCollection: TCollection;
     FSiteWeb: string;
     FGenres: TStringList;
@@ -186,8 +194,8 @@ type
     property TitreSerie: string read FTitreSerie write SetTitreSerie;
     property Terminee: Integer read FTerminee write FTerminee;
     property Genres: TStringList read FGenres;
-    property Sujet: TStringList read FSujet;
-    property Notes: TStringList read FNotes;
+    property Sujet: LongString read FSujet write FSujet;
+    property Notes: LongString read FNotes write FNotes;
     property Editeur: TEditeurComplet read FEditeur;
     property Collection: TCollection read FCollection;
     property SiteWeb: string read FSiteWeb write SetSiteWeb;
@@ -217,7 +225,7 @@ type
 
   TAuteurComplet = class(TObjetComplet)
   strict private
-    FBiographie: TStringList;
+    FBiographie: LongString;
     FNomAuteur: string;
     FSiteWeb: string;
     FSeries: TObjectList<TSerieComplete>;
@@ -234,7 +242,7 @@ type
     property ID_Auteur: TGUID read FID write FID;
     property NomAuteur: string read FNomAuteur write SetNomAuteur;
     property SiteWeb: string read FSiteWeb write SetSiteWeb;
-    property Biographie: TStringList read FBiographie;
+    property Biographie: LongString read FBiographie write FBiographie;
     property Series: TObjectList<TSerieComplete> read FSeries;
   end;
 
@@ -249,7 +257,7 @@ type
     FPrete: Boolean;
     FNombreDePages: Integer;
     FNumeroPerso: string;
-    FNotes: TStringList;
+    FNotes: LongString;
     FReliure: ROption;
     FAnneeEdition: Integer;
     FDedicace: Boolean;
@@ -312,7 +320,7 @@ type
     property ISBN: string read FISBN write FISBN;
     property DateAchat: TDateTime read FDateAchat write FDateAchat;
     property sDateAchat: string read Get_sDateAchat;
-    property Notes: TStringList read FNotes;
+    property Notes: LongString read FNotes write FNotes;
     property NumeroPerso: string { [25] } read FNumeroPerso write SetNumeroPerso;
     property Couvertures: TMyObjectList<TCouverture> read FCouvertures;
   end;
@@ -335,12 +343,12 @@ type
   strict private
     FTitreAlbum: string;
     FSerie: TSerieComplete;
-    FSujet: TStringList;
+    FSujet: LongString;
     FHorsSerie: Boolean;
     FMoisParution: Integer;
     FTomeFin: Integer;
     FColoristes: TObjectList<TAuteur>;
-    FNotes: TStringList;
+    FNotes: LongString;
     FAnneeParution: Integer;
     FScenaristes: TObjectList<TAuteur>;
     FIntegrale: Boolean;
@@ -388,8 +396,8 @@ type
     property Scenaristes: TObjectList<TAuteur> read FScenaristes;
     property Dessinateurs: TObjectList<TAuteur> read FDessinateurs;
     property Coloristes: TObjectList<TAuteur> read FColoristes;
-    property Sujet: TStringList read FSujet;
-    property Notes: TStringList read FNotes;
+    property Sujet: LongString read FSujet write FSujet;
+    property Notes: LongString read FNotes write FNotes;
     property Editions: TEditionsCompletes read FEditions;
     property Notation: Integer read FNotation write FNotation;
     property Univers: TObjectList<TUnivers> read FUnivers;
@@ -541,7 +549,7 @@ type
     FSerie: TSerieComplete;
     FAnneeEdition: Integer;
     FDedicace: Boolean;
-    FDescription: TStringList;
+    FDescription: LongString;
     FPrixCote: Currency;
     FNumerote: Boolean;
     FDateAchat: TDateTime;
@@ -574,7 +582,7 @@ type
     property AnneeCote: Integer read FAnneeCote write FAnneeCote;
     property TitreParaBD: string { [150] } read FTitreParaBD write SetTitreParaBD;
     property Auteurs: TObjectList<TAuteur> read FAuteurs;
-    property Description: TStringList read FDescription;
+    property Description: LongString read FDescription write FDescription;
     property Serie: TSerieComplete read FSerie;
     property Prix: Currency read FPrix write FPrix;
     property PrixCote: Currency read FPrixCote write FPrixCote;
@@ -709,6 +717,18 @@ begin
   Result.Caption := Caption;
 end;
 
+{ LongString }
+
+class operator LongString.Implicit(a: string): LongString;
+begin
+  Result.Value := a.Trim([' ', #13, #10]);
+end;
+
+class operator LongString.Implicit(a: LongString): string;
+begin
+  Result := a.Value;
+end;
+
 { TBaseComplet }
 
 procedure TBaseComplet.BeforeDestruction;
@@ -826,8 +846,8 @@ begin
   Scenaristes.Clear;
   Dessinateurs.Clear;
   Coloristes.Clear;
-  Sujet.Clear;
-  Notes.Clear;
+  Sujet := '';
+  Notes := '';
   Serie.Clear;
   Univers.Clear;
   UniversFull.Clear;
@@ -879,8 +899,8 @@ begin
         Self.TitreAlbum := Fields.ByNameAsString['titrealbum'];
         Self.AnneeParution := Fields.ByNameAsInteger['anneeparution'];
         Self.MoisParution := Fields.ByNameAsInteger['moisparution'];
-        Self.Sujet.Text := Fields.ByNameAsString['sujetalbum'];
-        Self.Notes.Text := Fields.ByNameAsString['remarquesalbum'];
+        Self.Sujet := Fields.ByNameAsString['sujetalbum'];
+        Self.Notes := Fields.ByNameAsString['remarquesalbum'];
         Self.Tome := Fields.ByNameAsInteger['tome'];
         Self.TomeDebut := Fields.ByNameAsInteger['tomedebut'];
         Self.TomeFin := Fields.ByNameAsInteger['tomefin'];
@@ -1012,10 +1032,10 @@ begin
       if NotInList(Auteur, Dest.Coloristes) then
         Dest.Coloristes.Add(TAuteur.Duplicate(Auteur) as TAuteur);
 
-    if not SameText(Sujet.Text, DefaultAlbum.Sujet.Text) then
-      Dest.Sujet.Assign(Sujet);
-    if not SameText(Notes.Text, DefaultAlbum.Notes.Text) then
-      Dest.Notes.Assign(Notes);
+    if not SameText(Sujet, DefaultAlbum.Sujet) then
+      Dest.Sujet := Sujet;
+    if not SameText(Notes, DefaultAlbum.Notes) then
+      Dest.Notes := Notes;
 
     // Série
     if not IsEqualGUID(ID_Serie, DefaultAlbum.ID_Serie) and not IsEqualGUID(ID_Serie, Dest.ID_Serie) then
@@ -1046,8 +1066,6 @@ begin
   FScenaristes := TObjectList<TAuteur>.Create;
   FDessinateurs := TObjectList<TAuteur>.Create;
   FColoristes := TObjectList<TAuteur>.Create;
-  FSujet := TStringList.Create;
-  FNotes := TStringList.Create;
   FSerie := TSerieComplete.Create;
   FEditions := TEditionsCompletes.Create;
   FUnivers := TObjectList<TUnivers>.Create;
@@ -1116,12 +1134,12 @@ begin
         Params.ByNameAsInteger['tomefin'] := TomeFin;
       Params.ByNameAsBoolean['integrale'] := Integrale;
       Params.ByNameAsBoolean['horsserie'] := HorsSerie;
-      S := Sujet.Text;
+      S := Sujet;
       if S <> '' then
         ParamsSetBlob('sujetalbum', S)
       else
         Params.ByNameIsNull['sujetalbum'] := True;
-      S := Notes.Text;
+      S := Notes;
       if S <> '' then
         ParamsSetBlob('remarquesalbum', S)
       else
@@ -1279,7 +1297,7 @@ begin
   Editeur.Clear;
   Collection.Clear;
   Couvertures.Clear;
-  Notes.Clear;
+  Notes := '';
 
   GetDefaultValues;
 
@@ -1380,7 +1398,7 @@ begin
         Self.FormatEdition := MakeOption(Fields.ByNameAsInteger['formatedition'], Trim(Fields.ByNameAsString['sformatedition']));
         Self.SensLecture := MakeOption(Fields.ByNameAsInteger['senslecture'], Trim(Fields.ByNameAsString['ssenslecture']));
         Self.DateAchat := Fields.ByNameAsDate['dateachat'];
-        Self.Notes.Text := Fields.ByNameAsString['notes'];
+        Self.Notes := Fields.ByNameAsString['notes'];
         Self.AnneeCote := Fields.ByNameAsInteger['anneecote'];
         Self.PrixCote := Fields.ByNameAsCurrency['prixcote'];
         Self.NumeroPerso := Fields.ByNameAsString['numeroperso'];
@@ -1460,8 +1478,8 @@ begin
       Dest.ISBN := ISBN;
     if DateAchat <> DefaultEdition.DateAchat then
       Dest.DateAchat := DateAchat;
-    if not SameText(Notes.Text, DefaultEdition.Notes.Text) then
-      Dest.Notes.Assign(Notes);
+    if not SameText(Notes, DefaultEdition.Notes) then
+      Dest.Notes := Notes;
     if NumeroPerso <> DefaultEdition.NumeroPerso then
       Dest.NumeroPerso := NumeroPerso;
 
@@ -1570,9 +1588,8 @@ begin
       end;
       Params.ByNameAsString['numeroperso'] := NumeroPerso;
 
-      S := Notes.Text;
-      if S <> '' then
-        ParamsSetBlob('notes', S)
+      if Notes <> '' then
+        ParamsSetBlob('notes', Notes)
       else
         Params.ByNameIsNull['notes'] := True;
       ExecSQL;
@@ -1752,7 +1769,6 @@ begin
   FEditeur := TEditeurComplet.Create;
   FCollection := TCollection.Create;
   FCouvertures := TMyObjectList<TCouverture>.Create;
-  FNotes := TStringList.Create;
 end;
 
 { TEditionsComplet }
@@ -1970,8 +1986,8 @@ begin
   Albums.Clear;
   ParaBD.Clear;
   Genres.Clear;
-  Sujet.Clear;
-  Notes.Clear;
+  Sujet := '';
+  Notes := '';
   Editeur.Clear;
   Collection.Clear;
   Scenaristes.Clear;
@@ -2085,8 +2101,8 @@ begin
         Self.Complete := Fields.ByNameAsBoolean['complete'];
         Self.SuivreManquants := RecInconnu or Fields.ByNameAsBoolean['suivremanquants'];
         Self.NbAlbums := Fields.ByNameAsInteger['nb_albums'];
-        Self.Sujet.Text := Fields.ByNameAsString['sujetserie'];
-        Self.Notes.Text := Fields.ByNameAsString['remarquesserie'];
+        Self.Sujet := Fields.ByNameAsString['sujetserie'];
+        Self.Notes := Fields.ByNameAsString['remarquesserie'];
         Self.SiteWeb := Trim(Fields.ByNameAsString['siteweb']);
 
         Self.TypeEdition := MakeOption(Fields.ByNameAsInteger['typeedition'], Trim(Fields.ByNameAsString['stypeedition']));
@@ -2243,8 +2259,6 @@ begin
   FAlbums := TObjectList<TAlbum>.Create(True);
   FParaBD := TObjectList<TParaBD>.Create(True);
   FGenres := TStringList.Create;
-  FSujet := TStringList.Create;
-  FNotes := TStringList.Create;
   FEditeur := TEditeurComplet.Create;
   FCollection := TCollection.Create;
   FUnivers := TObjectList<TUnivers>.Create(True);
@@ -2320,14 +2334,12 @@ begin
         else
           Params.ByNameAsString['id_collection'] := GUIDToString(Self.ID_Collection);
       end;
-      S := Self.Sujet.Text;
-      if S <> '' then
-        ParamsSetBlob('sujetserie', S)
+      if Self.Sujet <> '' then
+        ParamsSetBlob('sujetserie', Self.Sujet)
       else
         Params.ByNameIsNull['sujetserie'] := True;
-      S := Self.Notes.Text;
-      if S <> '' then
-        ParamsSetBlob('remarquesserie', S)
+      if Self.Notes <> '' then
+        ParamsSetBlob('remarquesserie', Self.Notes)
       else
         Params.ByNameIsNull['remarquesserie'] := True;
 
@@ -3021,7 +3033,7 @@ begin
       if not RecInconnu then
       begin
         Self.NomAuteur := Fields.ByNameAsString['nompersonne'];
-        Self.Biographie.Text := Fields.ByNameAsString['biographie'];
+        Self.Biographie := Fields.ByNameAsString['biographie'];
         Self.SiteWeb := Trim(Fields.ByNameAsString['siteweb']);
         FetchBlobs := False;
 
@@ -3068,12 +3080,9 @@ procedure TAuteurComplet.PrepareInstance;
 begin
   inherited;
   FSeries := TObjectList<TSerieComplete>.Create(True);
-  FBiographie := TStringList.Create;
 end;
 
 procedure TAuteurComplet.SaveToDatabase(UseTransaction: TUIBTransaction);
-var
-  S: string;
 begin
   inherited;
   with TUIBQuery.Create(nil) do
@@ -3093,9 +3102,8 @@ begin
         Params.ByNameAsString['id_personne'] := GUIDToString(ID_Auteur);
       Params.ByNameAsString['nompersonne'] := Trim(NomAuteur);
       Params.ByNameAsString['siteweb'] := Trim(SiteWeb);
-      S := Biographie.Text;
-      if S <> '' then
-        ParamsSetBlob('biographie', S)
+      if Self.Biographie <> '' then
+        ParamsSetBlob('biographie', Self.Biographie)
       else
         Params.ByNameIsNull['biographie'] := True;
       ExecSQL;
@@ -3169,7 +3177,7 @@ begin
   TitreParaBD := '';
 
   Auteurs.Clear;
-  Description.Clear;
+  Description := '';
   Serie.Clear;
   Univers.Clear;
   UniversFull.Clear;
@@ -3217,7 +3225,7 @@ begin
       begin
         Self.TitreParaBD := Fields.ByNameAsString['titreparabd'];
         Self.AnneeEdition := Fields.ByNameAsInteger['annee'];
-        Self.Description.Text := Fields.ByNameAsString['description'];
+        Self.Description := Fields.ByNameAsString['description'];
         Self.CategorieParaBD := MakeOption(Fields.ByNameAsInteger['categorieparabd'], Fields.ByNameAsString['scategorieparabd']);
         Self.Prix := Fields.ByNameAsCurrency['prix'];
         Self.Dedicace := Fields.ByNameAsBoolean['dedicace'];
@@ -3332,9 +3340,8 @@ begin
       Params.ByNameAsInteger['categorieparabd'] := CategorieParaBD.Value;
       Params.ByNameAsBoolean['dedicace'] := Dedicace;
       Params.ByNameAsBoolean['numerote'] := Numerote;
-      S := Description.Text;
-      if S <> '' then
-        ParamsSetBlob('description', S)
+      if Description <> '' then
+        ParamsSetBlob('description', Description)
       else
         Params.ByNameIsNull['description'] := True;
       Params.ByNameAsBoolean['gratuit'] := Gratuit;
@@ -3466,7 +3473,6 @@ end;
 procedure TParaBDComplet.PrepareInstance;
 begin
   inherited;
-  FDescription := TStringList.Create;
   FAuteurs := TObjectList<TAuteur>.Create;
   FSerie := TSerieComplete.Create;
   FUnivers := TObjectList<TUnivers>.Create;
@@ -4385,7 +4391,7 @@ begin
       begin
         Self.NomUnivers := Fields.ByNameAsString['nomunivers'];
         Self.ID_UniversParent := StringToGUIDDef(Fields.ByNameAsString['id_univers_parent'], GUID_NULL);
-        Self.Description.Text := Fields.ByNameAsString['description'];
+        Self.Description := Fields.ByNameAsString['description'];
         Self.SiteWeb := Trim(Fields.ByNameAsString['siteweb']);
       end;
     finally
@@ -4403,12 +4409,9 @@ procedure TUniversComplet.PrepareInstance;
 begin
   inherited;
   FUniversParent := TUnivers.Create;
-  FDescription := TStringList.Create;
 end;
 
 procedure TUniversComplet.SaveToDatabase(UseTransaction: TUIBTransaction);
-var
-  S: string;
 begin
   inherited;
   with TUIBQuery.Create(nil) do
@@ -4428,9 +4431,8 @@ begin
         Params.ByNameAsString['id_univers'] := GUIDToString(ID_Univers);
       Params.ByNameAsString['nomunivers'] := Trim(NomUnivers);
       Params.ByNameAsString['siteweb'] := Trim(SiteWeb);
-      S := Description.Text;
-      if S <> '' then
-        ParamsSetBlob('description', S)
+      if Description <> '' then
+        ParamsSetBlob('description', Description)
       else
         Params.ByNameIsNull['description'] := True;
       if IsEqualGUID(GUID_NULL, ID_UniversParent) then

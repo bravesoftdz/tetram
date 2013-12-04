@@ -930,14 +930,16 @@ end;
 function GetJPEGStream(const Fichier: string): TStream;
 
   function MatchesMask(const Fichier, Mask: string): Boolean;
+  var
+    sl: TStringList;
   begin
-    with TStringList.Create do
-      try
-        Text := StringReplace(LowerCase(Mask), ';', #13#10, [rfReplaceAll]);
-        Result := IndexOf('*' + Fichier) <> -1;
-      finally
-        Free;
-      end;
+    sl := TStringList.Create;
+    try
+      sl.Text := StringReplace(LowerCase(Mask), ';', #13#10, [rfReplaceAll]);
+      Result := sl.IndexOf('*' + Fichier) <> -1;
+    finally
+      sl.Free;
+    end;
   end;
 
 var

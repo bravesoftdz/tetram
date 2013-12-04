@@ -68,7 +68,7 @@ object frmEditParaBD: TfrmEditParaBD
       Height = 13
       Alignment = taRightJustify
       Caption = 'Description :'
-      FocusControl = description
+      FocusControl = edDescription
     end
     object btCreateur: TVDTButton
       Tag = 1
@@ -327,7 +327,7 @@ object frmEditParaBD: TfrmEditParaBD
         end>
       CurrencyChar = #0
     end
-    object description: TMemoLabeled
+    object edDescription: TMemoLabeled
       Left = 68
       Top = 132
       Width = 436
@@ -808,7 +808,7 @@ object frmEditParaBD: TfrmEditParaBD
       inherited VTEdit: TJvComboEdit
         Width = 141
         OnChange = vtEditUniversVTEditChange
-        ExplicitWidth = 373
+        ExplicitWidth = 141
       end
     end
     object lvUnivers: TVDTListViewLabeled

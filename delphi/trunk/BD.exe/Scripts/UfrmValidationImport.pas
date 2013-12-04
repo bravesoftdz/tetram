@@ -206,7 +206,7 @@ end;
 
 procedure TfrmValidationImport.framBoutons1btnOKClick(Sender: TObject);
 
-  function SetValue(Ctrl: TEdit; Chk: TCheckBox; const Defaut: string): string; overload;
+  function SetValue(Ctrl: TCustomEdit; Chk: TCheckBox; const Defaut: string): string; overload;
   begin
     if Chk.Checked then
       Result := Ctrl.Text
@@ -313,8 +313,8 @@ begin
   SetValue(FAlbum.Scenaristes, cklScenaristes, CheckBox8);
   SetValue(FAlbum.Dessinateurs, cklDessinateurs, CheckBox9);
   SetValue(FAlbum.Coloristes, cklColoristes, CheckBox10);
-  SetValue(FAlbum.Sujet, mmResumeAlbum, CheckBox11);
-  SetValue(FAlbum.Notes, mmNotesAlbum, CheckBox12);
+  FAlbum.Sujet := SetValue(mmResumeAlbum, CheckBox11, DefaultValues.Sujet);
+  FAlbum.Notes := SetValue(mmNotesAlbum, CheckBox12, DefaultValues.Notes);
 
   // Série
   FAlbum.Serie.TitreSerie := SetValue(edTitreSerie, CheckBox13, DefaultValues.Serie.TitreSerie);
@@ -325,8 +325,8 @@ begin
   SetValue(FAlbum.Serie.Scenaristes, cklScenaristesSerie, CheckBoxLabeled2);
   SetValue(FAlbum.Serie.Dessinateurs, cklDessinateursSerie, CheckBoxLabeled3);
   SetValue(FAlbum.Serie.Coloristes, cklColoristesSerie, CheckBoxLabeled4);
-  SetValue(FAlbum.Serie.Sujet, mmResumeSerie, CheckBox17);
-  SetValue(FAlbum.Serie.Notes, mmNotesSerie, CheckBox18);
+  FAlbum.Serie.Sujet := SetValue(mmResumeSerie, CheckBox17, DefaultValues.Serie.Sujet);
+  FAlbum.Serie.Notes := SetValue(mmNotesSerie, CheckBox18, DefaultValues.Serie.Notes);
   FAlbum.Serie.Editeur.NomEditeur := SetValue(edNomEditeurSerie, CheckBoxLabeled5, DefaultValues.Serie.Editeur.NomEditeur);
   FAlbum.Serie.Editeur.SiteWeb := SetValue(edSiteWebEditeurSerie, CheckBoxLabeled6, DefaultValues.Serie.Editeur.SiteWeb);
   FAlbum.Serie.Collection.NomCollection := SetValue(edCollectionSerie, CheckBoxLabeled7, DefaultValues.Serie.Collection.NomCollection);
@@ -412,7 +412,7 @@ procedure TfrmValidationImport.SetAlbum(Value: TAlbumComplet);
     Ctrl.Enabled := Chk.Enabled and not(Ctrl is TPanel);
   end;
 
-  procedure LoadValue(const Value: string; Ctrl: TEdit; Chk: TCheckBox; const Defaut: string); overload;
+  procedure LoadValue(const Value: string; Ctrl: TCustomEdit; Chk: TCheckBox; const Defaut: string); overload;
   begin
     Ctrl.Text := Value;
     Chk.Checked := Value <> Defaut;
@@ -532,8 +532,8 @@ begin
   LoadValue(FAlbum.Scenaristes, cklScenaristes, CheckBox8);
   LoadValue(FAlbum.Dessinateurs, cklDessinateurs, CheckBox9);
   LoadValue(FAlbum.Coloristes, cklColoristes, CheckBox10);
-  LoadValue(FAlbum.Sujet, mmResumeAlbum, CheckBox11);
-  LoadValue(FAlbum.Notes, mmNotesAlbum, CheckBox12);
+  LoadValue(FAlbum.Sujet, mmResumeAlbum, CheckBox11, DefaultValues.Sujet);
+  LoadValue(FAlbum.Notes, mmNotesAlbum, CheckBox12, DefaultValues.Notes);
 
   // Série
   LoadValue(FAlbum.Serie.TitreSerie, edTitreSerie, CheckBox13, DefaultValues.Serie.TitreSerie);
@@ -544,8 +544,8 @@ begin
   LoadValue(FAlbum.Serie.Scenaristes, cklScenaristesSerie, CheckBoxLabeled2);
   LoadValue(FAlbum.Serie.Dessinateurs, cklDessinateursSerie, CheckBoxLabeled3);
   LoadValue(FAlbum.Serie.Coloristes, cklColoristesSerie, CheckBoxLabeled4);
-  LoadValue(FAlbum.Serie.Sujet, mmResumeSerie, CheckBox17);
-  LoadValue(FAlbum.Serie.Notes, mmNotesSerie, CheckBox18);
+  LoadValue(FAlbum.Serie.Sujet, mmResumeSerie, CheckBox17, DefaultValues.Serie.Sujet);
+  LoadValue(FAlbum.Serie.Notes, mmNotesSerie, CheckBox18, DefaultValues.Serie.Notes);
   LoadValue(FAlbum.Serie.Editeur.NomEditeur, edNomEditeurSerie, CheckBoxLabeled5, DefaultValues.Serie.Editeur.NomEditeur);
   LoadValue(FAlbum.Serie.Editeur.SiteWeb, edSiteWebEditeurSerie, CheckBoxLabeled6, DefaultValues.Serie.Editeur.SiteWeb);
   LoadValue(FAlbum.Serie.Collection.NomCollection, edCollectionSerie, CheckBoxLabeled7, DefaultValues.Serie.Collection.NomCollection);

@@ -8,29 +8,28 @@ uses UIB, Updates;
 
 procedure MAJ0_0_3_16(Query: TUIBScript);
 begin
-  with Query do begin
-    Script.Clear;
+  Query.Script.Clear;
 
-    Script.Add('DECLARE EXTERNAL FUNCTION UDF_DELETEFILE');
-    Script.Add('    CSTRING(32767)');
-    Script.Add('RETURNS INTEGER BY VALUE');
-    Script.Add('ENTRY_POINT ''DeleteFile'' MODULE_NAME ''BDT_UDF.dll'';');
+  Query.Script.Add('DECLARE EXTERNAL FUNCTION UDF_DELETEFILE');
+  Query.Script.Add('    CSTRING(32767)');
+  Query.Script.Add('RETURNS INTEGER BY VALUE');
+  Query.Script.Add('ENTRY_POINT ''DeleteFile'' MODULE_NAME ''BDT_UDF.dll'';');
 
-    Script.Add('CREATE PROCEDURE DELETEFILE (');
-    Script.Add('    FICHIER VARCHAR(255) CHARACTER SET NONE)');
-    Script.Add('RETURNS (');
-    Script.Add('    RESULT INTEGER)');
-    Script.Add('AS');
-    Script.Add('begin');
-    Script.Add('  select UDF_DELETEFILE(:Fichier) from rdb$database into :Result;');
-    Script.Add('  suspend;');
-    Script.Add('end;');
+  Query.Script.Add('CREATE PROCEDURE DELETEFILE (');
+  Query.Script.Add('    FICHIER VARCHAR(255) CHARACTER SET NONE)');
+  Query.Script.Add('RETURNS (');
+  Query.Script.Add('    RESULT INTEGER)');
+  Query.Script.Add('AS');
+  Query.Script.Add('begin');
+  Query.Script.Add('  select UDF_DELETEFILE(:Fichier) from rdb$database into :Result;');
+  Query.Script.Add('  suspend;');
+  Query.Script.Add('end;');
 
-    ExecuteScript;
-  end;
+  Query.ExecuteScript;
 end;
 
 initialization
-  RegisterFBUpdate('0.0.3.16', @MAJ0_0_3_16);
+
+RegisterFBUpdate('0.0.3.16', @MAJ0_0_3_16);
 
 end.

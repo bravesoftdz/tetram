@@ -8,20 +8,17 @@ implementation
 
 procedure MAJ1_0_0_1(Script: TStrings);
 begin
-  with Script do
-  begin
-    Clear;
-    Add('ALTER TABLE /*DB_PREFIX*/series');
-    Add('  add etat int(11) default NULL,');
-    Add('  add reliure int(11) default NULL,');
-    Add('  add typeedition int(11) default NULL,');
-    Add('  add orientation int(11) default NULL,');
-    Add('  add formatedition int(11) default NULL,');
-    Add('  add senslecture int(11) default NULL,');
-    Add('  add vo smallint(6) default 0,');
-    Add('  add couleur smallint(6) default 0;');
-    Add('@@');
-  end;
+  Script.Clear;
+  Script.Add('ALTER TABLE /*DB_PREFIX*/series');
+  Script.Add('  add etat int(11) default NULL,');
+  Script.Add('  add reliure int(11) default NULL,');
+  Script.Add('  add typeedition int(11) default NULL,');
+  Script.Add('  add orientation int(11) default NULL,');
+  Script.Add('  add formatedition int(11) default NULL,');
+  Script.Add('  add senslecture int(11) default NULL,');
+  Script.Add('  add vo smallint(6) default 0,');
+  Script.Add('  add couleur smallint(6) default 0;');
+  Script.Add('@@');
 end;
 
 initialization

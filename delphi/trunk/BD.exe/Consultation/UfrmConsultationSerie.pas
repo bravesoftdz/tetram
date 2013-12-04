@@ -18,8 +18,8 @@ type
     Label7: TLabel;
     TitreSerie: TLabel;
     Bevel1: TBevel;
-    remarques: TMemo;
-    sujet: TMemo;
+    edRemarques: TMemo;
+    edSujet: TMemo;
     lvScenaristes: TVDTListView;
     lvDessinateurs: TVDTListView;
     lvColoristes: TVDTListView;
@@ -143,8 +143,8 @@ begin
   Collection.Caption := FSerie.Collection.ChaineAffichage;
   cbTerminee.State := TCheckBoxState(FSerie.Terminee);
 
-  sujet.Text := FSerie.sujet.Text;
-  remarques.Text := FSerie.Notes.Text;
+  edSujet.Text := FSerie.Sujet;
+  edRemarques.Text := FSerie.Notes;
 
   s := '';
   for i := 0 to Pred(FSerie.Genres.Count) do

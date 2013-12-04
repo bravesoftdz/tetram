@@ -28,7 +28,7 @@ type
     class function Duplicate(Ps: TBasePointeur): TBasePointeur;
     class function Make(Query: TUIBQuery): TBasePointeur;
     class procedure VideListe(LV: TListView; DoClear: Boolean = True); overload;
-    class procedure VideListe(List: TList; DoClear: Boolean = True); overload;
+    class procedure VideListe(List: TList<TBasePointeur>; DoClear: Boolean = True); overload;
     class procedure VideListe(ListBox: TListBox; DoClear: Boolean = True); overload;
 
     procedure Clear; virtual;
@@ -36,7 +36,6 @@ type
     function ChaineAffichage(dummy: Boolean = True): string; virtual; abstract;
 
     class procedure FillList(List: TList<TBasePointeur>; Query: TUIBQuery); overload;
-    class procedure FillList(List: TList; Query: TUIBQuery); overload;
     class procedure Prepare(Q: TUIBQuery);
     class procedure Unprepare;
   end;
@@ -308,7 +307,7 @@ begin
   end;
 end;
 
-class procedure TBasePointeur.VideListe(List: TList; DoClear: Boolean = True);
+class procedure TBasePointeur.VideListe(List: TList<TBasePointeur>; DoClear: Boolean = True);
 var
   i: Integer;
 begin
@@ -404,20 +403,6 @@ begin
 end;
 
 class procedure TBasePointeur.FillList(List: TList<TBasePointeur>; Query: TUIBQuery);
-begin
-  Prepare(Query);
-  try
-    while not Query.Eof do
-    begin
-      List.Add(Make(Query));
-      Query.Next;
-    end;
-  finally
-    Unprepare;
-  end;
-end;
-
-class procedure TBasePointeur.FillList(List: TList; Query: TUIBQuery);
 begin
   Prepare(Query);
   try

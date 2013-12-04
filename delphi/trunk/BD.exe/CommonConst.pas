@@ -3,13 +3,13 @@ unit CommonConst;
 interface
 
 {$WARN UNIT_PLATFORM OFF}
+
 uses
   SysUtils,
   Windows,
   Forms,
   Classes,
-  Divers,
-  Contnrs;
+  Divers;
 
 const
   AppData: string = 'TetramCorp\BDTheque\';
@@ -136,36 +136,42 @@ begin
   end;
 end;
 
+procedure ReadIniFile;
+var
+  ini: TIniFile;
+begin
+  ini := TIniFile.Create(FichierIni);
+  try
+    DatabasePath := ini.ReadString('Database', 'Database', DatabasePath);
+    DatabaseUserName := ini.ReadString('Database', 'UserName', DatabaseUserName);
+    DatabasePassword := ini.ReadString('Database', 'Password', DatabasePassword);
+    DatabaseRole := ini.ReadString('Database', 'Role', DatabaseRole);
+    DatabaseLibraryName := ini.ReadString('Database', 'LibraryName', DatabaseLibraryName);
+    RepImages := IncludeTrailingPathDelimiter(ini.ReadString('DIVERS', 'RepImages', RepImages));
+    RepScripts := IncludeTrailingPathDelimiter(ini.ReadString('DIVERS', 'Scripts', RepScripts));
+
+    TGlobalVar.Utilisateur.Options.VerifMAJDelai := ini.ReadInteger('Divers', 'VerifMAJDelai', 4);
+    TGlobalVar.Utilisateur.Options.LastVerifMAJ := ini.ReadInteger('Divers', 'LastVerifMAJ', 0);
+  finally
+    ini.Free;
+  end;
+end;
+
 initialization
 
 InitPath;
 FormatMonnaieCourt := '#,##0.00';
 FormatMonnaieSimple := '0.00';
 FormatMonnaie := IIf(FormatSettings.CurrencyFormat in [0, 2], FormatSettings.CurrencyString + IIf(FormatSettings.CurrencyFormat = 2, ' ', ''), '') +
-  FormatMonnaieCourt + IIf(FormatSettings.CurrencyFormat in [1, 3], IIf(FormatSettings.CurrencyFormat = 3, ' ', '') +
-    FormatSettings.CurrencyString, '');
+  FormatMonnaieCourt + IIf(FormatSettings.CurrencyFormat in [1, 3], IIf(FormatSettings.CurrencyFormat = 3, ' ', '') + FormatSettings.CurrencyString, '');
 FormatPourcent := '%d (%f%%)';
 TGlobalVar.Utilisateur.ExeVersion := GetFichierVersion(Application.ExeName);
-TGlobalVar.Utilisateur.AppVersion := Format('%d.%d', [TGlobalVar.Utilisateur.ExeVersion.MajorVersion,
-    TGlobalVar.Utilisateur.ExeVersion.MinorVersion]);
-with TIniFile.Create(FichierIni) do
-  try
-    DatabasePath := ReadString('Database', 'Database', DatabasePath);
-    DatabaseUserName := ReadString('Database', 'UserName', DatabaseUserName);
-    DatabasePassword := ReadString('Database', 'Password', DatabasePassword);
-    DatabaseRole := ReadString('Database', 'Role', DatabaseRole);
-    DatabaseLibraryName := ReadString('Database', 'LibraryName', DatabaseLibraryName);
-    RepImages := IncludeTrailingPathDelimiter(ReadString('DIVERS', 'RepImages', RepImages));
-    RepScripts := IncludeTrailingPathDelimiter(ReadString('DIVERS', 'Scripts', RepScripts));
-
-    TGlobalVar.Utilisateur.Options.VerifMAJDelai := ReadInteger('Divers', 'VerifMAJDelai', 4);
-    TGlobalVar.Utilisateur.Options.LastVerifMAJ := ReadInteger('Divers', 'LastVerifMAJ', 0);
-  finally
-    Free;
-  end;
+TGlobalVar.Utilisateur.AppVersion := Format('%d.%d', [TGlobalVar.Utilisateur.ExeVersion.MajorVersion, TGlobalVar.Utilisateur.ExeVersion.MinorVersion]);
+ReadIniFile;
 
 finalization
 
-if HandleDLLPic <> 0 then FreeLibrary(HandleDLLPic);
+if HandleDLLPic <> 0 then
+  FreeLibrary(HandleDLLPic);
 
 end.

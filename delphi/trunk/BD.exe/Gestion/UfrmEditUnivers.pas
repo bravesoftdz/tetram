@@ -100,7 +100,7 @@ begin
   FUnivers.FillAssociations(vmUnivers);
 
   edNom.Text := FUnivers.NomUnivers;
-  edDescription.Text := FUnivers.Description.Text;
+  edDescription.Text := FUnivers.Description;
   edSite.Text := FUnivers.SiteWeb;
 
   vtAlbums.Filtre := 'branche_univers containing ' + QuotedStr('|' + GUIDToString(ID_Univers) + '|');

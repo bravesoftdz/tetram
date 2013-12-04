@@ -57,14 +57,24 @@ begin
   T := Self.Serie;
 end;
 
-procedure TAlbumCompletNotes_R(Self: TAlbumComplet; var T: TStringList);
+procedure TAlbumCompletNotes_R(Self: TAlbumComplet; var T: string);
 begin
   T := Self.Notes;
 end;
 
-procedure TAlbumCompletSujet_R(Self: TAlbumComplet; var T: TStringList);
+procedure TAlbumCompletNotes_W(Self: TAlbumComplet; const T: string);
+begin
+  Self.Notes := T;
+end;
+
+procedure TAlbumCompletSujet_R(Self: TAlbumComplet; var T: string);
 begin
   T := Self.Sujet;
+end;
+
+procedure TAlbumCompletSujet_W(Self: TAlbumComplet; const T: string);
+begin
+  Self.Sujet := T;
 end;
 
 procedure TAlbumCompletColoristes_R(Self: TAlbumComplet; var T: TObjectList<TAuteur>);
@@ -187,9 +197,14 @@ begin
   T := Self.Items[t1];
 end;
 
-procedure TEditionCompleteNotes_R(Self: TEditionComplete; var T: TStringList);
+procedure TEditionCompleteNotes_R(Self: TEditionComplete; var T: string);
 begin
   T := Self.Notes;
+end;
+
+procedure TEditionCompleteNotes_W(Self: TEditionComplete; const T: string);
+begin
+  Self.Notes := T;
 end;
 
 procedure TEditionCompleteDateAchat_W(Self: TEditionComplete; const T: TDateTime);
@@ -447,14 +462,24 @@ begin
   T := Self.SiteWeb;
 end;
 
-procedure TSerieCompleteNotes_R(Self: TSerieComplete; var T: TStringList);
+procedure TSerieCompleteNotes_R(Self: TSerieComplete; var T: string);
 begin
   T := Self.Notes;
 end;
 
-procedure TSerieCompleteSujet_R(Self: TSerieComplete; var T: TStringList);
+procedure TSerieCompleteNotes_W(Self: TSerieComplete; const T: string);
+begin
+  Self.Notes := T;
+end;
+
+procedure TSerieCompleteSujet_R(Self: TSerieComplete; var T: string);
 begin
   T := Self.Sujet;
+end;
+
+procedure TSerieCompleteSujet_W(Self: TSerieComplete; const T: string);
+begin
+  Self.Sujet := T;
 end;
 
 procedure TSerieCompleteGenres_R(Self: TSerieComplete; var T: TStringList);
@@ -612,8 +637,8 @@ begin
     RegisterPropertyHelper(@TAlbumCompletScenaristes_R, nil, 'Scenaristes');
     RegisterPropertyHelper(@TAlbumCompletDessinateurs_R, nil, 'Dessinateurs');
     RegisterPropertyHelper(@TAlbumCompletColoristes_R, nil, 'Coloristes');
-    RegisterPropertyHelper(@TAlbumCompletSujet_R, nil, 'Sujet');
-    RegisterPropertyHelper(@TAlbumCompletNotes_R, nil, 'Notes');
+    RegisterPropertyHelper(@TAlbumCompletSujet_R, @TAlbumCompletSujet_W, 'Sujet');
+    RegisterPropertyHelper(@TAlbumCompletNotes_R, @TAlbumCompletNotes_W, 'Notes');
     RegisterPropertyHelper(@TAlbumCompletEdition_R, nil, 'Edition');
 
     RegisterMethod(@TAlbumComplet.Clear, 'Clear');
@@ -628,8 +653,8 @@ begin
     RegisterPropertyHelper(@TSerieCompleteTitre_R, @TSerieCompleteTitre_W, 'Titre');
     RegisterPropertyHelper(@TSerieCompleteTerminee_R, @TSerieCompleteTerminee_W, 'Terminee');
     RegisterPropertyHelper(@TSerieCompleteGenres_R, nil, 'Genres');
-    RegisterPropertyHelper(@TSerieCompleteSujet_R, nil, 'Sujet');
-    RegisterPropertyHelper(@TSerieCompleteNotes_R, nil, 'Notes');
+    RegisterPropertyHelper(@TSerieCompleteSujet_R, @TSerieCompleteSujet_W, 'Sujet');
+    RegisterPropertyHelper(@TSerieCompleteNotes_R, @TSerieCompleteNotes_W, 'Notes');
     RegisterPropertyHelper(@TSerieCompleteEditeur_R, nil, 'Editeur');
     RegisterPropertyHelper(@TSerieCompleteCollection_R, @TSerieCompleteCollection_W, 'Collection');
     RegisterPropertyHelper(@TSerieCompleteSiteWeb_R, @TSerieCompleteSiteWeb_W, 'SiteWeb');
@@ -667,7 +692,7 @@ begin
     RegisterPropertyHelper(@TEditionCompleteGratuit_R, @TEditionCompleteGratuit_W, 'Gratuit');
     RegisterPropertyHelper(@TEditionCompleteISBN_R, @TEditionCompleteISBN_W, 'ISBN');
     //    RegisterPropertyHelper(@TEditionCompleteDateAchat_R, @TEditionCompleteDateAchat_W, 'DateAchat');
-    //    RegisterPropertyHelper(@TEditionCompleteNotes_R, nil, 'Notes');
+    //    RegisterPropertyHelper(@TEditionCompleteNotes_R, @TEditionCompleteNotes_W, 'Notes');
     //    RegisterPropertyHelper(@TEditionCompleteNumeroPerso_R, @TEditionCompleteNumeroPerso_W, 'NumeroPerso');
     //    RegisterPropertyHelper(@TEditionCompleteCouvertures_R, nil, 'Couvertures');
     RegisterMethod(@AddImageFromURL, 'AddImageFromURL');

@@ -4,8 +4,8 @@ unit UfrmPreview;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ComCtrls, StdCtrls, ExtCtrls, ToolWin, Menus, Printers, PrintObject, ImgList, UBdtForms;
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Generics.Collections,
+  StdCtrls, ExtCtrls, ToolWin, Menus, Printers, PrintObject, ImgList, UBdtForms, ComCtrls;
 
 type
   TfrmPreview = class(TBdtForm, IPrintObjectPreview)
@@ -69,12 +69,12 @@ type
     { Déclarations publiques }
     HeightMM: Single;
     WidthMM: Single;
-    FPages: TList;
+    FPages: TList<TGraphic>;
     PosClick: TPoint;
     Moving: Boolean;
     procedure Abort; safecall;
     procedure Quit; safecall;
-    function Pages: TList; safecall;
+    function Pages: TList<TGraphic>; safecall;
     procedure SetHeightMM(const Value: Single); safecall;
     procedure SetWidthMM(const Value: Single); safecall;
     procedure SetCaption(const Title: string); safecall;
@@ -164,7 +164,7 @@ begin
   ToolButton8.Hint := quitter;
   Fnumeropage := 0;
   Icon := TApplication(Owner).Icon;
-  FPages := TList.Create;
+  FPages := TList<TGraphic>.Create;
   ScrollBarV.Top := 0;
   ScrollBarV.Height := Panel.Height;
   ScrollBarV.Left := Panel.Width - ScrollBarV.Width;
@@ -293,12 +293,12 @@ begin
     end;
 
     if Page > 0 then begin
-      Source1 := TGraphic(Pages[Page - 1]);
+      Source1 := Pages[Page - 1];
       Source1Width := Source1.Width;
       Source1Height := Source1.Height;
     end;
     if DoublePage and (Page < Pages.Count) then begin
-      Source2 := TGraphic(Pages[Page]);
+      Source2 := Pages[Page];
       Source2Width := Source2.Width;
       Source2Height := Source2.Height;
     end;
@@ -418,7 +418,7 @@ var
 begin
   OnResize := nil;
   for i := 0 to Maximum - 1 do
-    TImage(Pages[i]).Free;
+    Pages[i].Free;
   Pages.Free;
 end;
 
@@ -549,7 +549,7 @@ begin
   Self.Release;
 end;
 
-function TfrmPreview.Pages: TList;
+function TfrmPreview.Pages: TList<TGraphic>;
 begin
   Result := FPages;
 end;

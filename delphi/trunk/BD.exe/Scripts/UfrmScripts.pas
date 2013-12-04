@@ -469,6 +469,7 @@ procedure TfrmScripts.ListView1SelectItem(Sender: TObject; Item: TListItem; Sele
 var
   Option: TOption;
   Script: TScript;
+  qry: TUIBQuery;
 begin
   if Selected and Assigned(Item) then
   begin
@@ -477,24 +478,26 @@ begin
     MasterEngine.SelectProjectScript(Script);
 
     if MasterEngine.ProjectScript.Options.Count > 0 then
-      with TUIBQuery.Create(nil) do
-        try
-          Transaction := GetTransaction(dmPrinc.UIBDataBase);
-          SQL.Text := 'select nom_option, valeur from options_scripts where script = :script';
-          Prepare(True);
-          Params.AsString[0] := Copy(string(MasterEngine.ProjectScript.ScriptUnitName), 1, Params.MaxStrLen[0]);
-          Open;
-          while not Eof do
-          begin
-            Option := MasterEngine.ProjectScript.OptionByName(Fields.AsString[0]);
-            if Assigned(Option) then
-              Option.ChooseValue := Fields.AsString[1];
-            Next;
-          end;
-        finally
-          Transaction.Free;
-          Free;
+    begin
+      qry := TUIBQuery.Create(nil);
+      try
+        qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
+        qry.SQL.Text := 'select nom_option, valeur from options_scripts where script = :script';
+        qry.Prepare(True);
+        qry.Params.AsString[0] := Copy(string(MasterEngine.ProjectScript.ScriptUnitName), 1, qry.Params.MaxStrLen[0]);
+        qry.Open;
+        while not qry.Eof do
+        begin
+          Option := MasterEngine.ProjectScript.OptionByName(qry.Fields.AsString[0]);
+          if Assigned(Option) then
+            Option.ChooseValue := qry.Fields.AsString[1];
+          qry.Next;
         end;
+      finally
+        qry.Transaction.Free;
+        qry.Free;
+      end;
+    end;
   end
   else
   begin
@@ -691,8 +694,6 @@ begin
 end;
 
 procedure TfrmScripts.FormDestroy(Sender: TObject);
-var
-  i: Integer;
 begin
   ProjetOuvert := False;
   MasterEngine.TypeEngine := seNone;

@@ -52,6 +52,9 @@ object frmValidationImport: TfrmValidationImport
     TabOrder = 1
     object TabSheet1: TTabSheet
       Caption = 'Album'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
       ExplicitHeight = 474
       object Label17: TLabel
         Left = 428
@@ -476,6 +479,9 @@ object frmValidationImport: TfrmValidationImport
     object TabSheet2: TTabSheet
       Caption = 'S'#233'rie'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
       ExplicitHeight = 474
       object edTitreSerie: TEditLabeled
         Left = 144
@@ -910,6 +916,9 @@ object frmValidationImport: TfrmValidationImport
     object TabSheet3: TTabSheet
       Caption = 'Edition'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
       ExplicitHeight = 486
       object cbxEtat: TLightComboCheck
         Left = 144

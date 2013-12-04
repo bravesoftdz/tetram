@@ -285,8 +285,8 @@ begin
     edTomeFin.Text := NonZero(IntToStr(FAlbum.TomeFin));
     cbIntegrale.Checked := FAlbum.Integrale;
     cbHorsSerie.Checked := FAlbum.HorsSerie;
-    histoire.Text := FAlbum.Sujet.Text;
-    remarques.Text := FAlbum.Notes.Text;
+    histoire.Text := FAlbum.Sujet;
+    remarques.Text := FAlbum.Notes;
     cbIntegraleClick(cbIntegrale);
 
     lvUnivers.Items.Count := FAlbum.Univers.Count;
@@ -567,8 +567,8 @@ begin
     FAlbum.TomeFin := StrToInt(edTomeFin.Text);
   FAlbum.Integrale := cbIntegrale.Checked;
   FAlbum.HorsSerie := cbHorsSerie.Checked;
-  FAlbum.Sujet.Text := histoire.Text;
-  FAlbum.Notes.Text := remarques.Text;
+  FAlbum.Sujet := histoire.Text;
+  FAlbum.Notes := remarques.Text;
 end;
 
 procedure TfrmEditAlbum.framVTEdit1VTEditChange(Sender: TObject);
@@ -952,7 +952,7 @@ begin
       FCurrentEditionComplete.DateAchat := Trunc(dtpAchat.Date)
     else
       FCurrentEditionComplete.DateAchat := 0;
-    FCurrentEditionComplete.Notes.Text := edNotes.Text;
+    FCurrentEditionComplete.Notes := edNotes.Text;
     FCurrentEditionComplete.NumeroPerso := edNumPerso.Text;
   end;
 end;
@@ -1024,7 +1024,7 @@ begin
         edPrixCote.Text := ''
       else
         edPrixCote.Text := FormatCurr(FormatMonnaie, FCurrentEditionComplete.PrixCote);
-      edNotes.Text := FCurrentEditionComplete.Notes.Text;
+      edNotes.Text := FCurrentEditionComplete.Notes;
       edNumPerso.Text := FCurrentEditionComplete.NumeroPerso;
       vstImages.RootNodeCount := FCurrentEditionComplete.Couvertures.Count;
     end;

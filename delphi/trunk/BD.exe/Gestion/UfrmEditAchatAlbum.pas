@@ -149,8 +149,8 @@ begin
     edTomeFin.Text := NonZero(IntToStr(FAlbum.TomeFin));
     cbIntegrale.Checked := FAlbum.Integrale;
     cbHorsSerie.Checked := FAlbum.HorsSerie;
-    histoire.Text := FAlbum.Sujet.Text;
-    remarques.Text := FAlbum.Notes.Text;
+    histoire.Text := FAlbum.Sujet;
+    remarques.Text := FAlbum.Notes;
     cbIntegraleClick(cbIntegrale);
 
     lvScenaristes.Items.BeginUpdate;
@@ -208,7 +208,7 @@ begin
       ModalResult := mrNone;
       Exit;
     end;
-    if not (StrToIntDef(edMoisParution.Text, 1) in [1..12]) then
+    if not(StrToIntDef(edMoisParution.Text, 1) in [1 .. 12]) then
     begin
       AffMessage(rsMoisParutionIncorrect, mtInformation, [mbOk], True);
       edMoisParution.SetFocus;
@@ -273,8 +273,8 @@ begin
     FAlbum.TomeFin := StrToInt(edTomeFin.Text);
   FAlbum.Integrale := cbIntegrale.Checked;
   FAlbum.HorsSerie := cbHorsSerie.Checked;
-  FAlbum.Sujet.Text := histoire.Text;
-  FAlbum.Notes.Text := remarques.Text;
+  FAlbum.Sujet := histoire.Text;
+  FAlbum.Notes := remarques.Text;
 end;
 
 procedure TfrmEditAchatAlbum.vtEditPersonnesVTEditChange(Sender: TObject);
@@ -297,9 +297,9 @@ var
 
 begin
   IdPersonne := vtEditPersonnes.CurrentValue;
-  btScenariste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVScenaristes);
-  btDessinateur.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVDessinateurs);
-  btColoriste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(LVColoristes);
+  btScenariste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(lvScenaristes);
+  btDessinateur.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(lvDessinateurs);
+  btColoriste.Enabled := (not IsEqualGUID(IdPersonne, GUID_NULL)) and NotIn(lvColoristes);
 end;
 
 procedure TfrmEditAchatAlbum.vtEditSeriesVTEditChange(Sender: TObject);
@@ -309,7 +309,7 @@ begin
   FAlbum.ID_Serie := vtEditSeries.CurrentValue;
   if not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL) then
   begin
-    if not (FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then
+    if not(FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then
       try
         lvScenaristes.Items.BeginUpdate;
         lvDessinateurs.Items.BeginUpdate;
@@ -415,9 +415,12 @@ begin
   if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
     Exit;
   case TSpeedButton(Sender).Tag of
-    1: AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TPersonnage(vtEditPersonnes.VTEdit.Data), FScenaristesSelected);
-    2: AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TPersonnage(vtEditPersonnes.VTEdit.Data), FDessinateursSelected);
-    3: AjouteAuteur(FAlbum.Coloristes, lvColoristes, TPersonnage(vtEditPersonnes.VTEdit.Data), FColoristesSelected);
+    1:
+      AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TPersonnage(vtEditPersonnes.VTEdit.Data), FScenaristesSelected);
+    2:
+      AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TPersonnage(vtEditPersonnes.VTEdit.Data), FDessinateursSelected);
+    3:
+      AjouteAuteur(FAlbum.Coloristes, lvColoristes, TPersonnage(vtEditPersonnes.VTEdit.Data), FColoristesSelected);
   end;
   vtEditPersonnesVTEditChange(vtEditPersonnes.VTEdit);
 end;
@@ -473,4 +476,3 @@ begin
 end;
 
 end.
-

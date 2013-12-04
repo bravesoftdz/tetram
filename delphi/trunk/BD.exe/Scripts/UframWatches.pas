@@ -56,19 +56,21 @@ begin
 end;
 
 procedure TframWatches.vstSuivisGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
+var
+  msg: IWatchInfo;
 begin
   if Column = -1 then
     Column := 0;
-  with MasterEngine.DebugPlugin.Watches[Node.index] do
-    case Column of
-      0:
-        CellText := string(name);
-      1:
-        if not Active then
-          CellText := '<désactivé>'
-        else
-          CellText := MasterEngine.Engine.GetWatchValue(name);
-    end;
+  msg := MasterEngine.DebugPlugin.Watches[Node.index];
+  case Column of
+    0:
+      CellText := string(name);
+    1:
+      if not msg.Active then
+        CellText := '<désactivé>'
+      else
+        CellText := MasterEngine.Engine.GetWatchValue(name);
+  end;
 end;
 
 procedure TframWatches.vstSuivisInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);

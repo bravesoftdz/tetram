@@ -38,7 +38,7 @@ implementation
 {$R *.DFM}
 
 uses CommonConst, Commun, Textes, UdmCommun, UIBLib, Divers, IniFiles, Procedures, UHistorique, Math, UIBase, Updates, UfrmFond, CheckVersionNet,
-  DateUtils, UMAJODS, JumpList, UfrmSplash, Proc_Gestions;
+  DateUtils, UMAJODS, JumpList, UfrmSplash, Proc_Gestions, Generics.Collections;
 
 var
   FDMPrinc: TdmPrinc = nil;
@@ -126,69 +126,72 @@ type
   procedure CheckIndex;
   var
     i: Integer;
+    sl: TList<string>;
+    qry: TUIBQuery;
   begin
-    with TUIBQuery.Create(nil) do
+    qry := TUIBQuery.Create(nil);
+    try
+      qry.Transaction := GetTransaction(UIBDataBase);
+      qry.SQL.Text := 'SELECT RDB$INDEX_NAME FROM RDB$INDICES WHERE COALESCE(RDB$SYSTEM_FLAG, 0) <> 1';
+      qry.Open;
+      sl := TList<string>.Create;
       try
-        Transaction := GetTransaction(UIBDataBase);
-        SQL.Text := 'SELECT RDB$INDEX_NAME FROM RDB$INDICES WHERE COALESCE(RDB$SYSTEM_FLAG, 0) <> 1';
-        Open;
-        with TStringList.Create do
-          try
-            while not Eof do
-            begin
-              Add(Fields.AsString[0]);
-              Next;
-            end;
-            Close;
+        while not qry.Eof do
+        begin
+          sl.Add(qry.Fields.AsString[0]);
+          qry.Next;
+        end;
+        qry.Close;
 
-            SQL.Clear;
-            for i := 0 to Pred(Count) do
-              SQL.Add('SET STATISTICS INDEX ' + Strings[i] + ';');
-          finally
-            Free;
-          end;
-        QuickScript := True;
-        ExecSQL;
-        Transaction.Commit;
+        qry.SQL.Clear;
+        for i := 0 to Pred(sl.Count) do
+          qry.SQL.Add('SET STATISTICS INDEX ' + sl[i] + ';');
       finally
-        Transaction.Free;
-        Free;
+        sl.Free;
       end;
+      qry.QuickScript := True;
+      qry.ExecSQL;
+      qry.Transaction.Commit;
+    finally
+      qry.Transaction.Free;
+      qry.Free;
+    end;
   end;
 
 var
   FBUpdate: TFBUpdate;
   Msg: string;
+  qry: TUIBQuery;
 begin
   Result := False;
 
-  with TUIBQuery.Create(nil) do
-    try
-      Transaction := GetTransaction(UIBDataBase);
+  qry := TUIBQuery.Create(nil);
+  try
+    qry.Transaction := GetTransaction(UIBDataBase);
 
-      SQL.Text := 'SELECT VALEUR FROM OPTIONS WHERE Nom_option = ?';
-      Params.AsString[0] := 'Version';
-      Open;
-      if not Eof then
-        CurrentVersion := Fields.AsString[0]
-      else
-      begin
-        CurrentVersion := '0.0.0.0';
-        try
-          SQL.Text := 'INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES (?, ?)';
-          Prepare(True);
-          Params.AsString[0] := 'Version';
-          Params.AsString[1] := Copy(CurrentVersion, 1, Params.MaxStrLen[0]);
-          ExecSQL;
-        except
-          // Pour s'assurer qu'il y'a la ligne dans la table options
-        end;
+    qry.SQL.Text := 'SELECT VALEUR FROM OPTIONS WHERE Nom_option = ?';
+    qry.Params.AsString[0] := 'Version';
+    qry.Open;
+    if not qry.Eof then
+      CurrentVersion := qry.Fields.AsString[0]
+    else
+    begin
+      CurrentVersion := '0.0.0.0';
+      try
+        qry.SQL.Text := 'INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES (?, ?)';
+        qry.Prepare(True);
+        qry.Params.AsString[0] := 'Version';
+        qry.Params.AsString[1] := Copy(CurrentVersion, 1, qry.Params.MaxStrLen[0]);
+        qry.ExecSQL;
+      except
+        // Pour s'assurer qu'il y'a la ligne dans la table options
       end;
-
-    finally
-      Transaction.Free;
-      Free;
     end;
+
+  finally
+    qry.Transaction.Free;
+    qry.Free;
+  end;
 
   Msg := 'BDthèque ne peut pas utiliser cette base de données.'#13#10'Version de la base de données: ' + CurrentVersion;
 
@@ -208,19 +211,19 @@ begin
     for FBUpdate in ListFBUpdates do
       ProcessUpdate(FBUpdate.Version, FBUpdate.UpdateCallback);
 
-    with TUIBQuery.Create(nil) do
-      try
-        Transaction := GetTransaction(UIBDataBase);
+    qry := TUIBQuery.Create(nil);
+    try
+      qry.Transaction := GetTransaction(UIBDataBase);
 
-        SQL.Text := 'UPDATE OPTIONS SET Valeur = ? WHERE Nom_Option = ?';
-        Params.AsString[0] := ListFBUpdates.Last.Version;
-        Params.AsString[1] := 'Version';
-        ExecSQL;
-        Transaction.Commit;
-      finally
-        Transaction.Free;
-        Free;
-      end;
+      qry.SQL.Text := 'UPDATE OPTIONS SET Valeur = ? WHERE Nom_Option = ?';
+      qry.Params.AsString[0] := ListFBUpdates.Last.Version;
+      qry.Params.AsString[1] := 'Version';
+      qry.ExecSQL;
+      qry.Transaction.Commit;
+    finally
+      qry.Transaction.Free;
+      qry.Free;
+    end;
   end;
 
   CheckIndex;

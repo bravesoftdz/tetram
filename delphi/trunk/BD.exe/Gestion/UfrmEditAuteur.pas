@@ -53,7 +53,7 @@ begin
 
   edNom.Text := FAuteur.NomAuteur;
   edSite.Text := FAuteur.SiteWeb;
-  edBiographie.Text := FAuteur.Biographie.Text;
+  edBiographie.Text := FAuteur.Biographie;
   edAssociations.Text := FAuteur.Associations.Text;
 end;
 
@@ -68,7 +68,7 @@ begin
 
   FAuteur.NomAuteur := Trim(edNom.Text);
   FAuteur.SiteWeb := Trim(edSite.Text);
-  FAuteur.Biographie.Text := edBiographie.Text;
+  FAuteur.Biographie := edBiographie.Text;
   FAuteur.Associations.Text := edAssociations.Text;
 
   FAuteur.SaveToDatabase;

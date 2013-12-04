@@ -28,7 +28,6 @@ type
   private
     { Déclarations privées }
     FRecherche: TFrmRecherche;
-    FChampValeurs: TStringList;
     FCritere: TCritereTri;
     procedure SetCritere(Value: TCritereTri);
     function GetCritere: TCritereTri;
@@ -84,7 +83,6 @@ var
 begin
   hg := THourGlass.Create;
   FRecherche := TFrmRecherche(Owner);
-  FChampValeurs := TStringList.Create;
   FCritere := TCritereTri.Create;
   pt := FRecherche.ClientToScreen(Point((FRecherche.Width - Width) div 2, (FRecherche.Height - Height) div 2));
   SetBounds(pt.x, pt.y, Width, Height);
@@ -104,7 +102,6 @@ end;
 
 procedure TfrmEditCritereTri.FormDestroy(Sender: TObject);
 begin
-  FChampValeurs.Free;
   FCritere.Free;
 end;
 

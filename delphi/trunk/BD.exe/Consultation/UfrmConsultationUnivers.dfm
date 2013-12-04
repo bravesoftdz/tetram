@@ -36,7 +36,7 @@ object frmConsultationUnivers: TfrmConsultationUnivers
       Alignment = taRightJustify
       Caption = 'Description :'
       Color = clWhite
-      FocusControl = Description
+      FocusControl = edDescription
       Font.Charset = ANSI_CHARSET
       Font.Color = 12615680
       Font.Height = -11
@@ -165,7 +165,7 @@ object frmConsultationUnivers: TfrmConsultationUnivers
       ParentFont = False
       Transparent = True
     end
-    object Description: TMemo
+    object edDescription: TMemo
       Left = 95
       Top = 50
       Width = 739

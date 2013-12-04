@@ -9,8 +9,7 @@ uses
 type
   TframMessages = class(TFrame)
     vstMessages: TVirtualStringTree;
-    procedure vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode;
-      Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
+    procedure vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
   private
     FMasterEngine: IMasterEngine;
     procedure SetMasterEngine(const Value: IMasterEngine);
@@ -43,35 +42,35 @@ begin
     FMasterEngine.DebugPlugin.Messages.View := vstMessages;
 end;
 
-procedure TframMessages.vstMessagesGetText(Sender: TBaseVirtualTree;
-  Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
-  var CellText: string);
+procedure TframMessages.vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
+var
+  msg: IMessageInfo;
 begin
   if Column = -1 then
     Column := 0;
-  with MasterEngine.DebugPlugin.Messages[Node.index] do
-    case Column of
-      0:
-        case Category of
-          cmInfo:
-            CellText := 'Information';
-          cmCompileError:
-            CellText := 'Compilation';
-          cmRuntimeError:
-            CellText := 'Exécution';
-        else
-          CellText := '';
-        end;
-      1:
-        CellText := string(TypeMessage);
-      2:
-        if ScriptUnitName = MasterEngine.Engine.GetSpecialMainUnitName then
-          CellText := MasterEngine.ProjectScript.ScriptUnitName
-        else
-          CellText := string(ScriptUnitName);
-      3:
-        CellText := string(Text);
-    end;
+  msg := MasterEngine.DebugPlugin.Messages[Node.index];
+  case Column of
+    0:
+      case msg.Category of
+        cmInfo:
+          CellText := 'Information';
+        cmCompileError:
+          CellText := 'Compilation';
+        cmRuntimeError:
+          CellText := 'Exécution';
+      else
+        CellText := '';
+      end;
+    1:
+      CellText := string(msg.TypeMessage);
+    2:
+      if msg.ScriptUnitName = MasterEngine.Engine.GetSpecialMainUnitName then
+        CellText := MasterEngine.ProjectScript.ScriptUnitName
+      else
+        CellText := string(msg.ScriptUnitName);
+    3:
+      CellText := string(Text);
+  end;
 end;
 
 end.

@@ -6,7 +6,7 @@ interface
 
 uses
   Windows, SysUtils, Classes, Controls, Graphics, VirtualTrees, VirtualTreeBdtk,
-  EditLabeled, TypeRec, StrUtils, LinkControls
+  EditLabeled, TypeRec, StrUtils, LinkControls, Generics.Collections
 {$IFDEF DEBUG}, Clipbrd{$ENDIF}
     ;
 
@@ -22,7 +22,7 @@ type
   PNodeInfo = ^RNodeInfo;
 
   RNodeInfo = record
-    List: TList;
+    List: TList<TBasePointeur>;
     // PDetail: Pointer;
     InitialeInfo: PInitialeInfo;
     Detail: TBasePointeur;
@@ -408,7 +408,7 @@ begin
     ChildCount := FCountPointers[Node.Index].Count;
     InfoNode := GetNodeData(Node);
     if not Assigned(InfoNode.List) then
-      InfoNode.List := TList.Create;
+      InfoNode.List := TList<TBasePointeur>.Create;
     q := TUIBQuery.Create(Self);
     with q do
       try

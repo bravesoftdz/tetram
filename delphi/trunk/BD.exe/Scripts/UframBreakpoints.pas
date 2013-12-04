@@ -43,27 +43,31 @@ begin
 end;
 
 procedure TframBreakpoints.vstBreakpointsChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
+var
+  msg: IBreakPointInfo;
 begin
-  with MasterEngine.DebugPlugin.Breakpoints[Node.Index] do
-    MasterEngine.ToggleBreakPoint(ScriptUnitName, Line, True);
+  msg := MasterEngine.DebugPlugin.Breakpoints[Node.Index];
+  MasterEngine.ToggleBreakPoint(msg.ScriptUnitName, msg.Line, True);
   MasterEngine.DebugPlugin.Breakpoints.View.InvalidateNode(Node);
 end;
 
 procedure TframBreakpoints.vstBreakpointsGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: string);
+var
+  msg: IBreakPointInfo;
 begin
   if Column = -1 then
     Column := 0;
-  with MasterEngine.DebugPlugin.Breakpoints[Node.Index] do
-    case Column of
-      0:
-        CellText := 'Ligne ' + IntToStr(Line);
-      1:
-        if ScriptUnitName = MasterEngine.Engine.GetSpecialMainUnitName then
-          CellText := MasterEngine.ProjectScript.ScriptUnitName
-        else
-          CellText := string(ScriptUnitName);
-    end;
+  msg := MasterEngine.DebugPlugin.Breakpoints[Node.Index];
+  case Column of
+    0:
+      CellText := 'Ligne ' + IntToStr(msg.Line);
+    1:
+      if msg.ScriptUnitName = MasterEngine.Engine.GetSpecialMainUnitName then
+        CellText := MasterEngine.ProjectScript.ScriptUnitName
+      else
+        CellText := string(msg.ScriptUnitName);
+  end;
 end;
 
 procedure TframBreakpoints.vstBreakpointsInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);

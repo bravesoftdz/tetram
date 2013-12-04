@@ -15,7 +15,7 @@ type
     NomUnivers: TLabel;
     Label6: TLabel;
     Bevel1: TBevel;
-    Description: TMemo;
+    edDescription: TMemo;
     MainMenu1: TMainMenu;
     ActionList1: TActionList;
     ImageApercu: TAction;
@@ -95,7 +95,7 @@ begin
     NomUnivers.Cursor := crDefault;
   end;
   UniversParent.Caption := FormatTitre(FUnivers.UniversParent.NomUnivers);
-  Description.Text := FUnivers.Description.Text;
+  edDescription.Text := FUnivers.Description;
 
   vtAlbums.Filtre := 'branche_univers containing ' + QuotedStr(GUIDToString(ID_Univers));
   vtAlbums.Mode := vmAlbumsSerieUnivers;

@@ -8,54 +8,54 @@ uses UIB, Updates;
 
 procedure MAJ0_0_1_7(Query: TUIBScript);
 begin
-  with Query do begin
-    Script.Clear;
-    Script.Add('ALTER PROCEDURE ALBUMS_BY_AUTEUR (');
-    Script.Add('    REFAUTEUR INTEGER)');
-    Script.Add('RETURNS (');
-    Script.Add('    REFALBUM INTEGER,');
-    Script.Add('    TITREALBUM VARCHAR(150),');
-    Script.Add('    TOME SMALLINT,');
-    Script.Add('    HORSSERIE SMALLINT,');
-    Script.Add('    INTEGRALE SMALLINT,');
-    Script.Add('    ANNEEPARUTION SMALLINT,');
-    Script.Add('    REFSERIE INTEGER,');
-    Script.Add('    TITRESERIE VARCHAR(150),');
-    Script.Add('    METIER SMALLINT)');
-    Script.Add('AS');
-    Script.Add('BEGIN');
-    Script.Add('  for SELECT A.REFALBUM,');
-    Script.Add('             A.TITREALBUM,');
-    Script.Add('             A.TOME,');
-    Script.Add('             A.HORSSERIE,');
-    Script.Add('             A.INTEGRALE,');
-    Script.Add('             A.ANNEEPARUTION,');
-    Script.Add('             A.REFSERIE,');
-    Script.Add('             A.TITRESERIE,');
-    Script.Add('             AU.metier');
-    Script.Add('        FROM vw_liste_albums A INNER JOIN auteurs au on a.refalbum = au.refalbum');
-    Script.Add('        WHERE au.refpersonne = :RefAuteur');
-    Script.Add('        ORDER BY UPPERTITRESERIE, HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, ANNEEPARUTION NULLS FIRST, UPPERTITREALBUM, METIER');
-    Script.Add('        INTO :REFALBUM,');
-    Script.Add('             :TITREALBUM,');
-    Script.Add('             :TOME,');
-    Script.Add('             :HORSSERIE,');
-    Script.Add('             :INTEGRALE,');
-    Script.Add('             :ANNEEPARUTION,');
-    Script.Add('             :REFSERIE,');
-    Script.Add('             :TITRESERIE,');
-    Script.Add('             :METIER');
-    Script.Add('      DO');
-    Script.Add('      BEGIN');
-    Script.Add('        SUSPEND;');
-    Script.Add('      END');
-    Script.Add('END;');
+  Query.Script.Clear;
+  Query.Script.Add('ALTER PROCEDURE ALBUMS_BY_AUTEUR (');
+  Query.Script.Add('    REFAUTEUR INTEGER)');
+  Query.Script.Add('RETURNS (');
+  Query.Script.Add('    REFALBUM INTEGER,');
+  Query.Script.Add('    TITREALBUM VARCHAR(150),');
+  Query.Script.Add('    TOME SMALLINT,');
+  Query.Script.Add('    HORSSERIE SMALLINT,');
+  Query.Script.Add('    INTEGRALE SMALLINT,');
+  Query.Script.Add('    ANNEEPARUTION SMALLINT,');
+  Query.Script.Add('    REFSERIE INTEGER,');
+  Query.Script.Add('    TITRESERIE VARCHAR(150),');
+  Query.Script.Add('    METIER SMALLINT)');
+  Query.Script.Add('AS');
+  Query.Script.Add('BEGIN');
+  Query.Script.Add('  for SELECT A.REFALBUM,');
+  Query.Script.Add('             A.TITREALBUM,');
+  Query.Script.Add('             A.TOME,');
+  Query.Script.Add('             A.HORSSERIE,');
+  Query.Script.Add('             A.INTEGRALE,');
+  Query.Script.Add('             A.ANNEEPARUTION,');
+  Query.Script.Add('             A.REFSERIE,');
+  Query.Script.Add('             A.TITRESERIE,');
+  Query.Script.Add('             AU.metier');
+  Query.Script.Add('        FROM vw_liste_albums A INNER JOIN auteurs au on a.refalbum = au.refalbum');
+  Query.Script.Add('        WHERE au.refpersonne = :RefAuteur');
+  Query.Script.Add
+    ('        ORDER BY UPPERTITRESERIE, HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, ANNEEPARUTION NULLS FIRST, UPPERTITREALBUM, METIER');
+  Query.Script.Add('        INTO :REFALBUM,');
+  Query.Script.Add('             :TITREALBUM,');
+  Query.Script.Add('             :TOME,');
+  Query.Script.Add('             :HORSSERIE,');
+  Query.Script.Add('             :INTEGRALE,');
+  Query.Script.Add('             :ANNEEPARUTION,');
+  Query.Script.Add('             :REFSERIE,');
+  Query.Script.Add('             :TITRESERIE,');
+  Query.Script.Add('             :METIER');
+  Query.Script.Add('      DO');
+  Query.Script.Add('      BEGIN');
+  Query.Script.Add('        SUSPEND;');
+  Query.Script.Add('      END');
+  Query.Script.Add('END;');
 
-    ExecuteScript;
-  end;
+  Query.ExecuteScript;
 end;
 
 initialization
-  RegisterFBUpdate('0.0.1.7', @MAJ0_0_1_7);
+
+RegisterFBUpdate('0.0.1.7', @MAJ0_0_1_7);
 
 end.

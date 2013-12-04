@@ -100,29 +100,30 @@ end;
 function TframScriptInfos.EditOption(Option: TOption): Boolean;
 var
   s: string;
+  frm: TfrmScriptEditOption;
 begin
-  with TfrmScriptEditOption.Create(nil) do
-    try
-      EditLabeled1.Text := Option.FLibelle;
-      MemoLabeled1.Lines.Text := StringReplace(Option.FValues, '|', sLineBreak, [rfReplaceAll]);
-      EditLabeled2.Text := Option.FDefaultValue;
+  frm := TfrmScriptEditOption.Create(nil);
+  try
+    frm.EditLabeled1.Text := Option.FLibelle;
+    frm.MemoLabeled1.Lines.Text := StringReplace(Option.FValues, '|', sLineBreak, [rfReplaceAll]);
+    frm.EditLabeled2.Text := Option.FDefaultValue;
 
-      Result := ShowModal = mrOk;
-      if Result then
-      begin
-        Option.FLibelle := EditLabeled1.Text;
-        s := MemoLabeled1.Lines.Text;
-        while EndsText(sLineBreak, s) do
-          Delete(s, Length(s) - Length(sLineBreak) + 1, Length(sLineBreak));
-        s := StringReplace(s, sLineBreak, '|', [rfReplaceAll]);
-        Option.FValues := s;
-        Option.FDefaultValue := EditLabeled2.Text;
+    Result := frm.ShowModal = mrOk;
+    if Result then
+    begin
+      Option.FLibelle := frm.EditLabeled1.Text;
+      s := frm.MemoLabeled1.Lines.Text;
+      while EndsText(sLineBreak, s) do
+        Delete(s, Length(s) - Length(sLineBreak) + 1, Length(sLineBreak));
+      s := StringReplace(s, sLineBreak, '|', [rfReplaceAll]);
+      Option.FValues := s;
+      Option.FDefaultValue := frm.EditLabeled2.Text;
 
-        MasterEngine.ProjectScript.Modifie := True;
-      end;
-    finally
-      Free;
+      MasterEngine.ProjectScript.Modifie := True;
     end;
+  finally
+    frm.Free;
+  end;
 end;
 
 procedure TframScriptInfos.ListBox1Data(Control: TWinControl; Index: Integer; var Data: string);
@@ -133,43 +134,45 @@ end;
 procedure TframScriptInfos.ListBox1DblClick(Sender: TObject);
 var
   Option: TOption;
+  qry: TUIBQuery;
+  frm: TfrmScriptOption;
 begin
   if TListBox(Sender).ItemIndex = -1 then
     Exit;
   Option := MasterEngine.ProjectScript.Options[TListBox(Sender).ItemIndex];
 
-  with TfrmScriptOption.Create(nil) do
-    try
-      RadioGroup1.Caption := Option.FLibelle;
-      RadioGroup1.Items.Text := StringReplace(Option.FValues, '|', sLineBreak, [rfReplaceAll]);
-      RadioGroup1.ItemIndex := RadioGroup1.Items.IndexOf(Option.ChooseValue);
-      RadioGroup1.Height := 21 + 20 * RadioGroup1.Items.Count;
-      ClientHeight := RadioGroup1.Height + framBoutons1.Height + 4;
-      if ShowModal = mrOk then
-      begin
-        Option.ChooseValue := RadioGroup1.Items[RadioGroup1.ItemIndex];
+  frm := TfrmScriptOption.Create(nil);
+  try
+    frm.RadioGroup1.Caption := Option.FLibelle;
+    frm.RadioGroup1.Items.Text := StringReplace(Option.FValues, '|', sLineBreak, [rfReplaceAll]);
+    frm.RadioGroup1.ItemIndex := frm.RadioGroup1.Items.IndexOf(Option.ChooseValue);
+    frm.RadioGroup1.Height := 21 + 20 * frm.RadioGroup1.Items.Count;
+    ClientHeight := frm.RadioGroup1.Height + frm.framBoutons1.Height + 4;
+    if frm.ShowModal = mrOk then
+    begin
+      Option.ChooseValue := frm.RadioGroup1.Items[frm.RadioGroup1.ItemIndex];
 
-        with TUIBQuery.Create(nil) do
-          try
-            Transaction := GetTransaction(dmPrinc.UIBDataBase);
-            SQL.Text := 'update or insert into options_scripts (script, nom_option, valeur) values (:script, :nom_option, :valeur)';
-            Prepare(True);
-            Params.AsString[0] := Copy(string(MasterEngine.ProjectScript.ScriptUnitName), 1, Params.MaxStrLen[0]);
-            Params.AsString[1] := Copy(Option.FLibelle, 1, Params.MaxStrLen[1]);
-            Params.AsString[2] := Copy(Option.ChooseValue, 1, Params.MaxStrLen[2]);
-            Execute;
-            Transaction.Commit;
-          finally
-            Transaction.Free;
-            Free;
-          end;
-
-        RefreshOptions;
-        RefreshDescription;
+      qry := TUIBQuery.Create(nil);
+      try
+        qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
+        qry.SQL.Text := 'update or insert into options_scripts (script, nom_option, valeur) values (:script, :nom_option, :valeur)';
+        qry.Prepare(True);
+        qry.Params.AsString[0] := Copy(string(MasterEngine.ProjectScript.ScriptUnitName), 1, qry.Params.MaxStrLen[0]);
+        qry.Params.AsString[1] := Copy(Option.FLibelle, 1, qry.Params.MaxStrLen[1]);
+        qry.Params.AsString[2] := Copy(Option.ChooseValue, 1, qry.Params.MaxStrLen[2]);
+        qry.Execute;
+        qry.Transaction.Commit;
+      finally
+        qry.Transaction.Free;
+        qry.Free;
       end;
-    finally
-      Free;
+
+      RefreshOptions;
+      RefreshDescription;
     end;
+  finally
+    Free;
+  end;
 end;
 
 procedure TframScriptInfos.MemoLabeled1Change(Sender: TObject);

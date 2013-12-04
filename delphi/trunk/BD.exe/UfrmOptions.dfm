@@ -804,6 +804,8 @@ object frmOptions: TfrmOptions
     Width = 32
     PngImages = <
       item
+        Background = clWindow
+        Name = 'PngImage0'
         PngImage.Data = {
           89504E470D0A1A0A0000000D4948445200000020000000200806000000737A7A
           F40000000473424954080808087C0864880000001974455874536F6674776172
@@ -870,10 +872,10 @@ object frmOptions: TfrmOptions
           93F26887E5B0FFCBE35EDE8A35B38418DA599D5D20B231FD8ACE3ABEF3DF367A
           3FFF98E864115614ED984E217FAF8D7CEBFF9AFD1D30C2223A8EE9C0A1000000
           0049454E44AE426082}
-        Name = 'PngImage0'
-        Background = clWindow
       end
       item
+        Background = clWindow
+        Name = 'PngImage1'
         PngImage.Data = {
           89504E470D0A1A0A0000000D4948445200000020000000200806000000737A7A
           F40000000473424954080808087C0864880000001974455874536F6674776172
@@ -931,10 +933,10 @@ object frmOptions: TfrmOptions
           53893EAB502BE0A9A14A108532A08E5AE2EFD9546CE626E1F68FCEBF03D00264
           2E09CF2443EDA793ED045148A552733F5370A700342F6618B6236FDBE9009D71
           FD01F5701C24244AC9A50000000049454E44AE426082}
-        Name = 'PngImage1'
-        Background = clWindow
       end
       item
+        Background = clWindow
+        Name = 'PngImage2'
         PngImage.Data = {
           89504E470D0A1A0A0000000D4948445200000020000000200806000000737A7A
           F40000000473424954080808087C0864880000001974455874536F6674776172
@@ -1011,8 +1013,6 @@ object frmOptions: TfrmOptions
           4829ABF5BBFBFAE3797DF3608586DD44F63B091E2E80C460919D1727C68B2932
           58743320DD7153F70D47E07F0077AB7833A9F89E2A0000000049454E44AE4260
           82}
-        Name = 'PngImage2'
-        Background = clWindow
       end>
     Left = 24
     Top = 377
@@ -1038,6 +1038,7 @@ object frmOptions: TfrmOptions
     AddOptions = []
     AddStoreSuffixes = [assGIF, assPNG, assZ, assZIP, assZOO, assARC, assLZH, assARJ, assTAZ, assTGZ, assLHA, assRAR, assACE, assCAB, assGZ, assGZIP, assJAR, assEXE, assJPG, assJPEG, ass7Zp, assMP3, assWMV, assWMA, assDVR, assAVI]
     Dll_Load = False
+    ExtAddStoreSuffixes = ''
     ExtrOptions = [ExtrDirNames, ExtrOverWrite, ExtrForceDirs]
     KeepFreeOnAllDisks = 0
     KeepFreeOnDisk1 = 0

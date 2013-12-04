@@ -89,7 +89,7 @@ type
 
 implementation
 
-uses System.StrUtils, CommonConst, UScriptsFonctions, JclStreams, System.TypInfo;
+uses System.StrUtils, CommonConst, UScriptsFonctions, JclStreams, System.TypInfo, IOUtils;
 
 function TScript.CheckOptionValue(const OptionName, Value: string): Boolean;
 begin
@@ -215,16 +215,19 @@ end;
 function TScript.OptionValueIndex(const OptionName: string; default: Integer): Integer;
 var
   Option: TOption;
+  sl: TStringList;
 begin
   Option := OptionByName(OptionName);
   if Assigned(Option) then
-    with TStringList.Create do
-      try
-        Text := StringReplace(Option.FValues, '|', sLineBreak, [rfReplaceAll]);
-        Result := IndexOf(Option.FChooseValue);
-      finally
-        Free;
-      end
+  begin
+    sl := TStringList.Create;
+    try
+      sl.Text := StringReplace(Option.FValues, '|', sLineBreak, [rfReplaceAll]);
+      Result := sl.IndexOf(Option.FChooseValue);
+    finally
+      sl.Free;
+    end;
+  end
   else
     Result := default;
 end;
@@ -337,35 +340,21 @@ procedure TScriptList.LoadDir(const Dir: string);
 
   procedure GetFiles(const Path, Ext: string);
   var
-    i: Integer;
-    sr: TSearchRec;
     Script: TScript;
+    FileName: string;
   begin
-    i := FindFirst(Path + '*' + Ext, faAnyFile, sr);
-    if i = 0 then
-      try
-        while i = 0 do
-        begin
-          if (sr.Attr and faDirectory) = 0 then
-          begin
-            Script := TScript.Create;
-            Script.FileName := Path + sr.name;
-            Add(Script);
-          end;
-          i := FindNext(sr);
-        end;
-      finally
-        FindClose(sr);
-      end;
+    for FileName in TDirectory.GetFiles(Path, '*' + Ext) do
+    begin
+      Script := TScript.Create;
+      Script.FileName := FileName;
+      Add(Script);
+    end;
   end;
 
-var
-  Path: string;
 begin
-  Path := IncludeTrailingPathDelimiter(Dir);
   Clear;
-  GetFiles(Path, ExtMainScript);
-  GetFiles(Path, ExtUnit);
+  GetFiles(Dir, ExtMainScript);
+  GetFiles(Dir, ExtUnit);
 end;
 
 { TOption }
@@ -380,13 +369,7 @@ end;
 
 function TOption.IsValidValue(const Value: string): Boolean;
 begin
-  with TStringList.Create do
-    try
-      Text := StringReplace(FValues, '|', sLineBreak, [rfReplaceAll]);
-      Result := IndexOf(Value) <> -1;
-    finally
-      Free;
-    end
+  Result := string('|' + FValues + '|').Contains('|' + Value + '|');
 end;
 
 end.

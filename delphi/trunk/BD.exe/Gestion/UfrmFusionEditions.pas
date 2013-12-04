@@ -182,7 +182,7 @@ begin
     else
       Label30.Caption := rsTransAcheteLe + ' :';
     Label31.Caption := Edition.sDateAchat;
-    Memo1.Text := Edition.Notes.Text;
+    Memo1.Text := Edition.Notes;
 
     if Edition.Gratuit then
       Label4.Caption := rsTransGratuit
@@ -265,7 +265,7 @@ begin
   else
     Label12.Caption := rsTransAcheteLe + ' :';
   AcheteLe.Caption := Edition.sDateAchat;
-  edNotes.Lines.Text := Edition.Notes.Text;
+  edNotes.Lines.Text := Edition.Notes;
 
   if Edition.Gratuit then
     Prix.Caption := rsTransGratuit

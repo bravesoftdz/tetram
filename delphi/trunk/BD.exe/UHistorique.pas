@@ -2,7 +2,7 @@ unit UHistorique;
 
 interface
 
-uses SysUtils, Windows, Classes, Contnrs, Commun;
+uses SysUtils, Windows, Classes, Generics.Collections, Commun;
 
 type
   TActionConsultation = (fcActionBack, fcActionRefresh, fcAlbum, fcAuteur, fcCouverture, fcRecherche, fcPreview, fcSeriesIncompletes,
@@ -41,10 +41,10 @@ type
 
   THistory = class
   strict private
-    FListConsultation: TObjectList;
+    FListConsultation: TObjectList<TConsult>;
     FCurrentConsultation: Integer;
     FLockCount: Integer;
-    FListWaiting: TObjectList;
+    FListWaiting: TObjectList<TConsult>;
     FOnChange: THistoriqueChange;
     function GetCountConsultation: Integer;
     function Open(Consult: TConsult; WithLock: Boolean): Boolean;
@@ -166,7 +166,7 @@ end;
 procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: TGUID);
 begin
   FListWaiting.Add(TConsult.Create);
-  with TConsult(FListWaiting.Last) do
+  with FListWaiting.Last do
   begin
     Action := Consultation;
     Reference := -1;
@@ -249,10 +249,10 @@ end;
 constructor THistory.Create;
 begin
   inherited;
-  FListConsultation := TObjectList.Create(True);
+  FListConsultation := TObjectList<TConsult>.Create(True);
   FCurrentConsultation := -1;
   FLockCount := 0;
-  FListWaiting := TObjectList.Create(True);
+  FListWaiting := TObjectList<TConsult>.Create(True);
 end;
 
 procedure THistory.Delete(index: Integer);

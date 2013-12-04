@@ -25,7 +25,7 @@ procedure ImpressionListePrevisionsAchats(Previsualisation: Boolean);
 
 implementation
 
-uses UfrmPreview, Math, Procedures, ProceduresBDtk, DateUtils, Contnrs, UIBlib, StrUtils, UMetadata;
+uses UfrmPreview, Math, Procedures, ProceduresBDtk, DateUtils, UIBlib, StrUtils, UMetadata;
 
 procedure PreparePrintObject(Prn: TPrintObject; Previsualisation: Boolean; const Titre: string);
 begin
@@ -56,7 +56,6 @@ const
   ThumbInterval = 4;
 
 var
-  s: string;
   nbImageHorz, numCol: Integer;
   Repositionne, ImageDessinee: Boolean;
   ms: TStream;
@@ -130,11 +129,10 @@ begin
 
   Prn.NextLine;
 
-  s := Edition.Notes.Text;
-  if s <> '' then
+  if Edition.Notes <> '' then
   begin
     Prn.WriteLineColumn(0, -1, rsTransNotes + ' :');
-    Prn.WriteColumn(7, -1, s);
+    Prn.WriteColumn(7, -1, Edition.Notes);
     Prn.NextLine;
   end;
 
@@ -209,8 +207,8 @@ begin
   if TGlobalVar.Utilisateur.Options.FicheParaBDWithImage and ParaBD.HasImage then
   begin
     fWaiting.ShowProgression(rsTransImage + '...', epNext);
-    ms := GetCouvertureStream(True, ParaBD.ID_ParaBD, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60),
-      TGlobalVar.Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
+    ms := GetCouvertureStream(True, ParaBD.ID_ParaBD, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60), TGlobalVar.Utilisateur.Options.AntiAliasing,
+      True, Prn.MmsToPixelsHorizontal(1));
     if Assigned(ms) then
       try
         fWaiting.ShowProgression(rsTransImage + '...', epNext);
@@ -264,11 +262,10 @@ begin
   Prn.NextLine;
 
   fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransDescription, rsTransPage, Prn.GetPageNumber]), epNext);
-  s := ParaBD.Description.Text;
-  if s <> '' then
+  if ParaBD.Description <> '' then
   begin
     Prn.WriteLineColumn(0, -1, rsTransDescription + ' :');
-    Prn.WriteColumn(4, -1, s);
+    Prn.WriteColumn(4, -1, ParaBD.Description);
     Prn.NextLine;
   end;
 
@@ -338,7 +335,8 @@ begin
   else
     Prn.WriteLineColumn(1, -2, NonZero(IntToStr(Album.Tome)));
   Prn.WriteLineColumn(0, -1, rsTransAnneeParution + ' :');
-  Prn.WriteLineColumn(1, -2, IIf(Album.MoisParution > 0, FormatSettings.ShortMonthNames[Album.MoisParution] + ' ', '') + NonZero(IntToStr(Album.AnneeParution)));
+  Prn.WriteLineColumn(1, -2, IIf(Album.MoisParution > 0, FormatSettings.ShortMonthNames[Album.MoisParution] + ' ', '') +
+    NonZero(IntToStr(Album.AnneeParution)));
 
   s := '';
   for i := 0 to Album.Serie.Genres.Count - 1 do
@@ -384,9 +382,9 @@ begin
   Prn.NextLine;
 
   fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransHistoire, rsTransPage, Prn.GetPageNumber]), epNext);
-  s := Album.Sujet.Text;
+  s := Album.Sujet;
   if s = '' then
-    s := Album.Serie.Sujet.Text;
+    s := Album.Serie.Sujet;
   if s <> '' then
   begin
     Prn.WriteLineColumn(0, -1, rsTransHistoire + ' :');
@@ -395,9 +393,9 @@ begin
   end;
 
   fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransNotes, rsTransPage, Prn.GetPageNumber]), epNext);
-  s := Album.Notes.Text;
+  s := Album.Notes;
   if s = '' then
-    s := Album.Serie.Notes.Text;
+    s := Album.Serie.Notes;
   if s <> '' then
   begin
     Prn.WriteLineColumn(0, -1, rsTransNotes + ' :');
@@ -519,7 +517,7 @@ begin
       Prn.NewLines(2);
 
       fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransHistoire, rsTransPage, Prn.GetPageNumber]), epNext);
-      s := Serie.Sujet.Text;
+      s := Serie.Sujet;
       if s <> '' then
       begin
         Prn.WriteLineColumn(0, -1, rsTransHistoire + ' :');
@@ -528,7 +526,7 @@ begin
       end;
 
       fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransNotes, rsTransPage, Prn.GetPageNumber]), epNext);
-      s := Serie.Notes.Text;
+      s := Serie.Notes;
       if s <> '' then
       begin
         Prn.WriteLineColumn(0, -1, rsTransNotes + ' :');
@@ -784,10 +782,10 @@ begin
       fl := -2;
       // if Auteur.SiteWeb <> '' then Prn.WriteColumn(1, -1, Auteur.SiteWeb);
       fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransBiographie, rsTransPage, Prn.GetPageNumber]), epNext);
-      if Auteur.Biographie.Text <> '' then
+      if Auteur.Biographie <> '' then
       begin
         Prn.WriteLineColumn(0, -2, rsTransBiographie + ' :');
-        Prn.WriteColumn(1, -1, Auteur.Biographie.Text);
+        Prn.WriteColumn(1, -1, Auteur.Biographie);
         fl := -1;
       end;
 
@@ -881,7 +879,7 @@ begin
         sl := False;
         OldSerie := GUID_FULL;
         fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 0, NbAlbums + 2);
-        while not EOF do
+        while not Eof do
         begin
           if liste = mrNo then
           begin
@@ -905,7 +903,7 @@ begin
               with Equipe do
               begin
                 s := '';
-                while (daoScenario in DetailsOptions) and (not EOF) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maScenariste) do
+                while (daoScenario in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maScenariste) do
                 begin
                   PA := TAuteur.Make(Equipe);
                   AjoutString(s, PA.ChaineAffichage, ', ');
@@ -914,7 +912,7 @@ begin
                 end;
                 AjoutString(sEquipe, s, #13#10, rsTransScenario + ': ', '.');
                 s := '';
-                while (daoDessins in DetailsOptions) and (not EOF) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maDessinateur) do
+                while (daoDessins in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maDessinateur) do
                 begin
                   PA := TAuteur.Make(Equipe);
                   AjoutString(s, PA.ChaineAffichage, ', ');
@@ -923,7 +921,7 @@ begin
                 end;
                 AjoutString(sEquipe, s, #13#10, rsTransDessins + ': ', '.');
                 s := '';
-                while (daoCouleurs in DetailsOptions) and (not EOF) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maColoriste) do
+                while (daoCouleurs in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maColoriste) do
                 begin
                   PA := TAuteur.Make(Equipe);
                   AjoutString(s, PA.ChaineAffichage, ', ');
@@ -1043,8 +1041,8 @@ var
     Prn.WriteLineColumn(3, -2, Format(FormatPourcent, [R.NbAlbumsStock, MulDiv(R.NbAlbumsStock, 100, R.NbAlbums)]));
     Prn.Columns[0].Font.Style := [fsBold];
     Prn.WriteLineColumn(0, -1, rsNombreSeries + ' :');
-    Prn.WriteLineColumn(1, -2, IntToStr(R.NbSeries) + ' (dont terminées: ' + Format
-        (FormatPourcent, [R.NbSeriesTerminee, MulDiv(R.NbSeriesTerminee, 100, R.NbSeries)]) + ')');
+    Prn.WriteLineColumn(1, -2, IntToStr(R.NbSeries) + ' (dont terminées: ' + Format(FormatPourcent,
+      [R.NbSeriesTerminee, MulDiv(R.NbSeriesTerminee, 100, R.NbSeries)]) + ')');
     Prn.Columns[0].Font.Style := [];
     Prn.WriteLineColumn(0, -1, rsAlbumsNB + ' :');
     Prn.WriteLineColumn(1, -2, Format(FormatPourcent, [R.NbAlbumsNB, MulDiv(R.NbAlbumsNB, 100, R.NbAlbums)]));
@@ -1079,8 +1077,7 @@ var
 
     Prn.WriteLineColumn(0, -2, rsValeurMoyenne + ' :');
     Prn.WriteLineColumn(1, -2, FormatCurr(FormatMonnaie, R.PrixAlbumMoyen));
-    Prn.WriteLineColumn(3, -2, FormatCurr(FormatMonnaie, R.PrixAlbumMinimun) + ' < ' + rsTransPrix + ' < ' + FormatCurr
-        (FormatMonnaie, R.PrixAlbumMaximun));
+    Prn.WriteLineColumn(3, -2, FormatCurr(FormatMonnaie, R.PrixAlbumMinimun) + ' < ' + rsTransPrix + ' < ' + FormatCurr(FormatMonnaie, R.PrixAlbumMaximun));
     Prn.WriteLineColumn(2, -1, rsValeurConnue + ' :');
     Prn.WriteLineColumn(1, -2, FormatCurr(FormatMonnaie, R.ValeurConnue));
     Prn.WriteLineColumn(2, -1, rsValeurEstimee + ' :');
@@ -1340,11 +1337,11 @@ begin
               begin
                 CritereTri := TCritereTri(Recherche.SortBy[i]);
                 if CritereTri._Champ.Booleen then
-                  s := CritereTri.LabelChamp + ' - ' + IIf(CritereTri.Asc, 'Non puis Oui', 'Oui puis Non') + IIf
-                    (CritereTri.NullsFirst, ' - Vides en premier', '') + IIf(CritereTri.NullsLast, ' - Vides en dernier', '')
+                  s := CritereTri.LabelChamp + ' - ' + IIf(CritereTri.Asc, 'Non puis Oui', 'Oui puis Non') + IIf(CritereTri.NullsFirst, ' - Vides en premier',
+                    '') + IIf(CritereTri.NullsLast, ' - Vides en dernier', '')
                 else
-                  s := CritereTri.LabelChamp + ' - ' + IIf(CritereTri.Asc, 'Croissant', 'Décroissant') + IIf
-                    (CritereTri.NullsFirst, ' - Vides en premier', '') + IIf(CritereTri.NullsLast, ' - Vides en dernier', '');
+                  s := CritereTri.LabelChamp + ' - ' + IIf(CritereTri.Asc, 'Croissant', 'Décroissant') + IIf(CritereTri.NullsFirst, ' - Vides en premier', '') +
+                    IIf(CritereTri.NullsLast, ' - Vides en dernier', '');
                 Prn.WriteLineColumn(3, IIf(i = 0, -2, -1), s);
               end;
             end;
@@ -1395,7 +1392,7 @@ begin
             with Equipe do
             begin
               s := '';
-              while (daoScenario in DetailsOptions) and (not EOF) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maScenariste) do
+              while (daoScenario in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maScenariste) do
               begin
                 PA := TAuteur.Make(Equipe);
                 AjoutString(s, PA.ChaineAffichage, ', ');
@@ -1404,7 +1401,7 @@ begin
               end;
               AjoutString(sEquipe, s, #13#10, rsTransScenario + ': ', '.');
               s := '';
-              while (daoDessins in DetailsOptions) and (not EOF) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maDessinateur) do
+              while (daoDessins in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maDessinateur) do
               begin
                 PA := TAuteur.Make(Equipe);
                 AjoutString(s, PA.ChaineAffichage, ', ');
@@ -1413,7 +1410,7 @@ begin
               end;
               AjoutString(sEquipe, s, #13#10, rsTransDessins + ': ', '.');
               s := '';
-              while (daoCouleurs in DetailsOptions) and (not EOF) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maColoriste) do
+              while (daoCouleurs in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maColoriste) do
               begin
                 PA := TAuteur.Make(Equipe);
                 AjoutString(s, PA.ChaineAffichage, ', ');
@@ -1440,7 +1437,7 @@ begin
           h := h + Prn.GetLineHeightMmsFont(Prn.Columns[1].Font) + Prn.GetLineHeightMmsFont(Prn.Columns[6].Font) * (nTri - 1);
 
         if (i <> 0) and ((h > Prn.GetHeightLeftMms) or ((liste = mrNo) and (Sujet + sEquipe <> '') and
-              (Prn.GetHeightLeftMms - h < 3 * Prn.GetLineHeightMmsFont(Prn.Columns[4].Font)))) then
+          (Prn.GetHeightLeftMms - h < 3 * Prn.GetLineHeightMmsFont(Prn.Columns[4].Font)))) then
         begin
           Prn.NewPage;
           SautLigne := False;
@@ -1528,8 +1525,8 @@ begin
           jpg := TJpegImage.Create;
           try
             jpg.LoadFromStream(ms);
-            Prn.Draw(Prn.Detail.Left + ((Prn.Detail.Width - Prn.PixelsToMmsHorizontal(jpg.Width)) / 2), Prn.Detail.Top +
-                ((Prn.Detail.Height - Prn.PixelsToMmsVertical(jpg.Height)) / 2), jpg);
+            Prn.Draw(Prn.Detail.Left + ((Prn.Detail.Width - Prn.PixelsToMmsHorizontal(jpg.Width)) / 2),
+              Prn.Detail.Top + ((Prn.Detail.Height - Prn.PixelsToMmsVertical(jpg.Height)) / 2), jpg);
           finally
             FreeAndNil(jpg);
           end;
@@ -1584,8 +1581,8 @@ begin
           jpg := TJpegImage.Create;
           try
             jpg.LoadFromStream(ms);
-            Prn.Draw(Prn.Detail.Left + ((Prn.Detail.Width - Prn.PixelsToMmsHorizontal(jpg.Width)) / 2), Prn.Detail.Top +
-                ((Prn.Detail.Height - Prn.PixelsToMmsVertical(jpg.Height)) / 2), jpg);
+            Prn.Draw(Prn.Detail.Left + ((Prn.Detail.Width - Prn.PixelsToMmsHorizontal(jpg.Width)) / 2),
+              Prn.Detail.Top + ((Prn.Detail.Height - Prn.PixelsToMmsVertical(jpg.Height)) / 2), jpg);
           finally
             FreeAndNil(jpg);
           end;
@@ -1751,8 +1748,8 @@ begin
 
       Source.SQL.Text := 'SELECT Count(a.ID_Album)';
       Source.SQL.Add('FROM Albums a LEFT JOIN Series s ON a.ID_Serie = s.ID_Serie');
-      Source.SQL.Add(
-        'left join vw_prixunitaires v on v.horsserie = a.horsserie and v.ID_Serie = s.ID_Serie and (v.ID_Editeur = s.ID_Editeur or s.ID_Editeur is null)');
+      Source.SQL.Add
+        ('left join vw_prixunitaires v on v.horsserie = a.horsserie and v.ID_Serie = s.ID_Serie and (v.ID_Editeur = s.ID_Editeur or s.ID_Editeur is null)');
       Source.SQL.Add('WHERE a.Achat = 1');
       Source.Open;
       NbAlbums := Source.Fields.AsInteger[0] * 2; // on va parcourir 2 fois la liste
@@ -1770,7 +1767,7 @@ begin
         OldAlbum := GUID_FULL;
         PAl := nil;
         fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 0, NbAlbums + 2);
-        while not EOF do
+        while not Eof do
         begin
           if not IsEqualGUID(OldAlbum, StringToGUID(Fields.ByNameAsString['ID_ALBUM'])) then
           begin
@@ -1803,7 +1800,7 @@ begin
       Prn.SetHeaderDimensions1(-1, -1, -1, 30, False, 0, clWhite);
       Prn.SetHeaderInformation1(0, 5, rsListeAchats, taCenter, Prn.Font.name, 24, [fsBold]);
       Prn.SetHeaderInformation1(1, -1, Format('%d %s - %s', [NbAlbums div 2
-          { NbAlbums contient le double du nb d'albums } , rsTransAlbums, FormatCurr(FormatMonnaie, PrixTotal)]), taCenter, Prn.Font.name, 12, []);
+        { NbAlbums contient le double du nb d'albums } , rsTransAlbums, FormatCurr(FormatMonnaie, PrixTotal)]), taCenter, Prn.Font.name, 12, []);
       Prn.SetHeaderInformation1(2, -1, 'Prix moyen estimé d''un album: ' + FormatCurr(FormatMonnaie, PrixMoyen), taCenter, Prn.Font.name, 12, []);
 
       Prn.CreateColumn1(0, 15, 15, taLeftJustify, Prn.Font.name, 12, []); // numéro
@@ -1836,8 +1833,8 @@ begin
             Prn.Columns[1].Font.Color := clRed
           else
             Prn.Columns[1].Font.Color := clFuchsia
-          else
-            Prn.Columns[1].Font.Color := clBlack;
+        else
+          Prn.Columns[1].Font.Color := clBlack;
 
         try
           s := '';

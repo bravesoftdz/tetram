@@ -141,7 +141,7 @@ begin
   lvUnivers.Items.EndUpdate;
   lvAuteurs.Items.EndUpdate;
 
-  Description.Text := FParaBD.Description.Text;
+  Description.Text := FParaBD.Description;
 
   cbStock.Checked := FParaBD.Stock;
   cbOffert.Checked := FParaBD.Offert;

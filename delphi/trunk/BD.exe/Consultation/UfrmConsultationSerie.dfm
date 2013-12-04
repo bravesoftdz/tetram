@@ -26,7 +26,6 @@ object frmConsultationSerie: TfrmConsultationSerie
     ParentBackground = True
     TabOrder = 0
     OnClick = EditeurClick
-    ExplicitWidth = 862
     DesignSize = (
       692
       805)
@@ -38,7 +37,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Alignment = taRightJustify
       Caption = 'Notes'
       Color = clWhite
-      FocusControl = remarques
+      FocusControl = edRemarques
       Font.Charset = ANSI_CHARSET
       Font.Color = 12615680
       Font.Height = -11
@@ -56,7 +55,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       Alignment = taRightJustify
       Caption = 'Histoire'
       Color = clWhite
-      FocusControl = sujet
+      FocusControl = edSujet
       Font.Charset = ANSI_CHARSET
       Font.Color = 12615680
       Font.Height = -11
@@ -337,7 +336,7 @@ object frmConsultationSerie: TfrmConsultationSerie
       ParentFont = False
       Transparent = True
     end
-    object remarques: TMemo
+    object edRemarques: TMemo
       Left = 59
       Top = 324
       Width = 627
@@ -351,9 +350,8 @@ object frmConsultationSerie: TfrmConsultationSerie
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 0
-      ExplicitWidth = 672
     end
-    object sujet: TMemo
+    object edSujet: TMemo
       Left = 59
       Top = 252
       Width = 627
@@ -367,7 +365,6 @@ object frmConsultationSerie: TfrmConsultationSerie
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 1
-      ExplicitWidth = 672
     end
     object lvScenaristes: TVDTListView
       Left = 59
@@ -388,7 +385,6 @@ object frmConsultationSerie: TfrmConsultationSerie
       TabOrder = 2
       OnData = lvScenaristesData
       OnDblClick = lvScenaristesDblClick
-      ExplicitWidth = 672
     end
     object lvDessinateurs: TVDTListView
       Left = 59
@@ -410,7 +406,6 @@ object frmConsultationSerie: TfrmConsultationSerie
       TabOrder = 3
       OnData = lvDessinateursData
       OnDblClick = lvScenaristesDblClick
-      ExplicitWidth = 672
     end
     object lvColoristes: TVDTListView
       Left = 59
@@ -432,7 +427,6 @@ object frmConsultationSerie: TfrmConsultationSerie
       TabOrder = 4
       OnData = lvColoristesData
       OnDblClick = lvScenaristesDblClick
-      ExplicitWidth = 672
     end
     object vtAlbums: TVirtualStringTree
       Left = 59
@@ -464,7 +458,6 @@ object frmConsultationSerie: TfrmConsultationSerie
       TabOrder = 5
       OnAfterItemPaint = vtAlbumsAfterItemPaint
       OnDblClick = vtAlbumsDblClick
-      ExplicitWidth = 672
       Columns = <>
     end
     object vtParaBD: TVirtualStringTree
@@ -494,7 +487,6 @@ object frmConsultationSerie: TfrmConsultationSerie
       TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
       TreeOptions.StringOptions = []
       OnDblClick = vtParaBDDblClick
-      ExplicitWidth = 672
       Columns = <>
     end
     object cbTerminee: TLabeledCheckBox
@@ -556,7 +548,6 @@ object frmConsultationSerie: TfrmConsultationSerie
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 9
-      ExplicitWidth = 299
     end
   end
   object MainMenu1: TMainMenu

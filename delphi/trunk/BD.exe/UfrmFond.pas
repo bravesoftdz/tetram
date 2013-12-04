@@ -6,7 +6,7 @@ interface
 {$WARN SYMBOL_DEPRECATED OFF}
 
 uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ImgList, Menus, ComCtrls, ExtCtrls, Buttons, ActnList,
-  Printers, iniFiles, jpeg, Contnrs, ToolWin, UBdtForms, PngImageList, pngImage, PngFunctions, UHistorique,
+  Printers, iniFiles, jpeg, Generics.Collections, ToolWin, UBdtForms, PngImageList, pngImage, PngFunctions, UHistorique,
   System.Actions;
 
 const
@@ -20,11 +20,6 @@ type
   end;
 
   TActionUpdate = function: Boolean of object;
-
-  TStack = class(Contnrs.TStack) // surcharge pour pouvoir acceder à List
-    // published
-    // property List;
-  end;
 
   TfrmFond = class(TbdtForm)
     ImageList1: TImageList;
@@ -185,7 +180,7 @@ type
   private
     { Déclarations privées }
     FToolOriginal: TStringList;
-    FModalWindows: TStack;
+    FModalWindows: TStack<TForm>;
     procedure ChargeToolBarres(sl: TStringList);
     procedure WMSyscommand(var msg: TWmSysCommand); message WM_SYSCOMMAND;
     procedure WMCopyData(var msg: TWMCopyData); message WM_COPYDATA;
@@ -230,18 +225,19 @@ end;
 procedure TfrmFond.FormDestroy(Sender: TObject);
 var
   i: Integer;
+  ini: TIniFile;
 begin
-  with TIniFile.Create(FichierIni) do
-    try
-      case WindowState of
-        wsMaximized:
-          DeleteKey('Options', 'WS');
-        wsNormal:
-          WriteString('Options', 'WS', Format('%dx%d-%dx%d', [Width, Height, Left, Top]));
-      end;
-    finally
-      Free;
+  ini := TIniFile.Create(FichierIni);
+  try
+    case WindowState of
+      wsMaximized:
+        ini.DeleteKey('Options', 'WS');
+      wsNormal:
+        ini.WriteString('Options', 'WS', Format('%dx%d-%dx%d', [Width, Height, Left, Top]));
     end;
+  finally
+    ini.Free;
+  end;
 
   Historique.OnChange := nil;
   FreeAndNil(FModalWindows);
@@ -376,7 +372,7 @@ var
   i: Integer;
   tlb: TToolButton;
 begin
-  FModalWindows := TStack.Create;
+  FModalWindows := TStack<TForm>.Create;
   FToolOriginal := TStringList.Create;
   for i := 0 to ToolBar1.ButtonCount - 1 do
   begin
@@ -897,13 +893,15 @@ end;
 function TfrmFond.IsShowing(Classe: TFormClass): Boolean;
 var
   i: Integer;
-  c: TObject;
+  c: TForm;
+  a: TArray<TForm>;
 begin
   Result := False;
+  a := FModalWindows.ToArray;
   i := 0;
   while not Result and (i < FModalWindows.Count) do
   begin
-    c := FModalWindows.List[i];
+    c := a[i];
     Result := c is Classe;
     Inc(i);
   end;

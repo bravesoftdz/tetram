@@ -404,7 +404,7 @@ begin
       else
         Label12.Caption := rsTransAcheteLe + ' :';
       AcheteLe.Caption := FCurrentEdition.sDateAchat;
-      edNotes.Text := FCurrentEdition.Notes.Text;
+      edNotes.Text := FCurrentEdition.Notes;
 
       ShowCouverture(0);
       if FCurrentEdition.Gratuit then
@@ -515,13 +515,13 @@ begin
   HorsSerie.Checked := FAlbum.HorsSerie;
   AnneeParution.Caption := IIf(FAlbum.MoisParution > 0, FormatSettings.ShortMonthNames[FAlbum.MoisParution] + ' ', '') +
     NonZero(IntToStr(FAlbum.AnneeParution));
-  s := FAlbum.sujet.Text;
+  s := FAlbum.sujet;
   if s = '' then
-    s := FAlbum.Serie.sujet.Text;
+    s := FAlbum.Serie.sujet;
   sujet.Text := s;
-  s := FAlbum.Notes.Text;
+  s := FAlbum.Notes;
   if s = '' then
-    s := FAlbum.Serie.Notes.Text;
+    s := FAlbum.Serie.Notes;
   remarques.Text := s;
 
   s := '';

@@ -32,7 +32,8 @@ implementation
 
 {$R *.dfm}
 
-uses UNet, Divers, Updates, DIMime, DIMimeStreams, UIB, UIBLib, UdmPrinc, Commun, DateUtils, Procedures, CommonConst, VarUtils, StrUtils;
+uses Math, UNet, Divers, Updates, DIMime, DIMimeStreams, UIB, UIBLib, UdmPrinc, Commun, DateUtils, Procedures, CommonConst, VarUtils, StrUtils,
+  Generics.Collections;
 
 type
   TSynchroSpecial = (tsNone, tsImages);
@@ -47,24 +48,18 @@ type
   end;
 
 const
-  TablesSynchro: array [1 .. 16] of RInfoTable = (
-    (TableName: 'PERSONNES'; ID: 'id_personne'; UpperFields: 'nompersonne'),
-    (TableName: 'EDITEURS'; ID: 'id_editeur'; UpperFields: 'nomediteur'),
-    (TableName: 'COLLECTIONS'; ID: 'id_collection'; UpperFields: 'nomcollection'),
-    (TableName: 'SERIES'; ID: 'id_serie'; SkipFields: 'etat=1.0.0.1@reliure=1.0.0.1@typeedition=1.0.0.1@orientation=1.0.0.1@formatedition=1.0.0.1@senslecture=1.0.0.1@vo=1.0.0.1@couleur=1.0.0.1@notation'; UpperFields: 'titreserie@sujetserie@remarquesserie'),
-    (TableName: 'ALBUMS'; ID: 'id_album'; SkipFields: 'notation'; UpperFields: 'titrealbum@sujetalbum@remarquesalbum'),
-    (TableName: 'EDITIONS'; ID: 'id_edition'),
-    (TableName: 'AUTEURS'; ID: 'id_auteur'),
-    (TableName: 'GENRES'; ID: 'id_genre'; UpperFields: 'genre'),
-    (TableName: 'GENRESERIES'; ID: 'id_genreseries'),
-    (TableName: 'LISTES'; ID: 'id_liste'),
-    (TableName: 'ALBUMS_MANQUANTS'; UpperFields: 'titreserie'; ProcedureStockee: 'ALBUMS_MANQUANTS(1, 1, NULL)'),
-    (TableName: 'PREVISIONS_SORTIES'; UpperFields: 'titreserie'; ProcedureStockee: 'PREVISIONS_SORTIES(1, NULL)'),
-    (TableName: 'COUVERTURES'; ID: 'id_couverture'; TypeSynchro: tsImages; SkipFields: 'stockagecouverture@imagecouverture@fichiercouverture'),
-    (TableName: 'UNIVERS'; ID: 'id_univers'; UpperFields: 'nomunivers'),
-    (TableName: 'SERIES_UNIVERS'; ID: 'id_serie_univers'),
-    (TableName: 'ALBUMS_UNIVERS'; ID: 'id_album_univers')
-  );
+  TablesSynchro: array [1 .. 16] of RInfoTable = ((TableName: 'PERSONNES'; ID: 'id_personne'; UpperFields: 'nompersonne'), (TableName: 'EDITEURS';
+    ID: 'id_editeur'; UpperFields: 'nomediteur'), (TableName: 'COLLECTIONS'; ID: 'id_collection'; UpperFields: 'nomcollection'), (TableName: 'SERIES';
+    ID: 'id_serie';
+    SkipFields
+    : 'etat=1.0.0.1@reliure=1.0.0.1@typeedition=1.0.0.1@orientation=1.0.0.1@formatedition=1.0.0.1@senslecture=1.0.0.1@vo=1.0.0.1@couleur=1.0.0.1@notation';
+    UpperFields: 'titreserie@sujetserie@remarquesserie'), (TableName: 'ALBUMS'; ID: 'id_album'; SkipFields: 'notation';
+    UpperFields: 'titrealbum@sujetalbum@remarquesalbum'), (TableName: 'EDITIONS'; ID: 'id_edition'), (TableName: 'AUTEURS'; ID: 'id_auteur'),
+    (TableName: 'GENRES'; ID: 'id_genre'; UpperFields: 'genre'), (TableName: 'GENRESERIES'; ID: 'id_genreseries'), (TableName: 'LISTES'; ID: 'id_liste'),
+    (TableName: 'ALBUMS_MANQUANTS'; UpperFields: 'titreserie'; ProcedureStockee: 'ALBUMS_MANQUANTS(1, 1, NULL)'), (TableName: 'PREVISIONS_SORTIES';
+    UpperFields: 'titreserie'; ProcedureStockee: 'PREVISIONS_SORTIES(1, NULL)'), (TableName: 'COUVERTURES'; ID: 'id_couverture'; TypeSynchro: tsImages;
+    SkipFields: 'stockagecouverture@imagecouverture@fichiercouverture'), (TableName: 'UNIVERS'; ID: 'id_univers'; UpperFields: 'nomunivers'),
+    (TableName: 'SERIES_UNIVERS'; ID: 'id_serie_univers'), (TableName: 'ALBUMS_UNIVERS'; ID: 'id_album_univers'));
 
 procedure TfrmPublier.Button1Click(Sender: TObject);
 const
@@ -127,8 +122,8 @@ var
   begin
     Reponse.Size := 0;
     if LoadStreamURL(URL, Param, Reponse, False) <> 200 then
-      raise Exception.Create(
-        'Impossible d''accéder au site:'#13#10'- vérifiez le paramétrage de l''adresse'#13#10'- Assurez-vous que le modèle est bien chargé sur le site');
+      raise Exception.Create
+        ('Impossible d''accéder au site:'#13#10'- vérifiez le paramétrage de l''adresse'#13#10'- Assurez-vous que le modèle est bien chargé sur le site');
     Reponse.Position := 0;
     slReponse.LoadFromStream(Reponse);
     Memo1.Lines.Text := Reponse.DataString;
@@ -160,45 +155,95 @@ var
   end;
 
   procedure CheckVersions;
+  type
+    TCheckConf = reference to function(const confCode: string): Boolean;
   var
     i: Integer;
+    lstValues: TStringList;
+    CheckConf: TCheckConf;
   begin
     SendData(0);
 
     Decoupe(0, s1, s2);
-    if s1 <> 'intf_version' then
+    if (s1 <> 'intf_version') then
       raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
-    if TVersionNumber(s2) < '1' then
-      raise Exception.Create('Version d''interface non supportée.'#13#10'Veuillez mettre à jour BDThèque.');
+    if (TVersionNumber(s2) < '1') then
+      raise Exception.Create('Version d''interface non supportée.'#13#10'Veuillez mettre à jour BDThèque.')
+    else if (TVersionNumber(s2) = '1') then
+    begin
+      Decoupe(1, s1, s2);
+      if s1 <> 'php_version' then
+        raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
+      if Copy(s2, Length(s2) - 2, 2) <> 'OK' then
+        raise Exception.Create('La version de php disponible sur le serveur est insuffisante.'#13#10'Veuillez utiliser un autre hébergeur.');
 
-    Decoupe(1, s1, s2);
-    if s1 <> 'php_version' then
-      raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
-    if Copy(s2, Length(s2) - 2, 2) <> 'OK' then
-      raise Exception.Create('La version de php disponible sur le serveur est insuffisante.'#13#10'Veuillez utiliser un autre hébergeur.');
+      Decoupe(2, s1, s2);
+      if s1 <> 'XML' then
+        raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
+      if Copy(s2, Length(s2) - 2, 2) <> 'OK' then
+        raise Exception.Create('Le support XML n''est pas présent dans le moteur php du serveur.'#13#10'Veuillez utiliser un autre hébergeur.');
 
-    Decoupe(2, s1, s2);
-    if s1 <> 'XML' then
-      raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
-    if Copy(s2, Length(s2) - 2, 2) <> 'OK' then
-      raise Exception.Create('Le support XML n''est pas présent dans le moteur php du serveur.'#13#10'Veuillez utiliser un autre hébergeur.');
+      // Decoupe(3, s1, s2); // support JSON
 
-    // Decoupe(3, s1, s2); // support JSON
+      i := 5;
+      if IsError(4) then
+        raise Exception.Create
+          ('Impossible de se connecter à la base de données MySQL:'#13#10'- vérifier le paramétrage de la base de données'#13#10'- Assurez-vous que le modèle est bien chargé sur le site après avoir regénéré le site'#13#10#13#10
+          + GetLabel(i));
+      Decoupe(4, s1, s2);
+      if s1 <> 'mysql_version' then
+        raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
+      if Copy(s2, Length(s2) - 2, 2) <> 'OK' then
+        raise Exception.Create('La version de MySQL disponible sur le serveur est insuffisante.'#13#10'Veuillez utiliser un autre hébergeur.');
 
-    i := 5;
-    if IsError(4) then
-      raise Exception.Create(
-        'Impossible de se connecter à la base de données MySQL:'#13#10'- vérifier le paramétrage de la base de données'#13#10'- Assurez-vous que le modèle est bien chargé sur le site après avoir regénéré le site'#13#10#13#10 + GetLabel(i));
-    Decoupe(4, s1, s2);
-    if s1 <> 'mysql_version' then
-      raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
-    if Copy(s2, Length(s2) - 2, 2) <> 'OK' then
-      raise Exception.Create('La version de MySQL disponible sur le serveur est insuffisante.'#13#10'Veuillez utiliser un autre hébergeur.');
+      Decoupe(5, s1, s2);
+      if s1 <> 'db_version' then
+        raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
+      db_version := s2;
+    end
+    else
+    begin
+      lstValues := TStringList.Create;
+      try
+        for i := 0 to Pred(slReponse.Count) do
+        begin
+          Decoupe(i, s1, s2);
+          lstValues.Values[s1] := s2;
+        end;
 
-    Decoupe(5, s1, s2);
-    if s1 <> 'db_version' then
-      raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
-    db_version := s2;
+        CheckConf := function(const confCode: string): Boolean
+          begin
+            i := lstValues.IndexOfName(confCode);
+            if i = -1 then
+              raise Exception.Create('Erreur inattendue: '#13''#10'' + slReponse.Text);
+            Result := SameText(Copy(lstValues.ValueFromIndex[i], Length(lstValues.ValueFromIndex[i]) - 2, 2), 'OK');
+          end;
+
+        if not CheckConf('php_version') then
+          raise Exception.Create('La version de php disponible sur le serveur est insuffisante.'#13''#10'Veuillez utiliser un autre hébergeur.');
+        if not CheckConf('XML') then
+          raise Exception.Create('Le support XML n''est pas présent dans le moteur php du serveur.'#13#10'Veuillez utiliser un autre hébergeur.');
+        if not CheckConf('MYSQLI') then
+          raise Exception.Create('Le support MySQLi n''est pas présent dans le moteur php du serveur.'#13#10'Veuillez utiliser un autre hébergeur.');
+
+        if not CheckConf('DB') then
+          raise Exception.Create
+            ('Impossible de se connecter à la base de données MySQL:'#13#10'- vérifier le paramétrage de la base de données et que la base de données est accessible'#13#10'- Assurez-vous que le modèle est bien chargé sur le site après avoir regénéré le site'#13#10#13#10
+            + lstValues.ValueFromIndex[i + 1])
+        else
+        begin
+          if not CheckConf('mysql_version') then
+            raise Exception.Create('La version de MySQL disponible sur le serveur est insuffisante.'#13#10'Veuillez utiliser un autre hébergeur.');
+          db_version := lstValues.Values['db_version'];
+          if db_version = '' then
+            raise Exception.Create('Erreur inattendue: '#13#10 + slReponse.Text);
+        end;
+      finally
+        lstValues.Free;
+      end;
+    end
+    // else
+    // raise Exception.Create('Version d''interface non supportée.'#13#10'Veuillez mettre à jour BDThèque.');
   end;
 
   function CleanHTTP(Valeur: string): string;
@@ -213,10 +258,11 @@ var
       while c^ <> #0 do
       begin
         case c^ of
-          ' ', '0' .. '9', 'a' .. 'z', 'A' .. 'Z': Result := Result + c^;
-          else
-            Result := Result + '&#' + IntToStr(Ord(c^)) + ';';
-          end;
+          ' ', '0' .. '9', 'a' .. 'z', 'A' .. 'Z':
+            Result := Result + c^;
+        else
+          Result := Result + '&#' + IntToStr(Ord(c^)) + ';';
+        end;
         Inc(c);
       end;
     end;
@@ -224,8 +270,8 @@ var
 
   procedure SendOption(const cle, Valeur: string);
   begin
-    SendData(2, '<data><table>options</table><primarykey>cle</primarykey><records><record><cle>' + CleanHTTP(cle) + '</cle><valeur>' + CleanHTTP
-        (Valeur) + '</valeur></record></records></data>');
+    SendData(2, '<data><table>options</table><primarykey>cle</primarykey><records><record><cle>' + CleanHTTP(cle) + '</cle><valeur>' + CleanHTTP(Valeur) +
+      '</valeur></record></records></data>');
   end;
 
   function GetOption(const cle: string): string;
@@ -275,37 +321,52 @@ var
 
   procedure RefreshProgressBar;
   var
-    moyExecTime, moyExecTimeTable: Cardinal;
-    OperationFaites, OperationFaitesTable: Cardinal;
-    OperationRestantes, OperationRestantesTable: Cardinal;
-    ExecTime, ExecTimeTable: Cardinal;
-    TempsRestant: Cardinal;
+    OperationAFaireTotal, OperationAFaireTable, OperationAFaireAutresTables: Cardinal;
+    OperationFaitesTotal, OperationFaitesTable, OperationFaitesAutresTables: Cardinal;
+    OperationRestantTotal, OperationRestantTable, OperationRestantAutresTables: Cardinal;
+
+    ExecTimeTotal, ExecTimeTable, ExecTimeAutresTables: Cardinal;
+    moyExecTimeTable, moyExecTimeAutresTables: Cardinal;
+    TempsRestantTotal, TempsRestantTable, TempsRestantAutresTables: Cardinal;
   begin
     ProgressBar1.StepBy(1);
     ProgressBar2.StepBy(1);
 
+    OperationAFaireTable := Cardinal(ProgressBar1.Max);
+    OperationAFaireTotal := Cardinal(ProgressBar2.Max);
+    OperationAFaireAutresTables := OperationAFaireTotal - OperationAFaireTable;
+
     OperationFaitesTable := Cardinal(ProgressBar1.Position);
-    OperationRestantesTable := Cardinal(ProgressBar1.Max) - OperationFaitesTable;
+    OperationFaitesTotal := Cardinal(ProgressBar2.Position);
+    OperationFaitesAutresTables := OperationFaitesTotal - OperationFaitesTable;
+
+    OperationRestantTable := OperationAFaireTable - OperationFaitesTable;
+    OperationRestantTotal := OperationAFaireTotal - OperationFaitesTotal;
+    OperationRestantAutresTables := OperationRestantTotal - OperationRestantTable;
+
     ExecTimeTable := MilliSecondsBetween(Now, StartTimeTable);
-    moyExecTimeTable := ExecTimeTable div OperationFaitesTable;
+    ExecTimeTotal := MilliSecondsBetween(Now, StartTime);
+    ExecTimeAutresTables := ExecTimeTotal - ExecTimeTable;
+
+    if OperationFaitesTable = 0 then
+      moyExecTimeTable := 0
+    else
+      moyExecTimeTable := ExecTimeTable div OperationFaitesTable;
     if moyExecTimeTable < 10 then
       moyExecTimeTable := 10; // au départ la moyenne n'est pas forcément très juste: par tatonnement, il faut au moins 10ms par enregistrement
+    if OperationFaitesAutresTables = 0 then
+      moyExecTimeAutresTables := moyExecTimeTable
+    else
+      moyExecTimeAutresTables := ExecTimeAutresTables div OperationFaitesAutresTables;
+    if moyExecTimeAutresTables < 10 then
+      moyExecTimeAutresTables := 10; // au départ la moyenne n'est pas forcément très juste: par tatonnement, il faut au moins 10ms par enregistrement
 
-    TempsRestant := moyExecTimeTable * OperationRestantesTable;
+    TempsRestantTable := moyExecTimeTable * OperationRestantTable;
+    TempsRestantAutresTables := moyExecTimeAutresTables * OperationRestantAutresTables;
+    TempsRestantTotal := TempsRestantTable + TempsRestantAutresTables;
 
-    if ProgressBar1.Position <> ProgressBar2.Position then
-    begin
-      OperationFaites := Cardinal(ProgressBar2.Position) - OperationFaitesTable;
-      OperationRestantes := Cardinal(ProgressBar2.Max - ProgressBar2.Position) - OperationRestantesTable;
-      ExecTime := MilliSecondsBetween(Now, StartTime) - ExecTimeTable;
-      moyExecTime := ExecTime div OperationFaites;
-      if moyExecTime < 10 then
-        moyExecTime := 10; // au départ la moyenne n'est pas forcément très juste: par tatonnement, il faut au moins 10ms par enregistrement
-
-      TempsRestant := TempsRestant + moyExecTime * OperationRestantes;
-    end;
-
-    Label9.Caption := 'Fin estimée : ' + FormatDateTime('HH:mm:ss', IncMilliSecond(Now, TempsRestant));
+    Label9.Caption := Format('Fin estimée : %s (%s)', [FormatDateTime('HH:mm:ss', IncMilliSecond(Now, TempsRestantTotal)),
+      TimeToStr(IncMilliSecond(0, TempsRestantTotal))]);
     Application.ProcessMessages;
   end;
 
@@ -339,10 +400,10 @@ var
     i, l: Integer;
     // ms: TMemoryStream;
     // ss: TStringStream;
-    listFields, listUpperFields: TList;
+    listFields, listUpperFields: TList<Integer>;
   begin
-    listFields := TList.Create;
-    listUpperFields := TList.Create;
+    listFields := TList<Integer>.Create;
+    listUpperFields := TList<Integer>.Create;
     try
       enteteXML := '<table>' + LowerCase(InfoTable.TableName) + '</table>';
       AjoutString(enteteXML, LowerCase(InfoTable.ID), '', '<primarykey>', '</primarykey>');
@@ -359,11 +420,11 @@ var
           begin
             l := l + Length(champ) + 2;
             if db_version >= Copy(s, l, PosEx('@', s, l) - l) then
-              listFields.Add(Pointer(i));
+              listFields.Add(i);
             Continue; // ce n'est pas grave si on ne fait pas le test du champ à upper: si on l'a passé c'est qu'il ne l'est pas
           end;
           if Pos('@' + champ + '@', s) = 0 then
-            listFields.Add(Pointer(i));
+            listFields.Add(i);
 
           s := '@' + InfoTable.UpperFields + '@';
           l := Pos('@' + champ + '=', s);
@@ -371,11 +432,11 @@ var
           begin
             l := l + Length(champ) + 2;
             if db_version >= Copy(s, l, PosEx('@', s, l) - l) then
-              listUpperFields.Add(Pointer(i));
+              listUpperFields.Add(i);
             Continue;
           end;
           if Pos('@' + champ + '@', s) > 0 then
-            listUpperFields.Add(Pointer(i));
+            listUpperFields.Add(i);
         end;
         bodyXML := '';
         while not Eof do
@@ -383,15 +444,17 @@ var
           recordXML := '';
           for l := 0 to Pred(listFields.Count) do
           begin
-            i := Integer(listFields[l]);
+            i := listFields[l];
             champ := LowerCase(Fields.AliasName[i]);
             if Fields.IsNull[i] then
               contenuChamp := ''
             else
             begin
               case Fields.FieldType[i] of
-                uftDate: contenuChamp := DateToStr(Fields.AsDate[i], SQLSettings);
-                uftTimestamp: contenuChamp := DateToStr(Fields.AsDateTime[i], SQLSettings) + ' ' + TimeToStr(Fields.AsDateTime[i], SQLSettings);
+                uftDate:
+                  contenuChamp := DateToStr(Fields.AsDate[i], SQLSettings);
+                uftTimestamp:
+                  contenuChamp := DateToStr(Fields.AsDateTime[i], SQLSettings) + ' ' + TimeToStr(Fields.AsDateTime[i], SQLSettings);
                 // uftBlob:
                 // begin
                 // ms := TMemoryStream.Create;
@@ -406,10 +469,11 @@ var
                 // ss.Free;
                 // end;
                 // end;
-                uftNumeric: contenuChamp := StringReplace(Fields.AsString[i], FormatSettings.DecimalSeparator, '.', []);
-                else
-                  contenuChamp := Trim(Fields.AsString[i]);
-                end;
+                uftNumeric:
+                  contenuChamp := StringReplace(Fields.AsString[i], FormatSettings.DecimalSeparator, '.', []);
+              else
+                contenuChamp := Trim(Fields.AsString[i]);
+              end;
               // if Fields.FieldType[i] <> uftBlob then
 
             end;
@@ -417,16 +481,16 @@ var
             if contenuChamp = '' then
             begin
               AjoutString(recordXML, Format('<%s null="T" />', [champ]), '');
-              if listUpperFields.IndexOf(Pointer(i)) <> -1 then
+              if listUpperFields.IndexOf(i) <> -1 then
                 AjoutString(recordXML, Format('<%s null="T" />', ['upper' + champ]), '');
             end
             else
             begin
               AjoutString(recordXML, CleanHTTP(contenuChamp), '', Format('<%s%s>', [champ, IIf(Fields.FieldType[i] = uftBlob,
-                    { ' type="B"' } '', '')]), Format('</%s>', [champ]));
-              if listUpperFields.IndexOf(Pointer(i)) <> -1 then
-                AjoutString(recordXML, CleanHTTP(UpperCase(SansAccents(contenuChamp))), '', Format
-                    ('<%s%s>', ['upper' + champ, IIf(Fields.FieldType[i] = uftBlob, { ' type="B"' } '', '')]), Format('</%s>', ['upper' + champ]));
+                { ' type="B"' } '', '')]), Format('</%s>', [champ]));
+              if listUpperFields.IndexOf(i) <> -1 then
+                AjoutString(recordXML, CleanHTTP(UpperCase(SansAccents(contenuChamp))), '',
+                  Format('<%s%s>', ['upper' + champ, IIf(Fields.FieldType[i] = uftBlob, { ' type="B"' } '', '')]), Format('</%s>', ['upper' + champ]));
             end;
           end;
           AjoutString(bodyXML, recordXML, '', '<record' + IIf(isDelete, ' action="D"', '') + '>', '</record>');
@@ -571,6 +635,7 @@ var
 var
   i: Integer;
   rc: Integer;
+  table: RInfoTable;
 begin
   // TODO: ajouter la gestion des univers
   // TODO: vérifier la gestion des catégories (table LISTES, le champ REF contient maintenant le code de la catégorie * 100)
@@ -616,16 +681,15 @@ begin
         FetchBlobs := True;
 
         rc := 0;
-        for i := low(TablesSynchro) to high(TablesSynchro) do
-          with TablesSynchro[i] do
-            if ((version_mini = '') or (db_version >= version_mini)) and ((version_maxi = '') or (db_version < version_maxi)) then
-              case TypeSynchro of
-                tsImages:
-                  if CheckBox2.Checked then
-                    Inc(rc, CompteUpdates(TablesSynchro[i]) * 2); // la synchro des images est faite en 2 fois : les données puis les fichiers
-                else
-                  Inc(rc, CompteUpdates(TablesSynchro[i]));
-                end;
+        for table in TablesSynchro do
+          if ((table.version_mini = '') or (db_version >= table.version_mini)) and ((table.version_maxi = '') or (db_version < table.version_maxi)) then
+            case table.TypeSynchro of
+              tsImages:
+                if CheckBox2.Checked then
+                  Inc(rc, CompteUpdates(table) * 2); // la synchro des images est faite en 2 fois : les données puis les fichiers
+            else
+              Inc(rc, CompteUpdates(table));
+            end;
 
         if rc = 0 then
           ShowMessage('Rien à publier')

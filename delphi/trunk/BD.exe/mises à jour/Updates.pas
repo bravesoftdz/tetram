@@ -2,7 +2,7 @@ unit Updates;
 
 interface
 
-uses Contnrs, Classes, UIB, Divers, Generics.Collections, Generics.Defaults;
+uses Classes, UIB, Divers, Generics.Collections, Generics.Defaults;
 
 type
   TUpdateFBCallback = procedure(Query: TUIBScript);

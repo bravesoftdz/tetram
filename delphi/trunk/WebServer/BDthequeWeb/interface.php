@@ -1,7 +1,7 @@
 <?php
 if (!isset($_REQUEST['isExe'])) echo "<pre>\n";
 
-$intf_version = '1';
+$intf_version = '2';
 require_once 'db.php';
 
 function Message($code, $msg)
@@ -19,7 +19,7 @@ function Message($code, $msg)
 		Message($code, print_r($msg, true));
 }
 
-if ($_REQUEST['auth_key'] != $db_key) {
+if (!isset($_REQUEST['auth_key']) || $_REQUEST['auth_key'] != $db_key) {
 	Message('ERROR', 'Auth key required');
 	exit;
 }
@@ -157,8 +157,7 @@ function wfMkdirParents( $fullDir, $mode = null ) {
 	return true;
 }
 
-$action = $_REQUEST['action'];
-if (!$action) $action = 0;
+$action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 0;
 
 switch ($action)
 {
@@ -170,22 +169,25 @@ switch ($action)
 		Message('INFO', "php_version=$php_version ".(version_compare($php_version, $php_version_mini, '>=')?'(OK)':'(KO)'));
 		Message('INFO', 'XML='.(function_exists('xml_parser_create')?'(OK)':'(KO)'));
 		Message('INFO', 'JSON='.(function_exists('json_decode')?'(OK)':'(KO)'));        
+		Message('INFO', 'MYSQLI='.(function_exists('mysqli_connect')?'(OK)':'(KO)'));        
 
 		set_error_handler('OnErrorDoNothing');
 
-		if ($db_ok) { 
-			preg_match("/^(\d+)\.(\d+)(\.(\d+))*/", mysql_get_server_info(), $mysql_version);
+		if ($db_link) { 
+			Message('INFO', 'DB=(OK)');
+
+			preg_match("/^(\d+)\.(\d+)(\.(\d+))*/", $db_link->server_info, $mysql_version);
 			$mysql_version = $mysql_version[0];
 			Message('INFO', "mysql_version=$mysql_version ".(version_compare($mysql_version, $mysql_version_mini, '>=')?'(OK)':'(KO)'));
 	
-			$rs = mysql_query("select valeur from ".$db_prefix."options where cle = 'version'");
-			Message('INFO', "db_version=".($rs && ($row = mysql_fetch_object($rs))?$row->valeur:'0.0.0.0'));
-			if ($rs) mysql_free_result($rs);
+			$rs = $db_link->query("select valeur from ".$db_prefix."options where cle = 'version'");
+			Message('INFO', "db_version=".($rs && ($row = $rs->fetch_object())?$row->valeur:'0.0.0.0'));
+			if ($rs) $rs->free();
 		}
 		else
 		{
-			Message('ERROR', 'incorrect db params');
-			Message('INFO', mysql_error());
+			Message('INFO', 'DB=(KO)');
+			Message('ERROR', $db_link->error);
 		}
 			
 		restore_error_handler;
@@ -200,13 +202,13 @@ switch ($action)
 			exit;
 		}
 
-		$lines = explode("@@", $data);
+		$lines = explode('@@', $data);
 		foreach($lines as $sql)
 		if (trim($sql) != '') {
 			prepare_sql($sql);
-			if (!mysql_query($sql)) 
+			if (!$db_link->query($sql)) 
 			{
-				Message('ERROR', mysql_error());
+				Message('ERROR', $db_link->error);
 				Message('INFO', $sql);
 				exit;
 			}
@@ -227,7 +229,7 @@ switch ($action)
 		$xml = xml2ary($data);
 		
 		$table = $db_prefix.$xml['data']['_c']['table']['_v'];
-		$primary_key = $xml['data']['_c']['primarykey']['_v'];
+		$primary_key = isset($xml['data']['_c']['primarykey']) ? $xml['data']['_c']['primarykey']['_v'] : null;
 
 		if (!$table) 
 		{
@@ -236,7 +238,7 @@ switch ($action)
 			exit;
 		}
 		
-		$rs = mysql_query("SHOW COLUMNS FROM $table");
+		$rs = $db_link->query("SHOW COLUMNS FROM $table");
 		if (!$rs)
 		{
 			Message('ERROR', 'unknown table');
@@ -247,7 +249,7 @@ switch ($action)
 		{   
 			$xml_primary_key = $primary_key;
 			$primary_key = '';
-			while ($row = mysql_fetch_object($rs)) 
+			while ($row = $rs->fetch_object()) 
 				if ($row->Field == $xml_primary_key)
 				{
 					$primary_key = $row->Field;
@@ -261,7 +263,7 @@ switch ($action)
 				exit;
 			}
 		}
-		mysql_free_result($rs);     
+		$rs->free();     
 		
 		if (array_key_exists('_c', $xml['data']['_c']['records']['_c']['record']))
 			$records = $xml['data']['_c']['records']['_c'];
@@ -269,7 +271,7 @@ switch ($action)
 			$records = $xml['data']['_c']['records']['_c']['record'];
 		foreach($records as $record)
 		{
-			$is_delete = $record['_a']['action'] == 'D';
+			$is_delete = isset($record['_a']) && ($record['_a']['action'] == 'D');
 			if ($primary_key && $record['_c'][$primary_key]['_v'] && ($record['_c'][$primary_key]['_v'] == ''))
 			 {
 				Message('ERROR', 'missing primary key value');
@@ -284,7 +286,7 @@ switch ($action)
 			{
 				if (substr($prop, 0, 1) == '_') continue;
 				$v = $value['_v'];
-				if ($value['_a']['type'] == 'B') $v = base64_decode($v);
+				if (isset($value['_a']) && isset($value['_a']['type']) && ($value['_a']['type'] == 'B')) $v = base64_decode($v);
 				$sql_insert .= ($sql_insert == ''?'':', ').$prop.' '.format_string_null($v);
 				$sql_where .= ($sql_where == ''?'':' and ').$prop.' '.format_string_null($v, true);
 				if ($prop != $primary_key) $sql_update .= ($sql_update == ''?'':', ')."$prop = values($prop)";
@@ -294,10 +296,10 @@ switch ($action)
 				$sql = "delete from $table".($sql_where != ''?' where '.$sql_where:'');
 			else
 				$sql = "insert into $table set $sql_insert on duplicate key update $sql_update";
-			if (!mysql_query($sql))
+			if (!$db_link->query($sql))
 			{
 				Message('ERROR', 'error during '.($is_delete?'delete':'insert/update'));
-				Message('INFO', mysql_error());
+				Message('INFO', $db_link->error);
 				Message('INFO', $sql);
 				Message('INFO', print_r($xml, true));
 				exit;

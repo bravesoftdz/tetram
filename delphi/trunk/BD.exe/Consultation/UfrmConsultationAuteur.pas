@@ -181,7 +181,7 @@ begin
     edNom.Font.Style := edNom.Font.Style - [fsUnderline];
     edNom.Cursor := crDefault;
   end;
-  edBiographie.Text := FAuteur.Biographie.Text;
+  edBiographie.Text := FAuteur.Biographie;
 
   vstSeries.RootNodeCount := FAuteur.Series.Count;
 end;

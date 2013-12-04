@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, StdCtrls, LoadComplet, Generics.Collections, Contnrs, TypeRec,
+  Dialogs, ExtCtrls, StdCtrls, LoadComplet, Generics.Collections, TypeRec,
   UBdtForms, ListOfTypeRec;
 
 type

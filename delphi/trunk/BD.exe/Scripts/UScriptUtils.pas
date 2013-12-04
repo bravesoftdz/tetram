@@ -3,7 +3,7 @@ unit UScriptUtils;
 interface
 
 uses
-  SysUtils, Classes, Graphics, Types, StdCtrls, SynEdit, Controls, VirtualTrees, Contnrs, uPSCompiler, uPSUtils,
+  SysUtils, Classes, Graphics, Types, StdCtrls, SynEdit, Controls, VirtualTrees, uPSCompiler, uPSUtils,
   Generics.Collections, Generics.Defaults, UScriptEditor, UScriptEngineIntf;
 
 type

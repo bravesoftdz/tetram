@@ -9,119 +9,123 @@ uses UIB, Updates;
 procedure MAJ0_0_2_23(Query: TUIBScript);
 
   function HasUpgradeToDo: Boolean;
+  var
+    qry: TUIBQuery;
   begin
-    with TUIBQuery.Create(Query.Transaction) do try
-      SQL.Text := 'select count(*) from RDB$RELATION_FIELDS where rdb$field_name = ''ACHAT'' and rdb$relation_name = ''EDITIONS'';';
-      Open;
-      Result := Fields.AsInteger[0] = 0;
+    qry := TUIBQuery.Create(Query.Transaction);
+    try
+      qry.SQL.Text := 'select count(*) from RDB$RELATION_FIELDS where rdb$field_name = ''ACHAT'' and rdb$relation_name = ''EDITIONS'';';
+      qry.Open;
+      Result := qry.Fields.AsInteger[0] = 0;
     finally
-      Free;
+      qry.Free;
     end;
   end;
 
 begin
-  if not HasUpgradeToDo then Exit;
-  with Query do begin
-    Script.Clear;
+  if not HasUpgradeToDo then
+    Exit;
 
-    Script.Add('ALTER TABLE EDITIONS ADD ACHAT DATE;');
+  Query.Script.Clear;
 
-    Script.Add('ALTER PROCEDURE SERIES_ALBUMS (');
-    Script.Add('    FILTRE VARCHAR(125))');
-    Script.Add('RETURNS (');
-    Script.Add('    TITRESERIE VARCHAR(150),');
-    Script.Add('    COUNTSERIE INTEGER,');
-    Script.Add('    REFSERIE INTEGER)');
-    Script.Add('AS');
-    Script.Add('DECLARE VARIABLE SWHERE VARCHAR(132);');
-    Script.Add('begin');
-    Script.Add('  swhere = '''';');
-    Script.Add('  if (filtre is not null and filtre <> '''') then swhere = ''AND '' || filtre;');
-    Script.Add('');
-    Script.Add('  for execute statement');
-    Script.Add('     ''select');
-    Script.Add('             -1,');
-    Script.Add('             RefSerie,');
-    Script.Add('             Count(REFALBUM)');
-    Script.Add('      from vw_liste_albums');
-    Script.Add('      where TITRESerie is null '' || SWHERE ||');
-    Script.Add('    '' group by UPPERTITRESERIE, TITRESerie, RefSerie''');
-    Script.Add('  into :TITRESerie,');
-    Script.Add('       :RefSerie,');
-    Script.Add('       :countSerie');
-    Script.Add('  do');
-    Script.Add('    suspend;');
-    Script.Add('');
-    Script.Add('  for execute statement');
-    Script.Add('     ''select');
-    Script.Add('             TITRESerie,');
-    Script.Add('             RefSerie,');
-    Script.Add('             Count(REFALBUM)');
-    Script.Add('      from vw_liste_albums');
-    Script.Add('      where TITRESerie is not null '' || SWHERE ||');
-    Script.Add('    '' group by UPPERTITRESERIE, TITRESerie, RefSerie''');
-    Script.Add('  into :TITRESerie,');
-    Script.Add('       :RefSerie,');
-    Script.Add('       :countSerie');
-    Script.Add('  do');
-    Script.Add('    suspend;');
-    Script.Add('end;');
+  Query.Script.Add('ALTER TABLE EDITIONS ADD ACHAT DATE;');
 
-    Script.Add('ALTER PROCEDURE ALBUMS_BY_SERIE (');
-    Script.Add('    SERIE INTEGER,');
-    Script.Add('    FILTRE VARCHAR(125))');
-    Script.Add('RETURNS (');
-    Script.Add('    REFALBUM INTEGER,');
-    Script.Add('    TITREALBUM VARCHAR(150),');
-    Script.Add('    TOME SMALLINT,');
-    Script.Add('    TOMEDEBUT SMALLINT,');
-    Script.Add('    TOMEFIN SMALLINT,');
-    Script.Add('    HORSSERIE SMALLINT,');
-    Script.Add('    INTEGRALE SMALLINT,');
-    Script.Add('    ANNEEPARUTION SMALLINT,');
-    Script.Add('    REFSERIE INTEGER,');
-    Script.Add('    TITRESERIE VARCHAR(150))');
-    Script.Add('AS');
-    Script.Add('DECLARE VARIABLE SWHERE VARCHAR(130);');
-    Script.Add('BEGIN');
-    Script.Add('  swhere = '''';');
-    Script.Add('  if (filtre is not null and filtre <> '''') then swhere = ''and '' || filtre || '' '';');
-    Script.Add('  FOR execute statement');
-    Script.Add('      ''SELECT REFALBUM,');
-    Script.Add('             TITREALBUM,');
-    Script.Add('             TOME,');
-    Script.Add('             TOMEDEBUT,');
-    Script.Add('             TOMEFIN,');
-    Script.Add('             HORSSERIE,');
-    Script.Add('             INTEGRALE,');
-    Script.Add('             ANNEEPARUTION,');
-    Script.Add('             REFSERIE,');
-    Script.Add('             TITRESERIE');
-    Script.Add('      FROM vw_liste_albums');
-    Script.Add('      WHERE refserie = '''''' || :serie || '''''' '' || swhere ||');
-    Script.Add('      ''ORDER BY HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, ANNEEPARUTION NULLS FIRST, UPPERTITREALBUM''');
-    Script.Add('      INTO :REFALBUM,');
-    Script.Add('           :TITREALBUM,');
-    Script.Add('           :TOME,');
-    Script.Add('           :TOMEDEBUT,');
-    Script.Add('           :TOMEFIN,');
-    Script.Add('           :HORSSERIE,');
-    Script.Add('           :INTEGRALE,');
-    Script.Add('           :ANNEEPARUTION,');
-    Script.Add('           :REFSERIE,');
-    Script.Add('           :TITRESERIE');
-    Script.Add('  DO');
-    Script.Add('  BEGIN');
-    Script.Add('    SUSPEND;');
-    Script.Add('  END');
-    Script.Add('END;');
+  Query.Script.Add('ALTER PROCEDURE SERIES_ALBUMS (');
+  Query.Script.Add('    FILTRE VARCHAR(125))');
+  Query.Script.Add('RETURNS (');
+  Query.Script.Add('    TITRESERIE VARCHAR(150),');
+  Query.Script.Add('    COUNTSERIE INTEGER,');
+  Query.Script.Add('    REFSERIE INTEGER)');
+  Query.Script.Add('AS');
+  Query.Script.Add('DECLARE VARIABLE SWHERE VARCHAR(132);');
+  Query.Script.Add('begin');
+  Query.Script.Add('  swhere = '''';');
+  Query.Script.Add('  if (filtre is not null and filtre <> '''') then swhere = ''AND '' || filtre;');
+  Query.Script.Add('');
+  Query.Script.Add('  for execute statement');
+  Query.Script.Add('     ''select');
+  Query.Script.Add('             -1,');
+  Query.Script.Add('             RefSerie,');
+  Query.Script.Add('             Count(REFALBUM)');
+  Query.Script.Add('      from vw_liste_albums');
+  Query.Script.Add('      where TITRESerie is null '' || SWHERE ||');
+  Query.Script.Add('    '' group by UPPERTITRESERIE, TITRESerie, RefSerie''');
+  Query.Script.Add('  into :TITRESerie,');
+  Query.Script.Add('       :RefSerie,');
+  Query.Script.Add('       :countSerie');
+  Query.Script.Add('  do');
+  Query.Script.Add('    suspend;');
+  Query.Script.Add('');
+  Query.Script.Add('  for execute statement');
+  Query.Script.Add('     ''select');
+  Query.Script.Add('             TITRESerie,');
+  Query.Script.Add('             RefSerie,');
+  Query.Script.Add('             Count(REFALBUM)');
+  Query.Script.Add('      from vw_liste_albums');
+  Query.Script.Add('      where TITRESerie is not null '' || SWHERE ||');
+  Query.Script.Add('    '' group by UPPERTITRESERIE, TITRESerie, RefSerie''');
+  Query.Script.Add('  into :TITRESerie,');
+  Query.Script.Add('       :RefSerie,');
+  Query.Script.Add('       :countSerie');
+  Query.Script.Add('  do');
+  Query.Script.Add('    suspend;');
+  Query.Script.Add('end;');
 
-    ExecuteScript;
-  end;
+  Query.Script.Add('ALTER PROCEDURE ALBUMS_BY_SERIE (');
+  Query.Script.Add('    SERIE INTEGER,');
+  Query.Script.Add('    FILTRE VARCHAR(125))');
+  Query.Script.Add('RETURNS (');
+  Query.Script.Add('    REFALBUM INTEGER,');
+  Query.Script.Add('    TITREALBUM VARCHAR(150),');
+  Query.Script.Add('    TOME SMALLINT,');
+  Query.Script.Add('    TOMEDEBUT SMALLINT,');
+  Query.Script.Add('    TOMEFIN SMALLINT,');
+  Query.Script.Add('    HORSSERIE SMALLINT,');
+  Query.Script.Add('    INTEGRALE SMALLINT,');
+  Query.Script.Add('    ANNEEPARUTION SMALLINT,');
+  Query.Script.Add('    REFSERIE INTEGER,');
+  Query.Script.Add('    TITRESERIE VARCHAR(150))');
+  Query.Script.Add('AS');
+  Query.Script.Add('DECLARE VARIABLE SWHERE VARCHAR(130);');
+  Query.Script.Add('BEGIN');
+  Query.Script.Add('  swhere = '''';');
+  Query.Script.Add('  if (filtre is not null and filtre <> '''') then swhere = ''and '' || filtre || '' '';');
+  Query.Script.Add('  FOR execute statement');
+  Query.Script.Add('      ''SELECT REFALBUM,');
+  Query.Script.Add('             TITREALBUM,');
+  Query.Script.Add('             TOME,');
+  Query.Script.Add('             TOMEDEBUT,');
+  Query.Script.Add('             TOMEFIN,');
+  Query.Script.Add('             HORSSERIE,');
+  Query.Script.Add('             INTEGRALE,');
+  Query.Script.Add('             ANNEEPARUTION,');
+  Query.Script.Add('             REFSERIE,');
+  Query.Script.Add('             TITRESERIE');
+  Query.Script.Add('      FROM vw_liste_albums');
+  Query.Script.Add('      WHERE refserie = '''''' || :serie || '''''' '' || swhere ||');
+  Query.Script.Add('      ''ORDER BY HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, ANNEEPARUTION NULLS FIRST, UPPERTITREALBUM''');
+  Query.Script.Add('      INTO :REFALBUM,');
+  Query.Script.Add('           :TITREALBUM,');
+  Query.Script.Add('           :TOME,');
+  Query.Script.Add('           :TOMEDEBUT,');
+  Query.Script.Add('           :TOMEFIN,');
+  Query.Script.Add('           :HORSSERIE,');
+  Query.Script.Add('           :INTEGRALE,');
+  Query.Script.Add('           :ANNEEPARUTION,');
+  Query.Script.Add('           :REFSERIE,');
+  Query.Script.Add('           :TITRESERIE');
+  Query.Script.Add('  DO');
+  Query.Script.Add('  BEGIN');
+  Query.Script.Add('    SUSPEND;');
+  Query.Script.Add('  END');
+  Query.Script.Add('END;');
+
+  Query.ExecuteScript;
 end;
 
 initialization
-  RegisterFBUpdate('0.0.2.23', @MAJ0_0_2_23);
-  RegisterFBUpdate('0.0.3.8', @MAJ0_0_2_23); // le passage de 0.0.2.22 à 0.0.3.7 n'a pas forcément vu cette maj
+
+RegisterFBUpdate('0.0.2.23', @MAJ0_0_2_23);
+RegisterFBUpdate('0.0.3.8', @MAJ0_0_2_23); // le passage de 0.0.2.22 à 0.0.3.7 n'a pas forcément vu cette maj
 
 end.

@@ -33,7 +33,7 @@ procedure SIRegister_BdtkObjects(CL: TPSPascalCompiler);
 implementation
 
 uses
-  Windows, Dialogs, TypeRec, Commun, CommonConst, UdmPrinc, DateUtils, ListOfTypeRec, Contnrs, LoadComplet;
+  Windows, Dialogs, TypeRec, Commun, CommonConst, UdmPrinc, DateUtils, ListOfTypeRec, LoadComplet;
 
 (* === compile-time registration functions === *)
 
@@ -105,8 +105,8 @@ begin
     RegisterProperty('Scenaristes', 'TObjectListOfAuteur' {TObjectList<TAuteur>}, iptR);
     RegisterProperty('Dessinateurs', 'TObjectListOfAuteur' {TObjectList<TAuteur>}, iptR);
     RegisterProperty('Coloristes', 'TObjectListOfAuteur' {TObjectList<TAuteur>}, iptR);
-    RegisterProperty('Sujet', 'TStringList', iptR);
-    RegisterProperty('Notes', 'TStringList', iptR);
+    RegisterProperty('Sujet', 'LongString', iptRW);
+    RegisterProperty('Notes', 'LongString', iptRW);
     RegisterProperty('Edition', 'TEditionComplete', iptR);
 
     RegisterMethod('procedure Clear;');
@@ -121,8 +121,8 @@ begin
     RegisterProperty('Titre', 'string', iptRW);
     RegisterProperty('Terminee', 'Integer', iptRW);
     RegisterProperty('Genres', 'TStringList', iptR);
-    RegisterProperty('Sujet', 'TStringList', iptR);
-    RegisterProperty('Notes', 'TStringList', iptR);
+    RegisterProperty('Sujet', 'LongString', iptRW);
+    RegisterProperty('Notes', 'LongString', iptRW);
     RegisterProperty('Editeur', 'TEditeurComplet', iptR);
     RegisterProperty('Collection', 'string', iptRW);
     RegisterProperty('SiteWeb', 'string', iptRW);
@@ -161,7 +161,7 @@ begin
     RegisterProperty('Gratuit', 'Boolean', iptRW);
     RegisterProperty('ISBN', 'string', iptRW);
 //    RegisterProperty('DateAchat', 'TDateTime', iptRW);
-//    RegisterProperty('Notes', 'TStringList', iptR);
+//    RegisterProperty('Notes', 'LongString', iptRW);
 //    RegisterProperty('NumeroPerso', 'string', iptRW);
 //    RegisterProperty('Couvertures', 'TMyObjectList<TCouverture>', iptR);
     RegisterMethod('function AddImageFromURL(const URL: string; TypeImage: Integer): Integer;');

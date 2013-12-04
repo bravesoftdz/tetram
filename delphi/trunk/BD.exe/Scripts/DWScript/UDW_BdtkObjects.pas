@@ -260,6 +260,7 @@ end;
 procedure TDW_BdtkObjectsUnit.Register_Classes;
 begin
   RegisterType('Currency', 'Float');
+  RegisterType('LongString', 'string');
 
   Register_TObjectList;
 
@@ -295,8 +296,8 @@ begin
   RegisterProperty(c, 'Scenaristes', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , HandleDynamicProperty);
   RegisterProperty(c, 'Dessinateurs', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , HandleDynamicProperty);
   RegisterProperty(c, 'Coloristes', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , HandleDynamicProperty);
-  RegisterProperty(c, 'Sujet', 'TStringList', HandleDynamicProperty);
-  RegisterProperty(c, 'Notes', 'TStringList', HandleDynamicProperty);
+  RegisterProperty(c, 'Sujet', 'LongString', HandleDynamicProperty, HandleDynamicProperty);
+  RegisterProperty(c, 'Notes', 'LongString', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Edition', 'TEditionComplete', TAlbumCompletEdition_R);
 
   RegisterMethod(c, 'Clear', []);
@@ -390,7 +391,7 @@ begin
   RegisterProperty(c, 'Gratuit', 'Boolean', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'ISBN', 'string', HandleDynamicProperty, HandleDynamicProperty);
   // RegisterProperty(c, 'DateAchat', 'TDateTime', True);
-  // RegisterProperty(c, 'Notes', 'TStringList', False);
+  // RegisterProperty(c, 'Notes', 'LongString', HandleDynamicProperty, HandleDynamicProperty);
   // RegisterProperty(c, 'NumeroPerso', 'string', True);
   // RegisterProperty(c, 'Couvertures', 'TMyObjectList<TCouverture>', False);
 
@@ -456,8 +457,8 @@ begin
   RegisterProperty(c, 'Titre', 'string', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Terminee', 'Integer', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Genres', 'TStringList', HandleDynamicProperty);
-  RegisterProperty(c, 'Sujet', 'TStringList', HandleDynamicProperty);
-  RegisterProperty(c, 'Notes', 'TStringList', HandleDynamicProperty);
+  RegisterProperty(c, 'Sujet', 'LongString', HandleDynamicProperty, HandleDynamicProperty);
+  RegisterProperty(c, 'Notes', 'LongString', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Editeur', 'TEditeurComplet', HandleDynamicProperty);
   RegisterProperty(c, 'Collection', 'string', TSerieCompleteCollection, TSerieCompleteCollection);
   RegisterProperty(c, 'SiteWeb', 'string', HandleDynamicProperty, HandleDynamicProperty);
