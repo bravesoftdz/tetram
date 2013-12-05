@@ -879,7 +879,7 @@ function FindCmdLineSwitch(const cmdLine, Switch: string; out Value: string): Bo
     SetLength(Param, Len);
 
     p := Start;
-    s := PChar(Param[1]);
+    s := PChar(@Param[1]);
     i := 0;
     while p[0] > ' ' do
     begin
