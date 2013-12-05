@@ -1,6 +1,10 @@
 program BD;
 
+{$R 'scripts_maj.res' 'mises à jour\scripts_maj.rc'}
+{$R curseurs.res}
+{$INCLUDE FastMM4Options.inc}
 {$R *.dres}
+{$R *.RES}
 
 uses
   FastMM4,
@@ -186,12 +190,6 @@ uses
   UMAJ2_2_3_21 in 'mises à jour\UMAJ2_2_3_21.pas',
   UMySQLMAJ1_0_0_3 in 'Web\mises à jour\UMySQLMAJ1_0_0_3.pas',
   UMAJ2_2_3_22 in 'mises à jour\UMAJ2_2_3_22.pas';
-
-{$R 'scripts_maj.res' 'mises à jour\scripts_maj.rc'}
-{$R curseurs.res}
-{$INCLUDE FastMM4Options.inc}
-{$R *.dres}
-{$R *.RES}
 
 begin
   InitProc := @BdtkInitProc;
