@@ -450,7 +450,7 @@ begin
     AnalyseLigneCommande(GetCommandLine);
 
     FrmSplash.Affiche_act(FinChargement + '...');
-    ChangeCurseur(crHandPoint, 'MyHandPoint', 'MyCursor');
+    ChangeCurseur(crHandPoint, 'CUR_HANDPOINT', RT_RCDATA);
     while SecondsBetween(Now, Debut) < 1 do // au moins 1 seconde d'affichage du splash
     begin
       FrmSplash.Show;

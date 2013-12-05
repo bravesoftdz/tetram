@@ -220,7 +220,7 @@ procedure DecodeISBNRules;
     rule: TISBNRule;
     list: TList<TISBNRule>;
   begin
-    Result := TDictionary < string, TList < TISBNRule >>.Create;
+    Result := TObjectDictionary < string, TList < TISBNRule >>.Create([doOwnsValues]);
 
     for xmlPrefix in Node.Items do
       if SameText(xmlPrefix.Name, ListNodeName) then
@@ -233,7 +233,7 @@ procedure DecodeISBNRules;
 
           if not Result.TryGetValue(prefix, list) then
           begin
-            list := TList<TISBNRule>.Create;
+            list := TObjectList<TISBNRule>.Create(True);
             Result.Add(prefix, list);
           end;
           rule := TISBNRule.Create(range.Substring(0, p).ToInteger, range.Substring(p + 1).ToInteger, xmlRule.Items.ItemNamed['length'].IntValue);
@@ -428,7 +428,7 @@ initialization
 
 finalization
 
-isbnPrefixes.Free;
-isbnGroups.Free;
+  isbnPrefixes.Free;
+  isbnGroups.Free;
 
 end.

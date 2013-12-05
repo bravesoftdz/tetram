@@ -1,8 +1,8 @@
 program BD;
 
-{$R 'scripts_maj.res' 'mises à jour\scripts_maj.rc'}
-{$R curseurs.res}
 {$INCLUDE FastMM4Options.inc}
+
+{$R 'scripts_maj.res' 'mises à jour\scripts_maj.rc'}
 {$R *.dres}
 {$R *.RES}
 

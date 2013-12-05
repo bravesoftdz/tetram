@@ -498,6 +498,10 @@ $(PostBuildEvent)]]></PostBuildEvent>
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>ISBN_RANGES</ResourceId>
         </RcItem>
+        <RcItem Include="handpoint.cur">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>CUR_HANDPOINT</ResourceId>
+        </RcItem>
         <BuildConfiguration Include="Débogage">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
