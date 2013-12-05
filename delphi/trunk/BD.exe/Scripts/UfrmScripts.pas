@@ -209,6 +209,7 @@ type
     procedure SynCodeCompletionShow(Sender: TObject);
     procedure SynCodeCompletionExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var X, Y: Integer; var CanExecute: Boolean);
     procedure SynParametersExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var X, Y: Integer; var CanExecute: Boolean);
+    procedure framMessages1vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
   private
     FLastSearch, FLastReplace: string;
     FSearchOptions: TSynSearchOptions;
@@ -711,6 +712,13 @@ begin
     Release;
 end;
 
+procedure TfrmScripts.framMessages1vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
+  var CellText: string);
+begin
+  framMessages1.vstMessagesGetText(Sender, Node, Column, TextType, CellText);
+
+end;
+
 procedure TfrmScripts.RefreshDescription(Script: TScript);
 begin
   FRefreshingDescription := True;
@@ -754,7 +762,10 @@ var
   Page: TEditorPage;
   Script: TScript;
 begin
-  Script := MasterEngine.ScriptList.InfoScriptByUnitName(UnitName);
+  if (UnitName = MasterEngine.Engine.GetSpecialMainUnitName) then
+    Script := MasterEngine.ProjectScript
+  else
+    Script := MasterEngine.ScriptList.InfoScriptByUnitName(UnitName);
   // doit être fait avant la création de page pour s'assurer de l'existence du fichier
   if not Assigned(Script) then
     raise Exception.Create('Impossible de trouver l''unité ' + string(UnitName) + '.');

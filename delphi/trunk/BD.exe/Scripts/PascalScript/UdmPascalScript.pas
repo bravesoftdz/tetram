@@ -718,8 +718,6 @@ procedure TdmPascalScript.PSScriptDebugger1Compile(Sender: TPSScript);
 var
   I: Integer;
 begin
-  PSScriptDebugger1.Comp.AddTypeCopyN('LongString', 'string');
-
   for I := 0 to Pred(FListTypesImages.Count) do
     PSScriptDebugger1.Comp.AddConstantN('cti' + AnsiStrings.StringReplace(AnsiString(SansAccents(FListTypesImages.ValueFromIndex[I])), ' ', '_', [rfReplaceAll]
       ), 'integer').SetInt(StrToInt(AnsiString(FListTypesImages.Names[I])));

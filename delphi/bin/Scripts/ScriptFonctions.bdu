@@ -1,11 +1,12 @@
-<?xml version="1.0" encoding="iso-8859-1" standalone="no"?>
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
 <Script>
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
     <ScriptVersion>2</ScriptVersion>
     <BDVersion>2.1.0.17</BDVersion>
-    <LastUpdate>Thu, 9 Jun 2011 14:37:11 +0200</LastUpdate>
+    <LastUpdate>Thu, 5 Dec 2013 18:51:58 +0100</LastUpdate>
+    <Engine>PascalScript</Engine>
   </Infos>
   <Options/>
   <Code>unit ScriptFonctions;
@@ -33,6 +34,17 @@ end;
 procedure AjoutString2(var Chaine: string; const Ajout, Espace: string);
 begin
   AjoutString1(Chaine, Ajout, Espace, &apos;&apos;, &apos;&apos;);
+end;
+
+function AjoutString3(Chaine: string; const Ajout, Espace: string; const Avant: string; const Apres: string): string;
+begin
+  Result := Ajout;
+  AjoutString1(Result, Ajout, Espace, Avant, Apres);
+end;
+
+function AjoutString4(Chaine: string; const Ajout, Espace: string): string;
+begin
+  Result := AjoutString3(Chaine, Ajout, Espace, &apos;&apos;, &apos;&apos;);
 end;
 
 function ChaineIn(const Chaine: string; const Tests: array of string): Boolean;

@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>2.1</ScriptVersion>
-    <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Fri, 16 Oct 2009 17:26:45 +0200</LastUpdate>
+    <ScriptVersion>2.2</ScriptVersion>
+    <BDVersion>2.2.3.22</BDVersion>
+    <LastUpdate>Thu, 5 Dec 2013 19:39:26 +0100</LastUpdate>
     <Engine>PascalScript</Engine>
   </Infos>
   <Options/>
@@ -86,7 +86,7 @@ begin
     AlbumToImport.Edition.ISBN := CleanISBN(ExtractRegEx(page, regExAlbumISBN));
     AlbumToImport.Edition.Prix := StrToFloatDef(StringReplace(ExtractRegEx(page, regExAlbumPrix), &apos;,&apos;, &apos;.&apos;, []), 0);
 
-    AlbumToImport.Sujet.Text := HTMLText(ExtractRegEx(page, regExAlbumResume));
+    AlbumToImport.Sujet := HTMLText(ExtractRegEx(page, regExAlbumResume));
 
     AlbumToImport.Serie.Genres.Add(ExtractRegEx(page, regExAlbumGenre));
 
@@ -118,7 +118,7 @@ begin
     begin
       page := GetPage(AlbumToImport.Serie.SiteWeb, False);
 
-      AlbumToImport.Serie.Sujet.Text := HTMLText(ExtractRegEx(page, regExAlbumResume));
+      AlbumToImport.Serie.Sujet := HTMLText(ExtractRegEx(page, regExAlbumResume));
 
       if re.BeginSearch(ExtractRegEx(page, regExAlbumScenaristes), regExURL) then
         while re.Next do

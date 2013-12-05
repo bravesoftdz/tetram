@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>2</ScriptVersion>
-    <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Wed, 27 Nov 2013 14:45:24 +0100</LastUpdate>
+    <ScriptVersion>2.1</ScriptVersion>
+    <BDVersion>2.2.3.22</BDVersion>
+    <LastUpdate>Thu, 5 Dec 2013 19:37:11 +0100</LastUpdate>
     <Engine>PascalScript</Engine>
   </Infos>
   <Options>
@@ -94,7 +94,7 @@ begin
 
     s := ExtractRegEx(page, Format(regExInfosDiv, [&apos;id&apos;, &apos;contenu-a-propos&apos;]));
 
-    AlbumToImport.Sujet.Text := HTMLText(ExtractRegEx(s, Format(regExInfosDiv, [&apos;class&apos;, &apos;contenu&apos;])));
+    AlbumToImport.Sujet := HTMLText(ExtractRegEx(s, Format(regExInfosDiv, [&apos;class&apos;, &apos;contenu&apos;])));
     if BeginSearch(s, Format(regExInfosDiv, [&apos;class&apos;, &apos;auteur&apos;])) then
       while Find(s) do
       begin
@@ -196,7 +196,7 @@ begin
 
       s := ExtractRegEx(page, Format(regExInfosDiv, [&apos;id&apos;, &apos;contenu-a-propos&apos;]));
 
-      AlbumToImport.Serie.Sujet.Text := HTMLText(ExtractRegEx(s, Format(regExInfosDiv, [&apos;class&apos;, &apos;contenu&apos;])));
+      AlbumToImport.Serie.Sujet := HTMLText(ExtractRegEx(s, Format(regExInfosDiv, [&apos;class&apos;, &apos;contenu&apos;])));
       if BeginSearch(s, Format(regExInfosDiv, [&apos;class&apos;, &apos;auteur&apos;])) then
         while Find(s) do
         begin

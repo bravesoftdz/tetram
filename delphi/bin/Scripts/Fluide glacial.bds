@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>1.1</ScriptVersion>
-    <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Sun, 27 Sep 2009 11:46:02 +0200</LastUpdate>
+    <ScriptVersion>1.2</ScriptVersion>
+    <BDVersion>2.2.3.22</BDVersion>
+    <LastUpdate>Thu, 5 Dec 2013 19:37:55 +0100</LastUpdate>
     <Engine>PascalScript</Engine>
   </Infos>
   <Options>
@@ -42,7 +42,7 @@ begin
   re := TBdtkRegEx.Create;
   try
     AlbumToImport.Titre := PrepareTitre(HTMLText(ExtractRegEx(page, regExAlbumTitre)));
-    AlbumToImport.Sujet.Text := HTMLText(ExtractRegEx(page, regExAlbumResume));
+    AlbumToImport.Sujet := HTMLText(ExtractRegEx(page, regExAlbumResume));
 
     if re.BeginSearch(page, regExAlbumInfos) and re.Next then
     begin

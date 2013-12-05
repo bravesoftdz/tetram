@@ -5,9 +5,11 @@
     <Description/>
     <ScriptVersion>2</ScriptVersion>
     <BDVersion>2.1.0.17</BDVersion>
-    <LastUpdate>Sat, 1 Sep 2012 17:50:12 +0200</LastUpdate>
-    <Engine>DWScript</Engine>
+    <LastUpdate>Thu, 5 Dec 2013 19:41:52 +0100</LastUpdate>
+    <Engine>PascalScript</Engine>
   </Infos>
   <Options/>
-  <Code>ShowMessage(&apos;Utiliser le script Glenat.&apos;);</Code>
+  <Code>begin
+  ShowMessage(&apos;Utiliser le script Glenat.&apos;);
+end.</Code>
 </Script>

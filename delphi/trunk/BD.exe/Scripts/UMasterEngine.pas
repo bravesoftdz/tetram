@@ -126,7 +126,7 @@ end;
 
 function TMasterEngine.GetAlbumToImport: TAlbumComplet;
 begin
-  Result := FInternalAlbumToImport;
+  Result := FAlbumToImport;
 end;
 
 function TMasterEngine.GetDebugPlugin: IDebugInfos;

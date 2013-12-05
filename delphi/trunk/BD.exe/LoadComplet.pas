@@ -1832,9 +1832,9 @@ begin
     Exit;
 
   SetLength(FusionsGUID, Editions.Count);
-  ZeroMemory(FusionsGUID, SizeOf(FusionsGUID));
+  ZeroMemory(FusionsGUID, Length(FusionsGUID) * SizeOf(TGUID));
   SetLength(OptionsFusion, Editions.Count);
-  ZeroMemory(OptionsFusion, SizeOf(FusionsGUID));
+  ZeroMemory(OptionsFusion, Length(OptionsFusion) * SizeOf(OptionFusion));
   // même si la destination n'a aucune données, on peut choisir de ne rien y importer
   // if Dest.Editions.Count > 0 then
   for i := 0 to Pred(Editions.Count) do

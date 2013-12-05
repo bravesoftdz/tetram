@@ -214,6 +214,8 @@ end;
 
 procedure SIRegister_BdtkObjects(CL: TPSPascalCompiler);
 begin
+  CL.AddTypeCopyN('LongString', 'string');
+
   SIRegister_TStringList(CL);
   SIRegister_TObjectList(CL);
 

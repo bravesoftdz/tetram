@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>1</ScriptVersion>
-    <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Sun, 27 Sep 2009 13:11:53 +0200</LastUpdate>
+    <ScriptVersion>1.1</ScriptVersion>
+    <BDVersion>2.2.3.22</BDVersion>
+    <LastUpdate>Thu, 5 Dec 2013 19:37:33 +0100</LastUpdate>
     <Engine>PascalScript</Engine>
   </Infos>
   <Options>
@@ -51,7 +51,7 @@ begin
   AlbumToImport.Serie.Titre := PrepareTitre(ExtractRegEx(s,  regExBDSerie));
   AlbumToImport.Titre := PrepareTitre(ExtractRegEx(s,  regExBDTitre));
   AlbumToImport.Tome := StrToIntDef(ExtractRegEx(s,  regExBDTome), 0);
-  AlbumToImport.Sujet.Text := HTMLText(ExtractRegEx(s,  regExBDResume));
+  AlbumToImport.Sujet := HTMLText(ExtractRegEx(s,  regExBDResume));
 
   AlbumToImport.Edition.NombreDePages := StrToIntDef(ExtractRegEx(s,  regExBDPages), 0);
   AlbumToImport.Edition.ISBN := ExtractRegEx(s,  regExBDISBN);

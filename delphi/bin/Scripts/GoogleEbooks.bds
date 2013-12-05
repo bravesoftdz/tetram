@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>1</ScriptVersion>
-    <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Fri, 15 Nov 2013 10:54:23 +0100</LastUpdate>
+    <ScriptVersion>1.1</ScriptVersion>
+    <BDVersion>2.2.3.22</BDVersion>
+    <LastUpdate>Thu, 5 Dec 2013 19:38:37 +0100</LastUpdate>
     <Engine>PascalScript</Engine>
   </Infos>
   <Options>
@@ -58,7 +58,7 @@ begin
 
 //  AlbumToImport.Serie.Titre := &apos;debug&apos;;
 
-  AlbumToImport.Sujet.Text := HTMLText(page.GetS(&apos;volumeInfo.description&apos;));
+  AlbumToImport.Sujet := HTMLText(page.GetS(&apos;volumeInfo.description&apos;));
   AlbumToImport.Serie.Editeur.NomEditeur := page.GetS(&apos;volumeInfo.publisher&apos;);
   AlbumToImport.Edition.Editeur.NomEditeur := page.GetS(&apos;volumeInfo.publisher&apos;);
 

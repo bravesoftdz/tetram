@@ -64,12 +64,12 @@ begin
   msg := MasterEngine.DebugPlugin.Watches[Node.index];
   case Column of
     0:
-      CellText := string(name);
+      CellText := string(msg.name);
     1:
       if not msg.Active then
         CellText := '<désactivé>'
       else
-        CellText := MasterEngine.Engine.GetWatchValue(name);
+        CellText := MasterEngine.Engine.GetWatchValue(msg.name);
   end;
 end;
 

@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>2</ScriptVersion>
-    <BDVersion>2.2.1.185</BDVersion>
-    <LastUpdate>Fri, 18 Oct 2013 13:57:19 +0200</LastUpdate>
+    <ScriptVersion>2.1</ScriptVersion>
+    <BDVersion>2.2.3.22</BDVersion>
+    <LastUpdate>Thu, 5 Dec 2013 19:40:46 +0100</LastUpdate>
     <Engine>PascalScript</Engine>
     <Alias aka="Soleil Productions"/>
   </Infos>
@@ -95,10 +95,11 @@ begin
       AlbumToImport.Edition.Editeur.SiteWeb := AlbumToImport.Serie.Editeur.SiteWeb;
     end;
 
-    AlbumToImport.Sujet.Text := &apos;&apos;;
+    AlbumToImport.Sujet := &apos;&apos;;
     if re.BeginSearch(ExtractRegEx(page, regExAlbumResume), regExAlbumResumeLigne) then
     while re.Find(s) do
-      AlbumToImport.Sujet.Add(HTMLText(s));
+      AlbumToImport.Sujet := AjoutString4(AlbumToImport.Sujet, HTMLText(s), #13#10);
+
 
     AuteursSerie := CheckOptionValue(&apos;Liste des auteurs&apos;, &apos;Album et s&#xE9;rie&apos;);
 

@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>1.1</ScriptVersion>
-    <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Sun, 27 Sep 2009 11:45:39 +0200</LastUpdate>
+    <ScriptVersion>1.2</ScriptVersion>
+    <BDVersion>2.2.3.22</BDVersion>
+    <LastUpdate>Thu, 5 Dec 2013 19:37:19 +0100</LastUpdate>
     <Engine>PascalScript</Engine>
   </Infos>
   <Options/>
@@ -109,8 +109,8 @@ begin
       AlbumToImport.Edition.Collection := AlbumToImport.Serie.Collection;
     end;
 
-    AlbumToImport.Sujet.Text := HTMLText(ExtractRegEx(page, regExAlbumResume));
-    AlbumToImport.Serie.Sujet.Text := HTMLText(ExtractRegEx(page, regExSerieResume));
+    AlbumToImport.Sujet := HTMLText(ExtractRegEx(page, regExAlbumResume));
+    AlbumToImport.Serie.Sujet := HTMLText(ExtractRegEx(page, regExSerieResume));
 
     s := ExtractRegEx(page, regExAlbumPlanches);
     if s &lt;&gt; &apos;&apos; then

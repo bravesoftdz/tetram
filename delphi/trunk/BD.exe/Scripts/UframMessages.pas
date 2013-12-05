@@ -69,7 +69,7 @@ begin
       else
         CellText := string(msg.ScriptUnitName);
     3:
-      CellText := string(Text);
+      CellText := string(msg.Text);
   end;
 end;
 
