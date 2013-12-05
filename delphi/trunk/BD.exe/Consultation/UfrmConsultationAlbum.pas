@@ -190,7 +190,7 @@ end;
 
 procedure TfrmConsultationAlbum.FicheModifierExecute(Sender: TObject);
 begin
-  Historique.AddWaiting(fcGestionModif, @RefreshCallBack, nil, @ModifierAlbums2, nil, FAlbum.ID);
+  Historique.AddWaiting(fcGestionModif, RefreshCallBack, nil, @ModifierAlbums2, nil, FAlbum.ID);
 end;
 
 procedure TfrmConsultationAlbum.FormCreate(Sender: TObject);

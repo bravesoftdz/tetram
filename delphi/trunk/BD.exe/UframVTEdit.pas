@@ -48,7 +48,6 @@ type
 
 implementation
 
-
 {$R *.dfm}
 
 uses
@@ -63,13 +62,16 @@ end;
 
 procedure TframVTEdit.RefreshFiltre;
 begin
-  with VTEdit.PopupWindow.TreeView do begin
+  with VTEdit.PopupWindow.TreeView do
+  begin
     if not IsEqualGUID(ParentValue, GUID_NULL) then
       case Mode of
-        vmCollections: Filtre := 'id_editeur = ' + QuotedStr(GUIDToString(ParentValue));
-        vmUnivers: Filtre := 'branche_univers not containing ' + QuotedStr('|' + GUIDToString(ParentValue) + '|');
-        else
-          Filtre := '';
+        vmCollections:
+          Filtre := 'id_editeur = ' + QuotedStr(GUIDToString(ParentValue));
+        vmUnivers:
+          Filtre := 'branche_univers not containing ' + QuotedStr('|' + GUIDToString(ParentValue) + '|');
+      else
+        Filtre := '';
       end
     else
       Filtre := '';
@@ -77,11 +79,15 @@ begin
   end;
 end;
 
-procedure callbackAfterEdit(Data: Pointer);
+procedure callbackAfterEdit(Data: TObject);
+var
+  framVTEdit: TframVTEdit;
 begin
-  TframVTEdit(Data).VTEdit.CurrentValue := TframVTEdit(Data).VTEdit.PopupWindow.TreeView.CurrentValue;
-  if Assigned(TframVTEdit(Data).FAfterEdit) then
-    TframVTEdit(Data).FAfterEdit(TframVTEdit(Data));
+  framVTEdit := Data as TframVTEdit;
+
+  framVTEdit.VTEdit.CurrentValue := framVTEdit.VTEdit.PopupWindow.TreeView.CurrentValue;
+  if Assigned(framVTEdit.FAfterEdit) then
+    framVTEdit.FAfterEdit(framVTEdit);
 end;
 
 procedure TframVTEdit.btEditClick(Sender: TObject);
@@ -90,40 +96,38 @@ var
 begin
   VT := VTEdit.PopupWindow.TreeView;
   case Mode of
-    vmAlbums,
-    vmAlbumsAnnee,
-    vmAlbumsCollection,
-    vmAlbumsEditeur,
-    vmAlbumsGenre,
-    vmAlbumsSerie:
-      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierAlbums, VT, '');
+    vmAlbums, vmAlbumsAnnee, vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie:
+      Historique.AddWaiting(fcGestionModif, callbackAfterEdit, Self, @ModifierAlbums, VT, '');
     vmAchatsAlbumsEditeur:
-      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierAchatsAlbum, VT, '');
+      Historique.AddWaiting(fcGestionModif, callbackAfterEdit, Self, @ModifierAchatsAlbum, VT, '');
     vmCollections:
-      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierCollections, VT, '');
+      Historique.AddWaiting(fcGestionModif, callbackAfterEdit, Self, @ModifierCollections, VT, '');
     vmEditeurs:
-      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierEditeurs, VT, '');
+      Historique.AddWaiting(fcGestionModif, callbackAfterEdit, Self, @ModifierEditeurs, VT, '');
     vmUnivers:
-      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierUnivers, VT, '');
+      Historique.AddWaiting(fcGestionModif, callbackAfterEdit, Self, @ModifierUnivers, VT, '');
     vmGenres:
-      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierGenres, VT, '');
+      Historique.AddWaiting(fcGestionModif, callbackAfterEdit, Self, @ModifierGenres, VT, '');
     vmPersonnes:
-      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierAuteurs, VT, '');
+      Historique.AddWaiting(fcGestionModif, callbackAfterEdit, Self, @ModifierAuteurs, VT, '');
     vmSeries:
-      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierSeries, VT, '');
+      Historique.AddWaiting(fcGestionModif, callbackAfterEdit, Self, @ModifierSeries, VT, '');
     vmParaBDSerie:
-      Historique.AddWaiting(fcGestionModif, @callbackAfterEdit, Self, @ModifierParaBD, VT, '');
-    else
-      Exit;
+      Historique.AddWaiting(fcGestionModif, callbackAfterEdit, Self, @ModifierParaBD, VT, '');
+  else
+    Exit;
   end;
 end;
 
-
-procedure callbackAfterAppend(Data: Pointer);
+procedure callbackAfterAppend(Data: TObject);
+var
+  framVTEdit: TframVTEdit;
 begin
-  TframVTEdit(Data).VTEdit.CurrentValue := TframVTEdit(Data).VTEdit.PopupWindow.TreeView.CurrentValue;
-  if Assigned(TframVTEdit(Data).FAfterAppend) then
-    TframVTEdit(Data).FAfterAppend(TframVTEdit(Data));
+  framVTEdit := Data as TframVTEdit;
+
+  framVTEdit.VTEdit.CurrentValue := framVTEdit.VTEdit.PopupWindow.TreeView.CurrentValue;
+  if Assigned(framVTEdit.FAfterAppend) then
+    framVTEdit.FAfterAppend(framVTEdit);
 end;
 
 procedure TframVTEdit.btNewClick(Sender: TObject);
@@ -137,12 +141,7 @@ begin
   else
     newText := VTEdit.Text;
   case Mode of
-    vmAlbums,
-    vmAlbumsAnnee,
-    vmAlbumsCollection,
-    vmAlbumsEditeur,
-    vmAlbumsGenre,
-    vmAlbumsSerie:
+    vmAlbums, vmAlbumsAnnee, vmAlbumsCollection, vmAlbumsEditeur, vmAlbumsGenre, vmAlbumsSerie:
       Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterAlbums, VT, newText);
     vmAchatsAlbumsEditeur:
       Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterAchatsAlbum, VT, newText);
@@ -163,8 +162,8 @@ begin
       Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterSeries, VT, newText);
     vmParaBDSerie:
       Historique.AddWaiting(fcGestionAjout, @callbackAfterAppend, Self, @AjouterParaBD, VT, newText);
-    else
-      Exit;
+  else
+    Exit;
   end;
 end;
 

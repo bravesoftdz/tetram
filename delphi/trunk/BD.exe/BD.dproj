@@ -152,10 +152,6 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <RcCompile Include="mises à jour\scripts_maj.rc">
-            <ContainerId>RC</ContainerId>
-            <Form>scripts_maj.res</Form>
-        </RcCompile>
         <DCCReference Include="CommonConst.pas"/>
         <DCCReference Include="Commun.pas"/>
         <DCCReference Include="UfrmFond.pas">
@@ -468,6 +464,9 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="mises à jour\UMAJ2_2_3_21.pas"/>
         <DCCReference Include="Web\mises à jour\UMySQLMAJ1_0_0_3.pas"/>
         <DCCReference Include="mises à jour\UMAJ2_2_3_22.pas"/>
+        <RcCompile Include="mises à jour\scripts_maj.rc">
+            <Form>scripts_maj.res</Form>
+        </RcCompile>
         <None Include="ModelSupport_BD\BD\default.txaPackage"/>
         <None Include="ModelSupport_BD\default.txaPackage"/>
         <None Include="ModelSupport_BD\BD\default.txvpck"/>
@@ -493,6 +492,11 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <RcItem Include="images\unknown.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>MAINICON_2</ResourceId>
+        </RcItem>
+        <RcItem Include="ISBNRanges.xml">
+            <ContainerId>ResourceItem</ContainerId>
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>ISBN_RANGES</ResourceId>
         </RcItem>
         <BuildConfiguration Include="Débogage">
             <Key>Cfg_2</Key>
@@ -749,35 +753,47 @@ $(PostBuildEvent)]]></PostBuildEvent>
     </ProjectExtensions>
     <Import Project="$(MSBuildProjectName).deployproj" Condition="Exists('$(MSBuildProjectName).deployproj')"/>
     <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win32'">
-        <PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
+        <PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;
+</PreBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
+        <PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y
+&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y
+</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Débogage' And '$(Platform)'=='Win32'">
-        <PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
+        <PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;
+</PreBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
+        <PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y
+&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y
+</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='Debug DCU' And '$(Platform)'=='Win32'">
-        <PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
+        <PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;
+</PreBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
+        <PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y
+&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y
+</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='FullDebug' And '$(Platform)'=='Win32'">
-        <PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;</PreBuildEvent>
+        <PreBuildEvent>rem del &quot;$(PROJECTDIR)\dcu\*.dcu&quot;
+</PreBuildEvent>
         <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
         <PreLinkEvent/>
         <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
-        <PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y</PostBuildEvent>
+        <PostBuildEvent>rem copy &quot;d:\MEDIA.KIT\BDThèque\Divers\Setup\Base vide\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y
+&amp;&amp;rem copy &quot;C:\Users\Thierry\Desktop\bases BD\install\BD.GDB&quot; d:\MEDIA.KIT\BDThèque\bin /y
+</PostBuildEvent>
         <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
     </PropertyGroup>
 </Project>

@@ -69,8 +69,6 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 1
-    ExplicitLeft = -8
-    ExplicitTop = 39
     DesignSize = (
       760
       371)

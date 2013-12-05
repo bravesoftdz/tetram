@@ -23,7 +23,6 @@ type
 
   RNodeInfo = record
     List: TList<TBasePointeur>;
-    // PDetail: Pointer;
     InitialeInfo: PInitialeInfo;
     Detail: TBasePointeur;
   end;
@@ -88,7 +87,7 @@ type
     property ShowDateParutionAlbum: Boolean read FShowDateParutionAlbum write SetShowDateParutionAlbum default False;
     property OnCompareNodeString: TOnCompareNodeString read FOnCompareNodeString write FOnCompareNodeString;
     function GetNodeBasePointer(Node: PVirtualNode): TBasePointeur;
-    function GetFocusedNodeData: Pointer;
+    function GetFocusedNodeData: TBasePointeur;
     procedure InitializeRep(KeepValue: Boolean = True);
     procedure ReinitNodes(NodeLevel: Integer = -1);
     procedure Find(const Text: string; GetNext: Boolean = False);
@@ -688,7 +687,7 @@ begin
     end;
 end;
 
-function TVirtualStringTree.GetFocusedNodeData: Pointer;
+function TVirtualStringTree.GetFocusedNodeData: TBasePointeur;
 begin
   Result := nil;
   if FMode <> vmNone then

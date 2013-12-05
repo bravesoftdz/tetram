@@ -195,7 +195,7 @@ end;
 
 procedure TfrmConsultationSerie.FicheModifierExecute(Sender: TObject);
 begin
-  Historique.AddWaiting(fcGestionModif, @RefreshCallBack, nil, @ModifierSeries2, nil, FSerie.ID);
+  Historique.AddWaiting(fcGestionModif, RefreshCallBack, nil, @ModifierSeries2, nil, FSerie.ID);
 end;
 
 procedure TfrmConsultationSerie.FormCreate(Sender: TObject);

@@ -11,6 +11,7 @@ type
   private
     FExternalInstances: TDictionary<IScriptObj, TObject>;
     FScriptObjInstances: TDictionary<TObject, IScriptObj>;
+    // l'utilisation du type Pointer est impérative pour ne pas déclencher le comptage de référence
     FMasterEngine: Pointer;
 
     function RegisterMethod(m: TdwsMethods; Kind: TMethodKind; const MethodName, ResultType: string; Params: array of String; Event: TMethodEvalEvent;

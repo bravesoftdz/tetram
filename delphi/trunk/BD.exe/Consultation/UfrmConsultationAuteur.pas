@@ -266,7 +266,7 @@ end;
 
 procedure TfrmConsultationAuteur.FicheModifierExecute(Sender: TObject);
 begin
-  Historique.AddWaiting(fcGestionModif, @RefreshCallBack, nil, @ModifierAuteurs2, nil, ID_Auteur);
+  Historique.AddWaiting(fcGestionModif, RefreshCallBack, nil, @ModifierAuteurs2, nil, ID_Auteur);
 end;
 
 procedure TfrmConsultationAuteur.ModificationExecute(Sender: TObject);

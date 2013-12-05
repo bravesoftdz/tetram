@@ -20,11 +20,11 @@ procedure AjoutString(var Chaine: AnsiString; const Ajout, Espace: AnsiString; c
 function StringToGUIDDef(const GUID: string; const Default: TGUID): TGUID; inline;
 
 function NonZero(const S: string): string; inline; overload;
-function NonZero(const I: integer): string; inline; overload;
+function NonZero(const I: Integer): string; inline; overload;
 
 function VerifieEAN(var Valeur: string): Boolean;
 function VerifieISBN(var Valeur: string; LongueurISBN: Integer = 10): Boolean;
-function FormatISBN(const Code: string): string;
+function FormatISBN(isbn: string): string;
 function ClearISBN(const Code: string): string;
 
 function FormatTitre(const Titre: string): string; inline;
@@ -47,7 +47,7 @@ type
 implementation
 
 uses
-  Forms, CommonConst;
+  Forms, CommonConst, Generics.Collections, JclSimpleXML, Math;
 
 function StringToGUIDDef(const GUID: string; const Default: TGUID): TGUID;
 begin
@@ -60,69 +60,74 @@ end;
 
 procedure AjoutString(var Chaine: AnsiString; const Ajout, Espace: AnsiString; const Avant: AnsiString = ''; const Apres: AnsiString = '');
 var
-  s: AnsiString;
+  S: AnsiString;
 begin
-  s := Ajout;
+  S := Ajout;
   if (Ajout <> '') then
   begin
-    s := Avant + Ajout + Apres;
-    if (Chaine <> '') then Chaine := Chaine + Espace;
+    S := Avant + Ajout + Apres;
+    if (Chaine <> '') then
+      Chaine := Chaine + Espace;
   end;
-  Chaine := Chaine + s;
+  Chaine := Chaine + S;
 end;
 
 procedure AjoutString(var Chaine: string; const Ajout, Espace: string; const Avant: string = ''; const Apres: string = '');
 var
-  s: string;
+  S: string;
 begin
-  s := Ajout;
+  S := Ajout;
   if (Ajout <> '') then
   begin
-    s := Avant + Ajout + Apres;
-    if (Chaine <> '') then Chaine := Chaine + Espace;
+    S := Avant + Ajout + Apres;
+    if (Chaine <> '') then
+      Chaine := Chaine + Espace;
   end;
-  Chaine := Chaine + s;
+  Chaine := Chaine + S;
 end;
 
 procedure AjoutString(var Chaine: WideString; const Ajout, Espace: WideString; const Avant: WideString = ''; const Apres: WideString = '');
 var
-  s: string;
+  S: WideString;
 begin
-  s := Ajout;
+  S := Ajout;
   if (Ajout <> '') then
   begin
-    s := Avant + Ajout + Apres;
-    if (Chaine <> '') then Chaine := Chaine + Espace;
+    S := Avant + Ajout + Apres;
+    if (Chaine <> '') then
+      Chaine := Chaine + Espace;
   end;
-  Chaine := Chaine + s;
+  Chaine := Chaine + S;
 end;
 
 function NonZero(const S: string): string;
 begin
-  Result := s;
-  if Trim(s) = '0' then Result := '';
+  Result := S;
+  if Trim(S) = '0' then
+    Result := '';
 end;
 
-function NonZero(const I: integer): string;
+function NonZero(const I: Integer): string;
 begin
   Result := '';
-  if I <> 0 then Result := IntToStr(i);
+  if I <> 0 then
+    Result := IntToStr(I);
 end;
 
 function VerifieEAN(var Valeur: string): Boolean;
 var
-  i, fak, sum: Integer;
+  I, fak, sum: Integer;
   tmp: string;
 begin
   sum := 0;
   tmp := Copy(Valeur + '0000000000000', 1, 12);
   fak := Length(tmp);
-  for i := 1 to Length(tmp) do
+  for I := 1 to Length(tmp) do
   begin
     if (fak mod 2) = 0 then
-      sum := sum + (StrToInt(tmp[i]) * 1)
+      sum := sum + (StrToInt(tmp[I]) * 1)
     else
-      sum := sum + (StrToInt(tmp[i]) * 3);
+      sum := sum + (StrToInt(tmp[I]) * 3);
     Dec(fak);
   end;
   if (sum mod 10) = 0 then
@@ -135,11 +140,12 @@ end;
 
 function ClearISBN(const Code: string): string;
 var
-  i: Integer;
+  I: Integer;
 begin
   Result := '';
-  for i := 1 to Length(Code) do
-    if CharInSet(Code[i], ['0'..'9', 'X', 'x']) then Result := Result + UpCase(Code[i]);
+  for I := 1 to Length(Code) do
+    if CharInSet(Code[I], ['0' .. '9', 'X', 'x']) then
+      Result := Result + UpCase(Code[I]);
 end;
 
 function VerifieISBN(var Valeur: string; LongueurISBN: Integer = 10): Boolean;
@@ -162,7 +168,7 @@ begin
       while Length(tmp) < LongueurISBN do
         tmp := tmp + '0';
       M := Ord(tmp[Length(tmp)]) - Ord('0');
-      //    M := StrToInt(tmp[Length(tmp)]);
+      // M := StrToInt(tmp[Length(tmp)]);
     end;
 
     if LongueurISBN = 13 then
@@ -171,7 +177,7 @@ begin
     begin
       C := 0;
       for X := 1 to Pred(Length(tmp)) do
-        //    C := C + StrToInt(tmp[X]) * X;
+        // C := C + StrToInt(tmp[X]) * X;
         C := C + (Ord(tmp[X]) - Ord('0')) * X;
       v := C mod 11;
       Result := v = M;
@@ -185,102 +191,153 @@ begin
   Valeur := tmp;
 end;
 
-function FormatISBN(const Code: string): string;
-var
-  s, CleanCode: string;
-  l: integer;
-begin
-  CleanCode := Copy(ClearISBN(Code), 1, 13); // une fois nettoyé, le code ne peut contenir que 13 caractères
-  s := CleanCode;
-  if Length(s) > 10 then s := Copy(CleanCode, 4, 10); // ISBN13 = 3 premiers car de l'isbn13 + '-' + ISBN
-  if Length(s) < 10 then Exit;
+type
+  TISBNRule = class
+    valueLower, valueUpper, Length: Integer;
+    constructor Create(valueLower, valueUpper, Length: Integer);
+  end;
 
-  l := -1;
-  case StrToInt(s[1]) of
-    0, 3, 4, 5: // codes anglophones
-      case StrToInt(Copy(s, 2, 2)) of
-        00..19: l := 2;
-        20..69: l := 3;
-        70..84: l := 4;
-        85..89: l := 5;
-        90..94: l := 6;
-        95..99: l := 7;
-      end;
-    2: // codes francophones
-      case StrToInt(Copy(s, 2, 2)) of
-        01..19: l := 2;
-        20..34, 40..69: l := 3;
-        70..83: l := 4;
-        84..89, 35..39: l := 5;
-        90..94: l := 6;
-        95..99: l := 7;
-      end;
-    1:
-      case StrToInt(Copy(s, 2, 6)) of
-        550000..869799: l := 5;
-        869800..926429: l := 6;
-      end;
-    7:
-      case StrToInt(Copy(s, 2, 2)) of
-        00..09: l := 2;
-        10..49: l := 3;
-        50..79: l := 4;
-        80..89: l := 5;
-        90..99: l := 6;
-      end;
-    8:
-      case StrToInt(Copy(s, 2, 1)) of
-        1, 3, 4, 5, 8:
-          case StrToInt(Copy(s, 3, 2)) of
-            00..19: l := 2;
-            20..69: l := 3;
-            70..84: l := 4;
-            85..89: l := 5;
-            90..99: l := 6;
+  { ISBNRule }
+
+constructor TISBNRule.Create(valueLower, valueUpper, Length: Integer);
+begin
+  Self.valueLower := valueLower;
+  Self.valueUpper := valueUpper;
+  Self.Length := Length;
+end;
+
+var
+  isbnPrefixes: TDictionary < string, TList < TISBNRule >> = nil;
+  isbnGroups: TDictionary < string, TList < TISBNRule >> = nil;
+
+procedure DecodeISBNRules;
+
+  function LoadNode(Node: TJclSimpleXMLElem; const ListNodeName: string): TDictionary<string, TList<TISBNRule>>;
+  var
+    xmlPrefix, xmlRule: TJclSimpleXMLElem;
+    p: Integer;
+    prefix, range: string;
+    rule: TISBNRule;
+    list: TList<TISBNRule>;
+  begin
+    Result := TDictionary < string, TList < TISBNRule >>.Create;
+
+    for xmlPrefix in Node.Items do
+      if SameText(xmlPrefix.Name, ListNodeName) then
+      begin
+        prefix := xmlPrefix.Items.ItemNamed['prefix'].Value;
+        for xmlRule in xmlPrefix.Items.ItemNamed['Rules'].Items do
+        begin
+          range := xmlRule.Items.ItemNamed['range'].Value;
+          p := range.IndexOf('-');
+
+          if not Result.TryGetValue(prefix, list) then
+          begin
+            list := TList<TISBNRule>.Create;
+            Result.Add(prefix, list);
           end;
-      end;
-    9:
-      case StrToInt(Copy(s, 2, 1)) of
-        0:
-          case StrToInt(Copy(s, 3, 2)) of
-            00..19: l := 3;
-            20..49: l := 4;
-            50..69: l := 5;
-            70..79: l := 6;
-            80..89: l := 7;
-          end;
-        2:
-          case StrToInt(Copy(s, 3, 2)) of
-            00..05: l := 2;
-            06..07: l := 3;
-            80..89: l := 4;
-            90..99: l := 5;
-          end;
+          rule := TISBNRule.Create(range.Substring(0, p).ToInteger, range.Substring(p + 1).ToInteger, xmlRule.Items.ItemNamed['length'].IntValue);
+          list.Add(rule);
+        end;
       end;
   end;
 
-  if l = -1 then Exit;
-  Result := Format('%s-%s-%s-%s', [Copy(s, 1, 1), Copy(s, 2, l), Copy(s, 2 + l, 8 - l), Copy(s, 10, 1)]);
-  if Length(CleanCode) > 10 then
-    Result := Copy(CleanCode, 1, 3) + '-' + Result;
+var
+  xml: TJclSimpleXML;
+begin
+  if (isbnPrefixes <> nil) then
+    Exit;
+
+  xml := TJclSimpleXML.Create;
+  try
+    xml.LoadFromResourceName(HInstance, 'ISBN_RANGES');
+
+    isbnPrefixes := LoadNode(xml.Root.Items.ItemNamed['EAN.UCCPrefixes'], 'EAN.UCC');
+    isbnGroups := LoadNode(xml.Root.Items.ItemNamed['RegistrationGroups'], 'Group');
+  finally
+    xml.Free;
+  end;
+end;
+
+function getLengthForPrefix(map: TDictionary<String, TList<TISBNRule>>; const prefix: String; Value: Integer): Integer;
+var
+  rules: TList<TISBNRule>;
+  rule: TISBNRule;
+begin
+  rules := map.Items[prefix];
+  if (rules = nil) or (rules.Count = 0) then
+    Exit(0);
+
+  for rule in rules do
+    if (rule.valueLower <= Value) and (rule.valueUpper >= Value) then
+      Exit(rule.Length);
+
+  Exit(0);
+end;
+
+function FormatISBN(isbn: string): string;
+var
+  S: string;
+  groupSize, publisherSize: Integer;
+  prefix, group, publisher, s1: string;
+begin
+  isbn := ClearISBN(isbn);
+  isbn := isbn.ToUpper.Substring(0, Math.Min(isbn.Length, 13));
+  S := isbn;
+  if (S.Length > 10) then
+  begin
+    prefix := S.Substring(0, 3);
+    S := S.Substring(3, Math.Min(S.Length, 13));
+  end
+  else
+    prefix := '978';
+
+  if (S.Length < 10) then
+    Exit(isbn);
+
+  DecodeISBNRules;
+
+  s1 := S.Substring(0, 7);
+  groupSize := getLengthForPrefix(isbnPrefixes, prefix, s1.ToInteger);
+  group := S.Substring(0, groupSize);
+
+  s1 := S.Substring(groupSize, 7);
+  publisherSize := getLengthForPrefix(isbnGroups, prefix + '-' + group, s1.ToInteger);
+  publisher := S.Substring(groupSize, publisherSize);
+
+  Result := '';
+  if (isbn.Length > 10) then
+  begin
+    Result := Result + prefix;
+    Result := Result + '-';
+  end;
+  Result := Result + group;
+  Result := Result + '-';
+  Result := Result + publisher;
+  Result := Result + '-';
+  Result := Result + S.Substring(groupSize + publisherSize, 9 - groupSize - publisherSize);
+  Result := Result + '-';
+  Result := Result + S.Substring(S.Length - 1, 1);
 end;
 
 function FormatTitre(const Titre: string): string;
 var
-  i, j: Integer;
+  I, j: Integer;
   Dummy: string;
 begin
   Result := Titre;
   try
-    i := Pos('[', Titre);
-    if i > 0 then
+    I := Pos('[', Titre);
+    if I > 0 then
     begin
-      j := PosEx(']', Titre, i);
-      if j = 0 then Exit;
-      Dummy := Copy(Titre, i + 1, j - i - 1);
+      j := PosEx(']', Titre, I);
+      if j = 0 then
+        Exit;
+      Dummy := Copy(Titre, I + 1, j - I - 1);
       if Length(Dummy) > 0 then
-        if Dummy[Length(Dummy)] <> '''' then Dummy := Dummy + ' ';
-      Result := Dummy + Copy(Titre, 1, i - 1) + Copy(Titre, j + 1, Length(Titre));
+        if Dummy[Length(Dummy)] <> '''' then
+          Dummy := Dummy + ' ';
+      Result := Dummy + Copy(Titre, 1, I - 1) + Copy(Titre, j + 1, Length(Titre));
     end;
   finally
     Result := Trim(Result);
@@ -289,14 +346,15 @@ end;
 
 function FormatTitreAlbum(Simple, AvecSerie: Boolean; const Titre, Serie: string; Tome, TomeDebut, TomeFin: Integer; Integrale, HorsSerie: Boolean): string;
 const
-  resTome: array[False..True] of string = ('T. ', 'Tome ');
-  resHS: array[False..True] of string = ('HS', 'Hors-série');
-  resIntegrale: array[False..True] of string = ('INT.', 'Intégrale');
+  resTome: array [False .. True] of string = ('T. ', 'Tome ');
+  resHS: array [False .. True] of string = ('HS', 'Hors-série');
+  resIntegrale: array [False .. True] of string = ('INT.', 'Intégrale');
 var
   sSerie, sAlbum, s2, sTome: string;
 begin
   sAlbum := Titre;
-  if not Simple then sAlbum := FormatTitre(sAlbum);
+  if not Simple then
+    sAlbum := FormatTitre(sAlbum);
 
   sSerie := '';
   if AvecSerie then
@@ -320,28 +378,29 @@ begin
 
   case TGlobalVar.Utilisateur.Options.FormatTitreAlbum of
     0: // Album (Serie - Tome)
-    begin
-      AjoutString(sSerie, sTome, ' - ');
-      if sAlbum = '' then
-        Result := sSerie
-      else
       begin
-        AjoutString(sAlbum, sSerie, ' ', '(', ')');
-        Result := sAlbum;
+        AjoutString(sSerie, sTome, ' - ');
+        if sAlbum = '' then
+          Result := sSerie
+        else
+        begin
+          AjoutString(sAlbum, sSerie, ' ', '(', ')');
+          Result := sAlbum;
+        end;
       end;
-    end;
     1: // Tome - Album (Serie)
-    begin
-      if sAlbum = '' then
-        sAlbum := sSerie
-      else
-        AjoutString(sAlbum, sSerie, ' ', '(', ')');
-      AjoutString(sTome, sAlbum, ' - ');
-      Result := sTome;
-    end;
+      begin
+        if sAlbum = '' then
+          sAlbum := sSerie
+        else
+          AjoutString(sAlbum, sSerie, ' ', '(', ')');
+        AjoutString(sTome, sAlbum, ' - ');
+        Result := sTome;
+      end;
   end;
 
-  if Result = '' then Result := '<Sans titre>';
+  if Result = '' then
+    Result := '<Sans titre>';
 end;
 
 { THourGlass }
@@ -362,8 +421,14 @@ end;
 function GetTransaction(Database: TUIBDataBase): TUIBTransaction;
 begin
   Result := TUIBTransaction.Create(nil);
-  Result.DataBase := Database;
+  Result.Database := Database;
 end;
 
-end.
+initialization
 
+finalization
+
+isbnPrefixes.Free;
+isbnGroups.Free;
+
+end.

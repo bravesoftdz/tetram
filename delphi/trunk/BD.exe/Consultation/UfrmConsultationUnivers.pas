@@ -167,7 +167,7 @@ end;
 
 procedure TfrmConsultationUnivers.FicheModifierExecute(Sender: TObject);
 begin
-  Historique.AddWaiting(fcGestionModif, @RefreshCallBack, nil, @ModifierUnivers2, nil, FUnivers.ID);
+  Historique.AddWaiting(fcGestionModif, RefreshCallBack, nil, @ModifierUnivers2, nil, FUnivers.ID);
 end;
 
 procedure TfrmConsultationUnivers.ImpRep(Sender: TObject);

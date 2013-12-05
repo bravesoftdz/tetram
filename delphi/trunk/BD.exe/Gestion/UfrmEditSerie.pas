@@ -418,7 +418,7 @@ var
   Auteur: TAuteur;
   CurrentAuteur: TPersonnage;
 begin
-  CurrentAuteur := vtEditPersonnes.VTEdit.Data;
+  CurrentAuteur := vtEditPersonnes.VTEdit.Data as TPersonnage;
   for i := 0 to Pred(lvScenaristes.Items.Count) do
   begin
     Auteur := lvScenaristes.Items[i].Data;

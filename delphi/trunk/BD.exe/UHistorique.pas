@@ -10,7 +10,7 @@ type
     fcGestionModif, fcGestionSupp, fcGestionAchat, fcScripts, fcConflitImport, fcGallerie, fcModeConsultation, fcModeGestion, fcModeScript, fcUnivers);
 
 type
-  TConsultCallback = procedure(Data: Pointer);
+  TConsultCallback = procedure(Data: TObject);
 
   TConsult = class
   strict private
@@ -20,11 +20,11 @@ type
     Action: TActionConsultation;
     ReferenceGUID, ReferenceGUID2: TGUID;
     Reference, Reference2: Integer;
-    Data: Pointer;
+    Data: TObject;
     Stream: TMemoryStream;
 
     GestionCallback: TConsultCallback;
-    GestionCallbackData: Pointer;
+    GestionCallbackData: TObject;
 
     GestionProc, GestionVTV: Pointer;
     GestionValeur: string;
@@ -65,8 +65,8 @@ type
     procedure AddWaiting(Consultation: TActionConsultation; Ref: Integer = -1; Ref2: Integer = -1); overload;
     procedure AddWaiting(Consultation: TActionConsultation; const Ref: TGUID; Ref2: Integer = -1); overload;
     procedure AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: TGUID); overload;
-    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Valeur: string = ''); overload;
-    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Ref: TGUID;
+    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Valeur: string = ''); overload;
+    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Ref: TGUID;
       const Valeur: string = ''); overload;
 
     procedure Refresh;
@@ -90,7 +90,7 @@ type
 var
   Historique: THistory;
 
-procedure RefreshCallBack(Data: Pointer);
+procedure RefreshCallBack(Data: TObject);
 
 implementation
 
@@ -106,7 +106,7 @@ const
   CanRefresh = [fcAlbum, fcAuteur, fcSeriesIncompletes, fcPrevisionsSorties, fcPrevisionsAchats, fcGallerie, fcUnivers];
   MustRefresh = [fcRecherche];
 
-procedure RefreshCallBack(Data: Pointer);
+procedure RefreshCallBack(Data: TObject);
 begin
   Historique.Refresh;
 end;
@@ -202,12 +202,12 @@ begin
   end;
 end;
 
-procedure THistory.AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Valeur: string);
+procedure THistory.AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Valeur: string);
 begin
   AddWaiting(Consultation, Callback, CallbackData, Proc, VTV, GUID_NULL, Valeur);
 end;
 
-procedure THistory.AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData, Proc, VTV: Pointer; const Ref: TGUID;
+procedure THistory.AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Ref: TGUID;
   const Valeur: string);
 begin
   FListWaiting.Add(TConsult.Create);

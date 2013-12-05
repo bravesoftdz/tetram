@@ -480,7 +480,7 @@ begin
   AfficheEdition := -1;
   for i := 0 to Pred(vtEditions.Items.Count) do
   begin
-    EditionComplete := Pointer(vtEditions.Items.Objects[i]);
+    EditionComplete := TEditionComplete(vtEditions.Items.Objects[i]);
     if IsEqualGUID(EditionComplete.Editeur.ID_Editeur, GUID_NULL) then
     begin
       AffMessage(rsEditeurObligatoire, mtInformation, [mbOk], True);
@@ -827,7 +827,7 @@ begin
     EditionComplete.Collection.ID := TSerie(vtEditSerie.VTEdit.Data).Collection.ID;
   end;
   FAlbum.Editions.Editions.Add(EditionComplete);
-  vtEditions.AddItem('Nouvelle edition', Pointer(EditionComplete));
+  vtEditions.AddItem('Nouvelle edition', EditionComplete);
   vtEditions.ItemIndex := Pred(vtEditions.Items.Count);
   vtEditionsClick(nil);
 
@@ -984,7 +984,7 @@ begin
   FEditionChanging := True;
   try
     if vtEditions.ItemIndex > -1 then
-      FCurrentEditionComplete := Pointer(vtEditions.Items.Objects[vtEditions.ItemIndex])
+      FCurrentEditionComplete := vtEditions.Items.Objects[vtEditions.ItemIndex] as TEditionComplete
     else
       FCurrentEditionComplete := nil;
 
@@ -1040,7 +1040,7 @@ var
   Auteur: TAuteur;
   CurrentAuteur: TPersonnage;
 begin
-  CurrentAuteur := vtEditPersonnes.VTEdit.Data;
+  CurrentAuteur := vtEditPersonnes.VTEdit.Data as TPersonnage;
   for i := 0 to Pred(lvScenaristes.Items.Count) do
   begin
     Auteur := lvScenaristes.Items[i].Data;

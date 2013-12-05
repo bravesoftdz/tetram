@@ -43,6 +43,7 @@ const
   GP_ALBUMS = 3;
   GP_EDITIONS = 4;
 
+var
   // Bien que pas génant, il vaut mieux que les champs soient regroupés par table
   _ChampsRecherche: TArrayOfChamp = (
     (Groupe: GP_ALBUMS; ID: 01; NomTable: 'ALBUMS'; NomChamp: 'titrealbum'; LibelleChamp: rsTransTitreAlbum; Special: csTitre),

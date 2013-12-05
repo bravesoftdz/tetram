@@ -27,7 +27,7 @@ uses Commun, CommonConst, UfrmConvertisseur;
 
 {$R *.DFM}
 
-const
+var
   travail: Boolean = False;
 
 procedure TframConvertisseur.Edit1Change(Sender: TObject);

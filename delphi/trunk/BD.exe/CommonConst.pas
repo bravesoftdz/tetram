@@ -11,7 +11,7 @@ uses
   Classes,
   Divers;
 
-const
+var
   AppData: string = 'TetramCorp\BDTheque\';
   CommonAppData: string = 'TetramCorp\BDTheque\';
   DatabasePath: string = 'bd.gdb';
@@ -30,6 +30,8 @@ const
   FormatPourcent: string = '';
   FormatMonnaie: string = '';
   FormatMonnaieSimple: string = '';
+
+const
   TitreApplication = 'BDthèque';
   CopyrightTetramCorp = 'Copyright © Teträm Corp';
 

@@ -1,5 +1,5 @@
 program BD;
-{$R 'scripts_maj.res' 'mises à jour\scripts_maj.rc'}
+
 {$R *.dres}
 
 uses
@@ -187,9 +187,11 @@ uses
   UMySQLMAJ1_0_0_3 in 'Web\mises à jour\UMySQLMAJ1_0_0_3.pas',
   UMAJ2_2_3_22 in 'mises à jour\UMAJ2_2_3_22.pas';
 
-{$R *.RES}
+{$R 'scripts_maj.res' 'mises à jour\scripts_maj.rc'}
 {$R curseurs.res}
 {$INCLUDE FastMM4Options.inc}
+{$R *.dres}
+{$R *.RES}
 
 begin
   InitProc := @BdtkInitProc;

@@ -238,23 +238,6 @@ procedure TfrmEditCritere.champsChange(Sender: TObject);
     end;
   end;
 
-  procedure AssignItems(Items: TStrings; Source: TUIBQuery); overload;
-  begin
-    try
-      Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      Items.Clear;
-      Source.Open;
-      while not Source.Eof do
-      begin
-        Items.AddObject(Source.Fields.AsString[1], Pointer(Source.Fields.AsInteger[0]));
-        Source.Next;
-      end;
-      Source.Close;
-    finally
-      Source.Transaction.Free;
-    end;
-  end;
-
 begin
   valeur.Text := '';
   signes.Items.Clear;
@@ -272,8 +255,8 @@ begin
       begin
         AssignItems(signes.Items, dmCommun.TCritereListe);
         AssignItems(Critere2.Items, dmCommun.TGenre, FChampValeurs);
-        valeur.Visible := False;
         signes.Tag := 2;
+        valeur.Visible := False;
       end;
     csAffiche:
       begin

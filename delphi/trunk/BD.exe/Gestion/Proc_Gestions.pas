@@ -155,7 +155,7 @@ begin
   if IsEqualGUID(i, GUID_NULL) then
     Exit;
   VT.MemorizeIndexNode;
-  PA := VT.GetFocusedNodeData;
+  PA := VT.GetFocusedNodeData as TAlbum;
   s := rsSupprimerAchat;
   if Assigned(PA) and not PA.Complet then
     s := rsLienAchatAlbum + #13 + s;
@@ -609,7 +609,7 @@ begin
   if IsEqualGUID(i, GUID_NULL) then
     Exit;
   VT.MemorizeIndexNode;
-  PA := VT.GetFocusedNodeData;
+  PA := VT.GetFocusedNodeData as TParaBD;
   s := rsSupprimerAchat;
   if Assigned(PA) and not PA.Complet then
     s := rsLienAchatParaBD + #13 + s;

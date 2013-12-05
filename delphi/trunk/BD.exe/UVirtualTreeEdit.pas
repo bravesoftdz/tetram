@@ -3,7 +3,7 @@ unit UVirtualTreeEdit;
 interface
 
 uses
-  SysUtils, Windows, Classes, Controls, Messages, JvToolEdit, VirtualTrees, VirtualTree, Variants, EditLabeled, LinkControls, Vcl.ExtCtrls;
+  SysUtils, Windows, Classes, Controls, Messages, JvToolEdit, VirtualTrees, VirtualTree, Variants, EditLabeled, LinkControls, TypeRec, Vcl.ExtCtrls;
 
 type
   TJvComboEdit = class(JvToolEdit.TJvComboEdit)
@@ -57,7 +57,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    function Data: Pointer;
+    function Data: TBasePointeur;
     procedure CloseUp;
     procedure PopupChange; override;
     procedure SetBounds(ALeft, ATop, AWidth, AHeight: Integer); override;
@@ -74,7 +74,7 @@ type
 implementation
 
 uses
-  Commun, Forms, TypeRec, Math, Graphics;
+  Commun, Forms, Math, Graphics;
 
 constructor TJvComboEdit.Create(AOwner: TComponent);
 begin
@@ -121,7 +121,7 @@ begin
     PopupCloseUp(Self, True);
 end;
 
-function TJvComboEdit.Data: Pointer;
+function TJvComboEdit.Data: TBasePointeur;
 begin
   Result := PopupWindow.TreeView.GetFocusedNodeData;
 end;

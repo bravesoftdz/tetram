@@ -297,7 +297,7 @@ end;
 
 procedure TfrmConsultationParaBD.FicheModifierExecute(Sender: TObject);
 begin
-  Historique.AddWaiting(fcGestionModif, @RefreshCallBack, nil, @ModifierParaBD2, nil, FParaBD.ID);
+  Historique.AddWaiting(fcGestionModif, RefreshCallBack, nil, @ModifierParaBD2, nil, FParaBD.ID);
 end;
 
 procedure TfrmConsultationParaBD.ImpRep(Sender: TObject);

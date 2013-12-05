@@ -3740,18 +3740,22 @@ var
     // SERIES
     // EDITIONS
     // GENRESERIES
-    // UNIVERS
+    // ALBUMS_UNIVERS + UNIVERS
 
-    Result := 'albums inner join editions on albums.id_album = editions.id_album left join series on albums.id_serie = series.id_serie left join univers on univers.id_univers = albums.id_univers';
-    slFrom.Delete(slFrom.IndexOf('albums'));
-    slFrom.Delete(slFrom.IndexOf('series'));
-    slFrom.Delete(slFrom.IndexOf('editions'));
-    slFrom.Delete(slFrom.IndexOf('univers'));
+    Result := '';
+    Result := Result + #13#10' albums';
+    Result := Result + #13#10' inner join editions on albums.id_album = editions.id_album';
+    Result := Result + #13#10' left join series on albums.id_serie = series.id_serie';
+
     i := slFrom.IndexOf('genreseries');
     if i <> -1 then
+      Result := Result + #13#10' left join genreseries on genreseries.id_serie = albums.id_serie';
+
+    i := slFrom.IndexOf('univers');
+    if i <> -1 then
     begin
-      Result := Result + ' left join genreseries on genreseries.id_serie = albums.id_serie';
-      slFrom.Delete(i);
+      Result := Result + #13#10' left join albums_univers on albums_univers.id_album = albums.id_album';
+      Result := Result + #13#10' left join univers on univers.id_univers = albums_univers.id_univers';
     end;
   end;
 
@@ -3818,7 +3822,7 @@ begin
   slFrom := TStringList.Create;
   slFrom.Sorted := True;
   slFrom.Duplicates := dupIgnore;
-  slFrom.Delimiter := ',';
+  slFrom.CaseSensitive := False;
   slWhere := TStringList.Create;
   with q do
     try
@@ -3832,7 +3836,6 @@ begin
       slFrom.Add('albums');
       slFrom.Add('series');
       slFrom.Add('editions');
-      slFrom.Add('univers');
       sWhere := ProcessCritere(Criteres);
 
       SQL.Add('from ' + ProcessTables);

@@ -149,7 +149,7 @@ object frmRepertoire: TfrmRepertoire
           item
             Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
             Position = 0
-            Width = 329
+            Width = 333
           end>
       end
       inline FrameRechercheRapideAlbums: TframRechercheRapide
