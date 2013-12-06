@@ -3,10 +3,10 @@
         <ProjectGuid>{34D6FF5D-C4A3-41B4-A9F2-A7188CB01A71}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="BDT_UDF.DLL\BDT_UDF.dproj">
+        <Projects Include="BDPic.DLL\BDPic.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="BDPic.DLL\BDPic.dproj">
+        <Projects Include="BDT_UDF.DLL\BDT_UDF.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="BD.exe\BD.dproj">
@@ -23,15 +23,6 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
-    <Target Name="BDT_UDF">
-        <MSBuild Projects="BDT_UDF.DLL\BDT_UDF.dproj"/>
-    </Target>
-    <Target Name="BDT_UDF:Clean">
-        <MSBuild Projects="BDT_UDF.DLL\BDT_UDF.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="BDT_UDF:Make">
-        <MSBuild Projects="BDT_UDF.DLL\BDT_UDF.dproj" Targets="Make"/>
-    </Target>
     <Target Name="BDPic">
         <MSBuild Projects="BDPic.DLL\BDPic.dproj"/>
     </Target>
@@ -40,6 +31,15 @@
     </Target>
     <Target Name="BDPic:Make">
         <MSBuild Projects="BDPic.DLL\BDPic.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="BDT_UDF">
+        <MSBuild Projects="BDT_UDF.DLL\BDT_UDF.dproj"/>
+    </Target>
+    <Target Name="BDT_UDF:Clean">
+        <MSBuild Projects="BDT_UDF.DLL\BDT_UDF.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="BDT_UDF:Make">
+        <MSBuild Projects="BDT_UDF.DLL\BDT_UDF.dproj" Targets="Make"/>
     </Target>
     <Target Name="BD">
         <MSBuild Projects="BD.exe\BD.dproj"/>
@@ -60,13 +60,13 @@
         <MSBuild Projects="D:\Composants\DWScript\Tools\IDEDialog\Delphi projects\DwsIdeDemo.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="BDT_UDF;BDPic;BD;DwsIdeDemo"/>
+        <CallTarget Targets="BDPic;BDT_UDF;BD;DwsIdeDemo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="BDT_UDF:Clean;BDPic:Clean;BD:Clean;DwsIdeDemo:Clean"/>
+        <CallTarget Targets="BDPic:Clean;BDT_UDF:Clean;BD:Clean;DwsIdeDemo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="BDT_UDF:Make;BDPic:Make;BD:Make;DwsIdeDemo:Make"/>
+        <CallTarget Targets="BDPic:Make;BDT_UDF:Make;BD:Make;DwsIdeDemo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
