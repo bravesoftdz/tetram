@@ -33,10 +33,12 @@ var
   s: string;
 begin
   case OrigineTitre of
-    1: s := BaseSoundex(string(Chaine), 'FR');
-    2: s := BaseSoundex(string(Chaine), 'EN');
-    else
-      s := '';
+    1:
+      s := BaseSoundex(string(Chaine), 'FR');
+    2:
+      s := BaseSoundex(string(Chaine), 'EN');
+  else
+    s := '';
   end;
   Result := CreateResult(AnsiString(s));
 end;
@@ -82,10 +84,12 @@ begin
     if i > 0 then
     begin
       j := AnsiStrings.PosEx(']', Titre, i);
-      if j = 0 then Exit;
+      if j = 0 then
+        Exit;
       Dummy := Copy(Titre, i + 1, j - i - 1);
       if Length(Dummy) > 0 then
-        if Dummy[Length(Dummy)] <> '''' then Dummy := Dummy + ' ';
+        if Dummy[Length(Dummy)] <> '''' then
+          Dummy := Dummy + ' ';
       Result := Dummy + Copy(Titre, 1, i - 1) + Copy(Titre, j + 1, Length(Titre));
     end;
   finally
@@ -128,7 +132,8 @@ begin
       d_del := p[j] + cost_del;
       d_ins := q[j - 1] + cost_ins;
       d_sub := p[j - 1];
-      if s1[i - 1] <> s2[j - 1] then Inc(d_sub, cost_sub);
+      if s1[i - 1] <> s2[j - 1] then
+        Inc(d_sub, cost_sub);
       q[j] := Min(Min(d_del, d_ins), d_sub);
     end;
     r := p;
@@ -141,75 +146,82 @@ end;
 
 function CompareChaines1(Chaine1, Chaine2: PAnsiChar): Float; cdecl; export;
 
-  function DoCompare(const S1, S2: AnsiString): Float;
+  function DoCompare(const s1, s2: AnsiString): Float;
   var
     i, l: Integer;
     Str1, Str2: AnsiString;
   begin
     Result := 0;
-    if S1 = S2 then
+    if s1 = s2 then
       Result := 100
     else
-    try
-      if Length(S1) > Length(S2) then
-      begin
-        Str1 := S2;
-        Str2 := S1;
-      end
-      else
-      begin
-        Str1 := S1;
-        Str2 := S2;
-      end;
+      try
+        if Length(s1) > Length(s2) then
+        begin
+          Str1 := s2;
+          Str2 := s1;
+        end
+        else
+        begin
+          Str1 := s1;
+          Str2 := s2;
+        end;
 
-      for l := Length(Str1) downto 1 do
-        for i := 1 to Length(Str2) - l + 1 do
-          if Pos(Copy(Str2, i, l), Str1) > 0 then
-          begin
-            Result := l;
-            Exit;
-          end;
-    finally
-      // on converti en %
-      Result := Result / Length(Str2) * 100;
-    end;
+        for l := Length(Str1) downto 1 do
+          for i := 1 to Length(Str2) - l + 1 do
+            if Pos(Copy(Str2, i, l), Str1) > 0 then
+            begin
+              Result := l;
+              Exit;
+            end;
+      finally
+        // on converti en %
+        Result := Result / Length(Str2) * 100;
+      end;
   end;
 
   function ChercheMeilleurTaux(const Str1, Str2: AnsiString): Float;
   var
-    S1, S2, F1, F2: AnsiString;
-    R: Float;
+    s1, s2, F1, F2: AnsiString;
+    r: Float;
   begin
     F1 := FormatTitre(Str1);
     F2 := FormatTitre(Str2);
 
-    S1 := AnsiString(OnlyAlphaNum(string(Str1)));
-    S2 := AnsiString(OnlyAlphaNum(string(Str2)));
-    Result := DoCompare(S1, S2);
-    if Result = 100 then Exit;
+    s1 := AnsiString(OnlyAlphaNum(string(Str1)));
+    s2 := AnsiString(OnlyAlphaNum(string(Str2)));
+    Result := DoCompare(s1, s2);
+    if Result = 100 then
+      Exit;
 
     if F2 <> Str2 then
     begin
-      S2 := AnsiString(OnlyAlphaNum(string(F2)));
-      R := DoCompare(S1, S2);
-      if R > Result then Result := R;
-      if Result = 100 then Exit;
+      s2 := AnsiString(OnlyAlphaNum(string(F2)));
+      r := DoCompare(s1, s2);
+      if r > Result then
+        Result := r;
+      if Result = 100 then
+        Exit;
     end;
 
     if F1 <> Str1 then
     begin
-      S1 := AnsiString(OnlyAlphaNum(string(F1)));
-      S2 := AnsiString(OnlyAlphaNum(string(Str2)));
-      R := DoCompare(S1, S2);
-      if R > Result then Result := R;
-      if Result = 100 then Exit;
+      s1 := AnsiString(OnlyAlphaNum(string(F1)));
+      s2 := AnsiString(OnlyAlphaNum(string(Str2)));
+      r := DoCompare(s1, s2);
+      if r > Result then
+        Result := r;
+      if Result = 100 then
+        Exit;
 
       if F2 <> Str2 then
       begin
-        S2 := AnsiString(OnlyAlphaNum(string(F2)));
-        R := DoCompare(S1, S2);
-        if R > Result then Result := R;
-        if Result = 100 then Exit;
+        s2 := AnsiString(OnlyAlphaNum(string(F2)));
+        r := DoCompare(s1, s2);
+        if r > Result then
+          Result := r;
+        if Result = 100 then
+          Exit;
       end;
     end;
   end;
@@ -220,86 +232,96 @@ end;
 
 function CompareChaines2(Chaine1, Chaine2: PAnsiChar): Float; cdecl; export;
 
-  function DoCompare(const S1, S2: AnsiString): Float;
+  function DoCompare(const s1, s2: AnsiString): Float;
   var
     c, i, l, L1, L2: Integer;
     Str1, Str2: AnsiString;
   begin
     Result := 0;
-    if S1 = S2 then
+    if s1 = s2 then
       Result := 100
     else
-    try
-      if Length(S1) > Length(S2) then
-      begin
-        Str1 := S2;
-        Str2 := S1;
-      end
-      else
-      begin
-        Str1 := S1;
-        Str2 := S2;
-      end;
-
-      L1 := Length(Str1);
-      L2 := Length(Str2);
-
-      for i := 1 - L1 to L2 - 1 do
-      begin
-        // si on n'a plus assez de caractères pour faire mieux on s'arrête
-        if Result >= L2 - i then Exit;
-
-        c := 0;
-        for l := Max(1, 1 - i) to Min(L1, L2 - i) do
-          if Str1[l] = Str2[i + l] then Inc(c);
-        if c > Result then
+      try
+        if Length(s1) > Length(s2) then
         begin
-          Result := c;
-          // si on a retrouvé la chaine complète, on ne pourra pas faire mieux
-          if Result = L1 then Exit;
+          Str1 := s2;
+          Str2 := s1;
+        end
+        else
+        begin
+          Str1 := s1;
+          Str2 := s2;
         end;
+
+        L1 := Length(Str1);
+        L2 := Length(Str2);
+
+        for i := 1 - L1 to L2 - 1 do
+        begin
+          // si on n'a plus assez de caractères pour faire mieux on s'arrête
+          if Result >= L2 - i then
+            Exit;
+
+          c := 0;
+          for l := Max(1, 1 - i) to Min(L1, L2 - i) do
+            if Str1[l] = Str2[i + l] then
+              Inc(c);
+          if c > Result then
+          begin
+            Result := c;
+            // si on a retrouvé la chaine complète, on ne pourra pas faire mieux
+            if Result = L1 then
+              Exit;
+          end;
+        end;
+      finally
+        // on converti en %
+        Result := Result / Length(Str2) * 100;
       end;
-    finally
-      // on converti en %
-      Result := Result / Length(Str2) * 100;
-    end;
   end;
 
   function ChercheMeilleurTaux(const Str1, Str2: AnsiString): Float;
   var
-    S1, S2, F1, F2: AnsiString;
-    R: Float;
+    s1, s2, F1, F2: AnsiString;
+    r: Float;
   begin
     F1 := FormatTitre(Str1);
     F2 := FormatTitre(Str2);
 
-    S1 := AnsiString(OnlyAlphaNum(string(Str1)));
-    S2 := AnsiString(OnlyAlphaNum(string(Str2)));
-    Result := DoCompare(S1, S2);
-    if Result = 100 then Exit;
+    s1 := AnsiString(OnlyAlphaNum(string(Str1)));
+    s2 := AnsiString(OnlyAlphaNum(string(Str2)));
+    Result := DoCompare(s1, s2);
+    if Result = 100 then
+      Exit;
 
     if F2 <> Str2 then
     begin
-      S2 := AnsiString(OnlyAlphaNum(string(F2))); // OnlyAlphaNum(FormatTitre(Str2));
-      R := DoCompare(S1, S2);
-      if R > Result then Result := R;
-      if Result = 100 then Exit;
+      s2 := AnsiString(OnlyAlphaNum(string(F2))); // OnlyAlphaNum(FormatTitre(Str2));
+      r := DoCompare(s1, s2);
+      if r > Result then
+        Result := r;
+      if Result = 100 then
+        Exit;
     end;
 
     if F1 <> Str1 then
     begin
-      S1 := AnsiString((string(F1)));
-      S2 := AnsiString((string(Str2)));
-      R := DoCompare(S1, S2);
-      if R > Result then Result := R;
-      if Result = 100 then Exit;
+      s1 := AnsiString((string(F1)));
+      s2 := AnsiString((string(Str2)));
+      r := DoCompare(s1, s2);
+      if r > Result then
+        Result := r;
+      if Result = 100 then
+        Exit;
 
       if F2 <> Str2 then
       begin
-        S2 := AnsiString(OnlyAlphaNum(string(F2))); // OnlyAlphaNum(FormatTitre(Str2));
-        R := DoCompare(S1, S2);
-        if R > Result then Result := R;
-        if Result = 100 then Exit;
+        s2 := AnsiString(OnlyAlphaNum(string(F2))); // OnlyAlphaNum(FormatTitre(Str2));
+        r := DoCompare(s1, s2);
+        if r > Result then
+          Result := r;
+        if Result = 100 then
+          Exit;
       end;
     end;
   end;
@@ -325,17 +347,18 @@ begin
       Result := Result + FileName[i];
 end;
 
-procedure WriteLog(chaine: string);
+procedure WriteLog(Chaine: string);
 begin
   with TStringList.Create do
-  try
-    if FileExists('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log') then LoadFromFile('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log');
-    Add('-- ' + DateTimeToStr(Now) + ' --');
-    Add(chaine);
-    SaveToFile('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log');
-  finally
-    free;
-  end;
+    try
+      if FileExists('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log') then
+        LoadFromFile('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log');
+      Add('-- ' + DateTimeToStr(Now) + ' --');
+      Add(Chaine);
+      SaveToFile('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log');
+    finally
+      free;
+    end;
 end;
 
 function SaveBlobToFile(Path, FileName: PAnsiChar; Blob: PBlob): Integer; cdecl; export;
@@ -348,43 +371,46 @@ begin
     FileName := PAnsiChar(Path + AnsiString(ValidFileName(string(FileName))));
     BlobS := TMemoryStream.Create;
     with BlobS do
-    try
-      Seek(0, soBeginning);
-      if Assigned(Blob.BlobHandle) and (Blob.SegmentCount > 0) then
-      begin
-        SetLength(buffer, Blob.MaxSegmentLength);
-        while LongBool(Blob.GetSegment(Blob.BlobHandle, @buffer[0], Blob.MaxSegmentLength, LongueurLue)) do
-          BlobS.Write(buffer[0], LongueurLue);
+      try
+        Seek(0, soBeginning);
+        if Assigned(Blob.BlobHandle) and (Blob.SegmentCount > 0) then
+        begin
+          SetLength(buffer, Blob.MaxSegmentLength);
+          while LongBool(Blob.GetSegment(Blob.BlobHandle, @buffer[0], Blob.MaxSegmentLength, LongueurLue)) do
+            BlobS.Write(buffer[0], LongueurLue);
 
-        ForceDirectories(string(Path));
-        if FileExists(string(FileName)) then DeleteFileA(FileName);
-        BlobS.SaveToFile(string(FileName));
+          ForceDirectories(string(Path));
+          if FileExists(string(FileName)) then
+            DeleteFileA(FileName);
+          BlobS.SaveToFile(string(FileName));
+        end;
+        Result := BlobS.Size;
+      finally
+        free;
       end;
-      Result := BlobS.Size;
-    finally
-      Free;
-    end;
-  except Result := 0;
+  except
+    Result := 0;
   end; // pour être sûr de ne pas faire planter le serveur !!!!
 end;
 
 procedure LoadBlobFromFile(Path, FileName: PAnsiChar; Blob: PBlob); cdecl; export;
 var
-  buffer: array[0..4095] of Char;
+  buffer: array [0 .. 4095] of Char;
   FS: TFileStream;
 begin
   try
     FileName := PAnsiChar(Path + AnsiString(ValidFileName(string(FileName))));
-    if not FileExists(string(FileName)) then Exit;
+    if not FileExists(string(FileName)) then
+      Exit;
 
     FS := TFileStream.Create(string(FileName), fmOpenRead or fmShareDenyWrite);
     with FS do
-    try
-      while Position < Size do
-        Blob.PutSegment(Blob.BlobHandle, @buffer[0], Read(buffer, Length(buffer)));
-    finally
-      Free;
-    end;
+      try
+        while Position < Size do
+          Blob.PutSegment(Blob.BlobHandle, @buffer[0], Read(buffer, Length(buffer)));
+      finally
+        free;
+      end;
   except
   end; // pour être sûr de ne pas faire planter le serveur !!!!
 end;
@@ -410,7 +436,7 @@ function FindFileNext(var Sr: PSearchRec): PSearchRec; cdecl; export;
 var
   i: Integer;
 begin
-  Result := sr;
+  Result := Sr;
   i := FindNext(Result^);
   if i <> 0 then
   begin
@@ -422,17 +448,17 @@ end;
 
 function ExtractFileName(var Sr: PSearchRec): PAnsiChar; cdecl; export;
 begin
-  Result := CreateResult(AnsiString(sr^.Name));
+  Result := CreateResult(AnsiString(Sr^.Name));
 end;
 
 function ExtractFileAttr(var Sr: PSearchRec): Integer; cdecl; export;
 begin
-  Result := sr^.Attr;
+  Result := Sr^.Attr;
 end;
 
 function ExtractFileSize(var Sr: PSearchRec): Integer; cdecl; export;
 begin
-  Result := sr^.Size;
+  Result := Sr^.Size;
 end;
 
 function SearchFileName(Path, FileName: PAnsiChar; var Reserve: Integer): PAnsiChar; cdecl; export;
@@ -452,7 +478,7 @@ begin
   if Reserve <> 0 then
   begin
     ForceDirectories(string(Path));
-    TFileStream.Create(Fichier + toAdd, fmCreate).Free;
+    TFileStream.Create(Fichier + toAdd, fmCreate).free;
   end;
   Result := CreateResult(AnsiString(Fichier + toAdd));
 end;
@@ -496,5 +522,5 @@ exports
   LevenshteinDistance;
 
 begin
-end.
 
+end.
