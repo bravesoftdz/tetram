@@ -36,8 +36,8 @@ type
     property Items[Index: Integer]: I read GetItemInterface; default;
   end;
 
-  IBreakpointInfo = interface(IDebugItem)
-    ['{D5B86D7D-44D5-41B6-85E1-A90EBC791064}']
+  IPositionnedDebugItem = interface(IDebugItem)
+    ['{DC390CC0-087B-4431-86BA-796173D77B16}']
     function GetLine: Cardinal;
     procedure SetLine(const Value: Cardinal);
     property Line: Cardinal read GetLine write SetLine;
@@ -45,7 +45,10 @@ type
     function GetScriptUnitName: string;
     procedure SetScriptUnitName(const Value: string);
     property ScriptUnitName: string read GetScriptUnitName write SetScriptUnitName;
+  end;
 
+  IBreakpointInfo = interface(IPositionnedDebugItem)
+    ['{D5B86D7D-44D5-41B6-85E1-A90EBC791064}']
     function GetActive: Boolean;
     procedure SetActive(const Value: Boolean);
     property Active: Boolean read GetActive write SetActive;
@@ -77,12 +80,8 @@ type
     procedure AddWatch(const VarName: string);
   end;
 
-  IMessageInfo = interface(IDebugItem)
+  IMessageInfo = interface(IPositionnedDebugItem)
     ['{23E9F59B-7711-435B-9302-19F0218F2069}']
-    function GetScriptUnitName: string;
-    procedure SetScriptUnitName(const Value: string);
-    property ScriptUnitName: string read GetScriptUnitName write SetScriptUnitName;
-
     function GetTypeMessage: string;
     procedure SetTypeMessage(const Value: string);
     property TypeMessage: string read GetTypeMessage write SetTypeMessage;
@@ -90,10 +89,6 @@ type
     function GetText: string;
     procedure SetText(const Value: string);
     property Text: string read GetText write SetText;
-
-    function GetLine: Cardinal;
-    procedure SetLine(const Value: Cardinal);
-    property Line: Cardinal read GetLine write SetLine;
 
     function GetChar: Cardinal;
     procedure SetChar(const Value: Cardinal);

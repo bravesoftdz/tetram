@@ -22,7 +22,6 @@ type
   private
     FScript: TScript;
     FTabSheet: TTabSheet;
-    FModifie: Boolean;
     FEditor: TScriptEditor;
     FSB: TStatusBar;
     FMasterEngine: IMasterEngine;
@@ -30,6 +29,7 @@ type
     FExecutableLines: TBits;
     FLineChangedState: array of TLineChangedState;
     procedure SetModifie(const Value: Boolean);
+    function GetModifie: Boolean;
   public
     procedure DoOnEditorChange(ASender: TObject);
     procedure SynEditorGutterClick(Sender: TObject; Button: TMouseButton; X, Y, Line: Integer; Mark: TSynEditMark);
@@ -62,7 +62,7 @@ type
     property TabSheet: TTabSheet read FTabSheet write FTabSheet;
     property Editor: TScriptEditor read FEditor write FEditor;
     property SB: TStatusBar read FSB write FSB;
-    property Modifie: Boolean read FModifie write SetModifie;
+    property Modifie: Boolean read GetModifie write SetModifie;
   end;
 
   TEditorPagesList = class(TObjectList<TEditorPage>)
@@ -432,13 +432,8 @@ begin
         Abort;
     end;
   end;
+  FCurrentPage := nil;
   FOpenedScript.Delete(pcScripts.ActivePageIndex);
-  pcScripts.ActivePage.Free;
-  // FCurrentPage.TabSheet := nil;
-  // FCurrentPage.Editor := nil;
-  // FCurrentPage.SB := nil;
-  // FCurrentPage.Modifie := False;
-  // FCurrentPage.Script.Loaded := False;
   pcScriptsChange(nil);
 end;
 
@@ -1168,7 +1163,9 @@ type
     FPage: TEditorPage;
     procedure LinesInserted(FirstLine, Count: Integer); override;
     procedure LinesDeleted(FirstLine, Count: Integer); override;
-    procedure PaintTransient(ACanvas: TCanvas; ATransientType: TTransientType); override;
+    (*
+      procedure PaintTransient(ACanvas: TCanvas; ATransientType: TTransientType); override;
+    *)
   public
     constructor Create(APage: TEditorPage);
   end;
@@ -1200,25 +1197,23 @@ begin
     FPage.FLineChangedState[i] := csModified;
 
   // Track the breakpoint lines in the debugger
-  with FPage.MasterEngine.DebugPlugin do
-  begin
-    for bp in Breakpoints do
-      if bp.ScriptUnitName = FPage.Script.ScriptUnitName then
-        if bp.Line >= Cardinal(FirstLine) then
-          bp.Line := bp.Line + Cardinal(Count);
+  for bp in FPage.MasterEngine.DebugPlugin.Breakpoints do
+    if bp.ScriptUnitName = FPage.Script.ScriptUnitName then
+      if bp.Line >= Cardinal(FirstLine) then
+        bp.Line := bp.Line + Cardinal(Count);
 
-    for mi in Messages do
-      if mi.ScriptUnitName = FPage.Script.ScriptUnitName then
-        if mi.Line >= Cardinal(FirstLine) then
-          mi.Line := mi.Line + Cardinal(Count);
-  end;
+  for mi in FPage.MasterEngine.DebugPlugin.Messages do
+    if mi.ScriptUnitName = FPage.Script.ScriptUnitName then
+      if mi.Line >= Cardinal(FirstLine) then
+        mi.Line := mi.Line + Cardinal(Count);
 
   // Redraw the gutter for updated icons.
   FPage.Editor.InvalidateGutter;
 end;
 
-procedure TEditorPageSynEditPlugin.PaintTransient(ACanvas: TCanvas; ATransientType: TTransientType);
-var
+(*
+  procedure TEditorPageSynEditPlugin.PaintTransient(ACanvas: TCanvas; ATransientType: TTransientType);
+  var
   Pt: TPoint;
   Rct: TRect;
   MouseBufferCoord: TBufferCoord;
@@ -1226,14 +1221,14 @@ var
   TokenType, Start: Integer;
   TokenName: String;
   OldFont: TFont;
-begin
+  begin
   // only handle after transient
   if ATransientType <> ttAfter then
-    Exit;
+  Exit;
 
   // only continue if [CTRL] is pressed
   if not(ssCtrl in KeyboardStateToShiftState) then
-    Exit;
+  Exit;
 
   Pt := Editor.ScreenToClient(Mouse.CursorPos);
   MouseBufferCoord := Editor.DisplayToBufferPos(Editor.PixelsToRowColumn(Pt.X, Pt.Y));
@@ -1241,27 +1236,30 @@ begin
 
   if FPage.MasterEngine.Engine.isTokenIdentifier(TokenType) then
   begin
-    with Editor do
-      Pt := RowColumnToPixels(BufferToDisplayPos(WordStartEx(MouseBufferCoord)));
+  with Editor do
+  Pt := RowColumnToPixels(BufferToDisplayPos(WordStartEx(MouseBufferCoord)));
 
-    Rct := Rect(Pt.X, Pt.Y, Pt.X + Editor.CharWidth * Length(TokenName), Pt.Y + Editor.LineHeight);
+  Rct := Rect(Pt.X, Pt.Y, Pt.X + Editor.CharWidth * Length(TokenName), Pt.Y + Editor.LineHeight);
 
-    OldFont := TFont.Create;
-    try
-      OldFont.Assign(ACanvas.Font);
-      ACanvas.Font.Color := clBlue;
-      ACanvas.Font.Style := [fsUnderline];
-      ACanvas.TextRect(Rct, Pt.X, Pt.Y, TokenName);
-      ACanvas.Font := OldFont;
-    finally
-      OldFont.Free;
-    end;
+  OldFont := TFont.Create;
+  try
+  OldFont.Assign(ACanvas.Font);
+  ACanvas.Font.Color := clBlue;
+  ACanvas.Font.Style := [fsUnderline];
+  ACanvas.TextRect(Rct, Pt.X, Pt.Y, TokenName);
+  ACanvas.Font := OldFont;
+  finally
+  OldFont.Free;
   end;
-end;
+  end;
+  end;
+*)
 
 procedure TEditorPageSynEditPlugin.LinesDeleted(FirstLine, Count: Integer);
 var
   i: Integer;
+  dp: IDebugInfos;
+  pi: IPositionnedDebugItem;
 begin
   // Track the executable lines
   for i := FirstLine - 1 to FPage.FExecutableLines.Size - Count - 1 do
@@ -1274,20 +1272,25 @@ begin
   SetLength(FPage.FLineChangedState, Length(FPage.FLineChangedState) - Count);
 
   // Track the breakpoint lines in the debugger
-  with FPage.MasterEngine.DebugPlugin do
+  dp := FPage.MasterEngine.DebugPlugin;
+  for i := Pred(dp.Breakpoints.ItemCount) downto 0 do
   begin
-    for i := Pred(Breakpoints.ItemCount) downto 0 do
-      if Breakpoints[i].ScriptUnitName = FPage.Script.ScriptUnitName then
-        if Breakpoints[i].Line in [FirstLine .. FirstLine + Count] then
-          Breakpoints.Delete(i)
-        else if Breakpoints[i].Line >= Cardinal(FirstLine) then
-          Breakpoints[i].Line := Breakpoints[i].Line - Cardinal(Count);
-    for i := Pred(Messages.ItemCount) downto 0 do
-      if Messages[i].ScriptUnitName = FPage.Script.ScriptUnitName then
-        if Messages[i].Line in [FirstLine .. FirstLine + Count] then
-          Messages.Delete(i)
-        else if Messages[i].Line >= Cardinal(FirstLine) then
-          Messages[i].Line := Messages[i].Line - Cardinal(Count);
+    pi := dp.Breakpoints[i];
+    if pi.ScriptUnitName = FPage.Script.ScriptUnitName then
+      if pi.Line in [FirstLine .. FirstLine + Count] then
+        dp.Breakpoints.Delete(i)
+      else if pi.Line >= Cardinal(FirstLine) then
+        pi.Line := pi.Line - Cardinal(Count);
+  end;
+
+  for i := Pred(dp.Messages.ItemCount) downto 0 do
+  begin
+    pi := dp.Messages[i];
+    if pi.ScriptUnitName = FPage.Script.ScriptUnitName then
+      if pi.Line in [FirstLine .. FirstLine + Count] then
+        dp.Messages.Delete(i)
+      else if pi.Line >= Cardinal(FirstLine) then
+        pi.Line := pi.Line - Cardinal(Count);
   end;
 
   // Redraw the gutter for updated icons.
@@ -1328,7 +1331,7 @@ begin
 
   TabSheet := TTabSheet.Create(AOwner);
   TabSheet.PageControl := AOwner;
-  TabSheet.Caption := string(Script.ScriptUnitName);
+  TabSheet.Caption := Script.ScriptUnitName;
 
   Editor := MasterEngine.Engine.GetNewEditor(TabSheet);
   Editor.Parent := TabSheet;
@@ -1344,11 +1347,6 @@ begin
   Editor.OnProcessUserCommand := SynEditorCommandProcessed;
 
   // *******************************
-  // FEditor.OnMouseMove := SynEditorMouseMove;
-  //
-  // FEditor.OnCommandProcessed := ;
-  //
-  // FEditor.OnClick := SynEditorClick;
   // FEditor.OnKeyDown := SynEditorKeyDown;
   // *******************************
 
@@ -1407,6 +1405,14 @@ begin
     Result := csOriginal;
 end;
 
+function TEditorPage.GetModifie: Boolean;
+begin
+  if Assigned(FScript) then
+    Result := FScript.Modifie
+  else
+    Result := True;
+end;
+
 procedure TEditorPage.GotoLineNumber;
 begin
   with TfrmScriptGotoLine.Create(nil) do
@@ -1442,8 +1448,8 @@ end;
 
 procedure TEditorPage.SetModifie(const Value: Boolean);
 begin
-  FModifie := Value;
-  FScript.Modifie := Value;
+  if Assigned(FScript) then
+    FScript.Modifie := Value;
 end;
 
 procedure TEditorPage.ShowExecutableLines;

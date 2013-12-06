@@ -52,6 +52,7 @@ function PostPage(const URL: string; const Pieces: array of RAttachement; UTF8: 
 function PostPageWithHeaders(const URL: string; const Pieces: array of RAttachement; UTF8: Boolean = True): string;
 function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;
 function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteur;
+function MakeUnivers(const Nom: string): TUnivers;
 function AskSearchEntry(const Labels: array of string; var Search: string; var index: Integer): Boolean;
 procedure Split(SL: TStringList; const Chaine: string; Sep: Char);
 function CombineURL(const Root, URL: string): string;
@@ -320,6 +321,12 @@ begin
   Result := TAuteur.Create;
   Result.Personne.Nom := Nom;
   Result.Metier := Metier;
+end;
+
+function MakeUnivers(const Nom: string): TUnivers;
+begin
+  Result := TUnivers.Create;
+  Result.NomUnivers := Nom;
 end;
 
 type

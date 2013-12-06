@@ -35,6 +35,7 @@ type
     procedure TObjectListOfObjectCount_R(info: TProgramInfo; ExtObject: TObject);
 
     procedure MakeAuteurEval(info: TProgramInfo);
+    procedure MakeUniversEval(info: TProgramInfo);
   public
     constructor Create(const MasterEngine: IMasterEngine); override;
   published
@@ -46,10 +47,6 @@ type
     procedure OnTAuteur_CreateEval(info: TProgramInfo; var ExtObject: TObject);
 
     procedure OnTEditionComplete_AddImageFromURLEval(info: TProgramInfo; ExtObject: TObject);
-
-    procedure OnTObjectListOfUnivers_ItemsEval(info: TProgramInfo; ExtObject: TObject);
-
-    procedure OnTObjectListOfAuteur_ItemsEval(info: TProgramInfo; ExtObject: TObject);
 
     procedure OnTScriptChoix_CreateEval(info: TProgramInfo; var ExtObject: TObject);
     procedure OnTScriptChoix_DestroyEval(ExtObject: TObject);
@@ -63,8 +60,13 @@ type
 
     procedure OnTObjectList_DeleteEval(info: TProgramInfo; ExtObject: TObject);
 
+    procedure OnTObjectListOfAuteur_ItemsEval(info: TProgramInfo; ExtObject: TObject);
     procedure OnTObjectListOfAuteur_AddEval(info: TProgramInfo; ExtObject: TObject);
     procedure OnTObjectListOfAuteur_InsertEval(info: TProgramInfo; ExtObject: TObject);
+
+    procedure OnTObjectListOfUnivers_ItemsEval(info: TProgramInfo; ExtObject: TObject);
+    procedure OnTObjectListOfUnivers_AddEval(info: TProgramInfo; ExtObject: TObject);
+    procedure OnTObjectListOfUnivers_InsertEval(info: TProgramInfo; ExtObject: TObject);
   end;
 
 implementation
@@ -86,6 +88,11 @@ end;
 procedure TDW_BdtkObjectsUnit.MakeAuteurEval(info: TProgramInfo);
 begin
   info.ResultAsVariant := GetScriptObjFromExternal(info, MakeAuteur(info.ParamAsString[0], TMetierAuteur(info.ParamAsInteger[1])));
+end;
+
+procedure TDW_BdtkObjectsUnit.MakeUniversEval(info: TProgramInfo);
+begin
+  info.ResultAsVariant := GetScriptObjFromExternal(info, MakeUnivers(info.ParamAsString[0]));
 end;
 
 procedure TDW_BdtkObjectsUnit.OnTAlbumComplet_ClearEval(info: TProgramInfo; ExtObject: TObject);
@@ -125,6 +132,17 @@ begin
       info.ResultAsVariant := GetScriptObjFromExternal(info, (ExtObject as TObjectList<TAuteur>).Items[info.ParamAsInteger[0]]);
     // info.ResultAsVariant := info.RegisterExternalObject((ExtObject as TObjectList<TAuteur>).Items[info.ParamAsInteger[0]]);
   end;
+end;
+
+procedure TDW_BdtkObjectsUnit.OnTObjectListOfUnivers_AddEval(info: TProgramInfo;
+  ExtObject: TObject);
+begin
+  info.ResultAsInteger := (ExtObject as TObjectList<TUnivers>).Add(info.ParamAsObject[0] as TUnivers);
+end;
+
+procedure TDW_BdtkObjectsUnit.OnTObjectListOfUnivers_InsertEval(info: TProgramInfo; ExtObject: TObject);
+begin
+  (ExtObject as TObjectList<TUnivers>).Insert(info.ParamAsInteger[0], info.ParamAsObject[1] as TUnivers);
 end;
 
 procedure TDW_BdtkObjectsUnit.OnTObjectListOfUnivers_ItemsEval(info: TProgramInfo; ExtObject: TObject);
@@ -299,6 +317,7 @@ begin
   RegisterProperty(c, 'Sujet', 'LongString', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Notes', 'LongString', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Edition', 'TEditionComplete', TAlbumCompletEdition_R);
+  RegisterProperty(c, 'Univers', 'TObjectListOfUnivers' { TObjectList<TUnivers> } , HandleDynamicProperty);
 
   RegisterMethod(c, 'Clear', []);
   RegisterMethod(c, 'Import', []);
@@ -466,6 +485,7 @@ begin
   RegisterProperty(c, 'Scenaristes', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , HandleDynamicProperty);
   RegisterProperty(c, 'Dessinateurs', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , HandleDynamicProperty);
   RegisterProperty(c, 'Coloristes', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , HandleDynamicProperty);
+  RegisterProperty(c, 'Univers', 'TObjectListOfUnivers' { TObjectList<TUnivers> } , HandleDynamicProperty);
 end;
 
 procedure TDW_BdtkObjectsUnit.Register_TUnivers;
@@ -475,6 +495,8 @@ begin
   c := RegisterClass('TUnivers');
 
   RegisterProperty(c, 'NomUnivers', 'string', HandleDynamicProperty, HandleDynamicProperty);
+
+  RegisterFunction('MakeUnivers', 'TUnivers', ['Nom', 'string'], MakeUniversEval);
 end;
 
 end.

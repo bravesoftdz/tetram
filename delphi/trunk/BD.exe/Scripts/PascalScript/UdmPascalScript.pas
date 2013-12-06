@@ -736,6 +736,7 @@ begin
     'function PostPageWithHeaders(const url: string; const Pieces: array of RAttachement; UTF8: Boolean): string;');
   PSScriptDebugger1.AddFunction(@findInfo, 'function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;');
   PSScriptDebugger1.AddFunction(@MakeAuteur, 'function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteur;');
+  PSScriptDebugger1.AddFunction(@MakeUnivers, 'function MakeUnivers(const Nom: string): TUnivers;');
   PSScriptDebugger1.AddFunction(@AskSearchEntry, 'function AskSearchEntry(const Labels: array of string; var Search: string; var Index: Integer): Boolean');
   PSScriptDebugger1.AddFunction(@CombineURL, 'function CombineURL(const Root, URL: string): string;');
   PSScriptDebugger1.AddFunction(@HTMLDecode, 'function HTMLDecode(const Chaine: string): string;');
