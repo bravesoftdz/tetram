@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Script>
+  <Infos>
+    <Auteur>Tetram Corp</Auteur>
+    <Description/>
+    <ScriptVersion>2.1</ScriptVersion>
+    <BDVersion>2.1.0.17</BDVersion>
+    <LastUpdate>Thu, 30 Aug 2012 16:26:46 +0200</LastUpdate>
+    <Engine>DWScript</Engine>
+  </Infos>
+  <Options/>
+  <Code>unit DWDefaultRegEx;
+
+const regExURLOrigin = &apos;X-URL-Origin: (.*?)[\r|\n]&apos;;
+const regExURLFinal = &apos;X-URL-Final: (.*?)[\r|\n]&apos;;
+const regExURL = &apos;&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;(?&lt;texte&gt;(?s-).*?)&lt;/a&gt;&apos;;
+const regExIMG = &apos;&lt;img(?: src=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*/?&gt;&apos;;
+const regExNumeric = &apos;(\d+(?:,|\.)?\d*)&apos;;</Code>
+</Script>

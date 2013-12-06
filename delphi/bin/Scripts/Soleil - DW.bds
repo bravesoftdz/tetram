@@ -3,10 +3,10 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>2.1</ScriptVersion>
-    <BDVersion>2.2.3.22</BDVersion>
-    <LastUpdate>Fri, 6 Dec 2013 09:38:00 +0100</LastUpdate>
-    <Engine>PascalScript</Engine>
+    <ScriptVersion>2</ScriptVersion>
+    <BDVersion>2.2.1.185</BDVersion>
+    <LastUpdate>Fri, 6 Dec 2013 09:42:22 +0100</LastUpdate>
+    <Engine>DWScript</Engine>
     <Alias aka="Soleil Productions"/>
   </Infos>
   <Options>
@@ -14,37 +14,34 @@
     <Option Label="Date d&apos;&#xE9;dition = Date de parution" Values="Oui|Non" Default="Oui"/>
     <Option Label="Liste des auteurs" Values="Album et s&#xE9;rie|Album uniquement" Default="Album et s&#xE9;rie"/>
   </Options>
-  <Code>program Soleil;
+  <Code>uses DWScriptFonctions, DWDefaultRegEx;
 
-uses ScriptFonctions, DefaultRegEx;
+const urlSite = &apos;http://soleilprod.com&apos;;
+const urlSearch = &apos;/recherche&apos;;
 
-const
-  urlSite = &apos;http://soleilprod.com&apos;;
-  urlSearch = &apos;/recherche&apos;;
+const regExResultSeries = &apos;&lt;div class=&quot;maincontent&quot; id=&quot;catalogue&quot;&gt;(?s-:.*?)&lt;table(?:.*?)&gt;((?s-).*?)&lt;/table&gt;&apos;;
+const regExResultSerie = &apos;&lt;td class=&quot;album&quot;&gt;(?s-:.*?)&lt;a(?:.*?)&gt;&lt;img(?: src=&quot;(?&lt;couverture&gt;.*?)&quot;|.*?)*&gt;&lt;/a&gt;(?s-:.*?)&lt;h2&gt;&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;(?&lt;titre_album&gt;.*?)&lt;/a&gt;&lt;/h2&gt;(?s-:.*?)&lt;p class=&quot;auteurs&quot;&gt;(?&lt;commentaire&gt;(?s-).*?)&lt;/p&gt;(?s-:.*?)&lt;/td&gt;&apos;;
 
-  regExResultSeries = &apos;&lt;div class=&quot;maincontent&quot; id=&quot;catalogue&quot;&gt;(?s-:.*?)&lt;table(?:.*?)&gt;((?s-).*?)&lt;/table&gt;&apos;;
-  regExResultSerie = &apos;&lt;td class=&quot;album&quot;&gt;(?s-:.*?)&lt;a(?:.*?)&gt;&lt;img(?: src=&quot;(?&lt;couverture&gt;.*?)&quot;|.*?)*&gt;&lt;/a&gt;(?s-:.*?)&lt;h2&gt;&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;(?&lt;titre_album&gt;.*?)&lt;/a&gt;&lt;/h2&gt;(?s-:.*?)&lt;p class=&quot;auteurs&quot;&gt;(?&lt;commentaire&gt;(?s-).*?)&lt;/p&gt;(?s-:.*?)&lt;/td&gt;&apos;;
+const regExAlbum = &apos;&lt;div class=&quot;maincontent&quot; id=&quot;album&quot;&gt;((?s-).*?)&lt;div class=&quot;sidecontent&quot;&gt;&apos;;
+const regExResultAlbum = &apos;&lt;div class=&quot;left&quot;&gt;(?s-:.*?)&lt;img(?: src=&quot;(?&lt;couverture&gt;.*?)&quot;|.*?)*&gt;(?s-:.*?)&lt;div class=&quot;right&quot;&gt;(?s-:.*?)&lt;h1&gt;(?&lt;titre_album&gt;.*?)&lt;/h1&gt;&lt;h2&gt;(?&lt;sous_titre_album&gt;.*?)&lt;/h2&gt;&apos;;
 
-  regExAlbum = &apos;&lt;div class=&quot;maincontent&quot; id=&quot;album&quot;&gt;((?s-).*?)&lt;div class=&quot;sidecontent&quot;&gt;&apos;;
-  regExResultAlbum = &apos;&lt;div class=&quot;left&quot;&gt;(?s-:.*?)&lt;img(?: src=&quot;(?&lt;couverture&gt;.*?)&quot;|.*?)*&gt;(?s-:.*?)&lt;div class=&quot;right&quot;&gt;(?s-:.*?)&lt;h1&gt;(?&lt;titre_album&gt;.*?)&lt;/h1&gt;&lt;h2&gt;(?&lt;sous_titre_album&gt;.*?)&lt;/h2&gt;&apos;;
+const regExAlbumTitreSerieGenre = &apos;&lt;div class=&quot;right&quot;&gt;(?s-:.*?)(?:&lt;p&gt;Genre : &lt;a(?s-:.*?)&gt;(?&lt;genre&gt;(?s-).*?)&lt;/a&gt;(?s-:.*?))(?:&lt;h3&gt;(?&lt;collection&gt;.*?)&lt;/h3&gt;)&lt;h1&gt;(?&lt;titre_serie&gt;.*?)&lt;/h1&gt;&lt;h2&gt;(?:T\.(?&lt;tome&gt;\d*) - )?(?&lt;titre_album&gt;.*?)&lt;/h2&gt;&apos;;
+const regExAlbumEdition = &apos;&lt;li&gt;&lt;strong&gt;Date de sortie :&lt;/strong&gt; (.*?)&lt;/li&gt;&apos;;
+const regExAlbumISBN = &apos;&lt;li&gt;&lt;strong&gt;EAN :&lt;/strong&gt; ([\d|x|X|-]*)&lt;/li&gt;&apos;;
+const regExAlbumNBPages = &apos;&lt;li&gt;&lt;strong&gt;Pages :&lt;/strong&gt; ([\d]*)&lt;/li&gt;&apos;;
+const regExAlbumPrix = &apos;&lt;li&gt;&lt;strong&gt;Prix :&lt;/strong&gt; ([\d|,|\.]*) &amp;euro;&lt;/li&gt;&apos;;
 
-  regExAlbumTitreSerieGenre = &apos;&lt;div class=&quot;right&quot;&gt;(?s-:.*?)(?:&lt;p&gt;Genre : &lt;a(?s-:.*?)&gt;(?&lt;genre&gt;(?s-).*?)&lt;/a&gt;(?s-:.*?))(?:&lt;h3&gt;(?&lt;collection&gt;.*?)&lt;/h3&gt;)&lt;h1&gt;(?&lt;titre_serie&gt;.*?)&lt;/h1&gt;&lt;h2&gt;(?:T\.(?&lt;tome&gt;\d*) - )?(?&lt;titre_album&gt;.*?)&lt;/h2&gt;&apos;;
-  regExAlbumEdition = &apos;&lt;li&gt;&lt;strong&gt;Date de sortie :&lt;/strong&gt; (.*?)&lt;/li&gt;&apos;;
-  regExAlbumISBN = &apos;&lt;li&gt;&lt;strong&gt;EAN :&lt;/strong&gt; ([\d|x|X|-]*)&lt;/li&gt;&apos;;
-  regExAlbumNBPages = &apos;&lt;li&gt;&lt;strong&gt;Pages :&lt;/strong&gt; ([\d]*)&lt;/li&gt;&apos;;
-  regExAlbumPrix = &apos;&lt;li&gt;&lt;strong&gt;Prix :&lt;/strong&gt; ([\d|,|\.]*) &amp;euro;&lt;/li&gt;&apos;;
+const regExAlbumResume = &apos;&lt;div class=&quot;auteurs&quot;&gt;(?:.*?)&lt;p&gt;((?s-).*?)(?:&lt;div id=&quot;resumeEN|&lt;/div&gt;)&apos;; // &lt;/div&gt; doit &#xEA;tre apr&#xE8;s resumeEN
+const regExAlbumResumeLigne = &apos;&lt;p(?:.*?)&gt;((?s-).*?)&lt;/p&gt;&apos;;
 
-  regExAlbumResume = &apos;&lt;div class=&quot;auteurs&quot;&gt;(?:.*?)&lt;p&gt;((?s-).*?)(?:&lt;div id=&quot;resumeEN|&lt;/div&gt;)&apos;; // &lt;/div&gt; doit &#xEA;tre apr&#xE8;s resumeEN
-  regExAlbumResumeLigne = &apos;&lt;p(?:.*?)&gt;((?s-).*?)&lt;/p&gt;&apos;;
+const regExAlbumScenariste = &apos;&lt;div class=&quot;auteurs&quot;&gt;(?:.*?)Sc&#xE9;nariste(?:s)? : ((?s-).*?)(?:&lt;br/&gt;|&lt;/div&gt;)&apos;;
+const regExAlbumDessinateur = &apos;&lt;div class=&quot;auteurs&quot;&gt;(?:.*?)Dessinateur(?:s)? : ((?s-).*?)(?:&lt;br/&gt;|&lt;/div&gt;)&apos;;
+const regExAlbumColoriste = &apos;&lt;div class=&quot;auteurs&quot;&gt;(?:.*?)Coloriste(?:s)? : ((?s-).*?)(?:&lt;br/&gt;|&lt;/div&gt;)&apos;;
 
-  regExAlbumScenariste = &apos;&lt;div class=&quot;auteurs&quot;&gt;(?:.*?)Sc&#xE9;nariste(?:s)? : ((?s-).*?)(?:&lt;br/&gt;|&lt;/div&gt;)&apos;;
-  regExAlbumDessinateur = &apos;&lt;div class=&quot;auteurs&quot;&gt;(?:.*?)Dessinateur(?:s)? : ((?s-).*?)(?:&lt;br/&gt;|&lt;/div&gt;)&apos;;
-  regExAlbumColoriste = &apos;&lt;div class=&quot;auteurs&quot;&gt;(?:.*?)Coloriste(?:s)? : ((?s-).*?)(?:&lt;br/&gt;|&lt;/div&gt;)&apos;;
+const regExAlbumCouverture = &apos;&lt;div class=&quot;left&quot;&gt;(?s-:.*?)&apos; + regExIMG + &apos;(?s-:.*?)&lt;/div&gt;&apos;; // le &lt;/div&gt; pour ne pas aller chercher des images au fin fond de la page
 
-  regExAlbumCouverture = &apos;&lt;div class=&quot;left&quot;&gt;(?s-:.*?)&apos; + regExIMG + &apos;(?s-:.*?)&lt;/div&gt;&apos;; // le &lt;/div&gt; pour ne pas aller chercher des images au fin fond de la page
-
-  regExAlbums = &apos;&lt;div class=&quot;carousel&quot; id=&quot;carousel1&quot;&gt;(?s-:.*?)&lt;ul&gt;((?s-).*?)&lt;/ul&gt;(?s-:.*?)&lt;/div&gt;&apos;;
-  regExOtherAlbum = &apos;&lt;li&gt;&lt;div class=&quot;vignette&quot;&gt;&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;&lt;div&gt;(?&lt;titre_album&gt;.*?)&lt;/div&gt;&lt;img(?: src=&quot;(?&lt;couverture&gt;.*?)&quot;| alt=&quot;(?&lt;sous_titre_album&gt;.*?)&quot;|.*?)*&gt;&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&apos;;
+const regExAlbums = &apos;&lt;div class=&quot;carousel&quot; id=&quot;carousel1&quot;&gt;(?s-:.*?)&lt;ul&gt;((?s-).*?)&lt;/ul&gt;(?s-:.*?)&lt;/div&gt;&apos;;
+const regExOtherAlbum = &apos;&lt;li&gt;&lt;div class=&quot;vignette&quot;&gt;&lt;a(?: href=&quot;(?&lt;lien&gt;.*?)&quot;|.*?)*&gt;&lt;div&gt;(?&lt;titre_album&gt;.*?)&lt;/div&gt;&lt;img(?: src=&quot;(?&lt;couverture&gt;.*?)&quot;| alt=&quot;(?&lt;sous_titre_album&gt;.*?)&quot;|.*?)*&gt;&lt;/a&gt;&lt;/div&gt;&lt;/li&gt;&apos;;
 
 procedure ParseAlbum(const id_album: string);
 var
@@ -55,23 +52,18 @@ begin
   lien := CombineURL(urlSite, id_album);
   page := GetPage(lien, True);
 
-  with TStringList.Create do
-    try
-      // c&apos;est l&apos;ann&#xE9;e de la derni&#xE8;re &#xE9;dition qui est indiqu&#xE9;e, par la date de parution
-      DateParution := CheckOptionValue(&apos;Date d&apos;&apos;&#xE9;dition = Date de parution&apos;, &apos;Oui&apos;);
-      Split(ExtractRegEx(page, regExAlbumEdition), &apos;/&apos;);
-      if Count &gt; 0 then
-      begin
-        AlbumToImport.Edition.AnneeEdition := StrToIntDef(Strings[Count - 1], 0);
-        if DateParution then
-          AlbumToImport.AnneeParution := AlbumToImport.Edition.AnneeEdition;
-      end;
-      if Count &gt; 1 then
-        if DateParution then
-          AlbumToImport.MoisParution := TraduitMois(Strings[Count - 2]);
-    finally
-      Free;
-    end;
+  // c&apos;est l&apos;ann&#xE9;e de la derni&#xE8;re &#xE9;dition qui est indiqu&#xE9;e, par la date de parution
+  DateParution := CheckOptionValue(&apos;Date d&apos;&apos;&#xE9;dition = Date de parution&apos;, &apos;Oui&apos;);
+  var sl: array of String = StrSplit(ExtractRegEx(page, regExAlbumEdition), &apos;/&apos;);
+  if sl.Count &gt; 0 then
+  begin
+    AlbumToImport.Edition.AnneeEdition := StrToIntDef(sl.Pop, 0);
+    if DateParution then
+      AlbumToImport.AnneeParution := AlbumToImport.Edition.AnneeEdition;
+  end;
+  if sl.Count &gt; 0 then
+    if DateParution then
+      AlbumToImport.MoisParution := TraduitMois(sl.Pop);
 
   AlbumToImport.Edition.ISBN := ExtractRegEx(page, regExAlbumISBN);
   AlbumToImport.Edition.Prix := StrToFloatDef(ExtractRegEx(page, regExAlbumPrix), 0);
@@ -79,6 +71,7 @@ begin
 
   re := TBdtkRegEx.Create;
   try
+    WriteToConsole(page);
     if re.BeginSearch(page, regExAlbumTitreSerieGenre) and re.Next then
     begin
       AlbumToImport.Titre := PrepareTitre(re.GetCaptureByName(&apos;titre_album&apos;));
@@ -99,7 +92,6 @@ begin
     if re.BeginSearch(ExtractRegEx(page, regExAlbumResume), regExAlbumResumeLigne) then
     while re.Find(s) do
       AlbumToImport.Sujet := AjoutString4(AlbumToImport.Sujet, HTMLText(s), #13#10);
-
 
     AuteursSerie := CheckOptionValue(&apos;Liste des auteurs&apos;, &apos;Album et s&#xE9;rie&apos;);
 
@@ -234,7 +226,7 @@ var
   page: string;
   Pieces: array of RAttachement;
 begin
-  SetLength(Pieces, 3);
+  Pieces.SetLength(3);
   Pieces[0].Nom := &apos;SearchForm[mode]&apos;;
   Pieces[0].Valeur := &apos;0&apos;;
   Pieces[0].isFichier := False;
@@ -251,6 +243,7 @@ end;
 
 var
   id_album, entry: string;
+var
   index: integer;
 begin
   entry := AlbumToImport.DefaultSearch;
@@ -265,5 +258,5 @@ begin
 
   if id_album &lt;&gt; &apos;&apos; then
     ParseAlbum(id_album);
-end.</Code>
+end;</Code>
 </Script>
