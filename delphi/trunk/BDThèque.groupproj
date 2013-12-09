@@ -15,9 +15,6 @@
         <Projects Include="D:\Composants\DWScript\Tools\IDEDialog\Delphi projects\DwsIdeDemo.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="C:\Users\Thierry\Documents\RAD Studio\Projets\Project8.dproj">
-            <Dependencies/>
-        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -62,23 +59,14 @@
     <Target Name="DwsIdeDemo:Make">
         <MSBuild Projects="D:\Composants\DWScript\Tools\IDEDialog\Delphi projects\DwsIdeDemo.dproj" Targets="Make"/>
     </Target>
-    <Target Name="Project8">
-        <MSBuild Projects="C:\Users\Thierry\Documents\RAD Studio\Projets\Project8.dproj"/>
-    </Target>
-    <Target Name="Project8:Clean">
-        <MSBuild Projects="C:\Users\Thierry\Documents\RAD Studio\Projets\Project8.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="Project8:Make">
-        <MSBuild Projects="C:\Users\Thierry\Documents\RAD Studio\Projets\Project8.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Build">
-        <CallTarget Targets="BDPic;BDT_UDF;BD;DwsIdeDemo;Project8"/>
+        <CallTarget Targets="BDPic;BDT_UDF;BD;DwsIdeDemo"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="BDPic:Clean;BDT_UDF:Clean;BD:Clean;DwsIdeDemo:Clean;Project8:Clean"/>
+        <CallTarget Targets="BDPic:Clean;BDT_UDF:Clean;BD:Clean;DwsIdeDemo:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="BDPic:Make;BDT_UDF:Make;BD:Make;DwsIdeDemo:Make;Project8:Make"/>
+        <CallTarget Targets="BDPic:Make;BDT_UDF:Make;BD:Make;DwsIdeDemo:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>
