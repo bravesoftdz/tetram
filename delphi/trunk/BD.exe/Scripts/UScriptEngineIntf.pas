@@ -247,6 +247,7 @@ type
 
     function GetInternalUnitName(Script: TScript): string; overload;
     function GetInternalUnitName(const ScriptUnitName: string): string; overload;
+    function GetScriptUnitName(const InternalUnitName: string): string;
     function GetScriptLines(const UnitName: string; Output: TStrings; ScriptKinds: TScriptKinds = [skUnit]): Boolean; overload;
     function GetScriptLines(Script: TScript; Lines: TStrings): Boolean; overload;
 

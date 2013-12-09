@@ -48,6 +48,7 @@ type
     function GetCompiled: Boolean;
     function GetInternalUnitName(Script: TScript): string; overload;
     function GetInternalUnitName(const ScriptUnitName: string): string; overload;
+    function GetScriptUnitName(const InternalUnitName: string): string;
     function GetScriptLines(const UnitName: string; Output: TStrings; ScriptKinds: TScriptKinds = [skUnit]): Boolean; overload;
     function GetScriptLines(Script: TScript; Lines: TStrings): Boolean; overload;
   public
@@ -143,7 +144,7 @@ end;
 function TMasterEngine.GetInternalUnitName(const ScriptUnitName: string): string;
 begin
   Result := ScriptUnitName;
-  if Result = GetProjectScript.ScriptUnitName then
+  if (Result = '') or (Result = GetProjectScript.ScriptUnitName) then
     Result := GetEngine.GetSpecialMainUnitName;
 end;
 
@@ -196,6 +197,13 @@ end;
 function TMasterEngine.GetScriptList: TScriptList;
 begin
   Result := FScriptList;
+end;
+
+function TMasterEngine.GetScriptUnitName(const InternalUnitName: string): string;
+begin
+  Result := InternalUnitName;
+  if InternalUnitName = GetEngine.GetSpecialMainUnitName then
+    Result := FProjectScript.ScriptUnitName;
 end;
 
 function TMasterEngine.GetTypeEngine: TScriptEngine;

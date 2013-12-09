@@ -88,7 +88,6 @@ type
     procedure SetRunToCursorFile(const Value: string);
     function GetRunning: Boolean;
     function GetDebugMode: TDebugMode;
-    function CorrectScriptName(const Script: AnsiString): AnsiString;
     procedure WriteToFile(const Chaine, FileName: string);
 
     function GetActiveLine: Cardinal;
@@ -358,14 +357,6 @@ begin
     if Comp.GetOutput(s) then
       DM.BuildLokalObjektList(Sender);
   Result := True;
-end;
-
-function TdmPascalScript.CorrectScriptName(const Script: AnsiString): AnsiString;
-begin
-  if Script = '' then
-    Result := PSScriptDebugger1.MainFileName
-  else
-    Result := Script;
 end;
 
 constructor TdmPascalScript.Create(MasterEngine: IMasterEngine);
@@ -708,7 +699,7 @@ begin
   ActiveLine := Row;
   ActiveUnitName := string(FileName);
 
-  FMasterEngine.OnBreakPoint;
+  FMasterEngine.OnBreakpoint;
 
   if Assigned(FOnBreakpoint) then
     FOnBreakpoint(Sender, AnsiString(ActiveUnitName), Position, ActiveLine, Col);
@@ -789,7 +780,7 @@ begin
     PSScriptDebugger1.Pause;
 
   if PSScriptDebugger1.Exec.DebugMode in [uPSDebugger.dmPaused, uPSDebugger.dmStepInto] then
-    FMasterEngine.OnBreakPoint;
+    FMasterEngine.OnBreakpoint;
 
   if Assigned(FOnLineInfo) then
     FOnLineInfo(Sender, AnsiString(ActiveUnitName), Position, ActiveLine, Col);
@@ -820,7 +811,7 @@ end;
 
 procedure TdmPascalScript.SetActiveUnitName(const Value: string);
 begin
-  FActiveUnitName := string(CorrectScriptName(AnsiString(Value)));
+  FActiveUnitName := FMasterEngine.GetInternalUnitName(Value);
 end;
 
 procedure TdmPascalScript.SetActiveLine(const Value: Cardinal);
@@ -830,7 +821,7 @@ end;
 
 procedure TdmPascalScript.SetErrorUnitName(const Value: string);
 begin
-  FErrorUnitName := string(CorrectScriptName(AnsiString(Value)));
+  FErrorUnitName := FMasterEngine.GetInternalUnitName(Value);
 end;
 
 procedure TdmPascalScript.SetErrorLine(const Value: Cardinal);
@@ -846,7 +837,7 @@ end;
 
 procedure TdmPascalScript.SetRunToCursorFile(const Value: string);
 begin
-  FRunToCursorFile := string(CorrectScriptName(AnsiString(Value)));
+  FRunToCursorFile := FMasterEngine.GetInternalUnitName(Value);
 end;
 
 procedure TdmPascalScript.SetUseDebugInfo(Value: Boolean);
@@ -875,8 +866,10 @@ var
   fi: PFunctionInfo;
   pt: TIfList;
   r: PPositionData;
+  FileName: string;
 begin
   Result := True;
+  FileName := FMasterEngine.GetInternalUnitName(Fn);
   Proc := 0;
   Position := 0;
   for I := 0 to TCrackPSDebugExec(PSScriptDebugger1.Exec).FDebugDataForProcs.Count - 1 do
@@ -887,7 +880,7 @@ begin
     for j := 0 to pt.Count - 1 do
     begin
       r := pt[j];
-      if not SameText(string(r^.FileName), Fn) then
+      if not SameText(string(r^.FileName), FileName) then
         Continue;
       if r^.Row = Row then
       begin
@@ -1728,7 +1721,7 @@ begin
   if PSScriptDebugger1.UseDebugInfo then
     for bp in FMasterEngine.DebugPlugin.Breakpoints do
       if bp.Active then
-        PSScriptDebugger1.SetBreakPoint(TbtString(bp.Script.ScriptUnitName), bp.Line);
+        PSScriptDebugger1.SetBreakPoint(TbtString(FMasterEngine.GetInternalUnitName(bp.Script.ScriptUnitName)), bp.Line);
 end;
 
 { TPascalScriptEngineFactory }

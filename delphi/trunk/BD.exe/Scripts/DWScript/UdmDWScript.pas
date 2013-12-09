@@ -47,7 +47,6 @@ type
     procedure DebuggerStateChanged(Sender: TObject);
 
     function FillMessages(Msgs: TdwsMessageList): IMessageInfo;
-    function CorrectScriptName(const Script: String): String;
   public
     constructor Create(MasterEngine: IMasterEngine);
     destructor Destroy; override;
@@ -746,14 +745,14 @@ begin
   Result := not exec.Msgs.HasErrors;
   if not Result then
   begin
-    FErrorLine := exec.Msgs.LastMessagePos.Line;
-    FErrorUnitName := CorrectScriptName(exec.Msgs.LastMessagePos.SourceFile.Name);
+    SetErrorLine(exec.Msgs.LastMessagePos.Line);
+    SetErrorUnitName(exec.Msgs.LastMessagePos.SourceFile.Name);
   end;
 end;
 
 procedure TdmDWScript.SetActiveUnitName(const Value: string);
 begin
-  FActiveUnitName := CorrectScriptName(Value);
+  FActiveUnitName := FMasterEngine.GetInternalUnitName(Value);
 end;
 
 procedure TdmDWScript.SetActiveLine(const Value: Cardinal);
@@ -763,7 +762,7 @@ end;
 
 procedure TdmDWScript.SetErrorUnitName(const Value: string);
 begin
-  FErrorUnitName := CorrectScriptName(Value);
+  FErrorUnitName := FMasterEngine.GetInternalUnitName(Value);
 end;
 
 procedure TdmDWScript.SetErrorLine(const Value: Cardinal);
@@ -774,7 +773,7 @@ end;
 procedure TdmDWScript.setRunTo(Position: Integer; const Filename: string);
 begin
   FRunToCursor := Position;
-  FRunToCursorFile := CorrectScriptName(Filename);
+  FRunToCursorFile := FMasterEngine.GetInternalUnitName(Filename);
 end;
 
 procedure TdmDWScript.SetUseDebugInfo(Value: Boolean);
@@ -797,14 +796,6 @@ begin
   DWDebugger.EndDebug;
 end;
 
-function TdmDWScript.CorrectScriptName(const Script: String): String;
-begin
-  if (Script = '') or (Script = FMasterEngine.ProjectScript.ScriptUnitName) then
-    Result := GetSpecialMainUnitName
-  else
-    Result := Script;
-end;
-
 procedure TdmDWScript.ResetBreakpoints;
 var
   bp: IBreakpointInfo;
@@ -818,7 +809,7 @@ begin
     begin
       dwsBP := TdwsDebuggerBreakpoint.Create;
       dwsBP.Line := bp.Line;
-      dwsBP.SourceName := CorrectScriptName(bp.Script.ScriptUnitName);
+      dwsBP.SourceName := FMasterEngine.GetInternalUnitName(bp.Script.ScriptUnitName);
       i := DWDebugger.Breakpoints.AddOrFind(dwsBP, added);
       if not added then
         dwsBP.Free

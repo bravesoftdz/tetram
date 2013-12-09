@@ -836,7 +836,7 @@ end;
 procedure TfrmScripts.actPauseExecute(Sender: TObject);
 begin
   MasterEngine.Engine.Pause;
-  GoToPosition(MasterEngine.Engine.ActiveUnitName, MasterEngine.Engine.ActiveLine, 1);
+  GoToPosition(MasterEngine.GetScriptUnitName(MasterEngine.Engine.ActiveUnitName), MasterEngine.Engine.ActiveLine, 1);
 end;
 
 procedure TfrmScripts.actResetExecute(Sender: TObject);
@@ -1152,16 +1152,16 @@ var
 begin
   framWatches1.Invalidate;
 
-  Script := FMasterEngine.ScriptList.FindScriptByUnitName(MasterEngine.Engine.ActiveUnitName);
+  Script := FMasterEngine.ScriptList.FindScriptByUnitName(MasterEngine.GetScriptUnitName(MasterEngine.Engine.ActiveUnitName));
   if Assigned(Script) then
     i := FMasterEngine.DebugPlugin.Breakpoints.IndexOf(Script, MasterEngine.Engine.ActiveLine)
   else
-    i:= -1;
+    i := -1;
 
   if i > -1 then
     GoToBreakpoint(FMasterEngine.DebugPlugin.Breakpoints[i])
   else
-    GoToPosition(MasterEngine.Engine.ActiveUnitName, MasterEngine.Engine.ActiveLine, 0);
+    GoToPosition(MasterEngine.GetScriptUnitName(MasterEngine.Engine.ActiveUnitName), MasterEngine.Engine.ActiveLine, 0);
 end;
 
 { TEditorPageSynEditPlugin }
@@ -1453,7 +1453,8 @@ begin
         IconIndex := imgGutterBREAKDISABLED
     else
     begin
-      if (Cardinal(aLine) = MasterEngine.Engine.ActiveLine) and SameText(MasterEngine.Engine.ActiveUnitName, FScript.ScriptUnitName) then
+      if (Cardinal(aLine) = MasterEngine.Engine.ActiveLine) and SameText(MasterEngine.GetScriptUnitName(MasterEngine.Engine.ActiveUnitName),
+        FScript.ScriptUnitName) then
         IconIndex := imgGutterEXECLINEBP
       else if MasterEngine.DebugPlugin.Breakpoints[i].Active then
         IconIndex := imgGutterBREAKVALID
@@ -1464,7 +1465,7 @@ begin
   else
   begin
     if (MasterEngine.Engine.DebugMode = UScriptEngineIntf.dmPaused) and (Cardinal(aLine) = MasterEngine.Engine.ActiveLine) and
-      SameText(MasterEngine.Engine.ActiveUnitName, FScript.ScriptUnitName) then
+      SameText(MasterEngine.GetScriptUnitName(MasterEngine.Engine.ActiveUnitName), FScript.ScriptUnitName) then
       IconIndex := imgGutterEXECLINE;
   end;
 
@@ -1538,7 +1539,8 @@ var
 begin
   i := MasterEngine.DebugPlugin.Breakpoints.IndexOf(FScript, Line);
 
-  if (Cardinal(Line) = MasterEngine.Engine.ActiveLine) and SameText(MasterEngine.Engine.ActiveUnitName, FScript.ScriptUnitName) then
+  if (Cardinal(Line) = MasterEngine.Engine.ActiveLine) and SameText(MasterEngine.GetScriptUnitName(MasterEngine.Engine.ActiveUnitName), FScript.ScriptUnitName)
+  then
   begin
     Special := True;
     FG := clWhite;
