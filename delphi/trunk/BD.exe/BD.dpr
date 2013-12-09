@@ -189,7 +189,8 @@ uses
   UMAJ2_2_3_19 in 'mises à jour\UMAJ2_2_3_19.pas',
   UMAJ2_2_3_21 in 'mises à jour\UMAJ2_2_3_21.pas',
   UMySQLMAJ1_0_0_3 in 'Web\mises à jour\UMySQLMAJ1_0_0_3.pas',
-  UMAJ2_2_3_22 in 'mises à jour\UMAJ2_2_3_22.pas';
+  UMAJ2_2_3_22 in 'mises à jour\UMAJ2_2_3_22.pas',
+  UScriptEditorPage in 'Scripts\UScriptEditorPage.pas';
 
 begin
   InitProc := @BdtkInitProc;

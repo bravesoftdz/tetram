@@ -71,8 +71,8 @@ type
     procedure FillAutoComplete(Proposal, Code: TStrings; var List: TParamInfoArray; Types: TInfoTypes; FromFather: Cardinal = 0; Typ: TbtString = '');
   strict private
     FMasterEngine: IMasterEngine;
-    FActiveLine, FRunToCursor, FErrorLine: Cardinal;
-    FActiveUnitName, FRunToCursorFile, FErrorUnitName: string;
+    FActiveLine, FRunToCursorLine, FErrorLine: Cardinal;
+    FActiveUnitName, FRunToCursorUnitName, FErrorUnitName: string;
     FListTypesImages: TStringList;
     FOnBreakpoint: TPSOnLineInfo;
     FOnLineInfo: TPSOnLineInfo;
@@ -85,7 +85,7 @@ type
     function GetNewEditor(AOwner: TComponent): TScriptEditor;
     function isTokenIdentifier(TokenType: Integer): Boolean;
 
-    procedure SetRunToCursorFile(const Value: string);
+    procedure SetRunToCursorUnitName(const Value: string);
     function GetRunning: Boolean;
     function GetDebugMode: TDebugMode;
     procedure WriteToFile(const Chaine, FileName: string);
@@ -111,7 +111,7 @@ type
     function GetExecutableLines(const AUnitName: string): TLineNumbers;
     function TranslatePosition(out Proc, Position: Cardinal; Row: Cardinal; const Fn: string): Boolean;
     procedure GetUncompiledCode(Lines: TStrings);
-    procedure setRunTo(Position: Integer; const FileName: string);
+    procedure SetRunTo(Position: Integer; const FileName: string);
     procedure WriteToConsole(const Chaine: string);
     function GetVar(const Name: TbtString; out s: AnsiString): PIFVariant;
     function GetVariableValue(const VarName: string): string;
@@ -121,8 +121,8 @@ type
 
     property ActiveLine: Cardinal read GetActiveLine write SetActiveLine;
     property ActiveUnitName: string read GetActiveUnitName write SetActiveUnitName;
-    property RunToCursor: Cardinal read FRunToCursor write FRunToCursor;
-    property RunToCursorFile: string read FRunToCursorFile write SetRunToCursorFile;
+    property RunToCursorLine: Cardinal read FRunToCursorLine write FRunToCursorLine;
+    property RunToCursorUnitName: string read FRunToCursorUnitName write SetRunToCursorUnitName;
     property ErrorLine: Cardinal read GetErrorLine write SetErrorLine;
     property ErrorUnitName: string read GetErrorUnitName write SetErrorUnitName;
     property Running: Boolean read GetRunning;
@@ -686,8 +686,8 @@ procedure TdmPascalScript.PSScriptDebugger1AfterExecute(Sender: TPSScript);
 begin
   ActiveLine := 0;
   ActiveUnitName := '';
-  RunToCursor := 0;
-  RunToCursorFile := '';
+  RunToCursorLine := 0;
+  RunToCursorUnitName := '';
   PSScriptDebugger1.ClearBreakPoints;
   FMasterEngine.DebugPlugin.Watches.UpdateView;
 
@@ -776,7 +776,7 @@ begin
   ActiveLine := Row;
   ActiveUnitName := string(FileName);
 
-  if (ActiveLine = RunToCursor) and SameText(ActiveUnitName, RunToCursorFile) and (PSScriptDebugger1.Exec.DebugMode = uPSDebugger.dmRun) then
+  if (ActiveLine = RunToCursorLine) and SameText(ActiveUnitName, RunToCursorUnitName) and (PSScriptDebugger1.Exec.DebugMode = uPSDebugger.dmRun) then
     PSScriptDebugger1.Pause;
 
   if PSScriptDebugger1.Exec.DebugMode in [uPSDebugger.dmPaused, uPSDebugger.dmStepInto] then
@@ -829,15 +829,15 @@ begin
   FErrorLine := Value;
 end;
 
-procedure TdmPascalScript.setRunTo(Position: Integer; const FileName: string);
+procedure TdmPascalScript.SetRunTo(Position: Integer; const FileName: string);
 begin
-  RunToCursor := Position;;
-  RunToCursorFile := FileName;
+  RunToCursorLine := Position;
+  RunToCursorUnitName := FileName;
 end;
 
-procedure TdmPascalScript.SetRunToCursorFile(const Value: string);
+procedure TdmPascalScript.SetRunToCursorUnitName(const Value: string);
 begin
-  FRunToCursorFile := FMasterEngine.GetInternalUnitName(Value);
+  FRunToCursorUnitName := FMasterEngine.GetInternalUnitName(Value);
 end;
 
 procedure TdmPascalScript.SetUseDebugInfo(Value: Boolean);
@@ -1431,7 +1431,7 @@ begin
   begin
     ErrorLine := PSScriptDebugger1.ExecErrorRow;
     ErrorUnitName := string(PSScriptDebugger1.ExecErrorFileName);
-    FMasterEngine.DebugPlugin.Messages.AddRuntimeErrorMessage(ErrorUnitName,
+    FMasterEngine.DebugPlugin.Messages.AddRuntimeErrorMessage(FMasterEngine.GetScriptUnitName(ErrorUnitName),
       Format('%s (Bytecode %d:%d)', [PSScriptDebugger1.ExecErrorToString, PSScriptDebugger1.ExecErrorProcNo, PSScriptDebugger1.ExecErrorByteCodePosition]),
       PSScriptDebugger1.ExecErrorRow, PSScriptDebugger1.ExecErrorCol);
     Result := False;

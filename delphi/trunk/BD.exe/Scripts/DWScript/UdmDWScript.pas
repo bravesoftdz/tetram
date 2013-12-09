@@ -32,8 +32,8 @@ type
     dwsJSONLib: TdwsJSONLibModule;
     bdCommonFunctions: TDW_CommonFunctionsUnit;
     SynDWSSyn: TSynDWSSyn;
-    FActiveLine, FRunToCursor, FErrorLine: Cardinal;
-    FActiveUnitName, FRunToCursorFile, FErrorUnitName: string;
+    FActiveLine, FRunToCursorLine, FErrorLine: Cardinal;
+    FActiveUnitName, FRunToCursorUnitName, FErrorUnitName: string;
     FRunningScript: TScript;
     FListTypesImages: TStringList;
     FUseDebugInfo: Boolean;
@@ -67,15 +67,19 @@ type
 
     function GetActiveLine: Cardinal;
     procedure SetActiveLine(const Value: Cardinal);
+    property ActiveLine: Cardinal read GetActiveLine write SetActiveLine;
 
     function GetActiveUnitName: string;
     procedure SetActiveUnitName(const Value: string);
+    property ActiveUnitName: string read GetActiveUnitName write SetActiveUnitName;
 
     function GetErrorLine: Cardinal;
     procedure SetErrorLine(const Value: Cardinal);
+    property ErrorLine: Cardinal read GetErrorLine write SetErrorLine;
 
     function GetErrorUnitName: string;
     procedure SetErrorUnitName(const Value: string);
+    property ErrorUnitName: string read GetErrorUnitName write SetErrorUnitName;
 
     function GetUseDebugInfo: Boolean;
     procedure SetUseDebugInfo(Value: Boolean);
@@ -94,7 +98,7 @@ type
     procedure Stop;
 
     procedure GetUncompiledCode(Lines: TStrings);
-    procedure setRunTo(Position: Integer; const Filename: string);
+    procedure SetRunTo(Position: Integer; const Filename: string);
 
     function GetNewEditor(AOwner: TComponent): TScriptEditor;
     function isTokenIdentifier(TokenType: Integer): Boolean;
@@ -293,8 +297,8 @@ begin
       ;
     dsDebugSuspended:
       begin
-        SetActiveUnitName(TdwsDebugger(Sender).CurrentScriptPos.SourceFile.Name);
-        SetActiveLine(TdwsDebugger(Sender).CurrentScriptPos.Line);
+        ActiveUnitName := TdwsDebugger(Sender).CurrentScriptPos.SourceFile.Name;
+        ActiveLine := TdwsDebugger(Sender).CurrentScriptPos.Line;
         FMasterEngine.OnBreakPoint;
       end;
     dsDebugResuming:
@@ -633,7 +637,7 @@ var
   i: Integer;
   Breakpointables: TdwsBreakpointableLines;
   Msg: IMessageInfo;
-  Lines: Tbits;
+  Lines: TBits;
 begin
   SetLength(Result, 0);
 
@@ -745,8 +749,8 @@ begin
   Result := not exec.Msgs.HasErrors;
   if not Result then
   begin
-    SetErrorLine(exec.Msgs.LastMessagePos.Line);
-    SetErrorUnitName(exec.Msgs.LastMessagePos.SourceFile.Name);
+    ErrorLine := exec.Msgs.LastMessagePos.Line;
+    ErrorUnitName := exec.Msgs.LastMessagePos.SourceFile.Name;
   end;
 end;
 
@@ -770,10 +774,10 @@ begin
   FErrorLine := Value;
 end;
 
-procedure TdmDWScript.setRunTo(Position: Integer; const Filename: string);
+procedure TdmDWScript.SetRunTo(Position: Integer; const Filename: string);
 begin
-  FRunToCursor := Position;
-  FRunToCursorFile := FMasterEngine.GetInternalUnitName(Filename);
+  FRunToCursorLine := Position;
+  FRunToCursorUnitName := FMasterEngine.GetInternalUnitName(Filename);
 end;
 
 procedure TdmDWScript.SetUseDebugInfo(Value: Boolean);

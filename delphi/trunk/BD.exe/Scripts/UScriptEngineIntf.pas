@@ -158,7 +158,7 @@ type
     procedure Stop;
 
     procedure GetUncompiledCode(Lines: TStrings);
-    procedure setRunTo(Position: Integer; const Filename: string);
+    procedure SetRunTo(Position: Integer; const Filename: string);
 
     function isTokenIdentifier(TokenType: Integer): Boolean;
 
