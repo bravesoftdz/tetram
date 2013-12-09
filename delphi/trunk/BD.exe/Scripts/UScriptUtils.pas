@@ -4,16 +4,18 @@ interface
 
 uses
   SysUtils, Classes, Graphics, Types, StdCtrls, SynEdit, Controls, VirtualTrees, uPSCompiler, uPSUtils,
-  Generics.Collections, Generics.Defaults, UScriptEditor, UScriptEngineIntf;
+  Generics.Collections, Generics.Defaults, UScriptEditor, UScriptEngineIntf, UScriptList;
 
 type
   TDebugList<I: IDebugItem> = class(TList<I>, IDebugList<I>)
   private
     FGetScriptEditorCallback: TGetScriptEditorCallback;
     FView: TVirtualStringTree;
+    FDebugInfos: Pointer;
     function GetView: TVirtualStringTree;
     procedure SetView(const Value: TVirtualStringTree);
     function ItemCount: Integer;
+    function GetDebugInfos: IDebugInfos;
   protected
     function QueryInterface(const IID: TGUID; out Obj): HResult; stdcall;
     function _AddRef: Integer; stdcall;
@@ -21,6 +23,7 @@ type
     function GetItemInterface(Index: Integer): I;
     procedure Notify(const Value: I; Action: TCollectionNotification); override;
   public
+    constructor Create(DebugInfos: IDebugInfos);
     destructor Destroy; override;
     procedure Clear; reintroduce;
     procedure UpdateView;
@@ -29,6 +32,7 @@ type
     function Last: I;
 
     property GetScriptEditorCallback: TGetScriptEditorCallback read FGetScriptEditorCallback write FGetScriptEditorCallback;
+    property DebugInfos: IDebugInfos read GetDebugInfos;
   end;
 
   TDebugItem<I: IDebugItem> = class abstract(TInterfacedObject)
@@ -37,49 +41,48 @@ type
     constructor Create(List: TDebugList<I>);
   end;
 
-  TBreakpointInfo = class(TDebugItem<IBreakpointInfo>, IBreakpointInfo)
+  TPositionnedDebugItem<I: IPositionnedDebugItem> = class(TDebugItem<I>)
   private
-    FActive: Boolean;
+    FScript: TScript;
     FLine: Cardinal;
-    FScriptUnitName: string;
-    procedure UpdateEditor;
+    function GetScript: TScript;
+    procedure SetScript(const Value: TScript);
     function GetLine: Cardinal;
     procedure SetLine(const Value: Cardinal);
-    function GetScriptUnitName: string;
-    procedure SetScriptUnitName(const Value: string);
+  public
+    property Script: TScript read GetScript write SetScript;
+    property Line: Cardinal read GetLine write SetLine;
+  end;
+
+  TBreakpointInfo = class(TPositionnedDebugItem<IBreakpointInfo>, IBreakpointInfo)
+  private
+    FActive: Boolean;
+    procedure UpdateEditor;
     function GetActive: Boolean;
     procedure SetActive(const Value: Boolean);
   public
     destructor Destroy; override;
 
-    property Line: Cardinal read GetLine write SetLine;
-    property ScriptUnitName: string read GetScriptUnitName write SetScriptUnitName;
     property Active: Boolean read GetActive write SetActive;
   end;
 
-  TMessageInfo = class(TDebugItem<IMessageInfo>, IMessageInfo)
+  TMessageInfo = class(TPositionnedDebugItem<IMessageInfo>, IMessageInfo)
   private
-    FScriptUnitName, FTypeMessage, FText: string;
-    FLine, FChar: Cardinal;
+    FTypeMessage, FText: string;
+    FChar: Cardinal;
     FCategory: TCategoryMessage;
 
-    function GetScriptUnitName: string;
-    procedure SetScriptUnitName(const Value: string);
     function GetTypeMessage: string;
     procedure SetTypeMessage(const Value: string);
     function GetText: string;
     procedure SetText(const Value: string);
-    function GetLine: Cardinal;
-    procedure SetLine(const Value: Cardinal);
     function GetChar: Cardinal;
     procedure SetChar(const Value: Cardinal);
     function GetCategory: TCategoryMessage;
     procedure SetCategory(const Value: TCategoryMessage);
   public
-    property ScriptUnitName: string read GetScriptUnitName write SetScriptUnitName;
     property TypeMessage: string read GetTypeMessage write SetTypeMessage;
     property Text: string read GetText write SetText;
-    property Line: Cardinal read GetLine write SetLine;
     property Char: Cardinal read GetChar write SetChar;
     property Category: TCategoryMessage read GetCategory write SetCategory;
   end;
@@ -115,14 +118,16 @@ type
   protected
     procedure Notify(const Value: IBreakpointInfo; Action: TCollectionNotification); override;
   public
-    function IndexOf(const UnitName: string; const ALine: Cardinal): Integer;
-    function Exists(const UnitName: string; const ALine: Cardinal): Boolean;
-    procedure AddBreakpoint(const UnitName: string; const ALine: Cardinal);
-    function Toggle(const UnitName: string; const ALine: Cardinal): Boolean;
+    function IndexOf(Script: TScript; const ALine: Cardinal): Integer;
+    function Exists(Script: TScript; const ALine: Cardinal): Boolean;
+    procedure AddBreakpoint(Script: TScript; const ALine: Cardinal);
+    function Toggle(Script: TScript; const ALine: Cardinal): Boolean;
   end;
 
   TDebugInfos = class(TInterfacedObject, IDebugInfos)
   private
+    FMasterEngine: Pointer;
+
     FCurrentLine: Integer;
     FCursorLine: Integer;
     FErrorLine: Integer;
@@ -144,9 +149,13 @@ type
 
     function GetOnGetScriptEditor: TGetScriptEditorCallback;
     procedure SetOnGetScriptEditor(const Value: TGetScriptEditorCallback);
+
+    function GetMasterEngine: IMasterEngine;
   public
-    constructor Create;
+    constructor Create(MasterEngine: IMasterEngine);
     destructor Destroy; override;
+
+    property MasterEngine: IMasterEngine read GetMasterEngine;
 
     property CurrentLine: Integer read GetCurrentLine write SetCurrentLine;
     property CursorLine: Integer read GetCursorLine write SetCursorLine;
@@ -162,49 +171,32 @@ implementation
 
 { TBreakpointList }
 
-function TBreakpointList.IndexOf(const UnitName: string; const ALine: Cardinal): Integer;
+function TBreakpointList.Exists(Script: TScript; const ALine: Cardinal): Boolean;
 begin
-  Result := 0;
-  while (Result < Count) and ((Items[Result].Line <> ALine) or not SameText(Items[Result].ScriptUnitName, UnitName)) do
-    Inc(Result);
-  if Result = Count then
-    Result := -1;
+  Result := IndexOf(Script, ALine) <> -1;
 end;
 
-function TBreakpointList.Exists(const UnitName: string; const ALine: Cardinal): Boolean;
-begin
-  Result := IndexOf(UnitName, ALine) <> -1;
-end;
-
-function TBreakpointList.Toggle(const UnitName: string; const ALine: Cardinal): Boolean;
-var
-  I: Integer;
-begin
-  I := IndexOf(UnitName, ALine);
-  if I = -1 then
-  begin
-    AddBreakpoint(UnitName, ALine);
-    Result := True;
-  end
-  else
-  begin
-    Delete(I);
-    Result := False;
-  end;
-end;
-
-procedure TBreakpointList.AddBreakpoint(const UnitName: string; const ALine: Cardinal);
+procedure TBreakpointList.AddBreakpoint(Script: TScript; const ALine: Cardinal);
 var
   BP: TBreakpointInfo;
 begin
-  if (IndexOf(UnitName, ALine) = -1) then
+  if (IndexOf(Script, ALine) = -1) then
   begin
     BP := TBreakpointInfo.Create(Self);
     BP.Line := ALine;
-    BP.ScriptUnitName := UnitName;
+    BP.Script := Script;
     BP.Active := True;
     Add(BP);
   end;
+end;
+
+function TBreakpointList.IndexOf(Script: TScript; const ALine: Cardinal): Integer;
+begin
+  Result := 0;
+  while (Result < Count) and ((Items[Result].Line <> ALine) or (Items[Result].Script <> Script)) do
+    Inc(Result);
+  if Result = Count then
+    Result := -1;
 end;
 
 procedure TBreakpointList.Notify(const Value: IBreakpointInfo; Action: TCollectionNotification);
@@ -218,7 +210,7 @@ begin
         Editor := nil;
         // InvalidateLine et InvalidateGutterLine bizarrement insuffisants dans certains cas
         if Assigned(GetScriptEditorCallback) then
-          Editor := GetScriptEditorCallback(Value.ScriptUnitName);
+          Editor := GetScriptEditorCallback(Value.Script);
         if Assigned(Editor) then
         begin
           Editor.Invalidate;
@@ -234,20 +226,38 @@ begin
     Sort(TComparer<IBreakpointInfo>.Construct(
       function(const Left, Right: IBreakpointInfo): Integer
       begin
-        Result := CompareText(Left.ScriptUnitName, Right.ScriptUnitName);
+        Result := CompareText(Left.Script.ScriptUnitName, Right.Script.ScriptUnitName);
         if Result = 0 then
           Result := Left.Line - Right.Line;
       end));
 end;
 
+function TBreakpointList.Toggle(Script: TScript; const ALine: Cardinal): Boolean;
+var
+  I: Integer;
+begin
+  I := IndexOf(Script, ALine);
+  if I = -1 then
+  begin
+    AddBreakpoint(Script, ALine);
+    Result := True;
+  end
+  else
+  begin
+    Delete(I);
+    Result := False;
+  end;
+end;
+
 { TDebugInfos }
 
-constructor TDebugInfos.Create;
+constructor TDebugInfos.Create(MasterEngine: IMasterEngine);
 begin
-  inherited;
-  FBreakpointsList := TBreakpointList.Create;
-  FWatchesList := TWatchList.Create;
-  FMessagesList := TMessageList.Create;
+  inherited Create;
+  FMasterEngine := Pointer(MasterEngine);
+  FBreakpointsList := TBreakpointList.Create(Self);
+  FWatchesList := TWatchList.Create(Self);
+  FMessagesList := TMessageList.Create(Self);
 end;
 
 destructor TDebugInfos.Destroy;
@@ -276,6 +286,11 @@ end;
 function TDebugInfos.GetErrorLine: Integer;
 begin
   Result := FErrorLine;
+end;
+
+function TDebugInfos.GetMasterEngine: IMasterEngine;
+begin
+  Result := IMasterEngine(FMasterEngine);
 end;
 
 function TDebugInfos.GetMessagesList: IMessageList;
@@ -330,6 +345,12 @@ begin
   end;
 end;
 
+constructor TDebugList<I>.Create(DebugInfos: IDebugInfos);
+begin
+  inherited Create;
+  FDebugInfos := Pointer(DebugInfos);
+end;
+
 function TDebugList<I>.Current: I;
 begin
   Result := nil;
@@ -351,6 +372,11 @@ destructor TDebugList<I>.Destroy;
 begin
   SetView(nil);
   inherited;
+end;
+
+function TDebugList<I>.GetDebugInfos: IDebugInfos;
+begin
+  Result := IDebugInfos(FDebugInfos);
 end;
 
 function TDebugList<I>.GetItemInterface(Index: Integer): I;
@@ -470,7 +496,7 @@ begin
     tmHint:
       Msg.FTypeMessage := 'Conseil';
   end;
-  Msg.FScriptUnitName := Fichier;
+  Msg.FScript := DebugInfos.MasterEngine.ScriptList.FindScriptByUnitName(Fichier);
   Msg.FText := Text;
   Msg.FLine := Line;
   Msg.FChar := Char;
@@ -484,7 +510,7 @@ begin
   Msg := TMessageInfo.Create(Self);
   Result := Add(Msg);
   Msg.FTypeMessage := 'Information';
-  Msg.FScriptUnitName := Fichier;
+  Msg.FScript := DebugInfos.MasterEngine.ScriptList.FindScriptByUnitName(Fichier);
   Msg.FText := Text;
   Msg.FLine := Line;
   Msg.FChar := Char;
@@ -498,7 +524,7 @@ begin
   Msg := TMessageInfo.Create(Self);
   Result := Add(Msg);
   Msg.FTypeMessage := 'Erreur';
-  Msg.FScriptUnitName := Fichier;
+  Msg.FScript := DebugInfos.MasterEngine.ScriptList.FindScriptByUnitName(Fichier);
   Msg.FText := Text;
   Msg.FLine := Line;
   Msg.FChar := Char;
@@ -518,30 +544,10 @@ begin
   Result := FActive;
 end;
 
-function TBreakpointInfo.GetLine: Cardinal;
-begin
-  Result := FLine;
-end;
-
-function TBreakpointInfo.GetScriptUnitName: string;
-begin
-  Result := FScriptUnitName;
-end;
-
 procedure TBreakpointInfo.SetActive(const Value: Boolean);
 begin
   FActive := Value;
   UpdateEditor;
-end;
-
-procedure TBreakpointInfo.SetLine(const Value: Cardinal);
-begin
-  FLine := Value;
-end;
-
-procedure TBreakpointInfo.SetScriptUnitName(const Value: string);
-begin
-  FScriptUnitName := Value;
 end;
 
 { TDebugItem }
@@ -558,7 +564,7 @@ var
 begin
   Editor := nil;
   if Assigned(List.GetScriptEditorCallback) then
-    Editor := List.GetScriptEditorCallback(ScriptUnitName);
+    Editor := List.GetScriptEditorCallback(Script);
   if Editor <> nil then
   begin
     Editor.InvalidateLine(Line);
@@ -576,16 +582,6 @@ end;
 function TMessageInfo.GetChar: Cardinal;
 begin
   Result := FChar;
-end;
-
-function TMessageInfo.GetLine: Cardinal;
-begin
-  Result := FLine;
-end;
-
-function TMessageInfo.GetScriptUnitName: string;
-begin
-  Result := FScriptUnitName;
 end;
 
 function TMessageInfo.GetText: string;
@@ -606,16 +602,6 @@ end;
 procedure TMessageInfo.SetChar(const Value: Cardinal);
 begin
   FChar := Value;
-end;
-
-procedure TMessageInfo.SetLine(const Value: Cardinal);
-begin
-  FLine := Value;
-end;
-
-procedure TMessageInfo.SetScriptUnitName(const Value: string);
-begin
-  FScriptUnitName := Value;
 end;
 
 procedure TMessageInfo.SetText(const Value: string);
@@ -648,6 +634,28 @@ end;
 procedure TWatchInfo.SetName(const Value: string);
 begin
   FName := Value;
+end;
+
+{ TPositionnedDebugItem<I> }
+
+function TPositionnedDebugItem<I>.GetLine: Cardinal;
+begin
+  Result := FLine;
+end;
+
+function TPositionnedDebugItem<I>.GetScript: TScript;
+begin
+  Result := FScript;
+end;
+
+procedure TPositionnedDebugItem<I>.SetLine(const Value: Cardinal);
+begin
+  FLine := Value;
+end;
+
+procedure TPositionnedDebugItem<I>.SetScript(const Value: TScript);
+begin
+  FScript := Value;
 end;
 
 end.

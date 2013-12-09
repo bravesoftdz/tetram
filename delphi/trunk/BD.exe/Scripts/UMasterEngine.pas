@@ -39,14 +39,15 @@ type
     function GetOnAfterExecute: TAfterExecuteEvent;
     procedure SetOnAfterExecute(const Value: TAfterExecuteEvent);
     procedure AfterExecute;
-    procedure ToggleBreakPoint(const UnitName: string; Line: Cardinal; Keep: Boolean);
+    procedure ToggleBreakPoint(Script: TScript; Line: Cardinal; Keep: Boolean);
     function GetOnBreakPoint: TBreakPointEvent;
     procedure SetOnBreakPoint(const Value: TBreakPointEvent);
     procedure SelectProjectScript(ProjectScript: TScript);
     function GetProjectScript: TScript;
     procedure SetCompiled(const Value: Boolean);
     function GetCompiled: Boolean;
-    function GetInternalUnitName(Script: TScript): string;
+    function GetInternalUnitName(Script: TScript): string; overload;
+    function GetInternalUnitName(const ScriptUnitName: string): string; overload;
     function GetScriptLines(const UnitName: string; Output: TStrings; ScriptKinds: TScriptKinds = [skUnit]): Boolean; overload;
     function GetScriptLines(Script: TScript; Lines: TStrings): Boolean; overload;
   public
@@ -109,7 +110,7 @@ end;
 
 constructor TMasterEngine.Create;
 begin
-  FDebugPlugin := TDebugInfos.Create;
+  FDebugPlugin := TDebugInfos.Create(Self);
   FInternalAlbumToImport := TAlbumComplet.Create;
   FAlbumToImport := FInternalAlbumToImport;
   FScriptList := TScriptList.Create;
@@ -139,11 +140,16 @@ begin
   Result := FEngine;
 end;
 
-function TMasterEngine.GetInternalUnitName(Script: TScript): string;
+function TMasterEngine.GetInternalUnitName(const ScriptUnitName: string): string;
 begin
-  Result := Script.ScriptUnitName;
+  Result := ScriptUnitName;
   if Result = GetProjectScript.ScriptUnitName then
     Result := GetEngine.GetSpecialMainUnitName;
+end;
+
+function TMasterEngine.GetInternalUnitName(Script: TScript): string;
+begin
+  Result := GetInternalUnitName(Script.ScriptUnitName);
 end;
 
 function TMasterEngine.GetOnAfterExecute: TAfterExecuteEvent;
@@ -174,14 +180,14 @@ begin
   Lines.Clear;
   Editor := nil;
   if Assigned(FDebugPlugin.OnGetScriptEditor) then
-    Editor := FDebugPlugin.OnGetScriptEditor(Script.ScriptUnitName);
+    Editor := FDebugPlugin.OnGetScriptEditor(Script);
   if Editor <> nil then
   begin
     with Script.ScriptInfos do
       if ((BDVersion = '') or (BDVersion <= TGlobalVar.Utilisateur.ExeVersion)) then
         Lines.Assign(Editor.Lines)
       else
-        ShowMessage('Le script "' + string(Script.ScriptUnitName) + '" n''est pas compatible avec cette version de BDthèque.')
+        ShowMessage('Le script "' + Script.ScriptUnitName + '" n''est pas compatible avec cette version de BDthèque.')
   end
   else
     Script.GetScriptLines(Lines);
@@ -254,13 +260,13 @@ begin
     FEngine := nil;
 end;
 
-procedure TMasterEngine.ToggleBreakPoint(const UnitName: string; Line: Cardinal; Keep: Boolean);
+procedure TMasterEngine.ToggleBreakPoint(Script: TScript; Line: Cardinal; Keep: Boolean);
 var
   i: Integer;
 begin
-  i := FDebugPlugin.Breakpoints.IndexOf(UnitName, Line);
+  i := FDebugPlugin.Breakpoints.IndexOf(Script, Line);
   if i = -1 then // nouveau point d'arrêt
-    FDebugPlugin.Breakpoints.AddBreakpoint(UnitName, Line)
+    FDebugPlugin.Breakpoints.AddBreakpoint(Script, Line)
   else if Keep then // changement d'état du point d'arrêt
     FDebugPlugin.Breakpoints[i].Active := not FDebugPlugin.Breakpoints[i].Active
   else // suppression du point d'arrêt

@@ -64,10 +64,7 @@ begin
     1:
       CellText := string(msg.TypeMessage);
     2:
-      if msg.ScriptUnitName = MasterEngine.Engine.GetSpecialMainUnitName then
-        CellText := MasterEngine.ProjectScript.ScriptUnitName
-      else
-        CellText := string(msg.ScriptUnitName);
+      CellText := msg.Script.ScriptUnitName;
     3:
       CellText := string(msg.Text);
   end;

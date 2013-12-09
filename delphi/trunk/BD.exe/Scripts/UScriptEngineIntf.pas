@@ -42,9 +42,9 @@ type
     procedure SetLine(const Value: Cardinal);
     property Line: Cardinal read GetLine write SetLine;
 
-    function GetScriptUnitName: string;
-    procedure SetScriptUnitName(const Value: string);
-    property ScriptUnitName: string read GetScriptUnitName write SetScriptUnitName;
+    function GetScript: TScript;
+    procedure SetScript(const Value: TScript);
+    property Script: TScript read GetScript write SetScript;
   end;
 
   IBreakpointInfo = interface(IPositionnedDebugItem)
@@ -56,10 +56,10 @@ type
 
   IBreakpointList = interface(IDebugList<IBreakpointInfo>)
     ['{68550247-E68A-497A-9172-9AC07D79AA30}']
-    function IndexOf(const UnitName: string; const ALine: Cardinal): Integer;
-    function Exists(const UnitName: string; const ALine: Cardinal): Boolean;
-    procedure AddBreakpoint(const UnitName: string; const ALine: Cardinal);
-    function Toggle(const UnitName: string; const ALine: Cardinal): Boolean;
+    function IndexOf(Script: TScript; const ALine: Cardinal): Integer;
+    function Exists(Script: TScript; const ALine: Cardinal): Boolean;
+    procedure AddBreakpoint(Script: TScript; const ALine: Cardinal);
+    function Toggle(Script: TScript; const ALine: Cardinal): Boolean;
   end;
 
   IWatchInfo = interface(IDebugItem)
@@ -106,7 +106,8 @@ type
     function AddInfoMessage(const Fichier, Text: string; Line: Cardinal = 0; Char: Cardinal = 0): Integer;
   end;
 
-  TGetScriptEditorCallback = function(const ScriptUnitName: string): TScriptEditor of object;
+  // TGetScriptEditorCallback = function(const ScriptUnitName: string): TScriptEditor of object;
+  TGetScriptEditorCallback = function(Script: TScript): TScriptEditor of object;
 
   IEngineInterface = interface
     ['{640DAE0F-93CC-40A1-922C-E884D5F0F19C}']
@@ -167,8 +168,13 @@ type
     function GetParametersProposal(Proposal, Code: TStrings; CurrentEditor: TScriptEditor; out BestProposal: Integer): Boolean;
   end;
 
+  IMasterEngine = interface;
+
   IDebugInfos = interface
     ['{6A5AB23B-4462-438B-8F65-B12C2DA3F52C}']
+    function GetMasterEngine: IMasterEngine;
+    property MasterEngine: IMasterEngine read GetMasterEngine;
+
     procedure SetCurrentLine(const Value: Integer);
     function GetCurrentLine: Integer;
     property CurrentLine: Integer read GetCurrentLine write SetCurrentLine;
@@ -233,13 +239,14 @@ type
     property OnAfterExecute: TAfterExecuteEvent read GetOnAfterExecute write SetOnAfterExecute;
     procedure AfterExecute;
 
-    procedure ToggleBreakPoint(const Script: string; Line: Cardinal; Keep: Boolean);
+    procedure ToggleBreakPoint(Script: TScript; Line: Cardinal; Keep: Boolean);
 
     function GetOnBreakPoint: TBreakPointEvent;
     procedure SetOnBreakPoint(const Value: TBreakPointEvent);
     property OnBreakPoint: TBreakPointEvent read GetOnBreakPoint write SetOnBreakPoint;
 
-    function GetInternalUnitName(Script: TScript): string;
+    function GetInternalUnitName(Script: TScript): string; overload;
+    function GetInternalUnitName(const ScriptUnitName: string): string; overload;
     function GetScriptLines(const UnitName: string; Output: TStrings; ScriptKinds: TScriptKinds = [skUnit]): Boolean; overload;
     function GetScriptLines(Script: TScript; Lines: TStrings): Boolean; overload;
 

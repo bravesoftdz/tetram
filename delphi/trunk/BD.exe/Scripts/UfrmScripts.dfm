@@ -378,10 +378,6 @@ object frmScripts: TfrmScripts
           TabOrder = 0
           object tabMessages: TTabSheet
             Caption = 'Messages'
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             inline framMessages1: TframMessages
               Left = 0
               Top = 0
@@ -416,7 +412,7 @@ object frmScripts: TfrmScripts
                   end
                   item
                     Position = 3
-                    Width = 225
+                    Width = 221
                     WideText = 'Message'
                   end>
               end

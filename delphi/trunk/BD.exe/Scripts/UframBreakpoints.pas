@@ -47,7 +47,7 @@ var
   msg: IBreakPointInfo;
 begin
   msg := MasterEngine.DebugPlugin.Breakpoints[Node.Index];
-  MasterEngine.ToggleBreakPoint(msg.ScriptUnitName, msg.Line, True);
+  MasterEngine.ToggleBreakPoint(msg.Script, msg.Line, True);
   MasterEngine.DebugPlugin.Breakpoints.View.InvalidateNode(Node);
 end;
 
@@ -63,10 +63,7 @@ begin
     0:
       CellText := 'Ligne ' + IntToStr(msg.Line);
     1:
-      if msg.ScriptUnitName = MasterEngine.Engine.GetSpecialMainUnitName then
-        CellText := MasterEngine.ProjectScript.ScriptUnitName
-      else
-        CellText := string(msg.ScriptUnitName);
+      CellText := msg.Script.ScriptUnitName;
   end;
 end;
 

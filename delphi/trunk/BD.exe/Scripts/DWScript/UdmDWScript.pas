@@ -261,7 +261,7 @@ begin
   bdObjects := TDW_BdtkObjectsUnit.Create(FMasterEngine);
   bdObjects.OnAfterInitUnitTable := AfterInitbdObjects;
   bdCommonFunctions := TDW_CommonFunctionsUnit.Create(FMasterEngine);
-  dwsJSONLib:= TdwsJSONLibModule.Create(nil);
+  dwsJSONLib := TdwsJSONLibModule.Create(nil);
   dwsUnit := TDW_Unit.Create(FMasterEngine);
   dwsUnit.unitName := 'Options';
   dwsUnit.RegisterFunction('GetOptionValue', 'String', ['OptionName', 'String', 'Default', 'String'], dwsUnitFunctionsGetOptionValueEval);
@@ -643,7 +643,7 @@ begin
 
   Breakpointables := TdwsBreakpointableLines.Create(FProgram);
   try
-    Lines := Breakpointables.SourceLines[AUnitName];
+    Lines := Breakpointables.SourceLines[FMasterEngine.GetInternalUnitName(AUnitName)];
     if Lines <> nil then
     begin
       for i := 1 to Lines.Size - 1 do
@@ -799,7 +799,7 @@ end;
 
 function TdmDWScript.CorrectScriptName(const Script: String): String;
 begin
-  if Script = '' then
+  if (Script = '') or (Script = FMasterEngine.ProjectScript.ScriptUnitName) then
     Result := GetSpecialMainUnitName
   else
     Result := Script;
@@ -818,7 +818,7 @@ begin
     begin
       dwsBP := TdwsDebuggerBreakpoint.Create;
       dwsBP.Line := bp.Line;
-      dwsBP.SourceName := CorrectScriptName(bp.ScriptUnitName);
+      dwsBP.SourceName := CorrectScriptName(bp.Script.ScriptUnitName);
       i := DWDebugger.Breakpoints.AddOrFind(dwsBP, added);
       if not added then
         dwsBP.Free

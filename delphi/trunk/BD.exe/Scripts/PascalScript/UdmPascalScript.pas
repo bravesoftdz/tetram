@@ -1727,12 +1727,8 @@ begin
   PSScriptDebugger1.ClearBreakPoints;
   if PSScriptDebugger1.UseDebugInfo then
     for bp in FMasterEngine.DebugPlugin.Breakpoints do
-    begin
-      if bp.ScriptUnitName = '' then
-        bp.ScriptUnitName := bp.ScriptUnitName;
       if bp.Active then
-        PSScriptDebugger1.SetBreakPoint(TbtString(bp.ScriptUnitName), bp.Line);
-    end;
+        PSScriptDebugger1.SetBreakPoint(TbtString(bp.Script.ScriptUnitName), bp.Line);
 end;
 
 { TPascalScriptEngineFactory }

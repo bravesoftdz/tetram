@@ -67,7 +67,11 @@ type
 
   TEditorPagesList = class(TObjectList<TEditorPage>)
   public
-    function EditorByUnitName(const Script: string): TScriptEditor;
+    function EditorByUnitName(const ScriptUnitName: string): TScriptEditor;
+    function EditorByScript(Script: TScript): TScriptEditor;
+
+    function PageByScript(Script: TScript): TEditorPage;
+    function PageByUnitName(const ScriptUnitName: string): TEditorPage;
   end;
 
   TfrmScripts = class(TbdtForm)
@@ -229,18 +233,19 @@ type
     procedure WMSyscommand(var msg: TWmSysCommand); message WM_SYSCOMMAND;
 {$REGION 'Débuggage'}
     procedure GoToPosition(Editor: TSynEdit; Line, Char: Cardinal); overload;
+    procedure GoToPosition(Script: TScript; Line, Char: Cardinal); overload; inline;
     procedure GoToPosition(ScriptUnitName: string; Line, Char: Cardinal); overload; inline;
     procedure GoToMessage(msg: IMessageInfo);
     procedure GoToBreakpoint(msg: IBreakpointInfo);
 {$ENDREGION}
-    function GetPageFromUnitName(const UnitName: string): TEditorPage;
+    function GetPageFromUnitName(const ScriptUnitName: string): TEditorPage;
     function GetPageForScript(const Script: TScript): TEditorPage;
 
-    function GetScriptEditor(const UnitName: string): TScriptEditor;
     procedure SetCompiled(const Value: Boolean);
     function GetProjet: string;
     procedure SetProjet(const Value: string);
-    procedure LoadScript(const UnitName: string);
+    function LoadScript(Script: TScript): TEditorPage; overload;
+    function LoadScript(const ScriptUnitName: string): TEditorPage; overload;
     procedure RefreshOptions;
     procedure RefreshDescription(Script: TScript);
     procedure ClearPages;
@@ -282,14 +287,6 @@ const
   imgGutterEXECLINEBP = 5;
   imgGutterEXECLINE = 6;
   imgGutterBREAKDISABLED = 7;
-
-function TfrmScripts.GetScriptEditor(const UnitName: string): TScriptEditor;
-begin
-  if (UnitName = '') or (UnitName = MasterEngine.Engine.GetSpecialMainUnitName) then
-    Result := FOpenedScript.EditorByUnitName(Projet)
-  else
-    Result := FOpenedScript.EditorByUnitName(UnitName);
-end;
 
 procedure TfrmScripts.Button1Click(Sender: TObject);
 begin
@@ -592,18 +589,12 @@ end;
 
 function TfrmScripts.GetPageForScript(const Script: TScript): TEditorPage;
 begin
-  for Result in FOpenedScript do
-    if Script = Result.Script then
-      Exit;
-  Result := nil;
+  Result := FOpenedScript.PageByScript(Script);
 end;
 
-function TfrmScripts.GetPageFromUnitName(const UnitName: string): TEditorPage;
+function TfrmScripts.GetPageFromUnitName(const ScriptUnitName: string): TEditorPage;
 begin
-  for Result in FOpenedScript do
-    if UnitName = Result.Script.ScriptUnitName then
-      Exit;
-  Result := nil;
+  Result := FOpenedScript.PageByUnitName(ScriptUnitName);
 end;
 
 function TfrmScripts.GetProjet: string;
@@ -675,7 +666,7 @@ begin
   FOpenedScript := TEditorPagesList.Create;
   MasterEngine := TMasterEngine.Create;
   MasterEngine.Console := mmConsole.Lines;
-  MasterEngine.DebugPlugin.OnGetScriptEditor := GetScriptEditor;
+  MasterEngine.DebugPlugin.OnGetScriptEditor := FOpenedScript.EditorByScript;
   MasterEngine.OnAfterExecute := AfterExecute;
   MasterEngine.OnBreakPoint := OnBreakPoint;
   // MasterEngine.OnIdle := PSScriptDebugger1Idle;
@@ -751,30 +742,36 @@ begin
   ListBox2.Invalidate;
 end;
 
-procedure TfrmScripts.LoadScript(const UnitName: string);
+function TfrmScripts.LoadScript(const ScriptUnitName: string): TEditorPage;
 var
-  LockWindow: ILockWindow;
-  Page: TEditorPage;
   Script: TScript;
 begin
-  if (UnitName = MasterEngine.Engine.GetSpecialMainUnitName) then
+  if (ScriptUnitName = MasterEngine.Engine.GetSpecialMainUnitName) then
     Script := MasterEngine.ProjectScript
   else
-    Script := MasterEngine.ScriptList.InfoScriptByUnitName(UnitName);
+    Script := MasterEngine.ScriptList.InfoScriptByUnitName(ScriptUnitName);
+
   // doit être fait avant la création de page pour s'assurer de l'existence du fichier
   if not Assigned(Script) then
-    raise Exception.Create('Impossible de trouver l''unité ' + string(UnitName) + '.');
+    raise Exception.Create('Impossible de trouver l''unité ' + string(ScriptUnitName) + '.');
 
-  Page := GetPageForScript(Script);
-  if not Assigned(Page) then
+  Result := LoadScript(Script);
+end;
+
+function TfrmScripts.LoadScript(Script: TScript): TEditorPage;
+var
+  LockWindow: ILockWindow;
+begin
+  Result := GetPageForScript(Script);
+  if not Assigned(Result) then
   begin
     // if not Info.Loaded then
     Script.Load; // on force le rechargement pour être sûr de bien avoir la dernière version
     LockWindow := TLockWindow.Create(pcScripts);
-    Page := TEditorPage.Create(pcScripts, Self, Script);
-    FOpenedScript.Add(Page);
+    Result := TEditorPage.Create(pcScripts, Self, Script);
+    FOpenedScript.Add(Result);
   end;
-  GoToPosition(Page.Editor, 1, 1);
+  GoToPosition(Result.Editor, 1, 1);
 end;
 
 procedure TfrmScripts.LoadScripts;
@@ -859,7 +856,7 @@ end;
 
 procedure TfrmScripts.actBreakpointExecute(Sender: TObject);
 begin
-  MasterEngine.ToggleBreakPoint(FCurrentPage.Script.ScriptUnitName, FCurrentPage.Editor.CaretY, False);
+  MasterEngine.ToggleBreakPoint(FCurrentPage.Script, FCurrentPage.Editor.CaretY, False);
 end;
 
 procedure TfrmScripts.actAddSuiviExecute(Sender: TObject);
@@ -881,15 +878,15 @@ end;
 
 procedure TfrmScripts.GoToMessage(msg: IMessageInfo);
 var
-  Editor: TSynEdit;
+  EditorPage: TEditorPage;
 begin
   if msg = nil then
     Exit;
 
-  Editor := GetScriptEditor(msg.ScriptUnitName);
-  if not Assigned(Editor) then
-    LoadScript(msg.ScriptUnitName);
-  GoToPosition(msg.ScriptUnitName, msg.Line, msg.Char);
+  EditorPage := GetPageForScript(msg.Script);
+  if not Assigned(EditorPage) then
+    LoadScript(msg.Script);
+  GoToPosition(msg.Script, msg.Line, msg.Char);
   PageControl1.ActivePage := tabMessages;
 end;
 
@@ -905,27 +902,33 @@ end;
 
 procedure TfrmScripts.GoToBreakpoint(msg: IBreakpointInfo);
 var
-  Editor: TSynEdit;
+  EditorPage: TEditorPage;
 begin
-  Editor := GetScriptEditor(msg.ScriptUnitName);
-  if not Assigned(Editor) then
-    LoadScript(msg.ScriptUnitName);
-  GoToPosition(msg.ScriptUnitName, msg.Line, 0);
+  EditorPage := GetPageForScript(msg.Script);
+  if not Assigned(EditorPage) then
+    LoadScript(msg.Script);
+  GoToPosition(msg.Script, msg.Line, 0);
   PageControl1.ActivePage := tabBreakpoints;
 end;
 
 procedure TfrmScripts.GoToPosition(ScriptUnitName: string; Line, Char: Cardinal);
 var
-  Editor: TSynEdit;
+  EditorPage: TEditorPage;
 begin
-  Editor := GetScriptEditor(ScriptUnitName);
-  if not Assigned(Editor) then
-  begin
-    // pas besoin de convertir ActiveUnitName puisque si Script = GetMainSpecialName, GetScriptEditor aura forcément trouvé l'editeur du projet
-    LoadScript(MasterEngine.Engine.ActiveUnitName);
-    Editor := GetScriptEditor(MasterEngine.Engine.ActiveUnitName);
-  end;
-  GoToPosition(Editor, Line, Char);
+  EditorPage := GetPageFromUnitName(ScriptUnitName);
+  if not Assigned(EditorPage) then
+    EditorPage := LoadScript(ScriptUnitName);
+  GoToPosition(EditorPage.Editor, Line, Char);
+end;
+
+procedure TfrmScripts.GoToPosition(Script: TScript; Line, Char: Cardinal);
+var
+  EditorPage: TEditorPage;
+begin
+  EditorPage := GetPageForScript(Script);
+  if not Assigned(EditorPage) then
+    EditorPage := LoadScript(Script);
+  GoToPosition(EditorPage.Editor, Line, Char);
 end;
 
 procedure TfrmScripts.GoToPosition(Editor: TSynEdit; Line, Char: Cardinal);
@@ -1145,10 +1148,16 @@ end;
 procedure TfrmScripts.OnBreakPoint;
 var
   i: Integer;
+  Script: TScript;
 begin
   framWatches1.Invalidate;
 
-  i := FMasterEngine.DebugPlugin.Breakpoints.IndexOf(MasterEngine.Engine.ActiveUnitName, MasterEngine.Engine.ActiveLine);
+  Script := FMasterEngine.ScriptList.FindScriptByUnitName(MasterEngine.Engine.ActiveUnitName);
+  if Assigned(Script) then
+    i := FMasterEngine.DebugPlugin.Breakpoints.IndexOf(Script, MasterEngine.Engine.ActiveLine)
+  else
+    i:= -1;
+
   if i > -1 then
     GoToBreakpoint(FMasterEngine.DebugPlugin.Breakpoints[i])
   else
@@ -1163,9 +1172,6 @@ type
     FPage: TEditorPage;
     procedure LinesInserted(FirstLine, Count: Integer); override;
     procedure LinesDeleted(FirstLine, Count: Integer); override;
-    (*
-      procedure PaintTransient(ACanvas: TCanvas; ATransientType: TTransientType); override;
-    *)
   public
     constructor Create(APage: TEditorPage);
   end;
@@ -1176,11 +1182,15 @@ begin
   FPage := APage;
 end;
 
+type
+  TCallback<II: IPositionnedDebugItem> = reference to procedure(list: IDebugList<II>);
+
 procedure TEditorPageSynEditPlugin.LinesInserted(FirstLine, Count: Integer);
 var
   i, iLineCount: Integer;
-  bp: IBreakpointInfo;
-  mi: IMessageInfo;
+  // bp: IBreakpointInfo;
+  // mi: IMessageInfo;
+  cb: TCallback<IPositionnedDebugItem>;
 begin
   // Track the executable lines
   iLineCount := FPage.Editor.Lines.Count;
@@ -1197,69 +1207,31 @@ begin
     FPage.FLineChangedState[i] := csModified;
 
   // Track the breakpoint lines in the debugger
-  for bp in FPage.MasterEngine.DebugPlugin.Breakpoints do
-    if bp.ScriptUnitName = FPage.Script.ScriptUnitName then
-      if bp.Line >= Cardinal(FirstLine) then
-        bp.Line := bp.Line + Cardinal(Count);
+  cb := procedure(list: IDebugList<IPositionnedDebugItem>)
+    var
+      Item: IPositionnedDebugItem;
+    begin
+      for Item in list do
+        if Item.Script = FPage.Script then
+          if Item.Line >= Cardinal(FirstLine) then
+            Item.Line := Item.Line + Cardinal(Count);
+      list.UpdateView;
+    end;
 
-  for mi in FPage.MasterEngine.DebugPlugin.Messages do
-    if mi.ScriptUnitName = FPage.Script.ScriptUnitName then
-      if mi.Line >= Cardinal(FirstLine) then
-        mi.Line := mi.Line + Cardinal(Count);
+  TCallback<IBreakpointInfo>(cb)(FPage.MasterEngine.DebugPlugin.Breakpoints);
+  TCallback<IMessageInfo>(cb)(FPage.MasterEngine.DebugPlugin.Messages);
 
   // Redraw the gutter for updated icons.
   FPage.Editor.InvalidateGutter;
+  FPage.Editor.InvalidateLines(FirstLine, FPage.Editor.Lines.Count);
 end;
-
-(*
-  procedure TEditorPageSynEditPlugin.PaintTransient(ACanvas: TCanvas; ATransientType: TTransientType);
-  var
-  Pt: TPoint;
-  Rct: TRect;
-  MouseBufferCoord: TBufferCoord;
-  Attri: TSynHighlighterAttributes;
-  TokenType, Start: Integer;
-  TokenName: String;
-  OldFont: TFont;
-  begin
-  // only handle after transient
-  if ATransientType <> ttAfter then
-  Exit;
-
-  // only continue if [CTRL] is pressed
-  if not(ssCtrl in KeyboardStateToShiftState) then
-  Exit;
-
-  Pt := Editor.ScreenToClient(Mouse.CursorPos);
-  MouseBufferCoord := Editor.DisplayToBufferPos(Editor.PixelsToRowColumn(Pt.X, Pt.Y));
-  Editor.GetHighlighterAttriAtRowColEx(MouseBufferCoord, TokenName, TokenType, Start, Attri);
-
-  if FPage.MasterEngine.Engine.isTokenIdentifier(TokenType) then
-  begin
-  with Editor do
-  Pt := RowColumnToPixels(BufferToDisplayPos(WordStartEx(MouseBufferCoord)));
-
-  Rct := Rect(Pt.X, Pt.Y, Pt.X + Editor.CharWidth * Length(TokenName), Pt.Y + Editor.LineHeight);
-
-  OldFont := TFont.Create;
-  try
-  OldFont.Assign(ACanvas.Font);
-  ACanvas.Font.Color := clBlue;
-  ACanvas.Font.Style := [fsUnderline];
-  ACanvas.TextRect(Rct, Pt.X, Pt.Y, TokenName);
-  ACanvas.Font := OldFont;
-  finally
-  OldFont.Free;
-  end;
-  end;
-  end;
-*)
 
 procedure TEditorPageSynEditPlugin.LinesDeleted(FirstLine, Count: Integer);
 var
   i: Integer;
-  dp: IDebugInfos;
-  pi: IPositionnedDebugItem;
+  // dp: IDebugInfos;
+  // pi: IPositionnedDebugItem;
+  cb: TCallback<IPositionnedDebugItem>;
 begin
   // Track the executable lines
   for i := FirstLine - 1 to FPage.FExecutableLines.Size - Count - 1 do
@@ -1272,29 +1244,29 @@ begin
   SetLength(FPage.FLineChangedState, Length(FPage.FLineChangedState) - Count);
 
   // Track the breakpoint lines in the debugger
-  dp := FPage.MasterEngine.DebugPlugin;
-  for i := Pred(dp.Breakpoints.ItemCount) downto 0 do
-  begin
-    pi := dp.Breakpoints[i];
-    if pi.ScriptUnitName = FPage.Script.ScriptUnitName then
-      if pi.Line in [FirstLine .. FirstLine + Count] then
-        dp.Breakpoints.Delete(i)
-      else if pi.Line >= Cardinal(FirstLine) then
-        pi.Line := pi.Line - Cardinal(Count);
-  end;
+  cb := procedure(list: IDebugList<IPositionnedDebugItem>)
+    var
+      Item: IPositionnedDebugItem;
+      i: Integer;
+    begin
+      for i := Pred(list.ItemCount) downto 0 do
+      begin
+        Item := list[i];
+        if Item.Script = FPage.Script then
+          if Item.Line in [FirstLine .. FirstLine + Count - 1] then
+            list.Delete(i)
+          else if Item.Line >= Cardinal(FirstLine) then
+            Item.Line := Item.Line - Cardinal(Count);
+      end;
+      list.UpdateView;
+    end;
 
-  for i := Pred(dp.Messages.ItemCount) downto 0 do
-  begin
-    pi := dp.Messages[i];
-    if pi.ScriptUnitName = FPage.Script.ScriptUnitName then
-      if pi.Line in [FirstLine .. FirstLine + Count] then
-        dp.Messages.Delete(i)
-      else if pi.Line >= Cardinal(FirstLine) then
-        pi.Line := pi.Line - Cardinal(Count);
-  end;
+  TCallback<IBreakpointInfo>(cb)(FPage.MasterEngine.DebugPlugin.Breakpoints);
+  TCallback<IMessageInfo>(cb)(FPage.MasterEngine.DebugPlugin.Messages);
 
   // Redraw the gutter for updated icons.
   FPage.Editor.InvalidateGutter;
+  FPage.Editor.InvalidateLines(FirstLine, FPage.Editor.Lines.Count);
 end;
 
 { TEditorPage }
@@ -1458,7 +1430,7 @@ var
   i: Integer;
 begin
   ClearExecutableLines;
-  LineNumbers := MasterEngine.Engine.GetExecutableLines(MasterEngine.GetInternalUnitName(FScript));
+  LineNumbers := MasterEngine.Engine.GetExecutableLines(FScript.ScriptUnitName);
   for i := 0 to Length(LineNumbers) - 1 do
     FExecutableLines[LineNumbers[i]] := True;
   Editor.InvalidateGutter;
@@ -1468,13 +1440,10 @@ procedure TEditorPage.SynEditGutterPaint(Sender: TObject; aLine, X, Y: Integer);
 var
   IconIndex: Integer;
   i: Integer;
-  ScriptUnitName: string;
   Proc, Pos: Cardinal;
 begin
-  ScriptUnitName := MasterEngine.GetInternalUnitName(FScript);
-
   IconIndex := -1;
-  i := MasterEngine.DebugPlugin.Breakpoints.IndexOf(ScriptUnitName, aLine);
+  i := MasterEngine.DebugPlugin.Breakpoints.IndexOf(FScript, aLine);
   if i <> -1 then
   begin
     if not MasterEngine.Engine.Running then
@@ -1484,7 +1453,7 @@ begin
         IconIndex := imgGutterBREAKDISABLED
     else
     begin
-      if (Cardinal(aLine) = MasterEngine.Engine.ActiveLine) and SameText(MasterEngine.Engine.ActiveUnitName, ScriptUnitName) then
+      if (Cardinal(aLine) = MasterEngine.Engine.ActiveLine) and SameText(MasterEngine.Engine.ActiveUnitName, FScript.ScriptUnitName) then
         IconIndex := imgGutterEXECLINEBP
       else if MasterEngine.DebugPlugin.Breakpoints[i].Active then
         IconIndex := imgGutterBREAKVALID
@@ -1495,12 +1464,12 @@ begin
   else
   begin
     if (MasterEngine.Engine.DebugMode = UScriptEngineIntf.dmPaused) and (Cardinal(aLine) = MasterEngine.Engine.ActiveLine) and
-      SameText(MasterEngine.Engine.ActiveUnitName, ScriptUnitName) then
+      SameText(MasterEngine.Engine.ActiveUnitName, FScript.ScriptUnitName) then
       IconIndex := imgGutterEXECLINE;
   end;
 
   if MasterEngine.Compiled then
-    if IsExecutableLine(aLine) or MasterEngine.Engine.TranslatePosition(Proc, Pos, aLine, ScriptUnitName) then
+    if IsExecutableLine(aLine) or MasterEngine.Engine.TranslatePosition(Proc, Pos, aLine, FScript.ScriptUnitName) then
       case IconIndex of
         - 1:
           IconIndex := imgGutterCOMPLINE;
@@ -1543,7 +1512,7 @@ begin
 
   if (X <= Editor.Gutter.LeftOffset) and (iLine < FExecutableLines.Size) then
   begin
-    MasterEngine.ToggleBreakPoint(MasterEngine.GetInternalUnitName(FScript), iLine, False);
+    MasterEngine.ToggleBreakPoint(FScript, iLine, False);
     Editor.Repaint;
   end;
 end;
@@ -1565,13 +1534,11 @@ end;
 procedure TEditorPage.SynEditorSpecialLineColors(Sender: TObject; Line: Integer; var Special: Boolean; var FG, BG: TColor);
 var
   i: Integer;
-  ScriptUnitName: string;
   Proc, Pos: Cardinal;
 begin
-  ScriptUnitName := MasterEngine.GetInternalUnitName(FScript);
-  i := MasterEngine.DebugPlugin.Breakpoints.IndexOf(ScriptUnitName, Line);
+  i := MasterEngine.DebugPlugin.Breakpoints.IndexOf(FScript, Line);
 
-  if (Cardinal(Line) = MasterEngine.Engine.ActiveLine) and SameText(MasterEngine.Engine.ActiveUnitName, ScriptUnitName) then
+  if (Cardinal(Line) = MasterEngine.Engine.ActiveLine) and SameText(MasterEngine.Engine.ActiveUnitName, FScript.ScriptUnitName) then
   begin
     Special := True;
     FG := clWhite;
@@ -1582,7 +1549,7 @@ begin
     Special := True;
     if MasterEngine.DebugPlugin.Breakpoints[i].Active then
     begin
-      if MasterEngine.Compiled and not(IsExecutableLine(Line) or MasterEngine.Engine.TranslatePosition(Proc, Pos, Line, ScriptUnitName)) then
+      if MasterEngine.Compiled and not(IsExecutableLine(Line) or MasterEngine.Engine.TranslatePosition(Proc, Pos, Line, FScript.ScriptUnitName)) then
       begin
         FG := clWhite;
         BG := clOlive;
@@ -1600,7 +1567,7 @@ begin
     end;
   end
   else if (MasterEngine.Engine.ErrorLine > 0) and (Cardinal(Line) = MasterEngine.Engine.ErrorLine) and
-    SameText(MasterEngine.Engine.ErrorUnitName, ScriptUnitName) then
+    SameText(MasterEngine.Engine.ErrorUnitName, FScript.ScriptUnitName) then
   begin
     Special := True;
     FG := clWhite;
@@ -1643,13 +1610,45 @@ end;
 
 { TEditorPagesList }
 
-function TEditorPagesList.EditorByUnitName(const Script: string): TScriptEditor;
+function TEditorPagesList.EditorByScript(Script: TScript): TScriptEditor;
+var
+  Page: TEditorPage;
+begin
+  Page := PageByScript(Script);
+  if Assigned(Page) then
+    Result := Page.Editor
+  else
+    Result := nil;
+end;
+
+function TEditorPagesList.EditorByUnitName(const ScriptUnitName: string): TScriptEditor;
+var
+  Page: TEditorPage;
+begin
+  Page := PageByUnitName(ScriptUnitName);
+  if Assigned(Page) then
+    Result := Page.Editor
+  else
+    Result := nil;
+end;
+
+function TEditorPagesList.PageByScript(Script: TScript): TEditorPage;
 var
   Page: TEditorPage;
 begin
   for Page in Self do
-    if Page.Script.ScriptUnitName = Script then
-      Exit(Page.Editor);
+    if Page.Script = Script then
+      Exit(Page);
+  Result := nil;
+end;
+
+function TEditorPagesList.PageByUnitName(const ScriptUnitName: string): TEditorPage;
+var
+  Page: TEditorPage;
+begin
+  for Page in Self do
+    if Page.Script.ScriptUnitName = ScriptUnitName then
+      Exit(Page);
   Result := nil;
 end;
 
