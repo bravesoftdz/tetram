@@ -178,6 +178,7 @@ function TMasterEngine.GetScriptLines(Script: TScript; Lines: TStrings): Boolean
 var
   Editor: TScriptEditor;
 begin
+  Result := False;
   Lines.Clear;
   Editor := nil;
   if Assigned(FDebugPlugin.OnGetScriptEditor) then
@@ -186,12 +187,17 @@ begin
   begin
     with Script.ScriptInfos do
       if ((BDVersion = '') or (BDVersion <= TGlobalVar.Utilisateur.ExeVersion)) then
-        Lines.Assign(Editor.Lines)
-      else
+      begin
+        Lines.Assign(Editor.Lines);
+        Result := True;
+      end else
         ShowMessage('Le script "' + Script.ScriptUnitName + '" n''est pas compatible avec cette version de BDthèque.')
   end
   else
+  begin
     Script.GetScriptLines(Lines);
+    Result := True;
+  end;
 end;
 
 function TMasterEngine.GetScriptList: TScriptList;

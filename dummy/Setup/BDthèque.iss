@@ -66,6 +66,7 @@ Source: ..\..\bin\msvcp80.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\msvcr80.dll; DestDir: {app}; Flags: ignoreversion
 Source: ..\..\bin\Microsoft.VC80.CRT.manifest; DestDir: {app}; Flags: ignoreversion
 ;Source: ..\..\bin\pcre3.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\7z.dll; DestDir: {app}; Flags: ignoreversion
 
 Source: Base vide\BD.GDB; DestDir: {userappdata}\TetramCorp\BDTheque; Flags: onlyifdoesntexist ignoreversion; Check: FirstInstall
 Source: ..\..\bin\scripts\*.bds; DestDir: {commonappdata}\TetramCorp\BDTheque\Scripts; Flags: ignoreversion promptifolder; 

@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, ComCtrls, IniFiles, CommCtrl, ImgList,
-  Buttons, VDTButton, UframBoutons, Browss, EditLabeled, ComboCheck, Spin, UBdtForms,
-  ZipMstr, PngSpeedButton, PngImageList;
+  Buttons, VDTButton, UframBoutons, Browss, EditLabeled, ComboCheck, Spin, UBdtForms, FileCtrl,
+  ZipMstr, PngSpeedButton, PngImageList, JvComponentBase, JclCompression;
 
 type
   TfrmOptions = class(TbdtForm)
@@ -54,8 +54,6 @@ type
     Label17: TLabel;
     ComboBox6: TComboBox;
     Button1: TButton;
-    BrowseDirectoryDlg2: TBrowseDirectoryDlg;
-    ZipMaster1: TZipMaster;
     CategoryPanelGroup1: TCategoryPanelGroup;
     CategoryPanel1: TCategoryPanel;
     CategoryPanel2: TCategoryPanel;
@@ -78,6 +76,7 @@ type
     VDTButton1: TVDTButton;
     AfficherNotesListes: TCheckBox;
     ComboBox1: TComboBox;
+    ZipMaster1: TZipMaster;
     procedure btnOKClick(Sender: TObject);
     procedure calculKeyPress(Sender: TObject; var Key: Char);
     procedure calculExit(Sender: TObject);
@@ -211,8 +210,12 @@ begin
     ComboBox5.Items.Insert(0, MySQLUpdate.Version);
   ComboBox5.ItemIndex := 0;
 
-  for fileName in TDirectory.GetFiles(RepWebServer, '*.zip') do
-    if not SameFileName(TPath.GetFileName(fileName), 'interface.zip') then
+  for fileName in TDirectory.GetFiles(RepWebServer,
+    function(const Path: string; const SearchRec: TSearchRec): Boolean
+    begin
+      Result := TPath.MatchesPattern(SearchRec.Name, '*.zip', False) or TPath.MatchesPattern(SearchRec.Name, '*.7z', False);
+    end) do
+    if not SameFileName(TPath.GetFileNameWithoutExtension(fileName), 'interface') then
       ComboBox4.Items.Add(TPath.GetFileNameWithoutExtension(fileName));
 
   PageControl1.ActivePage := PageControl1.Pages[0];
@@ -424,20 +427,53 @@ begin
 end;
 
 procedure TfrmOptions.Button1Click(Sender: TObject);
+
+  function SearchFileName(archiveName: string): string;
+  begin
+    if TFile.Exists(archiveName + '.7z') then
+      Result := archiveName + '.7z'
+    else
+      Result := archiveName + '.zip';
+  end;
+
+
+
+  procedure ExtractArchive(archiveName: string; const repSave: string);
+  var
+    AFormats: TJclDecompressArchiveClassArray;
+    AFormat: TJclDecompressArchiveClass;
+    FArchive: TJclCompressionArchive;
+  begin
+    archiveName := SearchFileName(archiveName);
+    AFormats := GetArchiveFormats.FindDecompressFormats(archiveName);
+    for AFormat in AFormats do
+    begin
+      FArchive := AFormat.Create(archiveName, 0, False);
+      if FArchive is TJclDecompressArchive then
+      begin
+        TJclDecompressArchive(FArchive).ListFiles;
+        TJclDecompressArchive(FArchive).ExtractAll(repSave, True);
+      end
+      else if FArchive is TJclUpdateArchive then
+      begin
+        TJclUpdateArchive(FArchive).ListFiles;
+        TJclUpdateArchive(FArchive).ExtractAll(repSave, True);
+      end;
+      FArchive.Free;
+      Break;
+    end;
+  end;
+
 var
   repSave: string;
   sl: TStringList;
 begin
-  if not BrowseDirectoryDlg2.Execute then
+  if not FileCtrl.SelectDirectory('Sélectionnez un répertoire dans lequel créer le site web', '', repSave, [sdNewUI, sdNewFolder, sdValidateDir], Self) then
     Exit;
-  repSave := IncludeTrailingBackslash(BrowseDirectoryDlg2.Selection);
-  ForceDirectories(repSave);
-  ZipMaster1.ZipFileName := RepWebServer + 'interface.zip';
-  ZipMaster1.ExtrBaseDir := repSave;
-  ZipMaster1.Extract;
-  ZipMaster1.ZipFileName := RepWebServer + TGlobalVar.Utilisateur.options.SiteWeb.Modele + '.zip';
-  ZipMaster1.ExtrBaseDir := repSave;
-  ZipMaster1.Extract;
+
+  ExtractArchive(RepWebServer + 'interface', repSave);
+  ExtractArchive(RepWebServer + TGlobalVar.Utilisateur.options.SiteWeb.Modele, repSave);
+
   sl := TStringList.Create;
   try
     sl.Add('<?');
@@ -454,7 +490,7 @@ begin
     sl.Add('if (file_exists(''config_ex.inc'')) include_once ''config_ex.inc'';');
     sl.Add('');
     sl.Add('?>');
-    sl.SaveToFile(repSave + 'config.inc');
+    sl.SaveToFile(TPath.Combine(repSave, 'config.inc'));
   finally
     sl.Free;
   end;
