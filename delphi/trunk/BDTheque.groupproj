@@ -10,7 +10,7 @@
             <Dependencies/>
         </Projects>
         <Projects Include="BD.exe\BD.dproj">
-            <Dependencies/>
+            <Dependencies>BDPic.DLL\BDPic.dproj;BDT_UDF.DLL\BDT_UDF.dproj</Dependencies>
         </Projects>
         <Projects Include="D:\Composants\DWScript\Tools\IDEDialog\Delphi projects\DwsIdeDemo.dproj">
             <Dependencies/>
@@ -41,13 +41,13 @@
     <Target Name="BDT_UDF:Make">
         <MSBuild Projects="BDT_UDF.DLL\BDT_UDF.dproj" Targets="Make"/>
     </Target>
-    <Target Name="BD">
+    <Target Name="BD" DependsOnTargets="BDPic;BDT_UDF">
         <MSBuild Projects="BD.exe\BD.dproj"/>
     </Target>
-    <Target Name="BD:Clean">
+    <Target Name="BD:Clean" DependsOnTargets="BDPic:Clean;BDT_UDF:Clean">
         <MSBuild Projects="BD.exe\BD.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="BD:Make">
+    <Target Name="BD:Make" DependsOnTargets="BDPic:Make;BDT_UDF:Make">
         <MSBuild Projects="BD.exe\BD.dproj" Targets="Make"/>
     </Target>
     <Target Name="DwsIdeDemo">

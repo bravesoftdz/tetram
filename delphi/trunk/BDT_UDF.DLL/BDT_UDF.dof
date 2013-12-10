@@ -101,7 +101,7 @@ DebugSourceDirs=
 UsePackages=0
 [Parameters]
 RunParams=
-HostApplication=G:\Programmation\MEDIA.KIT\BDThèque\bin\test_identicalstring.exe
+HostApplication=G:\Programmation\MEDIA.KIT\BDTheque\bin\test_identicalstring.exe
 Launcher=
 UseLauncher=0
 DebugCWD=

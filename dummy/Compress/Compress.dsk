@@ -8,16 +8,16 @@ File_5=TSourceModule,'D:\Composants\ZipMaster\ZMDlg.pas',0,1,1,21,34,0,0,,
 File_6=TSourceModule,'D:\Composants\ZipMaster\ZMUtils.pas',0,1,76,46,97,0,0,,
 
 [Modules]
-Module0=D:\MEDIA.KIT\BDThèque\Divers\Compress\Compress.dproj
+Module0=D:\MEDIA.KIT\BDTheque\Divers\Compress\Compress.dproj
 Count=1
 EditWindowCount=1
 
-[D:\MEDIA.KIT\BDThèque\Divers\Compress\Compress.dproj]
+[D:\MEDIA.KIT\BDTheque\Divers\Compress\Compress.dproj]
 ModuleType=TBaseProject
 
 [EditWindow0]
 ViewCount=1
-CurrentEditView=D:\MEDIA.KIT\BDThèque\Divers\Compress\Compress.dpr
+CurrentEditView=D:\MEDIA.KIT\BDTheque\Divers\Compress\Compress.dpr
 View0=0
 PercentageSizes=1
 Create=1
@@ -50,14 +50,14 @@ BottomMiddelPanelData=0000080001020200000009000000446F636B5369746530100000004772
 
 [View0]
 CustomEditViewType=TEditView
-Module=D:\MEDIA.KIT\BDThèque\Divers\Compress\Compress.dpr
+Module=D:\MEDIA.KIT\BDTheque\Divers\Compress\Compress.dpr
 CursorX=53
 CursorY=43
 TopLine=9
 LeftCol=1
 Elisions=
 Bookmarks=
-EditViewName=D:\MEDIA.KIT\BDThèque\Divers\Compress\Compress.dpr
+EditViewName=D:\MEDIA.KIT\BDTheque\Divers\Compress\Compress.dpr
 
 [Watches]
 Count=0

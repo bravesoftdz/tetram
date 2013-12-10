@@ -2,17 +2,17 @@
 Name: fr; MessagesFile: compiler:Languages\French.isl
 
 [Setup]
-AppVersion={#GetFileVersion("D:\MEDIA.KIT\BDThèque\bin\BD.exe")}
-AppName=BDthèque
-AppVerName=BDthèque {#SetupSetting("AppVersion")}
+AppVersion={#GetFileVersion("D:\MEDIA.KIT\BDTheque\bin\BD.exe")}
+AppName=BDTheque
+AppVerName=BDTheque {#SetupSetting("AppVersion")}
 AppMutex=TetramCorpBDMutex
 AppPublisher=Teträm Corp
 AppPublisherURL=http://www.tetram.org
 AppSupportURL=http://forums.tetram.org
 AppUpdatesURL=http://www.tetram.org
 UninstallDisplayIcon={app}\BD.exe
-DefaultDirName={pf}\Teträm Corp\BDthèque
-DefaultGroupName=Teträm Corp\BDthèque
+DefaultDirName={pf}\Teträm Corp\BDTheque
+DefaultGroupName=Teträm Corp\BDTheque
 PrivilegesRequired=poweruser
 AppCopyright=Teträm Corp © 1997-2008
 AppID={{A86E29B5-D1EE-431F-A5BF-E4A10D36CBDC}
@@ -79,13 +79,13 @@ Source: ..\..\bin\WebServer\BDthequeWeb.zip; DestDir: {commonappdata}\TetramCorp
 Filename: {app}\BD.url; Section: InternetShortcut; Key: URL; String: http://www.tetram.org; Tasks: interneticon
 
 [Icons]
-Name: {group}\BDthèque; Filename: {app}\BD.exe; IconIndex: 0
-Name: {group}\BDthèque on the Web; Filename: {app}\BD.url; Tasks: interneticon
-Name: {group}\Désinstaller BDthèque; Filename: {uninstallexe}
-Name: {userdesktop}\BDthèque; Filename: {app}\BD.exe; Tasks: desktopicon; IconIndex: 0
+Name: {group}\BDTheque; Filename: {app}\BD.exe; IconIndex: 0
+Name: {group}\BDTheque on the Web; Filename: {app}\BD.url; Tasks: interneticon
+Name: {group}\Désinstaller BDTheque; Filename: {uninstallexe}
+Name: {userdesktop}\BDTheque; Filename: {app}\BD.exe; Tasks: desktopicon; IconIndex: 0
 
 [Run]
-Filename: {app}\BD.exe; Description: Lancer BDthèque; Flags: nowait postinstall skipifsilent
+Filename: {app}\BD.exe; Description: Lancer BDTheque; Flags: nowait postinstall skipifsilent
 Filename: {app}\What's New.txt; Flags: nowait shellexec skipifdoesntexist postinstall skipifsilent
 ;Filename: {tmp}\vcredist_x86.exe; Flags: skipifdoesntexist; Parameters: /q; MinVersion: 0,5.01.2600; OnlyBelowVersion: 0,5.01.2600sp1
 ;Filename: {tmp}\vcredist_x86.exe; Flags: skipifdoesntexist; Parameters: /q; MinVersion: 0,5.02.3790; OnlyBelowVersion: 0,5.02.3790
@@ -111,8 +111,8 @@ Name: {app}\UDF\VDO_UDF.dll; Type: files
 Name: {app}\BDws.dll; Type: files
 
 [CustomMessages]
-CustomFormCaption=BDthèque est déjà installé
-CustomFormDescription=Le programme d'installation a détecté que BDthèque est déjà installé sur cet ordinateur.
+CustomFormCaption=BDTheque est déjà installé
+CustomFormDescription=Le programme d'installation a détecté que BDTheque est déjà installé sur cet ordinateur.
 UninstallRegKey=SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{A86E29B5-D1EE-431F-A5BF-E4A10D36CBDC}_is1
 
 [Code]

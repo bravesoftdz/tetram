@@ -50,7 +50,7 @@
         <DCC_UsePackage>rtl;vcl;vclx;indy;inet;xmlrtl;vclie;inetdbbde;inetdbxpress;dbrtl;dsnap;dsnapcon;vcldb;soaprtl;dbexpress;dbxcds;bdertl;vcldbx;webdsnap;websnap;adortl;ibxpress;teeui;teedb;tee;visualclx;vclactnband;dclOfficeXP;MediaKit;VclSmp;SynEdit_R7;visualdbclx;JvUIBD7R;VDBDatasetD7;VDatasetD7;ZipmasterD7;inetdb;dss;$(DCC_UsePackage)</DCC_UsePackage>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <DCC_F>false</DCC_F>
-        <DCC_ExeOutput>D:\MEDIA.KIT\BDThèque\Sources\WebServer</DCC_ExeOutput>
+        <DCC_ExeOutput>D:\MEDIA.KIT\BDTheque\Sources\WebServer</DCC_ExeOutput>
         <DCC_S>false</DCC_S>
         <DCC_K>false</DCC_K>
         <VerInfo_Locale>1036</VerInfo_Locale>

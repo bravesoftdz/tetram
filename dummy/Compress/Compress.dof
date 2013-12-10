@@ -90,7 +90,7 @@ MaxStackSize=1048576
 ImageBase=4194304
 ExeDescription=
 [Directories]
-OutputDir=D:\MEDIA.KIT\BDThèque\Sources\WebServer
+OutputDir=D:\MEDIA.KIT\BDTheque\Sources\WebServer
 UnitOutputDir=
 PackageDLLOutputDir=
 PackageDCPOutputDir=
@@ -152,5 +152,5 @@ Count=1
 Item0=dcu
 [HistoryLists\hlOutputDirectorry]
 Count=2
-Item0=D:\MEDIA.KIT\BDThèque\Sources\WebServer
+Item0=D:\MEDIA.KIT\BDTheque\Sources\WebServer
 Item1=..\..\bin
