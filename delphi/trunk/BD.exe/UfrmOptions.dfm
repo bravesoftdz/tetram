@@ -1017,27 +1017,4 @@ object frmOptions: TfrmOptions
     Left = 64
     Top = 380
   end
-  object ZipMaster1: TZipMaster
-    AddOptions = []
-    AddStoreSuffixes = [assGIF, assPNG, assZ, assZIP, assZOO, assARC, assLZH, assARJ, assTAZ, assTGZ, assLHA, assRAR, assACE, assCAB, assGZ, assGZIP, assJAR, assEXE, assJPG, assJPEG, ass7Zp, assMP3, assWMV, assWMA, assDVR, assAVI]
-    Dll_Load = False
-    ExtAddStoreSuffixes = ''
-    ExtrOptions = [ExtrDirNames, ExtrOverWrite, ExtrForceDirs]
-    KeepFreeOnAllDisks = 0
-    KeepFreeOnDisk1 = 0
-    Language = 'fr'
-    MaxVolumeSize = 0
-    PasswordReqCount = 1
-    SFXOptions = []
-    SFXOverWriteMode = OvrConfirm
-    SFXPath = 'DZSFXUS.bin'
-    SpanOptions = []
-    Trace = False
-    Unattended = False
-    Verbose = False
-    Version = '1.79.10.07'
-    VersionInfo = '1.79.10.07'
-    Left = 132
-    Top = 380
-  end
 end

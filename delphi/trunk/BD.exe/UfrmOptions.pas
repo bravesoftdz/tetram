@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, ComCtrls, IniFiles, CommCtrl, ImgList,
   Buttons, VDTButton, UframBoutons, Browss, EditLabeled, ComboCheck, Spin, UBdtForms, FileCtrl,
-  ZipMstr, PngSpeedButton, PngImageList, JvComponentBase, JclCompression;
+  PngSpeedButton, PngImageList, JvComponentBase, JclCompression;
 
 type
   TfrmOptions = class(TbdtForm)
@@ -76,7 +76,6 @@ type
     VDTButton1: TVDTButton;
     AfficherNotesListes: TCheckBox;
     ComboBox1: TComboBox;
-    ZipMaster1: TZipMaster;
     procedure btnOKClick(Sender: TObject);
     procedure calculKeyPress(Sender: TObject; var Key: Char);
     procedure calculExit(Sender: TObject);
@@ -435,8 +434,6 @@ procedure TfrmOptions.Button1Click(Sender: TObject);
     else
       Result := archiveName + '.zip';
   end;
-
-
 
   procedure ExtractArchive(archiveName: string; const repSave: string);
   var
