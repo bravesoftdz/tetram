@@ -27,7 +27,7 @@ type
     function CheckVersion(Force: Boolean): Boolean;
   end;
 
-function OuvreSession: Boolean;
+function OuvreSession(Connect: Boolean): Boolean;
 procedure BdtkInitProc;
 procedure AnalyseLigneCommande(cmdLine: string);
 
@@ -61,31 +61,31 @@ begin
   Result := FDMPrinc;
 end;
 
-function OuvreSession: Boolean;
+function OuvreSession(Connect: Boolean): Boolean;
 begin
   try
     Result := True;
-    with dmPrinc do
-    begin
-      UIBDataBase.Connected := False;
-      UIBDataBase.DatabaseName := DatabasePath;
-      UIBDataBase.UserName := DatabaseUserName;
-      UIBDataBase.PassWord := DatabasePassword;
-      UIBDataBase.LibraryName := DataBaseLibraryName;
-      UIBDataBase.Params.Values['sql_role_name'] := DatabaseRole;
 
-      UIBBackup.Database := DatabasePath;
-      UIBBackup.UserName := DatabaseUserName;
-      UIBBackup.PassWord := DatabasePassword;
-      UIBBackup.LibraryName := DataBaseLibraryName;
+    dmPrinc.UIBDataBase.Connected := False;
+    dmPrinc.UIBDataBase.DatabaseName := DatabasePath;
+    dmPrinc.UIBDataBase.UserName := DatabaseUserName;
+    dmPrinc.UIBDataBase.PassWord := DatabasePassword;
+    dmPrinc.UIBDataBase.LibraryName := DataBaseLibraryName;
+    dmPrinc.UIBDataBase.Params.Values['sql_role_name'] := DatabaseRole;
 
-      UIBRestore.Database := DatabasePath;
-      UIBRestore.UserName := DatabaseUserName;
-      UIBRestore.PassWord := DatabasePassword;
-      UIBRestore.LibraryName := DataBaseLibraryName;
+    dmPrinc.UIBBackup.Database := DatabasePath;
+    dmPrinc.UIBBackup.UserName := DatabaseUserName;
+    dmPrinc.UIBBackup.PassWord := DatabasePassword;
+    dmPrinc.UIBBackup.LibraryName := DataBaseLibraryName;
 
-      UIBDataBase.Connected := True;
-    end;
+    dmPrinc.UIBRestore.Database := DatabasePath;
+    dmPrinc.UIBRestore.UserName := DatabaseUserName;
+    dmPrinc.UIBRestore.PassWord := DatabasePassword;
+    dmPrinc.UIBRestore.LibraryName := DataBaseLibraryName;
+
+    if Connect then
+      dmPrinc.UIBDataBase.Connected := True;
+
     if not Assigned(dmCommun) then
       Application.CreateForm(TdmCommun, dmCommun);
   except
@@ -435,7 +435,8 @@ begin
     FrmSplash.Affiche_act(VerificationVersion + '...');
     if dmPrinc.CheckVersion(False) then
       Exit;
-    if not OuvreSession then
+
+    if not OuvreSession(True) then
       Exit;
     if not dmPrinc.CheckVersions(FrmSplash.Affiche_act) then
       Exit;
@@ -456,6 +457,12 @@ begin
       FrmSplash.Show;
       FrmSplash.Update;
     end;
+    (*
+      if not OuvreSession(False) then
+      Exit;
+      dmPrinc.UIBBackup.BackupFiles.Text := ExtractFilePath(Application.ExeName) + 'test-icu.fbk';
+      dmPrinc.UIBBackup.Run;
+    *)
   finally
     FrmSplash.Free;
   end;

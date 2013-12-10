@@ -78,8 +78,6 @@ uses
   UfrmPublier in 'Web\UfrmPublier.pas' {frmPublier},
   UNet in 'Web\UNet.pas',
   UMySQLMAJ1_0_0_1 in 'Web\mises à jour\UMySQLMAJ1_0_0_1.pas',
-  DIMimeStreams in 'Web\Mime64\DIMimeStreams.pas',
-  DIMime in 'Web\Mime64\DIMime.pas',
   UMySQLMAJ1_0_0_0 in 'Web\mises à jour\UMySQLMAJ1_0_0_0.pas',
   UMySQLMAJ1_0_0_2 in 'Web\mises à jour\UMySQLMAJ1_0_0_2.pas',
   UfrmScripts in 'Scripts\UfrmScripts.pas' {frmScripts},

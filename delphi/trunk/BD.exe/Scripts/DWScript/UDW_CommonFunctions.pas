@@ -266,7 +266,7 @@ end;
 
 procedure TDW_CommonFunctionsUnit.OnTStream_SeekEval(info: TProgramInfo; ExtObject: TObject);
 begin
-  info.ResultAsInteger := TStream(ExtObject).Seek(info.ParamAsInteger[0], info.ParamAsInteger[1]);
+  info.ResultAsInteger := TStream(ExtObject).Seek(LongInt(info.ParamAsInteger[0]), info.ParamAsInteger[1]);
 end;
 
 procedure TDW_CommonFunctionsUnit.OnTStream_WriteBufferEval(info: TProgramInfo; ExtObject: TObject);

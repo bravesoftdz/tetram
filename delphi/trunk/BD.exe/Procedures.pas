@@ -2,7 +2,7 @@ unit Procedures;
 
 interface
 
-uses SysUtils, Windows, Classes, Dialogs, ComCtrls, ExtCtrls, Controls, Forms, Graphics, CommonConst, UIB, jpeg, GraphicEx, StdCtrls, ComboCheck,
+uses SysUtils, Windows, Classes, Dialogs, ComCtrls, ExtCtrls, Controls, Forms, Graphics, CommonConst, UIB, jpeg, StdCtrls, ComboCheck,
   UIBLib, Commun;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
@@ -67,7 +67,7 @@ function FindCmdLineSwitch(const cmdLine, Switch: string; out Value: string): Bo
 implementation
 
 uses Divers, Textes, ShellAPI, LabeledCheckBox, MaskUtils, Mask, UdmPrinc, IniFiles, Math, VirtualTrees, EditLabeled, ActnList, Types, UBdtForms,
-  StrUtils;
+  StrUtils, GR32, GR32_Resamplers, JvGIF, pngimage;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
 begin
@@ -154,7 +154,7 @@ begin
   with op do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'SELECT FIRST 1 Valeur FROM OPTIONS WHERE NOM_OPTION = ? ORDER BY DM_OPTIONS DESC';
+      SQL.Text := 'select first 1 valeur from options where nom_option = ? order by dm_options desc';
       Prepare(True);
       TGlobalVar.Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', FormatSettings.CurrencyString);
       FormatMonnaie := IfThen(FormatSettings.CurrencyFormat in [0, 2], TGlobalVar.Utilisateur.Options.SymboleMonnetaire +
@@ -429,7 +429,8 @@ function ResizePicture(Image: TPicture; Hauteur, Largeur: Integer; AntiAliasing,
 var
   NewLargeur, NewHauteur, i: Integer;
   Bmp: TBitmap;
-  // Trace: array of TPoint;
+  Resampler: TLinearResampler;
+  BMP32Src, BMP32Dst: TBitmap32;
 begin
   Result := TMemoryStream.Create;
   try
@@ -458,8 +459,19 @@ begin
         Bmp.Width := NewLargeur;
         if AntiAliasing then
         begin
-          Bmp.Assign(Image.Graphic);
-          Stretch(NewLargeur, NewHauteur, sfBell, 0, Bmp);
+          BMP32Src := TBitmap32.Create;
+          BMP32Dst := TBitmap32.Create;
+          try
+            BMP32Src.Assign(Image.Graphic);
+            Resampler := TLinearResampler.Create(BMP32Src);
+            BMP32Dst.Height := NewHauteur;
+            BMP32Dst.Width := NewLargeur;
+            BMP32Dst.Draw(BMP32Dst.BoundsRect, BMP32Src.BoundsRect, BMP32Src);
+            Bmp.Assign(BMP32Dst);
+          finally
+            BMP32Src.Free;
+            BMP32Dst.Free;
+          end;
         end
         else
           Bmp.Canvas.StretchDraw(Rect(0, 0, NewLargeur, NewHauteur), Image.Graphic);
@@ -482,14 +494,6 @@ begin
           Bmp.Canvas.Pen.Style := psSolid;
           Bmp.Canvas.Brush.Color := clGray;
           Bmp.Canvas.Brush.Style := bsSolid;
-          // SetLength(Trace, 6);
-          // Trace[0] := Point(0, NewHauteur);
-          // Trace[1] := Point(0 + Effet3D, Bmp.Height);
-          // Trace[2] := Point(Bmp.Width, Bmp.Height);
-          // Trace[3] := Point(Bmp.Width, 0 + Effet3D);
-          // Trace[4] := Point(NewLargeur, 0);
-          // Trace[5] := Point(NewLargeur, NewHauteur);
-          // Bmp.Canvas.Polygon(Trace);
 
           for i := 0 to Effet3D do
           begin
@@ -572,9 +576,9 @@ begin
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       if isParaBD then
-        SQL.Text := 'SELECT IMAGEPARABD, STOCKAGEPARABD, FichierParaBD FROM ParaBD WHERE ID_ParaBD = ?'
+        SQL.Text := 'select imageparabd, stockageparabd, fichierparabd from parabd where id_parabd = ?'
       else
-        SQL.Text := 'SELECT IMAGECOUVERTURE, STOCKAGECOUVERTURE, FichierCouverture FROM Couvertures WHERE ID_Couverture = ?';
+        SQL.Text := 'select imagecouverture, stockagecouverture, fichiercouverture from couvertures where id_couverture = ?';
       Params.AsString[0] := GUIDToString(ID_Couverture);
       FetchBlobs := True;
       Open;
@@ -588,7 +592,7 @@ begin
           Chemin := ExtractFilePath(Fields.AsString[2]);
           if Chemin = '' then
             Chemin := RepImages;
-          SQL.Text := 'SELECT BlobContent FROM LOADBLOBFROMFILE(:Chemin, :Fichier);';
+          SQL.Text := 'select blobcontent from loadblobfromfile(:chemin, :fichier);';
           Prepare(True);
           Params.AsString[0] := Copy(Chemin, 1, Params.MaxStrLen[0]);
           Params.AsString[1] := Copy(Fichier, 1, Params.MaxStrLen[1]);
@@ -633,27 +637,37 @@ function GetJPEGStream(const Fichier: string): TStream;
     end;
   end;
 
+const
+  JPGMagic: array [0 .. 2] of Byte = ($FF, $D8, $FF);
+  GIFMagic: array [0 .. 3] of Byte = ($47, $49, $46, $38);
+  PNGMagic: array [0 .. 7] of Byte = ($89, $50, $4E, $47, $0D, $0A, $1A, $0A);
+
 var
   jImg: TJPEGImage;
   img: TPicture;
   graphClass: TGraphicClass;
   graph: TGraphic;
   f: TFileStream;
-  buffer: array [0 .. 2] of Byte;
+  buffer: array [0 .. 7] of Byte;
 begin
   f := TFileStream.Create(Fichier, fmOpenRead or fmShareDenyWrite);
 
   f.Position := 0;
-  f.ReadBuffer(buffer, 3);
+  f.ReadBuffer(buffer, Length(buffer));
   f.Position := 0;
 
-  if (buffer[0] = $FF) and (buffer[1] = $D8) and (buffer[2] = $FF) then
-  begin
-    Result := f;
-    Exit;
-  end
+  if CompareMem(@buffer, @JPGMagic, Length(JPGMagic)) then
+    // déjà du JPEG
+    Exit(f)
+  else if CompareMem(@buffer, @PNGMagic, Length(PNGMagic)) then
+    // PNG
+    graphClass := TPngImage
+  else if CompareMem(@buffer, @GIFMagic, Length(GIFMagic)) then
+    // GIF
+    graphClass := TJvGIFImage
   else
-    graphClass := FileFormatList.GraphicFromContent(f);
+    // type inconnu = on laisse faire la VCL, avec un peu de bol ça marchera
+    graphClass := nil;
 
   Result := TMemoryStream.Create;
   img := nil;

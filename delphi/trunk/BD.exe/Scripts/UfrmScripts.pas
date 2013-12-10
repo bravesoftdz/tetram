@@ -521,7 +521,7 @@ end;
 
 function TfrmScripts.GetlstDebugImages: TPngImageList;
 begin
-  REsult := lstDebugImages;
+  Result := lstDebugImages;
 end;
 
 function TfrmScripts.GetMasterEngine: IMasterEngine;
@@ -531,27 +531,27 @@ end;
 
 function TfrmScripts.GetPageForScript(const Script: TScript): TEditorPage;
 begin
-  REsult := FOpenedScript.PageByScript(Script);
+  Result := FOpenedScript.PageByScript(Script);
 end;
 
 function TfrmScripts.GetPageFromUnitName(const ScriptUnitName: string): TEditorPage;
 begin
-  REsult := FOpenedScript.PageByUnitName(ScriptUnitName);
+  Result := FOpenedScript.PageByUnitName(ScriptUnitName);
 end;
 
 function TfrmScripts.GetProjet: string;
 begin
-  REsult := MasterEngine.ProjectScript.ScriptUnitName;
+  Result := MasterEngine.ProjectScript.ScriptUnitName;
 end;
 
 function TfrmScripts.GetseScript1Change: TNotifyEvent;
 begin
-  REsult := seScript1Change;
+  Result := seScript1Change;
 end;
 
 function TfrmScripts.GetSynEditSearch: TSynEditSearch;
 begin
-  REsult := SynEditSearch;
+  Result := SynEditSearch;
 end;
 
 function TfrmScripts.GetSynMacroRecorder: TSynMacroRecorder;
@@ -719,23 +719,23 @@ begin
   if not Assigned(Script) then
     raise Exception.Create('Impossible de trouver l''unité ' + string(ScriptUnitName) + '.');
 
-  REsult := LoadScript(Script);
+  Result := LoadScript(Script);
 end;
 
 function TfrmScripts.LoadScript(Script: TScript): TEditorPage;
 var
   LockWindow: ILockWindow;
 begin
-  REsult := GetPageForScript(Script);
-  if not Assigned(REsult) then
+  Result := GetPageForScript(Script);
+  if not Assigned(Result) then
   begin
     // if not Info.Loaded then
     Script.Load; // on force le rechargement pour être sûr de bien avoir la dernière version
     LockWindow := TLockWindow.Create(pcScripts);
-    REsult := TEditorPage.Create(pcScripts, Self, Script);
-    FOpenedScript.Add(REsult);
+    Result := TEditorPage.Create(pcScripts, Self, Script);
+    FOpenedScript.Add(Result);
   end;
-  GoToPosition(REsult.Editor, 1, 1);
+  GoToPosition(Result.Editor, 1, 1);
 end;
 
 procedure TfrmScripts.LoadScripts;
@@ -941,10 +941,10 @@ function TfrmScripts.Execute: Boolean;
 begin
   MasterEngine.AlbumToImport.Clear;
   mmConsole.Clear;
-  REsult := MasterEngine.Engine.Run;
+  Result := MasterEngine.Engine.Run;
   if (MasterEngine.DebugPlugin.Messages.ItemCount > 0) then
     GoToMessage(MasterEngine.DebugPlugin.Messages.Last);
-  if not REsult then
+  if not Result then
   begin
     (*
       try
@@ -985,8 +985,8 @@ function TfrmScripts.Compile: Boolean;
 var
   msg: IMessageInfo;
 begin
-  REsult := MasterEngine.Engine.Compile(MasterEngine.ProjectScript, msg);
-  Compiled := REsult;
+  Result := MasterEngine.Engine.Compile(MasterEngine.ProjectScript, msg);
+  Compiled := Result;
   if Assigned(msg) then
     GoToMessage(msg);
   ShowExecutableLines;

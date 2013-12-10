@@ -32,8 +32,8 @@ implementation
 
 {$R *.dfm}
 
-uses Math, UNet, Divers, Updates, DIMime, DIMimeStreams, UIB, UIBLib, UdmPrinc, Commun, DateUtils, Procedures, CommonConst, VarUtils, StrUtils,
-  Generics.Collections;
+uses Math, UNet, Divers, Updates, UIB, UIBLib, UdmPrinc, Commun, DateUtils, Procedures, CommonConst, VarUtils, StrUtils,
+  Generics.Collections, JclMime;
 
 type
   TSynchroSpecial = (tsNone, tsImages);

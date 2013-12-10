@@ -61,9 +61,10 @@ const
 
 type
   PActionNodeData = ^RActionNodeData;
+
   RActionNodeData = record
     Texte, Description: string;
-    Action: TCustomAction
+    Action: TCustomAction;
   end;
 
 procedure TfrmEntretien.VDTButton20Click(Sender: TObject);
@@ -75,6 +76,7 @@ end;
 procedure TfrmEntretien.FormCreate(Sender: TObject);
 
   function AddNode(Parent: PVirtualNode; act: TCustomAction): PVirtualNode; overload;
+
   var
     ActionNodeData: PActionNodeData;
   begin
@@ -86,6 +88,7 @@ procedure TfrmEntretien.FormCreate(Sender: TObject);
   end;
 
   function AddNode(Parent: PVirtualNode; const Texte: string): PVirtualNode; overload;
+
   var
     ActionNodeData: PActionNodeData;
   begin
@@ -108,7 +111,8 @@ begin
   for act in ActionList1 do
     if act is TCustomAction then
     begin
-      if not Assigned(Node) or (s <> act.Category) then Node := AddNode(nil, act.Category);
+      if not Assigned(Node) or (s <> act.Category) then
+        Node := AddNode(nil, act.Category);
       s := act.Category;
       AddNode(Node, TCustomAction(act));
     end;
@@ -133,11 +137,13 @@ begin
 end;
 
 procedure TfrmEntretien.vstEntretienGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
+
 var
   s: string;
 begin
   case Column of
-    0: CellText := PActionNodeData(vstEntretien.GetNodeData(Node))^.Texte;
+    0:
+      CellText := PActionNodeData(vstEntretien.GetNodeData(Node))^.Texte;
     1:
       begin
         s := PActionNodeData(vstEntretien.GetNodeData(Node))^.Description;
@@ -146,10 +152,13 @@ begin
   end;
 end;
 
-procedure TfrmEntretien.vstEntretienPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+procedure TfrmEntretien.vstEntretienPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+  TextType: TVSTTextType);
 begin
-  if vstEntretien.GetNodeLevel(Node) = 0 then TargetCanvas.Font.Style := [fsBold];
-  if Column = 1 then TargetCanvas.Font.Color := clInactiveCaptionText;
+  if vstEntretien.GetNodeLevel(Node) = 0 then
+    TargetCanvas.Font.Style := [fsBold];
+  if Column = 1 then
+    TargetCanvas.Font.Color := clInactiveCaptionText;
 end;
 
 procedure TfrmEntretien.vstEntretienCollapsing(Sender: TBaseVirtualTree; Node: PVirtualNode; var Allowed: Boolean);
@@ -158,6 +167,7 @@ begin
 end;
 
 procedure TfrmEntretien.vstEntretienInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+
 var
   r: TRect;
   s: string;
@@ -174,7 +184,8 @@ begin
   end;
   oldBottom := r.Bottom;
   vstEntretien.NodeHeight[Node] := 8 + DrawText(vstEntretien.Canvas.Handle, PChar(s), Length(s), r, DT_CALCRECT or DT_WORDBREAK);
-  if oldBottom <> r.Bottom then Include(InitialStates, ivsMultiline);
+  if oldBottom <> r.Bottom then
+    Include(InitialStates, ivsMultiline);
 end;
 
 procedure TfrmEntretien.vstEntretienResize(Sender: TObject);
@@ -183,20 +194,23 @@ begin
 end;
 
 procedure TfrmEntretien.vstEntretienDblClick(Sender: TObject);
+
 var
   ActionNodeData: PActionNodeData;
 begin
   ActionNodeData := vstEntretien.GetNodeData(vstEntretien.FocusedNode);
-  if Assigned(ActionNodeData.Action) then ActionNodeData.Action.Execute;
+  if Assigned(ActionNodeData.Action) then
+    ActionNodeData.Action.Execute;
 end;
 
 procedure TfrmEntretien.CheckVersions;
+
 var
   Info: TInformation;
 begin
   Info := TInformation.Create;
   try
-    if not (OuvreSession and (DMPrinc.CheckVersions(Info.ShowInfo, False) or (BDDOpen.Execute and BDDOpen.ExecuteResult))) then
+    if not(OuvreSession(True) and (DMPrinc.CheckVersions(Info.ShowInfo, False) or (BDDOpen.Execute and BDDOpen.ExecuteResult))) then
     begin
       VDTButton20.Click;
       Application.Terminate;
@@ -212,6 +226,7 @@ begin
 end;
 
 procedure TfrmEntretien.actConvertirExecute(Sender: TObject);
+
 var
   nbConverti, nbAConvertir, i: Integer;
   UpdateQuery: TUIBQuery;
@@ -225,65 +240,69 @@ begin
   UpdateQuery := TUIBQuery.Create(Self);
   FichiersImages := TStringList.Create;
   with TUIBQuery.Create(Self) do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    UpdateQuery.Transaction := Transaction;
-    SQL.Text := 'select count(id_couverture) from couvertures where stockagecouverture = 0';
-    Open;
-    nbAConvertir := Fields.AsInteger[0];
-    fWaiting.ShowProgression(rsOperationEnCours, 0, nbAConvertir);
-    SQL.Text := 'select id_couverture, fichiercouverture from couvertures where stockagecouverture = 0';
-    UpdateQuery.SQL.Text := 'update couvertures set fichiercouverture = :fichiercouverture, stockagecouverture = 1, imagecouverture = :imagecouverture where id_couverture = :id_couverture';
-    nbConverti := 0;
-    Open;
-    while not Eof do
-    begin
-      Fichier := Fields.AsString[1];
-      UpdateQuery.Prepare(True);
-      UpdateQuery.Params.AsString[0] := Copy(ChangeFileExt(ExtractFileName(Fichier), ''), 1, UpdateQuery.Params.MaxStrLen[0]);
-      if ExtractFilePath(Fichier) = '' then
-        FichiersImages.Add(RepImages + Fichier)
-      else
-        FichiersImages.Add(Fichier);
-      Stream := GetCouvertureStream(False, StringToGUID(Fields.AsString[0]), -1, -1, False);
-      try
-        UpdateQuery.ParamsSetBlob(1, Stream);
-      finally
-        Stream.Free;
-      end;
-      UpdateQuery.Params.AsString[2] := Fields.AsString[0];
-      UpdateQuery.ExecSQL;
-      Inc(nbConverti);
-      if (nbConverti mod 1000) = 0 then Transaction.CommitRetaining;
-      if (nbConverti mod (Max(100, nbAConvertir) div 100)) = 0 then fWaiting.ShowProgression(rsOperationEnCours, nbConverti, nbAConvertir);
-      Next;
-    end;
-    Transaction.Commit;
-    if FichiersImages.Count > 0 then
-    begin
-      Transaction.StartTransaction;
-      SQL.Text := 'select * from deletefile(:fichier)';
-      Prepare(True);
-      for i := 0 to Pred(FichiersImages.Count) do
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      UpdateQuery.Transaction := Transaction;
+      SQL.Text := 'select count(id_couverture) from couvertures where stockagecouverture = 0';
+      Open;
+      nbAConvertir := Fields.AsInteger[0];
+      fWaiting.ShowProgression(rsOperationEnCours, 0, nbAConvertir);
+      SQL.Text := 'select id_couverture, fichiercouverture from couvertures where stockagecouverture = 0';
+      UpdateQuery.SQL.Text :=
+        'update couvertures set fichiercouverture = :fichiercouverture, stockagecouverture = 1, imagecouverture = :imagecouverture where id_couverture = :id_couverture';
+      nbConverti := 0;
+      Open;
+      while not Eof do
       begin
-        Params.AsString[0] := Copy(FichiersImages[i], 1, Params.MaxStrLen[0]);
-        Open;
-        if Fields.AsInteger[0] <> 0 then
-          ShowMessage(FichiersImages[i] + #13#13 + SysErrorMessage(Fields.AsInteger[0]));
+        Fichier := Fields.AsString[1];
+        UpdateQuery.Prepare(True);
+        UpdateQuery.Params.AsString[0] := Copy(ChangeFileExt(ExtractFileName(Fichier), ''), 1, UpdateQuery.Params.MaxStrLen[0]);
+        if ExtractFilePath(Fichier) = '' then
+          FichiersImages.Add(RepImages + Fichier)
+        else
+          FichiersImages.Add(Fichier);
+        Stream := GetCouvertureStream(False, StringToGUID(Fields.AsString[0]), -1, -1, False);
+        try
+          UpdateQuery.ParamsSetBlob(1, Stream);
+        finally
+          Stream.Free;
+        end;
+        UpdateQuery.Params.AsString[2] := Fields.AsString[0];
+        UpdateQuery.ExecSQL;
+        Inc(nbConverti);
+        if (nbConverti mod 1000) = 0 then
+          Transaction.CommitRetaining;
+        if (nbConverti mod (Max(100, nbAConvertir) div 100)) = 0 then
+          fWaiting.ShowProgression(rsOperationEnCours, nbConverti, nbAConvertir);
+        Next;
       end;
       Transaction.Commit;
+      if FichiersImages.Count > 0 then
+      begin
+        Transaction.StartTransaction;
+        SQL.Text := 'select * from deletefile(:fichier)';
+        Prepare(True);
+        for i := 0 to Pred(FichiersImages.Count) do
+        begin
+          Params.AsString[0] := Copy(FichiersImages[i], 1, Params.MaxStrLen[0]);
+          Open;
+          if Fields.AsInteger[0] <> 0 then
+            ShowMessage(FichiersImages[i] + #13#13 + SysErrorMessage(Fields.AsInteger[0]));
+        end;
+        Transaction.Commit;
+      end;
+      fWaiting := nil;
+      ShowMessageFmt('%d liens convertis sur %d à convertir.', [nbConverti, nbAConvertir]);
+    finally
+      Transaction.Free;
+      Free;
+      FichiersImages.Free;
+      UpdateQuery.Free;
     end;
-    fWaiting := nil;
-    ShowMessageFmt('%d liens convertis sur %d à convertir.', [nbConverti, nbAConvertir]);
-  finally
-    Transaction.Free;
-    Free;
-    FichiersImages.Free;
-    UpdateQuery.Free;
-  end;
 end;
 
 procedure TfrmEntretien.actExtraireExecute(Sender: TObject);
+
 var
   nbExtrais, nbAExtraire: Integer;
   ExtractQuery, UpdateQuery: TUIBQuery;
@@ -296,53 +315,57 @@ begin
   UpdateQuery := TUIBQuery.Create(Self);
   ExtractQuery := TUIBQuery.Create(Self);
   with TUIBQuery.Create(Self) do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    UpdateQuery.Transaction := Transaction;
-    ExtractQuery.Transaction := Transaction;
-    SQL.Text := 'select count(id_couverture) from couvertures where stockagecouverture = 1';
-    Open;
-    nbAExtraire := Fields.AsInteger[0];
-    fWaiting.ShowProgression(rsOperationEnCours, 0, nbAExtraire);
-    SQL.Text := 'select id_couverture, fichiercouverture from couvertures where stockagecouverture = 1';
-    UpdateQuery.SQL.Text := 'update couvertures set fichiercouverture = :fichiercouverture, stockagecouverture = 0, imagecouverture = null where id_couverture = :id_couverture';
-    UpdateQuery.Prepare(True);
-    ExtractQuery.SQL.Text := 'select result from saveblobtofile(:chemin, :fichier, :blobcontent)';
-    ExtractQuery.Prepare(True);
-    nbExtrais := 0;
-    Open;
-    while not Eof do
-    begin
-      Fichier := SearchNewFileName(RepImages, Fields.AsString[1] + '.jpg', True);
-      ExtractQuery.Params.AsString[0] := Copy(RepImages, 1, ExtractQuery.Params.MaxStrLen[0]);
-      ExtractQuery.Params.AsString[1] := Copy(Fichier, 1, ExtractQuery.Params.MaxStrLen[1]);
-      Stream := GetCouvertureStream(False, StringToGUID(Fields.AsString[0]), -1, -1, False);
-      try
-        ExtractQuery.ParamsSetBlob(2, Stream);
-      finally
-        Stream.Free;
-      end;
-      ExtractQuery.Open;
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      UpdateQuery.Transaction := Transaction;
+      ExtractQuery.Transaction := Transaction;
+      SQL.Text := 'select count(id_couverture) from couvertures where stockagecouverture = 1';
+      Open;
+      nbAExtraire := Fields.AsInteger[0];
+      fWaiting.ShowProgression(rsOperationEnCours, 0, nbAExtraire);
+      SQL.Text := 'select id_couverture, fichiercouverture from couvertures where stockagecouverture = 1';
+      UpdateQuery.SQL.Text :=
+        'update couvertures set fichiercouverture = :fichiercouverture, stockagecouverture = 0, imagecouverture = null where id_couverture = :id_couverture';
+      UpdateQuery.Prepare(True);
+      ExtractQuery.SQL.Text := 'select result from saveblobtofile(:chemin, :fichier, :blobcontent)';
+      ExtractQuery.Prepare(True);
+      nbExtrais := 0;
+      Open;
+      while not Eof do
+      begin
+        Fichier := SearchNewFileName(RepImages, Fields.AsString[1] + '.jpg', True);
+        ExtractQuery.Params.AsString[0] := Copy(RepImages, 1, ExtractQuery.Params.MaxStrLen[0]);
+        ExtractQuery.Params.AsString[1] := Copy(Fichier, 1, ExtractQuery.Params.MaxStrLen[1]);
+        Stream := GetCouvertureStream(False, StringToGUID(Fields.AsString[0]), -1, -1, False);
+        try
+          ExtractQuery.ParamsSetBlob(2, Stream);
+        finally
+          Stream.Free;
+        end;
+        ExtractQuery.Open;
 
-      UpdateQuery.Params.AsString[0] := Copy(Fichier, 1, UpdateQuery.Params.MaxStrLen[0]);
-      UpdateQuery.Params.AsString[1] := Fields.AsString[0];
-      UpdateQuery.ExecSQL;
-      Inc(nbExtrais);
-      if (nbExtrais mod 1000) = 0 then Transaction.CommitRetaining;
-      if (nbExtrais mod (Max(100, nbAExtraire) div 100)) = 0 then fWaiting.ShowProgression(rsOperationEnCours, nbExtrais, nbAExtraire);
-      Next;
+        UpdateQuery.Params.AsString[0] := Copy(Fichier, 1, UpdateQuery.Params.MaxStrLen[0]);
+        UpdateQuery.Params.AsString[1] := Fields.AsString[0];
+        UpdateQuery.ExecSQL;
+        Inc(nbExtrais);
+        if (nbExtrais mod 1000) = 0 then
+          Transaction.CommitRetaining;
+        if (nbExtrais mod (Max(100, nbAExtraire) div 100)) = 0 then
+          fWaiting.ShowProgression(rsOperationEnCours, nbExtrais, nbAExtraire);
+        Next;
+      end;
+      Transaction.Commit;
+      fWaiting := nil;
+      ShowMessageFmt('%d Couvertures extraites sur %d à extraire.'#13#10'Répertoire de destination: %s', [nbExtrais, nbAExtraire, RepImages]);
+    finally
+      Transaction.Free;
+      Free;
+      UpdateQuery.Free;
     end;
-    Transaction.Commit;
-    fWaiting := nil;
-    ShowMessageFmt('%d Couvertures extraites sur %d à extraire.'#13#10'Répertoire de destination: %s', [nbExtrais, nbAExtraire, RepImages]);
-  finally
-    Transaction.Free;
-    Free;
-    UpdateQuery.Free;
-  end;
 end;
 
 procedure TfrmEntretien.actNettoyerExecute(Sender: TObject);
+
 var
   nbSupprime, nbASupprimer: Integer;
   UpdateQuery: TUIBQuery;
@@ -353,42 +376,44 @@ begin
   fWaiting.ShowProgression(rsOperationEnCours, 0, 100);
   UpdateQuery := TUIBQuery.Create(Self);
   with TUIBQuery.Create(Self) do
-  try
-    Transaction := GetTransaction(DMPrinc.UIBDataBase);
-    UpdateQuery.Transaction := Transaction;
-    SQL.Text := 'select count(id_couverture) from couvertures where stockagecouverture = 0';
-    Open;
-    nbASupprimer := Fields.AsInteger[0];
-    fWaiting.ShowProgression(rsOperationEnCours, 0, nbASupprimer);
-    SQL.Text := 'select id_couverture, fichiercouverture from couvertures where stockagecouverture = 0';
-    UpdateQuery.SQL.Text := 'delete from couvertures where id_couverture = :id_couverture';
-    nbSupprime := 0;
-    Open;
-    while not Eof do
-    begin
-      Stream := GetCouvertureStream(False, StringToGUID(Fields.AsString[0]), -1, -1, False);
-      try
-        if not Assigned(Stream) then
-        begin
-          UpdateQuery.Params.AsString[0] := Fields.AsString[0];
-          UpdateQuery.ExecSQL;
-          Inc(nbSupprime);
-          if (nbSupprime mod 1000) = 0 then Transaction.CommitRetaining;
+    try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      UpdateQuery.Transaction := Transaction;
+      SQL.Text := 'select count(id_couverture) from couvertures where stockagecouverture = 0';
+      Open;
+      nbASupprimer := Fields.AsInteger[0];
+      fWaiting.ShowProgression(rsOperationEnCours, 0, nbASupprimer);
+      SQL.Text := 'select id_couverture, fichiercouverture from couvertures where stockagecouverture = 0';
+      UpdateQuery.SQL.Text := 'delete from couvertures where id_couverture = :id_couverture';
+      nbSupprime := 0;
+      Open;
+      while not Eof do
+      begin
+        Stream := GetCouvertureStream(False, StringToGUID(Fields.AsString[0]), -1, -1, False);
+        try
+          if not Assigned(Stream) then
+          begin
+            UpdateQuery.Params.AsString[0] := Fields.AsString[0];
+            UpdateQuery.ExecSQL;
+            Inc(nbSupprime);
+            if (nbSupprime mod 1000) = 0 then
+              Transaction.CommitRetaining;
+          end;
+        finally
+          FreeAndNil(Stream);
         end;
-      finally
-        FreeAndNil(Stream);
+        Next;
+        if (nbSupprime mod (Max(100, nbASupprimer) div 100)) = 0 then
+          fWaiting.ShowProgression(rsOperationEnCours, nbSupprime, nbASupprimer);
       end;
-      Next;
-      if (nbSupprime mod (Max(100, nbASupprimer) div 100)) = 0 then fWaiting.ShowProgression(rsOperationEnCours, nbSupprime, nbASupprimer);
+      Transaction.Commit;
+      fWaiting := nil;
+      ShowMessageFmt('%d liens supprimé(s) sur %d.', [nbSupprime, nbASupprimer]);
+    finally
+      Transaction.Free;
+      Free;
+      UpdateQuery.Free;
     end;
-    Transaction.Commit;
-    fWaiting := nil;
-    ShowMessageFmt('%d liens supprimé(s) sur %d.', [nbSupprime, nbASupprimer]);
-  finally
-    Transaction.Free;
-    Free;
-    UpdateQuery.Free;
-  end;
 end;
 
 procedure TfrmEntretien.BDDBackupBeforeExecute(Sender: TObject);
@@ -400,16 +425,16 @@ end;
 procedure TfrmEntretien.BDDBackupAccept(Sender: TObject);
 begin
   with TFrmVerbose.Create(Self) do
-  try
-    Application.ProcessMessages;
-    DMPrinc.UIBBackup.OnVerbose := UIBVerbose;
-    DMPrinc.UIBBackup.Verbose := True;
-    DMPrinc.UIBBackup.BackupFiles.Text := BDDBackup.Dialog.FileName;
-    DMPrinc.UIBBackup.Run;
-  finally
-    // pas de free, c'est la fenêtre qui va s'auto-libérer
-    Fin;
-  end;
+    try
+      Application.ProcessMessages;
+      DMPrinc.UIBBackup.OnVerbose := UIBVerbose;
+      DMPrinc.UIBBackup.Verbose := True;
+      DMPrinc.UIBBackup.BackupFiles.Text := BDDBackup.Dialog.FileName;
+      DMPrinc.UIBBackup.Run;
+    finally
+      // pas de free, c'est la fenêtre qui va s'auto-libérer
+      Fin;
+    end;
 end;
 
 procedure TfrmEntretien.BDDRestoreBeforeExecute(Sender: TObject);
@@ -421,17 +446,17 @@ end;
 procedure TfrmEntretien.BDDRestoreAccept(Sender: TObject);
 begin
   with TFrmVerbose.Create(Self) do
-  try
-    DMPrinc.UIBDataBase.Connected := False;
-    Application.ProcessMessages;
-    DMPrinc.UIBRestore.OnVerbose := UIBVerbose;
-    DMPrinc.UIBRestore.Verbose := True;
-    DMPrinc.UIBRestore.BackupFiles.Text := BDDRestore.Dialog.FileName;
-    DMPrinc.UIBRestore.Run;
-  finally
-    // pas de free, c'est la fenêtre qui va s'auto-libérer
-    Fin;
-  end;
+    try
+      DMPrinc.UIBDataBase.Connected := False;
+      Application.ProcessMessages;
+      DMPrinc.UIBRestore.OnVerbose := UIBVerbose;
+      DMPrinc.UIBRestore.Verbose := True;
+      DMPrinc.UIBRestore.BackupFiles.Text := BDDRestore.Dialog.FileName;
+      DMPrinc.UIBRestore.Run;
+    finally
+      // pas de free, c'est la fenêtre qui va s'auto-libérer
+      Fin;
+    end;
   CheckVersions;
 end;
 
@@ -446,17 +471,18 @@ begin
   DatabasePath := BDDOpen.Dialog.FileName;
   BDDOpen.Hint := DatabasePath;
   with TIniFile.Create(FichierIni) do
-  try
-    WriteString('Database', 'Database', DatabasePath);
-  finally
-    Free;
-  end;
+    try
+      WriteString('Database', 'Database', DatabasePath);
+    finally
+      Free;
+    end;
   DMPrinc.UIBDataBase.Connected := False;
   CheckVersions;
   vstEntretien.Invalidate;
 end;
 
 procedure TfrmEntretien.vstEntretienFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
+
 var
   ActionNodeData: PActionNodeData;
 begin
@@ -465,4 +491,3 @@ begin
 end;
 
 end.
-
