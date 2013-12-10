@@ -3,7 +3,7 @@
         <ProjectGuid>{51ED9FE5-C526-4DE7-89EB-0D8BB3607541}</ProjectGuid>
         <MainSource>BDT_UDF.dpr</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>3</TargetedPlatforms>
         <AppType>Library</AppType>
         <FrameworkType>None</FrameworkType>
