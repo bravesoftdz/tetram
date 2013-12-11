@@ -38,7 +38,8 @@ implementation
 {$R *.DFM}
 
 uses CommonConst, Commun, Textes, UdmCommun, UIBLib, Divers, IniFiles, Procedures, UHistorique, Math, UIBase, Updates, UfrmFond, CheckVersionNet,
-  DateUtils, UMAJODS, JumpList, UfrmSplash, Proc_Gestions, Generics.Collections;
+  DateUtils, UMAJODS, JumpList, UfrmSplash, Proc_Gestions, Generics.Collections,
+  UfrmVerbose;
 
 var
   FDMPrinc: TdmPrinc = nil;
@@ -460,8 +461,31 @@ begin
     (*
       if not OuvreSession(False) then
       Exit;
+
+      with TFrmVerbose.Create(Application) do
+      try
+      Application.ProcessMessages;
+      dmPrinc.UIBBackup.OnVerbose := UIBVerbose;
+      dmPrinc.UIBBackup.Verbose := True;
       dmPrinc.UIBBackup.BackupFiles.Text := ExtractFilePath(Application.ExeName) + 'test-icu.fbk';
       dmPrinc.UIBBackup.Run;
+      finally
+      // pas de free, c'est la fenêtre qui va s'auto-libérer
+      Fin;
+      end;
+
+      with TFrmVerbose.Create(Application) do
+      try
+      dmPrinc.UIBDataBase.Connected := False;
+      Application.ProcessMessages;
+      dmPrinc.UIBRestore.OnVerbose := UIBVerbose;
+      dmPrinc.UIBRestore.Verbose := True;
+      dmPrinc.UIBRestore.BackupFiles.Text := ExtractFilePath(Application.ExeName) + 'test-icu.fbk';
+      dmPrinc.UIBRestore.Run;
+      finally
+      // pas de free, c'est la fenêtre qui va s'auto-libérer
+      Fin;
+      end;
     *)
   finally
     FrmSplash.Free;

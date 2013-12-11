@@ -90,7 +90,7 @@ object frmEntretien: TfrmEntretien
       end
       item
         Position = 1
-        Width = 133
+        Width = 129
       end>
   end
   object ActionList1: TActionList
