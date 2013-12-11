@@ -2,7 +2,8 @@ unit LoadCompletImport;
 
 interface
 
-uses Windows, SysUtils, Classes, Forms, LoadComplet, Generics.Collections, Graphics;
+uses
+  Windows, SysUtils, Classes, Forms, LoadComplet, Generics.Collections, Graphics;
 
 procedure Import(Self: TAlbumComplet);
 
@@ -10,7 +11,8 @@ function AddImageFromURL(Edition: TEditionComplete; const URL: string; TypeImage
 
 implementation
 
-uses UIB, Commun, VirtualTree, UfrmControlImport, Controls, UdmPrinc, WinInet, UHistorique, Proc_Gestions, Editions, UfrmValidationImport, UNet,
+uses
+  IOUtils, UIB, Commun, VirtualTree, UfrmControlImport, Controls, UdmPrinc, WinInet, UHistorique, Proc_Gestions, Editions, UfrmValidationImport, UNet,
   TypeRec, CommonConst, Procedures, UMetadata, Divers;
 
 procedure Import(Self: TAlbumComplet);
@@ -67,7 +69,6 @@ var
           // on force l'edit à afficher le texte de l'item sélectionné
           framVTEdit1.VTEdit.CurrentValue := framVTEdit1.VTEdit.PopupWindow.TreeView.CurrentValue;
         end;
-
 
         frmValidationImport.Left := Application.MainForm.Monitor.Left + (Application.MainForm.Monitor.Width - (frmValidationImport.Width + Width)) div 2;
         Left := frmValidationImport.Left + frmValidationImport.Width;
@@ -235,16 +236,16 @@ begin
           if IsEqualGuid(dummyID, GUID_FULL) then
           begin
             for Edition in Editions.Editions do
-              if IsEqualGuid(Serie.Editeur.ID_Editeur, Edition.Editeur.ID_Editeur) and SameText
-                (Serie.Collection.NomCollection, Edition.Collection.NomCollection) then
+              if IsEqualGuid(Serie.Editeur.ID_Editeur, Edition.Editeur.ID_Editeur) and SameText(Serie.Collection.NomCollection, Edition.Collection.NomCollection)
+              then
                 Edition.Collection.NomCollection := '';
             Serie.Collection.NomCollection := '';
           end
           else
           begin
             for Edition in Editions.Editions do
-              if IsEqualGuid(Serie.Editeur.ID_Editeur, Edition.Editeur.ID_Editeur) and SameText
-                (Serie.Collection.NomCollection, Edition.Collection.NomCollection) then
+              if IsEqualGuid(Serie.Editeur.ID_Editeur, Edition.Editeur.ID_Editeur) and SameText(Serie.Collection.NomCollection, Edition.Collection.NomCollection)
+              then
                 Edition.Collection.Fill(dummyID);
             Serie.Collection.Fill(dummyID);
           end;
@@ -302,8 +303,7 @@ begin
               if Edition.Orientation.Value = DefaultEdition.Orientation.Value then
                 Edition.Orientation := MakeOption(IIf(Serie.Orientation.Value = -1, DefaultEdition.Orientation.Value, Serie.Orientation.Value), '');
               if Edition.FormatEdition.Value = DefaultEdition.FormatEdition.Value then
-                Edition.FormatEdition := MakeOption(IIf(Serie.FormatEdition.Value = -1, DefaultEdition.FormatEdition.Value, Serie.FormatEdition.Value)
-                    , '');
+                Edition.FormatEdition := MakeOption(IIf(Serie.FormatEdition.Value = -1, DefaultEdition.FormatEdition.Value, Serie.FormatEdition.Value), '');
               if Edition.SensLecture.Value = DefaultEdition.SensLecture.Value then
                 Edition.SensLecture := MakeOption(IIf(Serie.SensLecture.Value = -1, DefaultEdition.SensLecture.Value, Serie.SensLecture.Value), '');
               if Edition.TypeEdition.Value = DefaultEdition.TypeEdition.Value then
@@ -318,8 +318,8 @@ begin
               if IsEqualGuid(dummyID, GUID_FULL) then
               begin
                 for Edition2 in Editions.Editions do
-                  if (Edition <> Edition2) and IsEqualGuid(Edition2.Editeur.ID_Editeur, GUID_NULL) and SameText
-                    (Edition.Editeur.NomEditeur, Edition2.Editeur.NomEditeur) then
+                  if (Edition <> Edition2) and IsEqualGuid(Edition2.Editeur.ID_Editeur, GUID_NULL) and
+                    SameText(Edition.Editeur.NomEditeur, Edition2.Editeur.NomEditeur) then
                   begin
                     Edition2.Editeur.NomEditeur := '';
                     Edition2.Collection.NomCollection := '';
@@ -330,8 +330,8 @@ begin
               else
               begin
                 for Edition2 in Editions.Editions do
-                  if (Edition <> Edition2) and IsEqualGuid(Edition2.Editeur.ID_Editeur, GUID_NULL) and SameText
-                    (Edition.Editeur.NomEditeur, Edition2.Editeur.NomEditeur) then
+                  if (Edition <> Edition2) and IsEqualGuid(Edition2.Editeur.ID_Editeur, GUID_NULL) and
+                    SameText(Edition.Editeur.NomEditeur, Edition2.Editeur.NomEditeur) then
                   begin
                     Edition2.Editeur.Fill(dummyID);
                     Edition2.Collection.Editeur.Fill(dummyID);
@@ -352,18 +352,18 @@ begin
                 if IsEqualGuid(dummyID, GUID_FULL) then
                 begin
                   for Edition2 in Editions.Editions do
-                    if (Edition <> Edition2) and IsEqualGuid(Edition2.Collection.ID, GUID_NULL) and IsEqualGuid
-                      (Edition.Editeur.ID_Editeur, Edition2.Editeur.ID_Editeur) and SameText
-                      (Edition.Collection.NomCollection, Edition2.Collection.NomCollection) then
+                    if (Edition <> Edition2) and IsEqualGuid(Edition2.Collection.ID, GUID_NULL) and
+                      IsEqualGuid(Edition.Editeur.ID_Editeur, Edition2.Editeur.ID_Editeur) and
+                      SameText(Edition.Collection.NomCollection, Edition2.Collection.NomCollection) then
                       Edition2.Collection.NomCollection := '';
                   Edition.Collection.NomCollection := '';
                 end
                 else
                 begin
                   for Edition2 in Editions.Editions do
-                    if (Edition <> Edition2) and IsEqualGuid(Edition2.Collection.ID, GUID_NULL) and IsEqualGuid
-                      (Edition.Editeur.ID_Editeur, Edition2.Editeur.ID_Editeur) and SameText
-                      (Edition.Collection.NomCollection, Edition2.Collection.NomCollection) then
+                    if (Edition <> Edition2) and IsEqualGuid(Edition2.Collection.ID, GUID_NULL) and
+                      IsEqualGuid(Edition.Editeur.ID_Editeur, Edition2.Editeur.ID_Editeur) and
+                      SameText(Edition.Collection.NomCollection, Edition2.Collection.NomCollection) then
                       Edition2.Collection.Fill(dummyID);
                   Edition.Collection.Fill(dummyID);
                 end;
@@ -405,7 +405,7 @@ begin
     Inc(P);
   SetLength(tmpFile, (Integer(P) - Integer(@tmpFile[1])) div SizeOf(Char));
 
-  if FileExists(tmpFile) then
+  if TFile.Exists(tmpFile) then
     Stream := TFileStream.Create(tmpFile, fmOpenReadWrite, fmShareExclusive)
   else
     Stream := TFileStream.Create(tmpFile, fmCreate, fmShareExclusive);

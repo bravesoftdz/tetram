@@ -5,7 +5,7 @@ unit VirtualTree;
 interface
 
 uses
-  Windows, SysUtils, Classes, Controls, Graphics, VirtualTrees, VirtualTreeBdtk,
+  Windows, SysUtils, Classes, Controls, Graphics, VirtualTrees, VirtualTreeBdtk, System.UITypes,
   EditLabeled, TypeRec, StrUtils, LinkControls, Generics.Collections
 {$IFDEF DEBUG}, Clipbrd{$ENDIF}
     ;

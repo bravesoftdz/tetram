@@ -2,7 +2,8 @@ unit UNet;
 
 interface
 
-uses Windows, SysUtils, Classes, Forms, Messages;
+uses
+  Windows, SysUtils, Classes, Forms, Messages;
 
 type
   RAttachement = packed record
@@ -10,14 +11,15 @@ type
     IsFichier: Boolean;
   end;
 
-function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; ShowProgress: Boolean = True;
-  IncludeHeaders: Boolean = False): Word; overload;
+function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; ShowProgress: Boolean = True; IncludeHeaders: Boolean = False)
+  : Word; overload;
 function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamAnswer: TStream; out DocName: string; ShowProgress: Boolean = True;
   IncludeHeaders: Boolean = False): Word; overload;
 
 implementation
 
-uses WinInet, OverbyteIcsHttpProt, OverbyteIcsLogger, ProceduresBDtk, AnsiStrings, OverbyteIcsWSocket, OverbyteIcsLIBEAY;
+uses
+  IOUtils, WinInet, OverbyteIcsHttpProt, OverbyteIcsLogger, ProceduresBDtk, AnsiStrings, OverbyteIcsWSocket, OverbyteIcsLIBEAY;
 
 function URLEncode(const URL: string): string;
 var
@@ -68,8 +70,7 @@ begin
     try
       if GetFileVersionInfo(PChar(FileName), Wnd, InfoSize, VerBuf) then
         if VerQueryValue(VerBuf, '\', Pointer(FI), VerSize) then
-          Result := Format('%d.%d.%d.%d', [FI.dwFileVersionMS shr 16, FI.dwFileVersionMS and $FFFF, FI.dwFileVersionLS shr 16,
-            FI.dwFileVersionLS and $FFFF]);
+          Result := Format('%d.%d.%d.%d', [FI.dwFileVersionMS shr 16, FI.dwFileVersionMS and $FFFF, FI.dwFileVersionLS shr 16, FI.dwFileVersionLS and $FFFF]);
     finally
       FreeMem(VerBuf);
     end;
@@ -161,7 +162,7 @@ var
 begin
   idRequete := '---------------------------26846888314793'; // valeur arbitraire: voir s'il faut la changer à chaque requête mais il semble que non
   Result := 0;
-  Agent := Format('%s/%s', [ChangeFileExt(ExtractFileName(Application.ExeName), ''), GetInfoVersion(Application.ExeName)]);
+  Agent := Format('%s/%s', [TPath.GetFileNameWithoutExtension(Application.ExeName), GetInfoVersion(Application.ExeName)]);
   hISession := InternetOpen(PChar(Agent), INTERNET_OPEN_TYPE_PRECONFIG, nil, nil, 0);
   if (hISession = nil) then
     RaiseLastOSError;
@@ -188,8 +189,7 @@ begin
         Action := 'GET'
       else
         Action := 'POST';
-      hRequest := HttpOpenRequest(hConnect, PChar(Action), URLComponents.lpszUrlPath, nil, nil, nil,
-        INTERNET_FLAG_NO_CACHE_WRITE or INTERNET_FLAG_RELOAD, 0);
+      hRequest := HttpOpenRequest(hConnect, PChar(Action), URLComponents.lpszUrlPath, nil, nil, nil, INTERNET_FLAG_NO_CACHE_WRITE or INTERNET_FLAG_RELOAD, 0);
       if (hRequest = nil) then
         RaiseLastOSError;
       try
@@ -207,8 +207,8 @@ begin
                 fs := TFileStream.Create(Pieces[i].Valeur, fmOpenRead or fmShareDenyWrite);
                 try
                   httpHeader := '--' + idRequete + #13#10;
-                  httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + Pieces[i].Nom + '"; filename="' + ExtractFileName
-                    (Pieces[i].Valeur) + '"'#13#10;
+                  httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + Pieces[i].Nom + '"; filename="' + ExtractFileName(Pieces[i].Valeur) +
+                    '"'#13#10;
                   httpHeader := httpHeader + 'Content-Type: application/octet-stream'#13#10;
                   httpHeader := httpHeader + 'Content-Length: ' + IntToStr(fs.Size) + #13#10;
                   httpHeader := httpHeader + #13#10;
@@ -300,18 +300,18 @@ begin
   // 09/06/2011 dans certains cas particuliers, la redirection ne fonctionne pas si on est en 1.1
   // FHttpCli.RequestVer := '1.1';
   FHttpCli.RequestVer := '1.0';
-  FHttpCli.Agent := Format('%s/%s', [ChangeFileExt(ExtractFileName(Application.ExeName), ''), GetInfoVersion(Application.ExeName)]);
+  FHttpCli.Agent := Format('%s/%s', [TPath.GetFileNameWithoutExtension(Application.ExeName), GetInfoVersion(Application.ExeName)]);
   FHttpCli.AcceptLanguage := 'fr';
   FHttpCli.FollowRelocation := True;
   FHttpCli.OnRequestDone := RequestDone;
   FHttpCli.OnDocData := DocData;
   FHttpCli.OnSendData := SendData;
 
-//  FHttpCli.IcsLogger := TIcsLogger.Create(FHttpCli);
-//  FHttpCli.IcsLogger.LogOptions := [loDestFile, loAddStamp, loWsockErr, loWsockInfo, loWsockDump, loSslErr, loSslInfo, loSslDump, loProtSpecErr,
-//    loProtSpecInfo, loProtSpecDump];
-//  FHttpCli.IcsLogger.LogFileName := 'd:\icslog.log';
-//  FHttpCli.IcsLogger.LogFileOption := lfoOverwrite;
+  // FHttpCli.IcsLogger := TIcsLogger.Create(FHttpCli);
+  // FHttpCli.IcsLogger.LogOptions := [loDestFile, loAddStamp, loWsockErr, loWsockInfo, loWsockDump, loSslErr, loSslInfo, loSslDump, loProtSpecErr,
+  // loProtSpecInfo, loProtSpecDump];
+  // FHttpCli.IcsLogger.LogFileName := 'd:\icslog.log';
+  // FHttpCli.IcsLogger.LogFileOption := lfoOverwrite;
 
   FHttpCli.MultiThreaded := True;
 end;
@@ -389,8 +389,8 @@ begin
             fs := TFileStream.Create(Pieces[i].Valeur, fmOpenRead or fmShareDenyWrite);
             try
               httpHeader := '--' + UTF8Encode(idRequete) + #13#10;
-              httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + UTF8Encode(Pieces[i].Nom) + '"; filename="' + UTF8Encode
-                (ExtractFileName(Pieces[i].Valeur)) + '"'#13#10;
+              httpHeader := httpHeader + 'Content-Disposition: form-data; name="' + UTF8Encode(Pieces[i].Nom) + '"; filename="' +
+                UTF8Encode(ExtractFileName(Pieces[i].Valeur)) + '"'#13#10;
               httpHeader := httpHeader + 'Content-Type: application/octet-stream'#13#10;
               httpHeader := httpHeader + 'Content-Length: ' + UTF8Encode(IntToStr(fs.Size)) + #13#10;
               httpHeader := httpHeader + #13#10;
@@ -433,7 +433,7 @@ begin
       except
         on E: EHttpException do
         else
-          raise ;
+          raise;
       end;
 
       Result := FHttpCli.StatusCode;

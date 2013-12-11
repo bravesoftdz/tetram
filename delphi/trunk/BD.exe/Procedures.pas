@@ -2,7 +2,8 @@ unit Procedures;
 
 interface
 
-uses SysUtils, Windows, Classes, Dialogs, ComCtrls, ExtCtrls, Controls, Forms, Graphics, CommonConst, UIB, jpeg, StdCtrls, ComboCheck,
+uses
+  SysUtils, Windows, Classes, Dialogs, ComCtrls, ExtCtrls, Controls, Forms, Graphics, CommonConst, UIB, jpeg, StdCtrls, ComboCheck,
   UIBLib, Commun;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
@@ -66,8 +67,9 @@ function FindCmdLineSwitch(const cmdLine, Switch: string; out Value: string): Bo
 
 implementation
 
-uses Divers, Textes, ShellAPI, LabeledCheckBox, MaskUtils, Mask, UdmPrinc, IniFiles, Math, VirtualTrees, EditLabeled, ActnList, Types, UBdtForms,
-  StrUtils, GR32, GR32_Resamplers, JvGIF, pngimage;
+uses
+  IOUtils, Divers, Textes, ShellAPI, LabeledCheckBox, MaskUtils, Mask, UdmPrinc, IniFiles, Math, VirtualTrees, EditLabeled, ActnList, Types, UBdtForms,
+  StrUtils, GR32, GR32_Resamplers, JvGIF, pngimage, System.UITypes;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
 begin
@@ -99,7 +101,7 @@ var
 begin
   Result := False;
   Image.Picture := nil;
-  if not FileExists(Fichier) then
+  if not TFile.Exists(Fichier) then
     Exit;
   hg := THourGlass.Create;
   with TPicture.Create do
@@ -429,7 +431,6 @@ function ResizePicture(Image: TPicture; Hauteur, Largeur: Integer; AntiAliasing,
 var
   NewLargeur, NewHauteur, i: Integer;
   Bmp: TBitmap;
-  Resampler: TLinearResampler;
   BMP32Src, BMP32Dst: TBitmap32;
 begin
   Result := TMemoryStream.Create;
@@ -463,7 +464,8 @@ begin
           BMP32Dst := TBitmap32.Create;
           try
             BMP32Src.Assign(Image.Graphic);
-            Resampler := TLinearResampler.Create(BMP32Src);
+            // pas besoin de variable: TBitmap32 va le détruire
+            TLinearResampler.Create(BMP32Src);
             BMP32Dst.Height := NewHauteur;
             BMP32Dst.Width := NewLargeur;
             BMP32Dst.Draw(BMP32Dst.BoundsRect, BMP32Src.BoundsRect, BMP32Src);
@@ -588,8 +590,8 @@ begin
       begin
         if not Fields.AsBoolean[1] then
         begin
-          Fichier := ExtractFileName(Fields.AsString[2]);
-          Chemin := ExtractFilePath(Fields.AsString[2]);
+          Fichier := TPath.GetFileName(Fields.AsString[2]);
+          Chemin := TPath.GetDirectoryName(Fields.AsString[2]);
           if Chemin = '' then
             Chemin := RepImages;
           SQL.Text := 'select blobcontent from loadblobfromfile(:chemin, :fichier);';

@@ -3,7 +3,7 @@ unit UfrmOptions;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, ComCtrls, IniFiles, CommCtrl, ImgList,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, System.UITypes, System.Types, ComCtrls, IniFiles, CommCtrl, ImgList,
   Buttons, VDTButton, UframBoutons, Browss, EditLabeled, ComboCheck, Spin, UBdtForms, FileCtrl,
   PngSpeedButton, PngImageList, JvComponentBase, JclCompression;
 

@@ -2,8 +2,9 @@ unit Impression;
 
 interface
 
-uses Dialogs, Controls, Forms, Classes, SysUtils, Windows, ExtCtrls, Graphics, Printers, LoadComplet, Commun, PrintObject, Textes, CommonConst,
-  Divers, TypeRec, UfrmFond, UdmPrinc, UfrmRecherche, UIB, jpeg, Generics.Collections;
+uses
+  Dialogs, Controls, Forms, Classes, SysUtils, Windows, ExtCtrls, Graphics, System.UITypes, Printers, Commun, PrintObject, Textes, CommonConst,
+  Divers, TypeRec, UfrmFond, UdmPrinc, UfrmRecherche, UIB, jpeg, Generics.Collections, LoadComplet;
 
 procedure ImpressionListeCompleteAlbums(Previsualisation: Boolean);
 
@@ -25,7 +26,8 @@ procedure ImpressionListePrevisionsAchats(Previsualisation: Boolean);
 
 implementation
 
-uses UfrmPreview, Math, Procedures, ProceduresBDtk, DateUtils, UIBlib, StrUtils, UMetadata;
+uses
+  UfrmPreview, Math, Procedures, ProceduresBDtk, DateUtils, UIBlib, StrUtils, UMetadata;
 
 procedure PreparePrintObject(Prn: TPrintObject; Previsualisation: Boolean; const Titre: string);
 begin

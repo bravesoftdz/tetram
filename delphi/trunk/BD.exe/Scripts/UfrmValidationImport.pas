@@ -2,7 +2,8 @@ unit UfrmValidationImport;
 
 interface
 
-uses Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Generics.Collections, TypeRec, Dialogs, StdCtrls, LoadComplet,
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Generics.Collections, TypeRec, Dialogs, StdCtrls, LoadComplet,
   ExtCtrls, CheckLst, Menus, jpeg, UframBoutons, ComboCheck, EditLabeled, ComCtrls;
 
 type
@@ -136,7 +137,9 @@ type
 
 implementation
 
-uses Commun, Procedures, CommonConst, UBdtForms;
+uses
+  IOUtils, Commun, Procedures, CommonConst, UBdtForms;
+
 {$R *.dfm}
 
 procedure TfrmValidationImport.VisuClose(Sender: TObject);
@@ -481,7 +484,7 @@ procedure TfrmValidationImport.SetAlbum(Value: TAlbumComplet);
       if Value[i].sCategorie <> '' then
         Ctrl.Items.Add(Value[i].sCategorie)
       else
-        Ctrl.Items.Add(ExtractFileName(Value[i].NewNom));
+        Ctrl.Items.Add(TPath.GetFileName(Value[i].NewNom));
       Ctrl.Checked[i] := True;
     end;
     Chk.Checked := Ctrl.Items.Count > 0;

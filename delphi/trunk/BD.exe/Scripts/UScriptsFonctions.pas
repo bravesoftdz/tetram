@@ -2,7 +2,8 @@ unit UScriptsFonctions;
 
 interface
 
-uses Windows, SysUtils, Classes, Dialogs, WinInet, StrUtils, Math, UMetadata, TypeRec, Generics.Collections, UNet, jpeg;
+uses
+  Windows, SysUtils, Classes, Dialogs, WinInet, StrUtils, Math, UMetadata, TypeRec, Generics.Collections, UNet, jpeg;
 
 type
   TScriptChoix = class
@@ -74,8 +75,9 @@ function RFC822ToDateTimeDef(const S: string; default: TDateTime): TDateTime;
 
 implementation
 
-uses ProceduresBDtk, UBdtForms, EditLabeled, StdCtrls, Controls, Forms, UframBoutons, UfrmScriptChoix, OverbyteIcsHttpProt, CommonConst, Procedures,
-  SysConst, Graphics;
+uses
+  IOUtils, ProceduresBDtk, UBdtForms, EditLabeled, StdCtrls, Controls, Forms, UframBoutons, UfrmScriptChoix, OverbyteIcsHttpProt, CommonConst, Procedures,
+  SysConst, Graphics, System.UITypes;
 
 const
   PathDelim = '/';
@@ -143,7 +145,7 @@ begin
             end;
         end;
       finally
-        DeleteFile(tmpFile);
+        TFile.Delete(tmpFile);
       end;
     except
       //
@@ -509,7 +511,7 @@ end;
 
 function ScriptFormatSettings: TFormatSettings;
 begin
-  Result := TFormatSettings.Create(1033);
+  Result := TFormatSettings.Create('EN-us');
 end;
 
 function ScriptStrToFloatDef(const S: string; const default: Extended): Extended;
@@ -648,8 +650,7 @@ begin
   DecodeDate(T, Year, Month, Day);
   DecodeTime(T, Hour, Min, Sec, MSec);
   { Format is 'ddd, d mmm yyyy hh:mm:ss GMTOffset' with english names }
-  Result := Format('%s, %d %s %4d %02.2d:%02.2d:%02.2d %s', [RFC822_Days[DayOfWeek(T)], Day, RFC822_Months[Month], Year, Hour, Min, Sec, TimeZoneBias]
-    );
+  Result := Format('%s, %d %s %4d %02.2d:%02.2d:%02.2d %s', [RFC822_Days[DayOfWeek(T)], Day, RFC822_Months[Month], Year, Hour, Min, Sec, TimeZoneBias]);
 end;
 
 function TryRFC822ToDateTime(const S: string; out Value: TDateTime): Boolean;
@@ -700,7 +701,7 @@ begin
     while (P1 <= 12) and (not SameText(RFC822_Months[P1], aMonthLabel)) do
       Inc(P1);
 
-    aFormatSettings := TFormatSettings.Create(GetSystemDefaultLCID);
+    aFormatSettings := TFormatSettings.Create();
     aFormatSettings.DateSeparator := '/';
     aFormatSettings.TimeSeparator := ':';
     aFormatSettings.ShortDateFormat := 'dd/mm/yyyy';
@@ -713,11 +714,10 @@ begin
     if aTimeZoneStr = '' then
       Exit;
 
-    if (Length(aTimeZoneStr) >= 5) and CharInSet(aTimeZoneStr[1], ['+', '-']) and CharInSet
-      (aTimeZoneStr[2], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) and CharInSet
-      (aTimeZoneStr[3], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) and CharInSet
-      (aTimeZoneStr[4], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) and CharInSet
-      (aTimeZoneStr[5], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) then
+    if (Length(aTimeZoneStr) >= 5) and CharInSet(aTimeZoneStr[1], ['+', '-']) and CharInSet(aTimeZoneStr[2], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
+      and CharInSet(aTimeZoneStr[3], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) and
+      CharInSet(aTimeZoneStr[4], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) and
+      CharInSet(aTimeZoneStr[5], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) then
     begin
       aTimeZoneDelta := EncodeTime(StrToInt(Copy(aTimeZoneStr, 2, 2)), StrToInt(Copy(aTimeZoneStr, 4, 2)), 0, 0);
       if aTimeZoneStr[1] = '+' then

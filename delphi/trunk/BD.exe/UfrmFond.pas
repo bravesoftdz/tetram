@@ -5,7 +5,8 @@ interface
 { .$D- }
 {$WARN SYMBOL_DEPRECATED OFF}
 
-uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ImgList, Menus, ComCtrls, ExtCtrls, Buttons, ActnList,
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ImgList, Menus, ComCtrls, ExtCtrls, Buttons, ActnList,
   Printers, iniFiles, jpeg, Generics.Collections, ToolWin, UBdtForms, PngImageList, pngImage, PngFunctions, UHistorique,
   System.Actions;
 
@@ -209,7 +210,8 @@ implementation
 
 {$R *.DFM}
 
-uses ProceduresBDtk, UfrmRepertoire, CommonConst, UfrmOptions, UfrmStatsGeneral, UfrmStatsAlbums, LoadComplet, Impression,
+uses
+  IOUtils, ProceduresBDtk, UfrmRepertoire, CommonConst, UfrmOptions, UfrmStatsGeneral, UfrmStatsAlbums, LoadComplet, Impression,
   UfrmGestion, UfrmCustomize, UfrmAboutBox, UdmPrinc, Types, Procedures, UfrmEntretien, ShellAPI, Math, UfrmScripts, UfrmPublier, JumpList, ShlObj;
 
 procedure TfrmFond.WMSyscommand(var msg: TWmSysCommand);
@@ -670,7 +672,7 @@ procedure TfrmFond.LoadToolBarres;
 var
   sl: TStringList;
 begin
-  if FileExists(FichierIni) then
+  if TFile.Exists(FichierIni) then
     with TIniFile.Create(FichierIni) do
     begin
       sl := TStringList.Create;

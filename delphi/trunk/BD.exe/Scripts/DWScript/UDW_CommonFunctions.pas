@@ -48,7 +48,7 @@ type
 implementation
 
 uses
-  dwsUnitSymbols, Dialogs, UScriptsFonctions, UScriptUtils, UNet, UScriptsHTMLFunctions, dwsUtils, dwsComp;
+  IOUtils, dwsUnitSymbols, Dialogs, UScriptsFonctions, UScriptUtils, UNet, UScriptsHTMLFunctions, dwsUtils, dwsComp;
 
 const // type constants
   cFloat = 'Float';
@@ -357,7 +357,7 @@ begin
   buffer := TEncoding.default.GetBytes(Chaine);
   Preamble := TEncoding.default.GetPreamble;
 
-  if FileExists(FileName) then
+  if TFile.Exists(FileName) then
     fs := TFileStream.Create(FileName, fmOpenWrite)
   else
     fs := TFileStream.Create(FileName, fmCreate or fmOpenWrite);

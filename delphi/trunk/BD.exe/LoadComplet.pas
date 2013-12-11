@@ -134,7 +134,7 @@ type
     FTitreSerie: string;
     FTerminee: Integer;
     FSujet: LongString;
-    FNotes: Longstring;
+    FNotes: LongString;
     FCollection: TCollection;
     FSiteWeb: string;
     FGenres: TStringList;
@@ -701,15 +701,7 @@ type
 implementation
 
 uses
-  UIBLib,
-  Divers,
-  StdCtrls,
-  Procedures,
-  Textes,
-  StrUtils,
-  UMetadata,
-  Controls,
-  UfrmFusionEditions;
+  UIBLib, Divers, StdCtrls, Procedures, Textes, StrUtils, UMetadata, Controls, UfrmFusionEditions, IOUtils;
 
 function MakeOption(Value: Integer; const Caption: string): ROption;
 begin
@@ -1672,11 +1664,11 @@ begin
               q1.Params.ByNameAsInteger['categorieimage'] := PC.Categorie;
               q1.ExecSQL;
             end
-            else if FileExists(PC.NewNom) then
+            else if TFile.Exists(PC.NewNom) then
             begin // couvertures stockées (q2)
               q2.Params.ByNameAsString['id_edition'] := GUIDToString(ID_Edition);
               q2.Params.ByNameAsString['id_album'] := GUIDToString(ID_Album);
-              q2.Params.ByNameAsString['fichiercouverture'] := ChangeFileExt(ExtractFileName(PC.NewNom), '');
+              q2.Params.ByNameAsString['fichiercouverture'] := TPath.GetFileNameWithoutExtension(PC.NewNom);
               q2.Params.ByNameAsInteger['ordre'] := Couvertures.IndexOf(PC);
               Stream := GetJPEGStream(PC.NewNom);
               try
@@ -1699,11 +1691,11 @@ begin
                   q3.ParamsSetBlob('imagecouverture', Stream);
                   q3.Params.ByNameAsString['id_couverture'] := GUIDToString(PC.ID);
                   q3.ExecSQL;
-                  if ExtractFilePath(PC.NewNom) = '' then
-                    FichiersImages.Add(RepImages + PC.NewNom)
+                  if TPath.GetDirectoryName(PC.NewNom) = '' then
+                    FichiersImages.Add(TPath.Combine(RepImages, PC.NewNom))
                   else
                     FichiersImages.Add(PC.NewNom);
-                  PC.NewNom := ChangeFileExt(ExtractFileName(PC.NewNom), '');
+                  PC.NewNom := TPath.GetFileNameWithoutExtension(PC.NewNom);
                 end
                 else
                 begin // conversion couvertures stockées en liées
@@ -3420,25 +3412,25 @@ begin
         if ImageStockee then
         begin
           SQL.Text := 'update parabd set imageparabd = :imageparabd, stockageparabd = 1, fichierparabd = :fichierparabd where id_parabd = :id_parabd';
-          if ExtractFilePath(FichierImage) = '' then
-            FichierImage := IncludeTrailingPathDelimiter(RepImages) + FichierImage;
+          if TPath.GetDirectoryName(FichierImage) = '' then
+            FichierImage := TPath.Combine(RepImages, FichierImage);
           Stream := GetCouvertureStream(FichierImage, -1, -1, False);
           try
             ParamsSetBlob('imageparabd', Stream);
           finally
             Stream.Free;
           end;
-          Params.ByNameAsString['fichierparabd'] := ExtractFileName(FichierImage);
+          Params.ByNameAsString['fichierparabd'] := TPath.GetFileName(FichierImage);
         end
         else
         begin
           SQL.Text := 'select result from saveblobtofile(:chemin, :fichier, :blobcontent)';
-          if ExtractFilePath(FichierImage) = '' then
+          if TPath.GetDirectoryName(FichierImage) = '' then
             Stream := GetCouvertureStream(True, ID_ParaBD, -1, -1, False)
           else
             Stream := GetCouvertureStream(FichierImage, -1, -1, False);
           try
-            FichierImage := SearchNewFileName(RepImages, ExtractFileName(FichierImage), True);
+            FichierImage := SearchNewFileName(RepImages, TPath.GetFileName(FichierImage), True);
             Params.ByNameAsString['chemin'] := RepImages;
             Params.ByNameAsString['fichier'] := FichierImage;
             ParamsSetBlob('blobcontent', Stream);

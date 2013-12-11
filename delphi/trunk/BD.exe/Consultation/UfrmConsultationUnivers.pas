@@ -3,7 +3,7 @@ unit UfrmConsultationUnivers;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, StrUtils,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, StrUtils, System.UITypes,
   Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls, UfrmFond, Procedures,
   ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms, VirtualTree,
   LabeledCheckBox, System.Actions;

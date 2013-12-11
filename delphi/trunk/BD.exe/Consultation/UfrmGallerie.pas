@@ -3,7 +3,7 @@ unit UfrmGallerie;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, System.UITypes,
   Dialogs, ExtCtrls, StdCtrls, LoadComplet, Generics.Collections, TypeRec,
   UBdtForms, ListOfTypeRec;
 

@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Menus,
   StdCtrls, ComCtrls, CheckLst, ActnList, VDTButton, Buttons, ExtCtrls, UframBoutons,
-  ToolWin, IniFiles, UBdtForms, PngSpeedButton;
+  ToolWin, UBdtForms, PngSpeedButton;
 
 type
   TfrmCustomize = class(TbdtForm)

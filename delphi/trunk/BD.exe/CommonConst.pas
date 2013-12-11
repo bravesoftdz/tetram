@@ -5,11 +5,7 @@ interface
 {$WARN UNIT_PLATFORM OFF}
 
 uses
-  SysUtils,
-  Windows,
-  Forms,
-  Classes,
-  Divers;
+  SysUtils, Windows, Forms, Classes, IOUtils, Divers;
 
 var
   AppData: string = 'TetramCorp\BDTheque\';
@@ -102,39 +98,35 @@ procedure InitPath;
 var
   buffer: array [0 .. MAX_PATH] of Char;
 begin
-  ZeroMemory(@buffer, Length(buffer) * SizeOf(Char));
-  GetTempPath(Length(buffer), buffer);
-  TempPath := IncludeTrailingPathDelimiter(buffer) + TempPath;
-  ForceDirectories(TempPath);
+  TempPath := TPath.Combine(TPath.GetTempPath, TempPath);
+  TDirectory.CreateDirectory(TempPath);
   EmptyTempPath;
 
   ZeroMemory(@buffer, Length(buffer) * SizeOf(Char));
   SHGetFolderPath(0, CSIDL_COMMON_APPDATA, 0, SHGFP_TYPE_CURRENT, buffer);
   CommonAppData := IncludeTrailingPathDelimiter(buffer) + CommonAppData;
-  ForceDirectories(CommonAppData);
+  TDirectory.CreateDirectory(CommonAppData);
 
-  ZeroMemory(@buffer, Length(buffer) * SizeOf(Char));
-  SHGetFolderPath(0, CSIDL_APPDATA, 0, SHGFP_TYPE_CURRENT, buffer);
-  AppData := IncludeTrailingPathDelimiter(buffer) + AppData;
-  ForceDirectories(AppData);
+  AppData := TPath.Combine(TPath.GetHomePath, AppData);
+  TDirectory.CreateDirectory(AppData);
 
   // si le fichier ini est dans le même répertoire que l'exe (correspond à la version de développement)
   // alors on utilise les anciennes valeurs par défaut
-  if FileExists(ExtractFilePath(Application.ExeName) + FichierIni) then
+  if TFile.Exists(TPath.Combine(TPath.GetLibraryPath, FichierIni)) then
   begin
-    FichierIni := ExtractFilePath(Application.ExeName) + FichierIni;
-    DatabasePath := ExtractFilePath(Application.ExeName) + DatabasePath;
-    RepImages := ExtractFilePath(Application.ExeName) + RepImages;
-    RepScripts := ExtractFilePath(Application.ExeName) + RepScripts;
-    RepWebServer := ExtractFilePath(Application.ExeName) + RepWebServer;
+    FichierIni := TPath.Combine(TPath.GetLibraryPath, FichierIni);
+    DatabasePath := TPath.Combine(TPath.GetLibraryPath, DatabasePath);
+    RepImages := TPath.Combine(TPath.GetLibraryPath, RepImages);
+    RepScripts := TPath.Combine(TPath.GetLibraryPath, RepScripts);
+    RepWebServer := TPath.Combine(TPath.GetLibraryPath, RepWebServer);
   end
   else
   begin
-    FichierIni := AppData + FichierIni;
-    DatabasePath := AppData + DatabasePath;
-    RepImages := AppData + RepImages;
-    RepScripts := CommonAppData + RepScripts;
-    RepWebServer := CommonAppData + RepWebServer;
+    FichierIni := TPath.Combine(AppData, FichierIni);
+    DatabasePath := TPath.Combine(AppData, DatabasePath);
+    RepImages := TPath.Combine(AppData, RepImages);
+    RepScripts := TPath.Combine(CommonAppData, RepScripts);
+    RepWebServer := TPath.Combine(CommonAppData, RepWebServer);
   end;
 end;
 

@@ -3,8 +3,8 @@ unit UfrmExportation;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ActnList, StdActns, VirtualTrees, StdCtrls, Buttons, ProceduresBDtk,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, IOUtils, System.UITypes,
+  Vcl.Dialogs, ActnList, StdActns, VirtualTrees, StdCtrls, Buttons, ProceduresBDtk,
   VDTButton, ExtCtrls, VirtualTree, Procedures, UBdtForms, PngSpeedButton;
 
 type
@@ -225,7 +225,7 @@ begin
       vstExport := vstExportation;
 
     Fichier := SaveDialog1.FileName;
-    ForceDirectories(ExtractFilePath(Fichier));
+    TDirectory.CreateDirectory(TPath.GetDirectoryName(Fichier));
 
     fAbort := 0;
     fWaiting := TWaiting.Create('Exportation...', 2000, @fAbort);

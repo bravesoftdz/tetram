@@ -51,7 +51,8 @@ type
 
 implementation
 
-uses UfrmFond, CommonConst, UdmPrinc, UIB, Commun, Procedures, Textes,
+uses
+  IOUtils, UfrmFond, CommonConst, UdmPrinc, UIB, Commun, Procedures, Textes,
   UfrmVerbose, UHistorique, UfrmGestion, IniFiles, Math, uiblib;
 
 {$R *.dfm}
@@ -256,9 +257,9 @@ begin
       begin
         Fichier := Fields.AsString[1];
         UpdateQuery.Prepare(True);
-        UpdateQuery.Params.AsString[0] := Copy(ChangeFileExt(ExtractFileName(Fichier), ''), 1, UpdateQuery.Params.MaxStrLen[0]);
-        if ExtractFilePath(Fichier) = '' then
-          FichiersImages.Add(RepImages + Fichier)
+        UpdateQuery.Params.AsString[0] := Copy(TPath.GetFileNameWithoutExtension(Fichier), 1, UpdateQuery.Params.MaxStrLen[0]);
+        if TPath.GetDirectoryName(Fichier) = '' then
+          FichiersImages.Add(TPath.Combine(RepImages, Fichier))
         else
           FichiersImages.Add(Fichier);
         Stream := GetCouvertureStream(False, StringToGUID(Fields.AsString[0]), -1, -1, False);
@@ -418,8 +419,8 @@ end;
 
 procedure TfrmEntretien.BDDBackupBeforeExecute(Sender: TObject);
 begin
-  BDDBackup.Dialog.InitialDir := ExtractFilePath(DatabasePath);
-  BDDBackup.Dialog.FileName := ChangeFileExt(DatabasePath, '.gbk');
+  BDDBackup.Dialog.InitialDir := TPath.GetDirectoryName(DatabasePath);
+  BDDBackup.Dialog.FileName := TPath.ChangeExtension(DatabasePath, '.gbk');
 end;
 
 procedure TfrmEntretien.BDDBackupAccept(Sender: TObject);
@@ -439,8 +440,8 @@ end;
 
 procedure TfrmEntretien.BDDRestoreBeforeExecute(Sender: TObject);
 begin
-  BDDRestore.Dialog.InitialDir := ExtractFilePath(DatabasePath);
-  BDDRestore.Dialog.FileName := ChangeFileExt(DatabasePath, '.gbk');
+  BDDRestore.Dialog.InitialDir := TPath.GetDirectoryName(DatabasePath);
+  BDDRestore.Dialog.FileName := TPath.ChangeExtension(DatabasePath, '.gbk');
 end;
 
 procedure TfrmEntretien.BDDRestoreAccept(Sender: TObject);
@@ -462,7 +463,7 @@ end;
 
 procedure TfrmEntretien.BDDOpenBeforeExecute(Sender: TObject);
 begin
-  BDDOpen.Dialog.InitialDir := ExtractFilePath(DatabasePath);
+  BDDOpen.Dialog.InitialDir := TPath.GetDirectoryName(DatabasePath);
   BDDOpen.Dialog.FileName := DatabasePath;
 end;
 

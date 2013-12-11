@@ -3,7 +3,7 @@ unit UfrmConsultationSerie;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls,
   ComCtrls, VDTButton, Buttons, VirtualTree, Procedures, ProceduresBDtk, UBdtForms, StrUtils,
   ActnList, Menus, PngSpeedButton, LabeledCheckBox, System.Actions;
 

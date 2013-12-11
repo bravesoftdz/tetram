@@ -25,20 +25,20 @@ object frmValidationImport: TfrmValidationImport
     Height = 27
     Align = alBottom
     TabOrder = 0
-    ExplicitTop = 508
-    ExplicitWidth = 526
+    ExplicitTop = 546
+    ExplicitWidth = 519
     ExplicitHeight = 27
     inherited btnOK: TButton
       Left = 356
       Top = 4
       OnClick = framBoutons1btnOKClick
-      ExplicitLeft = 363
+      ExplicitLeft = 356
       ExplicitTop = 4
     end
     inherited btnAnnuler: TButton
       Left = 436
       Top = 4
-      ExplicitLeft = 443
+      ExplicitLeft = 436
       ExplicitTop = 4
     end
   end
@@ -479,10 +479,6 @@ object frmValidationImport: TfrmValidationImport
     object TabSheet2: TTabSheet
       Caption = 'S'#233'rie'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 474
       object edTitreSerie: TEditLabeled
         Left = 144
         Top = 8

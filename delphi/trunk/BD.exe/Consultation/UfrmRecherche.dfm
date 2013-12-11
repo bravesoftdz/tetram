@@ -173,6 +173,10 @@ object frmRecherche: TfrmRecherche
     object TabSheet4: TTabSheet
       Caption = 'Recherche avanc'#233'e'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         392
         191)
@@ -240,6 +244,10 @@ object frmRecherche: TfrmRecherche
         OnChange = PageControl1Change
         object TabSheet1: TTabSheet
           Caption = 'Filtre'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object TreeView1: TTreeView
             Left = 0
             Top = 0
@@ -263,6 +271,10 @@ object frmRecherche: TfrmRecherche
         object TabSheet2: TTabSheet
           Caption = 'Tri'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object TreeView2: TTreeView
             Left = 0
             Top = 0
@@ -325,7 +337,7 @@ object frmRecherche: TfrmRecherche
     Columns = <
       item
         Position = 0
-        Width = 156
+        Width = 160
         WideText = 'Album'
       end
       item

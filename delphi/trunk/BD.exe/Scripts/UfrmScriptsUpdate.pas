@@ -55,7 +55,7 @@ type
 implementation
 
 uses
-  JclSimpleXML, UScriptsFonctions, CommonConst, UNet;
+  IOUtils, JclSimpleXML, UScriptsFonctions, CommonConst, UNet;
 
 {$R *.dfm}
 
@@ -106,7 +106,7 @@ begin
         Inc(P);
       SetLength(tmpFile, (Integer(P) - Integer(@tmpFile[1])) div SizeOf(Char));
 
-      if FileExists(tmpFile) then
+      if TFile.Exists(tmpFile) then
         fs := TFileStream.Create(tmpFile, fmOpenReadWrite, fmShareExclusive)
       else
         fs := TFileStream.Create(tmpFile, fmCreate, fmShareExclusive);
@@ -118,11 +118,11 @@ begin
       end;
       if canCopy then
       begin
-        DeleteFile(PChar(fichier));
-        MoveFile(PChar(tmpFile), PChar(fichier));
+        TFile.Delete(fichier);
+        TFile.Move(tmpFile, fichier);
       end
       else
-        DeleteFile(PChar(tmpFile));
+        TFile.Delete(tmpFile);
 
       Node := VirtualStringTree1.GetNextChecked(Node);
     end;
@@ -157,7 +157,7 @@ procedure TfrmScriptsUpdate.GetOnlineList(List: TObjectList<TOnlineScript>);
   function GetLocalScript(ScriptName: string): TScript;
   begin
     for Result in dmScripts.ScriptList do
-      if SameText(ExtractFileName(Result.FileName), ScriptName) then
+      if SameText(TPath.GetFileName(Result.FileName), ScriptName) then
       begin
         if not Result.Loaded then
           Result.Load;

@@ -2,7 +2,8 @@ unit UScriptList;
 
 interface
 
-uses Windows, AnsiStrings, SysUtils, Classes, Generics.Collections, JclSimpleXML, Divers, Dialogs;
+uses
+  Windows, AnsiStrings, SysUtils, Classes, Generics.Collections, JclSimpleXML, Divers, Dialogs, System.Types;
 
 const
   ExtMainScript = '.bds';
@@ -295,8 +296,8 @@ end;
 procedure TScript.SetFileName(const Value: string);
 begin
   FFileName := Value;
-  FScriptUnitName := ChangeFileExt(ExtractFileName(FFileName), '');
-  if SameText(ExtractFileExt(FFileName), ExtMainScript) then
+  FScriptUnitName := TPath.GetFileNameWithoutExtension(FFileName);
+  if SameText(TPath.GetExtension(FFileName), ExtMainScript) then
     FScriptKind := skMain
   else
     FScriptKind := skUnit;

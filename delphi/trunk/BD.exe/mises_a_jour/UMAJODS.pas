@@ -2,19 +2,19 @@ unit UMAJODS;
 
 interface
 
-uses SysUtils, Windows, Classes, Forms;
-
+uses
+  SysUtils, Windows, Classes, Forms;
 
 const
   FB_ODS = '11.2';
   DBPageSize = 16384;
 
-  procedure MAJ_ODS(FullRebuild: Boolean);
+procedure MAJ_ODS(FullRebuild: Boolean);
 
 implementation
 
-uses CommonConst, UfrmVerbose, UdmPrinc, Divers, UIB, UIBLib, UIBMetadata, UIBConst;
-
+uses
+  IOUTils, CommonConst, UfrmVerbose, UdmPrinc, Divers, UIB, UIBLib, UIBMetadata, UIBConst;
 
 procedure MAJ_ODS_BackupRestore(DBPageSize: Integer);
 const
@@ -24,11 +24,10 @@ var
   FichierBackup, s: string;
   Done, pre25: Boolean;
 begin
-  FichierBackup := IncludeTrailingBackslash(TempPath) + 'bdtk-upgrade.fbk';
-  DeleteFile(PChar(FichierBackup));
-  DeleteFile(PChar(IncludeTrailingBackslash(TempPath) + ExtractFileName(DMPrinc.UIBDataBase.InfoDbFileName)));
-  CopyFile(PChar(DMPrinc.UIBDataBase.InfoDbFileName), PChar(IncludeTrailingBackslash(TempPath) + ExtractFileName(DMPrinc.UIBDataBase.InfoDbFileName))
-      , False);
+  FichierBackup := TPath.Combine(TempPath, 'bdtk-upgrade.fbk');
+  TFile.Delete(FichierBackup);
+  TFile.Delete(TPath.Combine(TempPath, TPath.GetFileName(DMPrinc.UIBDataBase.InfoDbFileName)));
+  TFile.Copy(DMPrinc.UIBDataBase.InfoDbFileName, TPath.Combine(TempPath, TPath.GetFileName(DMPrinc.UIBDataBase.InfoDbFileName)), False);
 
   pre25 := Format('%d.%d', [DMPrinc.UIBDataBase.InfoOdsVersion, DMPrinc.UIBDataBase.InfoOdsMinorVersion]) < TVersionNumber('11.2'); // ODS11.2 = FB2.5
 
@@ -179,7 +178,7 @@ begin
   Log('Création de la nouvelle base');
 
   NewBase := UIBDBSrc.DatabaseName;
-  NewBase := ChangeFileExt(NewBase, '') + '_D3' + ExtractFileExt(NewBase);
+  NewBase := TPath.Combine(TPath.GetDirectoryName(NewBase), TPath.GetFileNameWithoutExtension(NewBase)) + '_D3' + TPath.GetExtension(NewBase);
 
   Log(NewBase);
 
@@ -194,8 +193,8 @@ begin
     UIBDBDst.CreateDatabase(csUTF8);
   end;
 
-  UIBDBSrc.MetaDataOptions.Tables := UIBDBSrc.MetaDataOptions.Tables - [OIDPrimary, OIDForeign, OIDTableTrigger, OIDUnique, OIDIndex, OIDCheck,
-    OIDTableGrant, OIDTableFieldGrant];
+  UIBDBSrc.MetaDataOptions.Tables := UIBDBSrc.MetaDataOptions.Tables - [OIDPrimary, OIDForeign, OIDTableTrigger, OIDUnique, OIDIndex, OIDCheck, OIDTableGrant,
+    OIDTableFieldGrant];
   MD := TMetaDataBase(UIBDBSrc.GetMetadata(True));
   script := MD.AsDDL;
   script := StringReplace(script, 'DEFAULT "T"', 'DEFAULT ''T''', [rfReplaceAll, rfIgnoreCase]);
@@ -209,7 +208,7 @@ begin
     UIBScriptDst.ExecuteScript;
   except
     Log(script);
-    raise ;
+    raise;
   end;
 end;
 
@@ -257,7 +256,7 @@ begin
 
       UIBQueryDst.SQL.Text := sqlInsert;
 
-      UIBQuerySrc.SQL.Text := 'select count(*) from ' + LstTables[i]; ;
+      UIBQuerySrc.SQL.Text := 'select count(*) from ' + LstTables[i];;
       UIBQuerySrc.Open;
       maxRecords := UIBQuerySrc.Fields.AsInteger[0];
 
@@ -341,7 +340,7 @@ begin
     UIBScriptDst.ExecuteScript;
   except
     Log(script);
-    raise ;
+    raise;
   end;
 end;
 
@@ -386,7 +385,7 @@ var
   toUpgrade: Boolean;
 begin
   toUpgrade := Format('%d.%d', [DMPrinc.UIBDataBase.InfoOdsVersion, DMPrinc.UIBDataBase.InfoOdsMinorVersion]) < TVersionNumber(FB_ODS);
-  toUpgrade := toUpgrade or (dmPrinc.UIBDataBase.InfoPageSize < DBPageSize);
+  toUpgrade := toUpgrade or (DMPrinc.UIBDataBase.InfoPageSize < DBPageSize);
   if toUpgrade then
   begin
     GetDiskFreeSpaceEx(PChar(TempPath), AvailableSpace, TotalSpace, nil);

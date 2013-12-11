@@ -3,7 +3,7 @@ unit UfrmConsultationParaBD;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, StrUtils,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, System.UITypes, StrUtils,
   Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls, UfrmFond, Procedures,
   ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms,
   LabeledCheckBox, System.Actions;

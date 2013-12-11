@@ -158,7 +158,8 @@ function HashString(const s: TbtString): Cardinal;
 
 implementation
 
-uses AnsiStrings, Procedures, UfrmScripts, Divers, UScriptsFonctions, UScriptsHTMLFunctions, Dialogs, StrUtils, uPSDisassembly,
+uses
+  IOUtils, AnsiStrings, Procedures, UfrmScripts, Divers, UScriptsFonctions, UScriptsHTMLFunctions, Dialogs, StrUtils, uPSDisassembly,
   UPascalScriptEditor;
 
 procedure AddToTStrings(const Strings: TStringArray; List: TStrings);
@@ -941,7 +942,7 @@ begin
   Buffer := TEncoding.default.GetBytes(Chaine);
   Preamble := TEncoding.default.GetPreamble;
 
-  if FileExists(FileName) then
+  if TFile.Exists(FileName) then
     fs := TFileStream.Create(FileName, fmOpenWrite)
   else
     fs := TFileStream.Create(FileName, fmCreate or fmOpenWrite);

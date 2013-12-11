@@ -3,7 +3,7 @@ unit UfrmRecherche;
 interface
 
 uses
-  SysUtils, Windows, Messages, Classes, Forms, Graphics, Controls, Menus, StdCtrls, Buttons, ComCtrls, ExtCtrls, ToolWin, Commun,
+  SysUtils, Windows, Messages, Classes, Forms, Graphics, Controls, Menus, StdCtrls, System.UITypes, System.Types, Buttons, ComCtrls, ExtCtrls, ToolWin, Commun,
   VirtualTrees, VirtualTree, ActnList, VDTButton, ComboCheck, ProceduresBDtk,
   UframRechercheRapide, LoadComplet, UBdtForms, Generics.Defaults,
   System.Actions;

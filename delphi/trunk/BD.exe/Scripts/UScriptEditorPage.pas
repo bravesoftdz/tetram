@@ -3,7 +3,7 @@ unit UScriptEditorPage;
 interface
 
 uses
-  Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics,
+  Winapi.Windows, System.SysUtils, System.Classes, Vcl.Graphics, System.UITypes,
   Vcl.Controls, Vcl.ComCtrls, Vcl.Dialogs,
   Generics.Collections,
   SynEdit, SynEditKeyCmds, SynEditSearch, SynMacroRecorder,

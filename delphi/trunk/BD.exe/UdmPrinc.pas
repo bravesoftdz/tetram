@@ -2,7 +2,9 @@ unit UdmPrinc;
 
 interface
 
-uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, AppEvnts, SyncObjs, jpeg, Menus, uib;
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, SyncObjs, jpeg, Menus, uib,
+  Vcl.AppEvnts;
 
 const
   AntiAliasing = True;
@@ -467,7 +469,7 @@ begin
       Application.ProcessMessages;
       dmPrinc.UIBBackup.OnVerbose := UIBVerbose;
       dmPrinc.UIBBackup.Verbose := True;
-      dmPrinc.UIBBackup.BackupFiles.Text := ExtractFilePath(Application.ExeName) + 'test-icu.fbk';
+      dmPrinc.UIBBackup.BackupFiles.Text := TPath.Combine(TPath.GetLibraryPath, 'test-icu.fbk');
       dmPrinc.UIBBackup.Run;
       finally
       // pas de free, c'est la fenêtre qui va s'auto-libérer
@@ -480,7 +482,7 @@ begin
       Application.ProcessMessages;
       dmPrinc.UIBRestore.OnVerbose := UIBVerbose;
       dmPrinc.UIBRestore.Verbose := True;
-      dmPrinc.UIBRestore.BackupFiles.Text := ExtractFilePath(Application.ExeName) + 'test-icu.fbk';
+      dmPrinc.UIBRestore.BackupFiles.Text := TPath.Combine(TPath.GetLibraryPath, 'test-icu.fbk');
       dmPrinc.UIBRestore.Run;
       finally
       // pas de free, c'est la fenêtre qui va s'auto-libérer

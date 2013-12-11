@@ -3,7 +3,7 @@ unit UfrmScriptChoix;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, System.UITypes,
   Dialogs, VirtualTrees, UframBoutons, UScriptsFonctions, Generics.Collections, UbdtForms;
 
 type

@@ -3,7 +3,7 @@ unit UfrmEditCritere;
 interface
 
 uses
-  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, UframBoutons, StdCtrls, DBCtrls, UfrmRecherche,
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.Types, UframBoutons, StdCtrls, DBCtrls, UfrmRecherche,
   ActnList, EditLabeled, ComboCheck, ComCtrls, LoadComplet, UBdtForms,
   System.Actions;
 
