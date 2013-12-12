@@ -97,6 +97,7 @@ end;
 procedure InitPath;
 var
   buffer: array [0 .. MAX_PATH] of Char;
+  parentPath: string;
 begin
   TempPath := TPath.Combine(TPath.GetTempPath, TempPath);
   TDirectory.CreateDirectory(TempPath);
@@ -110,15 +111,16 @@ begin
   AppData := TPath.Combine(TPath.GetHomePath, AppData);
   TDirectory.CreateDirectory(AppData);
 
-  // si le fichier ini est dans le même répertoire que l'exe (correspond à la version de développement)
+  // si le fichier ini est dans le répertoire parent de l'exe (correspond à la version de développement)
   // alors on utilise les anciennes valeurs par défaut
-  if TFile.Exists(TPath.Combine(TPath.GetLibraryPath, FichierIni)) then
+  parentPath := TDirectory.GetParent(TPath.GetDirectoryName(TPath.GetLibraryPath));
+  if TFile.Exists(TPath.Combine(parentPath, FichierIni)) then
   begin
-    FichierIni := TPath.Combine(TPath.GetLibraryPath, FichierIni);
-    DatabasePath := TPath.Combine(TPath.GetLibraryPath, DatabasePath);
-    RepImages := TPath.Combine(TPath.GetLibraryPath, RepImages);
-    RepScripts := TPath.Combine(TPath.GetLibraryPath, RepScripts);
-    RepWebServer := TPath.Combine(TPath.GetLibraryPath, RepWebServer);
+    FichierIni := TPath.Combine(parentPath, FichierIni);
+    DatabasePath := TPath.Combine(parentPath, DatabasePath);
+    RepImages := TPath.Combine(parentPath, RepImages);
+    RepScripts := TPath.Combine(parentPath, RepScripts);
+    RepWebServer := TPath.Combine(parentPath, RepWebServer);
   end
   else
   begin

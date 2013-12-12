@@ -91,8 +91,10 @@ const
   PRODUCT_DATACENTER_SERVER_CORE_V = $00000027; // Server Datacenter without Hyper-V (core installation)
   PRODUCT_DATACENTER_SERVER_V = $00000025; // Server Datacenter without Hyper-V (full installation)
   PRODUCT_ENTERPRISE = $00000004; // Enterprise
+  PRODUCT_ENTERPRISE_EVALUATION = $00000048; // Enterprise (evaluation installation)
   PRODUCT_ENTERPRISE_E = $00000046; // Not supported
   PRODUCT_ENTERPRISE_N = $0000001B; // Enterprise N
+  PRODUCT_ENTERPRISE_N_EVALUATION = $00000054; // Enterprise N (evaluation installation)
   PRODUCT_ENTERPRISE_SERVER = $0000000A; // Server Enterprise (full installation)
   PRODUCT_ENTERPRISE_SERVER_CORE = $0000000E; // Server Enterprise (core installation)
   PRODUCT_ENTERPRISE_SERVER_CORE_V = $00000029; // Server Enterprise without Hyper-V (core installation)
@@ -111,12 +113,14 @@ const
   PRODUCT_PROFESSIONAL = $00000030; // Professional
   PRODUCT_PROFESSIONAL_E = $00000045; // Not supported
   PRODUCT_PROFESSIONAL_N = $00000031; // Professional N
+  PRODUCT_PROFESSIONAL_WMC = $00000067; // Professional with Media Center
   PRODUCT_SERVER_FOR_SMALLBUSINESS = $00000018; // Windows Server 2008 for Windows Essential Server Solutions
   PRODUCT_SERVER_FOR_SMALLBUSINESS_V = $00000023; // Windows Server 2008 without Hyper-V for Windows Essential Server Solutions
   PRODUCT_SERVER_FOUNDATION = $00000021; // Server Foundation
   PRODUCT_SMALLBUSINESS_SERVER = $00000009; // Windows Small Business Server
   PRODUCT_SMALLBUSINESS_SERVER_PREMIUM = $00000019; // Windows Small Business Server Prenium
   PRODUCT_SOLUTION_EMBEDDEDSERVER = $00000038; // Windows MultiPoint Server
+  PRODUCT_STANDARD_EVALUATION_SERVER = $0000004F; // Server Standard (evaluation installation)
   PRODUCT_STANDARD_SERVER = $00000007; // Server Standard (full installation)
   PRODUCT_STANDARD_SERVER_CORE = $0000000D; // Server Standard (core installation)
   PRODUCT_STANDARD_SERVER_CORE_V = $00000028; // Server Standard without Hyper-V (core installation)
@@ -126,14 +130,23 @@ const
   PRODUCT_STARTER_N = $0000002F; // Starter N
   PRODUCT_STORAGE_ENTERPRISE_SERVER = $00000017; // Storage Server Enterprise
   PRODUCT_STORAGE_EXPRESS_SERVER = $00000014; // Storage Server Express
+  PRODUCT_STORAGE_STANDARD_EVALUATION_SERVER = $00000060; // Storage Server Standard (evaluation installation)
   PRODUCT_STORAGE_STANDARD_SERVER = $00000015; // Storage Server Standard
   PRODUCT_STORAGE_WORKGROUP_SERVER = $00000016; // Storage Server Workgroup
+  PRODUCT_STORAGE_WORKGROUP_EVALUATION_SERVER = $0000005F; // Storage Server Workgroup (evaluation installation)
   PRODUCT_UNDEFINED = $00000000; // An unknown product
   PRODUCT_ULTIMATE = $00000001; // Ultimate
   PRODUCT_ULTIMATE_E = $00000047; // Not supported
   PRODUCT_ULTIMATE_N = $0000001C; // Ultimate N
   PRODUCT_WEB_SERVER = $00000011; // Web Server (full installation)
   PRODUCT_WEB_SERVER_CORE = $0000001D; // Web Server (core installation)  SM_SERVERR2 = 89;
+  PRODUCT_CORE = $00000065; // // Windows 8
+  PRODUCT_CORE_N = $00000062; // // Windows 8 N
+  PRODUCT_CORE_COUNTRYSPECIFIC = $00000063; // Windows 8 China
+  PRODUCT_CORE_SINGLELANGUAGE = $00000064; // Windows 8 Single Language
+  PRODUCT_DATACENTER_EVALUATION_SERVER = $00000050; // Server Datacenter (evaluation installation)
+  PRODUCT_MULTIPOINT_STANDARD_SERVER = $0000004C; // Windows MultiPoint Server Standard (full installation)
+  PRODUCT_MULTIPOINT_PREMIUM_SERVER = $0000004D; // Windows MultiPoint Server Premium (full installation)
   PROCESSOR_ARCHITECTURE_INTEL = 0;
   PROCESSOR_ARCHITECTURE_IA64 = 6;
   PROCESSOR_ARCHITECTURE_AMD64 = 9;
@@ -192,46 +205,204 @@ begin
             else
               Result := 'Windows Server 2008 R2';
 
+          if (OSVERSIONINFO.dwMinorVersion = 2) then
+            if (OSVERSIONINFOEX.wProductType = VER_NT_WORKSTATION) then
+              Result := 'Windows 8'
+            else
+              Result := 'Windows Server 2012';
+
+          if (OSVERSIONINFO.dwMinorVersion = 3) then
+            if (OSVERSIONINFOEX.wProductType = VER_NT_WORKSTATION) then
+              Result := 'Windows 8.1'
+            else
+              Result := 'Windows Server 2012 R2';
+
           pGPI := GetProcAddress(GetModuleHandle('kernel32.dll'), 'GetProductInfo');
           pGPI(OSVERSIONINFO.dwMajorVersion, OSVERSIONINFO.dwMinorVersion, 0, 0, dwType);
 
           case dwType of
-            PRODUCT_ULTIMATE:
-              Result := Result + ' Ultimate Edition';
-            PRODUCT_PROFESSIONAL:
-              Result := Result + ' Professional';
-            PRODUCT_HOME_PREMIUM:
-              Result := Result + ' Home Premium Edition';
-            PRODUCT_HOME_BASIC:
-              Result := Result + ' Home Basic Edition';
-            PRODUCT_ENTERPRISE:
-              Result := Result + ' Enterprise Edition';
             PRODUCT_BUSINESS:
               Result := Result + ' Business Edition';
-            PRODUCT_STARTER:
-              Result := Result + ' Starter Edition';
+            PRODUCT_BUSINESS_N:
+              Result := Result + ' Business N Edition';
+
             PRODUCT_CLUSTER_SERVER:
-              Result := Result + ' Cluster Server Edition';
+              Result := Result + ' Cluster Server (HPC) Edition';
+            PRODUCT_CLUSTER_SERVER_V:
+              Result := Result + ' Server Hyper Core V Edition';
+
+            PRODUCT_CORE:
+              ;
+            PRODUCT_CORE_N:
+              Result := Result + ' N';
+            PRODUCT_CORE_COUNTRYSPECIFIC:
+              ;
+            PRODUCT_CORE_SINGLELANGUAGE:
+              ;
+
+            PRODUCT_DATACENTER_EVALUATION_SERVER:
+              Result := Result + ' Datacenter Edition';
             PRODUCT_DATACENTER_SERVER:
               Result := Result + ' Datacenter Edition';
             PRODUCT_DATACENTER_SERVER_CORE:
               Result := Result + ' Datacenter Edition (core installation)';
+            PRODUCT_DATACENTER_SERVER_V:
+              Result := Result + ' Datacenter Edition without Hyper-V';
+            PRODUCT_DATACENTER_SERVER_CORE_V:
+              Result := Result + ' Datacenter Edition without Hyper-V (core installation)';
+
+            PRODUCT_ENTERPRISE:
+              Result := Result + ' Enterprise Edition';
+            PRODUCT_ENTERPRISE_E:
+              Result := Result + ' (not supported)';
+            PRODUCT_ENTERPRISE_N_EVALUATION:
+              Result := Result + ' Enterprise N Edition';
+            PRODUCT_ENTERPRISE_N:
+              Result := Result + ' Enterprise N Edition';
+            PRODUCT_ENTERPRISE_EVALUATION:
+              Result := Result + ' Enterprise N Edition';
             PRODUCT_ENTERPRISE_SERVER:
               Result := Result + ' Enterprise Edition';
             PRODUCT_ENTERPRISE_SERVER_CORE:
               Result := Result + ' Enterprise Edition (core installation)';
+            PRODUCT_ENTERPRISE_SERVER_CORE_V:
+              Result := Result + ' Enterprise Edition without Hyper-V (core installation)';
             PRODUCT_ENTERPRISE_SERVER_IA64:
               Result := Result + ' Enterprise Edition for Itanium-based Systems';
+            PRODUCT_ENTERPRISE_SERVER_V:
+              Result := Result + ' Enterprise Edition without Hyper-V';
+
+            PRODUCT_ESSENTIALBUSINESS_SERVER_MGMT:
+              Result := Result + ' Essential Server Solution Management Edition';
+            PRODUCT_ESSENTIALBUSINESS_SERVER_ADDL:
+              Result := Result + ' Essential Server Solution Additional Edition';
+            PRODUCT_ESSENTIALBUSINESS_SERVER_MGMTSVC:
+              Result := Result + ' Essential Server Solution Management SVC Edition';
+            PRODUCT_ESSENTIALBUSINESS_SERVER_ADDLSVC:
+              Result := Result + ' Essential Server Solution Additional SVC Edition';
+
+            PRODUCT_HOME_BASIC:
+              Result := Result + ' Home Basic Edition';
+            PRODUCT_HOME_BASIC_E:
+              Result := Result + ' (not supported)';
+            PRODUCT_HOME_BASIC_N:
+              Result := Result + ' Home Basic N Edition';
+            PRODUCT_HOME_PREMIUM:
+              Result := Result + ' Home Premium Edition';
+            PRODUCT_HOME_PREMIUM_E:
+              Result := Result + ' (not supported)';
+            PRODUCT_HOME_PREMIUM_N:
+              Result := Result + ' Home Premium N Edition';
+            PRODUCT_HOME_PREMIUM_SERVER:
+              Result := Result + ' Home Server 2011 Edition';
+            PRODUCT_HOME_SERVER:
+              Result := Result + ' Storage Server 2008 R2 Essentials Edition';
+
+            PRODUCT_HYPERV:
+              Result := Result + ' Hyper-V Server Edition';
+
+            PRODUCT_MEDIUMBUSINESS_SERVER_MANAGEMENT:
+              Result := Result + ' Essential Business Server Management Server Edition';
+            PRODUCT_MEDIUMBUSINESS_SERVER_MESSAGING:
+              Result := Result + ' Essential Business Server Messaging Server Edition';
+            PRODUCT_MEDIUMBUSINESS_SERVER_SECURITY:
+              Result := Result + ' Essential Business Server Security Server Edition';
+
+            PRODUCT_MULTIPOINT_STANDARD_SERVER:
+              Result := Result + ' MultiPoint Server Standard Edition';
+            PRODUCT_MULTIPOINT_PREMIUM_SERVER:
+              Result := Result + ' Windows MultiPoint Server Premium Edition';
+
+            PRODUCT_PROFESSIONAL:
+              Result := Result + ' Professional';
+            PRODUCT_PROFESSIONAL_E:
+              Result := Result + ' (not supported)';
+            PRODUCT_PROFESSIONAL_N:
+              Result := Result + ' Professional N';
+            PRODUCT_PROFESSIONAL_WMC:
+              Result := Result + ' Professional with Media Center';
+
+            PRODUCT_SB_SOLUTION_SERVER_EM:
+              Result := Result + ' Server For SB Solutions EM Edition';
+            PRODUCT_SERVER_FOR_SB_SOLUTIONS:
+              Result := Result + ' Server For SB Solutions Edition';
+            PRODUCT_SERVER_FOR_SB_SOLUTIONS_EM:
+              Result := Result + ' Server For SB Solutions EM Edition';
+
+            PRODUCT_SERVER_FOR_SMALLBUSINESS:
+              Result := Result + ' Windows Essential Server Solutions Edition';
+            PRODUCT_SERVER_FOR_SMALLBUSINESS_V:
+              Result := Result + ' Windows Essential Server Solutions Edition without Hyper-V';
+
+            PRODUCT_SERVER_FOUNDATION:
+              Result := Result + ' Server Foundation Edition';
+
+            PRODUCT_SB_SOLUTION_SERVER:
+              Result := Result + ' Small Business Server 2011 Essentials Edition';
             PRODUCT_SMALLBUSINESS_SERVER:
-              Result := Result + ' Small Business Server';
+              Result := Result + ' Small Business Server Edition';
             PRODUCT_SMALLBUSINESS_SERVER_PREMIUM:
               Result := Result + ' Small Business Server Premium Edition';
+            PRODUCT_SMALLBUSINESS_SERVER_PREMIUM_CORE:
+              Result := Result + ' Small Business Server Premium Edition (core installation)';
+
+            PRODUCT_SOLUTION_EMBEDDEDSERVER:
+              Result := Result + ' MultiPoint Server Edition';
+
+            PRODUCT_STANDARD_EVALUATION_SERVER:
+              Result := Result + ' Server Standard Edition';
             PRODUCT_STANDARD_SERVER:
               Result := Result + ' Standard Edition';
             PRODUCT_STANDARD_SERVER_CORE:
               Result := Result + ' Standard Edition (core installation)';
+            PRODUCT_STANDARD_SERVER_V:
+              Result := Result + ' Server Standard  Edition without Hyper-V';
+            PRODUCT_STANDARD_SERVER_CORE_V:
+              Result := Result + ' Server Standard Edition without Hyper-V (core installation)';
+            PRODUCT_STANDARD_SERVER_SOLUTIONS:
+              Result := Result + ' Server Solutions Premium Edition';
+            PRODUCT_STANDARD_SERVER_SOLUTIONS_CORE:
+              Result := Result + ' Server Solutions Premium Edition (core installation)';
+
+            PRODUCT_STARTER:
+              Result := Result + ' Starter Edition';
+            PRODUCT_STARTER_E:
+              Result := Result + ' (not supported)';
+            PRODUCT_STARTER_N:
+              Result := Result + ' Starter N Edition';
+
+            PRODUCT_STORAGE_ENTERPRISE_SERVER:
+              Result := Result + ' Storage Server Enterprise Edition';
+            PRODUCT_STORAGE_ENTERPRISE_SERVER_CORE:
+              Result := Result + ' Storage Server Enterprise Edition (core installation)';
+            PRODUCT_STORAGE_EXPRESS_SERVER:
+              Result := Result + ' Storage Server Express Edition';
+            PRODUCT_STORAGE_EXPRESS_SERVER_CORE:
+              Result := Result + ' Storage Server Express Edition (core installation)';
+            PRODUCT_STORAGE_STANDARD_EVALUATION_SERVER:
+              Result := Result + ' Storage Server Standard Edition';
+            PRODUCT_STORAGE_STANDARD_SERVER:
+              Result := Result + ' Storage Server Standard Edition';
+            PRODUCT_STORAGE_STANDARD_SERVER_CORE:
+              Result := Result + ' Storage Server Standard Edition (core installation)';
+            PRODUCT_STORAGE_WORKGROUP_EVALUATION_SERVER:
+              Result := Result + ' Storage Server Workgroup Edition';
+            PRODUCT_STORAGE_WORKGROUP_SERVER:
+              Result := Result + ' Storage Server Workgroup Edition';
+            PRODUCT_STORAGE_WORKGROUP_SERVER_CORE:
+              Result := Result + ' Storage Server Workgroup Edition (core installation)';
+
+            PRODUCT_ULTIMATE:
+              Result := Result + ' Ultimate Edition';
+            PRODUCT_ULTIMATE_E:
+              Result := Result + ' (not supported)';
+            PRODUCT_ULTIMATE_N:
+              Result := Result + ' Ultimate N Edition';
+
             PRODUCT_WEB_SERVER:
               Result := Result + ' Web Server Edition';
+            PRODUCT_WEB_SERVER_CORE:
+              Result := Result + ' Web Server Edition (core installation)';
           end;
 
           if (si.wProcessorArchitecture = PROCESSOR_ARCHITECTURE_AMD64) then
@@ -388,7 +559,7 @@ begin
   end;
 end;
 
-function formatSize(bytes: int64; fmt: string = '%.2f'): string;
+function formatSize(bytes: DWORDLONG; fmt: string = '%.2f'): string;
 const
   units: array [0 .. 4] of string = ('o', 'Ko', 'Mo', 'Go', 'To');
 var
@@ -400,8 +571,8 @@ begin
   if (b > 0) then
   begin
     e := trunc(logn(1024, b));
-    // Si on a pas l'unité on retourne en To
-    e := min( high(units), e);
+    // Si on n'a pas l'unité on retourne en To
+    e := min(high(units), e);
     b := b / Power(1024, e);
   end
   else
@@ -414,25 +585,31 @@ end;
 
 procedure TfrmAboutBox.FormCreate(Sender: TObject);
 const
-  FC: array [1 .. 2] of Integer = (31, 16);
-  W: array [1 .. 2] of Integer = (90, 72);
-  H: array [1 .. 2] of Integer = (76, 51);
-  Inter: array [1 .. 2] of Integer = (50, 100);
+  FC: array [1 .. 2] of integer = (31, 16);
+  W: array [1 .. 2] of integer = (90, 72);
+  H: array [1 .. 2] of integer = (76, 51);
+  Inter: array [1 .. 2] of integer = (50, 100);
   Back: array [1 .. 2] of TColor = (clGray, clWhite);
 var
-  MemoryStatus: TMemoryStatus;
+  MemoryStatus: TMemoryStatusEx;
 begin
   Image1.Picture.Bitmap.LoadFromResourceName(HInstance, 'ABOUT');
 
   LbSysteme.Caption := GetWindowsVersion;
+{$IFDEF WIN32}
+  VlVersion.InfoSuffix := '(x86)';
+{$ENDIF}
+{$IFDEF WIN64}
+  VlVersion.InfoSuffix := '(x64)';
+{$ENDIF}
 
   MemoryStatus.dwLength := sizeof(MemoryStatus);
-  GlobalMemoryStatus(MemoryStatus);
+  GlobalMemoryStatusEx(MemoryStatus);
 
-  LbMemoirePhysique.Caption := MemoirePhysique + ': ' + formatSize(MemoryStatus.dwTotalPhys);
-  LbMemoireLibre.Caption := MemoirePhysique + ': ' + formatSize(MemoryStatus.dwAvailPhys) + Format(' (%d%%)', [100 - MemoryStatus.dwMemoryLoad]);
-  LbMemoireVirtuelle.Caption := MemoireVirtuelle + ': ' + formatSize(MemoryStatus.dwTotalVirtual);
-  LbMemoireVirtuelleDisponible.Caption := MemoireVirtuelleDisponible + ': ' + formatSize(MemoryStatus.dwAvailVirtual);
+  LbMemoirePhysique.Caption := MemoirePhysique + ': ' + formatSize(MemoryStatus.ullTotalPhys);
+  LbMemoireLibre.Caption := MemoirePhysique + ': ' + formatSize(MemoryStatus.ullAvailPhys) + Format(' (%d%%)', [100 - MemoryStatus.dwMemoryLoad]);
+  LbMemoireVirtuelle.Caption := MemoireVirtuelle + ': ' + formatSize(MemoryStatus.ullTotalVirtual);
+  LbMemoireVirtuelleDisponible.Caption := MemoireVirtuelleDisponible + ': ' + formatSize(MemoryStatus.ullAvailVirtual);
 end;
 
 procedure TfrmAboutBox.ImLogoClick(Sender: TObject);
