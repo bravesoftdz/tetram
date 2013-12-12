@@ -428,7 +428,7 @@ initialization
 
 finalization
 
-  isbnPrefixes.Free;
-  isbnGroups.Free;
+isbnPrefixes.Free;
+isbnGroups.Free;
 
 end.

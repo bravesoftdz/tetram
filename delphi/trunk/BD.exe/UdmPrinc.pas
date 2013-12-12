@@ -439,6 +439,7 @@ begin
     if dmPrinc.CheckVersion(False) then
       Exit;
 
+{$IFNDEF TEST_ICU}
     if not OuvreSession(True) then
       Exit;
     if not dmPrinc.CheckVersions(FrmSplash.Affiche_act) then
@@ -460,8 +461,8 @@ begin
       FrmSplash.Show;
       FrmSplash.Update;
     end;
-    (*
-      if not OuvreSession(False) then
+{$ELSE}
+    if not OuvreSession(False) then
       Exit;
 
       with TFrmVerbose.Create(Application) do
@@ -470,29 +471,32 @@ begin
       dmPrinc.UIBBackup.OnVerbose := UIBVerbose;
       dmPrinc.UIBBackup.Verbose := True;
       dmPrinc.UIBBackup.BackupFiles.Text := TPath.Combine(TPath.GetLibraryPath, 'test-icu.fbk');
-      dmPrinc.UIBBackup.Run;
+        // dmPrinc.UIBBackup.Run;
       finally
-      // pas de free, c'est la fenêtre qui va s'auto-libérer
-      Fin;
+        // pas de free, c'est la fenêtre qui va s'auto-libérer
+        Fin;
       end;
 
-      with TFrmVerbose.Create(Application) do
+    with TFrmVerbose.Create(Application) do
       try
-      dmPrinc.UIBDataBase.Connected := False;
-      Application.ProcessMessages;
-      dmPrinc.UIBRestore.OnVerbose := UIBVerbose;
-      dmPrinc.UIBRestore.Verbose := True;
-      dmPrinc.UIBRestore.BackupFiles.Text := TPath.Combine(TPath.GetLibraryPath, 'test-icu.fbk');
-      dmPrinc.UIBRestore.Run;
+        dmPrinc.UIBDataBase.Connected := False;
+        Application.ProcessMessages;
+        dmPrinc.UIBRestore.OnVerbose := UIBVerbose;
+        dmPrinc.UIBRestore.Verbose := True;
+        dmPrinc.UIBRestore.BackupFiles.Text := TPath.Combine(TPath.GetLibraryPath, 'test-icu.fbk');
+        dmPrinc.UIBRestore.Run;
       finally
-      // pas de free, c'est la fenêtre qui va s'auto-libérer
-      Fin;
+        // pas de free, c'est la fenêtre qui va s'auto-libérer
+        Fin;
       end;
-    *)
+{$ENDIF}
   finally
     FrmSplash.Free;
   end;
-  Application.MainForm.Show;
+{$IFDEF TEST_ICU}
+  if Assigned(Application.MainForm) then
+{$ENDIF}
+    Application.MainForm.Show;
 end;
 
 end.
