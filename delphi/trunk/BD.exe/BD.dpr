@@ -190,7 +190,6 @@ uses
   UScriptEditorPage in 'Scripts\UScriptEditorPage.pas';
 
 begin
-  InitProc := @BdtkInitProc;
   Application.Title := 'BDthèque';
   Application.MainFormOnTaskbar := True;
   Application.Initialize;

@@ -8,6 +8,7 @@ uses
 
 const
   AntiAliasing = True;
+  DBPageSize = 16384;
 
 type
   TAffiche_act = procedure(const Texte: string) of object;
@@ -21,15 +22,24 @@ type
     procedure ApplicationEvents1Message(var Msg: tagMSG; var Handled: Boolean);
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
+  private
+    class function getInstance: TdmPrinc;
+  strict private
+    class var _instance: TdmPrinc;
   strict private
     FUILock: TCriticalSection;
     procedure MakeJumpList;
   public
-    function CheckVersions(Affiche_act: TAffiche_act; Force: Boolean = True): Boolean;
-    function CheckVersion(Force: Boolean): Boolean;
+    procedure PrepareDBConnexion;
+    function OuvreSession(doConnect: Boolean): Boolean;
+
+    procedure doBackup(const backupFile: TFileName; AutoClose: Boolean = True);
+    procedure doRestore(const backupFile: TFileName; AutoClose: Boolean = True; fixMetadata: Boolean = False);
+
+    function CheckDBVersion(Affiche_act: TAffiche_act; Force: Boolean = True): Boolean;
+    function CheckExeVersion(Force: Boolean): Boolean;
   end;
 
-function OuvreSession(Connect: Boolean): Boolean;
 procedure BdtkInitProc;
 procedure AnalyseLigneCommande(cmdLine: string);
 
@@ -39,65 +49,21 @@ implementation
 
 {$R *.DFM}
 
-uses CommonConst, Commun, Textes, UdmCommun, UIBLib, Divers, IniFiles, Procedures, UHistorique, Math, UIBase, Updates, UfrmFond, CheckVersionNet,
+uses
+  IOUtils, CommonConst, Commun, Textes, UdmCommun, UIBLib, Divers, IniFiles, Procedures, UHistorique, Math, UIBase, Updates, UfrmFond, CheckVersionNet,
   DateUtils, UMAJODS, JumpList, UfrmSplash, Proc_Gestions, Generics.Collections,
   UfrmVerbose;
 
-var
-  FDMPrinc: TdmPrinc = nil;
+const
+  FinBackup = 'gbak:closing file, committing, and finishing.';
+  FinRestore = 'gbak:    committing metadata';
 
 function dmPrinc: TdmPrinc;
-var
-  cs: TCriticalSection;
 begin
-  if not Assigned(FDMPrinc) then
-  begin
-    cs := TCriticalSection.Create;
-    cs.Enter;
-    try
-      Application.CreateForm(TdmPrinc, FDMPrinc);
-    finally
-      cs.Leave;
-      cs.Free;
-    end;
-  end;
-  Result := FDMPrinc;
+  Result := TdmPrinc.getInstance;
 end;
 
-function OuvreSession(Connect: Boolean): Boolean;
-begin
-  try
-    Result := True;
-
-    dmPrinc.UIBDataBase.Connected := False;
-    dmPrinc.UIBDataBase.DatabaseName := DatabasePath;
-    dmPrinc.UIBDataBase.UserName := DatabaseUserName;
-    dmPrinc.UIBDataBase.PassWord := DatabasePassword;
-    dmPrinc.UIBDataBase.LibraryName := DataBaseLibraryName;
-    dmPrinc.UIBDataBase.Params.Values['sql_role_name'] := DatabaseRole;
-
-    dmPrinc.UIBBackup.Database := DatabasePath;
-    dmPrinc.UIBBackup.UserName := DatabaseUserName;
-    dmPrinc.UIBBackup.PassWord := DatabasePassword;
-    dmPrinc.UIBBackup.LibraryName := DataBaseLibraryName;
-
-    dmPrinc.UIBRestore.Database := DatabasePath;
-    dmPrinc.UIBRestore.UserName := DatabaseUserName;
-    dmPrinc.UIBRestore.PassWord := DatabasePassword;
-    dmPrinc.UIBRestore.LibraryName := DataBaseLibraryName;
-
-    if Connect then
-      dmPrinc.UIBDataBase.Connected := True;
-
-    if not Assigned(dmCommun) then
-      Application.CreateForm(TdmCommun, dmCommun);
-  except
-    AffMessage(rsOuvertureSessionRate + #13#13 + Exception(ExceptObject).message, mtError, [mbOk], True);
-    Result := False;
-  end;
-end;
-
-function TdmPrinc.CheckVersions(Affiche_act: TAffiche_act; Force: Boolean): Boolean;
+function TdmPrinc.CheckDBVersion(Affiche_act: TAffiche_act; Force: Boolean): Boolean;
 var
   CurrentVersion: TVersionNumber;
 type
@@ -115,7 +81,7 @@ type
         Script.Transaction := GetTransaction(UIBDataBase);
         ProcMAJ(Script);
 
-        Script.Script.Text := 'UPDATE OPTIONS SET Valeur = ' + QuotedStr(Version) + ' WHERE Nom_Option = ''Version'';';
+        Script.Script.Text := 'update options set valeur = ' + QuotedStr(Version) + ' where nom_option = ''Version'';';
         Script.ExecuteScript;
         Script.Transaction.Commit;
         CurrentVersion := Version;
@@ -135,7 +101,7 @@ type
     qry := TUIBQuery.Create(nil);
     try
       qry.Transaction := GetTransaction(UIBDataBase);
-      qry.SQL.Text := 'SELECT RDB$INDEX_NAME FROM RDB$INDICES WHERE COALESCE(RDB$SYSTEM_FLAG, 0) <> 1';
+      qry.SQL.Text := 'select rdb$index_name from rdb$indices where coalesce(rdb$system_flag, 0) <> 1';
       qry.Open;
       sl := TList<string>.Create;
       try
@@ -148,7 +114,7 @@ type
 
         qry.SQL.Clear;
         for i := 0 to Pred(sl.Count) do
-          qry.SQL.Add('SET STATISTICS INDEX ' + sl[i] + ';');
+          qry.SQL.Add('set statistics index ' + sl[i] + ';');
       finally
         sl.Free;
       end;
@@ -165,6 +131,7 @@ var
   FBUpdate: TFBUpdate;
   Msg: string;
   qry: TUIBQuery;
+  backupFile: TFileName;
 begin
   Result := False;
 
@@ -172,7 +139,32 @@ begin
   try
     qry.Transaction := GetTransaction(UIBDataBase);
 
-    qry.SQL.Text := 'SELECT VALEUR FROM OPTIONS WHERE Nom_option = ?';
+    qry.SQL.Text := 'select titrealbum from albums';
+    try
+      // on va chercher un champ texte pour forcer FB à verifier la présence des collations
+      // donc vérifier que la version des ICU correspondent à ceux de la base
+      qry.Prepare;
+    except
+      on E: EUIBError do
+      begin
+        // 335544855 = collation not installed
+        if E.GDSCode = 335544855 then
+        begin
+          backupFile := TPath.Combine(TempPath, 'bdtk-upgrade.fbk');
+          if TFile.Exists(backupFile) then
+            TFile.Delete(backupFile);
+          TFile.Copy(UIBDataBase.InfoDbFileName, TPath.Combine(TempPath, TPath.GetFileName(UIBDataBase.InfoDbFileName)), True);
+          doBackup(backupFile);
+          doRestore(backupFile);
+        end
+        else
+          raise;
+      end
+      else
+        raise;
+    end;
+
+    qry.SQL.Text := 'select valeur from options where nom_option = ?';
     qry.Params.AsString[0] := 'Version';
     qry.Open;
     if not qry.Eof then
@@ -181,7 +173,7 @@ begin
     begin
       CurrentVersion := '0.0.0.0';
       try
-        qry.SQL.Text := 'INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES (?, ?)';
+        qry.SQL.Text := 'insert into options (nom_option, valeur) values (?, ?)';
         qry.Prepare(True);
         qry.Params.AsString[0] := 'Version';
         qry.Params.AsString[1] := Copy(CurrentVersion, 1, qry.Params.MaxStrLen[0]);
@@ -245,7 +237,7 @@ end;
 
 procedure TdmPrinc.ApplicationEvents1Message(var Msg: tagMSG; var Handled: Boolean);
 begin
-  if (Msg.message = WM_SYSCOMMAND) and (Msg.wParam = SC_CLOSE) and Assigned(frmFond) then
+  if (Msg.Message = WM_SYSCOMMAND) and (Msg.wParam = SC_CLOSE) and Assigned(frmFond) then
   begin
     Handled := True;
     frmFond.actQuitter.Execute;
@@ -262,6 +254,85 @@ procedure TdmPrinc.DataModuleDestroy(Sender: TObject);
 begin
   UIBDataBase.Connected := False;
   FUILock.Free;
+end;
+
+procedure TdmPrinc.doBackup(const backupFile: TFileName; AutoClose: Boolean = True);
+var
+  s: string;
+  frmVerbose: TFrmVerbose;
+begin
+  frmVerbose := TFrmVerbose.Create(Application);
+  try
+    frmVerbose.Show;
+    Application.ProcessMessages;
+    UIBBackup.OnVerbose := frmVerbose.UIBVerbose;
+    UIBBackup.Verbose := True;
+    UIBBackup.BackupFiles.Text := backupFile;
+    UIBBackup.Run;
+
+    s := Copy(frmVerbose.Memo1.Lines[frmVerbose.Memo1.Lines.Count - 1], 1, Length(FinBackup));
+    if not SameText(s, FinBackup) then
+      raise Exception.Create('Erreur durant le backup');
+  finally
+    if AutoClose then
+      frmVerbose.Free
+    else
+      frmVerbose.Fin;
+  end;
+end;
+
+procedure TdmPrinc.doRestore(const backupFile: TFileName; AutoClose: Boolean = True; fixMetadata: Boolean = False);
+var
+  s: string;
+  frmVerbose: TFrmVerbose;
+begin
+  frmVerbose := TFrmVerbose.Create(Application);
+  try
+    frmVerbose.Show;
+    UIBDataBase.Connected := False;
+    Application.ProcessMessages;
+    UIBRestore.PageSize := DBPageSize;
+    UIBRestore.OnVerbose := frmVerbose.UIBVerbose;
+    UIBRestore.Verbose := True;
+    UIBRestore.BackupFiles.Text := backupFile;
+
+    UIBRestore.FixMetadataCharset := csWIN1252;
+    UIBRestore.FixDataCharset := csWIN1252;
+
+    if fixMetadata then
+      UIBRestore.Options := UIBRestore.Options + [roFixMetadataCharset, roFixDataCharset]
+    else
+      UIBRestore.Options := UIBRestore.Options - [roFixMetadataCharset, roFixDataCharset];
+
+    UIBRestore.Run;
+
+    s := Copy(frmVerbose.Memo1.Lines[frmVerbose.Memo1.Lines.Count - 2], 1, Length(FinRestore));
+    if not SameText(s, FinRestore) then
+      raise Exception.Create('Erreur durant le restore');
+  finally
+    if AutoClose then
+      frmVerbose.Free
+    else
+      frmVerbose.Fin;
+  end;
+end;
+
+class function TdmPrinc.getInstance: TdmPrinc;
+var
+  cs: TCriticalSection;
+begin
+  if not Assigned(_instance) then
+  begin
+    cs := TCriticalSection.Create;
+    cs.Enter;
+    try
+      Application.CreateForm(TdmPrinc, _instance);
+    finally
+      cs.Leave;
+      cs.Free;
+    end;
+  end;
+  Result := _instance;
 end;
 
 procedure TdmPrinc.MakeJumpList;
@@ -281,7 +352,45 @@ begin
   end;
 end;
 
-function TdmPrinc.CheckVersion(Force: Boolean): Boolean;
+function TdmPrinc.OuvreSession(doConnect: Boolean): Boolean;
+begin
+  try
+    Result := True;
+
+    PrepareDBConnexion;
+
+    if doConnect then
+      UIBDataBase.Connected := True;
+
+    if not Assigned(dmCommun) then
+      Application.CreateForm(TdmCommun, dmCommun);
+  except
+    AffMessage(rsOuvertureSessionRate + #13#13 + Exception(ExceptObject).Message, mtError, [mbOk], True);
+    Result := False;
+  end;
+end;
+
+procedure TdmPrinc.PrepareDBConnexion;
+begin
+  UIBDataBase.Connected := False;
+  UIBDataBase.DatabaseName := DatabasePath;
+  UIBDataBase.UserName := DatabaseUserName;
+  UIBDataBase.PassWord := DatabasePassword;
+  UIBDataBase.LibraryName := DataBaseLibraryName;
+  UIBDataBase.Params.Values['sql_role_name'] := DatabaseRole;
+
+  UIBBackup.Database := DatabasePath;
+  UIBBackup.UserName := DatabaseUserName;
+  UIBBackup.PassWord := DatabasePassword;
+  UIBBackup.LibraryName := DataBaseLibraryName;
+
+  UIBRestore.Database := DatabasePath;
+  UIBRestore.UserName := DatabaseUserName;
+  UIBRestore.PassWord := DatabasePassword;
+  UIBRestore.LibraryName := DataBaseLibraryName;
+end;
+
+function TdmPrinc.CheckExeVersion(Force: Boolean): Boolean;
 // Valeurs de retour:
 // False: pas de mise à jour ou mise à jour "reportée"
 // True: mise à jour et utilisateur demande à fermer l'appli
@@ -398,6 +507,9 @@ var
   data: RMSGSendData;
   CD: TCopyDataStruct;
   s: string;
+{$IFDEF TEST_ICU}
+  backupFile: TFileName;
+{$ENDIF}
 begin
   TGlobalVar.Mode_en_cours := mdLoad;
   Application.Title := '© TeträmCorp ' + TitreApplication + ' ' + TGlobalVar.Utilisateur.AppVersion;
@@ -436,13 +548,13 @@ begin
     Debut := Now;
 
     FrmSplash.Affiche_act(VerificationVersion + '...');
-    if dmPrinc.CheckVersion(False) then
+    if dmPrinc.CheckExeVersion(False) then
       Exit;
 
 {$IFNDEF TEST_ICU}
-    if not OuvreSession(True) then
+    if not dmPrinc.OuvreSession(True) then
       Exit;
-    if not dmPrinc.CheckVersions(FrmSplash.Affiche_act) then
+    if not dmPrinc.CheckDBVersion(FrmSplash.Affiche_act) then
       Exit;
 
     FrmSplash.Affiche_act(ChargementOptions + '...');
@@ -462,33 +574,10 @@ begin
       FrmSplash.Update;
     end;
 {$ELSE}
-    if not OuvreSession(False) then
-      Exit;
-
-      with TFrmVerbose.Create(Application) do
-      try
-      Application.ProcessMessages;
-      dmPrinc.UIBBackup.OnVerbose := UIBVerbose;
-      dmPrinc.UIBBackup.Verbose := True;
-      dmPrinc.UIBBackup.BackupFiles.Text := TPath.Combine(TPath.GetLibraryPath, 'test-icu.fbk');
-        // dmPrinc.UIBBackup.Run;
-      finally
-        // pas de free, c'est la fenêtre qui va s'auto-libérer
-        Fin;
-      end;
-
-    with TFrmVerbose.Create(Application) do
-      try
-        dmPrinc.UIBDataBase.Connected := False;
-        Application.ProcessMessages;
-        dmPrinc.UIBRestore.OnVerbose := UIBVerbose;
-        dmPrinc.UIBRestore.Verbose := True;
-        dmPrinc.UIBRestore.BackupFiles.Text := TPath.Combine(TPath.GetLibraryPath, 'test-icu.fbk');
-        dmPrinc.UIBRestore.Run;
-      finally
-        // pas de free, c'est la fenêtre qui va s'auto-libérer
-        Fin;
-      end;
+    dmPrinc.PrepareDBConnexion;
+    backupFile := TPath.Combine(TPath.GetLibraryPath, 'test-icu.fbk');
+    dmPrinc.doBackup(backupFile);
+    dmPrinc.doRestore(backupFile);
 {$ENDIF}
   finally
     FrmSplash.Free;
@@ -498,5 +587,9 @@ begin
 {$ENDIF}
     Application.MainForm.Show;
 end;
+
+initialization
+
+InitProc := @BdtkInitProc;
 
 end.

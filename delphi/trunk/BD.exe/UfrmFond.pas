@@ -1068,7 +1068,7 @@ end;
 
 procedure TfrmFond.actMiseAJourExecute(Sender: TObject);
 begin
-  DMPrinc.CheckVersion(True);
+  DMPrinc.CheckExeVersion(True);
 end;
 
 procedure TfrmFond.HistoriqueChanged(Sender: TObject; LastAction: TConsult);

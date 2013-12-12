@@ -7,69 +7,30 @@ uses
 
 const
   FB_ODS = '11.2';
-  DBPageSize = 16384;
 
 procedure MAJ_ODS(FullRebuild: Boolean);
 
 implementation
 
 uses
-  IOUTils, CommonConst, UfrmVerbose, UdmPrinc, Divers, UIB, UIBLib, UIBMetadata, UIBConst;
+  IOUtils, CommonConst, UfrmVerbose, UdmPrinc, Divers, UIB, UIBLib, UIBMetadata, UIBConst;
 
-procedure MAJ_ODS_BackupRestore(DBPageSize: Integer);
-const
-  FinBackup = 'gbak:closing file, committing, and finishing.';
-  FinRestore = 'gbak:    committing metadata';
+procedure MAJ_ODS_BackupRestore;
 var
-  FichierBackup, s: string;
-  Done, pre25: Boolean;
+  FichierBackup: string;
+  pre25: Boolean;
 begin
   FichierBackup := TPath.Combine(TempPath, 'bdtk-upgrade.fbk');
+  if TFile.Exists(FichierBackup) then TFile.Delete(FichierBackup);
+  TFile.Copy(dmPrinc.UIBDataBase.InfoDbFileName, TPath.Combine(TempPath, TPath.GetFileName(dmPrinc.UIBDataBase.InfoDbFileName)), True);
+
+  pre25 := Format('%d.%d', [dmPrinc.UIBDataBase.InfoOdsVersion, dmPrinc.UIBDataBase.InfoOdsMinorVersion]) < TVersionNumber('11.2'); // ODS11.2 = FB2.5
+
+  dmPrinc.doBackup(FichierBackup, True);
+  dmPrinc.doRestore(FichierBackup, True, pre25);
+
+  dmPrinc.UIBDataBase.Connected := True;
   TFile.Delete(FichierBackup);
-  TFile.Delete(TPath.Combine(TempPath, TPath.GetFileName(DMPrinc.UIBDataBase.InfoDbFileName)));
-  TFile.Copy(DMPrinc.UIBDataBase.InfoDbFileName, TPath.Combine(TempPath, TPath.GetFileName(DMPrinc.UIBDataBase.InfoDbFileName)), False);
-
-  pre25 := Format('%d.%d', [DMPrinc.UIBDataBase.InfoOdsVersion, DMPrinc.UIBDataBase.InfoOdsMinorVersion]) < TVersionNumber('11.2'); // ODS11.2 = FB2.5
-
-  Done := False;
-  with TFrmVerbose.Create(nil) do
-    try
-      Application.ProcessMessages;
-      DMPrinc.UIBBackup.OnVerbose := UIBVerbose;
-      DMPrinc.UIBBackup.Verbose := True;
-      DMPrinc.UIBBackup.BackupFiles.Text := FichierBackup;
-      DMPrinc.UIBBackup.Run;
-      s := Copy(Memo1.Lines[Memo1.Lines.Count - 1], 1, Length(FinBackup));
-      if not SameText(s, FinBackup) then
-        raise Exception.Create('Erreur durant le backup');
-
-      DMPrinc.UIBDataBase.Connected := False;
-      Application.ProcessMessages;
-      DMPrinc.UIBRestore.PageSize := DBPageSize;
-      DMPrinc.UIBRestore.OnVerbose := UIBVerbose;
-      DMPrinc.UIBRestore.Verbose := True;
-      DMPrinc.UIBRestore.BackupFiles.Text := FichierBackup;
-      DMPrinc.UIBRestore.FixMetadataCharset := csWIN1252;
-      DMPrinc.UIBRestore.FixDataCharset := csWIN1252;
-      if pre25 then
-        DMPrinc.UIBRestore.Options := DMPrinc.UIBRestore.Options + [roFixMetadataCharset, roFixDataCharset]
-      else
-        DMPrinc.UIBRestore.Options := DMPrinc.UIBRestore.Options - [roFixMetadataCharset, roFixDataCharset];
-      DMPrinc.UIBRestore.Run;
-      s := Copy(Memo1.Lines[Memo1.Lines.Count - 2], 1, Length(FinRestore));
-      if not SameText(s, FinRestore) then
-        raise Exception.Create('Erreur durant le restore');
-
-      DMPrinc.UIBDataBase.Connected := True;
-      DeleteFile(PChar(FichierBackup));
-      Done := True;
-    finally
-      // pas de free, c'est la fenêtre qui va s'auto-libérer
-      if Done then
-        Free
-      else
-        Fin;
-    end;
 end;
 
 var
@@ -352,7 +313,7 @@ begin
   PrepareMigration;
   frmVerbose := TFrmVerbose.Create(nil);
   try
-    UIBDBSrc.DatabaseName := DMPrinc.UIBDataBase.DatabaseName;
+    UIBDBSrc.DatabaseName := dmPrinc.UIBDataBase.DatabaseName;
 
     Log(UIBDBSrc.DatabaseName);
 
@@ -384,12 +345,12 @@ var
   AvailableSpace, TotalSpace: Int64;
   toUpgrade: Boolean;
 begin
-  toUpgrade := Format('%d.%d', [DMPrinc.UIBDataBase.InfoOdsVersion, DMPrinc.UIBDataBase.InfoOdsMinorVersion]) < TVersionNumber(FB_ODS);
-  toUpgrade := toUpgrade or (DMPrinc.UIBDataBase.InfoPageSize < DBPageSize);
+  toUpgrade := Format('%d.%d', [dmPrinc.UIBDataBase.InfoOdsVersion, dmPrinc.UIBDataBase.InfoOdsMinorVersion]) < TVersionNumber(FB_ODS);
+  toUpgrade := toUpgrade or (dmPrinc.UIBDataBase.InfoPageSize < DBPageSize);
   if toUpgrade then
   begin
     GetDiskFreeSpaceEx(PChar(TempPath), AvailableSpace, TotalSpace, nil);
-    if AvailableSpace < 2 * (DMPrinc.UIBDataBase.InfoDbSizeInPages * DMPrinc.UIBDataBase.InfoPageSize) then
+    if AvailableSpace < 2 * (dmPrinc.UIBDataBase.InfoDbSizeInPages * dmPrinc.UIBDataBase.InfoPageSize) then
       raise Exception.CreateFmt('Espace insuffisant sur le disque "%s" pour procéder à la mise à jour', [ExtractFileDrive(TempPath)]);
 
     // le fullrebuild ne peut pas être utilisé tant que l'extraction des metadata des uib ne sait pas
@@ -398,7 +359,7 @@ begin
     // if FullRebuild then
     // RebuildDB
     // else
-    MAJ_ODS_BackupRestore(DBPageSize);
+    MAJ_ODS_BackupRestore;
   end;
 end;
 

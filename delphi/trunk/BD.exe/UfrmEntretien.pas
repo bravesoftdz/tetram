@@ -44,7 +44,7 @@ type
     procedure vstEntretienFreeNode(Sender: TBaseVirtualTree; Node: PVirtualNode);
   private
     { Déclarations privées }
-    procedure CheckVersions;
+    procedure CheckDBVersion;
   public
     { Déclarations publiques }
   end;
@@ -204,14 +204,14 @@ begin
     ActionNodeData.Action.Execute;
 end;
 
-procedure TfrmEntretien.CheckVersions;
+procedure TfrmEntretien.CheckDBVersion;
 
 var
   Info: TInformation;
 begin
   Info := TInformation.Create;
   try
-    if not(OuvreSession(True) and (DMPrinc.CheckVersions(Info.ShowInfo, False) or (BDDOpen.Execute and BDDOpen.ExecuteResult))) then
+    if not(dmPrinc.OuvreSession(True) and (dmPrinc.CheckDBVersion(Info.ShowInfo, False) or (BDDOpen.Execute and BDDOpen.ExecuteResult))) then
     begin
       VDTButton20.Click;
       Application.Terminate;
@@ -425,17 +425,7 @@ end;
 
 procedure TfrmEntretien.BDDBackupAccept(Sender: TObject);
 begin
-  with TFrmVerbose.Create(Self) do
-    try
-      Application.ProcessMessages;
-      DMPrinc.UIBBackup.OnVerbose := UIBVerbose;
-      DMPrinc.UIBBackup.Verbose := True;
-      DMPrinc.UIBBackup.BackupFiles.Text := BDDBackup.Dialog.FileName;
-      DMPrinc.UIBBackup.Run;
-    finally
-      // pas de free, c'est la fenêtre qui va s'auto-libérer
-      Fin;
-    end;
+  dmPrinc.doBackup(BDDBackup.Dialog.FileName);
 end;
 
 procedure TfrmEntretien.BDDRestoreBeforeExecute(Sender: TObject);
@@ -446,19 +436,8 @@ end;
 
 procedure TfrmEntretien.BDDRestoreAccept(Sender: TObject);
 begin
-  with TFrmVerbose.Create(Self) do
-    try
-      DMPrinc.UIBDataBase.Connected := False;
-      Application.ProcessMessages;
-      DMPrinc.UIBRestore.OnVerbose := UIBVerbose;
-      DMPrinc.UIBRestore.Verbose := True;
-      DMPrinc.UIBRestore.BackupFiles.Text := BDDRestore.Dialog.FileName;
-      DMPrinc.UIBRestore.Run;
-    finally
-      // pas de free, c'est la fenêtre qui va s'auto-libérer
-      Fin;
-    end;
-  CheckVersions;
+  dmPrinc.doRestore(BDDRestore.Dialog.FileName);
+  CheckDBVersion;
 end;
 
 procedure TfrmEntretien.BDDOpenBeforeExecute(Sender: TObject);
@@ -478,7 +457,7 @@ begin
       Free;
     end;
   DMPrinc.UIBDataBase.Connected := False;
-  CheckVersions;
+  CheckDBVersion;
   vstEntretien.Invalidate;
 end;
 
