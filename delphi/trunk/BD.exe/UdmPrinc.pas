@@ -52,7 +52,7 @@ implementation
 uses
   IOUtils, CommonConst, Commun, Textes, UdmCommun, UIBLib, Divers, IniFiles, Procedures, UHistorique, Math, UIBase, Updates, UfrmFond, CheckVersionNet,
   DateUtils, UMAJODS, JumpList, UfrmSplash, Proc_Gestions, Generics.Collections,
-  UfrmVerbose;
+  UfrmVerbose, UfrmConsole;
 
 const
   FinBackup = 'gbak:closing file, committing, and finishing.';
@@ -230,6 +230,8 @@ end;
 
 procedure TdmPrinc.ApplicationEvents1Idle(Sender: TObject; var Done: Boolean);
 begin
+  TfrmConsole.AddSeparator;
+
   Done := not Historique.Waiting;
   if Historique.Waiting then
     Historique.ProcessNext;
@@ -507,9 +509,6 @@ var
   data: RMSGSendData;
   CD: TCopyDataStruct;
   s: string;
-{$IFDEF TEST_ICU}
-  backupFile: TFileName;
-{$ENDIF}
 begin
   TGlobalVar.Mode_en_cours := mdLoad;
   Application.Title := '© TeträmCorp ' + TitreApplication + ' ' + TGlobalVar.Utilisateur.AppVersion;
@@ -551,7 +550,6 @@ begin
     if dmPrinc.CheckExeVersion(False) then
       Exit;
 
-{$IFNDEF TEST_ICU}
     if not dmPrinc.OuvreSession(True) then
       Exit;
     if not dmPrinc.CheckDBVersion(FrmSplash.Affiche_act) then
@@ -566,6 +564,10 @@ begin
     Historique.AddConsultation(fcRecherche);
     AnalyseLigneCommande(GetCommandLine);
 
+{$IFDEF DEBUG}
+    Historique.AddWaiting(fcConsole);
+{$ENDIF DEBUG}
+
     FrmSplash.Affiche_act(FinChargement + '...');
     ChangeCurseur(crHandPoint, 'CUR_HANDPOINT', RT_RCDATA);
     while SecondsBetween(Now, Debut) < 1 do // au moins 1 seconde d'affichage du splash
@@ -573,19 +575,10 @@ begin
       FrmSplash.Show;
       FrmSplash.Update;
     end;
-{$ELSE}
-    dmPrinc.PrepareDBConnexion;
-    backupFile := TPath.Combine(TPath.GetLibraryPath, 'test-icu.fbk');
-    dmPrinc.doBackup(backupFile);
-    dmPrinc.doRestore(backupFile);
-{$ENDIF}
   finally
     FrmSplash.Free;
   end;
-{$IFDEF TEST_ICU}
-  if Assigned(Application.MainForm) then
-{$ENDIF}
-    Application.MainForm.Show;
+  Application.MainForm.Show;
 end;
 
 initialization

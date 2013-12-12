@@ -1138,7 +1138,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     end
     object lvEditions: TListBox
       Left = 346
-      Top = 481
+      Top = 505
       Width = 216
       Height = 62
       Anchors = [akLeft, akTop, akRight]

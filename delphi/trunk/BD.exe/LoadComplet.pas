@@ -701,7 +701,8 @@ type
 implementation
 
 uses
-  UIBLib, Divers, StdCtrls, Procedures, Textes, StrUtils, UMetadata, Controls, UfrmFusionEditions, IOUtils;
+  UIBLib, Divers, StdCtrls, Procedures, Textes, StrUtils, UMetadata, Controls, UfrmFusionEditions, IOUtils,
+  UfrmConsole;
 
 function MakeOption(Value: Integer; const Caption: string): ROption;
 begin
@@ -873,6 +874,9 @@ begin
   with q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
+
+      TfrmConsole.AddEvent(Self.UnitName, 'TAlbumComplet.Fill > données de base - ' + GUIDToString(Reference));
+
       FetchBlobs := True;
       SQL.Clear;
       SQL.Add('select');
@@ -902,10 +906,15 @@ begin
         if Self.Notation = 0 then
           Self.Notation := 900;
 
-        Self.Serie.Fill(StringToGUIDDef(Fields.ByNameAsString['id_serie'], GUID_NULL));
-
         FComplet := Fields.ByNameAsBoolean['complet'];
 
+        TfrmConsole.AddEvent(Self.UnitName, 'TAlbumComplet.Fill < données de base - ' + GUIDToString(Reference));
+
+        TfrmConsole.AddEvent(Self.UnitName, 'TAlbumComplet.Fill > série - ' + GUIDToString(Reference));
+        Self.Serie.Fill(StringToGUIDDef(Fields.ByNameAsString['id_serie'], GUID_NULL));
+        TfrmConsole.AddEvent(Self.UnitName, 'TAlbumComplet.Fill < série - ' + GUIDToString(Reference));
+
+        TfrmConsole.AddEvent(Self.UnitName, 'TAlbumComplet.Fill > univers - ' + GUIDToString(Reference));
         Close;
         SQL.Clear;
         SQL.Add('select');
@@ -930,7 +939,9 @@ begin
         end;
         Self.UniversFull.AddRange(Self.Serie.Univers);
         Self.UniversFull.AddRange(Self.Univers);
+        TfrmConsole.AddEvent(Self.UnitName, 'TAlbumComplet.Fill < univers - ' + GUIDToString(Reference));
 
+        TfrmConsole.AddEvent(Self.UnitName, 'TAlbumComplet.Fill > auteurs - ' + GUIDToString(Reference));
         Close;
         SQL.Text := 'select * from proc_auteurs(?, null, null)';
         Params.AsString[0] := GUIDToString(Reference);
@@ -952,8 +963,11 @@ begin
         finally
           TAuteur.Unprepare;
         end;
+        TfrmConsole.AddEvent(Self.UnitName, 'TAlbumComplet.Fill < auteurs - ' + GUIDToString(Reference));
 
+        TfrmConsole.AddEvent(Self.UnitName, 'TAlbumComplet.Fill > éditions - ' + GUIDToString(Reference));
         Self.Editions.Fill(Self.ID_Album);
+        TfrmConsole.AddEvent(Self.UnitName, 'TAlbumComplet.Fill < éditions - ' + GUIDToString(Reference));
       end;
     finally
       q.Transaction.Free;
@@ -1337,6 +1351,8 @@ begin
   with q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
+
+      TfrmConsole.AddEvent(Self.UnitName, 'TEditionComplete.Fill > données de base - ' + GUIDToString(Reference));
       SQL.Clear;
       SQL.Add('select');
       SQL.Add('  id_edition, id_album, e.id_editeur, e.id_collection, nomcollection, anneeedition, prix, vo,');
@@ -1394,7 +1410,9 @@ begin
         Self.AnneeCote := Fields.ByNameAsInteger['anneecote'];
         Self.PrixCote := Fields.ByNameAsCurrency['prixcote'];
         Self.NumeroPerso := Fields.ByNameAsString['numeroperso'];
+        TfrmConsole.AddEvent(Self.UnitName, 'TEditionComplete.Fill < données de base - ' + GUIDToString(Reference));
 
+        TfrmConsole.AddEvent(Self.UnitName, 'TEditionComplete.Fill > images - ' + GUIDToString(Reference));
         Close;
         SQL.Clear;
         SQL.Add('select');
@@ -1410,6 +1428,7 @@ begin
         Params.AsString[0] := GUIDToString(Self.ID_Edition);
         Open;
         TCouverture.FillList(TList<TBasePointeur>(Self.Couvertures), q);
+        TfrmConsole.AddEvent(Self.UnitName, 'TEditionComplete.Fill < images - ' + GUIDToString(Reference));
       end;
     finally
       q.Transaction.Free;
@@ -1789,6 +1808,8 @@ begin
   with TUIBQuery.Create(nil) do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
+
+      TfrmConsole.AddEvent(Self.UnitName, '> TEditionsCompletes.Fill - ' + GUIDToString(Reference));
       SQL.Text := 'select id_edition from editions where id_album = ?';
       if Stock in [0, 1] then
         SQL.Add('  and e.stock = :stock');
@@ -1801,6 +1822,7 @@ begin
         Editions.Add(TEditionComplete.Create(StringToGUID(Fields.AsString[0])));
         Next;
       end;
+      TfrmConsole.AddEvent(Self.UnitName, '< TEditionsCompletes.Fill - ' + GUIDToString(Reference));
     finally
       Transaction.Free;
       Free;

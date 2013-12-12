@@ -187,7 +187,8 @@ uses
   UMAJ2_2_3_21 in 'mises_a_jour\UMAJ2_2_3_21.pas',
   UMySQLMAJ1_0_0_3 in 'Web\mises_a_jour\UMySQLMAJ1_0_0_3.pas',
   UMAJ2_2_3_22 in 'mises_a_jour\UMAJ2_2_3_22.pas',
-  UScriptEditorPage in 'Scripts\UScriptEditorPage.pas';
+  UScriptEditorPage in 'Scripts\UScriptEditorPage.pas',
+  UfrmConsole in 'UfrmConsole.pas' {frmConsole};
 
 begin
   Application.Title := 'BDthèque';

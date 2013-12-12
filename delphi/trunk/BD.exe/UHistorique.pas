@@ -7,7 +7,8 @@ uses SysUtils, Windows, Classes, Generics.Collections, Commun;
 type
   TActionConsultation = (fcActionBack, fcActionRefresh, fcAlbum, fcAuteur, fcCouverture, fcRecherche, fcPreview, fcSeriesIncompletes,
     fcPrevisionsSorties, fcRecreateToolBar, fcPrevisionsAchats, fcRefreshRepertoire, fcRefreshRepertoireData, fcParaBD, fcImageParaBD, fcSerie, fcGestionAjout,
-    fcGestionModif, fcGestionSupp, fcGestionAchat, fcScripts, fcConflitImport, fcGallerie, fcModeConsultation, fcModeGestion, fcModeScript, fcUnivers);
+    fcGestionModif, fcGestionSupp, fcGestionAchat, fcScripts, fcConflitImport, fcGallerie, fcModeConsultation, fcModeGestion, fcModeScript, fcUnivers,
+    fcConsole);
 
 type
   TConsultCallback = procedure(Data: TObject);
@@ -94,7 +95,7 @@ procedure RefreshCallBack(Data: TObject);
 
 implementation
 
-uses MAJ, UfrmFond, Forms, Proc_Gestions;
+uses MAJ, UfrmFond, Forms, Proc_Gestions, UfrmConsole, TypInfo, UdmPrinc;
 
 const
   UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcScripts, fcConflitImport];
@@ -102,7 +103,7 @@ const
   NoSaveHistorique = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire, fcRefreshRepertoireData]
   // à cause des callback, les appels de gestion ne peuvent pas être sauvés dans l'historique
   // et puis je vois pas bien à quoi ça pourrait servir
-    + UsedInGestion + Modes;
+    + UsedInGestion + Modes + [fcConsole];
   CanRefresh = [fcAlbum, fcAuteur, fcSeriesIncompletes, fcPrevisionsSorties, fcPrevisionsAchats, fcGallerie, fcUnivers];
   MustRefresh = [fcRecherche];
 
@@ -367,6 +368,8 @@ function THistory.Open(Consult: TConsult; WithLock: Boolean): Boolean;
 var
   doCallback: Boolean;
 begin
+  TfrmConsole.AddEvent(UnitName, 'THistory.Open ' + GetEnumName(TypeInfo(TActionConsultation), Integer(Consult.Action)));
+
   Result := True;
   doCallback := False;
   if WithLock then
@@ -440,6 +443,8 @@ begin
         doCallback := TActionGestionSupp(Consult.GestionProc)(Consult.GestionVTV);
       fcGestionAchat:
         doCallback := TActionGestionAchat(Consult.GestionProc)(Consult.GestionVTV);
+      fcConsole:
+        TfrmConsole.Create(Application).Show;
     end;
     if doCallback then
     begin

@@ -164,7 +164,7 @@ implementation
 
 uses
   Commun, TypeRec, CommonConst, MAJ, Impression, DateUtils, UHistorique, Procedures,
-  Divers, Textes, Proc_Gestions;
+  Divers, Textes, Proc_Gestions, UfrmConsole;
 
 var
   FSortColumn: Integer;
@@ -296,6 +296,7 @@ var
   ms: TStream;
   jpg: TJPEGImage;
 begin
+  TfrmConsole.AddEvent(UnitName, 'ShowCouverture ' + IntToStr(Num));
   Label4.Visible := FCurrentEdition.Couvertures.Count = 0;
 
   if FCurrentEdition.Couvertures.Count > 0 then
@@ -308,7 +309,10 @@ begin
     CurrentCouverture := Num;
     Couverture.Picture := nil;
     try
+      TfrmConsole.AddEvent(UnitName, '> GetCouvertureStream');
       ms := GetCouvertureStream(False, FCurrentEdition.Couvertures[Num].ID, Couverture.Height, Couverture.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
+      TfrmConsole.AddEvent(UnitName, '< GetCouvertureStream');
+
       if Assigned(ms) then
         try
           jpg := TJPEGImage.Create;
@@ -352,6 +356,8 @@ begin
   end
   else
     Couverture.Picture.Assign(nil);
+
+  TfrmConsole.AddEvent(UnitName, 'ShowCouverture done ' + IntToStr(Num));
 end;
 
 procedure TfrmConsultationAlbum.FormShow(Sender: TObject);
@@ -473,8 +479,10 @@ var
   PEd: TEditionComplete;
 begin
   ClearForm;
+  TfrmConsole.AddEvent(UnitName, 'FAlbum.Fill() - ' + GUIDToString(Value));
   FAlbum.Fill(Value);
 
+  TfrmConsole.AddEvent(UnitName, 'Chargement des données... - ' + GUIDToString(Value));
   Caption := 'Fiche d''album - ' + FAlbum.ChaineAffichage;
   if IsEqualGUID(FAlbum.Serie.ID_Serie, GUID_NULL) then
   begin
@@ -571,6 +579,8 @@ begin
     lvEditions.AddItem(PEd.ChaineAffichage, PEd);
   lvEditions.Items.EndUpdate;
   lvEditions.Visible := FAlbum.Editions.Editions.Count > 1;
+
+  TfrmConsole.AddEvent(UnitName, 'Chargement terminé - ' + GUIDToString(Value));
 end;
 
 procedure TfrmConsultationAlbum.TitreSerieDblClick(Sender: TObject);
