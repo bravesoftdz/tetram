@@ -48,14 +48,15 @@ type
     onlineScripts: TObjectList<TOnlineScript>;
     FUpdating: Boolean;
   public
-    dmScripts: IMasterEngine;
+    MasterEngine: IMasterEngine;
     procedure GetOnlineList(List: TObjectList<TOnlineScript>);
   end;
 
 implementation
 
 uses
-  IOUtils, JclSimpleXML, UScriptsFonctions, CommonConst, UNet;
+  IOUtils, JclSimpleXML, UScriptsFonctions, CommonConst, UNet, Divers,
+  UMasterEngine;
 
 {$R *.dfm}
 
@@ -127,7 +128,7 @@ begin
       Node := VirtualStringTree1.GetNextChecked(Node);
     end;
 
-    dmScripts.ScriptList.LoadDir(RepScripts);
+    MasterEngine.ScriptList.LoadDir(RepScripts);
   finally
     FUpdating := False;
   end;
@@ -139,6 +140,7 @@ begin
   FUpdating := False;
   onlineScripts := TObjectList<TOnlineScript>.Create(True);
   VirtualStringTree1.NodeDataSize := 0;
+  Button2.ElevationRequired := not IsAdmin;
 end;
 
 procedure TfrmScriptsUpdate.FormDestroy(Sender: TObject);
@@ -156,7 +158,7 @@ procedure TfrmScriptsUpdate.GetOnlineList(List: TObjectList<TOnlineScript>);
 
   function GetLocalScript(ScriptName: string): TScript;
   begin
-    for Result in dmScripts.ScriptList do
+    for Result in MasterEngine.ScriptList do
       if SameText(TPath.GetFileName(Result.FileName), ScriptName) then
       begin
         if not Result.Loaded then

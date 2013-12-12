@@ -166,17 +166,14 @@ begin
       2:
         CellText := e.Evenement;
       3:
-        if Node <> Sender.RootNode.LastChild then
-        begin
-          p := FListEvents[Node.Index + 1];
+        // if e.Duree > 0 then
           CellText := Format('%d:%.3d', [e.Duree div 1000, e.Duree mod 1000]);
-        end;
       4:
         begin
           while Assigned(Node.PrevSibling) and not(FListEvents[Node.PrevSibling.Index] is TSeparatorEvent) do
             Node := Node.PrevSibling;
           p := FListEvents[Node.Index];
-          if e <> p then
+          // if e <> p then
           begin
             d := MilliSecondsBetween(e.TimeStamp, p.TimeStamp) + e.Duree;
             CellText := Format('%d:%.3d', [d div 1000, d mod 1000]);

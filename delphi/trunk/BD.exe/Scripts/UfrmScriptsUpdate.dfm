@@ -60,7 +60,7 @@ object frmScriptsUpdate: TfrmScriptsUpdate
   object Button1: TButton
     Left = 8
     Top = 438
-    Width = 113
+    Width = 137
     Height = 25
     Cursor = crHandPoint
     Action = actGetListe
@@ -88,9 +88,9 @@ object frmScriptsUpdate: TfrmScriptsUpdate
     end
   end
   object Button2: TButton
-    Left = 127
+    Left = 151
     Top = 438
-    Width = 130
+    Width = 154
     Height = 25
     Cursor = crHandPoint
     Action = actUpdate

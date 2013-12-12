@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{A4E4DFAF-E8D4-4A12-B2FC-43EB2128EAE3}</ProjectGuid>
         <MainSource>BDPic.dpr</MainSource>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
         <ProjectVersion>14.6</ProjectVersion>
         <Base>True</Base>
