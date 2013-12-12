@@ -143,6 +143,7 @@ begin
     DatabaseLibraryName := ini.ReadString('Database', 'LibraryName', DatabaseLibraryName);
     RepImages := IncludeTrailingPathDelimiter(ini.ReadString('DIVERS', 'RepImages', RepImages));
     RepScripts := IncludeTrailingPathDelimiter(ini.ReadString('DIVERS', 'Scripts', RepScripts));
+    RepWebServer := IncludeTrailingPathDelimiter(ini.ReadString('DIVERS', 'WebServer', RepWebServer));
 
     TGlobalVar.Utilisateur.Options.VerifMAJDelai := ini.ReadInteger('Divers', 'VerifMAJDelai', 4);
     TGlobalVar.Utilisateur.Options.LastVerifMAJ := ini.ReadInteger('Divers', 'LastVerifMAJ', 0);
