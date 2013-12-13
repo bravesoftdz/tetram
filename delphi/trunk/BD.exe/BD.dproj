@@ -203,7 +203,6 @@
             <Form>frmEditParaBD</Form>
         </DCCReference>
         <DCCReference Include="Textes.pas"/>
-        <DCCReference Include="LoadComplet.pas"/>
         <DCCReference Include="Consultation\Impression.pas"/>
         <DCCReference Include="UframBoutons.pas">
             <Form>framBoutons</Form>
@@ -239,7 +238,6 @@
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Consultation\MAJ.pas"/>
-        <DCCReference Include="TypeRec.pas"/>
         <DCCReference Include="VirtualTree.pas"/>
         <DCCReference Include="Consultation\UfrmPreview.pas">
             <Form>frmPreview</Form>
@@ -265,7 +263,6 @@
             <Form>frmPrevisionsAchats</Form>
         </DCCReference>
         <DCCReference Include="mises_a_jour\Updates.pas"/>
-        <DCCReference Include="ListOfTypeRec.pas"/>
         <DCCReference Include="Gestion\UfrmWizardImport.pas">
             <Form>frmWizardImport</Form>
         </DCCReference>
@@ -312,7 +309,6 @@
             <Form>framVTEdit</Form>
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
-        <DCCReference Include="LoadCompletImport.pas"/>
         <DCCReference Include="Scripts\UfrmValidationImport.pas">
             <Form>frmValidationImport</Form>
         </DCCReference>
@@ -451,6 +447,10 @@
             <Form>frmConsole</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="DBObjets\ListOfTypeRec.pas"/>
+        <DCCReference Include="DBObjets\LoadComplet.pas"/>
+        <DCCReference Include="DBObjets\LoadCompletImport.pas"/>
+        <DCCReference Include="DBObjets\TypeRec.pas"/>
         <RcItem Include="images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>

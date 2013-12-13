@@ -40,7 +40,6 @@ uses
   UfrmEditAuteur in 'Gestion\UfrmEditAuteur.pas' {frmEditAuteur},
   UfrmEditParaBD in 'Gestion\UfrmEditParaBD.pas' {frmEditParaBD},
   Textes in 'Textes.pas',
-  LoadComplet in 'LoadComplet.pas',
   Impression in 'Consultation\Impression.pas',
   UframBoutons in 'UframBoutons.pas' {framBoutons: TFrame},
   UfrmOptions in 'UfrmOptions.pas' {frmOptions},
@@ -53,7 +52,6 @@ uses
   UframConvertisseur in 'UframConvertisseur.pas' {framConvertisseur: TFrame},
   UframRechercheRapide in 'UframRechercheRapide.pas' {framRechercheRapide: TFrame},
   MAJ in 'Consultation\MAJ.pas',
-  TypeRec in 'TypeRec.pas',
   VirtualTree in 'VirtualTree.pas',
   UfrmPreview in 'Consultation\UfrmPreview.pas' {frmPreview},
   Procedures in 'Procedures.pas',
@@ -65,7 +63,6 @@ uses
   UfrmSeriesIncompletes in 'Consultation\UfrmSeriesIncompletes.pas' {frmSeriesIncompletes},
   UfrmPrevisionAchats in 'Consultation\UfrmPrevisionAchats.pas' {frmPrevisionsAchats},
   Updates in 'mises_a_jour\Updates.pas',
-  ListOfTypeRec in 'ListOfTypeRec.pas',
   UfrmWizardImport in 'Gestion\UfrmWizardImport.pas' {frmWizardImport},
   UImportXML in 'Gestion\UImportXML.pas',
   ProceduresBDtk in 'ProceduresBDtk.pas',
@@ -95,7 +92,6 @@ uses
   UfrmControlImport in 'Gestion\UfrmControlImport.pas' {frmControlImport},
   UVirtualTreeEdit in 'UVirtualTreeEdit.pas',
   UframVTEdit in 'UframVTEdit.pas' {framVTEdit: TFrame},
-  LoadCompletImport in 'LoadCompletImport.pas',
   UfrmValidationImport in 'Scripts\UfrmValidationImport.pas' {frmValidationImport},
   UfrmScriptChoix in 'Scripts\UfrmScriptChoix.pas' {frmScriptChoix},
   UScriptsHTMLFunctions in 'Scripts\UScriptsHTMLFunctions.pas',
@@ -188,7 +184,11 @@ uses
   UMySQLMAJ1_0_0_3 in 'Web\mises_a_jour\UMySQLMAJ1_0_0_3.pas',
   UMAJ2_2_3_22 in 'mises_a_jour\UMAJ2_2_3_22.pas',
   UScriptEditorPage in 'Scripts\UScriptEditorPage.pas',
-  UfrmConsole in 'UfrmConsole.pas' {frmConsole};
+  UfrmConsole in 'UfrmConsole.pas' {frmConsole},
+  ListOfTypeRec in 'DBObjets\ListOfTypeRec.pas',
+  LoadComplet in 'DBObjets\LoadComplet.pas',
+  LoadCompletImport in 'DBObjets\LoadCompletImport.pas',
+  TypeRec in 'DBObjets\TypeRec.pas';
 
 begin
   Application.Title := 'BDthèque';
