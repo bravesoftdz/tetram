@@ -1,0 +1,9 @@
+ABOUT   BITMAP  "images\imgAbout.bmp"
+IMAGENONVALIDE  RCDATA  "images\brokenimage.jpg"
+
+; attention, les ressources icones sont triés par ordre alphabetique
+; et l'icon de l'appli s'appelle MAINICON
+MAINICON_1 ICON "images\my-documents.ico"
+MAINICON_2 ICON "images\unknown.ico"
+
+

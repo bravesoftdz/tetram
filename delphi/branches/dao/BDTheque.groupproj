@@ -1,0 +1,72 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{34D6FF5D-C4A3-41B4-A9F2-A7188CB01A71}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="BDPic.DLL\BDPic.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="BDT_UDF.DLL\BDT_UDF.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="BD.exe\BD.dproj">
+            <Dependencies>BDPic.DLL\BDPic.dproj;BDT_UDF.DLL\BDT_UDF.dproj</Dependencies>
+        </Projects>
+        <Projects Include="D:\Composants\DWScript\Tools\IDEDialog\Delphi projects\DwsIdeDemo.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="BDPic">
+        <MSBuild Projects="BDPic.DLL\BDPic.dproj"/>
+    </Target>
+    <Target Name="BDPic:Clean">
+        <MSBuild Projects="BDPic.DLL\BDPic.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="BDPic:Make">
+        <MSBuild Projects="BDPic.DLL\BDPic.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="BDT_UDF">
+        <MSBuild Projects="BDT_UDF.DLL\BDT_UDF.dproj"/>
+    </Target>
+    <Target Name="BDT_UDF:Clean">
+        <MSBuild Projects="BDT_UDF.DLL\BDT_UDF.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="BDT_UDF:Make">
+        <MSBuild Projects="BDT_UDF.DLL\BDT_UDF.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="BD" DependsOnTargets="BDPic;BDT_UDF">
+        <MSBuild Projects="BD.exe\BD.dproj"/>
+    </Target>
+    <Target Name="BD:Clean" DependsOnTargets="BDPic:Clean;BDT_UDF:Clean">
+        <MSBuild Projects="BD.exe\BD.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="BD:Make" DependsOnTargets="BDPic:Make;BDT_UDF:Make">
+        <MSBuild Projects="BD.exe\BD.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DwsIdeDemo">
+        <MSBuild Projects="D:\Composants\DWScript\Tools\IDEDialog\Delphi projects\DwsIdeDemo.dproj"/>
+    </Target>
+    <Target Name="DwsIdeDemo:Clean">
+        <MSBuild Projects="D:\Composants\DWScript\Tools\IDEDialog\Delphi projects\DwsIdeDemo.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DwsIdeDemo:Make">
+        <MSBuild Projects="D:\Composants\DWScript\Tools\IDEDialog\Delphi projects\DwsIdeDemo.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="BDPic;BDT_UDF;BD;DwsIdeDemo"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="BDPic:Clean;BDT_UDF:Clean;BD:Clean;DwsIdeDemo:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="BDPic:Make;BDT_UDF:Make;BD:Make;DwsIdeDemo:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
