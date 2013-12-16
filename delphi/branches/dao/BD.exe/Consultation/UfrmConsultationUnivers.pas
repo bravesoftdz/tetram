@@ -44,7 +44,7 @@ type
     procedure vtAlbumsDblClick(Sender: TObject);
     procedure vtParaBDDblClick(Sender: TObject);
   private
-    FUnivers: TUniversComplet;
+    FUnivers: TUniversFull;
     function GetID_Univers: TGUID;
     procedure SetID_Univers(const Value: TGUID);
     procedure ClearForm;
@@ -58,7 +58,7 @@ type
     { Déclarations privées }
   public
     { Déclarations publiques }
-    property Univers: TUniversComplet read FUnivers;
+    property Univers: TUniversFull read FUnivers;
     property ID_Univers: TGUID read GetID_Univers write SetID_Univers;
   end;
 
@@ -139,7 +139,7 @@ end;
 procedure TfrmConsultationUnivers.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FUnivers := TUniversComplet.Create;
+  FUnivers := TUniversFull.Create;
 end;
 
 procedure TfrmConsultationUnivers.FormDestroy(Sender: TObject);

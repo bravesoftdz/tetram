@@ -16,7 +16,7 @@ procedure MAJPrevisionsAchats;
 procedure MAJRecherche(const Reference: TGUID; TypeSimple: Integer = -1; Stream: TMemoryStream = nil);
 function MAJGallerie(TypeGallerie: Integer; const Reference: TGUID): Boolean;
 function ZoomCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID): Boolean;
-function MAJScript(Data: TAlbumComplet): Boolean;
+function MAJScript(Data: TAlbumFull): Boolean;
 
 implementation
 
@@ -210,7 +210,7 @@ begin
     end;
 end;
 
-function MAJScript(Data: TAlbumComplet): Boolean;
+function MAJScript(Data: TAlbumFull): Boolean;
 var
   FDest: TfrmScripts;
   isUpdate: Boolean;

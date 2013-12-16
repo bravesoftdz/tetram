@@ -23,12 +23,12 @@ type
     FDebugPlugin: IDebugInfos;
     FTypeEngine: TScriptEngine;
     FEngine: IEngineInterface;
-    FInternalAlbumToImport, FAlbumToImport: TAlbumComplet;
+    FInternalAlbumToImport, FAlbumToImport: TAlbumFull;
     FConsole: TStrings;
     FOnAfterExecute: TAfterExecuteEvent;
     FCompiled: Boolean;
-    function GetAlbumToImport: TAlbumComplet;
-    procedure SetAlbumToImport(const Value: TAlbumComplet);
+    function GetAlbumToImport: TAlbumFull;
+    procedure SetAlbumToImport(const Value: TAlbumFull);
     function GetDebugPlugin: IDebugInfos;
     function GetScriptList: TScriptList;
     function GetEngine: IEngineInterface;
@@ -58,7 +58,7 @@ type
     procedure WriteToConsole(const Chaine: string);
 
     function GetAlbumToUpdate: Boolean;
-    property AlbumToImport: TAlbumComplet read GetAlbumToImport write SetAlbumToImport;
+    property AlbumToImport: TAlbumFull read GetAlbumToImport write SetAlbumToImport;
 
     property ScriptList: TScriptList read GetScriptList;
   end;
@@ -112,7 +112,7 @@ end;
 constructor TMasterEngine.Create;
 begin
   FDebugPlugin := TDebugInfos.Create(Self);
-  FInternalAlbumToImport := TAlbumComplet.Create;
+  FInternalAlbumToImport := TAlbumFull.Create;
   FAlbumToImport := FInternalAlbumToImport;
   FScriptList := TScriptList.Create;
 end;
@@ -126,7 +126,7 @@ begin
   inherited;
 end;
 
-function TMasterEngine.GetAlbumToImport: TAlbumComplet;
+function TMasterEngine.GetAlbumToImport: TAlbumFull;
 begin
   Result := FAlbumToImport;
 end;
@@ -226,7 +226,7 @@ begin
   SetTypeEngine(FProjectScript.ScriptInfos.Engine);
 end;
 
-procedure TMasterEngine.SetAlbumToImport(const Value: TAlbumComplet);
+procedure TMasterEngine.SetAlbumToImport(const Value: TAlbumFull);
 begin
   if (GetEngine = nil) or (not GetEngine.Running) then
   begin

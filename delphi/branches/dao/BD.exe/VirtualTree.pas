@@ -109,7 +109,7 @@ type
     WHERECONDITION: string;
     DEFAULTFILTRE: string;
     ClassPointeur: TClassBasePointeur;
-    ClassDao: TClassDaoLite;
+    ClassDao: TDaoLiteClass;
   end;
 
 const
@@ -306,7 +306,7 @@ begin
       NodeInfo := GetNodeData(Node);
       if Assigned(NodeInfo.List) then
       begin
-        TDaoLiteFactory.getInstance(vmModeInfos[FMode].ClassDao).VideListe(NodeInfo.List);
+        vmModeInfos[FMode].ClassDao.VideListe(NodeInfo.List);
         NodeInfo.List.Free;
       end;
       // Finalize(NodeInfo^);
@@ -421,7 +421,7 @@ begin
         else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
           Params.AsString[1] := Copy(vmModeInfos[FMode].DEFAULTFILTRE, 1, Params.MaxStrLen[1]);
         Open;
-        TDaoLiteFactory.getInstance(vmModeInfos[FMode].ClassDao).FillList(InfoNode.List, q);
+        vmModeInfos[FMode].ClassDao.FillList(InfoNode.List, q);
       finally
         Transaction.Free;
         Free;
@@ -444,7 +444,7 @@ begin
     else
     begin
       if Assigned(NodeInfo.List) then
-        TDaoLiteFactory.getInstance(vmModeInfos[FMode].ClassDao).VideListe(NodeInfo.List);
+        vmModeInfos[FMode].ClassDao.VideListe(NodeInfo.List);
       FreeAndNil(NodeInfo.List);
       NodeInfo.InitialeInfo := @FCountPointers[Node.Index];
       if LongBool(FCountPointers[Node.Index].Count) then

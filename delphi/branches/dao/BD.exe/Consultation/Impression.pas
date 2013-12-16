@@ -29,7 +29,7 @@ implementation
 
 uses
   UfrmPreview, Math, Procedures, ProceduresBDtk, DateUtils, UIBlib, StrUtils, UMetadata,
-  DaoLite;
+  DaoLite, DaoFull;
 
 procedure PreparePrintObject(Prn: TPrintObject; Previsualisation: Boolean; const Titre: string);
 begin
@@ -52,7 +52,7 @@ begin
   Prn.Headers.Clear;
 end;
 
-procedure ImprimeEdition(Prn: TPrintObject; Edition: TEditionComplete; const fWaiting: IWaiting);
+procedure ImprimeEdition(Prn: TPrintObject; Edition: TEditionFull; const fWaiting: IWaiting);
 const
   // en mm
   ThumbWidth = 60;
@@ -190,7 +190,7 @@ begin
   end;
 end;
 
-procedure ImprimeParaBD(Prn: TPrintObject; ParaBD: TParaBDComplet; const fWaiting: IWaiting);
+procedure ImprimeParaBD(Prn: TPrintObject; ParaBD: TParaBDFull; const fWaiting: IWaiting);
 var
   ms: TStream;
   jpg: TJpegImage;
@@ -301,11 +301,11 @@ begin
   end;
 end;
 
-procedure ImprimeAlbum(Prn: TPrintObject; Album: TAlbumComplet; DetailsOptions: TDetailSerieOption; const fWaiting: IWaiting);
+procedure ImprimeAlbum(Prn: TPrintObject; Album: TAlbumFull; DetailsOptions: TDetailSerieOption; const fWaiting: IWaiting);
 var
   s, s2: string;
   i, op: Integer;
-  Edition: TEditionComplete;
+  Edition: TEditionFull;
 begin
   Prn.CreateColumn1(0, 10, 30, taRightJustify, Prn.Font.name, 12, [fsBold]);
   Prn.CreateColumn1(1, 42, 30, taLeftJustify, Prn.Font.name, 12, []);
@@ -429,13 +429,13 @@ end;
 procedure ImpressionFicheSerie(const Reference: TGUID; Previsualisation: Boolean);
 var
   fWaiting: IWaiting;
-  Serie: TSerieComplete;
+  Serie: TSerieFull;
   Prn: TPrintObject;
   i, op: Integer;
   Album: TAlbumLite;
-  AlbumComplet: TAlbumComplet;
+  AlbumComplet: TAlbumFull;
   ParaBD: TParaBDLite;
-  ParaBDComplet: TParaBDComplet;
+  ParaBDComplet: TParaBDFull;
   s, s2: string;
   Manquants: TSeriesIncompletes;
   Previsions: TPrevisionsSorties;
@@ -449,7 +449,7 @@ begin
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 9);
-  Serie := TSerieComplete.Create(Reference);
+  Serie := TDaoSerieFull.getInstance(Reference);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -632,7 +632,7 @@ begin
           for Album in Serie.Albums do
           begin
             Prn.NewPage;
-            AlbumComplet := TAlbumComplet.Create(Album.ID);
+            AlbumComplet := TDaoAlbumFull.getInstance(Album.ID);
             try
               ImprimeAlbum(Prn, AlbumComplet, DetailsOptions, fWaiting);
             finally
@@ -643,7 +643,7 @@ begin
           for ParaBD in Serie.ParaBD do
           begin
             Prn.NewPage;
-            ParaBDComplet := TParaBDComplet.Create(ParaBD.ID);
+            ParaBDComplet := TDaoParaBDFull.getInstance(ParaBD.ID);
             try
               ImprimeParaBD(Prn, ParaBDComplet, fWaiting);
             finally
@@ -671,8 +671,8 @@ procedure ImpressionFicheAlbum(const Reference, ID_Edition: TGUID; Previsualisat
 var
   i: Integer;
   op: Integer;
-  Album: TAlbumComplet;
-  Edition: TEditionComplete;
+  Album: TAlbumFull;
+  Edition: TEditionFull;
   fWaiting: IWaiting;
   Prn: TPrintObject;
   DetailsOptions: TDetailSerieOption;
@@ -684,10 +684,10 @@ begin
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 9);
   // MinTop := -1;
-  Album := TAlbumComplet.Create(Reference);
+  Album := TDaoAlbumFull.getInstance(Reference);
   Edition := nil;
   if not IsEqualGUID(ID_Edition, GUID_NULL) then
-    Edition := TEditionComplete.Create(ID_Edition);
+    Edition := TDaoEditionFull.getInstance(ID_Edition);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -732,7 +732,7 @@ end;
 
 procedure ImpressionFicheParaBD(const Reference: TGUID; Previsualisation: Boolean);
 var
-  ParaBD: TParaBDComplet;
+  ParaBD: TParaBDFull;
   fWaiting: IWaiting;
   Prn: TPrintObject;
 begin
@@ -740,7 +740,7 @@ begin
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 9);
-  ParaBD := TParaBDComplet.Create(Reference);
+  ParaBD := TDaoParaBDFull.getInstance(Reference);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -760,10 +760,10 @@ end;
 
 procedure ImpressionFicheAuteur(const Reference: TGUID; Previsualisation: Boolean);
 var
-  Auteur: TAuteurComplet;
+  Auteur: TAuteurFull;
   fWaiting: IWaiting;
   Prn: TPrintObject;
-  Serie: TSerieComplete;
+  Serie: TSerieFull;
   fl: Integer;
   Album: TAlbumLite;
 begin
@@ -771,7 +771,7 @@ begin
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 3);
-  Auteur := TAuteurComplet.Create(Reference);
+  Auteur := TDaoAuteurFull.getInstance(Reference);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -909,7 +909,7 @@ begin
                 s := '';
                 while (daoScenario in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maScenariste) do
                 begin
-                  PA := TDaoLiteFactory.AuteurLite.Make(Equipe);
+                  PA := TDaoAuteurLite.Make(Equipe);
                   AjoutString(s, PA.ChaineAffichage, ', ');
                   PA.Free;
                   Next;
@@ -918,7 +918,7 @@ begin
                 s := '';
                 while (daoDessins in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maDessinateur) do
                 begin
-                  PA := TDaoLiteFactory.AuteurLite.Make(Equipe);
+                  PA := TDaoAuteurLite.Make(Equipe);
                   AjoutString(s, PA.ChaineAffichage, ', ');
                   PA.Free;
                   Next;
@@ -927,7 +927,7 @@ begin
                 s := '';
                 while (daoCouleurs in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maColoriste) do
                 begin
-                  PA := TDaoLiteFactory.AuteurLite.Make(Equipe);
+                  PA := TDaoAuteurLite.Make(Equipe);
                   AjoutString(s, PA.ChaineAffichage, ', ');
                   PA.Free;
                   Next;
@@ -943,7 +943,7 @@ begin
             sl := False;
           end;
 
-          TDaoLiteFactory.AlbumLite.Fill(PAl, Source);
+          TDaoAlbumLite.Fill(PAl, Source);
 
           if not IsEqualGUID(OldSerie, PAl.ID_Serie) then
           begin
@@ -1398,7 +1398,7 @@ begin
               s := '';
               while (daoScenario in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maScenariste) do
               begin
-                PA := TDaoLiteFactory.AuteurLite.Make(Equipe);
+                PA := TDaoAuteurLite.Make(Equipe);
                 AjoutString(s, PA.ChaineAffichage, ', ');
                 PA.Free;
                 Next;
@@ -1407,7 +1407,7 @@ begin
               s := '';
               while (daoDessins in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maDessinateur) do
               begin
-                PA := TDaoLiteFactory.AuteurLite.Make(Equipe);
+                PA := TDaoAuteurLite.Make(Equipe);
                 AjoutString(s, PA.ChaineAffichage, ', ');
                 PA.Free;
                 Next;
@@ -1416,7 +1416,7 @@ begin
               s := '';
               while (daoCouleurs in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maColoriste) do
               begin
-                PA := TDaoLiteFactory.AuteurLite.Make(Equipe);
+                PA := TDaoAuteurLite.Make(Equipe);
                 AjoutString(s, PA.ChaineAffichage, ', ');
                 PA.Free;
                 Next;
@@ -1488,7 +1488,7 @@ end;
 
 procedure ImpressionCouvertureAlbum(const Reference, ID_Couverture: TGUID; Previsualisation: Boolean);
 var
-  Album: TAlbumComplet;
+  Album: TAlbumFull;
   ms: TStream;
   jpg: TJpegImage;
   s: string;
@@ -1499,7 +1499,7 @@ begin
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 2);
-  Album := TAlbumComplet.Create(Reference);
+  Album := TDaoAlbumFull.getInstance(Reference);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -1550,7 +1550,7 @@ end;
 
 procedure ImpressionImageParaBD(const Reference: TGUID; Previsualisation: Boolean);
 var
-  ParaBD: TParaBDComplet;
+  ParaBD: TParaBDFull;
   ms: TStream;
   jpg: TJpegImage;
   s: string;
@@ -1561,7 +1561,7 @@ begin
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 2);
-  ParaBD := TParaBDComplet.Create(Reference);
+  ParaBD := TDaoParaBDFull.getInstance(Reference);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -1777,7 +1777,7 @@ begin
           if not IsEqualGUID(OldAlbum, StringToGUID(Fields.ByNameAsString['ID_ALBUM'])) then
           begin
             PAl := TAchat.Create;
-            TDaoLiteFactory.AlbumLite.Fill(PAl, Source);
+            TDaoAlbumLite.Fill(PAl, Source);
             PAl.PrixCalcule := True;
             PAl.Prix := Fields.ByNameAsCurrency['PRIXUNITAIRE'];
             if PAl.Prix = 0 then

@@ -264,7 +264,7 @@ begin
       Open;
       while not Eof do
       begin
-        Album := TDaoLiteFactory.AlbumLite.Make(q);
+        Album := TDaoAlbumLite.Make(q);
         Resultats.Add(Album);
         S := '';
         for CritereTri in SortBy do
@@ -366,7 +366,7 @@ begin
           end
           else
           begin
-            Album := TDaoLiteFactory.AlbumLite.Make(q);
+            Album := TDaoAlbumLite.Make(q);
             Resultats.Add(Album);
             if Recherche = rsAuteur then
               case TMetierAuteur(Fields.ByNameAsInteger['metier']) of

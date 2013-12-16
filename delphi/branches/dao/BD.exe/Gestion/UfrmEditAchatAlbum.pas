@@ -62,24 +62,24 @@ type
     procedure btnScriptClick(Sender: TObject);
   private
     { Déclarations privées }
-    FAlbum, FAlbumImport: TAlbumComplet;
+    FAlbum, FAlbumImport: TAlbumFull;
     FScenaristesSelected, FDessinateursSelected, FColoristesSelected: Boolean;
     procedure AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean); overload;
     procedure AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite); overload;
     function GetID_Album: TGUID;
     procedure SaveToObject;
-    procedure SetAlbum(const Value: TAlbumComplet);
+    procedure SetAlbum(const Value: TAlbumFull);
   public
     { Déclarations publiques }
     property ID_Album: TGUID read GetID_Album;
-    property Album: TAlbumComplet read FAlbum write SetAlbum;
+    property Album: TAlbumFull read FAlbum write SetAlbum;
   end;
 
 implementation
 
 uses
   Math, CommonConst, Proc_Gestions, Commun, Procedures, Textes, Divers, StrUtils,
-  UHistorique, UMetadata, DaoLite;
+  UHistorique, UMetadata, DaoLite, DaoFull;
 
 {$R *.dfm}
 
@@ -95,7 +95,7 @@ var
   PA: TAuteurLite;
 begin
   PA := TAuteurLite.Create;
-  TDaoLiteFactory.AuteurLite.FillEx(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
+  TDaoAuteurLite.Fill(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
   List.Add(PA);
   lvList.Items.Count := List.Count;
   lvList.Invalidate;
@@ -123,7 +123,7 @@ begin
   FColoristesSelected := False;
 end;
 
-procedure TfrmEditAchatAlbum.SetAlbum(const Value: TAlbumComplet);
+procedure TfrmEditAchatAlbum.SetAlbum(const Value: TAlbumFull);
 var
   hg: IHourGlass;
 begin
@@ -228,16 +228,16 @@ begin
   begin
     if (not IsEqualGUID(vtEditAlbums.CurrentValue, ID_Album)) and (not IsEqualGUID(ID_Album, GUID_NULL)) then
     begin
-      FAlbum.Acheter(False);
+      TDaoAlbumFull.Acheter(FAlbum, False);
       FAlbum.Fill(vtEditAlbums.CurrentValue);
     end;
-    FAlbum.Acheter(True);
+    TDaoAlbumFull.Acheter(FAlbum, True);
   end
   else
   begin
     SaveToObject;
     FAlbum.SaveToDatabase;
-    FAlbum.Acheter(True);
+    TDaoAlbumFull.Acheter(FAlbum, True);
   end;
   ModalResult := mrOk;
 end;
@@ -401,7 +401,7 @@ end;
 procedure TfrmEditAchatAlbum.btnScriptClick(Sender: TObject);
 begin
   FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
-  FAlbumImport := TAlbumComplet.Create;
+  FAlbumImport := TAlbumFull.Create;
   if FAlbum.TitreAlbum <> '' then
     FAlbumImport.DefaultSearch := FormatTitre(FAlbum.TitreAlbum)
   else

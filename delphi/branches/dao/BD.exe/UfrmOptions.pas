@@ -245,7 +245,7 @@ begin
       begin
         with ListView1.Items.Add do
         begin
-          Data := TDaoLiteFactory.ConversionLite.Make(q);
+          Data := TDaoConversionLite.Make(q);
           Caption := TConversionLite(Data).ChaineAffichage;
           SubItems.Add('0');
         end;
@@ -376,7 +376,7 @@ end;
 
 procedure TfrmOptions.FormDestroy(Sender: TObject);
 begin
-  TDaoLiteFactory.ConversionLite.VideListe(ListView1);
+  TDaoConversionLite.VideListe(ListView1);
 end;
 
 procedure TfrmOptions.SpeedButton2Click(Sender: TObject);

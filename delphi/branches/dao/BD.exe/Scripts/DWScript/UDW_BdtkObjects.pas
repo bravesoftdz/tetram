@@ -97,12 +97,12 @@ end;
 
 procedure TDW_BdtkObjectsUnit.OnTAlbumComplet_ClearEval(info: TProgramInfo; ExtObject: TObject);
 begin
-  (ExtObject as TAlbumComplet).Clear;
+  (ExtObject as TAlbumFull).Clear;
 end;
 
 procedure TDW_BdtkObjectsUnit.OnTAlbumComplet_ImportEval(info: TProgramInfo; ExtObject: TObject);
 begin
-  Import(ExtObject as TAlbumComplet);
+  Import(ExtObject as TAlbumFull);
 end;
 
 procedure TDW_BdtkObjectsUnit.OnTAuteur_CreateEval(info: TProgramInfo; var ExtObject: TObject);
@@ -112,7 +112,7 @@ end;
 
 procedure TDW_BdtkObjectsUnit.OnTEditionComplete_AddImageFromURLEval(info: TProgramInfo; ExtObject: TObject);
 begin
-  info.ResultAsInteger := AddImageFromURL((ExtObject as TEditionComplete), info.ParamAsString[0], info.ParamAsInteger[1]);
+  info.ResultAsInteger := AddImageFromURL((ExtObject as TEditionFull), info.ParamAsString[0], info.ParamAsInteger[1]);
 end;
 
 procedure TDW_BdtkObjectsUnit.OnTObjectListOfAuteur_AddEval(info: TProgramInfo; ExtObject: TObject);
@@ -161,17 +161,17 @@ end;
 
 procedure TDW_BdtkObjectsUnit.TAlbumCompletDefaultSearch_R(info: TProgramInfo; ExtObject: TObject);
 begin
-  info.ResultAsString := (ExtObject as TAlbumComplet).DefaultSearch;
+  info.ResultAsString := (ExtObject as TAlbumFull).DefaultSearch;
 end;
 
 procedure TDW_BdtkObjectsUnit.TAlbumCompletEdition_R(info: TProgramInfo; ExtObject: TObject);
 var
-  Album: TAlbumComplet;
+  Album: TAlbumFull;
 begin
-  Album := (ExtObject as TAlbumComplet);
+  Album := (ExtObject as TAlbumFull);
   if Album.Editions.Editions.Count = 0 then
   begin
-    Album.Editions.Editions.Add(TEditionComplete.Create(GUID_NULL));
+    Album.Editions.Editions.Add(TEditionFull.Create(GUID_NULL));
     Album.Editions.Editions[0].New;
   end;
   info.ResultAsVariant := GetScriptObjFromExternal(info, Album.Editions.Editions[0]);
@@ -259,9 +259,9 @@ procedure TDW_BdtkObjectsUnit.TSerieCompleteCollection(info: TProgramInfo; ExtOb
 begin
   case TMethodSymbol(info.FuncSym).Kind of
     fkFunction:
-      info.ResultAsString := (ExtObject as TSerieComplete).Collection.NomCollection;
+      info.ResultAsString := (ExtObject as TSerieFull).Collection.NomCollection;
     fkProcedure:
-      (ExtObject as TSerieComplete).Collection.NomCollection := info.ParamAsString[0];
+      (ExtObject as TSerieFull).Collection.NomCollection := info.ParamAsString[0];
 end;
 end;
 
@@ -269,9 +269,9 @@ procedure TDW_BdtkObjectsUnit.TEditionCompleteCollection(info: TProgramInfo; Ext
 begin
   case TMethodSymbol(info.FuncSym).Kind of
     fkFunction:
-      info.ResultAsString := (ExtObject as TEditionComplete).Collection.NomCollection;
+      info.ResultAsString := (ExtObject as TEditionFull).Collection.NomCollection;
     fkProcedure:
-      (ExtObject as TEditionComplete).Collection.NomCollection := info.ParamAsString[0];
+      (ExtObject as TEditionFull).Collection.NomCollection := info.ParamAsString[0];
 end;
 end;
 

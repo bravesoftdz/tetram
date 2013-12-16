@@ -140,8 +140,8 @@ type
     procedure lvUniversDblClick(Sender: TObject);
   strict private
     CurrentCouverture: Integer;
-    FAlbum: TAlbumComplet;
-    FCurrentEdition: TEditionComplete;
+    FAlbum: TAlbumFull;
+    FCurrentEdition: TEditionFull;
     procedure ShowCouverture(Num: Integer);
     procedure ImpressionExecute(Sender: TObject);
     procedure ApercuExecute(Sender: TObject);
@@ -154,7 +154,7 @@ type
     function ModificationUpdate: Boolean;
   public
     { Déclarations publiques }
-    property Album: TAlbumComplet read FAlbum;
+    property Album: TAlbumFull read FAlbum;
     property ID_Album: TGUID read GetID_Album write SetID_Album;
   end;
 
@@ -164,7 +164,7 @@ implementation
 
 uses
   Commun, EntitiesLite, CommonConst, MAJ, Impression, DateUtils, UHistorique, Procedures,
-  Divers, Textes, Proc_Gestions, UfrmConsole;
+  Divers, Textes, Proc_Gestions, UfrmConsole, DaoFull;
 
 var
   FSortColumn: Integer;
@@ -195,7 +195,7 @@ end;
 
 procedure TfrmConsultationAlbum.FormCreate(Sender: TObject);
 begin
-  FAlbum := TAlbumComplet.Create;
+  FAlbum := TAlbumFull.Create;
   PrepareLV(Self);
   CurrentCouverture := 0;
   FSortColumn := 0;
@@ -223,7 +223,7 @@ end;
 procedure TfrmConsultationAlbum.ImpRep(Sender: TObject);
 begin
   if lvEditions.ItemIndex > -1 then
-    ImpressionFicheAlbum(ID_Album, TEditionComplete(lvEditions.Items.Objects[lvEditions.ItemIndex]).ID_Edition, TComponent(Sender).Tag = 1)
+    ImpressionFicheAlbum(ID_Album, TEditionFull(lvEditions.Items.Objects[lvEditions.ItemIndex]).ID_Edition, TComponent(Sender).Tag = 1)
   else
     ImpressionFicheAlbum(ID_Album, GUID_NULL, TComponent(Sender).Tag = 1);
 end;
@@ -375,7 +375,7 @@ begin
       FCurrentEdition := nil
     else
     begin
-      FCurrentEdition := TEditionComplete(lvEditions.Items.Objects[lvEditions.ItemIndex]);
+      FCurrentEdition := TEditionFull(lvEditions.Items.Objects[lvEditions.ItemIndex]);
       ISBN.Caption := FCurrentEdition.ISBN;
       Editeur.Caption := FormatTitre(FCurrentEdition.Editeur.NomEditeur);
       if FCurrentEdition.Editeur.SiteWeb <> '' then
@@ -476,7 +476,7 @@ procedure TfrmConsultationAlbum.SetID_Album(const Value: TGUID);
 var
   s, s2: string;
   i: Integer;
-  PEd: TEditionComplete;
+  PEd: TEditionFull;
 begin
   ClearForm;
   TfrmConsole.AddEvent(UnitName, 'FAlbum.Fill() - ' + GUIDToString(Value));
@@ -631,7 +631,7 @@ end;
 
 procedure TfrmConsultationAlbum.N7Click(Sender: TObject);
 begin
-  FAlbum.ChangeNotation(TMenuItem(Sender).Tag);
+  TDaoAlbumFull.ChangeNotation(FAlbum, TMenuItem(Sender).Tag);
   Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FAlbum.Notation - 900].pngimage);
   Historique.AddWaiting(fcRefreshRepertoireData);
   vstSerie.ReinitNodes(1);

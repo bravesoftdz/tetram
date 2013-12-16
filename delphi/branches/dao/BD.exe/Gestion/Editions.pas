@@ -105,7 +105,7 @@ implementation
 uses
   UIB, Commun, UfrmEditAlbum, UfrmEditSerie, Textes, UfrmEditEditeur, UdmPrinc,
   Math, UfrmFond, Procedures, ProceduresBDtk, UfrmEditCollection, UfrmEditAuteur, UfrmEditParaBD,
-  UfrmEditAchatAlbum, UfrmEditUnivers, DaoLite;
+  UfrmEditAchatAlbum, UfrmEditUnivers, DaoLite, DaoFull;
 
 function FindRec(const Table, Champ: string; const Reference: TGUID; WithMessage: Boolean): Boolean;
 begin
@@ -323,7 +323,7 @@ begin
   me := TModeEditing.Create;
   f := TFrmEditAchatAlbum.Create(Application);
   try
-    f.Album := TAlbumComplet(Source);
+    f.Album := TAlbumFull(Source);
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -333,14 +333,14 @@ end;
 
 function EditionAchatAlbum(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
-  Album: TAlbumComplet;
+  Album: TAlbumFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditAlbum) then
     Exit;
   if not Creation and not FindRec('ALBUMS', 'ID_Album', ID, True) then
     Exit;
-  Album := TAlbumComplet.Create(ID);
+  Album := TDaoAlbumFull.getInstance(ID);
   try
     if Creation then
       Album.TitreAlbum := Valeur;
@@ -400,7 +400,7 @@ begin
   f := TFrmEditAlbum.Create(Application);
   try
     f.isAchat := Achat;
-    f.Album := TAlbumComplet(Source);
+    f.Album := TAlbumFull(Source);
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -410,14 +410,14 @@ end;
 
 function EditionAlbum(const ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
 var
-  Album: TAlbumComplet;
+  Album: TAlbumFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditAlbum) then
     Exit;
   if not Creation and not FindRec('ALBUMS', 'ID_Album', ID, True) then
     Exit;
-  Album := TAlbumComplet.Create(ID);
+  Album := TDaoAlbumFull.getInstance(ID);
   try
     if Creation then
       Album.TitreAlbum := Valeur;
@@ -458,7 +458,7 @@ begin
   me := TModeEditing.Create;
   f := TFrmEditSerie.Create(Application);
   try
-    f.Serie := TSerieComplete(Source);
+    f.Serie := TSerieFull(Source);
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -468,14 +468,14 @@ end;
 
 function EditionSerie(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
-  Serie: TSerieComplete;
+  Serie: TSerieFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditSerie) then
     Exit;
   if not Creation and not FindRec('SERIES', 'ID_Serie', ID, True) then
     Exit;
-  Serie := TSerieComplete.Create(ID);
+  Serie := TDaoSerieFull.getInstance(ID);
   try
     if Creation then
       Serie.TitreSerie := Valeur;
@@ -511,7 +511,7 @@ begin
   me := TModeEditing.Create;
   f := TFrmEditUnivers.Create(Application);
   try
-    f.Univers := TUniversComplet(Source);
+    f.Univers := TUniversFull(Source);
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -521,14 +521,14 @@ end;
 
 function EditionUnivers(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
 var
-  Univers: TUniversComplet;
+  Univers: TUniversFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditUnivers) then
     Exit;
   if not Creation and not FindRec('UNIVERS', 'ID_Univers', ID, True) then
     Exit;
-  Univers := TUniversComplet.Create(ID);
+  Univers := TDaoUniversFull.getInstance(ID);
   try
     if Creation then
       Univers.NomUnivers := Valeur;
@@ -564,7 +564,7 @@ begin
   me := TModeEditing.Create;
   f := TFrmEditEditeur.Create(Application);
   try
-    f.Editeur := TEditeurComplet(Source);
+    f.Editeur := TEditeurFull(Source);
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -574,14 +574,14 @@ end;
 
 function EditionEditeur(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
-  Editeur: TEditeurComplet;
+  Editeur: TEditeurFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditEditeur) then
     Exit;
   if not Creation and not FindRec('EDITEURS', 'ID_Editeur', ID, True) then
     Exit;
-  Editeur := TEditeurComplet.Create(ID);
+  Editeur := TDaoEditeurFull.getInstance(ID);
   try
     if Creation then
       Editeur.NomEditeur := Valeur;
@@ -617,7 +617,7 @@ begin
   me := TModeEditing.Create;
   f := TFrmEditCollection.Create(Application);
   try
-    f.Collection := TCollectionComplete(Source);
+    f.Collection := TCollectionFull(Source);
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -632,19 +632,19 @@ end;
 
 function EditionCollection(const ID: TGUID; const ID_Editeur: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
-  Collection: TCollectionComplete;
+  Collection: TCollectionFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditCollection) then
     Exit;
   if not Creation and not FindRec('COLLECTIONS', 'ID_Collection', ID, True) then
     Exit;
-  Collection := TCollectionComplete.Create(ID);
+  Collection := TDaoCollectionFull.getInstance(ID);
   try
     if Creation then
     begin
       Collection.NomCollection := Valeur;
-      TDaoLiteFactory.EditeurLite.FillEx(Collection.Editeur, ID_Editeur);
+      TDaoEditeurLite.Fill(Collection.Editeur, ID_Editeur);
     end;
     Result := EditionCollection(Collection);
   finally
@@ -694,7 +694,7 @@ begin
   me := TModeEditing.Create;
   f := TFrmEditAuteur.Create(Application);
   try
-    f.Auteur := TAuteurComplet(Source);
+    f.Auteur := TAuteurFull(Source);
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -704,14 +704,14 @@ end;
 
 function EditionAuteur(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
-  Auteur: TAuteurComplet;
+  Auteur: TAuteurFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditAuteur) then
     Exit;
   if not Creation and not FindRec('Personnes', 'ID_Personne', ID, True) then
     Exit;
-  Auteur := TAuteurComplet.Create(ID);
+  Auteur := TDaoAuteurFull.getInstance(ID);
   try
     if Creation then
       Auteur.NomAuteur := Valeur;
@@ -748,7 +748,7 @@ begin
   f := TFrmEditParaBD.Create(Application);
   try
     f.isAchat := Achat;
-    f.ParaBD := TParaBDComplet(Source);
+    f.ParaBD := TParaBDFull(Source);
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -758,14 +758,14 @@ end;
 
 function EditionParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
 var
-  ParaBD: TParaBDComplet;
+  ParaBD: TParaBDFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditParaBD) then
     Exit;
   if not Creation and not FindRec('ParaBD', 'ID_ParaBD', ID, True) then
     Exit;
-  ParaBD := TParaBDComplet.Create(ID);
+  ParaBD := TDaoParaBDFull.getInstance(ID);
   try
     if Creation then
       ParaBD.TitreParaBD := Valeur;
@@ -801,7 +801,7 @@ begin
   me := TModeEditing.Create;
   f := TFrmEditAchatParaBD.Create(Application);
   try
-    f.ParaBD := TParaBDComplet(Source);
+    f.ParaBD := TParaBDFull(Source);
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -811,14 +811,14 @@ end;
 
 function EditionAchatParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
-  ParaBD: TParaBDComplet;
+  ParaBD: TParaBDFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditParaBD) then
     Exit;
   if not Creation and not FindRec('ParaBD', 'ID_ParaBD', ID, True) then
     Exit;
-  ParaBD := TParaBDComplet.Create(ID);
+  ParaBD := TDaoParaBDFull.getInstance(ID);
   try
     if Creation then
       ParaBD.TitreParaBD := Valeur;

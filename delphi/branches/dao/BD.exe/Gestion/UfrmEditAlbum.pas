@@ -165,8 +165,8 @@ type
     procedure lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure btUniversClick(Sender: TObject);
   strict private
-    FAlbum: TAlbumComplet;
-    FCurrentEditionComplete: TEditionComplete;
+    FAlbum: TAlbumFull;
+    FCurrentEditionComplete: TEditionFull;
     FEditeurCollectionSelected: array of Boolean;
     FEditionChanging: Boolean;
     FScenaristesSelected, FDessinateursSelected, FColoristesSelected: Boolean;
@@ -174,28 +174,28 @@ type
     FCategoriesImages: TStringList;
     procedure UpdateEdition;
     procedure RefreshEditionCaption;
-    procedure SetAlbum(Value: TAlbumComplet);
+    procedure SetAlbum(Value: TAlbumFull);
     procedure VisuClose(Sender: TObject);
     procedure AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean); overload;
     procedure AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite); overload;
     function GetID_Album: TGUID;
     function GetCreation: Boolean;
   private
-    FAlbumImport: TAlbumComplet;
+    FAlbumImport: TAlbumFull;
     procedure SaveToObject;
   public
     { Déclarations publiques }
     property isCreation: Boolean read GetCreation;
     property isAchat: Boolean read FisAchat write FisAchat;
     property ID_Album: TGUID read GetID_Album;
-    property Album: TAlbumComplet read FAlbum write SetAlbum;
+    property Album: TAlbumFull read FAlbum write SetAlbum;
   end;
 
 implementation
 
 uses
   Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
-  UHistorique, UMetadata, DaoLite;
+  UHistorique, UMetadata, DaoLite, DaoFull;
 
 {$R *.DFM}
 
@@ -262,10 +262,10 @@ begin
   end;
 end;
 
-procedure TfrmEditAlbum.SetAlbum(Value: TAlbumComplet);
+procedure TfrmEditAlbum.SetAlbum(Value: TAlbumFull);
 var
   i: Integer;
-  PE: TEditionComplete;
+  PE: TEditionFull;
   hg: IHourGlass;
   OldvtEditionsItemIndex: Integer;
 begin
@@ -339,7 +339,7 @@ var
   PA: TAuteurLite;
 begin
   PA := TAuteurLite.Create;
-  TDaoLiteFactory.AuteurLite.FillEx(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
+  TDaoAuteurLite.Fill(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
   List.Add(PA);
   lvList.Items.Count := List.Count;
   lvList.Invalidate;
@@ -377,7 +377,7 @@ end;
 procedure TfrmEditAlbum.btnScriptClick(Sender: TObject);
 begin
   FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
-  FAlbumImport := TAlbumComplet.Create;
+  FAlbumImport := TAlbumFull.Create;
   if FAlbum.TitreAlbum <> '' then
     FAlbumImport.DefaultSearch := FormatTitre(FAlbum.TitreAlbum)
   else
@@ -390,7 +390,7 @@ begin
   if IsEqualGUID(vtEditUnivers.CurrentValue, GUID_NULL) then
     Exit;
 
-  FAlbum.Univers.Add(TDaoLiteFactory.UniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
+  FAlbum.Univers.Add(TDaoUniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
   lvUnivers.Items.Count := FAlbum.Univers.Count;
   lvUnivers.Invalidate;
 
@@ -446,7 +446,7 @@ end;
 procedure TfrmEditAlbum.Frame11btnOKClick(Sender: TObject);
 var
   i: Integer;
-  EditionComplete: TEditionComplete;
+  EditionComplete: TEditionFull;
   hg: IHourGlass;
   AfficheEdition, lISBN: Integer;
   cs: string;
@@ -480,7 +480,7 @@ begin
   AfficheEdition := -1;
   for i := 0 to Pred(vtEditions.Items.Count) do
   begin
-    EditionComplete := TEditionComplete(vtEditions.Items.Objects[i]);
+    EditionComplete := TEditionFull(vtEditions.Items.Objects[i]);
     if IsEqualGUID(EditionComplete.Editeur.ID_Editeur, GUID_NULL) then
     begin
       AffMessage(rsEditeurObligatoire, mtInformation, [mbOk], True);
@@ -529,7 +529,7 @@ begin
 
   FAlbum.SaveToDatabase;
   if isAchat then
-    FAlbum.Acheter(False);
+    TDaoAlbumFull.Acheter(FAlbum, False);
 
   ModalResult := mrOk;
 end;
@@ -801,10 +801,10 @@ end;
 
 procedure TfrmEditAlbum.VDTButton3Click(Sender: TObject);
 var
-  EditionComplete: TEditionComplete;
+  EditionComplete: TEditionFull;
 begin
   SetLength(FEditeurCollectionSelected, Succ(Length(FEditeurCollectionSelected)));
-  EditionComplete := TEditionComplete.Create;
+  EditionComplete := TEditionFull.Create;
   EditionComplete.New;
   EditionComplete.ID_Album := ID_Album;
   EditionComplete.Stock := True;
@@ -984,7 +984,7 @@ begin
   FEditionChanging := True;
   try
     if vtEditions.ItemIndex > -1 then
-      FCurrentEditionComplete := vtEditions.Items.Objects[vtEditions.ItemIndex] as TEditionComplete
+      FCurrentEditionComplete := vtEditions.Items.Objects[vtEditions.ItemIndex] as TEditionFull
     else
       FCurrentEditionComplete := nil;
 

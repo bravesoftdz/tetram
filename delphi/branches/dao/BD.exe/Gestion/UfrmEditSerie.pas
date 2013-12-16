@@ -101,20 +101,20 @@ type
     procedure lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Déclarations privées }
-    FSerie: TSerieComplete;
-    procedure SetSerie(Value: TSerieComplete);
+    FSerie: TSerieFull;
+    procedure SetSerie(Value: TSerieFull);
     function GetID_Serie: TGUID;
   public
     { Déclarations publiques }
     property ID_Serie: TGUID read GetID_Serie;
-    property Serie: TSerieComplete read FSerie write SetSerie;
+    property Serie: TSerieFull read FSerie write SetSerie;
   end;
 
 implementation
 
 uses
   Commun, Proc_Gestions, EntitiesLite, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
-  UHistorique, UMetadata, DaoLite;
+  UHistorique, UMetadata, DaoLite, DaoFull;
 
 {$R *.DFM}
 
@@ -206,12 +206,12 @@ begin
   FSerie.Associations.Text := edAssociations.Lines.Text;
 
   FSerie.SaveToDatabase;
-  FSerie.SaveAssociations(vmSeries, GUID_NULL);
+  TDaoSerieFull.SaveAssociations(FSerie, vmSeries, GUID_NULL);
 
   ModalResult := mrOk;
 end;
 
-procedure TfrmEditSerie.SetSerie(Value: TSerieComplete);
+procedure TfrmEditSerie.SetSerie(Value: TSerieFull);
 var
   i: Integer;
   hg: IHourGlass;
@@ -219,7 +219,7 @@ var
 begin
   hg := THourGlass.Create;
   FSerie := Value;
-  FSerie.FillAssociations(vmSeries);
+  TDaoSerieFull.FillAssociations(FSerie, vmSeries);
 
   lvScenaristes.Items.BeginUpdate;
   lvDessinateurs.Items.BeginUpdate;
@@ -461,7 +461,7 @@ begin
     1:
       begin
         PA := TAuteurLite.Create;
-        TDaoLiteFactory.AuteurLite.FillEx(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maScenariste);
+        TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maScenariste);
         FSerie.Scenaristes.Add(PA);
         lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
         lvScenaristes.Invalidate;
@@ -469,7 +469,7 @@ begin
     2:
       begin
         PA := TAuteurLite.Create;
-        TDaoLiteFactory.AuteurLite.FillEx(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maDessinateur);
+        TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maDessinateur);
         FSerie.Dessinateurs.Add(PA);
         lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
         lvDessinateurs.Invalidate;
@@ -477,7 +477,7 @@ begin
     3:
       begin
         PA := TAuteurLite.Create;
-        TDaoLiteFactory.AuteurLite.FillEx(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maColoriste);
+        TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maColoriste);
         FSerie.Coloristes.Add(PA);
         lvColoristes.Items.Count := FSerie.Coloristes.Count;
         lvColoristes.Invalidate;
@@ -577,7 +577,7 @@ begin
   if IsEqualGUID(vtEditUnivers.CurrentValue, GUID_NULL) then
     Exit;
 
-  FSerie.Univers.Add(TDaoLiteFactory.UniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
+  FSerie.Univers.Add(TDaoUniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
   lvUnivers.Items.Count := FSerie.Univers.Count;
   lvUnivers.Invalidate;
 

@@ -95,9 +95,9 @@ type
   private
     procedure UpdateBtnOk;
   public
-    procedure SetEditionDst(Edition: TEditionComplete);
-    procedure SetEditionSrc(Edition: TEditionComplete);
-    procedure SetEditions(Editions: TList<TEditionComplete>; const Exclure: array of TGUID);
+    procedure SetEditionDst(Edition: TEditionFull);
+    procedure SetEditionSrc(Edition: TEditionFull);
+    procedure SetEditions(Editions: TList<TEditionFull>; const Exclure: array of TGUID);
   end;
 
 implementation
@@ -127,11 +127,11 @@ begin
   if lbEditions.ItemIndex = -1 then
     SetEditionDst(nil)
   else
-    SetEditionDst(TEditionComplete(lbEditions.Items.Objects[lbEditions.ItemIndex]));
+    SetEditionDst(TEditionFull(lbEditions.Items.Objects[lbEditions.ItemIndex]));
   UpdateBtnOk;
 end;
 
-procedure TfrmFusionEditions.SetEditionDst(Edition: TEditionComplete);
+procedure TfrmFusionEditions.SetEditionDst(Edition: TEditionFull);
 begin
   if not Assigned(Edition) then
   begin
@@ -198,7 +198,7 @@ begin
   end;
 end;
 
-procedure TfrmFusionEditions.SetEditions(Editions: TList<TEditionComplete>; const Exclure: array of TGUID);
+procedure TfrmFusionEditions.SetEditions(Editions: TList<TEditionFull>; const Exclure: array of TGUID);
 
   function NotInExclusion(const ID: TGUID): Boolean;
   var
@@ -215,7 +215,7 @@ procedure TfrmFusionEditions.SetEditions(Editions: TList<TEditionComplete>; cons
 
 var
   dummy, iiIsbn, iiInconnu: Integer;
-  Edition: TEditionComplete;
+  Edition: TEditionFull;
 begin
   lbEditions.Clear;
   iiIsbn := -1;
@@ -241,7 +241,7 @@ begin
   CheckBox1Click(nil);
 end;
 
-procedure TfrmFusionEditions.SetEditionSrc(Edition: TEditionComplete);
+procedure TfrmFusionEditions.SetEditionSrc(Edition: TEditionFull);
 begin
   ISBN.Caption := FormatISBN(Edition.ISBN);
   Editeur.Caption := FormatTitre(Edition.Editeur.NomEditeur);

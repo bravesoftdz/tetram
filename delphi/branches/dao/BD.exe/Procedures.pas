@@ -22,7 +22,10 @@ procedure PrepareLV(Form: TForm);
 
 function SupprimerTable(const Table: string): Boolean;
 function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TUIBTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TUIBTransaction = nil): Boolean; overload;
 function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: TGUID; UseTransaction: TUIBTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: TGUID; const Sauf: string; UseTransaction: TUIBTransaction = nil)
+  : Boolean; overload;
 
 type
   ILockWindow = interface
@@ -351,10 +354,20 @@ end;
 
 function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TUIBTransaction = nil): Boolean;
 begin
-  Result := SupprimerToutDans(ChampSupp, Table, '', GUID_NULL, UseTransaction);
+  Result := SupprimerToutDans(ChampSupp, Table, '', GUID_NULL, '', UseTransaction);
 end;
 
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: TGUID; UseTransaction: TUIBTransaction = nil): Boolean;
+function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TUIBTransaction = nil): Boolean; overload;
+begin
+  Result := SupprimerToutDans(ChampSupp, Table, Reference, GUID_NULL, Sauf, UseTransaction);
+end;
+
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: TGUID; UseTransaction: TUIBTransaction = nil): Boolean; overload;
+begin
+  Result := SupprimerToutDans(ChampSupp, Table, Reference, Valeur, '', UseTransaction);
+end;
+
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: TGUID; const Sauf: string; UseTransaction: TUIBTransaction = nil): Boolean;
 begin
   try
     with TUIBQuery.Create(nil) do
@@ -369,8 +382,12 @@ begin
         else
           SQL.Add(Format('delete from %s', [Table]));
 
-        if Reference <> '' then
-          SQL.Add(Format('where %s = ''%s''', [Reference, GUIDToString(Valeur)]));
+        if (Reference <> '') then
+          if IsEqualGUID(Valeur, GUID_NULL) then
+            SQL.Add(Format('where %s not in (%s)', [Reference, Sauf]))
+          else
+            SQL.Add(Format('where %s = ''%s''', [Reference, GUIDToString(Valeur)]));
+
         ExecSQL;
         Transaction.Commit;
         Result := True;

@@ -59,9 +59,9 @@ type
     procedure SetEdition(const Value: TGUID);
     procedure SetSerie(const Value: TGUID);
 
-    procedure ShowSerie(Serie: TSerieComplete);
+    procedure ShowSerie(Serie: TSerieFull);
     procedure ShowAlbum(Album: TAlbumLite);
-    procedure ShowEdition(Edition: TEditionComplete);
+    procedure ShowEdition(Edition: TEditionFull);
     { Déclarations privées }
   public
     { Déclarations publiques }
@@ -209,7 +209,7 @@ begin
 
   Album := TAlbumLite.Create;
   try
-    TDaoLiteFactory.AlbumLite.FillEx(Album, Value);
+    TDaoAlbumLite.Fill(Album, Value);
     Caption := 'Gallerie - ' + Album.ChaineAffichage(True);
     ShowAlbum(Album);
   finally
@@ -222,7 +222,7 @@ end;
 
 procedure TfrmGallerie.SetEdition(const Value: TGUID);
 var
-  Edition: TEditionComplete;
+  Edition: TEditionFull;
 begin
   FAlbum := GUID_NULL;
   FSerie := GUID_NULL;
@@ -230,7 +230,7 @@ begin
 
   FThumbs.Clear;
 
-  Edition := TEditionComplete.Create(Value);
+  Edition := TEditionFull.Create(Value);
   try
     ShowEdition(Edition);
     Caption := 'Gallerie - ' + Edition.ChaineAffichage;
@@ -244,7 +244,7 @@ end;
 
 procedure TfrmGallerie.SetSerie(const Value: TGUID);
 var
-  Serie: TSerieComplete;
+  Serie: TSerieFull;
 begin
   FAlbum := GUID_NULL;
   FSerie := Value;
@@ -252,7 +252,7 @@ begin
 
   FThumbs.Clear;
 
-  Serie := TSerieComplete.Create(Value);
+  Serie := TSerieFull.Create(Value);
   try
     ShowSerie(Serie);
     Caption := 'Gallerie - ' + Serie.ChaineAffichage;
@@ -279,7 +279,7 @@ begin
     end;
 end;
 
-procedure TfrmGallerie.ShowEdition(Edition: TEditionComplete);
+procedure TfrmGallerie.ShowEdition(Edition: TEditionFull);
 var
   AlbumThumbs: TThumbList;
   Thumb: TThumbList.TThumb;
@@ -350,7 +350,7 @@ begin
   AlbumThumbs.AutoSize := True;
 end;
 
-procedure TfrmGallerie.ShowSerie(Serie: TSerieComplete);
+procedure TfrmGallerie.ShowSerie(Serie: TSerieFull);
 var
   i: Integer;
 begin

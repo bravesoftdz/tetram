@@ -154,7 +154,7 @@ begin
   end;
 
   NodeInfo := vstExportation.GetNodeData(vstExportation.AddChild(NodeSerie));
-  NodeInfo.Detail := TDaoLiteFactory.AlbumLite.Duplicate(PA);
+  NodeInfo.Detail := TDaoAlbumLite.Duplicate(PA);
 end;
 
 procedure TfrmExportation.vstExportationGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
@@ -265,7 +265,7 @@ begin
   begin
     FFichierExport := Data;
     NodeInfo := Sender.GetNodeData(Node);
-    with TAlbumComplet.Create(TAlbumLite(NodeInfo.Detail).ID) do
+    with TAlbumFull.Create(TAlbumLite(NodeInfo.Detail).ID) do
       try
         WriteXMLToStream(FFichierExport);
       finally

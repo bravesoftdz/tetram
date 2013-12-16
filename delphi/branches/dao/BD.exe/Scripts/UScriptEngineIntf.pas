@@ -212,9 +212,9 @@ type
     function GetAlbumToUpdate: Boolean;
     property AlbumToUpdate: Boolean read GetAlbumToUpdate;
 
-    function GetAlbumToImport: TAlbumComplet;
-    procedure SetAlbumToImport(const Value: TAlbumComplet);
-    property AlbumToImport: TAlbumComplet read GetAlbumToImport write SetAlbumToImport;
+    function GetAlbumToImport: TAlbumFull;
+    procedure SetAlbumToImport(const Value: TAlbumFull);
+    property AlbumToImport: TAlbumFull read GetAlbumToImport write SetAlbumToImport;
 
     function GetDebugPlugin: IDebugInfos;
     property DebugPlugin: IDebugInfos read GetDebugPlugin;

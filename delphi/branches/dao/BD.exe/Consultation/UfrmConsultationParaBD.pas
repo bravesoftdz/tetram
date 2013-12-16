@@ -67,7 +67,7 @@ type
     procedure lvUniversData(Sender: TObject; Item: TListItem);
     procedure lvUniversDblClick(Sender: TObject);
   private
-    FParaBD: TParaBDComplet;
+    FParaBD: TParaBDFull;
     function GetID_ParaBD: TGUID;
     procedure SetID_ParaBD(const Value: TGUID);
     procedure ClearForm;
@@ -82,7 +82,7 @@ type
     { Déclarations privées }
   public
     { Déclarations publiques }
-    property ParaBD: TParaBDComplet read FParaBD;
+    property ParaBD: TParaBDFull read FParaBD;
     property ID_ParaBD: TGUID read GetID_ParaBD write SetID_ParaBD;
   end;
 
@@ -228,7 +228,7 @@ end;
 procedure TfrmConsultationParaBD.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FParaBD := TParaBDComplet.Create;
+  FParaBD := TParaBDFull.Create;
 end;
 
 procedure TfrmConsultationParaBD.FormDestroy(Sender: TObject);

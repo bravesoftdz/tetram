@@ -55,7 +55,7 @@ begin
       i := 0;
       while not Eof do
       begin
-        TDaoLiteFactory.ConversionLite.Fill(PC, q);
+        TDaoConversionLite.Fill(PC, q);
         fc := TframConvertisseur.Create(Self);
         if PC.Monnaie1 = TGlobalVar.Utilisateur.Options.SymboleMonnetaire then
         begin

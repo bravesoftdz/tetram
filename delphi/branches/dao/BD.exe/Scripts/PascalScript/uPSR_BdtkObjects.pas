@@ -36,152 +36,153 @@ uses
 
 (* === run-time registration functions === *)
 
-procedure TAlbumCompletEdition_R(Self: TAlbumComplet; var T: TEditionComplete);
+procedure TAlbumCompletEdition_R(Self: TAlbumFull; var T: TEditionFull);
 begin
   if Self.Editions.Editions.Count = 0 then
   begin
-    Self.Editions.Editions.Add(TEditionComplete.Create(GUID_NULL));
-    Self.Editions.Editions[0].New;
+    // TODO: à remplacer par les bons appels
+    // Self.Editions.Editions.Add(TDaoEditionFull.getInstance(GUID_NULL));
+    // Self.Editions.Editions[0].New;
   end;
   T := Self.Editions.Editions[0];
 end;
 
-procedure TAlbumCompletDefaultSearch_R(Self: TAlbumComplet; var T: string);
+procedure TAlbumCompletDefaultSearch_R(Self: TAlbumFull; var T: string);
 begin
   T := Self.DefaultSearch;
 end;
 
-procedure TAlbumCompletSerie_R(Self: TAlbumComplet; var T: TSerieComplete);
+procedure TAlbumCompletSerie_R(Self: TAlbumFull; var T: TSerieFull);
 begin
   T := Self.Serie;
 end;
 
-procedure TAlbumCompletUnivers_R(Self: TAlbumComplet; var T: TObjectList<TUniversLite>);
+procedure TAlbumCompletUnivers_R(Self: TAlbumFull; var T: TObjectList<TUniversLite>);
 begin
   T := Self.Univers;
 end;
 
-procedure TAlbumCompletNotes_R(Self: TAlbumComplet; var T: string);
+procedure TAlbumCompletNotes_R(Self: TAlbumFull; var T: string);
 begin
   T := Self.Notes;
 end;
 
-procedure TAlbumCompletNotes_W(Self: TAlbumComplet; const T: string);
+procedure TAlbumCompletNotes_W(Self: TAlbumFull; const T: string);
 begin
   Self.Notes := T;
 end;
 
-procedure TAlbumCompletSujet_R(Self: TAlbumComplet; var T: string);
+procedure TAlbumCompletSujet_R(Self: TAlbumFull; var T: string);
 begin
   T := Self.Sujet;
 end;
 
-procedure TAlbumCompletSujet_W(Self: TAlbumComplet; const T: string);
+procedure TAlbumCompletSujet_W(Self: TAlbumFull; const T: string);
 begin
   Self.Sujet := T;
 end;
 
-procedure TAlbumCompletColoristes_R(Self: TAlbumComplet; var T: TObjectList<TAuteurLite>);
+procedure TAlbumCompletColoristes_R(Self: TAlbumFull; var T: TObjectList<TAuteurLite>);
 begin
   T := Self.Coloristes;
 end;
 
-procedure TAlbumCompletDessinateurs_R(Self: TAlbumComplet; var T: TObjectList<TAuteurLite>);
+procedure TAlbumCompletDessinateurs_R(Self: TAlbumFull; var T: TObjectList<TAuteurLite>);
 begin
   T := Self.Dessinateurs;
 end;
 
-procedure TAlbumCompletScenaristes_R(Self: TAlbumComplet; var T: TObjectList<TAuteurLite>);
+procedure TAlbumCompletScenaristes_R(Self: TAlbumFull; var T: TObjectList<TAuteurLite>);
 begin
   T := Self.Scenaristes;
 end;
 
-procedure TAlbumCompletIntegrale_W(Self: TAlbumComplet; const T: Boolean);
+procedure TAlbumCompletIntegrale_W(Self: TAlbumFull; const T: Boolean);
 begin
   Self.Integrale := T;
 end;
 
-procedure TAlbumCompletIntegrale_R(Self: TAlbumComplet; var T: Boolean);
+procedure TAlbumCompletIntegrale_R(Self: TAlbumFull; var T: Boolean);
 begin
   T := Self.Integrale;
 end;
 
-procedure TAlbumCompletHorsSerie_W(Self: TAlbumComplet; const T: Boolean);
+procedure TAlbumCompletHorsSerie_W(Self: TAlbumFull; const T: Boolean);
 begin
   Self.HorsSerie := T;
 end;
 
-procedure TAlbumCompletHorsSerie_R(Self: TAlbumComplet; var T: Boolean);
+procedure TAlbumCompletHorsSerie_R(Self: TAlbumFull; var T: Boolean);
 begin
   T := Self.HorsSerie;
 end;
 
-procedure TAlbumCompletTitre_W(Self: TAlbumComplet; const T: string);
+procedure TAlbumCompletTitre_W(Self: TAlbumFull; const T: string);
 begin
   Self.TitreAlbum := T;
 end;
 
-procedure TAlbumCompletTitre_R(Self: TAlbumComplet; var T: string);
+procedure TAlbumCompletTitre_R(Self: TAlbumFull; var T: string);
 begin
   T := Self.TitreAlbum;
 end;
 
-procedure TAlbumCompletTomeFin_W(Self: TAlbumComplet; const T: Integer);
+procedure TAlbumCompletTomeFin_W(Self: TAlbumFull; const T: Integer);
 begin
   Self.TomeFin := T;
 end;
 
-procedure TAlbumCompletTomeFin_R(Self: TAlbumComplet; var T: Integer);
+procedure TAlbumCompletTomeFin_R(Self: TAlbumFull; var T: Integer);
 begin
   T := Self.TomeFin;
 end;
 
-procedure TAlbumCompletTomeDebut_W(Self: TAlbumComplet; const T: Integer);
+procedure TAlbumCompletTomeDebut_W(Self: TAlbumFull; const T: Integer);
 begin
   Self.TomeDebut := T;
 end;
 
-procedure TAlbumCompletTomeDebut_R(Self: TAlbumComplet; var T: Integer);
+procedure TAlbumCompletTomeDebut_R(Self: TAlbumFull; var T: Integer);
 begin
   T := Self.TomeDebut;
 end;
 
-procedure TAlbumCompletTome_W(Self: TAlbumComplet; const T: Integer);
+procedure TAlbumCompletTome_W(Self: TAlbumFull; const T: Integer);
 begin
   Self.Tome := T;
 end;
 
-procedure TAlbumCompletTome_R(Self: TAlbumComplet; var T: Integer);
+procedure TAlbumCompletTome_R(Self: TAlbumFull; var T: Integer);
 begin
   T := Self.Tome;
 end;
 
-procedure TAlbumCompletAnneeParution_W(Self: TAlbumComplet; const T: Integer);
+procedure TAlbumCompletAnneeParution_W(Self: TAlbumFull; const T: Integer);
 begin
   Self.AnneeParution := T;
 end;
 
-procedure TAlbumCompletAnneeParution_R(Self: TAlbumComplet; var T: Integer);
+procedure TAlbumCompletAnneeParution_R(Self: TAlbumFull; var T: Integer);
 begin
   T := Self.AnneeParution;
 end;
 
-procedure TAlbumCompletMoisParution_W(Self: TAlbumComplet; const T: Integer);
+procedure TAlbumCompletMoisParution_W(Self: TAlbumFull; const T: Integer);
 begin
   Self.MoisParution := T;
 end;
 
-procedure TAlbumCompletMoisParution_R(Self: TAlbumComplet; var T: Integer);
+procedure TAlbumCompletMoisParution_R(Self: TAlbumFull; var T: Integer);
 begin
   T := Self.MoisParution;
 end;
 
-procedure TObjectListOfEditionCompleteItems_W(Self: TObjectList<TEditionComplete>; const T: TEditionComplete; const t1: Integer);
+procedure TObjectListOfEditionCompleteItems_W(Self: TObjectList<TEditionFull>; const T: TEditionFull; const t1: Integer);
 begin
   Self.Items[t1] := T;
 end;
 
-procedure TObjectListOfEditionCompleteItems_R(Self: TObjectList<TEditionComplete>; var T: TEditionComplete; const t1: Integer);
+procedure TObjectListOfEditionCompleteItems_R(Self: TObjectList<TEditionFull>; var T: TEditionFull; const t1: Integer);
 begin
   T := Self.Items[t1];
 end;
@@ -201,362 +202,362 @@ begin
   T := Self.Items[t1];
 end;
 
-procedure TEditionCompleteNotes_R(Self: TEditionComplete; var T: string);
+procedure TEditionCompleteNotes_R(Self: TEditionFull; var T: string);
 begin
   T := Self.Notes;
 end;
 
-procedure TEditionCompleteNotes_W(Self: TEditionComplete; const T: string);
+procedure TEditionCompleteNotes_W(Self: TEditionFull; const T: string);
 begin
   Self.Notes := T;
 end;
 
-procedure TEditionCompleteDateAchat_W(Self: TEditionComplete; const T: TDateTime);
+procedure TEditionCompleteDateAchat_W(Self: TEditionFull; const T: TDateTime);
 begin
   Self.DateAchat := T;
 end;
 
-procedure TEditionCompleteDateAchat_R(Self: TEditionComplete; var T: TDateTime);
+procedure TEditionCompleteDateAchat_R(Self: TEditionFull; var T: TDateTime);
 begin
   T := Self.DateAchat;
 end;
 
-procedure TEditionCompleteNumeroPerso_W(Self: TEditionComplete; const T: string);
+procedure TEditionCompleteNumeroPerso_W(Self: TEditionFull; const T: string);
 begin
   Self.NumeroPerso := T;
 end;
 
-procedure TEditionCompleteNumeroPerso_R(Self: TEditionComplete; var T: string);
+procedure TEditionCompleteNumeroPerso_R(Self: TEditionFull; var T: string);
 begin
   T := Self.NumeroPerso;
 end;
 
-procedure TEditionCompleteISBN_W(Self: TEditionComplete; const T: string);
+procedure TEditionCompleteISBN_W(Self: TEditionFull; const T: string);
 begin
   Self.ISBN := T;
 end;
 
-procedure TEditionCompleteISBN_R(Self: TEditionComplete; var T: string);
+procedure TEditionCompleteISBN_R(Self: TEditionFull; var T: string);
 begin
   T := Self.ISBN;
 end;
 
-procedure TEditionCompleteGratuit_W(Self: TEditionComplete; const T: Boolean);
+procedure TEditionCompleteGratuit_W(Self: TEditionFull; const T: Boolean);
 begin
   Self.Gratuit := T;
 end;
 
-procedure TEditionCompleteGratuit_R(Self: TEditionComplete; var T: Boolean);
+procedure TEditionCompleteGratuit_R(Self: TEditionFull; var T: Boolean);
 begin
   T := Self.Gratuit;
 end;
 
-procedure TEditionCompleteOffert_W(Self: TEditionComplete; const T: Boolean);
+procedure TEditionCompleteOffert_W(Self: TEditionFull; const T: Boolean);
 begin
   Self.Offert := T;
 end;
 
-procedure TEditionCompleteOffert_R(Self: TEditionComplete; var T: Boolean);
+procedure TEditionCompleteOffert_R(Self: TEditionFull; var T: Boolean);
 begin
   T := Self.Offert;
 end;
 
-procedure TEditionCompletePrete_W(Self: TEditionComplete; const T: Boolean);
+procedure TEditionCompletePrete_W(Self: TEditionFull; const T: Boolean);
 begin
   Self.Prete := T;
 end;
 
-procedure TEditionCompletePrete_R(Self: TEditionComplete; var T: Boolean);
+procedure TEditionCompletePrete_R(Self: TEditionFull; var T: Boolean);
 begin
   T := Self.Prete;
 end;
 
-procedure TEditionCompleteStock_W(Self: TEditionComplete; const T: Boolean);
+procedure TEditionCompleteStock_W(Self: TEditionFull; const T: Boolean);
 begin
   Self.Stock := T;
 end;
 
-procedure TEditionCompleteStock_R(Self: TEditionComplete; var T: Boolean);
+procedure TEditionCompleteStock_R(Self: TEditionFull; var T: Boolean);
 begin
   T := Self.Stock;
 end;
 
-procedure TEditionCompleteDedicace_W(Self: TEditionComplete; const T: Boolean);
+procedure TEditionCompleteDedicace_W(Self: TEditionFull; const T: Boolean);
 begin
   Self.Dedicace := T;
 end;
 
-procedure TEditionCompleteDedicace_R(Self: TEditionComplete; var T: Boolean);
+procedure TEditionCompleteDedicace_R(Self: TEditionFull; var T: Boolean);
 begin
   T := Self.Dedicace;
 end;
 
-procedure TEditionCompleteVO_W(Self: TEditionComplete; const T: Boolean);
+procedure TEditionCompleteVO_W(Self: TEditionFull; const T: Boolean);
 begin
   Self.VO := T;
 end;
 
-procedure TEditionCompleteVO_R(Self: TEditionComplete; var T: Boolean);
+procedure TEditionCompleteVO_R(Self: TEditionFull; var T: Boolean);
 begin
   T := Self.VO;
 end;
 
-procedure TEditionCompleteCouleur_W(Self: TEditionComplete; const T: Boolean);
+procedure TEditionCompleteCouleur_W(Self: TEditionFull; const T: Boolean);
 begin
   Self.Couleur := T;
 end;
 
-procedure TEditionCompleteCouleur_R(Self: TEditionComplete; var T: Boolean);
+procedure TEditionCompleteCouleur_R(Self: TEditionFull; var T: Boolean);
 begin
   T := Self.Couleur;
 end;
 
-procedure TEditionCompletePrixCote_W(Self: TEditionComplete; const T: Currency);
+procedure TEditionCompletePrixCote_W(Self: TEditionFull; const T: Currency);
 begin
   Self.PrixCote := T;
 end;
 
-procedure TEditionCompletePrixCote_R(Self: TEditionComplete; var T: Currency);
+procedure TEditionCompletePrixCote_R(Self: TEditionFull; var T: Currency);
 begin
   T := Self.PrixCote;
 end;
 
-procedure TEditionCompletePrix_W(Self: TEditionComplete; const T: Currency);
+procedure TEditionCompletePrix_W(Self: TEditionFull; const T: Currency);
 begin
   Self.Prix := T;
 end;
 
-procedure TEditionCompletePrix_R(Self: TEditionComplete; var T: Currency);
+procedure TEditionCompletePrix_R(Self: TEditionFull; var T: Currency);
 begin
   T := Self.Prix;
 end;
 
-procedure TEditionCompleteAnneeCote_W(Self: TEditionComplete; const T: Integer);
+procedure TEditionCompleteAnneeCote_W(Self: TEditionFull; const T: Integer);
 begin
   Self.AnneeCote := T;
 end;
 
-procedure TEditionCompleteAnneeCote_R(Self: TEditionComplete; var T: Integer);
+procedure TEditionCompleteAnneeCote_R(Self: TEditionFull; var T: Integer);
 begin
   T := Self.AnneeCote;
 end;
 
-procedure TEditionCompleteOrientation_W(Self: TEditionComplete; const T: Integer);
+procedure TEditionCompleteOrientation_W(Self: TEditionFull; const T: Integer);
 begin
   Self.Orientation := MakeOption(T, Self.Orientation.Caption);
 end;
 
-procedure TEditionCompleteOrientation_R(Self: TEditionComplete; var T: Integer);
+procedure TEditionCompleteOrientation_R(Self: TEditionFull; var T: Integer);
 begin
   T := Self.Orientation.Value;
 end;
 
-procedure TEditionCompleteFormatEdition_W(Self: TEditionComplete; const T: Integer);
+procedure TEditionCompleteFormatEdition_W(Self: TEditionFull; const T: Integer);
 begin
   Self.FormatEdition := MakeOption(T, Self.FormatEdition.Caption);
 end;
 
-procedure TEditionCompleteFormatEdition_R(Self: TEditionComplete; var T: Integer);
+procedure TEditionCompleteFormatEdition_R(Self: TEditionFull; var T: Integer);
 begin
   T := Self.FormatEdition.Value;
 end;
 
-procedure TEditionCompleteNombreDePages_W(Self: TEditionComplete; const T: Integer);
+procedure TEditionCompleteNombreDePages_W(Self: TEditionFull; const T: Integer);
 begin
   Self.NombreDePages := T;
 end;
 
-procedure TEditionCompleteNombreDePages_R(Self: TEditionComplete; var T: Integer);
+procedure TEditionCompleteNombreDePages_R(Self: TEditionFull; var T: Integer);
 begin
   T := Self.NombreDePages;
 end;
 
-procedure TEditionCompleteReliure_W(Self: TEditionComplete; const T: Integer);
+procedure TEditionCompleteReliure_W(Self: TEditionFull; const T: Integer);
 begin
   Self.Reliure := MakeOption(T, Self.Reliure.Caption);
 end;
 
-procedure TEditionCompleteReliure_R(Self: TEditionComplete; var T: Integer);
+procedure TEditionCompleteReliure_R(Self: TEditionFull; var T: Integer);
 begin
   T := Self.Reliure.Value;
 end;
 
-procedure TEditionCompleteSensLecture_W(Self: TEditionComplete; const T: Integer);
+procedure TEditionCompleteSensLecture_W(Self: TEditionFull; const T: Integer);
 begin
   Self.SensLecture := MakeOption(T, Self.SensLecture.Caption);
 end;
 
-procedure TEditionCompleteSensLecture_R(Self: TEditionComplete; var T: Integer);
+procedure TEditionCompleteSensLecture_R(Self: TEditionFull; var T: Integer);
 begin
   T := Self.SensLecture.Value;
 end;
 
-procedure TEditionCompleteEtat_W(Self: TEditionComplete; const T: Integer);
+procedure TEditionCompleteEtat_W(Self: TEditionFull; const T: Integer);
 begin
   Self.Etat := MakeOption(T, Self.Etat.Caption);
 end;
 
-procedure TEditionCompleteEtat_R(Self: TEditionComplete; var T: Integer);
+procedure TEditionCompleteEtat_R(Self: TEditionFull; var T: Integer);
 begin
   T := Self.Etat.Value;
 end;
 
-procedure TEditionCompleteAnneeEdition_W(Self: TEditionComplete; const T: Integer);
+procedure TEditionCompleteAnneeEdition_W(Self: TEditionFull; const T: Integer);
 begin
   Self.AnneeEdition := T;
 end;
 
-procedure TEditionCompleteAnneeEdition_R(Self: TEditionComplete; var T: Integer);
+procedure TEditionCompleteAnneeEdition_R(Self: TEditionFull; var T: Integer);
 begin
   T := Self.AnneeEdition;
 end;
 
-procedure TEditionCompleteTypeEdition_W(Self: TEditionComplete; const T: Integer);
+procedure TEditionCompleteTypeEdition_W(Self: TEditionFull; const T: Integer);
 begin
   Self.TypeEdition := MakeOption(T, Self.TypeEdition.Caption);
 end;
 
-procedure TEditionCompleteTypeEdition_R(Self: TEditionComplete; var T: Integer);
+procedure TEditionCompleteTypeEdition_R(Self: TEditionFull; var T: Integer);
 begin
   T := Self.TypeEdition.Value;
 end;
 
-procedure TEditionCompleteCollection_W(Self: TEditionComplete; const T: string);
+procedure TEditionCompleteCollection_W(Self: TEditionFull; const T: string);
 begin
   Self.Collection.NomCollection := T;
 end;
 
-procedure TEditionCompleteCollection_R(Self: TEditionComplete; var T: string);
+procedure TEditionCompleteCollection_R(Self: TEditionFull; var T: string);
 begin
   T := Self.Collection.NomCollection;
 end;
 
-function TEditionCompleteCreate: TEditionComplete;
+function TEditionCompleteCreate: TEditionFull;
 begin
-  Result := TEditionComplete.Create(GUID_NULL);
+  Result := TEditionFull.Create;
 end;
 
-procedure TEditionCompleteEditeur_R(Self: TEditionComplete; var T: TEditeurComplet);
+procedure TEditionCompleteEditeur_R(Self: TEditionFull; var T: TEditeurFull);
 begin
   T := Self.Editeur;
 end;
 
-procedure TSerieCompleteCollection_W(Self: TSerieComplete; const T: string);
+procedure TSerieCompleteCollection_W(Self: TSerieFull; const T: string);
 begin
   Self.Collection.NomCollection := T;
 end;
 
-procedure TSerieCompleteCollection_R(Self: TSerieComplete; var T: string);
+procedure TSerieCompleteCollection_R(Self: TSerieFull; var T: string);
 begin
   T := Self.Collection.NomCollection;
 end;
 
-procedure TSerieCompleteEditeur_R(Self: TSerieComplete; var T: TEditeurComplet);
+procedure TSerieCompleteEditeur_R(Self: TSerieFull; var T: TEditeurFull);
 begin
   T := Self.Editeur;
 end;
 
-procedure TSerieCompleteSiteWeb_W(Self: TSerieComplete; const T: string);
+procedure TSerieCompleteSiteWeb_W(Self: TSerieFull; const T: string);
 begin
   Self.SiteWeb := T;
 end;
 
-procedure TSerieCompleteSiteWeb_R(Self: TSerieComplete; var T: string);
+procedure TSerieCompleteSiteWeb_R(Self: TSerieFull; var T: string);
 begin
   T := Self.SiteWeb;
 end;
 
-procedure TSerieCompleteNotes_R(Self: TSerieComplete; var T: string);
+procedure TSerieCompleteNotes_R(Self: TSerieFull; var T: string);
 begin
   T := Self.Notes;
 end;
 
-procedure TSerieCompleteNotes_W(Self: TSerieComplete; const T: string);
+procedure TSerieCompleteNotes_W(Self: TSerieFull; const T: string);
 begin
   Self.Notes := T;
 end;
 
-procedure TSerieCompleteSujet_R(Self: TSerieComplete; var T: string);
+procedure TSerieCompleteSujet_R(Self: TSerieFull; var T: string);
 begin
   T := Self.Sujet;
 end;
 
-procedure TSerieCompleteSujet_W(Self: TSerieComplete; const T: string);
+procedure TSerieCompleteSujet_W(Self: TSerieFull; const T: string);
 begin
   Self.Sujet := T;
 end;
 
-procedure TSerieCompleteGenres_R(Self: TSerieComplete; var T: TStringList);
+procedure TSerieCompleteGenres_R(Self: TSerieFull; var T: TStringList);
 begin
   T := Self.Genres;
 end;
 
-procedure TSerieCompleteTerminee_W(Self: TSerieComplete; const T: Integer);
+procedure TSerieCompleteTerminee_W(Self: TSerieFull; const T: Integer);
 begin
   Self.Terminee := T;
 end;
 
-procedure TSerieCompleteTerminee_R(Self: TSerieComplete; var T: Integer);
+procedure TSerieCompleteTerminee_R(Self: TSerieFull; var T: Integer);
 begin
   T := Self.Terminee;
 end;
 
-procedure TSerieCompleteNbAlbums_W(Self: TSerieComplete; const T: Integer);
+procedure TSerieCompleteNbAlbums_W(Self: TSerieFull; const T: Integer);
 begin
   Self.NbAlbums := T;
 end;
 
-procedure TSerieCompleteNbAlbums_R(Self: TSerieComplete; var T: Integer);
+procedure TSerieCompleteNbAlbums_R(Self: TSerieFull; var T: Integer);
 begin
   T := Self.NbAlbums;
 end;
 
-procedure TSerieCompleteColoristes_R(Self: TSerieComplete; var T: TObjectList<TAuteurLite>);
+procedure TSerieCompleteColoristes_R(Self: TSerieFull; var T: TObjectList<TAuteurLite>);
 begin
   T := Self.Coloristes;
 end;
 
-procedure TSerieCompleteDessinateurs_R(Self: TSerieComplete; var T: TObjectList<TAuteurLite>);
+procedure TSerieCompleteDessinateurs_R(Self: TSerieFull; var T: TObjectList<TAuteurLite>);
 begin
   T := Self.Dessinateurs;
 end;
 
-procedure TSerieCompleteScenaristes_R(Self: TSerieComplete; var T: TObjectList<TAuteurLite>);
+procedure TSerieCompleteScenaristes_R(Self: TSerieFull; var T: TObjectList<TAuteurLite>);
 begin
   T := Self.Scenaristes;
 end;
 
-procedure TSerieCompleteUnivers_R(Self: TSerieComplete; var T: TObjectList<TUniversLite>);
+procedure TSerieCompleteUnivers_R(Self: TSerieFull; var T: TObjectList<TUniversLite>);
 begin
   T := Self.Univers;
 end;
 
-procedure TSerieCompleteTitre_W(Self: TSerieComplete; const T: string);
+procedure TSerieCompleteTitre_W(Self: TSerieFull; const T: string);
 begin
   Self.TitreSerie := T;
 end;
 
-procedure TSerieCompleteTitre_R(Self: TSerieComplete; var T: string);
+procedure TSerieCompleteTitre_R(Self: TSerieFull; var T: string);
 begin
   T := Self.TitreSerie;
 end;
 
-procedure TEditeurCompletSiteWeb_W(Self: TEditeurComplet; const T: string);
+procedure TEditeurCompletSiteWeb_W(Self: TEditeurFull; const T: string);
 begin
   Self.SiteWeb := T;
 end;
 
-procedure TEditeurCompletSiteWeb_R(Self: TEditeurComplet; var T: string);
+procedure TEditeurCompletSiteWeb_R(Self: TEditeurFull; var T: string);
 begin
   T := Self.SiteWeb;
 end;
 
-procedure TEditeurCompletNomEditeur_W(Self: TEditeurComplet; const T: string);
+procedure TEditeurCompletNomEditeur_W(Self: TEditeurFull; const T: string);
 begin
   Self.NomEditeur := T;
 end;
 
-procedure TEditeurCompletNomEditeur_R(Self: TEditeurComplet; var T: string);
+procedure TEditeurCompletNomEditeur_R(Self: TEditeurFull; var T: string);
 begin
   T := Self.NomEditeur;
 end;
@@ -620,17 +621,17 @@ end;
 
 procedure RIRegister_TObjectListOfEditionComplete(CL: TPSRuntimeClassImporter);
 begin
-  with CL.Add2(TObjectList<TEditionComplete>, 'TObjectListOfEditionComplete') do
+  with CL.Add2(TObjectList<TEditionFull>, 'TObjectListOfEditionComplete') do
   begin
-    RegisterMethod(@TObjectList<TEditionComplete>.Add, 'Add');
-    RegisterMethod(@TObjectList<TEditionComplete>.Insert, 'Insert');
+    RegisterMethod(@TObjectList<TEditionFull>.Add, 'Add');
+    RegisterMethod(@TObjectList<TEditionFull>.Insert, 'Insert');
     RegisterPropertyHelper(@TObjectListOfEditionCompleteItems_R, @TObjectListOfEditionCompleteItems_W, 'Items');
   end;
 end;
 
 procedure RIRegister_TAlbumComplet(CL: TPSRuntimeClassImporter; isUpdate: Boolean);
 begin
-  with CL.Add(TAlbumComplet) do
+  with CL.Add(TAlbumFull) do
   begin
     RegisterPropertyHelper(@TAlbumCompletDefaultSearch_R, nil, 'DefaultSearch');
 
@@ -651,14 +652,14 @@ begin
     RegisterPropertyHelper(@TAlbumCompletEdition_R, nil, 'Edition');
     RegisterPropertyHelper(@TAlbumCompletUnivers_R, nil, 'Univers');
 
-    RegisterMethod(@TAlbumComplet.Clear, 'Clear');
+    RegisterMethod(@TAlbumFull.Clear, 'Clear');
     RegisterMethod(@Import, 'Import')
   end;
 end;
 
 procedure RIRegister_TSerieComplete(CL: TPSRuntimeClassImporter);
 begin
-  with CL.Add(TSerieComplete) do
+  with CL.Add(TSerieFull) do
   begin
     RegisterPropertyHelper(@TSerieCompleteTitre_R, @TSerieCompleteTitre_W, 'Titre');
     RegisterPropertyHelper(@TSerieCompleteTerminee_R, @TSerieCompleteTerminee_W, 'Terminee');
@@ -678,7 +679,7 @@ end;
 
 procedure RIRegister_TEditionComplete(CL: TPSRuntimeClassImporter);
 begin
-  with CL.Add(TEditionComplete) do
+  with CL.Add(TEditionFull) do
   begin
     RegisterConstructor(@TEditionCompleteCreate, 'Create');
     RegisterPropertyHelper(@TEditionCompleteEditeur_R, nil, 'Editeur');
@@ -712,7 +713,7 @@ end;
 
 procedure RIRegister_TEditeurComplet(CL: TPSRuntimeClassImporter);
 begin
-  with CL.Add(TEditeurComplet) do
+  with CL.Add(TEditeurFull) do
   begin
     RegisterPropertyHelper(@TEditeurCompletNomEditeur_R, @TEditeurCompletNomEditeur_W, 'NomEditeur');
     RegisterPropertyHelper(@TEditeurCompletSiteWeb_R, @TEditeurCompletSiteWeb_W, 'SiteWeb');

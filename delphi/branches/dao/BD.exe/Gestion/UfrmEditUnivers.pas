@@ -40,20 +40,20 @@ type
     procedure vtAlbumsDblClick(Sender: TObject);
   private
     { Déclarations privées }
-    FUnivers: TUniversComplet;
-    procedure SetUnivers(Value: TUniversComplet);
+    FUnivers: TUniversFull;
+    procedure SetUnivers(Value: TUniversFull);
     function GetID_Univers: TGUID;
   public
     { Déclarations publiques }
     property ID_Univers: TGUID read GetID_Univers;
-    property Univers: TUniversComplet read FUnivers write SetUnivers;
+    property Univers: TUniversFull read FUnivers write SetUnivers;
   end;
 
 implementation
 
 uses
   Commun, Proc_Gestions, EntitiesLite, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
-  UHistorique, UMetadata;
+  UHistorique, UMetadata, DaoFull;
 
 {$R *.DFM}
 
@@ -86,18 +86,18 @@ begin
   FUnivers.Associations.Text := edAssociations.Lines.Text;
 
   FUnivers.SaveToDatabase;
-  FUnivers.SaveAssociations(vmUnivers, GUID_NULL);
+  TDaoUniversFull.SaveAssociations(FUnivers, vmUnivers, GUID_NULL);
 
   ModalResult := mrOk;
 end;
 
-procedure TfrmEditUnivers.SetUnivers(Value: TUniversComplet);
+procedure TfrmEditUnivers.SetUnivers(Value: TUniversFull);
 var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
   FUnivers := Value;
-  FUnivers.FillAssociations(vmUnivers);
+  TDaoUniversFull.FillAssociations(FUnivers, vmUnivers);
 
   edNom.Text := FUnivers.NomUnivers;
   edDescription.Text := FUnivers.Description;

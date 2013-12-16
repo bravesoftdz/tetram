@@ -265,7 +265,7 @@ begin
       SQL.Add('order by');
       SQL.Add('  1 desc');
       Open;
-      TDaoLiteFactory.GenreLite.FillList(Stats.ListGenre, q);
+      TDaoGenreLite.FillList(Stats.ListGenre, q);
 
       Close;
       SQL.Clear;
@@ -436,7 +436,7 @@ begin
             UpdateSerie;
           Incomplete := TSerieIncomplete.Create;
           Self.Series.Add(Incomplete);
-          TDaoLiteFactory.SerieLite.Fill(Incomplete.Serie, q);
+          TDaoSerieLite.Fill(Incomplete.Serie, q);
           CurrentSerie := dummy;
           FirstTome := Fields.ByNameAsInteger['tome'];
           CurrentTome := FirstTome;
@@ -536,7 +536,7 @@ begin
       begin
         Annee := Fields.ByNameAsInteger['anneeparution'];
         Prevision := TPrevisionSortie.Create;
-        TDaoLiteFactory.SerieLite.Fill(Prevision.Serie, q);
+        TDaoSerieLite.Fill(Prevision.Serie, q);
         Prevision.Tome := Fields.ByNameAsInteger['tome'];
         Prevision.Annee := Annee;
         Prevision.Mois := Fields.ByNameAsInteger['moisparution'];

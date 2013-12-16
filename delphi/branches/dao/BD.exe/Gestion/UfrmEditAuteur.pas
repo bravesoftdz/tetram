@@ -28,28 +28,28 @@ type
     procedure VDTButton13Click(Sender: TObject);
   private
     { Déclarations privées }
-    FAuteur: TAuteurComplet;
-    procedure SetAuteur(const Value: TAuteurComplet);
+    FAuteur: TAuteurFull;
+    procedure SetAuteur(const Value: TAuteurFull);
     function GetID_Auteur: TGUID;
   public
     { Déclarations publiques }
     property ID_Auteur: TGUID read GetID_Auteur;
-    property Auteur: TAuteurComplet read FAuteur write SetAuteur;
+    property Auteur: TAuteurFull read FAuteur write SetAuteur;
   end;
 
 implementation
 
-uses Commun, ShellAPI, Procedures, Textes, VirtualTree;
+uses Commun, ShellAPI, Procedures, Textes, VirtualTree, DaoFull;
 
 {$R *.DFM}
 
-procedure TfrmEditAuteur.SetAuteur(const Value: TAuteurComplet);
+procedure TfrmEditAuteur.SetAuteur(const Value: TAuteurFull);
 var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
   FAuteur := Value;
-  FAuteur.FillAssociations(vmPersonnes);
+  TDaoAuteurFull.FillAssociations(FAuteur, vmPersonnes);
 
   edNom.Text := FAuteur.NomAuteur;
   edSite.Text := FAuteur.SiteWeb;
@@ -72,7 +72,7 @@ begin
   FAuteur.Associations.Text := edAssociations.Text;
 
   FAuteur.SaveToDatabase;
-  FAuteur.SaveAssociations(vmPersonnes, GUID_NULL);
+  TDaoAuteurFull.SaveAssociations(FAuteur, vmPersonnes, GUID_NULL);
 
   ModalResult := mrOk;
 end;

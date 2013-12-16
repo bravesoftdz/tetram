@@ -5,17 +5,17 @@ interface
 uses
   Windows, SysUtils, Classes, Forms, EntitiesFull, Generics.Collections, Graphics;
 
-procedure Import(Self: TAlbumComplet);
+procedure Import(Self: TAlbumFull);
 
-function AddImageFromURL(Edition: TEditionComplete; const URL: string; TypeImage: Integer): Integer;
+function AddImageFromURL(Edition: TEditionFull; const URL: string; TypeImage: Integer): Integer;
 
 implementation
 
 uses
   IOUtils, UIB, Commun, VirtualTree, UfrmControlImport, Controls, UdmPrinc, WinInet, UHistorique, Proc_Gestions, Editions, UfrmValidationImport, UNet,
-  EntitiesLite, CommonConst, Procedures, UMetadata, Divers, DaoLite;
+  EntitiesLite, CommonConst, Procedures, UMetadata, Divers, DaoLite, DaoFull;
 
-procedure Import(Self: TAlbumComplet);
+procedure Import(Self: TAlbumFull);
 var
   Qry: TUIBQuery;
   Auteur: TAuteurLite;
@@ -137,11 +137,11 @@ var
           for k := Pred(OtherList[j].Count) downto 0 do
             if SameText(OtherList[j][k].Personne.Nom, Nom) then
               if Accept then
-                TDaoLiteFactory.PersonnageLite.FillEx(OtherList[j][k].Personne, dummyID)
+                TDaoPersonnageLite.Fill(OtherList[j][k].Personne, dummyID)
               else
                 OtherList[j].Delete(k);
         if Accept then
-          TDaoLiteFactory.PersonnageLite.FillEx(List[i].Personne, dummyID)
+          TDaoPersonnageLite.Fill(List[i].Personne, dummyID)
         else
           List.Delete(i);
 
@@ -154,7 +154,7 @@ var
   dummyID: TGUID;
   i: Integer;
   PA: TAuteurLite;
-  DefaultEdition, Edition, Edition2: TEditionComplete;
+  DefaultEdition, Edition, Edition2: TEditionFull;
 begin
   with Self do
   begin
@@ -221,7 +221,7 @@ begin
               if SameText(Serie.Editeur.NomEditeur, Edition.Editeur.NomEditeur) then
               begin
                 Edition.Editeur.Fill(dummyID);
-                TDaoLiteFactory.EditeurLite.FillEx(Edition.Collection.Editeur, dummyID);
+                TDaoEditeurLite.Fill(Edition.Collection.Editeur, dummyID);
               end;
             Serie.Editeur.Fill(dummyID);
           end;
@@ -246,8 +246,8 @@ begin
             for Edition in Editions.Editions do
               if IsEqualGuid(Serie.Editeur.ID_Editeur, Edition.Editeur.ID_Editeur) and SameText(Serie.Collection.NomCollection, Edition.Collection.NomCollection)
               then
-                TDaoLiteFactory.CollectionLite.FillEx(Edition.Collection, dummyID);
-            TDaoLiteFactory.CollectionLite.FillEx(Serie.Collection, dummyID);
+                TDaoCollectionLite.Fill(Edition.Collection, dummyID);
+            TDaoCollectionLite.Fill(Serie.Collection, dummyID);
           end;
           frmValidationImport.Album := Self;
         end;
@@ -264,21 +264,21 @@ begin
             for Auteur in Serie.Scenaristes do
             begin
               PA := TAuteurLite.Create;
-              TDaoLiteFactory.AuteurLite.FillEx(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
+              TDaoAuteurLite.Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
               Scenaristes.Add(PA);
             end;
 
             for Auteur in Serie.Dessinateurs do
             begin
               PA := TAuteurLite.Create;
-              TDaoLiteFactory.AuteurLite.FillEx(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(1));
+              TDaoAuteurLite.Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(1));
               Dessinateurs.Add(PA);
             end;
 
             for Auteur in Serie.Coloristes do
             begin
               PA := TAuteurLite.Create;
-              TDaoLiteFactory.AuteurLite.FillEx(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(2));
+              TDaoAuteurLite.Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(2));
               Coloristes.Add(PA);
             end;
           end;
@@ -286,7 +286,7 @@ begin
         frmValidationImport.Album := Self;
 
         frmValidationImport.PageControl1.ActivePageIndex := 1;
-        DefaultEdition := TEditionComplete.Create(GUID_NULL);
+        DefaultEdition := TDaoEditionFull.getInstance(GUID_NULL);
         try
           for Edition in Editions.Editions do
           begin
@@ -334,10 +334,10 @@ begin
                     SameText(Edition.Editeur.NomEditeur, Edition2.Editeur.NomEditeur) then
                   begin
                     Edition2.Editeur.Fill(dummyID);
-                    TDaoLiteFactory.EditeurLite.FillEx(Edition2.Collection.Editeur, dummyID);
+                    TDaoEditeurLite.Fill(Edition2.Collection.Editeur, dummyID);
                   end;
                 Edition.Editeur.Fill(dummyID);
-                TDaoLiteFactory.EditeurLite.FillEx(Edition.Collection.Editeur, dummyID);
+                TDaoEditeurLite.Fill(Edition.Collection.Editeur, dummyID);
               end;
               frmValidationImport.Album := Self;
             end;
@@ -364,8 +364,8 @@ begin
                     if (Edition <> Edition2) and IsEqualGuid(Edition2.Collection.ID, GUID_NULL) and
                       IsEqualGuid(Edition.Editeur.ID_Editeur, Edition2.Editeur.ID_Editeur) and
                       SameText(Edition.Collection.NomCollection, Edition2.Collection.NomCollection) then
-                      TDaoLiteFactory.CollectionLite.FillEx(Edition2.Collection, dummyID);
-                  TDaoLiteFactory.CollectionLite.FillEx(Edition.Collection, dummyID);
+                      TDaoCollectionLite.Fill(Edition2.Collection, dummyID);
+                  TDaoCollectionLite.Fill(Edition.Collection, dummyID);
                 end;
               end;
               frmValidationImport.Album := Self;
@@ -387,7 +387,7 @@ begin
   end;
 end;
 
-function AddImageFromURL(Edition: TEditionComplete; const URL: string; TypeImage: Integer): Integer;
+function AddImageFromURL(Edition: TEditionFull; const URL: string; TypeImage: Integer): Integer;
 var
   Stream: TFileStream;
   Couverture: TCouvertureLite;

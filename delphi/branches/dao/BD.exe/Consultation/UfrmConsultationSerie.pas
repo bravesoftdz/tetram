@@ -73,7 +73,7 @@ type
     procedure lvColoristesData(Sender: TObject; Item: TListItem);
     procedure lvUniversData(Sender: TObject; Item: TListItem);
   private
-    FSerie: TSerieComplete;
+    FSerie: TSerieFull;
     function GetID_Serie: TGUID;
     procedure SetID_Serie(const Value: TGUID);
     procedure ClearForm;
@@ -86,14 +86,14 @@ type
     procedure ModificationExecute(Sender: TObject);
     function ModificationUpdate: Boolean;
   public
-    property Serie: TSerieComplete read FSerie;
+    property Serie: TSerieFull read FSerie;
     property ID_Serie: TGUID read GetID_Serie write SetID_Serie;
   end;
 
 implementation
 
 uses Commun, Divers, EntitiesLite, ShellAPI, UHistorique, Impression, Proc_Gestions,
-  UfrmFond;
+  UfrmFond, DaoFull;
 
 {$R *.dfm}
 { TFrmConsultationSerie }
@@ -201,7 +201,7 @@ end;
 procedure TfrmConsultationSerie.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FSerie := TSerieComplete.Create;
+  FSerie := TSerieFull.Create;
 end;
 
 procedure TfrmConsultationSerie.FormDestroy(Sender: TObject);
@@ -322,7 +322,7 @@ end;
 
 procedure TfrmConsultationSerie.N7Click(Sender: TObject);
 begin
-  FSerie.ChangeNotation(TMenuItem(Sender).Tag);
+  TDaoSerieFull.ChangeNotation(FSerie, TMenuItem(Sender).Tag);
   Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FSerie.Notation - 900].PngImage);
 end;
 

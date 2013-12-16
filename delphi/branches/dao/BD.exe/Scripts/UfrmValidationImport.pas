@@ -126,19 +126,19 @@ type
     procedure cklImagesClick(Sender: TObject);
     procedure imgVisuClick(Sender: TObject);
   private
-    FAlbum: TAlbumComplet;
-    DefaultValues: TAlbumComplet;
-    DefaultEdition: TEditionComplete;
-    procedure SetAlbum(Value: TAlbumComplet);
+    FAlbum: TAlbumFull;
+    DefaultValues: TAlbumFull;
+    DefaultEdition: TEditionFull;
+    procedure SetAlbum(Value: TAlbumFull);
     procedure VisuClose(Sender: TObject);
   public
-    property Album: TAlbumComplet read FAlbum write SetAlbum;
+    property Album: TAlbumFull read FAlbum write SetAlbum;
   end;
 
 implementation
 
 uses
-  IOUtils, Commun, Procedures, CommonConst, UBdtForms;
+  IOUtils, Commun, Procedures, CommonConst, UBdtForms, DaoFull;
 
 {$R *.dfm}
 
@@ -189,8 +189,8 @@ procedure TfrmValidationImport.FormCreate(Sender: TObject);
 begin
   PageControl1.ActivePageIndex := 0;
 
-  DefaultValues := TAlbumComplet.Create(GUID_NULL);
-  DefaultEdition := TEditionComplete.Create(GUID_NULL);
+  DefaultValues := TDaoAlbumFull.getInstance(GUID_NULL);
+  DefaultEdition := TDaoEditionFull.getInstance(GUID_NULL);
   DefaultValues.Editions.Editions.Add(DefaultEdition);
 
   LoadCombo(1 { Etat } , cbxEtat);
@@ -407,7 +407,7 @@ begin
     end;
 end;
 
-procedure TfrmValidationImport.SetAlbum(Value: TAlbumComplet);
+procedure TfrmValidationImport.SetAlbum(Value: TAlbumFull);
 
   procedure ChangeState(Chk: TCheckBox; Ctrl: TControl);
   begin

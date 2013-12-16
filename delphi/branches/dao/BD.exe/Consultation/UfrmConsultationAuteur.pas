@@ -45,7 +45,7 @@ type
     procedure FicheModifierExecute(Sender: TObject);
     procedure vstSeriesAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
   strict private
-    FAuteur: TAuteurComplet;
+    FAuteur: TAuteurFull;
     procedure ImpressionExecute(Sender: TObject);
     procedure ApercuExecute(Sender: TObject);
     function ImpressionUpdate: Boolean;
@@ -57,7 +57,7 @@ type
     function ModificationUpdate: Boolean;
   public
     { Déclarations publiques }
-    property Auteur: TAuteurComplet read FAuteur;
+    property Auteur: TAuteurFull read FAuteur;
     property ID_Auteur: TGUID read GetID_Auteur write SetID_Auteur;
   end;
 
@@ -71,7 +71,7 @@ type
   PNodeInfo = ^RNodeInfo;
 
   RNodeInfo = record
-    Serie: TSerieComplete;
+    Serie: TSerieFull;
     Album: TAlbumLite;
     ParaBD: TParaBDLite;
   end;
@@ -84,7 +84,7 @@ end;
 
 procedure TfrmConsultationAuteur.FormCreate(Sender: TObject);
 begin
-  FAuteur := TAuteurComplet.Create;
+  FAuteur := TAuteurFull.Create;
   vstSeries.NodeDataSize := SizeOf(RNodeInfo);
   PrepareLV(Self);
 end;

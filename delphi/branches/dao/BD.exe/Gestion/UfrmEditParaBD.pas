@@ -82,9 +82,9 @@ type
   private
     FCreation: Boolean;
     FisAchat: Boolean;
-    FParaBD: TParaBDComplet;
+    FParaBD: TParaBDFull;
     FDateAchat: TDateTime;
-    procedure SetParaBD(const Value: TParaBDComplet);
+    procedure SetParaBD(const Value: TParaBDFull);
     function GetID_ParaBD: TGUID;
     { Déclarations privées }
   public
@@ -92,7 +92,7 @@ type
     property isCreation: Boolean read FCreation;
     property isAchat: Boolean read FisAchat write FisAchat;
     property ID_ParaBD: TGUID read GetID_ParaBD;
-    property ParaBD: TParaBDComplet read FParaBD write SetParaBD;
+    property ParaBD: TParaBDFull read FParaBD write SetParaBD;
   end;
 
   TFrmEditAchatParaBD = class(TfrmEditParaBD)
@@ -104,7 +104,7 @@ implementation
 
 uses
   Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, EntitiesLite, Divers, UHistorique,
-  UMetadata, DaoLite;
+  UMetadata, DaoLite, DaoFull;
 
 {$R *.dfm}
 { TFrmEditAchatParaBD }
@@ -117,7 +117,7 @@ end;
 
 { TFrmEditParaBD }
 
-procedure TfrmEditParaBD.SetParaBD(const Value: TParaBDComplet);
+procedure TfrmEditParaBD.SetParaBD(const Value: TParaBDFull);
 var
   Stream: TStream;
   jpg: TJPEGImage;
@@ -310,7 +310,7 @@ begin
 
   FParaBD.SaveToDatabase;
   if isAchat then
-    FParaBD.Acheter(False);
+    TDaoParaBDFull.Acheter(FParaBD, False);
 
   ModalResult := mrOk;
 end;
@@ -320,7 +320,7 @@ begin
   if IsEqualGUID(vtEditUnivers.CurrentValue, GUID_NULL) then
     Exit;
 
-  FParaBD.Univers.Add(TDaoLiteFactory.UniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
+  FParaBD.Univers.Add(TDaoUniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
   lvUnivers.Items.Count := FParaBD.Univers.Count;
   lvUnivers.Invalidate;
 
@@ -441,7 +441,7 @@ begin
   if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
     Exit;
   PA := TAuteurLite.Create;
-  TDaoLiteFactory.AuteurLite.FillEx(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_ParaBD, GUID_NULL, TMetierAuteur(0));
+  TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_ParaBD, GUID_NULL, TMetierAuteur(0));
   FParaBD.Auteurs.Add(PA);
   lvAuteurs.Items.Count := FParaBD.Auteurs.Count;
   lvAuteurs.Invalidate;
