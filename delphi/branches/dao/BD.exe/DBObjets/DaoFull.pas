@@ -186,7 +186,7 @@ class procedure TDaoFull.SaveToDatabase(Entity: TObjetFull);
 var
   Transaction: TUIBTransaction;
 begin
-  Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut être GUID_NULL');
+  // Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut être GUID_NULL');
 
   Transaction := GetTransaction(dmPrinc.UIBDataBase);
   try
@@ -217,7 +217,7 @@ end;
 
 class procedure TDaoFullEntity<T>.SaveToDatabase(Entity: T; UseTransaction: TUIBTransaction);
 begin
-  Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut être GUID_NULL');
+  // Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut être GUID_NULL');
 end;
 
 class procedure TDaoFullEntity<T>.SaveToDatabase(Entity: TObjetFull; UseTransaction: TUIBTransaction);
@@ -237,7 +237,7 @@ begin
     qry.SQL.Text := 'update series set notation = ? where id_serie = ?';
     qry.Params.AsSmallint[0] := Note;
     qry.Params.AsString[1] := GUIDToString(Entity.ID_Serie);
-    qry.ExecSQL;
+    qry.Execute;
     qry.Transaction.Commit;
 
     Entity.Notation := Note;
@@ -279,7 +279,7 @@ begin
     qry.SQL.Text := 'update albums set notation = ? where id_album = ?';
     qry.Params.AsSmallint[0] := Note;
     qry.Params.AsString[1] := GUIDToString(Entity.ID_Album);
-    qry.ExecSQL;
+    qry.Execute;
     qry.Transaction.Commit;
 
     Entity.Notation := Note;
@@ -504,7 +504,7 @@ begin
     qry.SQL.Add(') values (');
     qry.SQL.Add('  :id_album, :titrealbum, :moisparution, :anneeparution, :id_serie, :tome, :tomedebut, :tomefin,');
     qry.SQL.Add('  :horsserie, :integrale, :sujetalbum, :remarquesalbum');
-    qry.SQL.Add(')');
+    qry.SQL.Add(') returning id_album');
     qry.Prepare(True);
 
     if IsEqualGUID(GUID_NULL, Entity.ID_Album) then
@@ -556,7 +556,10 @@ begin
       qry.Params.ByNameIsNull['ID_SERIE'] := True
     else
       qry.Params.ByNameAsString['id_serie'] := GUIDToString(Entity.ID_Serie);
-    qry.ExecSQL;
+    qry.Execute;
+
+    if Entity.RecInconnu then
+      Entity.ID_Album := StringToGUID(qry.Fields.AsString[0]);
 
     SupprimerToutDans('', 'auteurs', 'id_album', Entity.ID_Album);
     qry.SQL.Clear;
@@ -564,27 +567,30 @@ begin
     qry.SQL.Add('  id_album, metier, id_personne');
     qry.SQL.Add(') values (');
     qry.SQL.Add('  :id_album, :metier, :id_personne');
-    qry.SQL.Add(')');
+    qry.SQL.Add(') returning id_auteur');
     for Auteur in Entity.Scenaristes do
     begin
       qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
       qry.Params.AsInteger[1] := 0;
       qry.Params.AsString[2] := GUIDToString(Auteur.Personne.ID);
-      qry.ExecSQL;
+      qry.Execute;
+      Auteur.ID := StringToGUID(qry.Fields.AsString[0]);
     end;
     for Auteur in Entity.Dessinateurs do
     begin
       qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
       qry.Params.AsInteger[1] := 1;
       qry.Params.AsString[2] := GUIDToString(Auteur.Personne.ID);
-      qry.ExecSQL;
+      qry.Execute;
+      Auteur.ID := StringToGUID(qry.Fields.AsString[0]);
     end;
     for Auteur in Entity.Coloristes do
     begin
       qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
       qry.Params.AsInteger[1] := 2;
       qry.Params.AsString[2] := GUIDToString(Auteur.Personne.ID);
-      qry.ExecSQL;
+      qry.Execute;
+      Auteur.ID := StringToGUID(qry.Fields.AsString[0]);
     end;
 
     S := '';
@@ -597,16 +603,21 @@ begin
     if S <> '' then
       qry.SQL.Add('  and id_univers not in (' + S + ')');
     qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
-    qry.ExecSQL;
+    qry.Execute;
 
     qry.SQL.Clear;
-    qry.SQL.Add('update or insert into albums_univers (id_album, id_univers, source_album) values (:id_album, :id_univers, 1)');
+    qry.SQL.Add('update or insert into albums_univers (');
+    qry.SQL.Add('  id_album, id_univers, source_album');
+    qry.SQL.Add(') values (');
+    qry.SQL.Add('  :id_album, :id_univers, 1');
+    qry.SQL.Add(') returning id_album_univers');
     qry.Prepare(True);
     for Univers in Entity.Univers do
     begin
       qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
       qry.Params.AsString[1] := GUIDToString(Univers.ID);
-      qry.ExecSQL;
+      qry.Execute;
+      Univers.ID := StringToGUID(qry.Fields.AsString[0]);
     end;
 
     S := '';
@@ -622,7 +633,7 @@ begin
     if S <> '' then
       qry.SQL.Add('  and id_edition not in (' + S + ')');
     qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
-    qry.ExecSQL;
+    qry.Execute;
     qry.SQL.Clear;
     qry.SQL.Add('delete from couvertures');
     qry.SQL.Add('where');
@@ -630,7 +641,7 @@ begin
     if S <> '' then
       qry.SQL.Add('  and id_edition not in (' + S + ')');
     qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
-    qry.ExecSQL;
+    qry.Execute;
 
     for Edition in Entity.Editions.Editions do
     begin
@@ -779,7 +790,7 @@ begin
     qry.SQL.Add(') values (');
     qry.SQL.Add('  :id_parabd, :titreparabd, :annee, :id_serie, :categorieparabd, :dedicace, :numerote, :anneecote,');
     qry.SQL.Add('  :prixcote, :gratuit, :offert, :dateachat, :prix, :stock, :description, 1');
-    qry.SQL.Add(')');
+    qry.SQL.Add(') returning id_parabd');
 
     if IsEqualGUID(GUID_NULL, Entity.ID_ParaBD) then
       qry.Params.ByNameIsNull['id_parabd'] := True
@@ -827,7 +838,10 @@ begin
       qry.Params.ByNameIsNull['id_serie'] := True
     else
       qry.Params.ByNameAsString['id_serie'] := GUIDToString(Entity.Serie.ID_Serie);
-    qry.ExecSQL;
+    qry.Execute;
+
+    if Entity.RecInconnu then
+      Entity.ID_ParaBD := StringToGUID(qry.Fields.AsString[0]);
 
     SupprimerToutDans('', 'auteurs_parabd', 'id_parabd', Entity.ID_ParaBD);
     qry.SQL.Clear;
@@ -835,12 +849,13 @@ begin
     qry.SQL.Add('  id_parabd, id_personne');
     qry.SQL.Add(') values (');
     qry.SQL.Add('  :id_album, :id_personne');
-    qry.SQL.Add(')');
+    qry.SQL.Add(') returning id_auteur_parabd');
     for Auteur in Entity.Auteurs do
     begin
       qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
       qry.Params.AsString[1] := GUIDToString(Auteur.Personne.ID);
-      qry.ExecSQL;
+      qry.Execute;
+      Auteur.ID := StringToGUID(qry.Fields.AsString[0]);
     end;
 
     S := '';
@@ -853,23 +868,28 @@ begin
     if S <> '' then
       qry.SQL.Add('  and id_univers not in (' + S + ')');
     qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
-    qry.ExecSQL;
+    qry.Execute;
 
     qry.SQL.Clear;
-    qry.SQL.Add('update or insert into parabd_univers (id_parabd, id_univers, source_parabd) values (:id_parabd, :id_univers, 1)');
+    qry.SQL.Add('update or insert into parabd_univers (');
+    qry.SQL.Add('  id_parabd, id_univers, source_parabd');
+    qry.SQL.Add(') values (');
+    qry.SQL.Add('  :id_parabd, :id_univers, 1');
+    qry.SQL.Add(') returning id_parabd_univers');
     qry.Prepare(True);
     for Univers in Entity.Univers do
     begin
       qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
       qry.Params.AsString[1] := GUIDToString(Univers.ID);
-      qry.ExecSQL;
+      qry.Execute;
+      Univers.ID := StringToGUID(qry.Fields.AsString[0]);
     end;
 
     if not Entity.HasImage then
     begin
       qry.SQL.Text := 'update parabd set imageparabd = null, stockageparabd = 0, fichierparabd = null where id_parabd = :id_parabd';
       qry.Params.ByNameAsString['id_parabd'] := GUIDToString(Entity.ID_ParaBD);
-      qry.ExecSQL;
+      qry.Execute;
     end
     else if (Entity.OldFichierImage <> Entity.FichierImage) or (Entity.OldImageStockee <> Entity.ImageStockee) then
     begin
@@ -907,7 +927,7 @@ begin
         qry.Params.ByNameAsString['fichierparabd'] := Entity.FichierImage;
       end;
       qry.Params.ByNameAsString['id_parabd'] := GUIDToString(Entity.ID_ParaBD);
-      qry.ExecSQL;
+      qry.Execute;
     end;
 
     qry.Transaction.Commit;
@@ -966,7 +986,7 @@ begin
     qry.SQL.Add('  id_univers, nomunivers, id_univers_parent, description, siteweb');
     qry.SQL.Add(') values (');
     qry.SQL.Add('  :id_univers, :nomunivers, :id_univers_parent, :description, :siteweb');
-    qry.SQL.Add(')');
+    qry.SQL.Add(') returning id_univers');
 
     if IsEqualGUID(GUID_NULL, Entity.ID_Univers) then
       qry.Params.ByNameIsNull['id_univers'] := True
@@ -982,7 +1002,11 @@ begin
       qry.Params.ByNameIsNull['id_univers_parent'] := True
     else
       qry.Params.ByNameAsString['id_univers_parent'] := GUIDToString(Entity.ID_UniversParent);
-    qry.ExecSQL;
+    qry.Execute;
+
+    if Entity.RecInconnu then
+      Entity.ID_Univers := StringToGUID(qry.Fields.AsString[0]);
+
     qry.Transaction.Commit;
   finally
     qry.Free;
@@ -1037,7 +1061,7 @@ begin
     qry.SQL.Add('  id_collection, nomcollection, id_editeur');
     qry.SQL.Add(') values (');
     qry.SQL.Add('  :id_collection, :nomcollection, :id_editeur');
-    qry.SQL.Add(')');
+    qry.SQL.Add(') returning id_collection');
 
     if IsEqualGUID(GUID_NULL, Entity.ID_Collection) then
       qry.Params.ByNameIsNull['id_collection'] := True
@@ -1045,7 +1069,11 @@ begin
       qry.Params.ByNameAsString['id_collection'] := GUIDToString(Entity.ID_Collection);
     qry.Params.ByNameAsString['nomcollection'] := Entity.NomCollection;
     qry.Params.ByNameAsString['id_editeur'] := GUIDToString(Entity.ID_Editeur);
-    qry.ExecSQL;
+    qry.Execute;
+
+    if Entity.RecInconnu then
+      Entity.ID_Collection := StringToGUID(qry.Fields.AsString[0]);
+
     qry.Transaction.Commit;
   finally
     qry.Free;
@@ -1100,7 +1128,7 @@ begin
     qry.SQL.Add('  id_editeur, nomediteur, siteweb');
     qry.SQL.Add(') values (');
     qry.SQL.Add('  :id_editeur, :nomediteur, :siteweb');
-    qry.SQL.Add(')');
+    qry.SQL.Add(') returning id_editeur');
 
     if IsEqualGUID(GUID_NULL, Entity.ID_Editeur) then
       qry.Params.ByNameIsNull['id_editeur'] := True
@@ -1108,7 +1136,11 @@ begin
       qry.Params.ByNameAsString['id_editeur'] := GUIDToString(Entity.ID_Editeur);
     qry.Params.ByNameAsString['nomediteur'] := Entity.NomEditeur;
     qry.Params.ByNameAsString['siteweb'] := Entity.SiteWeb;
-    qry.ExecSQL;
+    qry.Execute;
+
+    if Entity.RecInconnu then
+      Entity.ID_Editeur := StringToGUID(qry.Fields.AsString[0]);
+
     qry.Transaction.Commit;
   finally
     qry.Free;
@@ -1199,7 +1231,7 @@ begin
     qry.SQL.Add('  id_personne, nompersonne, siteweb, biographie');
     qry.SQL.Add(') values (');
     qry.SQL.Add('  :id_personne, :nompersonne, :siteweb, :biographie');
-    qry.SQL.Add(')');
+    qry.SQL.Add(') returning id_personne');
 
     if IsEqualGUID(GUID_NULL, Entity.ID_Auteur) then
       qry.Params.ByNameIsNull['id_personne'] := True
@@ -1211,7 +1243,10 @@ begin
       qry.ParamsSetBlob('biographie', Entity.Biographie)
     else
       qry.Params.ByNameIsNull['biographie'] := True;
-    qry.ExecSQL;
+    qry.Execute;
+
+    if Entity.RecInconnu then
+      Entity.ID_Auteur := StringToGUID(qry.Fields.AsString[0]);
 
     qry.Transaction.Commit;
   finally
@@ -1394,6 +1429,7 @@ begin
         Free;
       end;
 
+  Edition := nil;
   for i := 0 to Pred(Source.Editions.Count) do
   begin
     if IsEqualGUID(FusionsGUID[i], GUID_FULL) then
@@ -1575,7 +1611,7 @@ begin
       qry.ParamsSetBlob('notes', Entity.Notes)
     else
       qry.Params.ByNameIsNull['notes'] := True;
-    qry.Open;
+    qry.Execute;
 
     if Entity.RecInconnu then
       Entity.ID_Edition := StringToGUID(qry.Fields.AsString[0]);
@@ -1592,7 +1628,7 @@ begin
     if S <> '' then
       qry.SQL.Add(' and id_couverture not in (' + S + ')');
     qry.Params.AsString[0] := GUIDToString(Entity.ID_Edition);
-    qry.ExecSQL;
+    qry.Execute;
 
     qry1 := TUIBQuery.Create(nil);
     qry2 := TUIBQuery.Create(nil);
@@ -1613,7 +1649,7 @@ begin
       qry1.SQL.Add('  id_edition, id_album, fichiercouverture, stockagecouverture, ordre, categorieimage');
       qry1.SQL.Add(') values (');
       qry1.SQL.Add('  :id_edition, :id_album, :fichiercouverture, 0, :ordre, :categorieimage');
-      qry1.SQL.Add(')');
+      qry1.SQL.Add(') returning id_couverture');
 
       qry6.SQL.Text := 'select result from saveblobtofile(:Chemin, :Fichier, :BlobContent)';
 
@@ -1622,7 +1658,7 @@ begin
       qry2.SQL.Add('  id_edition, id_album, fichiercouverture, stockagecouverture, ordre, imagecouverture, categorieimage');
       qry2.SQL.Add(') values (');
       qry2.SQL.Add('  :id_edition, :id_album, :fichiercouverture, 1, :ordre, :imagecouverture, :categorieimage');
-      qry2.SQL.Add(')');
+      qry2.SQL.Add(') returning id_couverture');
 
       qry3.SQL.Text := 'update couvertures set imagecouverture = :imagecouverture, stockagecouverture = 1 where id_couverture = :id_couverture';
 
@@ -1656,7 +1692,8 @@ begin
             qry1.Params.ByNameAsString['fichiercouverture'] := PC.NewNom;
             qry1.Params.ByNameAsInteger['ordre'] := Entity.Couvertures.IndexOf(PC);
             qry1.Params.ByNameAsInteger['categorieimage'] := PC.Categorie;
-            qry1.ExecSQL;
+            qry1.Execute;
+            PC.ID := StringToGUID(qry.Fields.AsString[0]);
           end
           else if TFile.Exists(PC.NewNom) then
           begin // couvertures stockées (q2)
@@ -1671,7 +1708,8 @@ begin
               Stream.Free;
             end;
             qry2.Params.ByNameAsInteger['categorieimage'] := PC.Categorie;
-            qry2.ExecSQL;
+            qry2.Execute;
+            PC.ID := StringToGUID(qry.Fields.AsString[0]);
           end;
         end
         else
@@ -1684,7 +1722,7 @@ begin
               begin // conversion couvertures liées en stockées (q3)
                 qry3.ParamsSetBlob('imagecouverture', Stream);
                 qry3.Params.ByNameAsString['id_couverture'] := GUIDToString(PC.ID);
-                qry3.ExecSQL;
+                qry3.Execute;
                 if TPath.GetDirectoryName(PC.NewNom) = '' then
                   FichiersImages.Add(TPath.Combine(RepImages, PC.NewNom))
                 else
@@ -1700,7 +1738,7 @@ begin
                 qry6.Open;
 
                 qry4.Params.ByNameAsString['id_couverture'] := GUIDToString(PC.ID);
-                qry4.ExecSQL;
+                qry4.Execute;
               end;
             finally
               Stream.Free;
@@ -1712,7 +1750,7 @@ begin
           qry5.Params.ByNameAsInteger['ordre'] := Entity.Couvertures.IndexOf(PC);
           qry5.Params.ByNameAsInteger['categorieimage'] := PC.Categorie;
           qry5.Params.ByNameAsString['id_couverture'] := GUIDToString(PC.ID);
-          qry5.ExecSQL;
+          qry5.Execute;
         end;
     finally
       FreeAndNil(qry1);
@@ -1951,8 +1989,7 @@ end;
 class procedure TDaoSerieFull.SaveToDatabase(Entity: TSerieFull; UseTransaction: TUIBTransaction);
 var
   qry: TUIBQuery;
-  S: string;
-  i: Integer;
+  S, genre: string;
   Auteur: TAuteurLite;
   Univers: TUniversLite;
 begin
@@ -1970,7 +2007,7 @@ begin
     qry.SQL.Add('  :id_serie, :titreserie, :terminee, :suivresorties, :complete, :suivremanquants, :siteweb, :id_editeur,');
     qry.SQL.Add('  :id_collection, :sujetserie, :remarquesserie, :nb_albums, :vo, :couleur, :etat, :reliure, :typeedition,');
     qry.SQL.Add('  :orientation, :formatedition, :senslecture');
-    qry.SQL.Add(')');
+    qry.SQL.Add(') returning id_serie');
 
     if IsEqualGUID(GUID_NULL, Entity.ID_Serie) then
       qry.Params.ByNameIsNull['id_serie'] := True
@@ -2024,18 +2061,20 @@ begin
       qry.ParamsSetBlob('remarquesserie', Entity.Notes)
     else
       qry.Params.ByNameIsNull['remarquesserie'] := True;
+    qry.Execute;
 
-    qry.ExecSQL;
+    if Entity.RecInconnu then
+      Entity.ID_Serie := StringToGUID(qry.Fields.AsString[0]);
 
     SupprimerToutDans('', 'genreseries', 'id_serie', Entity.ID_Serie);
     qry.SQL.Clear;
     qry.SQL.Add('insert into genreseries (id_serie, id_genre) values (:id_serie, :id_genre)');
     qry.Prepare(True);
-    for i := 0 to Pred(Entity.Genres.Count) do
+    for genre in Entity.Genres do
     begin
       qry.Params.AsString[0] := GUIDToString(Entity.ID_Serie);
-      qry.Params.AsString[1] := Copy(Entity.Genres.Names[i], 1, qry.Params.MaxStrLen[1]);
-      qry.ExecSQL;
+      qry.Params.AsString[1] := Copy(genre, 1, qry.Params.MaxStrLen[1]);
+      qry.Execute;
     end;
 
     SupprimerToutDans('', 'auteurs_series', 'id_serie', Entity.ID_Serie);
@@ -2044,27 +2083,30 @@ begin
     qry.SQL.Add('  id_serie, metier, id_personne');
     qry.SQL.Add(') values (');
     qry.SQL.Add('  :id_serie, :metier, :id_personne');
-    qry.SQL.Add(')');
+    qry.SQL.Add(') returning id_auteur_series');
     for Auteur in Entity.Scenaristes do
     begin
       qry.Params.AsString[0] := GUIDToString(Entity.ID_Serie);
       qry.Params.AsInteger[1] := 0;
       qry.Params.AsString[2] := GUIDToString(Auteur.Personne.ID);
-      qry.ExecSQL;
+      qry.Execute;
+      Auteur.ID := StringToGUID(qry.Fields.AsString[0]);
     end;
     for Auteur in Entity.Dessinateurs do
     begin
       qry.Params.AsString[0] := GUIDToString(Entity.ID_Serie);
       qry.Params.AsInteger[1] := 1;
       qry.Params.AsString[2] := GUIDToString(Auteur.Personne.ID);
-      qry.ExecSQL;
+      qry.Execute;
+      Auteur.ID := StringToGUID(qry.Fields.AsString[0]);
     end;
     for Auteur in Entity.Coloristes do
     begin
       qry.Params.AsString[0] := GUIDToString(Entity.ID_Serie);
       qry.Params.AsInteger[1] := 2;
       qry.Params.AsString[2] := GUIDToString(Auteur.Personne.ID);
-      qry.ExecSQL;
+      qry.Execute;
+      Auteur.ID := StringToGUID(qry.Fields.AsString[0]);
     end;
 
     S := '';
@@ -2077,16 +2119,21 @@ begin
     if S <> '' then
       qry.SQL.Add('  and id_univers not in (' + S + ')');
     qry.Params.AsString[0] := GUIDToString(Entity.ID_Serie);
-    qry.ExecSQL;
+    qry.Execute;
 
     qry.SQL.Clear;
-    qry.SQL.Add('update or insert into series_univers (id_serie, id_univers) values (:id_serie, :id_univers)');
+    qry.SQL.Add('update or insert into series_univers (');
+    qry.SQL.Add('  id_serie, id_univers');
+    qry.SQL.Add(') values (');
+    qry.SQL.Add('  :id_serie, :id_univers');
+    qry.SQL.Add(') returning id_serie_univers');
     qry.Prepare(True);
     for Univers in Entity.Univers do
     begin
       qry.Params.AsString[0] := GUIDToString(Entity.ID_Serie);
       qry.Params.AsString[1] := GUIDToString(Univers.ID);
-      qry.ExecSQL;
+      qry.Execute;
+      Univers.ID := StringToGUID(qry.Fields.AsString[0]);
     end;
 
     qry.Transaction.Commit;

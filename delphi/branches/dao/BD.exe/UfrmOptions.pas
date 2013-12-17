@@ -158,7 +158,7 @@ begin
   with TUIBQuery.Create(nil) do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'UPDATE OR INSERT INTO CONVERSIONS (ID_Conversion, Monnaie1, Monnaie2, Taux) VALUES (?, ?, ?, ?) MATCHING (id_conversion)';
+      SQL.Text := 'update or insert into conversions (id_conversion, monnaie1, monnaie2, taux) values (?, ?, ?, ?) matching (id_conversion)';
       Prepare(True);
       for i := 0 to ListView1.Items.Count - 1 do
       begin
@@ -170,7 +170,7 @@ begin
         Params.AsString[1] := Copy(PC.Monnaie1, 1, Params.MaxStrLen[1]);
         Params.AsString[2] := Copy(PC.Monnaie2, 1, Params.MaxStrLen[2]);
         Params.AsDouble[3] := PC.Taux;
-        ExecSQL;
+        Execute;
       end;
       Transaction.Commit;
     finally

@@ -208,11 +208,11 @@ procedure EcritOptions;
   begin
     with Table do
     begin
-      SQL.Text := 'UPDATE OR INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES (:Nom_Option, :Valeur) MATCHING (Nom_Option)';
+      SQL.Text := 'update or insert into options (nom_option, valeur) values (:nom_option, :valeur) matching (nom_option)';
       Prepare(True);
       Params.AsString[1] := Copy(Champ, 1, Params.MaxStrLen[0]);
       Params.AsCurrency[1] := Valeur;
-      ExecSQL;
+      Execute;
     end;
   end;
 
@@ -220,11 +220,11 @@ procedure EcritOptions;
   begin
     with Table do
     begin
-      SQL.Text := 'UPDATE OR INSERT INTO OPTIONS (Nom_Option, Valeur) VALUES (:Nom_Option, :Valeur) MATCHING (Nom_Option)';
+      SQL.Text := 'update or insert into options (nom_option, valeur) values (:nom_option, :valeur) matching (nom_option)';
       Prepare(True);
       Params.AsString[0] := Copy(Champ, 1, Params.MaxStrLen[0]);
       Params.AsString[1] := Copy(Valeur, 1, Params.MaxStrLen[1]);
-      ExecSQL;
+      Execute;
     end;
   end;
 
@@ -339,8 +339,8 @@ begin
         Transaction := GetTransaction(DMPrinc.UIBDataBase);
         Transaction.Database.Connected := False; // fonctionne mais pas correct du tout!
         Transaction.Database.Connected := True;
-        SQL.Text := 'DROP TABLE ' + Table;
-        ExecSQL;
+        SQL.Text := 'drop table ' + Table;
+        Execute;
         Transaction.Commit;
         Result := True;
       finally
@@ -388,7 +388,7 @@ begin
           else
             SQL.Add(Format('where %s = ''%s''', [Reference, GUIDToString(Valeur)]));
 
-        ExecSQL;
+        Execute;
         Transaction.Commit;
         Result := True;
       finally

@@ -27,7 +27,7 @@ var
     begin
       qryDst.Params.AsString[0] := qrySrc.Fields.AsString[0];
       qryDst.Params.AsString[1] := qrySrc.Fields.AsString[1];
-      qryDst.ExecSQL;
+      qryDst.Execute;
       qrySrc.Next;
     end;
     Query.Transaction.Commit;

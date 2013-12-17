@@ -133,7 +133,7 @@ const
     FIELDS: 'ID_EDITEUR, NOMEDITEUR';
     INITIALEFIELDS: 'INITIALENOMEDITEUR'; INITIALEVALUE: 'INITIALENOMEDITEUR'; REFFIELDS: 'ID_EDITEUR'; TABLESEARCH: 'EDITEURS';
     FIELDSEARCH: 'NOMEDITEUR';
-    ClassPointeur: TEditeurLite; ClassDao: TDaoEditionLite),
+    ClassPointeur: TEditeurLite; ClassDao: TDaoEditeurLite),
     ( // vmEmprunteurs = plus utilisé
 (*
     FILTRECOUNT: 'VW_INITIALES_EMPRUNTEURS'; Filtre: 'EMPRUNTEURS_BY_INITIALE(?)';

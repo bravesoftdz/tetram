@@ -177,7 +177,7 @@ begin
         qry.Prepare(True);
         qry.Params.AsString[0] := 'Version';
         qry.Params.AsString[1] := Copy(CurrentVersion, 1, qry.Params.MaxStrLen[0]);
-        qry.ExecSQL;
+        qry.Execute;
       except
         // Pour s'assurer qu'il y'a la ligne dans la table options
       end;
@@ -210,10 +210,10 @@ begin
     try
       qry.Transaction := GetTransaction(UIBDataBase);
 
-      qry.SQL.Text := 'UPDATE OPTIONS SET Valeur = ? WHERE Nom_Option = ?';
+      qry.SQL.Text := 'update options set valeur = ? where nom_option = ?';
       qry.Params.AsString[0] := ListFBUpdates.Last.Version;
       qry.Params.AsString[1] := 'Version';
-      qry.ExecSQL;
+      qry.Execute;
       qry.Transaction.Commit;
     finally
       qry.Transaction.Free;

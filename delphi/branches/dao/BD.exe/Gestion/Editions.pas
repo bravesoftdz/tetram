@@ -200,7 +200,7 @@ begin
     try
       try
         Transaction := GetTransaction(DMPrinc.UIBDataBase);
-        SQL.Text := Format('SELECT %s FROM %s WHERE %s = ?', [ChampRef, Table, Champ]);
+        SQL.Text := Format('select %s from %s where %s = ?', [ChampRef, Table, Champ]);
         Prepare(True);
         Params.AsString[0] := Copy(Chaine, 1, Params.MaxStrLen[0]);
         Open;
@@ -212,11 +212,11 @@ begin
         Result := StringToGUID(Fields.AsString[0]);
 
         Params.Clear;
-        SQL.Text := Format('INSERT INTO %s (%s, %s) VALUES (?, ?)', [Table, ChampRef, Champ]);
+        SQL.Text := Format('insert into %s (%s, %s) values (?, ?)', [Table, ChampRef, Champ]);
         Prepare(True);
         Params.AsString[0] := GUIDToString(Result);
         Params.AsString[1] := Copy(Chaine, 1, Params.MaxStrLen[1]);
-        ExecSQL;
+        Execute;
         Transaction.Commit;
       except
         Transaction.Rollback;
@@ -255,7 +255,7 @@ begin
           Exit;
 
         Params.Clear;
-        SQL.Text := Format('SELECT %s FROM %s WHERE %s = ? AND %s <> ?', [ChampRef, Table, Champ, ChampRef]);
+        SQL.Text := Format('select %s from %s where %s = ? and %s <> ?', [ChampRef, Table, Champ, ChampRef]);
         Prepare(True);
         Params.AsString[0] := Copy(Chaine, 1, Params.MaxStrLen[0]);
         Params.AsString[1] := GUIDToString(Reference);
@@ -263,11 +263,11 @@ begin
         if not Eof then
           raise Exception.CreateFmt(rsTitreStillUsed, [TypeInfo]);
 
-        SQL.Text := Format('UPDATE %s SET %s = ? WHERE %s = ?', [Table, Champ, ChampRef]);
+        SQL.Text := Format('update %s set %s = ? where%s = ?', [Table, Champ, ChampRef]);
         Prepare(True);
         Params.AsString[0] := Copy(Chaine, 1, Params.MaxStrLen[0]);
         Params.AsString[1] := GUIDToString(Reference);
-        ExecSQL;
+        Execute;
         Transaction.Commit;
         Result := True;
       except
@@ -290,10 +290,10 @@ begin
   with TUIBQuery.Create(nil) do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := Format('DELETE FROM %s WHERE %s=?', [Table, Champ]);
+      SQL.Text := Format('delete from %s where%s=?', [Table, Champ]);
       Params.AsString[0] := GUIDToString(Ref);
       try
-        ExecSQL;
+        Execute;
         Transaction.Commit;
         Result := True;
       except

@@ -3,7 +3,7 @@ unit DaoLambda;
 interface
 
 uses
-  EntitiesFull;
+  System.Classes, EntitiesFull;
 
 type
   TDaoListe = class
@@ -36,7 +36,8 @@ uses
 
 class constructor TDaoListe.Create;
 begin
-  GetDefaultValues;
+  // appelé en même temps que les initialization
+  // GetDefaultValues;
 end;
 
 class procedure TDaoListe.GetDefaultValues;
