@@ -73,7 +73,7 @@ implementation
 
 uses
   dwsSymbols, EntitiesFull, UMetadata, Procedures, AnsiStrings, Divers, Generics.Collections,
-  UScriptsFonctions, EntitiesLite, LoadCompletImport, Commun;
+  UScriptsFonctions, EntitiesLite, LoadCompletImport, Commun, DaoFull;
 
 { TDW_BdtkObjects }
 
@@ -134,8 +134,7 @@ begin
   end;
 end;
 
-procedure TDW_BdtkObjectsUnit.OnTObjectListOfUnivers_AddEval(info: TProgramInfo;
-  ExtObject: TObject);
+procedure TDW_BdtkObjectsUnit.OnTObjectListOfUnivers_AddEval(info: TProgramInfo; ExtObject: TObject);
 begin
   info.ResultAsInteger := (ExtObject as TObjectList<TUniversLite>).Add(info.ParamAsObject[0] as TUniversLite);
 end;
@@ -170,10 +169,7 @@ var
 begin
   Album := (ExtObject as TAlbumFull);
   if Album.Editions.Editions.Count = 0 then
-  begin
-    Album.Editions.Editions.Add(TEditionFull.Create(GUID_NULL));
-    Album.Editions.Editions[0].New;
-  end;
+    Album.Editions.Editions.Add(TEditionFull.Create);
   info.ResultAsVariant := GetScriptObjFromExternal(info, Album.Editions.Editions[0]);
 end;
 

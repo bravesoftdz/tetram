@@ -65,7 +65,8 @@ implementation
 
 {$R *.DFM}
 
-uses Commun, EntitiesLite, Impression, DateUtils, UHistorique, Proc_Gestions, UfrmFond;
+uses Commun, EntitiesLite, Impression, DateUtils, UHistorique, Proc_Gestions, UfrmFond,
+  DaoFull;
 
 type
   PNodeInfo = ^RNodeInfo;
@@ -165,7 +166,7 @@ end;
 procedure TfrmConsultationAuteur.SetID_Auteur(const Value: TGUID);
 begin
   ClearForm;
-  FAuteur.Fill(Value);
+  TDaoAuteurFull.Fill(FAuteur, Value);
 
   edNom.Caption := FormatTitre(FAuteur.NomAuteur);
   Caption := 'Fiche d''auteur - ' + FAuteur.ChaineAffichage;

@@ -44,7 +44,7 @@ type
 
 implementation
 
-uses CommonConst, EntitiesLite, Commun, EntitiesFull, DaoLite;
+uses CommonConst, EntitiesLite, Commun, EntitiesFull, DaoLite, DaoFull;
 
 {$R *.dfm}
 { TFileStream }
@@ -265,7 +265,7 @@ begin
   begin
     FFichierExport := Data;
     NodeInfo := Sender.GetNodeData(Node);
-    with TAlbumFull.Create(TAlbumLite(NodeInfo.Detail).ID) do
+    with TDaoAlbumFull.getInstance(TAlbumLite(NodeInfo.Detail).ID) do
       try
         WriteXMLToStream(FFichierExport);
       finally

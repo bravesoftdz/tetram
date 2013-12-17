@@ -76,7 +76,7 @@ begin
   FEditeur.SiteWeb := Trim(edSite.Text);
   FEditeur.Associations.Assign(edAssociations.Lines);
 
-  FEditeur.SaveToDatabase;
+  TDaoEditeurFull.SaveToDatabase(FEditeur);
   TDaoEditeurFull.SaveAssociations(FEditeur, vmEditeurs, GUID_NULL);
 
   ModalResult := mrOk;

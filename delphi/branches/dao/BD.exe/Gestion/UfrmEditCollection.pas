@@ -37,7 +37,7 @@ implementation
 
 uses
   Commun, Procedures, Proc_Gestions, Textes, UHistorique, EntitiesLite,
-  DaoFull;
+  DaoFull, DaoLite;
 
 {$R *.DFM}
 
@@ -84,10 +84,10 @@ begin
   end;
 
   FCollection.NomCollection := Trim(edNom.Text);
-  FCollection.ID_Editeur := ID_Editeur;
+  TDaoEditeurLite.Fill(FCollection.Editeur, ID_Editeur);
   FCollection.Associations.Text := edAssociations.Text;
 
-  FCollection.SaveToDatabase;
+  TDaoCollectionFull.SaveToDatabase(FCollection);
   TDaoCollectionFull.SaveAssociations(FCollection, vmCollections, FCollection.Editeur.ID);
 
   ModalResult := mrOk;

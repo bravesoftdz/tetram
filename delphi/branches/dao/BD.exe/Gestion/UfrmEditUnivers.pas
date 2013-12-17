@@ -53,7 +53,7 @@ implementation
 
 uses
   Commun, Proc_Gestions, EntitiesLite, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
-  UHistorique, UMetadata, DaoFull;
+  UHistorique, UMetadata, DaoFull, DaoLite;
 
 {$R *.DFM}
 
@@ -81,11 +81,11 @@ begin
 
   FUnivers.NomUnivers := Trim(edNom.Text);
   FUnivers.SiteWeb := Trim(edSite.Text);
-  FUnivers.ID_UniversParent := vtEditUnivers.CurrentValue;
+  TDaoUniversLite.Fill(FUnivers.UniversParent, vtEditUnivers.CurrentValue);
 
   FUnivers.Associations.Text := edAssociations.Lines.Text;
 
-  FUnivers.SaveToDatabase;
+  TDaoUniversFull.SaveToDatabase(FUnivers);
   TDaoUniversFull.SaveAssociations(FUnivers, vmUnivers, GUID_NULL);
 
   ModalResult := mrOk;

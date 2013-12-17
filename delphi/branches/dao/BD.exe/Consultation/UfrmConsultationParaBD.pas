@@ -89,7 +89,7 @@ type
 implementation
 
 uses Commun, EntitiesLite, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
-  Proc_Gestions;
+  Proc_Gestions, DaoFull;
 
 {$R *.dfm}
 { TFrmConsultationParaBD }
@@ -105,7 +105,7 @@ var
   jpg: TJPEGImage;
 begin
   ClearForm;
-  FParaBD.Fill(Value);
+  TDaoParaBDFull.Fill(FParaBD, Value);
 
   Caption := 'Fiche de para-BD - ' + FParaBD.ChaineAffichage;
   TitreSerie.Caption := FormatTitre(FParaBD.Serie.TitreSerie);

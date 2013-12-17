@@ -193,7 +193,8 @@ uses
   DaoLite in 'DBObjets\DaoLite.pas',
   DaoFull in 'DBObjets\DaoFull.pas',
   DaoStats in 'DBObjets\DaoStats.pas',
-  DaoRecherche in 'DBObjets\DaoRecherche.pas';
+  DaoRecherche in 'DBObjets\DaoRecherche.pas',
+  DaoLambda in 'DBObjets\DaoLambda.pas';
 
 begin
   Application.Title := 'BDthèque';

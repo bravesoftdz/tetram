@@ -188,8 +188,8 @@ begin
   FSerie.SuivreManquants := cbManquants.Checked;
   FSerie.NbAlbums := StrToIntDef(edNbAlbums.Text, -1);
   FSerie.SiteWeb := Trim(edSite.Text);
-  FSerie.ID_Editeur := vtEditEditeurs.CurrentValue;
-  FSerie.ID_Collection := vtEditCollections.CurrentValue;
+  TDaoEditeurFull.Fill(FSerie.Editeur, vtEditEditeurs.CurrentValue);
+  TDaoCollectionLite.Fill(FSerie.Collection, vtEditCollections.CurrentValue);
   FSerie.Sujet := edHistoire.Text;
   FSerie.Notes := edNotes.Text;
 
@@ -205,7 +205,7 @@ begin
 
   FSerie.Associations.Text := edAssociations.Lines.Text;
 
-  FSerie.SaveToDatabase;
+  TDaoSerieFull.SaveToDatabase(FSerie);
   TDaoSerieFull.SaveAssociations(FSerie, vmSeries, GUID_NULL);
 
   ModalResult := mrOk;

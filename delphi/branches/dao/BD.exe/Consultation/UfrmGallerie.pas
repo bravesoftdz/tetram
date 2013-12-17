@@ -75,7 +75,7 @@ implementation
 {$R *.dfm}
 
 uses
-  Procedures, CommonConst, jpeg, UHistorique, Commun, DaoLite;
+  Procedures, CommonConst, jpeg, UHistorique, Commun, DaoLite, DaoFull;
 
 { TThumbList.TThumb }
 
@@ -230,7 +230,7 @@ begin
 
   FThumbs.Clear;
 
-  Edition := TEditionFull.Create(Value);
+  Edition := TDaoEditionFull.getInstance(Value);
   try
     ShowEdition(Edition);
     Caption := 'Gallerie - ' + Edition.ChaineAffichage;
@@ -252,7 +252,7 @@ begin
 
   FThumbs.Clear;
 
-  Serie := TSerieFull.Create(Value);
+  Serie := TDaoSerieFull.getInstance(Value);
   try
     ShowSerie(Serie);
     Caption := 'Gallerie - ' + Serie.ChaineAffichage;
@@ -270,7 +270,7 @@ var
 begin
   FTitreAlbum := Album.ChaineAffichage(True);
 
-  with TEditionsCompletes.Create(Album.ID) do
+  with TDaoEditionFull.getList(Album.ID) do
     try
       for i := Pred(Editions.Count) downto 0 do
         ShowEdition(Editions[i]);

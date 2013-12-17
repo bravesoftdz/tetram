@@ -39,9 +39,8 @@ type
   public
     constructor Create(Complete: Boolean); reintroduce; overload;
     destructor Destroy; override;
-    procedure Fill(Complete: Boolean); reintroduce;
+    procedure Fill(Complete: Boolean);
     procedure Clear; override;
-    procedure PrepareInstance; override;
   published
     property Editeur: string read FEditeur;
     property NbAlbums: Integer read FNbAlbums;
@@ -74,7 +73,7 @@ type
     FSerie: TSerieLite;
     FNumerosManquants: TStringList;
   public
-    procedure PrepareInstance; override;
+    constructor Create; override;
     destructor Destroy; override;
     function ChaineAffichage: string;
   published
@@ -85,14 +84,15 @@ type
   TSeriesIncompletes = class(TListComplet)
   strict private
     FSeries: TObjectList<TSerieIncomplete>;
+  private
+    constructor Create; overload; override;
   public
     constructor Create(AvecIntegrales, AvecAchats: Boolean); reintroduce; overload;
     constructor Create(const ID_Serie: TGUID); reintroduce; overload;
     destructor Destroy; override;
-    procedure Fill(const Reference: TGUID); overload; override;
-    procedure Fill(AvecIntegrales, AvecAchats: Boolean; const ID_Serie: TGUID); reintroduce; overload;
+    procedure Fill(const Reference: TGUID); overload;
+    procedure Fill(AvecIntegrales, AvecAchats: Boolean; const ID_Serie: TGUID); overload;
     procedure Clear; override;
-    procedure PrepareInstance; override;
   published
     property Series: TObjectList<TSerieIncomplete> read FSeries;
   end;
@@ -120,14 +120,15 @@ type
     FAnneesPassees: TObjectList<TPrevisionSortie>;
     FAnneesProchaines: TObjectList<TPrevisionSortie>;
     FAnneeEnCours: TObjectList<TPrevisionSortie>;
+  private
+    constructor Create; overload; override;
   public
     constructor Create(AvecAchats: Boolean); reintroduce; overload;
     constructor Create(const ID_Serie: TGUID); reintroduce; overload;
     destructor Destroy; override;
-    procedure Fill(const Reference: TGUID); overload; override;
-    procedure Fill(AvecAchats: Boolean); reintroduce; overload;
-    procedure Fill(AvecAchats: Boolean; const ID_Serie: TGUID); reintroduce; overload;
-    procedure PrepareInstance; override;
+    procedure Fill(const Reference: TGUID); overload;
+    procedure Fill(AvecAchats: Boolean); overload;
+    procedure Fill(AvecAchats: Boolean; const ID_Serie: TGUID); overload;
     procedure Clear; override;
   published
     property AnneesPassees: TObjectList<TPrevisionSortie> read FAnneesPassees;
@@ -155,6 +156,10 @@ end;
 constructor TStats.Create(Complete: Boolean);
 begin
   inherited Create;
+  FListAlbumsMax := TObjectList<TAlbumLite>.Create;
+  FListAlbumsMin := TObjectList<TAlbumLite>.Create;
+  FListGenre := TObjectList<TGenreLite>.Create;
+  FListEditeurs := TObjectList<TStats>.Create;
   Fill(Complete);
 end;
 
@@ -323,7 +328,7 @@ var
   q: TUIBQuery;
   hg: IHourGlass;
 begin
-  inherited Fill(GUID_NULL);
+  Clear;
   hg := THourGlass.Create;
   CreateStats(Self);
   if Complete then
@@ -357,15 +362,6 @@ begin
   end;
 end;
 
-procedure TStats.PrepareInstance;
-begin
-  inherited;
-  FListAlbumsMax := TObjectList<TAlbumLite>.Create;
-  FListAlbumsMin := TObjectList<TAlbumLite>.Create;
-  FListGenre := TObjectList<TGenreLite>.Create;
-  FListEditeurs := TObjectList<TStats>.Create;
-end;
-
 { TSeriesIncompletes }
 
 procedure TSeriesIncompletes.Clear;
@@ -376,14 +372,20 @@ end;
 
 constructor TSeriesIncompletes.Create(AvecIntegrales, AvecAchats: Boolean);
 begin
-  inherited Create;
+  Create;
   Fill(AvecIntegrales, AvecAchats, GUID_NULL);
 end;
 
 constructor TSeriesIncompletes.Create(const ID_Serie: TGUID);
 begin
-  inherited Create;
+  Create;
   Fill(ID_Serie);
+end;
+
+constructor TSeriesIncompletes.Create;
+begin
+  inherited;
+  FSeries := TObjectList<TSerieIncomplete>.Create(True);
 end;
 
 destructor TSeriesIncompletes.Destroy;
@@ -413,7 +415,7 @@ var
 var
   Incomplete: TSerieIncomplete;
 begin
-  inherited Fill(GUID_NULL);
+  Clear;
   q := TUIBQuery.Create(nil);
   with q do
     try
@@ -466,12 +468,6 @@ begin
   Fill(True, True, Reference);
 end;
 
-procedure TSeriesIncompletes.PrepareInstance;
-begin
-  inherited;
-  FSeries := TObjectList<TSerieIncomplete>.Create(True);
-end;
-
 { TPrevisionsSorties }
 
 procedure TPrevisionsSorties.Clear;
@@ -484,14 +480,22 @@ end;
 
 constructor TPrevisionsSorties.Create(AvecAchats: Boolean);
 begin
-  inherited Create;
+  Create;
   Fill(AvecAchats);
 end;
 
 constructor TPrevisionsSorties.Create(const ID_Serie: TGUID);
 begin
-  inherited Create;
+  Create;
   Fill(ID_Serie);
+end;
+
+constructor TPrevisionsSorties.Create;
+begin
+  inherited;
+  FAnneesPassees := TObjectList<TPrevisionSortie>.Create(True);
+  FAnneeEnCours := TObjectList<TPrevisionSortie>.Create(True);
+  FAnneesProchaines := TObjectList<TPrevisionSortie>.Create(True);
 end;
 
 destructor TPrevisionsSorties.Destroy;
@@ -508,7 +512,7 @@ var
   Annee, CurrentAnnee: Integer;
   Prevision: TPrevisionSortie;
 begin
-  inherited Fill(GUID_NULL);
+  Clear;
   CurrentAnnee := YearOf(Now);
   q := TUIBQuery.Create(nil);
   with q do
@@ -564,14 +568,6 @@ begin
   Fill(AvecAchats, GUID_NULL);
 end;
 
-procedure TPrevisionsSorties.PrepareInstance;
-begin
-  inherited;
-  FAnneesPassees := TObjectList<TPrevisionSortie>.Create(True);
-  FAnneeEnCours := TObjectList<TPrevisionSortie>.Create(True);
-  FAnneesProchaines := TObjectList<TPrevisionSortie>.Create(True);
-end;
-
 { TPrevisionSortie }
 
 constructor TPrevisionSortie.Create;
@@ -610,18 +606,18 @@ begin
   end;
 end;
 
+constructor TSerieIncomplete.Create;
+begin
+  inherited;
+  FNumerosManquants := TStringList.Create;
+  FSerie := TSerieLite.Create;
+end;
+
 destructor TSerieIncomplete.Destroy;
 begin
   FreeAndNil(FSerie);
   FreeAndNil(FNumerosManquants);
   inherited;
-end;
-
-procedure TSerieIncomplete.PrepareInstance;
-begin
-  inherited;
-  FNumerosManquants := TStringList.Create;
-  FSerie := TSerieLite.Create;
 end;
 
 end.

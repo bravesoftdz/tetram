@@ -360,7 +360,7 @@ begin
       frm.vtEditPersonnes.VTEdit.PopupWindow.TreeView.InitializeRep;
       frm.vtEditEditeurs.VTEdit.PopupWindow.TreeView.InitializeRep;
       frm.vtEditCollections.VTEdit.PopupWindow.TreeView.InitializeRep;
-      frm.FAlbumImport.FusionneInto(frm.Album);
+      TDaoAlbumFull.FusionneInto(frm.FAlbumImport, frm.Album);
       oldIsAchat := frm.isAchat;
       try
         frm.isAchat := False;
@@ -527,7 +527,7 @@ begin
   hg := THourGlass.Create;
   SaveToObject;
 
-  FAlbum.SaveToDatabase;
+  TDaoAlbumFull.SaveToDatabase(FAlbum);
   if isAchat then
     TDaoAlbumFull.Acheter(FAlbum, False);
 
@@ -712,7 +712,7 @@ var
   i: TGUID;
 begin
   // on recharge la série
-  FAlbum.ID_Serie := FAlbum.ID_Serie;
+  TDaoSerieFull.Fill(FAlbum.Serie, FAlbum.ID_Serie);
   i := vtEditCollections.CurrentValue;
   vtEditEditeurs.VTEdit.PopupWindow.TreeView.InitializeRep;
   vtEditCollections.VTEdit.PopupWindow.TreeView.InitializeRep;
@@ -805,7 +805,6 @@ var
 begin
   SetLength(FEditeurCollectionSelected, Succ(Length(FEditeurCollectionSelected)));
   EditionComplete := TEditionFull.Create;
-  EditionComplete.New;
   EditionComplete.ID_Album := ID_Album;
   EditionComplete.Stock := True;
   EditionComplete.Dedicace := False;
@@ -1156,7 +1155,7 @@ procedure TfrmEditAlbum.JvComboEdit1Change(Sender: TObject);
 var
   Auteur: TAuteurLite;
 begin
-  FAlbum.ID_Serie := vtEditSerie.CurrentValue;
+  TDaoSerieFull.Fill(FAlbum.Serie, vtEditSerie.CurrentValue);
   if not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL) then
   begin
     if not(FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then

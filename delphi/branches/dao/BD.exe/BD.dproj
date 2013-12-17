@@ -456,6 +456,7 @@
         <DCCReference Include="DBObjets\DaoFull.pas"/>
         <DCCReference Include="DBObjets\DaoStats.pas"/>
         <DCCReference Include="DBObjets\DaoRecherche.pas"/>
+        <DCCReference Include="DBObjets\DaoLambda.pas"/>
         <RcItem Include="images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>

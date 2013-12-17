@@ -42,62 +42,62 @@ uses
 
 function CreationAchatAlbum(const Valeur: string): TGUID;
 function EditionAchatAlbum(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
-function EditionAchatAlbum(Source: TObjetComplet): Boolean; overload;
+function EditionAchatAlbum(Source: TObjetFull): Boolean; overload;
 function DelAchatAlbum(const ID: TGUID): Boolean;
 
 function CreationAlbum(const Valeur: string): TGUID; overload;
-function CreationAlbum(Source: TObjetComplet): TGUID; overload;
+function CreationAlbum(Source: TObjetFull): TGUID; overload;
 function EditionAlbum(const ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
 function EditionAlbum(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
-function EditionAlbum(Source: TObjetComplet; Achat: Boolean): Boolean; overload;
-function EditionAlbum(Source: TObjetComplet): Boolean; overload;
+function EditionAlbum(Source: TObjetFull; Achat: Boolean): Boolean; overload;
+function EditionAlbum(Source: TObjetFull): Boolean; overload;
 function DelAlbum(const ID: TGUID): Boolean;
 
 function CreationEditeur(const Valeur: string): TGUID; overload;
-function CreationEditeur(Source: TObjetComplet): TGUID; overload;
+function CreationEditeur(Source: TObjetFull): TGUID; overload;
 function EditionEditeur(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
-function EditionEditeur(Source: TObjetComplet): Boolean; overload;
+function EditionEditeur(Source: TObjetFull): Boolean; overload;
 function DelEditeur(const ID: TGUID): Boolean;
 
 function CreationCollection(const ID_Editeur: TGUID; const Valeur: string): TGUID; overload;
-function CreationCollection(Source: TObjetComplet): TGUID; overload;
+function CreationCollection(Source: TObjetFull): TGUID; overload;
 function EditionCollection(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
 function EditionCollection(const ID: TGUID; const ID_Editeur: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
-function EditionCollection(Source: TObjetComplet): Boolean; overload;
+function EditionCollection(Source: TObjetFull): Boolean; overload;
 function DelCollection(const ID: TGUID): Boolean;
 
-function CreationGenre(const Genre: string; Source: TObjetComplet = nil): TGUID;
+function CreationGenre(const Genre: string; Source: TObjetFull = nil): TGUID;
 function EditionGenre(const ID: TGUID): Boolean;
 function DelGenre(const ID: TGUID): Boolean;
 
 function CreationAuteur(const Auteur: string): TGUID;
 function CreationAuteur2(const Auteur: string): TGUID;
 function EditionAuteur(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
-function EditionAuteur(Source: TObjetComplet): Boolean; overload;
+function EditionAuteur(Source: TObjetFull): Boolean; overload;
 function DelAuteur(const ID: TGUID): Boolean;
 
 function CreationUnivers(const Valeur: string): TGUID; overload;
-function CreationUnivers(Source: TObjetComplet): TGUID; overload;
+function CreationUnivers(Source: TObjetFull): TGUID; overload;
 function EditionUnivers(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
-function EditionUnivers(Source: TObjetComplet): Boolean; overload;
+function EditionUnivers(Source: TObjetFull): Boolean; overload;
 function DelUnivers(const ID: TGUID): Boolean;
 
 function CreationSerie(const Valeur: string): TGUID; overload;
-function CreationSerie(Source: TObjetComplet): TGUID; overload;
+function CreationSerie(Source: TObjetFull): TGUID; overload;
 function EditionSerie(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
-function EditionSerie(Source: TObjetComplet): Boolean; overload;
+function EditionSerie(Source: TObjetFull): Boolean; overload;
 function DelSerie(const ID: TGUID): Boolean;
 
 function CreationParaBD(const Valeur: string): TGUID;
 function EditionParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
 function EditionParaBD(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
-function EditionParaBD(Source: TObjetComplet; Achat: Boolean): Boolean; overload;
-function EditionParaBD(Source: TObjetComplet): Boolean; overload;
+function EditionParaBD(Source: TObjetFull; Achat: Boolean): Boolean; overload;
+function EditionParaBD(Source: TObjetFull): Boolean; overload;
 function DelParaBD(const ID: TGUID): Boolean;
 
 function CreationAchatParaBD(const Valeur: string): TGUID;
 function EditionAchatParaBD(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
-function EditionAchatParaBD(Source: TObjetComplet): Boolean; overload;
+function EditionAchatParaBD(Source: TObjetFull): Boolean; overload;
 function DelAchatParaBD(const ID: TGUID): Boolean;
 
 implementation
@@ -127,7 +127,7 @@ end;
 // **********************************************************************************************
 type
   TLambdaEdition = function(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
-  TLambdaEditionSrc = function(Source: TObjetComplet): Boolean;
+  TLambdaEditionSrc = function(Source: TObjetFull): Boolean;
   TLambdaEdition2 = function(const ID: TGUID; const Reference2: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 
 function CreationLambda(LambdaEdition: TLambdaEdition; const Valeur: string; Fenetre: TFormClass): TGUID; overload;
@@ -149,7 +149,7 @@ begin
     Result := GUID_NULL;
 end;
 
-function CreationLambda(LambdaEdition: TLambdaEditionSrc; Source: TObjetComplet; Fenetre: TFormClass): TGUID; overload;
+function CreationLambda(LambdaEdition: TLambdaEditionSrc; Source: TObjetFull; Fenetre: TFormClass): TGUID; overload;
 begin
   Result := Source.ID;
   if frmFond.IsShowing(Fenetre) then
@@ -313,7 +313,7 @@ begin
   Result := CreationLambda(EditionAchatAlbum, Valeur, TFrmEditAchatAlbum);
 end;
 
-function EditionAchatAlbum(Source: TObjetComplet): Boolean;
+function EditionAchatAlbum(Source: TObjetFull): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -374,7 +374,7 @@ begin
 end;
 // **********************************************************************************************
 
-function CreationAlbum(Source: TObjetComplet): TGUID;
+function CreationAlbum(Source: TObjetFull): TGUID;
 begin
   Result := CreationLambda(EditionAlbum, Source, TFrmEditAlbum);
 end;
@@ -384,12 +384,12 @@ begin
   Result := CreationLambda(EditionAlbum, Valeur, TFrmEditAlbum);
 end;
 
-function EditionAlbum(Source: TObjetComplet): Boolean; overload;
+function EditionAlbum(Source: TObjetFull): Boolean; overload;
 begin
   Result := EditionAlbum(Source, False);
 end;
 
-function EditionAlbum(Source: TObjetComplet; Achat: Boolean): Boolean; overload;
+function EditionAlbum(Source: TObjetFull; Achat: Boolean): Boolean; overload;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -443,12 +443,12 @@ begin
   Result := CreationLambda(EditionSerie, Valeur, TFrmEditSerie);
 end;
 
-function CreationSerie(Source: TObjetComplet): TGUID;
+function CreationSerie(Source: TObjetFull): TGUID;
 begin
   Result := CreationLambda(EditionSerie, Source, TFrmEditSerie);
 end;
 
-function EditionSerie(Source: TObjetComplet): Boolean;
+function EditionSerie(Source: TObjetFull): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -496,12 +496,12 @@ begin
   Result := CreationLambda(EditionUnivers, Valeur, TFrmEditUnivers);
 end;
 
-function CreationUnivers(Source: TObjetComplet): TGUID; overload;
+function CreationUnivers(Source: TObjetFull): TGUID; overload;
 begin
   Result := CreationLambda(EditionUnivers, Source, TFrmEditUnivers);
 end;
 
-function EditionUnivers(Source: TObjetComplet): Boolean; overload;
+function EditionUnivers(Source: TObjetFull): Boolean; overload;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -549,12 +549,12 @@ begin
   Result := CreationLambda(EditionEditeur, Valeur, TFrmEditEditeur);
 end;
 
-function CreationEditeur(Source: TObjetComplet): TGUID;
+function CreationEditeur(Source: TObjetFull): TGUID;
 begin
   Result := CreationLambda(EditionEditeur, Source, TFrmEditEditeur);
 end;
 
-function EditionEditeur(Source: TObjetComplet): Boolean;
+function EditionEditeur(Source: TObjetFull): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -602,12 +602,12 @@ begin
   Result := CreationLambda(EditionCollection, ID_Editeur, Valeur, TFrmEditCollection);
 end;
 
-function CreationCollection(Source: TObjetComplet): TGUID;
+function CreationCollection(Source: TObjetFull): TGUID;
 begin
   Result := CreationLambda(EditionCollection, Source, TFrmEditCollection);
 end;
 
-function EditionCollection(Source: TObjetComplet): Boolean;
+function EditionCollection(Source: TObjetFull): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -658,7 +658,7 @@ begin
 end;
 // ************************************************************************************************************************
 
-function CreationGenre(const Genre: string; Source: TObjetComplet = nil): TGUID;
+function CreationGenre(const Genre: string; Source: TObjetFull = nil): TGUID;
 begin
   Result := CreationLambdaChampSimple(Textes.rsGenre, 'GENRES', 'Genre', 'ID_Genre', Genre);
 end;
@@ -684,7 +684,7 @@ begin
   Result := CreationLambda(EditionAuteur, Auteur, TFrmEditAuteur);
 end;
 
-function EditionAuteur(Source: TObjetComplet): Boolean; overload;
+function EditionAuteur(Source: TObjetFull): Boolean; overload;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -732,12 +732,12 @@ begin
   Result := CreationLambda(EditionParaBD, Valeur, TFrmEditParaBD);
 end;
 
-function EditionParaBD(Source: TObjetComplet): Boolean; overload;
+function EditionParaBD(Source: TObjetFull): Boolean; overload;
 begin
   Result := EditionParaBD(Source, False);
 end;
 
-function EditionParaBD(Source: TObjetComplet; Achat: Boolean): Boolean; overload;
+function EditionParaBD(Source: TObjetFull; Achat: Boolean): Boolean; overload;
 var
   hg: IHourGlass;
   me: IModeEditing;
@@ -791,7 +791,7 @@ begin
   Result := CreationLambda(EditionAchatParaBD, Valeur, TFrmEditParaBD);
 end;
 
-function EditionAchatParaBD(Source: TObjetComplet): Boolean;
+function EditionAchatParaBD(Source: TObjetFull): Boolean;
 var
   hg: IHourGlass;
   me: IModeEditing;

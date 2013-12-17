@@ -71,7 +71,7 @@ begin
   FAuteur.Biographie := edBiographie.Text;
   FAuteur.Associations.Text := edAssociations.Text;
 
-  FAuteur.SaveToDatabase;
+  TDaoAuteurFull.SaveToDatabase(FAuteur);
   TDaoAuteurFull.SaveAssociations(FAuteur, vmPersonnes, GUID_NULL);
 
   ModalResult := mrOk;

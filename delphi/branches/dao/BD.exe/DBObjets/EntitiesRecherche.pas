@@ -84,7 +84,6 @@ type
     RechercheSimple: TRechercheSimple;
     FLibelle: string;
 
-    procedure PrepareInstance; override;
     procedure Clear; override;
     procedure ClearCriteres;
     procedure Fill; reintroduce; overload;
@@ -123,6 +122,10 @@ end;
 constructor TRecherche.Create;
 begin
   inherited;
+  Resultats := TObjectList<TAlbumLite>.Create(True);
+  ResultatsInfos := TStringList.Create;
+  Criteres := TGroupCritere.Create(nil);
+  SortBy := TObjectList<TCritereTri>.Create(True);
 end;
 
 procedure TRecherche.ClearCriteres;
@@ -135,7 +138,6 @@ end;
 constructor TRecherche.Create(Recherche: TRechercheSimple; const ID: TGUID; const Libelle: string);
 begin
   inherited Create;
-  PrepareInstance;
   Fill(Recherche, ID, Libelle);
 end;
 
@@ -228,8 +230,7 @@ var
   sWhere, sOrderBy, S: string;
   CritereTri: TCritereTri;
 begin
-  inherited Fill(GUID_NULL);
-
+  Clear;
   q := TUIBQuery.Create(nil);
   slFrom := TStringList.Create;
   slFrom.Sorted := True;
@@ -332,7 +333,7 @@ var
   oldID_Album: TGUID;
   oldIndex: Integer;
 begin
-  inherited Fill(GUID_NULL);
+  Clear;
   if not IsEqualGUID(ID, GUID_NULL) then
   begin
     q := TUIBQuery.Create(nil);
@@ -392,15 +393,6 @@ begin
         Free;
       end;
   end;
-end;
-
-procedure TRecherche.PrepareInstance;
-begin
-  inherited;
-  Resultats := TObjectList<TAlbumLite>.Create(True);
-  ResultatsInfos := TStringList.Create;
-  Criteres := TGroupCritere.Create(nil);
-  SortBy := TObjectList<TCritereTri>.Create(True);
 end;
 
 function TRecherche.AddCritere(Parent: TGroupCritere): TCritere;

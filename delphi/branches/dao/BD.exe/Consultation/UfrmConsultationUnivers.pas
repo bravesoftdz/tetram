@@ -65,7 +65,7 @@ type
 implementation
 
 uses Commun, EntitiesLite, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
-  Proc_Gestions;
+  Proc_Gestions, DaoFull;
 
 {$R *.dfm}
 { TfrmConsultationUnivers }
@@ -78,7 +78,7 @@ end;
 procedure TfrmConsultationUnivers.SetID_Univers(const Value: TGUID);
 begin
   ClearForm;
-  FUnivers.Fill(Value);
+  TDaoUniversFull.Fill(FUnivers, Value);
 
   Caption := 'Fiche d''univers - ' + FUnivers.ChaineAffichage;
   NomUnivers.Caption := FormatTitre(FUnivers.NomUnivers);

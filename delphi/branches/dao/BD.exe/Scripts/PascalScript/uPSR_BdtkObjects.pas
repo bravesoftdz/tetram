@@ -39,11 +39,7 @@ uses
 procedure TAlbumCompletEdition_R(Self: TAlbumFull; var T: TEditionFull);
 begin
   if Self.Editions.Editions.Count = 0 then
-  begin
-    // TODO: à remplacer par les bons appels
-    // Self.Editions.Editions.Add(TDaoEditionFull.getInstance(GUID_NULL));
-    // Self.Editions.Editions[0].New;
-  end;
+    Self.Editions.Editions.Add(TEditionFull.Create);
   T := Self.Editions.Editions[0];
 end;
 

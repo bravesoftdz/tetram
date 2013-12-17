@@ -308,7 +308,7 @@ begin
 
   FParaBD.ImageStockee := cbImageBDD.Checked;
 
-  FParaBD.SaveToDatabase;
+  TDaoParaBDFull.SaveToDatabase(FParaBD);
   if isAchat then
     TDaoParaBDFull.Acheter(FParaBD, False);
 
@@ -390,7 +390,7 @@ end;
 
 procedure TfrmEditParaBD.vtEditSeriesVTEditChange(Sender: TObject);
 begin
-  FParaBD.ID_Serie := vtEditSeries.CurrentValue;
+  TDaoSerieFull.Fill(FParaBD.Serie, vtEditSeries.CurrentValue);
 end;
 
 procedure TfrmEditParaBD.vtEditUniversVTEditChange(Sender: TObject);

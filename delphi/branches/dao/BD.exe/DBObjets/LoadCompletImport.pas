@@ -46,7 +46,7 @@ var
     end;
   end;
 
-  function CheckValue(Texte: string; TypeData: TVirtualMode; const ParentID: TGUID; Objet: TObjetComplet = nil): TGUID; overload;
+  function CheckValue(Texte: string; TypeData: TVirtualMode; const ParentID: TGUID; Objet: TObjetFull = nil): TGUID; overload;
   var
     Toujours: Boolean;
   begin
@@ -220,10 +220,10 @@ begin
             for Edition in Editions.Editions do
               if SameText(Serie.Editeur.NomEditeur, Edition.Editeur.NomEditeur) then
               begin
-                Edition.Editeur.Fill(dummyID);
+                TDaoEditeurFull.Fill(Edition.Editeur, dummyID);
                 TDaoEditeurLite.Fill(Edition.Collection.Editeur, dummyID);
               end;
-            Serie.Editeur.Fill(dummyID);
+            TDaoEditeurFull.Fill(Serie.Editeur, dummyID);
           end;
           frmValidationImport.Album := Self;
         end;
@@ -257,7 +257,7 @@ begin
           Exit;
         if not IsEqualGuid(dummyID, GUID_FULL) then
         begin
-          ID_Serie := dummyID;
+          TDaoSerieFull.Fill(Serie, dummyID);
 
           if Scenaristes.Count + Dessinateurs.Count + Coloristes.Count = 0 then
           begin
@@ -333,10 +333,10 @@ begin
                   if (Edition <> Edition2) and IsEqualGuid(Edition2.Editeur.ID_Editeur, GUID_NULL) and
                     SameText(Edition.Editeur.NomEditeur, Edition2.Editeur.NomEditeur) then
                   begin
-                    Edition2.Editeur.Fill(dummyID);
+                    TDaoEditeurFull.Fill(Edition2.Editeur, dummyID);
                     TDaoEditeurLite.Fill(Edition2.Collection.Editeur, dummyID);
                   end;
-                Edition.Editeur.Fill(dummyID);
+                TDaoEditeurFull.Fill(Edition.Editeur, dummyID);
                 TDaoEditeurLite.Fill(Edition.Collection.Editeur, dummyID);
               end;
               frmValidationImport.Album := Self;

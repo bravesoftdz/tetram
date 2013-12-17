@@ -25,7 +25,7 @@ type
     function GetMode: TVirtualMode;
     procedure SetMode(const Value: TVirtualMode);
   public
-    ObjetImport: TObjetComplet;
+    ObjetImport: TObjetFull;
     SelectedValue: TGUID;
     SelectedText: string;
     function ShowModalEx: TModalResult;
