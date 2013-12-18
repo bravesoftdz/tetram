@@ -41,62 +41,62 @@ uses
 }
 
 function CreationAchatAlbum(const Valeur: string): TGUID;
-function EditionAchatAlbum(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionAchatAlbum(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
 function EditionAchatAlbum(Source: TObjetFull): Boolean; overload;
 function DelAchatAlbum(const ID: TGUID): Boolean;
 
 function CreationAlbum(const Valeur: string): TGUID; overload;
 function CreationAlbum(Source: TObjetFull): TGUID; overload;
-function EditionAlbum(const ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
-function EditionAlbum(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionAlbum(var ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
+function EditionAlbum(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
 function EditionAlbum(Source: TObjetFull; Achat: Boolean): Boolean; overload;
 function EditionAlbum(Source: TObjetFull): Boolean; overload;
 function DelAlbum(const ID: TGUID): Boolean;
 
 function CreationEditeur(const Valeur: string): TGUID; overload;
 function CreationEditeur(Source: TObjetFull): TGUID; overload;
-function EditionEditeur(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionEditeur(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
 function EditionEditeur(Source: TObjetFull): Boolean; overload;
 function DelEditeur(const ID: TGUID): Boolean;
 
 function CreationCollection(const ID_Editeur: TGUID; const Valeur: string): TGUID; overload;
 function CreationCollection(Source: TObjetFull): TGUID; overload;
-function EditionCollection(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
-function EditionCollection(const ID: TGUID; const ID_Editeur: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionCollection(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionCollection(var ID: TGUID; const ID_Editeur: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
 function EditionCollection(Source: TObjetFull): Boolean; overload;
 function DelCollection(const ID: TGUID): Boolean;
 
 function CreationGenre(const Genre: string; Source: TObjetFull = nil): TGUID;
-function EditionGenre(const ID: TGUID): Boolean;
+function EditionGenre(var ID: TGUID): Boolean;
 function DelGenre(const ID: TGUID): Boolean;
 
 function CreationAuteur(const Auteur: string): TGUID;
 function CreationAuteur2(const Auteur: string): TGUID;
-function EditionAuteur(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionAuteur(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
 function EditionAuteur(Source: TObjetFull): Boolean; overload;
 function DelAuteur(const ID: TGUID): Boolean;
 
 function CreationUnivers(const Valeur: string): TGUID; overload;
 function CreationUnivers(Source: TObjetFull): TGUID; overload;
-function EditionUnivers(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionUnivers(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
 function EditionUnivers(Source: TObjetFull): Boolean; overload;
 function DelUnivers(const ID: TGUID): Boolean;
 
 function CreationSerie(const Valeur: string): TGUID; overload;
 function CreationSerie(Source: TObjetFull): TGUID; overload;
-function EditionSerie(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionSerie(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
 function EditionSerie(Source: TObjetFull): Boolean; overload;
 function DelSerie(const ID: TGUID): Boolean;
 
 function CreationParaBD(const Valeur: string): TGUID;
-function EditionParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
-function EditionParaBD(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionParaBD(var ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
+function EditionParaBD(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
 function EditionParaBD(Source: TObjetFull; Achat: Boolean): Boolean; overload;
 function EditionParaBD(Source: TObjetFull): Boolean; overload;
 function DelParaBD(const ID: TGUID): Boolean;
 
 function CreationAchatParaBD(const Valeur: string): TGUID;
-function EditionAchatParaBD(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionAchatParaBD(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
 function EditionAchatParaBD(Source: TObjetFull): Boolean; overload;
 function DelAchatParaBD(const ID: TGUID): Boolean;
 
@@ -111,8 +111,8 @@ function FindRec(const Table, Champ: string; const Reference: TGUID; WithMessage
 begin
   with TUIBQuery.Create(nil) do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := Format('SELECT %s FROM %s WHERE %s = ?', [Champ, Table, Champ]);
+      Transaction := GetTransaction(dmPrinc.UIBDataBase);
+      SQL.Text := Format('select %s from %s where %s = ?', [Champ, Table, Champ]);
       Params.AsString[0] := GUIDToString(Reference);
       Open;
       Result := not Eof;
@@ -126,18 +126,19 @@ end;
 
 // **********************************************************************************************
 type
-  TLambdaEdition = function(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+  TLambdaEdition = function(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
   TLambdaEditionSrc = function(Source: TObjetFull): Boolean;
-  TLambdaEdition2 = function(const ID: TGUID; const Reference2: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+  TLambdaEdition2 = function(var ID: TGUID; const Reference2: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 
 function CreationLambda(LambdaEdition: TLambdaEdition; const Valeur: string; Fenetre: TFormClass): TGUID; overload;
 begin
   Result := GUID_NULL;
   if frmFond.IsShowing(Fenetre) then
     Exit;
+(*
   with TUIBQuery.Create(nil) do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      Transaction := GetTransaction(dmPrinc.UIBDataBase);
       SQL.Text := 'select udf_createguid() from rdb$database';
       Open;
       Result := StringToGUID(Fields.AsString[0]);
@@ -145,6 +146,7 @@ begin
       Transaction.Free;
       Free;
     end;
+*)
   if not LambdaEdition(Result, True, Valeur) then
     Result := GUID_NULL;
 end;
@@ -154,14 +156,16 @@ begin
   Result := Source.ID;
   if frmFond.IsShowing(Fenetre) then
     Exit;
-  if IsEqualGUID(Result, GUID_NULL) then
-  begin
+  (*
+    if IsEqualGUID(Result, GUID_NULL) then
+    begin
     Source.New(False);
     Result := Source.ID;
-  end;
+    end;
+  *)
 
-  if not LambdaEdition(Source) then
-    Result := GUID_NULL;
+  LambdaEdition(Source);
+  Result := Source.ID;
 end;
 
 function CreationLambda(LambdaEdition: TLambdaEdition2; const Reference2: TGUID; const Valeur: string; Fenetre: TFormClass): TGUID; overload;
@@ -169,16 +173,18 @@ begin
   Result := GUID_NULL;
   if frmFond.IsShowing(Fenetre) then
     Exit;
-  with TUIBQuery.Create(nil) do
+  (*
+    with TUIBQuery.Create(nil) do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'select udf_createguid() from rdb$database';
-      Open;
-      Result := StringToGUID(Fields.AsString[0]);
+    Transaction := GetTransaction(dmPrinc.UIBDataBase);
+    SQL.Text := 'select udf_createguid() from rdb$database';
+    Open;
+    Result := StringToGUID(Fields.AsString[0]);
     finally
-      Transaction.Free;
-      Free;
+    Transaction.Free;
+    Free;
     end;
+  *)
   if not LambdaEdition(Result, Reference2, True, Valeur) then
     Result := GUID_NULL;
 end;
@@ -199,7 +205,7 @@ begin
   with TUIBQuery.Create(nil) do
     try
       try
-        Transaction := GetTransaction(DMPrinc.UIBDataBase);
+        Transaction := GetTransaction(dmPrinc.UIBDataBase);
         SQL.Text := Format('select %s from %s where %s = ?', [ChampRef, Table, Champ]);
         Prepare(True);
         Params.AsString[0] := Copy(Chaine, 1, Params.MaxStrLen[0]);
@@ -207,16 +213,12 @@ begin
         if not Eof then
           raise Exception.CreateFmt(rsTitreStillUsed, [TypeInfo]);
 
-        SQL.Text := 'select udf_createguid() from rdb$database';
-        Open;
-        Result := StringToGUID(Fields.AsString[0]);
-
         Params.Clear;
-        SQL.Text := Format('insert into %s (%s, %s) values (?, ?)', [Table, ChampRef, Champ]);
+        SQL.Text := Format('insert into %s (%s) values (?) returning %s', [Table, Champ, ChampRef]);
         Prepare(True);
-        Params.AsString[0] := GUIDToString(Result);
-        Params.AsString[1] := Copy(Chaine, 1, Params.MaxStrLen[1]);
+        Params.AsString[0] := Copy(Chaine, 1, Params.MaxStrLen[0]);
         Execute;
+        Result := StringToGUID(Fields.AsString[0]);
         Transaction.Commit;
       except
         Transaction.Rollback;
@@ -229,7 +231,7 @@ begin
     end;
 end;
 
-function EditionLambdaChampSimple(const TypeInfo, Table, Champ, ChampRef: string; const Reference: TGUID): Boolean;
+function EditionLambdaChampSimple(const TypeInfo, Table, Champ, ChampRef: string; Reference: TGUID): Boolean;
 var
   Chaine: string;
   hg: IHourGlass;
@@ -239,9 +241,9 @@ begin
   with TUIBQuery.Create(nil) do
     try
       try
-        Transaction := GetTransaction(DMPrinc.UIBDataBase);
+        Transaction := GetTransaction(dmPrinc.UIBDataBase);
 
-        SQL.Text := Format('SELECT %s FROM %s WHERE %s = ?', [Champ, Table, ChampRef]);
+        SQL.Text := Format('select %s from %s where %s = ?', [Champ, Table, ChampRef]);
         Params.AsString[0] := GUIDToString(Reference);
         Open;
         if Eof then
@@ -263,7 +265,7 @@ begin
         if not Eof then
           raise Exception.CreateFmt(rsTitreStillUsed, [TypeInfo]);
 
-        SQL.Text := Format('update %s set %s = ? where%s = ?', [Table, Champ, ChampRef]);
+        SQL.Text := Format('update %s set %s = ? where %s = ?', [Table, Champ, ChampRef]);
         Prepare(True);
         Params.AsString[0] := Copy(Chaine, 1, Params.MaxStrLen[0]);
         Params.AsString[1] := GUIDToString(Reference);
@@ -289,8 +291,8 @@ begin
   Result := False;
   with TUIBQuery.Create(nil) do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := Format('delete from %s where%s=?', [Table, Champ]);
+      Transaction := GetTransaction(dmPrinc.UIBDataBase);
+      SQL.Text := Format('delete from %s where %s=?', [Table, Champ]);
       Params.AsString[0] := GUIDToString(Ref);
       try
         Execute;
@@ -323,7 +325,7 @@ begin
   me := TModeEditing.Create;
   f := TFrmEditAchatAlbum.Create(Application);
   try
-    f.Album := TAlbumFull(Source);
+    f.Album := Source as TAlbumFull;
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -331,20 +333,21 @@ begin
   end;
 end;
 
-function EditionAchatAlbum(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionAchatAlbum(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
   Album: TAlbumFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditAlbum) then
     Exit;
-  if not Creation and not FindRec('ALBUMS', 'ID_Album', ID, True) then
-    Exit;
+//  if not Creation and not FindRec('ALBUMS', 'ID_Album', ID, True) then
+//    Exit;
   Album := TDaoAlbumFull.getInstance(ID);
   try
     if Creation then
       Album.TitreAlbum := Valeur;
     Result := EditionAchatAlbum(Album);
+    ID := Album.ID_Album;
   finally
     Album.Free;
   end;
@@ -354,13 +357,13 @@ function DelAchatAlbum(const ID: TGUID): Boolean;
 begin
   with TUIBQuery.Create(nil) do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'SELECT COMPLET FROM ALBUMS WHERE ID_Album = ?';
+      Transaction := GetTransaction(dmPrinc.UIBDataBase);
+      SQL.Text := 'select complet from albums where id_album = ?';
       Params.AsString[0] := GUIDToString(ID);
       Open;
       if Fields.AsInteger[0] = 1 then
       begin
-        SQL.Text := 'UPDATE ALBUMS SET ACHAT = 0 WHERE ID_Album = ?';
+        SQL.Text := 'update albums set achat = 0 where id_album = ?';
         Params.AsString[0] := GUIDToString(ID);
         Execute;
         Result := True;
@@ -400,7 +403,7 @@ begin
   f := TFrmEditAlbum.Create(Application);
   try
     f.isAchat := Achat;
-    f.Album := TAlbumFull(Source);
+    f.Album := Source as TAlbumFull;
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -408,26 +411,27 @@ begin
   end;
 end;
 
-function EditionAlbum(const ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
+function EditionAlbum(var ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
 var
   Album: TAlbumFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditAlbum) then
     Exit;
-  if not Creation and not FindRec('ALBUMS', 'ID_Album', ID, True) then
-    Exit;
+//  if not Creation and not FindRec('ALBUMS', 'ID_Album', ID, True) then
+//    Exit;
   Album := TDaoAlbumFull.getInstance(ID);
   try
     if Creation then
       Album.TitreAlbum := Valeur;
     Result := EditionAlbum(Album, Achat);
+    ID := Album.ID_Album;
   finally
     Album.Free;
   end;
 end;
 
-function EditionAlbum(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionAlbum(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 begin
   Result := EditionAlbum(ID, Creation, Valeur, False);
 end;
@@ -458,7 +462,7 @@ begin
   me := TModeEditing.Create;
   f := TFrmEditSerie.Create(Application);
   try
-    f.Serie := TSerieFull(Source);
+    f.Serie := Source as TSerieFull;
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -466,20 +470,21 @@ begin
   end;
 end;
 
-function EditionSerie(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionSerie(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
   Serie: TSerieFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditSerie) then
     Exit;
-  if not Creation and not FindRec('SERIES', 'ID_Serie', ID, True) then
-    Exit;
+//  if not Creation and not FindRec('SERIES', 'ID_Serie', ID, True) then
+//    Exit;
   Serie := TDaoSerieFull.getInstance(ID);
   try
     if Creation then
       Serie.TitreSerie := Valeur;
     Result := EditionSerie(Serie);
+    ID := Serie.ID_Serie;
   finally
     Serie.Free;
   end;
@@ -511,7 +516,7 @@ begin
   me := TModeEditing.Create;
   f := TFrmEditUnivers.Create(Application);
   try
-    f.Univers := TUniversFull(Source);
+    f.Univers := Source as TUniversFull;
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -519,20 +524,21 @@ begin
   end;
 end;
 
-function EditionUnivers(const ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
+function EditionUnivers(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
 var
   Univers: TUniversFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditUnivers) then
     Exit;
-  if not Creation and not FindRec('UNIVERS', 'ID_Univers', ID, True) then
-    Exit;
+//  if not Creation and not FindRec('UNIVERS', 'ID_Univers', ID, True) then
+//    Exit;
   Univers := TDaoUniversFull.getInstance(ID);
   try
     if Creation then
       Univers.NomUnivers := Valeur;
     Result := EditionUnivers(Univers);
+    ID := Univers.ID_Univers;
   finally
     Univers.Free;
   end;
@@ -564,7 +570,7 @@ begin
   me := TModeEditing.Create;
   f := TFrmEditEditeur.Create(Application);
   try
-    f.Editeur := TEditeurFull(Source);
+    f.Editeur := Source as TEditeurFull;
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -572,20 +578,21 @@ begin
   end;
 end;
 
-function EditionEditeur(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionEditeur(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
   Editeur: TEditeurFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditEditeur) then
     Exit;
-  if not Creation and not FindRec('EDITEURS', 'ID_Editeur', ID, True) then
-    Exit;
+//  if not Creation and not FindRec('EDITEURS', 'ID_Editeur', ID, True) then
+//    Exit;
   Editeur := TDaoEditeurFull.getInstance(ID);
   try
     if Creation then
       Editeur.NomEditeur := Valeur;
     Result := EditionEditeur(Editeur);
+    ID := Editeur.ID_Editeur;
   finally
     Editeur.Free;
   end;
@@ -617,7 +624,7 @@ begin
   me := TModeEditing.Create;
   f := TFrmEditCollection.Create(Application);
   try
-    f.Collection := TCollectionFull(Source);
+    f.Collection := Source as TCollectionFull;
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -625,20 +632,20 @@ begin
   end;
 end;
 
-function EditionCollection(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionCollection(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 begin
   Result := EditionCollection(ID, GUID_NULL, Creation, Valeur);
 end;
 
-function EditionCollection(const ID: TGUID; const ID_Editeur: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionCollection(var ID: TGUID; const ID_Editeur: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
   Collection: TCollectionFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditCollection) then
     Exit;
-  if not Creation and not FindRec('COLLECTIONS', 'ID_Collection', ID, True) then
-    Exit;
+//  if not Creation and not FindRec('COLLECTIONS', 'ID_Collection', ID, True) then
+//    Exit;
   Collection := TDaoCollectionFull.getInstance(ID);
   try
     if Creation then
@@ -647,6 +654,7 @@ begin
       TDaoEditeurLite.Fill(Collection.Editeur, ID_Editeur);
     end;
     Result := EditionCollection(Collection);
+    ID := Collection.ID_Collection;
   finally
     Collection.Free;
   end;
@@ -663,7 +671,7 @@ begin
   Result := CreationLambdaChampSimple(Textes.rsGenre, 'GENRES', 'Genre', 'ID_Genre', Genre);
 end;
 
-function EditionGenre(const ID: TGUID): Boolean;
+function EditionGenre(var ID: TGUID): Boolean;
 begin
   Result := EditionLambdaChampSimple(Textes.rsGenre, 'GENRES', 'Genre', 'ID_Genre', ID);
 end;
@@ -694,7 +702,7 @@ begin
   me := TModeEditing.Create;
   f := TFrmEditAuteur.Create(Application);
   try
-    f.Auteur := TAuteurFull(Source);
+    f.Auteur := Source as TAuteurFull;
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -702,20 +710,21 @@ begin
   end;
 end;
 
-function EditionAuteur(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionAuteur(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
   Auteur: TAuteurFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditAuteur) then
     Exit;
-  if not Creation and not FindRec('Personnes', 'ID_Personne', ID, True) then
-    Exit;
+//  if not Creation and not FindRec('Personnes', 'ID_Personne', ID, True) then
+//    Exit;
   Auteur := TDaoAuteurFull.getInstance(ID);
   try
     if Creation then
       Auteur.NomAuteur := Valeur;
     Result := EditionAuteur(Auteur);
+    ID := Auteur.ID_Auteur;
   finally
     Auteur.Free;
   end;
@@ -748,7 +757,7 @@ begin
   f := TFrmEditParaBD.Create(Application);
   try
     f.isAchat := Achat;
-    f.ParaBD := TParaBDFull(Source);
+    f.ParaBD := Source as TParaBDFull;
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -756,26 +765,27 @@ begin
   end;
 end;
 
-function EditionParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
+function EditionParaBD(var ID: TGUID; Creation: Boolean; const Valeur: string; Achat: Boolean): Boolean; overload;
 var
   ParaBD: TParaBDFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditParaBD) then
     Exit;
-  if not Creation and not FindRec('ParaBD', 'ID_ParaBD', ID, True) then
-    Exit;
+//  if not Creation and not FindRec('ParaBD', 'ID_ParaBD', ID, True) then
+//    Exit;
   ParaBD := TDaoParaBDFull.getInstance(ID);
   try
     if Creation then
       ParaBD.TitreParaBD := Valeur;
     Result := EditionParaBD(ParaBD, Achat);
+    ID := ParaBD.ID_ParaBD;
   finally
     ParaBD.Free;
   end;
 end;
 
-function EditionParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionParaBD(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 begin
   Result := EditionParaBD(ID, Creation, Valeur, False);
 end;
@@ -801,7 +811,7 @@ begin
   me := TModeEditing.Create;
   f := TFrmEditAchatParaBD.Create(Application);
   try
-    f.ParaBD := TParaBDFull(Source);
+    f.ParaBD := Source as TParaBDFull;
     hg := nil;
     Result := frmFond.SetModalChildForm(f) = mrOk;
   finally
@@ -809,20 +819,21 @@ begin
   end;
 end;
 
-function EditionAchatParaBD(const ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
+function EditionAchatParaBD(var ID: TGUID; Creation: Boolean; const Valeur: string): Boolean;
 var
   ParaBD: TParaBDFull;
 begin
   Result := False;
   if frmFond.IsShowing(TFrmEditParaBD) then
     Exit;
-  if not Creation and not FindRec('ParaBD', 'ID_ParaBD', ID, True) then
-    Exit;
+//  if not Creation and not FindRec('ParaBD', 'ID_ParaBD', ID, True) then
+//    Exit;
   ParaBD := TDaoParaBDFull.getInstance(ID);
   try
     if Creation then
       ParaBD.TitreParaBD := Valeur;
     Result := EditionAchatParaBD(ParaBD);
+    ID := ParaBD.ID_ParaBD;
   finally
     ParaBD.Free;
   end;
@@ -832,13 +843,13 @@ function DelAchatParaBD(const ID: TGUID): Boolean;
 begin
   with TUIBQuery.Create(nil) do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'SELECT COMPLET FROM ParaBD WHERE ID_ParaBD = ?';
+      Transaction := GetTransaction(dmPrinc.UIBDataBase);
+      SQL.Text := 'select complet from parabd where id_parabd = ?';
       Params.AsString[0] := GUIDToString(ID);
       Open;
       if Fields.AsInteger[0] = 1 then
       begin
-        SQL.Text := 'UPDATE ParaBD SET ACHAT = 0 WHERE ID_ParaBD = ?';
+        SQL.Text := 'update parabd set achat = 0 where id_parabd = ?';
         Params.AsString[0] := GUIDToString(ID);
         Execute;
         Result := True;

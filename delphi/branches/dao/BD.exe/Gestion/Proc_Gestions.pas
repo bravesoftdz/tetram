@@ -188,11 +188,14 @@ begin
 end;
 
 function ModifierAlbums2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
+var
+  dummy: TGUID;
 begin
   Result := False;
   if IsEqualGUID(ID, GUID_NULL) then
     Exit;
-  Result := EditionAlbum(ID);
+  dummy := ID;
+  Result := EditionAlbum(dummy);
 end;
 
 function ModifierAlbums(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
@@ -309,11 +312,14 @@ begin
 end;
 
 function ModifierAuteurs2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
+var
+  dummy: TGUID;
 begin
   Result := False;
   if IsEqualGUID(ID, GUID_NULL) then
     Exit;
-  Result := EditionAuteur(ID);
+  dummy := ID;
+  Result := EditionAuteur(dummy);
 end;
 
 function ModifierAuteurs(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
@@ -361,11 +367,14 @@ begin
 end;
 
 function ModifierSeries2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
+var
+  dummy: TGUID;
 begin
   Result := False;
   if IsEqualGUID(ID, GUID_NULL) then
     Exit;
-  Result := EditionSerie(ID);
+  dummy := ID;
+  Result := EditionSerie(dummy);
 end;
 
 function ModifierSeries(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
@@ -413,11 +422,14 @@ begin
 end;
 
 function ModifierUnivers2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
+var
+  dummy: TGUID;
 begin
   Result := False;
   if IsEqualGUID(ID, GUID_NULL) then
     Exit;
-  Result := EditionUnivers(ID);
+  dummy := ID;
+  Result := EditionUnivers(dummy);
 end;
 
 function ModifierUnivers(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
@@ -524,11 +536,14 @@ begin
 end;
 
 function ModifierParaBD2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
+var
+  dummy: TGUID;
 begin
   Result := False;
   if IsEqualGUID(ID, GUID_NULL) then
     Exit;
-  Result := EditionParaBD(ID);
+  dummy := ID;
+  Result := EditionParaBD(dummy);
 end;
 
 function ModifierParaBD(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;

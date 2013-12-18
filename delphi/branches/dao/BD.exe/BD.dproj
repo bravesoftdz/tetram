@@ -46,9 +46,37 @@
         <Cfg_1>true</Cfg_1>
         <Base>true</Base>
     </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_3)'=='true') or '$(Cfg_3_Win32)'!=''">
+        <Cfg_3_Win32>true</Cfg_3_Win32>
+        <CfgParent>Cfg_3</CfgParent>
+        <Cfg_3>true</Cfg_3>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_3)'=='true') or '$(Cfg_3_Win64)'!=''">
+        <Cfg_3_Win64>true</Cfg_3_Win64>
+        <CfgParent>Cfg_3</CfgParent>
+        <Cfg_3>true</Cfg_3>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Config)'=='FullDebug' or '$(Cfg_4)'!=''">
         <Cfg_4>true</Cfg_4>
         <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_4)'=='true') or '$(Cfg_4_Win32)'!=''">
+        <Cfg_4_Win32>true</Cfg_4_Win32>
+        <CfgParent>Cfg_4</CfgParent>
+        <Cfg_4>true</Cfg_4>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_4)'=='true') or '$(Cfg_4_Win64)'!=''">
+        <Cfg_4_Win64>true</Cfg_4_Win64>
+        <CfgParent>Cfg_4</CfgParent>
+        <Cfg_4>true</Cfg_4>
         <Cfg_1>true</Cfg_1>
         <Base>true</Base>
     </PropertyGroup>
@@ -75,8 +103,8 @@
         <DCC_WriteableConstants>true</DCC_WriteableConstants>
         <Manifest_File>None</Manifest_File>
         <Icon_MainIcon>BD_Icon.ico</Icon_MainIcon>
-        <VerInfo_Build>22</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.22;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2011;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.0;Comments=</VerInfo_Keys>
+        <VerInfo_Build>23</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.23;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2011;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.0;Comments=</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_MajorVer>2</VerInfo_MajorVer>
@@ -117,10 +145,23 @@
     <PropertyGroup Condition="'$(Cfg_3)'!=''">
         <DCC_DebugDCUs>true</DCC_DebugDCUs>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_3_Win32)'!=''">
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_3_Win64)'!=''">
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_4)'!=''">
         <DCC_Define>FullDebugMode;ClearLogFileOnStartup;LoadDebugDLLDynamically;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_4_Win32)'!=''">
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_4_Win64)'!=''">
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
+        <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
         <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
         <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
@@ -457,6 +498,7 @@
         <DCCReference Include="DBObjets\DaoStats.pas"/>
         <DCCReference Include="DBObjets\DaoRecherche.pas"/>
         <DCCReference Include="DBObjets\DaoLambda.pas"/>
+        <DCCReference Include="mises_a_jour\UMAJ2_2_3_23.pas"/>
         <RcItem Include="images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>

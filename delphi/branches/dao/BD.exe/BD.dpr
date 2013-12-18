@@ -194,7 +194,8 @@ uses
   DaoFull in 'DBObjets\DaoFull.pas',
   DaoStats in 'DBObjets\DaoStats.pas',
   DaoRecherche in 'DBObjets\DaoRecherche.pas',
-  DaoLambda in 'DBObjets\DaoLambda.pas';
+  DaoLambda in 'DBObjets\DaoLambda.pas',
+  UMAJ2_2_3_23 in 'mises_a_jour\UMAJ2_2_3_23.pas';
 
 begin
   Application.Title := 'BDthèque';
