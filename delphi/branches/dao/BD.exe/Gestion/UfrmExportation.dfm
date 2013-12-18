@@ -108,7 +108,7 @@ object frmExportation: TfrmExportation
       item
         Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
         Position = 0
-        Width = 678
+        Width = 682
       end>
   end
   object vstAlbums: TVirtualStringTree
@@ -142,7 +142,7 @@ object frmExportation: TfrmExportation
       item
         Options = [coAllowClick, coEnabled, coParentBidiMode, coParentColor, coResizable, coShowDropMark, coVisible]
         Position = 0
-        Width = 678
+        Width = 682
       end>
   end
   object SaveDialog1: TSaveDialog

@@ -74,7 +74,7 @@ const
   TLblRechercheSimple: array [TRechercheSimple] of string = ('Auteur', 'Univers', 'Serie', 'Editeur', 'Genre', 'Collection');
 
 type
-  TRecherche = class(TBaseComplet)
+  TRecherche = class(TBaseFull)
   public
     TypeRecherche: TTypeRecherche;
     Resultats: TObjectList<TAlbumLite>;

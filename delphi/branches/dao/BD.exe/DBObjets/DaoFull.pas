@@ -18,7 +18,7 @@ type
   public
     class function getInstance(const Reference: TGUID): TObjetFull;
 
-    class procedure Fill(Entity: TBaseComplet; const Reference: TGUID); virtual; abstract;
+    class procedure Fill(Entity: TBaseFull; const Reference: TGUID); virtual; abstract;
     class procedure SaveToDatabase(Entity: TObjetFull); overload;
     class procedure SaveToDatabase(Entity: TObjetFull; UseTransaction: TUIBTransaction); overload; virtual; abstract;
 
@@ -29,7 +29,7 @@ type
   TDaoFullEntity<T: TObjetFull> = class abstract(TDaoFull)
     class function getInstance(const Reference: TGUID): T; reintroduce;
 
-    class procedure Fill(Entity: TBaseComplet; const Reference: TGUID); overload; override;
+    class procedure Fill(Entity: TBaseFull; const Reference: TGUID); overload; override;
     class procedure Fill(Entity: T; const Reference: TGUID); reintroduce; overload; virtual;
 
     class procedure SaveToDatabase(Entity: TObjetFull; UseTransaction: TUIBTransaction); overload; override;
@@ -200,7 +200,7 @@ end;
 
 { TDaoFullEntity<T> }
 
-class procedure TDaoFullEntity<T>.Fill(Entity: TBaseComplet; const Reference: TGUID);
+class procedure TDaoFullEntity<T>.Fill(Entity: TBaseFull; const Reference: TGUID);
 begin
   Fill(T(Entity), Reference);
 end;

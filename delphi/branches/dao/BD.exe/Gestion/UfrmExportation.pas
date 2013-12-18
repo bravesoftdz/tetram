@@ -267,7 +267,7 @@ begin
     NodeInfo := Sender.GetNodeData(Node);
     with TDaoAlbumFull.getInstance(TAlbumLite(NodeInfo.Detail).ID) do
       try
-        WriteXMLToStream(FFichierExport);
+        // WriteXMLToStream(FFichierExport);
       finally
         Free;
       end;

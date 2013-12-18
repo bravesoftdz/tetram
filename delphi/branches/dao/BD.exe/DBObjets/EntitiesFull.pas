@@ -4,9 +4,11 @@ interface
 
 uses
   SysUtils, Windows, Classes, Dialogs, EntitiesLite, Commun, CommonConst, UdmPrinc, UIB, DateUtils, UChampsRecherche, Generics.Collections,
-  Generics.Defaults, VirtualTree, superobject;
+  Generics.Defaults, VirtualTree, dwsJSON, System.Generics.Collections;
 
 type
+  PAutoTrimString = ^AutoTrimString;
+
   AutoTrimString = record
   private
     Value: string;
@@ -17,6 +19,8 @@ type
     class operator NotEqual(a, b: AutoTrimString): Boolean;
   end;
 
+  PLongString = ^LongString;
+
   LongString = record
   private
     Value: string;
@@ -24,6 +28,8 @@ type
     class operator Implicit(a: string): LongString;
     class operator Implicit(a: LongString): string;
   end;
+
+  POption = ^ROption;
 
   ROption = record
     Value: Integer;
@@ -33,31 +39,24 @@ type
 function MakeOption(Value: Integer; const Caption: AutoTrimString): ROption; inline;
 
 type
-  TBaseCompletClass = class of TBaseComplet;
+  TdwsJSONFullWriter = class;
 
-{$TYPEINFO ON}
-{$RTTI EXPLICIT PROPERTIES([vcPublished]) METHODS([]) FIELDS([])}
+  TBaseCompletClass = class of TBaseFull;
 
-  TBaseComplet = class(TPersistent)
-  protected
-    class procedure WriteString(Stream: TStream; const Chaine: string);
-    class procedure WriteStringLN(Stream: TStream; const Chaine: string);
+  TBaseFull = class(TPersistent)
   public
     constructor Create; virtual;
     procedure BeforeDestruction; override;
     procedure Clear; virtual;
     procedure AfterConstruction; override;
-    procedure WriteXMLToStream(Stream: TStream); virtual;
 
-    function ToJson(Indent: Boolean = False; Escape: Boolean = True): string;
-    procedure WriteJsonToSuperobect(o: ISuperObject);
+    procedure WriteToJSON(json: TdwsJSONObject); virtual;
+    function AsJson: string;
   end;
 
   TObjetCompletClass = class of TObjetFull;
 
-{$RTTI INHERIT}
-
-  TObjetFull = class(TBaseComplet)
+  TObjetFull = class(TBaseFull)
   strict private
     FAssociations: TStringList;
   private
@@ -69,15 +68,19 @@ type
     procedure Clear; override;
     procedure New(ClearInstance: Boolean = True);
     function ChaineAffichage(dummy: Boolean = True): string; virtual;
+
+    procedure WriteListLiteToJSON<T: TBasePointeur>(list: TList<T>; json: TdwsJSONArray);
+    procedure WriteListFullToJSON<T: TBaseFull>(list: TList<T>; json: TdwsJSONArray);
+    procedure WriteToJSON(json: TdwsJSONObject); override;
   published
     property ID: TGUID read FID;
     property Associations: TStringList read FAssociations;
   end;
 
-  TInfoComplet = class(TBaseComplet)
+  TInfoComplet = class(TBaseFull)
   end;
 
-  TListComplet = class(TBaseComplet)
+  TListComplet = class(TBaseFull)
   end;
 
   TEditeurFull = class(TObjetFull)
@@ -307,8 +310,6 @@ type
     property Editions: TObjectList<TEditionFull> read FEditions;
   end;
 
-{$RTTI INHERIT}
-
   TAlbumFull = class(TObjetFull)
   strict private
     FTitreAlbum: AutoTrimString;
@@ -344,6 +345,8 @@ type
     procedure Clear; override;
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
+
+    procedure WriteToJSON(json: TdwsJSONObject); override;
 
     property ReadyToFusion: Boolean read FReadyToFusion write FReadyToFusion;
     property FusionneEditions: Boolean read FFusionneEditions write FFusionneEditions;
@@ -437,11 +440,17 @@ type
     property UniversFull: TList<TUniversLite> read FUniversFull;
   end;
 
+  TdwsJSONFullWriter = class(TdwsJSONWriter)
+    procedure WriteObjetFull(const Name: string; obj: TBaseFull);
+    procedure WriteProperty(const Name: string; const Value: TGUID); overload;
+    procedure WriteProperty(const Name: string; const Value: string); overload;
+  end;
+
 implementation
 
 uses
   UIBLib, Divers, StdCtrls, Procedures, Textes, StrUtils, UMetadata, Controls, UfrmFusionEditions, IOUtils,
-  UfrmConsole, System.Rtti, System.TypInfo, supertypes;
+  UfrmConsole;
 
 function MakeOption(Value: Integer; const Caption: AutoTrimString): ROption;
 begin
@@ -483,95 +492,44 @@ begin
   Result := a.Value;
 end;
 
-{ TBaseComplet }
+{ TBaseFull }
 
-procedure TBaseComplet.BeforeDestruction;
+function TBaseFull.AsJson: string;
+var
+  wr: TdwsJSONFullWriter;
+begin
+  wr := TdwsJSONFullWriter.Create(nil);
+  try
+    wr.WriteObjetFull('', Self);
+    Result := wr.ToString;
+  finally
+    wr.Free;
+  end;
+end;
+
+procedure TBaseFull.BeforeDestruction;
 begin
   inherited;
   Clear;
 end;
 
-procedure TBaseComplet.Clear;
+procedure TBaseFull.Clear;
 begin
   // nettoyage de toutes les listes et autres
   // et reset aux valeurs par défaut
 end;
 
-constructor TBaseComplet.Create;
+constructor TBaseFull.Create;
 begin
 end;
 
-function TBaseComplet.ToJson(Indent: Boolean = False; Escape: Boolean = True): string;
-var
-  o: ISuperObject;
-begin
-  o := SO;
-  WriteJsonToSuperobect(o);
-  Result := o.AsJSon(Indent, Escape);
-end;
-
-procedure TBaseComplet.AfterConstruction;
+procedure TBaseFull.AfterConstruction;
 begin
   inherited;
   Clear;
 end;
 
-procedure TBaseComplet.WriteJsonToSuperobect(o: ISuperObject);
-type
-  PAutoTrimString = ^AutoTrimString;
-  PLongString = ^LongString;
-  POption = ^ROption;
-
-var
-  Context: TSuperRttiContext;
-  p: TRttiProperty;
-  Value: TValue;
-  s: string;
-begin
-  Context := TSuperRttiContext.Create;
-  try
-    for p in Context.Context.GetType(Self.ClassType).GetProperties do
-    begin
-      Value := p.GetValue(Self);
-      case p.PropertyType.TypeKind of
-        tkClass:
-          if Value.IsInstanceOf(TBaseComplet) then
-          begin
-            o.o[p.Name] := TSuperObject.Create(stObject);
-            TBaseComplet(Value.AsObject).WriteJsonToSuperobect(o.o[p.Name]);
-          end;
-        tkRecord:
-          if Value.TypeInfo = TypeInfo(AutoTrimString) then
-            o.o[p.Name] := TSuperObject.Create(SOString(PAutoTrimString(Value.GetReferenceToRawData).Value))
-          else if (Value.TypeInfo = TypeInfo(LongString)) then
-            o.o[p.Name] := TSuperObject.Create(SOString(PLongString(Value.GetReferenceToRawData).Value))
-          else if (Value.TypeInfo = TypeInfo(ROption)) then
-          begin
-            o.o[p.Name + '.Value'] := TSuperObject.Create(POption(Value.GetReferenceToRawData).Value);
-            o.o[p.Name + '.Caption'] := TSuperObject.Create(SOString(POption(Value.GetReferenceToRawData).Caption));
-          end
-          else
-            o.o[p.Name] := Context.ToJson(Value, nil);
-      else
-        o.o[p.Name] := Context.ToJson(Value, nil);
-      end;
-    end;
-  finally
-    Context.Free;
-  end;
-end;
-
-class procedure TBaseComplet.WriteString(Stream: TStream; const Chaine: string);
-begin
-  Stream.write(Chaine[1], Length(Chaine));
-end;
-
-class procedure TBaseComplet.WriteStringLN(Stream: TStream; const Chaine: string);
-begin
-  WriteString(Stream, Chaine + #13#10);
-end;
-
-procedure TBaseComplet.WriteXMLToStream(Stream: TStream);
+procedure TBaseFull.WriteToJSON(json: TdwsJSONObject);
 begin
 
 end;
@@ -625,6 +583,25 @@ begin
   if ClearInstance then
     // Fill(newId);
     Clear;
+end;
+
+procedure TObjetFull.WriteListFullToJSON<T>(list: TList<T>; json: TdwsJSONArray);
+var
+  o: T;
+begin
+  for o in list do
+    o.WriteToJSON(json.AddObject);
+end;
+
+procedure TObjetFull.WriteListLiteToJSON<T>(list: TList<T>; json: TdwsJSONArray);
+begin
+
+end;
+
+procedure TObjetFull.WriteToJSON(json: TdwsJSONObject);
+begin
+  inherited;
+  json.AddValue('ID', GUIDToString(ID));
 end;
 
 { TAlbumComplet }
@@ -717,6 +694,32 @@ end;
 procedure TAlbumFull.SetTitreAlbum(const Value: AutoTrimString);
 begin
   FTitreAlbum := Copy(Value, 1, LengthTitreAlbum);
+end;
+
+procedure TAlbumFull.WriteToJSON(json: TdwsJSONObject);
+begin
+  inherited;
+  json.AddValue('Complet', Complet);
+  json.AddValue('ID_Album', GUIDToString(ID_Album));
+  json.AddValue('ID_Serie', GUIDToString(ID_Serie));
+  json.AddValue('TitreAlbum', TitreAlbum);
+  Serie.WriteToJSON(json.AddObject('Serie'));
+  json.AddValue('MoisParution', MoisParution);
+  json.AddValue('AnneeParution', AnneeParution);
+  json.AddValue('Tome', Tome);
+  json.AddValue('TomeDebut', TomeDebut);
+  json.AddValue('TomeFin', TomeFin);
+  json.AddValue('HorsSerie', HorsSerie);
+  json.AddValue('Integrale', Integrale);
+  WriteListliteToJSON<TAuteurLite>(Scenaristes, json.AddArray('Scenaristes'));
+  WriteListliteToJSON<TAuteurLite>(Dessinateurs, json.AddArray('Dessinateurs'));
+  WriteListliteToJSON<TAuteurLite>(Coloristes, json.AddArray('Coloristes'));
+  json.AddValue('Sujet', Sujet);
+  json.AddValue('Notes', Notes);
+  Editions.WriteToJSON(json.AddObject('Editions'));
+  // property Notation: Integer read FNotation write FNotation;
+  WriteListliteToJSON<TUniversLite>(Univers, json.AddArray('Univers'));
+  WriteListliteToJSON<TAuteurLite>(Coloristes, json.AddArray('Coloristes'));
 end;
 
 { TEditionComplete }
@@ -1123,6 +1126,34 @@ end;
 procedure TUniversFull.SetSiteWeb(const Value: AutoTrimString);
 begin
   FSiteWeb := Value;
+end;
+
+{ TdwsJSONFullWriter }
+
+procedure TdwsJSONFullWriter.WriteObjetFull(const Name: string; obj: TBaseFull);
+var
+  jsonObj: TdwsJSONObject;
+begin
+  jsonObj := TdwsJSONObject.Create;
+  try
+    obj.WriteToJSON(jsonObj);
+    if Name <> '' then
+      WriteName(Name);
+    jsonObj.WriteTo(Self);
+  finally
+    jsonObj.Free;
+  end;
+end;
+
+procedure TdwsJSONFullWriter.WriteProperty(const Name: string; const Value: TGUID);
+begin
+  WriteProperty(Name, GUIDToString(Value));
+end;
+
+procedure TdwsJSONFullWriter.WriteProperty(const Name, Value: string);
+begin
+  WriteName(Name);
+  WriteString(Value);
 end;
 
 end.

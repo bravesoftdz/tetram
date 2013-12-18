@@ -197,7 +197,7 @@ implementation
 
 uses
   Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
-  UHistorique, UMetadata, DaoLite, DaoFull, superobject;
+  UHistorique, UMetadata, DaoLite, DaoFull, superobject, JclSimpleXml;
 
 {$R *.DFM}
 
@@ -401,7 +401,7 @@ end;
 
 procedure TfrmEditAlbum.Button1Click(Sender: TObject);
 begin
-  showmessage(FAlbum.ToJson(True));
+  ShowMessage(FAlbum.AsJson);
 end;
 
 procedure TfrmEditAlbum.ajoutClick(Sender: TObject);

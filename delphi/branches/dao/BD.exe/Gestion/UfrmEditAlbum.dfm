@@ -322,6 +322,7 @@ object frmEditAlbum: TfrmEditAlbum
       Width = 112
       Height = 20
       Caption = 'Nouvelle'
+      Flat = False
       OnClick = VDTButton3Click
     end
     object Bevel3: TBevel
@@ -438,6 +439,7 @@ object frmEditAlbum: TfrmEditAlbum
         Width = 72
         Height = 21
         Caption = 'Convertisseur'
+        Flat = False
         OnClick = SpeedButton3Click
       end
       object Label9: TLabel
@@ -474,6 +476,7 @@ object frmEditAlbum: TfrmEditAlbum
         Height = 20
         Caption = 'V'#233'rifier'
         Enabled = False
+        Flat = False
         OnClick = VDTButton6Click
       end
       object Label12: TLabel
@@ -652,6 +655,7 @@ object frmEditAlbum: TfrmEditAlbum
         Width = 72
         Height = 21
         Caption = 'Convertisseur'
+        Flat = False
         OnClick = VDTButton14Click
       end
       object Label26: TLabel
