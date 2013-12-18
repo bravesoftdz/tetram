@@ -4,7 +4,7 @@ interface
 
 uses
   SysUtils, Windows, Classes, Dialogs, EntitiesLite, Commun, CommonConst, UdmPrinc, UIB, DateUtils, UChampsRecherche, Generics.Collections,
-  Generics.Defaults, VirtualTree;
+  Generics.Defaults, VirtualTree, superobject;
 
 type
   AutoTrimString = record
@@ -35,6 +35,9 @@ function MakeOption(Value: Integer; const Caption: AutoTrimString): ROption; inl
 type
   TBaseCompletClass = class of TBaseComplet;
 
+{$TYPEINFO ON}
+{$RTTI EXPLICIT PROPERTIES([vcPublished]) METHODS([]) FIELDS([])}
+
   TBaseComplet = class(TPersistent)
   protected
     class procedure WriteString(Stream: TStream; const Chaine: string);
@@ -45,9 +48,14 @@ type
     procedure Clear; virtual;
     procedure AfterConstruction; override;
     procedure WriteXMLToStream(Stream: TStream); virtual;
+
+    function ToJson(Indent: Boolean = False; Escape: Boolean = True): string;
+    procedure WriteJsonToSuperobect(o: ISuperObject);
   end;
 
   TObjetCompletClass = class of TObjetFull;
+
+{$RTTI INHERIT}
 
   TObjetFull = class(TBaseComplet)
   strict private
@@ -299,6 +307,8 @@ type
     property Editions: TObjectList<TEditionFull> read FEditions;
   end;
 
+{$RTTI INHERIT}
+
   TAlbumFull = class(TObjetFull)
   strict private
     FTitreAlbum: AutoTrimString;
@@ -431,7 +441,7 @@ implementation
 
 uses
   UIBLib, Divers, StdCtrls, Procedures, Textes, StrUtils, UMetadata, Controls, UfrmFusionEditions, IOUtils,
-  UfrmConsole;
+  UfrmConsole, System.Rtti, System.TypInfo, supertypes;
 
 function MakeOption(Value: Integer; const Caption: AutoTrimString): ROption;
 begin
@@ -491,10 +501,64 @@ constructor TBaseComplet.Create;
 begin
 end;
 
+function TBaseComplet.ToJson(Indent: Boolean = False; Escape: Boolean = True): string;
+var
+  o: ISuperObject;
+begin
+  o := SO;
+  WriteJsonToSuperobect(o);
+  Result := o.AsJSon(Indent, Escape);
+end;
+
 procedure TBaseComplet.AfterConstruction;
 begin
   inherited;
   Clear;
+end;
+
+procedure TBaseComplet.WriteJsonToSuperobect(o: ISuperObject);
+type
+  PAutoTrimString = ^AutoTrimString;
+  PLongString = ^LongString;
+  POption = ^ROption;
+
+var
+  Context: TSuperRttiContext;
+  p: TRttiProperty;
+  Value: TValue;
+  s: string;
+begin
+  Context := TSuperRttiContext.Create;
+  try
+    for p in Context.Context.GetType(Self.ClassType).GetProperties do
+    begin
+      Value := p.GetValue(Self);
+      case p.PropertyType.TypeKind of
+        tkClass:
+          if Value.IsInstanceOf(TBaseComplet) then
+          begin
+            o.o[p.Name] := TSuperObject.Create(stObject);
+            TBaseComplet(Value.AsObject).WriteJsonToSuperobect(o.o[p.Name]);
+          end;
+        tkRecord:
+          if Value.TypeInfo = TypeInfo(AutoTrimString) then
+            o.o[p.Name] := TSuperObject.Create(SOString(PAutoTrimString(Value.GetReferenceToRawData).Value))
+          else if (Value.TypeInfo = TypeInfo(LongString)) then
+            o.o[p.Name] := TSuperObject.Create(SOString(PLongString(Value.GetReferenceToRawData).Value))
+          else if (Value.TypeInfo = TypeInfo(ROption)) then
+          begin
+            o.o[p.Name + '.Value'] := TSuperObject.Create(POption(Value.GetReferenceToRawData).Value);
+            o.o[p.Name + '.Caption'] := TSuperObject.Create(SOString(POption(Value.GetReferenceToRawData).Caption));
+          end
+          else
+            o.o[p.Name] := Context.ToJson(Value, nil);
+      else
+        o.o[p.Name] := Context.ToJson(Value, nil);
+      end;
+    end;
+  finally
+    Context.Free;
+  end;
 end;
 
 class procedure TBaseComplet.WriteString(Stream: TStream; const Chaine: string);
@@ -761,16 +825,16 @@ end;
 
 function TSerieFull.ChaineAffichage(Simple: Boolean): string;
 var
-  S: string;
+  s: string;
 begin
   if Simple then
     Result := TitreSerie
   else
     Result := FormatTitre(TitreSerie);
-  S := '';
-  AjoutString(S, FormatTitre(Editeur.NomEditeur), ' ');
-  AjoutString(S, FormatTitre(Collection.NomCollection), ' - ');
-  AjoutString(Result, S, ' ', '(', ')');
+  s := '';
+  AjoutString(s, FormatTitre(Editeur.NomEditeur), ' ');
+  AjoutString(s, FormatTitre(Collection.NomCollection), ' - ');
+  AjoutString(Result, s, ' ', '(', ')');
 end;
 
 procedure TSerieFull.Clear;
@@ -923,23 +987,23 @@ end;
 
 function TParaBDFull.ChaineAffichage(Simple, AvecSerie: Boolean): string;
 var
-  S: string;
+  s: string;
 begin
   if Simple then
     Result := TitreParaBD
   else
     Result := FormatTitre(TitreParaBD);
-  S := '';
+  s := '';
   if AvecSerie then
     if Result = '' then
       Result := FormatTitre(Serie.TitreSerie)
     else
-      AjoutString(S, FormatTitre(Serie.TitreSerie), ' - ');
-  AjoutString(S, CategorieParaBD.Caption, ' - ');
+      AjoutString(s, FormatTitre(Serie.TitreSerie), ' - ');
+  AjoutString(s, CategorieParaBD.Caption, ' - ');
   if Result = '' then
-    Result := S
+    Result := s
   else
-    AjoutString(Result, S, ' ', '(', ')');
+    AjoutString(Result, s, ' ', '(', ')');
 end;
 
 procedure TParaBDFull.Clear;

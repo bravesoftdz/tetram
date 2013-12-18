@@ -1166,7 +1166,7 @@ object frmEditAlbum: TfrmEditAlbum
       Columns = <
         item
           Position = 1
-          Width = 445
+          Width = 441
         end
         item
           Position = 0
@@ -1467,6 +1467,15 @@ object frmEditAlbum: TfrmEditAlbum
     ParentDoubleBuffered = False
     TabOrder = 2
     OnClick = btnScriptClick
+  end
+  object Button1: TButton
+    Left = 87
+    Top = 6
+    Width = 75
+    Height = 21
+    Caption = 'Button1'
+    TabOrder = 3
+    OnClick = Button1Click
   end
   object ChoixImageDialog: TOpenPictureDialog
     DefaultExt = 'bmp'

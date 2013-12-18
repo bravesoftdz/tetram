@@ -108,6 +108,7 @@ type
     Label29: TLabel;
     btUnivers: TVDTButton;
     lvUnivers: TVDTListViewLabeled;
+    Button1: TButton;
     procedure ajoutClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -164,6 +165,7 @@ type
     procedure lvUniversData(Sender: TObject; Item: TListItem);
     procedure lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure btUniversClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   strict private
     FAlbum: TAlbumFull;
     FCurrentEditionComplete: TEditionFull;
@@ -195,7 +197,7 @@ implementation
 
 uses
   Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
-  UHistorique, UMetadata, DaoLite, DaoFull;
+  UHistorique, UMetadata, DaoLite, DaoFull, superobject;
 
 {$R *.DFM}
 
@@ -395,6 +397,11 @@ begin
   lvUnivers.Invalidate;
 
   vtEditUniversVTEditChange(vtEditUnivers.VTEdit);
+end;
+
+procedure TfrmEditAlbum.Button1Click(Sender: TObject);
+begin
+  showmessage(FAlbum.ToJson(True));
 end;
 
 procedure TfrmEditAlbum.ajoutClick(Sender: TObject);

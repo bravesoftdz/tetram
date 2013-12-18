@@ -24,7 +24,7 @@ procedure RIRegister_superobject(CL: TPSRuntimeClassImporter);
 
 implementation
 
-uses Classes, superobject;
+uses Classes, superobject, supertypes, superdate;
 
 // function SA36_P(const Args: array of const ): ISuperObject;
 // begin
