@@ -19,7 +19,7 @@ type
     procedure SetDescription(const Value: string);
   public
     Action: TActionConsultation;
-    ReferenceGUID, ReferenceGUID2: TGUID;
+    ReferenceGUID, ReferenceGUID2: RGUIDEx;
     Reference, Reference2: Integer;
     Data: TObject;
     Stream: TMemoryStream;
@@ -61,13 +61,13 @@ type
     destructor Destroy; override;
 
     procedure AddConsultation(Consultation: TActionConsultation); overload;
-    procedure EditConsultation(const Ref: TGUID; Ref2: Integer); overload;
+    procedure EditConsultation(const Ref: RGUIDEx; Ref2: Integer); overload;
     procedure EditConsultation(Stream: TStream); overload;
     procedure AddWaiting(Consultation: TActionConsultation; Ref: Integer = -1; Ref2: Integer = -1); overload;
-    procedure AddWaiting(Consultation: TActionConsultation; const Ref: TGUID; Ref2: Integer = -1); overload;
-    procedure AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: TGUID); overload;
+    procedure AddWaiting(Consultation: TActionConsultation; const Ref: RGUIDEx; Ref2: Integer = -1); overload;
+    procedure AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: RGUIDEx); overload;
     procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Valeur: string = ''); overload;
-    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Ref: TGUID;
+    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Ref: RGUIDEx;
       const Valeur: string = ''); overload;
 
     procedure Refresh;
@@ -164,7 +164,7 @@ begin
   end;
 end;
 
-procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: TGUID);
+procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: RGUIDEx);
 begin
   FListWaiting.Add(TConsult.Create);
   with FListWaiting.Last do
@@ -190,7 +190,7 @@ begin
   end;
 end;
 
-procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref: TGUID; Ref2: Integer);
+procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref: RGUIDEx; Ref2: Integer);
 begin
   FListWaiting.Add(TConsult.Create);
   with TConsult(FListWaiting.Last) do
@@ -208,7 +208,7 @@ begin
   AddWaiting(Consultation, Callback, CallbackData, Proc, VTV, GUID_NULL, Valeur);
 end;
 
-procedure THistory.AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Ref: TGUID;
+procedure THistory.AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Ref: RGUIDEx;
   const Valeur: string);
 begin
   FListWaiting.Add(TConsult.Create);
@@ -275,7 +275,7 @@ begin
   CurrentConsult.Assign(Consult);
 end;
 
-procedure THistory.EditConsultation(const Ref: TGUID; Ref2: Integer);
+procedure THistory.EditConsultation(const Ref: RGUIDEx; Ref2: Integer);
 begin
   CurrentConsult.Reference := -1;
   CurrentConsult.ReferenceGUID := Ref;

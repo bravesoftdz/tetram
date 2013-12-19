@@ -195,7 +195,11 @@ uses
   DaoStats in 'DBObjets\DaoStats.pas',
   DaoRecherche in 'DBObjets\DaoRecherche.pas',
   DaoLambda in 'DBObjets\DaoLambda.pas',
-  UMAJ2_2_3_23 in 'mises_a_jour\UMAJ2_2_3_23.pas';
+  UMAJ2_2_3_23 in 'mises_a_jour\UMAJ2_2_3_23.pas',
+  EntitiesSerializer in 'DBObjets\EntitiesSerializer.pas',
+  JsonSerializer in 'DBObjets\JsonSerializer.pas',
+  EntitiesDeserializer in 'DBObjets\EntitiesDeserializer.pas',
+  JsonDeserializer in 'DBObjets\JsonDeserializer.pas';
 
 begin
   Application.Title := 'BDthèque';

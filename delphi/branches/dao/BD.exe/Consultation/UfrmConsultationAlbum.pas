@@ -266,7 +266,7 @@ end;
 procedure TfrmConsultationAlbum.vstSerieGetImageIndex(Sender: TBaseVirtualTree; Node: PVirtualNode; Kind: TVTImageKind; Column: TColumnIndex;
   var Ghosted: Boolean; var ImageIndex: Integer);
 var
-  Album: TBasePointeur;
+  Album: TBaseLite;
 begin
   Album := vstSerie.GetNodeBasePointer(Node);
   if Assigned(Album) and IsEqualGUID(Album.ID, ID_Album) then

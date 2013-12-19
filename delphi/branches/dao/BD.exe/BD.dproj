@@ -499,6 +499,10 @@
         <DCCReference Include="DBObjets\DaoRecherche.pas"/>
         <DCCReference Include="DBObjets\DaoLambda.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_23.pas"/>
+        <DCCReference Include="DBObjets\EntitiesSerializer.pas"/>
+        <DCCReference Include="DBObjets\JsonSerializer.pas"/>
+        <DCCReference Include="DBObjets\EntitiesDeserializer.pas"/>
+        <DCCReference Include="DBObjets\JsonDeserializer.pas"/>
         <RcItem Include="images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>
@@ -609,7 +613,7 @@
                     <VersionInfo Name="MajorVer">2</VersionInfo>
                     <VersionInfo Name="MinorVer">2</VersionInfo>
                     <VersionInfo Name="Release">3</VersionInfo>
-                    <VersionInfo Name="Build">52</VersionInfo>
+                    <VersionInfo Name="Build">53</VersionInfo>
                     <VersionInfo Name="Debug">False</VersionInfo>
                     <VersionInfo Name="PreRelease">False</VersionInfo>
                     <VersionInfo Name="Special">False</VersionInfo>
@@ -621,7 +625,7 @@
                 <VersionInfoKeys>
                     <VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
                     <VersionInfoKeys Name="FileDescription"/>
-                    <VersionInfoKeys Name="FileVersion">2.2.3.52</VersionInfoKeys>
+                    <VersionInfoKeys Name="FileVersion">2.2.3.53</VersionInfoKeys>
                     <VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
                     <VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2011</VersionInfoKeys>
                     <VersionInfoKeys Name="LegalTrademarks"/>

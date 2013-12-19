@@ -44,7 +44,8 @@ type
 
 implementation
 
-uses CommonConst, EntitiesLite, Commun, EntitiesFull, DaoLite, DaoFull;
+uses CommonConst, EntitiesLite, Commun, EntitiesFull, DaoLite, DaoFull,
+  EntitiesSerializer;
 
 {$R *.dfm}
 { TFileStream }
@@ -241,13 +242,9 @@ begin
     fWaiting.ShowProgression('Exportation...', 0, Count);
     FFichierExport := TFileStream.Create(Fichier, fmCreate, fmShareExclusive);
     try
-      // FFichierExport.WriteStringLN('<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE Albums SYSTEM "http://www.tetram.org/bdtheque/albums.dtd">');
-      FFichierExport.WriteStringLN('<?xml version="1.0" encoding="ISO-8859-1"?>');
-      FFichierExport.WriteStringLN('<Data>');
-
+      FFichierExport.WriteString('[');
       vstExport.IterateSubtree(nil, WriteNode, FFichierExport, [], True);
-
-      FFichierExport.WriteStringLN('</Data>');
+      FFichierExport.WriteString(']');
       fWaiting.ShowProgression('Exportation...', epFin);
     finally
       FreeAndNil(FFichierExport);
@@ -260,17 +257,18 @@ procedure TfrmExportation.WriteNode(Sender: TBaseVirtualTree; Node: PVirtualNode
 var
   FFichierExport: TFileStream;
   NodeInfo: ^RNodeInfo;
+  album: TAlbumFull;
 begin
   if Sender.GetNodeLevel(Node) = 1 then
   begin
     FFichierExport := Data;
     NodeInfo := Sender.GetNodeData(Node);
-    with TDaoAlbumFull.getInstance(TAlbumLite(NodeInfo.Detail).ID) do
-      try
-        // WriteXMLToStream(FFichierExport);
-      finally
-        Free;
-      end;
+    album := TDaoAlbumFull.getInstance(TAlbumLite(NodeInfo.Detail).ID);
+    try
+      FFichierExport.WriteString(TEntitesSerializer.AsJson(album, False) + ',');
+    finally
+      album.Free;
+    end;
   end;
   fWaiting.ShowProgression('Exportation...', epNext);
   Abort := fAbort <> 0;

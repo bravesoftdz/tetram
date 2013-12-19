@@ -7,6 +7,17 @@ interface
 uses
   SysUtils, Windows, Dialogs, Classes, UIB, Controls, StrUtils;
 
+type
+  RGUIDEx = record
+  private
+    GUID: TGUID;
+  public
+    class operator Implicit(a: RGUIDEx): TGUID;
+    class operator Implicit(a: RGUIDEx): string;
+    class operator Implicit(a: TGUID): RGUIDEx;
+    class operator Implicit(a: string): RGUIDEx;
+  end;
+
 const
   GUID_FULL: TGUID = '{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}';
   sGUID_FULL = '{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}';
@@ -422,6 +433,28 @@ function GetTransaction(Database: TUIBDataBase): TUIBTransaction;
 begin
   Result := TUIBTransaction.Create(nil);
   Result.Database := Database;
+end;
+
+{ RGUIDEx }
+
+class operator RGUIDEx.Implicit(a: RGUIDEx): string;
+begin
+  Result := GUIDToString(a);
+end;
+
+class operator RGUIDEx.Implicit(a: RGUIDEx): TGUID;
+begin
+  Result := a.GUID;
+end;
+
+class operator RGUIDEx.Implicit(a: string): RGUIDEx;
+begin
+  Result := StringToGUID(a);
+end;
+
+class operator RGUIDEx.Implicit(a: TGUID): RGUIDEx;
+begin
+  Result.GUID := a;
 end;
 
 initialization

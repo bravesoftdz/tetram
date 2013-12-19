@@ -3,67 +3,71 @@ unit EntitiesLite;
 interface
 
 uses
-  Windows, SysUtils, DB, Classes, ComCtrls, UIB, StdCtrls, Commun, UMetaData, SyncObjs, Generics.Collections;
+  Windows, SysUtils, DB, Classes, ComCtrls, UIB, StdCtrls, Commun, UMetaData, SyncObjs, Generics.Collections,
+  dwsJSON;
 
 type
-  TBasePointeurClass = class of TBasePointeur;
-  TBasePointeur = class(TObject)
-  public
-    ID: TGUID;
+  TBaseLiteClass = class of TBaseLite;
 
-    procedure Assign(Ps: TBasePointeur); virtual;
+  TBaseLite = class(TObject)
+  public
+    ID: RGUIDEx;
+
+    procedure Assign(Ps: TBaseLite); virtual;
 
     procedure AfterConstruction; override;
     constructor Create; virtual;
 
     procedure Clear; virtual;
     function ChaineAffichage(dummy: Boolean = True): string; virtual; abstract;
+
+    procedure WriteToJSON(json: TdwsJSONObject); virtual;
   end;
 
-  TCouvertureLite = class(TBasePointeur)
+  TCouvertureLite = class(TBaseLite)
   public
     OldNom, NewNom: string { [255] };
     OldStockee, NewStockee: Boolean;
     Categorie: Smallint;
     sCategorie: string { [50] };
 
-    procedure Assign(Ps: TBasePointeur); override;
+    procedure Assign(Ps: TBaseLite); override;
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
   end;
 
-  TParaBDLite = class(TBasePointeur)
+  TParaBDLite = class(TBaseLite)
   public
     Titre: string { [150] };
-    ID_Serie: TGUID;
+    ID_Serie: RGUIDEx;
     Serie: string { [150] };
     sCategorie: string { [50] };
     Achat: Boolean;
     Complet: Boolean;
 
-    procedure Assign(Ps: TBasePointeur); override;
+    procedure Assign(Ps: TBaseLite); override;
 
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple: Boolean; AvecSerie: Boolean): string; reintroduce; overload;
   end;
 
-  TPersonnageLite = class(TBasePointeur)
+  TPersonnageLite = class(TBaseLite)
   public
     Nom: string { [150] };
 
-    procedure Assign(Ps: TBasePointeur); override;
+    procedure Assign(Ps: TBaseLite); override;
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
   end;
 
-  TAuteurLite = class(TBasePointeur)
+  TAuteurLite = class(TBaseLite)
   public
     Personne: TPersonnageLite;
-    ID_Album, ID_Serie: TGUID;
+    ID_Album, ID_Serie: RGUIDEx;
     Metier: TMetierAuteur;
 
-    procedure Assign(Ps: TBasePointeur); override;
+    procedure Assign(Ps: TBaseLite); override;
 
     constructor Create; override;
     destructor Destroy; override;
@@ -72,35 +76,35 @@ type
     function ChaineAffichage(dummy: Boolean = True): string; override;
   end;
 
-  TUniversLite = class(TBasePointeur)
+  TUniversLite = class(TBaseLite)
   public
     NomUnivers: string { [50] };
 
-    procedure Assign(Ps: TBasePointeur); override;
+    procedure Assign(Ps: TBaseLite); override;
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
   end;
 
-  TEditeurLite = class(TBasePointeur)
+  TEditeurLite = class(TBaseLite)
   public
     NomEditeur: string { [50] };
 
-    procedure Assign(Ps: TBasePointeur); override;
+    procedure Assign(Ps: TBaseLite); override;
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
   end;
 
-  TAlbumLite = class(TBasePointeur)
+  TAlbumLite = class(TBaseLite)
   public
     Tome: Integer;
     TomeDebut: Integer;
     TomeFin: Integer;
     Titre: string { [150] };
-    ID_Serie: TGUID;
+    ID_Serie: RGUIDEx;
     Serie: string { [150] };
-    ID_Editeur: TGUID;
+    ID_Editeur: RGUIDEx;
     Editeur: string { [50] };
     AnneeParution, MoisParution: Integer;
     Stock: Boolean;
@@ -110,18 +114,18 @@ type
     Complet: Boolean;
     Notation: Integer;
 
-    procedure Assign(Ps: TBasePointeur); override;
+    procedure Assign(Ps: TBaseLite); override;
 
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
   end;
 
-  TCollectionLite = class(TBasePointeur)
+  TCollectionLite = class(TBaseLite)
   public
     NomCollection: string { [50] };
     Editeur: TEditeurLite;
 
-    procedure Assign(Ps: TBasePointeur); override;
+    procedure Assign(Ps: TBaseLite); override;
 
     constructor Create; override;
     destructor Destroy; override;
@@ -130,13 +134,13 @@ type
     procedure Clear; override;
   end;
 
-  TSerieLite = class(TBasePointeur)
+  TSerieLite = class(TBaseLite)
   public
     TitreSerie: string { [150] };
     Editeur: TEditeurLite;
     Collection: TCollectionLite;
 
-    procedure Assign(Ps: TBasePointeur); override;
+    procedure Assign(Ps: TBaseLite); override;
 
     constructor Create; override;
     destructor Destroy; override;
@@ -145,14 +149,14 @@ type
     procedure Clear; override;
   end;
 
-  TEditionLite = class(TBasePointeur)
+  TEditionLite = class(TBaseLite)
   public
     AnneeEdition: Integer;
     ISBN: string { [17] };
     Editeur: TEditeurLite;
     Collection: TCollectionLite;
 
-    procedure Assign(Ps: TBasePointeur); override;
+    procedure Assign(Ps: TBaseLite); override;
 
     constructor Create; override;
     destructor Destroy; override;
@@ -161,19 +165,19 @@ type
     procedure Clear; override;
   end;
 
-  TConversionLite = class(TBasePointeur)
+  TConversionLite = class(TBaseLite)
     Monnaie1, Monnaie2: string { [5] };
     Taux: Double;
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
   end;
 
-  TGenreLite = class(TBasePointeur)
+  TGenreLite = class(TBaseLite)
   public
     Genre: string { [50] };
     Quantite: Integer;
 
-    procedure Assign(Ps: TBasePointeur); override;
+    procedure Assign(Ps: TBaseLite); override;
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
@@ -186,26 +190,31 @@ uses
 
 { TBasePointeur }
 
-procedure TBasePointeur.AfterConstruction;
+procedure TBaseLite.AfterConstruction;
 begin
   inherited;
   Clear;
 end;
 
-procedure TBasePointeur.Assign(Ps: TBasePointeur);
+procedure TBaseLite.Assign(Ps: TBaseLite);
 begin
   ID := Ps.ID;
 end;
 
-procedure TBasePointeur.Clear;
+procedure TBaseLite.Clear;
 begin
   ID := GUID_NULL;
 end;
 
-constructor TBasePointeur.Create;
+constructor TBaseLite.Create;
 begin
   inherited;
   ID := GUID_NULL;
+end;
+
+procedure TBaseLite.WriteToJSON(json: TdwsJSONObject);
+begin
+  json.AddValue('ID', ID);
 end;
 
 { TConversion }
@@ -217,7 +226,7 @@ end;
 
 { TCouverture }
 
-procedure TCouvertureLite.Assign(Ps: TBasePointeur);
+procedure TCouvertureLite.Assign(Ps: TBaseLite);
 begin
   inherited;
   OldNom := TCouvertureLite(Ps).OldNom;
@@ -235,7 +244,7 @@ end;
 
 { TEditeur }
 
-procedure TEditeurLite.Assign(Ps: TBasePointeur);
+procedure TEditeurLite.Assign(Ps: TBaseLite);
 begin
   inherited Assign(Ps);
   NomEditeur := TEditeurLite(Ps).NomEditeur;
@@ -254,7 +263,7 @@ end;
 
 { TPersonnage }
 
-procedure TPersonnageLite.Assign(Ps: TBasePointeur);
+procedure TPersonnageLite.Assign(Ps: TBaseLite);
 begin
   inherited;
   Nom := TPersonnageLite(Ps).Nom;
@@ -273,7 +282,7 @@ end;
 
 { TAuteur }
 
-procedure TAuteurLite.Assign(Ps: TBasePointeur);
+procedure TAuteurLite.Assign(Ps: TBaseLite);
 begin
   inherited;
   ID_Album := TAuteurLite(Ps).ID_Album;
@@ -306,7 +315,7 @@ end;
 
 { TAlbum }
 
-procedure TAlbumLite.Assign(Ps: TBasePointeur);
+procedure TAlbumLite.Assign(Ps: TBaseLite);
 begin
   inherited;
   Titre := TAlbumLite(Ps).Titre;
@@ -337,7 +346,7 @@ end;
 
 { TCollection }
 
-procedure TCollectionLite.Assign(Ps: TBasePointeur);
+procedure TCollectionLite.Assign(Ps: TBaseLite);
 begin
   inherited;
   NomCollection := TCollectionLite(Ps).NomCollection;
@@ -372,7 +381,7 @@ end;
 
 { TSerie }
 
-procedure TSerieLite.Assign(Ps: TBasePointeur);
+procedure TSerieLite.Assign(Ps: TBaseLite);
 begin
   inherited;
   TitreSerie := TSerieLite(Ps).TitreSerie;
@@ -417,7 +426,7 @@ end;
 
 { TEdition }
 
-procedure TEditionLite.Assign(Ps: TBasePointeur);
+procedure TEditionLite.Assign(Ps: TBaseLite);
 begin
   inherited;
   AnneeEdition := TEditionLite(Ps).AnneeEdition;
@@ -458,7 +467,7 @@ end;
 
 { TGenre }
 
-procedure TGenreLite.Assign(Ps: TBasePointeur);
+procedure TGenreLite.Assign(Ps: TBaseLite);
 begin
   inherited;
   Genre := TGenreLite(Ps).Genre;
@@ -478,7 +487,7 @@ end;
 
 { TParaBD }
 
-procedure TParaBDLite.Assign(Ps: TBasePointeur);
+procedure TParaBDLite.Assign(Ps: TBaseLite);
 begin
   inherited;
   Titre := TParaBDLite(Ps).Titre;
@@ -516,7 +525,7 @@ end;
 
 { TUnivers }
 
-procedure TUniversLite.Assign(Ps: TBasePointeur);
+procedure TUniversLite.Assign(Ps: TBaseLite);
 begin
   inherited Assign(Ps);
   NomUnivers := TUniversLite(Ps).NomUnivers;

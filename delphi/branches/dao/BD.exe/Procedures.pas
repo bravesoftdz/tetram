@@ -23,8 +23,8 @@ procedure PrepareLV(Form: TForm);
 function SupprimerTable(const Table: string): Boolean;
 function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TUIBTransaction = nil): Boolean; overload;
 function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TUIBTransaction = nil): Boolean; overload;
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: TGUID; UseTransaction: TUIBTransaction = nil): Boolean; overload;
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: TGUID; const Sauf: string; UseTransaction: TUIBTransaction = nil)
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TUIBTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TUIBTransaction = nil)
   : Boolean; overload;
 
 type
@@ -54,11 +54,11 @@ type
     destructor Destroy; override;
   end;
 
-function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: TGUID; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False;
+function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False;
   Effet3D: Integer = 0): TStream; overload;
 function GetCouvertureStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0)
   : TStream; overload;
-procedure LoadCouverture(isParaBD: Boolean; const ID_Couverture: TGUID; Picture: TPicture);
+procedure LoadCouverture(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Picture: TPicture);
 function GetJPEGStream(const Fichier: string): TStream;
 function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = True): string;
 
@@ -362,12 +362,12 @@ begin
   Result := SupprimerToutDans(ChampSupp, Table, Reference, GUID_NULL, Sauf, UseTransaction);
 end;
 
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: TGUID; UseTransaction: TUIBTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TUIBTransaction = nil): Boolean; overload;
 begin
   Result := SupprimerToutDans(ChampSupp, Table, Reference, Valeur, '', UseTransaction);
 end;
 
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: TGUID; const Sauf: string; UseTransaction: TUIBTransaction = nil): Boolean;
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TUIBTransaction = nil): Boolean;
 begin
   try
     with TUIBQuery.Create(nil) do
@@ -571,7 +571,7 @@ begin
   end;
 end;
 
-function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: TGUID; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False;
+function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False;
   Effet3D: Integer = 0): TStream;
 var
   Couverture: TPicture;
@@ -585,7 +585,7 @@ begin
   end;
 end;
 
-procedure LoadCouverture(isParaBD: Boolean; const ID_Couverture: TGUID; Picture: TPicture);
+procedure LoadCouverture(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Picture: TPicture);
 var
   ms: TMemoryStream;
   img: TJPEGImage;

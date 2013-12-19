@@ -22,9 +22,9 @@ type
   PNodeInfo = ^RNodeInfo;
 
   RNodeInfo = record
-    List: TList<TBasePointeur>;
+    List: TList<TBaseLite>;
     InitialeInfo: PInitialeInfo;
-    Detail: TBasePointeur;
+    Detail: TBaseLite;
   end;
 
   // !!! Les valeurs ne doivent pas être changées
@@ -86,8 +86,8 @@ type
     property ShowAchat: Boolean read FShowAchat write SetShowAchat default True;
     property ShowDateParutionAlbum: Boolean read FShowDateParutionAlbum write SetShowDateParutionAlbum default False;
     property OnCompareNodeString: TOnCompareNodeString read FOnCompareNodeString write FOnCompareNodeString;
-    function GetNodeBasePointer(Node: PVirtualNode): TBasePointeur;
-    function GetFocusedNodeData: TBasePointeur;
+    function GetNodeBasePointer(Node: PVirtualNode): TBaseLite;
+    function GetFocusedNodeData: TBaseLite;
     procedure InitializeRep(KeepValue: Boolean = True);
     procedure ReinitNodes(NodeLevel: Integer = -1);
     procedure Find(const Text: string; GetNext: Boolean = False);
@@ -98,7 +98,7 @@ type
   end;
 
 type
-  TClassBasePointeur = class of TBasePointeur;
+  TClassBasePointeur = class of TBaseLite;
 
   RModeInfo = record
     FILTRECOUNT, Filtre, FIELDS: string;
@@ -408,7 +408,7 @@ begin
     ChildCount := FCountPointers[Node.Index].Count;
     InfoNode := GetNodeData(Node);
     if not Assigned(InfoNode.List) then
-      InfoNode.List := TList<TBasePointeur>.Create;
+      InfoNode.List := TList<TBaseLite>.Create;
     q := TUIBQuery.Create(Self);
     with q do
       try
@@ -639,7 +639,7 @@ begin
       DoGetText(Node, 0, ttNormal, Result);
 end;
 
-function TVirtualStringTree.GetNodeBasePointer(Node: PVirtualNode): TBasePointeur;
+function TVirtualStringTree.GetNodeBasePointer(Node: PVirtualNode): TBaseLite;
 begin
   Result := nil;
   if GetNodeLevel(Node) > 0 then
@@ -688,7 +688,7 @@ begin
     end;
 end;
 
-function TVirtualStringTree.GetFocusedNodeData: TBasePointeur;
+function TVirtualStringTree.GetFocusedNodeData: TBaseLite;
 begin
   Result := nil;
   if FMode <> vmNone then

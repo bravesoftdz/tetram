@@ -197,7 +197,8 @@ implementation
 
 uses
   Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
-  UHistorique, UMetadata, DaoLite, DaoFull, superobject, JclSimpleXml;
+  UHistorique, UMetadata, DaoLite, DaoFull, Vcl.Clipbrd, EntitiesSerializer,
+  EntitiesDeserializer;
 
 {$R *.DFM}
 
@@ -400,8 +401,15 @@ begin
 end;
 
 procedure TfrmEditAlbum.Button1Click(Sender: TObject);
+var
+  json: string;
+  tmp: TAlbumFull;
 begin
-  ShowMessage(FAlbum.AsJson);
+  json := TEntitesSerializer.AsJson(FAlbum, True);
+  Clipboard.AsText := json;
+  ShowMessage(json);
+  tmp := TEntitesDeserializer.BuildFromJson<TAlbumFull>(json);
+  tmp.Free;
 end;
 
 procedure TfrmEditAlbum.ajoutClick(Sender: TObject);

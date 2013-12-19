@@ -135,18 +135,6 @@ begin
   Result := GUID_NULL;
   if frmFond.IsShowing(Fenetre) then
     Exit;
-(*
-  with TUIBQuery.Create(nil) do
-    try
-      Transaction := GetTransaction(dmPrinc.UIBDataBase);
-      SQL.Text := 'select udf_createguid() from rdb$database';
-      Open;
-      Result := StringToGUID(Fields.AsString[0]);
-    finally
-      Transaction.Free;
-      Free;
-    end;
-*)
   if not LambdaEdition(Result, True, Valeur) then
     Result := GUID_NULL;
 end;
@@ -156,14 +144,6 @@ begin
   Result := Source.ID;
   if frmFond.IsShowing(Fenetre) then
     Exit;
-  (*
-    if IsEqualGUID(Result, GUID_NULL) then
-    begin
-    Source.New(False);
-    Result := Source.ID;
-    end;
-  *)
-
   LambdaEdition(Source);
   Result := Source.ID;
 end;
@@ -173,18 +153,6 @@ begin
   Result := GUID_NULL;
   if frmFond.IsShowing(Fenetre) then
     Exit;
-  (*
-    with TUIBQuery.Create(nil) do
-    try
-    Transaction := GetTransaction(dmPrinc.UIBDataBase);
-    SQL.Text := 'select udf_createguid() from rdb$database';
-    Open;
-    Result := StringToGUID(Fields.AsString[0]);
-    finally
-    Transaction.Free;
-    Free;
-    end;
-  *)
   if not LambdaEdition(Result, Reference2, True, Valeur) then
     Result := GUID_NULL;
 end;
@@ -340,8 +308,6 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditAlbum) then
     Exit;
-//  if not Creation and not FindRec('ALBUMS', 'ID_Album', ID, True) then
-//    Exit;
   Album := TDaoAlbumFull.getInstance(ID);
   try
     if Creation then
@@ -418,8 +384,6 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditAlbum) then
     Exit;
-//  if not Creation and not FindRec('ALBUMS', 'ID_Album', ID, True) then
-//    Exit;
   Album := TDaoAlbumFull.getInstance(ID);
   try
     if Creation then
@@ -477,8 +441,6 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditSerie) then
     Exit;
-//  if not Creation and not FindRec('SERIES', 'ID_Serie', ID, True) then
-//    Exit;
   Serie := TDaoSerieFull.getInstance(ID);
   try
     if Creation then
@@ -531,8 +493,6 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditUnivers) then
     Exit;
-//  if not Creation and not FindRec('UNIVERS', 'ID_Univers', ID, True) then
-//    Exit;
   Univers := TDaoUniversFull.getInstance(ID);
   try
     if Creation then
@@ -585,8 +545,6 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditEditeur) then
     Exit;
-//  if not Creation and not FindRec('EDITEURS', 'ID_Editeur', ID, True) then
-//    Exit;
   Editeur := TDaoEditeurFull.getInstance(ID);
   try
     if Creation then
@@ -644,8 +602,6 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditCollection) then
     Exit;
-//  if not Creation and not FindRec('COLLECTIONS', 'ID_Collection', ID, True) then
-//    Exit;
   Collection := TDaoCollectionFull.getInstance(ID);
   try
     if Creation then
@@ -717,8 +673,6 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditAuteur) then
     Exit;
-//  if not Creation and not FindRec('Personnes', 'ID_Personne', ID, True) then
-//    Exit;
   Auteur := TDaoAuteurFull.getInstance(ID);
   try
     if Creation then
@@ -772,8 +726,6 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditParaBD) then
     Exit;
-//  if not Creation and not FindRec('ParaBD', 'ID_ParaBD', ID, True) then
-//    Exit;
   ParaBD := TDaoParaBDFull.getInstance(ID);
   try
     if Creation then
@@ -826,8 +778,6 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditParaBD) then
     Exit;
-//  if not Creation and not FindRec('ParaBD', 'ID_ParaBD', ID, True) then
-//    Exit;
   ParaBD := TDaoParaBDFull.getInstance(ID);
   try
     if Creation then
