@@ -3,7 +3,7 @@ unit UfrmPrevisionsSorties;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, EntitiesStats, VirtualTrees, VirtualTree, ToolWin,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, EntitiesStats, VirtualTrees, VirtualTreeBdtk, ToolWin,
   ProceduresBDtk, StdCtrls, ExtCtrls, Menus, ActnList, Buttons, VDTButton, UBdtForms, StrUtils,
   EditLabeled, PngSpeedButton, System.Actions;
 
@@ -47,7 +47,7 @@ type
 implementation
 
 uses Impression, DateUtils, IniFiles, CommonConst, Divers, EntitiesLite, Commun,
-  UHistorique;
+  UHistorique, Procedures;
 
 {$R *.dfm}
 

@@ -4,7 +4,7 @@ interface
 
 uses
   SysUtils, Windows, Messages, Classes, Forms, Graphics, Controls, Menus, StdCtrls, System.UITypes, System.Types, Buttons, ComCtrls, ExtCtrls, ToolWin, Commun,
-  VirtualTrees, VirtualTree, ActnList, VDTButton, ComboCheck, ProceduresBDtk,
+  VirtualTrees, VirtualTreeBdtk, ActnList, VDTButton, ComboCheck, ProceduresBDtk,
   UframRechercheRapide, EntitiesFull, EntitiesRecherche, UBdtForms, Generics.Defaults,
   System.Actions;
 

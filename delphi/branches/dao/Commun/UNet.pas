@@ -19,7 +19,7 @@ function LoadStreamURL(URL: string; const Pieces: array of RAttachement; StreamA
 implementation
 
 uses
-  IOUtils, WinInet, OverbyteIcsHttpProt, OverbyteIcsLogger, ProceduresBDtk, AnsiStrings, OverbyteIcsWSocket, OverbyteIcsLIBEAY;
+  IOUtils, WinInet, OverbyteIcsHttpProt, OverbyteIcsLogger, Procedures, AnsiStrings, OverbyteIcsWSocket, OverbyteIcsLIBEAY;
 
 function URLEncode(const URL: string): string;
 var

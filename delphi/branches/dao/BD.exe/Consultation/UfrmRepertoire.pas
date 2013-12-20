@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, DBCtrls, Menus, Buttons, ComCtrls, ExtCtrls,
-  ScanEdit, VDTButton, VirtualTrees, ActnList, VirtualTree, jpeg, EditLabeled, ComboCheck, ProceduresBDtk,
+  ScanEdit, VDTButton, VirtualTrees, ActnList, VirtualTreeBdtk, jpeg, EditLabeled, ComboCheck, ProceduresBDtk,
   UframRechercheRapide, UBdtForms;
 
 type

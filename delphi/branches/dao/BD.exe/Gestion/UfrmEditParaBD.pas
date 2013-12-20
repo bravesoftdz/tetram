@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, EditLabeled, VirtualTrees, ComCtrls, VDTButton,
-  VirtualTree, ComboCheck, ExtCtrls, Buttons, UframRechercheRapide, ExtDlgs, EntitiesFull,
+  VirtualTreeBdtk, ComboCheck, ExtCtrls, Buttons, UframRechercheRapide, ExtDlgs, EntitiesFull,
   UframBoutons, UBdtForms, PngSpeedButton, UframVTEdit;
 
 type

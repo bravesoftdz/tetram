@@ -3,8 +3,8 @@ unit Procedures;
 interface
 
 uses
-  SysUtils, Windows, Classes, Dialogs, ComCtrls, ExtCtrls, Controls, Forms, Graphics, CommonConst, UIB, jpeg, StdCtrls, ComboCheck,
-  UIBLib, Commun;
+  System.SysUtils, Winapi.Windows, System.Classes, Vcl.Dialogs, Vcl.ComCtrls, Vcl.ExtCtrls, Vcl.Graphics, Vcl.Forms, UfrmProgression, Vcl.Controls,
+  Vcl.StdCtrls;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
 
@@ -14,17 +14,44 @@ function FormExistI(ClassType: TClass): Integer;
 procedure MoveListItem(LV: TListView; Sens: Integer);
 
 function DessineImage(Image: TImage; const Fichier: string): Boolean;
+function ChargeImage(ImgBmp: TImage; const ResName: string; ForceVisible: Boolean = True): Boolean; overload;
+function ChargeImage(Picture: TPicture; const ResName: string): Boolean; overload;
 
 procedure PrepareLV(Form: TForm);
 
-function SupprimerTable(const Table: string): Boolean;
-function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TUIBTransaction = nil): Boolean; overload;
-function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TUIBTransaction = nil): Boolean; overload;
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TUIBTransaction = nil): Boolean; overload;
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TUIBTransaction = nil)
-  : Boolean; overload;
-
 type
+  TEtapeProgression = (epNext, epFin);
+
+  IWaiting = interface
+    ['{82C50525-A282-4982-92DB-ED5FEC2E5C96}']
+    procedure ShowProgression(const Texte: string; Etape: TEtapeProgression); overload; stdcall;
+    procedure ShowProgression(Texte: PChar; Valeur, Maxi: Integer); overload; stdcall;
+    procedure ShowProgression(const Texte: string; Valeur, Maxi: Integer); overload; stdcall;
+  end;
+
+  TWaiting = class(TInterfacedObject, IWaiting)
+  strict private
+    FTimer: TTimer;
+
+    FCaption, FMessage: string;
+    FValeur, FMaxi: Integer;
+    FTimeToWait: Cardinal;
+    FForm: TfrmProgression;
+    PResult: PInteger;
+    FromMainThread: Boolean;
+    procedure InitForm;
+    procedure ClearForm;
+    procedure RefreshForm;
+    procedure Execute(Sender: TObject);
+    procedure Cancel(Sender: TObject);
+  public
+    constructor Create(const Msg: string = ''; WaitFor: Cardinal = 2000; Retour: PInteger = nil; MainThread: Boolean = True); reintroduce;
+    destructor Destroy; override;
+    procedure ShowProgression(const Texte: string; Etape: TEtapeProgression); overload; stdcall;
+    procedure ShowProgression(const Texte: string; Valeur, Maxi: Integer); overload; stdcall;
+    procedure ShowProgression(Texte: PChar; Valeur, Maxi: Integer); overload; stdcall;
+  end;
+
   ILockWindow = interface
   end;
 
@@ -51,16 +78,8 @@ type
     destructor Destroy; override;
   end;
 
-function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False;
-  Effet3D: Integer = 0): TStream; overload;
-function GetCouvertureStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0)
-  : TStream; overload;
-procedure LoadCouverture(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Picture: TPicture);
 function GetJPEGStream(const Fichier: string): TStream;
-function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = True): string;
-
-procedure LoadCombo(Categorie: Integer; Combo: TLightComboCheck);
-procedure LoadStrings(Categorie: Integer; Strings: TStrings);
+function ResizePicture(Image: TPicture; Hauteur, Largeur: Integer; AntiAliasing, Cadre: Boolean; Effet3D: Integer): TStream;
 
 function FindCmdLineSwitch(const cmdLine, Switch: string): Boolean; overload;
 function FindCmdLineSwitch(const cmdLine, Switch: string; out Value: string): Boolean; overload;
@@ -68,8 +87,8 @@ function FindCmdLineSwitch(const cmdLine, Switch: string; out Value: string): Bo
 implementation
 
 uses
-  IOUtils, Divers, Textes, ShellAPI, LabeledCheckBox, MaskUtils, Mask, UdmPrinc, IniFiles, Math, VirtualTrees, EditLabeled, ActnList, Types, UBdtForms,
-  StrUtils, GR32, GR32_Resamplers, JvGIF, pngimage, System.UITypes;
+  System.IOUtils, Commun, CommonConst, Divers, VirtualTrees, GR32, GR32_Resamplers, Vcl.Imaging.jpeg, Vcl.Imaging.pngimage, JvGIF, UBdtForms,
+  System.UITypes;
 
 function AffMessage(const Msg: string; DlgType: TMsgDlgType; Buttons: TMsgDlgButtons; Son: Boolean = False): Word;
 begin
@@ -114,13 +133,13 @@ begin
       if (hauteurimg >= hauteuraff) and (largeurimg >= largeuraff) then
         if (hauteurimg / largeurimg) > (hauteuraff / largeuraff) then
         begin
-          largeuraff := Windows.MulDiv(hauteuraff, largeurimg, hauteurimg);
+          largeuraff := Winapi.Windows.MulDiv(hauteuraff, largeurimg, hauteurimg);
           marge := (Image.Width - largeuraff) div 2;
           Image.Canvas.StretchDraw(Rect(marge, 0, marge + largeuraff, hauteuraff), Graphic);
         end
         else
         begin
-          hauteuraff := Windows.MulDiv(largeuraff, hauteurimg, largeurimg);
+          hauteuraff := Winapi.Windows.MulDiv(largeuraff, hauteurimg, largeurimg);
           marge := (Image.Height - hauteuraff) div 2;
           Image.Canvas.StretchDraw(Rect(0, marge, largeuraff, marge + hauteuraff), Graphic);
         end
@@ -130,6 +149,30 @@ begin
     finally
       Free;
     end;
+end;
+
+function ChargeImage(Picture: TPicture; const ResName: string): Boolean;
+begin
+  Result := False;
+  Picture.Bitmap.FreeImage;
+  if TGlobalVar.Utilisateur.Options.Images and not IsRemoteSession then
+  begin
+    if HandleDLLPic <= 32 then
+      HandleDLLPic := LoadLibrary(PChar(RessourcePic));
+    if HandleDLLPic > 32 then
+      try
+        Picture.Bitmap.LoadFromResourceName(HandleDLLPic, ResName);
+        Result := True;
+      except
+      end;
+  end;
+end;
+
+function ChargeImage(ImgBmp: TImage; const ResName: string; ForceVisible: Boolean = True): Boolean;
+begin
+  Result := ChargeImage(ImgBmp.Picture, ResName);
+  if ForceVisible then
+    ImgBmp.Visible := not ImgBmp.Picture.Bitmap.Empty;
 end;
 
 procedure MoveListItem(LV: TListView; Sens: Integer);
@@ -185,76 +228,6 @@ begin
     end;
 end;
 
-function SupprimerTable(const Table: string): Boolean;
-begin
-  try
-    with TUIBQuery.Create(nil) do
-      try
-        Transaction := GetTransaction(DMPrinc.UIBDataBase);
-        Transaction.Database.Connected := False; // fonctionne mais pas correct du tout!
-        Transaction.Database.Connected := True;
-        SQL.Text := 'drop table ' + Table;
-        Execute;
-        Transaction.Commit;
-        Result := True;
-      finally
-        Transaction.Free;
-        Free;
-      end;
-  except
-    Result := False;
-  end;
-end;
-
-function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TUIBTransaction = nil): Boolean;
-begin
-  Result := SupprimerToutDans(ChampSupp, Table, '', GUID_NULL, '', UseTransaction);
-end;
-
-function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TUIBTransaction = nil): Boolean; overload;
-begin
-  Result := SupprimerToutDans(ChampSupp, Table, Reference, GUID_NULL, Sauf, UseTransaction);
-end;
-
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TUIBTransaction = nil): Boolean; overload;
-begin
-  Result := SupprimerToutDans(ChampSupp, Table, Reference, Valeur, '', UseTransaction);
-end;
-
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TUIBTransaction = nil): Boolean;
-begin
-  try
-    with TUIBQuery.Create(nil) do
-      try
-        if Assigned(UseTransaction) then
-          Transaction := UseTransaction
-        else
-          Transaction := GetTransaction(DMPrinc.UIBDataBase);
-
-        if ChampSupp <> '' then
-          SQL.Add(Format('update %s set %s = True', [Table, ChampSupp]))
-        else
-          SQL.Add(Format('delete from %s', [Table]));
-
-        if (Reference <> '') then
-          if IsEqualGUID(Valeur, GUID_NULL) then
-            SQL.Add(Format('where %s not in (%s)', [Reference, Sauf]))
-          else
-            SQL.Add(Format('where %s = ''%s''', [Reference, GUIDToString(Valeur)]));
-
-        Execute;
-        Transaction.Commit;
-        Result := True;
-      finally
-        if not Assigned(UseTransaction) then
-          Transaction.Free;
-        Free;
-      end;
-  except
-    Result := False;
-  end;
-end;
-
 constructor TLockWindow.Create(Form: TWinControl);
 begin
   inherited Create;
@@ -266,6 +239,121 @@ begin
   if FLocked then
     LockWindowUpdate(0);
   inherited;
+end;
+
+{ TWaiting }
+
+procedure TWaiting.ClearForm;
+begin
+  if Assigned(FForm) then
+    FreeAndNil(FForm);
+end;
+
+constructor TWaiting.Create(const Msg: string; WaitFor: Cardinal; Retour: PInteger; MainThread: Boolean);
+begin
+  inherited Create;
+  FTimer := TTimer.Create(nil);
+  FTimer.Interval := WaitFor;
+  FTimer.OnTimer := Execute;
+  FromMainThread := MainThread;
+
+  FForm := TfrmProgression.Create(Application);
+  if Assigned(PResult) then
+    FForm.framBoutons1.btnAnnuler.OnClick := Self.Cancel
+  else
+    FForm.framBoutons1.Visible := False;
+  if FCaption <> '' then
+    FForm.Caption := FCaption;
+
+  FCaption := Msg;
+  FTimeToWait := WaitFor;
+  if Assigned(Retour) then
+    Retour^ := 0;
+  PResult := Retour;
+  FTimer.Enabled := True;
+end;
+
+procedure TWaiting.InitForm;
+begin
+  RefreshForm;
+  FForm.Show;
+end;
+
+destructor TWaiting.Destroy;
+begin
+  ShowProgression(FMessage, epFin);
+  FreeAndNil(FTimer);
+  if Assigned(FForm) then
+    ClearForm;
+  inherited;
+end;
+
+procedure TWaiting.Execute(Sender: TObject);
+begin
+  FTimer.Enabled := False;
+  InitForm;
+end;
+
+procedure TWaiting.RefreshForm;
+var
+  tmp: string;
+begin
+  if Assigned(FForm) then
+  begin
+    FForm.ProgressBar1.Max := FMaxi;
+    FForm.ProgressBar1.Position := FValeur;
+    tmp := FMessage;
+    with FForm.op do
+      if Canvas.TextWidth(tmp) > Width then
+      begin
+        while Canvas.TextWidth(tmp + '...') > Width do
+          Delete(tmp, Length(tmp) div 2, 1);
+        Insert('...', tmp, Length(tmp) div 2);
+      end;
+    FForm.op.Caption := tmp;
+  end;
+  if FromMainThread then
+    Application.ProcessMessages;
+end;
+
+procedure TWaiting.ShowProgression(const Texte: string; Etape: TEtapeProgression);
+begin
+  case Etape of
+    epNext:
+      Inc(FValeur);
+    epFin:
+      FValeur := FMaxi;
+  end;
+  if Texte <> '' then
+    FMessage := Texte;
+
+  RefreshForm;
+end;
+
+procedure TWaiting.ShowProgression(const Texte: string; Valeur, Maxi: Integer);
+begin
+  FMaxi := Maxi;
+  FValeur := Valeur;
+  if Texte <> '' then
+    FMessage := Texte;
+  RefreshForm;
+end;
+
+procedure TWaiting.ShowProgression(Texte: PChar; Valeur, Maxi: Integer);
+begin
+  FMaxi := Maxi;
+  FValeur := Valeur;
+  if Texte <> '' then
+    FMessage := Texte;
+  RefreshForm;
+end;
+
+procedure TWaiting.Cancel(Sender: TObject);
+begin
+  if Assigned(PResult) then
+    PResult^ := FForm.ModalResult;
+  FForm.Release;
+  FForm := nil;
 end;
 
 function ChangeLight(Value, FromValue, ToValue: Integer; Color, ToColor: TColor): TColor;
@@ -311,16 +399,16 @@ begin
       if Hauteur = -1 then
       begin
         NewLargeur := Largeur;
-        NewHauteur := Windows.MulDiv(NewLargeur, Image.Height, Image.Width);
+        NewHauteur := Winapi.Windows.MulDiv(NewLargeur, Image.Height, Image.Width);
       end
       else
       begin
         NewHauteur := Hauteur;
-        NewLargeur := Windows.MulDiv(NewHauteur, Image.Width, Image.Height);
+        NewLargeur := Winapi.Windows.MulDiv(NewHauteur, Image.Width, Image.Height);
         if (Largeur <> -1) and (NewLargeur > Largeur) then
         begin
           NewLargeur := Largeur;
-          NewHauteur := Windows.MulDiv(NewLargeur, Image.Height, Image.Width);
+          NewHauteur := Winapi.Windows.MulDiv(NewLargeur, Image.Height, Image.Width);
         end;
       end;
       Bmp := TBitmap.Create;
@@ -399,100 +487,6 @@ begin
   except
     FreeAndNil(Result);
   end;
-end;
-
-function GetCouvertureStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream;
-var
-  Couverture: TPicture;
-  img: TJPEGImage;
-  Stream: TStream;
-begin
-  Couverture := TPicture.Create;
-  try
-    Stream := GetJPEGStream(Fichier);
-    img := TJPEGImage.Create;
-    try
-      Stream.Position := 0;
-      img.LoadFromStream(Stream);
-      Couverture.Assign(img);
-    finally
-      img.Free;
-      FreeAndNil(Stream);
-    end;
-    Result := ResizePicture(Couverture, Hauteur, Largeur, AntiAliasing, Cadre, Effet3D);
-  finally
-    Couverture.Free;
-  end;
-end;
-
-function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False;
-  Effet3D: Integer = 0): TStream;
-var
-  Couverture: TPicture;
-begin
-  Couverture := TPicture.Create;
-  try
-    LoadCouverture(isParaBD, ID_Couverture, Couverture);
-    Result := ResizePicture(Couverture, Hauteur, Largeur, AntiAliasing, Cadre, Effet3D);
-  finally
-    Couverture.Free;
-  end;
-end;
-
-procedure LoadCouverture(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Picture: TPicture);
-var
-  ms: TMemoryStream;
-  img: TJPEGImage;
-  Fichier, Chemin: string;
-begin
-  with TUIBQuery.Create(nil) do
-    try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      if isParaBD then
-        SQL.Text := 'select imageparabd, stockageparabd, fichierparabd from parabd where id_parabd = ?'
-      else
-        SQL.Text := 'select imagecouverture, stockagecouverture, fichiercouverture from couvertures where id_couverture = ?';
-      Params.AsString[0] := GUIDToString(ID_Couverture);
-      FetchBlobs := True;
-      Open;
-      if Eof or (Fields.IsNull[0] and Fields.IsNull[2]) then
-        Picture.Assign(nil)
-      else
-      begin
-        if not Fields.AsBoolean[1] then
-        begin
-          Fichier := TPath.GetFileName(Fields.AsString[2]);
-          Chemin := TPath.GetDirectoryName(Fields.AsString[2]);
-          if Chemin = '' then
-            Chemin := RepImages;
-          SQL.Text := 'select blobcontent from loadblobfromfile(:chemin, :fichier);';
-          Prepare(True);
-          Params.AsString[0] := Copy(Chemin, 1, Params.MaxStrLen[0]);
-          Params.AsString[1] := Copy(Fichier, 1, Params.MaxStrLen[1]);
-          Open;
-          if Eof then
-          begin
-            Picture.Assign(nil);
-            Exit;
-          end;
-        end;
-
-        ms := TMemoryStream.Create;
-        img := TJPEGImage.Create;
-        try
-          ReadBlob(0, ms);
-          ms.Position := 0;
-          img.LoadFromStream(ms);
-          Picture.Assign(img);
-        finally
-          ms.Free;
-          img.Free;
-        end;
-      end;
-    finally
-      Transaction.Free;
-      Free;
-    end;
 end;
 
 function GetJPEGStream(const Fichier: string): TStream;
@@ -634,87 +628,6 @@ begin
   FLabel.Caption := Msg;
   FInfo.Show;
   Application.ProcessMessages;
-end;
-
-function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = True): string;
-begin
-  with TUIBQuery.Create(nil) do
-    try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'SELECT * FROM SearchFileName(:Chemin, :Fichier, :Reserve)';
-      Prepare(True);
-      Params.AsString[0] := Copy(IncludeTrailingPathDelimiter(Chemin), 1, Params.MaxStrLen[0]);
-      Params.AsString[1] := Copy(Fichier, 1, Params.MaxStrLen[1]);
-      Params.AsBoolean[2] := Reserve;
-      Open;
-      Result := ExtractFileName(Fields.AsString[0]);
-    finally
-      Transaction.Free;
-      Free;
-    end;
-end;
-
-procedure LoadStrings(Categorie: Integer; Strings: TStrings);
-begin
-  with TUIBQuery.Create(nil) do
-    try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'SELECT REF, LIBELLE, DEFAUT FROM LISTES WHERE CATEGORIE = :Categorie ORDER BY ORDRE';
-
-      Params.AsInteger[0] := Categorie;
-      Open;
-      Strings.Clear;
-      while not Eof do
-      begin
-        Strings.Add(Fields.AsString[0] + '=' + Fields.AsString[1]);
-        Next;
-      end;
-    finally
-      Transaction.Free;
-      Free;
-    end;
-end;
-
-procedure LoadCombo(Categorie: Integer; Combo: TLightComboCheck);
-var
-  HasNULL: Boolean;
-begin
-  with TUIBQuery.Create(nil) do
-    try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'select ref, libelle, defaut from listes where categorie = :categorie order by ordre';
-
-      HasNULL := False;
-
-      Params.AsInteger[0] := Categorie;
-      Open;
-      Combo.Items.Clear;
-      Combo.DefaultValueChecked := -1;
-      while not Eof do
-      begin
-        with Combo.Items.Add do
-        begin
-          Caption := Fields.AsString[1];
-          Valeur := Fields.AsInteger[0];
-          if Fields.AsBoolean[2] then
-            Combo.DefaultValueChecked := Valeur;
-          HasNULL := Valeur = -1;
-        end;
-        Next;
-      end;
-      if not HasNULL then
-        with Combo.Items.Add do
-        begin
-          Caption := ' ';
-          Valeur := -1;
-          index := 0;
-        end;
-
-      Combo.Value := Combo.DefaultValueChecked;
-    finally
-      Transaction.Free;
-      Free;
-    end;
 end;
 
 function FindCmdLineSwitch(const cmdLine, Switch: string): Boolean;

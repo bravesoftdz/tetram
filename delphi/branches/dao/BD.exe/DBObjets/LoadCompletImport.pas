@@ -12,8 +12,9 @@ function AddImageFromURL(Edition: TEditionFull; const URL: string; TypeImage: In
 implementation
 
 uses
-  IOUtils, UIB, Commun, VirtualTree, UfrmControlImport, Controls, UdmPrinc, WinInet, UHistorique, Proc_Gestions, Editions, UfrmValidationImport, UNet,
-  EntitiesLite, CommonConst, Procedures, UMetadata, Divers, DaoLite, DaoFull;
+  IOUtils, UIB, Commun, VirtualTreeBdtk, UfrmControlImport, Controls, UdmPrinc, WinInet, UHistorique, Proc_Gestions, Editions, UfrmValidationImport, UNet,
+  EntitiesLite, CommonConst, Procedures, UMetadata, Divers, DaoLite, DaoFull,
+  ProceduresBDtk;
 
 procedure Import(Self: TAlbumFull);
 var

@@ -3,7 +3,7 @@ unit DaoFull;
 interface
 
 uses
-  System.SysUtils, System.Classes, VirtualTree, EntitiesFull, uib,
+  System.SysUtils, System.Classes, VirtualTreeBdtk, EntitiesFull, uib,
   Vcl.StdCtrls, Winapi.Windows;
 
 type
@@ -120,7 +120,7 @@ implementation
 uses
   UdmPrinc, Commun, UfrmConsole, DaoLite, EntitiesLite, Procedures,
   CommonConst, System.IOUtils, Vcl.Dialogs, UMetadata, UfrmFusionEditions,
-  Vcl.Controls, System.Generics.Collections;
+  Vcl.Controls, System.Generics.Collections, ProceduresBDtk;
 
 { TDaoFull }
 

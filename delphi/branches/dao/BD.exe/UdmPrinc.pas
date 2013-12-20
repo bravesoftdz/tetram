@@ -54,7 +54,7 @@ implementation
 uses
   IOUtils, CommonConst, Commun, Textes, UdmCommun, UIBLib, Divers, IniFiles, Procedures, UHistorique, Math, UIBase, Updates, UfrmFond, CheckVersionNet,
   DateUtils, UMAJODS, JumpList, UfrmSplash, Proc_Gestions, Generics.Collections,
-  UfrmVerbose, UfrmConsole;
+  UfrmVerbose, UfrmConsole, ProceduresBDtk;
 
 const
   FinBackup = 'gbak:closing file, committing, and finishing.';

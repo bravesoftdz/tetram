@@ -75,7 +75,8 @@ implementation
 {$R *.dfm}
 
 uses
-  Procedures, CommonConst, jpeg, UHistorique, Commun, DaoLite, DaoFull;
+  Procedures, CommonConst, jpeg, UHistorique, Commun, DaoLite, DaoFull,
+  ProceduresBDtk;
 
 { TThumbList.TThumb }
 

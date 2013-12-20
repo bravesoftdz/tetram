@@ -270,7 +270,6 @@
         <DCCReference Include="Consultation\UfrmPreview.pas">
             <Form>frmPreview</Form>
         </DCCReference>
-        <DCCReference Include="Procedures.pas"/>
         <DCCReference Include="UHistorique.pas"/>
         <DCCReference Include="UfrmEntretien.pas">
             <Form>frmEntretien</Form>
@@ -304,7 +303,6 @@
         <DCCReference Include="Web\UfrmPublier.pas">
             <Form>frmPublier</Form>
         </DCCReference>
-        <DCCReference Include="Web\UNet.pas"/>
         <DCCReference Include="Web\mises_a_jour\UMySQLMAJ1_0_0_1.pas"/>
         <DCCReference Include="Web\mises_a_jour\UMySQLMAJ1_0_0_0.pas"/>
         <DCCReference Include="Web\mises_a_jour\UMySQLMAJ1_0_0_2.pas"/>
@@ -511,6 +509,8 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\Commun\UMetadata.pas"/>
+        <DCCReference Include="..\Commun\Procedures.pas"/>
+        <DCCReference Include="..\Commun\UNet.pas"/>
         <RcItem Include="..\Commun\images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>

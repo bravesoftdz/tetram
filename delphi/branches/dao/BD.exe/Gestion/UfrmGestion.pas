@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, DBCtrls, ComCtrls, Db, Menus,
-  ExtCtrls, Buttons, Proc_Gestions, VDTButton, VirtualTrees, VirtualTree,
+  ExtCtrls, Buttons, Proc_Gestions, VDTButton, VirtualTrees, VirtualTreeBdtk,
   UframRechercheRapide, UBdtForms, PngSpeedButton;
 
 type

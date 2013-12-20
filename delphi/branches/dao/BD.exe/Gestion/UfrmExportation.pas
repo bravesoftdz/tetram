@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, IOUtils, System.UITypes,
   Vcl.Dialogs, ActnList, StdActns, VirtualTrees, StdCtrls, Buttons, ProceduresBDtk,
-  VDTButton, ExtCtrls, VirtualTree, Procedures, UBdtForms, PngSpeedButton;
+  VDTButton, ExtCtrls, VirtualTreeBdtk, Procedures, UBdtForms, PngSpeedButton;
 
 type
   TFileStream = class(Classes.TFileStream)

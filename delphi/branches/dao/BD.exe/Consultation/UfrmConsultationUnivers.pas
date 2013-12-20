@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, StrUtils, System.UITypes,
   Dialogs, EntitiesFull, StdCtrls, VirtualTrees, ExtCtrls, UfrmFond, Procedures,
-  ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms, VirtualTree,
+  ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms, VirtualTreeBdtk,
   LabeledCheckBox, System.Actions;
 
 type

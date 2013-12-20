@@ -103,7 +103,7 @@ type
 implementation
 
 uses CommonConst, UdmPrinc, EntitiesLite, UIB, Commun, Procedures, Updates, IOUtils,
-  DaoLite;
+  DaoLite, ProceduresBDtk;
 
 {$R *.DFM}
 

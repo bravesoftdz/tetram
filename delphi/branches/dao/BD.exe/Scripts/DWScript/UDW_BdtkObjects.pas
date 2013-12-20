@@ -73,7 +73,8 @@ implementation
 
 uses
   dwsSymbols, EntitiesFull, UMetadata, Procedures, AnsiStrings, Divers, Generics.Collections,
-  UScriptsFonctions, EntitiesLite, LoadCompletImport, Commun, DaoFull;
+  UScriptsFonctions, EntitiesLite, LoadCompletImport, Commun, DaoFull,
+  ProceduresBDtk;
 
 { TDW_BdtkObjects }
 

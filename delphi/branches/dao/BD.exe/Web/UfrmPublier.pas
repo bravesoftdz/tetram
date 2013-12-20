@@ -33,7 +33,7 @@ implementation
 {$R *.dfm}
 
 uses Math, UNet, Divers, Updates, UIB, UIBLib, UdmPrinc, Commun, DateUtils, Procedures, CommonConst, VarUtils, StrUtils,
-  Generics.Collections, JclMime;
+  Generics.Collections, JclMime, ProceduresBDtk;
 
 type
   TSynchroSpecial = (tsNone, tsImages);

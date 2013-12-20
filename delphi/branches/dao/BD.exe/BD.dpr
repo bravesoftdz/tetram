@@ -48,7 +48,6 @@ uses
   MAJ in 'Consultation\MAJ.pas',
   VirtualTree in 'VirtualTree.pas',
   UfrmPreview in 'Consultation\UfrmPreview.pas' {frmPreview},
-  Procedures in 'Procedures.pas',
   UHistorique in 'UHistorique.pas',
   UfrmEntretien in 'UfrmEntretien.pas' {frmEntretien},
   UfrmExportation in 'Gestion\UfrmExportation.pas' {frmExportation},
@@ -64,7 +63,6 @@ uses
   UfrmEditCritere in 'Consultation\UfrmEditCritere.pas' {frmEditCritere},
   UChampsRecherche in 'Consultation\UChampsRecherche.pas',
   UfrmPublier in 'Web\UfrmPublier.pas' {frmPublier},
-  UNet in 'Web\UNet.pas',
   UMySQLMAJ1_0_0_1 in 'Web\mises_a_jour\UMySQLMAJ1_0_0_1.pas',
   UMySQLMAJ1_0_0_0 in 'Web\mises_a_jour\UMySQLMAJ1_0_0_0.pas',
   UMySQLMAJ1_0_0_2 in 'Web\mises_a_jour\UMySQLMAJ1_0_0_2.pas',
@@ -199,11 +197,12 @@ uses
   UfrmProgression in '..\Commun\UfrmProgression.pas' {frmProgression},
   UfrmSplash in '..\Commun\UfrmSplash.pas' {frmSplash},
   UfrmVerbose in '..\Commun\UfrmVerbose.pas' {frmVerbose},
-  UMetadata in '..\Commun\UMetadata.pas';
+  UMetadata in '..\Commun\UMetadata.pas',
+  Procedures in '..\Commun\Procedures.pas',
+  UNet in '..\Commun\UNet.pas';
 
 begin
   Application.Title := 'BDthèque';
-  Application.CreateForm(TfrmSplash, frmSplash);
   Application.MainFormOnTaskbar := True;
   Application.Initialize;
   Application.Run;

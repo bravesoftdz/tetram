@@ -38,7 +38,7 @@ type
 
 implementation
 
-uses EntitiesLite, Commun, Impression, IniFiles, CommonConst;
+uses EntitiesLite, Commun, Impression, IniFiles, CommonConst, Procedures;
 
 {$R *.dfm}
 

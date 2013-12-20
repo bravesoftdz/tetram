@@ -160,7 +160,7 @@ implementation
 
 uses
   IOUtils, AnsiStrings, Procedures, UfrmScripts, Divers, UScriptsFonctions, UScriptsHTMLFunctions, Dialogs, StrUtils, uPSDisassembly,
-  UPascalScriptEditor;
+  UPascalScriptEditor, ProceduresBDtk;
 
 procedure AddToTStrings(const Strings: TStringArray; List: TStrings);
 var
