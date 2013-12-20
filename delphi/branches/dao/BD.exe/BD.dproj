@@ -266,7 +266,6 @@
             <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <DCCReference Include="Consultation\MAJ.pas"/>
-        <DCCReference Include="VirtualTree.pas"/>
         <DCCReference Include="Consultation\UfrmPreview.pas">
             <Form>frmPreview</Form>
         </DCCReference>
@@ -511,6 +510,7 @@
         <DCCReference Include="..\Commun\UMetadata.pas"/>
         <DCCReference Include="..\Commun\Procedures.pas"/>
         <DCCReference Include="..\Commun\UNet.pas"/>
+        <DCCReference Include="..\Commun\VirtualTree.pas"/>
         <RcItem Include="..\Commun\images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>

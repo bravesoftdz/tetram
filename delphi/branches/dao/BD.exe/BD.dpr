@@ -46,7 +46,6 @@ uses
   UframConvertisseur in 'UframConvertisseur.pas' {framConvertisseur: TFrame},
   UframRechercheRapide in 'UframRechercheRapide.pas' {framRechercheRapide: TFrame},
   MAJ in 'Consultation\MAJ.pas',
-  VirtualTree in 'VirtualTree.pas',
   UfrmPreview in 'Consultation\UfrmPreview.pas' {frmPreview},
   UHistorique in 'UHistorique.pas',
   UfrmEntretien in 'UfrmEntretien.pas' {frmEntretien},
@@ -199,7 +198,8 @@ uses
   UfrmVerbose in '..\Commun\UfrmVerbose.pas' {frmVerbose},
   UMetadata in '..\Commun\UMetadata.pas',
   Procedures in '..\Commun\Procedures.pas',
-  UNet in '..\Commun\UNet.pas';
+  UNet in '..\Commun\UNet.pas',
+  VirtualTree in '..\Commun\VirtualTree.pas';
 
 begin
   Application.Title := 'BDthèque';

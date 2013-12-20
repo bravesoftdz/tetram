@@ -1,5 +1,7 @@
 program BDScript;
 
+
+
 {$R *.dres}
 
 uses
@@ -10,13 +12,13 @@ uses
   JsonDeserializer in '..\BD.exe\DBObjets\JsonDeserializer.pas',
   EntitiesFull in '..\BD.exe\DBObjets\EntitiesFull.pas',
   EntitiesLite in '..\BD.exe\DBObjets\EntitiesLite.pas',
-  Commun in '..\BD.exe\Commun.pas',
-  CommonConst in '..\BD.exe\CommonConst.pas',
-  UMetadata in '..\BD.exe\UMetadata.pas',
   UdmPrinc in 'UdmPrinc.pas' {dmPrinc: TDataModule},
-  UfrmSplash in '..\BD.exe\UfrmSplash.pas' {frmSplash},
-  UBdtForms in '..\BD.exe\UBdtForms.pas' {bdtForm},
-  Textes in '..\BD.exe\Textes.pas';
+  UMetadata in '..\Commun\UMetadata.pas',
+  Commun in '..\Commun\Commun.pas',
+  CommonConst in '..\Commun\CommonConst.pas',
+  Textes in '..\Commun\Textes.pas',
+  UfrmSplash in '..\Commun\UfrmSplash.pas' {frmSplash},
+  UBdtForms in '..\Commun\UBdtForms.pas' {bdtForm};
 
 {$R *.res}
 

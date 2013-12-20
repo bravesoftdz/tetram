@@ -97,28 +97,28 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="..\BD.exe\DBObjets\JsonDeserializer.pas"/>
         <DCCReference Include="..\BD.exe\DBObjets\EntitiesFull.pas"/>
         <DCCReference Include="..\BD.exe\DBObjets\EntitiesLite.pas"/>
-        <DCCReference Include="..\BD.exe\Commun.pas"/>
-        <DCCReference Include="..\BD.exe\CommonConst.pas"/>
-        <DCCReference Include="..\BD.exe\UMetadata.pas"/>
         <DCCReference Include="UdmPrinc.pas">
             <Form>dmPrinc</Form>
             <FormType>dfm</FormType>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="..\BD.exe\UfrmSplash.pas">
+        <DCCReference Include="..\Commun\UMetadata.pas"/>
+        <DCCReference Include="..\Commun\Commun.pas"/>
+        <DCCReference Include="..\Commun\CommonConst.pas"/>
+        <DCCReference Include="..\Commun\Textes.pas"/>
+        <DCCReference Include="..\Commun\UfrmSplash.pas">
             <Form>frmSplash</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\BD.exe\UBdtForms.pas">
+        <DCCReference Include="..\Commun\UBdtForms.pas">
             <Form>bdtForm</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\BD.exe\Textes.pas"/>
-        <RcItem Include="..\BD.exe\images\imgAbout.bmp">
+        <RcItem Include="..\Commun\images\imgAbout.bmp">
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>ABOUT</ResourceId>
         </RcItem>
-        <RcItem Include="..\BD.exe\handpoint.cur">
+        <RcItem Include="..\Commun\images\handpoint.cur">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>CUR_HANDPOINT</ResourceId>
         </RcItem>
