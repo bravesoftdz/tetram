@@ -402,14 +402,17 @@ end;
 
 procedure TfrmEditAlbum.Button1Click(Sender: TObject);
 var
-  json: string;
+  json, json2: string;
   tmp: TAlbumFull;
 begin
   json := TEntitesSerializer.AsJson(FAlbum, True);
   Clipboard.AsText := json;
   ShowMessage(json);
   tmp := TEntitesDeserializer.BuildFromJson<TAlbumFull>(json);
+  json2 := TEntitesSerializer.AsJson(tmp, True);
+  Clipboard.AsText := json2;
   tmp.Free;
+  ShowMessage(json2);
 end;
 
 procedure TfrmEditAlbum.ajoutClick(Sender: TObject);
