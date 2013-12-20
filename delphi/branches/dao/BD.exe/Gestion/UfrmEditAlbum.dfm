@@ -1479,7 +1479,6 @@ object frmEditAlbum: TfrmEditAlbum
     Height = 21
     Caption = 'Button1'
     TabOrder = 3
-    OnClick = Button1Click
   end
   object ChoixImageDialog: TOpenPictureDialog
     DefaultExt = 'bmp'

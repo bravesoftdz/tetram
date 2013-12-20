@@ -31,7 +31,7 @@ var
 
 implementation
 
-uses UfrmFond, CommonConst, ProceduresBDtk;
+uses CommonConst;
 
 {$R *.DFM}
 

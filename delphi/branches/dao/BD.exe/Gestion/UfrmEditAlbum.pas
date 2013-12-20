@@ -165,7 +165,6 @@ type
     procedure lvUniversData(Sender: TObject; Item: TListItem);
     procedure lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure btUniversClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
   strict private
     FAlbum: TAlbumFull;
     FCurrentEditionComplete: TEditionFull;
@@ -197,8 +196,7 @@ implementation
 
 uses
   Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
-  UHistorique, UMetadata, DaoLite, DaoFull, Vcl.Clipbrd, EntitiesSerializer,
-  EntitiesDeserializer;
+  UHistorique, UMetadata, DaoLite, DaoFull;
 
 {$R *.DFM}
 
@@ -398,21 +396,6 @@ begin
   lvUnivers.Invalidate;
 
   vtEditUniversVTEditChange(vtEditUnivers.VTEdit);
-end;
-
-procedure TfrmEditAlbum.Button1Click(Sender: TObject);
-var
-  json, json2: string;
-  tmp: TAlbumFull;
-begin
-  json := TEntitesSerializer.AsJson(FAlbum, True);
-  Clipboard.AsText := json;
-  ShowMessage(json);
-  tmp := TEntitesDeserializer.BuildFromJson<TAlbumFull>(json);
-  json2 := TEntitesSerializer.AsJson(tmp, True);
-  Clipboard.AsText := json2;
-  tmp.Free;
-  ShowMessage(json2);
 end;
 
 procedure TfrmEditAlbum.ajoutClick(Sender: TObject);

@@ -45,6 +45,8 @@ procedure AnalyseLigneCommande(cmdLine: string);
 
 function dmPrinc: TdmPrinc;
 
+function GetTransaction(Database: TUIBDataBase): TUIBTransaction; inline;
+
 implementation
 
 {$R *.DFM}
@@ -567,7 +569,6 @@ begin
 {$IFDEF DEBUG}
     Historique.AddWaiting(fcConsole);
 {$ENDIF DEBUG}
-
     FrmSplash.Affiche_act(FinChargement + '...');
     ChangeCurseur(crHandPoint, 'CUR_HANDPOINT', RT_RCDATA);
     while SecondsBetween(Now, Debut) < 1 do // au moins 1 seconde d'affichage du splash
@@ -578,7 +579,14 @@ begin
   finally
     FrmSplash.Free;
   end;
-  Application.MainForm.Show;
+  if Assigned(Application.MainForm) then
+    Application.MainForm.Show;
+end;
+
+function GetTransaction(Database: TUIBDataBase): TUIBTransaction;
+begin
+  Result := TUIBTransaction.Create(nil);
+  Result.Database := Database;
 end;
 
 initialization

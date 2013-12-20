@@ -168,13 +168,17 @@ end;
 class procedure TJsonDeserializer.ReadStringListWithValuesFromJSON(list: TStrings; json: TdwsJSONArray);
 var
   i: Integer;
+  o: TdwsJSONObject;
 begin
   if json = nil then
     Exit;
 
   list.Clear;
   for i := 0 to Pred(json.ElementCount) do
-    list.Values[json.Names[i]] := json.Elements[i].AsString;
+  begin
+    o := json.Elements[i] as TdwsJSONObject;
+    list.Values[o.Names[0]] := o.Values[0].AsString;
+  end;
 end;
 
 class function TJsonDeserializer.ReadValueFromJSON(const Name: string; const Default: ROption; json: TdwsJSONObject): ROption;
@@ -253,8 +257,14 @@ begin
 end;
 
 class function TJsonDeserializer.ReadValueFromJSON(const Name: string; const Default: TMetierAuteur; json: TdwsJSONObject): TMetierAuteur;
+var
+  o: TdwsJSONObject;
 begin
-  Result := TMetierAuteur(ReadValueFromJSON(Name, 0, json));
+  o := json.Items[Name] as TdwsJSONObject;
+  if o = nil then
+    Result := Default
+  else
+    Result := TMetierAuteur(StrToIntDef(o.Names[0], Integer(Default)));
 end;
 
 end.

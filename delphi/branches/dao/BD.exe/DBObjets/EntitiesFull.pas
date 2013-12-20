@@ -4,7 +4,7 @@ interface
 
 uses
   SysUtils, Windows, Classes, Dialogs, EntitiesLite, Commun, CommonConst, DateUtils, Generics.Collections,
-  Generics.Defaults, VirtualTree, System.Generics.Collections;
+  Generics.Defaults, System.Generics.Collections;
 
 type
   PAutoTrimString = ^RAutoTrimString;

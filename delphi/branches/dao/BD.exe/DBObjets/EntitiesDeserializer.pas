@@ -3,7 +3,7 @@ unit EntitiesDeserializer;
 interface
 
 uses
-  System.SysUtils, JsonDeserializer, dwsJSON, EntitiesFull, EntitiesLite;
+  System.SysUtils, System.Classes, JsonDeserializer, dwsJSON, EntitiesFull, EntitiesLite;
 
 type
   TEntitesDeserializer = class(TJsonDeserializer)
@@ -35,7 +35,7 @@ type
 implementation
 
 uses
-  Commun;
+  Commun, UMetadata;
 
 { TEntitesSerializer }
 

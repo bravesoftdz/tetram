@@ -3,8 +3,7 @@ unit EntitiesLite;
 interface
 
 uses
-  Windows, SysUtils, DB, Classes, ComCtrls, UIB, StdCtrls, Commun, UMetaData, SyncObjs, Generics.Collections,
-  dwsJSON;
+  Windows, SysUtils, DB, Classes, ComCtrls, StdCtrls, Commun, UMetaData, SyncObjs, Generics.Collections;
 
 type
   TBaseLiteClass = class of TBaseLite;
@@ -20,8 +19,6 @@ type
 
     procedure Clear; virtual;
     function ChaineAffichage(dummy: Boolean = True): string; virtual; abstract;
-
-    procedure WriteToJSON(json: TdwsJSONObject); virtual;
   end;
 
   TCouvertureLite = class(TBaseLite)
@@ -186,7 +183,7 @@ type
 implementation
 
 uses
-  UdmPrinc, UIBLib, StrUtils;
+  StrUtils;
 
 { TBasePointeur }
 
@@ -210,11 +207,6 @@ constructor TBaseLite.Create;
 begin
   inherited;
   ID := GUID_NULL;
-end;
-
-procedure TBaseLite.WriteToJSON(json: TdwsJSONObject);
-begin
-  json.AddValue('ID', ID);
 end;
 
 { TConversion }

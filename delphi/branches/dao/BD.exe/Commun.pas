@@ -5,7 +5,7 @@ interface
 {$WARN UNIT_PLATFORM OFF}
 
 uses
-  SysUtils, Windows, Dialogs, Classes, UIB, Controls, StrUtils;
+  SysUtils, Windows, Dialogs, Classes, Controls, StrUtils;
 
 type
   RGUIDEx = record
@@ -40,8 +40,6 @@ function ClearISBN(const Code: string): string;
 
 function FormatTitre(const Titre: string): string; inline;
 function FormatTitreAlbum(Simple, AvecSerie: Boolean; const Titre, Serie: string; Tome, TomeDebut, TomeFin: Integer; Integrale, HorsSerie: Boolean): string;
-
-function GetTransaction(Database: TUIBDataBase): TUIBTransaction; inline;
 
 type
   IHourGlass = interface
@@ -427,12 +425,6 @@ destructor THourGlass.Destroy;
 begin
   Screen.Cursor := FOldCursor;
   inherited;
-end;
-
-function GetTransaction(Database: TUIBDataBase): TUIBTransaction;
-begin
-  Result := TUIBTransaction.Create(nil);
-  Result.Database := Database;
 end;
 
 { RGUIDEx }
