@@ -312,15 +312,6 @@
             <Form>frmScriptSearch</Form>
         </DCCReference>
         <DCCReference Include="Scripts\IDHashMap.pas"/>
-        <DCCReference Include="Scripts\PascalScript\uPSC_BdtkObjects.pas"/>
-        <DCCReference Include="Scripts\PascalScript\uPSI_BdtkObjects.pas"/>
-        <DCCReference Include="Scripts\PascalScript\uPSR_BdtkObjects.pas"/>
-        <DCCReference Include="Scripts\UScriptsFonctions.pas"/>
-        <DCCReference Include="Scripts\UScriptUtils.pas"/>
-        <DCCReference Include="Scripts\PascalScript\uPSC_BdtkRegEx.pas"/>
-        <DCCReference Include="Scripts\PascalScript\uPSI_BdtkRegEx.pas"/>
-        <DCCReference Include="Scripts\PascalScript\uPSR_BdtkRegEx.pas"/>
-        <DCCReference Include="Scripts\BdtkRegEx.pas"/>
         <DCCReference Include="Gestion\UfrmControlImport.pas">
             <Form>frmControlImport</Form>
         </DCCReference>
@@ -342,7 +333,6 @@
         <DCCReference Include="Scripts\UfrmScriptOption.pas">
             <Form>frmScriptOption</Form>
         </DCCReference>
-        <DCCReference Include="Scripts\UScriptList.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_1_1_7.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ0_0_0_6.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ0_0_0_8.pas"/>
@@ -388,10 +378,6 @@
         <DCCReference Include="mises_a_jour\UMAJ2_1_0_22.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_1_0_72.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_1_1_2.pas"/>
-        <DCCReference Include="Scripts\PascalScript\UdmPascalScript.pas">
-            <Form>dmPascalScript</Form>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
         <DCCReference Include="Gestion\UfrmFusionEditions.pas">
             <Form>frmFusionEditions</Form>
         </DCCReference>
@@ -410,23 +396,13 @@
         <DCCReference Include="Consultation\UfrmConsultationAlbum.pas">
             <Form>frmConsultationAlbum</Form>
         </DCCReference>
-        <DCCReference Include="Scripts\PascalScript\uPSR_superobject.pas"/>
-        <DCCReference Include="Scripts\PascalScript\uPSC_superobject.pas"/>
-        <DCCReference Include="Scripts\PascalScript\uPSI_superobject.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_2_233.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_13.pas"/>
         <DCCReference Include="Scripts\UMasterEngine.pas">
             <Form>dmScripts</Form>
             <DesignClass>TDataModule</DesignClass>
         </DCCReference>
-        <DCCReference Include="Scripts\PascalScript\UPascalScriptEditor.pas"/>
         <DCCReference Include="Scripts\UScriptEditor.pas"/>
-        <DCCReference Include="Scripts\DWScript\UDWScriptEditor.pas"/>
-        <DCCReference Include="Scripts\DWScript\UdmDWScript.pas"/>
-        <DCCReference Include="Scripts\DWScript\UDW_CommonFunctions.pas"/>
-        <DCCReference Include="Scripts\DWScript\UDW_BdtkRegEx.pas"/>
-        <DCCReference Include="Scripts\DWScript\UDW_BdtkObjects.pas"/>
-        <DCCReference Include="Scripts\DWScript\UDWUnit.pas"/>
         <DCCReference Include="Consultation\UfrmConsultationUnivers.pas">
             <Form>frmConsultationUnivers</Form>
         </DCCReference>
@@ -460,21 +436,7 @@
         <DCCReference Include="Web\mises_a_jour\UMySQLMAJ1_0_0_3.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_22.pas"/>
         <DCCReference Include="Scripts\UScriptEditorPage.pas"/>
-        <DCCReference Include="DBObjets\EntitiesFull.pas"/>
-        <DCCReference Include="DBObjets\LoadCompletImport.pas"/>
-        <DCCReference Include="DBObjets\EntitiesLite.pas"/>
-        <DCCReference Include="DBObjets\EntitiesStats.pas"/>
-        <DCCReference Include="DBObjets\EntitiesRecherche.pas"/>
-        <DCCReference Include="DBObjets\DaoLite.pas"/>
-        <DCCReference Include="DBObjets\DaoFull.pas"/>
-        <DCCReference Include="DBObjets\DaoStats.pas"/>
-        <DCCReference Include="DBObjets\DaoRecherche.pas"/>
-        <DCCReference Include="DBObjets\DaoLambda.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_23.pas"/>
-        <DCCReference Include="DBObjets\EntitiesSerializer.pas"/>
-        <DCCReference Include="DBObjets\JsonSerializer.pas"/>
-        <DCCReference Include="DBObjets\EntitiesDeserializer.pas"/>
-        <DCCReference Include="DBObjets\JsonDeserializer.pas"/>
         <DCCReference Include="..\Commun\CommonConst.pas"/>
         <DCCReference Include="..\Commun\Commun.pas"/>
         <DCCReference Include="..\Commun\Textes.pas"/>
@@ -511,6 +473,41 @@
         <DCCReference Include="..\Commun\Procedures.pas"/>
         <DCCReference Include="..\Commun\UNet.pas"/>
         <DCCReference Include="..\Commun\VirtualTree.pas"/>
+        <DCCReference Include="DBObjets\DaoFull.pas"/>
+        <DCCReference Include="DBObjets\DaoLambda.pas"/>
+        <DCCReference Include="DBObjets\DaoLite.pas"/>
+        <DCCReference Include="DBObjets\DaoRecherche.pas"/>
+        <DCCReference Include="DBObjets\DaoStats.pas"/>
+        <DCCReference Include="DBObjets\EntitiesRecherche.pas"/>
+        <DCCReference Include="DBObjets\EntitiesStats.pas"/>
+        <DCCReference Include="DBObjets\LoadCompletImport.pas"/>
+        <DCCReference Include="..\Commun\Entities\EntitiesDeserializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\EntitiesFull.pas"/>
+        <DCCReference Include="..\Commun\Entities\EntitiesLite.pas"/>
+        <DCCReference Include="..\Commun\Entities\EntitiesSerializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\JsonDeserializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\JsonSerializer.pas"/>
+        <DCCReference Include="..\Commun\BdtkRegEx.pas"/>
+        <DCCReference Include="..\BDScript.exe\DWScript\UdmDWScript.pas"/>
+        <DCCReference Include="..\BDScript.exe\DWScript\UDW_BdtkObjects.pas"/>
+        <DCCReference Include="..\BDScript.exe\DWScript\UDW_BdtkRegEx.pas"/>
+        <DCCReference Include="..\BDScript.exe\DWScript\UDW_CommonFunctions.pas"/>
+        <DCCReference Include="..\BDScript.exe\DWScript\UDWScriptEditor.pas"/>
+        <DCCReference Include="..\BDScript.exe\DWScript\UDWUnit.pas"/>
+        <DCCReference Include="..\BDScript.exe\PascalScript\UdmPascalScript.pas"/>
+        <DCCReference Include="..\BDScript.exe\PascalScript\UPascalScriptEditor.pas"/>
+        <DCCReference Include="..\BDScript.exe\PascalScript\uPSC_BdtkObjects.pas"/>
+        <DCCReference Include="..\BDScript.exe\PascalScript\uPSC_BdtkRegEx.pas"/>
+        <DCCReference Include="..\BDScript.exe\PascalScript\uPSC_superobject.pas"/>
+        <DCCReference Include="..\BDScript.exe\PascalScript\uPSI_BdtkObjects.pas"/>
+        <DCCReference Include="..\BDScript.exe\PascalScript\uPSI_BdtkRegEx.pas"/>
+        <DCCReference Include="..\BDScript.exe\PascalScript\uPSI_superobject.pas"/>
+        <DCCReference Include="..\BDScript.exe\PascalScript\uPSR_BdtkObjects.pas"/>
+        <DCCReference Include="..\BDScript.exe\PascalScript\uPSR_BdtkRegEx.pas"/>
+        <DCCReference Include="..\BDScript.exe\PascalScript\uPSR_superobject.pas"/>
+        <DCCReference Include="..\Commun\Scripts\UScriptList.pas"/>
+        <DCCReference Include="..\Commun\Scripts\UScriptUtils.pas"/>
+        <DCCReference Include="..\Commun\Scripts\UScriptsFonctions.pas"/>
         <RcItem Include="..\Commun\images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>

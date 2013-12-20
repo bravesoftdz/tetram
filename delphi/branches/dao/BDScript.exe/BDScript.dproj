@@ -91,12 +91,6 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="..\BD.exe\DBObjets\EntitiesSerializer.pas"/>
-        <DCCReference Include="..\BD.exe\DBObjets\JsonSerializer.pas"/>
-        <DCCReference Include="..\BD.exe\DBObjets\EntitiesDeserializer.pas"/>
-        <DCCReference Include="..\BD.exe\DBObjets\JsonDeserializer.pas"/>
-        <DCCReference Include="..\BD.exe\DBObjets\EntitiesFull.pas"/>
-        <DCCReference Include="..\BD.exe\DBObjets\EntitiesLite.pas"/>
         <DCCReference Include="UdmPrinc.pas">
             <Form>dmPrinc</Form>
             <FormType>dfm</FormType>
@@ -113,6 +107,43 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="..\Commun\UBdtForms.pas">
             <Form>bdtForm</Form>
             <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\Commun\Entities\EntitiesDeserializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\EntitiesFull.pas"/>
+        <DCCReference Include="..\Commun\Entities\EntitiesLite.pas"/>
+        <DCCReference Include="..\Commun\Entities\EntitiesSerializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\JsonDeserializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\JsonSerializer.pas"/>
+        <DCCReference Include="PascalScript\UdmPascalScript.pas"/>
+        <DCCReference Include="PascalScript\UPascalScriptEditor.pas"/>
+        <DCCReference Include="PascalScript\uPSC_BdtkObjects.pas"/>
+        <DCCReference Include="PascalScript\uPSC_BdtkRegEx.pas"/>
+        <DCCReference Include="PascalScript\uPSC_superobject.pas"/>
+        <DCCReference Include="PascalScript\uPSI_BdtkObjects.pas"/>
+        <DCCReference Include="PascalScript\uPSI_BdtkRegEx.pas"/>
+        <DCCReference Include="PascalScript\uPSI_superobject.pas"/>
+        <DCCReference Include="PascalScript\uPSR_BdtkObjects.pas"/>
+        <DCCReference Include="PascalScript\uPSR_BdtkRegEx.pas"/>
+        <DCCReference Include="PascalScript\uPSR_superobject.pas"/>
+        <DCCReference Include="DWScript\UdmDWScript.pas"/>
+        <DCCReference Include="DWScript\UDW_BdtkObjects.pas"/>
+        <DCCReference Include="DWScript\UDW_BdtkRegEx.pas"/>
+        <DCCReference Include="DWScript\UDW_CommonFunctions.pas"/>
+        <DCCReference Include="DWScript\UDWScriptEditor.pas"/>
+        <DCCReference Include="DWScript\UDWUnit.pas"/>
+        <DCCReference Include="..\Commun\Scripts\UScriptList.pas"/>
+        <DCCReference Include="..\Commun\Scripts\UScriptsFonctions.pas"/>
+        <DCCReference Include="..\Commun\Scripts\UScriptUtils.pas"/>
+        <DCCReference Include="..\Commun\UNet.pas"/>
+        <DCCReference Include="..\Commun\Procedures.pas"/>
+        <DCCReference Include="..\Commun\UfrmProgression.pas">
+            <Form>frmProgression</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\Commun\UframBoutons.pas">
+            <Form>framBoutons</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
         </DCCReference>
         <RcItem Include="..\Commun\images\imgAbout.bmp">
             <ResourceType>BITMAP</ResourceType>
