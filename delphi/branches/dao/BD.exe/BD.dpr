@@ -15,8 +15,6 @@ uses
   SyncObjs,
   Divers,
   DateUtils,
-  CommonConst in 'CommonConst.pas',
-  Commun in 'Commun.pas',
   UfrmFond in 'UfrmFond.pas' {frmFond},
   UdmPrinc in 'UdmPrinc.pas' {dmPrinc: TDataModule},
   UfrmRepertoire in 'Consultation\UfrmRepertoire.pas' {frmRepertoire},
@@ -39,13 +37,9 @@ uses
   UfrmEditCollection in 'Gestion\UfrmEditCollection.pas' {frmEditCollection},
   UfrmEditAuteur in 'Gestion\UfrmEditAuteur.pas' {frmEditAuteur},
   UfrmEditParaBD in 'Gestion\UfrmEditParaBD.pas' {frmEditParaBD},
-  Textes in 'Textes.pas',
   Impression in 'Consultation\Impression.pas',
-  UframBoutons in 'UframBoutons.pas' {framBoutons: TFrame},
   UfrmOptions in 'UfrmOptions.pas' {frmOptions},
   UfrmCustomize in 'UfrmCustomize.pas' {frmCustomize},
-  UfrmSplash in 'UfrmSplash.pas' {frmSplash},
-  UfrmAboutBox in 'UfrmAboutBox.pas' {frmAboutBox},
   UfrmChoix in 'UfrmChoix.pas' {frmChoix},
   UfrmChoixDetail in 'UfrmChoixDetail.pas' {frmChoixDetail},
   UfrmConvertisseur in 'UfrmConvertisseur.pas' {FrmConvers},
@@ -56,7 +50,6 @@ uses
   UfrmPreview in 'Consultation\UfrmPreview.pas' {frmPreview},
   Procedures in 'Procedures.pas',
   UHistorique in 'UHistorique.pas',
-  UfrmVerbose in 'UfrmVerbose.pas' {frmVerbose},
   UfrmEntretien in 'UfrmEntretien.pas' {frmEntretien},
   UfrmExportation in 'Gestion\UfrmExportation.pas' {frmExportation},
   UfrmPrevisionsSorties in 'Consultation\UfrmPrevisionsSorties.pas' {frmPrevisionsSorties},
@@ -70,7 +63,6 @@ uses
   UMAJODS in 'mises_a_jour\UMAJODS.pas',
   UfrmEditCritere in 'Consultation\UfrmEditCritere.pas' {frmEditCritere},
   UChampsRecherche in 'Consultation\UChampsRecherche.pas',
-  UBdtForms in 'UBdtForms.pas',
   UfrmPublier in 'Web\UfrmPublier.pas' {frmPublier},
   UNet in 'Web\UNet.pas',
   UMySQLMAJ1_0_0_1 in 'Web\mises_a_jour\UMySQLMAJ1_0_0_1.pas',
@@ -88,7 +80,6 @@ uses
   uPSI_BdtkRegEx in 'Scripts\PascalScript\uPSI_BdtkRegEx.pas',
   uPSR_BdtkRegEx in 'Scripts\PascalScript\uPSR_BdtkRegEx.pas',
   BdtkRegEx in 'Scripts\BdtkRegEx.pas',
-  UMetadata in 'UMetadata.pas',
   UfrmControlImport in 'Gestion\UfrmControlImport.pas' {frmControlImport},
   UVirtualTreeEdit in 'UVirtualTreeEdit.pas',
   UframVTEdit in 'UframVTEdit.pas' {framVTEdit: TFrame},
@@ -152,7 +143,6 @@ uses
   VirtualTreeBdtk in 'VirtualTreeBdtk.pas',
   UMAJ2_1_1_10 in 'mises_a_jour\UMAJ2_1_1_10.pas',
   UMAJ2_1_1_17 in 'mises_a_jour\UMAJ2_1_1_17.pas',
-  UfrmProgression in 'UfrmProgression.pas' {frmProgression},
   UMAJ2_1_1_155 in 'mises_a_jour\UMAJ2_1_1_155.pas',
   UfrmConsultationAlbum in 'Consultation\UfrmConsultationAlbum.pas' {frmConsultationAlbum},
   uPSR_superobject in 'Scripts\PascalScript\uPSR_superobject.pas',
@@ -184,7 +174,6 @@ uses
   UMySQLMAJ1_0_0_3 in 'Web\mises_a_jour\UMySQLMAJ1_0_0_3.pas',
   UMAJ2_2_3_22 in 'mises_a_jour\UMAJ2_2_3_22.pas',
   UScriptEditorPage in 'Scripts\UScriptEditorPage.pas',
-  UfrmConsole in 'UfrmConsole.pas' {frmConsole},
   EntitiesFull in 'DBObjets\EntitiesFull.pas',
   LoadCompletImport in 'DBObjets\LoadCompletImport.pas',
   EntitiesLite in 'DBObjets\EntitiesLite.pas',
@@ -199,10 +188,22 @@ uses
   EntitiesSerializer in 'DBObjets\EntitiesSerializer.pas',
   JsonSerializer in 'DBObjets\JsonSerializer.pas',
   EntitiesDeserializer in 'DBObjets\EntitiesDeserializer.pas',
-  JsonDeserializer in 'DBObjets\JsonDeserializer.pas';
+  JsonDeserializer in 'DBObjets\JsonDeserializer.pas',
+  CommonConst in '..\Commun\CommonConst.pas',
+  Commun in '..\Commun\Commun.pas',
+  Textes in '..\Commun\Textes.pas',
+  UBdtForms in '..\Commun\UBdtForms.pas' {bdtForm},
+  UframBoutons in '..\Commun\UframBoutons.pas' {framBoutons: TFrame},
+  UfrmAboutBox in '..\Commun\UfrmAboutBox.pas' {frmAboutBox},
+  UfrmConsole in '..\Commun\UfrmConsole.pas' {frmConsole},
+  UfrmProgression in '..\Commun\UfrmProgression.pas' {frmProgression},
+  UfrmSplash in '..\Commun\UfrmSplash.pas' {frmSplash},
+  UfrmVerbose in '..\Commun\UfrmVerbose.pas' {frmVerbose},
+  UMetadata in '..\Commun\UMetadata.pas';
 
 begin
   Application.Title := 'BDthèque';
+  Application.CreateForm(TfrmSplash, frmSplash);
   Application.MainFormOnTaskbar := True;
   Application.Initialize;
   Application.Run;

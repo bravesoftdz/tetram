@@ -177,8 +177,6 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="CommonConst.pas"/>
-        <DCCReference Include="Commun.pas"/>
         <DCCReference Include="UfrmFond.pas">
             <Form>frmFond</Form>
         </DCCReference>
@@ -243,23 +241,12 @@
         <DCCReference Include="Gestion\UfrmEditParaBD.pas">
             <Form>frmEditParaBD</Form>
         </DCCReference>
-        <DCCReference Include="Textes.pas"/>
         <DCCReference Include="Consultation\Impression.pas"/>
-        <DCCReference Include="UframBoutons.pas">
-            <Form>framBoutons</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
         <DCCReference Include="UfrmOptions.pas">
             <Form>frmOptions</Form>
         </DCCReference>
         <DCCReference Include="UfrmCustomize.pas">
             <Form>frmCustomize</Form>
-        </DCCReference>
-        <DCCReference Include="UfrmSplash.pas">
-            <Form>frmSplash</Form>
-        </DCCReference>
-        <DCCReference Include="UfrmAboutBox.pas">
-            <Form>frmAboutBox</Form>
         </DCCReference>
         <DCCReference Include="UfrmChoix.pas">
             <Form>frmChoix</Form>
@@ -285,9 +272,6 @@
         </DCCReference>
         <DCCReference Include="Procedures.pas"/>
         <DCCReference Include="UHistorique.pas"/>
-        <DCCReference Include="UfrmVerbose.pas">
-            <Form>frmVerbose</Form>
-        </DCCReference>
         <DCCReference Include="UfrmEntretien.pas">
             <Form>frmEntretien</Form>
         </DCCReference>
@@ -317,7 +301,6 @@
             <Form>frmEditCritere</Form>
         </DCCReference>
         <DCCReference Include="Consultation\UChampsRecherche.pas"/>
-        <DCCReference Include="UBdtForms.pas"/>
         <DCCReference Include="Web\UfrmPublier.pas">
             <Form>frmPublier</Form>
         </DCCReference>
@@ -341,7 +324,6 @@
         <DCCReference Include="Scripts\PascalScript\uPSI_BdtkRegEx.pas"/>
         <DCCReference Include="Scripts\PascalScript\uPSR_BdtkRegEx.pas"/>
         <DCCReference Include="Scripts\BdtkRegEx.pas"/>
-        <DCCReference Include="UMetadata.pas"/>
         <DCCReference Include="Gestion\UfrmControlImport.pas">
             <Form>frmControlImport</Form>
         </DCCReference>
@@ -427,9 +409,6 @@
         <DCCReference Include="VirtualTreeBdtk.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_1_1_10.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_1_1_17.pas"/>
-        <DCCReference Include="UfrmProgression.pas">
-            <Form>frmProgression</Form>
-        </DCCReference>
         <DCCReference Include="mises_a_jour\UMAJ2_1_1_155.pas"/>
         <DCCReference Include="Consultation\UfrmConsultationAlbum.pas">
             <Form>frmConsultationAlbum</Form>
@@ -484,10 +463,6 @@
         <DCCReference Include="Web\mises_a_jour\UMySQLMAJ1_0_0_3.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_22.pas"/>
         <DCCReference Include="Scripts\UScriptEditorPage.pas"/>
-        <DCCReference Include="UfrmConsole.pas">
-            <Form>frmConsole</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="DBObjets\EntitiesFull.pas"/>
         <DCCReference Include="DBObjets\LoadCompletImport.pas"/>
         <DCCReference Include="DBObjets\EntitiesLite.pas"/>
@@ -503,23 +478,56 @@
         <DCCReference Include="DBObjets\JsonSerializer.pas"/>
         <DCCReference Include="DBObjets\EntitiesDeserializer.pas"/>
         <DCCReference Include="DBObjets\JsonDeserializer.pas"/>
-        <RcItem Include="images\network.png">
+        <DCCReference Include="..\Commun\CommonConst.pas"/>
+        <DCCReference Include="..\Commun\Commun.pas"/>
+        <DCCReference Include="..\Commun\Textes.pas"/>
+        <DCCReference Include="..\Commun\UBdtForms.pas">
+            <Form>bdtForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\Commun\UframBoutons.pas">
+            <Form>framBoutons</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="..\Commun\UfrmAboutBox.pas">
+            <Form>frmAboutBox</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\Commun\UfrmConsole.pas">
+            <Form>frmConsole</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\Commun\UfrmProgression.pas">
+            <Form>frmProgression</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\Commun\UfrmSplash.pas">
+            <Form>frmSplash</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\Commun\UfrmVerbose.pas">
+            <Form>frmVerbose</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\Commun\UMetadata.pas"/>
+        <RcItem Include="..\Commun\images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>
         </RcItem>
-        <RcItem Include="images\brokenimage.jpg">
+        <RcItem Include="..\Commun\images\brokenimage.jpg">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>IMAGENONVALIDE</ResourceId>
         </RcItem>
-        <RcItem Include="images\imgAbout.bmp">
+        <RcItem Include="..\Commun\images\imgAbout.bmp">
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>ABOUT</ResourceId>
         </RcItem>
-        <RcItem Include="images\my-documents.ico">
+        <RcItem Include="..\Commun\images\my-documents.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>MAINICON_1</ResourceId>
         </RcItem>
-        <RcItem Include="images\unknown.ico">
+        <RcItem Include="..\Commun\images\unknown.ico">
             <ResourceType>ICON</ResourceType>
             <ResourceId>MAINICON_2</ResourceId>
         </RcItem>
@@ -528,7 +536,7 @@
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>ISBN_RANGES</ResourceId>
         </RcItem>
-        <RcItem Include="handpoint.cur">
+        <RcItem Include="..\Commun\images\handpoint.cur">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>CUR_HANDPOINT</ResourceId>
         </RcItem>
