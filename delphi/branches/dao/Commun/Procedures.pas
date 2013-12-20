@@ -78,7 +78,8 @@ type
     destructor Destroy; override;
   end;
 
-function GetJPEGStream(const Fichier: string): TStream;
+function GetJPEGStream(const Fichier: string): TStream; overload;
+function GetJPEGStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream; overload;
 function ResizePicture(Image: TPicture; Hauteur, Largeur: Integer; AntiAliasing, Cadre: Boolean; Effet3D: Integer): TStream;
 
 function FindCmdLineSwitch(const cmdLine, Switch: string): Boolean; overload;
@@ -569,7 +570,31 @@ begin
   Result.Position := 0;
 end;
 
-{ TInformation }
+function GetJPEGStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream;
+var
+  picture: TPicture;
+  image: TJPEGImage;
+  stream: TStream;
+begin
+  picture := TPicture.Create;
+  try
+    stream := GetJPEGStream(Fichier);
+    image := TJPEGImage.Create;
+    try
+      stream.Position := 0;
+      image.LoadFromStream(stream);
+      picture.Assign(image);
+    finally
+      image.Free;
+      FreeAndNil(stream);
+    end;
+    Result := ResizePicture(picture, Hauteur, Largeur, AntiAliasing, Cadre, Effet3D);
+  finally
+    picture.Free;
+  end;
+end;
+
+  { TInformation }
 
 constructor TInformation.Create;
 begin

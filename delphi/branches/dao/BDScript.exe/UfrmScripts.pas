@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, SynEditHighlighter, SynEdit, ImgList,
   StrUtils, SynEditMiscClasses, SynEditSearch, StdActns, ActnList, Menus, SynEditTypes, ComCtrls, UScriptUtils, VirtualTrees, StdCtrls,
-  ExtCtrls, EntitiesFull, SynEditKeyCmds, UBdtForms, Generics.Collections, ToolWin, UfrmFond, UScriptEditor,
+  ExtCtrls, EntitiesFull, SynEditKeyCmds, UBdtForms, Generics.Collections, ToolWin, UScriptEditor,
   PngImageList, UScriptEngineIntf, UScriptList, UframBoutons, EditLabeled,
   System.Actions, SynCompletionProposal, SynEditPlugins, SynMacroRecorder,
   dwsDebugger, UframWatches, UframBreakpoints, UframMessages, UframScriptInfos, UScriptEditorPage;
@@ -22,7 +22,8 @@ type
     SearchFind1: TAction;
     SearchFindNext1: TAction;
     MainMenu1: TMainMenu;
-    Edition1: TMenuItem;
+    mnuEdition: TMenuItem;
+    mnuProjet: TMenuItem;
     Remplacer1: TMenuItem;
     Chercher1: TMenuItem;
     N2: TMenuItem;
@@ -77,7 +78,6 @@ type
     lstDebugImages: TPngImageList;
     ToolButton7: TToolButton;
     actPause: TAction;
-    framBoutons1: TframBoutons;
     Panel1: TPanel;
     PageControl1: TPageControl;
     tabMessages: TTabSheet;
@@ -111,6 +111,12 @@ type
     framBreakpoints1: TframBreakpoints;
     framMessages1: TframMessages;
     framScriptInfos1: TframScriptInfos;
+    boutons_16x16_hot: TPngImageList;
+    boutons_32x32_norm: TPngImageList;
+    boutons_16x16_norm: TPngImageList;
+    boutons_32x32_hot: TPngImageList;
+    mnuAide: TMenuItem;
+    mnuAPropos: TMenuItem;
     procedure SearchFind1Execute(Sender: TObject);
     procedure SearchFindNext1Execute(Sender: TObject);
     procedure ActionList1Update(Action: TBasicAction; var Handled: Boolean);
@@ -145,12 +151,12 @@ type
     procedure actEditExecute(Sender: TObject);
     procedure actPauseExecute(Sender: TObject);
     procedure mmConsoleChange(Sender: TObject);
-    procedure framBoutons1btnAnnulerClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure SynCodeCompletionShow(Sender: TObject);
     procedure SynCodeCompletionExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var X, Y: Integer; var CanExecute: Boolean);
     procedure SynParametersExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var X, Y: Integer; var CanExecute: Boolean);
     procedure framMessages1vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
+    procedure mnuAProposClick(Sender: TObject);
   private
     FLastSearch, FLastReplace: string;
     FSearchOptions: TSynSearchOptions;
@@ -165,7 +171,6 @@ type
 {$REGION 'Exécution'}
     function Compile: Boolean;
     function Execute: Boolean;
-    procedure PSScriptDebugger1Idle(Sender: TObject);
 {$ENDREGION}
     procedure WMSyscommand(var msg: TWmSysCommand); message WM_SYSCOMMAND;
 {$REGION 'Débuggage'}
@@ -211,6 +216,9 @@ type
     property ProjetOuvert: Boolean read FProjetOuvert write SetProjetOuvert;
   end;
 
+var
+  frmScripts: TfrmScripts;
+
 implementation
 
 {$R *.dfm}
@@ -218,7 +226,8 @@ implementation
 uses
   UfrmScriptSearch, UScriptsFonctions, CommonConst, UIB, Procedures, BdtkRegEx, Commun, Divers,
   UScriptsHTMLFunctions, JclSimpleXML, UdmPrinc, UfrmScriptOption, UfrmScriptEditOption, UfrmScriptsUpdate,
-  UdmPascalScript, SynHighlighterDWS, UMasterEngine;
+  UdmPascalScript, SynHighlighterDWS, UMasterEngine, PngFunctions,
+  UfrmAboutBox;
 
 procedure TfrmScripts.Button1Click(Sender: TObject);
 begin
@@ -237,6 +246,16 @@ begin
   if (PageControl1.ActivePage <> tabWatches) or (MasterEngine.DebugPlugin.Watches.CountActive = 0) then
     PageControl1.ActivePage := tabConsole;
   Application.ProcessMessages;
+end;
+
+procedure TfrmScripts.mnuAProposClick(Sender: TObject);
+begin
+  with TfrmAboutBox.Create(Application) do
+    try
+      ShowModal;
+    finally
+      Free;
+    end;
 end;
 
 procedure TfrmScripts.PageControl2Change(Sender: TObject);
@@ -404,8 +423,10 @@ begin
 
     if MasterEngine.ProjectScript.Options.Count > 0 then
     begin
-      qry := TUIBQuery.Create(nil);
-      try
+      // TODO: trouver un autre moyen de stocker les paramètres d'exécution des scripts
+      (*
+        qry := TUIBQuery.Create(nil);
+        try
         qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
         qry.SQL.Text := 'select nom_option, valeur from options_scripts where script = :script';
         qry.Prepare(True);
@@ -413,15 +434,16 @@ begin
         qry.Open;
         while not qry.Eof do
         begin
-          Option := MasterEngine.ProjectScript.OptionByName(qry.Fields.AsString[0]);
-          if Assigned(Option) then
-            Option.ChooseValue := qry.Fields.AsString[1];
-          qry.Next;
+        Option := MasterEngine.ProjectScript.OptionByName(qry.Fields.AsString[0]);
+        if Assigned(Option) then
+        Option.ChooseValue := qry.Fields.AsString[1];
+        qry.Next;
         end;
-      finally
+        finally
         qry.Transaction.Free;
         qry.Free;
-      end;
+        end;
+      *)
     end;
   end
   else
@@ -461,7 +483,7 @@ procedure TfrmScripts.WMSyscommand(var msg: TWmSysCommand);
 begin
   case (msg.CmdType and $FFF0) of
     SC_CLOSE:
-      if not MasterEngine.Engine.Running then
+      if not(Assigned(MasterEngine.Engine) and MasterEngine.Engine.Running) then
         inherited;
   else
     inherited;
@@ -480,6 +502,10 @@ begin
   else
     Editor := nil;
   Handled := True;
+
+  mnuEdition.Visible := Assigned(Editor);
+  mnuProjet.Visible := ProjetOuvert;
+
   actEdit.Enabled := Assigned(ListView1.Selected);
 
   EditCut1.Enabled := Assigned(Editor) and Editor.Focused and Editor.SelAvail;
@@ -604,20 +630,37 @@ begin
 end;
 
 procedure TfrmScripts.FormCreate(Sender: TObject);
+var
+  i: Integer;
 begin
+  boutons_32x32_norm.BeginUpdate;
+  boutons_16x16_norm.BeginUpdate;
+  boutons_16x16_hot.BeginUpdate;
+  for i := 0 to Pred(boutons_32x32_hot.Count) do
+  begin
+    boutons_32x32_norm.PngImages.Add.Assign(boutons_32x32_hot.PngImages[i]);
+    MakeImageBlended(boutons_32x32_norm.PngImages[i].pngImage);
+
+    boutons_16x16_hot.PngImages.Add.Assign(boutons_32x32_hot.PngImages[i]);
+    boutons_16x16_norm.PngImages.Add.Assign(boutons_32x32_norm.PngImages[i]);
+  end;
+  boutons_32x32_norm.EndUpdate;
+  boutons_16x16_norm.EndUpdate;
+  boutons_16x16_hot.EndUpdate;
+
   if TGlobalVar.Utilisateur.Options.GrandesIconesBarre then
   begin
-    ToolBar1.Images := frmFond.boutons_32x32_norm;
-    ToolBar1.HotImages := frmFond.boutons_32x32_hot;
-    ToolBar2.Images := frmFond.boutons_32x32_norm;
-    ToolBar2.HotImages := frmFond.boutons_32x32_hot;
+    ToolBar1.Images := boutons_32x32_norm;
+    ToolBar1.HotImages := boutons_32x32_hot;
+    ToolBar2.Images := boutons_32x32_norm;
+    ToolBar2.HotImages := boutons_32x32_hot;
   end
   else
   begin
-    ToolBar1.Images := frmFond.boutons_16x16_norm;
-    ToolBar1.HotImages := frmFond.boutons_16x16_hot;
-    ToolBar2.Images := frmFond.boutons_16x16_norm;
-    ToolBar2.HotImages := frmFond.boutons_16x16_hot;
+    ToolBar1.Images := boutons_16x16_norm;
+    ToolBar1.HotImages := boutons_16x16_hot;
+    ToolBar2.Images := boutons_16x16_norm;
+    ToolBar2.HotImages := boutons_16x16_hot;
   end;
 
   FOpenedScript := TEditorPagesList.Create;
@@ -648,18 +691,10 @@ begin
   MasterEngine := nil;
 end;
 
-procedure TfrmScripts.framBoutons1btnAnnulerClick(Sender: TObject);
-begin
-  framBoutons1.btnAnnulerClick(Sender);
-  if not MasterEngine.AlbumToUpdate then
-    Release;
-end;
-
 procedure TfrmScripts.framMessages1vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
   var CellText: string);
 begin
   framMessages1.vstMessagesGetText(Sender, Node, Column, TextType, CellText);
-
 end;
 
 procedure TfrmScripts.RefreshDescription(Script: TScript);
@@ -959,11 +994,6 @@ begin
   end;
 end;
 
-procedure TfrmScripts.PSScriptDebugger1Idle(Sender: TObject);
-begin
-  frmFond.MergeMenu(Menu);
-end;
-
 procedure TfrmScripts.AddEditor(Page: TEditorPage);
 begin
   SynMacroRecorder.AddEditor(Page.Editor);
@@ -976,7 +1006,7 @@ begin
   if pcScripts.PageCount > 0 then
     FCurrentPage.Editor.Refresh;
   PageControl1.ActivePage := TTabSheet(mmConsole.Parent);
-  frmFond.MergeMenu(Menu);
+  Menu := MainMenu1;
   if MasterEngine.AlbumToUpdate then
     ModalResult := mrOk;
 end;

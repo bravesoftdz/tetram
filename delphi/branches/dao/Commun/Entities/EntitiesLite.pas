@@ -180,10 +180,26 @@ type
     procedure Clear; override;
   end;
 
+function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteurLite;
+function MakeUnivers(const Nom: string): TUniversLite;
+
 implementation
 
 uses
   StrUtils;
+
+function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteurLite;
+begin
+  Result := TAuteurLite.Create;
+  Result.Personne.Nom := Nom;
+  Result.Metier := Metier;
+end;
+
+function MakeUnivers(const Nom: string): TUniversLite;
+begin
+  Result := TUniversLite.Create;
+  Result.NomUnivers := Nom;
+end;
 
 { TBasePointeur }
 

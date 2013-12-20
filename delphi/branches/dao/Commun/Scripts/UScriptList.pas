@@ -3,7 +3,8 @@ unit UScriptList;
 interface
 
 uses
-  Windows, AnsiStrings, SysUtils, Classes, Generics.Collections, JclSimpleXML, Divers, Dialogs, System.Types;
+  Winapi.Windows, System.SysUtils, System.Classes, Generics.Collections, JclSimpleXML, Divers, VCL.Dialogs, System.Types,
+  System.AnsiStrings;
 
 const
   ExtMainScript = '.bds';
@@ -90,7 +91,7 @@ type
 
 implementation
 
-uses System.StrUtils, CommonConst, UScriptsFonctions, JclStreams, System.TypInfo, IOUtils;
+uses System.StrUtils, CommonConst, JclStreams, System.TypInfo, System.IOUtils, UNet;
 
 function TScript.CheckOptionValue(const OptionName, Value: string): Boolean;
 begin

@@ -5,7 +5,7 @@ interface
 {$WARN UNIT_PLATFORM OFF}
 
 uses
-  SysUtils, Windows, Forms, Classes, IOUtils, Divers;
+  System.SysUtils, Winapi.Windows, VCL.Forms, System.Classes, System.IOUtils, Divers;
 
 var
   AppData: string = 'TetramCorp\BDTheque\';
@@ -79,9 +79,7 @@ type
 implementation
 
 uses
-  IniFiles,
-  ShellAPI,
-  SHFolder;
+  Winapi.ShellAPI, Winapi.SHFolder, System.IniFiles, System.StrUtils;
 
 procedure EmptyTempPath;
 var
@@ -89,7 +87,7 @@ var
 begin
   op.Wnd := INVALID_HANDLE_VALUE;
   op.wFunc := FO_DELETE;
-  op.pFrom := PChar(IncludeTrailingPathDelimiter(TempPath) + '*');
+  op.pFrom := PChar(TPath.Combine(TempPath, '*'));
   op.fFlags := FOF_SILENT or FOF_NOCONFIRMATION or FOF_NOERRORUI;
   SHFileOperation(op);
 end;
@@ -105,7 +103,7 @@ begin
 
   ZeroMemory(@buffer, Length(buffer) * SizeOf(Char));
   SHGetFolderPath(0, CSIDL_COMMON_APPDATA, 0, SHGFP_TYPE_CURRENT, buffer);
-  CommonAppData := IncludeTrailingPathDelimiter(buffer) + CommonAppData;
+  CommonAppData := TPath.Combine(buffer, CommonAppData);
   TDirectory.CreateDirectory(CommonAppData);
 
   AppData := TPath.Combine(TPath.GetHomePath, AppData);
@@ -162,7 +160,7 @@ FormatMonnaieSimple := '0.00';
 FormatMonnaie := IIf(FormatSettings.CurrencyFormat in [0, 2], FormatSettings.CurrencyString + IIf(FormatSettings.CurrencyFormat = 2, ' ', ''), '') +
   FormatMonnaieCourt + IIf(FormatSettings.CurrencyFormat in [1, 3], IIf(FormatSettings.CurrencyFormat = 3, ' ', '') + FormatSettings.CurrencyString, '');
 FormatPourcent := '%d (%f%%)';
-TGlobalVar.Utilisateur.ExeVersion := GetFichierVersion(Application.ExeName);
+TGlobalVar.Utilisateur.ExeVersion := GetFichierVersion(TPath.Combine(TPath.GetLibraryPath, 'bd.exe'));
 TGlobalVar.Utilisateur.AppVersion := Format('%d.%d', [TGlobalVar.Utilisateur.ExeVersion.MajorVersion, TGlobalVar.Utilisateur.ExeVersion.MinorVersion]);
 ReadIniFile;
 

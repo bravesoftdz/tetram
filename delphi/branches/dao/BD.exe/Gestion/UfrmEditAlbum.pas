@@ -383,7 +383,7 @@ begin
     FAlbumImport.DefaultSearch := FormatTitre(FAlbum.TitreAlbum)
   else
     FAlbumImport.DefaultSearch := FormatTitre(FAlbum.Serie.TitreSerie);
-  Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
+  // Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
 end;
 
 procedure TfrmEditAlbum.btUniversClick(Sender: TObject);
@@ -654,7 +654,7 @@ begin
     PC := FCurrentEditionComplete.Couvertures[Node.Index];
     hg := THourGlass.Create;
     if IsEqualGUID(PC.ID, GUID_NULL) then
-      ms := GetCouvertureStream(PC.NewNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing)
+      ms := GetJPEGStream(PC.NewNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing)
     else
       ms := GetCouvertureStream(False, PC.ID, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
     if Assigned(ms) then
@@ -1122,7 +1122,7 @@ begin
   PC := FCurrentEditionComplete.Couvertures[vstImages.FocusedNode.Index];
   hg := THourGlass.Create;
   if IsEqualGUID(PC.ID, GUID_NULL) then
-    ms := GetCouvertureStream(PC.NewNom, 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing)
+    ms := GetJPEGStream(PC.NewNom, 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing)
   else
     ms := GetCouvertureStream(False, PC.ID, 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing);
   if Assigned(ms) then

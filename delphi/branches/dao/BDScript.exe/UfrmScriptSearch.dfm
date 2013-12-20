@@ -95,7 +95,6 @@ object frmScriptSearch: TfrmScriptSearch
       Top = 32
       Width = 297
       Height = 21
-      ItemHeight = 13
       TabOrder = 2
       Text = 'ComboBox1'
     end
@@ -142,7 +141,6 @@ object frmScriptSearch: TfrmScriptSearch
       Top = 56
       Width = 297
       Height = 21
-      ItemHeight = 13
       TabOrder = 5
       Text = 'ComboBox1'
     end

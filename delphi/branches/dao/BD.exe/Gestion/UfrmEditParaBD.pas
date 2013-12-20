@@ -349,7 +349,7 @@ begin
     if Execute then
     begin
       FParaBD.FichierImage := FileName;
-      Stream := GetCouvertureStream(FParaBD.FichierImage, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
+      Stream := GetJPEGStream(FParaBD.FichierImage, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
       if Assigned(Stream) then
         try
           jpg := TJPEGImage.Create;

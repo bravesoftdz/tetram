@@ -6,7 +6,6 @@ program BDScript;
 
 uses
   Vcl.Forms,
-  UdmPrinc in 'UdmPrinc.pas' {dmPrinc: TDataModule},
   UMetadata in '..\Commun\UMetadata.pas',
   Commun in '..\Commun\Commun.pas',
   CommonConst in '..\Commun\CommonConst.pas',
@@ -42,7 +41,28 @@ uses
   UNet in '..\Commun\UNet.pas',
   Procedures in '..\Commun\Procedures.pas',
   UfrmProgression in '..\Commun\UfrmProgression.pas' {frmProgression},
-  UframBoutons in '..\Commun\UframBoutons.pas' {framBoutons: TFrame};
+  UframBoutons in '..\Commun\UframBoutons.pas' {framBoutons: TFrame},
+  IDHashMap in 'IDHashMap.pas',
+  UdmPrinc in 'UdmPrinc.pas' {dmPrinc: TDataModule},
+  UframBreakpoints in 'UframBreakpoints.pas' {framBreakpoints: TFrame},
+  UframMessages in 'UframMessages.pas' {framMessages: TFrame},
+  UframScriptInfos in 'UframScriptInfos.pas' {framScriptInfos: TFrame},
+  UframWatches in 'UframWatches.pas' {framWatches: TFrame},
+  UfrmScriptChoix in 'UfrmScriptChoix.pas' {frmScriptChoix},
+  UfrmScriptEditOption in 'UfrmScriptEditOption.pas' {frmScriptEditOption},
+  UfrmScriptGotoLine in 'UfrmScriptGotoLine.pas' {frmScriptGotoLine},
+  UfrmScriptOption in 'UfrmScriptOption.pas' {frmScriptOption},
+  UfrmScripts in 'UfrmScripts.pas',
+  UfrmScriptSearch in 'UfrmScriptSearch.pas' {frmScriptSearch},
+  UfrmScriptsUpdate in 'UfrmScriptsUpdate.pas' {frmScriptsUpdate},
+  UMasterEngine in 'UMasterEngine.pas',
+  UScriptEditor in 'UScriptEditor.pas',
+  UScriptEditorPage in 'UScriptEditorPage.pas',
+  UScriptEngineIntf in 'UScriptEngineIntf.pas',
+  UScriptsHTMLFunctions in 'UScriptsHTMLFunctions.pas',
+  BdtkRegEx in '..\Commun\BdtkRegEx.pas',
+  VirtualTree in '..\Commun\VirtualTree.pas',
+  UfrmAboutBox in '..\Commun\UfrmAboutBox.pas' {frmAboutBox};
 
 {$R *.res}
 

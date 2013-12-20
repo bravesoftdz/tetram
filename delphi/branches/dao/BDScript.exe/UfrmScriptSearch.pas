@@ -40,7 +40,7 @@ implementation
 
 {$R *.dfm}
 
-const
+var
   FLastSearch: string = '';
   FLastReplace: string = '';
 

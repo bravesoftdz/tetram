@@ -305,13 +305,6 @@
         <DCCReference Include="Web\mises_a_jour\UMySQLMAJ1_0_0_1.pas"/>
         <DCCReference Include="Web\mises_a_jour\UMySQLMAJ1_0_0_0.pas"/>
         <DCCReference Include="Web\mises_a_jour\UMySQLMAJ1_0_0_2.pas"/>
-        <DCCReference Include="Scripts\UfrmScripts.pas">
-            <Form>frmScripts</Form>
-        </DCCReference>
-        <DCCReference Include="Scripts\UfrmScriptSearch.pas">
-            <Form>frmScriptSearch</Form>
-        </DCCReference>
-        <DCCReference Include="Scripts\IDHashMap.pas"/>
         <DCCReference Include="Gestion\UfrmControlImport.pas">
             <Form>frmControlImport</Form>
         </DCCReference>
@@ -319,19 +312,6 @@
         <DCCReference Include="UframVTEdit.pas">
             <Form>framVTEdit</Form>
             <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Scripts\UfrmValidationImport.pas">
-            <Form>frmValidationImport</Form>
-        </DCCReference>
-        <DCCReference Include="Scripts\UfrmScriptChoix.pas">
-            <Form>frmScriptChoix</Form>
-        </DCCReference>
-        <DCCReference Include="Scripts\UScriptsHTMLFunctions.pas"/>
-        <DCCReference Include="Scripts\UfrmScriptEditOption.pas">
-            <Form>frmScriptEditOption</Form>
-        </DCCReference>
-        <DCCReference Include="Scripts\UfrmScriptOption.pas">
-            <Form>frmScriptOption</Form>
         </DCCReference>
         <DCCReference Include="mises_a_jour\UMAJ2_1_1_7.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ0_0_0_6.pas"/>
@@ -386,9 +366,6 @@
         <DCCReference Include="Consultation\UfrmGallerie.pas">
             <Form>frmGallerie</Form>
         </DCCReference>
-        <DCCReference Include="Scripts\UfrmScriptsUpdate.pas">
-            <Form>frmScriptsUpdate</Form>
-        </DCCReference>
         <DCCReference Include="VirtualTreeBdtk.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_1_1_10.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_1_1_17.pas"/>
@@ -398,11 +375,6 @@
         </DCCReference>
         <DCCReference Include="mises_a_jour\UMAJ2_2_2_233.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_13.pas"/>
-        <DCCReference Include="Scripts\UMasterEngine.pas">
-            <Form>dmScripts</Form>
-            <DesignClass>TDataModule</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Scripts\UScriptEditor.pas"/>
         <DCCReference Include="Consultation\UfrmConsultationUnivers.pas">
             <Form>frmConsultationUnivers</Form>
         </DCCReference>
@@ -410,32 +382,11 @@
             <Form>frmEditUnivers</Form>
         </DCCReference>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_16.pas"/>
-        <DCCReference Include="Scripts\UframWatches.pas">
-            <Form>framWatches</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Scripts\UframBreakpoints.pas">
-            <Form>framBreakpoints</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Scripts\UframMessages.pas">
-            <Form>framMessages</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Scripts\UframScriptInfos.pas">
-            <Form>framScriptInfos</Form>
-            <DesignClass>TFrame</DesignClass>
-        </DCCReference>
-        <DCCReference Include="Scripts\UfrmScriptGotoLine.pas">
-            <Form>frmScriptGotoLine</Form>
-        </DCCReference>
-        <DCCReference Include="Scripts\UScriptEngineIntf.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_17.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_19.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_21.pas"/>
         <DCCReference Include="Web\mises_a_jour\UMySQLMAJ1_0_0_3.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_22.pas"/>
-        <DCCReference Include="Scripts\UScriptEditorPage.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_23.pas"/>
         <DCCReference Include="..\Commun\CommonConst.pas"/>
         <DCCReference Include="..\Commun\Commun.pas"/>
@@ -488,26 +439,10 @@
         <DCCReference Include="..\Commun\Entities\JsonDeserializer.pas"/>
         <DCCReference Include="..\Commun\Entities\JsonSerializer.pas"/>
         <DCCReference Include="..\Commun\BdtkRegEx.pas"/>
-        <DCCReference Include="..\BDScript.exe\DWScript\UdmDWScript.pas"/>
-        <DCCReference Include="..\BDScript.exe\DWScript\UDW_BdtkObjects.pas"/>
-        <DCCReference Include="..\BDScript.exe\DWScript\UDW_BdtkRegEx.pas"/>
-        <DCCReference Include="..\BDScript.exe\DWScript\UDW_CommonFunctions.pas"/>
-        <DCCReference Include="..\BDScript.exe\DWScript\UDWScriptEditor.pas"/>
-        <DCCReference Include="..\BDScript.exe\DWScript\UDWUnit.pas"/>
-        <DCCReference Include="..\BDScript.exe\PascalScript\UdmPascalScript.pas"/>
-        <DCCReference Include="..\BDScript.exe\PascalScript\UPascalScriptEditor.pas"/>
-        <DCCReference Include="..\BDScript.exe\PascalScript\uPSC_BdtkObjects.pas"/>
-        <DCCReference Include="..\BDScript.exe\PascalScript\uPSC_BdtkRegEx.pas"/>
-        <DCCReference Include="..\BDScript.exe\PascalScript\uPSC_superobject.pas"/>
-        <DCCReference Include="..\BDScript.exe\PascalScript\uPSI_BdtkObjects.pas"/>
-        <DCCReference Include="..\BDScript.exe\PascalScript\uPSI_BdtkRegEx.pas"/>
-        <DCCReference Include="..\BDScript.exe\PascalScript\uPSI_superobject.pas"/>
-        <DCCReference Include="..\BDScript.exe\PascalScript\uPSR_BdtkObjects.pas"/>
-        <DCCReference Include="..\BDScript.exe\PascalScript\uPSR_BdtkRegEx.pas"/>
-        <DCCReference Include="..\BDScript.exe\PascalScript\uPSR_superobject.pas"/>
         <DCCReference Include="..\Commun\Scripts\UScriptList.pas"/>
-        <DCCReference Include="..\Commun\Scripts\UScriptUtils.pas"/>
-        <DCCReference Include="..\Commun\Scripts\UScriptsFonctions.pas"/>
+        <DCCReference Include="Scripts\UfrmValidationImport.pas">
+            <Form>frmValidationImport</Form>
+        </DCCReference>
         <RcItem Include="..\Commun\images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>

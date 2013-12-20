@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, Winapi.Windows, Forms, System.Classes, UScriptList, Variants,
-  UScriptUtils, EntitiesFull, LoadCompletImport, dwsComp, dwsDebugger, dwsCompiler, dwsExprs, dwsFunctions,
+  UScriptUtils, EntitiesFull, dwsComp, dwsDebugger, dwsCompiler, dwsExprs, dwsFunctions,
   UMasterEngine, UScriptEngineIntf, UScriptEditor, SynHighlighterDWS, UDW_BdtkRegEx, UDW_BdtkObjects, dwsClassesLibModule, UDW_CommonFunctions,
   dwsErrors, UDWUnit, Vcl.Graphics, dwsJSONConnector;
 
@@ -106,8 +106,8 @@ type
 
 implementation
 
-uses UDWScriptEditor, Procedures, dwsSymbols, dwsSuggestions, dwsUtils,
-  ProceduresBDtk;
+uses
+  UDWScriptEditor, Procedures, dwsSymbols, dwsSuggestions, dwsUtils;
 
 { TDWScriptEngineFactory }
 
@@ -256,7 +256,8 @@ begin
   FMasterEngine := MasterEngine;
 
   FListTypesImages := TStringList.Create;
-  LoadStrings(6, FListTypesImages);
+  // TODO: trouver un autre moyen d'obtenir la liste
+  // LoadStrings(6, FListTypesImages);
 
   FUseDebugInfo := True;
   SynDWSSyn := TSynDWSSyn.Create(nil);

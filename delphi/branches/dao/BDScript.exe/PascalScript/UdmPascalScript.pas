@@ -3,10 +3,10 @@ unit UdmPascalScript;
 interface
 
 uses
-  System.SysUtils, Winapi.Windows, Forms, System.Classes, Vcl.Graphics,
+  System.SysUtils, Winapi.Windows, Vcl.Forms, System.Classes, Vcl.Graphics,
   uPSComponent, uPSComponent_COM, uPSComponent_Default, UScriptList, UScriptUtils, EntitiesFull,
   IDHashMap, uPSUtils,
-  LoadCompletImport, uPSRuntime, uPSCompiler, uPSDebugger, uPSI_BdtkRegEx, uPSI_BdtkObjects, uPSI_superobject, UMasterEngine, UScriptEngineIntf, UScriptEditor,
+  uPSRuntime, uPSCompiler, uPSDebugger, uPSI_BdtkRegEx, uPSI_BdtkObjects, uPSI_superobject, UMasterEngine, UScriptEngineIntf, UScriptEditor,
   SynCompletionProposal,
   SynEditHighlighter, SynHighlighterPas;
 
@@ -160,7 +160,7 @@ implementation
 
 uses
   IOUtils, AnsiStrings, Procedures, UfrmScripts, Divers, UScriptsFonctions, UScriptsHTMLFunctions, Dialogs, StrUtils, uPSDisassembly,
-  UPascalScriptEditor, ProceduresBDtk;
+  UPascalScriptEditor, UNet, EntitiesLite;
 
 procedure AddToTStrings(const Strings: TStringArray; List: TStrings);
 var
@@ -365,7 +365,8 @@ begin
   FMasterEngine := MasterEngine;
 
   FListTypesImages := TStringList.Create;
-  LoadStrings(6, FListTypesImages);
+  // TODO: trouver un autre moyen d'obtenir la liste
+  // LoadStrings(6, FListTypesImages);
 
   PSImport_DateUtils1 := TPSImport_DateUtils.Create(nil);
   PSImport_Classes1 := TPSImport_Classes.Create(nil);

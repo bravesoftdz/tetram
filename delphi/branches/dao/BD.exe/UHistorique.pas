@@ -7,7 +7,7 @@ uses SysUtils, Windows, Classes, Generics.Collections, Commun;
 type
   TActionConsultation = (fcActionBack, fcActionRefresh, fcAlbum, fcAuteur, fcCouverture, fcRecherche, fcPreview, fcSeriesIncompletes,
     fcPrevisionsSorties, fcRecreateToolBar, fcPrevisionsAchats, fcRefreshRepertoire, fcRefreshRepertoireData, fcParaBD, fcImageParaBD, fcSerie, fcGestionAjout,
-    fcGestionModif, fcGestionSupp, fcGestionAchat, fcScripts, fcConflitImport, fcGallerie, fcModeConsultation, fcModeGestion, fcModeScript, fcUnivers,
+    fcGestionModif, fcGestionSupp, fcGestionAchat, fcConflitImport, fcGallerie, fcModeConsultation, fcModeGestion, fcUnivers,
     fcConsole);
 
 type
@@ -98,8 +98,8 @@ implementation
 uses MAJ, UfrmFond, Forms, Proc_Gestions, UfrmConsole, TypInfo, UdmPrinc;
 
 const
-  UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcScripts, fcConflitImport];
-  Modes = [fcModeConsultation, fcModeGestion, fcModeScript];
+  UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcConflitImport];
+  Modes = [fcModeConsultation, fcModeGestion];
   NoSaveHistorique = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire, fcRefreshRepertoireData]
   // à cause des callback, les appels de gestion ne peuvent pas être sauvés dans l'historique
   // et puis je vois pas bien à quoi ça pourrait servir
@@ -384,8 +384,6 @@ begin
         frmFond.actModeConsultation.Execute;
       fcModeGestion:
         frmFond.actModeGestion.Execute;
-      fcModeScript:
-        frmFond.actModeScripts.Execute;
       fcActionBack:
         Back;
       fcActionRefresh:
@@ -420,11 +418,6 @@ begin
         frmFond.actActualiseRepertoire.Execute;
       fcRefreshRepertoireData:
         frmFond.actActualiseRepertoireData;
-      fcScripts:
-        if Assigned(Consult.GestionCallback) then
-          doCallback := MAJScript(Consult.GestionVTV)
-        else
-          MAJScript(nil);
       fcConflitImport:
         frmFond.SetModalChildForm(TForm(Consult.Reference));
 

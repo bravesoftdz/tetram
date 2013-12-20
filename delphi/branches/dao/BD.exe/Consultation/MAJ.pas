@@ -16,13 +16,12 @@ procedure MAJPrevisionsAchats;
 procedure MAJRecherche(const Reference: TGUID; TypeSimple: Integer = -1; Stream: TMemoryStream = nil);
 function MAJGallerie(TypeGallerie: Integer; const Reference: TGUID): Boolean;
 function ZoomCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID): Boolean;
-function MAJScript(Data: TAlbumFull): Boolean;
 
 implementation
 
 uses
   CommonConst, UfrmFond, DB, StdCtrls, UfrmSeriesIncompletes, UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmRecherche,
-  UfrmZoomCouverture, UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique, UfrmConsultationParaBD, UfrmConsultationSerie, UfrmScripts, UfrmGallerie,
+  UfrmZoomCouverture, UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique, UfrmConsultationParaBD, UfrmConsultationSerie, UfrmGallerie,
   UfrmConsultationUnivers;
 
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;
@@ -208,28 +207,6 @@ begin
     finally
       frmFond.SetChildForm(FDest);
     end;
-end;
-
-function MAJScript(Data: TAlbumFull): Boolean;
-var
-  FDest: TfrmScripts;
-  isUpdate: Boolean;
-  // hg: IHourGlass;
-begin
-  // hg := THourGlass.Create;
-  isUpdate := False;
-  FDest := TfrmScripts.Create(frmFond);
-  try
-    FDest.MasterEngine.AlbumToImport := Data;
-
-    // AlbumToUpdate pourrait être différent dans le finally
-    isUpdate := FDest.MasterEngine.AlbumToUpdate;
-    FDest.Label1.Visible := not isUpdate;
-    Result := frmFond.SetModalChildForm(FDest) = mrOk
-  finally
-    if isUpdate then
-      FDest.Free;
-  end;
 end;
 
 function MAJGallerie(TypeGallerie: Integer; const Reference: TGUID): Boolean;

@@ -73,8 +73,7 @@ implementation
 
 uses
   dwsSymbols, EntitiesFull, UMetadata, Procedures, AnsiStrings, Divers, Generics.Collections,
-  UScriptsFonctions, EntitiesLite, LoadCompletImport, Commun, DaoFull,
-  ProceduresBDtk;
+  UScriptsFonctions, EntitiesLite, Commun;
 
 { TDW_BdtkObjects }
 
@@ -103,7 +102,7 @@ end;
 
 procedure TDW_BdtkObjectsUnit.OnTAlbumComplet_ImportEval(info: TProgramInfo; ExtObject: TObject);
 begin
-  Import(ExtObject as TAlbumFull);
+  // Import(ExtObject as TAlbumFull);
 end;
 
 procedure TDW_BdtkObjectsUnit.OnTAuteur_CreateEval(info: TProgramInfo; var ExtObject: TObject);
@@ -371,7 +370,8 @@ var
 begin
   FListTypesImages := TStringList.Create;
   try
-    LoadStrings(6, FListTypesImages);
+    // TODO: trouver un autre moyen d'obtenir la liste
+    // LoadStrings(6, FListTypesImages);
     for i := 0 to Pred(FListTypesImages.Count) do
       with Constants.Add do
       begin

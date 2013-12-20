@@ -31,7 +31,7 @@ implementation
 
 uses
   System.SyncObjs, Vcl.Forms, System.StrUtils, UfrmSplash, CommonConst, Textes,
-  System.DateUtils, System.UITypes, Divers;
+  System.DateUtils, System.UITypes, Divers, UfrmScripts;
 
 {$R *.dfm}
 
@@ -181,7 +181,7 @@ begin
       Debut := Now;
 
       FrmSplash.Affiche_act(ChargementApp + '...');
-      // Application.CreateForm(TfrmFond, frmFond);
+      Application.CreateForm(TfrmScripts, frmScripts);
       AnalyseLigneCommande(GetCommandLine);
 
       FrmSplash.Affiche_act(FinChargement + '...');

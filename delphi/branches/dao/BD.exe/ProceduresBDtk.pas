@@ -63,8 +63,6 @@ function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Vale
 function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TUIBTransaction = nil)
   : Boolean; overload;
 
-function GetCouvertureStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0)
-  : TStream; overload;
 function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False;
   Effet3D: Integer = 0): TStream; overload;
 procedure LoadCouverture(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Picture: TPicture);
@@ -520,30 +518,6 @@ begin
       end;
   except
     Result := False;
-  end;
-end;
-
-function GetCouvertureStream(const Fichier: string; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False; Effet3D: Integer = 0): TStream;
-var
-  Couverture: TPicture;
-  img: TJPEGImage;
-  Stream: TStream;
-begin
-  Couverture := TPicture.Create;
-  try
-    Stream := GetJPEGStream(Fichier);
-    img := TJPEGImage.Create;
-    try
-      Stream.Position := 0;
-      img.LoadFromStream(Stream);
-      Couverture.Assign(img);
-    finally
-      img.Free;
-      FreeAndNil(Stream);
-    end;
-    Result := ResizePicture(Couverture, Hauteur, Largeur, AntiAliasing, Cadre, Effet3D);
-  finally
-    Couverture.Free;
   end;
 end;
 

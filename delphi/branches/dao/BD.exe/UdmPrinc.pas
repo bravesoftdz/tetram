@@ -471,12 +471,6 @@ begin
     // mais rien n'y oblige
     if not TGlobalVar.Utilisateur.Options.ModeDemarrage or ForceGestion then
       ModeToOpen := fcModeGestion;
-    if Procedures.FindCmdLineSwitch(cmdLine, 'scripts') then
-    begin
-      ModeToOpen := fcModeGestion;
-      PageToOpen := fcScripts;
-      ForceGestion := False;
-    end;
     Historique.AddWaiting(ModeToOpen);
     // if ModeToOpen <> fcModeScript then
     if ForceGestion then

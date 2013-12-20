@@ -3,7 +3,8 @@ unit UScriptsFonctions;
 interface
 
 uses
-  Windows, SysUtils, Classes, Dialogs, WinInet, StrUtils, Math, UMetadata, EntitiesLite, Generics.Collections, UNet, jpeg;
+  Windows, SysUtils, Classes, Dialogs, WinInet, StrUtils, Math, UMetadata, EntitiesLite, Generics.Collections, UNet, jpeg,
+  EntitiesFull;
 
 type
   TScriptChoix = class
@@ -47,13 +48,7 @@ type
     property Titre: string read FTitre write FTitre;
   end;
 
-function GetPage(const URL: string; UTF8: Boolean = True): string;
-function GetPageWithHeaders(const URL: string; UTF8: Boolean = True): string;
-function PostPage(const URL: string; const Pieces: array of RAttachement; UTF8: Boolean = True): string;
-function PostPageWithHeaders(const URL: string; const Pieces: array of RAttachement; UTF8: Boolean = True): string;
 function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;
-function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteurLite;
-function MakeUnivers(const Nom: string): TUniversLite;
 function AskSearchEntry(const Labels: array of string; var Search: string; var index: Integer): Boolean;
 procedure Split(SL: TStringList; const Chaine: string; Sep: Char);
 function CombineURL(const Root, URL: string): string;
@@ -68,15 +63,12 @@ function ScriptExtractFileExt(const FileName: string): string;
 function ScriptIncludeTrailingPathDelimiter(const S: string): string;
 function ScriptExcludeTrailingPathDelimiter(const S: string): string;
 
-function DateTimeToRFC822(T: TDateTime): string;
-function TryRFC822ToDateTime(const S: string; out Value: TDateTime): Boolean;
-function RFC822ToDateTime(const S: string): TDateTime;
-function RFC822ToDateTimeDef(const S: string; default: TDateTime): TDateTime;
+function AddImageFromURL(Edition: TEditionFull; const URL: string; TypeImage: Integer): Integer;
 
 implementation
 
 uses
-  IOUtils, ProceduresBDtk, UBdtForms, EditLabeled, StdCtrls, Controls, Forms, UframBoutons, UfrmScriptChoix, OverbyteIcsHttpProt, CommonConst, Procedures,
+  IOUtils, UBdtForms, EditLabeled, StdCtrls, Controls, Forms, UframBoutons, UfrmScriptChoix, OverbyteIcsHttpProt, CommonConst, Procedures,
   SysConst, Graphics, System.UITypes;
 
 const
@@ -131,7 +123,7 @@ begin
 
         if LoadImage then
         begin
-          ms := GetCouvertureStream(tmpFile, 70, 70, TGlobalVar.Utilisateur.Options.AntiAliasing);
+          ms := GetJPEGStream(tmpFile, 70, 70, TGlobalVar.Utilisateur.Options.AntiAliasing);
           if Assigned(ms) then
             try
               Choix.FImage := TJPEGImage.Create;
@@ -260,75 +252,6 @@ begin
       iFin := Length(sChaine);
     Result := Copy(sChaine, iDebut, iFin - iDebut);
   end;
-end;
-
-function _PostPage(const URL: string; const Pieces: array of RAttachement; UTF8, IncludeHeaders: Boolean): string;
-var
-  ss: TStringStream;
-begin
-  if UTF8 then
-    ss := TStringStream.Create('', TEncoding.UTF8)
-  else
-    ss := TStringStream.Create('', TEncoding.default);
-  try
-    if LoadStreamURL(URL, Pieces, ss, True, IncludeHeaders) = 200 then
-      Result := ss.DataString
-    else
-      Result := '';
-  finally
-    ss.Free;
-  end;
-end;
-
-function PostPage(const URL: string; const Pieces: array of RAttachement; UTF8: Boolean): string;
-begin
-  Result := _PostPage(URL, Pieces, UTF8, False);
-end;
-
-function PostPageWithHeaders(const URL: string; const Pieces: array of RAttachement; UTF8: Boolean): string;
-begin
-  Result := _PostPage(URL, Pieces, UTF8, True);
-end;
-
-function _GetPage(const URL: string; UTF8, IncludeHeaders: Boolean): string;
-var
-  ss: TStringStream;
-begin
-  if UTF8 then
-    ss := TStringStream.Create('', TEncoding.UTF8)
-  else
-    ss := TStringStream.Create('', TEncoding.default);
-  try
-    if LoadStreamURL(URL, [], ss, True, IncludeHeaders) = 200 then
-      Result := ss.DataString
-    else
-      Result := '';
-  finally
-    ss.Free;
-  end;
-end;
-
-function GetPage(const URL: string; UTF8: Boolean): string;
-begin
-  Result := _GetPage(URL, UTF8, False);
-end;
-
-function GetPageWithHeaders(const URL: string; UTF8: Boolean): string;
-begin
-  Result := _GetPage(URL, UTF8, True);
-end;
-
-function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteurLite;
-begin
-  Result := TAuteurLite.Create;
-  Result.Personne.Nom := Nom;
-  Result.Metier := Metier;
-end;
-
-function MakeUnivers(const Nom: string): TUniversLite;
-begin
-  Result := TUniversLite.Create;
-  Result.NomUnivers := Nom;
 end;
 
 type
@@ -593,180 +516,52 @@ begin
     Result := '';
 end;
 
-function OffsetFromUTC: TDateTime;
+function AddImageFromURL(Edition: TEditionFull; const URL: string; TypeImage: Integer): Integer;
 var
-  iBias: Integer;
-  tmez: TTimeZoneInformation;
+  Stream: TFileStream;
+  Couverture: TCouvertureLite;
+  tmpFile: string;
+  P: PChar;
+  sl: TStringList;
 begin
-  iBias := 0;
-  case GetTimeZoneInformation(tmez) of
-    TIME_ZONE_ID_UNKNOWN:
-      iBias := tmez.Bias;
-    TIME_ZONE_ID_DAYLIGHT:
-      iBias := tmez.Bias + tmez.DaylightBias;
-    TIME_ZONE_ID_STANDARD:
-      iBias := tmez.Bias + tmez.StandardBias;
-  end;
-  { We use ABS because EncodeTime will only accept positive values }
-  Result := EncodeTime(Abs(iBias) div 60, Abs(iBias) mod 60, 0, 0);
-  { The GetTimeZone function returns values oriented towards converting
-    a GMT time into a local time.  We wish to do the opposite by returning
-    the difference between the local time and GMT.  So I just make a positive
-    value negative and leave a negative value as positive }
-  if iBias > 0 then
-    Result := 0 - Result;
-end;
+  Result := -1;
 
-function TimeZoneBias: string;
+  SetLength(tmpFile, MAX_PATH + 1);
+  FillMemory(@tmpFile[1], Length(tmpFile) * SizeOf(Char), 1);
+  GetTempFileName(PChar(TempPath), 'bdk', 0, @tmpFile[1]);
+  P := @tmpFile[1];
+  while P^ <> #0 do
+    Inc(P);
+  SetLength(tmpFile, (Integer(P) - Integer(@tmpFile[1])) div SizeOf(Char));
 
-var
-  TZI: TTimeZoneInformation;
-  TZIResult, aBias: Integer;
-begin
-  TZIResult := GetTimeZoneInformation(TZI);
-  if TZIResult = -1 then
-    Result := 'GMT'
+  if TFile.Exists(tmpFile) then
+    Stream := TFileStream.Create(tmpFile, fmOpenReadWrite, fmShareExclusive)
   else
-  begin
-    if TZIResult = TIME_ZONE_ID_DAYLIGHT then { 10/05/99 }
-      aBias := TZI.Bias + TZI.DaylightBias
-    else
-      aBias := TZI.Bias + TZI.StandardBias;
-    Result := Format('-%.2d%.2d', [Abs(aBias) div 60, Abs(aBias) mod 60]);
-    if aBias < 0 then
-      Result[1] := '+';
-  end;
-end;
-
-const
-  RFC822_Days: array [1 .. 7] of string = ('Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat');
-  RFC822_Months: array [1 .. 12] of string = ('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
-
-function DateTimeToRFC822(T: TDateTime): string;
-var
-  Year, Month, Day: Word;
-  Hour, Min, Sec, MSec: Word;
-begin
-  DecodeDate(T, Year, Month, Day);
-  DecodeTime(T, Hour, Min, Sec, MSec);
-  { Format is 'ddd, d mmm yyyy hh:mm:ss GMTOffset' with english names }
-  Result := Format('%s, %d %s %4d %02.2d:%02.2d:%02.2d %s', [RFC822_Days[DayOfWeek(T)], Day, RFC822_Months[Month], Year, Hour, Min, Sec, TimeZoneBias]);
-end;
-
-function TryRFC822ToDateTime(const S: string; out Value: TDateTime): Boolean;
-var
-  P1, P2: Integer;
-  ADateStr: string;
-  aLst: TStringList;
-  aMonthLabel: string;
-  aFormatSettings: TFormatSettings;
-  aTimeZoneStr: string;
-  aTimeZoneDelta: TDateTime;
-
-  function MonthWithLeadingChar(const AMonth: string): string;
-  begin
-    if Length(AMonth) = 1 then
-      Result := '0' + AMonth
-    else
-      Result := AMonth;
-  end;
-
-begin
-  Result := False;
-
-  ADateStr := S; // 'Wdy, DD-Mon-YYYY HH:MM:SS GMT' or 'Wdy, DD-Mon-YYYY HH:MM:SS +0200' or '23 Aug 2004 06:48:46 -0700'
-  P1 := Pos(',', ADateStr);
-  if P1 > 0 then
-    Delete(ADateStr, 1, P1); // ' DD-Mon-YYYY HH:MM:SS GMT' or ' DD-Mon-YYYY HH:MM:SS +0200' or '23 Aug 2004 06:48:46 -0700'
-  ADateStr := Trim(ADateStr); // 'DD-Mon-YYYY HH:MM:SS GMT' or 'DD-Mon-YYYY HH:MM:SS +0200' or '23 Aug 2004 06:48:46 -0700'
-
-  P1 := Pos(':', ADateStr);
-  P2 := Pos('-', ADateStr);
-  while (P2 > 0) and (P2 < P1) do
-  begin
-    Delete(ADateStr, P2, 1);
-    Dec(P1);
-    P2 := PosEx('-', ADateStr, P2);
-  end; // 'DD Mon YYYY HH:MM:SS GMT' or 'DD Mon YYYY HH:MM:SS +0200' or '23 Aug 2004 06:48:46 -0700'
-  while Pos('  ', ADateStr) > 0 do
-    ADateStr := StringReplace(ADateStr, '  ', ' ', [rfReplaceAll]); // 'DD Mon YYYY HH:MM:SS GMT' or 'DD Mon YYYY HH:MM:SS +0200'
-  aLst := TStringList.Create;
+    Stream := TFileStream.Create(tmpFile, fmCreate, fmShareExclusive);
   try
-    aLst.Text := StringReplace(ADateStr, ' ', #13#10, [rfReplaceAll]);
-    if aLst.Count < 5 then
+    Stream.Size := 0;
+    if LoadStreamURL(URL, [], Stream) <> 200 then
       Exit;
-
-    aMonthLabel := Trim(aLst[1]);
-    P1 := 1;
-    while (P1 <= 12) and (not SameText(RFC822_Months[P1], aMonthLabel)) do
-      Inc(P1);
-
-    aFormatSettings := TFormatSettings.Create;
-    aFormatSettings.DateSeparator := '/';
-    aFormatSettings.TimeSeparator := ':';
-    aFormatSettings.ShortDateFormat := 'dd/mm/yyyy';
-    aFormatSettings.ShortTimeFormat := 'hh:nn:zz';
-
-    aTimeZoneStr := UpperCase(aLst[4]);
-    aTimeZoneStr := StringReplace(aTimeZoneStr, '(', '', []);
-    aTimeZoneStr := StringReplace(aTimeZoneStr, ')', '', []);
-    aTimeZoneStr := Trim(aTimeZoneStr);
-    if aTimeZoneStr = '' then
-      Exit;
-
-    if (Length(aTimeZoneStr) >= 5) and CharInSet(aTimeZoneStr[1], ['+', '-']) and CharInSet(aTimeZoneStr[2], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'])
-      and CharInSet(aTimeZoneStr[3], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) and
-      CharInSet(aTimeZoneStr[4], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) and
-      CharInSet(aTimeZoneStr[5], ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']) then
-    begin
-      aTimeZoneDelta := EncodeTime(StrToInt(Copy(aTimeZoneStr, 2, 2)), StrToInt(Copy(aTimeZoneStr, 4, 2)), 0, 0);
-      if aTimeZoneStr[1] = '+' then
-        aTimeZoneDelta := -1 * aTimeZoneDelta;
-    end
-    else if aTimeZoneStr = 'GMT' then
-      aTimeZoneDelta := 0
-    else if aTimeZoneStr = 'UTC' then
-      aTimeZoneDelta := 0
-    else if aTimeZoneStr = 'UT' then
-      aTimeZoneDelta := 0
-    else if aTimeZoneStr = 'EST' then
-      aTimeZoneDelta := 5 / HoursPerDay
-    else if aTimeZoneStr = 'EDT' then
-      aTimeZoneDelta := 4 / HoursPerDay
-    else if aTimeZoneStr = 'CST' then
-      aTimeZoneDelta := 6 / HoursPerDay
-    else if aTimeZoneStr = 'CDT' then
-      aTimeZoneDelta := 5 / HoursPerDay
-    else if aTimeZoneStr = 'MST' then
-      aTimeZoneDelta := 7 / HoursPerDay
-    else if aTimeZoneStr = 'MDT' then
-      aTimeZoneDelta := 6 / HoursPerDay
-    else if aTimeZoneStr = 'PST' then
-      aTimeZoneDelta := 8 / HoursPerDay
-    else if aTimeZoneStr = 'PDT' then
-      aTimeZoneDelta := 7 / HoursPerDay
-    else
-      Exit;
-
-    ADateStr := Trim(aLst[0]) + '/' + MonthWithLeadingChar(IntToStr(P1)) + '/' + Trim(aLst[2]) + ' ' + Trim(aLst[3]); // 'DD/MM/YYYY HH:MM:SS'
-    Result := TryStrToDateTime(ADateStr, Value, aFormatSettings);
-    if Result then
-      Value := Value + aTimeZoneDelta + OffsetFromUTC;
   finally
-    aLst.Free;
+    Stream.Free;
   end;
-end;
 
-function RFC822ToDateTime(const S: string): TDateTime;
-begin
-  if not TryRFC822ToDateTime(S, Result) then
-    raise EConvertError.CreateResFmt(@SInvalidDateTime, [S]);
-end;
-
-function RFC822ToDateTimeDef(const S: string; default: TDateTime): TDateTime;
-begin
-  if not TryRFC822ToDateTime(S, Result) then
-    Result := default;
+  Couverture := TCouvertureLite.Create;
+  Result := Edition.Couvertures.Add(Couverture);
+  Couverture.NewNom := tmpFile;
+  Couverture.OldNom := Couverture.NewNom;
+  Couverture.NewStockee := TGlobalVar.Utilisateur.Options.ImagesStockees;
+  Couverture.OldStockee := Couverture.NewStockee;
+  Couverture.Categorie := TypeImage;
+  sl := TStringList.Create;
+  try
+    // c'est pas génial de recharger la liste à chaque fois mais ça évite du code usine à gaz
+    // TODO: trouver un autre moyen d'obtenir la liste
+    // LoadStrings(6, sl);
+    Couverture.sCategorie := sl.Values[IntToStr(TypeImage)];
+  finally
+    sl.Free;
+  end;
 end;
 
 end.

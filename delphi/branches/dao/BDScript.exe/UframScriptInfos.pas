@@ -152,8 +152,10 @@ begin
     begin
       Option.ChooseValue := frm.RadioGroup1.Items[frm.RadioGroup1.ItemIndex];
 
-      qry := TUIBQuery.Create(nil);
-      try
+      // TODO: trouver une autre façon de stocker les paramètres d'exécution de script
+      (*
+        qry := TUIBQuery.Create(nil);
+        try
         qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
         qry.SQL.Text := 'update or insert into options_scripts (script, nom_option, valeur) values (:script, :nom_option, :valeur)';
         qry.Prepare(True);
@@ -162,10 +164,11 @@ begin
         qry.Params.AsString[2] := Copy(Option.ChooseValue, 1, qry.Params.MaxStrLen[2]);
         qry.Execute;
         qry.Transaction.Commit;
-      finally
+        finally
         qry.Transaction.Free;
         qry.Free;
-      end;
+        end;
+      *)
 
       RefreshOptions;
       RefreshDescription;

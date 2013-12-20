@@ -127,8 +127,6 @@ type
     Aperuavantimpression4: TMenuItem;
     Impression1: TMenuItem;
     N8: TMenuItem;
-    Scripts1: TMenuItem;
-    actModeScripts: TAction;
     P1: TMenuItem;
     actPublier: TAction;
     ToolButton14: TToolButton;
@@ -173,7 +171,6 @@ type
     procedure MeasureMenuItem(Sender: TObject; ACanvas: TCanvas; var Width, Height: Integer);
     procedure actAfficheAchatsExecute(Sender: TObject);
     procedure actMiseAJourExecute(Sender: TObject);
-    procedure actModeScriptsExecute(Sender: TObject);
     procedure actPublierExecute(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure actFicheModifierExecute(Sender: TObject);
@@ -212,7 +209,7 @@ implementation
 
 uses
   IOUtils, ProceduresBDtk, UfrmRepertoire, CommonConst, UfrmOptions, UfrmStatsGeneral, UfrmStatsAlbums, EntitiesFull, Impression,
-  UfrmGestion, UfrmCustomize, UfrmAboutBox, UdmPrinc, Types, Procedures, UfrmEntretien, ShellAPI, Math, UfrmScripts, UfrmPublier, JumpList, ShlObj,
+  UfrmGestion, UfrmCustomize, UfrmAboutBox, UdmPrinc, Types, Procedures, UfrmEntretien, ShellAPI, Math, UfrmPublier, JumpList, ShlObj,
   EntitiesStats;
 
 procedure TfrmFond.WMSyscommand(var msg: TWmSysCommand);
@@ -780,7 +777,7 @@ end;
 
 procedure TfrmFond.actAideAboutExecute(Sender: TObject);
 begin
-  with TFrmAboutBox.Create(Application) do
+  with TfrmAboutBox.Create(Application) do
     try
       ShowModal;
     finally
@@ -812,11 +809,6 @@ begin
   Application.CreateForm(TFrmRepertoire, frmRepertoire);
   SetChildForm(frmRepertoire, alLeft);
   Historique.Refresh;
-end;
-
-procedure TfrmFond.actModeScriptsExecute(Sender: TObject);
-begin
-  Historique.AddWaiting(fcScripts);
 end;
 
 procedure TfrmFond.actStatsInfosBDthequeExecute(Sender: TObject);

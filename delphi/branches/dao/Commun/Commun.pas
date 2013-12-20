@@ -5,7 +5,7 @@ interface
 {$WARN UNIT_PLATFORM OFF}
 
 uses
-  SysUtils, Windows, Dialogs, Classes, Controls, StrUtils;
+  System.SysUtils, Winapi.Windows, VCL.Dialogs, System.Classes, VCL.Controls, System.StrUtils;
 
 type
   RGUIDEx = record
@@ -56,7 +56,7 @@ type
 implementation
 
 uses
-  Forms, CommonConst, Generics.Collections, JclSimpleXML, Math;
+  VCL.Forms, CommonConst, Generics.Collections, JclSimpleXML, System.Math;
 
 function StringToGUIDDef(const GUID: string; const Default: TGUID): TGUID;
 begin
@@ -291,12 +291,12 @@ var
   prefix, group, publisher, s1: string;
 begin
   isbn := ClearISBN(isbn);
-  isbn := isbn.ToUpper.Substring(0, Math.Min(isbn.Length, 13));
+  isbn := isbn.ToUpper.Substring(0, System.Math.Min(isbn.Length, 13));
   S := isbn;
   if (S.Length > 10) then
   begin
     prefix := S.Substring(0, 3);
-    S := S.Substring(3, Math.Min(S.Length, 13));
+    S := S.Substring(3, System.Math.Min(S.Length, 13));
   end
   else
     prefix := '978';

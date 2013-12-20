@@ -7,7 +7,6 @@ uses
 
 procedure Import(Self: TAlbumFull);
 
-function AddImageFromURL(Edition: TEditionFull; const URL: string; TypeImage: Integer): Integer;
 
 implementation
 
@@ -385,53 +384,6 @@ begin
     finally
       frmValidationImport.Free;
     end;
-  end;
-end;
-
-function AddImageFromURL(Edition: TEditionFull; const URL: string; TypeImage: Integer): Integer;
-var
-  Stream: TFileStream;
-  Couverture: TCouvertureLite;
-  tmpFile: string;
-  P: PChar;
-  sl: TStringList;
-begin
-  Result := -1;
-
-  SetLength(tmpFile, MAX_PATH + 1);
-  FillMemory(@tmpFile[1], Length(tmpFile) * SizeOf(Char), 1);
-  GetTempFileName(PChar(TempPath), 'bdk', 0, @tmpFile[1]);
-  P := @tmpFile[1];
-  while P^ <> #0 do
-    Inc(P);
-  SetLength(tmpFile, (Integer(P) - Integer(@tmpFile[1])) div SizeOf(Char));
-
-  if TFile.Exists(tmpFile) then
-    Stream := TFileStream.Create(tmpFile, fmOpenReadWrite, fmShareExclusive)
-  else
-    Stream := TFileStream.Create(tmpFile, fmCreate, fmShareExclusive);
-  try
-    Stream.Size := 0;
-    if LoadStreamURL(URL, [], Stream) <> 200 then
-      Exit;
-  finally
-    Stream.Free;
-  end;
-
-  Couverture := TCouvertureLite.Create;
-  Result := Edition.Couvertures.Add(Couverture);
-  Couverture.NewNom := tmpFile;
-  Couverture.OldNom := Couverture.NewNom;
-  Couverture.NewStockee := TGlobalVar.Utilisateur.Options.ImagesStockees;
-  Couverture.OldStockee := Couverture.NewStockee;
-  Couverture.Categorie := TypeImage;
-  sl := TStringList.Create;
-  try
-    // c'est pas génial de recharger la liste à chaque fois mais ça évite du code usine à gaz
-    LoadStrings(6, sl);
-    Couverture.sCategorie := sl.Values[IntToStr(TypeImage)];
-  finally
-    sl.Free;
   end;
 end;
 

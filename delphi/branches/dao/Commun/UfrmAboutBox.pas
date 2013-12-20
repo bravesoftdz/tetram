@@ -1,9 +1,10 @@
 unit UfrmAboutBox;
 
-{ .$D- }
+{ $D- }
 interface
 
-uses Windows, SysUtils, Classes, Graphics, Forms, Controls, StdCtrls, ProceduresBDtk, Buttons, ExtCtrls, verslabp, ShellAPI, jpeg, Dialogs, UBdtForms;
+uses
+  Windows, SysUtils, Classes, Graphics, Forms, Controls, StdCtrls, Buttons, ExtCtrls, verslabp, ShellAPI, jpeg, Dialogs, UBdtForms;
 
 type
   TfrmAboutBox = class(TbdtForm)
@@ -602,7 +603,6 @@ begin
 {$IFDEF WIN64}
   VlVersion.InfoSuffix := '(x64)';
 {$ENDIF}
-
   MemoryStatus.dwLength := sizeof(MemoryStatus);
   GlobalMemoryStatusEx(MemoryStatus);
 

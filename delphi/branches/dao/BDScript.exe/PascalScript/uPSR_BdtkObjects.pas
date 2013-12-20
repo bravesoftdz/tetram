@@ -32,7 +32,7 @@ procedure RIRegister_BdtkObjects(CL: TPSRuntimeClassImporter; isUpdate: Boolean)
 implementation
 
 uses
-  EntitiesLite, EntitiesFull, LoadCompletImport, UMetadata, Commun, UScriptsFonctions;
+  EntitiesLite, EntitiesFull, UMetadata, Commun, UScriptsFonctions;
 
 (* === run-time registration functions === *)
 
@@ -649,7 +649,7 @@ begin
     RegisterPropertyHelper(@TAlbumCompletUnivers_R, nil, 'Univers');
 
     RegisterMethod(@TAlbumFull.Clear, 'Clear');
-    RegisterMethod(@Import, 'Import')
+    // RegisterMethod(@Import, 'Import')
   end;
 end;
 

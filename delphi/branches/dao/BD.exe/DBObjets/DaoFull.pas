@@ -898,7 +898,7 @@ begin
         qry.SQL.Text := 'update parabd set imageparabd = :imageparabd, stockageparabd = 1, fichierparabd = :fichierparabd where id_parabd = :id_parabd';
         if TPath.GetDirectoryName(Entity.FichierImage) = '' then
           Entity.FichierImage := TPath.Combine(RepImages, Entity.FichierImage);
-        Stream := GetCouvertureStream(Entity.FichierImage, -1, -1, False);
+        Stream := GetJPEGStream(Entity.FichierImage, -1, -1, False);
         try
           qry.ParamsSetBlob('imageparabd', Stream);
         finally
@@ -912,7 +912,7 @@ begin
         if TPath.GetDirectoryName(Entity.FichierImage) = '' then
           Stream := GetCouvertureStream(True, Entity.ID_ParaBD, -1, -1, False)
         else
-          Stream := GetCouvertureStream(Entity.FichierImage, -1, -1, False);
+          Stream := GetJPEGStream(Entity.FichierImage, -1, -1, False);
         try
           Entity.FichierImage := SearchNewFileName(RepImages, TPath.GetFileName(Entity.FichierImage), True);
           qry.Params.ByNameAsString['chemin'] := RepImages;
@@ -1679,7 +1679,7 @@ begin
             PC.NewNom := SearchNewFileName(RepImages, ExtractFileName(PC.NewNom), True);
             qry6.Params.ByNameAsString['chemin'] := RepImages;
             qry6.Params.ByNameAsString['fichier'] := PC.NewNom;
-            Stream := GetCouvertureStream(PC.OldNom, -1, -1, False);
+            Stream := GetJPEGStream(PC.OldNom, -1, -1, False);
             try
               qry6.ParamsSetBlob('blobcontent', Stream);
             finally

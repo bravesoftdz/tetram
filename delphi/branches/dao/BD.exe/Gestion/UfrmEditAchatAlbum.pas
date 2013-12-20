@@ -407,7 +407,7 @@ begin
   else
     FAlbumImport.DefaultSearch := FormatTitre(FAlbum.Serie.TitreSerie);
   FAlbumImport.FusionneEditions := False;
-  Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
+  // Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
 end;
 
 procedure TfrmEditAchatAlbum.btScenaristeClick(Sender: TObject);
