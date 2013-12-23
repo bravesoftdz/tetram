@@ -1,10 +1,10 @@
-unit EntitiesFull;
+unit Entities.Full;
 
 interface
 
 uses
   SysUtils, Windows, Classes, Dialogs, EntitiesLite, Commun, CommonConst, DateUtils, Generics.Collections,
-  Generics.Defaults, System.Generics.Collections, EntitiesCommon;
+  Generics.Defaults, System.Generics.Collections, Entities.Common;
 
 type
   PAutoTrimString = ^RAutoTrimString;

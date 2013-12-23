@@ -60,14 +60,14 @@ begin
   Entity.TomeFin := ReadValueFromJSON('TomeFin', Entity.TomeFin, json);
   Entity.HorsSerie := ReadValueFromJSON('HorsSerie', Entity.HorsSerie, json);
   Entity.Integrale := ReadValueFromJSON('Integrale', Entity.Integrale, json);
-  ReadListLiteFromJSON<TAuteurLite>(Entity.Scenaristes, json.Items['Scenaristes'] as TdwsJSONArray);
-  ReadListLiteFromJSON<TAuteurLite>(Entity.Dessinateurs, json.Items['Dessinateurs'] as TdwsJSONArray);
-  ReadListLiteFromJSON<TAuteurLite>(Entity.Coloristes, json.Items['Coloristes'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurLite, TDaoAuteurLite>(Entity.Scenaristes, json.Items['Scenaristes'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurLite, TDaoAuteurLite>(Entity.Dessinateurs, json.Items['Dessinateurs'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurLite, TDaoAuteurLite>(Entity.Coloristes, json.Items['Coloristes'] as TdwsJSONArray);
   Entity.Sujet := ReadValueFromJSON('Sujet', Entity.Sujet, json);
   Entity.Notes := ReadValueFromJSON('Notes', Entity.Notes, json);
   ReadFromJSON(Entity.Editions, json.Items['Editions'] as TdwsJSONObject);
   // property Notation: Integer read FNotation write FNotation;
-  ReadListLiteFromJSON<TUniversLite>(Entity.Univers, json.Items['Univers'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TUniversLite, TDaoUniversLite>(Entity.Univers, json.Items['Univers'] as TdwsJSONArray);
 end;
 
 class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TParaBDFull; json: TdwsJSONObject);
@@ -77,7 +77,7 @@ begin
   Entity.CategorieParaBD := ReadValueFromJSON('CategorieParaBD', Entity.CategorieParaBD, json);
   Entity.AnneeCote := ReadValueFromJSON('AnneeCote', Entity.AnneeCote, json);
   Entity.TitreParaBD := ReadValueFromJSON('TitreParaBD', Entity.TitreParaBD, json);
-  ReadListLiteFromJSON<TAuteurLite>(Entity.Auteurs, json.Items['Auteurs'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurLite, TDaoAuteurLite>(Entity.Auteurs, json.Items['Auteurs'] as TdwsJSONArray);
   Entity.Description := ReadValueFromJSON('Description', Entity.Description, json);
   // Entity.ID_Serie := ReadValueFromJSON('ID_Serie', Entity.ID_Serie, json);
   ReadFromJSON(Entity.Serie, json.Items['Serie'] as TdwsJSONObject);
@@ -93,7 +93,7 @@ begin
   Entity.HasImage := ReadValueFromJSON('HasImage', Entity.HasImage, json);
   Entity.ImageStockee := ReadValueFromJSON('ImageStockee', Entity.ImageStockee, json);
   Entity.FichierImage := ReadValueFromJSON('FichierImage', Entity.FichierImage, json);
-  ReadListLiteFromJSON<TUniversLite>(Entity.Univers, json.Items['Univers'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TUniversLite, TDaoUniversLite>(Entity.Univers, json.Items['Univers'] as TdwsJSONArray);
 end;
 
 class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TEditionFull; json: TdwsJSONObject);
@@ -125,7 +125,7 @@ begin
   // property sDateAchat: string read Get_sDateAchat;
   Entity.Notes := ReadValueFromJSON('Notes', Entity.Notes, json);
   Entity.NumeroPerso := ReadValueFromJSON('NumeroPerso', Entity.NumeroPerso, json);
-  ReadListLiteFromJSON<TCouvertureLite>(Entity.Couvertures, json.Items['Couvertures'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TCouvertureLite, TDaoCouvertureLite>(Entity.Couvertures, json.Items['Couvertures'] as TdwsJSONArray);
 end;
 
 class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TCouvertureLite; json: TdwsJSONObject);
@@ -149,7 +149,7 @@ begin
   Entity.NomAuteur := ReadValueFromJSON('NomAuteur', Entity.NomAuteur, json);
   Entity.SiteWeb := ReadValueFromJSON('SiteWeb', Entity.SiteWeb, json);
   Entity.Biographie := ReadValueFromJSON('Biographie', Entity.Biographie, json);
-  ReadListFullFromJSON<TSerieFull>(Entity.Series, json.Items['Series'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TSerieFull, TDaoSerieFull>(Entity.Series, json.Items['Series'] as TdwsJSONArray);
 end;
 
 class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TEditeurFull; json: TdwsJSONObject);
@@ -176,11 +176,11 @@ begin
   Entity.SuivreManquants := ReadValueFromJSON('SuivreManquants', Entity.SuivreManquants, json);
   Entity.SuivreSorties := ReadValueFromJSON('SuivreSorties', Entity.SuivreSorties, json);
   Entity.NbAlbums := ReadValueFromJSON('NbAlbums', Entity.NbAlbums, json);
-  ReadListLiteFromJSON<TAlbumLite>(Entity.Albums, json.Items['Albums'] as TdwsJSONArray);
-  ReadListLiteFromJSON<TParaBDLite>(Entity.ParaBD, json.Items['ParaBD'] as TdwsJSONArray);
-  ReadListLiteFromJSON<TAuteurLite>(Entity.Scenaristes, json.Items['Scenaristes'] as TdwsJSONArray);
-  ReadListLiteFromJSON<TAuteurLite>(Entity.Dessinateurs, json.Items['Dessinateurs'] as TdwsJSONArray);
-  ReadListLiteFromJSON<TAuteurLite>(Entity.Coloristes, json.Items['Coloristes'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAlbumLite, TDaoAlbumLite>(Entity.Albums, json.Items['Albums'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TParaBDLite, TDaoParaBDLite>(Entity.ParaBD, json.Items['ParaBD'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurLite, TDaoAuteurLite>(Entity.Scenaristes, json.Items['Scenaristes'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurLite, TDaoAuteurLite>(Entity.Dessinateurs, json.Items['Dessinateurs'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurLite, TDaoAuteurLite>(Entity.Coloristes, json.Items['Coloristes'] as TdwsJSONArray);
   Entity.VO := ReadValueFromJSON('VO', Entity.VO, json);
   Entity.Couleur := ReadValueFromJSON('Couleur', Entity.Couleur, json);
   Entity.Etat := ReadValueFromJSON('Etat', Entity.Etat, json);
@@ -190,7 +190,7 @@ begin
   Entity.Orientation := ReadValueFromJSON('Orientation', Entity.Orientation, json);
   Entity.SensLecture := ReadValueFromJSON('SensLecture', Entity.SensLecture, json);
   // property Notation: Integer read FNotation write FNotation;
-  ReadListLiteFromJSON<TUniversLite>(Entity.Univers, json.Items['Univers'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TUniversLite, TDaoUniversLite>(Entity.Univers, json.Items['Univers'] as TdwsJSONArray);
 end;
 
 class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TUniversFull; json: TdwsJSONObject);

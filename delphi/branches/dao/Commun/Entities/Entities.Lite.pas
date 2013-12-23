@@ -1,10 +1,10 @@
-unit EntitiesLite;
+unit Entities.Lite;
 
 interface
 
 uses
   Windows, SysUtils, DB, Classes, ComCtrls, StdCtrls, Commun, UMetaData, SyncObjs, Generics.Collections,
-  EntitiesCommon;
+  Entities.Common;
 
 type
   TBaseLiteClass = class of TBaseLite;

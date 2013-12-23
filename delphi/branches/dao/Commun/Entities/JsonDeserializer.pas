@@ -4,7 +4,8 @@ interface
 
 uses
   System.SysUtils, System.Rtti, System.Generics.Collections, System.TypInfo, dwsJSON, Commun,
-  EntitiesLite, EntitiesFull, System.Classes, UMetadata, EntitiesCommon;
+  EntitiesLite, EntitiesFull, System.Classes, UMetadata, Entities.Common,
+  Entities.DaoCommon;
 
 type
 {$TYPEINFO ON}
@@ -17,7 +18,7 @@ type
   protected
     class procedure ReadStringListFromJSON(list: TStrings; json: TdwsJSONArray);
     class procedure ReadStringListWithValuesFromJSON(list: TStrings; json: TdwsJSONArray);
-    class procedure ReadListEntitiesFromJSON<T: TDBEntity>(list: TList<T>; json: TdwsJSONArray);
+    class procedure ReadListEntitiesFromJSON<T: TDBEntity; D: TDaoEntity>(list: TList<T>; json: TdwsJSONArray);
 
     class function ReadValueFromJSON(const Name: string; const Default: string; json: TdwsJSONObject): string; overload; inline;
     class function ReadValueFromJSON(const Name: string; const Default: Integer; json: TdwsJSONObject): Integer; overload; inline;
@@ -148,7 +149,7 @@ begin
   end;
 end;
 
-class procedure TJsonDeserializer.ReadListEntitiesFromJSON<T>(list: TList<T>; json: TdwsJSONArray);
+class procedure TJsonDeserializer.ReadListEntitiesFromJSON<T, D>(list: TList<T>; json: TdwsJSONArray);
 var
   i: Integer;
 begin
@@ -157,7 +158,7 @@ begin
 
   list.Clear;
   for i := 0 to Pred(json.ElementCount) do
-    list.Add(BuildFromJson<T>(json.Elements[i] as TdwsJSONObject));
+    list.Add(BuildEntityFromJson<T, D>(json.Elements[i] as TdwsJSONObject));
 end;
 
 class procedure TJsonDeserializer.ReadStringListFromJSON(list: TStrings; json: TdwsJSONArray);

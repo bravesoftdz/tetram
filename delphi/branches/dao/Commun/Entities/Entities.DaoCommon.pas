@@ -1,9 +1,9 @@
-unit DaoCommon;
+unit Entities.DaoCommon;
 
 interface
 
 uses
-  System.Rtti, System.Generics.Collections, EntitiesCommon;
+  System.Rtti, System.Generics.Collections, Entities.Common;
 
 type
   TDaoEntity = class abstract
@@ -13,6 +13,7 @@ type
     class function getBuilder(c: TEntityClass): TRttiMethod;
 
     class function BuildInstance: TEntity;
+  protected
     class function EntityClass: TEntityClass; virtual; abstract;
   public
     class constructor Create;
@@ -24,7 +25,7 @@ type
   TDaoDBEntity = class abstract(TDaoEntity)
   public
     class procedure Fill(Entity: TDBEntity; const Reference: TGUID); virtual; abstract;
-    class function getInstance(const Reference: TGUID): TEntity; overload;
+    class function getInstance(const Reference: TGUID): TDBEntity; reintroduce; overload;
   end;
 
 implementation
@@ -62,9 +63,9 @@ end;
 
 { TDaoDBEntity }
 
-class function TDaoDBEntity.getInstance(const Reference: TGUID): TEntity;
+class function TDaoDBEntity.getInstance(const Reference: TGUID): TDBEntity;
 begin
-  Result := BuildInstance;
+  Result := BuildInstance as TDBEntity;
   Fill(Result, Reference);
 end;
 

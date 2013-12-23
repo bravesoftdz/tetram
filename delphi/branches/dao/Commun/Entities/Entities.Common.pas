@@ -1,4 +1,4 @@
-unit EntitiesCommon;
+unit Entities.Common;
 
 interface
 
