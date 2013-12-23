@@ -383,7 +383,7 @@ begin
     FAlbumImport.DefaultSearch := FormatTitre(FAlbum.TitreAlbum)
   else
     FAlbumImport.DefaultSearch := FormatTitre(FAlbum.Serie.TitreSerie);
-  // Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
+  Historique.AddWaiting(fcScripts, @ImportScript, Self, nil, FAlbumImport);
 end;
 
 procedure TfrmEditAlbum.btUniversClick(Sender: TObject);

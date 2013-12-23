@@ -31,7 +31,8 @@ implementation
 
 uses
   System.SyncObjs, Vcl.Forms, System.StrUtils, UfrmSplash, CommonConst, Textes,
-  System.DateUtils, System.UITypes, Divers, UfrmScripts;
+  System.DateUtils, System.UITypes, Divers, UfrmScripts, System.IOUtils,
+  UScriptEngineIntf, UMasterEngine, UScriptList;
 
 {$R *.dfm}
 
@@ -136,6 +137,9 @@ var
   data: RMSGSendData;
   CD: TCopyDataStruct;
   s, scriptAutoRun: string;
+  frmSplash: TfrmSplash;
+  masterEngine: IMasterEngine;
+  Script: TScript;
 begin
   TGlobalVar.Mode_en_cours := mdLoad;
   Application.Title := '© TeträmCorp ' + TitreApplication + ' ' + TGlobalVar.Utilisateur.AppVersion;
@@ -170,33 +174,46 @@ begin
     Application.MainFormOnTaskbar := False;
     if FindCmdLineSwitch('dh', s, True, [clstValueNextParam]) then
       Application.DialogHandle := StrToIntDef(s, Application.DialogHandle);
+    Script := masterEngine.ScriptList.FindScriptByUnitName(scriptAutoRun, [skMain]);
+    if Assigned(Script) then
+    begin
+      masterEngine := TMasterEngine.Create;
+      masterEngine.SelectProjectScript(Script);
+      masterEngine.AlbumToImport := nil;
+      if masterEngine.Engine.Run then
+      begin
+
+      end;
+    end;
   end
   else
   begin
     Application.MainFormOnTaskbar := True;
-    FrmSplash := TFrmSplash.Create(nil);
+    frmSplash := TfrmSplash.Create(nil);
     try
-      FrmSplash.Show;
+      frmSplash.FileName := TPath.Combine(TPath.GetLibraryPath, 'bd.exe');
+      frmSplash.Show;
       Application.ProcessMessages;
       Debut := Now;
 
-      FrmSplash.Affiche_act(ChargementApp + '...');
+      ChangeCurseur(crHandPoint, 'CUR_HANDPOINT', RT_RCDATA);
+
+      frmSplash.Affiche_act(ChargementApp + '...');
       Application.CreateForm(TfrmScripts, frmScripts);
       AnalyseLigneCommande(GetCommandLine);
 
-      FrmSplash.Affiche_act(FinChargement + '...');
-      ChangeCurseur(crHandPoint, 'CUR_HANDPOINT', RT_RCDATA);
+      frmSplash.Affiche_act(FinChargement + '...');
       while SecondsBetween(Now, Debut) < 1 do // au moins 1 seconde d'affichage du splash
       begin
-        FrmSplash.Show;
-        FrmSplash.Update;
+        frmSplash.Show;
+        frmSplash.Update;
       end;
     finally
-      FrmSplash.Free;
+      frmSplash.Free;
     end;
-    if Assigned(Application.MainForm) then
-      Application.MainForm.Show;
   end;
+  if Assigned(Application.MainForm) then
+    Application.MainForm.Show;
 end;
 
 initialization

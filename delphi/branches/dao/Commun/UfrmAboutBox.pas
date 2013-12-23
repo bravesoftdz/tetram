@@ -4,7 +4,8 @@ unit UfrmAboutBox;
 interface
 
 uses
-  Windows, SysUtils, Classes, Graphics, Forms, Controls, StdCtrls, Buttons, ExtCtrls, verslabp, ShellAPI, jpeg, Dialogs, UBdtForms;
+  Windows, SysUtils, Classes, Graphics, Forms, Controls, StdCtrls, Buttons, ExtCtrls, verslabp, ShellAPI, jpeg, Dialogs, UBdtForms,
+  Vcl.Imaging.pngimage;
 
 type
   TfrmAboutBox = class(TbdtForm)
@@ -17,19 +18,21 @@ type
     VlTitre: TLabel;
     VlVersion: TfshVersionLabel;
     VlCopyright: TfshVersionLabel;
-    LbMemoireVirtuelleDisponible: TLabel;
-    LbMemoireVirtuelle: TLabel;
     LbMemoireLibre: TLabel;
     LbMemoirePhysique: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     LbSysteme: TLabel;
+    LbMemoireVirtuelle: TLabel;
+    LbMemoireVirtuelleDisponible: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure ImLogoClick(Sender: TObject);
   private
+    procedure SetFileName(const Value: TFileName);
+    function GetFileName: TFileName;
     { Private declarations }
   public
-    { Public declarations }
+    property FileName: TFileName read GetFileName write SetFileName;
   end;
 
 implementation
@@ -612,9 +615,20 @@ begin
   LbMemoireVirtuelleDisponible.Caption := MemoireVirtuelleDisponible + ': ' + formatSize(MemoryStatus.ullAvailVirtual);
 end;
 
+function TfrmAboutBox.GetFileName: TFileName;
+begin
+  Result := VlVersion.FileName;
+end;
+
 procedure TfrmAboutBox.ImLogoClick(Sender: TObject);
 begin
   ShellExecute(0, nil, 'http://www.tetram.org', nil, nil, SW_NORMAL);
+end;
+
+procedure TfrmAboutBox.SetFileName(const Value: TFileName);
+begin
+  VlVersion.FileName := Value;
+  VlCopyright.FileName := Value;
 end;
 
 end.

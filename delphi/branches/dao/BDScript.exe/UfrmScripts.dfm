@@ -29,12 +29,13 @@ object frmScripts: TfrmScripts
     Style = tsButtons
     TabOrder = 0
     OnChange = PageControl2Change
-    ExplicitTop = 29
-    ExplicitHeight = 641
     object tbScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 1
-      ExplicitHeight = 610
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object ToolBar1: TToolBar
         Left = 0
         Top = 0
@@ -76,7 +77,6 @@ object frmScripts: TfrmScripts
         Caption = 'Panel2'
         ShowCaption = False
         TabOrder = 1
-        ExplicitHeight = 588
         DesignSize = (
           874
           617)
@@ -280,7 +280,10 @@ object frmScripts: TfrmScripts
     end
     object tbEdition: TTabSheet
       Caption = 'Edition'
-      ExplicitHeight = 610
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Splitter1: TSplitter
         Left = 0
         Top = 449
@@ -362,7 +365,6 @@ object frmScripts: TfrmScripts
         Caption = 'Panel1'
         ShowCaption = False
         TabOrder = 2
-        ExplicitTop = 424
         object Splitter2: TSplitter
           Left = 603
           Top = 0
@@ -381,6 +383,10 @@ object frmScripts: TfrmScripts
           TabOrder = 0
           object tabMessages: TTabSheet
             Caption = 'Messages'
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             inline framMessages1: TframMessages
               Left = 0
               Top = 0
@@ -396,7 +402,6 @@ object frmScripts: TfrmScripts
                 OnDblClick = vstMessagesDblClick
                 OnGetText = framMessages1vstMessagesGetText
                 ExplicitWidth = 595
-                ExplicitHeight = 158
                 Columns = <
                   item
                     Position = 0
@@ -415,7 +420,7 @@ object frmScripts: TfrmScripts
                   end
                   item
                     Position = 3
-                    Width = 221
+                    Width = 225
                     WideText = 'Message'
                   end>
               end
@@ -424,6 +429,10 @@ object frmScripts: TfrmScripts
           object tabWatches: TTabSheet
             Caption = 'Points de suivi'
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             inline framWatches1: TframWatches
               Left = 0
               Top = 0
@@ -446,7 +455,7 @@ object frmScripts: TfrmScripts
                   end
                   item
                     Position = 1
-                    Width = 445
+                    Width = 449
                     WideText = 'Valeur'
                   end>
               end
@@ -455,6 +464,10 @@ object frmScripts: TfrmScripts
           object tabBreakpoints: TTabSheet
             Caption = 'Points d'#39'arr'#234't'
             ImageIndex = 2
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             inline framBreakpoints1: TframBreakpoints
               Left = 0
               Top = 0
@@ -478,7 +491,7 @@ object frmScripts: TfrmScripts
                   end
                   item
                     Position = 1
-                    Width = 491
+                    Width = 495
                     WideText = 'Fichier'
                   end>
               end
@@ -487,6 +500,10 @@ object frmScripts: TfrmScripts
           object tabConsole: TTabSheet
             Caption = 'Sortie'
             ImageIndex = 3
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object mmConsole: TMemo
               Left = 0
               Top = 0

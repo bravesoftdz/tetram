@@ -19,7 +19,7 @@ type
     class procedure WriteStringListWithValuesToJSON(list: TStrings; json: TdwsJSONArray);
     class procedure WriteListLiteToJSON<T: TBaseLite>(list: TList<T>; json: TdwsJSONArray);
     class procedure WriteListFullToJSON<T: TBaseFull>(list: TList<T>; json: TdwsJSONArray);
-
+  public
     class procedure WriteValueToJSON(const Name, Value: string; json: TdwsJSONObject); overload; inline;
     class procedure WriteValueToJSON(const Name: string; Value: Integer; json: TdwsJSONObject); overload; inline;
     class procedure WriteValueToJSON(const Name: string; Value: Currency; json: TdwsJSONObject); overload; inline;
@@ -28,7 +28,7 @@ type
     class procedure WriteValueToJSON(const Name: string; Value: RGUIDEx; json: TdwsJSONObject); overload; inline;
     class procedure WriteValueToJSON(const Name: string; Value: TMetierAuteur; json: TdwsJSONObject); overload; inline;
     class procedure WriteValueToJSON(const Name: string; Value: TStrings; json: TdwsJSONObject; ItemsHasValues: Boolean = False); overload; inline;
-  public
+
     class constructor Create;
     class destructor Destroy;
 

@@ -227,7 +227,7 @@ uses
   UfrmScriptSearch, UScriptsFonctions, CommonConst, UIB, Procedures, BdtkRegEx, Commun, Divers,
   UScriptsHTMLFunctions, JclSimpleXML, UdmPrinc, UfrmScriptOption, UfrmScriptEditOption, UfrmScriptsUpdate,
   UdmPascalScript, SynHighlighterDWS, UMasterEngine, PngFunctions,
-  UfrmAboutBox;
+  UfrmAboutBox, System.IOUtils;
 
 procedure TfrmScripts.Button1Click(Sender: TObject);
 begin
@@ -249,13 +249,16 @@ begin
 end;
 
 procedure TfrmScripts.mnuAProposClick(Sender: TObject);
+var
+  frmAboutBox: TfrmAboutBox;
 begin
-  with TfrmAboutBox.Create(Application) do
-    try
-      ShowModal;
-    finally
-      Free;
-    end;
+  frmAboutBox := TfrmAboutBox.Create(Application);
+  try
+    frmAboutBox.FileName := TPath.Combine(TPath.GetLibraryPath, 'bd.exe');
+    frmAboutBox.ShowModal;
+  finally
+    frmAboutBox.Free;
+  end;
 end;
 
 procedure TfrmScripts.PageControl2Change(Sender: TObject);

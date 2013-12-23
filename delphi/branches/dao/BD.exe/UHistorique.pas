@@ -8,7 +8,7 @@ type
   TActionConsultation = (fcActionBack, fcActionRefresh, fcAlbum, fcAuteur, fcCouverture, fcRecherche, fcPreview, fcSeriesIncompletes,
     fcPrevisionsSorties, fcRecreateToolBar, fcPrevisionsAchats, fcRefreshRepertoire, fcRefreshRepertoireData, fcParaBD, fcImageParaBD, fcSerie, fcGestionAjout,
     fcGestionModif, fcGestionSupp, fcGestionAchat, fcConflitImport, fcGallerie, fcModeConsultation, fcModeGestion, fcUnivers,
-    fcConsole);
+    fcConsole, fcScripts);
 
 type
   TConsultCallback = procedure(Data: TObject);
@@ -95,15 +95,17 @@ procedure RefreshCallBack(Data: TObject);
 
 implementation
 
-uses MAJ, UfrmFond, Forms, Proc_Gestions, UfrmConsole, TypInfo, UdmPrinc;
+uses MAJ, UfrmFond, Forms, Proc_Gestions, UfrmConsole, TypInfo, UdmPrinc,
+  EntitiesFull;
 
 const
   UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcConflitImport];
   Modes = [fcModeConsultation, fcModeGestion];
-  NoSaveHistorique = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire, fcRefreshRepertoireData]
+  Specials = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire, fcRefreshRepertoireData,fcConsole, fcScripts];
+  NoSaveHistorique = Specials
   // à cause des callback, les appels de gestion ne peuvent pas être sauvés dans l'historique
   // et puis je vois pas bien à quoi ça pourrait servir
-    + UsedInGestion + Modes + [fcConsole];
+    + UsedInGestion + Modes;
   CanRefresh = [fcAlbum, fcAuteur, fcSeriesIncompletes, fcPrevisionsSorties, fcPrevisionsAchats, fcGallerie, fcUnivers];
   MustRefresh = [fcRecherche];
 
@@ -418,6 +420,8 @@ begin
         frmFond.actActualiseRepertoire.Execute;
       fcRefreshRepertoireData:
         frmFond.actActualiseRepertoireData;
+      fcScripts:
+        MAJRunScript(TAlbumFull(Consult.GestionVTV));
       fcConflitImport:
         frmFond.SetModalChildForm(TForm(Consult.Reference));
 

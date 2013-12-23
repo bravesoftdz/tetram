@@ -13,6 +13,7 @@ function MAJConsultationSerie(const Reference: TGUID): Boolean;
 procedure MAJSeriesIncompletes;
 procedure MAJPrevisionsSorties;
 procedure MAJPrevisionsAchats;
+function MAJRunScript(AlbumToImport: TAlbumFull): Boolean;
 procedure MAJRecherche(const Reference: TGUID; TypeSimple: Integer = -1; Stream: TMemoryStream = nil);
 function MAJGallerie(TypeGallerie: Integer; const Reference: TGUID): Boolean;
 function ZoomCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID): Boolean;
@@ -22,7 +23,8 @@ implementation
 uses
   CommonConst, UfrmFond, DB, StdCtrls, UfrmSeriesIncompletes, UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmRecherche,
   UfrmZoomCouverture, UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique, UfrmConsultationParaBD, UfrmConsultationSerie, UfrmGallerie,
-  UfrmConsultationUnivers;
+  UfrmConsultationUnivers, JclCompression, System.IOUtils, EntitiesSerializer,
+  ProceduresBDtk, JsonSerializer, dwsJSON;
 
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;
 var
@@ -235,6 +237,34 @@ begin
     Result := True;
   finally
     frmFond.SetChildForm(FDest);
+  end;
+end;
+
+function MAJRunScript(AlbumToImport: TAlbumFull): Boolean;
+var
+  FArchive: TJcl7zCompressArchive;
+  archiveName: string;
+  sl: TStringList;
+  o, o2, p: TdwsJSONObject;
+begin
+  // TODO: la fonction doit retourner true si l'appel à import c'est correctement terminé
+
+  archiveName := TPath.GetTempFileName;
+  FArchive := TJcl7zCompressArchive.Create(archiveName, 0, False);
+  o := TdwsJSONObject.Create;
+  sl := TStringList.Create;
+  try
+    TEntitesSerializer.WriteToJSON(AlbumToImport, o.AddObject('album'));
+    o2 := o.AddObject('options');
+    p := o.AddObject('params');
+    LoadStrings(6, sl);
+    TJsonSerializer.WriteValueToJSON('typesImages', sl, p, True);
+    FArchive.AddFile('data.json', TStringStream.Create(o.ToString), True);
+    FArchive.Compress;
+  finally
+    sl.Free;
+    o.Free;
+    FArchive.Free;
   end;
 end;
 

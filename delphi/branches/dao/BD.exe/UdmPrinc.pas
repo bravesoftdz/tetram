@@ -505,6 +505,7 @@ var
   data: RMSGSendData;
   CD: TCopyDataStruct;
   s: string;
+  frmSplash: TfrmSplash;
 begin
   TGlobalVar.Mode_en_cours := mdLoad;
   Application.Title := '© TeträmCorp ' + TitreApplication + ' ' + TGlobalVar.Utilisateur.AppVersion;
@@ -536,42 +537,43 @@ begin
 
   // if not CheckCriticalFiles then Halt;
 
-  FrmSplash := TFrmSplash.Create(nil);
+  frmSplash := TfrmSplash.Create(nil);
   try
-    FrmSplash.Show;
+    frmSplash.Show;
     Application.ProcessMessages;
     Debut := Now;
 
-    FrmSplash.Affiche_act(VerificationVersion + '...');
+    ChangeCurseur(crHandPoint, 'CUR_HANDPOINT', RT_RCDATA);
+
+    frmSplash.Affiche_act(VerificationVersion + '...');
     if dmPrinc.CheckExeVersion(False) then
       Exit;
 
     if not dmPrinc.OuvreSession(True) then
       Exit;
-    if not dmPrinc.CheckDBVersion(FrmSplash.Affiche_act) then
+    if not dmPrinc.CheckDBVersion(frmSplash.Affiche_act) then
       Exit;
 
-    FrmSplash.Affiche_act(ChargementOptions + '...');
+    frmSplash.Affiche_act(ChargementOptions + '...');
     LitOptions;
 
-    FrmSplash.Affiche_act(ChargementApp + '...');
+    frmSplash.Affiche_act(ChargementApp + '...');
     Application.CreateForm(TfrmFond, frmFond);
-    FrmSplash.Affiche_act(ChargementDatabase + '...');
+    frmSplash.Affiche_act(ChargementDatabase + '...');
     Historique.AddConsultation(fcRecherche);
     AnalyseLigneCommande(GetCommandLine);
 
 {$IFDEF DEBUG}
     Historique.AddWaiting(fcConsole);
 {$ENDIF DEBUG}
-    FrmSplash.Affiche_act(FinChargement + '...');
-    ChangeCurseur(crHandPoint, 'CUR_HANDPOINT', RT_RCDATA);
+    frmSplash.Affiche_act(FinChargement + '...');
     while SecondsBetween(Now, Debut) < 1 do // au moins 1 seconde d'affichage du splash
     begin
-      FrmSplash.Show;
-      FrmSplash.Update;
+      frmSplash.Show;
+      frmSplash.Update;
     end;
   finally
-    FrmSplash.Free;
+    frmSplash.Free;
   end;
   if Assigned(Application.MainForm) then
     Application.MainForm.Show;

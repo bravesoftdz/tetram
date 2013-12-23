@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  ExtCtrls, StdCtrls, verslabp, jpeg, UBdtForms;
+  ExtCtrls, StdCtrls, verslabp, jpeg, UBdtForms, Vcl.Imaging.pngimage;
 
 type
   TfrmSplash = class(TbdtForm)
@@ -20,14 +20,14 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
+    function GetFileName: TFileName;
+    procedure SetFileName(const Value: TFileName);
     { Déclarations privées }
   public
     { Déclarations publiques }
     procedure Affiche_act(const Texte: string);
+    property FileName: TFileName read GetFileName write SetFileName;
   end;
-
-var
-  frmSplash: TfrmSplash;
 
 implementation
 
@@ -70,6 +70,17 @@ end;
 procedure TfrmSplash.FormDestroy(Sender: TObject);
 begin
   Cursor := crDefault;
+end;
+
+function TfrmSplash.GetFileName: TFileName;
+begin
+  Result := VersionLabel1.Filename;
+end;
+
+procedure TfrmSplash.SetFileName(const Value: TFileName);
+begin
+  VersionLabel1.Filename := Value;
+  VersionLabel2.Filename := Value;
 end;
 
 end.
