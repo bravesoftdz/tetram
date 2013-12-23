@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Classes, VirtualTreeBdtk, EntitiesFull, uib,
   Vcl.StdCtrls, Winapi.Windows, System.Rtti, System.Generics.Collections,
-  EntitiesCommon, DaoCommon;
+  Entities.Common, Entities.DaoCommon;
 
 type
   // ce serait trop facile si XE4 acceptait cette syntaxe....
@@ -34,8 +34,8 @@ type
   end;
 
   TDaoAlbumFull = class(TDaoFullEntity<TAlbumFull>)
-  private
-    class function EntityClass: TObjetFullClass; override;
+  protected
+    class function EntityClass: TEntityClass; override;
   public
     class procedure Fill(Entity: TAlbumFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TAlbumFull; UseTransaction: TUIBTransaction); override;
@@ -45,8 +45,8 @@ type
   end;
 
   TDaoParaBDFull = class(TDaoFullEntity<TParaBDFull>)
-  private
-    class function EntityClass: TObjetFullClass; override;
+  protected
+    class function EntityClass: TEntityClass; override;
   public
     class procedure Fill(Entity: TParaBDFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TParaBDFull; UseTransaction: TUIBTransaction); override;
@@ -54,8 +54,8 @@ type
   end;
 
   TDaoSerieFull = class(TDaoFullEntity<TSerieFull>)
-  private
-    class function EntityClass: TObjetFullClass; override;
+  protected
+    class function EntityClass: TEntityClass; override;
   public
     class function getInstance(const Reference, IdAuteurFiltre: TGUID): TSerieFull; reintroduce; overload;
     class function getInstance(const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean): TSerieFull; reintroduce; overload;
@@ -68,8 +68,8 @@ type
   end;
 
   TDaoEditionFull = class(TDaoFullEntity<TEditionFull>)
-  private
-    class function EntityClass: TObjetFullClass; override;
+  protected
+    class function EntityClass: TEntityClass; override;
   public
     class procedure Fill(Entity: TEditionFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TEditionFull; UseTransaction: TUIBTransaction); override;
@@ -81,32 +81,32 @@ type
   end;
 
   TDaoEditeurFull = class(TDaoFullEntity<TEditeurFull>)
-  private
-    class function EntityClass: TObjetFullClass; override;
+  protected
+    class function EntityClass: TEntityClass; override;
   public
     class procedure Fill(Entity: TEditeurFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TEditeurFull; UseTransaction: TUIBTransaction); override;
   end;
 
   TDaoCollectionFull = class(TDaoFullEntity<TCollectionFull>)
-  private
-    class function EntityClass: TObjetFullClass; override;
+  protected
+    class function EntityClass: TEntityClass; override;
   public
     class procedure Fill(Entity: TCollectionFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TCollectionFull; UseTransaction: TUIBTransaction); override;
   end;
 
   TDaoAuteurFull = class(TDaoFullEntity<TAuteurFull>)
-  private
-    class function EntityClass: TObjetFullClass; override;
+  protected
+    class function EntityClass: TEntityClass; override;
   public
     class procedure Fill(Entity: TAuteurFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TAuteurFull; UseTransaction: TUIBTransaction); override;
   end;
 
   TDaoUniversFull = class(TDaoFullEntity<TUniversFull>)
-  private
-    class function EntityClass: TObjetFullClass; override;
+  protected
+    class function EntityClass: TEntityClass; override;
   public
     class procedure Fill(Entity: TUniversFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TUniversFull; UseTransaction: TUIBTransaction); override;
@@ -285,7 +285,7 @@ begin
   end;
 end;
 
-class function TDaoAlbumFull.EntityClass: TObjetFullClass;
+class function TDaoAlbumFull.EntityClass: TEntityClass;
 begin
   Result := TAlbumFull;
 end;
@@ -673,7 +673,7 @@ begin
   end;
 end;
 
-class function TDaoParaBDFull.EntityClass: TObjetFullClass;
+class function TDaoParaBDFull.EntityClass: TEntityClass;
 begin
   Result := TParaBDFull;
 end;
@@ -934,7 +934,7 @@ end;
 
 { TDaoUniversFull }
 
-class function TDaoUniversFull.EntityClass: TObjetFullClass;
+class function TDaoUniversFull.EntityClass: TEntityClass;
 begin
   Result := TUniversFull;
 end;
@@ -1011,7 +1011,7 @@ end;
 
 { TDaoCollectionFull }
 
-class function TDaoCollectionFull.EntityClass: TObjetFullClass;
+class function TDaoCollectionFull.EntityClass: TEntityClass;
 begin
   Result := TCollectionFull;
 end;
@@ -1078,7 +1078,7 @@ end;
 
 { TDaoEditeurFull }
 
-class function TDaoEditeurFull.EntityClass: TObjetFullClass;
+class function TDaoEditeurFull.EntityClass: TEntityClass;
 begin
   Result := TEditeurFull;
 end;
@@ -1145,7 +1145,7 @@ end;
 
 { TDaoAuteurFull }
 
-class function TDaoAuteurFull.EntityClass: TObjetFullClass;
+class function TDaoAuteurFull.EntityClass: TEntityClass;
 begin
   Result := TAuteurFull;
 end;
@@ -1252,7 +1252,7 @@ end;
 
 { TDaoEditionFull }
 
-class function TDaoEditionFull.EntityClass: TObjetFullClass;
+class function TDaoEditionFull.EntityClass: TEntityClass;
 begin
   Result := TEditionFull;
 end;
@@ -1788,7 +1788,7 @@ begin
   Fill(Entity, Reference, IdAuteurFiltre, False);
 end;
 
-class function TDaoSerieFull.EntityClass: TObjetFullClass;
+class function TDaoSerieFull.EntityClass: TEntityClass;
 begin
   Result := TSerieFull;
 end;

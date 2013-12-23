@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, Generics.Collections, UChampsRecherche, EntitiesFull, EntitiesLite,
-  EntitiesCommon;
+  Entities.Common;
 
 type
   TGroupOption = (goEt, goOu);

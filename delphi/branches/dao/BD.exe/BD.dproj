@@ -435,8 +435,8 @@
         <DCCReference Include="DBObjets\EntitiesStats.pas"/>
         <DCCReference Include="DBObjets\LoadCompletImport.pas"/>
         <DCCReference Include="..\Commun\Entities\EntitiesDeserializer.pas"/>
-        <DCCReference Include="..\Commun\Entities\EntitiesFull.pas"/>
-        <DCCReference Include="..\Commun\Entities\EntitiesLite.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.Full.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.Lite.pas"/>
         <DCCReference Include="..\Commun\Entities\EntitiesSerializer.pas"/>
         <DCCReference Include="..\Commun\Entities\JsonDeserializer.pas"/>
         <DCCReference Include="..\Commun\Entities\JsonSerializer.pas"/>
@@ -445,8 +445,8 @@
         <DCCReference Include="Scripts\UfrmValidationImport.pas">
             <Form>frmValidationImport</Form>
         </DCCReference>
-        <DCCReference Include="..\Commun\Entities\DaoCommon.pas"/>
-        <DCCReference Include="..\Commun\Entities\EntitiesCommon.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.DaoCommon.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.Common.pas"/>
         <RcItem Include="..\Commun\images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>

@@ -105,8 +105,8 @@ $(PostBuildEvent)]]></PostBuildEvent>
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="..\Commun\Entities\EntitiesDeserializer.pas"/>
-        <DCCReference Include="..\Commun\Entities\EntitiesFull.pas"/>
-        <DCCReference Include="..\Commun\Entities\EntitiesLite.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.Full.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.Lite.pas"/>
         <DCCReference Include="..\Commun\Entities\EntitiesSerializer.pas"/>
         <DCCReference Include="..\Commun\Entities\JsonDeserializer.pas"/>
         <DCCReference Include="..\Commun\Entities\JsonSerializer.pas"/>

@@ -156,16 +156,16 @@ uses
   EntitiesStats in 'DBObjets\EntitiesStats.pas',
   LoadCompletImport in 'DBObjets\LoadCompletImport.pas',
   EntitiesDeserializer in '..\Commun\Entities\EntitiesDeserializer.pas',
-  EntitiesFull in '..\Commun\Entities\EntitiesFull.pas',
-  EntitiesLite in '..\Commun\Entities\EntitiesLite.pas',
+  Entities.Full in '..\Commun\Entities\Entities.Full.pas',
+  Entities.Lite in '..\Commun\Entities\Entities.Lite.pas',
   EntitiesSerializer in '..\Commun\Entities\EntitiesSerializer.pas',
   JsonDeserializer in '..\Commun\Entities\JsonDeserializer.pas',
   JsonSerializer in '..\Commun\Entities\JsonSerializer.pas',
   BdtkRegEx in '..\Commun\BdtkRegEx.pas',
   UScriptList in '..\Commun\Scripts\UScriptList.pas',
   UfrmValidationImport in 'Scripts\UfrmValidationImport.pas' {frmValidationImport},
-  DaoCommon in '..\Commun\Entities\DaoCommon.pas',
-  EntitiesCommon in '..\Commun\Entities\EntitiesCommon.pas';
+  Entities.DaoCommon in '..\Commun\Entities\Entities.DaoCommon.pas',
+  Entities.Common in '..\Commun\Entities\Entities.Common.pas';
 
 begin
   Application.Title := 'BDthèque';
