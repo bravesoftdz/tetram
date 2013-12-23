@@ -4,7 +4,7 @@ interface
 
 uses
   SysUtils, Windows, Classes, Dialogs, EntitiesLite, Commun, CommonConst, DateUtils, Generics.Collections,
-  Generics.Defaults, System.Generics.Collections;
+  Generics.Defaults, System.Generics.Collections, EntitiesCommon;
 
 type
   PAutoTrimString = ^RAutoTrimString;
@@ -39,23 +39,11 @@ type
 function MakeOption(Value: Integer; const Caption: RAutoTrimString): ROption; inline;
 
 type
-  TBaseCompletClass = class of TBaseFull;
+  TObjetFullClass = class of TObjetFull;
 
-  TBaseFull = class(TPersistent)
-  public
-    constructor Create; virtual;
-    procedure BeforeDestruction; override;
-    procedure Clear; virtual;
-    procedure AfterConstruction; override;
-  end;
-
-  TObjetCompletClass = class of TObjetFull;
-
-  TObjetFull = class(TBaseFull)
+  TObjetFull = class(TDBEntity)
   strict private
     FAssociations: TStringList;
-  private
-    FID: RGUIDEx;
   public
     RecInconnu: Boolean;
     constructor Create; override;
@@ -63,14 +51,13 @@ type
     procedure Clear; override;
     function ChaineAffichage(dummy: Boolean = True): string; virtual;
   published
-    property ID: RGUIDEx read FID;
     property Associations: TStringList read FAssociations;
   end;
 
-  TInfoComplet = class(TBaseFull)
+  TInfoFull = class(TEntity)
   end;
 
-  TListComplet = class(TBaseFull)
+  TListFull = class(TEntity)
   end;
 
   TEditeurFull = class(TObjetFull)
@@ -82,7 +69,7 @@ type
   public
     procedure Clear; override;
   published
-    property ID_Editeur: RGUIDEx read FID write FID;
+    property ID_Editeur: RGUIDEx read GetID write SetID;
     property NomEditeur: RAutoTrimString read FNomEditeur write SetNomEditeur;
     property SiteWeb: RAutoTrimString read FSiteWeb write SetSiteWeb;
   end;
@@ -93,12 +80,13 @@ type
     FEditeur: TEditeurLite;
     function GetID_Editeur: RGUIDEx; inline;
     procedure SetNomCollection(const Value: RAutoTrimString); inline;
-  public
+  protected
     constructor Create; override;
+  public
     destructor Destroy; override;
     procedure Clear; override;
   published
-    property ID_Collection: RGUIDEx read FID write FID;
+    property ID_Collection: RGUIDEx read GetID write SetID;
     property NomCollection: RAutoTrimString read FNomCollection write SetNomCollection;
     property Editeur: TEditeurLite read FEditeur;
     property ID_Editeur: RGUIDEx read GetID_Editeur;
@@ -113,13 +101,14 @@ type
     procedure SetNomUnivers(const Value: RAutoTrimString); inline;
     function GetID_UniversParent: RGUIDEx; inline;
     procedure SetSiteWeb(const Value: RAutoTrimString);
-  public
+  protected
     constructor Create; override;
+  public
     destructor Destroy; override;
     procedure Clear; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
   published
-    property ID_Univers: RGUIDEx read FID write FID;
+    property ID_Univers: RGUIDEx read GetID write SetID;
     property NomUnivers: RAutoTrimString read FNomUnivers write SetNomUnivers;
     property SiteWeb: RAutoTrimString read FSiteWeb write SetSiteWeb;
     property Description: RLongString read FDescription write FDescription;
@@ -160,14 +149,15 @@ type
     function GetID_Collection: RGUIDEx; inline;
     procedure SetTitreSerie(const Value: RAutoTrimString); inline;
     procedure SetSiteWeb(const Value: RAutoTrimString); inline;
-  public
+  protected
     constructor Create; override;
+  public
     destructor Destroy; override;
     procedure Clear; override;
     function ChaineAffichage: string; reintroduce; overload;
     function ChaineAffichage(Simple: Boolean): string; overload; override;
   published
-    property ID_Serie: RGUIDEx read FID write FID;
+    property ID_Serie: RGUIDEx read GetID write SetID;
     property ID_Editeur: RGUIDEx read GetID_Editeur;
     property ID_Collection: RGUIDEx read GetID_Collection;
     property TitreSerie: RAutoTrimString read FTitreSerie write SetTitreSerie;
@@ -210,13 +200,14 @@ type
     FSeries: TObjectList<TSerieFull>;
     procedure SetNomAuteur(const Value: RAutoTrimString); inline;
     procedure SetSiteWeb(const Value: RAutoTrimString); inline;
-  public
+  protected
     constructor Create; override;
+  public
     destructor Destroy; override;
     procedure Clear; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
   published
-    property ID_Auteur: RGUIDEx read FID write FID;
+    property ID_Auteur: RGUIDEx read GetID write SetID;
     property NomAuteur: RAutoTrimString read FNomAuteur write SetNomAuteur;
     property SiteWeb: RAutoTrimString read FSiteWeb write SetSiteWeb;
     property Biographie: RLongString read FBiographie write FBiographie;
@@ -253,13 +244,14 @@ type
     FVO: Boolean;
     function Get_sDateAchat: string; inline;
     procedure SetNumeroPerso(const Value: RAutoTrimString); inline;
-  public
+  protected
     constructor Create; override;
+  public
     destructor Destroy; override;
     procedure Clear; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
   published
-    property ID_Edition: RGUIDEx read FID write FID;
+    property ID_Edition: RGUIDEx read GetID write SetID;
     property ID_Album: RGUIDEx read FID_Album write FID_Album;
     property Editeur: TEditeurFull read FEditeur;
     property Collection: TCollectionLite read FCollection;
@@ -289,11 +281,12 @@ type
     property Couvertures: TObjectList<TCouvertureLite> read FCouvertures;
   end;
 
-  TEditionsFull = class(TListComplet)
+  TEditionsFull = class(TListFull)
   strict private
     FEditions: TObjectList<TEditionFull>;
-  public
+  protected
     constructor Create; override;
+  public
     destructor Destroy; override;
     procedure Clear; override;
   published
@@ -329,8 +322,9 @@ type
   private
     function GetDefaultSearch: string;
     procedure SetDefaultSearch(const Value: string);
-  public
+  protected
     constructor Create; override;
+  public
     destructor Destroy; override;
     procedure Clear; override;
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
@@ -341,7 +335,7 @@ type
     property DefaultSearch: string read GetDefaultSearch write SetDefaultSearch;
   published
     property Complet: Boolean read FComplet write FComplet;
-    property ID_Album: RGUIDEx read FID write FID;
+    property ID_Album: RGUIDEx read GetID write SetID;
     property ID_Serie: RGUIDEx read GetID_Serie;
     property TitreAlbum: RAutoTrimString read FTitreAlbum write SetTitreAlbum;
     property Serie: TSerieFull read FSerie;
@@ -392,18 +386,19 @@ type
     procedure SetTitreParaBD(const Value: RAutoTrimString); inline;
   private
     function GetID_Serie: RGUIDEx;
+  protected
+    constructor Create; override;
   public
     OldHasImage, OldImageStockee: Boolean;
     OldFichierImage: string;
 
-    constructor Create; override;
     destructor Destroy; override;
     procedure Clear; override;
 
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
   published
-    property ID_ParaBD: RGUIDEx read FID write FID;
+    property ID_ParaBD: RGUIDEx read GetID write SetID;
     property ID_Serie: RGUIDEx read GetID_Serie;
     property AnneeEdition: Integer read FAnneeEdition write FAnneeEdition;
     property CategorieParaBD: ROption read FCategorieParaBD write FCategorieParaBD;
@@ -475,31 +470,7 @@ begin
   Result := a.Value;
 end;
 
-{ TBaseFull }
-
-procedure TBaseFull.BeforeDestruction;
-begin
-  inherited;
-  Clear;
-end;
-
-procedure TBaseFull.Clear;
-begin
-  // nettoyage de toutes les listes et autres
-  // et reset aux valeurs par défaut
-end;
-
-constructor TBaseFull.Create;
-begin
-end;
-
-procedure TBaseFull.AfterConstruction;
-begin
-  inherited;
-  Clear;
-end;
-
-{ TObjetComplet }
+{ TObjetFull }
 
 function TObjetFull.ChaineAffichage(dummy: Boolean = True): string;
 begin
@@ -509,7 +480,6 @@ end;
 procedure TObjetFull.Clear;
 begin
   inherited;
-  FID := GUID_NULL;
   RecInconnu := True;
   FAssociations.Clear;
 end;

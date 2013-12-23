@@ -3,21 +3,15 @@ unit EntitiesLite;
 interface
 
 uses
-  Windows, SysUtils, DB, Classes, ComCtrls, StdCtrls, Commun, UMetaData, SyncObjs, Generics.Collections;
+  Windows, SysUtils, DB, Classes, ComCtrls, StdCtrls, Commun, UMetaData, SyncObjs, Generics.Collections,
+  EntitiesCommon;
 
 type
   TBaseLiteClass = class of TBaseLite;
 
-  TBaseLite = class(TObject)
+  TBaseLite = class(TDBEntity)
   public
-    ID: RGUIDEx;
-
     procedure Assign(Ps: TBaseLite); virtual;
-
-    procedure AfterConstruction; override;
-    constructor Create; virtual;
-
-    procedure Clear; virtual;
     function ChaineAffichage(dummy: Boolean = True): string; virtual; abstract;
   end;
 
@@ -29,7 +23,6 @@ type
     sCategorie: string { [50] };
 
     procedure Assign(Ps: TBaseLite); override;
-
     function ChaineAffichage(dummy: Boolean = True): string; override;
   end;
 
@@ -43,7 +36,6 @@ type
     Complet: Boolean;
 
     procedure Assign(Ps: TBaseLite); override;
-
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple: Boolean; AvecSerie: Boolean): string; reintroduce; overload;
   end;
@@ -53,7 +45,6 @@ type
     Nom: string { [150] };
 
     procedure Assign(Ps: TBaseLite); override;
-
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
   end;
@@ -163,6 +154,7 @@ type
   end;
 
   TConversionLite = class(TBaseLite)
+  public
     Monnaie1, Monnaie2: string { [5] };
     Taux: Double;
 
@@ -203,26 +195,9 @@ end;
 
 { TBasePointeur }
 
-procedure TBaseLite.AfterConstruction;
-begin
-  inherited;
-  Clear;
-end;
-
 procedure TBaseLite.Assign(Ps: TBaseLite);
 begin
   ID := Ps.ID;
-end;
-
-procedure TBaseLite.Clear;
-begin
-  ID := GUID_NULL;
-end;
-
-constructor TBaseLite.Create;
-begin
-  inherited;
-  ID := GUID_NULL;
 end;
 
 { TConversion }

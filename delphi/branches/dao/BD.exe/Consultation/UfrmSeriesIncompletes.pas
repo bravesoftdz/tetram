@@ -38,7 +38,8 @@ type
 
 implementation
 
-uses EntitiesLite, Commun, Impression, IniFiles, CommonConst, Procedures;
+uses EntitiesLite, Commun, Impression, IniFiles, CommonConst, Procedures,
+  DaoFull;
 
 {$R *.dfm}
 
@@ -69,7 +70,7 @@ begin
   CheckBox1.OnClick := CheckBox1Click;
   CheckBox2.OnClick := CheckBox1Click;
 
-  Liste := TSeriesIncompletes.Create;
+  Liste := TSeriesIncompletes.Create(GUID_NULL);
   LoadListe;
 end;
 

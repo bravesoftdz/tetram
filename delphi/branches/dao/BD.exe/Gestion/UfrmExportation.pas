@@ -45,7 +45,7 @@ type
 implementation
 
 uses CommonConst, EntitiesLite, Commun, EntitiesFull, DaoLite, DaoFull,
-  EntitiesSerializer;
+  EntitiesSerializer, JsonSerializer;
 
 {$R *.dfm}
 { TFileStream }
@@ -265,7 +265,7 @@ begin
     NodeInfo := Sender.GetNodeData(Node);
     album := TDaoAlbumFull.getInstance(TAlbumLite(NodeInfo.Detail).ID);
     try
-      FFichierExport.WriteString(TEntitesSerializer.AsJson(album, False) + ',');
+      FFichierExport.WriteString(TEntitesSerializer.AsJson(album, [soFull]) + ',');
     finally
       album.Free;
     end;

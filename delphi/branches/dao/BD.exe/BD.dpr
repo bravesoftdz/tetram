@@ -163,7 +163,9 @@ uses
   JsonSerializer in '..\Commun\Entities\JsonSerializer.pas',
   BdtkRegEx in '..\Commun\BdtkRegEx.pas',
   UScriptList in '..\Commun\Scripts\UScriptList.pas',
-  UfrmValidationImport in 'Scripts\UfrmValidationImport.pas' {frmValidationImport};
+  UfrmValidationImport in 'Scripts\UfrmValidationImport.pas' {frmValidationImport},
+  DaoCommon in '..\Commun\Entities\DaoCommon.pas',
+  EntitiesCommon in '..\Commun\Entities\EntitiesCommon.pas';
 
 begin
   Application.Title := 'BDthèque';

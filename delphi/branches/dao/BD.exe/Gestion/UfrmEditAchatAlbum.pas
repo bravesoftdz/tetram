@@ -401,7 +401,7 @@ end;
 procedure TfrmEditAchatAlbum.btnScriptClick(Sender: TObject);
 begin
   FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
-  FAlbumImport := TAlbumFull.Create;
+  FAlbumImport := TDaoAlbumFull.getInstance;
   if FAlbum.TitreAlbum <> '' then
     FAlbumImport.DefaultSearch := FormatTitre(FAlbum.TitreAlbum)
   else

@@ -445,6 +445,8 @@
         <DCCReference Include="Scripts\UfrmValidationImport.pas">
             <Form>frmValidationImport</Form>
         </DCCReference>
+        <DCCReference Include="..\Commun\Entities\DaoCommon.pas"/>
+        <DCCReference Include="..\Commun\Entities\EntitiesCommon.pas"/>
         <RcItem Include="..\Commun\images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>

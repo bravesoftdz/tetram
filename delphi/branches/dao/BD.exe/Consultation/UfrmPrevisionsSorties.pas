@@ -78,7 +78,7 @@ begin
   end;
   CheckBox1.OnClick := CheckBox1Click;
 
-  Liste := TPrevisionsSorties.Create;
+  Liste := TPrevisionsSorties.Create(GUID_NULL);
   LoadListe;
 end;
 

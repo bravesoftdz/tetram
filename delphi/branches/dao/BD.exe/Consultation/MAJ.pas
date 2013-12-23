@@ -254,11 +254,11 @@ begin
   o := TdwsJSONObject.Create;
   sl := TStringList.Create;
   try
-    TEntitesSerializer.WriteToJSON(AlbumToImport, o.AddObject('album'));
+    TEntitesSerializer.WriteToJSON(AlbumToImport, o.AddObject('album'), [soSkipNullValues]);
     o2 := o.AddObject('options');
     p := o.AddObject('params');
     LoadStrings(6, sl);
-    TJsonSerializer.WriteValueToJSON('typesImages', sl, p, True);
+    TJsonSerializer.WriteValueToJSON('typesImages', sl, p, [], True);
     FArchive.AddFile('data.json', TStringStream.Create(o.ToString), True);
     FArchive.Compress;
   finally

@@ -3,7 +3,8 @@ unit EntitiesRecherche;
 interface
 
 uses
-  System.SysUtils, System.Classes, Generics.Collections, UChampsRecherche, EntitiesFull, EntitiesLite;
+  System.SysUtils, System.Classes, Generics.Collections, UChampsRecherche, EntitiesFull, EntitiesLite,
+  EntitiesCommon;
 
 type
   TGroupOption = (goEt, goOu);
@@ -74,7 +75,7 @@ const
   TLblRechercheSimple: array [TRechercheSimple] of string = ('Auteur', 'Univers', 'Serie', 'Editeur', 'Genre', 'Collection');
 
 type
-  TRecherche = class(TBaseFull)
+  TRecherche = class(TEntity)
   public
     TypeRecherche: TTypeRecherche;
     Resultats: TObjectList<TAlbumLite>;

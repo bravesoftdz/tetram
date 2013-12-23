@@ -4,11 +4,15 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Rtti, System.Generics.Collections, Commun,
-  EntitiesFull, EntitiesLite, UMetadata, dwsJSON, System.TypInfo;
+  EntitiesFull, EntitiesLite, UMetadata, dwsJSON, System.TypInfo, EntitiesCommon;
 
 type
+  SerializationOption = (soIndent, soFull, soSkipNullValues);
+  SerializationOptions = set of SerializationOption;
+
 {$TYPEINFO ON}
 {$RTTI EXPLICIT METHODS([vcPrivate, vcPublic, vcProtected])}
+
   TJsonSerializer = class
   strict private
     class var RttiContext: TRttiContext;
@@ -17,38 +21,38 @@ type
   protected
     class procedure WriteStringListToJSON(list: TStrings; json: TdwsJSONArray);
     class procedure WriteStringListWithValuesToJSON(list: TStrings; json: TdwsJSONArray);
-    class procedure WriteListLiteToJSON<T: TBaseLite>(list: TList<T>; json: TdwsJSONArray);
-    class procedure WriteListFullToJSON<T: TBaseFull>(list: TList<T>; json: TdwsJSONArray);
+    class procedure WriteListEntityToJSON<T: TDBEntity>(list: TList<T>; json: TdwsJSONArray; Options: SerializationOptions);
   public
-    class procedure WriteValueToJSON(const Name, Value: string; json: TdwsJSONObject); overload; inline;
-    class procedure WriteValueToJSON(const Name: string; Value: Integer; json: TdwsJSONObject); overload; inline;
-    class procedure WriteValueToJSON(const Name: string; Value: Currency; json: TdwsJSONObject); overload; inline;
-    class procedure WriteValueToJSON(const Name: string; Value: Boolean; json: TdwsJSONObject); overload; inline;
-    class procedure WriteValueToJSON(const Name: string; Value: ROption; json: TdwsJSONObject); overload; inline;
-    class procedure WriteValueToJSON(const Name: string; Value: RGUIDEx; json: TdwsJSONObject); overload; inline;
-    class procedure WriteValueToJSON(const Name: string; Value: TMetierAuteur; json: TdwsJSONObject); overload; inline;
-    class procedure WriteValueToJSON(const Name: string; Value: TStrings; json: TdwsJSONObject; ItemsHasValues: Boolean = False); overload; inline;
+    class procedure WriteValueToJSON(const Name, Value: string; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
+    class procedure WriteValueToJSON(const Name: string; Value: Integer; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
+    class procedure WriteValueToJSON(const Name: string; Value: Currency; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
+    class procedure WriteValueToJSON(const Name: string; Value: Boolean; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
+    class procedure WriteValueToJSON(const Name: string; Value: ROption; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
+    class procedure WriteValueToJSON(const Name: string; Value: RGUIDEx; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
+    class procedure WriteValueToJSON(const Name: string; Value: TMetierAuteur; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
+    class procedure WriteValueToJSON(const Name: string; Value: TStrings; json: TdwsJSONObject; Options: SerializationOptions; ItemsHasValues: Boolean = False);
+      overload; inline;
 
     class constructor Create;
     class destructor Destroy;
 
-    class function AsJson(Entity: TObject; Indent: Boolean): string;
+    class function AsJson(Entity: TObject; Options: SerializationOptions = []): string;
 
-    class procedure WriteToJSON(obj: TObject; json: TdwsJSONObject);
+    class procedure WriteToJSON(obj: TObject; json: TdwsJSONObject; Options: SerializationOptions = []);
   end;
 
 implementation
 
 { TJsonSerializer }
 
-class function TJsonSerializer.AsJson(Entity: TObject; Indent: Boolean): string;
+class function TJsonSerializer.AsJson(Entity: TObject; Options: SerializationOptions): string;
 var
   o: TdwsJSONObject;
 begin
   o := TdwsJSONObject.Create;
   try
-    WriteToJSON(Entity, o);
-    if Indent then
+    WriteToJSON(Entity, o, Options);
+    if soIndent in Options then
       Result := o.ToBeautifiedString
     else
       Result := o.ToString;
@@ -78,9 +82,9 @@ begin
     FJsonWriters.Add(m.GetParameters[0].ParamType.Handle, m);
 end;
 
-class procedure TJsonSerializer.WriteToJSON(obj: TObject; json: TdwsJSONObject);
+class procedure TJsonSerializer.WriteToJSON(obj: TObject; json: TdwsJSONObject; Options: SerializationOptions = []);
 var
-  params: array [0 .. 1] of TValue;
+  params: TArray<TValue>;
   m: TRttiMethod;
   c: TClass;
   listMethods: TList<TRttiMethod>;
@@ -101,8 +105,11 @@ begin
 
     for m in listMethods do
     begin
+      SetLength(params, Length(m.GetParameters));
       TValue.Make(@obj, c.ClassInfo, params[0]);
       TValue.Make(@json, json.ClassInfo, params[1]);
+      if Length(m.GetParameters) > 2 then
+        TValue.Make(@Options, TypeInfo(SerializationOptions), params[2]);
       m.Invoke(Self, params);
     end;
   finally
@@ -110,32 +117,24 @@ begin
   end;
 end;
 
-class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: Currency; json: TdwsJSONObject);
+class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: Currency; json: TdwsJSONObject; Options: SerializationOptions);
 begin
-  // if Value <> 0 then
-  json.AddValue(Name, Value);
+  if (not (soSkipNullValues in Options)) or (Value <> 0) then
+    json.AddValue(Name, Value);
 end;
 
-class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: Integer; json: TdwsJSONObject);
+class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: Integer; json: TdwsJSONObject; Options: SerializationOptions);
 begin
-  // if Value <> 0 then
-  json.AddValue(Name, Value);
+  if (not (soSkipNullValues in Options)) or (Value <> 0) then
+    json.AddValue(Name, Value);
 end;
 
-class procedure TJsonSerializer.WriteListFullToJSON<T>(list: TList<T>; json: TdwsJSONArray);
+class procedure TJsonSerializer.WriteListEntityToJSON<T>(list: TList<T>; json: TdwsJSONArray; Options: SerializationOptions);
 var
   o: T;
 begin
   for o in list do
-    WriteToJSON(o, json.AddObject);
-end;
-
-class procedure TJsonSerializer.WriteListLiteToJSON<T>(list: TList<T>; json: TdwsJSONArray);
-var
-  o: T;
-begin
-  for o in list do
-    WriteToJSON(o, json.AddObject);
+    WriteToJSON(o, json.AddObject, Options);
 end;
 
 class procedure TJsonSerializer.WriteStringListToJSON(list: TStrings; json: TdwsJSONArray);
@@ -154,43 +153,44 @@ begin
     json.AddObject.AddValue(list.Names[i], list.ValueFromIndex[i]);
 end;
 
-class procedure TJsonSerializer.WriteValueToJSON(const Name, Value: string; json: TdwsJSONObject);
+class procedure TJsonSerializer.WriteValueToJSON(const Name, Value: string; json: TdwsJSONObject; Options: SerializationOptions);
 begin
-  // if Value <> '' then
-  json.AddValue(Name, Value);
+  if (not (soSkipNullValues in Options)) or (Value <> '') then
+    json.AddValue(Name, Value);
 end;
 
-class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: TMetierAuteur; json: TdwsJSONObject);
+class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: TMetierAuteur; json: TdwsJSONObject; Options: SerializationOptions);
 begin
-  // if Value in [Low(TMetierAuteur) .. High(TMetierAuteur)] then
-  json.AddObject(Name).AddValue(IntToStr(Ord(Value)), GetEnumName(TypeInfo(TMetierAuteur), Ord(Value)).Substring(2));
+  if Value in [Low(TMetierAuteur) .. High(TMetierAuteur)] then
+    json.AddObject(Name).AddValue(IntToStr(Ord(Value)), GetEnumName(TypeInfo(TMetierAuteur), Ord(Value)).Substring(2));
 end;
 
-class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: Boolean; json: TdwsJSONObject);
+class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: Boolean; json: TdwsJSONObject; Options: SerializationOptions);
 begin
-  // if Value then
-  json.AddValue(Name, Value);
+  if (not (soSkipNullValues in Options)) or Value then
+    json.AddValue(Name, Value);
 end;
 
-class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: RGUIDEx; json: TdwsJSONObject);
+class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: RGUIDEx; json: TdwsJSONObject; Options: SerializationOptions);
 begin
-  // if not IsEqualGUID(Value, GUID_NULL) then
-  json.AddValue(Name, Value);
+  if (not (soSkipNullValues in Options)) or (not IsEqualGUID(Value, GUID_NULL)) then
+    json.AddValue(Name, Value);
 end;
 
-class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: ROption; json: TdwsJSONObject);
+class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: ROption; json: TdwsJSONObject; Options: SerializationOptions);
 begin
-  // if Value.Value > -1 then
-  json.AddObject(Name).AddValue(IntToStr(Value.Value), Value.Caption);
+  if (not (soSkipNullValues in Options)) or (Value.Value > -1) then
+    json.AddObject(Name).AddValue(IntToStr(Value.Value), Value.Caption);
 end;
 
-class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: TStrings; json: TdwsJSONObject; ItemsHasValues: Boolean);
+class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: TStrings; json: TdwsJSONObject; Options: SerializationOptions;
+  ItemsHasValues: Boolean);
 begin
-  // if Value.Count > 0 then
-  if ItemsHasValues then
-    WriteStringListWithValuesToJSON(Value, json.AddArray(Name))
-  else
-    WriteStringListToJSON(Value, json.AddArray(Name))
+  if (not (soSkipNullValues in Options)) or (Value.Count > 0) then
+    if ItemsHasValues then
+      WriteStringListWithValuesToJSON(Value, json.AddArray(Name))
+    else
+      WriteStringListToJSON(Value, json.AddArray(Name))
 end;
 
 end.

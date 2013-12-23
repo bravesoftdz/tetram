@@ -1722,6 +1722,7 @@ end;
 
 type
   TAchat = class(TAlbumLite)
+  public
     Prix: Currency;
     PrixCalcule: Boolean;
   end;
