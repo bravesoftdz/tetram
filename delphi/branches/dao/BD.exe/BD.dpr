@@ -165,7 +165,9 @@ uses
   UScriptList in '..\Commun\Scripts\UScriptList.pas',
   UfrmValidationImport in 'Scripts\UfrmValidationImport.pas' {frmValidationImport},
   Entities.DaoCommon in '..\Commun\Entities\Entities.DaoCommon.pas',
-  Entities.Common in '..\Commun\Entities\Entities.Common.pas';
+  Entities.Common in '..\Commun\Entities\Entities.Common.pas',
+  Entities.DaoLite in '..\Commun\Entities\Entities.DaoLite.pas',
+  Entities.DaoFull in '..\Commun\Entities\Entities.DaoFull.pas';
 
 begin
   Application.Title := 'BDthèque';

@@ -447,6 +447,8 @@
         </DCCReference>
         <DCCReference Include="..\Commun\Entities\Entities.DaoCommon.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Common.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.DaoLite.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.DaoFull.pas"/>
         <RcItem Include="..\Commun\images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>
