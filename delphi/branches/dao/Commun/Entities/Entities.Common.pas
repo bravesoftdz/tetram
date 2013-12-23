@@ -26,6 +26,7 @@ type
   public
     function GetID: RGUIDEx; inline;
     procedure SetID(const Value: RGUIDEx); inline;
+    procedure Assign(Source: TPersistent); override;
     procedure Clear; override;
   published
     property ID: RGUIDEx read GetID write SetID;
@@ -59,6 +60,13 @@ begin
 end;
 
 { TDBEntity }
+
+procedure TDBEntity.Assign(Source: TPersistent);
+begin
+  inherited;
+  if Source is TDBEntity then
+    Self.ID := TDBEntity(Source).ID;
+end;
 
 procedure TDBEntity.Clear;
 begin

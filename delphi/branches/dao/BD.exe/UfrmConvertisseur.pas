@@ -29,7 +29,7 @@ var
 
 implementation
 
-uses CommonConst, EntitiesLite, UdmPrinc, UIB, Commun, DaoLite;
+uses CommonConst, Entities.Lite, UdmPrinc, UIB, Commun, Entities.DaoDBLite;
 
 {$R *.DFM}
 

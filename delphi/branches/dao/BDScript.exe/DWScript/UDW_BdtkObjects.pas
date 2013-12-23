@@ -72,8 +72,8 @@ type
 implementation
 
 uses
-  dwsSymbols, EntitiesFull, UMetadata, Procedures, AnsiStrings, Divers, Generics.Collections,
-  UScriptsFonctions, EntitiesLite, Commun;
+  dwsSymbols, Entities.Full, UMetadata, Procedures, AnsiStrings, Divers, Generics.Collections,
+  UScriptsFonctions, Entities.Lite, Commun;
 
 { TDW_BdtkObjects }
 

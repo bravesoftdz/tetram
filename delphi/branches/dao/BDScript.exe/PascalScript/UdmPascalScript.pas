@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, Winapi.Windows, Vcl.Forms, System.Classes, Vcl.Graphics,
-  uPSComponent, uPSComponent_COM, uPSComponent_Default, UScriptList, UScriptUtils, EntitiesFull,
+  uPSComponent, uPSComponent_COM, uPSComponent_Default, UScriptList, UScriptUtils, Entities.Full,
   IDHashMap, uPSUtils,
   uPSRuntime, uPSCompiler, uPSDebugger, uPSI_BdtkRegEx, uPSI_BdtkObjects, uPSI_superobject, UMasterEngine, UScriptEngineIntf, UScriptEditor,
   SynCompletionProposal,
@@ -160,7 +160,7 @@ implementation
 
 uses
   IOUtils, AnsiStrings, Procedures, UfrmScripts, Divers, UScriptsFonctions, UScriptsHTMLFunctions, Dialogs, StrUtils, uPSDisassembly,
-  UPascalScriptEditor, UNet, EntitiesLite;
+  UPascalScriptEditor, UNet, Entities.Lite;
 
 procedure AddToTStrings(const Strings: TStringArray; List: TStrings);
 var

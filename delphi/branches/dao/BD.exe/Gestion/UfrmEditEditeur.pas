@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, VDTButton,
-  Buttons, EditLabeled, ShellAPI, EntitiesFull, UBdtForms,
+  Buttons, EditLabeled, ShellAPI, Entities.Full, UBdtForms,
   PngSpeedButton, UframBoutons;
 
 type
@@ -40,7 +40,8 @@ type
 implementation
 
 uses
-  Commun, Procedures, Textes, VirtualTreeBdtk, DaoFull;
+  Commun, Procedures, Textes, VirtualTreeBdtk, Entities.DaoDBFull,
+  Entities.Common;
 
 {$R *.DFM}
 

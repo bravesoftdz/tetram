@@ -45,7 +45,7 @@ var
 implementation
 
 uses
-  CommonConst, IniFiles, Procedures, UHistorique, UfrmFond, EntitiesLite;
+  CommonConst, IniFiles, Procedures, UHistorique, UfrmFond, Entities.Lite;
 
 {$R *.DFM}
 

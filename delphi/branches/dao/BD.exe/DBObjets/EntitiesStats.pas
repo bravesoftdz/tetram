@@ -3,8 +3,8 @@ unit EntitiesStats;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Generics.Collections, EntitiesFull,
-  EntitiesLite;
+  System.SysUtils, System.Classes, System.Generics.Collections, Entities.Full,
+  Entities.Lite;
 
 type
   TStats = class(TInfoFull)
@@ -135,7 +135,7 @@ type
 implementation
 
 uses
-  Commun, uib, UdmPrinc, System.DateUtils, Divers, DaoLite;
+  Commun, uib, UdmPrinc, System.DateUtils, Divers, Entities.DaoDBLite;
 
 { TStats }
 

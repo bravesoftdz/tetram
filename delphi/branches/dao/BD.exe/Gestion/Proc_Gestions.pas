@@ -3,7 +3,7 @@ unit Proc_Gestions;
 interface
 
 uses
-  editions, SysUtils, Classes, Controls, Dialogs, Db, DBCtrls, Divers, Commun, ComCtrls, VirtualTreeBdtk, EntitiesFull;
+  editions, SysUtils, Classes, Controls, Dialogs, Db, DBCtrls, Divers, Commun, ComCtrls, VirtualTreeBdtk, Entities.Full;
 
 type
   TActionGestionAdd = function(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
@@ -65,7 +65,7 @@ function SupprimerAchatsParaBD(VT: TVirtualStringTree): Boolean;
 implementation
 
 uses
-  Textes, Procedures, EntitiesLite;
+  Textes, Procedures, Entities.Lite;
 
 // ******************************************************************************************************
 

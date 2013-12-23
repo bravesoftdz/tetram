@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, EditLabeled, VirtualTrees, ComCtrls, VDTButton,
-  VirtualTreeBdtk, ComboCheck, ExtCtrls, Buttons, UframRechercheRapide, ExtDlgs, EntitiesFull,
+  VirtualTreeBdtk, ComboCheck, ExtCtrls, Buttons, UframRechercheRapide, ExtDlgs, Entities.Full,
   UframBoutons, UBdtForms, PngSpeedButton, UframVTEdit;
 
 type
@@ -103,8 +103,8 @@ type
 implementation
 
 uses
-  Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, EntitiesLite, Divers, UHistorique,
-  UMetadata, DaoLite, DaoFull;
+  Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, Entities.Lite, Divers, UHistorique,
+  UMetadata, Entities.DaoDBLite, Entities.DaoDBFull, Entities.Common;
 
 {$R *.dfm}
 { TFrmEditAchatParaBD }

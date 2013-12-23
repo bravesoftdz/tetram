@@ -3,7 +3,7 @@ unit Entities.Full;
 interface
 
 uses
-  SysUtils, Windows, Classes, Dialogs, EntitiesLite, Commun, CommonConst, DateUtils, Generics.Collections,
+  SysUtils, Windows, Classes, Dialogs, Entities.Lite, Commun, CommonConst, DateUtils, Generics.Collections,
   Generics.Defaults, System.Generics.Collections, Entities.Common;
 
 type
@@ -44,9 +44,10 @@ type
   TObjetFull = class(TDBEntity)
   strict private
     FAssociations: TStringList;
+  protected
+    constructor Create; override;
   public
     RecInconnu: Boolean;
-    constructor Create; override;
     destructor Destroy; override;
     procedure Clear; override;
     function ChaineAffichage(dummy: Boolean = True): string; virtual;

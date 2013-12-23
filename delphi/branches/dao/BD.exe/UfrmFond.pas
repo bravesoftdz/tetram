@@ -208,7 +208,7 @@ implementation
 {$R *.DFM}
 
 uses
-  IOUtils, ProceduresBDtk, UfrmRepertoire, CommonConst, UfrmOptions, UfrmStatsGeneral, UfrmStatsAlbums, EntitiesFull, Impression,
+  IOUtils, ProceduresBDtk, UfrmRepertoire, CommonConst, UfrmOptions, UfrmStatsGeneral, UfrmStatsAlbums, Entities.Full, Impression,
   UfrmGestion, UfrmCustomize, UfrmAboutBox, UdmPrinc, Types, Procedures, UfrmEntretien, ShellAPI, Math, UfrmPublier, JumpList, ShlObj,
   EntitiesStats;
 

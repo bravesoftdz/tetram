@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, UbdtForms, StdCtrls, ExtCtrls, UframBoutons, EntitiesFull,
+  Dialogs, UbdtForms, StdCtrls, ExtCtrls, UframBoutons, Entities.Full,
   Generics.Collections, LabeledCheckBox;
 
 type
@@ -103,7 +103,7 @@ type
 implementation
 
 uses
-  Textes, Commun, CommonConst, StrUtils;
+  Textes, Commun, CommonConst, StrUtils, Entities.Common;
 
 {$R *.dfm}
 

@@ -3,7 +3,7 @@ unit MAJ;
 interface
 
 uses
-  Windows, SysUtils, Forms, Controls, ComCtrls, EntitiesLite, EntitiesFull, Classes, Commun;
+  Windows, SysUtils, Forms, Controls, ComCtrls, Entities.Lite, Entities.Full, Classes, Commun;
 
 function MAJConsultationAlbum(const Reference: TGUID): Boolean;
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;

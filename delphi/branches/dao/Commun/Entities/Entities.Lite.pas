@@ -11,7 +11,6 @@ type
 
   TBaseLite = class(TDBEntity)
   public
-    procedure Assign(Ps: TBaseLite); virtual;
     function ChaineAffichage(dummy: Boolean = True): string; virtual; abstract;
   end;
 
@@ -22,7 +21,7 @@ type
     Categorie: Smallint;
     sCategorie: string { [50] };
 
-    procedure Assign(Ps: TBaseLite); override;
+    procedure Assign(Source: TPersistent); override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
   end;
 
@@ -35,7 +34,7 @@ type
     Achat: Boolean;
     Complet: Boolean;
 
-    procedure Assign(Ps: TBaseLite); override;
+    procedure Assign(Source: TPersistent); override;
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple: Boolean; AvecSerie: Boolean): string; reintroduce; overload;
   end;
@@ -44,7 +43,7 @@ type
   public
     Nom: string { [150] };
 
-    procedure Assign(Ps: TBaseLite); override;
+    procedure Assign(Source: TPersistent); override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
   end;
@@ -55,7 +54,7 @@ type
     ID_Album, ID_Serie: RGUIDEx;
     Metier: TMetierAuteur;
 
-    procedure Assign(Ps: TBaseLite); override;
+    procedure Assign(Source: TPersistent); override;
 
     constructor Create; override;
     destructor Destroy; override;
@@ -68,7 +67,7 @@ type
   public
     NomUnivers: string { [50] };
 
-    procedure Assign(Ps: TBaseLite); override;
+    procedure Assign(Source: TPersistent); override;
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
@@ -78,7 +77,7 @@ type
   public
     NomEditeur: string { [50] };
 
-    procedure Assign(Ps: TBaseLite); override;
+    procedure Assign(Source: TPersistent); override;
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
@@ -102,7 +101,7 @@ type
     Complet: Boolean;
     Notation: Integer;
 
-    procedure Assign(Ps: TBaseLite); override;
+    procedure Assign(Source: TPersistent); override;
 
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
@@ -113,7 +112,7 @@ type
     NomCollection: string { [50] };
     Editeur: TEditeurLite;
 
-    procedure Assign(Ps: TBaseLite); override;
+    procedure Assign(Source: TPersistent); override;
 
     constructor Create; override;
     destructor Destroy; override;
@@ -128,7 +127,7 @@ type
     Editeur: TEditeurLite;
     Collection: TCollectionLite;
 
-    procedure Assign(Ps: TBaseLite); override;
+    procedure Assign(Source: TPersistent); override;
 
     constructor Create; override;
     destructor Destroy; override;
@@ -144,7 +143,7 @@ type
     Editeur: TEditeurLite;
     Collection: TCollectionLite;
 
-    procedure Assign(Ps: TBaseLite); override;
+    procedure Assign(Source: TPersistent); override;
 
     constructor Create; override;
     destructor Destroy; override;
@@ -166,7 +165,7 @@ type
     Genre: string { [50] };
     Quantite: Integer;
 
-    procedure Assign(Ps: TBaseLite); override;
+    procedure Assign(Source: TPersistent); override;
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
@@ -193,31 +192,27 @@ begin
   Result.NomUnivers := Nom;
 end;
 
-{ TBasePointeur }
-
-procedure TBaseLite.Assign(Ps: TBaseLite);
-begin
-  ID := Ps.ID;
-end;
-
-{ TConversion }
+{ TConversionLite }
 
 function TConversionLite.ChaineAffichage(dummy: Boolean = True): string;
 begin
   Result := Format('1 %s = %.2f %s', [Monnaie1, Taux, Monnaie2]);
 end;
 
-{ TCouverture }
+{ TCouvertureLite }
 
-procedure TCouvertureLite.Assign(Ps: TBaseLite);
+procedure TCouvertureLite.Assign(Source: TPersistent);
 begin
   inherited;
-  OldNom := TCouvertureLite(Ps).OldNom;
-  NewNom := TCouvertureLite(Ps).NewNom;
-  OldStockee := TCouvertureLite(Ps).OldStockee;
-  NewStockee := TCouvertureLite(Ps).NewStockee;
-  Categorie := TCouvertureLite(Ps).Categorie;
-  sCategorie := TCouvertureLite(Ps).sCategorie;
+  if Source is TCouvertureLite then
+  begin
+    OldNom := TCouvertureLite(Source).OldNom;
+    NewNom := TCouvertureLite(Source).NewNom;
+    OldStockee := TCouvertureLite(Source).OldStockee;
+    NewStockee := TCouvertureLite(Source).NewStockee;
+    Categorie := TCouvertureLite(Source).Categorie;
+    sCategorie := TCouvertureLite(Source).sCategorie;
+  end;
 end;
 
 function TCouvertureLite.ChaineAffichage(dummy: Boolean = True): string;
@@ -225,12 +220,13 @@ begin
   Result := NewNom;
 end;
 
-{ TEditeur }
+{ TEditeurLite }
 
-procedure TEditeurLite.Assign(Ps: TBaseLite);
+procedure TEditeurLite.Assign(Source: TPersistent);
 begin
-  inherited Assign(Ps);
-  NomEditeur := TEditeurLite(Ps).NomEditeur;
+  inherited;
+  if Source is TEditeurLite then
+    NomEditeur := TEditeurLite(Source).NomEditeur;
 end;
 
 function TEditeurLite.ChaineAffichage(dummy: Boolean = True): string;
@@ -244,12 +240,13 @@ begin
   NomEditeur := '';
 end;
 
-{ TPersonnage }
+{ TPersonnageLite }
 
-procedure TPersonnageLite.Assign(Ps: TBaseLite);
+procedure TPersonnageLite.Assign(Source: TPersistent);
 begin
   inherited;
-  Nom := TPersonnageLite(Ps).Nom;
+  if Source is TPersonnageLite then
+    Nom := TPersonnageLite(Source).Nom;
 end;
 
 function TPersonnageLite.ChaineAffichage(dummy: Boolean = True): string;
@@ -263,14 +260,17 @@ begin
   Nom := '';
 end;
 
-{ TAuteur }
+{ TAuteurLite }
 
-procedure TAuteurLite.Assign(Ps: TBaseLite);
+procedure TAuteurLite.Assign(Source: TPersistent);
 begin
   inherited;
-  ID_Album := TAuteurLite(Ps).ID_Album;
-  Metier := TAuteurLite(Ps).Metier;
-  Personne.Assign(TAuteurLite(Ps).Personne);
+  if Source is TAuteurLite then
+  begin
+    ID_Album := TAuteurLite(Source).ID_Album;
+    Metier := TAuteurLite(Source).Metier;
+    Personne.Assign(TAuteurLite(Source).Personne);
+  end;
 end;
 
 function TAuteurLite.ChaineAffichage(dummy: Boolean = True): string;
@@ -296,25 +296,28 @@ begin
   Personne.Clear;
 end;
 
-{ TAlbum }
+{ TAlbumLite }
 
-procedure TAlbumLite.Assign(Ps: TBaseLite);
+procedure TAlbumLite.Assign(Source: TPersistent);
 begin
   inherited;
-  Titre := TAlbumLite(Ps).Titre;
-  Tome := TAlbumLite(Ps).Tome;
-  TomeDebut := TAlbumLite(Ps).TomeDebut;
-  TomeFin := TAlbumLite(Ps).TomeFin;
-  ID_Serie := TAlbumLite(Ps).ID_Serie;
-  Integrale := TAlbumLite(Ps).Integrale;
-  HorsSerie := TAlbumLite(Ps).HorsSerie;
-  ID_Editeur := TAlbumLite(Ps).ID_Editeur;
-  Serie := TAlbumLite(Ps).Serie;
-  Editeur := TAlbumLite(Ps).Editeur;
-  AnneeParution := TAlbumLite(Ps).AnneeParution;
-  MoisParution := TAlbumLite(Ps).MoisParution;
-  Stock := TAlbumLite(Ps).Stock;
-  Notation := TAlbumLite(Ps).Notation;
+  if Source is TAlbumLite then
+  begin
+    Titre := TAlbumLite(Source).Titre;
+    Tome := TAlbumLite(Source).Tome;
+    TomeDebut := TAlbumLite(Source).TomeDebut;
+    TomeFin := TAlbumLite(Source).TomeFin;
+    ID_Serie := TAlbumLite(Source).ID_Serie;
+    Integrale := TAlbumLite(Source).Integrale;
+    HorsSerie := TAlbumLite(Source).HorsSerie;
+    ID_Editeur := TAlbumLite(Source).ID_Editeur;
+    Serie := TAlbumLite(Source).Serie;
+    Editeur := TAlbumLite(Source).Editeur;
+    AnneeParution := TAlbumLite(Source).AnneeParution;
+    MoisParution := TAlbumLite(Source).MoisParution;
+    Stock := TAlbumLite(Source).Stock;
+    Notation := TAlbumLite(Source).Notation;
+  end;
 end;
 
 function TAlbumLite.ChaineAffichage(Simple, AvecSerie: Boolean): string;
@@ -327,13 +330,16 @@ begin
   Result := ChaineAffichage(False, AvecSerie);
 end;
 
-{ TCollection }
+{ TCollectionLite }
 
-procedure TCollectionLite.Assign(Ps: TBaseLite);
+procedure TCollectionLite.Assign(Source: TPersistent);
 begin
   inherited;
-  NomCollection := TCollectionLite(Ps).NomCollection;
-  Editeur.Assign(TCollectionLite(Ps).Editeur);
+  if Source is TCollectionLite then
+  begin
+    NomCollection := TCollectionLite(Source).NomCollection;
+    Editeur.Assign(TCollectionLite(Source).Editeur);
+  end;
 end;
 
 function TCollectionLite.ChaineAffichage(Simple: Boolean = True): string;
@@ -362,14 +368,17 @@ begin
   Editeur.Clear;
 end;
 
-{ TSerie }
+{ TSerieLite }
 
-procedure TSerieLite.Assign(Ps: TBaseLite);
+procedure TSerieLite.Assign(Source: TPersistent);
 begin
   inherited;
-  TitreSerie := TSerieLite(Ps).TitreSerie;
-  Editeur.Assign(TSerieLite(Ps).Editeur);
-  Collection.Assign(TSerieLite(Ps).Collection);
+  if Source is TSerieLite then
+  begin
+    TitreSerie := TSerieLite(Source).TitreSerie;
+    Editeur.Assign(TSerieLite(Source).Editeur);
+    Collection.Assign(TSerieLite(Source).Collection);
+  end;
 end;
 
 function TSerieLite.ChaineAffichage(Simple: Boolean): string;
@@ -407,15 +416,18 @@ begin
   Collection.Clear;
 end;
 
-{ TEdition }
+{ TEditionLite }
 
-procedure TEditionLite.Assign(Ps: TBaseLite);
+procedure TEditionLite.Assign(Source: TPersistent);
 begin
   inherited;
-  AnneeEdition := TEditionLite(Ps).AnneeEdition;
-  ISBN := TEditionLite(Ps).ISBN;
-  Collection.Assign(TEditionLite(Ps).Collection);
-  Editeur.Assign(TEditionLite(Ps).Editeur);
+  if Source is TEditeurLite then
+  begin
+    AnneeEdition := TEditionLite(Source).AnneeEdition;
+    ISBN := TEditionLite(Source).ISBN;
+    Collection.Assign(TEditionLite(Source).Collection);
+    Editeur.Assign(TEditionLite(Source).Editeur);
+  end;
 end;
 
 function TEditionLite.ChaineAffichage(dummy: Boolean = True): string;
@@ -448,13 +460,16 @@ begin
   Collection.Clear;
 end;
 
-{ TGenre }
+{ TGenreLite }
 
-procedure TGenreLite.Assign(Ps: TBaseLite);
+procedure TGenreLite.Assign(Source: TPersistent);
 begin
   inherited;
-  Genre := TGenreLite(Ps).Genre;
-  Quantite := TGenreLite(Ps).Quantite;
+  if Source is TGenreLite then
+  begin
+    Genre := TGenreLite(Source).Genre;
+    Quantite := TGenreLite(Source).Quantite;
+  end;
 end;
 
 function TGenreLite.ChaineAffichage(dummy: Boolean = True): string;
@@ -468,16 +483,19 @@ begin
   Genre := '';
 end;
 
-{ TParaBD }
+{ TParaBDLite }
 
-procedure TParaBDLite.Assign(Ps: TBaseLite);
+procedure TParaBDLite.Assign(Source: TPersistent);
 begin
   inherited;
-  Titre := TParaBDLite(Ps).Titre;
-  ID_Serie := TParaBDLite(Ps).ID_Serie;
-  Serie := TParaBDLite(Ps).Serie;
-  Achat := TParaBDLite(Ps).Achat;
-  Complet := TParaBDLite(Ps).Complet;
+  if Source is TParaBDLite then
+  begin
+    Titre := TParaBDLite(Source).Titre;
+    ID_Serie := TParaBDLite(Source).ID_Serie;
+    Serie := TParaBDLite(Source).Serie;
+    Achat := TParaBDLite(Source).Achat;
+    Complet := TParaBDLite(Source).Complet;
+  end;
 end;
 
 function TParaBDLite.ChaineAffichage(AvecSerie: Boolean): string;
@@ -506,12 +524,13 @@ begin
     AjoutString(Result, s, ' ', '(', ')');
 end;
 
-{ TUnivers }
+{ TUniversLite }
 
-procedure TUniversLite.Assign(Ps: TBaseLite);
+procedure TUniversLite.Assign(Source: TPersistent);
 begin
-  inherited Assign(Ps);
-  NomUnivers := TUniversLite(Ps).NomUnivers;
+  inherited;
+  if Source is TUniversLite then
+    NomUnivers := TUniversLite(Source).NomUnivers;
 end;
 
 function TUniversLite.ChaineAffichage(dummy: Boolean): string;

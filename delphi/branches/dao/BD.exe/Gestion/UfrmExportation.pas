@@ -44,8 +44,8 @@ type
 
 implementation
 
-uses CommonConst, EntitiesLite, Commun, EntitiesFull, DaoLite, DaoFull,
-  EntitiesSerializer, JsonSerializer;
+uses CommonConst, Entities.Lite, Commun, Entities.Full, Entities.DaoDBLite, Entities.DaoDBFull,
+  EntitiesSerializer, JsonSerializer, Entities.Common;
 
 {$R *.dfm}
 { TFileStream }

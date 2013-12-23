@@ -3,7 +3,7 @@ unit UfrmConsultationSerie;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, EntitiesFull, StdCtrls, VirtualTrees, ExtCtrls,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, Entities.Full, StdCtrls, VirtualTrees, ExtCtrls,
   ComCtrls, VDTButton, Buttons, VirtualTreeBdtk, Procedures, ProceduresBDtk, UBdtForms, StrUtils,
   ActnList, Menus, PngSpeedButton, LabeledCheckBox, System.Actions;
 
@@ -92,8 +92,8 @@ type
 
 implementation
 
-uses Commun, Divers, EntitiesLite, ShellAPI, UHistorique, Impression, Proc_Gestions,
-  UfrmFond, DaoFull;
+uses Commun, Divers, Entities.Lite, ShellAPI, UHistorique, Impression, Proc_Gestions,
+  UfrmFond, Entities.DaoDBFull, Entities.Common;
 
 {$R *.dfm}
 { TFrmConsultationSerie }

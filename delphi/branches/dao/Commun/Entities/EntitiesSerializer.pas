@@ -3,7 +3,7 @@ unit EntitiesSerializer;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Generics.Collections, dwsJSON, EntitiesFull, EntitiesLite,
+  System.SysUtils, System.Classes, System.Generics.Collections, dwsJSON, Entities.Full, Entities.Lite,
   Vcl.Dialogs, System.Rtti, UMetadata, Commun, JsonSerializer;
 
 type
@@ -36,7 +36,7 @@ type
 implementation
 
 uses
-  System.TypInfo;
+  System.TypInfo, Entities.Common;
 
 { TEntitesSerializer }
 

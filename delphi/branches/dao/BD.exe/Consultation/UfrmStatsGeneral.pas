@@ -51,7 +51,7 @@ function TStatsGeneralesCreate(AOwner: TComponent; Info: TStats): TfrmStatsGener
 
 implementation
 
-uses CommonConst, EntitiesLite, Math, Divers;
+uses CommonConst, Entities.Lite, Math, Divers;
 
 {$R *.DFM}
 

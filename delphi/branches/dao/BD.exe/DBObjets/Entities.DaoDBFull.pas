@@ -1,9 +1,9 @@
-unit DaoFull;
+unit Entities.DaoDBFull;
 
 interface
 
 uses
-  System.SysUtils, System.Classes, VirtualTreeBdtk, EntitiesFull, uib,
+  System.SysUtils, System.Classes, VirtualTreeBdtk, Entities.Full, uib,
   Vcl.StdCtrls, Winapi.Windows, System.Rtti, System.Generics.Collections,
   Entities.Common, Entities.DaoCommon;
 
@@ -115,7 +115,7 @@ type
 implementation
 
 uses
-  UdmPrinc, Commun, UfrmConsole, DaoLite, EntitiesLite, Procedures,
+  UdmPrinc, Commun, UfrmConsole, Entities.DaoDBLite, Entities.Lite, Procedures,
   CommonConst, System.IOUtils, Vcl.Dialogs, UMetadata, UfrmFusionEditions,
   Vcl.Controls, ProceduresBDtk;
 

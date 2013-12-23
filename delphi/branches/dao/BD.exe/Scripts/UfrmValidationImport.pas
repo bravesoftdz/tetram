@@ -3,7 +3,7 @@ unit UfrmValidationImport;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Generics.Collections, EntitiesLite, Dialogs, StdCtrls, EntitiesFull,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Generics.Collections, Entities.Lite, Dialogs, StdCtrls, Entities.Full,
   ExtCtrls, CheckLst, Menus, jpeg, UframBoutons, ComboCheck, EditLabeled, ComCtrls;
 
 type
@@ -138,7 +138,8 @@ type
 implementation
 
 uses
-  IOUtils, Commun, Procedures, CommonConst, UBdtForms, DaoFull, ProceduresBDtk;
+  IOUtils, Commun, Procedures, CommonConst, UBdtForms, Entities.DaoDBFull, ProceduresBDtk,
+  Entities.Common;
 
 {$R *.dfm}
 

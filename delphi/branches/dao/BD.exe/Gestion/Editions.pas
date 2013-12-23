@@ -3,7 +3,7 @@ unit Editions;
 interface
 
 uses
-  SysUtils, Windows, Dialogs, DB, DBCtrls, Forms, Controls, ComCtrls, Classes, EntitiesFull;
+  SysUtils, Windows, Dialogs, DB, DBCtrls, Forms, Controls, ComCtrls, Classes, Entities.Full;
 
 {
   Principes de base:
@@ -105,7 +105,8 @@ implementation
 uses
   UIB, Commun, UfrmEditAlbum, UfrmEditSerie, Textes, UfrmEditEditeur, UdmPrinc,
   Math, UfrmFond, Procedures, ProceduresBDtk, UfrmEditCollection, UfrmEditAuteur, UfrmEditParaBD,
-  UfrmEditAchatAlbum, UfrmEditUnivers, DaoLite, DaoFull;
+  UfrmEditAchatAlbum, UfrmEditUnivers, Entities.DaoDBLite, Entities.DaoDBFull,
+  Entities.Common;
 
 function FindRec(const Table, Champ: string; const Reference: TGUID; WithMessage: Boolean): Boolean;
 begin

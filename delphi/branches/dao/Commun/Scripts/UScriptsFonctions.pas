@@ -3,8 +3,8 @@ unit UScriptsFonctions;
 interface
 
 uses
-  Windows, SysUtils, Classes, Dialogs, WinInet, StrUtils, Math, UMetadata, EntitiesLite, Generics.Collections, UNet, jpeg,
-  EntitiesFull;
+  Windows, SysUtils, Classes, Dialogs, WinInet, StrUtils, Math, UMetadata, Entities.Lite, Generics.Collections, UNet, jpeg,
+  Entities.Full;
 
 type
   TScriptChoix = class

@@ -32,7 +32,7 @@ procedure RIRegister_BdtkObjects(CL: TPSRuntimeClassImporter; isUpdate: Boolean)
 implementation
 
 uses
-  EntitiesLite, EntitiesFull, UMetadata, Commun, UScriptsFonctions;
+  Entities.Lite, Entities.Full, UMetadata, Commun, UScriptsFonctions;
 
 (* === run-time registration functions === *)
 

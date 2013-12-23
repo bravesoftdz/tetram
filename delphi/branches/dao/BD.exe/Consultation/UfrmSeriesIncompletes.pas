@@ -38,8 +38,8 @@ type
 
 implementation
 
-uses EntitiesLite, Commun, Impression, IniFiles, CommonConst, Procedures,
-  DaoFull;
+uses Entities.Lite, Commun, Impression, IniFiles, CommonConst, Procedures,
+  Entities.DaoDBFull;
 
 {$R *.dfm}
 

@@ -6,9 +6,9 @@ interface
 
 uses
   Windows, SysUtils, Classes, Controls, Graphics, VirtualTrees, VirtualTree, System.UITypes,
-  EditLabeled, EntitiesLite, StrUtils, LinkControls, Generics.Collections
+  EditLabeled, Entities.Lite, StrUtils, LinkControls, Generics.Collections
 {$IFDEF DEBUG}, Clipbrd{$ENDIF}
-    , DaoLite;
+    , Entities.DaoDBLite;
 
 type
   PInitialeInfo = ^RInitialeInfo;
@@ -243,7 +243,7 @@ const
 implementation
 
 uses
-  UIB, UdmPrinc, Commun, Types, UIBLib, Divers;
+  UIB, UdmPrinc, Commun, Types, UIBLib, Divers, Entities.Common;
 
 { TVirtualStringTree }
 

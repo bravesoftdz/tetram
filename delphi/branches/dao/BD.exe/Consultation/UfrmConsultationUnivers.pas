@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, StrUtils, System.UITypes,
-  Dialogs, EntitiesFull, StdCtrls, VirtualTrees, ExtCtrls, UfrmFond, Procedures,
+  Dialogs, Entities.Full, StdCtrls, VirtualTrees, ExtCtrls, UfrmFond, Procedures,
   ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms, VirtualTreeBdtk,
   LabeledCheckBox, System.Actions;
 
@@ -64,8 +64,8 @@ type
 
 implementation
 
-uses Commun, EntitiesLite, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
-  Proc_Gestions, DaoFull;
+uses Commun, Entities.Lite, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
+  Proc_Gestions, Entities.DaoDBFull, Entities.Common;
 
 {$R *.dfm}
 { TfrmConsultationUnivers }

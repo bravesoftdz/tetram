@@ -3,7 +3,7 @@ unit EntitiesRecherche;
 interface
 
 uses
-  System.SysUtils, System.Classes, Generics.Collections, UChampsRecherche, EntitiesFull, EntitiesLite,
+  System.SysUtils, System.Classes, Generics.Collections, UChampsRecherche, Entities.Full, Entities.Lite,
   Entities.Common;
 
 type
@@ -108,7 +108,7 @@ implementation
 
 uses
   uib, Commun, UdmPrinc, Divers, uiblib, CommonConst, UMetadata, Textes,
-  DaoLite;
+  Entities.DaoDBLite;
 
 { TRecherche }
 

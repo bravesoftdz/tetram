@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, System.UITypes,
-  Dialogs, ExtCtrls, StdCtrls, EntitiesFull, Generics.Collections, EntitiesLite,
+  Dialogs, ExtCtrls, StdCtrls, Entities.Full, Generics.Collections, Entities.Lite,
   UBdtForms;
 
 type
@@ -75,8 +75,8 @@ implementation
 {$R *.dfm}
 
 uses
-  Procedures, CommonConst, jpeg, UHistorique, Commun, DaoLite, DaoFull,
-  ProceduresBDtk;
+  Procedures, CommonConst, jpeg, UHistorique, Commun, Entities.DaoDBLite, Entities.DaoDBFull,
+  ProceduresBDtk, Entities.Common;
 
 { TThumbList.TThumb }
 

@@ -102,8 +102,8 @@ type
 
 implementation
 
-uses CommonConst, UdmPrinc, EntitiesLite, UIB, Commun, Procedures, Updates, IOUtils,
-  DaoLite, ProceduresBDtk;
+uses CommonConst, UdmPrinc, Entities.Lite, UIB, Commun, Procedures, Updates, IOUtils,
+  Entities.DaoDBLite, ProceduresBDtk, Entities.Common;
 
 {$R *.DFM}
 

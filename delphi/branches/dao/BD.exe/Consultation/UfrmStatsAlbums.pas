@@ -45,7 +45,7 @@ function TStatsAlbumsCreate(AOwner: TComponent; Info: TStats): TfrmStatsAlbums;
 
 implementation
 
-uses CommonConst, EntitiesLite, Divers;
+uses CommonConst, Entities.Lite, Divers;
 
 {$R *.DFM}
 

@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls,
   UfrmFond, VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, VirtualTreeBdtk, ProceduresBDtk, UbdtForms, StrUtils,
-  jpeg, ShellAPI, EntitiesFull, Generics.Defaults, PngSpeedButton, pngimage,
+  jpeg, ShellAPI, Entities.Full, Generics.Defaults, PngSpeedButton, pngimage,
   LabeledCheckBox, System.Actions;
 
 type
@@ -163,8 +163,9 @@ implementation
 {$R *.DFM}
 
 uses
-  Commun, EntitiesLite, CommonConst, MAJ, Impression, DateUtils, UHistorique, Procedures,
-  Divers, Textes, Proc_Gestions, UfrmConsole, DaoFull;
+  Commun, Entities.Lite, CommonConst, MAJ, Impression, DateUtils, UHistorique, Procedures,
+  Divers, Textes, Proc_Gestions, UfrmConsole, Entities.DaoDBFull,
+  Entities.Common;
 
 var
   FSortColumn: Integer;

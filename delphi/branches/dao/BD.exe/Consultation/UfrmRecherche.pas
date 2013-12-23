@@ -5,7 +5,7 @@ interface
 uses
   SysUtils, Windows, Messages, Classes, Forms, Graphics, Controls, Menus, StdCtrls, System.UITypes, System.Types, Buttons, ComCtrls, ExtCtrls, ToolWin, Commun,
   VirtualTrees, VirtualTreeBdtk, ActnList, VDTButton, ComboCheck, ProceduresBDtk,
-  UframRechercheRapide, EntitiesFull, EntitiesRecherche, UBdtForms, Generics.Defaults,
+  UframRechercheRapide, Entities.Full, EntitiesRecherche, UBdtForms, Generics.Defaults,
   System.Actions;
 
 type
@@ -83,8 +83,8 @@ type
 implementation
 
 uses
-  Textes, UdmPrinc, EntitiesLite, Impression, Math, UfrmEditCritere, UHistorique, Procedures, StrUtils,
-  UfrmFond, UfrmEditCritereTri, Divers;
+  Textes, UdmPrinc, Entities.Lite, Impression, Math, UfrmEditCritere, UHistorique, Procedures, StrUtils,
+  UfrmFond, UfrmEditCritereTri, Divers, Entities.Common;
 
 {$R *.DFM}
 

@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, EditLabeled, VirtualTrees, ComCtrls, VDTButton,
-  ExtCtrls, Buttons, UframBoutons, VirtualTreeBdtk, EntitiesLite, UframRechercheRapide, EntitiesFull,
+  ExtCtrls, Buttons, UframBoutons, VirtualTreeBdtk, Entities.Lite, UframRechercheRapide, Entities.Full,
   UBdtForms, Generics.Collections, PngSpeedButton, UframVTEdit;
 
 type
@@ -79,7 +79,7 @@ implementation
 
 uses
   Math, CommonConst, Proc_Gestions, Commun, Procedures, Textes, Divers, StrUtils,
-  UHistorique, UMetadata, DaoLite, DaoFull;
+  UHistorique, UMetadata, Entities.DaoDBLite, Entities.DaoDBFull, Entities.Common;
 
 {$R *.dfm}
 

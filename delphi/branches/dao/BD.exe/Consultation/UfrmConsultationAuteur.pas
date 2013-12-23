@@ -3,7 +3,7 @@ unit UfrmConsultationAuteur;
 interface
 
 uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls, ProceduresBDtk,
-  VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, jpeg, Procedures, ShellAPI, VirtualTree, EntitiesFull, UBdtForms, StrUtils,
+  VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, jpeg, Procedures, ShellAPI, VirtualTree, Entities.Full, UBdtForms, StrUtils,
   System.Actions;
 
 type
@@ -65,8 +65,8 @@ implementation
 
 {$R *.DFM}
 
-uses Commun, EntitiesLite, Impression, DateUtils, UHistorique, Proc_Gestions, UfrmFond,
-  DaoFull;
+uses Commun, Entities.Lite, Impression, DateUtils, UHistorique, Proc_Gestions, UfrmFond,
+  Entities.DaoDBFull, Entities.Common;
 
 type
   PNodeInfo = ^RNodeInfo;

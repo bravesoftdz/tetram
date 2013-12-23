@@ -1,14 +1,14 @@
-unit DaoLite;
+unit Entities.DaoDBLite;
 
 interface
 
 uses
-  System.SysUtils, uib, EntitiesLite, UMetadata, System.Generics.Collections,
+  System.SysUtils, uib, Entities.Lite, UMetadata, System.Generics.Collections,
   System.SyncObjs, Vcl.ComCtrls, Vcl.StdCtrls, System.Classes;
 
 type
   // ce serait trop facile si XE4 acceptait cette syntaxe....
-  // TClassDaoLite = class of TDaoLite<>;
+  // TClassEntities.DaoDBLite = class of TDaoLite<>;
   // je suis donc obligé de faire des classes "classique"
   TDaoLiteClass = class of TDaoLite;
 
@@ -167,7 +167,7 @@ type
 implementation
 
 uses
-  Commun, UdmPrinc, uiblib;
+  Commun, UdmPrinc, uiblib, Entities.Common;
 
 { TDaoLite<T> }
 

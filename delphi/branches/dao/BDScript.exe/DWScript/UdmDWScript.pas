@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, Winapi.Windows, Forms, System.Classes, UScriptList, Variants,
-  UScriptUtils, EntitiesFull, dwsComp, dwsDebugger, dwsCompiler, dwsExprs, dwsFunctions,
+  UScriptUtils, Entities.Full, dwsComp, dwsDebugger, dwsCompiler, dwsExprs, dwsFunctions,
   UMasterEngine, UScriptEngineIntf, UScriptEditor, SynHighlighterDWS, UDW_BdtkRegEx, UDW_BdtkObjects, dwsClassesLibModule, UDW_CommonFunctions,
   dwsErrors, UDWUnit, Vcl.Graphics, dwsJSONConnector;
 

@@ -96,7 +96,7 @@ procedure RefreshCallBack(Data: TObject);
 implementation
 
 uses MAJ, UfrmFond, Forms, Proc_Gestions, UfrmConsole, TypInfo, UdmPrinc,
-  EntitiesFull;
+  Entities.Full;
 
 const
   UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcConflitImport];

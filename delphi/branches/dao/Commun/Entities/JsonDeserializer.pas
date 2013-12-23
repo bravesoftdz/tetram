@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Rtti, System.Generics.Collections, System.TypInfo, dwsJSON, Commun,
-  EntitiesLite, EntitiesFull, System.Classes, UMetadata, Entities.Common,
+  Entities.Lite, Entities.Full, System.Classes, UMetadata, Entities.Common,
   Entities.DaoCommon;
 
 type

@@ -52,7 +52,7 @@ type
 
 implementation
 
-uses Impression, IniFiles, CommonConst, EntitiesLite, DateUtils, UHistorique,
+uses Impression, IniFiles, CommonConst, Entities.Lite, DateUtils, UHistorique,
   Proc_Gestions, Commun;
 
 {$R *.dfm}

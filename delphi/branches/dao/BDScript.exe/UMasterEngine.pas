@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, UScriptList, System.Generics.Collections, Dialogs,
-  UScriptUtils, EntitiesFull, UScriptEditor, UScriptEngineIntf;
+  UScriptUtils, Entities.Full, UScriptEditor, UScriptEngineIntf;
 
 type
   TEngineFactory = class

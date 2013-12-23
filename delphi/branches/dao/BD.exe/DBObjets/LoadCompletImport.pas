@@ -3,7 +3,7 @@ unit LoadCompletImport;
 interface
 
 uses
-  Windows, SysUtils, Classes, Forms, EntitiesFull, Generics.Collections, Graphics;
+  Windows, SysUtils, Classes, Forms, Entities.Full, Generics.Collections, Graphics;
 
 procedure Import(Self: TAlbumFull);
 
@@ -12,8 +12,8 @@ implementation
 
 uses
   IOUtils, UIB, Commun, VirtualTreeBdtk, UfrmControlImport, Controls, UdmPrinc, WinInet, UHistorique, Proc_Gestions, Editions, UfrmValidationImport, UNet,
-  EntitiesLite, CommonConst, Procedures, UMetadata, Divers, DaoLite, DaoFull,
-  ProceduresBDtk;
+  Entities.Lite, CommonConst, Procedures, UMetadata, Divers, Entities.DaoDBLite, Entities.DaoDBFull,
+  ProceduresBDtk, Entities.Common;
 
 procedure Import(Self: TAlbumFull);
 var

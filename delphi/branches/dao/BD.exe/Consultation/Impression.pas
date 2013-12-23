@@ -4,7 +4,7 @@ interface
 
 uses
   Dialogs, Controls, Forms, Classes, SysUtils, Windows, ExtCtrls, Graphics, System.UITypes, Printers, Commun, PrintObject, Textes, CommonConst,
-  Divers, EntitiesLite, UfrmFond, UdmPrinc, UfrmRecherche, UIB, jpeg, Generics.Collections, EntitiesFull,
+  Divers, Entities.Lite, UfrmFond, UdmPrinc, UfrmRecherche, UIB, jpeg, Generics.Collections, Entities.Full,
   EntitiesRecherche, EntitiesStats;
 
 procedure ImpressionListeCompleteAlbums(Previsualisation: Boolean);
@@ -29,7 +29,7 @@ implementation
 
 uses
   UfrmPreview, Math, Procedures, ProceduresBDtk, DateUtils, UIBlib, StrUtils, UMetadata,
-  DaoLite, DaoFull;
+  Entities.DaoDBLite, Entities.DaoDBFull, Entities.Common;
 
 procedure PreparePrintObject(Prn: TPrintObject; Previsualisation: Boolean; const Titre: string);
 begin

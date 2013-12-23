@@ -426,9 +426,9 @@
         <DCCReference Include="..\Commun\Procedures.pas"/>
         <DCCReference Include="..\Commun\UNet.pas"/>
         <DCCReference Include="..\Commun\VirtualTree.pas"/>
-        <DCCReference Include="DBObjets\DaoFull.pas"/>
+        <DCCReference Include="DBObjets\Entities.DaoDBFull.pas"/>
         <DCCReference Include="DBObjets\DaoLambda.pas"/>
-        <DCCReference Include="DBObjets\DaoLite.pas"/>
+        <DCCReference Include="DBObjets\Entities.DaoDBLite.pas"/>
         <DCCReference Include="DBObjets\DaoRecherche.pas"/>
         <DCCReference Include="DBObjets\DaoStats.pas"/>
         <DCCReference Include="DBObjets\EntitiesRecherche.pas"/>

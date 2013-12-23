@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, SynEditHighlighter, SynEdit, ImgList,
   StrUtils, SynEditMiscClasses, SynEditSearch, StdActns, ActnList, Menus, SynEditTypes, ComCtrls, UScriptUtils, VirtualTrees, StdCtrls,
-  ExtCtrls, EntitiesFull, SynEditKeyCmds, UBdtForms, Generics.Collections, ToolWin, UScriptEditor,
+  ExtCtrls, Entities.Full, SynEditKeyCmds, UBdtForms, Generics.Collections, ToolWin, UScriptEditor,
   PngImageList, UScriptEngineIntf, UScriptList, UframBoutons, EditLabeled,
   System.Actions, SynCompletionProposal, SynEditPlugins, SynMacroRecorder,
   dwsDebugger, UframWatches, UframBreakpoints, UframMessages, UframScriptInfos, UScriptEditorPage;
