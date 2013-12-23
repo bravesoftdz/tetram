@@ -29,7 +29,8 @@ var
 
 implementation
 
-uses CommonConst, Entities.Lite, UdmPrinc, UIB, Commun, Entities.DaoDBLite;
+uses CommonConst, Entities.Lite, UdmPrinc, UIB, Commun, Entities.DaoLite,
+  Entities.FactoriesLite;
 
 {$R *.DFM}
 
@@ -42,7 +43,7 @@ var
 begin
   FFirstEdit := nil;
   ListFC := TList<TframConvertisseur>.Create;
-  PC := TConversionLite.Create;
+  PC := TFactoryConversionLite.getInstance;
   q := TUIBQuery.Create(nil);
   with q do
     try

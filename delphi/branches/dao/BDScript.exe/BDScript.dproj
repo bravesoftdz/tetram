@@ -203,6 +203,10 @@ $(PostBuildEvent)]]></PostBuildEvent>
             <Form>frmAboutBox</Form>
             <FormType>dfm</FormType>
         </DCCReference>
+        <DCCReference Include="..\Commun\Entities\Entities.Common.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.FactoriesLite.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.FactoriesCommon.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.FactoriesFull.pas"/>
         <RcItem Include="..\Commun\images\imgAbout.bmp">
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>ABOUT</ResourceId>

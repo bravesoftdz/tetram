@@ -196,8 +196,8 @@ implementation
 
 uses
   Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
-  UHistorique, UMetadata, Entities.DaoDBLite, Entities.DaoDBFull, Entities.Common,
-  Entities.FactoriesLite;
+  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
+  Entities.FactoriesLite, Entities.FactoriesFull;
 
 {$R *.DFM}
 
@@ -340,7 +340,7 @@ procedure TfrmEditAlbum.AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListV
 var
   PA: TAuteurLite;
 begin
-  PA := TAuteurLite.Create;
+  PA := TFactoryAuteurLite.getInstance;
   TDaoAuteurLite.Fill(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
   List.Add(PA);
   lvList.Items.Count := List.Count;
@@ -619,7 +619,7 @@ begin
       try
         for i := 0 to Files.Count - 1 do
         begin
-          PC := TCouvertureLite.Create;
+          PC := TFactoryCouvertureLite.getInstance;
           FCurrentEditionComplete.Couvertures.Add(PC);
           PC.ID := GUID_NULL;
           PC.OldNom := Files[i];
@@ -806,7 +806,7 @@ var
   EditionComplete: TEditionFull;
 begin
   SetLength(FEditeurCollectionSelected, Succ(Length(FEditeurCollectionSelected)));
-  EditionComplete := TEditionFull.Create;
+  EditionComplete := TFactoryEditionFull.getInstance;
   EditionComplete.ID_Album := ID_Album;
   EditionComplete.Stock := True;
   EditionComplete.Dedicace := False;

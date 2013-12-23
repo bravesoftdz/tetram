@@ -89,7 +89,7 @@ type
 implementation
 
 uses Commun, Entities.Lite, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
-  Proc_Gestions, Entities.DaoDBFull, Entities.Common;
+  Proc_Gestions, Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
 
 {$R *.dfm}
 { TFrmConsultationParaBD }
@@ -228,7 +228,7 @@ end;
 procedure TfrmConsultationParaBD.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FParaBD := TParaBDFull.Create;
+  FParaBD := TFactoryParaBDFull.getInstance;
 end;
 
 procedure TfrmConsultationParaBD.FormDestroy(Sender: TObject);

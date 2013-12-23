@@ -69,7 +69,7 @@ implementation
 
 uses
   IOUtils, UBdtForms, EditLabeled, StdCtrls, Controls, Forms, UframBoutons, UfrmScriptChoix, OverbyteIcsHttpProt, CommonConst, Procedures,
-  SysConst, Graphics, System.UITypes;
+  SysConst, Graphics, System.UITypes, Entities.FactoriesLite;
 
 const
   PathDelim = '/';
@@ -546,7 +546,7 @@ begin
     Stream.Free;
   end;
 
-  Couverture := TCouvertureLite.Create;
+  Couverture := TFactoryCouvertureLite.getInstance;
   Result := Edition.Couvertures.Add(Couverture);
   Couverture.NewNom := tmpFile;
   Couverture.OldNom := Couverture.NewNom;

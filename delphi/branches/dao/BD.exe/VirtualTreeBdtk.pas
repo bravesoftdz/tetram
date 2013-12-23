@@ -8,7 +8,7 @@ uses
   Windows, SysUtils, Classes, Controls, Graphics, VirtualTrees, VirtualTree, System.UITypes,
   EditLabeled, Entities.Lite, StrUtils, LinkControls, Generics.Collections
 {$IFDEF DEBUG}, Clipbrd{$ENDIF}
-    , Entities.DaoDBLite;
+    , Entities.DaoLite;
 
 type
   PInitialeInfo = ^RInitialeInfo;

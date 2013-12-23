@@ -103,7 +103,7 @@ type
 implementation
 
 uses CommonConst, UdmPrinc, Entities.Lite, UIB, Commun, Procedures, Updates, IOUtils,
-  Entities.DaoDBLite, ProceduresBDtk, Entities.Common;
+  Entities.DaoLite, ProceduresBDtk, Entities.Common, Entities.FactoriesLite;
 
 {$R *.DFM}
 
@@ -317,7 +317,7 @@ begin
   end
   else
   begin
-    PC := TConversionLite.Create;
+    PC := TFactoryConversionLite.getInstance;
     i := ListView1.Items.Add;
     i.SubItems.Add('1');
     i.Data := PC;

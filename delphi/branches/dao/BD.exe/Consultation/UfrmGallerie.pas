@@ -75,8 +75,8 @@ implementation
 {$R *.dfm}
 
 uses
-  Procedures, CommonConst, jpeg, UHistorique, Commun, Entities.DaoDBLite, Entities.DaoDBFull,
-  ProceduresBDtk, Entities.Common;
+  Procedures, CommonConst, jpeg, UHistorique, Commun, Entities.DaoLite, Entities.DaoFull,
+  ProceduresBDtk, Entities.Common, Entities.FactoriesLite;
 
 { TThumbList.TThumb }
 
@@ -208,7 +208,7 @@ begin
 
   FThumbs.Clear;
 
-  Album := TAlbumLite.Create;
+  Album := TFactoryAlbumLite.getInstance;
   try
     TDaoAlbumLite.Fill(Album, Value);
     Caption := 'Gallerie - ' + Album.ChaineAffichage(True);

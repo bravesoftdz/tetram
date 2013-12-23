@@ -138,7 +138,7 @@ type
 implementation
 
 uses
-  IOUtils, Commun, Procedures, CommonConst, UBdtForms, Entities.DaoDBFull, ProceduresBDtk,
+  IOUtils, Commun, Procedures, CommonConst, UBdtForms, Entities.DaoFull, ProceduresBDtk,
   Entities.Common;
 
 {$R *.dfm}

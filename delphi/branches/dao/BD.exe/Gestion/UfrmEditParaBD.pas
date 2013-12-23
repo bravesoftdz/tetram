@@ -104,7 +104,7 @@ implementation
 
 uses
   Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, Entities.Lite, Divers, UHistorique,
-  UMetadata, Entities.DaoDBLite, Entities.DaoDBFull, Entities.Common,
+  UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
   Entities.FactoriesLite;
 
 {$R *.dfm}
@@ -441,7 +441,7 @@ var
 begin
   if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
     Exit;
-  PA := TAuteurLite.Create;
+  PA := TFactoryAuteurLite.getInstance;
   TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_ParaBD, GUID_NULL, TMetierAuteur(0));
   FParaBD.Auteurs.Add(PA);
   lvAuteurs.Items.Count := FParaBD.Auteurs.Count;

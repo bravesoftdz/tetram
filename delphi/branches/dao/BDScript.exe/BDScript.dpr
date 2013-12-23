@@ -62,7 +62,11 @@ uses
   UScriptsHTMLFunctions in 'UScriptsHTMLFunctions.pas',
   BdtkRegEx in '..\Commun\BdtkRegEx.pas',
   VirtualTree in '..\Commun\VirtualTree.pas',
-  UfrmAboutBox in '..\Commun\UfrmAboutBox.pas' {frmAboutBox};
+  UfrmAboutBox in '..\Commun\UfrmAboutBox.pas' {frmAboutBox},
+  Entities.Common in '..\Commun\Entities\Entities.Common.pas',
+  Entities.FactoriesLite in '..\Commun\Entities\Entities.FactoriesLite.pas',
+  Entities.FactoriesCommon in '..\Commun\Entities\Entities.FactoriesCommon.pas',
+  Entities.FactoriesFull in '..\Commun\Entities\Entities.FactoriesFull.pas';
 
 {$R *.res}
 

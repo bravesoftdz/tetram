@@ -37,7 +37,7 @@ implementation
 
 uses
   Commun, Procedures, Proc_Gestions, Textes, UHistorique, Entities.Lite,
-  Entities.DaoDBFull, Entities.DaoDBLite, Entities.Common;
+  Entities.DaoFull, Entities.DaoLite, Entities.Common;
 
 {$R *.DFM}
 

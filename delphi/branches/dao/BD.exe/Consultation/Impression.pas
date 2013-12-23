@@ -29,7 +29,7 @@ implementation
 
 uses
   UfrmPreview, Math, Procedures, ProceduresBDtk, DateUtils, UIBlib, StrUtils, UMetadata,
-  Entities.DaoDBLite, Entities.DaoDBFull, Entities.Common;
+  Entities.DaoLite, Entities.DaoFull, Entities.Common, Entities.FactoriesLite;
 
 procedure PreparePrintObject(Prn: TPrintObject; Previsualisation: Boolean; const Titre: string);
 begin
@@ -875,7 +875,7 @@ begin
       Prn.CreateColumn1(4, 15, -1, taLeftJustify, Prn.Font.name, 12, [fsBold]); // série
       Prn.CreateColumn1(5, 25, -1, taLeftJustify, Prn.Font.name, 10, [fsItalic]); // résumé de la série
 
-      PAl := TAlbumLite.Create;
+      PAl := TFactoryAlbumLite.getInstance;
       with Source do
       begin
         index := 1;

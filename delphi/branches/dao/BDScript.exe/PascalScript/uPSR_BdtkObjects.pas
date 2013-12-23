@@ -32,14 +32,15 @@ procedure RIRegister_BdtkObjects(CL: TPSRuntimeClassImporter; isUpdate: Boolean)
 implementation
 
 uses
-  Entities.Lite, Entities.Full, UMetadata, Commun, UScriptsFonctions;
+  Entities.Lite, Entities.Full, UMetadata, Commun, UScriptsFonctions,
+  Entities.FactoriesFull;
 
 (* === run-time registration functions === *)
 
 procedure TAlbumCompletEdition_R(Self: TAlbumFull; var T: TEditionFull);
 begin
   if Self.Editions.Editions.Count = 0 then
-    Self.Editions.Editions.Add(TEditionFull.Create);
+    Self.Editions.Editions.Add(TFactoryEditionFull.getInstance);
   T := Self.Editions.Editions[0];
 end;
 
@@ -430,7 +431,7 @@ end;
 
 function TEditionCompleteCreate: TEditionFull;
 begin
-  Result := TEditionFull.Create;
+  Result := TFactoryEditionFull.getInstance;
 end;
 
 procedure TEditionCompleteEditeur_R(Self: TEditionFull; var T: TEditeurFull);

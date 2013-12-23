@@ -12,8 +12,8 @@ implementation
 
 uses
   IOUtils, UIB, Commun, VirtualTreeBdtk, UfrmControlImport, Controls, UdmPrinc, WinInet, UHistorique, Proc_Gestions, Editions, UfrmValidationImport, UNet,
-  Entities.Lite, CommonConst, Procedures, UMetadata, Divers, Entities.DaoDBLite, Entities.DaoDBFull,
-  ProceduresBDtk, Entities.Common;
+  Entities.Lite, CommonConst, Procedures, UMetadata, Divers, Entities.DaoLite, Entities.DaoFull,
+  ProceduresBDtk, Entities.Common, Entities.FactoriesLite;
 
 procedure Import(Self: TAlbumFull);
 var
@@ -263,21 +263,21 @@ begin
           begin
             for Auteur in Serie.Scenaristes do
             begin
-              PA := TAuteurLite.Create;
+              PA := TFactoryAuteurLite.getInstance;
               TDaoAuteurLite.Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
               Scenaristes.Add(PA);
             end;
 
             for Auteur in Serie.Dessinateurs do
             begin
-              PA := TAuteurLite.Create;
+              PA := TFactoryAuteurLite.getInstance;
               TDaoAuteurLite.Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(1));
               Dessinateurs.Add(PA);
             end;
 
             for Auteur in Serie.Coloristes do
             begin
-              PA := TAuteurLite.Create;
+              PA := TFactoryAuteurLite.getInstance;
               TDaoAuteurLite.Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(2));
               Coloristes.Add(PA);
             end;

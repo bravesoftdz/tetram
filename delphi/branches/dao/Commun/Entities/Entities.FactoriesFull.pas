@@ -73,7 +73,7 @@ end;
 
 class function TFactoryEditionFull.EntityClass: TEntityClass;
 begin
-  Result := TEditeurFull;
+  Result := TEditionFull;
 end;
 
 { TFactoryEditeurFull }

@@ -93,7 +93,7 @@ type
 implementation
 
 uses Commun, Divers, Entities.Lite, ShellAPI, UHistorique, Impression, Proc_Gestions,
-  UfrmFond, Entities.DaoDBFull, Entities.Common;
+  UfrmFond, Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
 
 {$R *.dfm}
 { TFrmConsultationSerie }
@@ -201,7 +201,7 @@ end;
 procedure TfrmConsultationSerie.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FSerie := TSerieFull.Create;
+  FSerie := TFactorySerieFull.getInstance;
 end;
 
 procedure TfrmConsultationSerie.FormDestroy(Sender: TObject);

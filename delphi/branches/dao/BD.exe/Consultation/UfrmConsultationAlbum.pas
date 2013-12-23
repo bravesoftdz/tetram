@@ -164,8 +164,8 @@ implementation
 
 uses
   Commun, Entities.Lite, CommonConst, MAJ, Impression, DateUtils, UHistorique, Procedures,
-  Divers, Textes, Proc_Gestions, UfrmConsole, Entities.DaoDBFull,
-  Entities.Common;
+  Divers, Textes, Proc_Gestions, UfrmConsole, Entities.DaoFull,
+  Entities.Common, Entities.FactoriesFull;
 
 var
   FSortColumn: Integer;
@@ -196,7 +196,7 @@ end;
 
 procedure TfrmConsultationAlbum.FormCreate(Sender: TObject);
 begin
-  FAlbum := TAlbumFull.Create;
+  FAlbum := TFactoryAlbumFull.getInstance;
   PrepareLV(Self);
   CurrentCouverture := 0;
   FSortColumn := 0;

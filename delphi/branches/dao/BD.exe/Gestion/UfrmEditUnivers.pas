@@ -53,7 +53,7 @@ implementation
 
 uses
   Commun, Proc_Gestions, Entities.Lite, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
-  UHistorique, UMetadata, Entities.DaoDBFull, Entities.DaoDBLite, Entities.Common;
+  UHistorique, UMetadata, Entities.DaoFull, Entities.DaoLite, Entities.Common;
 
 {$R *.DFM}
 

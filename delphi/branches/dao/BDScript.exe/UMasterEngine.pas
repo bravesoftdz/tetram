@@ -69,7 +69,7 @@ implementation
 
 { %CLASSGROUP 'System.Classes.TPersistent' }
 
-uses CommonConst;
+uses CommonConst, Entities.FactoriesFull;
 
 var
   Engines: TDictionary<TScriptEngine, TEngineFactoryClass> = nil;
@@ -112,7 +112,7 @@ end;
 constructor TMasterEngine.Create;
 begin
   FDebugPlugin := TDebugInfos.Create(Self);
-  FInternalAlbumToImport := TAlbumFull.Create;
+  FInternalAlbumToImport := TFactoryAlbumFull.getInstance;
   FAlbumToImport := FInternalAlbumToImport;
   FScriptList := TScriptList.Create;
 end;

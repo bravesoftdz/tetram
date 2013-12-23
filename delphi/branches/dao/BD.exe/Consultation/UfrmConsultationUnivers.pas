@@ -65,7 +65,7 @@ type
 implementation
 
 uses Commun, Entities.Lite, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
-  Proc_Gestions, Entities.DaoDBFull, Entities.Common;
+  Proc_Gestions, Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
 
 {$R *.dfm}
 { TfrmConsultationUnivers }
@@ -139,7 +139,7 @@ end;
 procedure TfrmConsultationUnivers.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FUnivers := TUniversFull.Create;
+  FUnivers := TFactoryUniversFull.getInstance;
 end;
 
 procedure TfrmConsultationUnivers.FormDestroy(Sender: TObject);

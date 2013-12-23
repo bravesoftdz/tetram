@@ -39,7 +39,7 @@ type
 
 implementation
 
-uses Commun, ShellAPI, Procedures, Textes, VirtualTreeBdtk, Entities.DaoDBFull,
+uses Commun, ShellAPI, Procedures, Textes, VirtualTreeBdtk, Entities.DaoFull,
   Entities.Common;
 
 {$R *.DFM}

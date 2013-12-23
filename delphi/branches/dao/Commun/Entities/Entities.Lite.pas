@@ -177,18 +177,18 @@ function MakeUnivers(const Nom: string): TUniversLite;
 implementation
 
 uses
-  StrUtils;
+  StrUtils, Entities.FactoriesLite;
 
 function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteurLite;
 begin
-  Result := TAuteurLite.Create;
+  Result := TFactoryAuteurLite.getInstance;
   Result.Personne.Nom := Nom;
   Result.Metier := Metier;
 end;
 
 function MakeUnivers(const Nom: string): TUniversLite;
 begin
-  Result := TUniversLite.Create;
+  Result := TFactoryUniversLite.getInstance;
   Result.NomUnivers := Nom;
 end;
 
@@ -281,7 +281,7 @@ end;
 constructor TAuteurLite.Create;
 begin
   inherited;
-  Personne := TPersonnageLite.Create;
+  Personne := TFactoryPersonnageLite.getInstance;
 end;
 
 destructor TAuteurLite.Destroy;
@@ -352,7 +352,7 @@ end;
 constructor TCollectionLite.Create;
 begin
   inherited;
-  Editeur := TEditeurLite.Create;
+  Editeur := TFactoryEditeurLite.getInstance;
 end;
 
 destructor TCollectionLite.Destroy;
@@ -398,8 +398,8 @@ end;
 constructor TSerieLite.Create;
 begin
   inherited;
-  Editeur := TEditeurLite.Create;
-  Collection := TCollectionLite.Create;
+  Editeur := TFactoryEditeurLite.getInstance;
+  Collection := TFactoryCollectionLite.getInstance;
 end;
 
 destructor TSerieLite.Destroy;
@@ -442,8 +442,8 @@ end;
 constructor TEditionLite.Create;
 begin
   inherited;
-  Editeur := TEditeurLite.Create;
-  Collection := TCollectionLite.Create;
+  Editeur := TFactoryEditeurLite.getInstance;
+  Collection := TFactoryCollectionLite.getInstance;
 end;
 
 destructor TEditionLite.Destroy;

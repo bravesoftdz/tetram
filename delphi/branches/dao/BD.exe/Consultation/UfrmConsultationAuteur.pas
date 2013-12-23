@@ -66,7 +66,7 @@ implementation
 {$R *.DFM}
 
 uses Commun, Entities.Lite, Impression, DateUtils, UHistorique, Proc_Gestions, UfrmFond,
-  Entities.DaoDBFull, Entities.Common;
+  Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
 
 type
   PNodeInfo = ^RNodeInfo;
@@ -85,7 +85,7 @@ end;
 
 procedure TfrmConsultationAuteur.FormCreate(Sender: TObject);
 begin
-  FAuteur := TAuteurFull.Create;
+  FAuteur := TFactoryAuteurFull.getInstance;
   vstSeries.NodeDataSize := SizeOf(RNodeInfo);
   PrepareLV(Self);
 end;

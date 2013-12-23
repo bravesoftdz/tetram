@@ -63,9 +63,10 @@ end;
 
 procedure TDBEntity.Assign(Source: TPersistent);
 begin
-  inherited;
   if Source is TDBEntity then
-    Self.ID := TDBEntity(Source).ID;
+    Self.ID := TDBEntity(Source).ID
+  else
+    inherited;
 end;
 
 procedure TDBEntity.Clear;

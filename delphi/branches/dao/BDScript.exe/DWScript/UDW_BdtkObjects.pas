@@ -73,7 +73,8 @@ implementation
 
 uses
   dwsSymbols, Entities.Full, UMetadata, Procedures, AnsiStrings, Divers, Generics.Collections,
-  UScriptsFonctions, Entities.Lite, Commun;
+  UScriptsFonctions, Entities.Lite, Commun, Entities.FactoriesLite,
+  Entities.FactoriesFull;
 
 { TDW_BdtkObjects }
 
@@ -107,7 +108,7 @@ end;
 
 procedure TDW_BdtkObjectsUnit.OnTAuteur_CreateEval(info: TProgramInfo; var ExtObject: TObject);
 begin
-  ExtObject := TAuteurLite.Create;
+  ExtObject := TFactoryAuteurLite.getInstance;
 end;
 
 procedure TDW_BdtkObjectsUnit.OnTEditionComplete_AddImageFromURLEval(info: TProgramInfo; ExtObject: TObject);
@@ -169,7 +170,7 @@ var
 begin
   Album := (ExtObject as TAlbumFull);
   if Album.Editions.Editions.Count = 0 then
-    Album.Editions.Editions.Add(TEditionFull.Create);
+    Album.Editions.Editions.Add(TFactoryEditionFull.getInstance);
   info.ResultAsVariant := GetScriptObjFromExternal(info, Album.Editions.Editions[0]);
 end;
 
@@ -238,7 +239,7 @@ end;
 
 procedure TDW_BdtkObjectsUnit.OnTUnivers_CreateEval(info: TProgramInfo; var ExtObject: TObject);
 begin
-  ExtObject := TUniversLite.Create;
+  ExtObject := TFactoryUniversLite.getInstance;
 end;
 
 procedure TDW_BdtkObjectsUnit.TScriptChoixTitre(info: TProgramInfo; ExtObject: TObject);

@@ -79,7 +79,8 @@ implementation
 
 uses
   Math, CommonConst, Proc_Gestions, Commun, Procedures, Textes, Divers, StrUtils,
-  UHistorique, UMetadata, Entities.DaoDBLite, Entities.DaoDBFull, Entities.Common;
+  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
+  Entities.FactoriesLite;
 
 {$R *.dfm}
 
@@ -94,7 +95,7 @@ procedure TfrmEditAchatAlbum.AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDT
 var
   PA: TAuteurLite;
 begin
-  PA := TAuteurLite.Create;
+  PA := TFactoryAuteurLite.getInstance;
   TDaoAuteurLite.Fill(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
   List.Add(PA);
   lvList.Items.Count := List.Count;

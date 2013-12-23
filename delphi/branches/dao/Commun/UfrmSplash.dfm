@@ -62,7 +62,6 @@ object frmSplash: TfrmSplash
     InfoPrefix = 'Version'
     ShowInfoPrefix = True
     LangCharset = '-1'
-    Filename = 'C:\Program Files (x86)\Embarcadero\RAD Studio\11.0\bin\bds.exe'
     DateTimeFormat = 'dd/MM/yyyy'
     FileSizeFormat = '#,#0" Bytes"'
   end
@@ -237,7 +236,6 @@ object frmSplash: TfrmSplash
     InfoPrefix = 'Copyright'
     ShowInfoPrefix = True
     LangCharset = '-1'
-    Filename = 'C:\Program Files (x86)\Embarcadero\RAD Studio\11.0\bin\bds.exe'
     DateTimeFormat = 'dd/MM/yyyy'
     FileSizeFormat = '#,#0" Bytes"'
   end

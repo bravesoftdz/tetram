@@ -295,6 +295,7 @@ object frmAboutBox: TfrmAboutBox
     Width = 186
     Height = 16
     AutoSize = False
+    Caption = 'VlVersion'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -13
@@ -302,20 +303,20 @@ object frmAboutBox: TfrmAboutBox
     Font.Style = []
     ParentFont = False
     Transparent = True
-    VersionResource = vrFileVersion
-    VersionResourceKey = 'FileVersion'
-    InfoPrefix = 'Version'
+    VersionResource = vrProductVersion
+    VersionResourceKey = 'ProductVersion'
+    InfoPrefix = 'Version du produit:'
     ShowInfoPrefix = True
     LangCharset = '-1'
-    Filename = 'C:\Program Files (x86)\Embarcadero\RAD Studio\11.0\bin\bds.exe'
     DateTimeFormat = 'dd/MM/yyyy'
     FileSizeFormat = '#,#0" Bytes"'
   end
   object VlCopyright: TfshVersionLabel
     Left = 303
     Top = 66
-    Width = 3
+    Width = 55
     Height = 13
+    Caption = 'VlCopyright'
     Font.Charset = ANSI_CHARSET
     Font.Color = clBlack
     Font.Height = -11
@@ -328,7 +329,6 @@ object frmAboutBox: TfrmAboutBox
     InfoPrefix = 'Copyright'
     ShowInfoPrefix = True
     LangCharset = '-1'
-    Filename = 'C:\Program Files (x86)\Embarcadero\RAD Studio\11.0\bin\bds.exe'
     DateTimeFormat = 'dd/MM/yyyy'
     FileSizeFormat = '#,#0" Bytes"'
   end

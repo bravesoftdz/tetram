@@ -44,7 +44,7 @@ type
 
 implementation
 
-uses CommonConst, Entities.Lite, Commun, Entities.Full, Entities.DaoDBLite, Entities.DaoDBFull,
+uses CommonConst, Entities.Lite, Commun, Entities.Full, Entities.DaoLite, Entities.DaoFull,
   EntitiesSerializer, JsonSerializer, Entities.Common, Entities.FactoriesLite;
 
 {$R *.dfm}

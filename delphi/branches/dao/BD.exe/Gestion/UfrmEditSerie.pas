@@ -114,7 +114,7 @@ implementation
 
 uses
   Commun, Proc_Gestions, Entities.Lite, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
-  UHistorique, UMetadata, Entities.DaoDBLite, Entities.DaoDBFull, ProceduresBDtk,
+  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, ProceduresBDtk,
   Entities.Common, Entities.FactoriesLite;
 
 {$R *.DFM}
@@ -461,7 +461,7 @@ begin
   case TSpeedButton(Sender).Tag of
     1:
       begin
-        PA := TAuteurLite.Create;
+        PA := TFactoryAuteurLite.getInstance;
         TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maScenariste);
         FSerie.Scenaristes.Add(PA);
         lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
@@ -469,7 +469,7 @@ begin
       end;
     2:
       begin
-        PA := TAuteurLite.Create;
+        PA := TFactoryAuteurLite.getInstance;
         TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maDessinateur);
         FSerie.Dessinateurs.Add(PA);
         lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
@@ -477,7 +477,7 @@ begin
       end;
     3:
       begin
-        PA := TAuteurLite.Create;
+        PA := TFactoryAuteurLite.getInstance;
         TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maColoriste);
         FSerie.Coloristes.Add(PA);
         lvColoristes.Items.Count := FSerie.Coloristes.Count;

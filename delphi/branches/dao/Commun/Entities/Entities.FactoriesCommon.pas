@@ -26,6 +26,7 @@ type
   end;
 
   TFactoryGenericEntity<T: TEntity> = class abstract(TFactoryEntity)
+    class function getInstance: T; reintroduce;
     class function Duplicate(Source: T): T; reintroduce;
   end;
 
@@ -34,6 +35,7 @@ type
   end;
 
   TFactoryGenericDBEntity<T: TDBEntity> = class abstract(TFactoryDBEntity)
+    class function getInstance: T; reintroduce;
     class function Duplicate(Source: T): T; reintroduce;
   end;
 
@@ -83,11 +85,21 @@ begin
   Result := inherited Duplicate(Source) as T;
 end;
 
+class function TFactoryGenericEntity<T>.getInstance: T;
+begin
+  Result := inherited getInstance as T;
+end;
+
 { TFactoryGenericDBEntity<T> }
 
 class function TFactoryGenericDBEntity<T>.Duplicate(Source: T): T;
 begin
   Result := inherited Duplicate(Source) as T;
+end;
+
+class function TFactoryGenericDBEntity<T>.getInstance: T;
+begin
+  result := inherited getInstance as T;
 end;
 
 end.

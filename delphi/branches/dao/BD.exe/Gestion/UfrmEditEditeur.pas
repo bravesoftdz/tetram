@@ -40,7 +40,7 @@ type
 implementation
 
 uses
-  Commun, Procedures, Textes, VirtualTreeBdtk, Entities.DaoDBFull,
+  Commun, Procedures, Textes, VirtualTreeBdtk, Entities.DaoFull,
   Entities.Common;
 
 {$R *.DFM}

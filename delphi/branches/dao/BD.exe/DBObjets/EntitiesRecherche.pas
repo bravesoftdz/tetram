@@ -108,7 +108,7 @@ implementation
 
 uses
   uib, Commun, UdmPrinc, Divers, uiblib, CommonConst, UMetadata, Textes,
-  Entities.DaoDBLite;
+  Entities.DaoLite;
 
 { TRecherche }
 

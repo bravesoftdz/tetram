@@ -135,7 +135,8 @@ type
 implementation
 
 uses
-  Commun, uib, UdmPrinc, System.DateUtils, Divers, Entities.DaoDBLite;
+  Commun, uib, UdmPrinc, System.DateUtils, Divers, Entities.DaoLite,
+  Entities.FactoriesLite;
 
 { TStats }
 
@@ -563,7 +564,7 @@ end;
 constructor TPrevisionSortie.Create;
 begin
   inherited;
-  FSerie := TSerieLite.Create;
+  FSerie := TFactorySerieLite.getInstance;
 end;
 
 destructor TPrevisionSortie.Destroy;
@@ -600,7 +601,7 @@ constructor TSerieIncomplete.Create;
 begin
   inherited;
   FNumerosManquants := TStringList.Create;
-  FSerie := TSerieLite.Create;
+  FSerie := TFactorySerieLite.getInstance;
 end;
 
 destructor TSerieIncomplete.Destroy;

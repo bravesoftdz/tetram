@@ -285,9 +285,8 @@ type
   TEditionsFull = class(TListFull)
   strict private
     FEditions: TObjectList<TEditionFull>;
-  protected
-    constructor Create; override;
   public
+    constructor Create; override;
     destructor Destroy; override;
     procedure Clear; override;
   published
@@ -427,7 +426,7 @@ type
 implementation
 
 uses
-  UMetadata, Vcl.StdCtrls;
+  UMetadata, Vcl.StdCtrls, Entities.FactoriesFull, Entities.FactoriesLite;
 
 { ROption }
 
@@ -549,7 +548,7 @@ begin
   FScenaristes := TObjectList<TAuteurLite>.Create;
   FDessinateurs := TObjectList<TAuteurLite>.Create;
   FColoristes := TObjectList<TAuteurLite>.Create;
-  FSerie := TSerieFull.Create;
+  FSerie := TFactorySerieFull.getInstance;
   FEditions := TEditionsFull.Create;
   FUnivers := TObjectList<TUniversLite>.Create;
   FUniversFull := TList<TUniversLite>.Create;
@@ -627,8 +626,8 @@ end;
 constructor TEditionFull.Create;
 begin
   inherited;
-  FEditeur := TEditeurFull.Create;
-  FCollection := TCollectionLite.Create;
+  FEditeur := TFactoryEditeurFull.getInstance;
+  FCollection := TFactoryCollectionLite.getInstance;
   FCouvertures := TObjectList<TCouvertureLite>.Create;
 end;
 
@@ -748,8 +747,8 @@ begin
   FAlbums := TObjectList<TAlbumLite>.Create(True);
   FParaBD := TObjectList<TParaBDLite>.Create(True);
   FGenres := TStringList.Create;
-  FEditeur := TEditeurFull.Create;
-  FCollection := TCollectionLite.Create;
+  FEditeur := TFactoryEditeurFull.getInstance;
+  FCollection := TFactoryCollectionLite.getInstance;
   FUnivers := TObjectList<TUniversLite>.Create(True);
   FScenaristes := TObjectList<TAuteurLite>.Create(True);
   FDessinateurs := TObjectList<TAuteurLite>.Create(True);
@@ -893,7 +892,7 @@ constructor TParaBDFull.Create;
 begin
   inherited;
   FAuteurs := TObjectList<TAuteurLite>.Create;
-  FSerie := TSerieFull.Create;
+  FSerie := TFactorySerieFull.getInstance;
   FUnivers := TObjectList<TUniversLite>.Create;
   FUniversFull := TList<TUniversLite>.Create;
 end;
@@ -935,7 +934,7 @@ end;
 constructor TCollectionFull.Create;
 begin
   inherited;
-  FEditeur := TEditeurLite.Create;
+  FEditeur := TFactoryEditeurLite.getInstance;
 end;
 
 destructor TCollectionFull.Destroy;
@@ -970,7 +969,7 @@ end;
 constructor TUniversFull.Create;
 begin
   inherited;
-  FUniversParent := TUniversLite.Create;
+  FUniversParent := TFactoryUniversLite.getInstance;
 end;
 
 destructor TUniversFull.Destroy;
