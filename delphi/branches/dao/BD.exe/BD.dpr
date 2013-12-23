@@ -167,7 +167,10 @@ uses
   Entities.DaoCommon in '..\Commun\Entities\Entities.DaoCommon.pas',
   Entities.Common in '..\Commun\Entities\Entities.Common.pas',
   Entities.DaoLite in '..\Commun\Entities\Entities.DaoLite.pas',
-  Entities.DaoFull in '..\Commun\Entities\Entities.DaoFull.pas';
+  Entities.DaoFull in '..\Commun\Entities\Entities.DaoFull.pas',
+  Entities.FactoriesCommon in '..\Commun\Entities\Entities.FactoriesCommon.pas',
+  Entities.FactoriesLite in '..\Commun\Entities\Entities.FactoriesLite.pas',
+  Entities.FactoriesFull in '..\Commun\Entities\Entities.FactoriesFull.pas';
 
 begin
   Application.Title := 'BDthèque';

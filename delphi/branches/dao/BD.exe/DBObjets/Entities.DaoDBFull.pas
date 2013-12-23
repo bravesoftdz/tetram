@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Classes, VirtualTreeBdtk, Entities.Full, uib,
   Vcl.StdCtrls, Winapi.Windows, System.Rtti, System.Generics.Collections,
-  Entities.Common, Entities.DaoCommon;
+  Entities.Common, Entities.DaoCommon, Entities.FactoriesCommon;
 
 type
   // ce serait trop facile si XE4 acceptait cette syntaxe....
@@ -35,7 +35,7 @@ type
 
   TDaoAlbumFull = class(TDaoFullEntity<TAlbumFull>)
   protected
-    class function EntityClass: TEntityClass; override;
+    class function FactoryClass: TFactoryClass; override;
   public
     class procedure Fill(Entity: TAlbumFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TAlbumFull; UseTransaction: TUIBTransaction); override;
@@ -46,7 +46,7 @@ type
 
   TDaoParaBDFull = class(TDaoFullEntity<TParaBDFull>)
   protected
-    class function EntityClass: TEntityClass; override;
+    class function FactoryClass: TFactoryClass; override;
   public
     class procedure Fill(Entity: TParaBDFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TParaBDFull; UseTransaction: TUIBTransaction); override;
@@ -55,7 +55,7 @@ type
 
   TDaoSerieFull = class(TDaoFullEntity<TSerieFull>)
   protected
-    class function EntityClass: TEntityClass; override;
+    class function FactoryClass: TFactoryClass; override;
   public
     class function getInstance(const Reference, IdAuteurFiltre: TGUID): TSerieFull; reintroduce; overload;
     class function getInstance(const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean): TSerieFull; reintroduce; overload;
@@ -69,7 +69,7 @@ type
 
   TDaoEditionFull = class(TDaoFullEntity<TEditionFull>)
   protected
-    class function EntityClass: TEntityClass; override;
+    class function FactoryClass: TFactoryClass; override;
   public
     class procedure Fill(Entity: TEditionFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TEditionFull; UseTransaction: TUIBTransaction); override;
@@ -82,7 +82,7 @@ type
 
   TDaoEditeurFull = class(TDaoFullEntity<TEditeurFull>)
   protected
-    class function EntityClass: TEntityClass; override;
+    class function FactoryClass: TFactoryClass; override;
   public
     class procedure Fill(Entity: TEditeurFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TEditeurFull; UseTransaction: TUIBTransaction); override;
@@ -90,7 +90,7 @@ type
 
   TDaoCollectionFull = class(TDaoFullEntity<TCollectionFull>)
   protected
-    class function EntityClass: TEntityClass; override;
+    class function FactoryClass: TFactoryClass; override;
   public
     class procedure Fill(Entity: TCollectionFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TCollectionFull; UseTransaction: TUIBTransaction); override;
@@ -98,7 +98,7 @@ type
 
   TDaoAuteurFull = class(TDaoFullEntity<TAuteurFull>)
   protected
-    class function EntityClass: TEntityClass; override;
+    class function FactoryClass: TFactoryClass; override;
   public
     class procedure Fill(Entity: TAuteurFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TAuteurFull; UseTransaction: TUIBTransaction); override;
@@ -106,7 +106,7 @@ type
 
   TDaoUniversFull = class(TDaoFullEntity<TUniversFull>)
   protected
-    class function EntityClass: TEntityClass; override;
+    class function FactoryClass: TFactoryClass; override;
   public
     class procedure Fill(Entity: TUniversFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TUniversFull; UseTransaction: TUIBTransaction); override;
@@ -117,7 +117,7 @@ implementation
 uses
   UdmPrinc, Commun, UfrmConsole, Entities.DaoDBLite, Entities.Lite, Procedures,
   CommonConst, System.IOUtils, Vcl.Dialogs, UMetadata, UfrmFusionEditions,
-  Vcl.Controls, ProceduresBDtk;
+  Vcl.Controls, ProceduresBDtk, Entities.FactoriesFull, Entities.FactoriesLite;
 
 { TDaoFull }
 
@@ -285,9 +285,9 @@ begin
   end;
 end;
 
-class function TDaoAlbumFull.EntityClass: TEntityClass;
+class function TDaoAlbumFull.FactoryClass: TFactoryClass;
 begin
-  Result := TAlbumFull;
+  Result := TFactoryAlbumFull;
 end;
 
 class procedure TDaoAlbumFull.Fill(Entity: TAlbumFull; const Reference: TGUID);
@@ -449,13 +449,13 @@ begin
 
     for Auteur in Source.Scenaristes do
       if NotInList(Auteur, Dest.Scenaristes) then
-        Dest.Scenaristes.Add(TDaoAuteurLite.Duplicate(Auteur));
+        Dest.Scenaristes.Add(TFactoryAuteurLite.Duplicate(Auteur));
     for Auteur in Source.Dessinateurs do
       if NotInList(Auteur, Dest.Dessinateurs) then
-        Dest.Dessinateurs.Add(TDaoAuteurLite.Duplicate(Auteur));
+        Dest.Dessinateurs.Add(TFactoryAuteurLite.Duplicate(Auteur));
     for Auteur in Source.Coloristes do
       if NotInList(Auteur, Dest.Coloristes) then
-        Dest.Coloristes.Add(TDaoAuteurLite.Duplicate(Auteur));
+        Dest.Coloristes.Add(TFactoryAuteurLite.Duplicate(Auteur));
 
     if not SameText(Source.Sujet, DefaultAlbum.Sujet) then
       Dest.Sujet := Source.Sujet;
@@ -469,7 +469,7 @@ begin
     // Univers
     for Univers in Source.Univers do
       if NotInList(Univers, Dest.Univers) then
-        Dest.Univers.Add(TDaoUniversLite.Duplicate(Univers));
+        Dest.Univers.Add(TFactoryUniversLite.Duplicate(Univers));
 
     if Source.FusionneEditions then
       TDaoEditionFull.FusionneInto(Source.Editions, Dest.Editions);
@@ -673,9 +673,9 @@ begin
   end;
 end;
 
-class function TDaoParaBDFull.EntityClass: TEntityClass;
+class function TDaoParaBDFull.FactoryClass: TFactoryClass;
 begin
-  Result := TParaBDFull;
+  Result := TFactoryParaBDFull;
 end;
 
 class procedure TDaoParaBDFull.Fill(Entity: TParaBDFull; const Reference: TGUID);
@@ -934,9 +934,9 @@ end;
 
 { TDaoUniversFull }
 
-class function TDaoUniversFull.EntityClass: TEntityClass;
+class function TDaoUniversFull.FactoryClass: TFactoryClass;
 begin
-  Result := TUniversFull;
+  Result := TFactoryUniversFull;
 end;
 
 class procedure TDaoUniversFull.Fill(Entity: TUniversFull; const Reference: TGUID);
@@ -1011,9 +1011,9 @@ end;
 
 { TDaoCollectionFull }
 
-class function TDaoCollectionFull.EntityClass: TEntityClass;
+class function TDaoCollectionFull.FactoryClass: TFactoryClass;
 begin
-  Result := TCollectionFull;
+  Result := TFactoryCollectionFull;
 end;
 
 class procedure TDaoCollectionFull.Fill(Entity: TCollectionFull; const Reference: TGUID);
@@ -1078,9 +1078,9 @@ end;
 
 { TDaoEditeurFull }
 
-class function TDaoEditeurFull.EntityClass: TEntityClass;
+class function TDaoEditeurFull.FactoryClass: TFactoryClass;
 begin
-  Result := TEditeurFull;
+  Result := TFactoryEditeurFull;
 end;
 
 class procedure TDaoEditeurFull.Fill(Entity: TEditeurFull; const Reference: TGUID);
@@ -1145,9 +1145,9 @@ end;
 
 { TDaoAuteurFull }
 
-class function TDaoAuteurFull.EntityClass: TEntityClass;
+class function TDaoAuteurFull.FactoryClass: TFactoryClass;
 begin
-  Result := TAuteurFull;
+  Result := TFactoryAuteurFull;
 end;
 
 class procedure TDaoAuteurFull.Fill(Entity: TAuteurFull; const Reference: TGUID);
@@ -1252,9 +1252,9 @@ end;
 
 { TDaoEditionFull }
 
-class function TDaoEditionFull.EntityClass: TEntityClass;
+class function TDaoEditionFull.FactoryClass: TFactoryClass;
 begin
-  Result := TEditionFull;
+  Result := TFactoryEditionFull;
 end;
 
 class procedure TDaoEditionFull.Fill(Entity: TEditionFull; const Reference: TGUID);
@@ -1514,7 +1514,7 @@ begin
       Dest.NumeroPerso := Source.NumeroPerso;
 
     for Couverture in Source.Couvertures do
-      Dest.Couvertures.Add(TDaoCouvertureLite.Duplicate(Couverture));
+      Dest.Couvertures.Add(TFactoryCouvertureLite.Duplicate(Couverture));
   finally
     DefaultEdition.Free;
   end;
@@ -1788,9 +1788,9 @@ begin
   Fill(Entity, Reference, IdAuteurFiltre, False);
 end;
 
-class function TDaoSerieFull.EntityClass: TEntityClass;
+class function TDaoSerieFull.FactoryClass: TFactoryClass;
 begin
-  Result := TSerieFull;
+  Result := TFactorySerieFull;
 end;
 
 class procedure TDaoSerieFull.Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean);

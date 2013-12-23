@@ -104,7 +104,8 @@ implementation
 
 uses
   Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, Entities.Lite, Divers, UHistorique,
-  UMetadata, Entities.DaoDBLite, Entities.DaoDBFull, Entities.Common;
+  UMetadata, Entities.DaoDBLite, Entities.DaoDBFull, Entities.Common,
+  Entities.FactoriesLite;
 
 {$R *.dfm}
 { TFrmEditAchatParaBD }
@@ -320,7 +321,7 @@ begin
   if IsEqualGUID(vtEditUnivers.CurrentValue, GUID_NULL) then
     Exit;
 
-  FParaBD.Univers.Add(TDaoUniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
+  FParaBD.Univers.Add(TFactoryUniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
   lvUnivers.Items.Count := FParaBD.Univers.Count;
   lvUnivers.Invalidate;
 

@@ -45,7 +45,7 @@ type
 implementation
 
 uses CommonConst, Entities.Lite, Commun, Entities.Full, Entities.DaoDBLite, Entities.DaoDBFull,
-  EntitiesSerializer, JsonSerializer, Entities.Common;
+  EntitiesSerializer, JsonSerializer, Entities.Common, Entities.FactoriesLite;
 
 {$R *.dfm}
 { TFileStream }
@@ -155,7 +155,7 @@ begin
   end;
 
   NodeInfo := vstExportation.GetNodeData(vstExportation.AddChild(NodeSerie));
-  NodeInfo.Detail := TDaoAlbumLite.Duplicate(PA);
+  NodeInfo.Detail := TFactoryAlbumLite.Duplicate(PA);
 end;
 
 procedure TfrmExportation.vstExportationGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;

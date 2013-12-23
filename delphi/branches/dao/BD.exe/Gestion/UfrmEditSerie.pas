@@ -115,7 +115,7 @@ implementation
 uses
   Commun, Proc_Gestions, Entities.Lite, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
   UHistorique, UMetadata, Entities.DaoDBLite, Entities.DaoDBFull, ProceduresBDtk,
-  Entities.Common;
+  Entities.Common, Entities.FactoriesLite;
 
 {$R *.DFM}
 
@@ -578,7 +578,7 @@ begin
   if IsEqualGUID(vtEditUnivers.CurrentValue, GUID_NULL) then
     Exit;
 
-  FSerie.Univers.Add(TDaoUniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
+  FSerie.Univers.Add(TFactoryUniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
   lvUnivers.Items.Count := FSerie.Univers.Count;
   lvUnivers.Invalidate;
 

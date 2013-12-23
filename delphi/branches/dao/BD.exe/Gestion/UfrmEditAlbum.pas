@@ -196,7 +196,8 @@ implementation
 
 uses
   Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
-  UHistorique, UMetadata, Entities.DaoDBLite, Entities.DaoDBFull, Entities.Common;
+  UHistorique, UMetadata, Entities.DaoDBLite, Entities.DaoDBFull, Entities.Common,
+  Entities.FactoriesLite;
 
 {$R *.DFM}
 
@@ -391,7 +392,7 @@ begin
   if IsEqualGUID(vtEditUnivers.CurrentValue, GUID_NULL) then
     Exit;
 
-  FAlbum.Univers.Add(TDaoUniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
+  FAlbum.Univers.Add(TFactoryUniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
   lvUnivers.Items.Count := FAlbum.Univers.Count;
   lvUnivers.Invalidate;
 
