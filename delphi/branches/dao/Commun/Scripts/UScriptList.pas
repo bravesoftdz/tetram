@@ -13,6 +13,11 @@ const
 type
   TScriptKind = (skMain, skUnit);
   TScriptKinds = set of TScriptKind;
+
+const
+  AllScripts = [skMain, skUnit];
+
+type
   TScriptEngine = (seNone, sePascalScript, seDWScript);
 
   TScriptInfos = class
@@ -83,8 +88,8 @@ type
     constructor Create; reintroduce;
     procedure LoadDir(const Dir: string);
 
-    function FindScriptByUnitName(const UnitName: string; ScriptKinds: TScriptKinds = [skUnit]): TScript;
-    function FindScriptByAlias(const AliasName: string; ScriptKinds: TScriptKinds = [skUnit]): TScript;
+    function FindScriptByUnitName(const UnitName: string; ScriptKinds: TScriptKinds = AllScripts): TScript;
+    function FindScriptByAlias(const AliasName: string; ScriptKinds: TScriptKinds = AllScripts): TScript;
 
     function InfoScriptByUnitName(const UnitName: string): TScript;
   end;
@@ -316,7 +321,7 @@ begin
   inherited Create(True);
 end;
 
-function TScriptList.FindScriptByUnitName(const UnitName: string; ScriptKinds: TScriptKinds = [skUnit]): TScript;
+function TScriptList.FindScriptByUnitName(const UnitName: string; ScriptKinds: TScriptKinds): TScript;
 begin
   for Result in Self do
     if (Result.ScriptKind in ScriptKinds) and SameText(Result.ScriptUnitName, UnitName) then
@@ -335,7 +340,7 @@ end;
 
 function TScriptList.InfoScriptByUnitName(const UnitName: string): TScript;
 begin
-  Result := FindScriptByUnitName(UnitName, [skMain, skUnit]);
+  Result := FindScriptByUnitName(UnitName, AllScripts);
 end;
 
 procedure TScriptList.LoadDir(const Dir: string);

@@ -55,9 +55,6 @@ type
     property Associations: TStringList read FAssociations;
   end;
 
-  TInfoFull = class(TEntity)
-  end;
-
   TListFull = class(TEntity)
   end;
 
@@ -522,7 +519,7 @@ begin
   Coloristes.Clear;
   Sujet := '';
   Notes := '';
-  Serie.Clear;
+  Serie.DoClear;
   Univers.Clear;
   UniversFull.Clear;
 
@@ -583,18 +580,10 @@ procedure TEditionFull.Clear;
 begin
   inherited;
   ID_Edition := GUID_NULL;
-  Editeur.Clear;
-  Collection.Clear;
+  Editeur.DoClear;
+  Collection.DoClear;
   Couvertures.Clear;
   Notes := '';
-
-  // TODO: voir comment remplir ces valeurs sans utiliser TDaoListe
-  // TypeEdition := FDefaultTypeEdition;
-  // Etat := FDefaultEtat;
-  // Reliure := FDefaultReliure;
-  // FormatEdition := FDefaultFormatEdition;
-  // Orientation := FDefaultOrientation;
-  // SensLecture := FDefaultSensLecture;
   AnneeEdition := 0;
   NombreDePages := 0;
   AnneeCote := 0;
@@ -685,20 +674,12 @@ begin
   Genres.Clear;
   Sujet := '';
   Notes := '';
-  Editeur.Clear;
-  Collection.Clear;
+  Editeur.DoClear;
+  Collection.DoClear;
   Scenaristes.Clear;
   Dessinateurs.Clear;
   Coloristes.Clear;
   Univers.Clear;
-
-  // TODO: voir comment renseigner ces valeurs sans faire appel à TDaoListe
-  // TypeEdition := FDefaultTypeEdition;
-  // Etat := FDefaultEtat;
-  // Reliure := FDefaultReliure;
-  // FormatEdition := FDefaultFormatEdition;
-  // Orientation := FDefaultOrientation;
-  // SensLecture := FDefaultSensLecture;
   Couleur := Integer(cbGrayed);
   VO := Integer(cbGrayed);
   Terminee := Integer(cbGrayed);
@@ -852,7 +833,7 @@ begin
 
   Auteurs.Clear;
   Description := '';
-  Serie.Clear;
+  Serie.DoClear;
   Univers.Clear;
   UniversFull.Clear;
 end;
@@ -897,7 +878,7 @@ end;
 procedure TCollectionFull.Clear;
 begin
   inherited;
-  FEditeur.Clear;
+  Editeur.DoClear;
 end;
 
 constructor TCollectionFull.Create;
@@ -932,7 +913,7 @@ end;
 procedure TUniversFull.Clear;
 begin
   inherited;
-  UniversParent.Clear;
+  UniversParent.DoClear;
 end;
 
 constructor TUniversFull.Create;

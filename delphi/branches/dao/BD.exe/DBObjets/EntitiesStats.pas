@@ -3,11 +3,10 @@ unit EntitiesStats;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Generics.Collections, Entities.Full,
-  Entities.Lite;
+  System.SysUtils, System.Classes, System.Generics.Collections, Entities.Lite, Entities.Common;
 
 type
-  TStats = class(TInfoFull)
+  TStats = class(TEntity)
   strict private
     FNbAlbumsGratuit: Integer;
     FNbAlbumsNB: Integer;
@@ -68,7 +67,7 @@ type
     property ListEditeurs: TObjectList<TStats> read FListEditeurs;
   end;
 
-  TSerieIncomplete = class(TInfoFull)
+  TSerieIncomplete = class(TEntity)
   strict private
     FSerie: TSerieLite;
     FNumerosManquants: TStringList;
@@ -81,7 +80,7 @@ type
     property NumerosManquants: TStringList read FNumerosManquants;
   end;
 
-  TSeriesIncompletes = class(TListFull)
+  TSeriesIncompletes = class(TEntity)
   strict private
     FSeries: TObjectList<TSerieIncomplete>;
   public
@@ -95,7 +94,7 @@ type
     property Series: TObjectList<TSerieIncomplete> read FSeries;
   end;
 
-  TPrevisionSortie = class(TInfoFull)
+  TPrevisionSortie = class(TEntity)
   strict private
     FMois: Integer;
     FAnnee: Integer;
@@ -113,7 +112,7 @@ type
     property sAnnee: string read GetsAnnee;
   end;
 
-  TPrevisionsSorties = class(TListFull)
+  TPrevisionsSorties = class(TEntity)
   strict private
     FAnneesPassees: TObjectList<TPrevisionSortie>;
     FAnneesProchaines: TObjectList<TPrevisionSortie>;
@@ -325,7 +324,7 @@ var
   q: TUIBQuery;
   hg: IHourGlass;
 begin
-  Clear;
+  DoClear;
   hg := THourGlass.Create;
   CreateStats(Self);
   if Complete then
@@ -408,7 +407,7 @@ var
 var
   Incomplete: TSerieIncomplete;
 begin
-  Clear;
+  DoClear;
   q := TUIBQuery.Create(nil);
   with q do
     try
@@ -503,7 +502,7 @@ var
   Annee, CurrentAnnee: Integer;
   Prevision: TPrevisionSortie;
 begin
-  Clear;
+  DoClear;
   CurrentAnnee := YearOf(Now);
   q := TUIBQuery.Create(nil);
   with q do

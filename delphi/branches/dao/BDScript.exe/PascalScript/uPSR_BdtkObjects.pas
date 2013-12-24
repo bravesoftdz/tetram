@@ -39,9 +39,9 @@ uses
 
 procedure TAlbumCompletEdition_R(Self: TAlbumFull; var T: TEditionFull);
 begin
-  if Self.Editions.Editions.Count = 0 then
-    Self.Editions.Editions.Add(TFactoryEditionFull.getInstance);
-  T := Self.Editions.Editions[0];
+  if Self.Editions.Count = 0 then
+    Self.Editions.Add(TFactoryEditionFull.getInstance);
+  T := Self.Editions[0];
 end;
 
 procedure TAlbumCompletDefaultSearch_R(Self: TAlbumFull; var T: string);

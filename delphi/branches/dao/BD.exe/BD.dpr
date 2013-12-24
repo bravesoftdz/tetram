@@ -148,7 +148,6 @@ uses
   UNet in '..\Commun\UNet.pas',
   VirtualTree in '..\Commun\VirtualTree.pas',
   Entities.DaoFull in 'DBObjets\Entities.DaoFull.pas',
-  DaoLambda in 'DBObjets\DaoLambda.pas',
   Entities.DaoLite in 'DBObjets\Entities.DaoLite.pas',
   DaoRecherche in 'DBObjets\DaoRecherche.pas',
   DaoStats in 'DBObjets\DaoStats.pas',
@@ -168,7 +167,8 @@ uses
   Entities.Common in '..\Commun\Entities\Entities.Common.pas',
   Entities.FactoriesCommon in '..\Commun\Entities\Entities.FactoriesCommon.pas',
   Entities.FactoriesLite in '..\Commun\Entities\Entities.FactoriesLite.pas',
-  Entities.FactoriesFull in '..\Commun\Entities\Entities.FactoriesFull.pas';
+  Entities.FactoriesFull in '..\Commun\Entities\Entities.FactoriesFull.pas',
+  Entities.DaoLambda in 'DBObjets\Entities.DaoLambda.pas';
 
 begin
   Application.Title := 'BDthèque';

@@ -169,9 +169,9 @@ var
   Album: TAlbumFull;
 begin
   Album := (ExtObject as TAlbumFull);
-  if Album.Editions.Editions.Count = 0 then
-    Album.Editions.Editions.Add(TFactoryEditionFull.getInstance);
-  info.ResultAsVariant := GetScriptObjFromExternal(info, Album.Editions.Editions[0]);
+  if Album.Editions.Count = 0 then
+    Album.Editions.Add(TFactoryEditionFull.getInstance);
+  info.ResultAsVariant := GetScriptObjFromExternal(info, Album.Editions[0]);
 end;
 
 procedure TDW_BdtkObjectsUnit.TAuteurNomAuteur(info: TProgramInfo; ExtObject: TObject);

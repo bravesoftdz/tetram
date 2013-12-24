@@ -293,7 +293,7 @@ end;
 procedure TAuteurLite.Clear;
 begin
   inherited;
-  Personne.Clear;
+  Personne.DoClear;
 end;
 
 { TAlbumLite }
@@ -365,7 +365,7 @@ procedure TCollectionLite.Clear;
 begin
   inherited;
   NomCollection := '';
-  Editeur.Clear;
+  Editeur.DoClear;
 end;
 
 { TSerieLite }
@@ -412,8 +412,8 @@ end;
 procedure TSerieLite.Clear;
 begin
   inherited;
-  Editeur.Clear;
-  Collection.Clear;
+  Editeur.DoClear;
+  Collection.DoClear;
 end;
 
 { TEditionLite }
@@ -456,8 +456,8 @@ end;
 procedure TEditionLite.Clear;
 begin
   inherited;
-  Editeur.Clear;
-  Collection.Clear;
+  Editeur.DoClear;
+  Collection.DoClear;
 end;
 
 { TGenreLite }

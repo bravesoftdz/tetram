@@ -108,7 +108,6 @@ type
     Label29: TLabel;
     btUnivers: TVDTButton;
     lvUnivers: TVDTListViewLabeled;
-    Button1: TButton;
     procedure ajoutClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);

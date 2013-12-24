@@ -202,7 +202,7 @@ const
   cThreeFourths = 24;
   cHighBits = $F0000000;
 var
-  I: Integer;
+  i: Integer;
   P: ^tbtchar;
   Temp: Cardinal;
 begin
@@ -210,14 +210,14 @@ begin
   Result := 0;
   P := Pointer(UpperCase(s));
 
-  I := Length(s);
-  while I > 0 do
+  i := Length(s);
+  while i > 0 do
   begin
     Result := (Result shl cOneEight) + Ord(P^);
     Temp := Result and cHighBits;
     if Temp <> 0 then
       Result := (Result xor (Temp shr cThreeFourths)) and (not cHighBits);
-    Dec(I);
+    Dec(i);
     Inc(P);
   end;
 end;
@@ -709,11 +709,11 @@ end;
 
 procedure TdmPascalScript.PSScriptDebugger1Compile(Sender: TPSScript);
 var
-  I: Integer;
+  i: Integer;
 begin
-  for I := 0 to Pred(FListTypesImages.Count) do
-    PSScriptDebugger1.Comp.AddConstantN('cti' + AnsiStrings.StringReplace(AnsiString(SansAccents(FListTypesImages.ValueFromIndex[I])), ' ', '_', [rfReplaceAll]
-      ), 'integer').SetInt(StrToInt(AnsiString(FListTypesImages.Names[I])));
+  for i := 0 to Pred(FListTypesImages.Count) do
+    PSScriptDebugger1.Comp.AddConstantN('cti' + AnsiStrings.StringReplace(AnsiString(SansAccents(FListTypesImages.ValueFromIndex[i])), ' ', '_', [rfReplaceAll]
+      ), 'integer').SetInt(StrToInt(AnsiString(FListTypesImages.Names[i])));
 
   PSScriptDebugger1.AddMethod(Self, @TdmPascalScript.WriteToConsole, 'procedure WriteToConsole(const Chaine: string);');
   PSScriptDebugger1.AddMethod(Self, @TdmPascalScript.WriteToFile, 'procedure WriteToFile(const Chaine, FileName: string);');
@@ -864,7 +864,7 @@ end;
 
 function TdmPascalScript.TranslatePosition(out Proc, Position: Cardinal; Row: Cardinal; const Fn: string): Boolean;
 var
-  I, j: LongInt;
+  i, j: LongInt;
   fi: PFunctionInfo;
   pt: TIfList;
   r: PPositionData;
@@ -874,10 +874,10 @@ begin
   FileName := FMasterEngine.GetInternalUnitName(Fn);
   Proc := 0;
   Position := 0;
-  for I := 0 to TCrackPSDebugExec(PSScriptDebugger1.Exec).FDebugDataForProcs.Count - 1 do
+  for i := 0 to TCrackPSDebugExec(PSScriptDebugger1.Exec).FDebugDataForProcs.Count - 1 do
   begin
     Result := False;
-    fi := TCrackPSDebugExec(PSScriptDebugger1.Exec).FDebugDataForProcs[I];
+    fi := TCrackPSDebugExec(PSScriptDebugger1.Exec).FDebugDataForProcs[i];
     pt := fi^.FPositionTable;
     for j := 0 to pt.Count - 1 do
     begin
@@ -899,7 +899,7 @@ procedure TdmPascalScript.GetUncompiledCode(Lines: TStrings);
 var
   s: AnsiString;
   Script: string;
-  I, j: LongInt;
+  i, j: LongInt;
   fi: PFunctionInfo;
   pt: TIfList;
   r: PPositionData;
@@ -909,9 +909,9 @@ begin
   Lines.Text := Script;
 
   Lines.Add('[DEBUG DATA]');
-  for I := 0 to TCrackPSDebugExec(PSScriptDebugger1.Exec).FDebugDataForProcs.Count - 1 do
+  for i := 0 to TCrackPSDebugExec(PSScriptDebugger1.Exec).FDebugDataForProcs.Count - 1 do
   begin
-    fi := TCrackPSDebugExec(PSScriptDebugger1.Exec).FDebugDataForProcs[I];
+    fi := TCrackPSDebugExec(PSScriptDebugger1.Exec).FDebugDataForProcs[i];
     pt := fi^.FPositionTable;
     if fi^.Func is TPSExternalProcRec then
       with TPSExternalProcRec(fi^.Func) do
@@ -965,7 +965,7 @@ end;
 
 function TdmPascalScript.GetVar(const Name: TbtString; out s: AnsiString): PIFVariant;
 var
-  I: LongInt;
+  i: LongInt;
   s1: AnsiString;
 begin
   s := UpperCase(name);
@@ -982,27 +982,27 @@ begin
   Result := nil;
   with PSScriptDebugger1 do
   begin
-    for I := 0 to Exec.CurrentProcVars.Count - 1 do
-      if UpperCase(Exec.CurrentProcVars[I]) = s1 then
+    for i := 0 to Exec.CurrentProcVars.Count - 1 do
+      if UpperCase(Exec.CurrentProcVars[i]) = s1 then
       begin
-        Result := Exec.GetProcVar(I);
+        Result := Exec.GetProcVar(i);
         break;
       end;
     if Result = nil then
     begin
-      for I := 0 to Exec.CurrentProcParams.Count - 1 do
-        if UpperCase(Exec.CurrentProcParams[I]) = s1 then
+      for i := 0 to Exec.CurrentProcParams.Count - 1 do
+        if UpperCase(Exec.CurrentProcParams[i]) = s1 then
         begin
-          Result := Exec.GetProcParam(I);
+          Result := Exec.GetProcParam(i);
           break;
         end;
     end;
     if Result = nil then
     begin
-      for I := 0 to Exec.GlobalVarNames.Count - 1 do
-        if UpperCase(Exec.GlobalVarNames[I]) = s1 then
+      for i := 0 to Exec.GlobalVarNames.Count - 1 do
+        if UpperCase(Exec.GlobalVarNames[i]) = s1 then
         begin
-          Result := Exec.GetGlobalVar(I);
+          Result := Exec.GetGlobalVar(i);
           break;
         end;
     end;
@@ -1396,7 +1396,8 @@ end;
 
 function TdmPascalScript.Compile(Script: TScript; out Msg: IMessageInfo): Boolean;
 var
-  I: LongInt;
+  i: LongInt;
+  m: TPSPascalCompilerMessage;
 begin
   FRunningScript := Script;
   // PSScriptDebugger1.MainFileName := TbtString(FRunningScript.ScriptUnitName);
@@ -1404,19 +1405,21 @@ begin
   Result := PSScriptDebugger1.Compile;
   FMasterEngine.DebugPlugin.Messages.Clear;
   Msg := nil;
-  for I := 0 to PSScriptDebugger1.CompilerMessageCount - 1 do
-    with PSScriptDebugger1.CompilerMessages[I] do
-      if ClassType = TPSPascalCompilerWarning then
-        FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(string(ModuleName), string(ShortMessageToString), tmWarning, Row, Col)
-      else if ClassType = TPSPascalCompilerHint then
-        FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(string(ModuleName), string(ShortMessageToString), tmHint, Row, Col)
-      else if ClassType = TPSPascalCompilerError then
-      begin
-        Msg := FMasterEngine.DebugPlugin.Messages[FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(string(ModuleName), string(ShortMessageToString),
-          tmError, Row, Col)];
-      end
-      else
-        FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(string(ModuleName), string(ShortMessageToString), tmUnknown, Row, Col);
+  for i := 0 to PSScriptDebugger1.CompilerMessageCount - 1 do
+  begin
+    m := PSScriptDebugger1.CompilerMessages[i];
+    if m.ClassType = TPSPascalCompilerWarning then
+      FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(m.ModuleName), string(m.ShortMessageToString), tmWarning, m.Row, m.Col)
+    else if m.ClassType = TPSPascalCompilerHint then
+      FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(m.ModuleName), string(m.ShortMessageToString), tmHint, m.Row, m.Col)
+    else if m.ClassType = TPSPascalCompilerError then
+    begin
+      Msg := FMasterEngine.DebugPlugin.Messages[FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(m.ModuleName), string(m.ShortMessageToString),
+        tmError, m.Row, m.Col)];
+    end
+    else
+      FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(m.ModuleName), string(m.ShortMessageToString), tmUnknown, m.Row, m.Col);
+  end;
 end;
 
 function TdmPascalScript.Execute: Boolean;
@@ -1542,7 +1545,7 @@ var
 
 var
   sl1, sl2: TStringList;
-  I: Integer;
+  i: Integer;
 begin
   if LookUpList(FromFather, Father) then
   begin
@@ -1634,10 +1637,10 @@ begin
     end;
 
     sl1.Sort;
-    for I := 0 to Pred(sl1.Count) do
+    for i := 0 to Pred(sl1.Count) do
     begin
-      Code.Add(sl1[I]);
-      Proposal.Add(sl2[Integer(sl1.Objects[I])]);
+      Code.Add(sl1[i]);
+      Proposal.Add(sl2[Integer(sl1.Objects[i])]);
     end;
   finally
     sl1.Free;

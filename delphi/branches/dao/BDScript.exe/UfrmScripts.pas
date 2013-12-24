@@ -1156,7 +1156,7 @@ var
 begin
   framWatches1.Invalidate;
 
-  Script := FMasterEngine.ScriptList.FindScriptByUnitName(MasterEngine.GetScriptUnitName(MasterEngine.Engine.ActiveUnitName));
+  Script := FMasterEngine.ScriptList.FindScriptByUnitName(MasterEngine.GetScriptUnitName(MasterEngine.Engine.ActiveUnitName), AllScripts);
   if Assigned(Script) then
     i := FMasterEngine.DebugPlugin.Breakpoints.IndexOf(Script, MasterEngine.Engine.ActiveLine)
   else

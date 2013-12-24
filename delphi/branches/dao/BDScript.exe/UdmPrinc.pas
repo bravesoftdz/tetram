@@ -32,7 +32,8 @@ implementation
 uses
   System.SyncObjs, Vcl.Forms, System.StrUtils, UfrmSplash, CommonConst, Textes,
   System.DateUtils, System.UITypes, Divers, UfrmScripts, System.IOUtils,
-  UScriptEngineIntf, UMasterEngine, UScriptList;
+  UScriptEngineIntf, UMasterEngine, UScriptList, dwsJSON, Entities.Full,
+  JclCompression, Entities.Deserializer, Entities.FactoriesFull;
 
 {$R *.dfm}
 
@@ -130,6 +131,48 @@ begin
   // end;
 end;
 
+procedure AutoRun(DataFile: TFileName);
+var
+  masterEngine: IMasterEngine;
+  Script: TScript;
+  AlbumToImport: TAlbumFull;
+  o: TdwsJSONObject;
+  js: TStringStream;
+  Archive: TJcl7zDecompressArchive;
+begin
+  js := TStringStream.Create;
+  Archive := TJcl7zDecompressArchive.Create(DataFile);
+  try
+    Archive.ListFiles;
+    Archive.Items[0].Stream := js;
+    Archive.Items[0].OwnsStream := False;
+    Archive.Items[0].Selected := True;
+    Archive.ExtractSelected;
+
+    o := TdwsJSONObject.ParseString(js.DataString) as TdwsJSONObject;
+  finally
+    Archive.Free;
+    js.Free;
+  end;
+
+  AlbumToImport := TEntitesDeserializer.BuildEntityFromJson<TAlbumFull, TFactoryAlbumFull>(o.Items['album'] as TdwsJSONObject);
+  try
+    Script := masterEngine.ScriptList.FindScriptByUnitName('', [skMain]);
+    if Assigned(Script) then
+    begin
+      masterEngine := TMasterEngine.Create;
+      masterEngine.SelectProjectScript(Script);
+      masterEngine.AlbumToImport := AlbumToImport;
+      if masterEngine.Engine.Run then
+      begin
+
+      end;
+    end;
+  finally
+    AlbumToImport.Free;
+  end;
+end;
+
 procedure BdtkInitProc;
 var
   Debut: TDateTime;
@@ -138,8 +181,6 @@ var
   CD: TCopyDataStruct;
   s, scriptAutoRun: string;
   frmSplash: TfrmSplash;
-  masterEngine: IMasterEngine;
-  Script: TScript;
 begin
   TGlobalVar.Mode_en_cours := mdLoad;
   Application.Title := '© TeträmCorp ' + TitreApplication + ' ' + TGlobalVar.Utilisateur.AppVersion;
@@ -174,17 +215,7 @@ begin
     Application.MainFormOnTaskbar := False;
     if FindCmdLineSwitch('dh', s, True, [clstValueNextParam]) then
       Application.DialogHandle := StrToIntDef(s, Application.DialogHandle);
-    Script := masterEngine.ScriptList.FindScriptByUnitName(scriptAutoRun, [skMain]);
-    if Assigned(Script) then
-    begin
-      masterEngine := TMasterEngine.Create;
-      masterEngine.SelectProjectScript(Script);
-      masterEngine.AlbumToImport := nil;
-      if masterEngine.Engine.Run then
-      begin
-
-      end;
-    end;
+    AutoRun(scriptAutoRun);
   end
   else
   begin

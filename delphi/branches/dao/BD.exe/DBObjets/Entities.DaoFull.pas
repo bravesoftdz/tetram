@@ -57,6 +57,9 @@ type
   protected
     class function FactoryClass: TFactoryClass; override;
   public
+    class constructor Create;
+    class destructor Destroy;
+
     class function getInstance(const Reference, IdAuteurFiltre: TGUID): TSerieFull; reintroduce; overload;
     class function getInstance(const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean): TSerieFull; reintroduce; overload;
 
@@ -65,19 +68,26 @@ type
     class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean); reintroduce; overload;
     class procedure SaveToDatabase(Entity: TSerieFull; UseTransaction: TUIBTransaction); override;
     class procedure ChangeNotation(Entity: TSerieFull; Note: Integer);
+
+    class procedure InitSerie(Entity: TEntity);
   end;
 
   TDaoEditionFull = class(TDaoFullEntity<TEditionFull>)
   protected
     class function FactoryClass: TFactoryClass; override;
   public
+    class constructor Create;
+    class destructor Destroy;
+
     class procedure Fill(Entity: TEditionFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TEditionFull; UseTransaction: TUIBTransaction); override;
     class procedure FusionneInto(Source, Dest: TEditionFull); overload;
     class procedure FusionneInto(Source, Dest: TObjectList<TEditionFull>); overload;
 
     class function getList(const Reference: TGUID; Stock: Integer = -1): TObjectList<TEditionFull>;
-    class procedure FillList(Entity: TObjectList<TEditionFull>; const Reference: TGUID; Stock: Integer = -1);
+    class procedure FillList(EntitiesList: TObjectList<TEditionFull>; const Reference: TGUID; Stock: Integer = -1);
+
+    class procedure InitEdition(Entity: TEntity);
   end;
 
   TDaoEditeurFull = class(TDaoFullEntity<TEditeurFull>)
@@ -117,7 +127,8 @@ implementation
 uses
   UdmPrinc, Commun, UfrmConsole, Entities.DaoLite, Entities.Lite, Procedures,
   CommonConst, System.IOUtils, Vcl.Dialogs, UMetadata, UfrmFusionEditions,
-  Vcl.Controls, ProceduresBDtk, Entities.FactoriesFull, Entities.FactoriesLite;
+  Vcl.Controls, ProceduresBDtk, Entities.FactoriesFull, Entities.FactoriesLite,
+  Entities.DaoLambda;
 
 { TDaoFull }
 
@@ -198,7 +209,7 @@ end;
 
 class procedure TDaoFullEntity<T>.Fill(Entity: T; const Reference: TGUID);
 begin
-  Entity.Clear;
+  Entity.DoClear;
 end;
 
 class function TDaoFullEntity<T>.getInstance: T;
@@ -1252,6 +1263,16 @@ end;
 
 { TDaoEditionFull }
 
+class constructor TDaoEditionFull.Create;
+begin
+  TEditionFull.RegisterInitEvent(InitEdition);
+end;
+
+class destructor TDaoEditionFull.Destroy;
+begin
+  TEditionFull.UnregisterInitEvent(InitEdition);
+end;
+
 class function TDaoEditionFull.FactoryClass: TFactoryClass;
 begin
   Result := TFactoryEditionFull;
@@ -1353,11 +1374,11 @@ begin
   end;
 end;
 
-class procedure TDaoEditionFull.FillList(Entity: TObjectList<TEditionFull>; const Reference: TGUID; Stock: Integer);
+class procedure TDaoEditionFull.FillList(EntitiesList: TObjectList<TEditionFull>; const Reference: TGUID; Stock: Integer);
 var
   qry: TUIBQuery;
 begin
-  Entity.Clear;
+  EntitiesList.Clear;
   qry := TUIBQuery.Create(nil);
   try
     qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
@@ -1372,7 +1393,7 @@ begin
     qry.Open;
     while not qry.Eof do
     begin
-      Entity.Add(getInstance(StringToGUID(qry.Fields.AsString[0])));
+      EntitiesList.Add(getInstance(StringToGUID(qry.Fields.AsString[0])));
       qry.Next;
     end;
     TfrmConsole.AddEvent(Self.UnitName, '< TDaoEditionFull.FillList - ' + GUIDToString(Reference));
@@ -1524,6 +1545,16 @@ class function TDaoEditionFull.getList(const Reference: TGUID; Stock: Integer): 
 begin
   Result := TObjectList<TEditionFull>.Create;
   FillList(Result, Reference, Stock);
+end;
+
+class procedure TDaoEditionFull.InitEdition(Entity: TEntity);
+begin
+  (Entity as TEditionFull).TypeEdition := TDaoListe.DefaultTypeEdition;
+  (Entity as TEditionFull).Etat := TDaoListe.DefaultEtat;
+  (Entity as TEditionFull).Reliure := TDaoListe.DefaultReliure;
+  (Entity as TEditionFull).FormatEdition := TDaoListe.DefaultFormatEdition;
+  (Entity as TEditionFull).Orientation := TDaoListe.DefaultOrientation;
+  (Entity as TEditionFull).SensLecture := TDaoListe.DefaultSensLecture;
 end;
 
 class procedure TDaoEditionFull.SaveToDatabase(Entity: TEditionFull; UseTransaction: TUIBTransaction);
@@ -1788,6 +1819,16 @@ begin
   Fill(Entity, Reference, IdAuteurFiltre, False);
 end;
 
+class constructor TDaoSerieFull.Create;
+begin
+  TSerieFull.RegisterInitEvent(InitSerie);
+end;
+
+class destructor TDaoSerieFull.Destroy;
+begin
+  TSerieFull.UnregisterInitEvent(InitSerie);
+end;
+
 class function TDaoSerieFull.FactoryClass: TFactoryClass;
 begin
   Result := TFactorySerieFull;
@@ -1980,6 +2021,16 @@ class function TDaoSerieFull.getInstance(const Reference, IdAuteurFiltre: TGUID;
 begin
   Result := TFactorySerieFull.getInstance;
   Fill(Result, Reference, IdAuteurFiltre, ForceLoad);
+end;
+
+class procedure TDaoSerieFull.InitSerie(Entity: TEntity);
+begin
+  (Entity as TSerieFull).TypeEdition := TDaoListe.DefaultTypeEdition;
+  (Entity as TSerieFull).Etat := TDaoListe.DefaultEtat;
+  (Entity as TSerieFull).Reliure := TDaoListe.DefaultReliure;
+  (Entity as TSerieFull).FormatEdition := TDaoListe.DefaultFormatEdition;
+  (Entity as TSerieFull).Orientation := TDaoListe.DefaultOrientation;
+  (Entity as TSerieFull).SensLecture := TDaoListe.DefaultSensLecture;
 end;
 
 class procedure TDaoSerieFull.SaveToDatabase(Entity: TSerieFull; UseTransaction: TUIBTransaction);

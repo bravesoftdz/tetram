@@ -3,21 +3,34 @@ unit Entities.Common;
 interface
 
 uses
-  System.Classes, Commun;
+  System.Classes, Commun, System.Generics.Collections;
 
 type
+  TEntity = class;
   TEntityClass = class of TEntity;
   TDBEntityClass = class of TDBEntity;
+
+  TInitEvent = procedure(Entity: TEntity) of object;
 
 {$RTTI EXPLICIT METHODS([vcPublic, vcProtected])}
 
   TEntity = class(TPersistent)
+  private
+    class var FInitEvents: TDictionary<TClass, TList<TInitEvent>>;
+    procedure TriggerInitEvents;
   protected
     constructor Create; virtual;
   public
+    class constructor Create;
+    class destructor Destroy;
+
     procedure BeforeDestruction; override;
-    procedure Clear; virtual;
+    procedure DoClear;
+    procedure Clear; virtual; // deprecated 'Ne jamais appeler directement, utiliser DoClear';
     procedure AfterConstruction; override;
+
+    class procedure RegisterInitEvent(InitEvent: TInitEvent);
+    class procedure UnregisterInitEvent(InitEvent: TInitEvent);
   end;
 
   TDBEntity = class(TEntity)
@@ -39,24 +52,69 @@ implementation
 procedure TEntity.AfterConstruction;
 begin
   inherited;
-  Clear;
+  DoClear;
 end;
 
 procedure TEntity.BeforeDestruction;
 begin
   inherited;
-  Clear;
+  DoClear;
 end;
 
 procedure TEntity.Clear;
 begin
-  // nettoyage de toutes les listes et autres
-  // et reset aux valeurs par défaut
+end;
+
+class constructor TEntity.Create;
+begin
+  FInitEvents := TObjectDictionary < TClass, TList < TInitEvent >>.Create([doOwnsValues]);
 end;
 
 constructor TEntity.Create;
 begin
 
+end;
+
+class destructor TEntity.Destroy;
+begin
+  FInitEvents.Free;
+end;
+
+procedure TEntity.DoClear;
+begin
+  Clear;
+  TriggerInitEvents;
+end;
+
+class procedure TEntity.RegisterInitEvent(InitEvent: TInitEvent);
+var
+  initEvents: TList<TInitEvent>;
+begin
+  if not FInitEvents.TryGetValue(Self, initEvents) then
+  begin
+    initEvents := TList<TInitEvent>.Create;
+    FInitEvents.Add(Self, initEvents);
+  end;
+  if not initEvents.Contains(InitEvent) then
+    initEvents.Add(InitEvent);
+end;
+
+procedure TEntity.TriggerInitEvents;
+var
+  initEvents: TList<TInitEvent>;
+  InitEvent: TInitEvent;
+begin
+  if FInitEvents.TryGetValue(Self.ClassType, initEvents) then
+    for InitEvent in initEvents do
+      InitEvent(Self);
+end;
+
+class procedure TEntity.UnregisterInitEvent(InitEvent: TInitEvent);
+var
+  initEvents: TList<TInitEvent>;
+begin
+  if FInitEvents.TryGetValue(Self, initEvents) then
+    initEvents.Remove(InitEvent);
 end;
 
 { TDBEntity }

@@ -231,7 +231,7 @@ var
   sWhere, sOrderBy, S: string;
   CritereTri: TCritereTri;
 begin
-  Clear;
+  DoClear;
   q := TUIBQuery.Create(nil);
   slFrom := TStringList.Create;
   slFrom.Sorted := True;
@@ -334,7 +334,7 @@ var
   oldID_Album: TGUID;
   oldIndex: Integer;
 begin
-  Clear;
+  DoClear;
   if not IsEqualGUID(ID, GUID_NULL) then
   begin
     q := TUIBQuery.Create(nil);

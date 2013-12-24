@@ -496,7 +496,7 @@ begin
     tmHint:
       Msg.FTypeMessage := 'Conseil';
   end;
-  Msg.FScript := DebugInfos.MasterEngine.ScriptList.FindScriptByUnitName(Fichier);
+  Msg.FScript := DebugInfos.MasterEngine.ScriptList.FindScriptByUnitName(Fichier, AllScripts);
   Msg.FText := Text;
   Msg.FLine := Line;
   Msg.FChar := Char;
@@ -510,7 +510,7 @@ begin
   Msg := TMessageInfo.Create(Self);
   Result := Add(Msg);
   Msg.FTypeMessage := 'Information';
-  Msg.FScript := DebugInfos.MasterEngine.ScriptList.FindScriptByUnitName(Fichier);
+  Msg.FScript := DebugInfos.MasterEngine.ScriptList.FindScriptByUnitName(Fichier, AllScripts);
   Msg.FText := Text;
   Msg.FLine := Line;
   Msg.FChar := Char;
@@ -524,7 +524,7 @@ begin
   Msg := TMessageInfo.Create(Self);
   Result := Add(Msg);
   Msg.FTypeMessage := 'Erreur';
-  Msg.FScript := DebugInfos.MasterEngine.ScriptList.FindScriptByUnitName(Fichier);
+  Msg.FScript := DebugInfos.MasterEngine.ScriptList.FindScriptByUnitName(Fichier, AllScripts);
   Msg.FText := Text;
   Msg.FLine := Line;
   Msg.FChar := Char;

@@ -44,8 +44,11 @@ implementation
 { TDaoEntity }
 
 class function TFactoryEntity.BuildInstance: TEntity;
+var
+  c: TEntityClass;
 begin
-  Result := getBuilder(EntityClass).Invoke(EntityClass, []).AsObject as TEntity;
+  c := EntityClass;
+  Result := getBuilder(c).Invoke(c, []).AsObject as TEntity;
 end;
 
 class constructor TFactoryEntity.Create;
@@ -99,7 +102,7 @@ end;
 
 class function TFactoryGenericDBEntity<T>.getInstance: T;
 begin
-  result := inherited getInstance as T;
+  Result := inherited getInstance as T;
 end;
 
 end.
