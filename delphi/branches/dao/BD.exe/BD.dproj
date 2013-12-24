@@ -433,10 +433,10 @@
         <DCCReference Include="DBObjets\EntitiesRecherche.pas"/>
         <DCCReference Include="DBObjets\EntitiesStats.pas"/>
         <DCCReference Include="DBObjets\LoadCompletImport.pas"/>
-        <DCCReference Include="..\Commun\Entities\EntitiesDeserializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.Deserializer.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Full.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Lite.pas"/>
-        <DCCReference Include="..\Commun\Entities\EntitiesSerializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.Serializer.pas"/>
         <DCCReference Include="..\Commun\Entities\JsonDeserializer.pas"/>
         <DCCReference Include="..\Commun\Entities\JsonSerializer.pas"/>
         <DCCReference Include="..\Commun\BdtkRegEx.pas"/>
