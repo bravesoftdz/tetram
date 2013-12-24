@@ -282,17 +282,6 @@ type
     property Couvertures: TObjectList<TCouvertureLite> read FCouvertures;
   end;
 
-  TEditionsFull = class(TListFull)
-  strict private
-    FEditions: TObjectList<TEditionFull>;
-  public
-    constructor Create; override;
-    destructor Destroy; override;
-    procedure Clear; override;
-  published
-    property Editions: TObjectList<TEditionFull> read FEditions;
-  end;
-
   TAlbumFull = class(TObjetFull)
   strict private
     FTitreAlbum: RAutoTrimString;
@@ -309,7 +298,7 @@ type
     FDessinateurs: TObjectList<TAuteurLite>;
     FTomeDebut: Integer;
     FTome: Integer;
-    FEditions: TEditionsFull;
+    FEditions: TObjectList<TEditionFull>;
     FComplet: Boolean;
     FReadyToFusion: Boolean;
     FFusionneEditions: Boolean;
@@ -351,7 +340,7 @@ type
     property Coloristes: TObjectList<TAuteurLite> read FColoristes;
     property Sujet: RLongString read FSujet write FSujet;
     property Notes: RLongString read FNotes write FNotes;
-    property Editions: TEditionsFull read FEditions;
+    property Editions: TObjectList<TEditionFull> read FEditions;
     property Notation: Integer read FNotation write FNotation;
     property Univers: TObjectList<TUniversLite> read FUnivers;
     property UniversFull: TList<TUniversLite> read FUniversFull;
@@ -549,7 +538,7 @@ begin
   FDessinateurs := TObjectList<TAuteurLite>.Create;
   FColoristes := TObjectList<TAuteurLite>.Create;
   FSerie := TFactorySerieFull.getInstance;
-  FEditions := TEditionsFull.Create;
+  FEditions := TObjectList<TEditionFull>.Create;
   FUnivers := TObjectList<TUniversLite>.Create;
   FUniversFull := TList<TUniversLite>.Create;
 end;
@@ -663,26 +652,6 @@ end;
 procedure TEditionFull.SetNumeroPerso(const Value: RAutoTrimString);
 begin
   FNumeroPerso := Copy(Value, 1, LengthNumPerso);
-end;
-
-{ TEditionsComplet }
-
-procedure TEditionsFull.Clear;
-begin
-  inherited;
-  Editions.Clear;
-end;
-
-constructor TEditionsFull.Create;
-begin
-  inherited;
-  FEditions := TObjectList<TEditionFull>.Create;
-end;
-
-destructor TEditionsFull.Destroy;
-begin
-  FreeAndNil(FEditions);
-  inherited;
 end;
 
 { TSerieComplete }

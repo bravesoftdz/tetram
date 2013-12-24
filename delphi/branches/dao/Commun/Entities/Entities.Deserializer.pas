@@ -1,4 +1,4 @@
-unit EntitiesDeserializer;
+unit Entities.Deserializer;
 
 interface
 

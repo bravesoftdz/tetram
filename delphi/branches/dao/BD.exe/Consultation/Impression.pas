@@ -416,12 +416,12 @@ begin
       Prn.CreateColumn1(1, 42, -1, taLeftJustify, Prn.Font.name, 12, []);
 
       Prn.WriteLineColumn(0, -1, rsTransEditions);
-      for Edition in Album.Editions.Editions do
+      for Edition in Album.Editions do
         Prn.WriteLineColumn(1, -1, Edition.ChaineAffichage);
     end;
 
     if DetailsOptions > dsoListeEditions then
-      for Edition in Album.Editions.Editions do
+      for Edition in Album.Editions do
         ImprimeEdition(Prn, Edition, fWaiting);
   end;
 end;

@@ -1,4 +1,4 @@
-unit EntitiesSerializer;
+unit Entities.Serializer;
 
 interface
 
@@ -87,7 +87,7 @@ begin
   WriteListEntityToJSON<TAuteurLite>(Entity.Coloristes, json.AddArray('Coloristes'), Options);
   WriteValueToJSON('Sujet', Entity.Sujet, json, Options);
   WriteValueToJSON('Notes', Entity.Notes, json, Options);
-  WriteListEntityToJSON<TEditionFull>(Entity.Editions.Editions, json.AddArray('Editions'), Options);
+  WriteListEntityToJSON<TEditionFull>(Entity.Editions, json.AddArray('Editions'), Options);
   // property Notation: Integer read FNotation write FNotation;
   WriteListEntityToJSON<TUniversLite>(Entity.Univers, json.AddArray('Univers'), Options);
 end;

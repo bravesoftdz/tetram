@@ -268,16 +268,17 @@ end;
 procedure TfrmGallerie.ShowAlbum(Album: TAlbumLite);
 var
   i: Integer;
+  Editions: TList<TEditionFull>;
 begin
   FTitreAlbum := Album.ChaineAffichage(True);
 
-  with TDaoEditionFull.getList(Album.ID) do
-    try
-      for i := Pred(Editions.Count) downto 0 do
-        ShowEdition(Editions[i]);
-    finally
-      Free;
-    end;
+  Editions := TDaoEditionFull.getList(Album.ID);
+  try
+    for i := Pred(Editions.Count) downto 0 do
+      ShowEdition(Editions[i]);
+  finally
+    Free;
+  end;
 end;
 
 procedure TfrmGallerie.ShowEdition(Edition: TEditionFull);

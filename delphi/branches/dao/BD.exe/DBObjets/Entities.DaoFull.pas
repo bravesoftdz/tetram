@@ -74,10 +74,10 @@ type
     class procedure Fill(Entity: TEditionFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TEditionFull; UseTransaction: TUIBTransaction); override;
     class procedure FusionneInto(Source, Dest: TEditionFull); overload;
-    class procedure FusionneInto(Source, Dest: TEditionsFull); overload;
+    class procedure FusionneInto(Source, Dest: TObjectList<TEditionFull>); overload;
 
-    class function getList(const Reference: TGUID; Stock: Integer = -1): TEditionsFull;
-    class procedure FillList(Entity: TEditionsFull; const Reference: TGUID; Stock: Integer = -1);
+    class function getList(const Reference: TGUID; Stock: Integer = -1): TObjectList<TEditionFull>;
+    class procedure FillList(Entity: TObjectList<TEditionFull>; const Reference: TGUID; Stock: Integer = -1);
   end;
 
   TDaoEditeurFull = class(TDaoFullEntity<TEditeurFull>)
@@ -617,7 +617,7 @@ begin
     end;
 
     S := '';
-    for Edition in Entity.Editions.Editions do
+    for Edition in Entity.Editions do
       if not Edition.RecInconnu then
         AjoutString(S, QuotedStr(GUIDToString(Edition.ID_Edition)), ',');
 
@@ -639,7 +639,7 @@ begin
     qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
     qry.Execute;
 
-    for Edition in Entity.Editions.Editions do
+    for Edition in Entity.Editions do
     begin
       Edition.ID_Album := Entity.ID_Album;
       TDaoEditionFull.SaveToDatabase(Edition, qry.Transaction);
@@ -1353,7 +1353,7 @@ begin
   end;
 end;
 
-class procedure TDaoEditionFull.FillList(Entity: TEditionsFull; const Reference: TGUID; Stock: Integer);
+class procedure TDaoEditionFull.FillList(Entity: TObjectList<TEditionFull>; const Reference: TGUID; Stock: Integer);
 var
   qry: TUIBQuery;
 begin
@@ -1372,7 +1372,7 @@ begin
     qry.Open;
     while not qry.Eof do
     begin
-      Entity.Editions.Add(getInstance(StringToGUID(qry.Fields.AsString[0])));
+      Entity.Add(getInstance(StringToGUID(qry.Fields.AsString[0])));
       qry.Next;
     end;
     TfrmConsole.AddEvent(Self.UnitName, '< TDaoEditionFull.FillList - ' + GUIDToString(Reference));
@@ -1382,7 +1382,7 @@ begin
   end;
 end;
 
-class procedure TDaoEditionFull.FusionneInto(Source, Dest: TEditionsFull);
+class procedure TDaoEditionFull.FusionneInto(Source, Dest: TObjectList<TEditionFull>);
 type
   OptionFusion = record
     ImporterImages: Boolean;
@@ -1394,21 +1394,21 @@ var
   Edition: TEditionFull;
   i, j: Integer;
 begin
-  if Source.Editions.Count = 0 then
+  if Source.Count = 0 then
     Exit;
 
-  SetLength(FusionsGUID, Source.Editions.Count);
+  SetLength(FusionsGUID, Source.Count);
   ZeroMemory(FusionsGUID, Length(FusionsGUID) * SizeOf(TGUID));
-  SetLength(OptionsFusion, Source.Editions.Count);
+  SetLength(OptionsFusion, Source.Count);
   ZeroMemory(OptionsFusion, Length(OptionsFusion) * SizeOf(OptionFusion));
   // même si la destination n'a aucune données, on peut choisir de ne rien y importer
   // if Dest.Editions.Count > 0 then
-  for i := 0 to Pred(Source.Editions.Count) do
+  for i := 0 to Pred(Source.Count) do
     with TfrmFusionEditions.Create(nil) do
       try
-        SetEditionSrc(Source.Editions[i]);
+        SetEditionSrc(Source[i]);
         // SetEditions doit être fait après SetEditionSrc
-        SetEditions(Dest.Editions, FusionsGUID);
+        SetEditions(Dest, FusionsGUID);
 
         case ShowModal of
           mrCancel:
@@ -1419,37 +1419,37 @@ begin
             else
               FusionsGUID[i] := TEditionFull(lbEditions.Items.Objects[lbEditions.ItemIndex]).ID_Edition;
         end;
-        OptionsFusion[i].ImporterImages := CheckBox2.Checked and (Source.Editions[i].Couvertures.Count > 0);
+        OptionsFusion[i].ImporterImages := CheckBox2.Checked and (Source[i].Couvertures.Count > 0);
         OptionsFusion[i].RemplacerImages := CheckBox3.Checked and OptionsFusion[i].ImporterImages;
       finally
         Free;
       end;
 
   Edition := nil;
-  for i := 0 to Pred(Source.Editions.Count) do
+  for i := 0 to Pred(Source.Count) do
   begin
     if IsEqualGUID(FusionsGUID[i], GUID_FULL) then
       Continue;
     if IsEqualGUID(FusionsGUID[i], GUID_NULL) then
-      Dest.Editions.Add(TFactoryEditionFull.getInstance)
+      Dest.Add(TFactoryEditionFull.getInstance)
     else
     begin
       Edition := nil;
-      for j := 0 to Pred(Dest.Editions.Count) do
-        if IsEqualGUID(Dest.Editions[j].ID_Edition, FusionsGUID[i]) then
+      for j := 0 to Pred(Dest.Count) do
+        if IsEqualGUID(Dest[j].ID_Edition, FusionsGUID[i]) then
         begin
-          Edition := Dest.Editions[j];
+          Edition := Dest[j];
           Break;
         end;
     end;
     if Assigned(Edition) then
     begin
       if not OptionsFusion[i].ImporterImages then
-        Source.Editions[i].Couvertures.Clear
+        Source[i].Couvertures.Clear
       else if OptionsFusion[i].RemplacerImages then
         Edition.Couvertures.Clear;
 
-      FusionneInto(Source.Editions[i], Edition);
+      FusionneInto(Source[i], Edition);
     end;
   end;
 end;
@@ -1520,9 +1520,9 @@ begin
   end;
 end;
 
-class function TDaoEditionFull.getList(const Reference: TGUID; Stock: Integer): TEditionsFull;
+class function TDaoEditionFull.getList(const Reference: TGUID; Stock: Integer): TObjectList<TEditionFull>;
 begin
-  Result := TEditionsFull.Create;
+  Result := TObjectList<TEditionFull>.Create;
   FillList(Result, Reference, Stock);
 end;
 

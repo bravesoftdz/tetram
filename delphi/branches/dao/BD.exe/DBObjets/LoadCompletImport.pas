@@ -206,7 +206,7 @@ begin
             Exit;
           if IsEqualGuid(dummyID, GUID_FULL) then
           begin
-            for Edition in Editions.Editions do
+            for Edition in Editions do
               if SameText(Serie.Editeur.NomEditeur, Edition.Editeur.NomEditeur) then
               begin
                 Edition.Editeur.NomEditeur := '';
@@ -217,7 +217,7 @@ begin
           end
           else
           begin
-            for Edition in Editions.Editions do
+            for Edition in Editions do
               if SameText(Serie.Editeur.NomEditeur, Edition.Editeur.NomEditeur) then
               begin
                 TDaoEditeurFull.Fill(Edition.Editeur, dummyID);
@@ -235,7 +235,7 @@ begin
             Exit;
           if IsEqualGuid(dummyID, GUID_FULL) then
           begin
-            for Edition in Editions.Editions do
+            for Edition in Editions do
               if IsEqualGuid(Serie.Editeur.ID_Editeur, Edition.Editeur.ID_Editeur) and SameText(Serie.Collection.NomCollection, Edition.Collection.NomCollection)
               then
                 Edition.Collection.NomCollection := '';
@@ -243,7 +243,7 @@ begin
           end
           else
           begin
-            for Edition in Editions.Editions do
+            for Edition in Editions do
               if IsEqualGuid(Serie.Editeur.ID_Editeur, Edition.Editeur.ID_Editeur) and SameText(Serie.Collection.NomCollection, Edition.Collection.NomCollection)
               then
                 TDaoCollectionLite.Fill(Edition.Collection, dummyID);
@@ -288,7 +288,7 @@ begin
         frmValidationImport.PageControl1.ActivePageIndex := 1;
         DefaultEdition := TDaoEditionFull.getInstance(GUID_NULL);
         try
-          for Edition in Editions.Editions do
+          for Edition in Editions do
           begin
             if not IsEqualGuid(ID_Serie, GUID_FULL) then
             begin
@@ -317,7 +317,7 @@ begin
                 Exit;
               if IsEqualGuid(dummyID, GUID_FULL) then
               begin
-                for Edition2 in Editions.Editions do
+                for Edition2 in Editions do
                   if (Edition <> Edition2) and IsEqualGuid(Edition2.Editeur.ID_Editeur, GUID_NULL) and
                     SameText(Edition.Editeur.NomEditeur, Edition2.Editeur.NomEditeur) then
                   begin
@@ -329,7 +329,7 @@ begin
               end
               else
               begin
-                for Edition2 in Editions.Editions do
+                for Edition2 in Editions do
                   if (Edition <> Edition2) and IsEqualGuid(Edition2.Editeur.ID_Editeur, GUID_NULL) and
                     SameText(Edition.Editeur.NomEditeur, Edition2.Editeur.NomEditeur) then
                   begin
@@ -351,7 +351,7 @@ begin
                   Exit;
                 if IsEqualGuid(dummyID, GUID_FULL) then
                 begin
-                  for Edition2 in Editions.Editions do
+                  for Edition2 in Editions do
                     if (Edition <> Edition2) and IsEqualGuid(Edition2.Collection.ID, GUID_NULL) and
                       IsEqualGuid(Edition.Editeur.ID_Editeur, Edition2.Editeur.ID_Editeur) and
                       SameText(Edition.Collection.NomCollection, Edition2.Collection.NomCollection) then
@@ -360,7 +360,7 @@ begin
                 end
                 else
                 begin
-                  for Edition2 in Editions.Editions do
+                  for Edition2 in Editions do
                     if (Edition <> Edition2) and IsEqualGuid(Edition2.Collection.ID, GUID_NULL) and
                       IsEqualGuid(Edition.Editeur.ID_Editeur, Edition2.Editeur.ID_Editeur) and
                       SameText(Edition.Collection.NomCollection, Edition2.Collection.NomCollection) then

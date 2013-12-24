@@ -576,10 +576,10 @@ begin
   end;
 
   lvEditions.Items.BeginUpdate;
-  for PEd in FAlbum.Editions.Editions do
+  for PEd in FAlbum.Editions do
     lvEditions.AddItem(PEd.ChaineAffichage, PEd);
   lvEditions.Items.EndUpdate;
-  lvEditions.Visible := FAlbum.Editions.Editions.Count > 1;
+  lvEditions.Visible := FAlbum.Editions.Count > 1;
 
   TfrmConsole.AddEvent(UnitName, 'Chargement terminé - ' + GUIDToString(Value));
 end;

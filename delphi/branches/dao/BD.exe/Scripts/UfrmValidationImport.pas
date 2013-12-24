@@ -163,7 +163,7 @@ var
 begin
   if cklImages.ItemIndex > -1 then
   begin
-    PC := FAlbum.Editions.Editions[0].Couvertures[cklImages.ItemIndex];
+    PC := FAlbum.Editions[0].Couvertures[cklImages.ItemIndex];
     hg := THourGlass.Create;
     if IsEqualGUID(PC.ID, GUID_NULL) then
       ms := GetJPEGStream(PC.NewNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing)
@@ -192,7 +192,7 @@ begin
 
   DefaultValues := TDaoAlbumFull.getInstance(GUID_NULL);
   DefaultEdition := TDaoEditionFull.getInstance(GUID_NULL);
-  DefaultValues.Editions.Editions.Add(DefaultEdition);
+  DefaultValues.Editions.Add(DefaultEdition);
 
   LoadCombo(1 { Etat } , cbxEtat);
   LoadCombo(2 { Reliure } , cbxReliure);
@@ -336,8 +336,8 @@ begin
   FAlbum.Serie.Collection.NomCollection := SetValue(edCollectionSerie, CheckBoxLabeled7, DefaultValues.Serie.Collection.NomCollection);
 
   // Edition
-  if FAlbum.Editions.Editions.Count > 0 then
-    with FAlbum.Editions.Editions[0] do
+  if FAlbum.Editions.Count > 0 then
+    with FAlbum.Editions[0] do
     begin
       Editeur.NomEditeur := SetValue(edNomEditeur, CheckBox20, DefaultEdition.Editeur.NomEditeur);
       Editeur.SiteWeb := SetValue(edSiteWebEditeur, CheckBox21, DefaultEdition.Editeur.SiteWeb);
@@ -375,7 +375,7 @@ var
 begin
   if cklImages.ItemIndex = -1 then
     Exit;
-  PC := FAlbum.Editions.Editions[0].Couvertures[cklImages.ItemIndex];
+  PC := FAlbum.Editions[0].Couvertures[cklImages.ItemIndex];
   hg := THourGlass.Create;
   if IsEqualGUID(PC.ID, GUID_NULL) then
     ms := GetJPEGStream(PC.NewNom, 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing)
@@ -569,9 +569,9 @@ begin
     CheckBoxLabeled7.Checked } ;
 
   // Edition
-  TabSheet3.TabVisible := FAlbum.FusionneEditions and (FAlbum.Editions.Editions.Count > 0);
+  TabSheet3.TabVisible := FAlbum.FusionneEditions and (FAlbum.Editions.Count > 0);
   if TabSheet3.TabVisible then
-    with FAlbum.Editions.Editions[0] do
+    with FAlbum.Editions[0] do
     begin
       LoadValue(Editeur.NomEditeur, edNomEditeur, CheckBox20, DefaultEdition.Editeur.NomEditeur);
       LoadValue(Editeur.SiteWeb, edSiteWebEditeur, CheckBox21, DefaultEdition.Editeur.SiteWeb);

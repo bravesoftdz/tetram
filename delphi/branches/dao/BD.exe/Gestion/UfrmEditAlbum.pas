@@ -309,17 +309,17 @@ begin
     FCurrentEditionComplete := nil;
     vtEditions.Clear;
     vtEditionsClick(nil);
-    SetLength(FEditeurCollectionSelected, FAlbum.Editions.Editions.Count);
-    for i := 0 to Pred(FAlbum.Editions.Editions.Count) do
+    SetLength(FEditeurCollectionSelected, FAlbum.Editions.Count);
+    for i := 0 to Pred(FAlbum.Editions.Count) do
     begin
-      PE := FAlbum.Editions.Editions[i];
+      PE := FAlbum.Editions[i];
       FEditeurCollectionSelected[i] := True;
       vtEditions.AddItem(PE.ChaineAffichage, PE);
     end;
     vtEditions.ItemIndex := OldvtEditionsItemIndex;
     vtEditionsClick(nil);
 
-    if (FAlbum.RecInconnu and (FAlbum.Editions.Editions.Count = 0)) or isAchat then
+    if (FAlbum.RecInconnu and (FAlbum.Editions.Count = 0)) or isAchat then
       VDTButton3.Click;
   finally
     vtEditions.Items.EndUpdate;
@@ -827,7 +827,7 @@ begin
     EditionComplete.Editeur.ID_Editeur := TSerieLite(vtEditSerie.VTEdit.Data).Editeur.ID;
     EditionComplete.Collection.ID := TSerieLite(vtEditSerie.VTEdit.Data).Collection.ID;
   end;
-  FAlbum.Editions.Editions.Add(EditionComplete);
+  FAlbum.Editions.Add(EditionComplete);
   vtEditions.AddItem('Nouvelle edition', EditionComplete);
   vtEditions.ItemIndex := Pred(vtEditions.Items.Count);
   vtEditionsClick(nil);
@@ -1285,7 +1285,7 @@ begin
 
     FCurrentEditionComplete := nil;
     vtEditions.DeleteSelected;
-    FAlbum.Editions.Editions.Delete(OldIndex);
+    FAlbum.Editions.Delete(OldIndex);
     if OldIndex < vtEditions.Items.Count then
       vtEditions.ItemIndex := OldIndex
     else
