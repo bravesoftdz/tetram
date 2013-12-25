@@ -34,6 +34,8 @@ type
   ROption = record
     Value: Integer;
     Caption: RAutoTrimString;
+    class operator Implicit(a: ROption): Integer;
+    class operator Implicit(a: Integer): ROption;
   end;
 
 function MakeOption(Value: Integer; const Caption: RAutoTrimString): ROption; inline;
@@ -454,6 +456,19 @@ end;
 class operator RLongString.Implicit(a: RLongString): string;
 begin
   Result := a.Value;
+end;
+
+{ ROption }
+
+class operator ROption.Implicit(a: ROption): Integer;
+begin
+  Result := a.Value;
+end;
+
+class operator ROption.Implicit(a: Integer): ROption;
+begin
+  Result.Value := a;
+  Result.Caption := '';
 end;
 
 { TObjetFull }

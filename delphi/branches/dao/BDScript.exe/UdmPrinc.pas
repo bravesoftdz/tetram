@@ -33,7 +33,8 @@ uses
   System.SyncObjs, Vcl.Forms, System.StrUtils, UfrmSplash, CommonConst, Textes,
   System.DateUtils, System.UITypes, Divers, UfrmScripts, System.IOUtils,
   UScriptEngineIntf, UMasterEngine, UScriptList, dwsJSON, Entities.Full,
-  JclCompression, Entities.Deserializer, Entities.FactoriesFull;
+  JclCompression, Entities.Deserializer, Entities.FactoriesFull,
+  Entities.DaoLambdaJSON;
 
 {$R *.dfm}
 
@@ -131,6 +132,30 @@ begin
   // end;
 end;
 
+procedure ReadExternalData;
+var
+  fileName: TFileName;
+  Archive: TJcl7zDecompressArchive;
+  s: TStringStream;
+begin
+  fileName := TPath.ChangeExtension(CommonConst.DatabasePath, '.mtd');
+  if not TFile.Exists(fileName) then
+    Exit;
+  s := TStringStream.Create;
+  Archive := TJcl7zDecompressArchive.Create(fileName);
+  try
+    Archive.ListFiles;
+    Archive.Items[0].Stream := s;
+    Archive.Items[0].OwnsStream := False;
+    Archive.Items[0].Selected := True;
+    Archive.ExtractSelected;
+    TDaoListeJSON.json := s.DataString;
+  finally
+    Archive.Free;
+    s.Free;
+  end;
+end;
+
 procedure AutoRun(DataFile: TFileName);
 var
   masterEngine: IMasterEngine;
@@ -157,7 +182,7 @@ begin
 
   AlbumToImport := TEntitesDeserializer.BuildEntityFromJson<TAlbumFull, TFactoryAlbumFull>(o.Items['album'] as TdwsJSONObject);
   try
-    Script := masterEngine.ScriptList.FindScriptByUnitName('', [skMain]);
+    Script := masterEngine.ScriptList.FindScriptByUnitName(o.Items['options'].Items['script'].AsString, [skMain]);
     if Assigned(Script) then
     begin
       masterEngine := TMasterEngine.Create;
@@ -215,6 +240,7 @@ begin
     Application.MainFormOnTaskbar := False;
     if FindCmdLineSwitch('dh', s, True, [clstValueNextParam]) then
       Application.DialogHandle := StrToIntDef(s, Application.DialogHandle);
+    ReadExternalData;
     AutoRun(scriptAutoRun);
   end
   else
@@ -222,7 +248,7 @@ begin
     Application.MainFormOnTaskbar := True;
     frmSplash := TfrmSplash.Create(nil);
     try
-      frmSplash.FileName := TPath.Combine(TPath.GetLibraryPath, 'bd.exe');
+      frmSplash.fileName := TPath.Combine(TPath.GetLibraryPath, 'bd.exe');
       frmSplash.Show;
       Application.ProcessMessages;
       Debut := Now;
@@ -230,6 +256,7 @@ begin
       ChangeCurseur(crHandPoint, 'CUR_HANDPOINT', RT_RCDATA);
 
       frmSplash.Affiche_act(ChargementApp + '...');
+      ReadExternalData;
       Application.CreateForm(TfrmScripts, frmScripts);
       AnalyseLigneCommande(GetCommandLine);
 

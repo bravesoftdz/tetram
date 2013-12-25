@@ -168,7 +168,8 @@ uses
   Entities.FactoriesCommon in '..\Commun\Entities\Entities.FactoriesCommon.pas',
   Entities.FactoriesLite in '..\Commun\Entities\Entities.FactoriesLite.pas',
   Entities.FactoriesFull in '..\Commun\Entities\Entities.FactoriesFull.pas',
-  Entities.DaoLambda in 'DBObjets\Entities.DaoLambda.pas';
+  Entities.DaoLambda in '..\Commun\Entities\Entities.DaoLambda.pas',
+  Entities.DaoLambdaDB in 'DBObjets\Entities.DaoLambdaDB.pas';
 
 begin
   Application.Title := 'BDthèque';

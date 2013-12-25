@@ -139,7 +139,7 @@ implementation
 
 uses
   IOUtils, Commun, Procedures, CommonConst, UBdtForms, Entities.DaoFull, ProceduresBDtk,
-  Entities.Common;
+  Entities.Common, Entities.DaoLambda;
 
 {$R *.dfm}
 
@@ -194,12 +194,12 @@ begin
   DefaultEdition := TDaoEditionFull.getInstance(GUID_NULL);
   DefaultValues.Editions.Add(DefaultEdition);
 
-  LoadCombo(1 { Etat } , cbxEtat);
-  LoadCombo(2 { Reliure } , cbxReliure);
-  LoadCombo(3 { TypeEdition } , cbxEdition);
-  LoadCombo(4 { Orientation } , cbxOrientation);
-  LoadCombo(5 { Format } , cbxFormat);
-  LoadCombo(8 { Sens de lecture } , cbxSensLecture);
+  LoadCombo(cbxEtat, TDaoListe.ListEtats, TDaoListe.DefaultEtat);
+  LoadCombo(cbxReliure, TDaoListe.ListReliures, TDaoListe.DefaultReliure);
+  LoadCombo(cbxEdition, TDaoListe.ListTypesEdition, TDaoListe.DefaultTypeEdition);
+  LoadCombo(cbxOrientation, TDaoListe.ListOrientations, TDaoListe.DefaultOrientation);
+  LoadCombo(cbxFormat, TDaoListe.ListFormatsEdition, TDaoListe.DefaultFormatEdition);
+  LoadCombo(cbxSensLecture, TDaoListe.ListSensLecture, TDaoListe.DefaultSensLecture);
 end;
 
 procedure TfrmValidationImport.FormDestroy(Sender: TObject);

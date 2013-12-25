@@ -10,9 +10,9 @@ type
   SerializationOption = (soIndent, soFull, soSkipNullValues);
   SerializationOptions = set of SerializationOption;
 
+type
 {$TYPEINFO ON}
 {$RTTI EXPLICIT METHODS([vcPrivate, vcPublic, vcProtected])}
-
   TJsonSerializer = class
   strict private
     class var RttiContext: TRttiContext;
@@ -119,13 +119,13 @@ end;
 
 class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: Currency; json: TdwsJSONObject; Options: SerializationOptions);
 begin
-  if (not (soSkipNullValues in Options)) or (Value <> 0) then
+  if (not(soSkipNullValues in Options)) or (Value <> Default (Currency)) then
     json.AddValue(Name, Value);
 end;
 
 class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: Integer; json: TdwsJSONObject; Options: SerializationOptions);
 begin
-  if (not (soSkipNullValues in Options)) or (Value <> 0) then
+  if (not(soSkipNullValues in Options)) or (Value <> Default (Integer)) then
     json.AddValue(Name, Value);
 end;
 
@@ -155,7 +155,7 @@ end;
 
 class procedure TJsonSerializer.WriteValueToJSON(const Name, Value: string; json: TdwsJSONObject; Options: SerializationOptions);
 begin
-  if (not (soSkipNullValues in Options)) or (Value <> '') then
+  if (not(soSkipNullValues in Options)) or (Value <> Default (string)) then
     json.AddValue(Name, Value);
 end;
 
@@ -167,26 +167,26 @@ end;
 
 class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: Boolean; json: TdwsJSONObject; Options: SerializationOptions);
 begin
-  if (not (soSkipNullValues in Options)) or Value then
+  if (not(soSkipNullValues in Options)) or Value then
     json.AddValue(Name, Value);
 end;
 
 class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: RGUIDEx; json: TdwsJSONObject; Options: SerializationOptions);
 begin
-  if (not (soSkipNullValues in Options)) or (not IsEqualGUID(Value, GUID_NULL)) then
+  if (not(soSkipNullValues in Options)) or (not IsEqualGUID(Value, GUID_NULL)) then
     json.AddValue(Name, Value);
 end;
 
 class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: ROption; json: TdwsJSONObject; Options: SerializationOptions);
 begin
-  if (not (soSkipNullValues in Options)) or (Value.Value > -1) then
+  if (not(soSkipNullValues in Options)) or (Value.Value > -1) then
     json.AddObject(Name).AddValue(IntToStr(Value.Value), Value.Caption);
 end;
 
 class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: TStrings; json: TdwsJSONObject; Options: SerializationOptions;
   ItemsHasValues: Boolean);
 begin
-  if (not (soSkipNullValues in Options)) or (Value.Count > 0) then
+  if (not(soSkipNullValues in Options)) or (Value.Count > 0) then
     if ItemsHasValues then
       WriteStringListWithValuesToJSON(Value, json.AddArray(Name))
     else

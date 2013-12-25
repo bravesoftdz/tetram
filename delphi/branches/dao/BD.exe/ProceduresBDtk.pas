@@ -3,7 +3,7 @@ unit ProceduresBDtk;
 interface
 
 uses SysUtils, Windows, StdCtrls, Forms, Controls, ExtCtrls, CommonConst, Graphics, StrUtils, Dialogs, SyncObjs,
-  uib, Commun, System.Classes, ComboCheck;
+  uib, Commun, System.Classes, ComboCheck, Entities.Full;
 
 type
   IImpressionApercu = interface
@@ -68,8 +68,7 @@ function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Ha
 procedure LoadCouverture(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Picture: TPicture);
 function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = True): string;
 
-procedure LoadCombo(Categorie: Integer; Combo: TLightComboCheck);
-procedure LoadStrings(Categorie: Integer; Strings: TStrings);
+procedure LoadCombo(Combo: TLightComboCheck; List: TStrings; DefaultValue: ROption);
 
 implementation
 
@@ -596,80 +595,46 @@ begin
   with TUIBQuery.Create(nil) do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'SELECT * FROM SearchFileName(:Chemin, :Fichier, :Reserve)';
+      SQL.Text := 'select * from searchfilename(:chemin, :fichier, :reserve)';
       Prepare(True);
       Params.AsString[0] := Copy(IncludeTrailingPathDelimiter(Chemin), 1, Params.MaxStrLen[0]);
       Params.AsString[1] := Copy(Fichier, 1, Params.MaxStrLen[1]);
       Params.AsBoolean[2] := Reserve;
       Open;
-      Result := ExtractFileName(Fields.AsString[0]);
+      Result := TPath.GetFileName(Fields.AsString[0]);
     finally
       Transaction.Free;
       Free;
     end;
 end;
 
-procedure LoadStrings(Categorie: Integer; Strings: TStrings);
-begin
-  with TUIBQuery.Create(nil) do
-    try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'SELECT REF, LIBELLE, DEFAUT FROM LISTES WHERE CATEGORIE = :Categorie ORDER BY ORDRE';
-
-      Params.AsInteger[0] := Categorie;
-      Open;
-      Strings.Clear;
-      while not Eof do
-      begin
-        Strings.Add(Fields.AsString[0] + '=' + Fields.AsString[1]);
-        Next;
-      end;
-    finally
-      Transaction.Free;
-      Free;
-    end;
-end;
-
-procedure LoadCombo(Categorie: Integer; Combo: TLightComboCheck);
+procedure LoadCombo(Combo: TLightComboCheck; List: TStrings; DefaultValue: ROption);
 var
   HasNULL: Boolean;
+  i: Integer;
+  s: TSubItem;
 begin
-  with TUIBQuery.Create(nil) do
-    try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'select ref, libelle, defaut from listes where categorie = :categorie order by ordre';
+  Combo.Items.Clear;
+  Combo.DefaultValueChecked := -1;
+  HasNull := False;
+  for i := 0 to Pred(List.Count) do
+  begin
+    s := Combo.Items.Add;
+    s.Caption := List.ValueFromIndex[i];
+    s.Valeur := StrToInt(List.Names[i]);
+    if Integer(DefaultValue) = s.Valeur then
+      Combo.DefaultValueChecked := s.Valeur;
+    HasNULL := HasNull or (s.Valeur = -1);
+  end;
+  if not HasNULL then
+  begin
+    s := Combo.Items.Add;
+    s.Caption := ' ';
+    s.Valeur := -1;
+    s.Index := 0;
+  end;
 
-      HasNULL := False;
-
-      Params.AsInteger[0] := Categorie;
-      Open;
-      Combo.Items.Clear;
-      Combo.DefaultValueChecked := -1;
-      while not Eof do
-      begin
-        with Combo.Items.Add do
-        begin
-          Caption := Fields.AsString[1];
-          Valeur := Fields.AsInteger[0];
-          if Fields.AsBoolean[2] then
-            Combo.DefaultValueChecked := Valeur;
-          HasNULL := Valeur = -1;
-        end;
-        Next;
-      end;
-      if not HasNULL then
-        with Combo.Items.Add do
-        begin
-          Caption := ' ';
-          Valeur := -1;
-          index := 0;
-        end;
-
-      Combo.Value := Combo.DefaultValueChecked;
-    finally
-      Transaction.Free;
-      Free;
-    end;
+  Combo.Value := Combo.DefaultValueChecked;
 end;
 
 end.

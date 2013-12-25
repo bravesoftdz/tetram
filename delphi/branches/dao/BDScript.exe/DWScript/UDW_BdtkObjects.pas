@@ -74,7 +74,7 @@ implementation
 uses
   dwsSymbols, Entities.Full, UMetadata, Procedures, AnsiStrings, Divers, Generics.Collections,
   UScriptsFonctions, Entities.Lite, Commun, Entities.FactoriesLite,
-  Entities.FactoriesFull;
+  Entities.FactoriesFull, Entities.DaoLambda;
 
 { TDW_BdtkObjects }
 
@@ -367,21 +367,16 @@ procedure TDW_BdtkObjectsUnit.Register_TEditionComplete;
 var
   c: TdwsClass;
   i: Integer;
-  FListTypesImages: TStringList;
+  FListTypesImages: TStrings;
+  constant: TdwsConstant;
 begin
-  FListTypesImages := TStringList.Create;
-  try
-    // TODO: trouver un autre moyen d'obtenir la liste
-    // LoadStrings(6, FListTypesImages);
-    for i := 0 to Pred(FListTypesImages.Count) do
-      with Constants.Add do
-      begin
-        Name := 'cti' + StringReplace(SansAccents(FListTypesImages.ValueFromIndex[i]), ' ', '_', [rfReplaceAll]);
-        DataType := 'Integer';
-        Value := StrToInt(FListTypesImages.Names[i]);
-      end;
-  finally
-    FListTypesImages.Free;
+  FListTypesImages := TDaoListe.ListTypesImage;
+  for i := 0 to Pred(FListTypesImages.Count) do
+  begin
+    constant := Constants.Add;
+    constant.Name := 'cti' + StringReplace(SansAccents(FListTypesImages.ValueFromIndex[i]), ' ', '_', [rfReplaceAll]);
+    constant.DataType := 'Integer';
+    constant.Value := StrToInt(FListTypesImages.Names[i]);
   end;
 
   c := RegisterClass('TEditionComplete');

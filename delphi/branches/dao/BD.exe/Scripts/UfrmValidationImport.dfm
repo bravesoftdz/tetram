@@ -479,10 +479,6 @@ object frmValidationImport: TfrmValidationImport
     object TabSheet2: TTabSheet
       Caption = 'S'#233'rie'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object edTitreSerie: TEditLabeled
         Left = 144
         Top = 8

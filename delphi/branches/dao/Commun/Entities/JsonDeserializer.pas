@@ -19,7 +19,7 @@ type
     class procedure ReadStringListFromJSON(list: TStrings; json: TdwsJSONArray);
     class procedure ReadStringListWithValuesFromJSON(list: TStrings; json: TdwsJSONArray);
     class procedure ReadListEntitiesFromJSON<T: TDBEntity; F: TFactoryEntity>(list: TList<T>; json: TdwsJSONArray);
-
+  public
     class function ReadValueFromJSON(const Name: string; const Default: string; json: TdwsJSONObject): string; overload; inline;
     class function ReadValueFromJSON(const Name: string; const Default: Integer; json: TdwsJSONObject): Integer; overload; inline;
     class function ReadValueFromJSON(const Name: string; const Default: Currency; json: TdwsJSONObject): Currency; overload; inline;
@@ -28,7 +28,7 @@ type
     class function ReadValueFromJSON(const Name: string; const Default: RGUIDEx; json: TdwsJSONObject): RGUIDEx; overload; inline;
     class function ReadValueFromJSON(const Name: string; const Default: TMetierAuteur; json: TdwsJSONObject): TMetierAuteur; overload; inline;
     class procedure ReadValueFromJSON(const Name: string; Value: TStrings; json: TdwsJSONObject; ItemsHasValues: Boolean = False); overload; inline;
-  public
+
     class constructor Create;
     class destructor Destroy;
 

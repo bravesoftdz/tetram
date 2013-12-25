@@ -3,36 +3,59 @@ unit Entities.DaoLambda;
 interface
 
 uses
-  System.Classes, Entities.Full;
+  System.Classes, Entities.Full, System.Generics.Collections;
 
 type
   TDaoListe = class
+  type
+    // les valeurs doivent correspondre avec le champ "categorie" de la table "liste"
+    CategorieIndex = (piNOTUSED = 0, piEtat = 1, piReliure = 2, piTypeEdition = 3, piOrientation = 4, piFormatEdition = 5, piTypeImage = 6,
+      piCategorieParaBD = 7, piSensLecture = 8, piNoteAlbum = 9);
+    TMethod = procedure of object;
+    TArrayOfROption = array [CategorieIndex] of ROption;
   private
-    class var FDefaultEtat: ROption;
-    class var FDefaultReliure: ROption;
-    class var FDefaultFormatEdition: ROption;
-    class var FDefaultTypeEdition: ROption;
-    class var FDefaultOrientation: ROption;
-    class var FDefaultSensLecture: ROption;
+    class var FEnsureLists: TMethod;
+    class var FEnsureDefaultValues: TMethod;
 
+  protected
     class var FDefaultValuesLoaded: Boolean;
-    class function GetDefaultEtat: ROption; static;
-    class function GetDefaultFormatEdition: ROption; static;
-    class function GetDefaultOrientation: ROption; static;
-    class function GetDefaultReliure: ROption; static;
-    class function GetDefaultSensLecture: ROption; static;
-    class function GetDefaultTypeEdition: ROption; static;
+    class var FDefaultValues: TArrayOfROption;
+
+    class var FListsLoaded: Boolean;
+    class var FLists: TDictionary<CategorieIndex, TStrings>;
+
+    class function GetDefaultValue(Index: CategorieIndex): ROption; static;
+    class function GetList(const Index: CategorieIndex): TStrings; static;
+    class function GetDefaultValues: TArrayOfROption; static;
+    class function GetLists: TDictionary<CategorieIndex, TStrings>; static;
+
   public
     class constructor Create;
+    class destructor Destroy;
 
-    class procedure EnsureDefaultValues;
+    class property EnsureDefaultValues: TMethod read FEnsureDefaultValues write FEnsureDefaultValues;
+    class property DefaultValues: TArrayOfROption read GetDefaultValues;
+    class property DefaultEtat: ROption index piEtat read GetDefaultValue;
+    class property DefaultReliure: ROption index piReliure read GetDefaultValue;
+    class property DefaultFormatEdition: ROption index piFormatEdition read GetDefaultValue;
+    class property DefaultTypeEdition: ROption index piTypeEdition read GetDefaultValue;
+    class property DefaultOrientation: ROption index piOrientation read GetDefaultValue;
+    class property DefaultTypeImage: ROption index piTypeImage read GetDefaultValue;
+    class property DefaultCategorieParaBD: ROption index piCategorieParaBD read GetDefaultValue;
+    class property DefaultSensLecture: ROption index piSensLecture read GetDefaultValue;
+    class property DefaultNoteAlbum: ROption index piNoteAlbum read GetDefaultValue;
 
-    class property DefaultEtat: ROption read GetDefaultEtat;
-    class property DefaultReliure: ROption read GetDefaultReliure;
-    class property DefaultFormatEdition: ROption read GetDefaultFormatEdition;
-    class property DefaultTypeEdition: ROption read GetDefaultTypeEdition;
-    class property DefaultOrientation: ROption read GetDefaultOrientation;
-    class property DefaultSensLecture: ROption read GetDefaultSensLecture;
+    class property EnsureLists: TMethod read FEnsureLists write FEnsureLists;
+    class property Lists: TDictionary<CategorieIndex, TStrings> read GetLists;
+    class property ListEtats: TStrings index piEtat read GetList;
+    class property ListReliures: TStrings index piReliure read GetList;
+    class property ListFormatsEdition: TStrings index piFormatEdition read GetList;
+    class property ListTypesEdition: TStrings index piTypeEdition read GetList;
+    class property ListOrientations: TStrings index piOrientation read GetList;
+    class property ListTypesImage: TStrings index piTypeImage read GetList;
+    class property ListCategoriesParaBD: TStrings index piCategorieParaBD read GetList;
+    class property ListSensLecture: TStrings index piSensLecture read GetList;
+    class property ListNotesAlbum: TStrings index piNoteAlbum read GetList;
   end;
 
 implementation
@@ -43,88 +66,45 @@ uses
 { TDaoListe }
 
 class constructor TDaoListe.Create;
+var
+  c: CategorieIndex;
 begin
   FDefaultValuesLoaded := False;
-end;
 
-class procedure TDaoListe.EnsureDefaultValues;
-var
-  qry: TUIBQuery;
-begin
-  if FDefaultValuesLoaded then
-    Exit;
-  FDefaultEtat := MakeOption(-1, '');
-  FDefaultReliure := MakeOption(-1, '');
-  FDefaultTypeEdition := MakeOption(-1, '');
-  FDefaultOrientation := MakeOption(-1, '');
-  FDefaultFormatEdition := MakeOption(-1, '');
-  FDefaultSensLecture := MakeOption(-1, '');
-
-  qry := TUIBQuery.Create(nil);
-  try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
-    qry.SQL.Text := 'select categorie, ref, libelle from listes where defaut = 1 and categorie in (1,2,3,4,5,8)';
-    qry.Open;
-    while not qry.Eof do
-    begin
-      case qry.Fields.AsInteger[0] of
-        1:
-          FDefaultEtat := MakeOption(qry.Fields.AsInteger[1], qry.Fields.AsString[2]);
-        2:
-          FDefaultReliure := MakeOption(qry.Fields.AsInteger[1], qry.Fields.AsString[2]);
-        3:
-          FDefaultTypeEdition := MakeOption(qry.Fields.AsInteger[1], qry.Fields.AsString[2]);
-        4:
-          FDefaultOrientation := MakeOption(qry.Fields.AsInteger[1], qry.Fields.AsString[2]);
-        5:
-          FDefaultFormatEdition := MakeOption(qry.Fields.AsInteger[1], qry.Fields.AsString[2]);
-        8:
-          FDefaultSensLecture := MakeOption(qry.Fields.AsInteger[1], qry.Fields.AsString[2]);
-      end;
-      qry.Next;
-    end;
-    qry.Transaction.Commit;
-  finally
-    qry.Transaction.Free;
-    qry.Free;
+  FListsLoaded := False;
+  FLists := TObjectDictionary<CategorieIndex, TStrings>.Create([doOwnsValues]);
+  for c := Low(CategorieIndex) to High(CategorieIndex) do
+  begin
+    FLists.Add(c, TStringList.Create);
+    FDefaultValues[c] := MakeOption(-1, '');
   end;
-  FDefaultValuesLoaded := True;
 end;
 
-class function TDaoListe.GetDefaultEtat: ROption;
+class destructor TDaoListe.Destroy;
 begin
-  EnsureDefaultValues;
-  Result := FDefaultEtat;
+  FLists.Free;
 end;
 
-class function TDaoListe.GetDefaultFormatEdition: ROption;
+class function TDaoListe.GetDefaultValue(Index: CategorieIndex): ROption;
 begin
-  EnsureDefaultValues;
-  Result := FDefaultFormatEdition;
+  Result := DefaultValues[Index];
 end;
 
-class function TDaoListe.GetDefaultOrientation: ROption;
+class function TDaoListe.GetDefaultValues: TArrayOfROption;
 begin
   EnsureDefaultValues;
-  Result := FDefaultOrientation;
+  Result := FDefaultValues;
 end;
 
-class function TDaoListe.GetDefaultReliure: ROption;
+class function TDaoListe.GetList(const Index: CategorieIndex): TStrings;
 begin
-  EnsureDefaultValues;
-  Result := FDefaultReliure;
+  Lists.TryGetValue(Index, Result);
 end;
 
-class function TDaoListe.GetDefaultSensLecture: ROption;
+class function TDaoListe.GetLists: TDictionary<CategorieIndex, TStrings>;
 begin
-  EnsureDefaultValues;
-  Result := FDefaultSensLecture;
-end;
-
-class function TDaoListe.GetDefaultTypeEdition: ROption;
-begin
-  EnsureDefaultValues;
-  Result := FDefaultTypeEdition;
+  EnsureLists;
+  Result := FLists;
 end;
 
 end.

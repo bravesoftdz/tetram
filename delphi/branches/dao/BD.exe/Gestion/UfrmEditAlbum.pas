@@ -171,7 +171,6 @@ type
     FEditionChanging: Boolean;
     FScenaristesSelected, FDessinateursSelected, FColoristesSelected: Boolean;
     FisAchat: Boolean;
-    FCategoriesImages: TStringList;
     procedure UpdateEdition;
     procedure RefreshEditionCaption;
     procedure SetAlbum(Value: TAlbumFull);
@@ -196,7 +195,7 @@ implementation
 uses
   Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
   UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
-  Entities.FactoriesLite, Entities.FactoriesFull;
+  Entities.FactoriesLite, Entities.FactoriesFull, Entities.DaoLambda;
 
 {$R *.DFM}
 
@@ -243,21 +242,18 @@ begin
   FDessinateursSelected := False;
   FColoristesSelected := False;
 
-  FCategoriesImages := TStringList.Create;
+  LoadCombo(cbxEtat, TDaoListe.ListEtats, TDaoListe.DefaultEtat);
+  LoadCombo(cbxReliure, TDaoListe.ListReliures, TDaoListe.DefaultReliure);
+  LoadCombo(cbxEdition, TDaoListe.ListTypesEdition, TDaoListe.DefaultTypeEdition);
+  LoadCombo(cbxOrientation, TDaoListe.ListOrientations, TDaoListe.DefaultOrientation);
+  LoadCombo(cbxFormat, TDaoListe.ListFormatsEdition, TDaoListe.DefaultFormatEdition);
+  LoadCombo(cbxSensLecture, TDaoListe.ListSensLecture, TDaoListe.DefaultSensLecture);
 
-  LoadCombo(1 { Etat } , cbxEtat);
-  LoadCombo(2 { Reliure } , cbxReliure);
-  LoadCombo(3 { TypeEdition } , cbxEdition);
-  LoadCombo(4 { Orientation } , cbxOrientation);
-  LoadCombo(5 { Format } , cbxFormat);
-  LoadStrings(6 { Categorie d'image } , FCategoriesImages);
-  LoadCombo(8 { Sens de lecture } , cbxSensLecture);
-
-  for i := 0 to Pred(FCategoriesImages.Count) do
+  for i := 0 to Pred(TDaoListe.ListTypesImage.Count) do
   begin
     mi := TMenuItem.Create(pmChoixCategorie);
-    mi.Caption := FCategoriesImages.ValueFromIndex[i];
-    mi.Tag := StrToInt(FCategoriesImages.Names[i]);
+    mi.Caption := TDaoListe.ListTypesImage.ValueFromIndex[i];
+    mi.Tag := StrToInt(TDaoListe.ListTypesImage.Names[i]);
     mi.OnClick := miChangeCategorieImageClick;
     pmChoixCategorie.Items.Add(mi);
   end;
@@ -440,7 +436,6 @@ begin
   lvColoristes.Items.Count := 0;
   FCurrentEditionComplete := nil;
   vtEditions.Clear;
-  FCategoriesImages.Free;
   FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
 end;
 
@@ -629,7 +624,7 @@ begin
             PC.Categorie := 600
           else
             PC.Categorie := 601;
-          PC.sCategorie := FCategoriesImages.Values[IntToStr(PC.Categorie)];
+          PC.sCategorie := TDaoListe.ListTypesImage.Values[IntToStr(PC.Categorie)];
         end;
       finally
         vstImages.RootNodeCount := FCurrentEditionComplete.Couvertures.Count;
@@ -1353,7 +1348,7 @@ var
 begin
   PC := FCurrentEditionComplete.Couvertures[Integer(TPopupMenu(TMenuItem(Sender).GetParentMenu).PopupComponent)];
   PC.Categorie := Integer(TMenuItem(Sender).Tag);
-  PC.sCategorie := FCategoriesImages.Values[IntToStr(PC.Categorie)];
+  PC.sCategorie := TDaoListe.ListTypesImage.Values[IntToStr(PC.Categorie)];
   vstImages.Invalidate;
 end;
 

@@ -73,7 +73,6 @@ type
     FMasterEngine: IMasterEngine;
     FActiveLine, FRunToCursorLine, FErrorLine: Cardinal;
     FActiveUnitName, FRunToCursorUnitName, FErrorUnitName: string;
-    FListTypesImages: TStringList;
     FOnBreakpoint: TPSOnLineInfo;
     FOnLineInfo: TPSOnLineInfo;
     FOnIdle: TNotifyEvent;
@@ -160,7 +159,7 @@ implementation
 
 uses
   IOUtils, AnsiStrings, Procedures, UfrmScripts, Divers, UScriptsFonctions, UScriptsHTMLFunctions, Dialogs, StrUtils, uPSDisassembly,
-  UPascalScriptEditor, UNet, Entities.Lite;
+  UPascalScriptEditor, UNet, Entities.Lite, Entities.DaoLambda;
 
 procedure AddToTStrings(const Strings: TStringArray; List: TStrings);
 var
@@ -364,10 +363,6 @@ constructor TdmPascalScript.Create(MasterEngine: IMasterEngine);
 begin
   FMasterEngine := MasterEngine;
 
-  FListTypesImages := TStringList.Create;
-  // TODO: trouver un autre moyen d'obtenir la liste
-  // LoadStrings(6, FListTypesImages);
-
   PSImport_DateUtils1 := TPSImport_DateUtils.Create(nil);
   PSImport_Classes1 := TPSImport_Classes.Create(nil);
   PSImport_Classes1.EnableStreams := True;
@@ -422,7 +417,6 @@ begin
   PSImport_ComObj1.Free;
   PSDllPlugin1.Free;
 
-  FListTypesImages.Free;
   fTypeInfos.Free;
 
   FMasterEngine := nil;
@@ -710,7 +704,9 @@ end;
 procedure TdmPascalScript.PSScriptDebugger1Compile(Sender: TPSScript);
 var
   i: Integer;
+  FListTypesImages: TStrings;
 begin
+  FListTypesImages := TDaoListe.ListTypesImage;
   for i := 0 to Pred(FListTypesImages.Count) do
     PSScriptDebugger1.Comp.AddConstantN('cti' + AnsiStrings.StringReplace(AnsiString(SansAccents(FListTypesImages.ValueFromIndex[i])), ' ', '_', [rfReplaceAll]
       ), 'integer').SetInt(StrToInt(AnsiString(FListTypesImages.Names[i])));
@@ -1409,16 +1405,19 @@ begin
   begin
     m := PSScriptDebugger1.CompilerMessages[i];
     if m.ClassType = TPSPascalCompilerWarning then
-      FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(m.ModuleName), string(m.ShortMessageToString), tmWarning, m.Row, m.Col)
+      FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(m.ModuleName), string(m.ShortMessageToString), tmWarning,
+        m.Row, m.Col)
     else if m.ClassType = TPSPascalCompilerHint then
-      FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(m.ModuleName), string(m.ShortMessageToString), tmHint, m.Row, m.Col)
+      FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(m.ModuleName), string(m.ShortMessageToString), tmHint,
+        m.Row, m.Col)
     else if m.ClassType = TPSPascalCompilerError then
     begin
-      Msg := FMasterEngine.DebugPlugin.Messages[FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(m.ModuleName), string(m.ShortMessageToString),
-        tmError, m.Row, m.Col)];
+      Msg := FMasterEngine.DebugPlugin.Messages[FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(m.ModuleName),
+        string(m.ShortMessageToString), tmError, m.Row, m.Col)];
     end
     else
-      FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(m.ModuleName), string(m.ShortMessageToString), tmUnknown, m.Row, m.Col);
+      FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(m.ModuleName), string(m.ShortMessageToString), tmUnknown,
+        m.Row, m.Col);
   end;
 end;
 

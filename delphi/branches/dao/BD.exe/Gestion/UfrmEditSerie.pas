@@ -115,7 +115,7 @@ implementation
 uses
   Commun, Proc_Gestions, Entities.Lite, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
   UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, ProceduresBDtk,
-  Entities.Common, Entities.FactoriesLite;
+  Entities.Common, Entities.FactoriesLite, Entities.DaoLambda;
 
 {$R *.DFM}
 
@@ -144,18 +144,12 @@ begin
   vtParaBD.UseFiltre := True;
   vtEditPersonnes.AfterEdit := OnEditPersonne;
 
-  LoadCombo(1 { Etat } , cbxEtat);
-  cbxEtat.Value := -1;
-  LoadCombo(2 { Reliure } , cbxReliure);
-  cbxReliure.Value := -1;
-  LoadCombo(3 { TypeEdition } , cbxEdition);
-  cbxEdition.Value := -1;
-  LoadCombo(4 { Orientation } , cbxOrientation);
-  cbxOrientation.Value := -1;
-  LoadCombo(5 { Format } , cbxFormat);
-  cbxFormat.Value := -1;
-  LoadCombo(8 { Sens de lecture } , cbxSensLecture);
-  cbxSensLecture.Value := -1;
+  LoadCombo(cbxEtat, TDaoListe.ListEtats, -1);
+  LoadCombo(cbxReliure, TDaoListe.ListReliures, -1);
+  LoadCombo(cbxEdition, TDaoListe.ListTypesEdition, -1);
+  LoadCombo(cbxOrientation, TDaoListe.ListOrientations, -1);
+  LoadCombo(cbxFormat, TDaoListe.ListFormatsEdition, -1);
+  LoadCombo(cbxSensLecture, TDaoListe.ListSensLecture, -1);
 end;
 
 procedure TfrmEditSerie.FormDestroy(Sender: TObject);

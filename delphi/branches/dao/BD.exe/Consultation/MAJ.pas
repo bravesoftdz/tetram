@@ -24,7 +24,7 @@ uses
   CommonConst, UfrmFond, DB, StdCtrls, UfrmSeriesIncompletes, UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmRecherche,
   UfrmZoomCouverture, UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique, UfrmConsultationParaBD, UfrmConsultationSerie, UfrmGallerie,
   UfrmConsultationUnivers, JclCompression, System.IOUtils, Entities.Serializer,
-  ProceduresBDtk, JsonSerializer, dwsJSON;
+  ProceduresBDtk, JsonSerializer, dwsJSON, Entities.DaoLambda;
 
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;
 var
@@ -244,7 +244,6 @@ function MAJRunScript(AlbumToImport: TAlbumFull): Boolean;
 var
   FArchive: TJcl7zCompressArchive;
   archiveName: string;
-  sl: TStringList;
   o, o2, p: TdwsJSONObject;
 begin
   // TODO: la fonction doit retourner true si l'appel à import c'est correctement terminé
@@ -252,17 +251,14 @@ begin
   archiveName := TPath.GetTempFileName;
   FArchive := TJcl7zCompressArchive.Create(archiveName, 0, False);
   o := TdwsJSONObject.Create;
-  sl := TStringList.Create;
   try
     TEntitesSerializer.WriteToJSON(AlbumToImport, o.AddObject('album'), [soSkipNullValues]);
     o2 := o.AddObject('options');
+    o2.AddValue('script', '');
     p := o.AddObject('params');
-    LoadStrings(6, sl);
-    TJsonSerializer.WriteValueToJSON('typesImages', sl, p, [], True);
     FArchive.AddFile('data.json', TStringStream.Create({$IFNDEF DEBUG}o.ToString{$ELSE}o.ToBeautifiedString{$ENDIF}), True);
     FArchive.Compress;
   finally
-    sl.Free;
     o.Free;
     FArchive.Free;
   end;

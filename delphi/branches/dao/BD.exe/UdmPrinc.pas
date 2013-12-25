@@ -54,7 +54,8 @@ implementation
 uses
   IOUtils, CommonConst, Commun, Textes, UdmCommun, UIBLib, Divers, IniFiles, Procedures, UHistorique, Math, UIBase, Updates, UfrmFond, CheckVersionNet,
   DateUtils, UMAJODS, JumpList, UfrmSplash, Proc_Gestions, Generics.Collections,
-  UfrmVerbose, UfrmConsole, ProceduresBDtk;
+  UfrmVerbose, UfrmConsole, ProceduresBDtk, JclCompression, dwsJSON,
+  JsonSerializer, Entities.DaoLambda, System.TypInfo, Entities.Full;
 
 const
   FinBackup = 'gbak:closing file, committing, and finishing.';
@@ -129,6 +130,38 @@ type
     end;
   end;
 
+  procedure BuildExternalData;
+  var
+    fileName: TFileName;
+    Archive: TJcl7zCompressArchive;
+    o: TdwsJSONObject;
+    c: TDaoListe.CategorieIndex;
+    s: string;
+  begin
+    o := TdwsJSONObject.Create;
+    try
+      for c := Succ(TDaoListe.CategorieIndex.piNOTUSED) to High(TDaoListe.CategorieIndex) do
+      begin
+        s := GetEnumName(TypeInfo(TDaoListe.CategorieIndex), Integer(c)).Substring(2);
+        TJsonSerializer.WriteValueToJSON('default' + s, TDaoListe.DefaultValues[c], o, []);
+        TJsonSerializer.WriteValueToJSON('list' + s, TDaoListe.Lists[c], o, [], True);
+      end;
+
+      fileName := TPath.ChangeExtension(UIBDataBase.InfoDbFileName, '.mtd');
+      if TFile.Exists(fileName) then
+        TFile.Delete(fileName);
+      Archive := TJcl7zCompressArchive.Create(fileName);
+      try
+        Archive.AddFile('data.json', TStringStream.Create({$IFNDEF DEBUG}o.ToString{$ELSE}o.ToBeautifiedString{$ENDIF}), True);
+        Archive.Compress;
+      finally
+        Archive.Free;
+      end;
+    finally
+      o.Free;
+    end;
+  end;
+
 var
   FBUpdate: TFBUpdate;
   Msg: string;
@@ -144,7 +177,7 @@ begin
     qry.SQL.Text := 'select titrealbum from albums';
     try
       // on va chercher un champ texte pour forcer FB à verifier la présence des collations
-      // donc vérifier que la version des ICU correspondent à ceux de la base
+      // donc vérifier que la version des ICU sur disque correspondent à ceux utilisés par la base
       qry.Prepare;
     except
       on E: EUIBError do
@@ -224,6 +257,7 @@ begin
   end;
 
   CheckIndex;
+  BuildExternalData;
 
   if (ListFBUpdates.Last.Version > CurrentVersion) and not Force then
     ShowMessage('Mise à jour terminée.');

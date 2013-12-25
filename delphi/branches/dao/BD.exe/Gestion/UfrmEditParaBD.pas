@@ -105,7 +105,7 @@ implementation
 uses
   Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, Entities.Lite, Divers, UHistorique,
   UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
-  Entities.FactoriesLite;
+  Entities.FactoriesLite, Entities.DaoLambda;
 
 {$R *.dfm}
 { TFrmEditAchatParaBD }
@@ -244,7 +244,7 @@ begin
   vtEditPersonnes.VTEdit.LinkControls.Add(Label19);
   vtEditPersonnes.AfterEdit := OnEditPersonnes;
 
-  LoadCombo(7 { Catégorie ParaBD } , cbxCategorie);
+  LoadCombo(cbxCategorie, TDaoListe.ListCategoriesParaBD, TDaoListe.DefaultCategorieParaBD);
 
   VDTButton1.Click;
 end;
