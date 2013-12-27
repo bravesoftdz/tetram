@@ -75,6 +75,9 @@ Source: ..\..\bin\WebServer\interface.zip; DestDir: {commonappdata}\TetramCorp\B
 Source: ..\..\bin\WebServer\Site par défaut.zip; DestDir: {commonappdata}\TetramCorp\BDTheque\WebServer; Flags: ignoreversion
 Source: ..\..\bin\WebServer\BDthequeWeb.zip; DestDir: {commonappdata}\TetramCorp\BDTheque\WebServer; Flags: ignoreversion
 
+[Dirs]
+Name: {commonappdata}\TetramCorp
+
 [INI]
 Filename: {app}\BD.url; Section: InternetShortcut; Key: URL; String: http://www.tetram.org; Tasks: interneticon
 
