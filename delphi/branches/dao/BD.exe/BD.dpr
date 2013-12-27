@@ -169,7 +169,8 @@ uses
   Entities.FactoriesLite in '..\Commun\Entities\Entities.FactoriesLite.pas',
   Entities.FactoriesFull in '..\Commun\Entities\Entities.FactoriesFull.pas',
   Entities.DaoLambda in '..\Commun\Entities\Entities.DaoLambda.pas',
-  Entities.DaoLambdaDB in 'DBObjets\Entities.DaoLambdaDB.pas';
+  Entities.DaoLambdaDB in 'DBObjets\Entities.DaoLambdaDB.pas',
+  UfrmScriptOption in '..\Commun\Scripts\UfrmScriptOption.pas' {frmScriptOption};
 
 begin
   Application.Title := 'BDthèque';

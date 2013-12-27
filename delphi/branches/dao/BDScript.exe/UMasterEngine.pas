@@ -71,7 +71,7 @@ implementation
 
 { %CLASSGROUP 'System.Classes.TPersistent' }
 
-uses CommonConst, Entities.FactoriesFull;
+uses CommonConst, Entities.FactoriesFull, dwsJSON;
 
 var
   Engines: TDictionary<TScriptEngine, TEngineFactoryClass> = nil;
@@ -228,12 +228,31 @@ begin
 end;
 
 procedure TMasterEngine.SelectProjectScript(ProjectScript: TScript);
+var
+  Option: TOption;
+  oo, os: TdwsJSONObject;
 begin
   if FProjectScript = ProjectScript then
     Exit;
 
   FProjectScript := ProjectScript;
-  SetTypeEngine(FProjectScript.ScriptInfos.Engine);
+  if Assigned(FProjectScript) then
+  begin
+    SetTypeEngine(FProjectScript.ScriptInfos.Engine);
+
+    if FProjectScript.Options.Count > 0 then
+    begin
+      oo := ReadScriptsOptions;
+      try
+        os := oo.Items[FProjectScript.ScriptUnitName] as TdwsJSONObject;
+        if os <> nil then
+          for Option in FProjectScript.Options do
+            Option.Read(os);
+      finally
+        oo.Free;
+      end;
+    end;
+  end;
 end;
 
 procedure TMasterEngine.SetAlbumToImport(const Value: TAlbumFull);

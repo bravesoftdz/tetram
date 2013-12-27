@@ -134,47 +134,15 @@ end;
 procedure TframScriptInfos.ListBox1DblClick(Sender: TObject);
 var
   Option: TOption;
-  qry: TUIBQuery;
   frm: TfrmScriptOption;
 begin
   if TListBox(Sender).ItemIndex = -1 then
     Exit;
   Option := MasterEngine.ProjectScript.Options[TListBox(Sender).ItemIndex];
-
-  frm := TfrmScriptOption.Create(nil);
-  try
-    frm.RadioGroup1.Caption := Option.FLibelle;
-    frm.RadioGroup1.Items.Text := StringReplace(Option.FValues, '|', sLineBreak, [rfReplaceAll]);
-    frm.RadioGroup1.ItemIndex := frm.RadioGroup1.Items.IndexOf(Option.ChooseValue);
-    frm.RadioGroup1.Height := 21 + 20 * frm.RadioGroup1.Items.Count;
-    ClientHeight := frm.RadioGroup1.Height + frm.framBoutons1.Height + 4;
-    if frm.ShowModal = mrOk then
-    begin
-      Option.ChooseValue := frm.RadioGroup1.Items[frm.RadioGroup1.ItemIndex];
-
-      // TODO: trouver une autre façon de stocker les paramètres d'exécution de script
-      (*
-        qry := TUIBQuery.Create(nil);
-        try
-        qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
-        qry.SQL.Text := 'update or insert into options_scripts (script, nom_option, valeur) values (:script, :nom_option, :valeur)';
-        qry.Prepare(True);
-        qry.Params.AsString[0] := Copy(string(MasterEngine.ProjectScript.ScriptUnitName), 1, qry.Params.MaxStrLen[0]);
-        qry.Params.AsString[1] := Copy(Option.FLibelle, 1, qry.Params.MaxStrLen[1]);
-        qry.Params.AsString[2] := Copy(Option.ChooseValue, 1, qry.Params.MaxStrLen[2]);
-        qry.Execute;
-        qry.Transaction.Commit;
-        finally
-        qry.Transaction.Free;
-        qry.Free;
-        end;
-      *)
-
-      RefreshOptions;
-      RefreshDescription;
-    end;
-  finally
-    Free;
+  if TfrmScriptOption.AskForOption(MasterEngine.ProjectScript.ScriptUnitName, Option) = mrOk then
+  begin
+    RefreshOptions;
+    RefreshDescription;
   end;
 end;
 

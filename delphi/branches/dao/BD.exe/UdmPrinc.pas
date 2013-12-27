@@ -132,7 +132,6 @@ type
 
   procedure BuildExternalData;
   var
-    fileName: TFileName;
     Archive: TJcl7zCompressArchive;
     o: TdwsJSONObject;
     c: TDaoListe.CategorieIndex;
@@ -147,10 +146,9 @@ type
         TJsonSerializer.WriteValueToJSON('list' + s, TDaoListe.Lists[c], o, [], True);
       end;
 
-      fileName := TPath.ChangeExtension(UIBDataBase.InfoDbFileName, '.mtd');
-      if TFile.Exists(fileName) then
-        TFile.Delete(fileName);
-      Archive := TJcl7zCompressArchive.Create(fileName);
+      if TFile.Exists(FileScriptsMetadata) then
+        TFile.Delete(FileScriptsMetadata);
+      Archive := TJcl7zCompressArchive.Create(FileScriptsMetadata);
       try
         Archive.AddFile('data.json', TStringStream.Create({$IFNDEF DEBUG}o.ToString{$ELSE}o.ToBeautifiedString{$ENDIF}), True);
         Archive.Compress;

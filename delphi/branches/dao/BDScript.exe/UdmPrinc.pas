@@ -134,15 +134,13 @@ end;
 
 procedure ReadExternalData;
 var
-  fileName: TFileName;
   Archive: TJcl7zDecompressArchive;
   s: TStringStream;
 begin
-  fileName := TPath.ChangeExtension(CommonConst.DatabasePath, '.mtd');
-  if not TFile.Exists(fileName) then
+  if not TFile.Exists(FileScriptsMetadata) then
     Exit;
   s := TStringStream.Create;
-  Archive := TJcl7zDecompressArchive.Create(fileName);
+  Archive := TJcl7zDecompressArchive.Create(FileScriptsMetadata);
   try
     Archive.ListFiles;
     Archive.Items[0].Stream := s;

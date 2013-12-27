@@ -19,6 +19,8 @@ var
   RepImages: string = 'Images\';
   RepWebServer: string = 'WebServer\';
   RepScripts: string = 'Scripts\';
+  FileScriptsOptions: string = 'Scripts.opt';
+  FileScriptsMetadata: string = '';
   RessourcePic: string = 'BDPic.dll';
   HandleDLLPic: Integer = 0;
   FichierIni: string = 'Bd.ini';
@@ -79,7 +81,8 @@ type
 implementation
 
 uses
-  Winapi.ShellAPI, Winapi.SHFolder, System.IniFiles, System.StrUtils;
+  Winapi.ShellAPI, Winapi.SHFolder, System.IniFiles, System.StrUtils, JclWin32,
+  Winapi.AccCtrl;
 
 procedure EmptyTempPath;
 var
@@ -144,6 +147,9 @@ begin
     RepImages := IncludeTrailingPathDelimiter(ini.ReadString('DIVERS', 'RepImages', RepImages));
     RepScripts := IncludeTrailingPathDelimiter(ini.ReadString('DIVERS', 'Scripts', RepScripts));
     RepWebServer := IncludeTrailingPathDelimiter(ini.ReadString('DIVERS', 'WebServer', RepWebServer));
+
+    FileScriptsOptions := TPath.Combine(TPath.GetDirectoryName(DatabasePath), 'Scripts.opt');
+    FileScriptsMetadata := TPath.ChangeExtension(DatabasePath, '.mtd');
 
     TGlobalVar.Utilisateur.Options.VerifMAJDelai := ini.ReadInteger('Divers', 'VerifMAJDelai', 4);
     TGlobalVar.Utilisateur.Options.LastVerifMAJ := ini.ReadInteger('Divers', 'LastVerifMAJ', 0);

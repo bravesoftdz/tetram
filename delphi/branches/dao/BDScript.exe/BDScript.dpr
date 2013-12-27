@@ -51,7 +51,7 @@ uses
   UfrmScriptChoix in 'UfrmScriptChoix.pas' {frmScriptChoix},
   UfrmScriptEditOption in 'UfrmScriptEditOption.pas' {frmScriptEditOption},
   UfrmScriptGotoLine in 'UfrmScriptGotoLine.pas' {frmScriptGotoLine},
-  UfrmScriptOption in 'UfrmScriptOption.pas' {frmScriptOption},
+  UfrmScriptOption in '..\Commun\Scripts\UfrmScriptOption.pas' {frmScriptOption},
   UfrmScripts in 'UfrmScripts.pas',
   UfrmScriptSearch in 'UfrmScriptSearch.pas' {frmScriptSearch},
   UfrmScriptsUpdate in 'UfrmScriptsUpdate.pas' {frmScriptsUpdate},

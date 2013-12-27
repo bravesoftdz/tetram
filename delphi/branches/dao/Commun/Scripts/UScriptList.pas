@@ -4,7 +4,7 @@ interface
 
 uses
   Winapi.Windows, System.SysUtils, System.Classes, Generics.Collections, JclSimpleXML, Divers, VCL.Dialogs, System.Types,
-  System.AnsiStrings;
+  System.AnsiStrings, dwsJSON;
 
 const
   ExtMainScript = '.bds';
@@ -37,6 +37,11 @@ type
 
     function IsValidValue(const Value: string): Boolean;
     property ChooseValue: string read GetChooseValue write FChooseValue;
+
+    procedure Save(const ScriptName: string; Options: TdwsJSONObject); overload;
+    procedure Save(Option: TdwsJSONObject); overload;
+    procedure Read(const ScriptName: string; Options: TdwsJSONObject); overload;
+    procedure Read(Option: TdwsJSONObject); overload;
   end;
 
   TScriptClass = class of TScript;
@@ -94,9 +99,13 @@ type
     function InfoScriptByUnitName(const UnitName: string): TScript;
   end;
 
+function ReadScriptsOptions: TdwsJSONObject;
+procedure SaveScriptsOptions(o: TdwsJSONObject);
+
 implementation
 
-uses System.StrUtils, CommonConst, JclStreams, System.TypInfo, System.IOUtils, UNet;
+uses System.StrUtils, CommonConst, JclStreams, System.TypInfo, System.IOUtils, UNet,
+  JclCompression;
 
 function TScript.CheckOptionValue(const OptionName, Value: string): Boolean;
 begin
@@ -364,6 +373,43 @@ begin
   GetFiles(Dir, ExtUnit);
 end;
 
+function ReadScriptsOptions: TdwsJSONObject;
+var
+  Archive: TJcl7zDecompressArchive;
+  s: TStringStream;
+begin
+  if not TFile.Exists(FileScriptsOptions) then
+    Exit(TdwsJSONObject.Create);
+  s := TStringStream.Create;
+  Archive := TJcl7zDecompressArchive.Create(FileScriptsOptions);
+  try
+    Archive.ListFiles;
+    Archive.Items[0].Stream := s;
+    Archive.Items[0].OwnsStream := False;
+    Archive.Items[0].Selected := True;
+    Archive.ExtractSelected;
+    Result := TdwsJSONObject.ParseString(s.DataString) as TdwsJSONObject;
+  finally
+    Archive.Free;
+    s.Free;
+  end;
+end;
+
+procedure SaveScriptsOptions(o: TdwsJSONObject);
+var
+  Archive: TJcl7zCompressArchive;
+begin
+  if TFile.Exists(FileScriptsOptions) then
+    TFile.Delete(FileScriptsOptions);
+  Archive := TJcl7zCompressArchive.Create(FileScriptsOptions);
+  try
+    Archive.AddFile('data.json', TStringStream.Create({$IFNDEF DEBUG}o.ToString{$ELSE}o.ToBeautifiedString{$ENDIF}), True);
+    Archive.Compress;
+  finally
+    Archive.Free;
+  end;
+end;
+
 { TOption }
 
 function TOption.GetChooseValue: string;
@@ -377,6 +423,51 @@ end;
 function TOption.IsValidValue(const Value: string): Boolean;
 begin
   Result := string('|' + FValues + '|').Contains('|' + Value + '|');
+end;
+
+procedure TOption.Read(const ScriptName: string; Options: TdwsJSONObject);
+begin
+  if Options = nil then
+    Exit;
+  Read(Options.Items[ScriptName] as TdwsJSONObject);
+end;
+
+procedure TOption.Read(Option: TdwsJSONObject);
+begin
+  if Option = nil then
+    Exit;
+  if Option.Items[FLibelle].IsImmediateValue then
+    ChooseValue := Option.Items[FLibelle].AsString;
+end;
+
+procedure TOption.Save(Option: TdwsJSONObject);
+begin
+  if Option.Items[FLibelle].IsImmediateValue then
+    Option.Items[FLibelle].AsString := ChooseValue
+  else
+    Option.AddValue(FLibelle, ChooseValue);
+end;
+
+procedure TOption.Save(const ScriptName: string; Options: TdwsJSONObject);
+var
+  oo, os: TdwsJSONObject;
+begin
+  if Options = nil then
+    oo := ReadScriptsOptions
+  else
+    oo := Options;
+  try
+    os := oo.Items[ScriptName] as TdwsJSONObject;
+    if os = nil then
+      os := oo.AddObject(ScriptName);
+    Save(os);
+
+    if Options = nil then
+      SaveScriptsOptions(oo);
+  finally
+    if Options = nil then
+      oo.Free;
+  end;
 end;
 
 end.

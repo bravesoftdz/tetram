@@ -157,6 +157,8 @@ type
     procedure SynParametersExecute(Kind: SynCompletionType; Sender: TObject; var CurrentInput: string; var X, Y: Integer; var CanExecute: Boolean);
     procedure framMessages1vstMessagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
     procedure mnuAProposClick(Sender: TObject);
+    procedure ListBox2Data(Control: TWinControl; Index: Integer; var Data: string);
+    procedure ListBox2DblClick(Sender: TObject);
   private
     FLastSearch, FLastReplace: string;
     FSearchOptions: TSynSearchOptions;
@@ -402,6 +404,23 @@ begin
   end;
 end;
 
+procedure TfrmScripts.ListBox2Data(Control: TWinControl; Index: Integer; var Data: string);
+begin
+  Data := MasterEngine.ProjectScript.Options[index].FLibelle + ': ' + MasterEngine.ProjectScript.Options[index].ChooseValue;
+end;
+
+procedure TfrmScripts.ListBox2DblClick(Sender: TObject);
+var
+  Option: TOption;
+  frm: TfrmScriptOption;
+begin
+  if TListBox(Sender).ItemIndex = -1 then
+    Exit;
+  Option := MasterEngine.ProjectScript.Options[TListBox(Sender).ItemIndex];
+  if TfrmScriptOption.AskForOption(MasterEngine.ProjectScript.ScriptUnitName, Option) = mrOk then
+    RefreshOptions;
+end;
+
 procedure TfrmScripts.ListView1DblClick(Sender: TObject);
 begin
   if not Assigned(ListView1.Selected) then
@@ -414,7 +433,6 @@ end;
 
 procedure TfrmScripts.ListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
 var
-  Option: TOption;
   Script: TScript;
   qry: TUIBQuery;
 begin
@@ -423,31 +441,6 @@ begin
     Script := TScript(Item.Data);
     Script.Load;
     MasterEngine.SelectProjectScript(Script);
-
-    if MasterEngine.ProjectScript.Options.Count > 0 then
-    begin
-      // TODO: trouver un autre moyen de stocker les paramètres d'exécution des scripts
-      (*
-        qry := TUIBQuery.Create(nil);
-        try
-        qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
-        qry.SQL.Text := 'select nom_option, valeur from options_scripts where script = :script';
-        qry.Prepare(True);
-        qry.Params.AsString[0] := Copy(string(MasterEngine.ProjectScript.ScriptUnitName), 1, qry.Params.MaxStrLen[0]);
-        qry.Open;
-        while not qry.Eof do
-        begin
-        Option := MasterEngine.ProjectScript.OptionByName(qry.Fields.AsString[0]);
-        if Assigned(Option) then
-        Option.ChooseValue := qry.Fields.AsString[1];
-        qry.Next;
-        end;
-        finally
-        qry.Transaction.Free;
-        qry.Free;
-        end;
-      *)
-    end;
   end
   else
   begin
@@ -733,7 +726,10 @@ end;
 procedure TfrmScripts.RefreshOptions;
 begin
   framScriptInfos1.RefreshOptions;
-  ListBox2.Count := 0;
+  if Assigned(MasterEngine.ProjectScript) then
+    ListBox2.Count := MasterEngine.ProjectScript.Options.Count
+  else
+    ListBox2.Count := 0;
   ListBox2.Invalidate;
 end;
 
@@ -874,7 +870,7 @@ end;
 
 procedure TfrmScripts.vstSuivisChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
 begin
-  MasterEngine.DebugPlugin.Watches[Node.index].Active := Node.CheckState = csCheckedNormal;
+  MasterEngine.DebugPlugin.Watches[Node.Index].Active := Node.CheckState = csCheckedNormal;
   MasterEngine.DebugPlugin.Watches.View.InvalidateNode(Node);
 end;
 

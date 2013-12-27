@@ -32,10 +32,6 @@ object frmScripts: TfrmScripts
     object tbScripts: TTabSheet
       Caption = 'Scripts'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object ToolBar1: TToolBar
         Left = 0
         Top = 0
@@ -124,6 +120,9 @@ object frmScripts: TfrmScripts
             BevelKind = bkTile
             BorderStyle = bsNone
             TabOrder = 0
+            OnData = ListBox2Data
+            OnDblClick = ListBox2DblClick
+            ExplicitLeft = 647
           end
           object ListView1: TListView
             Left = 0
@@ -280,10 +279,6 @@ object frmScripts: TfrmScripts
     end
     object tbEdition: TTabSheet
       Caption = 'Edition'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Splitter1: TSplitter
         Left = 0
         Top = 449
@@ -353,7 +348,6 @@ object frmScripts: TfrmScripts
         PopupMenu = PopupMenu1
         TabOrder = 1
         OnChange = pcScriptsChange
-        ExplicitHeight = 398
       end
       object Panel1: TPanel
         Left = 0
@@ -383,10 +377,6 @@ object frmScripts: TfrmScripts
           TabOrder = 0
           object tabMessages: TTabSheet
             Caption = 'Messages'
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             inline framMessages1: TframMessages
               Left = 0
               Top = 0
@@ -401,6 +391,7 @@ object frmScripts: TfrmScripts
                 Height = 158
                 OnDblClick = vstMessagesDblClick
                 OnGetText = framMessages1vstMessagesGetText
+                ExplicitLeft = 0
                 ExplicitWidth = 595
                 Columns = <
                   item
@@ -420,7 +411,7 @@ object frmScripts: TfrmScripts
                   end
                   item
                     Position = 3
-                    Width = 225
+                    Width = 221
                     WideText = 'Message'
                   end>
               end
@@ -429,10 +420,6 @@ object frmScripts: TfrmScripts
           object tabWatches: TTabSheet
             Caption = 'Points de suivi'
             ImageIndex = 1
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             inline framWatches1: TframWatches
               Left = 0
               Top = 0
@@ -455,7 +442,7 @@ object frmScripts: TfrmScripts
                   end
                   item
                     Position = 1
-                    Width = 449
+                    Width = 445
                     WideText = 'Valeur'
                   end>
               end
@@ -464,10 +451,6 @@ object frmScripts: TfrmScripts
           object tabBreakpoints: TTabSheet
             Caption = 'Points d'#39'arr'#234't'
             ImageIndex = 2
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             inline framBreakpoints1: TframBreakpoints
               Left = 0
               Top = 0
@@ -491,7 +474,7 @@ object frmScripts: TfrmScripts
                   end
                   item
                     Position = 1
-                    Width = 495
+                    Width = 491
                     WideText = 'Fichier'
                   end>
               end
@@ -500,10 +483,6 @@ object frmScripts: TfrmScripts
           object tabConsole: TTabSheet
             Caption = 'Sortie'
             ImageIndex = 3
-            ExplicitLeft = 0
-            ExplicitTop = 0
-            ExplicitWidth = 0
-            ExplicitHeight = 0
             object mmConsole: TMemo
               Left = 0
               Top = 0
@@ -535,8 +514,6 @@ object frmScripts: TfrmScripts
             ExplicitWidth = 268
             ExplicitHeight = 186
             inherited TabSheet4: TTabSheet
-              ExplicitLeft = 4
-              ExplicitTop = 24
               ExplicitWidth = 260
               ExplicitHeight = 158
               inherited ListBox1: TListBox
@@ -547,10 +524,18 @@ object frmScripts: TfrmScripts
               end
             end
             inherited TabSheet5: TTabSheet
-              ExplicitLeft = 4
-              ExplicitTop = 24
-              ExplicitWidth = 312
-              ExplicitHeight = 212
+              inherited Label11: TLabel
+                Margins.Bottom = 0
+              end
+              inherited Label12: TLabel
+                Margins.Bottom = 0
+              end
+              inherited Label13: TLabel
+                Margins.Bottom = 0
+              end
+              inherited Label14: TLabel
+                Margins.Bottom = 0
+              end
               inherited EditLabeled1: TEditLabeled
                 LinkControls = <
                   item
@@ -575,12 +560,6 @@ object frmScripts: TfrmScripts
                     Control = framScriptInfos1.Label13
                   end>
               end
-            end
-            inherited Alias: TTabSheet
-              ExplicitLeft = 4
-              ExplicitTop = 24
-              ExplicitWidth = 312
-              ExplicitHeight = 212
             end
           end
           inherited PopupMenu2: TPopupMenu

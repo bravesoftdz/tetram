@@ -35,13 +35,16 @@ object frmScriptOption: TfrmScriptOption
     Height = 25
     Align = alBottom
     TabOrder = 1
-    ExplicitTop = 262
+    ExplicitTop = 90
     ExplicitWidth = 319
+    ExplicitHeight = 25
     inherited btnOK: TButton
       Left = 156
+      ExplicitLeft = 156
     end
     inherited btnAnnuler: TButton
       Left = 236
+      ExplicitLeft = 236
     end
   end
 end

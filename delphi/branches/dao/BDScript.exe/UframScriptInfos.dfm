@@ -14,10 +14,6 @@ object framScriptInfos: TframScriptInfos
     TabOrder = 0
     object TabSheet4: TTabSheet
       Caption = 'Options'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object ListBox1: TListBox
         Left = 0
         Top = 0
@@ -36,10 +32,6 @@ object framScriptInfos: TframScriptInfos
     object TabSheet5: TTabSheet
       Caption = 'Informations'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label11: TLabel
         Left = 3
         Top = 6
@@ -152,10 +144,6 @@ object framScriptInfos: TframScriptInfos
     object Alias: TTabSheet
       Caption = 'Alias'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Memo2: TMemo
         Left = 3
         Top = 3
