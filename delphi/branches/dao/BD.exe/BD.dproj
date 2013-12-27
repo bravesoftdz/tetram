@@ -425,13 +425,13 @@
         <DCCReference Include="..\Commun\Procedures.pas"/>
         <DCCReference Include="..\Commun\UNet.pas"/>
         <DCCReference Include="..\Commun\VirtualTree.pas"/>
-        <DCCReference Include="DBObjets\Entities.DaoFull.pas"/>
-        <DCCReference Include="DBObjets\Entities.DaoLite.pas"/>
-        <DCCReference Include="DBObjets\DaoRecherche.pas"/>
-        <DCCReference Include="DBObjets\DaoStats.pas"/>
-        <DCCReference Include="DBObjets\EntitiesRecherche.pas"/>
-        <DCCReference Include="DBObjets\EntitiesStats.pas"/>
-        <DCCReference Include="DBObjets\LoadCompletImport.pas"/>
+        <DCCReference Include="Entities\Entities.DaoFull.pas"/>
+        <DCCReference Include="Entities\Entities.DaoLite.pas"/>
+        <DCCReference Include="Entities\DaoRecherche.pas"/>
+        <DCCReference Include="Entities\DaoStats.pas"/>
+        <DCCReference Include="Entities\EntitiesRecherche.pas"/>
+        <DCCReference Include="Entities\EntitiesStats.pas"/>
+        <DCCReference Include="Entities\LoadCompletImport.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Deserializer.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Full.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Lite.pas"/>
@@ -443,13 +443,13 @@
         <DCCReference Include="Scripts\UfrmValidationImport.pas">
             <Form>frmValidationImport</Form>
         </DCCReference>
-        <DCCReference Include="DBObjets\Entities.DaoCommon.pas"/>
+        <DCCReference Include="Entities\Entities.DaoCommon.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Common.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.FactoriesCommon.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.FactoriesLite.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.FactoriesFull.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.DaoLambda.pas"/>
-        <DCCReference Include="DBObjets\Entities.DaoLambdaDB.pas"/>
+        <DCCReference Include="Entities\Entities.DaoLambdaDB.pas"/>
         <DCCReference Include="..\Commun\Scripts\UfrmScriptOption.pas">
             <Form>frmScriptOption</Form>
             <FormType>dfm</FormType>
