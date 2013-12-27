@@ -35,7 +35,6 @@ type
     FActiveLine, FRunToCursorLine, FErrorLine: Cardinal;
     FActiveUnitName, FRunToCursorUnitName, FErrorUnitName: string;
     FRunningScript: TScript;
-    FListTypesImages: TStringList;
     FUseDebugInfo: Boolean;
 
     procedure OnIncludeEvent(const scriptName: UnicodeString; var scriptSource: UnicodeString);
@@ -255,10 +254,6 @@ constructor TdmDWScript.Create(MasterEngine: IMasterEngine);
 begin
   FMasterEngine := MasterEngine;
 
-  FListTypesImages := TStringList.Create;
-  // TODO: trouver un autre moyen d'obtenir la liste
-  // LoadStrings(6, FListTypesImages);
-
   FUseDebugInfo := True;
   SynDWSSyn := TSynDWSSyn.Create(nil);
   dwsClassesLib := TdwsClassesLib.Create(nil);
@@ -325,7 +320,6 @@ begin
   bdObjects.Free;
   dwsUnit.Free;
   dwsClassesLib.Free;
-  FListTypesImages.Free;
   inherited;
 end;
 

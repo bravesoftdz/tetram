@@ -1656,7 +1656,7 @@ var
   StartX, ParenCounter: Integer;
   LookUp: TbtString;
 begin
-  { TODO : grosse lacune, la fonction ne gère pas du tout si la parenthèse est dans une chaine ou non }
+  // TODO : grosse lacune, la fonction ne gère pas du tout si la parenthèse est dans une chaine ou non
 
   // go back from the cursor and find the first open paren
   TmpX := X;

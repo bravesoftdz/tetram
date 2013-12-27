@@ -69,7 +69,8 @@ implementation
 
 uses
   IOUtils, UBdtForms, EditLabeled, StdCtrls, Controls, Forms, UframBoutons, UfrmScriptChoix, OverbyteIcsHttpProt, CommonConst, Procedures,
-  SysConst, Graphics, System.UITypes, Entities.FactoriesLite;
+  SysConst, Graphics, System.UITypes, Entities.FactoriesLite,
+  Entities.DaoLambda;
 
 const
   PathDelim = '/';
@@ -522,7 +523,7 @@ var
   Couverture: TCouvertureLite;
   tmpFile: string;
   P: PChar;
-  sl: TStringList;
+  SL: TStringList;
 begin
   Result := -1;
 
@@ -553,15 +554,7 @@ begin
   Couverture.NewStockee := TGlobalVar.Utilisateur.Options.ImagesStockees;
   Couverture.OldStockee := Couverture.NewStockee;
   Couverture.Categorie := TypeImage;
-  sl := TStringList.Create;
-  try
-    // c'est pas génial de recharger la liste à chaque fois mais ça évite du code usine à gaz
-    // TODO: trouver un autre moyen d'obtenir la liste
-    // LoadStrings(6, sl);
-    Couverture.sCategorie := sl.Values[IntToStr(TypeImage)];
-  finally
-    sl.Free;
-  end;
+  Couverture.sCategorie := TDaoListe.ListTypesImage.Values[IntToStr(TypeImage)];
 end;
 
 end.
