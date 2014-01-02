@@ -66,7 +66,7 @@ begin
   ReadListEntitiesFromJSON<TAuteurLite, TFactoryAuteurLite>(Entity.Coloristes, json.Items['Coloristes'] as TdwsJSONArray);
   Entity.Sujet := ReadValueFromJSON('Sujet', Entity.Sujet, json);
   Entity.Notes := ReadValueFromJSON('Notes', Entity.Notes, json);
-  ReadFromJSON(Entity.Editions, json.Items['Editions'] as TdwsJSONObject);
+  ReadListEntitiesFromJSON<TEditionFull, TFactoryEditionFull>(Entity.Editions, json.Items['Editions'] as TdwsJSONArray);
   // property Notation: Integer read FNotation write FNotation;
   ReadListEntitiesFromJSON<TUniversLite, TFactoryUniversLite>(Entity.Univers, json.Items['Univers'] as TdwsJSONArray);
 end;

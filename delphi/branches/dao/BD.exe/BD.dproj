@@ -450,6 +450,10 @@
         <DCCReference Include="..\Commun\Entities\Entities.FactoriesFull.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.DaoLambda.pas"/>
         <DCCReference Include="Entities\Entities.DaoLambdaDB.pas"/>
+        <DCCReference Include="Scripts\UfrmChoixScript.pas">
+            <Form>frmChoixScript</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
         <DCCReference Include="..\Commun\Scripts\UfrmScriptOption.pas">
             <Form>frmScriptOption</Form>
             <FormType>dfm</FormType>

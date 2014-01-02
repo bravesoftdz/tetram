@@ -232,7 +232,7 @@ begin
   SaveToDatabase(T(Entity), UseTransaction);
 end;
 
-{ TDaoSerieComplet }
+{ TDaoSerieFull }
 
 class procedure TDaoSerieFull.ChangeNotation(Entity: TSerieFull; Note: Integer);
 var

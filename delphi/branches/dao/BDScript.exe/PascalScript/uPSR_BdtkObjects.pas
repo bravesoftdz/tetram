@@ -17,13 +17,13 @@ uses
 procedure RIRegister_TStringList(CL: TPSRuntimeClassImporter);
 procedure RIRegister_TObjectList(CL: TPSRuntimeClassImporter);
 procedure RIRegister_TObjectListOfAuteur(CL: TPSRuntimeClassImporter);
-procedure RIRegister_TObjectListOfEditionComplete(CL: TPSRuntimeClassImporter);
+procedure RIRegister_TObjectListOfEditionFull(CL: TPSRuntimeClassImporter);
 
 procedure RIRegister_TAuteur(CL: TPSRuntimeClassImporter);
-procedure RIRegister_TAlbumComplet(CL: TPSRuntimeClassImporter; isUpdate: Boolean);
-procedure RIRegister_TEditionComplete(CL: TPSRuntimeClassImporter);
-procedure RIRegister_TSerieComplete(CL: TPSRuntimeClassImporter);
-procedure RIRegister_TEditeurComplet(CL: TPSRuntimeClassImporter);
+procedure RIRegister_TAlbumFull(CL: TPSRuntimeClassImporter; isUpdate: Boolean);
+procedure RIRegister_TEditionFull(CL: TPSRuntimeClassImporter);
+procedure RIRegister_TSerieFull(CL: TPSRuntimeClassImporter);
+procedure RIRegister_TEditeurFull(CL: TPSRuntimeClassImporter);
 
 procedure RIRegister_TScriptChoix(CL: TPSRuntimeClassImporter);
 
@@ -616,9 +616,9 @@ begin
   end;
 end;
 
-procedure RIRegister_TObjectListOfEditionComplete(CL: TPSRuntimeClassImporter);
+procedure RIRegister_TObjectListOfEditionFull(CL: TPSRuntimeClassImporter);
 begin
-  with CL.Add2(TObjectList<TEditionFull>, 'TObjectListOfEditionComplete') do
+  with CL.Add2(TObjectList<TEditionFull>, 'TObjectListOfEditionFull') do
   begin
     RegisterMethod(@TObjectList<TEditionFull>.Add, 'Add');
     RegisterMethod(@TObjectList<TEditionFull>.Insert, 'Insert');
@@ -626,7 +626,12 @@ begin
   end;
 end;
 
-procedure RIRegister_TAlbumComplet(CL: TPSRuntimeClassImporter; isUpdate: Boolean);
+procedure Import(Album: TAlbumFull);
+begin
+  // Album.ReadyToImport := True;
+end;
+
+procedure RIRegister_TAlbumFull(CL: TPSRuntimeClassImporter; isUpdate: Boolean);
 begin
   with CL.Add(TAlbumFull) do
   begin
@@ -650,11 +655,11 @@ begin
     RegisterPropertyHelper(@TAlbumCompletUnivers_R, nil, 'Univers');
 
     RegisterMethod(@TAlbumFull.Clear, 'Clear');
-    // RegisterMethod(@Import, 'Import')
+    RegisterMethod(@Import, 'Import')
   end;
 end;
 
-procedure RIRegister_TSerieComplete(CL: TPSRuntimeClassImporter);
+procedure RIRegister_TSerieFull(CL: TPSRuntimeClassImporter);
 begin
   with CL.Add(TSerieFull) do
   begin
@@ -674,7 +679,7 @@ begin
   end;
 end;
 
-procedure RIRegister_TEditionComplete(CL: TPSRuntimeClassImporter);
+procedure RIRegister_TEditionFull(CL: TPSRuntimeClassImporter);
 begin
   with CL.Add(TEditionFull) do
   begin
@@ -708,7 +713,7 @@ begin
   end;
 end;
 
-procedure RIRegister_TEditeurComplet(CL: TPSRuntimeClassImporter);
+procedure RIRegister_TEditeurFull(CL: TPSRuntimeClassImporter);
 begin
   with CL.Add(TEditeurFull) do
   begin
@@ -750,10 +755,10 @@ begin
 
   RIRegister_TAuteur(CL);
   RIRegister_TObjectListOfAuteur(CL);
-  RIRegister_TEditeurComplet(CL);
-  RIRegister_TSerieComplete(CL);
-  RIRegister_TEditionComplete(CL);
-  RIRegister_TAlbumComplet(CL, isUpdate);
+  RIRegister_TEditeurFull(CL);
+  RIRegister_TSerieFull(CL);
+  RIRegister_TEditionFull(CL);
+  RIRegister_TAlbumFull(CL, isUpdate);
 
   RIRegister_TScriptChoix(CL);
 end;

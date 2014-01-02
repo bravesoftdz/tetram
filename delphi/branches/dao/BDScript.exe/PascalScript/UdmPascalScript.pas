@@ -752,7 +752,7 @@ begin
     'function StringReplace(const S, OldPattern, NewPattern: string; Flags: TReplaceFlags): string;');
   PSScriptDebugger1.AddFunction(@ScriptStrToFloatDef, 'function StrToFloatDef(const S: string; const Default: Extended): Extended;');
 
-  PSScriptDebugger1.AddRegisteredVariable('AlbumToImport', 'TAlbumComplet');
+  PSScriptDebugger1.AddRegisteredVariable('AlbumToImport', 'TAlbumFull');
 end;
 
 procedure TdmPascalScript.PSScriptDebugger1Execute(Sender: TPSScript);

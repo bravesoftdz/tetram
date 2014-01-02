@@ -3,8 +3,7 @@ unit UdmPrinc;
 interface
 
 uses
-  System.SysUtils, System.Classes, Winapi.Windows, Vcl.Dialogs,
-  Winapi.Messages;
+  System.SysUtils, System.Classes, Winapi.Windows, Vcl.Dialogs, Winapi.Messages;
 
 const
   MSG_COMMANDELINE = WM_USER + 1;
@@ -30,11 +29,8 @@ function dmPrinc: TdmPrinc;
 implementation
 
 uses
-  System.SyncObjs, Vcl.Forms, System.StrUtils, UfrmSplash, CommonConst, Textes,
-  System.DateUtils, System.UITypes, Divers, UfrmScripts, System.IOUtils,
-  UScriptEngineIntf, UMasterEngine, UScriptList, dwsJSON, Entities.Full,
-  JclCompression, Entities.Deserializer, Entities.FactoriesFull,
-  Entities.DaoLambdaJSON;
+  System.SyncObjs, Vcl.Forms, System.StrUtils, UfrmSplash, CommonConst, Textes, System.DateUtils, System.UITypes, Divers, UfrmScripts, System.IOUtils,
+  UScriptEngineIntf, UMasterEngine, UScriptList, dwsJSON, Entities.Full, JclCompression, Entities.Deserializer, Entities.FactoriesFull, Entities.DaoLambdaJSON;
 
 {$R *.dfm}
 
@@ -156,12 +152,14 @@ end;
 
 procedure AutoRun(DataFile: TFileName);
 var
+  scriptName: string;
   masterEngine: IMasterEngine;
   Script: TScript;
   AlbumToImport: TAlbumFull;
   o: TdwsJSONObject;
   js: TStringStream;
   Archive: TJcl7zDecompressArchive;
+  Msg: IMessageInfo;
 begin
   js := TStringStream.Create;
   Archive := TJcl7zDecompressArchive.Create(DataFile);
@@ -171,24 +169,42 @@ begin
     Archive.Items[0].OwnsStream := False;
     Archive.Items[0].Selected := True;
     Archive.ExtractSelected;
-
     o := TdwsJSONObject.ParseString(js.DataString) as TdwsJSONObject;
   finally
     Archive.Free;
     js.Free;
   end;
-
+  masterEngine := TMasterEngine.Create;
   AlbumToImport := TEntitesDeserializer.BuildEntityFromJson<TAlbumFull, TFactoryAlbumFull>(o.Items['album'] as TdwsJSONObject);
   try
-    Script := masterEngine.ScriptList.FindScriptByUnitName(o.Items['options'].Items['script'].AsString, [skMain]);
+    masterEngine.ScriptList.LoadDir(RepScripts);
+    scriptName := o.Items['params'].Items['script'].AsString;
+    Script := masterEngine.ScriptList.FindScriptByUnitName(scriptName, [skMain]);
     if Assigned(Script) then
     begin
-      masterEngine := TMasterEngine.Create;
       masterEngine.SelectProjectScript(Script);
+      masterEngine.Engine.UseDebugInfo := False;
       masterEngine.AlbumToImport := AlbumToImport;
-      if masterEngine.Engine.Run then
+      if masterEngine.Engine.Compile(Script, Msg) then
       begin
+        if masterEngine.Engine.Run then
+        begin
 
+        end
+        else
+        begin
+          if (masterEngine.DebugPlugin.Messages.ItemCount > 0) then
+            ShowMessageFmt('Erreur d''exécution du script "%s" :'#13#10'%s', [scriptName, masterEngine.DebugPlugin.Messages[0]])
+          else
+            ShowMessageFmt('Erreur d''exécution du script "%s"', [scriptName]);
+        end;
+      end
+      else
+      begin
+        if Assigned(Msg) then
+          ShowMessageFmt('Impossible de compiler le script "%s" :'#13#10'%s', [scriptName, Msg.Text])
+        else
+          ShowMessageFmt('Impossible de compiler le script "%s"', [scriptName]);
       end;
     end;
   finally
@@ -214,7 +230,7 @@ begin
     hdl := GetHandleOtherInstance;
     if hdl = 0 then
       // c'est pas vrai mais bon... comme on devrait jamais passer là...
-      ShowMessage('Une instance de BDthèque est déjà ouverte!')
+      ShowMEssage('Une instance de BDthèque est déjà ouverte!')
     else
     begin
       if ParamCount > 0 then

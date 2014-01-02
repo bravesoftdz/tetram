@@ -4,10 +4,11 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Generics.Collections, Entities.Lite, Dialogs, StdCtrls, Entities.Full,
-  ExtCtrls, CheckLst, Menus, jpeg, UframBoutons, ComboCheck, EditLabeled, ComCtrls;
+  ExtCtrls, CheckLst, Menus, jpeg, UframBoutons, ComboCheck, EditLabeled, ComCtrls,
+  UBdtForms;
 
 type
-  TfrmValidationImport = class(TForm)
+  TfrmValidationImport = class(TbdtForm)
     CheckBox1: TCheckBoxLabeled;
     edTitreAlbum: TEditLabeled;
     CheckBox2: TCheckBoxLabeled;
@@ -138,7 +139,7 @@ type
 implementation
 
 uses
-  IOUtils, Commun, Procedures, CommonConst, UBdtForms, Entities.DaoFull, ProceduresBDtk,
+  IOUtils, Commun, Procedures, CommonConst, Entities.DaoFull, ProceduresBDtk,
   Entities.Common, Entities.DaoLambda;
 
 {$R *.dfm}

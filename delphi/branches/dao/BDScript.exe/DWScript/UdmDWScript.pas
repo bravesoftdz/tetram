@@ -131,7 +131,7 @@ end;
 
 procedure TdmDWScript.AfterInitbdObjects(Sender: TObject);
 begin
-  bdObjects.ExposeInstanceToUnit('AlbumToImport', 'TAlbumComplet', FMasterEngine.AlbumToImport);
+  bdObjects.ExposeInstanceToUnit('AlbumToImport', 'TAlbumFull', FMasterEngine.AlbumToImport);
 end;
 
 procedure TdmDWScript.AssignScript(Script: TStrings);

@@ -134,7 +134,6 @@ end;
 procedure TframScriptInfos.ListBox1DblClick(Sender: TObject);
 var
   Option: TOption;
-  frm: TfrmScriptOption;
 begin
   if TListBox(Sender).ItemIndex = -1 then
     Exit;

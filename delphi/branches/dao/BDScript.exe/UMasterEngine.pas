@@ -27,7 +27,6 @@ type
     FConsole: TStrings;
     FOnAfterExecute: TAfterExecuteEvent;
     FCompiled: Boolean;
-    FListTypesImages: TStringList;
     function GetAlbumToImport: TAlbumFull;
     procedure SetAlbumToImport(const Value: TAlbumFull);
     function GetDebugPlugin: IDebugInfos;
@@ -52,7 +51,6 @@ type
     function GetScriptUnitName(const InternalUnitName: string): string;
     function GetScriptLines(const UnitName: string; Output: TStrings; ScriptKinds: TScriptKinds = [skUnit]): Boolean; overload;
     function GetScriptLines(Script: TScript; Lines: TStrings): Boolean; overload;
-    function GetListTypesImages: TStrings;
   public
     constructor Create;
     destructor Destroy; override;
@@ -117,7 +115,6 @@ begin
   FInternalAlbumToImport := TFactoryAlbumFull.GetInstance;
   FAlbumToImport := FInternalAlbumToImport;
   FScriptList := TScriptList.Create;
-  FListTypesImages := TStringList.Create;
 end;
 
 destructor TMasterEngine.Destroy;
@@ -126,7 +123,6 @@ begin
   FInternalAlbumToImport.Free;
   FDebugPlugin := nil;
   FScriptList.Free;
-  FListTypesImages.Free;
   inherited;
 end;
 
@@ -150,11 +146,6 @@ begin
   Result := ScriptUnitName;
   if (Result = '') or (Result = GetProjectScript.ScriptUnitName) then
     Result := GetEngine.GetSpecialMainUnitName;
-end;
-
-function TMasterEngine.GetListTypesImages: TStrings;
-begin
-  Result := FListTypesImages;
 end;
 
 function TMasterEngine.GetInternalUnitName(Script: TScript): string;

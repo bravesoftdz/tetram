@@ -523,7 +523,6 @@ var
   Couverture: TCouvertureLite;
   tmpFile: string;
   P: PChar;
-  SL: TStringList;
 begin
   Result := -1;
 

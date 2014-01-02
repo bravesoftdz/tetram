@@ -412,7 +412,6 @@ end;
 procedure TfrmScripts.ListBox2DblClick(Sender: TObject);
 var
   Option: TOption;
-  frm: TfrmScriptOption;
 begin
   if TListBox(Sender).ItemIndex = -1 then
     Exit;
@@ -434,7 +433,6 @@ end;
 procedure TfrmScripts.ListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
 var
   Script: TScript;
-  qry: TUIBQuery;
 begin
   if Selected and Assigned(Item) then
   begin

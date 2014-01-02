@@ -310,6 +310,9 @@ type
   private
     function GetDefaultSearch: string;
     procedure SetDefaultSearch(const Value: string);
+    function GetID: RGUIDEx;
+    function GetSerie: TSerieFull;
+    procedure SetID(const Value: RGUIDEx);
   protected
     constructor Create; override;
   public
@@ -326,7 +329,7 @@ type
     property ID_Album: RGUIDEx read GetID write SetID;
     property ID_Serie: RGUIDEx read GetID_Serie;
     property TitreAlbum: RAutoTrimString read FTitreAlbum write SetTitreAlbum;
-    property Serie: TSerieFull read FSerie;
+    property Serie: TSerieFull read GetSerie;
     property MoisParution: Integer read FMoisParution write FMoisParution;
     property AnneeParution: Integer read FAnneeParution write FAnneeParution;
     property Tome: Integer read FTome write FTome;
@@ -497,7 +500,7 @@ begin
   inherited;
 end;
 
-{ TAlbumComplet }
+{ TAlbumFull }
 
 function TAlbumFull.ChaineAffichage(AvecSerie: Boolean): string;
 begin
@@ -574,9 +577,19 @@ begin
   Result := FDefaultSearch;
 end;
 
+function TAlbumFull.GetID: RGUIDEx;
+begin
+
+end;
+
 function TAlbumFull.GetID_Serie: RGUIDEx;
 begin
   Result := Serie.ID_Serie;
+end;
+
+function TAlbumFull.GetSerie: TSerieFull;
+begin
+  Result := FSerie;
 end;
 
 procedure TAlbumFull.SetDefaultSearch(const Value: string);
@@ -584,12 +597,17 @@ begin
   FDefaultSearch := Value;
 end;
 
+procedure TAlbumFull.SetID(const Value: RGUIDEx);
+begin
+
+end;
+
 procedure TAlbumFull.SetTitreAlbum(const Value: RAutoTrimString);
 begin
   FTitreAlbum := Copy(Value, 1, LengthTitreAlbum);
 end;
 
-{ TEditionComplete }
+{ TEditionFull }
 
 procedure TEditionFull.Clear;
 begin
@@ -658,7 +676,7 @@ begin
   FNumeroPerso := Copy(Value, 1, LengthNumPerso);
 end;
 
-{ TSerieComplete }
+{ TSerieFull }
 
 function TSerieFull.ChaineAffichage: string;
 begin
@@ -756,7 +774,7 @@ begin
   FTitreSerie := Copy(Value, 1, LengthTitreSerie);
 end;
 
-{ TEditeurComplet }
+{ TEditeurFull }
 
 procedure TEditeurFull.Clear;
 begin
@@ -776,7 +794,7 @@ begin
   FSiteWeb := Copy(Value, 1, LengthURL);
 end;
 
-{ TAuteurComplet }
+{ TAuteurFull }
 
 function TAuteurFull.ChaineAffichage(dummy: Boolean = True): string;
 begin
@@ -812,7 +830,7 @@ begin
   FSiteWeb := Copy(Value, 1, LengthURL);
 end;
 
-{ TParaBDComplet }
+{ TParaBDFull }
 
 function TParaBDFull.ChaineAffichage(AvecSerie: Boolean): string;
 begin
@@ -888,7 +906,7 @@ begin
   FTitreParaBD := Copy(Value, 1, LengthTitreParaBD);
 end;
 
-{ TCollectionComplete }
+{ TCollectionFull }
 
 procedure TCollectionFull.Clear;
 begin
@@ -918,7 +936,7 @@ begin
   FNomCollection := Copy(Value, 1, LengthNomCollection);
 end;
 
-{ TUniversComplet }
+{ TUniversFull }
 
 function TUniversFull.ChaineAffichage(dummy: Boolean): string;
 begin

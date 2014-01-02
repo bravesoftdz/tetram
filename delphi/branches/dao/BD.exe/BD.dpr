@@ -170,6 +170,7 @@ uses
   Entities.FactoriesFull in '..\Commun\Entities\Entities.FactoriesFull.pas',
   Entities.DaoLambda in '..\Commun\Entities\Entities.DaoLambda.pas',
   Entities.DaoLambdaDB in 'Entities\Entities.DaoLambdaDB.pas',
+  UfrmChoixScript in 'Scripts\UfrmChoixScript.pas' {frmChoixScript},
   UfrmScriptOption in '..\Commun\Scripts\UfrmScriptOption.pas' {frmScriptOption};
 
 begin

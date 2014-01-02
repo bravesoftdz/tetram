@@ -10,14 +10,14 @@ procedure SIRegister_TStringList(CL: TPSPascalCompiler);
 procedure SIRegister_TObjectList(CL: TPSPascalCompiler);
 procedure SIRegister_TObjectListOfUnivers(CL: TPSPascalCompiler);
 procedure SIRegister_TObjectListOfAuteur(CL: TPSPascalCompiler);
-procedure SIRegister_TObjectListOfEditionComplete(CL: TPSPascalCompiler);
+procedure SIRegister_TObjectListOfEditionFull(CL: TPSPascalCompiler);
 
 procedure SIRegister_TUnivers(CL: TPSPascalCompiler);
 procedure SIRegister_TAuteur(CL: TPSPascalCompiler);
-procedure SIRegister_TAlbumComplet(CL: TPSPascalCompiler);
-procedure SIRegister_TEditionComplete(CL: TPSPascalCompiler);
-procedure SIRegister_TSerieComplete(CL: TPSPascalCompiler);
-procedure SIRegister_TEditeurComplet(CL: TPSPascalCompiler);
+procedure SIRegister_TAlbumFull(CL: TPSPascalCompiler);
+procedure SIRegister_TEditionFull(CL: TPSPascalCompiler);
+procedure SIRegister_TSerieFull(CL: TPSPascalCompiler);
+procedure SIRegister_TEditeurFull(CL: TPSPascalCompiler);
 
 procedure SIRegister_TScriptChoix(CL: TPSPascalCompiler);
 
@@ -69,25 +69,25 @@ begin
   end;
 end;
 
-procedure SIRegister_TObjectListOfEditionComplete(CL: TPSPascalCompiler);
+procedure SIRegister_TObjectListOfEditionFull(CL: TPSPascalCompiler);
 begin
-  with CL.AddClassN(CL.FindClass('TObjectList' { TObjectList<> } ), 'TObjectListOfEditionComplete') do
+  with CL.AddClassN(CL.FindClass('TObjectList' { TObjectList<> } ), 'TObjectListOfEditionFull') do
   begin
-    RegisterMethod('function Add(AObject: TEditionComplete): Integer');
-    RegisterMethod('procedure Insert(Index: Integer; AObject: TEditionComplete)');
-    RegisterProperty('Items', 'TEditionComplete Integer', iptRW);
+    RegisterMethod('function Add(AObject: TEditionFull): Integer');
+    RegisterMethod('procedure Insert(Index: Integer; AObject: TEditionFull)');
+    RegisterProperty('Items', 'TEditionFull Integer', iptRW);
     SetDefaultPropery('Items');
   end;
 end;
 
-procedure SIRegister_TAlbumComplet(CL: TPSPascalCompiler);
+procedure SIRegister_TAlbumFull(CL: TPSPascalCompiler);
 begin
-  with CL.AddClassN(CL.FindClass('TObject' { TObjetComplet } ), 'TAlbumComplet') do
+  with CL.AddClassN(CL.FindClass('TObject' { TObjetFull } ), 'TAlbumFull') do
   begin
     RegisterProperty('DefaultSearch', 'string', iptR);
 
     RegisterProperty('Titre', 'string', iptRW);
-    RegisterProperty('Serie', 'TSerieComplete', iptR);
+    RegisterProperty('Serie', 'TSerieFull', iptR);
     RegisterProperty('MoisParution', 'Integer', iptRW);
     RegisterProperty('AnneeParution', 'Integer', iptRW);
     RegisterProperty('Tome', 'Integer', iptRW);
@@ -100,7 +100,7 @@ begin
     RegisterProperty('Coloristes', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , iptR);
     RegisterProperty('Sujet', 'LongString', iptRW);
     RegisterProperty('Notes', 'LongString', iptRW);
-    RegisterProperty('Edition', 'TEditionComplete', iptR);
+    RegisterProperty('Edition', 'TEditionFull', iptR);
     RegisterProperty('Univers', 'TObjectListOfUnivers' { TObjectList<TUnivers> } , iptR);
 
     RegisterMethod('procedure Clear;');
@@ -108,16 +108,16 @@ begin
   end;
 end;
 
-procedure SIRegister_TSerieComplete(CL: TPSPascalCompiler);
+procedure SIRegister_TSerieFull(CL: TPSPascalCompiler);
 begin
-  with CL.AddClassN(CL.FindClass('TObject' { TObjetComplet } ), 'TSerieComplete') do
+  with CL.AddClassN(CL.FindClass('TObject' { TObjetFull } ), 'TSerieFull') do
   begin
     RegisterProperty('Titre', 'string', iptRW);
     RegisterProperty('Terminee', 'Integer', iptRW);
     RegisterProperty('Genres', 'TStringList', iptR);
     RegisterProperty('Sujet', 'LongString', iptRW);
     RegisterProperty('Notes', 'LongString', iptRW);
-    RegisterProperty('Editeur', 'TEditeurComplet', iptR);
+    RegisterProperty('Editeur', 'TEditeurFull', iptR);
     RegisterProperty('Collection', 'string', iptRW);
     RegisterProperty('SiteWeb', 'string', iptRW);
     RegisterProperty('NbAlbums', 'Integer', iptRW);
@@ -128,13 +128,13 @@ begin
   end;
 end;
 
-procedure SIRegister_TEditionComplete(CL: TPSPascalCompiler);
+procedure SIRegister_TEditionFull(CL: TPSPascalCompiler);
 begin
-  with CL.AddClassN(CL.FindClass('TObject' { TObjetComplet } ), 'TEditionComplete') do
+  with CL.AddClassN(CL.FindClass('TObject' { TObjetFull } ), 'TEditionFull') do
   begin
     RegisterMethod('constructor Create');
 
-    RegisterProperty('Editeur', 'TEditeurComplet', iptR);
+    RegisterProperty('Editeur', 'TEditeurFull', iptR);
     RegisterProperty('Collection', 'string', iptRW);
     RegisterProperty('TypeEdition', 'Integer' { ROption } , iptRW);
     RegisterProperty('AnneeEdition', 'Integer', iptRW);
@@ -163,9 +163,9 @@ begin
   end;
 end;
 
-procedure SIRegister_TEditeurComplet(CL: TPSPascalCompiler);
+procedure SIRegister_TEditeurFull(CL: TPSPascalCompiler);
 begin
-  with CL.AddClassN(CL.FindClass('TObject' { TObjetComplet } ), 'TEditeurComplet') do
+  with CL.AddClassN(CL.FindClass('TObject' { TObjetFull } ), 'TEditeurFull') do
   begin
     RegisterProperty('NomEditeur', 'string', iptRW);
     RegisterProperty('SiteWeb', 'string', iptRW);
@@ -220,10 +220,10 @@ begin
   SIRegister_TObjectListOfUnivers(CL);
   SIRegister_TAuteur(CL);
   SIRegister_TObjectListOfAuteur(CL);
-  SIRegister_TEditeurComplet(CL);
-  SIRegister_TSerieComplete(CL);
-  SIRegister_TEditionComplete(CL);
-  SIRegister_TAlbumComplet(CL);
+  SIRegister_TEditeurFull(CL);
+  SIRegister_TSerieFull(CL);
+  SIRegister_TEditionFull(CL);
+  SIRegister_TAlbumFull(CL);
 
   SIRegister_TScriptChoix(CL);
 end;

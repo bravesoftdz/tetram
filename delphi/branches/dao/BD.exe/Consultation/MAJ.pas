@@ -24,7 +24,7 @@ uses
   CommonConst, UfrmFond, DB, StdCtrls, UfrmSeriesIncompletes, UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmRecherche,
   UfrmZoomCouverture, UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique, UfrmConsultationParaBD, UfrmConsultationSerie, UfrmGallerie,
   UfrmConsultationUnivers, JclCompression, System.IOUtils, Entities.Serializer,
-  ProceduresBDtk, JsonSerializer, dwsJSON, Entities.DaoLambda;
+  ProceduresBDtk, JsonSerializer, dwsJSON, Entities.DaoLambda, UfrmChoixScript;
 
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;
 var
@@ -243,19 +243,30 @@ end;
 function MAJRunScript(AlbumToImport: TAlbumFull): Boolean;
 var
   FArchive: TJcl7zCompressArchive;
-  archiveName: string;
-  o, o2, p: TdwsJSONObject;
+  archiveName, scriptName: string;
+  o, options, params: TdwsJSONObject;
+  frmChoixScript: TfrmChoixScript;
 begin
   // TODO: la fonction doit retourner true si l'appel à import c'est correctement terminé
+
+  frmChoixScript := TfrmChoixScript.Create(nil);
+  try
+    if frmFond.SetModalChildForm(frmChoixScript) = mrCancel then
+      Exit(False);
+    scriptName := frmChoixScript.CurrentScript.ScriptUnitName;
+  finally
+    frmChoixScript.Free;
+  end;
 
   archiveName := TPath.GetTempFileName;
   FArchive := TJcl7zCompressArchive.Create(archiveName, 0, False);
   o := TdwsJSONObject.Create;
   try
     TEntitesSerializer.WriteToJSON(AlbumToImport, o.AddObject('album'), [soSkipNullValues]);
-    o2 := o.AddObject('options');
-    o2.AddValue('script', '');
-    p := o.AddObject('params');
+    options := o.AddObject('options');
+    params := o.AddObject('params');
+    params.AddValue('script', scriptName);
+
     FArchive.AddFile('data.json', TStringStream.Create({$IFNDEF DEBUG}o.ToString{$ELSE}o.ToBeautifiedString{$ENDIF}), True);
     FArchive.Compress;
   finally

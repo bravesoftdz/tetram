@@ -13,10 +13,10 @@ type
     procedure Register_TObjectListOfUnivers;
     procedure Register_TAuteur;
     procedure Register_TObjectListOfAuteur;
-    procedure Register_TEditeurComplet;
-    procedure Register_TSerieComplete;
-    procedure Register_TEditionComplete;
-    procedure Register_TAlbumComplet;
+    procedure Register_TEditeurFull;
+    procedure Register_TSerieFull;
+    procedure Register_TEditionFull;
+    procedure Register_TAlbumFull;
 
     procedure Register_TScriptChoix;
     procedure Register_Classes;
@@ -283,24 +283,24 @@ begin
   Register_TObjectListOfUnivers;
   Register_TAuteur;
   Register_TObjectListOfAuteur;
-  Register_TEditeurComplet;
-  Register_TSerieComplete;
-  Register_TEditionComplete;
-  Register_TAlbumComplet;
+  Register_TEditeurFull;
+  Register_TSerieFull;
+  Register_TEditionFull;
+  Register_TAlbumFull;
 
   Register_TScriptChoix;
 end;
 
-procedure TDW_BdtkObjectsUnit.Register_TAlbumComplet;
+procedure TDW_BdtkObjectsUnit.Register_TAlbumFull;
 var
   c: TdwsClass;
 begin
-  c := RegisterClass('TAlbumComplet');
+  c := RegisterClass('TAlbumFull');
 
   RegisterProperty(c, 'DefaultSearch', 'string', TAlbumCompletDefaultSearch_R);
 
   RegisterProperty(c, 'Titre', 'string', HandleDynamicProperty, HandleDynamicProperty);
-  RegisterProperty(c, 'Serie', 'TSerieComplete', HandleDynamicProperty);
+  RegisterProperty(c, 'Serie', 'TSerieFull', HandleDynamicProperty);
   RegisterProperty(c, 'MoisParution', 'Integer', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'AnneeParution', 'Integer', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Tome', 'Integer', HandleDynamicProperty, HandleDynamicProperty);
@@ -313,7 +313,7 @@ begin
   RegisterProperty(c, 'Coloristes', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , HandleDynamicProperty);
   RegisterProperty(c, 'Sujet', 'LongString', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Notes', 'LongString', HandleDynamicProperty, HandleDynamicProperty);
-  RegisterProperty(c, 'Edition', 'TEditionComplete', TAlbumCompletEdition_R);
+  RegisterProperty(c, 'Edition', 'TEditionFull', TAlbumCompletEdition_R);
   RegisterProperty(c, 'Univers', 'TObjectListOfUnivers' { TObjectList<TUnivers> } , HandleDynamicProperty);
 
   RegisterMethod(c, 'Clear', []);
@@ -353,17 +353,17 @@ begin
   RegisterFunction('MakeAuteur', 'TAuteur', ['Nom', 'string', 'Metier', 'TMetierAuteur'], MakeAuteurEval);
 end;
 
-procedure TDW_BdtkObjectsUnit.Register_TEditeurComplet;
+procedure TDW_BdtkObjectsUnit.Register_TEditeurFull;
 var
   c: TdwsClass;
 begin
-  c := RegisterClass('TEditeurComplet');
+  c := RegisterClass('TEditeurFull');
 
   RegisterProperty(c, 'NomEditeur', 'string', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'SiteWeb', 'string', HandleDynamicProperty, HandleDynamicProperty);
 end;
 
-procedure TDW_BdtkObjectsUnit.Register_TEditionComplete;
+procedure TDW_BdtkObjectsUnit.Register_TEditionFull;
 var
   c: TdwsClass;
   i: Integer;
@@ -379,9 +379,9 @@ begin
     constant.Value := StrToInt(FListTypesImages.Names[i]);
   end;
 
-  c := RegisterClass('TEditionComplete');
+  c := RegisterClass('TEditionFull');
 
-  RegisterProperty(c, 'Editeur', 'TEditeurComplet', HandleDynamicProperty);
+  RegisterProperty(c, 'Editeur', 'TEditeurFull', HandleDynamicProperty);
   RegisterProperty(c, 'Collection', 'string', TEditionCompleteCollection, TEditionCompleteCollection);
   RegisterProperty(c, 'TypeEdition', 'Integer' { ROption } , HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'AnneeEdition', 'Integer', HandleDynamicProperty, HandleDynamicProperty);
@@ -460,18 +460,18 @@ begin
   RegisterProperty(c, 'Titre', 'string', TScriptChoixTitre, TScriptChoixTitre);
 end;
 
-procedure TDW_BdtkObjectsUnit.Register_TSerieComplete;
+procedure TDW_BdtkObjectsUnit.Register_TSerieFull;
 var
   c: TdwsClass;
 begin
-  c := RegisterClass('TSerieComplete');
+  c := RegisterClass('TSerieFull');
 
   RegisterProperty(c, 'Titre', 'string', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Terminee', 'Integer', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Genres', 'TStringList', HandleDynamicProperty);
   RegisterProperty(c, 'Sujet', 'LongString', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Notes', 'LongString', HandleDynamicProperty, HandleDynamicProperty);
-  RegisterProperty(c, 'Editeur', 'TEditeurComplet', HandleDynamicProperty);
+  RegisterProperty(c, 'Editeur', 'TEditeurFull', HandleDynamicProperty);
   RegisterProperty(c, 'Collection', 'string', TSerieCompleteCollection, TSerieCompleteCollection);
   RegisterProperty(c, 'SiteWeb', 'string', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'NbAlbums', 'Integer', HandleDynamicProperty, HandleDynamicProperty);

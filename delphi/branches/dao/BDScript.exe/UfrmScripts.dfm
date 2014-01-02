@@ -122,7 +122,6 @@ object frmScripts: TfrmScripts
             TabOrder = 0
             OnData = ListBox2Data
             OnDblClick = ListBox2DblClick
-            ExplicitLeft = 647
           end
           object ListView1: TListView
             Left = 0
@@ -514,6 +513,8 @@ object frmScripts: TfrmScripts
             ExplicitWidth = 268
             ExplicitHeight = 186
             inherited TabSheet4: TTabSheet
+              ExplicitLeft = 4
+              ExplicitTop = 24
               ExplicitWidth = 260
               ExplicitHeight = 158
               inherited ListBox1: TListBox
@@ -524,18 +525,10 @@ object frmScripts: TfrmScripts
               end
             end
             inherited TabSheet5: TTabSheet
-              inherited Label11: TLabel
-                Margins.Bottom = 0
-              end
-              inherited Label12: TLabel
-                Margins.Bottom = 0
-              end
-              inherited Label13: TLabel
-                Margins.Bottom = 0
-              end
-              inherited Label14: TLabel
-                Margins.Bottom = 0
-              end
+              ExplicitLeft = 4
+              ExplicitTop = 24
+              ExplicitWidth = 312
+              ExplicitHeight = 212
               inherited EditLabeled1: TEditLabeled
                 LinkControls = <
                   item
@@ -560,6 +553,12 @@ object frmScripts: TfrmScripts
                     Control = framScriptInfos1.Label13
                   end>
               end
+            end
+            inherited Alias: TTabSheet
+              ExplicitLeft = 4
+              ExplicitTop = 24
+              ExplicitWidth = 312
+              ExplicitHeight = 212
             end
           end
           inherited PopupMenu2: TPopupMenu
