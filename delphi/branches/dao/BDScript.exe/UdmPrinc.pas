@@ -30,7 +30,9 @@ implementation
 
 uses
   System.SyncObjs, Vcl.Forms, System.StrUtils, UfrmSplash, CommonConst, Textes, System.DateUtils, System.UITypes, Divers, UfrmScripts, System.IOUtils,
-  UScriptEngineIntf, UMasterEngine, UScriptList, dwsJSON, Entities.Full, JclCompression, Entities.Deserializer, Entities.FactoriesFull, Entities.DaoLambdaJSON;
+  UScriptEngineIntf, UMasterEngine, UScriptList, dwsJSON, Entities.Full, JclCompression, Entities.Deserializer, Entities.FactoriesFull, Entities.DaoLambdaJSON,
+  Entities.Serializer, JsonSerializer, Entities.Lite,
+  System.Generics.Collections;
 
 {$R *.dfm}
 
@@ -150,6 +152,48 @@ begin
   end;
 end;
 
+procedure BuildResult(AlbumToImport: TAlbumFull; DataFile: TFileName);
+var
+  Archive: TJcl7zCompressArchive;
+  o: TdwsJSONObject;
+  Edition: TEditionFull;
+  Couverture: TCouvertureLite;
+  ListFiles: TList<TFileName>;
+  fileName: string;
+begin
+  if TFile.Exists(DataFile) then
+    TFile.Delete(DataFile);
+
+  ListFiles := TList<TFileName>.Create;
+  try
+    Archive := TJcl7zCompressArchive.Create(DataFile);
+    o := TdwsJSONObject.Create;
+    try
+      for Edition in AlbumToImport.Editions do
+        for Couverture in Edition.Couvertures do
+        begin
+          Archive.AddFile(TPath.GetFileName(Couverture.NewNom), Couverture.NewNom);
+          ListFiles.Add(Couverture.NewNom);
+          Couverture.NewNom := TPath.GetFileName(Couverture.NewNom);
+          Couverture.OldNom := Couverture.NewNom;
+        end;
+
+      TEntitesSerializer.WriteToJSON(AlbumToImport, o.AddObject('album'), [soSkipNullValues]);
+      Archive.AddFile('data.json', TStringStream.Create({$IFNDEF DEBUG}o.ToString{$ELSE}o.ToBeautifiedString{$ENDIF}), True);
+
+      Archive.Compress;
+    finally
+      o.Free;
+      Archive.Free;
+    end;
+
+    for fileName in ListFiles do
+      TFile.Delete(fileName);
+  finally
+    ListFiles.Free;
+  end;
+end;
+
 procedure AutoRun(DataFile: TFileName);
 var
   scriptName: string;
@@ -160,6 +204,8 @@ var
   js: TStringStream;
   Archive: TJcl7zDecompressArchive;
   Msg: IMessageInfo;
+  params: TdwsJSONValue;
+  defaultSearch: TdwsJSONValue;
 begin
   js := TStringStream.Create;
   Archive := TJcl7zDecompressArchive.Create(DataFile);
@@ -177,8 +223,13 @@ begin
   masterEngine := TMasterEngine.Create;
   AlbumToImport := TEntitesDeserializer.BuildEntityFromJson<TAlbumFull, TFactoryAlbumFull>(o.Items['album'] as TdwsJSONObject);
   try
+    params := o.Items['params'];
+    defaultSearch := params.Items['defaultSearch'];
+    if defaultSearch.IsDefined then
+      AlbumToImport.defaultSearch := params.Items['defaultSearch'].AsString;
+    scriptName := params.Items['script'].AsString;
+
     masterEngine.ScriptList.LoadDir(RepScripts);
-    scriptName := o.Items['params'].Items['script'].AsString;
     Script := masterEngine.ScriptList.FindScriptByUnitName(scriptName, [skMain]);
     if Assigned(Script) then
     begin
@@ -189,7 +240,8 @@ begin
       begin
         if masterEngine.Engine.Run then
         begin
-
+          if AlbumToImport.ReadyToImport then
+            BuildResult(AlbumToImport, DataFile);
         end
         else
         begin

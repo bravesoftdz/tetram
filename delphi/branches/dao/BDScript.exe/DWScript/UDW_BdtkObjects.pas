@@ -103,7 +103,7 @@ end;
 
 procedure TDW_BdtkObjectsUnit.OnTAlbumComplet_ImportEval(info: TProgramInfo; ExtObject: TObject);
 begin
-  // Import(ExtObject as TAlbumFull);
+  (ExtObject as TAlbumFull).ReadyToImport := True;;
 end;
 
 procedure TDW_BdtkObjectsUnit.OnTAuteur_CreateEval(info: TProgramInfo; var ExtObject: TObject);

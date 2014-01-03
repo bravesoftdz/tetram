@@ -308,6 +308,7 @@ type
     function GetID_Serie: RGUIDEx; inline;
     procedure SetTitreAlbum(const Value: RAutoTrimString); inline;
   private
+    FReadyToImport: Boolean;
     function GetDefaultSearch: string;
     procedure SetDefaultSearch(const Value: string);
     function GetID: RGUIDEx;
@@ -321,6 +322,7 @@ type
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
 
+    property ReadyToImport: Boolean read FReadyToImport write FReadyToImport;
     property ReadyToFusion: Boolean read FReadyToFusion write FReadyToFusion;
     property FusionneEditions: Boolean read FFusionneEditions write FFusionneEditions;
     property DefaultSearch: string read GetDefaultSearch write SetDefaultSearch;

@@ -73,8 +73,8 @@ type
 
 type
   TGlobalVar = class
-  class var
-    Mode_en_cours: TModeConsult;
+  public
+    class var Mode_en_cours: TModeConsult;
     class var Utilisateur: RUtilisateur;
   end;
 

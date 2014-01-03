@@ -242,7 +242,7 @@ end;
 
 function MAJRunScript(AlbumToImport: TAlbumFull): Boolean;
 var
-  FArchive: TJcl7zCompressArchive;
+  Archive: TJcl7zCompressArchive;
   archiveName, scriptName: string;
   o, options, params: TdwsJSONObject;
   frmChoixScript: TfrmChoixScript;
@@ -259,19 +259,20 @@ begin
   end;
 
   archiveName := TPath.GetTempFileName;
-  FArchive := TJcl7zCompressArchive.Create(archiveName, 0, False);
+  Archive := TJcl7zCompressArchive.Create(archiveName, 0, False);
   o := TdwsJSONObject.Create;
   try
     TEntitesSerializer.WriteToJSON(AlbumToImport, o.AddObject('album'), [soSkipNullValues]);
     options := o.AddObject('options');
     params := o.AddObject('params');
     params.AddValue('script', scriptName);
+    params.AddValue('defaultSearch', AlbumToImport.DefaultSearch);
 
-    FArchive.AddFile('data.json', TStringStream.Create({$IFNDEF DEBUG}o.ToString{$ELSE}o.ToBeautifiedString{$ENDIF}), True);
-    FArchive.Compress;
+    Archive.AddFile('data.json', TStringStream.Create({$IFNDEF DEBUG}o.ToString{$ELSE}o.ToBeautifiedString{$ENDIF}), True);
+    Archive.Compress;
   finally
     o.Free;
-    FArchive.Free;
+    Archive.Free;
   end;
 end;
 

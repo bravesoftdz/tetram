@@ -32,6 +32,30 @@ uses
   System.IOUtils, OverbyteIcsHttpProt, OverbyteIcsLogger, Procedures, System.AnsiStrings, OverbyteIcsWSocket, OverbyteIcsLIBEAY,
   System.SysConst, Winapi.WinInet;
 
+function GetFileNameFromURL(const URL: string): string;
+var
+  URLComponents: TURLComponents;
+  chemin: string;
+  p: Integer;
+begin
+  ZeroMemory(@URLComponents, SizeOf(URLComponents));
+  URLComponents.dwStructSize := SizeOf(URLComponents);
+  URLComponents.dwHostNameLength := 1;
+  URLComponents.dwSchemeLength := 1;
+  URLComponents.dwUserNameLength := 1;
+  URLComponents.dwPasswordLength := 1;
+  URLComponents.dwUrlPathLength := 1;
+  if not InternetCrackUrl(PChar(URL), Length(URL), 0, URLComponents) then
+    RaiseLastOSError;
+  chemin := Copy(URLComponents.lpszUrlPath, 0, URLComponents.dwUrlPathLength);
+  chemin := chemin.Split(['?','#'])[0];
+  p := chemin.LastIndexOf('/');
+  if p > 0 then
+    Result := chemin.Substring(p + 1)
+  else
+    Result := '';
+end;
+
 function URLEncode(const URL: string): string;
 var
   URLComponents: TURLComponents;
@@ -448,13 +472,15 @@ begin
       end;
 
       Result := FHttpCli.StatusCode;
-      // à remplacer pas la valeur du header 'filename' ou equivalent
+      // à remplacer par la valeur du header 'filename' ou equivalent
       for i := 0 to Pred(FHttpCli.RcvdHeader.Count) do
         if SameText('filename: ', Copy(FHttpCli.RcvdHeader[i], 1, 10)) then
         begin
           DocName := Copy(FHttpCli.RcvdHeader[i], 11, MaxInt);
           Break;
         end;
+      if DocName = '' then
+        DocName := GetFileNameFromURL(URL);
 
       if IncludeHeaders then
       begin

@@ -628,7 +628,7 @@ end;
 
 procedure Import(Album: TAlbumFull);
 begin
-  // Album.ReadyToImport := True;
+  Album.ReadyToImport := True;
 end;
 
 procedure RIRegister_TAlbumFull(CL: TPSRuntimeClassImporter; isUpdate: Boolean);

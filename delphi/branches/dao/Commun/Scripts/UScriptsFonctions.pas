@@ -521,29 +521,33 @@ function AddImageFromURL(Edition: TEditionFull; const URL: string; TypeImage: In
 var
   Stream: TFileStream;
   Couverture: TCouvertureLite;
-  tmpFile: string;
+  tmpFile, urlFileName: string;
   P: PChar;
 begin
   Result := -1;
 
-  SetLength(tmpFile, MAX_PATH + 1);
-  FillMemory(@tmpFile[1], Length(tmpFile) * SizeOf(Char), 1);
-  GetTempFileName(PChar(TempPath), 'bdk', 0, @tmpFile[1]);
-  P := @tmpFile[1];
-  while P^ <> #0 do
-    Inc(P);
-  SetLength(tmpFile, (Integer(P) - Integer(@tmpFile[1])) div SizeOf(Char));
-
+  tmpFile := TPath.GetTempFileName;
   if TFile.Exists(tmpFile) then
+    // ça devrait toujours être le cas puisque GetTempFileName est sensé le créer
     Stream := TFileStream.Create(tmpFile, fmOpenReadWrite, fmShareExclusive)
   else
-    Stream := TFileStream.Create(tmpFile, fmCreate, fmShareExclusive);
+    Stream := TFileStream.Create(tmpFile, fmCreate or fmOpenReadWrite, fmShareExclusive);
   try
     Stream.Size := 0;
-    if LoadStreamURL(URL, [], Stream) <> 200 then
+    if LoadStreamURL(URL, [], Stream, urlFileName) <> 200 then
       Exit;
   finally
     Stream.Free;
+  end;
+
+  if urlFileName <> '' then
+  begin
+    urlFileName := TPath.Combine(TPath.GetDirectoryName(tmpFile), urlFileName);
+    if not TFile.Exists(urlFileName) then
+    begin
+      TFile.Move(tmpFile, urlFileName);
+      tmpFile := urlFileName;
+    end;
   end;
 
   Couverture := TFactoryCouvertureLite.getInstance;
