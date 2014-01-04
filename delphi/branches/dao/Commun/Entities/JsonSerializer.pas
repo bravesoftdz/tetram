@@ -150,7 +150,8 @@ var
   i: Integer;
 begin
   for i := 0 to Pred(list.Count) do
-    json.AddObject.AddValue(list.Names[i], list.ValueFromIndex[i]);
+    if list.Names[i] <> '' then
+      json.AddObject.AddValue(list.Names[i], list.ValueFromIndex[i]);
 end;
 
 class procedure TJsonSerializer.WriteValueToJSON(const Name, Value: string; json: TdwsJSONObject; Options: SerializationOptions);
@@ -179,7 +180,7 @@ end;
 
 class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: ROption; json: TdwsJSONObject; Options: SerializationOptions);
 begin
-  if (not(soSkipNullValues in Options)) or (Value.Value > -1) then
+  if (not(soSkipNullValues in Options)) or (Value.Value > 0) then
     json.AddObject(Name).AddValue(IntToStr(Value.Value), Value.Caption);
 end;
 

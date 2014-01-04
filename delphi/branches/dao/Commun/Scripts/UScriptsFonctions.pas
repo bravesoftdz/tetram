@@ -522,7 +522,6 @@ var
   Stream: TFileStream;
   Couverture: TCouvertureLite;
   tmpFile, urlFileName: string;
-  P: PChar;
 begin
   Result := -1;
 

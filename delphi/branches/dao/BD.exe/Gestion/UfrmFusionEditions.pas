@@ -97,7 +97,7 @@ type
   public
     procedure SetEditionDst(Edition: TEditionFull);
     procedure SetEditionSrc(Edition: TEditionFull);
-    procedure SetEditions(Editions: TList<TEditionFull>; const Exclure: array of TGUID);
+    procedure SetEditions(Editions: TList<TEditionFull>; const Exclure: array of TEditionFull);
   end;
 
 implementation
@@ -198,7 +198,7 @@ begin
   end;
 end;
 
-procedure TfrmFusionEditions.SetEditions(Editions: TList<TEditionFull>; const Exclure: array of TGUID);
+procedure TfrmFusionEditions.SetEditions(Editions: TList<TEditionFull>; const Exclure: array of TEditionFull);
 
   function NotInExclusion(const ID: TGUID): Boolean;
   var
@@ -208,7 +208,7 @@ procedure TfrmFusionEditions.SetEditions(Editions: TList<TEditionFull>; const Ex
     Result := True;
     while Result and (i <= Pred(Length(Exclure))) do
     begin
-      Result := not IsEqualGUID(Exclure[i], ID);
+      Result := not Assigned(Exclure[i]) or not IsEqualGUID(Exclure[i].ID_Edition, ID);
       Inc(i);
     end;
   end;

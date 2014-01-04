@@ -3,8 +3,7 @@ unit Entities.DaoCommon;
 interface
 
 uses
-  System.Rtti, System.Generics.Collections, Entities.Common,
-  Entities.FactoriesCommon;
+  System.SysUtils, System.Rtti, System.Generics.Collections, Entities.Common, Entities.FactoriesCommon;
 
 type
   TDaoEntity = class abstract
@@ -20,6 +19,7 @@ type
 
   TDaoDBEntity = class abstract(TDaoEntity)
   public
+    class function BuildID: TGUID;
     class procedure Fill(Entity: TDBEntity; const Reference: TGUID); virtual; abstract;
     class function getInstance(const Reference: TGUID): TDBEntity; reintroduce; overload;
   end;
@@ -31,6 +31,9 @@ type
 
 implementation
 
+uses
+  uib, UdmPrinc, Commun;
+
 { TDaoEntity }
 
 class function TDaoEntity.getInstance: TEntity;
@@ -39,6 +42,22 @@ begin
 end;
 
 { TDaoDBEntity }
+
+class function TDaoDBEntity.BuildID: TGUID;
+var
+  qry: TUIBQuery;
+begin
+  qry := TUIBQuery.Create(nil);
+  try
+    qry.Transaction := GetTransaction(DMPrinc.UIBDataBase);
+    qry.SQL.Text := 'select udf_createguid() from rdb$database';
+    qry.Open;
+    Result := StringToGUIDDef(qry.Fields.AsString[0], GUID_NULL);
+  finally
+    qry.Transaction.Free;
+    qry.Free;
+  end;
+end;
 
 class function TDaoDBEntity.getInstance(const Reference: TGUID): TDBEntity;
 begin

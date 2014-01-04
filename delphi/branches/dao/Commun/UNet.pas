@@ -595,7 +595,7 @@ begin
   begin
     Delete(ADateStr, P2, 1);
     Dec(P1);
-    P2 := PosEx('-', ADateStr, P2);
+    P2 := PosEx('-', AnsiString(ADateStr), P2);
   end; // 'DD Mon YYYY HH:MM:SS GMT' or 'DD Mon YYYY HH:MM:SS +0200' or '23 Aug 2004 06:48:46 -0700'
   while Pos('  ', ADateStr) > 0 do
     ADateStr := StringReplace(ADateStr, '  ', ' ', [rfReplaceAll]); // 'DD Mon YYYY HH:MM:SS GMT' or 'DD Mon YYYY HH:MM:SS +0200'

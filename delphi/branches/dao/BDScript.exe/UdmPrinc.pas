@@ -220,6 +220,9 @@ begin
     Archive.Free;
     js.Free;
   end;
+{$IFNDEF DEBUG}
+  TFile.Delete(DataFile);
+{$ENDIF}
   masterEngine := TMasterEngine.Create;
   AlbumToImport := TEntitesDeserializer.BuildEntityFromJson<TAlbumFull, TFactoryAlbumFull>(o.Items['album'] as TdwsJSONObject);
   try
@@ -241,10 +244,16 @@ begin
         if masterEngine.Engine.Run then
         begin
           if AlbumToImport.ReadyToImport then
+          begin
             BuildResult(AlbumToImport, DataFile);
+            ExitCode := ScriptRunOK;
+          end
+          else
+            ExitCode := ScriptRunOKNoImport;
         end
         else
         begin
+          ExitCode := ScriptRunError;
           if (masterEngine.DebugPlugin.Messages.ItemCount > 0) then
             ShowMessageFmt('Erreur d''exécution du script "%s" :'#13#10'%s', [scriptName, masterEngine.DebugPlugin.Messages[0]])
           else
@@ -253,6 +262,7 @@ begin
       end
       else
       begin
+        ExitCode := ScriptCompileError;
         if Assigned(Msg) then
           ShowMessageFmt('Impossible de compiler le script "%s" :'#13#10'%s', [scriptName, Msg.Text])
         else
@@ -303,11 +313,14 @@ begin
 
   if FindCmdLineSwitch('run', scriptAutoRun, True, [clstValueNextParam]) then
   begin
-    Application.MainFormOnTaskbar := False;
-    if FindCmdLineSwitch('dh', s, True, [clstValueNextParam]) then
-      Application.DialogHandle := StrToIntDef(s, Application.DialogHandle);
-    ReadExternalData;
-    AutoRun(scriptAutoRun);
+    if TFile.Exists(scriptAutoRun) then
+    begin
+      Application.MainFormOnTaskbar := False;
+      if FindCmdLineSwitch('dh', s, True, [clstValueNextParam]) then
+        Application.DialogHandle := StrToIntDef(s, Application.DialogHandle);
+      ReadExternalData;
+      AutoRun(scriptAutoRun);
+    end;
   end
   else
   begin

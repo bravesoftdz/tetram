@@ -1410,59 +1410,51 @@ type
     RemplacerImages: Boolean;
   end;
 var
-  FusionsGUID: array of TGUID;
+  FusionsEditions: array of TEditionFull;
   OptionsFusion: array of OptionFusion;
   Edition: TEditionFull;
-  i, j: Integer;
+  i: Integer;
+  frm: TfrmFusionEditions;
 begin
   if Source.Count = 0 then
     Exit;
 
-  SetLength(FusionsGUID, Source.Count);
-  ZeroMemory(FusionsGUID, Length(FusionsGUID) * SizeOf(TGUID));
+  SetLength(FusionsEditions, Source.Count);
+  ZeroMemory(FusionsEditions, Length(FusionsEditions) * SizeOf(TEditionFull));
   SetLength(OptionsFusion, Source.Count);
   ZeroMemory(OptionsFusion, Length(OptionsFusion) * SizeOf(OptionFusion));
   // même si la destination n'a aucune données, on peut choisir de ne rien y importer
   // if Dest.Editions.Count > 0 then
   for i := 0 to Pred(Source.Count) do
-    with TfrmFusionEditions.Create(nil) do
-      try
-        SetEditionSrc(Source[i]);
-        // SetEditions doit être fait après SetEditionSrc
-        SetEditions(Dest, FusionsGUID);
+  begin
+    frm := TfrmFusionEditions.Create(nil);
+    try
+      frm.SetEditionSrc(Source[i]);
+      // SetEditions doit être fait après SetEditionSrc
+      frm.SetEditions(Dest, FusionsEditions);
 
-        case ShowModal of
-          mrCancel:
-            FusionsGUID[i] := GUID_FULL;
-          mrOk:
-            if CheckBox1.Checked then
-              FusionsGUID[i] := GUID_NULL
-            else
-              FusionsGUID[i] := TEditionFull(lbEditions.Items.Objects[lbEditions.ItemIndex]).ID_Edition;
-        end;
-        OptionsFusion[i].ImporterImages := CheckBox2.Checked and (Source[i].Couvertures.Count > 0);
-        OptionsFusion[i].RemplacerImages := CheckBox3.Checked and OptionsFusion[i].ImporterImages;
-      finally
-        Free;
+      case frm.ShowModal of
+        mrCancel:
+          FusionsEditions[i] := nil;
+        mrOk:
+          if frm.CheckBox1.Checked then
+          begin
+            FusionsEditions[i] := TFactoryEditionFull.getInstance;
+            Dest.Add(FusionsEditions[i]);
+          end
+          else
+            FusionsEditions[i] := TEditionFull(frm.lbEditions.Items.Objects[frm.lbEditions.ItemIndex]);
       end;
+      OptionsFusion[i].ImporterImages := frm.CheckBox2.Checked and (Source[i].Couvertures.Count > 0);
+      OptionsFusion[i].RemplacerImages := frm.CheckBox3.Checked and OptionsFusion[i].ImporterImages;
+    finally
+      frm.Free;
+    end;
+  end;
 
-  Edition := nil;
   for i := 0 to Pred(Source.Count) do
   begin
-    if IsEqualGUID(FusionsGUID[i], GUID_FULL) then
-      Continue;
-    if IsEqualGUID(FusionsGUID[i], GUID_NULL) then
-      Dest.Add(TFactoryEditionFull.getInstance)
-    else
-    begin
-      Edition := nil;
-      for j := 0 to Pred(Dest.Count) do
-        if IsEqualGUID(Dest[j].ID_Edition, FusionsGUID[i]) then
-        begin
-          Edition := Dest[j];
-          Break;
-        end;
-    end;
+    Edition := FusionsEditions[i];
     if Assigned(Edition) then
     begin
       if not OptionsFusion[i].ImporterImages then

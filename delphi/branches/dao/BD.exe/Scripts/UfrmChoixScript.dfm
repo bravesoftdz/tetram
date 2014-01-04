@@ -26,13 +26,14 @@ object frmChoixScript: TfrmChoixScript
     Height = 29
     Align = alTop
     TabOrder = 0
-    ExplicitTop = 467
-    ExplicitWidth = 904
+    ExplicitWidth = 844
     inherited btnOK: TButton
       Left = 678
+      ExplicitLeft = 678
     end
     inherited btnAnnuler: TButton
       Left = 761
+      ExplicitLeft = 761
     end
   end
   object Panel4: TPanel
@@ -45,8 +46,6 @@ object frmChoixScript: TfrmChoixScript
     Caption = 'Panel4'
     ShowCaption = False
     TabOrder = 1
-    ExplicitWidth = 794
-    ExplicitHeight = 249
     object Splitter3: TSplitter
       Left = 595
       Top = 0
@@ -68,8 +67,6 @@ object frmChoixScript: TfrmChoixScript
       TabOrder = 0
       OnData = ListBox2Data
       OnDblClick = ListBox2DblClick
-      ExplicitLeft = 564
-      ExplicitHeight = 249
     end
     object ListView1: TListView
       Left = 0
@@ -84,9 +81,8 @@ object frmChoixScript: TfrmChoixScript
       ReadOnly = True
       TabOrder = 1
       ViewStyle = vsList
+      OnDblClick = ListView1DblClick
       OnSelectItem = ListView1SelectItem
-      ExplicitWidth = 561
-      ExplicitHeight = 249
     end
   end
   object Panel5: TPanel
@@ -100,8 +96,6 @@ object frmChoixScript: TfrmChoixScript
     Caption = 'Panel5'
     ShowCaption = False
     TabOrder = 2
-    ExplicitTop = 288
-    ExplicitWidth = 794
     DesignSize = (
       824
       96)
@@ -213,7 +207,6 @@ object frmChoixScript: TfrmChoixScript
       ReadOnly = True
       ScrollBars = ssVertical
       TabOrder = 0
-      ExplicitWidth = 697
     end
   end
 end

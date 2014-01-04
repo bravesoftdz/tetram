@@ -5,7 +5,8 @@ interface
 {$WARN UNIT_PLATFORM OFF}
 
 uses
-  System.SysUtils, Winapi.Windows, VCL.Forms, System.Classes, System.IOUtils, Divers;
+  System.SysUtils, Winapi.Windows, VCL.Forms, System.Classes, System.IOUtils, Divers,
+  sevenzip;
 
 var
   AppData: string = 'TetramCorp\BDTheque\';
@@ -33,7 +34,16 @@ const
   TitreApplication = 'BDthèque';
   CopyrightTetramCorp = 'Copyright © Teträm Corp';
 
-  csAll = '(Toutes)'; // All categories
+const
+  // Error codes are 32-bit values (bit 31 is the most significant bit). Bit 29 is reserved for application-defined error
+  // codes; no system error code has this bit set. If you are defining an error code for your application, set this bit to
+  // indicate that the error code has been defined by your application and to ensure that your error code does not
+  // conflict with any system-defined error codes.
+  UserDefinedErrorCode = $20000000;
+  ScriptRunOK = UserDefinedErrorCode or 1;
+  ScriptRunOKNoImport = UserDefinedErrorCode or 2;
+  ScriptRunError = UserDefinedErrorCode or 3;
+  ScriptCompileError = UserDefinedErrorCode or 4;
 
 type
   RSiteWeb = record
@@ -160,6 +170,12 @@ end;
 
 initialization
 
+{$IFDEF WIN32}
+  SevenzipLibraryName := '7z_x86.dll';
+{$ENDIF}
+{$IFDEF WIN64}
+SevenzipLibraryName := '7z_x64.dll';
+{$ENDIF}
 InitPath;
 FormatMonnaieCourt := '#,##0.00';
 FormatMonnaieSimple := '0.00';

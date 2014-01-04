@@ -311,9 +311,7 @@ type
     FReadyToImport: Boolean;
     function GetDefaultSearch: string;
     procedure SetDefaultSearch(const Value: string);
-    function GetID: RGUIDEx;
     function GetSerie: TSerieFull;
-    procedure SetID(const Value: RGUIDEx);
   protected
     constructor Create; override;
   public
@@ -579,11 +577,6 @@ begin
   Result := FDefaultSearch;
 end;
 
-function TAlbumFull.GetID: RGUIDEx;
-begin
-
-end;
-
 function TAlbumFull.GetID_Serie: RGUIDEx;
 begin
   Result := Serie.ID_Serie;
@@ -597,11 +590,6 @@ end;
 procedure TAlbumFull.SetDefaultSearch(const Value: string);
 begin
   FDefaultSearch := Value;
-end;
-
-procedure TAlbumFull.SetID(const Value: RGUIDEx);
-begin
-
 end;
 
 procedure TAlbumFull.SetTitreAlbum(const Value: RAutoTrimString);

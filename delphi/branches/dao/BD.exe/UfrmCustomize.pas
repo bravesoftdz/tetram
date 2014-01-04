@@ -42,7 +42,7 @@ type
 
 implementation
 
-uses UfrmFond, CommonConst, Procedures;
+uses UfrmFond, CommonConst, Procedures, Textes;
 
 {$R *.DFM}
 
@@ -98,7 +98,7 @@ var
 begin
   Cats.Items.BeginUpdate;
   Cats.Items.Clear;
-  Cats.Items.Add(csAll); // Add "All" entry
+  Cats.Items.Add(rsToutesCategories); // Add "All" entry
   // Loop through the actions
   for i := 0 to frmFond.ActionsOutils.ActionCount - 1 do
   begin
@@ -128,7 +128,7 @@ begin
       if Assigned(act) then
       begin
         // check if the category matches
-        if (cat = csAll) or (cat = act.Category) then
+        if (cat = rsToutesCategories) or (cat = act.Category) then
         begin
           ti := Commands.Items.Add;
           if Assigned(ti) then
@@ -188,7 +188,7 @@ procedure TfrmCustomize.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
   FillCategories;
-  FillCommands(csAll);
+  FillCommands(rsToutesCategories);
   FillToolbar;
 end;
 

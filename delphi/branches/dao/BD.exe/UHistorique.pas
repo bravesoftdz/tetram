@@ -421,7 +421,7 @@ begin
       fcRefreshRepertoireData:
         frmFond.actActualiseRepertoireData;
       fcScripts:
-        MAJRunScript(TAlbumFull(Consult.GestionVTV));
+        doCallback := MAJRunScript(TAlbumFull(Consult.GestionVTV));
       fcConflitImport:
         frmFond.SetModalChildForm(TForm(Consult.Reference));
 

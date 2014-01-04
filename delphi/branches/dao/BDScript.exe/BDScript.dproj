@@ -82,7 +82,7 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
-        <Debugger_RunParams>/run &quot;C:\Users\Thierry\AppData\Local\Temp\tmpD2AC.tmp&quot;</Debugger_RunParams>
+        <Debugger_RunParams>/run &quot;C:\Users\Thierry\AppData\Local\Temp\tmp2F11.tmp&quot;</Debugger_RunParams>
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>

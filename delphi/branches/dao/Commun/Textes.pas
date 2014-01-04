@@ -193,6 +193,7 @@ const
   rsSupprimerEdition = 'Êtes-vous sûr de vouloir supprimer cette édition ?';
 
   rsOperationEnCours = 'Operation en cours';
+  rsToutesCategories = '(Toutes)';
 
 implementation
 

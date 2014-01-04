@@ -21,10 +21,10 @@ function ZoomCouverture(isParaBD: Boolean; const ID_Item, ID_Couverture: TGUID):
 implementation
 
 uses
-  CommonConst, UfrmFond, DB, StdCtrls, UfrmSeriesIncompletes, UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmRecherche,
-  UfrmZoomCouverture, UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique, UfrmConsultationParaBD, UfrmConsultationSerie, UfrmGallerie,
-  UfrmConsultationUnivers, JclCompression, System.IOUtils, Entities.Serializer,
-  ProceduresBDtk, JsonSerializer, dwsJSON, Entities.DaoLambda, UfrmChoixScript;
+  CommonConst, UfrmFond, DB, StdCtrls, UfrmSeriesIncompletes, UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmRecherche, UfrmZoomCouverture,
+  UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique, UfrmConsultationParaBD, UfrmConsultationSerie, UfrmGallerie, UfrmConsultationUnivers,
+  JclCompression, System.IOUtils, Entities.Serializer, ProceduresBDtk, JsonSerializer, dwsJSON, Entities.DaoLambda, UfrmChoixScript, JclSysUtils,
+  Entities.Deserializer, LoadCompletImport;
 
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;
 var
@@ -242,12 +242,19 @@ end;
 
 function MAJRunScript(AlbumToImport: TAlbumFull): Boolean;
 var
-  Archive: TJcl7zCompressArchive;
+  archCompress: TJcl7zCompressArchive;
+  archDecompress: TJcl7zDecompressArchive;
   archiveName, scriptName: string;
-  o, options, params: TdwsJSONObject;
+  o, album, options, params: TdwsJSONObject;
   frmChoixScript: TfrmChoixScript;
+  cmdLine, dummy: string;
+  item: TJclCompressionItem;
+  i: Integer;
+  js: TStringStream;
+  Edition: TEditionFull;
+  Couverture: TCouvertureLite;
 begin
-  // TODO: la fonction doit retourner true si l'appel à import c'est correctement terminé
+  Result := False;
 
   frmChoixScript := TfrmChoixScript.Create(nil);
   try
@@ -259,20 +266,75 @@ begin
   end;
 
   archiveName := TPath.GetTempFileName;
-  Archive := TJcl7zCompressArchive.Create(archiveName, 0, False);
-  o := TdwsJSONObject.Create;
   try
-    TEntitesSerializer.WriteToJSON(AlbumToImport, o.AddObject('album'), [soSkipNullValues]);
-    options := o.AddObject('options');
-    params := o.AddObject('params');
-    params.AddValue('script', scriptName);
-    params.AddValue('defaultSearch', AlbumToImport.DefaultSearch);
+    archCompress := TJcl7zCompressArchive.Create(archiveName, 0, False);
+    o := TdwsJSONObject.Create;
+    try
+      album := o.AddObject('album');
+      TEntitesSerializer.WriteToJSON(AlbumToImport, album, [soSkipNullValues]);
+      options := o.AddObject('options');
+      params := o.AddObject('params');
+      params.AddValue('script', scriptName);
+      params.AddValue('defaultSearch', AlbumToImport.DefaultSearch);
 
-    Archive.AddFile('data.json', TStringStream.Create({$IFNDEF DEBUG}o.ToString{$ELSE}o.ToBeautifiedString{$ENDIF}), True);
-    Archive.Compress;
+      archCompress.AddFile('data.json', TStringStream.Create({$IFNDEF DEBUG}o.ToString{$ELSE}o.ToBeautifiedString{$ENDIF}), True);
+      archCompress.Compress;
+    finally
+      o.Free;
+      archCompress.Free;
+    end;
+
+    cmdLine := Format('"%s" /run "%s" /dh %d', [TPath.Combine(TPath.GetLibraryPath, 'BDScript.exe'), archiveName, Application.DialogHandle]);
+    if Execute(cmdLine, dummy) = ScriptRunOK then
+    begin
+      archDecompress := TJcl7zDecompressArchive.Create(archiveName);
+      js := TStringStream.Create;
+      try
+        archDecompress.ListFiles;
+        for i := 0 to Pred(archDecompress.ItemCount) do
+        begin
+          item := archDecompress.Items[i];
+          if SameText(item.PackedName, 'data.json') then
+          begin
+            item.OwnsStream := False;
+            item.Stream := js;
+            item.Selected := True;
+            archDecompress.ExtractSelected;
+            o := TdwsJSONObject.ParseString(js.DataString) as TdwsJSONObject;
+            try
+              album := o.Items['album'] as TdwsJSONObject;
+              AlbumToImport.Clear;
+              TEntitesDeserializer.ReadFromJSON(AlbumToImport, album);
+            finally
+              o.Free;
+            end;
+          end;
+        end;
+
+        for i := 0 to Pred(archDecompress.ItemCount) do
+        begin
+          item := archDecompress.Items[i];
+          item.Selected := not item.Selected;
+        end;
+        archDecompress.ExtractAll(TempPath);
+        for Edition in AlbumToImport.Editions do
+          for Couverture in Edition.Couvertures do
+          begin
+            Couverture.NewNom := TPath.Combine(TempPath, Couverture.NewNom);
+            Couverture.OldNom := Couverture.NewNom;
+          end;
+      finally
+        js.Free;
+        archDecompress.Free;
+      end;
+      Import(AlbumToImport);
+      Result := True;
+    end;
   finally
-    o.Free;
-    Archive.Free;
+{$IFNDEF DEBUG}
+    if TFile.Exists(archiveName) then
+      TFile.Delete(archiveName);
+{$ENDIF}
   end;
 end;
 

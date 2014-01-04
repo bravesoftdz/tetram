@@ -30,6 +30,7 @@ type
     procedure ListBox2DblClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure ListView1DblClick(Sender: TObject);
   private
     FCurrentScript: TScript;
     FScriptList: TScriptList;
@@ -72,6 +73,13 @@ begin
   Option := FCurrentScript.Options[TListBox(Sender).ItemIndex];
   if TfrmScriptOption.AskForOption(FCurrentScript.ScriptUnitName, Option) = mrOk then
     RefreshOptions;
+end;
+
+procedure TfrmChoixScript.ListView1DblClick(Sender: TObject);
+begin
+  inherited;
+  if Assigned(ListView1.Selected) then
+    ModalResult := mrOk;
 end;
 
 procedure TfrmChoixScript.ListView1SelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);

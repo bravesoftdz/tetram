@@ -1405,19 +1405,19 @@ begin
   begin
     m := PSScriptDebugger1.CompilerMessages[i];
     if m.ClassType = TPSPascalCompilerWarning then
-      FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(m.ModuleName), string(m.ShortMessageToString), tmWarning,
-        m.Row, m.Col)
+      FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(string(m.ModuleName)), string(m.ShortMessageToString),
+        tmWarning, m.Row, m.Col)
     else if m.ClassType = TPSPascalCompilerHint then
-      FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(m.ModuleName), string(m.ShortMessageToString), tmHint,
+      FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(string(m.ModuleName)), string(m.ShortMessageToString), tmHint,
         m.Row, m.Col)
     else if m.ClassType = TPSPascalCompilerError then
     begin
-      Msg := FMasterEngine.DebugPlugin.Messages[FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(m.ModuleName),
+      Msg := FMasterEngine.DebugPlugin.Messages[FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(string(m.ModuleName)),
         string(m.ShortMessageToString), tmError, m.Row, m.Col)];
     end
     else
-      FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(m.ModuleName), string(m.ShortMessageToString), tmUnknown,
-        m.Row, m.Col);
+      FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(string(m.ModuleName)), string(m.ShortMessageToString),
+        tmUnknown, m.Row, m.Col);
   end;
 end;
 
