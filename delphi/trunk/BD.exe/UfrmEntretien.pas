@@ -269,7 +269,7 @@ begin
           Stream.Free;
         end;
         UpdateQuery.Params.AsString[2] := Fields.AsString[0];
-        UpdateQuery.ExecSQL;
+        UpdateQuery.Execute;
         Inc(nbConverti);
         if (nbConverti mod 1000) = 0 then
           Transaction.CommitRetaining;
@@ -347,7 +347,7 @@ begin
 
         UpdateQuery.Params.AsString[0] := Copy(Fichier, 1, UpdateQuery.Params.MaxStrLen[0]);
         UpdateQuery.Params.AsString[1] := Fields.AsString[0];
-        UpdateQuery.ExecSQL;
+        UpdateQuery.Execute;
         Inc(nbExtrais);
         if (nbExtrais mod 1000) = 0 then
           Transaction.CommitRetaining;
@@ -395,7 +395,7 @@ begin
           if not Assigned(Stream) then
           begin
             UpdateQuery.Params.AsString[0] := Fields.AsString[0];
-            UpdateQuery.ExecSQL;
+            UpdateQuery.Execute;
             Inc(nbSupprime);
             if (nbSupprime mod 1000) = 0 then
               Transaction.CommitRetaining;

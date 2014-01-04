@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, System.UITypes, StrUtils,
-  Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls, UfrmFond, Procedures,
+  Dialogs, Entities.Full, StdCtrls, VirtualTrees, ExtCtrls, UfrmFond, Procedures,
   ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms,
   LabeledCheckBox, System.Actions;
 
@@ -67,7 +67,7 @@ type
     procedure lvUniversData(Sender: TObject; Item: TListItem);
     procedure lvUniversDblClick(Sender: TObject);
   private
-    FParaBD: TParaBDComplet;
+    FParaBD: TParaBDFull;
     function GetID_ParaBD: TGUID;
     procedure SetID_ParaBD(const Value: TGUID);
     procedure ClearForm;
@@ -82,14 +82,14 @@ type
     { Déclarations privées }
   public
     { Déclarations publiques }
-    property ParaBD: TParaBDComplet read FParaBD;
+    property ParaBD: TParaBDFull read FParaBD;
     property ID_ParaBD: TGUID read GetID_ParaBD write SetID_ParaBD;
   end;
 
 implementation
 
-uses Commun, TypeRec, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
-  Proc_Gestions;
+uses Commun, Entities.Lite, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
+  Proc_Gestions, Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
 
 {$R *.dfm}
 { TFrmConsultationParaBD }
@@ -105,7 +105,7 @@ var
   jpg: TJPEGImage;
 begin
   ClearForm;
-  FParaBD.Fill(Value);
+  TDaoParaBDFull.Fill(FParaBD, Value);
 
   Caption := 'Fiche de para-BD - ' + FParaBD.ChaineAffichage;
   TitreSerie.Caption := FormatTitre(FParaBD.Serie.TitreSerie);
@@ -228,7 +228,7 @@ end;
 procedure TfrmConsultationParaBD.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FParaBD := TParaBDComplet.Create;
+  FParaBD := TFactoryParaBDFull.getInstance;
 end;
 
 procedure TfrmConsultationParaBD.FormDestroy(Sender: TObject);
@@ -240,25 +240,25 @@ end;
 procedure TfrmConsultationParaBD.lvAuteursData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FParaBD.Auteurs[Item.Index];
-  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+  Item.Caption := TAuteurLite(Item.Data).ChaineAffichage;
 end;
 
 procedure TfrmConsultationParaBD.lvAuteursDblClick(Sender: TObject);
 begin
   if Assigned(TListView(Sender).Selected) then
-    Historique.AddWaiting(fcAuteur, TAuteur(TListView(Sender).Selected.Data).Personne.ID, 0);
+    Historique.AddWaiting(fcAuteur, TAuteurLite(TListView(Sender).Selected.Data).Personne.ID, 0);
 end;
 
 procedure TfrmConsultationParaBD.lvUniversData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FParaBD.UniversFull[Item.Index];
-  Item.Caption := TUnivers(Item.Data).ChaineAffichage;
+  Item.Caption := TUniversLite(Item.Data).ChaineAffichage;
 end;
 
 procedure TfrmConsultationParaBD.lvUniversDblClick(Sender: TObject);
 begin
   if Assigned(TListView(Sender).Selected) then
-    Historique.AddWaiting(fcUnivers, TUnivers(TListView(Sender).Selected.Data).ID, 0);
+    Historique.AddWaiting(fcUnivers, TUniversLite(TListView(Sender).Selected.Data).ID, 0);
 end;
 
 procedure TfrmConsultationParaBD.TitreSerieClick(Sender: TObject);

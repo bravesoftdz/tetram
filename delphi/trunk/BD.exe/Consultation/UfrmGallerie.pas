@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, System.UITypes,
-  Dialogs, ExtCtrls, StdCtrls, LoadComplet, Generics.Collections, TypeRec,
-  UBdtForms, ListOfTypeRec;
+  Dialogs, ExtCtrls, StdCtrls, Entities.Full, Generics.Collections, Entities.Lite,
+  UBdtForms;
 
 type
   TfrmGallerie = class(TBdtForm)
@@ -15,39 +15,38 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure ScrollBarVChange(Sender: TObject);
     procedure FormResize(Sender: TObject);
-  private
+  private type
+    TMyPanel = class(TPanel)
+    private
+      FControlList: TList<TControl>;
+    public
+      procedure CMControlListChanging(var Message: TCMControlListChanging); message CM_CONTROLLISTCHANGING;
+      procedure SetBounds(Left, Top, Width, Height: Integer); override;
+      procedure PositionneControles;
+      constructor Create(AOwner: TComponent); override;
+      destructor Destroy; override;
+    end;
+
+    TThumbList = class(TPanel)
+
     type
-      TMyPanel = class(TPanel)
-      private
-        FControlList: TMyObjectList<TControl>;
+      TThumb = class(TPanel)
       public
-        procedure CMControlListChanging(var Message: TCMControlListChanging); message CM_CONTROLLISTCHANGING;
-        procedure SetBounds(Left, Top, Width, Height: Integer); override;
-        procedure PositionneControles;
+        ID_Album, ID_Couverture: TGUID;
+        FImage: TImage;
+        procedure ImageClick(Sender: TObject);
         constructor Create(AOwner: TComponent); override;
         destructor Destroy; override;
       end;
 
-      TThumbList = class(TPanel)
+    public
+      FLblAlbum, FLblEdition: TLabel;
+      FThumbs: TObjectList<TThumb>;
+      FThumbsCntnr: TMyPanel;
 
-        type
-          TThumb = class(TPanel)
-          public
-            ID_Album, ID_Couverture: TGUID;
-            FImage: TImage;
-            procedure ImageClick(Sender: TObject);
-            constructor Create(AOwner: TCOmponent); override;
-            destructor Destroy; override;
-          end;
-
-      public
-        FLblAlbum, FLblEdition: TLabel;
-        FThumbs: TObjectList<TThumb>;
-        FThumbsCntnr: TMyPanel;
-
-        constructor Create(AOwner: TCOmponent); override;
-        destructor Destroy; override;
-      end;
+      constructor Create(AOwner: TComponent); override;
+      destructor Destroy; override;
+    end;
 
   private
     FAlbum: TGUID;
@@ -60,9 +59,9 @@ type
     procedure SetEdition(const Value: TGUID);
     procedure SetSerie(const Value: TGUID);
 
-    procedure ShowSerie(Serie: TSerieComplete);
-    procedure ShowAlbum(Album: TAlbum);
-    procedure ShowEdition(Edition: TEditionComplete);
+    procedure ShowSerie(Serie: TSerieFull);
+    procedure ShowAlbum(Album: TAlbumLite);
+    procedure ShowEdition(Edition: TEditionFull);
     { Déclarations privées }
   public
     { Déclarations publiques }
@@ -76,11 +75,12 @@ implementation
 {$R *.dfm}
 
 uses
-  Procedures, CommonConst, jpeg, UHistorique, Commun;
+  Procedures, CommonConst, jpeg, UHistorique, Commun, Entities.DaoLite, Entities.DaoFull,
+  ProceduresBDtk, Entities.Common, Entities.FactoriesLite;
 
 { TThumbList.TThumb }
 
-constructor TfrmGallerie.TThumbList.TThumb.Create(AOwner: TCOmponent);
+constructor TfrmGallerie.TThumbList.TThumb.Create(AOwner: TComponent);
 begin
   inherited;
   BorderWidth := 4;
@@ -111,7 +111,7 @@ end;
 
 { TThumbList }
 
-constructor TfrmGallerie.TThumbList.Create(AOwner: TCOmponent);
+constructor TfrmGallerie.TThumbList.Create(AOwner: TComponent);
 begin
   FThumbsCntnr := nil;
   inherited;
@@ -155,7 +155,7 @@ end;
 
 procedure TfrmGallerie.FormCreate(Sender: TObject);
 begin
-  FThumbs:= TObjectList<TThumbList>.Create(True);
+  FThumbs := TObjectList<TThumbList>.Create(True);
 end;
 
 procedure TfrmGallerie.FormDestroy(Sender: TObject);
@@ -200,7 +200,7 @@ end;
 
 procedure TfrmGallerie.SetAlbum(const Value: TGUID);
 var
-  Album: TAlbum;
+  Album: TAlbumLite;
 begin
   FAlbum := Value;
   FSerie := GUID_NULL;
@@ -208,9 +208,9 @@ begin
 
   FThumbs.Clear;
 
-  Album := TAlbum.Create;
+  Album := TFactoryAlbumLite.getInstance;
   try
-    Album.Fill(Value);
+    TDaoAlbumLite.Fill(Album, Value);
     Caption := 'Gallerie - ' + Album.ChaineAffichage(True);
     ShowAlbum(Album);
   finally
@@ -223,7 +223,7 @@ end;
 
 procedure TfrmGallerie.SetEdition(const Value: TGUID);
 var
-  Edition: TEditionComplete;
+  Edition: TEditionFull;
 begin
   FAlbum := GUID_NULL;
   FSerie := GUID_NULL;
@@ -231,7 +231,7 @@ begin
 
   FThumbs.Clear;
 
-  Edition := TEditionComplete.Create(Value);
+  Edition := TDaoEditionFull.getInstance(Value);
   try
     ShowEdition(Edition);
     Caption := 'Gallerie - ' + Edition.ChaineAffichage;
@@ -245,7 +245,7 @@ end;
 
 procedure TfrmGallerie.SetSerie(const Value: TGUID);
 var
-  Serie: TSerieComplete;
+  Serie: TSerieFull;
 begin
   FAlbum := GUID_NULL;
   FSerie := Value;
@@ -253,7 +253,7 @@ begin
 
   FThumbs.Clear;
 
-  Serie := TSerieComplete.Create(Value);
+  Serie := TDaoSerieFull.getInstance(Value);
   try
     ShowSerie(Serie);
     Caption := 'Gallerie - ' + Serie.ChaineAffichage;
@@ -265,13 +265,14 @@ begin
   OnResize(nil);
 end;
 
-procedure TfrmGallerie.ShowAlbum(Album: TAlbum);
+procedure TfrmGallerie.ShowAlbum(Album: TAlbumLite);
 var
   i: Integer;
+  Editions: TList<TEditionFull>;
 begin
   FTitreAlbum := Album.ChaineAffichage(True);
 
-  with TEditionsCompletes.Create(Album.ID) do
+  Editions := TDaoEditionFull.getList(Album.ID);
   try
     for i := Pred(Editions.Count) downto 0 do
       ShowEdition(Editions[i]);
@@ -280,11 +281,11 @@ begin
   end;
 end;
 
-procedure TfrmGallerie.ShowEdition(Edition: TEditionComplete);
+procedure TfrmGallerie.ShowEdition(Edition: TEditionFull);
 var
   AlbumThumbs: TThumbList;
   Thumb: TThumbList.TThumb;
-  Couverture: TCouverture;
+  Couverture: TCouvertureLite;
   ms: TStream;
   jpg: TJPEGImage;
 begin
@@ -310,25 +311,27 @@ begin
     Thumb.FImage.Picture.Assign(nil);
     try
       ms := GetCouvertureStream(False, Couverture.ID, 150, -1, TGlobalVar.Utilisateur.Options.AntiAliasing);
-      if Assigned(ms) then try
-        jpg := TJPEGImage.Create;
+      if Assigned(ms) then
         try
-          jpg.LoadFromStream(ms);
-          Thumb.FImage.Picture.Assign(jpg);
-          Thumb.FImage.Transparent := False;
+          jpg := TJPEGImage.Create;
+          try
+            jpg.LoadFromStream(ms);
+            Thumb.FImage.Picture.Assign(jpg);
+            Thumb.FImage.Transparent := False;
+          finally
+            jpg.Free;
+          end;
         finally
-          jpg.Free;
-        end;
-      finally
-        ms.Free;
-      end
+          ms.Free;
+        end
       else
         Thumb.FImage.Picture.Assign(nil);
     except
       Thumb.FImage.Picture.Assign(nil);
     end;
 
-    if not Assigned(Thumb.FImage.Picture.Graphic) then begin
+    if not Assigned(Thumb.FImage.Picture.Graphic) then
+    begin
       ms := TResourceStream.Create(HInstance, 'IMAGENONVALIDE', RT_RCDATA);
       jpg := TJPEGImage.Create;
       try
@@ -345,11 +348,11 @@ begin
 
     Thumb.AutoSize := True;
   end;
-  //AlbumThumbs.FThumbsCntnr.AutoSize := True;
+  // AlbumThumbs.FThumbsCntnr.AutoSize := True;
   AlbumThumbs.AutoSize := True;
 end;
 
-procedure TfrmGallerie.ShowSerie(Serie: TSerieComplete);
+procedure TfrmGallerie.ShowSerie(Serie: TSerieFull);
 var
   i: Integer;
 begin
@@ -366,7 +369,8 @@ begin
   begin
     if FControlList.IndexOf(Message.ControlListItem.Control) < 0 then
       FControlList.Add(Message.ControlListItem.Control);
-  end else
+  end
+  else
     FControlList.Remove(Message.ControlListItem.Control);
   PositionneControles;
 end;
@@ -376,7 +380,7 @@ begin
   inherited;
   ParentColor := True;
   ParentBackground := False;
-  FControlList := TMyObjectList<TControl>.Create(False);
+  FControlList := TList<TControl>.Create;
 end;
 
 destructor TfrmGallerie.TMyPanel.Destroy;
@@ -392,7 +396,8 @@ var
   Ctrl: TControl;
   l, t, CtrlHeight: Integer;
 begin
-  if PositionnementEnCours or not Assigned(FControlList) then Exit;
+  if PositionnementEnCours or not Assigned(FControlList) then
+    Exit;
   try
     PositionnementEnCours := True;
     l := 0;
@@ -400,7 +405,8 @@ begin
     CtrlHeight := 0;
     for Ctrl in FControlList do
     begin
-      if not Ctrl.Visible then Continue;
+      if not Ctrl.Visible then
+        Continue;
       CtrlHeight := Ctrl.Height;
       if l + Ctrl.Width > Self.Width then
       begin

@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.Types, UframBoutons, StdCtrls, DBCtrls, UfrmRecherche,
-  ActnList, EditLabeled, ComboCheck, ComCtrls, LoadComplet, UBdtForms,
+  ActnList, EditLabeled, ComboCheck, ComCtrls, EntitiesRecherche, UBdtForms,
   System.Actions;
 
 type

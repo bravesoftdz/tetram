@@ -33,7 +33,7 @@ implementation
 {$R *.dfm}
 
 uses Math, UNet, Divers, Updates, UIB, UIBLib, UdmPrinc, Commun, DateUtils, Procedures, CommonConst, VarUtils, StrUtils,
-  Generics.Collections, JclMime;
+  Generics.Collections, JclMime, ProceduresBDtk;
 
 type
   TSynchroSpecial = (tsNone, tsImages);
@@ -637,9 +637,6 @@ var
   rc: Integer;
   table: RInfoTable;
 begin
-  // TODO: ajouter la gestion des univers
-  // TODO: vérifier la gestion des catégories (table LISTES, le champ REF contient maintenant le code de la catégorie * 100)
-
   SQLSettings.ShortDateFormat := 'YYYY-MM-DD';
   SQLSettings.ShortTimeFormat := 'HH:mm:ss:zzz';
   SQLSettings.LongTimeFormat := 'HH:mm:ss:zzz';

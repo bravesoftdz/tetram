@@ -29,7 +29,8 @@ var
 
 implementation
 
-uses CommonConst, TypeRec, UdmPrinc, UIB, Commun;
+uses CommonConst, Entities.Lite, UdmPrinc, UIB, Commun, Entities.DaoLite,
+  Entities.FactoriesLite;
 
 {$R *.DFM}
 
@@ -37,12 +38,12 @@ procedure TFrmConvers.FormCreate(Sender: TObject);
 var
   q: TUIBQuery;
   fc: TframConvertisseur;
-  PC: TConversion;
+  PC: TConversionLite;
   i: Integer;
 begin
   FFirstEdit := nil;
   ListFC := TList<TframConvertisseur>.Create;
-  PC := TConversion.Create;
+  PC := TFactoryConversionLite.getInstance;
   q := TUIBQuery.Create(nil);
   with q do
     try
@@ -55,7 +56,7 @@ begin
       i := 0;
       while not Eof do
       begin
-        PC.Fill(q);
+        TDaoConversionLite.Fill(PC, q);
         fc := TframConvertisseur.Create(Self);
         if PC.Monnaie1 = TGlobalVar.Utilisateur.Options.SymboleMonnetaire then
         begin

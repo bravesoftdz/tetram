@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, ExtCtrls, DBCtrls, Mask, Buttons, VDTButton, ComCtrls,
-  EditLabeled, VirtualTrees, VirtualTree, LoadComplet, Menus, ExtDlgs, UframRechercheRapide, UframBoutons, UBdtForms,
+  EditLabeled, VirtualTrees, VirtualTreeBdtk, Entities.Full, Menus, ExtDlgs, UframRechercheRapide, UframBoutons, UBdtForms,
   ComboCheck, StrUtils, PngSpeedButton, UframVTEdit;
 
 type
@@ -101,20 +101,21 @@ type
     procedure lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
   private
     { Déclarations privées }
-    FSerie: TSerieComplete;
-    procedure SetSerie(Value: TSerieComplete);
+    FSerie: TSerieFull;
+    procedure SetSerie(Value: TSerieFull);
     function GetID_Serie: TGUID;
   public
     { Déclarations publiques }
     property ID_Serie: TGUID read GetID_Serie;
-    property Serie: TSerieComplete read FSerie write SetSerie;
+    property Serie: TSerieFull read FSerie write SetSerie;
   end;
 
 implementation
 
 uses
-  Commun, Proc_Gestions, TypeRec, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
-  UHistorique, UMetadata;
+  Commun, Proc_Gestions, Entities.Lite, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
+  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, ProceduresBDtk,
+  Entities.Common, Entities.FactoriesLite, Entities.DaoLambda;
 
 {$R *.DFM}
 
@@ -143,18 +144,12 @@ begin
   vtParaBD.UseFiltre := True;
   vtEditPersonnes.AfterEdit := OnEditPersonne;
 
-  LoadCombo(1 { Etat } , cbxEtat);
-  cbxEtat.Value := -1;
-  LoadCombo(2 { Reliure } , cbxReliure);
-  cbxReliure.Value := -1;
-  LoadCombo(3 { TypeEdition } , cbxEdition);
-  cbxEdition.Value := -1;
-  LoadCombo(4 { Orientation } , cbxOrientation);
-  cbxOrientation.Value := -1;
-  LoadCombo(5 { Format } , cbxFormat);
-  cbxFormat.Value := -1;
-  LoadCombo(8 { Sens de lecture } , cbxSensLecture);
-  cbxSensLecture.Value := -1;
+  LoadCombo(cbxEtat, TDaoListe.ListEtats, -1);
+  LoadCombo(cbxReliure, TDaoListe.ListReliures, -1);
+  LoadCombo(cbxEdition, TDaoListe.ListTypesEdition, -1);
+  LoadCombo(cbxOrientation, TDaoListe.ListOrientations, -1);
+  LoadCombo(cbxFormat, TDaoListe.ListFormatsEdition, -1);
+  LoadCombo(cbxSensLecture, TDaoListe.ListSensLecture, -1);
 end;
 
 procedure TfrmEditSerie.FormDestroy(Sender: TObject);
@@ -188,8 +183,8 @@ begin
   FSerie.SuivreManquants := cbManquants.Checked;
   FSerie.NbAlbums := StrToIntDef(edNbAlbums.Text, -1);
   FSerie.SiteWeb := Trim(edSite.Text);
-  FSerie.ID_Editeur := vtEditEditeurs.CurrentValue;
-  FSerie.ID_Collection := vtEditCollections.CurrentValue;
+  TDaoEditeurFull.Fill(FSerie.Editeur, vtEditEditeurs.CurrentValue);
+  TDaoCollectionLite.Fill(FSerie.Collection, vtEditCollections.CurrentValue);
   FSerie.Sujet := edHistoire.Text;
   FSerie.Notes := edNotes.Text;
 
@@ -205,13 +200,13 @@ begin
 
   FSerie.Associations.Text := edAssociations.Lines.Text;
 
-  FSerie.SaveToDatabase;
-  FSerie.SaveAssociations(vmSeries, GUID_NULL);
+  TDaoSerieFull.SaveToDatabase(FSerie);
+  TDaoSerieFull.SaveAssociations(FSerie, vmSeries, GUID_NULL);
 
   ModalResult := mrOk;
 end;
 
-procedure TfrmEditSerie.SetSerie(Value: TSerieComplete);
+procedure TfrmEditSerie.SetSerie(Value: TSerieFull);
 var
   i: Integer;
   hg: IHourGlass;
@@ -219,7 +214,7 @@ var
 begin
   hg := THourGlass.Create;
   FSerie := Value;
-  FSerie.FillAssociations(vmSeries);
+  TDaoSerieFull.FillAssociations(FSerie, vmSeries);
 
   lvScenaristes.Items.BeginUpdate;
   lvDessinateurs.Items.BeginUpdate;
@@ -297,7 +292,7 @@ begin
   if Sender.GetNodeLevel(Node) > 0 then
   begin
     Node.CheckType := ctCheckBox;
-    if Assigned(FSerie) and (FSerie.Genres.IndexOfName(GUIDToString(TGenre(RNodeInfo(vtGenres.GetNodeData(Node)^).Detail).ID)) <> -1) then
+    if Assigned(FSerie) and (FSerie.Genres.IndexOfName(GUIDToString(TGenreLite(RNodeInfo(vtGenres.GetNodeData(Node)^).Detail).ID)) <> -1) then
       Node.CheckState := csCheckedNormal
     else
       Node.CheckState := csUncheckedNormal;
@@ -308,13 +303,13 @@ procedure TfrmEditSerie.vtGenresChecked(Sender: TBaseVirtualTree; Node: PVirtual
 var
   s: string;
   i: Integer;
-  PG: TGenre;
+  PG: TGenreLite;
   NodeInfo: PNodeInfo;
 begin
   NodeInfo := vtGenres.GetNodeData(Node);
   if Assigned(NodeInfo) and Assigned(NodeInfo.Detail) then
   begin
-    PG := NodeInfo.Detail as TGenre;
+    PG := NodeInfo.Detail as TGenreLite;
     i := FSerie.Genres.IndexOfName(GUIDToString(PG.ID));
     if i = -1 then
       FSerie.Genres.Values[GUIDToString(PG.ID)] := PG.Genre
@@ -358,7 +353,7 @@ var
     Result := True;
     while Result and (i <= Pred(LV.Items.Count)) do
     begin
-      Result := not IsEqualGUID(TAuteur(LV.Items[i].Data).Personne.ID, IdPersonne);
+      Result := not IsEqualGUID(TAuteurLite(LV.Items[i].Data).Personne.ID, IdPersonne);
       Inc(i);
     end;
   end;
@@ -382,7 +377,7 @@ var
     Result := True;
     while Result and (i <= Pred(LV.Items.Count)) do
     begin
-      Result := not IsEqualGUID(TUnivers(LV.Items[i].Data).ID, IdUnivers);
+      Result := not IsEqualGUID(TUniversLite(LV.Items[i].Data).ID, IdUnivers);
       Inc(i);
     end;
   end;
@@ -415,10 +410,10 @@ end;
 procedure TfrmEditSerie.OnEditPersonne(Sender: TObject);
 var
   i: Integer;
-  Auteur: TAuteur;
-  CurrentAuteur: TPersonnage;
+  Auteur: TAuteurLite;
+  CurrentAuteur: TPersonnageLite;
 begin
-  CurrentAuteur := vtEditPersonnes.VTEdit.Data as TPersonnage;
+  CurrentAuteur := vtEditPersonnes.VTEdit.Data as TPersonnageLite;
   for i := 0 to Pred(lvScenaristes.Items.Count) do
   begin
     Auteur := lvScenaristes.Items[i].Data;
@@ -453,31 +448,31 @@ end;
 
 procedure TfrmEditSerie.btColoristeClick(Sender: TObject);
 var
-  PA: TAuteur;
+  PA: TAuteurLite;
 begin
   if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
     Exit;
   case TSpeedButton(Sender).Tag of
     1:
       begin
-        PA := TAuteur.Create;
-        PA.Fill(TPersonnage(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maScenariste);
+        PA := TFactoryAuteurLite.getInstance;
+        TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maScenariste);
         FSerie.Scenaristes.Add(PA);
         lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
         lvScenaristes.Invalidate;
       end;
     2:
       begin
-        PA := TAuteur.Create;
-        PA.Fill(TPersonnage(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maDessinateur);
+        PA := TFactoryAuteurLite.getInstance;
+        TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maDessinateur);
         FSerie.Dessinateurs.Add(PA);
         lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
         lvDessinateurs.Invalidate;
       end;
     3:
       begin
-        PA := TAuteur.Create;
-        PA.Fill(TPersonnage(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maColoriste);
+        PA := TFactoryAuteurLite.getInstance;
+        TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maColoriste);
         FSerie.Coloristes.Add(PA);
         lvColoristes.Items.Count := FSerie.Coloristes.Count;
         lvColoristes.Invalidate;
@@ -527,13 +522,13 @@ end;
 procedure TfrmEditSerie.lvScenaristesData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FSerie.Scenaristes[Item.Index];
-  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+  Item.Caption := TAuteurLite(Item.Data).ChaineAffichage;
 end;
 
 procedure TfrmEditSerie.lvUniversData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FSerie.Univers[Item.Index];
-  Item.Caption := TUnivers(Item.Data).ChaineAffichage;
+  Item.Caption := TUniversLite(Item.Data).ChaineAffichage;
 end;
 
 procedure TfrmEditSerie.lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -553,13 +548,13 @@ end;
 procedure TfrmEditSerie.lvDessinateursData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FSerie.Dessinateurs[Item.Index];
-  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+  Item.Caption := TAuteurLite(Item.Data).ChaineAffichage;
 end;
 
 procedure TfrmEditSerie.lvColoristesData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FSerie.Coloristes[Item.Index];
-  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+  Item.Caption := TAuteurLite(Item.Data).ChaineAffichage;
 end;
 
 procedure TfrmEditSerie.vtParaBDDblClick(Sender: TObject);
@@ -577,7 +572,7 @@ begin
   if IsEqualGUID(vtEditUnivers.CurrentValue, GUID_NULL) then
     Exit;
 
-  FSerie.Univers.Add(TUnivers.Duplicate(TUnivers(vtEditUnivers.VTEdit.Data)));
+  FSerie.Univers.Add(TFactoryUniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
   lvUnivers.Items.Count := FSerie.Univers.Count;
   lvUnivers.Invalidate;
 

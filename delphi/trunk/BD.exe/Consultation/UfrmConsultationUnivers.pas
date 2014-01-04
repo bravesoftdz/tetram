@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, StrUtils, System.UITypes,
-  Dialogs, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls, UfrmFond, Procedures,
-  ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms, VirtualTree,
+  Dialogs, Entities.Full, StdCtrls, VirtualTrees, ExtCtrls, UfrmFond, Procedures,
+  ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms, VirtualTreeBdtk,
   LabeledCheckBox, System.Actions;
 
 type
@@ -44,7 +44,7 @@ type
     procedure vtAlbumsDblClick(Sender: TObject);
     procedure vtParaBDDblClick(Sender: TObject);
   private
-    FUnivers: TUniversComplet;
+    FUnivers: TUniversFull;
     function GetID_Univers: TGUID;
     procedure SetID_Univers(const Value: TGUID);
     procedure ClearForm;
@@ -58,14 +58,14 @@ type
     { Déclarations privées }
   public
     { Déclarations publiques }
-    property Univers: TUniversComplet read FUnivers;
+    property Univers: TUniversFull read FUnivers;
     property ID_Univers: TGUID read GetID_Univers write SetID_Univers;
   end;
 
 implementation
 
-uses Commun, TypeRec, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
-  Proc_Gestions;
+uses Commun, Entities.Lite, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
+  Proc_Gestions, Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
 
 {$R *.dfm}
 { TfrmConsultationUnivers }
@@ -78,7 +78,7 @@ end;
 procedure TfrmConsultationUnivers.SetID_Univers(const Value: TGUID);
 begin
   ClearForm;
-  FUnivers.Fill(Value);
+  TDaoUniversFull.Fill(FUnivers, Value);
 
   Caption := 'Fiche d''univers - ' + FUnivers.ChaineAffichage;
   NomUnivers.Caption := FormatTitre(FUnivers.NomUnivers);
@@ -115,7 +115,7 @@ end;
 procedure TfrmConsultationUnivers.vtAlbumsAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
 begin
   if vtAlbums.GetNodeLevel(Node) > 0 then
-    frmFond.DessineNote(TargetCanvas, ItemRect, TAlbum(vtAlbums.GetNodeBasePointer(Node)).Notation);
+    frmFond.DessineNote(TargetCanvas, ItemRect, TAlbumLite(vtAlbums.GetNodeBasePointer(Node)).Notation);
 end;
 
 procedure TfrmConsultationUnivers.vtAlbumsDblClick(Sender: TObject);
@@ -139,7 +139,7 @@ end;
 procedure TfrmConsultationUnivers.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FUnivers := TUniversComplet.Create;
+  FUnivers := TFactoryUniversFull.getInstance;
 end;
 
 procedure TfrmConsultationUnivers.FormDestroy(Sender: TObject);

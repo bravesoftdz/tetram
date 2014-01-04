@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, IOUtils, System.UITypes,
   Vcl.Dialogs, ActnList, StdActns, VirtualTrees, StdCtrls, Buttons, ProceduresBDtk,
-  VDTButton, ExtCtrls, VirtualTree, Procedures, UBdtForms, PngSpeedButton;
+  VDTButton, ExtCtrls, VirtualTreeBdtk, Procedures, UBdtForms, PngSpeedButton;
 
 type
   TFileStream = class(Classes.TFileStream)
@@ -44,7 +44,8 @@ type
 
 implementation
 
-uses CommonConst, TypeRec, Commun, LoadComplet;
+uses CommonConst, Entities.Lite, Commun, Entities.Full, Entities.DaoLite, Entities.DaoFull,
+  Entities.Serializer, JsonSerializer, Entities.Common, Entities.FactoriesLite;
 
 {$R *.dfm}
 { TFileStream }
@@ -134,7 +135,7 @@ end;
 procedure TfrmExportation.AjouterAlbum(Source, NodeSerie: PVirtualNode);
 var
   NodeInfo: ^RNodeInfo;
-  PA: TAlbum;
+  PA: TAlbumLite;
   Node: PVirtualNode;
 begin
   if not Assigned(Source) then
@@ -142,19 +143,19 @@ begin
   if not Assigned(NodeSerie) then
     Exit;
   NodeInfo := vstAlbums.GetNodeData(Source);
-  PA := NodeInfo.Detail as TAlbum;
+  PA := NodeInfo.Detail as TAlbumLite;
 
   Node := vstExportation.GetFirstChild(NodeSerie);
   while Assigned(Node) do
   begin
     NodeInfo := vstExportation.GetNodeData(Node);
-    if IsEqualGUID(TAlbum(NodeInfo.Detail).ID, PA.ID) then
+    if IsEqualGUID(TAlbumLite(NodeInfo.Detail).ID, PA.ID) then
       Exit;
     Node := vstExportation.GetNextSibling(Node);
   end;
 
   NodeInfo := vstExportation.GetNodeData(vstExportation.AddChild(NodeSerie));
-  NodeInfo.Detail := TAlbum.Duplicate(PA);
+  NodeInfo.Detail := TFactoryAlbumLite.Duplicate(PA);
 end;
 
 procedure TfrmExportation.vstExportationGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
@@ -241,13 +242,9 @@ begin
     fWaiting.ShowProgression('Exportation...', 0, Count);
     FFichierExport := TFileStream.Create(Fichier, fmCreate, fmShareExclusive);
     try
-      // FFichierExport.WriteStringLN('<?xml version="1.0" encoding="ISO-8859-1"?><!DOCTYPE Albums SYSTEM "http://www.tetram.org/bdtheque/albums.dtd">');
-      FFichierExport.WriteStringLN('<?xml version="1.0" encoding="ISO-8859-1"?>');
-      FFichierExport.WriteStringLN('<Data>');
-
+      FFichierExport.WriteString('[');
       vstExport.IterateSubtree(nil, WriteNode, FFichierExport, [], True);
-
-      FFichierExport.WriteStringLN('</Data>');
+      FFichierExport.WriteString(']');
       fWaiting.ShowProgression('Exportation...', epFin);
     finally
       FreeAndNil(FFichierExport);
@@ -260,17 +257,18 @@ procedure TfrmExportation.WriteNode(Sender: TBaseVirtualTree; Node: PVirtualNode
 var
   FFichierExport: TFileStream;
   NodeInfo: ^RNodeInfo;
+  album: TAlbumFull;
 begin
   if Sender.GetNodeLevel(Node) = 1 then
   begin
     FFichierExport := Data;
     NodeInfo := Sender.GetNodeData(Node);
-    with TAlbumComplet.Create(TAlbum(NodeInfo.Detail).ID) do
-      try
-        WriteXMLToStream(FFichierExport);
-      finally
-        Free;
-      end;
+    album := TDaoAlbumFull.getInstance(TAlbumLite(NodeInfo.Detail).ID);
+    try
+      FFichierExport.WriteString(TEntitesSerializer.AsJson(album, [soFull]) + ',');
+    finally
+      album.Free;
+    end;
   end;
   fWaiting.ShowProgression('Exportation...', epNext);
   Abort := fAbort <> 0;

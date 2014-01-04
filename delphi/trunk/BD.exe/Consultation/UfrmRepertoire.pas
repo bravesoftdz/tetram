@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, DBCtrls, Menus, Buttons, ComCtrls, ExtCtrls,
-  ScanEdit, VDTButton, VirtualTrees, ActnList, VirtualTree, jpeg, EditLabeled, ComboCheck, ProceduresBDtk,
+  ScanEdit, VDTButton, VirtualTrees, ActnList, VirtualTreeBdtk, jpeg, EditLabeled, ComboCheck, ProceduresBDtk,
   UframRechercheRapide, UBdtForms;
 
 type
@@ -45,7 +45,7 @@ var
 implementation
 
 uses
-  CommonConst, IniFiles, Procedures, UHistorique, UfrmFond, TypeRec;
+  CommonConst, IniFiles, Procedures, UHistorique, UfrmFond, Entities.Lite;
 
 {$R *.DFM}
 
@@ -103,7 +103,7 @@ end;
 procedure TfrmRepertoire.vstAlbumsAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
 begin
   if vstAlbums.GetNodeLevel(Node) > 0 then
-    frmFond.DessineNote(TargetCanvas, ItemRect, TAlbum(vstAlbums.GetNodeBasePointer(Node)).Notation);
+    frmFond.DessineNote(TargetCanvas, ItemRect, TAlbumLite(vstAlbums.GetNodeBasePointer(Node)).Notation);
 end;
 
 procedure TfrmRepertoire.vstAlbumsDblClick(Sender: TObject);

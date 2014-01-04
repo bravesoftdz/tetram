@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, VirtualTree, Buttons, VDTButton, StdCtrls, EditLabeled,
+  Dialogs, VirtualTreeBdtk, Buttons, VDTButton, StdCtrls, EditLabeled,
   PngSpeedButton, Vcl.ExtCtrls;
 
 type

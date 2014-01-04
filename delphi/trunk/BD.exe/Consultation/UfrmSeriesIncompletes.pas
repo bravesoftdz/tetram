@@ -3,8 +3,8 @@ unit UfrmSeriesIncompletes;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, LoadComplet, VirtualTrees, VirtualTree, ToolWin,
-  ProceduresBDtk, StdCtrls, ExtCtrls, Menus, ActnList, UBdtForms;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, EntitiesStats, VirtualTrees, VirtualTree, ToolWin,
+  ProceduresBDtk, StdCtrls, ExtCtrls, Menus, ActnList, UBdtForms, System.Actions;
 
 type
   TfrmSeriesIncompletes = class(TBdtForm, IImpressionApercu)
@@ -38,7 +38,8 @@ type
 
 implementation
 
-uses TypeRec, Commun, Impression, IniFiles, CommonConst;
+uses Entities.Lite, Commun, Impression, IniFiles, CommonConst, Procedures,
+  Entities.DaoFull;
 
 {$R *.dfm}
 
@@ -69,7 +70,7 @@ begin
   CheckBox1.OnClick := CheckBox1Click;
   CheckBox2.OnClick := CheckBox1Click;
 
-  Liste := TSeriesIncompletes.Create;
+  Liste := TSeriesIncompletes.Create(GUID_NULL);
   LoadListe;
 end;
 

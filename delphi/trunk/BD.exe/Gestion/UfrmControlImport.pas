@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, UframBoutons, UbdtForms, StdCtrls, UframVTEdit, VirtualTree, LoadComplet;
+  Dialogs, UframBoutons, UbdtForms, StdCtrls, UframVTEdit, VirtualTreeBdtk, Entities.Full;
 
 type
   TfrmControlImport = class(TbdtForm)
@@ -25,7 +25,7 @@ type
     function GetMode: TVirtualMode;
     procedure SetMode(const Value: TVirtualMode);
   public
-    ObjetImport: TObjetComplet;
+    ObjetImport: TObjetFull;
     SelectedValue: TGUID;
     SelectedText: string;
     function ShowModalEx: TModalResult;

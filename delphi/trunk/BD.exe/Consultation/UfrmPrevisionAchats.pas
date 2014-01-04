@@ -4,8 +4,9 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Menus, ActnList, VirtualTrees, VirtualTree, Buttons, VDTButton, ProceduresBDtk,
-  ExtCtrls, Procedures, ComboCheck, StdCtrls, UBdtForms, PngSpeedButton;
+  Dialogs, Menus, ActnList, VirtualTrees, VirtualTreeBdtk, Buttons, VDTButton, ProceduresBDtk,
+  ExtCtrls, Procedures, ComboCheck, StdCtrls, UBdtForms, PngSpeedButton,
+  System.Actions;
 
 type
   TfrmPrevisionsAchats = class(TBdtForm, IImpressionApercu)
@@ -51,7 +52,7 @@ type
 
 implementation
 
-uses Impression, IniFiles, CommonConst, TypeRec, DateUtils, UHistorique,
+uses Impression, IniFiles, CommonConst, Entities.Lite, DateUtils, UHistorique,
   Proc_Gestions, Commun;
 
 {$R *.dfm}
@@ -128,9 +129,9 @@ end;
 
 procedure TfrmPrevisionsAchats.vstPrevisionsAchatsPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
 var
-  Album: TAlbum;
+  Album: TAlbumLite;
 begin
-  Album := TAlbum(vstPrevisionsAchats.GetNodeBasePointer(Node));
+  Album := TAlbumLite(vstPrevisionsAchats.GetNodeBasePointer(Node));
   if Assigned(Album) then
     if (Album.AnneeParution > 0) and (Album.AnneeParution = YearOf(Now)) then
       if (Album.MoisParution > 0) and (Album.MoisParution <= MonthOf(Now)) then

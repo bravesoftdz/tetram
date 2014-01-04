@@ -3,9 +3,9 @@ unit UfrmPrevisionsSorties;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, LoadComplet, VirtualTrees, VirtualTree, ToolWin,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, EntitiesStats, VirtualTrees, VirtualTreeBdtk, ToolWin,
   ProceduresBDtk, StdCtrls, ExtCtrls, Menus, ActnList, Buttons, VDTButton, UBdtForms, StrUtils,
-  EditLabeled, PngSpeedButton;
+  EditLabeled, PngSpeedButton, System.Actions;
 
 type
   TfrmPrevisionsSorties = class(TBdtForm, IImpressionApercu)
@@ -46,8 +46,8 @@ type
 
 implementation
 
-uses Impression, DateUtils, IniFiles, CommonConst, Divers, TypeRec, Commun,
-  UHistorique;
+uses Impression, DateUtils, IniFiles, CommonConst, Divers, Entities.Lite, Commun,
+  UHistorique, Procedures, Entities.Common;
 
 {$R *.dfm}
 
@@ -55,7 +55,7 @@ type
   RNodeInfo = record
     Annee: Integer;
     Serie, PrevisionSortie: string;
-    PSerie: TSerie;
+    PSerie: TSerieLite;
   end;
 
 procedure TfrmPrevisionsSorties.FormDestroy(Sender: TObject);
@@ -78,7 +78,7 @@ begin
   end;
   CheckBox1.OnClick := CheckBox1Click;
 
-  Liste := TPrevisionsSorties.Create;
+  Liste := TPrevisionsSorties.Create(GUID_NULL);
   LoadListe;
 end;
 

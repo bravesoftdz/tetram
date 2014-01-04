@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, Db, StdCtrls, ExtCtrls, DBCtrls, Mask, Buttons, VDTButton, ComCtrls,
-  EditLabeled, VirtualTrees, VirtualTree, LoadComplet, Menus, ExtDlgs, UframRechercheRapide, UframBoutons, UBdtForms,
+  EditLabeled, VirtualTrees, VirtualTreeBdtk, Entities.Full, Menus, ExtDlgs, UframRechercheRapide, UframBoutons, UBdtForms,
   ComboCheck, StrUtils, PngSpeedButton, UframVTEdit;
 
 type
@@ -40,20 +40,20 @@ type
     procedure vtAlbumsDblClick(Sender: TObject);
   private
     { Déclarations privées }
-    FUnivers: TUniversComplet;
-    procedure SetUnivers(Value: TUniversComplet);
+    FUnivers: TUniversFull;
+    procedure SetUnivers(Value: TUniversFull);
     function GetID_Univers: TGUID;
   public
     { Déclarations publiques }
     property ID_Univers: TGUID read GetID_Univers;
-    property Univers: TUniversComplet read FUnivers write SetUnivers;
+    property Univers: TUniversFull read FUnivers write SetUnivers;
   end;
 
 implementation
 
 uses
-  Commun, Proc_Gestions, TypeRec, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
-  UHistorique, UMetadata;
+  Commun, Proc_Gestions, Entities.Lite, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
+  UHistorique, UMetadata, Entities.DaoFull, Entities.DaoLite, Entities.Common;
 
 {$R *.DFM}
 
@@ -81,23 +81,23 @@ begin
 
   FUnivers.NomUnivers := Trim(edNom.Text);
   FUnivers.SiteWeb := Trim(edSite.Text);
-  FUnivers.ID_UniversParent := vtEditUnivers.CurrentValue;
+  TDaoUniversLite.Fill(FUnivers.UniversParent, vtEditUnivers.CurrentValue);
 
   FUnivers.Associations.Text := edAssociations.Lines.Text;
 
-  FUnivers.SaveToDatabase;
-  FUnivers.SaveAssociations(vmUnivers, GUID_NULL);
+  TDaoUniversFull.SaveToDatabase(FUnivers);
+  TDaoUniversFull.SaveAssociations(FUnivers, vmUnivers, GUID_NULL);
 
   ModalResult := mrOk;
 end;
 
-procedure TfrmEditUnivers.SetUnivers(Value: TUniversComplet);
+procedure TfrmEditUnivers.SetUnivers(Value: TUniversFull);
 var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
   FUnivers := Value;
-  FUnivers.FillAssociations(vmUnivers);
+  TDaoUniversFull.FillAssociations(FUnivers, vmUnivers);
 
   edNom.Text := FUnivers.NomUnivers;
   edDescription.Text := FUnivers.Description;

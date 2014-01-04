@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, EditLabeled, VirtualTrees, ComCtrls, VDTButton,
-  VirtualTree, ComboCheck, ExtCtrls, Buttons, UframRechercheRapide, ExtDlgs, LoadComplet,
+  VirtualTreeBdtk, ComboCheck, ExtCtrls, Buttons, UframRechercheRapide, ExtDlgs, Entities.Full,
   UframBoutons, UBdtForms, PngSpeedButton, UframVTEdit;
 
 type
@@ -82,9 +82,9 @@ type
   private
     FCreation: Boolean;
     FisAchat: Boolean;
-    FParaBD: TParaBDComplet;
+    FParaBD: TParaBDFull;
     FDateAchat: TDateTime;
-    procedure SetParaBD(const Value: TParaBDComplet);
+    procedure SetParaBD(const Value: TParaBDFull);
     function GetID_ParaBD: TGUID;
     { Déclarations privées }
   public
@@ -92,7 +92,7 @@ type
     property isCreation: Boolean read FCreation;
     property isAchat: Boolean read FisAchat write FisAchat;
     property ID_ParaBD: TGUID read GetID_ParaBD;
-    property ParaBD: TParaBDComplet read FParaBD write SetParaBD;
+    property ParaBD: TParaBDFull read FParaBD write SetParaBD;
   end;
 
   TFrmEditAchatParaBD = class(TfrmEditParaBD)
@@ -103,8 +103,9 @@ type
 implementation
 
 uses
-  Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, TypeRec, Divers, UHistorique,
-  UMetadata;
+  Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, Entities.Lite, Divers, UHistorique,
+  UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
+  Entities.FactoriesLite, Entities.DaoLambda;
 
 {$R *.dfm}
 { TFrmEditAchatParaBD }
@@ -117,7 +118,7 @@ end;
 
 { TFrmEditParaBD }
 
-procedure TfrmEditParaBD.SetParaBD(const Value: TParaBDComplet);
+procedure TfrmEditParaBD.SetParaBD(const Value: TParaBDFull);
 var
   Stream: TStream;
   jpg: TJPEGImage;
@@ -243,7 +244,7 @@ begin
   vtEditPersonnes.VTEdit.LinkControls.Add(Label19);
   vtEditPersonnes.AfterEdit := OnEditPersonnes;
 
-  LoadCombo(7 { Catégorie ParaBD } , cbxCategorie);
+  LoadCombo(cbxCategorie, TDaoListe.ListCategoriesParaBD, TDaoListe.DefaultCategorieParaBD);
 
   VDTButton1.Click;
 end;
@@ -308,9 +309,9 @@ begin
 
   FParaBD.ImageStockee := cbImageBDD.Checked;
 
-  FParaBD.SaveToDatabase;
+  TDaoParaBDFull.SaveToDatabase(FParaBD);
   if isAchat then
-    FParaBD.Acheter(False);
+    TDaoParaBDFull.Acheter(FParaBD, False);
 
   ModalResult := mrOk;
 end;
@@ -320,7 +321,7 @@ begin
   if IsEqualGUID(vtEditUnivers.CurrentValue, GUID_NULL) then
     Exit;
 
-  FParaBD.Univers.Add(TUnivers.Duplicate(TUnivers(vtEditUnivers.VTEdit.Data)));
+  FParaBD.Univers.Add(TFactoryUniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
   lvUnivers.Items.Count := FParaBD.Univers.Count;
   lvUnivers.Invalidate;
 
@@ -349,7 +350,7 @@ begin
     if Execute then
     begin
       FParaBD.FichierImage := FileName;
-      Stream := GetCouvertureStream(FParaBD.FichierImage, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
+      Stream := GetJPEGStream(FParaBD.FichierImage, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
       if Assigned(Stream) then
         try
           jpg := TJPEGImage.Create;
@@ -378,7 +379,7 @@ var
     Result := True;
     while Result and (i <= Pred(LV.Items.Count)) do
     begin
-      Result := not IsEqualGUID(TAuteur(LV.Items[i].Data).Personne.ID, IdPersonne);
+      Result := not IsEqualGUID(TAuteurLite(LV.Items[i].Data).Personne.ID, IdPersonne);
       Inc(i);
     end;
   end;
@@ -390,7 +391,7 @@ end;
 
 procedure TfrmEditParaBD.vtEditSeriesVTEditChange(Sender: TObject);
 begin
-  FParaBD.ID_Serie := vtEditSeries.CurrentValue;
+  TDaoSerieFull.Fill(FParaBD.Serie, vtEditSeries.CurrentValue);
 end;
 
 procedure TfrmEditParaBD.vtEditUniversVTEditChange(Sender: TObject);
@@ -405,7 +406,7 @@ var
     Result := True;
     while Result and (i <= Pred(LV.Items.Count)) do
     begin
-      Result := not IsEqualGUID(TUnivers(LV.Items[i].Data).ID, IdUnivers);
+      Result := not IsEqualGUID(TUniversLite(LV.Items[i].Data).ID, IdUnivers);
       Inc(i);
     end;
   end;
@@ -418,10 +419,10 @@ end;
 procedure TfrmEditParaBD.OnEditPersonnes(Sender: TObject);
 var
   i: Integer;
-  Auteur: TAuteur;
-  CurrentAuteur: TPersonnage;
+  Auteur: TAuteurLite;
+  CurrentAuteur: TPersonnageLite;
 begin
-  CurrentAuteur := vtEditPersonnes.VTEdit.Data as TPersonnage;
+  CurrentAuteur := vtEditPersonnes.VTEdit.Data as TPersonnageLite;
   for i := 0 to Pred(lvAuteurs.Items.Count) do
   begin
     Auteur := lvAuteurs.Items[i].Data;
@@ -436,12 +437,12 @@ end;
 
 procedure TfrmEditParaBD.btCreateurClick(Sender: TObject);
 var
-  PA: TAuteur;
+  PA: TAuteurLite;
 begin
   if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
     Exit;
-  PA := TAuteur.Create;
-  PA.Fill(TPersonnage(vtEditPersonnes.VTEdit.Data), ID_ParaBD, GUID_NULL, TMetierAuteur(0));
+  PA := TFactoryAuteurLite.getInstance;
+  TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_ParaBD, GUID_NULL, TMetierAuteur(0));
   FParaBD.Auteurs.Add(PA);
   lvAuteurs.Items.Count := FParaBD.Auteurs.Count;
   lvAuteurs.Invalidate;
@@ -465,7 +466,7 @@ end;
 procedure TfrmEditParaBD.lvUniversData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FParaBD.Univers[Item.Index];
-  Item.Caption := TUnivers(Item.Data).ChaineAffichage;
+  Item.Caption := TUniversLite(Item.Data).ChaineAffichage;
 end;
 
 procedure TfrmEditParaBD.lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -500,7 +501,7 @@ end;
 procedure TfrmEditParaBD.lvAuteursData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FParaBD.Auteurs[Item.Index];
-  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+  Item.Caption := TAuteurLite(Item.Data).ChaineAffichage;
 end;
 
 procedure TfrmEditParaBD.cbxCategorieChange(Sender: TObject);

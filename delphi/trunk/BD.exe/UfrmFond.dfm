@@ -147,8 +147,8 @@ object frmFond: TfrmFond
     end
   end
   object ImageList1: TImageList
-    Left = 56
-    Top = 136
+    Left = 32
+    Top = 56
     Bitmap = {
       494C010104000900040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
@@ -590,12 +590,6 @@ object frmFond: TfrmFond
       Caption = 'V'#233'rifier la version'
       OnExecute = actMiseAJourExecute
     end
-    object actModeScripts: TAction
-      Category = 'Modes'
-      Caption = 'Scripts'
-      ImageIndex = 7
-      OnExecute = actModeScriptsExecute
-    end
     object actPublier: TAction
       Category = 'Outils'
       Caption = 'Publier...'
@@ -610,13 +604,13 @@ object frmFond: TfrmFond
   end
   object PrinterSetupDialog1: TPrinterSetupDialog
     Left = 88
-    Top = 232
+    Top = 248
   end
   object boutons_16x16_hot: TPngImageList
     PngImages = <>
     PngOptions = [pngBlendOnDisabled, pngGrayscaleOnDisabled]
-    Left = 152
-    Top = 88
+    Left = 280
+    Top = 104
   end
   object ShareImageList: TPngImageList
     ColorDepth = cd32Bit
@@ -1008,15 +1002,15 @@ object frmFond: TfrmFond
           49454E44AE426082}
       end>
     PngOptions = [pngBlendOnDisabled, pngGrayscaleOnDisabled]
-    Left = 88
-    Top = 168
+    Left = 112
+    Top = 56
     Bitmap = {}
   end
   object ActionList1: TActionList
     Images = boutons_16x16_hot
     OnUpdate = ActionList1Update
     Left = 24
-    Top = 232
+    Top = 248
     object CheminBase: TAction
       Caption = 'Chemin base'
       OnExecute = CheminBaseExecute
@@ -1081,9 +1075,6 @@ object frmFond: TfrmFond
         end
         object Entretien1: TMenuItem
           Action = actModeEntretien
-        end
-        object Scripts1: TMenuItem
-          Action = actModeScripts
         end
       end
       object N1: TMenuItem
@@ -1228,18 +1219,18 @@ object frmFond: TfrmFond
     Width = 32
     PngImages = <>
     PngOptions = [pngBlendOnDisabled, pngGrayscaleOnDisabled]
-    Left = 184
+    Left = 400
     Top = 56
   end
   object boutons_16x16_norm: TPngImageList
     PngImages = <>
     PngOptions = [pngBlendOnDisabled, pngGrayscaleOnDisabled]
-    Left = 184
-    Top = 88
+    Left = 400
+    Top = 104
   end
   object PopupMenu1: TPopupMenu
     Left = 160
-    Top = 166
+    Top = 182
     object mnuBack: TMenuItem
       Caption = 'Pr'#233'c'#233'dent'
       ImageIndex = 11
@@ -2760,7 +2751,7 @@ object frmFond: TfrmFond
           454E44AE426082}
       end>
     PngOptions = [pngBlendOnDisabled, pngGrayscaleOnDisabled]
-    Left = 120
+    Left = 280
     Top = 56
     Bitmap = {}
   end
@@ -3189,7 +3180,7 @@ object frmFond: TfrmFond
           6082}
       end>
     PngOptions = [pngBlendOnDisabled, pngGrayscaleOnDisabled]
-    Left = 304
+    Left = 528
     Top = 56
     Bitmap = {}
   end
@@ -3272,7 +3263,7 @@ object frmFond: TfrmFond
           BC5BA20D879E0000000049454E44AE426082}
       end>
     PngOptions = [pngBlendOnDisabled, pngGrayscaleOnDisabled]
-    Left = 304
+    Left = 528
     Top = 104
     Bitmap = {}
   end

@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  StdCtrls, ExtCtrls, LoadComplet, UBdtForms;
+  StdCtrls, ExtCtrls, EntitiesStats, UBdtForms;
 
 type
   TfrmStatsAlbums = class(TbdtForm)
@@ -45,7 +45,7 @@ function TStatsAlbumsCreate(AOwner: TComponent; Info: TStats): TfrmStatsAlbums;
 
 implementation
 
-uses CommonConst, TypeRec, Divers;
+uses CommonConst, Entities.Lite, Divers;
 
 {$R *.DFM}
 
@@ -71,7 +71,7 @@ begin
     maxannee.Caption := IntToStr(Info.MaxAnnee);
 
     for i := 0 to Info.ListGenre.Count - 1 do
-      with TGenre(Info.ListGenre[i]) do
+      with TGenreLite(Info.ListGenre[i]) do
         Result.genre.Items.Add(Format('%s - ' + FormatPourcent, [ChaineAffichage, Quantite, MulDiv(Quantite, 100, Info.NbAlbums)]));
   end;
 end;

@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Buttons, VDTButton, StdCtrls, Mask, JvExMask,
-  JvToolEdit, UVirtualTreeEdit, VirtualTree, UHistorique, PngSpeedButton, UfrmFond,
+  JvToolEdit, UVirtualTreeEdit, VirtualTreeBdtk, UHistorique, PngSpeedButton, UfrmFond,
   Vcl.ExtCtrls;
 
 type

@@ -7,8 +7,8 @@ uses SysUtils, Windows, Classes, Generics.Collections, Commun;
 type
   TActionConsultation = (fcActionBack, fcActionRefresh, fcAlbum, fcAuteur, fcCouverture, fcRecherche, fcPreview, fcSeriesIncompletes,
     fcPrevisionsSorties, fcRecreateToolBar, fcPrevisionsAchats, fcRefreshRepertoire, fcRefreshRepertoireData, fcParaBD, fcImageParaBD, fcSerie, fcGestionAjout,
-    fcGestionModif, fcGestionSupp, fcGestionAchat, fcScripts, fcConflitImport, fcGallerie, fcModeConsultation, fcModeGestion, fcModeScript, fcUnivers,
-    fcConsole);
+    fcGestionModif, fcGestionSupp, fcGestionAchat, fcConflitImport, fcGallerie, fcModeConsultation, fcModeGestion, fcUnivers,
+    fcConsole, fcScripts);
 
 type
   TConsultCallback = procedure(Data: TObject);
@@ -19,7 +19,7 @@ type
     procedure SetDescription(const Value: string);
   public
     Action: TActionConsultation;
-    ReferenceGUID, ReferenceGUID2: TGUID;
+    ReferenceGUID, ReferenceGUID2: RGUIDEx;
     Reference, Reference2: Integer;
     Data: TObject;
     Stream: TMemoryStream;
@@ -61,13 +61,13 @@ type
     destructor Destroy; override;
 
     procedure AddConsultation(Consultation: TActionConsultation); overload;
-    procedure EditConsultation(const Ref: TGUID; Ref2: Integer); overload;
+    procedure EditConsultation(const Ref: RGUIDEx; Ref2: Integer); overload;
     procedure EditConsultation(Stream: TStream); overload;
     procedure AddWaiting(Consultation: TActionConsultation; Ref: Integer = -1; Ref2: Integer = -1); overload;
-    procedure AddWaiting(Consultation: TActionConsultation; const Ref: TGUID; Ref2: Integer = -1); overload;
-    procedure AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: TGUID); overload;
+    procedure AddWaiting(Consultation: TActionConsultation; const Ref: RGUIDEx; Ref2: Integer = -1); overload;
+    procedure AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: RGUIDEx); overload;
     procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Valeur: string = ''); overload;
-    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Ref: TGUID;
+    procedure AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Ref: RGUIDEx;
       const Valeur: string = ''); overload;
 
     procedure Refresh;
@@ -95,15 +95,17 @@ procedure RefreshCallBack(Data: TObject);
 
 implementation
 
-uses MAJ, UfrmFond, Forms, Proc_Gestions, UfrmConsole, TypInfo, UdmPrinc;
+uses MAJ, UfrmFond, Forms, Proc_Gestions, UfrmConsole, TypInfo, UdmPrinc,
+  Entities.Full;
 
 const
-  UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcScripts, fcConflitImport];
-  Modes = [fcModeConsultation, fcModeGestion, fcModeScript];
-  NoSaveHistorique = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire, fcRefreshRepertoireData]
+  UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcConflitImport];
+  Modes = [fcModeConsultation, fcModeGestion];
+  Specials = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire, fcRefreshRepertoireData,fcConsole, fcScripts];
+  NoSaveHistorique = Specials
   // à cause des callback, les appels de gestion ne peuvent pas être sauvés dans l'historique
   // et puis je vois pas bien à quoi ça pourrait servir
-    + UsedInGestion + Modes + [fcConsole];
+    + UsedInGestion + Modes;
   CanRefresh = [fcAlbum, fcAuteur, fcSeriesIncompletes, fcPrevisionsSorties, fcPrevisionsAchats, fcGallerie, fcUnivers];
   MustRefresh = [fcRecherche];
 
@@ -164,7 +166,7 @@ begin
   end;
 end;
 
-procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: TGUID);
+procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref, Ref2: RGUIDEx);
 begin
   FListWaiting.Add(TConsult.Create);
   with FListWaiting.Last do
@@ -190,7 +192,7 @@ begin
   end;
 end;
 
-procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref: TGUID; Ref2: Integer);
+procedure THistory.AddWaiting(Consultation: TActionConsultation; const Ref: RGUIDEx; Ref2: Integer);
 begin
   FListWaiting.Add(TConsult.Create);
   with TConsult(FListWaiting.Last) do
@@ -208,7 +210,7 @@ begin
   AddWaiting(Consultation, Callback, CallbackData, Proc, VTV, GUID_NULL, Valeur);
 end;
 
-procedure THistory.AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Ref: TGUID;
+procedure THistory.AddWaiting(Consultation: TActionConsultation; Callback: TConsultCallback; CallbackData: TObject; Proc, VTV: Pointer; const Ref: RGUIDEx;
   const Valeur: string);
 begin
   FListWaiting.Add(TConsult.Create);
@@ -275,7 +277,7 @@ begin
   CurrentConsult.Assign(Consult);
 end;
 
-procedure THistory.EditConsultation(const Ref: TGUID; Ref2: Integer);
+procedure THistory.EditConsultation(const Ref: RGUIDEx; Ref2: Integer);
 begin
   CurrentConsult.Reference := -1;
   CurrentConsult.ReferenceGUID := Ref;
@@ -384,8 +386,6 @@ begin
         frmFond.actModeConsultation.Execute;
       fcModeGestion:
         frmFond.actModeGestion.Execute;
-      fcModeScript:
-        frmFond.actModeScripts.Execute;
       fcActionBack:
         Back;
       fcActionRefresh:
@@ -421,10 +421,7 @@ begin
       fcRefreshRepertoireData:
         frmFond.actActualiseRepertoireData;
       fcScripts:
-        if Assigned(Consult.GestionCallback) then
-          doCallback := MAJScript(Consult.GestionVTV)
-        else
-          MAJScript(nil);
+        doCallback := MAJRunScript(TAlbumFull(Consult.GestionVTV));
       fcConflitImport:
         frmFond.SetModalChildForm(TForm(Consult.Reference));
 

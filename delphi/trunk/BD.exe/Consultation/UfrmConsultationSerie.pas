@@ -3,8 +3,8 @@ unit UfrmConsultationSerie;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, LoadComplet, StdCtrls, VirtualTrees, ExtCtrls,
-  ComCtrls, VDTButton, Buttons, VirtualTree, Procedures, ProceduresBDtk, UBdtForms, StrUtils,
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, Entities.Full, StdCtrls, VirtualTrees, ExtCtrls,
+  ComCtrls, VDTButton, Buttons, VirtualTreeBdtk, Procedures, ProceduresBDtk, UBdtForms, StrUtils,
   ActnList, Menus, PngSpeedButton, LabeledCheckBox, System.Actions;
 
 type
@@ -73,7 +73,7 @@ type
     procedure lvColoristesData(Sender: TObject; Item: TListItem);
     procedure lvUniversData(Sender: TObject; Item: TListItem);
   private
-    FSerie: TSerieComplete;
+    FSerie: TSerieFull;
     function GetID_Serie: TGUID;
     procedure SetID_Serie(const Value: TGUID);
     procedure ClearForm;
@@ -86,14 +86,14 @@ type
     procedure ModificationExecute(Sender: TObject);
     function ModificationUpdate: Boolean;
   public
-    property Serie: TSerieComplete read FSerie;
+    property Serie: TSerieFull read FSerie;
     property ID_Serie: TGUID read GetID_Serie write SetID_Serie;
   end;
 
 implementation
 
-uses Commun, Divers, TypeRec, ShellAPI, UHistorique, Impression, Proc_Gestions,
-  UfrmFond;
+uses Commun, Divers, Entities.Lite, ShellAPI, UHistorique, Impression, Proc_Gestions,
+  UfrmFond, Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
 
 {$R *.dfm}
 { TFrmConsultationSerie }
@@ -109,7 +109,7 @@ var
   i: Integer;
 begin
   ClearForm;
-  FSerie.Fill(Value);
+  TDaoSerieFull.Fill(FSerie, Value);
 
   Caption := 'Fiche de série - ' + FSerie.ChaineAffichage;
   TitreSerie.Caption := FormatTitre(FSerie.TitreSerie);
@@ -201,7 +201,7 @@ end;
 procedure TfrmConsultationSerie.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FSerie := TSerieComplete.Create;
+  FSerie := TFactorySerieFull.getInstance;
 end;
 
 procedure TfrmConsultationSerie.FormDestroy(Sender: TObject);
@@ -236,7 +236,7 @@ end;
 procedure TfrmConsultationSerie.vtAlbumsAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
 begin
   if vtAlbums.GetNodeLevel(Node) > 0 then
-    frmFond.DessineNote(TargetCanvas, ItemRect, TAlbum(vtAlbums.GetNodeBasePointer(Node)).Notation);
+    frmFond.DessineNote(TargetCanvas, ItemRect, TAlbumLite(vtAlbums.GetNodeBasePointer(Node)).Notation);
 end;
 
 procedure TfrmConsultationSerie.vtAlbumsDblClick(Sender: TObject);
@@ -277,37 +277,37 @@ end;
 procedure TfrmConsultationSerie.lvColoristesData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FSerie.Coloristes[Item.Index];
-  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+  Item.Caption := TAuteurLite(Item.Data).ChaineAffichage;
 end;
 
 procedure TfrmConsultationSerie.lvDessinateursData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FSerie.Dessinateurs[Item.Index];
-  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+  Item.Caption := TAuteurLite(Item.Data).ChaineAffichage;
 end;
 
 procedure TfrmConsultationSerie.lvScenaristesData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FSerie.Scenaristes[Item.Index];
-  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+  Item.Caption := TAuteurLite(Item.Data).ChaineAffichage;
 end;
 
 procedure TfrmConsultationSerie.lvScenaristesDblClick(Sender: TObject);
 begin
   if Assigned(TListView(Sender).Selected) then
-    Historique.AddWaiting(fcAuteur, TAuteur(TListView(Sender).Selected.Data).Personne.ID, 0);
+    Historique.AddWaiting(fcAuteur, TAuteurLite(TListView(Sender).Selected.Data).Personne.ID, 0);
 end;
 
 procedure TfrmConsultationSerie.lvUniversData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FSerie.Univers[Item.Index];
-  Item.Caption := TUnivers(Item.Data).ChaineAffichage;
+  Item.Caption := TUniversLite(Item.Data).ChaineAffichage;
 end;
 
 procedure TfrmConsultationSerie.lvUniversDblClick(Sender: TObject);
 begin
   if Assigned(TListView(Sender).Selected) then
-    Historique.AddWaiting(fcUnivers, TUnivers(TListView(Sender).Selected.Data).ID, 0);
+    Historique.AddWaiting(fcUnivers, TUniversLite(TListView(Sender).Selected.Data).ID, 0);
 end;
 
 procedure TfrmConsultationSerie.ModificationExecute(Sender: TObject);
@@ -322,7 +322,7 @@ end;
 
 procedure TfrmConsultationSerie.N7Click(Sender: TObject);
 begin
-  FSerie.ChangeNotation(TMenuItem(Sender).Tag);
+  TDaoSerieFull.ChangeNotation(FSerie, TMenuItem(Sender).Tag);
   Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FSerie.Notation - 900].PngImage);
 end;
 

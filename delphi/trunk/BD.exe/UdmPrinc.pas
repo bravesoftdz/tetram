@@ -45,6 +45,8 @@ procedure AnalyseLigneCommande(cmdLine: string);
 
 function dmPrinc: TdmPrinc;
 
+function GetTransaction(Database: TUIBDataBase): TUIBTransaction; inline;
+
 implementation
 
 {$R *.DFM}
@@ -52,7 +54,8 @@ implementation
 uses
   IOUtils, CommonConst, Commun, Textes, UdmCommun, UIBLib, Divers, IniFiles, Procedures, UHistorique, Math, UIBase, Updates, UfrmFond, CheckVersionNet,
   DateUtils, UMAJODS, JumpList, UfrmSplash, Proc_Gestions, Generics.Collections,
-  UfrmVerbose, UfrmConsole;
+  UfrmVerbose, UfrmConsole, ProceduresBDtk, JclCompression, dwsJSON,
+  JsonSerializer, Entities.DaoLambda, System.TypInfo, Entities.Full;
 
 const
   FinBackup = 'gbak:closing file, committing, and finishing.';
@@ -127,6 +130,36 @@ type
     end;
   end;
 
+  procedure BuildExternalData;
+  var
+    Archive: TJcl7zCompressArchive;
+    o: TdwsJSONObject;
+    c: TDaoListe.CategorieIndex;
+    s: string;
+  begin
+    o := TdwsJSONObject.Create;
+    try
+      for c := Succ(TDaoListe.CategorieIndex.piNOTUSED) to High(TDaoListe.CategorieIndex) do
+      begin
+        s := GetEnumName(TypeInfo(TDaoListe.CategorieIndex), Integer(c)).Substring(2);
+        TJsonSerializer.WriteValueToJSON('default' + s, TDaoListe.DefaultValues[c], o, []);
+        TJsonSerializer.WriteValueToJSON('list' + s, TDaoListe.Lists[c], o, [], True);
+      end;
+
+      if TFile.Exists(FileScriptsMetadata) then
+        TFile.Delete(FileScriptsMetadata);
+      Archive := TJcl7zCompressArchive.Create(FileScriptsMetadata);
+      try
+        Archive.AddFile('data.json', TStringStream.Create({$IFNDEF DEBUG}o.ToString{$ELSE}o.ToBeautifiedString{$ENDIF}), True);
+        Archive.Compress;
+      finally
+        Archive.Free;
+      end;
+    finally
+      o.Free;
+    end;
+  end;
+
 var
   FBUpdate: TFBUpdate;
   Msg: string;
@@ -142,7 +175,7 @@ begin
     qry.SQL.Text := 'select titrealbum from albums';
     try
       // on va chercher un champ texte pour forcer FB à verifier la présence des collations
-      // donc vérifier que la version des ICU correspondent à ceux de la base
+      // donc vérifier que la version des ICU sur disque correspondent à ceux utilisés par la base
       qry.Prepare;
     except
       on E: EUIBError do
@@ -177,7 +210,7 @@ begin
         qry.Prepare(True);
         qry.Params.AsString[0] := 'Version';
         qry.Params.AsString[1] := Copy(CurrentVersion, 1, qry.Params.MaxStrLen[0]);
-        qry.ExecSQL;
+        qry.Execute;
       except
         // Pour s'assurer qu'il y'a la ligne dans la table options
       end;
@@ -210,10 +243,10 @@ begin
     try
       qry.Transaction := GetTransaction(UIBDataBase);
 
-      qry.SQL.Text := 'UPDATE OPTIONS SET Valeur = ? WHERE Nom_Option = ?';
+      qry.SQL.Text := 'update options set valeur = ? where nom_option = ?';
       qry.Params.AsString[0] := ListFBUpdates.Last.Version;
       qry.Params.AsString[1] := 'Version';
-      qry.ExecSQL;
+      qry.Execute;
       qry.Transaction.Commit;
     finally
       qry.Transaction.Free;
@@ -222,6 +255,7 @@ begin
   end;
 
   CheckIndex;
+  BuildExternalData;
 
   if (ListFBUpdates.Last.Version > CurrentVersion) and not Force then
     ShowMessage('Mise à jour terminée.');
@@ -469,12 +503,6 @@ begin
     // mais rien n'y oblige
     if not TGlobalVar.Utilisateur.Options.ModeDemarrage or ForceGestion then
       ModeToOpen := fcModeGestion;
-    if Procedures.FindCmdLineSwitch(cmdLine, 'scripts') then
-    begin
-      ModeToOpen := fcModeGestion;
-      PageToOpen := fcScripts;
-      ForceGestion := False;
-    end;
     Historique.AddWaiting(ModeToOpen);
     // if ModeToOpen <> fcModeScript then
     if ForceGestion then
@@ -509,6 +537,7 @@ var
   data: RMSGSendData;
   CD: TCopyDataStruct;
   s: string;
+  frmSplash: TfrmSplash;
 begin
   TGlobalVar.Mode_en_cours := mdLoad;
   Application.Title := '© TeträmCorp ' + TitreApplication + ' ' + TGlobalVar.Utilisateur.AppVersion;
@@ -540,45 +569,52 @@ begin
 
   // if not CheckCriticalFiles then Halt;
 
-  FrmSplash := TFrmSplash.Create(nil);
+  frmSplash := TfrmSplash.Create(nil);
   try
-    FrmSplash.Show;
+    frmSplash.Show;
     Application.ProcessMessages;
     Debut := Now;
 
-    FrmSplash.Affiche_act(VerificationVersion + '...');
+    ChangeCurseur(crHandPoint, 'CUR_HANDPOINT', RT_RCDATA);
+
+    frmSplash.Affiche_act(VerificationVersion + '...');
     if dmPrinc.CheckExeVersion(False) then
       Exit;
 
     if not dmPrinc.OuvreSession(True) then
       Exit;
-    if not dmPrinc.CheckDBVersion(FrmSplash.Affiche_act) then
+    if not dmPrinc.CheckDBVersion(frmSplash.Affiche_act) then
       Exit;
 
-    FrmSplash.Affiche_act(ChargementOptions + '...');
+    frmSplash.Affiche_act(ChargementOptions + '...');
     LitOptions;
 
-    FrmSplash.Affiche_act(ChargementApp + '...');
+    frmSplash.Affiche_act(ChargementApp + '...');
     Application.CreateForm(TfrmFond, frmFond);
-    FrmSplash.Affiche_act(ChargementDatabase + '...');
+    frmSplash.Affiche_act(ChargementDatabase + '...');
     Historique.AddConsultation(fcRecherche);
     AnalyseLigneCommande(GetCommandLine);
 
 {$IFDEF DEBUG}
     Historique.AddWaiting(fcConsole);
 {$ENDIF DEBUG}
-
-    FrmSplash.Affiche_act(FinChargement + '...');
-    ChangeCurseur(crHandPoint, 'CUR_HANDPOINT', RT_RCDATA);
+    frmSplash.Affiche_act(FinChargement + '...');
     while SecondsBetween(Now, Debut) < 1 do // au moins 1 seconde d'affichage du splash
     begin
-      FrmSplash.Show;
-      FrmSplash.Update;
+      frmSplash.Show;
+      frmSplash.Update;
     end;
   finally
-    FrmSplash.Free;
+    frmSplash.Free;
   end;
-  Application.MainForm.Show;
+  if Assigned(Application.MainForm) then
+    Application.MainForm.Show;
+end;
+
+function GetTransaction(Database: TUIBDataBase): TUIBTransaction;
+begin
+  Result := TUIBTransaction.Create(nil);
+  Result.Database := Database;
 end;
 
 initialization

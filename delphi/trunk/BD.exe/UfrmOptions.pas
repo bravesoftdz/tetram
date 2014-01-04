@@ -102,13 +102,14 @@ type
 
 implementation
 
-uses CommonConst, UdmPrinc, TypeRec, UIB, Commun, Procedures, Updates, IOUtils;
+uses CommonConst, UdmPrinc, Entities.Lite, UIB, Commun, Procedures, Updates, IOUtils,
+  Entities.DaoLite, ProceduresBDtk, Entities.Common, Entities.FactoriesLite;
 
 {$R *.DFM}
 
 procedure TfrmOptions.btnOKClick(Sender: TObject);
 var
-  PC: TConversion;
+  PC: TConversionLite;
   i: Integer;
 begin
   if RepImages <> VDTButton1.Caption then
@@ -157,7 +158,7 @@ begin
   with TUIBQuery.Create(nil) do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'UPDATE OR INSERT INTO CONVERSIONS (ID_Conversion, Monnaie1, Monnaie2, Taux) VALUES (?, ?, ?, ?) MATCHING (id_conversion)';
+      SQL.Text := 'update or insert into conversions (id_conversion, monnaie1, monnaie2, taux) values (?, ?, ?, ?) matching (id_conversion)';
       Prepare(True);
       for i := 0 to ListView1.Items.Count - 1 do
       begin
@@ -169,7 +170,7 @@ begin
         Params.AsString[1] := Copy(PC.Monnaie1, 1, Params.MaxStrLen[1]);
         Params.AsString[2] := Copy(PC.Monnaie2, 1, Params.MaxStrLen[2]);
         Params.AsDouble[3] := PC.Taux;
-        ExecSQL;
+        Execute;
       end;
       Transaction.Commit;
     finally
@@ -244,8 +245,8 @@ begin
       begin
         with ListView1.Items.Add do
         begin
-          Data := TConversion.Make(q);
-          Caption := TConversion(Data).ChaineAffichage;
+          Data := TDaoConversionLite.Make(q);
+          Caption := TConversionLite(Data).ChaineAffichage;
           SubItems.Add('0');
         end;
         Next;
@@ -303,7 +304,7 @@ end;
 
 procedure TfrmOptions.Button2Click(Sender: TObject);
 var
-  PC: TConversion;
+  PC: TConversionLite;
   i: TListItem;
 begin
   if Assigned(SItem) then
@@ -316,7 +317,7 @@ begin
   end
   else
   begin
-    PC := TConversion.Create;
+    PC := TFactoryConversionLite.getInstance;
     i := ListView1.Items.Add;
     i.SubItems.Add('1');
     i.Data := PC;
@@ -365,9 +366,9 @@ begin
   if not Assigned(ListView1.Selected) or Panel4.Visible then
     Exit;
   SItem := ListView1.Selected;
-  ComboBox2.Text := TConversion(SItem.Data).Monnaie1;
-  ComboBox3.Text := TConversion(SItem.Data).Monnaie2;
-  Edit1.Text := Format('%g', [TConversion(SItem.Data).Taux]);
+  ComboBox2.Text := TConversionLite(SItem.Data).Monnaie1;
+  ComboBox3.Text := TConversionLite(SItem.Data).Monnaie2;
+  Edit1.Text := Format('%g', [TConversionLite(SItem.Data).Taux]);
   Panel4.Visible := True;
   SpeedButton2.Enabled := False;
   SpeedButton1.Enabled := False;
@@ -375,14 +376,14 @@ end;
 
 procedure TfrmOptions.FormDestroy(Sender: TObject);
 begin
-  TConversion.VideListe(ListView1);
+  TDaoConversionLite.VideListe(ListView1);
 end;
 
 procedure TfrmOptions.SpeedButton2Click(Sender: TObject);
 begin
   if not Assigned(ListView1.Selected) or Panel4.Visible then
     Exit;
-  TConversion(ListView1.Selected.Data).Free;
+  TConversionLite(ListView1.Selected.Data).Free;
   ListView1.Selected.Delete;
 end;
 
@@ -494,3 +495,4 @@ begin
 end;
 
 end.
+

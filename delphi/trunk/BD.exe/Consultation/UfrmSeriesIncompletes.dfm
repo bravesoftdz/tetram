@@ -32,6 +32,7 @@ object frmSeriesIncompletes: TfrmSeriesIncompletes
     Header.Font.Height = -11
     Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
+    Header.Height = 17
     Header.Images = frmFond.ImageList1
     Header.Options = [hoAutoResize, hoColumnResize, hoShowImages, hoVisible]
     Header.Style = hsPlates
@@ -50,7 +51,7 @@ object frmSeriesIncompletes: TfrmSeriesIncompletes
       item
         MinWidth = 50
         Position = 1
-        Width = 560
+        Width = 564
         WideText = 'Albums manquants'
       end>
   end

@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, EditLabeled, VirtualTrees, ComCtrls, VDTButton,
-  ExtCtrls, Buttons, UframBoutons, VirtualTree, TypeRec, UframRechercheRapide, LoadComplet,
+  ExtCtrls, Buttons, UframBoutons, VirtualTreeBdtk, Entities.Lite, UframRechercheRapide, Entities.Full,
   UBdtForms, Generics.Collections, PngSpeedButton, UframVTEdit;
 
 type
@@ -62,40 +62,41 @@ type
     procedure btnScriptClick(Sender: TObject);
   private
     { Déclarations privées }
-    FAlbum, FAlbumImport: TAlbumComplet;
+    FAlbum, FAlbumImport: TAlbumFull;
     FScenaristesSelected, FDessinateursSelected, FColoristesSelected: Boolean;
-    procedure AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean); overload;
-    procedure AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage); overload;
+    procedure AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean); overload;
+    procedure AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite); overload;
     function GetID_Album: TGUID;
     procedure SaveToObject;
-    procedure SetAlbum(const Value: TAlbumComplet);
+    procedure SetAlbum(const Value: TAlbumFull);
   public
     { Déclarations publiques }
     property ID_Album: TGUID read GetID_Album;
-    property Album: TAlbumComplet read FAlbum write SetAlbum;
+    property Album: TAlbumFull read FAlbum write SetAlbum;
   end;
 
 implementation
 
 uses
   Math, CommonConst, Proc_Gestions, Commun, Procedures, Textes, Divers, StrUtils,
-  UHistorique, UMetadata;
+  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
+  Entities.FactoriesLite;
 
 {$R *.dfm}
 
-procedure TfrmEditAchatAlbum.AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage);
+procedure TfrmEditAchatAlbum.AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite);
 var
   dummy: Boolean;
 begin
   AjouteAuteur(List, lvList, Auteur, dummy);
 end;
 
-procedure TfrmEditAchatAlbum.AjouteAuteur(List: TObjectList<TAuteur>; lvList: TVDTListViewLabeled; Auteur: TPersonnage; var FlagAuteur: Boolean);
+procedure TfrmEditAchatAlbum.AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean);
 var
-  PA: TAuteur;
+  PA: TAuteurLite;
 begin
-  PA := TAuteur.Create;
-  PA.Fill(Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
+  PA := TFactoryAuteurLite.getInstance;
+  TDaoAuteurLite.Fill(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
   List.Add(PA);
   lvList.Items.Count := List.Count;
   lvList.Invalidate;
@@ -123,7 +124,7 @@ begin
   FColoristesSelected := False;
 end;
 
-procedure TfrmEditAchatAlbum.SetAlbum(const Value: TAlbumComplet);
+procedure TfrmEditAchatAlbum.SetAlbum(const Value: TAlbumFull);
 var
   hg: IHourGlass;
 begin
@@ -228,16 +229,16 @@ begin
   begin
     if (not IsEqualGUID(vtEditAlbums.CurrentValue, ID_Album)) and (not IsEqualGUID(ID_Album, GUID_NULL)) then
     begin
-      FAlbum.Acheter(False);
-      FAlbum.Fill(vtEditAlbums.CurrentValue);
+      TDaoAlbumFull.Acheter(FAlbum, False);
+      TDaoAlbumFull.Fill(FAlbum, vtEditAlbums.CurrentValue);
     end;
-    FAlbum.Acheter(True);
+    TDaoAlbumFull.Acheter(FAlbum, True);
   end
   else
   begin
     SaveToObject;
-    FAlbum.SaveToDatabase;
-    FAlbum.Acheter(True);
+    TDaoAlbumFull.SaveToDatabase(FAlbum);
+    TDaoAlbumFull.Acheter(FAlbum, True);
   end;
   ModalResult := mrOk;
 end;
@@ -290,7 +291,7 @@ var
     Result := True;
     while Result and (i <= Pred(LV.Items.Count)) do
     begin
-      Result := not IsEqualGUID(TAuteur(LV.Items[i].Data).Personne.ID, IdPersonne);
+      Result := not IsEqualGUID(TAuteurLite(LV.Items[i].Data).Personne.ID, IdPersonne);
       Inc(i);
     end;
   end;
@@ -304,9 +305,9 @@ end;
 
 procedure TfrmEditAchatAlbum.vtEditSeriesVTEditChange(Sender: TObject);
 var
-  Auteur: TAuteur;
+  Auteur: TAuteurLite;
 begin
-  FAlbum.ID_Serie := vtEditSeries.CurrentValue;
+  TDaoSerieFull.Fill(FAlbum.Serie, vtEditSeries.CurrentValue);
   if not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL) then
   begin
     if not(FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then
@@ -346,10 +347,10 @@ end;
 procedure TfrmEditAchatAlbum.OnEditAuteurs(Sender: TObject);
 var
   i: Integer;
-  Auteur: TAuteur;
-  CurrentAuteur: TPersonnage;
+  Auteur: TAuteurLite;
+  CurrentAuteur: TPersonnageLite;
 begin
-  CurrentAuteur := vtEditPersonnes.VTEdit.Data as TPersonnage;
+  CurrentAuteur := vtEditPersonnes.VTEdit.Data as TPersonnageLite;
   for i := 0 to Pred(lvScenaristes.Items.Count) do
   begin
     Auteur := lvScenaristes.Items[i].Data;
@@ -390,7 +391,7 @@ begin
       frm.SaveToObject;
       frm.vtEditSeries.VTEdit.PopupWindow.TreeView.InitializeRep;
       frm.vtEditPersonnes.VTEdit.PopupWindow.TreeView.InitializeRep;
-      frm.FAlbumImport.FusionneInto(frm.Album);
+      TDaoAlbumFull.FusionneInto(frm.FAlbumImport, frm.Album);
       frm.Album := frm.Album; // recharger la fenêtre avec frm.Album
     end;
   finally
@@ -401,7 +402,7 @@ end;
 procedure TfrmEditAchatAlbum.btnScriptClick(Sender: TObject);
 begin
   FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
-  FAlbumImport := TAlbumComplet.Create;
+  FAlbumImport := TDaoAlbumFull.getInstance;
   if FAlbum.TitreAlbum <> '' then
     FAlbumImport.DefaultSearch := FormatTitre(FAlbum.TitreAlbum)
   else
@@ -416,11 +417,11 @@ begin
     Exit;
   case TSpeedButton(Sender).Tag of
     1:
-      AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TPersonnage(vtEditPersonnes.VTEdit.Data), FScenaristesSelected);
+      AjouteAuteur(FAlbum.Scenaristes, lvScenaristes, TPersonnageLite(vtEditPersonnes.VTEdit.Data), FScenaristesSelected);
     2:
-      AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TPersonnage(vtEditPersonnes.VTEdit.Data), FDessinateursSelected);
+      AjouteAuteur(FAlbum.Dessinateurs, lvDessinateurs, TPersonnageLite(vtEditPersonnes.VTEdit.Data), FDessinateursSelected);
     3:
-      AjouteAuteur(FAlbum.Coloristes, lvColoristes, TPersonnage(vtEditPersonnes.VTEdit.Data), FColoristesSelected);
+      AjouteAuteur(FAlbum.Coloristes, lvColoristes, TPersonnageLite(vtEditPersonnes.VTEdit.Data), FColoristesSelected);
   end;
   vtEditPersonnesVTEditChange(vtEditPersonnes.VTEdit);
 end;
@@ -428,7 +429,7 @@ end;
 procedure TfrmEditAchatAlbum.lvColoristesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
 var
   src: TListView;
-  PA: TAuteur;
+  PA: TAuteurLite;
 begin
   if Key <> VK_DELETE then
     Exit;
@@ -452,7 +453,7 @@ end;
 procedure TfrmEditAchatAlbum.lvScenaristesData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FAlbum.Scenaristes[Item.Index];
-  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+  Item.Caption := TAuteurLite(Item.Data).ChaineAffichage;
 end;
 
 procedure TfrmEditAchatAlbum.rbNouvelAlbumClick(Sender: TObject);
@@ -466,13 +467,13 @@ end;
 procedure TfrmEditAchatAlbum.lvDessinateursData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FAlbum.Dessinateurs[Item.Index];
-  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+  Item.Caption := TAuteurLite(Item.Data).ChaineAffichage;
 end;
 
 procedure TfrmEditAchatAlbum.lvColoristesData(Sender: TObject; Item: TListItem);
 begin
   Item.Data := FAlbum.Coloristes[Item.Index];
-  Item.Caption := TAuteur(Item.Data).ChaineAffichage;
+  Item.Caption := TAuteurLite(Item.Data).ChaineAffichage;
 end;
 
 end.

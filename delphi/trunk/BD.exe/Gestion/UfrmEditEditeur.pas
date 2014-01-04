@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, Mask, DBCtrls, ExtCtrls, ComCtrls, VDTButton,
-  Buttons, EditLabeled, ShellAPI, LoadComplet, UBdtForms,
+  Buttons, EditLabeled, ShellAPI, Entities.Full, UBdtForms,
   PngSpeedButton, UframBoutons;
 
 type
@@ -28,19 +28,20 @@ type
     procedure edSiteChange(Sender: TObject);
   private
     { Déclarations privées }
-    FEditeur: TEditeurComplet;
-    procedure SetEditeur(Value: TEditeurComplet);
+    FEditeur: TEditeurFull;
+    procedure SetEditeur(Value: TEditeurFull);
     function GetID_Editeur: TGUID;
   public
     { Déclarations publiques }
     property ID_Editeur: TGUID read GetID_Editeur;
-    property Editeur: TEditeurComplet read FEditeur write SetEditeur;
+    property Editeur: TEditeurFull read FEditeur write SetEditeur;
   end;
 
 implementation
 
 uses
-  Commun, Procedures, Textes, VirtualTree;
+  Commun, Procedures, Textes, VirtualTreeBdtk, Entities.DaoFull,
+  Entities.Common;
 
 {$R *.DFM}
 
@@ -50,13 +51,13 @@ begin
   FEditeur := nil;
 end;
 
-procedure TfrmEditEditeur.SetEditeur(Value: TEditeurComplet);
+procedure TfrmEditEditeur.SetEditeur(Value: TEditeurFull);
 var
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
   FEditeur := Value;
-  FEditeur.FillAssociations(vmEditeurs);
+  TDaoEditeurFull.FillAssociations(FEditeur, vmEditeurs);
 
   edNom.Text := FEditeur.NomEditeur;
   edSite.Text := FEditeur.SiteWeb;
@@ -76,8 +77,8 @@ begin
   FEditeur.SiteWeb := Trim(edSite.Text);
   FEditeur.Associations.Assign(edAssociations.Lines);
 
-  FEditeur.SaveToDatabase;
-  FEditeur.SaveAssociations(vmEditeurs, GUID_NULL);
+  TDaoEditeurFull.SaveToDatabase(FEditeur);
+  TDaoEditeurFull.SaveAssociations(FEditeur, vmEditeurs, GUID_NULL);
 
   ModalResult := mrOk;
 end;

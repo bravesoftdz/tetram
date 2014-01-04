@@ -4,8 +4,8 @@ interface
 
 uses
   SysUtils, Windows, Messages, Classes, Forms, Graphics, Controls, Menus, StdCtrls, System.UITypes, System.Types, Buttons, ComCtrls, ExtCtrls, ToolWin, Commun,
-  VirtualTrees, VirtualTree, ActnList, VDTButton, ComboCheck, ProceduresBDtk,
-  UframRechercheRapide, LoadComplet, UBdtForms, Generics.Defaults,
+  VirtualTrees, VirtualTreeBdtk, ActnList, VDTButton, ComboCheck, ProceduresBDtk,
+  UframRechercheRapide, Entities.Full, EntitiesRecherche, UBdtForms, Generics.Defaults,
   System.Actions;
 
 type
@@ -83,8 +83,8 @@ type
 implementation
 
 uses
-  Textes, UdmPrinc, TypeRec, Impression, Math, UfrmEditCritere, UHistorique, Procedures, StrUtils,
-  UfrmFond, UfrmEditCritereTri, Divers;
+  Textes, UdmPrinc, Entities.Lite, Impression, Math, UfrmEditCritere, UHistorique, Procedures, StrUtils,
+  UfrmFond, UfrmEditCritereTri, Divers, Entities.Common;
 
 {$R *.DFM}
 
@@ -421,22 +421,22 @@ begin
 end;
 
 type
-  TAlbumCompare = class(TComparer<TAlbum>)
-    function Compare(const Left, Right: TAlbum): Integer; override;
+  TAlbumCompare = class(TComparer<TAlbumLite>)
+    function Compare(const Left, Right: TAlbumLite): Integer; override;
   end;
 
-function TAlbumCompare.Compare(const Left, Right: TAlbum): Integer;
+function TAlbumCompare.Compare(const Left, Right: TAlbumLite): Integer;
 begin
   case FSortColumn of
     0:
-      Result := CompareText(TAlbum(Left).Titre, TAlbum(Right).Titre);
+      Result := CompareText(TAlbumLite(Left).Titre, TAlbumLite(Right).Titre);
     1:
-      Result := CompareValue(TAlbum(Left).Tome, TAlbum(Right).Tome);
+      Result := CompareValue(TAlbumLite(Left).Tome, TAlbumLite(Right).Tome);
     2:
       begin
-        Result := CompareText(TAlbum(Left).Serie, TAlbum(Right).Serie);
+        Result := CompareText(TAlbumLite(Left).Serie, TAlbumLite(Right).Serie);
         if Result = 0 then
-          Result := CompareValue(TAlbum(Left).Tome, TAlbum(Right).Tome);
+          Result := CompareValue(TAlbumLite(Left).Tome, TAlbumLite(Right).Tome);
       end;
   else
     Result := 0;

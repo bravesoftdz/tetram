@@ -179,15 +179,13 @@ object frmCustomize: TfrmCustomize
     object Label3: TLabel
       Left = 2
       Top = 15
-      Width = 516
-      Height = 44
+      Width = 31
+      Height = 13
       Align = alClient
       Alignment = taCenter
       Caption = 'Label3'
       Layout = tlCenter
       Visible = False
-      ExplicitWidth = 31
-      ExplicitHeight = 13
     end
   end
   inline Frame11: TframBoutons

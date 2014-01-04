@@ -3,7 +3,7 @@ unit UfrmConsultationAuteur;
 interface
 
 uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls, ProceduresBDtk,
-  VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, jpeg, Procedures, ShellAPI, VirtualTree, LoadComplet, UBdtForms, StrUtils,
+  VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, jpeg, Procedures, ShellAPI, VirtualTree, Entities.Full, UBdtForms, StrUtils,
   System.Actions;
 
 type
@@ -45,7 +45,7 @@ type
     procedure FicheModifierExecute(Sender: TObject);
     procedure vstSeriesAfterItemPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; ItemRect: TRect);
   strict private
-    FAuteur: TAuteurComplet;
+    FAuteur: TAuteurFull;
     procedure ImpressionExecute(Sender: TObject);
     procedure ApercuExecute(Sender: TObject);
     function ImpressionUpdate: Boolean;
@@ -57,7 +57,7 @@ type
     function ModificationUpdate: Boolean;
   public
     { Déclarations publiques }
-    property Auteur: TAuteurComplet read FAuteur;
+    property Auteur: TAuteurFull read FAuteur;
     property ID_Auteur: TGUID read GetID_Auteur write SetID_Auteur;
   end;
 
@@ -65,26 +65,27 @@ implementation
 
 {$R *.DFM}
 
-uses Commun, TypeRec, Impression, DateUtils, UHistorique, Proc_Gestions, UfrmFond;
+uses Commun, Entities.Lite, Impression, DateUtils, UHistorique, Proc_Gestions, UfrmFond,
+  Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
 
 type
   PNodeInfo = ^RNodeInfo;
 
   RNodeInfo = record
-    Serie: TSerieComplete;
-    Album: TAlbum;
-    ParaBD: TParaBD;
+    Serie: TSerieFull;
+    Album: TAlbumLite;
+    ParaBD: TParaBDLite;
   end;
 
 procedure TfrmConsultationAuteur.lvScenaristesDblClick(Sender: TObject);
 begin
   if Assigned(TListView(Sender).Selected) then
-    Historique.AddWaiting(fcRecherche, TAuteur(TListView(Sender).Selected.Data).Personne.ID, 0);
+    Historique.AddWaiting(fcRecherche, TAuteurLite(TListView(Sender).Selected.Data).Personne.ID, 0);
 end;
 
 procedure TfrmConsultationAuteur.FormCreate(Sender: TObject);
 begin
-  FAuteur := TAuteurComplet.Create;
+  FAuteur := TFactoryAuteurFull.getInstance;
   vstSeries.NodeDataSize := SizeOf(RNodeInfo);
   PrepareLV(Self);
 end;
@@ -165,7 +166,7 @@ end;
 procedure TfrmConsultationAuteur.SetID_Auteur(const Value: TGUID);
 begin
   ClearForm;
-  FAuteur.Fill(Value);
+  TDaoAuteurFull.Fill(FAuteur, Value);
 
   edNom.Caption := FormatTitre(FAuteur.NomAuteur);
   Caption := 'Fiche d''auteur - ' + FAuteur.ChaineAffichage;

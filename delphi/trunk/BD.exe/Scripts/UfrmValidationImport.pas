@@ -3,11 +3,12 @@ unit UfrmValidationImport;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Generics.Collections, TypeRec, Dialogs, StdCtrls, LoadComplet,
-  ExtCtrls, CheckLst, Menus, jpeg, UframBoutons, ComboCheck, EditLabeled, ComCtrls;
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Generics.Collections, Entities.Lite, Dialogs, StdCtrls, Entities.Full,
+  ExtCtrls, CheckLst, Menus, jpeg, UframBoutons, ComboCheck, EditLabeled, ComCtrls,
+  UBdtForms;
 
 type
-  TfrmValidationImport = class(TForm)
+  TfrmValidationImport = class(TbdtForm)
     CheckBox1: TCheckBoxLabeled;
     edTitreAlbum: TEditLabeled;
     CheckBox2: TCheckBoxLabeled;
@@ -126,19 +127,20 @@ type
     procedure cklImagesClick(Sender: TObject);
     procedure imgVisuClick(Sender: TObject);
   private
-    FAlbum: TAlbumComplet;
-    DefaultValues: TAlbumComplet;
-    DefaultEdition: TEditionComplete;
-    procedure SetAlbum(Value: TAlbumComplet);
+    FAlbum: TAlbumFull;
+    DefaultValues: TAlbumFull;
+    DefaultEdition: TEditionFull;
+    procedure SetAlbum(Value: TAlbumFull);
     procedure VisuClose(Sender: TObject);
   public
-    property Album: TAlbumComplet read FAlbum write SetAlbum;
+    property Album: TAlbumFull read FAlbum write SetAlbum;
   end;
 
 implementation
 
 uses
-  IOUtils, Commun, Procedures, CommonConst, UBdtForms;
+  IOUtils, Commun, Procedures, CommonConst, Entities.DaoFull, ProceduresBDtk,
+  Entities.Common, Entities.DaoLambda;
 
 {$R *.dfm}
 
@@ -155,17 +157,17 @@ end;
 
 procedure TfrmValidationImport.cklImagesClick(Sender: TObject);
 var
-  PC: TCouverture;
+  PC: TCouvertureLite;
   hg: IHourGlass;
   ms: TStream;
   jpg: TJPEGImage;
 begin
   if cklImages.ItemIndex > -1 then
   begin
-    PC := FAlbum.Editions.Editions[0].Couvertures[cklImages.ItemIndex];
+    PC := FAlbum.Editions[0].Couvertures[cklImages.ItemIndex];
     hg := THourGlass.Create;
     if IsEqualGUID(PC.ID, GUID_NULL) then
-      ms := GetCouvertureStream(PC.NewNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing)
+      ms := GetJPEGStream(PC.NewNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing)
     else
       ms := GetCouvertureStream(False, PC.ID, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
     if Assigned(ms) then
@@ -189,16 +191,16 @@ procedure TfrmValidationImport.FormCreate(Sender: TObject);
 begin
   PageControl1.ActivePageIndex := 0;
 
-  DefaultValues := TAlbumComplet.Create(GUID_NULL);
-  DefaultEdition := TEditionComplete.Create(GUID_NULL);
-  DefaultValues.Editions.Editions.Add(DefaultEdition);
+  DefaultValues := TDaoAlbumFull.getInstance(GUID_NULL);
+  DefaultEdition := TDaoEditionFull.getInstance(GUID_NULL);
+  DefaultValues.Editions.Add(DefaultEdition);
 
-  LoadCombo(1 { Etat } , cbxEtat);
-  LoadCombo(2 { Reliure } , cbxReliure);
-  LoadCombo(3 { TypeEdition } , cbxEdition);
-  LoadCombo(4 { Orientation } , cbxOrientation);
-  LoadCombo(5 { Format } , cbxFormat);
-  LoadCombo(8 { Sens de lecture } , cbxSensLecture);
+  LoadCombo(cbxEtat, TDaoListe.ListEtats, TDaoListe.DefaultEtat);
+  LoadCombo(cbxReliure, TDaoListe.ListReliures, TDaoListe.DefaultReliure);
+  LoadCombo(cbxEdition, TDaoListe.ListTypesEdition, TDaoListe.DefaultTypeEdition);
+  LoadCombo(cbxOrientation, TDaoListe.ListOrientations, TDaoListe.DefaultOrientation);
+  LoadCombo(cbxFormat, TDaoListe.ListFormatsEdition, TDaoListe.DefaultFormatEdition);
+  LoadCombo(cbxSensLecture, TDaoListe.ListSensLecture, TDaoListe.DefaultSensLecture);
 end;
 
 procedure TfrmValidationImport.FormDestroy(Sender: TObject);
@@ -244,7 +246,7 @@ procedure TfrmValidationImport.framBoutons1btnOKClick(Sender: TObject);
           Value.Add(Ctrl.Items[i]);
   end;
 
-  procedure SetValue(Value: TObjectList<TAuteur>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
+  procedure SetValue(Value: TList<TAuteurLite>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
   var
     i: Integer;
   begin
@@ -258,7 +260,7 @@ procedure TfrmValidationImport.framBoutons1btnOKClick(Sender: TObject);
       Value.Clear;
   end;
 
-  procedure SetValue(Value: TObjectList<TCouverture>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
+  procedure SetValue(Value: TList<TCouvertureLite>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
   var
     i: Integer;
   begin
@@ -335,8 +337,8 @@ begin
   FAlbum.Serie.Collection.NomCollection := SetValue(edCollectionSerie, CheckBoxLabeled7, DefaultValues.Serie.Collection.NomCollection);
 
   // Edition
-  if FAlbum.Editions.Editions.Count > 0 then
-    with FAlbum.Editions.Editions[0] do
+  if FAlbum.Editions.Count > 0 then
+    with FAlbum.Editions[0] do
     begin
       Editeur.NomEditeur := SetValue(edNomEditeur, CheckBox20, DefaultEdition.Editeur.NomEditeur);
       Editeur.SiteWeb := SetValue(edSiteWebEditeur, CheckBox21, DefaultEdition.Editeur.SiteWeb);
@@ -365,7 +367,7 @@ end;
 
 procedure TfrmValidationImport.imgVisuClick(Sender: TObject);
 var
-  PC: TCouverture;
+  PC: TCouvertureLite;
   hg: IHourGlass;
   ms: TStream;
   jpg: TJPEGImage;
@@ -374,10 +376,10 @@ var
 begin
   if cklImages.ItemIndex = -1 then
     Exit;
-  PC := FAlbum.Editions.Editions[0].Couvertures[cklImages.ItemIndex];
+  PC := FAlbum.Editions[0].Couvertures[cklImages.ItemIndex];
   hg := THourGlass.Create;
   if IsEqualGUID(PC.ID, GUID_NULL) then
-    ms := GetCouvertureStream(PC.NewNom, 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing)
+    ms := GetJPEGStream(PC.NewNom, 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing)
   else
     ms := GetCouvertureStream(False, PC.ID, 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing);
   if Assigned(ms) then
@@ -407,7 +409,7 @@ begin
     end;
 end;
 
-procedure TfrmValidationImport.SetAlbum(Value: TAlbumComplet);
+procedure TfrmValidationImport.SetAlbum(Value: TAlbumFull);
 
   procedure ChangeState(Chk: TCheckBox; Ctrl: TControl);
   begin
@@ -460,7 +462,7 @@ procedure TfrmValidationImport.SetAlbum(Value: TAlbumComplet);
     ChangeState(Chk, Ctrl);
   end;
 
-  procedure LoadValue(Value: TObjectList<TAuteur>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
+  procedure LoadValue(Value: TList<TAuteurLite>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
   var
     i: Integer;
   begin
@@ -474,7 +476,7 @@ procedure TfrmValidationImport.SetAlbum(Value: TAlbumComplet);
     ChangeState(Chk, Ctrl);
   end;
 
-  procedure LoadValue(Value: TObjectList<TCouverture>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
+  procedure LoadValue(Value: TList<TCouvertureLite>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
   var
     i: Integer;
   begin
@@ -568,9 +570,9 @@ begin
     CheckBoxLabeled7.Checked } ;
 
   // Edition
-  TabSheet3.TabVisible := FAlbum.FusionneEditions and (FAlbum.Editions.Editions.Count > 0);
+  TabSheet3.TabVisible := FAlbum.FusionneEditions and (FAlbum.Editions.Count > 0);
   if TabSheet3.TabVisible then
-    with FAlbum.Editions.Editions[0] do
+    with FAlbum.Editions[0] do
     begin
       LoadValue(Editeur.NomEditeur, edNomEditeur, CheckBox20, DefaultEdition.Editeur.NomEditeur);
       LoadValue(Editeur.SiteWeb, edSiteWebEditeur, CheckBox21, DefaultEdition.Editeur.SiteWeb);

@@ -3,73 +3,73 @@ unit Proc_Gestions;
 interface
 
 uses
-  editions, SysUtils, Classes, Controls, Dialogs, Db, DBCtrls, Divers, Commun, ComCtrls, VirtualTree, LoadComplet;
+  editions, SysUtils, Classes, Controls, Dialogs, Db, DBCtrls, Divers, Commun, ComCtrls, VirtualTreeBdtk, Entities.Full;
 
 type
-  TActionGestionAdd = function(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
-  TActionGestionAddWithRef = function(VT: TVirtualStringTree; const ID_Editeur: TGUID; const Valeur: string; Source: TObjetComplet = nil): TGUID;
-  TActionGestionModif = function(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
-  TActionGestionModif2 = function(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
+  TActionGestionAdd = function(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
+  TActionGestionAddWithRef = function(VT: TVirtualStringTree; const ID_Editeur: TGUID; const Valeur: string; Source: TObjetFull = nil): TGUID;
+  TActionGestionModif = function(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
+  TActionGestionModif2 = function(const ID: TGUID; Source: TObjetFull = nil): Boolean;
   TActionGestionSupp = function(VT: TVirtualStringTree): Boolean;
   TActionGestionAchat = function(VT: TVirtualStringTree): Boolean;
 
-function AjouterEditeurs(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
-function ModifierEditeurs(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function AjouterEditeurs(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
+function ModifierEditeurs(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
 function SupprimerEditeurs(VT: TVirtualStringTree): Boolean;
 
-function AjouterAchatsAlbum(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
-function ModifierAchatsAlbum(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function AjouterAchatsAlbum(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
+function ModifierAchatsAlbum(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
 function SupprimerAchatsAlbum(VT: TVirtualStringTree): Boolean;
 
-function AjouterAlbums(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
-function ModifierAlbums(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
-function ModifierAlbums2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function AjouterAlbums(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
+function ModifierAlbums(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
+function ModifierAlbums2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
 function AcheterAlbums(VT: TVirtualStringTree): Boolean;
 function SupprimerAlbums(VT: TVirtualStringTree): Boolean;
 
-function AjouterGenres(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
-function ModifierGenres(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function AjouterGenres(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
+function ModifierGenres(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
 function SupprimerGenres(VT: TVirtualStringTree): Boolean;
 
-function AjouterAuteurs(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
-function AjouterAuteurs2(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
-function ModifierAuteurs(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
-function ModifierAuteurs2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function AjouterAuteurs(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
+function AjouterAuteurs2(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
+function ModifierAuteurs(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
+function ModifierAuteurs2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
 function SupprimerAuteurs(VT: TVirtualStringTree): Boolean;
 
-function AjouterSeries(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
-function ModifierSeries(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
-function ModifierSeries2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function AjouterSeries(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
+function ModifierSeries(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
+function ModifierSeries2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
 function SupprimerSeries(VT: TVirtualStringTree): Boolean;
 
-function AjouterUnivers(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
-function ModifierUnivers(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
-function ModifierUnivers2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function AjouterUnivers(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
+function ModifierUnivers(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
+function ModifierUnivers2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
 function SupprimerUnivers(VT: TVirtualStringTree): Boolean;
 
 function AjouterCollections2(VT: TVirtualStringTree; const ID_Editeur: TGUID; const Valeur: string): TGUID;
-function AjouterCollections(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
-function ModifierCollections(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function AjouterCollections(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
+function ModifierCollections(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
 function SupprimerCollections(VT: TVirtualStringTree): Boolean;
 
-function AjouterParaBD(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
-function ModifierParaBD(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
-function ModifierParaBD2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function AjouterParaBD(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
+function ModifierParaBD(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
+function ModifierParaBD2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
 function AcheterParaBD(VT: TVirtualStringTree): Boolean;
 function SupprimerParaBD(VT: TVirtualStringTree): Boolean;
 
-function AjouterAchatsParaBD(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
-function ModifierAchatsParaBD(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function AjouterAchatsParaBD(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
+function ModifierAchatsParaBD(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
 function SupprimerAchatsParaBD(VT: TVirtualStringTree): Boolean;
 
 implementation
 
 uses
-  Textes, Procedures, TypeRec;
+  Textes, Procedures, Entities.Lite;
 
 // ******************************************************************************************************
 
-function AjouterEditeurs(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
+function AjouterEditeurs(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
 begin
   if Assigned(Source) then
     Result := CreationEditeur(Source)
@@ -84,7 +84,7 @@ begin
   end;
 end;
 
-function ModifierEditeurs(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function ModifierEditeurs(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
 var
   i: TGUID;
 begin
@@ -119,7 +119,7 @@ begin
 end;
 // ********************************************************************************************************
 
-function AjouterAchatsAlbum(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
+function AjouterAchatsAlbum(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
 begin
   Result := CreationAchatAlbum(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then
@@ -131,7 +131,7 @@ begin
   end;
 end;
 
-function ModifierAchatsAlbum(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function ModifierAchatsAlbum(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
 var
   i: TGUID;
 begin
@@ -147,7 +147,7 @@ end;
 function SupprimerAchatsAlbum(VT: TVirtualStringTree): Boolean;
 var
   i: TGUID;
-  PA: TAlbum;
+  PA: TAlbumLite;
   s: string;
 begin
   Result := False;
@@ -155,7 +155,7 @@ begin
   if IsEqualGUID(i, GUID_NULL) then
     Exit;
   VT.MemorizeIndexNode;
-  PA := VT.GetFocusedNodeData as TAlbum;
+  PA := VT.GetFocusedNodeData as TAlbumLite;
   s := rsSupprimerAchat;
   if Assigned(PA) and not PA.Complet then
     s := rsLienAchatAlbum + #13 + s;
@@ -172,7 +172,7 @@ begin
 end;
 // *********************************************************************************************************
 
-function AjouterAlbums(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
+function AjouterAlbums(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
 begin
   if Assigned(Source) then
     Result := CreationAlbum(Source)
@@ -187,15 +187,18 @@ begin
   end;
 end;
 
-function ModifierAlbums2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function ModifierAlbums2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
+var
+  dummy: TGUID;
 begin
   Result := False;
   if IsEqualGUID(ID, GUID_NULL) then
     Exit;
-  Result := EditionAlbum(ID);
+  dummy := ID;
+  Result := EditionAlbum(dummy);
 end;
 
-function ModifierAlbums(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function ModifierAlbums(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
 begin
   Result := ModifierAlbums2(VT.CurrentValue);
   if Result then
@@ -237,7 +240,7 @@ begin
 end;
 // *********************************************************************************************************
 
-function AjouterGenres(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
+function AjouterGenres(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
 begin
   Result := CreationGenre(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then
@@ -249,7 +252,7 @@ begin
   end;
 end;
 
-function ModifierGenres(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function ModifierGenres(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
 var
   i: TGUID;
 begin
@@ -284,7 +287,7 @@ begin
 end;
 // ********************************************************************************************************************
 
-function AjouterAuteurs(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
+function AjouterAuteurs(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
 begin
   Result := CreationAuteur(FormalizeNom(Valeur));
   if IsEqualGUID(Result, GUID_NULL) then
@@ -296,7 +299,7 @@ begin
   end;
 end;
 
-function AjouterAuteurs2(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
+function AjouterAuteurs2(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
 begin
   Result := CreationAuteur2(FormalizeNom(Valeur));
   if IsEqualGUID(Result, GUID_NULL) then
@@ -308,15 +311,18 @@ begin
   end;
 end;
 
-function ModifierAuteurs2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function ModifierAuteurs2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
+var
+  dummy: TGUID;
 begin
   Result := False;
   if IsEqualGUID(ID, GUID_NULL) then
     Exit;
-  Result := EditionAuteur(ID);
+  dummy := ID;
+  Result := EditionAuteur(dummy);
 end;
 
-function ModifierAuteurs(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function ModifierAuteurs(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
 begin
   Result := ModifierAuteurs2(VT.CurrentValue);
   if Result then
@@ -345,7 +351,7 @@ begin
 end;
 // ********************************************************************************************************************
 
-function AjouterSeries(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
+function AjouterSeries(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
 begin
   if Assigned(Source) then
     Result := CreationSerie(Source)
@@ -360,15 +366,18 @@ begin
   end;
 end;
 
-function ModifierSeries2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function ModifierSeries2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
+var
+  dummy: TGUID;
 begin
   Result := False;
   if IsEqualGUID(ID, GUID_NULL) then
     Exit;
-  Result := EditionSerie(ID);
+  dummy := ID;
+  Result := EditionSerie(dummy);
 end;
 
-function ModifierSeries(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function ModifierSeries(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
 begin
   Result := ModifierSeries2(VT.CurrentValue);
   if Result then
@@ -397,7 +406,7 @@ begin
 end;
 // ********************************************************************************************************************
 
-function AjouterUnivers(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
+function AjouterUnivers(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
 begin
   if Assigned(Source) then
     Result := CreationUnivers(Source)
@@ -412,15 +421,18 @@ begin
   end;
 end;
 
-function ModifierUnivers2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function ModifierUnivers2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
+var
+  dummy: TGUID;
 begin
   Result := False;
   if IsEqualGUID(ID, GUID_NULL) then
     Exit;
-  Result := EditionUnivers(ID);
+  dummy := ID;
+  Result := EditionUnivers(dummy);
 end;
 
-function ModifierUnivers(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function ModifierUnivers(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
 begin
   Result := ModifierUnivers2(VT.CurrentValue);
   if Result then
@@ -461,7 +473,7 @@ begin
   end;
 end;
 
-function AjouterCollections(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
+function AjouterCollections(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
 begin
   if Assigned(Source) then
     Result := CreationCollection(Source)
@@ -476,7 +488,7 @@ begin
   end;
 end;
 
-function ModifierCollections(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function ModifierCollections(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
 var
   i: TGUID;
 begin
@@ -511,7 +523,7 @@ begin
 end;
 // ********************************************************************************************************************
 
-function AjouterParaBD(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
+function AjouterParaBD(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
 begin
   Result := CreationParaBD(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then
@@ -523,15 +535,18 @@ begin
   end;
 end;
 
-function ModifierParaBD2(const ID: TGUID; Source: TObjetComplet = nil): Boolean;
+function ModifierParaBD2(const ID: TGUID; Source: TObjetFull = nil): Boolean;
+var
+  dummy: TGUID;
 begin
   Result := False;
   if IsEqualGUID(ID, GUID_NULL) then
     Exit;
-  Result := EditionParaBD(ID);
+  dummy := ID;
+  Result := EditionParaBD(dummy);
 end;
 
-function ModifierParaBD(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function ModifierParaBD(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
 begin
   Result := ModifierParaBD2(VT.CurrentValue);
   if Result then
@@ -573,7 +588,7 @@ begin
 end;
 // *********************************************************************************************************
 
-function AjouterAchatsParaBD(VT: TVirtualStringTree; const Valeur: string; Source: TObjetComplet = nil): TGUID;
+function AjouterAchatsParaBD(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;
 begin
   Result := CreationAchatParaBD(Valeur);
   if IsEqualGUID(Result, GUID_NULL) then
@@ -585,7 +600,7 @@ begin
   end;
 end;
 
-function ModifierAchatsParaBD(VT: TVirtualStringTree; Source: TObjetComplet = nil): Boolean;
+function ModifierAchatsParaBD(VT: TVirtualStringTree; Source: TObjetFull = nil): Boolean;
 var
   i: TGUID;
 begin
@@ -601,7 +616,7 @@ end;
 function SupprimerAchatsParaBD(VT: TVirtualStringTree): Boolean;
 var
   i: TGUID;
-  PA: TParaBD;
+  PA: TParaBDLite;
   s: string;
 begin
   Result := False;
@@ -609,7 +624,7 @@ begin
   if IsEqualGUID(i, GUID_NULL) then
     Exit;
   VT.MemorizeIndexNode;
-  PA := VT.GetFocusedNodeData as TParaBD;
+  PA := VT.GetFocusedNodeData as TParaBDLite;
   s := rsSupprimerAchat;
   if Assigned(PA) and not PA.Complet then
     s := rsLienAchatParaBD + #13 + s;

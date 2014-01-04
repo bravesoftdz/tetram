@@ -32,6 +32,7 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
     Header.Font.Height = -11
     Header.Font.Name = 'Tahoma'
     Header.Font.Style = []
+    Header.Height = 17
     Header.Images = frmFond.ImageList1
     Header.Options = [hoAutoResize, hoColumnResize, hoShowImages, hoVisible]
     Header.SortColumn = 1
@@ -54,7 +55,7 @@ object frmPrevisionsSorties: TfrmPrevisionsSorties
       item
         MinWidth = 50
         Position = 1
-        Width = 560
+        Width = 564
         WideText = 'Pr'#233'visions'
       end>
   end

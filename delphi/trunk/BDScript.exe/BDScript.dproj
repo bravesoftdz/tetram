@@ -1,0 +1,358 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{5E022C95-04FD-4378-B040-C7F9ECAB1946}</ProjectGuid>
+        <ProjectVersion>14.6</ProjectVersion>
+        <FrameworkType>VCL</FrameworkType>
+        <MainSource>BDScript.dpr</MainSource>
+        <Base>True</Base>
+        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Platform Condition="'$(Platform)'==''">Win32</Platform>
+        <TargetedPlatforms>1</TargetedPlatforms>
+        <AppType>Application</AppType>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Base)'=='true') or '$(Base_Win32)'!=''">
+        <Base_Win32>true</Base_Win32>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Base)'=='true') or '$(Base_Win64)'!=''">
+        <Base_Win64>true</Base_Win64>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_1)'!=''">
+        <Cfg_1>true</Cfg_1>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win32)'!=''">
+        <Cfg_1_Win32>true</Cfg_1_Win32>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='DCU Debug' or '$(Cfg_3)'!=''">
+        <Cfg_3>true</Cfg_3>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_2)'!=''">
+        <Cfg_2>true</Cfg_2>
+        <CfgParent>Base</CfgParent>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base)'!=''">
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <DCC_Define>FB25;FBEMBED;GIFGraphic;UseLZW;PortableNetworkGraphic;PS_USESSUPPORT;PCRE_STATICLINK;7ZIP_LINKONREQUEST;NO_ADVANCED_HTTP_CLIENT_FEATURES;UseContentCoding;USE_SSL;NO_OSSL_VERSION_CHECK;$(DCC_Define)</DCC_Define>
+        <DCC_UnitSearchPath>D:\Composants\Perso;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <VerInfo_Locale>1036</VerInfo_Locale>
+        <Manifest_File>None</Manifest_File>
+        <PostBuildEvent><![CDATA[copy ..\..\bin\$(Platform)\$(OUTPUTFILENAME) ..\..\bin\Win64\$(OUTPUTFILENAME)
+$(PostBuildEvent)]]></PostBuildEvent>
+        <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=Teträm Corp 1997-2014;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
+        <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
+        <Icon_MainIcon>BDScript_Icon.ico</Icon_MainIcon>
+        <DCC_DcuOutput>.\dcu\$(Platform)\$(Config)</DCC_DcuOutput>
+        <DCC_ExeOutput>..\..\bin\$(Platform)</DCC_ExeOutput>
+        <DCC_E>false</DCC_E>
+        <DCC_N>false</DCC_N>
+        <DCC_S>false</DCC_S>
+        <DCC_F>false</DCC_F>
+        <DCC_K>false</DCC_K>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <DCC_UsePackage>IndyIPClient;JvGlobus;JvMM;JvManagedThreads;DBXSqliteDriver;frxDB18;fmx;JvDlgs;IndySystem;JvCrypt;TeeDB;frx18;inetdbbde;vclib;DBXInterBaseDriver;DataSnapClient;DataSnapCommon;DataSnapServer;JvNet;DataSnapProviderClient;JvDotNetCtrls;DBXSybaseASEDriver;DbxCommonDriver;vclimg;dbxcds;DatasnapConnectorsFreePascal;MetropolisUILiveTile;JvXPCtrls;vcldb;vcldsnap;DBXDb2Driver;DBXOracleDriver;CustomIPTransport;JvCore;dsnap;IndyIPServer;fmxase;vcl;IndyCore;IndyIPCommon;CloudService;DBXMSSQLDriver;FmxTeeUI;JvAppFrm;JvDB;JvRuntimeDesign;inetdbxpress;webdsnap;JclDeveloperTools;JvDocking;adortl;JvWizards;JvHMI;bindcompfmx;MediaKit;JvBands;vcldbx;rtl;dbrtl;DbxClientDriver;bindcomp;inetdb;JvPluginSystem;Tee;JclContainers;DBXOdbcDriver;JvCmp;JvSystem;xmlrtl;svnui;ibxpress;JvTimeFramework;JvControls;IndyProtocols;DBXMySQLDriver;frxe18;vclactnband;bindengine;soaprtl;bindcompdbx;FMXTee;TeeUI;bindcompvcl;UIBD17Win32R;JvStdCtrls;Jcl;vclie;JvCustom;JvJans;JvPageComps;JvPrintPreview;vcltouch;ZipmasterD12;PngComponents;OverbyteIcsDXe4Run;VclSmp;DBXInformixDriver;Intraweb;DataSnapConnectors;dsnapcon;DBXFirebirdDriver;inet;SynEdit_RXE4;fmxobj;JclVcl;JvPascalInterpreter;vclx;svn;DBXSybaseASADriver;fmxdae;bdertl;VirtualTreesR;dbexpress;DataSnapIndy10ServerTransport;JvBDE;$(DCC_UsePackage)</DCC_UsePackage>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <DCC_UsePackage>IndyIPClient;DBXSqliteDriver;fmx;IndySystem;TeeDB;vclib;DBXInterBaseDriver;DataSnapClient;DataSnapCommon;DataSnapServer;DataSnapProviderClient;DBXSybaseASEDriver;DbxCommonDriver;vclimg;dbxcds;DatasnapConnectorsFreePascal;MetropolisUILiveTile;vcldb;vcldsnap;DBXDb2Driver;DBXOracleDriver;CustomIPTransport;dsnap;IndyIPServer;fmxase;vcl;IndyCore;IndyIPCommon;CloudService;DBXMSSQLDriver;FmxTeeUI;inetdbxpress;webdsnap;adortl;bindcompfmx;rtl;dbrtl;DbxClientDriver;bindcomp;inetdb;Tee;DBXOdbcDriver;xmlrtl;ibxpress;IndyProtocols;DBXMySQLDriver;vclactnband;bindengine;soaprtl;bindcompdbx;FMXTee;TeeUI;bindcompvcl;vclie;vcltouch;PngComponents;OverbyteIcsDXe4Run;VclSmp;DBXInformixDriver;Intraweb;DataSnapConnectors;dsnapcon;DBXFirebirdDriver;inet;SynEdit_RXE4;fmxobj;vclx;DBXSybaseASADriver;fmxdae;VirtualTreesR;dbexpress;DataSnapIndy10ServerTransport;$(DCC_UsePackage)</DCC_UsePackage>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1)'!=''">
+        <VerInfo_Debug>true</VerInfo_Debug>
+        <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+        <DCC_Optimize>false</DCC_Optimize>
+        <DCC_GenerateStackFrames>true</DCC_GenerateStackFrames>
+        <DCC_DebugInfoInExe>true</DCC_DebugInfoInExe>
+        <DCC_RemoteDebug>true</DCC_RemoteDebug>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <Debugger_RunParams>/run &quot;C:\Users\Thierry\AppData\Local\Temp\tmp2F11.tmp&quot;</Debugger_RunParams>
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
+        <VerInfo_Locale>1033</VerInfo_Locale>
+        <DCC_RemoteDebug>false</DCC_RemoteDebug>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_3)'!=''">
+        <DCC_DebugDCUs>true</DCC_DebugDCUs>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_2)'!=''">
+        <VerInfo_AutoIncVersion>true</VerInfo_AutoIncVersion>
+        <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+        <DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+        <DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+        <DCC_DebugInformation>false</DCC_DebugInformation>
+    </PropertyGroup>
+    <ItemGroup>
+        <DelphiCompile Include="$(MainSource)">
+            <MainSource>MainSource</MainSource>
+        </DelphiCompile>
+        <DCCReference Include="..\Commun\UMetadata.pas"/>
+        <DCCReference Include="..\Commun\Commun.pas"/>
+        <DCCReference Include="..\Commun\CommonConst.pas"/>
+        <DCCReference Include="..\Commun\Textes.pas"/>
+        <DCCReference Include="..\Commun\UfrmSplash.pas">
+            <Form>frmSplash</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\Commun\UBdtForms.pas">
+            <Form>bdtForm</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\Commun\Entities\Entities.Deserializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.Full.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.Lite.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.Serializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\JsonDeserializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\JsonSerializer.pas"/>
+        <DCCReference Include="PascalScript\UdmPascalScript.pas"/>
+        <DCCReference Include="PascalScript\UPascalScriptEditor.pas"/>
+        <DCCReference Include="PascalScript\uPSC_BdtkObjects.pas"/>
+        <DCCReference Include="PascalScript\uPSC_BdtkRegEx.pas"/>
+        <DCCReference Include="PascalScript\uPSC_superobject.pas"/>
+        <DCCReference Include="PascalScript\uPSI_BdtkObjects.pas"/>
+        <DCCReference Include="PascalScript\uPSI_BdtkRegEx.pas"/>
+        <DCCReference Include="PascalScript\uPSI_superobject.pas"/>
+        <DCCReference Include="PascalScript\uPSR_BdtkObjects.pas"/>
+        <DCCReference Include="PascalScript\uPSR_BdtkRegEx.pas"/>
+        <DCCReference Include="PascalScript\uPSR_superobject.pas"/>
+        <DCCReference Include="DWScript\UdmDWScript.pas"/>
+        <DCCReference Include="DWScript\UDW_BdtkObjects.pas"/>
+        <DCCReference Include="DWScript\UDW_BdtkRegEx.pas"/>
+        <DCCReference Include="DWScript\UDW_CommonFunctions.pas"/>
+        <DCCReference Include="DWScript\UDWScriptEditor.pas"/>
+        <DCCReference Include="DWScript\UDWUnit.pas"/>
+        <DCCReference Include="..\Commun\Scripts\UScriptList.pas"/>
+        <DCCReference Include="..\Commun\Scripts\UScriptsFonctions.pas"/>
+        <DCCReference Include="..\Commun\Scripts\UScriptUtils.pas"/>
+        <DCCReference Include="..\Commun\UNet.pas"/>
+        <DCCReference Include="..\Commun\Procedures.pas"/>
+        <DCCReference Include="..\Commun\UfrmProgression.pas">
+            <Form>frmProgression</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\Commun\UframBoutons.pas">
+            <Form>framBoutons</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="IDHashMap.pas"/>
+        <DCCReference Include="UdmPrinc.pas">
+            <Form>dmPrinc</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TDataModule</DesignClass>
+        </DCCReference>
+        <DCCReference Include="UframBreakpoints.pas">
+            <Form>framBreakpoints</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="UframMessages.pas">
+            <Form>framMessages</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="UframScriptInfos.pas">
+            <Form>framScriptInfos</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="UframWatches.pas">
+            <Form>framWatches</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="UfrmScriptChoix.pas">
+            <Form>frmScriptChoix</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="UfrmScriptEditOption.pas">
+            <Form>frmScriptEditOption</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="UfrmScriptGotoLine.pas">
+            <Form>frmScriptGotoLine</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\Commun\Scripts\UfrmScriptOption.pas">
+            <Form>frmScriptOption</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="UfrmScripts.pas"/>
+        <DCCReference Include="UfrmScriptSearch.pas">
+            <Form>frmScriptSearch</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="UfrmScriptsUpdate.pas">
+            <Form>frmScriptsUpdate</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="UMasterEngine.pas"/>
+        <DCCReference Include="UScriptEditor.pas"/>
+        <DCCReference Include="UScriptEditorPage.pas"/>
+        <DCCReference Include="UScriptEngineIntf.pas"/>
+        <DCCReference Include="UScriptsHTMLFunctions.pas"/>
+        <DCCReference Include="..\Commun\BdtkRegEx.pas"/>
+        <DCCReference Include="..\Commun\VirtualTree.pas"/>
+        <DCCReference Include="..\Commun\UfrmAboutBox.pas">
+            <Form>frmAboutBox</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="..\Commun\Entities\Entities.Common.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.FactoriesLite.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.FactoriesCommon.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.FactoriesFull.pas"/>
+        <DCCReference Include="Entities.DaoLambdaJSON.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.DaoLambda.pas"/>
+        <RcItem Include="..\Commun\images\imgAbout.bmp">
+            <ResourceType>BITMAP</ResourceType>
+            <ResourceId>ABOUT</ResourceId>
+        </RcItem>
+        <RcItem Include="..\Commun\images\handpoint.cur">
+            <ResourceType>RCDATA</ResourceType>
+            <ResourceId>CUR_HANDPOINT</ResourceId>
+        </RcItem>
+        <BuildConfiguration Include="Release">
+            <Key>Cfg_2</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+        <BuildConfiguration Include="DCU Debug">
+            <Key>Cfg_3</Key>
+            <CfgParent>Cfg_1</CfgParent>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Base">
+            <Key>Base</Key>
+        </BuildConfiguration>
+        <BuildConfiguration Include="Debug">
+            <Key>Cfg_1</Key>
+            <CfgParent>Base</CfgParent>
+        </BuildConfiguration>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Delphi.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Delphi.Personality>
+                <VersionInfo>
+                    <VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+                    <VersionInfo Name="AutoIncBuild">False</VersionInfo>
+                    <VersionInfo Name="MajorVer">1</VersionInfo>
+                    <VersionInfo Name="MinorVer">0</VersionInfo>
+                    <VersionInfo Name="Release">0</VersionInfo>
+                    <VersionInfo Name="Build">0</VersionInfo>
+                    <VersionInfo Name="Debug">False</VersionInfo>
+                    <VersionInfo Name="PreRelease">False</VersionInfo>
+                    <VersionInfo Name="Special">False</VersionInfo>
+                    <VersionInfo Name="Private">False</VersionInfo>
+                    <VersionInfo Name="DLL">False</VersionInfo>
+                    <VersionInfo Name="Locale">1036</VersionInfo>
+                    <VersionInfo Name="CodePage">1252</VersionInfo>
+                </VersionInfo>
+                <VersionInfoKeys>
+                    <VersionInfoKeys Name="CompanyName"/>
+                    <VersionInfoKeys Name="FileDescription"/>
+                    <VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+                    <VersionInfoKeys Name="InternalName"/>
+                    <VersionInfoKeys Name="LegalCopyright"/>
+                    <VersionInfoKeys Name="LegalTrademarks"/>
+                    <VersionInfoKeys Name="OriginalFilename"/>
+                    <VersionInfoKeys Name="ProductName"/>
+                    <VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
+                    <VersionInfoKeys Name="Comments"/>
+                    <VersionInfoKeys Name="CFBundleName"/>
+                    <VersionInfoKeys Name="CFBundleDisplayName"/>
+                    <VersionInfoKeys Name="UIDeviceFamily"/>
+                    <VersionInfoKeys Name="CFBundleIdentifier"/>
+                    <VersionInfoKeys Name="CFBundleVersion"/>
+                    <VersionInfoKeys Name="CFBundlePackageType"/>
+                    <VersionInfoKeys Name="CFBundleSignature"/>
+                    <VersionInfoKeys Name="CFBundleAllowMixedLocalizations"/>
+                    <VersionInfoKeys Name="UISupportedInterfaceOrientations"/>
+                    <VersionInfoKeys Name="CFBundleExecutable"/>
+                    <VersionInfoKeys Name="CFBundleResourceSpecification"/>
+                    <VersionInfoKeys Name="LSRequiresIPhoneOS"/>
+                    <VersionInfoKeys Name="CFBundleInfoDictionaryVersion"/>
+                    <VersionInfoKeys Name="CFBundleDevelopmentRegion"/>
+                </VersionInfoKeys>
+                <Source>
+                    <Source Name="MainSource">BDScript.dpr</Source>
+                </Source>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k180.bpl">Composants Microsoft Office 2000 Sample Automation Server Wrapper</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp180.bpl">Composants Microsoft Office XP Sample Automation Server Wrapper</Excluded_Packages>
+                </Excluded_Packages>
+            </Delphi.Personality>
+            <Deployment/>
+            <Platforms>
+                <Platform value="Win32">True</Platform>
+                <Platform value="Win64">False</Platform>
+            </Platforms>
+            <ModelSupport>False</ModelSupport>
+        </BorlandProject>
+        <ProjectFileVersion>12</ProjectFileVersion>
+    </ProjectExtensions>
+    <Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
+    <Import Project="$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj" Condition="Exists('$(APPDATA)\Embarcadero\$(BDSAPPDATABASEDIR)\$(PRODUCTVERSION)\UserTools.proj')"/>
+    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win32'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>copy ..\..\bin\$(Platform)\$(OUTPUTFILENAME) ..\..\bin\Win64\$(OUTPUTFILENAME)</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Debug' And '$(Platform)'=='Win64'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>copy ..\..\bin\$(Platform)\$(OUTPUTFILENAME) ..\..\bin\Win64\$(OUTPUTFILENAME)</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='DCU Debug' And '$(Platform)'=='Win32'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>copy ..\..\bin\$(Platform)\$(OUTPUTFILENAME) ..\..\bin\Win64\$(OUTPUTFILENAME)</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='DCU Debug' And '$(Platform)'=='Win64'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>copy ..\..\bin\$(Platform)\$(OUTPUTFILENAME) ..\..\bin\Win64\$(OUTPUTFILENAME)</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win32'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>copy ..\..\bin\$(Platform)\$(OUTPUTFILENAME) ..\..\bin\Win64\$(OUTPUTFILENAME)</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Config)'=='Release' And '$(Platform)'=='Win64'">
+        <PreBuildEvent/>
+        <PreBuildEventIgnoreExitCode>False</PreBuildEventIgnoreExitCode>
+        <PreLinkEvent/>
+        <PreLinkEventIgnoreExitCode>False</PreLinkEventIgnoreExitCode>
+        <PostBuildEvent>copy ..\..\bin\$(Platform)\$(OUTPUTFILENAME) ..\..\bin\Win64\$(OUTPUTFILENAME)</PostBuildEvent>
+        <PostBuildEventIgnoreExitCode>False</PostBuildEventIgnoreExitCode>
+    </PropertyGroup>
+</Project>
