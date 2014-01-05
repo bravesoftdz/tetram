@@ -316,8 +316,8 @@ begin
     if TFile.Exists(scriptAutoRun) then
     begin
       Application.MainFormOnTaskbar := False;
-      if FindCmdLineSwitch('dh', s, True, [clstValueNextParam]) then
-        Application.DialogHandle := StrToIntDef(s, Application.DialogHandle);
+//      if FindCmdLineSwitch('dh', s, True, [clstValueNextParam]) then
+//        Application.DialogHandle := StrToIntDef(s, Application.DialogHandle);
       ReadExternalData;
       AutoRun(scriptAutoRun);
     end;

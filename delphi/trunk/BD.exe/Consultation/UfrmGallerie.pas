@@ -277,7 +277,7 @@ begin
     for i := Pred(Editions.Count) downto 0 do
       ShowEdition(Editions[i]);
   finally
-    Free;
+    Editions.Free;
   end;
 end;
 

@@ -284,7 +284,7 @@ begin
       archCompress.Free;
     end;
 
-    cmdLine := Format('"%s" /run "%s" /dh %d', [TPath.Combine(TPath.GetLibraryPath, 'BDScript.exe'), archiveName, Application.DialogHandle]);
+    cmdLine := Format('"%s" /run "%s" /dh %d', [TPath.Combine(TPath.GetLibraryPath, 'BDScript.exe'), archiveName, Application.MainFormHandle]);
     if Execute(cmdLine, dummy) = ScriptRunOK then
     begin
       archDecompress := TJcl7zDecompressArchive.Create(archiveName);

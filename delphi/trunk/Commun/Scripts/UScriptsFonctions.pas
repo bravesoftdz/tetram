@@ -70,7 +70,7 @@ implementation
 uses
   IOUtils, UBdtForms, EditLabeled, StdCtrls, Controls, Forms, UframBoutons, UfrmScriptChoix, OverbyteIcsHttpProt, CommonConst, Procedures,
   SysConst, Graphics, System.UITypes, Entities.FactoriesLite,
-  Entities.DaoLambda;
+  Entities.DaoLambda, Divers;
 
 const
   PathDelim = '/';

@@ -430,6 +430,7 @@ begin
     CurrentCouverture := 0;
     VDTButton3.Visible := (FCurrentEdition <> nil) and (FCurrentEdition.Couvertures.Count > 1);
     VDTButton4.Visible := VDTButton3.Visible;
+    VDTButton1.Visible := (FAlbum.Editions.Count > 1) or ((FCurrentEdition <> nil) and (FCurrentEdition.Couvertures.Count > 0));
   end;
 end;
 

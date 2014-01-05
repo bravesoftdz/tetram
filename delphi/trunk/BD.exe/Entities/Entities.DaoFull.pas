@@ -1325,7 +1325,16 @@ begin
     begin
       Entity.ID_Album := StringToGUIDDef(qry.Fields.ByNameAsString['id_album'], GUID_NULL);
       TDaoEditeurFull.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL));
-      TDaoCollectionLite.Fill(Entity.Collection, qry);
+      { .$IFDEF DEBUG }
+      TDaoCollectionLite.Prepare(qry);
+      try
+        { .$ENDIF }
+        TDaoCollectionLite.Fill(Entity.Collection, qry);
+        { .$IFDEF DEBUG }
+      finally
+        TDaoCollectionLite.Unprepare;
+      end;
+      { .$ENDIF }
       Entity.AnneeEdition := qry.Fields.ByNameAsInteger['anneeedition'];
       Entity.Prix := qry.Fields.ByNameAsCurrency['prix'];
       Entity.VO := qry.Fields.ByNameAsBoolean['vo'];
@@ -1896,7 +1905,16 @@ begin
       Entity.SensLecture := MakeOption(qry.Fields.ByNameAsInteger['senslecture'], qry.Fields.ByNameAsString['ssenslecture']);
 
       TDaoEditeurFull.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL));
-      TDaoCollectionLite.Fill(Entity.Collection, qry);
+      { .$IFDEF DEBUG }
+      TDaoCollectionLite.Prepare(qry);
+      try
+        { .$ENDIF }
+        TDaoCollectionLite.Fill(Entity.Collection, qry);
+        { .$IFDEF DEBUG }
+      finally
+        TDaoCollectionLite.Unprepare;
+      end;
+      { .$ENDIF }
       qry.FetchBlobs := False;
 
       qry.Close;

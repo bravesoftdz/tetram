@@ -30,9 +30,6 @@ object framWatches: TframWatches
     OnPaintText = vstSuivisPaintText
     OnInitNode = vstSuivisInitNode
     OnNewText = vstSuivisNewText
-    ExplicitLeft = -276
-    ExplicitWidth = 596
-    ExplicitHeight = 158
     Columns = <
       item
         Position = 0
@@ -41,7 +38,7 @@ object framWatches: TframWatches
       end
       item
         Position = 1
-        Width = 174
+        Width = 170
         WideText = 'Valeur'
       end>
   end
