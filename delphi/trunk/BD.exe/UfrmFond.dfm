@@ -456,6 +456,11 @@ object frmFond: TfrmFond
       ImageIndex = 10
       OnExecute = actPersonnaliseBarreExecute
     end
+    object actSynchroniser: TAction
+      Category = 'Outils'
+      Caption = 'Synchroniser...'
+      OnExecute = actSynchroniserExecute
+    end
     object actStatsListeCompletesAlbums: TAction
       Category = 'Statistiques'
       Caption = 'Liste compl'#232'te des albums'
@@ -1175,6 +1180,9 @@ object frmFond: TfrmFond
       end
       object P1: TMenuItem
         Action = actPublier
+      end
+      object Synchroniser1: TMenuItem
+        Action = actSynchroniser
       end
       object N8: TMenuItem
         Caption = '-'

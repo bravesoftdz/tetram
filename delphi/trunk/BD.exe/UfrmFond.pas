@@ -135,6 +135,8 @@ type
     boutons_32x32_hot: TPngImageList;
     imlNotation_32x32: TPngImageList;
     imlNotation_16x16: TPngImageList;
+    actSynchroniser: TAction;
+    Synchroniser1: TMenuItem;
     procedure FormDestroy(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure actChangementOptionsExecute(Sender: TObject);
@@ -175,6 +177,7 @@ type
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure actFicheModifierExecute(Sender: TObject);
     procedure CheminBaseExecute(Sender: TObject);
+    procedure actSynchroniserExecute(Sender: TObject);
   private
     { Déclarations privées }
     FToolOriginal: TStringList;
@@ -210,7 +213,7 @@ implementation
 uses
   IOUtils, ProceduresBDtk, UfrmRepertoire, CommonConst, UfrmOptions, UfrmStatsGeneral, UfrmStatsAlbums, Entities.Full, Impression,
   UfrmGestion, UfrmCustomize, UfrmAboutBox, UdmPrinc, Types, Procedures, UfrmEntretien, ShellAPI, Math, UfrmPublier, JumpList, ShlObj,
-  EntitiesStats;
+  EntitiesStats, UfrmSynchroniser;
 
 procedure TfrmFond.WMSyscommand(var msg: TWmSysCommand);
 begin
@@ -819,6 +822,16 @@ end;
 procedure TfrmFond.actStatsListeCompletesAlbumsExecute(Sender: TObject);
 begin
   ImpressionListeCompleteAlbums(TAction(Sender).ActionComponent.Tag = 1);
+end;
+
+procedure TfrmFond.actSynchroniserExecute(Sender: TObject);
+begin
+  with TfrmSynchroniser.Create(nil) do
+    try
+      ShowModal;
+    finally
+      Free;
+    end;
 end;
 
 procedure TfrmFond.StatsInfosBDAppExecute(Sender: TObject);
