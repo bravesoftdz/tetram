@@ -70,7 +70,7 @@ type
     LastVerifMAJ: TDateTime;
     SerieObligatoireAlbums, SerieObligatoireParaBD: Boolean;
     FormatTitreAlbum: Integer;
-    SiteWeb: RSiteWeb;
+    SiteWeb, ServerSynchro: RSiteWeb;
     AfficheNoteListes: Boolean;
   end;
 
@@ -86,6 +86,9 @@ type
   public
     class var Mode_en_cours: TModeConsult;
     class var Utilisateur: RUtilisateur;
+    class var SQLSettings: TFormatSettings;
+
+    class constructor Create;
   end;
 
 implementation
@@ -166,6 +169,18 @@ begin
   finally
     ini.Free;
   end;
+end;
+
+{ TGlobalVar }
+
+class constructor TGlobalVar.Create;
+begin
+  SQLSettings := TFormatSettings.Create('en-US');
+  SQLSettings.ShortDateFormat := 'YYYY-MM-DD';
+  SQLSettings.ShortTimeFormat := 'HH:mm:ss:zzz';
+  SQLSettings.LongTimeFormat := 'HH:mm:ss:zzz';
+  SQLSettings.DateSeparator := '-';
+  SQLSettings.TimeSeparator := ':';
 end;
 
 initialization

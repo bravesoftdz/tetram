@@ -171,7 +171,10 @@ uses
   Entities.DaoLambda in '..\Commun\Entities\Entities.DaoLambda.pas',
   Entities.DaoLambdaDB in 'Entities\Entities.DaoLambdaDB.pas',
   UfrmChoixScript in 'Scripts\UfrmChoixScript.pas' {frmChoixScript},
-  UfrmScriptOption in '..\Commun\Scripts\UfrmScriptOption.pas' {frmScriptOption};
+  UfrmScriptOption in '..\Commun\Scripts\UfrmScriptOption.pas' {frmScriptOption},
+  UNetICSCompress in '..\Commun\UNetICSCompress.pas',
+  UfrmSynchroniser in 'Web\UfrmSynchroniser.pas' {frmSynchroniser},
+  UWeb in 'Web\UWeb.pas';
 
 begin
   Application.Title := 'BDthèque';

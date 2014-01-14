@@ -30,7 +30,7 @@ implementation
 
 uses
   System.IOUtils, OverbyteIcsHttpProt, OverbyteIcsLogger, Procedures, System.AnsiStrings, OverbyteIcsWSocket, OverbyteIcsLIBEAY,
-  System.SysConst, Winapi.WinInet;
+  System.SysConst, Winapi.WinInet, UNetICSCompress;
 
 function GetFileNameFromURL(const URL: string): string;
 var
@@ -337,6 +337,7 @@ begin
   FHttpCli.RequestVer := '1.0';
   FHttpCli.Agent := Format('%s/%s', [TPath.GetFileNameWithoutExtension(Application.ExeName), GetInfoVersion(Application.ExeName)]);
   FHttpCli.AcceptLanguage := 'fr';
+  FHttpCli.Options := FHttpCli.Options + [httpoEnableContentCoding, httpoUseQuality];
   FHttpCli.FollowRelocation := True;
   FHttpCli.OnRequestDone := RequestDone;
   FHttpCli.OnDocData := DocData;

@@ -368,6 +368,10 @@ begin
       TGlobalVar.Utilisateur.Options.SiteWeb.MySQLPrefix := ReadString('WWW', 'MySQLPrefix', 'bdt');
       TGlobalVar.Utilisateur.Options.SiteWeb.BddVersion := ReadString('WWW', 'BddVersion', '');
       TGlobalVar.Utilisateur.Options.SiteWeb.Paquets := ReadInteger('WWW', 'Paquets', 4096);
+
+      {$IFDEF DEBUG}
+      TGlobalVar.Utilisateur.Options.ServerSynchro := TGlobalVar.Utilisateur.Options.SiteWeb;
+      {$ENDIF}
     finally
       Free;
     end;
