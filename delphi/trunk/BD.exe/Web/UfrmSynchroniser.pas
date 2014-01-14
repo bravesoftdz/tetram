@@ -125,12 +125,8 @@ var
 begin
   obj := TdwsJSONObject.Create;
   try
-    obj.AddValue('table', 'options');
-    obj.AddValue('primarykey', 'cle');
-    rec := obj.AddArray('records').AddObject;
-    data := rec.AddObject('data');
-    data.AddValue('cle', cle);
-    data.AddValue('valeur', Valeur);
+    obj.AddValue('cle', cle);
+    obj.AddValue('valeur', Valeur);
     SendData(ActionSendOption, obj.ToString);
   finally
     obj.Free;
