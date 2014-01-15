@@ -61,4 +61,13 @@ function get_option($cle, $default = '')
 		return $rs->valeur;
 }
 
+function set_option($cle, $valeur)
+{
+	global $db_link;
+
+	$sql = 'insert into /*DB_PREFIX*/options set cle '.format_string_null($cle).', valeur '.format_string_null($valeur).' on duplicate key update valeur=values(valeur)';
+	prepare_sql($sql);
+	$db_link->query($sql) or die($db_link->error);
+}
+
 ?>
