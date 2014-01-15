@@ -103,8 +103,8 @@
         <DCC_WriteableConstants>true</DCC_WriteableConstants>
         <Manifest_File>None</Manifest_File>
         <Icon_MainIcon>BD_Icon.ico</Icon_MainIcon>
-        <VerInfo_Build>23</VerInfo_Build>
-        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.23;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2014;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.2;Comments=</VerInfo_Keys>
+        <VerInfo_Build>24</VerInfo_Build>
+        <VerInfo_Keys>CompanyName=Teträm Corp;FileDescription=;FileVersion=2.2.3.24;InternalName=BDT;LegalCopyright=Teträm Corp 1997-2014;LegalTrademarks=;OriginalFilename=;ProductName=BDtheque;ProductVersion=2.2;Comments=</VerInfo_Keys>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;Vcl;Vcl.Imaging;Vcl.Touch;Vcl.Samples;Vcl.Shell;$(DCC_Namespace)</DCC_Namespace>
         <VerInfo_MajorVer>2</VerInfo_MajorVer>
@@ -464,6 +464,7 @@
             <FormType>dfm</FormType>
         </DCCReference>
         <DCCReference Include="Web\UWeb.pas"/>
+        <DCCReference Include="mises_a_jour\UMAJ2_2_3_24.pas"/>
         <RcItem Include="..\Commun\images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>
@@ -610,6 +611,8 @@
                     <VersionInfoKeys Name="CFBundleDevelopmentRegion"/>
                 </VersionInfoKeys>
                 <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclDataSnapServer180.bpl">Composants serveur DBExpress DataSnap Embarcadero</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclDataSnapClient180.bpl">Composants clients Embarcadero DBExpress DataSnap</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k180.bpl">Composants Microsoft Office 2000 Sample Automation Server Wrapper</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dclofficexp180.bpl">Composants Microsoft Office XP Sample Automation Server Wrapper</Excluded_Packages>
                 </Excluded_Packages>

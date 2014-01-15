@@ -174,7 +174,8 @@ uses
   UfrmScriptOption in '..\Commun\Scripts\UfrmScriptOption.pas' {frmScriptOption},
   UNetICSCompress in '..\Commun\UNetICSCompress.pas',
   UfrmSynchroniser in 'Web\UfrmSynchroniser.pas' {frmSynchroniser},
-  UWeb in 'Web\UWeb.pas';
+  UWeb in 'Web\UWeb.pas',
+  UMAJ2_2_3_24 in 'mises_a_jour\UMAJ2_2_3_24.pas';
 
 begin
   Application.Title := 'BDthèque';
