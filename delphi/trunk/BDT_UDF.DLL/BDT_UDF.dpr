@@ -10,7 +10,13 @@ uses
   ib_util in 'ib_util.pas',
   Math,
   AnsiStrings,
-  StrUtils;
+  StrUtils,
+  unum in 'icu\lib\unum.pas',
+  icu_globals in 'icu\lib\icu_globals.pas',
+  utypes in 'icu\lib\utypes.pas',
+  umachine in 'icu\lib\umachine.pas',
+  umisc in 'icu\lib\umisc.pas',
+  parseerr in 'icu\lib\parseerr.pas';
 
 {$R *.res}
 
