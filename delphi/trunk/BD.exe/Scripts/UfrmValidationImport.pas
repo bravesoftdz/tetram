@@ -344,7 +344,7 @@ begin
       Editeur.SiteWeb := SetValue(edSiteWebEditeur, CheckBox21, DefaultEdition.Editeur.SiteWeb);
       Collection.NomCollection := SetValue(edCollection, CheckBox22, DefaultEdition.Collection.NomCollection);
       AnneeEdition := SetValue(edAnneeEdition, CheckBox29, DefaultEdition.AnneeEdition);
-      Prix := StrToCurrDef(SetValue(edPrix, Label9, FormatCurr(FormatMonnaie, DefaultEdition.Prix)), 0);
+      Prix := ICUStrToDecimalDef(SetValue(edPrix, Label9, ICUFormatCurrency(DefaultEdition.Prix)), 0);
       Gratuit := SetValue(pnGratuit, CheckBox30, DefaultEdition.Gratuit);
       ISBN := SetValue(edISBN, Label11, DefaultEdition.ISBN);
       Etat := SetValue(cbxEtat, CheckBox23);
@@ -355,7 +355,7 @@ begin
       FormatEdition := SetValue(cbxFormat, CheckBox28);
       AnneeCote := SetValue(edAnneeCote, Label24, DefaultEdition.AnneeCote);
       if PrixCote <> 0 then
-        PrixCote := StrToCurrDef(SetValue(edPrixCote, Label25, FormatCurr(FormatMonnaie, DefaultEdition.PrixCote)), 0);
+        PrixCote := ICUStrToDecimalDef(SetValue(edPrixCote, Label25, ICUFormatCurrency(DefaultEdition.PrixCote)), 0);
       Couleur := SetValue(pnCouleur, CheckBox31, DefaultEdition.Couleur);
       VO := SetValue(pnVO, CheckBox32, DefaultEdition.VO);
       NombreDePages := SetValue(edNbPages, CheckBox33, DefaultEdition.NombreDePages);
@@ -579,7 +579,7 @@ begin
       LoadValue(Collection.NomCollection, edCollection, CheckBox22, DefaultEdition.Collection.NomCollection);
       LoadValue(AnneeEdition, edAnneeEdition, CheckBox29, DefaultEdition.AnneeEdition);
       // if Prix <> 0 then
-      LoadValue(FormatCurr(FormatMonnaie, Prix), edPrix, Label9, FormatCurr(FormatMonnaie, DefaultEdition.Prix));
+      LoadValue(ICUFormatCurrency(Prix), edPrix, Label9, ICUFormatCurrency(DefaultEdition.Prix));
       LoadValue(Gratuit, pnGratuit, CheckBox30, DefaultEdition.Gratuit);
       LoadValue(ISBN, edISBN, Label11, DefaultEdition.ISBN);
       LoadValue(Etat, cbxEtat, CheckBox23);
@@ -590,7 +590,7 @@ begin
       LoadValue(FormatEdition, cbxFormat, CheckBox28);
       LoadValue(AnneeCote, edAnneeCote, Label24, DefaultEdition.AnneeCote);
       // if PrixCote <> 0 then
-      LoadValue(FormatCurr(FormatMonnaie, PrixCote), edPrixCote, Label25, FormatCurr(FormatMonnaie, DefaultEdition.PrixCote));
+      LoadValue(ICUFormatCurrency(PrixCote), edPrixCote, Label25, ICUFormatCurrency(DefaultEdition.PrixCote));
       LoadValue(Couleur, pnCouleur, CheckBox31, DefaultEdition.Couleur);
       LoadValue(VO, pnVO, CheckBox32, DefaultEdition.VO);
       LoadValue(NombreDePages, edNbPages, CheckBox33, DefaultEdition.NombreDePages);

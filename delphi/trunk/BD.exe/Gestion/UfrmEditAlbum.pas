@@ -837,9 +837,9 @@ begin
   c := StrToCurrDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if Convertisseur(SpeedButton3, c) then
     if edPrix.Focused then
-      edPrix.Text := FormatCurr(FormatMonnaieSimple, c)
+      edPrix.Text := ICUFormatDecimal(c)
     else
-      edPrix.Text := FormatCurr(FormatMonnaie, c);
+      edPrix.Text := ICUFormatCurrency(c);
 end;
 
 procedure TfrmEditAlbum.VDTButton6Click(Sender: TObject);
@@ -923,7 +923,7 @@ begin
   begin
     FCurrentEditionComplete.ISBN := edISBN.Text;
     FCurrentEditionComplete.AnneeEdition := StrToIntDef(edAnneeEdition.Text, 0);
-    FCurrentEditionComplete.Prix := StrToCurrDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+    FCurrentEditionComplete.Prix := ICUStrToDecimalDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
     FCurrentEditionComplete.Editeur.ID_Editeur := vtEditEditeurs.CurrentValue;
     FCurrentEditionComplete.Editeur.NomEditeur := vtEditEditeurs.VTEdit.PopupWindow.TreeView.Caption;
     FCurrentEditionComplete.Collection.ID := vtEditCollections.CurrentValue;
@@ -942,7 +942,7 @@ begin
     FCurrentEditionComplete.SensLecture := MakeOption(cbxSensLecture.Value, cbxSensLecture.Caption);
     FCurrentEditionComplete.NombreDePages := StrToIntDef(edNombreDePages.Text, 0);
     FCurrentEditionComplete.AnneeCote := StrToIntDef(edAnneeCote.Text, 0);
-    FCurrentEditionComplete.PrixCote := StrToCurrDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+    FCurrentEditionComplete.PrixCote := ICUStrToDecimalDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
     if dtpAchat.Checked then
       FCurrentEditionComplete.DateAchat := Trunc(dtpAchat.Date)
     else
@@ -993,7 +993,7 @@ begin
       if FCurrentEditionComplete.Prix = 0 then
         edPrix.Text := ''
       else
-        edPrix.Text := FormatCurr(FormatMonnaie, FCurrentEditionComplete.Prix);
+        edPrix.Text := ICUFormatCurrency(FCurrentEditionComplete.Prix);
       vtEditEditeurs.CurrentValue := FCurrentEditionComplete.Editeur.ID_Editeur;
       vtEditCollections.CurrentValue := FCurrentEditionComplete.Collection.ID;
       cbStock.Checked := FCurrentEditionComplete.Stock;
@@ -1018,7 +1018,7 @@ begin
       if FCurrentEditionComplete.PrixCote = 0 then
         edPrixCote.Text := ''
       else
-        edPrixCote.Text := FormatCurr(FormatMonnaie, FCurrentEditionComplete.PrixCote);
+        edPrixCote.Text := ICUFormatCurrency(FCurrentEditionComplete.PrixCote);
       edNotes.Text := FCurrentEditionComplete.Notes;
       edNumPerso.Text := FCurrentEditionComplete.NumeroPerso;
       vstImages.RootNodeCount := FCurrentEditionComplete.Couvertures.Count;
@@ -1314,12 +1314,12 @@ procedure TfrmEditAlbum.VDTButton14Click(Sender: TObject);
 var
   c: Currency;
 begin
-  c := StrToCurrDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  c := ICUStrToDecimalDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if Convertisseur(SpeedButton3, c) then
     if edPrixCote.Focused then
-      edPrixCote.Text := FormatCurr(FormatMonnaieSimple, c)
+      edPrixCote.Text := ICUFormatDecimal(c)
     else
-      edPrixCote.Text := FormatCurr(FormatMonnaie, c);
+      edPrixCote.Text := ICUFormatCurrency(c);
 end;
 
 procedure TfrmEditAlbum.vstImagesMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);

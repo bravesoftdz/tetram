@@ -284,7 +284,7 @@ begin
                 csTitre:
                   S := S + FormatTitre(Fields.ByNameAsString[CritereTri.Champ]);
                 csMonnaie:
-                  S := S + FormatCurr(FormatMonnaie, Fields.ByNameAsCurrency[CritereTri.Champ]);
+                  S := S + ICUFormatCurrency(Fields.ByNameAsCurrency[CritereTri.Champ]);
               else
                 case CritereTri._Champ.TypeData of
                   uftDate:

@@ -40,6 +40,10 @@ function ClearISBN(const Code: string): string;
 
 function FormatTitre(const Titre: string): string; inline;
 function FormatTitreAlbum(Simple, AvecSerie: Boolean; const Titre, Serie: string; Tome, TomeDebut, TomeFin: Integer; Integrale, HorsSerie: Boolean): string;
+function ICUFormatCurrency(const Value: Double; const Locale: AnsiString = ''; const CurrencySymbol: string = ''): string;
+function ICUFormatDecimal(const Value: Double; const Locale: AnsiString = ''): string;
+function ICUStrToDecimal(const Value: string; const Locale: AnsiString = ''): Double;
+function ICUStrToDecimalDef(const Value: string; const Default: Double; const Locale: AnsiString = ''): Double;
 
 type
   IHourGlass = interface
@@ -56,7 +60,8 @@ type
 implementation
 
 uses
-  VCL.Forms, CommonConst, Generics.Collections, JclSimpleXML, System.Math;
+  VCL.Forms, CommonConst, Generics.Collections, JclSimpleXML, System.Math, ICUNumberFormatter, unum,
+  utypes;
 
 function StringToGUIDDef(const GUID: string; const Default: TGUID): TGUID;
 begin
@@ -410,6 +415,64 @@ begin
 
   if Result = '' then
     Result := '<Sans titre>';
+end;
+
+function ICUFormatCurrency(const Value: Double; const Locale: AnsiString = ''; const CurrencySymbol: string = ''): string;
+var
+  formatter: TICUNumberFormatter;
+begin
+  formatter := TICUNumberFormatter.Create(Locale, UNUM_CURRENCY);
+  try
+    if CurrencySymbol <> '' then
+      formatter.Symbols.Currency := CurrencySymbol
+    else if TGlobalVar.Utilisateur.Options.SymboleMonnetaire <> '' then
+      formatter.Symbols.Currency := TGlobalVar.Utilisateur.Options.SymboleMonnetaire;
+
+    Result := formatter.Format(Value);
+  finally
+    formatter.Free;
+  end;
+end;
+
+function ICUFormatDecimal(const Value: Double; const Locale: AnsiString = ''): string;
+var
+  formatter: TICUNumberFormatter;
+begin
+  formatter := TICUNumberFormatter.Create(Locale, UNUM_DECIMAL);
+  try
+    formatter.Attributes.SignificantDigitsUsed := 1;
+    Result := formatter.Format(Value);
+  finally
+    formatter.Free;
+  end;
+end;
+
+function ICUStrToDecimal(const Value: string; const Locale: AnsiString = ''): Double;
+var
+  formatter: TICUNumberFormatter;
+begin
+  formatter := TICUNumberFormatter.Create(Locale, UNUM_DECIMAL);
+  try
+    formatter.Attributes.SignificantDigitsUsed := 1;
+    Result := formatter.ParseDouble(Value);
+  finally
+    formatter.Free;
+  end;
+end;
+
+function ICUStrToDecimalDef(const Value: string; const Default: Double; const Locale: AnsiString = ''): Double;
+var
+  formatter: TICUNumberFormatter;
+begin
+  formatter := TICUNumberFormatter.Create(Locale, UNUM_DECIMAL);
+  try
+    formatter.Attributes.SignificantDigitsUsed := 1;
+    Result := formatter.ParseDouble(Value);
+    if U_FAILURE(formatter.GetErrorCode) then
+      Result := Default;
+  finally
+    formatter.Free;
+  end;
 end;
 
 { THourGlass }

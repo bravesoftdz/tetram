@@ -6,9 +6,6 @@
         <Projects Include="BDT_UDF.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="icu\Test\ICUTests.dproj">
-            <Dependencies/>
-        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -26,23 +23,14 @@
     <Target Name="BDT_UDF:Make">
         <MSBuild Projects="BDT_UDF.dproj" Targets="Make"/>
     </Target>
-    <Target Name="ICUTests">
-        <MSBuild Projects="icu\Test\ICUTests.dproj"/>
-    </Target>
-    <Target Name="ICUTests:Clean">
-        <MSBuild Projects="icu\Test\ICUTests.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="ICUTests:Make">
-        <MSBuild Projects="icu\Test\ICUTests.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Build">
-        <CallTarget Targets="BDT_UDF;ICUTests"/>
+        <CallTarget Targets="BDT_UDF"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="BDT_UDF:Clean;ICUTests:Clean"/>
+        <CallTarget Targets="BDT_UDF:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="BDT_UDF:Make;ICUTests:Make"/>
+        <CallTarget Targets="BDT_UDF:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

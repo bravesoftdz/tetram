@@ -11,12 +11,8 @@ uses
   Math,
   AnsiStrings,
   StrUtils,
-  unum in 'icu\lib\unum.pas',
-  icu_globals in 'icu\lib\icu_globals.pas',
-  utypes in 'icu\lib\utypes.pas',
-  umachine in 'icu\lib\umachine.pas',
-  umisc in 'icu\lib\umisc.pas',
-  parseerr in 'icu\lib\parseerr.pas';
+  ICUNumberFormatter in 'D:\Composants\Perso\icu\ICUNumberFormatter.pas',
+  unum in 'D:\Composants\Perso\icu\lib\unum.pas';
 
 {$R *.res}
 
@@ -72,6 +68,18 @@ begin
     end;
   except
   end; // pour être sûr de ne pas faire planter le serveur !!!!
+end;
+
+function IntegerAsNatural(var Value: Integer; Locale: PAnsiChar): PAnsiChar; cdecl; export;
+var
+  number: TICUNumberFormatter;
+begin
+  number := TICUNumberFormatter.Create(Locale, UNUM_SPELLOUT);
+  try
+    Result := CreateResult(AnsiString(number.Format(Value)));
+  finally
+    number.Free;
+  end;
 end;
 
 function SubString(Chaine: PAnsiChar; var Position, Longueur: Integer): PAnsiChar; cdecl; export;
@@ -363,7 +371,7 @@ begin
       Add(Chaine);
       SaveToFile('G:\Programmation\MEDIA.KIT\BDthèque 1.0\UDF\bdt_udf.log');
     finally
-      free;
+      Free;
     end;
 end;
 
@@ -392,7 +400,7 @@ begin
         end;
         Result := BlobS.Size;
       finally
-        free;
+        Free;
       end;
   except
     Result := 0;
@@ -415,7 +423,7 @@ begin
         while Position < Size do
           Blob.PutSegment(Blob.BlobHandle, @buffer[0], Read(buffer, Length(buffer)));
       finally
-        free;
+        Free;
       end;
   except
   end; // pour être sûr de ne pas faire planter le serveur !!!!
@@ -484,7 +492,7 @@ begin
   if Reserve <> 0 then
   begin
     ForceDirectories(string(Path));
-    TFileStream.Create(Fichier + toAdd, fmCreate).free;
+    TFileStream.Create(Fichier + toAdd, fmCreate).Free;
   end;
   Result := CreateResult(AnsiString(Fichier + toAdd));
 end;
@@ -525,7 +533,8 @@ exports
   CompareChaines2 name 'IdenticalString2',
   FormatTitle,
   UDFLength name 'Length',
-  LevenshteinDistance;
+  LevenshteinDistance,
+  IntegerAsNatural;
 
 begin
 

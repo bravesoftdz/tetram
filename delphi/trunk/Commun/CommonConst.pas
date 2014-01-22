@@ -25,10 +25,7 @@ var
   RessourcePic: string = 'BDPic.dll';
   HandleDLLPic: Integer = 0;
   FichierIni: string = 'Bd.ini';
-  FormatMonnaieCourt: string = '';
   FormatPourcent: string = '';
-  FormatMonnaie: string = '';
-  FormatMonnaieSimple: string = '';
 
 const
   TitreApplication = 'BDthèque';
@@ -192,10 +189,6 @@ initialization
 SevenzipLibraryName := '7z_x64.dll';
 {$ENDIF}
 InitPath;
-FormatMonnaieCourt := '#,##0.00';
-FormatMonnaieSimple := '0.00';
-FormatMonnaie := IIf(FormatSettings.CurrencyFormat in [0, 2], FormatSettings.CurrencyString + IIf(FormatSettings.CurrencyFormat = 2, ' ', ''), '') +
-  FormatMonnaieCourt + IIf(FormatSettings.CurrencyFormat in [1, 3], IIf(FormatSettings.CurrencyFormat = 3, ' ', '') + FormatSettings.CurrencyString, '');
 FormatPourcent := '%d (%f%%)';
 TGlobalVar.Utilisateur.ExeVersion := GetFichierVersion(TPath.Combine(TPath.GetLibraryPath, 'bd.exe'));
 TGlobalVar.Utilisateur.AppVersion := Format('%d.%d', [TGlobalVar.Utilisateur.ExeVersion.MajorVersion, TGlobalVar.Utilisateur.ExeVersion.MinorVersion]);

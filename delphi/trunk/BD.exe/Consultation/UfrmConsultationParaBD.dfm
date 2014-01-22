@@ -25,8 +25,6 @@ object frmConsultationParaBD: TfrmConsultationParaBD
     BorderStyle = bsNone
     ParentBackground = True
     TabOrder = 0
-    ExplicitWidth = 842
-    ExplicitHeight = 489
     DesignSize = (
       755
       575)

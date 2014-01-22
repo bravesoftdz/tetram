@@ -333,9 +333,6 @@ begin
       SQL.Text := 'select first 1 valeur from options where nom_option = ? order by dm_options desc';
       Prepare(True);
       TGlobalVar.Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', FormatSettings.CurrencyString);
-      FormatMonnaie := IfThen(FormatSettings.CurrencyFormat in [0, 2], TGlobalVar.Utilisateur.Options.SymboleMonnetaire +
-        IfThen(FormatSettings.CurrencyFormat = 2, ' ', ''), '') + FormatMonnaieCourt + IfThen(FormatSettings.CurrencyFormat in [1, 3],
-        IfThen(FormatSettings.CurrencyFormat = 3, ' ', '') + TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '');
       RepImages := LitStr(op, 'RepImages', RepImages);
     finally
       Transaction.Free;

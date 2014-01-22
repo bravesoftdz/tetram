@@ -149,12 +149,12 @@ begin
   if FParaBD.Prix = 0 then
     edPrix.Text := ''
   else
-    edPrix.Text := FormatCurr(FormatMonnaie, FParaBD.Prix);
+    edPrix.Text := ICUFormatCurrency(FParaBD.Prix);
   edAnneeCote.Text := NonZero(IntToStr(FParaBD.AnneeCote));
   if FParaBD.PrixCote = 0 then
     edPrixCote.Text := ''
   else
-    edPrixCote.Text := FormatCurr(FormatMonnaie, FParaBD.PrixCote);
+    edPrixCote.Text := ICUFormatCurrency(FParaBD.PrixCote);
   cbStock.Checked := FParaBD.Stock;
 
   lvUnivers.Items.BeginUpdate;
@@ -208,24 +208,24 @@ procedure TfrmEditParaBD.SpeedButton3Click(Sender: TObject);
 var
   c: Currency;
 begin
-  c := StrToCurrDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  c := ICUStrToDecimalDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if Convertisseur(SpeedButton3, c) then
     if edPrix.Focused then
-      edPrix.Text := FormatCurr(FormatMonnaieSimple, c)
+      edPrix.Text := ICUFormatDecimal(c)
     else
-      edPrix.Text := FormatCurr(FormatMonnaie, c);
+      edPrix.Text := ICUFormatCurrency(c);
 end;
 
 procedure TfrmEditParaBD.VDTButton14Click(Sender: TObject);
 var
   c: Currency;
 begin
-  c := StrToCurrDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  c := ICUStrToDecimalDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if Convertisseur(SpeedButton3, c) then
     if edPrixCote.Focused then
-      edPrixCote.Text := FormatCurr(FormatMonnaieSimple, c)
+      edPrixCote.Text := ICUFormatDecimal(c)
     else
-      edPrixCote.Text := FormatCurr(FormatMonnaie, c);
+      edPrixCote.Text := ICUFormatCurrency(c);
 end;
 
 procedure TfrmEditParaBD.FormActivate(Sender: TObject);
@@ -278,7 +278,7 @@ begin
   end;
 
   AnneeCote := StrToIntDef(edAnneeCote.Text, 0);
-  PrixCote := StrToCurrDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  PrixCote := ICUStrToDecimalDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if (AnneeCote * PrixCote = 0) and (AnneeCote + PrixCote <> 0) then
   begin
     // une cote doit être composée d'une année ET d'un prix
@@ -304,7 +304,7 @@ begin
     FParaBD.DateAchat := Trunc(dtpAchat.Date)
   else
     FParaBD.DateAchat := 0;
-  FParaBD.Prix := StrToCurrDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  FParaBD.Prix := ICUStrToDecimalDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   FParaBD.Stock := cbStock.Checked;
 
   FParaBD.ImageStockee := cbImageBDD.Checked;

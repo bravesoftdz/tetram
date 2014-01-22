@@ -101,7 +101,7 @@ begin
     fc := TframConvertisseur(ListFC[i]);
     fc.Edit1.Text := '';
     try
-      fc.Edit1.Text := FormatCurr(FormatMonnaieSimple, Value / fc.FTaux);
+      fc.Edit1.Text := ICUFormatDecimal(Value / fc.FTaux);
     except
     end;
   end;
