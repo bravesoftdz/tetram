@@ -69,12 +69,12 @@ begin
     AlbumsIntegrales.Caption := Format(FormatPourcent, [Info.NbAlbumsIntegrale, MulDiv(Info.NbAlbumsIntegrale, 100, Info.NbAlbums)]);
     AlbumsHorsSerie.Caption := Format(FormatPourcent, [Info.NbAlbumsHorsSerie, MulDiv(Info.NbAlbumsHorsSerie, 100, Info.NbAlbums)]);
 
-    PrixMoy.Caption := ICUFormatCurrency(Info.PrixAlbumMoyen);
+    PrixMoy.Caption := ICUCurrencyToStr(Info.PrixAlbumMoyen);
 
-    PrixMax.Caption := ICUFormatCurrency(Info.PrixAlbumMaximun);
-    PrixMin.Caption := ICUFormatCurrency(Info.PrixAlbumMinimun);
-    TotalConnu.Caption := ICUFormatCurrency(Info.ValeurConnue);
-    TotalEstime.Caption := ICUFormatCurrency(Info.ValeurEstimee);
+    PrixMax.Caption := ICUCurrencyToStr(Info.PrixAlbumMaximun);
+    PrixMin.Caption := ICUCurrencyToStr(Info.PrixAlbumMinimun);
+    TotalConnu.Caption := ICUCurrencyToStr(Info.ValeurConnue);
+    TotalEstime.Caption := ICUCurrencyToStr(Info.ValeurEstimee);
 
     i := Max(totalestime.Left + totalestime.Width, totalconnu.Left + totalconnu.Width);
     PrixMoy.Left := i - PrixMoy.Width;

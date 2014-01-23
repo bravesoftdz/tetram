@@ -193,9 +193,9 @@ end;
 procedure TfrmOptions.calculExit(Sender: TObject);
 begin
   try
-    TEdit(Sender).Text := ICUFormatDecimal(ICUStrToDecimal(TEdit(Sender).Text));
+    TEdit(Sender).Text := ICUDoubleToStr(ICUStrToDouble(TEdit(Sender).Text));
   except
-    TEdit(Sender).Text := ICUFormatDecimal(0);
+    TEdit(Sender).Text := ICUDoubleToStr(0);
   end;
 end;
 
@@ -347,7 +347,7 @@ procedure TfrmOptions.SpeedButton1Click(Sender: TObject);
 begin
   ComboBox2.Text := '';
   ComboBox3.Text := '';
-  Edit1.Text := ICUFormatDecimal(0);
+  Edit1.Text := ICUDoubleToStr(0);
   Panel4.Visible := True;
   SpeedButton2.Enabled := False;
   SpeedButton3.Enabled := False;
@@ -358,7 +358,7 @@ begin
   if Sender is TComboBox then
     if Length(TComboBox(Sender).Text) > 5 then
       TComboBox(Sender).Text := Copy(TComboBox(Sender).Text, 1, 5);
-  Label10.Caption := Format('%s = %s', [ICUFormatCurrency(1, '', ComboBox2.Text), ICUFormatCurrency(ICUStrToDecimal(Edit1.Text), '', ComboBox3.Text)]);
+  Label10.Caption := Format('%s = %s', [ICUCurrencyToStr(1, '', ComboBox2.Text), ICUCurrencyToStr(ICUStrToDouble(Edit1.Text), '', ComboBox3.Text)]);
   Frame12.btnOK.Enabled := (ComboBox2.Text <> '') and (Edit1.Text <> '') and (ComboBox3.Text <> '');
 end;
 
@@ -369,7 +369,7 @@ begin
   SItem := ListView1.Selected;
   ComboBox2.Text := TConversionLite(SItem.Data).Monnaie1;
   ComboBox3.Text := TConversionLite(SItem.Data).Monnaie2;
-  Edit1.Text := ICUFormatDecimal(TConversionLite(SItem.Data).Taux);
+  Edit1.Text := ICUDoubleToStr(TConversionLite(SItem.Data).Taux);
   Panel4.Visible := True;
   SpeedButton2.Enabled := False;
   SpeedButton1.Enabled := False;
@@ -391,9 +391,9 @@ end;
 procedure TfrmOptions.Edit1Exit(Sender: TObject);
 begin
   try
-    TEdit(Sender).Text := ICUFormatDecimal(ICUStrToDecimal(TEdit(Sender).Text));
+    TEdit(Sender).Text := ICUDoubleToStr(ICUStrToDouble(TEdit(Sender).Text));
   except
-    TEdit(Sender).Text := ICUFormatDecimal(0);
+    TEdit(Sender).Text := ICUDoubleToStr(0);
   end;
 end;
 

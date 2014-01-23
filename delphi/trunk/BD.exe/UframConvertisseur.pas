@@ -37,8 +37,8 @@ var
 begin
   Position := Edit1.SelStart;
   Label2.Caption := '';
-  val := ICUStrToDecimalDef(Edit1.Text, 0) * FTaux;
-  Label2.Caption := ICUFormatCurrency(val);
+  val := ICUStrToDoubleDef(Edit1.Text, 0) * FTaux;
+  Label2.Caption := ICUCurrencyToStr(val);
   if not travail then begin
     travail := True;
     TFrmConvers(Owner).Valeur := val;

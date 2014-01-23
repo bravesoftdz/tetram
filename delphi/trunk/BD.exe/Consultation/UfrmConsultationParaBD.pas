@@ -156,10 +156,10 @@ begin
   else if FParaBD.Prix = 0 then
     Prix.Caption := ''
   else
-    Prix.Caption := ICUFormatCurrency(FParaBD.Prix);
+    Prix.Caption := ICUCurrencyToStr(FParaBD.Prix);
 
   if FParaBD.PrixCote > 0 then
-    lbCote.Caption := Format('%s (%d)', [ICUFormatCurrency(FParaBD.PrixCote), FParaBD.AnneeCote])
+    lbCote.Caption := Format('%s (%d)', [ICUCurrencyToStr(FParaBD.PrixCote), FParaBD.AnneeCote])
   else
     lbCote.Caption := '';
 

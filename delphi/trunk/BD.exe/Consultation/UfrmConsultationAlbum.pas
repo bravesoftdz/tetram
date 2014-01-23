@@ -419,10 +419,10 @@ begin
       else if FCurrentEdition.Prix = 0 then
         Prix.Caption := ''
       else
-        Prix.Caption := ICUFormatCurrency(FCurrentEdition.Prix);
+        Prix.Caption := ICUCurrencyToStr(FCurrentEdition.Prix);
 
       if FCurrentEdition.PrixCote > 0 then
-        lbCote.Caption := Format('%s (%d)', [ICUFormatCurrency(FCurrentEdition.PrixCote), FCurrentEdition.AnneeCote])
+        lbCote.Caption := Format('%s (%d)', [ICUCurrencyToStr(FCurrentEdition.PrixCote), FCurrentEdition.AnneeCote])
       else
         lbCote.Caption := '';
     end;
