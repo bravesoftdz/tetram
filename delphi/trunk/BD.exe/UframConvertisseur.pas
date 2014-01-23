@@ -23,7 +23,7 @@ type
 
 implementation
 
-uses Commun, CommonConst, UfrmConvertisseur;
+uses Commun, CommonConst, UfrmConvertisseur, ICUNumberFormatter;
 
 {$R *.DFM}
 

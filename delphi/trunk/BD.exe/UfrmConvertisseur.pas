@@ -30,7 +30,7 @@ var
 implementation
 
 uses CommonConst, Entities.Lite, UdmPrinc, UIB, Commun, Entities.DaoLite,
-  Entities.FactoriesLite;
+  Entities.FactoriesLite, ICUNumberFormatter;
 
 {$R *.DFM}
 

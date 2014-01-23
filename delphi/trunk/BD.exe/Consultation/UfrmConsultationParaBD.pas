@@ -89,7 +89,8 @@ type
 implementation
 
 uses Commun, Entities.Lite, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
-  Proc_Gestions, Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
+  Proc_Gestions, Entities.DaoFull, Entities.Common, Entities.FactoriesFull,
+  ICUNumberFormatter;
 
 {$R *.dfm}
 { TFrmConsultationParaBD }

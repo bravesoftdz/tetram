@@ -103,7 +103,7 @@ type
 implementation
 
 uses
-  Textes, Commun, CommonConst, StrUtils, Entities.Common;
+  Textes, Commun, CommonConst, StrUtils, Entities.Common, ICUNumberFormatter;
 
 {$R *.dfm}
 

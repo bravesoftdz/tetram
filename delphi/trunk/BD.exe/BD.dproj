@@ -98,6 +98,7 @@
         <Base>true</Base>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base)'!=''">
+        <DCC_UnitSearchPath>$(Composants)\Perso\icu;$(Composants)\Perso\icu\lib;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <DCC_SYMBOL_PLATFORM>false</DCC_SYMBOL_PLATFORM>
         <DCC_UNIT_PLATFORM>false</DCC_UNIT_PLATFORM>
         <DCC_WriteableConstants>true</DCC_WriteableConstants>
@@ -611,7 +612,6 @@
                     <VersionInfoKeys Name="CFBundleDevelopmentRegion"/>
                 </VersionInfoKeys>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\dclDataSnapServer180.bpl">Composants serveur DBExpress DataSnap Embarcadero</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dclDataSnapClient180.bpl">Composants clients Embarcadero DBExpress DataSnap</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dcloffice2k180.bpl">Composants Microsoft Office 2000 Sample Automation Server Wrapper</Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\dclofficexp180.bpl">Composants Microsoft Office XP Sample Automation Server Wrapper</Excluded_Packages>

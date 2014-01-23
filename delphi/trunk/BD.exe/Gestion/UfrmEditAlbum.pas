@@ -195,7 +195,8 @@ implementation
 uses
   Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
   UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
-  Entities.FactoriesLite, Entities.FactoriesFull, Entities.DaoLambda;
+  Entities.FactoriesLite, Entities.FactoriesFull, Entities.DaoLambda,
+  ICUNumberFormatter;
 
 {$R *.DFM}
 

@@ -140,7 +140,7 @@ implementation
 
 uses
   IOUtils, Commun, Procedures, CommonConst, Entities.DaoFull, ProceduresBDtk,
-  Entities.Common, Entities.DaoLambda;
+  Entities.Common, Entities.DaoLambda, ICUNumberFormatter;
 
 {$R *.dfm}
 
