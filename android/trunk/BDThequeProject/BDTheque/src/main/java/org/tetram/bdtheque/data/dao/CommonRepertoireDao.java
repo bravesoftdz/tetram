@@ -48,7 +48,7 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
             sWhere += filtre == null || "".equals(filtre) ? "" : " and " + filtre;
             Cursor cursor = rdb.rawQuery(BDThequeApplication.getInstance().getString(resId, sWhere), params);
             try {
-                List<B> result = new ArrayList<B>();
+                List<B> result = new ArrayList<>();
                 while (cursor.moveToNext()) {
                     result.add(loadFromCursor(this.getBeanClass(), cursor, true, null));
                 }
@@ -68,7 +68,7 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
             Cursor cursor = rdb.rawQuery(sql, null);
             try {
                 int cValue = (cursor.getColumnCount() == 2) ? 0 : 2;
-                List<I> result = new ArrayList<I>();
+                List<I> result = new ArrayList<>();
                 while (cursor.moveToNext()) {
                     result.add((I) InitialeBean.createInstance(this.initialeClass, cursor.getString(0), cursor.getInt(1), cursor.getString(cValue)));
                 }

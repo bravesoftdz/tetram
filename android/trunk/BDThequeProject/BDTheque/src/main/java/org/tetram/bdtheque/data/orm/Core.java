@@ -22,9 +22,9 @@ import java.util.Map;
 @SuppressWarnings("UnusedDeclaration")
 public abstract class Core {
 
-    private static final Map<Class<? extends CommonBean>, List<PropertyDescriptor>> propertyDescriptorsList = new HashMap<Class<? extends CommonBean>, List<PropertyDescriptor>>();
-    private static final Map<Class<? extends CommonBean>, SQLDescriptor> sqlDescriptorsList = new HashMap<Class<? extends CommonBean>, SQLDescriptor>();
-    private static final Map<Class<? extends CommonBean>, QueryInfo> queryInfoList = new HashMap<Class<? extends CommonBean>, QueryInfo>();
+    private static final Map<Class<? extends CommonBean>, List<PropertyDescriptor>> propertyDescriptorsList = new HashMap<>();
+    private static final Map<Class<? extends CommonBean>, SQLDescriptor> sqlDescriptorsList = new HashMap<>();
+    private static final Map<Class<? extends CommonBean>, QueryInfo> queryInfoList = new HashMap<>();
     private static BDDatabaseHelper databaseHelper;
 
     private Core() {
@@ -50,10 +50,10 @@ public abstract class Core {
     private static List<PropertyDescriptor> buildPropertiesDescriptors(Class<? extends CommonBean> masterClasz, Class<? extends CommonBean> clasz) {
         List<PropertyDescriptor> result = propertyDescriptorsList.get(clasz);
         if (null == result) {
-            result = new ArrayList<PropertyDescriptor>();
+            result = new ArrayList<>();
             java.lang.reflect.Field[] fields = clasz.getDeclaredFields();
 
-            for (java.lang.reflect.Field field : fields) {
+            for (final java.lang.reflect.Field field : fields) {
                 if (!Modifier.isStatic(field.getModifiers())) {
                     SimplePropertyDescriptor simpleProperty = new SimplePropertyDescriptor();
                     simpleProperty.annotation = field.getAnnotation(Field.class);
@@ -65,14 +65,14 @@ public abstract class Core {
                         final String setterName = String.format("set%s%s", field.getName().substring(0, 1).toUpperCase(), field.getName().substring(1));
                         try {
                             simpleProperty.setter = masterClasz.getMethod(setterName, field.getType());
-                        } catch (NoSuchMethodException e) {
+                        } catch (final NoSuchMethodException e) {
                             e.printStackTrace();
                         }
                         final boolean isBoolean = field.getType().equals(boolean.class) || field.getType().equals(Boolean.class);
                         final String getterName = String.format("%s%s%s", isBoolean ? "is" : "get", field.getName().substring(0, 1).toUpperCase(), field.getName().substring(1));
                         try {
                             simpleProperty.getter = masterClasz.getMethod(getterName);
-                        } catch (NoSuchMethodException e) {
+                        } catch (final NoSuchMethodException e) {
                             e.printStackTrace();
                         }
                         result.add(simpleProperty);
@@ -91,7 +91,7 @@ public abstract class Core {
                         final String getterName = String.format("%s%s%s", "get", field.getName().substring(0, 1).toUpperCase(), field.getName().substring(1));
                         try {
                             multipleProperty.getter = masterClasz.getMethod(getterName);
-                        } catch (NoSuchMethodException e) {
+                        } catch (final NoSuchMethodException e) {
                             e.printStackTrace();
                         }
                         result.add(multipleProperty);
@@ -124,17 +124,11 @@ public abstract class Core {
             if (BeanFactory.class.isAssignableFrom(a.factoryClass()))
                 try {
                     result.factory = (BeanFactory) a.factoryClass().getConstructor().newInstance();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
+                } catch (final InstantiationException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
                     e.printStackTrace();
                 }
             List<PropertyDescriptor> properties = getPropertiesDescriptors(clasz);
-            for (PropertyDescriptor property : properties) {
+            for (final PropertyDescriptor property : properties) {
                 if (property instanceof SimplePropertyDescriptor) {
                     SimplePropertyDescriptor simpleProperty = (SimplePropertyDescriptor) property;
                     if (simpleProperty.annotation.primaryKey())
@@ -179,7 +173,7 @@ public abstract class Core {
 
         int localIndicator = queryInfo.indicator;
 
-        for (Map.Entry<SimplePropertyDescriptor, SQLDescriptor> column : descriptor.getColumns().entrySet()) {
+        for (final Map.Entry<SimplePropertyDescriptor, SQLDescriptor> column : descriptor.getColumns().entrySet()) {
             PropertySQLDescriptor property = new PropertySQLDescriptor();
 
             property.property = column.getKey();

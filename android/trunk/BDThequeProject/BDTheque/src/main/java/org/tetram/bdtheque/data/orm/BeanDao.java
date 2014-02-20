@@ -31,7 +31,7 @@ public abstract class BeanDao {
         QueryInfo queryInfo = Core.getQueryInfo(beanClass);
 
         StringBuilder tableList = new StringBuilder(150);
-        for (String table : queryInfo.getTables())
+        for (final String table : queryInfo.getTables())
             tableList.append(table).append(" ");
 
         SQLiteQueryBuilder qryBuilder = new SQLiteQueryBuilder();
@@ -94,7 +94,7 @@ public abstract class BeanDao {
         QueryInfo queryInfo = Core.getQueryInfo(beanClass);
 
         StringBuilder tableList = new StringBuilder(150);
-        for (String table : queryInfo.getTables())
+        for (final String table : queryInfo.getTables())
             tableList.append(table).append(" ");
 
         SQLiteQueryBuilder qryBuilder = new SQLiteQueryBuilder();
@@ -114,7 +114,7 @@ public abstract class BeanDao {
 
         Log.i(BeanDao.class.getName(), sql);
 
-        List<T> result = new ArrayList<T>();
+        List<T> result = new ArrayList<>();
         Cursor cursor = rdb.rawQuery(sql, selectionArgs);
         try {
             if (cursor.moveToFirst())

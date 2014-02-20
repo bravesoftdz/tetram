@@ -44,7 +44,7 @@ public class FichePersonneFragment extends FicheFragment {
 
         ViewPager tabsContent = (ViewPager) view.findViewById(android.R.id.tabcontent);
 
-        List<ViewPagerAdapter.TabDescriptor> tabList = new ArrayList<ViewPagerAdapter.TabDescriptor>();
+        List<ViewPagerAdapter.TabDescriptor> tabList = new ArrayList<>();
 
         if ((personneBean.getBiographie() != null) && !personneBean.getBiographie().isEmpty())
             tabList.add(new ViewPagerAdapter.TabDescriptor(

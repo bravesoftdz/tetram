@@ -23,7 +23,7 @@ import java.util.List;
 public class BuildDemoImages extends AsyncTask<Void, Void, Void> {
 
     private ProgressDialog progress;
-    private final List<Field> drawables = new ArrayList<Field>();
+    private final List<Field> drawables = new ArrayList<>();
     private String externalDir;
     private final Context context;
     private boolean alreadyDone;

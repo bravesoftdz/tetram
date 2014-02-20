@@ -29,7 +29,7 @@ public class BDDatabaseHelper extends SQLiteOpenHelper {
     private void runSQL(SQLiteDatabase db, String scriptName) {
         try {
             DBUtils.executeSqlScript(this.context, db, scriptName);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
     }

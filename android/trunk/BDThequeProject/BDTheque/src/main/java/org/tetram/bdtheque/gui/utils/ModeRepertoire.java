@@ -72,7 +72,7 @@ public enum ModeRepertoire {
 
     public static ModeRepertoire fromValue(Integer value) {
         if (value == null) return DEFAULT_MODE;
-        for (ModeRepertoire modeRepertoire : ModeRepertoire.values())
+        for (final ModeRepertoire modeRepertoire : ModeRepertoire.values())
             if (value.equals(modeRepertoire.getValue()))
                 return modeRepertoire;
         return DEFAULT_MODE;

@@ -12,7 +12,7 @@ public class InitialeBean {
             t.setLabel(label);
             t.setValue(value);
             t.setCount(count);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
         return t;

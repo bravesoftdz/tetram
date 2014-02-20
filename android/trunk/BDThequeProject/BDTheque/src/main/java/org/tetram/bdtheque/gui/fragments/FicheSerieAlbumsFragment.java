@@ -12,7 +12,6 @@ import org.tetram.bdtheque.R;
 import org.tetram.bdtheque.data.bean.AlbumBean;
 import org.tetram.bdtheque.data.bean.SerieBean;
 import org.tetram.bdtheque.data.bean.abstracts.CommonBean;
-import org.tetram.bdtheque.data.bean.lite.AlbumLiteBean;
 import org.tetram.bdtheque.gui.adapters.ListLiteBeanAdapter;
 
 public class FicheSerieAlbumsFragment extends FicheFragment {
@@ -38,7 +37,7 @@ public class FicheSerieAlbumsFragment extends FicheFragment {
         if (serie != null) {
             final ListView listAlbums = (ListView) v.findViewById(R.id.serie_albums);
             final int itemLayout = (album == null) ? android.R.layout.simple_list_item_1 : R.layout.simple_list_item_single_choice;
-            listAlbums.setAdapter(new ListLiteBeanAdapter<AlbumLiteBean>(getActivity(), itemLayout, serie.getAlbums()));
+            listAlbums.setAdapter(new ListLiteBeanAdapter<>(getActivity(), itemLayout, serie.getAlbums()));
             listAlbums.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

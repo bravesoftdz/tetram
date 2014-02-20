@@ -30,7 +30,7 @@ public abstract class UIUtils {
             try {
                 Method method = aClass.getMethod("isEmpty", (Class[]) null);
                 return (Boolean) method.invoke(o);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 return false;
             }
         }

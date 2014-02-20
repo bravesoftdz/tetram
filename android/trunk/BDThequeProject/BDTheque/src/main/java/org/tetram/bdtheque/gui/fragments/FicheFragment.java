@@ -25,16 +25,14 @@ public abstract class FicheFragment extends Fragment {
         FicheFragment ficheFragment = null;
         try {
             ficheFragment = classFiche.getConstructor().newInstance();
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             e.printStackTrace();
             return null;
-        } catch (InvocationTargetException e) {
+        } catch (final InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
-        } catch (java.lang.InstantiationException e) {
+        } catch (final java.lang.InstantiationException e) {
             e.printStackTrace();
             return null;
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
         }
 
         Bundle args = new Bundle();

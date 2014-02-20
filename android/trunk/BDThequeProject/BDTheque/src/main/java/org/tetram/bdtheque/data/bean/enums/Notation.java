@@ -28,7 +28,7 @@ public enum Notation {
 
     public static Notation fromValue(Integer note) {
         if (note == null) return DEFAULT_NOTATION;
-        for (Notation notation : Notation.values())
+        for (final Notation notation : Notation.values())
             if (note.equals(notation.getValue()))
                 return notation;
         return DEFAULT_NOTATION;

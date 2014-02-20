@@ -28,13 +28,7 @@ public abstract class BeanLoader {
         T bean = null;
         try {
             bean = beanClass.getConstructor().newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (final InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
         LoadResult res = loadByAnnotation(cursor, inline, loadDescriptor, bean);
@@ -63,7 +57,7 @@ public abstract class BeanLoader {
         bean.setId(FieldLoader.getFieldAsUUID(cursor, dbFieldName));
         if (bean.getId() == null) return LoadResult.NOTFOUND;
 
-        for (PropertyDescriptor property : fields)
+        for (final PropertyDescriptor property : fields)
             if (!property.equals(descriptor.getPrimaryKey()))
                 loadProperty(bean, property, cursor, inline, loadDescriptor);
 
@@ -105,7 +99,7 @@ public abstract class BeanLoader {
                 Method enumFromValue;
                 try {
                     enumFromValue = fieldType.getMethod("fromValue", int.class);
-                } catch (NoSuchMethodException e) {
+                } catch (final NoSuchMethodException e) {
                     enumFromValue = fieldType.getMethod("fromValue", Integer.class);
                 }
                 descriptor.getSetter().invoke(bean, enumFromValue.invoke(null, FieldLoader.getFieldAsInteger(cursor, dbFieldName)));
@@ -124,13 +118,9 @@ public abstract class BeanLoader {
                 descriptor.getSetter().invoke(bean, FieldLoader.getFieldAsUUID(cursor, dbFieldName));
             else if (fieldType.equals(URL.class))
                 descriptor.getSetter().invoke(bean, new URL(FieldLoader.getFieldAsString(cursor, dbFieldName)));
-        } catch (NoSuchMethodException e) {
+        } catch (final NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
-        } catch (MalformedURLException ignored) {
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (final MalformedURLException ignored) {
         }
     }
 
@@ -145,20 +135,18 @@ public abstract class BeanLoader {
             StringBuilder filtre = new StringBuilder(150);
             filtre.append(String.format("%s = ?", queryInfo.getFullFieldname(property.getAnnotation().mappedBy())));
             if (property.getFilters() != null)
-                for (Filter filter : property.getFilters().value())
+                for (final Filter filter : property.getFilters().value())
                     filtre.append(String.format(" and (%s = %s)", queryInfo.getFullFieldname(filter.field()), filter.value()));
 
             StringBuilder orderBy = new StringBuilder(150);
             if (property.getOrderBy() != null)
-                for (Order order : property.getOrderBy().value())
+                for (final Order order : property.getOrderBy().value())
                     orderBy.append(queryInfo.getFullFieldname(order.field())).append(order.asc() ? "" : " DESC");
 
             list.clear();
             List<B> tmpList = (List<B>) BeanDao.getList(property.beanClass, filtre.toString(), new String[]{StringUtils.UUIDToGUIDString(bean.getId())}, orderBy.toString());
             list.addAll(tmpList);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
+        } catch (final IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();
         }
     }

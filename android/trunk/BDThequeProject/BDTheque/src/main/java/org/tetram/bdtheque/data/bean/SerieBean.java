@@ -39,18 +39,18 @@ public class SerieBean extends SerieBeanAbstract {
     };
     @OneToMany(mappedBy = "serie")
     @OrderBy(@Order(field = "genre.nom"))
-    private final List<GenreSerieBean> genres = new ArrayList<GenreSerieBean>();
+    private final List<GenreSerieBean> genres = new ArrayList<>();
     @OneToMany(mappedBy = "serie")
     @Filters(@Filter(field = "metier", value = "0"))
-    private final List<AuteurSerieBean> scenaristes = new ArrayList<AuteurSerieBean>();
+    private final List<AuteurSerieBean> scenaristes = new ArrayList<>();
     @OneToMany(mappedBy = "serie")
     @Filters(@Filter(field = "metier", value = "1"))
-    private final List<AuteurSerieBean> dessinateurs = new ArrayList<AuteurSerieBean>();
+    private final List<AuteurSerieBean> dessinateurs = new ArrayList<>();
     @OneToMany(mappedBy = "serie")
     @Filters(@Filter(field = "metier", value = "2"))
-    private final List<AuteurSerieBean> coloristes = new ArrayList<AuteurSerieBean>();
+    private final List<AuteurSerieBean> coloristes = new ArrayList<>();
     @OneToMany(mappedBy = "serie")
-    private final List<AlbumLiteBean> albums = new ArrayList<AlbumLiteBean>();
+    private final List<AlbumLiteBean> albums = new ArrayList<>();
     @Field(fieldName = DDLConstants.SERIES_SITEWEB)
     private URL siteWeb;
     @Field(fieldName = DDLConstants.EDITEURS_ID, nullable = false)
@@ -110,7 +110,7 @@ public class SerieBean extends SerieBeanAbstract {
 
     public String getGenreList() {
         String s = "";
-        for (GenreSerieBean genre : this.genres)
+        for (final GenreSerieBean genre : this.genres)
             s = StringUtils.ajoutString(s, genre.getGenre().getNom(), ", ");
         return s;
     }

@@ -99,7 +99,7 @@ public class FieldLoader {
                         return SQLConstants.simpleDateFormat.parse(dateString);
                     else
                         return SQLConstants.sqlDateFormat.parse(dateString);
-                } catch (ParseException e) {
+                } catch (final ParseException e) {
                     e.printStackTrace();
                     return null;
                 }

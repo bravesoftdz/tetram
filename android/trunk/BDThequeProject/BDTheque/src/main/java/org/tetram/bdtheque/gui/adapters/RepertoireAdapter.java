@@ -30,10 +30,10 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
 
     private final ExpandableListView expandableListView;
     @SuppressWarnings("UnusedDeclaration")
-    private final LinkedHashMap<Character, Integer> sectionsPositions = new LinkedHashMap<Character, Integer>();
+    private final LinkedHashMap<Character, Integer> sectionsPositions = new LinkedHashMap<>();
     @SuppressWarnings("UnusedDeclaration")
-    private final List<Character> sections = new ArrayList<Character>();
-    private final List<Character> realListInitiales = new ArrayList<Character>();
+    private final List<Character> sections = new ArrayList<>();
+    private final List<Character> realListInitiales = new ArrayList<>();
     InitialeRepertoireDao repertoireDao;
     Context context;
     private List<? extends InitialeBean> listInitiales;
@@ -82,14 +82,14 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
             this.sections.addAll(this.sectionsPositions.keySet());
 */
             this.realListInitiales.clear();
-            for (InitialeBean initiale : this.listInitiales)
+            for (final InitialeBean initiale : this.listInitiales)
                 this.realListInitiales.add(Character.toUpperCase(initiale.getRawLabel().charAt(0)));
         }
     }
 
     private void ensureData(final Integer initiale) {
         if (this.mapData == null)
-            this.mapData = new SparseArray<List<T>>(getGroupCount());
+            this.mapData = new SparseArray<>(getGroupCount());
 
         if (this.mapData.indexOfKey(initiale) < 0)
             this.mapData.put(initiale, this.repertoireDao.getData(this.listInitiales.get(initiale)));
@@ -221,7 +221,7 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
 
     @SuppressWarnings("SuspiciousMethodCalls")
     @Override
-    public int getPositionForSection(int section) {
+    public int getPositionForSection(int sectionIndex) {
         if (this.manualScroll) {
 /*
             int flatSection = ExpandableListView.getPackedPositionGroup(this.expandableListView.getExpandableListPosition(section));
@@ -229,9 +229,9 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
             Character character = this.sections.get(flatSection);
             return this.sectionsPositions.get(character);
 */
-            return section;
+            return sectionIndex;
         } else {
-            return this.expandableListView.getFlatListPosition(ExpandableListView.getPackedPositionForGroup(section));
+            return this.expandableListView.getFlatListPosition(ExpandableListView.getPackedPositionForGroup(sectionIndex));
         }
     }
 

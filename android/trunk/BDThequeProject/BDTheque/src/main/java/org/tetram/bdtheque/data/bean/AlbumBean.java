@@ -28,15 +28,15 @@ public class AlbumBean extends AlbumBeanAbstract {
     private SerieBean serie;
     @OneToMany(mappedBy = "album")
     @Filters(@Filter(field = "metier", value = "0"))
-    private final List<AuteurAlbumBean> scenaristes = new ArrayList<AuteurAlbumBean>();
+    private final List<AuteurAlbumBean> scenaristes = new ArrayList<>();
     @OneToMany(mappedBy = "album")
     @Filters(@Filter(field = "metier", value = "1"))
-    private final List<AuteurAlbumBean> dessinateurs = new ArrayList<AuteurAlbumBean>();
+    private final List<AuteurAlbumBean> dessinateurs = new ArrayList<>();
     @OneToMany(mappedBy = "album")
     @Filters(@Filter(field = "metier", value = "2"))
-    private final List<AuteurAlbumBean> coloristes = new ArrayList<AuteurAlbumBean>();
+    private final List<AuteurAlbumBean> coloristes = new ArrayList<>();
     @OneToMany(mappedBy = "album")
-    private final List<EditionBean> editions = new ArrayList<EditionBean>();
+    private final List<EditionBean> editions = new ArrayList<>();
 
     @SuppressWarnings("FieldNameHidesFieldInSuperclass")
     public static final Creator<AlbumBean> CREATOR = new Creator<AlbumBean>() {

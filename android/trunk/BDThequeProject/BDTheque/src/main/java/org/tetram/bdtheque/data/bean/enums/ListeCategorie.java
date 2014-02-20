@@ -21,7 +21,7 @@ public enum ListeCategorie {
 
     @Nullable
     public static ListeCategorie fromValue(int value) {
-        for (ListeCategorie type : values())
+        for (final ListeCategorie type : values())
             if (type.value == value) return type;
         return null;
     }

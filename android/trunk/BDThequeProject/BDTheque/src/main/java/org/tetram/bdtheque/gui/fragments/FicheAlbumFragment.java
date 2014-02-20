@@ -66,7 +66,7 @@ public class FicheAlbumFragment extends FicheFragment {
 
         ViewPager tabsContent = (ViewPager) view.findViewById(android.R.id.tabcontent);
 
-        List<TabDescriptor> tabList = new ArrayList<TabDescriptor>();
+        List<TabDescriptor> tabList = new ArrayList<>();
 
         tabList.add(new TabDescriptor(
                 getResources().getString(R.string.fiche_album_tab_details),
@@ -82,7 +82,7 @@ public class FicheAlbumFragment extends FicheFragment {
             ));
 
             int nbImages = 0;
-            for (EditionBean edition : albumBean.getEditions())
+            for (final EditionBean edition : albumBean.getEditions())
                 nbImages += edition.getImages().size();
             if (nbImages > 0) {
                 tabList.add(new TabDescriptor(

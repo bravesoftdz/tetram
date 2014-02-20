@@ -1,21 +1,8 @@
 apply plugin: 'android'
 
-dependencies {
-    compile project(':libraries:bdtheque-dependencies')
-    compile project(':libraries:android-styled-dialogs')
-    compile project(':libraries:universal-image-loader')
-    compile project(':libraries:photoview')
-    compile project(':libraries:android-viewpagerindicator')
-}
-
 android {
     compileSdkVersion 16
-    buildToolsVersion "19"
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_6
-        targetCompatibility = JavaVersion.VERSION_1_6
-    }
+    buildToolsVersion '19.0.1'
 
     dexOptions {
         //incremental true
@@ -49,25 +36,30 @@ android {
 
     buildTypes {
         release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             signingConfig signingConfigs.release
-            buildConfig "public final static boolean TRIAL = false;"
+            buildConfigField "boolean", "TRIAL", "false"
+            debuggable false
         }
-
         trial.initWith(buildTypes.release)
         trial {
-            buildConfig "public final static boolean TRIAL = true;"
+            buildConfigField "boolean", "TRIAL", "true"
         }
-
         debug {
-            buildConfig "public final static boolean TRIAL = false;"
-            packageNameSuffix ".debug"
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            buildConfigField "boolean", "TRIAL", "false"
+            packageNameSuffix '.debug'
+            debuggable true
         }
-        /*
-        jnidebug.initWith(buildTypes.debug)
-        jnidebug {
-            packageNameSuffix ".jnidebug"
-            jnidebugBuild true
-        }
-        */
     }
+}
+
+dependencies {
+    compile project(':libraries:bdtheque-dependencies')
+    compile project(':libraries:android-styled-dialogs')
+    compile project(':libraries:universal-image-loader')
+    compile project(':libraries:photoview')
+    compile project(':libraries:android-viewpagerindicator')
 }

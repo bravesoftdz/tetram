@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 
 import org.jetbrains.annotations.Nullable;
 import org.tetram.bdtheque.R;
-import org.tetram.bdtheque.data.bean.AuteurSerieBean;
 import org.tetram.bdtheque.data.bean.EditeurBean;
 import org.tetram.bdtheque.data.bean.SerieBean;
 import org.tetram.bdtheque.data.bean.lite.CollectionLiteBean;
@@ -46,19 +45,19 @@ public class FicheSerieDetailsFragment extends FicheFragment {
         if (serie.getScenaristes().isEmpty())
             view.findViewById(R.id.fiche_serie_row_scenaristes).setVisibility(View.GONE);
         listAuteurs = (LinearListView) view.findViewById(R.id.serie_scenaristes);
-        listAuteurs.setAdapter(new ArrayAdapter<AuteurSerieBean>(getActivity(), android.R.layout.simple_list_item_1, serie.getScenaristes()));
+        listAuteurs.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, serie.getScenaristes()));
         //listAuteurs.setMinimumHeight(Math.min(serie.getScenaristes().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
 
         if (serie.getDessinateurs().isEmpty())
             view.findViewById(R.id.fiche_serie_row_dessinateurs).setVisibility(View.GONE);
         listAuteurs = (LinearListView) view.findViewById(R.id.serie_dessinateurs);
-        listAuteurs.setAdapter(new ArrayAdapter<AuteurSerieBean>(getActivity(), android.R.layout.simple_list_item_1, serie.getDessinateurs()));
+        listAuteurs.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, serie.getDessinateurs()));
         //listAuteurs.setMinimumHeight(Math.min(serie.getDessinateurs().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
 
         if (serie.getColoristes().isEmpty())
             view.findViewById(R.id.fiche_serie_row_coloristes).setVisibility(View.GONE);
         listAuteurs = (LinearListView) view.findViewById(R.id.serie_coloristes);
-        listAuteurs.setAdapter(new ArrayAdapter<AuteurSerieBean>(getActivity(), android.R.layout.simple_list_item_1, serie.getColoristes()));
+        listAuteurs.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, serie.getColoristes()));
         //listAuteurs.setMinimumHeight(Math.min(serie.getColoristes().size(), 3) * android.R.attr.listPreferredItemHeightSmall);
 
         setUIElement(view, R.id.serie_histoire, serie.getSujet(), R.id.fiche_serie_row_histoire);

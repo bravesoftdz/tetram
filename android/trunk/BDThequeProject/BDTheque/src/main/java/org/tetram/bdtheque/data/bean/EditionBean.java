@@ -34,7 +34,7 @@ public class EditionBean extends EditionLiteBean {
     };
     @OneToMany(mappedBy = "edition")
     @OrderBy(@Order(field = "ordre"))
-    private final List<ImageBean> images = new ArrayList<ImageBean>();
+    private final List<ImageBean> images = new ArrayList<>();
     @Field(fieldName = DDLConstants.EDITIONS_COULEUR)
     @DefaultBooleanValue(true)
     private boolean couleur;

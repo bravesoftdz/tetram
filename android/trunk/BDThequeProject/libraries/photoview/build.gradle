@@ -5,13 +5,6 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 16
-    buildToolsVersion "19"
-
-    defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 18
-    }
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'

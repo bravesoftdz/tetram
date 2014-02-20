@@ -10,11 +10,11 @@ import java.util.Map;
 
 @SuppressWarnings("UnusedDeclaration")
 public class QueryInfo {
-    final List<String> tables = new ArrayList<String>();
-    final List<String> fields = new ArrayList<String>();
+    final List<String> tables = new ArrayList<>();
+    final List<String> fields = new ArrayList<>();
     final LoadDescriptor loadDescriptor = new LoadDescriptor();
-    final Map<String, String> sqlAliasMapping = new HashMap<String, String>();
-    final Map<java.lang.reflect.Field, PropertySQLDescriptor> columns = new HashMap<java.lang.reflect.Field, PropertySQLDescriptor>();
+    final Map<String, String> sqlAliasMapping = new HashMap<>();
+    final Map<java.lang.reflect.Field, PropertySQLDescriptor> columns = new HashMap<>();
     /**
      * utilisé uniquement en interne pour générer les alias
      */
@@ -62,14 +62,14 @@ public class QueryInfo {
         java.lang.reflect.Field field = null;
         Class aClass = beanClass;
 
-        for (String s : fields) {
+        for (final String s : fields) {
             field = null;
             try {
                 while ((aClass != null) && (field == null)) {
                     field = aClass.getDeclaredField(s);
                     aClass = aClass.getSuperclass();
                 }
-            } catch (NoSuchFieldException e) {
+            } catch (final NoSuchFieldException e) {
                 e.printStackTrace();
             }
 

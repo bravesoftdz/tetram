@@ -41,12 +41,12 @@ public class BDContentProvider extends ContentProvider {
     @SuppressWarnings("StringConcatenationMissingWhitespace")
     private static final Uri BASE_URI = Uri.parse(SCHEME + AUTORITHY);
 
-    private static final HashMap<String, Class<? extends CommonBean>> tablesMap = new HashMap<String, Class<? extends CommonBean>>();
+    private static final HashMap<String, Class<? extends CommonBean>> tablesMap = new HashMap<>();
 
     @SuppressWarnings("unchecked")
     @Nullable
     public static List<Class<? extends CommonBean>> getClasses(String pckgname) {
-        ArrayList<Class<? extends CommonBean>> classes = new ArrayList<Class<? extends CommonBean>>();
+        ArrayList<Class<? extends CommonBean>> classes = new ArrayList<>();
 
         ClassLoader cld = Thread.currentThread().getContextClassLoader();
         if (cld == null) return null;
@@ -59,7 +59,7 @@ public class BDContentProvider extends ContentProvider {
 
         if (directory.exists()) {
             // Get the list of the files contained in the package
-            for (String fileName : directory.list()) {
+            for (final String fileName : directory.list()) {
                 // we are only interested in .class files
                 if (fileName.endsWith(".class")) {
                     // removes the .class extension
@@ -67,7 +67,7 @@ public class BDContentProvider extends ContentProvider {
                         Class<?> aClass = Class.forName(pckgname + '.' + fileName.substring(0, fileName.length() - 6));
                         if (CommonBean.class.isAssignableFrom(aClass))
                             classes.add((Class<? extends CommonBean>) aClass);
-                    } catch (ClassNotFoundException e) {
+                    } catch (final ClassNotFoundException e) {
                         e.printStackTrace();
                     }
                 } else {
@@ -81,7 +81,7 @@ public class BDContentProvider extends ContentProvider {
     }
 
     static {
-        for (Class<? extends CommonBean> aClass : getClasses(CommonBean.class.getPackage().getName())) {
+        for (final Class<? extends CommonBean> aClass : getClasses(CommonBean.class.getPackage().getName())) {
             ExportProvider a = aClass.getAnnotation(ExportProvider.class);
             if ((a != null) && !TextUtils.isEmpty(a.uriTableName())) {
                 tablesMap.put(a.uriTableName(), aClass);
@@ -208,7 +208,7 @@ public class BDContentProvider extends ContentProvider {
             else {
                 try {
                     this.idValue = StringUtils.UUIDToGUIDString(UUID.fromString(this.idValue));
-                } catch (Exception ignored) {
+                } catch (final Exception ignored) {
                 }
             }
             return this;

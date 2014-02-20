@@ -41,7 +41,7 @@ public class FicheAlbumEditionsFragment extends FicheFragment {
 
         Spinner listEditions = (Spinner) this.view.findViewById(R.id.album_list_editions);
         if (album.getEditions().size() <= 1) listEditions.setVisibility(View.GONE);
-        listEditions.setAdapter(new ArrayAdapter<EditionBean>(getActivity(), android.R.layout.simple_list_item_1, album.getEditions()));
+        listEditions.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, album.getEditions()));
         listEditions.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

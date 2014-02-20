@@ -52,11 +52,11 @@ public class RepertoireActivity extends FragmentActivity implements ActionBar.On
             this.currentNavigationItem = savedInstanceState.getInt("navigationItem", -1);
         }
 
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        // SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
         MenuEntry defaultMenu = null;
-        List<MenuEntry> menuEntries = new ArrayList<MenuEntry>();
-        for (ModeRepertoire mode : ModeRepertoire.values()) {
+        List<MenuEntry> menuEntries = new ArrayList<>();
+        for (final ModeRepertoire mode : ModeRepertoire.values()) {
             MenuEntry menu = mode.getMenuEntry(this);
             if (mode.isDefault()) defaultMenu = menu;
             menuEntries.add(menu);

@@ -12,7 +12,7 @@ public class SQLDescriptor {
     Class<? extends CommonBean> beanClass;
     String tableName;
     SimplePropertyDescriptor primaryKey;
-    Map<SimplePropertyDescriptor, SQLDescriptor> columns = new HashMap<SimplePropertyDescriptor, SQLDescriptor>();
+    Map<SimplePropertyDescriptor, SQLDescriptor> columns = new HashMap<>();
 
     public Class<? extends CommonBean> getBeanClass() {
         return this.beanClass;

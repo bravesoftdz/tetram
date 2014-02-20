@@ -29,8 +29,8 @@ public class NotationDialogFragment extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         final ListView listView = (ListView) inflater.inflate(R.layout.dialog_notation, null);
 
-        List<MenuEntry> menuEntries = new ArrayList<MenuEntry>();
-        for (Notation notation : Notation.values())
+        List<MenuEntry> menuEntries = new ArrayList<>();
+        for (final Notation notation : Notation.values())
             menuEntries.add(notation.getMenuEntry(getActivity()));
 
         MenuAdapter mSpinnerAdapter = new MenuAdapter(getActivity(), android.R.layout.simple_spinner_dropdown_item, menuEntries);

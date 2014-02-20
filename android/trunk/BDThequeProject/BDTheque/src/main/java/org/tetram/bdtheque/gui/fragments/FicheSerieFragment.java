@@ -58,7 +58,7 @@ public class FicheSerieFragment extends FicheFragment {
 
         ViewPager tabsContent = (ViewPager) view.findViewById(android.R.id.tabcontent);
 
-        List<ViewPagerAdapter.TabDescriptor> tabList = new ArrayList<ViewPagerAdapter.TabDescriptor>();
+        List<ViewPagerAdapter.TabDescriptor> tabList = new ArrayList<>();
 
         tabList.add(new ViewPagerAdapter.TabDescriptor(
                 getResources().getString(R.string.fiche_serie_tab_details),
