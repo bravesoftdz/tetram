@@ -82,17 +82,17 @@ public class FicheSerieFragment extends FicheFragment {
         pageIndicator.setViewPager(tabsContent, BDThequeApplication.getFicheSerieLastShownTab());
         pageIndicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int i, float v, int i2) {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
 
             @Override
-            public void onPageSelected(int i) {
-                BDThequeApplication.setFicheSerieLastShownTab(i);
+            public void onPageSelected(int position) {
+                BDThequeApplication.setFicheSerieLastShownTab(position);
             }
 
             @Override
-            public void onPageScrollStateChanged(int i) {
+            public void onPageScrollStateChanged(int state) {
 
             }
         });
