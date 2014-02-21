@@ -25,21 +25,17 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.6.4
  */
-@SuppressWarnings("OverloadedVarargsMethod")
 public final class L {
 
     private static final String LOG_FORMAT = "%1$s\n%2$s";
-    @SuppressWarnings({"NonConstantFieldWithUpperCaseName", "RedundantFieldInitialization"})
     private static volatile boolean DISABLED = false;
 
     private L() {
-        super();
     }
 
     /**
      * Enables logger (if {@link #disableLogging()} was called before)
      */
-    @SuppressWarnings("UnusedDeclaration")
     public static void enableLogging() {
         DISABLED = false;
     }
@@ -85,7 +81,7 @@ public final class L {
         if (ex == null) {
             log = message;
         } else {
-            String logMessage = (message == null) ? ex.getMessage() : message;
+            String logMessage = message == null ? ex.getMessage() : message;
             String logBody = Log.getStackTraceString(ex);
             log = String.format(LOG_FORMAT, logMessage, logBody);
         }

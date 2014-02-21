@@ -23,7 +23,6 @@ import java.io.File;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
-@SuppressWarnings("ClassNamePrefixedWithPackageName")
 public interface DiscCacheAware {
     /**
      * This method must not to save file on file system in fact. It is called after image was cached in cache directory

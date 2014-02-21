@@ -28,14 +28,13 @@ import java.io.File;
  * @see FileNameGenerator
  * @since 1.0.0
  */
-@SuppressWarnings("UnusedDeclaration")
 public abstract class BaseDiscCache implements DiscCacheAware {
 
     private static final String ERROR_ARG_NULL = "\"%s\" argument must be not null";
 
     protected File cacheDir;
 
-    private final FileNameGenerator fileNameGenerator;
+    private FileNameGenerator fileNameGenerator;
 
     public BaseDiscCache(File cacheDir) {
         this(cacheDir, DefaultConfigurationFactory.createFileNameGenerator());
@@ -55,17 +54,16 @@ public abstract class BaseDiscCache implements DiscCacheAware {
 
     @Override
     public File get(String key) {
-        String fileName = this.fileNameGenerator.generate(key);
-        return new File(this.cacheDir, fileName);
+        String fileName = fileNameGenerator.generate(key);
+        return new File(cacheDir, fileName);
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void clear() {
-        File[] files = this.cacheDir.listFiles();
+        File[] files = cacheDir.listFiles();
         if (files != null) {
-            for (File file : files) {
-                file.delete();
+            for (File f : files) {
+                f.delete();
             }
         }
     }

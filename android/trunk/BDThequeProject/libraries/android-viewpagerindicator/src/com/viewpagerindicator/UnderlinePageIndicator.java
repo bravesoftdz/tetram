@@ -15,14 +15,12 @@
  */
 package com.viewpagerindicator;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.v4.view.MotionEventCompat;
@@ -33,43 +31,45 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  * Draws a line for each page. The current page line is colored differently
  * than the unselected page lines.
  */
-@SuppressWarnings("UnusedDeclaration")
 public class UnderlinePageIndicator extends View implements PageIndicator {
     private static final int INVALID_POINTER = -1;
     private static final int FADE_FRAME_MS = 30;
+
     private final Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+
+    private boolean mFades;
+    private int mFadeDelay;
+    private int mFadeLength;
+    private int mFadeBy;
+
+    private ViewPager mViewPager;
+    private ViewPager.OnPageChangeListener mListener;
+    private int mScrollState;
+    private int mCurrentPage;
+    private float mPositionOffset;
+
+    private int mTouchSlop;
+    private float mLastMotionX = -1;
+    private int mActivePointerId = INVALID_POINTER;
+    private boolean mIsDragging;
+
     private final Runnable mFadeRunnable = new Runnable() {
         @Override
         public void run() {
-            if (!UnderlinePageIndicator.this.mFades) return;
+            if (!mFades) return;
 
-            final int alpha = Math.max(UnderlinePageIndicator.this.mPaint.getAlpha() - UnderlinePageIndicator.this.mFadeBy, 0);
-            UnderlinePageIndicator.this.mPaint.setAlpha(alpha);
+            final int alpha = Math.max(mPaint.getAlpha() - mFadeBy, 0);
+            mPaint.setAlpha(alpha);
             invalidate();
             if (alpha > 0) {
                 postDelayed(this, FADE_FRAME_MS);
             }
         }
     };
-    private boolean mFades;
-    private int mFadeDelay;
-    private int mFadeLength;
-    private int mFadeBy;
-    private ViewPager mViewPager;
-    private ViewPager.OnPageChangeListener mListener;
-    private int mScrollState;
-    private int mCurrentPage;
-    private float mPositionOffset;
-    private int mTouchSlop;
-    private float mLastMotionX = -1;
-    private int mActivePointerId = INVALID_POINTER;
-    private boolean mIsDragging;
 
     public UnderlinePageIndicator(Context context) {
         this(context, null);
@@ -79,7 +79,6 @@ public class UnderlinePageIndicator extends View implements PageIndicator {
         this(context, attrs, R.attr.vpiUnderlinePageIndicatorStyle);
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public UnderlinePageIndicator(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         if (isInEditMode()) return;
@@ -102,55 +101,55 @@ public class UnderlinePageIndicator extends View implements PageIndicator {
 
         Drawable background = a.getDrawable(R.styleable.UnderlinePageIndicator_android_background);
         if (background != null) {
-            setBackground(background);
+            setBackgroundDrawable(background);
         }
 
         a.recycle();
 
         final ViewConfiguration configuration = ViewConfiguration.get(context);
-        this.mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
+        mTouchSlop = ViewConfigurationCompat.getScaledPagingTouchSlop(configuration);
     }
 
-    public boolean isFades() {
-        return this.mFades;
+    public boolean getFades() {
+        return mFades;
     }
 
     public void setFades(boolean fades) {
-        if (fades != this.mFades) {
-            this.mFades = fades;
+        if (fades != mFades) {
+            mFades = fades;
             if (fades) {
-                post(this.mFadeRunnable);
+                post(mFadeRunnable);
             } else {
-                removeCallbacks(this.mFadeRunnable);
-                this.mPaint.setAlpha(0xFF);
+                removeCallbacks(mFadeRunnable);
+                mPaint.setAlpha(0xFF);
                 invalidate();
             }
         }
     }
 
     public int getFadeDelay() {
-        return this.mFadeDelay;
+        return mFadeDelay;
     }
 
     public void setFadeDelay(int fadeDelay) {
-        this.mFadeDelay = fadeDelay;
+        mFadeDelay = fadeDelay;
     }
 
     public int getFadeLength() {
-        return this.mFadeLength;
+        return mFadeLength;
     }
 
     public void setFadeLength(int fadeLength) {
-        this.mFadeLength = fadeLength;
-        this.mFadeBy = 0xFF / (this.mFadeLength / FADE_FRAME_MS);
+        mFadeLength = fadeLength;
+        mFadeBy = 0xFF / (mFadeLength / FADE_FRAME_MS);
     }
 
     public int getSelectedColor() {
-        return this.mPaint.getColor();
+        return mPaint.getColor();
     }
 
     public void setSelectedColor(int selectedColor) {
-        this.mPaint.setColor(selectedColor);
+        mPaint.setColor(selectedColor);
         invalidate();
     }
 
@@ -158,59 +157,58 @@ public class UnderlinePageIndicator extends View implements PageIndicator {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (this.mViewPager == null) {
+        if (mViewPager == null) {
             return;
         }
-        final int count = this.mViewPager.getAdapter().getCount();
+        final int count = mViewPager.getAdapter().getCount();
         if (count == 0) {
             return;
         }
 
-        if (this.mCurrentPage >= count) {
+        if (mCurrentPage >= count) {
             setCurrentItem(count - 1);
             return;
         }
 
         final int paddingLeft = getPaddingLeft();
         final float pageWidth = (getWidth() - paddingLeft - getPaddingRight()) / (1f * count);
-        final float left = paddingLeft + (pageWidth * (this.mCurrentPage + this.mPositionOffset));
+        final float left = paddingLeft + pageWidth * (mCurrentPage + mPositionOffset);
         final float right = left + pageWidth;
         final float top = getPaddingTop();
         final float bottom = getHeight() - getPaddingBottom();
-        canvas.drawRect(left, top, right, bottom, this.mPaint);
+        canvas.drawRect(left, top, right, bottom, mPaint);
     }
 
-    @Override
-    public boolean onTouchEvent(@NotNull MotionEvent event) {
-        if (super.onTouchEvent(event)) {
+    public boolean onTouchEvent(MotionEvent ev) {
+        if (super.onTouchEvent(ev)) {
             return true;
         }
-        if ((this.mViewPager == null) || (this.mViewPager.getAdapter().getCount() == 0)) {
+        if ((mViewPager == null) || (mViewPager.getAdapter().getCount() == 0)) {
             return false;
         }
 
-        final int action = event.getAction() & MotionEventCompat.ACTION_MASK;
+        final int action = ev.getAction() & MotionEventCompat.ACTION_MASK;
         switch (action) {
             case MotionEvent.ACTION_DOWN:
-                this.mActivePointerId = MotionEventCompat.getPointerId(event, 0);
-                this.mLastMotionX = event.getX();
+                mActivePointerId = MotionEventCompat.getPointerId(ev, 0);
+                mLastMotionX = ev.getX();
                 break;
 
             case MotionEvent.ACTION_MOVE: {
-                final int activePointerIndex = MotionEventCompat.findPointerIndex(event, this.mActivePointerId);
-                final float x = MotionEventCompat.getX(event, activePointerIndex);
-                final float deltaX = x - this.mLastMotionX;
+                final int activePointerIndex = MotionEventCompat.findPointerIndex(ev, mActivePointerId);
+                final float x = MotionEventCompat.getX(ev, activePointerIndex);
+                final float deltaX = x - mLastMotionX;
 
-                if (!this.mIsDragging) {
-                    if (Math.abs(deltaX) > this.mTouchSlop) {
-                        this.mIsDragging = true;
+                if (!mIsDragging) {
+                    if (Math.abs(deltaX) > mTouchSlop) {
+                        mIsDragging = true;
                     }
                 }
 
-                if (this.mIsDragging) {
-                    this.mLastMotionX = x;
-                    if (this.mViewPager.isFakeDragging() || this.mViewPager.beginFakeDrag()) {
-                        this.mViewPager.fakeDragBy(deltaX);
+                if (mIsDragging) {
+                    mLastMotionX = x;
+                    if (mViewPager.isFakeDragging() || mViewPager.beginFakeDrag()) {
+                        mViewPager.fakeDragBy(deltaX);
                     }
                 }
 
@@ -219,72 +217,71 @@ public class UnderlinePageIndicator extends View implements PageIndicator {
 
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                if (!this.mIsDragging) {
-                    final int count = this.mViewPager.getAdapter().getCount();
+                if (!mIsDragging) {
+                    final int count = mViewPager.getAdapter().getCount();
                     final int width = getWidth();
                     final float halfWidth = width / 2f;
                     final float sixthWidth = width / 6f;
 
-                    if ((this.mCurrentPage > 0) && (event.getX() < (halfWidth - sixthWidth))) {
+                    if ((mCurrentPage > 0) && (ev.getX() < halfWidth - sixthWidth)) {
                         if (action != MotionEvent.ACTION_CANCEL) {
-                            this.mViewPager.setCurrentItem(this.mCurrentPage - 1);
+                            mViewPager.setCurrentItem(mCurrentPage - 1);
                         }
                         return true;
-                    } else if ((this.mCurrentPage < (count - 1)) && (event.getX() > (halfWidth + sixthWidth))) {
+                    } else if ((mCurrentPage < count - 1) && (ev.getX() > halfWidth + sixthWidth)) {
                         if (action != MotionEvent.ACTION_CANCEL) {
-                            this.mViewPager.setCurrentItem(this.mCurrentPage + 1);
+                            mViewPager.setCurrentItem(mCurrentPage + 1);
                         }
                         return true;
                     }
                 }
 
-                this.mIsDragging = false;
-                this.mActivePointerId = INVALID_POINTER;
-                if (this.mViewPager.isFakeDragging()) this.mViewPager.endFakeDrag();
+                mIsDragging = false;
+                mActivePointerId = INVALID_POINTER;
+                if (mViewPager.isFakeDragging()) mViewPager.endFakeDrag();
                 break;
 
             case MotionEventCompat.ACTION_POINTER_DOWN: {
-                final int index = MotionEventCompat.getActionIndex(event);
-                this.mLastMotionX = MotionEventCompat.getX(event, index);
-                this.mActivePointerId = MotionEventCompat.getPointerId(event, index);
+                final int index = MotionEventCompat.getActionIndex(ev);
+                mLastMotionX = MotionEventCompat.getX(ev, index);
+                mActivePointerId = MotionEventCompat.getPointerId(ev, index);
                 break;
             }
 
             case MotionEventCompat.ACTION_POINTER_UP:
-                final int pointerIndex = MotionEventCompat.getActionIndex(event);
-                final int pointerId = MotionEventCompat.getPointerId(event, pointerIndex);
-                if (pointerId == this.mActivePointerId) {
-                    final int newPointerIndex = (pointerIndex == 0) ? 1 : 0;
-                    this.mActivePointerId = MotionEventCompat.getPointerId(event, newPointerIndex);
+                final int pointerIndex = MotionEventCompat.getActionIndex(ev);
+                final int pointerId = MotionEventCompat.getPointerId(ev, pointerIndex);
+                if (pointerId == mActivePointerId) {
+                    final int newPointerIndex = pointerIndex == 0 ? 1 : 0;
+                    mActivePointerId = MotionEventCompat.getPointerId(ev, newPointerIndex);
                 }
-                this.mLastMotionX = MotionEventCompat.getX(event, MotionEventCompat.findPointerIndex(event, this.mActivePointerId));
+                mLastMotionX = MotionEventCompat.getX(ev, MotionEventCompat.findPointerIndex(ev, mActivePointerId));
                 break;
         }
 
         return true;
     }
 
-    @SuppressWarnings("ObjectEquality")
     @Override
-    public void setViewPager(ViewPager view) {
-        if (this.mViewPager == view) {
+    public void setViewPager(ViewPager viewPager) {
+        if (mViewPager == viewPager) {
             return;
         }
-        if (this.mViewPager != null) {
+        if (mViewPager != null) {
             //Clear us from the old pager.
-            this.mViewPager.setOnPageChangeListener(null);
+            mViewPager.setOnPageChangeListener(null);
         }
-        if (view.getAdapter() == null) {
+        if (viewPager.getAdapter() == null) {
             throw new IllegalStateException("ViewPager does not have adapter instance.");
         }
-        this.mViewPager = view;
-        this.mViewPager.setOnPageChangeListener(this);
+        mViewPager = viewPager;
+        mViewPager.setOnPageChangeListener(this);
         invalidate();
         post(new Runnable() {
             @Override
             public void run() {
-                if (UnderlinePageIndicator.this.mFades) {
-                    post(UnderlinePageIndicator.this.mFadeRunnable);
+                if (mFades) {
+                    post(mFadeRunnable);
                 }
             }
         });
@@ -298,11 +295,11 @@ public class UnderlinePageIndicator extends View implements PageIndicator {
 
     @Override
     public void setCurrentItem(int item) {
-        if (this.mViewPager == null) {
+        if (mViewPager == null) {
             throw new IllegalStateException("ViewPager has not been bound.");
         }
-        this.mViewPager.setCurrentItem(item);
-        this.mCurrentPage = item;
+        mViewPager.setCurrentItem(item);
+        mCurrentPage = item;
         invalidate();
     }
 
@@ -313,55 +310,55 @@ public class UnderlinePageIndicator extends View implements PageIndicator {
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        this.mScrollState = state;
+        mScrollState = state;
 
-        if (this.mListener != null) {
-            this.mListener.onPageScrollStateChanged(state);
+        if (mListener != null) {
+            mListener.onPageScrollStateChanged(state);
         }
     }
 
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-        this.mCurrentPage = position;
-        this.mPositionOffset = positionOffset;
-        if (this.mFades) {
+        mCurrentPage = position;
+        mPositionOffset = positionOffset;
+        if (mFades) {
             if (positionOffsetPixels > 0) {
-                removeCallbacks(this.mFadeRunnable);
-                this.mPaint.setAlpha(0xFF);
-            } else if (this.mScrollState != ViewPager.SCROLL_STATE_DRAGGING) {
-                postDelayed(this.mFadeRunnable, this.mFadeDelay);
+                removeCallbacks(mFadeRunnable);
+                mPaint.setAlpha(0xFF);
+            } else if (mScrollState != ViewPager.SCROLL_STATE_DRAGGING) {
+                postDelayed(mFadeRunnable, mFadeDelay);
             }
         }
         invalidate();
 
-        if (this.mListener != null) {
-            this.mListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
+        if (mListener != null) {
+            mListener.onPageScrolled(position, positionOffset, positionOffsetPixels);
         }
     }
 
     @Override
     public void onPageSelected(int position) {
-        if (this.mScrollState == ViewPager.SCROLL_STATE_IDLE) {
-            this.mCurrentPage = position;
-            this.mPositionOffset = 0;
+        if (mScrollState == ViewPager.SCROLL_STATE_IDLE) {
+            mCurrentPage = position;
+            mPositionOffset = 0;
             invalidate();
-            this.mFadeRunnable.run();
+            mFadeRunnable.run();
         }
-        if (this.mListener != null) {
-            this.mListener.onPageSelected(position);
+        if (mListener != null) {
+            mListener.onPageSelected(position);
         }
     }
 
     @Override
     public void setOnPageChangeListener(ViewPager.OnPageChangeListener listener) {
-        this.mListener = listener;
+        mListener = listener;
     }
 
     @Override
     public void onRestoreInstanceState(Parcelable state) {
         SavedState savedState = (SavedState) state;
         super.onRestoreInstanceState(savedState.getSuperState());
-        this.mCurrentPage = savedState.currentPage;
+        mCurrentPage = savedState.currentPage;
         requestLayout();
     }
 
@@ -369,23 +366,11 @@ public class UnderlinePageIndicator extends View implements PageIndicator {
     public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         SavedState savedState = new SavedState(superState);
-        savedState.currentPage = this.mCurrentPage;
+        savedState.currentPage = mCurrentPage;
         return savedState;
     }
 
     static class SavedState extends BaseSavedState {
-        @SuppressWarnings({"UnusedDeclaration", "FieldNameHidesFieldInSuperclass"})
-        public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
-            @Override
-            public SavedState createFromParcel(Parcel source) {
-                return new SavedState(source);
-            }
-
-            @Override
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        };
         int currentPage;
 
         public SavedState(Parcelable superState) {
@@ -394,13 +379,26 @@ public class UnderlinePageIndicator extends View implements PageIndicator {
 
         private SavedState(Parcel in) {
             super(in);
-            this.currentPage = in.readInt();
+            currentPage = in.readInt();
         }
 
         @Override
-        public void writeToParcel(@NotNull Parcel dest, int flags) {
+        public void writeToParcel(Parcel dest, int flags) {
             super.writeToParcel(dest, flags);
-            dest.writeInt(this.currentPage);
+            dest.writeInt(currentPage);
         }
+
+        @SuppressWarnings("UnusedDeclaration")
+        public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
+            @Override
+            public SavedState createFromParcel(Parcel in) {
+                return new SavedState(in);
+            }
+
+            @Override
+            public SavedState[] newArray(int size) {
+                return new SavedState[size];
+            }
+        };
     }
 }

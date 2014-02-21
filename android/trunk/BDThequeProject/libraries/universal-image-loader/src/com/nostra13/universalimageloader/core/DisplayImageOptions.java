@@ -15,32 +15,36 @@
  *******************************************************************************/
 package com.nostra13.universalimageloader.core;
 
-import android.annotation.TargetApi;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory.Options;
-import android.os.Build;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
 import com.nostra13.universalimageloader.core.display.SimpleBitmapDisplayer;
 import com.nostra13.universalimageloader.core.download.ImageDownloader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.process.BitmapProcessor;
 
 /**
  * Contains options for image display. Defines:
  * <ul>
- * <li>whether stub image will be displayed in {@link android.widget.ImageView ImageView} during image loading</li>
- * <li>whether stub image will be displayed in {@link android.widget.ImageView ImageView} if empty URI is passed</li>
- * <li>whether stub image will be displayed in {@link android.widget.ImageView ImageView} if image loading fails</li>
- * <li>whether {@link android.widget.ImageView ImageView} should be reset before image loading start</li>
+ * <li>whether stub image will be displayed in {@link com.nostra13.universalimageloader.core.imageaware.ImageAware
+ * image aware view} during image loading</li>
+ * <li>whether stub image will be displayed in {@link com.nostra13.universalimageloader.core.imageaware.ImageAware
+ * image aware view} if empty URI is passed</li>
+ * <li>whether stub image will be displayed in {@link com.nostra13.universalimageloader.core.imageaware.ImageAware
+ * image aware view} if image loading fails</li>
+ * <li>whether {@link com.nostra13.universalimageloader.core.imageaware.ImageAware image aware view} should be reset
+ * before image loading start</li>
  * <li>whether loaded image will be cached in memory</li>
  * <li>whether loaded image will be cached on disc</li>
  * <li>image scale type</li>
  * <li>decoding options (including bitmap decoding configuration)</li>
  * <li>delay before loading of image</li>
+ * <li>whether consider EXIF parameters of image</li>
  * <li>auxiliary object which will be passed to {@link ImageDownloader#getStream(String, Object) ImageDownloader}</li>
  * <li>pre-processor for image Bitmap (before caching in memory)</li>
  * <li>post-processor for image Bitmap (after caching in memory, before displaying)</li>
@@ -52,7 +56,7 @@ import com.nostra13.universalimageloader.core.process.BitmapProcessor;
  * <li>with {@link Builder}:<br />
  * <b>i.e.</b> :
  * <code>new {@link DisplayImageOptions}.{@link Builder#Builder() Builder()}.{@link Builder#cacheInMemory() cacheInMemory()}.
- * {@link Builder#showStubImage(int) showStubImage()}.{@link Builder#build() build()}</code><br />
+ * {@link Builder#showImageOnLoading(int) showImageOnLoading()}.{@link Builder#build() build()}</code><br />
  * </li>
  * <li>or by static method: {@link #createSimple()}</li> <br />
  *
@@ -61,116 +65,134 @@ import com.nostra13.universalimageloader.core.process.BitmapProcessor;
  */
 public final class DisplayImageOptions {
 
-    private final int stubImage;
-    private final int imageForEmptyUri;
-    private final int imageOnFail;
+    private final int imageResOnLoading;
+    private final int imageResForEmptyUri;
+    private final int imageResOnFail;
+    private final Drawable imageOnLoading;
+    private final Drawable imageForEmptyUri;
+    private final Drawable imageOnFail;
     private final boolean resetViewBeforeLoading;
     private final boolean cacheInMemory;
     private final boolean cacheOnDisc;
     private final ImageScaleType imageScaleType;
     private final Options decodingOptions;
     private final int delayBeforeLoading;
+    private final boolean considerExifParams;
     private final Object extraForDownloader;
     private final BitmapProcessor preProcessor;
     private final BitmapProcessor postProcessor;
     private final BitmapDisplayer displayer;
     private final Handler handler;
+    private final boolean isSyncLoading;
 
     private DisplayImageOptions(Builder builder) {
-        this.stubImage = builder.stubImage;
-        this.imageForEmptyUri = builder.imageForEmptyUri;
-        this.imageOnFail = builder.imageOnFail;
-        this.resetViewBeforeLoading = builder.resetViewBeforeLoading;
-        this.cacheInMemory = builder.cacheInMemory;
-        this.cacheOnDisc = builder.cacheOnDisc;
-        this.imageScaleType = builder.imageScaleType;
-        this.decodingOptions = builder.decodingOptions;
-        this.delayBeforeLoading = builder.delayBeforeLoading;
-        this.extraForDownloader = builder.extraForDownloader;
-        this.preProcessor = builder.preProcessor;
-        this.postProcessor = builder.postProcessor;
-        this.displayer = builder.displayer;
-        this.handler = builder.handler;
+        imageResOnLoading = builder.imageResOnLoading;
+        imageResForEmptyUri = builder.imageResForEmptyUri;
+        imageResOnFail = builder.imageResOnFail;
+        imageOnLoading = builder.imageOnLoading;
+        imageForEmptyUri = builder.imageForEmptyUri;
+        imageOnFail = builder.imageOnFail;
+        resetViewBeforeLoading = builder.resetViewBeforeLoading;
+        cacheInMemory = builder.cacheInMemory;
+        cacheOnDisc = builder.cacheOnDisc;
+        imageScaleType = builder.imageScaleType;
+        decodingOptions = builder.decodingOptions;
+        delayBeforeLoading = builder.delayBeforeLoading;
+        considerExifParams = builder.considerExifParams;
+        extraForDownloader = builder.extraForDownloader;
+        preProcessor = builder.preProcessor;
+        postProcessor = builder.postProcessor;
+        displayer = builder.displayer;
+        handler = builder.handler;
+        isSyncLoading = builder.isSyncLoading;
     }
 
-    public boolean shouldShowStubImage() {
-        return this.stubImage != 0;
+    public boolean shouldShowImageOnLoading() {
+        return imageOnLoading != null || imageResOnLoading != 0;
     }
 
     public boolean shouldShowImageForEmptyUri() {
-        return this.imageForEmptyUri != 0;
+        return imageForEmptyUri != null || imageResForEmptyUri != 0;
     }
 
     public boolean shouldShowImageOnFail() {
-        return this.imageOnFail != 0;
+        return imageOnFail != null || imageResOnFail != 0;
     }
 
     public boolean shouldPreProcess() {
-        return this.preProcessor != null;
+        return preProcessor != null;
     }
 
     public boolean shouldPostProcess() {
-        return this.postProcessor != null;
+        return postProcessor != null;
     }
 
     public boolean shouldDelayBeforeLoading() {
-        return this.delayBeforeLoading > 0;
+        return delayBeforeLoading > 0;
     }
 
-    public int getStubImage() {
-        return this.stubImage;
+    public Drawable getImageOnLoading(Resources res) {
+        return imageResOnLoading != 0 ? res.getDrawable(imageResOnLoading) : imageOnLoading;
     }
 
-    public int getImageForEmptyUri() {
-        return this.imageForEmptyUri;
+    public Drawable getImageForEmptyUri(Resources res) {
+        return imageResForEmptyUri != 0 ? res.getDrawable(imageResForEmptyUri) : imageForEmptyUri;
     }
 
-    public int getImageOnFail() {
-        return this.imageOnFail;
+    public Drawable getImageOnFail(Resources res) {
+        return imageResOnFail != 0 ? res.getDrawable(imageResOnFail) : imageOnFail;
     }
 
     public boolean isResetViewBeforeLoading() {
-        return this.resetViewBeforeLoading;
+        return resetViewBeforeLoading;
     }
 
     public boolean isCacheInMemory() {
-        return this.cacheInMemory;
+        return cacheInMemory;
     }
 
     public boolean isCacheOnDisc() {
-        return this.cacheOnDisc;
+        return cacheOnDisc;
     }
 
     public ImageScaleType getImageScaleType() {
-        return this.imageScaleType;
+        return imageScaleType;
     }
 
     public Options getDecodingOptions() {
-        return this.decodingOptions;
+        return decodingOptions;
     }
 
     public int getDelayBeforeLoading() {
-        return this.delayBeforeLoading;
+        return delayBeforeLoading;
+    }
+
+    public boolean isConsiderExifParams() {
+        return considerExifParams;
     }
 
     public Object getExtraForDownloader() {
-        return this.extraForDownloader;
+        return extraForDownloader;
     }
 
     public BitmapProcessor getPreProcessor() {
-        return this.preProcessor;
+        return preProcessor;
     }
 
     public BitmapProcessor getPostProcessor() {
-        return this.postProcessor;
+        return postProcessor;
     }
 
     public BitmapDisplayer getDisplayer() {
-        return this.displayer;
+        return displayer;
     }
 
     public Handler getHandler() {
-        return ((this.handler == null) ? new Handler() : this.handler);
+        return handler;
+    }
+
+    boolean isSyncLoading() {
+        return isSyncLoading;
     }
 
     /**
@@ -178,75 +200,127 @@ public final class DisplayImageOptions {
      *
      * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
      */
-    @SuppressWarnings({"UnusedDeclaration", "RedundantFieldInitialization"})
     public static class Builder {
-        private int stubImage = 0;
-        private int imageForEmptyUri = 0;
-        private int imageOnFail = 0;
+        private int imageResOnLoading = 0;
+        private int imageResForEmptyUri = 0;
+        private int imageResOnFail = 0;
+        private Drawable imageOnLoading = null;
+        private Drawable imageForEmptyUri = null;
+        private Drawable imageOnFail = null;
         private boolean resetViewBeforeLoading = false;
         private boolean cacheInMemory = false;
         private boolean cacheOnDisc = false;
         private ImageScaleType imageScaleType = ImageScaleType.IN_SAMPLE_POWER_OF_2;
         private Options decodingOptions = new Options();
         private int delayBeforeLoading = 0;
+        private boolean considerExifParams = false;
         private Object extraForDownloader = null;
         private BitmapProcessor preProcessor = null;
         private BitmapProcessor postProcessor = null;
         private BitmapDisplayer displayer = DefaultConfigurationFactory.createBitmapDisplayer();
         private Handler handler = null;
+        private boolean isSyncLoading = false;
 
-        @TargetApi(Build.VERSION_CODES.DONUT)
         public Builder() {
-            this.decodingOptions.inPurgeable = true;
-            this.decodingOptions.inInputShareable = true;
+            decodingOptions.inPurgeable = true;
+            decodingOptions.inInputShareable = true;
         }
 
         /**
-         * Stub image will be displayed in {@link android.widget.ImageView ImageView} during image loading
+         * Stub image will be displayed in {@link com.nostra13.universalimageloader.core.imageaware.ImageAware
+         * image aware view} during image loading
          *
-         * @param stubImageRes Stub image resource
+         * @param imageRes Stub image resource
+         * @deprecated Use {@link #showImageOnLoading(int)} instead
          */
-        public Builder showStubImage(int stubImageRes) {
-            this.stubImage = stubImageRes;
+        @Deprecated
+        public Builder showStubImage(int imageRes) {
+            imageResOnLoading = imageRes;
             return this;
         }
 
         /**
-         * Incoming image will be displayed in {@link android.widget.ImageView ImageView} if empty URI (null or empty
+         * Incoming image will be displayed in {@link com.nostra13.universalimageloader.core.imageaware.ImageAware
+         * image aware view} during image loading
+         *
+         * @param imageRes Image resource
+         */
+        public Builder showImageOnLoading(int imageRes) {
+            imageResOnLoading = imageRes;
+            return this;
+        }
+
+        /**
+         * Incoming drawable will be displayed in {@link com.nostra13.universalimageloader.core.imageaware.ImageAware
+         * image aware view} during image loading.
+         * This option will be ignored if {@link DisplayImageOptions.Builder#showImageOnLoading(int)} is set.
+         */
+        public Builder showImageOnLoading(Drawable drawable) {
+            imageOnLoading = drawable;
+            return this;
+        }
+
+        /**
+         * Incoming image will be displayed in {@link com.nostra13.universalimageloader.core.imageaware.ImageAware
+         * image aware view} if empty URI (null or empty
          * string) will be passed to <b>ImageLoader.displayImage(...)</b> method.
          *
          * @param imageRes Image resource
          */
         public Builder showImageForEmptyUri(int imageRes) {
-            this.imageForEmptyUri = imageRes;
+            imageResForEmptyUri = imageRes;
             return this;
         }
 
         /**
-         * Incoming image will be displayed in {@link android.widget.ImageView ImageView} if some error occurs during
+         * Incoming drawable will be displayed in {@link com.nostra13.universalimageloader.core.imageaware.ImageAware
+         * image aware view} if empty URI (null or empty
+         * string) will be passed to <b>ImageLoader.displayImage(...)</b> method.
+         * This option will be ignored if {@link DisplayImageOptions.Builder#showImageForEmptyUri(int)} is set.
+         */
+        public Builder showImageForEmptyUri(Drawable drawable) {
+            imageForEmptyUri = drawable;
+            return this;
+        }
+
+        /**
+         * Incoming image will be displayed in {@link com.nostra13.universalimageloader.core.imageaware.ImageAware
+         * image aware view} if some error occurs during
          * requested image loading/decoding.
          *
          * @param imageRes Image resource
          */
         public Builder showImageOnFail(int imageRes) {
-            this.imageOnFail = imageRes;
+            imageResOnFail = imageRes;
             return this;
         }
 
         /**
-         * {@link android.widget.ImageView ImageView} will be reset (set <b>null</b>) before image loading start
+         * Incoming drawable will be displayed in {@link com.nostra13.universalimageloader.core.imageaware.ImageAware
+         * image aware view} if some error occurs during
+         * requested image loading/decoding.
+         * This option will be ignored if {@link DisplayImageOptions.Builder#showImageOnFail(int)} is set.
+         */
+        public Builder showImageOnFail(Drawable drawable) {
+            imageOnFail = drawable;
+            return this;
+        }
+
+        /**
+         * {@link com.nostra13.universalimageloader.core.imageaware.ImageAware
+         * image aware view} will be reset (set <b>null</b>) before image loading start
          *
          * @deprecated Use {@link #resetViewBeforeLoading(boolean) resetViewBeforeLoading(true)} instead
          */
         public Builder resetViewBeforeLoading() {
-            this.resetViewBeforeLoading = true;
+            resetViewBeforeLoading = true;
             return this;
         }
 
         /**
-         * Sets whether {@link android.widget.ImageView ImageView} will be reset (set <b>null</b>) before image loading start
+         * Sets whether {@link com.nostra13.universalimageloader.core.imageaware.ImageAware
+         * image aware view} will be reset (set <b>null</b>) before image loading start
          */
-        @SuppressWarnings("MethodParameterNamingConvention")
         public Builder resetViewBeforeLoading(boolean resetViewBeforeLoading) {
             this.resetViewBeforeLoading = resetViewBeforeLoading;
             return this;
@@ -258,7 +332,7 @@ public final class DisplayImageOptions {
          * @deprecated Use {@link #cacheInMemory(boolean) cacheInMemory(true)} instead
          */
         public Builder cacheInMemory() {
-            this.cacheInMemory = true;
+            cacheInMemory = true;
             return this;
         }
 
@@ -276,7 +350,7 @@ public final class DisplayImageOptions {
          * @deprecated Use {@link #cacheOnDisc(boolean) cacheOnDisc(true)} instead
          */
         public Builder cacheOnDisc() {
-            this.cacheOnDisc = true;
+            cacheOnDisc = true;
             return this;
         }
 
@@ -303,7 +377,7 @@ public final class DisplayImageOptions {
         public Builder bitmapConfig(Bitmap.Config bitmapConfig) {
             if (bitmapConfig == null)
                 throw new IllegalArgumentException("bitmapConfig can't be null");
-            this.decodingOptions.inPreferredConfig = bitmapConfig;
+            decodingOptions.inPreferredConfig = bitmapConfig;
             return this;
         }
 
@@ -339,6 +413,14 @@ public final class DisplayImageOptions {
         }
 
         /**
+         * Sets whether ImageLoader will consider EXIF parameters of JPEG image (rotate, flip)
+         */
+        public Builder considerExifParams(boolean considerExifParams) {
+            this.considerExifParams = considerExifParams;
+            return this;
+        }
+
+        /**
          * Sets bitmap processor which will be process bitmaps before they will be cached in memory. So memory cache
          * will contain bitmap processed by incoming preProcessor.<br />
          * Image will be pre-processed even if caching in memory is disabled.
@@ -349,7 +431,8 @@ public final class DisplayImageOptions {
         }
 
         /**
-         * Sets bitmap processor which will be process bitmaps before they will be displayed in {@link ImageView} but
+         * Sets bitmap processor which will be process bitmaps before they will be displayed in
+         * {@link com.nostra13.universalimageloader.core.imageaware.ImageAware image aware view} but
          * after they'll have been saved in memory cache.
          */
         public Builder postProcessor(BitmapProcessor postProcessor) {
@@ -367,6 +450,11 @@ public final class DisplayImageOptions {
             return this;
         }
 
+        Builder syncLoading(boolean isSyncLoading) {
+            this.isSyncLoading = isSyncLoading;
+            return this;
+        }
+
         /**
          * Sets custom {@linkplain Handler handler} for displaying images and firing {@linkplain ImageLoadingListener
          * listener} events.
@@ -380,20 +468,25 @@ public final class DisplayImageOptions {
          * Sets all options equal to incoming options
          */
         public Builder cloneFrom(DisplayImageOptions options) {
-            this.stubImage = options.stubImage;
-            this.imageForEmptyUri = options.imageForEmptyUri;
-            this.imageOnFail = options.imageOnFail;
-            this.resetViewBeforeLoading = options.resetViewBeforeLoading;
-            this.cacheInMemory = options.cacheInMemory;
-            this.cacheOnDisc = options.cacheOnDisc;
-            this.imageScaleType = options.imageScaleType;
-            this.decodingOptions = options.decodingOptions;
-            this.delayBeforeLoading = options.delayBeforeLoading;
-            this.extraForDownloader = options.extraForDownloader;
-            this.preProcessor = options.preProcessor;
-            this.postProcessor = options.postProcessor;
-            this.displayer = options.displayer;
-            this.handler = options.handler;
+            imageResOnLoading = options.imageResOnLoading;
+            imageResForEmptyUri = options.imageResForEmptyUri;
+            imageResOnFail = options.imageResOnFail;
+            imageOnLoading = options.imageOnLoading;
+            imageForEmptyUri = options.imageForEmptyUri;
+            imageOnFail = options.imageOnFail;
+            resetViewBeforeLoading = options.resetViewBeforeLoading;
+            cacheInMemory = options.cacheInMemory;
+            cacheOnDisc = options.cacheOnDisc;
+            imageScaleType = options.imageScaleType;
+            decodingOptions = options.decodingOptions;
+            delayBeforeLoading = options.delayBeforeLoading;
+            considerExifParams = options.considerExifParams;
+            extraForDownloader = options.extraForDownloader;
+            preProcessor = options.preProcessor;
+            postProcessor = options.postProcessor;
+            displayer = options.displayer;
+            handler = options.handler;
+            isSyncLoading = options.isSyncLoading;
             return this;
         }
 

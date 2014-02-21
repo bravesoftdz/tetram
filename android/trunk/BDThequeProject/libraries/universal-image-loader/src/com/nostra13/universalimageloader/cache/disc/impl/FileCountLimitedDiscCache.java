@@ -29,7 +29,6 @@ import java.io.File;
  * @see LimitedDiscCache
  * @since 1.0.0
  */
-@SuppressWarnings("UnusedDeclaration")
 public class FileCountLimitedDiscCache extends LimitedDiscCache {
     /**
      * @param cacheDir     Directory for file caching. <b>Important:</b> Specify separate folder for cached files. It's

@@ -23,8 +23,7 @@ package com.nostra13.universalimageloader.core.assist;
  */
 public class ImageSize {
 
-    @SuppressWarnings("UnusedDeclaration")
-    private static final int TO_STRING_MAX_LENGTH = 9; // "9999x9999".length()
+    private static final int TO_STRING_MAX_LENGHT = 9; // "9999x9999".length()
     private static final String SEPARATOR = "x";
 
     private final int width;
@@ -35,9 +34,8 @@ public class ImageSize {
         this.height = height;
     }
 
-    @SuppressWarnings("SuspiciousNameCombination")
     public ImageSize(int width, int height, int rotation) {
-        if ((rotation % 180) == 0) {
+        if (rotation % 180 == 0) {
             this.width = width;
             this.height = height;
         } else {
@@ -47,29 +45,29 @@ public class ImageSize {
     }
 
     public int getWidth() {
-        return this.width;
+        return width;
     }
 
     public int getHeight() {
-        return this.height;
+        return height;
     }
 
     /**
      * Scales down dimensions in <b>sampleSize</b> times. Returns new object.
      */
     public ImageSize scaleDown(int sampleSize) {
-        return new ImageSize(this.width / sampleSize, this.height / sampleSize);
+        return new ImageSize(width / sampleSize, height / sampleSize);
     }
 
     /**
      * Scales dimensions according to incoming scale. Returns new object.
      */
     public ImageSize scale(float scale) {
-        return new ImageSize((int) (this.width * scale), (int) (this.height * scale));
+        return new ImageSize((int) (width * scale), (int) (height * scale));
     }
 
     @Override
     public String toString() {
-        return String.format("%d%s%d", this.width, SEPARATOR, this.height);
+        return new StringBuilder(TO_STRING_MAX_LENGHT).append(width).append(SEPARATOR).append(height).toString();
     }
 }

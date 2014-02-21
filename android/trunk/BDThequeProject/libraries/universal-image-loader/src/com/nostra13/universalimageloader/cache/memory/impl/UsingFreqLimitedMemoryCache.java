@@ -38,7 +38,6 @@ import java.util.Set;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
-@SuppressWarnings("UnusedDeclaration")
 public class UsingFreqLimitedMemoryCache extends LimitedMemoryCache<String, Bitmap> {
     /**
      * Contains strong references to stored objects (keys) and last object usage date (in milliseconds). If hard cache
@@ -54,7 +53,7 @@ public class UsingFreqLimitedMemoryCache extends LimitedMemoryCache<String, Bitm
     @Override
     public boolean put(String key, Bitmap value) {
         if (super.put(key, value)) {
-            this.usingCounts.put(value, 0);
+            usingCounts.put(value, 0);
             return true;
         } else {
             return false;
@@ -66,9 +65,9 @@ public class UsingFreqLimitedMemoryCache extends LimitedMemoryCache<String, Bitm
         Bitmap value = super.get(key);
         // Increment usage count for value if value is contained in hardCahe
         if (value != null) {
-            Integer usageCount = this.usingCounts.get(value);
+            Integer usageCount = usingCounts.get(value);
             if (usageCount != null) {
-                this.usingCounts.put(value, usageCount + 1);
+                usingCounts.put(value, usageCount + 1);
             }
         }
         return value;
@@ -78,14 +77,14 @@ public class UsingFreqLimitedMemoryCache extends LimitedMemoryCache<String, Bitm
     public void remove(String key) {
         Bitmap value = super.get(key);
         if (value != null) {
-            this.usingCounts.remove(value);
+            usingCounts.remove(value);
         }
         super.remove(key);
     }
 
     @Override
     public void clear() {
-        this.usingCounts.clear();
+        usingCounts.clear();
         super.clear();
     }
 
@@ -98,8 +97,8 @@ public class UsingFreqLimitedMemoryCache extends LimitedMemoryCache<String, Bitm
     protected Bitmap removeNext() {
         Integer minUsageCount = null;
         Bitmap leastUsedValue = null;
-        Set<Entry<Bitmap, Integer>> entries = this.usingCounts.entrySet();
-        synchronized (this.usingCounts) {
+        Set<Entry<Bitmap, Integer>> entries = usingCounts.entrySet();
+        synchronized (usingCounts) {
             for (Entry<Bitmap, Integer> entry : entries) {
                 if (leastUsedValue == null) {
                     leastUsedValue = entry.getKey();
@@ -113,7 +112,7 @@ public class UsingFreqLimitedMemoryCache extends LimitedMemoryCache<String, Bitm
                 }
             }
         }
-        this.usingCounts.remove(leastUsedValue);
+        usingCounts.remove(leastUsedValue);
         return leastUsedValue;
     }
 

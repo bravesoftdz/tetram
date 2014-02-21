@@ -40,7 +40,7 @@ public class NetworkDeniedImageDownloader implements ImageDownloader {
             case HTTPS:
                 throw new IllegalStateException();
             default:
-                return this.wrappedDownloader.getStream(imageUri, extra);
+                return wrappedDownloader.getStream(imageUri, extra);
         }
     }
 }

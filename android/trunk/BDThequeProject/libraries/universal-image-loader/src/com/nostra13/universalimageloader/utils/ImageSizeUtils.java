@@ -16,14 +16,13 @@
 package com.nostra13.universalimageloader.utils;
 
 import android.graphics.BitmapFactory;
-import android.util.DisplayMetrics;
-import android.view.ViewGroup.LayoutParams;
-import android.widget.ImageView;
+import android.opengl.GLES10;
 
 import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.assist.ViewScaleType;
+import com.nostra13.universalimageloader.core.imageaware.ImageAware;
 
-import java.lang.reflect.Field;
+import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Provides calculations with image sizes, scales
@@ -33,56 +32,33 @@ import java.lang.reflect.Field;
  */
 public final class ImageSizeUtils {
 
+    private static final int DEFAULT_MAX_BITMAP_DIMENSION = 2048;
+
+    private static ImageSize maxBitmapSize;
+
+    static {
+        int[] maxTextureSize = new int[1];
+        GLES10.glGetIntegerv(GL10.GL_MAX_TEXTURE_SIZE, maxTextureSize, 0);
+        int maxBitmapDimension = Math.max(maxTextureSize[0], DEFAULT_MAX_BITMAP_DIMENSION);
+        maxBitmapSize = new ImageSize(maxBitmapDimension, maxBitmapDimension);
+    }
+
     private ImageSizeUtils() {
     }
 
     /**
-     * Defines target size for image. Size is defined by target {@link ImageView view} parameters, configuration
+     * Defines target size for image aware view. Size is defined by target
+     * {@link com.nostra13.universalimageloader.core.imageaware.ImageAware view} parameters, configuration
      * parameters or device display dimensions.<br />
-     * Size computing algorithm:<br />
-     * 1) Get the actual drawn <b>getWidth()</b> and <b>getHeight()</b> of the View. If view haven't drawn yet then go
-     * to step #2.<br />
-     * 2) Get <b>layout_width</b> and <b>layout_height</b>. If both of them haven't exact value then go to step #3.<br />
-     * 3) Get <b>maxWidth</b> and <b>maxHeight</b>. If both of them are not set then go to step #4.<br />
-     * 4) Get <b>maxImageWidth</b> param (<b>maxImageWidthForMemoryCache</b>) and <b>maxImageHeight</b> param
-     * (<b>maxImageHeightForMemoryCache</b>). If both of them are not set (equal 0) then go to step #5.<br />
-     * 5) Get device screen dimensions.
      */
-    public static ImageSize defineTargetSizeForView(ImageView imageView, int maxImageWidth, int maxImageHeight) {
-        final DisplayMetrics displayMetrics = imageView.getContext().getResources().getDisplayMetrics();
+    public static ImageSize defineTargetSizeForView(ImageAware imageAware, ImageSize maxImageSize) {
+        int width = imageAware.getWidth();
+        if (width <= 0) width = maxImageSize.getWidth();
 
-        final LayoutParams params = imageView.getLayoutParams();
-        int width = ((params != null) && (params.width == LayoutParams.WRAP_CONTENT)) ? 0 : imageView.getWidth(); // Get actual image width
-        if ((width <= 0) && (params != null)) width = params.width; // Get layout width parameter
-        if (width <= 0)
-            width = getImageViewFieldValue(imageView, "mMaxWidth"); // Check maxWidth parameter
-        if (width <= 0) width = maxImageWidth;
-        if (width <= 0) width = displayMetrics.widthPixels;
-
-        int height = ((params != null) && (params.height == LayoutParams.WRAP_CONTENT)) ? 0 : imageView.getHeight(); // Get actual image height
-        if ((height <= 0) && (params != null))
-            height = params.height; // Get layout height parameter
-        if (height <= 0)
-            height = getImageViewFieldValue(imageView, "mMaxHeight"); // Check maxHeight parameter
-        if (height <= 0) height = maxImageHeight;
-        if (height <= 0) height = displayMetrics.heightPixels;
+        int height = imageAware.getHeight();
+        if (height <= 0) height = maxImageSize.getHeight();
 
         return new ImageSize(width, height);
-    }
-
-    private static int getImageViewFieldValue(Object object, String fieldName) {
-        int value = 0;
-        try {
-            Field field = ImageView.class.getDeclaredField(fieldName);
-            field.setAccessible(true);
-            int fieldValue = (Integer) field.get(object);
-            if ((fieldValue > 0) && (fieldValue < Integer.MAX_VALUE)) {
-                value = fieldValue;
-            }
-        } catch (Exception e) {
-            L.e(e);
-        }
-        return value;
     }
 
     /**
@@ -112,7 +88,8 @@ public final class ImageSizeUtils {
      * @param powerOf2Scale <i>true</i> - if sample size be a power of 2 (1, 2, 4, 8, ...)
      * @return Computed sample size
      */
-    public static int computeImageSampleSize(ImageSize srcSize, ImageSize targetSize, ViewScaleType viewScaleType, boolean powerOf2Scale) {
+    public static int computeImageSampleSize(ImageSize srcSize, ImageSize targetSize, ViewScaleType viewScaleType,
+                                             boolean powerOf2Scale) {
         int srcWidth = srcSize.getWidth();
         int srcHeight = srcSize.getHeight();
         int targetWidth = targetSize.getWidth();
@@ -126,7 +103,7 @@ public final class ImageSizeUtils {
         switch (viewScaleType) {
             case FIT_INSIDE:
                 if (powerOf2Scale) {
-                    while (((srcWidth / 2) >= targetWidth) || ((srcHeight / 2) >= targetHeight)) { // ||
+                    while (srcWidth / 2 >= targetWidth || srcHeight / 2 >= targetHeight) { // ||
                         srcWidth /= 2;
                         srcHeight /= 2;
                         scale *= 2;
@@ -137,7 +114,7 @@ public final class ImageSizeUtils {
                 break;
             case CROP:
                 if (powerOf2Scale) {
-                    while (((srcWidth / 2) >= targetWidth) && ((srcHeight / 2) >= targetHeight)) { // &&
+                    while (srcWidth / 2 >= targetWidth && srcHeight / 2 >= targetHeight) { // &&
                         srcWidth /= 2;
                         srcHeight /= 2;
                         scale *= 2;
@@ -153,6 +130,27 @@ public final class ImageSizeUtils {
         }
 
         return scale;
+    }
+
+    /**
+     * Computes minimal sample size for downscaling image so result image size won't exceed max acceptable OpenGL
+     * texture size.<br />
+     * We can't create Bitmap in memory with size exceed max texture size (usually this is 2048x2048) so this method
+     * calculate minimal sample size which should be applied to image to fit into these limits.
+     *
+     * @param srcSize Original image size
+     * @return Minimal sample size
+     */
+    public static int computeMinImageSampleSize(ImageSize srcSize) {
+        int srcWidth = srcSize.getWidth();
+        int srcHeight = srcSize.getHeight();
+        int targetWidth = maxBitmapSize.getWidth();
+        int targetHeight = maxBitmapSize.getHeight();
+
+        int widthScale = (int) Math.ceil((float) srcWidth / targetWidth);
+        int heightScale = (int) Math.ceil((float) srcHeight / targetHeight);
+
+        return Math.max(widthScale, heightScale); // max
     }
 
     /**
@@ -177,7 +175,8 @@ public final class ImageSizeUtils {
      *                      then result scale value can't be greater than 1.
      * @return Computed scale
      */
-    public static float computeImageScale(ImageSize srcSize, ImageSize targetSize, ViewScaleType viewScaleType, boolean stretch) {
+    public static float computeImageScale(ImageSize srcSize, ImageSize targetSize, ViewScaleType viewScaleType,
+                                          boolean stretch) {
         int srcWidth = srcSize.getWidth();
         int srcHeight = srcSize.getHeight();
         int targetWidth = targetSize.getWidth();
@@ -188,7 +187,7 @@ public final class ImageSizeUtils {
 
         int destWidth;
         int destHeight;
-        if (((viewScaleType == ViewScaleType.FIT_INSIDE) && (widthScale >= heightScale)) || ((viewScaleType == ViewScaleType.CROP) && (widthScale < heightScale))) {
+        if ((viewScaleType == ViewScaleType.FIT_INSIDE && widthScale >= heightScale) || (viewScaleType == ViewScaleType.CROP && widthScale < heightScale)) {
             destWidth = targetWidth;
             destHeight = (int) (srcHeight / widthScale);
         } else {
@@ -197,7 +196,7 @@ public final class ImageSizeUtils {
         }
 
         float scale = 1;
-        if ((!stretch && (destWidth < srcWidth) && (destHeight < srcHeight)) || (stretch && (destWidth != srcWidth) && (destHeight != srcHeight))) {
+        if ((!stretch && destWidth < srcWidth && destHeight < srcHeight) || (stretch && destWidth != srcWidth && destHeight != srcHeight)) {
             scale = (float) destWidth / srcWidth;
         }
 

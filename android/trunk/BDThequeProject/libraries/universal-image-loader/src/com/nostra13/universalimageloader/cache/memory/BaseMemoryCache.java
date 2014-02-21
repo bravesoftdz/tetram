@@ -39,7 +39,7 @@ public abstract class BaseMemoryCache<K, V> implements MemoryCacheAware<K, V> {
     @Override
     public V get(K key) {
         V result = null;
-        Reference<V> reference = this.softMap.get(key);
+        Reference<V> reference = softMap.get(key);
         if (reference != null) {
             result = reference.get();
         }
@@ -48,25 +48,25 @@ public abstract class BaseMemoryCache<K, V> implements MemoryCacheAware<K, V> {
 
     @Override
     public boolean put(K key, V value) {
-        this.softMap.put(key, createReference(value));
+        softMap.put(key, createReference(value));
         return true;
     }
 
     @Override
     public void remove(K key) {
-        this.softMap.remove(key);
+        softMap.remove(key);
     }
 
     @Override
     public Collection<K> keys() {
-        synchronized (this.softMap) {
-            return new HashSet<K>(this.softMap.keySet());
+        synchronized (softMap) {
+            return new HashSet<K>(softMap.keySet());
         }
     }
 
     @Override
     public void clear() {
-        this.softMap.clear();
+        softMap.clear();
     }
 
     /**

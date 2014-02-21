@@ -39,7 +39,7 @@ public class Md5FileNameGenerator implements FileNameGenerator {
         return bi.toString(RADIX);
     }
 
-    private static byte[] getMD5(byte[] data) {
+    private byte[] getMD5(byte[] data) {
         byte[] hash = null;
         try {
             MessageDigest digest = MessageDigest.getInstance(HASH_ALGORITHM);

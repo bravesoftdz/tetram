@@ -23,10 +23,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.assist.ContentLengthInputStream;
+import com.nostra13.universalimageloader.utils.IoUtils;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -43,7 +46,6 @@ import java.net.URLConnection;
  * @see HttpClientImageDownloader
  * @since 1.8.0
  */
-@SuppressWarnings("UnusedDeclaration")
 public class BaseImageDownloader implements ImageDownloader {
     /**
      * {@value}
@@ -118,12 +120,20 @@ public class BaseImageDownloader implements ImageDownloader {
         HttpURLConnection conn = createConnection(imageUri, extra);
 
         int redirectCount = 0;
-        while (((conn.getResponseCode() / 100) == 3) && (redirectCount < MAX_REDIRECT_COUNT)) {
+        while (conn.getResponseCode() / 100 == 3 && redirectCount < MAX_REDIRECT_COUNT) {
             conn = createConnection(conn.getHeaderField("Location"), extra);
             redirectCount++;
         }
 
-        return new BufferedInputStream(conn.getInputStream(), BUFFER_SIZE);
+        InputStream imageStream;
+        try {
+            imageStream = conn.getInputStream();
+        } catch (IOException e) {
+            // Read all data to allow reuse connection (http://bit.ly/1ad35PY)
+            IoUtils.readAndCloseStream(conn.getErrorStream());
+            throw e;
+        }
+        return new ContentLengthInputStream(new BufferedInputStream(imageStream, BUFFER_SIZE), conn.getContentLength());
     }
 
     /**
@@ -139,8 +149,8 @@ public class BaseImageDownloader implements ImageDownloader {
     protected HttpURLConnection createConnection(String url, Object extra) throws IOException {
         String encodedUrl = Uri.encode(url, ALLOWED_URI_CHARS);
         HttpURLConnection conn = (HttpURLConnection) new URL(encodedUrl).openConnection();
-        conn.setConnectTimeout(this.connectTimeout);
-        conn.setReadTimeout(this.readTimeout);
+        conn.setConnectTimeout(connectTimeout);
+        conn.setReadTimeout(readTimeout);
         return conn;
     }
 
@@ -153,9 +163,10 @@ public class BaseImageDownloader implements ImageDownloader {
      * @return {@link InputStream} of image
      * @throws IOException if some I/O error occurs reading from file system
      */
-    protected static InputStream getStreamFromFile(String imageUri, Object extra) throws IOException {
+    protected InputStream getStreamFromFile(String imageUri, Object extra) throws IOException {
         String filePath = Scheme.FILE.crop(imageUri);
-        return new BufferedInputStream(new FileInputStream(filePath), BUFFER_SIZE);
+        return new ContentLengthInputStream(new BufferedInputStream(new FileInputStream(filePath), BUFFER_SIZE),
+                new File(filePath).length());
     }
 
     /**
@@ -168,7 +179,7 @@ public class BaseImageDownloader implements ImageDownloader {
      * @throws FileNotFoundException if the provided URI could not be opened
      */
     protected InputStream getStreamFromContent(String imageUri, Object extra) throws FileNotFoundException {
-        ContentResolver res = this.context.getContentResolver();
+        ContentResolver res = context.getContentResolver();
         Uri uri = Uri.parse(imageUri);
         return res.openInputStream(uri);
     }
@@ -184,7 +195,7 @@ public class BaseImageDownloader implements ImageDownloader {
      */
     protected InputStream getStreamFromAssets(String imageUri, Object extra) throws IOException {
         String filePath = Scheme.ASSETS.crop(imageUri);
-        return this.context.getAssets().open(filePath);
+        return context.getAssets().open(filePath);
     }
 
     /**
@@ -198,7 +209,7 @@ public class BaseImageDownloader implements ImageDownloader {
     protected InputStream getStreamFromDrawable(String imageUri, Object extra) {
         String drawableIdString = Scheme.DRAWABLE.crop(imageUri);
         int drawableId = Integer.parseInt(drawableIdString);
-        BitmapDrawable drawable = (BitmapDrawable) this.context.getResources().getDrawable(drawableId);
+        BitmapDrawable drawable = (BitmapDrawable) context.getResources().getDrawable(drawableId);
         Bitmap bitmap = drawable.getBitmap();
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -219,7 +230,7 @@ public class BaseImageDownloader implements ImageDownloader {
      * @throws IOException                   if some I/O error occurs
      * @throws UnsupportedOperationException if image URI has unsupported scheme(protocol)
      */
-    protected static InputStream getStreamFromOtherSource(String imageUri, Object extra) throws IOException {
+    protected InputStream getStreamFromOtherSource(String imageUri, Object extra) throws IOException {
         throw new UnsupportedOperationException(String.format(ERROR_UNSUPPORTED_SCHEME, imageUri));
     }
 }

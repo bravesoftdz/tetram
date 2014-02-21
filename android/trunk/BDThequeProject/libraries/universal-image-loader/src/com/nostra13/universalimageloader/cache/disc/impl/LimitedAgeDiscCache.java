@@ -31,7 +31,6 @@ import java.util.Map;
  * @see BaseDiscCache
  * @since 1.3.1
  */
-@SuppressWarnings("UnusedDeclaration")
 public class LimitedAgeDiscCache extends BaseDiscCache {
 
     private final long maxFileAge;
@@ -58,21 +57,19 @@ public class LimitedAgeDiscCache extends BaseDiscCache {
         this.maxFileAge = maxAge * 1000; // to milliseconds
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void put(String key, File file) {
         long currentTime = System.currentTimeMillis();
         file.setLastModified(currentTime);
-        this.loadingDates.put(file, currentTime);
+        loadingDates.put(file, currentTime);
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public File get(String key) {
         File file = super.get(key);
         if (file.exists()) {
             boolean cached;
-            Long loadingDate = this.loadingDates.get(file);
+            Long loadingDate = loadingDates.get(file);
             if (loadingDate == null) {
                 cached = false;
                 loadingDate = file.lastModified();
@@ -80,11 +77,11 @@ public class LimitedAgeDiscCache extends BaseDiscCache {
                 cached = true;
             }
 
-            if ((System.currentTimeMillis() - loadingDate) > this.maxFileAge) {
+            if (System.currentTimeMillis() - loadingDate > maxFileAge) {
                 file.delete();
-                this.loadingDates.remove(file);
+                loadingDates.remove(file);
             } else if (!cached) {
-                this.loadingDates.put(file, loadingDate);
+                loadingDates.put(file, loadingDate);
             }
         }
         return file;

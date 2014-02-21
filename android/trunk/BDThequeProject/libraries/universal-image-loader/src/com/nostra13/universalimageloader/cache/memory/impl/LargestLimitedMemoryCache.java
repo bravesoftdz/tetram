@@ -29,7 +29,7 @@ import java.util.Set;
 
 /**
  * Limited {@link Bitmap bitmap} cache. Provides {@link Bitmap bitmaps} storing. Size of all stored bitmaps will not to
- * exceed size limit. When cache reaches limit size then the bitmap which used the least frequently is deleted from
+ * exceed size limit. When cache reaches limit size then the bitmap which has the largest size is deleted from
  * cache.<br />
  * <br />
  * <b>NOTE:</b> This cache uses strong and weak references for stored Bitmaps. Strong references - for limited count of
@@ -38,11 +38,10 @@ import java.util.Set;
  * @author Sergey Tarasevich (nostra13[at]gmail[dot]com)
  * @since 1.0.0
  */
-@SuppressWarnings("UnusedDeclaration")
 public class LargestLimitedMemoryCache extends LimitedMemoryCache<String, Bitmap> {
     /**
-     * Contains strong references to stored objects (keys) and last object usage date (in milliseconds). If hard cache
-     * size will exceed limit then object with the least frequently usage is deleted (but it continue exist at
+     * Contains strong references to stored objects (keys) and sizes of the objects. If hard cache
+     * size will exceed limit then object with the largest size is deleted (but it continue exist at
      * {@link #softMap} and can be collected by GC at any time)
      */
     private final Map<Bitmap, Integer> valueSizes = Collections.synchronizedMap(new HashMap<Bitmap, Integer>());
@@ -54,7 +53,7 @@ public class LargestLimitedMemoryCache extends LimitedMemoryCache<String, Bitmap
     @Override
     public boolean put(String key, Bitmap value) {
         if (super.put(key, value)) {
-            this.valueSizes.put(value, getSize(value));
+            valueSizes.put(value, getSize(value));
             return true;
         } else {
             return false;
@@ -65,14 +64,14 @@ public class LargestLimitedMemoryCache extends LimitedMemoryCache<String, Bitmap
     public void remove(String key) {
         Bitmap value = super.get(key);
         if (value != null) {
-            this.valueSizes.remove(value);
+            valueSizes.remove(value);
         }
         super.remove(key);
     }
 
     @Override
     public void clear() {
-        this.valueSizes.clear();
+        valueSizes.clear();
         super.clear();
     }
 
@@ -85,8 +84,8 @@ public class LargestLimitedMemoryCache extends LimitedMemoryCache<String, Bitmap
     protected Bitmap removeNext() {
         Integer maxSize = null;
         Bitmap largestValue = null;
-        Set<Entry<Bitmap, Integer>> entries = this.valueSizes.entrySet();
-        synchronized (this.valueSizes) {
+        Set<Entry<Bitmap, Integer>> entries = valueSizes.entrySet();
+        synchronized (valueSizes) {
             for (Entry<Bitmap, Integer> entry : entries) {
                 if (largestValue == null) {
                     largestValue = entry.getKey();
@@ -100,7 +99,7 @@ public class LargestLimitedMemoryCache extends LimitedMemoryCache<String, Bitmap
                 }
             }
         }
-        this.valueSizes.remove(largestValue);
+        valueSizes.remove(largestValue);
         return largestValue;
     }
 

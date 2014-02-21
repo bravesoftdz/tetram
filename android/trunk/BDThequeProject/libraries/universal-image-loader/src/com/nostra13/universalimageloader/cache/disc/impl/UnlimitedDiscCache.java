@@ -29,7 +29,6 @@ import java.io.File;
  * @see BaseDiscCache
  * @since 1.0.0
  */
-@SuppressWarnings("UnusedDeclaration")
 public class UnlimitedDiscCache extends BaseDiscCache {
 
     /**
