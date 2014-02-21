@@ -28,12 +28,12 @@ import java.io.IOException;
  */
 public interface ImageDecoder {
 
-    /**
-     * Decodes image to {@link Bitmap} according target size and other parameters.
-     *
-     * @param imageDecodingInfo
-     * @return
-     * @throws IOException
-     */
-    Bitmap decode(ImageDecodingInfo imageDecodingInfo) throws IOException;
+	/**
+	 * Decodes image to {@link Bitmap} according target size and other parameters.
+	 *
+	 * @param imageDecodingInfo
+	 * @return
+	 * @throws IOException
+	 */
+	Bitmap decode(ImageDecodingInfo imageDecodingInfo) throws IOException;
 }

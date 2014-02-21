@@ -16,7 +16,6 @@
 package com.nostra13.universalimageloader.cache.memory.impl;
 
 import android.graphics.Bitmap;
-
 import com.nostra13.universalimageloader.cache.memory.BaseMemoryCache;
 
 import java.lang.ref.Reference;
@@ -31,8 +30,8 @@ import java.lang.ref.WeakReference;
  * @since 1.5.3
  */
 public class WeakMemoryCache extends BaseMemoryCache<String, Bitmap> {
-    @Override
-    protected Reference<Bitmap> createReference(Bitmap value) {
-        return new WeakReference<Bitmap>(value);
-    }
+	@Override
+	protected Reference<Bitmap> createReference(Bitmap value) {
+		return new WeakReference<Bitmap>(value);
+	}
 }

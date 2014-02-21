@@ -31,49 +31,49 @@ import java.util.Comparator;
  */
 public class FuzzyKeyMemoryCache<K, V> implements MemoryCacheAware<K, V> {
 
-    private final MemoryCacheAware<K, V> cache;
-    private final Comparator<K> keyComparator;
+	private final MemoryCacheAware<K, V> cache;
+	private final Comparator<K> keyComparator;
 
-    public FuzzyKeyMemoryCache(MemoryCacheAware<K, V> cache, Comparator<K> keyComparator) {
-        this.cache = cache;
-        this.keyComparator = keyComparator;
-    }
+	public FuzzyKeyMemoryCache(MemoryCacheAware<K, V> cache, Comparator<K> keyComparator) {
+		this.cache = cache;
+		this.keyComparator = keyComparator;
+	}
 
-    @Override
-    public boolean put(K key, V value) {
-        // Search equal key and remove this entry
-        synchronized (cache) {
-            K keyToRemove = null;
-            for (K cacheKey : cache.keys()) {
-                if (keyComparator.compare(key, cacheKey) == 0) {
-                    keyToRemove = cacheKey;
-                    break;
-                }
-            }
-            if (keyToRemove != null) {
-                cache.remove(keyToRemove);
-            }
-        }
-        return cache.put(key, value);
-    }
+	@Override
+	public boolean put(K key, V value) {
+		// Search equal key and remove this entry
+		synchronized (cache) {
+			K keyToRemove = null;
+			for (K cacheKey : cache.keys()) {
+				if (keyComparator.compare(key, cacheKey) == 0) {
+					keyToRemove = cacheKey;
+					break;
+				}
+			}
+			if (keyToRemove != null) {
+				cache.remove(keyToRemove);
+			}
+		}
+		return cache.put(key, value);
+	}
 
-    @Override
-    public V get(K key) {
-        return cache.get(key);
-    }
+	@Override
+	public V get(K key) {
+		return cache.get(key);
+	}
 
-    @Override
-    public void remove(K key) {
-        cache.remove(key);
-    }
+	@Override
+	public void remove(K key) {
+		cache.remove(key);
+	}
 
-    @Override
-    public void clear() {
-        cache.clear();
-    }
+	@Override
+	public void clear() {
+		cache.clear();
+	}
 
-    @Override
-    public Collection<K> keys() {
-        return cache.keys();
-    }
+	@Override
+	public Collection<K> keys() {
+		return cache.keys();
+	}
 }
