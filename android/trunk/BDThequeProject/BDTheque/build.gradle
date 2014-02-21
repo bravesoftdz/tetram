@@ -1,9 +1,6 @@
 apply plugin: 'android'
 
 android {
-    compileSdkVersion 16
-    buildToolsVersion '19.0.1'
-
     dexOptions {
         //incremental true
     }
