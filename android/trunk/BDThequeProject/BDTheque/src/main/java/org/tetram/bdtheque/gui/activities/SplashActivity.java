@@ -59,7 +59,7 @@ public class SplashActivity extends Activity {
 
     };
 
-    public void goToMainActivity() {
+    void goToMainActivity() {
         final Intent intent = new Intent(SplashActivity.this, RepertoireActivity.class);
         startActivity(intent);
     }

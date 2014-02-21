@@ -152,7 +152,7 @@ public class RepertoireActivity extends FragmentActivity implements ActionBar.On
         return super.onCreateOptionsMenu(menu);
     }
 
-    public static Intent createShareIntent() {
+    private static Intent createShareIntent() {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("plain/text");
         intent.putExtra(Intent.EXTRA_TEXT, "Test");

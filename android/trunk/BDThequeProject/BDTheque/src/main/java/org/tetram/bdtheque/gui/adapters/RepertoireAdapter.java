@@ -34,8 +34,8 @@ public class RepertoireAdapter<T extends TreeNodeBean> extends BaseExpandableLis
     @SuppressWarnings("UnusedDeclaration")
     private final List<Character> sections = new ArrayList<>();
     private final List<Character> realListInitiales = new ArrayList<>();
-    InitialeRepertoireDao repertoireDao;
-    Context context;
+    private InitialeRepertoireDao repertoireDao;
+    private Context context;
     private List<? extends InitialeBean> listInitiales;
     private SparseArray<List<T>> mapData;
     private boolean manualScroll;

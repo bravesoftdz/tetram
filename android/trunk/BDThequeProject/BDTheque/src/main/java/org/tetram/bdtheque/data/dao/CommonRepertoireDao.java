@@ -28,11 +28,11 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
         this.initialeClass = initialeClass;
     }
 
-    public List<B> getData(int resId, InitialeBean initiale) {
+    protected List<B> getData(int resId, InitialeBean initiale) {
         return getData(resId, initiale, null);
     }
 
-    public List<B> getData(int resId, InitialeBean initiale, String filtre) {
+    protected List<B> getData(int resId, InitialeBean initiale, String filtre) {
         SQLiteDatabase rdb = getDatabaseHelper().getReadableDatabase();
         assert rdb != null;
         try {
@@ -85,11 +85,11 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
         return getInitiales(resId, "");
     }
 
-    public final List<I> getInitiales(int resId, String filtre) {
+    protected final List<I> getInitiales(int resId, String filtre) {
         return getInitiales(BDThequeApplication.getInstance().getString(resId, ((filtre == null) || "".equals(filtre)) ? "" : (" and " + filtre)));
     }
 
-    public final List<I> getInitiales(String tableName, String fieldName, String filtre) {
+    protected final List<I> getInitiales(String tableName, String fieldName, String filtre) {
         return getInitiales(BDThequeApplication.getInstance().getString(R.string.sql_initiales, tableName, fieldName, filtre));
     }
 
@@ -103,11 +103,11 @@ public abstract class CommonRepertoireDao<B extends CommonBean & TreeNodeBean, I
         return this.filtre;
     }
 
-    public String getFiltre(int resId) {
+    protected String getFiltre(int resId) {
         return getFiltre(BDThequeApplication.getInstance().getString(resId));
     }
 
-    public String getFiltre(String searchField) {
+    String getFiltre(String searchField) {
         if ((this.filtre == null) || "".equals(this.filtre))
             return "";
         else

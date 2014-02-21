@@ -1,7 +1,7 @@
 package org.tetram.bdtheque.data.utils;
 
 @SuppressWarnings("UnusedDeclaration")
-public abstract class DaoUtils {
+abstract class DaoUtils {
 
     private DaoUtils() {
         super();

@@ -19,7 +19,8 @@ import org.tetram.bdtheque.gui.utils.ModeRepertoire;
 import org.tetram.bdtheque.gui.utils.ShowFragmentClass;
 
 public class TitlesFragment extends ExpandableListFragment {
-    Integer curChildPosition, curGroupPosition;
+    private Integer curChildPosition;
+    private Integer curGroupPosition;
 
     private InitialeRepertoireDao<?, ?> repertoireDao;
     private ModeRepertoire repertoireMode;
