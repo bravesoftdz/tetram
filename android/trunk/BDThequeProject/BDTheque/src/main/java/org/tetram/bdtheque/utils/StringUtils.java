@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -64,7 +65,7 @@ public abstract class StringUtils {
     }
 
     public static String UUIDToGUIDString(final UUID uuid) {
-        return "{" + uuid.toString().toUpperCase() + "}";
+        return "{" + uuid.toString().toUpperCase(Locale.US) + "}";
     }
 
     public static String ajoutString(final String chaine, final String ajout, final String espace) {
@@ -200,7 +201,7 @@ end;
 
                 @Override
                 public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-                    String s = qName.toLowerCase();
+                    String s = qName.toLowerCase(Locale.US);
                     switch (s) {
                         case "ean.uccprefixes":
                             this.currentList = isbnPrefixes;
@@ -217,7 +218,7 @@ end;
 
                 @Override
                 public void endElement(String uri, String localName, String qName) throws SAXException {
-                    String s = qName.toLowerCase();
+                    String s = qName.toLowerCase(Locale.US);
                     switch (s) {
                         case "valuelower":
                             this.currentRule.valueLower = Integer.valueOf(this.tmpValue);
@@ -292,7 +293,7 @@ end;
         decodeISBNRules();
 
 
-        isbn = isbn.toUpperCase().substring(0, Math.min(isbn.length(), 13));
+        isbn = isbn.toUpperCase(Locale.US).substring(0, Math.min(isbn.length(), 13));
         String prefix = "978";
         String s = isbn;
         if (s.length() > 10) {
@@ -328,7 +329,7 @@ end;
 
     public static String clearISBN(final String code) {
         final StringBuilder result = new StringBuilder(code.length());
-        for (final char c : code.toUpperCase().toCharArray())
+        for (final char c : code.toUpperCase(Locale.US).toCharArray())
             if (Character.isDigit(c) || (c == 'X')) {
                 result.append(c);
             }

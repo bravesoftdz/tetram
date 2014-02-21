@@ -17,6 +17,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @SuppressWarnings("UnusedDeclaration")
@@ -39,7 +40,7 @@ public abstract class Core {
 
     public static String getSQLAlias(String sqlName, int indicator) {
         int aliasLength = SQLConstants.MAX_SQL_ALIAS_LENGTH - 1 - ((indicator == 0) ? 1 : ((int) Math.ceil(Math.log10(indicator)) + 1));
-        return String.format("%s_%d", (sqlName.length() <= aliasLength) ? sqlName : sqlName.substring(0, aliasLength), indicator);
+        return String.format(Locale.US, "%s_%d", (sqlName.length() <= aliasLength) ? sqlName : sqlName.substring(0, aliasLength), indicator);
     }
 
     public static List<PropertyDescriptor> getPropertiesDescriptors(Class<? extends CommonBean> clasz) {
@@ -62,14 +63,14 @@ public abstract class Core {
                         simpleProperty.dbFieldName = field.getName();
                         if (!simpleProperty.annotation.fieldName().isEmpty())
                             simpleProperty.dbFieldName = simpleProperty.annotation.fieldName();
-                        final String setterName = String.format("set%s%s", field.getName().substring(0, 1).toUpperCase(), field.getName().substring(1));
+                        final String setterName = String.format("set%s%s", field.getName().substring(0, 1).toUpperCase(Locale.US), field.getName().substring(1));
                         try {
                             simpleProperty.setter = masterClasz.getMethod(setterName, field.getType());
                         } catch (final NoSuchMethodException e) {
                             e.printStackTrace();
                         }
                         final boolean isBoolean = field.getType().equals(boolean.class) || field.getType().equals(Boolean.class);
-                        final String getterName = String.format("%s%s%s", isBoolean ? "is" : "get", field.getName().substring(0, 1).toUpperCase(), field.getName().substring(1));
+                        final String getterName = String.format("%s%s%s", isBoolean ? "is" : "get", field.getName().substring(0, 1).toUpperCase(Locale.US), field.getName().substring(1));
                         try {
                             simpleProperty.getter = masterClasz.getMethod(getterName);
                         } catch (final NoSuchMethodException e) {
@@ -88,7 +89,7 @@ public abstract class Core {
                         }
                         multipleProperty.filters = field.getAnnotation(Filters.class);
                         multipleProperty.orderBy = field.getAnnotation(OrderBy.class);
-                        final String getterName = String.format("%s%s%s", "get", field.getName().substring(0, 1).toUpperCase(), field.getName().substring(1));
+                        final String getterName = String.format("%s%s%s", "get", field.getName().substring(0, 1).toUpperCase(Locale.US), field.getName().substring(1));
                         try {
                             multipleProperty.getter = masterClasz.getMethod(getterName);
                         } catch (final NoSuchMethodException e) {
@@ -120,7 +121,7 @@ public abstract class Core {
             if (!a.tableName().isEmpty())
                 result.tableName = a.tableName();
             else
-                result.tableName = clasz.getSimpleName().toUpperCase() + "S";
+                result.tableName = clasz.getSimpleName().toUpperCase(Locale.US) + "S";
             if (BeanFactory.class.isAssignableFrom(a.factoryClass()))
                 try {
                     result.factory = (BeanFactory) a.factoryClass().getConstructor().newInstance();

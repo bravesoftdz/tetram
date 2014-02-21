@@ -31,6 +31,7 @@ import org.tetram.bdtheque.gui.activities.ImageActivity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
@@ -207,7 +208,7 @@ public class ImageFragment extends Fragment {
             ImageBean imageBean = ImageFragment.this.imagesList.get(position);
             String imagePath = "";
             if (BuildConfig.DEBUG)
-                imagePath = new File(this.externalDir, "demo_img_" + imageBean.getId().toString().toLowerCase().replaceAll("-", "_")).toString();
+                imagePath = new File(this.externalDir, "demo_img_" + imageBean.getId().toString().toLowerCase(Locale.US).replaceAll("-", "_")).toString();
 
             setUIElement(imageLayout, R.id.image_type_image, imageBean.getCategorieImage().getLibelle());
 

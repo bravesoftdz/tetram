@@ -7,6 +7,7 @@ import org.tetram.bdtheque.utils.StringUtils;
 
 import java.text.ParseException;
 import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 public class FieldLoader {
@@ -23,7 +24,8 @@ public class FieldLoader {
     @Nullable
     public static String getFieldAsString(Cursor cursor, String fieldName) {
         int columnIndex = cursor.getColumnIndex(fieldName);
-        if (columnIndex == -1) columnIndex = cursor.getColumnIndex(fieldName.toLowerCase());
+        if (columnIndex == -1)
+            columnIndex = cursor.getColumnIndex(fieldName.toLowerCase(Locale.US));
         if (columnIndex == -1) return null;
         if (cursor.isNull(columnIndex)) return null;
 
@@ -33,7 +35,8 @@ public class FieldLoader {
     @Nullable
     public static Double getFieldAsDouble(Cursor cursor, String fieldName) {
         int columnIndex = cursor.getColumnIndex(fieldName);
-        if (columnIndex == -1) columnIndex = cursor.getColumnIndex(fieldName.toLowerCase());
+        if (columnIndex == -1)
+            columnIndex = cursor.getColumnIndex(fieldName.toLowerCase(Locale.US));
         if (columnIndex == -1) return null;
         if (cursor.isNull(columnIndex)) return null;
 
@@ -70,7 +73,8 @@ public class FieldLoader {
     @Nullable
     public static Integer getFieldAsInteger(Cursor cursor, String fieldName) {
         int columnIndex = cursor.getColumnIndex(fieldName);
-        if (columnIndex == -1) columnIndex = cursor.getColumnIndex(fieldName.toLowerCase());
+        if (columnIndex == -1)
+            columnIndex = cursor.getColumnIndex(fieldName.toLowerCase(Locale.US));
         if (columnIndex == -1) return null;
         if (cursor.isNull(columnIndex)) return null;
 
@@ -85,7 +89,8 @@ public class FieldLoader {
     @Nullable
     public static Date getFieldAsDate(Cursor cursor, String fieldName) {
         int columnIndex = cursor.getColumnIndex(fieldName);
-        if (columnIndex == -1) columnIndex = cursor.getColumnIndex(fieldName.toLowerCase());
+        if (columnIndex == -1)
+            columnIndex = cursor.getColumnIndex(fieldName.toLowerCase(Locale.US));
         if (columnIndex == -1) return null;
         if (cursor.isNull(columnIndex)) return null;
 

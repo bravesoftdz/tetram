@@ -70,7 +70,7 @@
                 android:textStyle="bold"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:layout_gravity="center_vertical"
-                android:autoText="false"/>
+                />
         </TableRow>
     </TableLayout>
 </LinearLayout>
