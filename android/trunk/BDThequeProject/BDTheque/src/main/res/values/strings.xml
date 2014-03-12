@@ -57,6 +57,7 @@
     <string name="fiche_edition_senslecture">Sens de lecture :</string>
     <string name="fiche_album_albums">Albums de la série :</string>
     <string name="fiche_album_tab_details">Détails</string>
+
     <plurals name="fiche_album_tab_editions">
         <item quantity="one">Edition</item>
         <item quantity="other">Editions</item>
@@ -65,6 +66,7 @@
         <item quantity="one">Image</item>
         <item quantity="other">Images</item>
     </plurals>
+
     <string name="fiche_serie_tab_details">Détails</string>
     <string name="fiche_serie_tab_albums">Albums de la série</string>
     <string name="fiche_serie_titre">Titre :</string>

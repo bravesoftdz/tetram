@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="annotations">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/BDTheque/build/exploded-bundles/BDThequeProjectLibrariesBdthequeDependenciesUnspecified.aar/libs/annotations.jar!/" />
+      <root url="jar://$PROJECT_DIR$/BDTheque/build/exploded-aar/BDThequeProject.libraries/bdtheque-dependencies/unspecified/libs/annotations.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
