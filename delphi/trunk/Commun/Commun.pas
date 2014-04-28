@@ -268,20 +268,19 @@ begin
   end;
 end;
 
-function getLengthForPrefix(map: TDictionary<String, TList<TISBNRule>>; const prefix: String; Value: Integer): Integer;
+function getLengthForPrefix(map: TDictionary<String, TList<TISBNRule>>; const prefix: String; Value, Default: Integer): Integer;
 var
   rules: TList<TISBNRule>;
   rule: TISBNRule;
 begin
-  rules := map.Items[prefix];
-  if (rules = nil) or (rules.Count = 0) then
-    Exit(0);
+  if (not map.TryGetValue(prefix, rules)) or (rules.Count = 0) then
+    Exit(Default);
 
   for rule in rules do
     if (rule.valueLower <= Value) and (rule.valueUpper >= Value) then
       Exit(rule.Length);
 
-  Exit(0);
+  Exit(Default);
 end;
 
 function FormatISBN(isbn: string): string;
@@ -307,11 +306,11 @@ begin
   DecodeISBNRules;
 
   s1 := S.Substring(0, 7);
-  groupSize := getLengthForPrefix(isbnPrefixes, prefix, s1.ToInteger);
+  groupSize := getLengthForPrefix(isbnPrefixes, prefix, s1.ToInteger, 1);
   group := S.Substring(0, groupSize);
 
   s1 := S.Substring(groupSize, 7);
-  publisherSize := getLengthForPrefix(isbnGroups, prefix + '-' + group, s1.ToInteger);
+  publisherSize := getLengthForPrefix(isbnGroups, prefix + '-' + group, s1.ToInteger, 2);
   publisher := S.Substring(groupSize, publisherSize);
 
   Result := '';

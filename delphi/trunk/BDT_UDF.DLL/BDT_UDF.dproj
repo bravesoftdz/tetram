@@ -134,7 +134,7 @@
         </DelphiCompile>
         <DCCReference Include="ib_util.pas"/>
         <DCCReference Include="D:\Composants\Perso\icu\ICUNumberFormatter.pas"/>
-        <DCCReference Include="D:\Composants\Perso\icu\lib\unum.pas"/>
+        <DCCReference Include="D:\Composants\Perso\icu\lib\_unum.pas"/>
         <BuildConfiguration Include="Debug">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

@@ -12,7 +12,7 @@ uses
   AnsiStrings,
   StrUtils,
   ICUNumberFormatter in 'D:\Composants\Perso\icu\ICUNumberFormatter.pas',
-  unum in 'D:\Composants\Perso\icu\lib\unum.pas';
+  _unum in 'D:\Composants\Perso\icu\lib\_unum.pas';
 
 {$R *.res}
 
