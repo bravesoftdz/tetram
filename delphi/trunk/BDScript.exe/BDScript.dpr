@@ -68,7 +68,8 @@ uses
   Entities.FactoriesCommon in '..\Commun\Entities\Entities.FactoriesCommon.pas',
   Entities.FactoriesFull in '..\Commun\Entities\Entities.FactoriesFull.pas',
   Entities.DaoLambdaJSON in 'Entities.DaoLambdaJSON.pas',
-  Entities.DaoLambda in '..\Commun\Entities\Entities.DaoLambda.pas';
+  Entities.DaoLambda in '..\Commun\Entities\Entities.DaoLambda.pas',
+  UNetICSCompress in '..\Commun\UNetICSCompress.pas';
 
 {$R *.res}
 

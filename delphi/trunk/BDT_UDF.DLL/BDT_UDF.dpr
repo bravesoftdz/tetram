@@ -4,8 +4,7 @@ uses
   Windows,
   SysUtils,
   Classes,
-  IBExternals,
-  IBUtils,
+  uibase,
   Divers,
   ib_util in 'ib_util.pas',
   Math,
@@ -15,6 +14,9 @@ uses
   _unum in 'D:\Composants\Perso\icu\lib\_unum.pas';
 
 {$R *.res}
+
+type
+  Float = Single; { 32 bit }
 
 function CreateResult(const Chaine: AnsiString): PAnsiChar;
 var
@@ -50,20 +52,21 @@ begin
   Result := CreateResult(AnsiString(UpperCase(SansAccents(string(Chaine)))));
 end;
 
-procedure UpperBlob(BlobIn, BlobOut: PBlob); cdecl; export;
+procedure UpperBlob(BlobIn, BlobOut: PBlobCallBack); cdecl; export;
 var
   buffer: array of Char;
-  LongueurLue, i: Integer;
+  LongueurLue: ISCUShort;
+  i: Integer;
 begin
   try
-    if Assigned(BlobIn.BlobHandle) and (BlobIn.SegmentCount > 0) then
+    if Assigned(BlobIn.blob_handle) and (BlobIn.blob_number_segments > 0) then
     begin
-      SetLength(buffer, BlobIn.MaxSegmentLength);
-      while LongBool(BlobIn.GetSegment(BlobIn.BlobHandle, @buffer[0], BlobIn.MaxSegmentLength, LongueurLue)) do
+      SetLength(buffer, BlobIn.blob_max_segment);
+      while LongBool(BlobIn.blob_get_segment(BlobIn.blob_handle, @buffer[0], BlobIn.blob_max_segment, LongueurLue)) do
       begin
         for i := 0 to LongueurLue - 1 do
           buffer[i] := UpperCase(SansAccents(buffer[i]))[1];
-        BlobOut.PutSegment(BlobOut.BlobHandle, @buffer[0], LongueurLue);
+        BlobOut.blob_put_segment(BlobOut.blob_handle, @buffer[0], LongueurLue);
       end;
     end;
   except
@@ -375,10 +378,10 @@ begin
     end;
 end;
 
-function SaveBlobToFile(Path, FileName: PAnsiChar; Blob: PBlob): Integer; cdecl; export;
+function SaveBlobToFile(Path, FileName: PAnsiChar; Blob: PBlobCallBack): Integer; cdecl; export;
 var
   buffer: array of AnsiChar;
-  LongueurLue: Integer;
+  LongueurLue: ISCUShort;
   BlobS: TMemoryStream;
 begin
   try
@@ -387,10 +390,10 @@ begin
     with BlobS do
       try
         Seek(0, soBeginning);
-        if Assigned(Blob.BlobHandle) and (Blob.SegmentCount > 0) then
+        if Assigned(Blob.blob_handle) and (Blob.blob_number_segments > 0) then
         begin
-          SetLength(buffer, Blob.MaxSegmentLength);
-          while LongBool(Blob.GetSegment(Blob.BlobHandle, @buffer[0], Blob.MaxSegmentLength, LongueurLue)) do
+          SetLength(buffer, Blob.blob_max_segment);
+          while LongBool(Blob.blob_get_segment(Blob.blob_handle, @buffer[0], Blob.blob_max_segment, LongueurLue)) do
             BlobS.Write(buffer[0], LongueurLue);
 
           ForceDirectories(string(Path));
@@ -407,7 +410,7 @@ begin
   end; // pour être sûr de ne pas faire planter le serveur !!!!
 end;
 
-procedure LoadBlobFromFile(Path, FileName: PAnsiChar; Blob: PBlob); cdecl; export;
+procedure LoadBlobFromFile(Path, FileName: PAnsiChar; Blob: PBlobCallBack); cdecl; export;
 var
   buffer: array [0 .. 4095] of Char;
   FS: TFileStream;
@@ -421,7 +424,7 @@ begin
     with FS do
       try
         while Position < Size do
-          Blob.PutSegment(Blob.BlobHandle, @buffer[0], Read(buffer, Length(buffer)));
+          Blob.blob_put_segment(Blob.blob_handle, @buffer[0], Read(buffer, Length(buffer)));
       finally
         Free;
       end;
