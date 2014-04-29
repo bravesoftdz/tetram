@@ -68,7 +68,7 @@ type
     procedure DoGetText(Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var Text: UnicodeString); override;
   protected
     procedure DoFreeNode(Node: PVirtualNode); override;
-    procedure DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal); override;
+    function DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal): Boolean; override;
     function InitNode(Node: PVirtualNode): Boolean; reintroduce;
     procedure DoInitNode(Parent, Node: PVirtualNode; var InitStates: TVirtualNodeInitStates); override;
     procedure DoPaintText(Node: PVirtualNode; const Canvas: TCanvas; Column: TColumnIndex; TextType: TVSTTextType); override;
@@ -398,7 +398,7 @@ begin
   inherited;
 end;
 
-procedure TVirtualStringTree.DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal);
+function TVirtualStringTree.DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal): Boolean;
 var
   InfoNode: ^RNodeInfo;
   q: TUIBQuery;
@@ -418,7 +418,8 @@ begin
         Params.AsString[0] := Copy(FCountPointers[Node.Index].sValue, 1, Params.MaxStrLen[0]);
         if FUseFiltre then
           Params.AsString[1] := Copy(FFiltre, 1, Params.MaxStrLen[1])
-        else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
+        else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '')
+        then
           Params.AsString[1] := Copy(vmModeInfos[FMode].DEFAULTFILTRE, 1, Params.MaxStrLen[1]);
         Open;
         vmModeInfos[FMode].ClassDao.FillList(InfoNode.List, q);
@@ -426,8 +427,10 @@ begin
         Transaction.Free;
         Free;
       end;
-  end;
-  inherited;
+    Result := True;
+  end
+  else
+    Result := inherited DoInitChildren(Node, ChildCount);
 end;
 
 procedure TVirtualStringTree.DoInitNode(Parent, Node: PVirtualNode; var InitStates: TVirtualNodeInitStates);
