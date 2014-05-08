@@ -1,8 +1,13 @@
+#ifndef SrcBin
+#define SrcBin = "Win32" 
+#define outputSuffix = "-x86" 
+#endif
+
 [Languages]
 Name: fr; MessagesFile: compiler:Languages\French.isl
 
 [Setup]
-AppVersion={#GetFileVersion("D:\MEDIA.KIT\BDTheque\bin\BD.exe")}
+AppVersion={#GetFileVersion("..\..\bin\Win64\BD.exe")}
 AppName=BDTheque
 AppVerName=BDTheque {#SetupSetting("AppVersion")}
 AppMutex=TetramCorpBDMutex
@@ -22,7 +27,7 @@ BackColor=$008080FF
 BackColor2=clPurple
 BackColorDirection=toptobottom
 WizardImageBackColor=clBlack
-OutputBaseFilename=BDTheque-setup-{#SetupSetting("AppVersion")}
+OutputBaseFilename=BDTheque-setup-{#SetupSetting("AppVersion")}{#outputSuffix}
 MinVersion=0,5.0.2195
 EnableDirDoesntExistWarning=true
 AllowUNCPath=false
@@ -38,6 +43,10 @@ WizardImageFile=fond.bmp
 WizardSmallImageFile=SetupModernSmall19.bmp
 LanguageDetectionMethod=locale
 SetupLogging=true
+OutputDir=Output
+
+; pour le moment on n'active pas: il faut trouver un moyen de savoir si la maj est en mode 32bit malgré qu'on soit sur un OS 64bit
+;ArchitecturesInstallIn64BitMode=x64
 
 [Tasks]
 Name: desktopicon; Description: Créer un raccourci sur le &bureau; GroupDescription: Raccourcis supplémentaires:
@@ -46,28 +55,36 @@ Name: interneticon; Description: Créer un raccourci vers le site de Teträm Corp;
 [Files]
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
-Source: ..\..\bin\BD.exe; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\BDPic.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\fbembed.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\firebird.msg; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\ib_util.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\UDF\BDT_UDF.dll; DestDir: {app}\UDF; Flags: ignoreversion
-Source: What's New.txt; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\icuuc30.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\icuin30.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\icudt30.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\ssleay32.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\libeay32.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\intl\fbintl.dll; DestDir: {app}\Intl; Flags: ignoreversion
-Source: ..\..\bin\intl\fbintl.conf; DestDir: {app}\Intl; Flags: ignoreversion
-Source: ..\..\bin\DelZip179.dll; DestDir: {app}; Flags: ignoreversion
-;Source: vcredist_x86.exe; DestDir: {tmp}; Flags: deleteafterinstall
-Source: ..\..\bin\msvcp80.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\msvcr80.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\Microsoft.VC80.CRT.manifest; DestDir: {app}; Flags: ignoreversion
-;Source: ..\..\bin\pcre3.dll; DestDir: {app}; Flags: ignoreversion
-Source: ..\..\bin\7z.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\BD.exe; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\BDScript.exe; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\BDPic.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\fbembed.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\firebird.msg; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\ib_util.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\UDF\BDT_UDF.dll; DestDir: {app}\UDF; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\icuuc30.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\icuin30.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\icudt30.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\icuuc52.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\icuin52.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\icudt52.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\ssleay32.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\libeay32.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\intl\fbintl.dll; DestDir: {app}\Intl; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\intl\fbintl.conf; DestDir: {app}\Intl; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\msvcp80.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\msvcr80.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\Microsoft.VC80.CRT.manifest; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\msvcp90.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\msvcr90.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\Microsoft.VC90.CRT.manifest; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\msvcp100.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\msvcr100.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\Microsoft.VC100.CRT.manifest; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\7z_x86.dll; DestDir: {app}; Flags: ignoreversion
+Source: ..\..\bin\{#SrcBin}\7z_x64.dll; DestDir: {app}; Flags: ignoreversion
 
+Source: What's New.txt; DestDir: {app}; Flags: ignoreversion
 Source: Base vide\BD.GDB; DestDir: {userappdata}\TetramCorp\BDTheque; Flags: onlyifdoesntexist ignoreversion; Check: FirstInstall
 Source: ..\..\bin\scripts\*.bds; DestDir: {commonappdata}\TetramCorp\BDTheque\Scripts; Flags: ignoreversion promptifolder; 
 Source: ..\..\bin\scripts\*.bdu; DestDir: {commonappdata}\TetramCorp\BDTheque\Scripts; Flags: ignoreversion promptifolder
