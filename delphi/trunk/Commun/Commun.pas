@@ -41,6 +41,11 @@ function ClearISBN(const Code: string): string;
 function FormatTitre(const Titre: string): string; inline;
 function FormatTitreAlbum(Simple, AvecSerie: Boolean; const Titre, Serie: string; Tome, TomeDebut, TomeFin: Integer; Integrale, HorsSerie: Boolean): string;
 
+function BDCurrencyToStr(const Value: Double): string;
+function BDDoubleToStr(const Value: Double): string;
+function BDStrToDouble(const Value: string): Double;
+function BDStrToDoubleDef(const Value: string; const Default: Double): Double;
+
 type
   IHourGlass = interface
   end;
@@ -56,7 +61,7 @@ type
 implementation
 
 uses
-  VCL.Forms, CommonConst, Generics.Collections, JclSimpleXML, System.Math;
+  VCL.Forms, CommonConst, Generics.Collections, JclSimpleXML, System.Math, ICUNumberFormatter, _uloc, icu_globals;
 
 function StringToGUIDDef(const GUID: string; const Default: TGUID): TGUID;
 begin
@@ -448,7 +453,29 @@ begin
   Result.GUID := a;
 end;
 
+function BDCurrencyToStr(const Value: Double): string;
+begin
+  Result := ICUCurrencyToStr(Value, uloc_getDefault, TGlobalVar.Utilisateur.Options.SymboleMonnetaire);
+end;
+
+function BDDoubleToStr(const Value: Double): string;
+begin
+  Result := ICUDoubleToStr(Value, uloc_getDefault);
+end;
+
+function BDStrToDouble(const Value: string): Double;
+begin
+  Result := ICUStrToDouble(Value, uloc_getDefault);
+end;
+
+function BDStrToDoubleDef(const Value: string; const Default: Double): Double;
+begin
+  Result := ICUStrToDoubleDef(Value, Default, uloc_getDefault);
+end;
+
 initialization
+
+LoadICU;
 
 finalization
 

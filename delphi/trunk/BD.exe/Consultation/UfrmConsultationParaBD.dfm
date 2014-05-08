@@ -241,7 +241,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       Transparent = True
     end
     object Label12: TLabel
-      Left = 124
+      Left = 156
       Top = 461
       Width = 52
       Height = 13
@@ -258,7 +258,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       Transparent = True
     end
     object AcheteLe: TLabel
-      Left = 184
+      Left = 216
       Top = 461
       Width = 45
       Height = 13
@@ -506,8 +506,8 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       ReadOnly = True
     end
     object cbStock: TLabeledCheckBox
-      Left = 185
-      Top = 433
+      Left = 172
+      Top = 432
       Width = 13
       Height = 13
       Alignment = taLeftJustify

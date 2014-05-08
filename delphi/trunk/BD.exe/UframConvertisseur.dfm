@@ -6,8 +6,8 @@ object framConvertisseur: TframConvertisseur
   Align = alTop
   TabOrder = 0
   object Label2: TLabel
-    Left = 120
-    Top = 5
+    Left = 126
+    Top = 6
     Width = 31
     Height = 13
     Caption = 'Label2'
@@ -21,7 +21,7 @@ object framConvertisseur: TframConvertisseur
   end
   object Label4: TLabel
     Left = 112
-    Top = 5
+    Top = 6
     Width = 8
     Height = 13
     Caption = '='

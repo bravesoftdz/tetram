@@ -195,8 +195,7 @@ implementation
 uses
   Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
   UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
-  Entities.FactoriesLite, Entities.FactoriesFull, Entities.DaoLambda,
-  ICUNumberFormatter;
+  Entities.FactoriesLite, Entities.FactoriesFull, Entities.DaoLambda;
 
 {$R *.DFM}
 
@@ -836,9 +835,9 @@ begin
   c := StrToCurrDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if Convertisseur(SpeedButton3, c) then
     if edPrix.Focused then
-      edPrix.Text := ICUDoubleToStr(c)
+      edPrix.Text := BDDoubleToStr(c)
     else
-      edPrix.Text := ICUCurrencyToStr(c);
+      edPrix.Text := BDCurrencyToStr(c);
 end;
 
 procedure TfrmEditAlbum.VDTButton6Click(Sender: TObject);
@@ -919,7 +918,7 @@ begin
   begin
     FCurrentEditionComplete.ISBN := edISBN.Text;
     FCurrentEditionComplete.AnneeEdition := StrToIntDef(edAnneeEdition.Text, 0);
-    FCurrentEditionComplete.Prix := ICUStrToDoubleDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+    FCurrentEditionComplete.Prix := BDStrToDoubleDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
     FCurrentEditionComplete.Editeur.ID_Editeur := vtEditEditeurs.CurrentValue;
     FCurrentEditionComplete.Editeur.NomEditeur := vtEditEditeurs.VTEdit.PopupWindow.TreeView.Caption;
     FCurrentEditionComplete.Collection.ID := vtEditCollections.CurrentValue;
@@ -938,7 +937,7 @@ begin
     FCurrentEditionComplete.SensLecture := MakeOption(cbxSensLecture.Value, cbxSensLecture.Caption);
     FCurrentEditionComplete.NombreDePages := StrToIntDef(edNombreDePages.Text, 0);
     FCurrentEditionComplete.AnneeCote := StrToIntDef(edAnneeCote.Text, 0);
-    FCurrentEditionComplete.PrixCote := ICUStrToDoubleDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+    FCurrentEditionComplete.PrixCote := BDStrToDoubleDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
     if dtpAchat.Checked then
       FCurrentEditionComplete.DateAchat := Trunc(dtpAchat.Date)
     else
@@ -989,7 +988,7 @@ begin
       if FCurrentEditionComplete.Prix = 0 then
         edPrix.Text := ''
       else
-        edPrix.Text := ICUCurrencyToStr(FCurrentEditionComplete.Prix);
+        edPrix.Text := BDCurrencyToStr(FCurrentEditionComplete.Prix);
       vtEditEditeurs.CurrentValue := FCurrentEditionComplete.Editeur.ID_Editeur;
       vtEditCollections.CurrentValue := FCurrentEditionComplete.Collection.ID;
       cbStock.Checked := FCurrentEditionComplete.Stock;
@@ -1014,7 +1013,7 @@ begin
       if FCurrentEditionComplete.PrixCote = 0 then
         edPrixCote.Text := ''
       else
-        edPrixCote.Text := ICUCurrencyToStr(FCurrentEditionComplete.PrixCote);
+        edPrixCote.Text := BDCurrencyToStr(FCurrentEditionComplete.PrixCote);
       edNotes.Text := FCurrentEditionComplete.Notes;
       edNumPerso.Text := FCurrentEditionComplete.NumeroPerso;
       vstImages.RootNodeCount := FCurrentEditionComplete.Couvertures.Count;
@@ -1310,12 +1309,12 @@ procedure TfrmEditAlbum.VDTButton14Click(Sender: TObject);
 var
   c: Currency;
 begin
-  c := ICUStrToDoubleDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  c := BDStrToDoubleDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if Convertisseur(SpeedButton3, c) then
     if edPrixCote.Focused then
-      edPrixCote.Text := ICUDoubleToStr(c)
+      edPrixCote.Text := BDDoubleToStr(c)
     else
-      edPrixCote.Text := ICUCurrencyToStr(c);
+      edPrixCote.Text := BDCurrencyToStr(c);
 end;
 
 procedure TfrmEditAlbum.vstImagesMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);

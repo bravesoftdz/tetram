@@ -19,7 +19,7 @@ type
     OldNom, NewNom: string { [255] };
     OldStockee, NewStockee: Boolean;
 
-    constructor Create;
+    constructor Create; override;
 
     procedure Assign(Source: TPersistent); override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
@@ -228,6 +228,7 @@ end;
 
 constructor TPhotoLite.Create;
 begin
+  inherited;
   OldStockee := TGlobalVar.Utilisateur.Options.ImagesStockees;
   NewStockee := OldStockee;
 end;

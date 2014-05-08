@@ -103,7 +103,7 @@ type
 implementation
 
 uses
-  Textes, Commun, CommonConst, StrUtils, Entities.Common, ICUNumberFormatter;
+  Textes, Commun, CommonConst, StrUtils, Entities.Common;
 
 {$R *.dfm}
 
@@ -189,10 +189,10 @@ begin
     else if Edition.Prix = 0 then
       Label4.Caption := ''
     else
-      Label4.Caption := ICUCurrencyToStr(Edition.Prix);
+      Label4.Caption := BDCurrencyToStr(Edition.Prix);
 
     if Edition.PrixCote > 0 then
-      Label38.Caption := Format('%s (%d)', [ICUCurrencyToStr(Edition.PrixCote), Edition.AnneeCote])
+      Label38.Caption := Format('%s (%d)', [BDCurrencyToStr(Edition.PrixCote), Edition.AnneeCote])
     else
       Label38.Caption := '';
   end;
@@ -272,10 +272,10 @@ begin
   else if Edition.Prix = 0 then
     Prix.Caption := ''
   else
-    Prix.Caption := ICUCurrencyToStr(Edition.Prix);
+    Prix.Caption := BDCurrencyToStr(Edition.Prix);
 
   if Edition.PrixCote > 0 then
-    lbCote.Caption := Format('%s (%d)', [ICUCurrencyToStr(Edition.PrixCote), Edition.AnneeCote])
+    lbCote.Caption := Format('%s (%d)', [BDCurrencyToStr(Edition.PrixCote), Edition.AnneeCote])
   else
     lbCote.Caption := '';
 end;

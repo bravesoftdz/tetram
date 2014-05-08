@@ -12,7 +12,6 @@ type
     Frame11: TframBoutons;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure FormShow(Sender: TObject);
   private
     { Déclarations privées }
     FValeur: Currency;
@@ -30,7 +29,7 @@ var
 implementation
 
 uses CommonConst, Entities.Lite, UdmPrinc, UIB, Commun, Entities.DaoLite,
-  Entities.FactoriesLite, ICUNumberFormatter;
+  Entities.FactoriesLite;
 
 {$R *.DFM}
 
@@ -48,10 +47,18 @@ begin
   with q do
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      SQL.Text := 'SELECT Monnaie1, Monnaie2, Taux FROM conversions WHERE Monnaie1 = ? OR Monnaie2 = ?';
+      SQL.Add('select');
+      SQL.Add('  Monnaie1, Monnaie2, Taux');
+      SQL.Add('from');
+      SQL.Add('  conversions');
+      SQL.Add('where');
+      SQL.Add('  Monnaie1 = ? or Monnaie2 = ?');
+      SQL.Add('order by');
+      SQL.Add('  case Monnaie1 when ? then Monnaie2 else Monnaie1 end');
       Prepare(True);
       Params.AsString[0] := Copy(TGlobalVar.Utilisateur.Options.SymboleMonnetaire, 1, Params.MaxStrLen[0]);
       Params.AsString[1] := Copy(TGlobalVar.Utilisateur.Options.SymboleMonnetaire, 1, Params.MaxStrLen[1]);
+      Params.AsString[2] := Copy(TGlobalVar.Utilisateur.Options.SymboleMonnetaire, 1, Params.MaxStrLen[2]);
       Open;
       i := 0;
       while not Eof do
@@ -74,12 +81,15 @@ begin
         fc.Name := fc.Name + IntToStr(i);
         ListFC.Add(fc);
         Inc(i, fc.Height);
+        fc.Top := i + 1;
+
         if not Assigned(FFirstEdit) then
           FFirstEdit := fc.Edit1;
         Next;
       end;
       ClientHeight := Frame11.Height + i + 4;
     finally
+      ActiveControl := FFirstEdit;
       Transaction.Free;
       Free;
       PC.Free;
@@ -96,22 +106,13 @@ var
   i: Integer;
   fc: TframConvertisseur;
 begin
-  for i := 0 to ListFC.Count - 1 do
-  begin
-    fc := TframConvertisseur(ListFC[i]);
-    fc.Edit1.Text := '';
+  for fc in ListFC do
     try
-      fc.Edit1.Text := ICUDoubleToStr(Value / fc.FTaux);
+      fc.Edit1.Text := BDDoubleToStr(Value / fc.FTaux);
     except
+      fc.Edit1.Text := '';
     end;
-  end;
   FValeur := Value;
-end;
-
-procedure TFrmConvers.FormShow(Sender: TObject);
-begin
-  if Assigned(FFirstEdit) then
-    FFirstEdit.SetFocus;
 end;
 
 end.

@@ -51,7 +51,7 @@ function TStatsGeneralesCreate(AOwner: TComponent; Info: TStats): TfrmStatsGener
 
 implementation
 
-uses CommonConst, Entities.Lite, Math, Divers, Commun, ICUNumberFormatter;
+uses CommonConst, Entities.Lite, Math, Divers, Commun;
 
 {$R *.DFM}
 
@@ -69,12 +69,12 @@ begin
     AlbumsIntegrales.Caption := Format(FormatPourcent, [Info.NbAlbumsIntegrale, MulDiv(Info.NbAlbumsIntegrale, 100, Info.NbAlbums)]);
     AlbumsHorsSerie.Caption := Format(FormatPourcent, [Info.NbAlbumsHorsSerie, MulDiv(Info.NbAlbumsHorsSerie, 100, Info.NbAlbums)]);
 
-    PrixMoy.Caption := ICUCurrencyToStr(Info.PrixAlbumMoyen);
+    PrixMoy.Caption := BDCurrencyToStr(Info.PrixAlbumMoyen);
 
-    PrixMax.Caption := ICUCurrencyToStr(Info.PrixAlbumMaximun);
-    PrixMin.Caption := ICUCurrencyToStr(Info.PrixAlbumMinimun);
-    TotalConnu.Caption := ICUCurrencyToStr(Info.ValeurConnue);
-    TotalEstime.Caption := ICUCurrencyToStr(Info.ValeurEstimee);
+    PrixMax.Caption := BDCurrencyToStr(Info.PrixAlbumMaximun);
+    PrixMin.Caption := BDCurrencyToStr(Info.PrixAlbumMinimun);
+    TotalConnu.Caption := BDCurrencyToStr(Info.ValeurConnue);
+    TotalEstime.Caption := BDCurrencyToStr(Info.ValeurEstimee);
 
     i := Max(totalestime.Left + totalestime.Width, totalconnu.Left + totalconnu.Width);
     PrixMoy.Left := i - PrixMoy.Width;

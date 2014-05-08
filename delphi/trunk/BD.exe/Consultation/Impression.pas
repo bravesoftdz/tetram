@@ -29,8 +29,7 @@ implementation
 
 uses
   UfrmPreview, Math, Procedures, ProceduresBDtk, DateUtils, UIBlib, StrUtils, UMetadata,
-  Entities.DaoLite, Entities.DaoFull, Entities.Common, Entities.FactoriesLite,
-  ICUNumberFormatter;
+  Entities.DaoLite, Entities.DaoFull, Entities.Common, Entities.FactoriesLite;
 
 procedure PreparePrintObject(Prn: TPrintObject; Previsualisation: Boolean; const Titre: string);
 begin
@@ -100,7 +99,7 @@ begin
   if Edition.Gratuit then
     Prn.WriteLineColumn(1, -2, rsTransGratuit)
   else if Edition.Prix > 0 then
-    Prn.WriteLineColumn(1, -2, ICUCurrencyToStr(Edition.Prix));
+    Prn.WriteLineColumn(1, -2, BDCurrencyToStr(Edition.Prix));
   if Edition.Offert then
     Prn.WriteLineColumn(2, -2, rsTransOffertLe + ' :')
   else
@@ -110,7 +109,7 @@ begin
   if Edition.PrixCote > 0 then
   begin
     Prn.WriteLineColumn(0, -1, rsTransCote + ' :');
-    Prn.WriteLineColumn(1, -2, Format('%s (%d)', [ICUCurrencyToStr(Edition.PrixCote), Edition.AnneeCote]));
+    Prn.WriteLineColumn(1, -2, Format('%s (%d)', [BDCurrencyToStr(Edition.PrixCote), Edition.AnneeCote]));
   end;
 
   Prn.WriteLineColumn(0, -1, rsTransEtat + ' :');
@@ -287,7 +286,7 @@ begin
   if ParaBD.Gratuit then
     Prn.WriteLineColumn(1, -2, rsTransGratuit)
   else if ParaBD.Prix > 0 then
-    Prn.WriteLineColumn(1, -2, ICUCurrencyToStr(ParaBD.Prix));
+    Prn.WriteLineColumn(1, -2, BDCurrencyToStr(ParaBD.Prix));
   if ParaBD.Offert then
     Prn.WriteLineColumn(2, -2, rsTransOffertLe + ' :')
   else
@@ -298,7 +297,7 @@ begin
   if ParaBD.PrixCote > 0 then
   begin
     Prn.WriteLineColumn(0, -1, rsTransCote + ' :');
-    Prn.WriteLineColumn(1, -2, Format('%s (%d)', [ICUCurrencyToStr(ParaBD.PrixCote), ParaBD.AnneeCote]));
+    Prn.WriteLineColumn(1, -2, Format('%s (%d)', [BDCurrencyToStr(ParaBD.PrixCote), ParaBD.AnneeCote]));
   end;
 end;
 
@@ -1081,12 +1080,12 @@ var
     end;
 
     Prn.WriteLineColumn(0, -2, rsValeurMoyenne + ' :');
-    Prn.WriteLineColumn(1, -2, ICUCurrencyToStr(R.PrixAlbumMoyen));
-    Prn.WriteLineColumn(3, -2, ICUCurrencyToStr(R.PrixAlbumMinimun) + ' < ' + rsTransPrix + ' < ' + ICUCurrencyToStr(R.PrixAlbumMaximun));
+    Prn.WriteLineColumn(1, -2, BDCurrencyToStr(R.PrixAlbumMoyen));
+    Prn.WriteLineColumn(3, -2, BDCurrencyToStr(R.PrixAlbumMinimun) + ' < ' + rsTransPrix + ' < ' + BDCurrencyToStr(R.PrixAlbumMaximun));
     Prn.WriteLineColumn(2, -1, rsValeurConnue + ' :');
-    Prn.WriteLineColumn(1, -2, ICUCurrencyToStr(R.ValeurConnue));
+    Prn.WriteLineColumn(1, -2, BDCurrencyToStr(R.ValeurConnue));
     Prn.WriteLineColumn(2, -1, rsValeurEstimee + ' :');
-    Prn.WriteLineColumn(1, -2, ICUCurrencyToStr(R.ValeurEstimee));
+    Prn.WriteLineColumn(1, -2, BDCurrencyToStr(R.ValeurEstimee));
 
     fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransEmprunteurs, rsTransPage, Prn.GetPageNumber]), epNext);
     Prn.Columns.Clear;
@@ -1807,8 +1806,8 @@ begin
       Prn.SetHeaderDimensions1(-1, -1, -1, 30, False, 0, clWhite);
       Prn.SetHeaderInformation1(0, 5, rsListeAchats, taCenter, Prn.Font.name, 24, [fsBold]);
       Prn.SetHeaderInformation1(1, -1, Format('%d %s - %s', [NbAlbums div 2
-        { NbAlbums contient le double du nb d'albums } , rsTransAlbums, ICUCurrencyToStr(PrixTotal)]), taCenter, Prn.Font.name, 12, []);
-      Prn.SetHeaderInformation1(2, -1, 'Prix moyen estimé d''un album: ' + ICUCurrencyToStr(PrixMoyen), taCenter, Prn.Font.name, 12, []);
+        { NbAlbums contient le double du nb d'albums } , rsTransAlbums, BDCurrencyToStr(PrixTotal)]), taCenter, Prn.Font.name, 12, []);
+      Prn.SetHeaderInformation1(2, -1, 'Prix moyen estimé d''un album: ' + BDCurrencyToStr(PrixMoyen), taCenter, Prn.Font.name, 12, []);
 
       Prn.CreateColumn1(0, 15, 15, taLeftJustify, Prn.Font.name, 12, []); // numéro
       Prn.CreateColumn1(1, 25, -1, taLeftJustify, Prn.Font.name, 12, []); // titre
@@ -1860,7 +1859,7 @@ begin
           AjoutString(s, IIf(PAl.MoisParution > 0, FormatSettings.ShortMonthNames[PAl.MoisParution] + ' ', '') + NonZero(IntToStr(PAl.AnneeParution)), ' - ');
           AjoutString(s, FormatTitre(PAl.Titre), ' - ');
           if PAl.PrixCalcule then
-            AjoutString(s, ICUCurrencyToStr(PAl.Prix), ' - ');
+            AjoutString(s, BDCurrencyToStr(PAl.Prix), ' - ');
 
           Prn.WriteLineColumn(1, IIf(sl or (not IsEqualGUID(OldSerie, PAl.ID_Serie)), -1, -2), s);
         finally

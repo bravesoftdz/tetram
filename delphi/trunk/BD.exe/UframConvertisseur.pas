@@ -23,7 +23,7 @@ type
 
 implementation
 
-uses Commun, CommonConst, UfrmConvertisseur, ICUNumberFormatter;
+uses Commun, CommonConst, UfrmConvertisseur;
 
 {$R *.DFM}
 
@@ -37,8 +37,8 @@ var
 begin
   Position := Edit1.SelStart;
   Label2.Caption := '';
-  val := ICUStrToDoubleDef(Edit1.Text, 0) * FTaux;
-  Label2.Caption := ICUCurrencyToStr(val);
+  val := BDStrToDoubleDef(Edit1.Text, 0) * FTaux;
+  Label2.Caption := BDCurrencyToStr(val);
   if not travail then begin
     travail := True;
     TFrmConvers(Owner).Valeur := val;

@@ -95,7 +95,7 @@ implementation
 
 uses Commun, Entities.Lite, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
   Proc_Gestions, Entities.DaoFull, Entities.Common, Entities.FactoriesFull,
-  ICUNumberFormatter, UfrmConsole;
+  UfrmConsole;
 
 {$R *.dfm}
 { TFrmConsultationParaBD }
@@ -106,9 +106,6 @@ begin
 end;
 
 procedure TfrmConsultationParaBD.SetID_ParaBD(const Value: TGUID);
-var
-  ms: TStream;
-  jpg: TJPEGImage;
 begin
   ClearForm;
   TDaoParaBDFull.Fill(FParaBD, Value);
@@ -161,10 +158,10 @@ begin
   else if FParaBD.Prix = 0 then
     Prix.Caption := ''
   else
-    Prix.Caption := ICUCurrencyToStr(FParaBD.Prix);
+    Prix.Caption := BDCurrencyToStr(FParaBD.Prix);
 
   if FParaBD.PrixCote > 0 then
-    lbCote.Caption := Format('%s (%d)', [ICUCurrencyToStr(FParaBD.PrixCote), FParaBD.AnneeCote])
+    lbCote.Caption := Format('%s (%d)', [BDCurrencyToStr(FParaBD.PrixCote), FParaBD.AnneeCote])
   else
     lbCote.Caption := '';
 

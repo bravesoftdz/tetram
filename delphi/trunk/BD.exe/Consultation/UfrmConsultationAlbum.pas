@@ -165,7 +165,7 @@ implementation
 uses
   Commun, Entities.Lite, CommonConst, MAJ, Impression, DateUtils, UHistorique, Procedures,
   Divers, Textes, Proc_Gestions, UfrmConsole, Entities.DaoFull,
-  Entities.Common, Entities.FactoriesFull, ICUNumberFormatter;
+  Entities.Common, Entities.FactoriesFull;
 
 var
   FSortColumn: Integer;
@@ -419,10 +419,10 @@ begin
       else if FCurrentEdition.Prix = 0 then
         Prix.Caption := ''
       else
-        Prix.Caption := ICUCurrencyToStr(FCurrentEdition.Prix);
+        Prix.Caption := BDCurrencyToStr(FCurrentEdition.Prix);
 
       if FCurrentEdition.PrixCote > 0 then
-        lbCote.Caption := Format('%s (%d)', [ICUCurrencyToStr(FCurrentEdition.PrixCote), FCurrentEdition.AnneeCote])
+        lbCote.Caption := Format('%s (%d)', [BDCurrencyToStr(FCurrentEdition.PrixCote), FCurrentEdition.AnneeCote])
       else
         lbCote.Caption := '';
     end;

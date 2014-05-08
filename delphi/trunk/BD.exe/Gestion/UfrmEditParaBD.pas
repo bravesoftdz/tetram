@@ -116,7 +116,7 @@ implementation
 uses
   Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, Entities.Lite, Divers, UHistorique,
   UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
-  Entities.FactoriesLite, Entities.DaoLambda, ICUNumberFormatter;
+  Entities.FactoriesLite, Entities.DaoLambda;
 
 {$R *.dfm}
 { TFrmEditAchatParaBD }
@@ -131,8 +131,6 @@ end;
 
 procedure TfrmEditParaBD.SetParaBD(const Value: TParaBDFull);
 var
-  Stream: TStream;
-  jpg: TJPEGImage;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
@@ -160,12 +158,12 @@ begin
   if FParaBD.Prix = 0 then
     edPrix.Text := ''
   else
-    edPrix.Text := ICUCurrencyToStr(FParaBD.Prix);
+    edPrix.Text := BDCurrencyToStr(FParaBD.Prix);
   edAnneeCote.Text := NonZero(IntToStr(FParaBD.AnneeCote));
   if FParaBD.PrixCote = 0 then
     edPrixCote.Text := ''
   else
-    edPrixCote.Text := ICUCurrencyToStr(FParaBD.PrixCote);
+    edPrixCote.Text := BDCurrencyToStr(FParaBD.PrixCote);
   cbStock.Checked := FParaBD.Stock;
 
   lvUnivers.Items.BeginUpdate;
@@ -205,24 +203,24 @@ procedure TfrmEditParaBD.SpeedButton3Click(Sender: TObject);
 var
   c: Currency;
 begin
-  c := ICUStrToDoubleDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  c := BDStrToDoubleDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if Convertisseur(SpeedButton3, c) then
     if edPrix.Focused then
-      edPrix.Text := ICUDoubleToStr(c)
+      edPrix.Text := BDDoubleToStr(c)
     else
-      edPrix.Text := ICUCurrencyToStr(c);
+      edPrix.Text := BDCurrencyToStr(c);
 end;
 
 procedure TfrmEditParaBD.VDTButton14Click(Sender: TObject);
 var
   c: Currency;
 begin
-  c := ICUStrToDoubleDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  c := BDStrToDoubleDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if Convertisseur(SpeedButton3, c) then
     if edPrixCote.Focused then
-      edPrixCote.Text := ICUDoubleToStr(c)
+      edPrixCote.Text := BDDoubleToStr(c)
     else
-      edPrixCote.Text := ICUCurrencyToStr(c);
+      edPrixCote.Text := BDCurrencyToStr(c);
 end;
 
 procedure TfrmEditParaBD.VDTButton4Click(Sender: TObject);
@@ -299,7 +297,7 @@ begin
   end;
 
   AnneeCote := StrToIntDef(edAnneeCote.Text, 0);
-  PrixCote := ICUStrToDoubleDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  PrixCote := BDStrToDoubleDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if (AnneeCote * PrixCote = 0) and (AnneeCote + PrixCote <> 0) then
   begin
     // une cote doit être composée d'une année ET d'un prix
@@ -325,7 +323,7 @@ begin
     FParaBD.DateAchat := Trunc(dtpAchat.Date)
   else
     FParaBD.DateAchat := 0;
-  FParaBD.Prix := ICUStrToDoubleDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  FParaBD.Prix := BDStrToDoubleDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   FParaBD.Stock := cbStock.Checked;
 
   TDaoParaBDFull.SaveToDatabase(FParaBD);

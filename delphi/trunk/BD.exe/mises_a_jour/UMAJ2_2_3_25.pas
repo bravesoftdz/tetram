@@ -12,11 +12,6 @@ uses
 
 procedure MAJ2_2_3_25(Query: TUIBScript);
 begin
-  Query.Script.Add('drop trigger criteres_biu0;');
-  Query.Script.Add('alter table suppressions add constraint pk_suppressions primary key (id_suppression);');
-  Query.Script.Add('drop trigger options_scripts_uniqid_biu0;');
-  Query.Script.Add('alter table options_scripts alter dc_options to dc_options_scripts, alter dm_options to dm_options_scripts;');
-
   Query.Script.Add('create table photos (');
   Query.Script.Add('    id_photo       t_guid_notnull,');
   Query.Script.Add('    id_parabd      t_guid_notnull,');

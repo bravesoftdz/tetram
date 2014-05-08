@@ -108,7 +108,7 @@ implementation
 
 uses
   uib, Commun, UdmPrinc, Divers, uiblib, CommonConst, UMetadata, Textes,
-  Entities.DaoLite, ICUNumberFormatter;
+  Entities.DaoLite;
 
 { TRecherche }
 
@@ -284,7 +284,7 @@ begin
                 csTitre:
                   S := S + FormatTitre(Fields.ByNameAsString[CritereTri.Champ]);
                 csMonnaie:
-                  S := S + ICUCurrencyToStr(Fields.ByNameAsCurrency[CritereTri.Champ]);
+                  S := S + BDCurrencyToStr(Fields.ByNameAsCurrency[CritereTri.Champ]);
               else
                 case CritereTri._Champ.TypeData of
                   uftDate:
