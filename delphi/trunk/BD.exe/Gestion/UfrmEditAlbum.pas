@@ -1017,6 +1017,7 @@ begin
       edNotes.Text := FCurrentEditionComplete.Notes;
       edNumPerso.Text := FCurrentEditionComplete.NumeroPerso;
       vstImages.RootNodeCount := FCurrentEditionComplete.Couvertures.Count;
+      vstImages.Selected[vstImages.GetFirst] := True;
     end;
   finally
     ChoixImage.Enabled := Assigned(FCurrentEditionComplete);

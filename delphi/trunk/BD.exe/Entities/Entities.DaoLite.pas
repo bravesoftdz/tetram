@@ -16,7 +16,8 @@ type
   TDaoLite = class abstract(TDaoDBEntity)
   private
     class var cs: TCriticalSection;
-    class var FPreparedQuery: TUIBQuery;
+    class var FPreparedQueries: TDictionary<TDaoLiteClass, TUIBQuery>;
+    class function getPreparedQuery: TUIBQuery;
 
     class function NonNull(Query: TUIBQuery; const Champ: string; Default: Integer): Integer; overload; inline;
     class function NonNull(Query: TUIBQuery; const Champ: string): TGUID; overload; inline;
@@ -212,10 +213,12 @@ end;
 class constructor TDaoLite.Create;
 begin
   cs := nil;
+  FPreparedQueries := TDictionary<TDaoLiteClass, TUIBQuery>.Create;
 end;
 
 class destructor TDaoLite.Destroy;
 begin
+  FPreparedQueries.Free;
   cs.Free;
 end;
 
@@ -234,16 +237,24 @@ begin
 end;
 
 class function TDaoLite.GetFieldIndex(const Name: string): Integer;
+var
+  q: TUIBQuery;
 begin
-  for Result := 0 to Pred(FPreparedQuery.Fields.FieldCount) do
-    if SameText(FPreparedQuery.Fields.AliasName[Result], Name) then
+  q := getPreparedQuery;
+  for Result := 0 to Pred(q.Fields.FieldCount) do
+    if SameText(q.Fields.AliasName[Result], Name) then
       Exit;
   Result := -1;
 end;
 
 class procedure TDaoLite.GetFieldIndices;
 begin
-  Assert(FPreparedQuery <> nil, 'Doit être préparé avant');
+  Assert(getPreparedQuery <> nil, 'Doit être préparé avant');
+end;
+
+class function TDaoLite.getPreparedQuery: TUIBQuery;
+begin
+  FPreparedQueries.TryGetValue(Self, Result);
 end;
 
 class function TDaoLite.Make(Query: TUIBQuery): TBaseLite;
@@ -266,17 +277,19 @@ end;
 
 class procedure TDaoLite.Prepare(Query: TUIBQuery);
 begin
-  Assert(FPreparedQuery = nil, 'Ne peut pas être préparée plusieurs fois');
+  // Ne peut pas être préparée plusieurs fois
+  if getPreparedQuery <> nil then Exit;
+
   if not Assigned(cs) then
     cs := TCriticalSection.Create;
   cs.Enter;
-  FPreparedQuery := Query;
+  FPreparedQueries.Add(Self, Query);
   GetFieldIndices;
 end;
 
 class procedure TDaoLite.Unprepare;
 begin
-  FPreparedQuery := nil;
+  FPreparedQueries.Remove(Self);
   cs.Release;
 end;
 
@@ -373,7 +386,7 @@ end;
 
 class function TDaoPhotoLite.FactoryClass: TFactoryClass;
 begin
-  REsult := TFactoryPhotoLite;
+  Result := TFactoryPhotoLite;
 end;
 
 class procedure TDaoPhotoLite.Fill(Entity: TPhotoLite; Query: TUIBQuery);
@@ -453,7 +466,7 @@ class procedure TDaoEditeurLite.Fill(Entity: TEditeurLite; Query: TUIBQuery);
 begin
   Entity.NomEditeur := '';
 
-  if Assigned(FPreparedQuery) then
+  if getPreparedQuery = Query then
   begin
     Entity.ID := NonNull(Query, IndexID_Editeur);
     if IndexNomEditeur <> -1 then
@@ -538,7 +551,7 @@ begin
   Entity.Complet := True;
   Entity.Notation := 900;
 
-  if Assigned(FPreparedQuery) then
+  if getPreparedQuery = Query then
   begin
     Entity.ID := NonNull(Query, IndexID_Album);
     Entity.Titre := Query.Fields.AsString[IndexTitreAlbum];
@@ -717,7 +730,7 @@ end;
 class procedure TDaoCollectionLite.GetFieldIndices;
 begin
   inherited;
-  TDaoEditeurLite.GetFieldIndices;
+  TDaoEditeurLite.Prepare(getPreparedQuery);
 end;
 
 { TDaoSerieLite }
@@ -783,9 +796,9 @@ end;
 class procedure TDaoEditionLite.GetFieldIndices;
 begin
   inherited;
-  // le TDaoEditeurLite.GetFieldIndices sera appelé par TDaoCollectionLite.GetFieldIndices
-  // TDaoEditeurLite.GetFieldIndices;
-  TDaoCollectionLite.GetFieldIndices;
+  // le TDaoEditeurLite.Prepare(getPreparedQuery) sera appelé par TDaoCollectionLite.Prepare(getPreparedQuery)
+  // TDaoEditeurLite.Prepare(getPreparedQuery);
+  TDaoCollectionLite.Prepare(getPreparedQuery);
 end;
 
 { TDaoGenreLite }

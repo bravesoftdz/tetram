@@ -177,6 +177,7 @@ begin
 
   vstImages.Clear;
   vstImages.RootNodeCount := FParaBD.Photos.Count;
+  vstImages.Selected[vstImages.GetFirst] := True;
 end;
 
 procedure TfrmEditParaBD.cbOffertClick(Sender: TObject);
