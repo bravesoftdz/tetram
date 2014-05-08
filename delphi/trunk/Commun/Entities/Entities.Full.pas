@@ -556,8 +556,6 @@ begin
   FreeAndNil(FScenaristes);
   FreeAndNil(FDessinateurs);
   FreeAndNil(FColoristes);
-  FreeAndNil(FSujet);
-  FreeAndNil(FNotes);
   FreeAndNil(FSerie);
   FreeAndNil(FEditions);
   FreeAndNil(FUnivers);
@@ -630,7 +628,6 @@ begin
   FreeAndNil(FCouvertures);
   FreeAndNil(FEditeur);
   FreeAndNil(FCollection);
-  FreeAndNil(FNotes);
   inherited;
 end;
 
@@ -726,8 +723,6 @@ begin
   FreeAndNil(FAlbums);
   FreeAndNil(FParaBD);
   FreeAndNil(FGenres);
-  FreeAndNil(FSujet);
-  FreeAndNil(FNotes);
   FreeAndNil(FEditeur);
   FreeAndNil(FCollection);
   FreeAndNil(FScenaristes);
@@ -799,7 +794,6 @@ end;
 destructor TAuteurFull.Destroy;
 begin
   FreeAndNil(FSeries);
-  FreeAndNil(FBiographie);
   inherited;
 end;
 
@@ -866,10 +860,11 @@ end;
 
 destructor TParaBDFull.Destroy;
 begin
-  FreeAndNil(FPhotos);
   FreeAndNil(FAuteurs);
   FreeAndNil(FSerie);
-  FreeAndNil(FDescription);
+  FreeAndNil(FPhotos);
+  FreeAndNil(FUnivers);
+  FreeAndNil(FUniversFull);
   inherited;
 end;
 
@@ -943,7 +938,6 @@ end;
 destructor TUniversFull.Destroy;
 begin
   FreeAndNil(FUniversParent);
-  FreeAndNil(FDescription);
   inherited;
 end;
 
