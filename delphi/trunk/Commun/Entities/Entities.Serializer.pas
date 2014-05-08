@@ -3,7 +3,8 @@ unit Entities.Serializer;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Generics.Collections, dwsJSON, Entities.Full, Entities.Lite,
+  System.SysUtils, System.Classes, System.Generics.Collections, dwsJSON,
+  Entities.Full, Entities.Lite,
   Vcl.Dialogs, System.Rtti, UMetadata, Commun, JsonSerializer;
 
 type
@@ -20,6 +21,7 @@ type
     class procedure ProcessWriteToJSON(Entity: TParaBDFull; json: TdwsJSONObject; Options: SerializationOptions); overload;
 
     class procedure ProcessWriteToJSON(Entity: TBaseLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
+    class procedure ProcessWriteToJSON(Entity: TPhotoLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
     class procedure ProcessWriteToJSON(Entity: TCouvertureLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
     class procedure ProcessWriteToJSON(Entity: TParaBDLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
     class procedure ProcessWriteToJSON(Entity: TAuteurLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
@@ -61,10 +63,8 @@ begin
   WriteValueToJSON('Gratuit', Entity.Gratuit, json, Options);
   WriteValueToJSON('DateAchat', Entity.DateAchat, json, Options);
   // property sDateAchat: string read Get_sDateAchat;
-  WriteValueToJSON('HasImage', Entity.HasImage, json, Options);
-  WriteValueToJSON('ImageStockee', Entity.ImageStockee, json, Options);
-  WriteValueToJSON('FichierImage', Entity.FichierImage, json, Options);
   WriteListEntityToJSON<TUniversLite>(Entity.Univers, json.AddArray('Univers'), Options);
+  WriteListEntityToJSON<TPhotoLite>(Entity.Photos, json.AddArray('Photos'), Options);
 end;
 
 class procedure TEntitesSerializer.ProcessWriteToJSON(Entity: TAlbumFull; json: TdwsJSONObject; Options: SerializationOptions);
@@ -209,12 +209,16 @@ begin
     WriteValueToJSON('ID', Entity.ID, json, Options);
 end;
 
-class procedure TEntitesSerializer.ProcessWriteToJSON(Entity: TCouvertureLite; json: TdwsJSONObject; Options: SerializationOptions);
+class procedure TEntitesSerializer.ProcessWriteToJSON(Entity: TPhotoLite; json: TdwsJSONObject; Options: SerializationOptions);
 begin
   WriteValueToJSON('NewNom', Entity.NewNom, json, Options);
   WriteValueToJSON('OldNom', Entity.OldNom, json, Options);
   WriteValueToJSON('NewStockee', Entity.NewStockee, json, Options);
   WriteValueToJSON('OldStockee', Entity.OldStockee, json, Options);
+end;
+
+class procedure TEntitesSerializer.ProcessWriteToJSON(Entity: TCouvertureLite; json: TdwsJSONObject; Options: SerializationOptions);
+begin
   json.AddObject('Categorie').AddValue(IntToStr(Entity.Categorie), Entity.sCategorie);
 end;
 

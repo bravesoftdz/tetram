@@ -545,7 +545,7 @@ begin
     try
       Transaction := GetTransaction(DMPrinc.UIBDataBase);
       if isParaBD then
-        SQL.Text := 'select imageparabd, stockageparabd, fichierparabd from parabd where id_parabd = ?'
+        SQL.Text := 'select imagephoto, stockagephoto, fichierphoto from photos where id_photo = ?'
       else
         SQL.Text := 'select imagecouverture, stockagecouverture, fichiercouverture from couvertures where id_couverture = ?';
       Params.AsString[0] := GUIDToString(ID_Couverture);

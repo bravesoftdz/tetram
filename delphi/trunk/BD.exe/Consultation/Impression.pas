@@ -19,7 +19,7 @@ procedure ImpressionFicheParaBD(const Reference: TGUID; Previsualisation: Boolea
 
 procedure ImpressionRecherche(Recherche: TRecherche; Previsualisation: Boolean);
 procedure ImpressionCouvertureAlbum(const Reference, ID_Couverture: TGUID; Previsualisation: Boolean);
-procedure ImpressionImageParaBD(const Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionImageParaBD(const Reference, ID_Photo: TGUID; Previsualisation: Boolean);
 
 procedure ImpressionListeManquants(R: TSeriesIncompletes; Previsualisation: Boolean);
 procedure ImpressionListePrevisions(R: TPrevisionsSorties; Previsualisation: Boolean);
@@ -209,10 +209,10 @@ begin
   fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransAlbums, rsTransPage, Prn.GetPageNumber]), 1, 7);
 
   MinTop := -1;
-  if TGlobalVar.Utilisateur.Options.FicheParaBDWithImage and ParaBD.HasImage then
+  if TGlobalVar.Utilisateur.Options.FicheParaBDWithImage and (ParaBD.Photos.Count > 0) then
   begin
     fWaiting.ShowProgression(rsTransImage + '...', epNext);
-    ms := GetCouvertureStream(True, ParaBD.ID_ParaBD, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60), TGlobalVar.Utilisateur.Options.AntiAliasing,
+    ms := GetCouvertureStream(True, ParaBD.Photos[0].ID, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60), TGlobalVar.Utilisateur.Options.AntiAliasing,
       True, Prn.MmsToPixelsHorizontal(1));
     if Assigned(ms) then
       try
@@ -1549,7 +1549,7 @@ begin
   end;
 end;
 
-procedure ImpressionImageParaBD(const Reference: TGUID; Previsualisation: Boolean);
+procedure ImpressionImageParaBD(const Reference, ID_Photo: TGUID; Previsualisation: Boolean);
 var
   ParaBD: TParaBDFull;
   ms: TStream;
@@ -1578,7 +1578,7 @@ begin
       Prn.PageNumber.Printed := False;
 
       // ShowMessage(Format('W %d H %d', [Prn.MmsToPixelsHorizontal(Prn.Detail.Width), Prn.MmsToPixelsVertical(Prn.Detail.Height)]));
-      ms := GetCouvertureStream(True, Reference, Prn.MmsToPixelsVertical(Prn.Detail.Height), Prn.MmsToPixelsHorizontal(Prn.Detail.Width),
+      ms := GetCouvertureStream(True, ID_Photo, Prn.MmsToPixelsVertical(Prn.Detail.Height), Prn.MmsToPixelsHorizontal(Prn.Detail.Width),
         TGlobalVar.Utilisateur.Options.AntiAliasing);
       if Assigned(ms) then
         try

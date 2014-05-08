@@ -150,6 +150,13 @@ type
     class procedure Fill(Entity: TUniversLite; const ID_Univers: TGUID); overload;
   end;
 
+  TDaoPhotoLite = class(TDaoLiteEntity<TPhotoLite>)
+  protected
+    class function FactoryClass: TFactoryClass; override;
+  public
+    class procedure Fill(Entity: TPhotoLite; Query: TUIBQuery); override;
+  end;
+
   TDaoCouvertureLite = class(TDaoLiteEntity<TCouvertureLite>)
   protected
     class function FactoryClass: TFactoryClass; override;
@@ -362,6 +369,22 @@ begin
   inherited VideListe(TList<TBaseLite>(List), DoClear);
 end;
 
+{ TDaoPhotoLite }
+
+class function TDaoPhotoLite.FactoryClass: TFactoryClass;
+begin
+  REsult := TFactoryPhotoLite;
+end;
+
+class procedure TDaoPhotoLite.Fill(Entity: TPhotoLite; Query: TUIBQuery);
+begin
+  Entity.ID := NonNull(Query, 'ID_Photo');
+  Entity.OldNom := Query.Fields.ByNameAsString['FichierPhoto'];
+  Entity.NewNom := Entity.OldNom;
+  Entity.OldStockee := Query.Fields.ByNameAsBoolean['StockagePhoto'];
+  Entity.NewStockee := Entity.OldStockee;
+end;
+
 { TDaoCouvertureLite }
 
 class function TDaoCouvertureLite.FactoryClass: TFactoryClass;
@@ -374,7 +397,7 @@ begin
   Entity.ID := NonNull(Query, 'ID_Couverture');
   Entity.OldNom := Query.Fields.ByNameAsString['FichierCouverture'];
   Entity.NewNom := Entity.OldNom;
-  Entity.OldStockee := Query.Fields.ByNameAsBoolean['STOCKAGECOUVERTURE'];
+  Entity.OldStockee := Query.Fields.ByNameAsBoolean['StockageCouverture'];
   Entity.NewStockee := Entity.OldStockee;
   Entity.Categorie := Query.Fields.ByNameAsSmallint['CategorieImage'];
   Entity.sCategorie := Query.Fields.ByNameAsString['sCategorieImage'];

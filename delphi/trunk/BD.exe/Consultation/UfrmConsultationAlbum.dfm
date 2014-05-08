@@ -30,7 +30,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
     DesignSize = (
       599
       722)
-    object Label4: TLabel
+    object lbNoImage: TLabel
       Left = 408
       Top = 137
       Width = 89
@@ -371,7 +371,7 @@ object frmConsultationAlbum: TfrmConsultationAlbum
       ExplicitTop = 602
       ExplicitWidth = 515
     end
-    object Label18: TLabel
+    object lbInvalidImage: TLabel
       Left = 395
       Top = 177
       Width = 114

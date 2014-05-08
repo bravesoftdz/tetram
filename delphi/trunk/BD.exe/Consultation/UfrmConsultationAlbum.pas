@@ -29,7 +29,7 @@ type
     lvScenaristes: TVDTListView;
     lvDessinateurs: TVDTListView;
     Couverture: TImage;
-    Label4: TLabel;
+    lbNoImage: TLabel;
     Label5: TLabel;
     TitreAlbum: TLabel;
     Label6: TLabel;
@@ -81,7 +81,7 @@ type
     Label19: TLabel;
     lbFormat: TLabel;
     edNotes: TMemo;
-    Label18: TLabel;
+    lbInvalidImage: TLabel;
     lbCote: TLabel;
     Label20: TLabel;
     Label21: TLabel;
@@ -298,7 +298,7 @@ var
   jpg: TJPEGImage;
 begin
   TfrmConsole.AddEvent(UnitName, 'ShowCouverture ' + IntToStr(Num));
-  Label4.Visible := FCurrentEdition.Couvertures.Count = 0;
+  lbNoImage.Visible := FCurrentEdition.Couvertures.Count = 0;
 
   if FCurrentEdition.Couvertures.Count > 0 then
   begin
@@ -333,8 +333,8 @@ begin
       Couverture.Picture.Assign(nil);
     end;
 
-    Label18.Visible := not Assigned(Couverture.Picture.Graphic);
-    if Label18.Visible then
+    lbInvalidImage.Visible := not Assigned(Couverture.Picture.Graphic);
+    if lbInvalidImage.Visible then
     begin
       Couverture.OnDblClick := nil;
       Couverture.Cursor := crDefault;

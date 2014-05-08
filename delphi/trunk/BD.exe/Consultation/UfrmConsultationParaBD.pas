@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, System.UITypes, StrUtils,
   Dialogs, Entities.Full, StdCtrls, VirtualTrees, ExtCtrls, UfrmFond, Procedures,
   ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms,
-  LabeledCheckBox, System.Actions;
+  LabeledCheckBox, System.Actions, PngSpeedButton;
 
 type
   TfrmConsultationParaBD = class(TBdtForm, IImpressionApercu, IFicheEditable)
@@ -54,6 +54,8 @@ type
     cbStock: TLabeledCheckBox;
     lvUnivers: TVDTListView;
     Label4: TLabel;
+    VDTButton3: TVDTButton;
+    VDTButton4: TVDTButton;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure lvAuteursDblClick(Sender: TObject);
@@ -66,12 +68,15 @@ type
     procedure lvAuteursData(Sender: TObject; Item: TListItem);
     procedure lvUniversData(Sender: TObject; Item: TListItem);
     procedure lvUniversDblClick(Sender: TObject);
-  private
+    procedure VDTButton3Click(Sender: TObject);
+    procedure VDTButton4Click(Sender: TObject);
+  strict private
+    CurrentPhoto: Integer;
     FParaBD: TParaBDFull;
     function GetID_ParaBD: TGUID;
     procedure SetID_ParaBD(const Value: TGUID);
     procedure ClearForm;
-    procedure CouvertureDblClick(Sender: TObject);
+    procedure ImageParaBDDblClick(Sender: TObject);
     procedure ImpRep(Sender: TObject);
     procedure ApercuExecute(Sender: TObject);
     function ApercuUpdate: Boolean;
@@ -79,7 +84,7 @@ type
     function ImpressionUpdate: Boolean;
     procedure ModificationExecute(Sender: TObject);
     function ModificationUpdate: Boolean;
-    { Déclarations privées }
+    procedure ShowPhoto(Num: Integer);
   public
     { Déclarations publiques }
     property ParaBD: TParaBDFull read FParaBD;
@@ -90,7 +95,7 @@ implementation
 
 uses Commun, Entities.Lite, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
   Proc_Gestions, Entities.DaoFull, Entities.Common, Entities.FactoriesFull,
-  ICUNumberFormatter;
+  ICUNumberFormatter, UfrmConsole;
 
 {$R *.dfm}
 { TFrmConsultationParaBD }
@@ -163,13 +168,34 @@ begin
   else
     lbCote.Caption := '';
 
-  lbNoImage.Visible := not FParaBD.HasImage;
+  ShowPhoto(0);
+  VDTButton3.Visible := FParaBD.Photos.Count > 1;
+  VDTButton4.Visible := VDTButton3.Visible;
+end;
 
-  if FParaBD.HasImage then
+procedure TfrmConsultationParaBD.ShowPhoto(Num: Integer);
+var
+  hg: IHourGlass;
+  ms: TStream;
+  jpg: TJPEGImage;
+begin
+  TfrmConsole.AddEvent(UnitName, 'ShowPhoto ' + IntToStr(Num));
+  lbNoImage.Visible := FParaBD.Photos.Count = 0;
+
+  if FParaBD.Photos.Count > 0 then
   begin
+    hg := THourGlass.Create;
+    if Num < 0 then
+      Num := Pred(FParaBD.Photos.Count);
+    if Num > Pred(FParaBD.Photos.Count) then
+      Num := 0;
+    CurrentPhoto := Num;
     ImageParaBD.Picture := nil;
     try
-      ms := GetCouvertureStream(True, ID_ParaBD, ImageParaBD.Height, ImageParaBD.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
+      TfrmConsole.AddEvent(UnitName, '> GetCouvertureStream');
+      ms := GetCouvertureStream(True, FParaBD.Photos[Num].ID, ImageParaBD.Height, ImageParaBD.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
+      TfrmConsole.AddEvent(UnitName, '< GetCouvertureStream');
+
       if Assigned(ms) then
         try
           jpg := TJPEGImage.Create;
@@ -178,10 +204,10 @@ begin
             ImageParaBD.Picture.Assign(jpg);
             ImageParaBD.Transparent := False;
           finally
-            FreeAndNil(jpg);
+            jpg.Free;
           end;
         finally
-          FreeAndNil(ms);
+          ms.Free;
         end
       else
         ImageParaBD.Picture.Assign(nil);
@@ -207,17 +233,19 @@ begin
     end
     else
     begin
-      ImageParaBD.OnDblClick := CouvertureDblClick;
+      ImageParaBD.OnDblClick := ImageParaBDDblClick;
       ImageParaBD.Cursor := crHandPoint;
     end;
   end
   else
     ImageParaBD.Picture.Assign(nil);
+
+  TfrmConsole.AddEvent(UnitName, 'ShowPhoto done ' + IntToStr(Num));
 end;
 
-procedure TfrmConsultationParaBD.CouvertureDblClick(Sender: TObject);
+procedure TfrmConsultationParaBD.ImageParaBDDblClick(Sender: TObject);
 begin
-  Historique.AddWaiting(fcImageParaBD, ID_ParaBD, ID_ParaBD);
+  Historique.AddWaiting(fcImageParaBD, ID_ParaBD, FParaBD.Photos[CurrentPhoto].ID);
 end;
 
 procedure TfrmConsultationParaBD.ClearForm;
@@ -228,8 +256,10 @@ end;
 
 procedure TfrmConsultationParaBD.FormCreate(Sender: TObject);
 begin
-  PrepareLV(Self);
   FParaBD := TFactoryParaBDFull.getInstance;
+  PrepareLV(Self);
+  CurrentPhoto := 0;
+  ImageParaBD.Picture := nil;
 end;
 
 procedure TfrmConsultationParaBD.FormDestroy(Sender: TObject);
@@ -280,9 +310,19 @@ begin
     Historique.AddWaiting(fcSerie, FParaBD.Serie.ID_Serie);
 end;
 
+procedure TfrmConsultationParaBD.VDTButton3Click(Sender: TObject);
+begin
+  ShowPhoto(Pred(CurrentPhoto));
+end;
+
+procedure TfrmConsultationParaBD.VDTButton4Click(Sender: TObject);
+begin
+  ShowPhoto(Succ(CurrentPhoto));
+end;
+
 procedure TfrmConsultationParaBD.ImageApercuExecute(Sender: TObject);
 begin
-  ImpressionImageParaBD(ID_ParaBD, TComponent(Sender).Tag = 1);
+  ImpressionImageParaBD(ID_ParaBD, FParaBD.Photos[CurrentPhoto].ID, TComponent(Sender).Tag = 1);
 end;
 
 procedure TfrmConsultationParaBD.ActionList1Update(Action: TBasicAction; var Handled: Boolean);

@@ -51,6 +51,11 @@ type
     class function EntityClass: TEntityClass; override;
   end;
 
+  TFactoryPhotoLite = class(TFactoryGenericDBEntity<TPhotoLite>)
+  protected
+    class function EntityClass: TEntityClass; override;
+  end;
+
   TFactoryCouvertureLite = class(TFactoryGenericDBEntity<TCouvertureLite>)
   protected
     class function EntityClass: TEntityClass; override;
@@ -150,6 +155,13 @@ end;
 class function TFactoryConversionLite.EntityClass: TEntityClass;
 begin
   Result := TConversionLite;
+end;
+
+{ TFactoryPhotoLite }
+
+class function TFactoryPhotoLite.EntityClass: TEntityClass;
+begin
+  Result := TPhotoLite;
 end;
 
 end.

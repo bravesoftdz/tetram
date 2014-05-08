@@ -41,11 +41,6 @@ type
     Panel1: TPanel;
     imgVisu: TImage;
     cbNumerote: TCheckBoxLabeled;
-    Panel3: TPanel;
-    ChoixImage: TVDTButton;
-    Panel4: TPanel;
-    cbImageBDD: TCheckBoxLabeled;
-    VDTButton1: TVDTButton;
     ChoixImageDialog: TOpenPictureDialog;
     Frame11: TframBoutons;
     Bevel2: TBevel;
@@ -57,6 +52,11 @@ type
     Label11: TLabel;
     lvUnivers: TVDTListViewLabeled;
     btUnivers: TVDTButton;
+    ChoixImage: TVDTButton;
+    vstImages: TVirtualStringTree;
+    VDTButton5: TVDTButton;
+    VDTButton4: TVDTButton;
+    Bevel5: TBevel;
     procedure cbOffertClick(Sender: TObject);
     procedure cbGratuitClick(Sender: TObject);
     procedure edPrixChange(Sender: TObject);
@@ -65,7 +65,6 @@ type
     procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure btnOKClick(Sender: TObject);
-    procedure VDTButton1Click(Sender: TObject);
     procedure ChoixImageClick(Sender: TObject);
     procedure btCreateurClick(Sender: TObject);
     procedure lvAuteursKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -79,6 +78,18 @@ type
     procedure btUniversClick(Sender: TObject);
     procedure lvUniversData(Sender: TObject; Item: TListItem);
     procedure lvUniversKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure vstImagesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
+    procedure vstImagesChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
+    procedure vstImagesDblClick(Sender: TObject);
+    procedure vstImagesEditing(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
+    procedure vstImagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
+    procedure vstImagesInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+    procedure vstImagesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure vstImagesNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: string);
+    procedure vstImagesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+    procedure vstImagesStructureChange(Sender: TBaseVirtualTree; Node: PVirtualNode; Reason: TChangeReason);
+    procedure VDTButton4Click(Sender: TObject);
+    procedure VDTButton5Click(Sender: TObject);
   private
     FCreation: Boolean;
     FisAchat: Boolean;
@@ -166,22 +177,8 @@ begin
   lvUnivers.Items.EndUpdate;
   lvAuteurs.Items.EndUpdate;
 
-  if FParaBD.HasImage then
-    cbImageBDD.Checked := FParaBD.ImageStockee;
-
-  Stream := GetCouvertureStream(True, FParaBD.ID_ParaBD, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
-  if Assigned(Stream) then
-    try
-      jpg := TJPEGImage.Create;
-      try
-        jpg.LoadFromStream(Stream);
-        imgVisu.Picture.Assign(jpg);
-      finally
-        FreeAndNil(jpg);
-      end;
-    finally
-      FreeAndNil(Stream);
-    end;
+  vstImages.Clear;
+  vstImages.RootNodeCount := FParaBD.Photos.Count;
 end;
 
 procedure TfrmEditParaBD.cbOffertClick(Sender: TObject);
@@ -228,6 +225,22 @@ begin
       edPrixCote.Text := ICUCurrencyToStr(c);
 end;
 
+procedure TfrmEditParaBD.VDTButton4Click(Sender: TObject);
+begin
+  FParaBD.Photos.Move(vstImages.FocusedNode.Index, Pred(vstImages.FocusedNode.Index));
+  vstImages.FocusedNode := vstImages.FocusedNode.PrevSibling;
+  vstImages.Selected[vstImages.FocusedNode] := True;
+  vstImages.Invalidate;
+end;
+
+procedure TfrmEditParaBD.VDTButton5Click(Sender: TObject);
+begin
+  FParaBD.Photos.Move(vstImages.FocusedNode.Index, Succ(vstImages.FocusedNode.Index));
+  vstImages.FocusedNode := vstImages.FocusedNode.NextSibling;
+  vstImages.Selected[vstImages.FocusedNode] := True;
+  vstImages.Invalidate;
+end;
+
 procedure TfrmEditParaBD.FormActivate(Sender: TObject);
 begin
   Invalidate;
@@ -244,9 +257,17 @@ begin
   vtEditPersonnes.VTEdit.LinkControls.Add(Label19);
   vtEditPersonnes.AfterEdit := OnEditPersonnes;
 
-  LoadCombo(cbxCategorie, TDaoListe.ListCategoriesParaBD, TDaoListe.DefaultCategorieParaBD);
+  vstImages.LinkControls.Clear;
+  vstImages.LinkControls.Add(ChoixImage);
+  vstImages.LinkControls.Add(VDTButton4);
+  vstImages.LinkControls.Add(VDTButton5);
+  vstImages.Mode := vmNone;
+  vstImages.CheckImageKind := ckXP;
+  vstImages.TreeOptions.StringOptions := [];
+  vstImages.TreeOptions.MiscOptions := vstImages.TreeOptions.MiscOptions + [toCheckSupport];
+  vstImages.TreeOptions.PaintOptions := vstImages.TreeOptions.PaintOptions - [toShowButtons, toShowRoot, toShowTreeLines];
 
-  VDTButton1.Click;
+  LoadCombo(cbxCategorie, TDaoListe.ListCategoriesParaBD, TDaoListe.DefaultCategorieParaBD);
 end;
 
 procedure TfrmEditParaBD.btnOKClick(Sender: TObject);
@@ -307,8 +328,6 @@ begin
   FParaBD.Prix := ICUStrToDoubleDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   FParaBD.Stock := cbStock.Checked;
 
-  FParaBD.ImageStockee := cbImageBDD.Checked;
-
   TDaoParaBDFull.SaveToDatabase(FParaBD);
   if isAchat then
     TDaoParaBDFull.Acheter(FParaBD, False);
@@ -328,43 +347,170 @@ begin
   vtEditUniversVTEditChange(vtEditUnivers.VTEdit);
 end;
 
-procedure TfrmEditParaBD.VDTButton1Click(Sender: TObject);
-begin
-  imgVisu.Picture := nil;
-  FParaBD.FichierImage := '';
-  cbImageBDD.Checked := TGlobalVar.Utilisateur.Options.ImagesStockees;
-  FParaBD.HasImage := False;
-end;
-
 procedure TfrmEditParaBD.ChoixImageClick(Sender: TObject);
 var
-  Stream: TStream;
-  jpg: TJPEGImage;
+  i: Integer;
+  PP: TPhotoLite;
 begin
   with ChoixImageDialog do
   begin
-    Options := Options - [ofAllowMultiSelect];
+    Options := Options + [ofAllowMultiSelect];
     Filter := GraphicFilter(TGraphic);
     InitialDir := RepImages;
     FileName := '';
     if Execute then
     begin
-      FParaBD.FichierImage := FileName;
-      Stream := GetJPEGStream(FParaBD.FichierImage, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
-      if Assigned(Stream) then
-        try
-          jpg := TJPEGImage.Create;
-          try
-            jpg.LoadFromStream(Stream);
-            imgVisu.Picture.Assign(jpg);
-          finally
-            FreeAndNil(jpg);
-          end;
-        finally
-          FreeAndNil(Stream);
+      vstImages.BeginUpdate;
+      try
+        for i := 0 to Files.Count - 1 do
+        begin
+          PP := TFactoryPhotoLite.getInstance;
+          FParaBD.Photos.Add(PP);
+          PP.ID := GUID_NULL;
+          PP.OldNom := Files[i];
+          PP.NewNom := PP.OldNom;
         end;
+      finally
+        vstImages.RootNodeCount := FParaBD.Photos.Count;
+        vstImages.EndUpdate;
+      end;
     end;
   end;
+end;
+
+procedure TfrmEditParaBD.vstImagesChange(Sender: TBaseVirtualTree; Node: PVirtualNode);
+var
+  PP: TPhotoLite;
+  hg: IHourGlass;
+  ms: TStream;
+  jpg: TJPEGImage;
+begin
+  VDTButton4.Enabled := Assigned(Node) and (Node.Index > 0);
+  VDTButton5.Enabled := Assigned(Node) and (Node.Index < Pred(vstImages.RootNodeCount));
+
+  if Assigned(Node) then
+  begin
+    PP := FParaBD.Photos[Node.Index];
+    hg := THourGlass.Create;
+    if IsEqualGUID(PP.ID, GUID_NULL) then
+      ms := GetJPEGStream(PP.NewNom, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing)
+    else
+      ms := GetCouvertureStream(True, PP.ID, imgVisu.Height, imgVisu.Width, TGlobalVar.Utilisateur.Options.AntiAliasing);
+    if Assigned(ms) then
+      try
+        jpg := TJPEGImage.Create;
+        try
+          jpg.LoadFromStream(ms);
+          imgVisu.Picture.Assign(jpg);
+        finally
+          FreeAndNil(jpg);
+        end;
+      finally
+        FreeAndNil(ms);
+      end;
+  end
+  else
+    imgVisu.Picture.Assign(nil);
+end;
+
+procedure TfrmEditParaBD.vstImagesChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
+begin
+  FParaBD.Photos[Node.Index].NewStockee := (Node.CheckState = csCheckedNormal);
+end;
+
+procedure TfrmEditParaBD.vstImagesDblClick(Sender: TObject);
+var
+  PP: TPhotoLite;
+begin
+  if not Assigned(vstImages.FocusedNode) then
+    Exit;
+  PP := FParaBD.Photos[vstImages.FocusedNode.Index];
+  if IsEqualGUID(PP.ID, GUID_NULL) then
+    with ChoixImageDialog do
+    begin
+      Options := Options - [ofAllowMultiSelect];
+      FileName := PP.NewNom;
+      if Execute then
+      begin
+        PP.NewNom := FileName;
+        vstImages.InvalidateNode(vstImages.FocusedNode);
+      end;
+    end;
+end;
+
+procedure TfrmEditParaBD.vstImagesEditing(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
+// var
+// PP: TPhotoLite;
+begin
+  // PP := FParaBD.Photos[Node.Index];
+  // Allowed := (PP.Reference <> -1) and (PP.NewStockee) and (PP.NewStockee = PP.OldStockee);
+
+  // devrait être autorisé aussi pour changer le nom de l'image
+  Allowed := False;
+end;
+
+procedure TfrmEditParaBD.vstImagesGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
+var
+  PP: TPhotoLite;
+begin
+  PP := FParaBD.Photos[Node.Index];
+  CellText := '';
+  case Column of
+    0:
+      CellText := PP.NewNom;
+  end;
+end;
+
+procedure TfrmEditParaBD.vstImagesInitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
+var
+  PP: TPhotoLite;
+begin
+  PP := FParaBD.Photos[Node.Index];
+  Node.CheckType := ctCheckBox;
+  if PP.NewStockee then
+    Node.CheckState := csCheckedNormal
+  else
+    Node.CheckState := csUncheckedNormal;
+end;
+
+procedure TfrmEditParaBD.vstImagesKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+begin
+  if Key = VK_DELETE then
+  begin
+    FParaBD.Photos.Delete(vstImages.FocusedNode.Index);
+    vstImages.RootNodeCount := FParaBD.Photos.Count;
+    imgVisu.Picture.Assign(nil);
+    vstImages.ReinitNode(vstImages.RootNode, True);
+  end;
+end;
+
+procedure TfrmEditParaBD.vstImagesNewText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; NewText: string);
+var
+  PP: TPhotoLite;
+begin
+  PP := FParaBD.Photos[Node.Index];
+  case Column of
+    0:
+      PP.NewNom := NewText;
+  end;
+end;
+
+procedure TfrmEditParaBD.vstImagesPaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+  TextType: TVSTTextType);
+var
+  PP: TPhotoLite;
+begin
+  PP := FParaBD.Photos[Node.Index];
+  if (Column = 0) and (not IsEqualGUID(PP.ID, GUID_NULL)) then
+    if vstImages.Selected[Node] then
+      TargetCanvas.Font.Color := clInactiveCaption
+    else
+      TargetCanvas.Font.Color := clInactiveCaptionText;
+end;
+
+procedure TfrmEditParaBD.vstImagesStructureChange(Sender: TBaseVirtualTree; Node: PVirtualNode; Reason: TChangeReason);
+begin
+  vstImagesChange(Sender, vstImages.FocusedNode);
 end;
 
 procedure TfrmEditParaBD.vtEditPersonnesVTEditChange(Sender: TObject);

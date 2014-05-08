@@ -368,11 +368,9 @@ type
     FNumerote: Boolean;
     FDateAchat: TDateTime;
     FOffert: Boolean;
-    FFichierImage: RAutoTrimString;
-    FImageStockee: Boolean;
-    FHasImage: Boolean;
     FUnivers: TObjectList<TUniversLite>;
     FUniversFull: TList<TUniversLite>;
+    FPhotos: TObjectList<TPhotoLite>;
     function Get_sDateAchat: string;
     procedure SetTitreParaBD(const Value: RAutoTrimString); inline;
   private
@@ -380,9 +378,6 @@ type
   protected
     constructor Create; override;
   public
-    OldHasImage, OldImageStockee: Boolean;
-    OldFichierImage: string;
-
     destructor Destroy; override;
     procedure Clear; override;
 
@@ -407,11 +402,9 @@ type
     property Gratuit: Boolean read FGratuit write FGratuit;
     property DateAchat: TDateTime read FDateAchat write FDateAchat;
     property sDateAchat: string read Get_sDateAchat;
-    property HasImage: Boolean read FHasImage write FHasImage;
-    property ImageStockee: Boolean read FImageStockee write FImageStockee;
-    property FichierImage: RAutoTrimString read FFichierImage write FFichierImage;
     property Univers: TObjectList<TUniversLite> read FUnivers;
     property UniversFull: TList<TUniversLite> read FUniversFull;
+    property Photos: TObjectList<TPhotoLite> read FPhotos;
   end;
 
 implementation
@@ -868,10 +861,12 @@ begin
   FSerie := TFactorySerieFull.getInstance;
   FUnivers := TObjectList<TUniversLite>.Create;
   FUniversFull := TList<TUniversLite>.Create;
+  FPhotos := TObjectList<TPhotoLite>.Create;
 end;
 
 destructor TParaBDFull.Destroy;
 begin
+  FreeAndNil(FPhotos);
   FreeAndNil(FAuteurs);
   FreeAndNil(FSerie);
   FreeAndNil(FDescription);

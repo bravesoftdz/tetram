@@ -175,7 +175,8 @@ uses
   UNetICSCompress in '..\Commun\UNetICSCompress.pas',
   UfrmSynchroniser in 'Web\UfrmSynchroniser.pas' {frmSynchroniser},
   UWeb in 'Web\UWeb.pas',
-  UMAJ2_2_3_24 in 'mises_a_jour\UMAJ2_2_3_24.pas';
+  UMAJ2_2_3_24 in 'mises_a_jour\UMAJ2_2_3_24.pas',
+  UMAJ2_2_3_25 in 'mises_a_jour\UMAJ2_2_3_25.pas';
 
 begin
   Application.Title := 'BDthèque';

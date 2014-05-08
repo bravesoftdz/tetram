@@ -705,8 +705,7 @@ begin
     qry.SQL.Clear;
     qry.SQL.Add('select');
     qry.SQL.Add('  titreparabd, annee, id_serie, achat, description, dedicace, numerote, anneecote, prixcote,');
-    qry.SQL.Add('  gratuit, offert, dateachat, prix, stock, categorieparabd, lc.libelle as scategorieparabd,');
-    qry.SQL.Add('  fichierparabd, stockageparabd, case when imageparabd is null then 0 else 1 end as hasblobimage');
+    qry.SQL.Add('  gratuit, offert, dateachat, prix, stock, categorieparabd, lc.libelle as scategorieparabd');
     qry.SQL.Add('from');
     qry.SQL.Add('  parabd p');
     qry.SQL.Add('  left join listes lc on');
@@ -736,14 +735,6 @@ begin
 
       ID_Serie := StringToGUIDDef(qry.Fields.ByNameAsString['id_serie'], GUID_NULL);
 
-      Entity.ImageStockee := qry.Fields.ByNameAsBoolean['stockageparabd'];
-      Entity.FichierImage := qry.Fields.ByNameAsString['fichierparabd'];
-      Entity.HasImage := (qry.Fields.ByNameAsSmallint['hasblobimage'] = 1) or (Entity.FichierImage <> '');
-
-      Entity.OldImageStockee := Entity.ImageStockee;
-      Entity.OldFichierImage := Entity.FichierImage;
-      Entity.OldHasImage := Entity.HasImage;
-
       qry.Close;
       qry.SQL.Clear;
       qry.SQL.Add('select');
@@ -768,6 +759,22 @@ begin
       TDaoAuteurLite.FillList(Entity.Auteurs, qry);
 
       TDaoSerieFull.Fill(Entity.Serie, ID_Serie);
+
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoParaBDFull.Fill > photos - ' + GUIDToString(Reference));
+      qry.Close;
+      qry.SQL.Clear;
+      qry.SQL.Add('select');
+      qry.SQL.Add('  p.id_photo, p.fichierphoto, p.stockagephoto');
+      qry.SQL.Add('from');
+      qry.SQL.Add('  photos p');
+      qry.SQL.Add('where');
+      qry.SQL.Add('  id_parabd = ?');
+      qry.SQL.Add('order by');
+      qry.SQL.Add('  p.ordre');
+      qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
+      qry.Open;
+      TDaoPhotoLite.FillList(Entity.Photos, qry);
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoParaBDFull.Fill < photos - ' + GUIDToString(Reference));
     end;
   finally
     qry.Transaction.Free;
@@ -783,8 +790,13 @@ var
   Stream: TStream;
   Auteur: TAuteurLite;
   Univers: TUniversLite;
+  PP: TPhotoLite;
+  i: Integer;
+  qry1, qry2, qry3, qry4, qry5, qry6: TUIBQuery;
+  FichiersImages: TStringList;
 begin
   inherited;
+  FichiersImages := TStringList.Create;
   hg := THourGlass.Create;
   qry := TUIBQuery.Create(nil);
   try
@@ -892,53 +904,163 @@ begin
       Univers.ID := StringToGUID(qry.Fields.AsString[0]);
     end;
 
-    if not Entity.HasImage then
-    begin
-      qry.SQL.Text := 'update parabd set imageparabd = null, stockageparabd = 0, fichierparabd = null where id_parabd = :id_parabd';
-      qry.Params.ByNameAsString['id_parabd'] := GUIDToString(Entity.ID_ParaBD);
-      qry.Execute;
-    end
-    else if (Entity.OldFichierImage <> Entity.FichierImage) or (Entity.OldImageStockee <> Entity.ImageStockee) then
-    begin
-      if Entity.ImageStockee then
-      begin
-        qry.SQL.Text := 'update parabd set imageparabd = :imageparabd, stockageparabd = 1, fichierparabd = :fichierparabd where id_parabd = :id_parabd';
-        if TPath.GetDirectoryName(Entity.FichierImage) = '' then
-          Entity.FichierImage := TPath.Combine(RepImages, Entity.FichierImage);
-        Stream := GetJPEGStream(Entity.FichierImage, -1, -1, False);
-        try
-          qry.ParamsSetBlob('imageparabd', Stream);
-        finally
-          Stream.Free;
-        end;
-        qry.Params.ByNameAsString['fichierparabd'] := TPath.GetFileName(Entity.FichierImage);
-      end
-      else
-      begin
-        qry.SQL.Text := 'select result from saveblobtofile(:chemin, :fichier, :blobcontent)';
-        if TPath.GetDirectoryName(Entity.FichierImage) = '' then
-          Stream := GetCouvertureStream(True, Entity.ID_ParaBD, -1, -1, False)
+    S := '';
+    for PP in Entity.Photos do
+      if not IsEqualGUID(PP.ID, GUID_NULL) then
+        AjoutString(S, QuotedStr(GUIDToString(PP.ID)), ',');
+
+    qry.SQL.Clear;
+    qry.SQL.Add('delete from photos');
+    qry.SQL.Add('where');
+    qry.SQL.Add('  id_parabd = ?');
+    if S <> '' then
+      qry.SQL.Add(' and id_photo not in (' + S + ')');
+    qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
+    qry.Execute;
+
+    qry1 := TUIBQuery.Create(nil);
+    qry2 := TUIBQuery.Create(nil);
+    qry3 := TUIBQuery.Create(nil);
+    qry4 := TUIBQuery.Create(nil);
+    qry5 := TUIBQuery.Create(nil);
+    qry6 := TUIBQuery.Create(nil);
+    try
+      qry1.Transaction := qry.Transaction;
+      qry2.Transaction := qry.Transaction;
+      qry3.Transaction := qry.Transaction;
+      qry4.Transaction := qry.Transaction;
+      qry5.Transaction := qry.Transaction;
+      qry6.Transaction := qry.Transaction;
+
+      qry1.SQL.Clear;
+      qry1.SQL.Add('insert into photos (');
+      qry1.SQL.Add('  id_parabd, fichierphoto, stockagephoto, ordre');
+      qry1.SQL.Add(') values (');
+      qry1.SQL.Add('  :id_parabd, :fichierphoto, 0, :ordre');
+      qry1.SQL.Add(') returning id_photo');
+
+      qry6.SQL.Text := 'select result from saveblobtofile(:Chemin, :Fichier, :BlobContent)';
+
+      qry2.SQL.Clear;
+      qry2.SQL.Add('insert into photos (');
+      qry2.SQL.Add('  id_parabd, fichierphoto, stockagephoto, ordre, imagephoto');
+      qry2.SQL.Add(') values (');
+      qry2.SQL.Add('  :id_parabd, :fichierphoto, 1, :ordre, :imagephoto');
+      qry2.SQL.Add(') returning id_photo');
+
+      qry3.SQL.Text := 'update photo set imagephoto = :imagephoto, stockagephoto = 1 where id_photo = :id_photo';
+
+      qry4.SQL.Text := 'update photos set imagephoto = null, stockagephoto = 0 where id_photo = :id_photo';
+
+      qry5.SQL.Clear;
+      qry5.SQL.Add('update photos set');
+      qry5.SQL.Add('  fichierphoto = :fichierphoto, ordre = :ordre');
+      qry5.SQL.Add('where');
+      qry5.SQL.Add('  id_photo = :id_photo');
+
+      for PP in Entity.Photos do
+        if IsEqualGUID(PP.ID, GUID_NULL) then
+        begin // nouvelles photos
+          if (not PP.NewStockee) then
+          begin // photos liées (q1)
+            PP.OldNom := PP.NewNom;
+            PP.NewNom := SearchNewFileName(RepImages, ExtractFileName(PP.NewNom), True);
+            qry6.Params.ByNameAsString['chemin'] := RepImages;
+            qry6.Params.ByNameAsString['fichier'] := PP.NewNom;
+            Stream := GetJPEGStream(PP.OldNom, -1, -1, False);
+            try
+              qry6.ParamsSetBlob('blobcontent', Stream);
+            finally
+              Stream.Free;
+            end;
+            qry6.Open;
+
+            qry1.Params.ByNameAsString['id_parabd'] := GUIDToString(Entity.ID_ParaBD);
+            qry1.Params.ByNameAsString['fichierphoto'] := PP.NewNom;
+            qry1.Params.ByNameAsInteger['ordre'] := Entity.Photos.IndexOf(PP);
+            qry1.Execute;
+            PP.ID := StringToGUID(qry1.Fields.AsString[0]);
+          end
+          else if TFile.Exists(PP.NewNom) then
+          begin // photos stockées (q2)
+            qry2.Params.ByNameAsString['id_parabd'] := GUIDToString(Entity.ID_ParaBD);
+            qry2.Params.ByNameAsString['fichierphoto'] := TPath.GetFileNameWithoutExtension(PP.NewNom);
+            qry2.Params.ByNameAsInteger['ordre'] := Entity.Photos.IndexOf(PP);
+            Stream := GetJPEGStream(PP.NewNom);
+            try
+              qry2.ParamsSetBlob('imagephoto', Stream);
+            finally
+              Stream.Free;
+            end;
+            qry2.Execute;
+            PP.ID := StringToGUID(qry2.Fields.AsString[0]);
+          end;
+        end
         else
-          Stream := GetJPEGStream(Entity.FichierImage, -1, -1, False);
-        try
-          Entity.FichierImage := SearchNewFileName(RepImages, TPath.GetFileName(Entity.FichierImage), True);
-          qry.Params.ByNameAsString['chemin'] := RepImages;
-          qry.Params.ByNameAsString['fichier'] := Entity.FichierImage;
-          qry.ParamsSetBlob('blobcontent', Stream);
-        finally
-          Stream.Free;
+        begin // ancienne photo
+          if PP.OldStockee <> PP.NewStockee then
+          begin // changement de stockage
+            Stream := GetCouvertureStream(True, PP.ID, -1, -1, False);
+            try
+              if (PP.NewStockee) then
+              begin // conversion photos liées en stockées (q3)
+                qry3.ParamsSetBlob('imagephoto', Stream);
+                qry3.Params.ByNameAsString['id_photo'] := GUIDToString(PP.ID);
+                qry3.Execute;
+                if TPath.GetDirectoryName(PP.NewNom) = '' then
+                  FichiersImages.Add(TPath.Combine(RepImages, PP.NewNom))
+                else
+                  FichiersImages.Add(PP.NewNom);
+                PP.NewNom := TPath.GetFileNameWithoutExtension(PP.NewNom);
+              end
+              else
+              begin // conversion photos stockées en liées
+                PP.NewNom := SearchNewFileName(RepImages, PP.NewNom + '.jpg', True);
+                qry6.Params.ByNameAsString['chemin'] := RepImages;
+                qry6.Params.ByNameAsString['fichier'] := PP.NewNom;
+                qry6.ParamsSetBlob('blobcontent', Stream);
+                qry6.Open;
+
+                qry4.Params.ByNameAsString['id_photo'] := GUIDToString(PP.ID);
+                qry4.Execute;
+              end;
+            finally
+              Stream.Free;
+            end;
+          end;
+          // photos renommées, réordonnées, etc (q5)
+          // obligatoire pour les changement de stockage
+          qry5.Params.ByNameAsString['fichierphoto'] := PP.NewNom;
+          qry5.Params.ByNameAsInteger['ordre'] := Entity.Photos.IndexOf(PP);
+          qry5.Params.ByNameAsString['id_photo'] := GUIDToString(PP.ID);
+          qry5.Execute;
         end;
-        qry.Open;
-
-        qry.SQL.Text := 'update parabd set imageparabd = null, stockageparabd = 0, fichierparabd = :fichierparabd where id_parabd = :id_parabd';
-        qry.Params.ByNameAsString['fichierparabd'] := Entity.FichierImage;
-      end;
-      qry.Params.ByNameAsString['id_parabd'] := GUIDToString(Entity.ID_ParaBD);
-      qry.Execute;
+    finally
+      FreeAndNil(qry1);
+      FreeAndNil(qry2);
+      FreeAndNil(qry3);
+      FreeAndNil(qry4);
+      FreeAndNil(qry5);
+      FreeAndNil(qry6);
     end;
-
     qry.Transaction.Commit;
+
+    if FichiersImages.Count > 0 then
+    begin
+      qry.Transaction.StartTransaction;
+      qry.SQL.Text := 'select * from deletefile(:fichier)';
+      qry.Prepare(True);
+      for i := 0 to Pred(FichiersImages.Count) do
+      begin
+        qry.Params.AsString[0] := Copy(FichiersImages[i], 1, qry.Params.MaxStrLen[0]);
+        qry.Open;
+        if qry.Fields.AsInteger[0] <> 0 then
+          ShowMessage(FichiersImages[i] + #13#13 + SysErrorMessage(qry.Fields.AsInteger[0]));
+      end;
+      qry.Transaction.Commit;
+    end;
   finally
+    FichiersImages.Free;
     qry.Free;
   end;
 end;
@@ -1721,7 +1843,7 @@ begin
             qry1.Params.ByNameAsInteger['ordre'] := Entity.Couvertures.IndexOf(PC);
             qry1.Params.ByNameAsInteger['categorieimage'] := PC.Categorie;
             qry1.Execute;
-            PC.ID := StringToGUID(qry.Fields.AsString[0]);
+            PC.ID := StringToGUID(qry1.Fields.AsString[0]);
           end
           else if TFile.Exists(PC.NewNom) then
           begin // couvertures stockées (q2)
@@ -1737,7 +1859,7 @@ begin
             end;
             qry2.Params.ByNameAsInteger['categorieimage'] := PC.Categorie;
             qry2.Execute;
-            PC.ID := StringToGUID(qry.Fields.AsString[0]);
+            PC.ID := StringToGUID(qry2.Fields.AsString[0]);
           end;
         end
         else

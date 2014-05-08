@@ -19,6 +19,7 @@ type
     class procedure ProcessReadFromJSON(Entity: TParaBDFull; json: TdwsJSONObject); overload;
 
     class procedure ProcessReadFromJSON(Entity: TBaseLite; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TPhotoLite; json: TdwsJSONObject); overload;
     class procedure ProcessReadFromJSON(Entity: TCouvertureLite; json: TdwsJSONObject); overload;
     class procedure ProcessReadFromJSON(Entity: TParaBDLite; json: TdwsJSONObject); overload;
     class procedure ProcessReadFromJSON(Entity: TAuteurLite; json: TdwsJSONObject); overload;
@@ -91,10 +92,8 @@ begin
   Entity.Gratuit := ReadValueFromJSON('Gratuit', Entity.Gratuit, json);
   Entity.DateAchat := ReadValueFromJSON('DateAchat', Entity.DateAchat, json);
   // property sDateAchat: string read Get_sDateAchat;
-  Entity.HasImage := ReadValueFromJSON('HasImage', Entity.HasImage, json);
-  Entity.ImageStockee := ReadValueFromJSON('ImageStockee', Entity.ImageStockee, json);
-  Entity.FichierImage := ReadValueFromJSON('FichierImage', Entity.FichierImage, json);
   ReadListEntitiesFromJSON<TUniversLite, TFactoryUniversLite>(Entity.Univers, json.Items['Univers'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TPhotoLite, TFactoryPhotoLite>(Entity.Photos, json.Items['Photos'] as TdwsJSONArray);
 end;
 
 class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TEditionFull; json: TdwsJSONObject);
@@ -129,12 +128,16 @@ begin
   ReadListEntitiesFromJSON<TCouvertureLite, TFactoryCouvertureLite>(Entity.Couvertures, json.Items['Couvertures'] as TdwsJSONArray);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TCouvertureLite; json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TPhotoLite; json: TdwsJSONObject);
 begin
   Entity.NewNom := ReadValueFromJSON('NewNom', Entity.NewNom, json);
   Entity.OldNom := ReadValueFromJSON('OldNom', Entity.OldNom, json);
   Entity.NewStockee := ReadValueFromJSON('NewStockee', Entity.NewStockee, json);
   Entity.OldStockee := ReadValueFromJSON('OldStockee', Entity.OldStockee, json);
+end;
+
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TCouvertureLite; json: TdwsJSONObject);
+begin
   Entity.Categorie := StrToInt(json.Items['Categorie'].Names[0]);
   Entity.sCategorie := ReadValueFromJSON(IntToStr(Entity.Categorie), Entity.sCategorie, json.Items['Categorie'] as TdwsJSONObject);
 end;

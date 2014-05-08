@@ -619,8 +619,6 @@ begin
           PC.ID := GUID_NULL;
           PC.OldNom := Files[i];
           PC.NewNom := PC.OldNom;
-          PC.OldStockee := TGlobalVar.Utilisateur.Options.ImagesStockees;
-          PC.NewStockee := PC.OldStockee;
           if FCurrentEditionComplete.Couvertures.Count = 1 then
             PC.Categorie := 600
           else
@@ -886,16 +884,13 @@ begin
 end;
 
 procedure TfrmEditAlbum.vstImagesChecked(Sender: TBaseVirtualTree; Node: PVirtualNode);
-var
-  PC: TCouvertureLite;
 begin
-  PC := FCurrentEditionComplete.Couvertures[Node.Index];
-  PC.NewStockee := (Node.CheckState = csCheckedNormal);
+  FCurrentEditionComplete.Couvertures[Node.Index].NewStockee := (Node.CheckState = csCheckedNormal);
 end;
 
 procedure TfrmEditAlbum.vstImagesEditing(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; var Allowed: Boolean);
 // var
-// PC: TCouverture;
+// PC: TCouvertureLite;
 begin
   // PC := FCurrentEditionComplete.Couvertures[Node.Index];
   // Allowed := (PC.Reference <> -1) and (PC.NewStockee) and (PC.NewStockee = PC.OldStockee);
