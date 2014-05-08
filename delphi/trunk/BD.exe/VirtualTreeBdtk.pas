@@ -730,7 +730,7 @@ begin
             SetLength(FCountPointers, Length(FCountPointers) + 250);
           FCountPointers[i].Count := FIELDS.AsInteger[1];
           FCountPointers[i].Initiale := FIELDS.AsString[0];
-          if FMode in [vmAlbumsSerie, vmAlbumsEditeur, vmAlbumsCollection, vmAchatsAlbumsEditeur, vmAlbumsSerieUnivers] then
+          if FMode in [vmAlbumsSerie, vmAlbumsEditeur, vmAlbumsCollection, vmAchatsAlbumsEditeur, vmAlbumsSerieUnivers, vmParaBDSerie, vmParaBDSerieUnivers] then
             FCountPointers[i].Initiale := FormatTitre(FCountPointers[i].Initiale);
           if FMode = vmAlbumsCollection then
             AjoutString(FCountPointers[i].Initiale, FormatTitre(FIELDS.AsString[3]), ' ', '(', ')');
