@@ -528,6 +528,7 @@ begin
   frmRepertoire.vstSeries.InitializeRep;
   frmRepertoire.vstUnivers.InitializeRep;
   frmRepertoire.vstAuteurs.InitializeRep;
+  frmRepertoire.vstParaBD.InitializeRep;
 end;
 
 procedure TfrmFond.actRelireOptionsExecute(Sender: TObject);
