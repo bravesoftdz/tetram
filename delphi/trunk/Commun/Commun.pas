@@ -465,12 +465,12 @@ end;
 
 function BDStrToDouble(const Value: string): Double;
 begin
-  Result := ICUStrToDouble(Value, uloc_getDefault);
+  Result := ICUStrToDouble(StringReplace(Value, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), uloc_getDefault);
 end;
 
 function BDStrToDoubleDef(const Value: string; const Default: Double): Double;
 begin
-  Result := ICUStrToDoubleDef(Value, Default, uloc_getDefault);
+  Result := ICUStrToDoubleDef(StringReplace(Value, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), Default, uloc_getDefault);
 end;
 
 initialization

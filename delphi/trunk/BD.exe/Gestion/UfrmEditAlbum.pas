@@ -832,7 +832,7 @@ procedure TfrmEditAlbum.SpeedButton3Click(Sender: TObject);
 var
   c: Currency;
 begin
-  c := StrToCurrDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+  c := BDStrToDoubleDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
   if Convertisseur(SpeedButton3, c) then
     if edPrix.Focused then
       edPrix.Text := BDDoubleToStr(c)
@@ -918,7 +918,7 @@ begin
   begin
     FCurrentEditionComplete.ISBN := edISBN.Text;
     FCurrentEditionComplete.AnneeEdition := StrToIntDef(edAnneeEdition.Text, 0);
-    FCurrentEditionComplete.Prix := BDStrToDoubleDef(StringReplace(edPrix.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+    FCurrentEditionComplete.Prix := BDStrToDoubleDef(edPrix.Text, 0);
     FCurrentEditionComplete.Editeur.ID_Editeur := vtEditEditeurs.CurrentValue;
     FCurrentEditionComplete.Editeur.NomEditeur := vtEditEditeurs.VTEdit.PopupWindow.TreeView.Caption;
     FCurrentEditionComplete.Collection.ID := vtEditCollections.CurrentValue;
@@ -937,7 +937,7 @@ begin
     FCurrentEditionComplete.SensLecture := MakeOption(cbxSensLecture.Value, cbxSensLecture.Caption);
     FCurrentEditionComplete.NombreDePages := StrToIntDef(edNombreDePages.Text, 0);
     FCurrentEditionComplete.AnneeCote := StrToIntDef(edAnneeCote.Text, 0);
-    FCurrentEditionComplete.PrixCote := BDStrToDoubleDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
+    FCurrentEditionComplete.PrixCote := BDStrToDoubleDef(edPrixCote.Text, 0);
     if dtpAchat.Checked then
       FCurrentEditionComplete.DateAchat := Trunc(dtpAchat.Date)
     else
@@ -1310,8 +1310,8 @@ procedure TfrmEditAlbum.VDTButton14Click(Sender: TObject);
 var
   c: Currency;
 begin
-  c := BDStrToDoubleDef(StringReplace(edPrixCote.Text, TGlobalVar.Utilisateur.Options.SymboleMonnetaire, '', []), 0);
-  if Convertisseur(SpeedButton3, c) then
+  c := BDStrToDoubleDef(edPrixCote.Text, 0);
+  if Convertisseur(VDTButton14, c) then
     if edPrixCote.Focused then
       edPrixCote.Text := BDDoubleToStr(c)
     else

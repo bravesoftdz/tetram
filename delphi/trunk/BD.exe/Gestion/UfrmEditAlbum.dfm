@@ -1,6 +1,6 @@
 object frmEditAlbum: TfrmEditAlbum
   Left = 480
-  Top = 108
+  Top = 77
   ActiveControl = edTitre
   Caption = 'Saisie d'#39'album'
   ClientHeight = 829
@@ -13,6 +13,7 @@ object frmEditAlbum: TfrmEditAlbum
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
+  Position = poDesigned
   OnActivate = FormActivate
   OnCreate = FormCreate
   OnDestroy = FormDestroy
@@ -227,7 +228,7 @@ object frmEditAlbum: TfrmEditAlbum
       Left = 601
       Top = 613
       Width = 22
-      Height = 20
+      Height = 21
       Anchors = [akTop, akRight]
       Enabled = False
       OnClick = VDTButton5Click
@@ -320,7 +321,7 @@ object frmEditAlbum: TfrmEditAlbum
       Left = 225
       Top = 343
       Width = 112
-      Height = 20
+      Height = 21
       Caption = 'Nouvelle'
       Flat = False
       OnClick = VDTButton3Click
@@ -391,7 +392,7 @@ object frmEditAlbum: TfrmEditAlbum
     end
     object Label29: TLabel
       Left = 11
-      Top = 85
+      Top = 86
       Width = 43
       Height = 13
       Alignment = taRightJustify
@@ -434,16 +435,45 @@ object frmEditAlbum: TfrmEditAlbum
       Caption = ' '
       TabOrder = 17
       object SpeedButton3: TVDTButton
-        Left = 304
+        Left = 355
         Top = 93
-        Width = 72
+        Width = 21
         Height = 21
-        Caption = 'Convertisseur'
-        Flat = False
+        Margins.Left = 0
         OnClick = SpeedButton3Click
+        PngImage.Data = {
+          89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+          61000000097048597300000B1300000B1301009A9C180000033C4944415478DA
+          8D934D6C54551886DF73CFDC9FB9F33FB52D9DB6606B33990E6905A58A0B1D35
+          05230901A22C80545888606041485CB8538C71A13B88BA50C0850B2A42521522
+          0926562D3F032833B1A528D24945683BED0CDC7B67E6FE9DE3F127D1200BDFE4
+          AC4ECEF39DEF7BDF8FD8977BC13DD6641B4E8EB9AC8FAA8176DF6311EE7836A1
+          648E503AA184E43CD5A4226704778BF0D2C39B8DDF660F38152B416371D4980A
+          AFC1A0C97F1C0F9E6981C81C91B6451F70976C679E235EFD03223307FB0AC927
+          97F505DA0240BD8EB9520576C381A42808108A96740BB8A962E1C204B4D8D541
+          259138CDFD7F010E66B07369AEF3ADCC0B9978389D8014D4E0B936ECAA03DF24
+          F0170C4C9F2C81E833C80E65416C6FD0B7EBA721497F010E0F85A59EB8790E65
+          AC48AD8D20B4240C1A0C8033058D590F46C984A436A335DB8580B100E64EBE28
+          07ED0F19FB1B609E7A70BDDABDF878E1E31FE15B55C4B21C7AAB0CAD390C25A2
+          825205A46C61FEE21D5CF9AEFCED99CBEC713B06E83AC07C0138F294BEE1B10D
+          DDC7F47412AE6C0A661D4A9481535B54B3C0674C142F85E1F4BE091E4E17BF3E
+          F4EE9EFCD1E1AF3401106C9091EDEAD6EE54D361120A22B99C434D12304906F7
+          397CC341F9873BF8F2C6B358B1ED3D6416CBB859B98DE1BD1B1F1AFF7CF4FB78
+          8700544797FD3275E6465730A143BB4F58D7EC83EA32A400051A2EAE8E1AF866
+          FE793CBDF50DA4DB43301C1FF9B363D73E7B754B8F356B82F81F0DF05BC9186A
+          B7A7A0461CF103D1B72E41A2C26F9B63E2C43CC6AD55E8DFB61F6EF53A526D8B
+          E069717C71E0B58D854F478E92D7FBB163D3FAD4FBC9C11690A80B22B9608CC1
+          356BB06F7AF8356F62DABB1F2B5F19835599816554D19AEA44213F76B2F2F3E4
+          1A9108228DAC53FCB56BA2402F852D8623692A08747806C0EB21942E94A10EEC
+          43D31343183F7F16E1908E8A519BAB33D6F167A49604B16E68395E7EE451B53F
+          DB1F690B36ABC242914CDFC7ADEB356FF8D0C2F4A4D164EEDC7FA22F9B7900F1
+          6818856211CFAC5E1DBD7B3B3A85F5DD3420CA1348DC179DD4D110767371D733
+          90E97A69EFBEB757E672391CFFE4C8B15DBB773FF7DFF5BAB7344AD0C938DA3B
+          A2CAAA584BAAF6D3B5A977C48C6DC239FF9F8C7BEB776405579A8AA8E2790000
+          000049454E44AE426082}
       end
       object Label9: TLabel
-        Left = 210
+        Left = 244
         Top = 96
         Width = 25
         Height = 13
@@ -470,10 +500,10 @@ object frmEditAlbum: TfrmEditAlbum
         Layout = tlCenter
       end
       object VDTButton6: TVDTButton
-        Left = 304
+        Left = 305
         Top = 120
         Width = 48
-        Height = 20
+        Height = 21
         Caption = 'V'#233'rifier'
         Enabled = False
         Flat = False
@@ -552,7 +582,7 @@ object frmEditAlbum: TfrmEditAlbum
         Items = <>
       end
       object Label18: TLabel
-        Left = 222
+        Left = 217
         Top = 69
         Width = 52
         Height = 13
@@ -621,7 +651,8 @@ object frmEditAlbum: TfrmEditAlbum
         Left = 355
         Top = 120
         Width = 21
-        Height = 20
+        Height = 21
+        Margins.Left = 0
         OnClick = VDTButton13Click
         PngImage.Data = {
           89504E470D0A1A0A0000000D4948445200000010000000100803000000282D0F
@@ -632,7 +663,7 @@ object frmEditAlbum: TfrmEditAlbum
           600268860200D68B4C1F0B8D881E0000000049454E44AE426082}
       end
       object Label24: TLabel
-        Left = 108
+        Left = 143
         Top = 175
         Width = 38
         Height = 13
@@ -641,7 +672,7 @@ object frmEditAlbum: TfrmEditAlbum
         Layout = tlCenter
       end
       object Label25: TLabel
-        Left = 204
+        Left = 239
         Top = 175
         Width = 30
         Height = 13
@@ -650,13 +681,42 @@ object frmEditAlbum: TfrmEditAlbum
         Layout = tlCenter
       end
       object VDTButton14: TVDTButton
-        Left = 304
+        Left = 355
         Top = 172
-        Width = 72
+        Width = 21
         Height = 21
-        Caption = 'Convertisseur'
-        Flat = False
+        Margins.Left = 1
         OnClick = VDTButton14Click
+        PngImage.Data = {
+          89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
+          61000000097048597300000B1300000B1301009A9C180000033C4944415478DA
+          8D934D6C54551886DF73CFDC9FB9F33FB52D9DB6606B33990E6905A58A0B1D35
+          05230901A22C80545888606041485CB8538C71A13B88BA50C0850B2A42521522
+          0926562D3F032833B1A528D24945683BED0CDC7B67E6FE9DE3F127D1200BDFE4
+          AC4ECEF39DEF7BDF8FD8977BC13DD6641B4E8EB9AC8FAA8176DF6311EE7836A1
+          648E503AA184E43CD5A4226704778BF0D2C39B8DDF660F38152B416371D4980A
+          AFC1A0C97F1C0F9E6981C81C91B6451F70976C679E235EFD03223307FB0AC927
+          97F505DA0240BD8EB9520576C381A42808108A96740BB8A962E1C204B4D8D541
+          259138CDFD7F010E66B07369AEF3ADCC0B9978389D8014D4E0B936ECAA03DF24
+          F0170C4C9F2C81E833C80E65416C6FD0B7EBA721497F010E0F85A59EB8790E65
+          AC48AD8D20B4240C1A0C8033058D590F46C984A436A335DB8580B100E64EBE28
+          07ED0F19FB1B609E7A70BDDABDF878E1E31FE15B55C4B21C7AAB0CAD390C25A2
+          825205A46C61FEE21D5CF9AEFCED99CBEC713B06E83AC07C0138F294BEE1B10D
+          DDC7F47412AE6C0A661D4A9481535B54B3C0674C142F85E1F4BE091E4E17BF3E
+          F4EE9EFCD1E1AF3401106C9091EDEAD6EE54D361120A22B99C434D12304906F7
+          397CC341F9873BF8F2C6B358B1ED3D6416CBB859B98DE1BD1B1F1AFF7CF4FB78
+          8700544797FD3275E6465730A143BB4F58D7EC83EA32A400051A2EAE8E1AF866
+          FE793CBDF50DA4DB43301C1FF9B363D73E7B754B8F356B82F81F0DF05BC9186A
+          B7A7A0461CF103D1B72E41A2C26F9B63E2C43CC6AD55E8DFB61F6EF53A526D8B
+          E069717C71E0B58D854F478E92D7FBB163D3FAD4FBC9C11690A80B22B9608CC1
+          356BB06F7AF8356F62DABB1F2B5F19835599816554D19AEA44213F76B2F2F3E4
+          1A9108228DAC53FCB56BA2402F852D8623692A08747806C0EB21942E94A10EEC
+          43D31343183F7F16E1908E8A519BAB33D6F167A49604B16E68395E7EE451B53F
+          DB1F690B36ABC242914CDFC7ADEB356FF8D0C2F4A4D164EEDC7FA22F9B7900F1
+          6818856211CFAC5E1DBD7B3B3A85F5DD3420CA1348DC179DD4D110767371D733
+          90E97A69EFBEB757E672391CFFE4C8B15DBB773FF7DFF5BAB7344AD0C938DA3B
+          A2CAAA584BAAF6D3B5A977C48C6DC239FF9F8C7BEB776405579A8AA8E2790000
+          000049454E44AE426082}
       end
       object Label26: TLabel
         Left = 116
@@ -716,9 +776,9 @@ object frmEditAlbum: TfrmEditAlbum
         Caption = 'Notes :'
       end
       object edPrix: TEditLabeled
-        Left = 237
+        Left = 275
         Top = 93
-        Width = 64
+        Width = 79
         Height = 21
         AutoSelect = False
         AutoSize = False
@@ -758,8 +818,8 @@ object frmEditAlbum: TfrmEditAlbum
       object edISBN: TEditLabeled
         Left = 60
         Top = 120
-        Width = 241
-        Height = 20
+        Width = 242
+        Height = 21
         AutoSelect = False
         AutoSize = False
         BevelKind = bkTile
@@ -911,7 +971,7 @@ object frmEditAlbum: TfrmEditAlbum
         CurrencyChar = #0
       end
       object edAnneeCote: TEditLabeled
-        Left = 152
+        Left = 187
         Top = 172
         Width = 46
         Height = 21
@@ -927,9 +987,9 @@ object frmEditAlbum: TfrmEditAlbum
         CurrencyChar = #0
       end
       object edPrixCote: TEditLabeled
-        Left = 240
+        Left = 275
         Top = 172
-        Width = 64
+        Width = 79
         Height = 21
         AutoSelect = False
         AutoSize = False
@@ -952,7 +1012,7 @@ object frmEditAlbum: TfrmEditAlbum
         Left = 216
         Top = 146
         Width = 160
-        Height = 20
+        Height = 21
         BevelKind = bkTile
         BorderStyle = bsNone
         TabOrder = 13
@@ -1034,7 +1094,7 @@ object frmEditAlbum: TfrmEditAlbum
       Left = 175
       Top = 57
       Width = 39
-      Height = 20
+      Height = 21
       BevelKind = bkTile
       BorderStyle = bsNone
       MaxLength = 4
@@ -1050,7 +1110,7 @@ object frmEditAlbum: TfrmEditAlbum
       Left = 56
       Top = 4
       Width = 674
-      Height = 20
+      Height = 21
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
@@ -1218,7 +1278,7 @@ object frmEditAlbum: TfrmEditAlbum
       Left = 56
       Top = 57
       Width = 39
-      Height = 20
+      Height = 21
       BevelKind = bkTile
       BorderStyle = bsNone
       MaxLength = 3
@@ -1276,7 +1336,7 @@ object frmEditAlbum: TfrmEditAlbum
       Left = 424
       Top = 57
       Width = 39
-      Height = 20
+      Height = 21
       BevelKind = bkTile
       BorderStyle = bsNone
       Enabled = False
@@ -1296,7 +1356,7 @@ object frmEditAlbum: TfrmEditAlbum
       Left = 472
       Top = 57
       Width = 39
-      Height = 20
+      Height = 21
       BevelKind = bkTile
       BorderStyle = bsNone
       Enabled = False
@@ -1316,7 +1376,7 @@ object frmEditAlbum: TfrmEditAlbum
       Left = 152
       Top = 57
       Width = 22
-      Height = 20
+      Height = 21
       BevelKind = bkTile
       BorderStyle = bsNone
       MaxLength = 2
