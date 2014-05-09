@@ -839,13 +839,24 @@ procedure TParaBDFull.Clear;
 begin
   inherited;
   ID_ParaBD := GUID_NULL;
-  TitreParaBD := '';
 
+  AnneeEdition := 0;
+  AnneeCote := 0;
+  TitreParaBD := '';
   Auteurs.Clear;
   Description := '';
   Serie.DoClear;
+  Prix := 0;
+  PrixCote := 0;
+  Dedicace := False;
+  Numerote := False;
+  Stock := True;
+  Offert := False;
+  Gratuit := False;
+  DateAchat := -1;
   Univers.Clear;
   UniversFull.Clear;
+  Photos.Clear;
 end;
 
 constructor TParaBDFull.Create;
