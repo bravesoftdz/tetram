@@ -40,7 +40,6 @@ type
     cbxCategorie: TLightComboCheck;
     Panel1: TPanel;
     imgVisu: TImage;
-    cbNumerote: TCheckBoxLabeled;
     ChoixImageDialog: TOpenPictureDialog;
     Frame11: TframBoutons;
     Bevel2: TBevel;
@@ -57,6 +56,7 @@ type
     VDTButton5: TVDTButton;
     VDTButton4: TVDTButton;
     Bevel5: TBevel;
+    cbNumerote: TCheckBoxLabeled;
     procedure cbOffertClick(Sender: TObject);
     procedure cbGratuitClick(Sender: TObject);
     procedure edPrixChange(Sender: TObject);
