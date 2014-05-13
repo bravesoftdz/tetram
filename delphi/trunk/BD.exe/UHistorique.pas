@@ -101,7 +101,7 @@ uses MAJ, UfrmFond, Forms, Proc_Gestions, UfrmConsole, TypInfo, UdmPrinc,
 const
   UsedInGestion = [fcGestionAjout, fcGestionModif, fcGestionSupp, fcGestionAchat, fcConflitImport];
   Modes = [fcModeConsultation, fcModeGestion];
-  Specials = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire, fcRefreshRepertoireData,fcConsole, fcScripts];
+  Specials = [fcActionBack, fcActionRefresh, fcPreview, fcRecreateToolBar, fcRefreshRepertoire, fcRefreshRepertoireData, fcConsole, fcScripts];
   NoSaveHistorique = Specials
   // à cause des callback, les appels de gestion ne peuvent pas être sauvés dans l'historique
   // et puis je vois pas bien à quoi ça pourrait servir
