@@ -75,7 +75,7 @@ uses
 
 begin
   {$IFDEF WIN64}
-  Ce projet n'est pas compilable en 64 bits
+  {$Message Fatal 'Ce projet n''est pas compilable en 64 bits: les moteurs de scripts ne supportent pas ce mode'}
   {$ENDIF}
 
   Application.Initialize;

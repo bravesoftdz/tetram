@@ -257,7 +257,7 @@ begin
           if (masterEngine.DebugPlugin.Messages.ItemCount > 0) then
             ShowMessageFmt('Erreur d''exécution du script "%s" :'#13#10'%s', [scriptName, masterEngine.DebugPlugin.Messages[0]])
           else
-            ShowMessageFmt('Erreur d''exécution du script "%s"', [scriptName]);
+            ShowMessageFmt('Erreur inconnue d''exécution du script "%s"', [scriptName]);
         end;
       end
       else

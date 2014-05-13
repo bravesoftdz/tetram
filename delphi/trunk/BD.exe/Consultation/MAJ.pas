@@ -247,7 +247,7 @@ var
   archiveName, scriptName: string;
   o, album, options, params: TdwsJSONObject;
   frmChoixScript: TfrmChoixScript;
-  cmdLine, dummy: string;
+  cmdLine, dummy, errResult: string;
   item: TJclCompressionItem;
   i: Integer;
   js: TStringStream;
@@ -285,7 +285,7 @@ begin
     end;
 
     cmdLine := Format('"%s" /run "%s" /dh %d', [TPath.Combine(TPath.GetLibraryPath, 'BDScript.exe'), archiveName, Application.MainFormHandle]);
-    if Execute(cmdLine, dummy) = ScriptRunOK then
+    if Execute(cmdLine, dummy, errResult) = ScriptRunOK then
     begin
       archDecompress := TJcl7zDecompressArchive.Create(archiveName);
       js := TStringStream.Create;
