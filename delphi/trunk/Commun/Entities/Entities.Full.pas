@@ -29,6 +29,20 @@ type
     class operator Implicit(a: RLongString): string;
   end;
 
+  PTriStateValue = ^RTriStateValue;
+
+  RTriStateValue = record
+  private
+    Value: Integer;
+    function IsUndefined: Boolean;
+  public
+    class operator Implicit(a: Boolean): RTriStateValue;
+    class operator Implicit(a: RTriStateValue): Integer;
+    class function FromInteger(a: Integer): RTriStateValue; static;
+    procedure SetUndefined;
+    property Undefined: Boolean read IsUndefined;
+  end;
+
   POption = ^ROption;
 
   ROption = record
@@ -119,7 +133,7 @@ type
   TSerieFull = class(TObjetFull)
   strict private
     FTitreSerie: RAutoTrimString;
-    FTerminee: Integer;
+    FTerminee: RTriStateValue;
     FSujet: RLongString;
     FNotes: RLongString;
     FCollection: TCollectionLite;
@@ -131,12 +145,12 @@ type
     FComplete: Boolean;
     FScenaristes: TObjectList<TAuteurLite>;
     FSuivreSorties: Boolean;
-    FCouleur: Integer;
+    FCouleur: RTriStateValue;
     FDessinateurs: TObjectList<TAuteurLite>;
     FAlbums: TObjectList<TAlbumLite>;
     FParaBD: TObjectList<TParaBDLite>;
     FNbAlbums: Integer;
-    FVO: Integer;
+    FVO: RTriStateValue;
     FReliure: ROption;
     FEtat: ROption;
     FFormatEdition: ROption;
@@ -161,7 +175,7 @@ type
     property ID_Editeur: RGUIDEx read GetID_Editeur;
     property ID_Collection: RGUIDEx read GetID_Collection;
     property TitreSerie: RAutoTrimString read FTitreSerie write SetTitreSerie;
-    property Terminee: Integer read FTerminee write FTerminee;
+    property Terminee: RTriStateValue read FTerminee write FTerminee;
     property Genres: TStringList read FGenres;
     property Sujet: RLongString read FSujet write FSujet;
     property Notes: RLongString read FNotes write FNotes;
@@ -177,8 +191,8 @@ type
     property Scenaristes: TObjectList<TAuteurLite> read FScenaristes;
     property Dessinateurs: TObjectList<TAuteurLite> read FDessinateurs;
     property Coloristes: TObjectList<TAuteurLite> read FColoristes;
-    property VO: Integer read FVO write FVO;
-    property Couleur: Integer read FCouleur write FCouleur;
+    property VO: RTriStateValue read FVO write FVO;
+    property Couleur: RTriStateValue read FCouleur write FCouleur;
     property Etat: ROption read FEtat write FEtat;
     property Reliure: ROption read FReliure write FReliure;
     property TypeEdition: ROption read FTypeEdition write FTypeEdition;
@@ -454,6 +468,39 @@ begin
   Result := a.Value;
 end;
 
+{ RTriStateValue }
+
+class function RTriStateValue.FromInteger(a: Integer): RTriStateValue;
+begin
+  if (a = -1) or (a in [0 .. 1]) then
+    Result.Value := a
+  else
+    Result.SetUndefined;
+end;
+
+class operator RTriStateValue.Implicit(a: Boolean): RTriStateValue;
+begin
+  if a then
+    Result.Value := 1
+  else
+    Result.Value := 0;
+end;
+
+class operator RTriStateValue.Implicit(a: RTriStateValue): Integer;
+begin
+  Result := a.Value;
+end;
+
+function RTriStateValue.IsUndefined: Boolean;
+begin
+  Result := Value = -1;
+end;
+
+procedure RTriStateValue.SetUndefined;
+begin
+  Value := -1;
+end;
+
 { ROption }
 
 class operator ROption.Implicit(a: ROption): Integer;
@@ -693,9 +740,9 @@ begin
   Dessinateurs.Clear;
   Coloristes.Clear;
   Univers.Clear;
-  Couleur := Integer(cbGrayed);
-  VO := Integer(cbGrayed);
-  Terminee := Integer(cbGrayed);
+  Couleur.SetUndefined;
+  VO.SetUndefined;
+  Terminee.SetUndefined;
   SiteWeb := '';
   Complete := False;
   SuivreManquants := True;

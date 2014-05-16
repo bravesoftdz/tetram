@@ -2004,9 +2004,9 @@ begin
       Entity.Notation := qry.Fields.ByNameAsSmallint['notation'];
       if Entity.Notation = 0 then
         Entity.Notation := 900;
-      Entity.Terminee := qry.Fields.ByNameAsInteger['terminee'];
-      Entity.VO := qry.Fields.ByNameAsInteger['vo'];
-      Entity.Couleur := qry.Fields.ByNameAsInteger['couleur'];
+      Entity.Terminee := RTriStateValue.FromInteger(qry.Fields.ByNameAsInteger['terminee']);
+      Entity.VO := RTriStateValue.FromInteger(qry.Fields.ByNameAsInteger['vo']);
+      Entity.Couleur := RTriStateValue.FromInteger(qry.Fields.ByNameAsInteger['couleur']);
       Entity.SuivreSorties := Entity.RecInconnu or qry.Fields.ByNameAsBoolean['suivresorties'];
       Entity.Complete := qry.Fields.ByNameAsBoolean['complete'];
       Entity.SuivreManquants := Entity.RecInconnu or qry.Fields.ByNameAsBoolean['suivremanquants'];
@@ -2185,15 +2185,15 @@ begin
     else
       qry.Params.ByNameAsString['id_serie'] := GUIDToString(Entity.ID_Serie);
     qry.Params.ByNameAsString['titreserie'] := Entity.TitreSerie;
-    if TCheckBoxState(Entity.Terminee) = cbGrayed then
+    if Entity.Terminee.Undefined then
       qry.Params.ByNameIsNull['terminee'] := True
     else
       qry.Params.ByNameAsInteger['terminee'] := Entity.Terminee;
-    if TCheckBoxState(Entity.VO) = cbGrayed then
+    if Entity.VO.Undefined then
       qry.Params.ByNameIsNull['vo'] := True
     else
       qry.Params.ByNameAsInteger['vo'] := Entity.VO;
-    if TCheckBoxState(Entity.Couleur) = cbGrayed then
+    if Entity.Couleur.Undefined then
       qry.Params.ByNameIsNull['couleur'] := True
     else
       qry.Params.ByNameAsInteger['couleur'] := Entity.Couleur;

@@ -34,7 +34,7 @@ procedure SIRegister_TStringList(CL: TPSPascalCompiler);
 begin
   with CL.FindClass('TStringList') do
   begin
-    RegisterMethod('procedure Split(const Chaine: string; Sep: Char)');
+    RegisterMethod('procedure Split(const Chaine: string; const Sep: string)');
   end;
 end;
 

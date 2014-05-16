@@ -31,7 +31,7 @@ implementation
 uses
   System.SyncObjs, Vcl.Forms, System.StrUtils, UfrmSplash, CommonConst, Textes, System.DateUtils, System.UITypes, Divers, UfrmScripts, System.IOUtils,
   UScriptEngineIntf, UMasterEngine, UScriptList, dwsJSON, Entities.Full, JclCompression, Entities.Deserializer, Entities.FactoriesFull, Entities.DaoLambdaJSON,
-  Entities.Serializer, JsonSerializer, Entities.Lite,
+  Entities.Serializer, JsonSerializer, Entities.Lite, Commun,
   System.Generics.Collections;
 
 {$R *.dfm}
@@ -156,6 +156,8 @@ procedure BuildResult(AlbumToImport: TAlbumFull; DataFile: TFileName);
 var
   Archive: TJcl7zCompressArchive;
   o: TdwsJSONObject;
+  i: Integer;
+  s: string;
   Edition: TEditionFull;
   Couverture: TCouvertureLite;
   ListFiles: TList<TFileName>;
@@ -169,6 +171,10 @@ begin
     Archive := TJcl7zCompressArchive.Create(DataFile);
     o := TdwsJSONObject.Create;
     try
+      for i := 0 to Pred(AlbumToImport.Serie.Genres.Count) do
+        if AlbumToImport.Serie.Genres.Names[i] = '' then
+          AlbumToImport.Serie.Genres[i] := sGUID_NULL + '=' + AlbumToImport.Serie.Genres[i];
+
       for Edition in AlbumToImport.Editions do
         for Couverture in Edition.Couvertures do
         begin
@@ -316,8 +322,8 @@ begin
     if TFile.Exists(scriptAutoRun) then
     begin
       Application.MainFormOnTaskbar := False;
-//      if FindCmdLineSwitch('dh', s, True, [clstValueNextParam]) then
-//        Application.DialogHandle := StrToIntDef(s, Application.DialogHandle);
+      // if FindCmdLineSwitch('dh', s, True, [clstValueNextParam]) then
+      // Application.DialogHandle := StrToIntDef(s, Application.DialogHandle);
       ReadExternalData;
       AutoRun(scriptAutoRun);
     end;

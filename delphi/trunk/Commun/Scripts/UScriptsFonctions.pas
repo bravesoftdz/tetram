@@ -50,7 +50,7 @@ type
 
 function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;
 function AskSearchEntry(const Labels: array of string; var Search: string; var index: Integer): Boolean;
-procedure Split(SL: TStringList; const Chaine: string; Sep: Char);
+procedure Split(SL: TStringList; const Chaine: string; const Sep: string);
 function CombineURL(const Root, URL: string): string;
 function ScriptStrToFloatDef(const S: string; const default: Extended): Extended;
 
@@ -414,10 +414,15 @@ begin
   end;
 end;
 
-procedure Split(SL: TStringList; const Chaine: string; Sep: Char);
+procedure Split(SL: TStringList; const Chaine: string; const Sep: string);
 begin
-  SL.Delimiter := Sep;
-  SL.DelimitedText := Chaine;
+  if Length(Sep) = 1 then
+  begin
+    SL.Delimiter := Sep[1];
+    SL.DelimitedText := Chaine;
+  end
+  else
+    SL.Text := StringReplace(Chaine, Sep, #13#10, [rfReplaceAll]);
 end;
 
 function CombineURL(const Root, URL: string): string;
