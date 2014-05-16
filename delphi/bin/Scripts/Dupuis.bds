@@ -5,54 +5,54 @@
     <Description/>
     <ScriptVersion>1.4</ScriptVersion>
     <BDVersion>2.2.3.22</BDVersion>
-    <LastUpdate>Thu, 5 Dec 2013 19:35:58 +0100</LastUpdate>
+    <LastUpdate>Fri, 16 May 2014 13:09:10 +0200</LastUpdate>
     <Engine>PascalScript</Engine>
   </Infos>
-  <Options/>
+  <Options>
+    <Option Label="Pays" Values="Belgique|France|Pays-Bas|Suisse" Default="France"/>
+  </Options>
   <Code>program Dupuis;
 
-uses ScriptFonctions;
+uses ScriptFonctions, DefaultRegEx;
 
 const
-  urlSearchRoot = &apos;http://www.dupuis.com/servlet/jpsearch?lang=FR&apos;;
-  urlSearchGlobale = &apos;&amp;pgm=RESULT_SEARCH_ENGINE_3&amp;researchtype=3&amp;p=1&amp;init=1&amp;sel=1&amp;researchkeyword=&apos;;
-  urlSearchCategorie = &apos;&amp;pgm=RESULT_SEARCH_ENGINE&amp;researchtype=%d&amp;p=%d&amp;init=1&amp;sel=1&amp;researchkeyword=&apos;;
+  urlSearchRoot = &apos;http://www.dupuis.com/catalogue/FR/resultats_recherche.html?lang=FR&amp;init=1&amp;sel=1&apos;;
+  urlSearchGlobale = &apos;&amp;pgm=RESULT_SEARCH_ENGINE_3_V3&amp;researchtype=3&amp;p=1&amp;researchkeyword=&apos;;
+  urlSearchCategorie = &apos;&amp;pgm=RESULT_SEARCH_ENGINE_V3&amp;researchtype=%d&amp;p=%d&amp;researchkeyword=&apos;;
+  urlPlayer = &apos;http://bdi.dlpdomain.com/player_dev/&apos;;
 
-  regExResultsGlobale = &apos;&lt;table id=&quot;albums_results&quot;(?s-:.*?)&lt;!-- LIGNE BLANCHE --&gt;[\r|\n|\t]*((?s-).*?)[\r|\n|\t]*&lt;/table&gt;&apos;;
-  regExResultsGlobaleLigne = &apos;&lt;tr(?:.*?)&gt;(.*?)&lt;/tr&gt;&apos;;
+  regExResultsGlobale = &apos;&lt;table class=&quot;albums_results&quot;(?s-:.*?)&gt;[\r|\n|\t]*(?&lt;Resultats&gt;(?s-).*?)[\r|\n|\t]*&lt;/table&gt;&apos;;
+  regExResultsGlobaleLigne = &apos;&lt;tr(?:.*?)&gt;(&lt;td&gt;.*?&lt;/td&gt;)&lt;/?tr&gt;&apos;;
   regExResultsGlobaleLigneDecoupe = &apos;&lt;td(?:.*?)&gt;(?&lt;Album&gt;.*?)&lt;/td&gt;&lt;td(?:.*?)&gt;(?&lt;Auteurs&gt;.*?)&lt;/td&gt;&lt;td(?:.*?)&gt;(?&lt;Serie&gt;.*?)&lt;/td&gt;&lt;td(?:.*?)&gt;(?&lt;Collection&gt;.*?)&lt;/td&gt;&apos;;
-
-  regExResultsCategorie = &apos;&lt;div id=&quot;box_results&quot;&gt;(?s-:.*?)&lt;table(?s-:.*?)id=&quot;table_results&quot;(?s-:.*?)&lt;tr&gt;(?s-:.*?)&lt;/tr&gt;[\r|\n|\t]*(?&lt;Resultats&gt;(?s-).*?)[\r|\n|\t]*&lt;/table&gt;&apos;;
-  regExResultsCategorieNb = &apos;&lt;div id=&quot;infos_results&quot;&gt;(?:\D*?)(?&lt;NbResultats&gt;\d*?)(?:\D*?)&lt;/div&gt;&apos;;
-  regExResultsCategorieLigne = &apos;&lt;tr(?:.*?)&gt;(.*?)&lt;tr&gt;&apos;;
-  regExResultsCategorieLigneDecoupe = &apos;&lt;td(?:.*?)&gt;(?&lt;Album&gt;.*?)&lt;/td&gt;&lt;td(?:.*?)&gt;(?&lt;Serie&gt;.*?)&lt;/td&gt;&lt;td(?:.*?)&gt;(?&lt;Auteurs&gt;.*?)&lt;/td&gt;&lt;td(?:.*?)&gt;(?&lt;Collection&gt;.*?)&lt;/td&gt;&apos;;
 
   regExResultsItems = &apos;&lt;a(?:.*?)href=&quot;(?&lt;Lien&gt;.*?)&quot;(?:.*?)&gt;(?&lt;Label&gt;.*?)&lt;/a&gt;&apos;;
   regExResultsSerie = &apos;(?&lt;TitreSerie&gt;.*?) \((?:.*?)\)&apos;;
 
-  regExAlbumSerie = &apos;&lt;!-- TITRE SERIE --&gt;(?s-:.*?)&lt;h2(?:.*?)&gt;&lt;a href=&quot;(?&lt;id_serie&gt;.*?)&quot;&gt;(?&lt;titre_serie&gt;.*?)&lt;/a&gt;(?:\D*?)(?&lt;tome&gt;\d*?)&lt;/h2&gt;&apos;;
-  regExAlbumTitre = &apos;&lt;!-- TITRE ALBUM --&gt;(?s-:.*?)&lt;h1(?:.*?)&gt;(?&lt;titre_album&gt;.*?)&lt;/h1&gt;&apos;;
+  regExAlbumSerie = &apos;&lt;div id=&quot;titre_album&quot;&gt;[\r|\n|\s|\t]*&lt;h1&gt;&lt;a href=&quot;(?&lt;id_serie&gt;.*?)&quot;&gt;(?&lt;titre_serie&gt;.*?)&lt;/a&gt;[\r|\n|\s|\t]*&lt;span class=&quot;titre_album_tome&quot;&gt;(?:\D*?)(?&lt;tome&gt;\d*?)&lt;/span&gt;[\r|\n|\s|\t]*&lt;span class=&quot;titre_album_titre&quot;&gt;(?&lt;titre_album&gt;.*?)&lt;/span&gt;&lt;/h1&gt;[\r|\n|\s|\t]*&lt;/div&gt;&apos;;
+  regExAlbumTitre = &apos;&lt;span class=&quot;titre_album_titre&quot;&gt;(?&lt;titre_album&gt;.*?)&lt;/span&gt;&apos;;
   regExAlbumAuteurs = &apos;&lt;!-- AUTEURS --&gt;(?s-:.*?)&lt;ul id=&quot;auteurs&quot;&gt;((?s-).*?)&lt;/ul&gt;&apos;;
-  regExAlbumDessinateurs = &apos;&lt;!-- DESSINATEUR\(S\) --&gt;(?s-:.*?)&lt;li&gt;((?s-).*?)&lt;/li&gt;&apos;;
-  regExAlbumScenaristes = &apos;&lt;!-- SCENARISTE\(S\) --&gt;(?s-:.*?)&lt;li&gt;((?s-).*?)&lt;/li&gt;&apos;;
-  regExAlbumAuteur = &apos;&lt;a href=\\&quot;(?s-:.*?)\\&quot; &gt;(?&lt;nom&gt;.*?)&lt;/a&gt;&apos;;
-  regExAlbumCollection = &apos;&lt;!-- COLLECTIONS --&gt;(?s-:.*?)&lt;h4(?:.*?)&gt;Collection : &lt;a(?s-:.*?)&gt;(?&lt;collection&gt;.*?)&lt;/a&gt;&lt;/h4&gt;&apos;;
-  regExAlbumFiche = &apos;&lt;!-- FICHE TECHNIQUE --&gt;(?s-:.*?)&lt;table id=&quot;fiche_tech&quot;(?s-:.*?)&gt;((?s-).*?)&lt;/table&gt;&apos;;
-  regExAlbumISBN = &apos;&lt;td(?s-:.*?)&gt;ISBN (.*?)&lt;/td&gt;&apos;;
-  regExAlbumParutionPrix = &apos;&lt;td(?s-:.*?)&gt;France: (?&lt;parution&gt;.*?) - (?&lt;prix&gt;.*?) EUR&lt;/td&gt;&apos;;
-  regExAlbumNbPages = &apos;&lt;td(?s-:.*?)&gt;(?s-:.*?)(\d*?) pages(?s-:.*?)&lt;/td&gt;&apos;;
-  regExAlbumResume = &apos;&lt;!-- RESUME ALBUM --&gt;(?s-:.*?)&lt;!-- ACCROCHE --&gt;[\r|\n|\t]*((?s-).*?)[\r|\n|\t]*&lt;!-- INFOS SUPPLEMENTAIRES --&gt;&apos;;
-  regExSerieGenres = &apos;&lt;!-- GENRE --&gt;(?s-:.*?)&lt;h5&gt;Genre : (.*?)&amp;nbsp;&lt;/h5&gt;&apos;;
-  regExSerieTerminee = &apos;&lt;!-- ETAT DE LA SERIE --&gt;(?s-:.*?)&lt;h5&gt;(?s-:.*?)&lt;script&gt;var nr=&apos;&apos;(.*?)&apos;&apos;;&apos;;
-  regExAlbumCouverture = &apos;&lt;!-- IMAGE ALBUM --&gt;(?s-:.*?)&lt;a href=&quot;(?&lt;image&gt;.*?)&quot;(?s-:.*?)&gt;(?s-:.*?)&lt;/a&gt;&apos;;
+  regExAlbumDessinateurs = &apos;Dessin[\r|\n|\s|\t]*:[\r|\n|\s|\t]*(&apos; + regExURL + &apos;(?: - )?)*[\r|\n|\s|\t]*&lt;br ?/?&gt;&apos;;
+  regExAlbumScenaristes = &apos;Sc&#xE9;nario[\r|\n|\s|\t]*:[\r|\n|\s|\t]*(&apos; + regExURL + &apos;(?: - )?)*[\r|\n|\s|\t]*&lt;br ?/?&gt;&apos;;
+  regExAlbumCollection = &apos;Collection[\r|\n|\s|\t]*:[\r|\n|\s|\t]*(&apos; + regExURL + &apos;(?: - )?)*[\r|\n|\s|\t]*(?:&lt;br ?/?&gt;|&lt;/p&gt;)&apos;;
+  regExAlbumFiche = &apos;&lt;div id=&quot;info_album&quot;&gt;[\r|\n|\s|\t]*((?s-).*?)&lt;/div&gt;&apos;;
+  regExAlbumISBN = &apos;&lt;li(?s-:.*?)&gt;ISBN/Code-barre: ([\d|x|X|-]*)&lt;/li&gt;&apos;;
+  regExAlbumParutionPrix = &apos;&lt;li(?s-:.*?)&gt;%s: (?&lt;parution&gt;.*?) - (?&lt;prix&gt;.*?) EUR&lt;/li&gt;&apos;;
+  regExAlbumNbPages = &apos;&lt;li(?s-:.*?)&gt;(?s-:.*?)(\d*?) pages(?s-:.*?)&lt;/li&gt;&apos;;
+  regExAlbumResume = &apos;&lt;div id=&quot;txt_album&quot;&gt;[\r|\n|\s|\t]*&lt;p&gt;((?s-).*?)&lt;/p&gt;[\r|\n|\s|\t]*&lt;/div&gt;&apos;;
+  regExSerieGenres = &apos;&lt;li(?s-:.*?)&gt;Genre : (.*?)&amp;nbsp;&lt;/li&gt;&apos;;
+  regExSerieTerminee = &apos;&lt;li&gt;Etat de la s&#xE9;rie :[\r|\n|\s|\t]*&lt;script&gt;var nr=&apos;&apos;(.*?)&apos;&apos;;&apos;;
+  regExAlbumCouverture = &apos;&lt;div id=&quot;cover_album&quot;&gt;[\r|\n|\s|\t]*(?&lt;player&gt;&lt;a.*?&gt;)?&lt;div style=&quot;background:url\(&apos;&apos;(?&lt;image&gt;.*?)&apos;&apos;\) center 10px no-repeat ;&quot;&gt;&apos;;
   regExAlbumPlanches = &apos;&lt;div id=&quot;planches&quot;&gt;&lt;ul&gt;(?&lt;planches&gt;.*?)&lt;/ul&gt;&apos;;
+  regExAlbumIdPlayer = &apos;&lt;script&gt;[\r|\n|\s|\t]*function player\(\)(?s-:.*?)window\.open\(&apos;&apos;http://(?:[^/]+/)+(?&lt;id_player&gt;\w*)\.html&apos;&apos;&apos;;
   regExAlbumPlanche = &apos;&lt;a href=&quot;(?&lt;image&gt;.*?)&quot;(?s-:.*?)&gt;(?s-:.*?)&lt;/a&gt;&apos;;
 
 procedure ParseAlbum(const id_album: string);
 var
-  page, Auteurs, Fiche, s: string;
+  page, Auteurs, Fiche, s, idPlayer: string;
   re: TBdtkRegEx;
   sl: TStringList;
+  player, tmpso: isuperobject;
+  i: Integer;
 begin
   page := GetPage(CombineURL(urlSearchRoot, id_album), False);
 
@@ -66,12 +66,12 @@ begin
   re := TBdtkRegEx.Create;
   try
     Auteurs := ExtractRegEx(page, regExAlbumAuteurs);
-    if re.BeginSearch(ExtractRegEx(Auteurs, regExAlbumScenaristes), regExAlbumAuteur) then
+    if re.BeginSearch(page, regExAlbumScenaristes) then
       while re.Next do
-        AlbumToImport.Scenaristes.Add(MakeAuteur(re.GetCaptureByName(&apos;nom&apos;), maScenariste));
-    if re.BeginSearch(ExtractRegEx(Auteurs, regExAlbumDessinateurs), regExAlbumAuteur) then
+        AlbumToImport.Scenaristes.Add(MakeAuteur(re.GetCaptureByName(&apos;texte&apos;), maScenariste));
+    if re.BeginSearch(page, regExAlbumDessinateurs) then
       while re.Next do
-        AlbumToImport.Dessinateurs.Add(MakeAuteur(re.GetCaptureByName(&apos;nom&apos;), maDessinateur));
+        AlbumToImport.Dessinateurs.Add(MakeAuteur(re.GetCaptureByName(&apos;texte&apos;), maDessinateur));
   finally
     re.Free;
   end;
@@ -86,7 +86,7 @@ begin
   AlbumToImport.Edition.ISBN := CleanISBN(ExtractRegEx(Fiche, regExAlbumISBN));
   sl := TStringList.Create;
   try
-    sl.Split(ExtractRegExGroup(Fiche, regExAlbumParutionPrix, &apos;parution&apos;), &apos;/&apos;);
+    sl.Split(ExtractRegExGroup(Fiche, Format(regExAlbumParutionPrix, [GetOptionValue(&apos;Pays&apos;, &apos;France&apos;)]), &apos;parution&apos;), &apos;/&apos;);
     if sl.Count &gt; 0 then
       AlbumToImport.AnneeParution := StrToIntDef(sl[sl.Count - 1], 0);
     if sl.Count &gt; 1 then
@@ -94,21 +94,29 @@ begin
   finally
     sl.Free;
   end;
-  AlbumToImport.Edition.Prix := StrToFloat(ExtractRegExGroup(Fiche, regExAlbumParutionPrix, &apos;prix&apos;));
+  AlbumToImport.Edition.Prix := StrToFloat(ExtractRegExGroup(Fiche, Format(regExAlbumParutionPrix, [GetOptionValue(&apos;Pays&apos;, &apos;France&apos;)]), &apos;prix&apos;));
   AlbumToImport.Edition.NombreDePages := StrToIntDef(ExtractRegEx(Fiche, regExAlbumNbPages), 0);
 
-  s := ExtractRegEx(page, regExAlbumCouverture);
-  if s &lt;&gt; &apos;&apos; then
-    AlbumToImport.Edition.AddImageFromURL(CombineURL(urlSearchRoot, s), ctiCouverture);
-  re := TBdtkRegEx.Create;
-  try
-    s := ExtractRegEx(page, regExAlbumPlanches);
-    if re.BeginSearch(s, regExAlbumPlanche) then
-      while re.Find(s) do
-        if s &lt;&gt; &apos;&apos; then
-          AlbumToImport.Edition.AddImageFromURL(CombineURL(urlSearchRoot, s), ctiPlanche);
-  finally
-    re.Free;
+  if ExtractRegExGroup(page, regExAlbumCouverture, &apos;player&apos;) = &apos;&apos; then
+  begin
+    s := ExtractRegExGroup(page, regExAlbumCouverture, &apos;image&apos;);
+    if s &lt;&gt; &apos;&apos; then
+      AlbumToImport.Edition.AddImageFromURL(CombineURL(urlSearchRoot, s), ctiCouverture);
+  end
+  else
+  begin
+    idPlayer := ExtractRegExGroup(page, regExAlbumIdPlayer, &apos;id_player&apos;);
+    player := so(GetPage(CombineUrl(urlPlayer, idPlayer + &apos;.json&apos;), True));
+    tmpso := player.GetO(&apos;list&apos;);
+    if tmpso &lt;&gt; nil then
+      for i := 0 to tmpso.AsArray.Length - 1 do
+      begin
+        s := tmpso.AsArray[i].GetS(&apos;page&apos;);
+        if s = &apos;couv&apos; then
+          AlbumToImport.Edition.AddImageFromURL(CombineURL(urlPlayer, idPlayer + &apos;-&apos; + s + &apos;-1200.jpg&apos;), ctiCouverture)
+        else
+          AlbumToImport.Edition.AddImageFromURL(CombineURL(urlPlayer, idPlayer + &apos;-&apos; + s + &apos;-1200.jpg&apos;), ctiPlanche);
+      end;
   end;
 
   page := GetPage(AlbumToImport.Serie.SiteWeb, False);
@@ -116,10 +124,10 @@ begin
   s := Trim(ExtractRegEx(page, regExSerieGenres));
   if s &lt;&gt; &apos;&apos; then AlbumToImport.Serie.Genres.Text := StringReplace(s, &apos;&amp;nbsp;&apos;, #13#10, [rfReplaceAll]);
   s := ExtractRegEx(page, regExSerieTerminee);
-  if (s = &apos;null&apos;) or (s = &apos;0&apos;) then
-    AlbumToImport.Serie.Terminee := 1
+  if (s = &apos;-1&apos;) then
+    AlbumToImport.Serie.Terminee := 0
   else
-    AlbumToImport.Serie.Terminee := 0;
+    AlbumToImport.Serie.Terminee := 1;
 
   AlbumToImport.Import;
 end;
@@ -127,8 +135,7 @@ end;
 function RechercheParCategorie(const Titre: string; Categorie: Integer): string;
 var
   page: string;
-  p, nbResultats, nbPages: Integer;
-  ResultFound: Boolean;
+  p: Integer;
   c: TScriptChoix;
   sResultat, Album, Serie, Auteurs, Collection: string;
   titre_album, id, commentaire: string;
@@ -141,72 +148,9 @@ begin
   re := TBdtkRegEx.Create;
   try
     page := GetPage(urlSearchRoot + Format(urlSearchCategorie, [Categorie, p]) + Titre, False);
-    nbResultats := StrToIntDef(ExtractRegEx(page, regExResultsCategorieNb), 0);
-    nbPages := nbResultats div 20;
-    if nbResultats mod 20 &gt; 0 then nbPages := nbPages + 1;
-    ResultFound := nbResultats &gt; 0;
 
-    while ResultFound do
+    if re.BeginSearch(ExtractRegExGroup(page, regExResultsGlobale, &apos;Resultats&apos;), regExResultsGlobaleLigne) then
     begin
-      if re.BeginSearch(ExtractRegExGroup(page, regExResultsCategorie, &apos;Resultats&apos;), regExResultsCategorieLigne) then
-        while re.Find(sResultat) do begin
-          Album := ExtractRegExGroup(sResultat, regExResultsCategorieLigneDecoupe, &apos;Album&apos;);
-          titre_album := ExtractRegExGroup(Album, regExResultsItems, &apos;Label&apos;);
-          id := ExtractRegExGroup(Album, regExResultsItems, &apos;Lien&apos;);
-
-          commentaire := &apos;&apos;;
-          Serie := ExtractRegExGroup(sResultat, regExResultsCategorieLigneDecoupe, &apos;Serie&apos;);
-          Serie := ExtractRegExGroup(Serie, regExResultsItems, &apos;Label&apos;)
-          AjoutString1(commentaire, ExtractRegExGroup(Serie, regExResultsSerie, &apos;TitreSerie&apos;), #13#10, &apos;S&#xE9;rie: &apos;, &apos;&apos;);
-          with TBdtkRegEx.Create do
-            try
-              Auteurs := &apos;&apos;;
-              if BeginSearch(ExtractRegExGroup(sResultat, regExResultsCategorieLigneDecoupe, &apos;Auteurs&apos;), regExResultsItems) then
-                while Next do
-                  AjoutString2(Auteurs, GetCaptureByName(&apos;Label&apos;), &apos;, &apos;);
-              AjoutString1(commentaire, Auteurs, #13#10, &apos;Auteurs: &apos;, &apos;&apos;);
-            finally
-              Free;
-            end;
-          Collection := ExtractRegExGroup(sResultat, regExResultsCategorieLigneDecoupe, &apos;Collection&apos;);
-          AjoutString1(commentaire, ExtractRegExGroup(Collection, regExResultsItems, &apos;Label&apos;), #13#10, &apos;Collection: &apos;, &apos;&apos;);
-
-          c.AjoutChoix(&apos;Album&apos;, titre_album, commentaire, id);
-        end;
-
-      ResultFound := p &lt; nbPages;
-      p := p + 1;
-      if ResultFound then
-        page := GetPage(urlSearchRoot + Format(urlSearchCategorie, [Categorie, p]) + Titre, False);
-    end;
-
-    if c.ChoixCount &gt; 0 then
-      Result := c.Show
-    else
-      ShowMessage(&apos;La recherche n&apos;&apos;a pas retourn&#xE9; de r&#xE9;sultat.&apos;);
-  finally
-    re.Free;
-    c.Free;
-  end;
-end;
-
-function RechercheParTitre(const Titre: string): string;
-var
-  page, sResultat: string;
-  re: TBdtkRegEx;
-  c: TScriptChoix;
-  id, titre_album, commentaire: string;
-  Album, Auteurs, Serie, Collection: string;
-begin
-  Result := &apos;&apos;;
-
-  page := GetPage(urlSearchRoot + urlSearchGlobale + Titre, False);
-
-  c := TScriptChoix.Create;
-  re := TBdtkRegEx.Create;
-  try
-    c.Titre := &apos;R&#xE9;sultats de recherche de &quot;&apos; + Titre + &apos;&quot;&apos;;
-    if re.BeginSearch(ExtractRegEx(page, regExResultsGlobale), regExResultsGlobaleLigne) then
       while re.Find(sResultat) do begin
         Album := ExtractRegExGroup(sResultat, regExResultsGlobaleLigneDecoupe, &apos;Album&apos;);
         titre_album := ExtractRegExGroup(Album, regExResultsItems, &apos;Label&apos;);
@@ -231,6 +175,7 @@ begin
 
         c.AjoutChoix(&apos;Album&apos;, titre_album, commentaire, id);
       end;
+    end;
 
     if c.ChoixCount &gt; 0 then
       Result := c.Show
@@ -248,14 +193,13 @@ var
 begin
   entry := AlbumToImport.DefaultSearch;
   index := 0;
-  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album ou de la s&#xE9;rie&apos;, &apos;Titre de l&apos;&apos;album&apos;, &apos;Titre de la s&#xE9;rie&apos;, &apos;Lien&apos;], entry, index) then Exit;
+  if not AskSearchEntry([&apos;Titre de l&apos;&apos;album&apos;, &apos;Titre de la s&#xE9;rie&apos;, &apos;Lien&apos;], entry, index) then Exit;
 
   id_album := &apos;&apos;;
   case index of
-    0: id_album := RechercheParTitre(entry);
-    1: id_album := RechercheParCategorie(entry, 3);
-    2: id_album := RechercheParCategorie(entry, 2);
-    3: id_album := entry
+    0: id_album := RechercheParCategorie(entry, 3);
+    1: id_album := RechercheParCategorie(entry, 2);
+    2: id_album := entry
   end;
 
   if id_album &lt;&gt; &apos;&apos; then
