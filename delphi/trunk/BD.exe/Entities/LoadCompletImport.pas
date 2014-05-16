@@ -184,6 +184,19 @@ begin
         if not CheckListAuteurs(Serie.Coloristes, []) then
           Exit;
 
+        for i := Pred(Serie.Univers.Count) downto 0 do
+          if IsEqualGuid(Serie.Univers[i].ID, GUID_NULL) then
+          begin
+            dummyID := CheckValue(Serie.Univers[i].NomUnivers, vmUnivers);
+            if IsEqualGuid(dummyID, GUID_NULL) then
+              Exit;
+            if IsEqualGuid(dummyID, GUID_FULL) then
+              Serie.Univers.Delete(i)
+            else
+              TDaoUniversLite.Fill(Serie.Univers[i], dummyID);
+            frmValidationImport.Album := Self;
+          end;
+
         for i := Pred(Serie.Genres.Count) downto 0 do
           if IsEqualGuid(StringToGUIDDef(Serie.Genres.Names[i], GUID_NULL), GUID_NULL) then
           begin

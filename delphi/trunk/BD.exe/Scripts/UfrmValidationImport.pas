@@ -117,7 +117,7 @@ type
     edAnneeEdition: TEditLabeled;
     CheckBox29: TCheckBoxLabeled;
     CheckBox32: TCheckBoxLabeled;
-    edUnivers: TEditLabeled;
+    cklUnivers: TCheckListBoxLabeled;
     CheckBox19: TCheckBoxLabeled;
     CheckBoxLabeled8: TCheckBoxLabeled;
     procedure FormCreate(Sender: TObject);
@@ -246,6 +246,20 @@ procedure TfrmValidationImport.framBoutons1btnOKClick(Sender: TObject);
           Value.Add(Ctrl.Items[i]);
   end;
 
+  procedure SetValue(Value: TList<TUniversLite>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
+  var
+    i: Integer;
+  begin
+    if Chk.Checked then
+    begin
+      for i := Pred(Value.Count) downto 0 do
+        if not Ctrl.Checked[i] then
+          Value.Delete(i);
+    end
+    else
+      Value.Clear;
+  end;
+
   procedure SetValue(Value: TList<TAuteurLite>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
   var
     i: Integer;
@@ -324,7 +338,8 @@ begin
   // Série
   FAlbum.Serie.TitreSerie := SetValue(edTitreSerie, CheckBox13, DefaultValues.Serie.TitreSerie);
   FAlbum.Serie.SiteWeb := SetValue(edSiteWebSerie, CheckBox16, DefaultValues.Serie.SiteWeb);
-  FAlbum.Serie.NbAlbums := SetValue(edNbAlbums, CheckBox19, DefaultValues.Serie.NbAlbums);
+  SetValue(FAlbum.Serie.Univers, cklUnivers, CheckBox19);
+  FAlbum.Serie.NbAlbums := SetValue(edNbAlbums, CheckBoxLabeled8, DefaultValues.Serie.NbAlbums);
   FAlbum.Serie.Terminee := SetValue(pnTerminee, CheckBox14, DefaultValues.Serie.Terminee);
   SetValue(FAlbum.Serie.Genres, cklGenres, CheckBox15);
   SetValue(FAlbum.Serie.Scenaristes, cklScenaristesSerie, CheckBoxLabeled2);
@@ -462,6 +477,20 @@ procedure TfrmValidationImport.SetAlbum(Value: TAlbumFull);
     ChangeState(Chk, Ctrl);
   end;
 
+  procedure LoadValue(Value: TList<TUniversLite>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
+  var
+    i: Integer;
+  begin
+    Ctrl.Items.Clear;
+    for i := 0 to Pred(Value.Count) do
+    begin
+      Ctrl.Items.Add(Value[i].ChaineAffichage);
+      Ctrl.Checked[i] := True;
+    end;
+    Chk.Checked := Ctrl.Items.Count > 0;
+    ChangeState(Chk, Ctrl);
+  end;
+
   procedure LoadValue(Value: TList<TAuteurLite>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
   var
     i: Integer;
@@ -543,7 +572,8 @@ begin
   // Série
   LoadValue(FAlbum.Serie.TitreSerie, edTitreSerie, CheckBox13, DefaultValues.Serie.TitreSerie);
   LoadValue(FAlbum.Serie.SiteWeb, edSiteWebSerie, CheckBox16, DefaultValues.Serie.SiteWeb);
-  LoadValue(FAlbum.Serie.NbAlbums, edNbAlbums, CheckBox19, DefaultValues.Serie.NbAlbums);
+  LoadValue(FAlbum.Serie.Univers, cklUnivers, CheckBox19);
+  LoadValue(FAlbum.Serie.NbAlbums, edNbAlbums, CheckBoxLabeled8, DefaultValues.Serie.NbAlbums);
   LoadValue(FAlbum.Serie.Terminee, pnTerminee, CheckBox14, DefaultValues.Serie.Terminee);
   LoadValue(FAlbum.Serie.Genres, cklGenres, CheckBox15);
   LoadValue(FAlbum.Serie.Scenaristes, cklScenaristesSerie, CheckBoxLabeled2);
