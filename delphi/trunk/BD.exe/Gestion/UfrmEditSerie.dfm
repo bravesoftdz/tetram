@@ -977,7 +977,7 @@ object frmEditSerie: TfrmEditSerie
       inherited VTEdit: TJvComboEdit
         Width = 316
         OnChange = vtEditUniversVTEditChange
-        ExplicitWidth = 293
+        ExplicitWidth = 316
       end
     end
     object lvUnivers: TVDTListViewLabeled
