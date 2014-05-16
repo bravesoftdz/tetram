@@ -3,7 +3,7 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>1.4</ScriptVersion>
+    <ScriptVersion>1.5</ScriptVersion>
     <BDVersion>2.2.3.22</BDVersion>
     <LastUpdate>Fri, 16 May 2014 13:09:10 +0200</LastUpdate>
     <Engine>PascalScript</Engine>
