@@ -391,7 +391,7 @@ begin
           qry.Next;
         end;
       finally
-        TDaoAuteurLite.Unprepare;
+        TDaoAuteurLite.Unprepare(qry);
       end;
       TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < auteurs - ' + GUIDToString(Reference));
 
@@ -1447,16 +1447,12 @@ begin
     begin
       Entity.ID_Album := StringToGUIDDef(qry.Fields.ByNameAsString['id_album'], GUID_NULL);
       TDaoEditeurFull.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL));
-      { .$IFDEF DEBUG }
       TDaoCollectionLite.Prepare(qry);
       try
-        { .$ENDIF }
         TDaoCollectionLite.Fill(Entity.Collection, qry);
-        { .$IFDEF DEBUG }
       finally
-        TDaoCollectionLite.Unprepare;
+        TDaoCollectionLite.Unprepare(qry);
       end;
-      { .$ENDIF }
       Entity.AnneeEdition := qry.Fields.ByNameAsInteger['anneeedition'];
       Entity.Prix := qry.Fields.ByNameAsCurrency['prix'];
       Entity.VO := qry.Fields.ByNameAsBoolean['vo'];
@@ -2027,16 +2023,12 @@ begin
       Entity.SensLecture := MakeOption(qry.Fields.ByNameAsInteger['senslecture'], qry.Fields.ByNameAsString['ssenslecture']);
 
       TDaoEditeurFull.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL));
-      { .$IFDEF DEBUG }
       TDaoCollectionLite.Prepare(qry);
       try
-        { .$ENDIF }
         TDaoCollectionLite.Fill(Entity.Collection, qry);
-        { .$IFDEF DEBUG }
       finally
-        TDaoCollectionLite.Unprepare;
+        TDaoCollectionLite.Unprepare(qry);
       end;
-      { .$ENDIF }
       qry.FetchBlobs := False;
 
       qry.Close;
@@ -2092,7 +2084,7 @@ begin
           qry.Next;
         end;
       finally
-        TDaoAuteurLite.Unprepare;
+        TDaoAuteurLite.Unprepare(qry);
       end;
     end;
 

@@ -31,7 +31,7 @@ type
     class destructor Destroy;
 
     class procedure Prepare(Query: TUIBQuery);
-    class procedure Unprepare;
+    class procedure Unprepare(Query: TUIBQuery);
 
     class function Make(Query: TUIBQuery): TBaseLite;
 
@@ -44,6 +44,7 @@ type
   end;
 
   TDaoLiteEntity<T: TBaseLite> = class abstract(TDaoLite)
+  public
     class function Make(Query: TUIBQuery): T; reintroduce;
 
     class procedure Fill(Entity: TBaseLite; Query: TUIBQuery); overload; override;
@@ -232,7 +233,7 @@ begin
       Query.Next;
     end;
   finally
-    Unprepare;
+    Unprepare(Query);
   end;
 end;
 
@@ -276,9 +277,12 @@ begin
 end;
 
 class procedure TDaoLite.Prepare(Query: TUIBQuery);
+var
+  p: TUIBQuery;
 begin
   // Ne peut pas être préparée plusieurs fois
-  if getPreparedQuery <> nil then Exit;
+  p := getPreparedQuery;
+  if (p <> nil) or (p = Query) then Exit;
 
   if not Assigned(cs) then
     cs := TCriticalSection.Create;
@@ -287,9 +291,16 @@ begin
   GetFieldIndices;
 end;
 
-class procedure TDaoLite.Unprepare;
+class procedure TDaoLite.Unprepare(Query: TUIBQuery);
+var
+  p: TPair<TDaoLiteClass, TUIBQuery>;
 begin
-  FPreparedQueries.Remove(Self);
+  if getPreparedQuery <> Query then Exit;
+
+  for p in FPreparedQueries do
+    if p.Value = Query then
+      FPreparedQueries.Remove(p.Key);
+
   cs.Release;
 end;
 
@@ -368,7 +379,7 @@ begin
       Query.Next;
     end;
   finally
-    Unprepare;
+    Unprepare(Query);
   end;
 end;
 
@@ -662,7 +673,7 @@ begin
     try
       Fill(Entity, qry);
     finally
-      Unprepare;
+      Unprepare(qry);
     end;
   finally
     qry.Transaction.Free;
