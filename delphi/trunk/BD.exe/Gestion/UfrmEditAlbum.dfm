@@ -1230,7 +1230,7 @@ object frmEditAlbum: TfrmEditAlbum
       Columns = <
         item
           Position = 1
-          Width = 441
+          Width = 445
         end
         item
           Position = 0
@@ -1527,7 +1527,7 @@ object frmEditAlbum: TfrmEditAlbum
     Default = True
     DoubleBuffered = True
     ImageIndex = 12
-    Images = frmFond.ShareImageList
+    Images = dmPrinc.ShareImageList
     ParentDoubleBuffered = False
     TabOrder = 2
     OnClick = btnScriptClick

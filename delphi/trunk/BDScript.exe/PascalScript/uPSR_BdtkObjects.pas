@@ -491,7 +491,7 @@ end;
 
 procedure TSerieCompleteTerminee_W(Self: TSerieFull; const T: Integer);
 begin
-  Self.Terminee := T;
+  Self.Terminee := RTriStateValue.FromInteger(T);
 end;
 
 procedure TSerieCompleteTerminee_R(Self: TSerieFull; var T: Integer);

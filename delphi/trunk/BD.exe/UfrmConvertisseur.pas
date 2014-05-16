@@ -103,7 +103,6 @@ end;
 
 procedure TFrmConvers.SetValue(Value: Currency);
 var
-  i: Integer;
   fc: TframConvertisseur;
 begin
   for fc in ListFC do

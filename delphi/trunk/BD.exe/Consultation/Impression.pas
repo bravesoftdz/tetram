@@ -211,8 +211,8 @@ begin
   if TGlobalVar.Utilisateur.Options.FicheParaBDWithImage and (ParaBD.Photos.Count > 0) then
   begin
     fWaiting.ShowProgression(rsTransImage + '...', epNext);
-    ms := GetCouvertureStream(True, ParaBD.Photos[0].ID, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60), TGlobalVar.Utilisateur.Options.AntiAliasing,
-      True, Prn.MmsToPixelsHorizontal(1));
+    ms := GetCouvertureStream(True, ParaBD.Photos[0].ID, Prn.MmsToPixelsVertical(60), Prn.MmsToPixelsHorizontal(60),
+      TGlobalVar.Utilisateur.Options.AntiAliasing, True, Prn.MmsToPixelsHorizontal(1));
     if Assigned(ms) then
       try
         fWaiting.ShowProgression(rsTransImage + '...', epNext);
@@ -465,10 +465,11 @@ begin
       Prn.CreateColumn1(4, 20, -1, taLeftJustify, Prn.Font.name, 12, []);
       Prn.CreateColumn1(5, 42, 30, taLeftJustify, Prn.Font.name, 16, []);
 
-      if Serie.Terminee = 1 then
-        Prn.WriteLineColumn(2, -1, rsTransSerieTerminee)
-      else
-        Prn.WriteLineColumn(2, -1, rsTransSerieEnCours);
+      if not Serie.Terminee.Undefined then
+        if Serie.Terminee.AsBoolean[False] then
+          Prn.WriteLineColumn(2, -1, rsTransSerieTerminee)
+        else
+          Prn.WriteLineColumn(2, -1, rsTransSerieEnCours);
 
       Prn.NextLine;
 
@@ -707,7 +708,7 @@ begin
       fWaiting.ShowProgression(Format('%s (%s %d)...', [rsTransSerie, rsTransPage, Prn.GetPageNumber]), epNext);
       Prn.WriteLineColumn(0, -1, rsTransSerie + ' :');
       op := -2;
-      if Album.Serie.Terminee = 1 then
+      if Album.Serie.Terminee.AsBoolean[False] then
       begin
         Prn.WriteLineColumn(2, -2, rsTransTerminee);
         op := -1;

@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, System.UITypes,
-  Dialogs, VirtualTrees, UframBoutons, UScriptsFonctions, Generics.Collections, UbdtForms;
+  Dialogs, VirtualTrees, UframBoutons, UScriptsFonctions, Generics.Collections, UbdtForms, UdmPrinc;
 
 type
   TVirtualStringTree = class(VirtualTrees.TVirtualStringTree)
@@ -19,10 +19,12 @@ type
     procedure VirtualStringTree1InitNode(Sender: TBaseVirtualTree; ParentNode, Node: PVirtualNode; var InitialStates: TVirtualNodeInitStates);
     procedure FormCreate(Sender: TObject);
     procedure VirtualStringTree1InitChildren(Sender: TBaseVirtualTree; Node: PVirtualNode; var ChildCount: Cardinal);
-    procedure VirtualStringTree1PaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+    procedure VirtualStringTree1PaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+      TextType: TVSTTextType);
     procedure VirtualStringTree1MeasureItem(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; var NodeHeight: Integer);
     procedure VirtualStringTree1AfterCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; CellRect: TRect);
     procedure VirtualStringTree1DblClick(Sender: TObject);
+    procedure VirtualStringTree1Change(Sender: TBaseVirtualTree; Node: PVirtualNode);
   private
     FList: TList<TScriptChoix.TCategorie>;
   public
@@ -63,10 +65,12 @@ begin
     VirtualStringTree1.RootNodeCount := 0;
     FList := List;
     case FList.Count of
-      0: VirtualStringTree1.RootNodeCount := 0;
-      1: VirtualStringTree1.RootNodeCount := FList[0].Choix.Count;
-      else
-        VirtualStringTree1.RootNodeCount := FList.Count;
+      0:
+        VirtualStringTree1.RootNodeCount := 0;
+      1:
+        VirtualStringTree1.RootNodeCount := FList[0].Choix.Count;
+    else
+      VirtualStringTree1.RootNodeCount := FList.Count;
     end;
   finally
     VirtualStringTree1.EndUpdate;
@@ -78,7 +82,8 @@ begin
   VirtualStringTree1.NodeDataSize := 0;
 end;
 
-procedure TfrmScriptChoix.VirtualStringTree1AfterCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; CellRect: TRect);
+procedure TfrmScriptChoix.VirtualStringTree1AfterCellPaint(Sender: TBaseVirtualTree; TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+  CellRect: TRect);
 begin
   if (FList.Count = 1) or (Sender.GetNodeLevel(Node) > 0) then
   begin
@@ -88,20 +93,31 @@ begin
   end;
 end;
 
-procedure TfrmScriptChoix.VirtualStringTree1DblClick(Sender: TObject);
+procedure TfrmScriptChoix.VirtualStringTree1Change(Sender: TBaseVirtualTree; Node: PVirtualNode);
 begin
-  framBoutons1.btnOk.Click;
+  inherited;
+  framBoutons1.btnOK.Enabled := VirtualStringTree1.GetFirstSelected <> nil;
 end;
 
-procedure TfrmScriptChoix.VirtualStringTree1GetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType; var CellText: string);
+procedure TfrmScriptChoix.VirtualStringTree1DblClick(Sender: TObject);
+begin
+  if VirtualStringTree1.GetFirstSelected <> nil then
+    framBoutons1.btnOK.Click;
+end;
+
+procedure TfrmScriptChoix.VirtualStringTree1GetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
+  var CellText: string);
 begin
   if (FList.Count = 1) or (Sender.GetNodeLevel(Node) > 0) then
   begin
     // noeud classique
-    case column of
-      0: CellText := FList[Node.Parent.Index].Choix[Node.Index].FLibelle;
-      1: CellText := FList[Node.Parent.Index].Choix[Node.Index].FCommentaire;
-      2: if Assigned(FList[Node.Parent.Index].Choix[Node.Index].FImage) then
+    case Column of
+      0:
+        CellText := FList[Node.Parent.Index].Choix[Node.Index].FLibelle;
+      1:
+        CellText := FList[Node.Parent.Index].Choix[Node.Index].FCommentaire;
+      2:
+        if Assigned(FList[Node.Parent.Index].Choix[Node.Index].FImage) then
           CellText := ' '
         else
           CellText := '';
@@ -111,8 +127,10 @@ begin
   begin
     // catégorie
     case Column of
-      0: CellText := FList[Node.Index].FNom;
-      else CellText := '';
+      0:
+        CellText := FList[Node.Index].FNom;
+    else
+      CellText := '';
     end;
   end;
 end;
@@ -154,11 +172,11 @@ begin
     Include(Node.States, vsMultiline);
 end;
 
-procedure TfrmScriptChoix.VirtualStringTree1PaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType);
+procedure TfrmScriptChoix.VirtualStringTree1PaintText(Sender: TBaseVirtualTree; const TargetCanvas: TCanvas; Node: PVirtualNode; Column: TColumnIndex;
+  TextType: TVSTTextType);
 begin
   if (FList.Count > 1) and (Sender.GetNodeLevel(Node) = 0) then
     TargetCanvas.Font.Style := TargetCanvas.Font.Style + [fsBold];
 end;
 
 end.
-

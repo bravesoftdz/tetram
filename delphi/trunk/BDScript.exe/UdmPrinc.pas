@@ -3,7 +3,8 @@ unit UdmPrinc;
 interface
 
 uses
-  System.SysUtils, System.Classes, Winapi.Windows, Vcl.Dialogs, Winapi.Messages;
+  System.SysUtils, System.Classes, Winapi.Windows, Vcl.Dialogs, Winapi.Messages,
+  Vcl.ImgList, Vcl.Controls, PngImageList;
 
 const
   MSG_COMMANDELINE = WM_USER + 1;
@@ -16,6 +17,7 @@ type
   end;
 
   TdmPrinc = class(TDataModule)
+    ShareImageList: TPngImageList;
   private
     class function getInstance: TdmPrinc;
   strict private
@@ -157,7 +159,6 @@ var
   Archive: TJcl7zCompressArchive;
   o: TdwsJSONObject;
   i: Integer;
-  s: string;
   Edition: TEditionFull;
   Couverture: TCouvertureLite;
   ListFiles: TList<TFileName>;
@@ -316,6 +317,9 @@ begin
     end;
     Exit;
   end;
+
+  // l'instance de dmPrinc doit exister pour que les images des boutons s'affichent correctement
+  dmPrinc;
 
   if FindCmdLineSwitch('run', scriptAutoRun, True, [clstValueNextParam]) then
   begin

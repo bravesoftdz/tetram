@@ -304,9 +304,9 @@ begin
             if not IsEqualGuid(ID_Serie, GUID_FULL) then
             begin
               if Edition.Couleur = DefaultEdition.Couleur then
-                Edition.Couleur := IIf(Serie.Couleur = -1, DefaultEdition.Couleur, Serie.Couleur = 1);
+                Edition.Couleur := Serie.Couleur.AsBoolean[DefaultEdition.Couleur];
               if Edition.VO = DefaultEdition.VO then
-                Edition.VO := IIf(Serie.VO = -1, DefaultEdition.VO, Serie.VO = 1);
+                Edition.VO := Serie.VO.AsBoolean[DefaultEdition.VO];
               if Edition.Etat.Value = DefaultEdition.Etat.Value then
                 Edition.Etat := MakeOption(IIf(Serie.Etat.Value = -1, DefaultEdition.Etat.Value, Serie.Etat.Value), '');
               if Edition.Reliure.Value = DefaultEdition.Reliure.Value then

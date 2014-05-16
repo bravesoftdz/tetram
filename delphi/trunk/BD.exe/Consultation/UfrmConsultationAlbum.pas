@@ -165,7 +165,7 @@ implementation
 uses
   Commun, Entities.Lite, CommonConst, MAJ, Impression, DateUtils, UHistorique, Procedures,
   Divers, Textes, Proc_Gestions, UfrmConsole, Entities.DaoFull,
-  Entities.Common, Entities.FactoriesFull;
+  Entities.Common, Entities.FactoriesFull, UdmPrinc;
 
 var
   FSortColumn: Integer;
@@ -573,7 +573,7 @@ begin
     if FAlbum.Serie.Albums.Count = 1 then
       vstSerie.Images := nil
     else
-      vstSerie.Images := frmFond.ShareImageList;
+      vstSerie.Images := dmPrinc.ShareImageList;
   end;
 
   lvEditions.Items.BeginUpdate;

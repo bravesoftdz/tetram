@@ -177,7 +177,7 @@ begin
   end;
 
   FSerie.TitreSerie := Trim(edTitre.Text);
-  FSerie.Terminee := Integer(cbTerminee.State);
+  FSerie.Terminee := cbTerminee.State;
   FSerie.SuivreSorties := cbSorties.Checked;
   FSerie.Complete := cbComplete.Checked;
   FSerie.SuivreManquants := cbManquants.Checked;
@@ -188,8 +188,8 @@ begin
   FSerie.Sujet := edHistoire.Text;
   FSerie.Notes := edNotes.Text;
 
-  FSerie.VO := Integer(cbVO.State);
-  FSerie.Couleur := Integer(cbCouleur.State);
+  FSerie.VO := cbVO.State;
+  FSerie.Couleur := cbCouleur.State;
 
   FSerie.TypeEdition := MakeOption(cbxEdition.Value, cbxEdition.Caption);
   FSerie.Etat := MakeOption(cbxEtat.Value, cbxEtat.Caption);
@@ -221,10 +221,7 @@ begin
   lvColoristes.Items.BeginUpdate;
   try
     edTitre.Text := FSerie.TitreSerie;
-    if FSerie.Terminee = -1 then
-      cbTerminee.State := cbGrayed
-    else
-      cbTerminee.State := TCheckBoxState(FSerie.Terminee);
+    cbTerminee.State := FSerie.Terminee;
     cbSorties.Checked := FSerie.SuivreSorties;
     vtEditEditeurs.CurrentValue := FSerie.ID_Editeur;
     vtEditCollections.CurrentValue := FSerie.ID_Collection;
@@ -246,14 +243,8 @@ begin
       AjoutString(s, FSerie.Genres.ValueFromIndex[i], ', ');
     Label15.Caption := s;
 
-    if FSerie.VO = -1 then
-      cbVO.State := cbGrayed
-    else
-      cbVO.State := TCheckBoxState(FSerie.VO);
-    if FSerie.Couleur = -1 then
-      cbCouleur.State := cbGrayed
-    else
-      cbCouleur.State := TCheckBoxState(FSerie.Couleur);
+    cbVO.State := FSerie.VO;
+    cbCouleur.State := FSerie.Couleur;
     cbxEdition.Value := FSerie.TypeEdition.Value;
     cbxEtat.Value := FSerie.Etat.Value;
     cbxReliure.Value := FSerie.Reliure.Value;

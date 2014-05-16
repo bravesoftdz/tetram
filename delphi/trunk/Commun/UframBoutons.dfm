@@ -21,7 +21,7 @@ object framBoutons: TframBoutons
     Default = True
     DoubleBuffered = True
     ImageIndex = 2
-    Images = frmFond.ShareImageList
+    Images = dmPrinc.ShareImageList
     ModalResult = 1
     ParentDoubleBuffered = False
     TabOrder = 0
@@ -39,7 +39,7 @@ object framBoutons: TframBoutons
     Caption = 'Annuler'
     DoubleBuffered = True
     ImageIndex = 0
-    Images = frmFond.ShareImageList
+    Images = dmPrinc.ShareImageList
     ModalResult = 2
     ParentDoubleBuffered = False
     TabOrder = 1

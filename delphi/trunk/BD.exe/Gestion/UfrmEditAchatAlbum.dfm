@@ -638,7 +638,7 @@ object frmEditAchatAlbum: TfrmEditAchatAlbum
     Default = True
     DoubleBuffered = True
     ImageIndex = 12
-    Images = frmFond.ShareImageList
+    Images = dmPrinc.ShareImageList
     ParentDoubleBuffered = False
     TabOrder = 2
     OnClick = btnScriptClick

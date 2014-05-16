@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-  Buttons, StdCtrls;
+  Buttons, StdCtrls, UdmPrinc;
 
 type
   TframBoutons = class(TFrame)

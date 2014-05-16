@@ -29,6 +29,7 @@ type
     class procedure WriteValueToJSON(const Name: string; Value: Boolean; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
     class procedure WriteValueToJSON(const Name: string; Value: ROption; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
     class procedure WriteValueToJSON(const Name: string; Value: RGUIDEx; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
+    class procedure WriteValueToJSON(const Name: string; Value: RTriStateValue; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
     class procedure WriteValueToJSON(const Name: string; Value: TMetierAuteur; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
     class procedure WriteValueToJSON(const Name: string; Value: TStrings; json: TdwsJSONObject; Options: SerializationOptions; ItemsHasValues: Boolean = False);
       overload; inline;
@@ -192,6 +193,12 @@ begin
       WriteStringListWithValuesToJSON(Value, json.AddArray(Name))
     else
       WriteStringListToJSON(Value, json.AddArray(Name))
+end;
+
+class procedure TJsonSerializer.WriteValueToJSON(const Name: string;  Value: RTriStateValue; json: TdwsJSONObject; Options: SerializationOptions);
+begin
+  if (not(soSkipNullValues in Options)) or (Integer(Value) <> Integer(RTriStateValue.Default)) then
+    json.AddValue(Name, Integer(Value));
 end;
 
 end.

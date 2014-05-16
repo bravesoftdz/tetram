@@ -4,7 +4,7 @@ interface
 
 uses
   SysUtils, Windows, Classes, Dialogs, Entities.Lite, Commun, CommonConst, DateUtils, Generics.Collections,
-  Generics.Defaults, System.Generics.Collections, Entities.Common;
+  Generics.Defaults, System.Generics.Collections, Entities.Common, Vcl.StdCtrls;
 
 type
   PAutoTrimString = ^RAutoTrimString;
@@ -35,12 +35,22 @@ type
   private
     Value: Integer;
     function IsUndefined: Boolean;
+    function GetAsBoolean(DefaultIfUndefined: Boolean): Boolean;
   public
     class operator Implicit(a: Boolean): RTriStateValue;
     class operator Implicit(a: RTriStateValue): Integer;
+    class operator Implicit(a: TCheckBoxState): RTriStateValue;
+    class operator Implicit(a: RTriStateValue): TCheckBoxState;
+    class operator Equal(a, b: RTriStateValue): Boolean;
+    class operator NotEqual(a, b: RTriStateValue): Boolean;
+
     class function FromInteger(a: Integer): RTriStateValue; static;
+    class function Default: RTriStateValue; static;
+
     procedure SetUndefined;
     property Undefined: Boolean read IsUndefined;
+    // des propriétés plutôt que des Implicit pour declencher des erreurs de compilation
+    property AsBoolean[DefaultIfUndefined: Boolean]: Boolean read GetAsBoolean;
   end;
 
   POption = ^ROption;
@@ -424,7 +434,7 @@ type
 implementation
 
 uses
-  UMetadata, Vcl.StdCtrls, Entities.FactoriesFull, Entities.FactoriesLite;
+  UMetadata, Entities.FactoriesFull, Entities.FactoriesLite;
 
 { ROption }
 
@@ -470,6 +480,16 @@ end;
 
 { RTriStateValue }
 
+class function RTriStateValue.Default: RTriStateValue;
+begin
+  Result.SetUndefined;
+end;
+
+class operator RTriStateValue.Equal(a, b: RTriStateValue): Boolean;
+begin
+  Result := a.value = b.value;
+end;
+
 class function RTriStateValue.FromInteger(a: Integer): RTriStateValue;
 begin
   if (a = -1) or (a in [0 .. 1]) then
@@ -496,9 +516,44 @@ begin
   Result := Value = -1;
 end;
 
+class operator RTriStateValue.NotEqual(a, b: RTriStateValue): Boolean;
+begin
+  Result := not (a = b);
+end;
+
 procedure RTriStateValue.SetUndefined;
 begin
   Value := -1;
+end;
+
+class operator RTriStateValue.Implicit(a: TCheckBoxState): RTriStateValue;
+begin
+  case a of
+    cbUnchecked:
+      Result := False;
+    cbChecked:
+      Result := True;
+    cbGrayed:
+      Result.SetUndefined;
+  end;
+end;
+
+function RTriStateValue.GetAsBoolean(DefaultIfUndefined: Boolean): Boolean;
+begin
+  if Undefined then
+    Result := DefaultIfUndefined
+  else
+    Result := Value = 1;
+end;
+
+class operator RTriStateValue.Implicit(a: RTriStateValue): TCheckBoxState;
+begin
+  if a.Value = 1 then
+    Result := cbChecked
+  else if a.Value = 0 then
+    Result := cbUnchecked
+  else
+    Result := cbGrayed;
 end;
 
 { ROption }

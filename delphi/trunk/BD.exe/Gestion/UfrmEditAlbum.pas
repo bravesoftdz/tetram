@@ -804,8 +804,8 @@ begin
   EditionComplete.Dedicace := False;
   with FAlbum.Serie do
   begin
-    EditionComplete.Couleur := IIf(RecInconnu or (Couleur = -1), True, Couleur = 1);
-    EditionComplete.VO := IIf(RecInconnu or (VO = -1), False, VO = 1);
+    EditionComplete.Couleur := IIf(RecInconnu or Couleur.Undefined, True, Couleur.AsBoolean[True]);
+    EditionComplete.VO := IIf(RecInconnu or VO.Undefined, False, VO.AsBoolean[False]);
     EditionComplete.Etat := MakeOption(IIf(RecInconnu or (Etat.Value = -1), cbxEtat.DefaultValueChecked, Etat.Value), '');
     EditionComplete.Reliure := MakeOption(IIf(RecInconnu or (Reliure.Value = -1), cbxReliure.DefaultValueChecked, Reliure.Value), '');
     EditionComplete.Orientation := MakeOption(IIf(RecInconnu or (Orientation.Value = -1), cbxOrientation.DefaultValueChecked, Orientation.Value), '');
@@ -1189,8 +1189,8 @@ begin
 
       with FAlbum.Serie do
       begin
-        cbCouleur.Checked := IIf(RecInconnu or (Couleur = -1), True, Couleur = 1);
-        cbVO.Checked := IIf(RecInconnu or (VO = -1), False, VO = 1);
+        cbCouleur.Checked := IIf(RecInconnu or Couleur.Undefined, True, Couleur.AsBoolean[True]);
+        cbVO.Checked := IIf(RecInconnu or VO.Undefined, False, VO.AsBoolean[False]);
         cbxEtat.Value := IIf(RecInconnu or (Etat.Value = -1), cbxEtat.DefaultValueChecked, Etat.Value);
         cbxReliure.Value := IIf(RecInconnu or (Reliure.Value = -1), cbxReliure.DefaultValueChecked, Reliure.Value);
         cbxOrientation.Value := IIf(RecInconnu or (Orientation.Value = -1), cbxOrientation.DefaultValueChecked, Orientation.Value);

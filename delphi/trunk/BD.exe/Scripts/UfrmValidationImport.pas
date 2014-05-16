@@ -311,6 +311,21 @@ procedure TfrmValidationImport.framBoutons1btnOKClick(Sender: TObject);
       Result := Defaut;
   end;
 
+  function SetValue(Ctrl: TPanel; Chk: TCheckBox; Defaut: RTriStateValue): RTriStateValue; overload;
+  begin
+    if Chk.Checked then
+    begin
+      if TRadioButton(Ctrl.Controls[0]).Checked then
+        Result := True
+      else if TRadioButton(Ctrl.Controls[1]).Checked then
+        Result := False
+      else
+        Result.SetUndefined;
+    end
+    else
+      Result := Defaut;
+  end;
+
   function SetValue(Ctrl: TLightComboCheck; Chk: TCheckBox): ROption; overload;
   begin
     if Chk.Checked then
@@ -530,12 +545,12 @@ procedure TfrmValidationImport.SetAlbum(Value: TAlbumFull);
     ChangeState(Chk, Ctrl);
   end;
 
-  procedure LoadValue(Value: Integer; Ctrl: TPanel; Chk: TCheckBox; Defaut: Integer); overload;
+  procedure LoadValue(Value: RTriStateValue; Ctrl: TPanel; Chk: TCheckBox; Defaut: RTriStateValue); overload;
   begin
     Chk.Checked := Defaut <> Value;
-    TRadioButton(Ctrl.Controls[0]).Checked := TCheckBoxState(Value) = cbChecked;
-    TRadioButton(Ctrl.Controls[1]).Checked := TCheckBoxState(Value) = cbUnchecked;
-    TRadioButton(Ctrl.Controls[2]).Checked := TCheckBoxState(Value) = cbGrayed;
+    TRadioButton(Ctrl.Controls[0]).Checked := Value.AsBoolean[False];
+    TRadioButton(Ctrl.Controls[1]).Checked := not Value.AsBoolean[True];
+    TRadioButton(Ctrl.Controls[2]).Checked := Value.Undefined;
     ChangeState(Chk, Ctrl);
   end;
 

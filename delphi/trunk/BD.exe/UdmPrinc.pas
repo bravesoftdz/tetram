@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, SyncObjs, jpeg, Menus, uib,
-  Vcl.AppEvnts;
+  Vcl.AppEvnts, Vcl.ImgList, PngImageList;
 
 const
   AntiAliasing = True;
@@ -18,6 +18,7 @@ type
     ApplicationEvents1: TApplicationEvents;
     UIBBackup: TUIBBackup;
     UIBRestore: TUIBRestore;
+    ShareImageList: TPngImageList;
     procedure ApplicationEvents1Idle(Sender: TObject; var Done: Boolean);
     procedure ApplicationEvents1Message(var Msg: tagMSG; var Handled: Boolean);
     procedure DataModuleCreate(Sender: TObject);

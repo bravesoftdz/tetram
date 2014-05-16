@@ -38,7 +38,6 @@ type
     actAfficheStatsAlbums: TAction;
     actPersonnaliseBarre: TAction;
     boutons_16x16_hot: TPngImageList;
-    ShareImageList: TPngImageList;
     ActionList1: TActionList;
     actAideSommaire: TAction;
     actAideAbout: TAction;

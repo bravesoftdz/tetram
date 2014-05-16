@@ -126,7 +126,7 @@ object frmControlImport: TfrmControlImport
     Default = True
     DoubleBuffered = True
     ImageIndex = 4
-    Images = frmFond.ShareImageList
+    Images = dmPrinc.ShareImageList
     ModalResult = 5
     ParentDoubleBuffered = False
     TabOrder = 3

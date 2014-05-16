@@ -28,6 +28,7 @@ object frmScriptChoix: TfrmScriptChoix
     ExplicitHeight = 25
     inherited btnOK: TButton
       Left = 404
+      Enabled = False
       ExplicitLeft = 404
     end
     inherited btnAnnuler: TButton
@@ -56,6 +57,7 @@ object frmScriptChoix: TfrmScriptChoix
     TreeOptions.PaintOptions = [toHideFocusRect, toShowButtons, toShowDropmark, toShowTreeLines, toThemeAware, toUseBlendedImages]
     TreeOptions.SelectionOptions = [toFullRowSelect]
     OnAfterCellPaint = VirtualStringTree1AfterCellPaint
+    OnChange = VirtualStringTree1Change
     OnDblClick = VirtualStringTree1DblClick
     OnGetText = VirtualStringTree1GetText
     OnPaintText = VirtualStringTree1PaintText
