@@ -5,7 +5,7 @@
     <Description/>
     <ScriptVersion>1.5</ScriptVersion>
     <BDVersion>2.2.3.22</BDVersion>
-    <LastUpdate>Fri, 16 May 2014 14:22:42 +0200</LastUpdate>
+    <LastUpdate>Fri, 16 May 2014 14:38:20 +0200</LastUpdate>
     <Engine>PascalScript</Engine>
   </Infos>
   <Options>
@@ -123,7 +123,7 @@ begin
 
   s := Trim(ExtractRegEx(page, regExSerieGenres));
   if s &lt;&gt; &apos;&apos; then
-    AlbumToImport.Serie.Genres.Text := StringReplace(s, &apos;&amp;nbsp;&apos;, #13#10, [rfReplaceAll]);
+    AlbumToImport.Serie.Genres.Split(s, &apos;&amp;nbsp;&apos;);
   s := ExtractRegEx(page, regExSerieTerminee);
   if (s = &apos;-1&apos;) then
     AlbumToImport.Serie.Terminee := 0
