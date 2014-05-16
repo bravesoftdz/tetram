@@ -24,7 +24,7 @@ uses
   CommonConst, UfrmFond, DB, StdCtrls, UfrmSeriesIncompletes, UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmRecherche, UfrmZoomCouverture,
   UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique, UfrmConsultationParaBD, UfrmConsultationSerie, UfrmGallerie, UfrmConsultationUnivers,
   JclCompression, System.IOUtils, Entities.Serializer, ProceduresBDtk, JsonSerializer, dwsJSON, Entities.DaoLambda, UfrmChoixScript, JclSysUtils,
-  Entities.Deserializer, LoadCompletImport;
+  Entities.Deserializer, LoadCompletImport, Divers;
 
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;
 var
@@ -247,7 +247,8 @@ var
   archiveName, scriptName: string;
   o, album, options, params: TdwsJSONObject;
   frmChoixScript: TfrmChoixScript;
-  cmdLine, dummy, errResult: string;
+  cmdLine: RCommandLine;
+  dummy, errResult: string;
   item: TJclCompressionItem;
   i: Integer;
   js: TStringStream;
@@ -284,7 +285,13 @@ begin
       archCompress.Free;
     end;
 
-    cmdLine := Format('"%s" /run "%s" /dh %d', [TPath.Combine(TPath.GetLibraryPath, 'BDScript.exe'), archiveName, Application.MainFormHandle]);
+    cmdLine := '';
+    cmdLine.Add(TPath.Combine(TPath.GetLibraryPath, 'BDScript.exe'));
+    cmdLine.Add('/run');
+    cmdLine.Add(archiveName);
+    cmdLine.Add('/dh');
+    cmdLine.Add(IntToStr(Application.MainFormHandle));
+
     if Execute(cmdLine, dummy, errResult) = ScriptRunOK then
     begin
       archDecompress := TJcl7zDecompressArchive.Create(archiveName);
