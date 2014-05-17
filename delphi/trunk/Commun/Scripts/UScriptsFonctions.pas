@@ -561,7 +561,7 @@ begin
   Couverture.NewStockee := TGlobalVar.Utilisateur.Options.ImagesStockees;
   Couverture.OldStockee := Couverture.NewStockee;
   Couverture.Categorie := TypeImage;
-  Couverture.sCategorie := TDaoListe.ListTypesImage.Values[IntToStr(TypeImage)];
+  Couverture.sCategorie := TDaoListe.ListTypesCouverture.Values[IntToStr(TypeImage)];
 end;
 
 end.

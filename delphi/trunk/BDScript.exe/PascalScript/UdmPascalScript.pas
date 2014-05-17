@@ -704,12 +704,12 @@ end;
 procedure TdmPascalScript.PSScriptDebugger1Compile(Sender: TPSScript);
 var
   i: Integer;
-  FListTypesImages: TStrings;
+  FListTypesCouverture: TStrings;
 begin
-  FListTypesImages := TDaoListe.ListTypesImage;
-  for i := 0 to Pred(FListTypesImages.Count) do
-    PSScriptDebugger1.Comp.AddConstantN('cti' + AnsiStrings.StringReplace(AnsiString(SansAccents(FListTypesImages.ValueFromIndex[i])), ' ', '_', [rfReplaceAll]
-      ), 'integer').SetInt(StrToInt(AnsiString(FListTypesImages.Names[i])));
+  FListTypesCouverture := TDaoListe.ListTypesCouverture;
+  for i := 0 to Pred(FListTypesCouverture.Count) do
+    PSScriptDebugger1.Comp.AddConstantN('cti' + AnsiStrings.StringReplace(AnsiString(SansAccents(FListTypesCouverture.ValueFromIndex[i])), ' ', '_', [rfReplaceAll]
+      ), 'integer').SetInt(StrToInt(AnsiString(FListTypesCouverture.Names[i])));
 
   PSScriptDebugger1.AddMethod(Self, @TdmPascalScript.WriteToConsole, 'procedure WriteToConsole(const Chaine: string);');
   PSScriptDebugger1.AddMethod(Self, @TdmPascalScript.WriteToFile, 'procedure WriteToFile(const Chaine, FileName: string);');

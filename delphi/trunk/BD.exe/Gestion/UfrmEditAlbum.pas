@@ -249,11 +249,11 @@ begin
   LoadCombo(cbxFormat, TDaoListe.ListFormatsEdition, TDaoListe.DefaultFormatEdition);
   LoadCombo(cbxSensLecture, TDaoListe.ListSensLecture, TDaoListe.DefaultSensLecture);
 
-  for i := 0 to Pred(TDaoListe.ListTypesImage.Count) do
+  for i := 0 to Pred(TDaoListe.ListTypesCouverture.Count) do
   begin
     mi := TMenuItem.Create(pmChoixCategorie);
-    mi.Caption := TDaoListe.ListTypesImage.ValueFromIndex[i];
-    mi.Tag := StrToInt(TDaoListe.ListTypesImage.Names[i]);
+    mi.Caption := TDaoListe.ListTypesCouverture.ValueFromIndex[i];
+    mi.Tag := StrToInt(TDaoListe.ListTypesCouverture.Names[i]);
     mi.OnClick := miChangeCategorieImageClick;
     pmChoixCategorie.Items.Add(mi);
   end;
@@ -622,7 +622,7 @@ begin
             PC.Categorie := 600
           else
             PC.Categorie := 601;
-          PC.sCategorie := TDaoListe.ListTypesImage.Values[IntToStr(PC.Categorie)];
+          PC.sCategorie := TDaoListe.ListTypesCouverture.Values[IntToStr(PC.Categorie)];
         end;
       finally
         vstImages.RootNodeCount := FCurrentEditionComplete.Couvertures.Count;
@@ -1344,7 +1344,7 @@ var
 begin
   PC := FCurrentEditionComplete.Couvertures[Integer(TPopupMenu(TMenuItem(Sender).GetParentMenu).PopupComponent)];
   PC.Categorie := Integer(TMenuItem(Sender).Tag);
-  PC.sCategorie := TDaoListe.ListTypesImage.Values[IntToStr(PC.Categorie)];
+  PC.sCategorie := TDaoListe.ListTypesCouverture.Values[IntToStr(PC.Categorie)];
   vstImages.Invalidate;
 end;
 

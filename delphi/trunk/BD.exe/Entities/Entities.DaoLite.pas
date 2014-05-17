@@ -407,6 +407,8 @@ begin
   Entity.NewNom := Entity.OldNom;
   Entity.OldStockee := Query.Fields.ByNameAsBoolean['StockagePhoto'];
   Entity.NewStockee := Entity.OldStockee;
+  Entity.Categorie := Query.Fields.ByNameAsSmallint['CategorieImage'];
+  Entity.sCategorie := Query.Fields.ByNameAsString['sCategorieImage'];
 end;
 
 { TDaoCouvertureLite }

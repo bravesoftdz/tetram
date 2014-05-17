@@ -764,11 +764,13 @@ begin
       qry.Close;
       qry.SQL.Clear;
       qry.SQL.Add('select');
-      qry.SQL.Add('  p.id_photo, p.fichierphoto, p.stockagephoto');
+      qry.SQL.Add('  p.id_photo, p.fichierphoto, p.stockagephoto, p.categorieimage, l.libelle as scategorieimage');
       qry.SQL.Add('from');
       qry.SQL.Add('  photos p');
+      qry.SQL.Add('  left join listes l on');
+      qry.SQL.Add('    (p.categorieimage = l.ref and l.categorie = 10)');
       qry.SQL.Add('where');
-      qry.SQL.Add('  id_parabd = ?');
+      qry.SQL.Add('  p.id_parabd = ?');
       qry.SQL.Add('order by');
       qry.SQL.Add('  p.ordre');
       qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
@@ -934,27 +936,27 @@ begin
 
       qry1.SQL.Clear;
       qry1.SQL.Add('insert into photos (');
-      qry1.SQL.Add('  id_parabd, fichierphoto, stockagephoto, ordre');
+      qry1.SQL.Add('  id_parabd, fichierphoto, stockagephoto, ordre, categorieimage');
       qry1.SQL.Add(') values (');
-      qry1.SQL.Add('  :id_parabd, :fichierphoto, 0, :ordre');
+      qry1.SQL.Add('  :id_parabd, :fichierphoto, 0, :ordre, :categorieimage');
       qry1.SQL.Add(') returning id_photo');
 
       qry6.SQL.Text := 'select result from saveblobtofile(:Chemin, :Fichier, :BlobContent)';
 
       qry2.SQL.Clear;
       qry2.SQL.Add('insert into photos (');
-      qry2.SQL.Add('  id_parabd, fichierphoto, stockagephoto, ordre, imagephoto');
+      qry2.SQL.Add('  id_parabd, fichierphoto, stockagephoto, ordre, imagephoto, categorieimage');
       qry2.SQL.Add(') values (');
-      qry2.SQL.Add('  :id_parabd, :fichierphoto, 1, :ordre, :imagephoto');
+      qry2.SQL.Add('  :id_parabd, :fichierphoto, 1, :ordre, :imagephoto, :categorieimage');
       qry2.SQL.Add(') returning id_photo');
 
-      qry3.SQL.Text := 'update photo set imagephoto = :imagephoto, stockagephoto = 1 where id_photo = :id_photo';
+      qry3.SQL.Text := 'update photos set imagephoto = :imagephoto, stockagephoto = 1 where id_photo = :id_photo';
 
       qry4.SQL.Text := 'update photos set imagephoto = null, stockagephoto = 0 where id_photo = :id_photo';
 
       qry5.SQL.Clear;
       qry5.SQL.Add('update photos set');
-      qry5.SQL.Add('  fichierphoto = :fichierphoto, ordre = :ordre');
+      qry5.SQL.Add('  fichierphoto = :fichierphoto, ordre = :ordre, categorieimage = :categorieimage');
       qry5.SQL.Add('where');
       qry5.SQL.Add('  id_photo = :id_photo');
 
@@ -978,6 +980,7 @@ begin
             qry1.Params.ByNameAsString['id_parabd'] := GUIDToString(Entity.ID_ParaBD);
             qry1.Params.ByNameAsString['fichierphoto'] := PP.NewNom;
             qry1.Params.ByNameAsInteger['ordre'] := Entity.Photos.IndexOf(PP);
+            qry1.Params.ByNameAsInteger['categorieimage'] := PP.Categorie;
             qry1.Execute;
             PP.ID := StringToGUID(qry1.Fields.AsString[0]);
           end
@@ -992,6 +995,7 @@ begin
             finally
               Stream.Free;
             end;
+            qry2.Params.ByNameAsInteger['categorieimage'] := PP.Categorie;
             qry2.Execute;
             PP.ID := StringToGUID(qry2.Fields.AsString[0]);
           end;
@@ -1032,6 +1036,7 @@ begin
           // obligatoire pour les changement de stockage
           qry5.Params.ByNameAsString['fichierphoto'] := PP.NewNom;
           qry5.Params.ByNameAsInteger['ordre'] := Entity.Photos.IndexOf(PP);
+          qry5.Params.ByNameAsInteger['categorieimage'] := PP.Categorie;
           qry5.Params.ByNameAsString['id_photo'] := GUIDToString(PP.ID);
           qry5.Execute;
         end;
@@ -1481,13 +1486,13 @@ begin
       qry.Close;
       qry.SQL.Clear;
       qry.SQL.Add('select');
-      qry.SQL.Add('  id_couverture, fichiercouverture, stockagecouverture, categorieimage, l.libelle as scategorieimage');
+      qry.SQL.Add('  c.id_couverture, c.fichiercouverture, c.stockagecouverture, c.categorieimage, l.libelle as scategorieimage');
       qry.SQL.Add('from');
       qry.SQL.Add('  couvertures c');
       qry.SQL.Add('  left join listes l on');
       qry.SQL.Add('    (c.categorieimage = l.ref and l.categorie = 6)');
       qry.SQL.Add('where');
-      qry.SQL.Add('  id_edition = ?');
+      qry.SQL.Add('  c.id_edition = ?');
       qry.SQL.Add('order by');
       qry.SQL.Add('  l.ordre nulls last, c.ordre');
       qry.Params.AsString[0] := GUIDToString(Entity.ID_Edition);

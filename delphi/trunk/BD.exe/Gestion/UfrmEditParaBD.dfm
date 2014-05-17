@@ -49,7 +49,6 @@ object frmEditParaBD: TfrmEditParaBD
     Align = alClient
     BorderStyle = bsNone
     TabOrder = 0
-    ExplicitTop = 35
     DesignSize = (
       734
       866)
@@ -526,7 +525,6 @@ object frmEditParaBD: TfrmEditParaBD
       Top = 383
       Width = 61
       Height = 13
-      Anchors = [akTop, akRight]
       Caption = 'En stock'
       Checked = True
       Ctl3D = True
@@ -804,6 +802,7 @@ object frmEditParaBD: TfrmEditParaBD
       OnPaintText = vstImagesPaintText
       OnInitNode = vstImagesInitNode
       OnKeyDown = vstImagesKeyDown
+      OnMouseUp = vstImagesMouseUp
       OnNewText = vstImagesNewText
       OnStructureChange = vstImagesStructureChange
       Columns = <
@@ -847,5 +846,9 @@ object frmEditParaBD: TfrmEditParaBD
     Options = [ofReadOnly, ofHideReadOnly, ofPathMustExist, ofFileMustExist]
     Left = 378
     Top = 65535
+  end
+  object pmChoixCategorie: TPopupMenu
+    OnPopup = pmChoixCategoriePopup
+    Left = 416
   end
 end

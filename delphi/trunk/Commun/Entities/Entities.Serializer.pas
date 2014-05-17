@@ -21,8 +21,7 @@ type
     class procedure ProcessWriteToJSON(Entity: TParaBDFull; json: TdwsJSONObject; Options: SerializationOptions); overload;
 
     class procedure ProcessWriteToJSON(Entity: TBaseLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
-    class procedure ProcessWriteToJSON(Entity: TPhotoLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
-    class procedure ProcessWriteToJSON(Entity: TCouvertureLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
+    class procedure ProcessWriteToJSON(Entity: TImageLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
     class procedure ProcessWriteToJSON(Entity: TParaBDLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
     class procedure ProcessWriteToJSON(Entity: TAuteurLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
     class procedure ProcessWriteToJSON(Entity: TPersonnageLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
@@ -209,16 +208,12 @@ begin
     WriteValueToJSON('ID', Entity.ID, json, Options);
 end;
 
-class procedure TEntitesSerializer.ProcessWriteToJSON(Entity: TPhotoLite; json: TdwsJSONObject; Options: SerializationOptions);
+class procedure TEntitesSerializer.ProcessWriteToJSON(Entity: TImageLite; json: TdwsJSONObject; Options: SerializationOptions);
 begin
   WriteValueToJSON('NewNom', Entity.NewNom, json, Options);
   WriteValueToJSON('OldNom', Entity.OldNom, json, Options);
   WriteValueToJSON('NewStockee', Entity.NewStockee, json, Options);
   WriteValueToJSON('OldStockee', Entity.OldStockee, json, Options);
-end;
-
-class procedure TEntitesSerializer.ProcessWriteToJSON(Entity: TCouvertureLite; json: TdwsJSONObject; Options: SerializationOptions);
-begin
   json.AddObject('Categorie').AddValue(IntToStr(Entity.Categorie), Entity.sCategorie);
 end;
 

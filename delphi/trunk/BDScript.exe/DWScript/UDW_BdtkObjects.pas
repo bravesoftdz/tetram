@@ -367,16 +367,16 @@ procedure TDW_BdtkObjectsUnit.Register_TEditionFull;
 var
   c: TdwsClass;
   i: Integer;
-  FListTypesImages: TStrings;
+  FListTypesCouverture: TStrings;
   constant: TdwsConstant;
 begin
-  FListTypesImages := TDaoListe.ListTypesImage;
-  for i := 0 to Pred(FListTypesImages.Count) do
+  FListTypesCouverture := TDaoListe.ListTypesCouverture;
+  for i := 0 to Pred(FListTypesCouverture.Count) do
   begin
     constant := Constants.Add;
-    constant.Name := 'cti' + StringReplace(SansAccents(FListTypesImages.ValueFromIndex[i]), ' ', '_', [rfReplaceAll]);
+    constant.Name := 'cti' + StringReplace(SansAccents(FListTypesCouverture.ValueFromIndex[i]), ' ', '_', [rfReplaceAll]);
     constant.DataType := 'Integer';
-    constant.Value := StrToInt(FListTypesImages.Names[i]);
+    constant.Value := StrToInt(FListTypesCouverture.Names[i]);
   end;
 
   c := RegisterClass('TEditionFull');

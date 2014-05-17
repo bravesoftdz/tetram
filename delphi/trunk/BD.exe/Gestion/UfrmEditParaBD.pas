@@ -3,9 +3,9 @@ unit UfrmEditParaBD;
 interface
 
 uses
-  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, EditLabeled, VirtualTrees, ComCtrls, VDTButton,
-  VirtualTreeBdtk, ComboCheck, ExtCtrls, Buttons, UframRechercheRapide, ExtDlgs, Entities.Full,
-  UframBoutons, UBdtForms, PngSpeedButton, UframVTEdit;
+  Windows, Messages, SysUtils, System.Types, Variants, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, EditLabeled, VirtualTrees, ComCtrls, VDTButton,
+  VirtualTreeBdtk, ComboCheck, ExtCtrls, Buttons, UframRechercheRapide, Vcl.ExtDlgs, Entities.Full,
+  UframBoutons, UBdtForms, PngSpeedButton, UframVTEdit, Vcl.Menus;
 
 type
   TfrmEditParaBD = class(TbdtForm)
@@ -57,6 +57,7 @@ type
     VDTButton4: TVDTButton;
     Bevel5: TBevel;
     cbNumerote: TCheckBoxLabeled;
+    pmChoixCategorie: TPopupMenu;
     procedure cbOffertClick(Sender: TObject);
     procedure cbGratuitClick(Sender: TObject);
     procedure edPrixChange(Sender: TObject);
@@ -90,6 +91,10 @@ type
     procedure vstImagesStructureChange(Sender: TBaseVirtualTree; Node: PVirtualNode; Reason: TChangeReason);
     procedure VDTButton4Click(Sender: TObject);
     procedure VDTButton5Click(Sender: TObject);
+    procedure vstImagesMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure pmChoixCategoriePopup(Sender: TObject);
+    procedure miChangeCategorieImageClick(Sender: TObject);
   private
     FCreation: Boolean;
     FisAchat: Boolean;
@@ -246,6 +251,9 @@ begin
 end;
 
 procedure TfrmEditParaBD.FormCreate(Sender: TObject);
+var
+  i: Integer;
+  mi: TMenuItem;
 begin
   PrepareLV(Self);
   vtEditSeries.Mode := vmSeries;
@@ -267,6 +275,15 @@ begin
   vstImages.TreeOptions.PaintOptions := vstImages.TreeOptions.PaintOptions - [toShowButtons, toShowRoot, toShowTreeLines];
 
   LoadCombo(cbxCategorie, TDaoListe.ListCategoriesParaBD, TDaoListe.DefaultCategorieParaBD);
+
+    for i := 0 to Pred(TDaoListe.ListTypesPhoto.Count) do
+  begin
+    mi := TMenuItem.Create(pmChoixCategorie);
+    mi.Caption := TDaoListe.ListTypesPhoto.ValueFromIndex[i];
+    mi.Tag := StrToInt(TDaoListe.ListTypesPhoto.Names[i]);
+    mi.OnClick := miChangeCategorieImageClick;
+    pmChoixCategorie.Items.Add(mi);
+  end;
 end;
 
 procedure TfrmEditParaBD.btnOKClick(Sender: TObject);
@@ -445,6 +462,7 @@ begin
   // Allowed := (PP.Reference <> -1) and (PP.NewStockee) and (PP.NewStockee = PP.OldStockee);
 
   // devrait être autorisé aussi pour changer le nom de l'image
+  // l'édition de la catégorie d'image n'est pas gérée par le virtualtreeview
   Allowed := False;
 end;
 
@@ -457,6 +475,8 @@ begin
   case Column of
     0:
       CellText := PP.NewNom;
+    1:
+      CellText := PP.sCategorie;
   end;
 end;
 
@@ -480,6 +500,27 @@ begin
     vstImages.RootNodeCount := FParaBD.Photos.Count;
     imgVisu.Picture.Assign(nil);
     vstImages.ReinitNode(vstImages.RootNode, True);
+  end;
+end;
+
+procedure TfrmEditParaBD.vstImagesMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var
+  pt: TPoint;
+  Node: PVirtualNode;
+begin
+  Node := vstImages.GetNodeAt(X, Y);
+  if (Node <> nil) and (vstImages.Header.Columns.ColumnFromPosition(Point(X, Y)) = 1) then
+  begin
+    with vstImages.GetDisplayRect(Node, 1, False) do
+    begin
+      X := Left;
+      Y := Bottom;
+    end;
+    pt := vstImages.ClientToScreen(Point(X, Y));
+    pmChoixCategorie.PopupComponent := TComponent(Node.Index);
+    pmChoixCategorie.Tag := FParaBD.Photos[Node.Index].Categorie;
+    pmChoixCategorie.Popup(pt.X, pt.Y);
   end;
 end;
 
@@ -580,6 +621,14 @@ begin
   lvAuteurs.Invalidate;
 end;
 
+procedure TfrmEditParaBD.pmChoixCategoriePopup(Sender: TObject);
+var
+  MenuItem: TMenuItem;
+begin
+  for MenuItem in pmChoixCategorie.Items do
+    MenuItem.Checked := pmChoixCategorie.Tag = MenuItem.Tag;
+end;
+
 procedure TfrmEditParaBD.btCreateurClick(Sender: TObject);
 var
   PA: TAuteurLite;
@@ -626,6 +675,16 @@ begin
   lvUnivers.Items.Count := FParaBD.Univers.Count;
   src.Invalidate;
   vtEditUniversVTEditChange(vtEditUnivers.VTEdit);
+end;
+
+procedure TfrmEditParaBD.miChangeCategorieImageClick(Sender: TObject);
+var
+  PP: TPhotoLite;
+begin
+  PP := FParaBD.Photos[Integer(TPopupMenu(TMenuItem(Sender).GetParentMenu).PopupComponent)];
+  PP.Categorie := Integer(TMenuItem(Sender).Tag);
+  PP.sCategorie := TDaoListe.ListTypesPhoto.Values[IntToStr(PP.Categorie)];
+  vstImages.Invalidate;
 end;
 
 procedure TfrmEditParaBD.FormShow(Sender: TObject);

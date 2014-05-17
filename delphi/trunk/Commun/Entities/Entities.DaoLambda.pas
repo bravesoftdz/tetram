@@ -9,8 +9,8 @@ type
   TDaoListe = class
   type
     // les valeurs doivent correspondre avec le champ "categorie" de la table "liste"
-    CategorieIndex = (piNOTUSED = 0, piEtat = 1, piReliure = 2, piTypeEdition = 3, piOrientation = 4, piFormatEdition = 5, piTypeImage = 6,
-      piCategorieParaBD = 7, piSensLecture = 8, piNoteAlbum = 9);
+    CategorieIndex = (piNOTUSED = 0, piEtat = 1, piReliure = 2, piTypeEdition = 3, piOrientation = 4, piFormatEdition = 5, piTypeCouverture = 6,
+      piCategorieParaBD = 7, piSensLecture = 8, piNoteAlbum = 9, piTypePhoto = 10);
     TMethod = procedure of object;
     TArrayOfROption = array [CategorieIndex] of ROption;
   private
@@ -40,10 +40,11 @@ type
     class property DefaultFormatEdition: ROption index piFormatEdition read GetDefaultValue;
     class property DefaultTypeEdition: ROption index piTypeEdition read GetDefaultValue;
     class property DefaultOrientation: ROption index piOrientation read GetDefaultValue;
-    class property DefaultTypeImage: ROption index piTypeImage read GetDefaultValue;
+    class property DefaultTypeCouverture: ROption index piTypeCouverture read GetDefaultValue;
     class property DefaultCategorieParaBD: ROption index piCategorieParaBD read GetDefaultValue;
     class property DefaultSensLecture: ROption index piSensLecture read GetDefaultValue;
     class property DefaultNoteAlbum: ROption index piNoteAlbum read GetDefaultValue;
+    class property DefaultTypePhoto: ROption index piTypePhoto read GetDefaultValue;
 
     class property EnsureLists: TMethod read FEnsureLists write FEnsureLists;
     class property Lists: TDictionary<CategorieIndex, TStrings> read GetLists;
@@ -52,10 +53,11 @@ type
     class property ListFormatsEdition: TStrings index piFormatEdition read GetList;
     class property ListTypesEdition: TStrings index piTypeEdition read GetList;
     class property ListOrientations: TStrings index piOrientation read GetList;
-    class property ListTypesImage: TStrings index piTypeImage read GetList;
+    class property ListTypesCouverture: TStrings index piTypeCouverture read GetList;
     class property ListCategoriesParaBD: TStrings index piCategorieParaBD read GetList;
     class property ListSensLecture: TStrings index piSensLecture read GetList;
     class property ListNotesAlbum: TStrings index piNoteAlbum read GetList;
+    class property ListTypesPhoto: TStrings index piTypePhoto read GetList;
   end;
 
 implementation

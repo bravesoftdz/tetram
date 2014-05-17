@@ -1195,7 +1195,7 @@ object frmEditAlbum: TfrmEditAlbum
         end>
     end
     object vstImages: TVirtualStringTree
-      Left = 56
+      Left = 61
       Top = 592
       Width = 545
       Height = 130
@@ -1230,7 +1230,7 @@ object frmEditAlbum: TfrmEditAlbum
       Columns = <
         item
           Position = 1
-          Width = 445
+          Width = 441
         end
         item
           Position = 0

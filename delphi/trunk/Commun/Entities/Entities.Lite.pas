@@ -14,10 +14,12 @@ type
     function ChaineAffichage(dummy: Boolean = True): string; virtual; abstract;
   end;
 
-  TPhotoLite = class(TBaseLite)
+  TImageLite = class(TBaseLite)
   public
     OldNom, NewNom: string { [255] };
     OldStockee, NewStockee: Boolean;
+    Categorie: Smallint;
+    sCategorie: string { [50] };
 
     constructor Create; override;
 
@@ -25,12 +27,12 @@ type
     function ChaineAffichage(dummy: Boolean = True): string; override;
   end;
 
-  TCouvertureLite = class(TPhotoLite)
+  TPhotoLite = class(TImageLite)
   public
-    Categorie: Smallint;
-    sCategorie: string { [50] };
+  end;
 
-    procedure Assign(Source: TPersistent); override;
+  TCouvertureLite = class(TImageLite)
+  public
   end;
 
   TParaBDLite = class(TBaseLite)
@@ -207,42 +209,32 @@ begin
   Result := Format('1 %s = %.2f %s', [Monnaie1, Taux, Monnaie2]);
 end;
 
-{ TPhotoLite }
+{ TImageLite }
 
-procedure TPhotoLite.Assign(Source: TPersistent);
+procedure TImageLite.Assign(Source: TPersistent);
 begin
   inherited;
-  if Source is TPhotoLite then
+  if Source is TImageLite then
   begin
-    OldNom := TPhotoLite(Source).OldNom;
-    NewNom := TPhotoLite(Source).NewNom;
-    OldStockee := TPhotoLite(Source).OldStockee;
-    NewStockee := TPhotoLite(Source).NewStockee;
+    OldNom := TImageLite(Source).OldNom;
+    NewNom := TImageLite(Source).NewNom;
+    OldStockee := TImageLite(Source).OldStockee;
+    NewStockee := TImageLite(Source).NewStockee;
+    Categorie := TImageLite(Source).Categorie;
+    sCategorie := TImageLite(Source).sCategorie;
   end;
 end;
 
-function TPhotoLite.ChaineAffichage(dummy: Boolean): string;
+function TImageLite.ChaineAffichage(dummy: Boolean): string;
 begin
   Result := NewNom;
 end;
 
-constructor TPhotoLite.Create;
+constructor TImageLite.Create;
 begin
   inherited;
   OldStockee := TGlobalVar.Utilisateur.Options.ImagesStockees;
   NewStockee := OldStockee;
-end;
-
-{ TCouvertureLite }
-
-procedure TCouvertureLite.Assign(Source: TPersistent);
-begin
-  inherited;
-  if Source is TCouvertureLite then
-  begin
-    Categorie := TCouvertureLite(Source).Categorie;
-    sCategorie := TCouvertureLite(Source).sCategorie;
-  end;
 end;
 
 { TEditeurLite }
