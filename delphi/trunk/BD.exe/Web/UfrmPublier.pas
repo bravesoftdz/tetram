@@ -60,18 +60,23 @@ type
     ActionCreateImagesDirectory = 4;
     ActionEmptyImagesDirectory = 6;
 
-    TablesSynchro: array [1 .. 16] of RInfoTable = ((TableName: 'PERSONNES'; ID: 'id_personne'; UpperFields: 'nompersonne'), (TableName: 'EDITEURS';
-      ID: 'id_editeur'; UpperFields: 'nomediteur'), (TableName: 'COLLECTIONS'; ID: 'id_collection'; UpperFields: 'nomcollection'), (TableName: 'SERIES';
-      ID: 'id_serie';
-      SkipFields
-      : 'etat=1.0.0.1@reliure=1.0.0.1@typeedition=1.0.0.1@orientation=1.0.0.1@formatedition=1.0.0.1@senslecture=1.0.0.1@vo=1.0.0.1@couleur=1.0.0.1@notation';
-      UpperFields: 'titreserie@sujetserie@remarquesserie'), (TableName: 'ALBUMS'; ID: 'id_album'; SkipFields: 'notation';
-      UpperFields: 'titrealbum@sujetalbum@remarquesalbum'), (TableName: 'EDITIONS'; ID: 'id_edition'), (TableName: 'AUTEURS'; ID: 'id_auteur'),
-      (TableName: 'GENRES'; ID: 'id_genre'; UpperFields: 'genre'), (TableName: 'GENRESERIES'; ID: 'id_genreseries'), (TableName: 'LISTES'; ID: 'id_liste'),
-      (TableName: 'ALBUMS_MANQUANTS'; UpperFields: 'titreserie'; ProcedureStockee: 'ALBUMS_MANQUANTS(1, 1, NULL)'), (TableName: 'PREVISIONS_SORTIES';
-      UpperFields: 'titreserie'; ProcedureStockee: 'PREVISIONS_SORTIES(1, NULL)'), (TableName: 'COUVERTURES'; ID: 'id_couverture'; TypeSynchro: tsImages;
-      SkipFields: 'stockagecouverture@imagecouverture@fichiercouverture'), (TableName: 'UNIVERS'; ID: 'id_univers'; UpperFields: 'nomunivers'),
-      (TableName: 'SERIES_UNIVERS'; ID: 'id_serie_univers'), (TableName: 'ALBUMS_UNIVERS'; ID: 'id_album_univers'));
+    TablesSynchro: array [1 .. 16] of RInfoTable = (
+      (TableName: 'PERSONNES'; ID: 'id_personne'; SkipFields: 'ds_personnes'; UpperFields: 'nompersonne'),
+      (TableName: 'EDITEURS'; ID: 'id_editeur'; SkipFields: 'ds_editeurs'; UpperFields: 'nomediteur'),
+      (TableName: 'COLLECTIONS'; ID: 'id_collection'; SkipFields: 'ds_collections'; UpperFields: 'nomcollection'),
+      (TableName: 'SERIES'; ID: 'id_serie'; SkipFields: 'etat=1.0.0.1@reliure=1.0.0.1@typeedition=1.0.0.1@orientation=1.0.0.1@formatedition=1.0.0.1@senslecture=1.0.0.1@vo=1.0.0.1@couleur=1.0.0.1@notation@ds_series'; UpperFields: 'titreserie@sujetserie@remarquesserie'),
+      (TableName: 'ALBUMS'; ID: 'id_album'; SkipFields: 'notation@ds_albums'; UpperFields: 'titrealbum@sujetalbum@remarquesalbum'),
+      (TableName: 'EDITIONS'; ID: 'id_edition'; SkipFields: 'ds_editions'),
+      (TableName: 'AUTEURS'; ID: 'id_auteur'; SkipFields: 'ds_auteurs'),
+      (TableName: 'GENRES'; ID: 'id_genre'; SkipFields: 'ds_genres'; UpperFields: 'genre'),
+      (TableName: 'GENRESERIES'; ID: 'id_genreseries'; SkipFields: 'ds_genreseries'),
+      (TableName: 'LISTES'; ID: 'id_liste'; SkipFields: 'ds_listes'),
+      (TableName: 'ALBUMS_MANQUANTS'; UpperFields: 'titreserie'; ProcedureStockee: 'ALBUMS_MANQUANTS(1, 1, NULL)'),
+      (TableName: 'PREVISIONS_SORTIES'; UpperFields: 'titreserie'; ProcedureStockee: 'PREVISIONS_SORTIES(1, NULL)'),
+      (TableName: 'COUVERTURES'; ID: 'id_couverture'; TypeSynchro: tsImages; SkipFields: 'stockagecouverture@imagecouverture@fichiercouverture@ds_couvertures'),
+      (TableName: 'UNIVERS'; ID: 'id_univers'; SkipFields: 'ds_univers'; UpperFields: 'nomunivers'),
+      (TableName: 'SERIES_UNIVERS'; ID: 'id_serie_univers'; SkipFields: 'ds_series_univers'),
+      (TableName: 'ALBUMS_UNIVERS'; ID: 'id_album_univers'; SkipFields: 'ds_albums_univers'));
   private
     FStartTime: TDateTime;
     FUpgradeFromDate: TDate;
