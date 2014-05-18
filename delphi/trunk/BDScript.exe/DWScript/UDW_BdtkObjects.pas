@@ -21,16 +21,16 @@ type
     procedure Register_TScriptChoix;
     procedure Register_Classes;
 
-    procedure TAlbumCompletDefaultSearch_R(info: TProgramInfo; ExtObject: TObject);
-    procedure TAlbumCompletEdition_R(info: TProgramInfo; ExtObject: TObject);
+    procedure TAlbumFullDefaultSearch_R(info: TProgramInfo; ExtObject: TObject);
+    procedure TAlbumFullEdition_R(info: TProgramInfo; ExtObject: TObject);
 
     procedure TAuteurNomAuteur(info: TProgramInfo; ExtObject: TObject);
 
-    procedure TEditionCompleteCollection(info: TProgramInfo; ExtObject: TObject);
+    procedure TEditionFullCollection(info: TProgramInfo; ExtObject: TObject);
 
     procedure TScriptChoixTitre(info: TProgramInfo; ExtObject: TObject);
 
-    procedure TSerieCompleteCollection(info: TProgramInfo; ExtObject: TObject);
+    procedure TSerieFullCollection(info: TProgramInfo; ExtObject: TObject);
 
     procedure TObjectListOfObjectCount_R(info: TProgramInfo; ExtObject: TObject);
 
@@ -40,14 +40,15 @@ type
   public
     constructor Create(const MasterEngine: IMasterEngine); override;
   published
-    procedure OnTAlbumComplet_ImportEval(info: TProgramInfo; ExtObject: TObject);
-    procedure OnTAlbumComplet_ClearEval(info: TProgramInfo; ExtObject: TObject);
+    procedure OnTAlbumFull_ImportEval(info: TProgramInfo; ExtObject: TObject);
+    procedure OnTAlbumFull_ClearEval(info: TProgramInfo; ExtObject: TObject);
 
     procedure OnTUnivers_CreateEval(info: TProgramInfo; var ExtObject: TObject);
 
-    procedure OnTAuteur_CreateEval(info: TProgramInfo; var ExtObject: TObject);
+    procedure OnTAuteurSerie_CreateEval(info: TProgramInfo; var ExtObject: TObject);
+    procedure OnTAuteurAlbum_CreateEval(info: TProgramInfo; var ExtObject: TObject);
 
-    procedure OnTEditionComplete_AddImageFromURLEval(info: TProgramInfo; ExtObject: TObject);
+    procedure OnTEditionFull_AddImageFromURLEval(info: TProgramInfo; ExtObject: TObject);
 
     procedure OnTScriptChoix_CreateEval(info: TProgramInfo; var ExtObject: TObject);
     procedure OnTScriptChoix_DestroyEval(ExtObject: TObject);
@@ -102,41 +103,46 @@ begin
   info.ResultAsVariant := GetScriptObjFromExternal(info, MakeUnivers(info.ParamAsString[0]));
 end;
 
-procedure TDW_BdtkObjectsUnit.OnTAlbumComplet_ClearEval(info: TProgramInfo; ExtObject: TObject);
+procedure TDW_BdtkObjectsUnit.OnTAlbumFull_ClearEval(info: TProgramInfo; ExtObject: TObject);
 begin
   (ExtObject as TAlbumFull).Clear;
 end;
 
-procedure TDW_BdtkObjectsUnit.OnTAlbumComplet_ImportEval(info: TProgramInfo; ExtObject: TObject);
+procedure TDW_BdtkObjectsUnit.OnTAlbumFull_ImportEval(info: TProgramInfo; ExtObject: TObject);
 begin
   (ExtObject as TAlbumFull).ReadyToImport := True;;
 end;
 
-procedure TDW_BdtkObjectsUnit.OnTAuteur_CreateEval(info: TProgramInfo; var ExtObject: TObject);
+procedure TDW_BdtkObjectsUnit.OnTAuteurAlbum_CreateEval(info: TProgramInfo; var ExtObject: TObject);
 begin
-  ExtObject := TFactoryAuteurLite.getInstance;
+  ExtObject := TFactoryAuteurAlbumLite.getInstance;
 end;
 
-procedure TDW_BdtkObjectsUnit.OnTEditionComplete_AddImageFromURLEval(info: TProgramInfo; ExtObject: TObject);
+procedure TDW_BdtkObjectsUnit.OnTAuteurSerie_CreateEval(info: TProgramInfo; var ExtObject: TObject);
+begin
+  ExtObject := TFactoryAuteurSerieLite.getInstance;
+end;
+
+procedure TDW_BdtkObjectsUnit.OnTEditionFull_AddImageFromURLEval(info: TProgramInfo; ExtObject: TObject);
 begin
   info.ResultAsInteger := AddImageFromURL((ExtObject as TEditionFull), info.ParamAsString[0], info.ParamAsInteger[1]);
 end;
 
 procedure TDW_BdtkObjectsUnit.OnTObjectListOfAuteur_AddEval(info: TProgramInfo; ExtObject: TObject);
 begin
-  info.ResultAsInteger := (ExtObject as TObjectList<TAuteurEditionLite>).Add(info.ParamAsObject[0] as TAuteurEditionLite);
+  info.ResultAsInteger := (ExtObject as TObjectList<TAuteurLite>).Add(info.ParamAsObject[0] as TAuteurLite);
 end;
 
 procedure TDW_BdtkObjectsUnit.OnTObjectListOfAuteur_InsertEval(info: TProgramInfo; ExtObject: TObject);
 begin
-  (ExtObject as TObjectList<TAuteurEditionLite>).Insert(info.ParamAsInteger[0], info.ParamAsObject[1] as TAuteurEditionLite);
+  (ExtObject as TObjectList<TAuteurLite>).Insert(info.ParamAsInteger[0], info.ParamAsObject[1] as TAuteurLite);
 end;
 
 procedure TDW_BdtkObjectsUnit.OnTObjectListOfAuteur_ItemsEval(info: TProgramInfo; ExtObject: TObject);
 begin
   case TMethodSymbol(info.FuncSym).Kind of
     fkFunction:
-      info.ResultAsVariant := GetScriptObjFromExternal(info, (ExtObject as TObjectList<TAuteurEditionLite>).Items[info.ParamAsInteger[0]]);
+      info.ResultAsVariant := GetScriptObjFromExternal(info, (ExtObject as TObjectList<TAuteurLite>).Items[info.ParamAsInteger[0]]);
     // info.ResultAsVariant := info.RegisterExternalObject((ExtObject as TObjectList<TAuteur>).Items[info.ParamAsInteger[0]]);
   end;
 end;
@@ -165,12 +171,12 @@ begin
   (ExtObject as TObjectList<TObject>).Delete(info.ParamAsInteger[0]);
 end;
 
-procedure TDW_BdtkObjectsUnit.TAlbumCompletDefaultSearch_R(info: TProgramInfo; ExtObject: TObject);
+procedure TDW_BdtkObjectsUnit.TAlbumFullDefaultSearch_R(info: TProgramInfo; ExtObject: TObject);
 begin
   info.ResultAsString := (ExtObject as TAlbumFull).DefaultSearch;
 end;
 
-procedure TDW_BdtkObjectsUnit.TAlbumCompletEdition_R(info: TProgramInfo; ExtObject: TObject);
+procedure TDW_BdtkObjectsUnit.TAlbumFullEdition_R(info: TProgramInfo; ExtObject: TObject);
 var
   Album: TAlbumFull;
 begin
@@ -184,9 +190,9 @@ procedure TDW_BdtkObjectsUnit.TAuteurNomAuteur(info: TProgramInfo; ExtObject: TO
 begin
   case info.FuncSym.Kind of
     fkFunction:
-      info.ResultAsString := (ExtObject as TAuteurEditionLite).Personne.Nom;
+      info.ResultAsString := (ExtObject as TAuteurLite).Personne.Nom;
     fkProcedure:
-      (ExtObject as TAuteurEditionLite).Personne.Nom := info.ParamAsString[0];
+      (ExtObject as TAuteurLite).Personne.Nom := info.ParamAsString[0];
 end;
 end;
 
@@ -258,7 +264,7 @@ begin
 end;
 end;
 
-procedure TDW_BdtkObjectsUnit.TSerieCompleteCollection(info: TProgramInfo; ExtObject: TObject);
+procedure TDW_BdtkObjectsUnit.TSerieFullCollection(info: TProgramInfo; ExtObject: TObject);
 begin
   case TMethodSymbol(info.FuncSym).Kind of
     fkFunction:
@@ -268,7 +274,7 @@ begin
 end;
 end;
 
-procedure TDW_BdtkObjectsUnit.TEditionCompleteCollection(info: TProgramInfo; ExtObject: TObject);
+procedure TDW_BdtkObjectsUnit.TEditionFullCollection(info: TProgramInfo; ExtObject: TObject);
 begin
   case TMethodSymbol(info.FuncSym).Kind of
     fkFunction:
@@ -303,7 +309,7 @@ var
 begin
   c := RegisterClass('TAlbumFull');
 
-  RegisterProperty(c, 'DefaultSearch', 'string', TAlbumCompletDefaultSearch_R);
+  RegisterProperty(c, 'DefaultSearch', 'string', TAlbumFullDefaultSearch_R);
 
   RegisterProperty(c, 'Titre', 'string', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Serie', 'TSerieFull', HandleDynamicProperty);
@@ -319,7 +325,7 @@ begin
   RegisterProperty(c, 'Coloristes', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , HandleDynamicProperty);
   RegisterProperty(c, 'Sujet', 'LongString', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Notes', 'LongString', HandleDynamicProperty, HandleDynamicProperty);
-  RegisterProperty(c, 'Edition', 'TEditionFull', TAlbumCompletEdition_R);
+  RegisterProperty(c, 'Edition', 'TEditionFull', TAlbumFullEdition_R);
   RegisterProperty(c, 'Univers', 'TObjectListOfUnivers' { TObjectList<TUnivers> } , HandleDynamicProperty);
 
   RegisterMethod(c, 'Clear', []);
@@ -352,12 +358,14 @@ begin
 
   c := RegisterClass('TAuteur');
 
-  RegisterConstructor(c, []);
   RegisterProperty(c, 'NomAuteur', 'string', TAuteurNomAuteur, TAuteurNomAuteur);
   RegisterProperty(c, 'Metier', 'TMetierAuteur', HandleDynamicProperty, HandleDynamicProperty);
 
-  RegisterFunction('MakeAuteurSerie', 'TAuteur', ['Nom', 'string', 'Metier', 'TMetierAuteur'], MakeAuteurSerieEval);
-  RegisterFunction('MakeAuteurAlbum', 'TAuteur', ['Nom', 'string', 'Metier', 'TMetierAuteur'], MakeAuteurAlbumEval);
+  RegisterConstructor(RegisterClass('TAuteurSerie', c.Name), []);
+  RegisterConstructor(RegisterClass('TAuteurAlbum', c.Name), []);
+
+  RegisterFunction('MakeAuteurSerie', 'TAuteurSerie', ['Nom', 'string', 'Metier', 'TMetierAuteur'], MakeAuteurSerieEval);
+  RegisterFunction('MakeAuteurAlbum', 'TAuteurAlbum', ['Nom', 'string', 'Metier', 'TMetierAuteur'], MakeAuteurAlbumEval);
 end;
 
 procedure TDW_BdtkObjectsUnit.Register_TEditeurFull;
@@ -389,7 +397,7 @@ begin
   c := RegisterClass('TEditionFull');
 
   RegisterProperty(c, 'Editeur', 'TEditeurFull', HandleDynamicProperty);
-  RegisterProperty(c, 'Collection', 'string', TEditionCompleteCollection, TEditionCompleteCollection);
+  RegisterProperty(c, 'Collection', 'string', TEditionFullCollection, TEditionFullCollection);
   RegisterProperty(c, 'TypeEdition', 'Integer' { ROption } , HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'AnneeEdition', 'Integer', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Etat', 'Integer' { ROption } , HandleDynamicProperty, HandleDynamicProperty);
@@ -479,7 +487,7 @@ begin
   RegisterProperty(c, 'Sujet', 'LongString', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Notes', 'LongString', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Editeur', 'TEditeurFull', HandleDynamicProperty);
-  RegisterProperty(c, 'Collection', 'string', TSerieCompleteCollection, TSerieCompleteCollection);
+  RegisterProperty(c, 'Collection', 'string', TSerieFullCollection, TSerieFullCollection);
   RegisterProperty(c, 'SiteWeb', 'string', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'NbAlbums', 'Integer', HandleDynamicProperty, HandleDynamicProperty);
   RegisterProperty(c, 'Scenaristes', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , HandleDynamicProperty);

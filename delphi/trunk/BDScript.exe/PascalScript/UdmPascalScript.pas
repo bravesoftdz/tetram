@@ -724,8 +724,8 @@ begin
   PSScriptDebugger1.AddFunction(@PostPageWithHeaders,
     'function PostPageWithHeaders(const url: string; const Pieces: array of RAttachement; UTF8: Boolean): string;');
   PSScriptDebugger1.AddFunction(@findInfo, 'function findInfo(const sDebut, sFin, sChaine, sDefault: string): string;');
-  PSScriptDebugger1.AddFunction(@MakeAuteurSerie, 'function MakeAuteurSerie(const Nom: string; Metier: TMetierAuteur): TAuteur;');
-  PSScriptDebugger1.AddFunction(@MakeAuteurAlbum, 'function MakeAuteurAlbum(const Nom: string; Metier: TMetierAuteur): TAuteur;');
+  PSScriptDebugger1.AddFunction(@MakeAuteurSerie, 'function MakeAuteurSerie(const Nom: string; Metier: TMetierAuteur): TAuteurSerie;');
+  PSScriptDebugger1.AddFunction(@MakeAuteurAlbum, 'function MakeAuteurAlbum(const Nom: string; Metier: TMetierAuteur): TAuteurAlbum;');
   PSScriptDebugger1.AddFunction(@MakeUnivers, 'function MakeUnivers(const Nom: string): TUnivers;');
   PSScriptDebugger1.AddFunction(@AskSearchEntry, 'function AskSearchEntry(const Labels: array of string; var Search: string; var Index: Integer): Boolean');
   PSScriptDebugger1.AddFunction(@CombineURL, 'function CombineURL(const Root, URL: string): string;');
