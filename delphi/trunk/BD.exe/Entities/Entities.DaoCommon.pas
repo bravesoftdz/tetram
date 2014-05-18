@@ -3,7 +3,7 @@ unit Entities.DaoCommon;
 interface
 
 uses
-  System.SysUtils, System.Rtti, System.Generics.Collections, Entities.Common, Entities.FactoriesCommon;
+  System.SysUtils, System.Classes, System.Rtti, System.Generics.Collections, Entities.Common, Entities.FactoriesCommon, Entities.Attributes;
 
 type
   TDaoEntity = class abstract
@@ -20,7 +20,7 @@ type
   TDaoDBEntity = class abstract(TDaoEntity)
   public
     class function BuildID: TGUID;
-    class procedure Fill(Entity: TDBEntity; const Reference: TGUID); virtual; abstract;
+    class procedure Fill(Entity: TDBEntity; const Reference: TGUID); virtual;
     class function getInstance(const Reference: TGUID): TDBEntity; reintroduce; overload;
   end;
 
@@ -57,6 +57,13 @@ begin
     qry.Transaction.Free;
     qry.Free;
   end;
+end;
+
+class procedure TDaoDBEntity.Fill(Entity: TDBEntity; const Reference: TGUID);
+var
+  mi: TEntityMetadataCache.TMetadataInfo;
+begin
+  mi := TEntityMetadataCache.PrepareRTTI(TDBEntityClass(Entity.ClassType));
 end;
 
 class function TDaoDBEntity.getInstance(const Reference: TGUID): TDBEntity;

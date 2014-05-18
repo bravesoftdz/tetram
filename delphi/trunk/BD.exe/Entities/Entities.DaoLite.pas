@@ -316,7 +316,7 @@ begin
     Exit;
 
   for p in FPreparedQueries do
-    if p.Value.Equals(Query) then
+    if p.Value = Query then
       FPreparedQueries.Remove(p.Key);
 
   cs.Release;

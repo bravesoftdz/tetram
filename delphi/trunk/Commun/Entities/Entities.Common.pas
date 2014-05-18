@@ -3,7 +3,7 @@ unit Entities.Common;
 interface
 
 uses
-  System.Classes, System.Rtti, Commun, System.Generics.Collections;
+  System.Classes, System.Rtti, Commun, System.Generics.Collections, Entities.Attributes;
 
 type
   TEntity = class;
@@ -35,17 +35,10 @@ type
 
   TDBEntity = class(TEntity)
   private
-    class var RttiContext: TRttiContext;
-    class var FRTTIPrepared: TList<TDBEntityClass>;
-    class procedure PrepareRTTI;
-  private
     FID: RGUIDEx;
   protected
     constructor Create; override;
   public
-    class constructor Create;
-    class destructor Destroy;
-
     function GetID: RGUIDEx; inline;
     procedure SetID(const Value: RGUIDEx); inline;
     procedure Assign(Source: TPersistent); override;
@@ -54,11 +47,30 @@ type
     property ID: RGUIDEx read GetID write SetID;
   end;
 
+  TEntityMetadataCache = class
+  public type
+    TMetadataInfo = class
+    public
+      EntityDesc: EntityAttribute;
+      PrimaryKeyDesc: PrimaryKeyAttribute;
+      FieldsDesc: TList<EntityFieldAttribute>;
+      constructor Create;
+      destructor Destroy; override;
+      function getSelectSQL: string;
+    end;
+  private
+    class var RttiContext: TRttiContext;
+    class var FRTTIPrepared: TDictionary<TDBEntityClass, TMetadataInfo>;
+  public
+    class constructor Create;
+    class destructor Destroy;
+
+    class function PrepareRTTI(c: TDBEntityClass): TMetadataInfo;
+  end;
+
 implementation
 
 { TEntity }
-
-uses Entities.Attributes;
 
 procedure TEntity.AfterConstruction;
 begin
@@ -144,14 +156,9 @@ begin
   FID := GUID_NULL;
 end;
 
-class constructor TDBEntity.Create;
-begin
-  FRTTIPrepared := TList<TDBEntityClass>.Create;
-end;
-
 constructor TDBEntity.Create;
 begin
-  PrepareRTTI;
+  TEntityMetadataCache.PrepareRTTI(TDBEntityClass(Self.ClassType));
   inherited;
 end;
 
@@ -160,55 +167,101 @@ begin
   Result := FID;
 end;
 
-class procedure TDBEntity.PrepareRTTI;
-var
-  attr: TCustomAttribute;
-  c: TRttiType;
-  f: TRttiField;
-  p: TRttiProperty;
-  m: TRttiMethod;
-begin
-  if FRTTIPrepared.Contains(Self) then
-    Exit;
-
-  c := RttiContext.GetType(Self);
-
-  for attr in c.GetAttributes do
-    if attr is TRelatedAttribute then
-      TRelatedAttribute(attr).c := c;
-
-  for f in c.GetFields do
-    for attr in f.GetAttributes do
-    begin
-      TRelatedAttribute(attr).c := c;
-      TRelatedAttribute(attr).f := f;
-    end;
-
-  for p in c.GetProperties do
-    for attr in p.GetAttributes do
-    begin
-      TRelatedAttribute(attr).c := c;
-      TRelatedAttribute(attr).p := p;
-    end;
-
-  for m in c.GetMethods do
-    for attr in m.GetAttributes do
-    begin
-      TRelatedAttribute(attr).c := c;
-      TRelatedAttribute(attr).m := m;
-    end;
-
-  FRTTIPrepared.Add(Self);
-end;
-
 procedure TDBEntity.SetID(const Value: RGUIDEx);
 begin
   FID := Value;
 end;
 
-class destructor TDBEntity.Destroy;
+{ TEntityMetadataCache.TMetadataInfo }
+
+constructor TEntityMetadataCache.TMetadataInfo.Create;
+begin
+  FieldsDesc := TList<EntityFieldAttribute>.Create;
+end;
+
+destructor TEntityMetadataCache.TMetadataInfo.Destroy;
+begin
+  FieldsDesc.Free;
+  inherited;
+end;
+
+function TEntityMetadataCache.TMetadataInfo.getSelectSQL: string;
+var
+  f: EntityFieldAttribute;
+begin
+  Result := 'select ' + PrimaryKeyDesc.FieldName;
+  for f in FieldsDesc do
+    Result := Result + ', ' + f.FieldName;
+  Result := Result + ' where ' + PrimaryKeyDesc.FieldName + ' = ?';
+end;
+
+{ TEntityMetadataCache }
+
+class constructor TEntityMetadataCache.Create;
+begin
+  FRTTIPrepared := TObjectDictionary<TDBEntityClass, TMetadataInfo>.Create([doOwnsValues]);
+end;
+
+class destructor TEntityMetadataCache.Destroy;
 begin
   FRTTIPrepared.Free;
+end;
+
+class function TEntityMetadataCache.PrepareRTTI(c: TDBEntityClass): TMetadataInfo;
+var
+  attr: TCustomAttribute;
+  RC: TRttiType;
+  f: TRttiField;
+  p: TRttiProperty;
+  m: TRttiMethod;
+begin
+  if FRTTIPrepared.TryGetValue(c, Result) then
+    Exit;
+
+  Result := TMetadataInfo.Create;
+  FRTTIPrepared.Add(c, Result);
+
+  RC := RttiContext.GetType(Self);
+
+  for attr in RC.GetAttributes do
+    if attr is TRelatedAttribute then
+    begin
+      TRelatedAttribute(attr).c := RC;
+      if attr is EntityAttribute then
+        Result.EntityDesc := EntityAttribute(attr);
+    end;
+
+  for f in RC.GetFields do
+    for attr in f.GetAttributes do
+      if attr is TRelatedAttribute then
+      begin
+        TRelatedAttribute(attr).c := RC;
+        TRelatedAttribute(attr).f := f;
+        if attr is PrimaryKeyAttribute then
+          Result.PrimaryKeyDesc := PrimaryKeyAttribute(attr)
+        else if attr is EntityFieldAttribute then
+          Result.FieldsDesc.Add(EntityFieldAttribute(attr));
+      end;
+
+  for p in RC.GetProperties do
+    for attr in p.GetAttributes do
+      if attr is TRelatedAttribute then
+      begin
+        TRelatedAttribute(attr).c := RC;
+        TRelatedAttribute(attr).p := p;
+        if attr is PrimaryKeyAttribute then
+          Result.PrimaryKeyDesc := PrimaryKeyAttribute(attr)
+        else if attr is EntityFieldAttribute then
+          Result.FieldsDesc.Add(EntityFieldAttribute(attr));
+      end;
+
+  for m in RC.GetMethods do
+    for attr in m.GetAttributes do
+      if attr is TRelatedAttribute then
+      begin
+        TRelatedAttribute(attr).c := RC;
+        TRelatedAttribute(attr).m := m;
+      end;
 end;
 
 end.
