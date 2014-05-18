@@ -134,7 +134,7 @@ object frmEditSerie: TfrmEditSerie
       ExplicitLeft = 443
     end
     object VDTButton13: TVDTButton
-      Left = 751
+      Left = 754
       Top = 30
       Width = 23
       Height = 20
@@ -173,7 +173,6 @@ object frmEditSerie: TfrmEditSerie
         893708AB398E77913EF34A5E9AF82B9B1E99095E38A5C85284E2C608F9FF6DE3
         3F46038B558452BD6059268919EDEE3681C6123142E2DFC17F03DFC55B0C5750
         2E1C0000000049454E44AE426082}
-      ExplicitLeft = 769
     end
     object Label1: TLabel
       Left = 27
@@ -515,7 +514,7 @@ object frmEditSerie: TfrmEditSerie
     object edTitre: TEditLabeled
       Left = 81
       Top = 4
-      Width = 693
+      Width = 696
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -531,7 +530,7 @@ object frmEditSerie: TfrmEditSerie
     object vtGenres: TVirtualStringTree
       Left = 537
       Top = 216
-      Width = 237
+      Width = 240
       Height = 90
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
@@ -551,7 +550,7 @@ object frmEditSerie: TfrmEditSerie
       Indent = 8
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 10
+      TabOrder = 11
       OnChecked = vtGenresChecked
       OnDblClick = vtGenresDblClick
       OnInitNode = vtGenresInitNode
@@ -566,7 +565,7 @@ object frmEditSerie: TfrmEditSerie
       BevelKind = bkTile
       BorderStyle = bsNone
       ScrollBars = ssVertical
-      TabOrder = 3
+      TabOrder = 4
       LinkControls = <
         item
           Control = Label6
@@ -575,13 +574,13 @@ object frmEditSerie: TfrmEditSerie
     object edNotes: TMemoLabeled
       Left = 466
       Top = 103
-      Width = 308
+      Width = 311
       Height = 79
       Anchors = [akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       ScrollBars = ssVertical
-      TabOrder = 4
+      TabOrder = 5
       LinkControls = <
         item
           Control = Label7
@@ -595,7 +594,7 @@ object frmEditSerie: TfrmEditSerie
       AllowGrayed = True
       Caption = 'S'#233'rie termin'#233'e'
       State = cbGrayed
-      TabOrder = 17
+      TabOrder = 18
       OnClick = cbTermineeClick
       LinkControls = <
         item
@@ -608,7 +607,7 @@ object frmEditSerie: TfrmEditSerie
       Width = 137
       Height = 16
       Caption = 'Chercher les manquants'
-      TabOrder = 16
+      TabOrder = 17
       LinkControls = <
         item
           Control = cbManquants
@@ -617,7 +616,7 @@ object frmEditSerie: TfrmEditSerie
     object vtAlbums: TVirtualStringTree
       Left = 81
       Top = 499
-      Width = 693
+      Width = 696
       Height = 158
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
@@ -638,14 +637,14 @@ object frmEditSerie: TfrmEditSerie
       Indent = 8
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 19
+      TabOrder = 21
       OnDblClick = vtAlbumsDblClick
       Columns = <>
     end
     object edSite: TEditLabeled
       Left = 81
       Top = 30
-      Width = 669
+      Width = 674
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -673,7 +672,7 @@ object frmEditSerie: TfrmEditSerie
         end>
       OwnerData = True
       SortType = stNone
-      TabOrder = 6
+      TabOrder = 7
       OnData = lvScenaristesData
       OnKeyDown = lvColoristesKeyDown
       LinkControls = <
@@ -693,7 +692,7 @@ object frmEditSerie: TfrmEditSerie
         end>
       OwnerData = True
       SortType = stBoth
-      TabOrder = 7
+      TabOrder = 8
       OnData = lvDessinateursData
       OnKeyDown = lvColoristesKeyDown
       LinkControls = <
@@ -713,7 +712,7 @@ object frmEditSerie: TfrmEditSerie
         end>
       OwnerData = True
       SortType = stBoth
-      TabOrder = 8
+      TabOrder = 9
       OnData = lvColoristesData
       OnKeyDown = lvColoristesKeyDown
       LinkControls = <
@@ -724,7 +723,7 @@ object frmEditSerie: TfrmEditSerie
     object vtParaBD: TVirtualStringTree
       Left = 81
       Top = 672
-      Width = 693
+      Width = 696
       Height = 89
       Anchors = [akLeft, akTop, akRight]
       AnimationDuration = 0
@@ -745,33 +744,33 @@ object frmEditSerie: TfrmEditSerie
       Indent = 8
       ParentShowHint = False
       ShowHint = True
-      TabOrder = 20
+      TabOrder = 22
       OnDblClick = vtParaBDDblClick
       Columns = <>
     end
     inline FrameRechercheRapideGenre: TframRechercheRapide
       Left = 577
       Top = 190
-      Width = 197
+      Width = 200
       Height = 21
       Anchors = [akLeft, akTop, akRight]
-      TabOrder = 9
+      TabOrder = 10
       ExplicitLeft = 577
       ExplicitTop = 190
-      ExplicitWidth = 197
+      ExplicitWidth = 200
       DesignSize = (
-        197
+        200
         21)
       inherited btNext: TVDTButton
-        Left = 156
+        Left = 159
         ExplicitLeft = 139
       end
       inherited btNew: TVDTButton
-        Left = 176
+        Left = 179
         ExplicitLeft = 159
       end
       inherited edSearch: TEditLabeled
-        Width = 157
+        Width = 160
         LinkControls = <
           item
             Control = Label17
@@ -785,7 +784,7 @@ object frmEditSerie: TfrmEditSerie
       Width = 121
       Height = 16
       Caption = 'Surveiller les sorties'
-      TabOrder = 18
+      TabOrder = 19
       LinkControls = <
         item
           Control = cbSorties
@@ -797,7 +796,7 @@ object frmEditSerie: TfrmEditSerie
       Width = 65
       Height = 16
       Caption = 'Complete'
-      TabOrder = 15
+      TabOrder = 16
       OnClick = cbCompleteClick
       LinkControls = <
         item
@@ -814,7 +813,7 @@ object frmEditSerie: TfrmEditSerie
       BorderStyle = bsNone
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 21
+      TabOrder = 20
       OnChange = edSiteChange
       LinkControls = <
         item
@@ -835,7 +834,7 @@ object frmEditSerie: TfrmEditSerie
       Ctl3D = True
       ParentCtl3D = False
       State = cbChecked
-      TabOrder = 14
+      TabOrder = 15
       LinkControls = <
         item
           Control = cbCouleur
@@ -851,7 +850,7 @@ object frmEditSerie: TfrmEditSerie
       Caption = 'VO'
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 13
+      TabOrder = 14
       LinkControls = <
         item
           Control = cbVO
@@ -862,7 +861,7 @@ object frmEditSerie: TfrmEditSerie
       Top = 244
       Width = 215
       Height = 21
-      TabOrder = 5
+      TabOrder = 6
       ExplicitLeft = 81
       ExplicitTop = 244
       ExplicitWidth = 215
@@ -889,7 +888,7 @@ object frmEditSerie: TfrmEditSerie
       Top = 367
       Width = 322
       Height = 21
-      TabOrder = 12
+      TabOrder = 13
       ExplicitLeft = 81
       ExplicitTop = 367
       ExplicitWidth = 322
@@ -915,7 +914,7 @@ object frmEditSerie: TfrmEditSerie
       Top = 342
       Width = 322
       Height = 21
-      TabOrder = 11
+      TabOrder = 12
       ExplicitLeft = 81
       ExplicitTop = 342
       ExplicitWidth = 322
@@ -940,13 +939,13 @@ object frmEditSerie: TfrmEditSerie
     object edAssociations: TMemoLabeled
       Left = 81
       Top = 777
-      Width = 693
+      Width = 696
       Height = 105
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       ScrollBars = ssBoth
-      TabOrder = 22
+      TabOrder = 23
       WordWrap = False
       LinkControls = <
         item
@@ -983,7 +982,7 @@ object frmEditSerie: TfrmEditSerie
     object lvUnivers: TVDTListViewLabeled
       Left = 521
       Top = 56
-      Width = 253
+      Width = 256
       Height = 41
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -993,7 +992,7 @@ object frmEditSerie: TfrmEditSerie
         end>
       OwnerData = True
       SortType = stNone
-      TabOrder = 23
+      TabOrder = 3
       OnData = lvUniversData
       OnKeyDown = lvUniversKeyDown
       LinkControls = <

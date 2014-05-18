@@ -66,6 +66,8 @@ begin
   Query.Script.Add('end');
   Query.Script.Add(';');
 
+  Query.Script.Add('alter table parabd add notes t_description_utf8;');
+
   Query.ExecuteScript;
 end;
 

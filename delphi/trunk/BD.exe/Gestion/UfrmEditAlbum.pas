@@ -1018,6 +1018,7 @@ begin
       edNumPerso.Text := FCurrentEditionComplete.NumeroPerso;
       vstImages.RootNodeCount := FCurrentEditionComplete.Couvertures.Count;
       vstImages.Selected[vstImages.GetFirst] := True;
+      vstImages.FocusedNode := vstImages.GetFirst;
     end;
   finally
     ChoixImage.Enabled := Assigned(FCurrentEditionComplete);

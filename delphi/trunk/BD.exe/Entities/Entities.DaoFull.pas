@@ -704,7 +704,7 @@ begin
     qry.FetchBlobs := True;
     qry.SQL.Clear;
     qry.SQL.Add('select');
-    qry.SQL.Add('  titreparabd, annee, id_serie, achat, description, dedicace, numerote, anneecote, prixcote,');
+    qry.SQL.Add('  titreparabd, annee, id_serie, achat, description, notes, dedicace, numerote, anneecote, prixcote,');
     qry.SQL.Add('  gratuit, offert, dateachat, prix, stock, categorieparabd, lc.libelle as scategorieparabd');
     qry.SQL.Add('from');
     qry.SQL.Add('  parabd p');
@@ -722,6 +722,7 @@ begin
       Entity.TitreParaBD := qry.Fields.ByNameAsString['titreparabd'];
       Entity.AnneeEdition := qry.Fields.ByNameAsInteger['annee'];
       Entity.Description := qry.Fields.ByNameAsString['description'];
+      Entity.Notes := qry.Fields.ByNameAsString['notes'];
       Entity.CategorieParaBD := MakeOption(qry.Fields.ByNameAsInteger['categorieparabd'], qry.Fields.ByNameAsString['scategorieparabd']);
       Entity.Prix := qry.Fields.ByNameAsCurrency['prix'];
       Entity.Dedicace := qry.Fields.ByNameAsBoolean['dedicace'];
@@ -807,10 +808,10 @@ begin
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into parabd (');
     qry.SQL.Add('  id_parabd, titreparabd, annee, id_serie, categorieparabd, dedicace, numerote, anneecote,');
-    qry.SQL.Add('  prixcote, gratuit, offert, dateachat, prix, stock, description, complet');
+    qry.SQL.Add('  prixcote, gratuit, offert, dateachat, prix, stock, description, notes, complet');
     qry.SQL.Add(') values (');
     qry.SQL.Add('  :id_parabd, :titreparabd, :annee, :id_serie, :categorieparabd, :dedicace, :numerote, :anneecote,');
-    qry.SQL.Add('  :prixcote, :gratuit, :offert, :dateachat, :prix, :stock, :description, 1');
+    qry.SQL.Add('  :prixcote, :gratuit, :offert, :dateachat, :prix, :stock, :description, :notes, 1');
     qry.SQL.Add(') returning id_parabd');
 
     if IsEqualGUID(GUID_NULL, Entity.ID_ParaBD) then
@@ -832,6 +833,10 @@ begin
       qry.ParamsSetBlob('description', Entity.Description)
     else
       qry.Params.ByNameIsNull['description'] := True;
+    if Entity.Notes <> '' then
+      qry.ParamsSetBlob('notes', Entity.Notes)
+    else
+      qry.Params.ByNameIsNull['notes'] := True;
     qry.Params.ByNameAsBoolean['gratuit'] := Entity.Gratuit;
     qry.Params.ByNameAsBoolean['offert'] := Entity.Offert;
 

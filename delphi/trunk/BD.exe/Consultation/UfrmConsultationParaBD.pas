@@ -56,6 +56,8 @@ type
     Label4: TLabel;
     VDTButton3: TVDTButton;
     VDTButton4: TVDTButton;
+    Notes: TMemo;
+    l_notes: TLabel;
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure lvAuteursDblClick(Sender: TObject);

@@ -46,7 +46,7 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       ExplicitLeft = 636
     end
     object l_sujet: TLabel
-      Left = 1
+      Left = 0
       Top = 170
       Width = 53
       Height = 13
@@ -397,11 +397,29 @@ object frmConsultationParaBD: TfrmConsultationParaBD
         5CFF9B535AEFA746642A33E000580DE89ED3FEECF1CBC77C01B681479CEC5C3D
         18F000DA642652000044DEC4E12EAFF41A0000000049454E44AE426082}
     end
+    object l_notes: TLabel
+      Left = 25
+      Top = 328
+      Width = 28
+      Height = 13
+      Alignment = taRightJustify
+      Caption = 'Notes'
+      Color = clWhite
+      FocusControl = Notes
+      Font.Charset = ANSI_CHARSET
+      Font.Color = 12615680
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+      Transparent = True
+    end
     object Description: TMemo
       Left = 59
       Top = 169
       Width = 371
-      Height = 257
+      Height = 152
       Anchors = [akLeft, akTop, akRight]
       BevelInner = bvLowered
       BevelKind = bkFlat
@@ -549,6 +567,21 @@ object frmConsultationParaBD: TfrmConsultationParaBD
       TabOrder = 6
       OnData = lvUniversData
       OnDblClick = lvUniversDblClick
+    end
+    object Notes: TMemo
+      Left = 59
+      Top = 327
+      Width = 371
+      Height = 82
+      Anchors = [akLeft, akTop, akRight]
+      BevelInner = bvLowered
+      BevelKind = bkFlat
+      BevelOuter = bvNone
+      BorderStyle = bsNone
+      ParentColor = True
+      ReadOnly = True
+      ScrollBars = ssVertical
+      TabOrder = 7
     end
   end
   object MainMenu1: TMainMenu

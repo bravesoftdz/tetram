@@ -398,6 +398,7 @@ type
     function Get_sDateAchat: string;
     procedure SetTitreParaBD(const Value: RAutoTrimString); inline;
   private
+    FNotes: RLongString;
     function GetID_Serie: RGUIDEx;
   protected
     constructor Create; override;
@@ -416,6 +417,7 @@ type
     property TitreParaBD: RAutoTrimString { [150] } read FTitreParaBD write SetTitreParaBD;
     property Auteurs: TObjectList<TAuteurLite> read FAuteurs;
     property Description: RLongString read FDescription write FDescription;
+    property Notes: RLongString read FNotes write FNotes;
     property Serie: TSerieFull read FSerie;
     property Prix: Currency read FPrix write FPrix;
     property PrixCote: Currency read FPrixCote write FPrixCote;

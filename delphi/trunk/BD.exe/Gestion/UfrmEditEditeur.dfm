@@ -74,7 +74,7 @@ object frmEditEditeur: TfrmEditEditeur
       Layout = tlCenter
     end
     object VDTButton13: TVDTButton
-      Left = 731
+      Left = 736
       Top = 32
       Width = 23
       Height = 18
@@ -113,7 +113,6 @@ object frmEditEditeur: TfrmEditEditeur
         893708AB398E77913EF34A5E9AF82B9B1E99095E38A5C85284E2C608F9FF6DE3
         3F46038B558452BD6059268919EDEE3681C6123142E2DFC17F03DFC55B0C5750
         2E1C0000000049454E44AE426082}
-      ExplicitLeft = 308
     end
     object Label4: TLabel
       Left = 5
@@ -137,7 +136,7 @@ object frmEditEditeur: TfrmEditEditeur
     object edNom: TEditLabeled
       Left = 77
       Top = 7
-      Width = 676
+      Width = 682
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -155,7 +154,7 @@ object frmEditEditeur: TfrmEditEditeur
     object edSite: TEditLabeled
       Left = 77
       Top = 31
-      Width = 651
+      Width = 660
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -174,7 +173,7 @@ object frmEditEditeur: TfrmEditEditeur
     object edAssociations: TMemoLabeled
       Left = 77
       Top = 65
-      Width = 676
+      Width = 682
       Height = 105
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile

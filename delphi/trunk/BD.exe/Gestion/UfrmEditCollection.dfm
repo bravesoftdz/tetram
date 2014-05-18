@@ -61,6 +61,7 @@ object frmEditCollection: TfrmEditCollection
       Hint = 'R'#233'f'#233'rence du support'
       Alignment = taRightJustify
       Caption = 'Nom :'
+      FocusControl = edNom
       Layout = tlCenter
     end
     object Label5: TLabel
@@ -93,7 +94,7 @@ object frmEditCollection: TfrmEditCollection
     object edNom: TEditLabeled
       Left = 77
       Top = 7
-      Width = 724
+      Width = 726
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       AutoSize = False
@@ -111,34 +112,34 @@ object frmEditCollection: TfrmEditCollection
     inline vtEditEditeurs: TframVTEdit
       Left = 77
       Top = 30
-      Width = 723
+      Width = 726
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 1
       ExplicitLeft = 77
       ExplicitTop = 30
-      ExplicitWidth = 723
+      ExplicitWidth = 726
       inherited btReset: TVDTButton
-        Left = 660
+        Left = 663
         ExplicitLeft = 289
       end
       inherited btNew: TVDTButton
-        Left = 702
+        Left = 705
         ExplicitLeft = 331
       end
       inherited btEdit: TVDTButton
-        Left = 681
+        Left = 684
         ExplicitLeft = 310
       end
       inherited VTEdit: TJvComboEdit
-        Width = 660
+        Width = 663
         ExplicitWidth = 660
       end
     end
     object edAssociations: TMemoLabeled
       Left = 77
       Top = 68
-      Width = 724
+      Width = 726
       Height = 105
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile

@@ -38,8 +38,6 @@ type
     cbDedicace: TCheckBoxLabeled;
     Label12: TLabel;
     cbxCategorie: TLightComboCheck;
-    Panel1: TPanel;
-    imgVisu: TImage;
     ChoixImageDialog: TOpenPictureDialog;
     Frame11: TframBoutons;
     Bevel2: TBevel;
@@ -58,6 +56,9 @@ type
     Bevel5: TBevel;
     cbNumerote: TCheckBoxLabeled;
     pmChoixCategorie: TPopupMenu;
+    Label1: TLabel;
+    edNotes: TMemoLabeled;
+    imgVisu: TImage;
     procedure cbOffertClick(Sender: TObject);
     procedure cbGratuitClick(Sender: TObject);
     procedure edPrixChange(Sender: TObject);
@@ -91,10 +92,10 @@ type
     procedure vstImagesStructureChange(Sender: TBaseVirtualTree; Node: PVirtualNode; Reason: TChangeReason);
     procedure VDTButton4Click(Sender: TObject);
     procedure VDTButton5Click(Sender: TObject);
-    procedure vstImagesMouseUp(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
+    procedure vstImagesMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure pmChoixCategoriePopup(Sender: TObject);
     procedure miChangeCategorieImageClick(Sender: TObject);
+    procedure imgVisuClick(Sender: TObject);
   private
     FCreation: Boolean;
     FisAchat: Boolean;
@@ -102,6 +103,7 @@ type
     FDateAchat: TDateTime;
     procedure SetParaBD(const Value: TParaBDFull);
     function GetID_ParaBD: TGUID;
+    procedure VisuClose(Sender: TObject);
     { Déclarations privées }
   public
     { Déclarations publiques }
@@ -147,6 +149,7 @@ begin
   cbDedicace.Checked := FParaBD.Dedicace;
   cbNumerote.Checked := FParaBD.Numerote;
   edDescription.Text := FParaBD.Description;
+  edNotes.Text := FParaBD.Notes;
 
   vtEditSeries.VTEdit.OnChange := nil;
   vtEditSeries.CurrentValue := FParaBD.Serie.ID_Serie;
@@ -183,6 +186,7 @@ begin
   vstImages.Clear;
   vstImages.RootNodeCount := FParaBD.Photos.Count;
   vstImages.Selected[vstImages.GetFirst] := True;
+  vstImages.FocusedNode := vstImages.GetFirst;
 end;
 
 procedure TfrmEditParaBD.cbOffertClick(Sender: TObject);
@@ -276,7 +280,7 @@ begin
 
   LoadCombo(cbxCategorie, TDaoListe.ListCategoriesParaBD, TDaoListe.DefaultCategorieParaBD);
 
-    for i := 0 to Pred(TDaoListe.ListTypesPhoto.Count) do
+  for i := 0 to Pred(TDaoListe.ListTypesPhoto.Count) do
   begin
     mi := TMenuItem.Create(pmChoixCategorie);
     mi.Caption := TDaoListe.ListTypesPhoto.ValueFromIndex[i];
@@ -333,6 +337,7 @@ begin
   FParaBD.Dedicace := cbDedicace.Checked;
   FParaBD.Numerote := cbNumerote.Checked;
   FParaBD.Description := edDescription.Text;
+  FParaBD.Notes := edNotes.Text;
   FParaBD.AnneeCote := AnneeCote;
   FParaBD.PrixCote := PrixCote;
   FParaBD.Gratuit := cbGratuit.Checked;
@@ -503,8 +508,7 @@ begin
   end;
 end;
 
-procedure TfrmEditParaBD.vstImagesMouseUp(Sender: TObject; Button: TMouseButton;
-  Shift: TShiftState; X, Y: Integer);
+procedure TfrmEditParaBD.vstImagesMouseUp(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
 var
   pt: TPoint;
   Node: PVirtualNode;
@@ -695,11 +699,61 @@ begin
   dtpAchat.Checked := FDateAchat > 0;
   if dtpAchat.Checked then
     dtpAchat.Date := FDateAchat;
+  edTitre.SetFocus;
 end;
 
 function TfrmEditParaBD.GetID_ParaBD: TGUID;
 begin
   Result := FParaBD.ID_ParaBD;
+end;
+
+procedure TfrmEditParaBD.VisuClose(Sender: TObject);
+begin
+  TForm(TImage(Sender).Parent).ModalResult := mrCancel;
+end;
+
+procedure TfrmEditParaBD.imgVisuClick(Sender: TObject);
+var
+  PP: TPhotoLite;
+  hg: IHourGlass;
+  ms: TStream;
+  jpg: TJPEGImage;
+  Couverture: TImage;
+  frm: TForm;
+begin
+  if not Assigned(vstImages.FocusedNode) then
+    Exit;
+  PP := FParaBD.Photos[vstImages.FocusedNode.Index];
+  hg := THourGlass.Create;
+  if IsEqualGUID(PP.ID, GUID_NULL) then
+    ms := GetJPEGStream(PP.NewNom, 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing)
+  else
+    ms := GetCouvertureStream(True, PP.ID, 400, 500, TGlobalVar.Utilisateur.Options.AntiAliasing);
+  if Assigned(ms) then
+    try
+      jpg := TJPEGImage.Create;
+      frm := TbdtForm.Create(Self);
+      Couverture := TImage.Create(frm);
+      try
+        jpg.LoadFromStream(ms);
+        frm.BorderIcons := [];
+        frm.BorderStyle := bsToolWindow;
+        frm.Position := poOwnerFormCenter;
+        Couverture.Parent := frm;
+        Couverture.Picture.Assign(jpg);
+        Couverture.Cursor := crHandPoint;
+        Couverture.OnClick := VisuClose;
+        Couverture.AutoSize := True;
+        frm.AutoSize := True;
+        frm.ShowModal;
+      finally
+        FreeAndNil(jpg);
+        FreeAndNil(Couverture);
+        FreeAndNil(frm);
+      end;
+    finally
+      FreeAndNil(ms);
+    end;
 end;
 
 procedure TfrmEditParaBD.lvAuteursData(Sender: TObject; Item: TListItem);

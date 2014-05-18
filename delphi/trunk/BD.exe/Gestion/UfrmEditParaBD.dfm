@@ -64,7 +64,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object Label6: TLabel
       Left = 2
-      Top = 135
+      Top = 134
       Width = 60
       Height = 13
       Alignment = taRightJustify
@@ -73,8 +73,8 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object btCreateur: TVDTButton
       Tag = 1
-      Left = 278
-      Top = 260
+      Left = 412
+      Top = 261
       Width = 57
       Height = 72
       Caption = 'Auteur /'#13#10'Cr'#233'ateur'
@@ -289,7 +289,7 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object Label11: TLabel
       Left = 19
-      Top = 88
+      Top = 87
       Width = 43
       Height = 13
       Alignment = taRightJustify
@@ -297,8 +297,8 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object btUnivers: TVDTButton
       Tag = 1
-      Left = 278
-      Top = 85
+      Left = 412
+      Top = 84
       Width = 57
       Height = 41
       Caption = 'Univers'
@@ -351,13 +351,12 @@ object frmEditParaBD: TfrmEditParaBD
         18F000DA642652000044DEC4E12EAFF41A0000000049454E44AE426082}
     end
     object VDTButton5: TVDTButton
-      Left = 703
+      Left = 599
       Top = 483
       Width = 22
       Height = 20
       Anchors = [akTop, akRight]
       Enabled = False
-      Flat = False
       OnClick = VDTButton5Click
       PngImage.Data = {
         89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
@@ -376,16 +375,14 @@ object frmEditParaBD: TfrmEditParaBD
         AE923E0182E9E0EA954B931A1734A4EF3CBB9D8D458089E1F79BBF0C610E613F
         E6342FE22429211577E67D5ABE77194F8453D497BE8A497CF449897437000080
         F2B8E1D3A5D1600000000049454E44AE426082}
-      ExplicitLeft = 793
     end
     object VDTButton4: TVDTButton
-      Left = 703
+      Left = 599
       Top = 462
       Width = 22
       Height = 21
       Anchors = [akTop, akRight]
       Enabled = False
-      Flat = False
       OnClick = VDTButton4Click
       PngImage.Data = {
         89504E470D0A1A0A0000000D49484452000000100000001008060000001FF3FF
@@ -404,7 +401,6 @@ object frmEditParaBD: TfrmEditParaBD
         FF2BA3AB9FE52716CB608D85BD8776ED7CF2EAB1DCCBF72F055EBF7FC5C5C3C9
         FB5B5450F48B98A0F81B7141F1A722FC227735B5758AE89312E96200007E39BB
         E1E7DF03100000000049454E44AE426082}
-      ExplicitLeft = 793
     end
     object Bevel5: TBevel
       Left = 261
@@ -415,10 +411,30 @@ object frmEditParaBD: TfrmEditParaBD
       Shape = bsTopLine
       ExplicitWidth = 302
     end
+    object Label1: TLabel
+      Left = 371
+      Top = 134
+      Width = 35
+      Height = 13
+      Alignment = taRightJustify
+      Anchors = [akTop, akRight]
+      Caption = 'Notes :'
+      FocusControl = edNotes
+    end
+    object imgVisu: TImage
+      Left = 627
+      Top = 462
+      Width = 104
+      Height = 131
+      Cursor = crHandPoint
+      Anchors = [akTop, akRight]
+      Center = True
+      OnClick = imgVisuClick
+    end
     object edTitre: TEditLabeled
       Left = 68
       Top = 4
-      Width = 401
+      Width = 663
       Height = 20
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -432,23 +448,23 @@ object frmEditParaBD: TfrmEditParaBD
     end
     object edDescription: TMemoLabeled
       Left = 68
-      Top = 132
-      Width = 401
+      Top = 131
+      Width = 289
       Height = 111
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
       BorderStyle = bsNone
       ScrollBars = ssVertical
-      TabOrder = 5
+      TabOrder = 7
       LinkControls = <
         item
           Control = Label6
         end>
     end
     object lvAuteurs: TVDTListViewLabeled
-      Left = 335
+      Left = 475
       Top = 261
-      Width = 134
+      Width = 256
       Height = 72
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -458,7 +474,7 @@ object frmEditParaBD: TfrmEditParaBD
         end>
       OwnerData = True
       SortType = stNone
-      TabOrder = 7
+      TabOrder = 10
       OnData = lvAuteursData
       OnKeyDown = lvAuteursKeyDown
       LinkControls = <
@@ -474,7 +490,7 @@ object frmEditParaBD: TfrmEditParaBD
       BevelKind = bkTile
       BorderStyle = bsNone
       MaxLength = 4
-      TabOrder = 12
+      TabOrder = 16
       LinkControls = <
         item
           Control = Label24
@@ -493,7 +509,7 @@ object frmEditParaBD: TfrmEditParaBD
       BorderStyle = bsNone
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 13
+      TabOrder = 17
       LinkControls = <
         item
           Control = Label25
@@ -512,7 +528,7 @@ object frmEditParaBD: TfrmEditParaBD
       BevelKind = bkTile
       BorderStyle = bsNone
       MaxLength = 4
-      TabOrder = 3
+      TabOrder = 2
       LinkControls = <
         item
           Control = Label10
@@ -530,7 +546,7 @@ object frmEditParaBD: TfrmEditParaBD
       Ctl3D = True
       ParentCtl3D = False
       State = cbChecked
-      TabOrder = 14
+      TabOrder = 13
       LinkControls = <
         item
           Control = cbStock
@@ -545,7 +561,7 @@ object frmEditParaBD: TfrmEditParaBD
       Caption = 'Gratuit'
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 9
+      TabOrder = 14
       OnClick = cbGratuitClick
       LinkControls = <
         item
@@ -561,7 +577,7 @@ object frmEditParaBD: TfrmEditParaBD
       Caption = 'Offert'
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 8
+      TabOrder = 11
       OnClick = cbOffertClick
       LinkControls = <
         item
@@ -577,7 +593,7 @@ object frmEditParaBD: TfrmEditParaBD
       Time = 38158.758085983800000000
       ShowCheckbox = True
       Checked = False
-      TabOrder = 10
+      TabOrder = 12
       LinkControls = <
         item
           Control = Label18
@@ -594,7 +610,7 @@ object frmEditParaBD: TfrmEditParaBD
       BorderStyle = bsNone
       Ctl3D = True
       ParentCtl3D = False
-      TabOrder = 11
+      TabOrder = 15
       OnChange = edPrixChange
       LinkControls = <
         item
@@ -621,7 +637,7 @@ object frmEditParaBD: TfrmEditParaBD
       Font.Style = []
       ParentCtl3D = False
       ParentFont = False
-      TabOrder = 4
+      TabOrder = 3
       LinkControls = <
         item
           Control = cbDedicace
@@ -642,119 +658,98 @@ object frmEditParaBD: TfrmEditParaBD
       Font.Style = []
       ParentCtl3D = False
       ParentFont = False
-      TabOrder = 18
+      TabOrder = 4
       LinkControls = <
         item
           Control = cbNumerote
         end>
     end
-    object Panel1: TPanel
-      Left = 475
-      Top = 4
-      Width = 250
-      Height = 328
-      Anchors = [akTop, akRight]
-      BevelInner = bvLowered
-      Caption = ' '
-      TabOrder = 15
-      object imgVisu: TImage
-        Left = 2
-        Top = 2
-        Width = 246
-        Height = 324
-        Align = alClient
-        Center = True
-        ExplicitTop = 25
-        ExplicitWidth = 301
-        ExplicitHeight = 448
-      end
-    end
     inline vtEditSeries: TframVTEdit
       Left = 68
       Top = 30
-      Width = 401
+      Width = 663
       Height = 21
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 1
       ExplicitLeft = 68
       ExplicitTop = 30
-      ExplicitWidth = 401
+      ExplicitWidth = 663
       inherited btReset: TVDTButton
-        Left = 338
+        Left = 600
         ExplicitLeft = 373
       end
       inherited btNew: TVDTButton
-        Left = 380
+        Left = 642
         ExplicitLeft = 415
       end
       inherited btEdit: TVDTButton
-        Left = 359
+        Left = 621
         ExplicitLeft = 394
       end
       inherited VTEdit: TJvComboEdit
-        Width = 338
+        Width = 600
         OnChange = vtEditSeriesVTEditChange
-        ExplicitWidth = 338
+        ExplicitWidth = 600
       end
     end
     inline vtEditPersonnes: TframVTEdit
       Left = 68
       Top = 261
-      Width = 204
+      Width = 311
       Height = 21
-      TabOrder = 6
+      TabOrder = 9
       ExplicitLeft = 68
       ExplicitTop = 261
-      ExplicitWidth = 204
+      ExplicitWidth = 311
       inherited btReset: TVDTButton
-        Left = 141
-        ExplicitLeft = 141
+        Left = 254
+        ExplicitLeft = 254
       end
       inherited btNew: TVDTButton
-        Left = 183
+        Left = 290
         ExplicitLeft = 183
       end
       inherited btEdit: TVDTButton
-        Left = 162
+        Left = 269
         ExplicitLeft = 162
       end
       inherited VTEdit: TJvComboEdit
-        Width = 141
+        Width = 248
         OnChange = vtEditPersonnesVTEditChange
-        ExplicitWidth = 141
+        ExplicitWidth = 248
       end
     end
     inline vtEditUnivers: TframVTEdit
       Left = 68
-      Top = 85
-      Width = 204
+      Top = 84
+      Width = 311
       Height = 21
-      TabOrder = 2
+      TabOrder = 5
       ExplicitLeft = 68
-      ExplicitTop = 85
-      ExplicitWidth = 204
+      ExplicitTop = 84
+      ExplicitWidth = 311
       inherited btReset: TVDTButton
-        Left = 141
+        Left = 248
         ExplicitLeft = 284
       end
       inherited btNew: TVDTButton
-        Left = 183
+        Left = 290
         ExplicitLeft = 326
       end
       inherited btEdit: TVDTButton
-        Left = 162
+        Left = 269
         ExplicitLeft = 305
       end
       inherited VTEdit: TJvComboEdit
-        Width = 141
+        Width = 248
         OnChange = vtEditUniversVTEditChange
-        ExplicitWidth = 141
+        ExplicitWidth = 248
       end
     end
     object lvUnivers: TVDTListViewLabeled
-      Left = 335
-      Top = 85
-      Width = 134
+      Left = 475
+      Top = 84
+      Width = 256
       Height = 41
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -764,7 +759,7 @@ object frmEditParaBD: TfrmEditParaBD
         end>
       OwnerData = True
       SortType = stNone
-      TabOrder = 16
+      TabOrder = 6
       OnData = lvUniversData
       OnKeyDown = lvUniversKeyDown
       LinkControls = <
@@ -775,7 +770,7 @@ object frmEditParaBD: TfrmEditParaBD
     object vstImages: TVirtualStringTree
       Left = 68
       Top = 462
-      Width = 635
+      Width = 533
       Height = 130
       Anchors = [akLeft, akTop, akRight]
       BevelKind = bkTile
@@ -791,7 +786,7 @@ object frmEditParaBD: TfrmEditParaBD
       Header.Font.Style = []
       Header.Height = 17
       Header.Options = [hoAutoResize, hoColumnResize, hoDrag]
-      TabOrder = 17
+      TabOrder = 18
       TreeOptions.MiscOptions = [toAcceptOLEDrop, toEditable, toFullRepaintOnResize, toInitOnSave, toToggleOnDblClick, toWheelPanning]
       TreeOptions.StringOptions = []
       OnChange = vstImagesChange
@@ -808,11 +803,26 @@ object frmEditParaBD: TfrmEditParaBD
       Columns = <
         item
           Position = 1
-          Width = 531
+          Width = 429
         end
         item
           Position = 0
           Width = 100
+        end>
+    end
+    object edNotes: TMemoLabeled
+      Left = 412
+      Top = 131
+      Width = 319
+      Height = 111
+      Anchors = [akTop, akRight]
+      BevelKind = bkTile
+      BorderStyle = bsNone
+      ScrollBars = ssVertical
+      TabOrder = 8
+      LinkControls = <
+        item
+          Control = Label1
         end>
     end
   end
