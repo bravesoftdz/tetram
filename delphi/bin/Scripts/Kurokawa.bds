@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>1.2</ScriptVersion>
-    <BDVersion>2.2.3.22</BDVersion>
-    <LastUpdate>Thu, 5 Dec 2013 19:39:06 +0100</LastUpdate>
+    <ScriptVersion>1.3</ScriptVersion>
+    <BDVersion>2.2.3.29</BDVersion>
+    <LastUpdate>Sun, 18 May 2014 16:14:28 +0200</LastUpdate>
     <Engine>PascalScript</Engine>
   </Infos>
   <Options/>
@@ -50,10 +50,10 @@ begin
     auteur := ExtractRegEx(page, regExAlbumAuteur);
     if auteur &lt;&gt; &apos;&apos; then
     begin
-      AlbumToImport.Scenaristes.Add(MakeAuteur(auteur, maScenariste));
-      AlbumToImport.Serie.Scenaristes.Add(MakeAuteur(auteur, maScenariste));
-      AlbumToImport.Dessinateurs.Add(MakeAuteur(auteur, maDessinateur));
-      AlbumToImport.Serie.Dessinateurs.Add(MakeAuteur(auteur, maDessinateur));
+      AlbumToImport.Scenaristes.Add(MakeAuteurAlbum(auteur, maScenariste));
+      AlbumToImport.Serie.Scenaristes.Add(MakeAuteurSerie(auteur, maScenariste));
+      AlbumToImport.Dessinateurs.Add(MakeAuteurAlbum(auteur, maDessinateur));
+      AlbumToImport.Serie.Dessinateurs.Add(MakeAuteurSerie(auteur, maDessinateur));
     end;
 
     AlbumToImport.Serie.Editeur.NomEditeur := &apos;Kurokawa&apos;;

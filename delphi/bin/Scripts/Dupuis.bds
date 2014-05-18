@@ -4,8 +4,8 @@
     <Auteur>Tetram Corp</Auteur>
     <Description/>
     <ScriptVersion>1.5</ScriptVersion>
-    <BDVersion>2.2.3.22</BDVersion>
-    <LastUpdate>Fri, 16 May 2014 14:38:20 +0200</LastUpdate>
+    <BDVersion>2.2.3.29</BDVersion>
+    <LastUpdate>Sun, 18 May 2014 16:07:59 +0200</LastUpdate>
     <Engine>PascalScript</Engine>
   </Infos>
   <Options>
@@ -68,10 +68,10 @@ begin
     Auteurs := ExtractRegEx(page, regExAlbumAuteurs);
     if re.BeginSearch(page, regExAlbumScenaristes) then
       while re.Next do
-        AlbumToImport.Scenaristes.Add(MakeAuteur(re.GetCaptureByName(&apos;texte&apos;), maScenariste));
+        AlbumToImport.Scenaristes.Add(MakeAuteurAlbum(re.GetCaptureByName(&apos;texte&apos;), maScenariste));
     if re.BeginSearch(page, regExAlbumDessinateurs) then
       while re.Next do
-        AlbumToImport.Dessinateurs.Add(MakeAuteur(re.GetCaptureByName(&apos;texte&apos;), maDessinateur));
+        AlbumToImport.Dessinateurs.Add(MakeAuteurAlbum(re.GetCaptureByName(&apos;texte&apos;), maDessinateur));
   finally
     re.Free;
   end;

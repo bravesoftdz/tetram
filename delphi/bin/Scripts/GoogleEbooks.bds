@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>1.1</ScriptVersion>
-    <BDVersion>2.2.3.22</BDVersion>
-    <LastUpdate>Thu, 5 Dec 2013 19:38:37 +0100</LastUpdate>
+    <ScriptVersion>1.2</ScriptVersion>
+    <BDVersion>2.2.3.29</BDVersion>
+    <LastUpdate>Sun, 18 May 2014 16:13:37 +0200</LastUpdate>
     <Engine>PascalScript</Engine>
   </Infos>
   <Options>
@@ -67,12 +67,12 @@ begin
     for i := 0 to tmpso.AsArray.Length - 1 do
     begin
       s := tmpso.AsArray[i].AsString;
-      AlbumToImport.Scenaristes.Add(MakeAuteur(s, maScenariste));
-      AlbumToImport.Dessinateurs.Add(MakeAuteur(s, maDessinateur));
-      AlbumToImport.Coloristes.Add(MakeAuteur(s, maColoriste));
-      AlbumToImport.Serie.Scenaristes.Add(MakeAuteur(s, maScenariste));
-      AlbumToImport.Serie.Dessinateurs.Add(MakeAuteur(s, maDessinateur));
-      AlbumToImport.Serie.Coloristes.Add(MakeAuteur(s, maColoriste));
+      AlbumToImport.Scenaristes.Add(MakeAuteurAlbum(s, maScenariste));
+      AlbumToImport.Dessinateurs.Add(MakeAuteurAlbum(s, maDessinateur));
+      AlbumToImport.Coloristes.Add(MakeAuteurAlbum(s, maColoriste));
+      AlbumToImport.Serie.Scenaristes.Add(MakeAuteurSerie(s, maScenariste));
+      AlbumToImport.Serie.Dessinateurs.Add(MakeAuteurSerie(s, maDessinateur));
+      AlbumToImport.Serie.Coloristes.Add(MakeAuteurSerie(s, maColoriste));
     end;
 
   isbn := &apos;&apos;;

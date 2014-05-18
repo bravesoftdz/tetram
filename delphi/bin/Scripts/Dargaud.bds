@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>2.1</ScriptVersion>
-    <BDVersion>2.2.3.22</BDVersion>
-    <LastUpdate>Thu, 5 Dec 2013 19:37:11 +0100</LastUpdate>
+    <ScriptVersion>2.2</ScriptVersion>
+    <BDVersion>2.2.3.29</BDVersion>
+    <LastUpdate>Sun, 18 May 2014 16:08:58 +0200</LastUpdate>
     <Engine>PascalScript</Engine>
   </Infos>
   <Options>
@@ -104,11 +104,11 @@ begin
         nom := ExtractRegExGroup(ExtractRegEx(s, Format(regExInfosSpan, [&apos;class&apos;, &apos;nom&apos;])), regExURL, &apos;texte&apos;);
 
         if metier = &apos;dessinateur&apos; then
-          AlbumToImport.Dessinateurs.Add(MakeAuteur(nom, maDessinateur));
+          AlbumToImport.Dessinateurs.Add(MakeAuteurAlbum(nom, maDessinateur));
         if metier = &apos;sc&#xE9;nariste&apos; then
-          AlbumToImport.Scenaristes.Add(MakeAuteur(nom, maScenariste));
+          AlbumToImport.Scenaristes.Add(MakeAuteurAlbum(nom, maScenariste));
         if metier = &apos;coloriste&apos; then
-          AlbumToImport.Coloristes.Add(MakeAuteur(nom, maColoriste));
+          AlbumToImport.Coloristes.Add(MakeAuteurAlbum(nom, maColoriste));
       end;
 
     s := ExtractRegEx(page, Format(regExInfosDiv, [&apos;id&apos;, &apos;contenu-fiche&apos;]));
@@ -206,11 +206,11 @@ begin
           nom := ExtractRegExGroup(ExtractRegEx(s, Format(regExInfosSpan, [&apos;class&apos;, &apos;nom&apos;])), regExURL, &apos;texte&apos;);
 
           if metier = &apos;dessinateur&apos; then
-            AlbumToImport.Serie.Dessinateurs.Add(MakeAuteur(nom, maDessinateur));
+            AlbumToImport.Serie.Dessinateurs.Add(MakeAuteurSerie(nom, maDessinateur));
           if metier = &apos;sc&#xE9;nariste&apos; then
-            AlbumToImport.Serie.Scenaristes.Add(MakeAuteur(nom, maScenariste));
+            AlbumToImport.Serie.Scenaristes.Add(MakeAuteurSerie(nom, maScenariste));
           if metier = &apos;coloriste&apos; then
-            AlbumToImport.Serie.Coloristes.Add(MakeAuteur(nom, maColoriste));
+            AlbumToImport.Serie.Coloristes.Add(MakeAuteurSerie(nom, maColoriste));
         end;
 
 //      AlbumToImport.Serie.NbAlbums := StrToIntDef(GetCaptureByName(&apos;nbalbums&apos;), 0);

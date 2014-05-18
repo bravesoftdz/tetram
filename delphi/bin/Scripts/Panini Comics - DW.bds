@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>2</ScriptVersion>
-    <BDVersion>2.2.0.0</BDVersion>
-    <LastUpdate>Sat, 1 Sep 2012 17:57:28 +0200</LastUpdate>
+    <ScriptVersion>2.1</ScriptVersion>
+    <BDVersion>2.2.3.29</BDVersion>
+    <LastUpdate>Sun, 18 May 2014 16:46:58 +0200</LastUpdate>
     <Engine>DWScript</Engine>
   </Infos>
   <Options/>
@@ -49,7 +49,7 @@ begin
   if sl.Count &gt; 0 then
     AlbumToImport.MoisParution := TraduitMois(sl.Pop);
 
-  AlbumToImport.Sujet.Text := HTMLText(ExtractRegExGroup(page, regExAlbumResume, &apos;resume&apos;));
+  AlbumToImport.Sujet := HTMLText(ExtractRegExGroup(page, regExAlbumResume, &apos;resume&apos;));
 
   AlbumToImport.Edition.Editeur.NomEditeur := &apos;Panini&apos;;
   AlbumToImport.Edition.Editeur.SiteWeb := &apos;http://www.paninicomicsfrance.com/Home.jsp&apos;;

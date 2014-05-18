@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>1.1</ScriptVersion>
-    <BDVersion>2.2.3.22</BDVersion>
-    <LastUpdate>Thu, 5 Dec 2013 19:37:33 +0100</LastUpdate>
+    <ScriptVersion>1.2</ScriptVersion>
+    <BDVersion>2.2.3.29</BDVersion>
+    <LastUpdate>Sun, 18 May 2014 16:10:14 +0200</LastUpdate>
     <Engine>PascalScript</Engine>
   </Infos>
   <Options>
@@ -82,18 +82,18 @@ begin
           metier := GetCaptureByName(&apos;metier&apos;);
           if (metier = &apos;Dessinateur&apos;) or (metier = &apos;Auteur&apos;) then
           begin
-            AlbumToImport.Dessinateurs.Add(MakeAuteur(auteur, maDessinateur));
-            AlbumToImport.Serie.Dessinateurs.Add(MakeAuteur(auteur, maDessinateur));
+            AlbumToImport.Dessinateurs.Add(MakeAuteurAlbum(auteur, maDessinateur));
+            AlbumToImport.Serie.Dessinateurs.Add(MakeAuteurSerie(auteur, maDessinateur));
           end;
           if (metier = &apos;Sc&#xE9;nariste&apos;) or (metier = &apos;Auteur&apos;) then
           begin
-            AlbumToImport.Scenaristes.Add(MakeAuteur(auteur, maScenariste));
-            AlbumToImport.Serie.Scenaristes.Add(MakeAuteur(auteur, maScenariste));
+            AlbumToImport.Scenaristes.Add(MakeAuteurAlbum(auteur, maScenariste));
+            AlbumToImport.Serie.Scenaristes.Add(MakeAuteurSerie(auteur, maScenariste));
           end;
           if (metier = &apos;Coloriste&apos;) or (metier = &apos;Auteur&apos;) then
           begin
-            AlbumToImport.Coloristes.Add(MakeAuteur(auteur, maColoriste));
-            AlbumToImport.Serie.Coloristes.Add(MakeAuteur(auteur, maColoriste));
+            AlbumToImport.Coloristes.Add(MakeAuteurAlbum(auteur, maColoriste));
+            AlbumToImport.Serie.Coloristes.Add(MakeAuteurSerie(auteur, maColoriste));
           end;
         end;
 

@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>2.2</ScriptVersion>
-    <BDVersion>2.2.3.22</BDVersion>
-    <LastUpdate>Thu, 5 Dec 2013 19:39:26 +0100</LastUpdate>
+    <ScriptVersion>2.3</ScriptVersion>
+    <BDVersion>2.2.3.29</BDVersion>
+    <LastUpdate>Sun, 18 May 2014 16:15:53 +0200</LastUpdate>
     <Engine>PascalScript</Engine>
   </Infos>
   <Options/>
@@ -92,10 +92,10 @@ begin
 
     if re.BeginSearch(ExtractRegEx(page, regExAlbumScenaristes), regExURL) then
       while re.Next do
-        AlbumToImport.Scenaristes.Add(MakeAuteur(re.GetCaptureByName(&apos;texte&apos;), maScenariste));
+        AlbumToImport.Scenaristes.Add(MakeAuteurAlbum(re.GetCaptureByName(&apos;texte&apos;), maScenariste));
     if re.BeginSearch(ExtractRegEx(page, regExAlbumDessinateurs), regExURL) then
       while re.Next do
-        AlbumToImport.Dessinateurs.Add(MakeAuteur(re.GetCaptureByName(&apos;texte&apos;), maDessinateur));
+        AlbumToImport.Dessinateurs.Add(MakeAuteurAlbum(re.GetCaptureByName(&apos;texte&apos;), maDessinateur));
 
     s := ExtractRegEx(page, regExAlbumCouverture);
     if s &lt;&gt; &apos;&apos; then
@@ -122,10 +122,10 @@ begin
 
       if re.BeginSearch(ExtractRegEx(page, regExAlbumScenaristes), regExURL) then
         while re.Next do
-          AlbumToImport.Serie.Scenaristes.Add(MakeAuteur(re.GetCaptureByName(&apos;texte&apos;), maScenariste));
+          AlbumToImport.Serie.Scenaristes.Add(MakeAuteurSerie(re.GetCaptureByName(&apos;texte&apos;), maScenariste));
       if re.BeginSearch(ExtractRegEx(page, regExAlbumDessinateurs), regExURL) then
         while re.Next do
-          AlbumToImport.Serie.Dessinateurs.Add(MakeAuteur(re.GetCaptureByName(&apos;texte&apos;), maDessinateur));
+          AlbumToImport.Serie.Dessinateurs.Add(MakeAuteurSerie(re.GetCaptureByName(&apos;texte&apos;), maDessinateur));
     end;
   finally
     re.Free;

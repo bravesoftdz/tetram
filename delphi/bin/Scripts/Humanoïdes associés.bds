@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>2.1</ScriptVersion>
-    <BDVersion>2.2.3.22</BDVersion>
-    <LastUpdate>Thu, 5 Dec 2013 19:38:53 +0100</LastUpdate>
+    <ScriptVersion>2.2</ScriptVersion>
+    <BDVersion>2.2.3.29</BDVersion>
+    <LastUpdate>Sun, 18 May 2014 16:14:03 +0200</LastUpdate>
     <Engine>PascalScript</Engine>
   </Infos>
   <Options>
@@ -86,13 +86,13 @@ begin
          auteur := re.GetCaptureByName(&apos;nom&apos;);
          if Pos(&apos;scenario&apos;, metier) &gt; 0 then
          begin
-           AlbumToImport.Scenaristes.Add(MakeAuteur(auteur, maScenariste));
-           AlbumToImport.Serie.Scenaristes.Add(MakeAuteur(auteur, maScenariste));
+           AlbumToImport.Scenaristes.Add(MakeAuteurAlbum(auteur, maScenariste));
+           AlbumToImport.Serie.Scenaristes.Add(MakeAuteurSerie(auteur, maScenariste));
          end;
          if Pos(&apos;dessin&apos;, metier) &gt; 0 then
          begin
-           AlbumToImport.Dessinateurs.Add(MakeAuteur(auteur, maDessinateur));
-           AlbumToImport.Serie.Dessinateurs.Add(MakeAuteur(auteur, maDessinateur));
+           AlbumToImport.Dessinateurs.Add(MakeAuteurAlbum(auteur, maDessinateur));
+           AlbumToImport.Serie.Dessinateurs.Add(MakeAuteurSerie(auteur, maDessinateur));
          end;
        end;
 

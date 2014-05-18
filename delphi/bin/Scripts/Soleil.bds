@@ -3,9 +3,9 @@
   <Infos>
     <Auteur>Tetram Corp</Auteur>
     <Description/>
-    <ScriptVersion>2.1</ScriptVersion>
-    <BDVersion>2.2.3.22</BDVersion>
-    <LastUpdate>Fri, 6 Dec 2013 09:38:00 +0100</LastUpdate>
+    <ScriptVersion>2.2</ScriptVersion>
+    <BDVersion>2.2.3.29</BDVersion>
+    <LastUpdate>Sun, 18 May 2014 16:17:43 +0200</LastUpdate>
     <Engine>PascalScript</Engine>
     <Alias aka="Soleil Productions"/>
   </Infos>
@@ -107,27 +107,27 @@ begin
       while re.Next do
       begin
         sAuteur := re.GetCaptureByName(&apos;texte&apos;);
-        AlbumToImport.Scenaristes.Add(MakeAuteur(sAuteur, maScenariste));
+        AlbumToImport.Scenaristes.Add(MakeAuteurAlbum(sAuteur, maScenariste));
         if AuteursSerie then
-          AlbumToImport.Serie.Scenaristes.Add(MakeAuteur(sAuteur, maScenariste));
+          AlbumToImport.Serie.Scenaristes.Add(MakeAuteurSerie(sAuteur, maScenariste));
       end;
 
     if re.BeginSearch(ExtractRegEx(page, regExAlbumDessinateur), regExURL) then
       while re.Next do
       begin
         sAuteur := re.GetCaptureByName(&apos;texte&apos;);
-        AlbumToImport.Dessinateurs.Add(MakeAuteur(sAuteur, maDessinateur));
+        AlbumToImport.Dessinateurs.Add(MakeAuteurAlbum(sAuteur, maDessinateur));
         if AuteursSerie then
-          AlbumToImport.Serie.Dessinateurs.Add(MakeAuteur(sAuteur, maDessinateur));
+          AlbumToImport.Serie.Dessinateurs.Add(MakeAuteurSerie(sAuteur, maDessinateur));
       end;
 
     if re.BeginSearch(ExtractRegEx(page, regExAlbumColoriste), regExURL) then
       while re.Next do
       begin
         sAuteur := re.GetCaptureByName(&apos;texte&apos;);
-        AlbumToImport.Coloristes.Add(MakeAuteur(sAuteur, maColoriste));
+        AlbumToImport.Coloristes.Add(MakeAuteurAlbum(sAuteur, maColoriste));
         if AuteursSerie then
-          AlbumToImport.Serie.Coloristes.Add(MakeAuteur(sAuteur, maColoriste));
+          AlbumToImport.Serie.Coloristes.Add(MakeAuteurSerie(sAuteur, maColoriste));
       end;
   finally
     re.Free;
