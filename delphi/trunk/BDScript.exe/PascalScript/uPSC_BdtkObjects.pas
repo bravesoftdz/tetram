@@ -62,11 +62,14 @@ procedure SIRegister_TObjectListOfAuteur(CL: TPSPascalCompiler);
 begin
   with CL.AddClassN(CL.FindClass('TObjectList' { TObjectList<> } ), 'TObjectListOfAuteur') do
   begin
+    IsAbstract := True;
     RegisterMethod('function Add(AObject: TAuteur): Integer');
     RegisterMethod('procedure Insert(Index: Integer; AObject: TAuteur)');
     RegisterProperty('Items', 'TAuteur Integer', iptRW);
     SetDefaultPropery('Items');
   end;
+  CL.AddClassN(CL.FindClass('TObjectListOfAuteur' { TObjectList<> } ), 'TObjectListOfAuteurSerie');
+  CL.AddClassN(CL.FindClass('TObjectListOfAuteur' { TObjectList<> } ), 'TObjectListOfAuteurAlbum');
 end;
 
 procedure SIRegister_TObjectListOfEditionFull(CL: TPSPascalCompiler);

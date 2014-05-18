@@ -136,12 +136,28 @@ type
     class procedure Fill(Entity: TPersonnageLite; const ID_Personne: TGUID); overload;
   end;
 
-  TDaoAuteurLite = class(TDaoLiteEntity<TAuteurLite>)
+  TDaoAuteurSerieLite = class(TDaoLiteEntity<TAuteurSerieLite>)
   protected
     class function FactoryClass: TFactoryClass; override;
   public
-    class procedure Fill(Entity: TAuteurLite; Query: TUIBQuery); overload; override;
-    class procedure Fill(Entity: TAuteurLite; Pe: TPersonnageLite; const ReferenceAlbum, ReferenceSerie: TGUID; Metier: TMetierAuteur); overload;
+    class procedure Fill(Entity: TAuteurSerieLite; Query: TUIBQuery); overload; override;
+    class procedure Fill(Entity: TAuteurSerieLite; Pe: TPersonnageLite; const ReferenceSerie: TGUID; Metier: TMetierAuteur); overload;
+  end;
+
+  TDaoAuteurAlbumLite = class(TDaoLiteEntity<TAuteurAlbumLite>)
+  protected
+    class function FactoryClass: TFactoryClass; override;
+  public
+    class procedure Fill(Entity: TAuteurAlbumLite; Query: TUIBQuery); overload; override;
+    class procedure Fill(Entity: TAuteurAlbumLite; Pe: TPersonnageLite; const ReferenceAlbum, ReferenceSerie: TGUID; Metier: TMetierAuteur); overload;
+  end;
+
+  TDaoAuteurParaBDLite = class(TDaoLiteEntity<TAuteurParaBDLite>)
+  protected
+    class function FactoryClass: TFactoryClass; override;
+  public
+    class procedure Fill(Entity: TAuteurParaBDLite; Query: TUIBQuery); overload; override;
+    class procedure Fill(Entity: TAuteurParaBDLite; Pe: TPersonnageLite; const ReferenceParaBD: TGUID); overload;
   end;
 
   TDaoUniversLite = class(TDaoLiteEntity<TUniversLite>)
@@ -282,7 +298,8 @@ var
 begin
   // Ne peut pas être préparée plusieurs fois
   p := getPreparedQuery;
-  if (p <> nil) or (p = Query) then Exit;
+  if (p <> nil) or (p = Query) then
+    Exit;
 
   if not Assigned(cs) then
     cs := TCriticalSection.Create;
@@ -295,7 +312,8 @@ class procedure TDaoLite.Unprepare(Query: TUIBQuery);
 var
   p: TPair<TDaoLiteClass, TUIBQuery>;
 begin
-  if getPreparedQuery <> Query then Exit;
+  if getPreparedQuery <> Query then
+    Exit;
 
   for p in FPreparedQueries do
     if p.Value.Equals(Query) then
@@ -525,30 +543,74 @@ begin
   end;
 end;
 
-{ TDaoAuteurLite }
+{ TDaoAuteurSerieLite }
 
-class procedure TDaoAuteurLite.Fill(Entity: TAuteurLite; Query: TUIBQuery);
+class function TDaoAuteurSerieLite.FactoryClass: TFactoryClass;
+begin
+  Result := TFactoryAuteurSerieLite;
+end;
+
+class procedure TDaoAuteurSerieLite.Fill(Entity: TAuteurSerieLite; Query: TUIBQuery);
 var
   PPersonne: TPersonnageLite;
 begin
   PPersonne := TDaoPersonnageLite.Make(Query);
   try
-    Fill(Entity, PPersonne, NonNull(Query, 'ID_Album'), NonNull(Query, 'ID_Serie'), TMetierAuteur(Query.Fields.ByNameAsInteger['Metier']));
+    Fill(Entity, PPersonne, NonNull(Query, 'ID_Serie'), TMetierAuteur(Query.Fields.ByNameAsInteger['Metier']));
   finally
     PPersonne.Free;
   end;
 end;
 
-class function TDaoAuteurLite.FactoryClass: TFactoryClass;
-begin
-  Result := TFactoryAuteurLite;
-end;
-
-class procedure TDaoAuteurLite.Fill(Entity: TAuteurLite; Pe: TPersonnageLite; const ReferenceAlbum, ReferenceSerie: TGUID; Metier: TMetierAuteur);
+class procedure TDaoAuteurSerieLite.Fill(Entity: TAuteurSerieLite; Pe: TPersonnageLite; const ReferenceSerie: TGUID; Metier: TMetierAuteur);
 begin
   Entity.Personne.Assign(Pe);
-  Entity.ID_Album := ReferenceAlbum;
+  Entity.ID_Serie := ReferenceSerie;
   Entity.Metier := Metier;
+end;
+
+{ TDaoAuteurAlbumLite }
+
+class procedure TDaoAuteurAlbumLite.Fill(Entity: TAuteurAlbumLite; Query: TUIBQuery);
+begin
+  TDaoAuteurSerieLite.Fill(Entity, Query);
+  Entity.ID_Album := NonNull(Query, 'ID_Album');
+end;
+
+class function TDaoAuteurAlbumLite.FactoryClass: TFactoryClass;
+begin
+  Result := TFactoryAuteurAlbumLite;
+end;
+
+class procedure TDaoAuteurAlbumLite.Fill(Entity: TAuteurAlbumLite; Pe: TPersonnageLite; const ReferenceAlbum, ReferenceSerie: TGUID; Metier: TMetierAuteur);
+begin
+  TDaoAuteurSerieLite.Fill(Entity, Pe, ReferenceSerie, Metier);
+  Entity.ID_Album := ReferenceAlbum;
+end;
+
+{ TDaoAuteurParaBDLite }
+
+class function TDaoAuteurParaBDLite.FactoryClass: TFactoryClass;
+begin
+  Result := TFactoryAuteurParaBDLite;
+end;
+
+class procedure TDaoAuteurParaBDLite.Fill(Entity: TAuteurParaBDLite; Query: TUIBQuery);
+var
+  PPersonne: TPersonnageLite;
+begin
+  PPersonne := TDaoPersonnageLite.Make(Query);
+  try
+    Fill(Entity, PPersonne, NonNull(Query, 'ID_ParaBD'));
+  finally
+    PPersonne.Free;
+  end;
+end;
+
+class procedure TDaoAuteurParaBDLite.Fill(Entity: TAuteurParaBDLite; Pe: TPersonnageLite; const ReferenceParaBD: TGUID);
+begin
+  Entity.Personne.Assign(Pe);
+  Entity.ID_ParaBD := ReferenceParaBD;
 end;
 
 { TDaoAlbumLite }

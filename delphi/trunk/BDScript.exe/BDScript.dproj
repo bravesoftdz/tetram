@@ -228,6 +228,8 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="Entities.DaoLambdaJSON.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.DaoLambda.pas"/>
         <DCCReference Include="..\Commun\UNetICSCompress.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.Attributes.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.Types.pas"/>
         <RcItem Include="..\Commun\images\imgAbout.bmp">
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>ABOUT</ResourceId>

@@ -175,8 +175,8 @@ type
     procedure RefreshEditionCaption;
     procedure SetAlbum(Value: TAlbumFull);
     procedure VisuClose(Sender: TObject);
-    procedure AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean); overload;
-    procedure AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite); overload;
+    procedure AjouteAuteur(List: TList<TAuteurAlbumLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean); overload;
+    procedure AjouteAuteur(List: TList<TAuteurAlbumLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite); overload;
     function GetID_Album: TGUID;
     function GetCreation: Boolean;
   private
@@ -194,7 +194,7 @@ implementation
 
 uses
   Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
-  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
+  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common, Entities.Types,
   Entities.FactoriesLite, Entities.FactoriesFull, Entities.DaoLambda;
 
 {$R *.DFM}
@@ -324,19 +324,19 @@ begin
   end;
 end;
 
-procedure TfrmEditAlbum.AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite);
+procedure TfrmEditAlbum.AjouteAuteur(List: TList<TAuteurAlbumLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite);
 var
   dummy: Boolean;
 begin
   AjouteAuteur(List, lvList, Auteur, dummy);
 end;
 
-procedure TfrmEditAlbum.AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean);
+procedure TfrmEditAlbum.AjouteAuteur(List: TList<TAuteurAlbumLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean);
 var
-  PA: TAuteurLite;
+  PA: TAuteurAlbumLite;
 begin
-  PA := TFactoryAuteurLite.getInstance;
-  TDaoAuteurLite.Fill(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
+  PA := TFactoryAuteurAlbumLite.getInstance;
+  TDaoAuteurAlbumLite.Fill(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
   List.Add(PA);
   lvList.Items.Count := List.Count;
   lvList.Invalidate;
@@ -1029,7 +1029,7 @@ end;
 procedure TfrmEditAlbum.OnEditAuteurs(Sender: TObject);
 var
   i: Integer;
-  Auteur: TAuteurLite;
+  Auteur: TAuteurAlbumLite;
   CurrentAuteur: TPersonnageLite;
 begin
   CurrentAuteur := vtEditPersonnes.VTEdit.Data as TPersonnageLite;
@@ -1146,7 +1146,7 @@ end;
 
 procedure TfrmEditAlbum.JvComboEdit1Change(Sender: TObject);
 var
-  Auteur: TAuteurLite;
+  Auteur: TAuteurSerieLite;
 begin
   TDaoSerieFull.Fill(FAlbum.Serie, vtEditSerie.CurrentValue);
   if not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL) then

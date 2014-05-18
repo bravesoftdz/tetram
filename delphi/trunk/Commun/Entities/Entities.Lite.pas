@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, SysUtils, DB, Classes, ComCtrls, StdCtrls, Commun, UMetaData, SyncObjs, Generics.Collections,
-  Entities.Common;
+  Entities.Common, Entities.Attributes;
 
 type
   TBaseLiteClass = class of TBaseLite;
@@ -27,14 +27,21 @@ type
     function ChaineAffichage(dummy: Boolean = True): string; override;
   end;
 
+  [Entity('photos')]
   TPhotoLite = class(TImageLite)
   public
+    [PrimaryKey('id_photo')]
+    property ID;
   end;
 
+  [Entity('couvertures')]
   TCouvertureLite = class(TImageLite)
   public
+    [PrimaryKey('id_couverture')]
+    property ID;
   end;
 
+  [Entity('parabd')]
   TParaBDLite = class(TBaseLite)
   public
     Titre: string { [150] };
@@ -47,8 +54,12 @@ type
     procedure Assign(Source: TPersistent); override;
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple: Boolean; AvecSerie: Boolean): string; reintroduce; overload;
+
+    [PrimaryKey('id_parabd')]
+    property ID;
   end;
 
+  [Entity('personnes')]
   TPersonnageLite = class(TBaseLite)
   public
     Nom: string { [150] };
@@ -56,23 +67,59 @@ type
     procedure Assign(Source: TPersistent); override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
+
+    [PrimaryKey('id_personne')]
+    property ID;
   end;
 
   TAuteurLite = class(TBaseLite)
   public
     Personne: TPersonnageLite;
-    ID_Album, ID_Serie: RGUIDEx;
-    Metier: TMetierAuteur;
-
-    procedure Assign(Source: TPersistent); override;
 
     constructor Create; override;
     destructor Destroy; override;
+
+    procedure Assign(Source: TPersistent); override;
 
     procedure Clear; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
   end;
 
+  [Entity('auteurs_series')]
+  TAuteurSerieLite = class(TAuteurLite)
+  public
+    ID_Serie: RGUIDEx;
+    Metier: TMetierAuteur;
+
+    procedure Assign(Source: TPersistent); override;
+
+    [PrimaryKey('id_auteur_series')]
+    property ID;
+  end;
+
+  [Entity('auteurs')]
+  TAuteurAlbumLite = class(TAuteurSerieLite)
+  public
+    ID_Album: RGUIDEx;
+
+    procedure Assign(Source: TPersistent); override;
+
+    [PrimaryKey('id_auteur')]
+    property ID;
+  end;
+
+  [Entity('auteurs_parabd')]
+  TAuteurParaBDLite = class(TAuteurLite)
+  public
+    ID_ParaBD: RGUIDEx;
+
+    procedure Assign(Source: TPersistent); override;
+
+    [PrimaryKey('id_auteur_parabd')]
+    property ID;
+  end;
+
+  [Entity('univers')]
   TUniversLite = class(TBaseLite)
   public
     NomUnivers: string { [50] };
@@ -81,8 +128,12 @@ type
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
+
+    [PrimaryKey('id_univers')]
+    property ID;
   end;
 
+  [Entity('editeurs')]
   TEditeurLite = class(TBaseLite)
   public
     NomEditeur: string { [50] };
@@ -91,8 +142,12 @@ type
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
+
+    [PrimaryKey('id_editeur')]
+    property ID;
   end;
 
+  [Entity('albums')]
   TAlbumLite = class(TBaseLite)
   public
     Tome: Integer;
@@ -115,8 +170,12 @@ type
 
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
+
+    [PrimaryKey('id_album')]
+    property ID;
   end;
 
+  [Entity('collections')]
   TCollectionLite = class(TBaseLite)
   public
     NomCollection: string { [50] };
@@ -129,8 +188,12 @@ type
 
     function ChaineAffichage(Simple: Boolean = True): string; override;
     procedure Clear; override;
+
+    [PrimaryKey('id_collection')]
+    property ID;
   end;
 
+  [Entity('series')]
   TSerieLite = class(TBaseLite)
   public
     TitreSerie: string { [150] };
@@ -144,8 +207,12 @@ type
 
     function ChaineAffichage(Simple: Boolean): string; override;
     procedure Clear; override;
+
+    [PrimaryKey('id_serie')]
+    property ID;
   end;
 
+  [Entity('editions')]
   TEditionLite = class(TBaseLite)
   public
     AnneeEdition: Integer;
@@ -160,16 +227,24 @@ type
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
+
+    [PrimaryKey('id_edition')]
+    property ID;
   end;
 
+  [Entity('conversions')]
   TConversionLite = class(TBaseLite)
   public
     Monnaie1, Monnaie2: string { [5] };
     Taux: Double;
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
+
+    [PrimaryKey('id_conversion')]
+    property ID;
   end;
 
+  [Entity('genres')]
   TGenreLite = class(TBaseLite)
   public
     Genre: string { [50] };
@@ -179,21 +254,35 @@ type
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
     procedure Clear; override;
+
+    [PrimaryKey('id_genre')]
+    property ID;
   end;
 
-function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteurLite;
+function MakeAuteurSerie(const Nom: string; Metier: TMetierAuteur): TAuteurSerieLite;
+function MakeAuteurAlbum(const Nom: string; Metier: TMetierAuteur): TAuteurAlbumLite;
 function MakeUnivers(const Nom: string): TUniversLite;
 
 implementation
 
 uses
-  StrUtils, Entities.FactoriesLite, CommonConst;
+  StrUtils, Entities.FactoriesLite, CommonConst, Entities.FactoriesCommon;
 
-function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteurLite;
+function MakeAuteur(Factory: TFactoryClass; const Nom: string; Metier: TMetierAuteur): TAuteurSerieLite;
 begin
-  Result := TFactoryAuteurLite.getInstance;
+  Result := Factory.getInstance as TAuteurSerieLite;
   Result.Personne.Nom := Nom;
   Result.Metier := Metier;
+end;
+
+function MakeAuteurSerie(const Nom: string; Metier: TMetierAuteur): TAuteurSerieLite;
+begin
+  Result := MakeAuteur(TFactoryAuteurSerieLite, Nom, Metier) as TAuteurSerieLite;
+end;
+
+function MakeAuteurAlbum(const Nom: string; Metier: TMetierAuteur): TAuteurAlbumLite;
+begin
+  Result := MakeAuteur(TFactoryAuteurAlbumLite, Nom, Metier) as TAuteurAlbumLite;
 end;
 
 function MakeUnivers(const Nom: string): TUniversLite;
@@ -284,8 +373,6 @@ begin
   inherited;
   if Source is TAuteurLite then
   begin
-    ID_Album := TAuteurLite(Source).ID_Album;
-    Metier := TAuteurLite(Source).Metier;
     Personne.Assign(TAuteurLite(Source).Personne);
   end;
 end;
@@ -311,6 +398,40 @@ procedure TAuteurLite.Clear;
 begin
   inherited;
   Personne.DoClear;
+end;
+
+{ TAuteurSerieLite }
+
+procedure TAuteurSerieLite.Assign(Source: TPersistent);
+begin
+  inherited;
+  if Source is TAuteurSerieLite then
+  begin
+    ID_Serie := TAuteurSerieLite(Source).ID_Serie;
+    Metier := TAuteurSerieLite(Source).Metier;
+  end;
+end;
+
+{ TAuteurAlbumLite }
+
+procedure TAuteurAlbumLite.Assign(Source: TPersistent);
+begin
+  inherited;
+  if Source is TAuteurAlbumLite then
+  begin
+    ID_Album := TAuteurAlbumLite(Source).ID_Album;
+  end;
+end;
+
+{ TAuteurParaBDLite }
+
+procedure TAuteurParaBDLite.Assign(Source: TPersistent);
+begin
+  inherited;
+  if Source is TAuteurParaBDLite then
+  begin
+    ID_ParaBD := TAuteurParaBDLite(Source).ID_ParaBD;
+  end;
 end;
 
 { TAlbumLite }

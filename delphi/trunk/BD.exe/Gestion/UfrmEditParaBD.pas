@@ -123,7 +123,7 @@ implementation
 uses
   Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, Entities.Lite, Divers, UHistorique,
   UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
-  Entities.FactoriesLite, Entities.DaoLambda;
+  Entities.FactoriesLite, Entities.DaoLambda, Entities.Types;
 
 {$R *.dfm}
 { TFrmEditAchatParaBD }
@@ -635,12 +635,12 @@ end;
 
 procedure TfrmEditParaBD.btCreateurClick(Sender: TObject);
 var
-  PA: TAuteurLite;
+  PA: TAuteurParaBDLite;
 begin
   if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
     Exit;
-  PA := TFactoryAuteurLite.getInstance;
-  TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_ParaBD, GUID_NULL, TMetierAuteur(0));
+  PA := TFactoryAuteurParaBDLite.getInstance;
+  TDaoAuteurParaBDLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_ParaBD);
   FParaBD.Auteurs.Add(PA);
   lvAuteurs.Items.Count := FParaBD.Auteurs.Count;
   lvAuteurs.Invalidate;

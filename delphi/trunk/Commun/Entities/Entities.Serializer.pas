@@ -24,6 +24,9 @@ type
     class procedure ProcessWriteToJSON(Entity: TImageLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
     class procedure ProcessWriteToJSON(Entity: TParaBDLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
     class procedure ProcessWriteToJSON(Entity: TAuteurLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
+    class procedure ProcessWriteToJSON(Entity: TAuteurSerieLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
+    class procedure ProcessWriteToJSON(Entity: TAuteurAlbumLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
+    class procedure ProcessWriteToJSON(Entity: TAuteurParaBDLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
     class procedure ProcessWriteToJSON(Entity: TPersonnageLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
     class procedure ProcessWriteToJSON(Entity: TUniversLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
     class procedure ProcessWriteToJSON(Entity: TEditeurLite; json: TdwsJSONObject; Options: SerializationOptions); overload;
@@ -37,7 +40,7 @@ type
 implementation
 
 uses
-  System.TypInfo, Entities.Common;
+  System.TypInfo, Entities.Common, Entities.Types;
 
 { TEntitesSerializer }
 
@@ -51,7 +54,7 @@ begin
   WriteValueToJSON('CategorieParaBD', Entity.CategorieParaBD, json, Options);
   WriteValueToJSON('AnneeCote', Entity.AnneeCote, json, Options);
   WriteValueToJSON('TitreParaBD', Entity.TitreParaBD, json, Options);
-  WriteListEntityToJSON<TAuteurLite>(Entity.Auteurs, json.AddArray('Auteurs'), Options);
+  WriteListEntityToJSON<TAuteurParaBDLite>(Entity.Auteurs, json.AddArray('Auteurs'), Options);
   WriteValueToJSON('Description', Entity.Description, json, Options);
   WriteValueToJSON('Prix', Entity.Prix, json, Options);
   WriteValueToJSON('PrixCote', Entity.PrixCote, json, Options);
@@ -81,9 +84,9 @@ begin
   WriteValueToJSON('TomeFin', Entity.TomeFin, json, Options);
   WriteValueToJSON('HorsSerie', Entity.HorsSerie, json, Options);
   WriteValueToJSON('Integrale', Entity.Integrale, json, Options);
-  WriteListEntityToJSON<TAuteurLite>(Entity.Scenaristes, json.AddArray('Scenaristes'), Options);
-  WriteListEntityToJSON<TAuteurLite>(Entity.Dessinateurs, json.AddArray('Dessinateurs'), Options);
-  WriteListEntityToJSON<TAuteurLite>(Entity.Coloristes, json.AddArray('Coloristes'), Options);
+  WriteListEntityToJSON<TAuteurAlbumLite>(Entity.Scenaristes, json.AddArray('Scenaristes'), Options);
+  WriteListEntityToJSON<TAuteurAlbumLite>(Entity.Dessinateurs, json.AddArray('Dessinateurs'), Options);
+  WriteListEntityToJSON<TAuteurAlbumLite>(Entity.Coloristes, json.AddArray('Coloristes'), Options);
   WriteValueToJSON('Sujet', Entity.Sujet, json, Options);
   WriteValueToJSON('Notes', Entity.Notes, json, Options);
   WriteListEntityToJSON<TEditionFull>(Entity.Editions, json.AddArray('Editions'), Options);
@@ -111,9 +114,9 @@ begin
   WriteValueToJSON('NbAlbums', Entity.NbAlbums, json, Options);
   WriteListEntityToJSON<TAlbumLite>(Entity.Albums, json.AddArray('Albums'), Options);
   WriteListEntityToJSON<TParaBDLite>(Entity.ParaBD, json.AddArray('ParaBD'), Options);
-  WriteListEntityToJSON<TAuteurLite>(Entity.Scenaristes, json.AddArray('Scenaristes'), Options);
-  WriteListEntityToJSON<TAuteurLite>(Entity.Dessinateurs, json.AddArray('Dessinateurs'), Options);
-  WriteListEntityToJSON<TAuteurLite>(Entity.Coloristes, json.AddArray('Coloristes'), Options);
+  WriteListEntityToJSON<TAuteurSerieLite>(Entity.Scenaristes, json.AddArray('Scenaristes'), Options);
+  WriteListEntityToJSON<TAuteurSerieLite>(Entity.Dessinateurs, json.AddArray('Dessinateurs'), Options);
+  WriteListEntityToJSON<TAuteurSerieLite>(Entity.Coloristes, json.AddArray('Coloristes'), Options);
   WriteValueToJSON('VO', Entity.VO, json, Options);
   WriteValueToJSON('Couleur', Entity.Couleur, json, Options);
   WriteValueToJSON('Etat', Entity.Etat, json, Options);
@@ -235,10 +238,22 @@ end;
 class procedure TEntitesSerializer.ProcessWriteToJSON(Entity: TAuteurLite; json: TdwsJSONObject; Options: SerializationOptions);
 begin
   WriteToJSON(Entity.Personne, json.AddObject('Personne'));
-  WriteValueToJSON('ID_Album', Entity.ID_Album, json, Options);
+end;
+
+class procedure TEntitesSerializer.ProcessWriteToJSON(Entity: TAuteurSerieLite; json: TdwsJSONObject; Options: SerializationOptions);
+begin
   WriteValueToJSON('ID_Serie', Entity.ID_Serie, json, Options);
   WriteValueToJSON('Metier', Entity.metier, json, Options);
-  WriteValueToJSON('ID_Serie', Entity.ID_Serie, json, Options);
+end;
+
+class procedure TEntitesSerializer.ProcessWriteToJSON(Entity: TAuteurAlbumLite; json: TdwsJSONObject; Options: SerializationOptions);
+begin
+  WriteValueToJSON('ID_Album', Entity.ID_Album, json, Options);
+end;
+
+class procedure TEntitesSerializer.ProcessWriteToJSON(Entity: TAuteurParaBDLite; json: TdwsJSONObject; Options: SerializationOptions);
+begin
+  WriteValueToJSON('ID_ParaBD', Entity.ID_ParaBD, json, Options);
 end;
 
 class procedure TEntitesSerializer.ProcessWriteToJSON(Entity: TUniversLite; json: TdwsJSONObject; Options: SerializationOptions);

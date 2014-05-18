@@ -3,7 +3,7 @@ unit Entities.DaoLambda;
 interface
 
 uses
-  System.Classes, Entities.Full, System.Generics.Collections;
+  System.Classes, Entities.Types, System.Generics.Collections;
 
 type
   TDaoListe = class

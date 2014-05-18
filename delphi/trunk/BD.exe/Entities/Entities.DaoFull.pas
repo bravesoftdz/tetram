@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Classes, VirtualTreeBdtk, Entities.Full, uib,
   Vcl.StdCtrls, Winapi.Windows, System.Rtti, System.Generics.Collections,
-  Entities.Common, Entities.DaoCommon, Entities.FactoriesCommon;
+  Entities.Common, Entities.DaoCommon, Entities.FactoriesCommon, Entities.Types;
 
 type
   // ce serait trop facile si XE4 acceptait cette syntaxe....
@@ -376,22 +376,22 @@ begin
       qry.SQL.Text := 'select * from proc_auteurs(?, null, null)';
       qry.Params.AsString[0] := GUIDToString(Reference);
       qry.Open;
-      TDaoAuteurLite.Prepare(qry);
+      TDaoAuteurAlbumLite.Prepare(qry);
       try
         while not qry.Eof do
         begin
           case TMetierAuteur(qry.Fields.ByNameAsInteger['metier']) of
             maScenariste:
-              Entity.Scenaristes.Add(TDaoAuteurLite.Make(qry));
+              Entity.Scenaristes.Add(TDaoAuteurAlbumLite.Make(qry));
             maDessinateur:
-              Entity.Dessinateurs.Add(TDaoAuteurLite.Make(qry));
+              Entity.Dessinateurs.Add(TDaoAuteurAlbumLite.Make(qry));
             maColoriste:
-              Entity.Coloristes.Add(TDaoAuteurLite.Make(qry));
+              Entity.Coloristes.Add(TDaoAuteurAlbumLite.Make(qry));
           end;
           qry.Next;
         end;
       finally
-        TDaoAuteurLite.Unprepare(qry);
+        TDaoAuteurAlbumLite.Unprepare(qry);
       end;
       TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < auteurs - ' + GUIDToString(Reference));
 
@@ -407,7 +407,7 @@ end;
 
 class procedure TDaoAlbumFull.FusionneInto(Source, Dest: TAlbumFull);
 
-  function NotInList(Auteur: TAuteurLite; List: TObjectList<TAuteurLite>): Boolean; inline; overload;
+  function NotInList(Auteur: TAuteurAlbumLite; List: TObjectList<TAuteurAlbumLite>): Boolean; inline; overload;
   var
     i: Integer;
   begin
@@ -435,7 +435,7 @@ class procedure TDaoAlbumFull.FusionneInto(Source, Dest: TAlbumFull);
 
 var
   DefaultAlbum: TAlbumFull;
-  Auteur: TAuteurLite;
+  Auteur: TAuteurAlbumLite;
   Univers: TUniversLite;
 begin
   DefaultAlbum := TFactoryAlbumFull.getInstance;
@@ -460,13 +460,13 @@ begin
 
     for Auteur in Source.Scenaristes do
       if NotInList(Auteur, Dest.Scenaristes) then
-        Dest.Scenaristes.Add(TFactoryAuteurLite.Duplicate(Auteur));
+        Dest.Scenaristes.Add(TFactoryAuteurAlbumLite.Duplicate(Auteur));
     for Auteur in Source.Dessinateurs do
       if NotInList(Auteur, Dest.Dessinateurs) then
-        Dest.Dessinateurs.Add(TFactoryAuteurLite.Duplicate(Auteur));
+        Dest.Dessinateurs.Add(TFactoryAuteurAlbumLite.Duplicate(Auteur));
     for Auteur in Source.Coloristes do
       if NotInList(Auteur, Dest.Coloristes) then
-        Dest.Coloristes.Add(TFactoryAuteurLite.Duplicate(Auteur));
+        Dest.Coloristes.Add(TFactoryAuteurAlbumLite.Duplicate(Auteur));
 
     if not SameText(Source.Sujet, DefaultAlbum.Sujet) then
       Dest.Sujet := Source.Sujet;
@@ -493,7 +493,7 @@ class procedure TDaoAlbumFull.SaveToDatabase(Entity: TAlbumFull; UseTransaction:
 var
   S: string;
   qry: TUIBQuery;
-  Auteur: TAuteurLite;
+  Auteur: TAuteurAlbumLite;
   hg: IHourGlass;
   Edition: TEditionFull;
   Univers: TUniversLite;
@@ -757,7 +757,7 @@ begin
       qry.SQL.Text := 'select * from proc_auteurs(null, null, ?)';
       qry.Params.AsString[0] := GUIDToString(Reference);
       qry.Open;
-      TDaoAuteurLite.FillList(Entity.Auteurs, qry);
+      TDaoAuteurParaBDLite.FillList(Entity.Auteurs, qry);
 
       TDaoSerieFull.Fill(Entity.Serie, ID_Serie);
 
@@ -791,7 +791,7 @@ var
   qry: TUIBQuery;
   hg: IHourGlass;
   Stream: TStream;
-  Auteur: TAuteurLite;
+  Auteur: TAuteurParaBDLite;
   Univers: TUniversLite;
   PP: TPhotoLite;
   i: Integer;
@@ -2079,22 +2079,22 @@ begin
       qry.SQL.Text := 'select * from proc_auteurs(null, ?, null)';
       qry.Params.AsString[0] := GUIDToString(Reference);
       qry.Open;
-      TDaoAuteurLite.Prepare(qry);
+      TDaoAuteurSerieLite.Prepare(qry);
       try
         while not qry.Eof do
         begin
           case TMetierAuteur(qry.Fields.ByNameAsInteger['metier']) of
             maScenariste:
-              Entity.Scenaristes.Add(TDaoAuteurLite.Make(qry));
+              Entity.Scenaristes.Add(TDaoAuteurSerieLite.Make(qry));
             maDessinateur:
-              Entity.Dessinateurs.Add(TDaoAuteurLite.Make(qry));
+              Entity.Dessinateurs.Add(TDaoAuteurSerieLite.Make(qry));
             maColoriste:
-              Entity.Coloristes.Add(TDaoAuteurLite.Make(qry));
+              Entity.Coloristes.Add(TDaoAuteurSerieLite.Make(qry));
           end;
           qry.Next;
         end;
       finally
-        TDaoAuteurLite.Unprepare(qry);
+        TDaoAuteurSerieLite.Unprepare(qry);
       end;
     end;
 
@@ -2171,7 +2171,7 @@ class procedure TDaoSerieFull.SaveToDatabase(Entity: TSerieFull; UseTransaction:
 var
   qry: TUIBQuery;
   S, genre: string;
-  Auteur: TAuteurLite;
+  Auteur: TAuteurSerieLite;
   Univers: TUniversLite;
 begin
   inherited;

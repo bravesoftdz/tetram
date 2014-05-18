@@ -3,7 +3,7 @@ unit Entities.Common;
 interface
 
 uses
-  System.Classes, Commun, System.Generics.Collections;
+  System.Classes, System.Rtti, Commun, System.Generics.Collections;
 
 type
   TEntity = class;
@@ -26,7 +26,7 @@ type
 
     procedure BeforeDestruction; override;
     procedure DoClear;
-    procedure Clear; virtual; // deprecated 'Ne jamais appeler directement, utiliser DoClear';
+    procedure Clear; virtual;
     procedure AfterConstruction; override;
 
     class procedure RegisterInitEvent(InitEvent: TInitEvent);
@@ -35,19 +35,30 @@ type
 
   TDBEntity = class(TEntity)
   private
+    class var RttiContext: TRttiContext;
+    class var FRTTIPrepared: TList<TDBEntityClass>;
+    class procedure PrepareRTTI;
+  private
     FID: RGUIDEx;
+  protected
+    constructor Create; override;
   public
+    class constructor Create;
+    class destructor Destroy;
+
     function GetID: RGUIDEx; inline;
     procedure SetID(const Value: RGUIDEx); inline;
     procedure Assign(Source: TPersistent); override;
     procedure Clear; override;
-  published
+
     property ID: RGUIDEx read GetID write SetID;
   end;
 
 implementation
 
 { TEntity }
+
+uses Entities.Attributes;
 
 procedure TEntity.AfterConstruction;
 begin
@@ -133,14 +144,71 @@ begin
   FID := GUID_NULL;
 end;
 
+class constructor TDBEntity.Create;
+begin
+  FRTTIPrepared := TList<TDBEntityClass>.Create;
+end;
+
+constructor TDBEntity.Create;
+begin
+  PrepareRTTI;
+  inherited;
+end;
+
 function TDBEntity.GetID: RGUIDEx;
 begin
   Result := FID;
 end;
 
+class procedure TDBEntity.PrepareRTTI;
+var
+  attr: TCustomAttribute;
+  c: TRttiType;
+  f: TRttiField;
+  p: TRttiProperty;
+  m: TRttiMethod;
+begin
+  if FRTTIPrepared.Contains(Self) then
+    Exit;
+
+  c := RttiContext.GetType(Self);
+
+  for attr in c.GetAttributes do
+    if attr is TRelatedAttribute then
+      TRelatedAttribute(attr).c := c;
+
+  for f in c.GetFields do
+    for attr in f.GetAttributes do
+    begin
+      TRelatedAttribute(attr).c := c;
+      TRelatedAttribute(attr).f := f;
+    end;
+
+  for p in c.GetProperties do
+    for attr in p.GetAttributes do
+    begin
+      TRelatedAttribute(attr).c := c;
+      TRelatedAttribute(attr).p := p;
+    end;
+
+  for m in c.GetMethods do
+    for attr in m.GetAttributes do
+    begin
+      TRelatedAttribute(attr).c := c;
+      TRelatedAttribute(attr).m := m;
+    end;
+
+  FRTTIPrepared.Add(Self);
+end;
+
 procedure TDBEntity.SetID(const Value: RGUIDEx);
 begin
   FID := Value;
+end;
+
+class destructor TDBEntity.Destroy;
+begin
+  FRTTIPrepared.Free;
 end;
 
 end.

@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Rtti, System.Generics.Collections, System.TypInfo, dwsJSON, Commun,
   Entities.Lite, Entities.Full, System.Classes, UMetadata, Entities.Common,
-  Entities.FactoriesCommon;
+  Entities.FactoriesCommon, Entities.Types;
 
 type
 {$TYPEINFO ON}

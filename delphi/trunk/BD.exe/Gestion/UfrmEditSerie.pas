@@ -115,7 +115,7 @@ implementation
 uses
   Commun, Proc_Gestions, Entities.Lite, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
   UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, ProceduresBDtk,
-  Entities.Common, Entities.FactoriesLite, Entities.DaoLambda;
+  Entities.Common, Entities.FactoriesLite, Entities.DaoLambda, Entities.Types;
 
 {$R *.DFM}
 
@@ -439,31 +439,31 @@ end;
 
 procedure TfrmEditSerie.btColoristeClick(Sender: TObject);
 var
-  PA: TAuteurLite;
+  PA: TAuteurSerieLite;
 begin
   if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
     Exit;
   case TSpeedButton(Sender).Tag of
     1:
       begin
-        PA := TFactoryAuteurLite.getInstance;
-        TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maScenariste);
+        PA := TFactoryAuteurSerieLite.getInstance;
+        TDaoAuteurSerieLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_Serie, maScenariste);
         FSerie.Scenaristes.Add(PA);
         lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
         lvScenaristes.Invalidate;
       end;
     2:
       begin
-        PA := TFactoryAuteurLite.getInstance;
-        TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maDessinateur);
+        PA := TFactoryAuteurSerieLite.getInstance;
+        TDaoAuteurSerieLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_Serie, maDessinateur);
         FSerie.Dessinateurs.Add(PA);
         lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
         lvDessinateurs.Invalidate;
       end;
     3:
       begin
-        PA := TFactoryAuteurLite.getInstance;
-        TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), GUID_NULL, ID_Serie, maColoriste);
+        PA := TFactoryAuteurSerieLite.getInstance;
+        TDaoAuteurSerieLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_Serie, maColoriste);
         FSerie.Coloristes.Add(PA);
         lvColoristes.Items.Count := FSerie.Coloristes.Count;
         lvColoristes.Invalidate;

@@ -4,7 +4,8 @@ interface
 
 uses
   System.SysUtils, System.Classes, System.Rtti, System.Generics.Collections, Commun,
-  Entities.Full, Entities.Lite, UMetadata, dwsJSON, System.TypInfo, Entities.Common;
+  Entities.Full, Entities.Lite, UMetadata, dwsJSON, System.TypInfo, Entities.Common,
+  Entities.Types;
 
 type
   SerializationOption = (soIndent, soFull, soSkipNullValues);

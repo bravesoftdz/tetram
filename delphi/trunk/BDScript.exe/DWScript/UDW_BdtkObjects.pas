@@ -34,7 +34,8 @@ type
 
     procedure TObjectListOfObjectCount_R(info: TProgramInfo; ExtObject: TObject);
 
-    procedure MakeAuteurEval(info: TProgramInfo);
+    procedure MakeAuteurSerieEval(info: TProgramInfo);
+    procedure MakeAuteurAlbumEval(info: TProgramInfo);
     procedure MakeUniversEval(info: TProgramInfo);
   public
     constructor Create(const MasterEngine: IMasterEngine); override;
@@ -86,9 +87,14 @@ begin
   Register_Classes;
 end;
 
-procedure TDW_BdtkObjectsUnit.MakeAuteurEval(info: TProgramInfo);
+procedure TDW_BdtkObjectsUnit.MakeAuteurAlbumEval(info: TProgramInfo);
 begin
-  info.ResultAsVariant := GetScriptObjFromExternal(info, MakeAuteur(info.ParamAsString[0], TMetierAuteur(info.ParamAsInteger[1])));
+  info.ResultAsVariant := GetScriptObjFromExternal(info, MakeAuteurAlbum(info.ParamAsString[0], TMetierAuteur(info.ParamAsInteger[1])));
+end;
+
+procedure TDW_BdtkObjectsUnit.MakeAuteurSerieEval(info: TProgramInfo);
+begin
+  info.ResultAsVariant := GetScriptObjFromExternal(info, MakeAuteurSerie(info.ParamAsString[0], TMetierAuteur(info.ParamAsInteger[1])));
 end;
 
 procedure TDW_BdtkObjectsUnit.MakeUniversEval(info: TProgramInfo);
@@ -118,19 +124,19 @@ end;
 
 procedure TDW_BdtkObjectsUnit.OnTObjectListOfAuteur_AddEval(info: TProgramInfo; ExtObject: TObject);
 begin
-  info.ResultAsInteger := (ExtObject as TObjectList<TAuteurLite>).Add(info.ParamAsObject[0] as TAuteurLite);
+  info.ResultAsInteger := (ExtObject as TObjectList<TAuteurEditionLite>).Add(info.ParamAsObject[0] as TAuteurEditionLite);
 end;
 
 procedure TDW_BdtkObjectsUnit.OnTObjectListOfAuteur_InsertEval(info: TProgramInfo; ExtObject: TObject);
 begin
-  (ExtObject as TObjectList<TAuteurLite>).Insert(info.ParamAsInteger[0], info.ParamAsObject[1] as TAuteurLite);
+  (ExtObject as TObjectList<TAuteurEditionLite>).Insert(info.ParamAsInteger[0], info.ParamAsObject[1] as TAuteurEditionLite);
 end;
 
 procedure TDW_BdtkObjectsUnit.OnTObjectListOfAuteur_ItemsEval(info: TProgramInfo; ExtObject: TObject);
 begin
   case TMethodSymbol(info.FuncSym).Kind of
     fkFunction:
-      info.ResultAsVariant := GetScriptObjFromExternal(info, (ExtObject as TObjectList<TAuteurLite>).Items[info.ParamAsInteger[0]]);
+      info.ResultAsVariant := GetScriptObjFromExternal(info, (ExtObject as TObjectList<TAuteurEditionLite>).Items[info.ParamAsInteger[0]]);
     // info.ResultAsVariant := info.RegisterExternalObject((ExtObject as TObjectList<TAuteur>).Items[info.ParamAsInteger[0]]);
   end;
 end;
@@ -178,9 +184,9 @@ procedure TDW_BdtkObjectsUnit.TAuteurNomAuteur(info: TProgramInfo; ExtObject: TO
 begin
   case info.FuncSym.Kind of
     fkFunction:
-      info.ResultAsString := (ExtObject as TAuteurLite).Personne.Nom;
+      info.ResultAsString := (ExtObject as TAuteurEditionLite).Personne.Nom;
     fkProcedure:
-      (ExtObject as TAuteurLite).Personne.Nom := info.ParamAsString[0];
+      (ExtObject as TAuteurEditionLite).Personne.Nom := info.ParamAsString[0];
 end;
 end;
 
@@ -350,7 +356,8 @@ begin
   RegisterProperty(c, 'NomAuteur', 'string', TAuteurNomAuteur, TAuteurNomAuteur);
   RegisterProperty(c, 'Metier', 'TMetierAuteur', HandleDynamicProperty, HandleDynamicProperty);
 
-  RegisterFunction('MakeAuteur', 'TAuteur', ['Nom', 'string', 'Metier', 'TMetierAuteur'], MakeAuteurEval);
+  RegisterFunction('MakeAuteurSerie', 'TAuteur', ['Nom', 'string', 'Metier', 'TMetierAuteur'], MakeAuteurSerieEval);
+  RegisterFunction('MakeAuteurAlbum', 'TAuteur', ['Nom', 'string', 'Metier', 'TMetierAuteur'], MakeAuteurAlbumEval);
 end;
 
 procedure TDW_BdtkObjectsUnit.Register_TEditeurFull;

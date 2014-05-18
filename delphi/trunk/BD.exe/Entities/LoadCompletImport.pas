@@ -3,7 +3,8 @@ unit LoadCompletImport;
 interface
 
 uses
-  Winapi.Windows, SysUtils, Classes, Forms, Entities.Full, Generics.Collections, Graphics;
+  Winapi.Windows, SysUtils, Classes, Forms, Entities.Full, Generics.Collections, Graphics,
+  Entities.Types;
 
 procedure Import(Self: TAlbumFull);
 
@@ -16,7 +17,7 @@ uses
 procedure Import(Self: TAlbumFull);
 var
   Qry: TUIBQuery;
-  Auteur: TAuteurLite;
+  Auteur: TAuteurSerieLite;
   frmValidationImport: TfrmValidationImport;
   choosenText: string;
 
@@ -113,7 +114,7 @@ var
     Result := CheckValue(Texte, TypeData, GUID_NULL);
   end;
 
-  function CheckListAuteurs(List: TList<TAuteurLite>; const OtherList: array of TList<TAuteurLite>): Boolean;
+  function CheckListAuteurs(List: TList<TAuteurSerieLite>; const OtherList: array of TList<TAuteurSerieLite>): Boolean; overload;
   var
     dummyID: TGUID;
     i, j, k: Integer;
@@ -148,10 +149,52 @@ var
     Result := True;
   end;
 
+  function CheckListAuteurs(List: TList<TAuteurAlbumLite>; const OtherList: array of TList<TAuteurAlbumLite>; const OtherList2: array of TList<TAuteurSerieLite>): Boolean; overload;
+  var
+    dummyID: TGUID;
+    i, j, k: Integer;
+    Accept: Boolean;
+    Nom: string;
+  begin
+    Result := False;
+    for i := Pred(List.Count) downto 0 do
+      if IsEqualGuid(List[i].Personne.ID, GUID_NULL) then
+      begin
+        dummyID := CheckValue(List[i].Personne.Nom, vmPersonnes);
+        if IsEqualGuid(dummyID, GUID_NULL) then
+          Exit;
+
+        Accept := not IsEqualGuid(dummyID, GUID_FULL);
+
+        Nom := List[i].Personne.Nom;
+        for j := High(OtherList2) downto Low(OtherList2) do
+          for k := 0 to Pred(OtherList2[j].Count) do
+            if SameText(OtherList2[j][k].Personne.Nom, Nom) then
+              if Accept then
+                TDaoPersonnageLite.Fill(OtherList2[j][k].Personne, dummyID)
+              else
+                OtherList2[j].Delete(k);
+        for j := Low(OtherList) to High(OtherList) do
+          for k := Pred(OtherList[j].Count) downto 0 do
+            if SameText(OtherList[j][k].Personne.Nom, Nom) then
+              if Accept then
+                TDaoPersonnageLite.Fill(OtherList[j][k].Personne, dummyID)
+              else
+                OtherList[j].Delete(k);
+        if Accept then
+          TDaoPersonnageLite.Fill(List[i].Personne, dummyID)
+        else
+          List.Delete(i);
+
+        frmValidationImport.Album := Self;
+      end;
+    Result := True;
+  end;
+
 var
   dummyID: TGUID;
   i: Integer;
-  PA: TAuteurLite;
+  PA: TAuteurAlbumLite;
   DefaultEdition, Edition, Edition2: TEditionFull;
 begin
   with Self do
@@ -169,11 +212,11 @@ begin
         Qry.Transaction := GetTransaction(DMPrinc.UIBDataBase);
 
         frmValidationImport.PageControl1.ActivePageIndex := 0;
-        if not CheckListAuteurs(Scenaristes, [Dessinateurs, Coloristes, Serie.Scenaristes, Serie.Dessinateurs, Serie.Coloristes]) then
+        if not CheckListAuteurs(Scenaristes, [Dessinateurs, Coloristes], [Serie.Scenaristes, Serie.Dessinateurs, Serie.Coloristes]) then
           Exit;
-        if not CheckListAuteurs(Dessinateurs, [Coloristes, Serie.Scenaristes, Serie.Dessinateurs, Serie.Coloristes]) then
+        if not CheckListAuteurs(Dessinateurs, [Coloristes], [Serie.Scenaristes, Serie.Dessinateurs, Serie.Coloristes]) then
           Exit;
-        if not CheckListAuteurs(Coloristes, [Serie.Scenaristes, Serie.Dessinateurs, Serie.Coloristes]) then
+        if not CheckListAuteurs(Coloristes, [], [Serie.Scenaristes, Serie.Dessinateurs, Serie.Coloristes]) then
           Exit;
 
         frmValidationImport.PageControl1.ActivePageIndex := 1;
@@ -274,22 +317,22 @@ begin
           begin
             for Auteur in Serie.Scenaristes do
             begin
-              PA := TFactoryAuteurLite.getInstance;
-              TDaoAuteurLite.Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
+              PA := TFactoryAuteurAlbumLite.getInstance;
+              TDaoAuteurAlbumLite.Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
               Scenaristes.Add(PA);
             end;
 
             for Auteur in Serie.Dessinateurs do
             begin
-              PA := TFactoryAuteurLite.getInstance;
-              TDaoAuteurLite.Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(1));
+              PA := TFactoryAuteurAlbumLite.getInstance;
+              TDaoAuteurAlbumLite.Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(1));
               Dessinateurs.Add(PA);
             end;
 
             for Auteur in Serie.Coloristes do
             begin
-              PA := TFactoryAuteurLite.getInstance;
-              TDaoAuteurLite.Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(2));
+              PA := TFactoryAuteurAlbumLite.getInstance;
+              TDaoAuteurAlbumLite.Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(2));
               Coloristes.Add(PA);
             end;
           end;
