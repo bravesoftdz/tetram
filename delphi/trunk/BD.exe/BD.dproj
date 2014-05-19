@@ -426,7 +426,6 @@
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_24.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_25.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_29.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.Attributes.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Types.pas"/>
         <DCCReference Include="Entities\Entities.DBConnection.pas"/>
         <RcItem Include="..\Commun\images\network.png">

@@ -178,7 +178,6 @@ uses
   UMAJ2_2_3_24 in 'mises_a_jour\UMAJ2_2_3_24.pas',
   UMAJ2_2_3_25 in 'mises_a_jour\UMAJ2_2_3_25.pas',
   UMAJ2_2_3_29 in 'mises_a_jour\UMAJ2_2_3_29.pas',
-  Entities.Attributes in '..\Commun\Entities\Entities.Attributes.pas',
   Entities.Types in '..\Commun\Entities\Entities.Types.pas',
   Entities.DBConnection in 'Entities\Entities.DBConnection.pas';
 

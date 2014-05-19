@@ -295,8 +295,6 @@ class procedure TDaoAlbumFull.Fill(Entity: TAlbumFull; const Reference: TGUID);
 var
   qry: TUIBQuery;
 begin
-  FillEntity(Entity, Reference);
-
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then
     Exit;

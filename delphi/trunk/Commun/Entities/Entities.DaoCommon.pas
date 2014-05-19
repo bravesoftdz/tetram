@@ -3,7 +3,8 @@ unit Entities.DaoCommon;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Rtti, System.Generics.Collections, Entities.Common, Entities.FactoriesCommon, Entities.Attributes, Entities.DBConnection;
+  System.SysUtils, System.Classes, System.Rtti, System.Generics.Collections, Entities.Common, Entities.FactoriesCommon,
+  Entities.DBConnection;
 
 type
   TDaoEntity = class abstract
@@ -23,8 +24,6 @@ type
   public
     class function BuildID: TGUID;
     class procedure Fill(Entity: TDBEntity; const Reference: TGUID); virtual; abstract;
-    class procedure FillEntity(Entity: TDBEntity; const Reference: TGUID);
-    class procedure FillExtra(Entity: TDBEntity); virtual;
     class function getInstance(const Reference: TGUID): TDBEntity; reintroduce; overload;
 
     class property DBConnection: IDBConnection read FDBConnection write FDBConnection;
@@ -38,7 +37,7 @@ type
 implementation
 
 uses
-  Commun;
+  Commun, uiblib;
 
 { TDaoEntity }
 
@@ -61,45 +60,6 @@ begin
   finally
     qry.Free;
   end;
-end;
-
-class procedure TDaoDBEntity.FillEntity(Entity: TDBEntity; const Reference: TGUID);
-
-  procedure SetProperty(PropDesc: EntityFieldAttribute; const Value);
-  var
-    v: TValue;
-  begin
-    if PropDesc.f <> nil then
-    begin
-      TValue.Make(@Value, PropDesc.f.FieldType.Handle, v);
-      PropDesc.f.SetValue(Entity, v)
-    end
-    else
-    begin
-      TValue.Make(@Value, PropDesc.p.PropertyType.Handle, v);
-      PropDesc.p.SetValue(Entity, v);
-    end;
-  end;
-
-var
-  mi: TEntityMetadataCache.TMetadataInfo;
-begin
-  if IsEqualGUID(Reference, GUID_NULL) then
-    Exit;
-
-  mi := TEntityMetadataCache.PrepareRTTI(TDBEntityClass(Entity.ClassType));
-
-  SetProperty(mi.PrimaryKeyDesc, Reference);
-
-  // Entity.ID_Album := Reference;
-  // qry := TUIBQuery.Create(nil);
-
-  FillExtra(Entity);
-end;
-
-class procedure TDaoDBEntity.FillExtra(Entity: TDBEntity);
-begin
-
 end;
 
 class function TDaoDBEntity.getInstance(const Reference: TGUID): TDBEntity;
