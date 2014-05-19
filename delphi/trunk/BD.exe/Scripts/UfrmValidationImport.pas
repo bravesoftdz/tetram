@@ -343,9 +343,9 @@ procedure TfrmValidationImport.framBoutons1btnOKClick(Sender: TObject);
   function SetValue(Ctrl: TLightComboCheck; Chk: TCheckBox): ROption; overload;
   begin
     if Chk.Checked then
-      Result := MakeOption(Ctrl.Value, Ctrl.Caption)
+      Result := ROption.Create(Ctrl.Value, Ctrl.Caption)
     else
-      Result := MakeOption(Ctrl.DefaultValueChecked, Ctrl.GetCaption(Ctrl.DefaultValueChecked));
+      Result := ROption.Create(Ctrl.DefaultValueChecked, Ctrl.GetCaption(Ctrl.DefaultValueChecked));
   end;
 
 begin

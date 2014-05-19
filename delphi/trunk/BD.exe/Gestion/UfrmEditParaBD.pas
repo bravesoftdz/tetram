@@ -333,7 +333,7 @@ begin
 
   FParaBD.TitreParaBD := Trim(edTitre.Text);
   FParaBD.AnneeEdition := StrToIntDef(edAnneeEdition.Text, 0);
-  FParaBD.CategorieParaBD := MakeOption(cbxCategorie.Value, cbxCategorie.Caption);
+  FParaBD.CategorieParaBD := ROption.Create(cbxCategorie.Value, cbxCategorie.Caption);
   FParaBD.Dedicace := cbDedicace.Checked;
   FParaBD.Numerote := cbNumerote.Checked;
   FParaBD.Description := edDescription.Text;

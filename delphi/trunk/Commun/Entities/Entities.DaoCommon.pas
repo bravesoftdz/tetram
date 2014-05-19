@@ -3,7 +3,7 @@ unit Entities.DaoCommon;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Rtti, System.Generics.Collections, Entities.Common, Entities.FactoriesCommon, Entities.Attributes;
+  System.SysUtils, System.Classes, System.Rtti, System.Generics.Collections, Entities.Common, Entities.FactoriesCommon, Entities.Attributes, Entities.DBConnection;
 
 type
   TDaoEntity = class abstract
@@ -18,10 +18,16 @@ type
   end;
 
   TDaoDBEntity = class abstract(TDaoEntity)
+  private
+    class var FDBConnection: IDBConnection;
   public
     class function BuildID: TGUID;
-    class procedure Fill(Entity: TDBEntity; const Reference: TGUID); virtual;
+    class procedure Fill(Entity: TDBEntity; const Reference: TGUID); virtual; abstract;
+    class procedure FillEntity(Entity: TDBEntity; const Reference: TGUID);
+    class procedure FillExtra(Entity: TDBEntity); virtual;
     class function getInstance(const Reference: TGUID): TDBEntity; reintroduce; overload;
+
+    class property DBConnection: IDBConnection read FDBConnection write FDBConnection;
   end;
 
   TDaoGenericDBEntity<T: TDBEntity> = class abstract(TDaoDBEntity)
@@ -32,7 +38,7 @@ type
 implementation
 
 uses
-  uib, UdmPrinc, Commun;
+  Commun;
 
 { TDaoEntity }
 
@@ -45,25 +51,55 @@ end;
 
 class function TDaoDBEntity.BuildID: TGUID;
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(DMPrinc.UIBDataBase);
     qry.SQL.Text := 'select udf_createguid() from rdb$database';
     qry.Open;
     Result := StringToGUIDDef(qry.Fields.AsString[0], GUID_NULL);
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
 
-class procedure TDaoDBEntity.Fill(Entity: TDBEntity; const Reference: TGUID);
+class procedure TDaoDBEntity.FillEntity(Entity: TDBEntity; const Reference: TGUID);
+
+  procedure SetProperty(PropDesc: EntityFieldAttribute; const Value);
+  var
+    v: TValue;
+  begin
+    if PropDesc.f <> nil then
+    begin
+      TValue.Make(@Value, PropDesc.f.FieldType.Handle, v);
+      PropDesc.f.SetValue(Entity, v)
+    end
+    else
+    begin
+      TValue.Make(@Value, PropDesc.p.PropertyType.Handle, v);
+      PropDesc.p.SetValue(Entity, v);
+    end;
+  end;
+
 var
   mi: TEntityMetadataCache.TMetadataInfo;
 begin
+  if IsEqualGUID(Reference, GUID_NULL) then
+    Exit;
+
   mi := TEntityMetadataCache.PrepareRTTI(TDBEntityClass(Entity.ClassType));
+
+  SetProperty(mi.PrimaryKeyDesc, Reference);
+
+  // Entity.ID_Album := Reference;
+  // qry := TUIBQuery.Create(nil);
+
+  FillExtra(Entity);
+end;
+
+class procedure TDaoDBEntity.FillExtra(Entity: TDBEntity);
+begin
+
 end;
 
 class function TDaoDBEntity.getInstance(const Reference: TGUID): TDBEntity;

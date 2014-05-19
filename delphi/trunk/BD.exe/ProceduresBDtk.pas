@@ -73,7 +73,8 @@ procedure LoadCombo(Combo: TLightComboCheck; List: TStrings; DefaultValue: ROpti
 implementation
 
 uses UfrmChoixDetail, UfrmChoix, UfrmConvertisseur, UfrmFond, Divers, Procedures, Math, Textes, ActnList, UfrmChoixDetailSerie,
-  UdmPrinc, System.IniFiles, Vcl.Imaging.jpeg, System.IOUtils;
+  UdmPrinc, System.IniFiles, Vcl.Imaging.jpeg, System.IOUtils,
+  Entities.DBConnection;
 
 function Choisir(const Texte1, Texte2: string; Bouton: Integer): TModalResult;
 begin
@@ -322,20 +323,18 @@ procedure LitOptions;
   end;
 
 var
-  op: TUIBQuery;
+  op: TManagedQuery;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  op := TUIBQuery.Create(nil);
+  op := dmPrinc.DBConnection.GetQuery;
   with op do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'select first 1 valeur from options where nom_option = ? order by dm_options desc';
       Prepare(True);
       TGlobalVar.Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', FormatSettings.CurrencyString);
       RepImages := LitStr(op, 'RepImages', RepImages);
     finally
-      Transaction.Free;
       Free;
     end;
   with TIniFile.Create(FichierIni) do
@@ -401,19 +400,17 @@ procedure EcritOptions;
   end;
 
 var
-  op: TUIBQuery;
+  op: TManagedQuery;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  op := TUIBQuery.Create(nil);
+  op := dmPrinc.DBConnection.GetQuery;
   with op do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       Sauve(op, 'SymboleM', TGlobalVar.Utilisateur.Options.SymboleMonnetaire);
       Sauve(op, 'RepImages', RepImages);
       Transaction.Commit;
     finally
-      Transaction.Free;
       Free;
     end;
   with TIniFile.Create(FichierIni), TGlobalVar.Utilisateur.Options do
@@ -453,9 +450,8 @@ end;
 function SupprimerTable(const Table: string): Boolean;
 begin
   try
-    with TUIBQuery.Create(nil) do
+    with dmPrinc.DBConnection.GetQuery do
       try
-        Transaction := GetTransaction(DMPrinc.UIBDataBase);
         Transaction.Database.Connected := False; // fonctionne mais pas correct du tout!
         Transaction.Database.Connected := True;
         SQL.Text := 'drop table ' + Table;
@@ -463,7 +459,6 @@ begin
         Transaction.Commit;
         Result := True;
       finally
-        Transaction.Free;
         Free;
       end;
   except
@@ -490,13 +485,8 @@ function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Vale
   : Boolean;
 begin
   try
-    with TUIBQuery.Create(nil) do
+    with dmPrinc.DBConnection.GetQuery(UseTransaction) do
       try
-        if Assigned(UseTransaction) then
-          Transaction := UseTransaction
-        else
-          Transaction := GetTransaction(DMPrinc.UIBDataBase);
-
         if ChampSupp <> '' then
           SQL.Add(Format('update %s set %s = True', [Table, ChampSupp]))
         else
@@ -512,8 +502,6 @@ begin
         Transaction.Commit;
         Result := True;
       finally
-        if not Assigned(UseTransaction) then
-          Transaction.Free;
         Free;
       end;
   except
@@ -541,9 +529,8 @@ var
   img: TJPEGImage;
   Fichier, Chemin: string;
 begin
-  with TUIBQuery.Create(nil) do
+  with dmPrinc.DBConnection.GetQuery do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       if isParaBD then
         SQL.Text := 'select imagephoto, stockagephoto, fichierphoto from photos where id_photo = ?'
       else
@@ -586,16 +573,14 @@ begin
         end;
       end;
     finally
-      Transaction.Free;
       Free;
     end;
 end;
 
 function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = True): string;
 begin
-  with TUIBQuery.Create(nil) do
+  with dmPrinc.DBConnection.GetQuery do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'select * from searchfilename(:chemin, :fichier, :reserve)';
       Prepare(True);
       Params.AsString[0] := Copy(IncludeTrailingPathDelimiter(Chemin), 1, Params.MaxStrLen[0]);
@@ -604,7 +589,6 @@ begin
       Open;
       Result := TPath.GetFileName(Fields.AsString[0]);
     finally
-      Transaction.Free;
       Free;
     end;
 end;

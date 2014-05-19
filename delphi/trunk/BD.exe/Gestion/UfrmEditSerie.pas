@@ -191,12 +191,12 @@ begin
   FSerie.VO := cbVO.State;
   FSerie.Couleur := cbCouleur.State;
 
-  FSerie.TypeEdition := MakeOption(cbxEdition.Value, cbxEdition.Caption);
-  FSerie.Etat := MakeOption(cbxEtat.Value, cbxEtat.Caption);
-  FSerie.Reliure := MakeOption(cbxReliure.Value, cbxReliure.Caption);
-  FSerie.Orientation := MakeOption(cbxOrientation.Value, cbxOrientation.Caption);
-  FSerie.FormatEdition := MakeOption(cbxFormat.Value, cbxFormat.Caption);
-  FSerie.SensLecture := MakeOption(cbxSensLecture.Value, cbxSensLecture.Caption);
+  FSerie.TypeEdition := ROption.Create(cbxEdition.Value, cbxEdition.Caption);
+  FSerie.Etat := ROption.Create(cbxEtat.Value, cbxEtat.Caption);
+  FSerie.Reliure := ROption.Create(cbxReliure.Value, cbxReliure.Caption);
+  FSerie.Orientation := ROption.Create(cbxOrientation.Value, cbxOrientation.Caption);
+  FSerie.FormatEdition := ROption.Create(cbxFormat.Value, cbxFormat.Caption);
+  FSerie.SensLecture := ROption.Create(cbxSensLecture.Value, cbxSensLecture.Caption);
 
   FSerie.Associations.Text := edAssociations.Lines.Text;
 

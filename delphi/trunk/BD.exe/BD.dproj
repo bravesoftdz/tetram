@@ -402,7 +402,7 @@
         <DCCReference Include="Scripts\UfrmValidationImport.pas">
             <Form>frmValidationImport</Form>
         </DCCReference>
-        <DCCReference Include="Entities\Entities.DaoCommon.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.DaoCommon.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Common.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.FactoriesCommon.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.FactoriesLite.pas"/>
@@ -428,6 +428,7 @@
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_29.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Attributes.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Types.pas"/>
+        <DCCReference Include="Entities\Entities.DBConnection.pas"/>
         <RcItem Include="..\Commun\images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>
@@ -538,7 +539,7 @@
                     <VersionInfo Name="MajorVer">2</VersionInfo>
                     <VersionInfo Name="MinorVer">2</VersionInfo>
                     <VersionInfo Name="Release">3</VersionInfo>
-                    <VersionInfo Name="Build">71</VersionInfo>
+                    <VersionInfo Name="Build">72</VersionInfo>
                     <VersionInfo Name="Debug">False</VersionInfo>
                     <VersionInfo Name="PreRelease">False</VersionInfo>
                     <VersionInfo Name="Special">False</VersionInfo>
@@ -550,7 +551,7 @@
                 <VersionInfoKeys>
                     <VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
                     <VersionInfoKeys Name="FileDescription"/>
-                    <VersionInfoKeys Name="FileVersion">2.2.3.71</VersionInfoKeys>
+                    <VersionInfoKeys Name="FileVersion">2.2.3.72</VersionInfoKeys>
                     <VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
                     <VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2011</VersionInfoKeys>
                     <VersionInfoKeys Name="LegalTrademarks"/>

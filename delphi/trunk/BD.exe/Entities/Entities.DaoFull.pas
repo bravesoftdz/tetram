@@ -125,20 +125,19 @@ type
 implementation
 
 uses
-  UdmPrinc, Commun, UfrmConsole, Entities.DaoLite, Entities.Lite, Procedures,
+  Commun, UfrmConsole, Entities.DaoLite, Entities.Lite, Procedures,
   CommonConst, System.IOUtils, Vcl.Dialogs, UMetadata, UfrmFusionEditions,
   Vcl.Controls, ProceduresBDtk, Entities.FactoriesFull, Entities.FactoriesLite,
-  Entities.DaoLambda;
+  Entities.DaoLambda, Entities.DBConnection;
 
 { TDaoFull }
 
 class procedure TDaoFull.FillAssociations(Entity: TObjetFull; TypeData: TVirtualMode);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select chaine, always from import_associations where typedata = :typedata and id = :id and always = 1';
     qry.Params.AsInteger[0] := Integer(TypeData);
     qry.Params.AsString[1] := GUIDToString(Entity.ID);
@@ -149,7 +148,6 @@ begin
       qry.Next;
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -157,11 +155,10 @@ end;
 class procedure TDaoFull.SaveAssociations(Entity: TObjetFull; TypeData: TVirtualMode; const ParentID: TGUID);
 var
   association: string;
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'delete from import_associations where typedata = :typedata and id = :id and always = 1';
     qry.Params.AsInteger[0] := Integer(TypeData);
     qry.Params.AsString[1] := GUIDToString(Entity.ID);
@@ -179,7 +176,6 @@ begin
         qry.Execute;
       end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -190,7 +186,7 @@ var
 begin
   // Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut être GUID_NULL');
 
-  Transaction := GetTransaction(dmPrinc.UIBDataBase);
+  Transaction := DBConnection.GetTransaction;
   try
     SaveToDatabase(Entity, Transaction);
     Transaction.Commit;
@@ -238,9 +234,8 @@ class procedure TDaoSerieFull.ChangeNotation(Entity: TSerieFull; Note: Integer);
 var
   qry: TUIBQuery;
 begin
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'update series set notation = ? where id_serie = ?';
     qry.Params.AsSmallint[0] := Note;
     qry.Params.AsString[1] := GUIDToString(Entity.ID_Serie);
@@ -249,7 +244,6 @@ begin
 
     Entity.Notation := Note;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -262,16 +256,14 @@ var
 begin
   if IsEqualGUID(Entity.ID_Album, GUID_NULL) then
     Exit;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'update albums set achat = :achat where id_album = ?';
     qry.Params.AsBoolean[0] := Prevision;
     qry.Params.AsString[1] := GUIDToString(Entity.ID_Album);
     qry.Execute;
     qry.Transaction.Commit;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -280,9 +272,8 @@ class procedure TDaoAlbumFull.ChangeNotation(Entity: TAlbumFull; Note: Integer);
 var
   qry: TUIBQuery;
 begin
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'update albums set notation = ? where id_album = ?';
     qry.Params.AsSmallint[0] := Note;
     qry.Params.AsString[1] := GUIDToString(Entity.ID_Album);
@@ -291,7 +282,6 @@ begin
 
     Entity.Notation := Note;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -305,14 +295,14 @@ class procedure TDaoAlbumFull.Fill(Entity: TAlbumFull; const Reference: TGUID);
 var
   qry: TUIBQuery;
 begin
+  FillEntity(Entity, Reference);
+
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then
     Exit;
   Entity.ID_Album := Reference;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
-
     TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > données de base - ' + GUIDToString(Reference));
 
     qry.FetchBlobs := True;
@@ -400,7 +390,6 @@ begin
       TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < éditions - ' + GUIDToString(Reference));
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -670,16 +659,14 @@ var
 begin
   if IsEqualGUID(Entity.ID_ParaBD, GUID_NULL) then
     Exit;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'update parabd set achat = :achat where id_parabd = ?';
     qry.Params.AsBoolean[0] := Prevision;
     qry.Params.AsString[1] := GUIDToString(Entity.ID_ParaBD);
     qry.Execute;
     qry.Transaction.Commit;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -698,9 +685,8 @@ begin
   if IsEqualGUID(Reference, GUID_NULL) then
     Exit;
   Entity.ID_ParaBD := Reference;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.FetchBlobs := True;
     qry.SQL.Clear;
     qry.SQL.Add('select');
@@ -723,7 +709,7 @@ begin
       Entity.AnneeEdition := qry.Fields.ByNameAsInteger['annee'];
       Entity.Description := qry.Fields.ByNameAsString['description'];
       Entity.Notes := qry.Fields.ByNameAsString['notes'];
-      Entity.CategorieParaBD := MakeOption(qry.Fields.ByNameAsInteger['categorieparabd'], qry.Fields.ByNameAsString['scategorieparabd']);
+      Entity.CategorieParaBD := ROption.Create(qry.Fields.ByNameAsInteger['categorieparabd'], qry.Fields.ByNameAsString['scategorieparabd']);
       Entity.Prix := qry.Fields.ByNameAsCurrency['prix'];
       Entity.Dedicace := qry.Fields.ByNameAsBoolean['dedicace'];
       Entity.Numerote := qry.Fields.ByNameAsBoolean['numerote'];
@@ -780,7 +766,6 @@ begin
       TfrmConsole.AddEvent(Self.UnitName, 'TDaoParaBDFull.Fill < photos - ' + GUIDToString(Reference));
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -1090,9 +1075,8 @@ begin
   if IsEqualGUID(Reference, GUID_NULL) then
     Exit;
   Entity.ID_Univers := Reference;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select nomunivers, id_univers_parent, description, siteweb from univers where id_univers = ?';
     qry.Params.AsString[0] := GUIDToString(Reference);
     qry.Open;
@@ -1106,7 +1090,6 @@ begin
       Entity.SiteWeb := qry.Fields.ByNameAsString['siteweb'];
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -1167,9 +1150,8 @@ begin
   if IsEqualGUID(Reference, GUID_NULL) then
     Exit;
   Entity.ID_Collection := Reference;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select nomcollection, id_editeur from collections where id_collection = ?';
     qry.Params.AsString[0] := GUIDToString(Reference);
     qry.Open;
@@ -1181,7 +1163,6 @@ begin
       TDaoEditeurLite.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL));
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -1234,9 +1215,8 @@ begin
   if IsEqualGUID(Reference, GUID_NULL) then
     Exit;
   Entity.ID_Editeur := Reference;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select nomediteur, siteweb from editeurs where id_editeur = ?';
     qry.Params.AsString[0] := GUIDToString(Reference);
     qry.Open;
@@ -1248,7 +1228,6 @@ begin
       Entity.SiteWeb := qry.Fields.ByNameAsString['siteweb'];
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -1301,9 +1280,8 @@ begin
   if IsEqualGUID(Reference, GUID_NULL) then
     Exit;
   Entity.ID_Auteur := Reference;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select nompersonne, siteweb, biographie from personnes where id_personne = ?';
     qry.Params.AsString[0] := GUIDToString(Reference);
     qry.FetchBlobs := True;
@@ -1418,10 +1396,8 @@ begin
   if IsEqualGUID(Reference, GUID_NULL) then
     Exit;
   Entity.ID_Edition := Reference;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
-
     TfrmConsole.AddEvent(Self.UnitName, 'TDaoEditionFull.Fill > données de base - ' + GUIDToString(Reference));
     qry.SQL.Clear;
     qry.SQL.Add('select');
@@ -1473,13 +1449,13 @@ begin
       Entity.Prete := qry.Fields.ByNameAsBoolean['prete'];
       Entity.Stock := qry.Fields.ByNameAsBoolean['stock'];
       Entity.ISBN := FormatISBN(Trim(qry.Fields.ByNameAsString['isbn']));
-      Entity.TypeEdition := MakeOption(qry.Fields.ByNameAsInteger['typeedition'], qry.Fields.ByNameAsString['stypeedition']);
+      Entity.TypeEdition := ROption.Create(qry.Fields.ByNameAsInteger['typeedition'], qry.Fields.ByNameAsString['stypeedition']);
       Entity.NombreDePages := qry.Fields.ByNameAsInteger['nombredepages'];
-      Entity.Etat := MakeOption(qry.Fields.ByNameAsInteger['etat'], qry.Fields.ByNameAsString['setat']);
-      Entity.Reliure := MakeOption(qry.Fields.ByNameAsInteger['reliure'], qry.Fields.ByNameAsString['sreliure']);
-      Entity.Orientation := MakeOption(qry.Fields.ByNameAsInteger['orientation'], qry.Fields.ByNameAsString['sorientation']);
-      Entity.FormatEdition := MakeOption(qry.Fields.ByNameAsInteger['formatedition'], qry.Fields.ByNameAsString['sformatedition']);
-      Entity.SensLecture := MakeOption(qry.Fields.ByNameAsInteger['senslecture'], qry.Fields.ByNameAsString['ssenslecture']);
+      Entity.Etat := ROption.Create(qry.Fields.ByNameAsInteger['etat'], qry.Fields.ByNameAsString['setat']);
+      Entity.Reliure := ROption.Create(qry.Fields.ByNameAsInteger['reliure'], qry.Fields.ByNameAsString['sreliure']);
+      Entity.Orientation := ROption.Create(qry.Fields.ByNameAsInteger['orientation'], qry.Fields.ByNameAsString['sorientation']);
+      Entity.FormatEdition := ROption.Create(qry.Fields.ByNameAsInteger['formatedition'], qry.Fields.ByNameAsString['sformatedition']);
+      Entity.SensLecture := ROption.Create(qry.Fields.ByNameAsInteger['senslecture'], qry.Fields.ByNameAsString['ssenslecture']);
       Entity.DateAchat := qry.Fields.ByNameAsDate['dateachat'];
       Entity.Notes := qry.Fields.ByNameAsString['notes'];
       Entity.AnneeCote := qry.Fields.ByNameAsInteger['anneecote'];
@@ -1506,7 +1482,6 @@ begin
       TfrmConsole.AddEvent(Self.UnitName, 'TDaoEditionFull.Fill < images - ' + GUIDToString(Reference));
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -1516,10 +1491,8 @@ var
   qry: TUIBQuery;
 begin
   EntitiesList.Clear;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
-
     TfrmConsole.AddEvent(Self.UnitName, '> TDaoEditionFull.FillList - ' + GUIDToString(Reference));
     qry.SQL.Text := 'select id_edition from editions where id_album = ?';
     if Stock in [0, 1] then
@@ -1535,7 +1508,6 @@ begin
     end;
     TfrmConsole.AddEvent(Self.UnitName, '< TDaoEditionFull.FillList - ' + GUIDToString(Reference));
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -1971,9 +1943,8 @@ begin
   if IsEqualGUID(Reference, GUID_NULL) and (not ForceLoad) then
     Exit;
   Entity.ID_Serie := Reference;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.FetchBlobs := True;
     qry.SQL.Clear;
     qry.SQL.Add('select');
@@ -2025,12 +1996,12 @@ begin
       Entity.Notes := qry.Fields.ByNameAsString['remarquesserie'];
       Entity.SiteWeb := qry.Fields.ByNameAsString['siteweb'];
 
-      Entity.TypeEdition := MakeOption(qry.Fields.ByNameAsInteger['typeedition'], qry.Fields.ByNameAsString['stypeedition']);
-      Entity.Etat := MakeOption(qry.Fields.ByNameAsInteger['etat'], qry.Fields.ByNameAsString['setat']);
-      Entity.Reliure := MakeOption(qry.Fields.ByNameAsInteger['reliure'], qry.Fields.ByNameAsString['sreliure']);
-      Entity.Orientation := MakeOption(qry.Fields.ByNameAsInteger['orientation'], qry.Fields.ByNameAsString['sorientation']);
-      Entity.FormatEdition := MakeOption(qry.Fields.ByNameAsInteger['formatedition'], qry.Fields.ByNameAsString['sformatedition']);
-      Entity.SensLecture := MakeOption(qry.Fields.ByNameAsInteger['senslecture'], qry.Fields.ByNameAsString['ssenslecture']);
+      Entity.TypeEdition := ROption.Create(qry.Fields.ByNameAsInteger['typeedition'], qry.Fields.ByNameAsString['stypeedition']);
+      Entity.Etat := ROption.Create(qry.Fields.ByNameAsInteger['etat'], qry.Fields.ByNameAsString['setat']);
+      Entity.Reliure := ROption.Create(qry.Fields.ByNameAsInteger['reliure'], qry.Fields.ByNameAsString['sreliure']);
+      Entity.Orientation := ROption.Create(qry.Fields.ByNameAsInteger['orientation'], qry.Fields.ByNameAsString['sorientation']);
+      Entity.FormatEdition := ROption.Create(qry.Fields.ByNameAsInteger['formatedition'], qry.Fields.ByNameAsString['sformatedition']);
+      Entity.SensLecture := ROption.Create(qry.Fields.ByNameAsInteger['senslecture'], qry.Fields.ByNameAsString['ssenslecture']);
 
       TDaoEditeurFull.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL));
       TDaoCollectionLite.Prepare(qry);
@@ -2140,7 +2111,6 @@ begin
     qry.Open;
     TDaoParaBDLite.FillList(Entity.ParaBD, qry);
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;

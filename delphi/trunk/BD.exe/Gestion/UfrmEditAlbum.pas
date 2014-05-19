@@ -806,12 +806,12 @@ begin
   begin
     EditionComplete.Couleur := IIf(RecInconnu or Couleur.Undefined, True, Couleur.AsBoolean[True]);
     EditionComplete.VO := IIf(RecInconnu or VO.Undefined, False, VO.AsBoolean[False]);
-    EditionComplete.Etat := MakeOption(IIf(RecInconnu or (Etat.Value = -1), cbxEtat.DefaultValueChecked, Etat.Value), '');
-    EditionComplete.Reliure := MakeOption(IIf(RecInconnu or (Reliure.Value = -1), cbxReliure.DefaultValueChecked, Reliure.Value), '');
-    EditionComplete.Orientation := MakeOption(IIf(RecInconnu or (Orientation.Value = -1), cbxOrientation.DefaultValueChecked, Orientation.Value), '');
-    EditionComplete.FormatEdition := MakeOption(IIf(RecInconnu or (FormatEdition.Value = -1), cbxFormat.DefaultValueChecked, FormatEdition.Value), '');
-    EditionComplete.SensLecture := MakeOption(IIf(RecInconnu or (SensLecture.Value = -1), cbxSensLecture.DefaultValueChecked, SensLecture.Value), '');
-    EditionComplete.TypeEdition := MakeOption(IIf(RecInconnu or (TypeEdition.Value = -1), cbxEdition.DefaultValueChecked, TypeEdition.Value), '');
+    EditionComplete.Etat := ROption.Create(IIf(RecInconnu or (Etat.Value = -1), cbxEtat.DefaultValueChecked, Etat.Value), '');
+    EditionComplete.Reliure := ROption.Create(IIf(RecInconnu or (Reliure.Value = -1), cbxReliure.DefaultValueChecked, Reliure.Value), '');
+    EditionComplete.Orientation := ROption.Create(IIf(RecInconnu or (Orientation.Value = -1), cbxOrientation.DefaultValueChecked, Orientation.Value), '');
+    EditionComplete.FormatEdition := ROption.Create(IIf(RecInconnu or (FormatEdition.Value = -1), cbxFormat.DefaultValueChecked, FormatEdition.Value), '');
+    EditionComplete.SensLecture := ROption.Create(IIf(RecInconnu or (SensLecture.Value = -1), cbxSensLecture.DefaultValueChecked, SensLecture.Value), '');
+    EditionComplete.TypeEdition := ROption.Create(IIf(RecInconnu or (TypeEdition.Value = -1), cbxEdition.DefaultValueChecked, TypeEdition.Value), '');
   end;
   // if not IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
   if not IsEqualGUID(vtEditSerie.CurrentValue, GUID_NULL) then
@@ -929,12 +929,12 @@ begin
     FCurrentEditionComplete.Dedicace := cbDedicace.Checked;
     FCurrentEditionComplete.Gratuit := cbGratuit.Checked;
     FCurrentEditionComplete.Offert := cbOffert.Checked;
-    FCurrentEditionComplete.TypeEdition := MakeOption(cbxEdition.Value, cbxEdition.Caption);
-    FCurrentEditionComplete.Etat := MakeOption(cbxEtat.Value, cbxEtat.Caption);
-    FCurrentEditionComplete.Reliure := MakeOption(cbxReliure.Value, cbxReliure.Caption);
-    FCurrentEditionComplete.Orientation := MakeOption(cbxOrientation.Value, cbxOrientation.Caption);
-    FCurrentEditionComplete.FormatEdition := MakeOption(cbxFormat.Value, cbxFormat.Caption);
-    FCurrentEditionComplete.SensLecture := MakeOption(cbxSensLecture.Value, cbxSensLecture.Caption);
+    FCurrentEditionComplete.TypeEdition := ROption.Create(cbxEdition.Value, cbxEdition.Caption);
+    FCurrentEditionComplete.Etat := ROption.Create(cbxEtat.Value, cbxEtat.Caption);
+    FCurrentEditionComplete.Reliure := ROption.Create(cbxReliure.Value, cbxReliure.Caption);
+    FCurrentEditionComplete.Orientation := ROption.Create(cbxOrientation.Value, cbxOrientation.Caption);
+    FCurrentEditionComplete.FormatEdition := ROption.Create(cbxFormat.Value, cbxFormat.Caption);
+    FCurrentEditionComplete.SensLecture := ROption.Create(cbxSensLecture.Value, cbxSensLecture.Caption);
     FCurrentEditionComplete.NombreDePages := StrToIntDef(edNombreDePages.Text, 0);
     FCurrentEditionComplete.AnneeCote := StrToIntDef(edAnneeCote.Text, 0);
     FCurrentEditionComplete.PrixCote := BDStrToDoubleDef(edPrixCote.Text, 0);

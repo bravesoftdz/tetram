@@ -207,10 +207,8 @@ begin
       frmValidationImport.framBoutons1.Visible := False;
       frmValidationImport.Show;
 
-      Qry := TUIBQuery.Create(nil);
+      Qry := dmPrinc.DBConnection.GetQuery;
       try
-        Qry.Transaction := GetTransaction(DMPrinc.UIBDataBase);
-
         frmValidationImport.PageControl1.ActivePageIndex := 0;
         if not CheckListAuteurs(Scenaristes, [Dessinateurs, Coloristes], [Serie.Scenaristes, Serie.Dessinateurs, Serie.Coloristes]) then
           Exit;
@@ -351,17 +349,17 @@ begin
               if Edition.VO = DefaultEdition.VO then
                 Edition.VO := Serie.VO.AsBoolean[DefaultEdition.VO];
               if Edition.Etat.Value = DefaultEdition.Etat.Value then
-                Edition.Etat := MakeOption(IIf(Serie.Etat.Value = -1, DefaultEdition.Etat.Value, Serie.Etat.Value), '');
+                Edition.Etat := ROption.Create(IIf(Serie.Etat.Value = -1, DefaultEdition.Etat.Value, Serie.Etat.Value), '');
               if Edition.Reliure.Value = DefaultEdition.Reliure.Value then
-                Edition.Reliure := MakeOption(IIf(Serie.Reliure.Value = -1, DefaultEdition.Reliure.Value, Serie.Reliure.Value), '');
+                Edition.Reliure := ROption.Create(IIf(Serie.Reliure.Value = -1, DefaultEdition.Reliure.Value, Serie.Reliure.Value), '');
               if Edition.Orientation.Value = DefaultEdition.Orientation.Value then
-                Edition.Orientation := MakeOption(IIf(Serie.Orientation.Value = -1, DefaultEdition.Orientation.Value, Serie.Orientation.Value), '');
+                Edition.Orientation := ROption.Create(IIf(Serie.Orientation.Value = -1, DefaultEdition.Orientation.Value, Serie.Orientation.Value), '');
               if Edition.FormatEdition.Value = DefaultEdition.FormatEdition.Value then
-                Edition.FormatEdition := MakeOption(IIf(Serie.FormatEdition.Value = -1, DefaultEdition.FormatEdition.Value, Serie.FormatEdition.Value), '');
+                Edition.FormatEdition := ROption.Create(IIf(Serie.FormatEdition.Value = -1, DefaultEdition.FormatEdition.Value, Serie.FormatEdition.Value), '');
               if Edition.SensLecture.Value = DefaultEdition.SensLecture.Value then
-                Edition.SensLecture := MakeOption(IIf(Serie.SensLecture.Value = -1, DefaultEdition.SensLecture.Value, Serie.SensLecture.Value), '');
+                Edition.SensLecture := ROption.Create(IIf(Serie.SensLecture.Value = -1, DefaultEdition.SensLecture.Value, Serie.SensLecture.Value), '');
               if Edition.TypeEdition.Value = DefaultEdition.TypeEdition.Value then
-                Edition.TypeEdition := MakeOption(IIf(Serie.TypeEdition.Value = -1, DefaultEdition.TypeEdition.Value, Serie.TypeEdition.Value), '');
+                Edition.TypeEdition := ROption.Create(IIf(Serie.TypeEdition.Value = -1, DefaultEdition.TypeEdition.Value, Serie.TypeEdition.Value), '');
             end;
 
             if IsEqualGuid(Edition.Editeur.ID_Editeur, GUID_NULL) then
@@ -432,7 +430,6 @@ begin
         Qry.Transaction.Commit;
         Self.ReadyToFusion := True;
       finally
-        Qry.Transaction.Free;
         Qry.Free;
       end;
     finally

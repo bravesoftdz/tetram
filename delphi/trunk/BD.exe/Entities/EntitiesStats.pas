@@ -135,7 +135,7 @@ implementation
 
 uses
   Commun, uib, UdmPrinc, System.DateUtils, Divers, Entities.DaoLite,
-  Entities.FactoriesLite;
+  Entities.FactoriesLite, Entities.DBConnection;
 
 { TStats }
 
@@ -166,15 +166,14 @@ end;
 
 procedure TStats.CreateStats(Stats: TStats; const ID_Editeur: TGUID; const Editeur: string);
 var
-  q: TUIBQuery;
+  q: TManagedQuery;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
   Stats.FEditeur := Editeur;
-  q := TUIBQuery.Create(nil);
+  q := dmPrinc.DBConnection.GetQuery;
   with q do
     try
-      Transaction := GetTransaction(dmPrinc.UIBDataBase);
       SQL.Add('select count(a.id_album) from albums a inner join editions e on a.id_album = e.id_album');
       if not IsEqualGUID(ID_Editeur, GUID_NULL) then
         SQL.Add('and e.id_editeur = ' + QuotedStr(GUIDToString(ID_Editeur)))
@@ -304,7 +303,6 @@ begin
         Stats.FNbAlbumsSansPrix := Fields.ByNameAsInteger['countref'] - Stats.NbAlbumsGratuit;
       Stats.FValeurEstimee := Stats.ValeurConnue + Stats.NbAlbumsSansPrix * Stats.PrixAlbumMoyen;
     finally
-      Transaction.Free;
       Free;
     end;
 end;
@@ -321,7 +319,7 @@ end;
 procedure TStats.Fill(Complete: Boolean);
 var
   PS: TStats;
-  q: TUIBQuery;
+  q: TManagedQuery;
   hg: IHourGlass;
 begin
   DoClear;
@@ -329,10 +327,9 @@ begin
   CreateStats(Self);
   if Complete then
   begin
-    q := TUIBQuery.Create(nil);
+    q := dmPrinc.DBConnection.GetQuery;
     with q do
       try
-        Transaction := GetTransaction(dmPrinc.UIBDataBase);
         Close;
         SQL.Clear;
         SQL.Add('select distinct');
@@ -352,7 +349,6 @@ begin
           Next;
         end;
       finally
-        Transaction.Free;
         Free;
       end;
   end;
@@ -388,7 +384,7 @@ end;
 
 procedure TSeriesIncompletes.Fill(AvecIntegrales, AvecAchats: Boolean; const ID_Serie: TGUID);
 var
-  q: TUIBQuery;
+  q: TManagedQuery;
   CurrentSerie, dummy: TGUID;
   iDummy, FirstTome, CurrentTome: Integer;
 
@@ -408,10 +404,9 @@ var
   Incomplete: TSerieIncomplete;
 begin
   DoClear;
-  q := TUIBQuery.Create(nil);
+  q := dmPrinc.DBConnection.GetQuery;
   with q do
     try
-      Transaction := GetTransaction(dmPrinc.UIBDataBase);
       SQL.Text := 'select * from albums_manquants(:withintegrales, :withachats, :id_serie) order by titreserie, tome';
       Params.AsBoolean[0] := AvecIntegrales;
       Params.AsBoolean[1] := AvecAchats;
@@ -450,7 +445,6 @@ begin
       if not IsEqualGUID(CurrentSerie, GUID_NULL) then
         UpdateSerie;
     finally
-      Transaction.Free;
       Free;
     end;
 end;
@@ -498,16 +492,15 @@ end;
 
 procedure TPrevisionsSorties.Fill(AvecAchats: Boolean; const ID_Serie: TGUID);
 var
-  q: TUIBQuery;
+  q: TManagedQuery;
   Annee, CurrentAnnee: Integer;
   Prevision: TPrevisionSortie;
 begin
   DoClear;
   CurrentAnnee := YearOf(Now);
-  q := TUIBQuery.Create(nil);
+  q := dmPrinc.DBConnection.GetQuery;
   with q do
     try
-      Transaction := GetTransaction(dmPrinc.UIBDataBase);
       SQL.Clear;
       SQL.Add('select');
       SQL.Add('  *');
@@ -543,7 +536,6 @@ begin
         Next;
       end;
     finally
-      Transaction.Free;
       Free;
     end;
 end;

@@ -57,21 +57,12 @@ type
   ROption = record
     Value: Integer;
     Caption: RAutoTrimString;
+    constructor Create(Value: Integer; const Caption: RAutoTrimString);
     class operator Implicit(a: ROption): Integer;
     class operator Implicit(a: Integer): ROption;
   end;
 
-function MakeOption(Value: Integer; const Caption: RAutoTrimString): ROption; inline;
-
 implementation
-
-{ ROption }
-
-function MakeOption(Value: Integer; const Caption: RAutoTrimString): ROption;
-begin
-  Result.Value := Value;
-  Result.Caption := Caption;
-end;
 
 { AutoTrimString }
 
@@ -186,6 +177,12 @@ begin
 end;
 
 { ROption }
+
+constructor ROption.Create(Value: Integer; const Caption: RAutoTrimString);
+begin
+  Self.Value := Value;
+  Self.Caption := Caption;
+end;
 
 class operator ROption.Implicit(a: ROption): Integer;
 begin

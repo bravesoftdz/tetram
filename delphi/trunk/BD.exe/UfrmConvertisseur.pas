@@ -29,13 +29,13 @@ var
 implementation
 
 uses CommonConst, Entities.Lite, UdmPrinc, UIB, Commun, Entities.DaoLite,
-  Entities.FactoriesLite;
+  Entities.FactoriesLite, Entities.DBConnection;
 
 {$R *.DFM}
 
 procedure TFrmConvers.FormCreate(Sender: TObject);
 var
-  q: TUIBQuery;
+  q: TManagedQuery;
   fc: TframConvertisseur;
   PC: TConversionLite;
   i: Integer;
@@ -43,10 +43,9 @@ begin
   FFirstEdit := nil;
   ListFC := TList<TframConvertisseur>.Create;
   PC := TFactoryConversionLite.getInstance;
-  q := TUIBQuery.Create(nil);
+  q := dmPrinc.DBConnection.GetQuery;
   with q do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Add('select');
       SQL.Add('  Monnaie1, Monnaie2, Taux');
       SQL.Add('from');
@@ -90,7 +89,6 @@ begin
       ClientHeight := Frame11.Height + i + 4;
     finally
       ActiveControl := FFirstEdit;
-      Transaction.Free;
       Free;
       PC.Free;
     end;

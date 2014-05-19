@@ -351,7 +351,7 @@ end;
 
 procedure TEditionCompleteOrientation_W(Self: TEditionFull; const T: Integer);
 begin
-  Self.Orientation := MakeOption(T, Self.Orientation.Caption);
+  Self.Orientation := ROption.Create(T, Self.Orientation.Caption);
 end;
 
 procedure TEditionCompleteOrientation_R(Self: TEditionFull; var T: Integer);
@@ -361,7 +361,7 @@ end;
 
 procedure TEditionCompleteFormatEdition_W(Self: TEditionFull; const T: Integer);
 begin
-  Self.FormatEdition := MakeOption(T, Self.FormatEdition.Caption);
+  Self.FormatEdition := ROption.Create(T, Self.FormatEdition.Caption);
 end;
 
 procedure TEditionCompleteFormatEdition_R(Self: TEditionFull; var T: Integer);
@@ -381,7 +381,7 @@ end;
 
 procedure TEditionCompleteReliure_W(Self: TEditionFull; const T: Integer);
 begin
-  Self.Reliure := MakeOption(T, Self.Reliure.Caption);
+  Self.Reliure := ROption.Create(T, Self.Reliure.Caption);
 end;
 
 procedure TEditionCompleteReliure_R(Self: TEditionFull; var T: Integer);
@@ -391,7 +391,7 @@ end;
 
 procedure TEditionCompleteSensLecture_W(Self: TEditionFull; const T: Integer);
 begin
-  Self.SensLecture := MakeOption(T, Self.SensLecture.Caption);
+  Self.SensLecture := ROption.Create(T, Self.SensLecture.Caption);
 end;
 
 procedure TEditionCompleteSensLecture_R(Self: TEditionFull; var T: Integer);
@@ -401,7 +401,7 @@ end;
 
 procedure TEditionCompleteEtat_W(Self: TEditionFull; const T: Integer);
 begin
-  Self.Etat := MakeOption(T, Self.Etat.Caption);
+  Self.Etat := ROption.Create(T, Self.Etat.Caption);
 end;
 
 procedure TEditionCompleteEtat_R(Self: TEditionFull; var T: Integer);
@@ -421,7 +421,7 @@ end;
 
 procedure TEditionCompleteTypeEdition_W(Self: TEditionFull; const T: Integer);
 begin
-  Self.TypeEdition := MakeOption(T, Self.TypeEdition.Caption);
+  Self.TypeEdition := ROption.Create(T, Self.TypeEdition.Caption);
 end;
 
 procedure TEditionCompleteTypeEdition_R(Self: TEditionFull; var T: Integer);

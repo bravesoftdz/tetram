@@ -308,6 +308,7 @@ type
     [PrimaryKey]
     property ID_Album: RGUIDEx read GetID write SetID;
     property ID_Serie: RGUIDEx read GetID_Serie;
+    [EntityField('titre_album')]
     property TitreAlbum: RAutoTrimString read FTitreAlbum write SetTitreAlbum;
     property Serie: TSerieFull read GetSerie;
     property MoisParution: Integer read FMoisParution write FMoisParution;

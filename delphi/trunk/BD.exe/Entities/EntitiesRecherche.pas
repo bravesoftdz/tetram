@@ -232,7 +232,7 @@ var
   CritereTri: TCritereTri;
 begin
   DoClear;
-  q := TUIBQuery.Create(nil);
+  q := dmPrinc.DBConnection.GetQuery;
   slFrom := TStringList.Create;
   slFrom.Sorted := True;
   slFrom.Duplicates := dupIgnore;
@@ -240,7 +240,6 @@ begin
   slWhere := TStringList.Create;
   with q do
     try
-      Transaction := GetTransaction(dmPrinc.UIBDataBase);
       SQL.Clear;
       SQL.Add('select distinct');
       SQL.Add('  albums.id_album, albums.titrealbum, albums.tome, albums.tomedebut, albums.tomefin,');
@@ -306,7 +305,6 @@ begin
       else
         TypeRecherche := trAucune;
     finally
-      Transaction.Free;
       Free;
       slFrom.Free;
       slWhere.Free;
@@ -337,10 +335,9 @@ begin
   DoClear;
   if not IsEqualGUID(ID, GUID_NULL) then
   begin
-    q := TUIBQuery.Create(nil);
+    q := dmPrinc.DBConnection.GetQuery;
     with q do
       try
-        Transaction := GetTransaction(DMPrinc.UIBDataBase);
         SQL.Text := 'select * from ' + Proc[Integer(Recherche)];
         Params.AsString[0] := GUIDToString(ID);
         FLibelle := Libelle;
@@ -390,7 +387,6 @@ begin
         else
           TypeRecherche := trAucune;
       finally
-        Transaction.Free;
         Free;
       end;
   end;

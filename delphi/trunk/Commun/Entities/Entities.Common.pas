@@ -3,7 +3,7 @@ unit Entities.Common;
 interface
 
 uses
-  System.Classes, System.Rtti, Commun, System.Generics.Collections, Entities.Attributes;
+  System.SysUtils, System.Classes, System.Rtti, Commun, System.Generics.Collections, Entities.Attributes;
 
 type
   TEntity = class;
@@ -57,7 +57,10 @@ type
       constructor Create;
       destructor Destroy; override;
       function getSelectSQL: string;
+      function getDeleteSQL: string;
+      function getUpdateInsertSQL: string;
     end;
+
   private
     class var RttiContext: TRttiContext;
     class var FRTTIPrepared: TDictionary<TDBEntityClass, TMetadataInfo>;
@@ -185,6 +188,11 @@ begin
   inherited;
 end;
 
+function TEntityMetadataCache.TMetadataInfo.getDeleteSQL: string;
+begin
+  Result := 'delete from ' + EntityDesc.TableName + ' where ' + PrimaryKeyDesc.FieldName + ' = :' + PrimaryKeyDesc.FieldName;
+end;
+
 function TEntityMetadataCache.TMetadataInfo.getSelectSQL: string;
 var
   f: EntityFieldAttribute;
@@ -192,7 +200,23 @@ begin
   Result := 'select ' + PrimaryKeyDesc.FieldName;
   for f in FieldsDesc do
     Result := Result + ', ' + f.FieldName;
-  Result := Result + ' where ' + PrimaryKeyDesc.FieldName + ' = ?';
+  Result := Result + ' from ' + EntityDesc.TableName;
+  Result := Result + ' where ' + PrimaryKeyDesc.FieldName + ' = :' + PrimaryKeyDesc.FieldName;
+end;
+
+function TEntityMetadataCache.TMetadataInfo.getUpdateInsertSQL: string;
+var
+  f: EntityFieldAttribute;
+begin
+  Result := 'update or insert into ' + EntityDesc.TableName + ' (';
+  Result := Result + PrimaryKeyDesc.FieldName;
+  for f in FieldsDesc do
+    Result := Result + ', ' + f.FieldName;
+  Result := Result + ') values (';
+  Result := Result + ':' + PrimaryKeyDesc.FieldName;
+  for f in FieldsDesc do
+    Result := Result + ', :' + f.FieldName;
+  Result := Result + ') returning ' + PrimaryKeyDesc.FieldName;
 end;
 
 { TEntityMetadataCache }
@@ -221,7 +245,7 @@ begin
   Result := TMetadataInfo.Create;
   FRTTIPrepared.Add(c, Result);
 
-  RC := RttiContext.GetType(Self);
+  RC := RttiContext.GetType(c);
 
   for attr in RC.GetAttributes do
     if attr is TRelatedAttribute then

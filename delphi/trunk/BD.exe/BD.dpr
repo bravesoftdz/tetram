@@ -163,7 +163,7 @@ uses
   BdtkRegEx in '..\Commun\BdtkRegEx.pas',
   UScriptList in '..\Commun\Scripts\UScriptList.pas',
   UfrmValidationImport in 'Scripts\UfrmValidationImport.pas' {frmValidationImport},
-  Entities.DaoCommon in 'Entities\Entities.DaoCommon.pas',
+  Entities.DaoCommon in '..\Commun\Entities\Entities.DaoCommon.pas',
   Entities.Common in '..\Commun\Entities\Entities.Common.pas',
   Entities.FactoriesCommon in '..\Commun\Entities\Entities.FactoriesCommon.pas',
   Entities.FactoriesLite in '..\Commun\Entities\Entities.FactoriesLite.pas',
@@ -179,7 +179,8 @@ uses
   UMAJ2_2_3_25 in 'mises_a_jour\UMAJ2_2_3_25.pas',
   UMAJ2_2_3_29 in 'mises_a_jour\UMAJ2_2_3_29.pas',
   Entities.Attributes in '..\Commun\Entities\Entities.Attributes.pas',
-  Entities.Types in '..\Commun\Entities\Entities.Types.pas';
+  Entities.Types in '..\Commun\Entities\Entities.Types.pas',
+  Entities.DBConnection in 'Entities\Entities.DBConnection.pas';
 
 begin
   Application.Title := 'BDthèque';

@@ -199,7 +199,7 @@ type
 implementation
 
 uses
-  Commun, UdmPrinc, uiblib, Entities.FactoriesLite;
+  Commun, uiblib, Entities.FactoriesLite, Entities.DBConnection;
 
 { TDaoLite<T> }
 
@@ -471,17 +471,15 @@ end;
 
 class procedure TDaoEditeurLite.Fill(Entity: TEditeurLite; const ID_Editeur: TGUID);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select nomediteur, id_editeur from editeurs where id_editeur = ?';
     qry.Params.AsString[0] := GUIDToString(ID_Editeur);
     qry.Open;
     Fill(Entity, qry);
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -528,17 +526,15 @@ end;
 
 class procedure TDaoPersonnageLite.Fill(Entity: TPersonnageLite; const ID_Personne: TGUID);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select nompersonne, id_personne from personnes where id_personne = ?';
     qry.Params.AsString[0] := GUIDToString(ID_Personne);
     qry.Open;
     Fill(Entity, qry);
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -715,11 +711,10 @@ end;
 
 class procedure TDaoAlbumLite.Fill(Entity: TAlbumLite; const ID_Album, ID_Edition: TGUID);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select a.id_album, a.titrealbum, a.horsserie, a.integrale, a.tome, a.tomedebut, a.tomefin, a.id_serie, a.achat, a.complet, a.titreserie';
     qry.SQL.Add('from vw_liste_albums a');
     qry.SQL.Add('where a.id_album = :id_album');
@@ -740,7 +735,6 @@ begin
       Unprepare(qry);
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -787,17 +781,15 @@ end;
 
 class procedure TDaoCollectionLite.Fill(Entity: TCollectionLite; const ID_Collection: TGUID);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select id_collection, nomcollection from collections where id_collection = ?';
     qry.Params.AsString[0] := GUIDToString(ID_Collection);
     qry.Open;
     Fill(Entity, qry);
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -833,17 +825,15 @@ end;
 
 class procedure TDaoSerieLite.Fill(Entity: TSerieLite; const ID_Serie: TGUID);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select id_serie, titreserie from series where id_serie = :id_serie';
     qry.Params.AsString[0] := GUIDToString(ID_Serie);
     qry.Open;
     Fill(Entity, qry);
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -943,17 +933,15 @@ end;
 
 class procedure TDaoUniversLite.Fill(Entity: TUniversLite; const ID_Univers: TGUID);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select nomunivers, id_univers from univers where id_univers = ?';
     qry.Params.AsString[0] := GUIDToString(ID_Univers);
     qry.Open;
     Fill(Entity, qry);
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;

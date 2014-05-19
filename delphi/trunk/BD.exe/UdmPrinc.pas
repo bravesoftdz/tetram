@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, SyncObjs, jpeg, Menus, uib,
-  Vcl.AppEvnts, Vcl.ImgList, PngImageList;
+  Vcl.AppEvnts, Vcl.ImgList, PngImageList, Entities.DBConnection;
 
 const
   AntiAliasing = True;
@@ -14,7 +14,6 @@ type
   TAffiche_act = procedure(const Texte: string) of object;
 
   TdmPrinc = class(TDataModule)
-    UIBDataBase: TUIBDataBase;
     ApplicationEvents1: TApplicationEvents;
     UIBBackup: TUIBBackup;
     UIBRestore: TUIBRestore;
@@ -23,12 +22,13 @@ type
     procedure ApplicationEvents1Message(var Msg: tagMSG; var Handled: Boolean);
     procedure DataModuleCreate(Sender: TObject);
     procedure DataModuleDestroy(Sender: TObject);
+  strict private
+    class var _instance: TdmPrinc;
   private
     class function getInstance: TdmPrinc;
   strict private
-    class var _instance: TdmPrinc;
-  strict private
     FUILock: TCriticalSection;
+    FDBConnection: IDBConnection;
     procedure MakeJumpList;
   public
     procedure PrepareDBConnexion;
@@ -39,14 +39,14 @@ type
 
     function CheckDBVersion(Affiche_act: TAffiche_act; Force: Boolean = True): Boolean;
     function CheckExeVersion(Force: Boolean): Boolean;
+
+    property DBConnection: IDBConnection read FDBConnection;
   end;
 
 procedure BdtkInitProc;
 procedure AnalyseLigneCommande(cmdLine: string);
 
 function dmPrinc: TdmPrinc;
-
-function GetTransaction(Database: TUIBDataBase): TUIBTransaction; inline;
 
 implementation
 
@@ -56,7 +56,8 @@ uses
   IOUtils, CommonConst, Commun, Textes, UdmCommun, UIBLib, Divers, IniFiles, Procedures, UHistorique, Math, UIBase, Updates, UfrmFond, CheckVersionNet,
   DateUtils, UMAJODS, JumpList, UfrmSplash, Proc_Gestions, Generics.Collections,
   UfrmVerbose, UfrmConsole, ProceduresBDtk, JclCompression, dwsJSON,
-  JsonSerializer, Entities.DaoLambda, System.TypInfo, Entities.Full;
+  JsonSerializer, Entities.DaoLambda, System.TypInfo, Entities.Full,
+  Entities.Types, Entities.DaoCommon;
 
 const
   FinBackup = 'gbak:closing file, committing, and finishing.';
@@ -82,7 +83,7 @@ type
       Affiche_act('Mise à jour ' + Version + '...');
       Script := TUIBScript.Create(nil);
       try
-        Script.Transaction := GetTransaction(UIBDataBase);
+        Script.Transaction := DBConnection.GetTransaction;
         ProcMAJ(Script);
 
         Script.Script.Text := 'update options set valeur = ' + QuotedStr(Version) + ' where nom_option = ''Version'';';
@@ -102,9 +103,8 @@ type
     sl: TList<string>;
     qry: TUIBQuery;
   begin
-    qry := TUIBQuery.Create(nil);
+    qry := dmPrinc.DBConnection.GetQuery;
     try
-      qry.Transaction := GetTransaction(UIBDataBase);
       qry.SQL.Text := 'select rdb$index_name from rdb$indices where coalesce(rdb$system_flag, 0) <> 1';
       qry.Open;
       sl := TList<string>.Create;
@@ -126,7 +126,6 @@ type
       qry.ExecSQL;
       qry.Transaction.Commit;
     finally
-      qry.Transaction.Free;
       qry.Free;
     end;
   end;
@@ -169,10 +168,8 @@ var
 begin
   Result := False;
 
-  qry := TUIBQuery.Create(nil);
+  qry := dmPrinc.DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(UIBDataBase);
-
     qry.SQL.Text := 'select titrealbum from albums';
     try
       // on va chercher un champ texte pour forcer FB à verifier la présence des collations
@@ -187,7 +184,7 @@ begin
           backupFile := TPath.Combine(TempPath, 'bdtk-upgrade.fbk');
           if TFile.Exists(backupFile) then
             TFile.Delete(backupFile);
-          TFile.Copy(UIBDataBase.InfoDbFileName, TPath.Combine(TempPath, TPath.GetFileName(UIBDataBase.InfoDbFileName)), True);
+          TFile.Copy(DBConnection.GetDatabase.InfoDbFileName, TPath.Combine(TempPath, TPath.GetFileName(DBConnection.GetDatabase.InfoDbFileName)), True);
           doBackup(backupFile);
           doRestore(backupFile);
         end
@@ -218,7 +215,6 @@ begin
     end;
 
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 
@@ -230,7 +226,7 @@ begin
     Exit;
   end;
 
-  if (ListFBUpdates.Last.Version > CurrentVersion) or (UIBDataBase.InfoPageSize < DBPageSize) then
+  if (ListFBUpdates.Last.Version > CurrentVersion) or (DBConnection.GetDatabase.InfoPageSize < DBPageSize) then
   begin
     if not(Force or (MessageDlg(Msg + #13#10'Voulez-vous la mettre à jour?', mtConfirmation, [mbYes, mbNo], 0) = mrYes)) then
       Exit;
@@ -240,17 +236,14 @@ begin
     for FBUpdate in ListFBUpdates do
       ProcessUpdate(FBUpdate.Version, FBUpdate.UpdateCallback);
 
-    qry := TUIBQuery.Create(nil);
+    qry := dmPrinc.DBConnection.GetQuery;
     try
-      qry.Transaction := GetTransaction(UIBDataBase);
-
       qry.SQL.Text := 'update options set valeur = ? where nom_option = ?';
       qry.Params.AsString[0] := ListFBUpdates.Last.Version;
       qry.Params.AsString[1] := 'Version';
       qry.Execute;
       qry.Transaction.Commit;
     finally
-      qry.Transaction.Free;
       qry.Free;
     end;
   end;
@@ -284,12 +277,16 @@ end;
 procedure TdmPrinc.DataModuleCreate(Sender: TObject);
 begin
   FUILock := TCriticalSection.Create;
+  FDBConnection := TDBConnection.Create;
+  TDaoDBEntity.DBConnection := FDBConnection;
   MakeJumpList;
 end;
 
 procedure TdmPrinc.DataModuleDestroy(Sender: TObject);
 begin
-  UIBDataBase.Connected := False;
+  DBConnection.GetDatabase.Connected := False;
+  TDaoDBEntity.DBConnection := nil;
+  FDBConnection := nil;
   FUILock.Free;
 end;
 
@@ -326,7 +323,7 @@ begin
   frmVerbose := TFrmVerbose.Create(Application);
   try
     frmVerbose.Show;
-    UIBDataBase.Connected := False;
+    DBConnection.GetDatabase.Connected := False;
     Application.ProcessMessages;
     UIBRestore.PageSize := DBPageSize;
     UIBRestore.OnVerbose := frmVerbose.UIBVerbose;
@@ -397,7 +394,7 @@ begin
     PrepareDBConnexion;
 
     if doConnect then
-      UIBDataBase.Connected := True;
+      DBConnection.GetDatabase.Connected := True;
 
     if not Assigned(dmCommun) then
       Application.CreateForm(TdmCommun, dmCommun);
@@ -409,12 +406,12 @@ end;
 
 procedure TdmPrinc.PrepareDBConnexion;
 begin
-  UIBDataBase.Connected := False;
-  UIBDataBase.DatabaseName := DatabasePath;
-  UIBDataBase.UserName := DatabaseUserName;
-  UIBDataBase.PassWord := DatabasePassword;
-  UIBDataBase.LibraryName := DataBaseLibraryName;
-  UIBDataBase.Params.Values['sql_role_name'] := DatabaseRole;
+  DBConnection.GetDatabase.Connected := False;
+  DBConnection.GetDatabase.DatabaseName := DatabasePath;
+  DBConnection.GetDatabase.UserName := DatabaseUserName;
+  DBConnection.GetDatabase.PassWord := DatabasePassword;
+  DBConnection.GetDatabase.LibraryName := DataBaseLibraryName;
+  DBConnection.GetDatabase.Params.Values['sql_role_name'] := DatabaseRole;
 
   UIBBackup.Database := DatabasePath;
   UIBBackup.UserName := DatabaseUserName;
@@ -610,12 +607,6 @@ begin
   end;
   if Assigned(Application.MainForm) then
     Application.MainForm.Show;
-end;
-
-function GetTransaction(Database: TUIBDataBase): TUIBTransaction;
-begin
-  Result := TUIBTransaction.Create(nil);
-  Result.Database := Database;
 end;
 
 initialization
