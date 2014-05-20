@@ -107,8 +107,8 @@ type
 implementation
 
 uses
-  uib, Commun, UdmPrinc, Divers, uiblib, CommonConst, UMetadata, Textes,
-  Entities.DaoLite;
+  uiblib, Commun, UdmPrinc, Divers, CommonConst, UMetadata, Textes,
+  Entities.DaoLite, Entities.DBConnection;
 
 { TRecherche }
 
@@ -227,7 +227,7 @@ var
 
 var
   Album: TAlbumLite;
-  q: TUIBQuery;
+  q: TManagedQuery;
   sWhere, sOrderBy, S: string;
   CritereTri: TCritereTri;
 begin
@@ -326,7 +326,7 @@ const
   Proc: array [0 .. 5] of string = ('albums_by_auteur(?, null)', 'albums_by_univers(?, null)', 'albums_by_serie(?, null)', 'albums_by_editeur(?, null)',
     'albums_by_genre(?, null)', 'albums_by_collection(?, null)');
 var
-  q: TUIBQuery;
+  q: TManagedQuery;
   S: string;
   Album: TAlbumLite;
   oldID_Album: TGUID;

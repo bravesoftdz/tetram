@@ -3,7 +3,7 @@ unit Entities.DaoFull;
 interface
 
 uses
-  System.SysUtils, System.Classes, VirtualTreeBdtk, Entities.Full, uib,
+  System.SysUtils, System.Classes, VirtualTreeBdtk, Entities.Full, Entities.DBConnection,
   Vcl.StdCtrls, Winapi.Windows, System.Rtti, System.Generics.Collections,
   Entities.Common, Entities.DaoCommon, Entities.FactoriesCommon, Entities.Types;
 
@@ -11,26 +11,26 @@ type
   // ce serait trop facile si XE4 acceptait cette syntaxe....
   // TClassDaoComplet = class of TDaoComplet<>;
   // je suis donc obligé de faire des classes "classique"
-  TDaoFullClass = class of TDaoFull;
+  // TDaoFullClass = class of TDaoFull;
 
-  TDaoFull = class abstract(TDaoDBEntity)
+  TDaoFull<T: TObjetFull> = class abstract(TDaoGenericDBEntity<T>)
   public
-    class procedure SaveToDatabase(Entity: TObjetFull); overload;
-    class procedure SaveToDatabase(Entity: TObjetFull; UseTransaction: TUIBTransaction); overload; virtual; abstract;
+    class procedure SaveToDatabase(Entity: T); overload;
+    class procedure SaveToDatabase(Entity: T; UseTransaction: TManagedTransaction); overload; virtual;
 
-    class procedure FillAssociations(Entity: TObjetFull; TypeData: TVirtualMode);
-    class procedure SaveAssociations(Entity: TObjetFull; TypeData: TVirtualMode; const ParentID: TGUID);
+    class procedure FillAssociations(Entity: T; TypeData: TVirtualMode);
+    class procedure SaveAssociations(Entity: T; TypeData: TVirtualMode; const ParentID: TGUID);
   end;
 
-  TDaoFullEntity<T: TObjetFull> = class abstract(TDaoFull)
+  TDaoFullEntity<T: TObjetFull> = class abstract(TDaoFull<T>)
     class function getInstance: T; reintroduce; overload;
     class function getInstance(const Reference: TGUID): T; reintroduce; overload;
 
-    class procedure Fill(Entity: TDBEntity; const Reference: TGUID); overload; override;
+    class procedure Fill(Entity: TDBEntity; const Reference: TGUID); overload; override; final;
     class procedure Fill(Entity: T; const Reference: TGUID); reintroduce; overload; virtual;
 
-    class procedure SaveToDatabase(Entity: TObjetFull; UseTransaction: TUIBTransaction); overload; override;
-    class procedure SaveToDatabase(Entity: T; UseTransaction: TUIBTransaction); reintroduce; overload; virtual;
+    class procedure FillExtra(Entity: TDBEntity; UseTransaction: TManagedTransaction); overload; override; final;
+    class procedure FillExtra(Entity: T; UseTransaction: TManagedTransaction); reintroduce; overload; virtual;
   end;
 
   TDaoAlbumFull = class(TDaoFullEntity<TAlbumFull>)
@@ -38,7 +38,8 @@ type
     class function FactoryClass: TFactoryClass; override;
   public
     class procedure Fill(Entity: TAlbumFull; const Reference: TGUID); override;
-    class procedure SaveToDatabase(Entity: TAlbumFull; UseTransaction: TUIBTransaction); override;
+    class procedure FillExtra(Entity: TAlbumFull; UseTransaction: TManagedTransaction); override;
+    class procedure SaveToDatabase(Entity: TAlbumFull; UseTransaction: TManagedTransaction); override;
     class procedure Acheter(Entity: TAlbumFull; Prevision: Boolean);
     class procedure ChangeNotation(Entity: TAlbumFull; Note: Integer);
     class procedure FusionneInto(Source, Dest: TAlbumFull);
@@ -49,7 +50,8 @@ type
     class function FactoryClass: TFactoryClass; override;
   public
     class procedure Fill(Entity: TParaBDFull; const Reference: TGUID); override;
-    class procedure SaveToDatabase(Entity: TParaBDFull; UseTransaction: TUIBTransaction); override;
+    class procedure FillExtra(Entity: TParaBDFull; UseTransaction: TManagedTransaction); override;
+    class procedure SaveToDatabase(Entity: TParaBDFull; UseTransaction: TManagedTransaction); override;
     class procedure Acheter(Entity: TParaBDFull; Prevision: Boolean);
   end;
 
@@ -66,7 +68,8 @@ type
     class procedure Fill(Entity: TSerieFull; const Reference: TGUID); overload; override;
     class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID); reintroduce; overload;
     class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean); reintroduce; overload;
-    class procedure SaveToDatabase(Entity: TSerieFull; UseTransaction: TUIBTransaction); override;
+    class procedure FillExtra(Entity: TSerieFull; UseTransaction: TManagedTransaction); override;
+    class procedure SaveToDatabase(Entity: TSerieFull; UseTransaction: TManagedTransaction); override;
     class procedure ChangeNotation(Entity: TSerieFull; Note: Integer);
 
     class procedure InitSerie(Entity: TEntity);
@@ -80,7 +83,8 @@ type
     class destructor Destroy;
 
     class procedure Fill(Entity: TEditionFull; const Reference: TGUID); override;
-    class procedure SaveToDatabase(Entity: TEditionFull; UseTransaction: TUIBTransaction); override;
+    class procedure FillExtra(Entity: TEditionFull; UseTransaction: TManagedTransaction); override;
+    class procedure SaveToDatabase(Entity: TEditionFull; UseTransaction: TManagedTransaction); override;
     class procedure FusionneInto(Source, Dest: TEditionFull); overload;
     class procedure FusionneInto(Source, Dest: TObjectList<TEditionFull>); overload;
 
@@ -95,7 +99,8 @@ type
     class function FactoryClass: TFactoryClass; override;
   public
     class procedure Fill(Entity: TEditeurFull; const Reference: TGUID); override;
-    class procedure SaveToDatabase(Entity: TEditeurFull; UseTransaction: TUIBTransaction); override;
+    class procedure FillExtra(Entity: TEditeurFull; UseTransaction: TManagedTransaction); override;
+    class procedure SaveToDatabase(Entity: TEditeurFull; UseTransaction: TManagedTransaction); override;
   end;
 
   TDaoCollectionFull = class(TDaoFullEntity<TCollectionFull>)
@@ -103,7 +108,8 @@ type
     class function FactoryClass: TFactoryClass; override;
   public
     class procedure Fill(Entity: TCollectionFull; const Reference: TGUID); override;
-    class procedure SaveToDatabase(Entity: TCollectionFull; UseTransaction: TUIBTransaction); override;
+    class procedure FillExtra(Entity: TCollectionFull; UseTransaction: TManagedTransaction); override;
+    class procedure SaveToDatabase(Entity: TCollectionFull; UseTransaction: TManagedTransaction); override;
   end;
 
   TDaoAuteurFull = class(TDaoFullEntity<TAuteurFull>)
@@ -111,7 +117,8 @@ type
     class function FactoryClass: TFactoryClass; override;
   public
     class procedure Fill(Entity: TAuteurFull; const Reference: TGUID); override;
-    class procedure SaveToDatabase(Entity: TAuteurFull; UseTransaction: TUIBTransaction); override;
+    class procedure FillExtra(Entity: TAuteurFull; UseTransaction: TManagedTransaction); override;
+    class procedure SaveToDatabase(Entity: TAuteurFull; UseTransaction: TManagedTransaction); override;
   end;
 
   TDaoUniversFull = class(TDaoFullEntity<TUniversFull>)
@@ -119,7 +126,8 @@ type
     class function FactoryClass: TFactoryClass; override;
   public
     class procedure Fill(Entity: TUniversFull; const Reference: TGUID); override;
-    class procedure SaveToDatabase(Entity: TUniversFull; UseTransaction: TUIBTransaction); override;
+    class procedure FillExtra(Entity: TUniversFull; UseTransaction: TManagedTransaction); override;
+    class procedure SaveToDatabase(Entity: TUniversFull; UseTransaction: TManagedTransaction); override;
   end;
 
 implementation
@@ -128,11 +136,11 @@ uses
   Commun, UfrmConsole, Entities.DaoLite, Entities.Lite, Procedures,
   CommonConst, System.IOUtils, Vcl.Dialogs, UMetadata, UfrmFusionEditions,
   Vcl.Controls, ProceduresBDtk, Entities.FactoriesFull, Entities.FactoriesLite,
-  Entities.DaoLambda, Entities.DBConnection;
+  Entities.DaoLambda;
 
 { TDaoFull }
 
-class procedure TDaoFull.FillAssociations(Entity: TObjetFull; TypeData: TVirtualMode);
+class procedure TDaoFull<T>.FillAssociations(Entity: T; TypeData: TVirtualMode);
 var
   qry: TManagedQuery;
 begin
@@ -152,7 +160,7 @@ begin
   end;
 end;
 
-class procedure TDaoFull.SaveAssociations(Entity: TObjetFull; TypeData: TVirtualMode; const ParentID: TGUID);
+class procedure TDaoFull<T>.SaveAssociations(Entity: T; TypeData: TVirtualMode; const ParentID: TGUID);
 var
   association: string;
   qry: TManagedQuery;
@@ -180,9 +188,14 @@ begin
   end;
 end;
 
-class procedure TDaoFull.SaveToDatabase(Entity: TObjetFull);
+class procedure TDaoFull<T>.SaveToDatabase(Entity: T; UseTransaction: TManagedTransaction);
+begin
+  // Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut être GUID_NULL');
+end;
+
+class procedure TDaoFull<T>.SaveToDatabase(Entity: T);
 var
-  Transaction: TUIBTransaction;
+  Transaction: TManagedTransaction;
 begin
   // Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut être GUID_NULL');
 
@@ -208,6 +221,17 @@ begin
   Entity.DoClear;
 end;
 
+class procedure TDaoFullEntity<T>.FillExtra(Entity: TDBEntity; UseTransaction: TManagedTransaction);
+begin
+  FillExtra(T(Entity), UseTransaction);
+end;
+
+class procedure TDaoFullEntity<T>.FillExtra(Entity: T; UseTransaction: TManagedTransaction);
+begin
+  Entity.RecInconnu := IsEqualGUID(Entity.ID, GUID_NULL);
+  inherited FillExtra(Entity, UseTransaction);
+end;
+
 class function TDaoFullEntity<T>.getInstance: T;
 begin
   Result := getInstance(GUID_NULL);
@@ -218,21 +242,11 @@ begin
   Result := T(inherited getInstance(Reference));
 end;
 
-class procedure TDaoFullEntity<T>.SaveToDatabase(Entity: T; UseTransaction: TUIBTransaction);
-begin
-  // Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut être GUID_NULL');
-end;
-
-class procedure TDaoFullEntity<T>.SaveToDatabase(Entity: TObjetFull; UseTransaction: TUIBTransaction);
-begin
-  SaveToDatabase(T(Entity), UseTransaction);
-end;
-
 { TDaoSerieFull }
 
 class procedure TDaoSerieFull.ChangeNotation(Entity: TSerieFull; Note: Integer);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   qry := DBConnection.GetQuery;;
   try
@@ -252,7 +266,7 @@ end;
 
 class procedure TDaoAlbumFull.Acheter(Entity: TAlbumFull; Prevision: Boolean);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   if IsEqualGUID(Entity.ID_Album, GUID_NULL) then
     Exit;
@@ -270,7 +284,7 @@ end;
 
 class procedure TDaoAlbumFull.ChangeNotation(Entity: TAlbumFull; Note: Integer);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   qry := DBConnection.GetQuery;
   try
@@ -292,101 +306,65 @@ begin
 end;
 
 class procedure TDaoAlbumFull.Fill(Entity: TAlbumFull; const Reference: TGUID);
+begin
+  Assert(True, 'on ne doit plus passer là');
+end;
+
+class procedure TDaoAlbumFull.FillExtra(Entity: TAlbumFull; UseTransaction: TManagedTransaction);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
-  if IsEqualGUID(Reference, GUID_NULL) then
-    Exit;
-  Entity.ID_Album := Reference;
-  qry := DBConnection.GetQuery;
+  if Entity.Notation = 0 then
+    Entity.Notation := 900;
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > données de base - ' + GUIDToString(Reference));
-
-    qry.FetchBlobs := True;
+    TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.FillExtra > univers - ' + GUIDToString(Entity.ID_Album));
+    qry.Close;
     qry.SQL.Clear;
     qry.SQL.Add('select');
-    qry.SQL.Add('  titrealbum, moisparution, anneeparution, id_serie, tome, tomedebut, tomefin, sujetalbum,');
-    qry.SQL.Add('  remarquesalbum, horsserie, integrale, complet, notation');
+    qry.SQL.Add('  u.*');
     qry.SQL.Add('from');
-    qry.SQL.Add('  albums');
+    qry.SQL.Add('  univers u');
+    qry.SQL.Add('  inner join albums_univers au on');
+    qry.SQL.Add('    au.id_univers = u.id_univers');
     qry.SQL.Add('where');
-    qry.SQL.Add('  id_album = ?');
-    qry.Params.AsString[0] := GUIDToString(Reference);
+    qry.SQL.Add('  au.source_album = 1 and au.id_album = ?');
+    qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
     qry.Open;
-    Entity.RecInconnu := qry.Eof;
+    TDaoUniversLite.FillList(Entity.Univers, qry);
+    Entity.UniversFull.Clear;
+    Entity.UniversFull.AddRange(Entity.Serie.Univers);
+    Entity.UniversFull.AddRange(Entity.Univers);
+    TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.FillExtra < univers - ' + GUIDToString(Entity.ID_Album));
 
-    if not Entity.RecInconnu then
-    begin
-      Entity.TitreAlbum := qry.Fields.ByNameAsString['titrealbum'];
-      Entity.AnneeParution := qry.Fields.ByNameAsInteger['anneeparution'];
-      Entity.MoisParution := qry.Fields.ByNameAsInteger['moisparution'];
-      Entity.Sujet := qry.Fields.ByNameAsString['sujetalbum'];
-      Entity.Notes := qry.Fields.ByNameAsString['remarquesalbum'];
-      Entity.Tome := qry.Fields.ByNameAsInteger['tome'];
-      Entity.TomeDebut := qry.Fields.ByNameAsInteger['tomedebut'];
-      Entity.TomeFin := qry.Fields.ByNameAsInteger['tomefin'];
-      Entity.Integrale := qry.Fields.ByNameAsBoolean['integrale'];
-      Entity.HorsSerie := qry.Fields.ByNameAsBoolean['horsserie'];
-      Entity.Notation := qry.Fields.ByNameAsSmallint['notation'];
-      if Entity.Notation = 0 then
-        Entity.Notation := 900;
-
-      Entity.Complet := qry.Fields.ByNameAsBoolean['complet'];
-
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < données de base - ' + GUIDToString(Reference));
-
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > série - ' + GUIDToString(Reference));
-      TDaoSerieFull.Fill(Entity.Serie, StringToGUIDDef(qry.Fields.ByNameAsString['id_serie'], GUID_NULL));
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < série - ' + GUIDToString(Reference));
-
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > univers - ' + GUIDToString(Reference));
-      qry.Close;
-      qry.SQL.Clear;
-      qry.SQL.Add('select');
-      qry.SQL.Add('  u.*');
-      qry.SQL.Add('from');
-      qry.SQL.Add('  univers u');
-      qry.SQL.Add('  inner join albums_univers au on');
-      qry.SQL.Add('    au.id_univers = u.id_univers');
-      qry.SQL.Add('where');
-      qry.SQL.Add('  au.source_album = 1 and au.id_album = ?');
-      qry.Params.AsString[0] := GUIDToString(Reference);
-      qry.Open;
-      TDaoUniversLite.FillList(Entity.Univers, qry);
-      Entity.UniversFull.Clear;
-      Entity.UniversFull.AddRange(Entity.Serie.Univers);
-      Entity.UniversFull.AddRange(Entity.Univers);
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < univers - ' + GUIDToString(Reference));
-
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > auteurs - ' + GUIDToString(Reference));
-      qry.Close;
-      qry.SQL.Text := 'select * from proc_auteurs(?, null, null)';
-      qry.Params.AsString[0] := GUIDToString(Reference);
-      qry.Open;
-      TDaoAuteurAlbumLite.Prepare(qry);
-      try
-        while not qry.Eof do
-        begin
-          case TMetierAuteur(qry.Fields.ByNameAsInteger['metier']) of
-            maScenariste:
-              Entity.Scenaristes.Add(TDaoAuteurAlbumLite.Make(qry));
-            maDessinateur:
-              Entity.Dessinateurs.Add(TDaoAuteurAlbumLite.Make(qry));
-            maColoriste:
-              Entity.Coloristes.Add(TDaoAuteurAlbumLite.Make(qry));
-          end;
-          qry.Next;
+    TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.FillExtra > auteurs - ' + GUIDToString(Entity.ID_Album));
+    qry.Close;
+    qry.SQL.Text := 'select * from proc_auteurs(?, null, null)';
+    qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
+    qry.Open;
+    TDaoAuteurAlbumLite.Prepare(qry);
+    try
+      while not qry.Eof do
+      begin
+        case TMetierAuteur(qry.Fields.ByNameAsInteger['metier']) of
+          maScenariste:
+            Entity.Scenaristes.Add(TDaoAuteurAlbumLite.Make(qry));
+          maDessinateur:
+            Entity.Dessinateurs.Add(TDaoAuteurAlbumLite.Make(qry));
+          maColoriste:
+            Entity.Coloristes.Add(TDaoAuteurAlbumLite.Make(qry));
         end;
-      finally
-        TDaoAuteurAlbumLite.Unprepare(qry);
+        qry.Next;
       end;
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < auteurs - ' + GUIDToString(Reference));
-
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > éditions - ' + GUIDToString(Reference));
-      TDaoEditionFull.FillList(Entity.Editions, Entity.ID_Album);
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < éditions - ' + GUIDToString(Reference));
+    finally
+      TDaoAuteurAlbumLite.Unprepare(qry);
     end;
+    TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.FillExtra < auteurs - ' + GUIDToString(Entity.ID_Album));
+
+    TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.FillExtra > éditions - ' + GUIDToString(Entity.ID_Album));
+    TDaoEditionFull.FillList(Entity.Editions, Entity.ID_Album);
+    TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.FillExtra < éditions - ' + GUIDToString(Entity.ID_Album));
   finally
     qry.Free;
   end;
@@ -476,10 +454,10 @@ begin
   end;
 end;
 
-class procedure TDaoAlbumFull.SaveToDatabase(Entity: TAlbumFull; UseTransaction: TUIBTransaction);
+class procedure TDaoAlbumFull.SaveToDatabase(Entity: TAlbumFull; UseTransaction: TManagedTransaction);
 var
   S: string;
-  qry: TUIBQuery;
+  qry: TManagedQuery;
   Auteur: TAuteurAlbumLite;
   hg: IHourGlass;
   Edition: TEditionFull;
@@ -487,10 +465,8 @@ var
 begin
   inherited;
   hg := THourGlass.Create;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := UseTransaction;
-
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into albums (');
     qry.SQL.Add('  id_album, titrealbum, moisparution, anneeparution, id_serie, tome, tomedebut, tomefin,');
@@ -653,7 +629,7 @@ end;
 
 class procedure TDaoParaBDFull.Acheter(Entity: TParaBDFull; Prevision: Boolean);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   if IsEqualGUID(Entity.ID_ParaBD, GUID_NULL) then
     Exit;
@@ -675,21 +651,20 @@ begin
 end;
 
 class procedure TDaoParaBDFull.Fill(Entity: TParaBDFull; const Reference: TGUID);
-var
-  qry: TUIBQuery;
-  ID_Serie: TGUID;
 begin
-  inherited;
-  if IsEqualGUID(Reference, GUID_NULL) then
-    Exit;
-  Entity.ID_ParaBD := Reference;
+  Assert(True, 'on ne doit plus passer là');
+end;
+
+class procedure TDaoParaBDFull.FillExtra(Entity: TParaBDFull; UseTransaction: TManagedTransaction);
+var
+  qry: TManagedQuery;
+begin
   qry := DBConnection.GetQuery;
   try
     qry.FetchBlobs := True;
     qry.SQL.Clear;
     qry.SQL.Add('select');
-    qry.SQL.Add('  titreparabd, annee, id_serie, achat, description, notes, dedicace, numerote, anneecote, prixcote,');
-    qry.SQL.Add('  gratuit, offert, dateachat, prix, stock, categorieparabd, lc.libelle as scategorieparabd');
+    qry.SQL.Add('  categorieparabd, lc.libelle as scategorieparabd');
     qry.SQL.Add('from');
     qry.SQL.Add('  parabd p');
     qry.SQL.Add('  left join listes lc on');
@@ -697,91 +672,70 @@ begin
     qry.SQL.Add('where');
     qry.SQL.Add('  id_parabd = ?');
 
-    qry.Params.AsString[0] := GUIDToString(Reference);
+    qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
     qry.Open;
-    Entity.RecInconnu := qry.Eof;
 
-    if not Entity.RecInconnu then
-    begin
-      Entity.TitreParaBD := qry.Fields.ByNameAsString['titreparabd'];
-      Entity.AnneeEdition := qry.Fields.ByNameAsInteger['annee'];
-      Entity.Description := qry.Fields.ByNameAsString['description'];
-      Entity.Notes := qry.Fields.ByNameAsString['notes'];
-      Entity.CategorieParaBD := ROption.Create(qry.Fields.ByNameAsInteger['categorieparabd'], qry.Fields.ByNameAsString['scategorieparabd']);
-      Entity.Prix := qry.Fields.ByNameAsCurrency['prix'];
-      Entity.Dedicace := qry.Fields.ByNameAsBoolean['dedicace'];
-      Entity.Numerote := qry.Fields.ByNameAsBoolean['numerote'];
-      Entity.Offert := qry.Fields.ByNameAsBoolean['offert'];
-      Entity.Gratuit := qry.Fields.ByNameAsBoolean['gratuit'];
-      Entity.Stock := qry.Fields.ByNameAsBoolean['stock'];
-      Entity.DateAchat := qry.Fields.ByNameAsDate['dateachat'];
-      Entity.AnneeCote := qry.Fields.ByNameAsInteger['anneecote'];
-      Entity.PrixCote := qry.Fields.ByNameAsCurrency['prixcote'];
+    Entity.CategorieParaBD := ROption.Create(qry.Fields.ByNameAsInteger['categorieparabd'], qry.Fields.ByNameAsString['scategorieparabd']);
 
-      ID_Serie := StringToGUIDDef(qry.Fields.ByNameAsString['id_serie'], GUID_NULL);
+    qry.Close;
+    qry.SQL.Clear;
+    qry.SQL.Add('select');
+    qry.SQL.Add('  u.*');
+    qry.SQL.Add('from');
+    qry.SQL.Add('  univers u');
+    qry.SQL.Add('  inner join parabd_univers pu on');
+    qry.SQL.Add('    pu.id_univers = u.id_univers');
+    qry.SQL.Add('where');
+    qry.SQL.Add('  pu.source_parabd = 1 and pu.id_parabd = ?');
+    qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
+    qry.Open;
+    TDaoUniversLite.FillList(Entity.Univers, qry);
+    Entity.UniversFull.Clear;
+    Entity.UniversFull.AddRange(Entity.Serie.Univers);
+    Entity.UniversFull.AddRange(Entity.Univers);
 
-      qry.Close;
-      qry.SQL.Clear;
-      qry.SQL.Add('select');
-      qry.SQL.Add('  u.*');
-      qry.SQL.Add('from');
-      qry.SQL.Add('  univers u');
-      qry.SQL.Add('  inner join parabd_univers pu on');
-      qry.SQL.Add('    pu.id_univers = u.id_univers');
-      qry.SQL.Add('where');
-      qry.SQL.Add('  pu.source_parabd = 1 and pu.id_parabd = ?');
-      qry.Params.AsString[0] := GUIDToString(Reference);
-      qry.Open;
-      TDaoUniversLite.FillList(Entity.Univers, qry);
-      Entity.UniversFull.Clear;
-      Entity.UniversFull.AddRange(Entity.Serie.Univers);
-      Entity.UniversFull.AddRange(Entity.Univers);
+    qry.Close;
+    qry.SQL.Text := 'select * from proc_auteurs(null, null, ?)';
+    qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
+    qry.Open;
+    TDaoAuteurParaBDLite.FillList(Entity.Auteurs, qry);
 
-      qry.Close;
-      qry.SQL.Text := 'select * from proc_auteurs(null, null, ?)';
-      qry.Params.AsString[0] := GUIDToString(Reference);
-      qry.Open;
-      TDaoAuteurParaBDLite.FillList(Entity.Auteurs, qry);
+    TDaoSerieFull.Fill(Entity.Serie, Entity.ID_Serie);
 
-      TDaoSerieFull.Fill(Entity.Serie, ID_Serie);
-
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoParaBDFull.Fill > photos - ' + GUIDToString(Reference));
-      qry.Close;
-      qry.SQL.Clear;
-      qry.SQL.Add('select');
-      qry.SQL.Add('  p.id_photo, p.fichierphoto, p.stockagephoto, p.categorieimage, l.libelle as scategorieimage');
-      qry.SQL.Add('from');
-      qry.SQL.Add('  photos p');
-      qry.SQL.Add('  left join listes l on');
-      qry.SQL.Add('    (p.categorieimage = l.ref and l.categorie = 10)');
-      qry.SQL.Add('where');
-      qry.SQL.Add('  p.id_parabd = ?');
-      qry.SQL.Add('order by');
-      qry.SQL.Add('  p.ordre');
-      qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
-      qry.Open;
-      TDaoPhotoLite.FillList(Entity.Photos, qry);
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoParaBDFull.Fill < photos - ' + GUIDToString(Reference));
-    end;
+    TfrmConsole.AddEvent(Self.UnitName, 'TDaoParaBDFull.FillExtra > photos - ' + GUIDToString(Entity.ID_ParaBD));
+    qry.Close;
+    qry.SQL.Clear;
+    qry.SQL.Add('select');
+    qry.SQL.Add('  p.id_photo, p.fichierphoto, p.stockagephoto, p.categorieimage, l.libelle as scategorieimage');
+    qry.SQL.Add('from');
+    qry.SQL.Add('  photos p');
+    qry.SQL.Add('  left join listes l on');
+    qry.SQL.Add('    (p.categorieimage = l.ref and l.categorie = 10)');
+    qry.SQL.Add('where');
+    qry.SQL.Add('  p.id_parabd = ?');
+    qry.SQL.Add('order by');
+    qry.SQL.Add('  p.ordre');
+    qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
+    qry.Open;
+    TDaoPhotoLite.FillList(Entity.Photos, qry);
+    TfrmConsole.AddEvent(Self.UnitName, 'TDaoParaBDFull.FillExtra < photos - ' + GUIDToString(Entity.ID_ParaBD));
   finally
     qry.Free;
   end;
 end;
 
-class procedure TDaoParaBDFull.SaveToDatabase(Entity: TParaBDFull; UseTransaction: TUIBTransaction);
+class procedure TDaoParaBDFull.SaveToDatabase(Entity: TParaBDFull; UseTransaction: TManagedTransaction);
 var
   S: string;
-  qry: TUIBQuery;
+  qry: TManagedQuery;
   hg: IHourGlass;
   Auteur: TAuteurParaBDLite;
   Univers: TUniversLite;
 begin
   inherited;
   hg := THourGlass.Create;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := UseTransaction;
-
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into parabd (');
     qry.SQL.Add('  id_parabd, titreparabd, annee, id_serie, categorieparabd, dedicace, numerote, anneecote,');
@@ -904,7 +858,7 @@ end;
 
 class procedure TDaoUniversFull.Fill(Entity: TUniversFull; const Reference: TGUID);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then
@@ -929,15 +883,19 @@ begin
   end;
 end;
 
-class procedure TDaoUniversFull.SaveToDatabase(Entity: TUniversFull; UseTransaction: TUIBTransaction);
-var
-  qry: TUIBQuery;
+class procedure TDaoUniversFull.FillExtra(Entity: TUniversFull; UseTransaction: TManagedTransaction);
 begin
   inherited;
-  qry := TUIBQuery.Create(nil);
-  try
-    qry.Transaction := UseTransaction;
 
+end;
+
+class procedure TDaoUniversFull.SaveToDatabase(Entity: TUniversFull; UseTransaction: TManagedTransaction);
+var
+  qry: TManagedQuery;
+begin
+  inherited;
+  qry := DBConnection.GetQuery(UseTransaction);
+  try
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into univers (');
     qry.SQL.Add('  id_univers, nomunivers, id_univers_parent, description, siteweb');
@@ -979,7 +937,7 @@ end;
 
 class procedure TDaoCollectionFull.Fill(Entity: TCollectionFull; const Reference: TGUID);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then
@@ -1002,15 +960,19 @@ begin
   end;
 end;
 
-class procedure TDaoCollectionFull.SaveToDatabase(Entity: TCollectionFull; UseTransaction: TUIBTransaction);
-var
-  qry: TUIBQuery;
+class procedure TDaoCollectionFull.FillExtra(Entity: TCollectionFull; UseTransaction: TManagedTransaction);
 begin
   inherited;
-  qry := TUIBQuery.Create(nil);
-  try
-    qry.Transaction := UseTransaction;
 
+end;
+
+class procedure TDaoCollectionFull.SaveToDatabase(Entity: TCollectionFull; UseTransaction: TManagedTransaction);
+var
+  qry: TManagedQuery;
+begin
+  inherited;
+  qry := DBConnection.GetQuery(UseTransaction);
+  try
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into collections (');
     qry.SQL.Add('  id_collection, nomcollection, id_editeur');
@@ -1044,7 +1006,7 @@ end;
 
 class procedure TDaoEditeurFull.Fill(Entity: TEditeurFull; const Reference: TGUID);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then
@@ -1067,15 +1029,19 @@ begin
   end;
 end;
 
-class procedure TDaoEditeurFull.SaveToDatabase(Entity: TEditeurFull; UseTransaction: TUIBTransaction);
-var
-  qry: TUIBQuery;
+class procedure TDaoEditeurFull.FillExtra(Entity: TEditeurFull; UseTransaction: TManagedTransaction);
 begin
   inherited;
-  qry := TUIBQuery.Create(nil);
-  try
-    qry.Transaction := UseTransaction;
 
+end;
+
+class procedure TDaoEditeurFull.SaveToDatabase(Entity: TEditeurFull; UseTransaction: TManagedTransaction);
+var
+  qry: TManagedQuery;
+begin
+  inherited;
+  qry := DBConnection.GetQuery(UseTransaction);
+  try
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into editeurs (');
     qry.SQL.Add('  id_editeur, nomediteur, siteweb');
@@ -1109,7 +1075,7 @@ end;
 
 class procedure TDaoAuteurFull.Fill(Entity: TAuteurFull; const Reference: TGUID);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then
@@ -1169,15 +1135,19 @@ begin
   end;
 end;
 
-class procedure TDaoAuteurFull.SaveToDatabase(Entity: TAuteurFull; UseTransaction: TUIBTransaction);
-var
-  qry: TUIBQuery;
+class procedure TDaoAuteurFull.FillExtra(Entity: TAuteurFull; UseTransaction: TManagedTransaction);
 begin
   inherited;
-  qry := TUIBQuery.Create(nil);
-  try
-    qry.Transaction := UseTransaction;
 
+end;
+
+class procedure TDaoAuteurFull.SaveToDatabase(Entity: TAuteurFull; UseTransaction: TManagedTransaction);
+var
+  qry: TManagedQuery;
+begin
+  inherited;
+  qry := DBConnection.GetQuery(UseTransaction);
+  try
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into personnes (');
     qry.SQL.Add('  id_personne, nompersonne, siteweb, biographie');
@@ -1225,7 +1195,7 @@ end;
 
 class procedure TDaoEditionFull.Fill(Entity: TEditionFull; const Reference: TGUID);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then
@@ -1321,9 +1291,15 @@ begin
   end;
 end;
 
+class procedure TDaoEditionFull.FillExtra(Entity: TEditionFull; UseTransaction: TManagedTransaction);
+begin
+  inherited;
+
+end;
+
 class procedure TDaoEditionFull.FillList(EntitiesList: TObjectList<TEditionFull>; const Reference: TGUID; Stock: Integer);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   EntitiesList.Clear;
   qry := DBConnection.GetQuery;
@@ -1493,17 +1469,15 @@ begin
   (Entity as TEditionFull).SensLecture := TDaoListe.DefaultSensLecture;
 end;
 
-class procedure TDaoEditionFull.SaveToDatabase(Entity: TEditionFull; UseTransaction: TUIBTransaction);
+class procedure TDaoEditionFull.SaveToDatabase(Entity: TEditionFull; UseTransaction: TManagedTransaction);
 var
   hg: IHourGlass;
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
   hg := THourGlass.Create;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := UseTransaction;
-
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into editions (');
     qry.SQL.Add('  id_edition, id_album, id_editeur, id_collection, anneeedition, prix, vo, typeedition,');
@@ -1606,7 +1580,7 @@ end;
 
 class procedure TDaoSerieFull.Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited Fill(Entity, Reference);
   if IsEqualGUID(Reference, GUID_NULL) and (not ForceLoad) then
@@ -1784,6 +1758,12 @@ begin
   end;
 end;
 
+class procedure TDaoSerieFull.FillExtra(Entity: TSerieFull; UseTransaction: TManagedTransaction);
+begin
+  inherited;
+
+end;
+
 class function TDaoSerieFull.getInstance(const Reference, IdAuteurFiltre: TGUID): TSerieFull;
 begin
   Result := TFactorySerieFull.getInstance;
@@ -1806,18 +1786,16 @@ begin
   (Entity as TSerieFull).SensLecture := TDaoListe.DefaultSensLecture;
 end;
 
-class procedure TDaoSerieFull.SaveToDatabase(Entity: TSerieFull; UseTransaction: TUIBTransaction);
+class procedure TDaoSerieFull.SaveToDatabase(Entity: TSerieFull; UseTransaction: TManagedTransaction);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
   S, genre: string;
   Auteur: TAuteurSerieLite;
   Univers: TUniversLite;
 begin
   inherited;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := UseTransaction;
-
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into series (');
     qry.SQL.Add('  id_serie, titreserie, terminee, suivresorties, complete, suivremanquants, siteweb, id_editeur,');

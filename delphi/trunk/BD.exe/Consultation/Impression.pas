@@ -30,7 +30,7 @@ implementation
 uses
   UfrmPreview, Math, Procedures, ProceduresBDtk, DateUtils, UIBlib, StrUtils, UMetadata,
   Entities.DaoLite, Entities.DaoFull, Entities.Common, Entities.FactoriesLite,
-  Entities.DBConnection;
+  Entities.DBConnection, Entities.Types;
 
 procedure PreparePrintObject(Prn: TPrintObject; Previsualisation: Boolean; const Titre: string);
 begin

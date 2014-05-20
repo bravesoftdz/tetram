@@ -3,7 +3,7 @@ unit ProceduresBDtk;
 interface
 
 uses SysUtils, Windows, StdCtrls, Forms, Controls, ExtCtrls, CommonConst, Graphics, StrUtils, Dialogs, SyncObjs,
-  uib, Commun, System.Classes, ComboCheck, Entities.Full, Entities.Types;
+  Commun, System.Classes, ComboCheck, Entities.Full, Entities.Types, Entities.DBConnection;
 
 type
   IImpressionApercu = interface
@@ -57,10 +57,10 @@ procedure LitOptions;
 procedure EcritOptions;
 
 function SupprimerTable(const Table: string): Boolean;
-function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TUIBTransaction = nil): Boolean; overload;
-function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TUIBTransaction = nil): Boolean; overload;
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TUIBTransaction = nil): Boolean; overload;
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TUIBTransaction = nil)
+function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TManagedTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TManagedTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TManagedTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TManagedTransaction = nil)
   : Boolean; overload;
 
 function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False;
@@ -73,8 +73,7 @@ procedure LoadCombo(Combo: TLightComboCheck; List: TStrings; DefaultValue: ROpti
 implementation
 
 uses UfrmChoixDetail, UfrmChoix, UfrmConvertisseur, UfrmFond, Divers, Procedures, Math, Textes, ActnList, UfrmChoixDetailSerie,
-  UdmPrinc, System.IniFiles, Vcl.Imaging.jpeg, System.IOUtils,
-  Entities.DBConnection;
+  UdmPrinc, System.IniFiles, Vcl.Imaging.jpeg, System.IOUtils;
 
 function Choisir(const Texte1, Texte2: string; Bouton: Integer): TModalResult;
 begin
@@ -309,7 +308,7 @@ end;
 
 procedure LitOptions;
 
-  function LitStr(Table: TUIBQuery; const Champ, Defaut: string): string;
+  function LitStr(Table: TManagedQuery; const Champ, Defaut: string): string;
   begin
     with Table do
     begin
@@ -375,7 +374,7 @@ end;
 
 procedure EcritOptions;
 
-  procedure Sauve(Table: TUIBQuery; const Champ: string; Valeur: Currency); overload;
+  procedure Sauve(Table: TManagedQuery; const Champ: string; Valeur: Currency); overload;
   begin
     with Table do
     begin
@@ -387,7 +386,7 @@ procedure EcritOptions;
     end;
   end;
 
-  procedure Sauve(Table: TUIBQuery; const Champ, Valeur: string); overload;
+  procedure Sauve(Table: TManagedQuery; const Champ, Valeur: string); overload;
   begin
     with Table do
     begin
@@ -466,22 +465,22 @@ begin
   end;
 end;
 
-function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TUIBTransaction = nil): Boolean;
+function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TManagedTransaction = nil): Boolean;
 begin
   Result := SupprimerToutDans(ChampSupp, Table, '', GUID_NULL, '', UseTransaction);
 end;
 
-function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TUIBTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TManagedTransaction = nil): Boolean; overload;
 begin
   Result := SupprimerToutDans(ChampSupp, Table, Reference, GUID_NULL, Sauf, UseTransaction);
 end;
 
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TUIBTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TManagedTransaction = nil): Boolean; overload;
 begin
   Result := SupprimerToutDans(ChampSupp, Table, Reference, Valeur, '', UseTransaction);
 end;
 
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TUIBTransaction = nil)
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TManagedTransaction = nil)
   : Boolean;
 begin
   try

@@ -7,77 +7,77 @@ uses
 
 type
   TFactoryAlbumLite = class(TFactoryGenericDBEntity<TAlbumLite>)
-  protected
+  public
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryParaBDLite = class(TFactoryGenericDBEntity<TParaBDLite>)
-  protected
+  public
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactorySerieLite = class(TFactoryGenericDBEntity<TSerieLite>)
-  protected
+  public
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryEditionLite = class(TFactoryGenericDBEntity<TEditionLite>)
-  protected
+  public
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryEditeurLite = class(TFactoryGenericDBEntity<TEditeurLite>)
-  protected
+  public
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryCollectionLite = class(TFactoryGenericDBEntity<TCollectionLite>)
-  protected
+  public
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryPersonnageLite = class(TFactoryGenericDBEntity<TPersonnageLite>)
-  protected
+  public
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryAuteurSerieLite = class(TFactoryGenericDBEntity<TAuteurSerieLite>)
-  protected
+  public
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryAuteurAlbumLite = class(TFactoryGenericDBEntity<TAuteurAlbumLite>)
-  protected
+  public
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryAuteurParaBDLite = class(TFactoryGenericDBEntity<TAuteurParaBDLite>)
-  protected
+  public
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryUniversLite = class(TFactoryGenericDBEntity<TUniversLite>)
-  protected
+  public
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryPhotoLite = class(TFactoryGenericDBEntity<TPhotoLite>)
-  protected
+  public
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryCouvertureLite = class(TFactoryGenericDBEntity<TCouvertureLite>)
-  protected
+  public
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryGenreLite = class(TFactoryGenericDBEntity<TGenreLite>)
-  protected
+  public
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryConversionLite = class(TFactoryGenericDBEntity<TConversionLite>)
-  protected
+  public
     class function EntityClass: TEntityClass; override;
   end;
 

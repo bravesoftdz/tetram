@@ -102,8 +102,9 @@ type
 
 implementation
 
-uses CommonConst, UdmPrinc, Entities.Lite, UIB, Commun, Procedures, Updates, IOUtils,
-  Entities.DaoLite, ProceduresBDtk, Entities.Common, Entities.FactoriesLite, ICUNumberFormatter, _uloc;
+uses CommonConst, UdmPrinc, Entities.Lite, Commun, Procedures, Updates, IOUtils,
+  Entities.DaoLite, ProceduresBDtk, Entities.Common, Entities.FactoriesLite, ICUNumberFormatter, _uloc,
+  Entities.DBConnection;
 
 {$R *.DFM}
 
@@ -198,7 +199,7 @@ end;
 
 procedure TfrmOptions.FormCreate(Sender: TObject);
 var
-  q: TUIBQuery;
+  q: TManagedQuery;
   MySQLUpdate: TMySQLUpdate;
   fileName: String;
 begin

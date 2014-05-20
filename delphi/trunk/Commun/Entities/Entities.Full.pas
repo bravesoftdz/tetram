@@ -3,8 +3,8 @@ unit Entities.Full;
 interface
 
 uses
-  SysUtils, Windows, Classes, Dialogs, Entities.Lite, Commun, CommonConst, DateUtils, Generics.Collections,
-  Generics.Defaults, System.Generics.Collections, Entities.Common, Entities.Types;
+  System.SysUtils, Windows, Classes, Dialogs, Entities.Lite, Commun, CommonConst, DateUtils, Generics.Collections,
+  Generics.Defaults, System.Generics.Collections, Entities.Common, Entities.Types, Entities.Attributes;
 
 type
   TObjetFullClass = class of TObjetFull;
@@ -26,6 +26,7 @@ type
   TListFull = class(TEntity)
   end;
 
+  [Entity('editeurs')]
   TEditeurFull = class(TObjetFull)
   strict private
     FNomEditeur: RAutoTrimString;
@@ -35,11 +36,13 @@ type
   public
     procedure Clear; override;
   published
+    [PrimaryKey]
     property ID_Editeur: RGUIDEx read GetID write SetID;
     property NomEditeur: RAutoTrimString read FNomEditeur write SetNomEditeur;
     property SiteWeb: RAutoTrimString read FSiteWeb write SetSiteWeb;
   end;
 
+  [Entity('collections')]
   TCollectionFull = class(TObjetFull)
   strict private
     FNomCollection: RAutoTrimString;
@@ -52,12 +55,14 @@ type
     destructor Destroy; override;
     procedure Clear; override;
   published
+    [PrimaryKey]
     property ID_Collection: RGUIDEx read GetID write SetID;
     property NomCollection: RAutoTrimString read FNomCollection write SetNomCollection;
     property Editeur: TEditeurLite read FEditeur;
     property ID_Editeur: RGUIDEx read GetID_Editeur;
   end;
 
+  [Entity('univers')]
   TUniversFull = class(TObjetFull)
   strict private
     FNomUnivers: RAutoTrimString;
@@ -74,6 +79,7 @@ type
     procedure Clear; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
   published
+    [PrimaryKey]
     property ID_Univers: RGUIDEx read GetID write SetID;
     property NomUnivers: RAutoTrimString read FNomUnivers write SetNomUnivers;
     property SiteWeb: RAutoTrimString read FSiteWeb write SetSiteWeb;
@@ -82,6 +88,7 @@ type
     property ID_UniversParent: RGUIDEx read GetID_UniversParent;
   end;
 
+  [Entity('series')]
   TSerieFull = class(TObjetFull)
   strict private
     FTitreSerie: RAutoTrimString;
@@ -123,6 +130,7 @@ type
     function ChaineAffichage: string; reintroduce; overload;
     function ChaineAffichage(Simple: Boolean): string; overload; override;
   published
+    [PrimaryKey]
     property ID_Serie: RGUIDEx read GetID write SetID;
     property ID_Editeur: RGUIDEx read GetID_Editeur;
     property ID_Collection: RGUIDEx read GetID_Collection;
@@ -158,6 +166,7 @@ type
     property Titre: RAutoTrimString read FTitreSerie write SetTitreSerie;
   end;
 
+  [Entity('personnes')]
   TAuteurFull = class(TObjetFull)
   strict private
     FBiographie: RLongString;
@@ -173,6 +182,7 @@ type
     procedure Clear; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
   published
+    [PrimaryKey]
     property ID_Auteur: RGUIDEx read GetID write SetID;
     property NomAuteur: RAutoTrimString read FNomAuteur write SetNomAuteur;
     property SiteWeb: RAutoTrimString read FSiteWeb write SetSiteWeb;
@@ -180,6 +190,7 @@ type
     property Series: TObjectList<TSerieFull> read FSeries;
   end;
 
+  [Entity('editions')]
   TEditionFull = class(TObjetFull)
   strict private
     FStock: Boolean;
@@ -217,6 +228,7 @@ type
     procedure Clear; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
   published
+    [PrimaryKey]
     property ID_Edition: RGUIDEx read GetID write SetID;
     property ID_Album: RGUIDEx read FID_Album write FID_Album;
     property Editeur: TEditeurFull read FEditeur;
@@ -247,6 +259,7 @@ type
     property Couvertures: TObjectList<TCouvertureLite> read FCouvertures;
   end;
 
+  [Entity('albums')]
   TAlbumFull = class(TObjetFull)
   strict private
     FTitreAlbum: RAutoTrimString;
@@ -272,12 +285,17 @@ type
     FUnivers: TObjectList<TUniversLite>;
     FUniversFull: TList<TUniversLite>;
     function GetID_Serie: RGUIDEx; inline;
-    procedure SetTitreAlbum(const Value: RAutoTrimString); inline;
   private
     FReadyToImport: Boolean;
     function GetDefaultSearch: string;
     procedure SetDefaultSearch(const Value: string);
     function GetSerie: TSerieFull;
+    function GetTitreAlbum: string; inline;
+    procedure SetTitreAlbum(const Value: string); inline;
+    function GetNotes: string;
+    function GetSujet: string;
+    procedure SetNotes(const Value: string);
+    procedure SetSujet(const Value: string);
   protected
     constructor Create; override;
   public
@@ -291,32 +309,47 @@ type
     property FusionneEditions: Boolean read FFusionneEditions write FFusionneEditions;
     property DefaultSearch: string read GetDefaultSearch write SetDefaultSearch;
   published
+    [EntityField]
     property Complet: Boolean read FComplet write FComplet;
+    [PrimaryKey]
     property ID_Album: RGUIDEx read GetID write SetID;
     property ID_Serie: RGUIDEx read GetID_Serie;
-    property TitreAlbum: RAutoTrimString read FTitreAlbum write SetTitreAlbum;
+    [EntityField]
+    property TitreAlbum: string read GetTitreAlbum write SetTitreAlbum;
+    [EntityField('id_serie')]
     property Serie: TSerieFull read GetSerie;
+    [EntityField]
     property MoisParution: Integer read FMoisParution write FMoisParution;
+    [EntityField]
     property AnneeParution: Integer read FAnneeParution write FAnneeParution;
+    [EntityField]
     property Tome: Integer read FTome write FTome;
+    [EntityField]
     property TomeDebut: Integer read FTomeDebut write FTomeDebut;
+    [EntityField]
     property TomeFin: Integer read FTomeFin write FTomeFin;
+    [EntityField]
     property HorsSerie: Boolean read FHorsSerie write FHorsSerie;
+    [EntityField]
     property Integrale: Boolean read FIntegrale write FIntegrale;
     property Scenaristes: TObjectList<TAuteurAlbumLite> read FScenaristes;
     property Dessinateurs: TObjectList<TAuteurAlbumLite> read FDessinateurs;
     property Coloristes: TObjectList<TAuteurAlbumLite> read FColoristes;
-    property Sujet: RLongString read FSujet write FSujet;
-    property Notes: RLongString read FNotes write FNotes;
+    [EntityField('sujetalbum')]
+    property Sujet: string read GetSujet write SetSujet;
+    [EntityField('remarquesalbum')]
+    property Notes: string read GetNotes write SetNotes;
     property Editions: TObjectList<TEditionFull> read FEditions;
+    [EntityField]
     property Notation: Integer read FNotation write FNotation;
     property Univers: TObjectList<TUniversLite> read FUnivers;
     property UniversFull: TList<TUniversLite> read FUniversFull;
 
     // pour rétrocompatibilité pour les scripts
-    property Titre: RAutoTrimString read FTitreAlbum write SetTitreAlbum;
+    property Titre: string read GetTitreAlbum write SetTitreAlbum;
   end;
 
+  [Entity('parabd')]
   TParaBDFull = class(TObjetFull)
   strict private
     FAuteurs: TObjectList<TAuteurParaBDLite>;
@@ -338,10 +371,15 @@ type
     FUniversFull: TList<TUniversLite>;
     FPhotos: TObjectList<TPhotoLite>;
     function Get_sDateAchat: string;
-    procedure SetTitreParaBD(const Value: RAutoTrimString); inline;
+    procedure SetTitreParaBD(const Value: string); inline;
   private
     FNotes: RLongString;
     function GetID_Serie: RGUIDEx;
+    function GetDescription: string;
+    function GetNotes: string;
+    function GetTitreParaBD: string;
+    procedure SetDescription(const Value: string);
+    procedure SetNotes(const Value: string);
   protected
     constructor Create; override;
   public
@@ -351,23 +389,38 @@ type
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
   published
+    [PrimaryKey]
     property ID_ParaBD: RGUIDEx read GetID write SetID;
     property ID_Serie: RGUIDEx read GetID_Serie;
+    [EntityField('annee')]
     property AnneeEdition: Integer read FAnneeEdition write FAnneeEdition;
     property CategorieParaBD: ROption read FCategorieParaBD write FCategorieParaBD;
+    [EntityField]
     property AnneeCote: Integer read FAnneeCote write FAnneeCote;
-    property TitreParaBD: RAutoTrimString { [150] } read FTitreParaBD write SetTitreParaBD;
+    [EntityField]
+    property TitreParaBD: string { [150] } read GetTitreParaBD write SetTitreParaBD;
     property Auteurs: TObjectList<TAuteurParaBDLite> read FAuteurs;
-    property Description: RLongString read FDescription write FDescription;
-    property Notes: RLongString read FNotes write FNotes;
+    [EntityField]
+    property Description: string read GetDescription write SetDescription;
+    [EntityField]
+    property Notes: string read GetNotes write SetNotes;
+    [EntityField('id_serie')]
     property Serie: TSerieFull read FSerie;
+    [EntityField]
     property Prix: Currency read FPrix write FPrix;
+    [EntityField]
     property PrixCote: Currency read FPrixCote write FPrixCote;
+    [EntityField]
     property Dedicace: Boolean read FDedicace write FDedicace;
+    [EntityField]
     property Numerote: Boolean read FNumerote write FNumerote;
+    [EntityField]
     property Stock: Boolean read FStock write FStock;
+    [EntityField]
     property Offert: Boolean read FOffert write FOffert;
+    [EntityField]
     property Gratuit: Boolean read FGratuit write FGratuit;
+    [EntityField]
     property DateAchat: TDateTime read FDateAchat write FDateAchat;
     property sDateAchat: string read Get_sDateAchat;
     property Univers: TObjectList<TUniversLite> read FUnivers;
@@ -486,9 +539,24 @@ begin
   Result := Serie.ID_Serie;
 end;
 
+function TAlbumFull.GetNotes: string;
+begin
+  Result := FNotes;
+end;
+
 function TAlbumFull.GetSerie: TSerieFull;
 begin
   Result := FSerie;
+end;
+
+function TAlbumFull.GetSujet: string;
+begin
+  Result := FSujet;
+end;
+
+function TAlbumFull.GetTitreAlbum: string;
+begin
+  Result := FTitreAlbum;
 end;
 
 procedure TAlbumFull.SetDefaultSearch(const Value: string);
@@ -496,9 +564,19 @@ begin
   FDefaultSearch := Value;
 end;
 
-procedure TAlbumFull.SetTitreAlbum(const Value: RAutoTrimString);
+procedure TAlbumFull.SetNotes(const Value: string);
 begin
-  FTitreAlbum := Copy(Value, 1, LengthTitreAlbum);
+  FNotes := Value;
+end;
+
+procedure TAlbumFull.SetSujet(const Value: string);
+begin
+  FSujet := Value;
+end;
+
+procedure TAlbumFull.SetTitreAlbum(const Value: string);
+begin
+  FTitreAlbum := Value.Substring(0, LengthTitreAlbum);
 end;
 
 { TEditionFull }
@@ -792,9 +870,24 @@ begin
   inherited;
 end;
 
+function TParaBDFull.GetDescription: string;
+begin
+  Result := FDescription;
+end;
+
 function TParaBDFull.GetID_Serie: RGUIDEx;
 begin
   Result := Serie.ID_Serie;
+end;
+
+function TParaBDFull.GetNotes: string;
+begin
+  Result := FNotes;
+end;
+
+function TParaBDFull.GetTitreParaBD: string;
+begin
+  Result := FTitreParaBD;
 end;
 
 function TParaBDFull.Get_sDateAchat: string;
@@ -805,9 +898,19 @@ begin
     Result := '';
 end;
 
-procedure TParaBDFull.SetTitreParaBD(const Value: RAutoTrimString);
+procedure TParaBDFull.SetDescription(const Value: string);
 begin
-  FTitreParaBD := Copy(Value, 1, LengthTitreParaBD);
+  FDescription := Value;
+end;
+
+procedure TParaBDFull.SetNotes(const Value: string);
+begin
+  FNotes := Value;
+end;
+
+procedure TParaBDFull.SetTitreParaBD(const Value: string);
+begin
+  FTitreParaBD := Value.Substring(0, LengthTitreParaBD);
 end;
 
 { TCollectionFull }

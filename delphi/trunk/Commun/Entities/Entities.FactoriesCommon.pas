@@ -15,12 +15,11 @@ type
     class function getBuilder(c: TEntityClass): TRttiMethod;
 
     class function BuildInstance: TEntity;
-  protected
-    class function EntityClass: TEntityClass; virtual; abstract;
   public
     class constructor Create;
     class destructor Destroy;
 
+    class function EntityClass: TEntityClass; virtual; abstract;
     class function getInstance: TEntity;
     class function Duplicate(Source: TEntity): TEntity;
   end;
@@ -29,6 +28,8 @@ type
     class function getInstance: T; reintroduce;
     class function Duplicate(Source: T): T; reintroduce;
   end;
+
+  TFactoryDBEntityClass = class of TFactoryDBEntity;
 
   TFactoryDBEntity = class abstract(TFactoryEntity)
   public

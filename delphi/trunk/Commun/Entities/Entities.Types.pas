@@ -107,7 +107,7 @@ end;
 
 class operator RTriStateValue.Equal(a, b: RTriStateValue): Boolean;
 begin
-  Result := a.value = b.value;
+  Result := a.Value = b.Value;
 end;
 
 class function RTriStateValue.FromInteger(a: Integer): RTriStateValue;
@@ -138,7 +138,7 @@ end;
 
 class operator RTriStateValue.NotEqual(a, b: RTriStateValue): Boolean;
 begin
-  Result := not (a = b);
+  Result := not(a = b);
 end;
 
 procedure RTriStateValue.SetUndefined;

@@ -7,12 +7,14 @@ uses
 
 type
   TManagedQuery = class;
+  TManagedTransaction = class;
+  TManagedDatabase = class;
 
   IDBConnection = interface
     ['{F9F4EAE7-A0AB-4154-A479-DA7105788FC4}']
-    function GetDatabase: TUIBDataBase;
-    function GetTransaction: TUIBTransaction;
-    function GetQuery(useTransaction: TUIBTransaction = nil): TManagedQuery;
+    function GetDatabase: TManagedDatabase;
+    function GetTransaction: TManagedTransaction;
+    function GetQuery(useTransaction: TManagedTransaction = nil): TManagedQuery;
     // function This: IDBConnection;
 
     function GetDead: Boolean;
@@ -20,10 +22,19 @@ type
     property Dead: Boolean read GetDead write SetDead;
   end;
 
+  TManagedDatabase = class(TUIBDatabase)
+
+  end;
+
+  TManagedTransaction = class(TUIBTransaction)
+
+  end;
+
   TManagedQuery = class(TUIBQuery)
   private
     FConnection: IDBConnection;
     FOwnTransaction: Boolean;
+    function GetTransaction: TManagedTransaction;
 
     // FDoLog: Boolean;
 
@@ -31,22 +42,23 @@ type
   protected
     procedure BeginExecute; override;
     procedure BeginPrepare(describeParams: Boolean = False); override;
-    procedure SetTransaction(const Value: TUIBTransaction); override;
+    procedure SetTransaction(const Value: TManagedTransaction); reintroduce;
   public
     constructor Create(const Connection: IDBConnection); reintroduce;
     destructor Destroy; override;
 
     // property DoLog: Boolean read FDoLog write FDoLog;
     property Connection: IDBConnection read FConnection;
+    property Transaction: TManagedTransaction read GetTransaction write SetTransaction;
   end;
 
   TDBConnection = class(TInterfacedObject, IDBConnection)
   private
-    FDatabase: TUIBDataBase;
+    FDatabase: TManagedDatabase;
     FDead: Boolean;
-    function GetDatabase: TUIBDataBase;
-    function GetTransaction: TUIBTransaction;
-    function GetQuery(useTransaction: TUIBTransaction = nil): TManagedQuery;
+    function GetDatabase: TManagedDatabase;
+    function GetTransaction: TManagedTransaction;
+    function GetQuery(useTransaction: TManagedTransaction = nil): TManagedQuery;
     // function This: IDBConnection;
     function GetDead: Boolean;
     procedure SetDead(const Value: Boolean);
@@ -62,7 +74,7 @@ implementation
 procedure TDBConnection.AfterConstruction;
 begin
   inherited;
-  FDatabase := TUIBDataBase.Create(nil);
+  FDatabase := TManagedDatabase.Create(nil);
   FDead := False;
 end;
 
@@ -72,7 +84,7 @@ begin
   FDatabase.Free;
 end;
 
-function TDBConnection.GetDatabase: TUIBDataBase;
+function TDBConnection.GetDatabase: TManagedDatabase;
 begin
   Result := FDatabase;
 end;
@@ -82,7 +94,7 @@ begin
   Result := FDead;
 end;
 
-function TDBConnection.GetQuery(useTransaction: TUIBTransaction): TManagedQuery;
+function TDBConnection.GetQuery(useTransaction: TManagedTransaction): TManagedQuery;
 begin
   Result := TManagedQuery.Create(Self);
   Result.Database := FDatabase;
@@ -97,9 +109,9 @@ begin
   Result.FetchBlobs := True;
 end;
 
-function TDBConnection.GetTransaction: TUIBTransaction;
+function TDBConnection.GetTransaction: TManagedTransaction;
 begin
-  Result := TUIBTransaction.Create(nil);
+  Result := TManagedTransaction.Create(nil);
   Result.Database := FDatabase;
   Result.Options := [tpNowait, tpReadCommitted, tpRecVersion];
 end;
@@ -109,7 +121,7 @@ begin
   FDead := Value;
 end;
 
-{ TUIBQueryEx }
+{ TManagedQuery }
 
 procedure TManagedQuery.BeginExecute;
 var
@@ -191,9 +203,14 @@ begin
   inherited;
 end;
 
-procedure TManagedQuery.SetTransaction(const Value: TUIBTransaction);
+function TManagedQuery.GetTransaction: TManagedTransaction;
 begin
-  inherited;
+  Result := (inherited Transaction) as TManagedTransaction
+end;
+
+procedure TManagedQuery.SetTransaction(const Value: TManagedTransaction);
+begin
+  inherited SetTransaction(Value);
   FOwnTransaction := False;
 end;
 

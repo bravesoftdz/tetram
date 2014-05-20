@@ -3,55 +3,33 @@ unit Entities.DaoLite;
 interface
 
 uses
-  System.SysUtils, uib, Entities.Lite, UMetadata, System.Generics.Collections,
-  System.SyncObjs, Vcl.ComCtrls, Vcl.StdCtrls, System.Classes, Entities.DaoCommon,
+  System.SysUtils, System.Types, Entities.Lite, UMetadata, System.Generics.Collections,
+  System.SyncObjs, Vcl.ComCtrls, Vcl.StdCtrls, System.Classes, Entities.DBConnection, Entities.DaoCommon,
   Entities.Common, Entities.FactoriesCommon, System.IOUtils, Vcl.Dialogs;
 
 type
   // ce serait trop facile si XE4 acceptait cette syntaxe....
   // TClassEntities.DaoLite = class of TDaoLite<>;
   // je suis donc obligé de faire des classes "classique"
-  TDaoLiteClass = class of TDaoLite;
+  // TDaoLiteClass = class of TDaoLite;
 
-  TDaoLite = class abstract(TDaoDBEntity)
-  private
-    class var cs: TCriticalSection;
-    class var FPreparedQueries: TDictionary<TDaoLiteClass, TUIBQuery>;
-    class function getPreparedQuery: TUIBQuery;
-
-    class function NonNull(Query: TUIBQuery; const Champ: string; Default: Integer): Integer; overload; inline;
-    class function NonNull(Query: TUIBQuery; const Champ: string): TGUID; overload; inline;
-    class function NonNull(Query: TUIBQuery; Champ, Default: Integer): Integer; overload; inline;
-    class function NonNull(Query: TUIBQuery; Champ: Integer): TGUID; overload; inline;
-
-    class procedure GetFieldIndices; virtual;
-    class function GetFieldIndex(const Name: string): Integer;
+  TDaoLite<T: TBaseLite> = class abstract(TDaoGenericDBEntity<T>)
   public
-    class constructor Create;
-    class destructor Destroy;
+    class function Make(Query: TManagedQuery): TBaseLite;
 
-    class procedure Prepare(Query: TUIBQuery);
-    class procedure Unprepare(Query: TUIBQuery);
+    class procedure FillList(List: TList<TBaseLite>; Query: TManagedQuery);
 
-    class function Make(Query: TUIBQuery): TBaseLite;
-
-    class procedure Fill(Entity: TBaseLite; Query: TUIBQuery); reintroduce; virtual; abstract;
-    class procedure FillList(List: TList<TBaseLite>; Query: TUIBQuery);
-
-    class procedure VideListe(LV: TListView; DoClear: Boolean = True); overload;
-    class procedure VideListe(List: TList<TBaseLite>; DoClear: Boolean = True); overload;
-    class procedure VideListe(ListBox: TListBox; DoClear: Boolean = True); overload;
+    class procedure VideListe(LV: TListView; DoClear: Boolean = True);
   end;
 
-  TDaoLiteEntity<T: TBaseLite> = class abstract(TDaoLite)
+  TDaoLiteEntity<T: TBaseLite> = class abstract(TDaoLite<T>)
   public
-    class function Make(Query: TUIBQuery): T; reintroduce;
+    class function Make(Query: TManagedQuery): T; reintroduce;
 
-    class procedure Fill(Entity: TBaseLite; Query: TUIBQuery); overload; override;
-    class procedure Fill(Entity: T; Query: TUIBQuery); reintroduce; overload; virtual; abstract;
-    class procedure FillList(List: TList<T>; Query: TUIBQuery);
-    class procedure VideListe(List: TList<T>; DoClear: Boolean = True); overload;
-    class procedure SaveList(List: TList<T>; ReferenceParent: TGUID; ReferenceSecondaires: array of TGUID; UseTransaction: TUIBTransaction); virtual; abstract;
+    class procedure Fill(Entity: TDBEntity; Query: TManagedQuery); overload; override;
+    class procedure Fill(Entity: T; Query: TManagedQuery); reintroduce; overload; virtual; abstract;
+    class procedure FillList(List: TList<T>; Query: TManagedQuery);
+    class procedure SaveList(List: TList<T>; ReferenceParent: TGUID; ReferenceSecondaires: array of TGUID; UseTransaction: TManagedTransaction); virtual; abstract;
   end;
 
   TDaoAlbumLite = class(TDaoLiteEntity<TAlbumLite>)
@@ -72,38 +50,33 @@ type
     class var IndexAchat: Integer;
     class var IndexComplet: Integer;
     class var IndexNotation: Integer;
-  protected
-    class function FactoryClass: TFactoryClass; override;
-  private
-    class procedure GetFieldIndices; override;
   public
-    class procedure Fill(Entity: TAlbumLite; Query: TUIBQuery); overload; override;
+    class procedure GetFieldIndices; override;
+    class function FactoryClass: TFactoryClass; override;
+    class procedure Fill(Entity: TAlbumLite; Query: TManagedQuery); overload; override;
     class procedure Fill(Entity: TAlbumLite; const ID_Album: TGUID); overload;
     class procedure Fill(Entity: TAlbumLite; const ID_Album, ID_Edition: TGUID); overload;
   end;
 
   TDaoParaBDLite = class(TDaoLiteEntity<TParaBDLite>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
-    class procedure Fill(Entity: TParaBDLite; Query: TUIBQuery); override;
+    class function FactoryClass: TFactoryClass; override;
+    class procedure Fill(Entity: TParaBDLite; Query: TManagedQuery); override;
   end;
 
   TDaoSerieLite = class(TDaoLiteEntity<TSerieLite>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
-    class procedure Fill(Entity: TSerieLite; Query: TUIBQuery); overload; override;
+    class function FactoryClass: TFactoryClass; override;
+    class procedure Fill(Entity: TSerieLite; Query: TManagedQuery); overload; override;
     class procedure Fill(Entity: TSerieLite; const ID_Serie: TGUID); overload;
   end;
 
   TDaoEditionLite = class(TDaoLiteEntity<TEditionLite>)
   protected
-    class function FactoryClass: TFactoryClass; override;
-  private
     class procedure GetFieldIndices; override;
   public
-    class procedure Fill(Entity: TEditionLite; Query: TUIBQuery); override;
+    class function FactoryClass: TFactoryClass; override;
+    class procedure Fill(Entity: TEditionLite; Query: TManagedQuery); override;
   end;
 
   TDaoEditeurLite = class(TDaoLiteEntity<TEditeurLite>)
@@ -111,61 +84,54 @@ type
     class var IndexID_Editeur: Integer;
     class var IndexNomEditeur: Integer;
   protected
-    class function FactoryClass: TFactoryClass; override;
-  private
     class procedure GetFieldIndices; override;
   public
-    class procedure Fill(Entity: TEditeurLite; Query: TUIBQuery); overload; override;
+    class function FactoryClass: TFactoryClass; override;
+    class procedure Fill(Entity: TEditeurLite; Query: TManagedQuery); overload; override;
     class procedure Fill(Entity: TEditeurLite; const ID_Editeur: TGUID); overload;
   end;
 
   TDaoCollectionLite = class(TDaoLiteEntity<TCollectionLite>)
   protected
-    class function FactoryClass: TFactoryClass; override;
-  private
     class procedure GetFieldIndices; override;
   public
-    class procedure Fill(Entity: TCollectionLite; Query: TUIBQuery); overload; override;
+    class function FactoryClass: TFactoryClass; override;
+    class procedure Fill(Entity: TCollectionLite; Query: TManagedQuery); overload; override;
     class procedure Fill(Entity: TCollectionLite; const ID_Collection: TGUID); overload;
   end;
 
   TDaoPersonnageLite = class(TDaoLiteEntity<TPersonnageLite>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
-    class procedure Fill(Entity: TPersonnageLite; Query: TUIBQuery); overload; override;
+    class function FactoryClass: TFactoryClass; override;
+    class procedure Fill(Entity: TPersonnageLite; Query: TManagedQuery); overload; override;
     class procedure Fill(Entity: TPersonnageLite; const ID_Personne: TGUID); overload;
   end;
 
   TDaoAuteurSerieLite = class(TDaoLiteEntity<TAuteurSerieLite>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
-    class procedure Fill(Entity: TAuteurSerieLite; Query: TUIBQuery); overload; override;
+    class function FactoryClass: TFactoryClass; override;
+    class procedure Fill(Entity: TAuteurSerieLite; Query: TManagedQuery); overload; override;
     class procedure Fill(Entity: TAuteurSerieLite; Pe: TPersonnageLite; const ReferenceSerie: TGUID; Metier: TMetierAuteur); overload;
   end;
 
   TDaoAuteurAlbumLite = class(TDaoLiteEntity<TAuteurAlbumLite>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
-    class procedure Fill(Entity: TAuteurAlbumLite; Query: TUIBQuery); overload; override;
+    class function FactoryClass: TFactoryClass; override;
+    class procedure Fill(Entity: TAuteurAlbumLite; Query: TManagedQuery); overload; override;
     class procedure Fill(Entity: TAuteurAlbumLite; Pe: TPersonnageLite; const ReferenceAlbum, ReferenceSerie: TGUID; Metier: TMetierAuteur); overload;
   end;
 
   TDaoAuteurParaBDLite = class(TDaoLiteEntity<TAuteurParaBDLite>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
-    class procedure Fill(Entity: TAuteurParaBDLite; Query: TUIBQuery); overload; override;
+    class function FactoryClass: TFactoryClass; override;
+    class procedure Fill(Entity: TAuteurParaBDLite; Query: TManagedQuery); overload; override;
     class procedure Fill(Entity: TAuteurParaBDLite; Pe: TPersonnageLite; const ReferenceParaBD: TGUID); overload;
   end;
 
   TDaoUniversLite = class(TDaoLiteEntity<TUniversLite>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
-    class procedure Fill(Entity: TUniversLite; Query: TUIBQuery); overload; override;
+    class function FactoryClass: TFactoryClass; override;
+    class procedure Fill(Entity: TUniversLite; Query: TManagedQuery); overload; override;
     class procedure Fill(Entity: TUniversLite; const ID_Univers: TGUID); overload;
   end;
 
@@ -182,84 +148,46 @@ type
   protected
     class function getFieldsInfo: RFieldsInfo; virtual; abstract;
   public
-    class procedure SaveList(List: TList<T>; ReferenceParent: TGUID; ReferenceSecondaires: array of TGUID; UseTransaction: TUIBTransaction); override;
+    class procedure SaveList(List: TList<T>; ReferenceParent: TGUID; ReferenceSecondaires: array of TGUID; UseTransaction: TManagedTransaction); override;
   end;
 
   TDaoPhotoLite = class(TDaoImageLite<TPhotoLite>)
   protected
-    class function FactoryClass: TFactoryClass; override;
     class function getFieldsInfo: RFieldsInfo; override;
   public
-    class procedure Fill(Entity: TPhotoLite; Query: TUIBQuery); override;
+    class function FactoryClass: TFactoryClass; override;
+    class procedure Fill(Entity: TPhotoLite; Query: TManagedQuery); override;
   end;
 
   TDaoCouvertureLite = class(TDaoImageLite<TCouvertureLite>)
   protected
-    class function FactoryClass: TFactoryClass; override;
     class function getFieldsInfo: RFieldsInfo; override;
   public
-    class procedure Fill(Entity: TCouvertureLite; Query: TUIBQuery); override;
+    class function FactoryClass: TFactoryClass; override;
+    class procedure Fill(Entity: TCouvertureLite; Query: TManagedQuery); override;
   end;
 
   TDaoGenreLite = class(TDaoLiteEntity<TGenreLite>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
-    class procedure Fill(Entity: TGenreLite; Query: TUIBQuery); override;
+    class function FactoryClass: TFactoryClass; override;
+    class procedure Fill(Entity: TGenreLite; Query: TManagedQuery); override;
   end;
 
   TDaoConversionLite = class(TDaoLiteEntity<TConversionLite>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
-    class procedure Fill(Entity: TConversionLite; Query: TUIBQuery); override;
+    class function FactoryClass: TFactoryClass; override;
+    class procedure Fill(Entity: TConversionLite; Query: TManagedQuery); override;
   end;
 
 implementation
 
 uses
-  Commun, uiblib, Entities.FactoriesLite, Entities.DBConnection, ProceduresBDtk,
+  Commun, uib, uiblib, Entities.FactoriesLite, ProceduresBDtk,
   CommonConst, Procedures;
 
 { TDaoLite<T> }
 
-class function TDaoLite.NonNull(Query: TUIBQuery; const Champ: string): TGUID;
-begin
-  try
-    if Query.Fields.ByNameIsNull[Champ] then
-      Result := GUID_NULL
-    else
-      Result := StringToGUID(Query.Fields.ByNameAsString[Champ]);
-  except
-    Result := GUID_NULL;
-  end;
-end;
-
-class function TDaoLite.NonNull(Query: TUIBQuery; const Champ: string; Default: Integer): Integer;
-begin
-  try
-    if Query.Fields.ByNameIsNull[Champ] then
-      Result := Default
-    else
-      Result := Query.Fields.ByNameAsInteger[Champ];
-  except
-    Result := Default;
-  end;
-end;
-
-class constructor TDaoLite.Create;
-begin
-  cs := nil;
-  FPreparedQueries := TDictionary<TDaoLiteClass, TUIBQuery>.Create;
-end;
-
-class destructor TDaoLite.Destroy;
-begin
-  FPreparedQueries.Free;
-  cs.Free;
-end;
-
-class procedure TDaoLite.FillList(List: TList<TBaseLite>; Query: TUIBQuery);
+class procedure TDaoLite<T>.FillList(List: TList<TBaseLite>; Query: TManagedQuery);
 begin
   Prepare(Query);
   try
@@ -273,76 +201,13 @@ begin
   end;
 end;
 
-class function TDaoLite.GetFieldIndex(const Name: string): Integer;
-var
-  q: TUIBQuery;
-begin
-  q := getPreparedQuery;
-  for Result := 0 to Pred(q.Fields.FieldCount) do
-    if SameText(q.Fields.AliasName[Result], Name) then
-      Exit;
-  Result := -1;
-end;
-
-class procedure TDaoLite.GetFieldIndices;
-begin
-  Assert(getPreparedQuery <> nil, 'Doit être préparé avant');
-end;
-
-class function TDaoLite.getPreparedQuery: TUIBQuery;
-begin
-  FPreparedQueries.TryGetValue(Self, Result);
-end;
-
-class function TDaoLite.Make(Query: TUIBQuery): TBaseLite;
+class function TDaoLite<T>.Make(Query: TManagedQuery): TBaseLite;
 begin
   Result := getInstance as TBaseLite;
   Fill(Result, Query);
 end;
 
-class function TDaoLite.NonNull(Query: TUIBQuery; Champ: Integer): TGUID;
-begin
-  try
-    if (Champ = -1) or Query.Fields.IsNull[Champ] then
-      Result := GUID_NULL
-    else
-      Result := StringToGUID(Query.Fields.AsString[Champ]);
-  except
-    Result := GUID_NULL;
-  end;
-end;
-
-class procedure TDaoLite.Prepare(Query: TUIBQuery);
-var
-  p: TUIBQuery;
-begin
-  // Ne peut pas être préparée plusieurs fois
-  p := getPreparedQuery;
-  if (p <> nil) or (p = Query) then
-    Exit;
-
-  if not Assigned(cs) then
-    cs := TCriticalSection.Create;
-  cs.Enter;
-  FPreparedQueries.Add(Self, Query);
-  GetFieldIndices;
-end;
-
-class procedure TDaoLite.Unprepare(Query: TUIBQuery);
-var
-  p: TPair<TDaoLiteClass, TUIBQuery>;
-begin
-  if getPreparedQuery <> Query then
-    Exit;
-
-  for p in FPreparedQueries do
-    if p.Value = Query then
-      FPreparedQueries.Remove(p.Key);
-
-  cs.Release;
-end;
-
-class procedure TDaoLite.VideListe(LV: TListView; DoClear: Boolean);
+class procedure TDaoLite<T>.VideListe(LV: TListView; DoClear: Boolean);
 var
   i: Integer;
 begin
@@ -360,54 +225,14 @@ begin
   end;
 end;
 
-class procedure TDaoLite.VideListe(List: TList<TBaseLite>; DoClear: Boolean);
-var
-  i: Integer;
-begin
-  try
-    for i := 0 to Pred(List.Count) do
-      List[i].Free;
-  finally
-    if DoClear then
-      List.Clear;
-  end;
-end;
-
-class procedure TDaoLite.VideListe(ListBox: TListBox; DoClear: Boolean);
-var
-  i: Integer;
-begin
-  try
-    for i := 0 to Pred(ListBox.Items.Count) do
-    begin
-      ListBox.Items.Objects[i].Free;
-    end;
-  finally
-    if DoClear then
-      ListBox.Items.Clear;
-  end;
-end;
-
-class function TDaoLite.NonNull(Query: TUIBQuery; Champ, Default: Integer): Integer;
-begin
-  try
-    if (Champ = -1) or Query.Fields.IsNull[Champ] then
-      Result := Default
-    else
-      Result := Query.Fields.AsInteger[Champ];
-  except
-    Result := Default;
-  end;
-end;
-
 { TDaoLiteEntity<T> }
 
-class procedure TDaoLiteEntity<T>.Fill(Entity: TBaseLite; Query: TUIBQuery);
+class procedure TDaoLiteEntity<T>.Fill(Entity: TDBEntity; Query: TManagedQuery);
 begin
   Fill(T(Entity), Query);
 end;
 
-class procedure TDaoLiteEntity<T>.FillList(List: TList<T>; Query: TUIBQuery);
+class procedure TDaoLiteEntity<T>.FillList(List: TList<T>; Query: TManagedQuery);
 begin
   Prepare(Query);
   try
@@ -421,19 +246,14 @@ begin
   end;
 end;
 
-class function TDaoLiteEntity<T>.Make(Query: TUIBQuery): T;
+class function TDaoLiteEntity<T>.Make(Query: TManagedQuery): T;
 begin
   Result := T(inherited Make(Query));
 end;
 
-class procedure TDaoLiteEntity<T>.VideListe(List: TList<T>; DoClear: Boolean);
-begin
-  inherited VideListe(TList<TBaseLite>(List), DoClear);
-end;
-
 { TDaoImageLite<T> }
 
-class procedure TDaoImageLite<T>.SaveList(List: TList<T>; ReferenceParent: TGUID; ReferenceSecondaires: array of TGUID; UseTransaction: TUIBTransaction);
+class procedure TDaoImageLite<T>.SaveList(List: TList<T>; ReferenceParent: TGUID; ReferenceSecondaires: array of TGUID; UseTransaction: TManagedTransaction);
 var
   s: string;
   pi: T;
@@ -619,7 +439,7 @@ begin
   Result := TFactoryPhotoLite;
 end;
 
-class procedure TDaoPhotoLite.Fill(Entity: TPhotoLite; Query: TUIBQuery);
+class procedure TDaoPhotoLite.Fill(Entity: TPhotoLite; Query: TManagedQuery);
 begin
   Entity.ID := NonNull(Query, 'ID_Photo');
   Entity.OldNom := Query.Fields.ByNameAsString['FichierPhoto'];
@@ -647,7 +467,7 @@ begin
   Result := TFactoryCouvertureLite;
 end;
 
-class procedure TDaoCouvertureLite.Fill(Entity: TCouvertureLite; Query: TUIBQuery);
+class procedure TDaoCouvertureLite.Fill(Entity: TCouvertureLite; Query: TManagedQuery);
 begin
   Entity.ID := NonNull(Query, 'ID_Couverture');
   Entity.OldNom := Query.Fields.ByNameAsString['FichierCouverture'];
@@ -677,7 +497,7 @@ begin
   Result := TFactoryConversionLite;
 end;
 
-class procedure TDaoConversionLite.Fill(Entity: TConversionLite; Query: TUIBQuery);
+class procedure TDaoConversionLite.Fill(Entity: TConversionLite; Query: TManagedQuery);
 begin
   Entity.ID := NonNull(Query, 'ID_Conversion');
   Entity.Monnaie1 := Query.Fields.ByNameAsString['Monnaie1'];
@@ -714,7 +534,7 @@ begin
   IndexNomEditeur := GetFieldIndex('NomEditeur');
 end;
 
-class procedure TDaoEditeurLite.Fill(Entity: TEditeurLite; Query: TUIBQuery);
+class procedure TDaoEditeurLite.Fill(Entity: TEditeurLite; Query: TManagedQuery);
 begin
   Entity.NomEditeur := '';
 
@@ -736,7 +556,7 @@ end;
 
 { TDaoPersonnageLite }
 
-class procedure TDaoPersonnageLite.Fill(Entity: TPersonnageLite; Query: TUIBQuery);
+class procedure TDaoPersonnageLite.Fill(Entity: TPersonnageLite; Query: TManagedQuery);
 begin
   Entity.ID := NonNull(Query, 'ID_Personne');
   Entity.Nom := Query.Fields.ByNameAsString['NomPersonne'];
@@ -769,7 +589,7 @@ begin
   Result := TFactoryAuteurSerieLite;
 end;
 
-class procedure TDaoAuteurSerieLite.Fill(Entity: TAuteurSerieLite; Query: TUIBQuery);
+class procedure TDaoAuteurSerieLite.Fill(Entity: TAuteurSerieLite; Query: TManagedQuery);
 var
   PPersonne: TPersonnageLite;
 begin
@@ -790,7 +610,7 @@ end;
 
 { TDaoAuteurAlbumLite }
 
-class procedure TDaoAuteurAlbumLite.Fill(Entity: TAuteurAlbumLite; Query: TUIBQuery);
+class procedure TDaoAuteurAlbumLite.Fill(Entity: TAuteurAlbumLite; Query: TManagedQuery);
 begin
   TDaoAuteurSerieLite.Fill(Entity, Query);
   Entity.ID_Album := NonNull(Query, 'ID_Album');
@@ -814,7 +634,7 @@ begin
   Result := TFactoryAuteurParaBDLite;
 end;
 
-class procedure TDaoAuteurParaBDLite.Fill(Entity: TAuteurParaBDLite; Query: TUIBQuery);
+class procedure TDaoAuteurParaBDLite.Fill(Entity: TAuteurParaBDLite; Query: TManagedQuery);
 var
   PPersonne: TPersonnageLite;
 begin
@@ -834,7 +654,7 @@ end;
 
 { TDaoAlbumLite }
 
-class procedure TDaoAlbumLite.Fill(Entity: TAlbumLite; Query: TUIBQuery);
+class procedure TDaoAlbumLite.Fill(Entity: TAlbumLite; Query: TManagedQuery);
 begin
   Entity.Serie := '';
   Entity.Editeur := '';
@@ -986,7 +806,7 @@ end;
 
 { TDaoCollectionLite }
 
-class procedure TDaoCollectionLite.Fill(Entity: TCollectionLite; Query: TUIBQuery);
+class procedure TDaoCollectionLite.Fill(Entity: TCollectionLite; Query: TManagedQuery);
 begin
   Entity.ID := NonNull(Query, 'ID_Collection');
   Entity.NomCollection := Query.Fields.ByNameAsString['NomCollection'];
@@ -1025,7 +845,7 @@ end;
 
 { TDaoSerieLite }
 
-class procedure TDaoSerieLite.Fill(Entity: TSerieLite; Query: TUIBQuery);
+class procedure TDaoSerieLite.Fill(Entity: TSerieLite; Query: TManagedQuery);
 begin
   Entity.ID := NonNull(Query, 'ID_Serie');
   Entity.TitreSerie := Query.Fields.ByNameAsString['TitreSerie'];
@@ -1068,7 +888,7 @@ begin
   Result := TFactoryEditionLite;
 end;
 
-class procedure TDaoEditionLite.Fill(Entity: TEditionLite; Query: TUIBQuery);
+class procedure TDaoEditionLite.Fill(Entity: TEditionLite; Query: TManagedQuery);
 begin
   Entity.ID := NonNull(Query, 'ID_Edition');
   Entity.AnneeEdition := Query.Fields.ByNameAsInteger['AnneeEdition'];
@@ -1096,7 +916,7 @@ begin
   Result := TFactoryGenreLite;
 end;
 
-class procedure TDaoGenreLite.Fill(Entity: TGenreLite; Query: TUIBQuery);
+class procedure TDaoGenreLite.Fill(Entity: TGenreLite; Query: TManagedQuery);
 begin
   Entity.ID := NonNull(Query, 'ID_Genre');
   Entity.Genre := Query.Fields.ByNameAsString['Genre'];
@@ -1114,7 +934,7 @@ begin
   Result := TFactoryParaBDLite;
 end;
 
-class procedure TDaoParaBDLite.Fill(Entity: TParaBDLite; Query: TUIBQuery);
+class procedure TDaoParaBDLite.Fill(Entity: TParaBDLite; Query: TManagedQuery);
 begin
   Entity.ID := NonNull(Query, 'ID_ParaBD');
   Entity.Titre := Query.Fields.ByNameAsString['TitreParaBD'];
@@ -1143,7 +963,7 @@ end;
 
 { TDaoUniversLite }
 
-class procedure TDaoUniversLite.Fill(Entity: TUniversLite; Query: TUIBQuery);
+class procedure TDaoUniversLite.Fill(Entity: TUniversLite; Query: TManagedQuery);
 begin
   Entity.ID := NonNull(Query, 'ID_Univers');
   Entity.NomUnivers := Query.Fields.ByNameAsString['NomUnivers'];
