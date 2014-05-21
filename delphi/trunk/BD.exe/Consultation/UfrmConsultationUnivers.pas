@@ -65,7 +65,8 @@ type
 implementation
 
 uses Commun, Entities.Lite, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
-  Proc_Gestions, Entities.DaoFull, ORM.Core.Entities, Entities.FactoriesFull;
+  Proc_Gestions, Entities.DaoFull, ORM.Core.Entities, ORM.Core.Types,
+  ORM.Core.Factories, ORM.Core.Dao;
 
 {$R *.dfm}
 { TfrmConsultationUnivers }
@@ -78,7 +79,7 @@ end;
 procedure TfrmConsultationUnivers.SetID_Univers(const Value: TGUID);
 begin
   ClearForm;
-  TDaoUniversFull.Fill(FUnivers, Value);
+  TDaoFactory.getDaoDB<TUniversFull>.Fill(FUnivers, Value);
 
   Caption := 'Fiche d''univers - ' + FUnivers.ChaineAffichage;
   NomUnivers.Caption := FormatTitre(FUnivers.NomUnivers);
@@ -139,7 +140,7 @@ end;
 procedure TfrmConsultationUnivers.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FUnivers := TFactoryUniversFull.getInstance;
+  FUnivers := TFactories.getFactory<TUniversFull>.getInstance;
 end;
 
 procedure TfrmConsultationUnivers.FormDestroy(Sender: TObject);

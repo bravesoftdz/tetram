@@ -95,7 +95,7 @@ end;
 
 procedure TRelatedAttribute.Setc(const Value: TRttiType);
 begin
-  Assert(Value.AsInstance.MetaclassType.InheritsFrom(TDBEntity), 'TRelatedAttribute ne peut être attaché qu''à des TDBEntity');
+  Assert(Value.AsInstance.MetaclassType.InheritsFrom(TabstractDBEntity), 'TRelatedAttribute ne peut être attaché qu''à des TabstractDBEntity');
   Fc := Value;
   Ft := Value.Handle;
 end;
@@ -173,7 +173,7 @@ end;
 // on ne peut pas utiliser TDaoDBEntityClass dans la déclaration, ça provoque une référence circulaire
 constructor EntityListAttribute.Create(DaoClass: TClass);
 begin
-  Assert(DaoClass.InheritsFrom(TDaoDBEntity), 'DaoClass doit hérité de TDaoDBEntity');
+//  Assert(DaoClass.InheritsFrom(TDaoDBEntity), 'DaoClass doit hérité de TDaoDBEntity');
   inherited Create;
   FDaoClass := DaoClass;
 end;

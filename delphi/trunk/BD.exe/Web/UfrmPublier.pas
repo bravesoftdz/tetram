@@ -33,7 +33,7 @@ implementation
 {$R *.dfm}
 
 uses Math, UNet, Divers, Updates, UIB, UIBLib, UdmPrinc, Commun, DateUtils, Procedures, CommonConst, VarUtils, StrUtils,
-  Generics.Collections, JclMime, ProceduresBDtk, UWeb;
+  Generics.Collections, JclMime, ProceduresBDtk, UWeb, ORM.Core.Types;
 
 type
   TPublicationWeb = class(TWeb)

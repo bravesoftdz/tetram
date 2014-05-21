@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, UframBoutons, UBdtForms, Generics.Collections,
-  UframConvertisseur;
+  UframConvertisseur, ORM.Core.Dao;
 
 type
   TFrmConvers = class(TbdtForm)
@@ -29,7 +29,7 @@ var
 implementation
 
 uses CommonConst, Entities.Lite, UdmPrinc, UIB, Commun, Entities.DaoLite,
-  Entities.FactoriesLite, ORM.Core.DBConnection;
+  ORM.Core.DBConnection, ORM.Core.Factories;
 
 {$R *.DFM}
 
@@ -42,7 +42,7 @@ var
 begin
   FFirstEdit := nil;
   ListFC := TList<TframConvertisseur>.Create;
-  PC := TFactoryConversionLite.getInstance;
+  PC := TFactories.getFactory<TConversionLite>.getInstance;
   q := dmPrinc.DBConnection.GetQuery;
   with q do
     try
@@ -62,7 +62,7 @@ begin
       i := 0;
       while not Eof do
       begin
-        TDaoConversionLite.Fill(PC, q);
+        TDaoFactory.getDaoDB<TConversionLite>.Fill(PC, q);
         fc := TframConvertisseur.Create(Self);
         if PC.Monnaie1 = TGlobalVar.Utilisateur.Options.SymboleMonnetaire then
         begin

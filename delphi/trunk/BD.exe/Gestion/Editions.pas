@@ -106,7 +106,8 @@ uses
   UIB, Commun, UfrmEditAlbum, UfrmEditSerie, Textes, UfrmEditEditeur, UdmPrinc,
   Math, UfrmFond, Procedures, ProceduresBDtk, UfrmEditCollection, UfrmEditAuteur, UfrmEditParaBD,
   UfrmEditAchatAlbum, UfrmEditUnivers, Entities.DaoLite, Entities.DaoFull,
-  ORM.Core.Entities, Entities.Types;
+  ORM.Core.Entities, Entities.Types, ORM.Core.Types, ORM.Core.Dao,
+  Entities.Lite;
 
 function FindRec(const Table, Champ: string; const Reference: TGUID; WithMessage: Boolean): Boolean;
 begin
@@ -300,7 +301,7 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditAlbum) then
     Exit;
-  Album := TDaoAlbumFull.getInstance(ID);
+  Album := TDaoFactory.getDaoDB<TAlbumFull>.getInstance(ID);
   try
     if Creation then
       Album.TitreAlbum := Valeur;
@@ -374,7 +375,7 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditAlbum) then
     Exit;
-  Album := TDaoAlbumFull.getInstance(ID);
+  Album := TDaoFactory.getDaoDB<TAlbumFull>.getInstance(ID);
   try
     if Creation then
       Album.TitreAlbum := Valeur;
@@ -431,7 +432,7 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditSerie) then
     Exit;
-  Serie := TDaoSerieFull.getInstance(ID);
+  Serie := TDaoFactory.getDaoDB<TSerieFull>.getInstance(ID);
   try
     if Creation then
       Serie.TitreSerie := Valeur;
@@ -483,7 +484,7 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditUnivers) then
     Exit;
-  Univers := TDaoUniversFull.getInstance(ID);
+  Univers := TDaoFactory.getDaoDB<TUniversFull>.getInstance(ID);
   try
     if Creation then
       Univers.NomUnivers := Valeur;
@@ -535,7 +536,7 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditEditeur) then
     Exit;
-  Editeur := TDaoEditeurFull.getInstance(ID);
+  Editeur := TDaoFactory.getDaoDB<TEditeurFull>.getInstance(ID);
   try
     if Creation then
       Editeur.NomEditeur := Valeur;
@@ -592,12 +593,12 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditCollection) then
     Exit;
-  Collection := TDaoCollectionFull.getInstance(ID);
+  Collection := TDaoFactory.getDaoDB<TCollectionFull>.getInstance(ID);
   try
     if Creation then
     begin
       Collection.NomCollection := Valeur;
-      TDaoEditeurLite.Fill(Collection.Editeur, ID_Editeur);
+      TDaoFactory.getDaoDB<TEditeurLite>.Fill(Collection.Editeur, ID_Editeur);
     end;
     Result := EditionCollection(Collection);
     ID := Collection.ID_Collection;
@@ -663,7 +664,7 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditAuteur) then
     Exit;
-  Auteur := TDaoAuteurFull.getInstance(ID);
+  Auteur := TDaoFactory.getDaoDB<TAuteurFull>.getInstance(ID);
   try
     if Creation then
       Auteur.NomAuteur := Valeur;
@@ -716,7 +717,7 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditParaBD) then
     Exit;
-  ParaBD := TDaoParaBDFull.getInstance(ID);
+  ParaBD := TDaoFactory.getDaoDB<TParaBDFull>.getInstance(ID);
   try
     if Creation then
       ParaBD.TitreParaBD := Valeur;
@@ -768,7 +769,7 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditParaBD) then
     Exit;
-  ParaBD := TDaoParaBDFull.getInstance(ID);
+  ParaBD := TDaoFactory.getDaoDB<TParaBDFull>.getInstance(ID);
   try
     if Creation then
       ParaBD.TitreParaBD := Valeur;

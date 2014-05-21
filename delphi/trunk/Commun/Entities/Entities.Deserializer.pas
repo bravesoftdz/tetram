@@ -3,7 +3,8 @@ unit Entities.Deserializer;
 interface
 
 uses
-  System.SysUtils, System.Classes, ORM.Core.Json.Deserializer, dwsJSON, Entities.Full, Entities.Lite, Entities.Types, Commun, UMetadata;
+  System.SysUtils, System.Classes, ORM.Core.Json.Deserializer, dwsJSON, Entities.Full, Entities.Lite, Entities.Types, Commun, UMetadata,
+  ORM.Core.Types;
 
 type
   TEntitesDeserializer = class(TJsonDeserializer)
@@ -43,7 +44,6 @@ type
 implementation
 
 uses
-  Commun, UMetadata, Entities.FactoriesLite, Entities.FactoriesFull,
   ORM.Core.Entities;
 
 { TEntitesSerializer }
@@ -69,14 +69,14 @@ begin
   Entity.TomeFin := ReadValueFromJSON('TomeFin', Entity.TomeFin, Json);
   Entity.HorsSerie := ReadValueFromJSON('HorsSerie', Entity.HorsSerie, Json);
   Entity.Integrale := ReadValueFromJSON('Integrale', Entity.Integrale, Json);
-  ReadListEntitiesFromJSON<TAuteurAlbumLite, TFactoryAuteurAlbumLite>(Entity.Scenaristes, Json.Items['Scenaristes'] as TdwsJSONArray);
-  ReadListEntitiesFromJSON<TAuteurAlbumLite, TFactoryAuteurAlbumLite>(Entity.Dessinateurs, Json.Items['Dessinateurs'] as TdwsJSONArray);
-  ReadListEntitiesFromJSON<TAuteurAlbumLite, TFactoryAuteurAlbumLite>(Entity.Coloristes, Json.Items['Coloristes'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurAlbumLite>(Entity.Scenaristes, Json.Items['Scenaristes'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurAlbumLite>(Entity.Dessinateurs, Json.Items['Dessinateurs'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurAlbumLite>(Entity.Coloristes, Json.Items['Coloristes'] as TdwsJSONArray);
   Entity.Sujet := ReadValueFromJSON('Sujet', Entity.Sujet, Json);
   Entity.Notes := ReadValueFromJSON('Notes', Entity.Notes, Json);
-  ReadListEntitiesFromJSON<TEditionFull, TFactoryEditionFull>(Entity.Editions, Json.Items['Editions'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TEditionFull>(Entity.Editions, Json.Items['Editions'] as TdwsJSONArray);
   // property Notation: Integer read FNotation write FNotation;
-  ReadListEntitiesFromJSON<TUniversLite, TFactoryUniversLite>(Entity.Univers, Json.Items['Univers'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TUniversLite>(Entity.Univers, Json.Items['Univers'] as TdwsJSONArray);
 end;
 
 class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TParaBDFull; Json: TdwsJSONObject);
@@ -86,7 +86,7 @@ begin
   Entity.CategorieParaBD := ReadValueFromJSON('CategorieParaBD', Entity.CategorieParaBD, Json);
   Entity.AnneeCote := ReadValueFromJSON('AnneeCote', Entity.AnneeCote, Json);
   Entity.TitreParaBD := ReadValueFromJSON('TitreParaBD', Entity.TitreParaBD, Json);
-  ReadListEntitiesFromJSON<TAuteurParaBDLite, TFactoryAuteurParaBDLite>(Entity.Auteurs, Json.Items['Auteurs'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurParaBDLite>(Entity.Auteurs, Json.Items['Auteurs'] as TdwsJSONArray);
   Entity.Description := ReadValueFromJSON('Description', Entity.Description, Json);
   // Entity.ID_Serie := ReadValueFromJSON('ID_Serie', Entity.ID_Serie, json);
   ReadFromJSON(Entity.Serie, Json.Items['Serie'] as TdwsJSONObject);
@@ -99,8 +99,8 @@ begin
   Entity.Gratuit := ReadValueFromJSON('Gratuit', Entity.Gratuit, Json);
   Entity.DateAchat := ReadValueFromJSON('DateAchat', Entity.DateAchat, Json);
   // property sDateAchat: string read Get_sDateAchat;
-  ReadListEntitiesFromJSON<TUniversLite, TFactoryUniversLite>(Entity.Univers, Json.Items['Univers'] as TdwsJSONArray);
-  ReadListEntitiesFromJSON<TPhotoLite, TFactoryPhotoLite>(Entity.Photos, Json.Items['Photos'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TUniversLite>(Entity.Univers, Json.Items['Univers'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TPhotoLite>(Entity.Photos, Json.Items['Photos'] as TdwsJSONArray);
 end;
 
 class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TEditionFull; Json: TdwsJSONObject);
@@ -132,7 +132,7 @@ begin
   // property sDateAchat: string read Get_sDateAchat;
   Entity.Notes := ReadValueFromJSON('Notes', Entity.Notes, Json);
   Entity.NumeroPerso := ReadValueFromJSON('NumeroPerso', Entity.NumeroPerso, Json);
-  ReadListEntitiesFromJSON<TCouvertureLite, TFactoryCouvertureLite>(Entity.Couvertures, Json.Items['Couvertures'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TCouvertureLite>(Entity.Couvertures, Json.Items['Couvertures'] as TdwsJSONArray);
 end;
 
 class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TImageLite; Json: TdwsJSONObject);
@@ -156,7 +156,7 @@ begin
   Entity.NomAuteur := ReadValueFromJSON('NomAuteur', Entity.NomAuteur, Json);
   Entity.SiteWeb := ReadValueFromJSON('SiteWeb', Entity.SiteWeb, Json);
   Entity.Biographie := ReadValueFromJSON('Biographie', Entity.Biographie, Json);
-  ReadListEntitiesFromJSON<TSerieFull, TFactorySerieFull>(Entity.Series, Json.Items['Series'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TSerieFull>(Entity.Series, Json.Items['Series'] as TdwsJSONArray);
 end;
 
 class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TEditeurFull; Json: TdwsJSONObject);
@@ -183,11 +183,11 @@ begin
   Entity.SuivreManquants := ReadValueFromJSON('SuivreManquants', Entity.SuivreManquants, Json);
   Entity.SuivreSorties := ReadValueFromJSON('SuivreSorties', Entity.SuivreSorties, Json);
   Entity.NbAlbums := ReadValueFromJSON('NbAlbums', Entity.NbAlbums, Json);
-  ReadListEntitiesFromJSON<TAlbumLite, TFactoryAlbumLite>(Entity.Albums, Json.Items['Albums'] as TdwsJSONArray);
-  ReadListEntitiesFromJSON<TParaBDLite, TFactoryParaBDLite>(Entity.ParaBD, Json.Items['ParaBD'] as TdwsJSONArray);
-  ReadListEntitiesFromJSON<TAuteurSerieLite, TFactoryAuteurSerieLite>(Entity.Scenaristes, Json.Items['Scenaristes'] as TdwsJSONArray);
-  ReadListEntitiesFromJSON<TAuteurSerieLite, TFactoryAuteurSerieLite>(Entity.Dessinateurs, Json.Items['Dessinateurs'] as TdwsJSONArray);
-  ReadListEntitiesFromJSON<TAuteurSerieLite, TFactoryAuteurSerieLite>(Entity.Coloristes, Json.Items['Coloristes'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAlbumLite>(Entity.Albums, Json.Items['Albums'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TParaBDLite>(Entity.ParaBD, Json.Items['ParaBD'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurSerieLite>(Entity.Scenaristes, Json.Items['Scenaristes'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurSerieLite>(Entity.Dessinateurs, Json.Items['Dessinateurs'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurSerieLite>(Entity.Coloristes, Json.Items['Coloristes'] as TdwsJSONArray);
   Entity.VO := ReadValueFromJSON('VO', Entity.VO, Json);
   Entity.Couleur := ReadValueFromJSON('Couleur', Entity.Couleur, Json);
   Entity.Etat := ReadValueFromJSON('Etat', Entity.Etat, Json);
@@ -197,7 +197,7 @@ begin
   Entity.Orientation := ReadValueFromJSON('Orientation', Entity.Orientation, Json);
   Entity.SensLecture := ReadValueFromJSON('SensLecture', Entity.SensLecture, Json);
   // property Notation: Integer read FNotation write FNotation;
-  ReadListEntitiesFromJSON<TUniversLite, TFactoryUniversLite>(Entity.Univers, Json.Items['Univers'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TUniversLite>(Entity.Univers, Json.Items['Univers'] as TdwsJSONArray);
 end;
 
 class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TUniversFull; Json: TdwsJSONObject);

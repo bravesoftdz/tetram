@@ -56,7 +56,7 @@ uses
   IOUtils, CommonConst, Commun, Textes, UdmCommun, UIBLib, Divers, IniFiles, Procedures, UHistorique, Math, UIBase, Updates, UfrmFond, CheckVersionNet,
   DateUtils, UMAJODS, JumpList, UfrmSplash, Proc_Gestions, Generics.Collections,
   UfrmVerbose, UfrmConsole, ProceduresBDtk, JclCompression, dwsJSON,
-  JsonSerializer, Entities.DaoLambda, System.TypInfo, Entities.Full,
+  ORM.Core.Json.Serializer, Entities.DaoLambda, System.TypInfo, Entities.Full,
   Entities.Types, ORM.Core.Dao;
 
 const
@@ -278,14 +278,16 @@ procedure TdmPrinc.DataModuleCreate(Sender: TObject);
 begin
   FUILock := TCriticalSection.Create;
   FDBConnection := TDBConnection.Create;
-  TDaoDBEntity.DBConnection := FDBConnection;
+  // TODO
+  // TDaoDBEntity.DBConnection := FDBConnection;
   MakeJumpList;
 end;
 
 procedure TdmPrinc.DataModuleDestroy(Sender: TObject);
 begin
   DBConnection.GetDatabase.Connected := False;
-  TDaoDBEntity.DBConnection := nil;
+  // TODO
+  // TDaoDBEntity.DBConnection := nil;
   FDBConnection := nil;
   FUILock.Free;
 end;

@@ -53,7 +53,7 @@ type
 implementation
 
 uses Impression, IniFiles, CommonConst, Entities.Lite, DateUtils, UHistorique,
-  Proc_Gestions, Commun;
+  Proc_Gestions, Commun, ORM.Core.Types;
 
 {$R *.dfm}
 

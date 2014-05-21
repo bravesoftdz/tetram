@@ -195,7 +195,7 @@ implementation
 uses
   Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
   UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, ORM.Core.Entities, Entities.Types,
-  Entities.FactoriesLite, Entities.FactoriesFull, Entities.DaoLambda;
+  Entities.DaoLambda, ORM.Core.Factories, ORM.Core.Dao;
 
 {$R *.DFM}
 
@@ -335,8 +335,8 @@ procedure TfrmEditAlbum.AjouteAuteur(List: TList<TAuteurAlbumLite>; lvList: TVDT
 var
   PA: TAuteurAlbumLite;
 begin
-  PA := TFactoryAuteurAlbumLite.getInstance;
-  TDaoAuteurAlbumLite.Fill(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
+  PA := TFactories.getFactory<TAuteurAlbumLite>.getInstance;
+  (TDaoFactory.getDaoDB<TAuteurAlbumLite> as TDaoAuteurAlbumLite).Fill(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
   List.Add(PA);
   lvList.Items.Count := List.Count;
   lvList.Invalidate;
@@ -357,7 +357,7 @@ begin
       frm.vtEditPersonnes.VTEdit.PopupWindow.TreeView.InitializeRep;
       frm.vtEditEditeurs.VTEdit.PopupWindow.TreeView.InitializeRep;
       frm.vtEditCollections.VTEdit.PopupWindow.TreeView.InitializeRep;
-      TDaoAlbumFull.FusionneInto(frm.FAlbumImport, frm.Album);
+      TDaoFactory.getDaoDB<TAlbumFull>.FusionneInto(frm.FAlbumImport, frm.Album);
       oldIsAchat := frm.isAchat;
       try
         frm.isAchat := False;
@@ -374,7 +374,7 @@ end;
 procedure TfrmEditAlbum.btnScriptClick(Sender: TObject);
 begin
   FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
-  FAlbumImport := TDaoAlbumFull.getInstance;
+  FAlbumImport := TDaoFactory.getDaoDB<TAlbumFull>.getInstance;
   if FAlbum.TitreAlbum <> '' then
     FAlbumImport.DefaultSearch := FormatTitre(FAlbum.TitreAlbum)
   else
@@ -387,7 +387,7 @@ begin
   if IsEqualGUID(vtEditUnivers.CurrentValue, GUID_NULL) then
     Exit;
 
-  FAlbum.Univers.Add(TFactoryUniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
+  FAlbum.Univers.Add(TFactories.getFactory<TUniversLite>.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
   lvUnivers.Items.Count := FAlbum.Univers.Count;
   lvUnivers.Invalidate;
 
@@ -523,9 +523,9 @@ begin
   hg := THourGlass.Create;
   SaveToObject;
 
-  TDaoAlbumFull.SaveToDatabase(FAlbum);
+  TDaoFactory.getDaoDB<TAlbumFull>.SaveToDatabase(FAlbum);
   if isAchat then
-    TDaoAlbumFull.Acheter(FAlbum, False);
+    (TDaoFactory.getDaoDB<TAlbumFull> as TDaoAlbumFull).Acheter(FAlbum, False);
 
   ModalResult := mrOk;
 end;
@@ -613,7 +613,7 @@ begin
       try
         for i := 0 to Files.Count - 1 do
         begin
-          PC := TFactoryCouvertureLite.getInstance;
+          PC := TFactories.getFactory<TCouvertureLite>.getInstance;
           FCurrentEditionComplete.Couvertures.Add(PC);
           PC.ID := GUID_NULL;
           PC.OldNom := Files[i];
@@ -706,7 +706,7 @@ var
   i: TGUID;
 begin
   // on recharge la série
-  TDaoSerieFull.Fill(FAlbum.Serie, FAlbum.ID_Serie);
+  TDaoFactory.getDaoDB<TSerieFull>.Fill(FAlbum.Serie, FAlbum.ID_Serie);
   i := vtEditCollections.CurrentValue;
   vtEditEditeurs.VTEdit.PopupWindow.TreeView.InitializeRep;
   vtEditCollections.VTEdit.PopupWindow.TreeView.InitializeRep;
@@ -798,7 +798,7 @@ var
   EditionComplete: TEditionFull;
 begin
   SetLength(FEditeurCollectionSelected, Succ(Length(FEditeurCollectionSelected)));
-  EditionComplete := TFactoryEditionFull.getInstance;
+  EditionComplete := TFactories.getFactory<TEditionFull>.getInstance;
   EditionComplete.ID_Album := ID_Album;
   EditionComplete.Stock := True;
   EditionComplete.Dedicace := False;
@@ -1148,7 +1148,7 @@ procedure TfrmEditAlbum.JvComboEdit1Change(Sender: TObject);
 var
   Auteur: TAuteurSerieLite;
 begin
-  TDaoSerieFull.Fill(FAlbum.Serie, vtEditSerie.CurrentValue);
+  TDaoFactory.getDaoDB<TSerieFull>.Fill(FAlbum.Serie, vtEditSerie.CurrentValue);
   if not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL) then
   begin
     if not(FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then

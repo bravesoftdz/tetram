@@ -3,7 +3,8 @@ unit MAJ;
 interface
 
 uses
-  Windows, SysUtils, Forms, Controls, ComCtrls, Entities.Lite, Entities.Full, Classes, Commun;
+  Windows, SysUtils, Forms, Controls, ComCtrls, Entities.Lite, Entities.Full, Classes, Commun,
+  ORM.Core.Types;
 
 function MAJConsultationAlbum(const Reference: TGUID): Boolean;
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;
@@ -23,7 +24,7 @@ implementation
 uses
   CommonConst, UfrmFond, DB, StdCtrls, UfrmSeriesIncompletes, UfrmPrevisionsSorties, Graphics, UfrmConsultationAlbum, UfrmRecherche, UfrmZoomCouverture,
   UfrmConsultationAuteur, UfrmPrevisionAchats, UHistorique, UfrmConsultationParaBD, UfrmConsultationSerie, UfrmGallerie, UfrmConsultationUnivers,
-  JclCompression, System.IOUtils, Entities.Serializer, ProceduresBDtk, JsonSerializer, dwsJSON, Entities.DaoLambda, UfrmChoixScript, JclSysUtils,
+  JclCompression, System.IOUtils, Entities.Serializer, ProceduresBDtk, ORM.Core.Json.Serializer, dwsJSON, Entities.DaoLambda, UfrmChoixScript, JclSysUtils,
   Entities.Deserializer, LoadCompletImport, Divers;
 
 function MAJConsultationAuteur(const Reference: TGUID): Boolean;

@@ -5,7 +5,7 @@ interface
 uses
   System.SysUtils, System.Classes, System.Generics.Collections, dwsJSON,
   Entities.Full, Entities.Lite, Vcl.Dialogs, System.Rtti, UMetadata, Commun,
-  ORM.Core.Json.Serializer, Entities.Types;
+  ORM.Core.Json.Serializer, Entities.Types, ORM.Core.Types;
 
 type
   TEntitesSerializer = class(TJsonSerializer)

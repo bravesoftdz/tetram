@@ -392,8 +392,6 @@
         <DCCReference Include="..\Commun\Entities\ORM.Core.Dao.pas"/>
         <DCCReference Include="..\Commun\Entities\ORM.Core.Entities.pas"/>
         <DCCReference Include="..\Commun\Entities\ORM.Core.Factories.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.FactoriesLite.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.FactoriesFull.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.DaoLambda.pas"/>
         <DCCReference Include="Entities\Entities.DaoLambdaDB.pas"/>
         <DCCReference Include="Scripts\UfrmChoixScript.pas">
@@ -415,8 +413,9 @@
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_29.pas"/>
         <DCCReference Include="..\Commun\Entities\ORM.Core.Attributes.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Types.pas"/>
-        <DCCReference Include="Entities\ORM.Core.DBConnection.pas"/>
         <DCCReference Include="..\Commun\Entities\ORM.Core.pas"/>
+        <DCCReference Include="..\Commun\Entities\ORM.Core.DBConnection.pas"/>
+        <DCCReference Include="..\Commun\Entities\ORM.Core.Types.pas"/>
         <RcItem Include="..\Commun\images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>

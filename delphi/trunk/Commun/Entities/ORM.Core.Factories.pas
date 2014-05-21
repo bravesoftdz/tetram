@@ -6,69 +6,88 @@ uses
   System.Rtti, System.Generics.Collections, ORM.Core.Entities;
 
 type
-  TFactoryClass = class of TFactoryEntity;
+  TAbstractFactory<T: TabstractEntity> = class abstract
+  private
+    class function BuildInstance: T;
+  public
+    class constructor Create;
 
-  TFactoryEntity = class abstract
+    class function Supports(AClass: TEntityClass): Boolean;
+
+    class function EntityClass: TEntityClass;
+
+    function getInstance: T;
+    function Duplicate(Source: T): T;
+  end;
+
+  TAbstractFactory = TAbstractFactory<TabstractEntity>;
+
+  TFactories = class abstract
   private
     class var RttiContext: TRttiContext;
     class var FEntitiesBuilders: TDictionary<TEntityClass, TRttiMethod>;
+    class var FFactories: TList<TAbstractFactory>;
     class function getBuilder(c: TEntityClass): TRttiMethod;
-
-    class function BuildInstance: TEntity;
   public
     class constructor Create;
     class destructor Destroy;
 
-    class function EntityClass: TEntityClass; virtual; abstract;
-    class function getInstance: TEntity;
-    class function Duplicate(Source: TEntity): TEntity;
-  end;
-
-  TFactoryGenericEntity<T: TEntity> = class abstract(TFactoryEntity)
-    class function getInstance: T; reintroduce;
-    class function Duplicate(Source: T): T; reintroduce;
-  end;
-
-  TFactoryDBEntityClass = class of TFactoryDBEntity;
-
-  TFactoryDBEntity = class abstract(TFactoryEntity)
-  public
-  end;
-
-  TFactoryGenericDBEntity<T: TDBEntity> = class abstract(TFactoryDBEntity)
-    class function getInstance: T; reintroduce;
-    class function Duplicate(Source: T): T; reintroduce;
+    class function getFactory<T: TabstractEntity>: TAbstractFactory<T>;
   end;
 
 implementation
 
 { TDaoEntity }
 
-class function TFactoryEntity.BuildInstance: TEntity;
+class function TAbstractFactory<T>.BuildInstance: T;
 var
   c: TEntityClass;
 begin
   c := EntityClass;
-  Result := getBuilder(c).Invoke(c, []).AsObject as TEntity;
+  Result := TFactories.getBuilder(c).Invoke(c, []).AsObject as T;
 end;
 
-class constructor TFactoryEntity.Create;
+class constructor TAbstractFactory<T>.Create;
 begin
-  FEntitiesBuilders := TDictionary<TEntityClass, TRttiMethod>.Create;
+  TFactories.FFactories.Add(TAbstractFactory(TAbstractFactory<T>.Create));
 end;
 
-class destructor TFactoryEntity.Destroy;
-begin
-  FEntitiesBuilders.Free;
-end;
-
-class function TFactoryEntity.Duplicate(Source: TEntity): TEntity;
+function TAbstractFactory<T>.Duplicate(Source: T): T;
 begin
   Result := getInstance;
   Result.Assign(Source);
 end;
 
-class function TFactoryEntity.getBuilder(c: TEntityClass): TRttiMethod;
+class function TAbstractFactory<T>.EntityClass: TEntityClass;
+begin
+  Result := T;
+end;
+
+function TAbstractFactory<T>.getInstance: T;
+begin
+  Result := BuildInstance;
+end;
+
+class function TAbstractFactory<T>.Supports(AClass: TEntityClass): Boolean;
+begin
+  Result := T.InheritsFrom(AClass);  // do not use "is" operator, it compiles but does not work because it considers T as an instance
+end;
+
+{ TFactoriesInitializer }
+
+class constructor TFactories.Create;
+begin
+  FFactories := TObjectList<TAbstractFactory>.Create(True);
+  FEntitiesBuilders := TDictionary<TEntityClass, TRttiMethod>.Create;
+end;
+
+class destructor TFactories.Destroy;
+begin
+  FFactories.Free;
+  FEntitiesBuilders.Free;
+end;
+
+class function TFactories.getBuilder(c: TEntityClass): TRttiMethod;
 begin
   if not FEntitiesBuilders.TryGetValue(c, Result) then
   begin
@@ -77,33 +96,14 @@ begin
   end;
 end;
 
-class function TFactoryEntity.getInstance: TEntity;
+class function TFactories.getFactory<T>: TAbstractFactory<T>;
+var
+  CandidateFactory: TAbstractFactory;
 begin
-  Result := BuildInstance;
-end;
-
-{ TFactoryGenericEntity<T> }
-
-class function TFactoryGenericEntity<T>.Duplicate(Source: T): T;
-begin
-  Result := inherited Duplicate(Source) as T;
-end;
-
-class function TFactoryGenericEntity<T>.getInstance: T;
-begin
-  Result := inherited getInstance as T;
-end;
-
-{ TFactoryGenericDBEntity<T> }
-
-class function TFactoryGenericDBEntity<T>.Duplicate(Source: T): T;
-begin
-  Result := inherited Duplicate(Source) as T;
-end;
-
-class function TFactoryGenericDBEntity<T>.getInstance: T;
-begin
-  Result := inherited getInstance as T;
+  for CandidateFactory in FFactories do
+    if CandidateFactory.Supports(T) then
+      Exit(TAbstractFactory<T>(CandidateFactory));
+  Result := nil;
 end;
 
 end.

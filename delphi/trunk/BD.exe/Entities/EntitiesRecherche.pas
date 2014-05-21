@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, Generics.Collections, UChampsRecherche, Entities.Full, Entities.Lite,
-  ORM.Core.Entities;
+  ORM.Core.Entities, ORM.Core.Dao;
 
 type
   TGroupOption = (goEt, goOu);
@@ -75,7 +75,7 @@ const
   TLblRechercheSimple: array [TRechercheSimple] of string = ('Auteur', 'Univers', 'Serie', 'Editeur', 'Genre', 'Collection');
 
 type
-  TRecherche = class(TEntity)
+  TRecherche = class(TabstractEntity)
   public
     TypeRecherche: TTypeRecherche;
     Resultats: TObjectList<TAlbumLite>;
@@ -85,7 +85,9 @@ type
     RechercheSimple: TRechercheSimple;
     FLibelle: string;
 
-    procedure Clear; override;
+  protected
+    procedure DoClear; override;
+  public
     procedure ClearCriteres;
     procedure Fill; reintroduce; overload;
     procedure Fill(Recherche: TRechercheSimple; const ID: TGUID; const Libelle: string); reintroduce; overload;
@@ -108,11 +110,11 @@ implementation
 
 uses
   uiblib, Commun, UdmPrinc, Divers, CommonConst, UMetadata, Textes,
-  Entities.DaoLite, ORM.Core.DBConnection;
+  Entities.DaoLite, ORM.Core.DBConnection, ORM.Core.Types;
 
 { TRecherche }
 
-procedure TRecherche.Clear;
+procedure TRecherche.DoClear;
 begin
   inherited;
   Resultats.Clear;
@@ -231,7 +233,7 @@ var
   sWhere, sOrderBy, S: string;
   CritereTri: TCritereTri;
 begin
-  DoClear;
+  Clear;
   q := dmPrinc.DBConnection.GetQuery;
   slFrom := TStringList.Create;
   slFrom.Sorted := True;
@@ -265,7 +267,7 @@ begin
       Open;
       while not Eof do
       begin
-        Album := TDaoAlbumLite.Make(q);
+        Album := (TDaoFactory.getDao<TAlbumLite> as TDaoAlbumLite).getInstance(q);
         Resultats.Add(Album);
         S := '';
         for CritereTri in SortBy do
@@ -332,7 +334,7 @@ var
   oldID_Album: TGUID;
   oldIndex: Integer;
 begin
-  DoClear;
+  Clear;
   if not IsEqualGUID(ID, GUID_NULL) then
   begin
     q := dmPrinc.DBConnection.GetQuery;
@@ -365,7 +367,7 @@ begin
           end
           else
           begin
-            Album := TDaoAlbumLite.Make(q);
+            Album := TDaoFactory.getDaoDB<TAlbumLite>.getInstance(q);
             Resultats.Add(Album);
             if Recherche = rsAuteur then
               case TMetierAuteur(Fields.ByNameAsInteger['metier']) of

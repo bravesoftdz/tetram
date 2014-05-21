@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Generics.Collections, Entities.Lite, Dialogs, StdCtrls, Entities.Full,
   ExtCtrls, CheckLst, Menus, jpeg, UframBoutons, ComboCheck, EditLabeled, ComCtrls,
-  UBdtForms, Entities.Types;
+  UBdtForms, Entities.Types, ORM.Core.Types;
 
 type
   TfrmValidationImport = class(TbdtForm)
@@ -140,7 +140,7 @@ implementation
 
 uses
   IOUtils, Commun, Procedures, CommonConst, Entities.DaoFull, ProceduresBDtk,
-  ORM.Core.Entities, Entities.DaoLambda;
+  ORM.Core.Entities, Entities.DaoLambda, ORM.Core.Dao;
 
 {$R *.dfm}
 
@@ -191,8 +191,8 @@ procedure TfrmValidationImport.FormCreate(Sender: TObject);
 begin
   PageControl1.ActivePageIndex := 0;
 
-  DefaultValues := TDaoAlbumFull.getInstance(GUID_NULL);
-  DefaultEdition := TDaoEditionFull.getInstance(GUID_NULL);
+  DefaultValues := TDaoFactory.getDaoDB<TAlbumFull>.getInstance(GUID_NULL);
+  DefaultEdition := TDaoFactory.getDaoDB<TEditionFull>.getInstance(GUID_NULL);
   DefaultValues.Editions.Add(DefaultEdition);
 
   LoadCombo(cbxEtat, TDaoListe.ListEtats, TDaoListe.DefaultEtat);

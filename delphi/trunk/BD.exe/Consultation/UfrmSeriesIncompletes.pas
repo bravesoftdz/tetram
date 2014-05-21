@@ -39,7 +39,7 @@ type
 implementation
 
 uses Entities.Lite, Commun, Impression, IniFiles, CommonConst, Procedures,
-  Entities.DaoFull;
+  Entities.DaoFull, ORM.Core.Types;
 
 {$R *.dfm}
 

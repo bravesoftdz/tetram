@@ -41,7 +41,7 @@ implementation
 
 uses
   Commun, Procedures, Textes, VirtualTreeBdtk, Entities.DaoFull,
-  ORM.Core.Entities, Entities.Types;
+  ORM.Core.Entities, Entities.Types, ORM.Core.Types, ORM.Core.Dao;
 
 {$R *.DFM}
 
@@ -57,7 +57,7 @@ var
 begin
   hg := THourGlass.Create;
   FEditeur := Value;
-  TDaoEditeurFull.FillAssociations(FEditeur, vmEditeurs);
+  (TDaoFactory.getDaoDB<TEditeurFull> as TDaoEditeurFull).FillAssociations(FEditeur, vmEditeurs);
 
   edNom.Text := FEditeur.NomEditeur;
   edSite.Text := FEditeur.SiteWeb;
@@ -77,8 +77,8 @@ begin
   FEditeur.SiteWeb := Trim(edSite.Text);
   FEditeur.Associations.Assign(edAssociations.Lines);
 
-  TDaoEditeurFull.SaveToDatabase(FEditeur);
-  TDaoEditeurFull.SaveAssociations(FEditeur, vmEditeurs, GUID_NULL);
+  TDaoFactory.getDaoDB<TEditeurFull>.SaveToDatabase(FEditeur);
+  (TDaoFactory.getDaoDB<TEditeurFull> as TDaoEditeurFull).SaveAssociations(FEditeur, vmEditeurs, GUID_NULL);
 
   ModalResult := mrOk;
 end;

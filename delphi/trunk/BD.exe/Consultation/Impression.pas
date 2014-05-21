@@ -29,8 +29,8 @@ implementation
 
 uses
   UfrmPreview, Math, Procedures, ProceduresBDtk, DateUtils, UIBlib, StrUtils, UMetadata,
-  Entities.DaoLite, Entities.DaoFull, ORM.Core.Entities, Entities.FactoriesLite,
-  ORM.Core.DBConnection, Entities.Types;
+  Entities.DaoLite, Entities.DaoFull, ORM.Core.Entities, ORM.Core.DBConnection, Entities.Types,
+  ORM.Core.Types, ORM.Core.Factories, ORM.Core.Dao;
 
 procedure PreparePrintObject(Prn: TPrintObject; Previsualisation: Boolean; const Titre: string);
 begin
@@ -450,7 +450,7 @@ begin
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 9);
-  Serie := TDaoSerieFull.getInstance(Reference);
+  Serie := TDaoFactory.getDaoDB<TSerieFull>.getInstance(Reference);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -634,7 +634,7 @@ begin
           for Album in Serie.Albums do
           begin
             Prn.NewPage;
-            AlbumComplet := TDaoAlbumFull.getInstance(Album.ID);
+            AlbumComplet := TDaoFactory.getDaoDB<TAlbumFull>.getInstance(Album.ID);
             try
               ImprimeAlbum(Prn, AlbumComplet, DetailsOptions, fWaiting);
             finally
@@ -645,7 +645,7 @@ begin
           for ParaBD in Serie.ParaBD do
           begin
             Prn.NewPage;
-            ParaBDComplet := TDaoParaBDFull.getInstance(ParaBD.ID);
+            ParaBDComplet := TDaoFactory.getDaoDB<TParaBDFull>.getInstance(ParaBD.ID);
             try
               ImprimeParaBD(Prn, ParaBDComplet, fWaiting);
             finally
@@ -686,10 +686,10 @@ begin
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 9);
   // MinTop := -1;
-  Album := TDaoAlbumFull.getInstance(Reference);
+  Album := TDaoFactory.getDaoDB<TAlbumFull>.getInstance(Reference);
   Edition := nil;
   if not IsEqualGUID(ID_Edition, GUID_NULL) then
-    Edition := TDaoEditionFull.getInstance(ID_Edition);
+    Edition := TDaoFactory.getDaoDB<TEditionFull>.getInstance(ID_Edition);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -742,7 +742,7 @@ begin
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 9);
-  ParaBD := TDaoParaBDFull.getInstance(Reference);
+  ParaBD := TDaoFactory.getDaoDB<TParaBDFull>.getInstance(Reference);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -773,7 +773,7 @@ begin
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 3);
-  Auteur := TDaoAuteurFull.getInstance(Reference);
+  Auteur := TDaoFactory.getDaoDB<TAuteurFull>.getInstance(Reference);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -876,7 +876,7 @@ begin
       Prn.CreateColumn1(4, 15, -1, taLeftJustify, Prn.Font.name, 12, [fsBold]); // série
       Prn.CreateColumn1(5, 25, -1, taLeftJustify, Prn.Font.name, 10, [fsItalic]); // résumé de la série
 
-      PAl := TFactoryAlbumLite.getInstance;
+      PAl := TFactories.getFactory<TAlbumLite>.getInstance;
       with qrySource do
       begin
         index := 1;
@@ -910,7 +910,7 @@ begin
                 s := '';
                 while (daoScenario in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maScenariste) do
                 begin
-                  PA := TDaoAuteurAlbumLite.Make(qryEquipe);
+                  PA := TDaoFactory.getDaoDB<TAuteurAlbumLite>.getInstance(qryEquipe);
                   AjoutString(s, PA.ChaineAffichage, ', ');
                   PA.Free;
                   Next;
@@ -919,7 +919,7 @@ begin
                 s := '';
                 while (daoDessins in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maDessinateur) do
                 begin
-                  PA := TDaoAuteurAlbumLite.Make(qryEquipe);
+                  PA := TDaoFactory.getDaoDB<TAuteurAlbumLite>.getInstance(qryEquipe);
                   AjoutString(s, PA.ChaineAffichage, ', ');
                   PA.Free;
                   Next;
@@ -928,7 +928,7 @@ begin
                 s := '';
                 while (daoCouleurs in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maColoriste) do
                 begin
-                  PA := TDaoAuteurAlbumLite.Make(qryEquipe);
+                  PA := TDaoFactory.getDaoDB<TAuteurAlbumLite>.getInstance(qryEquipe);
                   AjoutString(s, PA.ChaineAffichage, ', ');
                   PA.Free;
                   Next;
@@ -944,7 +944,7 @@ begin
             sl := False;
           end;
 
-          TDaoAlbumLite.Fill(PAl, qrySource);
+          TDaoFactory.getDaoDB<TAlbumLite>.Fill(PAl, qrySource);
 
           if not IsEqualGUID(OldSerie, PAl.ID_Serie) then
           begin
@@ -1396,7 +1396,7 @@ begin
               s := '';
               while (daoScenario in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maScenariste) do
               begin
-                PA := TDaoAuteurAlbumLite.Make(qryEquipe);
+                PA := TDaoFactory.getDaoDB<TAuteurAlbumLite>.getInstance(qryEquipe);
                 AjoutString(s, PA.ChaineAffichage, ', ');
                 PA.Free;
                 Next;
@@ -1405,7 +1405,7 @@ begin
               s := '';
               while (daoDessins in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maDessinateur) do
               begin
-                PA := TDaoAuteurAlbumLite.Make(qryEquipe);
+                PA := TDaoFactory.getDaoDB<TAuteurAlbumLite>.getInstance(qryEquipe);
                 AjoutString(s, PA.ChaineAffichage, ', ');
                 PA.Free;
                 Next;
@@ -1414,7 +1414,7 @@ begin
               s := '';
               while (daoCouleurs in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maColoriste) do
               begin
-                PA := TDaoAuteurAlbumLite.Make(qryEquipe);
+                PA := TDaoFactory.getDaoDB<TAuteurAlbumLite>.getInstance(qryEquipe);
                 AjoutString(s, PA.ChaineAffichage, ', ');
                 PA.Free;
                 Next;
@@ -1496,7 +1496,7 @@ begin
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 2);
-  Album := TDaoAlbumFull.getInstance(Reference);
+  Album := TDaoFactory.getDaoDB<TAlbumFull>.getInstance(Reference);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -1558,7 +1558,7 @@ begin
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig, 0, 2);
-  ParaBD := TDaoParaBDFull.getInstance(Reference);
+  ParaBD := TDaoFactory.getDaoDB<TParaBDFull>.getInstance(Reference);
   try
     Prn := TPrintObject.Create(frmFond);
     try
@@ -1774,7 +1774,7 @@ begin
           if not IsEqualGUID(OldAlbum, StringToGUID(Fields.ByNameAsString['ID_ALBUM'])) then
           begin
             PAl := TAchat.Create;
-            TDaoAlbumLite.Fill(PAl, qrySource);
+            TDaoFactory.getDaoDB<TAlbumLite>.Fill(PAl, qrySource);
             PAl.PrixCalcule := True;
             PAl.Prix := Fields.ByNameAsCurrency['PRIXUNITAIRE'];
             if PAl.Prix = 0 then

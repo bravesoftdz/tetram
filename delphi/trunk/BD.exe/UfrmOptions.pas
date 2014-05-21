@@ -103,8 +103,8 @@ type
 implementation
 
 uses CommonConst, UdmPrinc, Entities.Lite, Commun, Procedures, Updates, IOUtils,
-  Entities.DaoLite, ProceduresBDtk, ORM.Core.Entities, Entities.FactoriesLite, ICUNumberFormatter, _uloc,
-  ORM.Core.DBConnection;
+  Entities.DaoLite, ProceduresBDtk, ORM.Core.Entities, ICUNumberFormatter, _uloc,
+  ORM.Core.DBConnection, ORM.Core.Factories, ORM.Core.Dao;
 
 {$R *.DFM}
 
@@ -243,7 +243,7 @@ begin
       begin
         with ListView1.Items.Add do
         begin
-          Data := TDaoConversionLite.Make(q);
+          Data := TDaoFactory.getDaoDB<TConversionLite>.getInstance(q);
           Caption := TConversionLite(Data).ChaineAffichage;
           SubItems.Add('0');
         end;
@@ -314,7 +314,7 @@ begin
   end
   else
   begin
-    PC := TFactoryConversionLite.getInstance;
+    PC := TFactories.getFactory<TConversionLite>.getInstance;
     i := ListView1.Items.Add;
     i.SubItems.Add('1');
     i.Data := PC;

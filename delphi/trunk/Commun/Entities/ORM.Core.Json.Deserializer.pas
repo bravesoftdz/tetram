@@ -3,9 +3,9 @@ unit ORM.Core.Json.Deserializer;
 interface
 
 uses
-  System.SysUtils, System.Rtti, System.Generics.Collections, System.TypInfo, dwsJSON, Commun,
-  Entities.Lite, Entities.Full, System.Classes, UMetadata, ORM.Core.Entities,
-  ORM.Core.Factories, Entities.Types;
+  System.SysUtils, System.Rtti, System.Generics.Collections, System.TypInfo, dwsJSON,
+  System.Classes, ORM.Core.Entities,
+  ORM.Core.Factories;
 
 type
 {$TYPEINFO ON}
@@ -18,7 +18,7 @@ type
   protected
     class procedure ReadStringListFromJSON(list: TStrings; json: TdwsJSONArray);
     class procedure ReadStringListWithValuesFromJSON(list: TStrings; json: TdwsJSONArray);
-    class procedure ReadListEntitiesFromJSON<T: TDBEntity; F: TFactoryEntity>(list: TList<T>; json: TdwsJSONArray);
+    class procedure ReadListEntitiesFromJSON<T: TabstractDBEntity>(list: TList<T>; json: TdwsJSONArray);
   public
     class function ReadValueFromJSON(const Name: string; const Default: string; json: TdwsJSONObject): string; overload; inline;
     class function ReadValueFromJSON(const Name: string; const Default: Integer; json: TdwsJSONObject): Integer; overload; inline;
@@ -32,8 +32,8 @@ type
     class procedure LoadFromJson<T: class>(Obj: T; const json: string);
     class function BuildFromJson<T: class, constructor>(const json: string): T; overload;
     class function BuildFromJson<T: class, constructor>(json: TdwsJSONObject): T; overload;
-    class function BuildEntityFromJson<T: TEntity; F: TFactoryEntity>(const json: string): T; overload;
-    class function BuildEntityFromJson<T: TEntity; F: TFactoryEntity>(json: TdwsJSONObject): T; overload;
+    class function BuildEntityFromJson<T: TabstractEntity>(const json: string): T; overload;
+    class function BuildEntityFromJson<T: TabstractEntity>(json: TdwsJSONObject): T; overload;
 
     class procedure ReadFromJSON(Obj: TObject; json: TdwsJSONObject);
   end;
@@ -42,21 +42,21 @@ implementation
 
 { TJsonDeserializer }
 
-class function TJsonDeserializer.BuildEntityFromJson<T, F>(const json: string): T;
+class function TJsonDeserializer.BuildEntityFromJson<T>(const json: string): T;
 var
   o: TdwsJSONObject;
 begin
   o := TdwsJSONObject.ParseString(json) as TdwsJSONObject;
   try
-    Result := BuildEntityFromJson<T, F>(o);
+    Result := BuildEntityFromJson<T>(o);
   finally
     o.Free;
   end;
 end;
 
-class function TJsonDeserializer.BuildEntityFromJson<T, F>(json: TdwsJSONObject): T;
+class function TJsonDeserializer.BuildEntityFromJson<T>(json: TdwsJSONObject): T;
 begin
-  Result := F.getInstance as T;
+  Result := TFactories.getFactory<T>.getInstance as T;
   ReadFromJSON(Result, json);
 end;
 
@@ -146,7 +146,7 @@ begin
   end;
 end;
 
-class procedure TJsonDeserializer.ReadListEntitiesFromJSON<T, F>(list: TList<T>; json: TdwsJSONArray);
+class procedure TJsonDeserializer.ReadListEntitiesFromJSON<T>(list: TList<T>; json: TdwsJSONArray);
 var
   i: Integer;
 begin
@@ -155,7 +155,7 @@ begin
 
   list.Clear;
   for i := 0 to Pred(json.ElementCount) do
-    list.Add(BuildEntityFromJson<T, F>(json.Elements[i] as TdwsJSONObject));
+    list.Add(BuildEntityFromJson<T>(json.Elements[i] as TdwsJSONObject));
 end;
 
 class procedure TJsonDeserializer.ReadStringListFromJSON(list: TStrings; json: TdwsJSONArray);

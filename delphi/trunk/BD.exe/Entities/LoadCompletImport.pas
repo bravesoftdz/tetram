@@ -11,8 +11,9 @@ procedure Import(Self: TAlbumFull);
 implementation
 
 uses
-  uib, Entities.Lite, UfrmValidationImport, VirtualTreeBdtk, UfrmControlImport, Commun, Entities.DaoLite, UdmPrinc, Entities.DaoFull, Entities.FactoriesLite,
-  UMetadata, System.UITypes, Divers, ORM.Core.Entities;
+  uib, Entities.Lite, UfrmValidationImport, VirtualTreeBdtk, UfrmControlImport, Commun, Entities.DaoLite, UdmPrinc, Entities.DaoFull,
+  UMetadata, System.UITypes, Divers, ORM.Core.Entities, ORM.Core.Types,
+  ORM.Core.Factories, ORM.Core.Dao;
 
 procedure Import(Self: TAlbumFull);
 var
@@ -136,11 +137,11 @@ var
           for k := Pred(OtherList[j].Count) downto 0 do
             if SameText(OtherList[j][k].Personne.Nom, Nom) then
               if Accept then
-                TDaoPersonnageLite.Fill(OtherList[j][k].Personne, dummyID)
+                TDaoFactory.getDaoDB<TPersonnageLite>.Fill(OtherList[j][k].Personne, dummyID)
               else
                 OtherList[j].Delete(k);
         if Accept then
-          TDaoPersonnageLite.Fill(List[i].Personne, dummyID)
+          TDaoFactory.getDaoDB<TPersonnageLite>.Fill(List[i].Personne, dummyID)
         else
           List.Delete(i);
 
@@ -171,18 +172,18 @@ var
           for k := 0 to Pred(OtherList2[j].Count) do
             if SameText(OtherList2[j][k].Personne.Nom, Nom) then
               if Accept then
-                TDaoPersonnageLite.Fill(OtherList2[j][k].Personne, dummyID)
+                TDaoFactory.getDaoDB<TPersonnageLite>.Fill(OtherList2[j][k].Personne, dummyID)
               else
                 OtherList2[j].Delete(k);
         for j := Low(OtherList) to High(OtherList) do
           for k := Pred(OtherList[j].Count) downto 0 do
             if SameText(OtherList[j][k].Personne.Nom, Nom) then
               if Accept then
-                TDaoPersonnageLite.Fill(OtherList[j][k].Personne, dummyID)
+                TDaoFactory.getDaoDB<TPersonnageLite>.Fill(OtherList[j][k].Personne, dummyID)
               else
                 OtherList[j].Delete(k);
         if Accept then
-          TDaoPersonnageLite.Fill(List[i].Personne, dummyID)
+          TDaoFactory.getDaoDB<TPersonnageLite>.Fill(List[i].Personne, dummyID)
         else
           List.Delete(i);
 
@@ -234,7 +235,7 @@ begin
             if IsEqualGuid(dummyID, GUID_FULL) then
               Serie.Univers.Delete(i)
             else
-              TDaoUniversLite.Fill(Serie.Univers[i], dummyID);
+              TDaoFactory.getDaoDB<TUniversLite>.Fill(Serie.Univers[i], dummyID);
             frmValidationImport.Album := Self;
           end;
 
@@ -272,10 +273,10 @@ begin
             for Edition in Editions do
               if SameText(Serie.Editeur.NomEditeur, Edition.Editeur.NomEditeur) then
               begin
-                TDaoEditeurFull.Fill(Edition.Editeur, dummyID);
-                TDaoEditeurLite.Fill(Edition.Collection.Editeur, dummyID);
+                TDaoFactory.getDaoDB<TEditeurFull>.Fill(Edition.Editeur, dummyID);
+                TDaoFactory.getDaoDB<TEditeurLite>.Fill(Edition.Collection.Editeur, dummyID);
               end;
-            TDaoEditeurFull.Fill(Serie.Editeur, dummyID);
+            TDaoFactory.getDaoDB<TEditeurFull>.Fill(Serie.Editeur, dummyID);
           end;
           frmValidationImport.Album := Self;
         end;
@@ -298,8 +299,8 @@ begin
             for Edition in Editions do
               if IsEqualGuid(Serie.Editeur.ID_Editeur, Edition.Editeur.ID_Editeur) and SameText(Serie.Collection.NomCollection, Edition.Collection.NomCollection)
               then
-                TDaoCollectionLite.Fill(Edition.Collection, dummyID);
-            TDaoCollectionLite.Fill(Serie.Collection, dummyID);
+                TDaoFactory.getDaoDB<TCollectionLite>.Fill(Edition.Collection, dummyID);
+            TDaoFactory.getDaoDB<TCollectionLite>.Fill(Serie.Collection, dummyID);
           end;
           frmValidationImport.Album := Self;
         end;
@@ -309,28 +310,28 @@ begin
           Exit;
         if not IsEqualGuid(dummyID, GUID_FULL) then
         begin
-          TDaoSerieFull.Fill(Serie, dummyID);
+          TDaoFactory.getDaoDB<TSerieFull>.Fill(Serie, dummyID);
 
           if Scenaristes.Count + Dessinateurs.Count + Coloristes.Count = 0 then
           begin
             for Auteur in Serie.Scenaristes do
             begin
-              PA := TFactoryAuteurAlbumLite.getInstance;
-              TDaoAuteurAlbumLite.Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
+              PA := TFactories.getFactory<TAuteurAlbumLite>.getInstance;
+              (TDaoFactory.getDaoDB<TAuteurAlbumLite> as TDaoAuteurAlbumLite).Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
               Scenaristes.Add(PA);
             end;
 
             for Auteur in Serie.Dessinateurs do
             begin
-              PA := TFactoryAuteurAlbumLite.getInstance;
-              TDaoAuteurAlbumLite.Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(1));
+              PA := TFactories.getFactory<TAuteurAlbumLite>.getInstance;
+              (TDaoFactory.getDaoDB<TAuteurAlbumLite> as TDaoAuteurAlbumLite).Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(1));
               Dessinateurs.Add(PA);
             end;
 
             for Auteur in Serie.Coloristes do
             begin
-              PA := TFactoryAuteurAlbumLite.getInstance;
-              TDaoAuteurAlbumLite.Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(2));
+              PA := TFactories.getFactory<TAuteurAlbumLite>.getInstance;
+              (TDaoFactory.getDaoDB<TAuteurAlbumLite> as TDaoAuteurAlbumLite).Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(2));
               Coloristes.Add(PA);
             end;
           end;
@@ -338,7 +339,7 @@ begin
         frmValidationImport.Album := Self;
 
         frmValidationImport.PageControl1.ActivePageIndex := 1;
-        DefaultEdition := TDaoEditionFull.getInstance(GUID_NULL);
+        DefaultEdition := TDaoFactory.getDaoDB<TEditionFull>.getInstance(GUID_NULL);
         try
           for Edition in Editions do
           begin
@@ -385,11 +386,11 @@ begin
                   if (Edition <> Edition2) and IsEqualGuid(Edition2.Editeur.ID_Editeur, GUID_NULL) and
                     SameText(Edition.Editeur.NomEditeur, Edition2.Editeur.NomEditeur) then
                   begin
-                    TDaoEditeurFull.Fill(Edition2.Editeur, dummyID);
-                    TDaoEditeurLite.Fill(Edition2.Collection.Editeur, dummyID);
+                    TDaoFactory.getDaoDB<TEditeurFull>.Fill(Edition2.Editeur, dummyID);
+                    TDaoFactory.getDaoDB<TEditeurLite>.Fill(Edition2.Collection.Editeur, dummyID);
                   end;
-                TDaoEditeurFull.Fill(Edition.Editeur, dummyID);
-                TDaoEditeurLite.Fill(Edition.Collection.Editeur, dummyID);
+                TDaoFactory.getDaoDB<TEditeurFull>.Fill(Edition.Editeur, dummyID);
+                TDaoFactory.getDaoDB<TEditeurLite>.Fill(Edition.Collection.Editeur, dummyID);
               end;
               frmValidationImport.Album := Self;
             end;
@@ -416,8 +417,8 @@ begin
                     if (Edition <> Edition2) and IsEqualGuid(Edition2.Collection.ID, GUID_NULL) and
                       IsEqualGuid(Edition.Editeur.ID_Editeur, Edition2.Editeur.ID_Editeur) and
                       SameText(Edition.Collection.NomCollection, Edition2.Collection.NomCollection) then
-                      TDaoCollectionLite.Fill(Edition2.Collection, dummyID);
-                  TDaoCollectionLite.Fill(Edition.Collection, dummyID);
+                      TDaoFactory.getDaoDB<TCollectionLite>.Fill(Edition2.Collection, dummyID);
+                  TDaoFactory.getDaoDB<TCollectionLite>.Fill(Edition.Collection, dummyID);
                 end;
               end;
               frmValidationImport.Album := Self;

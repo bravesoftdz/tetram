@@ -123,7 +123,7 @@ implementation
 uses
   Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, Entities.Lite, Divers, UHistorique,
   UMetadata, Entities.DaoLite, Entities.DaoFull, ORM.Core.Entities,
-  Entities.FactoriesLite, Entities.DaoLambda, Entities.Types;
+  Entities.DaoLambda, Entities.Types, ORM.Core.Factories, ORM.Core.Dao;
 
 {$R *.dfm}
 { TFrmEditAchatParaBD }
@@ -349,9 +349,9 @@ begin
   FParaBD.Prix := BDStrToDoubleDef(edPrix.Text, 0);
   FParaBD.Stock := cbStock.Checked;
 
-  TDaoParaBDFull.SaveToDatabase(FParaBD);
+  TDaoFactory.getDaoDB<TParaBDFull>.SaveToDatabase(FParaBD);
   if isAchat then
-    TDaoParaBDFull.Acheter(FParaBD, False);
+    (TDaoFactory.getDaoDB<TParaBDFull> as TDaoParaBDFull).Acheter(FParaBD, False);
 
   ModalResult := mrOk;
 end;
@@ -361,7 +361,7 @@ begin
   if IsEqualGUID(vtEditUnivers.CurrentValue, GUID_NULL) then
     Exit;
 
-  FParaBD.Univers.Add(TFactoryUniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
+  FParaBD.Univers.Add(TFactories.getFactory<TUniversLite>.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
   lvUnivers.Items.Count := FParaBD.Univers.Count;
   lvUnivers.Invalidate;
 
@@ -385,7 +385,7 @@ begin
       try
         for i := 0 to Files.Count - 1 do
         begin
-          PP := TFactoryPhotoLite.getInstance;
+          PP := TFactories.getFactory<TPhotoLite>.getInstance;
           FParaBD.Photos.Add(PP);
           PP.ID := GUID_NULL;
           PP.OldNom := Files[i];
@@ -581,7 +581,7 @@ end;
 
 procedure TfrmEditParaBD.vtEditSeriesVTEditChange(Sender: TObject);
 begin
-  TDaoSerieFull.Fill(FParaBD.Serie, vtEditSeries.CurrentValue);
+  TDaoFactory.getDaoDB<TSerieFull>.Fill(FParaBD.Serie, vtEditSeries.CurrentValue);
 end;
 
 procedure TfrmEditParaBD.vtEditUniversVTEditChange(Sender: TObject);
@@ -639,8 +639,8 @@ var
 begin
   if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
     Exit;
-  PA := TFactoryAuteurParaBDLite.getInstance;
-  TDaoAuteurParaBDLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_ParaBD);
+  PA := TFactories.getFactory<TAuteurParaBDLite>.getInstance;
+  (TDaoFactory.getDaoDB<TAuteurParaBDLite> as TDaoAuteurParaBDLite).Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_ParaBD);
   FParaBD.Auteurs.Add(PA);
   lvAuteurs.Items.Count := FParaBD.Auteurs.Count;
   lvAuteurs.Invalidate;

@@ -6,7 +6,7 @@ uses
   System.SysUtils, System.Classes, System.Generics.Collections, Entities.Lite, ORM.Core.Entities;
 
 type
-  TStats = class(TEntity)
+  TStats = class(TabstractEntity)
   strict private
     FNbAlbumsGratuit: Integer;
     FNbAlbumsNB: Integer;
@@ -39,7 +39,8 @@ type
     constructor Create(Complete: Boolean); reintroduce; overload;
     destructor Destroy; override;
     procedure Fill(Complete: Boolean);
-    procedure Clear; override;
+  protected
+    procedure DoClear; override;
   published
     property Editeur: string read FEditeur;
     property NbAlbums: Integer read FNbAlbums;
@@ -67,7 +68,7 @@ type
     property ListEditeurs: TObjectList<TStats> read FListEditeurs;
   end;
 
-  TSerieIncomplete = class(TEntity)
+  TSerieIncomplete = class(TabstractEntity)
   strict private
     FSerie: TSerieLite;
     FNumerosManquants: TStringList;
@@ -80,7 +81,7 @@ type
     property NumerosManquants: TStringList read FNumerosManquants;
   end;
 
-  TSeriesIncompletes = class(TEntity)
+  TSeriesIncompletes = class(TabstractEntity)
   strict private
     FSeries: TObjectList<TSerieIncomplete>;
   public
@@ -89,12 +90,13 @@ type
     destructor Destroy; override;
     procedure Fill(const Reference: TGUID); overload;
     procedure Fill(AvecIntegrales, AvecAchats: Boolean; const ID_Serie: TGUID); overload;
-    procedure Clear; override;
+  protected
+    procedure DoClear; override;
   published
     property Series: TObjectList<TSerieIncomplete> read FSeries;
   end;
 
-  TPrevisionSortie = class(TEntity)
+  TPrevisionSortie = class(TabstractEntity)
   strict private
     FMois: Integer;
     FAnnee: Integer;
@@ -112,7 +114,7 @@ type
     property sAnnee: string read GetsAnnee;
   end;
 
-  TPrevisionsSorties = class(TEntity)
+  TPrevisionsSorties = class(TabstractEntity)
   strict private
     FAnneesPassees: TObjectList<TPrevisionSortie>;
     FAnneesProchaines: TObjectList<TPrevisionSortie>;
@@ -124,7 +126,8 @@ type
     procedure Fill(const Reference: TGUID); overload;
     procedure Fill(AvecAchats: Boolean); overload;
     procedure Fill(AvecAchats: Boolean; const ID_Serie: TGUID); overload;
-    procedure Clear; override;
+  protected
+    procedure DoClear; override;
   published
     property AnneesPassees: TObjectList<TPrevisionSortie> read FAnneesPassees;
     property AnneeEnCours: TObjectList<TPrevisionSortie> read FAnneeEnCours;
@@ -135,11 +138,11 @@ implementation
 
 uses
   Commun, uib, UdmPrinc, System.DateUtils, Divers, Entities.DaoLite,
-  Entities.FactoriesLite, ORM.Core.DBConnection;
+  ORM.Core.DBConnection, ORM.Core.Types, ORM.Core.Factories, ORM.Core.Dao;
 
 { TStats }
 
-procedure TStats.Clear;
+procedure TStats.DoClear;
 begin
   inherited;
   ListAlbumsMax.Clear;
@@ -265,7 +268,7 @@ begin
       SQL.Add('order by');
       SQL.Add('  1 desc');
       Open;
-      TDaoGenreLite.FillList(Stats.ListGenre, q);
+      TDaoFactory.getDaoDB<TGenreLite>.FillList(Stats.ListGenre, q);
 
       Close;
       SQL.Clear;
@@ -322,7 +325,7 @@ var
   q: TManagedQuery;
   hg: IHourGlass;
 begin
-  DoClear;
+  Clear;
   hg := THourGlass.Create;
   CreateStats(Self);
   if Complete then
@@ -356,7 +359,7 @@ end;
 
 { TSeriesIncompletes }
 
-procedure TSeriesIncompletes.Clear;
+procedure TSeriesIncompletes.DoClear;
 begin
   inherited;
   Series.Clear;
@@ -403,7 +406,7 @@ var
 var
   Incomplete: TSerieIncomplete;
 begin
-  DoClear;
+  Clear;
   q := dmPrinc.DBConnection.GetQuery;
   with q do
     try
@@ -425,7 +428,7 @@ begin
             UpdateSerie;
           Incomplete := TSerieIncomplete.Create;
           Self.Series.Add(Incomplete);
-          TDaoSerieLite.Fill(Incomplete.Serie, q);
+          TDaoFactory.getDaoDB<TSerieLite>.Fill(Incomplete.Serie, q);
           CurrentSerie := dummy;
           FirstTome := Fields.ByNameAsInteger['tome'];
           CurrentTome := FirstTome;
@@ -456,7 +459,7 @@ end;
 
 { TPrevisionsSorties }
 
-procedure TPrevisionsSorties.Clear;
+procedure TPrevisionsSorties.DoClear;
 begin
   inherited;
   AnneesPassees.Clear;
@@ -496,7 +499,7 @@ var
   Annee, CurrentAnnee: Integer;
   Prevision: TPrevisionSortie;
 begin
-  DoClear;
+  Clear;
   CurrentAnnee := YearOf(Now);
   q := dmPrinc.DBConnection.GetQuery;
   with q do
@@ -523,7 +526,7 @@ begin
       begin
         Annee := Fields.ByNameAsInteger['anneeparution'];
         Prevision := TPrevisionSortie.Create;
-        TDaoSerieLite.Fill(Prevision.Serie, q);
+        TDaoFactory.getDaoDB<TSerieLite>.Fill(Prevision.Serie, q);
         Prevision.Tome := Fields.ByNameAsInteger['tome'];
         Prevision.Annee := Annee;
         Prevision.Mois := Fields.ByNameAsInteger['moisparution'];
@@ -555,7 +558,7 @@ end;
 constructor TPrevisionSortie.Create;
 begin
   inherited;
-  FSerie := TFactorySerieLite.getInstance;
+  FSerie := TFactories.getFactory<TSerieLite>.getInstance;
 end;
 
 destructor TPrevisionSortie.Destroy;
@@ -592,7 +595,7 @@ constructor TSerieIncomplete.Create;
 begin
   inherited;
   FNumerosManquants := TStringList.Create;
-  FSerie := TFactorySerieLite.getInstance;
+  FSerie := TFactories.getFactory<TSerieLite>.getInstance;
 end;
 
 destructor TSerieIncomplete.Destroy;

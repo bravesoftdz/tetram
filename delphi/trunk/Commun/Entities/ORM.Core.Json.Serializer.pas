@@ -3,7 +3,7 @@ unit ORM.Core.Json.Serializer;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Rtti, System.Generics.Collections, Commun,
+  System.SysUtils, System.Classes, System.Rtti, System.Generics.Collections,
   dwsJSON, System.TypInfo, ORM.Core.Entities;
 
 type
@@ -21,7 +21,7 @@ type
   protected
     class procedure WriteStringListToJSON(list: TStrings; json: TdwsJSONArray);
     class procedure WriteStringListWithValuesToJSON(list: TStrings; json: TdwsJSONArray);
-    class procedure WriteListEntityToJSON<T: TDBEntity>(list: TList<T>; json: TdwsJSONArray; Options: SerializationOptions);
+    class procedure WriteListEntityToJSON<T: TabstractDBEntity>(list: TList<T>; json: TdwsJSONArray; Options: SerializationOptions);
   public
     class procedure WriteValueToJSON(const Name, Value: string; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
     class procedure WriteValueToJSON(const Name: string; Value: Integer; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;

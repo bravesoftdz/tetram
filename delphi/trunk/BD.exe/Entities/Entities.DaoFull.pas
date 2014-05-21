@@ -5,7 +5,8 @@ interface
 uses
   System.SysUtils, System.Classes, VirtualTreeBdtk, Entities.Full, ORM.Core.DBConnection,
   Vcl.StdCtrls, Winapi.Windows, System.Rtti, System.Generics.Collections,
-  ORM.Core.Entities, ORM.Core.Dao, ORM.Core.Factories, Entities.Types;
+  ORM.Core.Entities, ORM.Core.Dao, ORM.Core.Factories, Entities.Types,
+  ORM.Core.Types;
 
 type
   // ce serait trop facile si XE4 acceptait cette syntaxe....
@@ -13,121 +14,104 @@ type
   // je suis donc obligé de faire des classes "classique"
   // TDaoFullClass = class of TDaoFull;
 
-  TDaoFull<T: TObjetFull> = class abstract(TDaoGenericDBEntity<T>)
+  TDaoFull<T: TObjetFull> = class abstract(TabstractDaoDB<T>)
   public
-    class procedure SaveToDatabase(Entity: T); overload;
-    class procedure SaveToDatabase(Entity: T; UseTransaction: TManagedTransaction); overload; virtual;
+    procedure SaveToDatabase(Entity: T); reintroduce; overload;
+    procedure SaveToDatabase(Entity: T; UseTransaction: TManagedTransaction); reintroduce; overload; virtual;
 
-    class procedure FillAssociations(Entity: T; TypeData: TVirtualMode);
-    class procedure SaveAssociations(Entity: T; TypeData: TVirtualMode; const ParentID: TGUID);
+    procedure FillAssociations(Entity: T; TypeData: TVirtualMode);
+    procedure SaveAssociations(Entity: T; TypeData: TVirtualMode; const ParentID: TGUID);
   end;
 
   TDaoFullEntity<T: TObjetFull> = class abstract(TDaoFull<T>)
-    class function getInstance: T; reintroduce; overload;
-    class function getInstance(const Reference: TGUID): T; reintroduce; overload;
+    function getInstance: T; reintroduce; overload;
+    function getInstance(const Reference: TGUID): T; reintroduce; overload;
 
-    class procedure Fill(Entity: TDBEntity; const Reference: TGUID); overload; override; final;
-    class procedure Fill(Entity: T; const Reference: TGUID); reintroduce; overload; virtual;
+    procedure Fill(Entity: TabstractDBEntity; const Reference: TGUID); overload; virtual; final;
+    procedure Fill(Entity: T; const Reference: TGUID); reintroduce; overload; virtual;
 
-    class procedure FillExtra(Entity: TDBEntity; UseTransaction: TManagedTransaction); overload; override; final;
-    class procedure FillExtra(Entity: T; UseTransaction: TManagedTransaction); reintroduce; overload; virtual;
+    procedure FillExtra(Entity: T; UseTransaction: TManagedTransaction); reintroduce; overload; virtual;
   end;
 
   TDaoAlbumFull = class(TDaoFullEntity<TAlbumFull>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
-    class procedure Fill(Entity: TAlbumFull; const Reference: TGUID); override;
-    class procedure FillExtra(Entity: TAlbumFull; UseTransaction: TManagedTransaction); override;
-    class procedure SaveToDatabase(Entity: TAlbumFull; UseTransaction: TManagedTransaction); override;
-    class procedure Acheter(Entity: TAlbumFull; Prevision: Boolean);
-    class procedure ChangeNotation(Entity: TAlbumFull; Note: Integer);
-    class procedure FusionneInto(Source, Dest: TAlbumFull);
+    procedure Fill(Entity: TAlbumFull; const Reference: TGUID); override;
+    procedure FillExtra(Entity: TAlbumFull; UseTransaction: TManagedTransaction); override;
+    procedure SaveToDatabase(Entity: TAlbumFull; UseTransaction: TManagedTransaction); override;
+    procedure Acheter(Entity: TAlbumFull; Prevision: Boolean);
+    procedure ChangeNotation(Entity: TAlbumFull; Note: Integer);
+    procedure FusionneInto(Source, Dest: TAlbumFull);
   end;
 
   TDaoParaBDFull = class(TDaoFullEntity<TParaBDFull>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
-    class procedure Fill(Entity: TParaBDFull; const Reference: TGUID); override;
-    class procedure FillExtra(Entity: TParaBDFull; UseTransaction: TManagedTransaction); override;
-    class procedure SaveToDatabase(Entity: TParaBDFull; UseTransaction: TManagedTransaction); override;
-    class procedure Acheter(Entity: TParaBDFull; Prevision: Boolean);
+    procedure Fill(Entity: TParaBDFull; const Reference: TGUID); override;
+    procedure FillExtra(Entity: TParaBDFull; UseTransaction: TManagedTransaction); override;
+    procedure SaveToDatabase(Entity: TParaBDFull; UseTransaction: TManagedTransaction); override;
+    procedure Acheter(Entity: TParaBDFull; Prevision: Boolean);
   end;
 
   TDaoSerieFull = class(TDaoFullEntity<TSerieFull>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
     class constructor Create;
     class destructor Destroy;
 
-    class function getInstance(const Reference, IdAuteurFiltre: TGUID): TSerieFull; reintroduce; overload;
-    class function getInstance(const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean): TSerieFull; reintroduce; overload;
+    function getInstance(const Reference, IdAuteurFiltre: TGUID): TSerieFull; reintroduce; overload;
+    function getInstance(const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean): TSerieFull; reintroduce; overload;
 
-    class procedure Fill(Entity: TSerieFull; const Reference: TGUID); overload; override;
-    class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID); reintroduce; overload;
-    class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean); reintroduce; overload;
-    class procedure FillExtra(Entity: TSerieFull; UseTransaction: TManagedTransaction); override;
-    class procedure SaveToDatabase(Entity: TSerieFull; UseTransaction: TManagedTransaction); override;
-    class procedure ChangeNotation(Entity: TSerieFull; Note: Integer);
+    procedure Fill(Entity: TSerieFull; const Reference: TGUID); overload; override;
+    procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID); reintroduce; overload;
+    procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean); reintroduce; overload;
+    procedure FillExtra(Entity: TSerieFull; UseTransaction: TManagedTransaction); override;
+    procedure SaveToDatabase(Entity: TSerieFull; UseTransaction: TManagedTransaction); override;
+    procedure ChangeNotation(Entity: TSerieFull; Note: Integer);
 
-    class procedure InitSerie(Entity: TEntity);
+    class procedure InitSerie(Entity: TabstractEntity);
   end;
 
   TDaoEditionFull = class(TDaoFullEntity<TEditionFull>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
     class constructor Create;
     class destructor Destroy;
 
-    class procedure Fill(Entity: TEditionFull; const Reference: TGUID); override;
-    class procedure FillExtra(Entity: TEditionFull; UseTransaction: TManagedTransaction); override;
-    class procedure SaveToDatabase(Entity: TEditionFull; UseTransaction: TManagedTransaction); override;
-    class procedure FusionneInto(Source, Dest: TEditionFull); overload;
-    class procedure FusionneInto(Source, Dest: TObjectList<TEditionFull>); overload;
+    procedure Fill(Entity: TEditionFull; const Reference: TGUID); override;
+    procedure FillExtra(Entity: TEditionFull; UseTransaction: TManagedTransaction); override;
+    procedure SaveToDatabase(Entity: TEditionFull; UseTransaction: TManagedTransaction); override;
+    procedure FusionneInto(Source, Dest: TEditionFull); overload;
+    procedure FusionneInto(Source, Dest: TObjectList<TEditionFull>); overload;
 
-    class function getList(const Reference: TGUID; Stock: Integer = -1): TObjectList<TEditionFull>;
-    class procedure FillList(EntitiesList: TObjectList<TEditionFull>; const Reference: TGUID; Stock: Integer = -1);
+    function getList(const Reference: TGUID; Stock: Integer = -1): TObjectList<TEditionFull>;
+    procedure FillList(EntitiesList: TObjectList<TEditionFull>; const Reference: TGUID; Stock: Integer = -1);
 
-    class procedure InitEdition(Entity: TEntity);
+    class procedure InitEdition(Entity: TabstractEntity);
   end;
 
   TDaoEditeurFull = class(TDaoFullEntity<TEditeurFull>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
-    class procedure Fill(Entity: TEditeurFull; const Reference: TGUID); override;
-    class procedure FillExtra(Entity: TEditeurFull; UseTransaction: TManagedTransaction); override;
-    class procedure SaveToDatabase(Entity: TEditeurFull; UseTransaction: TManagedTransaction); override;
+    procedure Fill(Entity: TEditeurFull; const Reference: TGUID); override;
+    procedure FillExtra(Entity: TEditeurFull; UseTransaction: TManagedTransaction); override;
+    procedure SaveToDatabase(Entity: TEditeurFull; UseTransaction: TManagedTransaction); override;
   end;
 
   TDaoCollectionFull = class(TDaoFullEntity<TCollectionFull>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
-    class procedure Fill(Entity: TCollectionFull; const Reference: TGUID); override;
-    class procedure FillExtra(Entity: TCollectionFull; UseTransaction: TManagedTransaction); override;
-    class procedure SaveToDatabase(Entity: TCollectionFull; UseTransaction: TManagedTransaction); override;
+    procedure Fill(Entity: TCollectionFull; const Reference: TGUID); override;
+    procedure FillExtra(Entity: TCollectionFull; UseTransaction: TManagedTransaction); override;
+    procedure SaveToDatabase(Entity: TCollectionFull; UseTransaction: TManagedTransaction); override;
   end;
 
   TDaoAuteurFull = class(TDaoFullEntity<TAuteurFull>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
-    class procedure Fill(Entity: TAuteurFull; const Reference: TGUID); override;
-    class procedure FillExtra(Entity: TAuteurFull; UseTransaction: TManagedTransaction); override;
-    class procedure SaveToDatabase(Entity: TAuteurFull; UseTransaction: TManagedTransaction); override;
+    procedure Fill(Entity: TAuteurFull; const Reference: TGUID); override;
+    procedure FillExtra(Entity: TAuteurFull; UseTransaction: TManagedTransaction); override;
+    procedure SaveToDatabase(Entity: TAuteurFull; UseTransaction: TManagedTransaction); override;
   end;
 
   TDaoUniversFull = class(TDaoFullEntity<TUniversFull>)
-  protected
-    class function FactoryClass: TFactoryClass; override;
   public
-    class procedure Fill(Entity: TUniversFull; const Reference: TGUID); override;
-    class procedure FillExtra(Entity: TUniversFull; UseTransaction: TManagedTransaction); override;
-    class procedure SaveToDatabase(Entity: TUniversFull; UseTransaction: TManagedTransaction); override;
+    procedure Fill(Entity: TUniversFull; const Reference: TGUID); override;
+    procedure FillExtra(Entity: TUniversFull; UseTransaction: TManagedTransaction); override;
+    procedure SaveToDatabase(Entity: TUniversFull; UseTransaction: TManagedTransaction); override;
   end;
 
 implementation
@@ -135,12 +119,12 @@ implementation
 uses
   Commun, UfrmConsole, Entities.DaoLite, Entities.Lite, Procedures,
   CommonConst, System.IOUtils, Vcl.Dialogs, UMetadata, UfrmFusionEditions,
-  Vcl.Controls, ProceduresBDtk, Entities.FactoriesFull, Entities.FactoriesLite,
+  Vcl.Controls, ProceduresBDtk,
   Entities.DaoLambda;
 
 { TDaoFull }
 
-class procedure TDaoFull<T>.FillAssociations(Entity: T; TypeData: TVirtualMode);
+procedure TDaoFull<T>.FillAssociations(Entity: T; TypeData: TVirtualMode);
 var
   qry: TManagedQuery;
 begin
@@ -160,7 +144,7 @@ begin
   end;
 end;
 
-class procedure TDaoFull<T>.SaveAssociations(Entity: T; TypeData: TVirtualMode; const ParentID: TGUID);
+procedure TDaoFull<T>.SaveAssociations(Entity: T; TypeData: TVirtualMode; const ParentID: TGUID);
 var
   association: string;
   qry: TManagedQuery;
@@ -188,63 +172,49 @@ begin
   end;
 end;
 
-class procedure TDaoFull<T>.SaveToDatabase(Entity: T; UseTransaction: TManagedTransaction);
+procedure TDaoFull<T>.SaveToDatabase(Entity: T; UseTransaction: TManagedTransaction);
 begin
-  // Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut être GUID_NULL');
+  // juste pour pouvoir utiliser override plutôt que reintroduce dans les classes enfants
+  inherited;
 end;
 
-class procedure TDaoFull<T>.SaveToDatabase(Entity: T);
-var
-  Transaction: TManagedTransaction;
+procedure TDaoFull<T>.SaveToDatabase(Entity: T);
 begin
-  // Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut être GUID_NULL');
-
-  Transaction := DBConnection.GetTransaction;
-  try
-    SaveToDatabase(Entity, Transaction);
-    Transaction.Commit;
-    Entity.RecInconnu := False;
-  finally
-    Transaction.Free;
-  end;
+  inherited;
+  Entity.RecInconnu := False;
 end;
 
 { TDaoFullEntity<T> }
 
-class procedure TDaoFullEntity<T>.Fill(Entity: TDBEntity; const Reference: TGUID);
+procedure TDaoFullEntity<T>.Fill(Entity: TabstractDBEntity; const Reference: TGUID);
 begin
   Fill(T(Entity), Reference);
 end;
 
-class procedure TDaoFullEntity<T>.Fill(Entity: T; const Reference: TGUID);
+procedure TDaoFullEntity<T>.Fill(Entity: T; const Reference: TGUID);
 begin
-  Entity.DoClear;
+  Entity.Clear;
 end;
 
-class procedure TDaoFullEntity<T>.FillExtra(Entity: TDBEntity; UseTransaction: TManagedTransaction);
-begin
-  FillExtra(T(Entity), UseTransaction);
-end;
-
-class procedure TDaoFullEntity<T>.FillExtra(Entity: T; UseTransaction: TManagedTransaction);
+procedure TDaoFullEntity<T>.FillExtra(Entity: T; UseTransaction: TManagedTransaction);
 begin
   Entity.RecInconnu := IsEqualGUID(Entity.ID, GUID_NULL);
   inherited FillExtra(Entity, UseTransaction);
 end;
 
-class function TDaoFullEntity<T>.getInstance: T;
+function TDaoFullEntity<T>.getInstance: T;
 begin
   Result := getInstance(GUID_NULL);
 end;
 
-class function TDaoFullEntity<T>.getInstance(const Reference: TGUID): T;
+function TDaoFullEntity<T>.getInstance(const Reference: TGUID): T;
 begin
   Result := T(inherited getInstance(Reference));
 end;
 
 { TDaoSerieFull }
 
-class procedure TDaoSerieFull.ChangeNotation(Entity: TSerieFull; Note: Integer);
+procedure TDaoSerieFull.ChangeNotation(Entity: TSerieFull; Note: Integer);
 var
   qry: TManagedQuery;
 begin
@@ -264,7 +234,7 @@ end;
 
 { TDaoAlbumFull }
 
-class procedure TDaoAlbumFull.Acheter(Entity: TAlbumFull; Prevision: Boolean);
+procedure TDaoAlbumFull.Acheter(Entity: TAlbumFull; Prevision: Boolean);
 var
   qry: TManagedQuery;
 begin
@@ -282,7 +252,7 @@ begin
   end;
 end;
 
-class procedure TDaoAlbumFull.ChangeNotation(Entity: TAlbumFull; Note: Integer);
+procedure TDaoAlbumFull.ChangeNotation(Entity: TAlbumFull; Note: Integer);
 var
   qry: TManagedQuery;
 begin
@@ -300,17 +270,12 @@ begin
   end;
 end;
 
-class function TDaoAlbumFull.FactoryClass: TFactoryClass;
-begin
-  Result := TFactoryAlbumFull;
-end;
-
-class procedure TDaoAlbumFull.Fill(Entity: TAlbumFull; const Reference: TGUID);
+procedure TDaoAlbumFull.Fill(Entity: TAlbumFull; const Reference: TGUID);
 begin
   Assert(True, 'on ne doit plus passer là');
 end;
 
-class procedure TDaoAlbumFull.FillExtra(Entity: TAlbumFull; UseTransaction: TManagedTransaction);
+procedure TDaoAlbumFull.FillExtra(Entity: TAlbumFull; UseTransaction: TManagedTransaction);
 var
   qry: TManagedQuery;
 begin
@@ -332,7 +297,7 @@ begin
     qry.SQL.Add('  au.source_album = 1 and au.id_album = ?');
     qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
     qry.Open;
-    TDaoUniversLite.FillList(Entity.Univers, qry);
+    TDaoFactory.getDaoDB<TUniversLite>.FillList(Entity.Univers, qry);
     Entity.UniversFull.Clear;
     Entity.UniversFull.AddRange(Entity.Serie.Univers);
     Entity.UniversFull.AddRange(Entity.Univers);
@@ -343,34 +308,34 @@ begin
     qry.SQL.Text := 'select * from proc_auteurs(?, null, null)';
     qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
     qry.Open;
-    TDaoAuteurAlbumLite.Prepare(qry);
+    TDaoFactory.getDaoDB<TAuteurAlbumLite>.Prepare(qry);
     try
       while not qry.Eof do
       begin
         case TMetierAuteur(qry.Fields.ByNameAsInteger['metier']) of
           maScenariste:
-            Entity.Scenaristes.Add(TDaoAuteurAlbumLite.Make(qry));
+            Entity.Scenaristes.Add(TDaoFactory.getDaoDB<TAuteurAlbumLite>.getInstance(qry));
           maDessinateur:
-            Entity.Dessinateurs.Add(TDaoAuteurAlbumLite.Make(qry));
+            Entity.Dessinateurs.Add(TDaoFactory.getDaoDB<TAuteurAlbumLite>.getInstance(qry));
           maColoriste:
-            Entity.Coloristes.Add(TDaoAuteurAlbumLite.Make(qry));
+            Entity.Coloristes.Add(TDaoFactory.getDaoDB<TAuteurAlbumLite>.getInstance(qry));
         end;
         qry.Next;
       end;
     finally
-      TDaoAuteurAlbumLite.Unprepare(qry);
+      TDaoFactory.getDaoDB<TAuteurAlbumLite>.Unprepare(qry);
     end;
     TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.FillExtra < auteurs - ' + GUIDToString(Entity.ID_Album));
 
     TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.FillExtra > éditions - ' + GUIDToString(Entity.ID_Album));
-    TDaoEditionFull.FillList(Entity.Editions, Entity.ID_Album);
+    (TDaoFactory.getDaoDB<TEditionFull> as TDaoEditionFull).FillList(Entity.Editions, Entity.ID_Album);
     TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.FillExtra < éditions - ' + GUIDToString(Entity.ID_Album));
   finally
     qry.Free;
   end;
 end;
 
-class procedure TDaoAlbumFull.FusionneInto(Source, Dest: TAlbumFull);
+procedure TDaoAlbumFull.FusionneInto(Source, Dest: TAlbumFull);
 
   function NotInList(Auteur: TAuteurAlbumLite; List: TObjectList<TAuteurAlbumLite>): Boolean; inline; overload;
   var
@@ -403,7 +368,7 @@ var
   Auteur: TAuteurAlbumLite;
   Univers: TUniversLite;
 begin
-  DefaultAlbum := TFactoryAlbumFull.getInstance;
+  DefaultAlbum := TFactories.getFactory<TAlbumFull>.getInstance;
   try
     // Album
     if not SameText(Source.TitreAlbum, DefaultAlbum.TitreAlbum) then
@@ -425,13 +390,13 @@ begin
 
     for Auteur in Source.Scenaristes do
       if NotInList(Auteur, Dest.Scenaristes) then
-        Dest.Scenaristes.Add(TFactoryAuteurAlbumLite.Duplicate(Auteur));
+        Dest.Scenaristes.Add(TFactories.getFactory<TAuteurAlbumLite>.Duplicate(Auteur));
     for Auteur in Source.Dessinateurs do
       if NotInList(Auteur, Dest.Dessinateurs) then
-        Dest.Dessinateurs.Add(TFactoryAuteurAlbumLite.Duplicate(Auteur));
+        Dest.Dessinateurs.Add(TFactories.getFactory<TAuteurAlbumLite>.Duplicate(Auteur));
     for Auteur in Source.Coloristes do
       if NotInList(Auteur, Dest.Coloristes) then
-        Dest.Coloristes.Add(TFactoryAuteurAlbumLite.Duplicate(Auteur));
+        Dest.Coloristes.Add(TFactories.getFactory<TAuteurAlbumLite>.Duplicate(Auteur));
 
     if not SameText(Source.Sujet, DefaultAlbum.Sujet) then
       Dest.Sujet := Source.Sujet;
@@ -440,21 +405,21 @@ begin
 
     // Série
     if not IsEqualGUID(Source.ID_Serie, DefaultAlbum.ID_Serie) and not IsEqualGUID(Source.ID_Serie, Dest.ID_Serie) then
-      TDaoSerieFull.Fill(Dest.Serie, Source.ID_Serie);
+      TDaoFactory.getDaoDB<TSerieFull>.Fill(Dest.Serie, Source.ID_Serie);
 
     // Univers
     for Univers in Source.Univers do
       if NotInList(Univers, Dest.Univers) then
-        Dest.Univers.Add(TFactoryUniversLite.Duplicate(Univers));
+        Dest.Univers.Add(TFactories.getFactory<TUniversLite>.Duplicate(Univers));
 
     if Source.FusionneEditions then
-      TDaoEditionFull.FusionneInto(Source.Editions, Dest.Editions);
+      TDaoFactory.getDao<TEditionFull>.FusionneInto(Source.Editions, Dest.Editions);
   finally
     DefaultAlbum.Free;
   end;
 end;
 
-class procedure TDaoAlbumFull.SaveToDatabase(Entity: TAlbumFull; UseTransaction: TManagedTransaction);
+procedure TDaoAlbumFull.SaveToDatabase(Entity: TAlbumFull; UseTransaction: TManagedTransaction);
 var
   S: string;
   qry: TManagedQuery;
@@ -616,7 +581,7 @@ begin
     for Edition in Entity.Editions do
     begin
       Edition.ID_Album := Entity.ID_Album;
-      TDaoEditionFull.SaveToDatabase(Edition, qry.Transaction);
+      TDaoFactory.getDaoDB<TEditionFull>.SaveToDatabase(Edition, qry.Transaction);
     end;
 
     qry.Transaction.Commit;
@@ -627,7 +592,7 @@ end;
 
 { TDaoParaBDFull }
 
-class procedure TDaoParaBDFull.Acheter(Entity: TParaBDFull; Prevision: Boolean);
+procedure TDaoParaBDFull.Acheter(Entity: TParaBDFull; Prevision: Boolean);
 var
   qry: TManagedQuery;
 begin
@@ -645,17 +610,12 @@ begin
   end;
 end;
 
-class function TDaoParaBDFull.FactoryClass: TFactoryClass;
-begin
-  Result := TFactoryParaBDFull;
-end;
-
-class procedure TDaoParaBDFull.Fill(Entity: TParaBDFull; const Reference: TGUID);
+procedure TDaoParaBDFull.Fill(Entity: TParaBDFull; const Reference: TGUID);
 begin
   Assert(True, 'on ne doit plus passer là');
 end;
 
-class procedure TDaoParaBDFull.FillExtra(Entity: TParaBDFull; UseTransaction: TManagedTransaction);
+procedure TDaoParaBDFull.FillExtra(Entity: TParaBDFull; UseTransaction: TManagedTransaction);
 var
   qry: TManagedQuery;
 begin
@@ -689,7 +649,7 @@ begin
     qry.SQL.Add('  pu.source_parabd = 1 and pu.id_parabd = ?');
     qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
     qry.Open;
-    TDaoUniversLite.FillList(Entity.Univers, qry);
+    TDaoFactory.getDaoDB<TUniversLite>.FillList(Entity.Univers, qry);
     Entity.UniversFull.Clear;
     Entity.UniversFull.AddRange(Entity.Serie.Univers);
     Entity.UniversFull.AddRange(Entity.Univers);
@@ -698,9 +658,9 @@ begin
     qry.SQL.Text := 'select * from proc_auteurs(null, null, ?)';
     qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
     qry.Open;
-    TDaoAuteurParaBDLite.FillList(Entity.Auteurs, qry);
+    TDaoFactory.getDaoDB<TAuteurParaBDLite>.FillList(Entity.Auteurs, qry);
 
-    TDaoSerieFull.Fill(Entity.Serie, Entity.ID_Serie);
+    TDaoFactory.getDaoDB<TSerieFull>.Fill(Entity.Serie, Entity.ID_Serie);
 
     TfrmConsole.AddEvent(Self.UnitName, 'TDaoParaBDFull.FillExtra > photos - ' + GUIDToString(Entity.ID_ParaBD));
     qry.Close;
@@ -717,14 +677,14 @@ begin
     qry.SQL.Add('  p.ordre');
     qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
     qry.Open;
-    TDaoPhotoLite.FillList(Entity.Photos, qry);
+    TDaoFactory.getDaoDB<TPhotoLite>.FillList(Entity.Photos, qry);
     TfrmConsole.AddEvent(Self.UnitName, 'TDaoParaBDFull.FillExtra < photos - ' + GUIDToString(Entity.ID_ParaBD));
   finally
     qry.Free;
   end;
 end;
 
-class procedure TDaoParaBDFull.SaveToDatabase(Entity: TParaBDFull; UseTransaction: TManagedTransaction);
+procedure TDaoParaBDFull.SaveToDatabase(Entity: TParaBDFull; UseTransaction: TManagedTransaction);
 var
   S: string;
   qry: TManagedQuery;
@@ -842,7 +802,7 @@ begin
       Univers.ID := StringToGUID(qry.Fields.AsString[0]);
     end;
 
-    TDaoPhotoLite.SaveList(Entity.Photos, Entity.ID_ParaBD, [], qry.Transaction);
+    (TDaoFactory.getDaoDB<TPhotoLite> as TDaoPhotoLite).SaveList(Entity.Photos, Entity.ID_ParaBD, [], qry.Transaction);
     qry.Transaction.Commit;
   finally
     qry.Free;
@@ -851,12 +811,7 @@ end;
 
 { TDaoUniversFull }
 
-class function TDaoUniversFull.FactoryClass: TFactoryClass;
-begin
-  Result := TFactoryUniversFull;
-end;
-
-class procedure TDaoUniversFull.Fill(Entity: TUniversFull; const Reference: TGUID);
+procedure TDaoUniversFull.Fill(Entity: TUniversFull; const Reference: TGUID);
 var
   qry: TManagedQuery;
 begin
@@ -874,7 +829,7 @@ begin
     if not Entity.RecInconnu then
     begin
       Entity.NomUnivers := qry.Fields.ByNameAsString['nomunivers'];
-      TDaoUniversLite.Fill(Entity.UniversParent, StringToGUIDDef(qry.Fields.ByNameAsString['id_univers_parent'], GUID_NULL));
+      TDaoFactory.getDaoDB<TUniversLite>.Fill(Entity.UniversParent, StringToGUIDDef(qry.Fields.ByNameAsString['id_univers_parent'], GUID_NULL));
       Entity.Description := qry.Fields.ByNameAsString['description'];
       Entity.SiteWeb := qry.Fields.ByNameAsString['siteweb'];
     end;
@@ -883,13 +838,13 @@ begin
   end;
 end;
 
-class procedure TDaoUniversFull.FillExtra(Entity: TUniversFull; UseTransaction: TManagedTransaction);
+procedure TDaoUniversFull.FillExtra(Entity: TUniversFull; UseTransaction: TManagedTransaction);
 begin
   inherited;
 
 end;
 
-class procedure TDaoUniversFull.SaveToDatabase(Entity: TUniversFull; UseTransaction: TManagedTransaction);
+procedure TDaoUniversFull.SaveToDatabase(Entity: TUniversFull; UseTransaction: TManagedTransaction);
 var
   qry: TManagedQuery;
 begin
@@ -930,12 +885,7 @@ end;
 
 { TDaoCollectionFull }
 
-class function TDaoCollectionFull.FactoryClass: TFactoryClass;
-begin
-  Result := TFactoryCollectionFull;
-end;
-
-class procedure TDaoCollectionFull.Fill(Entity: TCollectionFull; const Reference: TGUID);
+procedure TDaoCollectionFull.Fill(Entity: TCollectionFull; const Reference: TGUID);
 var
   qry: TManagedQuery;
 begin
@@ -953,20 +903,20 @@ begin
     if not Entity.RecInconnu then
     begin
       Entity.NomCollection := qry.Fields.ByNameAsString['nomcollection'];
-      TDaoEditeurLite.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL));
+      TDaoFactory.getDaoDB<TEditeurLite>.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL));
     end;
   finally
     qry.Free;
   end;
 end;
 
-class procedure TDaoCollectionFull.FillExtra(Entity: TCollectionFull; UseTransaction: TManagedTransaction);
+procedure TDaoCollectionFull.FillExtra(Entity: TCollectionFull; UseTransaction: TManagedTransaction);
 begin
   inherited;
 
 end;
 
-class procedure TDaoCollectionFull.SaveToDatabase(Entity: TCollectionFull; UseTransaction: TManagedTransaction);
+procedure TDaoCollectionFull.SaveToDatabase(Entity: TCollectionFull; UseTransaction: TManagedTransaction);
 var
   qry: TManagedQuery;
 begin
@@ -999,12 +949,7 @@ end;
 
 { TDaoEditeurFull }
 
-class function TDaoEditeurFull.FactoryClass: TFactoryClass;
-begin
-  Result := TFactoryEditeurFull;
-end;
-
-class procedure TDaoEditeurFull.Fill(Entity: TEditeurFull; const Reference: TGUID);
+procedure TDaoEditeurFull.Fill(Entity: TEditeurFull; const Reference: TGUID);
 var
   qry: TManagedQuery;
 begin
@@ -1029,13 +974,13 @@ begin
   end;
 end;
 
-class procedure TDaoEditeurFull.FillExtra(Entity: TEditeurFull; UseTransaction: TManagedTransaction);
+procedure TDaoEditeurFull.FillExtra(Entity: TEditeurFull; UseTransaction: TManagedTransaction);
 begin
   inherited;
 
 end;
 
-class procedure TDaoEditeurFull.SaveToDatabase(Entity: TEditeurFull; UseTransaction: TManagedTransaction);
+procedure TDaoEditeurFull.SaveToDatabase(Entity: TEditeurFull; UseTransaction: TManagedTransaction);
 var
   qry: TManagedQuery;
 begin
@@ -1068,12 +1013,7 @@ end;
 
 { TDaoAuteurFull }
 
-class function TDaoAuteurFull.FactoryClass: TFactoryClass;
-begin
-  Result := TFactoryAuteurFull;
-end;
-
-class procedure TDaoAuteurFull.Fill(Entity: TAuteurFull; const Reference: TGUID);
+procedure TDaoAuteurFull.Fill(Entity: TAuteurFull; const Reference: TGUID);
 var
   qry: TManagedQuery;
 begin
@@ -1123,9 +1063,9 @@ begin
       while not qry.Eof do
       begin
         if qry.Fields.IsNull[1] then
-          Entity.Series.Insert(0, TDaoSerieFull.getInstance(GUID_NULL, Entity.ID_Auteur, True))
+          Entity.Series.Insert(0, (TDaoFactory.getDaoDB<TSerieFull> as TDaoSerieFull).getInstance(GUID_NULL, Entity.ID_Auteur, True))
         else
-          Entity.Series.Add(TDaoSerieFull.getInstance(StringToGUID(qry.Fields.AsString[1]), Entity.ID_Auteur, True));
+          Entity.Series.Add((TDaoFactory.getDaoDB<TSerieFull> as TDaoSerieFull).getInstance(StringToGUID(qry.Fields.AsString[1]), Entity.ID_Auteur, True));
         qry.Next;
       end;
     end;
@@ -1135,13 +1075,13 @@ begin
   end;
 end;
 
-class procedure TDaoAuteurFull.FillExtra(Entity: TAuteurFull; UseTransaction: TManagedTransaction);
+procedure TDaoAuteurFull.FillExtra(Entity: TAuteurFull; UseTransaction: TManagedTransaction);
 begin
   inherited;
 
 end;
 
-class procedure TDaoAuteurFull.SaveToDatabase(Entity: TAuteurFull; UseTransaction: TManagedTransaction);
+procedure TDaoAuteurFull.SaveToDatabase(Entity: TAuteurFull; UseTransaction: TManagedTransaction);
 var
   qry: TManagedQuery;
 begin
@@ -1188,12 +1128,7 @@ begin
   TEditionFull.UnregisterInitEvent(InitEdition);
 end;
 
-class function TDaoEditionFull.FactoryClass: TFactoryClass;
-begin
-  Result := TFactoryEditionFull;
-end;
-
-class procedure TDaoEditionFull.Fill(Entity: TEditionFull; const Reference: TGUID);
+procedure TDaoEditionFull.Fill(Entity: TEditionFull; const Reference: TGUID);
 var
   qry: TManagedQuery;
 begin
@@ -1237,12 +1172,12 @@ begin
     if not Entity.RecInconnu then
     begin
       Entity.ID_Album := StringToGUIDDef(qry.Fields.ByNameAsString['id_album'], GUID_NULL);
-      TDaoEditeurFull.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL));
-      TDaoCollectionLite.Prepare(qry);
+      TDaoFactory.getDaoDB<TEditeurFull>.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL));
+      TDaoFactory.getDaoDB<TCollectionLite>.Prepare(qry);
       try
-        TDaoCollectionLite.Fill(Entity.Collection, qry);
+        TDaoFactory.getDaoDB<TCollectionLite>.Fill(Entity.Collection, qry);
       finally
-        TDaoCollectionLite.Unprepare(qry);
+        TDaoFactory.getDaoDB<TCollectionLite>.Unprepare(qry);
       end;
       Entity.AnneeEdition := qry.Fields.ByNameAsInteger['anneeedition'];
       Entity.Prix := qry.Fields.ByNameAsCurrency['prix'];
@@ -1283,7 +1218,7 @@ begin
       qry.SQL.Add('  l.ordre nulls last, c.ordre');
       qry.Params.AsString[0] := GUIDToString(Entity.ID_Edition);
       qry.Open;
-      TDaoCouvertureLite.FillList(Entity.Couvertures, qry);
+      TDaoFactory.getDaoDB<TCouvertureLite>.FillList(Entity.Couvertures, qry);
       TfrmConsole.AddEvent(Self.UnitName, 'TDaoEditionFull.Fill < images - ' + GUIDToString(Reference));
     end;
   finally
@@ -1291,13 +1226,13 @@ begin
   end;
 end;
 
-class procedure TDaoEditionFull.FillExtra(Entity: TEditionFull; UseTransaction: TManagedTransaction);
+procedure TDaoEditionFull.FillExtra(Entity: TEditionFull; UseTransaction: TManagedTransaction);
 begin
   inherited;
 
 end;
 
-class procedure TDaoEditionFull.FillList(EntitiesList: TObjectList<TEditionFull>; const Reference: TGUID; Stock: Integer);
+procedure TDaoEditionFull.FillList(EntitiesList: TObjectList<TEditionFull>; const Reference: TGUID; Stock: Integer);
 var
   qry: TManagedQuery;
 begin
@@ -1323,7 +1258,7 @@ begin
   end;
 end;
 
-class procedure TDaoEditionFull.FusionneInto(Source, Dest: TObjectList<TEditionFull>);
+procedure TDaoEditionFull.FusionneInto(Source, Dest: TObjectList<TEditionFull>);
 type
   OptionFusion = record
     ImporterImages: Boolean;
@@ -1359,7 +1294,7 @@ begin
         mrOk:
           if frm.CheckBox1.Checked then
           begin
-            FusionsEditions[i] := TFactoryEditionFull.getInstance;
+            FusionsEditions[i] := TFactories.getFactory<TEditionFull>.getInstance;
             Dest.Add(FusionsEditions[i]);
           end
           else
@@ -1387,18 +1322,18 @@ begin
   end;
 end;
 
-class procedure TDaoEditionFull.FusionneInto(Source, Dest: TEditionFull);
+procedure TDaoEditionFull.FusionneInto(Source, Dest: TEditionFull);
 var
   DefaultEdition: TEditionFull;
   Couverture: TCouvertureLite;
 begin
-  DefaultEdition := TFactoryEditionFull.getInstance;
+  DefaultEdition := TFactories.getFactory<TEditionFull>.getInstance;
   try
     if not IsEqualGUID(Source.Editeur.ID_Editeur, DefaultEdition.Editeur.ID_Editeur) and not IsEqualGUID(Source.Editeur.ID_Editeur, Dest.Editeur.ID_Editeur)
     then
-      TDaoEditeurFull.Fill(Dest.Editeur, Source.Editeur.ID_Editeur);
+      TDaoFactory.getDaoDB<TEditeurFull>.Fill(Dest.Editeur, Source.Editeur.ID_Editeur);
     if not IsEqualGUID(Source.Collection.ID, DefaultEdition.Collection.ID) and not IsEqualGUID(Source.Collection.ID, Dest.Collection.ID) then
-      TDaoCollectionLite.Fill(Dest.Collection, Source.Collection.ID);
+      TDaoFactory.getDaoDB<TCollectionLite>.Fill(Dest.Collection, Source.Collection.ID);
 
     if Source.TypeEdition.Value <> DefaultEdition.TypeEdition.Value then
       Dest.TypeEdition := Source.TypeEdition;
@@ -1447,19 +1382,19 @@ begin
       Dest.NumeroPerso := Source.NumeroPerso;
 
     for Couverture in Source.Couvertures do
-      Dest.Couvertures.Add(TFactoryCouvertureLite.Duplicate(Couverture));
+      Dest.Couvertures.Add(TFactories.getFactory<TCouvertureLite>.Duplicate(Couverture));
   finally
     DefaultEdition.Free;
   end;
 end;
 
-class function TDaoEditionFull.getList(const Reference: TGUID; Stock: Integer): TObjectList<TEditionFull>;
+function TDaoEditionFull.getList(const Reference: TGUID; Stock: Integer): TObjectList<TEditionFull>;
 begin
   Result := TObjectList<TEditionFull>.Create;
   FillList(Result, Reference, Stock);
 end;
 
-class procedure TDaoEditionFull.InitEdition(Entity: TEntity);
+class procedure TDaoEditionFull.InitEdition(Entity: TabstractEntity);
 begin
   (Entity as TEditionFull).TypeEdition := TDaoListe.DefaultTypeEdition;
   (Entity as TEditionFull).Etat := TDaoListe.DefaultEtat;
@@ -1469,7 +1404,7 @@ begin
   (Entity as TEditionFull).SensLecture := TDaoListe.DefaultSensLecture;
 end;
 
-class procedure TDaoEditionFull.SaveToDatabase(Entity: TEditionFull; UseTransaction: TManagedTransaction);
+procedure TDaoEditionFull.SaveToDatabase(Entity: TEditionFull; UseTransaction: TManagedTransaction);
 var
   hg: IHourGlass;
   qry: TManagedQuery;
@@ -1546,19 +1481,19 @@ begin
     if Entity.RecInconnu then
       Entity.ID_Edition := StringToGUID(qry.Fields.AsString[0]);
 
-    TDaoCouvertureLite.SaveList(Entity.Couvertures, Entity.ID_Edition, [Entity.ID_Album], qry.Transaction);
+    (TDaoFactory.getDaoDB<TCouvertureLite> as TDaoCouvertureLite).SaveList(Entity.Couvertures, Entity.ID_Edition, [Entity.ID_Album], qry.Transaction);
     qry.Transaction.Commit;
   finally
     qry.Free;
   end;
 end;
 
-class procedure TDaoSerieFull.Fill(Entity: TSerieFull; const Reference: TGUID);
+procedure TDaoSerieFull.Fill(Entity: TSerieFull; const Reference: TGUID);
 begin
   Fill(Entity, Reference, GUID_NULL, False);
 end;
 
-class procedure TDaoSerieFull.Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID);
+procedure TDaoSerieFull.Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID);
 begin
   Fill(Entity, Reference, IdAuteurFiltre, False);
 end;
@@ -1573,12 +1508,7 @@ begin
   TSerieFull.UnregisterInitEvent(InitSerie);
 end;
 
-class function TDaoSerieFull.FactoryClass: TFactoryClass;
-begin
-  Result := TFactorySerieFull;
-end;
-
-class procedure TDaoSerieFull.Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean);
+procedure TDaoSerieFull.Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean);
 var
   qry: TManagedQuery;
 begin
@@ -1646,12 +1576,12 @@ begin
       Entity.FormatEdition := ROption.Create(qry.Fields.ByNameAsInteger['formatedition'], qry.Fields.ByNameAsString['sformatedition']);
       Entity.SensLecture := ROption.Create(qry.Fields.ByNameAsInteger['senslecture'], qry.Fields.ByNameAsString['ssenslecture']);
 
-      TDaoEditeurFull.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL));
-      TDaoCollectionLite.Prepare(qry);
+      TDaoFactory.getDaoDB<TEditeurFull>.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL));
+      TDaoFactory.getDaoDB<TCollectionLite>.Prepare(qry);
       try
-        TDaoCollectionLite.Fill(Entity.Collection, qry);
+        TDaoFactory.getDaoDB<TCollectionLite>.Fill(Entity.Collection, qry);
       finally
-        TDaoCollectionLite.Unprepare(qry);
+        TDaoFactory.getDaoDB<TCollectionLite>.Unprepare(qry);
       end;
       qry.FetchBlobs := False;
 
@@ -1667,7 +1597,7 @@ begin
       qry.SQL.Add('  su.id_serie = ?');
       qry.Params.AsString[0] := GUIDToString(Reference);
       qry.Open;
-      TDaoUniversLite.FillList(Entity.Univers, qry);
+      TDaoFactory.getDaoDB<TUniversLite>.FillList(Entity.Univers, qry);
 
       qry.Close;
       qry.SQL.Clear;
@@ -1693,22 +1623,22 @@ begin
       qry.SQL.Text := 'select * from proc_auteurs(null, ?, null)';
       qry.Params.AsString[0] := GUIDToString(Reference);
       qry.Open;
-      TDaoAuteurSerieLite.Prepare(qry);
+      TDaoFactory.getDaoDB<TAuteurSerieLite>.Prepare(qry);
       try
         while not qry.Eof do
         begin
           case TMetierAuteur(qry.Fields.ByNameAsInteger['metier']) of
             maScenariste:
-              Entity.Scenaristes.Add(TDaoAuteurSerieLite.Make(qry));
+              Entity.Scenaristes.Add(TDaoFactory.getDaoDB<TAuteurSerieLite>.getInstance(qry));
             maDessinateur:
-              Entity.Dessinateurs.Add(TDaoAuteurSerieLite.Make(qry));
+              Entity.Dessinateurs.Add(TDaoFactory.getDaoDB<TAuteurSerieLite>.getInstance(qry));
             maColoriste:
-              Entity.Coloristes.Add(TDaoAuteurSerieLite.Make(qry));
+              Entity.Coloristes.Add(TDaoFactory.getDaoDB<TAuteurSerieLite>.getInstance(qry));
           end;
           qry.Next;
         end;
       finally
-        TDaoAuteurSerieLite.Unprepare(qry);
+        TDaoFactory.getDaoDB<TAuteurSerieLite>.Unprepare(qry);
       end;
     end;
 
@@ -1731,7 +1661,7 @@ begin
     if not IsEqualGUID(IdAuteurFiltre, GUID_NULL) then
       qry.Params.AsString[1] := GUIDToString(IdAuteurFiltre);
     qry.Open;
-    TDaoAlbumLite.FillList(Entity.Albums, qry);
+    TDaoFactory.getDaoDB<TAlbumLite>.FillList(Entity.Albums, qry);
 
     qry.Close;
     qry.SQL.Clear;
@@ -1752,31 +1682,31 @@ begin
     if not IsEqualGUID(IdAuteurFiltre, GUID_NULL) then
       qry.Params.AsString[1] := GUIDToString(IdAuteurFiltre);
     qry.Open;
-    TDaoParaBDLite.FillList(Entity.ParaBD, qry);
+    TDaoFactory.getDaoDB<TParaBDLite>.FillList(Entity.ParaBD, qry);
   finally
     qry.Free;
   end;
 end;
 
-class procedure TDaoSerieFull.FillExtra(Entity: TSerieFull; UseTransaction: TManagedTransaction);
+procedure TDaoSerieFull.FillExtra(Entity: TSerieFull; UseTransaction: TManagedTransaction);
 begin
   inherited;
 
 end;
 
-class function TDaoSerieFull.getInstance(const Reference, IdAuteurFiltre: TGUID): TSerieFull;
+function TDaoSerieFull.getInstance(const Reference, IdAuteurFiltre: TGUID): TSerieFull;
 begin
-  Result := TFactorySerieFull.getInstance;
+  Result := TFactories.getFactory<TSerieFull>.getInstance;
   Fill(Result, Reference, IdAuteurFiltre);
 end;
 
-class function TDaoSerieFull.getInstance(const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean): TSerieFull;
+function TDaoSerieFull.getInstance(const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean): TSerieFull;
 begin
-  Result := TFactorySerieFull.getInstance;
+  Result := TFactories.getFactory<TSerieFull>.getInstance;
   Fill(Result, Reference, IdAuteurFiltre, ForceLoad);
 end;
 
-class procedure TDaoSerieFull.InitSerie(Entity: TEntity);
+class procedure TDaoSerieFull.InitSerie(Entity: TabstractEntity);
 begin
   (Entity as TSerieFull).TypeEdition := TDaoListe.DefaultTypeEdition;
   (Entity as TSerieFull).Etat := TDaoListe.DefaultEtat;
@@ -1786,7 +1716,7 @@ begin
   (Entity as TSerieFull).SensLecture := TDaoListe.DefaultSensLecture;
 end;
 
-class procedure TDaoSerieFull.SaveToDatabase(Entity: TSerieFull; UseTransaction: TManagedTransaction);
+procedure TDaoSerieFull.SaveToDatabase(Entity: TSerieFull; UseTransaction: TManagedTransaction);
 var
   qry: TManagedQuery;
   S, genre: string;

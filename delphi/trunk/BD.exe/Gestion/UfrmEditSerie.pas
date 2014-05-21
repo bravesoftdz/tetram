@@ -115,7 +115,8 @@ implementation
 uses
   Commun, Proc_Gestions, Entities.Lite, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
   UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, ProceduresBDtk,
-  ORM.Core.Entities, Entities.FactoriesLite, Entities.DaoLambda, Entities.Types;
+  ORM.Core.Entities, Entities.DaoLambda, Entities.Types, ORM.Core.Types,
+  ORM.Core.Factories, ORM.Core.Dao;
 
 {$R *.DFM}
 
@@ -183,8 +184,8 @@ begin
   FSerie.SuivreManquants := cbManquants.Checked;
   FSerie.NbAlbums := StrToIntDef(edNbAlbums.Text, -1);
   FSerie.SiteWeb := Trim(edSite.Text);
-  TDaoEditeurFull.Fill(FSerie.Editeur, vtEditEditeurs.CurrentValue);
-  TDaoCollectionLite.Fill(FSerie.Collection, vtEditCollections.CurrentValue);
+  TDaoFactory.getDaoDB<TEditeurFull>.Fill(FSerie.Editeur, vtEditEditeurs.CurrentValue);
+  TDaoFactory.getDaoDB<TCollectionLite>.Fill(FSerie.Collection, vtEditCollections.CurrentValue);
   FSerie.Sujet := edHistoire.Text;
   FSerie.Notes := edNotes.Text;
 
@@ -200,8 +201,8 @@ begin
 
   FSerie.Associations.Text := edAssociations.Lines.Text;
 
-  TDaoSerieFull.SaveToDatabase(FSerie);
-  TDaoSerieFull.SaveAssociations(FSerie, vmSeries, GUID_NULL);
+  TDaoFactory.getDaoDB<TSerieFull>.SaveToDatabase(FSerie);
+  (TDaoFactory.getDaoDB<TSerieFull> as TDaoSerieFull).SaveAssociations(FSerie, vmSeries, GUID_NULL);
 
   ModalResult := mrOk;
 end;
@@ -214,7 +215,7 @@ var
 begin
   hg := THourGlass.Create;
   FSerie := Value;
-  TDaoSerieFull.FillAssociations(FSerie, vmSeries);
+  (TDaoFactory.getDaoDB<TSerieFull> as TDaoSerieFull).FillAssociations(FSerie, vmSeries);
 
   lvScenaristes.Items.BeginUpdate;
   lvDessinateurs.Items.BeginUpdate;
@@ -446,24 +447,24 @@ begin
   case TSpeedButton(Sender).Tag of
     1:
       begin
-        PA := TFactoryAuteurSerieLite.getInstance;
-        TDaoAuteurSerieLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_Serie, maScenariste);
+        PA := TFactories.getFactory<TAuteurSerieLite>.getInstance;
+        (TDaoFactory.getDaoDB<TAuteurSerieLite> as TDaoAuteurSerieLite).Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_Serie, maScenariste);
         FSerie.Scenaristes.Add(PA);
         lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
         lvScenaristes.Invalidate;
       end;
     2:
       begin
-        PA := TFactoryAuteurSerieLite.getInstance;
-        TDaoAuteurSerieLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_Serie, maDessinateur);
+        PA := TFactories.getFactory<TAuteurSerieLite>.getInstance;
+        (TDaoFactory.getDaoDB<TAuteurSerieLite> as TDaoAuteurSerieLite).Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_Serie, maDessinateur);
         FSerie.Dessinateurs.Add(PA);
         lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
         lvDessinateurs.Invalidate;
       end;
     3:
       begin
-        PA := TFactoryAuteurSerieLite.getInstance;
-        TDaoAuteurSerieLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_Serie, maColoriste);
+        PA := TFactories.getFactory<TAuteurSerieLite>.getInstance;
+        (TDaoFactory.getDaoDB<TAuteurSerieLite> as TDaoAuteurSerieLite).Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_Serie, maColoriste);
         FSerie.Coloristes.Add(PA);
         lvColoristes.Items.Count := FSerie.Coloristes.Count;
         lvColoristes.Invalidate;
@@ -563,7 +564,7 @@ begin
   if IsEqualGUID(vtEditUnivers.CurrentValue, GUID_NULL) then
     Exit;
 
-  FSerie.Univers.Add(TFactoryUniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
+  FSerie.Univers.Add(TFactories.getFactory<TUniversLite>.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
   lvUnivers.Items.Count := FSerie.Univers.Count;
   lvUnivers.Invalidate;
 

@@ -7,28 +7,9 @@ interface
 uses
   System.SysUtils, Winapi.Windows, VCL.Dialogs, System.Classes, VCL.Controls, System.StrUtils;
 
-type
-  RGUIDEx = record
-  private
-    GUID: TGUID;
-  public
-    class operator Implicit(a: RGUIDEx): TGUID;
-    class operator Implicit(a: RGUIDEx): string;
-    class operator Implicit(a: TGUID): RGUIDEx;
-    class operator Implicit(a: string): RGUIDEx;
-  end;
-
-const
-  GUID_FULL: TGUID = '{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}';
-  sGUID_FULL = '{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}';
-  GUID_NULL: TGUID = '{00000000-0000-0000-0000-000000000000}';
-  sGUID_NULL = '{00000000-0000-0000-0000-000000000000}';
-
 procedure AjoutString(var Chaine: string; const Ajout, Espace: string; const Avant: string = ''; const Apres: string = ''); overload; inline;
 procedure AjoutString(var Chaine: WideString; const Ajout, Espace: WideString; const Avant: WideString = ''; const Apres: WideString = ''); overload; inline;
 procedure AjoutString(var Chaine: AnsiString; const Ajout, Espace: AnsiString; const Avant: AnsiString = ''; const Apres: AnsiString = ''); overload; inline;
-
-function StringToGUIDDef(const GUID: string; const Default: TGUID): TGUID; inline;
 
 function NonZero(const S: string): string; inline; overload;
 function NonZero(const I: Integer): string; inline; overload;
@@ -429,28 +410,6 @@ destructor THourGlass.Destroy;
 begin
   Screen.Cursor := FOldCursor;
   inherited;
-end;
-
-{ RGUIDEx }
-
-class operator RGUIDEx.Implicit(a: RGUIDEx): string;
-begin
-  Result := GUIDToString(a);
-end;
-
-class operator RGUIDEx.Implicit(a: RGUIDEx): TGUID;
-begin
-  Result := a.GUID;
-end;
-
-class operator RGUIDEx.Implicit(a: string): RGUIDEx;
-begin
-  Result := StringToGUID(a);
-end;
-
-class operator RGUIDEx.Implicit(a: TGUID): RGUIDEx;
-begin
-  Result.GUID := a;
 end;
 
 function BDCurrencyToStr(const Value: Double): string;

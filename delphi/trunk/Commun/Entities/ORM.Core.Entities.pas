@@ -3,46 +3,47 @@ unit ORM.Core.Entities;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Rtti, Commun, System.Generics.Collections, ORM.Core.Attributes;
+  System.SysUtils, System.Classes, System.Rtti, ORM.Core.Types, System.Generics.Collections, ORM.Core.Attributes;
 
 type
-  TEntity = class;
-  TEntityClass = class of TEntity;
-  TDBEntityClass = class of TDBEntity;
+  TabstractEntity = class;
+  TEntityClass = class of TabstractEntity;
+  TDBEntityClass = class of TabstractDBEntity;
 
-  TInitEvent = procedure(Entity: TEntity) of object;
+  TInitEvent = procedure(Entity: TabstractEntity) of object;
 
 {$RTTI EXPLICIT METHODS([vcPublic, vcProtected])}
 
-  TEntity = class abstract(TPersistent)
+  TabstractEntity = class abstract(TPersistent)
   private
     class var FInitEvents: TDictionary<TClass, TList<TInitEvent>>;
     procedure TriggerInitEvents;
   protected
+    procedure DoClear; virtual;
     constructor Create; virtual;
   public
     class constructor Create;
     class destructor Destroy;
 
     procedure BeforeDestruction; override;
-    procedure DoClear;
-    procedure Clear; virtual;
     procedure AfterConstruction; override;
+
+    procedure Clear;
 
     class procedure RegisterInitEvent(InitEvent: TInitEvent);
     class procedure UnregisterInitEvent(InitEvent: TInitEvent);
   end;
 
-  TDBEntity = class abstract(TEntity)
+  TabstractDBEntity = class abstract(TabstractEntity)
   private
     FID: RGUIDEx;
   protected
     constructor Create; override;
+    procedure DoClear; override;
   public
-    function GetID: RGUIDEx; inline;
-    procedure SetID(const Value: RGUIDEx); inline;
+    function GetID: RGUIDEx;
+    procedure SetID(const Value: RGUIDEx);
     procedure Assign(Source: TPersistent); override;
-    procedure Clear; override;
 
     property ID: RGUIDEx read GetID write SetID;
   end;
@@ -73,46 +74,46 @@ type
 
 implementation
 
-{ TEntity }
+{ TabstractEntity }
 
-procedure TEntity.AfterConstruction;
+procedure TabstractEntity.AfterConstruction;
 begin
   inherited;
-  DoClear;
+  Clear;
 end;
 
-procedure TEntity.BeforeDestruction;
+procedure TabstractEntity.BeforeDestruction;
 begin
   inherited;
-  DoClear;
+  Clear;
 end;
 
-procedure TEntity.Clear;
+procedure TabstractEntity.DoClear;
 begin
 end;
 
-class constructor TEntity.Create;
+class constructor TabstractEntity.Create;
 begin
   FInitEvents := TObjectDictionary < TClass, TList < TInitEvent >>.Create([doOwnsValues]);
 end;
 
-constructor TEntity.Create;
+constructor TabstractEntity.Create;
 begin
 
 end;
 
-class destructor TEntity.Destroy;
+class destructor TabstractEntity.Destroy;
 begin
   FInitEvents.Free;
 end;
 
-procedure TEntity.DoClear;
+procedure TabstractEntity.Clear;
 begin
-  Clear;
+  DoClear;
   TriggerInitEvents;
 end;
 
-class procedure TEntity.RegisterInitEvent(InitEvent: TInitEvent);
+class procedure TabstractEntity.RegisterInitEvent(InitEvent: TInitEvent);
 var
   initEvents: TList<TInitEvent>;
 begin
@@ -125,7 +126,7 @@ begin
     initEvents.Add(InitEvent);
 end;
 
-procedure TEntity.TriggerInitEvents;
+procedure TabstractEntity.TriggerInitEvents;
 var
   initEvents: TList<TInitEvent>;
   InitEvent: TInitEvent;
@@ -135,7 +136,7 @@ begin
       InitEvent(Self);
 end;
 
-class procedure TEntity.UnregisterInitEvent(InitEvent: TInitEvent);
+class procedure TabstractEntity.UnregisterInitEvent(InitEvent: TInitEvent);
 var
   initEvents: TList<TInitEvent>;
 begin
@@ -143,34 +144,34 @@ begin
     initEvents.Remove(InitEvent);
 end;
 
-{ TDBEntity }
+{ TabstractDBEntity }
 
-procedure TDBEntity.Assign(Source: TPersistent);
+procedure TabstractDBEntity.Assign(Source: TPersistent);
 begin
-  if Source is TDBEntity then
-    Self.ID := TDBEntity(Source).ID
+  if Source is TabstractDBEntity then
+    Self.ID := TabstractDBEntity(Source).ID
   else
     inherited;
 end;
 
-procedure TDBEntity.Clear;
+procedure TabstractDBEntity.DoClear;
 begin
   inherited;
   FID := GUID_NULL;
 end;
 
-constructor TDBEntity.Create;
+constructor TabstractDBEntity.Create;
 begin
   TEntityMetadataCache.PrepareRTTI(TDBEntityClass(Self.ClassType));
   inherited;
 end;
 
-function TDBEntity.GetID: RGUIDEx;
+function TabstractDBEntity.GetID: RGUIDEx;
 begin
   Result := FID;
 end;
 
-procedure TDBEntity.SetID(const Value: RGUIDEx);
+procedure TabstractDBEntity.SetID(const Value: RGUIDEx);
 begin
   FID := Value;
 end;
