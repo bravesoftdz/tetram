@@ -66,7 +66,7 @@ implementation
 {$R *.DFM}
 
 uses Commun, Entities.Lite, Impression, DateUtils, UHistorique, Proc_Gestions, UfrmFond,
-  Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
+  Entities.DaoFull, ORM.Core.Entities, Entities.FactoriesFull;
 
 type
   PNodeInfo = ^RNodeInfo;

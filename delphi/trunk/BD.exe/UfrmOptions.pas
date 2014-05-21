@@ -103,8 +103,8 @@ type
 implementation
 
 uses CommonConst, UdmPrinc, Entities.Lite, Commun, Procedures, Updates, IOUtils,
-  Entities.DaoLite, ProceduresBDtk, Entities.Common, Entities.FactoriesLite, ICUNumberFormatter, _uloc,
-  Entities.DBConnection;
+  Entities.DaoLite, ProceduresBDtk, ORM.Core.Entities, Entities.FactoriesLite, ICUNumberFormatter, _uloc,
+  ORM.Core.DBConnection;
 
 {$R *.DFM}
 

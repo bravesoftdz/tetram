@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, Windows, Classes, Dialogs, Entities.Lite, Commun, CommonConst, DateUtils, Generics.Collections,
-  Generics.Defaults, System.Generics.Collections, Entities.Common, Entities.Types, Entities.Attributes;
+  Generics.Defaults, System.Generics.Collections, ORM.Core.Entities, Entities.Types, ORM.Core.Attributes;
 
 type
   TObjetFullClass = class of TObjetFull;

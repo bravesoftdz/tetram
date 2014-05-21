@@ -3,9 +3,9 @@ unit Entities.DaoFull;
 interface
 
 uses
-  System.SysUtils, System.Classes, VirtualTreeBdtk, Entities.Full, Entities.DBConnection,
+  System.SysUtils, System.Classes, VirtualTreeBdtk, Entities.Full, ORM.Core.DBConnection,
   Vcl.StdCtrls, Winapi.Windows, System.Rtti, System.Generics.Collections,
-  Entities.Common, Entities.DaoCommon, Entities.FactoriesCommon, Entities.Types;
+  ORM.Core.Entities, ORM.Core.Dao, ORM.Core.Factories, Entities.Types;
 
 type
   // ce serait trop facile si XE4 acceptait cette syntaxe....

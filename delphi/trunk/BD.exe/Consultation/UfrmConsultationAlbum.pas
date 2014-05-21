@@ -165,7 +165,7 @@ implementation
 uses
   Commun, Entities.Lite, CommonConst, MAJ, Impression, DateUtils, UHistorique, Procedures,
   Divers, Textes, Proc_Gestions, UfrmConsole, Entities.DaoFull,
-  Entities.Common, Entities.FactoriesFull, UdmPrinc, Entities.Types;
+  ORM.Core.Entities, Entities.FactoriesFull, UdmPrinc, Entities.Types;
 
 var
   FSortColumn: Integer;

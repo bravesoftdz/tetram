@@ -41,7 +41,7 @@ implementation
 
 uses
   Commun, Procedures, Textes, VirtualTreeBdtk, Entities.DaoFull,
-  Entities.Common, Entities.Types;
+  ORM.Core.Entities, Entities.Types;
 
 {$R *.DFM}
 

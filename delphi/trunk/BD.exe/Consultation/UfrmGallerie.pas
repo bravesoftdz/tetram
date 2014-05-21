@@ -76,7 +76,7 @@ implementation
 
 uses
   Procedures, CommonConst, jpeg, UHistorique, Commun, Entities.DaoLite, Entities.DaoFull,
-  ProceduresBDtk, Entities.Common, Entities.FactoriesLite;
+  ProceduresBDtk, ORM.Core.Entities, Entities.FactoriesLite;
 
 { TThumbList.TThumb }
 

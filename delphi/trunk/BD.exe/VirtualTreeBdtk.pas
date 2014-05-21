@@ -242,8 +242,8 @@ const
 implementation
 
 uses
-  UIB, UdmPrinc, Commun, Types, UIBLib, Divers, Entities.Common,
-  Entities.DBConnection, Entities.DaoCommon;
+  UIB, UdmPrinc, Commun, Types, UIBLib, Divers, ORM.Core.Entities,
+  ORM.Core.DBConnection, ORM.Core.Dao;
 
 { TVirtualStringTree }
 

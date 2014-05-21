@@ -3,7 +3,7 @@ unit Entities.FactoriesLite;
 interface
 
 uses
-  Entities.FactoriesCommon, Entities.Lite, Entities.Common;
+  ORM.Core.Factories, Entities.Lite, ORM.Core.Entities;
 
 type
   TFactoryAlbumLite = class(TFactoryGenericDBEntity<TAlbumLite>)

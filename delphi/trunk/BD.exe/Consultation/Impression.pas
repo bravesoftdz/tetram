@@ -29,8 +29,8 @@ implementation
 
 uses
   UfrmPreview, Math, Procedures, ProceduresBDtk, DateUtils, UIBlib, StrUtils, UMetadata,
-  Entities.DaoLite, Entities.DaoFull, Entities.Common, Entities.FactoriesLite,
-  Entities.DBConnection, Entities.Types;
+  Entities.DaoLite, Entities.DaoFull, ORM.Core.Entities, Entities.FactoriesLite,
+  ORM.Core.DBConnection, Entities.Types;
 
 procedure PreparePrintObject(Prn: TPrintObject; Previsualisation: Boolean; const Titre: string);
 begin

@@ -1,4 +1,4 @@
-unit Entities.DBConnection;
+unit ORM.Core.DBConnection;
 
 interface
 

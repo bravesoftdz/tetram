@@ -194,7 +194,7 @@ implementation
 
 uses
   Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
-  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common, Entities.Types,
+  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, ORM.Core.Entities, Entities.Types,
   Entities.FactoriesLite, Entities.FactoriesFull, Entities.DaoLambda;
 
 {$R *.DFM}

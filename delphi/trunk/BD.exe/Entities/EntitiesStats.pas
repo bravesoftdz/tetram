@@ -3,7 +3,7 @@ unit EntitiesStats;
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Generics.Collections, Entities.Lite, Entities.Common;
+  System.SysUtils, System.Classes, System.Generics.Collections, Entities.Lite, ORM.Core.Entities;
 
 type
   TStats = class(TEntity)
@@ -135,7 +135,7 @@ implementation
 
 uses
   Commun, uib, UdmPrinc, System.DateUtils, Divers, Entities.DaoLite,
-  Entities.FactoriesLite, Entities.DBConnection;
+  Entities.FactoriesLite, ORM.Core.DBConnection;
 
 { TStats }
 

@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, Generics.Collections, UChampsRecherche, Entities.Full, Entities.Lite,
-  Entities.Common;
+  ORM.Core.Entities;
 
 type
   TGroupOption = (goEt, goOu);
@@ -108,7 +108,7 @@ implementation
 
 uses
   uiblib, Commun, UdmPrinc, Divers, CommonConst, UMetadata, Textes,
-  Entities.DaoLite, Entities.DBConnection;
+  Entities.DaoLite, ORM.Core.DBConnection;
 
 { TRecherche }
 

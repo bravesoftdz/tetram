@@ -382,16 +382,16 @@
         <DCCReference Include="..\Commun\Entities\Entities.Full.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Lite.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Serializer.pas"/>
-        <DCCReference Include="..\Commun\Entities\JsonDeserializer.pas"/>
-        <DCCReference Include="..\Commun\Entities\JsonSerializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\ORM.Core.Json.Deserializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\ORM.Core.Json.Serializer.pas"/>
         <DCCReference Include="..\Commun\BdtkRegEx.pas"/>
         <DCCReference Include="..\Commun\Scripts\UScriptList.pas"/>
         <DCCReference Include="Scripts\UfrmValidationImport.pas">
             <Form>frmValidationImport</Form>
         </DCCReference>
-        <DCCReference Include="..\Commun\Entities\Entities.DaoCommon.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.Common.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.FactoriesCommon.pas"/>
+        <DCCReference Include="..\Commun\Entities\ORM.Core.Dao.pas"/>
+        <DCCReference Include="..\Commun\Entities\ORM.Core.Entities.pas"/>
+        <DCCReference Include="..\Commun\Entities\ORM.Core.Factories.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.FactoriesLite.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.FactoriesFull.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.DaoLambda.pas"/>
@@ -413,9 +413,10 @@
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_24.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_25.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_29.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.Attributes.pas"/>
+        <DCCReference Include="..\Commun\Entities\ORM.Core.Attributes.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Types.pas"/>
-        <DCCReference Include="Entities\Entities.DBConnection.pas"/>
+        <DCCReference Include="Entities\ORM.Core.DBConnection.pas"/>
+        <DCCReference Include="..\Commun\Entities\ORM.Core.pas"/>
         <RcItem Include="..\Commun\images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>

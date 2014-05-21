@@ -122,7 +122,7 @@ implementation
 
 uses
   Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, Entities.Lite, Divers, UHistorique,
-  UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
+  UMetadata, Entities.DaoLite, Entities.DaoFull, ORM.Core.Entities,
   Entities.FactoriesLite, Entities.DaoLambda, Entities.Types;
 
 {$R *.dfm}

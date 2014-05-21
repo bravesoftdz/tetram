@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, SysUtils, DB, Classes, ComCtrls, StdCtrls, Commun, UMetaData, SyncObjs, Generics.Collections,
-  Entities.Common, Entities.Attributes;
+  ORM.Core.Entities, ORM.Core.Attributes;
 
 type
   TBaseLiteClass = class of TBaseLite;
@@ -266,7 +266,7 @@ function MakeUnivers(const Nom: string): TUniversLite;
 implementation
 
 uses
-  StrUtils, Entities.FactoriesLite, CommonConst, Entities.FactoriesCommon;
+  StrUtils, Entities.FactoriesLite, CommonConst, ORM.Core.Factories;
 
 function MakeAuteur(Factory: TFactoryClass; const Nom: string; Metier: TMetierAuteur): TAuteurSerieLite;
 begin

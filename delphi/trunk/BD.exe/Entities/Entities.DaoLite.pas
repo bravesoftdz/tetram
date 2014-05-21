@@ -4,8 +4,8 @@ interface
 
 uses
   System.SysUtils, System.Types, Entities.Lite, UMetadata, System.Generics.Collections,
-  System.SyncObjs, Vcl.ComCtrls, Vcl.StdCtrls, System.Classes, Entities.DBConnection, Entities.DaoCommon,
-  Entities.Common, Entities.FactoriesCommon, System.IOUtils, Vcl.Dialogs;
+  System.SyncObjs, Vcl.ComCtrls, Vcl.StdCtrls, System.Classes, ORM.Core.DBConnection, ORM.Core.Dao,
+  ORM.Core.Entities, ORM.Core.Factories, System.IOUtils, Vcl.Dialogs;
 
 type
   // ce serait trop facile si XE4 acceptait cette syntaxe....

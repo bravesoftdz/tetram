@@ -35,7 +35,7 @@ const
 implementation
 
 uses
-  Textes, Commun, UIB, UdmPrinc, Entities.DBConnection;
+  Textes, Commun, UIB, UdmPrinc, ORM.Core.DBConnection;
 
 const
   GP_UNIVERS = 1;

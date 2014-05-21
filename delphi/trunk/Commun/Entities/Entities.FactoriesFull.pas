@@ -3,7 +3,7 @@ unit Entities.FactoriesFull;
 interface
 
 uses
-  Entities.FactoriesCommon, Entities.Full, Entities.Common;
+  ORM.Core.Factories, Entities.Full, ORM.Core.Entities;
 
 type
   TFactoryAlbumFull = class(TFactoryGenericDBEntity<TAlbumFull>)

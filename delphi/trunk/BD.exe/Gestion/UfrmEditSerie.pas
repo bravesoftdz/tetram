@@ -115,7 +115,7 @@ implementation
 uses
   Commun, Proc_Gestions, Entities.Lite, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
   UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, ProceduresBDtk,
-  Entities.Common, Entities.FactoriesLite, Entities.DaoLambda, Entities.Types;
+  ORM.Core.Entities, Entities.FactoriesLite, Entities.DaoLambda, Entities.Types;
 
 {$R *.DFM}
 

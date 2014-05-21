@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, SyncObjs, jpeg, Menus, uib,
-  Vcl.AppEvnts, Vcl.ImgList, PngImageList, Entities.DBConnection;
+  Vcl.AppEvnts, Vcl.ImgList, PngImageList, ORM.Core.DBConnection;
 
 const
   AntiAliasing = True;
@@ -57,7 +57,7 @@ uses
   DateUtils, UMAJODS, JumpList, UfrmSplash, Proc_Gestions, Generics.Collections,
   UfrmVerbose, UfrmConsole, ProceduresBDtk, JclCompression, dwsJSON,
   JsonSerializer, Entities.DaoLambda, System.TypInfo, Entities.Full,
-  Entities.Types, Entities.DaoCommon;
+  Entities.Types, ORM.Core.Dao;
 
 const
   FinBackup = 'gbak:closing file, committing, and finishing.';

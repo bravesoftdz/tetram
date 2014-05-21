@@ -3,7 +3,7 @@ unit ProceduresBDtk;
 interface
 
 uses SysUtils, Windows, StdCtrls, Forms, Controls, ExtCtrls, CommonConst, Graphics, StrUtils, Dialogs, SyncObjs,
-  Commun, System.Classes, ComboCheck, Entities.Full, Entities.Types, Entities.DBConnection;
+  Commun, System.Classes, ComboCheck, Entities.Full, Entities.Types, ORM.Core.DBConnection;
 
 type
   IImpressionApercu = interface

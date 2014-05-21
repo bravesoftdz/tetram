@@ -1,9 +1,9 @@
-unit Entities.Common;
+unit ORM.Core.Entities;
 
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Rtti, Commun, System.Generics.Collections, Entities.Attributes;
+  System.SysUtils, System.Classes, System.Rtti, Commun, System.Generics.Collections, ORM.Core.Attributes;
 
 type
   TEntity = class;
@@ -14,7 +14,7 @@ type
 
 {$RTTI EXPLICIT METHODS([vcPublic, vcProtected])}
 
-  TEntity = class(TPersistent)
+  TEntity = class abstract(TPersistent)
   private
     class var FInitEvents: TDictionary<TClass, TList<TInitEvent>>;
     procedure TriggerInitEvents;
@@ -33,7 +33,7 @@ type
     class procedure UnregisterInitEvent(InitEvent: TInitEvent);
   end;
 
-  TDBEntity = class(TEntity)
+  TDBEntity = class abstract(TEntity)
   private
     FID: RGUIDEx;
   protected

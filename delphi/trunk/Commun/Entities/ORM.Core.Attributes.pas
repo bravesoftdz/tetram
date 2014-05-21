@@ -1,4 +1,4 @@
-unit Entities.Attributes;
+unit ORM.Core.Attributes;
 
 interface
 
@@ -62,10 +62,14 @@ type
     property DaoClass: TClass read FDaoClass;
   end;
 
+  DaoAttribute = class(TRelatedAttribute)
+
+  end;
+
 implementation
 
 uses
-  Entities.Common, Entities.DaoCommon, Entities.FactoriesCommon;
+  ORM.Core.Entities, ORM.Core.Dao, ORM.Core.Factories;
 
 { TRelatedAttribute }
 

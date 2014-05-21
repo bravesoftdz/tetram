@@ -12,7 +12,7 @@ implementation
 
 uses
   uib, Entities.Lite, UfrmValidationImport, VirtualTreeBdtk, UfrmControlImport, Commun, Entities.DaoLite, UdmPrinc, Entities.DaoFull, Entities.FactoriesLite,
-  UMetadata, System.UITypes, Divers, Entities.Common;
+  UMetadata, System.UITypes, Divers, ORM.Core.Entities;
 
 procedure Import(Self: TAlbumFull);
 var

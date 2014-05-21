@@ -16,8 +16,8 @@ uses
   Entities.Full in '..\Commun\Entities\Entities.Full.pas',
   Entities.Lite in '..\Commun\Entities\Entities.Lite.pas',
   Entities.Serializer in '..\Commun\Entities\Entities.Serializer.pas',
-  JsonDeserializer in '..\Commun\Entities\JsonDeserializer.pas',
-  JsonSerializer in '..\Commun\Entities\JsonSerializer.pas',
+  ORM.Core.Json.Deserializer in '..\Commun\Entities\ORM.Core.Json.Deserializer.pas',
+  ORM.Core.Json.Serializer in '..\Commun\Entities\ORM.Core.Json.Serializer.pas',
   UdmPascalScript in 'PascalScript\UdmPascalScript.pas',
   UPascalScriptEditor in 'PascalScript\UPascalScriptEditor.pas',
   uPSC_BdtkObjects in 'PascalScript\uPSC_BdtkObjects.pas',
@@ -63,14 +63,14 @@ uses
   BdtkRegEx in '..\Commun\BdtkRegEx.pas',
   VirtualTree in '..\Commun\VirtualTree.pas',
   UfrmAboutBox in '..\Commun\UfrmAboutBox.pas' {frmAboutBox},
-  Entities.Common in '..\Commun\Entities\Entities.Common.pas',
+  ORM.Core.Entities in '..\Commun\Entities\ORM.Core.Entities.pas',
   Entities.FactoriesLite in '..\Commun\Entities\Entities.FactoriesLite.pas',
-  Entities.FactoriesCommon in '..\Commun\Entities\Entities.FactoriesCommon.pas',
+  ORM.Core.Factories in '..\Commun\Entities\ORM.Core.Factories.pas',
   Entities.FactoriesFull in '..\Commun\Entities\Entities.FactoriesFull.pas',
   Entities.DaoLambdaJSON in 'Entities.DaoLambdaJSON.pas',
   Entities.DaoLambda in '..\Commun\Entities\Entities.DaoLambda.pas',
   UNetICSCompress in '..\Commun\UNetICSCompress.pas',
-  Entities.Attributes in '..\Commun\Entities\Entities.Attributes.pas',
+  ORM.Core.Attributes in '..\Commun\Entities\ORM.Core.Attributes.pas',
   Entities.Types in '..\Commun\Entities\Entities.Types.pas';
 
 {$R *.res}

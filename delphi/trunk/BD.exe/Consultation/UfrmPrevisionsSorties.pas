@@ -47,7 +47,7 @@ type
 implementation
 
 uses Impression, DateUtils, IniFiles, CommonConst, Divers, Entities.Lite, Commun,
-  UHistorique, Procedures, Entities.Common;
+  UHistorique, Procedures, ORM.Core.Entities;
 
 {$R *.dfm}
 

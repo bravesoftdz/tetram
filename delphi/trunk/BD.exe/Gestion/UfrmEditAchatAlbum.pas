@@ -79,7 +79,7 @@ implementation
 
 uses
   Math, CommonConst, Proc_Gestions, Commun, Procedures, Textes, Divers, StrUtils,
-  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
+  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, ORM.Core.Entities,
   Entities.FactoriesLite, Entities.Types;
 
 {$R *.dfm}

@@ -1,10 +1,10 @@
-unit Entities.DaoCommon;
+unit ORM.Core.Dao;
 
 interface
 
 uses
-  System.SysUtils, System.Classes, System.Rtti, System.Generics.Collections, Entities.Common, Entities.FactoriesCommon,
-  Entities.DBConnection, Vcl.Dialogs, UFichierLog, System.SyncObjs;
+  System.SysUtils, System.Classes, System.Rtti, System.Generics.Collections, ORM.Core.Entities, ORM.Core.Factories,
+  ORM.Core.DBConnection, Vcl.Dialogs, UFichierLog, System.SyncObjs;
 
 type
   TDaoEntity<T: TEntity> = class abstract
@@ -65,7 +65,7 @@ type
 implementation
 
 uses
-  Commun, System.TypInfo, Entities.Attributes, System.Types, System.StrUtils;
+  Commun, System.TypInfo, ORM.Core.Attributes, System.Types, System.StrUtils;
 
 { TDaoEntity }
 

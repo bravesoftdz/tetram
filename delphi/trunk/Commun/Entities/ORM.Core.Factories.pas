@@ -1,9 +1,9 @@
-unit Entities.FactoriesCommon;
+unit ORM.Core.Factories;
 
 interface
 
 uses
-  System.Rtti, System.Generics.Collections, Entities.Common;
+  System.Rtti, System.Generics.Collections, ORM.Core.Entities;
 
 type
   TFactoryClass = class of TFactoryEntity;
