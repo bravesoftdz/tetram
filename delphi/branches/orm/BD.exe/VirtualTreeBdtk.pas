@@ -109,7 +109,6 @@ type
     WHERECONDITION: string;
     DEFAULTFILTRE: string;
     ClassPointeur: TClassBasePointeur;
-    ClassDao: TDaoLiteClass;
   end;
 
 const
@@ -121,19 +120,19 @@ const
     FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)';
     SEARCHORDER: 'TITREALBUM, HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
     DEFAULTFILTRE: 'COMPLET = 1';
-    ClassPointeur: TAlbumLite; ClassDao: TDaoAlbumLite),
+    ClassPointeur: TAlbumLite),
     ( // vmCollections
     FILTRECOUNT: 'INITIALES_COLLECTIONS(?)'; Filtre: 'COLLECTIONS_BY_INITIALE(?, ?)';
     FIELDS: 'ID_COLLECTION, NOMCOLLECTION, id_editeur, nomediteur';
     INITIALEFIELDS: 'INITIALENOMCOLLECTION'; INITIALEVALUE: 'INITIALENOMCOLLECTION'; REFFIELDS: 'ID_COLLECTION'; TABLESEARCH: 'COLLECTIONS';
     FIELDSEARCH: 'NOMCOLLECTION';
-    ClassPointeur: TCollectionLite; ClassDao: TDaoCollectionLite),
+    ClassPointeur: TCollectionLite),
     ( // vmEditeurs
     FILTRECOUNT: 'VW_INITIALES_EDITEURS'; Filtre: 'EDITEURS_BY_INITIALE(?)';
     FIELDS: 'ID_EDITEUR, NOMEDITEUR';
     INITIALEFIELDS: 'INITIALENOMEDITEUR'; INITIALEVALUE: 'INITIALENOMEDITEUR'; REFFIELDS: 'ID_EDITEUR'; TABLESEARCH: 'EDITEURS';
     FIELDSEARCH: 'NOMEDITEUR';
-    ClassPointeur: TEditeurLite; ClassDao: TDaoEditeurLite),
+    ClassPointeur: TEditeurLite),
     ( // vmEmprunteurs = plus utilisé
 (*
     FILTRECOUNT: 'VW_INITIALES_EMPRUNTEURS'; Filtre: 'EMPRUNTEURS_BY_INITIALE(?)';
@@ -147,19 +146,19 @@ const
     FIELDS: 'ID_GENRE, GENRE';
     INITIALEFIELDS: 'INITIALEGENRE'; INITIALEVALUE: 'INITIALEGENRE'; REFFIELDS: 'ID_GENRE'; TABLESEARCH: 'GENRES';
     FIELDSEARCH: 'GENRE';
-    ClassPointeur: TGenreLite; ClassDao: TDaoGenreLite),
+    ClassPointeur: TGenreLite),
     ( // vmPersonnes
     FILTRECOUNT: 'VW_INITIALES_PERSONNES'; Filtre: 'PERSONNES_BY_INITIALE(?)';
     FIELDS: 'ID_PERSONNE, NOMPERSONNE';
     INITIALEFIELDS: 'INITIALENOMPERSONNE'; INITIALEVALUE: 'INITIALENOMPERSONNE'; REFFIELDS: 'ID_PERSONNE'; TABLESEARCH: 'PERSONNES';
     FIELDSEARCH: 'NOMPERSONNE';
-    ClassPointeur: TPersonnageLite; ClassDao: TDaoPersonnageLite),
+    ClassPointeur: TPersonnageLite),
     ( // vmSeries
     FILTRECOUNT: 'VW_INITIALES_SERIES'; Filtre: 'SERIES_BY_INITIALE(?)';
     FIELDS: 'ID_SERIE, TITRESERIE, ID_EDITEUR, NOMEDITEUR, ID_COLLECTION, NOMCOLLECTION';
     INITIALEFIELDS: 'INITIALETITRESERIE'; INITIALEVALUE: 'INITIALETITRESERIE'; REFFIELDS: 'ID_SERIE'; TABLESEARCH: 'SERIES';
     FIELDSEARCH: 'TITRESERIE';
-    ClassPointeur: TSerieLite; ClassDao: TDaoSerieLite),
+    ClassPointeur: TSerieLite),
     ( // vmAlbumsAnnee
     FILTRECOUNT: 'ANNEES_ALBUMS(?)'; Filtre: 'ALBUMS_BY_ANNEE(?, ?)';
     FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET, NOTATION';
@@ -167,7 +166,7 @@ const
     FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)';
     SEARCHORDER: 'COALESCE(TITREALBUM, TITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
     DEFAULTFILTRE: 'COMPLET = 1';
-    ClassPointeur: TAlbumLite; ClassDao: TDaoAlbumLite),
+    ClassPointeur: TAlbumLite),
     ( // vmAlbumsCollection
     FILTRECOUNT: 'COLLECTIONS_ALBUMS(?)'; Filtre: 'ALBUMS_BY_COLLECTION(?, ?)';
     FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET, NOTATION';
@@ -175,7 +174,7 @@ const
     FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)';
     SEARCHORDER: 'COALESCE(TITREALBUM, TITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
     DEFAULTFILTRE: 'COMPLET = 1';
-    ClassPointeur: TAlbumLite; ClassDao: TDaoAlbumLite),
+    ClassPointeur: TAlbumLite),
     ( // vmAlbumsEditeur
     FILTRECOUNT: 'EDITEURS_ALBUMS(?)'; Filtre: 'ALBUMS_BY_EDITEUR(?, ?)';
     FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET, NOTATION';
@@ -183,7 +182,7 @@ const
     FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)';
     SEARCHORDER: 'COALESCE(TITREALBUM, TITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
     DEFAULTFILTRE: 'COMPLET = 1';
-    ClassPointeur: TAlbumLite; ClassDao: TDaoAlbumLite),
+    ClassPointeur: TAlbumLite),
     ( // vmAlbumsGenre
     FILTRECOUNT: 'GENRES_ALBUMS(?)'; Filtre: 'ALBUMS_BY_GENRE(?, ?)';
     FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET, NOTATION';
@@ -191,7 +190,7 @@ const
     FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)';
     SEARCHORDER: 'COALESCE(TITREALBUM, TITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
     DEFAULTFILTRE: 'COMPLET = 1';
-    ClassPointeur: TAlbumLite; ClassDao: TDaoAlbumLite),
+    ClassPointeur: TAlbumLite),
     ( // vmAlbumsSerie
     FILTRECOUNT: 'SERIES_ALBUMS(?)'; Filtre: 'ALBUMS_BY_SERIE(?, ?)';
     FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET, NOTATION';
@@ -199,7 +198,7 @@ const
     FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)';
     SEARCHORDER: 'COALESCE(TITREALBUM, TITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
     DEFAULTFILTRE: 'COMPLET = 1';
-    ClassPointeur: TAlbumLite; ClassDao: TDaoAlbumLite),
+    ClassPointeur: TAlbumLite),
     ( // vmParaBDSerie
     FILTRECOUNT: 'SERIES_PARABD(?)'; Filtre: 'PARABD_BY_SERIE(?, ?)';
     FIELDS: 'ID_PARABD, TITREPARABD, ID_SERIE, TITRESERIE, ACHAT, COMPLET, SCATEGORIE';
@@ -207,7 +206,7 @@ const
     FIELDSEARCH: 'COALESCE(TITREPARABD, TITRESERIE)';
     SEARCHORDER: 'COALESCE(TITREPARABD, TITRESERIE)';
     DEFAULTFILTRE: 'COMPLET = 1';
-    ClassPointeur: TParaBDLite; ClassDao: TDaoParaBDLite),
+    ClassPointeur: TParaBDLite),
     ( // vmAchatsAlbumsEditeur
     FILTRECOUNT: 'EDITEURS_ACHATALBUMS(?)'; Filtre: 'ACHATALBUMS_BY_EDITEUR(?, ?)';
     FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET, NOTATION';
@@ -215,13 +214,13 @@ const
     FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)';
     SEARCHORDER: 'COALESCE(TITREALBUM, TITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
     DEFAULTFILTRE: 'ACHAT = 1';
-    ClassPointeur: TAlbumLite; ClassDao: TDaoAlbumLite),
+    ClassPointeur: TAlbumLite),
     ( // vmUnivers
     FILTRECOUNT: 'INITIALES_UNIVERS(?)'; Filtre: 'UNIVERS_BY_INITIALE(?, ?)';
     FIELDS: 'ID_UNIVERS, NOMUNIVERS';
     INITIALEFIELDS: 'INITIALENOMUNIVERS'; INITIALEVALUE: 'INITIALENOMUNIVERS'; REFFIELDS: 'ID_UNIVERS'; TABLESEARCH: 'UNIVERS';
     FIELDSEARCH: 'NOMUNIVERS';
-    ClassPointeur: TUniversLite; ClassDao: TDaoUniversLite),
+    ClassPointeur: TUniversLite),
     ( // vmAlbumsSerieUnivers
     FILTRECOUNT: 'SERIES_ALBUMS(?)'; Filtre: 'ALBUMS_BY_SERIE(?, ?)';
     FIELDS: 'ID_ALBUM, TITREALBUM, MOISPARUTION, ANNEEPARUTION, HORSSERIE, INTEGRALE, TOME, TOMEDEBUT, TOMEFIN, ID_SERIE, TITRESERIE, ACHAT, COMPLET, NOTATION';
@@ -229,7 +228,7 @@ const
     FIELDSEARCH: 'COALESCE(TITREALBUM, TITRESERIE)';
     SEARCHORDER: 'COALESCE(TITREALBUM, TITRESERIE), HORSSERIE NULLS FIRST, INTEGRALE NULLS FIRST, TOME NULLS FIRST, TOMEDEBUT NULLS FIRST, TOMEFIN NULLS FIRST, ANNEEPARUTION NULLS FIRST, MOISPARUTION NULLS FIRST';
     DEFAULTFILTRE: 'COMPLET = 1';
-    ClassPointeur: TAlbumLite; ClassDao: TDaoAlbumLite),
+    ClassPointeur: TAlbumLite),
     ( // vmParaBDSerieUnivers
     FILTRECOUNT: 'SERIES_PARABD(?)'; Filtre: 'PARABD_BY_SERIE(?, ?)';
     FIELDS: 'ID_PARABD, TITREPARABD, ID_SERIE, TITRESERIE, ACHAT, COMPLET, SCATEGORIE';
@@ -237,13 +236,14 @@ const
     FIELDSEARCH: 'COALESCE(TITREPARABD, TITRESERIE)';
     SEARCHORDER: 'COALESCE(TITREPARABD, TITRESERIE)';
     DEFAULTFILTRE: 'COMPLET = 1';
-    ClassPointeur: TParaBDLite; ClassDao: TDaoParaBDLite)
+    ClassPointeur: TParaBDLite)
   );
 
 implementation
 
 uses
-  UIB, UdmPrinc, Commun, Types, UIBLib, Divers, Entities.Common;
+  UIB, UdmPrinc, Commun, Types, UIBLib, Divers, ORM.Core.Entities,
+  ORM.Core.DBConnection, ORM.Core.Dao;
 
 { TVirtualStringTree }
 
@@ -304,11 +304,7 @@ begin
     if (GetNodeLevel(Node) = 0) then
     begin
       NodeInfo := GetNodeData(Node);
-      if Assigned(NodeInfo.List) then
-      begin
-        vmModeInfos[FMode].ClassDao.VideListe(NodeInfo.List);
-        NodeInfo.List.Free;
-      end;
+      NodeInfo.List.Free;
       // Finalize(NodeInfo^);
     end;
   inherited;
@@ -401,32 +397,28 @@ end;
 function TVirtualStringTree.DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal): Boolean;
 var
   InfoNode: ^RNodeInfo;
-  q: TUIBQuery;
+  q: TManagedQuery;
 begin
   if (FMode <> vmNone) and (GetNodeLevel(Node) = 0) then
   begin
     ChildCount := FCountPointers[Node.Index].Count;
     InfoNode := GetNodeData(Node);
     if not Assigned(InfoNode.List) then
-      InfoNode.List := TList<TBaseLite>.Create;
-    q := TUIBQuery.Create(Self);
-    with q do
-      try
-        Transaction := GetTransaction(DMPrinc.UIBDataBase);
-        SQL.Text := 'select ' + vmModeInfos[FMode].FIELDS + ' from ' + vmModeInfos[FMode].Filtre;
-        Prepare(True);
-        Params.AsString[0] := Copy(FCountPointers[Node.Index].sValue, 1, Params.MaxStrLen[0]);
-        if FUseFiltre then
-          Params.AsString[1] := Copy(FFiltre, 1, Params.MaxStrLen[1])
-        else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '')
-        then
-          Params.AsString[1] := Copy(vmModeInfos[FMode].DEFAULTFILTRE, 1, Params.MaxStrLen[1]);
-        Open;
-        vmModeInfos[FMode].ClassDao.FillList(InfoNode.List, q);
-      finally
-        Transaction.Free;
-        Free;
-      end;
+      InfoNode.List := TObjectList<TBaseLite>.Create(True);
+    q := dmPrinc.DBConnection.GetQuery;
+    try
+      q.SQL.Text := 'select ' + vmModeInfos[FMode].FIELDS + ' from ' + vmModeInfos[FMode].Filtre;
+      q.Prepare(True);
+      q.Params.AsString[0] := Copy(FCountPointers[Node.Index].sValue, 1, q.Params.MaxStrLen[0]);
+      if FUseFiltre then
+        q.Params.AsString[1] := Copy(FFiltre, 1, q.Params.MaxStrLen[1])
+      else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
+        q.Params.AsString[1] := Copy(vmModeInfos[FMode].DEFAULTFILTRE, 1, q.Params.MaxStrLen[1]);
+      q.Open;
+      TDaoFactory.getDaoDB(vmModeInfos[FMode].ClassPointeur).FillList(TList<TabstractDBEntity>(InfoNode.List), q);
+    finally
+      q.Free;
+    end;
     Result := True;
   end
   else
@@ -446,8 +438,6 @@ begin
     end
     else
     begin
-      if Assigned(NodeInfo.List) then
-        vmModeInfos[FMode].ClassDao.VideListe(NodeInfo.List);
       FreeAndNil(NodeInfo.List);
       NodeInfo.InitialeInfo := @FCountPointers[Node.Index];
       if LongBool(FCountPointers[Node.Index].Count) then
@@ -538,9 +528,8 @@ begin
       CurrentValue := iFind;
     end
     else
-      with TUIBQuery.Create(nil) do
+      with dmPrinc.DBConnection.GetQuery do
         try
-          Transaction := GetTransaction(DMPrinc.UIBDataBase);
           SQL.Text := 'SELECT ' + vmModeInfos[FMode].REFFIELDS + ' FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].FIELDSEARCH +
             ' LIKE ''%'' || ? || ''%''';
           if FUseFiltre then
@@ -576,7 +565,6 @@ begin
           else
             CurrentValue := FFindArray[0];
         finally
-          Transaction.Free;
           Free;
         end;
   end;
@@ -658,9 +646,8 @@ begin
   Result := nil;
   if IsEqualGUID(Value, GUID_NULL) then
     Exit;
-  with TUIBQuery.Create(nil) do
+  with dmPrinc.DBConnection.GetQuery do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'SELECT coalesce(' + vmModeInfos[FMode].INITIALEVALUE + ', ''-1'') FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' +
         vmModeInfos[FMode].REFFIELDS + ' = ?';
       Params.AsString[0] := GUIDToString(Value);
@@ -686,7 +673,6 @@ begin
           Result := Result.NextSibling;
       end;
     finally
-      Transaction.Free;
       Free;
     end;
 end;
@@ -708,11 +694,10 @@ begin
   iCurrent := CurrentValue;
   Clear;
   if FMode <> vmNone then
-    with TUIBQuery.Create(Self) do
+    with dmPrinc.DBConnection.GetQuery do
     begin
       BeginUpdate;
       try
-        Transaction := GetTransaction(DMPrinc.UIBDataBase);
         SQL.Text := 'SELECT * FROM ' + vmModeInfos[FMode].FILTRECOUNT;
         Prepare(True);
         if FUseFiltre then
@@ -743,7 +728,6 @@ begin
 
         RootNodeCount := Length(FCountPointers);
       finally
-        Transaction.Free;
         Free;
         EndUpdate;
       end;

@@ -3,7 +3,8 @@ unit Proc_Gestions;
 interface
 
 uses
-  editions, SysUtils, Classes, Controls, Dialogs, Db, DBCtrls, Divers, Commun, ComCtrls, VirtualTreeBdtk, Entities.Full;
+  editions, SysUtils, Classes, Controls, Dialogs, Db, DBCtrls, Divers, Commun, ComCtrls, VirtualTreeBdtk, Entities.Full,
+  ORM.Core.Types;
 
 type
   TActionGestionAdd = function(VT: TVirtualStringTree; const Valeur: string; Source: TObjetFull = nil): TGUID;

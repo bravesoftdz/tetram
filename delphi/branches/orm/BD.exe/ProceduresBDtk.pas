@@ -3,7 +3,7 @@ unit ProceduresBDtk;
 interface
 
 uses SysUtils, Windows, StdCtrls, Forms, Controls, ExtCtrls, CommonConst, Graphics, StrUtils, Dialogs, SyncObjs,
-  uib, Commun, System.Classes, ComboCheck, Entities.Full;
+  Commun, System.Classes, ComboCheck, Entities.Full, Entities.Types, ORM.Core.DBConnection, ORM.Core.Types;
 
 type
   IImpressionApercu = interface
@@ -57,10 +57,10 @@ procedure LitOptions;
 procedure EcritOptions;
 
 function SupprimerTable(const Table: string): Boolean;
-function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TUIBTransaction = nil): Boolean; overload;
-function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TUIBTransaction = nil): Boolean; overload;
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TUIBTransaction = nil): Boolean; overload;
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TUIBTransaction = nil)
+function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TManagedTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TManagedTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TManagedTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TManagedTransaction = nil)
   : Boolean; overload;
 
 function GetCouvertureStream(isParaBD: Boolean; const ID_Couverture: RGUIDEx; Hauteur, Largeur: Integer; AntiAliasing: Boolean; Cadre: Boolean = False;
@@ -308,7 +308,7 @@ end;
 
 procedure LitOptions;
 
-  function LitStr(Table: TUIBQuery; const Champ, Defaut: string): string;
+  function LitStr(Table: TManagedQuery; const Champ, Defaut: string): string;
   begin
     with Table do
     begin
@@ -322,20 +322,18 @@ procedure LitOptions;
   end;
 
 var
-  op: TUIBQuery;
+  op: TManagedQuery;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  op := TUIBQuery.Create(nil);
+  op := dmPrinc.DBConnection.GetQuery;
   with op do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'select first 1 valeur from options where nom_option = ? order by dm_options desc';
       Prepare(True);
       TGlobalVar.Utilisateur.Options.SymboleMonnetaire := LitStr(op, 'SymboleM', FormatSettings.CurrencyString);
       RepImages := LitStr(op, 'RepImages', RepImages);
     finally
-      Transaction.Free;
       Free;
     end;
   with TIniFile.Create(FichierIni) do
@@ -376,7 +374,7 @@ end;
 
 procedure EcritOptions;
 
-  procedure Sauve(Table: TUIBQuery; const Champ: string; Valeur: Currency); overload;
+  procedure Sauve(Table: TManagedQuery; const Champ: string; Valeur: Currency); overload;
   begin
     with Table do
     begin
@@ -388,7 +386,7 @@ procedure EcritOptions;
     end;
   end;
 
-  procedure Sauve(Table: TUIBQuery; const Champ, Valeur: string); overload;
+  procedure Sauve(Table: TManagedQuery; const Champ, Valeur: string); overload;
   begin
     with Table do
     begin
@@ -401,19 +399,17 @@ procedure EcritOptions;
   end;
 
 var
-  op: TUIBQuery;
+  op: TManagedQuery;
   hg: IHourGlass;
 begin
   hg := THourGlass.Create;
-  op := TUIBQuery.Create(nil);
+  op := dmPrinc.DBConnection.GetQuery;
   with op do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       Sauve(op, 'SymboleM', TGlobalVar.Utilisateur.Options.SymboleMonnetaire);
       Sauve(op, 'RepImages', RepImages);
       Transaction.Commit;
     finally
-      Transaction.Free;
       Free;
     end;
   with TIniFile.Create(FichierIni), TGlobalVar.Utilisateur.Options do
@@ -453,9 +449,8 @@ end;
 function SupprimerTable(const Table: string): Boolean;
 begin
   try
-    with TUIBQuery.Create(nil) do
+    with dmPrinc.DBConnection.GetQuery do
       try
-        Transaction := GetTransaction(DMPrinc.UIBDataBase);
         Transaction.Database.Connected := False; // fonctionne mais pas correct du tout!
         Transaction.Database.Connected := True;
         SQL.Text := 'drop table ' + Table;
@@ -463,7 +458,6 @@ begin
         Transaction.Commit;
         Result := True;
       finally
-        Transaction.Free;
         Free;
       end;
   except
@@ -471,32 +465,27 @@ begin
   end;
 end;
 
-function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TUIBTransaction = nil): Boolean;
+function SupprimerToutDans(const ChampSupp, Table: string; UseTransaction: TManagedTransaction = nil): Boolean;
 begin
   Result := SupprimerToutDans(ChampSupp, Table, '', GUID_NULL, '', UseTransaction);
 end;
 
-function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TUIBTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference, Sauf: string; UseTransaction: TManagedTransaction = nil): Boolean; overload;
 begin
   Result := SupprimerToutDans(ChampSupp, Table, Reference, GUID_NULL, Sauf, UseTransaction);
 end;
 
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TUIBTransaction = nil): Boolean; overload;
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; UseTransaction: TManagedTransaction = nil): Boolean; overload;
 begin
   Result := SupprimerToutDans(ChampSupp, Table, Reference, Valeur, '', UseTransaction);
 end;
 
-function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TUIBTransaction = nil)
+function SupprimerToutDans(const ChampSupp, Table, Reference: string; const Valeur: RGUIDEx; const Sauf: string; UseTransaction: TManagedTransaction = nil)
   : Boolean;
 begin
   try
-    with TUIBQuery.Create(nil) do
+    with dmPrinc.DBConnection.GetQuery(UseTransaction) do
       try
-        if Assigned(UseTransaction) then
-          Transaction := UseTransaction
-        else
-          Transaction := GetTransaction(DMPrinc.UIBDataBase);
-
         if ChampSupp <> '' then
           SQL.Add(Format('update %s set %s = True', [Table, ChampSupp]))
         else
@@ -512,8 +501,6 @@ begin
         Transaction.Commit;
         Result := True;
       finally
-        if not Assigned(UseTransaction) then
-          Transaction.Free;
         Free;
       end;
   except
@@ -541,9 +528,8 @@ var
   img: TJPEGImage;
   Fichier, Chemin: string;
 begin
-  with TUIBQuery.Create(nil) do
+  with dmPrinc.DBConnection.GetQuery do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       if isParaBD then
         SQL.Text := 'select imagephoto, stockagephoto, fichierphoto from photos where id_photo = ?'
       else
@@ -586,16 +572,14 @@ begin
         end;
       end;
     finally
-      Transaction.Free;
       Free;
     end;
 end;
 
 function SearchNewFileName(const Chemin, Fichier: string; Reserve: Boolean = True): string;
 begin
-  with TUIBQuery.Create(nil) do
+  with dmPrinc.DBConnection.GetQuery do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'select * from searchfilename(:chemin, :fichier, :reserve)';
       Prepare(True);
       Params.AsString[0] := Copy(IncludeTrailingPathDelimiter(Chemin), 1, Params.MaxStrLen[0]);
@@ -604,7 +588,6 @@ begin
       Open;
       Result := TPath.GetFileName(Fields.AsString[0]);
     finally
-      Transaction.Free;
       Free;
     end;
 end;

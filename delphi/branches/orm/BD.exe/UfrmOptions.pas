@@ -102,8 +102,9 @@ type
 
 implementation
 
-uses CommonConst, UdmPrinc, Entities.Lite, UIB, Commun, Procedures, Updates, IOUtils,
-  Entities.DaoLite, ProceduresBDtk, Entities.Common, Entities.FactoriesLite, ICUNumberFormatter, _uloc;
+uses CommonConst, UdmPrinc, Entities.Lite, Commun, Procedures, Updates, IOUtils,
+  Entities.DaoLite, ProceduresBDtk, ORM.Core.Entities, ICUNumberFormatter, _uloc,
+  ORM.Core.DBConnection, ORM.Core.Factories, ORM.Core.Dao;
 
 {$R *.DFM}
 
@@ -155,9 +156,8 @@ begin
       SiteWeb.BddVersion := ComboBox5.Text;
     SiteWeb.Paquets := StrToInt(ComboBox6.Text);
   end;
-  with TUIBQuery.Create(nil) do
+  with dmPrinc.DBConnection.GetQuery do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'update or insert into conversions (id_conversion, monnaie1, monnaie2, taux) values (?, ?, ?, ?) matching (id_conversion)';
       Prepare(True);
       for i := 0 to ListView1.Items.Count - 1 do
@@ -174,7 +174,6 @@ begin
       end;
       Transaction.Commit;
     finally
-      Transaction.Free;
       Free;
     end;
   EcritOptions;
@@ -200,7 +199,7 @@ end;
 
 procedure TfrmOptions.FormCreate(Sender: TObject);
 var
-  q: TUIBQuery;
+  q: TManagedQuery;
   MySQLUpdate: TMySQLUpdate;
   fileName: String;
 begin
@@ -222,10 +221,9 @@ begin
   ImageChargee := False;
   SItem := nil;
 
-  q := TUIBQuery.Create(nil);
+  q := dmPrinc.DBConnection.GetQuery;
   with q do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Add('SELECT Monnaie1 AS Monnaie FROM conversions');
       SQL.Add('UNION');
       SQL.Add('SELECT Monnaie2 AS Monnaie FROM conversions');
@@ -245,14 +243,13 @@ begin
       begin
         with ListView1.Items.Add do
         begin
-          Data := TDaoConversionLite.Make(q);
+          Data := TDaoFactory.getDaoDB<TConversionLite>.getInstance(q);
           Caption := TConversionLite(Data).ChaineAffichage;
           SubItems.Add('0');
         end;
         Next;
       end;
     finally
-      Transaction.Free;
       Free;
     end;
   with ComboBox1.Items, TGlobalVar.Utilisateur.options do
@@ -317,7 +314,7 @@ begin
   end
   else
   begin
-    PC := TFactoryConversionLite.getInstance;
+    PC := TFactories.getInstance<TConversionLite>;
     i := ListView1.Items.Add;
     i.SubItems.Add('1');
     i.Data := PC;

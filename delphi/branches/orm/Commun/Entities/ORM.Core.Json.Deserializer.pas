@@ -1,11 +1,11 @@
-unit JsonDeserializer;
+unit ORM.Core.Json.Deserializer;
 
 interface
 
 uses
-  System.SysUtils, System.Rtti, System.Generics.Collections, System.TypInfo, dwsJSON, Commun,
-  Entities.Lite, Entities.Full, System.Classes, UMetadata, Entities.Common,
-  Entities.FactoriesCommon;
+  System.SysUtils, System.Rtti, System.Generics.Collections, System.TypInfo, dwsJSON,
+  System.Classes, ORM.Core.Entities,
+  ORM.Core.Factories;
 
 type
 {$TYPEINFO ON}
@@ -18,16 +18,12 @@ type
   protected
     class procedure ReadStringListFromJSON(list: TStrings; json: TdwsJSONArray);
     class procedure ReadStringListWithValuesFromJSON(list: TStrings; json: TdwsJSONArray);
-    class procedure ReadListEntitiesFromJSON<T: TDBEntity; F: TFactoryEntity>(list: TList<T>; json: TdwsJSONArray);
+    class procedure ReadListEntitiesFromJSON<T: TabstractDBEntity>(list: TList<T>; json: TdwsJSONArray);
   public
     class function ReadValueFromJSON(const Name: string; const Default: string; json: TdwsJSONObject): string; overload; inline;
     class function ReadValueFromJSON(const Name: string; const Default: Integer; json: TdwsJSONObject): Integer; overload; inline;
     class function ReadValueFromJSON(const Name: string; const Default: Currency; json: TdwsJSONObject): Currency; overload; inline;
     class function ReadValueFromJSON(const Name: string; const Default: Boolean; json: TdwsJSONObject): Boolean; overload; inline;
-    class function ReadValueFromJSON(const Name: string; const Default: ROption; json: TdwsJSONObject): ROption; overload; inline;
-    class function ReadValueFromJSON(const Name: string; const Default: RGUIDEx; json: TdwsJSONObject): RGUIDEx; overload; inline;
-    class function ReadValueFromJSON(const Name: string; const Default: TMetierAuteur; json: TdwsJSONObject): TMetierAuteur; overload; inline;
-    class function ReadValueFromJSON(const Name: string; const Default: RTriStateValue; json: TdwsJSONObject): RTriStateValue; overload; // inline;
     class procedure ReadValueFromJSON(const Name: string; Value: TStrings; json: TdwsJSONObject; ItemsHasValues: Boolean = False); overload; inline;
 
     class constructor Create;
@@ -36,8 +32,8 @@ type
     class procedure LoadFromJson<T: class>(Obj: T; const json: string);
     class function BuildFromJson<T: class, constructor>(const json: string): T; overload;
     class function BuildFromJson<T: class, constructor>(json: TdwsJSONObject): T; overload;
-    class function BuildEntityFromJson<T: TEntity; F: TFactoryEntity>(const json: string): T; overload;
-    class function BuildEntityFromJson<T: TEntity; F: TFactoryEntity>(json: TdwsJSONObject): T; overload;
+    class function BuildEntityFromJson<T: TabstractEntity>(const json: string): T; overload;
+    class function BuildEntityFromJson<T: TabstractEntity>(json: TdwsJSONObject): T; overload;
 
     class procedure ReadFromJSON(Obj: TObject; json: TdwsJSONObject);
   end;
@@ -46,21 +42,21 @@ implementation
 
 { TJsonDeserializer }
 
-class function TJsonDeserializer.BuildEntityFromJson<T, F>(const json: string): T;
+class function TJsonDeserializer.BuildEntityFromJson<T>(const json: string): T;
 var
   o: TdwsJSONObject;
 begin
   o := TdwsJSONObject.ParseString(json) as TdwsJSONObject;
   try
-    Result := BuildEntityFromJson<T, F>(o);
+    Result := BuildEntityFromJson<T>(o);
   finally
     o.Free;
   end;
 end;
 
-class function TJsonDeserializer.BuildEntityFromJson<T, F>(json: TdwsJSONObject): T;
+class function TJsonDeserializer.BuildEntityFromJson<T>(json: TdwsJSONObject): T;
 begin
-  Result := F.getInstance as T;
+  Result := TFactories.getInstance<T> as T;
   ReadFromJSON(Result, json);
 end;
 
@@ -150,7 +146,7 @@ begin
   end;
 end;
 
-class procedure TJsonDeserializer.ReadListEntitiesFromJSON<T, F>(list: TList<T>; json: TdwsJSONArray);
+class procedure TJsonDeserializer.ReadListEntitiesFromJSON<T>(list: TList<T>; json: TdwsJSONArray);
 var
   i: Integer;
 begin
@@ -159,7 +155,7 @@ begin
 
   list.Clear;
   for i := 0 to Pred(json.ElementCount) do
-    list.Add(BuildEntityFromJson<T, F>(json.Elements[i] as TdwsJSONObject));
+    list.Add(BuildEntityFromJson<T>(json.Elements[i] as TdwsJSONObject));
 end;
 
 class procedure TJsonDeserializer.ReadStringListFromJSON(list: TStrings; json: TdwsJSONArray);
@@ -187,20 +183,6 @@ begin
   begin
     o := json.Elements[i] as TdwsJSONObject;
     list.Add(o.Names[0] + list.NameValueSeparator + o.Values[0].AsString);
-  end;
-end;
-
-class function TJsonDeserializer.ReadValueFromJSON(const Name: string; const Default: ROption; json: TdwsJSONObject): ROption;
-var
-  o: TdwsJSONObject;
-begin
-  o := json.Items[Name] as TdwsJSONObject;
-  if o = nil then
-    Result := Default
-  else
-  begin
-    Result.Value := StrToInt(o.Names[0]);
-    Result.Caption := ReadValueFromJSON(IntToStr(Result.Value), Result.Caption, o);
   end;
 end;
 
@@ -237,11 +219,6 @@ begin
     Result := o.AsString;
 end;
 
-class function TJsonDeserializer.ReadValueFromJSON(const Name: string; const Default: RGUIDEx; json: TdwsJSONObject): RGUIDEx;
-begin
-  Result := ReadValueFromJSON(Name, string(Default), json);
-end;
-
 class function TJsonDeserializer.ReadValueFromJSON(const Name: string; const Default: Currency; json: TdwsJSONObject): Currency;
 var
   o: TdwsJSONValue;
@@ -263,28 +240,6 @@ begin
       ReadStringListWithValuesFromJSON(Value, o as TdwsJSONArray)
     else
       ReadStringListFromJSON(Value, o as TdwsJSONArray);
-end;
-
-class function TJsonDeserializer.ReadValueFromJSON(const Name: string; const Default: RTriStateValue; json: TdwsJSONObject): RTriStateValue;
-var
-  o: TdwsJSONValue;
-begin
-  o := json.Items[Name] as TdwsJSONValue;
-  if o = nil then
-    Result := Default
-  else
-    Result := RTriStateValue.FromInteger(o.AsInteger);
-end;
-
-class function TJsonDeserializer.ReadValueFromJSON(const Name: string; const Default: TMetierAuteur; json: TdwsJSONObject): TMetierAuteur;
-var
-  o: TdwsJSONObject;
-begin
-  o := json.Items[Name] as TdwsJSONObject;
-  if o = nil then
-    Result := Default
-  else
-    Result := TMetierAuteur(StrToIntDef(o.Names[0], Integer(Default)));
 end;
 
 end.

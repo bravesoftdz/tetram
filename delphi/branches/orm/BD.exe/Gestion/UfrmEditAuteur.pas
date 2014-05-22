@@ -40,7 +40,7 @@ type
 implementation
 
 uses Commun, ShellAPI, Procedures, Textes, VirtualTreeBdtk, Entities.DaoFull,
-  Entities.Common;
+  ORM.Core.Entities, Entities.Types, ORM.Core.Types, ORM.Core.Dao;
 
 {$R *.DFM}
 
@@ -50,7 +50,7 @@ var
 begin
   hg := THourGlass.Create;
   FAuteur := Value;
-  TDaoAuteurFull.FillAssociations(FAuteur, vmPersonnes);
+  (TDaoFactory.getDaoDB<TAuteurFull> as TDaoAuteurFull).FillAssociations(FAuteur, vmPersonnes);
 
   edNom.Text := FAuteur.NomAuteur;
   edSite.Text := FAuteur.SiteWeb;
@@ -72,8 +72,8 @@ begin
   FAuteur.Biographie := edBiographie.Text;
   FAuteur.Associations.Text := edAssociations.Text;
 
-  TDaoAuteurFull.SaveToDatabase(FAuteur);
-  TDaoAuteurFull.SaveAssociations(FAuteur, vmPersonnes, GUID_NULL);
+  TDaoFactory.getDaoDB<TAuteurFull>.SaveToDatabase(FAuteur);
+  (TDaoFactory.getDaoDB<TAuteurFull> as TDaoAuteurFull).SaveAssociations(FAuteur, vmPersonnes, GUID_NULL);
 
   ModalResult := mrOk;
 end;

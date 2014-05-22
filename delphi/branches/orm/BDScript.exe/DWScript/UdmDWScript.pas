@@ -200,16 +200,16 @@ begin
           else
             Filename := ScriptPos.SourceFile.Name;
           if m is TWarningMessage then
-            FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(Filename, Text, tmWarning, ScriptPos.Line, ScriptPos.Col)
+            FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(Filename), Text, tmWarning, ScriptPos.Line, ScriptPos.Col)
           else if m is THintMessage then
-            FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(Filename, Text, tmHint, ScriptPos.Line, ScriptPos.Col)
+            FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(Filename), Text, tmHint, ScriptPos.Line, ScriptPos.Col)
           else if m is TRuntimeErrorMessage then
-            FMasterEngine.DebugPlugin.Messages.AddRuntimeErrorMessage(Filename, Text, ScriptPos.Line, ScriptPos.Col)
+            FMasterEngine.DebugPlugin.Messages.AddRuntimeErrorMessage(FMasterEngine.GetScriptUnitName(Filename), Text, ScriptPos.Line, ScriptPos.Col)
           else if (m is TCompilerErrorMessage) or (m is TSyntaxErrorMessage) then
-            Result := FMasterEngine.DebugPlugin.Messages[FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(Filename, Text, tmError, ScriptPos.Line,
+            Result := FMasterEngine.DebugPlugin.Messages[FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(Filename), Text, tmError, ScriptPos.Line,
               ScriptPos.Col)]
           else
-            FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(Filename, Text, tmUnknown, ScriptPos.Line, ScriptPos.Col);
+            FMasterEngine.DebugPlugin.Messages.AddCompileErrorMessage(FMasterEngine.GetScriptUnitName(Filename), Text, tmUnknown, ScriptPos.Line, ScriptPos.Col);
         end
       else
         FMasterEngine.DebugPlugin.Messages.AddInfoMessage('', m.AsInfo, 0, 0);

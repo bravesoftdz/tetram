@@ -35,7 +35,7 @@ const
 implementation
 
 uses
-  Textes, Commun, UIB, UdmPrinc;
+  Textes, Commun, UIB, UdmPrinc, ORM.Core.DBConnection;
 
 const
   GP_UNIVERS = 1;
@@ -110,28 +110,26 @@ var
   iChamp, pChamp: Integer;
   Table: string;
   hg: IHourGlass;
-  Qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   if _ChampsRecherche[1].TypeData = uftUnKnown then
   begin
     hg := THourGlass.Create;
-    Qry := TUIBQuery.Create(nil);
+    qry := dmPrinc.DBConnection.GetQuery;
     try
-      Qry.Transaction := GetTransaction(DMPrinc.UIBDataBase);
-
       iChamp := 1;
       while iChamp <= High(_ChampsRecherche) do
       begin
         Table := _ChampsRecherche[iChamp].NomTable;
-        Qry.Close;
-        Qry.SQL.Text := 'select first 0 * from ' + Table;
-        Qry.Open;
+        qry.Close;
+        qry.SQL.Text := 'select first 0 * from ' + Table;
+        qry.Open;
 
         while iChamp <= High(_ChampsRecherche) do
         begin
           if SameText(Table, _ChampsRecherche[iChamp].NomTable) then
           begin
-            pChamp := Qry.Fields.GetFieldIndex(AnsiString(_ChampsRecherche[iChamp].NomChamp));
+            pChamp := qry.Fields.GetFieldIndex(AnsiString(_ChampsRecherche[iChamp].NomChamp));
             _ChampsRecherche[iChamp].TypeData := qry.Fields.FieldType[pChamp];
             Inc(iChamp);
           end
@@ -140,8 +138,7 @@ begin
         end;
       end;
     finally
-      Qry.Transaction.Free;
-      Qry.Free;
+      qry.Free;
     end;
   end;
   Result := @_ChampsRecherche;

@@ -47,6 +47,24 @@ begin
   end;
 end;
 
+procedure SIRegister_TObjectListOfAuteur(CL: TPSPascalCompiler);
+begin
+  with CL.AddClassN(CL.FindClass('TObjectList' { TObjectList<> } ), 'TObjectListOfAuteurSerie') do
+  begin
+    RegisterMethod('function Add(AObject: TAuteurSerie): Integer');
+    RegisterMethod('procedure Insert(Index: Integer; AObject: TAuteurSerie)');
+    RegisterProperty('Items', 'TAuteurSerie Integer', iptRW);
+    SetDefaultPropery('Items');
+  end;
+  with CL.AddClassN(CL.FindClass('TObjectList' { TObjectList<> } ), 'TObjectListOfAuteurAlbum') do
+  begin
+    RegisterMethod('function Add(AObject: TAuteurAlbum): Integer');
+    RegisterMethod('procedure Insert(Index: Integer; AObject: TAuteurAlbum)');
+    RegisterProperty('Items', 'TAuteurAlbum Integer', iptRW);
+    SetDefaultPropery('Items');
+  end;
+end;
+
 procedure SIRegister_TObjectListOfUnivers(CL: TPSPascalCompiler);
 begin
   with CL.AddClassN(CL.FindClass('TObjectList' { TObjectList<> } ), 'TObjectListOfUnivers') do
@@ -54,17 +72,6 @@ begin
     RegisterMethod('function Add(AObject: TUnivers): Integer');
     RegisterMethod('procedure Insert(Index: Integer; AObject: TUnivers)');
     RegisterProperty('Items', 'TUnivers Integer', iptRW);
-    SetDefaultPropery('Items');
-  end;
-end;
-
-procedure SIRegister_TObjectListOfAuteur(CL: TPSPascalCompiler);
-begin
-  with CL.AddClassN(CL.FindClass('TObjectList' { TObjectList<> } ), 'TObjectListOfAuteur') do
-  begin
-    RegisterMethod('function Add(AObject: TAuteur): Integer');
-    RegisterMethod('procedure Insert(Index: Integer; AObject: TAuteur)');
-    RegisterProperty('Items', 'TAuteur Integer', iptRW);
     SetDefaultPropery('Items');
   end;
 end;
@@ -95,9 +102,9 @@ begin
     RegisterProperty('TomeFin', 'Integer', iptRW);
     RegisterProperty('HorsSerie', 'Boolean', iptRW);
     RegisterProperty('Integrale', 'Boolean', iptRW);
-    RegisterProperty('Scenaristes', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , iptR);
-    RegisterProperty('Dessinateurs', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , iptR);
-    RegisterProperty('Coloristes', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , iptR);
+    RegisterProperty('Scenaristes', 'TObjectListOfAuteurAlbum' { TObjectList<TAuteur> } , iptR);
+    RegisterProperty('Dessinateurs', 'TObjectListOfAuteurAlbum' { TObjectList<TAuteur> } , iptR);
+    RegisterProperty('Coloristes', 'TObjectListOfAuteurAlbum' { TObjectList<TAuteur> } , iptR);
     RegisterProperty('Sujet', 'LongString', iptRW);
     RegisterProperty('Notes', 'LongString', iptRW);
     RegisterProperty('Edition', 'TEditionFull', iptR);
@@ -121,9 +128,9 @@ begin
     RegisterProperty('Collection', 'string', iptRW);
     RegisterProperty('SiteWeb', 'string', iptRW);
     RegisterProperty('NbAlbums', 'Integer', iptRW);
-    RegisterProperty('Scenaristes', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , iptR);
-    RegisterProperty('Dessinateurs', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , iptR);
-    RegisterProperty('Coloristes', 'TObjectListOfAuteur' { TObjectList<TAuteur> } , iptR);
+    RegisterProperty('Scenaristes', 'TObjectListOfAuteurSerie' { TObjectList<TAuteur> } , iptR);
+    RegisterProperty('Dessinateurs', 'TObjectListOfAuteurSerie' { TObjectList<TAuteur> } , iptR);
+    RegisterProperty('Coloristes', 'TObjectListOfAuteurSerie' { TObjectList<TAuteur> } , iptR);
     RegisterProperty('Univers', 'TObjectListOfUnivers' { TObjectList<TUnivers> } , iptR);
   end;
 end;
@@ -188,6 +195,8 @@ begin
     RegisterProperty('NomAuteur', 'string', iptRW);
     RegisterProperty('Metier', 'TMetierAuteur', iptRW);
   end;
+  CL.AddClassN(CL.FindClass('TAuteur' { TBaseRec } ), 'TAuteurSerie');
+  CL.AddClassN(CL.FindClass('TAuteur' { TBaseRec } ), 'TAuteurAlbum');
 end;
 
 procedure SIRegister_TScriptChoix(CL: TPSPascalCompiler);

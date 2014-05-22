@@ -15,9 +15,6 @@
         <Projects Include="BDScript.exe\BDScript.dproj">
             <Dependencies>BD.exe\BD.dproj;BDPic.DLL\BDPic.dproj</Dependencies>
         </Projects>
-        <Projects Include="D:\Composants\DWScript\Tools\IDEDialog\Delphi projects\DwsIdeDemo.dproj">
-            <Dependencies/>
-        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -62,23 +59,14 @@
     <Target Name="BDScript:Make" DependsOnTargets="BD:Make;BDPic:Make">
         <MSBuild Projects="BDScript.exe\BDScript.dproj" Targets="Make"/>
     </Target>
-    <Target Name="DwsIdeDemo">
-        <MSBuild Projects="D:\Composants\DWScript\Tools\IDEDialog\Delphi projects\DwsIdeDemo.dproj"/>
-    </Target>
-    <Target Name="DwsIdeDemo:Clean">
-        <MSBuild Projects="D:\Composants\DWScript\Tools\IDEDialog\Delphi projects\DwsIdeDemo.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="DwsIdeDemo:Make">
-        <MSBuild Projects="D:\Composants\DWScript\Tools\IDEDialog\Delphi projects\DwsIdeDemo.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Build">
-        <CallTarget Targets="BDPic;BDT_UDF;BD;BDScript;DwsIdeDemo"/>
+        <CallTarget Targets="BDPic;BDT_UDF;BD;BDScript"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="BDPic:Clean;BDT_UDF:Clean;BD:Clean;BDScript:Clean;DwsIdeDemo:Clean"/>
+        <CallTarget Targets="BDPic:Clean;BDT_UDF:Clean;BD:Clean;BDScript:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="BDPic:Make;BDT_UDF:Make;BD:Make;BDScript:Make;DwsIdeDemo:Make"/>
+        <CallTarget Targets="BDPic:Make;BDT_UDF:Make;BD:Make;BDScript:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
     <ItemGroup Condition="'$(BuildGroup)'=='Release'">
@@ -105,12 +93,6 @@
             <Configurations>Release</Configurations>
             <Platforms>Win32</Platforms>
             <Enabled>True</Enabled>
-        </BuildGroupProject>
-        <BuildGroupProject Include="D:\Composants\DWScript\Tools\IDEDialog\Delphi projects\DwsIdeDemo.dproj">
-            <ProjectGuid>{EAB7E737-287F-411F-9AA4-C136AB7D313F}</ProjectGuid>
-            <Configurations>Debug</Configurations>
-            <Platforms>Win32</Platforms>
-            <Enabled>False</Enabled>
         </BuildGroupProject>
     </ItemGroup>
 </Project>

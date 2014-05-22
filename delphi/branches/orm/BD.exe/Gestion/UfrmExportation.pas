@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, IOUtils, System.UITypes,
   Vcl.Dialogs, ActnList, StdActns, VirtualTrees, StdCtrls, Buttons, ProceduresBDtk,
-  VDTButton, ExtCtrls, VirtualTreeBdtk, Procedures, UBdtForms, PngSpeedButton;
+  VDTButton, ExtCtrls, VirtualTreeBdtk, Procedures, UBdtForms, PngSpeedButton,
+  ORM.Core.Factories, ORM.Core.Types;
 
 type
   TFileStream = class(Classes.TFileStream)
@@ -45,7 +46,8 @@ type
 implementation
 
 uses CommonConst, Entities.Lite, Commun, Entities.Full, Entities.DaoLite, Entities.DaoFull,
-  Entities.Serializer, JsonSerializer, Entities.Common, Entities.FactoriesLite;
+  Entities.Serializer, ORM.Core.Json.Serializer, ORM.Core.Entities,
+  ORM.Core.Dao;
 
 {$R *.dfm}
 { TFileStream }
@@ -155,7 +157,7 @@ begin
   end;
 
   NodeInfo := vstExportation.GetNodeData(vstExportation.AddChild(NodeSerie));
-  NodeInfo.Detail := TFactoryAlbumLite.Duplicate(PA);
+  NodeInfo.Detail := TFactories.getFactory<TAlbumLite>.Duplicate(PA);
 end;
 
 procedure TfrmExportation.vstExportationGetText(Sender: TBaseVirtualTree; Node: PVirtualNode; Column: TColumnIndex; TextType: TVSTTextType;
@@ -263,7 +265,7 @@ begin
   begin
     FFichierExport := Data;
     NodeInfo := Sender.GetNodeData(Node);
-    album := TDaoAlbumFull.getInstance(TAlbumLite(NodeInfo.Detail).ID);
+    album := TDaoFactory.getDaoDB<TAlbumFull>.getInstance(TAlbumLite(NodeInfo.Detail).ID);
     try
       FFichierExport.WriteString(TEntitesSerializer.AsJson(album, [soFull]) + ',');
     finally

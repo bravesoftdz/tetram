@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Generics.Collections, Entities.Lite, Dialogs, StdCtrls, Entities.Full,
   ExtCtrls, CheckLst, Menus, jpeg, UframBoutons, ComboCheck, EditLabeled, ComCtrls,
-  UBdtForms;
+  UBdtForms, Entities.Types, ORM.Core.Types;
 
 type
   TfrmValidationImport = class(TbdtForm)
@@ -140,7 +140,7 @@ implementation
 
 uses
   IOUtils, Commun, Procedures, CommonConst, Entities.DaoFull, ProceduresBDtk,
-  Entities.Common, Entities.DaoLambda;
+  ORM.Core.Entities, Entities.DaoLambda, ORM.Core.Dao;
 
 {$R *.dfm}
 
@@ -191,8 +191,8 @@ procedure TfrmValidationImport.FormCreate(Sender: TObject);
 begin
   PageControl1.ActivePageIndex := 0;
 
-  DefaultValues := TDaoAlbumFull.getInstance(GUID_NULL);
-  DefaultEdition := TDaoEditionFull.getInstance(GUID_NULL);
+  DefaultValues := TDaoFactory.getDaoDB<TAlbumFull>.getInstance(GUID_NULL);
+  DefaultEdition := TDaoFactory.getDaoDB<TEditionFull>.getInstance(GUID_NULL);
   DefaultValues.Editions.Add(DefaultEdition);
 
   LoadCombo(cbxEtat, TDaoListe.ListEtats, TDaoListe.DefaultEtat);
@@ -260,7 +260,21 @@ procedure TfrmValidationImport.framBoutons1btnOKClick(Sender: TObject);
       Value.Clear;
   end;
 
-  procedure SetValue(Value: TList<TAuteurLite>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
+  procedure SetValue(Value: TList<TAuteurSerieLite>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
+  var
+    i: Integer;
+  begin
+    if Chk.Checked then
+    begin
+      for i := Pred(Value.Count) downto 0 do
+        if not Ctrl.Checked[i] then
+          Value.Delete(i);
+    end
+    else
+      Value.Clear;
+  end;
+
+  procedure SetValue(Value: TList<TAuteurAlbumLite>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
   var
     i: Integer;
   begin
@@ -329,9 +343,9 @@ procedure TfrmValidationImport.framBoutons1btnOKClick(Sender: TObject);
   function SetValue(Ctrl: TLightComboCheck; Chk: TCheckBox): ROption; overload;
   begin
     if Chk.Checked then
-      Result := MakeOption(Ctrl.Value, Ctrl.Caption)
+      Result := ROption.Create(Ctrl.Value, Ctrl.Caption)
     else
-      Result := MakeOption(Ctrl.DefaultValueChecked, Ctrl.GetCaption(Ctrl.DefaultValueChecked));
+      Result := ROption.Create(Ctrl.DefaultValueChecked, Ctrl.GetCaption(Ctrl.DefaultValueChecked));
   end;
 
 begin
@@ -506,7 +520,21 @@ procedure TfrmValidationImport.SetAlbum(Value: TAlbumFull);
     ChangeState(Chk, Ctrl);
   end;
 
-  procedure LoadValue(Value: TList<TAuteurLite>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
+  procedure LoadValue(Value: TList<TAuteurSerieLite>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
+  var
+    i: Integer;
+  begin
+    Ctrl.Items.Clear;
+    for i := 0 to Pred(Value.Count) do
+    begin
+      Ctrl.Items.Add(Value[i].Personne.ChaineAffichage);
+      Ctrl.Checked[i] := True;
+    end;
+    Chk.Checked := Ctrl.Items.Count > 0;
+    ChangeState(Chk, Ctrl);
+  end;
+
+  procedure LoadValue(Value: TList<TAuteurAlbumLite>; Ctrl: TCheckListBox; Chk: TCheckBox); overload;
   var
     i: Integer;
   begin

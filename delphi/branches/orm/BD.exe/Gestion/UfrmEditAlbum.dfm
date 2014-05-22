@@ -1226,7 +1226,7 @@ object frmEditAlbum: TfrmEditAlbum
       Columns = <
         item
           Position = 1
-          Width = 433
+          Width = 437
         end
         item
           Position = 0

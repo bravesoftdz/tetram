@@ -4,7 +4,7 @@ interface
 
 uses Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, System.UITypes, Db, ExtCtrls, DBCtrls, StdCtrls, Menus, ComCtrls, ProceduresBDtk,
   VDTButton, ActnList, Buttons, ToolWin, VirtualTrees, jpeg, Procedures, ShellAPI, VirtualTree, Entities.Full, UBdtForms, StrUtils,
-  System.Actions;
+  System.Actions, ORM.Core.Types;
 
 type
   TfrmConsultationAuteur = class(TBdtForm, IImpressionApercu, IFicheEditable)
@@ -66,7 +66,7 @@ implementation
 {$R *.DFM}
 
 uses Commun, Entities.Lite, Impression, DateUtils, UHistorique, Proc_Gestions, UfrmFond,
-  Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
+  Entities.DaoFull, ORM.Core.Entities, ORM.Core.Factories, ORM.Core.Dao;
 
 type
   PNodeInfo = ^RNodeInfo;
@@ -85,7 +85,7 @@ end;
 
 procedure TfrmConsultationAuteur.FormCreate(Sender: TObject);
 begin
-  FAuteur := TFactoryAuteurFull.getInstance;
+  FAuteur := TFactories.getInstance<TAuteurFull>;
   vstSeries.NodeDataSize := SizeOf(RNodeInfo);
   PrepareLV(Self);
 end;
@@ -166,7 +166,7 @@ end;
 procedure TfrmConsultationAuteur.SetID_Auteur(const Value: TGUID);
 begin
   ClearForm;
-  TDaoAuteurFull.Fill(FAuteur, Value);
+  TDaoFactory.getDaoDB<TAuteurFull>.Fill(FAuteur, Value);
 
   edNom.Caption := FormatTitre(FAuteur.NomAuteur);
   Caption := 'Fiche d''auteur - ' + FAuteur.ChaineAffichage;

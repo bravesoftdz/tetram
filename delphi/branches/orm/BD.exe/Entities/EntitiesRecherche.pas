@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Classes, Generics.Collections, UChampsRecherche, Entities.Full, Entities.Lite,
-  Entities.Common;
+  ORM.Core.Entities, ORM.Core.Dao;
 
 type
   TGroupOption = (goEt, goOu);
@@ -75,7 +75,7 @@ const
   TLblRechercheSimple: array [TRechercheSimple] of string = ('Auteur', 'Univers', 'Serie', 'Editeur', 'Genre', 'Collection');
 
 type
-  TRecherche = class(TEntity)
+  TRecherche = class(TabstractEntity)
   public
     TypeRecherche: TTypeRecherche;
     Resultats: TObjectList<TAlbumLite>;
@@ -85,7 +85,9 @@ type
     RechercheSimple: TRechercheSimple;
     FLibelle: string;
 
-    procedure Clear; override;
+  protected
+    procedure DoClear; override;
+  public
     procedure ClearCriteres;
     procedure Fill; reintroduce; overload;
     procedure Fill(Recherche: TRechercheSimple; const ID: TGUID; const Libelle: string); reintroduce; overload;
@@ -107,12 +109,12 @@ type
 implementation
 
 uses
-  uib, Commun, UdmPrinc, Divers, uiblib, CommonConst, UMetadata, Textes,
-  Entities.DaoLite;
+  uiblib, Commun, UdmPrinc, Divers, CommonConst, UMetadata, Textes,
+  Entities.DaoLite, ORM.Core.DBConnection, ORM.Core.Types;
 
 { TRecherche }
 
-procedure TRecherche.Clear;
+procedure TRecherche.DoClear;
 begin
   inherited;
   Resultats.Clear;
@@ -227,12 +229,12 @@ var
 
 var
   Album: TAlbumLite;
-  q: TUIBQuery;
+  q: TManagedQuery;
   sWhere, sOrderBy, S: string;
   CritereTri: TCritereTri;
 begin
-  DoClear;
-  q := TUIBQuery.Create(nil);
+  Clear;
+  q := dmPrinc.DBConnection.GetQuery;
   slFrom := TStringList.Create;
   slFrom.Sorted := True;
   slFrom.Duplicates := dupIgnore;
@@ -240,7 +242,6 @@ begin
   slWhere := TStringList.Create;
   with q do
     try
-      Transaction := GetTransaction(dmPrinc.UIBDataBase);
       SQL.Clear;
       SQL.Add('select distinct');
       SQL.Add('  albums.id_album, albums.titrealbum, albums.tome, albums.tomedebut, albums.tomefin,');
@@ -266,7 +267,7 @@ begin
       Open;
       while not Eof do
       begin
-        Album := TDaoAlbumLite.Make(q);
+        Album := (TDaoFactory.getDao<TAlbumLite> as TDaoAlbumLite).getInstance(q);
         Resultats.Add(Album);
         S := '';
         for CritereTri in SortBy do
@@ -306,7 +307,6 @@ begin
       else
         TypeRecherche := trAucune;
     finally
-      Transaction.Free;
       Free;
       slFrom.Free;
       slWhere.Free;
@@ -328,19 +328,18 @@ const
   Proc: array [0 .. 5] of string = ('albums_by_auteur(?, null)', 'albums_by_univers(?, null)', 'albums_by_serie(?, null)', 'albums_by_editeur(?, null)',
     'albums_by_genre(?, null)', 'albums_by_collection(?, null)');
 var
-  q: TUIBQuery;
+  q: TManagedQuery;
   S: string;
   Album: TAlbumLite;
   oldID_Album: TGUID;
   oldIndex: Integer;
 begin
-  DoClear;
+  Clear;
   if not IsEqualGUID(ID, GUID_NULL) then
   begin
-    q := TUIBQuery.Create(nil);
+    q := dmPrinc.DBConnection.GetQuery;
     with q do
       try
-        Transaction := GetTransaction(DMPrinc.UIBDataBase);
         SQL.Text := 'select * from ' + Proc[Integer(Recherche)];
         Params.AsString[0] := GUIDToString(ID);
         FLibelle := Libelle;
@@ -368,7 +367,7 @@ begin
           end
           else
           begin
-            Album := TDaoAlbumLite.Make(q);
+            Album := TDaoFactory.getDaoDB<TAlbumLite>.getInstance(q);
             Resultats.Add(Album);
             if Recherche = rsAuteur then
               case TMetierAuteur(Fields.ByNameAsInteger['metier']) of
@@ -390,7 +389,6 @@ begin
         else
           TypeRecherche := trAucune;
       finally
-        Transaction.Free;
         Free;
       end;
   end;

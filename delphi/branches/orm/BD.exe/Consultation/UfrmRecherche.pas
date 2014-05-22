@@ -84,7 +84,7 @@ implementation
 
 uses
   Textes, UdmPrinc, Entities.Lite, Impression, Math, UfrmEditCritere, UHistorique, Procedures, StrUtils,
-  UfrmFond, UfrmEditCritereTri, Divers, Entities.Common;
+  UfrmFond, UfrmEditCritereTri, Divers, ORM.Core.Entities;
 
 {$R *.DFM}
 
