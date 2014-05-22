@@ -278,16 +278,14 @@ procedure TdmPrinc.DataModuleCreate(Sender: TObject);
 begin
   FUILock := TCriticalSection.Create;
   FDBConnection := TDBConnection.Create;
-  // TODO
-  // TDaoDBEntity.DBConnection := FDBConnection;
+  TDaoFactory.DBConnection := FDBConnection;
   MakeJumpList;
 end;
 
 procedure TdmPrinc.DataModuleDestroy(Sender: TObject);
 begin
   DBConnection.GetDatabase.Connected := False;
-  // TODO
-  // TDaoDBEntity.DBConnection := nil;
+  TDaoFactory.DBConnection := nil;
   FDBConnection := nil;
   FUILock.Free;
 end;

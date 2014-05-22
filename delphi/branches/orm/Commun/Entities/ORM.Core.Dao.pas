@@ -24,8 +24,8 @@ type
 
   TabstractDaoDB<T: TabstractDBEntity> = class abstract(TabstractDao<T>)
   private
-    class var FDBConnection: IDBConnection;
-    procedure SetProperty(Entity: T; PropDesc: EntityFieldAttribute; qry: TManagedQuery); overload;
+    procedure SetProperty(Instance: T; PropDesc: EntityFieldAttribute; qry: TManagedQuery); overload;
+    class function GetDBConnection: IDBConnection; static;
   protected
     function getPreparedQuery: TManagedQuery;
     function GetFieldIndex(const Name: string): Integer;
@@ -55,14 +55,15 @@ type
     procedure SaveToDatabase(Entity: T); overload;
     procedure SaveToDatabase(Entity: T; UseTransaction: TManagedTransaction); overload; virtual;
 
-    class property DBConnection: IDBConnection read FDBConnection write FDBConnection;
+    class property DBConnection: IDBConnection read GetDBConnection;
   end;
 
   TabstractDao = TabstractDao<TabstractEntity>;
   TabstractDaoDB = TabstractDaoDB<TabstractDBEntity>;
 
-  TDaoFactory = class abstract
+  TDaoFactory = class sealed
   private
+    class var FDBConnection: IDBConnection;
     class var RttiContext: TRttiContext;
     class var FDao: TList<TabstractDao>;
     class procedure SearchDao;
@@ -75,6 +76,8 @@ type
     class function getDaoDB<T: TabstractDBEntity>: TabstractDaoDB<T>; overload;
     class function getDaoDB(T: TDBEntityClass): TabstractDaoDB; overload;
     class function getDao<T: TabstractEntity>: TabstractDao<T>;
+
+    class property DBConnection: IDBConnection read FDBConnection write FDBConnection;
   end;
 
 implementation
@@ -145,17 +148,24 @@ begin
   end;
 end;
 
-procedure TabstractDaoDB<T>.SetProperty(Entity: T; PropDesc: EntityFieldAttribute; qry: TManagedQuery);
+procedure TabstractDaoDB<T>.SetProperty(Instance: T; PropDesc: EntityFieldAttribute; qry: TManagedQuery);
+var
+  s: string;
 begin
   if PropDesc.IsClass(TabstractDBEntity) then
   begin
-    TDaoFactory.getDaoDB(TDBEntityClass(TEntityClass(PropDesc.c.ClassType)));
-    FillEntity(PropDesc.GetValue<TabstractDBEntity>(@Entity), NonNull(qry, PropDesc.FieldName), qry.Transaction)
+    TDaoFactory.getDaoDB(TDBEntityClass(PropDesc.c.ClassType)).
+    FillEntity(PropDesc.GetValue<TabstractDBEntity>(@Instance), NonNull(qry, PropDesc.FieldName), qry.Transaction)
   end
   else if PropDesc.T = TypeInfo(Boolean) then
-    PropDesc.SetValue(@Entity, TValue.From<Boolean>(qry.Fields.ByNameAsBoolean[PropDesc.FieldName]))
+    PropDesc.SetValue(@Instance, TValue.From<Boolean>(qry.Fields.ByNameAsBoolean[PropDesc.FieldName]))
+  else if PropDesc.T = TypeInfo(RGUIDEx) then
+  begin
+    s := qry.Fields.ByNameAsAnsiString[PropDesc.FieldName];
+    PropDesc.SetValue(@Instance, s)
+  end
   else
-    PropDesc.SetValue(@Entity, qry.Fields.AsTValue[qry.Fields.GetFieldIndex(AnsiString(PropDesc.FieldName))]);
+    PropDesc.SetValue(@Instance, qry.Fields.AsTValue[qry.Fields.GetFieldIndex(AnsiString(PropDesc.FieldName))]);
 end;
 
 procedure TabstractDaoDB<T>.FillEntity(Entity: T; Query: TManagedQuery);
@@ -188,6 +198,11 @@ begin
   finally
     Unprepare(Query);
   end;
+end;
+
+class function TabstractDaoDB<T>.GetDBConnection: IDBConnection;
+begin
+  Result := TDaoFactory.DBConnection;
 end;
 
 function TabstractDaoDB<T>.GetFieldIndex(const Name: string): Integer;

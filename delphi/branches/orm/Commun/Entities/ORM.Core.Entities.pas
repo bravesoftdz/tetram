@@ -37,7 +37,7 @@ type
 
   TabstractDBEntity = class abstract(TabstractEntity)
   private
-    FID: TGUID;
+    FID: RGUIDEx;
   protected
     constructor Create; override;
     procedure DoClear; override;
