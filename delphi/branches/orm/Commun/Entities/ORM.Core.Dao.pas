@@ -8,8 +8,12 @@ uses
 
 type
   TabstractDao<T: TabstractEntity> = class abstract
+  private
+    FEntityClass: TEntityClass;
   public
     class constructor Create;
+
+    constructor Create; virtual;
 
     function Supports(AClass: TEntityClass): Boolean;
 
@@ -21,8 +25,7 @@ type
   TabstractDaoDB<T: TabstractDBEntity> = class abstract(TabstractDao<T>)
   private
     class var FDBConnection: IDBConnection;
-    procedure SetProperty(Entity: T; PropDesc: EntityFieldAttribute; qry: TManagedQuery);
-      overload;
+    procedure SetProperty(Entity: T; PropDesc: EntityFieldAttribute; qry: TManagedQuery); overload;
   protected
     function getPreparedQuery: TManagedQuery;
     function GetFieldIndex(const Name: string): Integer;
@@ -61,11 +64,10 @@ type
   TDaoFactory = class abstract
   private
     class var RttiContext: TRttiContext;
-    class var FDao: TObjectDictionary<TEntityClass, TabstractDao>;
+    class var FDao: TList<TabstractDao>;
     class procedure SearchDao;
-    // class var FDaoClasses: TList<TDaoEntity>;
-    // class var cs: TCriticalSection;
-    // class var FPreparedQueries: TDictionary<TDaoDBEntity, TManagedQuery>;
+    class var cs: TCriticalSection;
+    class var FPreparedQueries: TDictionary<TEntityClass, TManagedQuery>;
   public
     class constructor Create;
     class destructor Destroy;
@@ -88,14 +90,19 @@ begin
   // TDaoFactory.FDaoClasses.Add(TDaoEntity(TDaoEntity<T>.Create));
 end;
 
+constructor TabstractDao<T>.Create;
+begin
+  FEntityClass := T;
+end;
+
 function TabstractDao<T>.getInstance: T;
 begin
-  Result := TFactories.getInstance<T>;
+  Result := T(TFactories.getFactory(FEntityClass).getInstance);
 end;
 
 function TabstractDao<T>.Supports(AClass: TEntityClass): Boolean;
 begin
-  Result := T.InheritsFrom(AClass);
+  Result := (FEntityClass = AClass) or FEntityClass.InheritsFrom(AClass);
 end;
 
 { TDaoDBEntity }
@@ -214,7 +221,7 @@ end;
 
 function TabstractDaoDB<T>.getPreparedQuery: TManagedQuery;
 begin
-  // TDaoFactory.FPreparedQueries.TryGetValue(TDaoDBEntity(Self), Result);
+  TDaoFactory.FPreparedQueries.TryGetValue(FEntityClass, Result);
 end;
 
 class function TabstractDaoDB<T>.NonNull(Query: TManagedQuery; const Champ: string): TGUID;
@@ -273,13 +280,12 @@ begin
   p := getPreparedQuery;
   if (p <> nil) or (p = Query) then
     exit;
-  (*
-    if not Assigned(TDaoFactory.cs) then
+
+  if not Assigned(TDaoFactory.cs) then
     TDaoFactory.cs := TCriticalSection.Create;
-    TDaoFactory.cs.Enter;
-    TDaoFactory.FPreparedQueries.Add(TDaoDBEntity(Self), Query);
-    GetFieldIndices;
-  *)
+  TDaoFactory.cs.Enter;
+  TDaoFactory.FPreparedQueries.Add(FEntityClass, Query);
+  GetFieldIndices;
 end;
 
 procedure TabstractDaoDB<T>.SaveToDatabase(Entity: T);
@@ -303,18 +309,17 @@ begin
 end;
 
 procedure TabstractDaoDB<T>.Unprepare(Query: TManagedQuery);
-// var
-// p: TPair<TDaoDBEntity, TManagedQuery>;
+var
+  p: TPair<TEntityClass, TManagedQuery>;
 begin
   if getPreparedQuery <> Query then
     exit;
-  (*
-    for p in TDaoFactory.FPreparedQueries do
-    if p.Value = Query then
-    TDaoFactory.FPreparedQueries.Remove(p.Key);
 
-    TDaoFactory.cs.Release;
-  *)
+  for p in TDaoFactory.FPreparedQueries do
+    if p.Value = Query then
+      TDaoFactory.FPreparedQueries.Remove(p.Key);
+
+  TDaoFactory.cs.Release;
 end;
 
 { TDaoFactory }
@@ -324,44 +329,47 @@ begin
   // on ne construit pas maintenant: la présence de l'instance sera à dire si on a déjà cherché les DAO
   // FDao := TObjectList<TabstractDao>.Create(True);
 
-  // cs := nil;
-  // FPreparedQueries := TDictionary<TDaoDBEntity, TManagedQuery>.Create;
+  cs := nil;
+  FPreparedQueries := TDictionary<TEntityClass, TManagedQuery>.Create;
 end;
 
 class destructor TDaoFactory.Destroy;
 begin
   FDao.Free;
-  // FPreparedQueries.Free;
-  // cs.Free;
+  FPreparedQueries.Free;
+  cs.Free;
 end;
 
 class function TDaoFactory.getDao<T>: TabstractDao<T>;
 var
-  dao: TabstractDao;
+  CandidateDao: TabstractDao;
 begin
   SearchDao;
-  if FDao.TryGetValue(T, dao) then
-    Exit(TabstractDao<T>(dao));
+  for CandidateDao in FDao do
+    if CandidateDao.Supports(T) then
+      exit(TabstractDao<T>(CandidateDao));
   Result := nil;
 end;
 
 class function TDaoFactory.getDaoDB(T: TDBEntityClass): TabstractDaoDB;
 var
-  dao: TabstractDao;
+  CandidateDao: TabstractDao;
 begin
   SearchDao;
-  if FDao.TryGetValue(T, dao) then
-    Exit(TabstractDaoDB(dao));
+  for CandidateDao in FDao do
+    if CandidateDao.Supports(T) then
+      exit(TabstractDaoDB(CandidateDao));
   Result := nil;
 end;
 
 class function TDaoFactory.getDaoDB<T>: TabstractDaoDB<T>;
 var
-  dao: TabstractDao;
+  CandidateDao: TabstractDao;
 begin
   SearchDao;
-  if FDao.TryGetValue(T, dao) then
-    Exit(TabstractDaoDB<T>(dao));
+  for CandidateDao in FDao do
+    if CandidateDao.Supports(T) then
+      exit(TabstractDaoDB<T>(CandidateDao));
   Result := nil;
 end;
 
@@ -369,20 +377,27 @@ class procedure TDaoFactory.SearchDao;
 var
   T: TRttiType;
   attr: TCustomAttribute;
+  Dao: TObject;
+  m: TRttiMethod;
 begin
   if Assigned(FDao) then
     exit;
 
-  FDao := TObjectDictionary<TEntityClass, TabstractDao>.Create([doOwnsValues]);
-
-//  if not (TDaoAlbumLite.Supports(TAlbumLite)) then
-//    exit;
+  FDao := TObjectList<TabstractDao>.Create(True);
 
   for T in RttiContext.GetTypes do
     if T.IsInstance then
       for attr in T.GetAttributes do
         if attr is DaoAttribute then
-          FDao.Add(DaoAttribute(attr).EntityClass, TabstractDao(T.Handle.TypeData.ClassType.Create));
+          for m in T.GetMethods do
+            // GetMethod('Create') serait trop facile...
+            // TRttiInstanceType(T).MetaclassType.Create aussi
+            if m.IsConstructor { and (Length(m.GetParameters) = 0) } then
+            begin
+              Dao := m.Invoke(TRttiInstanceType(T).MetaclassType, []).AsObject;
+              FDao.Add(TabstractDao(Dao));
+              break;
+            end;
 end;
 
 end.

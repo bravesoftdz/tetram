@@ -42,7 +42,7 @@ var
 begin
   FFirstEdit := nil;
   ListFC := TList<TframConvertisseur>.Create;
-  PC := TFactories.getInstance<TConversionLite>;
+  PC := TFactories.getFactory<TConversionLite>.getInstance;
   q := dmPrinc.DBConnection.GetQuery;
   with q do
     try

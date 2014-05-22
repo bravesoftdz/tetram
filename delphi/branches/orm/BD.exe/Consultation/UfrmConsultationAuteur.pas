@@ -85,7 +85,7 @@ end;
 
 procedure TfrmConsultationAuteur.FormCreate(Sender: TObject);
 begin
-  FAuteur := TFactories.getInstance<TAuteurFull>;
+  FAuteur := TFactories.getFactory<TAuteurFull>.getInstance;
   vstSeries.NodeDataSize := SizeOf(RNodeInfo);
   PrepareLV(Self);
 end;

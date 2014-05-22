@@ -255,7 +255,7 @@ end;
 
 procedure TfrmConsultationParaBD.FormCreate(Sender: TObject);
 begin
-  FParaBD := TFactories.getInstance<TParaBDFull>;
+  FParaBD := TFactories.getFactory<TParaBDFull>.getInstance;
   PrepareLV(Self);
   CurrentPhoto := 0;
   ImageParaBD.Picture := nil;

@@ -95,7 +95,7 @@ procedure TfrmEditAchatAlbum.AjouteAuteur(List: TList<TAuteurAlbumLite>; lvList:
 var
   PA: TAuteurAlbumLite;
 begin
-  PA := TFactories.getInstance<TAuteurAlbumLite>;
+  PA := TFactories.getFactory<TAuteurAlbumLite>.getInstance;
   (TDaoFactory.getDaoDB<TAuteurAlbumLite> as TDaoAuteurAlbumLite).Fill(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
   List.Add(PA);
   lvList.Items.Count := List.Count;

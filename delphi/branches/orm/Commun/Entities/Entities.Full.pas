@@ -584,7 +584,7 @@ begin
   FScenaristes := TObjectList<TAuteurAlbumLite>.Create;
   FDessinateurs := TObjectList<TAuteurAlbumLite>.Create;
   FColoristes := TObjectList<TAuteurAlbumLite>.Create;
-  FSerie := TFactories.getInstance<TSerieFull>;
+  FSerie := TFactories.getFactory<TSerieFull>.getInstance;
   FEditions := TObjectList<TEditionFull>.Create;
   FUnivers := TObjectList<TUniversLite>.Create;
   FUniversFull := TList<TUniversLite>.Create;
@@ -682,8 +682,8 @@ end;
 constructor TEditionFull.Create;
 begin
   inherited;
-  FEditeur := TFactories.getInstance<TEditeurFull>;
-  FCollection := TFactories.getInstance<TCollectionLite>;
+  FEditeur := TFactories.getFactory<TEditeurFull>.getInstance;
+  FCollection := TFactories.getFactory<TCollectionLite>.getInstance;
   FCouvertures := TObjectList<TCouvertureLite>.Create;
 end;
 
@@ -809,8 +809,8 @@ begin
   FAlbums := TObjectList<TAlbumLite>.Create(True);
   FParaBD := TObjectList<TParaBDLite>.Create(True);
   FGenres := TStringList.Create;
-  FEditeur := TFactories.getInstance<TEditeurFull>;
-  FCollection := TFactories.getInstance<TCollectionLite>;
+  FEditeur := TFactories.getFactory<TEditeurFull>.getInstance;
+  FCollection := TFactories.getFactory<TCollectionLite>.getInstance;
   FUnivers := TObjectList<TUniversLite>.Create(True);
   FScenaristes := TObjectList<TAuteurSerieLite>.Create(True);
   FDessinateurs := TObjectList<TAuteurSerieLite>.Create(True);
@@ -1022,7 +1022,7 @@ constructor TParaBDFull.Create;
 begin
   inherited;
   FAuteurs := TObjectList<TAuteurParaBDLite>.Create;
-  FSerie := TFactories.getInstance<TSerieFull>;
+  FSerie := TFactories.getFactory<TSerieFull>.getInstance;
   FUnivers := TObjectList<TUniversLite>.Create;
   FUniversFull := TList<TUniversLite>.Create;
   FPhotos := TObjectList<TPhotoLite>.Create;
@@ -1092,7 +1092,7 @@ end;
 constructor TCollectionFull.Create;
 begin
   inherited;
-  FEditeur := TFactories.getInstance<TEditeurLite>;
+  FEditeur := TFactories.getFactory<TEditeurLite>.getInstance;
 end;
 
 destructor TCollectionFull.Destroy;
@@ -1132,7 +1132,7 @@ end;
 constructor TUniversFull.Create;
 begin
   inherited;
-  FUniversParent := TFactories.getInstance<TUniversLite>;
+  FUniversParent := TFactories.getFactory<TUniversLite>.getInstance;
 end;
 
 destructor TUniversFull.Destroy;

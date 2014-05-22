@@ -140,7 +140,7 @@ end;
 procedure TfrmConsultationUnivers.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FUnivers := TFactories.getInstance<TUniversFull>;
+  FUnivers := TFactories.getFactory<TUniversFull>.getInstance;
 end;
 
 procedure TfrmConsultationUnivers.FormDestroy(Sender: TObject);

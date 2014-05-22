@@ -202,7 +202,7 @@ end;
 procedure TfrmConsultationSerie.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FSerie := TFactories.getInstance<TSerieFull>;
+  FSerie := TFactories.getFactory<TSerieFull>.getInstance;
 end;
 
 procedure TfrmConsultationSerie.FormDestroy(Sender: TObject);

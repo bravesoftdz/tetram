@@ -335,7 +335,7 @@ procedure TfrmEditAlbum.AjouteAuteur(List: TList<TAuteurAlbumLite>; lvList: TVDT
 var
   PA: TAuteurAlbumLite;
 begin
-  PA := TFactories.getInstance<TAuteurAlbumLite>;
+  PA := TFactories.getFactory<TAuteurAlbumLite>.getInstance;
   (TDaoFactory.getDaoDB<TAuteurAlbumLite> as TDaoAuteurAlbumLite).Fill(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
   List.Add(PA);
   lvList.Items.Count := List.Count;
@@ -613,7 +613,7 @@ begin
       try
         for i := 0 to Files.Count - 1 do
         begin
-          PC := TFactories.getInstance<TCouvertureLite>;
+          PC := TFactories.getFactory<TCouvertureLite>.getInstance;
           FCurrentEditionComplete.Couvertures.Add(PC);
           PC.ID := GUID_NULL;
           PC.OldNom := Files[i];
@@ -798,7 +798,7 @@ var
   EditionComplete: TEditionFull;
 begin
   SetLength(FEditeurCollectionSelected, Succ(Length(FEditeurCollectionSelected)));
-  EditionComplete := TFactories.getInstance<TEditionFull>;
+  EditionComplete := TFactories.getFactory<TEditionFull>.getInstance;
   EditionComplete.ID_Album := ID_Album;
   EditionComplete.Stock := True;
   EditionComplete.Dedicace := False;

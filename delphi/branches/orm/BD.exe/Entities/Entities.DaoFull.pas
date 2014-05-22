@@ -341,7 +341,7 @@ var
   Auteur: TAuteurAlbumLite;
   Univers: TUniversLite;
 begin
-  DefaultAlbum := TFactories.getInstance<TAlbumFull>;
+  DefaultAlbum := TFactories.getFactory<TAlbumFull>.getInstance;
   try
     // Album
     if not SameText(Source.TitreAlbum, DefaultAlbum.TitreAlbum) then
@@ -1119,7 +1119,7 @@ begin
         mrOk:
           if frm.CheckBox1.Checked then
           begin
-            FusionsEditions[i] := TFactories.getInstance<TEditionFull>;
+            FusionsEditions[i] := TFactories.getFactory<TEditionFull>.getInstance;
             Dest.Add(FusionsEditions[i]);
           end
           else
@@ -1152,7 +1152,7 @@ var
   DefaultEdition: TEditionFull;
   Couverture: TCouvertureLite;
 begin
-  DefaultEdition := TFactories.getInstance<TEditionFull>;
+  DefaultEdition := TFactories.getFactory<TEditionFull>.getInstance;
   try
     if not IsEqualGUID(Source.Editeur.ID_Editeur, DefaultEdition.Editeur.ID_Editeur) and not IsEqualGUID(Source.Editeur.ID_Editeur, Dest.Editeur.ID_Editeur)
     then

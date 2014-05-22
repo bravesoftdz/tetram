@@ -316,21 +316,21 @@ begin
           begin
             for Auteur in Serie.Scenaristes do
             begin
-              PA := TFactories.getInstance<TAuteurAlbumLite>;
+              PA := TFactories.getFactory<TAuteurAlbumLite>.getInstance;
               (TDaoFactory.getDaoDB<TAuteurAlbumLite> as TDaoAuteurAlbumLite).Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(0));
               Scenaristes.Add(PA);
             end;
 
             for Auteur in Serie.Dessinateurs do
             begin
-              PA := TFactories.getInstance<TAuteurAlbumLite>;
+              PA := TFactories.getFactory<TAuteurAlbumLite>.getInstance;
               (TDaoFactory.getDaoDB<TAuteurAlbumLite> as TDaoAuteurAlbumLite).Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(1));
               Dessinateurs.Add(PA);
             end;
 
             for Auteur in Serie.Coloristes do
             begin
-              PA := TFactories.getInstance<TAuteurAlbumLite>;
+              PA := TFactories.getFactory<TAuteurAlbumLite>.getInstance;
               (TDaoFactory.getDaoDB<TAuteurAlbumLite> as TDaoAuteurAlbumLite).Fill(PA, Auteur.Personne, ID_Album, GUID_NULL, TMetierAuteur(2));
               Coloristes.Add(PA);
             end;

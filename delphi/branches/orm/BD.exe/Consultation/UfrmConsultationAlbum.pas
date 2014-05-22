@@ -197,7 +197,7 @@ end;
 
 procedure TfrmConsultationAlbum.FormCreate(Sender: TObject);
 begin
-  FAlbum := TFactories.getInstance<TAlbumFull>;
+  FAlbum := TFactories.getFactory<TAlbumFull>.getInstance;
   PrepareLV(Self);
   CurrentCouverture := 0;
   FSortColumn := 0;
@@ -483,7 +483,7 @@ var
 begin
   ClearForm;
   TfrmConsole.AddEvent(UnitName, 'FAlbum.Fill() - ' + GUIDToString(Value));
-  TDaoFactory.getDaoDB<TAlbumFull>.Fill(FAlbum, Value);
+  TDaoFactory.getDaoDB<TAlbumFull>.FillEntity(FAlbum, Value);
 
   TfrmConsole.AddEvent(UnitName, 'Chargement des données... - ' + GUIDToString(Value));
   Caption := 'Fiche d''album - ' + FAlbum.ChaineAffichage;
