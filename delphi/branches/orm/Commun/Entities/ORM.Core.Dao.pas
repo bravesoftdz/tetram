@@ -150,7 +150,7 @@ end;
 
 procedure TabstractDaoDB<T>.SetProperty(Instance: T; PropDesc: EntityFieldAttribute; qry: TManagedQuery);
 var
-  s: string;
+  s: TGUID;
 begin
   if PropDesc.IsClass(TabstractDBEntity) then
   begin
@@ -161,7 +161,7 @@ begin
     PropDesc.SetValue(@Instance, TValue.From<Boolean>(qry.Fields.ByNameAsBoolean[PropDesc.FieldName]))
   else if PropDesc.T = TypeInfo(RGUIDEx) then
   begin
-    s := qry.Fields.ByNameAsAnsiString[PropDesc.FieldName];
+    s := StringToGUID( qry.Fields.ByNameAsAnsiString[PropDesc.FieldName]);
     PropDesc.SetValue(@Instance, s)
   end
   else
