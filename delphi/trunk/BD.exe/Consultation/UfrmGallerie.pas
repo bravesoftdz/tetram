@@ -209,7 +209,7 @@ begin
 
   FThumbs.Clear;
 
-  Album := TFactories.getFactory<TAlbumLite>.getInstance;
+  Album := TFactories.getInstance<TAlbumLite>;
   try
     TDaoFactory.getDaoDB<TAlbumLite>.Fill(Album, Value);
     Caption := 'Gallerie - ' + Album.ChaineAffichage(True);

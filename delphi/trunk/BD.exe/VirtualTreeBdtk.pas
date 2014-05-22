@@ -415,8 +415,7 @@ begin
       else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
         q.Params.AsString[1] := Copy(vmModeInfos[FMode].DEFAULTFILTRE, 1, q.Params.MaxStrLen[1]);
       q.Open;
-      // TODO: refaire le FillList;
-      // vmModeInfos[FMode].ClassDao.FillList(InfoNode.List, q);
+      TDaoFactory.getDaoDB(vmModeInfos[FMode].ClassPointeur).FillList(TList<TabstractDBEntity>(InfoNode.List), q);
     finally
       q.Free;
     end;

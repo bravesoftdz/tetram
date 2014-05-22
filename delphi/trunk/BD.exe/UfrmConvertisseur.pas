@@ -42,7 +42,7 @@ var
 begin
   FFirstEdit := nil;
   ListFC := TList<TframConvertisseur>.Create;
-  PC := TFactories.getFactory<TConversionLite>.getInstance;
+  PC := TFactories.getInstance<TConversionLite>;
   q := dmPrinc.DBConnection.GetQuery;
   with q do
     try
@@ -113,3 +113,4 @@ begin
 end;
 
 end.
+

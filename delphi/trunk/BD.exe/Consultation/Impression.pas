@@ -876,7 +876,7 @@ begin
       Prn.CreateColumn1(4, 15, -1, taLeftJustify, Prn.Font.name, 12, [fsBold]); // série
       Prn.CreateColumn1(5, 25, -1, taLeftJustify, Prn.Font.name, 10, [fsItalic]); // résumé de la série
 
-      PAl := TFactories.getFactory<TAlbumLite>.getInstance;
+      PAl := TFactories.getInstance<TAlbumLite>;
       with qrySource do
       begin
         index := 1;

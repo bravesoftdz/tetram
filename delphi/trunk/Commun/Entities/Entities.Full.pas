@@ -32,15 +32,20 @@ type
   strict private
     FNomEditeur: RAutoTrimString;
     FSiteWeb: RAutoTrimString;
-    procedure SetNomEditeur(const Value: RAutoTrimString);
-    procedure SetSiteWeb(const Value: RAutoTrimString);
+  private
+    procedure SetNomEditeur(const Value: string);
+    procedure SetSiteWeb(const Value: string);
+    function GetNomEditeur: string;
+    function GetSiteWeb: string;
   protected
     procedure DoClear; override;
   published
     [PrimaryKey]
     property ID_Editeur: RGUIDEx read GetID write SetID;
-    property NomEditeur: RAutoTrimString read FNomEditeur write SetNomEditeur;
-    property SiteWeb: RAutoTrimString read FSiteWeb write SetSiteWeb;
+    [EntityField]
+    property NomEditeur: string read GetNomEditeur write SetNomEditeur;
+    [EntityField]
+    property SiteWeb: string read GetSiteWeb write SetSiteWeb;
   end;
 
   [Entity('collections')]
@@ -48,8 +53,10 @@ type
   strict private
     FNomCollection: RAutoTrimString;
     FEditeur: TEditeurLite;
+  private
     function GetID_Editeur: RGUIDEx;
-    procedure SetNomCollection(const Value: RAutoTrimString);
+    procedure SetNomCollection(const Value: string);
+    function GetNomCollection: string;
   protected
     constructor Create; override;
     procedure DoClear; override;
@@ -58,7 +65,9 @@ type
   published
     [PrimaryKey]
     property ID_Collection: RGUIDEx read GetID write SetID;
-    property NomCollection: RAutoTrimString read FNomCollection write SetNomCollection;
+    [EntityField]
+    property NomCollection: string read GetNomCollection write SetNomCollection;
+    [EntityField('id_editeur')]
     property Editeur: TEditeurLite read FEditeur;
     property ID_Editeur: RGUIDEx read GetID_Editeur;
   end;
@@ -70,9 +79,14 @@ type
     FUniversParent: TUniversLite;
     FDescription: RLongString;
     FSiteWeb: RAutoTrimString;
-    procedure SetNomUnivers(const Value: RAutoTrimString);
+  private
+    procedure SetNomUnivers(const Value: string);
     function GetID_UniversParent: RGUIDEx;
-    procedure SetSiteWeb(const Value: RAutoTrimString);
+    procedure SetSiteWeb(const Value: string);
+    function GetNomUnivers: string;
+    function GetDescription: string;
+    function GetSiteWeb: string;
+    procedure SetDescription(const Value: string);
   protected
     constructor Create; override;
     procedure DoClear; override;
@@ -82,9 +96,13 @@ type
   published
     [PrimaryKey]
     property ID_Univers: RGUIDEx read GetID write SetID;
-    property NomUnivers: RAutoTrimString read FNomUnivers write SetNomUnivers;
-    property SiteWeb: RAutoTrimString read FSiteWeb write SetSiteWeb;
-    property Description: RLongString read FDescription write FDescription;
+    [EntityField]
+    property NomUnivers: string read GetNomUnivers write SetNomUnivers;
+    [EntityField]
+    property SiteWeb: string read GetSiteWeb write SetSiteWeb;
+    [EntityField]
+    property Description: string read GetDescription write SetDescription;
+    [EntityField('id_univers_parent')]
     property UniversParent: TUniversLite read FUniversParent;
     property ID_UniversParent: RGUIDEx read GetID_UniversParent;
   end;
@@ -119,10 +137,17 @@ type
     FSensLecture: ROption;
     FNotation: Integer;
     FUnivers: TObjectList<TUniversLite>;
+  private
     function GetID_Editeur: RGUIDEx;
     function GetID_Collection: RGUIDEx;
-    procedure SetTitreSerie(const Value: RAutoTrimString);
-    procedure SetSiteWeb(const Value: RAutoTrimString);
+    procedure SetTitreSerie(const Value: string);
+    procedure SetSiteWeb(const Value: string);
+    function GetNotes: string;
+    function GetSiteWeb: string;
+    function GetSujet: string;
+    procedure SetNotes(const Value: string);
+    procedure SetSujet(const Value: string);
+    function GetTitreSerie: string;
   protected
     constructor Create; override;
     procedure DoClear; override;
@@ -135,17 +160,27 @@ type
     property ID_Serie: RGUIDEx read GetID write SetID;
     property ID_Editeur: RGUIDEx read GetID_Editeur;
     property ID_Collection: RGUIDEx read GetID_Collection;
-    property TitreSerie: RAutoTrimString read FTitreSerie write SetTitreSerie;
+    [EntityField]
+    property TitreSerie: string read GetTitreSerie write SetTitreSerie;
     property Terminee: RTriStateValue read FTerminee write FTerminee;
     property Genres: TStringList read FGenres;
-    property Sujet: RLongString read FSujet write FSujet;
-    property Notes: RLongString read FNotes write FNotes;
+    [EntityField('sujetserie')]
+    property Sujet: string read GetSujet write SetSujet;
+    [EntityField('remarquesserie')]
+    property Notes: string read GetNotes write SetNotes;
+    [EntityField('id_editeur')]
     property Editeur: TEditeurFull read FEditeur;
+    [EntityField('id_collection')]
     property Collection: TCollectionLite read FCollection;
-    property SiteWeb: RAutoTrimString read FSiteWeb write SetSiteWeb;
+    [EntityField]
+    property SiteWeb: string read GetSiteWeb write SetSiteWeb;
+    [EntityField]
     property Complete: Boolean read FComplete write FComplete;
+    [EntityField]
     property SuivreManquants: Boolean read FSuivreManquants write FSuivreManquants;
+    [EntityField]
     property SuivreSorties: Boolean read FSuivreSorties write FSuivreSorties;
+    [EntityField('nb_albums')]
     property NbAlbums: Integer read FNbAlbums write FNbAlbums;
     property Albums: TObjectList<TAlbumLite> read FAlbums;
     property ParaBD: TObjectList<TParaBDLite> read FParaBD;
@@ -160,11 +195,12 @@ type
     property FormatEdition: ROption read FFormatEdition write FFormatEdition;
     property Orientation: ROption read FOrientation write FOrientation;
     property SensLecture: ROption read FSensLecture write FSensLecture;
+    [EntityField]
     property Notation: Integer read FNotation write FNotation;
     property Univers: TObjectList<TUniversLite> read FUnivers;
 
     // pour rétrocompatibilité pour les scripts
-    property Titre: RAutoTrimString read FTitreSerie write SetTitreSerie;
+    property Titre: string read GetTitreSerie write SetTitreSerie;
   end;
 
   [Entity('personnes')]
@@ -174,8 +210,13 @@ type
     FNomAuteur: RAutoTrimString;
     FSiteWeb: RAutoTrimString;
     FSeries: TObjectList<TSerieFull>;
-    procedure SetNomAuteur(const Value: RAutoTrimString);
-    procedure SetSiteWeb(const Value: RAutoTrimString);
+  private
+    procedure SetNomAuteur(const Value: string);
+    procedure SetSiteWeb(const Value: string);
+    function GetBiographie: string;
+    function GetNomAuteur: string;
+    function GetSiteWeb: string;
+    procedure SetBiographie(const Value: string);
   protected
     constructor Create; override;
     procedure DoClear; override;
@@ -183,11 +224,14 @@ type
     destructor Destroy; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
   published
-    [PrimaryKey]
+    [PrimaryKey('id_personne')]
     property ID_Auteur: RGUIDEx read GetID write SetID;
-    property NomAuteur: RAutoTrimString read FNomAuteur write SetNomAuteur;
-    property SiteWeb: RAutoTrimString read FSiteWeb write SetSiteWeb;
-    property Biographie: RLongString read FBiographie write FBiographie;
+    [EntityField('nompersonne')]
+    property NomAuteur: string read GetNomAuteur write SetNomAuteur;
+    [EntityField]
+    property SiteWeb: string read GetSiteWeb write SetSiteWeb;
+    [EntityField]
+    property Biographie: string read GetBiographie write SetBiographie;
     property Series: TObjectList<TSerieFull> read FSeries;
   end;
 
@@ -218,10 +262,20 @@ type
     FOffert: Boolean;
     FSensLecture: ROption;
     FEditeur: TEditeurFull;
-    FID_Album: RGUIDEx;
     FVO: Boolean;
+
+    [EntityField]
+    FID_Album: TGUID;
+  private
     function Get_sDateAchat: string;
-    procedure SetNumeroPerso(const Value: RAutoTrimString);
+    procedure SetNumeroPerso(const Value: string);
+    function GetISBN: string;
+    function GetNotes: string;
+    function GetNumeroPerso: string;
+    procedure SetISBN(const Value: string);
+    procedure SetNotes(const Value: string);
+    function GetID_Album: RGUIDEx;
+    procedure SetID_Album(const Value: RGUIDEx);
   protected
     constructor Create; override;
     procedure DoClear; override;
@@ -231,32 +285,50 @@ type
   published
     [PrimaryKey]
     property ID_Edition: RGUIDEx read GetID write SetID;
-    property ID_Album: RGUIDEx read FID_Album write FID_Album;
+    property ID_Album: RGUIDEx read GetID_Album write SetID_Album;
+    [EntityField('id_editeur')]
     property Editeur: TEditeurFull read FEditeur;
+    [EntityField('id_collection')]
     property Collection: TCollectionLite read FCollection;
     property TypeEdition: ROption read FTypeEdition write FTypeEdition;
+    [EntityField]
     property AnneeEdition: Integer read FAnneeEdition write FAnneeEdition;
     property Etat: ROption read FEtat write FEtat;
     property Reliure: ROption read FReliure write FReliure;
+    [EntityField]
     property NombreDePages: Integer read FNombreDePages write FNombreDePages;
     property FormatEdition: ROption read FFormatEdition write FFormatEdition;
     property Orientation: ROption read FOrientation write FOrientation;
+    [EntityField]
     property AnneeCote: Integer read FAnneeCote write FAnneeCote;
     property SensLecture: ROption read FSensLecture write FSensLecture;
+    [EntityField]
     property Prix: Currency read FPrix write FPrix;
+    [EntityField]
     property PrixCote: Currency read FPrixCote write FPrixCote;
+    [EntityField]
     property Couleur: Boolean read FCouleur write FCouleur;
+    [EntityField]
     property VO: Boolean read FVO write FVO;
+    [EntityField]
     property Dedicace: Boolean read FDedicace write FDedicace;
+    [EntityField]
     property Stock: Boolean read FStock write FStock;
+    [EntityField]
     property Prete: Boolean read FPrete write FPrete;
+    [EntityField]
     property Offert: Boolean read FOffert write FOffert;
+    [EntityField]
     property Gratuit: Boolean read FGratuit write FGratuit;
-    property ISBN: RAutoTrimString read FISBN write FISBN;
+    [EntityField]
+    property ISBN: string read GetISBN write SetISBN;
+    [EntityField]
     property DateAchat: TDateTime read FDateAchat write FDateAchat;
     property sDateAchat: string read Get_sDateAchat;
-    property Notes: RLongString read FNotes write FNotes;
-    property NumeroPerso: RAutoTrimString { [25] } read FNumeroPerso write SetNumeroPerso;
+    [EntityField]
+    property Notes: string read GetNotes write SetNotes;
+    [EntityField]
+    property NumeroPerso: string { [25] } read GetNumeroPerso write SetNumeroPerso;
     property Couvertures: TObjectList<TCouvertureLite> read FCouvertures;
   end;
 
@@ -285,9 +357,9 @@ type
     FDefaultSearch: RAutoTrimString;
     FUnivers: TObjectList<TUniversLite>;
     FUniversFull: TList<TUniversLite>;
-    function GetID_Serie: RGUIDEx;
-  private
     FReadyToImport: Boolean;
+  private
+    function GetID_Serie: RGUIDEx;
     function GetDefaultSearch: string;
     procedure SetDefaultSearch(const Value: string);
     function GetSerie: TSerieFull;
@@ -371,10 +443,10 @@ type
     FUnivers: TObjectList<TUniversLite>;
     FUniversFull: TList<TUniversLite>;
     FPhotos: TObjectList<TPhotoLite>;
+    FNotes: RLongString;
+  private
     function Get_sDateAchat: string;
     procedure SetTitreParaBD(const Value: string);
-  private
-    FNotes: RLongString;
     function GetID_Serie: RGUIDEx;
     function GetDescription: string;
     function GetNotes: string;
@@ -512,7 +584,7 @@ begin
   FScenaristes := TObjectList<TAuteurAlbumLite>.Create;
   FDessinateurs := TObjectList<TAuteurAlbumLite>.Create;
   FColoristes := TObjectList<TAuteurAlbumLite>.Create;
-  FSerie := TFactories.getFactory<TSerieFull>.getInstance;
+  FSerie := TFactories.getInstance<TSerieFull>;
   FEditions := TObjectList<TEditionFull>.Create;
   FUnivers := TObjectList<TUniversLite>.Create;
   FUniversFull := TList<TUniversLite>.Create;
@@ -610,8 +682,8 @@ end;
 constructor TEditionFull.Create;
 begin
   inherited;
-  FEditeur := TFactories.getFactory<TEditeurFull>.getInstance;
-  FCollection := TFactories.getFactory<TCollectionLite>.getInstance;
+  FEditeur := TFactories.getInstance<TEditeurFull>;
+  FCollection := TFactories.getInstance<TCollectionLite>;
   FCouvertures := TObjectList<TCouvertureLite>.Create;
 end;
 
@@ -621,6 +693,26 @@ begin
   FreeAndNil(FEditeur);
   FreeAndNil(FCollection);
   inherited;
+end;
+
+function TEditionFull.GetID_Album: RGUIDEx;
+begin
+  Result := FID_Album;
+end;
+
+function TEditionFull.GetISBN: string;
+begin
+  Result := FISBN;
+end;
+
+function TEditionFull.GetNotes: string;
+begin
+  Result := FNotes;
+end;
+
+function TEditionFull.GetNumeroPerso: string;
+begin
+  Result := FNumeroPerso;
 end;
 
 function TEditionFull.Get_sDateAchat: string;
@@ -643,9 +735,24 @@ begin
   AjoutString(Result, FormatISBN(ISBN), ' - ', 'ISBN ');
 end;
 
-procedure TEditionFull.SetNumeroPerso(const Value: RAutoTrimString);
+procedure TEditionFull.SetID_Album(const Value: RGUIDEx);
 begin
-  FNumeroPerso := Copy(Value, 1, LengthNumPerso);
+  FID_Album := Value;
+end;
+
+procedure TEditionFull.SetISBN(const Value: string);
+begin
+  FISBN := Value;
+end;
+
+procedure TEditionFull.SetNotes(const Value: string);
+begin
+  FNotes := Value;
+end;
+
+procedure TEditionFull.SetNumeroPerso(const Value: string);
+begin
+  FNumeroPerso := Value.Substring(0, LengthNumPerso);
 end;
 
 { TSerieFull }
@@ -702,8 +809,8 @@ begin
   FAlbums := TObjectList<TAlbumLite>.Create(True);
   FParaBD := TObjectList<TParaBDLite>.Create(True);
   FGenres := TStringList.Create;
-  FEditeur := TFactories.getFactory<TEditeurFull>.getInstance;
-  FCollection := TFactories.getFactory<TCollectionLite>.getInstance;
+  FEditeur := TFactories.getInstance<TEditeurFull>;
+  FCollection := TFactories.getInstance<TCollectionLite>;
   FUnivers := TObjectList<TUniversLite>.Create(True);
   FScenaristes := TObjectList<TAuteurSerieLite>.Create(True);
   FDessinateurs := TObjectList<TAuteurSerieLite>.Create(True);
@@ -734,14 +841,44 @@ begin
   Result := Editeur.ID_Editeur;
 end;
 
-procedure TSerieFull.SetSiteWeb(const Value: RAutoTrimString);
+function TSerieFull.GetNotes: string;
 begin
-  FSiteWeb := Copy(Value, 1, LengthURL);
+  Result := FNotes;
 end;
 
-procedure TSerieFull.SetTitreSerie(const Value: RAutoTrimString);
+function TSerieFull.GetSiteWeb: string;
 begin
-  FTitreSerie := Copy(Value, 1, LengthTitreSerie);
+  Result := FSiteWeb;
+end;
+
+function TSerieFull.GetSujet: string;
+begin
+  Result := FSujet;
+end;
+
+function TSerieFull.GetTitreSerie: string;
+begin
+  Result := FTitreSerie;
+end;
+
+procedure TSerieFull.SetNotes(const Value: string);
+begin
+  FNotes := Value;
+end;
+
+procedure TSerieFull.SetSiteWeb(const Value: string);
+begin
+  FSiteWeb := Value.Substring(0, LengthURL);
+end;
+
+procedure TSerieFull.SetSujet(const Value: string);
+begin
+  FSujet := Value;
+end;
+
+procedure TSerieFull.SetTitreSerie(const Value: string);
+begin
+  FTitreSerie := Value.Substring(0, LengthTitreSerie);
 end;
 
 { TEditeurFull }
@@ -754,14 +891,24 @@ begin
   FSiteWeb := '';
 end;
 
-procedure TEditeurFull.SetNomEditeur(const Value: RAutoTrimString);
+function TEditeurFull.GetNomEditeur: string;
 begin
-  FNomEditeur := Copy(Value, 1, LengthNomEditeur);
+  Result := FNomEditeur;
 end;
 
-procedure TEditeurFull.SetSiteWeb(const Value: RAutoTrimString);
+function TEditeurFull.GetSiteWeb: string;
 begin
-  FSiteWeb := Copy(Value, 1, LengthURL);
+  Result := FSiteWeb;
+end;
+
+procedure TEditeurFull.SetNomEditeur(const Value: string);
+begin
+  FNomEditeur := Value.Substring(0, LengthNomEditeur);
+end;
+
+procedure TEditeurFull.SetSiteWeb(const Value: string);
+begin
+  FSiteWeb := Value.Substring(0, LengthURL);
 end;
 
 { TAuteurFull }
@@ -777,6 +924,21 @@ begin
   Series.Clear;
 end;
 
+function TAuteurFull.GetBiographie: string;
+begin
+  Result := FBiographie;
+end;
+
+function TAuteurFull.GetNomAuteur: string;
+begin
+  Result := FNomAuteur;
+end;
+
+function TAuteurFull.GetSiteWeb: string;
+begin
+  Result := FSiteWeb;
+end;
+
 constructor TAuteurFull.Create;
 begin
   inherited;
@@ -789,14 +951,19 @@ begin
   inherited;
 end;
 
-procedure TAuteurFull.SetNomAuteur(const Value: RAutoTrimString);
+procedure TAuteurFull.SetBiographie(const Value: string);
 begin
-  FNomAuteur := Copy(Value, 1, LengthNomAuteur);
+  FBiographie := Value;
 end;
 
-procedure TAuteurFull.SetSiteWeb(const Value: RAutoTrimString);
+procedure TAuteurFull.SetNomAuteur(const Value: string);
 begin
-  FSiteWeb := Copy(Value, 1, LengthURL);
+  FNomAuteur := Value.Substring(0, LengthNomAuteur);
+end;
+
+procedure TAuteurFull.SetSiteWeb(const Value: string);
+begin
+  FSiteWeb := Value.Substring(0, LengthURL);
 end;
 
 { TParaBDFull }
@@ -855,7 +1022,7 @@ constructor TParaBDFull.Create;
 begin
   inherited;
   FAuteurs := TObjectList<TAuteurParaBDLite>.Create;
-  FSerie := TFactories.getFactory<TSerieFull>.getInstance;
+  FSerie := TFactories.getInstance<TSerieFull>;
   FUnivers := TObjectList<TUniversLite>.Create;
   FUniversFull := TList<TUniversLite>.Create;
   FPhotos := TObjectList<TPhotoLite>.Create;
@@ -925,7 +1092,7 @@ end;
 constructor TCollectionFull.Create;
 begin
   inherited;
-  FEditeur := TFactories.getFactory<TEditeurLite>.getInstance;
+  FEditeur := TFactories.getInstance<TEditeurLite>;
 end;
 
 destructor TCollectionFull.Destroy;
@@ -939,9 +1106,14 @@ begin
   Result := Editeur.ID;
 end;
 
-procedure TCollectionFull.SetNomCollection(const Value: RAutoTrimString);
+function TCollectionFull.GetNomCollection: string;
 begin
-  FNomCollection := Copy(Value, 1, LengthNomCollection);
+  Result := FNomCollection;
+end;
+
+procedure TCollectionFull.SetNomCollection(const Value: string);
+begin
+  FNomCollection := Value.Substring(0, LengthNomCollection);
 end;
 
 { TUniversFull }
@@ -960,7 +1132,7 @@ end;
 constructor TUniversFull.Create;
 begin
   inherited;
-  FUniversParent := TFactories.getFactory<TUniversLite>.getInstance;
+  FUniversParent := TFactories.getInstance<TUniversLite>;
 end;
 
 destructor TUniversFull.Destroy;
@@ -969,19 +1141,39 @@ begin
   inherited;
 end;
 
+function TUniversFull.GetNomUnivers: string;
+begin
+  Result := FNomUnivers;
+end;
+
+function TUniversFull.GetDescription: string;
+begin
+  Result := FDescription;
+end;
+
 function TUniversFull.GetID_UniversParent: RGUIDEx;
 begin
   Result := UniversParent.ID;
 end;
 
-procedure TUniversFull.SetNomUnivers(const Value: RAutoTrimString);
+function TUniversFull.GetSiteWeb: string;
 begin
-  FNomUnivers := Copy(Value, 1, LengthNomUnivers);
+  Result := FSiteWeb;
 end;
 
-procedure TUniversFull.SetSiteWeb(const Value: RAutoTrimString);
+procedure TUniversFull.SetDescription(const Value: string);
 begin
-  FSiteWeb := Value;
+  FDescription := Value;
+end;
+
+procedure TUniversFull.SetNomUnivers(const Value: string);
+begin
+  FNomUnivers := Value.Substring(0, LengthNomUnivers);
+end;
+
+procedure TUniversFull.SetSiteWeb(const Value: string);
+begin
+  FSiteWeb := Value.Substring(0, LengthURL);
 end;
 
 end.

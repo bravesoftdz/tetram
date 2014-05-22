@@ -197,7 +197,7 @@ end;
 
 procedure TfrmConsultationAlbum.FormCreate(Sender: TObject);
 begin
-  FAlbum := TFactories.getFactory<TAlbumFull>.getInstance;
+  FAlbum := TFactories.getInstance<TAlbumFull>;
   PrepareLV(Self);
   CurrentCouverture := 0;
   FSortColumn := 0;

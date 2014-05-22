@@ -56,7 +56,7 @@ end;
 
 class function TJsonDeserializer.BuildEntityFromJson<T>(json: TdwsJSONObject): T;
 begin
-  Result := TFactories.getFactory<T>.getInstance as T;
+  Result := TFactories.getInstance<T> as T;
   ReadFromJSON(Result, json);
 end;
 

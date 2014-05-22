@@ -558,7 +558,7 @@ end;
 constructor TPrevisionSortie.Create;
 begin
   inherited;
-  FSerie := TFactories.getFactory<TSerieLite>.getInstance;
+  FSerie := TFactories.getInstance<TSerieLite>;
 end;
 
 destructor TPrevisionSortie.Destroy;
@@ -595,7 +595,7 @@ constructor TSerieIncomplete.Create;
 begin
   inherited;
   FNumerosManquants := TStringList.Create;
-  FSerie := TFactories.getFactory<TSerieLite>.getInstance;
+  FSerie := TFactories.getInstance<TSerieLite>;
 end;
 
 destructor TSerieIncomplete.Destroy;

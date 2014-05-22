@@ -14,8 +14,6 @@ type
 
     class function Supports(AClass: TEntityClass): Boolean;
 
-    class function EntityClass: TEntityClass;
-
     function getInstance: T;
     function Duplicate(Source: T): T;
   end;
@@ -28,11 +26,16 @@ type
     class var FEntitiesBuilders: TDictionary<TEntityClass, TRttiMethod>;
     class var FFactories: TList<TAbstractFactory>;
     class function getBuilder(c: TEntityClass): TRttiMethod;
+    class function BuildInstance<T: TabstractEntity>: T;
   public
     class constructor Create;
     class destructor Destroy;
 
-    class function getFactory<T: TabstractEntity>: TAbstractFactory<T>;
+    class function getFactory<T: TabstractEntity>: TAbstractFactory<T>; overload;
+    class function getFactory(T: TEntityClass): TAbstractFactory; overload;
+
+    class function getInstance<T: TabstractEntity>: T;
+    class function Duplicate<T: TabstractEntity>(Source: T): T;
   end;
 
 implementation
@@ -40,11 +43,8 @@ implementation
 { TDaoEntity }
 
 class function TAbstractFactory<T>.BuildInstance: T;
-var
-  c: TEntityClass;
 begin
-  c := EntityClass;
-  Result := TFactories.getBuilder(c).Invoke(c, []).AsObject as T;
+  Result := TFactories.getBuilder(T).Invoke(T, []).AsObject as T;
 end;
 
 class constructor TAbstractFactory<T>.Create;
@@ -56,11 +56,6 @@ function TAbstractFactory<T>.Duplicate(Source: T): T;
 begin
   Result := getInstance;
   Result.Assign(Source);
-end;
-
-class function TAbstractFactory<T>.EntityClass: TEntityClass;
-begin
-  Result := T;
 end;
 
 function TAbstractFactory<T>.getInstance: T;
@@ -75,6 +70,11 @@ end;
 
 { TFactoriesInitializer }
 
+class function TFactories.BuildInstance<T>: T;
+begin
+  Result := getBuilder(T).Invoke(T, []).AsObject as T;
+end;
+
 class constructor TFactories.Create;
 begin
   FFactories := TObjectList<TAbstractFactory>.Create(True);
@@ -87,6 +87,12 @@ begin
   FEntitiesBuilders.Free;
 end;
 
+class function TFactories.Duplicate<T>(Source: T): T;
+begin
+  Result := getInstance<T>;
+  Result.Assign(Source);
+end;
+
 class function TFactories.getBuilder(c: TEntityClass): TRttiMethod;
 begin
   if not FEntitiesBuilders.TryGetValue(c, Result) then
@@ -94,6 +100,16 @@ begin
     Result := RttiContext.GetType(c).GetMethod('Create');
     FEntitiesBuilders.Add(c, Result);
   end;
+end;
+
+class function TFactories.getFactory(T: TEntityClass): TAbstractFactory;
+var
+  CandidateFactory: TAbstractFactory;
+begin
+  for CandidateFactory in FFactories do
+    if CandidateFactory.Supports(T) then
+      Exit(TAbstractFactory(CandidateFactory));
+  Result := nil;
 end;
 
 class function TFactories.getFactory<T>: TAbstractFactory<T>;
@@ -104,6 +120,11 @@ begin
     if CandidateFactory.Supports(T) then
       Exit(TAbstractFactory<T>(CandidateFactory));
   Result := nil;
+end;
+
+class function TFactories.getInstance<T>: T;
+begin
+  Result := BuildInstance<T>;
 end;
 
 end.

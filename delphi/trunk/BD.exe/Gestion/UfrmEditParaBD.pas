@@ -385,7 +385,7 @@ begin
       try
         for i := 0 to Files.Count - 1 do
         begin
-          PP := TFactories.getFactory<TPhotoLite>.getInstance;
+          PP := TFactories.getInstance<TPhotoLite>;
           FParaBD.Photos.Add(PP);
           PP.ID := GUID_NULL;
           PP.OldNom := Files[i];
@@ -639,7 +639,7 @@ var
 begin
   if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
     Exit;
-  PA := TFactories.getFactory<TAuteurParaBDLite>.getInstance;
+  PA := TFactories.getInstance<TAuteurParaBDLite>;
   (TDaoFactory.getDaoDB<TAuteurParaBDLite> as TDaoAuteurParaBDLite).Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_ParaBD);
   FParaBD.Auteurs.Add(PA);
   lvAuteurs.Items.Count := FParaBD.Auteurs.Count;

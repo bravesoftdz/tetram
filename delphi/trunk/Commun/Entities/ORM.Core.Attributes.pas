@@ -2,7 +2,7 @@ unit ORM.Core.Attributes;
 
 interface
 
-uses System.SysUtils, System.Rtti, System.TypInfo;
+uses System.SysUtils, System.Rtti, System.TypInfo, ORM.Core.Entities;
 
 type
   TRelatedAttribute = class abstract(TCustomAttribute)
@@ -63,13 +63,18 @@ type
   end;
 
   DaoAttribute = class(TRelatedAttribute)
-
+  private
+    FEntityClass: TEntityClass;
+  public
+    constructor Create(EntityClass: TEntityClass);
+  published
+    property EntityClass: TEntityClass read FEntityClass;
   end;
 
 implementation
 
 uses
-  ORM.Core.Entities, ORM.Core.Dao, ORM.Core.Factories;
+  ORM.Core.Dao, ORM.Core.Factories;
 
 { TRelatedAttribute }
 
@@ -173,9 +178,16 @@ end;
 // on ne peut pas utiliser TDaoDBEntityClass dans la déclaration, ça provoque une référence circulaire
 constructor EntityListAttribute.Create(DaoClass: TClass);
 begin
-//  Assert(DaoClass.InheritsFrom(TDaoDBEntity), 'DaoClass doit hérité de TDaoDBEntity');
+  // Assert(DaoClass.InheritsFrom(TDaoDBEntity), 'DaoClass doit hérité de TDaoDBEntity');
   inherited Create;
   FDaoClass := DaoClass;
+end;
+
+{ DaoAttribute }
+
+constructor DaoAttribute.Create(EntityClass: TEntityClass);
+begin
+  FEntityClass := EntityClass;
 end;
 
 end.

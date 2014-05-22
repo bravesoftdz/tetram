@@ -16,7 +16,7 @@ type
     class procedure VideListe(LV: TListView; DoClear: Boolean = True);
   end;
 
-  [Dao]
+  [Dao(TAlbumLite)]
   TDaoAlbumLite = class(TDaoLite<TAlbumLite>)
   strict private
     IndexID_Album: Integer;
@@ -42,20 +42,20 @@ type
     procedure Fill(Entity: TAlbumLite; const ID_Album, ID_Edition: TGUID); overload;
   end;
 
-  [Dao]
+  [Dao(TParaBDLite)]
   TDaoParaBDLite = class(TDaoLite<TParaBDLite>)
   public
     procedure Fill(Entity: TParaBDLite; Query: TManagedQuery); override;
   end;
 
-  [Dao]
+  [Dao(TSerieLite)]
   TDaoSerieLite = class(TDaoLite<TSerieLite>)
   public
     procedure Fill(Entity: TSerieLite; Query: TManagedQuery); overload; override;
     procedure Fill(Entity: TSerieLite; const ID_Serie: TGUID); overload; override;
   end;
 
-  [Dao]
+  [Dao(TEditionLite)]
   TDaoEditionLite = class(TDaoLite<TEditionLite>)
   protected
     procedure GetFieldIndices; override;
@@ -63,7 +63,7 @@ type
     procedure Fill(Entity: TEditionLite; Query: TManagedQuery); override;
   end;
 
-  [Dao]
+  [Dao(TEditeurLite)]
   TDaoEditeurLite = class(TDaoLite<TEditeurLite>)
   strict private
     IndexID_Editeur: Integer;
@@ -75,7 +75,7 @@ type
     procedure Fill(Entity: TEditeurLite; const ID_Editeur: TGUID); overload; override;
   end;
 
-  [Dao]
+  [Dao(TCollectionLite)]
   TDaoCollectionLite = class(TDaoLite<TCollectionLite>)
   protected
     procedure GetFieldIndices; override;
@@ -84,35 +84,35 @@ type
     procedure Fill(Entity: TCollectionLite; const ID_Collection: TGUID); overload; override;
   end;
 
-  [Dao]
+  [Dao(TPersonnageLite)]
   TDaoPersonnageLite = class(TDaoLite<TPersonnageLite>)
   public
     procedure Fill(Entity: TPersonnageLite; Query: TManagedQuery); overload; override;
     procedure Fill(Entity: TPersonnageLite; const ID_Personne: TGUID); overload; override;
   end;
 
-  [Dao]
+  [Dao(TAuteurSerieLite)]
   TDaoAuteurSerieLite = class(TDaoLite<TAuteurSerieLite>)
   public
     procedure Fill(Entity: TAuteurSerieLite; Query: TManagedQuery); overload; override;
     procedure Fill(Entity: TAuteurSerieLite; Pe: TPersonnageLite; const ReferenceSerie: TGUID; Metier: TMetierAuteur); overload;
   end;
 
-  [Dao]
+  [Dao(TAuteurAlbumLite)]
   TDaoAuteurAlbumLite = class(TDaoLite<TAuteurAlbumLite>)
   public
     procedure Fill(Entity: TAuteurAlbumLite; Query: TManagedQuery); overload; override;
     procedure Fill(Entity: TAuteurAlbumLite; Pe: TPersonnageLite; const ReferenceAlbum, ReferenceSerie: TGUID; Metier: TMetierAuteur); overload;
   end;
 
-  [Dao]
+  [Dao(TAuteurParaBDLite)]
   TDaoAuteurParaBDLite = class(TDaoLite<TAuteurParaBDLite>)
   public
     procedure Fill(Entity: TAuteurParaBDLite; Query: TManagedQuery); overload; override;
     procedure Fill(Entity: TAuteurParaBDLite; Pe: TPersonnageLite; const ReferenceParaBD: TGUID); overload;
   end;
 
-  [Dao]
+  [Dao(TUniversLite)]
   TDaoUniversLite = class(TDaoLite<TUniversLite>)
   public
     procedure Fill(Entity: TUniversLite; Query: TManagedQuery); overload; override;
@@ -134,7 +134,7 @@ type
     procedure SaveList(List: TList<T>; ReferenceParent: TGUID; ReferenceSecondaires: array of TGUID; UseTransaction: TManagedTransaction); override;
   end;
 
-  [Dao]
+  [Dao(TPhotoLite)]
   TDaoPhotoLite = class(TDaoImageLite<TPhotoLite>)
   protected
     class function getFieldsInfo: TDaoImageLite<TPhotoLite>.RFieldsInfo; override;
@@ -142,7 +142,7 @@ type
     procedure Fill(Entity: TPhotoLite; Query: TManagedQuery); override;
   end;
 
-  [Dao]
+  [Dao(TCouvertureLite)]
   TDaoCouvertureLite = class(TDaoImageLite<TCouvertureLite>)
   protected
     class function getFieldsInfo: TDaoImageLite<TCouvertureLite>.RFieldsInfo; override;
@@ -150,13 +150,13 @@ type
     procedure Fill(Entity: TCouvertureLite; Query: TManagedQuery); override;
   end;
 
-  [Dao]
+  [Dao(TGenreLite)]
   TDaoGenreLite = class(TDaoLite<TGenreLite>)
   public
     procedure Fill(Entity: TGenreLite; Query: TManagedQuery); override;
   end;
 
-  [Dao]
+  [Dao(TConversionLite)]
   TDaoConversionLite = class(TDaoLite<TConversionLite>)
   public
     procedure Fill(Entity: TConversionLite; Query: TManagedQuery); override;

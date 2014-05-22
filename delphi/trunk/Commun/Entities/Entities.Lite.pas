@@ -278,21 +278,21 @@ uses
 
 function MakeAuteurSerie(const Nom: string; Metier: TMetierAuteur): TAuteurSerieLite;
 begin
-  Result := TFactories.getFactory<TAuteurSerieLite>.getInstance;
+  Result := TFactories.getInstance<TAuteurSerieLite>;
   Result.Personne.Nom := Nom;
   Result.Metier := Metier;
 end;
 
 function MakeAuteurAlbum(const Nom: string; Metier: TMetierAuteur): TAuteurAlbumLite;
 begin
-  Result := TFactories.getFactory<TAuteurAlbumLite>.getInstance;
+  Result := TFactories.getInstance<TAuteurAlbumLite>;
   Result.Personne.Nom := Nom;
   Result.Metier := Metier;
 end;
 
 function MakeUnivers(const Nom: string): TUniversLite;
 begin
-  Result := TFactories.getFactory<TUniversLite>.getInstance;
+  Result := TFactories.getInstance<TUniversLite>;
   Result.NomUnivers := Nom;
 end;
 
@@ -390,7 +390,7 @@ end;
 constructor TAuteurLite.Create;
 begin
   inherited;
-  Personne := TFactories.getFactory<TPersonnageLite>.getInstance;
+  Personne := TFactories.getInstance<TPersonnageLite>;
 end;
 
 destructor TAuteurLite.Destroy;
@@ -495,7 +495,7 @@ end;
 constructor TCollectionLite.Create;
 begin
   inherited;
-  Editeur := TFactories.getFactory<TEditeurLite>.getInstance;
+  Editeur := TFactories.getInstance<TEditeurLite>;
 end;
 
 destructor TCollectionLite.Destroy;
@@ -541,8 +541,8 @@ end;
 constructor TSerieLite.Create;
 begin
   inherited;
-  Editeur := TFactories.getFactory<TEditeurLite>.getInstance;
-  Collection := TFactories.getFactory<TCollectionLite>.getInstance;
+  Editeur := TFactories.getInstance<TEditeurLite>;
+  Collection := TFactories.getInstance<TCollectionLite>;
 end;
 
 destructor TSerieLite.Destroy;
@@ -585,8 +585,8 @@ end;
 constructor TEditionLite.Create;
 begin
   inherited;
-  Editeur := TFactories.getFactory<TEditeurLite>.getInstance;
-  Collection := TFactories.getFactory<TCollectionLite>.getInstance;
+  Editeur := TFactories.getInstance<TEditeurLite>;
+  Collection := TFactories.getInstance<TCollectionLite>;
 end;
 
 destructor TEditionLite.Destroy;

@@ -314,7 +314,7 @@ begin
   end
   else
   begin
-    PC := TFactories.getFactory<TConversionLite>.getInstance;
+    PC := TFactories.getInstance<TConversionLite>;
     i := ListView1.Items.Add;
     i.SubItems.Add('1');
     i.Data := PC;

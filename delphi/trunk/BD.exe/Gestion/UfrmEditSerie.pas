@@ -447,7 +447,7 @@ begin
   case TSpeedButton(Sender).Tag of
     1:
       begin
-        PA := TFactories.getFactory<TAuteurSerieLite>.getInstance;
+        PA := TFactories.getInstance<TAuteurSerieLite>;
         (TDaoFactory.getDaoDB<TAuteurSerieLite> as TDaoAuteurSerieLite).Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_Serie, maScenariste);
         FSerie.Scenaristes.Add(PA);
         lvScenaristes.Items.Count := FSerie.Scenaristes.Count;
@@ -455,7 +455,7 @@ begin
       end;
     2:
       begin
-        PA := TFactories.getFactory<TAuteurSerieLite>.getInstance;
+        PA := TFactories.getInstance<TAuteurSerieLite>;
         (TDaoFactory.getDaoDB<TAuteurSerieLite> as TDaoAuteurSerieLite).Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_Serie, maDessinateur);
         FSerie.Dessinateurs.Add(PA);
         lvDessinateurs.Items.Count := FSerie.Dessinateurs.Count;
@@ -463,7 +463,7 @@ begin
       end;
     3:
       begin
-        PA := TFactories.getFactory<TAuteurSerieLite>.getInstance;
+        PA := TFactories.getInstance<TAuteurSerieLite>;
         (TDaoFactory.getDaoDB<TAuteurSerieLite> as TDaoAuteurSerieLite).Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_Serie, maColoriste);
         FSerie.Coloristes.Add(PA);
         lvColoristes.Items.Count := FSerie.Coloristes.Count;
