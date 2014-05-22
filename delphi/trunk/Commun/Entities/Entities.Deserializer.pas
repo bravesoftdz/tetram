@@ -3,354 +3,292 @@ unit Entities.Deserializer;
 interface
 
 uses
-  System.SysUtils, System.Classes, ORM.Core.Json.Deserializer, dwsJSON, Entities.Full, Entities.Lite, Entities.Types, Commun, UMetadata,
-  ORM.Core.Types;
+  System.SysUtils, System.Classes, JsonDeserializer, dwsJSON, Entities.Full, Entities.Lite;
 
 type
   TEntitesDeserializer = class(TJsonDeserializer)
-  public
-    class function ReadValueFromJSON(const Name: string; const Default: ROption; Json: TdwsJSONObject): ROption; overload; inline;
-    class function ReadValueFromJSON(const Name: string; const Default: RGUIDEx; Json: TdwsJSONObject): RGUIDEx; overload; inline;
-    class function ReadValueFromJSON(const Name: string; const Default: TMetierAuteur; Json: TdwsJSONObject): TMetierAuteur; overload; inline;
-    class function ReadValueFromJSON(const Name: string; const Default: RTriStateValue; Json: TdwsJSONObject): RTriStateValue; overload; // inline;
   protected
-    class procedure ProcessReadFromJSON(Entity: TObjetFull; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TAlbumFull; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TSerieFull; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TEditeurFull; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TCollectionFull; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TUniversFull; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TAuteurFull; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TEditionFull; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TParaBDFull; Json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TObjetFull; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TAlbumFull; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TSerieFull; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TEditeurFull; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TCollectionFull; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TUniversFull; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TAuteurFull; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TEditionFull; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TParaBDFull; json: TdwsJSONObject); overload;
 
-    class procedure ProcessReadFromJSON(Entity: TBaseLite; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TImageLite; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TParaBDLite; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TAuteurLite; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TAuteurSerieLite; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TAuteurAlbumLite; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TAuteurParaBDLite; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TPersonnageLite; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TUniversLite; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TEditeurLite; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TAlbumLite; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TCollectionLite; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TSerieLite; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TEditionLite; Json: TdwsJSONObject); overload;
-    class procedure ProcessReadFromJSON(Entity: TGenreLite; Json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TBaseLite; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TImageLite; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TParaBDLite; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TAuteurLite; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TPersonnageLite; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TUniversLite; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TEditeurLite; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TAlbumLite; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TCollectionLite; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TSerieLite; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TEditionLite; json: TdwsJSONObject); overload;
+    class procedure ProcessReadFromJSON(Entity: TGenreLite; json: TdwsJSONObject); overload;
   end;
 
 implementation
 
 uses
-  ORM.Core.Entities;
+  Commun, UMetadata, Entities.FactoriesLite, Entities.FactoriesFull,
+  Entities.Common;
 
 { TEntitesSerializer }
 
 { TEntitesDeserializer }
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TObjetFull; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TObjetFull; json: TdwsJSONObject);
 begin
   // Entity.ID := json.Items['ID'].AsString;
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TAlbumFull; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TAlbumFull; json: TdwsJSONObject);
 begin
-  Entity.ID_Album := ReadValueFromJSON('ID_Album', Entity.ID_Album, Json);
-  Entity.Complet := ReadValueFromJSON('Complet', Entity.Complet, Json);
-  Entity.TitreAlbum := ReadValueFromJSON('TitreAlbum', Entity.TitreAlbum, Json);
+  Entity.ID_Album := ReadValueFromJSON('ID_Album', Entity.ID_Album, json);
+  Entity.Complet := ReadValueFromJSON('Complet', Entity.Complet, json);
+  Entity.TitreAlbum := ReadValueFromJSON('TitreAlbum', Entity.TitreAlbum, json);
   // Entity.ID_Serie := ReadValueFromJSON('ID_Serie', json, Entity.ID_Serie);
-  ReadFromJSON(Entity.Serie, Json.Items['Serie'] as TdwsJSONObject);
-  Entity.MoisParution := ReadValueFromJSON('MoisParution', Entity.MoisParution, Json);
-  Entity.AnneeParution := ReadValueFromJSON('AnneeParution', Entity.AnneeParution, Json);
-  Entity.Tome := ReadValueFromJSON('Tome', Entity.Tome, Json);
-  Entity.TomeDebut := ReadValueFromJSON('TomeDebut', Entity.TomeDebut, Json);
-  Entity.TomeFin := ReadValueFromJSON('TomeFin', Entity.TomeFin, Json);
-  Entity.HorsSerie := ReadValueFromJSON('HorsSerie', Entity.HorsSerie, Json);
-  Entity.Integrale := ReadValueFromJSON('Integrale', Entity.Integrale, Json);
-  ReadListEntitiesFromJSON<TAuteurAlbumLite>(Entity.Scenaristes, Json.Items['Scenaristes'] as TdwsJSONArray);
-  ReadListEntitiesFromJSON<TAuteurAlbumLite>(Entity.Dessinateurs, Json.Items['Dessinateurs'] as TdwsJSONArray);
-  ReadListEntitiesFromJSON<TAuteurAlbumLite>(Entity.Coloristes, Json.Items['Coloristes'] as TdwsJSONArray);
-  Entity.Sujet := ReadValueFromJSON('Sujet', Entity.Sujet, Json);
-  Entity.Notes := ReadValueFromJSON('Notes', Entity.Notes, Json);
-  ReadListEntitiesFromJSON<TEditionFull>(Entity.Editions, Json.Items['Editions'] as TdwsJSONArray);
+  ReadFromJSON(Entity.Serie, json.Items['Serie'] as TdwsJSONObject);
+  Entity.MoisParution := ReadValueFromJSON('MoisParution', Entity.MoisParution, json);
+  Entity.AnneeParution := ReadValueFromJSON('AnneeParution', Entity.AnneeParution, json);
+  Entity.Tome := ReadValueFromJSON('Tome', Entity.Tome, json);
+  Entity.TomeDebut := ReadValueFromJSON('TomeDebut', Entity.TomeDebut, json);
+  Entity.TomeFin := ReadValueFromJSON('TomeFin', Entity.TomeFin, json);
+  Entity.HorsSerie := ReadValueFromJSON('HorsSerie', Entity.HorsSerie, json);
+  Entity.Integrale := ReadValueFromJSON('Integrale', Entity.Integrale, json);
+  ReadListEntitiesFromJSON<TAuteurLite, TFactoryAuteurLite>(Entity.Scenaristes, json.Items['Scenaristes'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurLite, TFactoryAuteurLite>(Entity.Dessinateurs, json.Items['Dessinateurs'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurLite, TFactoryAuteurLite>(Entity.Coloristes, json.Items['Coloristes'] as TdwsJSONArray);
+  Entity.Sujet := ReadValueFromJSON('Sujet', Entity.Sujet, json);
+  Entity.Notes := ReadValueFromJSON('Notes', Entity.Notes, json);
+  ReadListEntitiesFromJSON<TEditionFull, TFactoryEditionFull>(Entity.Editions, json.Items['Editions'] as TdwsJSONArray);
   // property Notation: Integer read FNotation write FNotation;
-  ReadListEntitiesFromJSON<TUniversLite>(Entity.Univers, Json.Items['Univers'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TUniversLite, TFactoryUniversLite>(Entity.Univers, json.Items['Univers'] as TdwsJSONArray);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TParaBDFull; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TParaBDFull; json: TdwsJSONObject);
 begin
-  Entity.ID_ParaBD := ReadValueFromJSON('ID_ParaBD', Entity.ID_ParaBD, Json);
-  Entity.AnneeEdition := ReadValueFromJSON('AnneeEdition', Entity.AnneeEdition, Json);
-  Entity.CategorieParaBD := ReadValueFromJSON('CategorieParaBD', Entity.CategorieParaBD, Json);
-  Entity.AnneeCote := ReadValueFromJSON('AnneeCote', Entity.AnneeCote, Json);
-  Entity.TitreParaBD := ReadValueFromJSON('TitreParaBD', Entity.TitreParaBD, Json);
-  ReadListEntitiesFromJSON<TAuteurParaBDLite>(Entity.Auteurs, Json.Items['Auteurs'] as TdwsJSONArray);
-  Entity.Description := ReadValueFromJSON('Description', Entity.Description, Json);
+  Entity.ID_ParaBD := ReadValueFromJSON('ID_ParaBD', Entity.ID_ParaBD, json);
+  Entity.AnneeEdition := ReadValueFromJSON('AnneeEdition', Entity.AnneeEdition, json);
+  Entity.CategorieParaBD := ReadValueFromJSON('CategorieParaBD', Entity.CategorieParaBD, json);
+  Entity.AnneeCote := ReadValueFromJSON('AnneeCote', Entity.AnneeCote, json);
+  Entity.TitreParaBD := ReadValueFromJSON('TitreParaBD', Entity.TitreParaBD, json);
+  ReadListEntitiesFromJSON<TAuteurLite, TFactoryAuteurLite>(Entity.Auteurs, json.Items['Auteurs'] as TdwsJSONArray);
+  Entity.Description := ReadValueFromJSON('Description', Entity.Description, json);
   // Entity.ID_Serie := ReadValueFromJSON('ID_Serie', Entity.ID_Serie, json);
-  ReadFromJSON(Entity.Serie, Json.Items['Serie'] as TdwsJSONObject);
-  Entity.Prix := ReadValueFromJSON('Prix', Entity.Prix, Json);
-  Entity.PrixCote := ReadValueFromJSON('PrixCote', Entity.PrixCote, Json);
-  Entity.Dedicace := ReadValueFromJSON('Dedicace', Entity.Dedicace, Json);
-  Entity.Numerote := ReadValueFromJSON('Numerote', Entity.Numerote, Json);
-  Entity.Stock := ReadValueFromJSON('Stock', Entity.Stock, Json);
-  Entity.Offert := ReadValueFromJSON('Offert', Entity.Offert, Json);
-  Entity.Gratuit := ReadValueFromJSON('Gratuit', Entity.Gratuit, Json);
-  Entity.DateAchat := ReadValueFromJSON('DateAchat', Entity.DateAchat, Json);
+  ReadFromJSON(Entity.Serie, json.Items['Serie'] as TdwsJSONObject);
+  Entity.Prix := ReadValueFromJSON('Prix', Entity.Prix, json);
+  Entity.PrixCote := ReadValueFromJSON('PrixCote', Entity.PrixCote, json);
+  Entity.Dedicace := ReadValueFromJSON('Dedicace', Entity.Dedicace, json);
+  Entity.Numerote := ReadValueFromJSON('Numerote', Entity.Numerote, json);
+  Entity.Stock := ReadValueFromJSON('Stock', Entity.Stock, json);
+  Entity.Offert := ReadValueFromJSON('Offert', Entity.Offert, json);
+  Entity.Gratuit := ReadValueFromJSON('Gratuit', Entity.Gratuit, json);
+  Entity.DateAchat := ReadValueFromJSON('DateAchat', Entity.DateAchat, json);
   // property sDateAchat: string read Get_sDateAchat;
-  ReadListEntitiesFromJSON<TUniversLite>(Entity.Univers, Json.Items['Univers'] as TdwsJSONArray);
-  ReadListEntitiesFromJSON<TPhotoLite>(Entity.Photos, Json.Items['Photos'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TUniversLite, TFactoryUniversLite>(Entity.Univers, json.Items['Univers'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TPhotoLite, TFactoryPhotoLite>(Entity.Photos, json.Items['Photos'] as TdwsJSONArray);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TEditionFull; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TEditionFull; json: TdwsJSONObject);
 begin
-  Entity.ID_Edition := ReadValueFromJSON('ID_Edition', Entity.ID_Edition, Json);
-  Entity.ID_Album := ReadValueFromJSON('ID_Album', Entity.ID_Album, Json);
-  ReadFromJSON(Entity.Editeur, Json.Items['Editeur'] as TdwsJSONObject);
-  ReadFromJSON(Entity.Collection, Json.Items['Collection'] as TdwsJSONObject);
-  Entity.TypeEdition := ReadValueFromJSON('TypeEdition', Entity.TypeEdition, Json);
-  Entity.Etat := ReadValueFromJSON('Etat', Entity.Etat, Json);
-  Entity.Reliure := ReadValueFromJSON('Reliure', Entity.Reliure, Json);
-  Entity.FormatEdition := ReadValueFromJSON('FormatEdition', Entity.FormatEdition, Json);
-  Entity.Orientation := ReadValueFromJSON('Orientation', Entity.Orientation, Json);
-  Entity.SensLecture := ReadValueFromJSON('SensLecture', Entity.SensLecture, Json);
-  Entity.AnneeEdition := ReadValueFromJSON('AnneeEdition', Entity.AnneeEdition, Json);
-  Entity.NombreDePages := ReadValueFromJSON('NombreDePages', Entity.NombreDePages, Json);
-  Entity.AnneeCote := ReadValueFromJSON('AnneeCote', Entity.AnneeCote, Json);
-  Entity.Prix := ReadValueFromJSON('Prix', Entity.Prix, Json);
-  Entity.PrixCote := ReadValueFromJSON('PrixCote', Entity.PrixCote, Json);
-  Entity.Couleur := ReadValueFromJSON('Couleur', Entity.Couleur, Json);
-  Entity.VO := ReadValueFromJSON('VO', Entity.VO, Json);
-  Entity.Dedicace := ReadValueFromJSON('Dedicace', Entity.Dedicace, Json);
-  Entity.Stock := ReadValueFromJSON('Stock', Entity.Stock, Json);
-  Entity.Prete := ReadValueFromJSON('Prete', Entity.Prete, Json);
-  Entity.Offert := ReadValueFromJSON('Offert', Entity.Offert, Json);
-  Entity.Gratuit := ReadValueFromJSON('Gratuit', Entity.Gratuit, Json);
-  Entity.ISBN := ReadValueFromJSON('ISBN', Entity.ISBN, Json);
-  Entity.DateAchat := ReadValueFromJSON('DateAchat', Entity.DateAchat, Json);
+  Entity.ID_Edition := ReadValueFromJSON('ID_Edition', Entity.ID_Edition, json);
+  Entity.ID_Album := ReadValueFromJSON('ID_Album', Entity.ID_Album, json);
+  ReadFromJSON(Entity.Editeur, json.Items['Editeur'] as TdwsJSONObject);
+  ReadFromJSON(Entity.Collection, json.Items['Collection'] as TdwsJSONObject);
+  Entity.TypeEdition := ReadValueFromJSON('TypeEdition', Entity.TypeEdition, json);
+  Entity.Etat := ReadValueFromJSON('Etat', Entity.Etat, json);
+  Entity.Reliure := ReadValueFromJSON('Reliure', Entity.Reliure, json);
+  Entity.FormatEdition := ReadValueFromJSON('FormatEdition', Entity.FormatEdition, json);
+  Entity.Orientation := ReadValueFromJSON('Orientation', Entity.Orientation, json);
+  Entity.SensLecture := ReadValueFromJSON('SensLecture', Entity.SensLecture, json);
+  Entity.AnneeEdition := ReadValueFromJSON('AnneeEdition', Entity.AnneeEdition, json);
+  Entity.NombreDePages := ReadValueFromJSON('NombreDePages', Entity.NombreDePages, json);
+  Entity.AnneeCote := ReadValueFromJSON('AnneeCote', Entity.AnneeCote, json);
+  Entity.Prix := ReadValueFromJSON('Prix', Entity.Prix, json);
+  Entity.PrixCote := ReadValueFromJSON('PrixCote', Entity.PrixCote, json);
+  Entity.Couleur := ReadValueFromJSON('Couleur', Entity.Couleur, json);
+  Entity.VO := ReadValueFromJSON('VO', Entity.VO, json);
+  Entity.Dedicace := ReadValueFromJSON('Dedicace', Entity.Dedicace, json);
+  Entity.Stock := ReadValueFromJSON('Stock', Entity.Stock, json);
+  Entity.Prete := ReadValueFromJSON('Prete', Entity.Prete, json);
+  Entity.Offert := ReadValueFromJSON('Offert', Entity.Offert, json);
+  Entity.Gratuit := ReadValueFromJSON('Gratuit', Entity.Gratuit, json);
+  Entity.ISBN := ReadValueFromJSON('ISBN', Entity.ISBN, json);
+  Entity.DateAchat := ReadValueFromJSON('DateAchat', Entity.DateAchat, json);
   // property sDateAchat: string read Get_sDateAchat;
-  Entity.Notes := ReadValueFromJSON('Notes', Entity.Notes, Json);
-  Entity.NumeroPerso := ReadValueFromJSON('NumeroPerso', Entity.NumeroPerso, Json);
-  ReadListEntitiesFromJSON<TCouvertureLite>(Entity.Couvertures, Json.Items['Couvertures'] as TdwsJSONArray);
+  Entity.Notes := ReadValueFromJSON('Notes', Entity.Notes, json);
+  Entity.NumeroPerso := ReadValueFromJSON('NumeroPerso', Entity.NumeroPerso, json);
+  ReadListEntitiesFromJSON<TCouvertureLite, TFactoryCouvertureLite>(Entity.Couvertures, json.Items['Couvertures'] as TdwsJSONArray);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TImageLite; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TImageLite; json: TdwsJSONObject);
 begin
-  Entity.NewNom := ReadValueFromJSON('NewNom', Entity.NewNom, Json);
-  Entity.OldNom := ReadValueFromJSON('OldNom', Entity.OldNom, Json);
-  Entity.NewStockee := ReadValueFromJSON('NewStockee', Entity.NewStockee, Json);
-  Entity.OldStockee := ReadValueFromJSON('OldStockee', Entity.OldStockee, Json);
-  Entity.Categorie := StrToInt(Json.Items['Categorie'].Names[0]);
-  Entity.sCategorie := ReadValueFromJSON(IntToStr(Entity.Categorie), Entity.sCategorie, Json.Items['Categorie'] as TdwsJSONObject);
+  Entity.NewNom := ReadValueFromJSON('NewNom', Entity.NewNom, json);
+  Entity.OldNom := ReadValueFromJSON('OldNom', Entity.OldNom, json);
+  Entity.NewStockee := ReadValueFromJSON('NewStockee', Entity.NewStockee, json);
+  Entity.OldStockee := ReadValueFromJSON('OldStockee', Entity.OldStockee, json);
+  Entity.Categorie := StrToInt(json.Items['Categorie'].Names[0]);
+  Entity.sCategorie := ReadValueFromJSON(IntToStr(Entity.Categorie), Entity.sCategorie, json.Items['Categorie'] as TdwsJSONObject);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TBaseLite; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TBaseLite; json: TdwsJSONObject);
 begin
-  Entity.ID := ReadValueFromJSON('ID', Entity.ID, Json);
+  Entity.ID := ReadValueFromJSON('ID', Entity.ID, json);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TAuteurFull; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TAuteurFull; json: TdwsJSONObject);
 begin
-  Entity.ID_Auteur := ReadValueFromJSON('ID_Auteur', Entity.ID_Auteur, Json);
-  Entity.NomAuteur := ReadValueFromJSON('NomAuteur', Entity.NomAuteur, Json);
-  Entity.SiteWeb := ReadValueFromJSON('SiteWeb', Entity.SiteWeb, Json);
-  Entity.Biographie := ReadValueFromJSON('Biographie', Entity.Biographie, Json);
-  ReadListEntitiesFromJSON<TSerieFull>(Entity.Series, Json.Items['Series'] as TdwsJSONArray);
+  Entity.ID_Auteur := ReadValueFromJSON('ID_Auteur', Entity.ID_Auteur, json);
+  Entity.NomAuteur := ReadValueFromJSON('NomAuteur', Entity.NomAuteur, json);
+  Entity.SiteWeb := ReadValueFromJSON('SiteWeb', Entity.SiteWeb, json);
+  Entity.Biographie := ReadValueFromJSON('Biographie', Entity.Biographie, json);
+  ReadListEntitiesFromJSON<TSerieFull, TFactorySerieFull>(Entity.Series, json.Items['Series'] as TdwsJSONArray);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TEditeurFull; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TEditeurFull; json: TdwsJSONObject);
 begin
-  Entity.ID_Editeur := ReadValueFromJSON('ID_Editeur', Entity.ID_Editeur, Json);
-  Entity.NomEditeur := ReadValueFromJSON('NomEditeur', Entity.NomEditeur, Json);
-  Entity.SiteWeb := ReadValueFromJSON('SiteWeb', Entity.SiteWeb, Json);
+  Entity.ID_Editeur := ReadValueFromJSON('ID_Editeur', Entity.ID_Editeur, json);
+  Entity.NomEditeur := ReadValueFromJSON('NomEditeur', Entity.NomEditeur, json);
+  Entity.SiteWeb := ReadValueFromJSON('SiteWeb', Entity.SiteWeb, json);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TSerieFull; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TSerieFull; json: TdwsJSONObject);
 begin
-  Entity.ID_Serie := ReadValueFromJSON('ID_Serie', Entity.ID_Serie, Json);
-  Entity.TitreSerie := ReadValueFromJSON('TitreSerie', Entity.TitreSerie, Json);
-  Entity.Terminee := ReadValueFromJSON('Terminee', Entity.Terminee, Json);
-  ReadValueFromJSON('Genres', Entity.Genres, Json, True);
-  Entity.Sujet := ReadValueFromJSON('Sujet', Entity.Sujet, Json);
-  Entity.Notes := ReadValueFromJSON('Notes', Entity.Notes, Json);
+  Entity.ID_Serie := ReadValueFromJSON('ID_Serie', Entity.ID_Serie, json);
+  Entity.TitreSerie := ReadValueFromJSON('TitreSerie', Entity.TitreSerie, json);
+  Entity.Terminee := ReadValueFromJSON('Terminee', Entity.Terminee, json);
+  ReadValueFromJSON('Genres', Entity.Genres, json, True);
+  Entity.Sujet := ReadValueFromJSON('Sujet', Entity.Sujet, json);
+  Entity.Notes := ReadValueFromJSON('Notes', Entity.Notes, json);
   // Entity.ID_Editeur := ReadValueFromJSON('ID_Editeur', Entity.ID_Editeur, json);
-  ReadFromJSON(Entity.Editeur, Json.Items['Editeur'] as TdwsJSONObject);
+  ReadFromJSON(Entity.Editeur, json.Items['Editeur'] as TdwsJSONObject);
   // Entity.ID_Collection := ReadValueFromJSON('ID_Collection', Entity.ID_Collection, json);
-  ReadFromJSON(Entity.Collection, Json.Items['Collection'] as TdwsJSONObject);
-  Entity.SiteWeb := ReadValueFromJSON('SiteWeb', Entity.SiteWeb, Json);
-  Entity.Complete := ReadValueFromJSON('Complete', Entity.Complete, Json);
-  Entity.SuivreManquants := ReadValueFromJSON('SuivreManquants', Entity.SuivreManquants, Json);
-  Entity.SuivreSorties := ReadValueFromJSON('SuivreSorties', Entity.SuivreSorties, Json);
-  Entity.NbAlbums := ReadValueFromJSON('NbAlbums', Entity.NbAlbums, Json);
-  ReadListEntitiesFromJSON<TAlbumLite>(Entity.Albums, Json.Items['Albums'] as TdwsJSONArray);
-  ReadListEntitiesFromJSON<TParaBDLite>(Entity.ParaBD, Json.Items['ParaBD'] as TdwsJSONArray);
-  ReadListEntitiesFromJSON<TAuteurSerieLite>(Entity.Scenaristes, Json.Items['Scenaristes'] as TdwsJSONArray);
-  ReadListEntitiesFromJSON<TAuteurSerieLite>(Entity.Dessinateurs, Json.Items['Dessinateurs'] as TdwsJSONArray);
-  ReadListEntitiesFromJSON<TAuteurSerieLite>(Entity.Coloristes, Json.Items['Coloristes'] as TdwsJSONArray);
-  Entity.VO := ReadValueFromJSON('VO', Entity.VO, Json);
-  Entity.Couleur := ReadValueFromJSON('Couleur', Entity.Couleur, Json);
-  Entity.Etat := ReadValueFromJSON('Etat', Entity.Etat, Json);
-  Entity.Reliure := ReadValueFromJSON('Reliure', Entity.Reliure, Json);
-  Entity.TypeEdition := ReadValueFromJSON('TypeEdition', Entity.TypeEdition, Json);
-  Entity.FormatEdition := ReadValueFromJSON('FormatEdition', Entity.FormatEdition, Json);
-  Entity.Orientation := ReadValueFromJSON('Orientation', Entity.Orientation, Json);
-  Entity.SensLecture := ReadValueFromJSON('SensLecture', Entity.SensLecture, Json);
+  ReadFromJSON(Entity.Collection, json.Items['Collection'] as TdwsJSONObject);
+  Entity.SiteWeb := ReadValueFromJSON('SiteWeb', Entity.SiteWeb, json);
+  Entity.Complete := ReadValueFromJSON('Complete', Entity.Complete, json);
+  Entity.SuivreManquants := ReadValueFromJSON('SuivreManquants', Entity.SuivreManquants, json);
+  Entity.SuivreSorties := ReadValueFromJSON('SuivreSorties', Entity.SuivreSorties, json);
+  Entity.NbAlbums := ReadValueFromJSON('NbAlbums', Entity.NbAlbums, json);
+  ReadListEntitiesFromJSON<TAlbumLite, TFactoryAlbumLite>(Entity.Albums, json.Items['Albums'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TParaBDLite, TFactoryParaBDLite>(Entity.ParaBD, json.Items['ParaBD'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurLite, TFactoryAuteurLite>(Entity.Scenaristes, json.Items['Scenaristes'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurLite, TFactoryAuteurLite>(Entity.Dessinateurs, json.Items['Dessinateurs'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TAuteurLite, TFactoryAuteurLite>(Entity.Coloristes, json.Items['Coloristes'] as TdwsJSONArray);
+  Entity.VO := ReadValueFromJSON('VO', Entity.VO, json);
+  Entity.Couleur := ReadValueFromJSON('Couleur', Entity.Couleur, json);
+  Entity.Etat := ReadValueFromJSON('Etat', Entity.Etat, json);
+  Entity.Reliure := ReadValueFromJSON('Reliure', Entity.Reliure, json);
+  Entity.TypeEdition := ReadValueFromJSON('TypeEdition', Entity.TypeEdition, json);
+  Entity.FormatEdition := ReadValueFromJSON('FormatEdition', Entity.FormatEdition, json);
+  Entity.Orientation := ReadValueFromJSON('Orientation', Entity.Orientation, json);
+  Entity.SensLecture := ReadValueFromJSON('SensLecture', Entity.SensLecture, json);
   // property Notation: Integer read FNotation write FNotation;
-  ReadListEntitiesFromJSON<TUniversLite>(Entity.Univers, Json.Items['Univers'] as TdwsJSONArray);
+  ReadListEntitiesFromJSON<TUniversLite, TFactoryUniversLite>(Entity.Univers, json.Items['Univers'] as TdwsJSONArray);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TUniversFull; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TUniversFull; json: TdwsJSONObject);
 begin
-  Entity.ID_Univers := ReadValueFromJSON('ID_Univers', Entity.ID_Univers, Json);
-  Entity.NomUnivers := ReadValueFromJSON('NomUnivers', Entity.NomUnivers, Json);
-  Entity.SiteWeb := ReadValueFromJSON('SiteWeb', Entity.SiteWeb, Json);
-  Entity.Description := ReadValueFromJSON('Description', Entity.Description, Json);
+  Entity.ID_Univers := ReadValueFromJSON('ID_Univers', Entity.ID_Univers, json);
+  Entity.NomUnivers := ReadValueFromJSON('NomUnivers', Entity.NomUnivers, json);
+  Entity.SiteWeb := ReadValueFromJSON('SiteWeb', Entity.SiteWeb, json);
+  Entity.Description := ReadValueFromJSON('Description', Entity.Description, json);
   // Entity.ID_UniversParent := ReadValueFromJSON('ID_UniversParent', Entity.ID_UniversParent, json);
-  ReadFromJSON(Entity.UniversParent, Json.Items['UniversParent'] as TdwsJSONObject);
+  ReadFromJSON(Entity.UniversParent, json.Items['UniversParent'] as TdwsJSONObject);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TCollectionFull; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TCollectionFull; json: TdwsJSONObject);
 begin
-  Entity.ID_Collection := ReadValueFromJSON('ID_Collection', Entity.ID_Collection, Json);
-  Entity.NomCollection := ReadValueFromJSON('NomCollection', Entity.NomCollection, Json);
+  Entity.ID_Collection := ReadValueFromJSON('ID_Collection', Entity.ID_Collection, json);
+  Entity.NomCollection := ReadValueFromJSON('NomCollection', Entity.NomCollection, json);
   // Entity.ID_Editeur := ReadValueFromJSON('ID_Editeur', Entity.ID_Editeur, json);
-  ReadFromJSON(Entity.Editeur, Json.Items['Editeur'] as TdwsJSONObject);
+  ReadFromJSON(Entity.Editeur, json.Items['Editeur'] as TdwsJSONObject);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TParaBDLite; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TParaBDLite; json: TdwsJSONObject);
 begin
-  Entity.Titre := ReadValueFromJSON('Titre', Entity.Titre, Json);
-  Entity.ID_Serie := ReadValueFromJSON('ID_Serie', Entity.ID_Serie, Json);
-  Entity.Serie := ReadValueFromJSON('Serie', Entity.Serie, Json);
-  Entity.sCategorie := ReadValueFromJSON('Categorie', Entity.sCategorie, Json);
-  Entity.Achat := ReadValueFromJSON('Achat', Entity.Achat, Json);
-  Entity.Complet := ReadValueFromJSON('Complet', Entity.Complet, Json);
+  Entity.Titre := ReadValueFromJSON('Titre', Entity.Titre, json);
+  Entity.ID_Serie := ReadValueFromJSON('ID_Serie', Entity.ID_Serie, json);
+  Entity.Serie := ReadValueFromJSON('Serie', Entity.Serie, json);
+  Entity.sCategorie := ReadValueFromJSON('Categorie', Entity.sCategorie, json);
+  Entity.Achat := ReadValueFromJSON('Achat', Entity.Achat, json);
+  Entity.Complet := ReadValueFromJSON('Complet', Entity.Complet, json);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TSerieLite; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TSerieLite; json: TdwsJSONObject);
 begin
-  ReadValueFromJSON('TitreSerie', Entity.TitreSerie, Json);
-  ReadFromJSON(Entity.Editeur, Json.Items['Editeur'] as TdwsJSONObject);
-  ReadFromJSON(Entity.Collection, Json.Items['Collection'] as TdwsJSONObject);
+  ReadValueFromJSON('TitreSerie', Entity.TitreSerie, json);
+  ReadFromJSON(Entity.Editeur, json.Items['Editeur'] as TdwsJSONObject);
+  ReadFromJSON(Entity.Collection, json.Items['Collection'] as TdwsJSONObject);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TCollectionLite; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TCollectionLite; json: TdwsJSONObject);
 begin
-  Entity.NomCollection := ReadValueFromJSON('NomCollection', Entity.NomCollection, Json);
-  ReadFromJSON(Entity.Editeur, Json.Items['Editeur'] as TdwsJSONObject);
+  Entity.NomCollection := ReadValueFromJSON('NomCollection', Entity.NomCollection, json);
+  ReadFromJSON(Entity.Editeur, json.Items['Editeur'] as TdwsJSONObject);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TGenreLite; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TGenreLite; json: TdwsJSONObject);
 begin
-  Entity.Genre := ReadValueFromJSON('Genre', Entity.Genre, Json);
+  Entity.Genre := ReadValueFromJSON('Genre', Entity.Genre, json);
   // Quantite: Integer;
 end;
 
-class function TEntitesDeserializer.ReadValueFromJSON(const Name: string; const Default: RGUIDEx; Json: TdwsJSONObject): RGUIDEx;
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TEditionLite; json: TdwsJSONObject);
 begin
-  Result := ReadValueFromJSON(Name, string(Default), Json);
+  Entity.AnneeEdition := ReadValueFromJSON('AnneeEdition', Entity.AnneeEdition, json);
+  Entity.ISBN := ReadValueFromJSON('ISBN', Entity.ISBN, json);
+  ReadFromJSON(Entity.Editeur, json.Items['Editeur'] as TdwsJSONObject);
+  ReadFromJSON(Entity.Collection, json.Items['Collection'] as TdwsJSONObject);
 end;
 
-class function TEntitesDeserializer.ReadValueFromJSON(const Name: string; const Default: ROption; Json: TdwsJSONObject): ROption;
-var
-  o: TdwsJSONObject;
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TAlbumLite; json: TdwsJSONObject);
 begin
-  o := json.Items[Name] as TdwsJSONObject;
-  if o = nil then
-    Result := Default
-  else
-  begin
-    Result.Value := StrToInt(o.Names[0]);
-    Result.Caption := ReadValueFromJSON(IntToStr(Result.Value), Result.Caption, o);
-  end;
-end;
-
-class function TEntitesDeserializer.ReadValueFromJSON(const Name: string; const Default: RTriStateValue; Json: TdwsJSONObject): RTriStateValue;
-var
-  o: TdwsJSONValue;
-begin
-  o := json.Items[Name] as TdwsJSONValue;
-  if o = nil then
-    Result := Default
-  else
-    Result := RTriStateValue.FromInteger(o.AsInteger);
-end;
-
-class function TEntitesDeserializer.ReadValueFromJSON(const Name: string; const Default: TMetierAuteur; Json: TdwsJSONObject): TMetierAuteur;
-var
-  o: TdwsJSONObject;
-begin
-  o := json.Items[Name] as TdwsJSONObject;
-  if o = nil then
-    Result := Default
-  else
-    Result := TMetierAuteur(StrToIntDef(o.Names[0], Integer(Default)));
-end;
-
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TEditionLite; Json: TdwsJSONObject);
-begin
-  Entity.AnneeEdition := ReadValueFromJSON('AnneeEdition', Entity.AnneeEdition, Json);
-  Entity.ISBN := ReadValueFromJSON('ISBN', Entity.ISBN, Json);
-  ReadFromJSON(Entity.Editeur, Json.Items['Editeur'] as TdwsJSONObject);
-  ReadFromJSON(Entity.Collection, Json.Items['Collection'] as TdwsJSONObject);
-end;
-
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TAlbumLite; Json: TdwsJSONObject);
-begin
-  Entity.Tome := ReadValueFromJSON('Tome', Entity.Tome, Json);
-  Entity.TomeDebut := ReadValueFromJSON('TomeDebut', Entity.TomeDebut, Json);
-  Entity.TomeFin := ReadValueFromJSON('TomeFin', Entity.TomeFin, Json);
-  Entity.Titre := ReadValueFromJSON('Titre', Entity.Titre, Json);
-  Entity.ID_Serie := ReadValueFromJSON('ID_Serie', Entity.ID_Serie, Json);
-  Entity.Serie := ReadValueFromJSON('Serie', Entity.Serie, Json);
-  Entity.ID_Editeur := ReadValueFromJSON('ID_Editeur', Entity.ID_Editeur, Json);
-  Entity.Editeur := ReadValueFromJSON('Editeur', Entity.Editeur, Json);
-  Entity.AnneeParution := ReadValueFromJSON('AnneeParution', Entity.AnneeParution, Json);
-  Entity.MoisParution := ReadValueFromJSON('MoisParution', Entity.MoisParution, Json);
-  Entity.Stock := ReadValueFromJSON('Stock', Entity.Stock, Json);
-  Entity.Integrale := ReadValueFromJSON('Integrale', Entity.Integrale, Json);
-  Entity.HorsSerie := ReadValueFromJSON('HorsSerie', Entity.HorsSerie, Json);
-  Entity.Achat := ReadValueFromJSON('Achat', Entity.Achat, Json);
-  Entity.Complet := ReadValueFromJSON('Complet', Entity.Complet, Json);
+  Entity.Tome := ReadValueFromJSON('Tome', Entity.Tome, json);
+  Entity.TomeDebut := ReadValueFromJSON('TomeDebut', Entity.TomeDebut, json);
+  Entity.TomeFin := ReadValueFromJSON('TomeFin', Entity.TomeFin, json);
+  Entity.Titre := ReadValueFromJSON('Titre', Entity.Titre, json);
+  Entity.ID_Serie := ReadValueFromJSON('ID_Serie', Entity.ID_Serie, json);
+  Entity.Serie := ReadValueFromJSON('Serie', Entity.Serie, json);
+  Entity.ID_Editeur := ReadValueFromJSON('ID_Editeur', Entity.ID_Editeur, json);
+  Entity.Editeur := ReadValueFromJSON('Editeur', Entity.Editeur, json);
+  Entity.AnneeParution := ReadValueFromJSON('AnneeParution', Entity.AnneeParution, json);
+  Entity.MoisParution := ReadValueFromJSON('MoisParution', Entity.MoisParution, json);
+  Entity.Stock := ReadValueFromJSON('Stock', Entity.Stock, json);
+  Entity.Integrale := ReadValueFromJSON('Integrale', Entity.Integrale, json);
+  Entity.HorsSerie := ReadValueFromJSON('HorsSerie', Entity.HorsSerie, json);
+  Entity.Achat := ReadValueFromJSON('Achat', Entity.Achat, json);
+  Entity.Complet := ReadValueFromJSON('Complet', Entity.Complet, json);
   // Notation: Integer;
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TPersonnageLite; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TPersonnageLite; json: TdwsJSONObject);
 begin
-  Entity.Nom := ReadValueFromJSON('Nom', Entity.Nom, Json);
+  Entity.Nom := ReadValueFromJSON('Nom', Entity.Nom, json);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TAuteurLite; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TAuteurLite; json: TdwsJSONObject);
 begin
-  ReadFromJSON(Entity.Personne, Json.Items['Personne'] as TdwsJSONObject);
+  ReadFromJSON(Entity.Personne, json.Items['Personne'] as TdwsJSONObject);
+  Entity.ID_Album := ReadValueFromJSON('ID_Album', Entity.ID_Album, json);
+  Entity.ID_Serie := ReadValueFromJSON('ID_Serie', Entity.ID_Serie, json);
+  Entity.metier := ReadValueFromJSON('Metier', Entity.metier, json);
+  Entity.ID_Serie := ReadValueFromJSON('ID_Serie', Entity.ID_Serie, json);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TAuteurSerieLite; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TEditeurLite; json: TdwsJSONObject);
 begin
-  ReadFromJSON(Entity.Personne, Json.Items['Personne'] as TdwsJSONObject);
-  Entity.ID_Serie := ReadValueFromJSON('ID_Serie', Entity.ID_Serie, Json);
-  Entity.metier := ReadValueFromJSON('Metier', Entity.metier, Json);
+  Entity.NomEditeur := ReadValueFromJSON('NomEditeur', Entity.NomEditeur, json);
 end;
 
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TAuteurAlbumLite; Json: TdwsJSONObject);
+class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TUniversLite; json: TdwsJSONObject);
 begin
-  Entity.ID_Album := ReadValueFromJSON('ID_Album', Entity.ID_Album, Json);
-end;
-
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TAuteurParaBDLite; Json: TdwsJSONObject);
-begin
-  Entity.ID_ParaBD := ReadValueFromJSON('ID_ParaBD', Entity.ID_ParaBD, Json);
-end;
-
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TEditeurLite; Json: TdwsJSONObject);
-begin
-  Entity.NomEditeur := ReadValueFromJSON('NomEditeur', Entity.NomEditeur, Json);
-end;
-
-class procedure TEntitesDeserializer.ProcessReadFromJSON(Entity: TUniversLite; Json: TdwsJSONObject);
-begin
-  Entity.NomUnivers := ReadValueFromJSON('NomUnivers', Entity.NomUnivers, Json);
+  Entity.NomUnivers := ReadValueFromJSON('NomUnivers', Entity.NomUnivers, json);
 end;
 
 end.

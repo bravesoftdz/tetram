@@ -53,8 +53,7 @@ implementation
 
 uses
   Commun, Proc_Gestions, Entities.Lite, Procedures, Divers, Textes, StdConvs, ShellAPI, CommonConst, JPEG,
-  UHistorique, UMetadata, Entities.DaoFull, Entities.DaoLite, ORM.Core.Entities,
-  Entities.Types, ORM.Core.Types, ORM.Core.Dao;
+  UHistorique, UMetadata, Entities.DaoFull, Entities.DaoLite, Entities.Common;
 
 {$R *.DFM}
 
@@ -82,12 +81,12 @@ begin
 
   FUnivers.NomUnivers := Trim(edNom.Text);
   FUnivers.SiteWeb := Trim(edSite.Text);
-  TDaoFactory.getDaoDB<TUniversLite>.Fill(FUnivers.UniversParent, vtEditUnivers.CurrentValue);
+  TDaoUniversLite.Fill(FUnivers.UniversParent, vtEditUnivers.CurrentValue);
 
   FUnivers.Associations.Text := edAssociations.Lines.Text;
 
-  TDaoFactory.getDaoDB<TUniversFull>.SaveToDatabase(FUnivers);
-  (TDaoFactory.getDaoDB<TUniversFull> as TDaoUniversFull).SaveAssociations(FUnivers, vmUnivers, GUID_NULL);
+  TDaoUniversFull.SaveToDatabase(FUnivers);
+  TDaoUniversFull.SaveAssociations(FUnivers, vmUnivers, GUID_NULL);
 
   ModalResult := mrOk;
 end;
@@ -98,7 +97,7 @@ var
 begin
   hg := THourGlass.Create;
   FUnivers := Value;
-  (TDaoFactory.getDaoDB<TUniversFull> as TDaoUniversFull).FillAssociations(FUnivers, vmUnivers);
+  TDaoUniversFull.FillAssociations(FUnivers, vmUnivers);
 
   edNom.Text := FUnivers.NomUnivers;
   edDescription.Text := FUnivers.Description;

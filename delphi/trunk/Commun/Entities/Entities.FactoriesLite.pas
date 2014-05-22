@@ -3,81 +3,71 @@ unit Entities.FactoriesLite;
 interface
 
 uses
-  ORM.Core.Factories, Entities.Lite, ORM.Core.Entities;
+  Entities.FactoriesCommon, Entities.Lite, Entities.Common;
 
 type
   TFactoryAlbumLite = class(TFactoryGenericDBEntity<TAlbumLite>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryParaBDLite = class(TFactoryGenericDBEntity<TParaBDLite>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactorySerieLite = class(TFactoryGenericDBEntity<TSerieLite>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryEditionLite = class(TFactoryGenericDBEntity<TEditionLite>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryEditeurLite = class(TFactoryGenericDBEntity<TEditeurLite>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryCollectionLite = class(TFactoryGenericDBEntity<TCollectionLite>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryPersonnageLite = class(TFactoryGenericDBEntity<TPersonnageLite>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
-  TFactoryAuteurSerieLite = class(TFactoryGenericDBEntity<TAuteurSerieLite>)
-  public
-    class function EntityClass: TEntityClass; override;
-  end;
-
-  TFactoryAuteurAlbumLite = class(TFactoryGenericDBEntity<TAuteurAlbumLite>)
-  public
-    class function EntityClass: TEntityClass; override;
-  end;
-
-  TFactoryAuteurParaBDLite = class(TFactoryGenericDBEntity<TAuteurParaBDLite>)
-  public
+  TFactoryAuteurLite = class(TFactoryGenericDBEntity<TAuteurLite>)
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryUniversLite = class(TFactoryGenericDBEntity<TUniversLite>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryPhotoLite = class(TFactoryGenericDBEntity<TPhotoLite>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryCouvertureLite = class(TFactoryGenericDBEntity<TCouvertureLite>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryGenreLite = class(TFactoryGenericDBEntity<TGenreLite>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryConversionLite = class(TFactoryGenericDBEntity<TConversionLite>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
@@ -132,25 +122,11 @@ begin
   Result := TPersonnageLite;
 end;
 
-{ TFactoryAuteurSerieLite }
+{ TFactoryAuteurLite }
 
-class function TFactoryAuteurSerieLite.EntityClass: TEntityClass;
+class function TFactoryAuteurLite.EntityClass: TEntityClass;
 begin
-  Result := TAuteurSerieLite;
-end;
-
-{ TFactoryAuteurAlbumLite }
-
-class function TFactoryAuteurAlbumLite.EntityClass: TEntityClass;
-begin
-  Result := TAuteurAlbumLite;
-end;
-
-{ TFactoryAuteurParaBDLite }
-
-class function TFactoryAuteurParaBDLite.EntityClass: TEntityClass;
-begin
-  Result := TAuteurParaBDLite;
+  Result := TAuteurLite;
 end;
 
 { TFactoryUniversLite }

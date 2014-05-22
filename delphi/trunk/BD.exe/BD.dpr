@@ -158,14 +158,16 @@ uses
   Entities.Full in '..\Commun\Entities\Entities.Full.pas',
   Entities.Lite in '..\Commun\Entities\Entities.Lite.pas',
   Entities.Serializer in '..\Commun\Entities\Entities.Serializer.pas',
-  ORM.Core.Json.Deserializer in '..\Commun\Entities\ORM.Core.Json.Deserializer.pas',
-  ORM.Core.Json.Serializer in '..\Commun\Entities\ORM.Core.Json.Serializer.pas',
+  JsonDeserializer in '..\Commun\Entities\JsonDeserializer.pas',
+  JsonSerializer in '..\Commun\Entities\JsonSerializer.pas',
   BdtkRegEx in '..\Commun\BdtkRegEx.pas',
   UScriptList in '..\Commun\Scripts\UScriptList.pas',
   UfrmValidationImport in 'Scripts\UfrmValidationImport.pas' {frmValidationImport},
-  ORM.Core.Dao in '..\Commun\Entities\ORM.Core.Dao.pas',
-  ORM.Core.Entities in '..\Commun\Entities\ORM.Core.Entities.pas',
-  ORM.Core.Factories in '..\Commun\Entities\ORM.Core.Factories.pas',
+  Entities.DaoCommon in 'Entities\Entities.DaoCommon.pas',
+  Entities.Common in '..\Commun\Entities\Entities.Common.pas',
+  Entities.FactoriesCommon in '..\Commun\Entities\Entities.FactoriesCommon.pas',
+  Entities.FactoriesLite in '..\Commun\Entities\Entities.FactoriesLite.pas',
+  Entities.FactoriesFull in '..\Commun\Entities\Entities.FactoriesFull.pas',
   Entities.DaoLambda in '..\Commun\Entities\Entities.DaoLambda.pas',
   Entities.DaoLambdaDB in 'Entities\Entities.DaoLambdaDB.pas',
   UfrmChoixScript in 'Scripts\UfrmChoixScript.pas' {frmChoixScript},
@@ -175,12 +177,7 @@ uses
   UWeb in 'Web\UWeb.pas',
   UMAJ2_2_3_24 in 'mises_a_jour\UMAJ2_2_3_24.pas',
   UMAJ2_2_3_25 in 'mises_a_jour\UMAJ2_2_3_25.pas',
-  UMAJ2_2_3_29 in 'mises_a_jour\UMAJ2_2_3_29.pas',
-  ORM.Core.Attributes in '..\Commun\Entities\ORM.Core.Attributes.pas',
-  Entities.Types in '..\Commun\Entities\Entities.Types.pas',
-  ORM.Core in '..\Commun\Entities\ORM.Core.pas',
-  ORM.Core.DBConnection in '..\Commun\Entities\ORM.Core.DBConnection.pas',
-  ORM.Core.Types in '..\Commun\Entities\ORM.Core.Types.pas';
+  UMAJ2_2_3_29 in 'mises_a_jour\UMAJ2_2_3_29.pas';
 
 begin
   Application.Title := 'BDthèque';

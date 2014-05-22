@@ -33,7 +33,7 @@ implementation
 
 uses
   Entities.Lite, Entities.Full, UMetadata, Commun, UScriptsFonctions,
-  Entities.FactoriesFull, Entities.Types;
+  Entities.FactoriesFull;
 
 (* === run-time registration functions === *)
 
@@ -79,17 +79,17 @@ begin
   Self.Sujet := T;
 end;
 
-procedure TAlbumCompletColoristes_R(Self: TAlbumFull; var T: TObjectList<TAuteurAlbumLite>);
+procedure TAlbumCompletColoristes_R(Self: TAlbumFull; var T: TObjectList<TAuteurLite>);
 begin
   T := Self.Coloristes;
 end;
 
-procedure TAlbumCompletDessinateurs_R(Self: TAlbumFull; var T: TObjectList<TAuteurAlbumLite>);
+procedure TAlbumCompletDessinateurs_R(Self: TAlbumFull; var T: TObjectList<TAuteurLite>);
 begin
   T := Self.Dessinateurs;
 end;
 
-procedure TAlbumCompletScenaristes_R(Self: TAlbumFull; var T: TObjectList<TAuteurAlbumLite>);
+procedure TAlbumCompletScenaristes_R(Self: TAlbumFull; var T: TObjectList<TAuteurLite>);
 begin
   T := Self.Scenaristes;
 end;
@@ -184,29 +184,19 @@ begin
   T := Self.Items[t1];
 end;
 
-procedure TObjectListOfAuteurSerieItems_W(Self: TObjectList<TAuteurSerieLite>; const T: TAuteurSerieLite; const t1: Integer);
+procedure TObjectListOfAuteurItems_W(Self: TObjectList<TAuteurLite>; const T: TAuteurLite; const t1: Integer);
 begin
   Self.Items[t1] := T;
 end;
 
-procedure TObjectListOfAuteurAlbumItems_W(Self: TObjectList<TAuteurAlbumLite>; const T: TAuteurAlbumLite; const t1: Integer);
-begin
-  Self.Items[t1] := T;
-end;
-
-procedure TObjectListOfAuteurSerieItems_R(Self: TObjectList<TAuteurSerieLite>; var T: TAuteurSerieLite; const t1: Integer);
-begin
-  T := Self.Items[t1];
-end;
-
-procedure TObjectListOfAuteurAlbumItems_R(Self: TObjectList<TAuteurAlbumLite>; var T: TAuteurAlbumLite; const t1: Integer);
-begin
-  T := Self.Items[t1];
-end;
-
-procedure TObjectListOfObjectCount_R(Self: TObjectList<TObject>; var T: Integer);
+procedure TObjectListOfObjectCount_R(Self: TObjectList<TAuteurLite>; var T: Integer);
 begin
   T := Self.Count;
+end;
+
+procedure TObjectListOfAuteurItems_R(Self: TObjectList<TAuteurLite>; var T: TAuteurLite; const t1: Integer);
+begin
+  T := Self.Items[t1];
 end;
 
 procedure TEditionCompleteNotes_R(Self: TEditionFull; var T: string);
@@ -351,7 +341,7 @@ end;
 
 procedure TEditionCompleteOrientation_W(Self: TEditionFull; const T: Integer);
 begin
-  Self.Orientation := ROption.Create(T, Self.Orientation.Caption);
+  Self.Orientation := MakeOption(T, Self.Orientation.Caption);
 end;
 
 procedure TEditionCompleteOrientation_R(Self: TEditionFull; var T: Integer);
@@ -361,7 +351,7 @@ end;
 
 procedure TEditionCompleteFormatEdition_W(Self: TEditionFull; const T: Integer);
 begin
-  Self.FormatEdition := ROption.Create(T, Self.FormatEdition.Caption);
+  Self.FormatEdition := MakeOption(T, Self.FormatEdition.Caption);
 end;
 
 procedure TEditionCompleteFormatEdition_R(Self: TEditionFull; var T: Integer);
@@ -381,7 +371,7 @@ end;
 
 procedure TEditionCompleteReliure_W(Self: TEditionFull; const T: Integer);
 begin
-  Self.Reliure := ROption.Create(T, Self.Reliure.Caption);
+  Self.Reliure := MakeOption(T, Self.Reliure.Caption);
 end;
 
 procedure TEditionCompleteReliure_R(Self: TEditionFull; var T: Integer);
@@ -391,7 +381,7 @@ end;
 
 procedure TEditionCompleteSensLecture_W(Self: TEditionFull; const T: Integer);
 begin
-  Self.SensLecture := ROption.Create(T, Self.SensLecture.Caption);
+  Self.SensLecture := MakeOption(T, Self.SensLecture.Caption);
 end;
 
 procedure TEditionCompleteSensLecture_R(Self: TEditionFull; var T: Integer);
@@ -401,7 +391,7 @@ end;
 
 procedure TEditionCompleteEtat_W(Self: TEditionFull; const T: Integer);
 begin
-  Self.Etat := ROption.Create(T, Self.Etat.Caption);
+  Self.Etat := MakeOption(T, Self.Etat.Caption);
 end;
 
 procedure TEditionCompleteEtat_R(Self: TEditionFull; var T: Integer);
@@ -421,7 +411,7 @@ end;
 
 procedure TEditionCompleteTypeEdition_W(Self: TEditionFull; const T: Integer);
 begin
-  Self.TypeEdition := ROption.Create(T, Self.TypeEdition.Caption);
+  Self.TypeEdition := MakeOption(T, Self.TypeEdition.Caption);
 end;
 
 procedure TEditionCompleteTypeEdition_R(Self: TEditionFull; var T: Integer);
@@ -519,17 +509,17 @@ begin
   T := Self.NbAlbums;
 end;
 
-procedure TSerieCompleteColoristes_R(Self: TSerieFull; var T: TObjectList<TAuteurSerieLite>);
+procedure TSerieCompleteColoristes_R(Self: TSerieFull; var T: TObjectList<TAuteurLite>);
 begin
   T := Self.Coloristes;
 end;
 
-procedure TSerieCompleteDessinateurs_R(Self: TSerieFull; var T: TObjectList<TAuteurSerieLite>);
+procedure TSerieCompleteDessinateurs_R(Self: TSerieFull; var T: TObjectList<TAuteurLite>);
 begin
   T := Self.Dessinateurs;
 end;
 
-procedure TSerieCompleteScenaristes_R(Self: TSerieFull; var T: TObjectList<TAuteurSerieLite>);
+procedure TSerieCompleteScenaristes_R(Self: TSerieFull; var T: TObjectList<TAuteurLite>);
 begin
   T := Self.Scenaristes;
 end;
@@ -579,12 +569,12 @@ begin
   T := Self.Personne.Nom;
 end;
 
-procedure TAuteurMetier_W(Self: TAuteurSerieLite; const T: TMetierAuteur);
+procedure TAuteurMetier_W(Self: TAuteurLite; const T: TMetierAuteur);
 begin
   Self.Metier := T;
 end;
 
-procedure TAuteurMetier_R(Self: TAuteurSerieLite; var T: TMetierAuteur);
+procedure TAuteurMetier_R(Self: TAuteurLite; var T: TMetierAuteur);
 begin
   T := Self.Metier;
 end;
@@ -618,17 +608,11 @@ end;
 
 procedure RIRegister_TObjectListOfAuteur(CL: TPSRuntimeClassImporter);
 begin
-  with CL.Add2(TObjectList<TAuteurSerieLite>, 'TObjectListOfAuteurSerie') do
+  with CL.Add2(TObjectList<TAuteurLite>, 'TObjectListOfAuteur') do
   begin
-    RegisterMethod(@TObjectList<TAuteurSerieLite>.Add, 'Add');
-    RegisterMethod(@TObjectList<TAuteurSerieLite>.Insert, 'Insert');
-    RegisterPropertyHelper(@TObjectListOfAuteurSerieItems_R, @TObjectListOfAuteurSerieItems_W, 'Items');
-  end;
-  with CL.Add2(TObjectList<TAuteurAlbumLite>, 'TObjectListOfAuteurAlbum') do
-  begin
-    RegisterMethod(@TObjectList<TAuteurAlbumLite>.Add, 'Add');
-    RegisterMethod(@TObjectList<TAuteurAlbumLite>.Insert, 'Insert');
-    RegisterPropertyHelper(@TObjectListOfAuteurAlbumItems_R, @TObjectListOfAuteurAlbumItems_W, 'Items');
+    RegisterMethod(@TObjectList<TAuteurLite>.Add, 'Add');
+    RegisterMethod(@TObjectList<TAuteurLite>.Insert, 'Insert');
+    RegisterPropertyHelper(@TObjectListOfAuteurItems_R, @TObjectListOfAuteurItems_W, 'Items');
   end;
 end;
 
@@ -740,7 +724,7 @@ end;
 
 procedure RIRegister_TAuteur(CL: TPSRuntimeClassImporter);
 begin
-  with CL.Add2(TAuteurSerieLite, 'TAuteur') do
+  with CL.Add(TAuteurLite) do
   begin
     RegisterPropertyHelper(@TAuteurNomAuteur_R, @TAuteurNomAuteur_W, 'NomAuteur');
     RegisterPropertyHelper(@TAuteurMetier_R, @TAuteurMetier_W, 'Metier');

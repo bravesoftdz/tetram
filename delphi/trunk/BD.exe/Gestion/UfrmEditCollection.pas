@@ -37,8 +37,7 @@ implementation
 
 uses
   Commun, Procedures, Proc_Gestions, Textes, UHistorique, Entities.Lite,
-  Entities.DaoFull, Entities.DaoLite, ORM.Core.Entities, Entities.Types,
-  ORM.Core.Types, ORM.Core.Dao;
+  Entities.DaoFull, Entities.DaoLite, Entities.Common;
 
 {$R *.DFM}
 
@@ -55,7 +54,7 @@ var
 begin
   hg := THourGlass.Create;
   FCollection := Value;
-  (TDaoFactory.getDaoDB<TCollectionFull> as TDaoCollectionFull).FillAssociations(FCollection, vmCollections);
+  TDaoCollectionFull.FillAssociations(FCollection, vmCollections);
 
   edNom.Text := FCollection.NomCollection;
   vtEditEditeurs.CurrentValue := FCollection.ID_Editeur;
@@ -85,11 +84,11 @@ begin
   end;
 
   FCollection.NomCollection := Trim(edNom.Text);
-  TDaoFactory.getDaoDB<TEditeurLite>.Fill(FCollection.Editeur, ID_Editeur);
+  TDaoEditeurLite.Fill(FCollection.Editeur, ID_Editeur);
   FCollection.Associations.Text := edAssociations.Text;
 
-  TDaoFactory.getDaoDB<TCollectionFull>.SaveToDatabase(FCollection);
-  (TDaoFactory.getDaoDB<TCollectionFull> as TDaoCollectionFull).SaveAssociations(FCollection, vmCollections, FCollection.Editeur.ID);
+  TDaoCollectionFull.SaveToDatabase(FCollection);
+  TDaoCollectionFull.SaveAssociations(FCollection, vmCollections, FCollection.Editeur.ID);
 
   ModalResult := mrOk;
 end;

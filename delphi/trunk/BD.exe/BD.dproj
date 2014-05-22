@@ -2,7 +2,7 @@
     <PropertyGroup>
         <ProjectGuid>{022E3FB6-83D5-4439-8F05-C27BDD308694}</ProjectGuid>
         <MainSource>BD.dpr</MainSource>
-        <Config Condition="'$(Config)'==''">DCU Debug</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <ProjectVersion>15.3</ProjectVersion>
         <Base>True</Base>
         <AppType>Application</AppType>
@@ -30,6 +30,12 @@
     </PropertyGroup>
     <PropertyGroup Condition="('$(Platform)'=='Win32' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win32)'!=''">
         <Cfg_1_Win32>true</Cfg_1_Win32>
+        <CfgParent>Cfg_1</CfgParent>
+        <Cfg_1>true</Cfg_1>
+        <Base>true</Base>
+    </PropertyGroup>
+    <PropertyGroup Condition="('$(Platform)'=='Win64' and '$(Cfg_1)'=='true') or '$(Cfg_1_Win64)'!=''">
+        <Cfg_1_Win64>true</Cfg_1_Win64>
         <CfgParent>Cfg_1</CfgParent>
         <Cfg_1>true</Cfg_1>
         <Base>true</Base>
@@ -82,12 +88,15 @@
         <DCC_DcuOutput>.\dcu\$(Platform)\$(Config)</DCC_DcuOutput>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;Bde;$(DCC_Namespace)</DCC_Namespace>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win64)'!=''">
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <DCC_Namespace>Winapi;System.Win;Data.Win;Datasnap.Win;Web.Win;Soap.Win;Xml.Win;$(DCC_Namespace)</DCC_Namespace>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1)'!=''">
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <VerInfo_Debug>true</VerInfo_Debug>
         <DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
         <DCC_Optimize>false</DCC_Optimize>
@@ -96,7 +105,11 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Cfg_1_Win64)'!=''">
+        <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_3)'!=''">
         <Manifest_File>$(BDS)\bin\default_app.manifest</Manifest_File>
@@ -382,16 +395,18 @@
         <DCCReference Include="..\Commun\Entities\Entities.Full.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Lite.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Serializer.pas"/>
-        <DCCReference Include="..\Commun\Entities\ORM.Core.Json.Deserializer.pas"/>
-        <DCCReference Include="..\Commun\Entities\ORM.Core.Json.Serializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\JsonDeserializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\JsonSerializer.pas"/>
         <DCCReference Include="..\Commun\BdtkRegEx.pas"/>
         <DCCReference Include="..\Commun\Scripts\UScriptList.pas"/>
         <DCCReference Include="Scripts\UfrmValidationImport.pas">
             <Form>frmValidationImport</Form>
         </DCCReference>
-        <DCCReference Include="..\Commun\Entities\ORM.Core.Dao.pas"/>
-        <DCCReference Include="..\Commun\Entities\ORM.Core.Entities.pas"/>
-        <DCCReference Include="..\Commun\Entities\ORM.Core.Factories.pas"/>
+        <DCCReference Include="Entities\Entities.DaoCommon.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.Common.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.FactoriesCommon.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.FactoriesLite.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.FactoriesFull.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.DaoLambda.pas"/>
         <DCCReference Include="Entities\Entities.DaoLambdaDB.pas"/>
         <DCCReference Include="Scripts\UfrmChoixScript.pas">
@@ -411,11 +426,6 @@
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_24.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_25.pas"/>
         <DCCReference Include="mises_a_jour\UMAJ2_2_3_29.pas"/>
-        <DCCReference Include="..\Commun\Entities\ORM.Core.Attributes.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.Types.pas"/>
-        <DCCReference Include="..\Commun\Entities\ORM.Core.pas"/>
-        <DCCReference Include="..\Commun\Entities\ORM.Core.DBConnection.pas"/>
-        <DCCReference Include="..\Commun\Entities\ORM.Core.Types.pas"/>
         <RcItem Include="..\Commun\images\network.png">
             <ResourceType>RCDATA</ResourceType>
             <ResourceId>BT_LINK</ResourceId>
@@ -526,7 +536,7 @@
                     <VersionInfo Name="MajorVer">2</VersionInfo>
                     <VersionInfo Name="MinorVer">2</VersionInfo>
                     <VersionInfo Name="Release">3</VersionInfo>
-                    <VersionInfo Name="Build">77</VersionInfo>
+                    <VersionInfo Name="Build">71</VersionInfo>
                     <VersionInfo Name="Debug">False</VersionInfo>
                     <VersionInfo Name="PreRelease">False</VersionInfo>
                     <VersionInfo Name="Special">False</VersionInfo>
@@ -538,7 +548,7 @@
                 <VersionInfoKeys>
                     <VersionInfoKeys Name="CompanyName">Teträm Corp</VersionInfoKeys>
                     <VersionInfoKeys Name="FileDescription"/>
-                    <VersionInfoKeys Name="FileVersion">2.2.3.77</VersionInfoKeys>
+                    <VersionInfoKeys Name="FileVersion">2.2.3.71</VersionInfoKeys>
                     <VersionInfoKeys Name="InternalName">BDT</VersionInfoKeys>
                     <VersionInfoKeys Name="LegalCopyright">Teträm Corp 1997-2011</VersionInfoKeys>
                     <VersionInfoKeys Name="LegalTrademarks"/>

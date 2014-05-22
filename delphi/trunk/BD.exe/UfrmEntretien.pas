@@ -240,8 +240,9 @@ begin
   fWaiting.ShowProgression(rsOperationEnCours, 0, 100);
   UpdateQuery := TUIBQuery.Create(Self);
   FichiersImages := TStringList.Create;
-  with dmPrinc.DBConnection.GetQuery do
+  with TUIBQuery.Create(Self) do
     try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       UpdateQuery.Transaction := Transaction;
       SQL.Text := 'select count(id_couverture) from couvertures where stockagecouverture = 0';
       Open;
@@ -294,6 +295,7 @@ begin
       fWaiting := nil;
       ShowMessageFmt('%d liens convertis sur %d à convertir.', [nbConverti, nbAConvertir]);
     finally
+      Transaction.Free;
       Free;
       FichiersImages.Free;
       UpdateQuery.Free;
@@ -313,8 +315,9 @@ begin
   fWaiting.ShowProgression(rsOperationEnCours, 0, 100);
   UpdateQuery := TUIBQuery.Create(Self);
   ExtractQuery := TUIBQuery.Create(Self);
-  with dmPrinc.DBConnection.GetQuery do
+  with TUIBQuery.Create(Self) do
     try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       UpdateQuery.Transaction := Transaction;
       ExtractQuery.Transaction := Transaction;
       SQL.Text := 'select count(id_couverture) from couvertures where stockagecouverture = 1';
@@ -356,6 +359,7 @@ begin
       fWaiting := nil;
       ShowMessageFmt('%d Couvertures extraites sur %d à extraire.'#13#10'Répertoire de destination: %s', [nbExtrais, nbAExtraire, RepImages]);
     finally
+      Transaction.Free;
       Free;
       UpdateQuery.Free;
     end;
@@ -372,8 +376,9 @@ begin
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsOperationEnCours, 0, 100);
   UpdateQuery := TUIBQuery.Create(Self);
-  with dmPrinc.DBConnection.GetQuery do
+  with TUIBQuery.Create(Self) do
     try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       UpdateQuery.Transaction := Transaction;
       SQL.Text := 'select count(id_couverture) from couvertures where stockagecouverture = 0';
       Open;
@@ -406,6 +411,7 @@ begin
       fWaiting := nil;
       ShowMessageFmt('%d liens supprimé(s) sur %d.', [nbSupprime, nbASupprimer]);
     finally
+      Transaction.Free;
       Free;
       UpdateQuery.Free;
     end;
@@ -450,7 +456,7 @@ begin
     finally
       Free;
     end;
-  dmPrinc.DBConnection.GetDatabase.Connected := False;
+  DMPrinc.UIBDataBase.Connected := False;
   CheckDBVersion;
   vstEntretien.Invalidate;
 end;

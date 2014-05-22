@@ -76,8 +76,7 @@ implementation
 
 uses
   Procedures, CommonConst, jpeg, UHistorique, Commun, Entities.DaoLite, Entities.DaoFull,
-  ProceduresBDtk, ORM.Core.Entities, ORM.Core.Types, ORM.Core.Factories,
-  ORM.Core.Dao;
+  ProceduresBDtk, Entities.Common, Entities.FactoriesLite;
 
 { TThumbList.TThumb }
 
@@ -209,9 +208,9 @@ begin
 
   FThumbs.Clear;
 
-  Album := TFactories.getInstance<TAlbumLite>;
+  Album := TFactoryAlbumLite.getInstance;
   try
-    TDaoFactory.getDaoDB<TAlbumLite>.Fill(Album, Value);
+    TDaoAlbumLite.Fill(Album, Value);
     Caption := 'Gallerie - ' + Album.ChaineAffichage(True);
     ShowAlbum(Album);
   finally
@@ -232,7 +231,7 @@ begin
 
   FThumbs.Clear;
 
-  Edition := TDaoFactory.getDaoDB<TEditionFull>.getInstance(Value);
+  Edition := TDaoEditionFull.getInstance(Value);
   try
     ShowEdition(Edition);
     Caption := 'Gallerie - ' + Edition.ChaineAffichage;
@@ -254,7 +253,7 @@ begin
 
   FThumbs.Clear;
 
-  Serie := TDaoFactory.getDaoDB<TSerieFull>.getInstance(Value);
+  Serie := TDaoSerieFull.getInstance(Value);
   try
     ShowSerie(Serie);
     Caption := 'Gallerie - ' + Serie.ChaineAffichage;
@@ -273,7 +272,7 @@ var
 begin
   FTitreAlbum := Album.ChaineAffichage(True);
 
-  Editions := (TDaoFactory.getDaoDB<TEditionFull> as TDaoEditionFull).getList(Album.ID);
+  Editions := TDaoEditionFull.getList(Album.ID);
   try
     for i := Pred(Editions.Count) downto 0 do
       ShowEdition(Editions[i]);

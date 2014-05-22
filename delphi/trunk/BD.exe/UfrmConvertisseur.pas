@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs, StdCtrls, ExtCtrls, UframBoutons, UBdtForms, Generics.Collections,
-  UframConvertisseur, ORM.Core.Dao;
+  UframConvertisseur;
 
 type
   TFrmConvers = class(TbdtForm)
@@ -29,23 +29,24 @@ var
 implementation
 
 uses CommonConst, Entities.Lite, UdmPrinc, UIB, Commun, Entities.DaoLite,
-  ORM.Core.DBConnection, ORM.Core.Factories;
+  Entities.FactoriesLite;
 
 {$R *.DFM}
 
 procedure TFrmConvers.FormCreate(Sender: TObject);
 var
-  q: TManagedQuery;
+  q: TUIBQuery;
   fc: TframConvertisseur;
   PC: TConversionLite;
   i: Integer;
 begin
   FFirstEdit := nil;
   ListFC := TList<TframConvertisseur>.Create;
-  PC := TFactories.getInstance<TConversionLite>;
-  q := dmPrinc.DBConnection.GetQuery;
+  PC := TFactoryConversionLite.getInstance;
+  q := TUIBQuery.Create(nil);
   with q do
     try
+      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Add('select');
       SQL.Add('  Monnaie1, Monnaie2, Taux');
       SQL.Add('from');
@@ -62,7 +63,7 @@ begin
       i := 0;
       while not Eof do
       begin
-        TDaoFactory.getDaoDB<TConversionLite>.Fill(PC, q);
+        TDaoConversionLite.Fill(PC, q);
         fc := TframConvertisseur.Create(Self);
         if PC.Monnaie1 = TGlobalVar.Utilisateur.Options.SymboleMonnetaire then
         begin
@@ -89,6 +90,7 @@ begin
       ClientHeight := Frame11.Height + i + 4;
     finally
       ActiveControl := FFirstEdit;
+      Transaction.Free;
       Free;
       PC.Free;
     end;
@@ -113,4 +115,3 @@ begin
 end;
 
 end.
-

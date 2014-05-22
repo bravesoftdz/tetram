@@ -33,7 +33,7 @@ implementation
 {$R *.dfm}
 
 uses Math, UNet, Divers, Updates, UIB, UIBLib, UdmPrinc, Commun, DateUtils, Procedures, CommonConst, VarUtils, StrUtils,
-  Generics.Collections, JclMime, ProceduresBDtk, UWeb, ORM.Core.Types;
+  Generics.Collections, JclMime, ProceduresBDtk, UWeb;
 
 type
   TPublicationWeb = class(TWeb)
@@ -275,8 +275,9 @@ begin
   FUpgradeFromDate := fromDate;
   FStartTime := Now;
 
-  qry := dmPrinc.DBConnection.GetQuery;
+  qry := TUIBQuery.Create(nil);
   try
+    qry.Transaction := GetTransaction(DMPrinc.UIBDataBase);
     qry.FetchBlobs := True;
 
     rc := 0;
@@ -339,6 +340,7 @@ begin
       ShowMessage('Publication terminée');
     end;
   finally
+    qry.Transaction.Free;
     qry.Free;
   end;
 end;

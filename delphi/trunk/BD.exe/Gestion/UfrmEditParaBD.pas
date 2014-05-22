@@ -122,8 +122,8 @@ implementation
 
 uses
   Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, Entities.Lite, Divers, UHistorique,
-  UMetadata, Entities.DaoLite, Entities.DaoFull, ORM.Core.Entities,
-  Entities.DaoLambda, Entities.Types, ORM.Core.Factories, ORM.Core.Dao;
+  UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
+  Entities.FactoriesLite, Entities.DaoLambda;
 
 {$R *.dfm}
 { TFrmEditAchatParaBD }
@@ -333,7 +333,7 @@ begin
 
   FParaBD.TitreParaBD := Trim(edTitre.Text);
   FParaBD.AnneeEdition := StrToIntDef(edAnneeEdition.Text, 0);
-  FParaBD.CategorieParaBD := ROption.Create(cbxCategorie.Value, cbxCategorie.Caption);
+  FParaBD.CategorieParaBD := MakeOption(cbxCategorie.Value, cbxCategorie.Caption);
   FParaBD.Dedicace := cbDedicace.Checked;
   FParaBD.Numerote := cbNumerote.Checked;
   FParaBD.Description := edDescription.Text;
@@ -349,9 +349,9 @@ begin
   FParaBD.Prix := BDStrToDoubleDef(edPrix.Text, 0);
   FParaBD.Stock := cbStock.Checked;
 
-  TDaoFactory.getDaoDB<TParaBDFull>.SaveToDatabase(FParaBD);
+  TDaoParaBDFull.SaveToDatabase(FParaBD);
   if isAchat then
-    (TDaoFactory.getDaoDB<TParaBDFull> as TDaoParaBDFull).Acheter(FParaBD, False);
+    TDaoParaBDFull.Acheter(FParaBD, False);
 
   ModalResult := mrOk;
 end;
@@ -361,7 +361,7 @@ begin
   if IsEqualGUID(vtEditUnivers.CurrentValue, GUID_NULL) then
     Exit;
 
-  FParaBD.Univers.Add(TFactories.getFactory<TUniversLite>.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
+  FParaBD.Univers.Add(TFactoryUniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
   lvUnivers.Items.Count := FParaBD.Univers.Count;
   lvUnivers.Invalidate;
 
@@ -385,7 +385,7 @@ begin
       try
         for i := 0 to Files.Count - 1 do
         begin
-          PP := TFactories.getInstance<TPhotoLite>;
+          PP := TFactoryPhotoLite.getInstance;
           FParaBD.Photos.Add(PP);
           PP.ID := GUID_NULL;
           PP.OldNom := Files[i];
@@ -581,7 +581,7 @@ end;
 
 procedure TfrmEditParaBD.vtEditSeriesVTEditChange(Sender: TObject);
 begin
-  TDaoFactory.getDaoDB<TSerieFull>.Fill(FParaBD.Serie, vtEditSeries.CurrentValue);
+  TDaoSerieFull.Fill(FParaBD.Serie, vtEditSeries.CurrentValue);
 end;
 
 procedure TfrmEditParaBD.vtEditUniversVTEditChange(Sender: TObject);
@@ -635,12 +635,12 @@ end;
 
 procedure TfrmEditParaBD.btCreateurClick(Sender: TObject);
 var
-  PA: TAuteurParaBDLite;
+  PA: TAuteurLite;
 begin
   if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
     Exit;
-  PA := TFactories.getInstance<TAuteurParaBDLite>;
-  (TDaoFactory.getDaoDB<TAuteurParaBDLite> as TDaoAuteurParaBDLite).Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_ParaBD);
+  PA := TFactoryAuteurLite.getInstance;
+  TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_ParaBD, GUID_NULL, TMetierAuteur(0));
   FParaBD.Auteurs.Add(PA);
   lvAuteurs.Items.Count := FParaBD.Auteurs.Count;
   lvAuteurs.Invalidate;

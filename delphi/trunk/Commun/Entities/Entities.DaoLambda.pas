@@ -3,7 +3,7 @@ unit Entities.DaoLambda;
 interface
 
 uses
-  System.Classes, Entities.Types, System.Generics.Collections;
+  System.Classes, Entities.Full, System.Generics.Collections;
 
 type
   TDaoListe = class
@@ -78,7 +78,7 @@ begin
   for c := Low(CategorieIndex) to High(CategorieIndex) do
   begin
     FLists.Add(c, TStringList.Create);
-    FDefaultValues[c] := ROption.Create(-1, '');
+    FDefaultValues[c] := MakeOption(-1, '');
   end;
 end;
 

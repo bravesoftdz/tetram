@@ -2,7 +2,7 @@ unit UHistorique;
 
 interface
 
-uses SysUtils, Windows, Classes, Generics.Collections, ORM.Core.Types;
+uses SysUtils, Windows, Classes, Generics.Collections, Commun;
 
 type
   TActionConsultation = (fcActionBack, fcActionRefresh, fcAlbum, fcAuteur, fcCouverture, fcRecherche, fcPreview, fcSeriesIncompletes,

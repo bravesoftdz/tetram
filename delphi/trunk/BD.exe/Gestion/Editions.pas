@@ -106,13 +106,13 @@ uses
   UIB, Commun, UfrmEditAlbum, UfrmEditSerie, Textes, UfrmEditEditeur, UdmPrinc,
   Math, UfrmFond, Procedures, ProceduresBDtk, UfrmEditCollection, UfrmEditAuteur, UfrmEditParaBD,
   UfrmEditAchatAlbum, UfrmEditUnivers, Entities.DaoLite, Entities.DaoFull,
-  ORM.Core.Entities, Entities.Types, ORM.Core.Types, ORM.Core.Dao,
-  Entities.Lite;
+  Entities.Common;
 
 function FindRec(const Table, Champ: string; const Reference: TGUID; WithMessage: Boolean): Boolean;
 begin
-  with dmPrinc.DBConnection.GetQuery do
+  with TUIBQuery.Create(nil) do
     try
+      Transaction := GetTransaction(dmPrinc.UIBDataBase);
       SQL.Text := Format('select %s from %s where %s = ?', [Champ, Table, Champ]);
       Params.AsString[0] := GUIDToString(Reference);
       Open;
@@ -120,6 +120,7 @@ begin
       if not Result and WithMessage then
         AffMessage(rsErrorFindEnr, mtConfirmation, [mbOk], True);
     finally
+      Transaction.Free;
       Free;
     end;
 end;
@@ -170,9 +171,10 @@ begin
   if (Chaine = '') then
     Exit;
   hg := THourGlass.Create;
-  with dmPrinc.DBConnection.GetQuery do
+  with TUIBQuery.Create(nil) do
     try
       try
+        Transaction := GetTransaction(dmPrinc.UIBDataBase);
         SQL.Text := Format('select %s from %s where %s = ?', [ChampRef, Table, Champ]);
         Prepare(True);
         Params.AsString[0] := Copy(Chaine, 1, Params.MaxStrLen[0]);
@@ -193,6 +195,7 @@ begin
         Result := GUID_NULL;
       end;
     finally
+      Transaction.Free;
       Free;
     end;
 end;
@@ -204,9 +207,11 @@ var
 begin
   hg := THourGlass.Create;
   Result := False;
-  with dmPrinc.DBConnection.GetQuery do
+  with TUIBQuery.Create(nil) do
     try
       try
+        Transaction := GetTransaction(dmPrinc.UIBDataBase);
+
         SQL.Text := Format('select %s from %s where %s = ?', [Champ, Table, ChampRef]);
         Params.AsString[0] := GUIDToString(Reference);
         Open;
@@ -242,6 +247,7 @@ begin
         Result := False;
       end;
     finally
+      Transaction.Free;
       Free;
     end;
 end;
@@ -252,8 +258,9 @@ var
 begin
   hg := THourGlass.Create;
   Result := False;
-  with dmPrinc.DBConnection.GetQuery do
+  with TUIBQuery.Create(nil) do
     try
+      Transaction := GetTransaction(dmPrinc.UIBDataBase);
       SQL.Text := Format('delete from %s where %s=?', [Table, Champ]);
       Params.AsString[0] := GUIDToString(Ref);
       try
@@ -265,6 +272,7 @@ begin
         AffMessage(rsErrorSuppEnr + #13#13 + Exception(ExceptObject).Message, mtInformation, [mbOk], True);
       end;
     finally
+      Transaction.Free;
       Free;
     end;
 end;
@@ -301,7 +309,7 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditAlbum) then
     Exit;
-  Album := TDaoFactory.getDaoDB<TAlbumFull>.getInstance(ID);
+  Album := TDaoAlbumFull.getInstance(ID);
   try
     if Creation then
       Album.TitreAlbum := Valeur;
@@ -314,8 +322,9 @@ end;
 
 function DelAchatAlbum(const ID: TGUID): Boolean;
 begin
-  with dmPrinc.DBConnection.GetQuery do
+  with TUIBQuery.Create(nil) do
     try
+      Transaction := GetTransaction(dmPrinc.UIBDataBase);
       SQL.Text := 'select complet from albums where id_album = ?';
       Params.AsString[0] := GUIDToString(ID);
       Open;
@@ -329,6 +338,7 @@ begin
       else
         Result := DelAlbum(ID);
     finally
+      Transaction.Free;
       Free;
     end;
 end;
@@ -375,7 +385,7 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditAlbum) then
     Exit;
-  Album := TDaoFactory.getDaoDB<TAlbumFull>.getInstance(ID);
+  Album := TDaoAlbumFull.getInstance(ID);
   try
     if Creation then
       Album.TitreAlbum := Valeur;
@@ -432,7 +442,7 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditSerie) then
     Exit;
-  Serie := TDaoFactory.getDaoDB<TSerieFull>.getInstance(ID);
+  Serie := TDaoSerieFull.getInstance(ID);
   try
     if Creation then
       Serie.TitreSerie := Valeur;
@@ -484,7 +494,7 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditUnivers) then
     Exit;
-  Univers := TDaoFactory.getDaoDB<TUniversFull>.getInstance(ID);
+  Univers := TDaoUniversFull.getInstance(ID);
   try
     if Creation then
       Univers.NomUnivers := Valeur;
@@ -536,7 +546,7 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditEditeur) then
     Exit;
-  Editeur := TDaoFactory.getDaoDB<TEditeurFull>.getInstance(ID);
+  Editeur := TDaoEditeurFull.getInstance(ID);
   try
     if Creation then
       Editeur.NomEditeur := Valeur;
@@ -593,12 +603,12 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditCollection) then
     Exit;
-  Collection := TDaoFactory.getDaoDB<TCollectionFull>.getInstance(ID);
+  Collection := TDaoCollectionFull.getInstance(ID);
   try
     if Creation then
     begin
       Collection.NomCollection := Valeur;
-      TDaoFactory.getDaoDB<TEditeurLite>.Fill(Collection.Editeur, ID_Editeur);
+      TDaoEditeurLite.Fill(Collection.Editeur, ID_Editeur);
     end;
     Result := EditionCollection(Collection);
     ID := Collection.ID_Collection;
@@ -664,7 +674,7 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditAuteur) then
     Exit;
-  Auteur := TDaoFactory.getDaoDB<TAuteurFull>.getInstance(ID);
+  Auteur := TDaoAuteurFull.getInstance(ID);
   try
     if Creation then
       Auteur.NomAuteur := Valeur;
@@ -717,7 +727,7 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditParaBD) then
     Exit;
-  ParaBD := TDaoFactory.getDaoDB<TParaBDFull>.getInstance(ID);
+  ParaBD := TDaoParaBDFull.getInstance(ID);
   try
     if Creation then
       ParaBD.TitreParaBD := Valeur;
@@ -769,7 +779,7 @@ begin
   Result := False;
   if frmFond.IsShowing(TFrmEditParaBD) then
     Exit;
-  ParaBD := TDaoFactory.getDaoDB<TParaBDFull>.getInstance(ID);
+  ParaBD := TDaoParaBDFull.getInstance(ID);
   try
     if Creation then
       ParaBD.TitreParaBD := Valeur;
@@ -782,8 +792,9 @@ end;
 
 function DelAchatParaBD(const ID: TGUID): Boolean;
 begin
-  with dmPrinc.DBConnection.GetQuery do
+  with TUIBQuery.Create(nil) do
     try
+      Transaction := GetTransaction(dmPrinc.UIBDataBase);
       SQL.Text := 'select complet from parabd where id_parabd = ?';
       Params.AsString[0] := GUIDToString(ID);
       Open;
@@ -797,6 +808,7 @@ begin
       else
         Result := DelParaBD(ID);
     finally
+      Transaction.Free;
       Free;
     end;
 end;

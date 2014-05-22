@@ -803,7 +803,7 @@ object frmEditParaBD: TfrmEditParaBD
       Columns = <
         item
           Position = 1
-          Width = 433
+          Width = 429
         end
         item
           Position = 0

@@ -3,46 +3,46 @@ unit Entities.FactoriesFull;
 interface
 
 uses
-  ORM.Core.Factories, Entities.Full, ORM.Core.Entities;
+  Entities.FactoriesCommon, Entities.Full, Entities.Common;
 
 type
   TFactoryAlbumFull = class(TFactoryGenericDBEntity<TAlbumFull>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryParaBDFull = class(TFactoryGenericDBEntity<TParaBDFull>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactorySerieFull = class(TFactoryGenericDBEntity<TSerieFull>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryEditionFull = class(TFactoryGenericDBEntity<TEditionFull>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryEditeurFull = class(TFactoryGenericDBEntity<TEditeurFull>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryCollectionFull = class(TFactoryGenericDBEntity<TCollectionFull>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryAuteurFull = class(TFactoryGenericDBEntity<TAuteurFull>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 
   TFactoryUniversFull = class(TFactoryGenericDBEntity<TUniversFull>)
-  public
+  protected
     class function EntityClass: TEntityClass; override;
   end;
 

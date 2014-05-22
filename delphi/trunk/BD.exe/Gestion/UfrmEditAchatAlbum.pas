@@ -64,8 +64,8 @@ type
     { Déclarations privées }
     FAlbum, FAlbumImport: TAlbumFull;
     FScenaristesSelected, FDessinateursSelected, FColoristesSelected: Boolean;
-    procedure AjouteAuteur(List: TList<TAuteurAlbumLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean); overload;
-    procedure AjouteAuteur(List: TList<TAuteurAlbumLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite); overload;
+    procedure AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean); overload;
+    procedure AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite); overload;
     function GetID_Album: TGUID;
     procedure SaveToObject;
     procedure SetAlbum(const Value: TAlbumFull);
@@ -79,24 +79,24 @@ implementation
 
 uses
   Math, CommonConst, Proc_Gestions, Commun, Procedures, Textes, Divers, StrUtils,
-  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, ORM.Core.Entities,
-  Entities.Types, ORM.Core.Factories, ORM.Core.Types, ORM.Core.Dao;
+  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
+  Entities.FactoriesLite;
 
 {$R *.dfm}
 
-procedure TfrmEditAchatAlbum.AjouteAuteur(List: TList<TAuteurAlbumLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite);
+procedure TfrmEditAchatAlbum.AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite);
 var
   dummy: Boolean;
 begin
   AjouteAuteur(List, lvList, Auteur, dummy);
 end;
 
-procedure TfrmEditAchatAlbum.AjouteAuteur(List: TList<TAuteurAlbumLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean);
+procedure TfrmEditAchatAlbum.AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean);
 var
-  PA: TAuteurAlbumLite;
+  PA: TAuteurLite;
 begin
-  PA := TFactories.getInstance<TAuteurAlbumLite>;
-  (TDaoFactory.getDaoDB<TAuteurAlbumLite> as TDaoAuteurAlbumLite).Fill(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
+  PA := TFactoryAuteurLite.getInstance;
+  TDaoAuteurLite.Fill(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
   List.Add(PA);
   lvList.Items.Count := List.Count;
   lvList.Invalidate;
@@ -229,16 +229,16 @@ begin
   begin
     if (not IsEqualGUID(vtEditAlbums.CurrentValue, ID_Album)) and (not IsEqualGUID(ID_Album, GUID_NULL)) then
     begin
-      (TDaoFactory.getDaoDB<TAlbumFull> as TDaoAlbumFull).Acheter(FAlbum, False);
-      TDaoFactory.getDaoDB<TAlbumFull>.Fill(FAlbum, vtEditAlbums.CurrentValue);
+      TDaoAlbumFull.Acheter(FAlbum, False);
+      TDaoAlbumFull.Fill(FAlbum, vtEditAlbums.CurrentValue);
     end;
-    (TDaoFactory.getDaoDB<TAlbumFull> as TDaoAlbumFull).Acheter(FAlbum, True);
+    TDaoAlbumFull.Acheter(FAlbum, True);
   end
   else
   begin
     SaveToObject;
-    TDaoFactory.getDaoDB<TAlbumFull>.SaveToDatabase(FAlbum);
-    (TDaoFactory.getDaoDB<TAlbumFull> as TDaoAlbumFull).Acheter(FAlbum, True);
+    TDaoAlbumFull.SaveToDatabase(FAlbum);
+    TDaoAlbumFull.Acheter(FAlbum, True);
   end;
   ModalResult := mrOk;
 end;
@@ -307,7 +307,7 @@ procedure TfrmEditAchatAlbum.vtEditSeriesVTEditChange(Sender: TObject);
 var
   Auteur: TAuteurLite;
 begin
-  TDaoFactory.getDaoDB<TSerieFull>.Fill(FAlbum.Serie, vtEditSeries.CurrentValue);
+  TDaoSerieFull.Fill(FAlbum.Serie, vtEditSeries.CurrentValue);
   if not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL) then
   begin
     if not(FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then
@@ -391,7 +391,7 @@ begin
       frm.SaveToObject;
       frm.vtEditSeries.VTEdit.PopupWindow.TreeView.InitializeRep;
       frm.vtEditPersonnes.VTEdit.PopupWindow.TreeView.InitializeRep;
-      TDaoFactory.getDaoDB<TAlbumFull>.FusionneInto(frm.FAlbumImport, frm.Album);
+      TDaoAlbumFull.FusionneInto(frm.FAlbumImport, frm.Album);
       frm.Album := frm.Album; // recharger la fenêtre avec frm.Album
     end;
   finally
@@ -402,7 +402,7 @@ end;
 procedure TfrmEditAchatAlbum.btnScriptClick(Sender: TObject);
 begin
   FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
-  FAlbumImport := TDaoFactory.getDaoDB<TAlbumFull>.getInstance;
+  FAlbumImport := TDaoAlbumFull.getInstance;
   if FAlbum.TitreAlbum <> '' then
     FAlbumImport.DefaultSearch := FormatTitre(FAlbum.TitreAlbum)
   else

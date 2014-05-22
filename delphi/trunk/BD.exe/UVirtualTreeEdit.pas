@@ -3,8 +3,7 @@ unit UVirtualTreeEdit;
 interface
 
 uses
-  SysUtils, Windows, Classes, Controls, Messages, JvToolEdit, VirtualTrees, VirtualTreeBdtk, Variants, EditLabeled, LinkControls, Entities.Lite, Vcl.ExtCtrls,
-  ORM.Core.Types;
+  SysUtils, Windows, Classes, Controls, Messages, JvToolEdit, VirtualTrees, VirtualTreeBdtk, Variants, EditLabeled, LinkControls, Entities.Lite, Vcl.ExtCtrls;
 
 type
   TJvComboEdit = class(JvToolEdit.TJvComboEdit)

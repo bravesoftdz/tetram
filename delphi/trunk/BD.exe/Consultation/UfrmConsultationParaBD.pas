@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, System.UITypes, StrUtils,
   Dialogs, Entities.Full, StdCtrls, VirtualTrees, ExtCtrls, UfrmFond, Procedures,
   ComCtrls, VDTButton, Buttons, ActnList, Menus, ProceduresBDtk, UBdtForms,
-  LabeledCheckBox, System.Actions, PngSpeedButton, ORM.Core.Types;
+  LabeledCheckBox, System.Actions, PngSpeedButton;
 
 type
   TfrmConsultationParaBD = class(TBdtForm, IImpressionApercu, IFicheEditable)
@@ -96,8 +96,8 @@ type
 implementation
 
 uses Commun, Entities.Lite, UHistorique, Divers, ShellAPI, Textes, CommonConst, jpeg, Impression,
-  Proc_Gestions, Entities.DaoFull, ORM.Core.Entities, UfrmConsole,
-  ORM.Core.Factories, ORM.Core.Dao;
+  Proc_Gestions, Entities.DaoFull, Entities.Common, Entities.FactoriesFull,
+  UfrmConsole;
 
 {$R *.dfm}
 { TFrmConsultationParaBD }
@@ -110,7 +110,7 @@ end;
 procedure TfrmConsultationParaBD.SetID_ParaBD(const Value: TGUID);
 begin
   ClearForm;
-  TDaoFactory.getDaoDB<TParaBDFull>.Fill(FParaBD, Value);
+  TDaoParaBDFull.Fill(FParaBD, Value);
 
   Caption := 'Fiche de para-BD - ' + FParaBD.ChaineAffichage;
   TitreSerie.Caption := FormatTitre(FParaBD.Serie.TitreSerie);
@@ -255,7 +255,7 @@ end;
 
 procedure TfrmConsultationParaBD.FormCreate(Sender: TObject);
 begin
-  FParaBD := TFactories.getInstance<TParaBDFull>;
+  FParaBD := TFactoryParaBDFull.getInstance;
   PrepareLV(Self);
   CurrentPhoto := 0;
   ImageParaBD.Picture := nil;

@@ -18,7 +18,7 @@ type
 implementation
 
 uses
-  uib, Entities.Full, UdmPrinc, Entities.Types;
+  uib, Entities.Full, UdmPrinc;
 
 class procedure TDaoListeDB.DoEnsureDefaultValues;
 var
@@ -27,18 +27,20 @@ begin
   if FDefaultValuesLoaded then
     Exit;
 
-  qry := dmPrinc.DBConnection.GetQuery;
+  qry := TUIBQuery.Create(nil);
   try
+    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select categorie, ref, libelle from listes where defaut = 1';
     qry.Open;
     while not qry.Eof do
     begin
       if CategorieIndex(qry.Fields.AsInteger[0]) in [Low(CategorieIndex) .. High(CategorieIndex)] then
-        FDefaultValues[CategorieIndex(qry.Fields.AsInteger[0])] := ROption.Create(qry.Fields.AsInteger[1], qry.Fields.AsString[2]);
+        FDefaultValues[CategorieIndex(qry.Fields.AsInteger[0])] := MakeOption(qry.Fields.AsInteger[1], qry.Fields.AsString[2]);
       qry.Next;
     end;
     qry.Transaction.Commit;
   finally
+    qry.Transaction.Free;
     qry.Free;
   end;
   FDefaultValuesLoaded := True;
@@ -53,8 +55,9 @@ begin
   if FListsLoaded then
     Exit;
 
-  qry := dmPrinc.DBConnection.GetQuery;
+  qry := TUIBQuery.Create(nil);
   try
+    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select categorie, ref, libelle from listes order by ordre';
 
     qry.Open;
@@ -73,6 +76,7 @@ begin
       qry.Next;
     end;
   finally
+    qry.Transaction.Free;
     qry.Free;
   end;
 

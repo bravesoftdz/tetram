@@ -93,8 +93,7 @@ type
 implementation
 
 uses Commun, Divers, Entities.Lite, ShellAPI, UHistorique, Impression, Proc_Gestions,
-  UfrmFond, Entities.DaoFull, ORM.Core.Entities, ORM.Core.Factories,
-  ORM.Core.Dao;
+  UfrmFond, Entities.DaoFull, Entities.Common, Entities.FactoriesFull;
 
 {$R *.dfm}
 { TFrmConsultationSerie }
@@ -110,7 +109,7 @@ var
   i: Integer;
 begin
   ClearForm;
-  TDaoFactory.getDaoDB<TSerieFull>.Fill(FSerie, Value);
+  TDaoSerieFull.Fill(FSerie, Value);
 
   Caption := 'Fiche de série - ' + FSerie.ChaineAffichage;
   TitreSerie.Caption := FormatTitre(FSerie.TitreSerie);
@@ -202,7 +201,7 @@ end;
 procedure TfrmConsultationSerie.FormCreate(Sender: TObject);
 begin
   PrepareLV(Self);
-  FSerie := TFactories.getInstance<TSerieFull>;
+  FSerie := TFactorySerieFull.getInstance;
 end;
 
 procedure TfrmConsultationSerie.FormDestroy(Sender: TObject);
@@ -323,7 +322,7 @@ end;
 
 procedure TfrmConsultationSerie.N7Click(Sender: TObject);
 begin
-  (TDaoFactory.getDaoDB<TSerieFull> as TDaoSerieFull).ChangeNotation(FSerie, TMenuItem(Sender).Tag);
+  TDaoSerieFull.ChangeNotation(FSerie, TMenuItem(Sender).Tag);
   Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FSerie.Notation - 900].PngImage);
 end;
 

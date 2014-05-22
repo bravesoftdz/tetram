@@ -103,7 +103,7 @@ type
 implementation
 
 uses
-  Textes, Commun, CommonConst, StrUtils, ORM.Core.Entities;
+  Textes, Commun, CommonConst, StrUtils, Entities.Common;
 
 {$R *.dfm}
 

@@ -4,8 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, UframBoutons, UbdtForms, StdCtrls, UframVTEdit, VirtualTreeBdtk, Entities.Full,
-  ORM.Core.Types;
+  Dialogs, UframBoutons, UbdtForms, StdCtrls, UframVTEdit, VirtualTreeBdtk, Entities.Full;
 
 type
   TfrmControlImport = class(TbdtForm)

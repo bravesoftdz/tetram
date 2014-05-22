@@ -126,8 +126,8 @@ $(PostBuildEvent)]]></PostBuildEvent>
         <DCCReference Include="..\Commun\Entities\Entities.Full.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Lite.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.Serializer.pas"/>
-        <DCCReference Include="..\Commun\Entities\ORM.Core.Json.Deserializer.pas"/>
-        <DCCReference Include="..\Commun\Entities\ORM.Core.Json.Serializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\JsonDeserializer.pas"/>
+        <DCCReference Include="..\Commun\Entities\JsonSerializer.pas"/>
         <DCCReference Include="PascalScript\UdmPascalScript.pas"/>
         <DCCReference Include="PascalScript\UPascalScriptEditor.pas"/>
         <DCCReference Include="PascalScript\uPSC_BdtkObjects.pas"/>
@@ -221,15 +221,13 @@ $(PostBuildEvent)]]></PostBuildEvent>
             <Form>frmAboutBox</Form>
             <FormType>dfm</FormType>
         </DCCReference>
-        <DCCReference Include="..\Commun\Entities\ORM.Core.Entities.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.Common.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.FactoriesLite.pas"/>
-        <DCCReference Include="..\Commun\Entities\ORM.Core.Factories.pas"/>
+        <DCCReference Include="..\Commun\Entities\Entities.FactoriesCommon.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.FactoriesFull.pas"/>
         <DCCReference Include="Entities.DaoLambdaJSON.pas"/>
         <DCCReference Include="..\Commun\Entities\Entities.DaoLambda.pas"/>
         <DCCReference Include="..\Commun\UNetICSCompress.pas"/>
-        <DCCReference Include="..\Commun\Entities\ORM.Core.Attributes.pas"/>
-        <DCCReference Include="..\Commun\Entities\Entities.Types.pas"/>
         <RcItem Include="..\Commun\images\imgAbout.bmp">
             <ResourceType>BITMAP</ResourceType>
             <ResourceId>ABOUT</ResourceId>

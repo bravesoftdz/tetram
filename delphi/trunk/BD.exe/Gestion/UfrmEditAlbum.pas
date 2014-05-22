@@ -175,8 +175,8 @@ type
     procedure RefreshEditionCaption;
     procedure SetAlbum(Value: TAlbumFull);
     procedure VisuClose(Sender: TObject);
-    procedure AjouteAuteur(List: TList<TAuteurAlbumLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean); overload;
-    procedure AjouteAuteur(List: TList<TAuteurAlbumLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite); overload;
+    procedure AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean); overload;
+    procedure AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite); overload;
     function GetID_Album: TGUID;
     function GetCreation: Boolean;
   private
@@ -194,8 +194,8 @@ implementation
 
 uses
   Commun, CommonConst, Textes, Divers, Proc_Gestions, Procedures, ProceduresBDtk, Types, jpeg, DateUtils,
-  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, ORM.Core.Entities, Entities.Types,
-  Entities.DaoLambda, ORM.Core.Factories, ORM.Core.Dao;
+  UHistorique, UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
+  Entities.FactoriesLite, Entities.FactoriesFull, Entities.DaoLambda;
 
 {$R *.DFM}
 
@@ -324,19 +324,19 @@ begin
   end;
 end;
 
-procedure TfrmEditAlbum.AjouteAuteur(List: TList<TAuteurAlbumLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite);
+procedure TfrmEditAlbum.AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite);
 var
   dummy: Boolean;
 begin
   AjouteAuteur(List, lvList, Auteur, dummy);
 end;
 
-procedure TfrmEditAlbum.AjouteAuteur(List: TList<TAuteurAlbumLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean);
+procedure TfrmEditAlbum.AjouteAuteur(List: TList<TAuteurLite>; lvList: TVDTListViewLabeled; Auteur: TPersonnageLite; var FlagAuteur: Boolean);
 var
-  PA: TAuteurAlbumLite;
+  PA: TAuteurLite;
 begin
-  PA := TFactories.getInstance<TAuteurAlbumLite>;
-  (TDaoFactory.getDaoDB<TAuteurAlbumLite> as TDaoAuteurAlbumLite).Fill(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
+  PA := TFactoryAuteurLite.getInstance;
+  TDaoAuteurLite.Fill(PA, Auteur, ID_Album, GUID_NULL, TMetierAuteur(0));
   List.Add(PA);
   lvList.Items.Count := List.Count;
   lvList.Invalidate;
@@ -357,7 +357,7 @@ begin
       frm.vtEditPersonnes.VTEdit.PopupWindow.TreeView.InitializeRep;
       frm.vtEditEditeurs.VTEdit.PopupWindow.TreeView.InitializeRep;
       frm.vtEditCollections.VTEdit.PopupWindow.TreeView.InitializeRep;
-      TDaoFactory.getDaoDB<TAlbumFull>.FusionneInto(frm.FAlbumImport, frm.Album);
+      TDaoAlbumFull.FusionneInto(frm.FAlbumImport, frm.Album);
       oldIsAchat := frm.isAchat;
       try
         frm.isAchat := False;
@@ -374,7 +374,7 @@ end;
 procedure TfrmEditAlbum.btnScriptClick(Sender: TObject);
 begin
   FreeAndNil(FAlbumImport); // si on a annulé la précédente maj par script, l'objet n'avait pas été détruit
-  FAlbumImport := TDaoFactory.getDaoDB<TAlbumFull>.getInstance;
+  FAlbumImport := TDaoAlbumFull.getInstance;
   if FAlbum.TitreAlbum <> '' then
     FAlbumImport.DefaultSearch := FormatTitre(FAlbum.TitreAlbum)
   else
@@ -387,7 +387,7 @@ begin
   if IsEqualGUID(vtEditUnivers.CurrentValue, GUID_NULL) then
     Exit;
 
-  FAlbum.Univers.Add(TFactories.getFactory<TUniversLite>.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
+  FAlbum.Univers.Add(TFactoryUniversLite.Duplicate(TUniversLite(vtEditUnivers.VTEdit.Data)));
   lvUnivers.Items.Count := FAlbum.Univers.Count;
   lvUnivers.Invalidate;
 
@@ -523,9 +523,9 @@ begin
   hg := THourGlass.Create;
   SaveToObject;
 
-  TDaoFactory.getDaoDB<TAlbumFull>.SaveToDatabase(FAlbum);
+  TDaoAlbumFull.SaveToDatabase(FAlbum);
   if isAchat then
-    (TDaoFactory.getDaoDB<TAlbumFull> as TDaoAlbumFull).Acheter(FAlbum, False);
+    TDaoAlbumFull.Acheter(FAlbum, False);
 
   ModalResult := mrOk;
 end;
@@ -613,7 +613,7 @@ begin
       try
         for i := 0 to Files.Count - 1 do
         begin
-          PC := TFactories.getInstance<TCouvertureLite>;
+          PC := TFactoryCouvertureLite.getInstance;
           FCurrentEditionComplete.Couvertures.Add(PC);
           PC.ID := GUID_NULL;
           PC.OldNom := Files[i];
@@ -706,7 +706,7 @@ var
   i: TGUID;
 begin
   // on recharge la série
-  TDaoFactory.getDaoDB<TSerieFull>.Fill(FAlbum.Serie, FAlbum.ID_Serie);
+  TDaoSerieFull.Fill(FAlbum.Serie, FAlbum.ID_Serie);
   i := vtEditCollections.CurrentValue;
   vtEditEditeurs.VTEdit.PopupWindow.TreeView.InitializeRep;
   vtEditCollections.VTEdit.PopupWindow.TreeView.InitializeRep;
@@ -798,7 +798,7 @@ var
   EditionComplete: TEditionFull;
 begin
   SetLength(FEditeurCollectionSelected, Succ(Length(FEditeurCollectionSelected)));
-  EditionComplete := TFactories.getInstance<TEditionFull>;
+  EditionComplete := TFactoryEditionFull.getInstance;
   EditionComplete.ID_Album := ID_Album;
   EditionComplete.Stock := True;
   EditionComplete.Dedicace := False;
@@ -806,12 +806,12 @@ begin
   begin
     EditionComplete.Couleur := IIf(RecInconnu or Couleur.Undefined, True, Couleur.AsBoolean[True]);
     EditionComplete.VO := IIf(RecInconnu or VO.Undefined, False, VO.AsBoolean[False]);
-    EditionComplete.Etat := ROption.Create(IIf(RecInconnu or (Etat.Value = -1), cbxEtat.DefaultValueChecked, Etat.Value), '');
-    EditionComplete.Reliure := ROption.Create(IIf(RecInconnu or (Reliure.Value = -1), cbxReliure.DefaultValueChecked, Reliure.Value), '');
-    EditionComplete.Orientation := ROption.Create(IIf(RecInconnu or (Orientation.Value = -1), cbxOrientation.DefaultValueChecked, Orientation.Value), '');
-    EditionComplete.FormatEdition := ROption.Create(IIf(RecInconnu or (FormatEdition.Value = -1), cbxFormat.DefaultValueChecked, FormatEdition.Value), '');
-    EditionComplete.SensLecture := ROption.Create(IIf(RecInconnu or (SensLecture.Value = -1), cbxSensLecture.DefaultValueChecked, SensLecture.Value), '');
-    EditionComplete.TypeEdition := ROption.Create(IIf(RecInconnu or (TypeEdition.Value = -1), cbxEdition.DefaultValueChecked, TypeEdition.Value), '');
+    EditionComplete.Etat := MakeOption(IIf(RecInconnu or (Etat.Value = -1), cbxEtat.DefaultValueChecked, Etat.Value), '');
+    EditionComplete.Reliure := MakeOption(IIf(RecInconnu or (Reliure.Value = -1), cbxReliure.DefaultValueChecked, Reliure.Value), '');
+    EditionComplete.Orientation := MakeOption(IIf(RecInconnu or (Orientation.Value = -1), cbxOrientation.DefaultValueChecked, Orientation.Value), '');
+    EditionComplete.FormatEdition := MakeOption(IIf(RecInconnu or (FormatEdition.Value = -1), cbxFormat.DefaultValueChecked, FormatEdition.Value), '');
+    EditionComplete.SensLecture := MakeOption(IIf(RecInconnu or (SensLecture.Value = -1), cbxSensLecture.DefaultValueChecked, SensLecture.Value), '');
+    EditionComplete.TypeEdition := MakeOption(IIf(RecInconnu or (TypeEdition.Value = -1), cbxEdition.DefaultValueChecked, TypeEdition.Value), '');
   end;
   // if not IsEqualGUID(vtSeries.CurrentValue, GUID_NULL) then
   if not IsEqualGUID(vtEditSerie.CurrentValue, GUID_NULL) then
@@ -929,12 +929,12 @@ begin
     FCurrentEditionComplete.Dedicace := cbDedicace.Checked;
     FCurrentEditionComplete.Gratuit := cbGratuit.Checked;
     FCurrentEditionComplete.Offert := cbOffert.Checked;
-    FCurrentEditionComplete.TypeEdition := ROption.Create(cbxEdition.Value, cbxEdition.Caption);
-    FCurrentEditionComplete.Etat := ROption.Create(cbxEtat.Value, cbxEtat.Caption);
-    FCurrentEditionComplete.Reliure := ROption.Create(cbxReliure.Value, cbxReliure.Caption);
-    FCurrentEditionComplete.Orientation := ROption.Create(cbxOrientation.Value, cbxOrientation.Caption);
-    FCurrentEditionComplete.FormatEdition := ROption.Create(cbxFormat.Value, cbxFormat.Caption);
-    FCurrentEditionComplete.SensLecture := ROption.Create(cbxSensLecture.Value, cbxSensLecture.Caption);
+    FCurrentEditionComplete.TypeEdition := MakeOption(cbxEdition.Value, cbxEdition.Caption);
+    FCurrentEditionComplete.Etat := MakeOption(cbxEtat.Value, cbxEtat.Caption);
+    FCurrentEditionComplete.Reliure := MakeOption(cbxReliure.Value, cbxReliure.Caption);
+    FCurrentEditionComplete.Orientation := MakeOption(cbxOrientation.Value, cbxOrientation.Caption);
+    FCurrentEditionComplete.FormatEdition := MakeOption(cbxFormat.Value, cbxFormat.Caption);
+    FCurrentEditionComplete.SensLecture := MakeOption(cbxSensLecture.Value, cbxSensLecture.Caption);
     FCurrentEditionComplete.NombreDePages := StrToIntDef(edNombreDePages.Text, 0);
     FCurrentEditionComplete.AnneeCote := StrToIntDef(edAnneeCote.Text, 0);
     FCurrentEditionComplete.PrixCote := BDStrToDoubleDef(edPrixCote.Text, 0);
@@ -1029,7 +1029,7 @@ end;
 procedure TfrmEditAlbum.OnEditAuteurs(Sender: TObject);
 var
   i: Integer;
-  Auteur: TAuteurAlbumLite;
+  Auteur: TAuteurLite;
   CurrentAuteur: TPersonnageLite;
 begin
   CurrentAuteur := vtEditPersonnes.VTEdit.Data as TPersonnageLite;
@@ -1146,9 +1146,9 @@ end;
 
 procedure TfrmEditAlbum.JvComboEdit1Change(Sender: TObject);
 var
-  Auteur: TAuteurSerieLite;
+  Auteur: TAuteurLite;
 begin
-  TDaoFactory.getDaoDB<TSerieFull>.Fill(FAlbum.Serie, vtEditSerie.CurrentValue);
+  TDaoSerieFull.Fill(FAlbum.Serie, vtEditSerie.CurrentValue);
   if not IsEqualGUID(FAlbum.ID_Serie, GUID_NULL) then
   begin
     if not(FScenaristesSelected and FDessinateursSelected and FColoristesSelected) then

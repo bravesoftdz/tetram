@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, Buttons, VDTButton, StdCtrls, Mask, JvExMask,
   JvToolEdit, UVirtualTreeEdit, VirtualTreeBdtk, UHistorique, PngSpeedButton, UfrmFond,
-  Vcl.ExtCtrls, ORM.Core.Types;
+  Vcl.ExtCtrls;
 
 type
   TframVTEdit = class(TFrame)

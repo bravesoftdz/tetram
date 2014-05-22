@@ -848,7 +848,7 @@ end;
 
 procedure TfrmFond.ActionList1Update(Action: TBasicAction; var Handled: Boolean);
 begin
-  CheminBase.Caption := dmPrinc.DBConnection.GetDatabase.DatabaseName;
+  CheminBase.Caption := DMPrinc.UIBDataBase.DatabaseName;
   HistoriqueBack.Enabled := (TGlobalVar.Mode_en_cours = mdConsult) and LongBool(Historique.CurrentConsultation);
   HistoriqueNext.Enabled := (TGlobalVar.Mode_en_cours = mdConsult) and LongBool(Historique.CountConsultation) and
     (Historique.CurrentConsultation <> Historique.CountConsultation - 1);

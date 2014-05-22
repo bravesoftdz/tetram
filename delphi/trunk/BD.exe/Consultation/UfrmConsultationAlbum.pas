@@ -165,8 +165,7 @@ implementation
 uses
   Commun, Entities.Lite, CommonConst, MAJ, Impression, DateUtils, UHistorique, Procedures,
   Divers, Textes, Proc_Gestions, UfrmConsole, Entities.DaoFull,
-  ORM.Core.Entities, UdmPrinc, Entities.Types, ORM.Core.Factories,
-  ORM.Core.Types, ORM.Core.Dao;
+  Entities.Common, Entities.FactoriesFull, UdmPrinc;
 
 var
   FSortColumn: Integer;
@@ -197,7 +196,7 @@ end;
 
 procedure TfrmConsultationAlbum.FormCreate(Sender: TObject);
 begin
-  FAlbum := TFactories.getInstance<TAlbumFull>;
+  FAlbum := TFactoryAlbumFull.getInstance;
   PrepareLV(Self);
   CurrentCouverture := 0;
   FSortColumn := 0;
@@ -483,7 +482,7 @@ var
 begin
   ClearForm;
   TfrmConsole.AddEvent(UnitName, 'FAlbum.Fill() - ' + GUIDToString(Value));
-  TDaoFactory.getDaoDB<TAlbumFull>.Fill(FAlbum, Value);
+  TDaoAlbumFull.Fill(FAlbum, Value);
 
   TfrmConsole.AddEvent(UnitName, 'Chargement des données... - ' + GUIDToString(Value));
   Caption := 'Fiche d''album - ' + FAlbum.ChaineAffichage;
@@ -634,7 +633,7 @@ end;
 
 procedure TfrmConsultationAlbum.N7Click(Sender: TObject);
 begin
-  (TDaoFactory.getDaoDB<TAlbumFull> as TDaoAlbumFull).ChangeNotation(FAlbum, TMenuItem(Sender).Tag);
+  TDaoAlbumFull.ChangeNotation(FAlbum, TMenuItem(Sender).Tag);
   Image1.Picture.Assign(frmFond.imlNotation_32x32.PngImages[FAlbum.Notation - 900].pngimage);
   Historique.AddWaiting(fcRefreshRepertoireData);
   vstSerie.ReinitNodes(1);
