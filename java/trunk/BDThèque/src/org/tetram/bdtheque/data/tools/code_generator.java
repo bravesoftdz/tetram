@@ -51,7 +51,8 @@ public class code_generator {
         javaModelGeneratorConfiguration.setTargetProject("D:\\MEDIA.KIT\\BDTheque\\Java\\BDThèque\\src");
         context.setJavaModelGeneratorConfiguration(javaModelGeneratorConfiguration);
 
-        TableConfiguration tc = new TableConfiguration(context);
+        TableConfiguration tc;
+        tc = new TableConfiguration(context);
         tc.setTableName("albums");
         context.addTableConfiguration(tc);
 
