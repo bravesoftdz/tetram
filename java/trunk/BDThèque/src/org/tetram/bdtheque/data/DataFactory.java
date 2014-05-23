@@ -1,6 +1,7 @@
 package org.tetram.bdtheque.data;
 
 import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
@@ -11,6 +12,9 @@ import java.io.InputStream;
  * Created by Thierry on 23/05/2014.
  */
 public class DataFactory {
+
+    private final SqlSessionFactory sqlSessionFactory;
+
     public DataFactory() {
         super();
 
@@ -21,6 +25,14 @@ public class DataFactory {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+        sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+    }
+
+    public SqlSessionFactory getSqlSessionFactory() {
+        return sqlSessionFactory;
+    }
+
+    public SqlSession getSession(){
+        return sqlSessionFactory.openSession();
     }
 }
