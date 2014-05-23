@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="mybatis-3.2.7">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../lib/mybatis-3.2.7/mybatis-3.2.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$PROJECT_DIR$/../lib/mybatis-3.2.7/src/main/java" />
+    </SOURCES>
+  </library>
+</component>
