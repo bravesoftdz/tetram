@@ -5,10 +5,7 @@ import org.mybatis.generator.config.*;
 import org.mybatis.generator.exception.InvalidConfigurationException;
 import org.mybatis.generator.internal.DefaultShellCallback;
 
-import java.io.Console;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -82,8 +79,8 @@ public class code_generator {
         tc.addColumnOverride(columnOverride);
 
         tc.addIgnoredColumn(new IgnoredColumn("dc_" + tableName));
-        tc.addIgnoredColumn(new IgnoredColumn("dm_"+tableName));
-        tc.addIgnoredColumn(new IgnoredColumn("ds_"+tableName));
+        tc.addIgnoredColumn(new IgnoredColumn("dm_" + tableName));
+        tc.addIgnoredColumn(new IgnoredColumn("ds_" + tableName));
 
         return tc;
     }

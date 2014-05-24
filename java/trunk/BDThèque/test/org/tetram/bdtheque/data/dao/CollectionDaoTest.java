@@ -11,8 +11,6 @@ import java.util.List;
 
 public class CollectionDaoTest extends DaoTest {
 
-    public static final String ID_EDITEUR_GLENAT = "{C8EC600B-9BCA-41F7-AF2A-4FF6F33F48D9}";
-    public static final String ID_COLLECTION_GENERATION_COMICS_PANINI = "{085B0C9C-7608-4B5E-A2B6-968D9FDB56E8}";
     protected CollectionDao dao;
 
     @Override

@@ -1,23 +1,8 @@
 package org.tetram.bdtheque.utils;
 
 import org.jetbrains.annotations.Nullable;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
+import java.util.*;
 
 @SuppressWarnings("UnusedDeclaration")
 public abstract class StringUtils {
@@ -26,11 +11,11 @@ public abstract class StringUtils {
     public static final String GUID_FULL_STRING = "{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}";
     public static final UUID GUID_NULL = GUIDStringToUUID("{00000000-0000-0000-0000-000000000000}");
     public static final String GUID_NULL_STRING = "{00000000-0000-0000-0000-000000000000}";
-
+    public static final String SEARCH_ISBN_GROUP = "//ISBNRangeMessage/EAN.UCCPrefixes/EAN.UCC[Prefix='%2$s']/Rules/Rule[ValueLower<=%1$s and ValueUpper>=%1$s]/Length";
+    public static final String SEARCH_ISBN_PUBLISHER = "//ISBNRangeMessage/RegistrationGroups/Group[Prefix='%2$s-%3$s']/Rules/Rule[ValueLower<=%1$s and ValueUpper>=%1$s]/Length";
     private static final Map<Boolean, String> RES_TOME;
     private static final Map<Boolean, String> RES_HORSERIE;
     private static final Map<Boolean, String> RES_INTEGRALE;
-
     static {
         Map<Boolean, String> aMap;
 
@@ -49,6 +34,7 @@ public abstract class StringUtils {
         aMap.put(true, "Intégrale");
         RES_INTEGRALE = Collections.unmodifiableMap(aMap);
     }
+    private static HashMap<String, List<ISBNRule>> isbnPrefixes, isbnGroups;
 
     public static UUID GUIDStringToUUID(final String guid) {
         return UUID.fromString(guid.substring(1, guid.length() - 1));
@@ -72,36 +58,6 @@ public abstract class StringUtils {
 
     public static String ajoutString(final String chaine, final String ajout, final String espace, final String avant) {
         return ajoutString(chaine, ajout, espace, avant, "");
-    }
-
-    public static String ajoutString(String chaine, final String ajout, final String espace, final String avant, final String apres) {
-        final StringBuilder stringBuilder = new StringBuilder(
-                ((chaine == null) ? 0 : chaine.length())
-                        + ((ajout == null) ? 0 : ajout.length())
-                        + ((espace == null) ? 0 : espace.length())
-                        + ((avant == null) ? 0 : avant.length())
-                        + ((apres == null) ? 0 : apres.length())
-        );
-        if (chaine != null) stringBuilder.append(chaine);
-        if ((ajout != null) && !"".equals(ajout)) {
-            if ((stringBuilder.length() > 0) && (espace != null)) stringBuilder.append(espace);
-            if (avant != null) stringBuilder.append(avant);
-            stringBuilder.append(ajout);
-            if (apres != null) stringBuilder.append(apres);
-        }
-        return stringBuilder.toString();
-    }
-
-    public static String nonZero(final String s) {
-        if ((s == null) || "0".equals(s.trim()))
-            return "";
-        return s;
-    }
-
-    public static String nonZero(final Integer i) {
-        if ((i == null) || Integer.valueOf(0).equals(i))
-            return "";
-        return i.toString();
     }
 
 /*
@@ -175,11 +131,35 @@ begin
 end;
 */
 
-    private static class ISBNRule {
-        int valueLower, valueUpper, length;
+    public static String ajoutString(String chaine, final String ajout, final String espace, final String avant, final String apres) {
+        final StringBuilder stringBuilder = new StringBuilder(
+                ((chaine == null) ? 0 : chaine.length())
+                        + ((ajout == null) ? 0 : ajout.length())
+                        + ((espace == null) ? 0 : espace.length())
+                        + ((avant == null) ? 0 : avant.length())
+                        + ((apres == null) ? 0 : apres.length())
+        );
+        if (chaine != null) stringBuilder.append(chaine);
+        if ((ajout != null) && !"".equals(ajout)) {
+            if ((stringBuilder.length() > 0) && (espace != null)) stringBuilder.append(espace);
+            if (avant != null) stringBuilder.append(avant);
+            stringBuilder.append(ajout);
+            if (apres != null) stringBuilder.append(apres);
+        }
+        return stringBuilder.toString();
     }
 
-    private static HashMap<String, List<ISBNRule>> isbnPrefixes, isbnGroups;
+    public static String nonZero(final String s) {
+        if ((s == null) || "0".equals(s.trim()))
+            return "";
+        return s;
+    }
+
+    public static String nonZero(final Integer i) {
+        if ((i == null) || Integer.valueOf(0).equals(i))
+            return "";
+        return i.toString();
+    }
 
     private static void decodeISBNRules() {
         if (isbnPrefixes != null) return;
@@ -280,9 +260,6 @@ end;
                 return rule.length;
         return 0;
     }
-
-    public static final String SEARCH_ISBN_GROUP = "//ISBNRangeMessage/EAN.UCCPrefixes/EAN.UCC[Prefix='%2$s']/Rules/Rule[ValueLower<=%1$s and ValueUpper>=%1$s]/Length";
-    public static final String SEARCH_ISBN_PUBLISHER = "//ISBNRangeMessage/RegistrationGroups/Group[Prefix='%2$s-%3$s']/Rules/Rule[ValueLower<=%1$s and ValueUpper>=%1$s]/Length";
 
     @Nullable
     public static String formatISBN(String isbn) {
@@ -422,5 +399,9 @@ end;
          */
 
         return result;
+    }
+
+    private static class ISBNRule {
+        int valueLower, valueUpper, length;
     }
 }

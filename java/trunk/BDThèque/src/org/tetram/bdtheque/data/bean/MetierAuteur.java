@@ -9,16 +9,16 @@ public enum MetierAuteur {
     private int value;
     private String label;
 
+    MetierAuteur(int value, String label) {
+        this.value = value;
+        this.label = label;
+    }
+
     public int getValue() {
         return value;
     }
 
     public String getLabel() {
         return label;
-    }
-
-    MetierAuteur(int value, String label) {
-        this.value = value;
-        this.label = label;
     }
 }

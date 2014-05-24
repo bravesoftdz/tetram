@@ -31,7 +31,7 @@ public class Database {
         return sqlSessionFactory;
     }
 
-    public SqlSession getSession(){
+    public SqlSession getSession() {
         return sqlSessionFactory.openSession();
     }
 }

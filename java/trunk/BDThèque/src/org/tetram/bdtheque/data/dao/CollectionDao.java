@@ -11,6 +11,8 @@ import java.util.UUID;
  */
 public interface CollectionDao {
     CollectionLite getCollectionLiteById(UUID id);
+
     List<CollectionLite> getListCollectionLiteByEditeurId(UUID id);
+
     Collection getCollectionById(UUID id);
 }
