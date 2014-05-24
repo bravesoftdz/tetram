@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <properties>
+        <property name="driver" value="org.firebirdsql.jdbc.FBDriver"/>
+        <property name="username" value="SYSDBA"/>
+        <property name="password" value="masterkey"/>
+    </properties>
+
+    <settings>
+        <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="jdbcTypeForNull" value="NULL"/>
+        <setting name="callSettersOnNulls" value="true"/>
+
+        <!-- à voir -->
+        <setting name="cacheEnabled" value="true"/>
+        <setting name="multipleResultSetsEnabled" value="true"/>
+    </settings>
+
+    <typeAliases>
+        <typeAlias type="java.util.UUID" alias="UUID"/>
+        <typeAlias type="org.tetram.bdtheque.data.UUIDTypeHandler" alias="UUIDTypeHandler"/>
+        <typeAlias type="java.net.URL" alias="URL"/>
+        <typeAlias type="org.tetram.bdtheque.data.URLTypeHandler" alias="URLTypeHandler"/>
+
+        <typeAlias type="org.tetram.bdtheque.data.bean.Editeur" alias="beanEditeur"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.lite.EditeurLite" alias="beanEditeurLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.Collection" alias="beanCollection"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.lite.CollectionLite" alias="beanCollectionLite"/>
+    </typeAliases>
+
+    <typeHandlers>
+        <typeHandler handler="UUIDTypeHandler"/>
+        <typeHandler handler="URLTypeHandler"/>
+    </typeHandlers>
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="jdbc:firebirdsql:embedded:D:\MEDIA.KIT\BDTheque\bin\BD.GDB"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+        <environment id="production">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${databasename}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper resource="org/tetram/bdtheque/data/bean/Editeur.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/Collection.xml"/>
+    </mappers>
+</configuration>

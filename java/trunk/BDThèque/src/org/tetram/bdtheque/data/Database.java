@@ -9,16 +9,15 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by Thierry on 23/05/2014.
+ * Created by Thierry on 24/05/2014.
  */
-public class DataFactory {
-
+public class Database {
     private final SqlSessionFactory sqlSessionFactory;
 
-    public DataFactory() {
+    public Database() {
         super();
 
-        String resource = "org/tetram/bdtheque/mybatis-config.xml";
+        String resource = "org/tetram/bdtheque/data/mybatis-config.xml";
         InputStream inputStream = null;
         try {
             inputStream = Resources.getResourceAsStream(resource);

@@ -2,10 +2,12 @@
   <library name="mybatis-3.2.7">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/../lib/mybatis-3.2.7/mybatis-3.2.7.jar!/" />
+      <root url="file://$PROJECT_DIR$/../lib/mybatis-3.2.7/lib" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="file://$PROJECT_DIR$/../lib/mybatis-3.2.7/src/main/java" />
     </SOURCES>
+    <jarDirectory url="file://$PROJECT_DIR$/../lib/mybatis-3.2.7/lib" recursive="false" />
   </library>
 </component>

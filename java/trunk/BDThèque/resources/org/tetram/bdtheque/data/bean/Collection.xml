@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.tetram.bdtheque.data.dao.CollectionDao">
+    <resultMap id="CollectionLite" type="beanCollectionLite">
+        <id column="id_collection" property="id"/>
+        <result column="NomCollection" property="nomCollection"/>
+        <association property="editeur" resultMap="org.tetram.bdtheque.data.dao.EditeurDao.EditeurLite"/>
+    </resultMap>
+    <resultMap id="CollectionFull" type="beanCollection">
+        <id column="id_collection" property="id"/>
+        <result column="NomCollection" property="nomCollection"/>
+        <association property="editeur" column="id_editeur" select="org.tetram.bdtheque.data.dao.EditeurDao.getEditeurLiteById"/>
+    </resultMap>
+
+    <select id="getCollectionLiteById" resultMap="CollectionLite">
+        <![CDATA[
+        select
+            c.id_collection, c.nomcollection,
+            e.id_editeur, e.nomediteur
+        from
+            collections c
+            inner join editeurs e on
+                e.id_editeur = c.id_editeur
+        where
+            c.id_collection = #{id}
+        ]]>
+    </select>
+
+    <select id="getCollectionById" resultMap="CollectionFull">
+        <![CDATA[
+        select
+            id_collection, nomcollection, id_editeur
+        from
+            collections
+        where
+            id_collection = #{id}
+        ]]>
+    </select>
+
+    <select id="getListCollectionLiteByEditeurId" resultMap="CollectionLite">
+        <![CDATA[
+        select
+            c.id_collection, c.nomcollection,
+            e.id_editeur, e.nomediteur
+        from
+            collections c
+            inner join editeurs e on
+                e.id_editeur = c.id_editeur
+        where
+            e.id_editeur = #{id}
+        ]]>
+    </select>
+</mapper>

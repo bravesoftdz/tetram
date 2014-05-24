@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="BDTheque">
+    <output-path>$PROJECT_DIR$/out/artifacts/BDTheque</output-path>
+    <root id="root">
+      <element id="archive" name="JavaFXApp.jar">
+        <element id="module-output" name="BDThèque" />
+      </element>
+    </root>
+  </artifact>
+</component>

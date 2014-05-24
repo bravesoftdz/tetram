@@ -19,26 +19,15 @@ import java.util.List;
 public class code_generator {
 
     public static void main(String[] args) throws InvalidConfigurationException {
-        List<String> warnings = new ArrayList<String>();
+        List<String> warnings = new ArrayList<>();
         boolean overwrite = true;
         Configuration config = new Configuration();
 
         //   ... fill out the config object as appropriate...
         config.addClasspathEntry("D:\\MEDIA.KIT\\BDTheque\\Java\\lib\\Jaybird-2.2.5-JDK_1.8\\jaybird-full-2.2.5.jar");
-        Context context = new Context(ModelType.CONDITIONAL);
+        Context context = new Context(ModelType.FLAT);
         context.setId("bdtheque");
-/*
-        String decodedPath = null;
-        try {
-            decodedPath = URLDecoder.decode(ClassLoader.getSystemClassLoader().getResource(".").getPath(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        decodedPath=decodedPath.substring(1, decodedPath.length()-1).replaceAll("/", "\\\\");
-        System.setProperty("java.library.path",decodedPath+";"+System.getProperty("java.library.path"));
 
-        System.out.println(System.getProperty("java.library.path"));
-*/
         JDBCConnectionConfiguration jdbcConnectionConfiguration = new JDBCConnectionConfiguration();
         jdbcConnectionConfiguration.setDriverClass("org.firebirdsql.jdbc.FBDriver");
         jdbcConnectionConfiguration.setConnectionURL("jdbc:firebirdsql:embedded:D:\\MEDIA.KIT\\BDTheque\\bin\\BD.GDB");
@@ -47,18 +36,29 @@ public class code_generator {
         context.setJdbcConnectionConfiguration(jdbcConnectionConfiguration);
 
         JavaModelGeneratorConfiguration javaModelGeneratorConfiguration = new JavaModelGeneratorConfiguration();
-        javaModelGeneratorConfiguration.setTargetPackage("org.tetram.bdtheque.data.bean");
-        javaModelGeneratorConfiguration.setTargetProject("D:\\MEDIA.KIT\\BDTheque\\Java\\BDThèque\\src");
+        javaModelGeneratorConfiguration.setTargetPackage("bean");
+        javaModelGeneratorConfiguration.setTargetProject("D:\\MEDIA.KIT\\BDTheque\\java\\BDThèque\\generated");
         context.setJavaModelGeneratorConfiguration(javaModelGeneratorConfiguration);
 
-        TableConfiguration tc;
-        tc = new TableConfiguration(context);
-        tc.setTableName("albums");
-        context.addTableConfiguration(tc);
+        JavaClientGeneratorConfiguration javaClientGeneratorConfiguration = new JavaClientGeneratorConfiguration();
+        javaClientGeneratorConfiguration.setConfigurationType("XMLMAPPER");
+        javaClientGeneratorConfiguration.setTargetPackage("dao");
+        javaClientGeneratorConfiguration.setTargetProject("D:\\MEDIA.KIT\\BDTheque\\Java\\BDThèque\\generated");
+        context.setJavaClientGeneratorConfiguration(javaClientGeneratorConfiguration);
+
+        context.addTableConfiguration(getTableConfiguration(context, "collections", "id_collection"));
+        context.addTableConfiguration(getTableConfiguration(context, "editeurs", "id_editeur"));
+        context.addTableConfiguration(getTableConfiguration(context, "series", "id_serie"));
+        context.addTableConfiguration(getTableConfiguration(context, "albums", "id_album"));
+
+        SqlMapGeneratorConfiguration sqlMapGeneratorConfiguration = new SqlMapGeneratorConfiguration();
+        sqlMapGeneratorConfiguration.setTargetPackage("bean");
+        sqlMapGeneratorConfiguration.setTargetProject("D:\\MEDIA.KIT\\BDTheque\\Java\\BDThèque\\generated");
+        context.setSqlMapGeneratorConfiguration(sqlMapGeneratorConfiguration);
 
         config.addContext(context);
 
-        config.validate();
+        System.out.println(config.toDocument().getFormattedContent());
 
         DefaultShellCallback callback = new DefaultShellCallback(overwrite);
         MyBatisGenerator myBatisGenerator = null;
@@ -68,5 +68,23 @@ public class code_generator {
         } catch (InvalidConfigurationException | InterruptedException | SQLException | IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private static TableConfiguration getTableConfiguration(Context context, String tableName, String pkName) {
+        TableConfiguration tc = new TableConfiguration(context);
+        tc.setTableName(tableName);
+
+        tc.setGeneratedKey(new GeneratedKey(pkName, "select udf_createguid() from rdb$database", true, "post"));
+
+        ColumnOverride columnOverride;
+        columnOverride = new ColumnOverride(pkName);
+        columnOverride.setJavaType("java.util.UUID");
+        tc.addColumnOverride(columnOverride);
+
+        tc.addIgnoredColumn(new IgnoredColumn("dc_" + tableName));
+        tc.addIgnoredColumn(new IgnoredColumn("dm_"+tableName));
+        tc.addIgnoredColumn(new IgnoredColumn("ds_"+tableName));
+
+        return tc;
     }
 }
