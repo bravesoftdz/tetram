@@ -20,7 +20,7 @@ public class AlbumLite extends DBEntityLite {
     private boolean integrale;
     private boolean horsSerie;
     private boolean achat;
-    private boolean complet;
+    private boolean complet = true;
     private Integer notation;
 
     public Integer getTome() {

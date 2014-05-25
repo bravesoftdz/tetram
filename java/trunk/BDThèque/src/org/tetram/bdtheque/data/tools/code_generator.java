@@ -47,6 +47,7 @@ public class code_generator {
         context.addTableConfiguration(getTableConfiguration(context, "editeurs", "id_editeur"));
         context.addTableConfiguration(getTableConfiguration(context, "series", "id_serie"));
         context.addTableConfiguration(getTableConfiguration(context, "albums", "id_album"));
+        context.addTableConfiguration(getTableConfiguration(context, "editions", "id_edition"));
 
         SqlMapGeneratorConfiguration sqlMapGeneratorConfiguration = new SqlMapGeneratorConfiguration();
         sqlMapGeneratorConfiguration.setTargetPackage("bean");

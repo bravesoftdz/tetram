@@ -4,7 +4,7 @@ import org.tetram.bdtheque.data.bean.lite.AuteurParaBDLite;
 import org.tetram.bdtheque.data.bean.lite.PhotoLite;
 import org.tetram.bdtheque.data.bean.lite.UniversLite;
 
-import java.util.Currency;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -14,24 +14,24 @@ import java.util.UUID;
  */
 public class ParaBD extends DBEntity {
     private Integer anneeEdition;
-    //property CategorieParaBD: ROption read FCategorieParaBD write FCategorieParaBD;
+    private ValeurListe categorieParaBD;
     private Integer anneeCote;
     private String titreParaBD;
-    private List<AuteurParaBDLite> auteurs;
+    private List<AuteurParaBDLite> auteurs = new ArrayList<>();
     private String description;
     private String notes;
     private Serie serie;
-    private Currency prix;
-    private Currency prixCote;
+    private Double prix;
+    private Double prixCote;
     private boolean dedicace;
     private boolean numerote;
     private boolean stock;
     private boolean offert;
     private boolean gratuit;
     private Date dateAchat;
-    private List<UniversLite> univers;
-    private List<UniversLite> universFull;
-    private List<PhotoLite> photos;
+    private List<UniversLite> univers = new ArrayList<>();
+    private List<UniversLite> universFull = new ArrayList<>();
+    private List<PhotoLite> photos = new ArrayList<>();
 
     public Integer getAnneeEdition() {
         return anneeEdition;
@@ -89,19 +89,19 @@ public class ParaBD extends DBEntity {
         this.serie = serie;
     }
 
-    public Currency getPrix() {
+    public Double getPrix() {
         return prix;
     }
 
-    public void setPrix(Currency prix) {
+    public void setPrix(Double prix) {
         this.prix = prix;
     }
 
-    public Currency getPrixCote() {
+    public Double getPrixCote() {
         return prixCote;
     }
 
-    public void setPrixCote(Currency prixCote) {
+    public void setPrixCote(Double prixCote) {
         this.prixCote = prixCote;
     }
 
@@ -162,6 +162,17 @@ public class ParaBD extends DBEntity {
     }
 
     public List<UniversLite> getUniversFull() {
+        Integer countUnivers = (univers != null ? univers.size() : 0);
+        if (serie != null)
+            countUnivers += (serie.getUnivers() != null ? serie.getUnivers().size() : 0);
+
+        if (universFull == null || universFull.size() != countUnivers) {
+            universFull = new ArrayList<>();
+            if (univers != null)
+                universFull.addAll(univers);
+            if (serie != null && serie.getUnivers() != null)
+                universFull.addAll(serie.getUnivers());
+        }
         return universFull;
     }
 
@@ -175,6 +186,14 @@ public class ParaBD extends DBEntity {
 
     public void setPhotos(List<PhotoLite> photos) {
         this.photos = photos;
+    }
+
+    public ValeurListe getCategorieParaBD() {
+        return categorieParaBD;
+    }
+
+    public void setCategorieParaBD(ValeurListe categorieParaBD) {
+        this.categorieParaBD = categorieParaBD;
     }
 
     public UUID getIdSerie() {

@@ -6,6 +6,7 @@ import org.tetram.bdtheque.data.bean.lite.ParaBDLite;
 import org.tetram.bdtheque.data.bean.lite.UniversLite;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,7 +17,7 @@ public class Serie extends DBEntity {
     private String titreSerie;
 
     private Boolean terminee;
-    private List<String> genres;
+    private List<String> genres = new ArrayList<>();
     private String sujet;
     private String notes;
     private Editeur editeur;
@@ -26,11 +27,11 @@ public class Serie extends DBEntity {
     private boolean suivreManquants;
     private boolean suivreSorties;
     private int nbAlbums;
-    private List<AlbumLite> albums;
-    private List<ParaBDLite> paraBDs;
-    private List<AuteurSerieLite> scenaristes;
-    private List<AuteurSerieLite> dessinateurs;
-    private List<AuteurSerieLite> coloristes;
+    private List<AlbumLite> albums = new ArrayList<>();
+    private List<ParaBDLite> paraBDs = new ArrayList<>();
+    private List<AuteurSerieLite> scenaristes = new ArrayList<>();
+    private List<AuteurSerieLite> dessinateurs = new ArrayList<>();
+    private List<AuteurSerieLite> coloristes = new ArrayList<>();
     private Boolean vo;
     private Boolean couleur;
     //    property Etat: ROption read FEtat write FEtat;
@@ -40,7 +41,7 @@ public class Serie extends DBEntity {
 //    property Orientation: ROption read FOrientation write FOrientation;
 //    property SensLecture: ROption read FSensLecture write FSensLecture;
     private Integer notation;
-    private List<UniversLite> univers;
+    private List<UniversLite> univers = new ArrayList<>();
 
     public String getTitreSerie() {
         return titreSerie;

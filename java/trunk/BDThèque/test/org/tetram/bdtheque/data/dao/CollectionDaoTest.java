@@ -22,21 +22,24 @@ public class CollectionDaoTest extends DaoTest {
 
     @Test
     public void testGetCollectionLiteById() throws Exception {
-        CollectionLite collectionLite = dao.getCollectionLiteById(StringUtils.GUIDStringToUUID(ID_COLLECTION_GENERATION_COMICS_PANINI));
+        CollectionLite collectionLite = dao.getCollectionLiteById(ID_COLLECTION_GENERATION_COMICS_PANINI);
         // pour le moment on suppose que si le résultat n'est pas null, c'est que tous les champs sont biens chargés
         Assert.assertNotNull(collectionLite);
+        Assert.assertEquals(collectionLite.getId(), ID_COLLECTION_GENERATION_COMICS_PANINI);
     }
 
     @Test
     public void testGetListCollectionLiteByEditeurId() throws Exception {
-        List<CollectionLite> lstCollectionLite = dao.getListCollectionLiteByEditeurId(StringUtils.GUIDStringToUUID(ID_EDITEUR_GLENAT));
+        List<CollectionLite> lstCollectionLite = dao.getListCollectionLiteByEditeurId(ID_EDITEUR_GLENAT);
         Assert.assertFalse(lstCollectionLite.isEmpty());
+        Assert.assertNotNull(lstCollectionLite.get(0).getId());
     }
 
     @Test
     public void testGetCollectionById() throws Exception {
-        Collection collection = dao.getCollectionById(StringUtils.GUIDStringToUUID(ID_COLLECTION_GENERATION_COMICS_PANINI));
+        Collection collection = dao.getCollectionById(ID_COLLECTION_GENERATION_COMICS_PANINI);
         // pour le moment on suppose que si le résultat n'est pas null, c'est que tous les champs sont biens chargés
         Assert.assertNotNull(collection);
+        Assert.assertEquals(collection.getId(), ID_COLLECTION_GENERATION_COMICS_PANINI);
     }
 }

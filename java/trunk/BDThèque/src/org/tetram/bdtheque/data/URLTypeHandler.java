@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data;
 
+import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
@@ -27,7 +28,6 @@ public class URLTypeHandler extends BaseTypeHandler<URL> {
         try {
             return new URL(rs.getString(columnName));
         } catch (MalformedURLException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -37,7 +37,6 @@ public class URLTypeHandler extends BaseTypeHandler<URL> {
         try {
             return new URL(rs.getString(columnIndex));
         } catch (MalformedURLException e) {
-            e.printStackTrace();
             return null;
         }
     }
@@ -47,7 +46,6 @@ public class URLTypeHandler extends BaseTypeHandler<URL> {
         try {
             return new URL(cs.getString(columnIndex));
         } catch (MalformedURLException e) {
-            e.printStackTrace();
             return null;
         }
     }

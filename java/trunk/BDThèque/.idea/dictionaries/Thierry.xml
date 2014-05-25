@@ -22,11 +22,13 @@
       <w>dessinateurs</w>
       <w>editeur</w>
       <w>etat</w>
+      <w>fichier</w>
       <w>firebirdsql</w>
       <w>gratuit</w>
       <w>hors</w>
       <w>integrale</w>
       <w>jdbc</w>
+      <w>liste</w>
       <w>manquants</w>
       <w>masterkey</w>
       <w>mois</w>
@@ -47,6 +49,7 @@
       <w>scenaristes</w>
       <w>scénariste</w>
       <w>serie</w>
+      <w>stockage</w>
       <w>stockee</w>
       <w>suivre</w>
       <w>sujet</w>
@@ -55,6 +58,7 @@
       <w>tetram</w>
       <w>theque</w>
       <w>univers</w>
+      <w>valeur</w>
     </words>
   </dictionary>
 </component>

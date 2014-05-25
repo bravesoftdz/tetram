@@ -12,7 +12,8 @@
     <settings>
         <setting name="lazyLoadingEnabled" value="true"/>
         <setting name="jdbcTypeForNull" value="NULL"/>
-        <setting name="callSettersOnNulls" value="true"/>
+        <setting name="callSettersOnNulls" value="false"/>
+        <setting name="logImpl" value="LOG4J2"/>
 
         <!-- à voir -->
         <setting name="cacheEnabled" value="true"/>
@@ -26,6 +27,7 @@
         <typeAlias type="org.tetram.bdtheque.data.URLTypeHandler" alias="URLTypeHandler"/>
 
         <typeAlias type="org.tetram.bdtheque.data.bean.MetierAuteur" alias="MetierAuteur"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.ValeurListe" alias="ValeurListe"/>
 
         <typeAlias type="org.tetram.bdtheque.data.bean.Album" alias="beanAlbum"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.lite.AlbumLite" alias="beanAlbumLite"/>
@@ -60,6 +62,10 @@
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="MetierAuteur"/>
     </typeHandlers>
 
+    <!-- permet de d'intervenir sur la création/initialisation des beans
+    <objectFactory type=""/>
+    -->
+
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"/>
@@ -82,7 +88,11 @@
     </environments>
 
     <mappers>
-        <mapper resource="org/tetram/bdtheque/data/bean/Editeur.xml"/>
         <mapper resource="org/tetram/bdtheque/data/bean/Collection.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/Editeur.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/Image.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/ParaBD.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/Univers.xml"/>
     </mappers>
+
 </configuration>

@@ -14,7 +14,7 @@
     <select id="getEditeurLiteById" resultMap="EditeurLite">
         <![CDATA[
         select
-            nomediteur, id_editeur
+            id_editeur, nomediteur
         from
             editeurs
         where
@@ -25,7 +25,7 @@
     <select id="getEditeurById" resultMap="EditeurFull">
         <![CDATA[
         select
-            nomediteur, id_editeur
+            id_editeur, nomediteur
         from
             editeurs
         where

@@ -2,10 +2,7 @@ package org.tetram.bdtheque.data.bean;
 
 import org.tetram.bdtheque.data.bean.lite.CouvertureLite;
 
-import java.util.Currency;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Thierry on 24/05/2014.
@@ -23,8 +20,8 @@ public class Edition extends DBEntity {
     private Integer anneeEdition;
     private Integer nombreDePages;
     private Integer anneeCote;
-    private Currency prix;
-    private Currency prixCote;
+    private Double prix;
+    private Double prixCote;
     private boolean couleur;
     private boolean vo;
     private boolean dedicace;
@@ -36,7 +33,7 @@ public class Edition extends DBEntity {
     private Date dateAchat;
     private String notes;
     private String numeroPerso;
-    private List<CouvertureLite> couvertures;
+    private List<CouvertureLite> couvertures = new ArrayList<>();
 
     public UUID getIdAlbum() {
         return idAlbum;
@@ -86,19 +83,19 @@ public class Edition extends DBEntity {
         this.anneeCote = anneeCote;
     }
 
-    public Currency getPrix() {
+    public Double getPrix() {
         return prix;
     }
 
-    public void setPrix(Currency prix) {
+    public void setPrix(Double prix) {
         this.prix = prix;
     }
 
-    public Currency getPrixCote() {
+    public Double getPrixCote() {
         return prixCote;
     }
 
-    public void setPrixCote(Currency prixCote) {
+    public void setPrixCote(Double prixCote) {
         this.prixCote = prixCote;
     }
 

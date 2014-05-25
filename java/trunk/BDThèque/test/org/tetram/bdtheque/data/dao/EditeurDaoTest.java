@@ -9,7 +9,6 @@ import org.tetram.bdtheque.utils.StringUtils;
 
 public class EditeurDaoTest extends DaoTest {
 
-    public static final String ID_EDITEUR_GLENAT = "{C8EC600B-9BCA-41F7-AF2A-4FF6F33F48D9}";
     protected EditeurDao dao;
 
     @Override
@@ -21,15 +20,17 @@ public class EditeurDaoTest extends DaoTest {
 
     @Test
     public void testGetEditeurLiteById() throws Exception {
-        EditeurLite editeurLite = dao.getEditeurLiteById(StringUtils.GUIDStringToUUID(ID_EDITEUR_GLENAT));
+        EditeurLite editeurLite = dao.getEditeurLiteById(ID_EDITEUR_GLENAT);
         // pour le moment on suppose que si le résultat n'est pas null, c'est que tous les champs sont biens chargés
         Assert.assertNotNull(editeurLite);
+        Assert.assertEquals(editeurLite.getId(), ID_EDITEUR_GLENAT);
     }
 
     @Test
     public void testGetEditeurById() throws Exception {
-        Editeur editeur = dao.getEditeurById(StringUtils.GUIDStringToUUID(ID_EDITEUR_GLENAT));
+        Editeur editeur = dao.getEditeurById(ID_EDITEUR_GLENAT);
         // pour le moment on suppose que si le résultat n'est pas null, c'est que tous les champs sont biens chargés
         Assert.assertNotNull(editeur);
+        Assert.assertEquals(editeur.getId(), ID_EDITEUR_GLENAT);
     }
 }

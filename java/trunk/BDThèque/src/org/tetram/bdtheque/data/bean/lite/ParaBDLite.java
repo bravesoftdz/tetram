@@ -13,7 +13,7 @@ public class ParaBDLite extends DBEntityLite {
     private String serie;
     private String sCategorie;
     private boolean achat;
-    private boolean complet;
+    private boolean complet = true;
 
     public String getTitre() {
         return titre;

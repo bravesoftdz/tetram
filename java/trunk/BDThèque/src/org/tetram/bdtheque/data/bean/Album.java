@@ -3,6 +3,7 @@ package org.tetram.bdtheque.data.bean;
 import org.tetram.bdtheque.data.bean.lite.AuteurAlbumLite;
 import org.tetram.bdtheque.data.bean.lite.UniversLite;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,15 +19,15 @@ public class Album extends DBEntity {
     private Integer tomeDebut, tomeFin;
     private boolean horsSerie;
     private boolean integrale;
-    private List<AuteurAlbumLite> scenaristes;
-    private List<AuteurAlbumLite> dessinateurs;
-    private List<AuteurAlbumLite> coloristes;
+    private List<AuteurAlbumLite> scenaristes = new ArrayList<>();
+    private List<AuteurAlbumLite> dessinateurs = new ArrayList<>();
+    private List<AuteurAlbumLite> coloristes = new ArrayList<>();
     private String sujet;
     private String notes;
-    private List<Edition> editions;
+    private List<Edition> editions = new ArrayList<>();
     private Integer notation;
-    private List<UniversLite> univers;
-    private List<UniversLite> universFull;
+    private List<UniversLite> univers = new ArrayList<>();
+    private List<UniversLite> universFull = new ArrayList<>();
 
     public boolean isComplet() {
         return complet;
@@ -173,6 +174,17 @@ public class Album extends DBEntity {
     }
 
     public List<UniversLite> getUniversFull() {
+        Integer countUnivers = (univers != null ? univers.size() : 0);
+        if (serie != null)
+            countUnivers += (serie.getUnivers() != null ? serie.getUnivers().size() : 0);
+
+        if (universFull == null || universFull.size() != countUnivers) {
+            universFull = new ArrayList<>();
+            if (univers != null)
+                universFull.addAll(univers);
+            if (serie != null && serie.getUnivers() != null)
+                universFull.addAll(serie.getUnivers());
+        }
         return universFull;
     }
 

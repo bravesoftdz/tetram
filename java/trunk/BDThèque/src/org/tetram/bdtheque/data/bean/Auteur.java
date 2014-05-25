@@ -1,6 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ public class Auteur extends DBEntity {
     private String nomAuteur;
     private URL siteWeb;
     private String biographie;
-    private List<Serie> series;
+    private List<Serie> series = new ArrayList<>();
 
     public String getNomAuteur() {
         return nomAuteur;
