@@ -463,7 +463,7 @@ procedure TfrmFond.actAfficheStatsGeneralesExecute(Sender: TObject);
 var
   R: TStats;
 begin
-  R := TStats.Create(False);
+  R := TStats.BuildStats(False);
   with TStatsGeneralesCreate(Self, R) do
     try
       ShowModal;
@@ -552,7 +552,7 @@ procedure TfrmFond.actAfficheStatsAlbumsExecute(Sender: TObject);
 var
   R: TStats;
 begin
-  R := TStats.Create(False);
+  R := TStats.BuildStats(False);
   with TStatsAlbumsCreate(Self, R) do
     try
       ShowModal;

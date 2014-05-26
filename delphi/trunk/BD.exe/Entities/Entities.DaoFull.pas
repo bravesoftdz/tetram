@@ -21,7 +21,9 @@ type
 
   TDaoFullEntity<T: TObjetFull> = class abstract(TDaoFull)
   protected
+    class procedure SaveEntity(Entity: TDBEntity; UseTransaction: TManagedTransaction); overload; override; final;
     class procedure SaveEntity(Entity: T; UseTransaction: TManagedTransaction); reintroduce; overload; virtual;
+    class procedure LoadEntity(Entity: TDBEntity; const Reference: TGUID; UseTransaction: TManagedTransaction); overload; override; final;
     class procedure LoadEntity(Entity: T; const Reference: TGUID; UseTransaction: TManagedTransaction); reintroduce; overload; virtual;
   public
     class function getInstance: T; reintroduce; overload;
@@ -62,7 +64,8 @@ type
     class function getInstance(const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean): TSerieFull; reintroduce; overload;
 
     class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; UseTransaction: TManagedTransaction); reintroduce; overload;
-    class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean; UseTransaction: TManagedTransaction); reintroduce; overload;
+    class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean; UseTransaction: TManagedTransaction);
+      reintroduce; overload;
     class procedure ChangeNotation(Entity: TSerieFull; Note: Integer);
 
     class procedure InitSerie(Entity: TEntity);
@@ -176,7 +179,12 @@ end;
 
 class procedure TDaoFullEntity<T>.LoadEntity(Entity: T; const Reference: TGUID; UseTransaction: TManagedTransaction);
 begin
-  Entity.DoClear;
+  Entity.Clear;
+end;
+
+class procedure TDaoFullEntity<T>.SaveEntity(Entity: TDBEntity; UseTransaction: TManagedTransaction);
+begin
+  SaveEntity(T(Entity), UseTransaction);
 end;
 
 class function TDaoFullEntity<T>.getInstance: T;
@@ -187,6 +195,11 @@ end;
 class function TDaoFullEntity<T>.getInstance(const Reference: TGUID): T;
 begin
   Result := T(inherited getInstance(Reference));
+end;
+
+class procedure TDaoFullEntity<T>.LoadEntity(Entity: TDBEntity; const Reference: TGUID; UseTransaction: TManagedTransaction);
+begin
+  LoadEntity(T(Entity), Reference, UseTransaction);
 end;
 
 class procedure TDaoFullEntity<T>.SaveEntity(Entity: T; UseTransaction: TManagedTransaction);
@@ -1120,7 +1133,6 @@ begin
       end;
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -1560,7 +1572,6 @@ class procedure TDaoSerieFull.Fill(Entity: TSerieFull; const Reference, IdAuteur
 var
   qry: TManagedQuery;
 begin
-  inherited Fill(Entity, Reference, UseTransaction);
   if IsEqualGUID(Reference, GUID_NULL) and (not ForceLoad) then
     Exit;
   Entity.ID_Serie := Reference;

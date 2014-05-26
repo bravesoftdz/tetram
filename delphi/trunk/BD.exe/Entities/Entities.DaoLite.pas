@@ -934,7 +934,7 @@ begin
   try
     TDaoEditeurLite.Fill(Entity.Editeur, Query);
   except
-    Entity.Editeur.DoClear;
+    Entity.Editeur.Clear;
   end;
 end;
 
@@ -973,12 +973,12 @@ begin
   try
     TDaoEditeurLite.Fill(Entity.Editeur, Query);
   except
-    Entity.Editeur.DoClear;
+    Entity.Editeur.Clear;
   end;
   try
     TDaoCollectionLite.Fill(Entity.Collection, Query);
   except
-    Entity.Collection.DoClear;
+    Entity.Collection.Clear;
   end;
 end;
 

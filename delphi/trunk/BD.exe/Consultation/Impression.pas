@@ -1168,7 +1168,7 @@ begin
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig + '...', 0, 1);
-  Stats := TStats.Create(i = mrNo);
+  Stats := TStats.BuildStats(i = mrNo);
   try
     Prn := TPrintObject.Create(frmFond);
     try

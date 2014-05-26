@@ -147,6 +147,7 @@ begin
   lvAuteurs.Items.EndUpdate;
 
   Description.Text := FParaBD.Description;
+  Notes.Text := FParaBD.Notes;
 
   cbStock.Checked := FParaBD.Stock;
   cbOffert.Checked := FParaBD.Offert;

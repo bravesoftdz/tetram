@@ -17,7 +17,7 @@ type
   public
     RecInconnu: Boolean;
     destructor Destroy; override;
-    procedure Clear; override;
+    procedure ResetInstance; override;
     function ChaineAffichage(dummy: Boolean = True): string; virtual;
   published
     property Associations: TStringList read FAssociations;
@@ -30,10 +30,10 @@ type
   strict private
     FNomEditeur: RAutoTrimString;
     FSiteWeb: RAutoTrimString;
-    procedure SetNomEditeur(const Value: RAutoTrimString); inline;
-    procedure SetSiteWeb(const Value: RAutoTrimString); inline;
+    procedure SetNomEditeur(const Value: RAutoTrimString);
+    procedure SetSiteWeb(const Value: RAutoTrimString);
   public
-    procedure Clear; override;
+    procedure ResetInstance; override;
   published
     property ID_Editeur: RGUIDEx read GetID write SetID;
     property NomEditeur: RAutoTrimString read FNomEditeur write SetNomEditeur;
@@ -44,13 +44,13 @@ type
   strict private
     FNomCollection: RAutoTrimString;
     FEditeur: TEditeurLite;
-    function GetID_Editeur: RGUIDEx; inline;
-    procedure SetNomCollection(const Value: RAutoTrimString); inline;
+    function GetID_Editeur: RGUIDEx;
+    procedure SetNomCollection(const Value: RAutoTrimString);
   protected
     constructor Create; override;
   public
     destructor Destroy; override;
-    procedure Clear; override;
+    procedure ResetInstance; override;
   published
     property ID_Collection: RGUIDEx read GetID write SetID;
     property NomCollection: RAutoTrimString read FNomCollection write SetNomCollection;
@@ -64,14 +64,14 @@ type
     FUniversParent: TUniversLite;
     FDescription: RLongString;
     FSiteWeb: RAutoTrimString;
-    procedure SetNomUnivers(const Value: RAutoTrimString); inline;
-    function GetID_UniversParent: RGUIDEx; inline;
+    procedure SetNomUnivers(const Value: RAutoTrimString);
+    function GetID_UniversParent: RGUIDEx;
     procedure SetSiteWeb(const Value: RAutoTrimString);
   protected
     constructor Create; override;
   public
     destructor Destroy; override;
-    procedure Clear; override;
+    procedure ResetInstance; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
   published
     property ID_Univers: RGUIDEx read GetID write SetID;
@@ -111,15 +111,15 @@ type
     FSensLecture: ROption;
     FNotation: Integer;
     FUnivers: TObjectList<TUniversLite>;
-    function GetID_Editeur: RGUIDEx; inline;
-    function GetID_Collection: RGUIDEx; inline;
-    procedure SetTitreSerie(const Value: RAutoTrimString); inline;
-    procedure SetSiteWeb(const Value: RAutoTrimString); inline;
+    function GetID_Editeur: RGUIDEx;
+    function GetID_Collection: RGUIDEx;
+    procedure SetTitreSerie(const Value: RAutoTrimString);
+    procedure SetSiteWeb(const Value: RAutoTrimString);
   protected
     constructor Create; override;
   public
     destructor Destroy; override;
-    procedure Clear; override;
+    procedure ResetInstance; override;
     function ChaineAffichage: string; reintroduce; overload;
     function ChaineAffichage(Simple: Boolean): string; overload; override;
   published
@@ -164,13 +164,13 @@ type
     FNomAuteur: RAutoTrimString;
     FSiteWeb: RAutoTrimString;
     FSeries: TObjectList<TSerieFull>;
-    procedure SetNomAuteur(const Value: RAutoTrimString); inline;
-    procedure SetSiteWeb(const Value: RAutoTrimString); inline;
+    procedure SetNomAuteur(const Value: RAutoTrimString);
+    procedure SetSiteWeb(const Value: RAutoTrimString);
   protected
     constructor Create; override;
   public
     destructor Destroy; override;
-    procedure Clear; override;
+    procedure ResetInstance; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
   published
     property ID_Auteur: RGUIDEx read GetID write SetID;
@@ -208,13 +208,13 @@ type
     FEditeur: TEditeurFull;
     FID_Album: RGUIDEx;
     FVO: Boolean;
-    function Get_sDateAchat: string; inline;
-    procedure SetNumeroPerso(const Value: RAutoTrimString); inline;
+    function Get_sDateAchat: string;
+    procedure SetNumeroPerso(const Value: RAutoTrimString);
   protected
     constructor Create; override;
   public
     destructor Destroy; override;
-    procedure Clear; override;
+    procedure ResetInstance; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
   published
     property ID_Edition: RGUIDEx read GetID write SetID;
@@ -271,14 +271,14 @@ type
     FDefaultSearch: RAutoTrimString;
     FUnivers: TObjectList<TUniversLite>;
     FUniversFull: TList<TUniversLite>;
-    function GetID_Serie: RGUIDEx; inline;
+    function GetID_Serie: RGUIDEx;
   private
     FReadyToImport: Boolean;
     function GetDefaultSearch: string;
     procedure SetDefaultSearch(const Value: string);
     function GetSerie: TSerieFull;
-    function GetTitreAlbum: string; inline;
-    procedure SetTitreAlbum(const Value: string); inline;
+    function GetTitreAlbum: string;
+    procedure SetTitreAlbum(const Value: string);
     function GetNotes: string;
     function GetSujet: string;
     procedure SetNotes(const Value: string);
@@ -287,7 +287,7 @@ type
     constructor Create; override;
   public
     destructor Destroy; override;
-    procedure Clear; override;
+    procedure ResetInstance; override;
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
 
@@ -343,7 +343,7 @@ type
     FUniversFull: TList<TUniversLite>;
     FPhotos: TObjectList<TPhotoLite>;
     function Get_sDateAchat: string;
-    procedure SetTitreParaBD(const Value: string); inline;
+    procedure SetTitreParaBD(const Value: string);
   private
     FNotes: RLongString;
     function GetID_Serie: RGUIDEx;
@@ -356,7 +356,7 @@ type
     constructor Create; override;
   public
     destructor Destroy; override;
-    procedure Clear; override;
+    procedure ResetInstance; override;
 
     function ChaineAffichage(AvecSerie: Boolean): string; overload; override;
     function ChaineAffichage(Simple, AvecSerie: Boolean): string; reintroduce; overload;
@@ -397,7 +397,7 @@ begin
   Result := '';
 end;
 
-procedure TObjetFull.Clear;
+procedure TObjetFull.ResetInstance;
 begin
   inherited;
   RecInconnu := True;
@@ -428,7 +428,7 @@ begin
   Result := FormatTitreAlbum(Simple, AvecSerie, TitreAlbum, Serie.TitreSerie, Tome, TomeDebut, TomeFin, Integrale, HorsSerie);
 end;
 
-procedure TAlbumFull.Clear;
+procedure TAlbumFull.ResetInstance;
 begin
   inherited;
   FReadyToFusion := False;
@@ -453,7 +453,7 @@ begin
   Coloristes.Clear;
   Sujet := '';
   Notes := '';
-  Serie.DoClear;
+  Serie.Clear;
   Univers.Clear;
   UniversFull.Clear;
 
@@ -538,12 +538,12 @@ end;
 
 { TEditionFull }
 
-procedure TEditionFull.Clear;
+procedure TEditionFull.ResetInstance;
 begin
   inherited;
   ID_Edition := GUID_NULL;
-  Editeur.DoClear;
-  Collection.DoClear;
+  Editeur.Clear;
+  Collection.Clear;
   Couvertures.Clear;
   Notes := '';
   AnneeEdition := 0;
@@ -625,7 +625,7 @@ begin
   AjoutString(Result, s, ' ', '(', ')');
 end;
 
-procedure TSerieFull.Clear;
+procedure TSerieFull.ResetInstance;
 begin
   inherited;
   ID_Serie := GUID_NULL;
@@ -635,8 +635,8 @@ begin
   Genres.Clear;
   Sujet := '';
   Notes := '';
-  Editeur.DoClear;
-  Collection.DoClear;
+  Editeur.Clear;
+  Collection.Clear;
   Scenaristes.Clear;
   Dessinateurs.Clear;
   Coloristes.Clear;
@@ -702,7 +702,7 @@ end;
 
 { TEditeurFull }
 
-procedure TEditeurFull.Clear;
+procedure TEditeurFull.ResetInstance;
 begin
   inherited;
   ID_Editeur := GUID_NULL;
@@ -727,7 +727,7 @@ begin
   Result := FormatTitre(NomAuteur);
 end;
 
-procedure TAuteurFull.Clear;
+procedure TAuteurFull.ResetInstance;
 begin
   inherited;
   Series.Clear;
@@ -783,7 +783,7 @@ begin
     AjoutString(Result, s, ' ', '(', ')');
 end;
 
-procedure TParaBDFull.Clear;
+procedure TParaBDFull.ResetInstance;
 begin
   inherited;
   ID_ParaBD := GUID_NULL;
@@ -793,7 +793,7 @@ begin
   TitreParaBD := '';
   Auteurs.Clear;
   Description := '';
-  Serie.DoClear;
+  Serie.Clear;
   Prix := 0;
   PrixCote := 0;
   Dedicace := False;
@@ -872,10 +872,10 @@ end;
 
 { TCollectionFull }
 
-procedure TCollectionFull.Clear;
+procedure TCollectionFull.ResetInstance;
 begin
   inherited;
-  Editeur.DoClear;
+  Editeur.Clear;
 end;
 
 constructor TCollectionFull.Create;
@@ -907,10 +907,10 @@ begin
   Result := FormatTitre(NomUnivers);
 end;
 
-procedure TUniversFull.Clear;
+procedure TUniversFull.ResetInstance;
 begin
   inherited;
-  UniversParent.DoClear;
+  UniversParent.Clear;
 end;
 
 constructor TUniversFull.Create;

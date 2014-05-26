@@ -25,8 +25,8 @@ type
     class destructor Destroy;
 
     procedure BeforeDestruction; override;
-    procedure DoClear;
-    procedure Clear; virtual;
+    procedure ResetInstance; virtual;
+    procedure Clear;
     procedure AfterConstruction; override;
 
     class procedure RegisterInitEvent(InitEvent: TInitEvent);
@@ -42,7 +42,7 @@ type
     function GetID: RGUIDEx;
     procedure SetID(const Value: RGUIDEx);
     procedure Assign(Source: TPersistent); override;
-    procedure Clear; override;
+    procedure ResetInstance; override;
 
     property ID: RGUIDEx read GetID write SetID;
   end;
@@ -54,17 +54,19 @@ implementation
 procedure TEntity.AfterConstruction;
 begin
   inherited;
-  DoClear;
+  Clear;
 end;
 
 procedure TEntity.BeforeDestruction;
 begin
   inherited;
-  DoClear;
+  Clear;
 end;
 
 procedure TEntity.Clear;
 begin
+  ResetInstance;
+  TriggerInitEvents;
 end;
 
 class constructor TEntity.Create;
@@ -82,12 +84,6 @@ begin
   FInitEvents.Free;
 end;
 
-procedure TEntity.DoClear;
-begin
-  Clear;
-  TriggerInitEvents;
-end;
-
 class procedure TEntity.RegisterInitEvent(InitEvent: TInitEvent);
 var
   initEvents: TList<TInitEvent>;
@@ -99,6 +95,10 @@ begin
   end;
   if not initEvents.Contains(InitEvent) then
     initEvents.Add(InitEvent);
+end;
+
+procedure TEntity.ResetInstance;
+begin
 end;
 
 procedure TEntity.TriggerInitEvents;
@@ -129,7 +129,7 @@ begin
     inherited;
 end;
 
-procedure TDBEntity.Clear;
+procedure TDBEntity.ResetInstance;
 begin
   inherited;
   FID := GUID_NULL;

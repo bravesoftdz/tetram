@@ -85,7 +85,7 @@ type
     RechercheSimple: TRechercheSimple;
     FLibelle: string;
 
-    procedure Clear; override;
+    procedure ResetInstance; override;
     procedure ClearCriteres;
     procedure Fill; reintroduce; overload;
     procedure Fill(Recherche: TRechercheSimple; const ID: TGUID; const Libelle: string); reintroduce; overload;
@@ -112,7 +112,7 @@ uses
 
 { TRecherche }
 
-procedure TRecherche.Clear;
+procedure TRecherche.ResetInstance;
 begin
   inherited;
   Resultats.Clear;
@@ -231,7 +231,7 @@ var
   sWhere, sOrderBy, S: string;
   CritereTri: TCritereTri;
 begin
-  DoClear;
+  Clear;
   q := dmPrinc.DBConnection.GetQuery;
   slFrom := TStringList.Create;
   slFrom.Sorted := True;
@@ -332,7 +332,7 @@ var
   oldID_Album: TGUID;
   oldIndex: Integer;
 begin
-  DoClear;
+  Clear;
   if not IsEqualGUID(ID, GUID_NULL) then
   begin
     q := dmPrinc.DBConnection.GetQuery;

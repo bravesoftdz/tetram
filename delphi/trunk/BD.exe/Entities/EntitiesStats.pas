@@ -36,10 +36,11 @@ type
     procedure CreateStats(Stats: TStats); overload;
     procedure CreateStats(Stats: TStats; const ID_Editeur: TGUID; const Editeur: string); overload;
   public
-    constructor Create(Complete: Boolean); reintroduce; overload;
+    constructor Create; override;
+    class function BuildStats(Complete: Boolean): TStats;
     destructor Destroy; override;
     procedure Fill(Complete: Boolean);
-    procedure Clear; override;
+    procedure ResetInstance; override;
   published
     property Editeur: string read FEditeur;
     property NbAlbums: Integer read FNbAlbums;
@@ -89,7 +90,7 @@ type
     destructor Destroy; override;
     procedure Fill(const Reference: TGUID); overload;
     procedure Fill(AvecIntegrales, AvecAchats: Boolean; const ID_Serie: TGUID); overload;
-    procedure Clear; override;
+    procedure ResetInstance; override;
   published
     property Series: TObjectList<TSerieIncomplete> read FSeries;
   end;
@@ -124,7 +125,7 @@ type
     procedure Fill(const Reference: TGUID); overload;
     procedure Fill(AvecAchats: Boolean); overload;
     procedure Fill(AvecAchats: Boolean; const ID_Serie: TGUID); overload;
-    procedure Clear; override;
+    procedure ResetInstance; override;
   published
     property AnneesPassees: TObjectList<TPrevisionSortie> read FAnneesPassees;
     property AnneeEnCours: TObjectList<TPrevisionSortie> read FAnneeEnCours;
@@ -139,29 +140,33 @@ uses
 
 { TStats }
 
-procedure TStats.Clear;
+procedure TStats.ResetInstance;
 begin
   inherited;
   ListAlbumsMax.Clear;
   ListAlbumsMin.Clear;
   ListGenre.Clear;
   ListEditeurs.Clear;
-  ListEditeurs.Clear;
 end;
 
-constructor TStats.Create(Complete: Boolean);
+class function TStats.BuildStats(Complete: Boolean): TStats;
 begin
-  inherited Create;
-  FListAlbumsMax := TObjectList<TAlbumLite>.Create;
-  FListAlbumsMin := TObjectList<TAlbumLite>.Create;
-  FListGenre := TObjectList<TGenreLite>.Create;
-  FListEditeurs := TObjectList<TStats>.Create;
-  Fill(Complete);
+  Result := Create;
+  Result.Fill(Complete);
 end;
 
 procedure TStats.CreateStats(Stats: TStats);
 begin
   CreateStats(Stats, GUID_NULL, '');
+end;
+
+constructor TStats.Create;
+begin
+  inherited;
+  FListAlbumsMax := TObjectList<TAlbumLite>.Create;
+  FListAlbumsMin := TObjectList<TAlbumLite>.Create;
+  FListGenre := TObjectList<TGenreLite>.Create;
+  FListEditeurs := TObjectList<TStats>.Create;
 end;
 
 procedure TStats.CreateStats(Stats: TStats; const ID_Editeur: TGUID; const Editeur: string);
@@ -322,7 +327,7 @@ var
   q: TManagedQuery;
   hg: IHourGlass;
 begin
-  DoClear;
+  Clear;
   hg := THourGlass.Create;
   CreateStats(Self);
   if Complete then
@@ -356,7 +361,7 @@ end;
 
 { TSeriesIncompletes }
 
-procedure TSeriesIncompletes.Clear;
+procedure TSeriesIncompletes.ResetInstance;
 begin
   inherited;
   Series.Clear;
@@ -403,7 +408,7 @@ var
 var
   Incomplete: TSerieIncomplete;
 begin
-  DoClear;
+  Clear;
   q := dmPrinc.DBConnection.GetQuery;
   with q do
     try
@@ -456,7 +461,7 @@ end;
 
 { TPrevisionsSorties }
 
-procedure TPrevisionsSorties.Clear;
+procedure TPrevisionsSorties.ResetInstance;
 begin
   inherited;
   AnneesPassees.Clear;
@@ -496,7 +501,7 @@ var
   Annee, CurrentAnnee: Integer;
   Prevision: TPrevisionSortie;
 begin
-  DoClear;
+  Clear;
   CurrentAnnee := YearOf(Now);
   q := dmPrinc.DBConnection.GetQuery;
   with q do

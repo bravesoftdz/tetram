@@ -53,7 +53,7 @@ type
 
     procedure Assign(Source: TPersistent); override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
-    procedure Clear; override;
+    procedure ResetInstance; override;
   end;
 
   TAuteurLite = class(TBaseLite)
@@ -65,7 +65,7 @@ type
 
     procedure Assign(Source: TPersistent); override;
 
-    procedure Clear; override;
+    procedure ResetInstance; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
   end;
 
@@ -98,7 +98,7 @@ type
     procedure Assign(Source: TPersistent); override;
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
-    procedure Clear; override;
+    procedure ResetInstance; override;
   end;
 
   TEditeurLite = class(TBaseLite)
@@ -108,7 +108,7 @@ type
     procedure Assign(Source: TPersistent); override;
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
-    procedure Clear; override;
+    procedure ResetInstance; override;
   end;
 
   TAlbumLite = class(TBaseLite)
@@ -146,7 +146,7 @@ type
     destructor Destroy; override;
 
     function ChaineAffichage(Simple: Boolean = True): string; override;
-    procedure Clear; override;
+    procedure ResetInstance; override;
   end;
 
   TSerieLite = class(TBaseLite)
@@ -161,7 +161,7 @@ type
     destructor Destroy; override;
 
     function ChaineAffichage(Simple: Boolean): string; override;
-    procedure Clear; override;
+    procedure ResetInstance; override;
   end;
 
   TEditionLite = class(TBaseLite)
@@ -177,7 +177,7 @@ type
     destructor Destroy; override;
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
-    procedure Clear; override;
+    procedure ResetInstance; override;
   end;
 
   TConversionLite = class(TBaseLite)
@@ -196,7 +196,7 @@ type
     procedure Assign(Source: TPersistent); override;
 
     function ChaineAffichage(dummy: Boolean = True): string; override;
-    procedure Clear; override;
+    procedure ResetInstance; override;
   end;
 
 function MakeAuteurSerie(const Nom: string; Metier: TMetierAuteur): TAuteurSerieLite;
@@ -280,7 +280,7 @@ begin
   Result := FormatTitre(NomEditeur);
 end;
 
-procedure TEditeurLite.Clear;
+procedure TEditeurLite.ResetInstance;
 begin
   inherited;
   NomEditeur := '';
@@ -300,7 +300,7 @@ begin
   Result := FormatTitre(Nom);
 end;
 
-procedure TPersonnageLite.Clear;
+procedure TPersonnageLite.ResetInstance;
 begin
   inherited;
   Nom := '';
@@ -334,10 +334,10 @@ begin
   inherited;
 end;
 
-procedure TAuteurLite.Clear;
+procedure TAuteurLite.ResetInstance;
 begin
   inherited;
-  Personne.DoClear;
+  Personne.Clear;
 end;
 
 { TAuteurSerieLite }
@@ -439,11 +439,11 @@ begin
   inherited;
 end;
 
-procedure TCollectionLite.Clear;
+procedure TCollectionLite.ResetInstance;
 begin
   inherited;
   NomCollection := '';
-  Editeur.DoClear;
+  Editeur.Clear;
 end;
 
 { TSerieLite }
@@ -487,11 +487,11 @@ begin
   inherited;
 end;
 
-procedure TSerieLite.Clear;
+procedure TSerieLite.ResetInstance;
 begin
   inherited;
-  Editeur.DoClear;
-  Collection.DoClear;
+  Editeur.Clear;
+  Collection.Clear;
 end;
 
 { TEditionLite }
@@ -531,11 +531,11 @@ begin
   inherited;
 end;
 
-procedure TEditionLite.Clear;
+procedure TEditionLite.ResetInstance;
 begin
   inherited;
-  Editeur.DoClear;
-  Collection.DoClear;
+  Editeur.Clear;
+  Collection.Clear;
 end;
 
 { TGenreLite }
@@ -555,7 +555,7 @@ begin
   Result := Genre;
 end;
 
-procedure TGenreLite.Clear;
+procedure TGenreLite.ResetInstance;
 begin
   inherited;
   Genre := '';
@@ -616,7 +616,7 @@ begin
   Result := FormatTitre(NomUnivers);
 end;
 
-procedure TUniversLite.Clear;
+procedure TUniversLite.ResetInstance;
 begin
   inherited;
   NomUnivers := '';

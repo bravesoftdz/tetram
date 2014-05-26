@@ -77,11 +77,15 @@ class procedure TDaoDBEntity.Fill(Entity: TDBEntity; const Reference: TGUID; Use
 var
   Transaction: TManagedTransaction;
 begin
-  Transaction := DBConnection.GetTransaction;
+  if Assigned(UseTransaction) then
+    Transaction := UseTransaction
+  else
+    Transaction := DBConnection.GetTransaction;
   try
     LoadEntity(Entity, Reference, Transaction);
   finally
-    Transaction.Free;
+    if not Assigned(UseTransaction) then
+      Transaction.Free;
   end;
 end;
 
@@ -144,13 +148,17 @@ var
   Transaction: TManagedTransaction;
 begin
   // Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut être GUID_NULL');
-
+  if Assigned(UseTransaction) then
+    Transaction := UseTransaction
+  else
+    Transaction := DBConnection.GetTransaction;
   Transaction := DBConnection.GetTransaction;
   try
     SaveEntity(Entity, Transaction);
     Transaction.Commit;
   finally
-    Transaction.Free;
+    if not Assigned(UseTransaction) then
+      Transaction.Free;
   end;
 end;
 
