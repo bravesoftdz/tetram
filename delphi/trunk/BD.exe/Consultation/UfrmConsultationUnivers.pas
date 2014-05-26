@@ -78,7 +78,7 @@ end;
 procedure TfrmConsultationUnivers.SetID_Univers(const Value: TGUID);
 begin
   ClearForm;
-  TDaoUniversFull.Fill(FUnivers, Value);
+  TDaoUniversFull.Fill(FUnivers, Value, nil);
 
   Caption := 'Fiche d''univers - ' + FUnivers.ChaineAffichage;
   NomUnivers.Caption := FormatTitre(FUnivers.NomUnivers);

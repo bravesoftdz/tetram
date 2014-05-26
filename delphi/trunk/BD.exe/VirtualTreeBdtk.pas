@@ -243,7 +243,8 @@ const
 implementation
 
 uses
-  UIB, UdmPrinc, Commun, Types, UIBLib, Divers, Entities.Common;
+  UIB, UdmPrinc, Commun, Types, UIBLib, Divers, Entities.Common,
+  Entities.DBConnection;
 
 { TVirtualStringTree }
 
@@ -304,11 +305,7 @@ begin
     if (GetNodeLevel(Node) = 0) then
     begin
       NodeInfo := GetNodeData(Node);
-      if Assigned(NodeInfo.List) then
-      begin
-        vmModeInfos[FMode].ClassDao.VideListe(NodeInfo.List);
-        NodeInfo.List.Free;
-      end;
+      NodeInfo.List.Free;
       // Finalize(NodeInfo^);
     end;
   inherited;
@@ -401,32 +398,28 @@ end;
 function TVirtualStringTree.DoInitChildren(Node: PVirtualNode; var ChildCount: Cardinal): Boolean;
 var
   InfoNode: ^RNodeInfo;
-  q: TUIBQuery;
+  q: TManagedQuery;
 begin
   if (FMode <> vmNone) and (GetNodeLevel(Node) = 0) then
   begin
     ChildCount := FCountPointers[Node.Index].Count;
     InfoNode := GetNodeData(Node);
     if not Assigned(InfoNode.List) then
-      InfoNode.List := TList<TBaseLite>.Create;
-    q := TUIBQuery.Create(Self);
-    with q do
-      try
-        Transaction := GetTransaction(DMPrinc.UIBDataBase);
-        SQL.Text := 'select ' + vmModeInfos[FMode].FIELDS + ' from ' + vmModeInfos[FMode].Filtre;
-        Prepare(True);
-        Params.AsString[0] := Copy(FCountPointers[Node.Index].sValue, 1, Params.MaxStrLen[0]);
-        if FUseFiltre then
-          Params.AsString[1] := Copy(FFiltre, 1, Params.MaxStrLen[1])
-        else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '')
-        then
-          Params.AsString[1] := Copy(vmModeInfos[FMode].DEFAULTFILTRE, 1, Params.MaxStrLen[1]);
-        Open;
-        vmModeInfos[FMode].ClassDao.FillList(InfoNode.List, q);
-      finally
-        Transaction.Free;
-        Free;
-      end;
+      InfoNode.List := TObjectList<TBaseLite>.Create(True);
+    q := dmPrinc.DBConnection.GetQuery;
+    try
+      q.SQL.Text := 'select ' + vmModeInfos[FMode].FIELDS + ' from ' + vmModeInfos[FMode].Filtre;
+      q.Prepare(True);
+      q.Params.AsString[0] := Copy(FCountPointers[Node.Index].sValue, 1, q.Params.MaxStrLen[0]);
+      if FUseFiltre then
+        q.Params.AsString[1] := Copy(FFiltre, 1, q.Params.MaxStrLen[1])
+      else if FUseDefaultFiltre and (vmModeInfos[FMode].DEFAULTFILTRE <> '') then
+        q.Params.AsString[1] := Copy(vmModeInfos[FMode].DEFAULTFILTRE, 1, q.Params.MaxStrLen[1]);
+      q.Open;
+      vmModeInfos[FMode].ClassDao.FillList(InfoNode.List, q);
+    finally
+      q.Free;
+    end;
     Result := True;
   end
   else
@@ -446,8 +439,6 @@ begin
     end
     else
     begin
-      if Assigned(NodeInfo.List) then
-        vmModeInfos[FMode].ClassDao.VideListe(NodeInfo.List);
       FreeAndNil(NodeInfo.List);
       NodeInfo.InitialeInfo := @FCountPointers[Node.Index];
       if LongBool(FCountPointers[Node.Index].Count) then
@@ -538,9 +529,8 @@ begin
       CurrentValue := iFind;
     end
     else
-      with TUIBQuery.Create(nil) do
+      with dmPrinc.DBConnection.GetQuery do
         try
-          Transaction := GetTransaction(DMPrinc.UIBDataBase);
           SQL.Text := 'SELECT ' + vmModeInfos[FMode].REFFIELDS + ' FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' + vmModeInfos[FMode].FIELDSEARCH +
             ' LIKE ''%'' || ? || ''%''';
           if FUseFiltre then
@@ -576,7 +566,6 @@ begin
           else
             CurrentValue := FFindArray[0];
         finally
-          Transaction.Free;
           Free;
         end;
   end;
@@ -658,9 +647,8 @@ begin
   Result := nil;
   if IsEqualGUID(Value, GUID_NULL) then
     Exit;
-  with TUIBQuery.Create(nil) do
+  with dmPrinc.DBConnection.GetQuery do
     try
-      Transaction := GetTransaction(DMPrinc.UIBDataBase);
       SQL.Text := 'SELECT coalesce(' + vmModeInfos[FMode].INITIALEVALUE + ', ''-1'') FROM ' + vmModeInfos[FMode].TABLESEARCH + ' WHERE ' +
         vmModeInfos[FMode].REFFIELDS + ' = ?';
       Params.AsString[0] := GUIDToString(Value);
@@ -686,7 +674,6 @@ begin
           Result := Result.NextSibling;
       end;
     finally
-      Transaction.Free;
       Free;
     end;
 end;
@@ -708,11 +695,10 @@ begin
   iCurrent := CurrentValue;
   Clear;
   if FMode <> vmNone then
-    with TUIBQuery.Create(Self) do
+    with dmPrinc.DBConnection.GetQuery do
     begin
       BeginUpdate;
       try
-        Transaction := GetTransaction(DMPrinc.UIBDataBase);
         SQL.Text := 'SELECT * FROM ' + vmModeInfos[FMode].FILTRECOUNT;
         Prepare(True);
         if FUseFiltre then
@@ -743,7 +729,6 @@ begin
 
         RootNodeCount := Length(FCountPointers);
       finally
-        Transaction.Free;
         Free;
         EndUpdate;
       end;

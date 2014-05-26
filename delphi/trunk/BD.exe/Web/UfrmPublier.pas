@@ -275,9 +275,8 @@ begin
   FUpgradeFromDate := fromDate;
   FStartTime := Now;
 
-  qry := TUIBQuery.Create(nil);
+  qry := dmPrinc.DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(DMPrinc.UIBDataBase);
     qry.FetchBlobs := True;
 
     rc := 0;
@@ -340,7 +339,6 @@ begin
       ShowMessage('Publication terminée');
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;

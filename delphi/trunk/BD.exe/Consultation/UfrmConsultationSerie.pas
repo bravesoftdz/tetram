@@ -109,7 +109,7 @@ var
   i: Integer;
 begin
   ClearForm;
-  TDaoSerieFull.Fill(FSerie, Value);
+  TDaoSerieFull.Fill(FSerie, Value, nil);
 
   Caption := 'Fiche de série - ' + FSerie.ChaineAffichage;
   TitreSerie.Caption := FormatTitre(FSerie.TitreSerie);

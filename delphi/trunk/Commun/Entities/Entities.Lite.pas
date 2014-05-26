@@ -28,11 +28,9 @@ type
   end;
 
   TPhotoLite = class(TImageLite)
-  public
   end;
 
   TCouvertureLite = class(TImageLite)
-  public
   end;
 
   TParaBDLite = class(TBaseLite)
@@ -61,16 +59,36 @@ type
   TAuteurLite = class(TBaseLite)
   public
     Personne: TPersonnageLite;
-    ID_Album, ID_Serie: RGUIDEx;
-    Metier: TMetierAuteur;
-
-    procedure Assign(Source: TPersistent); override;
 
     constructor Create; override;
     destructor Destroy; override;
 
+    procedure Assign(Source: TPersistent); override;
+
     procedure Clear; override;
     function ChaineAffichage(dummy: Boolean = True): string; override;
+  end;
+
+  TAuteurSerieLite = class(TAuteurLite)
+  public
+    ID_Serie: RGUIDEx;
+    Metier: TMetierAuteur;
+
+    procedure Assign(Source: TPersistent); override;
+  end;
+
+  TAuteurAlbumLite = class(TAuteurSerieLite)
+  public
+    ID_Album: RGUIDEx;
+
+    procedure Assign(Source: TPersistent); override;
+  end;
+
+  TAuteurParaBDLite = class(TAuteurLite)
+  public
+    ID_ParaBD: RGUIDEx;
+
+    procedure Assign(Source: TPersistent); override;
   end;
 
   TUniversLite = class(TBaseLite)
@@ -181,19 +199,30 @@ type
     procedure Clear; override;
   end;
 
-function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteurLite;
+function MakeAuteurSerie(const Nom: string; Metier: TMetierAuteur): TAuteurSerieLite;
+function MakeAuteurAlbum(const Nom: string; Metier: TMetierAuteur): TAuteurAlbumLite;
 function MakeUnivers(const Nom: string): TUniversLite;
 
 implementation
 
 uses
-  StrUtils, Entities.FactoriesLite, CommonConst;
+  StrUtils, Entities.FactoriesLite, CommonConst, Entities.FactoriesCommon;
 
-function MakeAuteur(const Nom: string; Metier: TMetierAuteur): TAuteurLite;
+function MakeAuteur(Factory: TFactoryClass; const Nom: string; Metier: TMetierAuteur): TAuteurSerieLite;
 begin
-  Result := TFactoryAuteurLite.getInstance;
+  Result := Factory.getInstance as TAuteurSerieLite;
   Result.Personne.Nom := Nom;
   Result.Metier := Metier;
+end;
+
+function MakeAuteurSerie(const Nom: string; Metier: TMetierAuteur): TAuteurSerieLite;
+begin
+  Result := MakeAuteur(TFactoryAuteurSerieLite, Nom, Metier) as TAuteurSerieLite;
+end;
+
+function MakeAuteurAlbum(const Nom: string; Metier: TMetierAuteur): TAuteurAlbumLite;
+begin
+  Result := MakeAuteur(TFactoryAuteurAlbumLite, Nom, Metier) as TAuteurAlbumLite;
 end;
 
 function MakeUnivers(const Nom: string): TUniversLite;
@@ -284,8 +313,6 @@ begin
   inherited;
   if Source is TAuteurLite then
   begin
-    ID_Album := TAuteurLite(Source).ID_Album;
-    Metier := TAuteurLite(Source).Metier;
     Personne.Assign(TAuteurLite(Source).Personne);
   end;
 end;
@@ -311,6 +338,40 @@ procedure TAuteurLite.Clear;
 begin
   inherited;
   Personne.DoClear;
+end;
+
+{ TAuteurSerieLite }
+
+procedure TAuteurSerieLite.Assign(Source: TPersistent);
+begin
+  inherited;
+  if Source is TAuteurSerieLite then
+  begin
+    ID_Serie := TAuteurSerieLite(Source).ID_Serie;
+    Metier := TAuteurSerieLite(Source).Metier;
+  end;
+end;
+
+{ TAuteurAlbumLite }
+
+procedure TAuteurAlbumLite.Assign(Source: TPersistent);
+begin
+  inherited;
+  if Source is TAuteurAlbumLite then
+  begin
+    ID_Album := TAuteurAlbumLite(Source).ID_Album;
+  end;
+end;
+
+{ TAuteurParaBDLite }
+
+procedure TAuteurParaBDLite.Assign(Source: TPersistent);
+begin
+  inherited;
+  if Source is TAuteurParaBDLite then
+  begin
+    ID_ParaBD := TAuteurParaBDLite(Source).ID_ParaBD;
+  end;
 end;
 
 { TAlbumLite }

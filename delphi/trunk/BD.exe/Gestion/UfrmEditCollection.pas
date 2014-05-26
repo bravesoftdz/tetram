@@ -87,7 +87,7 @@ begin
   TDaoEditeurLite.Fill(FCollection.Editeur, ID_Editeur);
   FCollection.Associations.Text := edAssociations.Text;
 
-  TDaoCollectionFull.SaveToDatabase(FCollection);
+  TDaoCollectionFull.SaveToDatabase(FCollection, nil);
   TDaoCollectionFull.SaveAssociations(FCollection, vmCollections, FCollection.Editeur.ID);
 
   ModalResult := mrOk;

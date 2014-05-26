@@ -29,7 +29,8 @@ implementation
 
 uses
   UfrmPreview, Math, Procedures, ProceduresBDtk, DateUtils, UIBlib, StrUtils, UMetadata,
-  Entities.DaoLite, Entities.DaoFull, Entities.Common, Entities.FactoriesLite;
+  Entities.DaoLite, Entities.DaoFull, Entities.Common, Entities.FactoriesLite,
+  Entities.DBConnection;
 
 procedure PreparePrintObject(Prn: TPrintObject; Previsualisation: Boolean; const Titre: string);
 begin
@@ -818,7 +819,7 @@ var
   index: Integer;
   OldSerie: TGUID;
   liste: TModalResult;
-  Source, Equipe: TUIBQuery;
+  qrySource, qryEquipe: TManagedQuery;
   sl: Boolean;
   Sujet, SujetSerie, sEquipe, s, s2: string;
   ColumnStyle: TFontStyles;
@@ -834,30 +835,29 @@ begin
     Exit;
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig + '...', 0, 1);
-  Source := TUIBQuery.Create(nil);
-  Equipe := TUIBQuery.Create(nil);
+  qrySource := dmPrinc.DBConnection.GetQuery;
+  qryEquipe := dmPrinc.DBConnection.GetQuery(qrySource.Transaction);
   try
     Prn := TPrintObject.Create(frmFond);
     try
-      Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      Source.SQL.Text := 'SELECT Count(a.ID_Album)';
-      Source.SQL.Add('FROM Albums a INNER JOIN Editions e ON a.ID_Album = e.ID_Album LEFT JOIN Series s ON a.ID_Serie = s.ID_Serie');
-      Source.Open;
-      NbAlbums := Source.Fields.AsInteger[0];
-      Source.Close;
-      Source.SQL[0] :=
+      qrySource.SQL.Text := 'SELECT Count(a.ID_Album)';
+      qrySource.SQL.Add('FROM Albums a INNER JOIN Editions e ON a.ID_Album = e.ID_Album LEFT JOIN Series s ON a.ID_Serie = s.ID_Serie');
+      qrySource.Open;
+      NbAlbums := qrySource.Fields.AsInteger[0];
+      qrySource.Close;
+      qrySource.SQL[0] :=
         'SELECT a.ID_Album, a.TITREALBUM, a.MOISPARUTION, a.ANNEEPARUTION, a.ID_Serie, a.TOME, a.TOMEDEBUT, a.TOMEFIN, a.HORSSERIE, a.INTEGRALE, s.TITRESERIE';
-      Source.SQL.Add('ORDER BY s.TITRESERIE NULLS FIRST, a.ID_Serie, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
+      qrySource.SQL.Add('ORDER BY s.TITRESERIE NULLS FIRST, a.ID_Serie, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
       if liste = mrNo then
       begin
         if daoHistoire in DetailsOptions then
-          Source.SQL[0] := Source.SQL[0] + ', a.SUJETALBUM, s.SUJETSERIE';
+          qrySource.SQL[0] := qrySource.SQL[0] + ', a.SUJETALBUM, s.SUJETSERIE';
         if daoNotes in DetailsOptions then
-          Source.SQL[0] := Source.SQL[0] + ', a.REMARQUESALBUM, s.REMARQUESSERIE';
-        Source.FetchBlobs := True;
+          qrySource.SQL[0] := qrySource.SQL[0] + ', a.REMARQUESALBUM, s.REMARQUESSERIE';
+        qrySource.FetchBlobs := True;
       end;
-      Equipe.Transaction := Source.Transaction;
-      Equipe.SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL, NULL)';
+
+      qryEquipe.SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL, NULL)';
 
       PreparePrintObject(Prn, Previsualisation, rsListeCompleteAlbums);
 
@@ -877,7 +877,7 @@ begin
       Prn.CreateColumn1(5, 25, -1, taLeftJustify, Prn.Font.name, 10, [fsItalic]); // résumé de la série
 
       PAl := TFactoryAlbumLite.getInstance;
-      with Source do
+      with qrySource do
       begin
         index := 1;
         Open;
@@ -902,15 +902,15 @@ begin
             if ([daoScenario, daoDessins, daoCouleurs] * DetailsOptions) <> [] then
             begin
               sEquipe := '';
-              Equipe.Close;
-              Equipe.Params.AsString[0] := Fields.ByNameAsString['ID_Album'];
-              Equipe.Open;
-              with Equipe do
+              qryEquipe.Close;
+              qryEquipe.Params.AsString[0] := Fields.ByNameAsString['ID_Album'];
+              qryEquipe.Open;
+              with qryEquipe do
               begin
                 s := '';
                 while (daoScenario in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maScenariste) do
                 begin
-                  PA := TDaoAuteurLite.Make(Equipe);
+                  PA := TDaoAuteurAlbumLite.Make(qryEquipe);
                   AjoutString(s, PA.ChaineAffichage, ', ');
                   PA.Free;
                   Next;
@@ -919,7 +919,7 @@ begin
                 s := '';
                 while (daoDessins in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maDessinateur) do
                 begin
-                  PA := TDaoAuteurLite.Make(Equipe);
+                  PA := TDaoAuteurAlbumLite.Make(qryEquipe);
                   AjoutString(s, PA.ChaineAffichage, ', ');
                   PA.Free;
                   Next;
@@ -928,7 +928,7 @@ begin
                 s := '';
                 while (daoCouleurs in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maColoriste) do
                 begin
-                  PA := TDaoAuteurLite.Make(Equipe);
+                  PA := TDaoAuteurAlbumLite.Make(qryEquipe);
                   AjoutString(s, PA.ChaineAffichage, ', ');
                   PA.Free;
                   Next;
@@ -944,7 +944,7 @@ begin
             sl := False;
           end;
 
-          TDaoAlbumLite.Fill(PAl, Source);
+          TDaoAlbumLite.Fill(PAl, qrySource);
 
           if not IsEqualGUID(OldSerie, PAl.ID_Serie) then
           begin
@@ -1011,9 +1011,8 @@ begin
       Prn.Free;
     end;
   finally
-    Source.Transaction.Free;
-    Source.Free;
-    Equipe.Free;
+    qrySource.Free;
+    qryEquipe.Free;
   end;
 end;
 
@@ -1207,7 +1206,7 @@ var
   i, nTri: Integer;
   PAl: TAlbumLite;
   sl: TStringList;
-  Source, Equipe: TUIBQuery;
+  qrySource, qryEquipe: TManagedQuery;
   Sujet, sEquipe, s: string;
   PA: TAuteurLite;
   SautLigne: Boolean;
@@ -1251,8 +1250,8 @@ begin
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig + '...', 0, 1);
   Criteres := TStringList.Create;
-  Source := TUIBQuery.Create(nil);
-  Equipe := TUIBQuery.Create(nil);
+  qrySource := dmPrinc.DBConnection.GetQuery;
+  qryEquipe := dmPrinc.DBConnection.GetQuery(qrySource.Transaction);
   try
     case Recherche.TypeRecherche of
       trSimple:
@@ -1266,18 +1265,16 @@ begin
 
     Prn := TPrintObject.Create(frmFond);
     try
-      Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      Source.SQL.Text := 'SELECT a.ID_Album'#13#10'FROM ALBUMS a LEFT JOIN Series s ON s.ID_Serie = a.ID_Serie WHERE a.ID_Album = ?';
+      qrySource.SQL.Text := 'SELECT a.ID_Album'#13#10'FROM ALBUMS a LEFT JOIN Series s ON s.ID_Serie = a.ID_Serie WHERE a.ID_Album = ?';
       if liste = mrNo then
       begin
         if daoHistoire in DetailsOptions then
-          Source.SQL[0] := Source.SQL[0] + ', a.SUJETALBUM, s.SUJETSERIE';
+          qrySource.SQL[0] := qrySource.SQL[0] + ', a.SUJETALBUM, s.SUJETSERIE';
         if daoNotes in DetailsOptions then
-          Source.SQL[0] := Source.SQL[0] + ', a.REMARQUESALBUM, s.REMARQUESSERIE';
-        Source.FetchBlobs := True;
+          qrySource.SQL[0] := qrySource.SQL[0] + ', a.REMARQUESALBUM, s.REMARQUESSERIE';
+        qrySource.FetchBlobs := True;
       end;
-      Equipe.Transaction := Source.Transaction;
-      Equipe.SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL, NULL)';
+      qryEquipe.SQL.Text := 'SELECT * FROM PROC_AUTEURS(?, NULL, NULL)';
 
       PreparePrintObject(Prn, Previsualisation, rsResultatRecherche);
 
@@ -1372,34 +1369,34 @@ begin
           Sujet := '';
           if (daoHistoire in DetailsOptions) or (daoNotes in DetailsOptions) then
           begin
-            Source.Params.AsString[0] := GUIDToString(PAl.ID);
-            Source.Open;
+            qrySource.Params.AsString[0] := GUIDToString(PAl.ID);
+            qrySource.Open;
             if (daoHistoire in DetailsOptions) then
             begin
-              if Source.Fields.ByNameIsNull['SUJETALBUM'] then
-                Sujet := Source.Fields.ByNameAsString['SUJETSERIE']
+              if qrySource.Fields.ByNameIsNull['SUJETALBUM'] then
+                Sujet := qrySource.Fields.ByNameAsString['SUJETSERIE']
               else
-                Sujet := Source.Fields.ByNameAsString['SUJETALBUM']
+                Sujet := qrySource.Fields.ByNameAsString['SUJETALBUM']
             end;
             if (daoNotes in DetailsOptions) then
             begin
-              if Source.Fields.ByNameIsNull['REMARQUESALBUM'] then
-                AjoutString(Sujet, Source.Fields.ByNameAsString['REMARQUESSERIE'], #13#10#13#10)
+              if qrySource.Fields.ByNameIsNull['REMARQUESALBUM'] then
+                AjoutString(Sujet, qrySource.Fields.ByNameAsString['REMARQUESSERIE'], #13#10#13#10)
               else
-                AjoutString(Sujet, Source.Fields.ByNameAsString['REMARQUESALBUM'], #13#10#13#10)
+                AjoutString(Sujet, qrySource.Fields.ByNameAsString['REMARQUESALBUM'], #13#10#13#10)
             end;
           end;
           if ([daoScenario, daoDessins, daoCouleurs] * DetailsOptions) <> [] then
           begin
-            Equipe.Params.AsString[0] := GUIDToString(PAl.ID);
-            Equipe.Open;
+            qryEquipe.Params.AsString[0] := GUIDToString(PAl.ID);
+            qryEquipe.Open;
             sEquipe := '';
-            with Equipe do
+            with qryEquipe do
             begin
               s := '';
               while (daoScenario in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maScenariste) do
               begin
-                PA := TDaoAuteurLite.Make(Equipe);
+                PA := TDaoAuteurAlbumLite.Make(qryEquipe);
                 AjoutString(s, PA.ChaineAffichage, ', ');
                 PA.Free;
                 Next;
@@ -1408,7 +1405,7 @@ begin
               s := '';
               while (daoDessins in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maDessinateur) do
               begin
-                PA := TDaoAuteurLite.Make(Equipe);
+                PA := TDaoAuteurAlbumLite.Make(qryEquipe);
                 AjoutString(s, PA.ChaineAffichage, ', ');
                 PA.Free;
                 Next;
@@ -1417,7 +1414,7 @@ begin
               s := '';
               while (daoCouleurs in DetailsOptions) and (not Eof) and (TMetierAuteur(Fields.ByNameAsInteger['Metier']) = maColoriste) do
               begin
-                PA := TDaoAuteurLite.Make(Equipe);
+                PA := TDaoAuteurAlbumLite.Make(qryEquipe);
                 AjoutString(s, PA.ChaineAffichage, ', ');
                 PA.Free;
                 Next;
@@ -1480,9 +1477,8 @@ begin
       Prn.Free;
     end;
   finally
-    Source.Transaction.Free;
-    Source.Free;
-    Equipe.Free;
+    qryEquipe.Free;
+    qrySource.Free;
     Criteres.Free;
   end;
 end;
@@ -1731,7 +1727,7 @@ type
 procedure ImpressionListePrevisionsAchats(Previsualisation: Boolean);
 var
   OldAlbum, OldSerie: TGUID;
-  Source: TUIBQuery;
+  qrySource: TManagedQuery;
   sl: Boolean;
   s, s2: string;
   PAl: TAchat;
@@ -1743,31 +1739,30 @@ var
 begin
   fWaiting := TWaiting.Create;
   fWaiting.ShowProgression(rsTransConfig + '...', 0, 1);
-  Source := TUIBQuery.Create(nil);
+  qrySource := dmPrinc.DBConnection.GetQuery;
   try
     Prn := TPrintObject.Create(frmFond);
     ListAlbums := TObjectList<TAchat>.Create(True);
     try
-      Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
-      Source.SQL.Text := 'SELECT AVG(PRIX) FROM EDITIONS';
-      Source.Open;
-      PrixMoyen := Source.Fields.AsCurrency[0];
+      qrySource.SQL.Text := 'SELECT AVG(PRIX) FROM EDITIONS';
+      qrySource.Open;
+      PrixMoyen := qrySource.Fields.AsCurrency[0];
 
-      Source.SQL.Text := 'SELECT Count(a.ID_Album)';
-      Source.SQL.Add('FROM Albums a LEFT JOIN Series s ON a.ID_Serie = s.ID_Serie');
-      Source.SQL.Add
+      qrySource.SQL.Text := 'SELECT Count(a.ID_Album)';
+      qrySource.SQL.Add('FROM Albums a LEFT JOIN Series s ON a.ID_Serie = s.ID_Serie');
+      qrySource.SQL.Add
         ('left join vw_prixunitaires v on v.horsserie = a.horsserie and v.ID_Serie = s.ID_Serie and (v.ID_Editeur = s.ID_Editeur or s.ID_Editeur is null)');
-      Source.SQL.Add('WHERE a.Achat = 1');
-      Source.Open;
-      NbAlbums := Source.Fields.AsInteger[0] * 2; // on va parcourir 2 fois la liste
-      Source.Close;
-      Source.SQL[0] :=
+      qrySource.SQL.Add('WHERE a.Achat = 1');
+      qrySource.Open;
+      NbAlbums := qrySource.Fields.AsInteger[0] * 2; // on va parcourir 2 fois la liste
+      qrySource.Close;
+      qrySource.SQL[0] :=
         'SELECT a.ID_Album, a.TITREALBUM, a.MOISPARUTION, a.ANNEEPARUTION, a.ID_Serie, a.TOME, a.TOMEDEBUT, a.TOMEFIN, a.HORSSERIE, a.INTEGRALE, s.TITRESERIE, v.ID_Editeur, v.PRIXUNITAIRE';
-      Source.SQL.Add('ORDER BY s.TITRESERIE NULLS FIRST, a.ID_Serie, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
+      qrySource.SQL.Add('ORDER BY s.TITRESERIE NULLS FIRST, a.ID_Serie, a.HORSSERIE NULLS FIRST, a.INTEGRALE NULLS FIRST, a.TOME NULLS FIRST');
 
       PreparePrintObject(Prn, Previsualisation, rsListeAchats);
 
-      with Source do
+      with qrySource do
       begin
         Open;
         PrixTotal := 0;
@@ -1779,7 +1774,7 @@ begin
           if not IsEqualGUID(OldAlbum, StringToGUID(Fields.ByNameAsString['ID_ALBUM'])) then
           begin
             PAl := TAchat.Create;
-            TDaoAlbumLite.Fill(PAl, Source);
+            TDaoAlbumLite.Fill(PAl, qrySource);
             PAl.PrixCalcule := True;
             PAl.Prix := Fields.ByNameAsCurrency['PRIXUNITAIRE'];
             if PAl.Prix = 0 then
@@ -1880,8 +1875,7 @@ begin
       ListAlbums.Free;
     end;
   finally
-    Source.Transaction.Free;
-    Source.Free;
+    qrySource.Free;
   end;
 end;
 

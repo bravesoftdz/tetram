@@ -85,7 +85,7 @@ begin
 
   FUnivers.Associations.Text := edAssociations.Lines.Text;
 
-  TDaoUniversFull.SaveToDatabase(FUnivers);
+  TDaoUniversFull.SaveToDatabase(FUnivers, nil);
   TDaoUniversFull.SaveAssociations(FUnivers, vmUnivers, GUID_NULL);
 
   ModalResult := mrOk;

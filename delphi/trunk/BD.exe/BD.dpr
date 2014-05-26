@@ -163,11 +163,8 @@ uses
   BdtkRegEx in '..\Commun\BdtkRegEx.pas',
   UScriptList in '..\Commun\Scripts\UScriptList.pas',
   UfrmValidationImport in 'Scripts\UfrmValidationImport.pas' {frmValidationImport},
-  Entities.DaoCommon in 'Entities\Entities.DaoCommon.pas',
   Entities.Common in '..\Commun\Entities\Entities.Common.pas',
   Entities.FactoriesCommon in '..\Commun\Entities\Entities.FactoriesCommon.pas',
-  Entities.FactoriesLite in '..\Commun\Entities\Entities.FactoriesLite.pas',
-  Entities.FactoriesFull in '..\Commun\Entities\Entities.FactoriesFull.pas',
   Entities.DaoLambda in '..\Commun\Entities\Entities.DaoLambda.pas',
   Entities.DaoLambdaDB in 'Entities\Entities.DaoLambdaDB.pas',
   UfrmChoixScript in 'Scripts\UfrmChoixScript.pas' {frmChoixScript},
@@ -177,7 +174,12 @@ uses
   UWeb in 'Web\UWeb.pas',
   UMAJ2_2_3_24 in 'mises_a_jour\UMAJ2_2_3_24.pas',
   UMAJ2_2_3_25 in 'mises_a_jour\UMAJ2_2_3_25.pas',
-  UMAJ2_2_3_29 in 'mises_a_jour\UMAJ2_2_3_29.pas';
+  UMAJ2_2_3_29 in 'mises_a_jour\UMAJ2_2_3_29.pas',
+  Entities.Types in '..\Commun\Entities\Entities.Types.pas',
+  Entities.FactoriesFull in '..\Commun\Entities\Entities.FactoriesFull.pas',
+  Entities.FactoriesLite in '..\Commun\Entities\Entities.FactoriesLite.pas',
+  Entities.DBConnection in '..\Commun\Entities\Entities.DBConnection.pas',
+  Entities.DaoCommon in '..\Commun\Entities\Entities.DaoCommon.pas';
 
 begin
   Application.Title := 'BDthèque';

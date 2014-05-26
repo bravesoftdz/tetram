@@ -193,48 +193,48 @@ end;
 
 procedure TfrmEditCritere.champsChange(Sender: TObject);
 
-  procedure AssignItems(Items: TItems; Source: TUIBQuery; ChampValeurs: TStrings); overload;
+  procedure AssignItems(Items: TItems; qrySource: TUIBQuery; ChampValeurs: TStrings); overload;
   begin
     try
-      Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      qrySource.Transaction := dmPrinc.DBConnection.GetTransaction;
       Items.Clear;
       FChampValeurs.Clear;
-      Source.Open;
-      while not Source.Eof do
+      qrySource.Open;
+      while not qrySource.Eof do
       begin
         with Items.Add do
         begin
-          Caption := Source.Fields.AsString[1];
+          Caption := qrySource.Fields.AsString[1];
           Valeur := Index;
-          ChampValeurs.Add(Source.Fields.AsString[0]);
+          ChampValeurs.Add(qrySource.Fields.AsString[0]);
         end;
-        Source.Next;
+        qrySource.Next;
       end;
-      Source.Close;
+      qrySource.Close;
     finally
-      Source.Transaction.Free;
+      qrySource.Transaction.Free;
     end;
   end;
 
-  procedure AssignItems(Items: TItems; Source: TUIBQuery); overload;
+  procedure AssignItems(Items: TItems; qrySource: TUIBQuery); overload;
   begin
     try
-      Source.Transaction := GetTransaction(DMPrinc.UIBDataBase);
+      qrySource.Transaction := dmPrinc.DBConnection.GetTransaction;
       Items.Clear;
       FChampValeurs.Clear;
-      Source.Open;
-      while not Source.Eof do
+      qrySource.Open;
+      while not qrySource.Eof do
       begin
         with Items.Add do
         begin
-          Caption := Source.Fields.AsString[1];
-          Valeur := Source.Fields.AsInteger[0];
+          Caption := qrySource.Fields.AsString[1];
+          Valeur := qrySource.Fields.AsInteger[0];
         end;
-        Source.Next;
+        qrySource.Next;
       end;
-      Source.Close;
+      qrySource.Close;
     finally
-      Source.Transaction.Free;
+      qrySource.Transaction.Free;
     end;
   end;
 

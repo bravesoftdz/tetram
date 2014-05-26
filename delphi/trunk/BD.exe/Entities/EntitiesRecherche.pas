@@ -107,8 +107,8 @@ type
 implementation
 
 uses
-  uib, Commun, UdmPrinc, Divers, uiblib, CommonConst, UMetadata, Textes,
-  Entities.DaoLite;
+  Commun, UdmPrinc, Divers, uiblib, CommonConst, UMetadata, Textes,
+  Entities.DaoLite, Entities.DBConnection;
 
 { TRecherche }
 
@@ -227,12 +227,12 @@ var
 
 var
   Album: TAlbumLite;
-  q: TUIBQuery;
+  q: TManagedQuery;
   sWhere, sOrderBy, S: string;
   CritereTri: TCritereTri;
 begin
   DoClear;
-  q := TUIBQuery.Create(nil);
+  q := dmPrinc.DBConnection.GetQuery;
   slFrom := TStringList.Create;
   slFrom.Sorted := True;
   slFrom.Duplicates := dupIgnore;
@@ -240,7 +240,6 @@ begin
   slWhere := TStringList.Create;
   with q do
     try
-      Transaction := GetTransaction(dmPrinc.UIBDataBase);
       SQL.Clear;
       SQL.Add('select distinct');
       SQL.Add('  albums.id_album, albums.titrealbum, albums.tome, albums.tomedebut, albums.tomefin,');
@@ -306,7 +305,6 @@ begin
       else
         TypeRecherche := trAucune;
     finally
-      Transaction.Free;
       Free;
       slFrom.Free;
       slWhere.Free;
@@ -328,7 +326,7 @@ const
   Proc: array [0 .. 5] of string = ('albums_by_auteur(?, null)', 'albums_by_univers(?, null)', 'albums_by_serie(?, null)', 'albums_by_editeur(?, null)',
     'albums_by_genre(?, null)', 'albums_by_collection(?, null)');
 var
-  q: TUIBQuery;
+  q: TManagedQuery;
   S: string;
   Album: TAlbumLite;
   oldID_Album: TGUID;
@@ -337,10 +335,9 @@ begin
   DoClear;
   if not IsEqualGUID(ID, GUID_NULL) then
   begin
-    q := TUIBQuery.Create(nil);
+    q := dmPrinc.DBConnection.GetQuery;
     with q do
       try
-        Transaction := GetTransaction(DMPrinc.UIBDataBase);
         SQL.Text := 'select * from ' + Proc[Integer(Recherche)];
         Params.AsString[0] := GUIDToString(ID);
         FLibelle := Libelle;
@@ -390,7 +387,6 @@ begin
         else
           TypeRecherche := trAucune;
       finally
-        Transaction.Free;
         Free;
       end;
   end;

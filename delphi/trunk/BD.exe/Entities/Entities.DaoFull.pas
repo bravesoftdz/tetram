@@ -3,9 +3,9 @@ unit Entities.DaoFull;
 interface
 
 uses
-  System.SysUtils, System.Classes, VirtualTreeBdtk, Entities.Full, uib,
+  System.SysUtils, System.Classes, VirtualTreeBdtk, Entities.Full, Entities.DBConnection,
   Vcl.StdCtrls, Winapi.Windows, System.Rtti, System.Generics.Collections,
-  Entities.Common, Entities.DaoCommon, Entities.FactoriesCommon;
+  Entities.Common, Entities.DaoCommon, Entities.FactoriesCommon, Entities.Types;
 
 type
   // ce serait trop facile si XE4 acceptait cette syntaxe....
@@ -15,30 +15,26 @@ type
 
   TDaoFull = class abstract(TDaoDBEntity)
   public
-    class procedure SaveToDatabase(Entity: TObjetFull); overload;
-    class procedure SaveToDatabase(Entity: TObjetFull; UseTransaction: TUIBTransaction); overload; virtual; abstract;
-
     class procedure FillAssociations(Entity: TObjetFull; TypeData: TVirtualMode);
     class procedure SaveAssociations(Entity: TObjetFull; TypeData: TVirtualMode; const ParentID: TGUID);
   end;
 
   TDaoFullEntity<T: TObjetFull> = class abstract(TDaoFull)
+  protected
+    class procedure SaveEntity(Entity: T; UseTransaction: TManagedTransaction); reintroduce; overload; virtual;
+    class procedure LoadEntity(Entity: T; const Reference: TGUID; UseTransaction: TManagedTransaction); reintroduce; overload; virtual;
+  public
     class function getInstance: T; reintroduce; overload;
     class function getInstance(const Reference: TGUID): T; reintroduce; overload;
-
-    class procedure Fill(Entity: TDBEntity; const Reference: TGUID); overload; override;
-    class procedure Fill(Entity: T; const Reference: TGUID); reintroduce; overload; virtual;
-
-    class procedure SaveToDatabase(Entity: TObjetFull; UseTransaction: TUIBTransaction); overload; override;
-    class procedure SaveToDatabase(Entity: T; UseTransaction: TUIBTransaction); reintroduce; overload; virtual;
   end;
 
   TDaoAlbumFull = class(TDaoFullEntity<TAlbumFull>)
   protected
     class function FactoryClass: TFactoryClass; override;
+
+    class procedure SaveEntity(Entity: TAlbumFull; UseTransaction: TManagedTransaction); override;
+    class procedure LoadEntity(Entity: TAlbumFull; const Reference: TGUID; UseTransaction: TManagedTransaction); override;
   public
-    class procedure Fill(Entity: TAlbumFull; const Reference: TGUID); override;
-    class procedure SaveToDatabase(Entity: TAlbumFull; UseTransaction: TUIBTransaction); override;
     class procedure Acheter(Entity: TAlbumFull; Prevision: Boolean);
     class procedure ChangeNotation(Entity: TAlbumFull; Note: Integer);
     class procedure FusionneInto(Source, Dest: TAlbumFull);
@@ -47,15 +43,17 @@ type
   TDaoParaBDFull = class(TDaoFullEntity<TParaBDFull>)
   protected
     class function FactoryClass: TFactoryClass; override;
+    class procedure LoadEntity(Entity: TParaBDFull; const Reference: TGUID; UseTransaction: TManagedTransaction); override;
+    class procedure SaveEntity(Entity: TParaBDFull; UseTransaction: TManagedTransaction); override;
   public
-    class procedure Fill(Entity: TParaBDFull; const Reference: TGUID); override;
-    class procedure SaveToDatabase(Entity: TParaBDFull; UseTransaction: TUIBTransaction); override;
     class procedure Acheter(Entity: TParaBDFull; Prevision: Boolean);
   end;
 
   TDaoSerieFull = class(TDaoFullEntity<TSerieFull>)
   protected
     class function FactoryClass: TFactoryClass; override;
+    class procedure LoadEntity(Entity: TSerieFull; const Reference: TGUID; UseTransaction: TManagedTransaction); overload; override;
+    class procedure SaveEntity(Entity: TSerieFull; UseTransaction: TManagedTransaction); override;
   public
     class constructor Create;
     class destructor Destroy;
@@ -63,10 +61,8 @@ type
     class function getInstance(const Reference, IdAuteurFiltre: TGUID): TSerieFull; reintroduce; overload;
     class function getInstance(const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean): TSerieFull; reintroduce; overload;
 
-    class procedure Fill(Entity: TSerieFull; const Reference: TGUID); overload; override;
-    class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID); reintroduce; overload;
-    class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean); reintroduce; overload;
-    class procedure SaveToDatabase(Entity: TSerieFull; UseTransaction: TUIBTransaction); override;
+    class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; UseTransaction: TManagedTransaction); reintroduce; overload;
+    class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean; UseTransaction: TManagedTransaction); reintroduce; overload;
     class procedure ChangeNotation(Entity: TSerieFull; Note: Integer);
 
     class procedure InitSerie(Entity: TEntity);
@@ -75,17 +71,17 @@ type
   TDaoEditionFull = class(TDaoFullEntity<TEditionFull>)
   protected
     class function FactoryClass: TFactoryClass; override;
+    class procedure LoadEntity(Entity: TEditionFull; const Reference: TGUID; UseTransaction: TManagedTransaction); override;
+    class procedure SaveEntity(Entity: TEditionFull; UseTransaction: TManagedTransaction); override;
   public
     class constructor Create;
     class destructor Destroy;
 
-    class procedure Fill(Entity: TEditionFull; const Reference: TGUID); override;
-    class procedure SaveToDatabase(Entity: TEditionFull; UseTransaction: TUIBTransaction); override;
     class procedure FusionneInto(Source, Dest: TEditionFull); overload;
     class procedure FusionneInto(Source, Dest: TObjectList<TEditionFull>); overload;
 
     class function getList(const Reference: TGUID; Stock: Integer = -1): TObjectList<TEditionFull>;
-    class procedure FillList(EntitiesList: TObjectList<TEditionFull>; const Reference: TGUID; Stock: Integer = -1);
+    class procedure FillList(EntitiesList: TObjectList<TEditionFull>; const Reference: TGUID; UseTransaction: TManagedTransaction; Stock: Integer = -1);
 
     class procedure InitEdition(Entity: TEntity);
   end;
@@ -93,39 +89,35 @@ type
   TDaoEditeurFull = class(TDaoFullEntity<TEditeurFull>)
   protected
     class function FactoryClass: TFactoryClass; override;
-  public
-    class procedure Fill(Entity: TEditeurFull; const Reference: TGUID); override;
-    class procedure SaveToDatabase(Entity: TEditeurFull; UseTransaction: TUIBTransaction); override;
+    class procedure LoadEntity(Entity: TEditeurFull; const Reference: TGUID; UseTransaction: TManagedTransaction); override;
+    class procedure SaveEntity(Entity: TEditeurFull; UseTransaction: TManagedTransaction); override;
   end;
 
   TDaoCollectionFull = class(TDaoFullEntity<TCollectionFull>)
   protected
     class function FactoryClass: TFactoryClass; override;
-  public
-    class procedure Fill(Entity: TCollectionFull; const Reference: TGUID); override;
-    class procedure SaveToDatabase(Entity: TCollectionFull; UseTransaction: TUIBTransaction); override;
+    class procedure LoadEntity(Entity: TCollectionFull; const Reference: TGUID; UseTransaction: TManagedTransaction); override;
+    class procedure SaveEntity(Entity: TCollectionFull; UseTransaction: TManagedTransaction); override;
   end;
 
   TDaoAuteurFull = class(TDaoFullEntity<TAuteurFull>)
   protected
     class function FactoryClass: TFactoryClass; override;
-  public
-    class procedure Fill(Entity: TAuteurFull; const Reference: TGUID); override;
-    class procedure SaveToDatabase(Entity: TAuteurFull; UseTransaction: TUIBTransaction); override;
+    class procedure LoadEntity(Entity: TAuteurFull; const Reference: TGUID; UseTransaction: TManagedTransaction); override;
+    class procedure SaveEntity(Entity: TAuteurFull; UseTransaction: TManagedTransaction); override;
   end;
 
   TDaoUniversFull = class(TDaoFullEntity<TUniversFull>)
   protected
     class function FactoryClass: TFactoryClass; override;
-  public
-    class procedure Fill(Entity: TUniversFull; const Reference: TGUID); override;
-    class procedure SaveToDatabase(Entity: TUniversFull; UseTransaction: TUIBTransaction); override;
+    class procedure LoadEntity(Entity: TUniversFull; const Reference: TGUID; UseTransaction: TManagedTransaction); override;
+    class procedure SaveEntity(Entity: TUniversFull; UseTransaction: TManagedTransaction); override;
   end;
 
 implementation
 
 uses
-  UdmPrinc, Commun, UfrmConsole, Entities.DaoLite, Entities.Lite, Procedures,
+  Commun, UfrmConsole, Entities.DaoLite, Entities.Lite, Procedures,
   CommonConst, System.IOUtils, Vcl.Dialogs, UMetadata, UfrmFusionEditions,
   Vcl.Controls, ProceduresBDtk, Entities.FactoriesFull, Entities.FactoriesLite,
   Entities.DaoLambda;
@@ -134,11 +126,10 @@ uses
 
 class procedure TDaoFull.FillAssociations(Entity: TObjetFull; TypeData: TVirtualMode);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select chaine, always from import_associations where typedata = :typedata and id = :id and always = 1';
     qry.Params.AsInteger[0] := Integer(TypeData);
     qry.Params.AsString[1] := GUIDToString(Entity.ID);
@@ -149,7 +140,6 @@ begin
       qry.Next;
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -157,11 +147,10 @@ end;
 class procedure TDaoFull.SaveAssociations(Entity: TObjetFull; TypeData: TVirtualMode; const ParentID: TGUID);
 var
   association: string;
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'delete from import_associations where typedata = :typedata and id = :id and always = 1';
     qry.Params.AsInteger[0] := Integer(TypeData);
     qry.Params.AsString[1] := GUIDToString(Entity.ID);
@@ -179,35 +168,13 @@ begin
         qry.Execute;
       end;
   finally
-    qry.Transaction.Free;
     qry.Free;
-  end;
-end;
-
-class procedure TDaoFull.SaveToDatabase(Entity: TObjetFull);
-var
-  Transaction: TUIBTransaction;
-begin
-  // Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut être GUID_NULL');
-
-  Transaction := GetTransaction(dmPrinc.UIBDataBase);
-  try
-    SaveToDatabase(Entity, Transaction);
-    Transaction.Commit;
-    Entity.RecInconnu := False;
-  finally
-    Transaction.Free;
   end;
 end;
 
 { TDaoFullEntity<T> }
 
-class procedure TDaoFullEntity<T>.Fill(Entity: TDBEntity; const Reference: TGUID);
-begin
-  Fill(T(Entity), Reference);
-end;
-
-class procedure TDaoFullEntity<T>.Fill(Entity: T; const Reference: TGUID);
+class procedure TDaoFullEntity<T>.LoadEntity(Entity: T; const Reference: TGUID; UseTransaction: TManagedTransaction);
 begin
   Entity.DoClear;
 end;
@@ -222,25 +189,20 @@ begin
   Result := T(inherited getInstance(Reference));
 end;
 
-class procedure TDaoFullEntity<T>.SaveToDatabase(Entity: T; UseTransaction: TUIBTransaction);
+class procedure TDaoFullEntity<T>.SaveEntity(Entity: T; UseTransaction: TManagedTransaction);
 begin
   // Assert(not IsEqualGUID(Entity.ID, GUID_NULL), 'L''ID ne peut être GUID_NULL');
-end;
-
-class procedure TDaoFullEntity<T>.SaveToDatabase(Entity: TObjetFull; UseTransaction: TUIBTransaction);
-begin
-  SaveToDatabase(T(Entity), UseTransaction);
+  Entity.RecInconnu := False;
 end;
 
 { TDaoSerieFull }
 
 class procedure TDaoSerieFull.ChangeNotation(Entity: TSerieFull; Note: Integer);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'update series set notation = ? where id_serie = ?';
     qry.Params.AsSmallint[0] := Note;
     qry.Params.AsString[1] := GUIDToString(Entity.ID_Serie);
@@ -249,7 +211,6 @@ begin
 
     Entity.Notation := Note;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -258,31 +219,28 @@ end;
 
 class procedure TDaoAlbumFull.Acheter(Entity: TAlbumFull; Prevision: Boolean);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   if IsEqualGUID(Entity.ID_Album, GUID_NULL) then
     Exit;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'update albums set achat = :achat where id_album = ?';
     qry.Params.AsBoolean[0] := Prevision;
     qry.Params.AsString[1] := GUIDToString(Entity.ID_Album);
     qry.Execute;
     qry.Transaction.Commit;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
 
 class procedure TDaoAlbumFull.ChangeNotation(Entity: TAlbumFull; Note: Integer);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'update albums set notation = ? where id_album = ?';
     qry.Params.AsSmallint[0] := Note;
     qry.Params.AsString[1] := GUIDToString(Entity.ID_Album);
@@ -291,7 +249,6 @@ begin
 
     Entity.Notation := Note;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -301,19 +258,17 @@ begin
   Result := TFactoryAlbumFull;
 end;
 
-class procedure TDaoAlbumFull.Fill(Entity: TAlbumFull; const Reference: TGUID);
+class procedure TDaoAlbumFull.LoadEntity(Entity: TAlbumFull; const Reference: TGUID; UseTransaction: TManagedTransaction);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then
     Exit;
   Entity.ID_Album := Reference;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
-
-    TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > données de base - ' + GUIDToString(Reference));
+    TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > données de base - ' + GUIDToString(Entity.ID_Album));
 
     qry.FetchBlobs := True;
     qry.SQL.Clear;
@@ -324,7 +279,7 @@ begin
     qry.SQL.Add('  albums');
     qry.SQL.Add('where');
     qry.SQL.Add('  id_album = ?');
-    qry.Params.AsString[0] := GUIDToString(Reference);
+    qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
     qry.Open;
     Entity.RecInconnu := qry.Eof;
 
@@ -346,13 +301,13 @@ begin
 
       Entity.Complet := qry.Fields.ByNameAsBoolean['complet'];
 
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < données de base - ' + GUIDToString(Reference));
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < données de base - ' + GUIDToString(Entity.ID_Album));
 
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > série - ' + GUIDToString(Reference));
-      TDaoSerieFull.Fill(Entity.Serie, StringToGUIDDef(qry.Fields.ByNameAsString['id_serie'], GUID_NULL));
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < série - ' + GUIDToString(Reference));
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > série - ' + GUIDToString(Entity.ID_Album));
+      TDaoSerieFull.Fill(Entity.Serie, StringToGUIDDef(qry.Fields.ByNameAsString['id_serie'], GUID_NULL), qry.Transaction);
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < série - ' + GUIDToString(Entity.ID_Album));
 
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > univers - ' + GUIDToString(Reference));
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > univers - ' + GUIDToString(Entity.ID_Album));
       qry.Close;
       qry.SQL.Clear;
       qry.SQL.Add('select');
@@ -363,51 +318,50 @@ begin
       qry.SQL.Add('    au.id_univers = u.id_univers');
       qry.SQL.Add('where');
       qry.SQL.Add('  au.source_album = 1 and au.id_album = ?');
-      qry.Params.AsString[0] := GUIDToString(Reference);
+      qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
       qry.Open;
       TDaoUniversLite.FillList(Entity.Univers, qry);
       Entity.UniversFull.Clear;
       Entity.UniversFull.AddRange(Entity.Serie.Univers);
       Entity.UniversFull.AddRange(Entity.Univers);
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < univers - ' + GUIDToString(Reference));
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < univers - ' + GUIDToString(Entity.ID_Album));
 
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > auteurs - ' + GUIDToString(Reference));
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > auteurs - ' + GUIDToString(Entity.ID_Album));
       qry.Close;
       qry.SQL.Text := 'select * from proc_auteurs(?, null, null)';
-      qry.Params.AsString[0] := GUIDToString(Reference);
+      qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
       qry.Open;
-      TDaoAuteurLite.Prepare(qry);
+      TDaoAuteurAlbumLite.Prepare(qry);
       try
         while not qry.Eof do
         begin
           case TMetierAuteur(qry.Fields.ByNameAsInteger['metier']) of
             maScenariste:
-              Entity.Scenaristes.Add(TDaoAuteurLite.Make(qry));
+              Entity.Scenaristes.Add(TDaoAuteurAlbumLite.Make(qry));
             maDessinateur:
-              Entity.Dessinateurs.Add(TDaoAuteurLite.Make(qry));
+              Entity.Dessinateurs.Add(TDaoAuteurAlbumLite.Make(qry));
             maColoriste:
-              Entity.Coloristes.Add(TDaoAuteurLite.Make(qry));
+              Entity.Coloristes.Add(TDaoAuteurAlbumLite.Make(qry));
           end;
           qry.Next;
         end;
       finally
-        TDaoAuteurLite.Unprepare(qry);
+        TDaoAuteurAlbumLite.Unprepare(qry);
       end;
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < auteurs - ' + GUIDToString(Reference));
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < auteurs - ' + GUIDToString(Entity.ID_Album));
 
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > éditions - ' + GUIDToString(Reference));
-      TDaoEditionFull.FillList(Entity.Editions, Entity.ID_Album);
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < éditions - ' + GUIDToString(Reference));
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > éditions - ' + GUIDToString(Entity.ID_Album));
+      TDaoEditionFull.FillList(Entity.Editions, Entity.ID_Album, qry.Transaction);
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < éditions - ' + GUIDToString(Entity.ID_Album));
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
 
 class procedure TDaoAlbumFull.FusionneInto(Source, Dest: TAlbumFull);
 
-  function NotInList(Auteur: TAuteurLite; List: TObjectList<TAuteurLite>): Boolean; inline; overload;
+  function NotInList(Auteur: TAuteurAlbumLite; List: TObjectList<TAuteurAlbumLite>): Boolean; inline; overload;
   var
     i: Integer;
   begin
@@ -435,7 +389,7 @@ class procedure TDaoAlbumFull.FusionneInto(Source, Dest: TAlbumFull);
 
 var
   DefaultAlbum: TAlbumFull;
-  Auteur: TAuteurLite;
+  Auteur: TAuteurAlbumLite;
   Univers: TUniversLite;
 begin
   DefaultAlbum := TFactoryAlbumFull.getInstance;
@@ -460,13 +414,13 @@ begin
 
     for Auteur in Source.Scenaristes do
       if NotInList(Auteur, Dest.Scenaristes) then
-        Dest.Scenaristes.Add(TFactoryAuteurLite.Duplicate(Auteur));
+        Dest.Scenaristes.Add(TFactoryAuteurAlbumLite.Duplicate(Auteur));
     for Auteur in Source.Dessinateurs do
       if NotInList(Auteur, Dest.Dessinateurs) then
-        Dest.Dessinateurs.Add(TFactoryAuteurLite.Duplicate(Auteur));
+        Dest.Dessinateurs.Add(TFactoryAuteurAlbumLite.Duplicate(Auteur));
     for Auteur in Source.Coloristes do
       if NotInList(Auteur, Dest.Coloristes) then
-        Dest.Coloristes.Add(TFactoryAuteurLite.Duplicate(Auteur));
+        Dest.Coloristes.Add(TFactoryAuteurAlbumLite.Duplicate(Auteur));
 
     if not SameText(Source.Sujet, DefaultAlbum.Sujet) then
       Dest.Sujet := Source.Sujet;
@@ -475,7 +429,7 @@ begin
 
     // Série
     if not IsEqualGUID(Source.ID_Serie, DefaultAlbum.ID_Serie) and not IsEqualGUID(Source.ID_Serie, Dest.ID_Serie) then
-      TDaoSerieFull.Fill(Dest.Serie, Source.ID_Serie);
+      TDaoSerieFull.Fill(Dest.Serie, Source.ID_Serie, nil);
 
     // Univers
     for Univers in Source.Univers do
@@ -489,21 +443,19 @@ begin
   end;
 end;
 
-class procedure TDaoAlbumFull.SaveToDatabase(Entity: TAlbumFull; UseTransaction: TUIBTransaction);
+class procedure TDaoAlbumFull.SaveEntity(Entity: TAlbumFull; UseTransaction: TManagedTransaction);
 var
   S: string;
-  qry: TUIBQuery;
-  Auteur: TAuteurLite;
+  qry: TManagedQuery;
+  Auteur: TAuteurAlbumLite;
   hg: IHourGlass;
   Edition: TEditionFull;
   Univers: TUniversLite;
 begin
   inherited;
   hg := THourGlass.Create;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := UseTransaction;
-
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into albums (');
     qry.SQL.Add('  id_album, titrealbum, moisparution, anneeparution, id_serie, tome, tomedebut, tomefin,');
@@ -666,20 +618,18 @@ end;
 
 class procedure TDaoParaBDFull.Acheter(Entity: TParaBDFull; Prevision: Boolean);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   if IsEqualGUID(Entity.ID_ParaBD, GUID_NULL) then
     Exit;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery;
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'update parabd set achat = :achat where id_parabd = ?';
     qry.Params.AsBoolean[0] := Prevision;
     qry.Params.AsString[1] := GUIDToString(Entity.ID_ParaBD);
     qry.Execute;
     qry.Transaction.Commit;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -689,31 +639,30 @@ begin
   Result := TFactoryParaBDFull;
 end;
 
-class procedure TDaoParaBDFull.Fill(Entity: TParaBDFull; const Reference: TGUID);
+class procedure TDaoParaBDFull.LoadEntity(Entity: TParaBDFull; const Reference: TGUID; UseTransaction: TManagedTransaction);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
   ID_Serie: TGUID;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then
     Exit;
   Entity.ID_ParaBD := Reference;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.FetchBlobs := True;
     qry.SQL.Clear;
     qry.SQL.Add('select');
-    qry.SQL.Add('  titreparabd, annee, id_serie, achat, description, notes, dedicace, numerote, anneecote, prixcote,');
-    qry.SQL.Add('  gratuit, offert, dateachat, prix, stock, categorieparabd, lc.libelle as scategorieparabd');
+    qry.SQL.Add('  p.titreparabd, p.annee, p.id_serie, p.achat, p.description, p.notes, p.dedicace, p.numerote, p.anneecote, p.prixcote,');
+    qry.SQL.Add('  p.gratuit, p.offert, p.dateachat, p.prix, p.stock, p.categorieparabd, lc.libelle as scategorieparabd');
     qry.SQL.Add('from');
     qry.SQL.Add('  parabd p');
     qry.SQL.Add('  left join listes lc on');
     qry.SQL.Add('    (lc.ref = p.categorieparabd and lc.categorie = 7)');
     qry.SQL.Add('where');
-    qry.SQL.Add('  id_parabd = ?');
+    qry.SQL.Add('  p.id_parabd = ?');
 
-    qry.Params.AsString[0] := GUIDToString(Reference);
+    qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
     qry.Open;
     Entity.RecInconnu := qry.Eof;
 
@@ -723,7 +672,7 @@ begin
       Entity.AnneeEdition := qry.Fields.ByNameAsInteger['annee'];
       Entity.Description := qry.Fields.ByNameAsString['description'];
       Entity.Notes := qry.Fields.ByNameAsString['notes'];
-      Entity.CategorieParaBD := MakeOption(qry.Fields.ByNameAsInteger['categorieparabd'], qry.Fields.ByNameAsString['scategorieparabd']);
+      Entity.CategorieParaBD := ROption.Create(qry.Fields.ByNameAsInteger['categorieparabd'], qry.Fields.ByNameAsString['scategorieparabd']);
       Entity.Prix := qry.Fields.ByNameAsCurrency['prix'];
       Entity.Dedicace := qry.Fields.ByNameAsBoolean['dedicace'];
       Entity.Numerote := qry.Fields.ByNameAsBoolean['numerote'];
@@ -735,6 +684,7 @@ begin
       Entity.PrixCote := qry.Fields.ByNameAsCurrency['prixcote'];
 
       ID_Serie := StringToGUIDDef(qry.Fields.ByNameAsString['id_serie'], GUID_NULL);
+      TDaoSerieFull.Fill(Entity.Serie, ID_Serie, qry.Transaction);
 
       qry.Close;
       qry.SQL.Clear;
@@ -746,7 +696,7 @@ begin
       qry.SQL.Add('    pu.id_univers = u.id_univers');
       qry.SQL.Add('where');
       qry.SQL.Add('  pu.source_parabd = 1 and pu.id_parabd = ?');
-      qry.Params.AsString[0] := GUIDToString(Reference);
+      qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
       qry.Open;
       TDaoUniversLite.FillList(Entity.Univers, qry);
       Entity.UniversFull.Clear;
@@ -755,13 +705,11 @@ begin
 
       qry.Close;
       qry.SQL.Text := 'select * from proc_auteurs(null, null, ?)';
-      qry.Params.AsString[0] := GUIDToString(Reference);
+      qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
       qry.Open;
-      TDaoAuteurLite.FillList(Entity.Auteurs, qry);
+      TDaoAuteurParaBDLite.FillList(Entity.Auteurs, qry);
 
-      TDaoSerieFull.Fill(Entity.Serie, ID_Serie);
-
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoParaBDFull.Fill > photos - ' + GUIDToString(Reference));
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoParaBDFull.Fill > photos - ' + GUIDToString(Entity.ID_ParaBD));
       qry.Close;
       qry.SQL.Clear;
       qry.SQL.Add('select');
@@ -777,34 +725,25 @@ begin
       qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
       qry.Open;
       TDaoPhotoLite.FillList(Entity.Photos, qry);
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoParaBDFull.Fill < photos - ' + GUIDToString(Reference));
+      TfrmConsole.AddEvent(Self.UnitName, 'TDaoParaBDFull.Fill < photos - ' + GUIDToString(Entity.ID_ParaBD));
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
 
-class procedure TDaoParaBDFull.SaveToDatabase(Entity: TParaBDFull; UseTransaction: TUIBTransaction);
+class procedure TDaoParaBDFull.SaveEntity(Entity: TParaBDFull; UseTransaction: TManagedTransaction);
 var
   S: string;
-  qry: TUIBQuery;
+  qry: TManagedQuery;
   hg: IHourGlass;
-  Stream: TStream;
-  Auteur: TAuteurLite;
+  Auteur: TAuteurParaBDLite;
   Univers: TUniversLite;
-  PP: TPhotoLite;
-  i: Integer;
-  qry1, qry2, qry3, qry4, qry5, qry6: TUIBQuery;
-  FichiersImages: TStringList;
 begin
   inherited;
-  FichiersImages := TStringList.Create;
   hg := THourGlass.Create;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := UseTransaction;
-
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into parabd (');
     qry.SQL.Add('  id_parabd, titreparabd, annee, id_serie, categorieparabd, dedicace, numerote, anneecote,');
@@ -911,166 +850,9 @@ begin
       Univers.ID := StringToGUID(qry.Fields.AsString[0]);
     end;
 
-    S := '';
-    for PP in Entity.Photos do
-      if not IsEqualGUID(PP.ID, GUID_NULL) then
-        AjoutString(S, QuotedStr(GUIDToString(PP.ID)), ',');
-
-    qry.SQL.Clear;
-    qry.SQL.Add('delete from photos');
-    qry.SQL.Add('where');
-    qry.SQL.Add('  id_parabd = ?');
-    if S <> '' then
-      qry.SQL.Add(' and id_photo not in (' + S + ')');
-    qry.Params.AsString[0] := GUIDToString(Entity.ID_ParaBD);
-    qry.Execute;
-
-    qry1 := TUIBQuery.Create(nil);
-    qry2 := TUIBQuery.Create(nil);
-    qry3 := TUIBQuery.Create(nil);
-    qry4 := TUIBQuery.Create(nil);
-    qry5 := TUIBQuery.Create(nil);
-    qry6 := TUIBQuery.Create(nil);
-    try
-      qry1.Transaction := qry.Transaction;
-      qry2.Transaction := qry.Transaction;
-      qry3.Transaction := qry.Transaction;
-      qry4.Transaction := qry.Transaction;
-      qry5.Transaction := qry.Transaction;
-      qry6.Transaction := qry.Transaction;
-
-      qry1.SQL.Clear;
-      qry1.SQL.Add('insert into photos (');
-      qry1.SQL.Add('  id_parabd, fichierphoto, stockagephoto, ordre, categorieimage');
-      qry1.SQL.Add(') values (');
-      qry1.SQL.Add('  :id_parabd, :fichierphoto, 0, :ordre, :categorieimage');
-      qry1.SQL.Add(') returning id_photo');
-
-      qry6.SQL.Text := 'select result from saveblobtofile(:Chemin, :Fichier, :BlobContent)';
-
-      qry2.SQL.Clear;
-      qry2.SQL.Add('insert into photos (');
-      qry2.SQL.Add('  id_parabd, fichierphoto, stockagephoto, ordre, imagephoto, categorieimage');
-      qry2.SQL.Add(') values (');
-      qry2.SQL.Add('  :id_parabd, :fichierphoto, 1, :ordre, :imagephoto, :categorieimage');
-      qry2.SQL.Add(') returning id_photo');
-
-      qry3.SQL.Text := 'update photos set imagephoto = :imagephoto, stockagephoto = 1 where id_photo = :id_photo';
-
-      qry4.SQL.Text := 'update photos set imagephoto = null, stockagephoto = 0 where id_photo = :id_photo';
-
-      qry5.SQL.Clear;
-      qry5.SQL.Add('update photos set');
-      qry5.SQL.Add('  fichierphoto = :fichierphoto, ordre = :ordre, categorieimage = :categorieimage');
-      qry5.SQL.Add('where');
-      qry5.SQL.Add('  id_photo = :id_photo');
-
-      for PP in Entity.Photos do
-        if IsEqualGUID(PP.ID, GUID_NULL) then
-        begin // nouvelles photos
-          if (not PP.NewStockee) then
-          begin // photos liées (q1)
-            PP.OldNom := PP.NewNom;
-            PP.NewNom := SearchNewFileName(RepImages, ExtractFileName(PP.NewNom), True);
-            qry6.Params.ByNameAsString['chemin'] := RepImages;
-            qry6.Params.ByNameAsString['fichier'] := PP.NewNom;
-            Stream := GetJPEGStream(PP.OldNom, -1, -1, False);
-            try
-              qry6.ParamsSetBlob('blobcontent', Stream);
-            finally
-              Stream.Free;
-            end;
-            qry6.Open;
-
-            qry1.Params.ByNameAsString['id_parabd'] := GUIDToString(Entity.ID_ParaBD);
-            qry1.Params.ByNameAsString['fichierphoto'] := PP.NewNom;
-            qry1.Params.ByNameAsInteger['ordre'] := Entity.Photos.IndexOf(PP);
-            qry1.Params.ByNameAsInteger['categorieimage'] := PP.Categorie;
-            qry1.Execute;
-            PP.ID := StringToGUID(qry1.Fields.AsString[0]);
-          end
-          else if TFile.Exists(PP.NewNom) then
-          begin // photos stockées (q2)
-            qry2.Params.ByNameAsString['id_parabd'] := GUIDToString(Entity.ID_ParaBD);
-            qry2.Params.ByNameAsString['fichierphoto'] := TPath.GetFileNameWithoutExtension(PP.NewNom);
-            qry2.Params.ByNameAsInteger['ordre'] := Entity.Photos.IndexOf(PP);
-            Stream := GetJPEGStream(PP.NewNom);
-            try
-              qry2.ParamsSetBlob('imagephoto', Stream);
-            finally
-              Stream.Free;
-            end;
-            qry2.Params.ByNameAsInteger['categorieimage'] := PP.Categorie;
-            qry2.Execute;
-            PP.ID := StringToGUID(qry2.Fields.AsString[0]);
-          end;
-        end
-        else
-        begin // ancienne photo
-          if PP.OldStockee <> PP.NewStockee then
-          begin // changement de stockage
-            Stream := GetCouvertureStream(True, PP.ID, -1, -1, False);
-            try
-              if (PP.NewStockee) then
-              begin // conversion photos liées en stockées (q3)
-                qry3.ParamsSetBlob('imagephoto', Stream);
-                qry3.Params.ByNameAsString['id_photo'] := GUIDToString(PP.ID);
-                qry3.Execute;
-                if TPath.GetDirectoryName(PP.NewNom) = '' then
-                  FichiersImages.Add(TPath.Combine(RepImages, PP.NewNom))
-                else
-                  FichiersImages.Add(PP.NewNom);
-                PP.NewNom := TPath.GetFileNameWithoutExtension(PP.NewNom);
-              end
-              else
-              begin // conversion photos stockées en liées
-                PP.NewNom := SearchNewFileName(RepImages, PP.NewNom + '.jpg', True);
-                qry6.Params.ByNameAsString['chemin'] := RepImages;
-                qry6.Params.ByNameAsString['fichier'] := PP.NewNom;
-                qry6.ParamsSetBlob('blobcontent', Stream);
-                qry6.Open;
-
-                qry4.Params.ByNameAsString['id_photo'] := GUIDToString(PP.ID);
-                qry4.Execute;
-              end;
-            finally
-              Stream.Free;
-            end;
-          end;
-          // photos renommées, réordonnées, etc (q5)
-          // obligatoire pour les changement de stockage
-          qry5.Params.ByNameAsString['fichierphoto'] := PP.NewNom;
-          qry5.Params.ByNameAsInteger['ordre'] := Entity.Photos.IndexOf(PP);
-          qry5.Params.ByNameAsInteger['categorieimage'] := PP.Categorie;
-          qry5.Params.ByNameAsString['id_photo'] := GUIDToString(PP.ID);
-          qry5.Execute;
-        end;
-    finally
-      FreeAndNil(qry1);
-      FreeAndNil(qry2);
-      FreeAndNil(qry3);
-      FreeAndNil(qry4);
-      FreeAndNil(qry5);
-      FreeAndNil(qry6);
-    end;
+    TDaoPhotoLite.SaveList(Entity.Photos, Entity.ID_ParaBD, [], qry.Transaction);
     qry.Transaction.Commit;
-
-    if FichiersImages.Count > 0 then
-    begin
-      qry.Transaction.StartTransaction;
-      qry.SQL.Text := 'select * from deletefile(:fichier)';
-      qry.Prepare(True);
-      for i := 0 to Pred(FichiersImages.Count) do
-      begin
-        qry.Params.AsString[0] := Copy(FichiersImages[i], 1, qry.Params.MaxStrLen[0]);
-        qry.Open;
-        if qry.Fields.AsInteger[0] <> 0 then
-          ShowMessage(FichiersImages[i] + #13#13 + SysErrorMessage(qry.Fields.AsInteger[0]));
-      end;
-      qry.Transaction.Commit;
-    end;
   finally
-    FichiersImages.Free;
     qry.Free;
   end;
 end;
@@ -1082,17 +864,16 @@ begin
   Result := TFactoryUniversFull;
 end;
 
-class procedure TDaoUniversFull.Fill(Entity: TUniversFull; const Reference: TGUID);
+class procedure TDaoUniversFull.LoadEntity(Entity: TUniversFull; const Reference: TGUID; UseTransaction: TManagedTransaction);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then
     Exit;
   Entity.ID_Univers := Reference;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select nomunivers, id_univers_parent, description, siteweb from univers where id_univers = ?';
     qry.Params.AsString[0] := GUIDToString(Reference);
     qry.Open;
@@ -1106,20 +887,17 @@ begin
       Entity.SiteWeb := qry.Fields.ByNameAsString['siteweb'];
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
 
-class procedure TDaoUniversFull.SaveToDatabase(Entity: TUniversFull; UseTransaction: TUIBTransaction);
+class procedure TDaoUniversFull.SaveEntity(Entity: TUniversFull; UseTransaction: TManagedTransaction);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := UseTransaction;
-
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into univers (');
     qry.SQL.Add('  id_univers, nomunivers, id_univers_parent, description, siteweb');
@@ -1159,17 +937,16 @@ begin
   Result := TFactoryCollectionFull;
 end;
 
-class procedure TDaoCollectionFull.Fill(Entity: TCollectionFull; const Reference: TGUID);
+class procedure TDaoCollectionFull.LoadEntity(Entity: TCollectionFull; const Reference: TGUID; UseTransaction: TManagedTransaction);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then
     Exit;
   Entity.ID_Collection := Reference;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select nomcollection, id_editeur from collections where id_collection = ?';
     qry.Params.AsString[0] := GUIDToString(Reference);
     qry.Open;
@@ -1181,20 +958,17 @@ begin
       TDaoEditeurLite.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL));
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
 
-class procedure TDaoCollectionFull.SaveToDatabase(Entity: TCollectionFull; UseTransaction: TUIBTransaction);
+class procedure TDaoCollectionFull.SaveEntity(Entity: TCollectionFull; UseTransaction: TManagedTransaction);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := UseTransaction;
-
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into collections (');
     qry.SQL.Add('  id_collection, nomcollection, id_editeur');
@@ -1226,17 +1000,16 @@ begin
   Result := TFactoryEditeurFull;
 end;
 
-class procedure TDaoEditeurFull.Fill(Entity: TEditeurFull; const Reference: TGUID);
+class procedure TDaoEditeurFull.LoadEntity(Entity: TEditeurFull; const Reference: TGUID; UseTransaction: TManagedTransaction);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then
     Exit;
   Entity.ID_Editeur := Reference;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select nomediteur, siteweb from editeurs where id_editeur = ?';
     qry.Params.AsString[0] := GUIDToString(Reference);
     qry.Open;
@@ -1248,20 +1021,17 @@ begin
       Entity.SiteWeb := qry.Fields.ByNameAsString['siteweb'];
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
 
-class procedure TDaoEditeurFull.SaveToDatabase(Entity: TEditeurFull; UseTransaction: TUIBTransaction);
+class procedure TDaoEditeurFull.SaveEntity(Entity: TEditeurFull; UseTransaction: TManagedTransaction);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := UseTransaction;
-
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into editeurs (');
     qry.SQL.Add('  id_editeur, nomediteur, siteweb');
@@ -1293,17 +1063,16 @@ begin
   Result := TFactoryAuteurFull;
 end;
 
-class procedure TDaoAuteurFull.Fill(Entity: TAuteurFull; const Reference: TGUID);
+class procedure TDaoAuteurFull.LoadEntity(Entity: TAuteurFull; const Reference: TGUID; UseTransaction: TManagedTransaction);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then
     Exit;
   Entity.ID_Auteur := Reference;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.SQL.Text := 'select nompersonne, siteweb, biographie from personnes where id_personne = ?';
     qry.Params.AsString[0] := GUIDToString(Reference);
     qry.FetchBlobs := True;
@@ -1356,15 +1125,13 @@ begin
   end;
 end;
 
-class procedure TDaoAuteurFull.SaveToDatabase(Entity: TAuteurFull; UseTransaction: TUIBTransaction);
+class procedure TDaoAuteurFull.SaveEntity(Entity: TAuteurFull; UseTransaction: TManagedTransaction);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := UseTransaction;
-
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into personnes (');
     qry.SQL.Add('  id_personne, nompersonne, siteweb, biographie');
@@ -1410,26 +1177,24 @@ begin
   Result := TFactoryEditionFull;
 end;
 
-class procedure TDaoEditionFull.Fill(Entity: TEditionFull; const Reference: TGUID);
+class procedure TDaoEditionFull.LoadEntity(Entity: TEditionFull; const Reference: TGUID; UseTransaction: TManagedTransaction);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   inherited;
   if IsEqualGUID(Reference, GUID_NULL) then
     Exit;
   Entity.ID_Edition := Reference;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
-
     TfrmConsole.AddEvent(Self.UnitName, 'TDaoEditionFull.Fill > données de base - ' + GUIDToString(Reference));
     qry.SQL.Clear;
     qry.SQL.Add('select');
-    qry.SQL.Add('  id_edition, id_album, e.id_editeur, e.id_collection, nomcollection, anneeedition, prix, vo,');
-    qry.SQL.Add('  couleur, isbn, dedicace, prete, stock, offert, gratuit, nombredepages, dateachat, notes,');
-    qry.SQL.Add('  anneecote, prixcote, numeroperso, etat, le.libelle as setat, reliure, lr.libelle as sreliure,');
-    qry.SQL.Add('  orientation, lo.libelle as sorientation, formatedition, lf.libelle as sformatedition,');
-    qry.SQL.Add('  typeedition, lte.libelle as stypeedition, senslecture, lsl.libelle as ssenslecture');
+    qry.SQL.Add('  e.id_edition, e.id_album, e.id_editeur, e.id_collection, c.nomcollection, e.anneeedition, e.prix, e.vo,');
+    qry.SQL.Add('  e.couleur, e.isbn, e.dedicace, e.prete, e.stock, e.offert, e.gratuit, e.nombredepages, e.dateachat, e.notes,');
+    qry.SQL.Add('  e.anneecote, e.prixcote, e.numeroperso, e.etat, le.libelle as setat, e.reliure, lr.libelle as sreliure,');
+    qry.SQL.Add('  e.orientation, lo.libelle as sorientation, e.formatedition, lf.libelle as sformatedition,');
+    qry.SQL.Add('  e.typeedition, lte.libelle as stypeedition, e.senslecture, lsl.libelle as ssenslecture');
     qry.SQL.Add('from');
     qry.SQL.Add('  editions e');
     qry.SQL.Add('  left join collections c on');
@@ -1447,7 +1212,7 @@ begin
     qry.SQL.Add('  left join listes lsl on');
     qry.SQL.Add('    (lsl.ref = e.senslecture and lsl.categorie = 8)');
     qry.SQL.Add('where');
-    qry.SQL.Add('  id_edition = ?');
+    qry.SQL.Add('  e.id_edition = ?');
     qry.Params.AsString[0] := GUIDToString(Reference);
     qry.FetchBlobs := True;
     qry.Open;
@@ -1456,7 +1221,7 @@ begin
     if not Entity.RecInconnu then
     begin
       Entity.ID_Album := StringToGUIDDef(qry.Fields.ByNameAsString['id_album'], GUID_NULL);
-      TDaoEditeurFull.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL));
+      TDaoEditeurFull.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL), qry.Transaction);
       TDaoCollectionLite.Prepare(qry);
       try
         TDaoCollectionLite.Fill(Entity.Collection, qry);
@@ -1473,13 +1238,13 @@ begin
       Entity.Prete := qry.Fields.ByNameAsBoolean['prete'];
       Entity.Stock := qry.Fields.ByNameAsBoolean['stock'];
       Entity.ISBN := FormatISBN(Trim(qry.Fields.ByNameAsString['isbn']));
-      Entity.TypeEdition := MakeOption(qry.Fields.ByNameAsInteger['typeedition'], qry.Fields.ByNameAsString['stypeedition']);
+      Entity.TypeEdition := ROption.Create(qry.Fields.ByNameAsInteger['typeedition'], qry.Fields.ByNameAsString['stypeedition']);
       Entity.NombreDePages := qry.Fields.ByNameAsInteger['nombredepages'];
-      Entity.Etat := MakeOption(qry.Fields.ByNameAsInteger['etat'], qry.Fields.ByNameAsString['setat']);
-      Entity.Reliure := MakeOption(qry.Fields.ByNameAsInteger['reliure'], qry.Fields.ByNameAsString['sreliure']);
-      Entity.Orientation := MakeOption(qry.Fields.ByNameAsInteger['orientation'], qry.Fields.ByNameAsString['sorientation']);
-      Entity.FormatEdition := MakeOption(qry.Fields.ByNameAsInteger['formatedition'], qry.Fields.ByNameAsString['sformatedition']);
-      Entity.SensLecture := MakeOption(qry.Fields.ByNameAsInteger['senslecture'], qry.Fields.ByNameAsString['ssenslecture']);
+      Entity.Etat := ROption.Create(qry.Fields.ByNameAsInteger['etat'], qry.Fields.ByNameAsString['setat']);
+      Entity.Reliure := ROption.Create(qry.Fields.ByNameAsInteger['reliure'], qry.Fields.ByNameAsString['sreliure']);
+      Entity.Orientation := ROption.Create(qry.Fields.ByNameAsInteger['orientation'], qry.Fields.ByNameAsString['sorientation']);
+      Entity.FormatEdition := ROption.Create(qry.Fields.ByNameAsInteger['formatedition'], qry.Fields.ByNameAsString['sformatedition']);
+      Entity.SensLecture := ROption.Create(qry.Fields.ByNameAsInteger['senslecture'], qry.Fields.ByNameAsString['ssenslecture']);
       Entity.DateAchat := qry.Fields.ByNameAsDate['dateachat'];
       Entity.Notes := qry.Fields.ByNameAsString['notes'];
       Entity.AnneeCote := qry.Fields.ByNameAsInteger['anneecote'];
@@ -1506,20 +1271,17 @@ begin
       TfrmConsole.AddEvent(Self.UnitName, 'TDaoEditionFull.Fill < images - ' + GUIDToString(Reference));
     end;
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
 
-class procedure TDaoEditionFull.FillList(EntitiesList: TObjectList<TEditionFull>; const Reference: TGUID; Stock: Integer);
+class procedure TDaoEditionFull.FillList(EntitiesList: TObjectList<TEditionFull>; const Reference: TGUID; UseTransaction: TManagedTransaction; Stock: Integer);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
   EntitiesList.Clear;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
-
     TfrmConsole.AddEvent(Self.UnitName, '> TDaoEditionFull.FillList - ' + GUIDToString(Reference));
     qry.SQL.Text := 'select id_edition from editions where id_album = ?';
     if Stock in [0, 1] then
@@ -1535,7 +1297,6 @@ begin
     end;
     TfrmConsole.AddEvent(Self.UnitName, '< TDaoEditionFull.FillList - ' + GUIDToString(Reference));
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -1613,7 +1374,7 @@ begin
   try
     if not IsEqualGUID(Source.Editeur.ID_Editeur, DefaultEdition.Editeur.ID_Editeur) and not IsEqualGUID(Source.Editeur.ID_Editeur, Dest.Editeur.ID_Editeur)
     then
-      TDaoEditeurFull.Fill(Dest.Editeur, Source.Editeur.ID_Editeur);
+      TDaoEditeurFull.Fill(Dest.Editeur, Source.Editeur.ID_Editeur, nil);
     if not IsEqualGUID(Source.Collection.ID, DefaultEdition.Collection.ID) and not IsEqualGUID(Source.Collection.ID, Dest.Collection.ID) then
       TDaoCollectionLite.Fill(Dest.Collection, Source.Collection.ID);
 
@@ -1673,7 +1434,7 @@ end;
 class function TDaoEditionFull.getList(const Reference: TGUID; Stock: Integer): TObjectList<TEditionFull>;
 begin
   Result := TObjectList<TEditionFull>.Create;
-  FillList(Result, Reference, Stock);
+  FillList(Result, Reference, nil, Stock);
 end;
 
 class procedure TDaoEditionFull.InitEdition(Entity: TEntity);
@@ -1686,24 +1447,15 @@ begin
   (Entity as TEditionFull).SensLecture := TDaoListe.DefaultSensLecture;
 end;
 
-class procedure TDaoEditionFull.SaveToDatabase(Entity: TEditionFull; UseTransaction: TUIBTransaction);
+class procedure TDaoEditionFull.SaveEntity(Entity: TEditionFull; UseTransaction: TManagedTransaction);
 var
-  PC: TCouvertureLite;
   hg: IHourGlass;
-  qry: TUIBQuery;
-  S: string;
-  i: Integer;
-  Stream: TStream;
-  qry1, qry2, qry3, qry4, qry5, qry6: TUIBQuery;
-  FichiersImages: TStringList;
+  qry: TManagedQuery;
 begin
   inherited;
-  FichiersImages := TStringList.Create;
   hg := THourGlass.Create;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := UseTransaction;
-
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into editions (');
     qry.SQL.Add('  id_edition, id_album, id_editeur, id_collection, anneeedition, prix, vo, typeedition,');
@@ -1772,180 +1524,21 @@ begin
     if Entity.RecInconnu then
       Entity.ID_Edition := StringToGUID(qry.Fields.AsString[0]);
 
-    S := '';
-    for PC in Entity.Couvertures do
-      if not IsEqualGUID(PC.ID, GUID_NULL) then
-        AjoutString(S, QuotedStr(GUIDToString(PC.ID)), ',');
-
-    qry.SQL.Clear;
-    qry.SQL.Add('delete from couvertures');
-    qry.SQL.Add('where');
-    qry.SQL.Add('  id_edition = ?');
-    if S <> '' then
-      qry.SQL.Add(' and id_couverture not in (' + S + ')');
-    qry.Params.AsString[0] := GUIDToString(Entity.ID_Edition);
-    qry.Execute;
-
-    qry1 := TUIBQuery.Create(nil);
-    qry2 := TUIBQuery.Create(nil);
-    qry3 := TUIBQuery.Create(nil);
-    qry4 := TUIBQuery.Create(nil);
-    qry5 := TUIBQuery.Create(nil);
-    qry6 := TUIBQuery.Create(nil);
-    try
-      qry1.Transaction := qry.Transaction;
-      qry2.Transaction := qry.Transaction;
-      qry3.Transaction := qry.Transaction;
-      qry4.Transaction := qry.Transaction;
-      qry5.Transaction := qry.Transaction;
-      qry6.Transaction := qry.Transaction;
-
-      qry1.SQL.Clear;
-      qry1.SQL.Add('insert into couvertures (');
-      qry1.SQL.Add('  id_edition, id_album, fichiercouverture, stockagecouverture, ordre, categorieimage');
-      qry1.SQL.Add(') values (');
-      qry1.SQL.Add('  :id_edition, :id_album, :fichiercouverture, 0, :ordre, :categorieimage');
-      qry1.SQL.Add(') returning id_couverture');
-
-      qry6.SQL.Text := 'select result from saveblobtofile(:Chemin, :Fichier, :BlobContent)';
-
-      qry2.SQL.Clear;
-      qry2.SQL.Add('insert into couvertures (');
-      qry2.SQL.Add('  id_edition, id_album, fichiercouverture, stockagecouverture, ordre, imagecouverture, categorieimage');
-      qry2.SQL.Add(') values (');
-      qry2.SQL.Add('  :id_edition, :id_album, :fichiercouverture, 1, :ordre, :imagecouverture, :categorieimage');
-      qry2.SQL.Add(') returning id_couverture');
-
-      qry3.SQL.Text := 'update couvertures set imagecouverture = :imagecouverture, stockagecouverture = 1 where id_couverture = :id_couverture';
-
-      qry4.SQL.Text := 'update couvertures set imagecouverture = null, stockagecouverture = 0 where id_couverture = :id_couverture';
-
-      qry5.SQL.Clear;
-      qry5.SQL.Add('update couvertures set');
-      qry5.SQL.Add('  fichiercouverture = :fichiercouverture, ordre = :ordre, categorieimage = :categorieimage');
-      qry5.SQL.Add('where');
-      qry5.SQL.Add('  id_couverture = :id_couverture');
-
-      for PC in Entity.Couvertures do
-        if IsEqualGUID(PC.ID, GUID_NULL) then
-        begin // nouvelles couvertures
-          if (not PC.NewStockee) then
-          begin // couvertures liées (q1)
-            PC.OldNom := PC.NewNom;
-            PC.NewNom := SearchNewFileName(RepImages, ExtractFileName(PC.NewNom), True);
-            qry6.Params.ByNameAsString['chemin'] := RepImages;
-            qry6.Params.ByNameAsString['fichier'] := PC.NewNom;
-            Stream := GetJPEGStream(PC.OldNom, -1, -1, False);
-            try
-              qry6.ParamsSetBlob('blobcontent', Stream);
-            finally
-              Stream.Free;
-            end;
-            qry6.Open;
-
-            qry1.Params.ByNameAsString['id_edition'] := GUIDToString(Entity.ID_Edition);
-            qry1.Params.ByNameAsString['id_album'] := GUIDToString(Entity.ID_Album);
-            qry1.Params.ByNameAsString['fichiercouverture'] := PC.NewNom;
-            qry1.Params.ByNameAsInteger['ordre'] := Entity.Couvertures.IndexOf(PC);
-            qry1.Params.ByNameAsInteger['categorieimage'] := PC.Categorie;
-            qry1.Execute;
-            PC.ID := StringToGUID(qry1.Fields.AsString[0]);
-          end
-          else if TFile.Exists(PC.NewNom) then
-          begin // couvertures stockées (q2)
-            qry2.Params.ByNameAsString['id_edition'] := GUIDToString(Entity.ID_Edition);
-            qry2.Params.ByNameAsString['id_album'] := GUIDToString(Entity.ID_Album);
-            qry2.Params.ByNameAsString['fichiercouverture'] := TPath.GetFileNameWithoutExtension(PC.NewNom);
-            qry2.Params.ByNameAsInteger['ordre'] := Entity.Couvertures.IndexOf(PC);
-            Stream := GetJPEGStream(PC.NewNom);
-            try
-              qry2.ParamsSetBlob('imagecouverture', Stream);
-            finally
-              Stream.Free;
-            end;
-            qry2.Params.ByNameAsInteger['categorieimage'] := PC.Categorie;
-            qry2.Execute;
-            PC.ID := StringToGUID(qry2.Fields.AsString[0]);
-          end;
-        end
-        else
-        begin // ancienne couverture
-          if PC.OldStockee <> PC.NewStockee then
-          begin // changement de stockage
-            Stream := GetCouvertureStream(False, PC.ID, -1, -1, False);
-            try
-              if (PC.NewStockee) then
-              begin // conversion couvertures liées en stockées (q3)
-                qry3.ParamsSetBlob('imagecouverture', Stream);
-                qry3.Params.ByNameAsString['id_couverture'] := GUIDToString(PC.ID);
-                qry3.Execute;
-                if TPath.GetDirectoryName(PC.NewNom) = '' then
-                  FichiersImages.Add(TPath.Combine(RepImages, PC.NewNom))
-                else
-                  FichiersImages.Add(PC.NewNom);
-                PC.NewNom := TPath.GetFileNameWithoutExtension(PC.NewNom);
-              end
-              else
-              begin // conversion couvertures stockées en liées
-                PC.NewNom := SearchNewFileName(RepImages, PC.NewNom + '.jpg', True);
-                qry6.Params.ByNameAsString['chemin'] := RepImages;
-                qry6.Params.ByNameAsString['fichier'] := PC.NewNom;
-                qry6.ParamsSetBlob('blobcontent', Stream);
-                qry6.Open;
-
-                qry4.Params.ByNameAsString['id_couverture'] := GUIDToString(PC.ID);
-                qry4.Execute;
-              end;
-            finally
-              Stream.Free;
-            end;
-          end;
-          // couvertures renommées, réordonnées, changée de catégorie, etc (q5)
-          // obligatoire pour les changement de stockage
-          qry5.Params.ByNameAsString['fichiercouverture'] := PC.NewNom;
-          qry5.Params.ByNameAsInteger['ordre'] := Entity.Couvertures.IndexOf(PC);
-          qry5.Params.ByNameAsInteger['categorieimage'] := PC.Categorie;
-          qry5.Params.ByNameAsString['id_couverture'] := GUIDToString(PC.ID);
-          qry5.Execute;
-        end;
-    finally
-      FreeAndNil(qry1);
-      FreeAndNil(qry2);
-      FreeAndNil(qry3);
-      FreeAndNil(qry4);
-      FreeAndNil(qry5);
-      FreeAndNil(qry6);
-    end;
+    TDaoCouvertureLite.SaveList(Entity.Couvertures, Entity.ID_Edition, [Entity.ID_Album], qry.Transaction);
     qry.Transaction.Commit;
-
-    if FichiersImages.Count > 0 then
-    begin
-      qry.Transaction.StartTransaction;
-      qry.SQL.Text := 'select * from deletefile(:fichier)';
-      qry.Prepare(True);
-      for i := 0 to Pred(FichiersImages.Count) do
-      begin
-        qry.Params.AsString[0] := Copy(FichiersImages[i], 1, qry.Params.MaxStrLen[0]);
-        qry.Open;
-        if qry.Fields.AsInteger[0] <> 0 then
-          ShowMessage(FichiersImages[i] + #13#13 + SysErrorMessage(qry.Fields.AsInteger[0]));
-      end;
-      qry.Transaction.Commit;
-    end;
   finally
-    FichiersImages.Free;
     qry.Free;
   end;
 end;
 
-class procedure TDaoSerieFull.Fill(Entity: TSerieFull; const Reference: TGUID);
+class procedure TDaoSerieFull.LoadEntity(Entity: TSerieFull; const Reference: TGUID; UseTransaction: TManagedTransaction);
 begin
-  Fill(Entity, Reference, GUID_NULL, False);
+  Fill(Entity, Reference, GUID_NULL, False, UseTransaction);
 end;
 
-class procedure TDaoSerieFull.Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID);
+class procedure TDaoSerieFull.Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; UseTransaction: TManagedTransaction);
 begin
-  Fill(Entity, Reference, IdAuteurFiltre, False);
+  Fill(Entity, Reference, IdAuteurFiltre, False, UseTransaction);
 end;
 
 class constructor TDaoSerieFull.Create;
@@ -1963,17 +1556,16 @@ begin
   Result := TFactorySerieFull;
 end;
 
-class procedure TDaoSerieFull.Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean);
+class procedure TDaoSerieFull.Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean; UseTransaction: TManagedTransaction);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
 begin
-  inherited Fill(Entity, Reference);
+  inherited Fill(Entity, Reference, UseTransaction);
   if IsEqualGUID(Reference, GUID_NULL) and (not ForceLoad) then
     Exit;
   Entity.ID_Serie := Reference;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := GetTransaction(dmPrinc.UIBDataBase);
     qry.FetchBlobs := True;
     qry.SQL.Clear;
     qry.SQL.Add('select');
@@ -2025,14 +1617,14 @@ begin
       Entity.Notes := qry.Fields.ByNameAsString['remarquesserie'];
       Entity.SiteWeb := qry.Fields.ByNameAsString['siteweb'];
 
-      Entity.TypeEdition := MakeOption(qry.Fields.ByNameAsInteger['typeedition'], qry.Fields.ByNameAsString['stypeedition']);
-      Entity.Etat := MakeOption(qry.Fields.ByNameAsInteger['etat'], qry.Fields.ByNameAsString['setat']);
-      Entity.Reliure := MakeOption(qry.Fields.ByNameAsInteger['reliure'], qry.Fields.ByNameAsString['sreliure']);
-      Entity.Orientation := MakeOption(qry.Fields.ByNameAsInteger['orientation'], qry.Fields.ByNameAsString['sorientation']);
-      Entity.FormatEdition := MakeOption(qry.Fields.ByNameAsInteger['formatedition'], qry.Fields.ByNameAsString['sformatedition']);
-      Entity.SensLecture := MakeOption(qry.Fields.ByNameAsInteger['senslecture'], qry.Fields.ByNameAsString['ssenslecture']);
+      Entity.TypeEdition := ROption.Create(qry.Fields.ByNameAsInteger['typeedition'], qry.Fields.ByNameAsString['stypeedition']);
+      Entity.Etat := ROption.Create(qry.Fields.ByNameAsInteger['etat'], qry.Fields.ByNameAsString['setat']);
+      Entity.Reliure := ROption.Create(qry.Fields.ByNameAsInteger['reliure'], qry.Fields.ByNameAsString['sreliure']);
+      Entity.Orientation := ROption.Create(qry.Fields.ByNameAsInteger['orientation'], qry.Fields.ByNameAsString['sorientation']);
+      Entity.FormatEdition := ROption.Create(qry.Fields.ByNameAsInteger['formatedition'], qry.Fields.ByNameAsString['sformatedition']);
+      Entity.SensLecture := ROption.Create(qry.Fields.ByNameAsInteger['senslecture'], qry.Fields.ByNameAsString['ssenslecture']);
 
-      TDaoEditeurFull.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL));
+      TDaoEditeurFull.Fill(Entity.Editeur, StringToGUIDDef(qry.Fields.ByNameAsString['id_editeur'], GUID_NULL), qry.Transaction);
       TDaoCollectionLite.Prepare(qry);
       try
         TDaoCollectionLite.Fill(Entity.Collection, qry);
@@ -2079,22 +1671,22 @@ begin
       qry.SQL.Text := 'select * from proc_auteurs(null, ?, null)';
       qry.Params.AsString[0] := GUIDToString(Reference);
       qry.Open;
-      TDaoAuteurLite.Prepare(qry);
+      TDaoAuteurSerieLite.Prepare(qry);
       try
         while not qry.Eof do
         begin
           case TMetierAuteur(qry.Fields.ByNameAsInteger['metier']) of
             maScenariste:
-              Entity.Scenaristes.Add(TDaoAuteurLite.Make(qry));
+              Entity.Scenaristes.Add(TDaoAuteurSerieLite.Make(qry));
             maDessinateur:
-              Entity.Dessinateurs.Add(TDaoAuteurLite.Make(qry));
+              Entity.Dessinateurs.Add(TDaoAuteurSerieLite.Make(qry));
             maColoriste:
-              Entity.Coloristes.Add(TDaoAuteurLite.Make(qry));
+              Entity.Coloristes.Add(TDaoAuteurSerieLite.Make(qry));
           end;
           qry.Next;
         end;
       finally
-        TDaoAuteurLite.Unprepare(qry);
+        TDaoAuteurSerieLite.Unprepare(qry);
       end;
     end;
 
@@ -2140,7 +1732,6 @@ begin
     qry.Open;
     TDaoParaBDLite.FillList(Entity.ParaBD, qry);
   finally
-    qry.Transaction.Free;
     qry.Free;
   end;
 end;
@@ -2148,13 +1739,13 @@ end;
 class function TDaoSerieFull.getInstance(const Reference, IdAuteurFiltre: TGUID): TSerieFull;
 begin
   Result := TFactorySerieFull.getInstance;
-  Fill(Result, Reference, IdAuteurFiltre);
+  Fill(Result, Reference, IdAuteurFiltre, nil);
 end;
 
 class function TDaoSerieFull.getInstance(const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean): TSerieFull;
 begin
   Result := TFactorySerieFull.getInstance;
-  Fill(Result, Reference, IdAuteurFiltre, ForceLoad);
+  Fill(Result, Reference, IdAuteurFiltre, ForceLoad, nil);
 end;
 
 class procedure TDaoSerieFull.InitSerie(Entity: TEntity);
@@ -2167,18 +1758,16 @@ begin
   (Entity as TSerieFull).SensLecture := TDaoListe.DefaultSensLecture;
 end;
 
-class procedure TDaoSerieFull.SaveToDatabase(Entity: TSerieFull; UseTransaction: TUIBTransaction);
+class procedure TDaoSerieFull.SaveEntity(Entity: TSerieFull; UseTransaction: TManagedTransaction);
 var
-  qry: TUIBQuery;
+  qry: TManagedQuery;
   S, genre: string;
-  Auteur: TAuteurLite;
+  Auteur: TAuteurSerieLite;
   Univers: TUniversLite;
 begin
   inherited;
-  qry := TUIBQuery.Create(nil);
+  qry := DBConnection.GetQuery(UseTransaction);
   try
-    qry.Transaction := UseTransaction;
-
     qry.SQL.Clear;
     qry.SQL.Add('update or insert into series (');
     qry.SQL.Add('  id_serie, titreserie, terminee, suivresorties, complete, suivremanquants, siteweb, id_editeur,');

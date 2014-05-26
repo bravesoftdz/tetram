@@ -3,66 +3,8 @@ unit Entities.Full;
 interface
 
 uses
-  SysUtils, Windows, Classes, Dialogs, Entities.Lite, Commun, CommonConst, DateUtils, Generics.Collections,
-  Generics.Defaults, System.Generics.Collections, Entities.Common, Vcl.StdCtrls;
-
-type
-  PAutoTrimString = ^RAutoTrimString;
-
-  RAutoTrimString = record
-  private
-    Value: string;
-  public
-    class operator Implicit(a: string): RAutoTrimString;
-    class operator Implicit(a: RAutoTrimString): string;
-    class operator Equal(a, b: RAutoTrimString): Boolean;
-    class operator NotEqual(a, b: RAutoTrimString): Boolean;
-  end;
-
-  PLongString = ^RLongString;
-
-  RLongString = record
-  private
-    Value: string;
-  public
-    class operator Implicit(a: string): RLongString;
-    class operator Implicit(a: RLongString): string;
-  end;
-
-  PTriStateValue = ^RTriStateValue;
-
-  RTriStateValue = record
-  private
-    Value: Integer;
-    function IsUndefined: Boolean;
-    function GetAsBoolean(DefaultIfUndefined: Boolean): Boolean;
-  public
-    class operator Implicit(a: Boolean): RTriStateValue;
-    class operator Implicit(a: RTriStateValue): Integer;
-    class operator Implicit(a: TCheckBoxState): RTriStateValue;
-    class operator Implicit(a: RTriStateValue): TCheckBoxState;
-    class operator Equal(a, b: RTriStateValue): Boolean;
-    class operator NotEqual(a, b: RTriStateValue): Boolean;
-
-    class function FromInteger(a: Integer): RTriStateValue; static;
-    class function Default: RTriStateValue; static;
-
-    procedure SetUndefined;
-    property Undefined: Boolean read IsUndefined;
-    // des propriétés plutôt que des Implicit pour declencher des erreurs de compilation
-    property AsBoolean[DefaultIfUndefined: Boolean]: Boolean read GetAsBoolean;
-  end;
-
-  POption = ^ROption;
-
-  ROption = record
-    Value: Integer;
-    Caption: RAutoTrimString;
-    class operator Implicit(a: ROption): Integer;
-    class operator Implicit(a: Integer): ROption;
-  end;
-
-function MakeOption(Value: Integer; const Caption: RAutoTrimString): ROption; inline;
+  System.SysUtils, Windows, Classes, Dialogs, Entities.Lite, Commun, CommonConst, DateUtils, Generics.Collections,
+  Generics.Defaults, System.Generics.Collections, Entities.Common, Entities.Types;
 
 type
   TObjetFullClass = class of TObjetFull;
@@ -151,12 +93,12 @@ type
     FGenres: TStringList;
     FEditeur: TEditeurFull;
     FSuivreManquants: Boolean;
-    FColoristes: TObjectList<TAuteurLite>;
+    FColoristes: TObjectList<TAuteurSerieLite>;
     FComplete: Boolean;
-    FScenaristes: TObjectList<TAuteurLite>;
+    FScenaristes: TObjectList<TAuteurSerieLite>;
     FSuivreSorties: Boolean;
     FCouleur: RTriStateValue;
-    FDessinateurs: TObjectList<TAuteurLite>;
+    FDessinateurs: TObjectList<TAuteurSerieLite>;
     FAlbums: TObjectList<TAlbumLite>;
     FParaBD: TObjectList<TParaBDLite>;
     FNbAlbums: Integer;
@@ -198,9 +140,9 @@ type
     property NbAlbums: Integer read FNbAlbums write FNbAlbums;
     property Albums: TObjectList<TAlbumLite> read FAlbums;
     property ParaBD: TObjectList<TParaBDLite> read FParaBD;
-    property Scenaristes: TObjectList<TAuteurLite> read FScenaristes;
-    property Dessinateurs: TObjectList<TAuteurLite> read FDessinateurs;
-    property Coloristes: TObjectList<TAuteurLite> read FColoristes;
+    property Scenaristes: TObjectList<TAuteurSerieLite> read FScenaristes;
+    property Dessinateurs: TObjectList<TAuteurSerieLite> read FDessinateurs;
+    property Coloristes: TObjectList<TAuteurSerieLite> read FColoristes;
     property VO: RTriStateValue read FVO write FVO;
     property Couleur: RTriStateValue read FCouleur write FCouleur;
     property Etat: ROption read FEtat write FEtat;
@@ -313,12 +255,12 @@ type
     FHorsSerie: Boolean;
     FMoisParution: Integer;
     FTomeFin: Integer;
-    FColoristes: TObjectList<TAuteurLite>;
+    FColoristes: TObjectList<TAuteurAlbumLite>;
     FNotes: RLongString;
     FAnneeParution: Integer;
-    FScenaristes: TObjectList<TAuteurLite>;
+    FScenaristes: TObjectList<TAuteurAlbumLite>;
     FIntegrale: Boolean;
-    FDessinateurs: TObjectList<TAuteurLite>;
+    FDessinateurs: TObjectList<TAuteurAlbumLite>;
     FTomeDebut: Integer;
     FTome: Integer;
     FEditions: TObjectList<TEditionFull>;
@@ -330,12 +272,17 @@ type
     FUnivers: TObjectList<TUniversLite>;
     FUniversFull: TList<TUniversLite>;
     function GetID_Serie: RGUIDEx; inline;
-    procedure SetTitreAlbum(const Value: RAutoTrimString); inline;
   private
     FReadyToImport: Boolean;
     function GetDefaultSearch: string;
     procedure SetDefaultSearch(const Value: string);
     function GetSerie: TSerieFull;
+    function GetTitreAlbum: string; inline;
+    procedure SetTitreAlbum(const Value: string); inline;
+    function GetNotes: string;
+    function GetSujet: string;
+    procedure SetNotes(const Value: string);
+    procedure SetSujet(const Value: string);
   protected
     constructor Create; override;
   public
@@ -352,7 +299,7 @@ type
     property Complet: Boolean read FComplet write FComplet;
     property ID_Album: RGUIDEx read GetID write SetID;
     property ID_Serie: RGUIDEx read GetID_Serie;
-    property TitreAlbum: RAutoTrimString read FTitreAlbum write SetTitreAlbum;
+    property TitreAlbum: string read GetTitreAlbum write SetTitreAlbum;
     property Serie: TSerieFull read GetSerie;
     property MoisParution: Integer read FMoisParution write FMoisParution;
     property AnneeParution: Integer read FAnneeParution write FAnneeParution;
@@ -361,23 +308,23 @@ type
     property TomeFin: Integer read FTomeFin write FTomeFin;
     property HorsSerie: Boolean read FHorsSerie write FHorsSerie;
     property Integrale: Boolean read FIntegrale write FIntegrale;
-    property Scenaristes: TObjectList<TAuteurLite> read FScenaristes;
-    property Dessinateurs: TObjectList<TAuteurLite> read FDessinateurs;
-    property Coloristes: TObjectList<TAuteurLite> read FColoristes;
-    property Sujet: RLongString read FSujet write FSujet;
-    property Notes: RLongString read FNotes write FNotes;
+    property Scenaristes: TObjectList<TAuteurAlbumLite> read FScenaristes;
+    property Dessinateurs: TObjectList<TAuteurAlbumLite> read FDessinateurs;
+    property Coloristes: TObjectList<TAuteurAlbumLite> read FColoristes;
+    property Sujet: string read GetSujet write SetSujet;
+    property Notes: string read GetNotes write SetNotes;
     property Editions: TObjectList<TEditionFull> read FEditions;
     property Notation: Integer read FNotation write FNotation;
     property Univers: TObjectList<TUniversLite> read FUnivers;
     property UniversFull: TList<TUniversLite> read FUniversFull;
 
     // pour rétrocompatibilité pour les scripts
-    property Titre: RAutoTrimString read FTitreAlbum write SetTitreAlbum;
+    property Titre: string read GetTitreAlbum write SetTitreAlbum;
   end;
 
   TParaBDFull = class(TObjetFull)
   strict private
-    FAuteurs: TObjectList<TAuteurLite>;
+    FAuteurs: TObjectList<TAuteurParaBDLite>;
     FStock: Boolean;
     FTitreParaBD: RAutoTrimString;
     FPrix: Currency;
@@ -396,10 +343,15 @@ type
     FUniversFull: TList<TUniversLite>;
     FPhotos: TObjectList<TPhotoLite>;
     function Get_sDateAchat: string;
-    procedure SetTitreParaBD(const Value: RAutoTrimString); inline;
+    procedure SetTitreParaBD(const Value: string); inline;
   private
     FNotes: RLongString;
     function GetID_Serie: RGUIDEx;
+    function GetDescription: string;
+    function GetNotes: string;
+    function GetTitreParaBD: string;
+    procedure SetDescription(const Value: string);
+    procedure SetNotes(const Value: string);
   protected
     constructor Create; override;
   public
@@ -414,10 +366,10 @@ type
     property AnneeEdition: Integer read FAnneeEdition write FAnneeEdition;
     property CategorieParaBD: ROption read FCategorieParaBD write FCategorieParaBD;
     property AnneeCote: Integer read FAnneeCote write FAnneeCote;
-    property TitreParaBD: RAutoTrimString { [150] } read FTitreParaBD write SetTitreParaBD;
-    property Auteurs: TObjectList<TAuteurLite> read FAuteurs;
-    property Description: RLongString read FDescription write FDescription;
-    property Notes: RLongString read FNotes write FNotes;
+    property TitreParaBD: string { [150] } read GetTitreParaBD write SetTitreParaBD;
+    property Auteurs: TObjectList<TAuteurParaBDLite> read FAuteurs;
+    property Description: string read GetDescription write SetDescription;
+    property Notes: string read GetNotes write SetNotes;
     property Serie: TSerieFull read FSerie;
     property Prix: Currency read FPrix write FPrix;
     property PrixCote: Currency read FPrixCote write FPrixCote;
@@ -437,139 +389,6 @@ implementation
 
 uses
   UMetadata, Entities.FactoriesFull, Entities.FactoriesLite;
-
-{ ROption }
-
-function MakeOption(Value: Integer; const Caption: RAutoTrimString): ROption;
-begin
-  Result.Value := Value;
-  Result.Caption := Caption;
-end;
-
-{ AutoTrimString }
-
-class operator RAutoTrimString.Implicit(a: string): RAutoTrimString;
-begin
-  Result.Value := a.Trim;
-end;
-
-class operator RAutoTrimString.Equal(a, b: RAutoTrimString): Boolean;
-begin
-  Result := CompareStr(a.Value, b.Value) = 0;
-end;
-
-class operator RAutoTrimString.Implicit(a: RAutoTrimString): string;
-begin
-  Result := a.Value;
-end;
-
-class operator RAutoTrimString.NotEqual(a, b: RAutoTrimString): Boolean;
-begin
-  Result := CompareStr(a.Value, b.Value) <> 0;
-end;
-
-{ LongString }
-
-class operator RLongString.Implicit(a: string): RLongString;
-begin
-  Result.Value := a.Trim([' ', #13, #10]);
-end;
-
-class operator RLongString.Implicit(a: RLongString): string;
-begin
-  Result := a.Value;
-end;
-
-{ RTriStateValue }
-
-class function RTriStateValue.Default: RTriStateValue;
-begin
-  Result.SetUndefined;
-end;
-
-class operator RTriStateValue.Equal(a, b: RTriStateValue): Boolean;
-begin
-  Result := a.value = b.value;
-end;
-
-class function RTriStateValue.FromInteger(a: Integer): RTriStateValue;
-begin
-  if (a = -1) or (a in [0 .. 1]) then
-    Result.Value := a
-  else
-    Result.SetUndefined;
-end;
-
-class operator RTriStateValue.Implicit(a: Boolean): RTriStateValue;
-begin
-  if a then
-    Result.Value := 1
-  else
-    Result.Value := 0;
-end;
-
-class operator RTriStateValue.Implicit(a: RTriStateValue): Integer;
-begin
-  Result := a.Value;
-end;
-
-function RTriStateValue.IsUndefined: Boolean;
-begin
-  Result := Value = -1;
-end;
-
-class operator RTriStateValue.NotEqual(a, b: RTriStateValue): Boolean;
-begin
-  Result := not (a = b);
-end;
-
-procedure RTriStateValue.SetUndefined;
-begin
-  Value := -1;
-end;
-
-class operator RTriStateValue.Implicit(a: TCheckBoxState): RTriStateValue;
-begin
-  case a of
-    cbUnchecked:
-      Result := False;
-    cbChecked:
-      Result := True;
-    cbGrayed:
-      Result.SetUndefined;
-  end;
-end;
-
-function RTriStateValue.GetAsBoolean(DefaultIfUndefined: Boolean): Boolean;
-begin
-  if Undefined then
-    Result := DefaultIfUndefined
-  else
-    Result := Value = 1;
-end;
-
-class operator RTriStateValue.Implicit(a: RTriStateValue): TCheckBoxState;
-begin
-  if a.Value = 1 then
-    Result := cbChecked
-  else if a.Value = 0 then
-    Result := cbUnchecked
-  else
-    Result := cbGrayed;
-end;
-
-{ ROption }
-
-class operator ROption.Implicit(a: ROption): Integer;
-begin
-  Result := a.Value;
-end;
-
-class operator ROption.Implicit(a: Integer): ROption;
-begin
-  Result.Value := a;
-  Result.Caption := '';
-end;
 
 { TObjetFull }
 
@@ -646,9 +465,9 @@ begin
   inherited;
   FFusionneEditions := True;
   FDefaultSearch := '';
-  FScenaristes := TObjectList<TAuteurLite>.Create;
-  FDessinateurs := TObjectList<TAuteurLite>.Create;
-  FColoristes := TObjectList<TAuteurLite>.Create;
+  FScenaristes := TObjectList<TAuteurAlbumLite>.Create;
+  FDessinateurs := TObjectList<TAuteurAlbumLite>.Create;
+  FColoristes := TObjectList<TAuteurAlbumLite>.Create;
   FSerie := TFactorySerieFull.getInstance;
   FEditions := TObjectList<TEditionFull>.Create;
   FUnivers := TObjectList<TUniversLite>.Create;
@@ -677,9 +496,24 @@ begin
   Result := Serie.ID_Serie;
 end;
 
+function TAlbumFull.GetNotes: string;
+begin
+  Result := FNotes;
+end;
+
 function TAlbumFull.GetSerie: TSerieFull;
 begin
   Result := FSerie;
+end;
+
+function TAlbumFull.GetSujet: string;
+begin
+  Result := FSujet;
+end;
+
+function TAlbumFull.GetTitreAlbum: string;
+begin
+  Result := FTitreAlbum;
 end;
 
 procedure TAlbumFull.SetDefaultSearch(const Value: string);
@@ -687,9 +521,19 @@ begin
   FDefaultSearch := Value;
 end;
 
-procedure TAlbumFull.SetTitreAlbum(const Value: RAutoTrimString);
+procedure TAlbumFull.SetNotes(const Value: string);
 begin
-  FTitreAlbum := Copy(Value, 1, LengthTitreAlbum);
+  FNotes := Value;
+end;
+
+procedure TAlbumFull.SetSujet(const Value: string);
+begin
+  FSujet := Value;
+end;
+
+procedure TAlbumFull.SetTitreAlbum(const Value: string);
+begin
+  FTitreAlbum := Value.Substring(0, LengthTitreAlbum);
 end;
 
 { TEditionFull }
@@ -817,9 +661,9 @@ begin
   FEditeur := TFactoryEditeurFull.getInstance;
   FCollection := TFactoryCollectionLite.getInstance;
   FUnivers := TObjectList<TUniversLite>.Create(True);
-  FScenaristes := TObjectList<TAuteurLite>.Create(True);
-  FDessinateurs := TObjectList<TAuteurLite>.Create(True);
-  FColoristes := TObjectList<TAuteurLite>.Create(True);
+  FScenaristes := TObjectList<TAuteurSerieLite>.Create(True);
+  FDessinateurs := TObjectList<TAuteurSerieLite>.Create(True);
+  FColoristes := TObjectList<TAuteurSerieLite>.Create(True);
 end;
 
 destructor TSerieFull.Destroy;
@@ -966,7 +810,7 @@ end;
 constructor TParaBDFull.Create;
 begin
   inherited;
-  FAuteurs := TObjectList<TAuteurLite>.Create;
+  FAuteurs := TObjectList<TAuteurParaBDLite>.Create;
   FSerie := TFactorySerieFull.getInstance;
   FUnivers := TObjectList<TUniversLite>.Create;
   FUniversFull := TList<TUniversLite>.Create;
@@ -983,9 +827,24 @@ begin
   inherited;
 end;
 
+function TParaBDFull.GetDescription: string;
+begin
+  Result := FDescription;
+end;
+
 function TParaBDFull.GetID_Serie: RGUIDEx;
 begin
   Result := Serie.ID_Serie;
+end;
+
+function TParaBDFull.GetNotes: string;
+begin
+  Result := FNotes;
+end;
+
+function TParaBDFull.GetTitreParaBD: string;
+begin
+  Result := FTitreParaBD;
 end;
 
 function TParaBDFull.Get_sDateAchat: string;
@@ -996,9 +855,19 @@ begin
     Result := '';
 end;
 
-procedure TParaBDFull.SetTitreParaBD(const Value: RAutoTrimString);
+procedure TParaBDFull.SetDescription(const Value: string);
 begin
-  FTitreParaBD := Copy(Value, 1, LengthTitreParaBD);
+  FDescription := Value;
+end;
+
+procedure TParaBDFull.SetNotes(const Value: string);
+begin
+  FNotes := Value;
+end;
+
+procedure TParaBDFull.SetTitreParaBD(const Value: string);
+begin
+  FTitreParaBD := Value.Substring(0, LengthTitreParaBD);
 end;
 
 { TCollectionFull }

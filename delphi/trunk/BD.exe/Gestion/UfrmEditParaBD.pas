@@ -123,7 +123,7 @@ implementation
 uses
   Commun, CommonConst, Textes, Procedures, ProceduresBDtk, jpeg, Proc_Gestions, Entities.Lite, Divers, UHistorique,
   UMetadata, Entities.DaoLite, Entities.DaoFull, Entities.Common,
-  Entities.FactoriesLite, Entities.DaoLambda;
+  Entities.FactoriesLite, Entities.DaoLambda, Entities.Types;
 
 {$R *.dfm}
 { TFrmEditAchatParaBD }
@@ -333,7 +333,7 @@ begin
 
   FParaBD.TitreParaBD := Trim(edTitre.Text);
   FParaBD.AnneeEdition := StrToIntDef(edAnneeEdition.Text, 0);
-  FParaBD.CategorieParaBD := MakeOption(cbxCategorie.Value, cbxCategorie.Caption);
+  FParaBD.CategorieParaBD := ROption.Create(cbxCategorie.Value, cbxCategorie.Caption);
   FParaBD.Dedicace := cbDedicace.Checked;
   FParaBD.Numerote := cbNumerote.Checked;
   FParaBD.Description := edDescription.Text;
@@ -349,7 +349,7 @@ begin
   FParaBD.Prix := BDStrToDoubleDef(edPrix.Text, 0);
   FParaBD.Stock := cbStock.Checked;
 
-  TDaoParaBDFull.SaveToDatabase(FParaBD);
+  TDaoParaBDFull.SaveToDatabase(FParaBD, nil);
   if isAchat then
     TDaoParaBDFull.Acheter(FParaBD, False);
 
@@ -581,7 +581,7 @@ end;
 
 procedure TfrmEditParaBD.vtEditSeriesVTEditChange(Sender: TObject);
 begin
-  TDaoSerieFull.Fill(FParaBD.Serie, vtEditSeries.CurrentValue);
+  TDaoSerieFull.Fill(FParaBD.Serie, vtEditSeries.CurrentValue, nil);
 end;
 
 procedure TfrmEditParaBD.vtEditUniversVTEditChange(Sender: TObject);
@@ -635,12 +635,12 @@ end;
 
 procedure TfrmEditParaBD.btCreateurClick(Sender: TObject);
 var
-  PA: TAuteurLite;
+  PA: TAuteurParaBDLite;
 begin
   if IsEqualGUID(vtEditPersonnes.CurrentValue, GUID_NULL) then
     Exit;
-  PA := TFactoryAuteurLite.getInstance;
-  TDaoAuteurLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_ParaBD, GUID_NULL, TMetierAuteur(0));
+  PA := TFactoryAuteurParaBDLite.getInstance;
+  TDaoAuteurParaBDLite.Fill(PA, TPersonnageLite(vtEditPersonnes.VTEdit.Data), ID_ParaBD);
   FParaBD.Auteurs.Add(PA);
   lvAuteurs.Items.Count := FParaBD.Auteurs.Count;
   lvAuteurs.Invalidate;

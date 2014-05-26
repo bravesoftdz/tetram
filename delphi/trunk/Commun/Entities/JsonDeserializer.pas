@@ -24,10 +24,6 @@ type
     class function ReadValueFromJSON(const Name: string; const Default: Integer; json: TdwsJSONObject): Integer; overload; inline;
     class function ReadValueFromJSON(const Name: string; const Default: Currency; json: TdwsJSONObject): Currency; overload; inline;
     class function ReadValueFromJSON(const Name: string; const Default: Boolean; json: TdwsJSONObject): Boolean; overload; inline;
-    class function ReadValueFromJSON(const Name: string; const Default: ROption; json: TdwsJSONObject): ROption; overload; inline;
-    class function ReadValueFromJSON(const Name: string; const Default: RGUIDEx; json: TdwsJSONObject): RGUIDEx; overload; inline;
-    class function ReadValueFromJSON(const Name: string; const Default: TMetierAuteur; json: TdwsJSONObject): TMetierAuteur; overload; inline;
-    class function ReadValueFromJSON(const Name: string; const Default: RTriStateValue; json: TdwsJSONObject): RTriStateValue; overload; // inline;
     class procedure ReadValueFromJSON(const Name: string; Value: TStrings; json: TdwsJSONObject; ItemsHasValues: Boolean = False); overload; inline;
 
     class constructor Create;
@@ -190,20 +186,6 @@ begin
   end;
 end;
 
-class function TJsonDeserializer.ReadValueFromJSON(const Name: string; const Default: ROption; json: TdwsJSONObject): ROption;
-var
-  o: TdwsJSONObject;
-begin
-  o := json.Items[Name] as TdwsJSONObject;
-  if o = nil then
-    Result := Default
-  else
-  begin
-    Result.Value := StrToInt(o.Names[0]);
-    Result.Caption := ReadValueFromJSON(IntToStr(Result.Value), Result.Caption, o);
-  end;
-end;
-
 class function TJsonDeserializer.ReadValueFromJSON(const Name: string; const Default: Boolean; json: TdwsJSONObject): Boolean;
 var
   o: TdwsJSONValue;
@@ -237,11 +219,6 @@ begin
     Result := o.AsString;
 end;
 
-class function TJsonDeserializer.ReadValueFromJSON(const Name: string; const Default: RGUIDEx; json: TdwsJSONObject): RGUIDEx;
-begin
-  Result := ReadValueFromJSON(Name, string(Default), json);
-end;
-
 class function TJsonDeserializer.ReadValueFromJSON(const Name: string; const Default: Currency; json: TdwsJSONObject): Currency;
 var
   o: TdwsJSONValue;
@@ -263,28 +240,6 @@ begin
       ReadStringListWithValuesFromJSON(Value, o as TdwsJSONArray)
     else
       ReadStringListFromJSON(Value, o as TdwsJSONArray);
-end;
-
-class function TJsonDeserializer.ReadValueFromJSON(const Name: string; const Default: RTriStateValue; json: TdwsJSONObject): RTriStateValue;
-var
-  o: TdwsJSONValue;
-begin
-  o := json.Items[Name] as TdwsJSONValue;
-  if o = nil then
-    Result := Default
-  else
-    Result := RTriStateValue.FromInteger(o.AsInteger);
-end;
-
-class function TJsonDeserializer.ReadValueFromJSON(const Name: string; const Default: TMetierAuteur; json: TdwsJSONObject): TMetierAuteur;
-var
-  o: TdwsJSONObject;
-begin
-  o := json.Items[Name] as TdwsJSONObject;
-  if o = nil then
-    Result := Default
-  else
-    Result := TMetierAuteur(StrToIntDef(o.Names[0], Integer(Default)));
 end;
 
 end.

@@ -166,7 +166,7 @@ end;
 procedure TfrmConsultationAuteur.SetID_Auteur(const Value: TGUID);
 begin
   ClearForm;
-  TDaoAuteurFull.Fill(FAuteur, Value);
+  TDaoAuteurFull.Fill(FAuteur, Value, nil);
 
   edNom.Caption := FormatTitre(FAuteur.NomAuteur);
   Caption := 'Fiche d''auteur - ' + FAuteur.ChaineAffichage;

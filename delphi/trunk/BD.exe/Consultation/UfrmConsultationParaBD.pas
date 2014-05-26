@@ -110,7 +110,7 @@ end;
 procedure TfrmConsultationParaBD.SetID_ParaBD(const Value: TGUID);
 begin
   ClearForm;
-  TDaoParaBDFull.Fill(FParaBD, Value);
+  TDaoParaBDFull.Fill(FParaBD, Value, nil);
 
   Caption := 'Fiche de para-BD - ' + FParaBD.ChaineAffichage;
   TitreSerie.Caption := FormatTitre(FParaBD.Serie.TitreSerie);

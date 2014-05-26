@@ -110,9 +110,8 @@ uses
 
 function FindRec(const Table, Champ: string; const Reference: TGUID; WithMessage: Boolean): Boolean;
 begin
-  with TUIBQuery.Create(nil) do
+  with dmPrinc.DBConnection.GetQuery do
     try
-      Transaction := GetTransaction(dmPrinc.UIBDataBase);
       SQL.Text := Format('select %s from %s where %s = ?', [Champ, Table, Champ]);
       Params.AsString[0] := GUIDToString(Reference);
       Open;
@@ -120,7 +119,6 @@ begin
       if not Result and WithMessage then
         AffMessage(rsErrorFindEnr, mtConfirmation, [mbOk], True);
     finally
-      Transaction.Free;
       Free;
     end;
 end;
@@ -171,10 +169,9 @@ begin
   if (Chaine = '') then
     Exit;
   hg := THourGlass.Create;
-  with TUIBQuery.Create(nil) do
+  with dmPrinc.DBConnection.GetQuery do
     try
       try
-        Transaction := GetTransaction(dmPrinc.UIBDataBase);
         SQL.Text := Format('select %s from %s where %s = ?', [ChampRef, Table, Champ]);
         Prepare(True);
         Params.AsString[0] := Copy(Chaine, 1, Params.MaxStrLen[0]);
@@ -195,7 +192,6 @@ begin
         Result := GUID_NULL;
       end;
     finally
-      Transaction.Free;
       Free;
     end;
 end;
@@ -207,11 +203,9 @@ var
 begin
   hg := THourGlass.Create;
   Result := False;
-  with TUIBQuery.Create(nil) do
+  with dmPrinc.DBConnection.GetQuery do
     try
       try
-        Transaction := GetTransaction(dmPrinc.UIBDataBase);
-
         SQL.Text := Format('select %s from %s where %s = ?', [Champ, Table, ChampRef]);
         Params.AsString[0] := GUIDToString(Reference);
         Open;
@@ -247,7 +241,6 @@ begin
         Result := False;
       end;
     finally
-      Transaction.Free;
       Free;
     end;
 end;
@@ -258,9 +251,8 @@ var
 begin
   hg := THourGlass.Create;
   Result := False;
-  with TUIBQuery.Create(nil) do
+  with dmPrinc.DBConnection.GetQuery do
     try
-      Transaction := GetTransaction(dmPrinc.UIBDataBase);
       SQL.Text := Format('delete from %s where %s=?', [Table, Champ]);
       Params.AsString[0] := GUIDToString(Ref);
       try
@@ -272,7 +264,6 @@ begin
         AffMessage(rsErrorSuppEnr + #13#13 + Exception(ExceptObject).Message, mtInformation, [mbOk], True);
       end;
     finally
-      Transaction.Free;
       Free;
     end;
 end;
@@ -322,9 +313,8 @@ end;
 
 function DelAchatAlbum(const ID: TGUID): Boolean;
 begin
-  with TUIBQuery.Create(nil) do
+  with dmPrinc.DBConnection.GetQuery do
     try
-      Transaction := GetTransaction(dmPrinc.UIBDataBase);
       SQL.Text := 'select complet from albums where id_album = ?';
       Params.AsString[0] := GUIDToString(ID);
       Open;
@@ -338,7 +328,6 @@ begin
       else
         Result := DelAlbum(ID);
     finally
-      Transaction.Free;
       Free;
     end;
 end;
@@ -792,9 +781,8 @@ end;
 
 function DelAchatParaBD(const ID: TGUID): Boolean;
 begin
-  with TUIBQuery.Create(nil) do
+  with dmPrinc.DBConnection.GetQuery do
     try
-      Transaction := GetTransaction(dmPrinc.UIBDataBase);
       SQL.Text := 'select complet from parabd where id_parabd = ?';
       Params.AsString[0] := GUIDToString(ID);
       Open;
@@ -808,7 +796,6 @@ begin
       else
         Result := DelParaBD(ID);
     finally
-      Transaction.Free;
       Free;
     end;
 end;

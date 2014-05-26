@@ -27,10 +27,6 @@ type
     class procedure WriteValueToJSON(const Name: string; Value: Integer; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
     class procedure WriteValueToJSON(const Name: string; Value: Currency; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
     class procedure WriteValueToJSON(const Name: string; Value: Boolean; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
-    class procedure WriteValueToJSON(const Name: string; Value: ROption; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
-    class procedure WriteValueToJSON(const Name: string; Value: RGUIDEx; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
-    class procedure WriteValueToJSON(const Name: string; Value: RTriStateValue; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
-    class procedure WriteValueToJSON(const Name: string; Value: TMetierAuteur; json: TdwsJSONObject; Options: SerializationOptions); overload; inline;
     class procedure WriteValueToJSON(const Name: string; Value: TStrings; json: TdwsJSONObject; Options: SerializationOptions; ItemsHasValues: Boolean = False);
       overload; inline;
 
@@ -161,28 +157,10 @@ begin
     json.AddValue(Name, Value);
 end;
 
-class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: TMetierAuteur; json: TdwsJSONObject; Options: SerializationOptions);
-begin
-  if Value in [Low(TMetierAuteur) .. High(TMetierAuteur)] then
-    json.AddObject(Name).AddValue(IntToStr(Ord(Value)), GetEnumName(TypeInfo(TMetierAuteur), Ord(Value)).Substring(2));
-end;
-
 class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: Boolean; json: TdwsJSONObject; Options: SerializationOptions);
 begin
   if (not(soSkipNullValues in Options)) or Value then
     json.AddValue(Name, Value);
-end;
-
-class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: RGUIDEx; json: TdwsJSONObject; Options: SerializationOptions);
-begin
-  if (not(soSkipNullValues in Options)) or (not IsEqualGUID(Value, GUID_NULL)) then
-    json.AddValue(Name, Value);
-end;
-
-class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: ROption; json: TdwsJSONObject; Options: SerializationOptions);
-begin
-  if (not(soSkipNullValues in Options)) or (Value.Value > 0) then
-    json.AddObject(Name).AddValue(IntToStr(Value.Value), Value.Caption);
 end;
 
 class procedure TJsonSerializer.WriteValueToJSON(const Name: string; Value: TStrings; json: TdwsJSONObject; Options: SerializationOptions;
@@ -193,12 +171,6 @@ begin
       WriteStringListWithValuesToJSON(Value, json.AddArray(Name))
     else
       WriteStringListToJSON(Value, json.AddArray(Name))
-end;
-
-class procedure TJsonSerializer.WriteValueToJSON(const Name: string;  Value: RTriStateValue; json: TdwsJSONObject; Options: SerializationOptions);
-begin
-  if (not(soSkipNullValues in Options)) or (Integer(Value) <> Integer(RTriStateValue.Default)) then
-    json.AddValue(Name, Integer(Value));
 end;
 
 end.

@@ -3,7 +3,7 @@ unit Entities.Common;
 interface
 
 uses
-  System.Classes, Commun, System.Generics.Collections;
+  System.SysUtils, System.Classes, System.Rtti, Commun, System.Generics.Collections;
 
 type
   TEntity = class;
@@ -26,7 +26,7 @@ type
 
     procedure BeforeDestruction; override;
     procedure DoClear;
-    procedure Clear; virtual; // deprecated 'Ne jamais appeler directement, utiliser DoClear';
+    procedure Clear; virtual;
     procedure AfterConstruction; override;
 
     class procedure RegisterInitEvent(InitEvent: TInitEvent);
@@ -36,12 +36,14 @@ type
   TDBEntity = class(TEntity)
   private
     FID: RGUIDEx;
+  protected
+    constructor Create; override;
   public
-    function GetID: RGUIDEx; inline;
-    procedure SetID(const Value: RGUIDEx); inline;
+    function GetID: RGUIDEx;
+    procedure SetID(const Value: RGUIDEx);
     procedure Assign(Source: TPersistent); override;
     procedure Clear; override;
-  published
+
     property ID: RGUIDEx read GetID write SetID;
   end;
 
@@ -131,6 +133,11 @@ procedure TDBEntity.Clear;
 begin
   inherited;
   FID := GUID_NULL;
+end;
+
+constructor TDBEntity.Create;
+begin
+  inherited;
 end;
 
 function TDBEntity.GetID: RGUIDEx;

@@ -482,7 +482,7 @@ var
 begin
   ClearForm;
   TfrmConsole.AddEvent(UnitName, 'FAlbum.Fill() - ' + GUIDToString(Value));
-  TDaoAlbumFull.Fill(FAlbum, Value);
+  TDaoAlbumFull.Fill(FAlbum, Value, nil);
 
   TfrmConsole.AddEvent(UnitName, 'Chargement des données... - ' + GUIDToString(Value));
   Caption := 'Fiche d''album - ' + FAlbum.ChaineAffichage;
