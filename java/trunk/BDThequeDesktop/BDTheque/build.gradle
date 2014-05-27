@@ -16,5 +16,4 @@ dependencies {
     compile 'org.firebirdsql.jdbc:jaybird-jdk18:+'
     compile 'org.mybatis:mybatis:+'
     compile 'org.mybatis.generator:mybatis-generator-core:+'
-
 }
