@@ -1,5 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'idea'
+apply plugin: 'signing'
 
 sourceCompatibility = 1.8
 version = '1.0'
@@ -11,9 +12,9 @@ repositories {
 dependencies {
     testCompile 'junit:junit:4+'
     compile 'com.intellij:annotations:+'
-    compile 'org.apache.logging.log4j:log4j:2+'
+    compile 'org.apache.logging.log4j:log4j-core:2+'
     compile 'org.firebirdsql.jdbc:jaybird-jdk18:+'
     compile 'org.mybatis:mybatis:+'
     compile 'org.mybatis.generator:mybatis-generator-core:+'
-    // runtime fileTree(dir: 'deploy', include: '*')
+
 }
