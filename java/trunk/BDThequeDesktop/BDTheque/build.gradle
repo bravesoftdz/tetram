@@ -1,16 +1,11 @@
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'signing'
 
 sourceCompatibility = 1.8
 version = '1.0'
 
 repositories {
     mavenCentral()
-}
-
-tasks.withType(Test) {
-
 }
 
 dependencies {

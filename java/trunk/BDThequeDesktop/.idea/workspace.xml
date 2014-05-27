@@ -7,9 +7,45 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="32b66b81-914a-4675-898b-1fae1d6860ea" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/artifacts" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/artifacts/BDTheque.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/build.gradle" afterPath="$PROJECT_DIR$/BDTheque/build.gradle" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\UDF\fbudf.sql" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\UDF\fbudf.sql" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\UDF\fbudf.txt" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\UDF\fbudf.txt" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\UDF\ib_udf.sql" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\UDF\ib_udf.sql" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\UDF\ib_udf2.sql" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\UDF\ib_udf2.sql" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\UDF\BDT_UDF.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\UDF\BDT_UDF.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\BDTheque.exe" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\BDTheque.exe" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\BDTheque64.exe" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\BDTheque64.exe" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\Microsoft.VC100.CRT.manifest" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\Microsoft.VC100.CRT.manifest" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\Microsoft.VC80.CRT.manifest" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\Microsoft.VC80.CRT.manifest" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\Microsoft.VC90.CRT.manifest" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\Microsoft.VC90.CRT.manifest" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\UDF" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\UDF" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy" afterPath="$PROJECT_DIR$/BDTheque/dist" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\fbclient.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\fbclient.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\fbembed.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\fbembed.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\intl\fbintl.conf" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\intl\fbintl.conf" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\intl\fbintl.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\intl\fbintl.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\UDF\fbudf.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\UDF\fbudf.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\firebird.msg" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\firebird.msg" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\UDF\ib_udf.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\UDF\ib_udf.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\ib_util.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\ib_util.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\icudt30.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\icudt30.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\icudt52.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\icudt52.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\icuin30.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\icuin30.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\icuin52.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\icuin52.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\icuuc30.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\icuuc30.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\icuuc52.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\icuuc52.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\intl" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\intl" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\jaybird22.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\jaybird22.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\jaybird22_x64.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\jaybird22_x64.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\libeay32.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\libeay32.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\msvcp100.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\msvcp100.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\msvcp80.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\msvcp80.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\msvcp90.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\msvcp90.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\msvcr100.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\msvcr100.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\msvcr80.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\msvcr80.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\msvcr90.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\msvcr90.dll" />
+      <change type="MOVED" beforePath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy\ssleay32.dll" afterPath="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\dist\ssleay32.dll" />
     </list>
     <ignored path="BDThequeDesktop.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,8 +81,8 @@
       <file leaf-file-name="build.gradle" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/BDTheque/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.21841542" vertical-offset="0" max-vertical-offset="934">
-              <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.46839547" vertical-offset="0" max-vertical-offset="617">
+              <caret line="17" column="8" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -117,7 +153,77 @@
               <option name="externalSystemIdString" value="GRADLE" />
               <option name="taskNames">
                 <list>
-                  <option value="build" />
+                  <option value="distZip" />
+                </list>
+              </option>
+            </ExternalSystemSettings>
+          </option>
+        </ExternalTaskExecutionInfo>
+        <ExternalTaskExecutionInfo>
+          <option name="executorId" value="Run" />
+          <option name="settings">
+            <ExternalSystemSettings>
+              <option name="externalProjectPath" value="$PROJECT_DIR$/BDTheque" />
+              <option name="externalSystemIdString" value="GRADLE" />
+              <option name="taskNames">
+                <list>
+                  <option value="assemble" />
+                </list>
+              </option>
+            </ExternalSystemSettings>
+          </option>
+        </ExternalTaskExecutionInfo>
+        <ExternalTaskExecutionInfo>
+          <option name="executorId" value="Run" />
+          <option name="settings">
+            <ExternalSystemSettings>
+              <option name="externalProjectPath" value="$PROJECT_DIR$/BDTheque" />
+              <option name="externalSystemIdString" value="GRADLE" />
+              <option name="taskNames">
+                <list>
+                  <option value="distTar" />
+                </list>
+              </option>
+            </ExternalSystemSettings>
+          </option>
+        </ExternalTaskExecutionInfo>
+        <ExternalTaskExecutionInfo>
+          <option name="executorId" value="Run" />
+          <option name="settings">
+            <ExternalSystemSettings>
+              <option name="externalProjectPath" value="$PROJECT_DIR$" />
+              <option name="externalSystemIdString" value="GRADLE" />
+              <option name="taskNames">
+                <list>
+                  <option value="distTar" />
+                </list>
+              </option>
+            </ExternalSystemSettings>
+          </option>
+        </ExternalTaskExecutionInfo>
+        <ExternalTaskExecutionInfo>
+          <option name="executorId" value="Run" />
+          <option name="settings">
+            <ExternalSystemSettings>
+              <option name="externalProjectPath" value="$PROJECT_DIR$" />
+              <option name="externalSystemIdString" value="GRADLE" />
+              <option name="taskNames">
+                <list>
+                  <option value="distZip" />
+                </list>
+              </option>
+            </ExternalSystemSettings>
+          </option>
+        </ExternalTaskExecutionInfo>
+        <ExternalTaskExecutionInfo>
+          <option name="executorId" value="Run" />
+          <option name="settings">
+            <ExternalSystemSettings>
+              <option name="externalProjectPath" value="$PROJECT_DIR$" />
+              <option name="externalSystemIdString" value="GRADLE" />
+              <option name="taskNames">
+                <list>
+                  <option value="buildNeeded" />
                 </list>
               </option>
             </ExternalSystemSettings>
@@ -132,78 +238,6 @@
               <option name="taskNames">
                 <list>
                   <option value="build" />
-                </list>
-              </option>
-            </ExternalSystemSettings>
-          </option>
-        </ExternalTaskExecutionInfo>
-        <ExternalTaskExecutionInfo>
-          <option name="executorId" value="Run" />
-          <option name="settings">
-            <ExternalSystemSettings>
-              <option name="externalProjectPath" value="$PROJECT_DIR$/BDTheque" />
-              <option name="externalSystemIdString" value="GRADLE" />
-              <option name="taskNames">
-                <list>
-                  <option value="javadoc" />
-                </list>
-              </option>
-            </ExternalSystemSettings>
-          </option>
-        </ExternalTaskExecutionInfo>
-        <ExternalTaskExecutionInfo>
-          <option name="executorId" value="Run" />
-          <option name="settings">
-            <ExternalSystemSettings>
-              <option name="externalProjectPath" value="$PROJECT_DIR$/BDTheque" />
-              <option name="externalSystemIdString" value="GRADLE" />
-              <option name="taskNames">
-                <list>
-                  <option value="jar" />
-                </list>
-              </option>
-            </ExternalSystemSettings>
-          </option>
-        </ExternalTaskExecutionInfo>
-        <ExternalTaskExecutionInfo>
-          <option name="executorId" value="Run" />
-          <option name="settings">
-            <ExternalSystemSettings>
-              <option name="externalProjectPath" value="$PROJECT_DIR$/BDTheque" />
-              <option name="externalSystemIdString" value="GRADLE" />
-              <option name="scriptParameters" value="" />
-              <option name="taskNames">
-                <list>
-                  <option value="test" />
-                </list>
-              </option>
-              <option name="vmOptions" value="-Duser.dir='D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy'" />
-            </ExternalSystemSettings>
-          </option>
-        </ExternalTaskExecutionInfo>
-        <ExternalTaskExecutionInfo>
-          <option name="executorId" value="Run" />
-          <option name="settings">
-            <ExternalSystemSettings>
-              <option name="externalProjectPath" value="$PROJECT_DIR$" />
-              <option name="externalSystemIdString" value="GRADLE" />
-              <option name="taskNames">
-                <list>
-                  <option value="test" />
-                </list>
-              </option>
-            </ExternalSystemSettings>
-          </option>
-        </ExternalTaskExecutionInfo>
-        <ExternalTaskExecutionInfo>
-          <option name="executorId" value="Run" />
-          <option name="settings">
-            <ExternalSystemSettings>
-              <option name="externalProjectPath" value="$PROJECT_DIR$/BDTheque" />
-              <option name="externalSystemIdString" value="GRADLE" />
-              <option name="taskNames">
-                <list>
-                  <option value="test" />
                 </list>
               </option>
             </ExternalSystemSettings>
@@ -403,7 +437,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="2802369445140" />
+        <entry key="$PROJECT_DIR$" value="2802375004368" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -618,162 +652,6 @@
               <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDTheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDTheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDTheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bdtheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="utils" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDTheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bdtheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="gui" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDTheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="main" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="java" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="bdtheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDThequeDesktop" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BDTheque" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="doc" />
-              <option name="myItemType" value="com.android.tools.idea.gradle.projectView.AndroidPsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
@@ -796,46 +674,16 @@
     <property name="project.structure.side.proportion" value="0.23228699" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/BDTheque/deploy" />
   </component>
-  <component name="RunManager" selected="Gradle.BDThequeDesktop:BDTheque [build]">
-    <configuration default="false" name="BDThequeDesktop:BDTheque [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/BDTheque" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="jar" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <RunnerSettings RunnerId="ExternalSystemTaskRunner" />
-      <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="BDThequeDesktop:BDTheque [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="externalProjectPath" value="$PROJECT_DIR$/BDTheque" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="build" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <RunnerSettings RunnerId="ExternalSystemTaskRunner" />
-      <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
-      <method />
-    </configuration>
-    <configuration default="false" name="BDThequeDesktop [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque" />
+      <recent name="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src\dist\main" />
+      <recent name="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\src" />
+      <recent name="D:\MEDIA.KIT\BDTheque\java\BDThequeDesktop\BDTheque\deploy" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Gradle.BDThequeDesktop:BDTheque [distZip]">
+    <configuration default="false" name="BDThequeDesktop [distZip]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
@@ -845,7 +693,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="test" />
+            <option value="distZip" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -854,7 +702,7 @@
       <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="BDThequeDesktop [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration default="false" name="BDThequeDesktop [distTar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="externalSystemIdString" value="GRADLE" />
@@ -864,7 +712,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="build" />
+            <option value="distTar" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -873,7 +721,7 @@
       <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="BDThequeDesktop:BDTheque [javadoc]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration default="false" name="BDThequeDesktop:BDTheque [distTar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="externalProjectPath" value="$PROJECT_DIR$/BDTheque" />
         <option name="externalSystemIdString" value="GRADLE" />
@@ -883,7 +731,45 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="javadoc" />
+            <option value="distTar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <RunnerSettings RunnerId="ExternalSystemTaskRunner" />
+      <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="BDThequeDesktop:BDTheque [distZip]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/BDTheque" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="distZip" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <RunnerSettings RunnerId="ExternalSystemTaskRunner" />
+      <ConfigurationWrapper RunnerId="ExternalSystemTaskRunner" />
+      <method />
+    </configuration>
+    <configuration default="false" name="BDThequeDesktop:BDTheque [assemble]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="externalProjectPath" value="$PROJECT_DIR$/BDTheque" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="assemble" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -1066,19 +952,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop:BDTheque [test]" />
-      <item index="1" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop:BDTheque [jar]" />
-      <item index="2" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop:BDTheque [build]" />
-      <item index="3" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop [test]" />
-      <item index="4" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop [build]" />
-      <item index="5" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop:BDTheque [javadoc]" />
+      <item index="1" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop [distZip]" />
+      <item index="2" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop [distTar]" />
+      <item index="3" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop:BDTheque [distTar]" />
+      <item index="4" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop:BDTheque [distZip]" />
+      <item index="5" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop:BDTheque [assemble]" />
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop:BDTheque [build]" />
-        <item index="1" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop [build]" />
-        <item index="2" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop:BDTheque [javadoc]" />
-        <item index="3" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop:BDTheque [jar]" />
-        <item index="4" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop [test]" />
+        <item index="0" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop:BDTheque [distZip]" />
+        <item index="1" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop:BDTheque [assemble]" />
+        <item index="2" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop:BDTheque [distTar]" />
+        <item index="3" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop [distTar]" />
+        <item index="4" class="java.lang.String" itemvalue="Gradle.BDThequeDesktop [distZip]" />
       </list>
     </recent_temporary>
     <configuration name="&lt;template&gt;" type="WebApp" default="true" selected="false">
@@ -1087,7 +973,7 @@
     </configuration>
   </component>
   <component name="ShelveChangesManager" show_recycled="false" />
-  <component name="SvnConfiguration" cleanupOnStartRun="true">
+  <component name="SvnConfiguration" myAutoUpdateAfterCommit="true" cleanupOnStartRun="true">
     <configuration>C:\Users\Thierry\AppData\Roaming\Subversion</configuration>
     <supportedVersion>125</supportedVersion>
   </component>
@@ -1131,7 +1017,11 @@
       <created>1401194032113</created>
       <updated>1401194032113</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003">
+      <created>1401194171166</created>
+      <updated>1401194171166</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1148,8 +1038,8 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32952183" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3296875" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32952183" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22552083" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1279,8 +1169,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/BDTheque/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.21841542" vertical-offset="0" max-vertical-offset="934">
-          <caret line="12" column="0" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.46839547" vertical-offset="0" max-vertical-offset="617">
+          <caret line="17" column="8" selection-start-line="17" selection-start-column="8" selection-end-line="17" selection-end-column="8" />
           <folding />
         </state>
       </provider>
