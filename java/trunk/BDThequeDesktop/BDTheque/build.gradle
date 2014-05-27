@@ -9,6 +9,10 @@ repositories {
     mavenCentral()
 }
 
+tasks.withType(Test) {
+
+}
+
 dependencies {
     testCompile 'junit:junit:4+'
     compile 'com.intellij:annotations:+'
