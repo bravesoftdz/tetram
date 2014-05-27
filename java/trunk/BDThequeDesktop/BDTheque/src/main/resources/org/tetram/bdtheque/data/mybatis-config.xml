@@ -74,6 +74,7 @@
                 <property name="url" value="jdbc:firebirdsql:embedded:D:\MEDIA.KIT\BDTheque\bin\BD.GDB"/>
                 <property name="username" value="${username}"/>
                 <property name="password" value="${password}"/>
+                <property name="driver.encoding" value="UTF8"/>
             </dataSource>
         </environment>
         <environment id="production">
@@ -83,6 +84,7 @@
                 <property name="url" value="${databasename}"/>
                 <property name="username" value="${username}"/>
                 <property name="password" value="${password}"/>
+                <property name="driver.encoding" value="UTF8"/>
             </dataSource>
         </environment>
     </environments>
