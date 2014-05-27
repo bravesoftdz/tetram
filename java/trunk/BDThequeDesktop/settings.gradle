@@ -1,0 +1,3 @@
+rootProject.name = 'BDThequeDesktop'
+include 'BDTheque'
+
