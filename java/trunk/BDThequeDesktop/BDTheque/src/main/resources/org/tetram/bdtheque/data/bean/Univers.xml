@@ -45,4 +45,16 @@
             pu.source_parabd = 1 and pu.id_parabd = #{id}
         ]]>
     </select>
+    <select id="getListUniversLiteBySerieId" resultMap="UniversLite">
+        <![CDATA[
+        select
+            u.*
+        from
+            univers u
+            inner join series_univers su on
+                su.id_univers = u.id_univers
+        where
+            su.id_serie = #{id}
+        ]]>
+    </select>
 </mapper>

@@ -16,7 +16,7 @@ public class Controller {
     @FXML Button button;
 
     public void buttonClick(ActionEvent actionEvent) {
-        Database db = new Database();
+        Database db = Database.getInstance();
         button.setText(db.getSession().getMapper(CollectionDao.class).getCollectionById(ID_COLLECTION_GENERATION_COMICS_PANINI).getNomCollection());
     }
 }

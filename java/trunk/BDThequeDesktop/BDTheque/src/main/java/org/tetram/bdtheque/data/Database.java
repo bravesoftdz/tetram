@@ -12,9 +12,18 @@ import java.io.InputStream;
  * Created by Thierry on 24/05/2014.
  */
 public class Database {
+
+    private static Database ourInstance = null;
+
+    public static Database getInstance() {
+        if (ourInstance == null)
+            ourInstance = new Database();
+        return ourInstance;
+    }
+
     private final SqlSessionFactory sqlSessionFactory;
 
-    public Database() {
+    private Database() {
         super();
 
         setFBLogged(true);

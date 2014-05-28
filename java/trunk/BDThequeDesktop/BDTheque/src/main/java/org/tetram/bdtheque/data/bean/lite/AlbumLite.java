@@ -148,7 +148,7 @@ public class AlbumLite extends DBEntityLite {
     }
 
     public void setNotation(Integer notation) {
-        this.notation = notation;
+        this.notation = notation == 0 ? 900 : notation;
     }
 
     @Override

@@ -162,7 +162,7 @@ public class Album extends DBEntity {
     }
 
     public void setNotation(Integer notation) {
-        this.notation = notation;
+        this.notation = notation == 0 ? 900 : notation;
     }
 
     public List<UniversLite> getUnivers() {

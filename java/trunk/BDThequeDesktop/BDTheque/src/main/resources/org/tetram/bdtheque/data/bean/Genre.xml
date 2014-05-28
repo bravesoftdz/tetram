@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.tetram.bdtheque.data.dao.GenreDao">
+    <resultMap id="Genre" type="beanGenreLite">
+        <id column="id_genre" property="id"/>
+        <result column="genre" property="genre"/>
+        <result column="quantite" property="quantite"/>
+    </resultMap>
+
+    <select id="getListGenreBySerieId" resultMap="Genre" resultOrdered="true">
+        <![CDATA[
+        select
+            g.id_genre, g.genre
+        from
+            genreseries s
+            inner join genres g on
+                g.id_genre = s.id_genre
+        where
+            s.id_serie = #{id}
+        order by
+            g.genre
+        ]]>
+    </select>
+</mapper>

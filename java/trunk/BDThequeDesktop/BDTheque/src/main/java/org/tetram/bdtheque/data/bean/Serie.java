@@ -1,9 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
-import org.tetram.bdtheque.data.bean.lite.AlbumLite;
-import org.tetram.bdtheque.data.bean.lite.AuteurSerieLite;
-import org.tetram.bdtheque.data.bean.lite.ParaBDLite;
-import org.tetram.bdtheque.data.bean.lite.UniversLite;
+import org.tetram.bdtheque.data.bean.lite.*;
+import org.tetram.bdtheque.data.dao.DefaultValeurListeDao;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,7 +15,7 @@ public class Serie extends DBEntity {
     private String titreSerie;
 
     private Boolean terminee;
-    private List<String> genres = new ArrayList<>();
+    private List<GenreLite> genres = new ArrayList<>();
     private String sujet;
     private String notes;
     private Editeur editeur;
@@ -34,12 +32,12 @@ public class Serie extends DBEntity {
     private List<AuteurSerieLite> coloristes = new ArrayList<>();
     private Boolean vo;
     private Boolean couleur;
-    //    property Etat: ROption read FEtat write FEtat;
-//    property Reliure: ROption read FReliure write FReliure;
-//    property TypeEdition: ROption read FTypeEdition write FTypeEdition;
-//    property FormatEdition: ROption read FFormatEdition write FFormatEdition;
-//    property Orientation: ROption read FOrientation write FOrientation;
-//    property SensLecture: ROption read FSensLecture write FSensLecture;
+    private ValeurListe etat = DefaultValeurListeDao.getInstance().getEtat();
+    private ValeurListe reliure = DefaultValeurListeDao.getInstance().getReliure();
+    private ValeurListe typeEdition = DefaultValeurListeDao.getInstance().getTypeEdition();
+    private ValeurListe formatEdition = DefaultValeurListeDao.getInstance().getFormatEdition();
+    private ValeurListe orientation = DefaultValeurListeDao.getInstance().getOrientation();
+    private ValeurListe sensLecture = DefaultValeurListeDao.getInstance().getSensLecture();
     private Integer notation;
     private List<UniversLite> univers = new ArrayList<>();
 
@@ -59,11 +57,11 @@ public class Serie extends DBEntity {
         this.terminee = terminee;
     }
 
-    public List<String> getGenres() {
+    public List<GenreLite> getGenres() {
         return genres;
     }
 
-    public void setGenres(List<String> genres) {
+    public void setGenres(List<GenreLite> genres) {
         this.genres = genres;
     }
 
@@ -200,7 +198,7 @@ public class Serie extends DBEntity {
     }
 
     public void setNotation(Integer notation) {
-        this.notation = notation;
+        this.notation = notation == 0 ? 900 : notation;
     }
 
     public List<UniversLite> getUnivers() {
@@ -219,4 +217,51 @@ public class Serie extends DBEntity {
         return collection.getId();
     }
 
+    public ValeurListe getEtat() {
+        return etat;
+    }
+
+    public void setEtat(ValeurListe etat) {
+        this.etat = etat;
+    }
+
+    public ValeurListe getReliure() {
+        return reliure;
+    }
+
+    public void setReliure(ValeurListe reliure) {
+        this.reliure = reliure;
+    }
+
+    public ValeurListe getTypeEdition() {
+        return typeEdition;
+    }
+
+    public void setTypeEdition(ValeurListe typeEdition) {
+        this.typeEdition = typeEdition;
+    }
+
+    public ValeurListe getFormatEdition() {
+        return formatEdition;
+    }
+
+    public void setFormatEdition(ValeurListe formatEdition) {
+        this.formatEdition = formatEdition;
+    }
+
+    public ValeurListe getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(ValeurListe orientation) {
+        this.orientation = orientation;
+    }
+
+    public ValeurListe getSensLecture() {
+        return sensLecture;
+    }
+
+    public void setSensLecture(ValeurListe sensLecture) {
+        this.sensLecture = sensLecture;
+    }
 }

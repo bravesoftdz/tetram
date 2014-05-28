@@ -24,7 +24,7 @@ public class UniversDaoTest extends DaoTest {
         UniversLite universLite = dao.getUniversLiteById(ID_UNIVERS_TROLLS_DE_TROY);
         // pour le moment on suppose que si le résultat n'est pas null, c'est que tous les champs sont biens chargés
         Assert.assertNotNull(universLite);
-        Assert.assertEquals(universLite.getId(), ID_UNIVERS_TROLLS_DE_TROY);
+        Assert.assertEquals(ID_UNIVERS_TROLLS_DE_TROY, universLite.getId());
     }
 
     @Test
@@ -35,10 +35,17 @@ public class UniversDaoTest extends DaoTest {
     }
 
     @Test
+    public void testGetListUniversLiteBySerieId() throws Exception{
+        List<UniversLite> lstUniversLite = dao.getListUniversLiteBySerieId(ID_SERIE_LANFEUST_DE_TROY);
+        Assert.assertFalse(lstUniversLite.isEmpty());
+        Assert.assertNotNull(lstUniversLite.get(0).getId());
+    }
+
+    @Test
     public void testGetUniversById() throws Exception {
         Univers univers = dao.getUniversById(ID_UNIVERS_TROLLS_DE_TROY);
         // pour le moment on suppose que si le résultat n'est pas null, c'est que tous les champs sont biens chargés
         Assert.assertNotNull(univers);
-        Assert.assertEquals(univers.getId(), ID_UNIVERS_TROLLS_DE_TROY);
+        Assert.assertEquals(ID_UNIVERS_TROLLS_DE_TROY, univers.getId());
     }
 }

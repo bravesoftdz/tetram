@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact type="javafx" build-on-make="true" name="BDTheque">
+  <artifact type="javafx" name="BDTheque">
     <output-path>$PROJECT_DIR$/out/artifacts</output-path>
     <properties id="ant-postprocessing">
       <options enabled="true">

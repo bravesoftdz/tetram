@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
+import org.jetbrains.annotations.NotNull;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.sql.CallableStatement;
@@ -18,7 +19,7 @@ import java.util.UUID;
 //@MappedJdbcTypes(JdbcType.VARCHAR)
 public class UUIDTypeHandler extends BaseTypeHandler<UUID> {
     @Override
-    public void setNonNullParameter(PreparedStatement ps, int i, UUID parameter, JdbcType jdbcType) throws SQLException {
+    public void setNonNullParameter(PreparedStatement ps, int i, @NotNull UUID parameter, JdbcType jdbcType) throws SQLException {
         ps.setString(i, StringUtils.UUIDToGUIDString(parameter));
     }
 

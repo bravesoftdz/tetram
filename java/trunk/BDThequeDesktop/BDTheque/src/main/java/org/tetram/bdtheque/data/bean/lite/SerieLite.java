@@ -9,6 +9,7 @@ public class SerieLite extends DBEntityLite {
     private String titreSerie;
     private EditeurLite editeur;
     private CollectionLite collection;
+    private Integer notation;
 
     public String getTitreSerie() {
         return titreSerie;
@@ -32,6 +33,14 @@ public class SerieLite extends DBEntityLite {
 
     public void setCollection(CollectionLite collection) {
         this.collection = collection;
+    }
+
+    public Integer getNotation() {
+        return notation;
+    }
+
+    public void setNotation(Integer notation) {
+        this.notation = notation == 0 ? 900 : notation;
     }
 
     @Override

@@ -26,8 +26,11 @@
         <typeAlias type="java.net.URL" alias="URL"/>
         <typeAlias type="org.tetram.bdtheque.data.URLTypeHandler" alias="URLTypeHandler"/>
 
-        <typeAlias type="org.tetram.bdtheque.data.bean.MetierAuteur" alias="MetierAuteur"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.ValeurListe" alias="ValeurListe"/>
+        <typeAlias type="org.tetram.bdtheque.data.ValeurListeTypeHandler" alias="ValeurListeTypeHandler"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.CategorieValeurListe" alias="ValeurListeCategorie"/>
+
+        <typeAlias type="org.tetram.bdtheque.data.bean.MetierAuteur" alias="MetierAuteur"/>
 
         <typeAlias type="org.tetram.bdtheque.data.bean.Album" alias="beanAlbum"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.lite.AlbumLite" alias="beanAlbumLite"/>
@@ -60,6 +63,8 @@
         <typeHandler handler="UUIDTypeHandler"/>
         <typeHandler handler="URLTypeHandler"/>
         <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="MetierAuteur"/>
+        <typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler" javaType="ValeurListeCategorie"/>
+        <typeHandler handler="ValeurListeTypeHandler"/>
     </typeHandlers>
 
     <!-- permet de d'intervenir sur la création/initialisation des beans
@@ -92,9 +97,12 @@
     <mappers>
         <mapper resource="org/tetram/bdtheque/data/bean/Collection.xml"/>
         <mapper resource="org/tetram/bdtheque/data/bean/Editeur.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/Genre.xml"/>
         <mapper resource="org/tetram/bdtheque/data/bean/Image.xml"/>
         <mapper resource="org/tetram/bdtheque/data/bean/ParaBD.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/Serie.xml"/>
         <mapper resource="org/tetram/bdtheque/data/bean/Univers.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/ValeurListe.xml"/>
     </mappers>
 
 </configuration>

@@ -3,6 +3,7 @@ package org.tetram.bdtheque.data;
 import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
+import org.jetbrains.annotations.NotNull;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -19,8 +20,8 @@ import java.sql.SQLException;
 //@MappedJdbcTypes(JdbcType.VARCHAR)
 public class URLTypeHandler extends BaseTypeHandler<URL> {
     @Override
-    public void setNonNullParameter(PreparedStatement ps, int i, URL parameter, JdbcType jdbcType) throws SQLException {
-        ps.setString(i, parameter == null ? null : parameter.toString());
+    public void setNonNullParameter(PreparedStatement ps, int i, @NotNull URL parameter, JdbcType jdbcType) throws SQLException {
+        ps.setString(i, parameter.toString());
     }
 
     @Override

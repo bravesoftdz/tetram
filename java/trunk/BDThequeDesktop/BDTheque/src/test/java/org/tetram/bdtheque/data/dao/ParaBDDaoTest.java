@@ -28,7 +28,7 @@ public class ParaBDDaoTest extends DaoTest {
         ParaBD paraBD = dao.getParaBDById(ID_PARABD_SPIROU_BLOC_3D);
         // pour le moment on suppose que si le résultat n'est pas null, c'est que tous les champs sont biens chargés
         Assert.assertNotNull(paraBD);
-        Assert.assertEquals(paraBD.getId(), ID_PARABD_SPIROU_BLOC_3D);
+        Assert.assertEquals(ID_PARABD_SPIROU_BLOC_3D, paraBD.getId());
         Assert.assertFalse(paraBD.getUnivers().isEmpty());
         Assert.assertNotNull(paraBD.getUnivers().get(0).getId());
         Assert.assertFalse(paraBD.getPhotos().isEmpty());

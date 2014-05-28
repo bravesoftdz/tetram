@@ -25,13 +25,10 @@
         <result column="dateachat" property="dateAchat"/>
         <result column="anneecote" property="anneeCote"/>
         <result column="prixcote" property="prixCote"/>
-        <association property="categorieParaBD" javaType="ValeurListe">
-            <result column="categorieparabd" property="valeur"/>
-            <result column="scategorieparabd" property="texte"/>
-        </association>
+        <result column="categorieparabd" property="categorieParaBD"/>
+        <association property="serie" select="org.tetram.bdtheque.data.dao.SerieDao.getSerieById" column="id_serie"/>
         <collection property="univers" select="org.tetram.bdtheque.data.dao.UniversDao.getListUniversLiteByParaBDId"
                     column="id_parabd"/>
-        <!-- association property="serie" select="org.tetram.bdtheque.data.dao.SerieFull.getSerieById" column="id_serie"/ -->
         <collection property="photos" select="org.tetram.bdtheque.data.dao.ImageDao.getListPhotoLiteByParaBDId"
                     column="id_parabd"/>
     </resultMap>
@@ -46,7 +43,7 @@
         <![CDATA[
         select
             p.id_parabd, p.titreparabd, p.annee, p.id_serie, p.achat, p.description, p.notes, p.dedicace, p.numerote, p.anneecote, p.prixcote,
-            p.gratuit, p.offert, p.dateachat, p.prix, p.stock, p.categorieparabd, lc.libelle as scategorieparabd
+            p.gratuit, p.offert, p.dateachat, p.prix, p.stock, p.categorieparabd, lc.libelle as lb_categorieparabd
         from
             parabd p
             left join listes lc on

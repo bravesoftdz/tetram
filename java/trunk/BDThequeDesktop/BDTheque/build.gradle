@@ -10,7 +10,9 @@ repositories {
 
 dependencies {
     testCompile 'junit:junit:4+'
-    compile 'com.intellij:annotations:+'
+    // 28/05/2014: la version dispo est la version 12 qui ne contient pas l'annotation Contract
+    //compile 'com.intellij:annotations:+'
+    compile files('C:\\Program Files (x86)\\JetBrains\\IntelliJ IDEA Community Edition 13.1.2\\lib\\annotations.jar')
     compile 'org.apache.logging.log4j:log4j-core:2+'
     runtime 'org.apache.logging.log4j:log4j-1.2-api:2+' // permet de rediriger, dans la plupart des cas, les appels à Log4j vers Log4j2
     compile 'org.firebirdsql.jdbc:jaybird-jdk18:+'
