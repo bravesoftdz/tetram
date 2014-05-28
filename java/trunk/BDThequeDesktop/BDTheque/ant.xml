@@ -1,0 +1,13 @@
+<project name="bdtheque" basedir=".">
+
+
+    <target name="deploy_firebird_artifact">
+
+        <property name="src.dir" value="firebird"/>
+        <property name="dest.dir" value="..\out\artifacts"/>
+
+        <copy todir="${artifact.output.path}" >
+            <fileset dir="${src.dir}" includes="**"/>
+        </copy>
+    </target>
+</project>

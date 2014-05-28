@@ -1,6 +1,12 @@
 <component name="ArtifactManager">
-  <artifact type="javafx" name="BDTheque">
-    <output-path>$PROJECT_DIR$/out/artifacts/BDTheque</output-path>
+  <artifact type="javafx" build-on-make="true" name="BDTheque">
+    <output-path>$PROJECT_DIR$/out/artifacts</output-path>
+    <properties id="ant-postprocessing">
+      <options enabled="true">
+        <file>file://$PROJECT_DIR$/BDTheque/ant.xml</file>
+        <target>deploy_firebird_artifact</target>
+      </options>
+    </properties>
     <properties id="javafx-properties">
       <options>
         <option name="appClass" value="org.tetram.bdtheque.gui.Main" />
@@ -25,13 +31,13 @@
         <element id="library" level="project" name="Gradle: jaybird-jdk18-2.2.5" />
         <element id="library" level="project" name="Gradle: junit-4.11" />
         <element id="library" level="project" name="Gradle: log4j-api-2.0-rc1" />
-        <element id="library" level="project" name="Gradle: log4j-core-2.0-rc1" />
         <element id="library" level="project" name="Gradle: mybatis-3.2.7" />
         <element id="library" level="project" name="Gradle: mybatis-generator-core-1.3.2" />
         <element id="library" level="project" name="Gradle: stringtemplate-3.2.1" />
         <element id="library" level="project" name="Gradle: annotations-12.0" />
+        <element id="library" level="project" name="Gradle: log4j-1.2-api-2.0-rc1" />
+        <element id="library" level="project" name="Gradle: log4j-core-2.0-rc1" />
       </element>
-      <element id="dir-copy" path="$PROJECT_DIR$/BDTheque/firebird" />
     </root>
   </artifact>
 </component>

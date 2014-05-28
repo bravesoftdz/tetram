@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn">
     <Appenders>
-        <File name="MyFile" fileName="logs/app.log">
-            <PatternLayout pattern="%d %p %c{1.} [%t] %m%n"/>
-        </File>
+        <RollingFile name="file" fileName="logs/app.log" filePattern="logs/app-%i.log">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %c{1.} - %msg%n"/>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="3 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="1"/>
+        </RollingFile>
         <Async name="Async">
-            <AppenderRef ref="MyFile"/>
+            <AppenderRef ref="file"/>
         </Async>
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
         </Console>
     </Appenders>
     <Loggers>
-        <Root level="error">
+        <Root level="debug">
             <AppenderRef ref="Async"/>
+            <AppenderRef ref="Console"/>
         </Root>
     </Loggers>
 </Configuration>

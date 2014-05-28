@@ -17,6 +17,8 @@ public class Database {
     public Database() {
         super();
 
+        setFBLogged(true);
+
         String resource = "org/tetram/bdtheque/data/mybatis-config.xml";
         InputStream inputStream = null;
         try {
@@ -33,5 +35,14 @@ public class Database {
 
     public SqlSession getSession() {
         return sqlSessionFactory.openSession();
+    }
+
+    static public boolean isFBLogged() {
+        return Boolean.getBoolean("FBLog4j");
+    }
+
+    static public void setFBLogged(boolean value) {
+        if (isFBLogged() != value)
+            System.setProperty("FBLog4j", String.valueOf(value));
     }
 }
