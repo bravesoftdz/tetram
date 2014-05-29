@@ -8,7 +8,7 @@ import org.tetram.bdtheque.data.bean.lite.PhotoLite;
 
 import java.util.List;
 
-public class ImageDaoTest extends  DaoTest{
+public class ImageDaoTest extends DaoTest {
 
     ImageDao dao;
 
@@ -24,6 +24,7 @@ public class ImageDaoTest extends  DaoTest{
         List<CouvertureLite> lstCouvertureLite = dao.getListCouvertureLiteByEditionId(ID_EDITION_SILLAGE_TOME_16);
         Assert.assertFalse(lstCouvertureLite.isEmpty());
         Assert.assertNotNull(lstCouvertureLite.get(0).getId());
+        Assert.assertNotEquals("", lstCouvertureLite.get(0).getCategorie().getTexte());
     }
 
     @Test
@@ -31,5 +32,6 @@ public class ImageDaoTest extends  DaoTest{
         List<PhotoLite> lstPhotoLite = dao.getListPhotoLiteByParaBDId(ID_PARABD_SPIROU_BLOC_3D);
         Assert.assertFalse(lstPhotoLite.isEmpty());
         Assert.assertNotNull(lstPhotoLite.get(0).getId());
+        Assert.assertNotEquals("", lstPhotoLite.get(0).getCategorie().getTexte());
     }
 }

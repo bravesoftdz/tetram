@@ -14,6 +14,8 @@ public interface UniversDao {
 
     List<UniversLite> getListUniversLiteByParaBDId(UUID id);
 
+    List<UniversLite> getListUniversLiteByAlbumId(UUID id);
+
     List<UniversLite> getListUniversLiteBySerieId(UUID id);
 
     Univers getUniversById(UUID id);

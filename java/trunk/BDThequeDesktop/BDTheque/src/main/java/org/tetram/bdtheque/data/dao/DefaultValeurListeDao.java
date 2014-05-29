@@ -14,18 +14,17 @@ import java.util.Map;
  */
 public class DefaultValeurListeDao {
     private static DefaultValeurListeDao ourInstance = null;
-
-    public static DefaultValeurListeDao getInstance() {
-        if (ourInstance == null)
-            ourInstance = new DefaultValeurListeDao();
-        return ourInstance;
-    }
-
     private Map<CategorieValeurListe, DefaultValeurListe> defaultValues = new HashMap<>();
 
     private DefaultValeurListeDao() {
         SqlSession session = Database.getInstance().getSession();
         defaultValues = session.selectMap("getListDefaultValeur", "categorie");
+    }
+
+    public static DefaultValeurListeDao getInstance() {
+        if (ourInstance == null)
+            ourInstance = new DefaultValeurListeDao();
+        return ourInstance;
     }
 
     private ValeurListe getValeur(CategorieValeurListe categorie) {

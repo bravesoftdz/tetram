@@ -28,14 +28,21 @@ public class UniversDaoTest extends DaoTest {
     }
 
     @Test
-    public void testGetListUniversLiteByParaBDId() throws Exception{
+    public void testGetListUniversLiteByParaBDId() throws Exception {
         List<UniversLite> lstUniversLite = dao.getListUniversLiteByParaBDId(ID_PARABD_SPIROU_BLOC_3D);
         Assert.assertFalse(lstUniversLite.isEmpty());
         Assert.assertNotNull(lstUniversLite.get(0).getId());
     }
 
     @Test
-    public void testGetListUniversLiteBySerieId() throws Exception{
+    public void testGetListUniversLiteAlbumId() throws Exception {
+        List<UniversLite> lstUniversLite = dao.getListUniversLiteByAlbumId(ID_ALBUM_SPIROU_GALLERIE_DES_ILLUSTRES);
+        Assert.assertFalse(lstUniversLite.isEmpty());
+        Assert.assertNotNull(lstUniversLite.get(0).getId());
+    }
+
+    @Test
+    public void testGetListUniversLiteBySerieId() throws Exception {
         List<UniversLite> lstUniversLite = dao.getListUniversLiteBySerieId(ID_SERIE_LANFEUST_DE_TROY);
         Assert.assertFalse(lstUniversLite.isEmpty());
         Assert.assertNotNull(lstUniversLite.get(0).getId());

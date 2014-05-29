@@ -9,7 +9,7 @@
         <!--Logger name="org.tetram.bdtheque.data.dao" level="trace">
             <AppenderRef ref="Console"/>
         </Logger-->
-        <Root level="error">
+        <Root level="debug">
             <AppenderRef ref="Console"/>
         </Root>
     </Loggers>

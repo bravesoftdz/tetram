@@ -16,6 +16,7 @@ public abstract class StringUtils {
     private static final Map<Boolean, String> RES_TOME;
     private static final Map<Boolean, String> RES_HORSERIE;
     private static final Map<Boolean, String> RES_INTEGRALE;
+
     static {
         Map<Boolean, String> aMap;
 
@@ -34,6 +35,7 @@ public abstract class StringUtils {
         aMap.put(true, "Intégrale");
         RES_INTEGRALE = Collections.unmodifiableMap(aMap);
     }
+
     private static HashMap<String, List<ISBNRule>> isbnPrefixes, isbnGroups;
 
     public static UUID GUIDStringToUUID(final String guid) {

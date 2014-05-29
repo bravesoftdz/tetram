@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.tetram.bdtheque.data.bean.Editeur;
 import org.tetram.bdtheque.data.bean.lite.EditeurLite;
-import org.tetram.bdtheque.utils.StringUtils;
 
 public class EditeurDaoTest extends DaoTest {
 

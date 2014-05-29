@@ -13,7 +13,8 @@ public class Controller {
 
     public static final UUID ID_COLLECTION_GENERATION_COMICS_PANINI = StringUtils.GUIDStringToUUID("{085B0C9C-7608-4B5E-A2B6-968D9FDB56E8}");
 
-    @FXML Button button;
+    @FXML
+    Button button;
 
     public void buttonClick(ActionEvent actionEvent) {
         Database db = Database.getInstance();

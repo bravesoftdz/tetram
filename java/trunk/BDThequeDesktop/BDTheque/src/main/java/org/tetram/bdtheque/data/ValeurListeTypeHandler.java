@@ -5,8 +5,6 @@ import org.apache.ibatis.type.JdbcType;
 import org.jetbrains.annotations.NotNull;
 import org.tetram.bdtheque.data.bean.ValeurListe;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

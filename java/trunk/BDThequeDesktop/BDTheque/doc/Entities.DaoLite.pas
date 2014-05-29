@@ -3,16 +3,13 @@ unit Entities.DaoLite;
 interface
 
 uses
-  System.SysUtils, System.Types, Entities.Lite, UMetadata, System.Generics.Collections,
-  System.SyncObjs, Vcl.ComCtrls, Vcl.StdCtrls, System.Classes, Entities.DBConnection, Entities.DaoCommon,
-  Entities.Common, Entities.FactoriesCommon, System.IOUtils, Vcl.Dialogs;
+  Entities.Lite
+  // UMetadata,
+  // Entities.DaoCommon,
+  // Entities.Common, Entities.FactoriesCommon
+  ;
 
 type
-  // ce serait trop facile si XE4 acceptait cette syntaxe....
-  // TClassEntities.DaoLite = class of TDaoLite<>;
-  // je suis donc obligé de faire des classes "classique"
-  // TDaoLiteClass = class of TDaoLite;
-
   TDaoLite<T: TBaseLite> = class abstract(TDaoGenericDBEntity<T>)
   public
     class function Make(Query: TManagedQuery): TBaseLite;
@@ -56,48 +53,6 @@ type
     class procedure Fill(Entity: TAlbumLite; Query: TManagedQuery); overload; override;
     class procedure Fill(Entity: TAlbumLite; const ID_Album: TGUID); overload;
     class procedure Fill(Entity: TAlbumLite; const ID_Album, ID_Edition: TGUID); overload;
-  end;
-
-  TDaoParaBDLite = class(TDaoLiteEntity<TParaBDLite>)
-  public
-    class function FactoryClass: TFactoryClass; override;
-    class procedure Fill(Entity: TParaBDLite; Query: TManagedQuery); override;
-  end;
-
-  TDaoSerieLite = class(TDaoLiteEntity<TSerieLite>)
-  public
-    class function FactoryClass: TFactoryClass; override;
-    class procedure Fill(Entity: TSerieLite; Query: TManagedQuery); overload; override;
-    class procedure Fill(Entity: TSerieLite; const ID_Serie: TGUID); overload;
-  end;
-
-  TDaoEditionLite = class(TDaoLiteEntity<TEditionLite>)
-  protected
-    class procedure GetFieldIndices; override;
-  public
-    class function FactoryClass: TFactoryClass; override;
-    class procedure Fill(Entity: TEditionLite; Query: TManagedQuery); override;
-  end;
-
-  TDaoEditeurLite = class(TDaoLiteEntity<TEditeurLite>)
-  strict private
-    class var IndexID_Editeur: Integer;
-    class var IndexNomEditeur: Integer;
-  protected
-    class procedure GetFieldIndices; override;
-  public
-    class function FactoryClass: TFactoryClass; override;
-    class procedure Fill(Entity: TEditeurLite; Query: TManagedQuery); overload; override;
-    class procedure Fill(Entity: TEditeurLite; const ID_Editeur: TGUID); overload;
-  end;
-
-  TDaoCollectionLite = class(TDaoLiteEntity<TCollectionLite>)
-  protected
-    class procedure GetFieldIndices; override;
-  public
-    class function FactoryClass: TFactoryClass; override;
-    class procedure Fill(Entity: TCollectionLite; Query: TManagedQuery); overload; override;
-    class procedure Fill(Entity: TCollectionLite; const ID_Collection: TGUID); overload;
   end;
 
   TDaoPersonnageLite = class(TDaoLiteEntity<TPersonnageLite>)
@@ -165,12 +120,6 @@ type
   public
     class function FactoryClass: TFactoryClass; override;
     class procedure Fill(Entity: TCouvertureLite; Query: TManagedQuery); override;
-  end;
-
-  TDaoGenreLite = class(TDaoLiteEntity<TGenreLite>)
-  public
-    class function FactoryClass: TFactoryClass; override;
-    class procedure Fill(Entity: TGenreLite; Query: TManagedQuery); override;
   end;
 
   TDaoConversionLite = class(TDaoLiteEntity<TConversionLite>)
@@ -325,7 +274,7 @@ begin
       if IsEqualGUID(pi.ID, GUID_NULL) then
       begin // nouvelles photos
         if (not pi.NewStockee) then
-        begin // photos liées (q1)
+        begin // photos liï¿½es (q1)
           pi.OldNom := pi.NewNom;
           pi.NewNom := SearchNewFileName(RepImages, ExtractFileName(pi.NewNom), True);
           qry6.Params.ByNameAsString['chemin'] := RepImages;
@@ -348,7 +297,7 @@ begin
           pi.ID := StringToGUID(qry1.Fields.AsString[0]);
         end
         else if TFile.Exists(pi.NewNom) then
-        begin // photos stockées (q2)
+        begin // photos stockï¿½es (q2)
           qry2.Params.ByNameAsString['pk_parent'] := GUIDToString(ReferenceParent);
           qry2.Params.ByNameAsString['fichier'] := TPath.GetFileNameWithoutExtension(pi.NewNom);
           qry2.Params.ByNameAsInteger['ordre'] := List.IndexOf(pi);
@@ -372,7 +321,7 @@ begin
           Stream := GetCouvertureStream(True, pi.ID, -1, -1, False);
           try
             if (pi.NewStockee) then
-            begin // conversion photos liées en stockées (q3)
+            begin // conversion photos liï¿½es en stockï¿½es (q3)
               qry3.ParamsSetBlob('image', Stream);
               qry3.Params.ByNameAsString['pk'] := GUIDToString(pi.ID);
               qry3.Execute;
@@ -383,7 +332,7 @@ begin
               pi.NewNom := TPath.GetFileNameWithoutExtension(pi.NewNom);
             end
             else
-            begin // conversion photos stockées en liées
+            begin // conversion photos stockï¿½es en liï¿½es
               pi.NewNom := SearchNewFileName(RepImages, pi.NewNom + '.jpg', True);
               qry6.Params.ByNameAsString['chemin'] := RepImages;
               qry6.Params.ByNameAsString['fichier'] := pi.NewNom;
@@ -397,7 +346,7 @@ begin
             Stream.Free;
           end;
         end;
-        // photos renommées, réordonnées, etc (q5)
+        // photos renommï¿½es, rï¿½ordonnï¿½es, etc (q5)
         // obligatoire pour les changement de stockage
         qry5.Params.ByNameAsString['fichier'] := pi.NewNom;
         qry5.Params.ByNameAsInteger['ordre'] := List.IndexOf(pi);
@@ -650,343 +599,6 @@ class procedure TDaoAuteurParaBDLite.Fill(Entity: TAuteurParaBDLite; Pe: TPerson
 begin
   Entity.Personne.Assign(Pe);
   Entity.ID_ParaBD := ReferenceParaBD;
-end;
-
-{ TDaoAlbumLite }
-
-class procedure TDaoAlbumLite.Fill(Entity: TAlbumLite; Query: TManagedQuery);
-begin
-  Entity.Serie := '';
-  Entity.Editeur := '';
-  Entity.MoisParution := 0;
-  Entity.AnneeParution := 0;
-  Entity.Stock := True;
-  Entity.Achat := False;
-  Entity.Complet := True;
-  Entity.Notation := 900;
-
-  if getPreparedQuery = Query then
-  begin
-    Entity.ID := NonNull(Query, IndexID_Album);
-    Entity.Titre := Query.Fields.AsString[IndexTitreAlbum];
-    Entity.Tome := Query.Fields.AsInteger[IndexTome];
-    Entity.TomeDebut := Query.Fields.AsInteger[IndexTomeDebut];
-    Entity.TomeFin := Query.Fields.AsInteger[IndexTomeFin];
-    Entity.ID_Serie := NonNull(Query, IndexID_Serie);
-    Entity.Integrale := Query.Fields.AsBoolean[IndexIntegrale];
-    Entity.HorsSerie := Query.Fields.AsBoolean[IndexHorsSerie];
-    Entity.ID_Editeur := NonNull(Query, IndexID_Editeur);
-    if IndexTitreSerie <> -1 then
-      Entity.Serie := Query.Fields.AsString[IndexTitreSerie];
-    if IndexNomEditeur <> -1 then
-      Entity.Editeur := Query.Fields.AsString[IndexNomEditeur];
-    if IndexMoisParution <> -1 then
-      Entity.MoisParution := Query.Fields.AsInteger[IndexMoisParution];
-    if IndexAnneeParution <> -1 then
-      Entity.AnneeParution := Query.Fields.AsInteger[IndexAnneeParution];
-    if IndexStock <> -1 then
-      Entity.Stock := Query.Fields.AsBoolean[IndexStock];
-    if IndexAchat <> -1 then
-      Entity.Achat := Query.Fields.AsBoolean[IndexAchat];
-    if IndexComplet <> -1 then
-      Entity.Complet := Query.Fields.AsBoolean[IndexComplet];
-    if IndexNotation <> -1 then
-      Entity.Notation := Query.Fields.AsSmallint[IndexNotation];
-  end
-  else
-  begin
-    Entity.ID := NonNull(Query, 'ID_Album');
-    Entity.Titre := Query.Fields.ByNameAsString['TitreAlbum'];
-    Entity.Tome := Query.Fields.ByNameAsInteger['Tome'];
-    Entity.TomeDebut := Query.Fields.ByNameAsInteger['TomeDebut'];
-    Entity.TomeFin := Query.Fields.ByNameAsInteger['TomeFin'];
-    Entity.ID_Serie := NonNull(Query, 'ID_Serie');
-    Entity.Integrale := Query.Fields.ByNameAsBoolean['Integrale'];
-    Entity.HorsSerie := Query.Fields.ByNameAsBoolean['HorsSerie'];
-    Entity.ID_Editeur := NonNull(Query, 'ID_Editeur');
-    try
-      Entity.Serie := Query.Fields.ByNameAsString['TitreSerie'];
-    except
-    end;
-    try
-      Entity.Editeur := Query.Fields.ByNameAsString['NomEditeur'];
-    except
-    end;
-    try
-      Entity.MoisParution := Query.Fields.ByNameAsInteger['MoisParution'];
-    except
-    end;
-    try
-      Entity.AnneeParution := Query.Fields.ByNameAsInteger['AnneeParution'];
-    except
-    end;
-    try
-      Entity.Stock := Query.Fields.ByNameAsBoolean['Stock'];
-    except
-    end;
-    try
-      Entity.Achat := Query.Fields.ByNameAsBoolean['Achat'];
-    except
-    end;
-    try
-      Entity.Complet := Query.Fields.ByNameAsBoolean['Complet'];
-    except
-    end;
-    try
-      Entity.Notation := Query.Fields.ByNameAsSmallint['Notation'];
-    except
-    end;
-  end;
-
-  if Entity.Notation = 0 then
-    Entity.Notation := 900;
-end;
-
-class procedure TDaoAlbumLite.Fill(Entity: TAlbumLite; const ID_Album: TGUID);
-begin
-  Fill(Entity, ID_Album, GUID_NULL);
-end;
-
-class function TDaoAlbumLite.FactoryClass: TFactoryClass;
-begin
-  Result := TFactoryAlbumLite;
-end;
-
-class procedure TDaoAlbumLite.Fill(Entity: TAlbumLite; const ID_Album, ID_Edition: TGUID);
-var
-  qry: TManagedQuery;
-begin
-  qry := DBConnection.GetQuery;
-  try
-    qry.SQL.Text := 'select a.id_album, a.titrealbum, a.horsserie, a.integrale, a.tome, a.tomedebut, a.tomefin, a.id_serie, a.achat, a.complet, a.titreserie';
-    qry.SQL.Add('from vw_liste_albums a');
-    qry.SQL.Add('where a.id_album = :id_album');
-    if not IsEqualGUID(ID_Edition, GUID_NULL) then
-    begin
-      qry.SQL[0] := qry.SQL[0] + ', e.stock';
-      qry.SQL[1] := qry.SQL[1] + ' inner join editions e on a.id_album = e.id_album';
-      qry.SQL.Add('and e.id_edition = :id_edition');
-    end;
-    qry.Params.AsString[0] := GUIDToString(ID_Album);
-    if not IsEqualGUID(ID_Edition, GUID_NULL) then
-      qry.Params.AsString[1] := GUIDToString(ID_Edition);
-    qry.Open;
-    Prepare(qry);
-    try
-      Fill(Entity, qry);
-    finally
-      Unprepare(qry);
-    end;
-  finally
-    qry.Free;
-  end;
-end;
-
-class procedure TDaoAlbumLite.GetFieldIndices;
-begin
-  inherited;
-  IndexID_Album := GetFieldIndex('ID_Album');
-  IndexTitreAlbum := GetFieldIndex('TitreAlbum');
-  IndexTome := GetFieldIndex('Tome');
-  IndexTomeDebut := GetFieldIndex('TomeDebut');
-  IndexTomeFin := GetFieldIndex('TomeFin');
-  IndexID_Serie := GetFieldIndex('ID_Serie');
-  IndexIntegrale := GetFieldIndex('Integrale');
-  IndexHorsSerie := GetFieldIndex('HorsSerie');
-  IndexID_Editeur := GetFieldIndex('ID_Editeur');
-  IndexTitreSerie := GetFieldIndex('TitreSerie');
-  IndexNomEditeur := GetFieldIndex('NomEditeur');
-  IndexMoisParution := GetFieldIndex('MoisParution');
-  IndexAnneeParution := GetFieldIndex('AnneeParution');
-  IndexStock := GetFieldIndex('Stock');
-  IndexAchat := GetFieldIndex('Achat');
-  IndexComplet := GetFieldIndex('Complet');
-  IndexNotation := GetFieldIndex('Notation');
-end;
-
-{ TDaoCollectionLite }
-
-class procedure TDaoCollectionLite.Fill(Entity: TCollectionLite; Query: TManagedQuery);
-begin
-  Entity.ID := NonNull(Query, 'ID_Collection');
-  Entity.NomCollection := Query.Fields.ByNameAsString['NomCollection'];
-  try
-    TDaoEditeurLite.Fill(Entity.Editeur, Query);
-  except
-    Entity.Editeur.DoClear;
-  end;
-end;
-
-class function TDaoCollectionLite.FactoryClass: TFactoryClass;
-begin
-  Result := TFactoryCollectionLite;
-end;
-
-class procedure TDaoCollectionLite.Fill(Entity: TCollectionLite; const ID_Collection: TGUID);
-var
-  qry: TManagedQuery;
-begin
-  qry := DBConnection.GetQuery;
-  try
-    qry.SQL.Text := 'select id_collection, nomcollection from collections where id_collection = ?';
-    qry.Params.AsString[0] := GUIDToString(ID_Collection);
-    qry.Open;
-    Fill(Entity, qry);
-  finally
-    qry.Free;
-  end;
-end;
-
-class procedure TDaoCollectionLite.GetFieldIndices;
-begin
-  inherited;
-  TDaoEditeurLite.Prepare(getPreparedQuery);
-end;
-
-{ TDaoSerieLite }
-
-class procedure TDaoSerieLite.Fill(Entity: TSerieLite; Query: TManagedQuery);
-begin
-  Entity.ID := NonNull(Query, 'ID_Serie');
-  Entity.TitreSerie := Query.Fields.ByNameAsString['TitreSerie'];
-  try
-    TDaoEditeurLite.Fill(Entity.Editeur, Query);
-  except
-    Entity.Editeur.DoClear;
-  end;
-  try
-    TDaoCollectionLite.Fill(Entity.Collection, Query);
-  except
-    Entity.Collection.DoClear;
-  end;
-end;
-
-class function TDaoSerieLite.FactoryClass: TFactoryClass;
-begin
-  Result := TFactorySerieLite;
-end;
-
-class procedure TDaoSerieLite.Fill(Entity: TSerieLite; const ID_Serie: TGUID);
-var
-  qry: TManagedQuery;
-begin
-  qry := DBConnection.GetQuery;
-  try
-    qry.SQL.Text := 'select id_serie, titreserie from series where id_serie = :id_serie';
-    qry.Params.AsString[0] := GUIDToString(ID_Serie);
-    qry.Open;
-    Fill(Entity, qry);
-  finally
-    qry.Free;
-  end;
-end;
-
-{ TDaoEditionLite }
-
-class function TDaoEditionLite.FactoryClass: TFactoryClass;
-begin
-  Result := TFactoryEditionLite;
-end;
-
-class procedure TDaoEditionLite.Fill(Entity: TEditionLite; Query: TManagedQuery);
-begin
-  Entity.ID := NonNull(Query, 'ID_Edition');
-  Entity.AnneeEdition := Query.Fields.ByNameAsInteger['AnneeEdition'];
-  try
-    Entity.ISBN := Trim(Query.Fields.ByNameAsString['ISBN']);
-  except
-    Entity.ISBN := '';
-  end;
-  TDaoEditeurLite.Fill(Entity.Editeur, Query);
-  TDaoCollectionLite.Fill(Entity.Collection, Query);
-end;
-
-class procedure TDaoEditionLite.GetFieldIndices;
-begin
-  inherited;
-  // le TDaoEditeurLite.Prepare(getPreparedQuery) sera appelé par TDaoCollectionLite.Prepare(getPreparedQuery)
-  // TDaoEditeurLite.Prepare(getPreparedQuery);
-  TDaoCollectionLite.Prepare(getPreparedQuery);
-end;
-
-{ TDaoGenreLite }
-
-class function TDaoGenreLite.FactoryClass: TFactoryClass;
-begin
-  Result := TFactoryGenreLite;
-end;
-
-class procedure TDaoGenreLite.Fill(Entity: TGenreLite; Query: TManagedQuery);
-begin
-  Entity.ID := NonNull(Query, 'ID_Genre');
-  Entity.Genre := Query.Fields.ByNameAsString['Genre'];
-  try
-    Entity.Quantite := Query.Fields.ByNameAsInteger['QuantiteGenre'];
-  except
-    Entity.Quantite := 0;
-  end;
-end;
-
-{ TDaoParaBDLite }
-
-class function TDaoParaBDLite.FactoryClass: TFactoryClass;
-begin
-  Result := TFactoryParaBDLite;
-end;
-
-class procedure TDaoParaBDLite.Fill(Entity: TParaBDLite; Query: TManagedQuery);
-begin
-  Entity.ID := NonNull(Query, 'ID_ParaBD');
-  Entity.Titre := Query.Fields.ByNameAsString['TitreParaBD'];
-  Entity.ID_Serie := NonNull(Query, 'ID_Serie');
-  try
-    Entity.Serie := Query.Fields.ByNameAsString['TitreSerie'];
-  except
-    Entity.Serie := '';
-  end;
-  try
-    Entity.Achat := Query.Fields.ByNameAsBoolean['Achat'];
-  except
-    Entity.Achat := False;
-  end;
-  try
-    Entity.Complet := Query.Fields.ByNameAsBoolean['Complet'];
-  except
-    Entity.Complet := True;
-  end;
-  try
-    Entity.sCategorie := Query.Fields.ByNameAsString['sCategorie'];
-  except
-    Entity.sCategorie := '';
-  end;
-end;
-
-{ TDaoUniversLite }
-
-class procedure TDaoUniversLite.Fill(Entity: TUniversLite; Query: TManagedQuery);
-begin
-  Entity.ID := NonNull(Query, 'ID_Univers');
-  Entity.NomUnivers := Query.Fields.ByNameAsString['NomUnivers'];
-end;
-
-class function TDaoUniversLite.FactoryClass: TFactoryClass;
-begin
-  Result := TFactoryUniversLite;
-end;
-
-class procedure TDaoUniversLite.Fill(Entity: TUniversLite; const ID_Univers: TGUID);
-var
-  qry: TManagedQuery;
-begin
-  qry := DBConnection.GetQuery;
-  try
-    qry.SQL.Text := 'select nomunivers, id_univers from univers where id_univers = ?';
-    qry.Params.AsString[0] := GUIDToString(ID_Univers);
-    qry.Open;
-    Fill(Entity, qry);
-  finally
-    qry.Free;
-  end;
 end;
 
 end.

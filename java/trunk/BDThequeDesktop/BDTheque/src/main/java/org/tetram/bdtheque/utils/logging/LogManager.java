@@ -1,7 +1,5 @@
 package org.tetram.bdtheque.utils.logging;
 
-import org.tetram.bdtheque.utils.logging.Log;
-
 /**
  * Created by Thierry on 28/05/2014.
  */

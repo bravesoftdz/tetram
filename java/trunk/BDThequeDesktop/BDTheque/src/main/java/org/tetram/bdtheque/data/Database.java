@@ -14,13 +14,6 @@ import java.io.InputStream;
 public class Database {
 
     private static Database ourInstance = null;
-
-    public static Database getInstance() {
-        if (ourInstance == null)
-            ourInstance = new Database();
-        return ourInstance;
-    }
-
     private final SqlSessionFactory sqlSessionFactory;
 
     private Database() {
@@ -38,12 +31,10 @@ public class Database {
         sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
     }
 
-    public SqlSessionFactory getSqlSessionFactory() {
-        return sqlSessionFactory;
-    }
-
-    public SqlSession getSession() {
-        return sqlSessionFactory.openSession();
+    public static Database getInstance() {
+        if (ourInstance == null)
+            ourInstance = new Database();
+        return ourInstance;
     }
 
     static public boolean isFBLogged() {
@@ -53,5 +44,13 @@ public class Database {
     static public void setFBLogged(boolean value) {
         if (isFBLogged() != value)
             System.setProperty("FBLog4j", String.valueOf(value));
+    }
+
+    public SqlSessionFactory getSqlSessionFactory() {
+        return sqlSessionFactory;
+    }
+
+    public SqlSession getSession() {
+        return sqlSessionFactory.openSession();
     }
 }

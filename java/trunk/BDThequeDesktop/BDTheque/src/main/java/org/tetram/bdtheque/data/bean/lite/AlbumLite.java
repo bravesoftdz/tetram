@@ -12,16 +12,16 @@ public class AlbumLite extends DBEntityLite {
     private Integer tomeDebut, tomeFin;
     private String titre;
     private UUID idSerie;
-    private String serie;
+    private String serie = "";
     private UUID idEditeur;
-    private String editeur;
-    private Integer anneeParution, moisParution;
-    private boolean stock;
+    private String editeur = "";
+    private Integer anneeParution, moisParution = 0;
+    private boolean stock = true;
     private boolean integrale;
     private boolean horsSerie;
     private boolean achat;
     private boolean complet = true;
-    private Integer notation;
+    private Integer notation = 900;
 
     public Integer getTome() {
         return tome;

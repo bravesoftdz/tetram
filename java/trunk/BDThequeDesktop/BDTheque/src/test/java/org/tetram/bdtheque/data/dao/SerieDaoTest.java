@@ -2,7 +2,6 @@ package org.tetram.bdtheque.data.dao;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.bean.lite.SerieLite;

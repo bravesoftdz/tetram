@@ -95,8 +95,10 @@
     </environments>
 
     <mappers>
+        <mapper resource="org/tetram/bdtheque/data/bean/Album.xml"/>
         <mapper resource="org/tetram/bdtheque/data/bean/Collection.xml"/>
         <mapper resource="org/tetram/bdtheque/data/bean/Editeur.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/Edition.xml"/>
         <mapper resource="org/tetram/bdtheque/data/bean/Genre.xml"/>
         <mapper resource="org/tetram/bdtheque/data/bean/Image.xml"/>
         <mapper resource="org/tetram/bdtheque/data/bean/ParaBD.xml"/>

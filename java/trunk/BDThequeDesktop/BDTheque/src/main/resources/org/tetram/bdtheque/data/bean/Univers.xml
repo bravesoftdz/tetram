@@ -45,6 +45,18 @@
             pu.source_parabd = 1 and pu.id_parabd = #{id}
         ]]>
     </select>
+    <select id="getListUniversLiteByAlbumId" resultMap="UniversLite">
+        <![CDATA[
+        select
+            u.*
+        from
+            univers u
+            inner join albums_univers au on
+                au.id_univers = u.id_univers
+        where
+            au.source_album = 1 and au.id_album = #{id}
+        ]]>
+    </select>
     <select id="getListUniversLiteBySerieId" resultMap="UniversLite">
         <![CDATA[
         select

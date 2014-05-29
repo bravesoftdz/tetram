@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.tetram.bdtheque.data.dao.AlbumDao">
+    <resultMap id="AlbumLite" type="beanAlbumLite">
+        <id column="id_album" property="id"/>
+        <result column="titreAlbum" property="titre"/>
+        <result column="tome" property="tome"/>
+        <result column="TomeDebut" property="tomeDebut"/>
+        <result column="TomeFin" property="tomeFin"/>
+        <result column="id_serie" property="idSerie"/>
+        <result column="integrale" property="integrale"/>
+        <result column="HorsSerie" property="horsSerie"/>
+        <result column="id_editeur" property="idEditeur"/>
+        <result column="TitreSerie" property="serie"/>
+        <result column="NomEditeur" property="editeur"/>
+        <result column="MoisParution" property="moisParution"/>
+        <result column="AnneeParution" property="anneeParution"/>
+        <result column="stock" property="stock"/>
+        <result column="achat" property="achat"/>
+        <result column="complet" property="complet"/>
+        <result column="notation" property="notation"/>
+    </resultMap>
+    <resultMap id="AlbumFull" type="beanAlbum">
+        <id column="id_album" property="id"/>
+        <result column="TitreAlbum" property="titreAlbum"/>
+        <result column="AnneeParution" property="anneeParution"/>
+        <result column="MoisParution" property="moisParution"/>
+        <result column="SujetAlbum" property="sujet"/>
+        <result column="RemarquesAlbum" property="notes"/>
+        <result column="tome" property="tome"/>
+        <result column="TomeDebut" property="tomeDebut"/>
+        <result column="TomeFin" property="tomeFin"/>
+        <result column="integrale" property="integrale"/>
+        <result column="HorsSerie" property="horsSerie"/>
+        <result column="notation" property="notation"/>
+        <result column="complet" property="complet"/>
+        <association property="serie" select="org.tetram.bdtheque.data.dao.SerieDao.getSerieById" column="id_serie"/>
+        <collection property="univers" select="org.tetram.bdtheque.data.dao.UniversDao.getListUniversLiteByAlbumId"
+                    column="id_album"/>
+        <collection property="editions" select="org.tetram.bdtheque.data.dao.EditionDao.getListEditionByAlbumId"
+                    column="{id=id_album}"/>
+    </resultMap>
+
+    <select id="getAlbumLiteById" resultMap="AlbumLite">
+        <![CDATA[
+        select
+            a.id_album, a.titrealbum, a.horsserie, a.integrale, a.tome, a.tomedebut, a.tomefin, a.id_serie, a.achat, a.complet, a.titreserie
+        ]]>
+        <if test="idEdition != null">
+            , e.stock
+        </if>
+        <![CDATA[
+        from
+            vw_liste_albums a
+        ]]>
+        <if test="idEdition != null">
+            <![CDATA[
+            inner join editions e on
+                a.id_album = e.id_album
+            ]]>
+        </if>
+        <![CDATA[
+        where
+            a.id_album = #{id}
+        ]]>
+        <if test="idEdition != null">
+            <![CDATA[
+            and e.id_edition = #{idEdition}
+            ]]>
+        </if>
+    </select>
+    <select id="getAlbumById" parameterType="UUID" resultMap="AlbumFull">
+        <![CDATA[
+        select
+            id_album, titrealbum, moisparution, anneeparution, id_serie, tome, tomedebut, tomefin, sujetalbum,
+            remarquesalbum, horsserie, integrale, complet, notation
+        from
+            albums
+        where
+            id_album = #{id}
+        ]]>
+    </select>
+</mapper>

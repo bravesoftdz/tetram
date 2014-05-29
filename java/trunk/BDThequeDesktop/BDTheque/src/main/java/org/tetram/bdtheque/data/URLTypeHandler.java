@@ -1,6 +1,5 @@
 package org.tetram.bdtheque.data;
 
-import org.apache.ibatis.logging.LogFactory;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.jetbrains.annotations.NotNull;

@@ -5,7 +5,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.tetram.bdtheque.data.bean.Collection;
 import org.tetram.bdtheque.data.bean.lite.CollectionLite;
-import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.List;
 

@@ -1,13 +1,14 @@
 package org.tetram.bdtheque.data.bean.lite;
 
+import org.tetram.bdtheque.data.bean.ValeurListe;
+
 /**
  * Created by Thierry on 24/05/2014.
  */
 public class ImageLite extends DBEntityLite {
     private String oldNom, newNom;
     private boolean oldStockee, newStockee;
-    private Integer categorie;
-    private String sCategorie;
+    private ValeurListe categorie;
 
     public String getOldNom() {
         return oldNom;
@@ -41,20 +42,12 @@ public class ImageLite extends DBEntityLite {
         this.newStockee = newStockee;
     }
 
-    public Integer getCategorie() {
+    public ValeurListe getCategorie() {
         return categorie;
     }
 
-    public void setCategorie(Integer categorie) {
+    public void setCategorie(ValeurListe categorie) {
         this.categorie = categorie;
-    }
-
-    public String getsCategorie() {
-        return sCategorie;
-    }
-
-    public void setsCategorie(String sCategorie) {
-        this.sCategorie = sCategorie;
     }
 
     @Override

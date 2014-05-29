@@ -34,5 +34,6 @@ public class ParaBDDaoTest extends DaoTest {
         Assert.assertFalse(paraBD.getPhotos().isEmpty());
         Assert.assertNotNull(paraBD.getPhotos().get(0).getId());
         Assert.assertNotNull(paraBD.getCategorieParaBD());
+        Assert.assertNotEquals("", paraBD.getCategorieParaBD().getTexte());
     }
 }

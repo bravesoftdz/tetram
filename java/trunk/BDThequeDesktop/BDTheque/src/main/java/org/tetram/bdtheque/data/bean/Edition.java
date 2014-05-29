@@ -1,8 +1,12 @@
 package org.tetram.bdtheque.data.bean;
 
 import org.tetram.bdtheque.data.bean.lite.CouvertureLite;
+import org.tetram.bdtheque.data.dao.DefaultValeurListeDao;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Thierry on 24/05/2014.
@@ -11,12 +15,12 @@ public class Edition extends DBEntity {
     private UUID idAlbum;
     private Editeur editeur;
     private Collection collection;
-    //property TypeEdition: ROption read FTypeEdition write FTypeEdition;
-    //property Etat: ROption read FEtat write FEtat;
-    //property Reliure: ROption read FReliure write FReliure;
-    //property FormatEdition: ROption read FFormatEdition write FFormatEdition;
-    //property Orientation: ROption read FOrientation write FOrientation;
-    //property SensLecture: ROption read FSensLecture write FSensLecture;
+    private ValeurListe etat = DefaultValeurListeDao.getInstance().getEtat();
+    private ValeurListe reliure = DefaultValeurListeDao.getInstance().getReliure();
+    private ValeurListe typeEdition = DefaultValeurListeDao.getInstance().getTypeEdition();
+    private ValeurListe formatEdition = DefaultValeurListeDao.getInstance().getFormatEdition();
+    private ValeurListe orientation = DefaultValeurListeDao.getInstance().getOrientation();
+    private ValeurListe sensLecture = DefaultValeurListeDao.getInstance().getSensLecture();
     private Integer anneeEdition;
     private Integer nombreDePages;
     private Integer anneeCote;
@@ -193,5 +197,53 @@ public class Edition extends DBEntity {
 
     public void setCouvertures(List<CouvertureLite> couvertures) {
         this.couvertures = couvertures;
+    }
+
+    public ValeurListe getEtat() {
+        return etat;
+    }
+
+    public void setEtat(ValeurListe etat) {
+        this.etat = etat;
+    }
+
+    public ValeurListe getReliure() {
+        return reliure;
+    }
+
+    public void setReliure(ValeurListe reliure) {
+        this.reliure = reliure;
+    }
+
+    public ValeurListe getTypeEdition() {
+        return typeEdition;
+    }
+
+    public void setTypeEdition(ValeurListe typeEdition) {
+        this.typeEdition = typeEdition;
+    }
+
+    public ValeurListe getFormatEdition() {
+        return formatEdition;
+    }
+
+    public void setFormatEdition(ValeurListe formatEdition) {
+        this.formatEdition = formatEdition;
+    }
+
+    public ValeurListe getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(ValeurListe orientation) {
+        this.orientation = orientation;
+    }
+
+    public ValeurListe getSensLecture() {
+        return sensLecture;
+    }
+
+    public void setSensLecture(ValeurListe sensLecture) {
+        this.sensLecture = sensLecture;
     }
 }
