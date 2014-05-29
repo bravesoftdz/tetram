@@ -11,6 +11,7 @@
 
     <settings>
         <setting name="lazyLoadingEnabled" value="true"/>
+        <setting name="aggressiveLazyLoading" value="false"/>
         <setting name="jdbcTypeForNull" value="NULL"/>
         <setting name="callSettersOnNulls" value="false"/>
         <setting name="logImpl" value="LOG4J2"/>
@@ -96,6 +97,7 @@
 
     <mappers>
         <mapper resource="org/tetram/bdtheque/data/bean/Album.xml"/>
+        <mapper resource="org/tetram/bdtheque/data/bean/Auteur.xml"/>
         <mapper resource="org/tetram/bdtheque/data/bean/Collection.xml"/>
         <mapper resource="org/tetram/bdtheque/data/bean/Editeur.xml"/>
         <mapper resource="org/tetram/bdtheque/data/bean/Edition.xml"/>

@@ -252,47 +252,6 @@ begin
   end;
 end;
 
-class procedure TDaoAlbumFull.Fill(Entity: TAlbumFull; const Reference: TGUID);
-var
-  qry: TUIBQuery;
-begin
-  inherited;
-  if IsEqualGUID(Reference, GUID_NULL) then
-    Exit;
-  Entity.ID_Album := Reference;
-  qry := DBConnection.GetQuery;
-  try
-    if not Entity.RecInconnu then
-    begin
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill > auteurs - ' + GUIDToString(Reference));
-      qry.Close;
-      qry.SQL.Text := 'select * from proc_auteurs(?, null, null)';
-      qry.Params.AsString[0] := GUIDToString(Reference);
-      qry.Open;
-      TDaoAuteurAlbumLite.Prepare(qry);
-      try
-        while not qry.Eof do
-        begin
-          case TMetierAuteur(qry.Fields.ByNameAsInteger['metier']) of
-            maScenariste:
-              Entity.Scenaristes.Add(TDaoAuteurAlbumLite.Make(qry));
-            maDessinateur:
-              Entity.Dessinateurs.Add(TDaoAuteurAlbumLite.Make(qry));
-            maColoriste:
-              Entity.Coloristes.Add(TDaoAuteurAlbumLite.Make(qry));
-          end;
-          qry.Next;
-        end;
-      finally
-        TDaoAuteurAlbumLite.Unprepare(qry);
-      end;
-      TfrmConsole.AddEvent(Self.UnitName, 'TDaoAlbumFull.Fill < auteurs - ' + GUIDToString(Reference));
-    end;
-  finally
-    qry.Free;
-  end;
-end;
-
 class procedure TDaoAlbumFull.FusionneInto(Source, Dest: TAlbumFull);
 
   function NotInList(Auteur: TAuteurAlbumLite; List: TObjectList<TAuteurAlbumLite>): Boolean; inline; overload;
@@ -565,28 +524,6 @@ begin
     qry.Params.AsString[1] := GUIDToString(Entity.ID_ParaBD);
     qry.Execute;
     qry.Transaction.Commit;
-  finally
-    qry.Free;
-  end;
-end;
-
-class procedure TDaoParaBDFull.Fill(Entity: TParaBDFull; const Reference: TGUID);
-var
-  qry: TUIBQuery;
-  ID_Serie: TGUID;
-begin
-  inherited;
-  if IsEqualGUID(Reference, GUID_NULL) then
-    Exit;
-  Entity.ID_ParaBD := Reference;
-  qry := DBConnection.GetQuery;
-  try
-      qry.Close;
-      qry.SQL.Text := 'select * from proc_auteurs(null, null, ?)';
-      qry.Params.AsString[0] := GUIDToString(Reference);
-      qry.Open;
-      TDaoAuteurParaBDLite.FillList(Entity.Auteurs, qry);
-    end;
   finally
     qry.Free;
   end;
@@ -934,32 +871,6 @@ begin
 end;
 
 { TDaoEditionFull }
-
-class procedure TDaoEditionFull.FillList(EntitiesList: TObjectList<TEditionFull>; const Reference: TGUID; Stock: Integer = -1);
-var
-  qry: TUIBQuery;
-begin
-  EntitiesList.Clear;
-  qry := DBConnection.GetQuery;
-  try
-    TfrmConsole.AddEvent(Self.UnitName, '> TDaoEditionFull.FillList - ' + GUIDToString(Reference));
-    qry.SQL.Text := 'select id_edition from editions where id_album = ?';
-    if Stock in [0, 1] then
-      qry.SQL.Add('  and e.stock = :stock');
-    qry.Params.AsString[0] := GUIDToString(Reference);
-    if Stock in [0, 1] then
-      qry.Params.AsInteger[1] := Stock;
-    qry.Open;
-    while not qry.Eof do
-    begin
-      EntitiesList.Add(getInstance(StringToGUID(qry.Fields.AsString[0])));
-      qry.Next;
-    end;
-    TfrmConsole.AddEvent(Self.UnitName, '< TDaoEditionFull.FillList - ' + GUIDToString(Reference));
-  finally
-    qry.Free;
-  end;
-end;
 
 class procedure TDaoEditionFull.FusionneInto(Source, Dest: TObjectList<TEditionFull>);
 type

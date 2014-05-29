@@ -27,9 +27,10 @@ public class Serie extends DBEntity {
     private int nbAlbums;
     private List<AlbumLite> albums = new ArrayList<>();
     private List<ParaBDLite> paraBDs = new ArrayList<>();
-    private List<AuteurSerieLite> scenaristes = new ArrayList<>();
-    private List<AuteurSerieLite> dessinateurs = new ArrayList<>();
-    private List<AuteurSerieLite> coloristes = new ArrayList<>();
+    private List<AuteurSerieLite> auteurs = new ArrayList<>();
+    private List<AuteurSerieLite> scenaristes = null;
+    private List<AuteurSerieLite> dessinateurs = null;
+    private List<AuteurSerieLite> coloristes = null;
     private Boolean vo;
     private Boolean couleur;
     private ValeurListe etat = DefaultValeurListeDao.getInstance().getEtat();
@@ -153,28 +154,54 @@ public class Serie extends DBEntity {
         this.paraBDs = paraBDs;
     }
 
+    private void buildListsAuteurs() {
+        int countScenaristes = (scenaristes != null ? scenaristes.size() : 0);
+        int countDessinateurs = (dessinateurs != null ? dessinateurs.size() : 0);
+        int countColoristes = (coloristes != null ? coloristes.size() : 0);
+
+        int countAuteurs = countScenaristes + countDessinateurs + countColoristes;
+
+        if (scenaristes == null || dessinateurs == null || coloristes == null || auteurs.size() != countAuteurs) {
+            scenaristes = new ArrayList<>();
+            dessinateurs = new ArrayList<>();
+            coloristes = new ArrayList<>();
+            for (AuteurSerieLite a : auteurs) {
+                switch (a.getMetier()) {
+                    case SCENARISTE:
+                        scenaristes.add(a);
+                        break;
+                    case DESSINATEUR:
+                        dessinateurs.add(a);
+                        break;
+                    case COLORISTE:
+                        coloristes.add(a);
+                        break;
+                }
+            }
+        }
+    }
+
+    public List<AuteurSerieLite> getAuteurs() {
+        return auteurs;
+    }
+
+    public void setAuteurs(List<AuteurSerieLite> auteurs) {
+        this.auteurs = auteurs;
+    }
+
     public List<AuteurSerieLite> getScenaristes() {
+        buildListsAuteurs();
         return scenaristes;
     }
 
-    public void setScenaristes(List<AuteurSerieLite> scenaristes) {
-        this.scenaristes = scenaristes;
-    }
-
     public List<AuteurSerieLite> getDessinateurs() {
+        buildListsAuteurs();
         return dessinateurs;
     }
 
-    public void setDessinateurs(List<AuteurSerieLite> dessinateurs) {
-        this.dessinateurs = dessinateurs;
-    }
-
     public List<AuteurSerieLite> getColoristes() {
+        buildListsAuteurs();
         return coloristes;
-    }
-
-    public void setColoristes(List<AuteurSerieLite> coloristes) {
-        this.coloristes = coloristes;
     }
 
     public Boolean getVo() {

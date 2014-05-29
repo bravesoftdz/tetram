@@ -36,9 +36,11 @@
         <result column="complet" property="complet"/>
         <association property="serie" select="org.tetram.bdtheque.data.dao.SerieDao.getSerieById" column="id_serie"/>
         <collection property="univers" select="org.tetram.bdtheque.data.dao.UniversDao.getListUniversLiteByAlbumId"
-                    column="id_album"/>
+                    column="id_album" fetchType="eager"/>
         <collection property="editions" select="org.tetram.bdtheque.data.dao.EditionDao.getListEditionByAlbumId"
                     column="{id=id_album}"/>
+        <collection property="auteurs" select="org.tetram.bdtheque.data.dao.AuteurDao.getListAuteurLiteByAlbumId"
+                    column="id_album" fetchType="eager"/>
     </resultMap>
 
     <select id="getAlbumLiteById" resultMap="AlbumLite">

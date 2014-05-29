@@ -47,5 +47,8 @@ public class SerieDaoTest extends DaoTest {
         Assert.assertNotEquals("", serie.getSensLecture().getTexte());
         Assert.assertNotNull(serie.getGenres());
         Assert.assertEquals(ID_GENRE_AVENTURES, serie.getGenres().get(0).getId());
+        Assert.assertNotNull(serie.getAuteurs());
+        Assert.assertFalse(serie.getAuteurs().isEmpty());
+        Assert.assertEquals(serie.getAuteurs().size(), serie.getScenaristes().size() + serie.getDessinateurs().size() + serie.getColoristes().size());
     }
 }

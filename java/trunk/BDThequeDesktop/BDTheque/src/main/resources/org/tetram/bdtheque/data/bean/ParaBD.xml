@@ -28,8 +28,10 @@
         <result column="categorieparabd" property="categorieParaBD"/>
         <association property="serie" select="org.tetram.bdtheque.data.dao.SerieDao.getSerieById" column="id_serie"/>
         <collection property="univers" select="org.tetram.bdtheque.data.dao.UniversDao.getListUniversLiteByParaBDId"
-                    column="id_parabd"/>
+                    column="id_parabd" fetchType="eager"/>
         <collection property="photos" select="org.tetram.bdtheque.data.dao.ImageDao.getListPhotoLiteByParaBDId"
+                    column="id_parabd"/>
+        <collection property="auteurs" select="org.tetram.bdtheque.data.dao.AuteurDao.getListAuteurLiteByParaBDId"
                     column="id_parabd"/>
     </resultMap>
 

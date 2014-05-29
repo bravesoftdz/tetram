@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.lite.AuteurParaBDLite;
 import org.tetram.bdtheque.data.bean.lite.PhotoLite;
 import org.tetram.bdtheque.data.bean.lite.UniversLite;
@@ -163,22 +164,8 @@ public class ParaBD extends DBEntity {
     }
 
     public List<UniversLite> getUniversFull() {
-        Integer countUnivers = (univers != null ? univers.size() : 0);
-        if (serie != null)
-            countUnivers += (serie.getUnivers() != null ? serie.getUnivers().size() : 0);
-
-        if (universFull == null || universFull.size() != countUnivers) {
-            universFull = new ArrayList<>();
-            if (univers != null)
-                universFull.addAll(univers);
-            if (serie != null && serie.getUnivers() != null)
-                universFull.addAll(serie.getUnivers());
-        }
+        universFull = BeanUtils.checkAndBuildListUniversFull(universFull, univers, serie);
         return universFull;
-    }
-
-    public void setUniversFull(List<UniversLite> universFull) {
-        this.universFull = universFull;
     }
 
     public List<PhotoLite> getPhotos() {

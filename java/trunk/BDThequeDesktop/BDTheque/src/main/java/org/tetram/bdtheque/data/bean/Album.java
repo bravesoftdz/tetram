@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.lite.AuteurAlbumLite;
 import org.tetram.bdtheque.data.bean.lite.UniversLite;
 
@@ -19,9 +20,10 @@ public class Album extends DBEntity {
     private Integer tomeDebut, tomeFin;
     private boolean horsSerie;
     private boolean integrale;
-    private List<AuteurAlbumLite> scenaristes = new ArrayList<>();
-    private List<AuteurAlbumLite> dessinateurs = new ArrayList<>();
-    private List<AuteurAlbumLite> coloristes = new ArrayList<>();
+    private List<AuteurAlbumLite> auteurs = new ArrayList<>();
+    private List<AuteurAlbumLite> scenaristes = null;
+    private List<AuteurAlbumLite> dessinateurs = null;
+    private List<AuteurAlbumLite> coloristes = null;
     private String sujet;
     private String notes;
     private List<Edition> editions = new ArrayList<>();
@@ -109,28 +111,57 @@ public class Album extends DBEntity {
         this.integrale = integrale;
     }
 
+    public List<AuteurAlbumLite> getAuteurs() {
+        return auteurs;
+    }
+
+    public void setAuteurs(List<AuteurAlbumLite> auteurs) {
+        this.auteurs = auteurs;
+    }
+
+    private void buildListsAuteurs() {
+        int countScenaristes = (scenaristes != null ? scenaristes.size() : 0);
+        int countDessinateurs = (dessinateurs != null ? dessinateurs.size() : 0);
+        int countColoristes = (coloristes != null ? coloristes.size() : 0);
+
+        int countAuteurs = countScenaristes + countDessinateurs + countColoristes;
+
+        if (scenaristes == null || dessinateurs == null || coloristes == null || auteurs.size() != countAuteurs) {
+            scenaristes = new ArrayList<>();
+            dessinateurs = new ArrayList<>();
+            coloristes = new ArrayList<>();
+            for (int i = auteurs.size() - 1; i >= 0; i--) {
+
+            }
+            for (AuteurAlbumLite a : auteurs) {
+                switch (a.getMetier()) {
+                    case SCENARISTE:
+                        scenaristes.add(a);
+                        break;
+                    case DESSINATEUR:
+                        dessinateurs.add(a);
+                        break;
+                    case COLORISTE:
+                        coloristes.add(a);
+                        break;
+                }
+            }
+        }
+    }
+
     public List<AuteurAlbumLite> getScenaristes() {
+        buildListsAuteurs();
         return scenaristes;
     }
 
-    public void setScenaristes(List<AuteurAlbumLite> scenaristes) {
-        this.scenaristes = scenaristes;
-    }
-
     public List<AuteurAlbumLite> getDessinateurs() {
+        buildListsAuteurs();
         return dessinateurs;
     }
 
-    public void setDessinateurs(List<AuteurAlbumLite> dessinateurs) {
-        this.dessinateurs = dessinateurs;
-    }
-
     public List<AuteurAlbumLite> getColoristes() {
+        buildListsAuteurs();
         return coloristes;
-    }
-
-    public void setColoristes(List<AuteurAlbumLite> coloristes) {
-        this.coloristes = coloristes;
     }
 
     public String getSujet() {
@@ -174,22 +205,8 @@ public class Album extends DBEntity {
     }
 
     public List<UniversLite> getUniversFull() {
-        Integer countUnivers = (univers != null ? univers.size() : 0);
-        if (serie != null)
-            countUnivers += (serie.getUnivers() != null ? serie.getUnivers().size() : 0);
-
-        if (universFull == null || universFull.size() != countUnivers) {
-            universFull = new ArrayList<>();
-            if (univers != null)
-                universFull.addAll(univers);
-            if (serie != null && serie.getUnivers() != null)
-                universFull.addAll(serie.getUnivers());
-        }
+        universFull = BeanUtils.checkAndBuildListUniversFull(universFull, univers, serie);
         return universFull;
-    }
-
-    public void setUniversFull(List<UniversLite> universFull) {
-        this.universFull = universFull;
     }
 
     public UUID getIdSerie() {

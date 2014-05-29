@@ -32,5 +32,9 @@ public class AlbumDaoTest extends DaoTest {
         Assert.assertNotNull(album.getSerie());
         Assert.assertNotNull(album.getEditions());
         Assert.assertEquals(2, album.getEditions().size());
+        Assert.assertFalse(album.getScenaristes().isEmpty());
+        Assert.assertNotNull(album.getAuteurs());
+        Assert.assertFalse(album.getAuteurs().isEmpty());
+        Assert.assertEquals(album.getAuteurs().size(), album.getScenaristes().size() + album.getDessinateurs().size() + album.getColoristes().size());
     }
 }

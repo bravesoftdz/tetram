@@ -38,6 +38,8 @@
                     column="id_serie"/>
         <collection property="genres" select="org.tetram.bdtheque.data.dao.GenreDao.getListGenreBySerieId"
                     column="id_serie"/>
+        <collection property="auteurs" select="org.tetram.bdtheque.data.dao.AuteurDao.getListAuteurLiteBySerieId"
+                    column="id_serie" fetchType="eager"/>
     </resultMap>
 
     <select id="getSerieLiteById" resultMap="SerieLite">

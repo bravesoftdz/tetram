@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.tetram.bdtheque.data.dao.AuteurDao">
+    <resultMap id="PersonneLite" type="beanPersonneLite">
+        <id column="" property="id"/>
+        <result column="" property="nom"/>
+    </resultMap>
+    <resultMap id="AuteurLite" type="beanAuteurLite">
+        <association property="personne" resultMap="PersonneLite"/>
+    </resultMap>
+    <resultMap id="AuteurSerieLite" type="beanAuteurSerieLite" extends="AuteurLite">
+        <result column="id_serie" property="idSerie"/>
+        <result column="metier" property="metier"/>
+    </resultMap>
+    <resultMap id="AuteurAlbumLite" type="beanAuteurAlbumLite" extends="AuteurSerieLite">
+        <result column="id_album" property="idAlbum"/>
+    </resultMap>
+    <resultMap id="AuteurParaBDLite" type="beanAuteurParaBDLite" extends="AuteurLite">
+        <result column="id_parabd" property="idParaBD"/>
+    </resultMap>
+    <resultMap id="AuteurFull" type="beanAuteur">
+        <id column="" property="id"/>
+        <result column="SiteWeb" property="siteWeb"/>
+        <result column="" property="biographie"/>
+        <collection property="series" select="" column="id_personne"/>
+    </resultMap>
+
+    <select id="getListAuteurLiteByAlbumId" resultMap="AuteurAlbumLite">
+        <![CDATA[
+        select
+            *
+        from
+            proc_auteurs(#{id}, null, null)
+        ]]>
+    </select>
+    <select id="getListAuteurLiteBySerieId" resultMap="AuteurSerieLite">
+        <![CDATA[
+        select
+            *
+        from
+            proc_auteurs(null, #{id}, null)
+        ]]>
+    </select>
+    <select id="getListAuteurLiteByParaBDId" resultMap="AuteurParaBDLite">
+        <![CDATA[
+        select
+            *
+        from
+            proc_auteurs(null, null, #{id})
+        ]]>
+    </select>
+</mapper>
