@@ -771,68 +771,6 @@ end;
 
 { TDaoAuteurFull }
 
-class procedure TDaoAuteurFull.Fill(Entity: TAuteurFull; const Reference: TGUID);
-var
-  qry: TUIBQuery;
-begin
-  inherited;
-  if IsEqualGUID(Reference, GUID_NULL) then
-    Exit;
-  Entity.ID_Auteur := Reference;
-  qry := DBConnection.GetQuery;
-  try
-    qry.SQL.Text := 'select nompersonne, siteweb, biographie from personnes where id_personne = ?';
-    qry.Params.AsString[0] := GUIDToString(Reference);
-    qry.FetchBlobs := True;
-    qry.Open;
-    Entity.RecInconnu := qry.Eof;
-
-    if not Entity.RecInconnu then
-    begin
-      Entity.NomAuteur := qry.Fields.ByNameAsString['nompersonne'];
-      Entity.Biographie := qry.Fields.ByNameAsString['biographie'];
-      Entity.SiteWeb := qry.Fields.ByNameAsString['siteweb'];
-      qry.FetchBlobs := False;
-
-      qry.SQL.Clear;
-      // TitreSerie en premier pour forcer l'union à trier sur le titre
-      qry.SQL.Add('select');
-      qry.SQL.Add('  titreserie, al.id_serie');
-      qry.SQL.Add('from');
-      qry.SQL.Add('  vw_liste_albums al');
-      qry.SQL.Add('  inner join auteurs au on');
-      qry.SQL.Add('    al.id_album = au.id_album and au.id_personne = :id_personne');
-      qry.SQL.Add('union');
-      qry.SQL.Add('select');
-      qry.SQL.Add('  titreserie, s.id_serie');
-      qry.SQL.Add('from');
-      qry.SQL.Add('  auteurs_series au');
-      qry.SQL.Add('  inner join series s on');
-      qry.SQL.Add('    s.id_serie = au.id_serie and au.id_personne = :id_personne');
-      qry.SQL.Add('union');
-      qry.SQL.Add('select');
-      qry.SQL.Add('  titreserie, p.id_serie');
-      qry.SQL.Add('from');
-      qry.SQL.Add('  auteurs_parabd ap');
-      qry.SQL.Add('  inner join vw_liste_parabd p on');
-      qry.SQL.Add('    ap.id_parabd = p.id_parabd and ap.id_personne = :id_personne');
-      qry.Params.ByNameAsString['id_personne'] := GUIDToString(Reference);
-      qry.Open;
-      while not qry.Eof do
-      begin
-        if qry.Fields.IsNull[1] then
-          Entity.Series.Insert(0, TDaoSerieFull.getInstance(GUID_NULL, Entity.ID_Auteur, True))
-        else
-          Entity.Series.Add(TDaoSerieFull.getInstance(StringToGUID(qry.Fields.AsString[1]), Entity.ID_Auteur, True));
-        qry.Next;
-      end;
-    end;
-  finally
-    qry.Transaction.Free;
-    qry.Free;
-  end;
-end;
-
 class procedure TDaoAuteurFull.SaveToDatabase(Entity: TAuteurFull; UseTransaction: TUIBTransaction);
 var
   qry: TUIBQuery;
@@ -1116,50 +1054,6 @@ begin
   Entity.ID_Serie := Reference;
   qry := DBConnection.GetQuery;
   try
-      qry.Close;
-      qry.SQL.Text := 'select * from proc_auteurs(null, ?, null)';
-      qry.Params.AsString[0] := GUIDToString(Reference);
-      qry.Open;
-      TDaoAuteurSerieLite.Prepare(qry);
-      try
-        while not qry.Eof do
-        begin
-          case TMetierAuteur(qry.Fields.ByNameAsInteger['metier']) of
-            maScenariste:
-              Entity.Scenaristes.Add(TDaoAuteurSerieLite.Make(qry));
-            maDessinateur:
-              Entity.Dessinateurs.Add(TDaoAuteurSerieLite.Make(qry));
-            maColoriste:
-              Entity.Coloristes.Add(TDaoAuteurSerieLite.Make(qry));
-          end;
-          qry.Next;
-        end;
-      finally
-        TDaoAuteurSerieLite.Unprepare(qry);
-      end;
-    end;
-
-    qry.Close;
-    qry.SQL.Clear;
-    qry.SQL.Add('select');
-    qry.SQL.Add('  id_album, titrealbum, integrale, horsserie, tome, tomedebut, tomefin, id_serie, notation');
-    qry.SQL.Add('from');
-    qry.SQL.Add('  albums');
-    qry.SQL.Add('where');
-    if IsEqualGUID(Reference, GUID_NULL) then
-      qry.SQL.Add('  (id_serie is null or id_serie = ?)')
-    else
-      qry.SQL.Add('  id_serie = ?');
-    if not IsEqualGUID(IdAuteurFiltre, GUID_NULL) then
-      qry.SQL.Add('  and id_album in (select id_album from auteurs where id_personne = ?)');
-    qry.SQL.Add('order by');
-    qry.SQL.Add('  horsserie nulls first, integrale nulls first, tome nulls first, anneeparution, moisparution');
-    qry.Params.AsString[0] := GUIDToString(Reference);
-    if not IsEqualGUID(IdAuteurFiltre, GUID_NULL) then
-      qry.Params.AsString[1] := GUIDToString(IdAuteurFiltre);
-    qry.Open;
-    TDaoAlbumLite.FillList(Entity.Albums, qry);
-
     qry.Close;
     qry.SQL.Clear;
     qry.SQL.Add('select');
@@ -1175,7 +1069,7 @@ begin
       qry.SQL.Add('and id_parabd in (select id_parabd from auteurs_parabd where id_personne = ?)');
     qry.SQL.Add('order by');
     qry.SQL.Add('  titreparabd');
-    qry.Params.AsString[0] := GUIDToString(Reference);
+qry.Params.AsString[0] := GUIDToString(Reference);
     if not IsEqualGUID(IdAuteurFiltre, GUID_NULL) then
       qry.Params.AsString[1] := GUIDToString(IdAuteurFiltre);
     qry.Open;

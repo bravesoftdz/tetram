@@ -1,8 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.lite.AuteurAlbumLite;
-import org.tetram.bdtheque.data.bean.lite.UniversLite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 24/05/2014.
  */
-public class Album extends DBEntity {
+public class Album extends AbstractDBEntity {
     private boolean complet;
     private String titreAlbum;
     private Serie serie;

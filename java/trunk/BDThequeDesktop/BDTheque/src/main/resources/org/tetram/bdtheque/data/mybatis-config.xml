@@ -34,30 +34,30 @@
         <typeAlias type="org.tetram.bdtheque.data.bean.MetierAuteur" alias="MetierAuteur"/>
 
         <typeAlias type="org.tetram.bdtheque.data.bean.Album" alias="beanAlbum"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.AlbumLite" alias="beanAlbumLite"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.AuteurAlbumLite" alias="beanAuteurAlbumLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.AlbumLite" alias="beanAlbumLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.AuteurAlbumLite" alias="beanAuteurAlbumLite"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.Auteur" alias="beanAuteur"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.AuteurLite" alias="beanAuteurLite"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.AuteurParaBDLite" alias="beanAuteurParaBDLite"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.AuteurSerieLite" alias="beanAuteurSerieLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.AuteurLite" alias="beanAuteurLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.AuteurParaBDLite" alias="beanAuteurParaBDLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.AuteurSerieLite" alias="beanAuteurSerieLite"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.Collection" alias="beanCollection"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.CollectionLite" alias="beanCollectionLite"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.ConversionLite" alias="beanConversionLite"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.CouvertureLite" alias="beanCouvertureLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.CollectionLite" alias="beanCollectionLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.ConversionLite" alias="beanConversionLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.CouvertureLite" alias="beanCouvertureLite"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.Editeur" alias="beanEditeur"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.EditeurLite" alias="beanEditeurLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.EditeurLite" alias="beanEditeurLite"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.Edition" alias="beanEdition"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.EditionLite" alias="beanEditionLite"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.GenreLite" alias="beanGenreLite"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.ImageLite" alias="beanImageLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.EditionLite" alias="beanEditionLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.GenreLite" alias="beanGenreLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.ImageLite" alias="beanImageLite"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.ParaBD" alias="beanParaBD"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.ParaBDLite" alias="beanParaBDLite"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.PersonneLite" alias="beanPersonneLite"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.PhotoLite" alias="beanPhotoLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.ParaBDLite" alias="beanParaBDLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.PersonneLite" alias="beanPersonneLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.PhotoLite" alias="beanPhotoLite"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.Serie" alias="beanSerie"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.SerieLite" alias="beanSerieLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.SerieLite" alias="beanSerieLite"/>
         <typeAlias type="org.tetram.bdtheque.data.bean.Univers" alias="beanUnivers"/>
-        <typeAlias type="org.tetram.bdtheque.data.bean.lite.UniversLite" alias="beanUniversLite"/>
+        <typeAlias type="org.tetram.bdtheque.data.bean.UniversLite" alias="beanUniversLite"/>
     </typeAliases>
 
     <typeHandlers>

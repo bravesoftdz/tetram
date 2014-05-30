@@ -50,7 +50,7 @@ public class Database {
         return sqlSessionFactory;
     }
 
-    public SqlSession getSession() {
+    public SqlSession openSession() {
         return sqlSessionFactory.openSession();
     }
 }

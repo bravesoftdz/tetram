@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.tetram.bdtheque.data.dao.ParaBDDao">
+<mapper namespace="org.tetram.bdtheque.data.mappers.ParaBDMapper">
     <resultMap id="ParaBDLite" type="beanParaBDLite">
         <id column="id_parabd" property="id"/>
         <result column="titreparabd" property="titre"/>
@@ -26,12 +26,15 @@
         <result column="anneecote" property="anneeCote"/>
         <result column="prixcote" property="prixCote"/>
         <result column="categorieparabd" property="categorieParaBD"/>
-        <association property="serie" select="org.tetram.bdtheque.data.dao.SerieDao.getSerieById" column="id_serie"/>
-        <collection property="univers" select="org.tetram.bdtheque.data.dao.UniversDao.getListUniversLiteByParaBDId"
+        <association property="serie" select="org.tetram.bdtheque.data.mappers.SerieMapper.getSerieById"
+                     column="id_serie"/>
+        <collection property="univers"
+                    select="org.tetram.bdtheque.data.mappers.UniversMapper.getListUniversLiteByParaBDId"
                     column="id_parabd" fetchType="eager"/>
-        <collection property="photos" select="org.tetram.bdtheque.data.dao.ImageDao.getListPhotoLiteByParaBDId"
+        <collection property="photos" select="org.tetram.bdtheque.data.mappers.ImageMapper.getListPhotoLiteByParaBDId"
                     column="id_parabd"/>
-        <collection property="auteurs" select="org.tetram.bdtheque.data.dao.AuteurDao.getListAuteurLiteByParaBDId"
+        <collection property="auteurs"
+                    select="org.tetram.bdtheque.data.mappers.AuteurMapper.getListAuteurLiteByParaBDId"
                     column="id_parabd"/>
     </resultMap>
 
@@ -52,6 +55,28 @@
                 (lc.ref = p.categorieparabd and lc.categorie = 7)
         where
             id_parabd = #{id}
+        ]]>
+    </select>
+
+    <select id="getParaBDLiteBySerieIdByAuteurId" parameterType="map" resultMap="ParaBDLite" resultOrdered="true">
+        <![CDATA[
+        select
+            id_parabd, titreParabd, id_serie, titreSerie, achat, complet, sCategorie
+        from
+            vw_liste_parabd
+        ]]>
+        <where>
+            <choose>
+                <when test="idSerie == null">(id_serie is null or id_serie = #{idSerie})</when>
+                <otherwise>id_serie = #{idSerie}</otherwise>
+            </choose>
+            <if test="idAuteur != null">
+                and id_parabd in (select id_parabd from auteurs_parabd where id_personne = #{idAuteur})
+            </if>
+        </where>
+        <![CDATA[
+        order by
+            titreParabd
         ]]>
     </select>
 </mapper>

@@ -1,7 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
-import org.tetram.bdtheque.data.bean.lite.CouvertureLite;
-import org.tetram.bdtheque.data.dao.DefaultValeurListeDao;
+import org.tetram.bdtheque.data.mappers.DefaultValeurListeMapper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,16 +10,16 @@ import java.util.UUID;
 /**
  * Created by Thierry on 24/05/2014.
  */
-public class Edition extends DBEntity {
+public class Edition extends AbstractDBEntity {
     private UUID idAlbum;
     private Editeur editeur;
     private Collection collection;
-    private ValeurListe etat = DefaultValeurListeDao.getInstance().getEtat();
-    private ValeurListe reliure = DefaultValeurListeDao.getInstance().getReliure();
-    private ValeurListe typeEdition = DefaultValeurListeDao.getInstance().getTypeEdition();
-    private ValeurListe formatEdition = DefaultValeurListeDao.getInstance().getFormatEdition();
-    private ValeurListe orientation = DefaultValeurListeDao.getInstance().getOrientation();
-    private ValeurListe sensLecture = DefaultValeurListeDao.getInstance().getSensLecture();
+    private ValeurListe etat = DefaultValeurListeMapper.getInstance().getEtat();
+    private ValeurListe reliure = DefaultValeurListeMapper.getInstance().getReliure();
+    private ValeurListe typeEdition = DefaultValeurListeMapper.getInstance().getTypeEdition();
+    private ValeurListe formatEdition = DefaultValeurListeMapper.getInstance().getFormatEdition();
+    private ValeurListe orientation = DefaultValeurListeMapper.getInstance().getOrientation();
+    private ValeurListe sensLecture = DefaultValeurListeMapper.getInstance().getSensLecture();
     private Integer anneeEdition;
     private Integer nombreDePages;
     private Integer anneeCote;

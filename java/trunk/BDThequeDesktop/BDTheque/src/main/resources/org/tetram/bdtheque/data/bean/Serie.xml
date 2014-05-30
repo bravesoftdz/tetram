@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.tetram.bdtheque.data.dao.SerieDao">
+<mapper namespace="org.tetram.bdtheque.data.mappers.SerieMapper">
     <resultMap id="SerieLite" type="beanSerieLite">
         <id column="id_serie" property="id"/>
         <result column="TitreSerie" property="titreSerie"/>
         <result column="notation" property="notation"/>
-        <association property="editeur" select="org.tetram.bdtheque.data.dao.EditeurDao.getEditeurLiteById"
+        <association property="editeur" select="org.tetram.bdtheque.data.mappers.EditeurMapper.getEditeurLiteById"
                      column="id_editeur"/>
-        <association property="collection" select="org.tetram.bdtheque.data.dao.CollectionDao.getCollectionLiteById"
+        <association property="collection" select="org.tetram.bdtheque.data.mappers.CollectionMapper.getCollectionLiteById"
                      column="id_collection"/>
     </resultMap>
     <resultMap id="SerieFull" type="beanSerie">
@@ -30,15 +30,15 @@
         <result column="orientation" property="orientation"/>
         <result column="formatedition" property="formatEdition"/>
         <result column="senslecture" property="sensLecture"/>
-        <association property="editeur" select="org.tetram.bdtheque.data.dao.EditeurDao.getEditeurById"
+        <association property="editeur" select="org.tetram.bdtheque.data.mappers.EditeurMapper.getEditeurById"
                      column="id_editeur"/>
-        <association property="collection" select="org.tetram.bdtheque.data.dao.CollectionDao.getCollectionById"
+        <association property="collection" select="org.tetram.bdtheque.data.mappers.CollectionMapper.getCollectionById"
                      column="id_collection"/>
-        <collection property="univers" select="org.tetram.bdtheque.data.dao.UniversDao.getListUniversLiteBySerieId"
+        <collection property="univers" select="org.tetram.bdtheque.data.mappers.UniversMapper.getListUniversLiteBySerieId"
                     column="id_serie"/>
-        <collection property="genres" select="org.tetram.bdtheque.data.dao.GenreDao.getListGenreBySerieId"
+        <collection property="genres" select="org.tetram.bdtheque.data.mappers.GenreMapper.getListGenreBySerieId"
                     column="id_serie"/>
-        <collection property="auteurs" select="org.tetram.bdtheque.data.dao.AuteurDao.getListAuteurLiteBySerieId"
+        <collection property="auteurs" select="org.tetram.bdtheque.data.mappers.AuteurMapper.getListAuteurLiteBySerieId"
                     column="id_serie" fetchType="eager"/>
     </resultMap>
 
@@ -83,5 +83,37 @@
         where
             id_serie = #{id}
        ]]>
+    </select>
+
+    <select id="getListSerieIdByAuteurId" resultMap="SerieLite" parameterType="UUID" resultOrdered="true">
+        <![CDATA[
+        select
+            al.id_serie, titreserie
+        from
+            vw_liste_albums al
+        inner join auteurs au on
+            al.id_album = au.id_album and au.id_personne = #{id}
+
+        union
+
+        select
+            s.id_serie, titreserie
+        from
+            auteurs_series au
+            inner join series s on
+                s.id_serie = au.id_serie and au.id_personne = #{id}
+
+        union
+
+        select
+            p.id_serie, titreserie
+        from
+            auteurs_parabd ap
+            inner join vw_liste_parabd p on
+                ap.id_parabd = p.id_parabd and ap.id_personne = #{id}
+
+        order by
+            2 nulls first
+        ]]>
     </select>
 </mapper>

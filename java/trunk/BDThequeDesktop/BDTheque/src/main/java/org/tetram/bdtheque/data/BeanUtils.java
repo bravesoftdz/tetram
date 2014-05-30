@@ -1,7 +1,7 @@
 package org.tetram.bdtheque.data;
 
 import org.tetram.bdtheque.data.bean.Serie;
-import org.tetram.bdtheque.data.bean.lite.UniversLite;
+import org.tetram.bdtheque.data.bean.UniversLite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
  */
 public abstract class BeanUtils {
     public static List<UniversLite> checkAndBuildListUniversFull(List<UniversLite> universFull, List<UniversLite> univers, Serie serie) {
-        Integer countUnivers = (univers != null ? univers.size() : 0);
+        int countUnivers = (univers != null ? univers.size() : 0);
         if (serie != null)
             countUnivers += (serie.getUnivers() != null ? serie.getUnivers().size() : 0);
 

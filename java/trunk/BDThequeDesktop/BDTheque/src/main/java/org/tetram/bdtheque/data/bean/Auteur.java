@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Thierry on 24/05/2014.
  */
-public class Auteur extends DBEntity {
+public class Auteur extends AbstractDBEntity {
     private String nomAuteur;
     private URL siteWeb;
     private String biographie;
@@ -41,7 +41,8 @@ public class Auteur extends DBEntity {
         return series;
     }
 
-    public void setSeries(List<Serie> series) {
-        this.series = series;
+    public void setSeries(List<Serie> idSeries) {
+        this.series = idSeries;
     }
+
 }

@@ -5,7 +5,7 @@ import java.net.URL;
 /**
  * Created by Thierry on 24/05/2014.
  */
-public class Editeur extends DBEntity {
+public class Editeur extends AbstractDBEntity {
     private String nomEditeur;
     private URL siteWeb;
 

@@ -1,10 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.bean.lite.AuteurParaBDLite;
-import org.tetram.bdtheque.data.bean.lite.PhotoLite;
-import org.tetram.bdtheque.data.bean.lite.UniversLite;
-import org.tetram.bdtheque.data.dao.DefaultValeurListeDao;
+import org.tetram.bdtheque.data.mappers.DefaultValeurListeMapper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,9 +11,9 @@ import java.util.UUID;
 /**
  * Created by Thierry on 24/05/2014.
  */
-public class ParaBD extends DBEntity {
+public class ParaBD extends AbstractDBEntity {
     private Integer anneeEdition;
-    private ValeurListe categorieParaBD = DefaultValeurListeDao.getInstance().getTypeParaBD();
+    private ValeurListe categorieParaBD = DefaultValeurListeMapper.getInstance().getTypeParaBD();
     private Integer anneeCote;
     private String titreParaBD;
     private List<AuteurParaBDLite> auteurs = new ArrayList<>();

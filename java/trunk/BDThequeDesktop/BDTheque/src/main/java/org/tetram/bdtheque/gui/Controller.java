@@ -4,7 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import org.tetram.bdtheque.data.Database;
-import org.tetram.bdtheque.data.dao.CollectionDao;
+import org.tetram.bdtheque.data.mappers.CollectionMapper;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.UUID;
@@ -18,6 +18,6 @@ public class Controller {
 
     public void buttonClick(ActionEvent actionEvent) {
         Database db = Database.getInstance();
-        button.setText(db.getSession().getMapper(CollectionDao.class).getCollectionById(ID_COLLECTION_GENERATION_COMICS_PANINI).getNomCollection());
+        button.setText(db.openSession().getMapper(CollectionMapper.class).getCollectionById(ID_COLLECTION_GENERATION_COMICS_PANINI).getNomCollection());
     }
 }

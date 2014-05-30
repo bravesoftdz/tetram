@@ -1,11 +1,9 @@
 package org.tetram.bdtheque.data.bean;
 
-import org.tetram.bdtheque.data.bean.lite.EditeurLite;
-
 /**
  * Created by Thierry on 24/05/2014.
  */
-public class Collection extends DBEntity {
+public class Collection extends AbstractDBEntity {
     private String nomCollection;
     private EditeurLite editeur;
 

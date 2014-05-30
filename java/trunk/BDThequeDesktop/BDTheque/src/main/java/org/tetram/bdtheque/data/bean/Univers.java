@@ -1,14 +1,12 @@
 package org.tetram.bdtheque.data.bean;
 
-import org.tetram.bdtheque.data.bean.lite.UniversLite;
-
 import java.net.URL;
 import java.util.UUID;
 
 /**
  * Created by Thierry on 24/05/2014.
  */
-public class Univers extends DBEntity {
+public class Univers extends AbstractDBEntity {
     private String nomUnivers;
     private URL siteWeb;
     private String description;

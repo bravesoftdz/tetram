@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.tetram.bdtheque.data.dao.AuteurDao">
+<mapper namespace="org.tetram.bdtheque.data.mappers.AuteurMapper">
     <resultMap id="PersonneLite" type="beanPersonneLite">
-        <id column="" property="id"/>
-        <result column="" property="nom"/>
+        <id column="id_personne" property="id"/>
+        <result column="NomPersonne" property="nom"/>
     </resultMap>
     <resultMap id="AuteurLite" type="beanAuteurLite">
         <association property="personne" resultMap="PersonneLite"/>
@@ -19,10 +19,13 @@
         <result column="id_parabd" property="idParaBD"/>
     </resultMap>
     <resultMap id="AuteurFull" type="beanAuteur">
-        <id column="" property="id"/>
+        <id column="id_personne" property="id"/>
+        <result column="NomPersonne" property="nomAuteur"/>
         <result column="SiteWeb" property="siteWeb"/>
-        <result column="" property="biographie"/>
-        <collection property="series" select="" column="id_personne"/>
+        <result column="biographie" property="biographie"/>
+        <!-- trop compliqué pour un mapping: construite par le DAO
+        <collection property="series"/>
+        -->
     </resultMap>
 
     <select id="getListAuteurLiteByAlbumId" resultMap="AuteurAlbumLite">
@@ -49,4 +52,25 @@
             proc_auteurs(null, null, #{id})
         ]]>
     </select>
+    <select id="getPersonneLiteById" resultMap="PersonneLite" parameterType="UUID">
+        <![CDATA[
+    select
+        id_personne, nompersonne
+    from
+        personnes
+    where
+        id_personne = #{id}
+    ]]>
+    </select>
+    <select id="getAuteurById" resultMap="AuteurFull" parameterType="UUID">
+        <![CDATA[
+        select
+            id_personne, nompersonne, siteweb, biographie
+        from
+            personnes
+        where
+            id_personne = #{id}
+    ]]>
+    </select>
+
 </mapper>

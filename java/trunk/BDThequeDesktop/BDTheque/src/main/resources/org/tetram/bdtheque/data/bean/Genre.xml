@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.tetram.bdtheque.data.dao.GenreDao">
+<mapper namespace="org.tetram.bdtheque.data.mappers.GenreMapper">
     <resultMap id="Genre" type="beanGenreLite">
         <id column="id_genre" property="id"/>
         <result column="genre" property="genre"/>

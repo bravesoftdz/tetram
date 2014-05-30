@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.tetram.bdtheque.data.dao.CollectionDao">
+<mapper namespace="org.tetram.bdtheque.data.mappers.CollectionMapper">
     <resultMap id="CollectionLite" type="beanCollectionLite">
         <id column="id_collection" property="id"/>
         <result column="NomCollection" property="nomCollection"/>
-        <association property="editeur" resultMap="org.tetram.bdtheque.data.dao.EditeurDao.EditeurLite"/>
+        <association property="editeur" resultMap="org.tetram.bdtheque.data.mappers.EditeurMapper.EditeurLite"/>
     </resultMap>
     <resultMap id="CollectionFull" type="beanCollection">
         <id column="id_collection" property="id"/>
         <result column="NomCollection" property="nomCollection"/>
-        <association property="editeur" select="org.tetram.bdtheque.data.dao.EditeurDao.getEditeurLiteById" column="id_editeur"/>
+        <association property="editeur" select="org.tetram.bdtheque.data.mappers.EditeurMapper.getEditeurLiteById" column="id_editeur"/>
     </resultMap>
 
     <select id="getCollectionLiteById" resultMap="CollectionLite">

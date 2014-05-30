@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.tetram.bdtheque.data.dao.AlbumDao">
+<mapper namespace="org.tetram.bdtheque.data.mappers.AlbumMapper">
     <resultMap id="AlbumLite" type="beanAlbumLite">
         <id column="id_album" property="id"/>
         <result column="titreAlbum" property="titre"/>
@@ -34,20 +34,29 @@
         <result column="HorsSerie" property="horsSerie"/>
         <result column="notation" property="notation"/>
         <result column="complet" property="complet"/>
-        <association property="serie" select="org.tetram.bdtheque.data.dao.SerieDao.getSerieById" column="id_serie"/>
-        <collection property="univers" select="org.tetram.bdtheque.data.dao.UniversDao.getListUniversLiteByAlbumId"
+        <association property="serie" select="org.tetram.bdtheque.data.mappers.SerieMapper.getSerieById"
+                     column="id_serie"/>
+        <collection property="univers"
+                    select="org.tetram.bdtheque.data.mappers.UniversMapper.getListUniversLiteByAlbumId"
                     column="id_album" fetchType="eager"/>
-        <collection property="editions" select="org.tetram.bdtheque.data.dao.EditionDao.getListEditionByAlbumId"
+        <collection property="editions" select="org.tetram.bdtheque.data.mappers.EditionMapper.getListEditionByAlbumId"
                     column="{id=id_album}"/>
-        <collection property="auteurs" select="org.tetram.bdtheque.data.dao.AuteurDao.getListAuteurLiteByAlbumId"
+        <collection property="auteurs" select="org.tetram.bdtheque.data.mappers.AuteurMapper.getListAuteurLiteByAlbumId"
                     column="id_album" fetchType="eager"/>
     </resultMap>
 
+    <sql id="fieldsAlbumLite">
+        a.id_album, a.titrealbum, a.horsserie, a.integrale, a.tome, a.tomedebut, a.tomefin, a.id_serie, a.achat,
+        a.complet
+    </sql>
+    <sql id="orderAlbum">
+        a.horsserie nulls first, a.integrale nulls first, a.tome nulls first, a.anneeparution, a.moisparution
+    </sql>
+
     <select id="getAlbumLiteById" resultMap="AlbumLite">
-        <![CDATA[
         select
-            a.id_album, a.titrealbum, a.horsserie, a.integrale, a.tome, a.tomedebut, a.tomefin, a.id_serie, a.achat, a.complet, a.titreserie
-        ]]>
+        <include refid="fieldsAlbumLite"/>
+        , a.titreserie
         <if test="idEdition != null">
             , e.stock
         </if>
@@ -81,5 +90,29 @@
         where
             id_album = #{id}
         ]]>
+    </select>
+    <select id="getAlbumLiteBySerieIdByAuteurId" parameterType="map" resultMap="AlbumLite" resultOrdered="true">
+        select
+        <include refid="fieldsAlbumLite"/>
+        <![CDATA[
+          , a.notation
+        from
+            albums a
+        ]]>
+        <where>
+            <choose>
+                <when test="idSerie == null">
+                    (a.id_serie is null or a.id_serie = #{idSerie})
+                </when>
+                <otherwise>
+                    a.id_serie = #{idSerie}
+                </otherwise>
+            </choose>
+            <if test="idAuteur != null">
+                and a.id_album in (select id_album from auteurs where id_personne = #{idAuteur})
+            </if>
+        </where>
+        order by
+        <include refid="orderAlbum"/>
     </select>
 </mapper>
