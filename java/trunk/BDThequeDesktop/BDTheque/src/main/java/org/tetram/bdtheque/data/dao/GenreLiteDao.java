@@ -1,7 +1,6 @@
 package org.tetram.bdtheque.data.dao;
 
 import org.springframework.context.annotation.Configuration;
-import org.tetram.bdtheque.data.bean.Editeur;
 import org.tetram.bdtheque.data.bean.GenreLite;
 
 import java.util.UUID;

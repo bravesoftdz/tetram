@@ -39,9 +39,11 @@
         <collection property="univers"
                     select="org.tetram.bdtheque.data.dao.mappers.UniversMapper.getListUniversLiteByAlbumId"
                     column="id_album" fetchType="eager"/>
-        <collection property="editions" select="org.tetram.bdtheque.data.dao.mappers.EditionMapper.getListEditionByAlbumId"
+        <collection property="editions"
+                    select="org.tetram.bdtheque.data.dao.mappers.EditionMapper.getListEditionByAlbumId"
                     column="{id=id_album}"/>
-        <collection property="auteurs" select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteByAlbumId"
+        <collection property="auteurs"
+                    select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteByAlbumId"
                     column="id_album" fetchType="eager"/>
     </resultMap>
 

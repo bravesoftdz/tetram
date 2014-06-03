@@ -31,7 +31,8 @@
         <collection property="univers"
                     select="org.tetram.bdtheque.data.dao.mappers.UniversMapper.getListUniversLiteByParaBDId"
                     column="id_parabd" fetchType="eager"/>
-        <collection property="photos" select="org.tetram.bdtheque.data.dao.mappers.ImageMapper.getListPhotoLiteByParaBDId"
+        <collection property="photos"
+                    select="org.tetram.bdtheque.data.dao.mappers.ImageMapper.getListPhotoLiteByParaBDId"
                     column="id_parabd"/>
         <collection property="auteurs"
                     select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteByParaBDId"

@@ -2,7 +2,10 @@
   <artifact type="javafx" name="BDTheque">
     <output-path>$PROJECT_DIR$/out/artifacts</output-path>
     <properties id="ant-postprocessing">
-      <options enabled="true" />
+      <options enabled="true">
+        <file>file://$PROJECT_DIR$/BDTheque/ant.xml</file>
+        <target>deploy_firebird_artifact</target>
+      </options>
     </properties>
     <properties id="javafx-properties">
       <options>
@@ -19,29 +22,31 @@
         <element id="module-output" name="BDTheque" />
       </element>
       <element id="directory" name="libs">
+        <element id="library" level="project" name="Gradle: annotations" />
         <element id="library" level="project" name="Gradle: antlr-2.7.7" />
         <element id="library" level="project" name="Gradle: antlr-runtime-3.4" />
+        <element id="library" level="project" name="Gradle: aopalliance-1.0" />
         <element id="library" level="project" name="Gradle: asm-4.2" />
         <element id="library" level="project" name="Gradle: cglib-3.1" />
+        <element id="library" level="project" name="Gradle: commons-logging-1.1.3" />
         <element id="library" level="project" name="Gradle: connector-api-1.5" />
         <element id="library" level="project" name="Gradle: hamcrest-core-1.3" />
         <element id="library" level="project" name="Gradle: jaybird-jdk18-2.2.5" />
         <element id="library" level="project" name="Gradle: junit-4.11" />
+        <element id="library" level="project" name="Gradle: log4j-1.2-api-2.0-rc1" />
         <element id="library" level="project" name="Gradle: log4j-api-2.0-rc1" />
+        <element id="library" level="project" name="Gradle: log4j-core-2.0-rc1" />
         <element id="library" level="project" name="Gradle: mybatis-3.2.7" />
         <element id="library" level="project" name="Gradle: mybatis-generator-core-1.3.2" />
-        <element id="library" level="project" name="Gradle: stringtemplate-3.2.1" />
-        <element id="library" level="project" name="Gradle: log4j-1.2-api-2.0-rc1" />
-        <element id="library" level="project" name="Gradle: log4j-core-2.0-rc1" />
         <element id="library" level="project" name="Gradle: mybatis-spring-1.2.2" />
-        <element id="library" level="project" name="Gradle: annotations" />
-        <element id="library" level="project" name="Gradle: aopalliance-1.0" />
-        <element id="library" level="project" name="Gradle: commons-logging-1.1.3" />
         <element id="library" level="project" name="Gradle: spring-aop-4.0.5.RELEASE" />
         <element id="library" level="project" name="Gradle: spring-beans-4.0.5.RELEASE" />
         <element id="library" level="project" name="Gradle: spring-context-4.0.5.RELEASE" />
         <element id="library" level="project" name="Gradle: spring-core-4.0.5.RELEASE" />
         <element id="library" level="project" name="Gradle: spring-expression-4.0.5.RELEASE" />
+        <element id="library" level="project" name="Gradle: spring-jdbc-4.0.5.RELEASE" />
+        <element id="library" level="project" name="Gradle: spring-tx-4.0.5.RELEASE" />
+        <element id="library" level="project" name="Gradle: stringtemplate-3.2.1" />
       </element>
     </root>
   </artifact>

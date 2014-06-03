@@ -7,7 +7,8 @@
         <result column="isbn" property="isbn"/>
         <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurLiteById"
                      column="id_editeur"/>
-        <association property="collection" select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionLiteById"
+        <association property="collection"
+                     select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionLiteById"
                      column="id_collection"/>
     </resultMap>
     <resultMap id="EditionFull" type="beanEdition">
@@ -38,9 +39,11 @@
         <result column="numeroperso" property="numeroPerso"/>
         <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurById"
                      column="id_editeur"/>
-        <association property="collection" select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionById"
+        <association property="collection"
+                     select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionById"
                      column="id_collection"/>
-        <collection property="couvertures" select="org.tetram.bdtheque.data.dao.mappers.ImageMapper.getListCouvertureLiteByEditionId"
+        <collection property="couvertures"
+                    select="org.tetram.bdtheque.data.dao.mappers.ImageMapper.getListCouvertureLiteByEditionId"
                     column="id_edition"/>
     </resultMap>
 
@@ -90,12 +93,12 @@
             e.id_edition = #{id}
         </where>
     </select>
-    <select id="getListEditionByAlbumId" resultMap="EditionFull" >
+    <select id="getListEditionByAlbumId" resultMap="EditionFull">
         <include refid="selectEditionFull"/>
         <where>
             e.id_album = #{id}
             <if test="stock != null">
-            and e.stock = #{stock}
+                and e.stock = #{stock}
             </if>
         </where>
     </select>

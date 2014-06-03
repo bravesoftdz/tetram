@@ -7,7 +7,8 @@
         <result column="notation" property="notation"/>
         <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurLiteById"
                      column="id_editeur"/>
-        <association property="collection" select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionLiteById"
+        <association property="collection"
+                     select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionLiteById"
                      column="id_collection"/>
     </resultMap>
     <resultMap id="SerieFull" type="beanSerie">
@@ -32,13 +33,16 @@
         <result column="senslecture" property="sensLecture"/>
         <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurById"
                      column="id_editeur"/>
-        <association property="collection" select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionById"
+        <association property="collection"
+                     select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionById"
                      column="id_collection"/>
-        <collection property="univers" select="org.tetram.bdtheque.data.dao.mappers.UniversMapper.getListUniversLiteBySerieId"
+        <collection property="univers"
+                    select="org.tetram.bdtheque.data.dao.mappers.UniversMapper.getListUniversLiteBySerieId"
                     column="id_serie"/>
         <collection property="genres" select="org.tetram.bdtheque.data.dao.mappers.GenreMapper.getListGenreBySerieId"
                     column="id_serie"/>
-        <collection property="auteurs" select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteBySerieId"
+        <collection property="auteurs"
+                    select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteBySerieId"
                     column="id_serie" fetchType="eager"/>
     </resultMap>
 

@@ -25,6 +25,7 @@ public class AbstractDao<T, PK> extends SqlSessionDaoSupport implements Dao<T, P
     public static final String PREFIX_DELETE_QUERY = "delete";  //prefix of delete queries in mappers files (eg. deleteAddressType)
     private static Log log = LogManager.getLog(AbstractDao.class);
     private Class<T> type;
+
     /**
      * Default Constructor
      */
