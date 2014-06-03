@@ -19,14 +19,14 @@ import org.tetram.bdtheque.utils.logging.LogManager;
 public class AbstractDao<T, PK> extends SqlSessionDaoSupport implements Dao<T, PK> {
 
     /**
-     * Define prefixes for easier naming convetions between XML mappers files and the DAO class
+     * Define prefixes for easier naming conventions between XML mappers files and the DAO class
      */
     public static final String PREFIX_SELECT_QUERY = "get";     //prefix of select queries in mappers files (eg. getAddressType)
     public static final String PREFIX_INSERT_QUERY = "create"; //prefix of create queries in mappers files (eg. createAddressType)
     public static final String PREFIX_UPDATE_QUERY = "update";  //prefix of update queries in mappers files (eg. updateAddressType)
     public static final String PREFIX_DELETE_QUERY = "delete";  //prefix of delete queries in mappers files (eg. deleteAddressType)
     private static Log log = LogManager.getLog(AbstractDao.class);
-    private Class<T> type;
+    private final Class<T> type;
 
     /**
      * Default Constructor
@@ -36,6 +36,7 @@ public class AbstractDao<T, PK> extends SqlSessionDaoSupport implements Dao<T, P
         this.type = (Class<T>) GenericUtils.getTypeArguments(AbstractDao.class, getClass()).get(0);
     }
 
+    @SuppressWarnings("EmptyMethod")
     @Autowired
     @Override
     public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {

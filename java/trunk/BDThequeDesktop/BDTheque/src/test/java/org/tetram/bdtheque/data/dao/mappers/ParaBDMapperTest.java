@@ -6,7 +6,6 @@ import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.bean.ParaBD;
-import org.tetram.bdtheque.data.bean.UniversLite;
 
 public class ParaBDMapperTest extends DBTest {
 

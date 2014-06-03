@@ -6,8 +6,8 @@ package org.tetram.bdtheque.data.bean;
 public enum MetierAuteur {
     SCENARISTE(0, "Scénariste"), DESSINATEUR(1, "Dessinateur"), COLORISTE(2, "Coloriste");
 
-    private int value;
-    private String label;
+    private final int value;
+    private final String label;
 
     MetierAuteur(int value, String label) {
         this.value = value;

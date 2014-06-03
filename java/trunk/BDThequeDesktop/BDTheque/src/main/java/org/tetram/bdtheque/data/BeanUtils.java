@@ -3,7 +3,6 @@ package org.tetram.bdtheque.data;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.bean.UniversLite;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 

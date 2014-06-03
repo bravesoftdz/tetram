@@ -3,8 +3,9 @@ package org.tetram.bdtheque.data.bean;
 /**
  * Created by Thierry on 24/05/2014.
  */
-public class ImageLite extends AbstractDBEntity {
+public abstract class ImageLite extends AbstractDBEntity {
 
+    @SuppressWarnings("CanBeFinal")
     static ValeurListe defaultCategorie = null;
 
     private String oldNom, newNom;

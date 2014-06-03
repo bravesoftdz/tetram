@@ -6,6 +6,7 @@
         <property name="src.dir" value="firebird"/>
         <property name="dest.dir" value="..\out\artifacts"/>
 
+        <!--suppress AntResolveInspection -->
         <copy todir="${artifact.output.path}" >
             <fileset dir="${src.dir}" includes="**"/>
         </copy>

@@ -59,7 +59,7 @@ public class code_generator {
         System.out.println(config.toDocument().getFormattedContent());
 
         DefaultShellCallback callback = new DefaultShellCallback(overwrite);
-        MyBatisGenerator myBatisGenerator = null;
+        MyBatisGenerator myBatisGenerator;
         try {
             myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
             myBatisGenerator.generate(null);

@@ -25,6 +25,7 @@ public class AuteurSerieLite extends AuteurLite {
         this.idSerie = idSerie;
     }
 
+    @SuppressWarnings("RedundantIfStatement")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

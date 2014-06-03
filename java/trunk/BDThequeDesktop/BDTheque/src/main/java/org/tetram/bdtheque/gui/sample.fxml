@@ -12,7 +12,5 @@
     <rowConstraints>
         <RowConstraints/>
     </rowConstraints>
-    <children>
-        <Button fx:id="button" mnemonicParsing="false" onAction="#buttonClick" text="Button"/>
-    </children>
+    <Button fx:id="button" mnemonicParsing="false" onAction="#buttonClick" text="Button"/>
 </GridPane>

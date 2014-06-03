@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
  */
 class Log4j2Logger implements Log {
 
-    private Logger logger;
+    private final Logger logger;
 
     public Log4j2Logger(String logger) {
         this.logger = org.apache.logging.log4j.LogManager.getLogger(logger);
