@@ -4,10 +4,7 @@ import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Thierry on 24/05/2014.
@@ -17,7 +14,7 @@ public class ParaBD extends AbstractDBEntity {
     private ValeurListe categorieParaBD;
     private Integer anneeCote;
     private String titreParaBD;
-    private List<AuteurParaBDLite> auteurs = new ArrayList<>();
+    private Set<AuteurParaBDLite> auteurs = new HashSet<>();
     private String description;
     private String notes;
     private Serie serie;
@@ -29,8 +26,8 @@ public class ParaBD extends AbstractDBEntity {
     private boolean offert;
     private boolean gratuit;
     private Date dateAchat;
-    private List<UniversLite> univers = new ArrayList<>();
-    private List<UniversLite> universFull = new ArrayList<>();
+    private Set<UniversLite> univers = new HashSet<>();
+    private Set<UniversLite> universFull = new HashSet<>();
     private List<PhotoLite> photos = new ArrayList<>();
 
     public ParaBD() {
@@ -62,12 +59,28 @@ public class ParaBD extends AbstractDBEntity {
         this.titreParaBD = titreParaBD;
     }
 
-    public List<AuteurParaBDLite> getAuteurs() {
+    public Set<AuteurParaBDLite> getAuteurs() {
         return auteurs;
     }
 
-    public void setAuteurs(List<AuteurParaBDLite> auteurs) {
+    public void setAuteurs(Set<AuteurParaBDLite> auteurs) {
         this.auteurs = auteurs;
+    }
+
+    public void addAuteur(PersonneLite personne) {
+        for (AuteurParaBDLite auteur : auteurs)
+            if (auteur.getPersonne() == personne) return;
+        AuteurParaBDLite auteur = new AuteurParaBDLite();
+        auteur.setPersonne(personne);
+        auteurs.add(auteur);
+    }
+
+    public void removeAuteur(PersonneLite personne) {
+        for (AuteurParaBDLite auteur : auteurs)
+            if (auteur.getPersonne() == personne) {
+                auteurs.remove(auteur);
+                return;
+            }
     }
 
     public String getDescription() {
@@ -158,17 +171,34 @@ public class ParaBD extends AbstractDBEntity {
         this.dateAchat = dateAchat;
     }
 
-    public List<UniversLite> getUnivers() {
+    public Set<UniversLite> getUnivers() {
         return univers;
     }
 
-    public void setUnivers(List<UniversLite> univers) {
+    public void setUnivers(Set<UniversLite> univers) {
         this.univers = univers;
     }
 
-    public List<UniversLite> getUniversFull() {
+    public Set<UniversLite> getUniversFull() {
         universFull = BeanUtils.checkAndBuildListUniversFull(universFull, univers, serie);
         return universFull;
+    }
+
+    @SuppressWarnings("SimplifiableIfStatement")
+    public boolean addUnivers(UniversLite universLite) {
+        if (!getUnivers().contains(universLite) && !getUniversFull().contains(universLite)) {
+            universFull.add(universLite);
+            return univers.add(universLite);
+        }
+        return false;
+    }
+
+    public boolean removeUnivers(UniversLite universLite) {
+        if (getUnivers().remove(universLite)) {
+            getUniversFull().remove(universLite);
+            return true;
+        } else
+            return false;
     }
 
     public List<PhotoLite> getPhotos() {
@@ -177,6 +207,14 @@ public class ParaBD extends AbstractDBEntity {
 
     public void setPhotos(List<PhotoLite> photos) {
         this.photos = photos;
+    }
+
+    public boolean addPhoto(PhotoLite photo){
+        return getPhotos().add(photo);
+    }
+
+    public boolean removePhoto(PhotoLite photo){
+        return getPhotos().remove(photo);
     }
 
     public ValeurListe getCategorieParaBD() {

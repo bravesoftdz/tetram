@@ -209,6 +209,14 @@ public class Edition extends AbstractDBEntity {
         this.couvertures = couvertures;
     }
 
+    public boolean addCouverture(CouvertureLite couverture){
+        return getCouvertures().add(couverture);
+    }
+
+    public boolean removeCouverture(CouvertureLite couverture){
+        return getCouvertures().remove(couverture);
+    }
+
     public ValeurListe getEtat() {
         return etat;
     }

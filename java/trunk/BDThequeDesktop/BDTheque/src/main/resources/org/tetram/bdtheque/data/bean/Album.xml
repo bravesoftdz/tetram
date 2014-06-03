@@ -85,21 +85,25 @@
     <select id="getAlbumById" parameterType="UUID" resultMap="AlbumFull">
         <![CDATA[
         select
-            id_album, titrealbum, moisparution, anneeparution, id_serie, tome, tomedebut, tomefin, sujetalbum,
-            remarquesalbum, horsserie, integrale, complet, notation
+            a.id_album, a.titrealbum, a.moisparution, a.anneeparution, a.id_serie, a.tome, a.tomedebut, a.tomefin, a.sujetalbum,
+            a.remarquesalbum, a.horsserie, a.integrale, a.complet, a.notation, n.libelle as lb_notation
         from
-            albums
+            albums a
+            left join listes n on
+                (n.ref = a.notation and n.categorie = 9)
         where
-            id_album = #{id}
+            a.id_album = #{id}
         ]]>
     </select>
     <select id="getAlbumLiteBySerieIdByAuteurId" parameterType="map" resultMap="AlbumLite" resultOrdered="true">
         select
         <include refid="fieldsAlbumLite"/>
         <![CDATA[
-          , a.notation
+          , a.notation, n.libelle as lb_notation
         from
             albums a
+            left join listes n on
+                (n.ref = a.notation and n.categorie = 9)
         ]]>
         <where>
             <choose>

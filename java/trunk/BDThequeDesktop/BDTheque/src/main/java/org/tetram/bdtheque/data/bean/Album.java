@@ -1,9 +1,11 @@
 package org.tetram.bdtheque.data.bean;
 
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.data.Database;
+import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
@@ -18,16 +20,21 @@ public class Album extends AbstractDBEntity {
     private Integer tomeDebut, tomeFin;
     private boolean horsSerie;
     private boolean integrale;
-    private List<AuteurAlbumLite> auteurs = new ArrayList<>();
-    private List<AuteurAlbumLite> scenaristes = null;
-    private List<AuteurAlbumLite> dessinateurs = null;
-    private List<AuteurAlbumLite> coloristes = null;
+    private Set<AuteurAlbumLite> auteurs = new HashSet<>();
+    private Set<AuteurAlbumLite> scenaristes = null;
+    private Set<AuteurAlbumLite> dessinateurs = null;
+    private Set<AuteurAlbumLite> coloristes = null;
     private String sujet;
     private String notes;
-    private List<Edition> editions = new ArrayList<>();
-    private Integer notation;
-    private List<UniversLite> univers = new ArrayList<>();
-    private List<UniversLite> universFull = new ArrayList<>();
+    private Set<Edition> editions = new HashSet<>();
+    private ValeurListe notation;
+    private Set<UniversLite> univers = new HashSet<>();
+    private Set<UniversLite> universFull = new HashSet<>();
+
+    public Album() {
+        ValeurListeDao valeurListeDao = Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class);
+        notation = valeurListeDao.getDefaultNotation();
+    }
 
     public boolean isComplet() {
         return complet;
@@ -109,11 +116,11 @@ public class Album extends AbstractDBEntity {
         this.integrale = integrale;
     }
 
-    public List<AuteurAlbumLite> getAuteurs() {
+    public Set<AuteurAlbumLite> getAuteurs() {
         return auteurs;
     }
 
-    public void setAuteurs(List<AuteurAlbumLite> auteurs) {
+    public void setAuteurs(Set<AuteurAlbumLite> auteurs) {
         this.auteurs = auteurs;
     }
 
@@ -125,12 +132,9 @@ public class Album extends AbstractDBEntity {
         int countAuteurs = countScenaristes + countDessinateurs + countColoristes;
 
         if (scenaristes == null || dessinateurs == null || coloristes == null || auteurs.size() != countAuteurs) {
-            scenaristes = new ArrayList<>();
-            dessinateurs = new ArrayList<>();
-            coloristes = new ArrayList<>();
-            for (int i = auteurs.size() - 1; i >= 0; i--) {
-
-            }
+            scenaristes = new HashSet<>();
+            dessinateurs = new HashSet<>();
+            coloristes = new HashSet<>();
             for (AuteurAlbumLite a : auteurs) {
                 switch (a.getMetier()) {
                     case SCENARISTE:
@@ -147,17 +151,60 @@ public class Album extends AbstractDBEntity {
         }
     }
 
-    public List<AuteurAlbumLite> getScenaristes() {
+    public Set<AuteurAlbumLite> getScenaristes() {
         buildListsAuteurs();
         return scenaristes;
     }
 
-    public List<AuteurAlbumLite> getDessinateurs() {
+    private void addAuteur(PersonneLite personne, Set<AuteurAlbumLite> listAuteurs, MetierAuteur metier) {
+        for (AuteurAlbumLite auteur : listAuteurs)
+            if (auteur.getPersonne() == personne) return;
+        AuteurAlbumLite auteur = new AuteurAlbumLite();
+        auteur.setPersonne(personne);
+        auteur.setMetier(metier);
+        listAuteurs.add(auteur);
+        auteurs.add(auteur);
+    }
+
+    public void addScenariste(PersonneLite personne) {
+        addAuteur(personne, getScenaristes(), MetierAuteur.SCENARISTE);
+    }
+
+    public void addDessinateur(PersonneLite personne) {
+        addAuteur(personne, getDessinateurs(), MetierAuteur.DESSINATEUR);
+    }
+
+    public void addColoriste(PersonneLite personne) {
+        addAuteur(personne, getColoristes(), MetierAuteur.COLORISTE);
+    }
+
+    private void removeAuteur(PersonneLite personne, Set<AuteurAlbumLite> listAuteurs) {
+        for (AuteurAlbumLite auteur : listAuteurs)
+            if (auteur.getPersonne() == personne) {
+                listAuteurs.remove(auteur);
+                auteurs.remove(auteur);
+                return;
+            }
+    }
+
+    public void removeScenariste(PersonneLite personne) {
+        removeAuteur(personne, getScenaristes());
+    }
+
+    public void removeDessinateur(PersonneLite personne) {
+        removeAuteur(personne, getDessinateurs());
+    }
+
+    public void removeColoriste(PersonneLite personne) {
+        removeAuteur(personne, getColoristes());
+    }
+
+    public Set<AuteurAlbumLite> getDessinateurs() {
         buildListsAuteurs();
         return dessinateurs;
     }
 
-    public List<AuteurAlbumLite> getColoristes() {
+    public Set<AuteurAlbumLite> getColoristes() {
         buildListsAuteurs();
         return coloristes;
     }
@@ -178,37 +225,62 @@ public class Album extends AbstractDBEntity {
         this.notes = notes;
     }
 
-    public List<Edition> getEditions() {
+    public Set<Edition> getEditions() {
         return editions;
     }
 
-    public void setEditions(List<Edition> editions) {
+    public void setEditions(Set<Edition> editions) {
         this.editions = editions;
     }
 
-    public Integer getNotation() {
+    public boolean addEdition(Edition edition) {
+        return getEditions().add(edition);
+    }
+
+    public boolean removeEdition(Edition edition) {
+        return getEditions().remove(edition);
+    }
+
+    public ValeurListe getNotation() {
         return notation;
     }
 
-    public void setNotation(Integer notation) {
-        this.notation = notation == 0 ? 900 : notation;
+    public void setNotation(ValeurListe notation) {
+        this.notation = notation == null || notation.getValeur() == 0 ? Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class).getDefaultNotation() : notation;
     }
 
-    public List<UniversLite> getUnivers() {
+    public Set<UniversLite> getUnivers() {
         return univers;
     }
 
-    public void setUnivers(List<UniversLite> univers) {
+    public void setUnivers(Set<UniversLite> univers) {
         this.univers = univers;
     }
 
-    public List<UniversLite> getUniversFull() {
-        universFull = BeanUtils.checkAndBuildListUniversFull(universFull, univers, serie);
+    public Set<UniversLite> getUniversFull() {
+        universFull = BeanUtils.checkAndBuildListUniversFull(universFull, getUnivers(), serie);
         return universFull;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
+    public boolean addUnivers(UniversLite universLite) {
+        if (!getUnivers().contains(universLite) && !getUniversFull().contains(universLite)) {
+            universFull.add(universLite);
+            return univers.add(universLite);
+        }
+        return false;
+    }
+
+    public boolean removeUnivers(UniversLite universLite) {
+        if (getUnivers().remove(universLite)) {
+            getUniversFull().remove(universLite);
+            return true;
+        } else
+            return false;
+    }
+
     public UUID getIdSerie() {
-        return serie.getId();
+        return getSerie().getId();
     }
 
 }

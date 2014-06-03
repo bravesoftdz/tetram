@@ -25,4 +25,26 @@ public class AuteurSerieLite extends AuteurLite {
         this.idSerie = idSerie;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AuteurSerieLite)) return false;
+        if (!super.equals(o)) return false;
+
+        AuteurSerieLite that = (AuteurSerieLite) o;
+
+        if (idSerie != null ? !idSerie.equals(that.idSerie) : that.idSerie != null) return false;
+        if (metier != that.metier) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (idSerie != null ? idSerie.hashCode() : 0);
+        result = 31 * result + (metier != null ? metier.hashCode() : 0);
+        return result;
+    }
+
 }

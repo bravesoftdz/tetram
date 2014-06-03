@@ -4,9 +4,7 @@ import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Created by Thierry on 24/05/2014.
@@ -27,10 +25,10 @@ public class Serie extends AbstractDBEntity {
     private int nbAlbums;
     private List<AlbumLite> albums = new ArrayList<>();
     private List<ParaBDLite> paraBDs = new ArrayList<>();
-    private List<AuteurSerieLite> auteurs = new ArrayList<>();
-    private List<AuteurSerieLite> scenaristes = null;
-    private List<AuteurSerieLite> dessinateurs = null;
-    private List<AuteurSerieLite> coloristes = null;
+    private Set<AuteurSerieLite> auteurs = new HashSet<>();
+    private Set<AuteurSerieLite> scenaristes = null;
+    private Set<AuteurSerieLite> dessinateurs = null;
+    private Set<AuteurSerieLite> coloristes = null;
     private Boolean vo;
     private Boolean couleur;
     private ValeurListe etat;
@@ -39,8 +37,8 @@ public class Serie extends AbstractDBEntity {
     private ValeurListe formatEdition;
     private ValeurListe orientation;
     private ValeurListe sensLecture;
-    private Integer notation;
-    private List<UniversLite> univers = new ArrayList<>();
+    private ValeurListe notation;
+    private Set<UniversLite> univers = new HashSet<>();
 
     public Serie() {
         ValeurListeDao valeurListeDao = Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class);
@@ -50,6 +48,7 @@ public class Serie extends AbstractDBEntity {
         formatEdition = valeurListeDao.getDefaultFormatEdition();
         orientation = valeurListeDao.getDefaultOrientation();
         sensLecture = valeurListeDao.getDefaultSensLecture();
+        notation = valeurListeDao.getDefaultNotation();
     }
 
     public String getTitreSerie() {
@@ -172,9 +171,9 @@ public class Serie extends AbstractDBEntity {
         int countAuteurs = countScenaristes + countDessinateurs + countColoristes;
 
         if (scenaristes == null || dessinateurs == null || coloristes == null || auteurs.size() != countAuteurs) {
-            scenaristes = new ArrayList<>();
-            dessinateurs = new ArrayList<>();
-            coloristes = new ArrayList<>();
+            scenaristes = new HashSet<>();
+            dessinateurs = new HashSet<>();
+            coloristes = new HashSet<>();
             for (AuteurSerieLite a : auteurs) {
                 switch (a.getMetier()) {
                     case SCENARISTE:
@@ -191,25 +190,70 @@ public class Serie extends AbstractDBEntity {
         }
     }
 
-    public List<AuteurSerieLite> getAuteurs() {
+    public Set<AuteurSerieLite> getAuteurs() {
         return auteurs;
     }
 
-    public void setAuteurs(List<AuteurSerieLite> auteurs) {
+    public void setAuteurs(Set<AuteurSerieLite> auteurs) {
         this.auteurs = auteurs;
     }
 
-    public List<AuteurSerieLite> getScenaristes() {
+    private boolean addAuteur(PersonneLite personne, Set<AuteurSerieLite> listAuteurs, MetierAuteur metier) {
+        for (AuteurSerieLite auteur : listAuteurs)
+            if (auteur.getPersonne() == personne) return false;
+        AuteurSerieLite auteur = new AuteurSerieLite();
+        auteur.setPersonne(personne);
+        auteur.setMetier(metier);
+        listAuteurs.add(auteur);
+        auteurs.add(auteur);
+        return true;
+    }
+
+    public boolean addScenariste(PersonneLite personne) {
+        return addAuteur(personne, getScenaristes(), MetierAuteur.SCENARISTE);
+    }
+
+    public boolean addDessinateur(PersonneLite personne) {
+        return addAuteur(personne, getDessinateurs(), MetierAuteur.DESSINATEUR);
+    }
+
+    public boolean addColoriste(PersonneLite personne) {
+        return addAuteur(personne, getColoristes(), MetierAuteur.COLORISTE);
+    }
+
+    private boolean removeAuteur(PersonneLite personne, Set<AuteurSerieLite> listAuteurs) {
+        for (AuteurSerieLite auteur : listAuteurs)
+            if (auteur.getPersonne() == personne) {
+                listAuteurs.remove(auteur);
+                auteurs.remove(auteur);
+                return true;
+            }
+        return false;
+    }
+
+    public boolean removeScenariste(PersonneLite personne) {
+        return removeAuteur(personne, getScenaristes());
+    }
+
+    public boolean removeDessinateur(PersonneLite personne) {
+        return removeAuteur(personne, getDessinateurs());
+    }
+
+    public boolean removeColoriste(PersonneLite personne) {
+        return removeAuteur(personne, getColoristes());
+    }
+
+    public Set<AuteurSerieLite> getScenaristes() {
         buildListsAuteurs();
         return scenaristes;
     }
 
-    public List<AuteurSerieLite> getDessinateurs() {
+    public Set<AuteurSerieLite> getDessinateurs() {
         buildListsAuteurs();
         return dessinateurs;
     }
 
-    public List<AuteurSerieLite> getColoristes() {
+    public Set<AuteurSerieLite> getColoristes() {
         buildListsAuteurs();
         return coloristes;
     }
@@ -230,28 +274,39 @@ public class Serie extends AbstractDBEntity {
         this.couleur = couleur;
     }
 
-    public Integer getNotation() {
+    public ValeurListe getNotation() {
         return notation;
     }
 
-    public void setNotation(Integer notation) {
-        this.notation = notation == 0 ? 900 : notation;
+    public void setNotation(ValeurListe notation) {
+        this.notation = notation == null || notation.getValeur() == 0 ? Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class).getDefaultNotation() : notation;
     }
 
-    public List<UniversLite> getUnivers() {
+    public Set<UniversLite> getUnivers() {
         return univers;
     }
 
-    public void setUnivers(List<UniversLite> univers) {
+    public void setUnivers(Set<UniversLite> univers) {
         this.univers = univers;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
+    public boolean addUnivers(UniversLite universLite) {
+        if (!getUnivers().contains(universLite))
+            return univers.add(universLite);
+        return false;
+    }
+
+    public boolean removeUnivers(UniversLite universLite) {
+        return getUnivers().remove(universLite);
+    }
+
     public UUID getIdEditeur() {
-        return editeur.getId();
+        return getEditeur().getId();
     }
 
     public UUID getIdCollection() {
-        return collection.getId();
+        return getCollection().getId();
     }
 
     public ValeurListe getEtat() {

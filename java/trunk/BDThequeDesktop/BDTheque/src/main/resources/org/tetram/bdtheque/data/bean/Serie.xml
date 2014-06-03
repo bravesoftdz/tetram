@@ -49,11 +49,13 @@
     <select id="getSerieLiteById" resultMap="SerieLite">
         <![CDATA[
         select
-            id_serie, titreserie, id_editeur, id_collection, notation
+            s.id_serie, s.titreserie, s.id_editeur, s.id_collection, s.notation, n.libelle as lb_notation
         from
-            series
+            series s
+            left join listes n on
+                (n.ref = s.notation and n.categorie = 9)
         where
-            id_serie = #{id}
+            s.id_serie = #{id}
         ]]>
     </select>
 
@@ -69,7 +71,7 @@
             coalesce(s.formatedition, -1) as formatedition, lf.libelle as lb_formatedition,
             coalesce(s.typeedition, -1) as typeedition, lte.libelle as lb_typeedition,
             coalesce(s.senslecture, -1) as senslecture, lsl.libelle as lb_senslecture,
-            s.notation
+            s.notation, n.libelle as lb_notation
         from
             series s
             left join listes le on
@@ -84,6 +86,8 @@
                 (lf.ref = s.formatedition and lf.categorie = 5)
             left join listes lsl on
                 (lsl.ref = s.senslecture and lsl.categorie = 8)
+            left join listes n on
+                (n.ref = s.notation and n.categorie = 9)
         where
             id_serie = #{id}
        ]]>

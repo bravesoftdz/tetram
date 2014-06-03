@@ -4,9 +4,16 @@ package org.tetram.bdtheque.data.bean;
  * Created by Thierry on 24/05/2014.
  */
 public class ImageLite extends AbstractDBEntity {
+
+    static ValeurListe defaultCategorie = null;
+
     private String oldNom, newNom;
     private boolean oldStockee, newStockee;
     private ValeurListe categorie;
+
+    public ImageLite() {
+        categorie = defaultCategorie;
+    }
 
     public String getOldNom() {
         return oldNom;
@@ -44,7 +51,7 @@ public class ImageLite extends AbstractDBEntity {
         return categorie;
     }
 
-    public void setCategorie(ValeurListe categorie) {
+    public void setCategorie(ValeurListe categorie)  {
         this.categorie = categorie;
     }
 

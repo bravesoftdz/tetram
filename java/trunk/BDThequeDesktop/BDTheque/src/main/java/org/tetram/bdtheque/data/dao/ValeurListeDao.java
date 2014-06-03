@@ -23,8 +23,7 @@ public class ValeurListeDao extends AbstractDao<ValeurListe, UUID> {
 
     private Map<CategorieValeurListe, DefaultValeurListe> defaultValues = null;
 
-    private ValeurListe getValeur(CategorieValeurListe categorie) {
-        // defaultValues = getSqlSession().selectMap("getListDefaultValeur", "categorie");
+    private ValeurListe getDefaultValeur(CategorieValeurListe categorie) {
         if (defaultValues == null) defaultValues = valeurListeMapper.getListDefaultValeur();
         if (defaultValues == null) return null;
 
@@ -36,43 +35,43 @@ public class ValeurListeDao extends AbstractDao<ValeurListe, UUID> {
     }
 
     public ValeurListe getDefaultEtat() {
-        return getValeur(CategorieValeurListe.ETAT);
+        return getDefaultValeur(CategorieValeurListe.ETAT);
     }
 
     public ValeurListe getDefaultReliure() {
-        return getValeur(CategorieValeurListe.RELIURE);
+        return getDefaultValeur(CategorieValeurListe.RELIURE);
     }
 
     public ValeurListe getDefaultTypeEdition() {
-        return getValeur(CategorieValeurListe.TYPE_EDITION);
+        return getDefaultValeur(CategorieValeurListe.TYPE_EDITION);
     }
 
     public ValeurListe getDefaultOrientation() {
-        return getValeur(CategorieValeurListe.ORIENTATION);
+        return getDefaultValeur(CategorieValeurListe.ORIENTATION);
     }
 
     public ValeurListe getDefaultFormatEdition() {
-        return getValeur(CategorieValeurListe.FORMAT_EDITION);
+        return getDefaultValeur(CategorieValeurListe.FORMAT_EDITION);
     }
 
     public ValeurListe getDefaultTypeCouverture() {
-        return getValeur(CategorieValeurListe.TYPE_COUVERTURE);
+        return getDefaultValeur(CategorieValeurListe.TYPE_COUVERTURE);
     }
 
     public ValeurListe getDefaultTypeParaBD() {
-        return getValeur(CategorieValeurListe.TYPE_PARABD);
+        return getDefaultValeur(CategorieValeurListe.TYPE_PARABD);
     }
 
     public ValeurListe getDefaultSensLecture() {
-        return getValeur(CategorieValeurListe.SENS_LECTURE);
+        return getDefaultValeur(CategorieValeurListe.SENS_LECTURE);
     }
 
     public ValeurListe getDefaultNotation() {
-        return getValeur(CategorieValeurListe.NOTATION);
+        return getDefaultValeur(CategorieValeurListe.NOTATION);
     }
 
     public ValeurListe getDefaultTypePhoto() {
-        return getValeur(CategorieValeurListe.TYPE_PHOTO);
+        return getDefaultValeur(CategorieValeurListe.TYPE_PHOTO);
     }
 
 }

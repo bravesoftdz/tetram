@@ -6,6 +6,7 @@ import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.bean.ParaBD;
+import org.tetram.bdtheque.data.bean.UniversLite;
 
 public class ParaBDMapperTest extends DBTest {
 
@@ -23,7 +24,7 @@ public class ParaBDMapperTest extends DBTest {
         Assert.assertNotNull(paraBD);
         Assert.assertEquals(Constants.ID_PARABD_SPIROU_BLOC_3D, paraBD.getId());
         Assert.assertFalse(paraBD.getUnivers().isEmpty());
-        Assert.assertNotNull(paraBD.getUnivers().get(0).getId());
+        Assert.assertNotNull(paraBD.getUnivers().iterator().next().getId());
         Assert.assertFalse(paraBD.getPhotos().isEmpty());
         Assert.assertNotNull(paraBD.getPhotos().get(0).getId());
         Assert.assertNotNull(paraBD.getCategorieParaBD());
