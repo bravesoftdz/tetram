@@ -4,6 +4,10 @@ import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,21 +18,19 @@ import java.io.InputStream;
 public class Database {
 
     private static Database ourInstance = null;
-    private final SqlSessionFactory sqlSessionFactory;
+    final private GenericApplicationContext ctx;
 
     private Database() {
         super();
 
         setFBLogged(true);
 
-        String resource = "org/tetram/bdtheque/data/mybatis-config.xml";
-        InputStream inputStream = null;
-        try {
-            inputStream = Resources.getResourceAsStream(resource);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+        ctx = new AnnotationConfigApplicationContext();
+        XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(ctx);
+        xmlReader.loadBeanDefinitions(new ClassPathResource("org/tetram/bdtheque/config/spring-config.xml"));
+        // PropertiesBeanDefinitionReader propReader = new PropertiesBeanDefinitionReader(ctx);
+        // propReader.loadBeanDefinitions(new ClassPathResource("otherBeans.properties"));
+        ctx.refresh();
     }
 
     public static Database getInstance() {
@@ -46,11 +48,7 @@ public class Database {
             System.setProperty("FBLog4j", String.valueOf(value));
     }
 
-    public SqlSessionFactory getSqlSessionFactory() {
-        return sqlSessionFactory;
-    }
-
-    public SqlSession openSession() {
-        return sqlSessionFactory.openSession();
+    public GenericApplicationContext getApplicationContext() {
+        return ctx;
     }
 }

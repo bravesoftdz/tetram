@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+    <context:property-placeholder location="org/tetram/bdtheque/config/database.properties"/>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:org/tetram/bdtheque/config/mybatis-config.xml"/>
+        <property name="mapperLocations" value="classpath:org/tetram/bdtheque/data/bean/*.xml" />
+    </bean>
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory"/>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"-->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.SingleConnectionDataSource">
+        <property name="suppressClose" value="true"/>
+        <property name="autoCommit" value="false"/>
+
+        <property name="driverClassName" value="${database.driver}"/>
+        <property name="url" value="${database.url}"/>
+        <property name="username" value="${database.username}"/>
+        <property name="password" value="${database.password}"/>
+
+        <property name="connectionProperties">
+            <props>
+                <prop key="encoding">UTF8</prop>
+            </props>
+        </property>
+    </bean>
+
+    <context:component-scan base-package="org.tetram.bdtheque.data.dao"/>
+
+    <bean id="baseMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.BaseMapperInterface"/>
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+
+    <bean id="albumMapper" parent="baseMapper">
+        <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.AlbumMapper"/>
+    </bean>
+    <bean id="auteurMapper" parent="baseMapper">
+        <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.AuteurMapper"/>
+    </bean>
+    <bean id="collectionMapper" parent="baseMapper">
+        <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.CollectionMapper"/>
+    </bean>
+    <bean id="editeurMapper" parent="baseMapper">
+        <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.EditeurMapper"/>
+    </bean>
+    <bean id="editionMapper" parent="baseMapper">
+        <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.EditionMapper"/>
+    </bean>
+    <bean id="genreMapper" parent="baseMapper">
+        <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.GenreMapper"/>
+    </bean>
+    <bean id="imageMapper" parent="baseMapper">
+        <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.ImageMapper"/>
+    </bean>
+    <bean id="paraBDMapper" parent="baseMapper">
+        <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.ParaBDMapper"/>
+    </bean>
+    <bean id="serieMapper" parent="baseMapper">
+        <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.SerieMapper"/>
+    </bean>
+    <bean id="universMapper" parent="baseMapper">
+        <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.UniversMapper"/>
+    </bean>
+    <bean id="valeurlisteMapper" parent="baseMapper">
+        <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.ValeurListeMapper"/>
+    </bean>
+
+</beans>

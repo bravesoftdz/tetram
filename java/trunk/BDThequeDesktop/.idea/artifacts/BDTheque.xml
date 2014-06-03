@@ -2,10 +2,7 @@
   <artifact type="javafx" name="BDTheque">
     <output-path>$PROJECT_DIR$/out/artifacts</output-path>
     <properties id="ant-postprocessing">
-      <options enabled="true">
-        <file>file://$PROJECT_DIR$/BDTheque/ant.xml</file>
-        <target>deploy_firebird_artifact</target>
-      </options>
+      <options enabled="true" />
     </properties>
     <properties id="javafx-properties">
       <options>
@@ -34,9 +31,17 @@
         <element id="library" level="project" name="Gradle: mybatis-3.2.7" />
         <element id="library" level="project" name="Gradle: mybatis-generator-core-1.3.2" />
         <element id="library" level="project" name="Gradle: stringtemplate-3.2.1" />
-        <element id="library" level="project" name="Gradle: annotations-12.0" />
         <element id="library" level="project" name="Gradle: log4j-1.2-api-2.0-rc1" />
         <element id="library" level="project" name="Gradle: log4j-core-2.0-rc1" />
+        <element id="library" level="project" name="Gradle: mybatis-spring-1.2.2" />
+        <element id="library" level="project" name="Gradle: annotations" />
+        <element id="library" level="project" name="Gradle: aopalliance-1.0" />
+        <element id="library" level="project" name="Gradle: commons-logging-1.1.3" />
+        <element id="library" level="project" name="Gradle: spring-aop-4.0.5.RELEASE" />
+        <element id="library" level="project" name="Gradle: spring-beans-4.0.5.RELEASE" />
+        <element id="library" level="project" name="Gradle: spring-context-4.0.5.RELEASE" />
+        <element id="library" level="project" name="Gradle: spring-core-4.0.5.RELEASE" />
+        <element id="library" level="project" name="Gradle: spring-expression-4.0.5.RELEASE" />
       </element>
     </root>
   </artifact>

@@ -1,7 +1,8 @@
 package org.tetram.bdtheque.data.bean;
 
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.mappers.DefaultValeurListeMapper;
+import org.tetram.bdtheque.data.Database;
+import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,7 +14,7 @@ import java.util.UUID;
  */
 public class ParaBD extends AbstractDBEntity {
     private Integer anneeEdition;
-    private ValeurListe categorieParaBD = DefaultValeurListeMapper.getInstance().getTypeParaBD();
+    private ValeurListe categorieParaBD;
     private Integer anneeCote;
     private String titreParaBD;
     private List<AuteurParaBDLite> auteurs = new ArrayList<>();
@@ -31,6 +32,11 @@ public class ParaBD extends AbstractDBEntity {
     private List<UniversLite> univers = new ArrayList<>();
     private List<UniversLite> universFull = new ArrayList<>();
     private List<PhotoLite> photos = new ArrayList<>();
+
+    public ParaBD() {
+        ValeurListeDao valeurListeDao = Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class);
+        categorieParaBD = valeurListeDao.getDefaultTypeParaBD();
+    }
 
     public Integer getAnneeEdition() {
         return anneeEdition;

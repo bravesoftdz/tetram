@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.tetram.bdtheque.data.mappers.AlbumMapper">
+<mapper namespace="org.tetram.bdtheque.data.dao.mappers.AlbumMapper">
     <resultMap id="AlbumLite" type="beanAlbumLite">
         <id column="id_album" property="id"/>
         <result column="titreAlbum" property="titre"/>
@@ -34,14 +34,14 @@
         <result column="HorsSerie" property="horsSerie"/>
         <result column="notation" property="notation"/>
         <result column="complet" property="complet"/>
-        <association property="serie" select="org.tetram.bdtheque.data.mappers.SerieMapper.getSerieById"
+        <association property="serie" select="org.tetram.bdtheque.data.dao.mappers.SerieMapper.getSerieById"
                      column="id_serie"/>
         <collection property="univers"
-                    select="org.tetram.bdtheque.data.mappers.UniversMapper.getListUniversLiteByAlbumId"
+                    select="org.tetram.bdtheque.data.dao.mappers.UniversMapper.getListUniversLiteByAlbumId"
                     column="id_album" fetchType="eager"/>
-        <collection property="editions" select="org.tetram.bdtheque.data.mappers.EditionMapper.getListEditionByAlbumId"
+        <collection property="editions" select="org.tetram.bdtheque.data.dao.mappers.EditionMapper.getListEditionByAlbumId"
                     column="{id=id_album}"/>
-        <collection property="auteurs" select="org.tetram.bdtheque.data.mappers.AuteurMapper.getListAuteurLiteByAlbumId"
+        <collection property="auteurs" select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteByAlbumId"
                     column="id_album" fetchType="eager"/>
     </resultMap>
 

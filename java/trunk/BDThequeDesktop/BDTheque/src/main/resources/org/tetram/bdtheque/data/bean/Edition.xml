@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.tetram.bdtheque.data.mappers.EditionMapper">
+<mapper namespace="org.tetram.bdtheque.data.dao.mappers.EditionMapper">
     <resultMap id="EditionLite" type="beanEditionLite">
         <id column="id_edition" property="id"/>
         <result column="anneeedition" property="anneeEdition"/>
         <result column="isbn" property="isbn"/>
-        <association property="editeur" select="org.tetram.bdtheque.data.mappers.EditeurMapper.getEditeurLiteById"
+        <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurLiteById"
                      column="id_editeur"/>
-        <association property="collection" select="org.tetram.bdtheque.data.mappers.CollectionMapper.getCollectionLiteById"
+        <association property="collection" select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionLiteById"
                      column="id_collection"/>
     </resultMap>
     <resultMap id="EditionFull" type="beanEdition">
@@ -36,11 +36,11 @@
         <result column="anneecote" property="anneeCote"/>
         <result column="prixcote" property="prixCote"/>
         <result column="numeroperso" property="numeroPerso"/>
-        <association property="editeur" select="org.tetram.bdtheque.data.mappers.EditeurMapper.getEditeurById"
+        <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurById"
                      column="id_editeur"/>
-        <association property="collection" select="org.tetram.bdtheque.data.mappers.CollectionMapper.getCollectionById"
+        <association property="collection" select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionById"
                      column="id_collection"/>
-        <collection property="couvertures" select="org.tetram.bdtheque.data.mappers.ImageMapper.getListCouvertureLiteByEditionId"
+        <collection property="couvertures" select="org.tetram.bdtheque.data.dao.mappers.ImageMapper.getListCouvertureLiteByEditionId"
                     column="id_edition"/>
     </resultMap>
 

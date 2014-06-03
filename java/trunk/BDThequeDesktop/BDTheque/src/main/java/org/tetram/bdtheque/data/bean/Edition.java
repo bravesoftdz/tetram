@@ -1,6 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
-import org.tetram.bdtheque.data.mappers.DefaultValeurListeMapper;
+import org.tetram.bdtheque.data.Database;
+import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,12 +15,12 @@ public class Edition extends AbstractDBEntity {
     private UUID idAlbum;
     private Editeur editeur;
     private Collection collection;
-    private ValeurListe etat = DefaultValeurListeMapper.getInstance().getEtat();
-    private ValeurListe reliure = DefaultValeurListeMapper.getInstance().getReliure();
-    private ValeurListe typeEdition = DefaultValeurListeMapper.getInstance().getTypeEdition();
-    private ValeurListe formatEdition = DefaultValeurListeMapper.getInstance().getFormatEdition();
-    private ValeurListe orientation = DefaultValeurListeMapper.getInstance().getOrientation();
-    private ValeurListe sensLecture = DefaultValeurListeMapper.getInstance().getSensLecture();
+    private ValeurListe etat;
+    private ValeurListe reliure;
+    private ValeurListe typeEdition;
+    private ValeurListe formatEdition;
+    private ValeurListe orientation;
+    private ValeurListe sensLecture;
     private Integer anneeEdition;
     private Integer nombreDePages;
     private Integer anneeCote;
@@ -37,6 +38,16 @@ public class Edition extends AbstractDBEntity {
     private String notes;
     private String numeroPerso;
     private List<CouvertureLite> couvertures = new ArrayList<>();
+
+    public Edition() {
+        ValeurListeDao valeurListeDao = Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class);
+        etat = valeurListeDao.getDefaultEtat();
+        reliure = valeurListeDao.getDefaultReliure();
+        typeEdition = valeurListeDao.getDefaultTypeEdition();
+        formatEdition = valeurListeDao.getDefaultFormatEdition();
+        orientation = valeurListeDao.getDefaultOrientation();
+        sensLecture = valeurListeDao.getDefaultSensLecture();
+    }
 
     public UUID getIdAlbum() {
         return idAlbum;

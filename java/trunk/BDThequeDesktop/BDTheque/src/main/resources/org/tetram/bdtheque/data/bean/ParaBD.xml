@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.tetram.bdtheque.data.mappers.ParaBDMapper">
+<mapper namespace="org.tetram.bdtheque.data.dao.mappers.ParaBDMapper">
     <resultMap id="ParaBDLite" type="beanParaBDLite">
         <id column="id_parabd" property="id"/>
         <result column="titreparabd" property="titre"/>
@@ -26,15 +26,15 @@
         <result column="anneecote" property="anneeCote"/>
         <result column="prixcote" property="prixCote"/>
         <result column="categorieparabd" property="categorieParaBD"/>
-        <association property="serie" select="org.tetram.bdtheque.data.mappers.SerieMapper.getSerieById"
+        <association property="serie" select="org.tetram.bdtheque.data.dao.mappers.SerieMapper.getSerieById"
                      column="id_serie"/>
         <collection property="univers"
-                    select="org.tetram.bdtheque.data.mappers.UniversMapper.getListUniversLiteByParaBDId"
+                    select="org.tetram.bdtheque.data.dao.mappers.UniversMapper.getListUniversLiteByParaBDId"
                     column="id_parabd" fetchType="eager"/>
-        <collection property="photos" select="org.tetram.bdtheque.data.mappers.ImageMapper.getListPhotoLiteByParaBDId"
+        <collection property="photos" select="org.tetram.bdtheque.data.dao.mappers.ImageMapper.getListPhotoLiteByParaBDId"
                     column="id_parabd"/>
         <collection property="auteurs"
-                    select="org.tetram.bdtheque.data.mappers.AuteurMapper.getListAuteurLiteByParaBDId"
+                    select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteByParaBDId"
                     column="id_parabd"/>
     </resultMap>
 
