@@ -37,6 +37,7 @@
     </bean>
 
     <context:component-scan base-package="org.tetram.bdtheque.data.dao"/>
+    <context:component-scan base-package="org.tetram.bdtheque.data.services"/>
 
     <bean id="baseMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
         <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.BaseMapperInterface"/>

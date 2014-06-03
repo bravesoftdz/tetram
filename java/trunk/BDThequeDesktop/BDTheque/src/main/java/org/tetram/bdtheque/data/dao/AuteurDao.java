@@ -2,7 +2,8 @@ package org.tetram.bdtheque.data.dao;
 
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Repository;
 import org.tetram.bdtheque.data.bean.Auteur;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.bean.SerieLite;
@@ -17,7 +18,8 @@ import java.util.UUID;
 /**
  * Created by Thierry on 30/05/2014.
  */
-@Configuration
+@Repository
+@Lazy
 public class AuteurDao extends AbstractDao<Auteur, UUID> {
 
     @Autowired

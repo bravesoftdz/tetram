@@ -1,7 +1,8 @@
 package org.tetram.bdtheque.data.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Repository;
 import org.tetram.bdtheque.data.bean.CategorieValeurListe;
 import org.tetram.bdtheque.data.bean.DefaultValeurListe;
 import org.tetram.bdtheque.data.bean.ValeurListe;
@@ -13,7 +14,8 @@ import java.util.UUID;
 /**
  * Created by Thierry on 28/05/2014.
  */
-@Configuration
+@Repository
+@Lazy
 public class ValeurListeDao extends AbstractDao<ValeurListe, UUID> {
 
     @Autowired

@@ -5,7 +5,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Repository;
 import org.tetram.bdtheque.utils.GenericUtils;
 import org.tetram.bdtheque.utils.logging.Log;
 import org.tetram.bdtheque.utils.logging.LogManager;
@@ -13,7 +14,8 @@ import org.tetram.bdtheque.utils.logging.LogManager;
 /**
  * Created by Thierry on 30/05/2014.
  */
-@Configuration
+@Repository
+@Lazy
 public class AbstractDao<T, PK> extends SqlSessionDaoSupport implements Dao<T, PK> {
 
     /**

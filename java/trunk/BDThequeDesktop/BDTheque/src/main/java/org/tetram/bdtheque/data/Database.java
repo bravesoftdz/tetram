@@ -23,6 +23,7 @@ public class Database {
         xmlReader.loadBeanDefinitions(new ClassPathResource("org/tetram/bdtheque/config/spring-config.xml"));
         // PropertiesBeanDefinitionReader propReader = new PropertiesBeanDefinitionReader(ctx);
         // propReader.loadBeanDefinitions(new ClassPathResource("otherBeans.properties"));
+
         ctx.refresh();
     }
 
