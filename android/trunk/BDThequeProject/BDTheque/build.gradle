@@ -15,20 +15,20 @@ android {
           versionName "1.0"
         */
         testPackageName "org.tetram.bdtheque.test"
-        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+        testInstrumentationRunner 'android.test.InstrumentationTestRunner'
+        testApplicationId 'org.tetram.bdtheque.test'
     }
 
     signingConfigs {
         release {
-            storeFile file("../keystore.jks")
-            storePassword "280776"
-            keyAlias "bdtheque"
-            keyPassword "280776"
+            storeFile file('../keystore.jks')
+            storePassword '280776'
+            keyAlias 'bdtheque'
+            keyPassword '280776'
         }
     }
 
     productFlavors {
-
     }
 
     buildTypes {
@@ -47,7 +47,7 @@ android {
             runProguard false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             buildConfigField "boolean", "TRIAL", "false"
-            packageNameSuffix '.debug'
+            applicationIdSuffix '.debug'
             debuggable true
         }
     }
