@@ -1,5 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.data.BeanUtils;
+
 import java.util.Locale;
 
 /**
@@ -10,19 +12,19 @@ public class ConversionLite extends AbstractDBEntity {
     private Double taux;
 
     public String getMonnaie1() {
-        return monnaie1;
+        return BeanUtils.trim(monnaie1);
     }
 
     public void setMonnaie1(String monnaie1) {
-        this.monnaie1 = monnaie1;
+        this.monnaie1 = BeanUtils.trim(monnaie1);
     }
 
     public String getMonnaie2() {
-        return monnaie2;
+        return BeanUtils.trim(monnaie2);
     }
 
     public void setMonnaie2(String monnaie2) {
-        this.monnaie2 = monnaie2;
+        this.monnaie2 = BeanUtils.trim(monnaie2);
     }
 
     public Double getTaux() {

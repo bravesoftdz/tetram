@@ -17,10 +17,13 @@ import java.sql.SQLException;
 // ne pas mettre l'annotation impose de tester le paramètre jdbcType pour connaitre le type de la propriété: ici on suppose toujours VARCHAR
 //@MappedJdbcTypes(JdbcType.VARCHAR)
 
-// le typehandler présuppose qu'on a un champ du même nom que le champ valeur et préfixé de LABEL_PREFIX pour contenir le libellé
+// le typehandler présuppose:
+//   qu'on a un champ du même nom que le champ valeur et préfixé de LABEL_PREFIX pour contenir le libellé
+//   qu'on a un champ du même nom que le champ valeur et préfixé de POSITION_PREFIX pour contenir l'ordre de tri
 public class ValeurListeTypeHandler extends BaseTypeHandler<ValeurListe> {
 
     public static final String LABEL_PREFIX = "lb_";
+    public static final String POSITION_PREFIX = "pos_";
 
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, @NotNull ValeurListe parameter, JdbcType jdbcType) throws SQLException {
@@ -34,6 +37,13 @@ public class ValeurListeTypeHandler extends BaseTypeHandler<ValeurListe> {
         if (rs.wasNull())
             return null;
         v.setTexte(rs.getString(LABEL_PREFIX + columnName));
+        try {
+            v.setPosition(rs.getInt(POSITION_PREFIX + columnName));
+        }
+        catch (Exception e)
+        {
+            v.setPosition(0);
+        }
         return v;
     }
 
@@ -49,6 +59,13 @@ public class ValeurListeTypeHandler extends BaseTypeHandler<ValeurListe> {
         if (cs.wasNull())
             return null;
         v.setTexte(cs.getString(LABEL_PREFIX + cs.getMetaData().getColumnName(columnIndex)));
+        try {
+            v.setPosition(cs.getInt(POSITION_PREFIX + cs.getMetaData().getColumnName(columnIndex)));
+        }
+        catch (Exception e)
+        {
+            v.setPosition(0);
+        }
         return v;
     }
 }

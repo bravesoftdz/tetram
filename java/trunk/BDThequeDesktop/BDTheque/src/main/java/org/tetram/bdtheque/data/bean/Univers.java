@@ -1,5 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.data.BeanUtils;
+
 import java.net.URL;
 import java.util.UUID;
 
@@ -13,11 +15,11 @@ public class Univers extends AbstractDBEntity {
     private UniversLite universParent;
 
     public String getNomUnivers() {
-        return nomUnivers;
+        return BeanUtils.trim(nomUnivers);
     }
 
     public void setNomUnivers(String nomUnivers) {
-        this.nomUnivers = nomUnivers;
+        this.nomUnivers = BeanUtils.trim(nomUnivers);
     }
 
     public URL getSiteWeb() {
@@ -29,11 +31,11 @@ public class Univers extends AbstractDBEntity {
     }
 
     public String getDescription() {
-        return description;
+        return BeanUtils.trim(description);
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = BeanUtils.trim(description);
     }
 
     public UniversLite getUniversParent() {

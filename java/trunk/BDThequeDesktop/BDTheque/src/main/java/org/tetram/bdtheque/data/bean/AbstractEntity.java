@@ -15,4 +15,5 @@ public abstract class AbstractEntity {
     public String buildLabel() {
         return "";
     }
+
 }

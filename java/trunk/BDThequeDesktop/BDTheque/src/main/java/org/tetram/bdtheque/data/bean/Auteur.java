@@ -1,5 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.data.BeanUtils;
+
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +16,11 @@ public class Auteur extends AbstractDBEntity {
     private List<Serie> series = new ArrayList<>();
 
     public String getNomAuteur() {
-        return nomAuteur;
+        return BeanUtils.trim(nomAuteur);
     }
 
     public void setNomAuteur(String nomAuteur) {
-        this.nomAuteur = nomAuteur;
+        this.nomAuteur = BeanUtils.trim(nomAuteur);
     }
 
     public URL getSiteWeb() {
@@ -30,11 +32,11 @@ public class Auteur extends AbstractDBEntity {
     }
 
     public String getBiographie() {
-        return biographie;
+        return BeanUtils.trim(biographie);
     }
 
     public void setBiographie(String biographie) {
-        this.biographie = biographie;
+        this.biographie = BeanUtils.trim(biographie);
     }
 
     public List<Serie> getSeries() {

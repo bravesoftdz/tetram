@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.utils.StringUtils;
 
 /**
@@ -9,15 +10,15 @@ public class UniversLite extends AbstractDBEntity {
     private String nomUnivers;
 
     public String getNomUnivers() {
-        return nomUnivers;
+        return BeanUtils.trim(nomUnivers);
     }
 
     public void setNomUnivers(String nomUnivers) {
-        this.nomUnivers = nomUnivers;
+        this.nomUnivers = BeanUtils.trim(nomUnivers);
     }
 
     @Override
     public String buildLabel() {
-        return StringUtils.formatTitre(nomUnivers);
+        return StringUtils.formatTitre(getNomUnivers());
     }
 }

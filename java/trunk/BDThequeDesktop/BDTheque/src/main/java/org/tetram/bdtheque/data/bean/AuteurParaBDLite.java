@@ -36,4 +36,5 @@ public class AuteurParaBDLite extends AuteurLite {
         result = 31 * result + (idParaBD != null ? idParaBD.hashCode() : 0);
         return result;
     }
+
 }

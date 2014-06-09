@@ -1,11 +1,36 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.utils.StringUtils;
+
+import java.util.Comparator;
 
 /**
  * Created by Thierry on 24/05/2014.
  */
 public class EditionLite extends AbstractDBEntity {
+    public static Comparator<EditionLite> DEFAULT_COMPARATOR = new Comparator<EditionLite>() {
+        @Override
+        public int compare(EditionLite o1, EditionLite o2) {
+            if (o1 == o2) return 0;
+
+            int comparaison;
+
+            comparaison = BeanUtils.compare(o1.getAnneeEdition(), o2.getAnneeEdition());
+            if (comparaison != 0) return comparaison;
+
+            comparaison = EditeurLite.DEFAULT_COMPARATOR.compare(o1.getEditeur(), o2.getEditeur());
+            if (comparaison != 0) return comparaison;
+
+            comparaison = CollectionLite.DEFAULT_COMPARATOR.compare(o1.getCollection(), o2.getCollection());
+            if (comparaison != 0) return comparaison;
+
+            comparaison = BeanUtils.compare(o1.getIsbn(), o2.getIsbn());
+            if (comparaison != 0) return comparaison;
+
+            return 0;
+        }
+    };
     private Integer anneeEdition;
     private String isbn;
     private EditeurLite editeur;
@@ -20,11 +45,11 @@ public class EditionLite extends AbstractDBEntity {
     }
 
     public String getIsbn() {
-        return isbn;
+        return BeanUtils.trim(isbn);
     }
 
     public void setIsbn(String isbn) {
-        this.isbn = isbn;
+        this.isbn = BeanUtils.trim(isbn);
     }
 
     public EditeurLite getEditeur() {

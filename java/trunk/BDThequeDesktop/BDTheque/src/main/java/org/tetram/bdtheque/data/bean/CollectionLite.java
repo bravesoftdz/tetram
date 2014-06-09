@@ -1,20 +1,36 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.utils.StringUtils;
+
+import java.util.Comparator;
 
 /**
  * Created by Thierry on 24/05/2014.
  */
 public class CollectionLite extends AbstractDBEntity {
+    public static Comparator<CollectionLite> DEFAULT_COMPARATOR = new Comparator<CollectionLite>() {
+        @Override
+        public int compare(CollectionLite o1, CollectionLite o2) {
+            if (o1 == o2) return 0;
+
+            int comparaison;
+
+            comparaison = BeanUtils.compare(o1.getNomCollection(), o2.getNomCollection());
+            if (comparaison != 0) return comparaison;
+
+            return 0;
+        }
+    };
     private String nomCollection;
     private EditeurLite editeur;
 
     public String getNomCollection() {
-        return nomCollection.trim();
+        return BeanUtils.trim(nomCollection);
     }
 
     public void setNomCollection(String nomCollection) {
-        this.nomCollection = nomCollection.trim();
+        this.nomCollection = BeanUtils.trim(nomCollection);
     }
 
     public EditeurLite getEditeur() {

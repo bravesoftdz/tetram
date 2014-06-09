@@ -1,35 +1,55 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.data.BeanUtils;
+
+import java.util.Comparator;
+
 /**
  * Created by Thierry on 24/05/2014.
  */
 public abstract class ImageLite extends AbstractDBEntity {
 
+    public static Comparator<ImageLite> DEFAULT_COMPARATOR = new Comparator<ImageLite>() {
+        @Override
+        public int compare(ImageLite o1, ImageLite o2) {
+            if (o1 == o2) return 0;
+
+            int comparaison;
+
+            comparaison = ValeurListe.DEFAULT_COMPARATOR.compare(o1.getCategorie(), o2.getCategorie());
+            if (comparaison != 0) return comparaison;
+
+            comparaison = BeanUtils.compare(o1.getPosition(), o2.getPosition());
+            if (comparaison != 0) return comparaison;
+
+            return 0;
+        }
+    };
     @SuppressWarnings("CanBeFinal")
     static ValeurListe defaultCategorie = null;
-
     private String oldNom, newNom;
     private boolean oldStockee, newStockee;
     private ValeurListe categorie;
+    private int position;
 
     public ImageLite() {
         categorie = defaultCategorie;
     }
 
     public String getOldNom() {
-        return oldNom;
+        return BeanUtils.trim(oldNom);
     }
 
     public void setOldNom(String oldNom) {
-        this.oldNom = oldNom;
+        this.oldNom = BeanUtils.trim(oldNom);
     }
 
     public String getNewNom() {
-        return newNom;
+        return BeanUtils.trim(newNom);
     }
 
     public void setNewNom(String newNom) {
-        this.newNom = newNom;
+        this.newNom = BeanUtils.trim(newNom);
     }
 
     public boolean isOldStockee() {
@@ -52,14 +72,20 @@ public abstract class ImageLite extends AbstractDBEntity {
         return categorie;
     }
 
-    public void setCategorie(ValeurListe categorie)  {
+    public void setCategorie(ValeurListe categorie) {
         this.categorie = categorie;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 
     @Override
     public String buildLabel() {
         return newNom;
     }
-
-
 }

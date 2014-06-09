@@ -3,6 +3,7 @@
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.ImageMapper">
     <resultMap id="ImageLite" type="beanImageLite">
         <result column="CategorieImage" property="categorie"/>
+        <result column="ordre" property="position"/>
     </resultMap>
     <resultMap id="PhotoLite" type="beanPhotoLite" extends="ImageLite">
         <id column="id_photo" property="id"/>
@@ -26,7 +27,7 @@
     <select id="getListCouvertureLiteByEditionId" resultMap="CouvertureLiteSelect" resultOrdered="true">
         <![CDATA[
         select
-            c.id_couverture, c.fichiercouverture, c.stockagecouverture, c.categorieimage, l.libelle as lb_categorieimage
+            c.id_couverture, c.fichiercouverture, c.stockagecouverture, c.categorieimage, l.libelle as lb_categorieimage, c.ordre
         from
             couvertures c
             left join listes l on
@@ -40,7 +41,7 @@
     <select id="getListPhotoLiteByParaBDId" resultMap="PhotoLiteSelect" resultOrdered="true">
         <![CDATA[
         select
-            p.id_photo, p.fichierphoto, p.stockagephoto, p.categorieimage, l.libelle as lb_categorieimage
+            p.id_photo, p.fichierphoto, p.stockagephoto, p.categorieimage, l.libelle as lb_categorieimage, p.ordre
         from
             photos p
             left join listes l on

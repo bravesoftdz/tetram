@@ -1,5 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.data.BeanUtils;
+
 import java.net.URL;
 
 /**
@@ -10,11 +12,11 @@ public class Editeur extends AbstractDBEntity {
     private URL siteWeb;
 
     public String getNomEditeur() {
-        return nomEditeur.trim();
+        return BeanUtils.trim(nomEditeur);
     }
 
     public void setNomEditeur(String nomEditeur) {
-        this.nomEditeur = nomEditeur.trim();
+        this.nomEditeur = BeanUtils.trim(nomEditeur);
     }
 
     public URL getSiteWeb() {

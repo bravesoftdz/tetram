@@ -3,7 +3,7 @@ package org.tetram.bdtheque.data.bean;
 /**
  * Created by Thierry on 24/05/2014.
  */
-public class AuteurLite extends AbstractDBEntity {
+public abstract class AuteurLite extends AbstractDBEntity {
     private PersonneLite personne;
 
     public PersonneLite getPersonne() {
@@ -39,4 +39,5 @@ public class AuteurLite extends AbstractDBEntity {
     public String buildLabel() {
         return personne.buildLabel();
     }
+
 }

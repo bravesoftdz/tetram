@@ -4,6 +4,7 @@ import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -12,6 +13,36 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 public class Album extends AbstractDBEntity {
+    public static Comparator<Album> DEFAULT_COMPARATOR = new Comparator<Album>() {
+        @Override
+        public int compare(Album o1, Album o2) {
+            if (o1 == o2) return 0;
+
+            int comparaison;
+
+            // horsSerie nulls first
+            comparaison = BeanUtils.compare(o1.isHorsSerie(), o2.isHorsSerie());
+            if (comparaison != 0) return comparaison;
+
+            // integrale nulls first
+            comparaison = BeanUtils.compare(o1.isIntegrale(), o2.isIntegrale());
+            if (comparaison != 0) return comparaison;
+
+            // tome nulls first
+            comparaison = BeanUtils.compare(o1.getTome(), o2.getTome());
+            if (comparaison != 0) return comparaison;
+
+            // anneeParution nulls first
+            comparaison = BeanUtils.compare(o1.getAnneeParution(), o2.getAnneeParution());
+            if (comparaison != 0) return comparaison;
+
+            // moisParution nulls first
+            comparaison = BeanUtils.compare(o1.getMoisParution(), o2.getMoisParution());
+            if (comparaison != 0) return comparaison;
+
+            return 0;
+        }
+    };
     private boolean complet;
     private String titreAlbum;
     private Serie serie;
@@ -45,11 +76,11 @@ public class Album extends AbstractDBEntity {
     }
 
     public String getTitreAlbum() {
-        return titreAlbum;
+        return BeanUtils.trim(titreAlbum);
     }
 
     public void setTitreAlbum(String titreAlbum) {
-        this.titreAlbum = titreAlbum;
+        this.titreAlbum = BeanUtils.trim(titreAlbum);
     }
 
     public Serie getSerie() {
@@ -210,19 +241,19 @@ public class Album extends AbstractDBEntity {
     }
 
     public String getSujet() {
-        return sujet;
+        return BeanUtils.trim(sujet);
     }
 
     public void setSujet(String sujet) {
-        this.sujet = sujet;
+        this.sujet = BeanUtils.trim(sujet);
     }
 
     public String getNotes() {
-        return notes;
+        return BeanUtils.trim(notes);
     }
 
     public void setNotes(String notes) {
-        this.notes = notes;
+        this.notes = BeanUtils.trim(notes);
     }
 
     public Set<Edition> getEditions() {

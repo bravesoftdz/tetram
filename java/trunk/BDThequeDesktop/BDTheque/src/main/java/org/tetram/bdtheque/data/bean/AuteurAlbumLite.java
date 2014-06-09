@@ -18,12 +18,12 @@ public class AuteurAlbumLite extends AuteurSerieLite {
 
     @SuppressWarnings("RedundantIfStatement")
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AuteurAlbumLite)) return false;
-        if (!super.equals(o)) return false;
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (!(other instanceof AuteurAlbumLite)) return false;
+        if (!super.equals(other)) return false;
 
-        AuteurAlbumLite that = (AuteurAlbumLite) o;
+        AuteurAlbumLite that = (AuteurAlbumLite) other;
 
         if (idAlbum != null ? !idAlbum.equals(that.idAlbum) : that.idAlbum != null) return false;
 

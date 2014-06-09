@@ -8,7 +8,7 @@ import org.tetram.bdtheque.data.dao.ValeurListeDao;
  */
 public class CouvertureLite extends ImageLite {
 
-    static{
+    static {
         ValeurListeDao valeurListeDao = Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class);
         defaultCategorie = valeurListeDao.getDefaultTypeCouverture();
     }

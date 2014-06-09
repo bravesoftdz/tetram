@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
@@ -52,11 +53,11 @@ public class Serie extends AbstractDBEntity {
     }
 
     public String getTitreSerie() {
-        return titreSerie;
+        return BeanUtils.trim(titreSerie);
     }
 
     public void setTitreSerie(String titreSerie) {
-        this.titreSerie = titreSerie;
+        this.titreSerie = BeanUtils.trim(titreSerie);
     }
 
     public Boolean getTerminee() {
@@ -76,19 +77,19 @@ public class Serie extends AbstractDBEntity {
     }
 
     public String getSujet() {
-        return sujet;
+        return BeanUtils.trim(sujet);
     }
 
     public void setSujet(String sujet) {
-        this.sujet = sujet;
+        this.sujet = BeanUtils.trim(sujet);
     }
 
     public String getNotes() {
-        return notes;
+        return BeanUtils.trim(notes);
     }
 
     public void setNotes(String notes) {
-        this.notes = notes;
+        this.notes = BeanUtils.trim(notes);
     }
 
     public Editeur getEditeur() {

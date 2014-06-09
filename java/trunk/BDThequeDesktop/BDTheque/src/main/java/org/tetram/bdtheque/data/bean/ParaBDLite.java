@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.UUID;
@@ -16,11 +17,11 @@ public class ParaBDLite extends AbstractDBEntity {
     private boolean complet = true;
 
     public String getTitre() {
-        return titre;
+        return BeanUtils.trim(titre);
     }
 
     public void setTitre(String titre) {
-        this.titre = titre;
+        this.titre = BeanUtils.trim(titre);
     }
 
     public UUID getIdSerie() {
@@ -32,19 +33,19 @@ public class ParaBDLite extends AbstractDBEntity {
     }
 
     public String getSerie() {
-        return serie;
+        return BeanUtils.trim(serie);
     }
 
     public void setSerie(String serie) {
-        this.serie = serie;
+        this.serie = BeanUtils.trim(serie);
     }
 
     public String getsCategorie() {
-        return sCategorie;
+        return BeanUtils.trim(sCategorie);
     }
 
     public void setsCategorie(String sCategorie) {
-        this.sCategorie = sCategorie;
+        this.sCategorie = BeanUtils.trim(sCategorie);
     }
 
     public boolean isAchat() {

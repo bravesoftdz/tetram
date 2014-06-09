@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
@@ -170,11 +171,11 @@ public class Edition extends AbstractDBEntity {
     }
 
     public String getIsbn() {
-        return isbn;
+        return BeanUtils.trim(isbn);
     }
 
     public void setIsbn(String isbn) {
-        this.isbn = isbn;
+        this.isbn = BeanUtils.trim(isbn);
     }
 
     public Date getDateAchat() {
@@ -186,19 +187,19 @@ public class Edition extends AbstractDBEntity {
     }
 
     public String getNotes() {
-        return notes;
+        return BeanUtils.trim(notes);
     }
 
     public void setNotes(String notes) {
-        this.notes = notes;
+        this.notes = BeanUtils.trim(notes);
     }
 
     public String getNumeroPerso() {
-        return numeroPerso;
+        return BeanUtils.trim(numeroPerso);
     }
 
     public void setNumeroPerso(String numeroPerso) {
-        this.numeroPerso = numeroPerso;
+        this.numeroPerso = BeanUtils.trim(numeroPerso);
     }
 
     public List<CouvertureLite> getCouvertures() {
@@ -209,11 +210,11 @@ public class Edition extends AbstractDBEntity {
         this.couvertures = couvertures;
     }
 
-    public boolean addCouverture(CouvertureLite couverture){
+    public boolean addCouverture(CouvertureLite couverture) {
         return getCouvertures().add(couverture);
     }
 
-    public boolean removeCouverture(CouvertureLite couverture){
+    public boolean removeCouverture(CouvertureLite couverture) {
         return getCouvertures().remove(couverture);
     }
 
