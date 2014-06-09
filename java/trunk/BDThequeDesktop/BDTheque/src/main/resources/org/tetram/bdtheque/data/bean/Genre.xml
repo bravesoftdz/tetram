@@ -7,6 +7,17 @@
         <result column="quantite" property="quantite"/>
     </resultMap>
 
+    <select id="getGenreLiteById" resultMap="GenreLite">
+        <![CDATA[
+        select
+            id_genre, genre
+        from
+            genres
+        where
+            id_genre = #{id}
+        ]]>
+    </select>
+
     <select id="getListGenreBySerieId" resultMap="GenreLite" resultOrdered="true">
         <![CDATA[
         select
@@ -21,4 +32,44 @@
             g.genre
         ]]>
     </select>
+
+    <select id="checkUniqueGenreLite" resultMap="GenreLite">
+        <![CDATA[
+        select
+            id_genre
+        from
+            genres
+        where
+            genre = #{genre}
+        ]]>
+        <if test="id != null">
+            <![CDATA[
+            and id_genre <> #{id}
+            ]]>
+        </if>
+    </select>
+
+    <insert id="createGenreLite">
+        <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
+            <include refid="org.tetram.bdtheque.data.dao.mappers.autoIncKey"/>
+        </selectKey>
+        <![CDATA[
+        insert into genres (id_genre, genre) values (#{id}, #{genre})
+        ]]>
+    </insert>
+
+    <update id="updateGenreLite">
+        <![CDATA[
+        update genres set
+          genre = #{genre}
+        where
+          id_genre = #{id}
+        ]]>
+    </update>
+
+    <delete id="deleteGenreLite">
+        <![CDATA[
+        delete from genres where id_genre = #{id}
+        ]]>
+    </delete>
 </mapper>

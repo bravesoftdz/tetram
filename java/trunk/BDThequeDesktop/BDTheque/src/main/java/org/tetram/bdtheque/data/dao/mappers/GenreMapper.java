@@ -9,5 +9,13 @@ import java.util.UUID;
  * Created by Thierry on 02/06/2014.
  */
 public interface GenreMapper extends BaseMapperInterface {
+    GenreLite getGenreLiteById(UUID id);
+
     List<GenreLite> getListGenreBySerieId(UUID id);
+
+    int createGenreLite(GenreLite genre);
+
+    int updateGenreLite(GenreLite genre);
+
+    int deleteGenreLite(UUID id);
 }

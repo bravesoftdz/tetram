@@ -1,6 +1,5 @@
 package org.tetram.bdtheque.data.dao;
 
-import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -32,7 +31,7 @@ public class AuteurDao extends AbstractDao<Auteur, UUID> {
     private SerieDao serieDao;
 
     @Override
-    public Auteur get(UUID id) throws PersistenceException {
+    public Auteur get(UUID id) {
         Auteur auteur = super.get(id);
         if (auteur != null) {
             List<Serie> lst = new ArrayList<>();

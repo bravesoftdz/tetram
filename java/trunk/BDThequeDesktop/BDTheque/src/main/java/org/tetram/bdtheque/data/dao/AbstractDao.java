@@ -1,8 +1,7 @@
 package org.tetram.bdtheque.data.dao;
 
-import org.apache.ibatis.exceptions.PersistenceException;
-import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.jetbrains.annotations.NonNls;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -21,10 +20,16 @@ public class AbstractDao<T, PK> extends SqlSessionDaoSupport implements Dao<T, P
     /**
      * Define prefixes for easier naming conventions between XML mappers files and the DAO class
      */
+    @NonNls
     public static final String PREFIX_SELECT_QUERY = "get";     //prefix of select queries in mappers files (eg. getAddressType)
+    @NonNls
     public static final String PREFIX_INSERT_QUERY = "create"; //prefix of create queries in mappers files (eg. createAddressType)
+    @NonNls
     public static final String PREFIX_UPDATE_QUERY = "update";  //prefix of update queries in mappers files (eg. updateAddressType)
+    @NonNls
     public static final String PREFIX_DELETE_QUERY = "delete";  //prefix of delete queries in mappers files (eg. deleteAddressType)
+    @NonNls
+    public static final String PREFIX_CHECK_UNIQUE_QUERY = "checkUnique";  //prefix of check unique queries in mappers files (eg. checkUniqueAddressType)
     private static Log log = LogManager.getLog(AbstractDao.class);
     private final Class<T> type;
 
@@ -56,10 +61,9 @@ public class AbstractDao<T, PK> extends SqlSessionDaoSupport implements Dao<T, P
      * If your DAO object is called CarInfo.java,
      * the corresponding mappers query id should be: &lt;select id="getCarInfo" ...
      */
-    public T get(PK id) throws PersistenceException {
-        SqlSession session = getSqlSession();
-        String query = PREFIX_SELECT_QUERY + this.type.getSimpleName() + "ById";
-        return session.selectOne(query, id);
+    public T get(PK id) {
+        @NonNls String query = PREFIX_SELECT_QUERY + this.type.getSimpleName() + "ById";
+        return getSqlSession().selectOne(query, id);
     }
 
     /**
@@ -74,10 +78,12 @@ public class AbstractDao<T, PK> extends SqlSessionDaoSupport implements Dao<T, P
      * </br></br>
      * SQL Executed (example): insert into [tablename] (fieldname1,fieldname2,...) values(value1,value2...) ...
      */
-    public int create(T o) throws PersistenceException {
-        String query = PREFIX_INSERT_QUERY + o.getClass().getSimpleName();
+    @SuppressWarnings("UnnecessaryLocalVariable")
+    public int create(T o) {
+        String query = PREFIX_INSERT_QUERY + this.type.getSimpleName();
         Integer status = getSqlSession().insert(query, o);
-        getSqlSession().commit();
+        // ne doit pas être utilisé avec une session Spring
+        // getSqlSession().commit();
         return status;
     }
 
@@ -93,10 +99,12 @@ public class AbstractDao<T, PK> extends SqlSessionDaoSupport implements Dao<T, P
      * </br></br>
      * SQL Executed (example): update [tablename] set fieldname1 = value1 where id = #{id}
      */
-    public int update(T o) throws PersistenceException {
-        String query = PREFIX_UPDATE_QUERY + o.getClass().getSimpleName();
+    @SuppressWarnings("UnnecessaryLocalVariable")
+    public int update(T o) {
+        String query = PREFIX_UPDATE_QUERY + this.type.getSimpleName();
         Integer status = getSqlSession().update(query, o);
-        getSqlSession().commit();
+        // ne doit pas être utilisé avec une session Spring
+        // getSqlSession().commit();
         return status;
     }
 
@@ -110,10 +118,18 @@ public class AbstractDao<T, PK> extends SqlSessionDaoSupport implements Dao<T, P
      * </br></br>
      * SQL Executed (example): update [tablename] set fieldname1 = value1 where id = #{id}
      */
-    public int delete(PK id) throws PersistenceException {
+    @SuppressWarnings("UnnecessaryLocalVariable")
+    public int delete(PK id) {
         String query = PREFIX_DELETE_QUERY + this.type.getSimpleName();
         Integer status = getSqlSession().delete(query, id);
-        getSqlSession().commit();
+        // ne doit pas être utilisé avec une session Spring
+        // getSqlSession().commit();
         return status;
+    }
+
+    public boolean isUnique(T o) {
+        String query = PREFIX_CHECK_UNIQUE_QUERY + this.type.getSimpleName();
+        // on ne devrait jamais en trouver plus d'un mais par sécurité
+        return getSqlSession().selectList(query, o).isEmpty();
     }
 }

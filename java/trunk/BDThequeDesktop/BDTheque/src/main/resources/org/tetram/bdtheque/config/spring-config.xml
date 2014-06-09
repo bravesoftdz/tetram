@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+       xmlns="http://www.springframework.org/schema/beans" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <context:property-placeholder location="org/tetram/bdtheque/config/database.properties"/>
 
@@ -17,7 +21,30 @@
     </bean>
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
+        <property name="validateExistingTransaction" value="true"/>
     </bean>
+
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+<!--
+        <tx:advice id="txAdvice" transaction-manager="transactionManager">
+            <tx:attributes>
+                <tx:method name="get*" read-only="true" propagation="REQUIRED"/>
+                <tx:method name="update*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+                <tx:method name="delete*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+                <tx:method name="create*" propagation="REQUIRED" rollback-for="java.lang.Exception"/>
+                <tx:method name="*" read-only="false" propagation="REQUIRED"/>
+            </tx:attributes>
+        </tx:advice>
+-->
+
+        <!-- ensure that the above transactional advice runs for any execution of an operation defined by a service -->
+<!--
+    <aop:config>
+        <aop:pointcut id="serviceOperation" expression="execution(* com.service.*Service.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceOperation"/>
+    </aop:config>
+    <aop:spring-configured/>
+-->
 
     <!--bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"-->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.SingleConnectionDataSource">

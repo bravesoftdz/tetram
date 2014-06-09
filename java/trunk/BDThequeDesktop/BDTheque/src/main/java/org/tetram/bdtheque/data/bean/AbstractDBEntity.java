@@ -8,7 +8,7 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 public abstract class AbstractDBEntity extends AbstractEntity {
-    private UUID id = StringUtils.GUID_NULL;
+    private UUID id = null;
 
     public UUID getId() {
         return id;
@@ -33,6 +33,6 @@ public abstract class AbstractDBEntity extends AbstractEntity {
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return id != null ? id.hashCode() : 0;
     }
 }

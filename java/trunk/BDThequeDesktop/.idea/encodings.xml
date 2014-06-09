@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
+  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false">
+    <file url="file://$PROJECT_DIR$/BDTheque/doc/DaoRecherche.pas" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/BDTheque/doc/DaoStats.pas" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/BDTheque/doc/Editions.pas" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/BDTheque/doc/Entities.DaoFull.pas" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/BDTheque/doc/Entities.DaoLambda.pas" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/BDTheque/doc/Entities.DaoLambdaDB.pas" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/BDTheque/doc/Entities.DaoLite.pas" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/BDTheque/doc/Entities.Full.pas" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/BDTheque/doc/Entities.Lite.pas" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/BDTheque/doc/Entities.Types.pas" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/BDTheque/doc/EntitiesRecherche.pas" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/BDTheque/doc/EntitiesStats.pas" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/BDTheque/doc/Proc_Gestions.pas" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/BDTheque/doc/Textes.pas" charset="windows-1252" />
+  </component>
 </project>
 

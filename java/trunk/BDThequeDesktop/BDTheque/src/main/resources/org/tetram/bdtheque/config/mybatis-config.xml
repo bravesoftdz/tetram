@@ -10,15 +10,15 @@
     </properties>
 
     <settings>
-        <setting name="lazyLoadingEnabled" value="true"/>
         <setting name="aggressiveLazyLoading" value="false"/>
         <setting name="jdbcTypeForNull" value="NULL"/>
         <setting name="callSettersOnNulls" value="false"/>
         <setting name="logImpl" value="LOG4J2"/>
+        <setting name="multipleResultSetsEnabled" value="false"/>
 
-        <!-- à voir -->
+        <!-- les deux utilisent CGLIB -->
+        <setting name="lazyLoadingEnabled" value="true"/>
         <setting name="cacheEnabled" value="true"/>
-        <setting name="multipleResultSetsEnabled" value="true"/>
     </settings>
 
     <typeAliases>
