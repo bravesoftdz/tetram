@@ -3,6 +3,7 @@ package org.tetram.bdtheque.data.bean;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
+import org.tetram.bdtheque.data.dao.ValeurListeDaoImpl;
 
 import java.net.URL;
 import java.util.*;
@@ -280,7 +281,7 @@ public class Serie extends AbstractDBEntity {
     }
 
     public void setNotation(ValeurListe notation) {
-        this.notation = notation == null || notation.getValeur() == 0 ? Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class).getDefaultNotation() : notation;
+        this.notation = notation == null || notation.getValeur() == 0 ? Database.getInstance().getApplicationContext().getBean(ValeurListeDaoImpl.class).getDefaultNotation() : notation;
     }
 
     public Set<UniversLite> getUnivers() {

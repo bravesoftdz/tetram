@@ -1,11 +1,13 @@
 package org.tetram.bdtheque.data.dao;
 
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.jetbrains.annotations.NonNls;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.utils.GenericUtils;
 import org.tetram.bdtheque.utils.logging.Log;
 import org.tetram.bdtheque.utils.logging.LogManager;
@@ -15,7 +17,8 @@ import org.tetram.bdtheque.utils.logging.LogManager;
  */
 @Repository
 @Lazy
-public class AbstractDao<T, PK> extends SqlSessionDaoSupport implements Dao<T, PK> {
+@Transactional
+public class DaoImpl<T, PK> extends SqlSessionDaoSupport implements Dao<T, PK> {
 
     /**
      * Define prefixes for easier naming conventions between XML mappers files and the DAO class
@@ -30,15 +33,15 @@ public class AbstractDao<T, PK> extends SqlSessionDaoSupport implements Dao<T, P
     public static final String PREFIX_DELETE_QUERY = "delete";  //prefix of delete queries in mappers files (eg. deleteAddressType)
     @NonNls
     public static final String PREFIX_CHECK_UNIQUE_QUERY = "checkUnique";  //prefix of check unique queries in mappers files (eg. checkUniqueAddressType)
-    private static Log log = LogManager.getLog(AbstractDao.class);
+    private static Log log = LogManager.getLog(DaoImpl.class);
     private final Class<T> type;
 
     /**
      * Default Constructor
      */
     @SuppressWarnings("unchecked")
-    protected AbstractDao() {
-        this.type = (Class<T>) GenericUtils.getTypeArguments(AbstractDao.class, getClass()).get(0);
+    protected DaoImpl() {
+        this.type = (Class<T>) GenericUtils.getTypeArguments(DaoImpl.class, getClass()).get(0);
     }
 
     @SuppressWarnings("EmptyMethod")
@@ -61,7 +64,7 @@ public class AbstractDao<T, PK> extends SqlSessionDaoSupport implements Dao<T, P
      * If your DAO object is called CarInfo.java,
      * the corresponding mappers query id should be: &lt;select id="getCarInfo" ...
      */
-    public T get(PK id) {
+    public T get(PK id) throws PersistenceException {
         @NonNls String query = PREFIX_SELECT_QUERY + this.type.getSimpleName() + "ById";
         return getSqlSession().selectOne(query, id);
     }
@@ -79,7 +82,7 @@ public class AbstractDao<T, PK> extends SqlSessionDaoSupport implements Dao<T, P
      * SQL Executed (example): insert into [tablename] (fieldname1,fieldname2,...) values(value1,value2...) ...
      */
     @SuppressWarnings("UnnecessaryLocalVariable")
-    public int create(T o) {
+    public int create(T o) throws PersistenceException {
         String query = PREFIX_INSERT_QUERY + this.type.getSimpleName();
         Integer status = getSqlSession().insert(query, o);
         // ne doit pas être utilisé avec une session Spring
@@ -100,7 +103,7 @@ public class AbstractDao<T, PK> extends SqlSessionDaoSupport implements Dao<T, P
      * SQL Executed (example): update [tablename] set fieldname1 = value1 where id = #{id}
      */
     @SuppressWarnings("UnnecessaryLocalVariable")
-    public int update(T o) {
+    public int update(T o) throws PersistenceException {
         String query = PREFIX_UPDATE_QUERY + this.type.getSimpleName();
         Integer status = getSqlSession().update(query, o);
         // ne doit pas être utilisé avec une session Spring
@@ -119,7 +122,7 @@ public class AbstractDao<T, PK> extends SqlSessionDaoSupport implements Dao<T, P
      * SQL Executed (example): update [tablename] set fieldname1 = value1 where id = #{id}
      */
     @SuppressWarnings("UnnecessaryLocalVariable")
-    public int delete(PK id) {
+    public int delete(PK id) throws PersistenceException {
         String query = PREFIX_DELETE_QUERY + this.type.getSimpleName();
         Integer status = getSqlSession().delete(query, id);
         // ne doit pas être utilisé avec une session Spring
@@ -127,7 +130,7 @@ public class AbstractDao<T, PK> extends SqlSessionDaoSupport implements Dao<T, P
         return status;
     }
 
-    public boolean isUnique(T o) {
+    public boolean isUnique(T o) throws PersistenceException {
         String query = PREFIX_CHECK_UNIQUE_QUERY + this.type.getSimpleName();
         // on ne devrait jamais en trouver plus d'un mais par sécurité
         return getSqlSession().selectList(query, o).isEmpty();

@@ -37,6 +37,8 @@
     <orderEntry type="library" exported="" name="Gradle: spring-tx-4.0.5.RELEASE" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: cglib-3.1" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: asm-4.2" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: aspectjrt-1.8.0" level="project" />
+    <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: aspectjweaver-1.8.0" level="project" />
   </component>
 </module>
 

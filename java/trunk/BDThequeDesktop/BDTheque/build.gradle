@@ -18,8 +18,10 @@ dependencies {
     compile 'org.firebirdsql.jdbc:jaybird-jdk18:+'
     compile 'org.mybatis:mybatis:+'
     compile 'org.mybatis.generator:mybatis-generator-core:+'
-    compile 'org.springframework:spring-context:4+'
+    compile 'org.springframework:spring-context:+'
     compile 'org.springframework:spring-jdbc:+'
     compile 'org.mybatis:mybatis-spring:+'
+    runtime 'org.aspectj:aspectjrt:+'
+    runtime 'org.aspectj:aspectjweaver:+'
     runtime 'cglib:cglib:+'
 }

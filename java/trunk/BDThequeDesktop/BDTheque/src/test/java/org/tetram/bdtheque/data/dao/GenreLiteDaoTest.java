@@ -8,10 +8,7 @@ import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.bean.GenreLite;
-import org.tetram.bdtheque.data.dao.mappers.GenreMapper;
 import org.tetram.bdtheque.utils.StringUtils;
-
-import static org.junit.Assert.*;
 
 public class GenreLiteDaoTest extends DBTest {
 
