@@ -18,17 +18,9 @@ import java.util.UUID;
 public class GenreLiteDaoImpl extends DaoImpl<GenreLite, UUID> implements GenreLiteDao {
 
     @Override
-    public int create(GenreLite o) throws ConsistencyException {
+    public int save(GenreLite o) throws ConsistencyException {
         if (!isUnique(o))
             throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("genre")));
-        return super.create(o);
-
-    }
-
-    @Override
-    public int update(GenreLite o) throws ConsistencyException {
-        if (!isUnique(o))
-            throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("genre")));
-        return super.update(o);
+        return super.save(o);
     }
 }

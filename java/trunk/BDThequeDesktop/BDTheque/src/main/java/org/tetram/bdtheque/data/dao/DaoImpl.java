@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.tetram.bdtheque.data.bean.AbstractDBEntity;
 import org.tetram.bdtheque.utils.GenericUtils;
 import org.tetram.bdtheque.utils.logging.Log;
 import org.tetram.bdtheque.utils.logging.LogManager;
@@ -18,7 +19,7 @@ import org.tetram.bdtheque.utils.logging.LogManager;
 @Repository
 @Lazy
 @Transactional
-public class DaoImpl<T, PK> extends SqlSessionDaoSupport implements Dao<T, PK> {
+public class DaoImpl<T extends AbstractDBEntity, PK> extends SqlSessionDaoSupport implements Dao<T, PK> {
 
     /**
      * Define prefixes for easier naming conventions between XML mappers files and the DAO class
@@ -82,7 +83,7 @@ public class DaoImpl<T, PK> extends SqlSessionDaoSupport implements Dao<T, PK> {
      * SQL Executed (example): insert into [tablename] (fieldname1,fieldname2,...) values(value1,value2...) ...
      */
     @SuppressWarnings("UnnecessaryLocalVariable")
-    public int create(T o) throws PersistenceException {
+    private int create(T o) throws PersistenceException {
         String query = PREFIX_INSERT_QUERY + this.type.getSimpleName();
         Integer status = getSqlSession().insert(query, o);
         // ne doit pas être utilisé avec une session Spring
@@ -103,7 +104,7 @@ public class DaoImpl<T, PK> extends SqlSessionDaoSupport implements Dao<T, PK> {
      * SQL Executed (example): update [tablename] set fieldname1 = value1 where id = #{id}
      */
     @SuppressWarnings("UnnecessaryLocalVariable")
-    public int update(T o) throws PersistenceException {
+    private int update(T o) throws PersistenceException {
         String query = PREFIX_UPDATE_QUERY + this.type.getSimpleName();
         Integer status = getSqlSession().update(query, o);
         // ne doit pas être utilisé avec une session Spring
@@ -128,6 +129,13 @@ public class DaoImpl<T, PK> extends SqlSessionDaoSupport implements Dao<T, PK> {
         // ne doit pas être utilisé avec une session Spring
         // getSqlSession().commit();
         return status;
+    }
+
+    public int save(T o) throws PersistenceException {
+        if (o.getId() == null)
+            return create(o);
+        else
+            return update(o);
     }
 
     public boolean isUnique(T o) throws PersistenceException {

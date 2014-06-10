@@ -73,4 +73,47 @@
     ]]>
     </select>
 
+    <select id="checkUniqueAuteur" resultType="UUID">
+        <![CDATA[
+        select
+            id_personne
+        from
+            personnes
+        where
+            nompersonne = #{nomAuteur}
+        ]]>
+        <if test="id != null">
+            <![CDATA[
+            and id_personne <> #{id}
+            ]]>
+        </if>
+    </select>
+
+    <sql id="saveAuteur">
+        <![CDATA[
+        update or insert into personnes (
+            id_personne, nompersonne, siteweb, biographie
+        ) values (
+            #{id}, #{nomAuteur}, #{siteWeb}, #{biographie}
+        )
+        ]]>
+    </sql>
+
+    <insert id="createAuteur">
+        <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
+            <include refid="org.tetram.bdtheque.data.dao.mappers.autoIncKey"/>
+        </selectKey>
+        <include refid="saveAuteur"/>
+    </insert>
+
+    <update id="updateAuteur">
+        <include refid="saveAuteur"/>
+    </update>
+
+    <delete id="deleteAuteur">
+        <![CDATA[
+        delete from personnes where id_personne = #{id}
+        ]]>
+    </delete>
+
 </mapper>

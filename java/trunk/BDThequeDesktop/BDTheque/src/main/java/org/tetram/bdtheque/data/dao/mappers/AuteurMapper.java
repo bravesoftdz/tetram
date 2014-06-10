@@ -18,4 +18,10 @@ public interface AuteurMapper extends BaseMapperInterface {
     List<AuteurParaBDLite> getListAuteurLiteByParaBDId(UUID id);
 
     Auteur getAuteurById(UUID id);
+
+    int createAuteur(Auteur auteur);
+
+    int updateAuteur(Auteur auteur);
+
+    int deleteAuteur(UUID id);
 }

@@ -33,7 +33,7 @@
         ]]>
     </select>
 
-    <select id="checkUniqueGenreLite" resultMap="GenreLite">
+    <select id="checkUniqueGenreLite" resultType="UUID">
         <![CDATA[
         select
             id_genre
@@ -49,22 +49,21 @@
         </if>
     </select>
 
+    <sql id="saveGenreLite">
+        <![CDATA[
+        update or insert into genres (id_genre, genre) values (#{id}, #{genre})
+        ]]>
+    </sql>
+
     <insert id="createGenreLite">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
             <include refid="org.tetram.bdtheque.data.dao.mappers.autoIncKey"/>
         </selectKey>
-        <![CDATA[
-        insert into genres (id_genre, genre) values (#{id}, #{genre})
-        ]]>
+        <include refid="saveGenreLite"/>
     </insert>
 
     <update id="updateGenreLite">
-        <![CDATA[
-        update genres set
-          genre = #{genre}
-        where
-          id_genre = #{id}
-        ]]>
+        <include refid="saveGenreLite"/>
     </update>
 
     <delete id="deleteGenreLite">

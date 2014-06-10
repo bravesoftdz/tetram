@@ -76,8 +76,8 @@ function EditionAuteur(var ID: TGUID; Creation: Boolean = False; const Valeur: s
 function EditionAuteur(Source: TObjetFull): Boolean; overload;
 function DelAuteur(const ID: TGUID): Boolean;
 
-function CreationUnivers(const Valeur: string): TGUID; overload;
 function CreationUnivers(Source: TObjetFull): TGUID; overload;
+function CreationUnivers(const Valeur: string): TGUID; overload;
 function EditionUnivers(var ID: TGUID; Creation: Boolean = False; const Valeur: string = ''): Boolean; overload;
 function EditionUnivers(Source: TObjetFull): Boolean; overload;
 function DelUnivers(const ID: TGUID): Boolean;

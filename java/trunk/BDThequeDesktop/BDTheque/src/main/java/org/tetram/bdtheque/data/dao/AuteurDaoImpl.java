@@ -1,15 +1,18 @@
 package org.tetram.bdtheque.data.dao;
 
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.bean.Auteur;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.bean.SerieLite;
 import org.tetram.bdtheque.data.dao.mappers.AlbumMapper;
 import org.tetram.bdtheque.data.dao.mappers.ParaBDMapper;
 import org.tetram.bdtheque.data.dao.mappers.SerieMapper;
+import org.tetram.bdtheque.utils.I18nSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,5 +56,12 @@ public class AuteurDaoImpl extends DaoImpl<Auteur, UUID> implements AuteurDao {
             auteur.setSeries(lst);
         }
         return auteur;
+    }
+
+    @Override
+    public int save(Auteur o) throws PersistenceException {
+        if (!isUnique(o))
+            throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("auteur")));
+        return super.save(o);
     }
 }
