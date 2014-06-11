@@ -19,7 +19,7 @@ public class SerieMapperTest extends DBTest {
         Assert.assertNotNull(serie);
         Assert.assertEquals(Constants.ID_SERIE_SILLAGE, serie.getId());
         Assert.assertNotNull(serie.getEditeur());
-        Assert.assertEquals(Constants.ID_DELCOURT, serie.getEditeur().getId());
+        Assert.assertEquals(Constants.ID_EDITEUR_DELCOURT, serie.getEditeur().getId());
         Assert.assertNotNull(serie.getCollection());
         Assert.assertEquals(Constants.ID_COLLECTION_NEOPOLIS_DELCOURT, serie.getCollection().getId());
     }
@@ -31,7 +31,7 @@ public class SerieMapperTest extends DBTest {
         Assert.assertNotNull(serie);
         Assert.assertEquals(Constants.ID_SERIE_SILLAGE, serie.getId());
         Assert.assertNotNull(serie.getEditeur());
-        Assert.assertEquals(Constants.ID_DELCOURT, serie.getEditeur().getId());
+        Assert.assertEquals(Constants.ID_EDITEUR_DELCOURT, serie.getEditeur().getId());
         Assert.assertNotNull(serie.getCollection());
         Assert.assertEquals(Constants.ID_COLLECTION_NEOPOLIS_DELCOURT, serie.getCollection().getId());
         Assert.assertNotEquals("", serie.getEtat().getTexte());

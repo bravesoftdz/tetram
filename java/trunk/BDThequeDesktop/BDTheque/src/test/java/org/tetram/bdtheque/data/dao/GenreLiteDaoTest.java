@@ -12,11 +12,6 @@ import org.tetram.bdtheque.utils.StringUtils;
 
 public class GenreLiteDaoTest extends DBTest {
 
-    @NonNls
-    public static final String TEST_CREATE_GENRE = "test create genre";
-    @NonNls
-    public static final String TEST_UPDATE_GENRE = "test update genre";
-
     GenreLiteDao dao = Database.getInstance().getApplicationContext().getBean(GenreLiteDao.class);
 
     @Test
@@ -34,7 +29,7 @@ public class GenreLiteDaoTest extends DBTest {
         GenreLite genre;
 
         genre = new GenreLite();
-        genre.setGenre(TEST_CREATE_GENRE);
+        genre.setGenre(Constants.TEST_CREATE);
 
         rowCount = dao.save(genre);
         Assert.assertEquals(1, rowCount);
@@ -42,14 +37,14 @@ public class GenreLiteDaoTest extends DBTest {
         Assert.assertNotEquals(StringUtils.GUID_NULL, genre.getId());
 
         genre = dao.get(genre.getId());
-        Assert.assertEquals(TEST_CREATE_GENRE, genre.getGenre());
+        Assert.assertEquals(Constants.TEST_CREATE, genre.getGenre());
 
-        genre.setGenre(TEST_UPDATE_GENRE);
+        genre.setGenre(Constants.TEST_UPDATE);
         rowCount = dao.save(genre);
         Assert.assertEquals(1, rowCount);
 
         genre = dao.get(genre.getId());
-        Assert.assertEquals(TEST_UPDATE_GENRE, genre.getGenre());
+        Assert.assertEquals(Constants.TEST_UPDATE, genre.getGenre());
 
         rowCount = dao.delete(genre.getId());
         Assert.assertEquals(1, rowCount);
@@ -61,7 +56,7 @@ public class GenreLiteDaoTest extends DBTest {
     @Test(expected = ConsistencyException.class)
     public void testCreateIsUnique() throws Exception {
         @NonNls GenreLite genre = new GenreLite();
-        genre.setGenre("Aventures");
+        genre.setGenre(Constants.NOM_GENRE_AVENTURES);
 
         dao.save(genre);
         Assert.fail();
@@ -70,7 +65,7 @@ public class GenreLiteDaoTest extends DBTest {
     @Test(expected = ConsistencyException.class)
     public void testUpdateIsUnique() throws Exception {
         @NonNls GenreLite genre = new GenreLite();
-        genre.setGenre("Aventures");
+        genre.setGenre(Constants.NOM_GENRE_AVENTURES);
         genre.setId(StringUtils.GUID_FULL);
 
         dao.save(genre);

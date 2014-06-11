@@ -32,4 +32,48 @@
             id_editeur = #{id}
         ]]>
     </select>
+
+    <select id="checkUniqueEditeur" resultType="UUID">
+        <![CDATA[
+        select
+            id_editeur
+        from
+            editeurs
+        where
+            nomediteur = #{nomEditeur}
+        ]]>
+        <if test="id != null">
+            <![CDATA[
+            and id_editeur <> #{id}
+            ]]>
+        </if>
+    </select>
+
+    <sql id="saveEditeur">
+        <![CDATA[
+        update or insert into editeurs (
+            id_editeur, nomediteur, siteweb
+        ) values (
+            #{id}, #{nomEditeur}, #{siteWeb}
+        )
+        ]]>
+    </sql>
+
+    <insert id="createEditeur">
+        <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
+            <include refid="org.tetram.bdtheque.data.dao.mappers.autoIncKey"/>
+        </selectKey>
+        <include refid="saveEditeur"/>
+    </insert>
+
+    <update id="updateEditeur">
+        <include refid="saveEditeur"/>
+    </update>
+
+    <delete id="deleteEditeur">
+        <![CDATA[
+        delete from editeurs where id_editeur = #{id}
+        ]]>
+    </delete>
+
 </mapper>

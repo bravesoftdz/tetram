@@ -64,4 +64,5 @@ public class AuteurDaoImpl extends DaoImpl<Auteur, UUID> implements AuteurDao {
             throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("auteur")));
         return super.save(o);
     }
+
 }
