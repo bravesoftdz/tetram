@@ -19,7 +19,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
-public class ValeurListeDaoImpl extends DaoImpl<ValeurListe, UUID> implements ValeurListeDao {
+public class ValeurListeDaoImpl implements ValeurListeDao {
 
     @Autowired
     private ValeurListeMapper valeurListeMapper;

@@ -36,7 +36,7 @@ public class GenreLiteDaoTest extends DBTest {
         genre = new GenreLite();
         genre.setGenre(TEST_CREATE_GENRE);
 
-        rowCount = dao.create(genre);
+        rowCount = dao.save(genre);
         Assert.assertEquals(1, rowCount);
         Assert.assertNotNull(genre.getId());
         Assert.assertNotEquals(StringUtils.GUID_NULL, genre.getId());
@@ -45,7 +45,7 @@ public class GenreLiteDaoTest extends DBTest {
         Assert.assertEquals(TEST_CREATE_GENRE, genre.getGenre());
 
         genre.setGenre(TEST_UPDATE_GENRE);
-        rowCount = dao.update(genre);
+        rowCount = dao.save(genre);
         Assert.assertEquals(1, rowCount);
 
         genre = dao.get(genre.getId());
@@ -63,7 +63,7 @@ public class GenreLiteDaoTest extends DBTest {
         @NonNls GenreLite genre = new GenreLite();
         genre.setGenre("Aventures");
 
-        dao.create(genre);
+        dao.save(genre);
         Assert.fail();
     }
 
@@ -73,7 +73,7 @@ public class GenreLiteDaoTest extends DBTest {
         genre.setGenre("Aventures");
         genre.setId(StringUtils.GUID_FULL);
 
-        dao.update(genre);
+        dao.save(genre);
         Assert.fail();
     }
 }

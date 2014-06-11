@@ -10,8 +10,5 @@ import java.util.UUID;
  */
 public interface GenreLiteDao extends Dao<GenreLite, UUID> {
     @Override
-    int create(GenreLite o) throws ConsistencyException;
-
-    @Override
-    int update(GenreLite o) throws ConsistencyException;
+    int save(GenreLite o) throws ConsistencyException;
 }

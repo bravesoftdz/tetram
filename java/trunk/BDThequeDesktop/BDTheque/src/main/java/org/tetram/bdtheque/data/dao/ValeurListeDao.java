@@ -7,7 +7,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 10/06/2014.
  */
-public interface ValeurListeDao extends Dao<ValeurListe, UUID> {
+public interface ValeurListeDao{
     ValeurListe getDefaultEtat();
 
     ValeurListe getDefaultReliure();

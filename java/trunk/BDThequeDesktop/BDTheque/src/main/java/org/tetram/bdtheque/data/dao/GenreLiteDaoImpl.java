@@ -23,4 +23,5 @@ public class GenreLiteDaoImpl extends DaoImpl<GenreLite, UUID> implements GenreL
             throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("genre")));
         return super.save(o);
     }
+
 }
