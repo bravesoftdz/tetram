@@ -51,4 +51,48 @@
             e.id_editeur = #{id}
         ]]>
     </select>
+
+    <select id="checkUniqueCollection" resultType="UUID">
+        <![CDATA[
+        select
+            id_collection
+        from
+            collections
+        where
+            nomcollection = #{nomCollection}
+            and id_editeur = #{idEditeur}
+        ]]>
+        <if test="id != null">
+            <![CDATA[
+            and id_collection <> #{id}
+            ]]>
+        </if>
+    </select>
+
+    <sql id="saveCollection">
+        <![CDATA[
+        update or insert into collections (
+            id_collection, nomcollection, id_editeur
+        ) values (
+            #{id}, #{nomCollection}, #{idEditeur}
+        )
+        ]]>
+    </sql>
+
+    <insert id="createCollection">
+        <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
+            <include refid="org.tetram.bdtheque.data.dao.mappers.autoIncKey"/>
+        </selectKey>
+        <include refid="saveCollection"/>
+    </insert>
+
+    <update id="updateCollection">
+        <include refid="saveCollection"/>
+    </update>
+
+    <delete id="deleteCollection">
+        <![CDATA[
+        delete from collections where id_collection = #{id}
+        ]]>
+    </delete>
 </mapper>

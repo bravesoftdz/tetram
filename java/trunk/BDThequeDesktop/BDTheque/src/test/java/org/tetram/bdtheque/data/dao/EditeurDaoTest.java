@@ -5,13 +5,12 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.Constants;
+import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.bean.Editeur;
 import org.tetram.bdtheque.utils.StringUtils;
 
-import static org.junit.Assert.*;
-
-public class EditeurDaoTest {
+public class EditeurDaoTest extends DBTest {
 
     EditeurDao dao = Database.getInstance().getApplicationContext().getBean(EditeurDao.class);
 

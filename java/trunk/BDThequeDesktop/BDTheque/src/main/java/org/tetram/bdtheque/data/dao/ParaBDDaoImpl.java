@@ -13,5 +13,5 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-public class ParaBDDaoImpl extends DaoImpl<ParaBD, UUID> implements ParaBDDao {
+public class ParaBDDaoImpl extends DaoRWImpl<ParaBD, UUID> implements ParaBDDao {
 }

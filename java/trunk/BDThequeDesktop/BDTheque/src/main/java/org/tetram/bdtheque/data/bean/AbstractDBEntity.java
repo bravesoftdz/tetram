@@ -7,13 +7,15 @@ import java.util.UUID;
 /**
  * Created by Thierry on 24/05/2014.
  */
-public abstract class AbstractDBEntity extends AbstractEntity {
+public abstract class AbstractDBEntity extends AbstractEntity implements DBEntity {
     private UUID id = null;
 
+    @Override
     public UUID getId() {
         return id;
     }
 
+    @Override
     public void setId(UUID id) {
         this.id = id;
     }

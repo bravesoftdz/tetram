@@ -13,5 +13,5 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-public class AlbumDaoImpl extends DaoImpl<Album, UUID> implements AlbumDao {
+public class AlbumDaoImpl extends DaoRWImpl<Album, UUID> implements AlbumDao {
 }

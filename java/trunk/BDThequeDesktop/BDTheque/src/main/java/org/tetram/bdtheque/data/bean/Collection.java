@@ -2,10 +2,12 @@ package org.tetram.bdtheque.data.bean;
 
 import org.tetram.bdtheque.data.BeanUtils;
 
+import java.util.UUID;
+
 /**
  * Created by Thierry on 24/05/2014.
  */
-public class Collection extends AbstractDBEntity {
+public class Collection extends AbstractScriptEntity {
     private String nomCollection;
     private EditeurLite editeur;
 
@@ -23,5 +25,9 @@ public class Collection extends AbstractDBEntity {
 
     public void setEditeur(EditeurLite editeur) {
         this.editeur = editeur;
+    }
+
+    public UUID getIdEditeur() {
+        return getEditeur() == null ? null : getEditeur().getId();
     }
 }

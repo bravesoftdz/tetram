@@ -7,5 +7,5 @@ import java.util.UUID;
 /**
  * Created by Thierry on 10/06/2014.
  */
-public interface CollectionDao extends Dao<Collection, UUID> {
+public interface CollectionDao extends DaoRW<Collection, UUID> {
 }

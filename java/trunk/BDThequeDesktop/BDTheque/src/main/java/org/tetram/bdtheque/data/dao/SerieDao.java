@@ -7,7 +7,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 10/06/2014.
  */
-public interface SerieDao extends Dao<Serie, UUID> {
+public interface SerieDao extends DaoRW<Serie, UUID> {
     @Override
     Serie get(UUID id);
 }

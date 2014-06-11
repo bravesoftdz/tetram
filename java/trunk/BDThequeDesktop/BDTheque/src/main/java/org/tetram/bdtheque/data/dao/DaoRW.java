@@ -5,8 +5,7 @@ import org.apache.ibatis.exceptions.PersistenceException;
 /**
  * Created by Thierry on 30/05/2014.
  */
-public interface Dao<T, PK> {
-    T get(PK id) throws PersistenceException;//get obj of type T by the primary key 'id'
+public interface DaoRW<T, PK> extends DaoRO<T,PK> {
 
     int save(T transientObject) throws PersistenceException; //update an object of type T
 

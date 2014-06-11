@@ -15,7 +15,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-public class GenreLiteDaoImpl extends DaoImpl<GenreLite, UUID> implements GenreLiteDao {
+public class GenreLiteDaoImpl extends DaoRWImpl<GenreLite, UUID> implements GenreLiteDao {
 
     @Override
     public int save(GenreLite o) throws ConsistencyException {

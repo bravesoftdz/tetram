@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * Created by Thierry on 24/05/2014.
  */
-public class Serie extends AbstractDBEntity {
+public class Serie extends AbstractScriptEntity {
     private String titreSerie;
 
     private Boolean terminee;

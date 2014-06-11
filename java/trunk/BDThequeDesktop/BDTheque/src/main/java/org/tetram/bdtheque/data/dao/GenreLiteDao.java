@@ -8,7 +8,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 10/06/2014.
  */
-public interface GenreLiteDao extends Dao<GenreLite, UUID> {
+public interface GenreLiteDao extends DaoRW<GenreLite, UUID> {
     @Override
     int save(GenreLite o) throws ConsistencyException;
 }

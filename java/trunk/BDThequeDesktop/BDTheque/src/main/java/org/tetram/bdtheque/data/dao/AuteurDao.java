@@ -10,6 +10,6 @@ import java.util.UUID;
  * Created by Thierry on 10/06/2014.
  */
 @Transactional(propagation = Propagation.REQUIRED)
-public interface AuteurDao extends Dao<Auteur, UUID> {
+public interface AuteurDao extends DaoRW<Auteur, UUID> {
 
 }

@@ -7,5 +7,5 @@ import java.util.UUID;
 /**
  * Created by Thierry on 10/06/2014.
  */
-public interface EditeurDao extends Dao<Editeur, UUID> {
+public interface EditeurDao extends DaoRW<Editeur, UUID> {
 }

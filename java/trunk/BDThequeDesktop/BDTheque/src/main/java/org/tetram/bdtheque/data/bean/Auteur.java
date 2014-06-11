@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Created by Thierry on 24/05/2014.
  */
-public class Auteur extends AbstractDBEntity {
+public class Auteur extends AbstractScriptEntity {
     private String nomAuteur;
     private URL siteWeb;
     private String biographie;
