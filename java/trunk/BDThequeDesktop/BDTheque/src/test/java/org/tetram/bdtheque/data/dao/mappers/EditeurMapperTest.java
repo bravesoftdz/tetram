@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.dao.mappers;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.Database;
@@ -10,7 +11,8 @@ import org.tetram.bdtheque.data.bean.EditeurLite;
 
 public class EditeurMapperTest extends DBTest {
 
-    protected EditeurMapper mapper = Database.getInstance().getApplicationContext().getBean(EditeurMapper.class);
+    @Autowired
+    private EditeurMapper mapper;
 
     @Test
     public void testGetEditeurLiteById() throws Exception {

@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data;
 
+import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;

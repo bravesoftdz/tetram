@@ -3,18 +3,20 @@ package org.tetram.bdtheque.data.dao;
 import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.bean.Collection;
-import org.tetram.bdtheque.data.bean.EditeurLite;
 import org.tetram.bdtheque.utils.StringUtils;
 
 public class CollectionDaoTest extends DBTest {
 
-    CollectionDao dao = Database.getInstance().getApplicationContext().getBean(CollectionDao.class);
-    EditeurLiteDao daoEditeur = Database.getInstance().getApplicationContext().getBean(EditeurLiteDao.class);
+    @Autowired
+    private CollectionDao dao;
+    @Autowired
+    private EditeurLiteDao daoEditeur;
 
     @Test
     public void testGet() throws Exception {
@@ -76,6 +78,16 @@ public class CollectionDaoTest extends DBTest {
         collection.setId(StringUtils.GUID_FULL);
 
         dao.save(collection);
+        Assert.fail();
+    }
+
+    @Test(expected = ConsistencyException.class)
+    public void testValidate() throws Exception {
+        @NonNls Collection collection = new Collection();
+        collection.setNomCollection(Constants.NOM_COLLECTION_NÉOPOLIS_DELCOURT);
+        collection.setId(StringUtils.GUID_FULL);
+
+        dao.validate(collection);
         Assert.fail();
     }
 

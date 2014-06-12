@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.dao.mappers;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.Database;
@@ -10,7 +11,8 @@ import org.tetram.bdtheque.data.bean.AlbumLite;
 
 public class AlbumMapperTest extends DBTest {
 
-    private AlbumMapper mapper = Database.getInstance().getApplicationContext().getBean(AlbumMapper.class);
+    @Autowired
+    private AlbumMapper mapper;
 
     @Test
     public void testGetAlbumLiteById() throws Exception {

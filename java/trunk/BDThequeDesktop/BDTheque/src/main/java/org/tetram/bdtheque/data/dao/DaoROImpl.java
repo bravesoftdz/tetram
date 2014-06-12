@@ -13,7 +13,7 @@ import org.tetram.bdtheque.utils.logging.LogManager;
 /**
  * Created by Thierry on 11/06/2014.
  */
-public class DaoROImpl<T extends AbstractDBEntity, PK> extends SqlSessionDaoSupport implements DaoRO<T, PK> {
+public abstract class DaoROImpl<T extends AbstractDBEntity, PK> extends SqlSessionDaoSupport implements DaoRO<T, PK> {
     /**
      * Define prefixes for easier naming conventions between XML mappers files and the DAO class
      */

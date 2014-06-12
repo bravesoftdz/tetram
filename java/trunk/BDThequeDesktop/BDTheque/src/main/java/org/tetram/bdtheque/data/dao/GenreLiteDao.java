@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.dao;
 
+import org.jetbrains.annotations.NotNull;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.bean.GenreLite;
 
@@ -10,5 +11,5 @@ import java.util.UUID;
  */
 public interface GenreLiteDao extends DaoRW<GenreLite, UUID> {
     @Override
-    int save(GenreLite o) throws ConsistencyException;
+    int save(@NotNull GenreLite o) throws ConsistencyException;
 }

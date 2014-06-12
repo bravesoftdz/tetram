@@ -20,7 +20,7 @@ public class Database {
 
         ctx = new AnnotationConfigApplicationContext();
         XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(ctx);
-        xmlReader.loadBeanDefinitions(new ClassPathResource("org/tetram/bdtheque/config/spring-config.xml"));
+        xmlReader.loadBeanDefinitions(new ClassPathResource("/org/tetram/bdtheque/config/spring-config.xml"));
         // PropertiesBeanDefinitionReader propReader = new PropertiesBeanDefinitionReader(ctx);
         // propReader.loadBeanDefinitions(new ClassPathResource("otherBeans.properties"));
 

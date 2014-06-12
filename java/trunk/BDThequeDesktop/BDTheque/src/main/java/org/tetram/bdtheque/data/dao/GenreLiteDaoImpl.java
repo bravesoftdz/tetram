@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.dao;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ import java.util.UUID;
 public class GenreLiteDaoImpl extends DaoRWImpl<GenreLite, UUID> implements GenreLiteDao {
 
     @Override
-    public int save(GenreLite o) throws ConsistencyException {
+    public int save(@NotNull GenreLite o) throws ConsistencyException {
         if (!isUnique(o))
             throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("genre")));
         return super.save(o);

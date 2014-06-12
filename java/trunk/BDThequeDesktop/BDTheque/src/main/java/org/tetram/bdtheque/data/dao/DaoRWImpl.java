@@ -1,25 +1,15 @@
 package org.tetram.bdtheque.data.dao;
 
 import org.apache.ibatis.exceptions.PersistenceException;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.jetbrains.annotations.NonNls;
-import org.mybatis.spring.support.SqlSessionDaoSupport;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import org.jetbrains.annotations.NotNull;
+import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.bean.AbstractDBEntity;
-import org.tetram.bdtheque.utils.GenericUtils;
-import org.tetram.bdtheque.utils.logging.Log;
-import org.tetram.bdtheque.utils.logging.LogManager;
 
 /**
  * Created by Thierry on 30/05/2014.
  */
-@Repository
-@Lazy
-@Transactional
-public class DaoRWImpl<T extends AbstractDBEntity, PK> extends DaoROImpl<T,PK> implements DaoRW<T, PK> {
+public abstract class DaoRWImpl<T extends AbstractDBEntity, PK> extends DaoROImpl<T,PK> implements DaoRW<T, PK> {
 
     @NonNls
     public static final String PREFIX_INSERT_QUERY = "create"; //prefix of create queries in mappers files (eg. createAddressType)
@@ -90,7 +80,7 @@ public class DaoRWImpl<T extends AbstractDBEntity, PK> extends DaoROImpl<T,PK> i
      * SQL Executed (example): update [tablename] set fieldname1 = value1 where id = #{id}
      */
     @SuppressWarnings("UnnecessaryLocalVariable")
-    public int delete(PK id) throws PersistenceException {
+    public int delete(@NotNull PK id) throws PersistenceException {
         String query = PREFIX_DELETE_QUERY + this.type.getSimpleName();
         Integer status = getSqlSession().delete(query, id);
         // ne doit pas être utilisé avec une session Spring
@@ -98,7 +88,20 @@ public class DaoRWImpl<T extends AbstractDBEntity, PK> extends DaoROImpl<T,PK> i
         return status;
     }
 
-    public int save(T o) throws PersistenceException {
+    /**
+     * Vérifie que l'objet est conforme à ses règles de gestion.</br>
+     * Une exception est déclenchée dès qu'une erreur est détectée dans l'objet
+     *
+     * @param object objet à vérifier
+     * @throws ConsistencyException
+     */
+    @Override
+    public void validate(@NotNull T object) throws ConsistencyException {
+    }
+
+    @Override
+    public int save(@NotNull T o) throws PersistenceException {
+        validate(o);
         if (o.getId() == null)
             return create(o);
         else

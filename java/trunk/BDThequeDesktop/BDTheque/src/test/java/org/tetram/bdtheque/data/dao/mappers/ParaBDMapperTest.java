@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.dao.mappers;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.Database;
@@ -9,7 +10,8 @@ import org.tetram.bdtheque.data.bean.ParaBD;
 
 public class ParaBDMapperTest extends DBTest {
 
-    private ParaBDMapper mapper = Database.getInstance().getApplicationContext().getBean(ParaBDMapper.class);
+    @Autowired
+    private ParaBDMapper mapper;
 
     @Test
     public void testGetParaBDLiteById() throws Exception {

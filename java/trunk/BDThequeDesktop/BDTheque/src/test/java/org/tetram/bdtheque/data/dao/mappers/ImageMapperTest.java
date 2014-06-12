@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.dao.mappers;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.Database;
@@ -12,7 +13,8 @@ import java.util.List;
 
 public class ImageMapperTest extends DBTest {
 
-    ImageMapper mapper = Database.getInstance().getApplicationContext().getBean(ImageMapper.class);
+    @Autowired
+    private ImageMapper mapper;
 
     @Test
     public void testGetListCouvertureLiteByEditionId() throws Exception {

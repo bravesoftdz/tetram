@@ -3,6 +3,7 @@ package org.tetram.bdtheque.data.dao;
 import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.DBTest;
@@ -12,7 +13,8 @@ import org.tetram.bdtheque.utils.StringUtils;
 
 public class EditeurDaoTest extends DBTest {
 
-    EditeurDao dao = Database.getInstance().getApplicationContext().getBean(EditeurDao.class);
+    @Autowired
+    private EditeurDao dao;
 
     @Test
     public void testGet() throws Exception {

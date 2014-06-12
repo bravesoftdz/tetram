@@ -69,4 +69,48 @@
             su.id_serie = #{id}
         ]]>
     </select>
+
+    <select id="checkUniqueUnivers" resultType="UUID">
+        <![CDATA[
+        select
+            id_univers
+        from
+            univers
+        where
+            nomunivers = #{nomUnivers}
+        ]]>
+        <if test="id != null">
+            <![CDATA[
+            and id_univers <> #{id}
+            ]]>
+        </if>
+    </select>
+
+    <sql id="saveUnivers">
+        <![CDATA[
+        update or insert into univers (
+            id_univers, nomunivers, id_univers_parent, description, siteweb
+        ) values (
+            #{id}, #{nomUnivers}, #{idUniversParent}, #{description}, #{siteWeb}
+        )
+        ]]>
+    </sql>
+
+    <insert id="createUnivers">
+        <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
+            <include refid="org.tetram.bdtheque.data.dao.mappers.autoIncKey"/>
+        </selectKey>
+        <include refid="saveUnivers"/>
+    </insert>
+
+    <update id="updateUnivers">
+        <include refid="saveUnivers"/>
+    </update>
+
+    <delete id="deleteUnivers">
+        <![CDATA[
+        delete from univers where id_univers = #{id}
+        ]]>
+    </delete>
+
 </mapper>

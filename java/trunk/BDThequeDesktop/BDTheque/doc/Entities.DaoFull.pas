@@ -699,41 +699,6 @@ begin
   end;
 end;
 
-{ TDaoCollectionFull }
-
-class procedure TDaoCollectionFull.SaveToDatabase(Entity: TCollectionFull; UseTransaction: TUIBTransaction);
-var
-  qry: TUIBQuery;
-begin
-  inherited;
-  qry := TUIBQuery.Create(nil);
-  try
-    qry.Transaction := UseTransaction;
-
-    qry.SQL.Clear;
-    qry.SQL.Add('update or insert into collections (');
-    qry.SQL.Add('  id_collection, nomcollection, id_editeur');
-    qry.SQL.Add(') values (');
-    qry.SQL.Add('  :id_collection, :nomcollection, :id_editeur');
-    qry.SQL.Add(') returning id_collection');
-
-    if IsEqualGUID(GUID_NULL, Entity.ID_Collection) then
-      qry.Params.ByNameIsNull['id_collection'] := True
-    else
-      qry.Params.ByNameAsString['id_collection'] := GUIDToString(Entity.ID_Collection);
-    qry.Params.ByNameAsString['nomcollection'] := Entity.NomCollection;
-    qry.Params.ByNameAsString['id_editeur'] := GUIDToString(Entity.ID_Editeur);
-    qry.Execute;
-
-    if Entity.RecInconnu then
-      Entity.ID_Collection := StringToGUID(qry.Fields.AsString[0]);
-
-    qry.Transaction.Commit;
-  finally
-    qry.Free;
-  end;
-end;
-
 { TDaoEditionFull }
 
 class procedure TDaoEditionFull.FusionneInto(Source, Dest: TObjectList<TEditionFull>);

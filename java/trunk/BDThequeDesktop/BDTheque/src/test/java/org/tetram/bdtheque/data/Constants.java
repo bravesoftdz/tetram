@@ -22,6 +22,7 @@ public class Constants {
     public static final UUID ID_EDITION_SILLAGE_TOME_16 = StringUtils.GUIDStringToUUID("{C283B013-6FD6-4CC3-884D-034807EB7E8F}");
     public static final UUID ID_PARABD_SPIROU_BLOC_3D = StringUtils.GUIDStringToUUID("{D7BB36F8-75DA-46C9-9DBD-EB9FFA110E49}");
     public static final UUID ID_UNIVERS_TROLLS_DE_TROY = StringUtils.GUIDStringToUUID("{484689EB-72CC-4957-A912-621019EEC526}");
+    public static final String NOM_UNIVERS_TROLLS_DE_TROY = "Trolls de Troy";
     public static final UUID ID_GENRE_AVENTURES = StringUtils.GUIDStringToUUID("{9D8F75CB-FEAC-48AF-86AE-F31C737D1B3F}");
     public static final String NOM_GENRE_AVENTURES = "Aventures";
     public static final UUID ID_ALBUM_SPIROU_GALLERIE_DES_ILLUSTRES = StringUtils.GUIDStringToUUID("{225CD5DE-3700-4499-927A-449182CD3028}");

@@ -20,6 +20,7 @@ dependencies {
     compile 'org.mybatis.generator:mybatis-generator-core:+'
     compile 'org.springframework:spring-context:+'
     compile 'org.springframework:spring-jdbc:+'
+    testCompile 'org.springframework:spring-test:+'
     compile 'org.mybatis:mybatis-spring:+'
     runtime 'org.aspectj:aspectjrt:+'
     runtime 'org.aspectj:aspectjweaver:+'

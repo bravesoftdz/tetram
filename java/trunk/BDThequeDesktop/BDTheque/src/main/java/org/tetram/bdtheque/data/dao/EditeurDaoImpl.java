@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.dao;
 
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.tetram.bdtheque.data.ConsistencyException;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Lazy
 public class EditeurDaoImpl extends DaoRWImpl<Editeur, UUID> implements EditeurDao {
     @Override
-    public int save(Editeur o) throws ConsistencyException {
+    public int save(@NotNull Editeur o) throws ConsistencyException {
         if (!isUnique(o))
             throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("editeur")));
         return super.save(o);

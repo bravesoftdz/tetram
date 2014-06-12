@@ -39,6 +39,7 @@
     <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: asm-4.2" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: aspectjrt-1.8.0" level="project" />
     <orderEntry type="library" exported="" scope="RUNTIME" name="Gradle: aspectjweaver-1.8.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Gradle: spring-test-4.0.5.RELEASE" level="project" />
   </component>
 </module>
 

@@ -14,7 +14,7 @@ public class I18nSupport {
     @NonNls
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle("org.tetram.bdtheque.lang.bd");
 
-    public static String message(@PropertyKey(resourceBundle = "org.tetram.bdtheque.lang.bd") String key, Object... params) {
+    public static String message(@PropertyKey(resourceBundle = "org.tetram.bdtheque.lang.bd_en") String key, Object... params) {
         String value = resourceBundle.getString(key);
         if (params.length > 0)
             return MessageFormat.format(value, params);

@@ -1,6 +1,7 @@
 package org.tetram.bdtheque.data.dao;
 
 import org.apache.ibatis.exceptions.PersistenceException;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
@@ -59,7 +60,7 @@ public class AuteurDaoImpl extends DaoRWImpl<Auteur, UUID> implements AuteurDao 
     }
 
     @Override
-    public int save(Auteur o) throws PersistenceException {
+    public int save(@NotNull Auteur o) throws PersistenceException {
         if (!isUnique(o))
             throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("auteur")));
         return super.save(o);

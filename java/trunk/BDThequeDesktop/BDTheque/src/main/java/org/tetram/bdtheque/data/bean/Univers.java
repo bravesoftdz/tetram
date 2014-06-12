@@ -47,7 +47,7 @@ public class Univers extends AbstractDBEntity {
     }
 
     public UUID getIdUniversParent() {
-        return universParent.getId();
+        return getUniversParent() == null ? null : getUniversParent().getId();
     }
 
 }
