@@ -25,7 +25,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-public class AuteurDaoImpl extends DaoRWImpl<Auteur, UUID> implements AuteurDao {
+public class AuteurDaoImpl extends DaoScriptImpl<Auteur, UUID> implements AuteurDao {
 
     @Autowired
     private SerieMapper serieMapper;

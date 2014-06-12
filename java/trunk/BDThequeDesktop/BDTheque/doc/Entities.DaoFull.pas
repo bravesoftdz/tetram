@@ -40,7 +40,6 @@ type
     class procedure Fill(Entity: TAlbumFull; const Reference: TGUID); override;
     class procedure SaveToDatabase(Entity: TAlbumFull; UseTransaction: TUIBTransaction); override;
     class procedure Acheter(Entity: TAlbumFull; Prevision: Boolean);
-    class procedure ChangeNotation(Entity: TAlbumFull; Note: Integer);
     class procedure FusionneInto(Source, Dest: TAlbumFull);
   end;
 
@@ -67,7 +66,6 @@ type
     class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID); reintroduce; overload;
     class procedure Fill(Entity: TSerieFull; const Reference, IdAuteurFiltre: TGUID; ForceLoad: Boolean); reintroduce; overload;
     class procedure SaveToDatabase(Entity: TSerieFull; UseTransaction: TUIBTransaction); override;
-    class procedure ChangeNotation(Entity: TSerieFull; Note: Integer);
   end;
 
   TDaoEditionFull = class(TDaoFullEntity<TEditionFull>)
@@ -130,54 +128,6 @@ uses
 
 { TDaoFull }
 
-class procedure TDaoFull.FillAssociations(Entity: TObjetFull; TypeData: TVirtualMode);
-var
-  qry: TManagedQuery;
-begin
-  qry := DBConnection.GetQuery;
-  try
-    qry.SQL.Text := 'select chaine, always from import_associations where typedata = :typedata and id = :id and always = 1';
-    qry.Params.AsInteger[0] := Integer(TypeData);
-    qry.Params.AsString[1] := GUIDToString(Entity.ID);
-    qry.Open;
-    while not qry.Eof do
-    begin
-      Entity.Associations.Add(qry.Fields.AsString[0]);
-      qry.Next;
-    end;
-  finally
-    qry.Free;
-  end;
-end;
-
-class procedure TDaoFull.SaveAssociations(Entity: TObjetFull; TypeData: TVirtualMode; const ParentID: TGUID);
-var
-  association: string;
-  qry: TManagedQuery;
-begin
-  qry := DBConnection.GetQuery;
-  try
-    qry.SQL.Text := 'delete from import_associations where typedata = :typedata and id = :id and always = 1';
-    qry.Params.AsInteger[0] := Integer(TypeData);
-    qry.Params.AsString[1] := GUIDToString(Entity.ID);
-    qry.Execute;
-
-    qry.SQL.Text := 'update or insert into import_associations (chaine, id, parentid, typedata, always) values (:chaine, :id, :parentid, :typedata, 1)';
-    qry.Prepare(True);
-    for association in Entity.Associations do
-      if Trim(association) <> '' then
-      begin
-        qry.Params.AsString[0] := Copy(Trim(association), 1, qry.Params.MaxStrLen[0]);
-        qry.Params.AsString[1] := GUIDToString(Entity.ID);
-        qry.Params.AsString[2] := GUIDToString(ParentID);
-        qry.Params.AsInteger[3] := Integer(TypeData);
-        qry.Execute;
-      end;
-  finally
-    qry.Free;
-  end;
-end;
-
 class procedure TDaoFull.SaveToDatabase(Entity: TObjetFull);
 var
   Transaction: TUIBTransaction;
@@ -196,24 +146,6 @@ end;
 
 { TDaoSerieFull }
 
-class procedure TDaoSerieFull.ChangeNotation(Entity: TSerieFull; Note: Integer);
-var
-  qry: TUIBQuery;
-begin
-  qry := DBConnection.GetQuery;;
-  try
-    qry.SQL.Text := 'update series set notation = ? where id_serie = ?';
-    qry.Params.AsSmallint[0] := Note;
-    qry.Params.AsString[1] := GUIDToString(Entity.ID_Serie);
-    qry.Execute;
-    qry.Transaction.Commit;
-
-    Entity.Notation := Note;
-  finally
-    qry.Free;
-  end;
-end;
-
 { TDaoAlbumFull }
 
 class procedure TDaoAlbumFull.Acheter(Entity: TAlbumFull; Prevision: Boolean);
@@ -229,24 +161,6 @@ begin
     qry.Params.AsString[1] := GUIDToString(Entity.ID_Album);
     qry.Execute;
     qry.Transaction.Commit;
-  finally
-    qry.Free;
-  end;
-end;
-
-class procedure TDaoAlbumFull.ChangeNotation(Entity: TAlbumFull; Note: Integer);
-var
-  qry: TUIBQuery;
-begin
-  qry := DBConnection.GetQuery;
-  try
-    qry.SQL.Text := 'update albums set notation = ? where id_album = ?';
-    qry.Params.AsSmallint[0] := Note;
-    qry.Params.AsString[1] := GUIDToString(Entity.ID_Album);
-    qry.Execute;
-    qry.Transaction.Commit;
-
-    Entity.Notation := Note;
   finally
     qry.Free;
   end;

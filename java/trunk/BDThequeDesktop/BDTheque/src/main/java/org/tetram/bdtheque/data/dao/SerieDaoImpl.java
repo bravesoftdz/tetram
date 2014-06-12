@@ -14,7 +14,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-public class SerieDaoImpl extends DaoRWImpl<Serie, UUID> implements SerieDao {
+public class SerieDaoImpl extends DaoScriptImpl<Serie, UUID> implements SerieDao {
 
     @Override
     public Serie get(UUID id) {

@@ -121,4 +121,10 @@
         order by
         <include refid="orderAlbum"/>
     </select>
+
+    <update id="changeNotation">
+        <![CDATA[
+        update albums set notation = #{notation} where id_album = #{id}
+        ]]>
+    </update>
 </mapper>

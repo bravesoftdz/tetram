@@ -2,4 +2,38 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers">
     <sql id="autoIncKey">select udf_createguid() from rdb$database</sql>
+
+    <select id="fillAssociations" resultType="String">
+        <![CDATA[
+        select
+            chaine
+        from
+            import_associations
+        where
+            typedata = #{typeData}
+            and id = #{id}
+            and always = 1
+        ]]>
+    </select>
+
+    <delete id="cleanAssociations">
+        <![CDATA[
+        delete from
+            import_associations
+        where
+            typedata = #{typeData}
+            and id = #{id}
+            and always = 1
+        ]]>
+    </delete>
+
+    <update id="saveAssociations">
+        <![CDATA[
+        update or insert into import_associations (
+            chaine, id, parentId, typedata, always
+        ) values (
+            #{chaine}, #{id}, #{parentId}, #{typeData}, 1
+        )
+        ]]>
+    </update>
 </mapper>

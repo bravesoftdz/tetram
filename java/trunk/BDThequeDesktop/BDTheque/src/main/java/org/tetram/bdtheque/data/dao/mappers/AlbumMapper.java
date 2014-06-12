@@ -3,6 +3,7 @@ package org.tetram.bdtheque.data.dao.mappers;
 import org.apache.ibatis.annotations.Param;
 import org.tetram.bdtheque.data.bean.Album;
 import org.tetram.bdtheque.data.bean.AlbumLite;
+import org.tetram.bdtheque.data.bean.ValeurListe;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,4 +17,6 @@ public interface AlbumMapper extends BaseMapperInterface {
     Album getAlbumById(UUID id);
 
     List<AlbumLite> getAlbumLiteBySerieIdByAuteurId(@Param("idSerie") UUID idSerie, @Param("idAuteur") UUID idAuteur);
+
+    int changeNotation(@Param("id") UUID id, @Param("notation") ValeurListe note);
 }

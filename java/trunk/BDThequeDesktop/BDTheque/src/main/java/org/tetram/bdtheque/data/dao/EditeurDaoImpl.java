@@ -14,7 +14,7 @@ import java.util.UUID;
  */
 @Repository
 @Lazy
-public class EditeurDaoImpl extends DaoRWImpl<Editeur, UUID> implements EditeurDao {
+public class EditeurDaoImpl extends DaoScriptImpl<Editeur, UUID> implements EditeurDao {
     @Override
     public int save(@NotNull Editeur o) throws ConsistencyException {
         if (!isUnique(o))

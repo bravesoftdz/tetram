@@ -1,7 +1,9 @@
 package org.tetram.bdtheque.data.dao.mappers;
 
+import org.apache.ibatis.annotations.Param;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.bean.SerieLite;
+import org.tetram.bdtheque.data.bean.ValeurListe;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,4 +17,6 @@ public interface SerieMapper extends BaseMapperInterface {
     Serie getSerieById(UUID id);
 
     List<SerieLite> getListSerieIdByAuteurId(UUID id);
+
+    int changeNotation(@Param("id") UUID id, @Param("notation") ValeurListe note);
 }

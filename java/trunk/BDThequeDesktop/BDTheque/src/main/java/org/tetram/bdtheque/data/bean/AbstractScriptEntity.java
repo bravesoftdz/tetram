@@ -6,27 +6,28 @@ import java.util.Set;
 /**
  * Created by Thierry on 11/06/2014.
  */
-public class AbstractScriptEntity extends AbstractDBEntity implements ScriptEntity {
+public abstract class AbstractScriptEntity extends AbstractDBEntity implements ScriptEntity {
 
     private Set<String> associations = new HashSet<>();
 
     @Override
     public Set<String> getAssociations() {
-        return null;
+        return associations;
     }
 
     @Override
     public void setAssociations(Set<String> associations) {
-
+        this.associations = associations;
     }
 
     @Override
     public boolean addAssociation(String association) {
-        return false;
+        return associations.add(association);
     }
 
     @Override
     public boolean removeAssociation(String association) {
-        return false;
+        return associations.remove(association);
     }
+
 }

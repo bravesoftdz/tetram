@@ -7,7 +7,8 @@ import java.util.Comparator;
 /**
  * Created by Thierry on 24/05/2014.
  */
-public class GenreLite extends AbstractDBEntity {
+@ScriptInfo(typeData = 5)
+public class GenreLite extends AbstractScriptEntity {
     public static Comparator<GenreLite> DEFAULT_COMPARATOR = new Comparator<GenreLite>() {
         @Override
         public int compare(GenreLite o1, GenreLite o2) {

@@ -7,6 +7,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 24/05/2014.
  */
+@ScriptInfo(typeData = 2, getParentIdMethod = "getIdEditeur")
 public class Collection extends AbstractScriptEntity {
     private String nomCollection;
     private EditeurLite editeur;
@@ -27,6 +28,7 @@ public class Collection extends AbstractScriptEntity {
         this.editeur = editeur;
     }
 
+    @SuppressWarnings("UnusedDeclaration")
     public UUID getIdEditeur() {
         return getEditeur() == null ? null : getEditeur().getId();
     }

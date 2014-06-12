@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data;
 
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.tetram.bdtheque.data.bean.ValeurListe;
 
@@ -22,7 +23,9 @@ import java.sql.SQLException;
 //   qu'on a un champ du même nom que le champ valeur et préfixé de POSITION_PREFIX pour contenir l'ordre de tri
 public class ValeurListeTypeHandler extends BaseTypeHandler<ValeurListe> {
 
+    @NonNls
     public static final String LABEL_PREFIX = "lb_";
+    @NonNls
     public static final String POSITION_PREFIX = "pos_";
 
     @Override
@@ -39,9 +42,7 @@ public class ValeurListeTypeHandler extends BaseTypeHandler<ValeurListe> {
         v.setTexte(rs.getString(LABEL_PREFIX + columnName));
         try {
             v.setPosition(rs.getInt(POSITION_PREFIX + columnName));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             v.setPosition(0);
         }
         return v;
@@ -61,9 +62,7 @@ public class ValeurListeTypeHandler extends BaseTypeHandler<ValeurListe> {
         v.setTexte(cs.getString(LABEL_PREFIX + cs.getMetaData().getColumnName(columnIndex)));
         try {
             v.setPosition(cs.getInt(POSITION_PREFIX + cs.getMetaData().getColumnName(columnIndex)));
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             v.setPosition(0);
         }
         return v;

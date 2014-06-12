@@ -124,4 +124,10 @@
             2 nulls first
         ]]>
     </select>
+
+    <update id="changeNotation">
+        <![CDATA[
+        update series set notation = #{notation} where id_serie = #{id}
+        ]]>
+    </update>
 </mapper>

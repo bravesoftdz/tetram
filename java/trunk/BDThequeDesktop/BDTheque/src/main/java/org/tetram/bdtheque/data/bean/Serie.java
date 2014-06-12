@@ -11,6 +11,7 @@ import java.util.*;
 /**
  * Created by Thierry on 24/05/2014.
  */
+@ScriptInfo(typeData = 7)
 public class Serie extends AbstractScriptEntity {
     private String titreSerie;
 

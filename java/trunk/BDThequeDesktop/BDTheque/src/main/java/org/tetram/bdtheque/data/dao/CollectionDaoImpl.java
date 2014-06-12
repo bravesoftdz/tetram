@@ -16,7 +16,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-public class CollectionDaoImpl extends DaoRWImpl<Collection, UUID> implements CollectionDao {
+public class CollectionDaoImpl extends DaoScriptImpl<Collection, UUID> implements CollectionDao {
 
     @Override
     public void validate(@NotNull Collection object) throws ConsistencyException {

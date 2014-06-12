@@ -7,6 +7,7 @@ import java.net.URL;
 /**
  * Created by Thierry on 24/05/2014.
  */
+@ScriptInfo(typeData = 3)
 public class Editeur extends AbstractScriptEntity {
     private String nomEditeur;
     private URL siteWeb;
