@@ -656,49 +656,6 @@ begin
   end;
 end;
 
-{ TDaoUniversFull }
-
-class procedure TDaoUniversFull.SaveToDatabase(Entity: TUniversFull; UseTransaction: TUIBTransaction);
-var
-  qry: TUIBQuery;
-begin
-  inherited;
-  qry := TUIBQuery.Create(nil);
-  try
-    qry.Transaction := UseTransaction;
-
-    qry.SQL.Clear;
-    qry.SQL.Add('update or insert into univers (');
-    qry.SQL.Add('  id_univers, nomunivers, id_univers_parent, description, siteweb');
-    qry.SQL.Add(') values (');
-    qry.SQL.Add('  :id_univers, :nomunivers, :id_univers_parent, :description, :siteweb');
-    qry.SQL.Add(') returning id_univers');
-
-    if IsEqualGUID(GUID_NULL, Entity.ID_Univers) then
-      qry.Params.ByNameIsNull['id_univers'] := True
-    else
-      qry.Params.ByNameAsString['id_univers'] := GUIDToString(Entity.ID_Univers);
-    qry.Params.ByNameAsString['nomunivers'] := Entity.NomUnivers;
-    qry.Params.ByNameAsString['siteweb'] := Entity.SiteWeb;
-    if Entity.Description <> '' then
-      qry.ParamsSetBlob('description', Entity.Description)
-    else
-      qry.Params.ByNameIsNull['description'] := True;
-    if IsEqualGUID(GUID_NULL, Entity.ID_UniversParent) then
-      qry.Params.ByNameIsNull['id_univers_parent'] := True
-    else
-      qry.Params.ByNameAsString['id_univers_parent'] := GUIDToString(Entity.ID_UniversParent);
-    qry.Execute;
-
-    if Entity.RecInconnu then
-      Entity.ID_Univers := StringToGUID(qry.Fields.AsString[0]);
-
-    qry.Transaction.Commit;
-  finally
-    qry.Free;
-  end;
-end;
-
 { TDaoEditionFull }
 
 class procedure TDaoEditionFull.FusionneInto(Source, Dest: TObjectList<TEditionFull>);
