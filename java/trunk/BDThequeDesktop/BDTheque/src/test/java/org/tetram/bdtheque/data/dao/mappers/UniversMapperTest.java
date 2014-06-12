@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.DBTest;
-import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.bean.Univers;
 import org.tetram.bdtheque.data.bean.UniversLite;
 

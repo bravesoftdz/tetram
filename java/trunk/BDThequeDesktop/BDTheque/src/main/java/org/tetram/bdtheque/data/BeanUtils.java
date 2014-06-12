@@ -13,7 +13,7 @@ import java.util.Set;
 public abstract class BeanUtils {
 
     @Contract("null -> null")
-    public static String trim(String v){
+    public static String trim(String v) {
         return v == null ? null : v.trim();
     }
 
@@ -37,12 +37,11 @@ public abstract class BeanUtils {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends Comparable> int compare(T bThis, T bOther, boolean nullsFirst)
-    {
+    public static <T extends Comparable> int compare(T bThis, T bOther, boolean nullsFirst) {
         if (bThis == bOther) return 0;
 
-        if(bThis == null) return nullsFirst ? -1 : 1;
-        if(bOther == null) return nullsFirst ? 1 : -1;
+        if (bThis == null) return nullsFirst ? -1 : 1;
+        if (bOther == null) return nullsFirst ? 1 : -1;
 
         return bThis.compareTo(bOther);
     }

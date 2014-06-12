@@ -9,7 +9,7 @@ import org.tetram.bdtheque.data.bean.AbstractDBEntity;
 /**
  * Created by Thierry on 30/05/2014.
  */
-public abstract class DaoRWImpl<T extends AbstractDBEntity, PK> extends DaoROImpl<T,PK> implements DaoRW<T, PK> {
+public abstract class DaoRWImpl<T extends AbstractDBEntity, PK> extends DaoROImpl<T, PK> implements DaoRW<T, PK> {
 
     @NonNls
     public static final String PREFIX_INSERT_QUERY = "create"; //prefix of create queries in mappers files (eg. createAddressType)
@@ -23,7 +23,7 @@ public abstract class DaoRWImpl<T extends AbstractDBEntity, PK> extends DaoROImp
     /**
      * Default Constructor
      */
-        protected DaoRWImpl() {
+    protected DaoRWImpl() {
         super();
     }
 

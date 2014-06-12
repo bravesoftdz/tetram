@@ -1,6 +1,5 @@
 package org.tetram.bdtheque.utils;
 
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;

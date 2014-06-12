@@ -1,6 +1,5 @@
 package org.tetram.bdtheque.data;
 
-import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.UUID;

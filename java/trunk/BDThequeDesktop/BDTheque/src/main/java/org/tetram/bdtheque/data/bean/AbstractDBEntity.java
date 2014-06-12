@@ -1,7 +1,5 @@
 package org.tetram.bdtheque.data.bean;
 
-import org.tetram.bdtheque.utils.StringUtils;
-
 import java.util.UUID;
 
 /**

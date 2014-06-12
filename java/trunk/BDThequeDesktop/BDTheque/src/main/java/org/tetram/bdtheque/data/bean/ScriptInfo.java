@@ -12,5 +12,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface ScriptInfo {
     int typeData();
+
     String getParentIdMethod() default "";
 }
