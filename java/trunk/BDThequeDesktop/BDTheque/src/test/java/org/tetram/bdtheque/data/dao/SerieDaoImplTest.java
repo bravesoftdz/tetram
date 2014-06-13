@@ -5,11 +5,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.DBTest;
-import org.tetram.bdtheque.data.bean.PersonneLite;
 import org.tetram.bdtheque.data.bean.Serie;
-import org.tetram.bdtheque.data.bean.UniversLite;
-
-import static org.junit.Assert.*;
 
 public class SerieDaoImplTest extends DBTest {
 

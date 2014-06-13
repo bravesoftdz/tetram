@@ -8,7 +8,6 @@ import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.bean.Univers;
 import org.tetram.bdtheque.data.bean.UniversLite;
 
-import java.util.List;
 import java.util.Set;
 
 public class UniversMapperTest extends DBTest {

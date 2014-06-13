@@ -7,7 +7,6 @@ import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.bean.Editeur;
 import org.tetram.bdtheque.utils.I18nSupport;
 
-import java.lang.invoke.ConstantCallSite;
 import java.util.UUID;
 
 /**
