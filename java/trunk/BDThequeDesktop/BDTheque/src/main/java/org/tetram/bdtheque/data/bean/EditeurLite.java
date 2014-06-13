@@ -25,11 +25,11 @@ public class EditeurLite extends AbstractDBEntity {
     private String nomEditeur;
 
     public String getNomEditeur() {
-        return BeanUtils.trim(nomEditeur);
+        return BeanUtils.trimOrNull(nomEditeur);
     }
 
     public void setNomEditeur(String nomEditeur) {
-        this.nomEditeur = BeanUtils.trim(nomEditeur);
+        this.nomEditeur = BeanUtils.trimOrNull(nomEditeur);
     }
 
     @Override

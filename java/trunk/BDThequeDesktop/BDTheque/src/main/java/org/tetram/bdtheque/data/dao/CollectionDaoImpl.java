@@ -20,8 +20,10 @@ public class CollectionDaoImpl extends DaoScriptImpl<Collection, UUID> implement
 
     @Override
     public void validate(@NotNull Collection object) throws ConsistencyException {
+        if (object.getNomCollection() == null || object.getNomCollection().isEmpty())
+            throw new ConsistencyException(I18nSupport.message("nom.obligatoire"));
         if (object.getEditeur() == null)
-            throw new ConsistencyException(I18nSupport.message("une.collection.doit.etre.rattachee.a.un.editeur"));
+            throw new ConsistencyException(I18nSupport.message("editeur.obligatoire"));
     }
 
     @Override

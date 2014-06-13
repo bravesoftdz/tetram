@@ -10,19 +10,19 @@ import java.util.List;
  * Created by Thierry on 24/05/2014.
  */
 @ScriptInfo(typeData = 6)
-public class Auteur extends AbstractScriptEntity {
+public class Personne extends AbstractScriptEntity {
 
-    private String nomAuteur;
+    private String nomPersonne;
     private URL siteWeb;
     private String biographie;
     private List<Serie> series = new ArrayList<>();
 
-    public String getNomAuteur() {
-        return BeanUtils.trim(nomAuteur);
+    public String getNomPersonne() {
+        return BeanUtils.trimOrNull(nomPersonne);
     }
 
-    public void setNomAuteur(String nomAuteur) {
-        this.nomAuteur = BeanUtils.trim(nomAuteur);
+    public void setNomPersonne(String nomPersonne) {
+        this.nomPersonne = BeanUtils.trimOrNull(nomPersonne);
     }
 
     public URL getSiteWeb() {
@@ -34,11 +34,11 @@ public class Auteur extends AbstractScriptEntity {
     }
 
     public String getBiographie() {
-        return BeanUtils.trim(biographie);
+        return BeanUtils.trimOrNull(biographie);
     }
 
     public void setBiographie(String biographie) {
-        this.biographie = BeanUtils.trim(biographie);
+        this.biographie = BeanUtils.trimOrNull(biographie);
     }
 
     public List<Serie> getSeries() {

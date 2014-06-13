@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.dao.mappers;
 
+import org.apache.ibatis.annotations.Param;
 import org.tetram.bdtheque.data.bean.*;
 
 import java.util.List;
@@ -17,11 +18,15 @@ public interface AuteurMapper extends BaseMapperInterface {
 
     List<AuteurParaBDLite> getListAuteurLiteByParaBDId(UUID id);
 
-    Auteur getAuteurById(UUID id);
+    Personne getPersonneById(UUID id);
 
-    int createAuteur(Auteur auteur);
+    int createAuteur(Personne personne);
 
-    int updateAuteur(Auteur auteur);
+    int updateAuteur(Personne personne);
 
     int deleteAuteur(UUID id);
+
+    int cleanAuteursSerie(@Param("id") UUID idSerie);
+
+    int addAuteurSerie(@Param("idSerie") UUID idSerie, @Param("auteur") AuteurSerieLite auteur);
 }

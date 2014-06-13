@@ -24,4 +24,10 @@ public class UniversDaoImpl extends DaoRWImpl<Univers, UUID> implements UniversD
         return super.save(o);
     }
 
+    @Override
+    public void validate(@NotNull Univers object) throws ConsistencyException {
+        super.validate(object);
+        if (object.getNomUnivers() == null || object.getNomUnivers().isEmpty())
+            throw new ConsistencyException("nom.obligatoire");
+    }
 }

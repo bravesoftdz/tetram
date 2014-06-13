@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.data.ConsistencyException;
-import org.tetram.bdtheque.data.bean.Auteur;
+import org.tetram.bdtheque.data.bean.Personne;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.bean.SerieLite;
 import org.tetram.bdtheque.data.dao.mappers.AlbumMapper;
@@ -25,7 +25,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
-public class AuteurDaoImpl extends DaoScriptImpl<Auteur, UUID> implements AuteurDao {
+public class PersonneDaoImpl extends DaoScriptImpl<Personne, UUID> implements PersonneDao {
 
     @Autowired
     private SerieMapper serieMapper;
@@ -37,9 +37,9 @@ public class AuteurDaoImpl extends DaoScriptImpl<Auteur, UUID> implements Auteur
     private SerieDao serieDao;
 
     @Override
-    public Auteur get(UUID id) {
-        Auteur auteur = super.get(id);
-        if (auteur != null) {
+    public Personne get(UUID id) {
+        Personne personne = super.get(id);
+        if (personne != null) {
             List<Serie> lst = new ArrayList<>();
             Serie serie;
             List<SerieLite> lstSerie = serieMapper.getListSerieIdByAuteurId(id);
@@ -54,13 +54,20 @@ public class AuteurDaoImpl extends DaoScriptImpl<Auteur, UUID> implements Auteur
                 serie.setAlbums(albumMapper.getAlbumLiteBySerieIdByAuteurId(serie.getId(), id));
                 serie.setParaBDs(paraBDMapper.getParaBDLiteBySerieIdByAuteurId(serie.getId(), id));
             }
-            auteur.setSeries(lst);
+            personne.setSeries(lst);
         }
-        return auteur;
+        return personne;
     }
 
     @Override
-    public int save(@NotNull Auteur o) throws PersistenceException {
+    public void validate(@NotNull Personne object) throws ConsistencyException {
+        super.validate(object);
+        if (object.getNomPersonne() == null || object.getNomPersonne().isEmpty())
+            throw new ConsistencyException(I18nSupport.message("nom.obligatoire"));
+    }
+
+    @Override
+    public int save(@NotNull Personne o) throws PersistenceException {
         if (!isUnique(o))
             throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("auteur")));
         return super.save(o);

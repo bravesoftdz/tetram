@@ -15,11 +15,11 @@ public class Univers extends AbstractDBEntity {
     private UniversLite universParent;
 
     public String getNomUnivers() {
-        return BeanUtils.trim(nomUnivers);
+        return BeanUtils.trimOrNull(nomUnivers);
     }
 
     public void setNomUnivers(String nomUnivers) {
-        this.nomUnivers = BeanUtils.trim(nomUnivers);
+        this.nomUnivers = BeanUtils.trimOrNull(nomUnivers);
     }
 
     public URL getSiteWeb() {
@@ -31,11 +31,11 @@ public class Univers extends AbstractDBEntity {
     }
 
     public String getDescription() {
-        return BeanUtils.trim(description);
+        return BeanUtils.trimOrNull(description);
     }
 
     public void setDescription(String description) {
-        this.description = BeanUtils.trim(description);
+        this.description = BeanUtils.trimOrNull(description);
     }
 
     public UniversLite getUniversParent() {

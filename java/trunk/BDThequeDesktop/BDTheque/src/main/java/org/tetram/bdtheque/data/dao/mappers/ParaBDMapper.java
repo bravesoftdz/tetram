@@ -16,4 +16,6 @@ public interface ParaBDMapper extends BaseMapperInterface {
     ParaBD getParaBDById(UUID id);
 
     List<ParaBDLite> getParaBDLiteBySerieIdByAuteurId(@Param("idSerie") UUID idSerie, @Param("idAuteur") UUID idAuteur);
+
+    int acheter(@Param("id") UUID id, @Param("achat") boolean previsionAchat);
 }

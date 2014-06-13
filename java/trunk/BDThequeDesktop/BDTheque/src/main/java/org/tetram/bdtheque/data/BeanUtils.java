@@ -13,7 +13,7 @@ import java.util.Set;
 public abstract class BeanUtils {
 
     @Contract("null -> null")
-    public static String trim(String v) {
+    public static String trimOrNull(String v) {
         return v == null ? null : v.trim();
     }
 

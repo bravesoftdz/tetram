@@ -127,4 +127,9 @@
         update albums set notation = #{notation} where id_album = #{id}
         ]]>
     </update>
+    <update id="acheter">
+        <![CDATA[
+        update albums set achat = #{achat} where id_album = #{id}
+        ]]>
+    </update>
 </mapper>

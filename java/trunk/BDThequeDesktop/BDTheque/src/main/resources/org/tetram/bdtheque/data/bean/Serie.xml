@@ -130,4 +130,36 @@
         update series set notation = #{notation} where id_serie = #{id}
         ]]>
     </update>
+
+    <sql id="saveSerie">
+        <![CDATA[
+        update or insert into series (
+            id_serie, titreserie, terminee, suivresorties, complete, suivremanquants, siteweb, id_editeur,
+            id_collection, sujetserie, remarquesserie, nb_albums, vo, couleur, etat, reliure, typeedition,
+            orientation, formatedition, senslecture
+        ) values (
+            #{id}, #{titreSerie}, #{terminee}, #{suivreSorties}, #{complete}, #{suivreManquants}, #{siteWeb}, #{idEditeur},
+            #{idCollection}, #{sujet}, #{notes}, #{nbAlbums}, #{vo}, #{couleur}, #{etat}, #{reliure}, #{typeEdition},
+            #{orientation}, #{formatEdition}, #{sensLecture}
+        )
+        ]]>
+    </sql>
+
+    <insert id="createSerie">
+        <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
+            <include refid="org.tetram.bdtheque.data.dao.mappers.autoIncKey"/>
+        </selectKey>
+        <include refid="saveSerie"/>
+    </insert>
+
+    <update id="updateSerie">
+        <include refid="saveSerie"/>
+    </update>
+
+    <delete id="deleteSerie">
+        <![CDATA[
+        delete from series where id_serie = #{id}
+        ]]>
+    </delete>
+
 </mapper>

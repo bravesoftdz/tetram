@@ -19,4 +19,6 @@ public interface AlbumMapper extends BaseMapperInterface {
     List<AlbumLite> getAlbumLiteBySerieIdByAuteurId(@Param("idSerie") UUID idSerie, @Param("idAuteur") UUID idAuteur);
 
     int changeNotation(@Param("id") UUID id, @Param("notation") ValeurListe note);
+
+    int acheter(@Param("id") UUID id, @Param("achat") boolean previsionAchat);
 }

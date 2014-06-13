@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.io.ClassPathResource;
-import org.tetram.bdtheque.data.bean.Auteur;
-import org.tetram.bdtheque.data.dao.AuteurDao;
+import org.tetram.bdtheque.data.bean.Personne;
+import org.tetram.bdtheque.data.dao.PersonneDao;
 
 /**
  * Created by Thierry on 02/06/2014.
@@ -39,13 +39,13 @@ public class SpringTest {
         Assert.assertEquals(Constants.ID_EDITEUR_GLENAT, editeur.getId());
 */
 
-        AuteurDao auteurDao = ctx.getBean(AuteurDao.class);
-        Assert.assertNotNull(auteurDao);
+        PersonneDao personneDao = ctx.getBean(PersonneDao.class);
+        Assert.assertNotNull(personneDao);
 
-        Auteur auteur = auteurDao.get(Constants.ID_AUTEUR_BUCHET);
-        Assert.assertNotNull(auteur);
-        Assert.assertEquals(Constants.ID_AUTEUR_BUCHET, auteur.getId());
-        Assert.assertNotNull(auteur.getSeries());
-        Assert.assertFalse(auteur.getSeries().isEmpty());
+        Personne personne = personneDao.get(Constants.ID_AUTEUR_BUCHET);
+        Assert.assertNotNull(personne);
+        Assert.assertEquals(Constants.ID_AUTEUR_BUCHET, personne.getId());
+        Assert.assertNotNull(personne.getSeries());
+        Assert.assertFalse(personne.getSeries().isEmpty());
     }
 }

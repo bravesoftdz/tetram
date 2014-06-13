@@ -77,11 +77,11 @@ public class Album extends AbstractDBEntity {
     }
 
     public String getTitreAlbum() {
-        return BeanUtils.trim(titreAlbum);
+        return BeanUtils.trimOrNull(titreAlbum);
     }
 
     public void setTitreAlbum(String titreAlbum) {
-        this.titreAlbum = BeanUtils.trim(titreAlbum);
+        this.titreAlbum = BeanUtils.trimOrNull(titreAlbum);
     }
 
     public Serie getSerie() {
@@ -242,19 +242,19 @@ public class Album extends AbstractDBEntity {
     }
 
     public String getSujet() {
-        return BeanUtils.trim(sujet);
+        return BeanUtils.trimOrNull(sujet);
     }
 
     public void setSujet(String sujet) {
-        this.sujet = BeanUtils.trim(sujet);
+        this.sujet = BeanUtils.trimOrNull(sujet);
     }
 
     public String getNotes() {
-        return BeanUtils.trim(notes);
+        return BeanUtils.trimOrNull(notes);
     }
 
     public void setNotes(String notes) {
-        this.notes = BeanUtils.trim(notes);
+        this.notes = BeanUtils.trimOrNull(notes);
     }
 
     public Set<Edition> getEditions() {

@@ -17,11 +17,11 @@ public class ParaBDLite extends AbstractDBEntity {
     private boolean complet = true;
 
     public String getTitre() {
-        return BeanUtils.trim(titre);
+        return BeanUtils.trimOrNull(titre);
     }
 
     public void setTitre(String titre) {
-        this.titre = BeanUtils.trim(titre);
+        this.titre = BeanUtils.trimOrNull(titre);
     }
 
     public UUID getIdSerie() {
@@ -33,19 +33,19 @@ public class ParaBDLite extends AbstractDBEntity {
     }
 
     public String getSerie() {
-        return BeanUtils.trim(serie);
+        return BeanUtils.trimOrNull(serie);
     }
 
     public void setSerie(String serie) {
-        this.serie = BeanUtils.trim(serie);
+        this.serie = BeanUtils.trimOrNull(serie);
     }
 
     public String getsCategorie() {
-        return BeanUtils.trim(sCategorie);
+        return BeanUtils.trimOrNull(sCategorie);
     }
 
     public void setsCategorie(String sCategorie) {
-        this.sCategorie = BeanUtils.trim(sCategorie);
+        this.sCategorie = BeanUtils.trimOrNull(sCategorie);
     }
 
     public boolean isAchat() {

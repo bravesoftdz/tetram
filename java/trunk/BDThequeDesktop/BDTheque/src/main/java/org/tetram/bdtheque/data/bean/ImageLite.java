@@ -37,19 +37,19 @@ public abstract class ImageLite extends AbstractDBEntity {
     }
 
     public String getOldNom() {
-        return BeanUtils.trim(oldNom);
+        return BeanUtils.trimOrNull(oldNom);
     }
 
     public void setOldNom(String oldNom) {
-        this.oldNom = BeanUtils.trim(oldNom);
+        this.oldNom = BeanUtils.trimOrNull(oldNom);
     }
 
     public String getNewNom() {
-        return BeanUtils.trim(newNom);
+        return BeanUtils.trimOrNull(newNom);
     }
 
     public void setNewNom(String newNom) {
-        this.newNom = BeanUtils.trim(newNom);
+        this.newNom = BeanUtils.trimOrNull(newNom);
     }
 
     public boolean isOldStockee() {

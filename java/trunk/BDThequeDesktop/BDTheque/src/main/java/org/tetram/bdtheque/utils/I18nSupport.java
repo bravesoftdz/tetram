@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.utils;
 
+import com.sun.istack.internal.localization.Localizable;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.PropertyKey;
 
@@ -9,7 +10,7 @@ import java.util.ResourceBundle;
 /**
  * Created by Thierry on 09/06/2014.
  */
-public class I18nSupport {
+public class I18nSupport  {
 
     @NonNls
     private static ResourceBundle resourceBundle = ResourceBundle.getBundle("org.tetram.bdtheque.lang.bd");

@@ -26,11 +26,11 @@ public class CollectionLite extends AbstractDBEntity {
     private EditeurLite editeur;
 
     public String getNomCollection() {
-        return BeanUtils.trim(nomCollection);
+        return BeanUtils.trimOrNull(nomCollection);
     }
 
     public void setNomCollection(String nomCollection) {
-        this.nomCollection = BeanUtils.trim(nomCollection);
+        this.nomCollection = BeanUtils.trimOrNull(nomCollection);
     }
 
     public EditeurLite getEditeur() {

@@ -80,4 +80,10 @@
             titreParabd
         ]]>
     </select>
+
+    <update id="acheter">
+        <![CDATA[
+        update parabd set achat = #{achat} where id_parabd = #{id}
+        ]]>
+    </update>
 </mapper>

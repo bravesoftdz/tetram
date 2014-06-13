@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.dao.mappers;
 
+import org.apache.ibatis.annotations.Param;
 import org.tetram.bdtheque.data.bean.GenreLite;
 
 import java.util.List;
@@ -18,4 +19,10 @@ public interface GenreMapper extends BaseMapperInterface {
     int updateGenreLite(GenreLite genre);
 
     int deleteGenreLite(UUID id);
+
+    int cleanGenresSerie(@Param("id") UUID idSerie);
+
+    int addGenreSerie(@Param("idSerie") UUID idSerie, @Param("idGenre") UUID idGenre);
 }
+
+

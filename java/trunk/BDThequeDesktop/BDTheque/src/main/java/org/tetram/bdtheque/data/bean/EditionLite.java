@@ -45,11 +45,11 @@ public class EditionLite extends AbstractDBEntity {
     }
 
     public String getIsbn() {
-        return BeanUtils.trim(isbn);
+        return BeanUtils.trimOrNull(isbn);
     }
 
     public void setIsbn(String isbn) {
-        this.isbn = BeanUtils.trim(isbn);
+        this.isbn = BeanUtils.trimOrNull(isbn);
     }
 
     public EditeurLite getEditeur() {

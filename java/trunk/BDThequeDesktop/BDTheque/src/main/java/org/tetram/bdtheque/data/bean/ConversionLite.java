@@ -12,19 +12,19 @@ public class ConversionLite extends AbstractDBEntity {
     private Double taux;
 
     public String getMonnaie1() {
-        return BeanUtils.trim(monnaie1);
+        return BeanUtils.trimOrNull(monnaie1);
     }
 
     public void setMonnaie1(String monnaie1) {
-        this.monnaie1 = BeanUtils.trim(monnaie1);
+        this.monnaie1 = BeanUtils.trimOrNull(monnaie1);
     }
 
     public String getMonnaie2() {
-        return BeanUtils.trim(monnaie2);
+        return BeanUtils.trimOrNull(monnaie2);
     }
 
     public void setMonnaie2(String monnaie2) {
-        this.monnaie2 = BeanUtils.trim(monnaie2);
+        this.monnaie2 = BeanUtils.trimOrNull(monnaie2);
     }
 
     public Double getTaux() {

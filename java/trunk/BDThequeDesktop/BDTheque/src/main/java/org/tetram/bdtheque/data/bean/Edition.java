@@ -171,11 +171,11 @@ public class Edition extends AbstractDBEntity {
     }
 
     public String getIsbn() {
-        return BeanUtils.trim(isbn);
+        return BeanUtils.trimOrNull(isbn);
     }
 
     public void setIsbn(String isbn) {
-        this.isbn = BeanUtils.trim(isbn);
+        this.isbn = BeanUtils.trimOrNull(isbn);
     }
 
     public Date getDateAchat() {
@@ -187,19 +187,19 @@ public class Edition extends AbstractDBEntity {
     }
 
     public String getNotes() {
-        return BeanUtils.trim(notes);
+        return BeanUtils.trimOrNull(notes);
     }
 
     public void setNotes(String notes) {
-        this.notes = BeanUtils.trim(notes);
+        this.notes = BeanUtils.trimOrNull(notes);
     }
 
     public String getNumeroPerso() {
-        return BeanUtils.trim(numeroPerso);
+        return BeanUtils.trimOrNull(numeroPerso);
     }
 
     public void setNumeroPerso(String numeroPerso) {
-        this.numeroPerso = BeanUtils.trim(numeroPerso);
+        this.numeroPerso = BeanUtils.trimOrNull(numeroPerso);
     }
 
     public List<CouvertureLite> getCouvertures() {

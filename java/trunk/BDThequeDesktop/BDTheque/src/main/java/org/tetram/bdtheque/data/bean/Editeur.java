@@ -13,11 +13,11 @@ public class Editeur extends AbstractScriptEntity {
     private URL siteWeb;
 
     public String getNomEditeur() {
-        return BeanUtils.trim(nomEditeur);
+        return BeanUtils.trimOrNull(nomEditeur);
     }
 
     public void setNomEditeur(String nomEditeur) {
-        this.nomEditeur = BeanUtils.trim(nomEditeur);
+        this.nomEditeur = BeanUtils.trimOrNull(nomEditeur);
     }
 
     public URL getSiteWeb() {

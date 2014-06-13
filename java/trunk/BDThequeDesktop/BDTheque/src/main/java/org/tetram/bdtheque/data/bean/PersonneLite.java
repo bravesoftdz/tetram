@@ -25,11 +25,11 @@ public class PersonneLite extends AbstractDBEntity {
     private String nom;
 
     public String getNom() {
-        return BeanUtils.trim(nom);
+        return BeanUtils.trimOrNull(nom);
     }
 
     public void setNom(String nom) {
-        this.nom = BeanUtils.trim(nom);
+        this.nom = BeanUtils.trimOrNull(nom);
     }
 
     @Override

@@ -25,4 +25,10 @@ public class GenreLiteDaoImpl extends DaoScriptImpl<GenreLite, UUID> implements 
         return super.save(o);
     }
 
+    @Override
+    public void validate(@NotNull GenreLite object) throws ConsistencyException {
+        super.validate(object);
+        if (object.getGenre() == null || object.getGenre().isEmpty())
+            throw new ConsistencyException(I18nSupport.message("nom.obligatoire"));
+    }
 }

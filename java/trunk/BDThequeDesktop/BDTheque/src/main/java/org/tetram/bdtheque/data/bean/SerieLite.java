@@ -34,11 +34,11 @@ public class SerieLite extends AbstractDBEntity {
     private Integer notation;
 
     public String getTitreSerie() {
-        return BeanUtils.trim(titreSerie);
+        return BeanUtils.trimOrNull(titreSerie);
     }
 
     public void setTitreSerie(String titreSerie) {
-        this.titreSerie = BeanUtils.trim(titreSerie);
+        this.titreSerie = BeanUtils.trimOrNull(titreSerie);
     }
 
     public EditeurLite getEditeur() {

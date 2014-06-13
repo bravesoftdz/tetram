@@ -38,11 +38,11 @@ public class ValeurListe {
     }
 
     public String getTexte() {
-        return BeanUtils.trim(texte);
+        return BeanUtils.trimOrNull(texte);
     }
 
     public void setTexte(String texte) {
-        this.texte = BeanUtils.trim(texte);
+        this.texte = BeanUtils.trimOrNull(texte);
     }
 
     public int getPosition() {

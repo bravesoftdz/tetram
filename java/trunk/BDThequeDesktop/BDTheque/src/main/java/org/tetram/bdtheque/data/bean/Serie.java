@@ -13,8 +13,8 @@ import java.util.*;
  */
 @ScriptInfo(typeData = 7)
 public class Serie extends AbstractScriptEntity {
-    private String titreSerie;
 
+    private String titreSerie;
     private Boolean terminee;
     private List<GenreLite> genres = new ArrayList<>();
     private String sujet;
@@ -55,11 +55,11 @@ public class Serie extends AbstractScriptEntity {
     }
 
     public String getTitreSerie() {
-        return BeanUtils.trim(titreSerie);
+        return BeanUtils.trimOrNull(titreSerie);
     }
 
     public void setTitreSerie(String titreSerie) {
-        this.titreSerie = BeanUtils.trim(titreSerie);
+        this.titreSerie = BeanUtils.trimOrNull(titreSerie);
     }
 
     public Boolean getTerminee() {
@@ -78,20 +78,28 @@ public class Serie extends AbstractScriptEntity {
         this.genres = genres;
     }
 
+    public boolean addGenre(GenreLite genre) {
+        return genres.add(genre);
+    }
+
+    public boolean removeGenre(GenreLite genre) {
+        return genres.remove(genre);
+    }
+
     public String getSujet() {
-        return BeanUtils.trim(sujet);
+        return BeanUtils.trimOrNull(sujet);
     }
 
     public void setSujet(String sujet) {
-        this.sujet = BeanUtils.trim(sujet);
+        this.sujet = BeanUtils.trimOrNull(sujet);
     }
 
     public String getNotes() {
-        return BeanUtils.trim(notes);
+        return BeanUtils.trimOrNull(notes);
     }
 
     public void setNotes(String notes) {
-        this.notes = BeanUtils.trim(notes);
+        this.notes = BeanUtils.trimOrNull(notes);
     }
 
     public Editeur getEditeur() {
@@ -305,11 +313,11 @@ public class Serie extends AbstractScriptEntity {
     }
 
     public UUID getIdEditeur() {
-        return getEditeur().getId();
+        return getEditeur() == null ? null : getEditeur().getId();
     }
 
     public UUID getIdCollection() {
-        return getCollection().getId();
+        return getEditeur() == null || getCollection() == null ? null : getCollection().getId();
     }
 
     public ValeurListe getEtat() {

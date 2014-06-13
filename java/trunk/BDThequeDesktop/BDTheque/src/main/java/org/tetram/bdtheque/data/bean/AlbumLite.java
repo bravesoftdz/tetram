@@ -80,11 +80,11 @@ public class AlbumLite extends AbstractDBEntity {
     }
 
     public String getTitre() {
-        return BeanUtils.trim(titre);
+        return BeanUtils.trimOrNull(titre);
     }
 
     public void setTitre(String titre) {
-        this.titre = BeanUtils.trim(titre);
+        this.titre = BeanUtils.trimOrNull(titre);
     }
 
     public UUID getIdSerie() {
@@ -96,11 +96,11 @@ public class AlbumLite extends AbstractDBEntity {
     }
 
     public String getSerie() {
-        return BeanUtils.trim(serie);
+        return BeanUtils.trimOrNull(serie);
     }
 
     public void setSerie(String serie) {
-        this.serie = BeanUtils.trim(serie);
+        this.serie = BeanUtils.trimOrNull(serie);
     }
 
     public UUID getIdEditeur() {
@@ -112,11 +112,11 @@ public class AlbumLite extends AbstractDBEntity {
     }
 
     public String getEditeur() {
-        return BeanUtils.trim(editeur);
+        return BeanUtils.trimOrNull(editeur);
     }
 
     public void setEditeur(String editeur) {
-        this.editeur = BeanUtils.trim(editeur);
+        this.editeur = BeanUtils.trimOrNull(editeur);
     }
 
     public Integer getAnneeParution() {

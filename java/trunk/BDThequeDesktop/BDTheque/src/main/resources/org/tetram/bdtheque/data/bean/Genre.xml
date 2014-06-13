@@ -71,4 +71,15 @@
         delete from genres where id_genre = #{id}
         ]]>
     </delete>
+
+    <delete id="cleanGenresSerie">
+        <![CDATA[
+        delete from genreseries where id_serie = #{id}
+        ]]>
+    </delete>
+    <insert id="addGenreSerie">
+        <![CDATA[
+        insert into genreseries (id_serie, id_genre) values (#{idSerie}, #{idGenre})
+        ]]>
+    </insert>
 </mapper>

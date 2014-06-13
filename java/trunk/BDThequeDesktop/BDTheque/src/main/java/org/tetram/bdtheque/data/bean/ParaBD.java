@@ -52,11 +52,11 @@ public class ParaBD extends AbstractDBEntity {
     }
 
     public String getTitreParaBD() {
-        return BeanUtils.trim(titreParaBD);
+        return BeanUtils.trimOrNull(titreParaBD);
     }
 
     public void setTitreParaBD(String titreParaBD) {
-        this.titreParaBD = BeanUtils.trim(titreParaBD);
+        this.titreParaBD = BeanUtils.trimOrNull(titreParaBD);
     }
 
     public Set<AuteurParaBDLite> getAuteurs() {
@@ -84,19 +84,19 @@ public class ParaBD extends AbstractDBEntity {
     }
 
     public String getDescription() {
-        return BeanUtils.trim(description);
+        return BeanUtils.trimOrNull(description);
     }
 
     public void setDescription(String description) {
-        this.description = BeanUtils.trim(description);
+        this.description = BeanUtils.trimOrNull(description);
     }
 
     public String getNotes() {
-        return BeanUtils.trim(notes);
+        return BeanUtils.trimOrNull(notes);
     }
 
     public void setNotes(String notes) {
-        this.notes = BeanUtils.trim(notes);
+        this.notes = BeanUtils.trimOrNull(notes);
     }
 
     public Serie getSerie() {

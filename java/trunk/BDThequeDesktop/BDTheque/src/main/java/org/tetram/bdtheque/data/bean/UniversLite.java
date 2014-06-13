@@ -10,11 +10,11 @@ public class UniversLite extends AbstractDBEntity {
     private String nomUnivers;
 
     public String getNomUnivers() {
-        return BeanUtils.trim(nomUnivers);
+        return BeanUtils.trimOrNull(nomUnivers);
     }
 
     public void setNomUnivers(String nomUnivers) {
-        this.nomUnivers = BeanUtils.trim(nomUnivers);
+        this.nomUnivers = BeanUtils.trimOrNull(nomUnivers);
     }
 
     @Override

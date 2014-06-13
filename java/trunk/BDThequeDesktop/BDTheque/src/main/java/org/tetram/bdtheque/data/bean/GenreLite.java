@@ -26,11 +26,11 @@ public class GenreLite extends AbstractScriptEntity {
     private Integer quantite;
 
     public String getGenre() {
-        return BeanUtils.trim(genre);
+        return BeanUtils.trimOrNull(genre);
     }
 
     public void setGenre(String genre) {
-        this.genre = BeanUtils.trim(genre);
+        this.genre = BeanUtils.trimOrNull(genre);
     }
 
     public Integer getQuantite() {

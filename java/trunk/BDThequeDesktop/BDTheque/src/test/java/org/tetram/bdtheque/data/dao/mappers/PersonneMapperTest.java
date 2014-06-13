@@ -5,9 +5,9 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.DBTest;
-import org.tetram.bdtheque.data.bean.Auteur;
+import org.tetram.bdtheque.data.bean.Personne;
 
-public class AuteurMapperTest extends DBTest {
+public class PersonneMapperTest extends DBTest {
 
     @Autowired
     private AuteurMapper mapper;
@@ -34,10 +34,10 @@ public class AuteurMapperTest extends DBTest {
 
     @Test
     public void testGetAuteurById() throws Exception {
-        Auteur auteur = mapper.getAuteurById(Constants.ID_AUTEUR_BUCHET);
-        Assert.assertNotNull(auteur);
-        Assert.assertEquals(Constants.ID_AUTEUR_BUCHET, auteur.getId());
-        Assert.assertNotNull(auteur.getSeries());
-        Assert.assertTrue(auteur.getSeries().isEmpty());
+        Personne personne = mapper.getPersonneById(Constants.ID_AUTEUR_BUCHET);
+        Assert.assertNotNull(personne);
+        Assert.assertEquals(Constants.ID_AUTEUR_BUCHET, personne.getId());
+        Assert.assertNotNull(personne.getSeries());
+        Assert.assertTrue(personne.getSeries().isEmpty());
     }
 }

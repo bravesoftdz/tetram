@@ -7,6 +7,7 @@ import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.bean.Editeur;
 import org.tetram.bdtheque.utils.I18nSupport;
 
+import java.lang.invoke.ConstantCallSite;
 import java.util.UUID;
 
 /**
@@ -20,5 +21,12 @@ public class EditeurDaoImpl extends DaoScriptImpl<Editeur, UUID> implements Edit
         if (!isUnique(o))
             throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("editeur")));
         return super.save(o);
+    }
+
+    @Override
+    public void validate(@NotNull Editeur object) throws ConsistencyException {
+        super.validate(object);
+        if (object.getNomEditeur() == null || object.getNomEditeur().isEmpty())
+            throw new ConsistencyException(I18nSupport.message("nom.obligatoire"));
     }
 }
