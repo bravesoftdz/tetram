@@ -425,11 +425,11 @@ begin
     qry2.SQL.Add('insert into ' + fi.TableName + ' (');
     qry2.SQL.Add('  ' + fi.PkParent + ', ' + fi.champFichier + ', ' + fi.champStockage + ', ordre, ' + fi.champImage + ', categorieimage');
     for s in fi.PkSec do
-      qry1.SQL.Add(', ' + s);
+      qry2.SQL.Add(', ' + s);
     qry2.SQL.Add(') values (');
     qry2.SQL.Add('  :pk_parent, :fichier, 1, :ordre, :image, :categorieimage');
     for s in fi.PkSec do
-      qry1.SQL.Add(', :' + s);
+      qry2.SQL.Add(', :' + s);
     qry2.SQL.Add(') returning ' + fi.Pk);
 
     qry3.SQL.Text := 'update ' + fi.TableName + ' set ' + fi.champImage + ' = :image, ' + fi.champStockage + ' = 1 where ' + fi.Pk + ' = :pk';
