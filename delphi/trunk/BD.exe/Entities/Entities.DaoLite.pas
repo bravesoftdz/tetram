@@ -481,7 +481,7 @@ begin
           end;
           qry2.Params.ByNameAsInteger['categorieimage'] := pi.Categorie;
           for i := 0 to Pred(Length(fi.PkSec)) do
-            qry1.Params.ByNameAsString[fi.PkSec[i]] := GUIDToString(ReferenceSecondaires[i]);
+            qry2.Params.ByNameAsString[fi.PkSec[i]] := GUIDToString(ReferenceSecondaires[i]);
           qry2.Execute;
           pi.ID := StringToGUID(qry2.Fields.AsString[0]);
         end;
