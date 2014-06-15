@@ -2,8 +2,8 @@ package org.tetram.bdtheque.data.bean;
 
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.Database;
+import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
-import org.tetram.bdtheque.data.dao.ValeurListeDaoImpl;
 
 import java.net.URL;
 import java.util.*;
@@ -11,7 +11,8 @@ import java.util.*;
 /**
  * Created by Thierry on 24/05/2014.
  */
-@ScriptInfo(typeData = 7)
+@SuppressWarnings("UnusedDeclaration")
+@DaoScriptImpl.ScriptInfo(typeData = 7)
 public class Serie extends AbstractScriptEntity {
 
     private String titreSerie;
@@ -19,8 +20,8 @@ public class Serie extends AbstractScriptEntity {
     private List<GenreLite> genres = new ArrayList<>();
     private String sujet;
     private String notes;
-    private Editeur editeur;
-    private Collection collection;
+    private EditeurLite editeur;
+    private CollectionLite collection;
     private URL siteWeb;
     private boolean complete;
     private boolean suivreManquants;
@@ -102,20 +103,28 @@ public class Serie extends AbstractScriptEntity {
         this.notes = BeanUtils.trimOrNull(notes);
     }
 
-    public Editeur getEditeur() {
+    public EditeurLite getEditeur() {
         return editeur;
     }
 
-    public void setEditeur(Editeur editeur) {
+    public void setEditeur(EditeurLite editeur) {
         this.editeur = editeur;
     }
 
-    public Collection getCollection() {
+    public UUID getIdEditeur() {
+        return getEditeur() == null ? null : getEditeur().getId();
+    }
+
+    public CollectionLite getCollection() {
         return collection;
     }
 
-    public void setCollection(Collection collection) {
+    public void setCollection(CollectionLite collection) {
         this.collection = collection;
+    }
+
+    public UUID getIdCollection() {
+        return getEditeur() == null || getCollection() == null || !getCollection().getEditeur().equals(getEditeur()) ? null : getCollection().getId();
     }
 
     public URL getSiteWeb() {
@@ -290,7 +299,7 @@ public class Serie extends AbstractScriptEntity {
     }
 
     public void setNotation(ValeurListe notation) {
-        this.notation = notation == null || notation.getValeur() == 0 ? Database.getInstance().getApplicationContext().getBean(ValeurListeDaoImpl.class).getDefaultNotation() : notation;
+        this.notation = notation == null || notation.getValeur() == 0 ? Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class).getDefaultNotation() : notation;
     }
 
     public Set<UniversLite> getUnivers() {
@@ -310,14 +319,6 @@ public class Serie extends AbstractScriptEntity {
 
     public boolean removeUnivers(UniversLite universLite) {
         return getUnivers().remove(universLite);
-    }
-
-    public UUID getIdEditeur() {
-        return getEditeur() == null ? null : getEditeur().getId();
-    }
-
-    public UUID getIdCollection() {
-        return getEditeur() == null || getCollection() == null ? null : getCollection().getId();
     }
 
     public ValeurListe getEtat() {

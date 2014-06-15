@@ -1,17 +1,31 @@
 package org.tetram.bdtheque.utils;
 
-import org.jetbrains.annotations.Nullable;
 
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 @SuppressWarnings("UnusedDeclaration")
 public abstract class StringUtils {
 
+    @NonNls
     public static final UUID GUID_FULL = GUIDStringToUUID("{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}");
+    @NonNls
     public static final String GUID_FULL_STRING = "{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}";
     public static final UUID GUID_NULL = GUIDStringToUUID("{00000000-0000-0000-0000-000000000000}");
     public static final String GUID_NULL_STRING = "{00000000-0000-0000-0000-000000000000}";
+    @NonNls
     public static final String SEARCH_ISBN_GROUP = "//ISBNRangeMessage/EAN.UCCPrefixes/EAN.UCC[Prefix='%2$s']/Rules/Rule[ValueLower<=%1$s and ValueUpper>=%1$s]/Length";
+    @NonNls
     public static final String SEARCH_ISBN_PUBLISHER = "//ISBNRangeMessage/RegistrationGroups/Group[Prefix='%2$s-%3$s']/Rules/Rule[ValueLower<=%1$s and ValueUpper>=%1$s]/Length";
     private static final Map<Boolean, String> RES_TOME;
     private static final Map<Boolean, String> RES_HORSERIE;
@@ -36,6 +50,9 @@ public abstract class StringUtils {
         RES_INTEGRALE = Collections.unmodifiableMap(aMap);
     }
 
+    @NonNls
+    public static final String RESOURCE_ISBN_RANGES_XML = "/org/tetram/bdtheque/isbn_ranges.xml";
+
     private static HashMap<String, List<ISBNRule>> isbnPrefixes, isbnGroups;
 
     public static UUID GUIDStringToUUID(final String guid) {
@@ -50,6 +67,7 @@ public abstract class StringUtils {
         }
     }
 
+    @NonNls
     public static String UUIDToGUIDString(final UUID uuid) {
         return "{" + uuid.toString().toUpperCase(Locale.US) + "}";
     }
@@ -151,12 +169,14 @@ end;
         return stringBuilder.toString();
     }
 
+    @SuppressWarnings("CallToStringEquals")
     public static String nonZero(final String s) {
         if ((s == null) || "0".equals(s.trim()))
             return "";
         return s;
     }
 
+    @SuppressWarnings("CallToNumericToString")
     public static String nonZero(final Integer i) {
         if ((i == null) || Integer.valueOf(0).equals(i))
             return "";
@@ -165,8 +185,8 @@ end;
 
     private static void decodeISBNRules() {
         if (isbnPrefixes != null) return;
-/*
-        InputStream inputStream = BDThequeApplication.getInstance().getResources().openRawResource(R.raw.isbnranges_original);
+
+        InputStream inputStream = ClassLoader.class.getResourceAsStream(RESOURCE_ISBN_RANGES_XML);
         try {
             isbnPrefixes = new HashMap<>();
             isbnGroups = new HashMap<>();
@@ -181,7 +201,7 @@ end;
 
                 @Override
                 public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-                    String s = qName.toLowerCase(Locale.US);
+                    @NonNls String s = qName.toLowerCase(Locale.US);
                     switch (s) {
                         case "ean.uccprefixes":
                             this.currentList = isbnPrefixes;
@@ -198,7 +218,7 @@ end;
 
                 @Override
                 public void endElement(String uri, String localName, String qName) throws SAXException {
-                    String s = qName.toLowerCase(Locale.US);
+                    @NonNls String s = qName.toLowerCase(Locale.US);
                     switch (s) {
                         case "valuelower":
                             this.currentRule.valueLower = Integer.valueOf(this.tmpValue);
@@ -251,7 +271,6 @@ end;
                 e.printStackTrace();
             }
         }
-*/
     }
 
     private static int getLengthForPrefix(HashMap<String, List<ISBNRule>> map, String prefix, int value) {
@@ -269,9 +288,8 @@ end;
 
         decodeISBNRules();
 
-
         isbn = isbn.toUpperCase(Locale.US).substring(0, Math.min(isbn.length(), 13));
-        String prefix = "978";
+        @NonNls String prefix = "978";
         String s = isbn;
         if (s.length() > 10) {
             prefix = s.substring(0, 3);
@@ -283,7 +301,7 @@ end;
 
         s1 = s.substring(0, 7);
         Integer groupSize = getLengthForPrefix(isbnPrefixes, prefix, Integer.valueOf(s1));
-        String group = s.substring(0, groupSize);
+        @NonNls String group = s.substring(0, groupSize);
 
         s1 = s.substring(groupSize, groupSize + 7);
         Integer publisherSize = getLengthForPrefix(isbnGroups, prefix + '-' + group, Integer.valueOf(s1));
@@ -401,6 +419,14 @@ end;
          */
 
         return result;
+    }
+
+    public static boolean isNullOrEmpty(String string) {
+        return string == null || string.isEmpty();
+    }
+
+    public static <T extends Collection> boolean isNullOrEmpty(T list) {
+        return list == null || list.isEmpty();
     }
 
     private static class ISBNRule {

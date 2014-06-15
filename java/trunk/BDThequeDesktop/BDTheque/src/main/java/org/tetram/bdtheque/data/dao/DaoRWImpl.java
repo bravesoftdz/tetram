@@ -12,13 +12,13 @@ import org.tetram.bdtheque.data.bean.AbstractDBEntity;
 public abstract class DaoRWImpl<T extends AbstractDBEntity, PK> extends DaoROImpl<T, PK> implements DaoRW<T, PK> {
 
     @NonNls
-    public static final String PREFIX_INSERT_QUERY = "create"; //prefix of create queries in mappers files (eg. createAddressType)
+    private static final String PREFIX_INSERT_QUERY = "create"; //prefix of create queries in mappers files (eg. createAddressType)
     @NonNls
-    public static final String PREFIX_UPDATE_QUERY = "update";  //prefix of update queries in mappers files (eg. updateAddressType)
+    private static final String PREFIX_UPDATE_QUERY = "update";  //prefix of update queries in mappers files (eg. updateAddressType)
     @NonNls
-    public static final String PREFIX_DELETE_QUERY = "delete";  //prefix of delete queries in mappers files (eg. deleteAddressType)
+    private static final String PREFIX_DELETE_QUERY = "delete";  //prefix of delete queries in mappers files (eg. deleteAddressType)
     @NonNls
-    public static final String PREFIX_CHECK_UNIQUE_QUERY = "checkUnique";  //prefix of check unique queries in mappers files (eg. checkUniqueAddressType)
+    private static final String PREFIX_CHECK_UNIQUE_QUERY = "checkUnique";  //prefix of check unique queries in mappers files (eg. checkUniqueAddressType)
 
     /**
      * Default Constructor

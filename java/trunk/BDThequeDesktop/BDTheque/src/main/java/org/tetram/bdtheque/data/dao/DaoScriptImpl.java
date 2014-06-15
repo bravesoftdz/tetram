@@ -1,19 +1,26 @@
 package org.tetram.bdtheque.data.dao;
 
 import org.apache.ibatis.exceptions.PersistenceException;
-import org.apache.ibatis.session.SqlSession;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.data.bean.AbstractScriptEntity;
-import org.tetram.bdtheque.data.bean.ScriptInfo;
+import org.tetram.bdtheque.data.dao.mappers.CommonMapper;
 
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.UUID;
 
 /**
  * Created by Thierry on 12/06/2014.
  */
 public abstract class DaoScriptImpl<T extends AbstractScriptEntity, PK> extends DaoRWImpl<T, PK> implements DaoScript<T> {
+
+    @Autowired
+    private CommonMapper commonMapper;
 
     @Override
     public int save(@NotNull T o) throws PersistenceException {
@@ -36,26 +43,17 @@ public abstract class DaoScriptImpl<T extends AbstractScriptEntity, PK> extends 
         ScriptInfo annotation = type.getAnnotation(ScriptInfo.class);
         assert annotation != null;
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("id", entity.getId());
-        params.put("typeData", annotation.typeData());
-
-        SqlSession session = getSqlSession();
-
-        List<String> list = session.selectList("fillAssociations", params);
-        Set<String> set = new HashSet<>();
-        set.addAll(list);
-        entity.setAssociations(set);
+        entity.setAssociations(commonMapper.fillAssociations(entity.getId(), annotation.typeData()));
     }
 
-    @SuppressWarnings("HardCodedStringLiteral")
+    @SuppressWarnings("CallToStringEquals")
     @Override
     public void saveAssociations(@NotNull T entity) {
         ScriptInfo annotation = type.getAnnotation(ScriptInfo.class);
         assert annotation != null;
 
         UUID parentId = null;
-        if (!"".equals(annotation.getParentIdMethod())) {
+        if (!annotation.getParentIdMethod().isEmpty()) {
             try {
                 Method method = type.getMethod(annotation.getParentIdMethod());
                 assert method != null;
@@ -65,18 +63,20 @@ public abstract class DaoScriptImpl<T extends AbstractScriptEntity, PK> extends 
             }
         }
 
-        SqlSession session = getSqlSession();
+        commonMapper.cleanAssociations(entity.getId(), annotation.typeData());
+        for (String s : entity.getAssociations())
+            commonMapper.saveAssociations(s, entity.getId(), annotation.typeData(), parentId);
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("id", entity.getId());
-        params.put("typeData", annotation.typeData());
+    }
 
-        session.delete("cleanAssociations", params);
+    /**
+     * Created by Thierry on 12/06/2014.
+     */
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.TYPE)
+    public static @interface ScriptInfo {
+        int typeData();
 
-        params.put("parentId", parentId);
-        for (String s : entity.getAssociations()) {
-            params.put("chaine", s);
-            session.update("saveAssociations", params);
-        }
+        String getParentIdMethod() default "";
     }
 }

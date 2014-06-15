@@ -3,9 +3,11 @@ package org.tetram.bdtheque.data.dao;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.bean.Editeur;
 import org.tetram.bdtheque.utils.I18nSupport;
+import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.UUID;
 
@@ -14,6 +16,8 @@ import java.util.UUID;
  */
 @Repository
 @Lazy
+@Transactional
+@SuppressWarnings("UnusedDeclaration")
 public class EditeurDaoImpl extends DaoScriptImpl<Editeur, UUID> implements EditeurDao {
     @Override
     public int save(@NotNull Editeur o) throws ConsistencyException {
@@ -25,7 +29,8 @@ public class EditeurDaoImpl extends DaoScriptImpl<Editeur, UUID> implements Edit
     @Override
     public void validate(@NotNull Editeur object) throws ConsistencyException {
         super.validate(object);
-        if (object.getNomEditeur() == null || object.getNomEditeur().isEmpty())
+        if (StringUtils.isNullOrEmpty(object.getNomEditeur()))
             throw new ConsistencyException(I18nSupport.message("nom.obligatoire"));
     }
+
 }

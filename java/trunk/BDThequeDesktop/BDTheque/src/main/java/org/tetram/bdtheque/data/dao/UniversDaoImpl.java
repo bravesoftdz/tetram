@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.bean.Univers;
 import org.tetram.bdtheque.utils.I18nSupport;
+import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.UUID;
 
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
+@SuppressWarnings("UnusedDeclaration")
 public class UniversDaoImpl extends DaoRWImpl<Univers, UUID> implements UniversDao {
     @Override
     public int save(@NotNull Univers o) throws ConsistencyException {
@@ -27,7 +29,7 @@ public class UniversDaoImpl extends DaoRWImpl<Univers, UUID> implements UniversD
     @Override
     public void validate(@NotNull Univers object) throws ConsistencyException {
         super.validate(object);
-        if (object.getNomUnivers() == null || object.getNomUnivers().isEmpty())
+        if (StringUtils.isNullOrEmpty(object.getNomUnivers()))
             throw new ConsistencyException("nom.obligatoire");
     }
 }

@@ -18,6 +18,7 @@ import java.util.Map;
 @Repository
 @Lazy
 @Transactional(propagation = Propagation.NOT_SUPPORTED)
+@SuppressWarnings("UnusedDeclaration")
 public class ValeurListeDaoImpl implements ValeurListeDao {
 
     @Autowired

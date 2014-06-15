@@ -3,12 +3,12 @@ package org.tetram.bdtheque.data.dao.mappers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.tetram.bdtheque.SpringTest;
 import org.tetram.bdtheque.data.Constants;
-import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.bean.SerieLite;
 
-public class SerieMapperTest extends DBTest {
+public class SerieMapperTest extends SpringTest {
 
     @Autowired
     private SerieMapper mapper;

@@ -37,7 +37,7 @@
         <result column="anneecote" property="anneeCote"/>
         <result column="prixcote" property="prixCote"/>
         <result column="numeroperso" property="numeroPerso"/>
-        <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurById"
+        <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurLiteById"
                      column="id_editeur"/>
         <association property="collection"
                      select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionById"
@@ -102,4 +102,36 @@
             </if>
         </where>
     </select>
+
+    <sql id="saveEdition">
+        <![CDATA[
+        update or insert into editions (
+            id_edition, id_album, id_editeur, id_collection, anneeedition, prix, vo, typeedition,
+            couleur, isbn, stock, dedicace, offert, gratuit, etat, reliure, orientation, formatedition,
+            dateachat, notes, nombredepages, anneecote, prixcote, numeroperso, senslecture
+        ) values (
+            #{id}, #{idAlbum}, #{idEditeur}, #{idCollection}, #{anneeEdition}, #{prix}, #{vo}, #{typeEdition},
+            #{couleur}, #{isbn}, #{stock}, #{dedicace}, #{offert}, #{gratuit}, #{etat}, #{reliure}, #{orientation}, #{formatEdition},
+            #{dateAchat}, #{notes}, #{nombreDePages}, #{anneeCote}, #{prixCote}, #{numeroPerso}, #{sensLecture}
+        )
+        ]]>
+    </sql>
+
+    <insert id="createEdition">
+        <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
+            <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
+        </selectKey>
+        <include refid="saveEdition"/>
+    </insert>
+
+    <update id="updateEdition">
+        <include refid="saveEdition"/>
+    </update>
+
+    <delete id="deleteEdition">
+        <![CDATA[
+        delete from editions where id_edition = #{id}
+        ]]>
+    </delete>
+
 </mapper>

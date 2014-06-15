@@ -12,9 +12,10 @@ import java.util.UUID;
 /**
  * Created by Thierry on 24/05/2014.
  */
+@SuppressWarnings("UnusedDeclaration")
 public class Edition extends AbstractDBEntity {
     private UUID idAlbum;
-    private Editeur editeur;
+    private EditeurLite editeur;
     private Collection collection;
     private ValeurListe etat;
     private ValeurListe reliure;
@@ -58,12 +59,16 @@ public class Edition extends AbstractDBEntity {
         this.idAlbum = idAlbum;
     }
 
-    public Editeur getEditeur() {
+    public EditeurLite getEditeur() {
         return editeur;
     }
 
-    public void setEditeur(Editeur editeur) {
+    public void setEditeur(EditeurLite editeur) {
         this.editeur = editeur;
+    }
+
+    public UUID getIdEditeur() {
+        return getEditeur() == null ? null : getEditeur().getId();
     }
 
     public Collection getCollection() {
@@ -72,6 +77,10 @@ public class Edition extends AbstractDBEntity {
 
     public void setCollection(Collection collection) {
         this.collection = collection;
+    }
+
+    public UUID getIdCollection() {
+        return getEditeur() == null || getCollection() == null || !getCollection().getEditeur().equals(getEditeur()) ? null : getCollection().getId();
     }
 
     public Integer getAnneeEdition() {

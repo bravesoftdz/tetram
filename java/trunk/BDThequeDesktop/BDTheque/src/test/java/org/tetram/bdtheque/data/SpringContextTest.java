@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data;
 
+import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
@@ -11,14 +12,17 @@ import org.tetram.bdtheque.data.dao.PersonneDao;
 /**
  * Created by Thierry on 02/06/2014.
  */
-public class SpringTest {
+public class SpringContextTest {
+
+    @NonNls
+    public static final String ORG_TETRAM_BDTHEQUE_CONFIG_SPRING_CONFIG_XML = "org/tetram/bdtheque/config/spring-config.xml";
 
     @Test
     public void testGetContext() throws Exception {
 
         AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
         XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(ctx);
-        xmlReader.loadBeanDefinitions(new ClassPathResource("org/tetram/bdtheque/config/spring-config.xml"));
+        xmlReader.loadBeanDefinitions(new ClassPathResource(ORG_TETRAM_BDTHEQUE_CONFIG_SPRING_CONFIG_XML));
         // PropertiesBeanDefinitionReader propReader = new PropertiesBeanDefinitionReader(ctx);
         // propReader.loadBeanDefinitions(new ClassPathResource("otherBeans.properties"));
         ctx.refresh();

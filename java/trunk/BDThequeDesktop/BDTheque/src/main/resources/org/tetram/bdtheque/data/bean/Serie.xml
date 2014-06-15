@@ -31,10 +31,10 @@
         <result column="orientation" property="orientation"/>
         <result column="formatedition" property="formatEdition"/>
         <result column="senslecture" property="sensLecture"/>
-        <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurById"
+        <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurLiteById"
                      column="id_editeur"/>
         <association property="collection"
-                     select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionById"
+                     select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionLiteById"
                      column="id_collection"/>
         <collection property="univers"
                     select="org.tetram.bdtheque.data.dao.mappers.UniversMapper.getListUniversLiteBySerieId"
@@ -147,7 +147,7 @@
 
     <insert id="createSerie">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
-            <include refid="org.tetram.bdtheque.data.dao.mappers.autoIncKey"/>
+            <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
         </selectKey>
         <include refid="saveSerie"/>
     </insert>

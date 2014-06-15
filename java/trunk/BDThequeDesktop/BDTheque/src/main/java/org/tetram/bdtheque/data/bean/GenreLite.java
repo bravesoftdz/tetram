@@ -1,13 +1,14 @@
 package org.tetram.bdtheque.data.bean;
 
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 
 import java.util.Comparator;
 
 /**
  * Created by Thierry on 24/05/2014.
  */
-@ScriptInfo(typeData = 5)
+@DaoScriptImpl.ScriptInfo(typeData = 5)
 public class GenreLite extends AbstractScriptEntity {
     public static Comparator<GenreLite> DEFAULT_COMPARATOR = new Comparator<GenreLite>() {
         @Override

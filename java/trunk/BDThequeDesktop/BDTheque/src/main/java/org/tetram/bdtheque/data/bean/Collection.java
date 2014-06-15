@@ -1,13 +1,14 @@
 package org.tetram.bdtheque.data.bean;
 
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 
 import java.util.UUID;
 
 /**
  * Created by Thierry on 24/05/2014.
  */
-@ScriptInfo(typeData = 2, getParentIdMethod = "getIdEditeur")
+@DaoScriptImpl.ScriptInfo(typeData = 2, getParentIdMethod = "getIdEditeur")
 public class Collection extends AbstractScriptEntity {
     private String nomCollection;
     private EditeurLite editeur;

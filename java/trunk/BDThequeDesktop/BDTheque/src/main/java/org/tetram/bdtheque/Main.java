@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.gui;/**
+package org.tetram.bdtheque;/**
  * Created by Thierry on 24/05/2014.
  */
 

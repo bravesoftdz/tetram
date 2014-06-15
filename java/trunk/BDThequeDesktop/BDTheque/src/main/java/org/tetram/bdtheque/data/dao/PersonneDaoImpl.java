@@ -14,6 +14,7 @@ import org.tetram.bdtheque.data.dao.mappers.AlbumMapper;
 import org.tetram.bdtheque.data.dao.mappers.ParaBDMapper;
 import org.tetram.bdtheque.data.dao.mappers.SerieMapper;
 import org.tetram.bdtheque.utils.I18nSupport;
+import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
+@SuppressWarnings("UnusedDeclaration")
 public class PersonneDaoImpl extends DaoScriptImpl<Personne, UUID> implements PersonneDao {
 
     @Autowired
@@ -62,7 +64,7 @@ public class PersonneDaoImpl extends DaoScriptImpl<Personne, UUID> implements Pe
     @Override
     public void validate(@NotNull Personne object) throws ConsistencyException {
         super.validate(object);
-        if (object.getNomPersonne() == null || object.getNomPersonne().isEmpty())
+        if (StringUtils.isNullOrEmpty(object.getNomPersonne()))
             throw new ConsistencyException(I18nSupport.message("nom.obligatoire"));
     }
 

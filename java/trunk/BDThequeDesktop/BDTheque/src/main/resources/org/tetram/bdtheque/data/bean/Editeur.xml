@@ -61,7 +61,7 @@
 
     <insert id="createEditeur">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
-            <include refid="org.tetram.bdtheque.data.dao.mappers.autoIncKey"/>
+            <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
         </selectKey>
         <include refid="saveEditeur"/>
     </insert>

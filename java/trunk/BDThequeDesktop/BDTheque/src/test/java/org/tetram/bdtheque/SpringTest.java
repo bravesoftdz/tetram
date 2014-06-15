@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.data;
+package org.tetram.bdtheque;
 
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -9,6 +9,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"/org/tetram/bdtheque/config/spring-config.xml"})
-public abstract class DBTest {
+public abstract class SpringTest {
 
 }

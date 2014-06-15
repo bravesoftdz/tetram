@@ -3,14 +3,14 @@ package org.tetram.bdtheque.data.dao.mappers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.tetram.bdtheque.SpringTest;
 import org.tetram.bdtheque.data.Constants;
-import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.bean.Univers;
 import org.tetram.bdtheque.data.bean.UniversLite;
 
 import java.util.Set;
 
-public class UniversMapperTest extends DBTest {
+public class UniversMapperTest extends SpringTest {
 
     @Autowired
     private UniversMapper mapper;

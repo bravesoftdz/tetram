@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.bean.Collection;
 import org.tetram.bdtheque.utils.I18nSupport;
+import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.UUID;
 
@@ -16,11 +17,12 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
+@SuppressWarnings("UnusedDeclaration")
 public class CollectionDaoImpl extends DaoScriptImpl<Collection, UUID> implements CollectionDao {
 
     @Override
     public void validate(@NotNull Collection object) throws ConsistencyException {
-        if (object.getNomCollection() == null || object.getNomCollection().isEmpty())
+        if (StringUtils.isNullOrEmpty(object.getNomCollection()))
             throw new ConsistencyException(I18nSupport.message("nom.obligatoire"));
         if (object.getEditeur() == null)
             throw new ConsistencyException(I18nSupport.message("editeur.obligatoire"));

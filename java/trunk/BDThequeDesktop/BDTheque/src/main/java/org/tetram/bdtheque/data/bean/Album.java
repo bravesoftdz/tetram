@@ -3,7 +3,6 @@ package org.tetram.bdtheque.data.bean;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
-import org.tetram.bdtheque.data.dao.ValeurListeDaoImpl;
 
 import java.util.Comparator;
 import java.util.HashSet;
@@ -278,7 +277,7 @@ public class Album extends AbstractDBEntity {
     }
 
     public void setNotation(ValeurListe notation) {
-        this.notation = notation == null || notation.getValeur() == 0 ? Database.getInstance().getApplicationContext().getBean(ValeurListeDaoImpl.class).getDefaultNotation() : notation;
+        this.notation = notation == null || notation.getValeur() == 0 ? Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class).getDefaultNotation() : notation;
     }
 
     public Set<UniversLite> getUnivers() {

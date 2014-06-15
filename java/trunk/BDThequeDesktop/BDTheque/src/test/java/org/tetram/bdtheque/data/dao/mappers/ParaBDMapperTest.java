@@ -3,11 +3,11 @@ package org.tetram.bdtheque.data.dao.mappers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.tetram.bdtheque.SpringTest;
 import org.tetram.bdtheque.data.Constants;
-import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.bean.ParaBD;
 
-public class ParaBDMapperTest extends DBTest {
+public class ParaBDMapperTest extends SpringTest {
 
     @Autowired
     private ParaBDMapper mapper;

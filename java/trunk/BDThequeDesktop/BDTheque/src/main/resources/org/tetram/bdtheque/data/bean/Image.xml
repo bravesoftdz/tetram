@@ -52,4 +52,46 @@
             p.ordre
         ]]>
     </select>
+
+    <delete id="cleanImageLite">
+        <![CDATA[
+        delete from ${tableName}
+        where
+            ${fieldParentId} = #{parentId}
+        ]]>
+        <if test="list != null and !list.isEmpty">
+            ${fieldId} not in
+            <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </delete>
+
+    <insert id="addImageLite">
+        <selectKey keyProperty="image.id" order="BEFORE" resultType="UUID">
+            <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
+        </selectKey>
+        <![CDATA[
+        insert into ${tableName} (
+            ${fieldId}, ${fieldParentId}, ${fieldFile}, ordre, categorieimage, ${fieldModeStockage}, ${fieldBlob}
+        ]]>
+        <foreach collection="secondaryParams.entrySet" index="field" item="value">
+            , ${field}
+        </foreach>
+        <![CDATA[
+        ) values (
+            #{image.id}, #{parentId}, #{fileName}, #{image.position}, #{image.categorieImage}
+        ]]>
+        <choose>
+            <when test="data != null and data.length > 0">, 1, #{data}</when>
+            <otherwise>, 0, null</otherwise>
+        </choose>
+        <foreach collection="secondaryParams.entrySet" index="field" item="value">
+            ,#{value}
+        </foreach>
+        <![CDATA[
+        )
+        ]]>
+    </insert>
+
 </mapper>

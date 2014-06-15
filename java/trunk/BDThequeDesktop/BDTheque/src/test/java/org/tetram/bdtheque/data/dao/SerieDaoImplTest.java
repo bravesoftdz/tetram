@@ -3,16 +3,16 @@ package org.tetram.bdtheque.data.dao;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.tetram.bdtheque.SpringTest;
 import org.tetram.bdtheque.data.Constants;
-import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.bean.Serie;
 
-public class SerieDaoImplTest extends DBTest {
+public class SerieDaoImplTest extends SpringTest {
 
     @Autowired
     SerieDao serieDao;
     @Autowired
-    EditeurDao editeurDao;
+    EditeurLiteDao editeurLiteDao;
     @Autowired
     PersonneLiteDao personneLiteDao;
     @Autowired
@@ -24,7 +24,7 @@ public class SerieDaoImplTest extends DBTest {
     public void testSave() throws Exception {
         Serie serie = new Serie();
         serie.setTitreSerie(Constants.TEST_CREATE);
-        serie.setEditeur(editeurDao.get(Constants.ID_EDITEUR_DELCOURT));
+        serie.setEditeur(editeurLiteDao.get(Constants.ID_EDITEUR_DELCOURT));
         serie.addGenre(genreLiteDao.get(Constants.ID_GENRE_AVENTURES));
         serie.addScenariste(personneLiteDao.get(Constants.ID_AUTEUR_BUCHET));
         serie.addUnivers(universLiteDao.get(Constants.ID_UNIVERS_TROLLS_DE_TROY));

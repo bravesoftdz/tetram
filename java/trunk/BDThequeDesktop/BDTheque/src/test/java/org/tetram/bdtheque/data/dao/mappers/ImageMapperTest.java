@@ -3,14 +3,14 @@ package org.tetram.bdtheque.data.dao.mappers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.tetram.bdtheque.SpringTest;
 import org.tetram.bdtheque.data.Constants;
-import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.bean.CouvertureLite;
 import org.tetram.bdtheque.data.bean.PhotoLite;
 
 import java.util.List;
 
-public class ImageMapperTest extends DBTest {
+public class ImageMapperTest extends SpringTest {
 
     @Autowired
     private ImageMapper mapper;

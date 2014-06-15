@@ -4,13 +4,13 @@ import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.tetram.bdtheque.SpringTest;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.Constants;
-import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.bean.Editeur;
 import org.tetram.bdtheque.utils.StringUtils;
 
-public class EditeurDaoTest extends DBTest {
+public class EditeurDaoTest extends SpringTest {
 
     @Autowired
     private EditeurDao dao;

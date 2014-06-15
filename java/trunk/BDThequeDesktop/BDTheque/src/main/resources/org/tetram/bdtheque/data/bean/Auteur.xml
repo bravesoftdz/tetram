@@ -106,7 +106,7 @@
 
     <insert id="createPersonne">
         <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
-            <include refid="org.tetram.bdtheque.data.dao.mappers.autoIncKey"/>
+            <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
         </selectKey>
         <include refid="savePersonne"/>
     </insert>
@@ -128,7 +128,7 @@
     </delete>
     <insert id="addAuteurSerie">
         <selectKey keyProperty="auteur.id" order="BEFORE" resultType="UUID">
-            <include refid="org.tetram.bdtheque.data.dao.mappers.autoIncKey"/>
+            <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
         </selectKey>
         <![CDATA[
         insert into auteurs_series (

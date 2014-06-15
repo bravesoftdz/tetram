@@ -3,11 +3,11 @@ package org.tetram.bdtheque.data.dao.mappers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.tetram.bdtheque.SpringTest;
 import org.tetram.bdtheque.data.Constants;
-import org.tetram.bdtheque.data.DBTest;
 import org.tetram.bdtheque.data.bean.Personne;
 
-public class PersonneMapperTest extends DBTest {
+public class PersonneMapperTest extends SpringTest {
 
     @Autowired
     private AuteurMapper mapper;

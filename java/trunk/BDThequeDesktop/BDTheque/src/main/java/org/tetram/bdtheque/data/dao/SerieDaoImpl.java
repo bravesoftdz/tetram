@@ -26,14 +26,15 @@ import java.util.UUID;
 @Repository
 @Lazy
 @Transactional
+@SuppressWarnings("UnusedDeclaration")
 public class SerieDaoImpl extends DaoScriptImpl<Serie, UUID> implements SerieDao {
 
     @Autowired
-    GenreMapper genreMapper;
+    private GenreMapper genreMapper;
     @Autowired
-    AuteurMapper auteurMapper;
+    private AuteurMapper auteurMapper;
     @Autowired
-    UniversMapper universMapper;
+    private UniversMapper universMapper;
 
     @Override
     public Serie get(UUID id) {
@@ -46,7 +47,7 @@ public class SerieDaoImpl extends DaoScriptImpl<Serie, UUID> implements SerieDao
     @Override
     public void validate(@NotNull Serie object) throws ConsistencyException {
         super.validate(object);
-        if (object.getTitreSerie() == null || object.getTitreSerie().isEmpty())
+        if (StringUtils.isNullOrEmpty(object.getTitreSerie()))
             throw new ConsistencyException(I18nSupport.message("titre.obligatoire"));
         if (object.getEditeur() == null)
             throw new ConsistencyException(I18nSupport.message("editeur.obligatoire"));

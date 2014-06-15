@@ -18,7 +18,7 @@ public abstract class DaoROImpl<T extends AbstractDBEntity, PK> extends SqlSessi
      * Define prefixes for easier naming conventions between XML mappers files and the DAO class
      */
     @NonNls
-    public static final String PREFIX_SELECT_QUERY = "get";     //prefix of select queries in mappers files (eg. getAddressType)
+    private static final String PREFIX_SELECT_QUERY = "get";     //prefix of select queries in mappers files (eg. getAddressType)
     private static Log log = LogManager.getLog(DaoRWImpl.class);
     protected final Class<T> type;
 
