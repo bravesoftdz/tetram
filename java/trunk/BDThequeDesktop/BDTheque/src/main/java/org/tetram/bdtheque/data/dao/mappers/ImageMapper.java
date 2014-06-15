@@ -3,6 +3,7 @@ package org.tetram.bdtheque.data.dao.mappers;
 import org.apache.ibatis.annotations.Param;
 import org.tetram.bdtheque.data.bean.CouvertureLite;
 import org.tetram.bdtheque.data.bean.ImageLite;
+import org.tetram.bdtheque.data.bean.ImageStream;
 import org.tetram.bdtheque.data.bean.PhotoLite;
 
 import java.util.List;
@@ -17,9 +18,10 @@ public interface ImageMapper extends BaseMapperInterface {
 
     List<PhotoLite> getListPhotoLiteByParaBDId(UUID id);
 
+    <T extends ImageLite>
     int cleanImageLite(
             @Param("parentId") UUID parentId,
-            @Param("list") List<? extends ImageLite> list,
+            @Param("list") List<T> list,
             @Param("tableName") String tableName,
             @Param("fieldParentId") String fieldParentId,
             @Param("fieldId") String fieldId
@@ -40,4 +42,32 @@ public interface ImageMapper extends BaseMapperInterface {
             @Param("fieldBlob") String fieldBlob
     );
 
+    <T extends ImageLite>
+    int updateMetadataImageLite(
+            @Param("image") T image,
+            @Param("fileName") String fileName,
+            @Param("tableName") String tableName,
+            @Param("fieldId") String fieldId,
+            @Param("fieldFile") String fieldFile
+    );
+
+    <T extends ImageLite>
+    int changeModeImageLite(
+            @Param("image") T image,
+            @Param("data") byte[] stream,
+            @Param("tableName") String tableName,
+            @Param("fieldId") String fieldId,
+            @Param("fieldModeStockage") String fieldModeStockage,
+            @Param("fieldBlob") String fieldBlob
+    );
+
+    <T extends ImageLite>
+    ImageStream getImageStream(
+            @Param("image") T image,
+            @Param("tableName") String tableName,
+            @Param("fieldId") String fieldId,
+            @Param("fieldFile") String fieldFile,
+            @Param("fieldModeStockage") String fieldModeStockage,
+            @Param("fieldBlob") String fieldBlob
+    );
 }

@@ -17,6 +17,16 @@ import java.util.UUID;
 @Transactional
 @SuppressWarnings("UnusedDeclaration")
 public class CouvertureLiteDaoImpl extends ImageLiteDaoImpl<CouvertureLite, UUID> implements CouvertureLiteDao {
+
+    static {
+        TABLE_NAME = "couvertures";
+    }
+
+    @Override
+    public byte[] getCouvertureStream(CouvertureLite image, Integer height, Integer width, boolean antiAliasing) {
+        return getCouvertureStream("couverture", "id_couverture", "fichiercouverture", "stockagecouverture", "imagecouverture", image, height, width, antiAliasing);
+    }
+
     @Override
     public void saveList(List<CouvertureLite> list, UUID parentId, Map<String, UUID> secondaryParams) {
         super.saveList("couvertures", "id_couverture", "id_edition", "fichiercouverture", "stockagecouverture", "imagecouverture", list, parentId, secondaryParams);

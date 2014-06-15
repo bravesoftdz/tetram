@@ -37,6 +37,11 @@
         ]]>
     </update>
 
+    <select id="getFileContent">
+        <![CDATA[
+        select blobcontent from loadblobfromfile(#{path}, #{file})
+        ]]>
+    </select>
     <select id="sendFileContent">
         <![CDATA[
         select result from saveblobtofile(#{path}, #{file}, #{content})

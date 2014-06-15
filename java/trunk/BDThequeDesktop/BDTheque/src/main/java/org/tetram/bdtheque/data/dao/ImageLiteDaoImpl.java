@@ -1,17 +1,23 @@
 package org.tetram.bdtheque.data.dao;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.bean.ImageLite;
+import org.tetram.bdtheque.data.bean.ImageStream;
 import org.tetram.bdtheque.data.dao.mappers.CommonMapper;
 import org.tetram.bdtheque.data.dao.mappers.ImageMapper;
+import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.utils.FileUtils;
 import org.tetram.bdtheque.utils.StringUtils;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -25,6 +31,36 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
     private CommonMapper commonMapper;
     @Autowired
     private UserPreferences userPreferences;
+
+    protected static String TABLE_NAME = null;
+
+    protected byte[] getCouvertureStream(@NonNls String tableName, @NonNls String pkField, @NonNls String fieldFile, @NonNls String fieldModeStockage, @NonNls String fieldBlob, T image, Integer height, Integer width, boolean antiAliasing) {
+        ImageStream imageInfo = imageMapper.getImageStream(image, tableName, pkField, fieldFile, fieldModeStockage, fieldBlob);
+        if (imageInfo.getData().length == 0 && StringUtils.isNullOrEmpty(imageInfo.getFileName()))
+            return null;
+
+        if (imageInfo.isStockee()) {
+            String fileName = new File(imageInfo.getFileName()).getName();
+            String path = new File(imageInfo.getFileName()).getParent();
+            if (StringUtils.isNullOrEmpty(path))
+                path = userPreferences.getRepImages();
+
+            byte[] imageBytes = commonMapper.getFileContent(path, fileName);
+            if (imageBytes == null || imageBytes.length == 0) return null;
+
+            try {
+                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                // write to jpeg file
+                ImageIO.write(FileUtils.resizePicture(ImageIO.read(new ByteArrayInputStream(imageBytes)), height, width, antiAliasing), "jpg", output);
+
+                return output.toByteArray();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        } else
+            return FileUtils.getJPEGStream(new File(imageInfo.getFileName()), height, width, antiAliasing);
+    }
 
     @SuppressWarnings({"HardCodedStringLiteral", "StringConcatenation"})
     protected void saveList(@NonNls String tableName, @NonNls String pkField, @NonNls String parentIdField, @NonNls String fieldFile, @NonNls String fieldModeStockage, @NonNls String fieldBlob, List<T> list, UUID parentId, Map<String, UUID> secondaryParams) {
@@ -55,12 +91,10 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
                 // ancienne photo
                 if (image.isOldStockee() != image.isNewStockee()) {
                     // changement de stockage
-                    byte[] imageStream = null; // GetCouvertureStream(True, image.ID, -1, -1, False);
+                    byte[] imageStream = getCouvertureStream(image, null, null, false);
                     if (image.isNewStockee()) {
                         // conversion photos liées en stockées (q3)
-                        // qry3.ParamsSetBlob('image', imageStream);
-                        // qry3.Params.ByNameAsString['pk']:=GUIDToString(image.ID);
-                        // qry3.Execute;
+                        imageMapper.changeModeImageLite(image, imageStream, tableName, pkField, fieldModeStockage, fieldBlob);
                         File f = new File(image.getNewNom());
                         if (f.getParent().isEmpty())
                             fichiersImages.add(new File(userPreferences.getRepImages(), image.getNewNom()).getPath());
@@ -71,21 +105,12 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
                         // conversion photos stockées en liées
                         image.setNewNom(commonMapper.searchNewFileName(userPreferences.getRepImages(), image.getNewNom() + ".jpg", true));
                         commonMapper.sendFileContent(userPreferences.getRepImages(), image.getNewNom(), imageStream);
-
-                        // qry4.Params.ByNameAsString['pk']:=GUIDToString(image.ID);
-                        // qry4.Execute;
+                        imageMapper.changeModeImageLite(image, null, tableName, pkField, fieldModeStockage, fieldBlob);
                     }
                 }
                 // photos renommées, réordonnées, etc (q5)
                 // obligatoire pour les changement de stockage
-                // qry5.Params.ByNameAsString['fichier']:=image.NewNom;
-                // qry5.Params.ByNameAsInteger['ordre']:=List.IndexOf(image);
-                // qry5.Params.ByNameAsInteger['categorieimage']:=image.Categorie;
-                // qry5.Params.ByNameAsString['pk']:=
-
-                // GUIDToString(image.ID);
-
-                // qry5.Execute;
+                imageMapper.updateMetadataImageLite(image, image.getNewNom(), tableName, pkField, fieldFile);
             }
         }
 

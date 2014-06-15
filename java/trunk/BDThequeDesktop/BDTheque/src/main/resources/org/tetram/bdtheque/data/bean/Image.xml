@@ -54,11 +54,10 @@
     </select>
 
     <delete id="cleanImageLite">
-        <![CDATA[
         delete from ${tableName}
-        where
+        <where>
             ${fieldParentId} = #{parentId}
-        ]]>
+        </where>
         <if test="list != null and !list.isEmpty">
             ${fieldId} not in
             <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
@@ -89,9 +88,44 @@
         <foreach collection="secondaryParams.entrySet" index="field" item="value">
             ,#{value}
         </foreach>
-        <![CDATA[
         )
-        ]]>
     </insert>
-
+    <update id="updateMetadataImageLite">
+        <![CDATA[
+        update ${tableName} set
+            ${fieldFile} = #{fileName},
+            ordre = #{image.position},
+            categorieimage = #{image.categorieImage}
+        ]]>
+        <where>
+            ${fieldId} = #{image.id}
+        </where>
+    </update>
+    <update id="changeModeImageLite">
+        update ${tableName} set
+        <choose>
+            <when test="data != null and data.length > 0">
+                ${fieldModeStockage} = 1,
+                ${fieldBlob} = #{data}
+            </when>
+            <otherwise>
+                ${fieldModeStockage} = 0,
+                ${fieldBlob} = null
+            </otherwise>
+        </choose>
+        <where>
+            ${fieldId} = #{image.id}
+        </where>
+    </update>
+    <select id="getImageStream" resultType="org.tetram.bdtheque.data.bean.ImageStream">
+        <![CDATA[
+        select
+            ${fieldBlob} data, ${fieldModeStockage} stockee, ${fieldFile} fileName
+        from
+            ${tableName}
+        ]]>
+        <where>
+            ${fieldId} = #{image.id}
+        </where>
+    </select>
 </mapper>

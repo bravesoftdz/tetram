@@ -25,8 +25,9 @@ public abstract class ImageLite extends AbstractDBEntity {
             return 0;
         }
     };
+
     @SuppressWarnings("CanBeFinal")
-    static ValeurListe defaultCategorie = null;
+    protected static ValeurListe defaultCategorie = null;
     private String oldNom, newNom;
     private boolean oldStockee, newStockee;
     private ValeurListe categorie;

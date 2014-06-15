@@ -15,6 +15,8 @@ public interface CommonMapper extends BaseMapperInterface {
 
     int saveAssociations(@Param("chaine") String chaine, @Param("id") UUID id, @Param("typeData") int typeData, @Param("parentId") UUID parentId);
 
+    byte[] getFileContent(@Param("path") String path, @Param("file") String fileName);
+
     int sendFileContent(@Param("path") String path, @Param("file") String fileName, @Param("content") byte[] content);
 
     int deleteFile(@Param("file") String fileName);
