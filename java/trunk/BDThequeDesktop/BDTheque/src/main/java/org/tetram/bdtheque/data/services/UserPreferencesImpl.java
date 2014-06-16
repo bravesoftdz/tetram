@@ -20,12 +20,10 @@ import java.util.Properties;
 @SuppressWarnings("UnusedDeclaration")
 public class UserPreferencesImpl implements UserPreferences {
 
-    @Autowired
-    private ApplicationContext applicationContext;
-
     @NonNls
     public static final String PREF_REP_IMAGES = "RepImages";
-
+    @Autowired
+    private ApplicationContext applicationContext;
     private Properties defaultPrefs = null;
     private Properties prefs = null;
 
@@ -42,12 +40,12 @@ public class UserPreferencesImpl implements UserPreferences {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (userConfig){
+        if (userConfig) {
             // DatabasePath := TPath.Combine(AppData, DatabasePath);
             defaultPrefs.put(PREF_REP_IMAGES, new File(applicationContext.getUserDataDirectory(), PREF_REP_IMAGES));
             // RepScripts := TPath.Combine(CommonAppData, RepScripts);
             // RepWebServer := TPath.Combine(CommonAppData, RepWebServer);
-        }else{
+        } else {
             // DatabasePath := TPath.Combine(parentPath, DatabasePath);
             defaultPrefs.put(PREF_REP_IMAGES, new File(System.getProperty("user.dir"), PREF_REP_IMAGES));
             // RepScripts := TPath.Combine(parentPath, RepScripts);

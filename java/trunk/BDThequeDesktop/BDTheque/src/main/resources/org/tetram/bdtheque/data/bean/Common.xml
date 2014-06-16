@@ -37,9 +37,9 @@
         ]]>
     </update>
 
-    <select id="getFileContent">
+    <select id="getFileContent" resultType="org.tetram.bdtheque.data.BlobContainer">
         <![CDATA[
-        select blobcontent from loadblobfromfile(#{path}, #{file})
+        select blobcontent data from loadblobfromfile(#{path}, #{file})
         ]]>
     </select>
     <select id="sendFileContent">

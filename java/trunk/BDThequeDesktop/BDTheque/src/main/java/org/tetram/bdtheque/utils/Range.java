@@ -52,6 +52,17 @@ public final class Range<T extends Comparable<T>> {
         this.upperBound = upperBound;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
+    private static boolean equals(final Object a, final Object b) {
+        if (a == b)
+            return true;
+
+        if (a != null && b != null)
+            return a.equals(b);
+
+        return false;
+    }
+
     /**
      * Checks whether the specified object is within the range, including
      * bounds.
@@ -147,17 +158,6 @@ public final class Range<T extends Comparable<T>> {
         final Range<?> that = (Range<?>) other;
 
         return equals(this.lowerBound, that.lowerBound) && equals(this.upperBound, that.upperBound);
-    }
-
-    @SuppressWarnings("SimplifiableIfStatement")
-    private static boolean equals(final Object a, final Object b) {
-        if (a == b)
-            return true;
-
-        if (a != null && b != null)
-            return a.equals(b);
-
-        return false;
     }
 
     @SuppressWarnings("HardCodedStringLiteral")

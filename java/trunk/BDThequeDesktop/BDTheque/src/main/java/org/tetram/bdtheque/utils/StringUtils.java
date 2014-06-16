@@ -27,10 +27,11 @@ public abstract class StringUtils {
     public static final String SEARCH_ISBN_GROUP = "//ISBNRangeMessage/EAN.UCCPrefixes/EAN.UCC[Prefix='%2$s']/Rules/Rule[ValueLower<=%1$s and ValueUpper>=%1$s]/Length";
     @NonNls
     public static final String SEARCH_ISBN_PUBLISHER = "//ISBNRangeMessage/RegistrationGroups/Group[Prefix='%2$s-%3$s']/Rules/Rule[ValueLower<=%1$s and ValueUpper>=%1$s]/Length";
+    @NonNls
+    public static final String RESOURCE_ISBN_RANGES_XML = "/org/tetram/bdtheque/isbn_ranges.xml";
     private static final Map<Boolean, String> RES_TOME;
     private static final Map<Boolean, String> RES_HORSERIE;
     private static final Map<Boolean, String> RES_INTEGRALE;
-
     static {
         Map<Boolean, String> aMap;
 
@@ -49,10 +50,6 @@ public abstract class StringUtils {
         aMap.put(true, "Intégrale");
         RES_INTEGRALE = Collections.unmodifiableMap(aMap);
     }
-
-    @NonNls
-    public static final String RESOURCE_ISBN_RANGES_XML = "/org/tetram/bdtheque/isbn_ranges.xml";
-
     private static HashMap<String, List<ISBNRule>> isbnPrefixes, isbnGroups;
 
     public static UUID GUIDStringToUUID(final String guid) {

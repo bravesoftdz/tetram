@@ -24,6 +24,18 @@
         <result column="StockageCouverture" property="oldStockee"/>
     </resultMap>
 
+    <select id="getCouvertureLiteById" resultMap="CouvertureLiteSelect">
+        <![CDATA[
+        select
+            c.id_couverture, c.fichiercouverture, c.stockagecouverture, c.categorieimage, l.libelle as lb_categorieimage, c.ordre
+        from
+            couvertures c
+            left join listes l on
+                (c.categorieimage = l.ref and l.categorie = 6)
+        where
+            c.id_couverture = #{id}
+        ]]>
+    </select>
     <select id="getListCouvertureLiteByEditionId" resultMap="CouvertureLiteSelect" resultOrdered="true">
         <![CDATA[
         select
@@ -36,6 +48,19 @@
             c.id_edition = #{id}
         order by
             l.ordre nulls last, c.ordre
+        ]]>
+    </select>
+
+    <select id="getPhotoLiteById" resultMap="PhotoLiteSelect">
+        <![CDATA[
+        select
+            p.id_photo, p.fichierphoto, p.stockagephoto, p.categorieimage, l.libelle as lb_categorieimage, p.ordre
+        from
+            photos p
+            left join listes l on
+                (p.categorieimage = l.ref and l.categorie = 10)
+        where
+            p.id_photo = #{id}
         ]]>
     </select>
     <select id="getListPhotoLiteByParaBDId" resultMap="PhotoLiteSelect" resultOrdered="true">

@@ -5,6 +5,7 @@ package org.tetram.bdtheque.data.services;
  */
 public interface UserPreferences {
     void reload();
+
     void save();
 
     String getRepImages();

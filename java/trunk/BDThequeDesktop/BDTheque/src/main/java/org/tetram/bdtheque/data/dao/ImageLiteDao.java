@@ -10,7 +10,9 @@ import java.util.UUID;
  * Created by Thierry on 13/06/2014.
  */
 public interface ImageLiteDao<T extends ImageLite, K> extends DaoRW<T, K> {
-    byte[] getCouvertureStream(T image, Integer height, Integer width, boolean antiAliasing);
+    byte[] getImageStream(T image, Integer height, Integer width, boolean antiAliasing, boolean cadre, int effet3D);
+
+    byte[] getImageStream(T image, Integer height, Integer width, boolean antiAliasing);
 
     void saveList(List<T> list, UUID parentId, Map<String, UUID> secondaryParams);
 }

@@ -23,8 +23,8 @@ public class PhotoLiteDaoImpl extends ImageLiteDaoImpl<PhotoLite, UUID> implemen
     }
 
     @Override
-    public byte[] getCouvertureStream(PhotoLite image, Integer height, Integer width, boolean antiAliasing) {
-        return getCouvertureStream("photos", "id_photo", "fichierphoto", "stockagephoto", "imagephoto", image, height, width, antiAliasing);
+    public byte[] getImageStream(PhotoLite image, Integer height, Integer width, boolean antiAliasing, boolean cadre, int effet3D) {
+        return getCouvertureStream("photos", "id_photo", "fichierphoto", "stockagephoto", "imagephoto", image, height, width, antiAliasing, cadre, effet3D);
     }
 
     @Override

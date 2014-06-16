@@ -20,6 +20,7 @@ public class Constants {
     public static final UUID ID_ALBUM_MAGASIN_GENERAL_TOME_11 = StringUtils.GUIDStringToUUID("{504EABDB-3A49-4AF7-9AEA-B4033478E343}");
     public static final UUID ID_EDITION_SILLAGE_TOME_16 = StringUtils.GUIDStringToUUID("{C283B013-6FD6-4CC3-884D-034807EB7E8F}");
     public static final UUID ID_PARABD_SPIROU_BLOC_3D = StringUtils.GUIDStringToUUID("{D7BB36F8-75DA-46C9-9DBD-EB9FFA110E49}");
+    public static final UUID ID_PHOTO_SPIROU_BLOC_3D = StringUtils.GUIDStringToUUID("{1248935B-951B-433D-8EE8-8E09EFD94274}");
     public static final UUID ID_UNIVERS_TROLLS_DE_TROY = StringUtils.GUIDStringToUUID("{484689EB-72CC-4957-A912-621019EEC526}");
     public static final String NOM_UNIVERS_TROLLS_DE_TROY = "Trolls de Troy";
     public static final UUID ID_GENRE_AVENTURES = StringUtils.GUIDStringToUUID("{9D8F75CB-FEAC-48AF-86AE-F31C737D1B3F}");
@@ -27,6 +28,7 @@ public class Constants {
     public static final UUID ID_ALBUM_SPIROU_GALLERIE_DES_ILLUSTRES = StringUtils.GUIDStringToUUID("{225CD5DE-3700-4499-927A-449182CD3028}");
     public static final UUID ID_AUTEUR_BUCHET = StringUtils.GUIDStringToUUID("{83F8F815-2DD3-4BA2-A037-57EEB0A1C5C8}");
     public static final String NOM_AUTEUR_BUCHET = "Buchet [Philippe]";
+    public static final UUID ID_COUVERTURE_NOMAD = StringUtils.GUIDStringToUUID("{023FBEA6-0412-4985-B7E9-8C40B978EE53}");
 
     public static final String TEST_CREATE = "test create";
     public static final String TEST_UPDATE = "test update";

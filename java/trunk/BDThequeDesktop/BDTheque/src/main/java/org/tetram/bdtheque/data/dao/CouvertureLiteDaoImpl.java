@@ -23,8 +23,8 @@ public class CouvertureLiteDaoImpl extends ImageLiteDaoImpl<CouvertureLite, UUID
     }
 
     @Override
-    public byte[] getCouvertureStream(CouvertureLite image, Integer height, Integer width, boolean antiAliasing) {
-        return getCouvertureStream("couverture", "id_couverture", "fichiercouverture", "stockagecouverture", "imagecouverture", image, height, width, antiAliasing);
+    public byte[] getImageStream(CouvertureLite image, Integer height, Integer width, boolean antiAliasing, boolean cadre, int effet3D) {
+        return getCouvertureStream("couvertures", "id_couverture", "fichiercouverture", "stockagecouverture", "imagecouverture", image, height, width, antiAliasing, cadre, effet3D);
     }
 
     @Override

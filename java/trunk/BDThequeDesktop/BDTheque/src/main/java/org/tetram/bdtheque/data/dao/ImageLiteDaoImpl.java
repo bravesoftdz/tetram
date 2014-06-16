@@ -24,6 +24,7 @@ import java.util.*;
  */
 public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl<T, K> implements ImageLiteDao<T, K> {
 
+    protected static String TABLE_NAME = null;
     @Autowired
     private ImageMapper imageMapper;
     @Autowired
@@ -31,34 +32,38 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
     @Autowired
     private UserPreferences userPreferences;
 
-    protected static String TABLE_NAME = null;
+    public byte[] getImageStream(T image, Integer height, Integer width, boolean antiAliasing) {
+        return getImageStream(image, height, width, antiAliasing, false, 0);
+    }
 
-    protected byte[] getCouvertureStream(@NonNls String tableName, @NonNls String pkField, @NonNls String fieldFile, @NonNls String fieldModeStockage, @NonNls String fieldBlob, T image, Integer height, Integer width, boolean antiAliasing) {
-        ImageStream imageInfo = imageMapper.getImageStream(image, tableName, pkField, fieldFile, fieldModeStockage, fieldBlob);
+    protected byte[] getCouvertureStream(@NonNls String tableName, @NonNls String pkField, @NonNls String fieldFile, @NonNls String fieldModeStockage, @NonNls String fieldBlob, T image, Integer height, Integer width, boolean antiAliasing, boolean cadre, int effet3D) {
+        ImageStream imageInfo = imageMapper.getImageStream(image, TABLE_NAME, pkField, fieldFile, fieldModeStockage, fieldBlob);
         if (imageInfo.getData().length == 0 && StringUtils.isNullOrEmpty(imageInfo.getFileName()))
             return null;
 
+        byte[] imageBytes;
         if (imageInfo.isStockee()) {
+            imageBytes = imageInfo.getData();
+        } else {
             String fileName = new File(imageInfo.getFileName()).getName();
             String path = new File(imageInfo.getFileName()).getParent();
             if (StringUtils.isNullOrEmpty(path))
                 path = userPreferences.getRepImages();
 
-            byte[] imageBytes = commonMapper.getFileContent(path, fileName);
+            imageBytes = commonMapper.getFileContent(path, fileName).getData();
             if (imageBytes == null || imageBytes.length == 0) return null;
+        }
 
-            try {
-                ByteArrayOutputStream output = new ByteArrayOutputStream();
-                // write to jpeg file
-                ImageIO.write(ImageUtils.resizePicture(ImageIO.read(new ByteArrayInputStream(imageBytes)), height, width, antiAliasing), "jpg", output);
+        try {
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            // write to jpeg file
+            ImageIO.write(ImageUtils.resizePicture(ImageIO.read(new ByteArrayInputStream(imageBytes)), height, width, antiAliasing, cadre, effet3D), "jpg", output);
 
-                return output.toByteArray();
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-        } else
-            return ImageUtils.getJPEGStream(new File(imageInfo.getFileName()), height, width, antiAliasing);
+            return output.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @SuppressWarnings({"HardCodedStringLiteral", "StringConcatenation"})
@@ -90,7 +95,7 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
                 // ancienne photo
                 if (image.isOldStockee() != image.isNewStockee()) {
                     // changement de stockage
-                    byte[] imageStream = getCouvertureStream(image, null, null, false);
+                    byte[] imageStream = getImageStream(image, null, null, false);
                     if (image.isNewStockee()) {
                         // conversion photos liées en stockées (q3)
                         imageMapper.changeModeImageLite(image, imageStream, tableName, pkField, fieldModeStockage, fieldBlob);

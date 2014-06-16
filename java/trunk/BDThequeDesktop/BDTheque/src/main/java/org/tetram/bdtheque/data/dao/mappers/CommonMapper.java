@@ -1,6 +1,7 @@
 package org.tetram.bdtheque.data.dao.mappers;
 
 import org.apache.ibatis.annotations.Param;
+import org.tetram.bdtheque.data.BlobContainer;
 
 import java.util.Set;
 import java.util.UUID;
@@ -15,7 +16,7 @@ public interface CommonMapper extends BaseMapperInterface {
 
     int saveAssociations(@Param("chaine") String chaine, @Param("id") UUID id, @Param("typeData") int typeData, @Param("parentId") UUID parentId);
 
-    byte[] getFileContent(@Param("path") String path, @Param("file") String fileName);
+    BlobContainer getFileContent(@Param("path") String path, @Param("file") String fileName);
 
     int sendFileContent(@Param("path") String path, @Param("file") String fileName, @Param("content") byte[] content);
 
