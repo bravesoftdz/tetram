@@ -26,16 +26,10 @@ public abstract class ImageLite extends AbstractDBEntity {
         }
     };
 
-    @SuppressWarnings("CanBeFinal")
-    protected static ValeurListe defaultCategorie = null;
     private String oldNom, newNom;
     private boolean oldStockee, newStockee;
     private ValeurListe categorie;
     private int position;
-
-    public ImageLite() {
-        categorie = defaultCategorie;
-    }
 
     public String getOldNom() {
         return BeanUtils.trimOrNull(oldNom);

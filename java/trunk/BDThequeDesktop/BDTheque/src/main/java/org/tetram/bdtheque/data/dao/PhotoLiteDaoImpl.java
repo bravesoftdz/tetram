@@ -18,17 +18,15 @@ import java.util.UUID;
 @SuppressWarnings("UnusedDeclaration")
 public class PhotoLiteDaoImpl extends ImageLiteDaoImpl<PhotoLite, UUID> implements PhotoLiteDao {
 
-    static {
-        TABLE_NAME = "photos";
+    public PhotoLiteDaoImpl() {
+        super(
+                "photos",
+                "id_photo",
+                "id_parabd",
+                "fichierphoto",
+                "stockagephoto",
+                "imagephoto"
+        );
     }
 
-    @Override
-    public byte[] getImageStream(PhotoLite image, Integer height, Integer width, boolean antiAliasing, boolean cadre, int effet3D) {
-        return getCouvertureStream("photos", "id_photo", "fichierphoto", "stockagephoto", "imagephoto", image, height, width, antiAliasing, cadre, effet3D);
-    }
-
-    @Override
-    public void saveList(List<PhotoLite> list, UUID parentId, Map<String, UUID> secondaryParams) {
-        super.saveList("photos", "id_photo", "id_parabd", "fichierphoto", "stockagephoto", "imagephoto", list, parentId, secondaryParams);
-    }
 }

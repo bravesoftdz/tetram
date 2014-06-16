@@ -7,8 +7,10 @@ import org.tetram.bdtheque.data.dao.ValeurListeDao;
  * Created by Thierry on 24/05/2014.
  */
 public class PhotoLite extends ImageLite {
-    static {
+
+    public PhotoLite() {
         ValeurListeDao valeurListeDao = Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class);
-        defaultCategorie = valeurListeDao.getDefaultTypePhoto();
+        setCategorie(valeurListeDao.getDefaultTypePhoto());
     }
+
 }

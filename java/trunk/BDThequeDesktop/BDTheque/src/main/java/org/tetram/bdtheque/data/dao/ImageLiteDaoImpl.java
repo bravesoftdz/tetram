@@ -24,7 +24,13 @@ import java.util.*;
  */
 public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl<T, K> implements ImageLiteDao<T, K> {
 
-    protected static String TABLE_NAME = null;
+    private final String tableName;
+    private final String fieldPk;
+    private final String fieldParentId;
+    private final String fieldFile;
+    private final String fieldModeStockage;
+    private final String fieldBlob;
+
     @Autowired
     private ImageMapper imageMapper;
     @Autowired
@@ -32,12 +38,23 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
     @Autowired
     private UserPreferences userPreferences;
 
+    protected ImageLiteDaoImpl(@NonNls String tableName, @NonNls String fieldPk, @NonNls String fieldParentId, @NonNls String fieldFile, @NonNls String fieldModeStockage, @NonNls String fieldBlob) {
+        this.tableName = tableName;
+        this.fieldPk = fieldPk;
+        this.fieldParentId = fieldParentId;
+        this.fieldFile = fieldFile;
+        this.fieldModeStockage = fieldModeStockage;
+        this.fieldBlob = fieldBlob;
+    }
+
+    @Override
     public byte[] getImageStream(T image, Integer height, Integer width, boolean antiAliasing) {
         return getImageStream(image, height, width, antiAliasing, false, 0);
     }
 
-    protected byte[] getCouvertureStream(@NonNls String tableName, @NonNls String pkField, @NonNls String fieldFile, @NonNls String fieldModeStockage, @NonNls String fieldBlob, T image, Integer height, Integer width, boolean antiAliasing, boolean cadre, int effet3D) {
-        ImageStream imageInfo = imageMapper.getImageStream(image, TABLE_NAME, pkField, fieldFile, fieldModeStockage, fieldBlob);
+    @Override
+    public byte[] getImageStream(T image, Integer height, Integer width, boolean antiAliasing, boolean cadre, int effet3D) {
+        ImageStream imageInfo = imageMapper.getImageStream(image, tableName, fieldPk, fieldFile, fieldModeStockage, fieldBlob);
         if (imageInfo.getData().length == 0 && StringUtils.isNullOrEmpty(imageInfo.getFileName()))
             return null;
 
@@ -67,10 +84,11 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
     }
 
     @SuppressWarnings({"HardCodedStringLiteral", "StringConcatenation"})
-    protected void saveList(@NonNls String tableName, @NonNls String pkField, @NonNls String parentIdField, @NonNls String fieldFile, @NonNls String fieldModeStockage, @NonNls String fieldBlob, List<T> list, UUID parentId, Map<String, UUID> secondaryParams) {
+    @Override
+    public void saveList(List<T> list, UUID parentId, Map<String, UUID> secondaryParams) {
         Set<String> fichiersImages = new HashSet<>();
 
-        imageMapper.cleanImageLite(parentId, list, tableName, parentIdField, pkField);
+        imageMapper.cleanImageLite(parentId, list, tableName, fieldParentId, fieldPk);
         for (T image : list) {
             image.setPosition(list.indexOf(image));
             if (image.getId() == null || image.getId().equals(StringUtils.GUID_NULL)) {
@@ -82,13 +100,13 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
                     commonMapper.sendFileContent(userPreferences.getRepImages(), image.getNewNom(), ImageUtils.getJPEGStream(new File(image.getOldNom()), null, null, false));
                     imageMapper.addImageLite(
                             image, parentId, secondaryParams, image.getNewNom(), null,
-                            tableName, parentIdField, pkField, fieldFile, fieldModeStockage, fieldBlob
+                            tableName, fieldParentId, fieldPk, fieldFile, fieldModeStockage, fieldBlob
                     );
                 } else if (new File(image.getNewNom()).exists()) {
                     // photos stockées (q2)
                     imageMapper.addImageLite(
                             image, parentId, secondaryParams, FilenameUtils.removeExtension(new File(image.getNewNom()).getName()), ImageUtils.getJPEGStream(new File(image.getNewNom())),
-                            tableName, parentIdField, pkField, fieldFile, fieldModeStockage, fieldBlob
+                            tableName, fieldParentId, fieldPk, fieldFile, fieldModeStockage, fieldBlob
                     );
                 }
             } else {
@@ -98,7 +116,7 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
                     byte[] imageStream = getImageStream(image, null, null, false);
                     if (image.isNewStockee()) {
                         // conversion photos liées en stockées (q3)
-                        imageMapper.changeModeImageLite(image, imageStream, tableName, pkField, fieldModeStockage, fieldBlob);
+                        imageMapper.changeModeImageLite(image, imageStream, tableName, fieldPk, fieldModeStockage, fieldBlob);
                         File f = new File(image.getNewNom());
                         if (f.getParent().isEmpty())
                             fichiersImages.add(new File(userPreferences.getRepImages(), image.getNewNom()).getPath());
@@ -109,12 +127,12 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
                         // conversion photos stockées en liées
                         image.setNewNom(commonMapper.searchNewFileName(userPreferences.getRepImages(), image.getNewNom() + ".jpg", true));
                         commonMapper.sendFileContent(userPreferences.getRepImages(), image.getNewNom(), imageStream);
-                        imageMapper.changeModeImageLite(image, null, tableName, pkField, fieldModeStockage, fieldBlob);
+                        imageMapper.changeModeImageLite(image, null, tableName, fieldPk, fieldModeStockage, fieldBlob);
                     }
                 }
                 // photos renommées, réordonnées, etc (q5)
                 // obligatoire pour les changement de stockage
-                imageMapper.updateMetadataImageLite(image, image.getNewNom(), tableName, pkField, fieldFile);
+                imageMapper.updateMetadataImageLite(image, image.getNewNom(), tableName, fieldPk, fieldFile);
             }
         }
 
