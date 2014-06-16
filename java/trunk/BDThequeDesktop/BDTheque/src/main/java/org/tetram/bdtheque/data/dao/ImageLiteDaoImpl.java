@@ -10,11 +10,10 @@ import org.tetram.bdtheque.data.bean.ImageStream;
 import org.tetram.bdtheque.data.dao.mappers.CommonMapper;
 import org.tetram.bdtheque.data.dao.mappers.ImageMapper;
 import org.tetram.bdtheque.data.services.UserPreferences;
-import org.tetram.bdtheque.utils.FileUtils;
+import org.tetram.bdtheque.utils.ImageUtils;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -51,7 +50,7 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
             try {
                 ByteArrayOutputStream output = new ByteArrayOutputStream();
                 // write to jpeg file
-                ImageIO.write(FileUtils.resizePicture(ImageIO.read(new ByteArrayInputStream(imageBytes)), height, width, antiAliasing), "jpg", output);
+                ImageIO.write(ImageUtils.resizePicture(ImageIO.read(new ByteArrayInputStream(imageBytes)), height, width, antiAliasing), "jpg", output);
 
                 return output.toByteArray();
             } catch (IOException e) {
@@ -59,7 +58,7 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
                 return null;
             }
         } else
-            return FileUtils.getJPEGStream(new File(imageInfo.getFileName()), height, width, antiAliasing);
+            return ImageUtils.getJPEGStream(new File(imageInfo.getFileName()), height, width, antiAliasing);
     }
 
     @SuppressWarnings({"HardCodedStringLiteral", "StringConcatenation"})
@@ -75,7 +74,7 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
                     // photos liées (q1)
                     image.setOldNom(image.getNewNom());
                     image.setNewNom(commonMapper.searchNewFileName(userPreferences.getRepImages(), new File(image.getNewNom()).getName(), true));
-                    commonMapper.sendFileContent(userPreferences.getRepImages(), image.getNewNom(), FileUtils.getJPEGStream(new File(image.getOldNom()), null, null, false));
+                    commonMapper.sendFileContent(userPreferences.getRepImages(), image.getNewNom(), ImageUtils.getJPEGStream(new File(image.getOldNom()), null, null, false));
                     imageMapper.addImageLite(
                             image, parentId, secondaryParams, image.getNewNom(), null,
                             tableName, parentIdField, pkField, fieldFile, fieldModeStockage, fieldBlob
@@ -83,7 +82,7 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
                 } else if (new File(image.getNewNom()).exists()) {
                     // photos stockées (q2)
                     imageMapper.addImageLite(
-                            image, parentId, secondaryParams, FilenameUtils.removeExtension(new File(image.getNewNom()).getName()), FileUtils.getJPEGStream(new File(image.getNewNom())),
+                            image, parentId, secondaryParams, FilenameUtils.removeExtension(new File(image.getNewNom()).getName()), ImageUtils.getJPEGStream(new File(image.getNewNom())),
                             tableName, parentIdField, pkField, fieldFile, fieldModeStockage, fieldBlob
                     );
                 }

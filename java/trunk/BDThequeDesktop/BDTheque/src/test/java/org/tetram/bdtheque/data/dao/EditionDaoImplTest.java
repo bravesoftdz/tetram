@@ -16,7 +16,7 @@ public class EditionDaoImplTest extends SpringTest {
     @Test
     public void testSave() throws Exception {
         Edition edition = new Edition();
-        edition.setIdAlbum(Constants.ID_ALBUM_MAGASIN_GENERAL_TOME_11);
+        edition.setIdAlbum(Constants.ID_ALBUM_SPIROU_GALLERIE_DES_ILLUSTRES);
         edition.setEditeur(editeurLiteDao.get(Constants.ID_EDITEUR_DELCOURT));
 
         editionDao.save(edition);

@@ -78,6 +78,9 @@
         <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
     </bean>
 
+    <bean id="commonMapper" parent="baseMapper">
+        <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.CommonMapper"/>
+    </bean>
     <bean id="albumMapper" parent="baseMapper">
         <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.AlbumMapper"/>
     </bean>
