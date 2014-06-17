@@ -117,7 +117,7 @@
     <!--
     <context:spring-configured/>
     <context:annotation-config/>
-    <context:load-time-weaver/>
     -->
+    <context:load-time-weaver/>
 
 </beans>

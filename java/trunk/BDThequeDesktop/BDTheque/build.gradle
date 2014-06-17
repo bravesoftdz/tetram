@@ -35,5 +35,5 @@ dependencies {
     testCompile 'org.springframework:spring-test:+'
 
     //runtime 'org.aspectj:aspectjrt:+'
-    //runtime 'org.aspectj:aspectjweaver:+'
+    runtime 'org.aspectj:aspectjweaver:+'
 }
