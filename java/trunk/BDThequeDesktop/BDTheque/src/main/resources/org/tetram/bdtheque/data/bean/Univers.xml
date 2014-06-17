@@ -3,20 +3,20 @@
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.UniversMapper">
     <resultMap id="UniversLite" type="beanUniversLite">
         <id column="id_univers" property="id"/>
-        <result column="nomunivers" property="nomUnivers"/>
+        <result column="nomUnivers" property="nomUnivers"/>
     </resultMap>
     <resultMap id="UniversFull" type="beanUnivers">
         <id column="id_univers" property="id"/>
-        <result column="nomunivers" property="nomUnivers"/>
+        <result column="nomUnivers" property="nomUnivers"/>
         <result column="description" property="description"/>
-        <result column="siteweb" property="siteWeb"/>
+        <result column="siteWeb" property="siteWeb"/>
         <association property="universParent" select="getUniversLiteById" column="id_univers_parent"/>
     </resultMap>
 
     <select id="getUniversLiteById" resultMap="UniversLite">
         <![CDATA[
         select
-            id_univers, nomunivers
+            id_univers, nomUnivers
         from
             univers
         where
@@ -26,7 +26,7 @@
     <select id="getUniversById" resultMap="UniversFull">
         <![CDATA[
         select
-            id_univers, nomunivers, id_univers_parent, description, siteweb
+            id_univers, nomUnivers, id_univers_parent, description, siteWeb
         from
             univers
         where
@@ -77,7 +77,7 @@
         from
             univers
         where
-            nomunivers = #{nomUnivers}
+            nomUnivers = #{nomUnivers}
         ]]>
         <if test="id != null">
             <![CDATA[
@@ -89,7 +89,7 @@
     <sql id="saveUnivers">
         <![CDATA[
         update or insert into univers (
-            id_univers, nomunivers, id_univers_parent, description, siteweb
+            id_univers, nomUnivers, id_univers_parent, description, siteWeb
         ) values (
             #{id}, #{nomUnivers}, #{idUniversParent}, #{description}, #{siteWeb}
         )

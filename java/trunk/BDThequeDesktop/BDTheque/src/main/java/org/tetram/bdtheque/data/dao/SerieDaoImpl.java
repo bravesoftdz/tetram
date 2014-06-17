@@ -1,7 +1,6 @@
 package org.tetram.bdtheque.data.dao;
 
 import org.apache.ibatis.exceptions.PersistenceException;
-import org.apache.ibatis.session.SqlSession;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -57,8 +56,6 @@ public class SerieDaoImpl extends DaoScriptImpl<Serie, UUID> implements SerieDao
     public int save(@NotNull Serie o) throws PersistenceException {
         int status = super.save(o);
         if (status == 0) return status;
-
-        SqlSession session = getSqlSession();
 
         genreMapper.cleanGenresSerie(o.getId());
         for (GenreLite genre : o.getGenres())

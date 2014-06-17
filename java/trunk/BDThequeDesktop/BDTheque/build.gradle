@@ -13,17 +13,27 @@ dependencies {
     // 28/05/2014: la version dispo est la version 12 qui ne contient pas l'annotation Contract
     //compile 'com.intellij:annotations:+'
     compile files('C:\\Program Files (x86)\\JetBrains\\IntelliJ IDEA Community Edition 13.1.2\\lib\\annotations.jar')
+
     compile 'org.apache.logging.log4j:log4j-core:2+'
     runtime 'org.apache.logging.log4j:log4j-1.2-api:2+' // permet de rediriger, dans la plupart des cas, les appels à Log4j vers Log4j2
+
     compile 'org.apache.commons:commons-io:+'
+
     compile 'org.firebirdsql.jdbc:jaybird-jdk18:+'
+
     compile 'org.mybatis:mybatis:+'
+    compile 'org.mybatis:mybatis-spring:+'
     compile 'org.mybatis.generator:mybatis-generator-core:+'
+
+    runtime 'cglib:cglib:+'
+
+    compile 'org.springframework:spring-aop:+'
+    compile 'org.springframework:spring-aspects:+'
+    //compile 'org.springframework:spring-agent:+'
     compile 'org.springframework:spring-context:+'
     compile 'org.springframework:spring-jdbc:+'
     testCompile 'org.springframework:spring-test:+'
-    compile 'org.mybatis:mybatis-spring:+'
-    runtime 'org.aspectj:aspectjrt:+'
-    runtime 'org.aspectj:aspectjweaver:+'
-    runtime 'cglib:cglib:+'
+
+    //runtime 'org.aspectj:aspectjrt:+'
+    //runtime 'org.aspectj:aspectjweaver:+'
 }

@@ -22,6 +22,12 @@ public class UserPreferencesImpl implements UserPreferences {
 
     @NonNls
     public static final String PREF_REP_IMAGES = "RepImages";
+    @NonNls
+    public static final String PREF_REP_IMAGES_DEFAULT = "RepImages";
+    @NonNls
+    private static final String PREF_FORMAT_TITRE_ALBUM = "FormatTitreAlbum";
+    private static final int PREF_FORMAT_TITRE_ALBUM_DEFAULT = 0;
+
     @Autowired
     private ApplicationContext applicationContext;
     private Properties defaultPrefs = null;
@@ -42,15 +48,17 @@ public class UserPreferencesImpl implements UserPreferences {
         }
         if (userConfig) {
             // DatabasePath := TPath.Combine(AppData, DatabasePath);
-            defaultPrefs.put(PREF_REP_IMAGES, new File(applicationContext.getUserDataDirectory(), PREF_REP_IMAGES));
+            defaultPrefs.put(PREF_REP_IMAGES, new File(applicationContext.getUserDataDirectory(), PREF_REP_IMAGES_DEFAULT));
             // RepScripts := TPath.Combine(CommonAppData, RepScripts);
             // RepWebServer := TPath.Combine(CommonAppData, RepWebServer);
         } else {
             // DatabasePath := TPath.Combine(parentPath, DatabasePath);
-            defaultPrefs.put(PREF_REP_IMAGES, new File(System.getProperty("user.dir"), PREF_REP_IMAGES));
+            defaultPrefs.put(PREF_REP_IMAGES, new File(System.getProperty("user.dir"), PREF_REP_IMAGES_DEFAULT));
             // RepScripts := TPath.Combine(parentPath, RepScripts);
             // RepWebServer := TPath.Combine(parentPath, RepWebServer);
         }
+
+        defaultPrefs.put(PREF_FORMAT_TITRE_ALBUM, PREF_FORMAT_TITRE_ALBUM_DEFAULT);
 
         return defaultPrefs;
     }
@@ -106,12 +114,40 @@ public class UserPreferencesImpl implements UserPreferences {
         }
     }
 
-    public String getRepImages() {
-        return getPrefs().getProperty(PREF_REP_IMAGES);
+    private String getStringPref(String key){
+        return getPrefs().getProperty(key);
     }
 
+    private int getIntPref(String key){
+        return Integer.valueOf(getPrefs().getProperty(key));
+    }
+
+    private Object setPref(String key, String value) {
+        return getPrefs().put(key, value);
+    }
+
+    private Object setPref(String key, int value) {
+        return getPrefs().put(key, value);
+    }
+
+    @Override
+    public String getRepImages() {
+        return getStringPref(PREF_REP_IMAGES);
+    }
+
+    @Override
     public void setRepImages(String value) {
-        getPrefs().put(PREF_REP_IMAGES, value);
+        setPref(PREF_REP_IMAGES, value);
+    }
+
+    @Override
+    public int getFormatTitreAlbum() {
+        return getIntPref(PREF_FORMAT_TITRE_ALBUM);
+    }
+
+    @Override
+    public void setFormatTitreAlbum(int value) {
+        setPref(PREF_FORMAT_TITRE_ALBUM, value);
     }
 
 }

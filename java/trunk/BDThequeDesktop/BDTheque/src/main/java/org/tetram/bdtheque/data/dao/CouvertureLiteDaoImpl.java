@@ -21,9 +21,9 @@ public class CouvertureLiteDaoImpl extends ImageLiteDaoImpl<CouvertureLite, UUID
                 "couvertures",
                 "id_couverture",
                 "id_edition",
-                "fichiercouverture",
-                "stockagecouverture",
-                "imagecouverture"
+                "fichierCouverture",
+                "stockageCouverture",
+                "imageCouverture"
         );
     }
 

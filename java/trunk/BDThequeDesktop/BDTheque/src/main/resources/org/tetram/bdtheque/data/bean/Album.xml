@@ -48,17 +48,17 @@
     </resultMap>
 
     <sql id="fieldsAlbumLite">
-        a.id_album, a.titrealbum, a.horsserie, a.integrale, a.tome, a.tomedebut, a.tomefin, a.id_serie, a.achat,
+        a.id_album, a.titreAlbum, a.horsSerie, a.integrale, a.tome, a.tomeDebut, a.tomeFin, a.id_serie, a.achat,
         a.complet
     </sql>
     <sql id="orderAlbum">
-        a.horsserie nulls first, a.integrale nulls first, a.tome nulls first, a.anneeparution, a.moisparution
+        a.horsSerie nulls first, a.integrale nulls first, a.tome nulls first, a.anneeParution, a.moisParution
     </sql>
 
     <select id="getAlbumLiteById" resultMap="AlbumLite">
         select
         <include refid="fieldsAlbumLite"/>
-        , a.titreserie
+        , a.titreSerie
         <if test="idEdition != null">
             , e.stock
         </if>
@@ -85,8 +85,8 @@
     <select id="getAlbumById" parameterType="UUID" resultMap="AlbumFull">
         <![CDATA[
         select
-            a.id_album, a.titrealbum, a.moisparution, a.anneeparution, a.id_serie, a.tome, a.tomedebut, a.tomefin, a.sujetalbum,
-            a.remarquesalbum, a.horsserie, a.integrale, a.complet, a.notation, n.libelle as lb_notation
+            a.id_album, a.titreAlbum, a.moisParution, a.anneeParution, a.id_serie, a.tome, a.tomeDebut, a.tomeFin, a.sujetAlbum,
+            a.remarquesAlbum, a.horsSerie, a.integrale, a.complet, a.notation, n.libelle as lb_notation
         from
             albums a
             left join listes n on

@@ -1,0 +1,5 @@
+<root>
+    <item name='java.lang.Class java.net.URL getResource(java.lang.String) 0'>
+        <annotation name='org.jetbrains.annotations.NonNls'/>
+    </item>
+</root>

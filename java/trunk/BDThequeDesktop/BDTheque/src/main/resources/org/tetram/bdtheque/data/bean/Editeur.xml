@@ -14,7 +14,7 @@
     <select id="getEditeurLiteById" resultMap="EditeurLite">
         <![CDATA[
         select
-            id_editeur, nomediteur
+            id_editeur, nomEditeur
         from
             editeurs
         where
@@ -25,7 +25,7 @@
     <select id="getEditeurById" resultMap="EditeurFull">
         <![CDATA[
         select
-            id_editeur, nomediteur
+            id_editeur, nomEditeur
         from
             editeurs
         where
@@ -40,7 +40,7 @@
         from
             editeurs
         where
-            nomediteur = #{nomEditeur}
+            nomEditeur = #{nomEditeur}
         ]]>
         <if test="id != null">
             <![CDATA[
@@ -52,7 +52,7 @@
     <sql id="saveEditeur">
         <![CDATA[
         update or insert into editeurs (
-            id_editeur, nomediteur, siteweb
+            id_editeur, nomEditeur, siteWeb
         ) values (
             #{id}, #{nomEditeur}, #{siteWeb}
         )

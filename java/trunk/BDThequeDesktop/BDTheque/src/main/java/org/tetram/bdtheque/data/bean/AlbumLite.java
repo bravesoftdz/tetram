@@ -1,7 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.Comparator;
 import java.util.UUID;
@@ -9,6 +8,7 @@ import java.util.UUID;
 /**
  * Created by Thierry on 24/05/2014.
  */
+@SuppressWarnings("UnusedDeclaration")
 public class AlbumLite extends AbstractDBEntity {
     public static Comparator<AlbumLite> DEFAULT_COMPARATOR = new Comparator<AlbumLite>() {
         @Override
@@ -193,6 +193,6 @@ public class AlbumLite extends AbstractDBEntity {
     }
 
     public String buildLabel(boolean simple, boolean avecSerie) {
-        return StringUtils.formatTitreAlbum(simple, avecSerie, getTitre(), getSerie(), getTome(), getTomeDebut(), getTomeFin(), isIntegrale(), isHorsSerie());
+        return BeanUtils.formatTitreAlbum(simple, avecSerie, getTitre(), getSerie(), getTome(), getTomeDebut(), getTomeFin(), isIntegrale(), isHorsSerie());
     }
 }

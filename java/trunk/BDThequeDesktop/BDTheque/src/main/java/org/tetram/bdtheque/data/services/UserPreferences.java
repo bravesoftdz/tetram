@@ -11,4 +11,8 @@ public interface UserPreferences {
     String getRepImages();
 
     void setRepImages(String value);
+
+    int getFormatTitreAlbum();
+
+    void setFormatTitreAlbum(int value);
 }

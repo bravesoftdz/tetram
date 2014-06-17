@@ -1,5 +1,7 @@
 package org.tetram.bdtheque.utils.logging;
 
+import org.tetram.bdtheque.utils.I18nSupport;
+
 /**
  * Created by Thierry on 28/05/2014.
  */
@@ -13,7 +15,7 @@ public class LogManager {
         try {
             return new Log4j2Logger(logger);
         } catch (Throwable t) {
-            throw new LogException("Error creating logger for logger " + logger + ".  Cause: " + t, t);
+            throw new LogException(I18nSupport.message("error.creating.logger.for.logger.0.cause.1", logger, t), t);
         }
     }
 

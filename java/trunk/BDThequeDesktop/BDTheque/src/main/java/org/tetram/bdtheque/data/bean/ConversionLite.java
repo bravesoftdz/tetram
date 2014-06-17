@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.data.BeanUtils;
 
 import java.util.Locale;
@@ -7,7 +8,11 @@ import java.util.Locale;
 /**
  * Created by Thierry on 24/05/2014.
  */
+@SuppressWarnings("UnusedDeclaration")
 public class ConversionLite extends AbstractDBEntity {
+    @NonNls
+    private static final String CONVERSION_FORMAT = "1 %s = %.2f %s";
+
     private String monnaie1, monnaie2;
     private Double taux;
 
@@ -37,6 +42,6 @@ public class ConversionLite extends AbstractDBEntity {
 
     @Override
     public String buildLabel() {
-        return String.format(Locale.getDefault(), "1 %s = %.2f %s", monnaie1, taux, monnaie2);
+        return String.format(Locale.getDefault(), CONVERSION_FORMAT, monnaie1, taux, monnaie2);
     }
 }

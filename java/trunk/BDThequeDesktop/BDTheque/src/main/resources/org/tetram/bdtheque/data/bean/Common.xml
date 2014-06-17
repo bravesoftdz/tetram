@@ -30,7 +30,7 @@
     <update id="saveAssociations">
         <![CDATA[
         update or insert into import_associations (
-            chaine, id, parentId, typedata, always
+            chaine, id, parentId, typeData, always
         ) values (
             #{chaine}, #{id}, #{parentId}, #{typeData}, 1
         )
@@ -39,22 +39,22 @@
 
     <select id="getFileContent" resultType="org.tetram.bdtheque.data.BlobContainer">
         <![CDATA[
-        select blobcontent data from loadblobfromfile(#{path}, #{file})
+        select blobContent data from loadBlobFromFile(#{path}, #{file})
         ]]>
     </select>
     <select id="sendFileContent">
         <![CDATA[
-        select result from saveblobtofile(#{path}, #{file}, #{content})
+        select result from saveBlobToFile(#{path}, #{file}, #{content})
         ]]>
     </select>
     <select id="deleteFile">
         <![CDATA[
-        select result from deletefile(#{file})
+        select result from deleteFile(#{file})
         ]]>
     </select>
     <select id="searchNewFileName">
         <![CDATA[
-        select new_filename from searchfilename(#{path}, #{baseFileName}, #{reserve})
+        select new_filename from searchFilename(#{path}, #{baseFileName}, #{reserve})
         ]]>
     </select>
 </mapper>

@@ -13,24 +13,24 @@
     </resultMap>
     <resultMap id="SerieFull" type="beanSerie">
         <id column="id_serie" property="id"/>
-        <result column="titreserie" property="titreSerie"/>
+        <result column="titreSerie" property="titreSerie"/>
         <result column="notation" property="notation"/>
         <result column="terminee" property="terminee"/>
         <result column="vo" property="vo"/>
         <result column="couleur" property="couleur"/>
-        <result column="suivresorties" property="suivreSorties"/>
+        <result column="suivreSorties" property="suivreSorties"/>
         <result column="complete" property="complete"/>
-        <result column="suivremanquantes" property="suivreManquants"/>
+        <result column="suivreManquants" property="suivreManquants"/>
         <result column="nb_albums" property="nbAlbums"/>
-        <result column="sujetserie" property="sujet"/>
-        <result column="remarquesserie" property="notes"/>
-        <result column="siteweb" property="siteWeb"/>
-        <result column="typeedition" property="typeEdition"/>
+        <result column="sujetSerie" property="sujet"/>
+        <result column="remarquesSerie" property="notes"/>
+        <result column="siteWeb" property="siteWeb"/>
+        <result column="typeEdition" property="typeEdition"/>
         <result column="etat" property="etat"/>
         <result column="reliure" property="reliure"/>
         <result column="orientation" property="orientation"/>
-        <result column="formatedition" property="formatEdition"/>
-        <result column="senslecture" property="sensLecture"/>
+        <result column="formatEdition" property="formatEdition"/>
+        <result column="sensLecture" property="sensLecture"/>
         <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurLiteById"
                      column="id_editeur"/>
         <association property="collection"
@@ -49,7 +49,7 @@
     <select id="getSerieLiteById" resultMap="SerieLite">
         <![CDATA[
         select
-            s.id_serie, s.titreserie, s.id_editeur, s.id_collection, s.notation, n.libelle as lb_notation
+            s.id_serie, s.titreSerie, s.id_editeur, s.id_collection, s.notation, n.libelle as lb_notation
         from
             series s
             left join listes n on
@@ -62,15 +62,15 @@
     <select id="getSerieById" resultMap="SerieFull">
         <![CDATA[
         select
-            s.id_serie, s.titreserie, coalesce(s.terminee, -1) as terminee, s.sujetserie, s.remarquesserie, s.siteweb, s.complete,
-            s.nb_albums, s.id_editeur, s.id_collection, s.suivresorties, s.suivremanquants,
+            s.id_serie, s.titreSerie, coalesce(s.terminee, -1) as terminee, s.sujetSerie, s.remarquesSerie, s.siteWeb, s.complete,
+            s.nb_albums, s.id_editeur, s.id_collection, s.suivreSorties, s.suivreManquants,
             coalesce(s.vo, -1) as vo, coalesce(s.couleur, -1) as couleur,
             coalesce(s.etat, -1) as etat, le.libelle as lb_etat,
             coalesce(s.reliure, -1) as reliure, lr.libelle as lb_reliure,
             coalesce(s.orientation, -1) as orientation, lo.libelle as lb_orientation,
-            coalesce(s.formatedition, -1) as formatedition, lf.libelle as lb_formatedition,
-            coalesce(s.typeedition, -1) as typeedition, lte.libelle as lb_typeedition,
-            coalesce(s.senslecture, -1) as senslecture, lsl.libelle as lb_senslecture,
+            coalesce(s.formatEdition, -1) as formatEdition, lf.libelle as lb_formatEdition,
+            coalesce(s.typeEdition, -1) as typeEdition, lte.libelle as lb_typeEdition,
+            coalesce(s.sensLecture, -1) as sensLecture, lsl.libelle as lb_sensLecture,
             s.notation, n.libelle as lb_notation
         from
             series s
@@ -79,13 +79,13 @@
             left join listes lr on
                 (lr.ref = s.reliure and lr.categorie = 2)
             left join listes lte on
-                (lte.ref = s.typeedition and lte.categorie = 3)
+                (lte.ref = s.typeEdition and lte.categorie = 3)
             left join listes lo on
                 (lo.ref = s.orientation and lo.categorie = 4)
             left join listes lf on
-                (lf.ref = s.formatedition and lf.categorie = 5)
+                (lf.ref = s.formatEdition and lf.categorie = 5)
             left join listes lsl on
-                (lsl.ref = s.senslecture and lsl.categorie = 8)
+                (lsl.ref = s.sensLecture and lsl.categorie = 8)
             left join listes n on
                 (n.ref = s.notation and n.categorie = 9)
         where
@@ -96,7 +96,7 @@
     <select id="getListSerieIdByAuteurId" resultMap="SerieLite" parameterType="UUID" resultOrdered="true">
         <![CDATA[
         select
-            al.id_serie, titreserie
+            al.id_serie, titreSerie
         from
             vw_liste_albums al
         inner join auteurs au on
@@ -105,7 +105,7 @@
         union
 
         select
-            s.id_serie, titreserie
+            s.id_serie, titreSerie
         from
             auteurs_series au
             inner join series s on
@@ -114,11 +114,11 @@
         union
 
         select
-            p.id_serie, titreserie
+            p.id_serie, titreSerie
         from
-            auteurs_parabd ap
-            inner join vw_liste_parabd p on
-                ap.id_parabd = p.id_parabd and ap.id_personne = #{id}
+            auteurs_paraBD ap
+            inner join vw_liste_paraBD p on
+                ap.id_paraBD = p.id_paraBD and ap.id_personne = #{id}
 
         order by
             2 nulls first
@@ -134,9 +134,9 @@
     <sql id="saveSerie">
         <![CDATA[
         update or insert into series (
-            id_serie, titreserie, terminee, suivresorties, complete, suivremanquants, siteweb, id_editeur,
-            id_collection, sujetserie, remarquesserie, nb_albums, vo, couleur, etat, reliure, typeedition,
-            orientation, formatedition, senslecture
+            id_serie, titreSerie, terminee, suivreSorties, complete, suivreManquants, siteWeb, id_editeur,
+            id_collection, sujetSerie, remarquesSerie, nb_albums, vo, couleur, etat, reliure, typeEdition,
+            orientation, formatEdition, sensLecture
         ) values (
             #{id}, #{titreSerie}, #{terminee}, #{suivreSorties}, #{complete}, #{suivreManquants}, #{siteWeb}, #{idEditeur},
             #{idCollection}, #{sujet}, #{notes}, #{nbAlbums}, #{vo}, #{couleur}, #{etat}, #{reliure}, #{typeEdition},

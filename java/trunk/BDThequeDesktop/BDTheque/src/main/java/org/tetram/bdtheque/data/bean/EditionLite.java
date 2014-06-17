@@ -1,6 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.Comparator;
@@ -71,10 +72,10 @@ public class EditionLite extends AbstractDBEntity {
     @Override
     public String buildLabel() {
         String s;
-        s = StringUtils.ajoutString("", StringUtils.formatTitre(editeur.getNomEditeur()), " ");
-        s = StringUtils.ajoutString(s, StringUtils.formatTitre(collection.getNomCollection()), " ", "(", ")");
+        s = StringUtils.ajoutString("", BeanUtils.formatTitre(editeur.getNomEditeur()), " ");
+        s = StringUtils.ajoutString(s, BeanUtils.formatTitre(collection.getNomCollection()), " ", "(", ")");
         s = StringUtils.ajoutString(s, StringUtils.nonZero(anneeEdition), " ", "[", "]");
-        s = StringUtils.ajoutString(s, StringUtils.formatISBN(isbn), " - ", "ISBN ");
+        s = StringUtils.ajoutString(s, BeanUtils.formatISBN(isbn), " - ", I18nSupport.message("isbn") + " ");
         return s;
     }
 }

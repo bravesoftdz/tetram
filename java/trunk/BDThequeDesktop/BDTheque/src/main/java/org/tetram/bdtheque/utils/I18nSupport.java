@@ -12,7 +12,7 @@ import java.util.ResourceBundle;
 public class I18nSupport {
 
     @NonNls
-    private static ResourceBundle resourceBundle = ResourceBundle.getBundle("org.tetram.bdtheque.lang.bd");
+    private final static ResourceBundle resourceBundle = ResourceBundle.getBundle("org.tetram.bdtheque.lang.bd");
 
     public static String message(@PropertyKey(resourceBundle = "org.tetram.bdtheque.lang.bd") String key, Object... params) {
         String value = resourceBundle.getString(key);

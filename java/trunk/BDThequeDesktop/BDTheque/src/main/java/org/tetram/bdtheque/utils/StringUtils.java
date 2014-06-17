@@ -1,17 +1,10 @@
 package org.tetram.bdtheque.utils;
 
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-import org.jetbrains.annotations.Nullable;
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+import org.tetram.bdtheque.data.BeanUtils;
 
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
 @SuppressWarnings("UnusedDeclaration")
@@ -23,34 +16,6 @@ public abstract class StringUtils {
     public static final String GUID_FULL_STRING = "{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}";
     public static final UUID GUID_NULL = GUIDStringToUUID("{00000000-0000-0000-0000-000000000000}");
     public static final String GUID_NULL_STRING = "{00000000-0000-0000-0000-000000000000}";
-    @NonNls
-    public static final String SEARCH_ISBN_GROUP = "//ISBNRangeMessage/EAN.UCCPrefixes/EAN.UCC[Prefix='%2$s']/Rules/Rule[ValueLower<=%1$s and ValueUpper>=%1$s]/Length";
-    @NonNls
-    public static final String SEARCH_ISBN_PUBLISHER = "//ISBNRangeMessage/RegistrationGroups/Group[Prefix='%2$s-%3$s']/Rules/Rule[ValueLower<=%1$s and ValueUpper>=%1$s]/Length";
-    @NonNls
-    public static final String RESOURCE_ISBN_RANGES_XML = "/org/tetram/bdtheque/isbn_ranges.xml";
-    private static final Map<Boolean, String> RES_TOME;
-    private static final Map<Boolean, String> RES_HORSERIE;
-    private static final Map<Boolean, String> RES_INTEGRALE;
-    static {
-        Map<Boolean, String> aMap;
-
-        aMap = new HashMap<>();
-        aMap.put(false, "T. ");
-        aMap.put(true, "Tome ");
-        RES_TOME = Collections.unmodifiableMap(aMap);
-
-        aMap = new HashMap<>();
-        aMap.put(false, "HS");
-        aMap.put(true, "Hors-Série");
-        RES_HORSERIE = Collections.unmodifiableMap(aMap);
-
-        aMap = new HashMap<>();
-        aMap.put(false, "INT.");
-        aMap.put(true, "Intégrale");
-        RES_INTEGRALE = Collections.unmodifiableMap(aMap);
-    }
-    private static HashMap<String, List<ISBNRule>> isbnPrefixes, isbnGroups;
 
     public static UUID GUIDStringToUUID(final String guid) {
         return UUID.fromString(guid.substring(1, guid.length() - 1));
@@ -167,6 +132,7 @@ end;
     }
 
     @SuppressWarnings("CallToStringEquals")
+    @Contract("null -> !null")
     public static String nonZero(final String s) {
         if ((s == null) || "0".equals(s.trim()))
             return "";
@@ -174,187 +140,11 @@ end;
     }
 
     @SuppressWarnings("CallToNumericToString")
+    @Contract("null -> !null")
     public static String nonZero(final Integer i) {
         if ((i == null) || Integer.valueOf(0).equals(i))
             return "";
         return i.toString();
-    }
-
-    private static void decodeISBNRules() {
-        if (isbnPrefixes != null) return;
-
-        InputStream inputStream = ClassLoader.class.getResourceAsStream(RESOURCE_ISBN_RANGES_XML);
-        try {
-            isbnPrefixes = new HashMap<>();
-            isbnGroups = new HashMap<>();
-
-            SAXParser parseur = SAXParserFactory.newInstance().newSAXParser();
-            parseur.parse(inputStream, new DefaultHandler() {
-
-                private ISBNRule currentRule;
-                public String tmpValue;
-                public HashMap<String, List<ISBNRule>> currentList;
-                public String prefix;
-
-                @Override
-                public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-                    @NonNls String s = qName.toLowerCase(Locale.US);
-                    switch (s) {
-                        case "ean.uccprefixes":
-                            this.currentList = isbnPrefixes;
-                            break;
-                        case "registrationgroups":
-                            this.currentList = isbnGroups;
-                            break;
-                        case "rule":
-                            this.currentRule = new ISBNRule();
-                            break;
-                    }
-                    this.tmpValue = "";
-                }
-
-                @Override
-                public void endElement(String uri, String localName, String qName) throws SAXException {
-                    @NonNls String s = qName.toLowerCase(Locale.US);
-                    switch (s) {
-                        case "valuelower":
-                            this.currentRule.valueLower = Integer.valueOf(this.tmpValue);
-                            break;
-                        case "range":
-                            Integer p = this.tmpValue.indexOf('-');
-                            this.currentRule.valueLower = Integer.valueOf(this.tmpValue.substring(0, p));
-                            this.tmpValue = this.tmpValue.substring(p + 1);
-                            // volontairement pas de break pour continuer sur valueupper
-                            // break;
-                            this.currentRule.valueUpper = Integer.valueOf(this.tmpValue);
-                            break;
-                        case "valueupper":
-                            this.currentRule.valueUpper = Integer.valueOf(this.tmpValue);
-                            break;
-                        case "length":
-                            this.currentRule.length = Integer.valueOf(this.tmpValue);
-                            break;
-                        case "prefix":
-                            this.prefix = this.tmpValue;
-                            break;
-                        case "rule":
-                            List<ISBNRule> list;
-                            if (!this.currentList.containsKey(this.prefix))
-                                list = new ArrayList<>();
-                            else
-                                list = this.currentList.get(this.prefix);
-                            list.add(this.currentRule);
-                            this.currentList.put(this.prefix, list);
-                            this.currentRule = null;
-                            break;
-                    }
-                    this.tmpValue = null;
-                }
-
-                @SuppressWarnings("StringConcatenationMissingWhitespace")
-                @Override
-                public void characters(char[] ch, int start, int length) throws SAXException {
-                    if (this.tmpValue != null)
-                        this.tmpValue += new String(ch, start, length);
-                }
-            });
-
-        } catch (final ParserConfigurationException | IOException | SAXException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                inputStream.close();
-            } catch (final IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private static int getLengthForPrefix(HashMap<String, List<ISBNRule>> map, String prefix, int value) {
-        List<ISBNRule> rules = map.get(prefix);
-        if ((rules == null) || rules.isEmpty()) return 0;
-        for (final ISBNRule rule : rules)
-            if ((rule.valueLower <= value) && (rule.valueUpper >= value))
-                return rule.length;
-        return 0;
-    }
-
-    @Nullable
-    public static String formatISBN(String isbn) {
-        if (isbn == null) return null;
-
-        decodeISBNRules();
-
-        isbn = isbn.toUpperCase(Locale.US).substring(0, Math.min(isbn.length(), 13));
-        @NonNls String prefix = "978";
-        String s = isbn;
-        if (s.length() > 10) {
-            prefix = s.substring(0, 3);
-            s = s.substring(3, Math.min(s.length(), 13));
-        }
-        if (s.length() < 10) return isbn;
-
-        String s1;
-
-        s1 = s.substring(0, 7);
-        Integer groupSize = getLengthForPrefix(isbnPrefixes, prefix, Integer.valueOf(s1));
-        @NonNls String group = s.substring(0, groupSize);
-
-        s1 = s.substring(groupSize, groupSize + 7);
-        Integer publisherSize = getLengthForPrefix(isbnGroups, prefix + '-' + group, Integer.valueOf(s1));
-        String publisher = s.substring(groupSize, groupSize + publisherSize);
-
-        StringBuilder result = new StringBuilder(13 + 4);
-        if (isbn.length() > 10) {
-            result.append(prefix);
-            result.append('-');
-        }
-        result.append(group);
-        result.append('-');
-        result.append(publisher);
-        result.append('-');
-        result.append(s.substring(groupSize + publisherSize, 9));
-        result.append('-');
-        result.append(s.substring(s.length() - 1, s.length()));
-        return result.toString();
-    }
-
-    public static String clearISBN(final String code) {
-        final StringBuilder result = new StringBuilder(code.length());
-        for (final char c : code.toUpperCase(Locale.US).toCharArray())
-            if (Character.isDigit(c) || (c == 'X')) {
-                result.append(c);
-            }
-        return result.toString();
-    }
-
-    public static String formatTitre(final String titre) {
-        String s = formatTitreAcceptNull(titre);
-        return (s == null) ? "" : s;
-    }
-
-    @Nullable
-    @SuppressWarnings("StringConcatenationMissingWhitespace")
-    public static String formatTitreAcceptNull(final String titre) {
-        if (titre == null) return null;
-        final int p = titre.lastIndexOf('[');
-        if (p == -1) return titre.trim();
-
-        final int p2 = titre.lastIndexOf(']');
-        if (p2 < p) return titre.trim();
-
-        final String article = titre.substring(p + 1, p2).trim();
-        final String debut = titre.substring(0, p);
-        final String fin = titre.substring(p2 + 1);
-
-        final StringBuilder result = new StringBuilder(titre.length());
-        result.append(article);
-        if (!article.endsWith("'"))
-            result.append(" ");
-        result.append(debut);
-        result.append(fin);
-
-        return result.toString().trim();
     }
 
     public static String trimRight(final String str) {
@@ -370,54 +160,6 @@ end;
         return str.substring(start, end + 1);
     }
 
-    public static String formatTitreAlbum(final boolean simple, final boolean avecSerie, final String titre, final String serie, final Integer tome, final Integer tomeDebut, final Integer tomeFin, final boolean integrale, final boolean horsSerie) {
-        String sAlbum;
-        if (simple)
-            sAlbum = titre;
-        else
-            sAlbum = formatTitre(titre);
-
-        String sSerie = "";
-        if (avecSerie)
-            if ("".equals(sAlbum))
-                sAlbum = formatTitre(serie);
-            else
-                sSerie = formatTitreAcceptNull(serie);
-
-        String sTome;
-        if (integrale) {
-            final String s = ajoutString(nonZero(tomeDebut), nonZero(tomeFin), " à ");
-            sTome = ajoutString("", RES_INTEGRALE.get("".equals(sAlbum)), " - ", "", trimRight(" " + nonZero(tome)));
-            sTome = ajoutString(sTome, s, " ", "[", "]");
-        } else if (horsSerie)
-            sTome = ajoutString("", RES_HORSERIE.get("".equals(sAlbum)), " - ", "", trimRight(" " + nonZero(tome)));
-        else
-            sTome = ajoutString("", nonZero(tome), " - ", RES_TOME.get("".equals(sAlbum)));
-
-        String result = "";
-/*
-        switch (UserConfig.getInstance().getFormatTitreAlbum()) {
-        case 0: // Album (Serie - Tome)
-        sSerie = ajoutString(sSerie, sTome, " - ");
-        if ("".equals(sAlbum)) {
-            result = sSerie;
-        }
-                else
-                    result = ajoutString(sAlbum, sSerie, " ", "(", ")");
-                break;
-            case 1: // Tome - Album (Serie)
-                if ("".equals(sAlbum))
-                    sAlbum = sSerie;
-                else
-                    sAlbum = ajoutString(sAlbum, sSerie, " ", "(", ")");
-                result = ajoutString(sTome, sAlbum, " - ");
-                break;
-        }
-         */
-
-        return result;
-    }
-
     public static boolean isNullOrEmpty(String string) {
         return string == null || string.isEmpty();
     }
@@ -426,7 +168,4 @@ end;
         return list == null || list.isEmpty();
     }
 
-    private static class ISBNRule {
-        int valueLower, valueUpper, length;
-    }
 }

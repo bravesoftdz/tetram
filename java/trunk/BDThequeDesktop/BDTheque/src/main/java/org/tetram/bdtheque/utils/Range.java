@@ -16,6 +16,8 @@
 
 package org.tetram.bdtheque.utils;
 
+import org.jetbrains.annotations.NonNls;
+
 import static java.lang.Integer.MAX_VALUE;
 import static java.lang.Integer.MIN_VALUE;
 
@@ -29,8 +31,14 @@ import static java.lang.Integer.MIN_VALUE;
  */
 public final class Range<T extends Comparable<T>> {
 
-    private final T lowerBound;
+    @NonNls
+    private static final String LOWER_BOUND_IS_GREATER_THAN_UPPER_BOUND = "lowerBound is greater than upperBound";
+    @NonNls
+    private static final String OBJECT_IS_NULL = "object is null";
+    @NonNls
+    private static final String RANGE_IS_NULL = "range is null";
 
+    private final T lowerBound;
     private final T upperBound;
 
     /**
@@ -46,7 +54,7 @@ public final class Range<T extends Comparable<T>> {
      */
     public Range(final T lowerBound, final T upperBound) throws IllegalArgumentException {
         if (lowerBound != null && upperBound != null && lowerBound.compareTo(upperBound) > 0)
-            throw new IllegalArgumentException("lowerBound is greater than upperBound");
+            throw new IllegalArgumentException(LOWER_BOUND_IS_GREATER_THAN_UPPER_BOUND);
 
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
@@ -75,7 +83,7 @@ public final class Range<T extends Comparable<T>> {
     @SuppressWarnings("RedundantIfStatement")
     public final boolean contains(final T object) throws IllegalArgumentException {
         if (object == null)
-            throw new IllegalArgumentException("object is null");
+            throw new IllegalArgumentException(OBJECT_IS_NULL);
 
         if (this.lowerBound != null && object.compareTo(this.lowerBound) < 0)
             return false;
@@ -101,7 +109,7 @@ public final class Range<T extends Comparable<T>> {
     @SuppressWarnings("RedundantIfStatement")
     public final boolean contains(final Range<T> range) throws IllegalArgumentException {
         if (range == null)
-            throw new IllegalArgumentException("range is null");
+            throw new IllegalArgumentException(RANGE_IS_NULL);
 
         if (this.lowerBound != null && (range.lowerBound == null || range.lowerBound.compareTo(this.lowerBound) < 0))
             return false;
@@ -126,7 +134,7 @@ public final class Range<T extends Comparable<T>> {
     @SuppressWarnings("RedundantIfStatement")
     public final boolean overlaps(final Range<T> range) throws IllegalArgumentException {
         if (range == null)
-            throw new IllegalArgumentException("range is null");
+            throw new IllegalArgumentException(RANGE_IS_NULL);
 
         if (this.upperBound != null && range.lowerBound != null && this.upperBound.compareTo(range.lowerBound) < 0)
             return false;

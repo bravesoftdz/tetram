@@ -23,7 +23,7 @@
         select
             g.id_genre, g.genre
         from
-            genreseries s
+            genreSeries s
             inner join genres g on
                 g.id_genre = s.id_genre
         where
@@ -74,12 +74,12 @@
 
     <delete id="cleanGenresSerie">
         <![CDATA[
-        delete from genreseries where id_serie = #{id}
+        delete from genreSeries where id_serie = #{id}
         ]]>
     </delete>
     <insert id="addGenreSerie">
         <![CDATA[
-        insert into genreseries (id_serie, id_genre) values (#{idSerie}, #{idGenre})
+        insert into genreSeries (id_serie, id_genre) values (#{idSerie}, #{idGenre})
         ]]>
     </insert>
 </mapper>

@@ -1,7 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.utils.StringUtils;
 
 /**
  * Created by Thierry on 24/05/2014.
@@ -19,6 +18,6 @@ public class UniversLite extends AbstractDBEntity {
 
     @Override
     public String buildLabel() {
-        return StringUtils.formatTitre(getNomUnivers());
+        return BeanUtils.formatTitre(getNomUnivers());
     }
 }

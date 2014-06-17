@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.tetram.bdtheque.data.dao.mappers.ParaBDMapper">
     <resultMap id="ParaBDLite" type="beanParaBDLite">
-        <id column="id_parabd" property="id"/>
-        <result column="titreparabd" property="titre"/>
+        <id column="id_paraBD" property="id"/>
+        <result column="titreParaBD" property="titre"/>
         <result column="id_serie" property="idSerie"/>
         <result column="titreserie" property="serie"/>
         <result column="achat" property="achat"/>
@@ -11,7 +11,7 @@
         <result column="sCategorie" property="sCategorie"/>
     </resultMap>
     <resultMap id="ParaBDFull" type="beanParaBD">
-        <id column="id_parabd" property="id"/>
+        <id column="id_paraBD" property="id"/>
         <result column="TitreParaBD" property="titreParaBD"/>
         <result column="annee" property="anneeEdition"/>
         <result column="description" property="description"/>
@@ -22,21 +22,21 @@
         <result column="offert" property="offert"/>
         <result column="gratuit" property="gratuit"/>
         <result column="stock" property="stock"/>
-        <result column="dateachat" property="dateAchat"/>
-        <result column="anneecote" property="anneeCote"/>
-        <result column="prixcote" property="prixCote"/>
-        <result column="categorieparabd" property="categorieParaBD"/>
+        <result column="dateAchat" property="dateAchat"/>
+        <result column="anneeCote" property="anneeCote"/>
+        <result column="prixCote" property="prixCote"/>
+        <result column="categorieParaBD" property="categorieParaBD"/>
         <association property="serie" select="org.tetram.bdtheque.data.dao.mappers.SerieMapper.getSerieById"
                      column="id_serie"/>
         <collection property="univers"
                     select="org.tetram.bdtheque.data.dao.mappers.UniversMapper.getListUniversLiteByParaBDId"
-                    column="id_parabd" fetchType="eager"/>
+                    column="id_paraBD" fetchType="eager"/>
         <collection property="photos"
                     select="org.tetram.bdtheque.data.dao.mappers.ImageMapper.getListPhotoLiteByParaBDId"
-                    column="id_parabd"/>
+                    column="id_paraBD"/>
         <collection property="auteurs"
                     select="org.tetram.bdtheque.data.dao.mappers.AuteurMapper.getListAuteurLiteByParaBDId"
-                    column="id_parabd"/>
+                    column="id_paraBD"/>
     </resultMap>
 
     <select id="getParaBDLiteById" resultMap="ParaBDLite">
@@ -48,21 +48,21 @@
     <select id="getParaBDById" resultMap="ParaBDFull">
         <![CDATA[
         select
-            p.id_parabd, p.titreparabd, p.annee, p.id_serie, p.achat, p.description, p.notes, p.dedicace, p.numerote, p.anneecote, p.prixcote,
-            p.gratuit, p.offert, p.dateachat, p.prix, p.stock, p.categorieparabd, lc.libelle as lb_categorieparabd
+            p.id_paraBD, p.titreParaBD, p.annee, p.id_serie, p.achat, p.description, p.notes, p.dedicace, p.numerote, p.anneeCote, p.prixCote,
+            p.gratuit, p.offert, p.dateAchat, p.prix, p.stock, p.categorieParaBD, lc.libelle as lb_categorieParaBD
         from
-            parabd p
+            paraBD p
             left join listes lc on
-                (lc.ref = p.categorieparabd and lc.categorie = 7)
+                (lc.ref = p.categorieParaBD and lc.categorie = 7)
         where
-            id_parabd = #{id}
+            id_paraBD = #{id}
         ]]>
     </select>
 
     <select id="getParaBDLiteBySerieIdByAuteurId" parameterType="map" resultMap="ParaBDLite" resultOrdered="true">
         <![CDATA[
         select
-            id_parabd, titreParabd, id_serie, titreSerie, achat, complet, sCategorie
+            id_paraBD, titreParaBD, id_serie, titreSerie, achat, complet, sCategorie
         from
             vw_liste_parabd
         ]]>
@@ -72,18 +72,18 @@
                 <otherwise>id_serie = #{idSerie}</otherwise>
             </choose>
             <if test="idAuteur != null">
-                and id_parabd in (select id_parabd from auteurs_parabd where id_personne = #{idAuteur})
+                and id_paraBD in (select id_paraBD from auteurs_paraBD where id_personne = #{idAuteur})
             </if>
         </where>
         <![CDATA[
         order by
-            titreParabd
+            titreParaBD
         ]]>
     </select>
 
     <update id="acheter">
         <![CDATA[
-        update parabd set achat = #{achat} where id_parabd = #{id}
+        update paraBD set achat = #{achat} where id_paraBD = #{id}
         ]]>
     </update>
 </mapper>

@@ -9,7 +9,7 @@ import java.util.Comparator;
  */
 public class ValeurListe {
 
-    public static Comparator<ValeurListe> DEFAULT_COMPARATOR = new Comparator<ValeurListe>() {
+    public final static Comparator<ValeurListe> DEFAULT_COMPARATOR = new Comparator<ValeurListe>() {
         @Override
         public int compare(ValeurListe o1, ValeurListe o2) {
             if (o1 == o2) return 0;

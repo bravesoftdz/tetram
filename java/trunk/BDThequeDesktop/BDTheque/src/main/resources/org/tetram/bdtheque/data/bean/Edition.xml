@@ -15,7 +15,7 @@
         <id column="id_edition" property="id"/>
         <!-- voir pour remplacer par un albumlite -->
         <result column="id_album" property="idAlbum"/>
-        <result column="anneeedition" property="anneeEdition"/>
+        <result column="anneeEdition" property="anneeEdition"/>
         <result column="prix" property="prix"/>
         <result column="vo" property="vo"/>
         <result column="couleur" property="couleur"/>
@@ -25,18 +25,18 @@
         <result column="stock" property="stock"/>
         <result column="prete" property="prete"/>
         <result column="isbn" property="isbn"/>
-        <result column="typeedition" property="typeEdition"/>
+        <result column="typeEdition" property="typeEdition"/>
         <result column="etat" property="etat"/>
         <result column="reliure" property="reliure"/>
         <result column="orientation" property="orientation"/>
-        <result column="formatedition" property="formatEdition"/>
-        <result column="senslecture" property="sensLecture"/>
-        <result column="nombredepages" property="nombreDePages"/>
-        <result column="dateachat" property="dateAchat"/>
+        <result column="formatEdition" property="formatEdition"/>
+        <result column="sensLecture" property="sensLecture"/>
+        <result column="nombreDePages" property="nombreDePages"/>
+        <result column="dateAchat" property="dateAchat"/>
         <result column="notes" property="notes"/>
-        <result column="anneecote" property="anneeCote"/>
-        <result column="prixcote" property="prixCote"/>
-        <result column="numeroperso" property="numeroPerso"/>
+        <result column="anneeCote" property="anneeCote"/>
+        <result column="prixCote" property="prixCote"/>
+        <result column="numeroPerso" property="numeroPerso"/>
         <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurLiteById"
                      column="id_editeur"/>
         <association property="collection"
@@ -50,7 +50,7 @@
     <select id="getEditionLiteById" resultMap="EditionLite">
         <![CDATA[
         select
-            id_edition, anneeedition, isbn, id_editeur, id_collection
+            id_edition, anneeEdition, isbn, id_editeur, id_collection
         from
             editions
         where
@@ -61,15 +61,15 @@
     <sql id="selectEditionFull">
         <![CDATA[
         select
-            e.id_edition, e.id_album, e.id_editeur, e.id_collection, e.anneeedition, e.prix, e.vo,
-            e.couleur, e.isbn, e.dedicace, e.prete, e.stock, e.offert, e.gratuit, e.nombredepages, e.dateachat, e.notes,
-            e.anneecote, e.prixcote, e.numeroperso,
+            e.id_edition, e.id_album, e.id_editeur, e.id_collection, e.anneeEdition, e.prix, e.vo,
+            e.couleur, e.isbn, e.dedicace, e.prete, e.stock, e.offert, e.gratuit, e.nombreDePages, e.dateAchat, e.notes,
+            e.anneeCote, e.prixCote, e.numeroPerso,
             e.etat, le.libelle as lb_etat,
             e.reliure, lr.libelle as lb_reliure,
             e.orientation, lo.libelle as lb_orientation,
-            e.formatedition, lf.libelle as lb_formatedition,
-            e.typeedition, lte.libelle as lb_typeedition,
-            e.senslecture, lsl.libelle as lb_senslecture
+            e.formatEdition, lf.libelle as lb_formatEdition,
+            e.typeEdition, lte.libelle as lb_typeEdition,
+            e.sensLecture, lsl.libelle as lb_sensLecture
         from
             editions e
             left join listes le on
@@ -77,13 +77,13 @@
             left join listes lr on
                 (lr.ref = e.reliure and lr.categorie = 2)
             left join listes lte on
-                (lte.ref = e.typeedition and lte.categorie = 3)
+                (lte.ref = e.typeEdition and lte.categorie = 3)
             left join listes lo on
                 (lo.ref = e.orientation and lo.categorie = 4)
             left join listes lf on
-                (lf.ref = e.formatedition and lf.categorie = 5)
+                (lf.ref = e.formatEdition and lf.categorie = 5)
             left join listes lsl on
-                (lsl.ref = e.senslecture and lsl.categorie = 8)
+                (lsl.ref = e.sensLecture and lsl.categorie = 8)
         ]]>
     </sql>
 
@@ -106,9 +106,9 @@
     <sql id="saveEdition">
         <![CDATA[
         update or insert into editions (
-            id_edition, id_album, id_editeur, id_collection, anneeedition, prix, vo, typeedition,
-            couleur, isbn, stock, dedicace, offert, gratuit, etat, reliure, orientation, formatedition,
-            dateachat, notes, nombredepages, anneecote, prixcote, numeroperso, senslecture
+            id_edition, id_album, id_editeur, id_collection, anneeEdition, prix, vo, typeEdition,
+            couleur, isbn, stock, dedicace, offert, gratuit, etat, reliure, orientation, formatEdition,
+            dateAchat, notes, nombreDePages, anneeCote, prixCote, numeroPerso, sensLecture
         ) values (
             #{id}, #{idAlbum}, #{idEditeur}, #{idCollection}, #{anneeEdition}, #{prix}, #{vo}, #{typeEdition},
             #{couleur}, #{isbn}, #{stock}, #{dedicace}, #{offert}, #{gratuit}, #{etat}, #{reliure}, #{orientation}, #{formatEdition},

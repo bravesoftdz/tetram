@@ -15,7 +15,7 @@ import java.sql.SQLException;
  * Created by Thierry on 24/05/2014.
  */
 // si on met l'annotation MappedJdbcTypes, il faut indiquer explicitement le JdbcType (ou le typehandler) sur les champs mappé sur un type UUID
-// ne pas mettre l'annotation impose de tester le paramètre jdbcType pour connaitre le type de la propriété: ici on suppose toujours VARCHAR
+// ne pas mettre l'annotation impose de tester le paramètre jdbcType pour connaître le type de la propriété: ici on suppose toujours VARCHAR
 //@MappedJdbcTypes(JdbcType.VARCHAR)
 
 // le typehandler présuppose:

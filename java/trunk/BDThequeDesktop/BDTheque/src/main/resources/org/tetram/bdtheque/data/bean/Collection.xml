@@ -16,8 +16,8 @@
     <select id="getCollectionLiteById" resultMap="CollectionLite">
         <![CDATA[
         select
-            c.id_collection, c.nomcollection,
-            e.id_editeur, e.nomediteur
+            c.id_collection, c.nomCollection,
+            e.id_editeur, e.nomEditeur
         from
             collections c
             inner join editeurs e on
@@ -30,7 +30,7 @@
     <select id="getCollectionById" resultMap="CollectionFull">
         <![CDATA[
         select
-            id_collection, nomcollection, id_editeur
+            id_collection, nomCollection, id_editeur
         from
             collections
         where
@@ -41,8 +41,8 @@
     <select id="getListCollectionLiteByEditeurId" resultMap="CollectionLite">
         <![CDATA[
         select
-            c.id_collection, c.nomcollection,
-            e.id_editeur, e.nomediteur
+            c.id_collection, c.nomCollection,
+            e.id_editeur, e.nomEditeur
         from
             collections c
             inner join editeurs e on
@@ -59,7 +59,7 @@
         from
             collections
         where
-            nomcollection = #{nomCollection}
+            nomCollection = #{nomCollection}
             and id_editeur = #{idEditeur}
         ]]>
         <if test="id != null">
@@ -72,7 +72,7 @@
     <sql id="saveCollection">
         <![CDATA[
         update or insert into collections (
-            id_collection, nomcollection, id_editeur
+            id_collection, nomCollection, id_editeur
         ) values (
             #{id}, #{nomCollection}, #{idEditeur}
         )

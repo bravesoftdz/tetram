@@ -10,7 +10,6 @@
 
     <context:property-placeholder location="org/tetram/bdtheque/config/database.properties"/>
 
-    <!--bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"-->
     <bean id="dataSource" class="org.springframework.jdbc.datasource.SingleConnectionDataSource">
         <property name="suppressClose" value="true"/>
         <property name="autoCommit" value="false"/>
@@ -55,7 +54,7 @@
 
     <!-- ensure that the above transactional advice runs for any execution of an operation defined by a service -->
     <!-- impératif si on veut que les appels internes des Dao utilisent aussi les transactions -->
-    <!-- apparament, sans ça marche quand même: les transactions sont bien passées entre appels internes -->
+    <!-- apparemment, sans ça marche quand même: les transactions sont bien passées entre appels internes -->
     <!--
         <aop:config>
             <aop:pointcut id="daoOperation" expression="execution(* org.tetram.bdtheque.data.dao.*.*(..))"/>
@@ -114,5 +113,11 @@
     <bean id="valeurlisteMapper" parent="baseMapper">
         <property name="mapperInterface" value="org.tetram.bdtheque.data.dao.mappers.ValeurListeMapper"/>
     </bean>
+
+    <!--
+    <context:spring-configured/>
+    <context:annotation-config/>
+    <context:load-time-weaver/>
+    -->
 
 </beans>

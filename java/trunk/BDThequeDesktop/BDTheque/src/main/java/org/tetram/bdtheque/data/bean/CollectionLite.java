@@ -8,6 +8,7 @@ import java.util.Comparator;
 /**
  * Created by Thierry on 24/05/2014.
  */
+@SuppressWarnings("UnusedDeclaration")
 public class CollectionLite extends AbstractDBEntity {
     public static Comparator<CollectionLite> DEFAULT_COMPARATOR = new Comparator<CollectionLite>() {
         @Override
@@ -52,9 +53,9 @@ public class CollectionLite extends AbstractDBEntity {
     }
 
     public String buildLabel(boolean simple) {
-        String lb = StringUtils.formatTitre(nomCollection);
+        String lb = BeanUtils.formatTitre(nomCollection);
         if (!simple)
-            lb = StringUtils.ajoutString(lb, StringUtils.formatTitre(editeur.getNomEditeur()), " ", "(", ")");
+            lb = StringUtils.ajoutString(lb, BeanUtils.formatTitre(editeur.getNomEditeur()), " ", "(", ")");
         return lb;
     }
 }

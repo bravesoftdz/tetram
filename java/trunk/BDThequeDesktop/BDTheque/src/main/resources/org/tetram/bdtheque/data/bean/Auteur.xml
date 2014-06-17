@@ -28,14 +28,14 @@
         <result column="id_album" property="idAlbum"/>
     </resultMap>
     <resultMap id="AuteurParaBDLite" type="beanAuteurParaBDLite" extends="AuteurLite">
-        <id column="id_auteur_parabd" property="id"/>
-        <result column="id_parabd" property="idParaBD"/>
+        <id column="id_auteur_paraBD" property="id"/>
+        <result column="id_paraBD" property="idParaBD"/>
     </resultMap>
 
     <select id="getPersonneLiteById" resultMap="PersonneLite" parameterType="UUID">
         <![CDATA[
         select
-            id_personne, nompersonne
+            id_personne, nomPersonne
         from
             personnes
         where
@@ -45,7 +45,7 @@
     <select id="getPersonneById" resultMap="PersonneFull" parameterType="UUID">
         <![CDATA[
         select
-            id_personne, nompersonne, siteweb, biographie
+            id_personne, nomPersonne, siteWeb, biographie
         from
             personnes
         where
@@ -85,7 +85,7 @@
         from
             personnes
         where
-            nompersonne = #{nomPersonne}
+            nomPersonne = #{nomPersonne}
         ]]>
         <if test="id != null">
             <![CDATA[
@@ -97,7 +97,7 @@
     <sql id="savePersonne">
         <![CDATA[
         update or insert into personnes (
-            id_personne, nompersonne, siteweb, biographie
+            id_personne, nomPersonne, siteWeb, biographie
         ) values (
             #{id}, #{nomPersonne}, #{siteWeb}, #{biographie}
         )

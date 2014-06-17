@@ -74,7 +74,7 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             // write to jpeg file
-            ImageIO.write(ImageUtils.resizePicture(ImageIO.read(new ByteArrayInputStream(imageBytes)), height, width, antiAliasing, cadre, effet3D), "jpg", output);
+            ImageIO.write(ImageUtils.resizePicture(ImageIO.read(new ByteArrayInputStream(imageBytes)), height, width, antiAliasing, cadre, effet3D), ImageUtils.JPG_FORMAT, output);
 
             return output.toByteArray();
         } catch (IOException e) {

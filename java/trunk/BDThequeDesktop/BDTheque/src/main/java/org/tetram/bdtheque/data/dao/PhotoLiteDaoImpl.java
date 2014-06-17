@@ -5,8 +5,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.tetram.bdtheque.data.bean.PhotoLite;
 
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -23,9 +21,9 @@ public class PhotoLiteDaoImpl extends ImageLiteDaoImpl<PhotoLite, UUID> implemen
                 "photos",
                 "id_photo",
                 "id_parabd",
-                "fichierphoto",
-                "stockagephoto",
-                "imagephoto"
+                "fichierPhoto",
+                "stockagePhoto",
+                "imagePhoto"
         );
     }
 

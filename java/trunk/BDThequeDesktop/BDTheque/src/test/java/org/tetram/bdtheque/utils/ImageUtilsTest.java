@@ -28,6 +28,7 @@ public class ImageUtilsTest {
     private static final String PNG = ".png";
     @NonNls
     private static final String GIF = ".gif";
+    @NonNls
     private static final String JPG = ".jpg";
 
     @Test

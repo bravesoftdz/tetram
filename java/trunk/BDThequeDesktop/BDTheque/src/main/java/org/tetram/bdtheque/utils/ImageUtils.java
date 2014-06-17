@@ -1,6 +1,7 @@
 package org.tetram.bdtheque.utils;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.jetbrains.annotations.NonNls;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -12,6 +13,9 @@ import java.io.IOException;
  * Created by Thierry on 16/06/2014.
  */
 public class ImageUtils {
+
+    @NonNls
+    public static final String JPG_FORMAT = "jpg";
 
     private static Color changeLight(int value, int fromValue, int toValue, Color fromColor, Color toColor) {
         int rc = fromColor.getRed() + ((toColor.getRed() - fromColor.getRed()) * (value - fromValue) / (toValue - fromValue));
@@ -83,13 +87,11 @@ public class ImageUtils {
         return getJPEGStream(file, height, width, antiAliasing, false, 0);
     }
 
-    @SuppressWarnings("HardCodedStringLiteral")
     public static byte[] getJPEGStream(File file, Integer height, Integer width, boolean antiAliasing, boolean cadre, int effet3D) {
-        BufferedImage bufferedImage;
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             // write to jpeg file
-            ImageIO.write(resizePicture(ImageIO.read(file), height, width, antiAliasing, cadre, effet3D), "jpg", output);
+            ImageIO.write(resizePicture(ImageIO.read(file), height, width, antiAliasing, cadre, effet3D), JPG_FORMAT, output);
 
             return output.toByteArray();
         } catch (IOException e) {

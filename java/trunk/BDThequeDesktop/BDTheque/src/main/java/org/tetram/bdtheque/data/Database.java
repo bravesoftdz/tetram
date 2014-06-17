@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data;
 
+import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
@@ -10,7 +11,11 @@ import org.springframework.core.io.ClassPathResource;
  */
 public class Database {
 
+    @NonNls
+    private static final String SPRING_CONFIG_XML = "/org/tetram/bdtheque/config/spring-config.xml";
+
     private static Database ourInstance = null;
+
     final private GenericApplicationContext ctx;
 
     private Database() {
@@ -20,7 +25,7 @@ public class Database {
 
         ctx = new AnnotationConfigApplicationContext();
         XmlBeanDefinitionReader xmlReader = new XmlBeanDefinitionReader(ctx);
-        xmlReader.loadBeanDefinitions(new ClassPathResource("/org/tetram/bdtheque/config/spring-config.xml"));
+        xmlReader.loadBeanDefinitions(new ClassPathResource(SPRING_CONFIG_XML));
         // PropertiesBeanDefinitionReader propReader = new PropertiesBeanDefinitionReader(ctx);
         // propReader.loadBeanDefinitions(new ClassPathResource("otherBeans.properties"));
 

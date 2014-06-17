@@ -76,13 +76,13 @@ public class ParaBDLite extends AbstractDBEntity {
     private String buildLabel(boolean simple, boolean avecSerie) {
         String lb = titre;
         if (!simple)
-            lb = StringUtils.formatTitre(lb);
+            lb = BeanUtils.formatTitre(lb);
         String s = "";
         if (avecSerie)
             if ("".equals(lb))
-                lb = StringUtils.formatTitre(serie);
+                lb = BeanUtils.formatTitre(serie);
             else
-                s = StringUtils.ajoutString(s, StringUtils.formatTitre(serie), " - ");
+                s = StringUtils.ajoutString(s, BeanUtils.formatTitre(serie), " - ");
         s = StringUtils.ajoutString(s, sCategorie, " - ");
         if ("".equals(lb))
             return s;
