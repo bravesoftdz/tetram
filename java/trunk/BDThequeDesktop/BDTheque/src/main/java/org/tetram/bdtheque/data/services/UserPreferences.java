@@ -15,4 +15,20 @@ public interface UserPreferences {
     int getFormatTitreAlbum();
 
     void setFormatTitreAlbum(int value);
+
+    boolean isSerieObligatoireAlbums();
+
+    void setSerieObligatoireAlbums(boolean value);
+
+    boolean isSerieObligatoireParaBD();
+
+    void setSerieObligatoireParaBD(boolean value);
+
+    boolean isAntiAliasing();
+
+    void setAntiAliasing(boolean value);
+
+    boolean isImagesStockees();
+
+    void setImagesStockees(boolean value);
 }

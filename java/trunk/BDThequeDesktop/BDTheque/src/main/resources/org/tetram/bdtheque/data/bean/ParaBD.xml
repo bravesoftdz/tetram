@@ -86,4 +86,34 @@
         update paraBD set achat = #{achat} where id_paraBD = #{id}
         ]]>
     </update>
+
+    <sql id="saveParaBD">
+        <![CDATA[
+        update or insert into parabd (
+            id_parabd, titreParabd, annee, id_serie, categorieparabd, dedicace, numerote, anneecote,
+            prixcote, gratuit, offert, dateachat, prix, stock, description, notes, complet
+        ) values (
+            #{id}, #{titreParabd}, #{annee}, #{idSerie}, #{categorieParaBD}, #{dedicace}, #{numerote}, #{anneeCote},
+            #{prixCote}, #{gratuit}, #{offert}, #{dateAchat}, #{prix}, #{stock}, #{description}, #{notes}, 1
+        )
+        ]]>
+    </sql>
+
+    <insert id="createParaBD">
+        <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
+            <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
+        </selectKey>
+        <include refid="saveParaBD"/>
+    </insert>
+
+    <update id="updateParaBD">
+        <include refid="saveParaBD"/>
+    </update>
+
+    <delete id="deleteParaBD">
+        <![CDATA[
+        delete from ParaBD where id_paraBD = #{id}
+        ]]>
+    </delete>
+
 </mapper>

@@ -48,11 +48,6 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
     }
 
     @Override
-    public byte[] getImageStream(T image, Integer height, Integer width, boolean antiAliasing) {
-        return getImageStream(image, height, width, antiAliasing, false, 0);
-    }
-
-    @Override
     public byte[] getImageStream(T image, Integer height, Integer width, boolean antiAliasing, boolean cadre, int effet3D) {
         ImageStream imageInfo = imageMapper.getImageStream(image, tableName, fieldPk, fieldFile, fieldModeStockage, fieldBlob);
         if (imageInfo.getData().length == 0 && StringUtils.isNullOrEmpty(imageInfo.getFileName()))

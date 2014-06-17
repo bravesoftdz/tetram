@@ -3,9 +3,10 @@ package org.tetram.bdtheque.utils;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
-import org.tetram.bdtheque.data.BeanUtils;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Locale;
+import java.util.UUID;
 
 @SuppressWarnings("UnusedDeclaration")
 public abstract class StringUtils {
@@ -113,6 +114,7 @@ begin
 end;
 */
 
+    @SuppressWarnings("CallToStringEquals")
     public static String ajoutString(String chaine, final String ajout, final String espace, final String avant, final String apres) {
         final StringBuilder stringBuilder = new StringBuilder(
                 ((chaine == null) ? 0 : chaine.length())

@@ -139,4 +139,22 @@
         ]]>
     </insert>
 
+    <delete id="cleanAuteursParaBD">
+        <![CDATA[
+        delete from auteurs_parabd where id_parabd = #{id}
+        ]]>
+    </delete>
+    <insert id="addAuteurParaBD">
+        <selectKey keyProperty="auteur.id" order="BEFORE" resultType="UUID">
+            <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
+        </selectKey>
+        <![CDATA[
+        insert into auteurs_parabd (
+            id_auteur_parabd, id_parabd, id_personne
+        ) values (
+            #{auteur.id}, #{idSerie}, #{auteur.personne.id}
+        )
+        ]]>
+    </insert>
+
 </mapper>

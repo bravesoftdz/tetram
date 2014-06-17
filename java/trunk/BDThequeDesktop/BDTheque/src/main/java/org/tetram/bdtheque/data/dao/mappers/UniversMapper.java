@@ -24,4 +24,8 @@ public interface UniversMapper extends BaseMapperInterface {
     int cleanUniversSerie(@Param("idSerie") UUID isSerie, @Param("univers") Set<UniversLite> universToKeep);
 
     int addUniversSerie(@Param("idSerie") UUID isSerie, @Param("idUnivers") UUID isUnivers);
+
+    int cleanUniversParaBD(@Param("idParaBD") UUID isParaBD, @Param("univers") Set<UniversLite> universToKeep);
+
+    int addUniversParaBD(@Param("idParaBD") UUID isParaBD, @Param("idUnivers") UUID isUnivers);
 }

@@ -24,9 +24,22 @@ public class UserPreferencesImpl implements UserPreferences {
     public static final String PREF_REP_IMAGES = "RepImages";
     @NonNls
     public static final String PREF_REP_IMAGES_DEFAULT = "RepImages";
+
     @NonNls
     private static final String PREF_FORMAT_TITRE_ALBUM = "FormatTitreAlbum";
     private static final int PREF_FORMAT_TITRE_ALBUM_DEFAULT = 0;
+    @NonNls
+    private static final String PREF_SERIE_OBLIGATOIRE_ALBUMS = "SerieObligatoireAlbums";
+    private static final boolean PREF_SERIE_OBLIGATOIRE_ALBUMS_DEFAULT = false;
+    @NonNls
+    private static final String PREF_SERIE_OBLIGATOIRE_PARABD = "SerieObligatoireParaBD";
+    private static final boolean PREF_SERIE_OBLIGATOIRE_PARABD_DEFAULT = false;
+    @NonNls
+    private static final String PREF_ANTI_ALIASING = "AntiAliasing";
+    private static final boolean PREF_ANTI_ALIASING_DEFAULT = true;
+    @NonNls
+    private static final String PREF_IMAGES_STOCKEES = "ImagesStockees";
+    private static final boolean PREF_IMAGES_STOCKEES_DEFAULT = false;
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -59,6 +72,10 @@ public class UserPreferencesImpl implements UserPreferences {
         }
 
         defaultPrefs.put(PREF_FORMAT_TITRE_ALBUM, PREF_FORMAT_TITRE_ALBUM_DEFAULT);
+        defaultPrefs.put(PREF_SERIE_OBLIGATOIRE_ALBUMS, PREF_SERIE_OBLIGATOIRE_ALBUMS_DEFAULT);
+        defaultPrefs.put(PREF_SERIE_OBLIGATOIRE_PARABD, PREF_SERIE_OBLIGATOIRE_PARABD_DEFAULT);
+        defaultPrefs.put(PREF_ANTI_ALIASING, PREF_ANTI_ALIASING_DEFAULT);
+        defaultPrefs.put(PREF_IMAGES_STOCKEES, PREF_IMAGES_STOCKEES_DEFAULT);
 
         return defaultPrefs;
     }
@@ -114,12 +131,16 @@ public class UserPreferencesImpl implements UserPreferences {
         }
     }
 
-    private String getStringPref(String key){
+    private String getStringPref(String key) {
         return getPrefs().getProperty(key);
     }
 
-    private int getIntPref(String key){
+    private int getIntPref(String key) {
         return Integer.valueOf(getPrefs().getProperty(key));
+    }
+
+    private boolean getBooleanPref(String key) {
+        return Boolean.valueOf(getPrefs().getProperty(key));
     }
 
     private Object setPref(String key, String value) {
@@ -127,6 +148,10 @@ public class UserPreferencesImpl implements UserPreferences {
     }
 
     private Object setPref(String key, int value) {
+        return getPrefs().put(key, value);
+    }
+
+    private Object setPref(String key, boolean value) {
         return getPrefs().put(key, value);
     }
 
@@ -148,6 +173,46 @@ public class UserPreferencesImpl implements UserPreferences {
     @Override
     public void setFormatTitreAlbum(int value) {
         setPref(PREF_FORMAT_TITRE_ALBUM, value);
+    }
+
+    @Override
+    public boolean isSerieObligatoireAlbums() {
+        return getBooleanPref(PREF_SERIE_OBLIGATOIRE_ALBUMS);
+    }
+
+    @Override
+    public void setSerieObligatoireAlbums(boolean value) {
+        setPref(PREF_SERIE_OBLIGATOIRE_ALBUMS, value);
+    }
+
+    @Override
+    public boolean isSerieObligatoireParaBD() {
+        return getBooleanPref(PREF_SERIE_OBLIGATOIRE_PARABD);
+    }
+
+    @Override
+    public void setSerieObligatoireParaBD(boolean value) {
+        setPref(PREF_SERIE_OBLIGATOIRE_PARABD, value);
+    }
+
+    @Override
+    public boolean isAntiAliasing() {
+        return getBooleanPref(PREF_ANTI_ALIASING);
+    }
+
+    @Override
+    public void setAntiAliasing(boolean value) {
+        setPref(PREF_ANTI_ALIASING, value);
+    }
+
+    @Override
+    public boolean isImagesStockees() {
+        return getBooleanPref(PREF_IMAGES_STOCKEES);
+    }
+
+    @Override
+    public void setImagesStockees(boolean value) {
+        setPref(PREF_IMAGES_STOCKEES, value);
     }
 
 }

@@ -12,7 +12,13 @@ import java.util.UUID;
 public interface ImageLiteDao<T extends ImageLite, K> extends DaoRW<T, K> {
     byte[] getImageStream(T image, Integer height, Integer width, boolean antiAliasing, boolean cadre, int effet3D);
 
-    byte[] getImageStream(T image, Integer height, Integer width, boolean antiAliasing);
+    default byte[] getImageStream(T image, Integer height, Integer width, boolean antiAliasing) {
+        return getImageStream(image, height, width, antiAliasing, false, 0);
+    }
 
     void saveList(List<T> list, UUID parentId, Map<String, UUID> secondaryParams);
+
+    default void saveList(List<T> list, UUID parentId) {
+        saveList(list, parentId, null);
+    }
 }

@@ -136,4 +136,27 @@
         ]]>
     </insert>
 
+    <delete id="cleanUniversParaBD">
+        <![CDATA[
+        delete from parabd_univers
+        where
+            id_parabd = #{idParaBD}
+        ]]>
+        <if test="univers != null and !univers.isEmpty">
+            and id_univers not in
+            <foreach collection="univers" item="item" index="index" open="(" separator="," close=")">
+                #{item.id}
+            </foreach>
+        </if>
+    </delete>
+    <insert id="addUniversParaBD">
+        <![CDATA[
+        update or insert into parabd_univers (
+            id_parabd, id_univers
+        ) values (
+            #{idParaBD}, #{idUnivers}
+        )
+        ]]>
+    </insert>
+
 </mapper>

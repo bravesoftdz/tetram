@@ -29,4 +29,8 @@ public interface AuteurMapper extends BaseMapperInterface {
     int cleanAuteursSerie(@Param("id") UUID idSerie);
 
     int addAuteurSerie(@Param("idSerie") UUID idSerie, @Param("auteur") AuteurSerieLite auteur);
+
+    int cleanAuteursParaBD(@Param("id") UUID idParaBD);
+
+    int addAuteurParaBD(@Param("idParaBD") UUID idParaBD, @Param("auteur") AuteurParaBDLite auteur);
 }
