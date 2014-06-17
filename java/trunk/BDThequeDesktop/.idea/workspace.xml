@@ -10,22 +10,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="32b66b81-914a-4675-898b-1fae1d6860ea" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/AbstractEntity.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/AbstractEntity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/bean/Auteur.xml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/bean/Auteur.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/AuteurMapper.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/AuteurMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Collection.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/Collection.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/doc/Entities.DaoFull.pas" afterPath="$PROJECT_DIR$/BDTheque/doc/Entities.DaoFull.pas" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ImageLiteDao.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ImageLiteDao.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ImageLiteDaoImpl.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ImageLiteDaoImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/bean/ParaBD.xml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/bean/ParaBD.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ParaBDDaoImpl.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ParaBDDaoImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/PhotoLite.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/bean/PhotoLite.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/utils/StringUtils.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/utils/StringUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/bean/Univers.xml" afterPath="$PROJECT_DIR$/BDTheque/src/main/resources/org/tetram/bdtheque/data/bean/Univers.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/UniversMapper.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/mappers/UniversMapper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/services/UserPreferences.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/services/UserPreferences.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/services/UserPreferencesImpl.java" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/services/UserPreferencesImpl.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/sample.fxml" afterPath="$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/gui/sample.fxml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="BDThequeDesktop.iws" />
@@ -77,7 +61,7 @@
       <file leaf-file-name="ParaBDDaoImpl.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ParaBDDaoImpl.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.06695939" vertical-offset="126" max-vertical-offset="1037">
+            <state vertical-scroll-proportion="0.20526893" vertical-offset="0" max-vertical-offset="1037">
               <caret line="27" column="81" selection-start-line="27" selection-start-column="81" selection-end-line="27" selection-end-column="81" />
               <folding>
                 <element signature="e#943#981#0" expanded="true" />
@@ -1764,7 +1748,11 @@
       <created>1403025239378</created>
       <updated>1403025239378</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031">
+      <created>1403030632244</created>
+      <updated>1403030632244</updated>
+    </task>
+    <option name="localTasksCounter" value="32" />
     <servers />
   </component>
   <component name="TodoView" selected-index="0">
@@ -2287,7 +2275,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/BDTheque/src/main/java/org/tetram/bdtheque/data/dao/ParaBDDaoImpl.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.06695939" vertical-offset="126" max-vertical-offset="1037">
+        <state vertical-scroll-proportion="0.20526893" vertical-offset="0" max-vertical-offset="1037">
           <caret line="27" column="81" selection-start-line="27" selection-start-column="81" selection-end-line="27" selection-end-column="81" />
           <folding>
             <element signature="e#943#981#0" expanded="true" />
