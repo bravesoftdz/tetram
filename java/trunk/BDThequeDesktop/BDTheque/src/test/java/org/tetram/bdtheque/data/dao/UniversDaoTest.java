@@ -1,5 +1,6 @@
 package org.tetram.bdtheque.data.dao;
 
+import org.apache.ibatis.session.SqlSession;
 import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
 import org.junit.Test;
@@ -8,9 +9,13 @@ import org.tetram.bdtheque.SpringTest;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.bean.Univers;
+import org.tetram.bdtheque.data.dao.mappers.SqlMapper;
 import org.tetram.bdtheque.utils.StringUtils;
 
 public class UniversDaoTest extends SpringTest {
+
+    @Autowired
+    private SqlMapper sqlMapper;
 
     @Autowired
     private UniversDao dao; // = Database.getInstance().getApplicationContext().getBean(UniversDao.class);
@@ -32,6 +37,8 @@ public class UniversDaoTest extends SpringTest {
     public void testCreateWithParent() throws Exception {
         int rowCount;
 
+        sqlMapper.execute("delete from univers where nomunivers = '" + Constants.TEST_CREATE + "'");
+
         Univers univers;
 
         univers = new Univers();
@@ -43,7 +50,10 @@ public class UniversDaoTest extends SpringTest {
         Assert.assertNotNull(univers.getId());
         Assert.assertNotEquals(StringUtils.GUID_NULL, univers.getId());
 
+        Univers oldUnivers = univers;
         univers = dao.get(univers.getId());
+        Assert.assertEquals(0, oldUnivers.fullCompare(univers));
+
         Assert.assertEquals(Constants.TEST_CREATE, univers.getNomUnivers());
         Assert.assertNotNull(univers.getUniversParent());
         Assert.assertEquals(Constants.ID_UNIVERS_TROLLS_DE_TROY, univers.getUniversParent().getId());
@@ -65,6 +75,8 @@ public class UniversDaoTest extends SpringTest {
     @Test
     public void testCreateWithoutParent() throws Exception {
         int rowCount;
+
+        sqlMapper.execute("delete from univers where nomunivers = '" + Constants.TEST_CREATE + "'");
 
         Univers univers;
 
