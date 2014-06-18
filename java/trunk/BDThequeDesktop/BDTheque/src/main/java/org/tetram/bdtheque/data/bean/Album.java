@@ -3,6 +3,7 @@ package org.tetram.bdtheque.data.bean;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
+import org.tetram.bdtheque.utils.TypeUtils;
 
 import java.util.Comparator;
 import java.util.HashSet;
@@ -92,8 +93,12 @@ public class Album extends AbstractDBEntity {
         this.serie = serie;
     }
 
+    public UUID getIdSerie() {
+        return getSerie() == null ? null : getSerie().getId();
+    }
+
     public Integer getMoisParution() {
-        return moisParution;
+        return TypeUtils.isNullOrZero(anneeParution) ? null : moisParution;
     }
 
     public void setMoisParution(Integer moisParution) {
@@ -309,10 +314,6 @@ public class Album extends AbstractDBEntity {
             return true;
         } else
             return false;
-    }
-
-    public UUID getIdSerie() {
-        return getSerie().getId();
     }
 
 }

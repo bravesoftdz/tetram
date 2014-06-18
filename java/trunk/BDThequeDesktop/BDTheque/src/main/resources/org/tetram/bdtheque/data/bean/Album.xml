@@ -132,4 +132,35 @@
         update albums set achat = #{achat} where id_album = #{id}
         ]]>
     </update>
+
+    <sql id="saveAlbum">
+        <![CDATA[
+        update or insert into albums (
+            id_album, titreAlbum, moisParution, anneeParution, id_serie, tome, tomeDebut, tomeFin,
+            horsSerie, integrale, sujetAlbum, remarquesAlbum
+        ) values (
+            #{id}, #{titreAlbum}, #{moisParution}, #{anneeParution}, #{idSerie}, #{tome}, #{tomeDebut}, #{tomeFin},
+            #{horsSerie}, #{integrale}, #{sujet}, #{notes}
+        )
+        ]]>
+    </sql>
+
+    <insert id="createAlbum">
+        <selectKey keyProperty="id" order="BEFORE" resultType="UUID">
+            <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
+        </selectKey>
+        <include refid="saveAlbum"/>
+    </insert>
+
+    <update id="updateAlbum">
+        <include refid="saveAlbum"/>
+    </update>
+
+    <delete id="deleteAlbum">
+        <![CDATA[
+        delete from albums where id_album = #{id}
+        ]]>
+    </delete>
+
 </mapper>
+
