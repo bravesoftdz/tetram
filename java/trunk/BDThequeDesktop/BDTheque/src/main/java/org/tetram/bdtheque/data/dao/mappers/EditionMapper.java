@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Param;
 import org.tetram.bdtheque.data.bean.Edition;
 import org.tetram.bdtheque.data.bean.EditionLite;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -16,4 +17,6 @@ public interface EditionMapper extends BaseMapperInterface {
     Edition getEditionById(UUID id);
 
     List<Edition> getListEditionByAlbumId(@Param("id") UUID id, @Param("stock") Boolean stock);
+
+    int cleanEditionsAlbum(@Param("IdAlbum") UUID idAlbum, @Param("editions") Collection<Edition> editions);
 }

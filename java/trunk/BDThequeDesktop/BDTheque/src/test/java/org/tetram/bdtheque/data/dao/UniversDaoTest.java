@@ -1,6 +1,5 @@
 package org.tetram.bdtheque.data.dao;
 
-import org.apache.ibatis.session.SqlSession;
 import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
 import org.junit.Test;

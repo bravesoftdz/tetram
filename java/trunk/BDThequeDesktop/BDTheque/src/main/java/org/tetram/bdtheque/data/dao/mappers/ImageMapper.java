@@ -1,11 +1,9 @@
 package org.tetram.bdtheque.data.dao.mappers;
 
 import org.apache.ibatis.annotations.Param;
-import org.tetram.bdtheque.data.bean.CouvertureLite;
-import org.tetram.bdtheque.data.bean.ImageLite;
-import org.tetram.bdtheque.data.bean.ImageStream;
-import org.tetram.bdtheque.data.bean.PhotoLite;
+import org.tetram.bdtheque.data.bean.*;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -21,7 +19,7 @@ public interface ImageMapper extends BaseMapperInterface {
     <T extends ImageLite>
     int cleanImageLite(
             @Param("parentId") UUID parentId,
-            @Param("list") List<T> list,
+            @Param("list") Collection<T> list,
             @Param("tableName") String tableName,
             @Param("fieldParentId") String fieldParentId,
             @Param("fieldId") String fieldId
@@ -70,4 +68,6 @@ public interface ImageMapper extends BaseMapperInterface {
             @Param("fieldModeStockage") String fieldModeStockage,
             @Param("fieldBlob") String fieldBlob
     );
+
+    int cleanCouverturesAlbum(@Param("idAlbum") UUID idAlbum, @Param("editions") Collection<Edition> editions);
 }

@@ -9,6 +9,15 @@ import java.util.List;
  * Created by Thierry on 18/06/2014.
  */
 public interface SqlMapper extends BaseMapperInterface {
+    @SelectProvider(type = PureSqlProvider.class, method = "sql")
+    public List<?> select(@NonNls String sql);
+
+    @SelectProvider(type = PureSqlProvider.class, method = "count")
+    public Integer count(@NonNls String from);
+
+    @SelectProvider(type = PureSqlProvider.class, method = "sql")
+    public Integer execute(@NonNls String query);
+
     static class PureSqlProvider {
         public String sql(String sql) {
             return sql;
@@ -19,13 +28,4 @@ public interface SqlMapper extends BaseMapperInterface {
             return "SELECT count(*) FROM " + from;
         }
     }
-
-    @SelectProvider(type = PureSqlProvider.class, method = "sql")
-    public List<?> select(@NonNls String sql);
-
-    @SelectProvider(type = PureSqlProvider.class, method = "count")
-    public Integer count(@NonNls String from);
-
-    @SelectProvider(type = PureSqlProvider.class, method = "sql")
-    public Integer execute(@NonNls String query);
 }

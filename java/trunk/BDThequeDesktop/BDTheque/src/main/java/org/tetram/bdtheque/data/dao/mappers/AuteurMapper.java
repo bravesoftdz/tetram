@@ -20,11 +20,9 @@ public interface AuteurMapper extends BaseMapperInterface {
 
     Personne getPersonneById(UUID id);
 
-    int createAuteur(Personne personne);
+    int cleanAuteursAlbum(@Param("id") UUID idAlbum);
 
-    int updateAuteur(Personne personne);
-
-    int deleteAuteur(UUID id);
+    int addAuteurAlbum(@Param("idAlbum") UUID idAlbum, @Param("auteur") AuteurAlbumLite auteur);
 
     int cleanAuteursSerie(@Param("id") UUID idSerie);
 

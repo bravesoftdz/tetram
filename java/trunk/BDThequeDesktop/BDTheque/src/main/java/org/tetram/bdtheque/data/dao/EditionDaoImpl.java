@@ -28,11 +28,10 @@ public class EditionDaoImpl extends DaoRWImpl<Edition, UUID> implements EditionD
     private CouvertureLiteDao couvertureLiteDao;
 
     @Override
-    public void validate(@NotNull Edition object) throws ConsistencyException {
-        super.validate(object);
-        if (object.getIdAlbum() == null)
-            throw new ConsistencyException(I18nSupport.message("album.obligatoire"));
-        if (object.getEditeur() == null)
+    public void validateFromAlbum(@NotNull Edition edition) throws ConsistencyException {
+        super.validate(edition);
+
+        if (edition.getEditeur() == null)
             throw new ConsistencyException(I18nSupport.message("editeur.obligatoire"));
         /*
         ce n'est pas à faire par le DAO: il faut que l'utilisateur confirme la correction proposée
@@ -46,11 +45,18 @@ public class EditionDaoImpl extends DaoRWImpl<Edition, UUID> implements EditionD
                 EditionComplete.ISBN := cs;
             end
         */
-        int anneeCote = object.getAnneeCote() == null ? 0 : object.getAnneeCote();
-        double prixCote = object.getPrixCote() == null ? 0 : object.getPrixCote();
+        int anneeCote = edition.getAnneeCote() == null ? 0 : edition.getAnneeCote();
+        double prixCote = edition.getPrixCote() == null ? 0 : edition.getPrixCote();
         if (anneeCote * prixCote == 0 && anneeCote + prixCote != 0)
             // une cote doit être composée d'une année ET d'un prix
             throw new ConsistencyException(I18nSupport.message("cote.incomplete"));
+    }
+
+    @Override
+    public void validate(@NotNull Edition object) throws ConsistencyException {
+        validateFromAlbum(object);
+        if (object.getIdAlbum() == null)
+            throw new ConsistencyException(I18nSupport.message("album.obligatoire"));
     }
 
     @Override
@@ -61,4 +67,5 @@ public class EditionDaoImpl extends DaoRWImpl<Edition, UUID> implements EditionD
         couvertureLiteDao.saveList(o.getCouvertures(), o.getId(), params);
         return status;
     }
+
 }

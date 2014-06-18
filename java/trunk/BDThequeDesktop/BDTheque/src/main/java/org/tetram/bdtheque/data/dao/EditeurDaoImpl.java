@@ -20,17 +20,17 @@ import java.util.UUID;
 @SuppressWarnings("UnusedDeclaration")
 public class EditeurDaoImpl extends DaoScriptImpl<Editeur, UUID> implements EditeurDao {
     @Override
-    public int save(@NotNull Editeur o) throws ConsistencyException {
-        if (!isUnique(o))
-            throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("editeur")));
-        return super.save(o);
-    }
-
-    @Override
     public void validate(@NotNull Editeur object) throws ConsistencyException {
         super.validate(object);
         if (StringUtils.isNullOrEmpty(object.getNomEditeur()))
             throw new ConsistencyException(I18nSupport.message("nom.obligatoire"));
+    }
+
+    @Override
+    public int save(@NotNull Editeur o) throws ConsistencyException {
+        if (!isUnique(o))
+            throw new ConsistencyException(I18nSupport.message("title.still.used", I18nSupport.message("editeur")));
+        return super.save(o);
     }
 
 }

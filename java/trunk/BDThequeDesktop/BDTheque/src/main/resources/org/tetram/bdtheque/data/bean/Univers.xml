@@ -113,6 +113,29 @@
         ]]>
     </delete>
 
+    <update id="cleanUniversAlbum">
+        <![CDATA[
+        update albums_univers set source_album = 0
+        where
+            id_album = #{idSerie}
+        ]]>
+        <if test="univers != null and !univers.isEmpty">
+            and id_univers not in
+            <foreach collection="univers" item="item" index="index" open="(" separator="," close=")">
+                #{item.id}
+            </foreach>
+        </if>
+    </update>
+    <insert id="addUniversAlbum">
+        <![CDATA[
+        update or insert into albums_univers (
+            id_album, id_univers, source_album
+        ) values (
+            #{idAlbum}, #{idUnivers}, 1
+        )
+        ]]>
+    </insert>
+
     <delete id="cleanUniversSerie">
         <![CDATA[
         delete from series_univers
@@ -136,9 +159,9 @@
         ]]>
     </insert>
 
-    <delete id="cleanUniversParaBD">
+    <update id="cleanUniversParaBD">
         <![CDATA[
-        delete from parabd_univers
+         update parabd_univers set source_parabd = 0
         where
             id_parabd = #{idParaBD}
         ]]>
@@ -148,13 +171,13 @@
                 #{item.id}
             </foreach>
         </if>
-    </delete>
+    </update>
     <insert id="addUniversParaBD">
         <![CDATA[
         update or insert into parabd_univers (
-            id_parabd, id_univers
+            id_parabd, id_univers, source_parabd
         ) values (
-            #{idParaBD}, #{idUnivers}
+            #{idParaBD}, #{idUnivers}, 1
         )
         ]]>
     </insert>

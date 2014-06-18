@@ -153,4 +153,18 @@
             ${fieldId} = #{image.id}
         </where>
     </select>
+
+    <delete id="cleanCouverturesAlbum">
+        <![CDATA[
+        delete from couvertures
+        where
+            id_album = #{idAlbum} and id_edition is not null
+        ]]>
+        <if test="editions != null and !editions.isEmpty">
+            and id_edition not in
+            <foreach collection="editions" item="item" index="index" open="(" separator="," close=")">
+                #{item.id}
+            </foreach>
+        </if>
+    </delete>
 </mapper>

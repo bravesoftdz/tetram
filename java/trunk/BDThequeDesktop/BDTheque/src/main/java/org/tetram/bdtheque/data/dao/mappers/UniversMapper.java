@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Param;
 import org.tetram.bdtheque.data.bean.Univers;
 import org.tetram.bdtheque.data.bean.UniversLite;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.UUID;
 
@@ -21,11 +22,15 @@ public interface UniversMapper extends BaseMapperInterface {
 
     Univers getUniversById(UUID id);
 
-    int cleanUniversSerie(@Param("idSerie") UUID isSerie, @Param("univers") Set<UniversLite> universToKeep);
+    int cleanUniversAlbum(@Param("idAlbum") UUID isAlbum, @Param("univers") Collection<UniversLite> universToKeep);
+
+    int addUniversAlbum(@Param("idAlbum") UUID isAlbum, @Param("idUnivers") UUID isUnivers);
+
+    int cleanUniversSerie(@Param("idSerie") UUID isSerie, @Param("univers") Collection<UniversLite> universToKeep);
 
     int addUniversSerie(@Param("idSerie") UUID isSerie, @Param("idUnivers") UUID isUnivers);
 
-    int cleanUniversParaBD(@Param("idParaBD") UUID isParaBD, @Param("univers") Set<UniversLite> universToKeep);
+    int cleanUniversParaBD(@Param("idParaBD") UUID isParaBD, @Param("univers") Collection<UniversLite> universToKeep);
 
     int addUniversParaBD(@Param("idParaBD") UUID isParaBD, @Param("idUnivers") UUID isUnivers);
 }

@@ -121,6 +121,24 @@
         ]]>
     </delete>
 
+    <delete id="cleanAuteursAlbum">
+        <![CDATA[
+        delete from auteurs where id_album = #{id}
+        ]]>
+    </delete>
+    <insert id="addAuteurAlbum">
+        <selectKey keyProperty="auteur.id" order="BEFORE" resultType="UUID">
+            <include refid="org.tetram.bdtheque.data.dao.mappers.CommonMapper.autoIncKey"/>
+        </selectKey>
+        <![CDATA[
+        insert into auteurs (
+            id_auteur, id_album, metier, id_personne
+        ) values (
+            #{auteur.id}, #{idSerie}, #{auteur.metier}, #{auteur.personne.id}
+        )
+        ]]>
+    </insert>
+
     <delete id="cleanAuteursSerie">
         <![CDATA[
         delete from auteurs_series where id_serie = #{id}

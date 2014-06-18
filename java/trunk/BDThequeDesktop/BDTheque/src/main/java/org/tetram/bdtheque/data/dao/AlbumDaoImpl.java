@@ -12,6 +12,8 @@ import org.tetram.bdtheque.data.bean.AuteurAlbumLite;
 import org.tetram.bdtheque.data.bean.Edition;
 import org.tetram.bdtheque.data.bean.UniversLite;
 import org.tetram.bdtheque.data.dao.mappers.AuteurMapper;
+import org.tetram.bdtheque.data.dao.mappers.EditionMapper;
+import org.tetram.bdtheque.data.dao.mappers.ImageMapper;
 import org.tetram.bdtheque.data.dao.mappers.UniversMapper;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.utils.I18nSupport;
@@ -37,7 +39,10 @@ public class AlbumDaoImpl extends DaoRWImpl<Album, UUID> implements AlbumDao {
     private UniversMapper universMapper;
     @Autowired
     private EditionDao editionDao;
-
+    @Autowired
+    private EditionMapper editionMapper;
+    @Autowired
+    private ImageMapper imageMapper;
 
     @Override
     public void validate(@NotNull Album object) throws ConsistencyException {
@@ -52,8 +57,8 @@ public class AlbumDaoImpl extends DaoRWImpl<Album, UUID> implements AlbumDao {
         if (object.getMoisParution() != null && !new Range<>(1, 12).contains(object.getMoisParution()))
             throw new ConsistencyException(I18nSupport.message("mois.parution.incorrect"));
 
-        for (Edition edition : object.getEditions())
-            editionDao.validate(edition);
+        // validate vérifierait qu'on a bien sélectionné un album... or en création, on ne connait pas encore l'idAlbum à ce moment là
+        for (Edition edition : object.getEditions()) editionDao.validateFromAlbum(edition);
     }
 
     @Override
@@ -67,6 +72,11 @@ public class AlbumDaoImpl extends DaoRWImpl<Album, UUID> implements AlbumDao {
         universMapper.cleanUniversAlbum(o.getId(), o.getUnivers());
         for (UniversLite univers : o.getUnivers())
             universMapper.addUniversAlbum(o.getId(), univers.getId());
+
+        editionMapper.cleanEditionsAlbum(o.getId(), o.getEditions());
+        imageMapper.cleanCouverturesAlbum(o.getId(), o.getEditions());
+        for (Edition edition : o.getEditions()) edition.setIdAlbum(o.getId());
+        editionDao.save(o.getEditions());
 
         return status;
     }
