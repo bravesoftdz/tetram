@@ -212,56 +212,6 @@ begin
   end;
 end;
 
-class procedure TDaoAlbumFull.SaveToDatabase(Entity: TAlbumFull; UseTransaction: TUIBTransaction);
-var
-  S: string;
-  qry: TUIBQuery;
-  Auteur: TAuteurAlbumLite;
-  hg: IHourGlass;
-  Edition: TEditionFull;
-  Univers: TUniversLite;
-begin
-  inherited;
-  hg := THourGlass.Create;
-  qry := TUIBQuery.Create(nil);
-  try
-    qry.Transaction := UseTransaction;
-
-    S := '';
-    for Edition in Entity.Editions do
-      if not Edition.RecInconnu then
-        AjoutString(S, QuotedStr(GUIDToString(Edition.ID_Edition)), ',');
-
-    // éditions supprimées
-    qry.SQL.Clear;
-    qry.SQL.Add('delete from editions');
-    qry.SQL.Add('where');
-    qry.SQL.Add('  id_album = ?');
-    if S <> '' then
-      qry.SQL.Add('  and id_edition not in (' + S + ')');
-    qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
-    qry.Execute;
-    qry.SQL.Clear;
-    qry.SQL.Add('delete from couvertures');
-    qry.SQL.Add('where');
-    qry.SQL.Add('  id_album = ? and id_edition is not null');
-    if S <> '' then
-      qry.SQL.Add('  and id_edition not in (' + S + ')');
-    qry.Params.AsString[0] := GUIDToString(Entity.ID_Album);
-    qry.Execute;
-
-    for Edition in Entity.Editions do
-    begin
-      Edition.ID_Album := Entity.ID_Album;
-      TDaoEditionFull.SaveToDatabase(Edition, qry.Transaction);
-    end;
-
-    qry.Transaction.Commit;
-  finally
-    qry.Free;
-  end;
-end;
-
 { TDaoEditionFull }
 
 class procedure TDaoEditionFull.FusionneInto(Source, Dest: TObjectList<TEditionFull>);
