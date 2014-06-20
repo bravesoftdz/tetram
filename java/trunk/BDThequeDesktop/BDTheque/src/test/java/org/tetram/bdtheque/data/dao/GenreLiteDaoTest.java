@@ -2,18 +2,28 @@ package org.tetram.bdtheque.data.dao;
 
 import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.SpringTest;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.bean.GenreLite;
+import org.tetram.bdtheque.data.dao.mappers.SqlMapper;
 import org.tetram.bdtheque.utils.StringUtils;
 
 public class GenreLiteDaoTest extends SpringTest {
 
     @Autowired
     private GenreLiteDao dao;
+    @Autowired
+    private SqlMapper sqlMapper;
+
+    @SuppressWarnings("HardCodedStringLiteral")
+    @Before
+    public void setUp() {
+        sqlMapper.execute("delete from genres where genre = '" + Constants.TEST_CREATE + "'");
+    }
 
     @Test
     public void testGet() throws Exception {

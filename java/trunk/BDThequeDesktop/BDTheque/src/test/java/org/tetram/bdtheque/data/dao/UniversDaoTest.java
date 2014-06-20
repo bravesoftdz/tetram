@@ -2,6 +2,7 @@ package org.tetram.bdtheque.data.dao;
 
 import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.SpringTest;
@@ -17,9 +18,14 @@ public class UniversDaoTest extends SpringTest {
     private SqlMapper sqlMapper;
 
     @Autowired
-    private UniversDao dao; // = Database.getInstance().getApplicationContext().getBean(UniversDao.class);
+    private UniversDao dao;
     @Autowired
-    private UniversLiteDao daoUnivers; // = Database.getInstance().getApplicationContext().getBean(UniversLiteDao.class);
+    private UniversLiteDao daoUnivers;
+
+    @Before
+    public void setUp() {
+        sqlMapper.execute("delete from univers where nomunivers = '" + Constants.TEST_CREATE + "'");
+    }
 
     @Test
     public void testGet() throws Exception {
@@ -35,8 +41,6 @@ public class UniversDaoTest extends SpringTest {
     @Test
     public void testCreateWithParent() throws Exception {
         int rowCount;
-
-        sqlMapper.execute("delete from univers where nomunivers = '" + Constants.TEST_CREATE + "'");
 
         Univers univers;
 

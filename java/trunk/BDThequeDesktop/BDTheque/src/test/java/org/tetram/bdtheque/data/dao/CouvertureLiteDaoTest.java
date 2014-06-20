@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-public class CouvertureLiteDaoImplTest extends SpringTest {
+public class CouvertureLiteDaoTest extends SpringTest {
 
     @NonNls
     private static final String ORG_TETRAM_BDTHEQUE_DATA_DAO_PLANCHE_NOMAD_JPG = "/org/tetram/bdtheque/data/dao/planche-nomad.jpg";

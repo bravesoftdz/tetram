@@ -14,7 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
-public class PhotoLiteDaoImplTest extends SpringTest {
+public class PhotoLiteDaoTest extends SpringTest {
 
     @NonNls
     private static final String ORG_TETRAM_BDTHEQUE_DATA_DAO_PHOTO_SPIROU_CUBE_3D_JPG = "/org/tetram/bdtheque/data/dao/photo-spirou_cube_3d.jpg";

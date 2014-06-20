@@ -2,12 +2,14 @@ package org.tetram.bdtheque.data.dao;
 
 import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.SpringTest;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.bean.Collection;
+import org.tetram.bdtheque.data.dao.mappers.SqlMapper;
 import org.tetram.bdtheque.utils.StringUtils;
 
 public class CollectionDaoTest extends SpringTest {
@@ -16,6 +18,13 @@ public class CollectionDaoTest extends SpringTest {
     private CollectionDao dao;
     @Autowired
     private EditeurLiteDao daoEditeur;
+    @Autowired
+    private SqlMapper sqlMapper;
+
+    @Before
+    public void setUp() {
+        sqlMapper.execute("delete from collections where nomcollection = '" + Constants.TEST_CREATE + "'");
+    }
 
     @Test
     public void testGet() throws Exception {
@@ -40,7 +49,9 @@ public class CollectionDaoTest extends SpringTest {
         Assert.assertNotNull(collection.getId());
         Assert.assertNotEquals(StringUtils.GUID_NULL, collection.getId());
 
+        Collection oldCollection = collection;
         collection = dao.get(collection.getId());
+        Assert.assertEquals(0, oldCollection.fullCompare(collection));
         Assert.assertEquals(Constants.TEST_CREATE, collection.getNomCollection());
         Assert.assertNotNull(collection.getEditeur());
         Assert.assertEquals(Constants.ID_EDITEUR_DELCOURT, collection.getEditeur().getId());

@@ -2,18 +2,28 @@ package org.tetram.bdtheque.data.dao;
 
 import org.jetbrains.annotations.NonNls;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.SpringTest;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.bean.Personne;
+import org.tetram.bdtheque.data.dao.mappers.SqlMapper;
 import org.tetram.bdtheque.utils.StringUtils;
 
 public class PersonneDaoTest extends SpringTest {
 
     @Autowired
     private PersonneDao dao;
+    @Autowired
+    private SqlMapper sqlMapper;
+
+    @SuppressWarnings("HardCodedStringLiteral")
+    @Before
+    public void setUp() {
+        sqlMapper.execute("delete from personnes where nompersonne = '" + Constants.TEST_CREATE + "'");
+    }
 
     @Test
     public void testGet() throws Exception {

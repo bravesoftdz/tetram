@@ -6,7 +6,7 @@ import org.tetram.bdtheque.SpringTest;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.bean.Edition;
 
-public class EditionDaoImplTest extends SpringTest {
+public class EditionDaoTest extends SpringTest {
 
     @Autowired
     private EditionDao editionDao;

@@ -1,6 +1,7 @@
 package org.tetram.bdtheque.data.dao.mappers;
 
 import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.jdbc.SQL;
 import org.jetbrains.annotations.NonNls;
 
 import java.util.List;
@@ -23,9 +24,13 @@ public interface SqlMapper extends BaseMapperInterface {
             return sql;
         }
 
+        @SuppressWarnings("HardCodedStringLiteral")
         @NonNls
         public String count(String from) {
-            return "SELECT count(*) FROM " + from;
+            return new SQL() {{
+                SELECT("count(*)");
+                FROM(from);
+            }}.toString();
         }
     }
 }
