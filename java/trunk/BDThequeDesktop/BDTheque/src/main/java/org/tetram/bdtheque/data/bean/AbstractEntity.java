@@ -31,6 +31,7 @@ public abstract class AbstractEntity {
         int compare = 0;
         for (Method method : getClass().getMethods()) {
             if (!method.getName().startsWith("get") && !method.getName().startsWith("is")) continue;
+            if (method.getName().equals("getAssociations")) continue;
             if (Modifier.isNative(method.getModifiers())) continue; // on ne peut pas créer de méthodes natives
             if (!Modifier.isPublic(method.getModifiers())) continue; // toutes nos méthodes sont public
 
