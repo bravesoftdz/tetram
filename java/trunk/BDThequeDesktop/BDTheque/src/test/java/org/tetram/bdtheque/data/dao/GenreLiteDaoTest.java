@@ -10,7 +10,7 @@ import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.bean.GenreLite;
 import org.tetram.bdtheque.data.dao.mappers.SqlMapper;
-import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.utils.TypeUtils;
 
 public class GenreLiteDaoTest extends SpringTest {
 
@@ -45,7 +45,7 @@ public class GenreLiteDaoTest extends SpringTest {
         rowCount = dao.save(genre);
         Assert.assertEquals(1, rowCount);
         Assert.assertNotNull(genre.getId());
-        Assert.assertNotEquals(StringUtils.GUID_NULL, genre.getId());
+        Assert.assertNotEquals(TypeUtils.GUID_NULL, genre.getId());
 
         genre = dao.get(genre.getId());
         Assert.assertEquals(Constants.TEST_CREATE, genre.getGenre());
@@ -77,7 +77,7 @@ public class GenreLiteDaoTest extends SpringTest {
     public void testUpdateIsUnique() throws Exception {
         @NonNls GenreLite genre = new GenreLite();
         genre.setGenre(Constants.NOM_GENRE_AVENTURES);
-        genre.setId(StringUtils.GUID_FULL);
+        genre.setId(TypeUtils.GUID_FULL);
 
         dao.save(genre);
         Assert.fail();

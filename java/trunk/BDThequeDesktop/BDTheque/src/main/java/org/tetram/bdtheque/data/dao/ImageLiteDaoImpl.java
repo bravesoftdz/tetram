@@ -12,6 +12,7 @@ import org.tetram.bdtheque.data.dao.mappers.ImageMapper;
 import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.utils.ImageUtils;
 import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.utils.TypeUtils;
 
 import javax.imageio.ImageIO;
 import java.io.ByteArrayInputStream;
@@ -86,7 +87,7 @@ public abstract class ImageLiteDaoImpl<T extends ImageLite, K> extends DaoRWImpl
         imageMapper.cleanImageLite(parentId, list, tableName, fieldParentId, fieldPk);
         for (T image : list) {
             image.setPosition(list.indexOf(image));
-            if (image.getId() == null || image.getId().equals(StringUtils.GUID_NULL)) {
+            if (image.getId() == null || image.getId().equals(TypeUtils.GUID_NULL)) {
                 // nouvelles photos
                 if (!image.isNewStockee()) {
                     // photos liées (q1)

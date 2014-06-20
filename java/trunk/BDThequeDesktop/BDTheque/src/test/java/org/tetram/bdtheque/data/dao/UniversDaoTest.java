@@ -10,7 +10,7 @@ import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.bean.Univers;
 import org.tetram.bdtheque.data.dao.mappers.SqlMapper;
-import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.utils.TypeUtils;
 
 public class UniversDaoTest extends SpringTest {
 
@@ -51,7 +51,7 @@ public class UniversDaoTest extends SpringTest {
         rowCount = dao.save(univers);
         Assert.assertEquals(1, rowCount);
         Assert.assertNotNull(univers.getId());
-        Assert.assertNotEquals(StringUtils.GUID_NULL, univers.getId());
+        Assert.assertNotEquals(TypeUtils.GUID_NULL, univers.getId());
 
         Univers oldUnivers = univers;
         univers = dao.get(univers.getId());
@@ -89,7 +89,7 @@ public class UniversDaoTest extends SpringTest {
         rowCount = dao.save(univers);
         Assert.assertEquals(1, rowCount);
         Assert.assertNotNull(univers.getId());
-        Assert.assertNotEquals(StringUtils.GUID_NULL, univers.getId());
+        Assert.assertNotEquals(TypeUtils.GUID_NULL, univers.getId());
 
         univers = dao.get(univers.getId());
         Assert.assertEquals(Constants.TEST_CREATE, univers.getNomUnivers());
@@ -123,7 +123,7 @@ public class UniversDaoTest extends SpringTest {
     public void testUpdateIsUnique() throws Exception {
         @NonNls Univers univers = new Univers();
         univers.setNomUnivers(Constants.NOM_UNIVERS_TROLLS_DE_TROY);
-        univers.setId(StringUtils.GUID_FULL);
+        univers.setId(TypeUtils.GUID_FULL);
 
         dao.save(univers);
         Assert.fail();

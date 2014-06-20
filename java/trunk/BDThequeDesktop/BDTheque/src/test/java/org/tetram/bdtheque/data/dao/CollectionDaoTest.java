@@ -10,14 +10,14 @@ import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.bean.Collection;
 import org.tetram.bdtheque.data.dao.mappers.SqlMapper;
-import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.utils.TypeUtils;
 
 public class CollectionDaoTest extends SpringTest {
 
     @Autowired
     private CollectionDao dao;
     @Autowired
-    private EditeurLiteDao daoEditeur;
+    private EditeurDao daoEditeur;
     @Autowired
     private SqlMapper sqlMapper;
 
@@ -47,7 +47,7 @@ public class CollectionDaoTest extends SpringTest {
         rowCount = dao.save(collection);
         Assert.assertEquals(1, rowCount);
         Assert.assertNotNull(collection.getId());
-        Assert.assertNotEquals(StringUtils.GUID_NULL, collection.getId());
+        Assert.assertNotEquals(TypeUtils.GUID_NULL, collection.getId());
 
         Collection oldCollection = collection;
         collection = dao.get(collection.getId());
@@ -85,7 +85,7 @@ public class CollectionDaoTest extends SpringTest {
         @NonNls Collection collection = new Collection();
         collection.setNomCollection(Constants.NOM_COLLECTION_NÉOPOLIS_DELCOURT);
         collection.setEditeur(daoEditeur.get(Constants.ID_EDITEUR_DELCOURT));
-        collection.setId(StringUtils.GUID_FULL);
+        collection.setId(TypeUtils.GUID_FULL);
 
         dao.save(collection);
         Assert.fail();
@@ -95,7 +95,7 @@ public class CollectionDaoTest extends SpringTest {
     public void testValidate() throws Exception {
         @NonNls Collection collection = new Collection();
         collection.setNomCollection(Constants.NOM_COLLECTION_NÉOPOLIS_DELCOURT);
-        collection.setId(StringUtils.GUID_FULL);
+        collection.setId(TypeUtils.GUID_FULL);
 
         dao.validate(collection);
         Assert.fail();

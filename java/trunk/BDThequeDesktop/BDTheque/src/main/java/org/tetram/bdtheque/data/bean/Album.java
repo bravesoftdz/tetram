@@ -15,6 +15,9 @@ import java.util.UUID;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class Album extends AbstractDBEntity {
+
+    public static final Album defaultAlbum = new Album();
+
     public static Comparator<Album> DEFAULT_COMPARATOR = new Comparator<Album>() {
         @Override
         public int compare(Album o1, Album o2) {

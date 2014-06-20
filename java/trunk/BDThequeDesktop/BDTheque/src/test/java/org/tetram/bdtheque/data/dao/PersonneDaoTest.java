@@ -10,7 +10,7 @@ import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.bean.Personne;
 import org.tetram.bdtheque.data.dao.mappers.SqlMapper;
-import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.utils.TypeUtils;
 
 public class PersonneDaoTest extends SpringTest {
 
@@ -46,7 +46,7 @@ public class PersonneDaoTest extends SpringTest {
         rowCount = dao.save(personne);
         Assert.assertEquals(1, rowCount);
         Assert.assertNotNull(personne.getId());
-        Assert.assertNotEquals(StringUtils.GUID_NULL, personne.getId());
+        Assert.assertNotEquals(TypeUtils.GUID_NULL, personne.getId());
 
         personne = dao.get(personne.getId());
         Assert.assertEquals(Constants.TEST_CREATE, personne.getNomPersonne());
@@ -78,7 +78,7 @@ public class PersonneDaoTest extends SpringTest {
     public void testUpdateIsUnique() throws Exception {
         @NonNls Personne personne = new Personne();
         personne.setNomPersonne(Constants.NOM_AUTEUR_BUCHET);
-        personne.setId(StringUtils.GUID_FULL);
+        personne.setId(TypeUtils.GUID_FULL);
 
         dao.save(personne);
         Assert.fail();

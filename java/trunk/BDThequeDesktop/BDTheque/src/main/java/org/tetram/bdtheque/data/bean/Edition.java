@@ -14,8 +14,10 @@ import java.util.UUID;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class Edition extends AbstractDBEntity {
+    public static final Edition defaultEdition = new Edition();
+
     private UUID idAlbum;
-    private EditeurLite editeur;
+    private Editeur editeur;
     private Collection collection;
     private ValeurListe etat;
     private ValeurListe reliure;
@@ -59,11 +61,11 @@ public class Edition extends AbstractDBEntity {
         this.idAlbum = idAlbum;
     }
 
-    public EditeurLite getEditeur() {
+    public Editeur getEditeur() {
         return editeur;
     }
 
-    public void setEditeur(EditeurLite editeur) {
+    public void setEditeur(Editeur editeur) {
         this.editeur = editeur;
     }
 
@@ -131,11 +133,11 @@ public class Edition extends AbstractDBEntity {
         this.couleur = couleur;
     }
 
-    public boolean isVo() {
+    public boolean isVO() {
         return vo;
     }
 
-    public void setVo(boolean vo) {
+    public void setVO(boolean vo) {
         this.vo = vo;
     }
 
@@ -179,11 +181,11 @@ public class Edition extends AbstractDBEntity {
         this.gratuit = gratuit;
     }
 
-    public String getIsbn() {
+    public String getISBN() {
         return BeanUtils.trimOrNull(isbn);
     }
 
-    public void setIsbn(String isbn) {
+    public void setISBN(String isbn) {
         this.isbn = BeanUtils.trimOrNull(isbn);
     }
 

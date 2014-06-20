@@ -9,7 +9,7 @@
     <resultMap id="CollectionFull" type="beanCollection">
         <id column="id_collection" property="id"/>
         <result column="NomCollection" property="nomCollection"/>
-        <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurLiteById"
+        <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurById"
                      column="id_editeur"/>
     </resultMap>
 

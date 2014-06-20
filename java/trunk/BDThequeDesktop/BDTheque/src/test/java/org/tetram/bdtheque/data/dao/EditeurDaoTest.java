@@ -10,7 +10,7 @@ import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.bean.Editeur;
 import org.tetram.bdtheque.data.dao.mappers.SqlMapper;
-import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.utils.TypeUtils;
 
 public class EditeurDaoTest extends SpringTest {
 
@@ -45,7 +45,7 @@ public class EditeurDaoTest extends SpringTest {
         rowCount = dao.save(editeur);
         Assert.assertEquals(1, rowCount);
         Assert.assertNotNull(editeur.getId());
-        Assert.assertNotEquals(StringUtils.GUID_NULL, editeur.getId());
+        Assert.assertNotEquals(TypeUtils.GUID_NULL, editeur.getId());
 
         editeur = dao.get(editeur.getId());
         Assert.assertEquals(Constants.TEST_CREATE, editeur.getNomEditeur());
@@ -77,7 +77,7 @@ public class EditeurDaoTest extends SpringTest {
     public void testUpdateIsUnique() throws Exception {
         @NonNls Editeur editeur = new Editeur();
         editeur.setNomEditeur(Constants.NOM_EDITEUR_GLÉNAT);
-        editeur.setId(StringUtils.GUID_FULL);
+        editeur.setId(TypeUtils.GUID_FULL);
 
         dao.save(editeur);
         Assert.fail();

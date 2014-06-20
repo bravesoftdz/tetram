@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.ConsistencyException;
 import org.tetram.bdtheque.data.bean.Album;
 import org.tetram.bdtheque.data.bean.AuteurAlbumLite;
@@ -19,6 +20,7 @@ import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.Range;
 import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.utils.TypeUtils;
 
 import java.util.UUID;
 
@@ -43,6 +45,8 @@ public class AlbumDaoImpl extends DaoRWImpl<Album, UUID> implements AlbumDao {
     private EditionMapper editionMapper;
     @Autowired
     private ImageMapper imageMapper;
+    @Autowired
+    private SerieDao serieDao;
 
     @Override
     public void validate(@NotNull Album object) throws ConsistencyException {
@@ -79,6 +83,53 @@ public class AlbumDaoImpl extends DaoRWImpl<Album, UUID> implements AlbumDao {
         editionDao.save(o.getEditions());
 
         return status;
+    }
+
+    @Override
+    public void fusionneInto(@NotNull Album source, @NotNull Album dest) {
+        if (!TypeUtils.sameValue(source.getTitreAlbum(), Album.defaultAlbum.getTitreAlbum()))
+            dest.setTitreAlbum(source.getTitreAlbum());
+        if (!TypeUtils.sameValue(source.getMoisParution(), Album.defaultAlbum.getMoisParution()))
+            dest.setMoisParution(source.getMoisParution());
+        if (!TypeUtils.sameValue(source.getAnneeParution(), Album.defaultAlbum.getAnneeParution()))
+            dest.setAnneeParution(source.getAnneeParution());
+        if (!TypeUtils.sameValue(source.getTome(), Album.defaultAlbum.getTome()))
+            dest.setTome(source.getTome());
+        if (!TypeUtils.sameValue(source.getTomeDebut(), Album.defaultAlbum.getTomeDebut()))
+            dest.setTomeDebut(source.getTomeDebut());
+        if (!TypeUtils.sameValue(source.getTomeFin(), Album.defaultAlbum.getTomeFin()))
+            dest.setTomeFin(source.getTomeFin());
+        if (source.isHorsSerie() != dest.isHorsSerie())
+            dest.setHorsSerie(source.isHorsSerie());
+        if (source.isIntegrale() != dest.isIntegrale())
+            dest.setIntegrale(source.isIntegrale());
+
+        for (AuteurAlbumLite auteurAlbumLite : source.getScenaristes())
+            if (BeanUtils.notInList(auteurAlbumLite, dest.getScenaristes()))
+                dest.addScenariste(auteurAlbumLite.getPersonne());
+        for (AuteurAlbumLite auteurAlbumLite : source.getDessinateurs())
+            if (BeanUtils.notInList(auteurAlbumLite, dest.getDessinateurs()))
+                dest.addDessinateur(auteurAlbumLite.getPersonne());
+        for (AuteurAlbumLite auteurAlbumLite : source.getColoristes())
+            if (BeanUtils.notInList(auteurAlbumLite, dest.getColoristes()))
+                dest.addColoriste(auteurAlbumLite.getPersonne());
+
+        if (!TypeUtils.sameValue(source.getSujet(), Album.defaultAlbum.getSujet()))
+            dest.setSujet(source.getSujet());
+        if (!TypeUtils.sameValue(source.getNotes(), Album.defaultAlbum.getNotes()))
+            dest.setNotes(source.getNotes());
+
+        // Série
+        if (!TypeUtils.sameValue(source.getIdSerie(), Album.defaultAlbum.getIdSerie()) && !TypeUtils.sameValue(source.getIdSerie(), dest.getIdSerie()))
+            dest.setSerie(serieDao.get(source.getIdSerie()));
+
+        // Univers
+        for (UniversLite universLite : source.getUnivers())
+            dest.addUnivers(universLite);
+/*
+    if Source.FusionneEditions then
+      TDaoEditionFull.FusionneInto(Source.Editions, Dest.Editions);
+ */
     }
 
 }

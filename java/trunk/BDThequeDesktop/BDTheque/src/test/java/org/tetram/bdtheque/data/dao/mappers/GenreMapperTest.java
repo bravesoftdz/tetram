@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.tetram.bdtheque.SpringTest;
 import org.tetram.bdtheque.data.Constants;
 import org.tetram.bdtheque.data.bean.GenreLite;
-import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.utils.TypeUtils;
 
 public class GenreMapperTest extends SpringTest {
 
@@ -37,7 +37,7 @@ public class GenreMapperTest extends SpringTest {
         rowCount = mapper.createGenreLite(genre);
         Assert.assertEquals(1, rowCount);
         Assert.assertNotNull(genre.getId());
-        Assert.assertNotEquals(StringUtils.GUID_NULL, genre.getId());
+        Assert.assertNotEquals(TypeUtils.GUID_NULL, genre.getId());
 
         genre = mapper.getGenreLiteById(genre.getId());
         Assert.assertEquals(Constants.TEST_CREATE, genre.getGenre());

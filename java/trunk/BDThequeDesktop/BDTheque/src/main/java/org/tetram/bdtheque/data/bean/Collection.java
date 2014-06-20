@@ -11,7 +11,7 @@ import java.util.UUID;
 @DaoScriptImpl.ScriptInfo(typeData = 2, getParentIdMethod = "getIdEditeur")
 public class Collection extends AbstractScriptEntity {
     private String nomCollection;
-    private EditeurLite editeur;
+    private Editeur editeur;
 
     public String getNomCollection() {
         return BeanUtils.trimOrNull(nomCollection);
@@ -21,11 +21,11 @@ public class Collection extends AbstractScriptEntity {
         this.nomCollection = BeanUtils.trimOrNull(nomCollection);
     }
 
-    public EditeurLite getEditeur() {
+    public Editeur getEditeur() {
         return editeur;
     }
 
-    public void setEditeur(EditeurLite editeur) {
+    public void setEditeur(Editeur editeur) {
         this.editeur = editeur;
     }
 

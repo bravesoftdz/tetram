@@ -16,6 +16,7 @@ import org.tetram.bdtheque.data.dao.mappers.GenreMapper;
 import org.tetram.bdtheque.data.dao.mappers.UniversMapper;
 import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.StringUtils;
+import org.tetram.bdtheque.utils.TypeUtils;
 
 import java.util.UUID;
 
@@ -37,7 +38,7 @@ public class SerieDaoImpl extends DaoScriptImpl<Serie, UUID> implements SerieDao
 
     @Override
     public Serie get(UUID id) {
-        if (id == null || id.equals(StringUtils.GUID_NULL))
+        if (id == null || id.equals(TypeUtils.GUID_NULL))
             return new Serie();
         else
             return super.get(id);

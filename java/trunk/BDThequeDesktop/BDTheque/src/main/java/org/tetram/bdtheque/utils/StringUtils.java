@@ -11,13 +11,6 @@ import java.util.UUID;
 @SuppressWarnings("UnusedDeclaration")
 public abstract class StringUtils {
 
-    @NonNls
-    public static final UUID GUID_FULL = GUIDStringToUUID("{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}");
-    @NonNls
-    public static final String GUID_FULL_STRING = "{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}";
-    public static final UUID GUID_NULL = GUIDStringToUUID("{00000000-0000-0000-0000-000000000000}");
-    public static final String GUID_NULL_STRING = "{00000000-0000-0000-0000-000000000000}";
-
     public static UUID GUIDStringToUUID(final String guid) {
         return UUID.fromString(guid.substring(1, guid.length() - 1));
     }

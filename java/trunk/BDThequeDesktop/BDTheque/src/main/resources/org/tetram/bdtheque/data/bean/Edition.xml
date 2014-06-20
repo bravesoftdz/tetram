@@ -37,7 +37,7 @@
         <result column="anneeCote" property="anneeCote"/>
         <result column="prixCote" property="prixCote"/>
         <result column="numeroPerso" property="numeroPerso"/>
-        <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurLiteById"
+        <association property="editeur" select="org.tetram.bdtheque.data.dao.mappers.EditeurMapper.getEditeurById"
                      column="id_editeur"/>
         <association property="collection"
                      select="org.tetram.bdtheque.data.dao.mappers.CollectionMapper.getCollectionById"

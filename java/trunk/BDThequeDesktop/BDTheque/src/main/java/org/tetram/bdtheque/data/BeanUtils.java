@@ -3,6 +3,7 @@ package org.tetram.bdtheque.data;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
+import org.tetram.bdtheque.data.bean.AuteurAlbumLite;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.bean.UniversLite;
 import org.tetram.bdtheque.data.services.UserPreferences;
@@ -316,6 +317,16 @@ public abstract class BeanUtils {
         }
 
         return result;
+    }
+
+    public static boolean notInList(AuteurAlbumLite auteur, Collection<AuteurAlbumLite> list) {
+        for (AuteurAlbumLite auteurAlbumLite : list)
+            if (auteur.getId().equals(auteurAlbumLite.getPersonne().getId())) return false;
+        return true;
+    }
+
+    private static boolean notInList(UniversLite univers, Collection<UniversLite> list) {
+        return !list.contains(univers);
     }
 
     private static class ISBNRule {

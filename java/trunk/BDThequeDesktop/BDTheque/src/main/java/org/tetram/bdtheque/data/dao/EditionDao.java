@@ -12,4 +12,5 @@ import java.util.UUID;
 public interface EditionDao extends DaoRW<Edition, UUID> {
     void validateFromAlbum(@NotNull Edition edition) throws ConsistencyException;
 
+    void fusionneInto(@NotNull Edition source, @NotNull Edition dest);
 }
