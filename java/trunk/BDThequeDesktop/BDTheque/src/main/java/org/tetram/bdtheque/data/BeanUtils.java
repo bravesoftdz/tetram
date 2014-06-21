@@ -3,6 +3,7 @@ package org.tetram.bdtheque.data;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
+import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.bean.AuteurAlbumLite;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.bean.UniversLite;
@@ -297,7 +298,7 @@ public abstract class BeanUtils {
 
         String result = "";
 
-        UserPreferences userPreferences = Database.getInstance().getApplicationContext().getBean(UserPreferences.class);
+        UserPreferences userPreferences = SpringContext.getInstance().getContext().getBean(UserPreferences.class);
 
         switch (userPreferences.getFormatTitreAlbum()) {
             case 0: // Album (Serie - Tome)

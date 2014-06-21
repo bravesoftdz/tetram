@@ -1,7 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 import org.tetram.bdtheque.utils.TypeUtils;
 
@@ -68,7 +68,7 @@ public class Album extends AbstractDBEntity {
     private Set<UniversLite> universFull = new HashSet<>();
 
     public Album() {
-        ValeurListeDao valeurListeDao = Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class);
+        ValeurListeDao valeurListeDao = SpringContext.getInstance().getContext().getBean(ValeurListeDao.class);
         notation = valeurListeDao.getDefaultNotation();
     }
 
@@ -286,7 +286,7 @@ public class Album extends AbstractDBEntity {
     }
 
     public void setNotation(ValeurListe notation) {
-        this.notation = notation == null || notation.getValeur() == 0 ? Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class).getDefaultNotation() : notation;
+        this.notation = notation == null || notation.getValeur() == 0 ? SpringContext.getInstance().getContext().getBean(ValeurListeDao.class).getDefaultNotation() : notation;
     }
 
     public Set<UniversLite> getUnivers() {

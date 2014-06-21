@@ -1,7 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
 import java.util.*;
@@ -9,6 +9,7 @@ import java.util.*;
 /**
  * Created by Thierry on 24/05/2014.
  */
+@SuppressWarnings("UnusedDeclaration")
 public class ParaBD extends AbstractDBEntity {
     private Integer anneeEdition;
     private ValeurListe categorieParaBD;
@@ -31,7 +32,7 @@ public class ParaBD extends AbstractDBEntity {
     private List<PhotoLite> photos = new ArrayList<>();
 
     public ParaBD() {
-        ValeurListeDao valeurListeDao = Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class);
+        ValeurListeDao valeurListeDao = SpringContext.getInstance().getContext().getBean(ValeurListeDao.class);
         categorieParaBD = valeurListeDao.getDefaultTypeParaBD();
     }
 

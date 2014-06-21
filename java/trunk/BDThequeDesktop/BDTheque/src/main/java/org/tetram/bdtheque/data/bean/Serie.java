@@ -1,7 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
@@ -45,7 +45,7 @@ public class Serie extends AbstractScriptEntity {
     private Set<UniversLite> univers = new HashSet<>();
 
     public Serie() {
-        ValeurListeDao valeurListeDao = Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class);
+        ValeurListeDao valeurListeDao = SpringContext.getInstance().getContext().getBean(ValeurListeDao.class);
         etat = valeurListeDao.getDefaultEtat();
         reliure = valeurListeDao.getDefaultReliure();
         typeEdition = valeurListeDao.getDefaultTypeEdition();
@@ -299,7 +299,7 @@ public class Serie extends AbstractScriptEntity {
     }
 
     public void setNotation(ValeurListe notation) {
-        this.notation = notation == null || notation.getValeur() == 0 ? Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class).getDefaultNotation() : notation;
+        this.notation = notation == null || notation.getValeur() == 0 ? SpringContext.getInstance().getContext().getBean(ValeurListeDao.class).getDefaultNotation() : notation;
     }
 
     public Set<UniversLite> getUnivers() {

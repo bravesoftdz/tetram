@@ -1,7 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.tetram.bdtheque.data.Database;
+import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
 /**
@@ -9,11 +8,8 @@ import org.tetram.bdtheque.data.dao.ValeurListeDao;
  */
 public class PhotoLite extends ImageLite {
 
-    @Autowired
-    private ValeurListeDao valeurListeDao;
-
     public PhotoLite() {
-        ValeurListeDao valeurListeDao = Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class);
+        ValeurListeDao valeurListeDao = SpringContext.getInstance().getContext().getBean(ValeurListeDao.class);
         setCategorie(valeurListeDao.getDefaultTypePhoto());
     }
 

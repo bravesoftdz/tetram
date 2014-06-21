@@ -1,7 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
+import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
-import org.tetram.bdtheque.data.Database;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class Edition extends AbstractDBEntity {
     private List<CouvertureLite> couvertures = new ArrayList<>();
 
     public Edition() {
-        ValeurListeDao valeurListeDao = Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class);
+        ValeurListeDao valeurListeDao = SpringContext.getInstance().getContext().getBean(ValeurListeDao.class);
         etat = valeurListeDao.getDefaultEtat();
         reliure = valeurListeDao.getDefaultReliure();
         typeEdition = valeurListeDao.getDefaultTypeEdition();

@@ -1,6 +1,6 @@
 package org.tetram.bdtheque.data.bean;
 
-import org.tetram.bdtheque.data.Database;
+import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
 
 /**
@@ -9,7 +9,7 @@ import org.tetram.bdtheque.data.dao.ValeurListeDao;
 public class CouvertureLite extends ImageLite {
 
     public CouvertureLite() {
-        ValeurListeDao valeurListeDao = Database.getInstance().getApplicationContext().getBean(ValeurListeDao.class);
+        ValeurListeDao valeurListeDao = SpringContext.getInstance().getContext().getBean(ValeurListeDao.class);
         setCategorie(valeurListeDao.getDefaultTypeCouverture());
     }
 
