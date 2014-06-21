@@ -13,7 +13,9 @@ public class TypeUtils {
     public static final UUID GUID_FULL = StringUtils.GUIDStringToUUID("{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}");
     @NonNls
     public static final String GUID_FULL_STRING = "{FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF}";
+    @NonNls
     public static final UUID GUID_NULL = StringUtils.GUIDStringToUUID("{00000000-0000-0000-0000-000000000000}");
+    @NonNls
     public static final String GUID_NULL_STRING = "{00000000-0000-0000-0000-000000000000}";
 
     public static boolean isNullOrZero(Integer value) {

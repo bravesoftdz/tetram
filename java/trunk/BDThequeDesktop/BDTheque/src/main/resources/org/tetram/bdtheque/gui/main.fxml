@@ -26,7 +26,8 @@
         </MenuBar>
         <ToolBar id="toolBar" fx:id="toolBar" prefHeight="40.0" prefWidth="200.0">
             <items>
-                <Button mnemonicParsing="false" text="Button"/>
+                <Button id="buttonTest" fx:id="buttonTest" mnemonicParsing="false" onAction="#buttonTestClick"
+                        text="Button"/>
             </items>
         </ToolBar>
     </children>
