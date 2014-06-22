@@ -12,6 +12,7 @@
         <option name="appClass" value="org.tetram.bdtheque.gui.Main" />
         <option name="description" value="" />
         <option name="htmlParamFile" value="" />
+        <option name="nativeBundle" value="exe" />
         <option name="paramFile" value="" />
         <option name="title" value="BDTheque" />
         <option name="vendor" value="Tetram Corp" />
@@ -49,8 +50,9 @@
         <element id="library" level="project" name="Gradle: stringtemplate-3.2.1" />
         <element id="library" level="project" name="Gradle: aspectjweaver-1.7.4" />
         <element id="library" level="project" name="Gradle: commons-io-1.3.2" />
-        <element id="library" level="project" name="Gradle: spring-agent-2.5.6" />
         <element id="library" level="project" name="Gradle: spring-aspects-4.0.5.RELEASE" />
+        <element id="library" level="project" name="Gradle: aspectjweaver-1.8.0" />
+        <element id="library" level="project" name="Gradle: controlsfx-8.0.6_20" />
       </element>
     </root>
   </artifact>

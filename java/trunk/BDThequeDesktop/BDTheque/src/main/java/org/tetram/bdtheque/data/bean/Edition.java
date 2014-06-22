@@ -42,6 +42,7 @@ public class Edition extends AbstractDBEntity {
     private String notes;
     private String numeroPerso;
     private List<CouvertureLite> couvertures = new ArrayList<>();
+
     public Edition() {
         ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
         etat = valeurListeDao.getDefaultEtat();

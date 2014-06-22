@@ -1,5 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.data.BeanUtils;
 
 import java.util.Comparator;
@@ -7,6 +9,7 @@ import java.util.Comparator;
 /**
  * Created by Thierry on 24/05/2014.
  */
+@SuppressWarnings("UnusedDeclaration")
 public class PersonneLite extends AbstractDBEntity {
 
     public final static Comparator<PersonneLite> DEFAULT_COMPARATOR = new Comparator<PersonneLite>() {
@@ -22,14 +25,18 @@ public class PersonneLite extends AbstractDBEntity {
             return 0;
         }
     };
-    private String nom;
+    private StringProperty nom = new SimpleStringProperty(this, "nom", null);
 
     public String getNom() {
-        return BeanUtils.trimOrNull(nom);
+        return BeanUtils.trimOrNull(nom.get());
     }
 
     public void setNom(String nom) {
-        this.nom = BeanUtils.trimOrNull(nom);
+        this.nom.set(BeanUtils.trimOrNull(nom));
+    }
+
+    public StringProperty nomProperty() {
+        return nom;
     }
 
     @Override

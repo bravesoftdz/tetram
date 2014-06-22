@@ -20,7 +20,7 @@ public class UniversLite extends AbstractDBEntity {
         this.nomUnivers.set(BeanUtils.trimOrNull(nomUnivers));
     }
 
-    public StringProperty nomUniversProperty(){
+    public StringProperty nomUniversProperty() {
         return nomUnivers;
     }
 

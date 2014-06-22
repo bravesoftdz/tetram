@@ -4,7 +4,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.dao.ValeurListeDao;
@@ -62,7 +61,7 @@ public class SerieLite extends AbstractDBEntity {
         this.editeur.set(editeur);
     }
 
-    public ObjectProperty<EditeurLite> editeurProperty(){
+    public ObjectProperty<EditeurLite> editeurProperty() {
         return editeur;
     }
 
@@ -74,7 +73,7 @@ public class SerieLite extends AbstractDBEntity {
         this.collection.set(collection);
     }
 
-    public ObjectProperty<CollectionLite> collectionProperty(){
+    public ObjectProperty<CollectionLite> collectionProperty() {
         return collection;
     }
 
@@ -83,10 +82,10 @@ public class SerieLite extends AbstractDBEntity {
     }
 
     public void setNotation(ValeurListe notation) {
-        this.notation.set(notation);
+        this.notation.set(notation == null || notation.getValeur() == 0 ? SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation() : notation);
     }
 
-    public ObjectProperty<ValeurListe> notationProperty(){
+    public ObjectProperty<ValeurListe> notationProperty() {
         return notation;
     }
 

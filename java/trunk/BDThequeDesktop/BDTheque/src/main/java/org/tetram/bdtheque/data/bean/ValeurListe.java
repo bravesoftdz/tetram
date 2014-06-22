@@ -66,7 +66,7 @@ public class ValeurListe {
         this.position.set(position);
     }
 
-    public IntegerProperty positionProperty(){
+    public IntegerProperty positionProperty() {
         return position;
     }
 

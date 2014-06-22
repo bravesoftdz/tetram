@@ -1,5 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.dao.DaoScriptImpl;
 
@@ -10,44 +12,61 @@ import java.util.List;
 /**
  * Created by Thierry on 24/05/2014.
  */
+@SuppressWarnings("UnusedDeclaration")
 @DaoScriptImpl.ScriptInfo(typeData = 6)
 public class Personne extends AbstractScriptEntity {
 
-    private String nomPersonne;
-    private URL siteWeb;
-    private String biographie;
-    private List<Serie> series = new ArrayList<>();
+    private StringProperty nomPersonne = new SimpleStringProperty(this, "nomPersonne", null);
+    private ObjectProperty<URL> siteWeb = new SimpleObjectProperty<>(this, "siteWeb", null);
+    private StringProperty biographie = new SimpleStringProperty(this, "biographie", null);
+    private ListProperty<Serie> series = new SimpleListProperty<>(this, "series", FXCollections.observableList(new ArrayList<>()));
 
     public String getNomPersonne() {
-        return BeanUtils.trimOrNull(nomPersonne);
+        return BeanUtils.trimOrNull(nomPersonne.get());
     }
 
     public void setNomPersonne(String nomPersonne) {
-        this.nomPersonne = BeanUtils.trimOrNull(nomPersonne);
+        this.nomPersonne.set(BeanUtils.trimOrNull(nomPersonne));
+    }
+
+    public StringProperty nomPersonneProperty() {
+        return nomPersonne;
     }
 
     public URL getSiteWeb() {
-        return siteWeb;
+        return siteWeb.get();
     }
 
     public void setSiteWeb(URL siteWeb) {
-        this.siteWeb = siteWeb;
+        this.siteWeb.set(siteWeb);
+    }
+
+    public ObjectProperty<URL> siteWebProperty() {
+        return siteWeb;
     }
 
     public String getBiographie() {
-        return BeanUtils.trimOrNull(biographie);
+        return BeanUtils.trimOrNull(biographie.get());
     }
 
     public void setBiographie(String biographie) {
-        this.biographie = BeanUtils.trimOrNull(biographie);
+        this.biographie.set(BeanUtils.trimOrNull(biographie));
+    }
+
+    public StringProperty biographieProperty() {
+        return biographie;
     }
 
     public List<Serie> getSeries() {
         return series;
     }
 
-    public void setSeries(List<Serie> idSeries) {
-        this.series = idSeries;
+    public void setSeries(List<Serie> series) {
+        this.series.set(FXCollections.observableList(series));
+    }
+
+    public ListProperty<Serie> seriesProperty() {
+        return series;
     }
 
 }
