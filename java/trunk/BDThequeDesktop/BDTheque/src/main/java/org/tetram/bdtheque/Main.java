@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.tetram.bdtheque.gui.controllers.MainController;
 
 import java.io.IOException;
 
@@ -28,12 +29,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws IOException {
         setFBLogged(true);
 
-        SpringFxmlLoader loader = new SpringFxmlLoader(SpringContext.getInstance().getContext());
+        MainController mainController = SpringFxmlLoader.load("main.fxml", primaryStage);
 
-        Parent root = (Parent) loader.load("main.fxml", primaryStage);
-        // Parent root = FXMLLoader.load(getClass().getResource("main.fxml"));
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(new Scene((Parent) mainController.getView()));
         primaryStage.show();
     }
 

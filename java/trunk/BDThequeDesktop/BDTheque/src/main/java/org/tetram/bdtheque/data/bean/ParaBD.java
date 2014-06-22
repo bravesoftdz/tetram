@@ -11,6 +11,7 @@ import java.util.*;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class ParaBD extends AbstractDBEntity {
+
     private Integer anneeEdition;
     private ValeurListe categorieParaBD;
     private Integer anneeCote;
@@ -32,7 +33,7 @@ public class ParaBD extends AbstractDBEntity {
     private List<PhotoLite> photos = new ArrayList<>();
 
     public ParaBD() {
-        ValeurListeDao valeurListeDao = SpringContext.getInstance().getContext().getBean(ValeurListeDao.class);
+        ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
         categorieParaBD = valeurListeDao.getDefaultTypeParaBD();
     }
 

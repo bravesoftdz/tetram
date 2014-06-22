@@ -9,6 +9,7 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 public class ParaBDLite extends AbstractDBEntity {
+
     private String titre;
     private UUID idSerie;
     private String serie;
@@ -90,4 +91,5 @@ public class ParaBDLite extends AbstractDBEntity {
             return StringUtils.ajoutString(lb, s, " ", "(", ")");
 
     }
+
 }

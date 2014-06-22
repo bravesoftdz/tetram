@@ -10,6 +10,7 @@ import java.net.URL;
  */
 @DaoScriptImpl.ScriptInfo(typeData = 3)
 public class Editeur extends AbstractScriptEntity {
+
     private String nomEditeur;
     private URL siteWeb;
 

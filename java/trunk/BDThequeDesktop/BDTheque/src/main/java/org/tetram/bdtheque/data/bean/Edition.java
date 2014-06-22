@@ -14,8 +14,8 @@ import java.util.UUID;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class Edition extends AbstractDBEntity {
-    public static final Edition defaultEdition = new Edition();
 
+    private static Edition defaultEdition = null;
     private UUID idAlbum;
     private Editeur editeur;
     private Collection collection;
@@ -42,15 +42,19 @@ public class Edition extends AbstractDBEntity {
     private String notes;
     private String numeroPerso;
     private List<CouvertureLite> couvertures = new ArrayList<>();
-
     public Edition() {
-        ValeurListeDao valeurListeDao = SpringContext.getInstance().getContext().getBean(ValeurListeDao.class);
+        ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
         etat = valeurListeDao.getDefaultEtat();
         reliure = valeurListeDao.getDefaultReliure();
         typeEdition = valeurListeDao.getDefaultTypeEdition();
         formatEdition = valeurListeDao.getDefaultFormatEdition();
         orientation = valeurListeDao.getDefaultOrientation();
         sensLecture = valeurListeDao.getDefaultSensLecture();
+    }
+
+    public static Edition getDefaultEdition() {
+        if (defaultEdition == null) defaultEdition = new Edition();
+        return defaultEdition;
     }
 
     public UUID getIdAlbum() {
@@ -276,4 +280,5 @@ public class Edition extends AbstractDBEntity {
     public void setSensLecture(ValeurListe sensLecture) {
         this.sensLecture = sensLecture;
     }
+
 }

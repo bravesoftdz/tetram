@@ -6,6 +6,7 @@ import org.tetram.bdtheque.data.BeanUtils;
  * Created by Thierry on 24/05/2014.
  */
 public class UniversLite extends AbstractDBEntity {
+
     private String nomUnivers;
 
     public String getNomUnivers() {
@@ -20,4 +21,5 @@ public class UniversLite extends AbstractDBEntity {
     public String buildLabel() {
         return BeanUtils.formatTitre(getNomUnivers());
     }
+
 }

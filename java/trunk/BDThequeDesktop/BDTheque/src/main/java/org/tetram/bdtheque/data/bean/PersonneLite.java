@@ -8,6 +8,7 @@ import java.util.Comparator;
  * Created by Thierry on 24/05/2014.
  */
 public class PersonneLite extends AbstractDBEntity {
+
     public final static Comparator<PersonneLite> DEFAULT_COMPARATOR = new Comparator<PersonneLite>() {
         @Override
         public int compare(PersonneLite o1, PersonneLite o2) {
@@ -35,4 +36,5 @@ public class PersonneLite extends AbstractDBEntity {
     public String buildLabel() {
         return BeanUtils.formatTitre(getNom());
     }
+
 }

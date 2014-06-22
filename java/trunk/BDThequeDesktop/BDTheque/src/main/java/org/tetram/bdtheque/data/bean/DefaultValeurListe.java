@@ -4,6 +4,7 @@ package org.tetram.bdtheque.data.bean;
  * Created by Thierry on 28/05/2014.
  */
 public class DefaultValeurListe {
+
     private ValeurListe valeur;
     private CategorieValeurListe categorie = CategorieValeurListe.NOT_USED;
 
@@ -22,4 +23,5 @@ public class DefaultValeurListe {
     public void setCategorie(CategorieValeurListe categorie) {
         this.categorie = categorie;
     }
+
 }

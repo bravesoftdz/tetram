@@ -10,6 +10,7 @@ import java.util.UUID;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class AlbumLite extends AbstractDBEntity {
+
     public static Comparator<AlbumLite> DEFAULT_COMPARATOR = new Comparator<AlbumLite>() {
         @Override
         public int compare(AlbumLite o1, AlbumLite o2) {
@@ -195,4 +196,5 @@ public class AlbumLite extends AbstractDBEntity {
     public String buildLabel(boolean simple, boolean avecSerie) {
         return BeanUtils.formatTitreAlbum(simple, avecSerie, getTitre(), getSerie(), getTome(), getTomeDebut(), getTomeFin(), isIntegrale(), isHorsSerie());
     }
+
 }

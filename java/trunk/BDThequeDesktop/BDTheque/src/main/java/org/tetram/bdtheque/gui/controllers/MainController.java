@@ -1,4 +1,4 @@
-package org.tetram.bdtheque.gui;
+package org.tetram.bdtheque.gui.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

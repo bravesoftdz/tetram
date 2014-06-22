@@ -10,6 +10,7 @@ import java.util.Comparator;
  */
 @DaoScriptImpl.ScriptInfo(typeData = 5)
 public class GenreLite extends AbstractScriptEntity {
+
     public static Comparator<GenreLite> DEFAULT_COMPARATOR = new Comparator<GenreLite>() {
         @Override
         public int compare(GenreLite o1, GenreLite o2) {
@@ -46,4 +47,5 @@ public class GenreLite extends AbstractScriptEntity {
     public String buildLabel() {
         return genre;
     }
+
 }

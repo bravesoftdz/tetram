@@ -36,4 +36,6 @@ dependencies {
 
     //runtime 'org.aspectj:aspectjrt:+'
     runtime 'org.aspectj:aspectjweaver:+'
+
+    compile 'org.controlsfx:controlsfx:+'
 }

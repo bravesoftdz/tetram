@@ -10,6 +10,7 @@ import java.util.Locale;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class ConversionLite extends AbstractDBEntity {
+
     @NonNls
     private static final String CONVERSION_FORMAT = "1 %s = %.2f %s";
 
@@ -44,4 +45,5 @@ public class ConversionLite extends AbstractDBEntity {
     public String buildLabel() {
         return String.format(Locale.getDefault(), CONVERSION_FORMAT, monnaie1, taux, monnaie2);
     }
+
 }

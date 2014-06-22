@@ -16,8 +16,6 @@ import java.util.UUID;
 @SuppressWarnings("UnusedDeclaration")
 public class Album extends AbstractDBEntity {
 
-    public static final Album defaultAlbum = new Album();
-
     public static Comparator<Album> DEFAULT_COMPARATOR = new Comparator<Album>() {
         @Override
         public int compare(Album o1, Album o2) {
@@ -48,6 +46,7 @@ public class Album extends AbstractDBEntity {
             return 0;
         }
     };
+    private static Album defaultAlbum = null;
     private boolean complet;
     private String titreAlbum;
     private Serie serie;
@@ -68,8 +67,13 @@ public class Album extends AbstractDBEntity {
     private Set<UniversLite> universFull = new HashSet<>();
 
     public Album() {
-        ValeurListeDao valeurListeDao = SpringContext.getInstance().getContext().getBean(ValeurListeDao.class);
+        ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
         notation = valeurListeDao.getDefaultNotation();
+    }
+
+    public static Album getDefaultAlbum() {
+        if (defaultAlbum == null) defaultAlbum = new Album();
+        return defaultAlbum;
     }
 
     public boolean isComplet() {
@@ -286,7 +290,7 @@ public class Album extends AbstractDBEntity {
     }
 
     public void setNotation(ValeurListe notation) {
-        this.notation = notation == null || notation.getValeur() == 0 ? SpringContext.getInstance().getContext().getBean(ValeurListeDao.class).getDefaultNotation() : notation;
+        this.notation = notation == null || notation.getValeur() == 0 ? SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation() : notation;
     }
 
     public Set<UniversLite> getUnivers() {

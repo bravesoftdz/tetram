@@ -1,11 +1,11 @@
 package org.tetram.bdtheque;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import org.jetbrains.annotations.NonNls;
-import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
-import org.springframework.context.ApplicationContext;
-import org.tetram.bdtheque.gui.WindowController;
+import org.tetram.bdtheque.gui.controllers.WindowController;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,25 +16,30 @@ import java.io.InputStream;
 class SpringFxmlLoader {
     @NonNls
     private static final String ORG_TETRAM_BDTHEQUE_GUI = "/org/tetram/bdtheque/gui/";
-    private ApplicationContext context;
 
-    public SpringFxmlLoader(ApplicationContext context) {
-        this.context = context;
+    public static <T extends WindowController> T load(@NonNls String url) throws IOException {
+        return load(url, null);
     }
 
-    public Object load(@NonNls String url, Stage stage) throws IOException {
+    @SuppressWarnings("unchecked")
+    public static <T extends WindowController> T load(@NonNls String url, Stage stage) throws IOException {
         InputStream fxmlStream = null;
         try {
-            fxmlStream = getClass().getResourceAsStream(ORG_TETRAM_BDTHEQUE_GUI + url);
+            fxmlStream = SpringFxmlLoader.class.getResourceAsStream(ORG_TETRAM_BDTHEQUE_GUI + url);
             FXMLLoader loader = new FXMLLoader();
+            loader.setControllerFactory(new Callback<Class<?>, Object>() {
+                @Override
+                public Object call(Class<?> aClass) {
+                    return SpringContext.CONTEXT.getBean(aClass);
+                }
+            });
 
-            Object gui = loader.load(fxmlStream);
+            Node view = (Node) loader.load(fxmlStream);
+            WindowController controller = loader.getController();
+            controller.setView(view);
+            controller.setDialog(stage);
 
-            Object controller = loader.getController();
-            if (controller instanceof WindowController) ((WindowController) controller).setDialog(stage);
-            context.getAutowireCapableBeanFactory().autowireBeanProperties(controller, AutowireCapableBeanFactory.AUTOWIRE_NO, false);
-
-            return gui;
+            return (T) controller;
         } finally {
             if (fxmlStream != null) {
                 fxmlStream.close();

@@ -6,6 +6,7 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 public class AuteurAlbumLite extends AuteurSerieLite {
+
     private UUID idAlbum;
 
     public UUID getIdAlbum() {
@@ -36,4 +37,5 @@ public class AuteurAlbumLite extends AuteurSerieLite {
         result = 31 * result + (idAlbum != null ? idAlbum.hashCode() : 0);
         return result;
     }
+
 }

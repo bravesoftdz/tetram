@@ -83,4 +83,5 @@ public abstract class ImageLite extends AbstractDBEntity {
     public String buildLabel() {
         return newNom;
     }
+
 }

@@ -8,7 +8,9 @@ import java.util.Comparator;
 /**
  * Created by Thierry on 24/05/2014.
  */
+@SuppressWarnings("UnusedDeclaration")
 public class SerieLite extends AbstractDBEntity {
+
     public static Comparator<SerieLite> DEFAULT_COMPARATOR = new Comparator<SerieLite>() {
         @Override
         public int compare(SerieLite o1, SerieLite o2) {
@@ -79,4 +81,5 @@ public class SerieLite extends AbstractDBEntity {
         s = StringUtils.ajoutString(s, BeanUtils.formatTitre(collection.getNomCollection()), " - ");
         return StringUtils.ajoutString(lb, s, " ", "(", ")");
     }
+
 }

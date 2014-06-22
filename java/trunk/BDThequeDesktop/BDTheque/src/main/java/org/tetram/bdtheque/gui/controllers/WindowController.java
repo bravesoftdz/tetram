@@ -1,5 +1,6 @@
-package org.tetram.bdtheque.gui;
+package org.tetram.bdtheque.gui.controllers;
 
+import javafx.scene.Node;
 import javafx.stage.Stage;
 
 /**
@@ -7,6 +8,7 @@ import javafx.stage.Stage;
  */
 public class WindowController {
     Stage dialog;
+    private Node view;
 
     public Stage getDialog() {
         return dialog;
@@ -14,5 +16,13 @@ public class WindowController {
 
     public void setDialog(Stage dialog) {
         this.dialog = dialog;
+    }
+
+    public Node getView() {
+        return view;
+    }
+
+    public void setView(Node view) {
+        this.view = view;
     }
 }

@@ -6,6 +6,7 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 public abstract class AbstractDBEntity extends AbstractEntity implements DBEntity {
+
     private UUID id = null;
 
     @Override
@@ -35,4 +36,5 @@ public abstract class AbstractDBEntity extends AbstractEntity implements DBEntit
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
     }
+
 }

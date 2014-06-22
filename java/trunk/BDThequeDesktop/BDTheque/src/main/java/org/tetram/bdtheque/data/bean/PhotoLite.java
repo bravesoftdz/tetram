@@ -9,7 +9,7 @@ import org.tetram.bdtheque.data.dao.ValeurListeDao;
 public class PhotoLite extends ImageLite {
 
     public PhotoLite() {
-        ValeurListeDao valeurListeDao = SpringContext.getInstance().getContext().getBean(ValeurListeDao.class);
+        ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
         setCategorie(valeurListeDao.getDefaultTypePhoto());
     }
 

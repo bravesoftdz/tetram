@@ -8,6 +8,7 @@ import java.util.Comparator;
  * Created by Thierry on 24/05/2014.
  */
 public class EditeurLite extends AbstractDBEntity {
+
     public final static Comparator<EditeurLite> DEFAULT_COMPARATOR = new Comparator<EditeurLite>() {
         @Override
         public int compare(EditeurLite o1, EditeurLite o2) {
@@ -35,4 +36,5 @@ public class EditeurLite extends AbstractDBEntity {
     public String buildLabel() {
         return BeanUtils.formatTitre(getNomEditeur());
     }
+
 }

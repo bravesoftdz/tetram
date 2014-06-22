@@ -45,7 +45,7 @@ public class Serie extends AbstractScriptEntity {
     private Set<UniversLite> univers = new HashSet<>();
 
     public Serie() {
-        ValeurListeDao valeurListeDao = SpringContext.getInstance().getContext().getBean(ValeurListeDao.class);
+        ValeurListeDao valeurListeDao = SpringContext.CONTEXT.getBean(ValeurListeDao.class);
         etat = valeurListeDao.getDefaultEtat();
         reliure = valeurListeDao.getDefaultReliure();
         typeEdition = valeurListeDao.getDefaultTypeEdition();
@@ -299,7 +299,7 @@ public class Serie extends AbstractScriptEntity {
     }
 
     public void setNotation(ValeurListe notation) {
-        this.notation = notation == null || notation.getValeur() == 0 ? SpringContext.getInstance().getContext().getBean(ValeurListeDao.class).getDefaultNotation() : notation;
+        this.notation = notation == null || notation.getValeur() == 0 ? SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation() : notation;
     }
 
     public Set<UniversLite> getUnivers() {
@@ -368,4 +368,5 @@ public class Serie extends AbstractScriptEntity {
     public void setSensLecture(ValeurListe sensLecture) {
         this.sensLecture = sensLecture;
     }
+
 }

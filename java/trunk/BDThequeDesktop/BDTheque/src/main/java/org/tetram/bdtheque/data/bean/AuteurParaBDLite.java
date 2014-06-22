@@ -6,6 +6,7 @@ import java.util.UUID;
  * Created by Thierry on 24/05/2014.
  */
 public class AuteurParaBDLite extends AuteurLite {
+
     private UUID idParaBD;
 
     public UUID getIdParaBD() {

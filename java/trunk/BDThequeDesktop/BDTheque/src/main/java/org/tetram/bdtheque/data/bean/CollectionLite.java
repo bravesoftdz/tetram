@@ -1,5 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -10,6 +12,7 @@ import java.util.Comparator;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class CollectionLite extends AbstractDBEntity {
+
     public static Comparator<CollectionLite> DEFAULT_COMPARATOR = new Comparator<CollectionLite>() {
         @Override
         public int compare(CollectionLite o1, CollectionLite o2) {
@@ -23,15 +26,19 @@ public class CollectionLite extends AbstractDBEntity {
             return 0;
         }
     };
-    private String nomCollection;
+    private StringProperty nomCollection = new SimpleStringProperty();
     private EditeurLite editeur;
 
     public String getNomCollection() {
-        return BeanUtils.trimOrNull(nomCollection);
+        return BeanUtils.trimOrNull(nomCollection.getValueSafe());
     }
 
     public void setNomCollection(String nomCollection) {
-        this.nomCollection = BeanUtils.trimOrNull(nomCollection);
+        this.nomCollection.setValue(BeanUtils.trimOrNull(nomCollection));
+    }
+
+    public StringProperty nomCollectionProperty() {
+        return nomCollection;
     }
 
     public EditeurLite getEditeur() {
@@ -53,9 +60,10 @@ public class CollectionLite extends AbstractDBEntity {
     }
 
     public String buildLabel(boolean simple) {
-        String lb = BeanUtils.formatTitre(nomCollection);
+        String lb = BeanUtils.formatTitre(getNomCollection());
         if (!simple)
             lb = StringUtils.ajoutString(lb, BeanUtils.formatTitre(editeur.getNomEditeur()), " ", "(", ")");
         return lb;
     }
+
 }

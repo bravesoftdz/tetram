@@ -33,4 +33,5 @@ public class ImageStream {
     public void setStockee(boolean stockee) {
         this.stockee = stockee;
     }
+
 }

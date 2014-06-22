@@ -298,7 +298,7 @@ public abstract class BeanUtils {
 
         String result = "";
 
-        UserPreferences userPreferences = SpringContext.getInstance().getContext().getBean(UserPreferences.class);
+        UserPreferences userPreferences = SpringContext.CONTEXT.getBean(UserPreferences.class);
 
         switch (userPreferences.getFormatTitreAlbum()) {
             case 0: // Album (Serie - Tome)

@@ -10,6 +10,7 @@ import java.util.Comparator;
  * Created by Thierry on 24/05/2014.
  */
 public class EditionLite extends AbstractDBEntity {
+
     public static Comparator<EditionLite> DEFAULT_COMPARATOR = new Comparator<EditionLite>() {
         @Override
         public int compare(EditionLite o1, EditionLite o2) {
@@ -78,4 +79,5 @@ public class EditionLite extends AbstractDBEntity {
         s = StringUtils.ajoutString(s, BeanUtils.formatISBN(isbn), " - ", I18nSupport.message("isbn") + " ");
         return s;
     }
+
 }

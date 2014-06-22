@@ -76,55 +76,57 @@ public class EditionDaoImpl extends DaoRWImpl<Edition, UUID> implements EditionD
 
     @Override
     public void fusionneInto(@NotNull Edition source, @NotNull Edition dest) {
-        if (!TypeUtils.sameValue(source.getIdEditeur(), Edition.defaultEdition.getIdEditeur()) && !TypeUtils.sameValue(source.getIdEditeur(), dest.getIdEditeur()))
+        Edition defaultEdition = Edition.getDefaultEdition();
+
+        if (!TypeUtils.sameValue(source.getIdEditeur(), Edition.getDefaultEdition().getIdEditeur()) && !TypeUtils.sameValue(source.getIdEditeur(), dest.getIdEditeur()))
             dest.setEditeur(editeurDao.get(source.getIdEditeur()));
-        if (!TypeUtils.sameValue(source.getIdCollection(), Edition.defaultEdition.getIdCollection()) && !TypeUtils.sameValue(source.getIdCollection(), dest.getIdCollection()))
+        if (!TypeUtils.sameValue(source.getIdCollection(), Edition.getDefaultEdition().getIdCollection()) && !TypeUtils.sameValue(source.getIdCollection(), dest.getIdCollection()))
             dest.setCollection(collectionDao.get(source.getIdCollection()));
 
-        if (source.getTypeEdition() != Edition.defaultEdition.getTypeEdition())
+        if (source.getTypeEdition() != defaultEdition.getTypeEdition())
             dest.setTypeEdition(source.getTypeEdition());
-        if (source.getEtat() != Edition.defaultEdition.getEtat())
+        if (source.getEtat() != defaultEdition.getEtat())
             dest.setEtat(source.getEtat());
-        if (source.getReliure() != Edition.defaultEdition.getReliure())
+        if (source.getReliure() != defaultEdition.getReliure())
             dest.setReliure(source.getReliure());
-        if (source.getFormatEdition() != Edition.defaultEdition.getFormatEdition())
+        if (source.getFormatEdition() != defaultEdition.getFormatEdition())
             dest.setFormatEdition(source.getFormatEdition());
-        if (source.getOrientation() != Edition.defaultEdition.getOrientation())
+        if (source.getOrientation() != defaultEdition.getOrientation())
             dest.setOrientation(source.getOrientation());
-        if (source.getSensLecture() != Edition.defaultEdition.getSensLecture())
+        if (source.getSensLecture() != defaultEdition.getSensLecture())
             dest.setSensLecture(source.getSensLecture());
 
-        if (!TypeUtils.sameValue(source.getAnneeEdition(), Edition.defaultEdition.getAnneeEdition()))
+        if (!TypeUtils.sameValue(source.getAnneeEdition(), defaultEdition.getAnneeEdition()))
             dest.setAnneeEdition(source.getAnneeEdition());
-        if (!TypeUtils.sameValue(source.getNombreDePages(), Edition.defaultEdition.getNombreDePages()))
+        if (!TypeUtils.sameValue(source.getNombreDePages(), defaultEdition.getNombreDePages()))
             dest.setNombreDePages(source.getNombreDePages());
-        if (!TypeUtils.sameValue(source.getAnneeCote(), Edition.defaultEdition.getAnneeCote()))
+        if (!TypeUtils.sameValue(source.getAnneeCote(), defaultEdition.getAnneeCote()))
             dest.setAnneeCote(source.getAnneeCote());
-        if (!TypeUtils.sameValue(source.getPrix(), Edition.defaultEdition.getPrix()))
+        if (!TypeUtils.sameValue(source.getPrix(), defaultEdition.getPrix()))
             dest.setPrix(source.getPrix());
-        if (!TypeUtils.sameValue(source.getPrixCote(), Edition.defaultEdition.getPrixCote()))
+        if (!TypeUtils.sameValue(source.getPrixCote(), defaultEdition.getPrixCote()))
             dest.setPrixCote(source.getPrixCote());
-        if (source.isCouleur() != Edition.defaultEdition.isCouleur())
+        if (source.isCouleur() != defaultEdition.isCouleur())
             dest.setCouleur(source.isCouleur());
-        if (source.isVO() != Edition.defaultEdition.isVO())
+        if (source.isVO() != defaultEdition.isVO())
             dest.setVO(source.isVO());
-        if (source.isDedicace() != Edition.defaultEdition.isDedicace())
+        if (source.isDedicace() != defaultEdition.isDedicace())
             dest.setDedicace(source.isDedicace());
-        if (source.isStock() != Edition.defaultEdition.isStock())
+        if (source.isStock() != defaultEdition.isStock())
             dest.setStock(source.isStock());
-        if (source.isPrete() != Edition.defaultEdition.isPrete())
+        if (source.isPrete() != defaultEdition.isPrete())
             dest.setPrete(source.isPrete());
-        if (source.isOffert() != Edition.defaultEdition.isOffert())
+        if (source.isOffert() != defaultEdition.isOffert())
             dest.setOffert(source.isOffert());
-        if (source.isGratuit() != Edition.defaultEdition.isGratuit())
+        if (source.isGratuit() != defaultEdition.isGratuit())
             dest.setGratuit(source.isGratuit());
-        if (!TypeUtils.sameValue(source.getISBN(), Edition.defaultEdition.getISBN()))
+        if (!TypeUtils.sameValue(source.getISBN(), defaultEdition.getISBN()))
             dest.setISBN(source.getISBN());
-        if (!TypeUtils.sameValue(source.getDateAchat(), Edition.defaultEdition.getDateAchat()))
+        if (!TypeUtils.sameValue(source.getDateAchat(), defaultEdition.getDateAchat()))
             dest.setDateAchat(source.getDateAchat());
-        if (!TypeUtils.sameValue(source.getNotes(), Edition.defaultEdition.getNotes()))
+        if (!TypeUtils.sameValue(source.getNotes(), defaultEdition.getNotes()))
             dest.setNotes(source.getNotes());
-        if (!TypeUtils.sameValue(source.getNumeroPerso(), Edition.defaultEdition.getNumeroPerso()))
+        if (!TypeUtils.sameValue(source.getNumeroPerso(), defaultEdition.getNumeroPerso()))
             dest.setNumeroPerso(source.getNumeroPerso());
 
         for (CouvertureLite couvertureLite : source.getCouvertures())
