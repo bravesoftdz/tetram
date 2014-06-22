@@ -1,5 +1,7 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.data.BeanUtils;
@@ -14,11 +16,11 @@ import java.util.UUID;
 @DaoScriptImpl.ScriptInfo(typeData = 2, getParentIdMethod = "getIdEditeur")
 public class Collection extends AbstractScriptEntity {
 
-    private StringProperty nomCollection = new SimpleStringProperty();
-    private Editeur editeur;
+    private StringProperty nomCollection = new SimpleStringProperty(null);
+    private ObjectProperty<Editeur> editeur = new SimpleObjectProperty<>(null);
 
     public String getNomCollection() {
-        return BeanUtils.trimOrNull(nomCollection.getValueSafe());
+        return BeanUtils.trimOrNull(nomCollection.get());
     }
 
     public void setNomCollection(String nomCollection) {
@@ -30,11 +32,15 @@ public class Collection extends AbstractScriptEntity {
     }
 
     public Editeur getEditeur() {
-        return editeur;
+        return editeur.get();
     }
 
     public void setEditeur(Editeur editeur) {
-        this.editeur = editeur;
+        this.editeur.set(editeur);
+    }
+
+    public ObjectProperty<Editeur> editeurProperty() {
+        return editeur;
     }
 
     public UUID getIdEditeur() {

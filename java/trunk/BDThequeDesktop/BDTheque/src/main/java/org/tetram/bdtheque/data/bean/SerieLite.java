@@ -1,6 +1,13 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import org.jetbrains.annotations.NonNls;
+import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.data.BeanUtils;
+import org.tetram.bdtheque.data.dao.ValeurListeDao;
 import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.Comparator;
@@ -30,41 +37,57 @@ public class SerieLite extends AbstractDBEntity {
             return 0;
         }
     };
-    private String titreSerie;
-    private EditeurLite editeur;
-    private CollectionLite collection;
-    private Integer notation;
+    private StringProperty titreSerie = new SimpleStringProperty(this, "titreSerie", null);
+    private ObjectProperty<EditeurLite> editeur = new SimpleObjectProperty<>(this, "editeur", null);
+    private ObjectProperty<CollectionLite> collection = new SimpleObjectProperty<>(this, "collection", null);
+    private ObjectProperty<ValeurListe> notation = new SimpleObjectProperty<>(this, "notation", SpringContext.CONTEXT.getBean(ValeurListeDao.class).getDefaultNotation());
 
     public String getTitreSerie() {
-        return BeanUtils.trimOrNull(titreSerie);
+        return BeanUtils.trimOrNull(titreSerie.get());
     }
 
     public void setTitreSerie(String titreSerie) {
-        this.titreSerie = BeanUtils.trimOrNull(titreSerie);
+        this.titreSerie.set(BeanUtils.trimOrNull(titreSerie));
+    }
+
+    public StringProperty titreSerieProperty() {
+        return titreSerie;
     }
 
     public EditeurLite getEditeur() {
-        return editeur;
+        return editeur.get();
     }
 
     public void setEditeur(EditeurLite editeur) {
-        this.editeur = editeur;
+        this.editeur.set(editeur);
+    }
+
+    public ObjectProperty<EditeurLite> editeurProperty(){
+        return editeur;
     }
 
     public CollectionLite getCollection() {
-        return collection;
+        return collection.get();
     }
 
     public void setCollection(CollectionLite collection) {
-        this.collection = collection;
+        this.collection.set(collection);
     }
 
-    public Integer getNotation() {
+    public ObjectProperty<CollectionLite> collectionProperty(){
+        return collection;
+    }
+
+    public ValeurListe getNotation() {
+        return notation.get();
+    }
+
+    public void setNotation(ValeurListe notation) {
+        this.notation.set(notation);
+    }
+
+    public ObjectProperty<ValeurListe> notationProperty(){
         return notation;
-    }
-
-    public void setNotation(Integer notation) {
-        this.notation = notation == 0 ? 900 : notation;
     }
 
     @Override
@@ -73,7 +96,7 @@ public class SerieLite extends AbstractDBEntity {
     }
 
     public String buildLabel(boolean simple) {
-        String lb = titreSerie;
+        String lb = getTitreSerie();
         if (!simple)
             lb = BeanUtils.formatTitre(lb);
         String s;

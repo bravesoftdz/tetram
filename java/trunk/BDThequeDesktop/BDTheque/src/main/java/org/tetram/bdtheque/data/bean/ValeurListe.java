@@ -1,5 +1,9 @@
 package org.tetram.bdtheque.data.bean;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import org.tetram.bdtheque.data.BeanUtils;
 
 import java.util.Comparator;
@@ -7,6 +11,7 @@ import java.util.Comparator;
 /**
  * Created by Thierry on 25/05/2014.
  */
+@SuppressWarnings("UnusedDeclaration")
 public class ValeurListe {
 
     public final static Comparator<ValeurListe> DEFAULT_COMPARATOR = new Comparator<ValeurListe>() {
@@ -25,32 +30,44 @@ public class ValeurListe {
             return 0;
         }
     };
-    private int valeur;
-    private String texte;
-    private int position;
+    private IntegerProperty valeur = new SimpleIntegerProperty();
+    private StringProperty texte = new SimpleStringProperty();
+    private IntegerProperty position = new SimpleIntegerProperty();
 
     public int getValeur() {
-        return valeur;
+        return valeur.get();
     }
 
     public void setValeur(int valeur) {
-        this.valeur = valeur;
+        this.valeur.set(valeur);
+    }
+
+    public IntegerProperty valeurProperty() {
+        return valeur;
     }
 
     public String getTexte() {
-        return BeanUtils.trimOrNull(texte);
+        return BeanUtils.trimOrNull(texte.get());
     }
 
     public void setTexte(String texte) {
-        this.texte = BeanUtils.trimOrNull(texte);
+        this.texte.set(BeanUtils.trimOrNull(texte));
+    }
+
+    public StringProperty texteProperty() {
+        return texte;
     }
 
     public int getPosition() {
-        return position;
+        return position.get();
     }
 
     public void setPosition(int position) {
-        this.position = position;
+        this.position.set(position);
+    }
+
+    public IntegerProperty positionProperty(){
+        return position;
     }
 
 }
