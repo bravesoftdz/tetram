@@ -100,8 +100,8 @@ public class SerieLite extends AbstractDBEntity {
         if (!simple)
             lb = BeanUtils.formatTitre(lb);
         String s;
-        s = StringUtils.ajoutString("", BeanUtils.formatTitre(editeur.getNomEditeur()), " ");
-        s = StringUtils.ajoutString(s, BeanUtils.formatTitre(collection.getNomCollection()), " - ");
+        s = StringUtils.ajoutString("", BeanUtils.formatTitre(getEditeur().getNomEditeur()), " ");
+        s = StringUtils.ajoutString(s, BeanUtils.formatTitre(getCollection().getNomCollection()), " - ");
         return StringUtils.ajoutString(lb, s, " ", "(", ")");
     }
 
