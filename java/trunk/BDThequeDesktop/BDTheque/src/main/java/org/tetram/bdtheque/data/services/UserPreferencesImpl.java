@@ -127,7 +127,6 @@ public class UserPreferencesImpl implements UserPreferences {
                     e.printStackTrace();
                 }
             }
-
         }
     }
 

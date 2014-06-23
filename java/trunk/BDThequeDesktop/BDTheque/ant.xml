@@ -1,14 +1,17 @@
+<!--suppress AntResolveInspection -->
 <project name="bdtheque" basedir=".">
 
 
     <target name="deploy_firebird_artifact">
 
         <property name="src.dir" value="firebird"/>
-        <property name="dest.dir" value="..\out\artifacts"/>
+        <property name="dest.dir" value="${artifact.output.path}"/>
 
-        <!--suppress AntResolveInspection -->
         <copy todir="${artifact.output.path}" >
             <fileset dir="${src.dir}" includes="**"/>
         </copy>
+
+        <delete file="${artifact.output.path}\BDTheque.html" />
+        <delete file="${artifact.output.path}\BDTheque.jnlp" />
     </target>
 </project>
