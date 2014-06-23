@@ -1,28 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="javafx" name="BDTheque">
     <output-path>$PROJECT_DIR$/out/artifacts</output-path>
-    <properties id="ant-postprocessing">
-      <options enabled="true">
-        <file>file://$PROJECT_DIR$/BDTheque/ant.xml</file>
-        <target>deploy_firebird_artifact</target>
-      </options>
-    </properties>
-    <properties id="ant-preprocessing">
-      <options>
-        <file>file://$PROJECT_DIR$/BDTheque/ant.xml</file>
-        <target>deploy_firebird_artifact</target>
-      </options>
-    </properties>
-    <properties id="javafx-properties">
-      <options>
-        <option name="appClass" value="org.tetram.bdtheque.Main" />
-        <option name="description" value="" />
-        <option name="htmlParamFile" value="" />
-        <option name="paramFile" value="" />
-        <option name="title" value="BDTheque" />
-        <option name="vendor" value="Tetram Corp" />
-      </options>
-    </properties>
     <root id="root">
       <element id="archive" name="BDTheque.jar">
         <element id="module-output" name="BDTheque" />

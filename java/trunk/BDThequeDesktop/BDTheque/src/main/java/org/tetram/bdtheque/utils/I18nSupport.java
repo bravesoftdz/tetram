@@ -20,4 +20,8 @@ public class I18nSupport {
             return MessageFormat.format(value, params);
         return value;
     }
+
+    public static ResourceBundle getResources() {
+        return resourceBundle;
+    }
 }

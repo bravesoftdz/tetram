@@ -5,13 +5,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.ToolBar;
+import javafx.scene.layout.AnchorPane;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.tetram.bdtheque.SpringFxmlLoader;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.dao.SerieDao;
 import org.tetram.bdtheque.utils.StringUtils;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.UUID;
@@ -40,15 +43,26 @@ public class MainController extends WindowController {
     @FXML // fx:id="buttonTest"
     private Button buttonTest;
 
+    @FXML// fx:id="detailPane"
+    private AnchorPane detailPane;
+
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
-    void initialize() {
+    void initialize() throws IOException {
         assert menuBar != null : "fx:id=\"menuBar\" was not injected: check your FXML file 'main.fxml'.";
         assert toolBar != null : "fx:id=\"toolBar\" was not injected: check your FXML file 'main.fxml'.";
         assert buttonTest != null : "fx:id=\"buttonTest\" was not injected: check your FXML file 'main.fxml'.";
+        assert detailPane != null : "fx:id=\"detailPane\" was not injected: check your FXML file 'main.fxml'.";
+
+        ModeConsultationController modeConsultationController = SpringFxmlLoader.load("modeConsultation.fxml");
+        detailPane.getChildren().add(modeConsultationController.getView());
+        AnchorPane.setBottomAnchor(modeConsultationController.getView(), 0.0);
+        AnchorPane.setTopAnchor(modeConsultationController.getView(), 0.0);
+        AnchorPane.setLeftAnchor(modeConsultationController.getView(), 0.0);
+        AnchorPane.setRightAnchor(modeConsultationController.getView(), 0.0);
     }
 
-    public void menuCloseClick(ActionEvent actionEvent) {
+    public void menuQuitClick(ActionEvent actionEvent) {
         dialog.close();
     }
 

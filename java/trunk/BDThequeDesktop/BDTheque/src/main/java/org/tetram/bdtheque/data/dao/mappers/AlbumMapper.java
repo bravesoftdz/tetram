@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Param;
 import org.tetram.bdtheque.data.bean.Album;
 import org.tetram.bdtheque.data.bean.AlbumLite;
 import org.tetram.bdtheque.data.bean.ValeurListe;
+import org.tetram.bdtheque.gui.utils.InitialEntity;
 
 import java.util.List;
 import java.util.UUID;
@@ -21,4 +22,6 @@ public interface AlbumMapper extends BaseMapperInterface {
     int changeNotation(@Param("id") UUID id, @Param("notation") ValeurListe note);
 
     int acheter(@Param("id") UUID id, @Param("achat") boolean previsionAchat);
+
+    List<InitialEntity> getInitialesSeries();
 }

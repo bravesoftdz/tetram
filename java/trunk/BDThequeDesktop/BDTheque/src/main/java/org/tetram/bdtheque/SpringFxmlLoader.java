@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.jetbrains.annotations.NonNls;
 import org.tetram.bdtheque.gui.controllers.WindowController;
+import org.tetram.bdtheque.utils.I18nSupport;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,7 +14,7 @@ import java.io.InputStream;
 /**
  * Created by Thierry on 21/06/2014.
  */
-class SpringFxmlLoader {
+public class SpringFxmlLoader {
     @NonNls
     private static final String ORG_TETRAM_BDTHEQUE_GUI = "/org/tetram/bdtheque/gui/";
 
@@ -33,8 +34,9 @@ class SpringFxmlLoader {
                     return SpringContext.CONTEXT.getBean(aClass);
                 }
             });
+            loader.setResources(I18nSupport.getResources());
 
-            Node view = (Node) loader.load(fxmlStream);
+            Node view = loader.load(fxmlStream);
             WindowController controller = loader.getController();
             controller.setView(view);
             controller.setDialog(stage);

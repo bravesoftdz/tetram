@@ -3,8 +3,10 @@ package org.tetram.bdtheque;/**
  */
 
 import javafx.application.Application;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.controlsfx.dialog.Dialogs;
 import org.jetbrains.annotations.NonNls;
@@ -21,6 +23,11 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class Main extends Application {
+
+    @NonNls
+    private static final String APPLICATION_TITLE = "BDTheque";
+    @NonNls
+    private static final String APPLICATION_ICON = "/org/tetram/bdtheque/bdtheque.png";
 
     public static void main(String[] args) {
         launch(args);
@@ -162,8 +169,12 @@ public class Main extends Application {
 
         MainController mainController = SpringFxmlLoader.load("main.fxml", primaryStage);
 
-        primaryStage.setTitle("Hello World");
-        primaryStage.setScene(new Scene((Parent) mainController.getView()));
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream(APPLICATION_ICON)));
+
+        primaryStage.setTitle(APPLICATION_TITLE);
+        primaryStage.setMaximized(true);
+        Scene scene = new Scene((Parent) mainController.getView());
+        primaryStage.setScene(scene);
         primaryStage.show();
     }
 
