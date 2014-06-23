@@ -17,7 +17,12 @@ import java.util.UUID;
 @SuppressWarnings("UnusedDeclaration")
 public class SerieLiteDaoImpl extends DaoROImpl<SerieLite, UUID> implements SerieLiteDao {
     @Override
-    public List<org.tetram.bdtheque.gui.utils.InitialEntity> getListInitiales() {
+    public List<org.tetram.bdtheque.gui.utils.InitialEntity> getListInitiales(String filtre) {
+        return null;
+    }
+
+    @Override
+    public List<org.tetram.bdtheque.data.bean.AlbumLite> getListEntitiesByInitiale(String initiale, String filtre) {
         return null;
     }
 }

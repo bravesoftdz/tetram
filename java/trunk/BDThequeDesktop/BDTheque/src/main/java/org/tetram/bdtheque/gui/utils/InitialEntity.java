@@ -16,6 +16,7 @@ public class InitialEntity extends AbstractEntity {
 
     private IntegerProperty count = new SimpleIntegerProperty(this, "count", 0);
     private StringProperty value = new SimpleStringProperty(this, "value", "");
+    private StringProperty label = new SimpleStringProperty(this, "label", "");
 
     private String unknownLabel = "";
 
@@ -43,6 +44,18 @@ public class InitialEntity extends AbstractEntity {
         this.value.set(value);
     }
 
+    public String getLabel() {
+        return label.get();
+    }
+
+    public StringProperty labelProperty() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label.set(label);
+    }
+
     public String getUnknownLabel() {
         return unknownLabel;
     }
@@ -57,7 +70,7 @@ public class InitialEntity extends AbstractEntity {
         if (getValue() != null)
             // chaque Dao doit s'occuper de la mise en forme du texte: elle dépend du type de l'objet
             // label = BeanUtils.formatTitre(value.getValueSafe());
-            label = value.getValueSafe();
+            label = this.label.getValueSafe();
         else
 /*
             case FMode of

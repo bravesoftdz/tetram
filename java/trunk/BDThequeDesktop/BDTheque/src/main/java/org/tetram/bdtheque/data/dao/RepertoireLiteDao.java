@@ -9,5 +9,7 @@ import java.util.List;
  * Created by Thierry on 23/06/2014.
  */
 public interface RepertoireLiteDao<T extends AbstractDBEntity> {
-    List<InitialEntity> getListInitiales();
+    List<InitialEntity> getListInitiales(String filtre);
+
+    List<org.tetram.bdtheque.data.bean.AlbumLite> getListEntitiesByInitiale(String initiale, String filtre);
 }

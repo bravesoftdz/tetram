@@ -122,6 +122,24 @@
         <include refid="orderAlbum"/>
     </select>
 
+    <select id="getInitialesSeries" resultType="org.tetram.bdtheque.gui.utils.InitialEntity">
+        <![CDATA[
+        select
+            titreSerie label, countSerie integer count, id_serie value
+        from
+            series_album(#{filtre})
+        ]]>
+    </select>
+    
+    <select id="getAlbumLiteBySerieId" resultMap="AlbumLite">
+        select
+        <include refid="fieldsAlbumLite"/>
+        <![CDATA[
+        from
+            albums_by_serie(#{idSerie}, #{filtre})
+        ]]>
+    </select>
+    
     <update id="changeNotation">
         <![CDATA[
         update albums set notation = #{notation} where id_album = #{id}

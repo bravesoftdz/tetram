@@ -17,6 +17,7 @@ import org.tetram.bdtheque.data.bean.AbstractEntity;
 import org.tetram.bdtheque.data.dao.AlbumLiteDao;
 import org.tetram.bdtheque.data.dao.RepertoireLiteDao;
 import org.tetram.bdtheque.data.dao.SerieLiteDao;
+import org.tetram.bdtheque.gui.utils.InitialEntity;
 
 import java.net.URL;
 import java.util.List;
@@ -94,18 +95,17 @@ public class RepertoireController extends WindowController {
             return isLeaf;
         }
 
+        @SuppressWarnings("unchecked")
         private ObservableList<InitialTreeItem> buildChildren(InitialTreeItem treeItem) {
             List<? extends AbstractEntity> items;
             if (treeItem.getParent() == null)
-                items = dao.getListInitiales();
+                items = dao.getListInitiales(null);
             else
-                items = null;
+                items = dao.getListEntitiesByInitiale(((InitialEntity) treeItem.getValue()).getValue(), null);
 
             ObservableList<InitialTreeItem> children = FXCollections.observableArrayList();
             if (items != null) {
-                for (AbstractEntity item : items) {
-                    children.add(new InitialTreeItem(dao, item));
-                }
+                for (AbstractEntity item : items) children.add(new InitialTreeItem(dao, item));
                 return children;
             }
 

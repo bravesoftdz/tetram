@@ -9,6 +9,7 @@ import org.tetram.bdtheque.data.bean.AlbumLite;
 import org.tetram.bdtheque.data.dao.mappers.AlbumMapper;
 import org.tetram.bdtheque.gui.utils.InitialEntity;
 import org.tetram.bdtheque.utils.I18nSupport;
+import org.tetram.bdtheque.utils.StringUtils;
 
 import java.util.List;
 import java.util.UUID;
@@ -22,17 +23,22 @@ import java.util.UUID;
 @SuppressWarnings("UnusedDeclaration")
 public class AlbumLiteDaoImpl extends DaoROImpl<AlbumLite, UUID> implements AlbumLiteDao {
 
-    private static final String UNKNOWN_LABEL = I18nSupport.message("initiale.inconnu");
+    private static final String UNKNOWN_LABEL = I18nSupport.message("initiale.sans.serie");
     @Autowired
     private AlbumMapper albumMapper;
 
     @Override
-    public List<InitialEntity> getListInitiales() {
-        final List<InitialEntity> list = albumMapper.getInitialesSeries();
+    public List<InitialEntity> getListInitiales(String filtre) {
+        final List<InitialEntity> list = albumMapper.getInitialesSeries(filtre);
         for (InitialEntity initialEntity : list) {
             initialEntity.setUnknownLabel(UNKNOWN_LABEL);
-            initialEntity.setValue(BeanUtils.formatTitre(initialEntity.getValue()));
+            initialEntity.setLabel(BeanUtils.formatTitre(initialEntity.getLabel()));
         }
         return list;
+    }
+
+    @Override
+    public List<AlbumLite> getListEntitiesByInitiale(String initiale, String filtre) {
+        return albumMapper.getAlbumLiteBySerieId(StringUtils.GUIDStringToUUID(initiale), filtre);
     }
 }

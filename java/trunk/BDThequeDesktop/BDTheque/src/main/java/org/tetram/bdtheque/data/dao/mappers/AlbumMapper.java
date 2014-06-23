@@ -15,7 +15,7 @@ import java.util.UUID;
 public interface AlbumMapper extends BaseMapperInterface {
     AlbumLite getAlbumLiteById(@Param("id") UUID id, @Param("idEdition") UUID idEdition);
 
-    Album getAlbumById(UUID id);
+    Album getAlbumById(@Param("id") UUID id);
 
     List<AlbumLite> getAlbumLiteBySerieIdByAuteurId(@Param("idSerie") UUID idSerie, @Param("idAuteur") UUID idAuteur);
 
@@ -23,5 +23,7 @@ public interface AlbumMapper extends BaseMapperInterface {
 
     int acheter(@Param("id") UUID id, @Param("achat") boolean previsionAchat);
 
-    List<InitialEntity> getInitialesSeries();
+    List<InitialEntity> getInitialesSeries(@Param("filtre") String filtre);
+
+    List<AlbumLite> getAlbumLiteBySerieId(@Param("id") UUID idSerie, @Param("filtre") String filtre);
 }
