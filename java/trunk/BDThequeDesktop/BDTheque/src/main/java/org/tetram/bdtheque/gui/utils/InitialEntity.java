@@ -15,10 +15,8 @@ import org.tetram.bdtheque.utils.StringUtils;
 public class InitialEntity extends AbstractEntity {
 
     private IntegerProperty count = new SimpleIntegerProperty(this, "count", 0);
-    private StringProperty value = new SimpleStringProperty(this, "value", "");
+    private StringProperty value = new SimpleStringProperty(this, "value", null);
     private StringProperty label = new SimpleStringProperty(this, "label", "");
-
-    private String unknownLabel = "";
 
     public int getCount() {
         return count.get();
@@ -56,22 +54,8 @@ public class InitialEntity extends AbstractEntity {
         this.label.set(label);
     }
 
-    public String getUnknownLabel() {
-        return unknownLabel;
-    }
-
-    public void setUnknownLabel(String unknownLabel) {
-        this.unknownLabel = unknownLabel;
-    }
-
     @Override
     public String buildLabel() {
-        String label;
-        if (getValue() != null)
-            // chaque Dao doit s'occuper de la mise en forme du texte: elle dépend du type de l'objet
-            // label = BeanUtils.formatTitre(value.getValueSafe());
-            label = this.label.getValueSafe();
-        else
 /*
             case FMode of
               vmAlbumsSerie, vmAlbumsSerieUnivers, vmParaBDSerie, vmParaBDSerieUnivers:
@@ -80,7 +64,6 @@ public class InitialEntity extends AbstractEntity {
               Text := '<Inconnu>';
             end
  */
-            label = unknownLabel;
-        return StringUtils.ajoutString(label, StringUtils.nonZero(getCount()), " ", "(", ")");
+        return StringUtils.ajoutString(label.getValueSafe(), StringUtils.nonZero(getCount()), " ", "(", ")");
     }
 }

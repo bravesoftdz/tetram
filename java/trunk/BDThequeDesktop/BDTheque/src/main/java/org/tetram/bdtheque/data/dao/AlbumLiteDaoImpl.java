@@ -31,7 +31,8 @@ public class AlbumLiteDaoImpl extends DaoROImpl<AlbumLite, UUID> implements Albu
     public List<InitialEntity> getListInitiales(String filtre) {
         final List<InitialEntity> list = albumMapper.getInitialesSeries(filtre);
         for (InitialEntity initialEntity : list) {
-            initialEntity.setUnknownLabel(UNKNOWN_LABEL);
+            if (initialEntity.getValue() == null)
+                initialEntity.setLabel(UNKNOWN_LABEL);
             initialEntity.setLabel(BeanUtils.formatTitre(initialEntity.getLabel()));
         }
         return list;

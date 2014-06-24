@@ -12,12 +12,18 @@ import java.util.UUID;
 public abstract class StringUtils {
 
     public static UUID GUIDStringToUUID(final String guid) {
-        return UUID.fromString(guid.substring(1, guid.length() - 1));
+        if (guid == null)
+            return TypeUtils.GUID_NULL;
+        else
+            return UUID.fromString(guid.substring(1, guid.length() - 1));
     }
 
     public static UUID GUIDStringToUUIDDef(final String guid, final UUID defaultGUID) {
         try {
-            return UUID.fromString(guid.substring(1, guid.length() - 1));
+            if (guid == null)
+                return defaultGUID;
+            else
+                return UUID.fromString(guid.substring(1, guid.length() - 1));
         } catch (final Exception e) {
             return defaultGUID;
         }
@@ -25,7 +31,10 @@ public abstract class StringUtils {
 
     @NonNls
     public static String UUIDToGUIDString(final UUID uuid) {
-        return "{" + uuid.toString().toUpperCase(Locale.US) + "}";
+        if (uuid == null)
+            return TypeUtils.GUID_NULL_STRING;
+        else
+            return "{" + uuid.toString().toUpperCase(Locale.US) + "}";
     }
 
     public static String ajoutString(final String chaine, final String ajout, final String espace) {

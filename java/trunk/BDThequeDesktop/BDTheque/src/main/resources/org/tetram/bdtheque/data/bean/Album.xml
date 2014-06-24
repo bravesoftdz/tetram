@@ -125,9 +125,9 @@
     <select id="getInitialesSeries" resultType="org.tetram.bdtheque.gui.utils.InitialEntity">
         <![CDATA[
         select
-            titreSerie label, countSerie integer count, id_serie value
+            titreSerie "label", countSerie "count", id_serie "value"
         from
-            series_album(#{filtre})
+            series_albums(#{filtre})
         ]]>
     </select>
     
