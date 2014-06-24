@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<GridPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="500.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8"
-          fx:controller="org.tetram.bdtheque.gui.controllers.PreferencesController">
+
+<GridPane prefHeight="500.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.tetram.bdtheque.gui.controllers.PreferencesController">
     <columnConstraints>
-        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0"/>
+        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints vgrow="ALWAYS"/>
-        <RowConstraints vgrow="NEVER"/>
+        <RowConstraints vgrow="ALWAYS" />
+        <RowConstraints vgrow="NEVER" />
     </rowConstraints>
     <children>
         <TabPane tabClosingPolicy="UNAVAILABLE">
@@ -21,20 +21,17 @@
                             <panes>
                                 <TitledPane animated="false" text="untitled 1">
                                     <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                                    prefWidth="200.0"/>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>
                                 </TitledPane>
                                 <TitledPane animated="false" text="untitled 2">
                                     <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                                    prefWidth="200.0"/>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>
                                 </TitledPane>
                                 <TitledPane animated="false" text="untitled 3">
                                     <content>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                                    prefWidth="200.0"/>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                     </content>
                                 </TitledPane>
                             </panes>
@@ -43,15 +40,15 @@
                 </Tab>
                 <Tab text="Untitled Tab 2">
                     <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                     </content>
                 </Tab>
             </tabs>
         </TabPane>
         <ToolBar nodeOrientation="RIGHT_TO_LEFT" GridPane.rowIndex="1">
             <items>
-                <Button cancelButton="true" mnemonicParsing="false" onAction="#btnCancelClick" text="Annuler"/>
-                <Button defaultButton="true" mnemonicParsing="false" onAction="#btnOkClick" text="Ok"/>
+                <Button cancelButton="true" mnemonicParsing="false" onAction="#btnCancelClick" text="Annuler" />
+                <Button defaultButton="true" mnemonicParsing="false" onAction="#btnOkClick" text="Ok" />
             </items>
         </ToolBar>
     </children>
