@@ -1,21 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.text.*?>
 
-
-<SplitPane dividerPositions="0.22429906542056074" focusTraversable="true" prefHeight="471.0" prefWidth="644.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.tetram.bdtheque.gui.controllers.ModeConsultationController">
-<items>
-  <AnchorPane fx:id="repertoirePane" SplitPane.resizableWithParent="false" />
-  <ScrollPane fx:id="detailPane" prefHeight="-1.0" prefWidth="-1.0">
-    <content>
-      <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0" />
-    </content>
-  </ScrollPane>
-</items>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<SplitPane xmlns:fx="http://javafx.com/fxml/1" dividerPositions="0.22429906542056074" focusTraversable="true" prefHeight="471.0"
+           prefWidth="644.0" xmlns="http://javafx.com/javafx/8"
+           fx:controller="org.tetram.bdtheque.gui.controllers.ModeConsultationController">
+    <items>
+        <AnchorPane fx:id="repertoirePane" SplitPane.resizableWithParent="false"/>
+        <ScrollPane fx:id="detailPane" prefHeight="-1.0" prefWidth="-1.0">
+            <content>
+                <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="545.0" prefWidth="430.0"/>
+            </content>
+        </ScrollPane>
+    </items>
 </SplitPane>

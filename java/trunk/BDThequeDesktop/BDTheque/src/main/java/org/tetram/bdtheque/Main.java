@@ -3,7 +3,6 @@ package org.tetram.bdtheque;/**
  */
 
 import javafx.application.Application;
-import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -28,6 +27,25 @@ public class Main extends Application {
     private static final String APPLICATION_TITLE = "BDTheque";
     @NonNls
     private static final String APPLICATION_ICON = "/org/tetram/bdtheque/bdtheque.png";
+    @SuppressWarnings("UnusedDeclaration")
+    @NonNls
+    private static final String FB64_CLASSPATH = "firebird_x64";
+    @SuppressWarnings("UnusedDeclaration")
+    @NonNls
+    private static final String FB32_CLASSPATH = "firebird_x86";
+    static {
+// 23/06/2014: peut être que ça servira un jour, quand FB Embedded n'imposera plus que les fichiers icu soit à la racine de l'appli
+/*
+        String fbPath = System.getProperty("user.dir") + File.separator;
+        if (is64bitJVM())
+            fbPath += FB64_CLASSPATH;
+        else
+            fbPath += FB32_CLASSPATH;
+
+        updateLibraryPath(fbPath);
+        updateFirebirdConf(fbPath);
+*/
+    }
 
     public static void main(String[] args) {
         launch(args);
@@ -57,6 +75,11 @@ public class Main extends Application {
         return Boolean.getBoolean("FBLog4j");
     }
 
+    static public void setFBLogged(boolean value) {
+        if (isFBLogged() != value)
+            System.setProperty("FBLog4j", String.valueOf(value));
+    }
+
     public static boolean is64bitJVM() {
         String property = System.getProperty("sun.arch.data.model");
         if (property == null)
@@ -65,27 +88,6 @@ public class Main extends Application {
             property = System.getProperty("os.arch");
 
         return property.contains("64");
-    }
-
-    @SuppressWarnings("UnusedDeclaration")
-    @NonNls
-    private static final String FB64_CLASSPATH = "firebird_x64";
-    @SuppressWarnings("UnusedDeclaration")
-    @NonNls
-    private static final String FB32_CLASSPATH = "firebird_x86";
-
-    static {
-// 23/06/2014: peut être que ça servira un jour, quand FB Embedded n'imposera plus que les fichiers icu soit à la racine de l'appli
-/*
-        String fbPath = System.getProperty("user.dir") + File.separator;
-        if (is64bitJVM())
-            fbPath += FB64_CLASSPATH;
-        else
-            fbPath += FB32_CLASSPATH;
-
-        updateLibraryPath(fbPath);
-        updateFirebirdConf(fbPath);
-*/
     }
 
     @SuppressWarnings("UnusedDeclaration")
@@ -147,11 +149,6 @@ public class Main extends Application {
                 }
             }
         }
-    }
-
-    static public void setFBLogged(boolean value) {
-        if (isFBLogged() != value)
-            System.setProperty("FBLog4j", String.valueOf(value));
     }
 
     @Override

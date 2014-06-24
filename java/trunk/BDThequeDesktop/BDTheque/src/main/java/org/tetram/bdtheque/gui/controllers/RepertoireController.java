@@ -63,10 +63,10 @@ public class RepertoireController extends WindowController {
     }
 
     private class InitialTreeItem extends TreeItem<AbstractEntity> {
+        private final RepertoireLiteDao dao;
         private boolean isLeaf;
         private boolean isFirstTimeChildren = true;
         private boolean isFirstTimeLeaf = true;
-        private final RepertoireLiteDao dao;
 
         public InitialTreeItem(RepertoireLiteDao dao) {
             this(dao, null);

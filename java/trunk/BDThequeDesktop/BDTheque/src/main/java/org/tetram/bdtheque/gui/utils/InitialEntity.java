@@ -4,7 +4,6 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import org.tetram.bdtheque.data.BeanUtils;
 import org.tetram.bdtheque.data.bean.AbstractEntity;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -22,36 +21,36 @@ public class InitialEntity extends AbstractEntity {
         return count.get();
     }
 
-    public IntegerProperty countProperty() {
-        return count;
-    }
-
     public void setCount(int count) {
         this.count.set(count);
+    }
+
+    public IntegerProperty countProperty() {
+        return count;
     }
 
     public String getValue() {
         return value.get();
     }
 
-    public StringProperty valueProperty() {
-        return value;
-    }
-
     public void setValue(String value) {
         this.value.set(value);
+    }
+
+    public StringProperty valueProperty() {
+        return value;
     }
 
     public String getLabel() {
         return label.get();
     }
 
-    public StringProperty labelProperty() {
-        return label;
-    }
-
     public void setLabel(String label) {
         this.label.set(label);
+    }
+
+    public StringProperty labelProperty() {
+        return label;
     }
 
     @Override

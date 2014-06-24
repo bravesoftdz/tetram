@@ -2,7 +2,6 @@ package org.tetram.bdtheque.gui.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.SplitPane;
 import javafx.scene.layout.AnchorPane;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.SpringFxmlLoader;

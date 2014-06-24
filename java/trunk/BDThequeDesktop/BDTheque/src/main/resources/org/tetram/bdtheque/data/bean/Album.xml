@@ -130,7 +130,7 @@
             series_albums(#{filtre})
         ]]>
     </select>
-    
+
     <select id="getAlbumLiteBySerieId" resultMap="AlbumLite">
         select
         <include refid="fieldsAlbumLite"/>
@@ -139,7 +139,7 @@
             albums_by_serie(#{idSerie}, #{filtre})
         ]]>
     </select>
-    
+
     <update id="changeNotation">
         <![CDATA[
         update albums set notation = #{notation} where id_album = #{id}
