@@ -31,15 +31,18 @@ public class SpringFxmlLoader {
             loader.setControllerFactory(new Callback<Class<?>, Object>() {
                 @Override
                 public Object call(Class<?> aClass) {
+                    // on pourrait faire ((WindowController) bean).setDialog(stage); ici
+                    // mais comme on ne peut pas faire la même chose avec setView, ça n'a pas trop d'intérêt
                     return SpringContext.CONTEXT.getBean(aClass);
                 }
             });
-            loader.setResources(I18nSupport.getResources());
+            loader.setResources(I18nSupport.getCurrentBundle());
 
             Node view = loader.load(fxmlStream);
             WindowController controller = loader.getController();
             controller.setView(view);
             controller.setDialog(stage);
+            controller.controllerLoaded();
 
             return (T) controller;
         } finally {

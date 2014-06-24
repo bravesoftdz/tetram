@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -40,6 +41,9 @@ public class UserPreferencesImpl implements UserPreferences {
     @NonNls
     private static final String PREF_IMAGES_STOCKEES = "ImagesStockees";
     private static final boolean PREF_IMAGES_STOCKEES_DEFAULT = false;
+    @NonNls
+    private static final String PREF_LOCALE = "Locale";
+    private static final Locale PREF_LOCALE_DEFAULT = Locale.getDefault();
 
     @Autowired
     private ApplicationContext applicationContext;
@@ -71,11 +75,12 @@ public class UserPreferencesImpl implements UserPreferences {
             // RepWebServer := TPath.Combine(parentPath, RepWebServer);
         }
 
-        defaultPrefs.put(PREF_FORMAT_TITRE_ALBUM, PREF_FORMAT_TITRE_ALBUM_DEFAULT);
-        defaultPrefs.put(PREF_SERIE_OBLIGATOIRE_ALBUMS, PREF_SERIE_OBLIGATOIRE_ALBUMS_DEFAULT);
-        defaultPrefs.put(PREF_SERIE_OBLIGATOIRE_PARABD, PREF_SERIE_OBLIGATOIRE_PARABD_DEFAULT);
-        defaultPrefs.put(PREF_ANTI_ALIASING, PREF_ANTI_ALIASING_DEFAULT);
-        defaultPrefs.put(PREF_IMAGES_STOCKEES, PREF_IMAGES_STOCKEES_DEFAULT);
+        defaultPrefs.setProperty(PREF_FORMAT_TITRE_ALBUM, String.valueOf(PREF_FORMAT_TITRE_ALBUM_DEFAULT));
+        defaultPrefs.setProperty(PREF_SERIE_OBLIGATOIRE_ALBUMS, String.valueOf(PREF_SERIE_OBLIGATOIRE_ALBUMS_DEFAULT));
+        defaultPrefs.setProperty(PREF_SERIE_OBLIGATOIRE_PARABD, String.valueOf(PREF_SERIE_OBLIGATOIRE_PARABD_DEFAULT));
+        defaultPrefs.setProperty(PREF_ANTI_ALIASING, String.valueOf(PREF_ANTI_ALIASING_DEFAULT));
+        defaultPrefs.setProperty(PREF_IMAGES_STOCKEES, String.valueOf(PREF_IMAGES_STOCKEES_DEFAULT));
+        defaultPrefs.setProperty(PREF_LOCALE, PREF_LOCALE_DEFAULT.toLanguageTag());
 
         return defaultPrefs;
     }
@@ -143,15 +148,15 @@ public class UserPreferencesImpl implements UserPreferences {
     }
 
     private Object setPref(String key, String value) {
-        return getPrefs().put(key, value);
+        return getPrefs().setProperty(key, value);
     }
 
     private Object setPref(String key, int value) {
-        return getPrefs().put(key, value);
+        return getPrefs().setProperty(key, String.valueOf(value));
     }
 
     private Object setPref(String key, boolean value) {
-        return getPrefs().put(key, value);
+        return getPrefs().setProperty(key, String.valueOf(value));
     }
 
     @Override
@@ -212,6 +217,16 @@ public class UserPreferencesImpl implements UserPreferences {
     @Override
     public void setImagesStockees(boolean value) {
         setPref(PREF_IMAGES_STOCKEES, value);
+    }
+
+    @Override
+    public Locale getLocale() {
+        return Locale.forLanguageTag(getStringPref(PREF_LOCALE));
+    }
+
+    @Override
+    public void setLocale(Locale locale) {
+        setPref(PREF_LOCALE, locale.toLanguageTag());
     }
 
 }

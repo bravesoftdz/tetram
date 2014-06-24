@@ -25,4 +25,10 @@ public class WindowController {
     public void setView(Node view) {
         this.view = view;
     }
+
+    /**
+     * A utiliser à la place de l'injection "Initialize" si on a besoin de getView et/ou getDialog
+     */
+    public void controllerLoaded() {
+    }
 }

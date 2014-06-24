@@ -25,5 +25,5 @@ public interface AlbumMapper extends BaseMapperInterface {
 
     List<InitialEntity> getInitialesSeries(@Param("filtre") String filtre);
 
-    List<AlbumLite> getAlbumLiteBySerieId(@Param("id") UUID idSerie, @Param("filtre") String filtre);
+    List<AlbumLite> getAlbumLiteBySerieId(@Param("idSerie") UUID idSerie, @Param("filtre") String filtre);
 }

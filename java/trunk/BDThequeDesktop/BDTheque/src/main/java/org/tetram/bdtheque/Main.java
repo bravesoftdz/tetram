@@ -2,6 +2,7 @@ package org.tetram.bdtheque;/**
  * Created by Thierry on 24/05/2014.
  */
 
+import impl.org.controlsfx.i18n.Localization;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -9,6 +10,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.controlsfx.dialog.Dialogs;
 import org.jetbrains.annotations.NonNls;
+import org.tetram.bdtheque.data.services.UserPreferences;
 import org.tetram.bdtheque.gui.controllers.MainController;
 import org.tetram.bdtheque.utils.I18nSupport;
 
@@ -18,6 +20,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -33,6 +36,7 @@ public class Main extends Application {
     @SuppressWarnings("UnusedDeclaration")
     @NonNls
     private static final String FB32_CLASSPATH = "firebird_x86";
+
     static {
 // 23/06/2014: peut être que ça servira un jour, quand FB Embedded n'imposera plus que les fichiers icu soit à la racine de l'appli
 /*
@@ -156,13 +160,16 @@ public class Main extends Application {
         if (is64bitJVM()) {
             Dialogs.create()
                     .title(I18nSupport.message("erreur.de.chargement"))
-                    .masthead(I18nSupport.message("mauvaise.version.de.jvm"))
+                            //.masthead(I18nSupport.message("mauvaise.version.de.jvm"))
                     .message(I18nSupport.message("vous.devez.utiliser.la.version.32bits.de.la.jvm"))
                     .showError();
             return;
         }
 
         setFBLogged(true);
+        final Locale locale = SpringContext.CONTEXT.getBean(UserPreferences.class).getLocale();
+        I18nSupport.setLocale(locale);
+        Localization.setLocale(locale);
 
         MainController mainController = SpringFxmlLoader.load("main.fxml", primaryStage);
 

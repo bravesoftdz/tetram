@@ -11,30 +11,24 @@ import java.util.UUID;
 @SuppressWarnings("UnusedDeclaration")
 public abstract class StringUtils {
 
+    @Contract("null -> null")
     public static UUID GUIDStringToUUID(final String guid) {
-        if (guid == null)
-            return TypeUtils.GUID_NULL;
-        else
-            return UUID.fromString(guid.substring(1, guid.length() - 1));
+        return guid == null ? null : UUID.fromString(guid.substring(1, guid.length() - 1));
     }
 
+    @Contract("null,null -> null; null,!null -> !null")
     public static UUID GUIDStringToUUIDDef(final String guid, final UUID defaultGUID) {
         try {
-            if (guid == null)
-                return defaultGUID;
-            else
-                return UUID.fromString(guid.substring(1, guid.length() - 1));
+            return guid == null ? defaultGUID : UUID.fromString(guid.substring(1, guid.length() - 1));
         } catch (final Exception e) {
             return defaultGUID;
         }
     }
 
     @NonNls
+    @Contract("null -> null")
     public static String UUIDToGUIDString(final UUID uuid) {
-        if (uuid == null)
-            return TypeUtils.GUID_NULL_STRING;
-        else
-            return "{" + uuid.toString().toUpperCase(Locale.US) + "}";
+        return uuid == null ? null : "{" + uuid.toString().toUpperCase(Locale.US) + "}";
     }
 
     public static String ajoutString(final String chaine, final String ajout, final String espace) {
@@ -172,4 +166,8 @@ end;
         return list == null || list.isEmpty();
     }
 
+    @Contract("null -> !null; !null -> !null")
+    public static String notNull(String s) {
+        return s == null ? "" : s;
+    }
 }

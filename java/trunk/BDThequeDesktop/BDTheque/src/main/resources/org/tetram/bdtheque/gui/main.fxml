@@ -19,7 +19,15 @@
                         <MenuItem mnemonicParsing="false" text="Save As…"/>
                         <MenuItem mnemonicParsing="false" text="Revert"/>
                         <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem mnemonicParsing="false" text="Preferences…"/>
+                        <MenuItem mnemonicParsing="false" text="Preferences…" onAction="#showPreferences"/>
+                        <Menu mnemonicParsing="false" text="%Language" fx:id="mnuLanguage">
+                            <items>
+                                <MenuItem id="mnu_fr" mnemonicParsing="false" onAction="#changeLanguage"
+                                          text="Français"/>
+                                <MenuItem id="mnu_en" mnemonicParsing="false" onAction="#changeLanguage"
+                                          text="English"/>
+                            </items>
+                        </Menu>
                         <SeparatorMenuItem mnemonicParsing="false"/>
                         <MenuItem mnemonicParsing="false" onAction="#menuQuitClick" text="Quit"/>
                     </items>
