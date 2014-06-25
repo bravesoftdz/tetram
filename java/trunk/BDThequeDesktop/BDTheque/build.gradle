@@ -29,13 +29,17 @@ dependencies {
 
     compile 'org.springframework:spring-aop:+'
     compile 'org.springframework:spring-aspects:+'
-    //compile 'org.springframework:spring-agent:+'
+    // compile 'org.springframework:spring-agent:+'
     compile 'org.springframework:spring-context:+'
     compile 'org.springframework:spring-jdbc:+'
     testCompile 'org.springframework:spring-test:+'
 
-    //runtime 'org.aspectj:aspectjrt:+'
-    runtime 'org.aspectj:aspectjweaver:+'
+    // runtime 'org.aspectj:aspectjrt:+'
+    // à priori pas utile puisque déjà en dépendance de spring-aspects
+    // runtime 'org.aspectj:aspectjweaver:+'
 
     compile 'org.controlsfx:controlsfx:8.0.6'
+    compile 'org.jfxtras:jfxtras-common:+'
+    compile 'org.jfxtras:jfxtras-fxml:+'
+    compile 'org.jfxtras:jfxtras-controls:+'
 }
