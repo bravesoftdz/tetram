@@ -5,15 +5,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import org.controlsfx.dialog.Dialogs;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.SpringFxmlLoader;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.dao.SerieDao;
+import org.tetram.bdtheque.data.services.FormatTitreAlbum;
 import org.tetram.bdtheque.data.services.UserPreferences;
-import org.tetram.bdtheque.gui.utils.DialogController;
+import org.tetram.bdtheque.gui.utils.Dialogs;
 import org.tetram.bdtheque.utils.I18nSupport;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -81,12 +81,12 @@ public class MainController extends WindowController {
 
     @FXML
     public void changeLanguage(ActionEvent event) {
-        // I18nSupport.setLocale(((MenuItem) event.getSource()).getId().substring(4));
+        // certaines traductions sont récupérées à l'initialisation des classes, on n'a pas d'autres choix que de recharger l'appli
         final Locale locale = Localization.getLocale();
         try {
             final Locale newLocale = Locale.forLanguageTag(((MenuItem) event.getSource()).getId().substring(4));
             Localization.setLocale(newLocale);
-            Dialogs.create()
+            org.controlsfx.dialog.Dialogs.create()
                     .title(I18nSupport.message(newLocale, "nouvelle.langue"))
                             //.masthead(I18nSupport.message(newLocale, "redemarrage.necessaire"))
                     .message(I18nSupport.message(newLocale, "le.changement.de.langue.sera.effectif.au.prochain.demarrage.de.l.application"))
@@ -99,10 +99,13 @@ public class MainController extends WindowController {
     }
 
     public void showPreferences(ActionEvent actionEvent) throws IOException {
-        PreferencesController preferencesController = DialogController.showPreferences(this.getDialog());
-        Dialogs.create()
-                .message(preferencesController.getResult())
-                .showInformation();
+        final FormatTitreAlbum formatTitreAlbum = userPreferences.getFormatTitreAlbum();
+        PreferencesController preferencesController = Dialogs.showPreferences(this.getDialog());
+
+        if (formatTitreAlbum != userPreferences.getFormatTitreAlbum())
+            org.controlsfx.dialog.Dialogs.create().message("KO").showError();
+        else
+            org.controlsfx.dialog.Dialogs.create().message("OK").showInformation();
     }
 
 }

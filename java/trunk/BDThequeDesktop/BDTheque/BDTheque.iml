@@ -45,6 +45,7 @@
     <orderEntry type="library" exported="" name="Gradle: jfxtras-common-8.0-r1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: jfxtras-fxml-8.0-r1" level="project" />
     <orderEntry type="library" exported="" name="Gradle: jfxtras-controls-8.0-r1" level="project" />
+    <orderEntry type="library" exported="" name="Gradle: jfxtras-labs-8.0-r1" level="project" />
   </component>
 </module>
 

@@ -301,14 +301,14 @@ public abstract class BeanUtils {
         UserPreferences userPreferences = SpringContext.CONTEXT.getBean(UserPreferences.class);
 
         switch (userPreferences.getFormatTitreAlbum()) {
-            case 0: // Album (Serie - Tome)
+            case ALBUM_SERIE_TOME: // Album (Serie - Tome)
                 sSerie = StringUtils.ajoutString(sSerie, sTome, " - ");
                 if ("".equals(sAlbum)) {
                     result = sSerie;
                 } else
                     result = StringUtils.ajoutString(sAlbum, sSerie, " ", "(", ")");
                 break;
-            case 1: // Tome - Album (Serie)
+            case TOME_ALBUM_SERIE: // Tome - Album (Serie)
                 if ("".equals(sAlbum))
                     sAlbum = sSerie;
                 else

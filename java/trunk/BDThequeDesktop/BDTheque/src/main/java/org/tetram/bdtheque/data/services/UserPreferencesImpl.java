@@ -1,5 +1,7 @@
 package org.tetram.bdtheque.data.services;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ObjectPropertyBase;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -28,7 +30,7 @@ public class UserPreferencesImpl implements UserPreferences {
 
     @NonNls
     private static final String PREF_FORMAT_TITRE_ALBUM = "FormatTitreAlbum";
-    private static final int PREF_FORMAT_TITRE_ALBUM_DEFAULT = 0;
+    private static final FormatTitreAlbum PREF_FORMAT_TITRE_ALBUM_DEFAULT = FormatTitreAlbum.ALBUM_SERIE_TOME;
     @NonNls
     private static final String PREF_SERIE_OBLIGATOIRE_ALBUMS = "SerieObligatoireAlbums";
     private static final boolean PREF_SERIE_OBLIGATOIRE_ALBUMS_DEFAULT = false;
@@ -49,6 +51,7 @@ public class UserPreferencesImpl implements UserPreferences {
     private ApplicationContext applicationContext;
     private Properties defaultPrefs = null;
     private Properties prefs = null;
+    private ObjectProperty<FormatTitreAlbum> formatTitreAlbumProperty = null;
 
     private Properties getDefaultPrefs() {
         if (defaultPrefs != null) return defaultPrefs;
@@ -75,7 +78,7 @@ public class UserPreferencesImpl implements UserPreferences {
             // RepWebServer := TPath.Combine(parentPath, RepWebServer);
         }
 
-        defaultPrefs.setProperty(PREF_FORMAT_TITRE_ALBUM, String.valueOf(PREF_FORMAT_TITRE_ALBUM_DEFAULT));
+        defaultPrefs.setProperty(PREF_FORMAT_TITRE_ALBUM, String.valueOf(PREF_FORMAT_TITRE_ALBUM_DEFAULT.getValue()));
         defaultPrefs.setProperty(PREF_SERIE_OBLIGATOIRE_ALBUMS, String.valueOf(PREF_SERIE_OBLIGATOIRE_ALBUMS_DEFAULT));
         defaultPrefs.setProperty(PREF_SERIE_OBLIGATOIRE_PARABD, String.valueOf(PREF_SERIE_OBLIGATOIRE_PARABD_DEFAULT));
         defaultPrefs.setProperty(PREF_ANTI_ALIASING, String.valueOf(PREF_ANTI_ALIASING_DEFAULT));
@@ -170,13 +173,42 @@ public class UserPreferencesImpl implements UserPreferences {
     }
 
     @Override
-    public int getFormatTitreAlbum() {
-        return getIntPref(PREF_FORMAT_TITRE_ALBUM);
+    public FormatTitreAlbum getFormatTitreAlbum() {
+        return FormatTitreAlbum.fromValue(getIntPref(PREF_FORMAT_TITRE_ALBUM));
     }
 
     @Override
-    public void setFormatTitreAlbum(int value) {
-        setPref(PREF_FORMAT_TITRE_ALBUM, value);
+    public void setFormatTitreAlbum(FormatTitreAlbum value) {
+        setPref(PREF_FORMAT_TITRE_ALBUM, String.valueOf(value.getValue()));
+    }
+
+    @Override
+    public ObjectProperty<FormatTitreAlbum> formatTitreAlbumProperty() {
+        if (formatTitreAlbumProperty == null)
+            formatTitreAlbumProperty = new ObjectPropertyBase<FormatTitreAlbum>() {
+                @Override
+                public Object getBean() {
+                    return this;
+                }
+
+                @NonNls
+                @Override
+                public String getName() {
+                    return "formatTitreAlbum";
+                }
+
+                @Override
+                public FormatTitreAlbum get() {
+                    return getFormatTitreAlbum();
+                }
+
+                @Override
+                public void set(FormatTitreAlbum newValue) {
+                    setFormatTitreAlbum(newValue);
+                    super.set(newValue);
+                }
+            };
+        return formatTitreAlbumProperty;
     }
 
     @Override

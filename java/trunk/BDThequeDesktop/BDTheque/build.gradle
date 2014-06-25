@@ -42,4 +42,5 @@ dependencies {
     compile 'org.jfxtras:jfxtras-common:+'
     compile 'org.jfxtras:jfxtras-fxml:+'
     compile 'org.jfxtras:jfxtras-controls:+'
+    compile 'org.jfxtras:jfxtras-labs:+'
 }

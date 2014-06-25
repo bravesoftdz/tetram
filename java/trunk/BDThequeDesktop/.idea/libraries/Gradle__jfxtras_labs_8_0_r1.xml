@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="Gradle: jfxtras-labs-8.0-r1">
+    <ANNOTATIONS>
+      <root url="file://$PROJECT_DIR$/external_annotations" />
+    </ANNOTATIONS>
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jfxtras/jfxtras-labs/8.0-r1/cddbd086b3ed37d51b04d4fe000ecd5049909b5f/jfxtras-labs-8.0-r1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jfxtras/jfxtras-labs/8.0-r1/97573c045564f9632fe3ee9ea8b7573fd3a24a8a/jfxtras-labs-8.0-r1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
