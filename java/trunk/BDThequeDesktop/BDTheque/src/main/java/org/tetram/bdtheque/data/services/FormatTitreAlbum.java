@@ -20,7 +20,7 @@ public enum FormatTitreAlbum {
     }
 
     public String getLabel() {
-        return MessageFormat.format(format, I18nSupport.message("Album"), I18nSupport.message("Serie"), I18nSupport.message("Tome"));
+        return MessageFormat.format(format, I18nSupport.message("Album"), I18nSupport.message("Série"), I18nSupport.message("Tome"));
     }
 
     public int getValue() {
