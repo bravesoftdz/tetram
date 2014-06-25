@@ -14,8 +14,11 @@ dependencies {
     //compile 'com.intellij:annotations:+'
     compile files('C:\\Program Files (x86)\\JetBrains\\IntelliJ IDEA Community Edition 13.1.2\\lib\\annotations.jar')
 
-    compile 'org.apache.logging.log4j:log4j-core:2+'
-    runtime 'org.apache.logging.log4j:log4j-1.2-api:2+' // permet de rediriger, dans la plupart des cas, les appels à Log4j vers Log4j2
+    // la 2.0-rc2 déclenche une exception "java.lang.ClassNotFoundException: org.apache.logging.log4j.spi.AbstractLoggerWrapper"
+    // la classe semble avoir disparu entre la rc1 et la rc2
+    // provoqué par l'utilisation de LOG4J2 dans mybatis
+    compile 'org.apache.logging.log4j:log4j-core:2.0-rc1'
+    runtime 'org.apache.logging.log4j:log4j-1.2-api:2.0-rc1' // permet de rediriger, dans la plupart des cas, les appels à Log4j vers Log4j2
 
     compile 'org.apache.commons:commons-io:+'
 
