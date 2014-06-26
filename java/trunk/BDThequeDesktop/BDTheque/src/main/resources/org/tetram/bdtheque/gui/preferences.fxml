@@ -1,136 +1,149 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane prefHeight="500.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.tetram.bdtheque.gui.controllers.PreferencesController">
-    <columnConstraints>
-        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
-    </columnConstraints>
-    <rowConstraints>
-        <RowConstraints vgrow="ALWAYS" />
-        <RowConstraints vgrow="NEVER" />
-    </rowConstraints>
-    <children>
-        <TabPane tabClosingPolicy="UNAVAILABLE">
-            <tabs>
-                <Tab fx:id="tabOptionsDiverses" text="Options diverses">
-                    <content>
-                        <ScrollPane fitToWidth="true" hbarPolicy="NEVER">
+<BorderPane fx:id="content" prefHeight="506.0" prefWidth="511.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.tetram.bdtheque.gui.controllers.PreferencesController">
+    <left>
+        <ToolBar orientation="VERTICAL" BorderPane.alignment="CENTER">
+            <items>
+                <ToggleButton fx:id="btnOptionsDiverses" contentDisplay="TOP" mnemonicParsing="false" text="Options diverses">
+                    <graphic>
+                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/org/tetram/bdtheque/graphics/png/32x32/kernel.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+               <toggleGroup>
+                  <ToggleGroup fx:id="btnTabGroup" />
+               </toggleGroup>
+                </ToggleButton>
+                <ToggleButton fx:id="btnMonnaies" contentDisplay="TOP" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Monnaies" toggleGroup="$btnTabGroup">
+                    <graphic>
+                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/org/tetram/bdtheque/graphics/png/32x32/contents.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </ToggleButton>
+                <ToggleButton fx:id="btnSiteWeb" contentDisplay="TOP" layoutX="10.0" layoutY="39.0" mnemonicParsing="false" text="Site web" toggleGroup="$btnTabGroup">
+                    <graphic>
+                        <ImageView fitHeight="32.0" fitWidth="32.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/org/tetram/bdtheque/graphics/png/32x32/network.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </ToggleButton>
+            </items>
+        </ToolBar>
+    </left>
+    <center>
+        <ScrollPane fx:id="tabOptionsDiverses" fitToWidth="true" hbarPolicy="NEVER" prefHeight="471.0" prefWidth="523.0" BorderPane.alignment="CENTER">
+            <content>
+                <VBox>
+                    <children>
+                        <TitledPane animated="false" expanded="true" text="Général">
                             <content>
-                                <VBox>
+                                <GridPane>
                                     <children>
-                                        <TitledPane animated="false" expanded="true" text="Général">
-                                            <content>
-                                                <GridPane>
-                                                    <children>
-                                                        <CheckBox fx:id="serieObligatoireAlbums" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Saisie obligatoire d'une série pour les ablums et les achats">
-                                                            <padding>
-                                                                <Insets bottom="4.0" top="4.0" />
-                                                            </padding>
-                                                        </CheckBox>
-                                                        <CheckBox fx:id="serieObligatoireParaBD" layoutX="14.0" layoutY="38.0" mnemonicParsing="false" text="Saisie obligatoire d'une série pour les para-bd" GridPane.rowIndex="1">
-                                                            <padding>
-                                                                <Insets bottom="4.0" top="4.0" />
-                                                            </padding>
-                                                        </CheckBox>
-                                                        <CheckBox fx:id="antiAliasing" layoutX="14.0" layoutY="62.0" mnemonicParsing="false" text="Utiliser l'anti-aliasing pour redimensionner les images" GridPane.rowIndex="2">
-                                                            <padding>
-                                                                <Insets bottom="4.0" top="4.0" />
-                                                            </padding>
-                                                        </CheckBox>
-                                                        <Label layoutX="14.0" layoutY="91.0" text="Format d'affichage des titres d'albums :" GridPane.rowIndex="3">
-                                                            <padding>
-                                                                <Insets bottom="4.0" top="4.0" />
-                                                            </padding>
-                                                        </Label>
-                                                        <ChoiceBox fx:id="formatTitreAlbum" layoutX="14.0" layoutY="108.0" GridPane.rowIndex="4" />
-                                                    </children>
-                                                    <columnConstraints>
-                                                        <ColumnConstraints />
-                                                    </columnConstraints>
-                                                    <rowConstraints>
-                                                        <RowConstraints />
-                                                        <RowConstraints />
-                                                        <RowConstraints />
-                                                        <RowConstraints />
-                                                        <RowConstraints />
-                                                    </rowConstraints>
-                                                </GridPane>
-                                            </content>
-                                        </TitledPane>
-                                        <TitledPane animated="false" text="Impression">
-                                            <content>
-                                                <AnchorPane minHeight="0.0" minWidth="0.0" />
-                                            </content>
-                                        </TitledPane>
-                                        <TitledPane animated="false" text="Mode Gestion">
-                                            <content>
-                                                <GridPane>
-                                                    <children>
-                                                        <HBox GridPane.rowIndex="1">
-                                                            <children>
-                                                                <Label layoutX="14.0" layoutY="39.0" text="Répertoire de stockage des images :">
-                                                                    <padding>
-                                                                        <Insets top="4.0" />
-                                                                    </padding>
-                                                                </Label>
-                                                                <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#btnChooseFolderClick" text="...">
-                                                                    <HBox.margin>
-                                                                        <Insets left="8.0" />
-                                                                    </HBox.margin>
-                                                                </Button>
-                                                            </children>
-                                                        </HBox>
-                                                        <CheckBox fx:id="imagesStockees" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Images stockées dans la base par défaut">
-                                                            <padding>
-                                                                <Insets bottom="4.0" top="4.0" />
-                                                            </padding>
-                                                        </CheckBox>
-                                                        <Label fx:id="repImages" layoutX="14.0" layoutY="56.0" text="repImages" textOverrun="CENTER_WORD_ELLIPSIS" GridPane.rowIndex="3">
-                                                            <padding>
-                                                                <Insets bottom="4.0" />
-                                                            </padding>
-                                                        </Label>
-                                                    </children>
-                                                    <columnConstraints>
-                                                        <ColumnConstraints />
-                                                    </columnConstraints>
-                                                    <rowConstraints>
-                                                        <RowConstraints />
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                                                        <RowConstraints />
-                                                        <RowConstraints />
-                                                    </rowConstraints>
-                                                </GridPane>
-                                            </content>
-                                        </TitledPane>
+                                        <CheckBox fx:id="serieObligatoireAlbums" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Saisie obligatoire d'une série pour les ablums et les achats">
+                                            <padding>
+                                                <Insets bottom="4.0" top="4.0" />
+                                            </padding>
+                                        </CheckBox>
+                                        <CheckBox fx:id="serieObligatoireParaBD" layoutX="14.0" layoutY="38.0" mnemonicParsing="false" text="Saisie obligatoire d'une série pour les para-bd" GridPane.rowIndex="1">
+                                            <padding>
+                                                <Insets bottom="4.0" top="4.0" />
+                                            </padding>
+                                        </CheckBox>
+                                        <CheckBox fx:id="antiAliasing" layoutX="14.0" layoutY="62.0" mnemonicParsing="false" text="Utiliser l'anti-aliasing pour redimensionner les images" GridPane.rowIndex="2">
+                                            <padding>
+                                                <Insets bottom="4.0" top="4.0" />
+                                            </padding>
+                                        </CheckBox>
+                                        <Label layoutX="14.0" layoutY="91.0" text="Format d'affichage des titres d'albums :" GridPane.rowIndex="3">
+                                            <padding>
+                                                <Insets bottom="4.0" top="4.0" />
+                                            </padding>
+                                        </Label>
+                                        <ChoiceBox fx:id="formatTitreAlbum" layoutX="14.0" layoutY="108.0" GridPane.rowIndex="4" />
                                     </children>
-                                </VBox>
+                                    <columnConstraints>
+                                        <ColumnConstraints />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints />
+                                        <RowConstraints />
+                                        <RowConstraints />
+                                        <RowConstraints />
+                                        <RowConstraints />
+                                    </rowConstraints>
+                                </GridPane>
                             </content>
-                        </ScrollPane>
-                    </content>
-                </Tab>
-                <Tab fx:id="tabMonnaies" text="Monnaies">
-                    <content>
-                        <AnchorPane />
-                    </content>
-                </Tab>
-                <Tab fx:id="tabSiteWeb" text="Site web">
-                    <content>
-                        <AnchorPane />
-                    </content>
-                </Tab>
-            </tabs>
-        </TabPane>
-        <ToolBar nodeOrientation="RIGHT_TO_LEFT" GridPane.rowIndex="1">
+                        </TitledPane>
+                        <TitledPane animated="false" text="Impression">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" />
+                            </content>
+                        </TitledPane>
+                        <TitledPane animated="false" text="Mode Gestion">
+                            <content>
+                                <GridPane>
+                                    <children>
+                                        <HBox GridPane.rowIndex="1">
+                                            <children>
+                                                <Label layoutX="14.0" layoutY="39.0" text="Répertoire de stockage des images :">
+                                                    <padding>
+                                                        <Insets top="4.0" />
+                                                    </padding>
+                                                </Label>
+                                                <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#btnChooseFolderClick" text="...">
+                                                    <HBox.margin>
+                                                        <Insets left="8.0" />
+                                                    </HBox.margin>
+                                                </Button>
+                                            </children>
+                                        </HBox>
+                                        <CheckBox fx:id="imagesStockees" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Images stockées dans la base par défaut">
+                                            <padding>
+                                                <Insets bottom="4.0" top="4.0" />
+                                            </padding>
+                                        </CheckBox>
+                                        <Label fx:id="repImages" layoutX="14.0" layoutY="56.0" text="repImages" textOverrun="CENTER_WORD_ELLIPSIS" GridPane.rowIndex="3">
+                                            <padding>
+                                                <Insets bottom="4.0" />
+                                            </padding>
+                                        </Label>
+                                    </children>
+                                    <columnConstraints>
+                                        <ColumnConstraints />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints />
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                        <RowConstraints />
+                                        <RowConstraints />
+                                    </rowConstraints>
+                                </GridPane>
+                            </content>
+                        </TitledPane>
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+    <bottom>
+        <ToolBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="35.0" prefWidth="234.0" BorderPane.alignment="CENTER">
             <items>
                 <Button fx:id="btnCancel" cancelButton="true" mnemonicParsing="false" onAction="#btnQuitClick" text="Annuler" />
                 <Button fx:id="btnOk" defaultButton="true" mnemonicParsing="false" onAction="#btnQuitClick" text="Ok" />
             </items>
         </ToolBar>
-    </children>
-</GridPane>
+    </bottom>
+</BorderPane>

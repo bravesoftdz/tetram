@@ -8,6 +8,7 @@ import javafx.scene.layout.AnchorPane;
 import org.jetbrains.annotations.NonNls;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.tetram.bdtheque.SpringContext;
 import org.tetram.bdtheque.SpringFxmlLoader;
 import org.tetram.bdtheque.data.bean.Serie;
 import org.tetram.bdtheque.data.dao.SerieDao;
@@ -53,6 +54,8 @@ public class MainController extends WindowController {
     @FXML // fx:id="mnuLanguage"
     private Menu mnuLanguage;
 
+    private ModeConsultationController modeConsultationController;
+
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize() throws IOException {
@@ -62,7 +65,7 @@ public class MainController extends WindowController {
         assert detailPane != null : "fx:id=\"detailPane\" was not injected: check your FXML file 'main.fxml'.";
         assert mnuLanguage != null : "fx:id=\"mnuLanguage\" was not injected: check your FXML file 'main.fxml'.";
 
-        ModeConsultationController modeConsultationController = SpringFxmlLoader.load("modeConsultation.fxml");
+        modeConsultationController = SpringFxmlLoader.load("modeConsultation.fxml");
         detailPane.getChildren().add(modeConsultationController.getView());
         AnchorPane.setBottomAnchor(modeConsultationController.getView(), 0.0);
         AnchorPane.setTopAnchor(modeConsultationController.getView(), 0.0);
@@ -106,6 +109,11 @@ public class MainController extends WindowController {
             org.controlsfx.dialog.Dialogs.create().message("KO").showError();
         else
             org.controlsfx.dialog.Dialogs.create().message("OK").showInformation();
+
+        if (preferencesController.getResult() == DialogController.DialogResult.OK)
+        {
+            SpringContext.CONTEXT.getBean(RepertoireController.class).refresh();        }
+
     }
 
 }

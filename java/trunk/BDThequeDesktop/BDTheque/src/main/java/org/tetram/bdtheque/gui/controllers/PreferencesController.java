@@ -1,12 +1,20 @@
 package org.tetram.bdtheque.gui.controllers;
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.BooleanPropertyBase;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ObjectPropertyBase;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableNumberValue;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.DirectoryChooser;
 import javafx.util.StringConverter;
 import org.jetbrains.annotations.NonNls;
@@ -16,6 +24,7 @@ import org.tetram.bdtheque.data.services.FormatTitreAlbum;
 import org.tetram.bdtheque.data.services.UserPreferences;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Locale;
 
 /**
@@ -25,22 +34,25 @@ import java.util.Locale;
 public class PreferencesController extends DialogController {
 
     @Autowired
-    UserPreferences userPreferences;
+    private UserPreferences userPreferences;
 
     @FXML
-    Button btnOk;
+    private Button btnOk;
 
     @FXML
-    Button btnCancel;
+    private Button btnCancel;
 
     @FXML
-    private Tab tabOptionsDiverses;
+    private ToggleButton btnOptionsDiverses;
 
     @FXML
-    private Tab tabSiteWeb;
+    private ToggleButton btnSiteWeb;
 
     @FXML
-    private Tab tabMonnaies;
+    private ToggleButton btnMonnaies;
+
+    @FXML
+    private ScrollPane tabOptionsDiverses;
 
     @FXML
     private ChoiceBox<FormatTitreAlbum> formatTitreAlbum;
@@ -60,6 +72,12 @@ public class PreferencesController extends DialogController {
     @FXML
     private Label repImages;
 
+    @FXML
+    private BorderPane content;
+
+    @FXML
+            private ToggleGroup btnTabGroup;
+
     UserPreferencesProperties preferencesProperties;
 
     @FXML
@@ -67,7 +85,33 @@ public class PreferencesController extends DialogController {
         attachClickListener(btnOk, okBtnClickListener);
         attachClickListener(btnCancel, cancelBtnClickListener);
 
-        tabOptionsDiverses.setGraphic(new ImageView(new Image(getClass().getResourceAsStream("/org/tetram/bdtheque/graphics/png/32x32/kernel.png"))));
+        HashMap<ToggleButton, Node> buttonNodeHashMap = new HashMap<>();
+        buttonNodeHashMap.put(btnOptionsDiverses, tabOptionsDiverses);
+        buttonNodeHashMap.put(btnMonnaies, null);
+        buttonNodeHashMap.put(btnSiteWeb, null);
+
+        ObservableNumberValue tabWidth = null;
+        for (ToggleButton toggleButton : buttonNodeHashMap.keySet())
+            tabWidth = tabWidth == null ? toggleButton.widthProperty() : Bindings.max(toggleButton.widthProperty(), tabWidth);
+
+        for (ToggleButton toggleButton : buttonNodeHashMap.keySet()){
+            toggleButton.minWidthProperty().bind(tabWidth);
+            toggleButton.setUserData(buttonNodeHashMap.get(toggleButton));
+            toggleButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    content.setCenter(buttonNodeHashMap.get(toggleButton));
+                }
+            });
+        }
+
+        btnTabGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldButton, Toggle newButton) {
+                if (newButton == null)
+                    oldButton.setSelected(true);
+            }
+        });
 
         preferencesProperties = new UserPreferencesProperties();
 
@@ -87,6 +131,14 @@ public class PreferencesController extends DialogController {
             @Override
             public File fromString(String string) {
                 return new File(string);
+            }
+        });
+
+        content.setCenter(null);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                btnOptionsDiverses.fire();
             }
         });
     }
@@ -132,6 +184,7 @@ public class PreferencesController extends DialogController {
 
             @Override
             public File get() {
+                super.get();
                 return userPreferences.getRepImages();
             }
 
@@ -155,6 +208,7 @@ public class PreferencesController extends DialogController {
 
             @Override
             public FormatTitreAlbum get() {
+                super.get();
                 return userPreferences.getFormatTitreAlbum();
             }
 
@@ -178,6 +232,7 @@ public class PreferencesController extends DialogController {
 
             @Override
             public boolean get() {
+                super.get();
                 return userPreferences.isSerieObligatoireAlbums();
             }
 
@@ -201,6 +256,7 @@ public class PreferencesController extends DialogController {
 
             @Override
             public boolean get() {
+                super.get();
                 return userPreferences.isSerieObligatoireParaBD();
             }
 
@@ -224,6 +280,7 @@ public class PreferencesController extends DialogController {
 
             @Override
             public boolean get() {
+                super.get();
                 return userPreferences.isAntiAliasing();
             }
 
@@ -247,6 +304,7 @@ public class PreferencesController extends DialogController {
 
             @Override
             public boolean get() {
+                super.get();
                 return userPreferences.isImagesStockees();
             }
 
@@ -270,6 +328,7 @@ public class PreferencesController extends DialogController {
 
             @Override
             public Locale get() {
+                super.get();
                 return userPreferences.getLocale();
             }
 

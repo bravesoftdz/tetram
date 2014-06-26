@@ -58,6 +58,10 @@ public class RepertoireController extends WindowController {
         assert tvSeries != null : "fx:id=\"tvSeries\" was not injected: check your FXML file 'repertoire.fxml'.";
         assert tabAlbums != null : "fx:id=\"tabAlbums\" was not injected: check your FXML file 'repertoire.fxml'.";
 
+        refresh();
+    }
+
+    public void refresh() {
         tvAlbums.setRoot(new InitialTreeItem(albumLiteDao));
         tvSeries.setRoot(new InitialTreeItem(serieLiteDao));
     }

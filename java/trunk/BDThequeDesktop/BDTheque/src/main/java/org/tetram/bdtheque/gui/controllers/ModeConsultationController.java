@@ -22,6 +22,10 @@ public class ModeConsultationController extends WindowController {
     @FXML // fx:id="detailPane"
     private ScrollPane detailPane; // Value injected by FXMLLoader
 
+    public AnchorPane getRepertoirePane() {
+        return repertoirePane;
+    }
+
     @FXML // fx:id="repertoirePane"
     private AnchorPane repertoirePane; // Value injected by FXMLLoader
 
