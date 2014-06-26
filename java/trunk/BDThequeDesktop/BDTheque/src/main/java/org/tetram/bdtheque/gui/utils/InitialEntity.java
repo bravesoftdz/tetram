@@ -1,9 +1,6 @@
 package org.tetram.bdtheque.gui.utils;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import org.tetram.bdtheque.data.bean.AbstractEntity;
 import org.tetram.bdtheque.utils.StringUtils;
 
@@ -11,10 +8,10 @@ import org.tetram.bdtheque.utils.StringUtils;
  * Created by Thierry on 23/06/2014.
  */
 @SuppressWarnings("UnusedDeclaration")
-public class InitialEntity extends AbstractEntity {
+public class InitialEntity<T> extends AbstractEntity {
 
     private IntegerProperty count = new SimpleIntegerProperty(this, "count", 0);
-    private StringProperty value = new SimpleStringProperty(this, "value", null);
+    private ObjectProperty<T> value = new SimpleObjectProperty<>(this, "value", null);
     private StringProperty label = new SimpleStringProperty(this, "label", "");
 
     public int getCount() {
@@ -29,15 +26,15 @@ public class InitialEntity extends AbstractEntity {
         return count;
     }
 
-    public String getValue() {
+    public T getValue() {
         return value.get();
     }
 
-    public void setValue(String value) {
+    public void setValue(T value) {
         this.value.set(value);
     }
 
-    public StringProperty valueProperty() {
+    public ObjectProperty<T> valueProperty() {
         return value;
     }
 

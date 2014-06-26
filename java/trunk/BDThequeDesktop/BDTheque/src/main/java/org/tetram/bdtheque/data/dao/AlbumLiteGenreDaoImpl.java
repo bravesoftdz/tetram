@@ -21,18 +21,24 @@ import java.util.UUID;
 @Lazy
 @Transactional
 @SuppressWarnings("UnusedDeclaration")
-public class AlbumLiteDaoImpl extends DaoROImpl<AlbumLite, UUID> implements AlbumLiteInitialeDao {
+public class AlbumLiteGenreDaoImpl extends DaoROImpl<AlbumLite, UUID> implements AlbumLiteGenreDao {
 
+    private static final String UNKNOWN_LABEL = I18nSupport.message("initiale.inconnu");
     @Autowired
     private AlbumMapper albumMapper;
 
     @Override
-    public List<InitialEntity<Character>> getListInitiales(String filtre) {
-        return albumMapper.getInitiales(filtre);
+    public List<InitialEntity<UUID>> getListInitiales(String filtre) {
+        return albumMapper.getInitialesGenres(filtre);
     }
 
     @Override
-    public List<AlbumLite> getListEntitiesByInitiale(InitialEntity<Character> initiale, String filtre) {
-        return albumMapper.getAlbumLiteByInitiale(initiale.getValue(), filtre);
+    public String getUnknownLabel() {
+        return UNKNOWN_LABEL;
+    }
+
+    @Override
+    public List<AlbumLite> getListEntitiesByInitiale(InitialEntity<UUID> initiale, String filtre) {
+        return albumMapper.getAlbumLiteByGenre(initiale.getValue(), filtre);
     }
 }

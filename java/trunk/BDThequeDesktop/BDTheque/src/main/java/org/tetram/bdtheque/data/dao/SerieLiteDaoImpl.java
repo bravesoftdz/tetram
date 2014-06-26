@@ -3,7 +3,9 @@ package org.tetram.bdtheque.data.dao;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.tetram.bdtheque.data.bean.AlbumLite;
 import org.tetram.bdtheque.data.bean.SerieLite;
+import org.tetram.bdtheque.gui.utils.InitialEntity;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,14 +17,20 @@ import java.util.UUID;
 @Lazy
 @Transactional
 @SuppressWarnings("UnusedDeclaration")
-public class SerieLiteDaoImpl extends DaoROImpl<SerieLite, UUID> implements SerieLiteDao {
+public class SerieLiteDaoImpl extends DaoROImpl<SerieLite, UUID> implements SerieLiteDao<Character> {
+
     @Override
-    public List<org.tetram.bdtheque.gui.utils.InitialEntity> getListInitiales(String filtre) {
+    public List<InitialEntity<Character>> getListInitiales(String filtre) {
         return null;
     }
 
     @Override
-    public List<org.tetram.bdtheque.data.bean.AlbumLite> getListEntitiesByInitiale(String initiale, String filtre) {
+    public String getUnknownLabel() {
+        return null;
+    }
+
+    @Override
+    public List<AlbumLite> getListEntitiesByInitiale(InitialEntity<Character> initiale, String filtre) {
         return null;
     }
 }

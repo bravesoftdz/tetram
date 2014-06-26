@@ -131,7 +131,7 @@
         ]]>
     </select>
 
-    <select id="getAlbumLiteBySerieId" resultMap="AlbumLite">
+    <select id="getAlbumLiteBySerie" resultMap="AlbumLite">
         <if test="idSerie == null">
             <bind name="idSerie" value="''"/>
         </if>
@@ -140,6 +140,27 @@
         <![CDATA[
         from
             albums_by_serie(#{idSerie}, #{filtre}) a
+        ]]>
+    </select>
+
+    <select id="getInitialesAnnees" resultType="org.tetram.bdtheque.gui.utils.InitialEntity">
+        <![CDATA[
+        select
+            anneeParution "label", countAnnee "count", anneeParution "value"
+        from
+            annees_albums(#{filtre})
+        ]]>
+    </select>
+
+    <select id="getAlbumLiteByAnnee" resultMap="AlbumLite">
+        <if test="annee == null">
+            <bind name="annee" value="-1"/>
+        </if>
+        select
+        <include refid="fieldsAlbumLite"/>
+        <![CDATA[
+        from
+            albums_by_annee(#{annee}, #{filtre}) a
         ]]>
     </select>
 

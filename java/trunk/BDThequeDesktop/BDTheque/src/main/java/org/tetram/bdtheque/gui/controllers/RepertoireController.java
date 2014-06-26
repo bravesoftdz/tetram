@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.tetram.bdtheque.data.bean.AbstractDBEntity;
 import org.tetram.bdtheque.data.bean.AbstractEntity;
 import org.tetram.bdtheque.data.dao.AlbumLiteDao;
+import org.tetram.bdtheque.data.dao.AlbumLiteSerieDao;
 import org.tetram.bdtheque.data.dao.RepertoireLiteDao;
 import org.tetram.bdtheque.data.dao.SerieLiteDao;
 import org.tetram.bdtheque.gui.utils.InitialEntity;
@@ -45,7 +46,7 @@ public class RepertoireController extends WindowController {
     private Tab tabAlbums; // Value injected by FXMLLoader
 
     @Autowired
-    private AlbumLiteDao albumLiteDao;
+    private AlbumLiteSerieDao albumLiteDao;
 
     @Autowired
     private SerieLiteDao serieLiteDao;
@@ -103,9 +104,9 @@ public class RepertoireController extends WindowController {
         private ObservableList<InitialTreeItem> buildChildren(InitialTreeItem treeItem) {
             List<? extends AbstractEntity> items;
             if (treeItem.getParent() == null)
-                items = dao.getListInitiales(null);
+                items = dao.getInitiales(null);
             else
-                items = dao.getListEntitiesByInitiale(((InitialEntity) treeItem.getValue()).getValue(), null);
+                items = dao.getListEntitiesByInitiale((InitialEntity) treeItem.getValue(), null);
 
             ObservableList<InitialTreeItem> children = FXCollections.observableArrayList();
             if (items != null) {
